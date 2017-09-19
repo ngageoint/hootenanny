@@ -49,51 +49,51 @@ OsmApiDbSqlStatementFormatter::OsmApiDbSqlStatementFormatter(const QString delim
 
 void OsmApiDbSqlStatementFormatter::_initOutputFormatStrings(const QString delimiter)
 {
-  QString formatString = CHANGESETS_OUTPUT_FORMAT_STRING_DEFAULT;
+  QString formatString = OSMAPIDB_CHANGESETS_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[ApiDb::getChangesetsTableName()] =
     formatString.replace("\t", delimiter);
 
-  formatString = CURRENT_NODES_OUTPUT_FORMAT_STRING_DEFAULT;
+  formatString = OSMAPIDB_CURRENT_NODES_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[ApiDb::getCurrentNodesTableName()] =
     formatString.replace("\t", delimiter);
 
-  formatString = HISTORICAL_NODES_OUTPUT_FORMAT_STRING_DEFAULT;
+  formatString = OSMAPIDB_HISTORICAL_NODES_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[ApiDb::getNodesTableName()] =
     formatString.replace("\t", delimiter);
 
-  formatString = CURRENT_WAYS_OUTPUT_FORMAT_STRING_DEFAULT;
+  formatString = OSMAPIDB_CURRENT_WAYS_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[ApiDb::getCurrentWaysTableName()] =
     formatString.replace("\t", delimiter);
 
-  formatString = HISTORICAL_WAYS_OUTPUT_FORMAT_STRING_DEFAULT;
+  formatString = OSMAPIDB_HISTORICAL_WAYS_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[ApiDb::getWaysTableName()] =
     formatString.replace("\t", delimiter);
 
-  formatString = CURRENT_WAY_NODES_OUTPUT_FORMAT_STRING_DEFAULT;
+  formatString = OSMAPIDB_CURRENT_WAY_NODES_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[ApiDb::getCurrentWayNodesTableName()] =
     formatString.replace("\t", delimiter);
 
-  formatString = HISTORICAL_WAY_NODES_OUTPUT_FORMAT_STRING_DEFAULT;
+  formatString = OSMAPIDB_HISTORICAL_WAY_NODES_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[ApiDb::getWayNodesTableName()] =
     formatString.replace("\t", delimiter);
 
-  formatString = CURRENT_RELATIONS_OUTPUT_FORMAT_STRING_DEFAULT;
+  formatString = OSMAPIDB_CURRENT_RELATIONS_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[ApiDb::getCurrentRelationsTableName()] =
     formatString.replace("\t", delimiter);
 
-  formatString = HISTORICAL_RELATIONS_OUTPUT_FORMAT_STRING_DEFAULT;
+  formatString = OSMAPIDB_HISTORICAL_RELATIONS_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[ApiDb::getRelationsTableName()] =
     formatString.replace("\t", delimiter);
 
-  formatString = CURRENT_RELATION_MEMBERS_OUTPUT_FORMAT_STRING_DEFAULT;
+  formatString = OSMAPIDB_CURRENT_RELATION_MEMBERS_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[ApiDb::getCurrentRelationMembersTableName()] =
     formatString.replace("\t", delimiter);
 
-  formatString = HISTORICAL_RELATION_MEMBERS_OUTPUT_FORMAT_STRING_DEFAULT;
+  formatString = OSMAPIDB_HISTORICAL_RELATION_MEMBERS_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[ApiDb::getRelationMembersTableName()] =
     formatString.replace("\t", delimiter);
 
-  formatString = CURRENT_TAGS_OUTPUT_FORMAT_STRING_DEFAULT;
+  formatString = OSMAPIDB_CURRENT_TAGS_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[ApiDb::getCurrentNodeTagsTableName()] =
     formatString.replace("\t", delimiter);
 
@@ -102,15 +102,34 @@ void OsmApiDbSqlStatementFormatter::_initOutputFormatStrings(const QString delim
   _outputFormatStrings[ApiDb::getCurrentRelationTagsTableName()] =
     formatString.replace("\t", delimiter);
 
-  formatString = HISTORICAL_TAGS_OUTPUT_FORMAT_STRING_DEFAULT;
+  formatString = OSMAPIDB_HISTORICAL_TAGS_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[ApiDb::getWayTagsTableName()] =
     formatString.replace("\t", delimiter);
   _outputFormatStrings[ApiDb::getRelationTagsTableName()] =
     formatString.replace("\t", delimiter);
 
-  formatString = HISTORICAL_NODE_TAGS_OUTPUT_FORMAT_STRING_DEFAULT;
+  formatString = OSMAPIDB_HISTORICAL_NODE_TAGS_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[ApiDb::getNodeTagsTableName()] =
     formatString.replace("\t", delimiter);
+}
+
+QString OsmApiDbSqlStatementFormatter::escapeCopyToData(const QString stringToOutput)
+{
+  //TODO: this is likely redundant with other code
+
+  QString escapedString;
+  escapedString.reserve(50);
+  escapedString.append(stringToOutput);
+  // Escape any special characters as required by
+  //    http://www.postgresql.org/docs/9.2/static/sql-copy.html
+  escapedString.replace(QChar(92), QString("\\\\"));  // Escape single backslashes first
+  escapedString.replace(QChar(8), QString("\\b"));
+  escapedString.replace(QChar(9), QString("\\t"));
+  escapedString.replace(QChar(10), QString("\\n"));
+  escapedString.replace(QChar(11), QString("\\v"));
+  escapedString.replace(QChar(12), QString("\\f"));
+  escapedString.replace(QChar(13), QString("\\r"));
+  return escapedString;
 }
 
 QStringList OsmApiDbSqlStatementFormatter::nodeToSqlStrings(const ConstNodePtr& node,
@@ -238,7 +257,7 @@ QStringList OsmApiDbSqlStatementFormatter::relationMemberToSqlStrings(const long
   const QString memberIdStr(QString::number(memberId));
   const QString memberType = member.getElementId().getType().toString();
   const QString memberSequenceIndexStr(QString::number(memberSequenceIndex));
-  QString memberRole = _escapeCopyToData(member.getRole());
+  QString memberRole = escapeCopyToData(member.getRole());
   //handle empty data
   if (memberRole.trimmed().isEmpty())
   {
@@ -267,11 +286,11 @@ QStringList OsmApiDbSqlStatementFormatter::tagToSqlStrings(const long elementId,
   //larger datasets due to the varying string sizes
   QString key;
   key.reserve(10);
-  key.append(_escapeCopyToData(tagKey));
+  key.append(escapeCopyToData(tagKey));
   LOG_VART(key);
   QString value;
   value.reserve(50);
-  value.append(_escapeCopyToData(tagValue));
+  value.append(escapeCopyToData(tagValue));
   LOG_VART(value);
 
   //all three of them are the same for current

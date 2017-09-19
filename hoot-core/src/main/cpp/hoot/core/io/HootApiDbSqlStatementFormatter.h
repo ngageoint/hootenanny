@@ -40,13 +40,13 @@ namespace hoot
 
 //These match up exclusively with the hoot api database and shouldn't be changed:
 
-static const QString CHANGESETS_OUTPUT_FORMAT_STRING_DEFAULT =
+static const QString HOOTAPIDB_CHANGESETS_OUTPUT_FORMAT_STRING_DEFAULT =
   "%1\t%2\t%3\t%4\t%5\t%6\t%7\t%8\t%9\t%10\n";
-static const QString CURRENT_NODES_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t%4\tt\t%5\t%6\t1\t\\N\n";
-static const QString CURRENT_WAYS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\tt\t1\t\\N\n";
-static const QString CURRENT_WAY_NODES_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\n";
-static const QString CURRENT_RELATIONS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\tt\t1\t\\N\n";
-static const QString CURRENT_RELATION_MEMBERS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t%4\t%5\n";
+static const QString HOOTAPIDB_CURRENT_NODES_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t%4\tt\t%5\t%6\t1\t\\N\n";
+static const QString HOOTAPIDB_CURRENT_WAYS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\tt\t1\t\\N\n";
+static const QString HOOTAPIDB_CURRENT_WAY_NODES_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\n";
+static const QString HOOTAPIDB_CURRENT_RELATIONS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\tt\t1\t\\N\n";
+static const QString HOOTAPIDB_CURRENT_RELATION_MEMBERS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t%4\t%5\n";
 
 /**
  * Converts OSM elements and their children into executable Postgres SQL COPY statements against an
@@ -62,80 +62,50 @@ public:
 
   HootApiDbSqlStatementFormatter(const QString delimiter, const long mapId);
 
-  QStringList nodeToSqlStrings(const ConstNodePtr& node, const long nodeId, const long changesetId,
+  QString nodeToSqlString(const ConstNodePtr& node, const long nodeId, const long changesetId,
                                const bool validate = false);
-  QStringList wayToSqlStrings(const long wayId, const long changesetId, const Tags& tags);
-  QStringList wayNodeToSqlStrings(const long wayId, const long wayNodeId,
+  QString wayToSqlString(const long wayId, const long changesetId, const Tags& tags);
+  QString wayNodeToSqlString(const long wayId, const long wayNodeId,
                                   const unsigned int wayNodeIndex);
-  QStringList relationToSqlStrings(const long relationId, const long changesetId, const Tags& tags);
-  QStringList relationMemberToSqlStrings(const long relationId, const long memberId,
+  QString relationToSqlString(const long relationId, const long changesetId, const Tags& tags);
+  QString relationMemberToSqlString(const long relationId, const long memberId,
                                          const RelationData::Entry& member,
                                          const unsigned int memberSequenceIndex);
   QString changesetToSqlString(const long changesetId, const long changesetUserId,
                                const long numChangesInChangeset,
                                const geos::geom::Envelope& changesetBounds);
-  QStringList elementToSqlStrings(const ConstElementPtr& element, const long elementId,
+  QString elementToSqlString(const ConstElementPtr& element, const long elementId,
                                   const long changesetId);
 
-  inline QString _escapeCopyToData(const QString stringToOutput)
+  inline static QString getNodeSqlHeaderString(const long mapId)
   {
-    //TODO: this is likely redundant with other code
-
-    QString escapedString;
-    escapedString.reserve(50);
-    escapedString.append(stringToOutput);
-    // Escape any special characters as required by
-    //    http://www.postgresql.org/docs/9.2/static/sql-copy.html
-    escapedString.replace(QChar(92), QString("\\\\"));  // Escape single backslashes first
-    escapedString.replace(QChar(8), QString("\\b"));
-    escapedString.replace(QChar(9), QString("\\t"));
-    escapedString.replace(QChar(10), QString("\\n"));
-    escapedString.replace(QChar(11), QString("\\v"));
-    escapedString.replace(QChar(12), QString("\\f"));
-    escapedString.replace(QChar(13), QString("\\r"));
-    return escapedString;
+    return "COPY " + HootApiDb::getCurrentNodesTableName(mapId) +
+    " (id, latitude, longitude, changeset_id, visible, \"timestamp\", tile, version, tags) " +
+    "FROM stdin;\n";
   }
 
-  // WITH NULL AS ''
-  inline static QStringList getNodeSqlHeaderStrings(const long mapId)
+  inline static QString getWaySqlHeaderString(const long mapId)
   {
-    QStringList sqlStrs;
-    sqlStrs.append("COPY " + HootApiDb::getCurrentNodesTableName(mapId) +
-                   " (id, latitude, longitude, changeset_id, visible, \"timestamp\", tile, version, tags) " +
-                   "FROM stdin;\n");
-    return sqlStrs;
+    return "COPY " + HootApiDb::getCurrentWaysTableName(mapId) +
+                   " (id, changeset_id, \"timestamp\", visible, version, tags) FROM stdin;\n";
   }
 
-  inline static QStringList getWaySqlHeaderStrings(const long mapId)
+  inline static QString getWayNodeSqlHeaderString(const long mapId)
   {
-    QStringList sqlStrs;
-    sqlStrs.append("COPY " + HootApiDb::getCurrentWaysTableName(mapId) +
-                   " (id, changeset_id, \"timestamp\", visible, version, tags) FROM stdin;\n");
-    return sqlStrs;
+    return "COPY " + HootApiDb::getCurrentWayNodesTableName(mapId) +
+                   " (way_id, node_id, sequence_id) FROM stdin;\n";
   }
 
-  inline static QStringList getWayNodeSqlHeaderStrings(const long mapId)
+  inline static QString getRelationSqlHeaderString(const long mapId)
   {
-    QStringList sqlStrs;
-    sqlStrs.append("COPY " + HootApiDb::getCurrentWayNodesTableName(mapId) +
-                   " (way_id, node_id, sequence_id) FROM stdin;\n");
-    return sqlStrs;
+    return "COPY " + HootApiDb::getCurrentRelationsTableName(mapId) +
+                   " (id, changeset_id, \"timestamp\", visible, version, tags) FROM stdin;\n";
   }
 
-  inline static QStringList getRelationSqlHeaderStrings(const long mapId)
+  inline static QString getRelationMemberSqlHeaderString(const long mapId)
   {
-    QStringList sqlStrs;
-    sqlStrs.append("COPY " + HootApiDb::getCurrentRelationsTableName(mapId) +
-                   " (id, changeset_id, \"timestamp\", visible, version, tags) FROM stdin;\n");
-    return sqlStrs;
-  }
-
-  inline static QStringList getRelationMemberSqlHeaderStrings(const long mapId)
-  {
-    QStringList sqlStrs;
-    sqlStrs.append("COPY " + HootApiDb::getCurrentRelationMembersTableName(mapId) +
-                   " (relation_id, member_type, member_id, member_role, sequence_id) FROM stdin;\n");
-    return sqlStrs;
+    return "COPY " + HootApiDb::getCurrentRelationMembersTableName(mapId) +
+                   " (relation_id, member_type, member_id, member_role, sequence_id) FROM stdin;\n";
   }
 
   inline static QString getChangesetSqlHeaderString(const long mapId)
@@ -145,23 +115,23 @@ public:
             "FROM stdin;\n";
   }
 
- inline static QStringList getElementSqlHeaderStrings(const ElementType& elementType, const long mapId)
+ inline static QString getElementSqlHeaderStrings(const ElementType& elementType, const long mapId)
   {
     switch (elementType.getEnum())
     {
       case ElementType::Node:
-        return getNodeSqlHeaderStrings(mapId);
+        return getNodeSqlHeaderString(mapId);
 
       case ElementType::Way:
-        return getWaySqlHeaderStrings(mapId);
+        return getWaySqlHeaderString(mapId);
 
       case ElementType::Relation:
-        return getRelationSqlHeaderStrings(mapId);
+        return getRelationSqlHeaderString(mapId);
 
       default:
         throw HootException("Unsupported element member type.");
     }
-    return QStringList();
+    return "";
   }
 
 private:

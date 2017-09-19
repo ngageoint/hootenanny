@@ -569,37 +569,34 @@ QStringList HootApiDbBulkInserter::_createSectionNameList()
 
 void HootApiDbBulkInserter::_createNodeOutputFiles()
 {
-  const QStringList nodeSqlHeaders = HootApiDbSqlStatementFormatter::getNodeSqlHeaderStrings(_database.getMapId());
-
-  _createOutputFile(HootApiDb::getCurrentNodesTableName(_database.getMapId()), nodeSqlHeaders[0]);
+  _createOutputFile(
+    HootApiDb::getCurrentNodesTableName(_database.getMapId()),
+    HootApiDbSqlStatementFormatter::getNodeSqlHeaderString(_database.getMapId()));
 }
 
 void HootApiDbBulkInserter::_writeNode(const ConstNodePtr& node, const unsigned long nodeDbId)
 {
   LOG_TRACE("Writing node to stream...");
-  const QStringList nodeSqlStrs =
-    _sqlFormatter->nodeToSqlStrings(
-      node, nodeDbId, _changesetData.currentChangesetId, _validateData);
-  LOG_VART(nodeSqlStrs[0]);
-  _outputSections[HootApiDb::getCurrentNodesTableName(_database.getMapId())]->write(nodeSqlStrs[0].toUtf8());
+  _outputSections[HootApiDb::getCurrentNodesTableName(_database.getMapId())]->write(
+    _sqlFormatter->nodeToSqlString(
+      node, nodeDbId, _changesetData.currentChangesetId, _validateData).toUtf8());
 }
 
 void HootApiDbBulkInserter::_createWayOutputFiles()
 {
-  const QStringList waySqlHeaders = HootApiDbSqlStatementFormatter::getWaySqlHeaderStrings(_database.getMapId());
-  const QStringList wayNodeSqlHeaders = HootApiDbSqlStatementFormatter::getWayNodeSqlHeaderStrings(_database.getMapId());
-
-  _createOutputFile(HootApiDb::getCurrentWaysTableName(_database.getMapId()), waySqlHeaders[0]);
-  _createOutputFile(HootApiDb::getCurrentWayNodesTableName(_database.getMapId()), wayNodeSqlHeaders[0]);
+  _createOutputFile(
+    HootApiDb::getCurrentWaysTableName(_database.getMapId()),
+    HootApiDbSqlStatementFormatter::getWaySqlHeaderString(_database.getMapId()));
+  _createOutputFile(
+    HootApiDb::getCurrentWayNodesTableName(_database.getMapId()),
+    HootApiDbSqlStatementFormatter::getWayNodeSqlHeaderString(_database.getMapId()));
 }
 
 void HootApiDbBulkInserter::_writeWay(const unsigned long wayDbId, const Tags& tags)
 {
   LOG_TRACE("Writing way to stream...");
-
-  const QStringList waySqlStrs =
-    _sqlFormatter->wayToSqlStrings(wayDbId, _changesetData.currentChangesetId, tags);
-  _outputSections[HootApiDb::getCurrentWaysTableName(_database.getMapId())]->write(waySqlStrs[0].toUtf8());
+  _outputSections[HootApiDb::getCurrentWaysTableName(_database.getMapId())]->write(
+    _sqlFormatter->wayToSqlString(wayDbId, _changesetData.currentChangesetId, tags).toUtf8());
 }
 
 void HootApiDbBulkInserter::_writeWayNodes(const unsigned long dbWayId,
@@ -626,9 +623,8 @@ void HootApiDbBulkInserter::_writeWayNodes(const unsigned long dbWayId,
         QString("Way %1 has reference to unknown node ID %2").arg(dbWayId, *it));
     }
 
-    const QStringList wayNodeSqlStrs =
-      _sqlFormatter->wayNodeToSqlStrings(dbWayId, wayNodeIdVal, wayNodeIndex);
-    _outputSections[HootApiDb::getCurrentWayNodesTableName(_database.getMapId())]->write(wayNodeSqlStrs[0].toUtf8());
+    _outputSections[HootApiDb::getCurrentWayNodesTableName(_database.getMapId())]->write(
+      _sqlFormatter->wayNodeToSqlString(dbWayId, wayNodeIdVal, wayNodeIndex).toUtf8());
 
     ++wayNodeIndex;
   }
@@ -636,22 +632,19 @@ void HootApiDbBulkInserter::_writeWayNodes(const unsigned long dbWayId,
 
 void HootApiDbBulkInserter::_createRelationOutputFiles()
 {
-  const QStringList relationSqlHeaders =
-    HootApiDbSqlStatementFormatter::getRelationSqlHeaderStrings(_database.getMapId());
-  const QStringList relationMemberSqlHeaders =
-    HootApiDbSqlStatementFormatter::getRelationMemberSqlHeaderStrings(_database.getMapId());
-
-  _createOutputFile(HootApiDb::getCurrentRelationsTableName(_database.getMapId()), relationSqlHeaders[0]);
-  _createOutputFile(HootApiDb::getCurrentRelationMembersTableName(_database.getMapId()), relationMemberSqlHeaders[0]);
+  _createOutputFile(
+    HootApiDb::getCurrentRelationsTableName(_database.getMapId()),
+    HootApiDbSqlStatementFormatter::getRelationSqlHeaderString(_database.getMapId()));
+  _createOutputFile(
+    HootApiDb::getCurrentRelationMembersTableName(_database.getMapId()),
+    HootApiDbSqlStatementFormatter::getRelationMemberSqlHeaderString(_database.getMapId()));
 }
 
 void HootApiDbBulkInserter::_writeRelation(const unsigned long relationDbId, const Tags& tags)
 {
   LOG_TRACE("Writing relation to stream...");
-
-  const QStringList relationSqlStrs =
-    _sqlFormatter->relationToSqlStrings(relationDbId, _changesetData.currentChangesetId, tags);
-  _outputSections[HootApiDb::getCurrentRelationsTableName(_database.getMapId())]->write(relationSqlStrs[0].toUtf8());
+  _outputSections[HootApiDb::getCurrentRelationsTableName(_database.getMapId())]->write(
+    _sqlFormatter->relationToSqlString(relationDbId, _changesetData.currentChangesetId, tags).toUtf8());
 }
 
 void HootApiDbBulkInserter::_writeRelationMember(const unsigned long sourceRelationDbId,
@@ -659,11 +652,9 @@ void HootApiDbBulkInserter::_writeRelationMember(const unsigned long sourceRelat
                                                 const unsigned long memberDbId,
                                                 const unsigned int memberSequenceIndex)
 {
-  const QStringList relationMemberSqlStrs =
-    _sqlFormatter->relationMemberToSqlStrings(
-      sourceRelationDbId, memberDbId, member, memberSequenceIndex);
   _outputSections[HootApiDb::getCurrentRelationMembersTableName(_database.getMapId())]->write(
-    relationMemberSqlStrs[0].toUtf8());
+    _sqlFormatter->relationMemberToSqlString(
+      sourceRelationDbId, memberDbId, member, memberSequenceIndex).toUtf8());
   _writeStats.relationMembersWritten++;
 }
 
@@ -681,7 +672,8 @@ void HootApiDbBulkInserter::_writeChangeset()
   if (!_outputSections[HootApiDb::getChangesetsTableName(_database.getMapId())])
   {
     _createOutputFile(
-      HootApiDb::getChangesetsTableName(_database.getMapId()), _sqlFormatter->getChangesetSqlHeaderString(_database.getMapId()));
+      HootApiDb::getChangesetsTableName(_database.getMapId()),
+      _sqlFormatter->getChangesetSqlHeaderString(_database.getMapId()));
   }
 
   _outputSections[HootApiDb::getChangesetsTableName(_database.getMapId())]->write(

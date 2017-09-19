@@ -29,13 +29,11 @@
 // hoot
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/io/OsmApiDbSqlStatementFormatter.h>
 
 // Qt
 #include <QDateTime>
 #include <QStringBuilder>
-
-using namespace geos::geom;
-using namespace std;
 
 namespace hoot
 {
@@ -52,27 +50,27 @@ _mapId(mapId)
 
 void HootApiDbSqlStatementFormatter::_initOutputFormatStrings(const QString delimiter)
 {
-  QString formatString = CHANGESETS_OUTPUT_FORMAT_STRING_DEFAULT;
+  QString formatString = HOOTAPIDB_CHANGESETS_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[HootApiDb::getChangesetsTableName(_mapId)] =
     formatString.replace("\t", delimiter);
 
-  formatString = CURRENT_NODES_OUTPUT_FORMAT_STRING_DEFAULT;
+  formatString = HOOTAPIDB_CURRENT_NODES_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[HootApiDb::getCurrentNodesTableName(_mapId)] =
     formatString.replace("\t", delimiter);
 
-  formatString = CURRENT_WAYS_OUTPUT_FORMAT_STRING_DEFAULT;
+  formatString = HOOTAPIDB_CURRENT_WAYS_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[HootApiDb::getCurrentWaysTableName(_mapId)] =
     formatString.replace("\t", delimiter);
 
-  formatString = CURRENT_WAY_NODES_OUTPUT_FORMAT_STRING_DEFAULT;
+  formatString = HOOTAPIDB_CURRENT_WAY_NODES_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[HootApiDb::getCurrentWayNodesTableName(_mapId)] =
     formatString.replace("\t", delimiter);
 
-  formatString = CURRENT_RELATIONS_OUTPUT_FORMAT_STRING_DEFAULT;
+  formatString = HOOTAPIDB_CURRENT_RELATIONS_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[HootApiDb::getCurrentRelationsTableName(_mapId)] =
     formatString.replace("\t", delimiter);
 
-  formatString = CURRENT_RELATION_MEMBERS_OUTPUT_FORMAT_STRING_DEFAULT;
+  formatString = HOOTAPIDB_CURRENT_RELATION_MEMBERS_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[HootApiDb::getCurrentRelationMembersTableName(_mapId)] =
     formatString.replace("\t", delimiter);
 }
@@ -114,13 +112,11 @@ QString HootApiDbSqlStatementFormatter::_toTagsString(const Tags& tags)
   return tagsStr;
 }
 
-QStringList HootApiDbSqlStatementFormatter::nodeToSqlStrings(const ConstNodePtr& node,
+QString HootApiDbSqlStatementFormatter::nodeToSqlString(const ConstNodePtr& node,
                                                             const long nodeId,
                                                             const long changesetId,
                                                             const bool validate)
 {
-  QStringList sqlStrs;
-
   const QString nodeIdStr = QString::number(nodeId);
   if (validate)
   {
@@ -154,18 +150,16 @@ QStringList HootApiDbSqlStatementFormatter::nodeToSqlStrings(const ConstNodePtr&
       .arg(tileNumberString));
   if (node->getTags().size() > 0)
   {
-    nodeStr.replace("\\N", _escapeCopyToData(_toTagsString(node->getTags())));
+    nodeStr.replace(
+      "\\N", OsmApiDbSqlStatementFormatter::escapeCopyToData(_toTagsString(node->getTags())));
   }
-  sqlStrs.append(nodeStr);
 
-  return sqlStrs;
+  return nodeStr;
 }
 
-QStringList HootApiDbSqlStatementFormatter::wayToSqlStrings(const long wayId, const long changesetId,
+QString HootApiDbSqlStatementFormatter::wayToSqlString(const long wayId, const long changesetId,
                                                             const Tags& tags)
 {
-  QStringList sqlStrs;
-
   QString wayStr;
   wayStr.reserve(600);
   wayStr.append(
@@ -175,35 +169,28 @@ QStringList HootApiDbSqlStatementFormatter::wayToSqlStrings(const long wayId, co
       .arg(_dateString));
   if (tags.size() > 0)
   {
-    wayStr.replace("\\N", _escapeCopyToData(_toTagsString(tags)));
+    wayStr.replace("\\N", OsmApiDbSqlStatementFormatter::escapeCopyToData(_toTagsString(tags)));
   }
-  sqlStrs.append(wayStr);
 
-  return sqlStrs;
+  return wayStr;
 }
 
-QStringList HootApiDbSqlStatementFormatter::wayNodeToSqlStrings(const long wayId,
+QString HootApiDbSqlStatementFormatter::wayNodeToSqlString(const long wayId,
                                                                const long wayNodeId,
                                                                const unsigned int wayNodeIndex)
 {
-  QStringList sqlStrs;
-
   const QString wayIdStr(QString::number(wayId));
   const QString wayNodeIdStr(QString::number(wayNodeId));
   const QString wayNodeIndexStr(QString::number(wayNodeIndex));
-  sqlStrs.append(
+  return
     _outputFormatStrings[HootApiDb::getCurrentWayNodesTableName(_mapId)]
-      .arg(wayIdStr, wayNodeIdStr, wayNodeIndexStr));
-
-  return sqlStrs;
+      .arg(wayIdStr, wayNodeIdStr, wayNodeIndexStr);
 }
 
-QStringList HootApiDbSqlStatementFormatter::relationToSqlStrings(const long relationId,
+QString HootApiDbSqlStatementFormatter::relationToSqlString(const long relationId,
                                                                  const long changesetId,
                                                                  const Tags& tags)
 {
-  QStringList sqlStrs;
-
   QString relationStr;
   relationStr.reserve(600);
   relationStr.append(
@@ -213,42 +200,36 @@ QStringList HootApiDbSqlStatementFormatter::relationToSqlStrings(const long rela
       .arg(_dateString));
   if (tags.size() > 0)
   {
-    relationStr.replace("\\N", _escapeCopyToData(_toTagsString(tags)));
+    relationStr.replace("\\N", OsmApiDbSqlStatementFormatter::escapeCopyToData(_toTagsString(tags)));
   }
-  sqlStrs.append(relationStr);
 
-  return sqlStrs;
+  return relationStr;
 }
 
-QStringList HootApiDbSqlStatementFormatter::relationMemberToSqlStrings(const long relationId,
+QString HootApiDbSqlStatementFormatter::relationMemberToSqlString(const long relationId,
                                                                        const long memberId,
                                                                        const RelationData::Entry& member,
                                                                        const unsigned int memberSequenceIndex)
 {
-  QStringList sqlStrs;
-
   const QString relationIdStr(QString::number(relationId));
   const QString memberIdStr(QString::number(memberId));
   const QString memberType = member.getElementId().getType().toString().toLower();
   const QString memberSequenceIndexStr(QString::number(memberSequenceIndex));
-  QString memberRole = _escapeCopyToData(member.getRole());
+  QString memberRole = OsmApiDbSqlStatementFormatter::escapeCopyToData(member.getRole());
   //handle empty data
   if (memberRole.trimmed().isEmpty())
   {
     memberRole = "<no role>";
   }
-
-  sqlStrs.append(
+  return
     _outputFormatStrings[HootApiDb::getCurrentRelationMembersTableName(_mapId)]
-      .arg(relationIdStr, memberType, memberIdStr, memberRole, memberSequenceIndexStr));
-
-  return sqlStrs;
+      .arg(relationIdStr, memberType, memberIdStr, memberRole, memberSequenceIndexStr);
 }
 
 QString HootApiDbSqlStatementFormatter::changesetToSqlString(const long changesetId,
                                                              const long changesetUserId,
                                                              const long numChangesInChangeset,
-                                                             const Envelope& changesetBounds)
+                                                             const geos::geom::Envelope& changesetBounds)
 {
   Tags tags;
   tags["bot"] = "yes";
@@ -264,28 +245,28 @@ QString HootApiDbSqlStatementFormatter::changesetToSqlString(const long changese
       .arg(QString::number(changesetBounds.getMaxX(), 'g', _precision))
       .arg(_dateString)
       .arg(QString::number(numChangesInChangeset))
-      .arg(_escapeCopyToData(_toTagsString(tags)));
+      .arg(OsmApiDbSqlStatementFormatter::escapeCopyToData(_toTagsString(tags)));
 }
 
-QStringList HootApiDbSqlStatementFormatter::elementToSqlStrings(const ConstElementPtr& element,
+QString HootApiDbSqlStatementFormatter::elementToSqlString(const ConstElementPtr& element,
                                                                 const long elementId,
                                                                 const long changesetId)
 {
   switch (element->getElementType().getEnum())
   {
     case ElementType::Node:
-      return nodeToSqlStrings(boost::dynamic_pointer_cast<const Node>(element), elementId, changesetId);
+      return nodeToSqlString(boost::dynamic_pointer_cast<const Node>(element), elementId, changesetId);
 
     case ElementType::Way:
-      return wayToSqlStrings(elementId, changesetId, element->getTags());
+      return wayToSqlString(elementId, changesetId, element->getTags());
 
     case ElementType::Relation:
-      return relationToSqlStrings(elementId, changesetId, element->getTags());
+      return relationToSqlString(elementId, changesetId, element->getTags());
 
     default:
       throw HootException("Unsupported element member type.");
   }
-  return QStringList();
+  return "";
 }
 
 }
