@@ -1023,9 +1023,6 @@ void OsmApiDbBulkInserter::_reset()
 
 unsigned long OsmApiDbBulkInserter::_establishIdMapping(const ElementId& sourceId)
 {
-  //TODO: can probably reduce the current element id increment logic to just that of when
-  //_validateData = false
-
   unsigned long dbIdentifier;
 
   switch (sourceId.getType().getEnum())
