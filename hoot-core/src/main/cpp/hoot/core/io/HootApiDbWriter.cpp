@@ -85,7 +85,7 @@ void HootApiDbWriter::close()
 {
   LOG_DEBUG("Closing database writer...");
   finalizePartial();
-  if ( (_nodesWritten > 0) || (_waysWritten > 0) || (_relationsWritten > 0) )
+  if ((_nodesWritten > 0) || (_waysWritten > 0) || (_relationsWritten > 0))
   {
     LOG_DEBUG("Write stats:");
     LOG_DEBUG("\t    Nodes: " << StringUtils::formatLargeNumber(_nodesWritten));
@@ -201,11 +201,6 @@ void HootApiDbWriter::_overwriteMaps(const QString& mapName, const set<long>& ma
 
       _hootdb.setMapId(_hootdb.insertMap(mapName, true));
     }
-//    else
-//    {
-//      LOG_ERROR("There are one or more maps with this name. Consider using "
-//                "'hootapi.db.writer.overwrite.map'. Map IDs: " << mapIds);
-//    }
     else if (mapIds.size() > 1)
     {
       LOG_ERROR("There are multiple maps with this name. Consider using "

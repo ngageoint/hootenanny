@@ -41,7 +41,7 @@ class ElementComparer
 
 public:
 
-  static const long DEBUG_ID = 6633775;
+  static const long DEBUG_ID = 0;
 
   ElementComparer(Meters threshold = 0.05);
 

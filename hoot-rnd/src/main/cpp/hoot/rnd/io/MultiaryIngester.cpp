@@ -361,6 +361,8 @@ boost::shared_ptr<QTemporaryFile> MultiaryIngester::_deriveAndWriteChangesToChan
           ((referencePoisParsed + newPoisParsed) % _logUpdateInterval == 0) ||
           ( critInputStrm->getNumFeaturesTotal() % _logUpdateInterval == 0))
       {
+        //not completely sure why these progress logs don't overwrite each other like the others
+        //do...
         PROGRESS_INFO(
           "Ref: " << StringUtils::formatLargeNumber(referencePoisParsed) <<
           " New: " << StringUtils::formatLargeNumber(newPoisParsed) <<
@@ -402,9 +404,10 @@ void MultiaryIngester::_writeChangesToReferenceLayer(const QString changesetOutp
   //already has the macro for OsmMapWriter, it can't be added for OsmChangeWriter as well.
   conf().set(ConfigOptions::getHootapiDbWriterCreateUserKey(), false);
   conf().set(ConfigOptions::getHootapiDbWriterOverwriteMapKey(), false);
-  //The bulk inserter won't work here, b/c we're writing more than just inserts and even if we
+  //The bulk inserter won't work here, b/c we're writing more than just inserts, and even if we
   //executed the inserts separately with the bulk inserter, we would still want the modifies/deletes
-  //to run within the same transaction which isn't possible unless we run with the HootApiDbWriter.
+  //to run within the same transaction.  Having all of them in the same transaction isn't possible
+  //here unless we use the HootApiDbWriter.
   conf().set(ConfigOptions::getHootapiDbWriterFastBulkInsertKey(), false);
   boost::shared_ptr<PartialOsmMapWriter> referenceWriter =
     boost::dynamic_pointer_cast<PartialOsmMapWriter>(
@@ -415,8 +418,9 @@ void MultiaryIngester::_writeChangesToReferenceLayer(const QString changesetOutp
   referenceChangeWriter->open(referenceOutput);
   LOG_DEBUG("Opened change layer writer.");
 
-  //this spark changeset reader will read in the element payload as xml
-  //TODO: add an ChangesetProviderFactory or OsmChangeReaderFactory to get rid of this
+  //this spark changeset reader will read in the element payload as xml (see comment in
+  //_deriveAndWriteChangesToChangeset)
+  //TODO: add a ChangesetProviderFactory or an OsmChangeReaderFactory to get rid of this
   //SparkChangesetReader dependency?
   SparkChangesetReader changesetFileReader;
   changesetFileReader.open(changesetOutput);

@@ -36,8 +36,9 @@ namespace hoot
 class HootApiDbSqlStatementFormatter;
 
 /**
- * See OsmApiDbBulkInserter.  This class implements the offline workflow only and does not allow for
- * writing to a SQL file.
+ * A Hooteanny API database writer that should perform faster than HootApiDbWriter when creating new
+ * elements in a new database only.  See OsmApiDbBulkInserter.  This class implements the offline
+ * workflow only and does not allow for writing to a SQL file.
  *
  * TODO: Having this class inheriting from OsmApiDbBulkInserter is not the cleanest approach but
  * allowed for reducing a lot of redundant code up front without involving a massive amount of
