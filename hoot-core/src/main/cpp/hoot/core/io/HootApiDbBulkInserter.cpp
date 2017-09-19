@@ -91,13 +91,7 @@ void HootApiDbBulkInserter::open(QString url)
   }
   _database.open(_outputUrl);
 
-  _database.transaction();
   _getOrCreateMap();
-  //committing here is going to create the indexes...didn't want to do that initially, but with
-  //the copy statements, I'm not seeing much difference in performance; if no commit is made here,
-  //then the sequences won't exist and the sql query will fail
-  _database.commit();
-
   LOG_VART(_database.getMapId());
 
   _sectionNames = _createSectionNameList();
@@ -247,6 +241,7 @@ void HootApiDbBulkInserter::_writeDataToDb()
   //_database.enableConstraints();
   //this will re-create the indexes
   //_database.commit();
+  _database.createPendingMapIndexes();
 }
 
 void HootApiDbBulkInserter::_writeCombinedSqlFile()
