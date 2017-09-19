@@ -82,7 +82,7 @@ public:
 
     const QString outputDir = "test-output/io/SparkChangesetWriterTest";
     QDir().mkpath(outputDir);
-    const QString changesetOutput = outputDir + "/changeset-1.spark.1";
+    const QString changesetOutput = outputDir + "/changeset-1.spark.2";
 
     SparkChangesetWriter changesetFileWriter;
     changesetFileWriter.open(changesetOutput);
@@ -108,7 +108,7 @@ public:
 
     const QString outputDir = "test-output/io/SparkChangesetWriterTest";
     QDir().mkpath(outputDir);
-    const QString changesetOutput = outputDir + "/changeset-1.spark.1";
+    const QString changesetOutput = outputDir + "/changeset-1.spark.3";
 
     SparkChangesetWriter changesetFileWriter;
     changesetFileWriter.open(changesetOutput);
@@ -136,7 +136,7 @@ public:
 
     const QString outputDir = "test-output/io/SparkChangesetWriterTest";
     QDir().mkpath(outputDir);
-    const QString changesetOutput = outputDir + "/changeset-1.spark.1";
+    const QString changesetOutput = outputDir + "/changeset-1.spark.4";
 
     SparkChangesetWriter changesetFileWriter;
     changesetFileWriter.open(changesetOutput);
