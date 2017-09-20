@@ -1,47 +1,122 @@
 pipeline {
     agent any
+    // Checkbox parameters for users to skip steps and control pipeline behavior
+    parameters {
+        // TODO: Need logic to reuse VM.  Current logic destroys it every run
+        //booleanParam(name: 'Destroy_VM (Coming Soon)',
+        //    defaultValue: true)
+        booleanParam(name: 'Static_analysis',
+            defaultValue: true)
+        booleanParam(name: 'License_headers',
+            defaultValue: true)
+        booleanParam(name: 'Configure_Tests',
+            defaultValue: true)
+        booleanParam(name: 'Core_tests',
+            defaultValue: true)
+        booleanParam(name: 'Services_tests',
+            defaultValue: true)
+        booleanParam(name: 'UI_tests',
+            defaultValue: true)
+    }
     stages {
         stage("Setup") {
             steps {
                 // Attempt to destroy exiting VM but don't stop job if not there
                 sh 'vagrant destroy -f || true'
-                cleanWs()
-                
-                git branch: 'develop', credentialsId: 'bebe8221-2edd-4ef5-bc85-fa5ec52c8ffc', url: 'https://github.com/ngageoint/hootenanny'
-                sh 'git submodule update --init'
-                
+                // Make sure we have the tags info because figuring out the version is required in the build process
+                sh 'git fetch --tags'
                 sh 'cp -R ../software.ubuntu1404 software'
-                //sh 'export WORDS_HOME=/fouo/ubuntu'
-                //sh '( [ -e $WORDS_HOME/words1.sqlite ] &&  cp $WORDS_HOME/words1.sqlite conf )'
-               
+            }
+        }
+        // Need to expand this step to more robust static analysis scanning with SonarQube
+        // and publish results
+        stage("Static Analysis") {
+            when {
+                expression {
+                    return params.Static_analysis
+                }
+                not {
+                    // Don't run this stage on pull requests
+                    branch 'PR-*'
+                }
+            }
+            steps {
+                sh 'cppcheck --enable=all --inconclusive --xml-version=2 --verbose --check-config . 2> cppcheck.xml'
+            }
+        }
+        stage("License Header") {
+            when {
+                expression {
+                    return params.License_headers
+                }
+            }
+            steps {
+                sh 'export HOOT_HOME=`pwd`; ./scripts/copyright/UpdateAllCopyrightHeaders.sh'
+            }
+        }
+	stage("Vagrant Up") {
+            steps {
+                // NOTE: Only installs hoot build dependencies
+                sh 'vagrant up --provision-with software,hoot --provider aws'
+            }       
+        }
+        stage("Test Configure") {
+            when {
+                expression {
+                    return params.Configure_Tests
+                }
+                not {
+                    // Don't run this step on pull requests
+                    branch 'PR-*'
+                }
+            }
+            steps {
+                // Run configuration tests
+                sh 'vagrant ssh -c "cd hoot; source ./SetupEnv.sh; ./scripts/TestConfigure.sh &> Hoot_Config_Test || { cat Hoot_Config_Test; false; }"'
+            }
+        }
+        stage("Vagrant Provision") {
+            steps {
+                // NOTE: Ubuntu only, may need more complex logic if other OS are included in pipeline
                 sh 'cp LocalConfig.pri.orig LocalConfig.pri'
-                echo 'QMAKE_CXXFLAGS += -Werror" >> LocalConfig.pri'
+                sh 'echo "QMAKE_CXXFLAGS += -Werror" >> LocalConfig.pri'
                 sh 'sed -i s/"QMAKE_CXX=g++"/"#QMAKE_CXX=g++"/g LocalConfig.pri'                 
                 sh 'sed -i s/"#QMAKE_CXX=ccache g++"/"QMAKE_CXX=ccache g++"/g LocalConfig.pri'
-            }
-             
+                
+                // Perform remainder of provisioning
+                sh 'vagrant provision --provision-with build,EGD,tomcat,mapnik,hadoop'
+            }       
         }
-        stage("Vagrant Up") {
-            steps {
-                sh 'vagrant up --provider aws'
+	stage("Core Tests") {
+            when {
+                expression {
+                    return params.Core_tests
+                }
             }
-             
-        }
-        stage("Core Tests") {
             steps {
                 sh 'vagrant ssh -c "cd hoot; source ./SetupEnv.sh; hoot --version --debug"'
                 sh 'vagrant ssh -c "export HOOT_TEST_DIFF=--diff"'
-                sh 'vagrant ssh -c "cd hoot; bin/HootTest $HOOT_TEST_DIFF --glacial"'
+                sh 'vagrant ssh -c "cd hoot; bin/HootTest $HOOT_TEST_DIFF --glacial; make -sj`nproc` archive"'
             }
         }
         stage("Services Tests") {
+            when {
+                expression {
+                    return params.Services_tests
+                }
+            }
             steps {
                 sh 'vagrant ssh -c "cd hoot; make -sj`nproc` pp-test"'
                 sh 'vagrant ssh -c "cd hoot; make -sj`nproc` plugins-test"'
                 sh 'vagrant ssh -c "cd hoot; make -sj`nproc` services-test"'
             }
         }
-         stage("UI Tests") {
+	stage("UI Tests") {
+            when {
+                expression {
+                    return params.UI_tests
+                }
+            }
             steps {
                 sh 'vagrant ssh -c "cd hoot; make -s ui-test"'
             }
@@ -49,12 +124,64 @@ pipeline {
     }
     post {
         success {
+            // If all tests passed, clean everything up
             sh 'vagrant destroy -f'
             cleanWs()
         }
-        failure {
-            slackSend (color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
- 
+	failure {
+            script {
+                // Check to see if we failed last time
+                if (currentBuild.previousBuild.result == 'FAILURE') {
+                    // Copy over any UI failure screenshots
+                    sh 'vagrant scp default:~/hoot/test-files/ui/screenshot_*.png ./test-files/ui/'
+                    emailext (
+                        to: '$DEFAULT_RECIPIENTS',
+                        subject: "Still Failing: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                        mimeType: 'text/html',
+                        attachmentsPattern: 'test-files/ui/screenshot_*.png',
+                        body: """<p>Failure: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+                            <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
+                            recipientProviders: [
+                                [$class: 'DevelopersRecipientProvider'],
+                                [$class: 'CulpritsRecipientProvider'],
+                                [$class: 'RequesterRecipientProvider']]
+                    )
+                }
+            }
+        }
+	changed {
+            script {
+                // Job has been fixed
+                if (currentBuild.currentResult == 'SUCCESS') {
+                    emailext (
+                        to: '$DEFAULT_RECIPIENTS',
+                        subject: "Back to normal: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                        mimeType: 'text/html',
+                        attachmentsPattern: 'test-files/ui/screenshot_*.png',
+                        body: """<p>Fixed: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+                            <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
+                            recipientProviders: [
+                                [$class: 'DevelopersRecipientProvider'],
+                                [$class: 'CulpritsRecipientProvider'],
+                                [$class: 'RequesterRecipientProvider']]
+                        )
+                } else  if (currentBuild.currentResult == 'FAILURE') {
+                    // Copy over any UI failure screenshots
+                    sh 'vagrant scp default:~/hoot/test-files/ui/screenshot_*.png ./test-files/ui/'
+                    emailext (
+                        to: '$DEFAULT_RECIPIENTS',
+                        subject: "Failed: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                        mimeType: 'text/html',
+                        attachmentsPattern: 'test-files/ui/screenshot_*.png',
+                        body: """<p>Fixed: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+                        <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
+                            recipientProviders: [
+                                [$class: 'DevelopersRecipientProvider'],
+                                [$class: 'CulpritsRecipientProvider'],
+                                [$class: 'RequesterRecipientProvider']]
+                    )
+                }
+            }
         }
     }
 }

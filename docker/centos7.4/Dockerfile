@@ -10,7 +10,7 @@ ENV container docker
 #rm -f /lib/systemd/system/basic.target.wants/*;\
 #rm -f /lib/systemd/system/anaconda.target.wants/*;
 RUN yum -y install openssh openssh-server openssh-clients openssl-libs; yum clean all; systemctl enable sshd.service
-RUN yum install -y nano wget ntp curl sudo vim python mlocate bt
+RUN yum install -y nano wget ntp curl sudo vim python mlocate bt file GConf2
 RUN chkconfig ntpd on
 RUN chkconfig sshd on
 RUN useradd vagrant
