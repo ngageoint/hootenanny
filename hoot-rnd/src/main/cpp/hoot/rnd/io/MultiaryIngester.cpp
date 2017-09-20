@@ -229,9 +229,11 @@ void MultiaryIngester::_writeNewReferenceData(
 
   conf().set(ConfigOptions::getHootapiDbWriterCreateUserKey(), true);
   conf().set(ConfigOptions::getHootapiDbWriterOverwriteMapKey(), true);
-  //We're able to use the faster bulk inserter here, since this is a brand new dataset.  The reads
-  //are much slower than the writing, so we could maybe even get better performance by splitting
-  //the reading and writing into separate threads.
+  //We're able to use the faster bulk inserter here, since this is a brand new dataset.  For raw
+  //writes, there was as much as a 70% performance increase seen when using the bulk inserter vs
+  //the regular inserter.  Here, we're seeing a 15% write performance improvement.  This seems to be
+  //b/c the reads are much slower than the writing.  So, we could maybe get better performance by
+  //splitting the reading and writing into separate threads (?).
   conf().set(ConfigOptions::getHootapiDbWriterFastBulkInsertKey(), true);
   boost::shared_ptr<PartialOsmMapWriter> referenceWriter =
     boost::dynamic_pointer_cast<PartialOsmMapWriter>(
