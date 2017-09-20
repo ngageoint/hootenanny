@@ -1420,6 +1420,27 @@ translate = {
 
             print(''); // just to get one blank line
         } // End for i
-    } // End dumpSchema
+    }, // End dumpSchema
 
+    // overrideValues - Add, modify or delete tags/attributes based on a JSON string
+    overrideValues: function(values,changeString)
+    {
+        if (changeString == '') return;
+
+        var override = JSON.parse(changeString);
+
+        for (var i in override)
+        {
+            if (override[i] == '')
+            {
+                delete values[i];
+            }
+            else
+            {
+                values[i] = override[i];
+            }
+        }
+
+        return values;
+    } // End overrideValues
 } // End of translate

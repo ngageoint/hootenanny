@@ -2378,6 +2378,20 @@ The direction that the translation script should translate. `toogr` will transla
 
 The script to use for translation.
 
+=== translation.override
+
+* Data Type: string
+* Default Value: ``
+
+Override the value of translated tags and attributes.
+
+VERY IMPORTANT NOTE: The changes apply to ALL elements and are applied to the OSM+ tags either before or
+after the translation. E.g.
+* After attributes are translated to OSM+ tags during Import
+* Before OSM+ tags are translated to attributes on Export
+
+NOTE: This assumes that you know exactly what tags you want to modify/delete
+
 === unify.enable.optimal.constrained.matches
 
 * Data Type: bool
