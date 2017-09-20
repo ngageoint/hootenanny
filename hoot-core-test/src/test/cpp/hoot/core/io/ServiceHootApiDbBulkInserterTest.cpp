@@ -142,11 +142,6 @@ public:
     writer.close();
     mapId = writer.getMapId();
 
-    //TODO: need a better way to verify the file output, as the map ids written to it will vary per
-    //test run
-//    TestUtils::verifyStdMatchesOutputIgnoreDate(
-//      "test-files/io/ServiceHootApiDbBulkInserterTest/psql-offline.sql",
-//      outFile);
     verifyDatabaseOutputOffline();
   }
 };

@@ -226,6 +226,7 @@ boost::shared_ptr<OsmMap> ServicesDbTestUtils::createTestMap1()
 
   boost::shared_ptr<Node> n1 = _createNode(-77.0, 38.0, map);
   n1->setTag("building", "yes");
+  //put a space in this tag value, since hstore dies on those if they are not esacaped properly
   n1->setTag("name", "n1 - n2");
 
   boost::shared_ptr<Way> w1(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
