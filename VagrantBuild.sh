@@ -11,8 +11,11 @@ else # Centos
   source ~/.bash_profile
 fi
 
-#cd $HOOT_HOME
-cd hoot
+HOOT_HOME=~/hoot
+echo HOOT_HOME: $HOOT_HOME
+
+cd $HOOT_HOME
+#cd hoot
 source ./SetupEnv.sh
 
 echo "### Configuring Hoot..."

@@ -295,6 +295,9 @@ fi
 # Get the configuration for the Database
 source $HOOT_HOME/conf/database/DatabaseConfig.sh
 
+echo "New postgres restart for docker box tknerr/baseimage-ubuntu-14.04"
+sudo service postgresql restart
+
 # NOTE: These have been changed to pg9.5
 # See if we already have a dB user
 if ! sudo -u postgres psql -c "\du" | awk -F"|" '{print $1}' | grep -iw --quiet $DB_USER; then
@@ -311,7 +314,6 @@ if ! sudo -u postgres psql -c "\du" | awk -F"|" '{print $1}' | grep -iw --quiet 
     sudo -u postgres createuser --superuser "$DB_USER_OSMAPI"
     sudo -u postgres psql -c "alter user \"$DB_USER_OSMAPI\" with password '$DB_PASSWORD_OSMAPI';"
 fi
-
 
 # Check for a hoot Db
 if ! sudo -u postgres psql -lqt | awk -F"|" '{print $1}' | grep -iw --quiet $DB_NAME; then
@@ -617,3 +619,4 @@ fi
 
 # Always start with a clean $HOOT_HOME/userfiles/tmp
 rm -rf $HOOT_HOME/userfiles/tmp
+
