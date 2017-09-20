@@ -58,6 +58,7 @@ Conflation occurs at the dataset level, where the user’s workflow determines t
 * OpenStreetMap SQL changeset file (.osc.sql) (M)
 
 (M) = format requires reading entire dataset into memory during processing
+
 (*) = format requires reading entire dataset into memory during processing only if element ID output is sorted
 
 # Tag Schemas

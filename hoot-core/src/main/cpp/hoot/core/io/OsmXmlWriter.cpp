@@ -299,11 +299,13 @@ void OsmXmlWriter::_writeTags(const ConstElementPtr& element)
 
   for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
   {
-    if (it.key().isEmpty() == false && it.value().isEmpty() == false)
+    const QString key = it.key();
+    const QString val = it.value().trimmed();
+    if (val.isEmpty() == false)
     {
       _writer->writeStartElement("tag");
-      _writer->writeAttribute("k", removeInvalidCharacters(it.key()));
-      if (it.key() == MetadataTags::HootStatus() &&
+      _writer->writeAttribute("k", removeInvalidCharacters(key));
+      if (key == MetadataTags::HootStatus() &&
           //status check here only for nodes/ways; should relation have this check too?
           (type == ElementType::Relation ||
            (type != ElementType::Relation && element->getStatus() != Status::Invalid)))
@@ -319,7 +321,7 @@ void OsmXmlWriter::_writeTags(const ConstElementPtr& element)
       }
       else
       {
-        _writer->writeAttribute("v", removeInvalidCharacters(it.value()));
+        _writer->writeAttribute("v", removeInvalidCharacters(val));
       }
       _writer->writeEndElement();
     }
@@ -506,12 +508,14 @@ void OsmXmlWriter::_writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapP
 
   for (Tags::const_iterator tit = tags.constBegin(); tit != tags.constEnd(); ++tit)
   {
-    if (tit.key().isEmpty() == false && tit.value().isEmpty() == false)
+    const QString key = tit.key();
+    const QString val = tit.value().trimmed();
+    if (val.isEmpty() == false)
     {
       _writer->writeStartElement("tag");
-      _writer->writeAttribute("k", removeInvalidCharacters(tit.key()));
+      _writer->writeAttribute("k", removeInvalidCharacters(key));
 
-      if (tit.key() == MetadataTags::HootStatus() && w->getStatus() != Status::Invalid)
+      if (key == MetadataTags::HootStatus() && w->getStatus() != Status::Invalid)
       {
         if (_textStatus)
         {
@@ -524,7 +528,7 @@ void OsmXmlWriter::_writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapP
       }
       else
       {
-        _writer->writeAttribute("v", removeInvalidCharacters(tit.value()));
+        _writer->writeAttribute("v", removeInvalidCharacters(val));
       }
       _writer->writeEndElement();
     }

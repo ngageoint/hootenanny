@@ -1155,10 +1155,14 @@ void OsmApiDbBulkInserter::_writeTagsToStream(const Tags& tags,
 
   for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
   {
-    const QStringList tagSqlStrs =
-      _sqlFormatter->tagToSqlStrings(dbId, elementType, it.key(), it.value());
-    *currentTable << tagSqlStrs[0];
-    *historicalTable << tagSqlStrs[1];
+    const QString key = it.key();
+    const QString value = it.value().trimmed();
+    if (!value.isEmpty())
+    {
+      const QStringList tagSqlStrs = _sqlFormatter->tagToSqlStrings(dbId, elementType, key, value);
+      *currentTable << tagSqlStrs[0];
+      *historicalTable << tagSqlStrs[1];
+    }
   }
 }
 
