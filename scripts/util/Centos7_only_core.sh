@@ -165,7 +165,7 @@ sudo yum -y install \
 
 # Official download page:
 # http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
-if  ! rpm -qa | grep jdk-8u144-linux; then
+if  ! rpm -qa | grep jdk1.8.0_144-1.8.0_144; then
     echo "### Installing Java8..."
     if [ ! -f jdk-8u144-linux-x64.rpm ]; then
       JDKURL=http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jdk-8u144-linux-x64.rpm
