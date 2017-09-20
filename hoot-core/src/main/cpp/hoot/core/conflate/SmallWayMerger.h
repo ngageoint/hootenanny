@@ -81,6 +81,8 @@ protected:
   NodeToWayMap* _n2w;
   std::auto_ptr<TagDifferencer> _diff;
 
+  bool _preserveUnknown1ElementIdWhenModifyingFeatures;
+
   void _mergeNeighbors(boost::shared_ptr<Way> w);
 
   void _mergeWays(const std::set<long>& ids);

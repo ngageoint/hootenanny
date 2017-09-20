@@ -242,8 +242,10 @@ if [ ! -f bin/osmosis ]; then
 fi
 
 
-# For convenience, set the version of GDAL to download and install
-GDAL_VERSION=2.1.3
+# For convenience, set the version of GDAL and FileGDB to download and install
+GDAL_VERSION=2.1.4
+FGDB_VERSION=1.5.1
+FGDB_VERSION2=`echo $FGDB_VERSION | sed 's/\./_/g;'`
 
 if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --version | grep -q $GDAL_VERSION && ogrinfo --formats | grep -q FileGDB ); then
     if [ ! -f gdal-$GDAL_VERSION.tar.gz ]; then
@@ -255,13 +257,13 @@ if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --version | grep -q $GDAL_VERSIO
         tar zxfp gdal-$GDAL_VERSION.tar.gz
     fi
 
-    if [ ! -f FileGDB_API_1_5_64.tar.gz ]; then
+    if [ ! -f FileGDB_API_${FGDB_VERSION2}-64.tar.gz ]; then
         echo "### Downloading FileGDB API source..."
-        wget --quiet https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_1.5/FileGDB_API_1_5_64.tar.gz
+        wget --quiet https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_${FGDB_VERSION}/FileGDB_API_${FGDB_VERSION2}-64.tar.gz
     fi
     if [ ! -d /usr/local/FileGDB_API ]; then
         echo "### Extracting FileGDB API source & installing lib..."
-        sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp FileGDB_API_1_5_64.tar.gz --directory /usr/local/FileGDB_API --strip-components 1
+        sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp FileGDB_API_${FGDB_VERSION2}-64.tar.gz --directory /usr/local/FileGDB_API --strip-components 1
         sudo sh -c "echo '/usr/local/FileGDB_API/lib' > /etc/ld.so.conf.d/filegdb.conf"
     fi
 
@@ -295,6 +297,9 @@ fi
 # Get the configuration for the Database
 source $HOOT_HOME/conf/database/DatabaseConfig.sh
 
+echo "New postgres restart for docker box tknerr/baseimage-ubuntu-14.04"
+sudo service postgresql restart
+
 # NOTE: These have been changed to pg9.5
 # See if we already have a dB user
 if ! sudo -u postgres psql -c "\du" | awk -F"|" '{print $1}' | grep -iw --quiet $DB_USER; then
@@ -311,7 +316,6 @@ if ! sudo -u postgres psql -c "\du" | awk -F"|" '{print $1}' | grep -iw --quiet 
     sudo -u postgres createuser --superuser "$DB_USER_OSMAPI"
     sudo -u postgres psql -c "alter user \"$DB_USER_OSMAPI\" with password '$DB_PASSWORD_OSMAPI';"
 fi
-
 
 # Check for a hoot Db
 if ! sudo -u postgres psql -lqt | awk -F"|" '{print $1}' | grep -iw --quiet $DB_NAME; then
@@ -617,3 +621,4 @@ fi
 
 # Always start with a clean $HOOT_HOME/userfiles/tmp
 rm -rf $HOOT_HOME/userfiles/tmp
+

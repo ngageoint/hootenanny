@@ -120,6 +120,7 @@ public:
   private:
     Meters _maxDistance;
     Radians _maxAngleDiff;
+
   };
 
   /**
@@ -167,6 +168,7 @@ public:
     std::vector<WayLocation>& wl1, std::vector<WayLocation> &wl2);
 
 private:
+
   std::auto_ptr<MatchCriteria> _criteria;
   Meters _spacing;
   Meters _minSplitSize;

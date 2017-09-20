@@ -48,12 +48,15 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, IntersectionSplitter)
 
-IntersectionSplitter::IntersectionSplitter()
+IntersectionSplitter::IntersectionSplitter() :
+_preserveUnknown1ElementIdWhenModifyingFeatures(
+  ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures())
 {
-
 }
 
-IntersectionSplitter::IntersectionSplitter(boost::shared_ptr<OsmMap> map)
+IntersectionSplitter::IntersectionSplitter(boost::shared_ptr<OsmMap> map) :
+_preserveUnknown1ElementIdWhenModifyingFeatures(
+  ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures())
 {
   _map = map;
 }
@@ -259,8 +262,7 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
         _map->replace(way, newWays);
 
         // see comments for similar functionality in HighwaySnapMerger::_mergePair
-        if (ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures() &&
-            way->getStatus() == Status::Unknown1)
+        if (_preserveUnknown1ElementIdWhenModifyingFeatures && way->getStatus() == Status::Unknown1)
         {
           LOG_TRACE(
             "Setting unknown1 " << way->getElementId().getId() << " on " <<

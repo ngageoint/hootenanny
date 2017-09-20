@@ -63,13 +63,6 @@ details.
 
 Email address of the API database user.  Can be set here for debugging and testing.
 
-=== api.db.reader.sort.by.id
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, elements read from the Hootenanny API database will be sorted by element ID.
-
 === attribute.count.values
 
 * Data Type: int
@@ -1141,6 +1134,21 @@ Attribute columns and values that do not match a one2one rule.
 
 Debugging: Print out which attributes are dropped during export validation.
 
+=== ogr.esri.fcsubtype
+
+* Data Type: bool
+* Default Value: `true`
+
+Add the ESRI specific FCSUBTYPE field to the output.
+
+=== ogr.esri.fdname
+
+* Data Type: string
+* Default Value: `TDS`
+
+The name to use for the ESRI Feature Dataset on export. Note: This only applies to ESRI File
+Geodatabases.
+
 === ogr.import.filter
 
 * Data Type: string
@@ -1150,6 +1158,24 @@ The regexp to be used to filter the layer names when importing layers from an ES
 Geodatabase. The default is to import all layers from a FGDB.  Setting this variable will
 override the filter value that can be set by the layerNameFilter function inside a translation
 script.
+
+=== ogr.note.extra
+
+* Data Type: string
+* Default Value: `attribute`
+
+When exporting to TDSv40 and TDSv61:
+- "attribute" Add unused tags to the "ZI006_MEM" field.
+- "file" Save the unused tags in a new layer (extra_[PLA]).
+- "none" Don't save the unused tags, just drop them.
+
+When exporting to MGCP:
+- "attribute" Add unused tags to the "TXT" field.
+- "file" Save the unused tags in a new layer (extra_[PLA]).
+- "none" Don't save the unused tags, just drop them.
+
+NOTE: According to the MGCP and Shapefile specifications, the "TXT" field has a maximum length of
+255 characters. Extra text will be truncated.
 
 === ogr.reader.bounding.box
 
@@ -1196,6 +1222,13 @@ This can sometimes be necessary when reading from a DB created with osm2pgsql. E
 hoot convert -D ogr.reader.epsg.override=900913 PG:"dbname='gis' host='localhost' port='5432' user='hoot' password='blahblah'" tmp/output.shp
 ----
 
+=== ogr.reader.node.id.field.name
+
+* Data Type: string
+* Default Value: ``
+
+If set, the ogr reader will use the value at the specified field to populate node IDs.
+
 === ogr.split.o2s
 
 * Data Type: bool
@@ -1229,39 +1262,6 @@ When exporting to TDSv40 and TDSv61:
 - "none" Don't save the unused tags, just drop them.
 
 NOTE: If exporting to Shapefile, this field will be truncated to 255 characters.
-
-=== ogr.esri.fcsubtype
-
-* Data Type: bool
-* Default Value: `true`
-
-Add the ESRI specific FCSUBTYPE field to the output.
-
-=== ogr.esri.fdname
-
-* Data Type: string
-* Default Value: `TDS`
-
-The name to use for the ESRI Feature Dataset on export. Note: This only applies to ESRI File
-Geodatabases.
-
-=== ogr.note.extra
-
-* Data Type: string
-* Default Value: `attribute`
-
-When exporting to TDSv40 and TDSv61:
-- "attribute" Add unused tags to the "ZI006_MEM" field.
-- "file" Save the unused tags in a new layer (extra_[PLA]).
-- "none" Don't save the unused tags, just drop them.
-
-When exporting to MGCP:
-- "attribute" Add unused tags to the "TXT" field.
-- "file" Save the unused tags in a new layer (extra_[PLA]).
-- "none" Don't save the unused tags, just drop them.
-
-NOTE: According to the MGCP and Shapefile specifications, the "TXT" field has a maximum length of
-255 characters. Extra text will be truncated.
 
 === ogr.thematic.structure
 
@@ -1317,17 +1317,6 @@ hoot --convert \
 ** `hoot::BuildingPartMergeOp` - Implicitly merges certain individual building parts into a single part.
 
 Operations that should be applied to ingested OGR data before saving the data.
-
-=== osmapidb.bulk.inserter.file.output.element.buffer.size
-
-* Data Type: long
-* Default Value: `10000`
-
-Maximum number of elements to keep in memory when serializing input elements to a file output
-before they are written to an OSM API database.  If you have enough memory available and the
-dataset you are writing is significantly larger than the value of this setting, you may be able to
-increase the input file parsing performance by raising this value.  This setting has no impact on
-the performance of writing records to a database, only on the input data parsing done beforehand.
 
 === osmapidb.bulk.inserter.file.output.status.update.interval
 
@@ -1931,7 +1920,8 @@ reported.
 * Data Type: bool
 * Default Value: `true`
 
-By default add the `source:datetime` stamp when reading files.  Not honored by all readers.
+By default add the `source:datetime` or `source:ingest:datetime` stamp when reading files.  Not
+honored by all readers.
 
 === reader.conflate.use.data.source.ids.1
 
@@ -1975,6 +1965,15 @@ an 'accuracy' tag will not be replaced by a 'error:circular' tag; both tags will
 
 Sets the status on data being read.  Valid values are "unknown1" and "unknown2".  Not honored by all
 readers.
+
+=== reader.use.data.source.ids
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, the element IDs in the source data will be assigned to written elements.  Otherwise,
+Hootenanny manages element IDs internally.  This should not be set to true if any source elements
+have negative IDs.  Not honored by all readers.
 
 === reader.use.file.status
 
@@ -2121,15 +2120,16 @@ will have the value specified in the set.tag.visitor.value option appended to it
 
 === set.tag.visitor.key
 
-* Data Type: string
+* Data Type: list
 * Default Value: ``
 
 Set the key member in the SetTagVisitor class.  SetTagVisitor allows for adding/modifying a
-particular tag on all elements in a map.
+particular tag on all elements in a map. The number of keys in `set.tag.visitor.key` should match
+the number of keys in `set.tag.visitor.value`.
 
 === set.tag.visitor.value
 
-* Data Type: string
+* Data Type: list
 * Default Value: ``
 
 Set the value member in the SetTagVisitor class.  SetTagVisitor allows for adding/modifying a
@@ -2150,6 +2150,14 @@ then they'll be a candidate for merging.
 
 If highways are smaller than threshold and the tags matched, then they will be merged together into
 a single way.
+
+=== spark.changeset.writer.element.payload.format
+
+* Data Type: string
+* Default Value: `json`
+
+The format used to write the element payload portion of the Spark changeset file.  Valid options are
+'json' or 'xml'.
 
 === status.criterion.status
 
@@ -2660,7 +2668,7 @@ NoInformationElementRemover cleaning operation.
 
 === writer.precision
 
-* Data Type: double
+* Data Type: int
 * Default Value: `16`
 
 Set the output precision when writing. Not honored by all writers.

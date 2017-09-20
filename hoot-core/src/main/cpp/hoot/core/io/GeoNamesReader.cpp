@@ -83,7 +83,6 @@ boost::shared_ptr<OGRSpatialReference> GeoNamesReader::getProjection() const
   {
     _wgs84 = MapProjector::getInstance().createWgs84Projection();
   }
-
   return _wgs84;
 }
 
@@ -117,10 +116,13 @@ ElementPtr GeoNamesReader::readNextElement()
 {
   QByteArray lineBytes = _fp.readLine();
   QString line = QString::fromUtf8(lineBytes.constData());
+  LOG_VART(line);
   QStringList fields = line.split('\t');
+  LOG_VART(fields);
 
   bool ok;
   double x = fields[_LONGITUDE].toDouble(&ok);
+  LOG_VART(x);
   if (ok == false)
   {
     throw HootException(QString("Error parsing longitude (%1): %2").arg(fields[_LONGITUDE]).
@@ -148,7 +150,7 @@ ElementPtr GeoNamesReader::readNextElement()
     id = _partialMap->createNextNodeId();
   }
 
-  NodePtr n(new Node(_status, id, x, y, _circularError));
+  NodePtr n(Node::newSp(_status, id, x, y, _circularError));
 
   if (_columns.size() != fields.size())
   {
@@ -159,9 +161,14 @@ ElementPtr GeoNamesReader::readNextElement()
   for (int i = 0; i < _columns.size(); i++)
   {
     int j = i; //convertColumns[i];
-    n->getTags()[_columns[j]] = _saveMemory(fields[j]);
+    const QString val = fields[j].trimmed();
+    if (!val.isEmpty())
+    {
+      n->getTags()[_columns[j]] = _saveMemory(val);
+    }
   }
 
+  LOG_VART(n);
   return n;
 }
 

@@ -72,6 +72,8 @@ private:
   boost::shared_ptr<BuildingRfClassifier> _rf;
   boost::shared_ptr<MatchThreshold> _matchThreshold;
 
+  QString _conflateMatchBuildingModel;
+
   /**
    * The building model can be slow to load, this provides a lazy load.
    */

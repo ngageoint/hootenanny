@@ -203,6 +203,7 @@ private:
   unsigned int _fileDataPassCtr;
   long _stxxlMapMinSize;
   bool _validateData;
+  bool _includeDebugTags;
 
   //ended up not going with temp files here, since the file outputs aren't always temporary
   std::map<QString, std::pair<boost::shared_ptr<QFile>, boost::shared_ptr<QTextStream> > > _outputSections;
@@ -262,7 +263,7 @@ private:
    * Since we're converting the input element IDs to our own sequence, we need to keep a mapping
    * between the two for reference.
    */
-  unsigned long _establishNewIdMapping(const ElementId& sourceId);
+  unsigned long _establishIdMapping(const ElementId& sourceId);
   void _checkUnresolvedReferences(const ConstElementPtr& element, const unsigned long elementDbId);
   void _updateRecordLineWithIdOffset(const QString tableName, QString& recordLine);
   void _writeCombinedSqlFile();

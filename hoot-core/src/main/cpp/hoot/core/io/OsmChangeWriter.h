@@ -41,7 +41,7 @@ class OsmChangeWriter
 
 public:
 
-  static std::string className() { return "hoot::OsmMapWriter"; }
+  static std::string className() { return "hoot::OsmChangeWriter"; }
 
   /**
    * Writes an OSM change.
@@ -59,6 +59,15 @@ public:
    * Opens the specified URL for writing.
    */
   virtual void open(QString url) = 0;
+
+  /**
+   * Closes the output file
+   */
+  virtual void close() = 0;
+
+  //TODO: this is kind of kludgy in that its only required for the SparkChangesetReader; think of
+  //a way to get rid of this
+  virtual void setElementPayloadFormat(const QString format) = 0;
 
 };
 

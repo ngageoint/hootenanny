@@ -28,7 +28,7 @@ hadoop fs -mkdir DcGisRoads.osm.pbf
 hadoop fs -put test-files/DcGisRoads.pbf DcGisRoads.osm.pbf/
 
 echo "Writing data to database..."
-hoot big-convert --error -D changeset.user.id=1 -D osmapidb.bulk.inserter.output.files.copy.location=$LOCAL_TEST_OUTPUT/output.sql -D osmapidb.bulk.inserter.file.output.element.buffer.size=1000 -D big.convert.exec.sql.with.mapreduce=true DcGisRoads.osm.pbf $OSM_API_DB_URL
+hoot big-convert --error -D changeset.user.id=1 -D osmapidb.bulk.inserter.output.files.copy.location=$LOCAL_TEST_OUTPUT/output.sql -D max.elements.per.partial.map=1000 -D big.convert.exec.sql.with.mapreduce=true DcGisRoads.osm.pbf $OSM_API_DB_URL
 
 echo "Verifying output..."
 # read the data back out of the db and compare

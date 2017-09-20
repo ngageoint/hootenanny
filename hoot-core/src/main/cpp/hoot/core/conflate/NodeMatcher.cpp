@@ -212,11 +212,11 @@ double NodeMatcher::scorePair(long nid1, long nid2)
   // this is very unsual and will slow things down.
   if (theta1.size() > 6 && theta2.size() > 6)
   {
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       LOG_WARN("Greater than seven intersections at one spot? Odd.  Giving it a high angleScore.");
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }

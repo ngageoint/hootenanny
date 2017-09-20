@@ -63,11 +63,11 @@ public:
 
     if (d < 0)
     {
-      if (_logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (_logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN("d less than zero. " << _g.toString());
       }
-      else if (_logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (_logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(typeid(this).name() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }

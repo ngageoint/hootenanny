@@ -27,23 +27,25 @@
 
 #include "OsmApiDbBulkInserter.h"
 
-#include <QDateTime>
-#include <QFileInfo>
-#include <QStringBuilder>
-#include <QDir>
-#include <QUuid>
-
+// Hoot
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/DbUtils.h>
 #include <hoot/core/io/OsmApiDbSqlStatementFormatter.h>
-#include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/StringUtils.h>
+#include <hoot/core/util/ConfigOptions.h>
 
+// Qt
+#include <QDateTime>
+#include <QFileInfo>
+#include <QStringBuilder>
+#include <QDir>
+#include <QUuid>
+#include <QLatin1String>
+
+// Tgs
 #include <tgs/System/SystemInfo.h>
-
-using namespace std;
-using namespace Tgs;
 
 namespace hoot
 {
@@ -54,7 +56,8 @@ HOOT_FACTORY_REGISTER(OsmMapWriter, OsmApiDbBulkInserter)
 
 OsmApiDbBulkInserter::OsmApiDbBulkInserter() :
 _outputDelimiter("\t"),
-_fileDataPassCtr(0)
+_fileDataPassCtr(0),
+_includeDebugTags(ConfigOptions().getWriterIncludeDebugTags())
 {
   _reset();
   _sectionNames = _createSectionNameList();
@@ -212,11 +215,11 @@ void OsmApiDbBulkInserter::_closeOutputFiles()
   for (QStringList::const_iterator sectionNamesItr = _sectionNames.begin();
        sectionNamesItr != _sectionNames.end(); ++sectionNamesItr)
   {
-      if (_outputSections.find(*sectionNamesItr) == _outputSections.end())
-      {
-        LOG_TRACE("No data for table " + *sectionNamesItr);
-        continue;
-      }
+    if (_outputSections.find(*sectionNamesItr) == _outputSections.end())
+    {
+      LOG_TRACE("No data for table " + *sectionNamesItr);
+      continue;
+    }
 
     if (_outputSections[*sectionNamesItr].first)
     {
@@ -234,41 +237,41 @@ void OsmApiDbBulkInserter::_logStats(const bool debug)
 {
   QStringList messages;
   messages.append(
-    QString("\tNodes: ") + FileUtils::formatPotentiallyLargeNumber(_writeStats.nodesWritten));
+    QString("\tNodes: ") + StringUtils::formatLargeNumber(_writeStats.nodesWritten));
   messages.append(
     QString("\tNode tags: ") +
-    FileUtils::formatPotentiallyLargeNumber(_writeStats.nodeTagsWritten));
+    StringUtils::formatLargeNumber(_writeStats.nodeTagsWritten));
   messages.append(
     QString("\tWays: ") +
-    FileUtils::formatPotentiallyLargeNumber(_writeStats.waysWritten));
+    StringUtils::formatLargeNumber(_writeStats.waysWritten));
   messages.append(
-    QString("\tWay nodes: ") + FileUtils::formatPotentiallyLargeNumber(_writeStats.wayNodesWritten));
+    QString("\tWay nodes: ") + StringUtils::formatLargeNumber(_writeStats.wayNodesWritten));
   messages.append(
-    QString("\tWay tags: ") + FileUtils::formatPotentiallyLargeNumber(_writeStats.wayTagsWritten));
+    QString("\tWay tags: ") + StringUtils::formatLargeNumber(_writeStats.wayTagsWritten));
   messages.append(
     QString("\tRelations: ") +
-    FileUtils::formatPotentiallyLargeNumber(_writeStats.relationsWritten));
+    StringUtils::formatLargeNumber(_writeStats.relationsWritten));
   messages.append(
     QString("\tRelation members: ") +
-    FileUtils::formatPotentiallyLargeNumber(_writeStats.relationMembersWritten));
+    StringUtils::formatLargeNumber(_writeStats.relationMembersWritten));
   messages.append(
     QString("\tRelation tags: ") +
-    FileUtils::formatPotentiallyLargeNumber(_writeStats.relationTagsWritten));
+    StringUtils::formatLargeNumber(_writeStats.relationTagsWritten));
   messages.append(
     QString("\tUnresolved relation members: ") +
-    FileUtils::formatPotentiallyLargeNumber(_writeStats.relationMembersUnresolved));
+    StringUtils::formatLargeNumber(_writeStats.relationMembersUnresolved));
   messages.append(
     QString("\tTotal features: ") +
-    FileUtils::formatPotentiallyLargeNumber(_getTotalFeaturesWritten()));
+    StringUtils::formatLargeNumber(_getTotalFeaturesWritten()));
   messages.append(
     QString("\tChangesets: ") +
-    FileUtils::formatPotentiallyLargeNumber(_changesetData.changesetsWritten));
+    StringUtils::formatLargeNumber(_changesetData.changesetsWritten));
   messages.append(
     QString("\tChangeset change size (each): ") +
-    FileUtils::formatPotentiallyLargeNumber(_maxChangesetSize));
+    StringUtils::formatLargeNumber(_maxChangesetSize));
   messages.append(
     QString("\tExecutable SQL records: ") +
-    FileUtils::formatPotentiallyLargeNumber(_getTotalRecordsWritten()));
+    StringUtils::formatLargeNumber(_getTotalRecordsWritten()));
 
   for (int i = 0; i < messages.size(); i++)
   {
@@ -349,10 +352,10 @@ void OsmApiDbBulkInserter::_clearIdCollections()
 void OsmApiDbBulkInserter::finalizePartial()
 {
   LOG_INFO(
-    FileUtils::formatPotentiallyLargeNumber(_getTotalFeaturesWritten()) <<
+    StringUtils::formatLargeNumber(_getTotalFeaturesWritten()) <<
     " input records parsed (data pass #" << _fileDataPassCtr << " of " <<
     _numberOfFileDataPasses() << ").  Time elapsed: " <<
-    FileUtils::secondsToDhms(_timer->elapsed()));
+    StringUtils::secondsToDhms(_timer->elapsed()));
 
   //go ahead and clear out some of the data structures we don't need anymore
   _clearIdCollections();
@@ -429,7 +432,7 @@ void OsmApiDbBulkInserter::_writeDataToDbPsql()
   //to not write the header if there are no records to copy for the table...
   LOG_INFO(
     "Executing element SQL for " <<
-    FileUtils::formatPotentiallyLargeNumber(_getTotalRecordsWritten()) <<
+    StringUtils::formatLargeNumber(_getTotalRecordsWritten()) <<
     " records (data pass #" << _fileDataPassCtr << " of " << _numberOfFileDataPasses() <<
     ").  17 separate SQL COPY statements will be executed...");
 
@@ -439,7 +442,7 @@ void OsmApiDbBulkInserter::_writeDataToDbPsql()
   ApiDb::execSqlFile(_outputUrl, _sqlOutputCombinedFile->fileName());
 
   LOG_INFO(
-    "SQL execution complete.  Time elapsed: " << FileUtils::secondsToDhms(_timer->elapsed()));
+    "SQL execution complete.  Time elapsed: " << StringUtils::secondsToDhms(_timer->elapsed()));
 }
 
 void OsmApiDbBulkInserter::_writeDataToDb()
@@ -499,7 +502,7 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
     //statements to the sql output here for applying at a later time.  we want
     //setval to reflect the last id in the sequence
     QString reserveElementIdsSql;
-    //TODO: may be able to collapse this logic; see notes in _establishNewIdMapping
+    //TODO: may be able to collapse this logic; see notes in _establishIdMapping
     if (_validateData)
     {
       //with data validation on, we increment for each element read and all our counters are
@@ -585,8 +588,8 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
             //size of the rest of the data
             PROGRESS_INFO(
               "Parsed " <<
-              FileUtils::formatPotentiallyLargeNumber(progressLineCtr) << "/" <<
-              FileUtils::formatPotentiallyLargeNumber(
+              StringUtils::formatLargeNumber(progressLineCtr) << "/" <<
+              StringUtils::formatLargeNumber(
                 _getTotalRecordsWritten() - _changesetData.changesetsWritten) <<
               " SQL file lines.");
           }
@@ -607,7 +610,7 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
         throw HootException("Unable to open input file: " + tempInputFile.fileName());
       }
     }
-    catch (const Exception&)
+    catch (...)
     {
       tempInputFile.close();
       _closeOutputFiles();
@@ -625,12 +628,12 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
   LOG_INFO(
     "SQL file write complete.  (data pass #" << _fileDataPassCtr << " of " <<
     _numberOfFileDataPasses() << ").  Time elapsed: " <<
-    FileUtils::secondsToDhms(_timer->elapsed()));
+    StringUtils::secondsToDhms(_timer->elapsed()));
   LOG_DEBUG(
-    "Parsed " << FileUtils::formatPotentiallyLargeNumber(progressLineCtr) <<
+    "Parsed " << StringUtils::formatLargeNumber(progressLineCtr) <<
     " total SQL file lines.");
   QFileInfo outputInfo(_sqlOutputCombinedFile->fileName());
-  LOG_VART(SystemInfo::humanReadable(outputInfo.size()));
+  LOG_VART(Tgs::SystemInfo::humanReadable(outputInfo.size()));
 }
 
 void OsmApiDbBulkInserter::_updateRecordLineWithIdOffset(const QString tableName,
@@ -654,7 +657,8 @@ void OsmApiDbBulkInserter::_updateRecordLineWithIdOffset(const QString tableName
     lineParts[0] = QString::number(lineParts[0].toULong() + _idMappings.currentNodeId);
     lineParts[3] = QString::number(lineParts[3].toULong() + _changesetData.currentChangesetId);
   }
-  else if (tableName == ApiDb::getCurrentWaysTableName() || tableName == ApiDb::getWaysTableName())
+  else if (tableName == ApiDb::getCurrentWaysTableName() ||
+           tableName == ApiDb::getWaysTableName())
   {
     lineParts[0] = QString::number(lineParts[0].toULong() + _idMappings.currentWayId);
     lineParts[1] = QString::number(lineParts[1].toULong() + _changesetData.currentChangesetId);
@@ -676,11 +680,11 @@ void OsmApiDbBulkInserter::_updateRecordLineWithIdOffset(const QString tableName
   {
     lineParts[0] = QString::number(lineParts[0].toULong() + _idMappings.currentRelationId);
     const unsigned long memberId = lineParts[2].toULong();
-    if (lineParts[1].toLower() == "node")
+    if (lineParts[1].toLower() == QLatin1String("node"))
     {
       lineParts[2] = QString::number(memberId + _idMappings.currentNodeId);
     }
-    else if (lineParts[1].toLower() == "way")
+    else if (lineParts[1].toLower() == QLatin1String("way"))
     {
       lineParts[2] = QString::number(memberId + _idMappings.currentWayId);
     }
@@ -784,7 +788,7 @@ void OsmApiDbBulkInserter::writePartial(const ConstNodePtr& node)
       "Streaming elements from input to file outputs.  (data pass #" <<
       _fileDataPassCtr << " of " << _numberOfFileDataPasses() << ")...");
     _createNodeOutputFiles();
-    _idMappings.nodeIdMap.reset(new BigMap<long, unsigned long>(_stxxlMapMinSize));
+    _idMappings.nodeIdMap.reset(new Tgs::BigMap<long, unsigned long>(_stxxlMapMinSize));
   }
 
   LOG_VART(node);
@@ -801,11 +805,11 @@ void OsmApiDbBulkInserter::writePartial(const ConstNodePtr& node)
   {
     throw NotImplementedException("Writer class does not support update operations.");
   }
-  // Have to establish new mapping
-  const unsigned long nodeDbId = _establishNewIdMapping(node->getElementId());
+  LOG_VART(node->getElementId());
+  const unsigned long nodeDbId = _establishIdMapping(node->getElementId());
   LOG_VART(ElementId(ElementType::Node, nodeDbId));
 
-  if (ConfigOptions().getWriterIncludeDebugTags())
+  if (_includeDebugTags)
   {
     Tags tags = node->getTags();
     //keep the hoot:id tag in sync with what could be a newly assigned id
@@ -829,7 +833,7 @@ void OsmApiDbBulkInserter::writePartial(const ConstNodePtr& node)
   if (_writeStats.nodesWritten % _fileOutputElementBufferSize == 0)
   {
     LOG_TRACE(
-      "Flushing " << FileUtils::formatPotentiallyLargeNumber(_fileOutputElementBufferSize) <<
+      "Flushing " << StringUtils::formatLargeNumber(_fileOutputElementBufferSize) <<
       " nodes to file...");
     _flushStreams();
   }
@@ -837,7 +841,7 @@ void OsmApiDbBulkInserter::writePartial(const ConstNodePtr& node)
   if (_writeStats.nodesWritten % _statusUpdateInterval == 0)
   {
     PROGRESS_INFO(
-      "Parsed " << FileUtils::formatPotentiallyLargeNumber(_writeStats.nodesWritten) <<
+      "Parsed " << StringUtils::formatLargeNumber(_writeStats.nodesWritten) <<
       " nodes from input.");
   }
 
@@ -851,7 +855,7 @@ void OsmApiDbBulkInserter::writePartial(const ConstWayPtr& way)
   if (_writeStats.waysWritten == 0)
   {
     _createWayOutputFiles();
-    _idMappings.wayIdMap.reset(new BigMap<long, unsigned long>(_stxxlMapMinSize));
+    _idMappings.wayIdMap.reset(new Tgs::BigMap<long, unsigned long>(_stxxlMapMinSize));
   }
 
   // Do we already know about this way?
@@ -859,11 +863,11 @@ void OsmApiDbBulkInserter::writePartial(const ConstWayPtr& way)
   {
     throw NotImplementedException("Writer class does not support update operations");
   }
-  // Have to establish new mapping
-  const unsigned long wayDbId = _establishNewIdMapping(way->getElementId());
+  LOG_VART(way->getElementId());
+  const unsigned long wayDbId = _establishIdMapping(way->getElementId());
   LOG_VART(ElementId(ElementType::Way, wayDbId));
 
-  if (ConfigOptions().getWriterIncludeDebugTags())
+  if (_includeDebugTags)
   {
     Tags tags = way->getTags();
     //keep the hoot:id tag in sync with what could be a newly assigned id
@@ -888,7 +892,7 @@ void OsmApiDbBulkInserter::writePartial(const ConstWayPtr& way)
   if (_writeStats.waysWritten % _fileOutputElementBufferSize == 0)
   {
     LOG_TRACE(
-      "Flushing " << FileUtils::formatPotentiallyLargeNumber(_fileOutputElementBufferSize) <<
+      "Flushing " << StringUtils::formatLargeNumber(_fileOutputElementBufferSize) <<
       " ways to file...");
     _flushStreams();
   }
@@ -896,7 +900,7 @@ void OsmApiDbBulkInserter::writePartial(const ConstWayPtr& way)
   if (_writeStats.waysWritten % _statusUpdateInterval == 0)
   {
     PROGRESS_INFO(
-      "Parsed " << FileUtils::formatPotentiallyLargeNumber(_writeStats.waysWritten) <<
+      "Parsed " << StringUtils::formatLargeNumber(_writeStats.waysWritten) <<
       " ways from input.");
   }
 }
@@ -908,7 +912,7 @@ void OsmApiDbBulkInserter::writePartial(const ConstRelationPtr& relation)
   if (_writeStats.relationsWritten == 0)
   {
     _createRelationOutputFiles();
-    _idMappings.relationIdMap.reset(new BigMap<long, unsigned long>(_stxxlMapMinSize));
+    _idMappings.relationIdMap.reset(new Tgs::BigMap<long, unsigned long>(_stxxlMapMinSize));
   }
 
   // Do we already know about this node?
@@ -916,11 +920,11 @@ void OsmApiDbBulkInserter::writePartial(const ConstRelationPtr& relation)
   {
     throw NotImplementedException("Writer class does not support update operations");
   }
-  // Have to establish new mapping
-  const unsigned long relationDbId = _establishNewIdMapping(relation->getElementId());
+  LOG_VART(relation->getElementId());
+  const unsigned long relationDbId = _establishIdMapping(relation->getElementId());
   LOG_VART(ElementId(ElementType::Relation, relationDbId));
 
-  if (ConfigOptions().getWriterIncludeDebugTags())
+  if (_includeDebugTags)
   {
     Tags tags = relation->getTags();
     //keep the hoot:id tag in sync with what could be a newly assigned id
@@ -945,7 +949,7 @@ void OsmApiDbBulkInserter::writePartial(const ConstRelationPtr& relation)
   if (_writeStats.relationsWritten % _fileOutputElementBufferSize == 0)
   {
     LOG_TRACE(
-      "Flushing " << FileUtils::formatPotentiallyLargeNumber(_fileOutputElementBufferSize) <<
+      "Flushing " << StringUtils::formatLargeNumber(_fileOutputElementBufferSize) <<
       " relations to file...");
     _flushStreams();
   }
@@ -953,7 +957,7 @@ void OsmApiDbBulkInserter::writePartial(const ConstRelationPtr& relation)
   if (_writeStats.relationsWritten % _statusUpdateInterval == 0)
   {
     PROGRESS_INFO(
-      "Parsed " << FileUtils::formatPotentiallyLargeNumber(_writeStats.relationsWritten) <<
+      "Parsed " << StringUtils::formatLargeNumber(_writeStats.relationsWritten) <<
       " relations from input.");
   }
 }
@@ -964,7 +968,7 @@ void OsmApiDbBulkInserter::setConfiguration(const Settings& conf)
 
   setOutputFilesCopyLocation(confOptions.getOsmapidbBulkInserterOutputFilesCopyLocation().trimmed());
   _changesetData.changesetUserId = confOptions.getChangesetUserId();
-  setFileOutputElementBufferSize(confOptions.getOsmapidbBulkInserterFileOutputElementBufferSize());
+  setFileOutputElementBufferSize(confOptions.getMaxElementsPerPartialMap());
   setStatusUpdateInterval(confOptions.getOsmapidbBulkInserterFileOutputStatusUpdateInterval());
   setMaxChangesetSize(confOptions.getChangesetMaxSize());
   setReserveRecordIdsBeforeWritingData(
@@ -1063,7 +1067,7 @@ void OsmApiDbBulkInserter::_reset()
   _sectionNames.clear();
 }
 
-unsigned long OsmApiDbBulkInserter::_establishNewIdMapping(const ElementId& sourceId)
+unsigned long OsmApiDbBulkInserter::_establishIdMapping(const ElementId& sourceId)
 {
   //TODO: can probably reduce the current element id increment logic to just that of when
   //_validateData = false
@@ -1151,10 +1155,14 @@ void OsmApiDbBulkInserter::_writeTagsToStream(const Tags& tags,
 
   for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
   {
-    const QStringList tagSqlStrs =
-      _sqlFormatter->tagToSqlStrings(dbId, elementType, it.key(), it.value());
-    *currentTable << tagSqlStrs[0];
-    *historicalTable << tagSqlStrs[1];
+    const QString key = it.key();
+    const QString value = it.value().trimmed();
+    if (!value.isEmpty())
+    {
+      const QStringList tagSqlStrs = _sqlFormatter->tagToSqlStrings(dbId, elementType, key, value);
+      *currentTable << tagSqlStrs[0];
+      *historicalTable << tagSqlStrs[1];
+    }
   }
 }
 
@@ -1184,12 +1192,12 @@ void OsmApiDbBulkInserter::_writeWayToStream(const unsigned long wayDbId)
 }
 
 void OsmApiDbBulkInserter::_writeWayNodesToStream(const unsigned long dbWayId,
-                                                const vector<long>& wayNodeIds)
+                                                const std::vector<long>& wayNodeIds)
 {
   LOG_TRACE("Writing way nodes to stream...");
 
   unsigned int wayNodeIndex = 1;
-  for (vector<long>::const_iterator it = wayNodeIds.begin(); it != wayNodeIds.end(); ++it)
+  for (std::vector<long>::const_iterator it = wayNodeIds.begin(); it != wayNodeIds.end(); ++it)
   {
     unsigned long wayNodeIdVal;
     if (!_validateData)
@@ -1251,10 +1259,10 @@ void OsmApiDbBulkInserter::_writeRelationMembersToStream(const ConstRelationPtr&
 
   unsigned int memberSequenceIndex = 1;
   const long relationId = relation->getId();
-  const vector<RelationData::Entry> relationMembers = relation->getMembers();
-  boost::shared_ptr<BigMap<long, unsigned long> > knownElementMap;
+  const std::vector<RelationData::Entry> relationMembers = relation->getMembers();
+  boost::shared_ptr<Tgs::BigMap<long, unsigned long> > knownElementMap;
 
-  for (vector<RelationData::Entry>::const_iterator it = relationMembers.begin();
+  for (std::vector<RelationData::Entry>::const_iterator it = relationMembers.begin();
        it != relationMembers.end(); ++it)
   {
     const ElementId memberElementId = it->getElementId();
@@ -1295,12 +1303,12 @@ void OsmApiDbBulkInserter::_writeRelationMembersToStream(const ConstRelationPtr&
       if (!_unresolvedRefs.unresolvedRelationRefs)
       {
         _unresolvedRefs.unresolvedRelationRefs.reset(
-          new map<ElementId, UnresolvedRelationReference>());
+          new std::map<ElementId, UnresolvedRelationReference>());
       }
       const UnresolvedRelationReference relationRef =
         { relationId, dbRelationId, *it, memberSequenceIndex };
       _unresolvedRefs.unresolvedRelationRefs->insert(
-        pair<ElementId, UnresolvedRelationReference>(memberElementId, relationRef));
+        std::pair<ElementId, UnresolvedRelationReference>(memberElementId, relationRef));
     }
 
     ++memberSequenceIndex;
@@ -1350,7 +1358,7 @@ void OsmApiDbBulkInserter::_createOutputFile(const QString tableName, const QStr
       "Could not open file at: " + file->fileName() + " for contents of table: " + tableName);
   }
   _outputSections[tableName] =
-    pair<boost::shared_ptr<QFile>, boost::shared_ptr<QTextStream> >(
+    std::pair<boost::shared_ptr<QFile>, boost::shared_ptr<QTextStream> >(
       file, boost::shared_ptr<QTextStream>(new QTextStream(file.get())));
 
   // Database is encoded in UTF-8, so force encoding as otherwise file is in local
@@ -1391,19 +1399,19 @@ void OsmApiDbBulkInserter::_checkUnresolvedReferences(const ConstElementPtr& ele
   // Regardless of type, may be referenced in relation
   if (_unresolvedRefs.unresolvedRelationRefs)
   {
-    map<ElementId, UnresolvedRelationReference >::iterator relationRef =
+    std::map<ElementId, UnresolvedRelationReference >::iterator relationRef =
       _unresolvedRefs.unresolvedRelationRefs->find(element->getElementId());
 
     if (relationRef != _unresolvedRefs.unresolvedRelationRefs->end())
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN("Found unresolved relation member ref!:");
         LOG_WARN(QString( "Relation ID ") % QString::number(relationRef->second.sourceRelationId) %
           QString(" (DB ID=") % QString::number(relationRef->second.sourceDbRelationId) %
            QString(") has ref to ") % relationRef->second.relationMemberData.toString());
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }

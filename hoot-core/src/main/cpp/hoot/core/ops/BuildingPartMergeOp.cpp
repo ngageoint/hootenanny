@@ -138,11 +138,11 @@ void BuildingPartMergeOp::_addNeighborsToGroup(const RelationPtr& r)
     }
     if (members[i].getElementId().getType() == ElementType::Relation)
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN("Not expecting relations of relations: " << r->toString());
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }

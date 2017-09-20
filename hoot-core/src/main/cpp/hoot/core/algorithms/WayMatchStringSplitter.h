@@ -53,6 +53,8 @@ private:
   static QString _overlyAggressiveMergeReviewText;
   std::set< std::pair<ElementId, ElementId> > _unknown1Replacements;
 
+  bool _preserveUnknown1ElementIdWhenModifyingFeatures;
+
   QMultiMap<WayPtr, WayMatchStringMerger::SublineMappingPtr> _buildWayIndex1(OsmMapPtr map,
     QList<WayMatchStringMerger::SublineMappingPtr> mappings) const;
   QMultiMap<WayPtr, WayMatchStringMerger::SublineMappingPtr> _buildWayIndex2(OsmMapPtr map,

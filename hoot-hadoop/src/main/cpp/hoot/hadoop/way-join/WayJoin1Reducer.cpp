@@ -59,11 +59,11 @@ void WayJoin1Reducer::close()
 
   if (_missingNodes > 0)
   {
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       LOG_WARN("Found " << _missingNodes << " missing nodes.");
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }
@@ -149,11 +149,11 @@ void WayJoin1Reducer::reduce(HadoopPipes::ReduceContext& context)
     {
       // record the number of missing nodes for reporting.
       _missingNodes++;
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN("Found ways, but no nodes. node id: " << *key << "  wayIds: " << _wayIds);
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }
