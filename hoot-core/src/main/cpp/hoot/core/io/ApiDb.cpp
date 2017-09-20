@@ -43,6 +43,7 @@
 #include <hoot/core/io/TableType.h>
 #include <hoot/core/util/DbUtils.h>
 #include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/ConfPath.h>
 
 // qt
 #include <QStringList>
@@ -50,6 +51,7 @@
 #include <QtSql/QSqlError>
 #include <QtSql/QSqlRecord>
 #include <QSet>
+#include <QFile>
 
 // Standard
 #include <math.h>
@@ -69,7 +71,8 @@ namespace hoot
 
 const Status ApiDb::DEFAULT_ELEMENT_STATUS(Status::Invalid);
 
-ApiDb::ApiDb()
+ApiDb::ApiDb() :
+_maxElementsPerPartialMap(ConfigOptions().getMaxElementsPerPartialMap())
 {
 }
 
@@ -103,6 +106,32 @@ void ApiDb::_resetQueries()
   _selectWayNodeIdsByWayIds.reset();
   _selectRelationIdsByMemberIds.reset();
   _selectChangesetsCreatedAfterTime.reset();
+
+  for (QHash<QString, boost::shared_ptr<QSqlQuery> >::iterator itr = _maxIdQueries.begin();
+       itr != _maxIdQueries.end(); ++itr)
+  {
+    itr.value().reset();
+  }
+  for (QHash<QString, boost::shared_ptr<QSqlQuery> >::iterator itr = _numElementsQueries.begin();
+       itr != _numElementsQueries.end(); ++itr)
+  {
+    itr.value().reset();
+  }
+  for (QHash<QString, boost::shared_ptr<QSqlQuery> >::iterator itr = _numEstimatedElementsQueries.begin();
+       itr != _numEstimatedElementsQueries.end(); ++itr)
+  {
+    itr.value().reset();
+  }
+  for (QHash<QString, boost::shared_ptr<QSqlQuery> >::iterator itr = _selectQueries.begin();
+       itr != _selectQueries.end(); ++itr)
+  {
+    itr.value().reset();
+  }
+  for (QHash<QString, boost::shared_ptr<QSqlQuery> >::iterator itr = _selectAllQueries.begin();
+       itr != _selectAllQueries.end(); ++itr)
+  {
+    itr.value().reset();
+  }
 }
 
 bool ApiDb::isSupported(const QUrl& url)
@@ -166,6 +195,32 @@ void ApiDb::open(const QUrl& url)
 
   LOG_DEBUG("Successfully opened db: " << url.toString());
   LOG_DEBUG("Postgres database version: " << DbUtils::getPostgresDbVersion(_db));
+}
+
+void ApiDb::transaction()
+{
+  LOG_TRACE("Starting transaction...");
+
+  // Queries must be created from within the current transaction.
+  _resetQueries();
+  if (!_db.transaction())
+  {
+    throw HootException(_db.lastError().text());
+  }
+  _inTransaction = true;
+}
+
+void ApiDb::rollback()
+{
+  LOG_TRACE("Rolling back transaction...");
+
+  _resetQueries();
+
+  if (!_db.rollback())
+  {
+    throw HootException("Error rolling back transaction: " + _db.lastError().text());
+  }
+  _inTransaction = false;
 }
 
 long ApiDb::getUserId(const QString email, bool throwWhenMissing)
@@ -320,6 +375,8 @@ boost::shared_ptr<QSqlQuery> ApiDb::selectNodesForWay(long wayId, const QString 
 
 Tags ApiDb::unescapeTags(const QVariant &v)
 {
+  //TODO: this is likely redundant with other code
+
   /** NOTE:  When we upgrade from Qt4 to Qt5 we can use the QRegularExpression
    *  classes that should enable the regex below that has both greedy matching
    *  and lazy matching in the same regex.  The QRegExp class doesn't allow this
@@ -347,11 +404,17 @@ Tags ApiDb::unescapeTags(const QVariant &v)
     if ((pos = rxValue.indexIn(str, pos)) != -1)
     {
       QString key = rxKey.cap(1);
-      QString value = rxValue.cap(1);
-      //  Unescape the actual key/value pairs
-      _unescapeString(key);
-      _unescapeString(value);
-      result.insert(key, value);
+      LOG_VART(key);
+      QString value = rxValue.cap(1).trimmed();
+      LOG_VART(value);
+      if (!value.isEmpty())
+      {
+        // Unescape the actual key/value pairs
+        _unescapeString(key);
+        _unescapeString(value);
+        result.insert(key, value);
+      }
+
       pos += rxValue.matchedLength();
     }
   }
@@ -508,7 +571,7 @@ boost::shared_ptr<QSqlQuery> ApiDb::selectWayIdsByWayNodeIds(const QSet<QString>
 }
 
 boost::shared_ptr<QSqlQuery> ApiDb::selectElementsByElementIdList(const QSet<QString>& elementIds,
-                                                           const TableType& tableType)
+                                                                  const TableType& tableType)
 {
   if (elementIds.size() == 0)
   {
@@ -568,7 +631,7 @@ boost::shared_ptr<QSqlQuery> ApiDb::selectWayNodeIdsByWayIds(const QSet<QString>
 }
 
 boost::shared_ptr<QSqlQuery> ApiDb::selectRelationIdsByMemberIds(const QSet<QString>& memberIds,
-                                                          const ElementType& memberElementType)
+                                                               const ElementType& memberElementType)
 {
   if (memberIds.size() == 0)
   {
@@ -739,6 +802,196 @@ QString ApiDb::getPqString(const QString url)
   return
     "dbname=" + dbUrlParts["database"] + " user=" + dbUrlParts["user"] + " password=" +
     dbUrlParts["password"] + " hostaddr=" + hostAddr + " port=" + dbUrlParts["port"];
+}
+
+Settings ApiDb::readDbConfig()
+{
+  Settings result;
+  //  Read in the default values
+  QString defaults = ConfPath::getHootHome() + "/conf/database/DatabaseConfigDefault.sh";
+  readDbConfig(result, defaults);
+  //  Read in the local values if the file exists
+  QString local = ConfPath::getHootHome() + "/conf/database/DatabaseConfigLocal.sh";
+  if (QFile::exists(local))
+  {
+    readDbConfig(result, local);
+  }
+  return result;
+}
+
+void ApiDb::readDbConfig(Settings& settings, QString config_path)
+{
+  QFile fp(config_path);
+  if (fp.open(QIODevice::ReadOnly) == false)
+  {
+    throw HootException("Error opening: " + fp.fileName());
+  }
+  QString s = QString::fromUtf8(fp.readAll());
+
+  QStringList sl = s.split('\n', QString::SkipEmptyParts);
+
+  foreach (QString s, sl)
+  {
+    QString key = s.section("=", 0, 0).remove("export ").trimmed();
+    QString value = s.section("=", 1).trimmed();
+    if (!key.startsWith("#") && key.length() > 0)
+    {
+      settings.set(key, value);
+    }
+  }
+}
+
+long ApiDb::maxId(const ElementType& elementType)
+{
+  const QString elementTableName = elementTypeToElementTableName(elementType);
+  if (!_maxIdQueries[elementTableName])
+  {
+    _maxIdQueries[elementTableName].reset(new QSqlQuery(_db));
+    _maxIdQueries[elementTableName]->prepare(
+      "SELECT id FROM " + elementTableName + " ORDER BY id DESC LIMIT 1");
+  }
+  LOG_VARD(_maxIdQueries[elementTableName]->lastQuery());
+
+  if (_maxIdQueries[elementTableName]->exec() == false)
+  {
+    LOG_ERROR(_maxIdQueries[elementTableName]->executedQuery());
+    LOG_ERROR(_maxIdQueries[elementTableName]->lastError().text());
+    throw HootException(_maxIdQueries[elementTableName]->lastError().text());
+  }
+
+  long result = -1;
+  if (_maxIdQueries[elementTableName]->next())
+  {
+    bool ok;
+    result = _maxIdQueries[elementTableName]->value(0).toLongLong(&ok);
+    if (!ok)
+    {
+      throw HootException("Count not retrieve max ID for element type: " + elementType.toString());
+    }
+  }
+  _maxIdQueries[elementTableName]->finish();
+  return result;
+}
+
+long ApiDb::numElements(const ElementType& elementType)
+{
+  const QString elementTableName = elementTypeToElementTableName(elementType);
+  if (!_numElementsQueries[elementTableName])
+  {
+    _numElementsQueries[elementTableName].reset(new QSqlQuery(_db));
+    _numElementsQueries[elementTableName]->prepare(
+      "SELECT COUNT(*) FROM " + elementTableName + " WHERE visible = true");
+  }
+  LOG_VARD(_numElementsQueries[elementTableName]->lastQuery());
+
+  if (_numElementsQueries[elementTableName]->exec() == false)
+  {
+    LOG_ERROR(_numElementsQueries[elementTableName]->executedQuery());
+    LOG_ERROR(_numElementsQueries[elementTableName]->lastError().text());
+    throw HootException(_numElementsQueries[elementTableName]->lastError().text());
+  }
+
+  long result = -1;
+  if (_numElementsQueries[elementTableName]->next())
+  {
+    bool ok;
+    result = _numElementsQueries[elementTableName]->value(0).toLongLong(&ok);
+    if (!ok)
+    {
+      throw HootException("Count not retrieve count for element type: " + elementType.toString());
+    }
+  }
+  _numElementsQueries[elementTableName]->finish();
+  return result;
+}
+
+long ApiDb::numEstimatedElements(const ElementType& elementType)
+{
+  const QString elementTableName = elementTypeToElementTableName(elementType);
+  if (!_numEstimatedElementsQueries[elementTableName])
+  {
+    _numEstimatedElementsQueries[elementTableName].reset(new QSqlQuery(_db));
+    _numEstimatedElementsQueries[elementTableName]->prepare(
+      "SELECT reltuples AS approximate_row_count FROM pg_class WHERE relname = '" +
+      elementTableName + "'");
+  }
+  LOG_VARD(_numEstimatedElementsQueries[elementTableName]->lastQuery());
+
+  if (_numEstimatedElementsQueries[elementTableName]->exec() == false)
+  {
+    LOG_ERROR(_numEstimatedElementsQueries[elementTableName]->executedQuery());
+    LOG_ERROR(_numEstimatedElementsQueries[elementTableName]->lastError().text());
+    throw HootException(_numEstimatedElementsQueries[elementTableName]->lastError().text());
+  }
+
+  long result = -1;
+  if (_numEstimatedElementsQueries[elementTableName]->next())
+  {
+    bool ok;
+    result = _numEstimatedElementsQueries[elementTableName]->value(0).toLongLong(&ok);
+    if (!ok)
+    {
+      throw HootException("Count not retrieve count for element type: " + elementType.toString());
+    }
+  }
+  _numEstimatedElementsQueries[elementTableName]->finish();
+  return result;
+}
+
+boost::shared_ptr<QSqlQuery> ApiDb::selectAllElements(const ElementType& elementType)
+{
+  const QString elementTableName = elementTypeToElementTableName(elementType);
+  if (!_selectAllQueries[elementTableName])
+  {
+    _selectAllQueries[elementTableName].reset(new QSqlQuery(_db));
+    _selectAllQueries[elementTableName]->setForwardOnly(true);
+    const QString sql = "SELECT * FROM " + elementTableName + " WHERE visible = true ORDER BY id";
+    _selectAllQueries[elementTableName]->prepare(sql);
+  }
+  LOG_VARD(_selectAllQueries[elementTableName]->lastQuery());
+
+  if (_selectAllQueries[elementTableName]->exec() == false)
+  {
+    const QString err =
+      "Error selecting all elements of type: " + elementType.toString() + " Error: " +
+      _selectAllQueries[elementTableName]->lastError().text();
+    LOG_ERROR(err);
+    throw HootException(err);
+  }
+  LOG_VARD(_selectAllQueries[elementTableName]->numRowsAffected());
+  LOG_VART(_selectAllQueries[elementTableName]->executedQuery());
+
+  return _selectAllQueries[elementTableName];
+}
+
+boost::shared_ptr<QSqlQuery> ApiDb::selectElements(const ElementType& elementType, const long minId)
+{
+  const QString elementTableName = elementTypeToElementTableName(elementType);
+  if (!_selectQueries[elementTableName])
+  {
+    _selectQueries[elementTableName].reset(new QSqlQuery(_db));
+    _selectQueries[elementTableName]->setForwardOnly(true);
+    const QString sql =
+      "SELECT * FROM " + elementTableName + " WHERE visible = true AND id > :minId ORDER BY id " +
+      "LIMIT " + QString::number(_maxElementsPerPartialMap);
+    LOG_VARD(sql);
+    _selectQueries[elementTableName]->prepare(sql);
+  }
+  _selectQueries[elementTableName]->bindValue(":minId", (qlonglong)minId);
+  LOG_VARD(_selectQueries[elementTableName]->lastQuery());
+
+  if (_selectQueries[elementTableName]->exec() == false)
+  {
+    const QString err =
+      "Error selecting elements of type: " + elementType.toString() + " Error: " +
+      _selectQueries[elementTableName]->lastError().text();
+    LOG_ERROR(err);
+    throw HootException(err);
+  }
+  LOG_VARD(_selectQueries[elementTableName]->numRowsAffected());
+  LOG_VART(_selectQueries[elementTableName]->executedQuery());
+
+  return _selectQueries[elementTableName];
 }
 
 }

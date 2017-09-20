@@ -61,6 +61,8 @@ private:
   std::set< std::pair<ElementId, ElementId> > _pairs;
   boost::shared_ptr<SublineStringMatcher> _sublineMatcher;
 
+  bool _preserveUnknown1ElementIdWhenModifyingFeatures;
+
   /**
    * Returns true if the way directly connects the left and right ways. There is some tolerance
    * for "directly". See ticket #951 for details.

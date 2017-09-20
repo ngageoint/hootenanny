@@ -58,16 +58,18 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, SmallWayMerger)
 
 SmallWayMerger::SmallWayMerger(Meters threshold)
 {
+  ConfigOptions opts = ConfigOptions();
   if (threshold >= 0)
   {
     _threshold = threshold;
   }
   else
   {
-    _threshold = ConfigOptions().getSmallWayMergerThreshold();
+    _threshold = opts.getSmallWayMergerThreshold();
   }
-  _diff.reset(Factory::getInstance().constructObject<TagDifferencer>(
-    ConfigOptions().getSmallWayMergerDiff()));
+  _diff.reset(Factory::getInstance().constructObject<TagDifferencer>(opts.getSmallWayMergerDiff()));
+  _preserveUnknown1ElementIdWhenModifyingFeatures =
+    opts.getPreserveUnknown1ElementIdWhenModifyingFeatures();
 }
 
 void SmallWayMerger::apply(boost::shared_ptr<OsmMap>& map)
@@ -211,7 +213,7 @@ void SmallWayMerger::_mergeWays(const set<long>& ids)
       next->getTags().clear();
       RecursiveElementRemover(next->getElementId()).apply(_map);
 
-      if (ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures() &&
+      if (_preserveUnknown1ElementIdWhenModifyingFeatures &&
           //since this is being run as a post conflation op, need to also check for a conflated
           //status due to associated bookkeeping modifications made in
           //UnifyingConflator::_mapUnknown1IdsBackToModifiedElements...not sure if the other classes

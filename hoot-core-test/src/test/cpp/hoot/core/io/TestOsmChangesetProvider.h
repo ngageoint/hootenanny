@@ -78,32 +78,33 @@ public:
   Change readNextChange()
   {
     Change change;
-    change.type = (Change::ChangeType)(Tgs::Random::instance()->generateInt() % 3);
+    Change::ChangeType changeType = _getRandomType();
 
     switch ((ElementType::Type)(Tgs::Random::instance()->generateInt() % 3))
     {
     default:
     case ElementType::Node:
       {
-        NodePtr node(new Node(Status::Unknown1, ++_node, getLon(), getLat(), 15.0));
-        change.e = node;
+        change =
+          Change(
+            changeType, NodePtr(new Node(Status::Unknown1, ++_node, _getLon(), _getLat(), 15.0)));
       }
       break;
     case ElementType::Way:
       {
-        NodePtr node1(new Node(Status::Unknown1, ++_node, getLon(), getLat(), 15.0));
-        NodePtr node2(new Node(Status::Unknown1, ++_node, getLon(), getLat(), 15.0));
+        NodePtr node1(new Node(Status::Unknown1, ++_node, _getLon(), _getLat(), 15.0));
+        NodePtr node2(new Node(Status::Unknown1, ++_node, _getLon(), _getLat(), 15.0));
         WayPtr way(new Way(Status::Unknown1, ++_way, 15.0));
         way->addNode(node1->getId());
         way->addNode(node2->getId());
         way->setTag("key1", "value1");
-        change.e = way;
+        change = Change(changeType, way);
       }
       break;
     case ElementType::Relation:
       {
-        NodePtr node1(new Node(Status::Unknown1, ++_node, getLon(), getLat(), 15.0));
-        NodePtr node2(new Node(Status::Unknown1, ++_node, getLon(), getLat(), 15.0));
+        NodePtr node1(new Node(Status::Unknown1, ++_node, _getLon(), _getLat(), 15.0));
+        NodePtr node2(new Node(Status::Unknown1, ++_node, _getLon(), _getLat(), 15.0));
         WayPtr way(new Way(Status::Unknown1, ++_way, 15.0));
         way->addNode(node1->getId());
         way->addNode(node2->getId());
@@ -112,7 +113,7 @@ public:
         relation->addElement("role1", node1->getElementId());
         relation->addElement("role2", way->getElementId());
         relation->setTag("key2", "value2");
-        change.e = relation;
+        change = Change(changeType, relation);
       }
       break;
     }
@@ -122,8 +123,15 @@ public:
   }
 
 private:
-  double getLat() { return (Tgs::Random::instance()->generateInt() % 180 -  90.0) / _coordinateScale; }
-  double getLon() { return (Tgs::Random::instance()->generateInt() % 360 - 180.0) / _coordinateScale; }
+
+  Change::ChangeType _getRandomType() const
+    { return (Change::ChangeType)(Tgs::Random::instance()->generateInt() % 3); }
+
+  double _getLat() const
+  { return (Tgs::Random::instance()->generateInt() % 180 -  90.0) / _coordinateScale; }
+
+  double _getLon() const
+  { return (Tgs::Random::instance()->generateInt() % 360 - 180.0) / _coordinateScale; }
 
   int _ctr;
   int _max;

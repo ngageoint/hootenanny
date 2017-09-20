@@ -386,7 +386,7 @@ geonames.rules = {
         'MTRO':{'railway':'station','station':'subway'}, //  metro station: metro station (Underground, Tube, or Metro)
         'MTS':{'natural':'mountain'}, //  mountains: a mountain range or a group of mountains or high ridges
         'MTU':{'natural':'undersea_mountain'}, //  mountain: a well-delineated subdivision of a large and complex positive feature
-        'MUS':{'amenity':'museum'}, //  museum: a building where objects of permanent interest in one or more of the arts and sciences are preserved and exhibited
+        'MUS':{'tourism':'museum'}, //  museum: a building where objects of permanent interest in one or more of the arts and sciences are preserved and exhibited
         'MVA':{'military':'maneuver_area'}, //  maneuver area: a tract of land where military field exercises are carried out
         'NKM':{'poi':'meander_neck'}, //  meander neck: a narrow strip of land between the two limbs of a meander loop at its narrowest point
         'NOV':{'amenity':'place_of_worship','building':'novitiate'}, //  novitiate: a religious house or school where novices are trained
@@ -479,7 +479,8 @@ geonames.rules = {
         'PRNQ':{'abandoned:amenity':'prison'}, //  abandoned prison: 
         'PROM':{'natural':'promontory'}, //  promontory(-ies): a bluff or prominent hill overlooking or projecting into a lowland
         'PRSH':{'place':'parish'}, //  parish: an ecclesiastical district
-        'PRT':{'landuse':'port'}, //  port: a place provided with terminal and transfer facilities for loading and discharging waterborne cargo or passengers, usually located in a harbor
+        // 'PRT':{'landuse':'port'}, //  port: a place provided with terminal and transfer facilities for loading and discharging waterborne cargo or passengers, usually located in a harbor
+        'PRT':{'port':'yes'}, //  port: a place provided with terminal and transfer facilities for loading and discharging waterborne cargo or passengers, usually located in a harbor
         'PRVU':{'place':'undersea_province'}, //  province: a region identifiable by a group of similar physiographic features whose characteristics are markedly in contrast with surrounding areas
         'PSH':{'power':'plant','landuse':'industrial','plant:type':'hydro'}, //  hydroelectric power station: a building where electricity is generated from water power
         'PS':{'power':'plant','landuse':'industrial'}, //  power station: a facility for generating electric power

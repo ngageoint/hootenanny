@@ -90,9 +90,6 @@ public:
 
 private:
 
-  static Settings _readDbConfig();
-  static void _readDbConfig(Settings& settings, QString config_path);
-
   static boost::shared_ptr<Node> _createNode(double x, double y, OsmMapPtr map);
 };
 

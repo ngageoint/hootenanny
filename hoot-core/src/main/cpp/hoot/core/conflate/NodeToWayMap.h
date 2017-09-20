@@ -74,6 +74,7 @@ public:
 private:
 
   std::set<long> _emptySet;
+
 };
 
 }

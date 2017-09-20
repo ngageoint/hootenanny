@@ -11,18 +11,23 @@ TOMCAT_LOGS_HOME=/var/log/tomcat8 # logs go here
 TOMCAT_CONFIG_HOME=/etc/tomcat8 # config files go here
 SCRIPT_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-#755 = -rwxr-xr-x
+# Find out what user we have: vagrant or ubuntu
+# This comes from a user difference in one of the Vagrant boxes
+VMUSER=`id -u -n`
+if [ "$VMUSER" = 'vagrant' ]
+then
+  TOMCAT_USER=$VMUSER
+  TOMCAT_GROUP=$VMUSER
+fi
 
+#755 = -rwxr-xr-x
 TOMCAT_HOME_PERMISSIONS=755
 TOMCAT_USER_HOME_PERMISSIONS=755
 TOMCAT_LOGS_HOME_PERMISSIONS=755
 TOMCAT_CACHE_HOME_PERMISSIONS=775
 
-TOMCAT_TAR_FILE=${SCRIPT_HOME}/../apache-tomcat-8.5.8.tar.gz
-
-# Find out what user we have: vagrant or ubuntu
-# This comes from a user difference in one of the Vagrant boxes
-VMUSER=`id -u -n`
+TOMCAT_VERSION='8.5.20'
+TOMCAT_TAR_FILE=${SCRIPT_HOME}/../apache-tomcat-${TOMCAT_VERSION}.tar.gz
 
 echo "######## Begin $TOMCAT_NAME installation ########"
 echo "SCRIPT_HOME=$SCRIPT_HOME"
@@ -119,6 +124,14 @@ sudo chgrp -R ${TOMCAT_GROUP} ${TOMCAT_CACHE_HOME}/work
 
 sudo cp ${SCRIPT_HOME}/etc/init.d/${TOMCAT_NAME} /etc/init.d
 sudo cp ${SCRIPT_HOME}/etc/default/${TOMCAT_NAME} /etc/default
+if [ "$TOMCAT_USER" != 'tomcat8' ]
+then
+  # replace the tomcat8 user and group with the user
+  sudo sed -i "s/TOMCAT8_USER=tomcat8/TOMCAT8_USER=${TOMCAT_USER}/g" /etc/default/${TOMCAT_NAME}
+  sudo sed -i "s/TOMCAT8_GROUP=tomcat8/TOMCAT8_GROUP=${TOMCAT_GROUP}/g" /etc/default/${TOMCAT_NAME}
+  sudo sed -i "s/TOMCAT8_USER=tomcat8/TOMCAT8_USER=${TOMCAT_USER}/g" /etc/init.d/${TOMCAT_NAME}
+  sudo sed -i "s/TOMCAT8_GROUP=tomcat8/TOMCAT8_GROUP=${TOMCAT_GROUP}/g" /etc/init.d/${TOMCAT_NAME}
+fi
 
 if ! grep -i --quiet 'ingest/processed' ${TOMCAT_CONFIG_HOME}/server.xml; then
     echo "Adding Tomcat context path for tile images..."

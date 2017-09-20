@@ -46,7 +46,8 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapReader, OsmApiDbReader)
 
 OsmApiDbReader::OsmApiDbReader() :
-_database(new OsmApiDb())
+_database(new OsmApiDb()),
+_defaultCircularError(ConfigOptions().getCircularErrorDefaultValue())
 {
   setConfiguration(conf());
 }
@@ -76,7 +77,7 @@ void OsmApiDbReader::open(QString urlStr)
 
 void OsmApiDbReader::_parseAndSetTagsOnElement(ElementPtr element)
 {
-  //TODO: See if these tags can be read out at the same time the element itself is read out.
+  //We should see if these tags can be read out at the same time the element itself is read out...
 
   QStringList tags;
   boost::shared_ptr<QSqlQuery> tagItr;
@@ -129,12 +130,12 @@ NodePtr OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& m
     resultIterator.value(ApiDb::NODES_LONGITUDE).toLongLong() / (double)ApiDb::COORDINATE_SCALE;
 
   NodePtr node(
-    new Node(
+    Node::newSp(
       _status,
       nodeId,
       lon,
       lat,
-      ConfigOptions().getCircularErrorDefaultValue(),
+      _defaultCircularError,
       resultIterator.value(ApiDb::NODES_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::NODES_VERSION).toLongLong(),
       resultIterator.value(ApiDb::NODES_TIMESTAMP).toUInt()));
@@ -142,7 +143,7 @@ NodePtr OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& m
   _parseAndSetTagsOnElement(node);
   _updateMetadataOnElement(node);
   //we want the reader's status to always override any existing status
-  if (!ConfigOptions().getReaderKeepFileStatus() && _status != Status::Invalid)
+  if (!_keepFileStatus && _status != Status::Invalid)
   {
     node->setStatus(_status);
   }
@@ -170,7 +171,7 @@ WayPtr OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& map
     new Way(
       _status,
       newWayId,
-      ConfigOptions().getCircularErrorDefaultValue(),
+      _defaultCircularError,
       resultIterator.value(ApiDb::WAYS_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::WAYS_VERSION).toLongLong(),
       resultIterator.value(ApiDb::WAYS_TIMESTAMP).toUInt()));
@@ -187,7 +188,7 @@ WayPtr OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& map
   _parseAndSetTagsOnElement(way);
   _updateMetadataOnElement(way);
   //we want the reader's status to always override any existing status
-  if (!ConfigOptions().getReaderKeepFileStatus() && _status != Status::Invalid)
+  if (!_keepFileStatus && _status != Status::Invalid)
   {
     way->setStatus(_status);
   }
@@ -213,7 +214,7 @@ RelationPtr OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, c
     new Relation(
       _status,
       newRelationId,
-      ConfigOptions().getCircularErrorDefaultValue(),
+      _defaultCircularError,
       "",
       resultIterator.value(ApiDb::RELATIONS_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::RELATIONS_VERSION).toLongLong(),
@@ -232,7 +233,7 @@ RelationPtr OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, c
   _parseAndSetTagsOnElement(relation);
   _updateMetadataOnElement(relation);
   //we want the reader's status to always override any existing status
-  if (!ConfigOptions().getReaderKeepFileStatus() && _status != Status::Invalid)
+  if (!_keepFileStatus && _status != Status::Invalid)
   {
     relation->setStatus(_status);
   }
@@ -244,6 +245,7 @@ RelationPtr OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, c
 void OsmApiDbReader::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
+  setMaxElementsPerMap(configOptions.getMaxElementsPerPartialMap());
   setUserEmail(configOptions.getApiDbEmail());
   setBoundingBox(configOptions.getConvertBoundingBox());
   setOverrideBoundingBox(configOptions.getConvertBoundingBoxOsmApiDatabase());

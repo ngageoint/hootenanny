@@ -52,8 +52,10 @@ public:
   virtual void visit(const boost::shared_ptr<Element>& e);
 
 private:
-  QString _k, _v;
+  QStringList _k, _v;
   bool _appendToExistingValue;
+
+  void _setTag(const ElementPtr& e, QString k, QString v);
 };
 
 }

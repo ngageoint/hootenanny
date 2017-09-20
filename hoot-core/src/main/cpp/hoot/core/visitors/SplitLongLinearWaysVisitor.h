@@ -69,6 +69,7 @@ private:
   // Actual max is 2000, but in order to allow editors to insert nodes without issues,
   //    leaving some breathing room
   static const unsigned int _defaultMaxNodesPerWay = 1900;
+
 };
 
 }

@@ -39,6 +39,7 @@ using namespace geos::geom;
 // Hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
 {
@@ -111,8 +112,8 @@ QString Node::toString() const
     QString(
       "Node(%1): x: %2 y: %3 tags:\n%4\n version: %5\n visible: %6\n status: %7\n circular error: %8")
       .arg(getId())
-      .arg(getX())
-      .arg(getY())
+      .arg(QString::number(getX(), 'f', ConfigOptions().getWriterPrecision()))
+      .arg(QString::number(getY(), 'f', ConfigOptions().getWriterPrecision()))
       .arg(getTags().toString())
       .arg(getVersion())
       .arg(getVisible())

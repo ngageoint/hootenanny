@@ -31,6 +31,18 @@
         "EXPORTPATH" : "translations/RenderDb.js"
     },
     {
+        "NAME" : "GIFD D4",
+        "DESCRIPTION" : "Geospatial Intelligence Feature Database (GIFD) D4",
+        "CANEXPORT" : false,
+        "PATH" : "translations/GIFD_D4.js",
+    },
+    {
+        "NAME" : "WorldPortIndex",
+        "DESCRIPTION" : "NGA World Port Index",
+        "CANEXPORT" : false,
+        "PATH" : "translations/WorldPortIndex.js",
+    },
+    {
         "NAME" : "GEONAMES",
         "DESCRIPTION" : "GeoNames.org",
         "CANEXPORT" : false,

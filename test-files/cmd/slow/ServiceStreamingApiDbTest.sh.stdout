@@ -21,3 +21,32 @@ streaming osm api db --> pbf...
       1
 (1 row)
 
+streaming hoot api db --> xml...
+
+streaming osm api db --> xml...
+
+ setval 
+--------
+      1
+(1 row)
+
+hoot api db bounds --> xml
+
+osm api db bounds --> xml
+
+ setval 
+--------
+      1
+(1 row)
+
+hoot api db bounds --> ogr
+
+16:36:17.042 WARN  ...?(  -1) CPL Error #: 6 Normalized/laundered field name: 'mountain_pass' to 'mountain_p'
+osm api db bounds --> ogr
+
+ setval 
+--------
+      1
+(1 row)
+
+16:36:19.984 WARN  ...?(  -1) CPL Error #: 6 Normalized/laundered field name: 'mountain_pass' to 'mountain_p'

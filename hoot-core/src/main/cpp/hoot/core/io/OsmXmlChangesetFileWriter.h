@@ -89,6 +89,9 @@ private:
 
   bool _multipleChangesetsWritten;
 
+  bool _addTimestamp;
+  bool _includeDebugTags;
+
   OsmXmlWriter _invalidCharacterRemover;
 
   QMap<ElementType::Type, long> _newElementIdCtrs;

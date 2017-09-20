@@ -14,16 +14,17 @@ cd $HOOT_HOME
 # Just wipe out the files. Db cleaning comes later
 scripts/jenkins/VeryClean.sh
 
+# Recreate this folder that Tomcat requires
+if [ ! -d "$HOOT_HOME/userfiles/ingest/processed" ]; then
+  mkdir -p $HOOT_HOME/userfiles/ingest/processed
+fi
+
 # Maintain vagrant state in the parent directory so very clean will still work.
 mkdir -p ../vagrant-hootenanny
 ln -s ../vagrant-hootenanny .vagrant
 
 # Update hoot-ui
 git submodule update --init
-
-# Jenkins Vagrant setup
-ln -s ../../vagrant/VSphereDummy.box VSphereDummy.box
-ln -s ../../vagrant/VagrantfileLocal.ubuntu1404 VagrantfileLocal
 
 # Copy words1.sqlite Db so we don't have to download it again
 ( [ -e $WORDS_HOME/words1.sqlite ] &&  cp $WORDS_HOME/words1.sqlite conf )
@@ -50,12 +51,13 @@ if [ "`date +%F`" != "`test -e ../BuildDate.txt && cat ../BuildDate.txt`" ]; the
     REBUILD_VAGRANT=true
 fi
 
-if [ $REBUILD_VAGRANT == 'true' ]; then
+# Disable VM reuse option.  Not working with AWS provider.
+#if [ $REBUILD_VAGRANT == 'true' ]; then
     vagrant destroy -f
-    time -p vagrant up --provider vsphere
-else
-    time -p vagrant up --provision-with nfs,build,EGD,tomcat,mapnik,hadoop --provider vsphere
-fi
+    time -p vagrant up --provider aws
+#else
+#    time -p vagrant up --provision-with build,EGD,tomcat,mapnik,hadoop --provider aws
+#fi
 
 # Disableing this until it gets moved earlier into the build.
 # Clean out the Database

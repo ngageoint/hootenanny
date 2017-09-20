@@ -1,0 +1,27 @@
+# Systemd unit file for tomcat8
+[Unit]
+Description=Apache Tomcat Web Application Container
+After=syslog.target network.target
+
+[Service]
+Type=forking
+
+Environment=JAVA_HOME=/usr/java/jdk1.8.0_144
+Environment=CATALINA_PID=/usr/share/tomcat8/temp/tomcat8.pid
+Environment=CATALINA_HOME=/usr/share/tomcat8
+Environment=CATALINA_BASE=/usr/share/tomcat8
+Environment='CATALINA_OPTS=-Xms512M -Xmx2048M -server -XX:+UseParallelGC'
+Environment='JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom'
+
+# NOTE: This start script is a wrapper that sets up the Hootenanny environment
+ExecStart=/usr/share/tomcat8/bin/tomcat8_start.sh
+ExecStop=/usr/share/tomcat8/bin/shutdown.sh
+
+User=tomcat8
+Group=tomcat8
+UMask=0007
+RestartSec=10
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

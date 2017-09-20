@@ -129,12 +129,12 @@ bool OsmNetworkExtractor::_isValidElement(const ConstElementPtr& e)
     ConstRelationPtr r = boost::dynamic_pointer_cast<const Relation>(e);
     if (OsmSchema::getInstance().isLinear(*e) == false)
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN(
           "Received a non-linear relation as a valid network element. Ignoring relation. " << e);
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }
@@ -148,11 +148,11 @@ bool OsmNetworkExtractor::_isValidElement(const ConstElementPtr& e)
       {
         if (members[i].getElementId().getType() != ElementType::Way)
         {
-          if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+          if (logWarnCount < Log::getWarnMessageLimit())
           {
             LOG_WARN("Received a linear relation that contains a non-linear element: " << e);
           }
-          else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+          else if (logWarnCount == Log::getWarnMessageLimit())
           {
             LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
           }
@@ -194,14 +194,14 @@ void OsmNetworkExtractor::_visit(const ConstElementPtr& e)
       // if this is a bad multi-linestring then don't include it in the network.
       else
       {
-        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        if (logWarnCount < Log::getWarnMessageLimit())
         {
           LOG_WARN(
             "Found a non-contiguous relation when extracting a network. Ignoring: " <<
             e->getElementId());
           LOG_TRACE("Non-contiguous relation: " << e);
         }
-        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        else if (logWarnCount == Log::getWarnMessageLimit())
         {
           LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }

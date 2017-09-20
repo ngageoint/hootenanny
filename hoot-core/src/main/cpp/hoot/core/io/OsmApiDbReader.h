@@ -57,11 +57,13 @@ protected:
 private:
 
   //for white box testing
-  friend class ServiceOsmApiDbBulkWriterTest;
+  friend class ServiceOsmApiDbBulkInserterTest;
   friend class ServicesDbTestUtils;
   friend class ServiceWriteOsmSqlStatementsDriverTest;
 
   boost::shared_ptr<OsmApiDb> _database;
+
+  double _defaultCircularError;
 
   void _parseAndSetTagsOnElement(ElementPtr element);
 };

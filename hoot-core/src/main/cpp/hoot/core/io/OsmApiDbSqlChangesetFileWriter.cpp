@@ -44,7 +44,8 @@ namespace hoot
 OsmApiDbSqlChangesetFileWriter::OsmApiDbSqlChangesetFileWriter(QUrl url) :
 _changesetId(0),
 _changesetMaxSize(ConfigOptions().getChangesetMaxSize()),
-_changesetUserId(ConfigOptions().getChangesetUserId())
+_changesetUserId(ConfigOptions().getChangesetUserId()),
+_includeDebugTags(ConfigOptions().getWriterIncludeDebugTags())
 {
   _db.open(url);
 }
@@ -54,7 +55,8 @@ OsmApiDbSqlChangesetFileWriter::~OsmApiDbSqlChangesetFileWriter()
   _db.close();
 }
 
-void OsmApiDbSqlChangesetFileWriter::write(const QString path, ChangeSetProviderPtr changesetProvider)
+void OsmApiDbSqlChangesetFileWriter::write(const QString path,
+                                           ChangeSetProviderPtr changesetProvider)
 {
   LOG_DEBUG("Writing changeset to " << path);
 
@@ -73,16 +75,16 @@ void OsmApiDbSqlChangesetFileWriter::write(const QString path, ChangeSetProvider
   {
     LOG_TRACE("Reading next SQL change...");
     Change change = changesetProvider->readNextChange();
-    switch (change.type)
+    switch (change.getType())
     {
       case Change::Create:
-        _createNewElement(change.e);
+        _createNewElement(change.getElement());
         break;
       case Change::Modify:
-        _updateExistingElement(change.e);
+        _updateExistingElement(change.getElement());
         break;
       case Change::Delete:
-        _deleteExistingElement(change.e);
+        _deleteExistingElement(change.getElement());
         break;
       case Change::Unknown:
         //see comment in ChangesetDeriver::_nextChange() when
@@ -92,11 +94,11 @@ void OsmApiDbSqlChangesetFileWriter::write(const QString path, ChangeSetProvider
         throw IllegalArgumentException("Unexpected change type.");
     }
 
-    if (change.type != Change::Unknown)
+    if (change.getType() != Change::Unknown)
     {
-      if (change.e->getElementType().getEnum() == ElementType::Node)
+      if (change.getElement()->getElementType().getEnum() == ElementType::Node)
       {
-        ConstNodePtr node = boost::dynamic_pointer_cast<const Node>(change.e);
+        ConstNodePtr node = boost::dynamic_pointer_cast<const Node>(change.getElement());
         _changesetBounds.expandToInclude(node->getX(), node->getY());
       }
       changes++;
@@ -463,7 +465,7 @@ void OsmApiDbSqlChangesetFileWriter::_createTags(ConstElementPtr element)
   QStringList tableNames = _tagTableNamesForElement(element->getElementId());
 
   Tags tags = element->getTags();
-  if (ConfigOptions().getWriterIncludeDebugTags())
+  if (_includeDebugTags)
   {
     tags.set(MetadataTags::HootStatus(), QString::number(element->getStatus().getEnum()));
   }
@@ -479,23 +481,27 @@ void OsmApiDbSqlChangesetFileWriter::_createTags(ConstElementPtr element)
     QString k = it.key();
     QString v = it.value();
 
-    const QString currentTagValues =
+    if (k != MetadataTags::HootHash())
+    {
+      const QString currentTagValues =
       QString("(%1_id, k, v) VALUES (%2, '%3', '%4');\n")
         .arg(element->getElementId().getType().toString().toLower())
         .arg(element->getElementId().getId())
         .arg(k.replace('\'', "''"))
         .arg(v.replace('\'', "''"));
 
-    const QString tagValues =
-      QString("(%1_id, k, v, version) VALUES (%2, '%3', '%4', %5);\n")
-        .arg(element->getElementId().getType().toString().toLower())
-        .arg(element->getElementId().getId())
-        .arg(k.replace('\'', "''"))
-        .arg(v.replace('\'', "''"))
-        .arg(element->getVersion());
+      const QString tagValues =
+        QString("(%1_id, k, v, version) VALUES (%2, '%3', '%4', %5);\n")
+          .arg(element->getElementId().getType().toString().toLower())
+          .arg(element->getElementId().getId())
+          .arg(k.replace('\'', "''"))
+          .arg(v.replace('\'', "''"))
+          .arg(element->getVersion());
 
-    _outputSql.write((QString("INSERT INTO %1 ").arg(tableNames.at(0)) + currentTagValues).toUtf8());
-    _outputSql.write((QString("INSERT INTO %1 ").arg(tableNames.at(1)) + tagValues).toUtf8());
+      _outputSql.write(
+        (QString("INSERT INTO %1 ").arg(tableNames.at(0)) + currentTagValues).toUtf8());
+      _outputSql.write((QString("INSERT INTO %1 ").arg(tableNames.at(1)) + tagValues).toUtf8());
+    }
   }
 }
 
