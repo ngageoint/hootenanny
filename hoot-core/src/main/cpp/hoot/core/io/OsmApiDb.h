@@ -172,24 +172,24 @@ public:
                                                const bool historical, const bool tags);
 
   /**
-   * @see ApiDb::disableConstraints
+   * Disables all OSM table constraints
    */
-  virtual void disableConstraints();
+  void disableConstraints();
 
   /**
-   * @see ApiDb::enableConstraints
+   * Enables all OSM table constraints
    */
-  virtual void enableConstraints();
+  void enableConstraints();
 
   /**
-   * @see ApiDb::dropIndexes
+   * Drops all OSM table indexes
    */
-  virtual void dropIndexes();
+  void dropIndexes();
 
   /**
-   * @see ApiDb::createIndexes
+   * Creates all OSM table indexes
    */
-  virtual void createIndexes();
+  void createIndexes();
 
 protected:
 

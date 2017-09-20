@@ -307,25 +307,11 @@ public:
   long getMapIdByName(const QString name);
 
   /**
-   * @see ApiDb::disableConstraints
+   * Removes the layer name from a Hooteanny API database URL
+   *
+   * @param url input URL
+   * @return a URL with the layer name removed
    */
-  virtual void disableConstraints();
-
-  /**
-   * @see ApiDb::enableConstraints
-   */
-  virtual void enableConstraints();
-
-  /**
-   * @see ApiDb::dropIndexes
-   */
-  virtual void dropIndexes();
-
-  /**
-   * @see ApiDb::createIndexes
-   */
-  virtual void createIndexes();
-
   static QString removeLayerName(const QString url);
 
 protected:
@@ -454,9 +440,6 @@ private:
    * @return should be <dbname>_renderdb_<map_id>
    */
   QString _getRenderDBName(long mapId);
-
-  QStringList _getTables();
-  void _modifyConstraints(const QStringList tableNames, const bool disable);
 
   static QString _escapeTags(const Tags& tags);
 };

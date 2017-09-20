@@ -232,17 +232,12 @@ void HootApiDbBulkInserter::_writeDataToDbPsql()
 
 void HootApiDbBulkInserter::_writeDataToDb()
 {
-  //indexes are already being dropped in HootApiDb when the map is inserted, so don't worry about
-  //dropping them here
-  //TODO: figure out what's going on with constraints...HootApiDb creating them too?
-  //_database.disableConstraints();
+  //indexes (and constraints?) are already being dropped in HootApiDb when the map is inserted,
+  //so don't worry about dropping them here
 
   _writeDataToDbPsql();
 
-  //_database.enableConstraints();
   //this will re-create the indexes
-  //_database.commit();
-  //_database.createPendingMapIndexes();
   _database.close();
 }
 
@@ -324,6 +319,7 @@ void HootApiDbBulkInserter::_writeCombinedSqlFile()
 
         do
         {
+          //these element lines will contain tags
           QString line;
           line.reserve(600);
           line.append(QString::fromUtf8(tempInputFile.readLine().constData()));
@@ -694,7 +690,7 @@ void HootApiDbBulkInserter::_writeSequenceUpdates(long changesetId, const unsign
 {
   LOG_DEBUG("Writing sequence updates stream...");
 
-  if (changesetId <= 0) //TODO: probably can get rid of this
+  if (changesetId <= 0) //probably can get rid of this
   {
     changesetId = 1;
   }
@@ -707,16 +703,19 @@ void HootApiDbBulkInserter::_writeSequenceUpdates(long changesetId, const unsign
 
   assert(changesetId > 0);
   sequenceUpdatesStream <<
-    sequenceUpdateFormat.arg(HootApiDb::getChangesetsSequenceName(_database.getMapId()), QString::number(changesetId)).toUtf8();
+    sequenceUpdateFormat.arg(
+      HootApiDb::getChangesetsSequenceName(_database.getMapId()), QString::number(changesetId)).toUtf8();
 
   assert(nodeId > 0);
   sequenceUpdatesStream <<
-    sequenceUpdateFormat.arg(HootApiDb::getCurrentNodesSequenceName(_database.getMapId()), QString::number(nodeId)).toUtf8();
+    sequenceUpdateFormat.arg(
+      HootApiDb::getCurrentNodesSequenceName(_database.getMapId()), QString::number(nodeId)).toUtf8();
 
   if (wayId > 0)
   {
     sequenceUpdatesStream <<
-      sequenceUpdateFormat.arg(HootApiDb::getCurrentWaysSequenceName(_database.getMapId()), QString::number(wayId)).toUtf8();
+      sequenceUpdateFormat.arg(
+        HootApiDb::getCurrentWaysSequenceName(_database.getMapId()), QString::number(wayId)).toUtf8();
   }
 
   if (relationId > 0)

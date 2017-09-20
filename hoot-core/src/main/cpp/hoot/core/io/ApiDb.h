@@ -401,26 +401,6 @@ public:
 
   static void readDbConfig(Settings& settings, QString config_path);
 
-  /**
-   * Disables all OSM table constraints
-   */
-  virtual void disableConstraints() = 0;
-
-  /**
-   * Enables all OSM table constraints
-   */
-  virtual void enableConstraints() = 0;
-
-  /**
-   * Drops all OSM table indexes
-   */
-  virtual void dropIndexes() = 0;
-
-  /**
-   * Creates all OSM table indexes
-   */
-  virtual void createIndexes() = 0;
-
 protected:
 
   //osm api db stores coords as integers and hoot api db as floating point
