@@ -72,11 +72,19 @@ Vagrant.configure(2) do |config|
     end
 
     dockcentos72.vm.synced_folder ".", "/home/vagrant/hoot"
+
+    # Stop the default vagrant rsyncing
+    config.vm.synced_folder '.', '/home/vagrant/sync', disabled: true
+
     dockcentos72.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvisionCentOS7.sh"
     dockcentos72.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
-    dockcentos72.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo service tomcat8 restart", run: "always"
-    dockcentos72.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo service node-mapnik-server start", run: "always"
+
+
+    dockcentos72.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo systemctl restart tomcat8", run: "always"
+    dockcentos72.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-mapnik", run: "always"
+    dockcentos72.vm.provision "export", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-export", run: "always"
     dockcentos72.vm.provision "hadoop", type: "shell", :privileged => false, :inline => "stop-all.sh && start-all.sh", run: "always"
+
     
     
   end
