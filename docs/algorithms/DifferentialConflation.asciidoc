@@ -1,0 +1,14 @@
+
+
+[[DifferentialConflation]]
+== Differential Conflation
+
+Differential Conflation makes use of the Unifying conflation framework within Hootenanny,
+but attempts a much simpler operation than "full" conflation. The idea is to allow a user to
+take two datasets, A and B, and generate a changeset from them such that the changeset
+includes all of the data in set B that does not overlap (conflict, need merging, etc.) with
+set A. The changeset can then be applied directly to dataset A.
+
+This algorithm is still under development. Currently it works best if you use the Network Conflation conflicts matcher (see conf/core/Network.conf). In a nutshell, both maps are loaded, matches are generated, then all matches from map1 are removed - leaving you with all of map2, plus the "extra stuff" from map1.
+
+In the future, it might be a good idea to detect coincident ways between the input maps, and attempt to split them at overlapping endpoints. That is to say, if way1 from map1 is coincident with way2 from map2, but way1 is shorter - it might be a good idea to split way2 at approximately the endpoint of way1.
