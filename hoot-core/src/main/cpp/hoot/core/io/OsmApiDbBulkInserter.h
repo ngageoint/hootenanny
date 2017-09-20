@@ -209,6 +209,7 @@ protected:
   std::map<QString, boost::shared_ptr<QTemporaryFile> > _outputSections;
   QStringList _sectionNames;
   boost::shared_ptr<QElapsedTimer> _timer;
+  long _maxChangesetSize;
 
   void _reset();
   void _clearIdCollections();
@@ -226,9 +227,6 @@ protected:
   virtual void _createWayOutputFiles();
   virtual void _createRelationOutputFiles();
 
-  virtual void _writeSequenceUpdates(long changesetId, const unsigned long nodeId,
-                             const unsigned long wayId, const unsigned long relationId,
-                             QString& outputStr);
   virtual void _writeChangeset();
   virtual void _writeRelation(const unsigned long relationDbId);
   void _writeRelationMembers(const ConstRelationPtr& relation,
@@ -244,7 +242,7 @@ protected:
                   const unsigned long dbId, boost::shared_ptr<QFile> currentTableFile,
                   boost::shared_ptr<QFile> historicalTableFile);
 
-  void _incrementChangesInChangeset();
+  virtual void _incrementChangesInChangeset();
 
   virtual void _writeDataToDb();
   virtual void _writeDataToDbPsql();
@@ -272,7 +270,6 @@ private:
   UnresolvedReferences _unresolvedRefs;
 
   long _fileOutputElementBufferSize;
-  long _maxChangesetSize;
   bool _reserveRecordIdsBeforeWritingData;
   bool _disableDatabaseConstraintsDuringWrite;
   QString _tempDir;
@@ -287,6 +284,10 @@ private:
   void _incrementAndGetLatestIdsFromDb();
   void _updateRecordLineWithIdOffset(const QString tableName, QString& recordLine);
   void _reserveIdsInDb();
+
+  void _writeSequenceUpdates(long changesetId, const unsigned long nodeId,
+                             const unsigned long wayId, const unsigned long relationId,
+                             QString& outputStr);
 };
 
 }

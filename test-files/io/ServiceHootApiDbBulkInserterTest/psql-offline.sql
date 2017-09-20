@@ -1,10 +1,5 @@
 BEGIN TRANSACTION;
 
-SELECT pg_catalog.setval('changesets_22_id_seq', 4);
-SELECT pg_catalog.setval('current_nodes_22_id_seq', 14);
-SELECT pg_catalog.setval('current_ways_22_id_seq', 5);
-SELECT pg_catalog.setval('current_relations_22_id_seq', 1);
-
 COPY changesets_22 (id, user_id, created_at, min_lat, max_lat, min_lon, max_lon, closed_at, num_changes, tags) FROM stdin;
 1	3	2017-09-19 14:39:32.974	0	-1	0	-1	2017-09-19 14:39:32.974	5	"bot"=>"yes","created_by"=>"hootenanny"
 2	3	2017-09-19 14:39:32.974	0	-1	0	-1	2017-09-19 14:39:32.974	5	"bot"=>"yes","created_by"=>"hootenanny"

@@ -104,7 +104,20 @@ public:
    */
   bool changesetExists(const long id);
 
+  /**
+   * Closes an existing changeset
+   */
   void endChangeset();
+
+  /**
+   * Inserts and closes a changeset
+   *
+   * @param bounds bounds to associate with the changeset
+   * @param tags tags to associate with the changeset
+   * @param numChanges the number of changes in the changeset
+   * @return the ID of the inserted changeset
+   */
+  long insertChangeset(const geos::geom::Envelope& bounds, const Tags& tags, const long numChanges);
 
   /**
    * Creates necessary indexes and constraints on all maps that don't have indexes/constraints
@@ -340,6 +353,7 @@ private:
   boost::shared_ptr<QSqlQuery> _jobStatusExists;
   boost::shared_ptr<QSqlQuery> _mapExistsByName;
   boost::shared_ptr<QSqlQuery> _getMapIdByName;
+  boost::shared_ptr<QSqlQuery> _insertChangeSet2;
 
   boost::shared_ptr<BulkInsert> _nodeBulkInsert;
   long _nodesPerBulkInsert;

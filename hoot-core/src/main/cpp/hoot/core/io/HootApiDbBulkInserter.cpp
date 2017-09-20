@@ -57,6 +57,9 @@ HootApiDbBulkInserter::HootApiDbBulkInserter() : OsmApiDbBulkInserter()
 {
   _reset();
   setConfiguration(conf());
+
+  _changesetTags["bot"] = "yes";
+  _changesetTags["created_by"] = "hootenanny";
 }
 
 HootApiDbBulkInserter::~HootApiDbBulkInserter()
@@ -237,7 +240,7 @@ void HootApiDbBulkInserter::_writeDataToDb()
 
   _writeDataToDbPsql();
 
-  //this will re-create the indexes
+  //this will re-create the previously dropped indexes
   _database.close();
 }
 
@@ -267,33 +270,9 @@ void HootApiDbBulkInserter::_writeCombinedSqlFile()
 
   _sqlOutputCombinedFile->write(QString("BEGIN TRANSACTION;\n\n").toUtf8());
 
-  //We're not reserving the ID ranges in the database, so we'll write the appropriate setval
-  //statements to the sql output here for applying at a later time.  we want
-  //setval to reflect the last id in the sequence
-  QString reserveElementIdsSql;
-  //TODO: may be able to collapse this logic; see notes in _establishIdMapping
-  if (_validateData)
-  {
-    //with data validation on, we increment for each element read and all our counters are
-    //incremented one past the element/changeset count and we need to decrement them by one
-    _writeSequenceUpdates(_changesetData.currentChangesetId - 1,
-                          _idMappings.currentNodeId - 1,
-                          _idMappings.currentWayId - 1,
-                          _idMappings.currentRelationId - 1,
-                          reserveElementIdsSql);
-  }
-  else
-  {
-    //with data validation off, changesets are incremented one past, but the element current
-    //id's were always assigned the highest parsed value
-    _writeSequenceUpdates(_changesetData.currentChangesetId - 1,
-                          _idMappings.currentNodeId,
-                          _idMappings.currentWayId,
-                          _idMappings.currentRelationId,
-                          reserveElementIdsSql);
-  }
-  LOG_VART(reserveElementIdsSql);
-  _sqlOutputCombinedFile->write(reserveElementIdsSql.toUtf8());
+  //skipping the writing of sequence updates here, since that doesn't seem to play nicely when
+  //this class and HootApiDbWriter are mixed in the same workflow.  That works, b/c HootApiDbReader
+  //handles sequences internally when the data is later read back out (?).
 
   long recordCtr = 0;
   for (QStringList::const_iterator it = _sectionNames.begin(); it != _sectionNames.end(); ++it)
@@ -435,10 +414,12 @@ void HootApiDbBulkInserter::writePartial(const ConstNodePtr& node)
     tags.set(MetadataTags::HootId(), QString::number(nodeDbId));
   }
 
+  //increment the changeset counter before writing the element in order to stay in sync with
+  //HootApiDb
+  _incrementChangesInChangeset();
   _writeNode(node, nodeDbId);
   _writeStats.nodesWritten++;
   _writeStats.nodeTagsWritten += node->getTags().size();
-  _incrementChangesInChangeset();
   if (_validateData)
   {
     _checkUnresolvedReferences(node, nodeDbId);
@@ -480,12 +461,14 @@ void HootApiDbBulkInserter::writePartial(const ConstWayPtr& way)
     tags.set(MetadataTags::HootId(), QString::number(wayDbId));
   }
 
+  //increment the changeset counter before writing the element in order to stay in sync with
+  //HootApiDb
+  _incrementChangesInChangeset();
   _writeWay(wayDbId, way->getTags());
   _writeWayNodes(wayDbId, way->getNodeIds());
   _writeStats.waysWritten++;
   _writeStats.wayTagsWritten += way->getTags().size();
   _writeStats.wayNodesWritten += way->getNodeIds().size();
-  _incrementChangesInChangeset();
   if (_validateData)
   {
     _checkUnresolvedReferences(way, wayDbId);
@@ -525,12 +508,14 @@ void HootApiDbBulkInserter::writePartial(const ConstRelationPtr& relation)
     tags.set(MetadataTags::HootId(), QString::number(relationDbId));
   }
 
+  //increment the changeset counter before writing the element in order to stay in sync with
+  //HootApiDb
+  _incrementChangesInChangeset();
   _writeRelation(relationDbId, relation->getTags());
   _writeRelationMembers(relation, relationDbId);
   _writeStats.relationsWritten++;
   _writeStats.relationTagsWritten += relation->getTags().size();
   _writeStats.relationMembersWritten += relation->getMembers().size();
-  _incrementChangesInChangeset();
   if (_validateData)
   {
     _checkUnresolvedReferences(relation, relationDbId);
@@ -558,7 +543,6 @@ void HootApiDbBulkInserter::setConfiguration(const Settings& conf)
 QStringList HootApiDbBulkInserter::_createSectionNameList()
 {
   QStringList sections;
-  sections.push_back(HootApiDb::getChangesetsTableName(_database.getMapId()));
   sections.push_back(HootApiDb::getCurrentNodesTableName(_database.getMapId()));
   sections.push_back(HootApiDb::getCurrentWaysTableName(_database.getMapId()));
   sections.push_back(HootApiDb::getCurrentWayNodesTableName(_database.getMapId()));
@@ -658,6 +642,28 @@ void HootApiDbBulkInserter::_writeRelationMember(const unsigned long sourceRelat
   _writeStats.relationMembersWritten++;
 }
 
+void HootApiDbBulkInserter::_incrementChangesInChangeset()
+{
+  //to stay in sync with how HootApiDb assigns changeset ID's we'll get the initial changeset ID
+  //if this is the first record being writen.  changeset ID's will be retrieved with each call to
+  //_writeChangeset
+  if (_changesetData.changesInChangeset == 0)
+  {
+    _writeChangeset();
+  }
+  _changesetData.changesInChangeset++;
+  if (_changesetData.changesInChangeset == _maxChangesetSize)
+  {
+    LOG_VART(_changesetData.changesInChangeset);
+    _writeChangeset();
+    LOG_VART(_changesetData.currentChangesetId);
+    _changesetData.changesInChangeset = 0;
+    _changesetData.changesetBounds.init();
+    _changesetData.changesetsWritten++;
+    LOG_VART(_changesetData.changesetsWritten);
+  }
+}
+
 void HootApiDbBulkInserter::_writeChangeset()
 {
   LOG_VART(_changesetData.changesetUserId);
@@ -669,63 +675,12 @@ void HootApiDbBulkInserter::_writeChangeset()
       "Invalid changeset user ID: " + QString::number(_changesetData.changesetUserId));
   }
 
-  if (!_outputSections[HootApiDb::getChangesetsTableName(_database.getMapId())])
-  {
-    _createOutputFile(
-      HootApiDb::getChangesetsTableName(_database.getMapId()),
-      _sqlFormatter->getChangesetSqlHeaderString(_database.getMapId()));
-  }
-
-  _outputSections[HootApiDb::getChangesetsTableName(_database.getMapId())]->write(
-    _sqlFormatter->changesetToSqlString(
-      _changesetData.currentChangesetId,
-      _changesetData.changesetUserId,
-      _changesetData.changesInChangeset,
-      _changesetData.changesetBounds).toUtf8());
-}
-
-void HootApiDbBulkInserter::_writeSequenceUpdates(long changesetId, const unsigned long nodeId,
-                                                 const unsigned long wayId,
-                                                 const unsigned long relationId, QString& outputStr)
-{
-  LOG_DEBUG("Writing sequence updates stream...");
-
-  if (changesetId <= 0) //probably can get rid of this
-  {
-    changesetId = 1;
-  }
-
-  QTextStream sequenceUpdatesStream(&outputStr);
-  const QString sequenceUpdateFormat("SELECT pg_catalog.setval('%1', %2);\n");
-
-  //At least one changeset and some nodes should always be written by a write operation; ways
-  //and relations are optional.
-
-  assert(changesetId > 0);
-  sequenceUpdatesStream <<
-    sequenceUpdateFormat.arg(
-      HootApiDb::getChangesetsSequenceName(_database.getMapId()), QString::number(changesetId)).toUtf8();
-
-  assert(nodeId > 0);
-  sequenceUpdatesStream <<
-    sequenceUpdateFormat.arg(
-      HootApiDb::getCurrentNodesSequenceName(_database.getMapId()), QString::number(nodeId)).toUtf8();
-
-  if (wayId > 0)
-  {
-    sequenceUpdatesStream <<
-      sequenceUpdateFormat.arg(
-        HootApiDb::getCurrentWaysSequenceName(_database.getMapId()), QString::number(wayId)).toUtf8();
-  }
-
-  if (relationId > 0)
-  {
-    sequenceUpdatesStream <<
-      sequenceUpdateFormat.arg(
-        HootApiDb::getCurrentRelationsSequenceName(_database.getMapId()), QString::number(relationId)).toUtf8();
-  }
-
-  sequenceUpdatesStream << QString("\n").toUtf8();
+  //rather than write the changeset as a COPY statement out to file, just going to write it directly
+  //to the db.  this helps this class and HootApiDbWriter play nicely when the two are mixed together
+  //in a data workflow.  A downside to this is that the changeset insert isn't part of the SQL
+  //transaction used with the copy statements.
+  _changesetData.currentChangesetId =
+    _database.insertChangeset(_changesetData.changesetBounds, _changesetTags, _maxChangesetSize);
 }
 
 }

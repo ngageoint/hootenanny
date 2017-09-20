@@ -17,22 +17,6 @@
     <tag k="asciiname" v="Costa de Xurius"/>
     <tag k="error:circular" v="15"/>
   </node>
-  <node id="3038815" version="1" timestamp="1970-01-01T00:00:00Z" lat="42.55003" lon="1.44986">
-    <tag k="population" v="0"/>
-    <tag k="geonameid" v="3038815"/>
-    <tag k="admin1_code" v="04"/>
-    <tag k="feature_code" v="SPNG"/>
-    <tag k="modification_date" v="2010-01-11&#xA;"/>
-    <tag k="name" v="Font de la Xona"/>
-    <tag k="country_code" v="AD"/>
-    <tag k="latitude" v="42.55003"/>
-    <tag k="timezone" v="Europe/Andorra"/>
-    <tag k="dem" v="1976"/>
-    <tag k="feature_class" v="H"/>
-    <tag k="longitude" v="1.44986"/>
-    <tag k="asciiname" v="Font de la Xona"/>
-    <tag k="error:circular" v="15"/>
-  </node>
   <node id="3038816" version="1" timestamp="1970-01-01T00:00:00Z" lat="42.55327" lon="1.48736">
     <tag k="population" v="0"/>
     <tag k="geonameid" v="3038816"/>
@@ -47,6 +31,22 @@
     <tag k="feature_class" v="P"/>
     <tag k="longitude" v="1.48736"/>
     <tag k="asciiname" v="Xixerella"/>
+    <tag k="error:circular" v="15"/>
+  </node>
+  <node id="3038818" version="1" timestamp="1970-01-01T00:00:00Z" lat="42.56667" lon="1.68333">
+    <tag k="population" v="0"/>
+    <tag k="geonameid" v="3038818"/>
+    <tag k="admin1_code" v="00"/>
+    <tag k="feature_code" v="STM"/>
+    <tag k="modification_date" v="1993-12-23&#xA;"/>
+    <tag k="name" v="Riu Xic"/>
+    <tag k="country_code" v="AD"/>
+    <tag k="latitude" v="42.56667"/>
+    <tag k="timezone" v="Europe/Andorra"/>
+    <tag k="dem" v="2121"/>
+    <tag k="feature_class" v="H"/>
+    <tag k="longitude" v="1.68333"/>
+    <tag k="asciiname" v="Riu Xic"/>
     <tag k="error:circular" v="15"/>
   </node>
   <node id="3038817" version="1" timestamp="1970-01-01T00:00:00Z" lat="42.55294" lon="1.48764">
@@ -66,20 +66,36 @@
     <tag k="asciiname" v="Xixerella"/>
     <tag k="error:circular" v="15"/>
   </node>
-  <node id="3038818" version="1" timestamp="1970-01-01T00:00:00Z" lat="42.56667" lon="1.68333">
+  <node id="3038815" version="1" timestamp="1970-01-01T00:00:00Z" lat="42.55003" lon="1.44986">
     <tag k="population" v="0"/>
-    <tag k="geonameid" v="3038818"/>
-    <tag k="admin1_code" v="00"/>
-    <tag k="feature_code" v="STM"/>
-    <tag k="modification_date" v="1993-12-23&#xA;"/>
-    <tag k="name" v="Riu Xic"/>
+    <tag k="geonameid" v="3038815"/>
+    <tag k="admin1_code" v="04"/>
+    <tag k="feature_code" v="SPNG"/>
+    <tag k="modification_date" v="2010-01-11&#xA;"/>
+    <tag k="name" v="Font de la Xona"/>
     <tag k="country_code" v="AD"/>
-    <tag k="latitude" v="42.56667"/>
+    <tag k="latitude" v="42.55003"/>
     <tag k="timezone" v="Europe/Andorra"/>
-    <tag k="dem" v="2121"/>
+    <tag k="dem" v="1976"/>
     <tag k="feature_class" v="H"/>
-    <tag k="longitude" v="1.68333"/>
-    <tag k="asciiname" v="Riu Xic"/>
+    <tag k="longitude" v="1.44986"/>
+    <tag k="asciiname" v="Font de la Xona"/>
+    <tag k="error:circular" v="15"/>
+  </node>
+  <node id="3038822" version="1" timestamp="1970-01-01T00:00:00Z" lat="42.5" lon="1.56667">
+    <tag k="population" v="0"/>
+    <tag k="geonameid" v="3038822"/>
+    <tag k="admin1_code" v="00"/>
+    <tag k="feature_code" v="SPNG"/>
+    <tag k="modification_date" v="1993-12-23&#xA;"/>
+    <tag k="name" v="Fonts Vives"/>
+    <tag k="country_code" v="AD"/>
+    <tag k="latitude" v="42.5"/>
+    <tag k="timezone" v="Europe/Andorra"/>
+    <tag k="dem" v="1684"/>
+    <tag k="feature_class" v="H"/>
+    <tag k="longitude" v="1.56667"/>
+    <tag k="asciiname" v="Fonts Vives"/>
     <tag k="error:circular" v="15"/>
   </node>
   <node id="3038819" version="1" timestamp="1970-01-01T00:00:00Z" lat="42.5" lon="1.58333">
@@ -128,22 +144,6 @@
     <tag k="feature_class" v="T"/>
     <tag k="longitude" v="1.48333"/>
     <tag k="asciiname" v="Collada del Xeig"/>
-    <tag k="error:circular" v="15"/>
-  </node>
-  <node id="3038822" version="1" timestamp="1970-01-01T00:00:00Z" lat="42.5" lon="1.56667">
-    <tag k="population" v="0"/>
-    <tag k="geonameid" v="3038822"/>
-    <tag k="admin1_code" v="00"/>
-    <tag k="feature_code" v="SPNG"/>
-    <tag k="modification_date" v="1993-12-23&#xA;"/>
-    <tag k="name" v="Fonts Vives"/>
-    <tag k="country_code" v="AD"/>
-    <tag k="latitude" v="42.5"/>
-    <tag k="timezone" v="Europe/Andorra"/>
-    <tag k="dem" v="1684"/>
-    <tag k="feature_class" v="H"/>
-    <tag k="longitude" v="1.56667"/>
-    <tag k="asciiname" v="Fonts Vives"/>
     <tag k="error:circular" v="15"/>
   </node>
   <node id="3038823" version="1" timestamp="1970-01-01T00:00:00Z" lat="42.5" lon="1.48333">

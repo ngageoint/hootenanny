@@ -84,7 +84,7 @@ void OsmFileSorter::sort(const QString input, const QString output)
 
     //Unfortunately for now, sorting an OGR input is going to require an extra pass over the data
     //to first write it to a sortable format.
-    LOG_WARN("OGR inputs are not currently sortable by node ID.");
+    LOG_WARN("OGR inputs must be converted to the OSM format before sorting by node ID.");
     LOG_WARN("Converting input to OSM format...");
     _sortPbf(_ogrToPbfTemp(input)->fileName(), output);
   }

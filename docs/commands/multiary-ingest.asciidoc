@@ -4,24 +4,22 @@
 
 Ingests POI data for use by Multiary Conflation by calculating the difference between new and existing data
 
-* +newInput+ - path to a supported Hootenanny data format; only .geonames and .osm.pbf formats are currently supported
-* +referenceOutput+ - path to reference data; must be a Hootenanny API database layer; if the layer does not exist, it will
-                      be created 
-* +changesetOutput+ - path to write the resulting changeset changes to; must be a Spark changeset
+* +newInput+          - path to a supported Hootenanny data format
+* +translationScript+ - path to a translation script used to translate the input data to OSM
+* +referenceOutput+   - path to reference data; must be a Hootenanny API database layer; if the layer does not exist, 
+                        it will be created 
+* +changesetOutput+   - path to write the resulting changeset changes to; must be a Spark changeset
 
 === Usage
 
 --------------------------------------
-multiary-ingest (newInput) (referenceOutput) (changesetOutput)
+multiary-ingest (newInput) (translationScript) (referenceOutput) (changesetOutput)
 --------------------------------------
 
-==== Example
+==== Examples
 
 --------------------------------------
-hoot multiary-ingest newData.geonames hootapidb://hoot:hoottest@localhost:5432/hoot/ReferenceLayer changeset.spark.1
+hoot multiary-ingest newData.geonames translations/GeoNames.js hootapidb://hoot:hoottest@localhost:5432/hoot/ReferenceLayer changeset.spark.1 
+
+hoot multiary-ingest planet.osm.pbf translations/OSM_Ingest.js hootapidb://hoot:hoottest@localhost:5432/hoot/ReferenceLayer changeset.spark.1 
 --------------------------------------
-
-NOTES:
-
-* Only POIs will be read from inputs and all data will be translated to the OSM format.
-* OSM PBF inputs must be sorted by element ID.

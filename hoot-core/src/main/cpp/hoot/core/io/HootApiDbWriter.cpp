@@ -342,7 +342,7 @@ void HootApiDbWriter::setConfiguration(const Settings &conf)
 
 void HootApiDbWriter::_startNewChangeSet()
 {
-  LOG_TRACE("Starting changeset...");
+  LOG_DEBUG("Starting changeset...");
   _hootdb.endChangeset();
   Tags tags;
   tags["bot"] = "yes";

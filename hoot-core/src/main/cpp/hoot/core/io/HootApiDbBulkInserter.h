@@ -87,9 +87,6 @@ protected:
  virtual void _createWayOutputFiles();
  virtual void _createRelationOutputFiles();
 
-  virtual void _writeSequenceUpdates(long changesetId, const unsigned long nodeId,
-                             const unsigned long wayId, const unsigned long relationId,
-                             QString& outputStr);
   virtual void _writeChangeset();
   virtual void _writeRelation(const unsigned long relationDbId, const Tags& tags);
   virtual void _writeRelationMember(const unsigned long sourceRelationDbId,
@@ -106,6 +103,8 @@ protected:
 
   virtual bool _destinationIsDatabase() const { return true; }
 
+  virtual void _incrementChangesInChangeset();
+
 private:
 
   QString _userEmail;
@@ -116,6 +115,8 @@ private:
   boost::shared_ptr<HootApiDbSqlStatementFormatter> _sqlFormatter;
 
   bool _fastBulkInsertActivated;
+
+  Tags _changesetTags;
 
   void _getOrCreateMap();
 };

@@ -46,19 +46,13 @@ public:
 
   virtual int runSimple(QStringList args)
   {
-    if (args.size() != 3 && args.size() != 4)
+    if (args.size() != 4)
     {
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes three or four parameters.").arg(getName()));
+      throw HootException(QString("%1 takes four parameters.").arg(getName()));
     }
 
-    bool sortInput = true;
-    if (args.size() == 4 && args[3].toLower().trimmed() == "false")
-    {
-      sortInput = false;
-    }
-
-    MultiaryIngester().ingest(args[0], args[1], args[2], sortInput);
+    MultiaryIngester().ingest(args[0], args[1], args[2], args[3]);
 
     return 0;
   }
