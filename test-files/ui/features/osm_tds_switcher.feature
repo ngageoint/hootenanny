@@ -14,6 +14,7 @@ Feature: OSM/TDS Switcher
         When I click the "zoom-in" button
         When I click the "zoom-in" button
         And I wait 3 seconds
+        And I hover over "#map"
         When I select a way map feature with OSM id "w352"
         Then I wait 10 "seconds" to see "Edit feature:"
         Then I should see element "#preset-input-name" with value "21ST ST NW"
