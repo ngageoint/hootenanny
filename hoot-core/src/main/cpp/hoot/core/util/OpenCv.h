@@ -28,10 +28,15 @@
 #include <hoot/core/HootConfig.h>
 
 #ifdef HOOT_HAVE_OPENCV2_OPENCV_HPP
+// #1356 - OpenCV and Geos both have an int64 typedef
+#define int64 opencv_broken_int
 # include <opencv2/opencv.hpp>
+#undef int64
 #else
 # if HOOT_HAVE_OPENCV_CV_H
+#define int64 opencv_broken_int
 #   include <opencv/cv.h>
+#undef int64
 # else
 #   error "Expected an OpenCV header file to be defined."
 # endif
