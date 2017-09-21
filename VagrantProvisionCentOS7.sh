@@ -91,6 +91,7 @@ sudo yum -y install \
     libtool \
     m4 \
     maven \
+    mlocate \
     opencv \
     opencv-core \
     opencv-devel \
@@ -120,6 +121,7 @@ sudo yum -y install \
     tex* \
     unzip \
     v8-devel \
+    vim \
     w3m \
     wget \
     words \
