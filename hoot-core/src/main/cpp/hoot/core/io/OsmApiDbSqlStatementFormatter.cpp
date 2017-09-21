@@ -117,9 +117,7 @@ QString OsmApiDbSqlStatementFormatter::escapeCopyToData(const QString stringToOu
 {
   //TODO: this is likely redundant with other code
 
-  QString escapedString;
-  escapedString.reserve(50);
-  escapedString.append(stringToOutput);
+  QString escapedString = stringToOutput;
   // Escape any special characters as required by
   //    http://www.postgresql.org/docs/9.2/static/sql-copy.html
   escapedString.replace(QChar(92), QString("\\\\"));  // Escape single backslashes first
@@ -282,23 +280,15 @@ QStringList OsmApiDbSqlStatementFormatter::tagToSqlStrings(const long elementId,
   QStringList sqlStrs;
 
   const QString elementIdStr = QString::number(elementId);
-  //pre-allocating the string memory here reduces memory fragmentation significantly when parsing
-  //larger datasets due to the varying string sizes
-  QString key;
-  key.reserve(10);
-  key.append(escapeCopyToData(tagKey));
+  QString key = escapeCopyToData(tagKey);
   LOG_VART(key);
-  QString value;
-  value.reserve(50);
-  value.append(escapeCopyToData(tagValue));
+  QString value = escapeCopyToData(tagValue);
   LOG_VART(value);
 
   //all three of them are the same for current
-  QString currentSql;
-  currentSql.reserve(75);
-  currentSql.append(
+  QString currentSql =
     _outputFormatStrings[ApiDb::getCurrentNodeTagsTableName()]
-      .arg(elementIdStr, key, value));
+      .arg(elementIdStr, key, value);
   sqlStrs.append(currentSql);
   //all three of them are not the same for historical
   QString historicalFormatString = _outputFormatStrings[ApiDb::getWayTagsTableName()];
@@ -307,9 +297,7 @@ QStringList OsmApiDbSqlStatementFormatter::tagToSqlStrings(const long elementId,
     //see explanation for this silliness in the header file
     historicalFormatString = _outputFormatStrings[ApiDb::getNodeTagsTableName()];
   }
-  QString historicalSql;
-  historicalSql.reserve(75);
-  historicalSql.append(historicalFormatString.arg(elementIdStr, key, value));
+  QString historicalSql = historicalFormatString.arg(elementIdStr, key, value);
   sqlStrs.append(historicalSql);
 
   return sqlStrs;

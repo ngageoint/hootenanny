@@ -78,15 +78,10 @@ void HootApiDbSqlStatementFormatter::_initOutputFormatStrings(const QString deli
 QString HootApiDbSqlStatementFormatter::_toTagsString(const Tags& tags)
 {
   QString tagsStr;
-  tagsStr.reserve(500);
   for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
   {
-    QString key;
-    key.reserve(10);
-    key.append(it.key().trimmed());
-    QString value;
-    value.reserve(50);
-    value.append(it.value().trimmed());
+    QString key = it.key().trimmed();
+    QString value = it.value().trimmed();
     if (!value.isEmpty())
     {
       key.replace("'", "\'");
@@ -138,16 +133,14 @@ QString HootApiDbSqlStatementFormatter::nodeToSqlString(const ConstNodePtr& node
   const QString changesetIdStr = QString::number(changesetId);
   const QString tileNumberString(QString::number(ApiDb::tileForPoint(node->getY(), node->getX())));
 
-  QString nodeStr;
-  nodeStr.reserve(600);
-  nodeStr.append(
+  QString nodeStr =
     _outputFormatStrings[HootApiDb::getCurrentNodesTableName(_mapId)]
       .arg(nodeIdStr)
       .arg(QString::number(node->getY(), 'g', _precision))
       .arg(QString::number(node->getX(), 'g', _precision))
       .arg(changesetIdStr)
       .arg(_dateString)
-      .arg(tileNumberString));
+      .arg(tileNumberString);
   if (node->getTags().size() > 0)
   {
     nodeStr.replace(
@@ -160,13 +153,11 @@ QString HootApiDbSqlStatementFormatter::nodeToSqlString(const ConstNodePtr& node
 QString HootApiDbSqlStatementFormatter::wayToSqlString(const long wayId, const long changesetId,
                                                             const Tags& tags)
 {
-  QString wayStr;
-  wayStr.reserve(600);
-  wayStr.append(
+  QString wayStr =
     _outputFormatStrings[HootApiDb::getCurrentWaysTableName(_mapId)]
       .arg(wayId)
       .arg(changesetId)
-      .arg(_dateString));
+      .arg(_dateString);
   if (tags.size() > 0)
   {
     wayStr.replace("\\N", OsmApiDbSqlStatementFormatter::escapeCopyToData(_toTagsString(tags)));
@@ -191,13 +182,11 @@ QString HootApiDbSqlStatementFormatter::relationToSqlString(const long relationI
                                                                  const long changesetId,
                                                                  const Tags& tags)
 {
-  QString relationStr;
-  relationStr.reserve(600);
-  relationStr.append(
+  QString relationStr =
     _outputFormatStrings[HootApiDb::getCurrentRelationsTableName(_mapId)]
       .arg(relationId)
       .arg(changesetId)
-      .arg(_dateString));
+      .arg(_dateString);
   if (tags.size() > 0)
   {
     relationStr.replace("\\N", OsmApiDbSqlStatementFormatter::escapeCopyToData(_toTagsString(tags)));

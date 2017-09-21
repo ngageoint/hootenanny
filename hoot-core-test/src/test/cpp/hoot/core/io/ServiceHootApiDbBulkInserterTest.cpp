@@ -33,14 +33,11 @@
 
 // Hoot
 #include <hoot/core/io/HootApiDbBulkInserter.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/HootApiDbReader.h>
-#include <hoot/core/util/FileUtils.h>
-#include <hoot/core/util/DbUtils.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 
 // Qt
 #include <QDir>
-#include <QFileInfo>
 
 #include "../TestUtils.h"
 #include "ServicesDbTestUtils.h"
@@ -48,6 +45,12 @@
 namespace hoot
 {
 
+/*
+ * There are some unused and untested features here that HootApiDbBulkWriter inherited from
+ * OsmApiDbBulkWriter.  Rather than add tests for the unneeded features, its a better idea to
+ * rework the inheritance of the two classes as described in HootApiDbBulkWriter to get rid of the
+ * unneeded functionality in HootApiDbBulkWriter.
+ */
 class ServiceHootApiDbBulkInserterTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceHootApiDbBulkInserterTest);
@@ -64,8 +67,8 @@ public:
   {
     mapId = -1;
     ServicesDbTestUtils::deleteUser(userEmail());
-    HootApiDb database;
 
+    HootApiDb database;
     database.open(ServicesDbTestUtils::getDbModifyUrl());
     database.getOrCreateUser(userEmail(), "ServiceHootApiDbBulkInserterTest");
     database.close();
@@ -84,45 +87,10 @@ public:
     }
   }
 
-  void verifyDatabaseOutputOffline()
-  {
-    HootApiDbReader reader;
-    OsmMapPtr map(new OsmMap());
-    reader.setUserEmail("ServiceHootApiDbBulkInserterTest@hoot.org");
-    reader.open(ServicesDbTestUtils::getDbModifyUrl().toString());
-    reader.read(map);
-
-    //verify current elements
-
-    CPPUNIT_ASSERT_EQUAL((size_t)14, map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getNode(14)->getTags().size());
-
-    CPPUNIT_ASSERT_EQUAL((size_t)5, map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(3)->getTags().size());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(4)->getTags().size());
-    CPPUNIT_ASSERT_EQUAL((int)3, map->getWay(5)->getTags().size());
-    CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(1)->getNodeCount());
-    CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(2)->getNodeCount());
-    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getWay(3)->getNodeCount());
-    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getWay(4)->getNodeCount());
-    CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(5)->getNodeCount());
-
-    CPPUNIT_ASSERT_EQUAL((size_t)1, map->getRelations().size());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getRelation(1)->getTags().size());
-    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelation(1)->getMembers().size());
-
-    //verify changeset table size
-    //TODO: fix
-//    CPPUNIT_ASSERT_EQUAL(
-//      (long)4,
-//      DbUtils::getRowCount(reader._getDatabase()->getDB(), HootApiDb::getChangesetsTableName(mapId)));
-
-    reader.close();
-  }
-
   void runPsqlDbOfflineTest()
   {
-    QDir().mkpath("test-output/io/ServiceHootApiDbBulkInserterTest/");
+    const QString outputDir = "test-output/io/ServiceHootApiDbBulkInserterTest";
+    QDir().mkpath(outputDir);
 
     HootApiDbBulkInserter writer;
     const QString outFile = "test-output/io/ServiceHootApiDbBulkInserterTest/psql-offline-out.sql";
@@ -131,18 +99,32 @@ public:
     writer.setChangesetUserId(1);
     writer.setMaxChangesetSize(5);
     writer.setFileOutputElementBufferSize(3);
-    writer.setValidateData(true);
+    writer.setValidateData(false);
     writer.setCreateUser(true);
     writer.setOverwriteMap(true);
-    writer.setUserEmail("ServiceHootApiDbBulkInserterTest@hoot.org");
+    writer.setUserEmail(userEmail());
     writer.setFastBulkInsertActivated(true);
 
     writer.open(ServicesDbTestUtils::getDbModifyUrl().toString());
     writer.write(ServicesDbTestUtils::createTestMap1());
     writer.close();
     mapId = writer.getMapId();
+    LOG_VARD(mapId);
 
-    verifyDatabaseOutputOffline();
+    HootApiDbReader reader;
+    OsmMapPtr actualMap(new OsmMap());
+    reader.setUserEmail(userEmail());
+    reader.open(ServicesDbTestUtils::getDbModifyUrl().toString());
+    reader.read(actualMap);
+    reader.close();
+    const QString actualOutputFile = outputDir + "/psqlOffline-out.osm";
+    boost::shared_ptr<OsmMapWriter> actualMapWriter =
+      OsmMapWriterFactory::getInstance().createWriter(actualOutputFile);
+    actualMapWriter->open(actualOutputFile);
+    actualMapWriter->write(actualMap);
+
+     HOOT_FILE_EQUALS(
+       "test-files/io/ServiceHootApiDbBulkInserterTest/psqlOffline.osm", actualOutputFile);
   }
 };
 

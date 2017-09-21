@@ -33,6 +33,7 @@
 #include <hoot/core/io/OgrReader.h>
 #include <hoot/core/io/GeoNamesReader.h>
 #include <hoot/core/io/ElementStreamer.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 // Qt
 #include <QDir>
@@ -120,7 +121,9 @@ void OsmFileSorter::_sortPbf(const QString input, const QString output)
 boost::shared_ptr<QTemporaryFile> OsmFileSorter::_ogrToPbfTemp(const QString input)
 {
   boost::shared_ptr<QTemporaryFile> pbfTemp(
-    new QTemporaryFile(QDir::tempPath() + "/multiary-ingest-sort-temp-XXXXXX.osm.pbf"));
+    new QTemporaryFile(
+      ConfigOptions().getApidbBulkInserterTempFileDir() +
+      "/multiary-ingest-sort-temp-XXXXXX.osm.pbf"));
   //for debugging only
   //pbfTemp->setAutoRemove(false);
   if (!pbfTemp->open())

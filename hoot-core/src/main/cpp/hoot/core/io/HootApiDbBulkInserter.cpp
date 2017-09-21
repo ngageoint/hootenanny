@@ -299,9 +299,7 @@ void HootApiDbBulkInserter::_writeCombinedSqlFile()
         do
         {
           //these element lines will contain tags
-          QString line;
-          line.reserve(600);
-          line.append(QString::fromUtf8(tempInputFile.readLine().constData()));
+          QString line = QString::fromUtf8(tempInputFile.readLine().constData());
           LOG_VART(line.left(25));
           LOG_VART(line.length());
 
@@ -311,7 +309,7 @@ void HootApiDbBulkInserter::_writeCombinedSqlFile()
             recordCtr++;
           }
 
-          _sqlOutputCombinedFile->write(QString(line).toUtf8());
+          _sqlOutputCombinedFile->write(line.toUtf8());
 
           if (recordCtr > 0 && (recordCtr % (_statusUpdateInterval * 100) == 0))
           {

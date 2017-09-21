@@ -572,7 +572,7 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
             recordCtr++;
           }
 
-          _sqlOutputCombinedFile->write(QString(line).toUtf8());
+          _sqlOutputCombinedFile->write(line.toUtf8());
 
           if (recordCtr > 0 && (recordCtr % (_statusUpdateInterval * 100) == 0))
           {
@@ -1102,14 +1102,8 @@ void OsmApiDbBulkInserter::_writeTags(const Tags& tags,
 
   for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
   {
-    //pre-allocating the string memory here reduces memory fragmentation significantly when parsing
-    //larger datasets due to the varying string sizes
-    QString key;
-    key.reserve(10);
-    key.append(it.key());
-    QString value;
-    value.reserve(50);
-    value.append(it.value().trimmed());
+    QString key = it.key();
+    QString value = it.value().trimmed();
     if (!value.isEmpty())
     {
       const QStringList tagSqlStrs = _sqlFormatter->tagToSqlStrings(dbId, elementType, key, value);

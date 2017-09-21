@@ -386,39 +386,26 @@ QString HootApiDb::_escapeTags(const Tags& tags)
   //TODO: this is likely redundant with other code
 
   QStringList l;
-  l.reserve(50);
   static QChar f1('\\'), f2('"');
 
   for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
   {
-    //pre-allocating the string memory here reduces memory fragmentation significantly when parsing
-    //larger datasets due to the varying string sizes
-    QString key;
-    key.reserve(10);
-    key.append(it.key());
-    QString val;
-    val.reserve(50);
-    val.append(it.value().trimmed());
+    QString key = it.key();
+    QString val = it.value().trimmed();
     if (val.isEmpty() == false)
     {
       // this doesn't appear to be working, but I think it is implementing the spec as described here:
       // http://www.postgresql.org/docs/9.0/static/hstore.html
       // The spec described above does seem to work on the psql command line. Curious.
-      QString k;
-      k.reserve(10);
-      k.append(QString(key).replace(f1, "\\\\").replace(f2, "\\\"").replace("'", "''"));
-      QString v;
-      v.reserve(50);
-      v.append(QString(val).replace(f1, "\\\\").replace(f2, "\\\"").replace("'", "''"));
+      QString k = QString(key).replace(f1, "\\\\").replace(f2, "\\\"").replace("'", "''");
+      QString v = QString(val).replace(f1, "\\\\").replace(f2, "\\\"").replace("'", "''");
 
       l << QString("'%1'").arg(k);
       l << QString("'%1'").arg(v);
     }
   }
 
-  QString hstoreStr;
-  hstoreStr.reserve(500);
-  hstoreStr.append(l.join(","));
+  QString hstoreStr = l.join(",");
   if (!hstoreStr.isEmpty())
   {
      hstoreStr = "hstore(ARRAY[" + hstoreStr + "])";
@@ -1129,9 +1116,9 @@ set<long> HootApiDb::selectMapIds(QString name)
     _selectMapIds->prepare("SELECT id FROM " + ApiDb::getMapsTableName() +
                            " WHERE display_name LIKE :name AND user_id=:userId");
   }
-
   _selectMapIds->bindValue(":name", name);
   _selectMapIds->bindValue(":user_id", (qlonglong)userId);
+  LOG_VARD(_selectMapIds->lastQuery());
 
   if (_selectMapIds->exec() == false)
   {

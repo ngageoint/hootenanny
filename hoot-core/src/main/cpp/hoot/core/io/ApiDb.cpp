@@ -386,11 +386,7 @@ Tags ApiDb::unescapeTags(const QVariant &v)
    *    QRegularExpression rxKeyValue("\"(.*?)\"=>\"((?:(?!\",).)*)\"(?:, )?");
    */
   assert(v.type() == QVariant::String);
-  //pre-allocating the string memory here reduces memory fragmentation significantly when parsing
-  //larger datasets due to the varying string sizes
-  QString str;
-  str.reserve(60);
-  str.append(v.toString());
+  QString str = v.toString();
 
   Tags result;
   QRegExp rxKey("\"(.*)\"=>\"");
@@ -407,13 +403,9 @@ Tags ApiDb::unescapeTags(const QVariant &v)
     //  Then match the value, ignoring any key/value pairs that don't match
     if ((pos = rxValue.indexIn(str, pos)) != -1)
     {
-      QString key;
-      key.reserve(10);
-      key.append(rxKey.cap(1));
+      QString key = rxKey.cap(1);
       LOG_VART(key);
-      QString value;
-      value.reserve(50);
-      value.append(rxValue.cap(1).trimmed());
+      QString value = rxValue.cap(1).trimmed();
       LOG_VART(value);
       if (!value.isEmpty())
       {
