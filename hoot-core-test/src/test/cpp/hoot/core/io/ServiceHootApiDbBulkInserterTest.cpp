@@ -89,6 +89,7 @@ public:
 
   void runPsqlDbOfflineTest()
   {
+    OsmMap::resetCounters();
     const QString outputDir = "test-output/io/ServiceHootApiDbBulkInserterTest";
     QDir().mkpath(outputDir);
 
