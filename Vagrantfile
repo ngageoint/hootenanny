@@ -55,9 +55,15 @@ Vagrant.configure(2) do |config|
     dock1404.vm.box_version = "1.0.0"
     #dock1404.vm.box_url = "https://atlas.hashicorp.com/ubuntu/boxes/trusty64"
     dock1404.vm.synced_folder ".", "/home/vagrant/hoot"
+
+    dock1404.vm.provider "docker" do |docker|
+        #docker.create_args = ['--security-opt', 'seccomp=./chrome.json']
+        docker.create_args = ['--privileged','--shm-size', '1g']
+    end
+
     dock1404.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvision.sh"
     dock1404.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
-    #dock1404.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo service tomcat8 restart", run: "always"
+    dock1404.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo service tomcat8 restart", run: "always"
     dock1404.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo service node-mapnik-server start", run: "always"
     dock1404.vm.provision "hadoop", type: "shell", :privileged => false, :inline => "stop-all.sh && start-all.sh", run: "always"
   end
@@ -67,7 +73,7 @@ Vagrant.configure(2) do |config|
     dockcentos72.ssh.insert_key = false
     dockcentos72.vm.provider "docker" do |d|
       d.image = "local/centos7.2vagrant"
-      d.create_args = ['-td','--privileged']
+      d.create_args = ['-td','--privileged','--shm-size','1g']
       d.has_ssh = true
     end
 
