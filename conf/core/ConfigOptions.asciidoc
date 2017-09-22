@@ -2466,7 +2466,17 @@ before the operations in `conflate.post.ops`.
 * Default Value:
 ** ``
 
+
 List of operations to apply immediately before conflating when using Unifying Conflation only.  Runs
+after the operations in `conflate.pre.ops`.
+
+=== network.pre.ops
+
+* Data Type: list
+* Default Value:
+** `hoot::RubberSheet`
+
+List of operations to apply immediately before conflating when using Network Conflation only.  Runs
 after the operations in `conflate.pre.ops`.
 
 === uuid.helper.repeatable

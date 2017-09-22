@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="18.544216" minlon="-72.3495523" maxlat="18.549036" maxlon="-72.340941"/>
     <node visible="true" id="-141" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5473270999999968" lon="-72.3470496999999995">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-141"/>
