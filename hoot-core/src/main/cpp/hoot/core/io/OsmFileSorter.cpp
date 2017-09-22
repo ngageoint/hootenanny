@@ -33,6 +33,7 @@
 #include <hoot/core/io/OgrReader.h>
 #include <hoot/core/io/GeoNamesReader.h>
 #include <hoot/core/io/ElementStreamer.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 // Qt
 #include <QDir>
@@ -84,7 +85,7 @@ void OsmFileSorter::sort(const QString input, const QString output)
 
     //Unfortunately for now, sorting an OGR input is going to require an extra pass over the data
     //to first write it to a sortable format.
-    LOG_WARN("OGR inputs are not currently sortable by node ID.");
+    LOG_WARN("OGR inputs must be converted to the OSM format before sorting by node ID.");
     LOG_WARN("Converting input to OSM format...");
     _sortPbf(_ogrToPbfTemp(input)->fileName(), output);
   }
@@ -120,7 +121,9 @@ void OsmFileSorter::_sortPbf(const QString input, const QString output)
 boost::shared_ptr<QTemporaryFile> OsmFileSorter::_ogrToPbfTemp(const QString input)
 {
   boost::shared_ptr<QTemporaryFile> pbfTemp(
-    new QTemporaryFile(QDir::tempPath() + "/multiary-ingest-sort-temp-XXXXXX.osm.pbf"));
+    new QTemporaryFile(
+      ConfigOptions().getApidbBulkInserterTempFileDir() +
+      "/multiary-ingest-sort-temp-XXXXXX.osm.pbf"));
   //for debugging only
   //pbfTemp->setAutoRemove(false);
   if (!pbfTemp->open())

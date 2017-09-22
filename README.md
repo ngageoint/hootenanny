@@ -57,9 +57,9 @@ Conflation occurs at the dataset level, where the user’s workflow determines t
 * OpenStreetMap XML changeset file (.osc) (M)
 * OpenStreetMap SQL changeset file (.osc.sql) (M)
 
-(M) = format requires reading entire dataset into memory during processing
-
-(*) = format requires reading entire dataset into memory during processing only if element ID output is sorted
+* (M) = format requires reading entire dataset into memory during processing
+* (*) = format requires reading entire dataset into memory during processing only if element ID output is sorted
+* All data read with a specified bounding box filter requires reading the entire dataset into memory during processing.
 
 # Tag Schemas
 Hootenanny leverages the OSM key value pair tag concept and PostgreSQL database structure to support translation between various data schemas.  By default, Hootenanny supports automated schema conversion between: 

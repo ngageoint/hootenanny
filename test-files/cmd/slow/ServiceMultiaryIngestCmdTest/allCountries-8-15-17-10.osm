@@ -18,22 +18,25 @@
     <tag k="asciiname" v="Pic de Font Blanca"/>
     <tag k="error:circular" v="15"/>
   </node>
-  <node id="2994701" version="1" timestamp="1970-01-01T00:00:00Z" lat="42.58765" lon="1.74028">
-    <tag k="alternatenames" v="Roc Mele,Roc Meler,Roc Mélé"/>
+  <node id="3029315" version="1" timestamp="1970-01-01T00:00:00Z" lat="42.6" lon="1.73333">
+    <tag k="alternatenames" v="Port de la Cabanette,Porteille de la Cabanette"/>
+    <tag k="admin2_code" v="09"/>
     <tag k="population" v="0"/>
-    <tag k="geonameid" v="2994701"/>
+    <tag k="geonameid" v="3029315"/>
     <tag k="cc2" v="AD,FR"/>
-    <tag k="admin1_code" v="00"/>
-    <tag k="feature_code" v="MT"/>
+    <tag k="admin1_code" v="B3"/>
+    <tag k="feature_code" v="PASS"/>
     <tag k="modification_date" v="2014-11-05&#xA;"/>
-    <tag k="name" v="Roc Mélé"/>
+    <tag k="name" v="Port de la Cabanette"/>
     <tag k="country_code" v="AD"/>
-    <tag k="latitude" v="42.58765"/>
+    <tag k="latitude" v="42.6"/>
     <tag k="timezone" v="Europe/Andorra"/>
-    <tag k="dem" v="2803"/>
+    <tag k="dem" v="2379"/>
     <tag k="feature_class" v="T"/>
-    <tag k="longitude" v="1.74028"/>
-    <tag k="asciiname" v="Roc Mele"/>
+    <tag k="admin4_code" v="09139"/>
+    <tag k="longitude" v="1.73333"/>
+    <tag k="admin3_code" v="091"/>
+    <tag k="asciiname" v="Port de la Cabanette"/>
     <tag k="error:circular" v="15"/>
   </node>
   <node id="3007683" version="1" timestamp="1970-01-01T00:00:00Z" lat="42.61203" lon="1.47364">
@@ -93,6 +96,24 @@
     <tag k="asciiname" v="Estany de les Abelletes"/>
     <tag k="error:circular" v="15"/>
   </node>
+  <node id="2994701" version="1" timestamp="1970-01-01T00:00:00Z" lat="42.58765" lon="1.74028">
+    <tag k="alternatenames" v="Roc Mele,Roc Meler,Roc Mélé"/>
+    <tag k="population" v="0"/>
+    <tag k="geonameid" v="2994701"/>
+    <tag k="cc2" v="AD,FR"/>
+    <tag k="admin1_code" v="00"/>
+    <tag k="feature_code" v="MT"/>
+    <tag k="modification_date" v="2014-11-05&#xA;"/>
+    <tag k="name" v="Roc Mélé"/>
+    <tag k="country_code" v="AD"/>
+    <tag k="latitude" v="42.58765"/>
+    <tag k="timezone" v="Europe/Andorra"/>
+    <tag k="dem" v="2803"/>
+    <tag k="feature_class" v="T"/>
+    <tag k="longitude" v="1.74028"/>
+    <tag k="asciiname" v="Roc Mele"/>
+    <tag k="error:circular" v="15"/>
+  </node>
   <node id="3023203" version="1" timestamp="1970-01-01T00:00:00Z" lat="42.62568" lon="1.61823">
     <tag k="alternatenames" v="Port Vieux de Coume d&apos;Ose,Port Vieux de Coume d’Ose,Port Vieux de la Coume d&apos;Ose,Port Vieux de la Coume d’Ose"/>
     <tag k="population" v="0"/>
@@ -110,25 +131,20 @@
     <tag k="asciiname" v="Port Vieux de la Coume d&apos;Ose"/>
     <tag k="error:circular" v="15"/>
   </node>
-  <node id="3029315" version="1" timestamp="1970-01-01T00:00:00Z" lat="42.6" lon="1.73333">
-    <tag k="alternatenames" v="Port de la Cabanette,Porteille de la Cabanette"/>
-    <tag k="admin2_code" v="09"/>
+  <node id="3038815" version="1" timestamp="1970-01-01T00:00:00Z" lat="42.55003" lon="1.44986">
     <tag k="population" v="0"/>
-    <tag k="geonameid" v="3029315"/>
-    <tag k="cc2" v="AD,FR"/>
-    <tag k="admin1_code" v="B3"/>
-    <tag k="feature_code" v="PASS"/>
-    <tag k="modification_date" v="2014-11-05&#xA;"/>
-    <tag k="name" v="Port de la Cabanette"/>
+    <tag k="geonameid" v="3038815"/>
+    <tag k="admin1_code" v="04"/>
+    <tag k="feature_code" v="SPNG"/>
+    <tag k="modification_date" v="2010-01-11&#xA;"/>
+    <tag k="name" v="Font de la Xona"/>
     <tag k="country_code" v="AD"/>
-    <tag k="latitude" v="42.6"/>
+    <tag k="latitude" v="42.55003"/>
     <tag k="timezone" v="Europe/Andorra"/>
-    <tag k="dem" v="2379"/>
-    <tag k="feature_class" v="T"/>
-    <tag k="admin4_code" v="09139"/>
-    <tag k="longitude" v="1.73333"/>
-    <tag k="admin3_code" v="091"/>
-    <tag k="asciiname" v="Port de la Cabanette"/>
+    <tag k="dem" v="1976"/>
+    <tag k="feature_class" v="H"/>
+    <tag k="longitude" v="1.44986"/>
+    <tag k="asciiname" v="Font de la Xona"/>
     <tag k="error:circular" v="15"/>
   </node>
   <node id="3034945" version="1" timestamp="1970-01-01T00:00:00Z" lat="42.60172" lon="1.45562">
@@ -162,22 +178,6 @@
     <tag k="feature_class" v="T"/>
     <tag k="longitude" v="1.47569"/>
     <tag k="asciiname" v="Costa de Xurius"/>
-    <tag k="error:circular" v="15"/>
-  </node>
-  <node id="3038815" version="1" timestamp="1970-01-01T00:00:00Z" lat="42.55003" lon="1.44986">
-    <tag k="population" v="0"/>
-    <tag k="geonameid" v="3038815"/>
-    <tag k="admin1_code" v="04"/>
-    <tag k="feature_code" v="SPNG"/>
-    <tag k="modification_date" v="2010-01-11&#xA;"/>
-    <tag k="name" v="Font de la Xona"/>
-    <tag k="country_code" v="AD"/>
-    <tag k="latitude" v="42.55003"/>
-    <tag k="timezone" v="Europe/Andorra"/>
-    <tag k="dem" v="1976"/>
-    <tag k="feature_class" v="H"/>
-    <tag k="longitude" v="1.44986"/>
-    <tag k="asciiname" v="Font de la Xona"/>
     <tag k="error:circular" v="15"/>
   </node>
 </osm>
