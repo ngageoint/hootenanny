@@ -34,6 +34,7 @@ OTHER_FILES = \
     $$files(../translations-local/*.py, true) \
     $$files(../rules/*.js, true) \
     $$files(../conf/schema/*.json, true) \
+    $$files(../docs/commands/*.asciidoc, true) \
     ../conf/core/ConfigOptions.asciidoc \
 
 include(../Configure.pri)
