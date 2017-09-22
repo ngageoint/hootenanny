@@ -67,8 +67,18 @@ void JobQueue::push(const QString& job)
   _mutex.unlock();
 }
 
-ProcessThread::ProcessThread(double waitTime, QMutex* outMutex, JobQueue* asyncJobs, JobQueue* syncJobs)
-  : _waitTime(waitTime), _outMutex(outMutex), _asyncJobs(asyncJobs), _syncJobs(syncJobs), _failures(0), _proc(createProcess())
+ProcessThread::ProcessThread(bool showTestName,
+                             double waitTime,
+                             QMutex* outMutex,
+                             JobQueue* parallelJobs,
+                             JobQueue* serialJobs)
+  : _showTestName(showTestName),
+    _waitTime(waitTime),
+    _outMutex(outMutex),
+    _parallelJobs(parallelJobs),
+    _serialJobs(serialJobs),
+    _failures(0),
+    _proc(createProcess())
 {
 }
 
@@ -77,21 +87,35 @@ int ProcessThread::getFailures()
   return _failures;
 }
 
+void ProcessThread::resetProcess()
+{
+  //  Kill the process
+  _proc->write(QString("%1\n").arg(HOOT_TEST_FINISHED).toAscii());
+  _proc->waitForFinished();
+  //  Start a new process
+  _proc.reset(createProcess());
+}
+
 QProcess* ProcessThread::createProcess()
 {
   QProcess* proc = new QProcess();
   proc->setProcessChannelMode(QProcess::MergedChannels);
   QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
   proc->setProcessEnvironment(env);
-  proc->start(QString("HootTest --listen %1").arg((int)_waitTime));
+  QString names = (_showTestName ? "--names" : "");
+  proc->start(QString("HootTest %1 --listen %2").arg(names).arg((int)_waitTime));
   return proc;
 }
 
 void ProcessThread::run()
 {
-  if (_syncJobs != NULL)
-    processJobs(_syncJobs);
-  processJobs(_asyncJobs);
+  if (_serialJobs != NULL)
+  {
+    processJobs(_serialJobs);
+    //  Reset the process between queues
+    resetProcess();
+  }
+  processJobs(_parallelJobs);
 
   _proc->write(QString("%1\n").arg(HOOT_TEST_FINISHED).toAscii());
   _proc->waitForFinished();
@@ -101,17 +125,17 @@ void ProcessThread::processJobs(JobQueue* queue)
 {
   int restart_count = 0;
   const int MAX_RESTART = 3;
+  const int READ_TIMEOUT = 3000;
   bool working = true;
   while (working)
   {
     if (!queue->empty())
     {
       QString test = queue->pop();
-      _proc->write(test.toAscii());
-      _proc->write("\n");
+      _proc->write(QString("%1\n").arg(test).toAscii());
       //  Read all of the output
       QString output;
-      _proc->waitForReadyRead();
+      _proc->waitForReadyRead(READ_TIMEOUT);
       QString line = QString(_proc->readLine()).trimmed();
       while (line != HOOT_TEST_FINISHED)
       {
@@ -129,7 +153,7 @@ void ProcessThread::processJobs(JobQueue* queue)
         }
         else if (line == "")
         {
-          if (output != "." && !output.endsWith("\n"))
+          if (output != "" && output != "." && !output.endsWith("\n"))
             output.append("\n");
         }
         else if (line.contains(" ERROR "))
@@ -137,12 +161,8 @@ void ProcessThread::processJobs(JobQueue* queue)
           ++_failures;
           output.append(line);
           output.append("\n");
-          //  Kill the process
-          _proc->write(HOOT_TEST_FINISHED);
-          _proc->write("\n");
-          _proc->waitForFinished();
-          //  Start a new process
-          _proc.reset(createProcess());
+          //  Reset the process
+          resetProcess();
           line = HOOT_TEST_FINISHED;
           continue;
         }
@@ -150,7 +170,7 @@ void ProcessThread::processJobs(JobQueue* queue)
           line.append("\n");
         output.append(line);
         if (_proc->bytesAvailable() < 1)
-          _proc->waitForReadyRead();
+          _proc->waitForReadyRead(READ_TIMEOUT);
         line = QString(_proc->readLine()).trimmed();
       }
       output = output.replace("\n\n\n", "\n").replace("\n\n", "\n");
@@ -164,13 +184,14 @@ void ProcessThread::processJobs(JobQueue* queue)
   }
 }
 
-ProcessPool::ProcessPool(int nproc, double waitTime)
+ProcessPool::ProcessPool(int nproc, double waitTime, bool showTestName)
   : _failed(0), _finished(0)
 {
   for (int i = 0; i < nproc; ++i)
   {
-    JobQueue* sync = (i == 0) ? &_syncJobs : NULL;
-    ProcessThreadPtr thread(new ProcessThread(waitTime, &_mutex, &_asyncJobs, sync));
+    //  First process gets the serial jobs
+    JobQueue* serial = (i == 0) ? &_serialJobs : NULL;
+    ProcessThreadPtr thread(new ProcessThread(showTestName, waitTime, &_mutex, &_parallelJobs, serial));
     _threads.push_back(thread);
   }
 }
@@ -196,12 +217,12 @@ void ProcessPool::wait()
     _threads[i]->wait();
 }
 
-void ProcessPool::addJob(const QString& test, bool async)
+void ProcessPool::addJob(const QString& test, bool parallel)
 {
-  if (async && !_syncJobs.contains(test))
-    _asyncJobs.push(test);
-  else if (!async)
-    _syncJobs.push(test);
+  if (parallel && !_serialJobs.contains(test))
+    _parallelJobs.push(test);
+  else if (!parallel)
+    _serialJobs.push(test);
 }
 
 int ProcessPool::getFailures()

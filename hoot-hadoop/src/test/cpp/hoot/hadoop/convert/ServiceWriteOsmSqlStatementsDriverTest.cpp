@@ -276,5 +276,5 @@ public:
 }
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::ServiceWriteOsmSqlStatementsDriverTest, "glacial");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::ServiceWriteOsmSqlStatementsDriverTest, "synchronous");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::ServiceWriteOsmSqlStatementsDriverTest, "serial");
 
