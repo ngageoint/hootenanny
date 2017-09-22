@@ -65,7 +65,7 @@ private:
 class ProcessThread : public QThread
 {
 public:
-  ProcessThread(double waitTime, QMutex* outMutex, JobQueue* asyncJobs, JobQueue* syncJobs = NULL);
+  ProcessThread(bool showTestName, double waitTime, QMutex* outMutex, JobQueue* parallelJobs, JobQueue* serialJobs = NULL);
 
   void run();
 
@@ -74,12 +74,15 @@ public:
 private:
   QProcess* createProcess();
 
+  void resetProcess();
+
   void processJobs(JobQueue* queue);
 
+  bool _showTestName;
   double _waitTime;
   QMutex* _outMutex;
-  JobQueue* _asyncJobs;
-  JobQueue* _syncJobs;
+  JobQueue* _parallelJobs;
+  JobQueue* _serialJobs;
   int _failures;
   QProcessPtr _proc;
 };
@@ -89,11 +92,11 @@ typedef boost::shared_ptr<ProcessThread> ProcessThreadPtr;
 class ProcessPool
 {
 public:
-  explicit ProcessPool(int nproc, double waitTime);
+  explicit ProcessPool(int nproc, double waitTime, bool showTestName);
 
   virtual ~ProcessPool();
 
-  void addJob(const QString& test, bool async = true);
+  void addJob(const QString& test, bool parallel = true);
 
   void startProcessing();
 
@@ -102,8 +105,8 @@ public:
   void wait();
 private:
   std::vector<ProcessThreadPtr> _threads;
-  JobQueue _syncJobs;
-  JobQueue _asyncJobs;
+  JobQueue _serialJobs;
+  JobQueue _parallelJobs;
   QMutex _mutex;
   int _failed;
   int _finished;
