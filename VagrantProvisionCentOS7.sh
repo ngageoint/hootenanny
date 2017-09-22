@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 VMUSER=`id -u -n`
 echo USER: $VMUSER
 VMGROUP=`groups | grep -o $VMUSER`
@@ -9,6 +8,9 @@ HOOT_HOME=~/hoot
 echo HOOT_HOME: $HOOT_HOME
 cd ~
 source ~/.bash_profile
+
+export LANG=en_US.UTF-8
+
 
 # Keep VagrantBuild.sh happy
 #ln -s ~/.bash_profile ~/.profile
@@ -27,6 +29,8 @@ sudo yum -q -y update >> CentOS_upgrade.txt 2>&1
 echo "### Upgrade ###" >> CentOS_upgrade.txt
 sudo yum -q -y upgrade >> CentOS_upgrade.txt 2>&1
 
+#sudo localedef -i en_US -f UTF-8 en_US.UTF-8
+
 echo "### Setup NTP..."
 sudo yum -q -y install ntp
 sudo chkconfig ntpd on
@@ -34,7 +38,6 @@ sudo chkconfig ntpd on
 sudo systemctl stop ntpd
 sudo ntpd -gq
 sudo systemctl start ntpd
-
 
 # Make sure that we are in ~ before trying to wget & install stuff
 cd ~
@@ -64,6 +67,7 @@ sudo yum versionlock nodejs*
 
 # install useful and needed packages for working with hootenanny
 echo "### Installing dependencies from repos..."
+sudo localedef -i en_US -f UTF-8 en_US.UTF-8
 sudo yum -y install \
     asciidoc \
     autoconf \
@@ -128,6 +132,7 @@ sudo yum -y install \
     xorg-x11-server-Xvfb \
     zip \
 
+#sudo localedef -i en_US -f UTF-8 en_US.UTF-8
 
 
 # Install Java8
@@ -433,8 +438,11 @@ cd /tmp # Stop postgres "could not change directory to" warnings
 
 # NOTE: These have been changed to pg9.5
 # Postgresql startup
-PGSETUP_INITDB_OPTIONS="-E 'UTF-8' --lc-collate='en_US.UTF-8' --lc-ctype='en_US.UTF-8'"
-sudo /usr/pgsql-$PG_VERSION/bin/postgresql95-setup initdb
+#PGSETUP_INITDB_OPTIONS="-E 'UTF-8' --lc-collate='en_US.UTF-8' --lc-ctype='en_US.UTF-8'"
+
+#sudo localedef -i en_US -f UTF-8 en_US.UTF-8
+
+sudo PGSETUP_INITDB_OPTIONS="-E 'UTF-8' --lc-collate='en_US.UTF-8' --lc-ctype='en_US.UTF-8'" /usr/pgsql-$PG_VERSION/bin/postgresql95-setup initdb
 sudo systemctl start postgresql-$PG_VERSION
 sudo systemctl enable postgresql-$PG_VERSION
 

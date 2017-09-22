@@ -15,6 +15,11 @@ RUN chkconfig ntpd on
 RUN chkconfig sshd on
 RUN useradd vagrant
 RUN mkdir -p /home/vagrant/.ssh
+RUN localedef --quiet -c -i en_US -f UTF-8 en_US.UTF-8 
+
+RUN echo "export LANG=en_US.UTF-8" >> ~/.bashrc
+RUN echo "" >> ~/.bashrc
+
 RUN curl https://raw.githubusercontent.com/mitchellh/vagrant/master/keys/vagrant.pub >> /home/vagrant/.ssh/authorized_keys
 RUN chown -R vagrant:vagrant /home/vagrant/.ssh
 RUN chmod 700 /home/vagrant/.ssh

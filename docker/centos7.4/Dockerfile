@@ -20,6 +20,11 @@ RUN chmod 600 /home/vagrant/.ssh/authorized_keys
 RUN chown -R vagrant:vagrant /home/vagrant/.ssh
 RUN sed -i 's/^\(Defaults.*requiretty\)/#\1/' /etc/sudoers
 RUN cat /etc/sudoers
+
+RUN localedef --quiet -c -i en_US -f UTF-8 en_US.UTF-8
+RUN echo "export LANG=en_US.UTF-8" >> ~/.bashrc
+RUN echo "" >> ~/.bashrc
+
 RUN echo "vagrant ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 #RUN vim /etc/sysconfig/network-scripts/ifcfg-eth0
 #RUN vi /etc/sysconfig/network-scripts/ifcfg-eth0
