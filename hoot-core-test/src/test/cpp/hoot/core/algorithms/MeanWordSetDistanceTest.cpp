@@ -39,6 +39,7 @@
 #include <hoot/core/algorithms/ExactStringDistance.h>
 #include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/Settings.h>
 using namespace hoot;
 
 // Qt
@@ -47,11 +48,16 @@ using namespace hoot;
 // Standard
 #include <string>
 
+#include "../TestUtils.h"
+
+namespace hoot
+{
 
 class MeanWordSetDistanceTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(MeanWordSetDistanceTest);
   CPPUNIT_TEST(runTest);
+  CPPUNIT_TEST(runLevenshteinTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -67,8 +73,20 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5, uut.compare("embassy of hungary", "embassy swiss"), 0.01);
   }
 
+  void runLevenshteinTest()
+  {
+    MeanWordSetDistance uut(new LevenshteinDistance(1.5));
+
+    Settings s;
+    s.set("token.separator", "[\\s-,';]+");
+    uut.setConfiguration(s);
+
+    HOOT_STR_EQUALS(1, uut.compare("Sheraton hotel", "Sheraton Sana'a Hotel"));
+  }
+
 };
 
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MeanWordSetDistanceTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MeanWordSetDistanceTest, "quick");
 
+}

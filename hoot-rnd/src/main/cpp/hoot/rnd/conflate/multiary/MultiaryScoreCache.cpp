@@ -66,8 +66,12 @@ MatchClassification MultiaryScoreCache::getScore(ConstElementPtr e1, ConstElemen
 {
   _lastExplainText.clear();
 
+  OsmMapPtr tmp(new OsmMap(_map->getProjection()));
+  tmp->addElement(ElementPtr(e1->clone()));
+  tmp->addElement(ElementPtr(e2->clone()));
+
   boost::scoped_ptr<Match> m(
-    _matchCreator->createMatch(_map, e1->getElementId(), e2->getElementId()));
+    _matchCreator->createMatch(tmp, e1->getElementId(), e2->getElementId()));
 
   // default to a hard miss.
   MatchClassification result(0, 1, 0);
