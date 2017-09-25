@@ -36,6 +36,9 @@
 #include <hoot/core/filters/TagKeyCriterion.h>
 #include <hoot/core/filters/StatusCriterion.h>
 #include <hoot/core/filters/TagContainsFilter.h>
+#include <hoot/core/io/ScriptToOgrTranslator.h>
+#include <hoot/core/io/ScriptTranslator.h>
+#include <hoot/core/io/ScriptTranslatorFactory.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/scoring/TextTable.h>
 #include <hoot/core/util/MetadataTags.h>
@@ -44,7 +47,10 @@
 #include <hoot/core/visitors/GetTagValuesVisitor.h>
 #include <hoot/core/visitors/SetTagVisitor.h>
 #include <hoot/core/visitors/ElementIdSetVisitor.h>
+#include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
+
+#include "MultiaryMatchTrainingValidator.h"
 
 // Qt
 #include <QSet>
@@ -56,16 +62,149 @@ namespace hoot
 
 unsigned int MultiaryMatchComparator::logWarnCount = 0;
 
+const QString matchMatchStr = "missMatch";
+const QString matchMissStr = "matchMiss";
+const QString matchReviewStr = "matchReview";
+const QString missMatchStr = "missMatch";
+const QString missReviewStr = "missReview";
+const QString reviewMatchStr = "reviewMatch";
+const QString reviewMissStr = "reviewMiss";
+const QString reviewReviewStr = "reviewReview";
+
 MultiaryMatchComparator::MultiaryMatchComparator()
 {
   _tagErrors = true;
+}
 
-  _confusion.resize(3);
-
-  for (size_t i = 0; i < 3; i++)
+void MultiaryMatchComparator::_addToConfusionTable(const ConfusionTable& x, ConfusionTable& addTo)
+  const
+{
+  bool foundOne = false;
+  foreach (int i, x.keys())
   {
-    _confusion[i].resize(3, 0);
+    foreach (int j, x[i].keys())
+    {
+      addTo[i][j] += x[i][j];
+      if (x[i][j] > 0)
+      {
+        foundOne = true;
+      }
+    }
   }
+
+  if (foundOne)
+  {
+    addTo[-1][-1] += 1;
+  }
+}
+
+void MultiaryMatchComparator::_calculateNodeBasedStats(const ConstOsmMapPtr& conflated)
+{
+  // used to represent the stats for all layers.
+  QString all = "All Layers";
+  QString noCategory = "No Category";
+  // A layer name to confusion table mapping
+  QMap<QString, ConfusionTable> confusionTables;
+
+  ScriptToOgrTranslatorPtr translator;
+
+  if (_translationScript != "")
+  {
+    translator.reset(dynamic_cast<ScriptToOgrTranslator*>(ScriptTranslatorFactory::getInstance().
+        createTranslator(_translationScript)));
+    translator->getOgrOutputSchema();
+  }
+
+
+  ElementIdSetVisitor eids;
+  conflated->visitRo(eids);
+
+  ElementConverter ec(conflated);
+
+  foreach (ElementId eid, eids.getElementSet())
+  {
+    ConstElementPtr e = conflated->getElement(eid);
+    Tags tags = e->getTags();
+
+    if (ReviewMarker::isReviewUid(conflated, eid) == false)
+    {
+      QString hootWrong = tags.get(MetadataTags::HootWrong());
+
+      ConfusionTable conf;
+
+      // calculate the number of correct matches for this element.
+      conf[MatchType::Match][MatchType::Match] += hootWrong.isEmpty() &&
+          e->getStatus() == Status::Conflated ? 1 : 0;
+      conf[MatchType::Match][MatchType::Miss] = hootWrong.contains(matchMissStr) ? 1 : 0;
+      conf[MatchType::Match][MatchType::Review] = hootWrong.contains(matchReviewStr) ? 1 : 0;
+      // take the expected set of matches then remove the actual matches and reviews, what is left
+      // are the misses.
+      conf[MatchType::Miss][MatchType::Match] = hootWrong.contains(missMatchStr) ? 1 : 0;
+      conf[MatchType::Miss][MatchType::Miss] = hootWrong.isEmpty() &&
+          e->getStatus() != Status::Conflated ? 1 : 0;
+      conf[MatchType::Miss][MatchType::Review] = hootWrong.contains(missReviewStr) ? 1 : 0;
+      conf[MatchType::Review][MatchType::Match] = hootWrong.contains(reviewMatchStr) ? 1 : 0;
+      conf[MatchType::Review][MatchType::Miss] = hootWrong.contains(reviewMissStr) ? 1 : 0;
+      conf[MatchType::Review][MatchType::Review] =
+          tags.contains(MetadataTags::HootCorrectReview()) ? 1 : 0;
+
+      _addToConfusionTable(conf, confusionTables[all]);
+
+      if (translator)
+      {
+        std::vector<ScriptToOgrTranslator::TranslatedFeature> translated =
+            translator->translateToOgr(tags, e->getElementType(),
+              ec.getGeometryType(e, false));
+
+        bool foundCategory = false;
+        foreach (const ScriptToOgrTranslator::TranslatedFeature& tf, translated)
+        {
+          _addToConfusionTable(conf, confusionTables[tf.tableName]);
+          foundCategory = true;
+        }
+
+        if (foundCategory == false)
+        {
+          _addToConfusionTable(conf, confusionTables[noCategory]);
+          LOG_VAR(tags);
+          foreach (const ScriptToOgrTranslator::TranslatedFeature& tf, translated)
+          {
+            LOG_VAR(tf);
+          }
+        }
+      }
+    }
+  }
+
+  _nodeBasedStatsResult = "== Node-based Statistics\n\n";
+
+  foreach (QString tableName, confusionTables.keys())
+  {
+    _nodeBasedStatsResult += "\n=== " + tableName + "\n\n";
+    _nodeBasedStatsResult += _printConfusionTable(confusionTables[tableName]);
+  }
+
+
+  foreach (QString tableName, confusionTables.keys())
+  {
+    const ConfusionTable& ct = confusionTables[tableName];
+    int noWorkCount = ct[MatchType::Review][MatchType::Review] +
+        ct[MatchType::Match][MatchType::Match] +
+        ct[MatchType::Miss][MatchType::Miss];
+    int missMatchCount = ct[MatchType::Miss][MatchType::Match];
+    int missReviewCount = ct[MatchType::Miss][MatchType::Review];
+    int matchMissCount = ct[MatchType::Match][MatchType::Miss];
+    int matchReviewCount = ct[MatchType::Match][MatchType::Review];
+    int reviews = ct[MatchType::Review][MatchType::Miss] +
+        ct[MatchType::Review][MatchType::Match] +
+        ct[MatchType::Review][MatchType::Review];
+    int totalCount = ct[-1][-1];
+    _nodeBasedStatsResult += "\n" + tableName + "\t";
+    _nodeBasedStatsResult += QString("%1\t%2\t%3\t%4\t%5\t%6\t%7").arg(noWorkCount).arg(missMatchCount).
+        arg(missReviewCount).arg(matchMissCount).arg(matchReviewCount).arg(reviews).arg(totalCount);
+  }
+  _nodeBasedStatsResult += "\n";
+
 }
 
 void MultiaryMatchComparator::_clearCache()
@@ -79,8 +218,12 @@ void MultiaryMatchComparator::_clearCache()
   _elementWrongCounts.clear();
 }
 
-double MultiaryMatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const OsmMapPtr& conflated)
+double MultiaryMatchComparator::evaluateMatches(const ConstOsmMapPtr& in,
+  const OsmMapPtr& conflated)
 {
+  OsmMapPtr copyIn(new OsmMap(in));
+  MultiaryMatchTrainingValidator().apply(copyIn);
+
   _clearCache();
   // determine the expected & actual situation
   _findExpectedMatches(in);
@@ -110,46 +253,67 @@ double MultiaryMatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const 
     actualReviewSet -= id;
     expectedReviewSet -= id;
 
+//    LOG_VAR(id);
 //    LOG_VAR(actualMatchSet);
 //    LOG_VAR(expectedMatchSet);
 //    LOG_VAR(actualReviewSet);
 //    LOG_VAR(expectedReviewSet);
 
+    // confusion matrix contributions. Variables are named as: actualExpected
+
     // calculate the number of correct matches for this element.
-    int correctMatches = (expectedMatchSet & actualMatchSet).size();
+    int matchMatch = (expectedMatchSet & actualMatchSet).size();
+    int matchMiss = (actualMatchSet - (expectedReviewSet + expectedMatchSet)).size();
+    int matchReview = (actualMatchSet & expectedReviewSet).size();
+    // take the expected set of matches then remove the actual matches and reviews, what is left
+    // are the misses.
+    int missMatch = (expectedMatchSet - (actualMatchSet + actualReviewSet)).size();
+    int missReview = (expectedReviewSet - actualReviewSet - actualMatchSet).size();
+    int reviewMatch = (actualReviewSet & expectedMatchSet).size();
+    int reviewMiss = (actualReviewSet - expectedReviewSet - expectedMatchSet).size();
+    int reviewReview = (actualReviewSet & expectedReviewSet).size();
 
-    // calculate the number of incorrect matches for this element.
-    int incorrectMatches = (actualMatchSet - expectedMatchSet).size();
-
-    // calculate the number of missed matches for this element.
-    int missedMatches = (expectedMatchSet - actualMatchSet).size();
-
-    if (incorrectMatches || missedMatches)
+    if (matchMiss)
     {
-      _tagWrong(conflated, id);
+      _tagWrong(conflated, id, matchMissStr);
+    }
+    if (matchReview)
+    {
+      _tagWrong(conflated, id, matchReviewStr);
+    }
+    if (missMatch)
+    {
+      _tagWrong(conflated, id, missMatchStr);
+    }
+    if (missReview)
+    {
+      _tagWrong(conflated, id, missReviewStr);
+    }
+    if (reviewMatch)
+    {
+      _tagWrong(conflated, id, reviewMatchStr);
+    }
+    if (reviewMiss)
+    {
+      _tagWrong(conflated, id, reviewMissStr);
+    }
+    if (reviewReview)
+    {
+      _tagReview(conflated, id, reviewReviewStr);
     }
 
-    // Weighting counts based on the cluster size is a bit unorthodoxed, but if we use the more
-    // typical pairwise comparison the large clusters will have a disproportionately large impact
-    // on the result. (e.g. a cluster of size 4 will have 4x the impact of a cluster with size 2)
-
-    _confusion[MatchType::Match][MatchType::Match] += correctMatches;
-    _confusion[MatchType::Miss][MatchType::Match] += missedMatches;
+    _confusion[MatchType::Match][MatchType::Match] += matchMatch;
+    _confusion[MatchType::Miss][MatchType::Match] += missMatch;
     // we expected a match, but got a review.
-    _confusion[MatchType::Review][MatchType::Match] += (actualReviewSet & expectedMatchSet).size();
-    _confusion[MatchType::Match][MatchType::Miss] += incorrectMatches;
+    _confusion[MatchType::Review][MatchType::Match] += reviewMatch;
+    _confusion[MatchType::Match][MatchType::Miss] += matchMiss;
     // we don't care about miss/miss. This isn't a meaningful value.
     // _confusion[MatchType::Miss][MatchType::Miss]
-    _confusion[MatchType::Review][MatchType::Miss] += (actualReviewSet -
-                                                       expectedReviewSet -
-                                                       expectedMatchSet).size();
+    _confusion[MatchType::Review][MatchType::Miss] += reviewMiss;
     _confusion[MatchType::Review][MatchType::Review] += (expectedReviewSet &
                                                          actualReviewSet).size();
-    _confusion[MatchType::Match][MatchType::Review] += (actualMatchSet &
-                                                        expectedReviewSet).size();
-    _confusion[MatchType::Miss][MatchType::Review] += (expectedReviewSet -
-                                                       actualReviewSet -
-                                                       actualMatchSet).size();
+    _confusion[MatchType::Match][MatchType::Review] += matchReview;
+    _confusion[MatchType::Miss][MatchType::Review] += missReview;
   }
 
   // we're counting both sides of each pair, so divide by two.
@@ -176,6 +340,8 @@ double MultiaryMatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const 
   _fp = _confusion[MatchType::Match][MatchType::Miss] +
       _confusion[MatchType::Match][MatchType::Review] +
       _confusion[MatchType::Review][MatchType::Miss];
+
+  _calculateNodeBasedStats(conflated);
 
   return double(_tp) / double(_tp + _fn + _fp);
 }
@@ -237,56 +403,31 @@ void MultiaryMatchComparator::_findActualReviews(const ConstOsmMapPtr& map)
   foreach (ReviewMarker::ReviewUid ruid, reviews)
   {
     set<ElementId> rEids = ReviewMarker::getReviewElements(map, ruid);
+    QList<ElementId> rEidList;
 
-    QSet<QString> allIds;
-
+    // convert the set to a list
     foreach (ElementId eid, rEids)
     {
-      allIds += QSet<QString>::fromList(_getAllIds(map->getElement(eid)));
+      rEidList.append(eid);
     }
 
-    bool foundExpectedPair = false;
-    // the IDs we will use to create the actual review.
-    QList<QString> idsToAdd;
-
-    foreach (QString id, allIds)
+    // go through all the possible pairwise combinations of rEidList (likely only two entries in
+    // rEidList, but it doesn't hurt to be thorough)
+    for (int i = 0; i < rEidList.size(); ++i)
     {
-      IdClusterPtr c = _expectedReviews.getCluster(id);
-      QSet<QString> copy = *c;
-      copy -= id;
-      QSet<QString> intersection = copy & allIds;
-
-      if (intersection.size() > 0)
+      QList<QString> allIds1 = _getAllIds(map->getElement(rEidList[i]));
+      for (int j = i + 1; j < rEidList.size(); ++j)
       {
-        idsToAdd.append(id);
-        idsToAdd.append(*intersection.begin());
-        foundExpectedPair = true;
-        break;
-      }
-    }
+        QList<QString> allIds2 = _getAllIds(map->getElement(rEidList[j]));
 
-    // for now this only when there are two elements in the review. You'll need to do a bit of
-    // noodling if this fails when we expand to buildings or similar that cause 3 or more elements
-    // in a review.
-    assert (rEids.size() == 2 || !foundExpectedPair);
-
-    // if we didn't find what we were looking for...
-    if (!foundExpectedPair)
-    {
-      // arbitrarily pick the first ID from each cluster. There is no need to report a bad review
-      // for every ID in the cluster. Seems kinda silly.
-      foreach (ElementId eid, rEids)
-      {
-        idsToAdd += *_getAllIds(map->getElement(eid)).begin();
-      }
-    }
-
-    // add an actual review between each of the chosen IDs.
-    for (int i = 0; i < idsToAdd.size(); ++i)
-    {
-      for (int j = i + 1; j < idsToAdd.size(); ++j)
-      {
-        _actualReviews.addReview(idsToAdd[i], idsToAdd[j]);
+        // add an actual review between each of the IDs in the two elements.
+        foreach (QString id1, allIds1)
+        {
+          foreach (QString id2, allIds2)
+          {
+            _actualReviews.addReview(id1, id2);
+          }
+        }
       }
     }
   }
@@ -470,9 +611,9 @@ double MultiaryMatchComparator::getPercentUnnecessaryReview() const
 int MultiaryMatchComparator::getTotalCount() const
 {
   int result = 0;
-  for (size_t i = 0; i < _confusion.size(); i++)
+  for (int i = 0; i <= MatchType::Review; i++)
   {
-    for (size_t j = 0; j < _confusion[i].size(); j++)
+    for (int j = 0; j <= MatchType::Review; j++)
     {
       result += _confusion[i][j];
     }
@@ -481,7 +622,39 @@ int MultiaryMatchComparator::getTotalCount() const
   return result;
 }
 
-void MultiaryMatchComparator::_tagWrong(const OsmMapPtr &map, const QString &id)
+QString MultiaryMatchComparator::_printConfusionTable(const ConfusionTable& x, bool emptyMissMiss)
+  const
+{
+  QString result;
+  QString left[3];
+  // weird markup makes a pretty table in redmine.
+  result += "|                 |        |\\3=.       expected     |\n";
+  result += "|                 |        | miss  | match | review |\n";
+  left[0] = "|/3. test outcome | miss  ";
+  left[1] = "                  | match ";
+  left[2] = "                  | review";
+  for (int i = 0; i < 3; i++)
+  {
+    result += left[i];
+    for (int j = 0; j < 3; j++)
+    {
+      if (i == 0 && j == 0 && emptyMissMiss)
+      {
+        result += QString(" |   -  ");
+      }
+      else
+      {
+        result += QString(" |%1").arg(x[i][j], 6, 10);
+      }
+    }
+    result += "  |\n";
+  }
+
+  return result;
+}
+
+
+void MultiaryMatchComparator::_tagReview(const OsmMapPtr &map, const QString &id, QString value)
 {
   if (_tagErrors)
   {
@@ -489,7 +662,20 @@ void MultiaryMatchComparator::_tagWrong(const OsmMapPtr &map, const QString &id)
 
     if (e.get())
     {
-      e->getTags()[MetadataTags::HootWrong()] = "1";
+      e->getTags().appendValue(MetadataTags::HootCorrectReview(), value);
+    }
+  }
+}
+
+void MultiaryMatchComparator::_tagWrong(const OsmMapPtr &map, const QString &id, QString value)
+{
+  if (_tagErrors)
+  {
+    ElementPtr e = map->getElement(_actualIdToEid[id]);
+
+    if (e.get())
+    {
+      e->getTags().appendValue(MetadataTags::HootWrong(), value);
     }
   }
 }
@@ -525,38 +711,25 @@ void MultiaryMatchComparator::_setElementWrongCount(const ConstOsmMapPtr& map,
 
 QString MultiaryMatchComparator::toString() const
 {
-  QString result;
+  QString result = _nodeBasedStatsResult;
   int total = 0;
   int correct = 0;
 
-  QString left[3];
-  // weird markup makes a pretty table in redmine.
-  result += "|                 |        |\\3=.       expected     |\n";
-  result += "|                 |        | miss  | match | review |\n";
-  left[0] = "|/3. test outcome | miss  ";
-  left[1] = "                  | match ";
-  left[2] = "                  | review";
-  for (size_t i = 0; i < 3; i++)
+  result += "\n=== Edge-based Scoring\n\n";
+
+  for (int i = 0; i < 3; i++)
   {
-    result += left[i];
-    for (size_t j = 0; j < 3; j++)
+    for (int j = 0; j < 3; j++)
     {
-      if (i == 0 && j == 0)
-      {
-        result += QString(" |   -  ");
-      }
-      else
-      {
-        result += QString(" |%1").arg(_confusion[i][j], 6, 10);
-      }
       total += _confusion[i][j];
       if (i == j)
       {
         correct += _confusion[i][j];
       }
     }
-    result += "  |\n";
   }
+
+  result += _printConfusionTable(_confusion, true);
 
   result += "\n";
   result += QString("correct: %1\n").arg(getPercentCorrect());

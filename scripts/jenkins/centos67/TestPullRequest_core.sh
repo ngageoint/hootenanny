@@ -17,4 +17,5 @@ HootTest --exclude=.*ConflateAverageTest.sh \
          --exclude=.*NetworkConflateCmd.* \
          --exclude=.*OsmApiDbHootApiDb.* \
          --exclude=.*MultiaryIngestCmd.* \
-         --glacial
+         --glacial \
+         --diff

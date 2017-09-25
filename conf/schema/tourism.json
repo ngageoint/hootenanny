@@ -79,11 +79,20 @@
         "objectType": "tag"
     },
     {
+        "aliases": [
+            "amenity=museum"
+        ],
          "categories": [
             "building"
         ],
         "isA": "tourism",
         "name": "tourism=museum",
-        "objectType": "tag"
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "amenity=arts_centre",
+                "weight": 0.8
+            }
+        ]
     }
 ]

@@ -19151,7 +19151,7 @@
         <tag k="hoot:review:type" v="POI to Polygon"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="PoiPolygonMatch Node:-4677 Way:-12 P: match: 0 miss: 0 review: 1, distance: 0, close match: 1, type score: 0, name score: 0.205039, address score: 0"/>
+        <tag k="hoot:review:note" v="PoiPolygonMatch Node:-4677 Way:-12 P: match: 0 miss: 0 review: 1, distance: 0, close match: 1, type score: 0.0141088, name score: 0.205039, address score: 0"/>
         <tag k="hoot:review:sort_order" v="525"/>
         <tag k="type" v="review"/>
     </relation>
@@ -21538,7 +21538,7 @@
         <tag k="hoot:review:type" v="POI to Polygon"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="PoiPolygonMatch Node:-643 Way:-12 P: match: 0 miss: 0 review: 1, distance: 32.4728, close match: 1, type score: 0, name score: 1, address score: 0"/>
+        <tag k="hoot:review:note" v="PoiPolygonMatch Node:-643 Way:-12 P: match: 0 miss: 0 review: 1, distance: 32.4728, close match: 1, type score: 0.00106188, name score: 1, address score: 0"/>
         <tag k="hoot:review:sort_order" v="520"/>
         <tag k="type" v="review"/>
     </relation>

@@ -78,7 +78,8 @@ inline QString SqlBulkInsert::_escape(const QVariant& v) const
   case QVariant::String:
     {
       QString result = v.toString();
-      if (!result.contains("hstore(ARRAY", Qt::CaseInsensitive) && result != "''") //check tags string return from HootApiDb::_escapeTags(tags)
+      //check tags string return from HootApiDb::_escapeTags(tags)
+      if (!result.contains("hstore(ARRAY", Qt::CaseInsensitive) && result != "''")
       {
          result.replace("'", "''");
          result = "'" % result % "'";

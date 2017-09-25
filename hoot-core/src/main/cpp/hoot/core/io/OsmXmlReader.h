@@ -103,6 +103,7 @@ public:
   void setUseStatusFromFile(bool useFileStatus) { _useFileStatus = useFileStatus; }
   void setKeepStatusFromFile(bool keepFileStatus) { _keepFileStatus = keepFileStatus; }
   void setDefaultAccuracy(Meters circularError) { _circularError = circularError; } 
+  void setAddSourceDateTime(bool add) { _addSourceDateTime = add; }
 
 private:
 

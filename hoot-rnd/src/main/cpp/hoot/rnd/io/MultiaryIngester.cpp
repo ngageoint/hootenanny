@@ -54,22 +54,20 @@ namespace hoot
 {
 
 MultiaryIngester::MultiaryIngester() :
-_sortInput(true),
-_logUpdateInterval(ConfigOptions().getOsmapidbBulkInserterFileOutputStatusUpdateInterval())
+_logUpdateInterval(ConfigOptions().getApidbBulkInserterFileOutputStatusUpdateInterval())
 {
   //in order for the sorting to work, all original POI ids must be retained...no new ones
   //assigned; we're assuming no duplicate ids in the input
   conf().set(ConfigOptions::getHootapiDbWriterRemapIdsKey(), false);
   //for the changeset derivation to work, all input IDs must not be modified as they are read
   conf().set(ConfigOptions::getReaderUseDataSourceIdsKey(), true);
-  //script for translating input to OSM
-  conf().set(ConfigOptions::getTranslationScriptKey(), "translations/OSM_Ingest.js");
 
   //for debugging only
   //conf().set(ConfigOptions::getMaxElementsPerPartialMapKey(), 1000);
 }
 
-void MultiaryIngester::_doInputErrorChecking(const QString newInput, const QString referenceOutput,
+void MultiaryIngester::_doInputErrorChecking(const QString newInput, const QString translationScript,
+                                             const QString referenceOutput,
                                              const QString changesetOutput)
 {
   if (!OsmMapReaderFactory::getInstance().hasElementInputStream(newInput))
@@ -102,17 +100,23 @@ void MultiaryIngester::_doInputErrorChecking(const QString newInput, const QStri
       "When ingesting OGR formats the " + ConfigOptions::getOgrReaderNodeIdFieldNameKey() +
       " configuration option must be set in order to identify the ID field.");
   }
+
+  if (translationScript.trimmed().isEmpty())
+  {
+    throw IllegalArgumentException("A translation script must be defined.");
+  }
 }
 
-void MultiaryIngester::ingest(const QString newInput, const QString referenceOutput,
-                              const QString changesetOutput, const bool sortInput)
+void MultiaryIngester::ingest(const QString newInput, const QString translationScript,
+                              const QString referenceOutput, const QString changesetOutput)
 {
   LOG_INFO("Ingesting Multiary data from " << newInput << "...");
 
-  _sortInput = sortInput;
-
   //do some input error checking before kicking off a potentially lengthy sort process
-  _doInputErrorChecking(newInput, referenceOutput, changesetOutput);
+  _doInputErrorChecking(newInput, translationScript, referenceOutput, changesetOutput);
+
+  //script for translating input to OSM
+  conf().set(ConfigOptions::getTranslationScriptKey(), translationScript);
 
   const QStringList dbUrlParts = referenceOutput.split("/");
   const QString mapName = dbUrlParts[dbUrlParts.size() - 1];
@@ -122,9 +126,8 @@ void MultiaryIngester::ingest(const QString newInput, const QString referenceOut
   if (!referenceDb.mapExists(mapName))
   {
     LOG_INFO("The reference output dataset does not exist.");
-    LOG_INFO("Skipping POI sorting and changeset derivation.");
-    LOG_INFO("Writing the input data directly to the reference layer");
-    LOG_INFO("and generating a changeset file consisting entirely of create statements...");
+    LOG_INFO("Writing the input data directly to the reference layer.");
+    LOG_INFO("Generating a changeset file consisting entirely of create statements.");
 
     //If there's no existing reference data, then there's no point in deriving a changeset diff
     //or sorting the data by ID.  So in that case, write all of the input data directly to the ref
@@ -134,24 +137,15 @@ void MultiaryIngester::ingest(const QString newInput, const QString referenceOut
   else
   {
     LOG_INFO("The reference output dataset exists.");
-    LOG_INFO("Deriving a changeset between the input and reference data,");
-    LOG_INFO("writing the changes to the reference layer,");
-    LOG_INFO("and writing the changes to the changeset file...");
+    LOG_INFO("Deriving the changes between the input and reference data.");
+    LOG_INFO("Writing the changes to the reference layer and a changeset file.");
 
     //assuming no duplicate map names here
     referenceDb.setMapId(referenceDb.getMapIdByName(mapName));
 
-    QString sortedNewInput;
-    if (!_sortInput)
-    {
-      LOG_INFO("The input data will not be sorted by POI ID.");
-      sortedNewInput = newInput;
-    }
-    else
-    {
-      _sortInputFile(newInput);
-      sortedNewInput = _sortTempFile->fileName();
-    }
+    //decided to always sort the input
+    _sortInputFile(newInput);
+    QString sortedNewInput = _sortTempFile->fileName();
 
     //create the changes and write them to the ref db layer and also to a changeset file for
     //external use by Spark
@@ -174,13 +168,16 @@ void MultiaryIngester::_sortInputFile(const QString input)
     QFileInfo newInputFileInfo(input);
       _sortTempFile.reset(
         new QTemporaryFile(
-          QDir::tempPath() + "/" + sortTempFileBaseName + "." + newInputFileInfo.completeSuffix()));
+          ConfigOptions().getApidbBulkInserterTempFileDir() + "/" + sortTempFileBaseName + "." +
+          newInputFileInfo.completeSuffix()));
   }
   else
   {
     //OGR formats have to be converted to PBF before sorting
     _sortTempFile.reset(
-      new QTemporaryFile(QDir::tempPath() + "/" + sortTempFileBaseName + ".osm.pbf"));
+      new QTemporaryFile(
+        ConfigOptions().getApidbBulkInserterTempFileDir() + "/" + sortTempFileBaseName +
+        ".osm.pbf"));
   }
   //for debugging only
   //sortTempFile->setAutoRemove(false);
@@ -206,7 +203,7 @@ boost::shared_ptr<ElementInputStream> MultiaryIngester::_getFilteredNewInputStre
   boost::shared_ptr<ElementInputStream> inputStream =
     boost::dynamic_pointer_cast<ElementInputStream>(newInputReader);
 
-  //filter new data down to POIs only and translate each element
+  //filter data down to POIs only, translate each element, and assign it a unique hash id
   boost::shared_ptr<PoiCriterion> elementCriterion(new PoiCriterion());
   QList<ElementVisitorPtr> visitors;
   visitors.append(boost::shared_ptr<TranslationVisitor>(new TranslationVisitor()));
@@ -229,6 +226,12 @@ void MultiaryIngester::_writeNewReferenceData(
 
   conf().set(ConfigOptions::getHootapiDbWriterCreateUserKey(), true);
   conf().set(ConfigOptions::getHootapiDbWriterOverwriteMapKey(), true);
+  //We're able to use the faster bulk inserter here, since this is a brand new dataset.  For raw
+  //writes, there was as much as a 70% performance increase seen when using the bulk inserter vs
+  //the regular inserter.  Here, we're seeing a 15% write performance improvement.  This seems to be
+  //b/c the reads are much slower than the writing.  So, we could maybe get better performance by
+  //splitting the reading and writing into separate threads (?).
+  conf().set(ConfigOptions::getHootapiDbWriterFastBulkInsertKey(), true);
   boost::shared_ptr<PartialOsmMapWriter> referenceWriter =
     boost::dynamic_pointer_cast<PartialOsmMapWriter>(
       OsmMapWriterFactory::getInstance().createWriter(referenceOutput));
@@ -257,13 +260,13 @@ void MultiaryIngester::_writeNewReferenceData(
           critInputStrm->getNumFeaturesTotal() % _logUpdateInterval == 0)
       {
         PROGRESS_INFO(
-          "POIs written to ref layer: " << StringUtils::formatLargeNumber(changesParsed) <<
+          "POIs found: " << StringUtils::formatLargeNumber(changesParsed) <<
           " Non-POIs skipped: " << StringUtils::formatLargeNumber(featuresSkipped));
       }
     }
   }
 
-  LOG_INFO("Flushing data...");
+  LOG_DEBUG("Flushing data...");
   referenceWriter->finalizePartial();
   changesetFileWriter->close();
 
@@ -311,7 +314,9 @@ boost::shared_ptr<QTemporaryFile> MultiaryIngester::_deriveAndWriteChangesToChan
   //a second changeset with the payload in xml; this spark changeset writer will write the
   //element payload as xml for db writing
   boost::shared_ptr<QTemporaryFile> tmpChangeset(
-    new QTemporaryFile(QDir::tempPath() + "/multiary-ingest-changeset-temp-XXXXXX.spark.1"));
+    new QTemporaryFile(
+      ConfigOptions().getApidbBulkInserterTempFileDir() +
+      "/multiary-ingest-changeset-temp-XXXXXX.spark.1"));
   //for debugging only
   //tmpChangeset->setAutoRemove(false);
   if (!tmpChangeset->open())
@@ -357,6 +362,8 @@ boost::shared_ptr<QTemporaryFile> MultiaryIngester::_deriveAndWriteChangesToChan
           ((referencePoisParsed + newPoisParsed) % _logUpdateInterval == 0) ||
           ( critInputStrm->getNumFeaturesTotal() % _logUpdateInterval == 0))
       {
+        //not completely sure why these progress logs don't overwrite each other like the others
+        //do...
         PROGRESS_INFO(
           "Ref: " << StringUtils::formatLargeNumber(referencePoisParsed) <<
           " New: " << StringUtils::formatLargeNumber(newPoisParsed) <<
@@ -398,6 +405,11 @@ void MultiaryIngester::_writeChangesToReferenceLayer(const QString changesetOutp
   //already has the macro for OsmMapWriter, it can't be added for OsmChangeWriter as well.
   conf().set(ConfigOptions::getHootapiDbWriterCreateUserKey(), false);
   conf().set(ConfigOptions::getHootapiDbWriterOverwriteMapKey(), false);
+  //The bulk inserter won't work here, b/c we're writing more than just inserts, and even if we
+  //executed the inserts separately with the bulk inserter, we would still want the modifies/deletes
+  //to run within the same transaction.  Having all of them in the same transaction isn't possible
+  //here unless we use the HootApiDbWriter.
+  conf().set(ConfigOptions::getHootapiDbWriterFastBulkInsertKey(), false);
   boost::shared_ptr<PartialOsmMapWriter> referenceWriter =
     boost::dynamic_pointer_cast<PartialOsmMapWriter>(
       OsmMapWriterFactory::getInstance().createWriter(referenceOutput));
@@ -407,8 +419,9 @@ void MultiaryIngester::_writeChangesToReferenceLayer(const QString changesetOutp
   referenceChangeWriter->open(referenceOutput);
   LOG_DEBUG("Opened change layer writer.");
 
-  //this spark changeset reader will read in the element payload as xml
-  //TODO: add an ChangesetProviderFactory or OsmChangeReaderFactory to get rid of this
+  //this spark changeset reader will read in the element payload as xml (see comment in
+  //_deriveAndWriteChangesToChangeset)
+  //TODO: add a ChangesetProviderFactory or an OsmChangeReaderFactory to get rid of this
   //SparkChangesetReader dependency?
   SparkChangesetReader changesetFileReader;
   changesetFileReader.open(changesetOutput);
@@ -423,8 +436,7 @@ void MultiaryIngester::_writeChangesToReferenceLayer(const QString changesetOutp
     if (changesWritten % _logUpdateInterval == 0)
     {
       PROGRESS_INFO(
-        "Wrote " << StringUtils::formatLargeNumber(changesWritten) <<
-        " changes to ref layer.");
+        "Wrote " << StringUtils::formatLargeNumber(changesWritten) << " changes to ref layer.");
     }
   }
 

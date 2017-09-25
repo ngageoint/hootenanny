@@ -59,6 +59,7 @@ public:
     boost::shared_ptr<MatchThreshold> mt, bool showConfusion)
   {
     MultiaryMatchComparator comparator;
+    comparator.setTranslationScript(_translator);
 
     QString result;
 
@@ -107,6 +108,19 @@ public:
     {
       args.removeAll("--confusion");
       showConfusion = true;
+    }
+
+    if (args.contains("--translator"))
+    {
+      int at = args.indexOf("--translator");
+      args.removeAt(at);
+
+      if (args.size() <= at)
+      {
+        throw HootException("Expected the translator path to be after --translator.");
+      }
+      _translator = args.at(at);
+      args.removeAt(at);
     }
 
     if (args.size() < 3)
@@ -160,6 +174,10 @@ public:
 
     return 0;
   }
+
+private:
+  QString _translator;
+
 };
 
 HOOT_FACTORY_REGISTER(Command, MultiaryScoreMatchesCmd)

@@ -59,7 +59,8 @@ LevenshteinDistance::LevenshteinDistance(double alpha)
 
 double LevenshteinDistance::compare(const QString &s1, const QString &s2) const
 {
-  return pow(score(s1, s2), _alpha);
+  double result = pow(score(s1, s2), _alpha);
+  return result;
 }
 
 void LevenshteinDistance::setAlpha(double alpha)

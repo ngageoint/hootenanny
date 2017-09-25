@@ -44,7 +44,7 @@ GetExitCodeText(){
             echo "    Error: Too many arguments"
             ;;
         "8")
-            echo "    Warning: There are files that need their copyright headers updated"
+            echo "    Warning: There are files that need their copyright headers updated. (Please run UpdateAllCopyrightHeaders.sh --update)"
             ;;
         "9")
             echo "    Error: Unrecognized updateMode"

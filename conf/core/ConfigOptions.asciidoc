@@ -56,6 +56,86 @@ Prefix to apply to REF1 values.
 The REF1 values are typically used when training a model. See the Developer Documentation for
 details.
 
+=== apidb.bulk.inserter.file.output.status.update.interval
+
+* Data Type: long
+* Default Value: `10000`
+
+Count at which the parse status of each element type should be logged when writing to them to
+files by an OSM/Hootenanny API database bulk inserter.  e.g. With a value of 100, you will see a
+load status update message logged for every 100 elements parsed or file lines written.  This
+setting can have a negative impact on performance if set to a very low value.
+
+=== apidb.bulk.inserter.output.files.copy.location
+
+* Data Type: string
+* Default Value: ``
+
+Use this option if you wish to retain the file data generated during an OSM/Hootenanny API database
+write.  This option is not needed and will be ignored if writing OSM data to a SQL file that will be
+applied/written to an OSM API database at a later time.  If this option is populated, any file data
+files generated as a result of executing the hoot convert command with an OSM API database target
+are copied to the specified location.  This option should be set to a full file path to a SQL
+file (.sql).
+
+=== apidb.bulk.inserter.starting.node.id
+
+* Data Type: long
+* Default Value: `1`
+
+First record ID to assign to written nodes when writing to an OSM/Hootenanny API database or SQL
+file.  Must be a positive number.  Use this when working with an offline database and know the
+ID range you want to assign to node records.  If writing to an OSM API databse, this option is
+ignored if "osmapidb.bulk.inserter.reserve.record.ids.before.writing.data" is set to true.
+
+=== apidb.bulk.inserter.starting.way.id
+
+* Data Type: long
+* Default Value: `1`
+
+First record ID to assign to written ways when writing to an OSM/Hootenanny API database or SQL file.  Must
+be a positive number.  Use this when working with an offline database and know the ID range you
+want to assign to way records.  If writing to an OSM API databse, this option is
+ignored if "osmapidb.bulk.inserter.reserve.record.ids.before.writing.data" is set to true.
+
+=== apidb.bulk.inserter.starting.relation.id
+
+* Data Type: long
+* Default Value: `1`
+
+First record ID to assign to written relations when writing to an OSM/Hootenanny API database or
+SQL file.  Must be a positive number.  Use this when working with an offline database and know the
+ID range you want to assign to relation records.  If writing to an OSM API databse, this option is
+ignored if "osmapidb.bulk.inserter.reserve.record.ids.before.writing.data" is set to true.
+
+=== apidb.bulk.inserter.stxxl.map.min.size
+
+* Data Type: long
+* Default Value: `10000000`
+
+Size at which the ID mappings storage for the OSM/Hootenanny API database bulk inserter switches
+from a std::map to an stxxl::map, which is a container optimized for very large amounts of data.
+For debugging purposes only.
+
+=== apidb.bulk.inserter.temp.file.dir
+
+* Data Type: string
+* Default Value: `/tmp`
+
+Allows for customizing where the OSM/Hootenanny API database bulk inserter stores temp files.
+
+=== apidb.bulk.inserter.validate.data
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, the OSM/Hootenanny API database bulk inserter will renumber element IDs, check for
+duplicated element IDs, check for invalid way node references, and check for invalid relation member
+references.  Only duplicate element IDs and invalid way node references will cause a failure.
+Invalid relation members will cause a warning to be logged.  You should enable this setting if you
+are loading data that has not been previously validated in another OSM API database.  Enabling this
+setting may cause writing to an OSM API database to occur more slowly.
+
 === api.db.email
 
 * Data Type: string
@@ -695,6 +775,16 @@ The size of a pixel when calculating node density. See User Manual for details.
 Should the hootapi services DB writer automatically create the specified user if it doesn't exist.
 This is most useful when debugging and testing.
 
+=== hootapi.db.writer.fast.bulk.insert
+
+* Data Type: bool
+* Default Value: `false`
+
+If set to true, the Hootenanny API database writer will insert new records using Postgres COPY
+statements, which may increase performance when writing large datasets.  This setting can only
+be activated when writing new records and will not work when existing records need to be modified
+or deleted.  It also requires writing out temporary files, so extra disk space is needed.
+
 === hootapi.db.writer.output.id.mappings
 
 * Data Type: string
@@ -1318,27 +1408,23 @@ hoot --convert \
 
 Operations that should be applied to ingested OGR data before saving the data.
 
-=== osmapidb.bulk.inserter.file.output.status.update.interval
+=== osmapidb.bulk.inserter.disable.database.constraints.during.write
 
-* Data Type: long
-* Default Value: `10000`
+* Data Type: bool
+* Default Value: `false`
 
-Count at which the parse status of each element type should be logged when writing to them to
-files.  e.g. With a value of 100, you will see a load status update message logged for every 100
-elements parsed or file lines written.  This setting will have a negative impact on performance
-if set to a very low value.
+If true, the OSM API database writer drops the database constraints before writing the data and
+re-enables them after the writing is complete.  This can only be used with databases that have been
+taken offline from other users.
 
-=== osmapidb.bulk.inserter.output.files.copy.location
+=== osmapidb.bulk.inserter.disable.database.indexes.during.write
 
-* Data Type: string
-* Default Value: ``
+* Data Type: bool
+* Default Value: `false`
 
-Use this option if you wish to retain the file data generated during an OSM API database write.
-This option is not needed and will be ignored if writing OSM data to a SQL file that will be
-applied/written to an OSM API database at a later time.  If this option is populated, any file data
-files generated as a result of executing the hoot convert command with an OSM API database target
-are copied to the specified location.  This option should be set to a full file path to a SQL
-file (.sql).
+If true, the OSM API database writer drops the database indexes before writing the data and
+re-enables them after the writing is complete.  This can only be used with databases that have been
+taken offline from other users.
 
 === osmapidb.bulk.inserter.reserve.record.ids.before.writing.data
 
@@ -1352,57 +1438,6 @@ environments, the risk of record ID conflicts will be present in the database.  
 destination must be an OSM API database or this setting will always be treated as being "false".
 If the output destination is a SQL file, the SQL statements to update the record IDs will be
 written to the SQL output for later execution.
-
-=== osmapidb.bulk.inserter.starting.node.id
-
-* Data Type: long
-* Default Value: `1`
-
-First record ID to assign to written nodes when writing to an OSM API database or SQL file.  Must
-be a positive number.  Use this when working with an offline database and know the ID range you
-want to assign to node records.  This option is ignored if
-"osmapidb.bulk.inserter.reserve.record.ids.before.writing.data" is set to true.
-
-=== osmapidb.bulk.inserter.starting.way.id
-
-* Data Type: long
-* Default Value: `1`
-
-First record ID to assign to written ways when writing to an OSM API database or SQL file.  Must
-be a positive number.  Use this when working with an offline database and know the ID range you
-want to assign to way records.  This option is ignored if
-"osmapidb.bulk.inserter.reserve.record.ids.before.writing.data" is set to true.
-
-=== osmapidb.bulk.inserter.starting.relation.id
-
-* Data Type: long
-* Default Value: `1`
-
-First record ID to assign to written relations when writing to an OSM API database or SQL file.
-Must be a positive number.  Use this when working with an offline database and know the ID range
-you want to assign to relation records.  This option is ignored if
-"osmapidb.bulk.inserter.reserve.record.ids.before.writing.data" is set to true.
-
-=== osmapidb.bulk.inserter.stxxl.map.min.size
-
-* Data Type: long
-* Default Value: `10000000`
-
-Size at which the ID mappings storage for the OSM API database bulk inserter switches from a
-std::map to an stxxl::map, which is a container optimized for very large amounts of data.  For
-debugging purposes only.
-
-=== osmapidb.bulk.inserter.validate.data
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, the OSM API database bulk inserter will renumber element IDs, check for duplicated
-element IDs, check for invalid way node references, and check for invalid relation member
-references.  Only duplicate element IDs and invalid way node references will cause a failure.
-Invalid relation members will cause a warning to be logged.  You should enable this setting if you
-are loading data that has not been previously validated in another OSM API database.  Enabling this
-setting may cause writing to an OSM API database to occur more slowly.
 
 === osmapidb.id.aware.url
 
@@ -2378,6 +2413,20 @@ The direction that the translation script should translate. `toogr` will transla
 
 The script to use for translation.
 
+=== translation.override
+
+* Data Type: string
+* Default Value: ``
+
+Override the value of translated tags and attributes.
+
+VERY IMPORTANT NOTE: The changes apply to ALL elements and are applied to the OSM+ tags either before or
+after the translation. E.g.
+* After attributes are translated to OSM+ tags during Import
+* Before OSM+ tags are translated to attributes on Export
+
+NOTE: This assumes that you know exactly what tags you want to modify/delete
+
 === unify.enable.optimal.constrained.matches
 
 * Data Type: bool
@@ -2417,7 +2466,17 @@ before the operations in `conflate.post.ops`.
 * Default Value:
 ** ``
 
+
 List of operations to apply immediately before conflating when using Unifying Conflation only.  Runs
+after the operations in `conflate.pre.ops`.
+
+=== network.pre.ops
+
+* Data Type: list
+* Default Value:
+** `hoot::RubberSheet`
+
+List of operations to apply immediately before conflating when using Network Conflation only.  Runs
 after the operations in `conflate.pre.ops`.
 
 === uuid.helper.repeatable
