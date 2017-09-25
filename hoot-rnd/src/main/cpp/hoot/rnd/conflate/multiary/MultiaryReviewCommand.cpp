@@ -29,7 +29,8 @@
 #include <sstream>
 #include "hoot/core/io/OsmJsonWriter.h"
 #include "hoot/core/io/OsmJsonReader.h"
-#include <hoot/core/util/Log.h>
+#include "hoot/core/util/Log.h"
+#include "hoot/core/visitors/CalculateHashVisitor.h"
 
 // Boost
 #include <boost/property_tree/json_parser.hpp>
@@ -244,18 +245,19 @@ bool MultiaryReviewCommand::applyToMap(OsmMapPtr pMap) const
 
 QByteArray MultiaryReviewCommand::_getElementHashID(ElementPtr e) const
 {
-  QString hashKey = "Hoot:Hash";
-  if (e->getTags().contains(hashKey))
+  QString hashKey = MetadataTags::HootHash();
+
+  // Ensure the hash is present
+  if (!e->getTags().contains(hashKey))
   {
-    return QByteArray::fromHex(e->getTags()[hashKey].toStdString().c_str());
+    CalculateHashVisitor v;
+    v.visit(e);
   }
-  else
-  {
-    // @TODO: Calculate hash for element
-    // return QByteArray::fromHex(hashString.toStdString().c_str())
-    QString nameStr = e->getTags()[QString("name")];
-    return QCryptographicHash::hash(nameStr.toUtf8(), QCryptographicHash::Sha1);
-  }
+
+  // Return the hash
+  QString hexString = e->getTags()[hashKey];
+  hexString.replace("sha1sum:", "");
+  return QByteArray::fromHex(hexString.toAscii());
 }
 
 QString MultiaryReviewCommand::_getHashIDList() const
