@@ -27,89 +27,184 @@
 #ifndef PROCESS_POOL_H
 #define PROCESS_POOL_H
 
+//  Boost
+#include <boost/shared_ptr.hpp>
+
 //  QT
 #include <QMutex>
 #include <QProcess>
 #include <QThread>
 #include <QWaitCondition>
+typedef boost::shared_ptr<QProcess> QProcessPtr;
 
 //  Standard
 #include <set>
 #include <vector>
 
-//  Boost
-#include <boost/shared_ptr.hpp>
-
 #define HOOT_TEST_FINISHED "HOOT_TEST_FINISHED"
 
-typedef boost::shared_ptr<QProcess> QProcessPtr;
-
+/**
+ * @brief The JobQueue class that is thread-safe queue class implemented with a std::set so it can be
+ *  searched in non-linear time for the contains() method
+ *
+ */
 class JobQueue
 {
 public:
+  /** Standard constructor */
   JobQueue();
 
+  /**
+   * @brief basic empty method on queue class, thread-safe
+   * @return true if the set is empty
+   */
   bool empty();
 
+  /**
+   * @brief basic contains method for searching the queue, thread-safe
+   * @param job - name of job to check the queue for
+   * @return true if job is found in the queue
+   */
   bool contains(const QString& job);
 
+  /**
+   * @brief atomic pop/top method in one in order to be thread-safe
+   * @return top job name on the queue
+   */
   QString pop();
 
+  /**
+   * @brief basic push method, thread-safe
+   * @param job - name of job to add to back of queue
+   */
   void push(const QString& job);
 
 private:
+  /** Mutex for locking _jobs */
   QMutex _mutex;
+  /** std::set of job names to be processed */
   std::set<QString> _jobs;
 };
 
+
+/**
+ * @brief The ProcessThread class is a process manager class that runs in a separate execution thread
+ *  so that it can wait on output from the thread without holding up other test threads or without requiring
+ *  polling of all processes
+ */
 class ProcessThread : public QThread
 {
 public:
+  /**
+   * @brief ProcessThread constructor
+   * @param showTestName - boolean flag indicating if the thread should pass the '--names' flag to the process
+   * @param waitTime - number of seconds to wait before reporting that a test took too long
+   * @param outMutex - mutex for preserving output ordering to standard out
+   * @param parallelJobs - JobQueue object that contains a set of jobs that can all be run in parallel
+   * @param serialJobs - JobQueue object (NULL for all threads but one) that contains a set of all jobs
+   *  that cannot be run in parallel but must be run serially
+   */
   ProcessThread(bool showTestName, double waitTime, QMutex* outMutex, JobQueue* parallelJobs, JobQueue* serialJobs = NULL);
 
+  /**
+   * @brief run method for thread, called by ::start()
+   */
   void run();
 
+  /**
+   * @brief getFailures accessor function of _failures count
+   * @return return number of failed tests
+   */
   int getFailures();
 
 private:
+  /**
+   * @brief createProcess actually creates a HootTest process that is listening for tests on standard in to run
+   * @return pointer to the process created, ownership is passed back
+   */
   QProcess* createProcess();
 
+  /**
+   * @brief resetProcess shutsdown the current process and starts a new one in its place for error handling
+   */
   void resetProcess();
 
+  /**
+   * @brief processJobs abstracted function to process all jobs in the shared job queue
+   * @param queue pointer to the job queue to begin work on
+   */
   void processJobs(JobQueue* queue);
 
+  /** Flag for showing test names in output */
   bool _showTestName;
+  /** Time (in seconds) to wait before reporting a tests is "taking too long" */
   double _waitTime;
+  /** Mutex guarding standard out so that output messages aren't scrambled */
   QMutex* _outMutex;
+  /** Pointer to shared job queue that contains names of jobs that can all be run in parallel */
   JobQueue* _parallelJobs;
+  /** Pointer to job queue that contains only names of jobs that must be run serially */
   JobQueue* _serialJobs;
+  /** Number of failed tests */
   int _failures;
+  /** Shared pointer containing ownership of the process pointer from createProcess() */
   QProcessPtr _proc;
 };
-
 typedef boost::shared_ptr<ProcessThread> ProcessThreadPtr;
 
+/**
+ * @brief The ProcessPool class that encapsulates the division of work amongs processes.  Tests
+ *  that must be run serially are passed off to the first process in the pool while the others
+ *  work on jobs that can be run in parallel.  If there are any jobs left after that the first
+ *  process begins working on those tests with all of the rest of the processes in the pool.
+ */
 class ProcessPool
 {
 public:
-  explicit ProcessPool(int nproc, double waitTime, bool showTestName);
+  /**
+   * @brief ProcessPool constructor
+   * @param nproc - number of threads/processes to add to the pool
+   * @param waitTime - number of seconds to wait before reporting that a test took too long
+   * @param showTestName - boolean flag indicating if the thread should pass the '--names' flag to the process
+   */
+  ProcessPool(int nproc, double waitTime, bool showTestName);
 
-  virtual ~ProcessPool();
+  /** Destructor */
+  ~ProcessPool();
 
+  /**
+   * @brief addJob method to add a new job to one of the job queues
+   * @param test - name of job to add
+   * @param parallel - boolean flag indicating if this test is able to be run in parallel
+   */
   void addJob(const QString& test, bool parallel = true);
 
+  /**
+   * @brief startProcessing starts each thread and process in order
+   */
   void startProcessing();
 
+  /**
+   * @brief getFailures gets the unit test failure count
+   * @return number of unit tests that failed
+   */
   int getFailures();
 
+  /**
+   * @brief wait for all threads (and processes) to finish working
+   */
   void wait();
 private:
+  /** vector of n threads to do the processing */
   std::vector<ProcessThreadPtr> _threads;
+  /** queue of jobs that must be run in serial */
   JobQueue _serialJobs;
+  /** queue of jobs that can be run in parallel */
   JobQueue _parallelJobs;
+  /** mutex protecting standard out to keep all output for each single test together */
   QMutex _mutex;
+  /** count of failed unit tests */
   int _failed;
-  int _finished;
 };
 
 #endif  //  PROCESS_POOL_H

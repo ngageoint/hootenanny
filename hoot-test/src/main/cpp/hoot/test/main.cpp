@@ -340,6 +340,7 @@ int main(int argc, char *argv[])
             "--diff - Print diff when a script test fails.\n"
             "--include=[regex] - Include only tests that match the specified regex.\n"
             "--exclude=[regex] - Exclude tests that match the specified regex.\n"
+            "--parallel [process count] - Run the specified tests in parallel.\n"
             "\n"
             "See the Hootenanny Developer Guide for more information.\n"
             ;

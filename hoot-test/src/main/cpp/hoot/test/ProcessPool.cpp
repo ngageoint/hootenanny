@@ -185,7 +185,7 @@ void ProcessThread::processJobs(JobQueue* queue)
 }
 
 ProcessPool::ProcessPool(int nproc, double waitTime, bool showTestName)
-  : _failed(0), _finished(0)
+  : _failed(0)
 {
   for (int i = 0; i < nproc; ++i)
   {
