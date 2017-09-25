@@ -167,8 +167,7 @@ scripts/database/blank_osmapidb.sql
 ######
 
 compile
-VagrantfileLocal
-VagrantfileLocalRepo
+VagrantfileLocal*
 config.rpath
 0
 tbs/0

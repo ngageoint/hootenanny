@@ -1,5 +1,5 @@
 
-poi = hoot.require("PoiGeneric");
+poi = hoot.require("MultiaryPoiGenericRules");
 
 // poor man's inheritance. Is there a better practice in JS?
 // use all the functions/parameters as defined in PoiGeneric, then we will override later.
@@ -30,15 +30,15 @@ exports.matchScore = function(map, e1, e2) {
     var s1 = e1.getTags().get("source");
     var s2 = e2.getTags().get("source");
 
-    // if either of the inputs are from wikimapia, allow intradataset conflation
-    if ((s1 && s1.indexOf("wikimapia") !== -1) || (s2 && s2.indexOf("wikimapia") !== -1)) {
-        // pass
-    }
-    // otherwise, if they aren't from wikimapia, return a miss on any intradataset comparison
-    // e.g. OSM vs OSM always returns a miss.
-    else if (e1.getStatusString() === e2.getStatusString()) {
-        return result;
-    }
+//    // if either of the inputs are from wikimapia, allow intradataset conflation
+//    if ((s1 && s1.indexOf("wikimapia") !== -1) || (s2 && s2.indexOf("wikimapia") !== -1)) {
+//        // pass
+//    }
+//    // otherwise, if they aren't from wikimapia, return a miss on any intradataset comparison
+//    // e.g. OSM vs OSM always returns a miss.
+//    else if (e1.getStatusString() === e2.getStatusString()) {
+//        return result;
+//    }
 
     var additiveResult = additiveScore(map, e1, e2);
     var score = additiveResult.score;

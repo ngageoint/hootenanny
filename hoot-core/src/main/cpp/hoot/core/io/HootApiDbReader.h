@@ -65,6 +65,9 @@ protected:
 
 private:
 
+  //for white box testing
+  friend class ServiceHootApiDbBulkInserterTest;
+
   boost::shared_ptr<HootApiDb> _database;
 };
 

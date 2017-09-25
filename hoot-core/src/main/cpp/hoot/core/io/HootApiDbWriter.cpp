@@ -85,7 +85,7 @@ void HootApiDbWriter::close()
 {
   LOG_DEBUG("Closing database writer...");
   finalizePartial();
-  if ( (_nodesWritten > 0) || (_waysWritten > 0) || (_relationsWritten > 0) )
+  if ((_nodesWritten > 0) || (_waysWritten > 0) || (_relationsWritten > 0))
   {
     LOG_DEBUG("Write stats:");
     LOG_DEBUG("\t    Nodes: " << StringUtils::formatLargeNumber(_nodesWritten));
@@ -114,7 +114,7 @@ void HootApiDbWriter::finalizePartial()
 bool HootApiDbWriter::isSupported(QString urlStr)
 {
   QUrl url(urlStr);
-  return _hootdb.isSupported(url);
+  return _hootdb.isSupported(url) && !_fastBulkInsertActivated;
 }
 
 void HootApiDbWriter::open(QString urlStr)
@@ -201,11 +201,6 @@ void HootApiDbWriter::_overwriteMaps(const QString& mapName, const set<long>& ma
 
       _hootdb.setMapId(_hootdb.insertMap(mapName, true));
     }
-//    else
-//    {
-//      LOG_ERROR("There are one or more maps with this name. Consider using "
-//                "'hootapi.db.writer.overwrite.map'. Map IDs: " << mapIds);
-//    }
     else if (mapIds.size() > 1)
     {
       LOG_ERROR("There are multiple maps with this name. Consider using "
@@ -342,11 +337,12 @@ void HootApiDbWriter::setConfiguration(const Settings &conf)
   setTextStatus(configOptions.getWriterTextStatus());
   setIncludeCircularError(configOptions.getWriterIncludeCircularErrorTags());
   setRemap(configOptions.getHootapiDbWriterRemapIds());
+  setFastBulkInsertActivated(configOptions.getHootapiDbWriterFastBulkInsert());
 }
 
 void HootApiDbWriter::_startNewChangeSet()
 {
-  LOG_TRACE("Starting changeset...");
+  LOG_DEBUG("Starting changeset...");
   _hootdb.endChangeset();
   Tags tags;
   tags["bot"] = "yes";
@@ -417,8 +413,6 @@ void HootApiDbWriter::writePartial(const ConstNodePtr& n)
 
   Tags tags = n->getTags();
   _addElementTags(n, tags);
-  //TODO: move this to other partial writes
-  //tags.removeEmptyTags();
 
   if (_remapIds)
   {

@@ -1,0 +1,28 @@
+[[conflate]]
+== diff-conflate
+
+=== Description
+
+Conflates two input sources into a single output using the differential conflation algorithm.
+
+* +input1+ - First input.
+* +input2+ - Second input.
+* +output+ - The output path. If the output is a .osc, a changeset will be created, otherwise expect .osm output.
+* +--stats+ - Hootenanny map statistics such as node and way count.
+
+=== Usage
+
+--------------------------------------
+diff-conflate (input1) (input2) (output) [--stats]
+---------------------------------
+
+==== Example
+
+--------------------------------------
+hoot diff-conflate input1.osm input2.osm output.osm --stats
+--------------------------------------
+
+==== See Also
+
+* _Differential Conflation_, <<hootalgo,Hootenanny - Algorithms>>
+

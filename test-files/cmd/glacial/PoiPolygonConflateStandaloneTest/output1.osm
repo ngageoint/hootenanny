@@ -3035,7 +3035,7 @@
         <tag k="cuisine" v="sandwich"/>
         <tag k="addr:street" v="Mission St"/>
         <tag k="addr:housenumber" v="2029"/>
-        <tag k="source" v="(415) 431-3811 "/>
+        <tag k="source" v="(415) 431-3811"/>
         <tag k="name" v="The Sandwich Place"/>
         <tag k="amenity" v="restaurant"/>
         <tag k="addr:postcode" v="94110"/>
@@ -3072,7 +3072,7 @@
     <node visible="true" id="-2280" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7637211999999991" lon="-122.4215832999999805">
         <tag k="REF1" v="002fbd"/>
         <tag k="cuisine" v="vietnamese"/>
-        <tag k="addr:street" v=" Valencia St"/>
+        <tag k="addr:street" v="Valencia St"/>
         <tag k="addr:city" v="San Francisco"/>
         <tag k="building" v="yes"/>
         <tag k="addr:housenumber" v="577"/>
@@ -3442,8 +3442,8 @@
         <tag k="REF1" v="00021e"/>
         <tag k="cuisine" v="french"/>
         <tag k="website" v="http://chezspencer.net/"/>
-        <tag k="addr:street" v="14th St, San Francisco "/>
-        <tag k="addr:housenumber" v="82 "/>
+        <tag k="addr:street" v="14th St, San Francisco"/>
+        <tag k="addr:housenumber" v="82"/>
         <tag k="source" v="survey"/>
         <tag k="name" v="Chez Spencer"/>
         <tag k="amenity" v="restaurant"/>
@@ -18987,7 +18987,7 @@
         <tag k="hoot:review:type" v="POI to Polygon"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="PoiPolygonMatch Node:-4677 Way:-12 P: match: 0 miss: 0 review: 1, distance: 0, close match: 1, type score: 0, name score: 0.205039, address score: 0"/>
+        <tag k="hoot:review:note" v="PoiPolygonMatch Node:-4677 Way:-12 P: match: 0 miss: 0 review: 1, distance: 0, close match: 1, type score: 0.0141088, name score: 0.205039, address score: 0"/>
         <tag k="hoot:review:sort_order" v="503"/>
         <tag k="type" v="review"/>
     </relation>
@@ -21473,7 +21473,7 @@
         <tag k="hoot:review:type" v="POI to Polygon"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="PoiPolygonMatch Node:-643 Way:-12 P: match: 0 miss: 0 review: 1, distance: 32.4728, close match: 1, type score: 0, name score: 1, address score: 0"/>
+        <tag k="hoot:review:note" v="PoiPolygonMatch Node:-643 Way:-12 P: match: 0 miss: 0 review: 1, distance: 32.4728, close match: 1, type score: 0.00106188, name score: 1, address score: 0"/>
         <tag k="hoot:review:sort_order" v="498"/>
         <tag k="type" v="review"/>
     </relation>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="15.3680266" minlon="44.2290349" maxlat="15.3680266" maxlon="44.2290349"/>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3680266000000003" lon="44.2290349000000020">
+        <tag k="is_in:city" v="امانة العاصمة"/>
+        <tag k="source" v="osm;geonames;wikimapia"/>
+        <tag k="building" v="hotel"/>
+        <tag k="note" v="Implicitly derived tags based on: hotel"/>
+        <tag k="ele" v="2289"/>
+        <tag k="is_in:country" v="Yemen"/>
+        <tag k="name" v="شيراتون"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="is_in:state" v="Amanah al-Asmah"/>
+        <tag k="alt_name" v="Funduq Shiratun;Funduq Shīrātūn;Hotel Sheraton San`a';Hotel Sheraton San‘ā’;Sheraton Sana'a Hotel;fndq shyratwn;فندق شيراتون"/>
+        <tag k="ID" v="1-00135"/>
+        <tag k="source:url" v="http://wikimapia.org/29237784/ar/%D9%81%D9%86%D8%AF%D9%82-%D8%B4%D9%8A%D8%B1%D8%A7%D8%AA%D9%88%D9%86"/>
+        <tag k="is_in:place" v="Sana"/>
+        <tag k="MATCH" v="1-00067"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="REVIEW" v="none"/>
+        <tag k="is_in:country_code" v="YE"/>
+        <tag k="hoot:hash" v="sha1sum:83e09b5e331daccd2299bbb2e7f795696feafd45"/>
+        <tag k="name:en" v="Sheraton hotel"/>
+        <tag k="source:datetime" v="2017-03-02T18:45:43.000Z;2016-07-12T10:47:05.000Z"/>
+        <tag k="uuid" v="{4ad35a88-dbd2-403a-943d-eb4de8541068};{1fa9a869-b0e0-4024-bbb6-2ccfca9d7cc9};GeoNames.org:7342280;wikimapia:29237784"/>
+        <tag k="source:hash" v="sha1sum:73b7d21daa9a4a69e1aed69ab79da06c70dc82de;sha1sum:5d58590d47b8b28f616d8071122922b5a7cfe1cf;sha1sum:a51c388c41da29c4a09f7d5c1bc7feba8986fba6;sha1sum:8883008e658460ec8b25bb240865a7127ffa1238"/>
+        <tag k="name:ar" v="شيراتون"/>
+        <tag k="tourism" v="hotel"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+</osm>

@@ -57,6 +57,9 @@
         "import": "capital.json"
     },
     {
+        "import": "cemetery.json"
+    },
+    {
         "import": "circumference.json"
     },
     {

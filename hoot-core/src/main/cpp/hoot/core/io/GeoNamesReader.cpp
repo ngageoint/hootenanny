@@ -114,10 +114,10 @@ void GeoNamesReader::open(QString url)
 
 ElementPtr GeoNamesReader::readNextElement()
 {
-  QByteArray lineBytes = _fp.readLine();
-  QString line = QString::fromUtf8(lineBytes.constData());
+  QString line = QString::fromUtf8(_fp.readLine().constData());
   LOG_VART(line);
-  QStringList fields = line.split('\t');
+  QStringList fields;
+  fields.append(line.split('\t'));
   LOG_VART(fields);
 
   bool ok;
@@ -161,7 +161,7 @@ ElementPtr GeoNamesReader::readNextElement()
   for (int i = 0; i < _columns.size(); i++)
   {
     int j = i; //convertColumns[i];
-    const QString val = fields[j].trimmed();
+    QString val = fields[j].trimmed();
     if (!val.isEmpty())
     {
       n->getTags()[_columns[j]] = _saveMemory(val);

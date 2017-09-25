@@ -108,9 +108,7 @@ public:
     LOG_INFO("Applying pre-conflation operations...");
     NamedOp(ConfigOptions().getConflatePreOps()).apply(map);
 
-    OsmMapPtr result = map;
-
-    MultiaryUtilities::conflate(result);
+    MultiaryUtilities::conflate(map);
 
     // Apply any user specified operations.
     LOG_INFO("Applying post-conflation operations...");
