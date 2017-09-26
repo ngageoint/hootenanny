@@ -105,8 +105,10 @@ void HootApiDbWriter::finalizePartial()
   if (_open)
   {
     _hootdb.endChangeset();
-    _hootdb.commit();
-    _hootdb.close();
+    if (_hootdb.inTransaction())
+      _hootdb.commit();
+    if (_hootdb.isOpen())
+      _hootdb.close();
     _open = false;
   }
 }
