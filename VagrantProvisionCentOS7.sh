@@ -29,7 +29,6 @@ sudo yum -q -y update >> CentOS_upgrade.txt 2>&1
 echo "### Upgrade ###" >> CentOS_upgrade.txt
 sudo yum -q -y upgrade >> CentOS_upgrade.txt 2>&1
 
-#sudo localedef -i en_US -f UTF-8 en_US.UTF-8
 
 echo "### Setup NTP..."
 sudo yum -q -y install ntp
@@ -132,7 +131,6 @@ sudo yum -y install \
     xorg-x11-server-Xvfb \
     zip \
 
-#sudo localedef -i en_US -f UTF-8 en_US.UTF-8
 
 
 # Install Java8
@@ -440,7 +438,6 @@ cd /tmp # Stop postgres "could not change directory to" warnings
 # Postgresql startup
 #PGSETUP_INITDB_OPTIONS="-E 'UTF-8' --lc-collate='en_US.UTF-8' --lc-ctype='en_US.UTF-8'"
 
-#sudo localedef -i en_US -f UTF-8 en_US.UTF-8
 
 sudo PGSETUP_INITDB_OPTIONS="-E 'UTF-8' --lc-collate='en_US.UTF-8' --lc-ctype='en_US.UTF-8'" /usr/pgsql-$PG_VERSION/bin/postgresql95-setup initdb
 sudo systemctl start postgresql-$PG_VERSION

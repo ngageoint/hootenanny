@@ -85,12 +85,10 @@ Vagrant.configure(2) do |config|
     dockcentos72.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvisionCentOS7.sh"
     dockcentos72.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
 
-
     dockcentos72.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo systemctl restart tomcat8", run: "always"
     dockcentos72.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-mapnik", run: "always"
     dockcentos72.vm.provision "export", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-export", run: "always"
     dockcentos72.vm.provision "hadoop", type: "shell", :privileged => false, :inline => "stop-all.sh && start-all.sh", run: "always"
-
     
     
   end
@@ -223,29 +221,6 @@ Vagrant.configure(2) do |config|
     libvirt.memory = 8192
     libvirt.cpus = 8
   end
-
-  #config.vm.provider "docker" do |docker, override|
-  #  override.nfs.map_uid = Process.uid
-  #  override.nfs.map_gid = Process.gid
-  #  # Disable the standard folders so we can use NFS
-  #  override.vm.synced_folder '.', '/home/vagrant/sync', disabled: true
-  #  override.vm.synced_folder '.', '/home/vagrant/hoot', disabled: true
-
-  #  # Configure some fancy NFS syncing
-  #  override.vm.synced_folder ".", "/home/vagrant/.hoot-nfs", type: "nfs",
-  #    :mount_options => ['vers=3','udp','noatime','nodiratime','nocto', 'nolock'],
-  #    :linux__nfs_options => ['rw','no_subtree_check','all_squash','async']
-  #  override.bindfs.bind_folder "/home/vagrant/.hoot-nfs",
-  #    "/home/vagrant/hoot",
-  #    chgrp_ignore: true,
-  #    chown_ignore: true,
-  #    perms: nil
-  ##  #override.vm.box = "iknite/trusty64"
-  ##  #override.vm.box_url = "https://app.vagrantup.com/iknite/boxes/trusty64"
-  ##  docker.memory = 8192
-  ##  docker.cpus = 8
-    
-  #end
 
 
   # This is a provider for the Parallels Virtualization Software
