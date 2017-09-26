@@ -114,7 +114,7 @@ void HootApiDbWriter::finalizePartial()
 bool HootApiDbWriter::isSupported(QString urlStr)
 {
   QUrl url(urlStr);
-  return _hootdb.isSupported(url) && !_fastBulkInsertActivated;
+  return _hootdb.isSupported(url) && !_copyBulkInsertActivated;
 }
 
 void HootApiDbWriter::open(QString urlStr)
@@ -337,7 +337,7 @@ void HootApiDbWriter::setConfiguration(const Settings &conf)
   setTextStatus(configOptions.getWriterTextStatus());
   setIncludeCircularError(configOptions.getWriterIncludeCircularErrorTags());
   setRemap(configOptions.getHootapiDbWriterRemapIds());
-  setFastBulkInsertActivated(configOptions.getHootapiDbWriterFastBulkInsert());
+  setCopyBulkInsertActivated(configOptions.getHootapiDbWriterCopyBulkInsert());
 }
 
 void HootApiDbWriter::_startNewChangeSet()

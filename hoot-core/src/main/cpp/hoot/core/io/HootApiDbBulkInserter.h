@@ -36,14 +36,14 @@ namespace hoot
 class HootApiDbSqlStatementFormatter;
 
 /**
- * A Hooteanny API database writer that should perform faster than HootApiDbWriter when creating new
- * elements in a new database only.  See OsmApiDbBulkInserter.  This class implements the offline
- * workflow only and does not allow for writing to a SQL file.
+ * A Hooteanny API database writer that performs faster than HootApiDbWriter but for use when
+ * creating new elements in a new database only.  See OsmApiDbBulkInserter.  This class implements
+ * the offline workflow only and does not allow for writing to a SQL file.
  *
  * TODO: Having this class inheriting from OsmApiDbBulkInserter is not the cleanest approach but
  * allowed for reducing a lot of redundant code up front without involving a massive amount of
- * refactoring.  The better long term approach is probably to create a ApiDbBulkinserter base class
- * and have both this class and OsmApiDbBulkInserter inherit from it.
+ * refactoring work.  The better long term approach is probably to create a ApiDbBulkinserter base
+ * class and have both this class and OsmApiDbBulkInserter inherit from it.
  */
 class HootApiDbBulkInserter : public OsmApiDbBulkInserter
 {
@@ -72,20 +72,20 @@ public:
   void setCreateUser(bool createIfNotFound) { _createUserIfNotFound = createIfNotFound; }
   void setUserEmail(QString email) { _userEmail = email; }
   void setOverwriteMap(bool overwriteMap) { _overwriteMap = overwriteMap; }
-  void setFastBulkInsertActivated(bool activated) { _fastBulkInsertActivated = activated; }
+  void setCopyBulkInsertActivated(bool activated) { _copyBulkInsertActivated = activated; }
 
 protected:
 
- virtual unsigned int _numberOfFileDataPasses() const;
+  virtual unsigned int _numberOfFileDataPasses() const;
 
- virtual unsigned long _getTotalRecordsWritten() const;
- virtual unsigned long _getTotalFeaturesWritten() const;
+  virtual unsigned long _getTotalRecordsWritten() const;
+  virtual unsigned long _getTotalFeaturesWritten() const;
 
- //creates the output files containing the data
- virtual void _createNodeOutputFiles();
- virtual QStringList _createSectionNameList();
- virtual void _createWayOutputFiles();
- virtual void _createRelationOutputFiles();
+  //creates the output files containing the data
+  virtual void _createNodeOutputFiles();
+  virtual QStringList _createSectionNameList();
+  virtual void _createWayOutputFiles();
+  virtual void _createRelationOutputFiles();
 
   virtual void _writeChangeset();
   virtual void _writeRelation(const unsigned long relationDbId, const Tags& tags);
@@ -114,7 +114,7 @@ private:
   HootApiDb _database;
   boost::shared_ptr<HootApiDbSqlStatementFormatter> _sqlFormatter;
 
-  bool _fastBulkInsertActivated;
+  bool _copyBulkInsertActivated;
 
   Tags _changesetTags;
 
