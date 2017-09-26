@@ -140,6 +140,7 @@ Envelope HootApiDb::calculateEnvelope() const
 void HootApiDb::_checkLastMapId(long mapId)
 {
   LOG_TRACE("Checking last map ID: " << mapId << "...");
+  LOG_VART(_lastMapId);
   if (_lastMapId != mapId)
   {
     _flushBulkInserts();
@@ -149,6 +150,7 @@ void HootApiDb::_checkLastMapId(long mapId)
     _wayIdReserver.reset();
     _relationIdReserver.reset();
     _lastMapId = mapId;
+    LOG_VART(_lastMapId);
   }
 }
 
@@ -171,56 +173,6 @@ void HootApiDb::close()
   // Seeing this? "Unable to free statement: connection pointer is NULL"
   // Make sure all queries are listed in _resetQueries.
   _db.close();
-}
-
-void HootApiDb::endChangeset()
-{
-  LOG_TRACE("Ending changeset...");
-
-  // If we're already closed, nothing to do
-  if ( _currChangesetId == -1 )
-  {
-    LOG_TRACE("Tried to end a changeset but there isn't an active changeset currently.");
-    return;
-  }
-
-  const long mapId = _currMapId;
-  if (!changesetExists(_currChangesetId))
-  {
-    throw HootException("No changeset exists with ID: " + _currChangesetId);
-  }
-
-  _checkLastMapId(mapId);
-  if (_closeChangeSet == 0)
-  {
-    _closeChangeSet.reset(new QSqlQuery(_db));
-    _closeChangeSet->prepare(
-      QString("UPDATE %1 SET min_lat=:min_lat, max_lat=:max_lat, min_lon=:min_lon, "
-        "max_lon=:max_lon, closed_at=NOW(), num_changes=:num_changes WHERE id=:id")
-         .arg(getChangesetsTableName(mapId)));
-  }
-  _closeChangeSet->bindValue(":min_lat", _changesetEnvelope.getMinY());
-  _closeChangeSet->bindValue(":max_lat", _changesetEnvelope.getMaxY());
-  _closeChangeSet->bindValue(":min_lon", _changesetEnvelope.getMinX());
-  _closeChangeSet->bindValue(":max_lon", _changesetEnvelope.getMaxX());
-  _closeChangeSet->bindValue(":num_changes", (int)_changesetChangeCount);
-  _closeChangeSet->bindValue(":id", (qlonglong)_currChangesetId);
-
-  if (_closeChangeSet->exec() == false)
-  {
-    LOG_ERROR("query bound values: ");
-    LOG_ERROR(_closeChangeSet->boundValues());
-    LOG_ERROR("\n");
-    throw HootException("Error executing close changeset: " + _closeChangeSet->lastError().text() +
-                        " (SQL: " + _closeChangeSet->executedQuery() + ")" + " with envelope: " +
-                        QString::fromStdString(_changesetEnvelope.toString()));
-  }
-
-  LOG_DEBUG("Successfully closed changeset " << QString::number(_currChangesetId));
-
-  // NOTE: do *not* alter _currChangesetId or _changesetEnvelope yet.  We haven't written data to
-  //database yet!   they will be refreshed upon opening a new database, so leave them alone!
-  _changesetChangeCount = 0;
 }
 
 void HootApiDb::commit()
@@ -429,27 +381,24 @@ void HootApiDb::deleteUser(long userId)
   _exec("DELETE FROM " + ApiDb::getUsersTableName() + " WHERE id=:id", (qlonglong)userId);
 }
 
-QString HootApiDb::_escapeTags(const Tags& tags) const
+QString HootApiDb::_escapeTags(const Tags& tags)
 {
   //TODO: this is likely redundant with other code
 
   QStringList l;
-  static QChar f1('\\'), f2('"'), f3('\'');
-  static QChar to('_');
+  static QChar f1('\\'), f2('"');
 
   for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
   {
-    const QString key = it.key();
-    const QString val = it.value().trimmed();
+    QString key = it.key();
+    QString val = it.value().trimmed();
     if (val.isEmpty() == false)
     {
       // this doesn't appear to be working, but I think it is implementing the spec as described here:
       // http://www.postgresql.org/docs/9.0/static/hstore.html
       // The spec described above does seem to work on the psql command line. Curious.
-      QString k = QString(key).replace(f1, "\\\\").replace(f2, "\\\"");
-      QString v = QString(val).replace(f1, "\\\\").replace(f2, "\\\"");
-      k.replace("'", "''");
-      v.replace("'", "''");
+      QString k = QString(key).replace(f1, "\\\\").replace(f2, "\\\"").replace("'", "''");
+      QString v = QString(val).replace(f1, "\\\\").replace(f2, "\\\"").replace("'", "''");
 
       l << QString("'%1'").arg(k);
       l << QString("'%1'").arg(v);
@@ -606,12 +555,12 @@ long HootApiDb::getNextId(const ElementType& elementType)
 void HootApiDb::beginChangeset()
 {
   Tags emptyTags;
-  beginChangeset(emptyTags);
+  return beginChangeset(emptyTags);
 }
 
 void HootApiDb::beginChangeset(const Tags& tags)
 {
-  LOG_TRACE("Starting changeset...");
+  LOG_DEBUG("Starting changeset...");
 
   _changesetEnvelope.init();
   _changesetChangeCount = 0;
@@ -635,11 +584,101 @@ void HootApiDb::beginChangeset(const Tags& tags)
   _insertChangeSet->bindValue(":max_lat", _changesetEnvelope.getMaxY());
   _insertChangeSet->bindValue(":min_lon", _changesetEnvelope.getMinX());
   _insertChangeSet->bindValue(":max_lon", _changesetEnvelope.getMaxX());
+  LOG_VARD(_insertChangeSet->lastQuery());
 
   _currChangesetId = _insertRecord(*_insertChangeSet);
+  LOG_VARD(_currChangesetId);
 
   _changesetChangeCount = 0;
   LOG_DEBUG("Started new changeset " << QString::number(_currChangesetId));
+}
+
+long HootApiDb::insertChangeset(const geos::geom::Envelope& bounds, const Tags& tags,
+                                const long numChanges)
+{
+  LOG_DEBUG("Inserting and closing changeset...");
+
+  const long mapId = _currMapId;
+  const long userId = _currUserId;
+
+  _checkLastMapId(mapId);
+  if (_insertChangeSet2 == 0)
+  {
+    _insertChangeSet2.reset(new QSqlQuery(_db));
+    _insertChangeSet2->prepare(
+      QString("INSERT INTO %1 (user_id, created_at, min_lat, max_lat, min_lon, max_lon, "
+        "closed_at, num_changes, tags) "
+        "VALUES (:user_id, NOW(), :min_lat, :max_lat, :min_lon, :max_lon, NOW(), :num_changes, " +
+        _escapeTags(tags) + ") "
+        "RETURNING id")
+        .arg(getChangesetsTableName(mapId)));
+  }
+  _insertChangeSet2->bindValue(":user_id", (qlonglong)userId);
+  _insertChangeSet2->bindValue(":min_lat", bounds.getMinY());
+  _insertChangeSet2->bindValue(":max_lat", bounds.getMaxY());
+  _insertChangeSet2->bindValue(":min_lon", bounds.getMinX());
+  _insertChangeSet2->bindValue(":max_lon", bounds.getMaxX());
+  _insertChangeSet2->bindValue(":num_changes", (int)numChanges);
+  LOG_VARD(_insertChangeSet2->lastQuery());
+
+  _currChangesetId = _insertRecord(*_insertChangeSet2);
+  LOG_VARD(_currChangesetId);
+
+  _changesetChangeCount = 0;
+  LOG_DEBUG("Inserted and closed changeset " << QString::number(_currChangesetId));
+
+  return _currChangesetId;
+}
+
+void HootApiDb::endChangeset()
+{
+  LOG_DEBUG("Ending changeset...");
+
+  // If we're already closed, nothing to do
+  if (_currChangesetId == -1)
+  {
+    LOG_DEBUG("Tried to end a changeset but there isn't an active changeset currently.");
+    return;
+  }
+
+  const long mapId = _currMapId;
+  if (!changesetExists(_currChangesetId))
+  {
+    throw HootException("No changeset exists with ID: " + _currChangesetId);
+  }
+
+  _checkLastMapId(mapId);
+  if (_closeChangeSet == 0)
+  {
+    _closeChangeSet.reset(new QSqlQuery(_db));
+    _closeChangeSet->prepare(
+      QString("UPDATE %1 SET min_lat=:min_lat, max_lat=:max_lat, min_lon=:min_lon, "
+        "max_lon=:max_lon, closed_at=NOW(), num_changes=:num_changes WHERE id=:id")
+         .arg(getChangesetsTableName(mapId)));
+  }
+  _closeChangeSet->bindValue(":min_lat", _changesetEnvelope.getMinY());
+  _closeChangeSet->bindValue(":max_lat", _changesetEnvelope.getMaxY());
+  _closeChangeSet->bindValue(":min_lon", _changesetEnvelope.getMinX());
+  _closeChangeSet->bindValue(":max_lon", _changesetEnvelope.getMaxX());
+  _closeChangeSet->bindValue(":num_changes", (int)_changesetChangeCount);
+  _closeChangeSet->bindValue(":id", (qlonglong)_currChangesetId);
+  LOG_VARD(_closeChangeSet->lastQuery());
+
+  if (_closeChangeSet->exec() == false)
+  {
+    LOG_ERROR("query bound values: ");
+    LOG_ERROR(_closeChangeSet->boundValues());
+    LOG_ERROR("\n");
+    throw HootException("Error executing close changeset: " + _closeChangeSet->lastError().text() +
+                        " (SQL: " + _closeChangeSet->executedQuery() + ")" + " with envelope: " +
+                        QString::fromStdString(_changesetEnvelope.toString()));
+  }
+
+  LOG_DEBUG("Successfully closed changeset " << QString::number(_currChangesetId));
+
+  // NOTE: do *not* alter _currChangesetId or _changesetEnvelope yet.  We haven't written data to
+  //database yet!   they will be refreshed upon opening a new database, so leave them alone!
+  _changesetChangeCount = 0;
 }
 
 long HootApiDb::insertMap(QString displayName, bool publicVisibility)
@@ -670,6 +709,7 @@ long HootApiDb::insertMap(QString displayName, bool publicVisibility)
   _copyTableStructure(ApiDb::getCurrentWayNodesTableName(), getCurrentWayNodesTableName(mapId));
   _copyTableStructure(ApiDb::getCurrentWaysTableName(), getCurrentWaysTableName(mapId));
 
+  DbUtils::execNoPrepare(_db, "CREATE SEQUENCE " + getChangesetsSequenceName(mapId));
   DbUtils::execNoPrepare(_db, "CREATE SEQUENCE " + getCurrentNodesSequenceName(mapId));
   DbUtils::execNoPrepare(_db, "CREATE SEQUENCE " + getCurrentRelationsSequenceName(mapId));
   DbUtils::execNoPrepare(_db, "CREATE SEQUENCE " + getCurrentWaysSequenceName(mapId));
@@ -906,6 +946,7 @@ long HootApiDb::_insertRecord(QSqlQuery& query)
   {
     QString err = QString("Error executing query: %1 (%2)").arg(query.executedQuery()).
         arg(query.lastError().text());
+    LOG_ERROR(err);
     throw HootException(err);
   }
   bool ok = false;
@@ -933,7 +974,7 @@ bool HootApiDb::isSupported(const QUrl& url)
 {
   bool valid = ApiDb::isSupported(url);
 
-  //postgresql is deprecated but still support
+  //postgresql is deprecated but still supported
   if (url.scheme() != "hootapidb" && url.scheme() != "postgresql")
   {
     valid = false;
@@ -944,7 +985,7 @@ bool HootApiDb::isSupported(const QUrl& url)
     QString path = url.path();
     QStringList plist = path.split("/");
 
-    if ( plist.size() == 3 )
+    if (plist.size() == 3)
     {
       if (plist[1] == "")
       {
@@ -959,7 +1000,7 @@ bool HootApiDb::isSupported(const QUrl& url)
         valid = false;
       }
     }
-    else if ( (plist.size() == 4) && ((plist[1] == "") || (plist[2 ] == "") || (plist[3] == "")) )
+    else if ((plist.size() == 4) && ((plist[1] == "") || (plist[2 ] == "") || (plist[3] == "")))
     {
       LOG_WARN("Looks like a DB path, but a valid DB name, layer, and element was expected. E.g. "
                "postgresql://myhost:5432/mydb/mylayer/1");
@@ -1026,6 +1067,8 @@ void HootApiDb::open(const QUrl& url)
 
 void HootApiDb::_resetQueries()
 {
+  LOG_DEBUG("Resetting queries...");
+
   ApiDb::_resetQueries();
 
   _closeChangeSet.reset();
@@ -1050,6 +1093,7 @@ void HootApiDb::_resetQueries()
   _jobStatusExists.reset();
   _mapExistsByName.reset();
   _getMapIdByName.reset();
+  _insertChangeSet2.reset();
 
   // bulk insert objects.
   _nodeBulkInsert.reset();
@@ -1072,9 +1116,9 @@ set<long> HootApiDb::selectMapIds(QString name)
     _selectMapIds->prepare("SELECT id FROM " + ApiDb::getMapsTableName() +
                            " WHERE display_name LIKE :name AND user_id=:userId");
   }
-
   _selectMapIds->bindValue(":name", name);
   _selectMapIds->bindValue(":user_id", (qlonglong)userId);
+  LOG_VARD(_selectMapIds->lastQuery());
 
   if (_selectMapIds->exec() == false)
   {
@@ -1189,6 +1233,8 @@ long HootApiDb::getMapIdByName(const QString name)
 
 bool HootApiDb::changesetExists(const long id)
 {
+  LOG_DEBUG("Checking changeset exists...");
+
   const long mapId = _currMapId;
 
   _checkLastMapId(mapId);
@@ -1199,6 +1245,7 @@ bool HootApiDb::changesetExists(const long id)
       .arg(getChangesetsTableName(mapId)));
   }
   _changesetExists->bindValue(":changesetId", (qlonglong)id);
+  LOG_VARD(_changesetExists->lastQuery());
   if (_changesetExists->exec() == false)
   {
     throw HootException(_changesetExists->lastError().text());
@@ -1559,6 +1606,18 @@ QUrl HootApiDb::getBaseUrl()
   result.setPassword(s.get("DB_PASSWORD").toString());
   result.setPath("/" + s.get("DB_NAME").toString());
   return result;
+}
+
+QString HootApiDb::removeLayerName(const QString url)
+{
+  QStringList urlParts =  url.split("/");
+  QString modifiedUrl;
+  for (int i = 0; i < urlParts.size() - 1; i++)
+  {
+    modifiedUrl += urlParts[i] + "/";
+  }
+  modifiedUrl.chop(1);
+  return modifiedUrl;
 }
 
 }

@@ -63,6 +63,8 @@ public:
     }
   } TranslatedFeature;
 
+  virtual ~ScriptToOgrTranslator() {}
+
   virtual boost::shared_ptr<const Schema> getOgrOutputSchema() = 0;
 
   virtual std::vector<TranslatedFeature> translateToOgr(Tags& tags, ElementType elementType,
@@ -71,6 +73,9 @@ public:
   virtual std::vector<Tags> translateToOgrTags(Tags& tags, ElementType elementType,
     geos::geom::GeometryTypeId geometryType) = 0;
 };
+
+typedef boost::shared_ptr<ScriptToOgrTranslator> ScriptToOgrTranslatorPtr;
+typedef boost::shared_ptr<const ScriptToOgrTranslator> ConstScriptToOgrTranslatorPtr;
 
 }
 

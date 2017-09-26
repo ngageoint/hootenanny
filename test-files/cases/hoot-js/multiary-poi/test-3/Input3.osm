@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-27363' action='modify' visible='true' lat='15.364548' lon='44.223589'>
+    <tag k='hoot:hash' v='sha1sum:2802ac21f2d5a705765cbb98202ee78a58e9477a' />
+    <tag k='is_in:city' v='امانة العاصمة' />
+    <tag k='is_in:country' v='Yemen' />
+    <tag k='is_in:place' v='Sana' />
+    <tag k='is_in:state' v='Amanah al-Asmah' />
+    <tag k='name' v='جامع النور' />
+    <tag k='name:en' v='Mosque of Light' />
+    <tag k='source' v='wikimapia' />
+    <tag k='source:url' v='http://wikimapia.org/7439734/ar/%D8%AC%D8%A7%D9%85%D8%B9-%D8%A7%D9%84%D9%86%D9%88%D8%B1' />
+    <tag k='uuid' v='wikimapia:7439734' />
+    <tag k='wm_No_Category' v='yes' />
+  </node>
+  <node id='-27365' action='modify' visible='true' lat='15.3645082' lon='44.223565'>
+    <tag k='hoot:hash' v='sha1sum:06a350fe7d86a212c638f367c10b48bc24e79c17' />
+    <tag k='is_in:city' v='Sanaa' />
+    <tag k='is_in:country' v='Yemen' />
+    <tag k='is_in:place' v='Sana' />
+    <tag k='is_in:state' v='Amanah al-Asmah' />
+    <tag k='name' v='مسجد النور' />
+    <tag k='name:en' v='Mosque of Light' />
+    <tag k='source' v='wikimapia' />
+    <tag k='source:url' v='http://wikimapia.org/25696204/%D9%85%D8%B3%D8%AC%D8%AF-%D8%A7%D9%84%D9%86%D9%88%D8%B1' />
+    <tag k='uuid' v='wikimapia:25696204' />
+    <tag k='wm_No_Category' v='yes' />
+  </node>
+</osm>

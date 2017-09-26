@@ -7,7 +7,7 @@
       "conn": "http://192.168.33.12:3000/api/0.6/map"
     },
     "APIDB": {
-      "conn": "osmapidb://vagrant:lqlrtktnabwx5gfI@192.168.33.12:5432/openstreetmap"
+      "conn": "osmapidb://vagrant:vagrant!@192.168.33.12:5432/openstreetmap"
     }
   },
   "formats": {

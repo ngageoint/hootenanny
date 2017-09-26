@@ -401,9 +401,9 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
       }
     }
 
-    if (qName == "node")
+    if (qName == QLatin1String("node"))
     {
-      if (attributes.value("action") != "delete")
+      if (attributes.value("action") != QLatin1String("delete"))
       {
         _createNode(attributes);
       }
@@ -412,9 +412,9 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
         _element.reset();
       }
     }
-    else if (qName == "way")
+    else if (qName == QLatin1String("way"))
     {
-      if (attributes.value("action") != "delete")
+      if (attributes.value("action") != QLatin1String("delete"))
       {
         _createWay(attributes);
       }
@@ -423,9 +423,9 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
         _element.reset();
       }
     }
-    else if (qName == "relation")
+    else if (qName == QLatin1String("relation"))
     {
-      if (attributes.value("action") != "delete")
+      if (attributes.value("action") != QLatin1String("delete"))
       {
         _createRelation(attributes);
       }
@@ -434,7 +434,7 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
         _element.reset();
       }
     }
-    else if (qName == "nd" && _element)
+    else if (qName == QLatin1String("nd") && _element)
     {
       long ref = _parseLong(attributes.value("ref"));
 
@@ -461,7 +461,7 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
         w->addNode(newRef);
       }
     }
-    else if (qName == "member" && _element)
+    else if (qName == QLatin1String("member") && _element)
     {
       long ref = _parseLong(attributes.value("ref"));
       QString type = attributes.value("type");
@@ -469,7 +469,7 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
 
       RelationPtr r = boost::dynamic_pointer_cast<Relation, Element>(_element);
 
-      if (type == "node")
+      if (type == QLatin1String("node"))
       {
         if (_nodeIdMap.contains(ref) == false)
         {
@@ -491,7 +491,7 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
           r->addElement(role, ElementType::Node, newRef);
         }
       }
-      else if (type == "way")
+      else if (type == QLatin1String("way"))
       {
         if (_wayIdMap.contains(ref) == false)
         {
@@ -513,7 +513,7 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
           r->addElement(role, ElementType::Way, newRef);
         }
       }
-      else if (type == "relation")
+      else if (type == QLatin1String("relation"))
       {
         // relations may be out of order so we don't check for consistency at this stage.
         long newRef = _getRelationId(ref);
@@ -534,29 +534,27 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
         logWarnCount++;
       }
     }
-    else if (qName == "tag" && _element)
+    else if (qName == QLatin1String("tag") && _element)
     {
-      const QString keyAttr = attributes.value("k").trimmed();
-      const QString valAttr = attributes.value("v").trimmed();
-      if (!keyAttr.isEmpty() && !valAttr.isEmpty())
+      const QString& key = _saveMemory(attributes.value("k").trimmed());
+      const QString& value = _saveMemory(attributes.value("v").trimmed());
+      //LOG_VART(key);
+      //LOG_VART(value);
+      if (!key.isEmpty() && !value.isEmpty())
       {
-        const QString& key = _saveMemory(keyAttr);
-        const QString& value = _saveMemory(valAttr);
-        //LOG_VART(key);
-        //LOG_VART(value);
-
         if (_useFileStatus && key == MetadataTags::HootStatus())
         {
           _element->setStatus(Status::fromString(value));
 
           if (_keepFileStatus)  { _element->setTag(key, value); }
         }
-        else if (key == "type" && _element->getElementType() == ElementType::Relation)
+        else if (key == QLatin1String("type") &&
+                 _element->getElementType() == ElementType::Relation)
         {
           RelationPtr r = boost::dynamic_pointer_cast<Relation, Element>(_element);
           r->setType(value);
 
-          if (ConfigOptions().getReaderPreserveAllTags()) { _element->setTag(key, value); }
+          if (_preserveAllTags) { _element->setTag(key, value); }
         }
         else if (key == MetadataTags::Accuracy() || key == MetadataTags::ErrorCircular())
         {
@@ -611,7 +609,7 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
         }
         else
         {
-          if (key != MetadataTags::HootId() && value != "")
+          if (key != MetadataTags::HootId() && !value.isEmpty())
           {
             //LOG_TRACE("setting tag with key: " << key << " and value: " << value);
             _element->setTag(key, value);
@@ -635,19 +633,19 @@ bool OsmXmlReader::endElement(const QString & /* namespaceURI */,
 {
   if (_element)
   {
-    if (qName == "node")
+    if (qName == QLatin1String("node"))
     {
       NodePtr n = boost::dynamic_pointer_cast<Node, Element>(_element);
       _map->addNode(n);
       LOG_VART(n);
     }
-    else if (qName == "way")
+    else if (qName == QLatin1String("way"))
     {
       WayPtr w = boost::dynamic_pointer_cast<Way, Element>(_element);
       _map->addWay(w);
       LOG_VART(w);
     }
-    else if (qName == "relation")
+    else if (qName == QLatin1String("relation"))
     {
       RelationPtr r = boost::dynamic_pointer_cast<Relation, Element>(_element);
       _map->addRelation(r);
@@ -742,7 +740,6 @@ void OsmXmlReader::_uncompressInput()
 QXmlAttributes OsmXmlReader::_streamAttributesToAttributes(
   const QXmlStreamAttributes& streamAttributes)
 {
-  //LOG_VART(streamAttributes.size());
   QXmlAttributes attributes;
   for (QXmlStreamAttributes::const_iterator itr = streamAttributes.begin();
        itr != streamAttributes.end(); ++itr)
@@ -780,8 +777,6 @@ bool OsmXmlReader::hasMoreElements()
     while (!_foundOsmHeaderXmlStartElement() && !_streamReader.atEnd())
     {
       _streamReader.readNext();
-//      LOG_TRACE(
-//        "Parsed token: " << _streamReader.name() << " of type: " << _streamReader.tokenType());
     }
     if (!_osmFound)
     {
@@ -793,17 +788,8 @@ bool OsmXmlReader::hasMoreElements()
   while (!_foundOsmElementXmlStartElement() && !_streamReader.atEnd())
   {
     _streamReader.readNext();
-//    LOG_TRACE(
-//      "Parsed token: " << _streamReader.name().toString() << " of type: " <<
-//      _streamReader.tokenType());
   }
 
-//  if (_streamReader.atEnd())
-//  {
-//    LOG_VART(_streamReader.atEnd());
-//  }
-//  LOG_VART(_streamReader.isEndElement());
-//  LOG_VART(_streamReader.name());
   if ((_streamReader.isEndElement() && _streamReader.name().toString() == "osm") ||
        _streamReader.atEnd())
   {
@@ -833,7 +819,8 @@ bool OsmXmlReader::_foundOsmElementXmlStartElement() const
   const QString xmlElementName = _streamReader.name().toString();
   return
     _streamReader.isStartElement() &&
-    (xmlElementName == "node" || xmlElementName == "way" || xmlElementName == "relation");
+    (xmlElementName == QLatin1String("node") || xmlElementName == QLatin1String("way") ||
+     xmlElementName == QLatin1String("relation"));
 }
 
 bool OsmXmlReader::_foundOsmElementXmlEndElement() const
@@ -841,7 +828,8 @@ bool OsmXmlReader::_foundOsmElementXmlEndElement() const
   const QString xmlElementName = _streamReader.name().toString();
   return
     _streamReader.isEndElement() &&
-    (xmlElementName == "node" || xmlElementName == "way" || xmlElementName == "relation");
+    (xmlElementName == QLatin1String("node") || xmlElementName == QLatin1String("way") ||
+     xmlElementName == QLatin1String("relation"));
 }
 
 ElementPtr OsmXmlReader::readNextElement()
@@ -861,7 +849,6 @@ ElementPtr OsmXmlReader::readNextElement()
     //way nodes, or relation members...ignores the rest
     if (_streamReader.isStartElement())
     {
-      LOG_TRACE("Parsing start xml element: " << _streamReader.name().toString());
       startElement(
         "", "", _streamReader.qualifiedName().toString(),
         //this attribute conversion isn't the best for performance...but will leave as is for now
@@ -869,9 +856,6 @@ ElementPtr OsmXmlReader::readNextElement()
     }
 
     _streamReader.readNext();
-//    LOG_TRACE(
-//      "Parsed token: " << _streamReader.name().toString() << " of type: " <<
-//      _streamReader.tokenType());
   }
 
   //this should never happen here

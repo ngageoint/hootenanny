@@ -28,7 +28,9 @@
 
 // Hoot
 #include <hoot/core/io/OsmJsonReader.h>
+#include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/scoring/multiary/MultiaryMatchComparator.h>
+#include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Log.h>
 
 using namespace hoot;
@@ -45,8 +47,12 @@ class MultiaryMatchComparatorTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runOneMatchTest);
   CPPUNIT_TEST(runMatchTest1);
   CPPUNIT_TEST(runMatchTest2);
+  CPPUNIT_TEST(runMatchTest3);
   CPPUNIT_TEST(runReviewTest1);
   CPPUNIT_TEST(runReviewTest2);
+  CPPUNIT_TEST(runReviewTest3);
+  CPPUNIT_TEST(runReviewTest4);
+  CPPUNIT_TEST(runMatchMissTest1);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -196,8 +202,6 @@ public:
 
     MultiaryMatchComparator uut;
     double correct = uut.evaluateMatches(input, conflated);
-    LOG_VAR(uut.toString());
-    LOG_VAR(uut.getFScore());
     HOOT_STR_EQUALS(0.285714, correct);
     HOOT_STR_EQUALS(4, uut.getTp());
     HOOT_STR_EQUALS(5, uut.getFp());
@@ -206,6 +210,45 @@ public:
     HOOT_STR_EQUALS(14, uut.getTotalCount());
   }
 
+  /**
+   * Expected 1 cluster of 3
+   * Actual 1 cluster of 3
+   */
+  void runMatchTest3()
+  {
+    QString inputJson =
+      "{'version': 0.6,'generator': 'Overpass API','elements':[\n"
+      "{'type':'node','id': -1,'lat': 2.0,'lon': -3.0,\n"
+      "  'tags':{'hoot:status':'1', 'ID':'1-000000', 'MATCH':'1-000000', 'poi':'yes'}},\n"
+      "{'type':'node','id': -2,'lat': 2.0,'lon': -3.0,\n"
+      "  'tags':{'hoot:status':'1', 'ID':'1-000001', 'MATCH':'1-000000', 'poi':'yes'}},\n"
+      "{'type':'node','id': -3,'lat': 2.0,'lon': -3.0,\n"
+      "  'tags':{'hoot:status':'2', 'ID':'2-000000', 'MATCH':'1-000000', 'poi':'yes'}}\n"
+      "]}\n";
+
+    QString conflatedJson =
+      "{'version': 0.6,'generator': 'Overpass API','elements':[\n"
+      "{'type':'node','id': -1,'lat': 2.0,'lon': -3.0,\n"
+      "  'tags':{'hoot:status':'Conflated', 'ID':'1-000000;1-000001;2-000000', 'MATCH':'1-000000', 'poi':'yes'}}\n"
+      "]}\n";
+
+    OsmJsonReader reader;
+    reader.setDefaultStatus(Status::Unknown1);
+    OsmMapPtr input = reader.loadFromString(inputJson);
+    OsmMapPtr conflated = reader.loadFromString(conflatedJson);
+
+    MultiaryMatchComparator uut;
+    double correct = uut.evaluateMatches(input, conflated);
+    HOOT_STR_EQUALS(false, conflated->getNode(-1)->getTags().contains(MetadataTags::HootWrong()));
+    LOG_VAR(OsmJsonWriter().toString(conflated));
+    LOG_VAR(uut.toString());
+    HOOT_STR_EQUALS(1, correct);
+    HOOT_STR_EQUALS(3, uut.getTp());
+    HOOT_STR_EQUALS(0, uut.getFp());
+    HOOT_STR_EQUALS(0, uut.getFn());
+    // this doesn't include True Negatives
+    HOOT_STR_EQUALS(3, uut.getTotalCount());
+  }
 
   /**
    * Expected 1 clusters of 2 and two reviews.
@@ -222,7 +265,7 @@ public:
       "{'type':'node','id': -3,'lat': 2.0,'lon': -3.0,\n"
       "  'tags':{'hoot:status':'1', 'ID':'1-000002', 'MATCH':'none', 'poi':'yes'}},\n"
       "{'type':'node','id': -4,'lat': 2.0,'lon': -3.0,\n"
-      "  'tags':{'hoot:status':'2', 'ID':'2-000000', 'REVIEW':'1-000000;1-000002', 'poi':'yes'}}\n"
+      "  'tags':{'hoot:status':'2', 'ID':'2-000000', 'MATCH':'none', 'REVIEW':'1-000000;1-000002', 'poi':'yes'}}\n"
       "]}\n";
 
     QString conflatedJson =
@@ -256,17 +299,20 @@ public:
     double correct = uut.evaluateMatches(input, conflated);
     LOG_VAR(uut.toString());
     LOG_VAR(uut.getFScore());
-    HOOT_STR_EQUALS(1, correct);
+    // this is arguable. We aren't explicitly stating that 2-000000 should be reviewed against
+    // 1-000001, but it is being implicitly reviewed because of the 1-000000 vs 1-000001 match.
+    // this leads to one unexpected review and an error.
+    HOOT_STR_EQUALS(.75, correct);
     HOOT_STR_EQUALS(3, uut.getTp());
-    HOOT_STR_EQUALS(0, uut.getFp());
+    HOOT_STR_EQUALS(1, uut.getFp());
     HOOT_STR_EQUALS(0, uut.getFn());
     // this doesn't include True Negatives
-    HOOT_STR_EQUALS(3, uut.getTotalCount());
+    HOOT_STR_EQUALS(4, uut.getTotalCount());
   }
 
   /**
-   * Expected 1 clusters of 2 and two reviews.
-   * Actual 1 clusters of 2 and two reviews.
+   * Expected 1 clusters of 2 and one review.
+   * Actual 1 clusters of 2 and one incorrect reviews.
    */
   void runReviewTest2()
   {
@@ -279,7 +325,7 @@ public:
       "{'type':'node','id': -3,'lat': 2.0,'lon': -3.0,\n"
       "  'tags':{'hoot:status':'1', 'ID':'1-000002', 'MATCH':'none', 'poi':'yes'}},\n"
       "{'type':'node','id': -4,'lat': 2.0,'lon': -3.0,\n"
-      "  'tags':{'hoot:status':'2', 'ID':'2-000000', 'REVIEW':'1-000002', 'poi':'yes'}}\n"
+      "  'tags':{'hoot:status':'2', 'ID':'2-000000', 'MATCH':'none', 'REVIEW':'1-000002', 'poi':'yes'}}\n"
       "]}\n";
 
     QString conflatedJson =
@@ -289,7 +335,7 @@ public:
       "{'type':'node','id': -3,'lat': 2.0,'lon': -3.0,\n"
       "  'tags':{'hoot:status':'1', 'ID':'1-000002', 'MATCH':'none', 'poi':'yes'}},\n"
       "{'type':'node','id': -4,'lat': 2.0,'lon': -3.0,\n"
-      "  'tags':{'hoot:status':'2', 'ID':'2-000000', 'REVIEW':'1-000000;1-000002', 'poi':'yes'}},\n"
+      "  'tags':{'hoot:status':'2', 'ID':'2-000000', 'REVIEW':'1-000002', 'poi':'yes'}},\n"
       "{'type': 'relation','id': -1,'members': [\n"
       "  {'type': 'node', 'ref': -1, 'role': 'reviewee'},\n"
       "  {'type': 'node', 'ref': -4, 'role': 'reviewee'}\n"
@@ -306,13 +352,181 @@ public:
 
     MultiaryMatchComparator uut;
     double correct = uut.evaluateMatches(input, conflated);
-    HOOT_STR_EQUALS(0.33333333, correct);
-    HOOT_STR_EQUALS(0.5, uut.getFScore());
+    LOG_VAR(uut.toString());
+    LOG_VAR(uut.getFScore());
+    HOOT_STR_EQUALS(0.25, correct);
+    HOOT_STR_EQUALS(0.4, uut.getFScore());
     HOOT_STR_EQUALS(1, uut.getTp());
-    HOOT_STR_EQUALS(1, uut.getFp());
+    HOOT_STR_EQUALS(2, uut.getFp());
     HOOT_STR_EQUALS(1, uut.getFn());
     // this doesn't include True Negatives
+    HOOT_STR_EQUALS(4, uut.getTotalCount());
+  }
+
+
+  /**
+   * Expected 1 clusters of 2.
+   * Actual 1 review.
+   */
+  void runReviewTest3()
+  {
+    QString inputJson =
+      "{'version': 0.6,'generator': 'Overpass API','elements':[\n"
+      "{'type':'node','id': -1,'lat': 2.0,'lon': -3.0,\n"
+      "  'tags':{'hoot:status':'1', 'ID':'1-000000', 'MATCH':'1-000000', 'poi':'yes'}},\n"
+      "{'type':'node','id': -2,'lat': 2.0,'lon': -3.0,\n"
+      "  'tags':{'hoot:status':'1', 'ID':'1-000001', 'MATCH':'1-000000', 'poi':'yes'}}\n"
+      "]}\n";
+
+    QString conflatedJson =
+      "{'version': 0.6,'generator': 'Overpass API','elements':[\n"
+      "{'type':'node','id': -1,'lat': 2.0,'lon': -3.0,\n"
+      "  'tags':{'hoot:status':'Conflated', 'ID':'1-000000', 'MATCH':'1-000000', 'poi':'yes'}},\n"
+      "{'type':'node','id': -2,'lat': 2.0,'lon': -3.0,\n"
+      "  'tags':{'hoot:status':'1', 'ID':'1-000001', 'MATCH':'1-000000', 'poi':'yes'}},\n"
+      "{'type': 'relation','id': -1,'members': [\n"
+      "  {'type': 'node', 'ref': -1, 'role': 'reviewee'},\n"
+      "  {'type': 'node', 'ref': -2, 'role': 'reviewee'}\n"
+      "],\n"
+      "  'tags':{'hoot:review:needs':'yes', 'hoot:review:members':'2', 'hoot:review:score':'1', 'type':'review'}}\n"
+      "]}\n";
+
+    OsmJsonReader reader;
+    reader.setDefaultStatus(Status::Unknown1);
+    OsmMapPtr input = reader.loadFromString(inputJson);
+    input->getNode(-2)->setStatus(Status::Unknown2);
+    OsmMapPtr conflated = reader.loadFromString(conflatedJson);
+    conflated->getNode(-2)->setStatus(Status::Unknown2);
+
+    MultiaryMatchComparator uut;
+    double correct = uut.evaluateMatches(input, conflated);
+
+    LOG_VAR(OsmJsonWriter().toString(conflated));
+    HOOT_STR_EQUALS(0, correct);
+    HOOT_STR_EQUALS(0, uut.getFScore());
+    HOOT_STR_EQUALS(0, uut.getTp());
+    HOOT_STR_EQUALS(0, uut.getFp());
+    HOOT_STR_EQUALS(1, uut.getFn());
+    // this doesn't include True Negatives
+    HOOT_STR_EQUALS(1, uut.getTotalCount());
+  }
+
+  /**
+   * Expected 1 clusters of 2.
+   * Actual 1 review.
+   */
+  void runReviewTest4()
+  {
+    QString translationScript = ConfPath::getHootHome() + "/translation-local/HGISv20.js";
+
+    if (QFile::exists(translationScript) == false)
+    {
+      LOG_INFO("HGIS translation script doesn't exist, skipping "
+        "MultiaryMatchComparatorTest::runReviewTest4.");
+      return;
+    }
+
+    QString inputJson =
+      "{'version': 0.6,'generator': 'Overpass API','elements':[\n"
+      "{'type':'node','id': -1,'lat': 2.0,'lon': -3.0,\n"
+      "  'tags':{'hoot:status':'1', 'ID':'1-000000', 'MATCH':'1-000000', 'poi':'yes'}},\n"
+      "{'type':'node','id': -2,'lat': 2.0,'lon': -3.0,\n"
+      "  'tags':{'hoot:status':'1', 'ID':'1-000001', 'MATCH':'1-000000', 'poi':'yes'}},\n"
+      "{'type':'node','id': -3,'lat': 2.0,'lon': -3.0,\n"
+      "  'tags':{'hoot:status':'1', 'ID':'1-000002', 'MATCH':'1-000000', 'poi':'yes'}}\n"
+      "]}\n";
+
+    QString conflatedJson =
+      "{'version': 0.6,'generator': 'Overpass API','elements':[\n"
+      "{'type':'node','id': -1,'lat': 2.0,'lon': -3.0,\n"
+      "  'tags':{'hoot:status':'Conflated', 'ID':'1-000000;1-000002', 'MATCH':'1-000000', 'poi':'yes'}},\n"
+      "{'type':'node','id': -2,'lat': 2.0,'lon': -3.0,\n"
+      "  'tags':{'hoot:status':'1', 'ID':'1-000001', 'MATCH':'1-000000', 'poi':'yes'}},\n"
+      "{'type': 'relation','id': -1,'members': [\n"
+      "  {'type': 'node', 'ref': -1, 'role': 'reviewee'},\n"
+      "  {'type': 'node', 'ref': -2, 'role': 'reviewee'}\n"
+      "],\n"
+      "  'tags':{'hoot:review:needs':'yes', 'hoot:review:members':'2', 'hoot:review:score':'1', 'type':'review'}}\n"
+      "]}\n";
+
+    OsmJsonReader reader;
+    reader.setDefaultStatus(Status::Unknown1);
+    OsmMapPtr input = reader.loadFromString(inputJson);
+    input->getNode(-2)->setStatus(Status::Unknown2);
+    OsmMapPtr conflated = reader.loadFromString(conflatedJson);
+    conflated->getNode(-2)->setStatus(Status::Unknown2);
+
+    MultiaryMatchComparator uut;
+
+    uut.setTranslationScript(translationScript);
+    double correct = uut.evaluateMatches(input, conflated);
+
+    LOG_VAR(OsmJsonWriter().toString(conflated));
+    LOG_VAR(uut.toString());
+    HOOT_STR_EQUALS(1.0 / 3.0, correct);
+    HOOT_STR_EQUALS(.5, uut.getFScore());
+    HOOT_STR_EQUALS(1, uut.getTp());
+    HOOT_STR_EQUALS(0, uut.getFp());
+    HOOT_STR_EQUALS(2, uut.getFn());
+    // this doesn't include True Negatives
     HOOT_STR_EQUALS(3, uut.getTotalCount());
+  }
+
+  /**
+   * Expected no matches.
+   * Actual 1 cluster of 5.
+   *
+   * There are 10 reported false postives here for this reason:
+   *
+   * 1. -1 to -2
+   * 2. -1 to -3
+   * 3. -1 to -4
+   * 4. -1 to -5
+   * 5. -2 to -3
+   * 6. -2 to -4
+   * 7. -2 to -5
+   * 8. -3 to -4
+   * 9. -3 to -5
+   * 10. -4 to -5
+   */
+  void runMatchMissTest1()
+  {
+    QString inputJson =
+      "{'version': 0.6,'generator': 'Overpass API','elements':[\n"
+      "{'type':'node','id': -1,'lat': 2.0,'lon': -3.0,\n"
+      "  'tags':{'hoot:status':'1', 'ID':'1-000000', 'MATCH':'none', 'poi':'yes'}},\n"
+      "{'type':'node','id': -2,'lat': 2.0,'lon': -3.0,\n"
+      "  'tags':{'hoot:status':'1', 'ID':'1-000001', 'MATCH':'none', 'poi':'yes'}},\n"
+      "{'type':'node','id': -3,'lat': 2.0,'lon': -3.0,\n"
+      "  'tags':{'hoot:status':'1', 'ID':'1-000002', 'MATCH':'none', 'poi':'yes'}},\n"
+      "{'type':'node','id': -4,'lat': 2.0,'lon': -3.0,\n"
+      "  'tags':{'hoot:status':'1', 'ID':'1-000003', 'MATCH':'none', 'poi':'yes'}},\n"
+      "{'type':'node','id': -5,'lat': 2.0,'lon': -3.0,\n"
+      "  'tags':{'hoot:status':'1', 'ID':'1-000004', 'MATCH':'none', 'poi':'yes'}}\n"
+      "]}\n";
+
+    QString conflatedJson =
+      "{'version': 0.6,'generator': 'Overpass API','elements':[\n"
+      "{'type':'node','id': -1,'lat': 2.0,'lon': -3.0,\n"
+      "  'tags':{'hoot:status':'Conflated', 'ID':'1-000000;1-000001;1-000002;1-000003;1-000004', 'MATCH':'none', 'poi':'yes'}}\n"
+      "]}\n";
+
+    OsmJsonReader reader;
+    reader.setDefaultStatus(Status::Unknown1);
+    OsmMapPtr input = reader.loadFromString(inputJson);
+    OsmMapPtr conflated = reader.loadFromString(conflatedJson);
+
+    MultiaryMatchComparator uut;
+    double correct = uut.evaluateMatches(input, conflated);
+    LOG_VAR(uut.toString());
+    LOG_VAR(uut.getFScore());
+    HOOT_STR_EQUALS(0, correct);
+    HOOT_STR_EQUALS(0, uut.getFScore());
+    HOOT_STR_EQUALS(0, uut.getTp());
+    HOOT_STR_EQUALS(10, uut.getFp());
+    HOOT_STR_EQUALS(0, uut.getFn());
+    // this doesn't include True Negatives
+    HOOT_STR_EQUALS(10, uut.getTotalCount());
   }
 };
 

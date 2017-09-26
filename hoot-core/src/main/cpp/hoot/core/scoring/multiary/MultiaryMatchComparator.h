@@ -134,6 +134,12 @@ public:
   void setTagErrors(bool tagErrors) { _tagErrors = tagErrors; }
 
   /**
+   * The script to use to determine the category of a feature. This can produce category based
+   * confusion matrices.
+   */
+  void setTranslationScript(QString t) { _translationScript = t; }
+
+  /**
    * Returns a bunch of info including the confusion matrix.
    */
   QString toString() const;
@@ -208,10 +214,16 @@ private:
   QHash<QString, IdClusterPtr> _expectedMatchGroups;
   ReviewClusterIndex _expectedReviews;
 
+  typedef QHash<int, QHash<int, int> > ConfusionTable;
+
   /**
    * Confusion matrix with [actual][expected]
    */
-  std::vector< std::vector<int> > _confusion;
+  ConfusionTable _confusion;
+
+  QMap<ElementType::Type, long> _elementWrongCounts;
+
+  QString _nodeBasedStatsResult;
 
   /**
    * Matrix of wrong values. The data is arranged as [row][col] where row <= col. Using
@@ -225,7 +237,15 @@ private:
   /// True if errors should be tagged on the elements.
   bool _tagErrors;
 
-  QMap<ElementType::Type, long> _elementWrongCounts;
+  QString _translationScript;
+
+  void _addToConfusionTable(const ConfusionTable& x, ConfusionTable& addTo) const;
+
+  /**
+   * Given the assigned "hoot:wrong" labels, calculate node base stats. These are easier to
+   * understand, but give less information about the algorithm.
+   */
+  void _calculateNodeBasedStats(const ConstOsmMapPtr& conflated);
 
   /// clear out all the cached data.
   void _clearCache();
@@ -242,8 +262,25 @@ private:
   /// Return all the IDs on a given element. Returns an empty list if there are none.
   static QList<QString> _getAllIds(ConstElementPtr e);
 
+  /**
+   * Print the confusion table in the redmine style of table output.
+   *
+   * @emptyMissMiss - If true the miss/miss cell is filled with a "-" instead a number.
+   */
+  QString _printConfusionTable(const ConfusionTable& x, bool emptyMissMiss = false) const;
+
   void _setElementWrongCounts(const ConstOsmMapPtr& map);
   void _setElementWrongCount(const ConstOsmMapPtr& map, const ElementType::Type& elementType);
+
+  /**
+   * Tag the element that contains the specified ID as containing a correct review.
+   *
+   * If _tagErrors is false, nothing happens.
+   *
+   * @param map The map that contains the element.
+   * @param id The ID of the element to mark as wrong.
+   */
+  void _tagReview(const OsmMapPtr &map, const QString &id, QString value);
 
   /**
    * Tag the element that contains the specified ID as wrong.
@@ -253,7 +290,7 @@ private:
    * @param map The map that contains the element.
    * @param id The ID of the element to mark as wrong.
    */
-  void _tagWrong(const OsmMapPtr &map, const QString &id);
+  void _tagWrong(const OsmMapPtr &map, const QString &id, QString value);
 
   /**
    * Convenience method to convert a std::set to QSet.

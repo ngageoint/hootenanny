@@ -350,7 +350,7 @@ geonames.rules = {
         'MFGSG':{'building':'industrial','product':'sugar'}, //  sugar refinery: a facility for converting raw sugar into refined sugar
         'MGV':{'natural':'wetland','wetland':'mangrove'}, //  mangrove swamp: a tropical tidal mud flat characterized by mangrove vegetation
         'MILB':{'military':'base'}, //  military base: a place used by an army or other armed service for storing arms and supplies, and for accommodating and training troops, a base from which operations can be initiated
-        'MKT':{'amenity':'market_place'}, //  market: a place where goods are bought and sold at regular intervals
+        'MKT':{'amenity':'marketplace'}, //  market: a place where goods are bought and sold at regular intervals
         'MLM':{'building':'industrial','use':'ore_treatment'}, //  ore treatment plant: a facility for improving the metal content of ore by concentration
         'MLO':{'building':'industrial','product':'olive_oil'}, //  olive oil mill: a mill where oil is extracted from olives
         'ML':{'building':'industrial','use':'mill'}, //  mill(s): a building housing machines for transforming, shaping, finishing, grinding, or extracting products

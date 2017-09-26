@@ -27,10 +27,6 @@
 #ifndef MULTIARYINGESTER_H
 #define MULTIARYINGESTER_H
 
-// Hoot
-#include <hoot/core/io/Change.h>
-#include <hoot/core/io/HootApiDb.h>
-
 // Qt
 #include <QElapsedTimer>
 #include <QTemporaryFile>
@@ -42,24 +38,17 @@ class ElementInputStream;
 
 /**
  * This class ingests data into the Multiary POI conflation workflow.  It takes a supported
- * data input, a reference database layer, and a changeset output location.  The input is
- * filtered down to POIs only and translated to OSM, then sorted by element ID (if not already).
- * Finally, the input data is then compared to the database ref layer in order to derive the
- * difference between the two in the form of a changeset.  The changeset changes are written both
- * to the reference layer as features and to a changeset output file as change statements for later
- * use by Spark.  Alternatively, if the specified database reference layer is empty, no changeset
- * is derived and the entire contents of the data input are simply written directly to the
- * reference layer.
+ * data input, a reference database layer, a changeset output location, and an optional translation
+ * script.  The input is filtered down to POIs only and translated to OSM, then sorted by element
+ * ID (if not already).  Finally, the input data is then compared to the database ref layer in
+ * order to derive the difference between the two in the form of a changeset.  The changeset
+ * changes are written both to the reference layer as features and to a changeset output file as
+ * change statements for later use by Spark.  Alternatively, if the specified database reference
+ * layer is empty, no changeset is derived and the entire contents of the data input are simply
+ * written directly to the reference layer.
  *
  * This class requires that the input be a streamable format, the output layer be a Hootenanny
  * API database layer, and the changeset output format be a Spark changeset.
- *
- * This class uses the Unix sort command to sort the geonames input, which is possible due to the
- * single line records.  Osmosis is used for sorting OSM files.  This could be replaced with a
- * custom file based merge sort routine in the future to reduce the dependency on Osmosis, but
- * for now using it is the best solution.  There is no good solution yet for sorting OGR inputs.
- * Those inputs must be converted to an OSM format before sorting, which unfortunately roughly
- * doubles the input parsing time.
  */
 class MultiaryIngester
 {
@@ -72,16 +61,15 @@ public:
    * Ingests multiary POI data
    *
    * @param newInput path to the input data; must be a streamable format
+   * @param translationScript script used to translate the input data into OSM
    * @param referenceOutput path to the output data; must be a Hootenanny API database
    * @param changesetOuput path to the output changeset; must be a Spark changeset
-   * @param sortInput if true, the input is sorted by element ID
    */
-  void ingest(const QString newInput, const QString referenceOutput, const QString changesetOuput,
-              const bool sortInput = true);
+  void ingest(const QString newInput, const QString translationScript,
+              const QString referenceOutput, const QString changesetOuput);
 
 private:
 
-  bool _sortInput;
   QString _sortedNewInput;
   boost::shared_ptr<QTemporaryFile> _sortTempFile;
 
@@ -112,8 +100,8 @@ private:
 
   void _sortInputFile(const QString input);
 
-  void _doInputErrorChecking(const QString newInput, const QString referenceOutput,
-                             const QString changesetOutput);
+  void _doInputErrorChecking(const QString newInput, const QString translationScript,
+                             const QString referenceOutput, const QString changesetOutput);
 };
 
 }

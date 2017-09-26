@@ -1875,6 +1875,9 @@ tds = {
             tds.configIn = {};
             tds.configIn.OgrDebugAddfcode = config.getOgrDebugAddfcode();
             tds.configIn.OgrDebugDumptags = config.getOgrDebugDumptags();
+
+            // Get any changes
+            tds.toChange = hoot.Settings.get("translation.override");
         }
 
         // Debug:
@@ -1982,6 +1985,9 @@ tds = {
             print('');
         }
 
+        // Override tag values if appropriate
+        translate.overrideValues(tags,tds.toChange);
+
         return tags;
     }, // End of toOsm
 
@@ -2008,6 +2014,10 @@ tds = {
             tds.configOut.OgrSplitO2s = config.getOgrSplitO2s();
             tds.configOut.OgrThematicStructure = config.getOgrThematicStructure();
             tds.configOut.OgrThrowError = config.getOgrThrowError();
+
+            // Get any changes to OSM tags
+            // NOTE: the rest of the config variables will change to this style of assignment soon
+            tds.toChange = hoot.Settings.get("translation.override");
         }
 
         // Check if we have a schema. This is a quick way to workout if various lookup tables have been built
@@ -2053,6 +2063,9 @@ tds = {
             // Debug
             // translate.dumpOne2OneLookup(tds.lookup);
         }
+
+        // Override values if appropriate
+        translate.overrideValues(tags,tds.toChange);
 
         // Pre Processing
         tds.applyToTdsPreProcessing(tags, attrs, geometryType);
