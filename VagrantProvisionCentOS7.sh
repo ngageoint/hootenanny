@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 VMUSER=`id -u -n`
 echo USER: $VMUSER
 VMGROUP=`groups | grep -o $VMUSER`
@@ -9,6 +8,9 @@ HOOT_HOME=~/hoot
 echo HOOT_HOME: $HOOT_HOME
 cd ~
 source ~/.bash_profile
+
+export LANG=en_US.UTF-8
+
 
 # Keep VagrantBuild.sh happy
 #ln -s ~/.bash_profile ~/.profile
@@ -27,6 +29,7 @@ sudo yum -q -y update >> CentOS_upgrade.txt 2>&1
 echo "### Upgrade ###" >> CentOS_upgrade.txt
 sudo yum -q -y upgrade >> CentOS_upgrade.txt 2>&1
 
+
 echo "### Setup NTP..."
 sudo yum -q -y install ntp
 sudo chkconfig ntpd on
@@ -34,7 +37,6 @@ sudo chkconfig ntpd on
 sudo systemctl stop ntpd
 sudo ntpd -gq
 sudo systemctl start ntpd
-
 
 # Make sure that we are in ~ before trying to wget & install stuff
 cd ~
@@ -64,6 +66,7 @@ sudo yum versionlock nodejs*
 
 # install useful and needed packages for working with hootenanny
 echo "### Installing dependencies from repos..."
+sudo localedef -i en_US -f UTF-8 en_US.UTF-8
 sudo yum -y install \
     asciidoc \
     autoconf \
@@ -91,6 +94,7 @@ sudo yum -y install \
     libtool \
     m4 \
     maven \
+    mlocate \
     opencv \
     opencv-core \
     opencv-devel \
@@ -120,6 +124,7 @@ sudo yum -y install \
     tex* \
     unzip \
     v8-devel \
+    vim \
     w3m \
     wget \
     words \
@@ -431,7 +436,10 @@ cd /tmp # Stop postgres "could not change directory to" warnings
 
 # NOTE: These have been changed to pg9.5
 # Postgresql startup
-sudo /usr/pgsql-$PG_VERSION/bin/postgresql95-setup initdb
+#PGSETUP_INITDB_OPTIONS="-E 'UTF-8' --lc-collate='en_US.UTF-8' --lc-ctype='en_US.UTF-8'"
+
+
+sudo PGSETUP_INITDB_OPTIONS="-E 'UTF-8' --lc-collate='en_US.UTF-8' --lc-ctype='en_US.UTF-8'" /usr/pgsql-$PG_VERSION/bin/postgresql95-setup initdb
 sudo systemctl start postgresql-$PG_VERSION
 sudo systemctl enable postgresql-$PG_VERSION
 
@@ -492,7 +500,9 @@ EOT
 fi
 
 # configure kernel parameters
+
 SYSCTL_CONF=/etc/sysctl.conf
+sudo touch $SYSCTL_CONF
 if ! grep --quiet 1173741824 $SYSCTL_CONF; then
     sudo cp $SYSCTL_CONF $SYSCTL_CONF.orig
     echo "Setting kernel.shmmax"
@@ -506,6 +516,8 @@ if ! grep --quiet 2097152 $SYSCTL_CONF; then
     sudo sh -c "echo 'kernel.shmall=2097152' >> $SYSCTL_CONF"
     #                 kernel.shmall=4294967296
 fi
+
+echo "Restarting postgres"
 sudo systemctl restart postgresql-$PG_VERSION
 
 ##### Hadoop #####
@@ -664,7 +676,11 @@ fi
 
 
 # Get ready to build Hoot
+
+echo "SetupEnv.sh"
 cd $HOOT_HOME
+echo "$HOOT_HOME"
+echo `pwd`
 source ./SetupEnv.sh
 
 if [ ! "$(ls -A hoot-ui)" ]; then
