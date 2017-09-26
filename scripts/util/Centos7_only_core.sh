@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+set -e
+set -x
+
 #
 # Hootenanny Core Only configure and build script
 #
@@ -122,6 +125,7 @@ sudo yum -y install \
     automake \
     bc \
     boost-devel \
+    bzip2 \
     ccache \
     cmake \
     cppunit-devel \
@@ -418,7 +422,7 @@ if [ ! -f bin/osmosis ]; then
     echo "### Installing Osmosis"
     mkdir -p ~/bin/osmosis_src
 
-    if [ -f $SRC_DIR/osmosis-latest.tgz ]; then
+    if [ -f "$SRC_DIR/osmosis-latest.tgz" ]; then
       tar -zxf $SRC_DIR/osmosis-latest.tgz -C ~/bin/osmosis_src
     elif [ -f ./osmosis-latest.tgz ]; then
       tar -zxf ./osmosis-latest.tgz -C ~/bin/osmosis_src
@@ -436,12 +440,12 @@ PG_VERSION=9.5
 
 if ! grep --quiet "psql-" ~/.bash_profile; then
     echo "Adding PostGres path vars to profile..."
-    echo "export PATH=\$PATH:/usr/pgsql-$PG_VERSION/bin" >> ~/.bash_profile
+    echo "export PATH=\$PATH:/usr/pgsql-${PG_VERSION}/bin" >> ~/.bash_profile
     source ~/.bash_profile
 fi
 
-if [ ! -f /etc/ld.so.conf.d/postgres$PG_VERSION.conf ]; then
-    sudo sh -c "echo '/usr/pgsql-$PG_VERSION/lib' > /etc/ld.so.conf.d/postgres$PG_VERSION.conf"
+if [ ! -f /etc/ld.so.conf.d/postgres${PG_VERSION}.conf ]; then
+    sudo sh -c "echo '/usr/pgsql-${PG_VERSION}/lib' > /etc/ld.so.conf.d/postgres${PG_VERSION}.conf"
     sudo ldconfig
 fi
 
@@ -450,30 +454,32 @@ GDAL_VERSION=2.1.4
 FGDB_VERSION=1.5.1
 FGDB_VERSION2=`echo $FGDB_VERSION | sed 's/\./_/g;'`
 
-if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --version | grep -q $GDAL_VERSION && ogrinfo --formats | grep -q FileGDB ); then
-    if [ ! -d gdal-$GDAL_VERSION ]; then
-        if [ -f $SRC_DIR/gdal-$GDAL_VERSION.tar.gz ]; then
+if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --version | grep -q ${GDAL_VERSION} && ogrinfo --formats | grep -q FileGDB ); then
+    if [ ! -d gdal-${GDAL_VERSION} ]; then
+        if [ -f "$SRC_DIR/gdal-${GDAL_VERSION}.tar.gz" ]; then
             echo "### Extracting GDAL $GDAL_VERSION source..."
-            tar zxfp $SRC_DIR/gdal-$GDAL_VERSION.tar.gz
-        elif [ -f ./gdal-$GDAL_VERSION.tar.gz ]; then
+            tar zxfp $SRC_DIR/gdal-${GDAL_VERSION}.tar.gz
+        elif [ -f "./gdal-${GDAL_VERSION}.tar.gz" ]; then
             echo "### Extracting GDAL $GDAL_VERSION source..."
-            tar zxfp ./gdal-$GDAL_VERSION.tar.gz
+            tar zxfp ./gdal-${GDAL_VERSION}.tar.gz
         else
             echo "### Downloading GDAL $GDAL_VERSION source..."
-            wget --quiet http://download.osgeo.org/gdal/$GDAL_VERSION/gdal-$GDAL_VERSION.tar.gz
+            wget --quiet http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION}.tar.gz
             echo "### Extracting GDAL $GDAL_VERSION source..."
-            tar zxfp ./gdal-$GDAL_VERSION.tar.gz
+            tar zxfp ./gdal-${GDAL_VERSION}.tar.gz
         fi
     fi # GDAL dir
 
     if [ ! -d /usr/local/FileGDB_API ]; then
-        if [ ! -f FileGDB_API_${FGDB_VERSION2}-64.tar.gz ]; then
+        if [ -f "$SRC_DIR/FileGDB_API_${FGDB_VERSION2}-64.tar.gz" ]; then
+            echo "### Extracting FileGDB API source & installing lib..."
+            sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp $SRC_DIR/FileGDB_API_${FGDB_VERSION2}-64.tar.gz --directory /usr/local/FileGDB_API --strip-components 1
+        elif [ ! -f "FileGDB_API_${FGDB_VERSION2}-64.tar.gz" ]; then
             echo "### Downloading FileGDB API source..."
             wget --quiet https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_${FGDB_VERSION}/FileGDB_API_${FGDB_VERSION2}-64.tar.gz
+            echo "### Extracting FileGDB API source & installing lib..."
+            sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp FileGDB_API_${FGDB_VERSION2}-64.tar.gz --directory /usr/local/FileGDB_API --strip-components 1
         fi
-
-        echo "### Extracting FileGDB API source & installing lib..."
-        sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp FileGDB_API_${FGDB_VERSION2}-64.tar.gz --directory /usr/local/FileGDB_API --strip-components 1
         sudo sh -c "echo '/usr/local/FileGDB_API/lib' > /etc/ld.so.conf.d/filegdb.conf"
     fi
 
@@ -482,7 +488,7 @@ if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --version | grep -q $GDAL_VERSIO
     cd gdal-$GDAL_VERSION
     touch config.rpath
     echo "GDAL: configure"
-    sudo ./configure --quiet --with-fgdb=/usr/local/FileGDB_API --with-pg=/usr/pgsql-$PG_VERSION/bin/pg_config --with-python CFLAGS='-std=c11' CXXFLAGS='-std=c++11'
+    sudo ./configure --quiet --with-fgdb=/usr/local/FileGDB_API --with-pg=/usr/pgsql-${PG_VERSION}/bin/pg_config --with-python CFLAGS='-std=c11' CXXFLAGS='-std=c++11'
     echo "GDAL: make"
     sudo make -sj$(nproc) > GDAL_Build.txt 2>&1
     echo "GDAL: install"
