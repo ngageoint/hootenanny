@@ -40,18 +40,13 @@ class MultiaryReviewCommandTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(MultiaryReviewCommandTest);
   CPPUNIT_TEST(basicTest);
+  CPPUNIT_TEST(hashTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  /**
-   * @brief basicTest creates a few review commands, exports them to strings, then recreates them
-   * from those strings again.
-   */
-  void basicTest()
+  OsmMapPtr getTestMap()
   {
-    TestUtils::resetEnvironment();
-
     QString testJsonStr =
       "{                                      \n"
       " 'elements': [                         \n"
@@ -68,6 +63,17 @@ public:
       "]                                      \n"
       "}                                      \n";
     OsmMapPtr pMap = OsmJsonReader().loadFromString(testJsonStr);
+    return pMap;
+  }
+
+  /**
+   * @brief basicTest creates a few review commands, exports them to strings, then recreates them
+   * from those strings again.
+   */
+  void basicTest()
+  {
+    TestUtils::resetEnvironment();
+    OsmMapPtr pMap = getTestMap();
 
     MultiaryReviewCommand missCmd, matchCmd, modifyCmd, deleteCmd;
 
@@ -115,8 +121,29 @@ public:
     CPPUNIT_ASSERT(deleteCmd == testDelete);
   }
 
+  /**
+   * @brief hashTest checks to make sure we are handling byte-array-hashes and hashes-as-strings
+   * and converting to/from hex representations appropriately.
+   */
+  void hashTest()
+  {
+    TestUtils::resetEnvironment();
+    OsmMapPtr pMap = getTestMap();
+
+    MultiaryReviewCommand matchCmd;
+
+    matchCmd.setOp(MultiaryReviewCommand::Match);
+    matchCmd.addElementHash(pMap->getElement(ElementType::Node, -1));
+    matchCmd.addElementHash(pMap->getElement(ElementType::Node, -2));
+
+    QByteArray hashBytes = *(matchCmd.getElementHashes().begin());
+    QString hashString = pMap->getElement(ElementType::Node, -2)->getTags()[MetadataTags::HootHash()];
+    hashString.replace("sha1sum:", "");
+
+    CPPUNIT_ASSERT(hashString == QString(hashBytes.toHex()));
+  }
+
   //@TODO: Create a test that applies commands to a map
-  //@TODO: Create a test that verifies
 
 };
 
