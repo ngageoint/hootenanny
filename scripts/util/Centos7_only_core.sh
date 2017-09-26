@@ -48,26 +48,36 @@
 # From: https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_1.5.1/FileGDB_API_1_5_1-64.tar.gz
 #
 
+# Setup some "local" config stuff. This directory has RPMs and source for things that have been already downloaded
+# so we don't have to try to download them again.
+# NOTE: This is _VERY_ site specific. DO NOT USE THIS UNLESS YOU _REALLY_ KNOW WHAT YOU ARE DOING
+SRC_DIR=/home/centos/hoot-deps
+
+
 VMUSER=`id -u -n`
 echo USER: $VMUSER
 VMGROUP=`groups | grep -o $VMUSER`
 echo GROUP: $VMGROUP
 
+# This is not optimal
 HOOT_HOME=~/hoot
 echo HOOT_HOME: $HOOT_HOME
+
 cd ~
 source ~/.bash_profile
 
 # Keep VagrantBuild.sh happy
 #ln -s ~/.bash_profile ~/.profile
 
-# add EPEL repo for extra packages
-echo "### Add epel repo ###" > CentOS_upgrade.txt
-sudo yum -y install epel-release >> CentOS_upgrade.txt 2>&1
+# add EPEL repo for extra packages - ONLY if we DONT have SRC_DIR
+if [ ! -d "$SRC_DIR" ] ; then
+    echo "### Add epel repo ###" > CentOS_upgrade.txt
+    sudo yum -y install epel-release >> CentOS_upgrade.txt 2>&1
 
-# add the Postgres repo
-echo "### Add Postgres repo ###" > CentOS_upgrade.txt
-sudo rpm -Uvh http://yum.postgresql.org/9.5/redhat/rhel-7-x86_64/pgdg-centos95-9.5-3.noarch.rpm >> CentOS_upgrade.txt 2>&1
+    # add the Postgres repo
+    echo "### Add Postgres repo ###" > CentOS_upgrade.txt
+    sudo rpm -Uvh http://yum.postgresql.org/9.5/redhat/rhel-7-x86_64/pgdg-centos95-9.5-3.noarch.rpm >> CentOS_upgrade.txt 2>&1
+fi
 
 echo "Updating OS..."
 echo "### Update ###" >> CentOS_upgrade.txt
@@ -84,18 +94,25 @@ sudo ntpd -gq
 sudo systemctl start ntpd
 
 
-# Install Java8
 # Make sure that we are in ~ before trying to wget & install stuff
 cd ~
 
-echo "### Installing the repo for an ancient version of NodeJS"
-curl --silent --location https://rpm.nodesource.com/setup | sudo bash -
+# add EPEL repo for extra packages - ONLY if we DONT have SRC_DIR
+if [ ! -d "$SRC_DIR" ] ; then
+    echo "### Installing the repo for an ancient version of NodeJS"
+    curl --silent --location https://rpm.nodesource.com/setup | sudo bash -
 
-echo "### Installing an ancient version of NodeJS"
-sudo yum install -y \
-  nodejs-0.10.46 \
-  nodejs-devel-0.10.46
-
+    echo "### Installing an ancient version of NodeJS"
+    sudo yum install -y \
+        nodejs-0.10.46 \
+        nodejs-devel-0.10.46
+else
+    # VERY HARDCODED
+    echo "### Installing an ancient version of NodeJS"
+    sudo yum install -y \
+        $SRC_DIR/nodejs-0.10.46-1nodesource.el7.centos.x86_64.rpm \
+        $SRC_DIR/nodejs-devel-0.10.46-1nodesource.el7.centos.x86_64.rpm
+fi
 
 # install useful and needed packages for working with hootenanny
 echo "### Installing dependencies from repos..."
@@ -167,11 +184,15 @@ sudo yum -y install \
 # http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 if  ! rpm -qa | grep jdk1.8.0_144-1.8.0_144; then
     echo "### Installing Java8..."
-    if [ ! -f jdk-8u144-linux-x64.rpm ]; then
+    if [ -f "$SRC_DIR/jdk-8u144-linux-x64.rpm" ]; then
+      sudo yum -y install $SRC_DIR/jdk-8u144-linux-x64.rpm
+    elif [ -f ./jdk-8u144-linux-x64.rpm ]; then
+      sudo yum -y install ./jdk-8u144-linux-x64.rpm
+    else
       JDKURL=http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jdk-8u144-linux-x64.rpm
       wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" $JDKURL
+      sudo yum -y install ./jdk-8u144-linux-x64.rpm
     fi
-    sudo yum -y install ./jdk-8u144-linux-x64.rpm
 fi
 
 # Trying the following instead of removing the OpenJDK
@@ -195,9 +216,15 @@ sudo alternatives --set javac /usr/java/jdk1.8.0_144/bin/javac
 
 echo "##### Temp installs #####"
 
-# Stxxl:
-if [ -d /home/centos/hoot-deps/stxxl ]
-    cd /home/centos/hoot-deps/stxxl
+# Words1.sqlite is normally installed by Makefile.old
+if [ -f "$SRC_DIR/words1.sqlite" ]; then
+    echo "### Copying words1.sqlite..."
+    cp $SRC_DIR/words1.sqlite $HOOT_HOME/conf/dictionary
+fi
+
+# Stxxl: We are expecting this to already be unpacked.
+if [ -d "$SRC_DIR/stxxl" ] ; then
+    cd $SRC_DIR/stxxl
 else
     git clone http://github.com/stxxl/stxxl.git stxxl
     cd stxxl
@@ -245,8 +272,12 @@ fi
 # We need this big dictionary for text matching. On Ubuntu, this is a package
 if [ ! -f /usr/share/dict/american-english-insane ]; then
     echo "### Installing american-english-insane dictionary..."
-    if [ -f /home/centos/hoot-deps/american-english-insane.bz2 ]
-        sudo bash -c "bzcat /home/centos/hoot-deps/american-english-insane.bz2 > /usr/share/dict/american-english-insane"
+    if [ -f "$SRC_DIR/american-english-insane.bz2" ] ; then
+        sudo bash -c "bzcat $SRC_DIR/american-english-insane.bz2 > /usr/share/dict/american-english-insane"
+    elif  [ -f "$SRC_DIR/american-english-insane" ] ; then
+        sudo bash -c "cp $SRC_DIR/american-english-insane /usr/share/dict/american-english-insane"
+    elif [ -f ./american-english-insane.bz2 ] ; then
+        sudo bash -c "bzcat ./american-english-insane.bz2 > /usr/share/dict/american-english-insane"
     else
         wget --quiet -N https://s3.amazonaws.com/hoot-rpms/support-files/american-english-insane.bz2
         sudo bash -c "bzcat american-english-insane.bz2 > /usr/share/dict/american-english-insane"
@@ -385,12 +416,17 @@ cd ~
 
 if [ ! -f bin/osmosis ]; then
     echo "### Installing Osmosis"
-    mkdir -p ~/bin
-    if [ ! -f osmosis-latest.tgz ]; then
-      wget --quiet http://bretth.dev.openstreetmap.org/osmosis-build/osmosis-latest.tgz
-    fi
     mkdir -p ~/bin/osmosis_src
-    tar -zxf osmosis-latest.tgz -C ~/bin/osmosis_src
+
+    if [ -f $SRC_DIR/osmosis-latest.tgz ]; then
+      tar -zxf $SRC_DIR/osmosis-latest.tgz -C ~/bin/osmosis_src
+    elif [ -f ./osmosis-latest.tgz ]; then
+      tar -zxf ./osmosis-latest.tgz -C ~/bin/osmosis_src
+    else
+      wget --quiet http://bretth.dev.openstreetmap.org/osmosis-build/osmosis-latest.tgz
+      tar -zxf osmosis-latest.tgz -C ~/bin/osmosis_src
+    fi
+
     ln -s ~/bin/osmosis_src/bin/osmosis ~/bin/osmosis
 fi
 
@@ -415,21 +451,27 @@ FGDB_VERSION=1.5.1
 FGDB_VERSION2=`echo $FGDB_VERSION | sed 's/\./_/g;'`
 
 if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --version | grep -q $GDAL_VERSION && ogrinfo --formats | grep -q FileGDB ); then
-    if [ ! -f gdal-$GDAL_VERSION.tar.gz ]; then
-        echo "### Downloading GDAL $GDAL_VERSION source..."
-        wget --quiet http://download.osgeo.org/gdal/$GDAL_VERSION/gdal-$GDAL_VERSION.tar.gz
-    fi
     if [ ! -d gdal-$GDAL_VERSION ]; then
-        echo "### Extracting GDAL $GDAL_VERSION source..."
-        tar zxfp gdal-$GDAL_VERSION.tar.gz
-    fi
-
-    if [ ! -f FileGDB_API_${FGDB_VERSION2}-64.tar.gz ]; then
-        echo "### Downloading FileGDB API source..."
-        wget --quiet https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_${FGDB_VERSION}/FileGDB_API_${FGDB_VERSION2}-64.tar.gz
-    fi
+        if [ -f $SRC_DIR/gdal-$GDAL_VERSION.tar.gz ]; then
+            echo "### Extracting GDAL $GDAL_VERSION source..."
+            tar zxfp $SRC_DIR/gdal-$GDAL_VERSION.tar.gz
+        elif [ -f ./gdal-$GDAL_VERSION.tar.gz ]; then
+            echo "### Extracting GDAL $GDAL_VERSION source..."
+            tar zxfp ./gdal-$GDAL_VERSION.tar.gz
+        else
+            echo "### Downloading GDAL $GDAL_VERSION source..."
+            wget --quiet http://download.osgeo.org/gdal/$GDAL_VERSION/gdal-$GDAL_VERSION.tar.gz
+            echo "### Extracting GDAL $GDAL_VERSION source..."
+            tar zxfp ./gdal-$GDAL_VERSION.tar.gz
+        fi
+    fi # GDAL dir
 
     if [ ! -d /usr/local/FileGDB_API ]; then
+        if [ ! -f FileGDB_API_${FGDB_VERSION2}-64.tar.gz ]; then
+            echo "### Downloading FileGDB API source..."
+            wget --quiet https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_${FGDB_VERSION}/FileGDB_API_${FGDB_VERSION2}-64.tar.gz
+        fi
+
         echo "### Extracting FileGDB API source & installing lib..."
         sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp FileGDB_API_${FGDB_VERSION2}-64.tar.gz --directory /usr/local/FileGDB_API --strip-components 1
         sudo sh -c "echo '/usr/local/FileGDB_API/lib' > /etc/ld.so.conf.d/filegdb.conf"
