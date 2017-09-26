@@ -94,7 +94,7 @@ public:
   virtual void writeChange(const Change& change);
   virtual void setElementPayloadFormat(const QString /*format*/) {}
 
-  void setFastBulkInsertActivated(bool activated) { _fastBulkInsertActivated = activated; }
+  void setCopyBulkInsertActivated(bool activated) { _copyBulkInsertActivated = activated; }
 
 protected:
 
@@ -153,7 +153,7 @@ private:
 
   bool _open;
 
-  bool _fastBulkInsertActivated;
+  bool _copyBulkInsertActivated;
 
   std::set<long> _openDb(QString& urlStr);
 
