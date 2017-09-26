@@ -54,8 +54,13 @@ bool JobQueue::contains(const QString& job)
 QString JobQueue::pop()
 {
   _mutex.lock();
-  QString job = *_jobs.begin();
-  _jobs.erase(_jobs.begin());
+  QString job;
+  //  Don't try to erase a job from an empty queue
+  if (!_jobs.empty())
+  {
+    job = *_jobs.begin();
+    _jobs.erase(_jobs.begin());
+  }
   _mutex.unlock();
   return job;
 }
@@ -132,6 +137,9 @@ void ProcessThread::processJobs(JobQueue* queue)
     if (!queue->empty())
     {
       QString test = queue->pop();
+      //  Empty strings can be ignored
+      if (test.isEmpty())
+        continue;
       _proc->write(QString("%1\n").arg(test).toAscii());
       //  Read all of the output
       QString output;
