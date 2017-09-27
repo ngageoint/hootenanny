@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-22354' visible='true' lat='15.3697127' lon='44.2208847'>
+    <tag k='ID' v='1-00116' />
+    <tag k='MATCH' v='1-00017' />
+    <tag k='REVIEW' v='none' />
+    <tag k='amenity' v='fuel' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='hoot:hash' v='sha1sum:e22b943a0eef28f3b356d0acfa202ac18a100423' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='name' v='محطة المنصور' />
+    <tag k='name:ar' v='محطة المنصور' />
+    <tag k='source' v='osm' />
+    <tag k='source:datetime' v='2016-10-18T14:34:52.000Z' />
+    <tag k='uuid' v='{2a001995-87f7-4c55-b882-8c9512fb59d1}' />
+  </node>
+  <node id='-22355' visible='true' lat='15.3697494' lon='44.2208912'>
+    <tag k='ID' v='1-00108' />
+    <tag k='MATCH' v='1-00017' />
+    <tag k='REVIEW' v='none' />
+    <tag k='addr:street' v='شارع شيراتون' />
+    <tag k='amenity' v='fuel' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='hoot:hash' v='sha1sum:5f512d64166a9dc36a237e85b58b816eca807b01' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='name' v='محطة المنصور' />
+    <tag k='name:ar' v='محطة المنصور' />
+    <tag k='source' v='osm' />
+    <tag k='source:datetime' v='2016-09-19T18:19:51.000Z' />
+    <tag k='uuid' v='{b504605b-e3e7-4423-93be-8af8423f2d69}' />
+  </node>
+  <node id='-22356' visible='true' lat='15.3697869' lon='44.2210439'>
+    <tag k='ID' v='1-00017' />
+    <tag k='MATCH' v='1-00017' />
+    <tag k='REVIEW' v='none' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='hoot:hash' v='sha1sum:b77a7ff8744f15149871e2f37f02ac5078ee5c50' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='name' v='Almnsor Petroleumeum Station' />
+    <tag k='source' v='osm' />
+    <tag k='source:datetime' v='2016-07-12T10:46:16.000Z' />
+    <tag k='uuid' v='{36e57ff3-31b4-4cdd-bbd8-4801ef8e326c}' />
+  </node>
+</osm>

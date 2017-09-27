@@ -9,4 +9,4 @@ export TESTDIR=$HOOT_HOME/test-files/cmd/slow/RndMultiaryScoreMatchesCmdTest
 hoot multiary-score-matches --confusion $TESTDIR/Input1.osm $TESTDIR/Input2.osm $TESTDIR/Input3.osm $HOOT_HOME/test-output/cmd/slow/RndMultiaryScoreMatchesCmdTest/Output.osm
 
 # Verify we get some wrong tags in the output
-grep 'k="hoot:wrong" v="1"' $HOOT_HOME/test-output/cmd/slow/RndMultiaryScoreMatchesCmdTest/Output.osm
+grep 'k="hoot:wrong" v="missMatch"' $HOOT_HOME/test-output/cmd/slow/RndMultiaryScoreMatchesCmdTest/Output.osm

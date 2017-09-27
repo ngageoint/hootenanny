@@ -32,8 +32,7 @@
 #include <vector>
 
 #include <QString>
-#include <QFile>
-#include <QTextStream>
+#include <QTemporaryFile>
 #include <QElapsedTimer>
 
 #include <hoot/core/io/PartialOsmMapWriter.h>
@@ -54,7 +53,8 @@ class OsmApiDbSqlStatementFormatter;
  * OSM element writer optimized for bulk element additions to an OSM API v0.6 database.
  *
  * If you need to write small amounts of elements to an OSM API database or modify data in an
- * existing database, you should create a new writer class or use the Rails Port instead.
+ * existing database, you should create a new writer class similar to how HootApiDbWriter works or
+ * use the Rails Port instead.
  *
  * This writer:
  *
@@ -62,7 +62,7 @@ class OsmApiDbSqlStatementFormatter;
  *   up by configuring the writer with the appropriate options.  See the user documentation for
  *   details on the two workflows and examples of how to use them.
  *
- * * allows for directly writing to a target database or an generating output SQL file that can be
+ * * allows for directly writing to a target database or for generating output SQL file that can be
  *   manually written to a database
  *
  * * has the ability to guarantee element ID uniqueness against a live database if the record ID
@@ -71,6 +71,10 @@ class OsmApiDbSqlStatementFormatter;
  * * is transaction safe
  *
  * * requires two passes over the input data *before* writing it to the database
+ *
+ * * uses the psql command to execute SQL statements; There is another version available that gives
+ * the option of using pg_bulkload instead, which is several times faster than psql.  It is
+ * currently in the 1446 development branch.
  */
 class OsmApiDbBulkInserter : public PartialOsmMapWriter, public Configurable
 {
@@ -181,94 +185,109 @@ public:
   }
   void setStxxlMapMinSize(long size) { _stxxlMapMinSize = size; }
   void setValidateData(bool validate) { _validateData = validate; }
+  void setDisableDatabaseConstraintsDuringWrite(bool disable)
+  { _disableDatabaseConstraintsDuringWrite = disable; }
+  void setTempDir(QString location) { _tempDir = location; }
+  void setDisableDatabaseIndexesDuringWrite(bool disable)
+  { _disableDatabaseIndexesDuringWrite = disable; }
 
-private:
-
-  // for white box testing.
-  friend class ServiceOsmApiDbBulkWriterTest;
+protected:
 
   ElementWriteStats _writeStats;
   ChangesetData _changesetData;
   IdMappings _idMappings;
-  UnresolvedReferences _unresolvedRefs;
 
-  long _fileOutputElementBufferSize;
   long _statusUpdateInterval;
-  long _maxChangesetSize;
   QString _outputFilesCopyLocation;
   QString _outputUrl;
   QString _outputDelimiter;
   boost::shared_ptr<QFile> _sqlOutputCombinedFile;
-  bool _reserveRecordIdsBeforeWritingData;
   unsigned int _fileDataPassCtr;
   long _stxxlMapMinSize;
   bool _validateData;
-
-  //ended up not going with temp files here, since the file outputs aren't always temporary
-  std::map<QString, std::pair<boost::shared_ptr<QFile>, boost::shared_ptr<QTextStream> > > _outputSections;
+  bool _includeDebugTags;
+  std::map<QString, boost::shared_ptr<QTemporaryFile> > _outputSections;
   QStringList _sectionNames;
-
-  OsmApiDb _database;
-  boost::shared_ptr<OsmApiDbSqlStatementFormatter> _sqlFormatter;
-
   boost::shared_ptr<QElapsedTimer> _timer;
+  long _maxChangesetSize;
 
   void _reset();
   void _clearIdCollections();
-  unsigned int _numberOfFileDataPasses() const;
-  bool _destinationIsDatabase() const;
-
-  void _logStats(const bool debug = false);
-  unsigned long _getTotalRecordsWritten() const;
-  unsigned long _getTotalFeaturesWritten() const;
-  void _verifyDependencies();
-  void _verifyOutputCopySettings();
   void _verifyStartingIds();
-  void _verifyFileOutputs();
   void _closeOutputFiles();
-  void _flushStreams(const bool writeClosingMark = false);
+  void _flush();
+  void _verifyDependencies();
+
+  void _createOutputFile(const QString tableName, const QString header = "");
+  QString _getCombinedSqlFileName() const;
 
   //creates the output files containing the data
-  void _createNodeOutputFiles();
-  QStringList _createSectionNameList();
-  void _createWayOutputFiles();
-  void _createRelationOutputFiles();
-  void _createOutputFile(const QString tableName, const QString header = "",
-                         const bool addByteOrderMarker = false);
-  QString _getCombinedSqlFileName() const;
-  QString _getTableOutputFileName(const QString tableName) const;
+  virtual void _createNodeOutputFiles();
+  virtual QStringList _createSectionNameList();
+  virtual void _createWayOutputFiles();
+  virtual void _createRelationOutputFiles();
 
-  void _writeSequenceUpdatesToStream(long changesetId, const unsigned long nodeId,
-                                     const unsigned long wayId,
-                                     const unsigned long relationId, QString& outputStr);
-  void _writeChangesetToStream();
-  void _writeRelationToStream(const unsigned long relationDbId);
-  void _writeRelationMembersToStream(const ConstRelationPtr& relation,
-                                     const unsigned long dbRelationId);
-  void _writeRelationMemberToStream(const unsigned long sourceRelationDbId,
-                                    const RelationData::Entry& member,
-                                    const unsigned long memberDbId,
-                                    const unsigned int memberSequenceIndex);
-  void _writeWayToStream(const unsigned long wayDbId);
-  void _writeWayNodesToStream(const unsigned long wayId, const std::vector<long>& wayNodeIds);
-  void _writeNodeToStream(const ConstNodePtr& node, const unsigned long nodeDbId);
-  void _writeTagsToStream(const Tags& tags, const ElementType::Type& elementType,
-                          const unsigned long dbId, boost::shared_ptr<QTextStream>& currentTable,
-                          boost::shared_ptr<QTextStream>& historicalTable);
+  virtual void _writeChangeset();
+  virtual void _writeRelation(const unsigned long relationDbId);
+  void _writeRelationMembers(const ConstRelationPtr& relation,
+                             const unsigned long dbRelationId);
+  virtual void _writeRelationMember(const unsigned long sourceRelationDbId,
+                            const RelationData::Entry& member,
+                            const unsigned long memberDbId,
+                            const unsigned int memberSequenceIndex);
+  virtual void _writeWay(const unsigned long wayDbId);
+  virtual void _writeWayNodes(const unsigned long wayId, const std::vector<long>& wayNodeIds);
+  virtual void _writeNode(const ConstNodePtr& node, const unsigned long nodeDbId);
+  virtual void _writeTags(const Tags& tags, const ElementType::Type& elementType,
+                  const unsigned long dbId, boost::shared_ptr<QFile> currentTableFile,
+                  boost::shared_ptr<QFile> historicalTableFile);
 
-  void _incrementAndGetLatestIdsFromDb();
-  void _incrementChangesInChangeset();
+  virtual void _incrementChangesInChangeset();
+
+  virtual void _writeDataToDb();
+  virtual void _writeDataToDbPsql();
+
+  virtual void _writeCombinedSqlFile();
+
   /*
    * Since we're converting the input element IDs to our own sequence, we need to keep a mapping
    * between the two for reference.
    */
-  unsigned long _establishNewIdMapping(const ElementId& sourceId);
+  unsigned long _establishIdMapping(const ElementId& sourceId);
   void _checkUnresolvedReferences(const ConstElementPtr& element, const unsigned long elementDbId);
+
+  virtual unsigned int _numberOfFileDataPasses() const;
+
+  void _logStats(const bool debug = false);
+
+  virtual unsigned long _getTotalRecordsWritten() const;
+  virtual unsigned long _getTotalFeaturesWritten() const;
+
+  virtual bool _destinationIsDatabase() const;
+
+private:
+
+  UnresolvedReferences _unresolvedRefs;
+
+  long _fileOutputElementBufferSize;
+  bool _reserveRecordIdsBeforeWritingData;
+  bool _disableDatabaseConstraintsDuringWrite;
+  QString _tempDir;
+  bool _disableDatabaseIndexesDuringWrite;
+
+  OsmApiDb _database;
+  boost::shared_ptr<OsmApiDbSqlStatementFormatter> _sqlFormatter;
+
+  void _verifyOutputCopySettings();
+  void _verifyFileOutputs();
+
+  void _incrementAndGetLatestIdsFromDb();
   void _updateRecordLineWithIdOffset(const QString tableName, QString& recordLine);
-  void _writeCombinedSqlFile();
   void _reserveIdsInDb();
-  void _writeDataToDb();
-  void _writeDataToDbPsql();
+
+  void _writeSequenceUpdates(long changesetId, const unsigned long nodeId,
+                             const unsigned long wayId, const unsigned long relationId,
+                             QString& outputStr);
 };
 
 }

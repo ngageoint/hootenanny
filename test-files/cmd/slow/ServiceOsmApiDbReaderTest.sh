@@ -17,7 +17,7 @@ OUTPUT_DIR=test-output/cmd/slow/ServiceOsmApiDbReaderTest
 rm -rf $OUTPUT_DIR
 mkdir -p $OUTPUT_DIR
 
-export HOOT_OPTS="-D reader.add.source.datetime=false -D uuid.helper.repeatable=true -D reader.preserve.all.tags=true -D writer.include.circular.error.tags=false -D changeset.user.id=1 -D osmapidb.bulk.inserter.reserve.record.ids.before.writing.data=true -D osmapidb.bulk.inserter.validate.data=true -D osmapidb.bulk.inserter.output.files.copy.location=$OUTPUT_DIR/DcGisRoads.sql"
+export HOOT_OPTS="-D reader.add.source.datetime=false -D uuid.helper.repeatable=true -D reader.preserve.all.tags=true -D writer.include.circular.error.tags=false -D changeset.user.id=1 -D osmapidb.bulk.inserter.reserve.record.ids.before.writing.data=true -D apidb.bulk.inserter.validate.data=true -D apidb.bulk.inserter.output.files.copy.location=$OUTPUT_DIR/DcGisRoads.sql"
 export DB_URL="osmapidb://$DB_USER_OSMAPI:$DB_PASSWORD_OSMAPI@$DB_HOST_OSMAPI:$DB_PORT_OSMAPI/$DB_NAME_OSMAPI"
 
 echo "Select all from osm api db..."
@@ -35,9 +35,9 @@ export PGPASSWORD=$DB_PASSWORD_OSMAPI
 
 scripts/database/CleanAndInitializeOsmApiDb.sh
 
-hoot convert --error $HOOT_OPTS test-files/DcGisRoads.osm $DB_URL
+hoot convert --warn $HOOT_OPTS test-files/DcGisRoads.osm $DB_URL
 
-hoot convert --error $HOOT_OPTS -D convert.bounding.box=-77.04,38.8916,-77.03324,38.8958 $OSM_API_DB_URL $OUTPUT_DIR/output2.osm
+hoot convert --warn $HOOT_OPTS -D convert.bounding.box=-77.04,38.8916,-77.03324,38.8958 $OSM_API_DB_URL $OUTPUT_DIR/output2.osm
 hoot is-match test-files/cmd/slow/ServiceOsmApiDbReaderTest/output2.osm $OUTPUT_DIR/output2.osm
 
 

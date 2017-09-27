@@ -101,6 +101,7 @@ public:
     }
   }
 
+  //TODO: this is redundant with code in ServiceOsmApiDbReaderTest; move to test utils class
   long populateMap()
   {
     OsmMapPtr map(new OsmMap());
@@ -467,9 +468,6 @@ public:
     CPPUNIT_ASSERT(reader.hasMoreElements());
     reader.readPartial(map);
 
-    CPPUNIT_ASSERT_EQUAL(
-      chunkSize,
-      (int)(map->getNodes().size() + map->getWays().size() + map->getRelations().size()));
     CPPUNIT_ASSERT_EQUAL(3, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
@@ -510,9 +508,6 @@ public:
     map.reset(new OsmMap());
     CPPUNIT_ASSERT(reader.hasMoreElements());
     reader.readPartial(map);
-    CPPUNIT_ASSERT_EQUAL(
-      chunkSize,
-      (int)(map->getNodes().size() + map->getWays().size() + map->getRelations().size()));
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getWays().size());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
@@ -553,9 +548,6 @@ public:
     map.reset(new OsmMap());
     CPPUNIT_ASSERT(reader.hasMoreElements());
     reader.readPartial(map);
-    CPPUNIT_ASSERT_EQUAL(
-      chunkSize,
-      (int)(map->getNodes().size() + map->getWays().size() + map->getRelations().size()));
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getWays().size());
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelations().size());
@@ -603,9 +595,6 @@ public:
     map.reset(new OsmMap());
     CPPUNIT_ASSERT(reader.hasMoreElements());
     reader.readPartial(map);
-    CPPUNIT_ASSERT_EQUAL(
-      1,
-      (int)(map->getNodes().size() + map->getWays().size() + map->getRelations().size()));
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelations().size());

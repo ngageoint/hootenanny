@@ -74,14 +74,14 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Eleme
     //building merger must not have been able to merge...maybe need an earlier check for this
     //and also handle it differently...
 
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       LOG_WARN("Building merger unable to merge.");
       LOG_VART(buildings1);
       LOG_VART(buildings2);
       LOG_VART(replaced);
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }

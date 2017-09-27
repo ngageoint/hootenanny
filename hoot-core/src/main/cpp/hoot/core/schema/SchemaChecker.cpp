@@ -49,11 +49,11 @@ void SchemaChecker::checkUnknownVertexType()
     SchemaVertex schemaVertex = _schemaVertexList[i];
     if (schemaVertex.isValid() == false)
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN("Warning: unknown type. " << schemaVertex.name);
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }
@@ -69,11 +69,11 @@ void SchemaChecker::checkEmptyGeometry()
     SchemaVertex schemaVertex = _schemaVertexList[i];
     if (schemaVertex.geometries == 0)
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN("Warning: empty geometries. " << schemaVertex.name);
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }

@@ -198,11 +198,11 @@ int TileBoundsCalculator::_calculateSplitX(PixelBox& b)
 
   if (bestSum == numeric_limits<double>::max())
   {
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       LOG_WARN("bestSum isn't valid. " << b.toString());
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }
@@ -253,12 +253,12 @@ int TileBoundsCalculator::_calculateSplitY(const PixelBox& b)
 
   if (bestSum == numeric_limits<double>::max())
   {
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       LOG_WARN("bestSum isn't valid. " << b.toString() << " total: " << total << " size: " <<
                b.maxY - b.minY);
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }

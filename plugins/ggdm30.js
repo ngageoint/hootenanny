@@ -1749,6 +1749,9 @@ ggdm30 = {
             ggdm30.config = {};
             ggdm30.config.OgrDebugAddfcode = config.getOgrDebugAddfcode();
             ggdm30.config.OgrDebugDumptags = config.getOgrDebugDumptags();
+            // Get any changes to OSM tags
+            // NOTE: the rest of the config variables will change to this style of assignment soon
+            ggdm30.toChange = hoot.Settings.get("translation.override");
         }
 
         // Debug:
@@ -1840,6 +1843,9 @@ ggdm30 = {
             print('');
         }
 
+        // Override tag values if appropriate
+        translate.overrideValues(tags,ggdm30.toChange);
+
         return tags;
     }, // End of toOsm
 
@@ -1866,6 +1872,10 @@ ggdm30 = {
             ggdm30.config.OgrSplitO2s = config.getOgrSplitO2s();
             ggdm30.config.OgrThematicStructure = config.getOgrThematicStructure();
             ggdm30.config.OgrThrowError = config.getOgrThrowError();
+
+            // Get any changes to OSM tags
+            // NOTE: the rest of the config variables will change to this style of assignment soon
+            ggdm30.toChange = hoot.Settings.get("translation.override");
         }
 
         // Check if we have a schema. This is a quick way to workout if various lookup tables have been built
@@ -1873,6 +1883,13 @@ ggdm30 = {
         {
             var tmp_schema = ggdm30.getDbSchema();
         }
+
+        // The Nuke Option: If we have a relation, drop the feature and carry on
+        if (tags['building:part']) return null;
+
+        // The Nuke Option: "Collections" are groups of different geometry types: Point, Area and Line.
+        // There is no way we can translate these to a single GGDM30 feature.
+        if (geometryType == 'Collection') return null;
 
         // Start processing here
         // Debug:
@@ -1882,13 +1899,6 @@ ggdm30 = {
             var kList = Object.keys(tags).sort()
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
         }
-
-        // The Nuke Option: If we have a relation, drop the feature and carry on
-        if (tags['building:part']) return null;
-
-        // The Nuke Option: "Collections" are groups of different geometry types: Point, Area and Line.
-        // There is no way we can translate these to a single GGDM30 feature.
-        if (geometryType == 'Collection') return null;
 
         // Flip the ge4List table so we can use it for export
         if (ggdm30.ge4Lookup == undefined)
@@ -1933,6 +1943,9 @@ ggdm30 = {
 //                 }
 //             }
         } // End ggdm30.lookup Undefined
+
+        // Override values if appropriate
+        translate.overrideValues(tags,ggdm30.toChange);
 
         // Pre Processing
         ggdm30.applyToOgrPreProcessing(tags, attrs, geometryType);

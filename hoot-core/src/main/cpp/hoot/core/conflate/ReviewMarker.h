@@ -75,6 +75,15 @@ public:
   static bool isNeedsReview(const ConstOsmMapPtr &map, ConstElementPtr e1, ConstElementPtr e2);
 
   /**
+   * Returns true if this element is a review record (not an element that needs to be reviewed, but
+   * the relation that describes the review).
+   *
+   * isReviewUid is preferred over this method. If we change the review mechanism in the future
+   * this method may be broken. (unlikely)
+   */
+  static bool isReview(const ConstElementPtr e);
+
+  /**
    * Returns true if the specified UID is a review tag.
    */
   static bool isReviewUid(const ConstOsmMapPtr &map, ReviewUid uid);

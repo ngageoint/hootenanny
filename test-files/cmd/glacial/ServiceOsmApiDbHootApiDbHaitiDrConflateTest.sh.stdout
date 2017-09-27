@@ -17,17 +17,17 @@ STEP 1: Cleaning out the osm api db and initializing it for use...
 
 STEP 2: Writing the complete reference dataset to the osm api db...
 
-20:35:30.126 WARN  .../hoot/core/io/OsmXmlReader.cpp( 530) Missing node (250651104) in relation (52900).
-20:35:30.126 WARN  .../hoot/core/io/OsmXmlReader.cpp( 530) Missing node (250651104) in relation (53432).
-20:35:30.126 WARN  .../hoot/core/io/OsmXmlReader.cpp( 530) Missing node (315342451) in relation (307828).
-20:35:30.126 WARN  .../hoot/core/io/OsmXmlReader.cpp( 534) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
-20:35:30.364 WARN  ...re/io/OsmApiDbBulkInserter.cpp(1416) Found unresolved relation member ref!:
-20:35:30.364 WARN  ...re/io/OsmApiDbBulkInserter.cpp(1419) Relation ID 1244309 (DB ID=81) has ref to Entry: role: tributary, eid: Relation:1244310
-20:35:30.364 WARN  ...re/io/OsmApiDbBulkInserter.cpp(1416) Found unresolved relation member ref!:
-20:35:30.364 WARN  ...re/io/OsmApiDbBulkInserter.cpp(1419) Relation ID 1244309 (DB ID=81) has ref to Entry: role: tributary, eid: Relation:1244336
-20:35:30.376 WARN  ...re/io/OsmApiDbBulkInserter.cpp(1416) Found unresolved relation member ref!:
-20:35:30.376 WARN  ...re/io/OsmApiDbBulkInserter.cpp(1419) Relation ID 1240526 (DB ID=113) has ref to Entry: role: tributary, eid: Relation:1241599
-20:35:30.379 WARN  ...re/io/OsmApiDbBulkInserter.cpp(1423) hoot::OsmApiDbBulkInserter: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+17:18:58.363 WARN  .../hoot/core/io/OsmXmlReader.cpp( 477) Missing node (250651104) in relation (52900).
+17:18:58.364 WARN  .../hoot/core/io/OsmXmlReader.cpp( 477) Missing node (250651104) in relation (53432).
+17:18:58.364 WARN  .../hoot/core/io/OsmXmlReader.cpp( 477) Missing node (315342451) in relation (307828).
+17:18:58.364 WARN  .../hoot/core/io/OsmXmlReader.cpp( 481) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+17:18:58.388 WARN  ...re/io/OsmApiDbBulkInserter.cpp(1401) Found unresolved relation member ref!:
+17:18:58.388 WARN  ...re/io/OsmApiDbBulkInserter.cpp(1404) Relation ID 1240526 (DB ID=173) has ref to Entry: role: tributary, eid: Relation:1240981
+17:18:58.388 WARN  ...re/io/OsmApiDbBulkInserter.cpp(1401) Found unresolved relation member ref!:
+17:18:58.388 WARN  ...re/io/OsmApiDbBulkInserter.cpp(1404) Relation ID 1240526 (DB ID=173) has ref to Entry: role: tributary, eid: Relation:1241599
+17:18:58.389 WARN  ...re/io/OsmApiDbBulkInserter.cpp(1401) Found unresolved relation member ref!:
+17:18:58.389 WARN  ...re/io/OsmApiDbBulkInserter.cpp(1404) Relation ID 1244309 (DB ID=178) has ref to Entry: role: tributary, eid: Relation:1244310
+17:18:58.389 WARN  ...re/io/OsmApiDbBulkInserter.cpp(1408) hoot::OsmApiDbBulkInserter: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
 
 STEP 5: Writing the complete secondary dataset to the hoot api db...
 
@@ -47,7 +47,7 @@ STEP 11b: Writing a XML changeset file that is the difference between the croppe
 STEP 12: Executing the SQL changeset on the osm api db...
 
 Changeset(s) Created: 1
-Changeset Details: min_lat=18.527401, max_lat=18.538810, min_lon=-72.480594, max_lon=-72.475766, num_changes=72
+Changeset Details: min_lat=18.527401, max_lat=18.5388103, min_lon=-72.4805939, max_lon=-72.4757657, num_changes=72
 Node(s) Created: 67
 Node(s) Modified: 0
 Node(s) Deleted: 0

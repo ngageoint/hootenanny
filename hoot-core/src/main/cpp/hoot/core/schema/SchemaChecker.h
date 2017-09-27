@@ -84,6 +84,7 @@ public:
 private:
 
   std::vector<SchemaVertex> _schemaVertexList;
+
 };
 
 }

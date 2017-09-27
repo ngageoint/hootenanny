@@ -35,6 +35,7 @@
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/DbUtils.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QtSql/QSqlDatabase>
@@ -84,12 +85,12 @@ void HootApiDbWriter::close()
 {
   LOG_DEBUG("Closing database writer...");
   finalizePartial();
-  if ( (_nodesWritten > 0) || (_waysWritten > 0) || (_relationsWritten > 0) )
+  if ((_nodesWritten > 0) || (_waysWritten > 0) || (_relationsWritten > 0))
   {
     LOG_DEBUG("Write stats:");
-    LOG_DEBUG("\t    Nodes: " << QString::number(_nodesWritten));
-    LOG_DEBUG("\t     Ways: " << QString::number(_waysWritten));
-    LOG_DEBUG("\tRelations: " << QString::number(_relationsWritten));
+    LOG_DEBUG("\t    Nodes: " << StringUtils::formatLargeNumber(_nodesWritten));
+    LOG_DEBUG("\t     Ways: " << StringUtils::formatLargeNumber(_waysWritten));
+    LOG_DEBUG("\tRelations: " << StringUtils::formatLargeNumber(_relationsWritten));
   }
 }
 
@@ -113,7 +114,7 @@ void HootApiDbWriter::finalizePartial()
 bool HootApiDbWriter::isSupported(QString urlStr)
 {
   QUrl url(urlStr);
-  return _hootdb.isSupported(url);
+  return _hootdb.isSupported(url) && !_copyBulkInsertActivated;
 }
 
 void HootApiDbWriter::open(QString urlStr)
@@ -200,11 +201,6 @@ void HootApiDbWriter::_overwriteMaps(const QString& mapName, const set<long>& ma
 
       _hootdb.setMapId(_hootdb.insertMap(mapName, true));
     }
-//    else
-//    {
-//      LOG_ERROR("There are one or more maps with this name. Consider using "
-//                "'hootapi.db.writer.overwrite.map'. Map IDs: " << mapIds);
-//    }
     else if (mapIds.size() > 1)
     {
       LOG_ERROR("There are multiple maps with this name. Consider using "
@@ -341,11 +337,12 @@ void HootApiDbWriter::setConfiguration(const Settings &conf)
   setTextStatus(configOptions.getWriterTextStatus());
   setIncludeCircularError(configOptions.getWriterIncludeCircularErrorTags());
   setRemap(configOptions.getHootapiDbWriterRemapIds());
+  setCopyBulkInsertActivated(configOptions.getHootapiDbWriterCopyBulkInsert());
 }
 
 void HootApiDbWriter::_startNewChangeSet()
 {
-  LOG_TRACE("Starting changeset...");
+  LOG_DEBUG("Starting changeset...");
   _hootdb.endChangeset();
   Tags tags;
   tags["bot"] = "yes";
@@ -421,14 +418,8 @@ void HootApiDbWriter::writePartial(const ConstNodePtr& n)
   {
     bool alreadyThere = _nodeRemap.count(n->getId()) != 0;
     long nodeId = _getRemappedElementId(n->getElementId());
-
-    if (ConfigOptions().getWriterIncludeDebugTags())
-    {
-      //keep the hoot:id tag in sync with what could be a newly assigned id
-      tags.set(MetadataTags::HootId(), QString::number(nodeId));
-    }
-
     LOG_VART(nodeId);
+
     if (alreadyThere)
     {
       _hootdb.updateNode(nodeId, n->getY(), n->getX(), n->getVersion() + 1, tags);
@@ -469,12 +460,6 @@ void HootApiDbWriter::writePartial(const ConstWayPtr& w)
   {
     bool alreadyThere = _wayRemap.count(w->getId()) != 0;
     wayId = _getRemappedElementId(w->getElementId());
-
-    if (ConfigOptions().getWriterIncludeDebugTags())
-    {
-      //keep the hoot:id tag in sync with what could be a newly assigned id
-      tags.set(MetadataTags::HootId(), QString::number(wayId));
-    }
 
     if (alreadyThere)
     {
@@ -526,12 +511,6 @@ void HootApiDbWriter::writePartial(const ConstRelationPtr& r)
   if (_remapIds)
   {
     relationId = _getRemappedElementId(r->getElementId());
-
-    if (ConfigOptions().getWriterIncludeDebugTags())
-    {
-      //keep the hoot:id tag in sync with what could be a newly assigned id
-      tags.set(MetadataTags::HootId(), QString::number(relationId));
-    }
 
     _hootdb.insertRelation(relationId, tags);
   }

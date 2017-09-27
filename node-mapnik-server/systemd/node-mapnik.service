@@ -1,0 +1,15 @@
+[Unit]
+Description=Node Mapnik Server
+After=syslog.target network.target
+
+[Service]
+Type=simple
+User=vagrant
+WorkingDirectory=/home/vagrant/hoot/node-mapnik-server
+ExecStartPre=cd /home/vagrant/hoot && source SetupEnv.sh && source conf/database/DatabaseConfig.sh
+ExecStart=/usr/bin/node app.js hoot_style.xml 8000
+ExecStop=kill -HUP $MAINPID
+Restart=on-abort
+
+[Install]
+WantedBy=default.target

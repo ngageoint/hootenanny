@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-30747' visible='true' lat='15.36938' lon='44.22915'>
+    <tag k='ID' v='2-00040' />
+    <tag k='MATCH' v='2-00040' />
+    <tag k='REVIEW' v='none' />
+    <tag k='alt_name' v='Funduq Shiratun;Funduq Shīrātūn;Hotel Sheraton San`a&apos;;Hotel Sheraton San‘ā’;fndq shyratwn;فندق شيراتون' />
+    <tag k='ele' v='2289' />
+    <tag k='error:circular' v='15' />
+    <tag k='hoot:hash' v='sha1sum:008d6457045e31794ffa339abc5b77a6c3f6647d' />
+    <tag k='is_in:country_code' v='YE' />
+    <tag k='name' v='Funduq Shīrātūn' />
+    <tag k='source' v='geonames' />
+    <tag k='tourism' v='hotel' />
+    <tag k='uuid' v='GeoNames.org:7342280' />
+  </node>
+</osm>

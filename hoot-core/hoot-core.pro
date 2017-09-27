@@ -28,8 +28,13 @@ OTHER_FILES = \
     $$files(../plugins/*.py, true) \
     $$files(../translations/*.js, true) \
     $$files(../translations/*.py, true) \
+    $$files(../plugins-local/*.js, true) \
+    $$files(../plugins-local/*.py, true) \
+    $$files(../translations-local/*.js, true) \
+    $$files(../translations-local/*.py, true) \
     $$files(../rules/*.js, true) \
     $$files(../conf/schema/*.json, true) \
+    $$files(../docs/commands/*.asciidoc, true) \
     ../conf/core/ConfigOptions.asciidoc \
 
 include(../Configure.pri)

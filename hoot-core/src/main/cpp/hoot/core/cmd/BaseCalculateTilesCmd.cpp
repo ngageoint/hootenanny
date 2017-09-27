@@ -115,16 +115,12 @@ std::vector< std::vector<geos::geom::Envelope> > BaseCalculateTilesCmd::_calcula
   return tileBoundsCalculator.calculateTiles();
 }
 
-/*write out to temp osm and then use ogr2ogr to convert to geojson
-
-This is kind of a shortcut way to get geojson output.  Its probably worth either figuring
-out a way to use 'hoot osm2ogr' without a translation (or just with a simple one) to do this
-OR adding an GeoJsonWriter class that can do this same thing using the GDAL API, so the
-'hoot convert' command can call it.*/
 void BaseCalculateTilesCmd::_writeOutputAsGeoJson(
   const std::vector< std::vector<geos::geom::Envelope> >& tiles, const QString outputPath,
   const bool selectSingleRandomTile, int randomSeed)
 {
+  //write out to temp osm and then use ogr2ogr to convert to geojson
+
   QTemporaryFile osmTempFile("calculate-tiles-temp-XXXXXX.osm");
   if (!osmTempFile.open())
   {

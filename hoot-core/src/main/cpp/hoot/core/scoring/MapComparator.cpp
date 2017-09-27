@@ -81,7 +81,8 @@ public:
   /**
    * Defaults to 5cm threshold
    */
-  CompareVisitor(boost::shared_ptr<OsmMap> ref, bool ignoreUUID, bool useDateTime, Meters threshold = 0.05)
+  CompareVisitor(
+    boost::shared_ptr<OsmMap> ref, bool ignoreUUID, bool useDateTime, Meters threshold = 0.05)
   {
     _ref = ref;
     _threshold = threshold;

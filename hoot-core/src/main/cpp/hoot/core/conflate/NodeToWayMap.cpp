@@ -120,11 +120,11 @@ bool NodeToWayMap::validate(const OsmMap& map)
       assert(*it != 0);
       if (map.containsWay(*it) == false)
       {
-        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        if (logWarnCount < Log::getWarnMessageLimit())
         {
           LOG_WARN(QString("Map does not contain way: %1 ref by node: %2").arg(*it).arg(nid));
         }
-        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        else if (logWarnCount == Log::getWarnMessageLimit())
         {
           LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }

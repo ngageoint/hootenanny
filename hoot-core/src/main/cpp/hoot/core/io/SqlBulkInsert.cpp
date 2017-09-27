@@ -78,7 +78,8 @@ inline QString SqlBulkInsert::_escape(const QVariant& v) const
   case QVariant::String:
     {
       QString result = v.toString();
-      if (!result.contains("hstore(ARRAY", Qt::CaseInsensitive) && result != "''") //check tags string return from HootApiDb::_escapeTags(tags)
+      //check tags string return from HootApiDb::_escapeTags(tags)
+      if (!result.contains("hstore(ARRAY", Qt::CaseInsensitive) && result != "''")
       {
          result.replace("'", "''");
          result = "'" % result % "'";
@@ -143,10 +144,11 @@ void SqlBulkInsert::flush()
     QSqlQuery q(_db);
     if (q.exec(sql) == false)
     {
-      LOG_ERROR(q.executedQuery());
-      LOG_ERROR(q.lastError().text());
-      throw HootException(QString("Error executing bulk insert: %1 (%2)").arg(q.lastError().text()).
-                          arg(sql));
+      LOG_ERROR(q.executedQuery().left(500));
+      LOG_ERROR(q.lastError().text().left(500));
+      throw HootException(
+        QString("Error executing bulk insert: %1 (%2)")
+        .arg(q.lastError().text().left(500)).arg(sql).left(500));
     }
 
     q.finish();

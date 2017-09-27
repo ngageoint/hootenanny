@@ -116,7 +116,6 @@ void ConflateCaseTest::_runMultiaryConflateCmd()
   while (stillLooking)
   {
     QFileInfo fi(_d, QString("Input%1.osm").arg(i++));
-    LOG_VAR(fi.absoluteFilePath());
     if (fi.exists())
     {
       in.append(fi);
@@ -176,7 +175,6 @@ void ConflateCaseTest::runTest()
   LOG_DEBUG("Running conflate case test...");
 
   // configures and cleans up the conf() environment
-  LOG_VART(_confs);
   TestSetup st(_confs);
 
   if (ConfigOptions().getTestCaseCmd().toStdString() == ConflateCmd::className())

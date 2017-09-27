@@ -77,7 +77,11 @@ translate = {
     // In the future this might sort the list of values
     appendValue : function(oldValue,newValue,sepValue)
     {
-        if (oldValue == undefined)
+        if (sepValue === undefined) {
+            sepValue = ";";
+        }
+
+        if (oldValue === undefined || oldValue === null || oldValue === "")
         {
             return newValue;
         }
@@ -1416,6 +1420,27 @@ translate = {
 
             print(''); // just to get one blank line
         } // End for i
-    } // End dumpSchema
+    }, // End dumpSchema
 
+    // overrideValues - Add, modify or delete tags/attributes based on a JSON string
+    overrideValues: function(values,changeString)
+    {
+        if (changeString == '') return;
+
+        var override = JSON.parse(changeString);
+
+        for (var i in override)
+        {
+            if (override[i] == '')
+            {
+                delete values[i];
+            }
+            else
+            {
+                values[i] = override[i];
+            }
+        }
+
+        return values;
+    } // End overrideValues
 } // End of translate

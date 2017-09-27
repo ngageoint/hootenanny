@@ -51,9 +51,11 @@ OsmChangeWriterFactory& OsmChangeWriterFactory::getInstance()
   return *_theInstance;
 }
 
-boost::shared_ptr<OsmChangeWriter> OsmChangeWriterFactory::createWriter(QString url)
+boost::shared_ptr<OsmChangeWriter> OsmChangeWriterFactory::createWriter(QString url,
+                                                                        QString elementPayloadFormat)
 {
   LOG_VART(url);
+  LOG_VART(elementPayloadFormat);
 
   vector<std::string> names =
     Factory::getInstance().getObjectNamesByBase(OsmChangeWriter::className());
@@ -64,6 +66,7 @@ boost::shared_ptr<OsmChangeWriter> OsmChangeWriterFactory::createWriter(QString 
     writer.reset(Factory::getInstance().constructObject<OsmChangeWriter>(names[i]));
     if (writer->isSupported(url))
     {
+      writer->setElementPayloadFormat(elementPayloadFormat);
       LOG_DEBUG("Using changeset output writer: " << names[i]);
     }
     else

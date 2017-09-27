@@ -36,11 +36,11 @@ STEP 11b: Writing a XML changeset file that is the difference between the croppe
 STEP 12: Executing the SQL changeset on the osm api db...
 
 Changeset(s) Created: 1
-Changeset Details: min_lat=38.846722, max_lat=38.910969, min_lon=-104.901478, max_lon=-104.714569, num_changes=38
+Changeset Details: min_lat=38.8467218, max_lat=38.9109693, min_lon=-104.9014778, max_lon=-104.7145693, num_changes=37
 Node(s) Created: 23
 Node(s) Modified: 2
 Node(s) Deleted: 0
-Way(s) Created: 10
+Way(s) Created: 9
 Way(s) Modified: 3
 Way(s) Deleted: 0
 Relation(s) Created: 0

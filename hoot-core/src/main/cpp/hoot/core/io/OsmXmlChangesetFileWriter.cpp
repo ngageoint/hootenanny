@@ -43,10 +43,12 @@ using namespace std;
 namespace hoot
 {
 
-OsmXmlChangesetFileWriter::OsmXmlChangesetFileWriter()
-  : _precision(ConfigOptions().getWriterPrecision()),
-    _changesetMaxSize(ConfigOptions().getChangesetMaxSize()),
-    _multipleChangesetsWritten(false)
+OsmXmlChangesetFileWriter::OsmXmlChangesetFileWriter() :
+_precision(ConfigOptions().getWriterPrecision()),
+_changesetMaxSize(ConfigOptions().getChangesetMaxSize()),
+_multipleChangesetsWritten(false),
+_addTimestamp(ConfigOptions().getChangesetXmlWriterAddTimestamp()),
+_includeDebugTags(ConfigOptions().getWriterIncludeDebugTags())
 {
 }
 
@@ -203,7 +205,7 @@ void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstNodePt
   writer.writeAttribute("lat", QString::number(n->getY(), 'f', _precision));
   writer.writeAttribute("lon", QString::number(n->getX(), 'f', _precision));
 
-  if (ConfigOptions().getChangesetXmlWriterAddTimestamp())
+  if (_addTimestamp)
   {
     if (n->getTimestamp() != 0)
       writer.writeAttribute("timestamp", OsmUtils::toTimeString(n->getTimestamp()));
@@ -212,7 +214,7 @@ void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstNodePt
   }
 
   Tags tags = n->getTags();
-  if (ConfigOptions().getWriterIncludeDebugTags())
+  if (_includeDebugTags)
   {
     tags.set(MetadataTags::HootStatus(), QString::number(n->getStatus().getEnum()));
   }
@@ -262,7 +264,7 @@ void OsmXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstWayPtr 
   else
     version = w->getVersion();
   writer.writeAttribute("version", QString::number(version));
-  if (ConfigOptions().getChangesetXmlWriterAddTimestamp())
+  if (_addTimestamp)
   {
     if (w->getTimestamp() != 0)
       writer.writeAttribute("timestamp", OsmUtils::toTimeString(w->getTimestamp()));
@@ -287,7 +289,7 @@ void OsmXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstWayPtr 
   }
 
   Tags tags = w->getTags();
-  if (ConfigOptions().getWriterIncludeDebugTags())
+  if (_includeDebugTags)
   {
     tags.set(MetadataTags::HootStatus(), QString::number(w->getStatus().getEnum()));
   }
@@ -335,7 +337,7 @@ void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstRe
   else
     version = r->getVersion();
   writer.writeAttribute("version", QString::number(version));
-  if (ConfigOptions().getChangesetXmlWriterAddTimestamp())
+  if (_addTimestamp)
   {
     if (r->getTimestamp() != 0)
       writer.writeAttribute("timestamp", OsmUtils::toTimeString(r->getTimestamp()));
@@ -365,7 +367,7 @@ void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstRe
   }
 
   Tags tags = r->getTags();
-  if (ConfigOptions().getWriterIncludeDebugTags())
+  if (_includeDebugTags)
   {
     tags.set(MetadataTags::HootStatus(), QString::number(r->getStatus().getEnum()));
   }
