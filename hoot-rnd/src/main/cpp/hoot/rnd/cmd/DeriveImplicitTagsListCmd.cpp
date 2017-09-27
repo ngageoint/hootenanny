@@ -24,47 +24,40 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef DERIVEIMPLICITTAGSVISITOR_H
-#define DERIVEIMPLICITTAGSVISITOR_H
 
-// hoot
-#include <hoot/core/elements/ElementVisitor.h>
+// Hoot
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/rnd/schema/PoiTypeFromNameDeriver.h>
 
 namespace hoot
 {
-class ImplicitRule;
 
 /**
- * Derive tags based on the names.
+ * See TypeFromNameDeriver
  */
-class DeriveImplicitTagsVisitor : public ElementVisitor
+class DeriveImplicitTagsListCmd : public BaseCommand
 {
 public:
 
-  static std::string className() { return "hoot::DeriveImplicitTagsVisitor"; }
+  static std::string className() { return "hoot::DeriveImplicitTagsListCmd"; }
 
-  DeriveImplicitTagsVisitor();
+  virtual QString getName() const { return "derive-implicit-tags-list"; }
 
-  virtual void visit(const ElementPtr& e);
+  virtual int runSimple(QStringList args)
+  {
+    if (args.size() != 2)
+    {
+      std::cout << getHelp() << std::endl << std::endl;
+      throw HootException(QString("%1 takes two parameters.").arg(getName()));
+    }
 
-public:
+    PoiTypeFromNameDeriver().generateList(args[0], args[1]);
 
-  QList< boost::shared_ptr<ImplicitRule> > _rules;
-
-  /**
-   * Ensure all rules are in lower case.
-   */
-  void _rulesToLower();
-
-  /**
-   * Extract the names from tags and then tokenize the names into a set of words.
-   */
-  QSet<QString> _extractNameWords(const Tags& t);
-
-  void _populateHardcodedRules();
-  void _readRulesFromFile();
+    return 0;
+  }
 };
 
-}
+HOOT_FACTORY_REGISTER(Command, DeriveImplicitTagsListCmd)
 
-#endif // DERIVEIMPLICITTAGSVISITOR_H
+}

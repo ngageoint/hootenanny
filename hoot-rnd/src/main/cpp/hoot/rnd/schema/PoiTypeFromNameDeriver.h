@@ -24,47 +24,36 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef DERIVEIMPLICITTAGSVISITOR_H
-#define DERIVEIMPLICITTAGSVISITOR_H
+#ifndef POITYPEFROMNAMEDERIVER_H
+#define POITYPEFROMNAMEDERIVER_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+
+// Qt
+#include <QString>
 
 namespace hoot
 {
-class ImplicitRule;
 
 /**
- * Derive tags based on the names.
+ *
  */
-class DeriveImplicitTagsVisitor : public ElementVisitor
+class PoiTypeFromNameDeriver
 {
-public:
-
-  static std::string className() { return "hoot::DeriveImplicitTagsVisitor"; }
-
-  DeriveImplicitTagsVisitor();
-
-  virtual void visit(const ElementPtr& e);
 
 public:
 
-  QList< boost::shared_ptr<ImplicitRule> > _rules;
+  PoiTypeFromNameDeriver();
 
   /**
-   * Ensure all rules are in lower case.
+   *
+   *
+   * @param input
+   * @param output
    */
-  void _rulesToLower();
-
-  /**
-   * Extract the names from tags and then tokenize the names into a set of words.
-   */
-  QSet<QString> _extractNameWords(const Tags& t);
-
-  void _populateHardcodedRules();
-  void _readRulesFromFile();
+  void generateList(const QString input, const QString output);
 };
 
 }
 
-#endif // DERIVEIMPLICITTAGSVISITOR_H
+#endif // POITYPEFROMNAMEDERIVER_H

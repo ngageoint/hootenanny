@@ -42,7 +42,9 @@ HOOT_FACTORY_REGISTER(ElementVisitor, DeriveImplicitTagsVisitor)
 
 class ImplicitRule
 {
+
 public:
+
   QStringList word;
   QStringList wholeName;
   Tags tags;
@@ -51,6 +53,11 @@ public:
 typedef boost::shared_ptr<ImplicitRule> ImplicitRulePtr;
 
 DeriveImplicitTagsVisitor::DeriveImplicitTagsVisitor()
+{
+  _populateHardcodedRules();
+}
+
+void DeriveImplicitTagsVisitor::_populateHardcodedRules()
 {
   // an incomplete list derived over Yemen/Egypt for testing.
 
@@ -114,6 +121,11 @@ DeriveImplicitTagsVisitor::DeriveImplicitTagsVisitor()
   _rulesToLower();
 }
 
+void DeriveImplicitTagsVisitor::_readRulesFromFile()
+{
+  //TODO:
+}
+
 QSet<QString> DeriveImplicitTagsVisitor::_extractNameWords(const Tags& t)
 {
   QSet<QString> result;
@@ -149,7 +161,7 @@ void DeriveImplicitTagsVisitor::visit(const ElementPtr& e)
   if (e->getElementType() == ElementType::Node &&
       // either the element isn't a poi, or it contains a generic poi type
       (OsmSchema::getInstance().hasCategory(e->getTags(), "poi") == false ||
-      e->getTags().contains("poi") || e->getTags().get("place") == "locality"))
+       e->getTags().contains("poi") || e->getTags().get("place") == "locality"))
   {
     QSet<QString> nameWords = _extractNameWords(e->getTags());
 
@@ -188,7 +200,6 @@ void DeriveImplicitTagsVisitor::visit(const ElementPtr& e)
                                matchWords.join(", "));
     }
   }
-
 }
 
 }

@@ -1,0 +1,22 @@
+== derive-implicit-tags-list
+
+=== Description
+
+Given an input data source, derives a list of POI types from the input POI names that can be used during POI 
+conflation for better type matching
+
+* +input+  - path to a supported Hootenanny data format
+* +output+ - list output path; supported formats are ?
+
+
+=== Usage
+
+--------------------------------------
+derive-implicit-tags-list (input) (output)
+--------------------------------------
+
+==== Examples
+
+--------------------------------------
+
+--------------------------------------
