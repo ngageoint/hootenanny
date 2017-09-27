@@ -80,6 +80,8 @@ if [ ! -d "$SRC_DIR" ] ; then
     # add the Postgres repo
     echo "### Add Postgres repo ###" > CentOS_upgrade.txt
     sudo rpm -Uvh http://yum.postgresql.org/9.5/redhat/rhel-7-x86_64/pgdg-centos95-9.5-3.noarch.rpm >> CentOS_upgrade.txt 2>&1
+else
+    echo "### Skipping the epel and postgresql repos..."
 fi
 
 echo "Updating OS..."
@@ -143,6 +145,8 @@ sudo yum -y install \
     gnuplot \
     libicu-devel \
     libpng-devel \
+    libsqlite3x \
+    libsqlite3x-devel \
     libtool \
     m4 \
     maven \
@@ -298,7 +302,7 @@ echo "QMAKE_CXXFLAGS += -std=c++11" >> LocalConfig.pri
 
 echo "### Configuring environment..."
 
-# Configure https alternative mirror for maven isntall, this can likely be removed once
+# Configure https alternative mirror for maven install, this can likely be removed once
 # we are using maven 3.2.3 or higher
 sudo /usr/bin/perl $HOOT_HOME/scripts/maven/SetMavenHttps.pl
 
