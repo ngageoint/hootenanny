@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-set -e
-set -x
-
 #
 # Hootenanny Core Only configure and build script
 #
