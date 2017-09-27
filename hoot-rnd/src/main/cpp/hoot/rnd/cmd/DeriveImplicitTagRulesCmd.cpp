@@ -24,13 +24,11 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef POITYPEFROMNAMEDERIVER_H
-#define POITYPEFROMNAMEDERIVER_H
 
-// hoot
-
-// Qt
-#include <QString>
+// Hoot
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/rnd/schema/PoiImplicitTagRulesDeriver.h>
 
 namespace hoot
 {
@@ -38,22 +36,28 @@ namespace hoot
 /**
  *
  */
-class PoiTypeFromNameDeriver
+class DeriveImplicitTagRulesCmd : public BaseCommand
 {
-
 public:
 
-  PoiTypeFromNameDeriver();
+  static std::string className() { return "hoot::DeriveImplicitTagRulesCmd"; }
 
-  /**
-   *
-   *
-   * @param input
-   * @param output
-   */
-  void generateList(const QString input, const QString output);
+  virtual QString getName() const { return "derive-implicit-tag-rules"; }
+
+  virtual int runSimple(QStringList args)
+  {
+    if (args.size() != 2)
+    {
+      std::cout << getHelp() << std::endl << std::endl;
+      throw HootException(QString("%1 takes two parameters.").arg(getName()));
+    }
+
+    PoiImplicitTagRulesDeriver().generateList(args[0], args[1]);
+
+    return 0;
+  }
 };
 
-}
+HOOT_FACTORY_REGISTER(Command, DeriveImplicitTagRulesCmd)
 
-#endif // POITYPEFROMNAMEDERIVER_H
+}

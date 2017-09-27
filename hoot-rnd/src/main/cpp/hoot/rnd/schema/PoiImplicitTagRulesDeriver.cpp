@@ -24,22 +24,42 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "PoiTypeFromNameDeriver.h"
+#include "PoiImplicitTagRulesDeriver.h"
 
 // hoot
-
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/io/PartialOsmMapReader.h>
+#include <hoot/core/io/ElementInputStream.h>
+#include <hoot/rnd/io/ImplicitTagRulesJsonWriter.h>
 
 namespace hoot
 {
 
-PoiTypeFromNameDeriver::PoiTypeFromNameDeriver()
+PoiImplicitTagRulesDeriver::PoiImplicitTagRulesDeriver()
 {
-
 }
 
-void PoiTypeFromNameDeriver::generateList(const QString input, const QString output)
+void PoiImplicitTagRulesDeriver::generateList(const QString input, const QString output)
 {
+  boost::shared_ptr<PartialOsmMapReader> inputReader =
+    boost::dynamic_pointer_cast<PartialOsmMapReader>(
+      OsmMapReaderFactory::getInstance().createReader(input));
+  inputReader->open(input);
+  boost::shared_ptr<ElementInputStream> inputStream =
+    boost::dynamic_pointer_cast<ElementInputStream>(inputReader);
 
+  assert(output.endsWith(".json"));
+  ImplicitTagRulesJsonWriter listWriter;
+
+  while (inputStream->hasMoreElements())
+  {
+    ElementPtr element = inputStream->readNextElement();
+
+  }
+
+  inputReader->finalizePartial();
+  //listWriter.close();
 }
 
 }

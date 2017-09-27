@@ -24,40 +24,36 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
+#ifndef POIIMPLICITTAGRULESDERIVER_H
+#define POIIMPLICITTAGRULESDERIVER_H
 
-// Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/rnd/schema/PoiTypeFromNameDeriver.h>
+// hoot
+
+// Qt
+#include <QString>
 
 namespace hoot
 {
 
 /**
- * See TypeFromNameDeriver
+ *
  */
-class DeriveImplicitTagsListCmd : public BaseCommand
+class PoiImplicitTagRulesDeriver
 {
+
 public:
 
-  static std::string className() { return "hoot::DeriveImplicitTagsListCmd"; }
+  PoiImplicitTagRulesDeriver();
 
-  virtual QString getName() const { return "derive-implicit-tags-list"; }
-
-  virtual int runSimple(QStringList args)
-  {
-    if (args.size() != 2)
-    {
-      std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes two parameters.").arg(getName()));
-    }
-
-    PoiTypeFromNameDeriver().generateList(args[0], args[1]);
-
-    return 0;
-  }
+  /**
+   *
+   *
+   * @param input
+   * @param output
+   */
+  void generateList(const QString input, const QString output);
 };
 
-HOOT_FACTORY_REGISTER(Command, DeriveImplicitTagsListCmd)
-
 }
+
+#endif // POIIMPLICITTAGRULESDERIVER_H

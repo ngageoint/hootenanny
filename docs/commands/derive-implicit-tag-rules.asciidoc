@@ -1,4 +1,4 @@
-== derive-implicit-tags-list
+== derive-implicit-tag-rules
 
 === Description
 
@@ -12,7 +12,7 @@ conflation for better type matching
 === Usage
 
 --------------------------------------
-derive-implicit-tags-list (input) (output)
+derive-implicit-tag-rules (input) (output)
 --------------------------------------
 
 ==== Examples
