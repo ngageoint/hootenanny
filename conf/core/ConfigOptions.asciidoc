@@ -775,7 +775,7 @@ The size of a pixel when calculating node density. See User Manual for details.
 Should the hootapi services DB writer automatically create the specified user if it doesn't exist.
 This is most useful when debugging and testing.
 
-=== hootapi.db.writer.fast.bulk.insert
+=== hootapi.db.writer.copy.bulk.insert
 
 * Data Type: bool
 * Default Value: `false`

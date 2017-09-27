@@ -76,7 +76,7 @@ sudo apt-get -q -y install texinfo g++ libicu-dev libqt4-dev git-core libboost-d
  w3m texlive-lang-cyrillic graphviz python-setuptools python python-pip git ccache distcc libogdi3.2-dev \
  gnuplot python-matplotlib libqt4-sql-sqlite ruby ruby-dev xvfb zlib1g-dev patch x11vnc openssh-server \
  htop unzip postgresql-9.5 postgresql-client-9.5 postgresql-9.5-postgis-scripts postgresql-9.5-postgis-2.3 \
- libpango-1.0-0 libappindicator1 valgrind dos2unix >> Ubuntu_upgrade.txt 2>&1
+ libpango-1.0-0 libappindicator1 valgrind dos2unix bc mlocate vim >> Ubuntu_upgrade.txt 2>&1
 
 if ! dpkg -l | grep --quiet dictionaries-common; then
     # See /usr/share/doc/dictionaries-common/README.problems for details
@@ -297,6 +297,9 @@ fi
 # Get the configuration for the Database
 source $HOOT_HOME/conf/database/DatabaseConfig.sh
 
+echo "New postgres restart for docker box tknerr/baseimage-ubuntu-14.04"
+sudo service postgresql restart
+
 # NOTE: These have been changed to pg9.5
 # See if we already have a dB user
 if ! sudo -u postgres psql -c "\du" | awk -F"|" '{print $1}' | grep -iw --quiet $DB_USER; then
@@ -313,7 +316,6 @@ if ! sudo -u postgres psql -c "\du" | awk -F"|" '{print $1}' | grep -iw --quiet 
     sudo -u postgres createuser --superuser "$DB_USER_OSMAPI"
     sudo -u postgres psql -c "alter user \"$DB_USER_OSMAPI\" with password '$DB_PASSWORD_OSMAPI';"
 fi
-
 
 # Check for a hoot Db
 if ! sudo -u postgres psql -lqt | awk -F"|" '{print $1}' | grep -iw --quiet $DB_NAME; then
@@ -619,3 +621,4 @@ fi
 
 # Always start with a clean $HOOT_HOME/userfiles/tmp
 rm -rf $HOOT_HOME/userfiles/tmp
+

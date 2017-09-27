@@ -104,7 +104,7 @@ public:
     writer.setCreateUser(true);
     writer.setOverwriteMap(true);
     writer.setUserEmail(userEmail());
-    writer.setFastBulkInsertActivated(true);
+    writer.setCopyBulkInsertActivated(true);
 
     writer.open(ServicesDbTestUtils::getDbModifyUrl().toString());
     writer.write(ServicesDbTestUtils::createTestMap1());

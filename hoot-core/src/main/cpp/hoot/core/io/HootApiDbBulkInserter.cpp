@@ -71,7 +71,7 @@ bool HootApiDbBulkInserter::isSupported(QString urlStr)
 {
   LOG_VARD(urlStr);
   QUrl url(urlStr);
-  return _database.isSupported(url) && _fastBulkInsertActivated;
+  return _database.isSupported(url) && _copyBulkInsertActivated;
 }
 
 void HootApiDbBulkInserter::open(QString url)
@@ -94,7 +94,7 @@ void HootApiDbBulkInserter::open(QString url)
   }
   _database.open(_outputUrl);
 
-  //not starting a transaction here, b/c the exec'd SQL file declares on instead
+  //not starting a transaction here, b/c the exec'd SQL file will declare one instead
   _getOrCreateMap();
   LOG_VART(_database.getMapId());
 
@@ -534,7 +534,7 @@ void HootApiDbBulkInserter::setConfiguration(const Settings& conf)
   setUserEmail(confOptions.getApiDbEmail());
   setCreateUser(confOptions.getHootapiDbWriterCreateUser());
   setOverwriteMap(confOptions.getHootapiDbWriterOverwriteMap());
-  setFastBulkInsertActivated(confOptions.getHootapiDbWriterFastBulkInsert());
+  setCopyBulkInsertActivated(confOptions.getHootapiDbWriterCopyBulkInsert());
 }
 
 QStringList HootApiDbBulkInserter::_createSectionNameList()
