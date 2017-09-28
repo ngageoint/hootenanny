@@ -92,8 +92,6 @@ sudo yum -y install \
     gnuplot \
     libicu-devel \
     libpng-devel \
-    libsqlite3x \
-    libsqlite3x-devel \
     libtool \
     m4 \
     maven \
@@ -123,6 +121,8 @@ sudo yum -y install \
     qt-postgresql \
     qtwebkit \
     qtwebkit-devel \
+    sqlite \
+    sqlite-devel \
     swig \
     tex* \
     unzip \
