@@ -28,7 +28,10 @@
 #define IMPLICITTAGRULESJSONWRITER_H
 
 // hoot
-#include <hoot/rnd/visitors/DeriveImplicitTagsVisitor.h>
+
+
+// Qt
+#include <QFile>
 
 namespace hoot
 {
@@ -41,9 +44,19 @@ class ImplicitTagRulesJsonWriter
 
 public:
 
-  ImplicitTagRulesJsonWriter();
+  ImplicitTagRulesJsonWriter(const int minOccurancesAllowed = 1);
+  ~ImplicitTagRulesJsonWriter();
 
-  void write(const ImplicitRule& rule);
+  void open(const QString input);
+
+  void write(const QMap<QString, QMap<QString, long> >& tokensToKvpsWithCounts);
+
+  void close();
+
+private:
+
+  boost::shared_ptr<QFile> _file;
+  int _minOccurancesAllowed;
 };
 
 }

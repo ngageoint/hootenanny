@@ -74,6 +74,7 @@ public:
   void appendValue(QString k, QString v);
   void appendValue(QString k, double v) { appendValue(k, QString::number(v)); }
   void appendValue(QString k, QStringList v);
+  void appendValue(const QString kvp);
 
   /**
    * Appends a value to a key. If the key already has a value then the values are semi-colon
@@ -115,10 +116,18 @@ public:
 
   /**
    * Given a list of keys (that may include regex values), find all the keys in this Tags set that
-   * match one or more entries in the list and return it. Each key will only bet returned at most
+   * match one or more entries in the list and return it. Each key will only be returned at most
    * once.
    */
   QStringList getMatchingKeys(const QStringList& k);
+
+  /**
+   *
+   *
+   * @param keys
+   * @return
+   */
+  bool hasAnyKey(const QStringList keys) const;
 
   /**
    * Return all the keys that are used in names.

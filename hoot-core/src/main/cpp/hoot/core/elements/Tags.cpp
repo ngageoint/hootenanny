@@ -58,6 +58,21 @@ void Tags::addNote(QString note)
   appendValue("note", note);
 }
 
+void Tags::appendValue(const QString kvp)
+{
+  const QString errorMsg = "KVP: " + kvp + " should be of the format: key=value";
+  if (!kvp.contains("="))
+  {
+    throw HootException(errorMsg);
+  }
+  const QStringList kvpParts = kvp.split("=");
+  if (kvpParts.size() != 2)
+  {
+    throw HootException(errorMsg);
+  }
+  appendValue(kvpParts[0].trimmed(), kvpParts[1].trimmed());
+}
+
 void Tags::appendValue(QString k, QString v)
 {
   QString oldV = value(k);
@@ -362,6 +377,18 @@ QStringList Tags::getMatchingKeys(const QStringList& k)
   }
 
   return result;
+}
+
+bool Tags::hasAnyKey(const QStringList keys) const
+{
+  for (int i = 0; i < keys.size(); i++)
+  {
+    if (contains(keys[i]))
+    {
+      return true;
+    }
+  }
+  return false;
 }
 
 QStringList Tags::getNames() const

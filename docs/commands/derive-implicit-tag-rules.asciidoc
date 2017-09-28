@@ -2,17 +2,18 @@
 
 === Description
 
-Given an input data source, derives a list of POI types from the input POI names that can be used during POI 
-conflation for better type matching
+Given an input data source, derives a list of feature types implicitly from the input feature names that can be used during 
+conflation for better type matching.  Only POI's are currently supported.
 
-* +input+  - path to a supported Hootenanny data format
-* +output+ - list output path; supported formats are ?
-
+* +input+             - path to a supported Hootenanny data input format
+* +minTypeOccurances+ - the minimum number of occurances of a type tag in order for a rule to be derived for it
+* +typeKeys+          - comma separated list of tag keys to parse when deriving implicit types; specify "" to use all types
+* +output+            - list output path; supported formats are ?
 
 === Usage
 
 --------------------------------------
-derive-implicit-tag-rules (input) (output)
+derive-implicit-tag-rules (input) (minTypeOccurances) (tagKeysToIgnore) (output)
 --------------------------------------
 
 ==== Examples

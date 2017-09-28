@@ -24,54 +24,35 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "ImplicitTagRulesJsonWriter.h"
+#include "DeriveImplicitTagsVisitor2.h"
 
-// hoot
-#include <hoot/core/util/HootException.h>
+#include <hoot/core/algorithms/string/StringTokenizer.h>
+#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/MetadataTags.h>
+
+// Qt
+#include <QSet>
 
 namespace hoot
 {
 
-ImplicitTagRulesJsonWriter::ImplicitTagRulesJsonWriter(const int minOccurancesAllowed) :
-_minOccurancesAllowed(minOccurancesAllowed)
+HOOT_FACTORY_REGISTER(ElementVisitor, DeriveImplicitTagsVisitor2)
+
+DeriveImplicitTagsVisitor2::DeriveImplicitTagsVisitor2()
 {
+  //_readRulesFromFile();
 }
 
-ImplicitTagRulesJsonWriter::~ImplicitTagRulesJsonWriter()
+void DeriveImplicitTagsVisitor2::_readRulesFromFile()
 {
-  close();
+  //TODO:
 }
 
-void ImplicitTagRulesJsonWriter::open(const QString output)
-{
-  close();
-
-  _file.reset(new QFile());
-  _file->setFileName(output);
-  if (_file->exists() && !_file->remove())
-  {
-    throw HootException(QObject::tr("Error removing existing %1 for writing.").arg(output));
-  }
-  if (!_file->open(QIODevice::WriteOnly | QIODevice::Text))
-  {
-    throw HootException(QObject::tr("Error opening %1 for writing.").arg(output));
-  }
-  LOG_DEBUG("Opened: " << output << ".");
-}
-
-void ImplicitTagRulesJsonWriter::write(
-  const QMap<QString, QMap<QString, long> >& /*tokensToKvpsWithCounts*/)
+void DeriveImplicitTagsVisitor2::visit(const ElementPtr& /*e*/)
 {
 
-}
-
-void ImplicitTagRulesJsonWriter::close()
-{
-  if (_file.get())
-  {
-    _file->close();
-    _file.reset();
-  }
 }
 
 }

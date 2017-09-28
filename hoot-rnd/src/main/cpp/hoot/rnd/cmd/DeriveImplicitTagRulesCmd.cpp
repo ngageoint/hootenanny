@@ -46,13 +46,22 @@ public:
 
   virtual int runSimple(QStringList args)
   {
-    if (args.size() != 2)
+    if (args.size() != 4)
     {
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes two parameters.").arg(getName()));
+      throw HootException(QString("%1 takes four parameters.").arg(getName()));
     }
 
-    PoiImplicitTagRulesDeriver().generateList(args[0], args[1]);
+    bool ok = false;
+    const int minOccurancesAllowed = args[1].toInt(&ok);
+    if (!ok || minOccurancesAllowed < 1)
+    {
+      throw IllegalArgumentException(
+        "Invalid value for the minimum number of type occurrances allowed: " + args[1]);
+    }
+
+    PoiImplicitTagRulesDeriver().writeRules(
+      args[0], args[3], minOccurancesAllowed, args[2].trimmed().split(","));
 
     return 0;
   }

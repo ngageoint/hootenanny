@@ -24,60 +24,41 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef POIIMPLICITTAGRULESDERIVER_H
-#define POIIMPLICITTAGRULESDERIVER_H
+#ifndef IMPLICITTAGRULESSQLLITEWRITER_H
+#define IMPLICITTAGRULESSQLLITEWRITER_H
 
 // hoot
 
 
 // Qt
-#include <QString>
-#include <QMultiMap>
+#include <QFile>
+#include <QMap>
 
 namespace hoot
 {
 
-class Tags;
-
 /**
  *
  */
-class PoiImplicitTagRulesDeriver
+class ImplicitTagRulesSqlLiteWriter
 {
 
 public:
 
-  PoiImplicitTagRulesDeriver();
+  ImplicitTagRulesSqlLiteWriter(const int minOccurancesAllowed = 1);
+  ~ImplicitTagRulesSqlLiteWriter();
 
-  void writeRules(const QString input, const QString output, const int minOccurancesAllowed = 1,
-                  const QStringList typeKeys = QStringList());
+  void open(const QString input);
+
+  void write(const QMap<QString, QMap<QString, long> >& tokensToKvpsWithCounts);
+
+  void close();
 
 private:
 
-//  //#1
-//  QMultiMap<QString, QStringList> _kvpCountsByToken;
-
-//  //#2
-//  QMap<QString, QStringList> _tokenToKvps;
-//  QMap<QString, QStringList> _kvpToTokens;
-//  QMap<QString, int> _tokenKvpToCount;
-
-  //#3
-  //QList<ImplicitTagRulePtr> _rules;
-  //QMap<QString, ImplicitTagRulePtr> _tokensToRules;
-  //QMap<QString, ImplicitTagRulePtr> _kvpsToRules;
-  QMap<QString, long> _wordKvpToCount;
-  QMap<QString, QMap<QString, long> > _tokensToKvpsWithCounts;
-
   int _minOccurancesAllowed;
-
-  //void _updateForNewToken(const QString token, const QString kvp);
-  void _updateForNewToken2(const QString token, const QString kvp);
-  //QList<ImplicitTagRulePtr> _tokenKvpsToRules();
-  QString _getMostSpecificPoiKvp(const Tags& tags) const;
-  void _removeKvpsBelowOccuranceThreshold();
 };
 
 }
 
-#endif // POIIMPLICITTAGRULESDERIVER_H
+#endif // IMPLICITTAGRULESSQLLITEWRITER_H

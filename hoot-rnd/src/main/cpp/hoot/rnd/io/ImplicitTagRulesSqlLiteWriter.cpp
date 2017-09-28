@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "ImplicitTagRulesJsonWriter.h"
+#include "ImplicitTagRulesSqlLiteWriter.h"
 
 // hoot
 #include <hoot/core/util/HootException.h>
@@ -32,46 +32,33 @@
 namespace hoot
 {
 
-ImplicitTagRulesJsonWriter::ImplicitTagRulesJsonWriter(const int minOccurancesAllowed) :
+ImplicitTagRulesSqlLiteWriter::ImplicitTagRulesSqlLiteWriter(const int minOccurancesAllowed) :
 _minOccurancesAllowed(minOccurancesAllowed)
 {
 }
 
-ImplicitTagRulesJsonWriter::~ImplicitTagRulesJsonWriter()
+ImplicitTagRulesSqlLiteWriter::~ImplicitTagRulesSqlLiteWriter()
 {
   close();
 }
 
-void ImplicitTagRulesJsonWriter::open(const QString output)
+void ImplicitTagRulesSqlLiteWriter::open(const QString output)
 {
   close();
 
-  _file.reset(new QFile());
-  _file->setFileName(output);
-  if (_file->exists() && !_file->remove())
-  {
-    throw HootException(QObject::tr("Error removing existing %1 for writing.").arg(output));
-  }
-  if (!_file->open(QIODevice::WriteOnly | QIODevice::Text))
-  {
-    throw HootException(QObject::tr("Error opening %1 for writing.").arg(output));
-  }
+
   LOG_DEBUG("Opened: " << output << ".");
 }
 
-void ImplicitTagRulesJsonWriter::write(
+void ImplicitTagRulesSqlLiteWriter::write(
   const QMap<QString, QMap<QString, long> >& /*tokensToKvpsWithCounts*/)
 {
 
 }
 
-void ImplicitTagRulesJsonWriter::close()
+void ImplicitTagRulesSqlLiteWriter::close()
 {
-  if (_file.get())
-  {
-    _file->close();
-    _file.reset();
-  }
+
 }
 
 }

@@ -24,54 +24,33 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "ImplicitTagRulesJsonWriter.h"
+#ifndef DERIVEIMPLICITTAGSVISITOR2_H
+#define DERIVEIMPLICITTAGSVISITOR2_H
 
 // hoot
-#include <hoot/core/util/HootException.h>
+#include <hoot/core/elements/ElementVisitor.h>
 
 namespace hoot
 {
 
-ImplicitTagRulesJsonWriter::ImplicitTagRulesJsonWriter(const int minOccurancesAllowed) :
-_minOccurancesAllowed(minOccurancesAllowed)
+/**
+ * Derive tags based on the names.
+ */
+class DeriveImplicitTagsVisitor2 : public ElementVisitor
 {
-}
+public:
 
-ImplicitTagRulesJsonWriter::~ImplicitTagRulesJsonWriter()
-{
-  close();
-}
+  static std::string className() { return "hoot::DeriveImplicitTagsVisitor2"; }
 
-void ImplicitTagRulesJsonWriter::open(const QString output)
-{
-  close();
+  DeriveImplicitTagsVisitor2();
 
-  _file.reset(new QFile());
-  _file->setFileName(output);
-  if (_file->exists() && !_file->remove())
-  {
-    throw HootException(QObject::tr("Error removing existing %1 for writing.").arg(output));
-  }
-  if (!_file->open(QIODevice::WriteOnly | QIODevice::Text))
-  {
-    throw HootException(QObject::tr("Error opening %1 for writing.").arg(output));
-  }
-  LOG_DEBUG("Opened: " << output << ".");
-}
+  virtual void visit(const ElementPtr& e);
 
-void ImplicitTagRulesJsonWriter::write(
-  const QMap<QString, QMap<QString, long> >& /*tokensToKvpsWithCounts*/)
-{
+public:
+
+  void _readRulesFromFile();
+};
 
 }
 
-void ImplicitTagRulesJsonWriter::close()
-{
-  if (_file.get())
-  {
-    _file->close();
-    _file.reset();
-  }
-}
-
-}
+#endif // DERIVEIMPLICITTAGSVISITOR2_H
