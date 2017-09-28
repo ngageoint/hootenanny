@@ -60,9 +60,6 @@ public:
    * Extract the names from tags and then tokenize the names into a set of words.
    */
   QSet<QString> _extractNameWords(const Tags& t);
-
-  void _populateHardcodedRules();
-  void _readRulesFromFile();
 };
 
 }

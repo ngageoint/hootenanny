@@ -27,15 +27,15 @@
 #ifndef IMPLICITTAGRULESSQLLITEWRITER_H
 #define IMPLICITTAGRULESSQLLITEWRITER_H
 
-// hoot
-
-
 // Qt
-#include <QFile>
+#include <QString>
 #include <QMap>
+#include <QtSql/QSqlDatabase>
 
 namespace hoot
 {
+
+class ImplicitTagRules;
 
 /**
  *
@@ -45,18 +45,19 @@ class ImplicitTagRulesSqlLiteWriter
 
 public:
 
-  ImplicitTagRulesSqlLiteWriter(const int minOccurancesAllowed = 1);
+  ImplicitTagRulesSqlLiteWriter();
   ~ImplicitTagRulesSqlLiteWriter();
 
   void open(const QString input);
 
-  void write(const QMap<QString, QMap<QString, long> >& tokensToKvpsWithCounts);
+  void write(const QMap<QString, QMap<QString, long> >& tagRules);
 
   void close();
 
 private:
 
   int _minOccurancesAllowed;
+  QSqlDatabase _db;
 };
 
 }

@@ -6,14 +6,14 @@ Given an input data source, derives a list of feature types implicitly from the 
 conflation for better type matching.  Only POI's are currently supported.
 
 * +input+             - path to a supported Hootenanny data input format
-* +minTypeOccurances+ - the minimum number of occurances of a type tag in order for a rule to be derived for it
+* +minTagOccurances+  - the minimum number of occurances of a type tag in order for a rule to be derived for it
 * +typeKeys+          - comma separated list of tag keys to parse when deriving implicit types; specify "" to use all types
 * +output+            - list output path; supported formats are ?
 
 === Usage
 
 --------------------------------------
-derive-implicit-tag-rules (input) (minTypeOccurances) (tagKeysToIgnore) (output)
+derive-implicit-tag-rules (input) (minTagOccurances) (tagKeysToIgnore) (output)
 --------------------------------------
 
 ==== Examples

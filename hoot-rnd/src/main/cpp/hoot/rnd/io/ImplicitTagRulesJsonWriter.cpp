@@ -29,11 +29,13 @@
 // hoot
 #include <hoot/core/util/HootException.h>
 
+// Qt
+#include <QStringBuilder>
+
 namespace hoot
 {
 
-ImplicitTagRulesJsonWriter::ImplicitTagRulesJsonWriter(const int minOccurancesAllowed) :
-_minOccurancesAllowed(minOccurancesAllowed)
+ImplicitTagRulesJsonWriter::ImplicitTagRulesJsonWriter()
 {
 }
 
@@ -59,10 +61,41 @@ void ImplicitTagRulesJsonWriter::open(const QString output)
   LOG_DEBUG("Opened: " << output << ".");
 }
 
-void ImplicitTagRulesJsonWriter::write(
-  const QMap<QString, QMap<QString, long> >& /*tokensToKvpsWithCounts*/)
+void ImplicitTagRulesJsonWriter::write(const QMap<QString, QMap<QString, long> >& tagRules)
 {
+  _file->write(QString("[\n").toUtf8());
 
+  for (QMap<QString, QMap<QString, long> >::const_iterator ruleItr = tagRules.begin();
+       ruleItr != tagRules.end(); ++ruleItr)
+  {
+    _file->write(QString("  {\n").toUtf8());
+
+    const QString wordLine = "    \"word\": \"" % ruleItr.key() % "\",\n";
+    _file->write(wordLine.toUtf8());
+
+    const QMap<QString, long> kvpsWithCount = ruleItr.value();
+    for (QMap<QString, long>::const_iterator kvpItr = kvpsWithCount.begin();
+       kvpItr != kvpsWithCount.end(); ++kvpItr)
+    {
+      QString kvpLine = "    \"" % kvpItr.key() % "\": " % QString::number(kvpItr.value());
+      if (kvpItr != kvpsWithCount.end())
+      {
+        kvpLine += ",";
+      }
+      kvpLine += "\n";
+      _file->write(kvpLine.toUtf8());
+    }
+
+    QString closingRuleLine = "  }";
+    if (ruleItr != tagRules.end())
+    {
+      closingRuleLine += ",";
+    }
+    closingRuleLine += "\n";
+    _file->write(closingRuleLine.toUtf8());
+  }
+
+  _file->write(QString("]").toUtf8());
 }
 
 void ImplicitTagRulesJsonWriter::close()

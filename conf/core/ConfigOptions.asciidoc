@@ -496,6 +496,13 @@ Bounds used by the map cropper when cropping a map, of the form: minx,miny,maxx,
 
 Debugging: The filename to use when saving the debug map during conflation.
 
+=== derive.implicit.tags.database
+
+* Data Type: string
+* Default Value: `dictionary/ImplicitTags.sqlite`
+
+TODO
+
 === dual.way.splitter.driving.side
 
 * Data Type: string

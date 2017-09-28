@@ -31,6 +31,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 // Qt
 #include <QSet>
@@ -42,17 +43,43 @@ HOOT_FACTORY_REGISTER(ElementVisitor, DeriveImplicitTagsVisitor2)
 
 DeriveImplicitTagsVisitor2::DeriveImplicitTagsVisitor2()
 {
-  //_readRulesFromFile();
+  _ruleReader.reset(
+    new ImplicitTagRulesSqlLiteReader(ConfigOptions().getDeriveImplicitTagsDatabase()));
 }
 
-void DeriveImplicitTagsVisitor2::_readRulesFromFile()
+void DeriveImplicitTagsVisitor2::visit(const ElementPtr& e)
 {
-  //TODO:
+  if (e->getElementType() == ElementType::Node &&
+      // either the element isn't a poi, or it contains a generic poi type
+      (OsmSchema::getInstance().hasCategory(e->getTags(), "poi") == false ||
+       e->getTags().contains("poi") || e->getTags().get("place") == "locality"))
+  {
+    const QSet<QString> nameWords = _extractNameWords(e->getTags());
+    for (QSet<QString>::const_iterator nameWordItr = nameWords.begin();
+         nameWordItr != nameWords.end(); ++nameWordItr)
+    {
+      Tags tags = _ruleReader->getTags(*nameWordItr);
+      //TODO: handle duplicate matches
+    }
+  }
 }
 
-void DeriveImplicitTagsVisitor2::visit(const ElementPtr& /*e*/)
+QSet<QString> DeriveImplicitTagsVisitor2::_extractNameWords(const Tags& t)
 {
+  QSet<QString> result;
+  QStringList names = t.getNames();
+  StringTokenizer tokenizer;
 
+  foreach (const QString& n, names)
+  {
+    QStringList words = tokenizer.tokenize(n);
+    foreach (const QString& w, words)
+    {
+      result.insert(w.toLower());
+    }
+  }
+
+  return result;
 }
 
 }

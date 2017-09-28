@@ -29,6 +29,7 @@
 
 // hoot
 #include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/rnd/io/ImplicitTagRulesSqlLiteReader.h>
 
 namespace hoot
 {
@@ -46,9 +47,12 @@ public:
 
   virtual void visit(const ElementPtr& e);
 
-public:
+private:
 
-  void _readRulesFromFile();
+  boost::shared_ptr<ImplicitTagRulesSqlLiteReader> _ruleReader;
+
+  QSet<QString> _extractNameWords(const Tags& t);
+
 };
 
 }

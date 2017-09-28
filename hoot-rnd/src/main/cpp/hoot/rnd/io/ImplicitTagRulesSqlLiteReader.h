@@ -22,49 +22,38 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef POIIMPLICITTAGRULESDERIVER_H
-#define POIIMPLICITTAGRULESDERIVER_H
+
+#ifndef IMPLICITTAGRULESSQLLITEREADER_H
+#define IMPLICITTAGRULESSQLLITEREADER_H
+
+// Hoot
+#include <hoot/core/elements/Tags.h>
 
 // Qt
 #include <QString>
-#include <QMap>
+#include <QtSql/QSqlDatabase>
+#include <QSqlQuery>
 
-namespace hoot
+namespace  hoot
 {
 
-class Tags;
-
-/**
- *
- */
-class PoiImplicitTagRulesDeriver
+class ImplicitTagRulesSqlLiteReader
 {
-
 public:
 
-  //typedef QMap<QString, QMap<QString, long> > ImplicitTagRules;
+  ImplicitTagRulesSqlLiteReader(const QString path);
 
-  PoiImplicitTagRulesDeriver();
-
-  QMap<QString, QMap<QString, long> > deriveRules(const QString input,
-                                                  const int minTagOccurances = 1,
-                                                  const QStringList typeKeys = QStringList());
+  Tags getTags(const QString word) const;
 
 private:
 
-  //ImplicitTagRules _tokensToKvpsWithCounts;
-  //TODO: replace with stxxl map
-  QMap<QString, QMap<QString, long> > _tokensToKvpsWithCounts;
-
-  int _minTagOccurances;
-
-  void _updateForNewToken(const QString token, const QString kvp);
-  QString _getMostSpecificPoiKvp(const Tags& tags) const;
-  void _removeKvpsBelowOccuranceThreshold();
+  QString _path;
+  QSqlDatabase _db;
+  mutable QSqlQuery _select;
 };
 
 }
 
-#endif // POIIMPLICITTAGRULESDERIVER_H
+#endif // IMPLICITTAGRULESSQLLITEREADER_H

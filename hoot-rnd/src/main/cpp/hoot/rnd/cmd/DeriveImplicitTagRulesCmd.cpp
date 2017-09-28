@@ -29,6 +29,8 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/rnd/schema/PoiImplicitTagRulesDeriver.h>
+#include <hoot/rnd/io/ImplicitTagRulesJsonWriter.h>
+#include <hoot/rnd/io/ImplicitTagRulesSqlLiteWriter.h>
 
 namespace hoot
 {
@@ -60,8 +62,24 @@ public:
         "Invalid value for the minimum number of type occurrances allowed: " + args[1]);
     }
 
-    PoiImplicitTagRulesDeriver().writeRules(
-      args[0], args[3], minOccurancesAllowed, args[2].trimmed().split(","));
+    const QMap<QString, QMap<QString, long> > tagRules =
+      PoiImplicitTagRulesDeriver().deriveRules(
+        args[0], minOccurancesAllowed, args[2].trimmed().split(","));
+
+    if (args[3].trimmed().endsWith(".json")) //TODO: cleanup
+    {
+      ImplicitTagRulesJsonWriter rulesWriter;
+      rulesWriter.open(args[3]);
+      rulesWriter.write(tagRules);
+      rulesWriter.close();
+    }
+    else
+    {
+      ImplicitTagRulesSqlLiteWriter rulesWriter;
+      rulesWriter.open(args[3]);
+      rulesWriter.write(tagRules);
+      rulesWriter.close();
+    }
 
     return 0;
   }

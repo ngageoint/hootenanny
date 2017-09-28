@@ -24,47 +24,26 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef POIIMPLICITTAGRULESDERIVER_H
-#define POIIMPLICITTAGRULESDERIVER_H
+// Hoot
+#include <hoot/core/TestUtils.h>
 
 // Qt
-#include <QString>
-#include <QMap>
+#include <QDir>
 
 namespace hoot
 {
 
-class Tags;
-
-/**
- *
- */
-class PoiImplicitTagRulesDeriver
+class ImplicitTagRulesSqlLiteReaderTest : public CppUnit::TestFixture
 {
+  CPPUNIT_TEST_SUITE(ImplicitTagRulesSqlLiteReaderTest);
+  //CPPUNIT_TEST(elementAsJsonTest);
+  CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  //typedef QMap<QString, QMap<QString, long> > ImplicitTagRules;
 
-  PoiImplicitTagRulesDeriver();
-
-  QMap<QString, QMap<QString, long> > deriveRules(const QString input,
-                                                  const int minTagOccurances = 1,
-                                                  const QStringList typeKeys = QStringList());
-
-private:
-
-  //ImplicitTagRules _tokensToKvpsWithCounts;
-  //TODO: replace with stxxl map
-  QMap<QString, QMap<QString, long> > _tokensToKvpsWithCounts;
-
-  int _minTagOccurances;
-
-  void _updateForNewToken(const QString token, const QString kvp);
-  QString _getMostSpecificPoiKvp(const Tags& tags) const;
-  void _removeKvpsBelowOccuranceThreshold();
 };
 
-}
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ImplicitTagRulesSqlLiteReaderTest, "quick");
 
-#endif // POIIMPLICITTAGRULESDERIVER_H
+}

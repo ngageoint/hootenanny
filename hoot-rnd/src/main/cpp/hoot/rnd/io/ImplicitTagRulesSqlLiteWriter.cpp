@@ -28,12 +28,16 @@
 
 // hoot
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/util/DbUtils.h>
+
+// Qt
+#include <QSqlError>
+#include <QSqlQuery>
 
 namespace hoot
 {
 
-ImplicitTagRulesSqlLiteWriter::ImplicitTagRulesSqlLiteWriter(const int minOccurancesAllowed) :
-_minOccurancesAllowed(minOccurancesAllowed)
+ImplicitTagRulesSqlLiteWriter::ImplicitTagRulesSqlLiteWriter()
 {
 }
 
@@ -46,19 +50,55 @@ void ImplicitTagRulesSqlLiteWriter::open(const QString output)
 {
   close();
 
-
+  _db = QSqlDatabase::addDatabase("QSQLITE");
+  _db.setDatabaseName(output);
+  if (!_db.open())
+  {
+    throw HootException("Error opening database: " + output);
+  }
   LOG_DEBUG("Opened: " << output << ".");
 }
 
-void ImplicitTagRulesSqlLiteWriter::write(
-  const QMap<QString, QMap<QString, long> >& /*tokensToKvpsWithCounts*/)
+void ImplicitTagRulesSqlLiteWriter::write(const QMap<QString, QMap<QString, long> >& tagRules)
 {
+  DbUtils::execNoPrepare(_db, "CREATE TABLE rules (id BIGSERIAL PRIMARY KEY, word TEXT, kvp TEXT)");
+  DbUtils::execNoPrepare(_db, "BEGIN");
 
+  QSqlQuery q(_db);
+  if (q.prepare("INSERT INTO rules (word, kvp) VALUES(:word, :kvp)") == false)
+  {
+    throw HootException(QString("Error preparing query: %1").arg(q.lastError().text()));
+  }
+
+  for (QMap<QString, QMap<QString, long> >::const_iterator tokenItr = tagRules.begin();
+       tokenItr != tagRules.end(); ++tokenItr)
+  {
+    const QString word = tokenItr.key();
+    const QMap<QString, long> kvps = tokenItr.value();
+    for (QMap<QString, long>::const_iterator kvpItr = kvps.begin(); kvpItr != kvps.end(); ++kvpItr)
+    {
+      q.bindValue(":word", word);
+      q.bindValue(":kvp", kvpItr.key());
+    }
+  }
+
+  //TODO: make this query buffered?
+  if (q.exec() == false)
+  {
+    QString err = QString("Error executing query: %1 (%2)").arg(q.executedQuery()).
+        arg(q.lastError().text());
+    throw HootException(err);
+  }
+
+  DbUtils::execNoPrepare(_db, "COMMIT");
 }
 
 void ImplicitTagRulesSqlLiteWriter::close()
 {
-
+  if (!_db.open())
+  {
+    _db.close();
+  }
 }
 
 }

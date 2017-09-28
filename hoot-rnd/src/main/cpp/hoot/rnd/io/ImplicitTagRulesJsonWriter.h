@@ -27,11 +27,9 @@
 #ifndef IMPLICITTAGRULESJSONWRITER_H
 #define IMPLICITTAGRULESJSONWRITER_H
 
-// hoot
-
-
 // Qt
 #include <QFile>
+#include <QMap>
 
 namespace hoot
 {
@@ -44,19 +42,18 @@ class ImplicitTagRulesJsonWriter
 
 public:
 
-  ImplicitTagRulesJsonWriter(const int minOccurancesAllowed = 1);
+  ImplicitTagRulesJsonWriter();
   ~ImplicitTagRulesJsonWriter();
 
   void open(const QString input);
 
-  void write(const QMap<QString, QMap<QString, long> >& tokensToKvpsWithCounts);
+  void write(const QMap<QString, QMap<QString, long> >& tagRules);
 
   void close();
 
 private:
 
   boost::shared_ptr<QFile> _file;
-  int _minOccurancesAllowed;
 };
 
 }
