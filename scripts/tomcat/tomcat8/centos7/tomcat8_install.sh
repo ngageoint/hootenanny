@@ -29,6 +29,12 @@ TOMCAT_CACHE_HOME_PERMISSIONS=775
 TOMCAT_VERSION='8.5.20'
 TOMCAT_TAR_FILE=${SCRIPT_HOME}/../apache-tomcat-${TOMCAT_VERSION}.tar.gz
 
+# Get the latest Tomcat 8 version from Apache
+#TOMCAT_VERSION=`wget -qO- http://www-us.apache.org/dist/tomcat/tomcat-8/ | grep -oP "\"v\K\d+\.\d+\.\d+/" | sed 's|/||' | tail -n 1`
+#if [ ! -f apache-tomcat-$TOMCAT_VERSION.tar.gz ]; then
+#  wget http://www-us.apache.org/dist/tomcat/tomcat-8/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz
+#fi
+
 echo "######## Begin $TOMCAT_NAME installation ########"
 echo "SCRIPT_HOME=$SCRIPT_HOME"
 

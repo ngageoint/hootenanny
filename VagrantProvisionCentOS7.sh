@@ -41,29 +41,6 @@ sudo systemctl start ntpd
 # Make sure that we are in ~ before trying to wget & install stuff
 cd ~
 
-echo "### Installing the repo for an ancient version of NodeJS"
-curl --silent --location https://rpm.nodesource.com/setup | sudo bash -
-
-echo "### Installing an ancient version of NodeJS"
-sudo yum install -y \
-  nodejs-0.10.46 \
-  nodejs-devel-0.10.46 \
-  yum-plugin-versionlock
-
-# Now try to lock NodeJS so that the next yum update doesn't remove it.
-sudo yum versionlock nodejs*
-
-
-# echo "### Installing and locking the GEOS version to 3.4.2"
-# This works but yum conflicts with postgis2_95
-# sudo yum install -y yum-plugin-versionlock
-# sudo yum install -y \
-#     geos-3.4.2-2.el7 \
-#     geos-devel-3.4.2-2.el7
-#
-# sudo yum versionlock geos*
-
-
 # install useful and needed packages for working with hootenanny
 echo "### Installing dependencies from repos..."
 sudo localedef -i en_US -f UTF-8 en_US.UTF-8
@@ -95,6 +72,8 @@ sudo yum -y install \
     m4 \
     maven \
     mlocate \
+    nodejs \
+    nodejs-devel \
     opencv \
     opencv-core \
     opencv-devel \
