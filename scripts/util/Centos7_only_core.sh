@@ -74,11 +74,17 @@ if [ ! -d "$SRC_DIR" ] ; then
     echo "### Add epel repo ###" > CentOS_upgrade.txt
     sudo yum -y install epel-release >> CentOS_upgrade.txt 2>&1
 
+    # This comes from the postgres repo
+    POSTGIS_PACKAGE=postgis23_95
+
     # add the Postgres repo
     echo "### Add Postgres repo ###" > CentOS_upgrade.txt
     sudo rpm -Uvh http://yum.postgresql.org/9.5/redhat/rhel-7-x86_64/pgdg-centos95-9.5-3.noarch.rpm >> CentOS_upgrade.txt 2>&1
 else
     echo "### Skipping the epel and postgresql repos..."
+
+    # This one is from the site specific repo
+    POSTGIS_PACKAGE=postgis2_95
 fi
 
 echo "Updating OS..."
@@ -150,7 +156,7 @@ sudo yum -y install \
     opencv-devel \
     opencv-python \
     perl-XML-LibXML \
-    postgis23_95 \
+    $POSTGIS_PACKAGE \
     postgresql95 \
     postgresql95-contrib \
     postgresql95-devel \
@@ -305,7 +311,7 @@ sudo /usr/bin/perl $HOOT_HOME/scripts/maven/SetMavenHttps.pl
 
 if ! grep --quiet "export HOOT_HOME" ~/.bash_profile; then
     echo "Adding hoot home to profile..."
-    echo "export HOOT_HOME=~/hoot" >> ~/.bash_profile
+    echo "export HOOT_HOME=$HOOT_HOME" >> ~/.bash_profile
     echo "export PATH=\$PATH:\$HOOT_HOME/bin" >> ~/.bash_profile
     source ~/.bash_profile
 fi
