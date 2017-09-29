@@ -83,7 +83,7 @@ ProcessThread::ProcessThread(bool showTestName,
     _parallelJobs(parallelJobs),
     _serialJobs(serialJobs),
     _failures(0),
-    _proc(createProcess())
+    _proc()
 {
 }
 
@@ -114,6 +114,7 @@ QProcess* ProcessThread::createProcess()
 
 void ProcessThread::run()
 {
+  _proc.reset(createProcess());
   if (_serialJobs != NULL)
   {
     processJobs(_serialJobs);
