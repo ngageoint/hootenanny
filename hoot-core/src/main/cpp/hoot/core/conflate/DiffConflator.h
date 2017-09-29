@@ -59,9 +59,11 @@ class ElementId;
  *
  * The idea behind the Differential Conflator is to do the "easy" conflation - to essentially
  * ignore anything that would be a possible conflict. The proposed conops are to conflate
- * map2 with map1, and have hoot spit out a changeset that can be simply applied to map1. The
- * changeset will contain all of the stuff from map2 that didn't appear to conflict with anything
- * in map1.
+ * input1 and input2, and have hoot spit out everything from input2, with anything that would
+ * conflict with input1 removed. Is it really a conflation operation? No, because nothing gets
+ * merged. It's not a true diff, either, because it won't tell you stuff that was in input1, but
+ * not input2. It's basically answering the question: what can I super-easily merge from dataset2
+ * into dataset1?
  */
 class DiffConflator : public OsmMapOperation, public Serializable, public Boundable,
     public Configurable

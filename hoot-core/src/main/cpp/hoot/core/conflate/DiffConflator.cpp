@@ -41,6 +41,8 @@
 #include <hoot/core/conflate/MatchClassification.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/filters/TagCriterion.h>
+#include <hoot/core/visitors/RemoveElementsVisitor.h>
 
 // standard
 #include <algorithm>
@@ -112,8 +114,9 @@ void DiffConflator::apply(OsmMapPtr& map)
   _stats.append(SingleStat("Number of Matches Found per Second",
     (double)_matches.size() / findMatchesTime));
 
-  // Now, for differential conflation, let us delete everything in the first dataset involved
-  // in the match, and leave whatever is in the second.
+  // Now we have matches. Here's what we are going to do, because our map contains All of input1
+  // and input2: we are going to delete everthing from the match pairs. Then we will delete all
+  // remaining input1 items.
   for (std::vector<const Match*>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
   {
     std::set< std::pair<ElementId, ElementId> > pairs = (*mit)->getMatchPairs();
@@ -122,8 +125,16 @@ void DiffConflator::apply(OsmMapPtr& map)
          pit != pairs.end(); ++pit)
     {
       RecursiveElementRemover(pit->first).apply(map);
+      RecursiveElementRemover(pit->second).apply(map);
     }
   }
+
+  // Now remove input1 elements
+  boost::shared_ptr<ElementCriterion> pTagCrit(new TagCriterion(MetadataTags::HootStatus(),
+                                                                MetadataTags::Ref1()));
+  RemoveElementsVisitor removeRef1Visitor(pTagCrit);
+  map->visitRw(removeRef1Visitor);
+
 
   LOG_INFO("Applying post-diff conflation operations...");
   NamedOp(ConfigOptions().getUnifyPostOps()).apply(map);
