@@ -56,7 +56,6 @@ public:
 
 private:
 
-  int _minOccurancesAllowed;
   QSqlDatabase _db;
 };
 

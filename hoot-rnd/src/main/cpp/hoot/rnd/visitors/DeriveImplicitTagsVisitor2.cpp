@@ -67,6 +67,7 @@ void DeriveImplicitTagsVisitor2::visit(const ElementPtr& e)
 QSet<QString> DeriveImplicitTagsVisitor2::_extractNameWords(const Tags& t)
 {
   QSet<QString> result;
+
   QStringList names = t.getNames();
   StringTokenizer tokenizer;
 

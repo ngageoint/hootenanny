@@ -48,8 +48,8 @@ public:
 
   PoiImplicitTagRulesDeriver();
 
-  QMap<QString, QMap<QString, long> > deriveRules(const QString input,
-                                                  const int minTagOccurances = 1,
+  QMap<QString, QMap<QString, long> > deriveRules(const QStringList inputs,
+                                                  const int minOccurances = 1,
                                                   const QStringList typeKeys = QStringList());
 
 private:
@@ -58,7 +58,7 @@ private:
   //TODO: replace with stxxl map
   QMap<QString, QMap<QString, long> > _tokensToKvpsWithCounts;
 
-  int _minTagOccurances;
+  int _minOccurances;
 
   void _updateForNewToken(const QString token, const QString kvp);
   QString _getMostSpecificPoiKvp(const Tags& tags) const;

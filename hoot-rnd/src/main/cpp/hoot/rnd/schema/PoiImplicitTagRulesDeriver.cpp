@@ -111,51 +111,54 @@ QString PoiImplicitTagRulesDeriver::_getMostSpecificPoiKvp(const Tags& tags) con
 //  return highestKvpOccuranceA > highestKvpOccuranceB;
 //}
 
-QMap<QString, QMap<QString, long> > PoiImplicitTagRulesDeriver::deriveRules(const QString input,
-                                                                        const int minTagOccurances,
+QMap<QString, QMap<QString, long> > PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs,
+                                                                        const int minOccurances,
                                                                         const QStringList typeKeys)
 {
-  _minTagOccurances = minTagOccurances;
+  _minOccurances = minOccurances;
 
-  boost::shared_ptr<PartialOsmMapReader> inputReader =
-    boost::dynamic_pointer_cast<PartialOsmMapReader>(
-      OsmMapReaderFactory::getInstance().createReader(input));
-  inputReader->open(input);
-  boost::shared_ptr<ElementInputStream> inputStream =
-    boost::dynamic_pointer_cast<ElementInputStream>(inputReader);
-
-  StringTokenizer tokenizer;
-  while (inputStream->hasMoreElements())
+  for (int i = 0; i < inputs.size(); i++)
   {
-    ElementPtr element = inputStream->readNextElement();
-    const Tags& tags = element->getTags();
+    boost::shared_ptr<PartialOsmMapReader> inputReader =
+      boost::dynamic_pointer_cast<PartialOsmMapReader>(
+        OsmMapReaderFactory::getInstance().createReader(inputs.at(i)));
+    inputReader->open(inputs.at(i));
+    boost::shared_ptr<ElementInputStream> inputStream =
+      boost::dynamic_pointer_cast<ElementInputStream>(inputReader);
 
-    if (element->getElementType() == ElementType::Node &&
-        (typeKeys.isEmpty() || tags.hasAnyKey(typeKeys)))
+    StringTokenizer tokenizer;
+    while (inputStream->hasMoreElements())
     {
-      const QStringList names = tags.getNames();
-      if (names.size() > 0)
+      ElementPtr element = inputStream->readNextElement();
+      const Tags& tags = element->getTags();
+
+      if (element->getElementType() == ElementType::Node &&
+          (typeKeys.isEmpty() || tags.hasAnyKey(typeKeys)))
       {
-        const QString mostSpecificPoiKvp = _getMostSpecificPoiKvp(tags);
-        if (!mostSpecificPoiKvp.isEmpty())
+        const QStringList names = tags.getNames();
+        if (names.size() > 0)
         {
-          for (int i = 0; i < names.size(); i++)
+          const QString mostSpecificPoiKvp = _getMostSpecificPoiKvp(tags);
+          if (!mostSpecificPoiKvp.isEmpty())
           {
-            const QString name = names.at(i);
-
-            _updateForNewToken(name, mostSpecificPoiKvp);
-
-            const QStringList nameTokens = tokenizer.tokenize(name);
-            for (int j = 0; j < nameTokens.size(); j++)
+            for (int i = 0; i < names.size(); i++)
             {
-              _updateForNewToken(nameTokens.at(i), mostSpecificPoiKvp);
+              const QString name = names.at(i);
+
+              _updateForNewToken(name, mostSpecificPoiKvp);
+
+              const QStringList nameTokens = tokenizer.tokenize(name);
+              for (int j = 0; j < nameTokens.size(); j++)
+              {
+                _updateForNewToken(nameTokens.at(i), mostSpecificPoiKvp);
+              }
             }
           }
         }
       }
     }
+    inputReader->finalizePartial();
   }
-  inputReader->finalizePartial();
 
   _removeKvpsBelowOccuranceThreshold();
 
@@ -178,7 +181,7 @@ void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccuranceThreshold()
     {
       const QString kvp = kvpWithCountItr.key();
       const long kvpCountForToken =  kvpWithCountItr.value();
-      if (kvpCountForToken >= _minTagOccurances)
+      if (kvpCountForToken >= _minOccurances)
       {
         if (!_tokensToKvpsWithCounts.contains(token))
         {

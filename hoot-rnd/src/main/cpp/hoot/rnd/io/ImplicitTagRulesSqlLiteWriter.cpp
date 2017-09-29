@@ -61,13 +61,15 @@ void ImplicitTagRulesSqlLiteWriter::open(const QString output)
 
 void ImplicitTagRulesSqlLiteWriter::write(const QMap<QString, QMap<QString, long> >& tagRules)
 {
-  DbUtils::execNoPrepare(_db, "CREATE TABLE rules (id BIGSERIAL PRIMARY KEY, word TEXT, kvp TEXT)");
+  //DbUtils::execNoPrepare(_db, "CREATE TABLE rules (word TEXT PRIMARY KEY, kvp TEXT, count INT)");
+  DbUtils::execNoPrepare(_db, "CREATE TABLE rules (word TEXT PRIMARY KEY, kvp TEXT)");
   DbUtils::execNoPrepare(_db, "BEGIN");
 
-  QSqlQuery q(_db);
-  if (q.prepare("INSERT INTO rules (word, kvp) VALUES(:word, :kvp)") == false)
+  QSqlQuery query(_db);
+  //if (!query.prepare("INSERT INTO rules (word, kvp, count) VALUES(:word, :kvp, :count)"))
+  if (!query.prepare("INSERT INTO rules (word, kvp, count) VALUES(:word, :kvp)"))
   {
-    throw HootException(QString("Error preparing query: %1").arg(q.lastError().text()));
+    throw HootException(QString("Error preparing query: %1").arg(query.lastError().text()));
   }
 
   for (QMap<QString, QMap<QString, long> >::const_iterator tokenItr = tagRules.begin();
@@ -77,16 +79,17 @@ void ImplicitTagRulesSqlLiteWriter::write(const QMap<QString, QMap<QString, long
     const QMap<QString, long> kvps = tokenItr.value();
     for (QMap<QString, long>::const_iterator kvpItr = kvps.begin(); kvpItr != kvps.end(); ++kvpItr)
     {
-      q.bindValue(":word", word);
-      q.bindValue(":kvp", kvpItr.key());
+      query.bindValue(":word", word);
+      query.bindValue(":kvp", kvpItr.key());
+      //query.bindValue(":count", kvpItr.value());
     }
   }
 
-  //TODO: make this query buffered?
-  if (q.exec() == false)
+  if (!query.exec())
   {
-    QString err = QString("Error executing query: %1 (%2)").arg(q.executedQuery()).
-        arg(q.lastError().text());
+    QString err =
+      QString("Error executing query: %1 (%2)")
+        .arg(query.executedQuery()).arg(query.lastError().text());
     throw HootException(err);
   }
 

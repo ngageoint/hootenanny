@@ -55,8 +55,8 @@ public:
     }
 
     bool ok = false;
-    const int minOccurancesAllowed = args[1].toInt(&ok);
-    if (!ok || minOccurancesAllowed < 1)
+    const int minOccurances = args[1].toInt(&ok);
+    if (!ok || minOccurances < 1)
     {
       throw IllegalArgumentException(
         "Invalid value for the minimum number of type occurrances allowed: " + args[1]);
@@ -64,21 +64,25 @@ public:
 
     const QMap<QString, QMap<QString, long> > tagRules =
       PoiImplicitTagRulesDeriver().deriveRules(
-        args[0], minOccurancesAllowed, args[2].trimmed().split(","));
+        args[0].trimmed().split(";"), minOccurances, args[2].trimmed().split(","));
 
-    if (args[3].trimmed().endsWith(".json")) //TODO: cleanup
+    const QStringList outputs = args[3].trimmed().split(";");
+    for (int i = 0; i < outputs.size(); i++)
     {
-      ImplicitTagRulesJsonWriter rulesWriter;
-      rulesWriter.open(args[3]);
-      rulesWriter.write(tagRules);
-      rulesWriter.close();
-    }
-    else
-    {
-      ImplicitTagRulesSqlLiteWriter rulesWriter;
-      rulesWriter.open(args[3]);
-      rulesWriter.write(tagRules);
-      rulesWriter.close();
+      if (outputs.at(i).trimmed().endsWith(".json")) //TODO: cleanup
+      {
+        ImplicitTagRulesJsonWriter rulesWriter;
+        rulesWriter.open(outputs.at(i));
+        rulesWriter.write(tagRules);
+        rulesWriter.close();
+      }
+      else
+      {
+        ImplicitTagRulesSqlLiteWriter rulesWriter;
+        rulesWriter.open(outputs.at(i));
+        rulesWriter.write(tagRules);
+        rulesWriter.close();
+      }
     }
 
     return 0;
