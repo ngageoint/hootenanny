@@ -95,7 +95,7 @@ sudo apt-get -y autoremove
 
 echo "### Configuring environment..."
 
-# Configure https alternative mirror for maven isntall, this can likely be removed once
+# Configure https alternative mirror for maven install, this can likely be removed once
 # we are using maven 3.2.3 or higher
 sudo /usr/bin/perl $HOOT_HOME/scripts/maven/SetMavenHttps.pl
 
@@ -284,6 +284,13 @@ if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --version | grep -q $GDAL_VERSIO
     sudo python setup.py install >> GDAL_Build.txt 2>&1
     sudo ldconfig
     cd ~
+
+    # Update the GDAL_DATA folder in ~/.profile
+    if ! grep --quiet GDAL_DATA ~/.profile; then
+      echo "Adding GDAL data path to profile..."
+      echo "export GDAL_DATA=`gdal-config --datadir`" >> ~/.profile
+      source ~/.profile
+    fi
 fi
 
 if ! mocha --version &>/dev/null; then

@@ -125,15 +125,15 @@ public:
   {
     OgrWriter uut;
     uut.setScriptPath("test-files/io/SampleTranslation.js");
-    FileUtils::removeDir("test-output/io/OgrWriterTest");
-    uut.open("test-output/io/OgrWriterTest.shp");
+    FileUtils::removeDir("test-output/io/OgrWriterShpTest");
+    uut.open("test-output/io/OgrWriterShpTest.shp");
     uut.write(createTestMap());
     QStringList nameFilter;
     nameFilter << "*.shp";
 
     // make sure it created the shapefiles, we aren't actually testing for correct output.
     HOOT_STR_EQUALS("[4]{AAL015.shp, LAP010.shp, LAP030.shp, PAL015.shp}",
-                    QDir("test-output/io/OgrWriterTest").entryList(nameFilter));
+                    QDir("test-output/io/OgrWriterShpTest").entryList(nameFilter));
   }
 
   void runGdbTest()
@@ -169,12 +169,12 @@ public:
 
     OgrWriter uut;
     uut.setScriptPath("test-files/io/SampleTranslation.js");
-    FileUtils::removeDir("test-output/io/OgrWriterTest.gdb");
-    uut.open("test-output/io/OgrWriterTest.gdb");
+    FileUtils::removeDir("test-output/io/OgrWriterRelationTest.gdb");
+    uut.open("test-output/io/OgrWriterRelationTest.gdb");
     uut.write(map);
 
     // make sure it created a bunch of files. We aren't testing for correct output.
-    CPPUNIT_ASSERT(QDir("test-output/io/OgrWriterTest.gdb").entryList().size() > 10);
+    CPPUNIT_ASSERT(QDir("test-output/io/OgrWriterRelationTest.gdb").entryList().size() > 10);
   }
 };
 

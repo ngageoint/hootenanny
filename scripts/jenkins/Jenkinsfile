@@ -95,7 +95,8 @@ pipeline {
             }
             steps {
                 sh 'vagrant ssh -c "cd hoot; source ./SetupEnv.sh; hoot --version --debug"'
-                sh 'vagrant ssh -c "cd hoot; bin/HootTest --diff --glacial; make -sj`nproc` archive"'
+                sh 'vagrant ssh -c "export HOOT_TEST_DIFF=--diff"'
+                sh 'vagrant ssh -c "cd hoot; bin/HootTest $HOOT_TEST_DIFF --glacial --parallel $(nproc)"'
             }
         }
         stage("Services Tests") {
