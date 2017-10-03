@@ -37,6 +37,7 @@
 #include <hoot/core/ops/CalculateStatsOp.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/ops/stats/IoSingleStat.h>
+#include <hoot/core/visitors/AddRef1Visitor.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmXmlWriter.h>
@@ -83,7 +84,6 @@ public:
   {
     Timer totalTime;
     Timer t;
-    bool findChangeset = false;
 
     QList<SingleStat> stats;
     bool displayStats = false;
@@ -102,12 +102,6 @@ public:
       throw HootException(QString("%1 takes three parameters.").arg(getName()));
     }
 
-    // Decide if we need to create a changeset
-    if (args[2].endsWith("osc", Qt::CaseInsensitive))
-    {
-      findChangeset = true;
-    }
-
     QString input1 = args[0];
     QString input2 = args[1];
     QString output = args[2];
@@ -122,6 +116,13 @@ public:
     // read input 1 into our working map
     OsmMapPtr map(new OsmMap());
     loadMap(map, input1, ConfigOptions().getReaderConflateUseDataSourceIds1(), Status::Unknown1);
+
+    // Mark input1 elements (Use Ref1 visitor, because it's already coded up)
+    Settings visitorConf;
+    visitorConf.set(ConfigOptions::getAddRefVisitorInformationOnlyKey(), "false");
+    boost::shared_ptr<AddRef1Visitor> pRef1v(new AddRef1Visitor());
+    pRef1v->setConfiguration(visitorConf);
+    map->visitRw(*pRef1v);
 
     // read input 2 into our working map
     loadMap(map, input2, ConfigOptions().getReaderConflateUseDataSourceIds2(), Status::Unknown2);
@@ -176,23 +177,8 @@ public:
     MapProjector::projectToWgs84(result);
     stats.append(SingleStat("Project to WGS84 Time (sec)", t.getElapsedAndRestart()));
 
-    // Either write changeset, or osm map
-    if (findChangeset)
-    {
-      // read input 1, save an original copy
-      OsmMapPtr originalMap(new OsmMap());
-      loadMap(originalMap, input1, ConfigOptions().getReaderConflateUseDataSourceIds1(), Status::Unknown1);
-
-      // Calculate & write the changeset
-      QList<OsmMapPtr> inputMaps;
-      inputMaps.push_back(originalMap);
-      inputMaps.push_back(result);
-      OsmXmlChangesetFileWriter().write(output, _sortInputs(inputMaps));
-    }
-    else
-    {
-      saveMap(result, output);
-    }
+    // Write conflated map
+    saveMap(result, output);
 
     // Do more stats
     double timingOutput = t.getElapsedAndRestart();

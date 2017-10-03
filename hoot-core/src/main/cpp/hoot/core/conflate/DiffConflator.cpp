@@ -41,7 +41,7 @@
 #include <hoot/core/conflate/MatchClassification.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/filters/TagCriterion.h>
+#include <hoot/core/filters/TagKeyCriterion.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 
 // standard
@@ -130,9 +130,9 @@ void DiffConflator::apply(OsmMapPtr& map)
   }
 
   // Now remove input1 elements
-  boost::shared_ptr<ElementCriterion> pTagCrit(new TagCriterion(MetadataTags::HootStatus(),
-                                                                MetadataTags::Ref1()));
-  RemoveElementsVisitor removeRef1Visitor(pTagCrit);
+  boost::shared_ptr<ElementCriterion> pTagKeyCrit(new TagKeyCriterion(MetadataTags::Ref1()));
+  RemoveElementsVisitor removeRef1Visitor(pTagKeyCrit);
+  removeRef1Visitor.setRecursive(true);
   map->visitRw(removeRef1Visitor);
 
 
