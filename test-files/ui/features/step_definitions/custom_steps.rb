@@ -979,7 +979,7 @@ end
 Then(/^I should see element "([^"]*)" with no value and placeholder (\d+)$/) do |id, value|
   el = find(id)
   el.value.should eq ""
-  el['placeholder'].should eq value
+  el['placeholder'].should eq value.to_s
 end
 
 Then(/^I should (not )?see "([^"]*)" dataset after ([0-9]*) "([^"]*)"$/) do |negate, text, timeout, unit|

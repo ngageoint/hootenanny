@@ -50,7 +50,9 @@ To run all the Core Tests in a suite, choose one of the following after running 
 HootTest --current
 HootTest --quick
 HootTest --slow
+HootTest --slow-only
 HootTest --glacial
+HootTest --glacial-only
 -------------------
 
 Here are some examples of more granularity when running Core Tests:
@@ -256,6 +258,53 @@ When a test runs it runs as follows:
 
 This approach makes it very fast/easy to create new micro tests and run them with the rest of the
 test routines. At this time the micro tests run as part of _quick_ and up.
+
+==== Running Core Unit Tests in Parallel
+
+Hootenanny can run certain unit tests in parallel.  This is accomplished by `--parallel [n]` flag
+where `[n]` specifies the number of worker processes to spawn.
+
+--------------
+# Runs quick tests serially
+HootTest --quick
+
+# Runs quick tests with two parallel processes
+HootTest --quick --parallel 2
+
+# Runs quick tests in parallel with one process per processing unit
+HootTest --quick --parallel $(nproc)
+--------------
+
+Initial testing shows using `$(nproc)` is the optimal setting for speed as any more than that causes
+processes to wait for significantly longer for CPU time and give no real benefit.
+
+These worker processes are QProcess objects that spawn `HootTest --listen`.  This "listening" process
+accepts single unit test names (similar to `--single`) from standard in, runs the test and then sends
+an end-of-test output command.  The master process listens for this command and once received it sends
+another single unit test from the queue.  Once the queue is empty, the master process shuts down the
+listen processes and ends.
+
+Some tests that use particular database tables and users have to run serially or they will fail so all
+of the code-based tests are marked and added to a `serial` test suite.  Those tests are also added to
+their respective test suite based on complexity and time (i.e. `quick`, `slow` or `glacial`).
+
+-----------------
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(GlacialUnitTestThatMustBeRunSeriallyTest, "serial");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(GlaicalUnitTestThatMustBeRunSeriallyTest, "glacial");
+------------------
+
+Core command line tests, or script-based tests, that can be run in parallel are located in
+`$HOOT_HOME/tests-files/cmd/slow/` and `$HOOT_HOME/test-files/cmd/glacial/`.  Those command line tests
+that must be run serially are in a sub-directory under those locations, i.e.
+`$HOOT_HOME/test-files/cmd/slow/serial/` and `$HOOT_HOME/test-files/cmd/glacial/serial/`.
+
+Serial unit tests are all passed off to the first worker process and run serially while the rest of the
+tests are run on the other parallel processes.  Once the first worker process completes the serial
+tests it will continue to help the other processes with the parallel queue.
+
+NOTE:  While creating new unit tests every effort should be made to allow for the tests to be run
+in parallel.  Do not reuse output filenames to avoid stomping on files.  Input files can be reused
+though.
 
 ==== Core Plugins Tests
 

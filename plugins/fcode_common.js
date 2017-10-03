@@ -128,7 +128,7 @@ fcodeCommon = {
       ['F_CODE','AL025','man_made','cairn'], // Cairn
       ['F_CODE','AL030','landuse','cemetery'], // Cemetery
       ['F_CODE','AL036','tomb','yes'], // Tomb
-      ['F_CODE','AL060','barrier','dragons_teeth'], // Dragon's Teeth
+      ['F_CODE','AL060','barrier','dragons_teeth'], // Dragon's Teeth - fixed in pre/post processing
       ['F_CODE','AL065','hazard','minefield'], // Minefield
       ['F_CODE','AL070','barrier','fence'], // Fence
       ['F_CODE','AL073','man_made','flagpole'], // Flagpole

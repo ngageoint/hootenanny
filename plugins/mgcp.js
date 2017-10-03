@@ -735,6 +735,7 @@ mgcp = {
             // Rules format:  ["test expression","output result"];
             // Note: t = tags, a = attrs and attrs can only be on the RHS
             var rulesList = [
+            ["t.barrier == 'dragons_teeth' && !(t.tank_trap)","t.barrier = 'tank_trap'; t.tank_trap = 'dragons_teeth'"],
             ["t['bridge:movable'] && t['bridge:movable'] !== 'no' && t['bridge:movable'] !== 'unknown'","t.bridge = 'movable'"],
             ["t['building:religious'] == 'other'","t.amenity = 'religion'"],
             ["t['cable:type'] && !(t.cable)","t.cable = 'yes'"],
@@ -1007,6 +1008,7 @@ mgcp = {
             // See ToOsmPostProcessing for more details about rulesList.
             var rulesList = [
             ["t.amenity == 'marketplace'","t.facility = 'yes'"],
+            ["t.barrier == 'tank_trap' && t.tank_trap == 'dragons_teeth'","t.barrier = 'dragons_teeth'; delete t.tank_trap"],
             ["t.construction && t.railway","t.railway = t.construction; t.condition = 'construction'; delete t.construction"],
             ["t.construction && t.highway","t.highway = t.construction; t.condition = 'construction'; delete t.construction"],
             ["t.content && !(t.product)","t.product = t.content; delete t.content"],

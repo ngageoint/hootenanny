@@ -35,9 +35,10 @@ LIBS += \
 HEADERS += \
     src/main/cpp/hoot/test/ScriptTestSuite.h \
     src/main/cpp/hoot/test/ScriptTest.h \
+    src/main/cpp/hoot/test/ProcessPool.h
 
 SOURCES += src/main/cpp/hoot/test/main.cpp \
     src/main/cpp/hoot/test/ScriptTestSuite.cpp \
     src/main/cpp/hoot/test/ScriptTest.cpp \
-
+    src/main/cpp/hoot/test/ProcessPool.cpp
 

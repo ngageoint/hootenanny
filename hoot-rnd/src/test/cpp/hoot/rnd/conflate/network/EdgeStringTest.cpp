@@ -112,6 +112,8 @@ public:
 
   void calculateLengthTest()
   {
+    TestUtils::resetEnvironment();
+
     OsmMapPtr map(new OsmMap());
     QList<NodePtr> nodes;
     NodePtr node1 = TestUtils::createNode(map, Status::Unknown1, 0, 0);
@@ -132,6 +134,8 @@ public:
 
   void edgeWithInvalidNumMembersTest()
   {
+    TestUtils::resetEnvironment();
+
     OsmMapPtr map(new OsmMap());
     QList<NodePtr> nodes;
     NodePtr node1 = TestUtils::createNode(map, Status::Unknown1, 0, 0);
@@ -183,6 +187,8 @@ public:
 
   void getEdgeAtOffsetTest()
   {
+    TestUtils::resetEnvironment();
+
     OsmMapPtr map(new OsmMap());
     QList<NodePtr> nodes;
     NodePtr node1 = TestUtils::createNode(map, Status::Unknown1, 0, 0);
@@ -209,6 +215,8 @@ public:
 
   void overlapTest()
   {
+    TestUtils::resetEnvironment();
+
     OsmMapPtr map(new OsmMap());
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
@@ -235,6 +243,8 @@ public:
 
   void overlapEdgeTest()
   {
+    TestUtils::resetEnvironment();
+
     OsmMapPtr map(new OsmMap());
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
@@ -258,6 +268,8 @@ public:
 
   void overlapSublineTest()
   {
+    TestUtils::resetEnvironment();
+
     OsmMapPtr map(new OsmMap());
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
@@ -280,6 +292,8 @@ public:
 
   void reverseTest()
   {
+    TestUtils::resetEnvironment();
+
     OsmMapPtr map(new OsmMap());
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
@@ -322,6 +336,8 @@ public:
 
   void partialTest()
   {
+    TestUtils::resetEnvironment();
+
     OsmMapPtr map(new OsmMap());
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
@@ -349,6 +365,8 @@ public:
 
   void stubTest()
   {
+    TestUtils::resetEnvironment();
+
     OsmMapPtr map(new OsmMap());
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
@@ -392,6 +410,8 @@ public:
 
   void addDisconnectedEdgeTest()
   {
+    TestUtils::resetEnvironment();
+
     OsmMapPtr map(new OsmMap());
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
@@ -421,6 +441,8 @@ public:
 
   void equalsTest()
   {
+    TestUtils::resetEnvironment();
+
     OsmMapPtr map(new OsmMap());
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
@@ -452,6 +474,8 @@ public:
 
   void containsEdgeStringTest()
   {
+    TestUtils::resetEnvironment();
+
     OsmMapPtr map(new OsmMap());
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
@@ -481,6 +505,8 @@ public:
 
   void appendSublineTest()
   {
+    TestUtils::resetEnvironment();
+
     OsmMapPtr map(new OsmMap());
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
@@ -530,6 +556,8 @@ public:
 
   void hashTest()
   {
+    TestUtils::resetEnvironment();
+
     OsmMapPtr map(new OsmMap());
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
