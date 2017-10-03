@@ -30,7 +30,7 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/rnd/schema/PoiImplicitTagRulesDeriver.h>
 #include <hoot/rnd/io/ImplicitTagRulesJsonWriter.h>
-#include <hoot/rnd/io/ImplicitTagRulesSqlLiteWriter.h>
+#include <hoot/rnd/io/ImplicitTagRulesSqliteWriter.h>
 
 namespace hoot
 {
@@ -62,9 +62,9 @@ public:
         "Invalid value for the minimum number of type occurrances allowed: " + args[1]);
     }
 
-    const QMap<QString, QMap<QString, long> > tagRules =
+    QMap<QString, QMap<QString, long> > rules =
       PoiImplicitTagRulesDeriver().deriveRules(
-        args[0].trimmed().split(";"), minOccurances, args[2].trimmed().split(","));
+        args[0].trimmed().split(";"), args[1].trimmed().split(";"), minOccurances);
 
     const QStringList outputs = args[3].trimmed().split(";");
     for (int i = 0; i < outputs.size(); i++)
@@ -73,14 +73,14 @@ public:
       {
         ImplicitTagRulesJsonWriter rulesWriter;
         rulesWriter.open(outputs.at(i));
-        rulesWriter.write(tagRules);
+        rulesWriter.write(rules);
         rulesWriter.close();
       }
       else
       {
-        ImplicitTagRulesSqlLiteWriter rulesWriter;
+        ImplicitTagRulesSqliteWriter rulesWriter;
         rulesWriter.open(outputs.at(i));
-        rulesWriter.write(tagRules);
+        rulesWriter.write(rules);
         rulesWriter.close();
       }
     }

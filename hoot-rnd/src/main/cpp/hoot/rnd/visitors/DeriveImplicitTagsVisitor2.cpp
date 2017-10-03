@@ -44,27 +44,61 @@ HOOT_FACTORY_REGISTER(ElementVisitor, DeriveImplicitTagsVisitor2)
 DeriveImplicitTagsVisitor2::DeriveImplicitTagsVisitor2()
 {
   _ruleReader.reset(
-    new ImplicitTagRulesSqlLiteReader(ConfigOptions().getDeriveImplicitTagsDatabase()));
+    new ImplicitTagRulesSqliteReader(ConfigOptions().getDeriveImplicitTagsDatabase()));
 }
 
 void DeriveImplicitTagsVisitor2::visit(const ElementPtr& e)
 {
+  //bool foundMatch = false;
+  bool foundDuplicateMatch = false;
+  Tags tagsToAdd;
+  QString matchWord;
   if (e->getElementType() == ElementType::Node &&
       // either the element isn't a poi, or it contains a generic poi type
-      (OsmSchema::getInstance().hasCategory(e->getTags(), "poi") == false ||
-       e->getTags().contains("poi") || e->getTags().get("place") == "locality"))
+      (!OsmSchema::getInstance().hasCategory(e->getTags(), "poi") ||
+       e->getTags().contains("poi") || e->getTags().get("place") == QLatin1String("locality")))
   {
-    const QSet<QString> nameWords = _extractNameWords(e->getTags());
-    for (QSet<QString>::const_iterator nameWordItr = nameWords.begin();
-         nameWordItr != nameWords.end(); ++nameWordItr)
+    const QSet<QString> namesAndNameWords = _extractNamesAndNameWords(e->getTags());
+
+    if (_ruleReader->wordsInvolveMultipleRules(namesAndNameWords))
     {
-      Tags tags = _ruleReader->getTags(*nameWordItr);
-      //TODO: handle duplicate matches
+      foundDuplicateMatch = true;
+    }
+
+    for (QSet<QString>::const_iterator namesAndNameWordsItr = namesAndNameWords.begin();
+         namesAndNameWordsItr != namesAndNameWords.end(); ++namesAndNameWordsItr)
+    {
+      const QString word = *namesAndNameWordsItr;
+//      if (_ruleReader->wordInvolvesMultipleRules(word))
+//      {
+//        foundDuplicateMatch = true;
+//        matchWord = word;
+//        return;
+//      }
+//      else
+//      {
+        tagsToAdd = _ruleReader->getTags(word);
+        if (!tagsToAdd.isEmpty())
+        {
+          matchWord = word;
+          return;
+        }
+      //}
+    }
+
+    if (foundDuplicateMatch)
+    {
+      e->getTags().appendValue("note", "Found multiple possible matches for implicit tags.");
+    }
+    else if (!tagsToAdd.isEmpty())
+    {
+      e->getTags().addTags(tagsToAdd);
+      e->getTags().appendValue("note", "Implicitly derived tags based on: " + matchWord);
     }
   }
 }
 
-QSet<QString> DeriveImplicitTagsVisitor2::_extractNameWords(const Tags& t)
+QSet<QString> DeriveImplicitTagsVisitor2::_extractNamesAndNameWords(const Tags& t)
 {
   QSet<QString> result;
 
@@ -73,6 +107,7 @@ QSet<QString> DeriveImplicitTagsVisitor2::_extractNameWords(const Tags& t)
 
   foreach (const QString& n, names)
   {
+    result.insert(n.toLower());
     QStringList words = tokenizer.tokenize(n);
     foreach (const QString& w, words)
     {

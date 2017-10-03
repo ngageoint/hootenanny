@@ -46,6 +46,7 @@ PoiImplicitTagRulesDeriver::PoiImplicitTagRulesDeriver()
 
 void PoiImplicitTagRulesDeriver::_updateForNewToken(const QString token, const QString kvp)
 {
+  //TODO: deal with case sensitivity?
   if (!_tokensToKvpsWithCounts.contains(token))
   {
     QMap<QString, long> kvpWithCount;
@@ -109,11 +110,11 @@ QString PoiImplicitTagRulesDeriver::_getMostSpecificPoiKvp(const Tags& tags) con
 //  }
 
 //  return highestKvpOccuranceA > highestKvpOccuranceB;
-//}
+//} 
 
 QMap<QString, QMap<QString, long> > PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs,
-                                                                        const int minOccurances,
-                                                                        const QStringList typeKeys)
+                                                                         const QStringList typeKeys,
+                                                                         const int minOccurances)
 {
   _minOccurances = minOccurances;
 
@@ -162,7 +163,7 @@ QMap<QString, QMap<QString, long> > PoiImplicitTagRulesDeriver::deriveRules(cons
 
   _removeKvpsBelowOccuranceThreshold();
 
-  //TODO: sort by descending kvp occurance per word?
+  //TODO: sort by descending kvp occurance per word also?
   //qSort(_tokensToKvpsWithCounts.begin(), _tokensToKvpsWithCounts.end(), maxOccuranceFirst);
 
   return _tokensToKvpsWithCounts;
@@ -183,6 +184,7 @@ void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccuranceThreshold()
       const long kvpCountForToken =  kvpWithCountItr.value();
       if (kvpCountForToken >= _minOccurances)
       {
+        //TODO: deal with case sensitivity?
         if (!_tokensToKvpsWithCounts.contains(token))
         {
           QMap<QString, long> updatedKvpsWithCounts;

@@ -22,28 +22,41 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
+
+#ifndef IMPLICITTAGRULESSQLITEREADER_H
+#define IMPLICITTAGRULESSQLITEREADER_H
+
 // Hoot
-#include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/Tags.h>
 
 // Qt
-#include <QDir>
+#include <QString>
+#include <QtSql/QSqlDatabase>
+#include <QSqlQuery>
 
-namespace hoot
+namespace  hoot
 {
 
-class ImplicitTagRulesSqlLiteWriterTest : public CppUnit::TestFixture
+class ImplicitTagRulesSqliteReader
 {
-  CPPUNIT_TEST_SUITE(ImplicitTagRulesSqlLiteWriterTest);
-  //CPPUNIT_TEST(elementAsJsonTest);
-  CPPUNIT_TEST_SUITE_END();
-
 public:
 
+  ImplicitTagRulesSqliteReader(const QString path);
 
+  bool wordsInvolveMultipleRules(const QSet<QString>& words);
+  Tags getTags(const QString word);
+
+private:
+
+  QString _path;
+  QSqlDatabase _db;
+  QSqlQuery _selectTagsForWord;
+
+  void _prepareQueries();
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ImplicitTagRulesSqlLiteWriterTest, "quick");
-
 }
+
+#endif // IMPLICITTAGRULESSQLITEREADER_H

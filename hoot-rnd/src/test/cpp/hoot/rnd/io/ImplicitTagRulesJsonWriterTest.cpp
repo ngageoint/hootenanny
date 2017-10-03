@@ -26,6 +26,7 @@
  */
 // Hoot
 #include <hoot/core/TestUtils.h>
+#include <hoot/rnd/io/ImplicitTagRulesJsonWriter.h>
 
 // Qt
 #include <QDir>
@@ -36,12 +37,47 @@ namespace hoot
 class ImplicitTagRulesJsonWriterTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ImplicitTagRulesJsonWriterTest);
-  //CPPUNIT_TEST(elementAsJsonTest);
+  CPPUNIT_TEST(runWriteTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
+  void runWriteTest()
+  {
+    const QString outputDir = "test-output/io/ImplicitTagRulesJsonWriterTest";
+    const QString outputFile = outputDir + "/rules-out.json";
+    QDir().mkpath(outputDir);
 
+    QMap<QString, QMap<QString, long> > rules;
+    QMap<QString, long> kvps;
+
+    kvps["amenity=place_of_worship"] = 1246;
+    kvps["amenity=school"] = 2;
+    kvps["amenity=fountain"] = 1;
+    kvps["amenity=hospital"] = 1;
+    kvps["amenity=religious_activities"] = 6;
+    rules["Mosque"] = kvps;
+
+    kvps.clear();
+    kvps["amenity=place_of_worship"] = 2672;
+    kvps["amenity=religious_activities"] = 9;
+    rules["Masjid"] = kvps;
+
+    kvps.clear();
+    kvps["amenity=grave_yard"] = 21;
+    rules["Sidi Muhammad"] = kvps;
+
+    kvps.clear();
+    kvps["amenity=place_of_worship"] = 18;
+    rules["Eid Prayer Ground"] = kvps;
+
+    ImplicitTagRulesJsonWriter writer;
+    writer.open(outputFile);
+    writer.write(rules);
+    writer.close();
+
+    HOOT_FILE_EQUALS("test-files/io/ImplicitTagRulesJsonWriterTest/rules.json", outputFile);
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ImplicitTagRulesJsonWriterTest, "quick");

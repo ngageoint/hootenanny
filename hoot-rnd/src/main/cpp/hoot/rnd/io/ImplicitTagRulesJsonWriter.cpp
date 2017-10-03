@@ -46,8 +46,6 @@ ImplicitTagRulesJsonWriter::~ImplicitTagRulesJsonWriter()
 
 void ImplicitTagRulesJsonWriter::open(const QString output)
 {
-  close();
-
   _file.reset(new QFile());
   _file->setFileName(output);
   if (_file->exists() && !_file->remove())
@@ -61,38 +59,51 @@ void ImplicitTagRulesJsonWriter::open(const QString output)
   LOG_DEBUG("Opened: " << output << ".");
 }
 
-void ImplicitTagRulesJsonWriter::write(const QMap<QString, QMap<QString, long> >& tagRules)
+bool caseInsensitiveLessThan(const QString s1, const QString s2)
+{
+  return s1.toLower() < s2.toLower();
+}
+
+void ImplicitTagRulesJsonWriter::write(QMap<QString, QMap<QString, long> > rules)
 {
   _file->write(QString("[\n").toUtf8());
 
-  for (QMap<QString, QMap<QString, long> >::const_iterator ruleItr = tagRules.begin();
-       ruleItr != tagRules.end(); ++ruleItr)
+  long ruleCtr = 0;
+  //sort rules alphabetically by word case insensitively (QMap sorts them case sensitively by
+  //default)
+  QStringList words = rules.keys();
+  qSort(words.begin(), words.end(), caseInsensitiveLessThan);
+  for (int i = 0; i < rules.size(); i++)
   {
     _file->write(QString("  {\n").toUtf8());
 
-    const QString wordLine = "    \"word\": \"" % ruleItr.key() % "\",\n";
+    const QString word = words.at(i);
+    const QString wordLine = "    \"word\": \"" % word % "\",\n";
     _file->write(wordLine.toUtf8());
 
-    const QMap<QString, long> kvpsWithCount = ruleItr.value();
+    long kvpCtr = 0;
+    const QMap<QString, long> kvpsWithCount = rules[word];
     for (QMap<QString, long>::const_iterator kvpItr = kvpsWithCount.begin();
        kvpItr != kvpsWithCount.end(); ++kvpItr)
     {
       QString kvpLine = "    \"" % kvpItr.key() % "\": " % QString::number(kvpItr.value());
-      if (kvpItr != kvpsWithCount.end())
+      if (kvpCtr < (kvpsWithCount.size() - 1))
       {
         kvpLine += ",";
       }
       kvpLine += "\n";
       _file->write(kvpLine.toUtf8());
+      kvpCtr++;
     }
 
     QString closingRuleLine = "  }";
-    if (ruleItr != tagRules.end())
+    if (ruleCtr < (rules.size() - 1))
     {
       closingRuleLine += ",";
     }
     closingRuleLine += "\n";
     _file->write(closingRuleLine.toUtf8());
+    ruleCtr++;
   }
 
   _file->write(QString("]").toUtf8());

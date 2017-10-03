@@ -45,9 +45,9 @@ public:
   ImplicitTagRulesJsonWriter();
   ~ImplicitTagRulesJsonWriter();
 
-  void open(const QString input);
+  void open(const QString output);
 
-  void write(const QMap<QString, QMap<QString, long> >& tagRules);
+  void write(QMap<QString, QMap<QString, long> > rules);
 
   void close();
 

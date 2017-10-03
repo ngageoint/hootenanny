@@ -24,26 +24,62 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-// Hoot
-#include <hoot/core/TestUtils.h>
+#ifndef IMPLICITTAGRULESSQLITEWRITER_H
+#define IMPLICITTAGRULESSQLITEWRITER_H
 
 // Qt
-#include <QDir>
+#include <QString>
+#include <QMap>
+#include <QtSql/QSqlDatabase>
+#include <QSqlQuery>
+#include <QSet>
 
 namespace hoot
 {
 
-class ImplicitTagRulesSqlLiteReaderTest : public CppUnit::TestFixture
+/**
+ *
+ */
+class ImplicitTagRulesSqliteWriter
 {
-  CPPUNIT_TEST_SUITE(ImplicitTagRulesSqlLiteReaderTest);
-  //CPPUNIT_TEST(elementAsJsonTest);
-  CPPUNIT_TEST_SUITE_END();
 
 public:
 
+  ImplicitTagRulesSqliteWriter();
+  ~ImplicitTagRulesSqliteWriter();
 
+  void open(const QString input);
+
+  void write(QMap<QString, QMap<QString, long> > rules);
+
+  void close();
+
+private:
+
+  QSqlDatabase _db;
+
+  QSqlQuery _insertRuleQuery;
+  QSqlQuery _insertWordQuery;
+  QSqlQuery _insertTagQuery;
+  QSqlQuery _selectTagIdForKvpQuery;
+  QSqlQuery _getLastWordIdQuery;
+  QSqlQuery _getLastTagIdQuery;
+  QSqlQuery _numTagsForRuleQuery;
+
+  int _currentRuleId;
+
+  void _createTables();
+  void _prepareQueries();
+
+  int _insertWord(const QString word);
+  int _insertTag(const QString kvp);
+  void _insertRuleRecord(const int ruleId, const int wordId, const int tagId);
+  int _selectTagIdForKvp(const QString kvp);
+  QSet<int> _selectRuleIdsContainingAllTags(const QSet<QString>& kvps);
+  QSet<int> _selectTagIdsForKvps(const QSet<QString>& kvps);
+  int _getNumTagsForRule(const int ruleId);
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ImplicitTagRulesSqlLiteReaderTest, "quick");
-
 }
+
+#endif // IMPLICITTAGRULESSQLITEWRITER_H

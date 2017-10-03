@@ -49,8 +49,8 @@ public:
   PoiImplicitTagRulesDeriver();
 
   QMap<QString, QMap<QString, long> > deriveRules(const QStringList inputs,
-                                                  const int minOccurances = 1,
-                                                  const QStringList typeKeys = QStringList());
+                                                  const QStringList typeKeys = QStringList(),
+                                                  const int minOccurances = 1);
 
 private:
 

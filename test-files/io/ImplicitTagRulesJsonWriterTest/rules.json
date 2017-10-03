@@ -1,0 +1,23 @@
+[
+  {
+    "word": "Eid Prayer Ground",
+    "amenity=place_of_worship": 18
+  },
+  {
+    "word": "Masjid",
+    "amenity=place_of_worship": 2672,
+    "amenity=religious_activities": 9
+  },
+  {
+    "word": "Mosque",
+    "amenity=fountain": 1,
+    "amenity=hospital": 1,
+    "amenity=place_of_worship": 1246,
+    "amenity=religious_activities": 6,
+    "amenity=school": 2
+  },
+  {
+    "word": "Sidi Muhammad",
+    "amenity=grave_yard": 21
+  }
+]

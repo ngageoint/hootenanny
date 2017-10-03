@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "ImplicitTagRulesSqlLiteReader.h"
+#include "ImplicitTagRulesSqliteReader.h"
 
 // hoot
 #include <hoot/core/util/HootException.h>
@@ -34,17 +34,18 @@
 // Qt
 #include <QSqlError>
 #include <QVariant>
+#include <QSet>
 
 namespace hoot
 {
 
-ImplicitTagRulesSqlLiteReader::ImplicitTagRulesSqlLiteReader(const QString path)
+ImplicitTagRulesSqliteReader::ImplicitTagRulesSqliteReader(const QString path)
 {
-  if (QSqlDatabase::contains(path) == false)
+  if (!QSqlDatabase::contains(path))
   {
     _db = QSqlDatabase::addDatabase("QSQLITE", path);
     _db.setDatabaseName(path);
-    if (_db.open() == false)
+    if (!_db.open())
     {
       throw HootException("Error opening DB. " + path);
     }
@@ -54,34 +55,58 @@ ImplicitTagRulesSqlLiteReader::ImplicitTagRulesSqlLiteReader(const QString path)
     _db = QSqlDatabase::database(path);
   }
 
-  if (_db.isOpen() == false)
+  if (!_db.isOpen())
   {
     throw HootException("Error DB is not open. " + path);
   }
 
-  _select = QSqlQuery(_db);
-  if (_select.prepare("SELECT kvp FROM rules WHERE word=:word") == false)
-  {
-    throw HootException(QString("Error preparing query: %1").arg(_select.lastError().text()));
-  }
-
+  _prepareQueries();
 }
 
-Tags ImplicitTagRulesSqlLiteReader::getTags(const QString word) const
+void ImplicitTagRulesSqliteReader::_prepareQueries()
 {
-  _select.bindValue(":word", word);
-
-  if (_select.exec() == false)
+  _selectTagsForWord = QSqlQuery(_db);
+  if (!_selectTagsForWord.prepare("SELECT kvp FROM rules WHERE word=:word"))
   {
-    throw HootException(QString("Error executing query: %1").arg(_select.lastError().text()));
+    throw HootException(
+      QString("Error preparing query: %1").arg(_selectTagsForWord.lastError().text()));
+  }
+}
+
+bool ImplicitTagRulesSqliteReader::wordsInvolveMultipleRules(const QSet<QString>& words)
+{
+  //can't prepare this one due to variable inputs
+  QSqlQuery uniqueRuleCountForWords = QSqlQuery(_db);
+  QString queryStr = "SELECT COUNT(*) DISTINCT rule_id FROM rules WHERE word IN (";
+  for (QSet<QString>::const_iterator wordItr = words.begin(); wordItr != words.end(); ++wordItr)
+  {
+    queryStr += *wordItr + ",";
+  }
+  queryStr.chop(1);
+  queryStr += ")";
+
+  if (!uniqueRuleCountForWords.exec(queryStr))
+  {
+    throw HootException(
+      QString("Error executing query: %1").arg(uniqueRuleCountForWords.lastError().text()));
+  }
+  return uniqueRuleCountForWords.value(0).toInt() > 1;
+}
+
+Tags ImplicitTagRulesSqliteReader::getTags(const QString word)
+{
+  _selectTagsForWord.bindValue(":word", word);
+  if (!_selectTagsForWord.exec())
+  {
+    throw HootException(
+      QString("Error executing query: %1").arg(_selectTagsForWord.lastError().text()));
   }
 
   Tags tags;
-  while (_select.next())
+  while (_selectTagsForWord.next())
   {
-    tags.appendValue(_select.value(0).toString());
+    tags.appendValue(_selectTagsForWord.value(0).toString());
   }
-
   return tags;
 }
 

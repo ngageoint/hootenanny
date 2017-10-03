@@ -24,41 +24,26 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef IMPLICITTAGRULESSQLLITEWRITER_H
-#define IMPLICITTAGRULESSQLLITEWRITER_H
+// Hoot
+#include <hoot/core/TestUtils.h>
 
 // Qt
-#include <QString>
-#include <QMap>
-#include <QtSql/QSqlDatabase>
+#include <QDir>
 
 namespace hoot
 {
 
-class ImplicitTagRules;
-
-/**
- *
- */
-class ImplicitTagRulesSqlLiteWriter
+class ImplicitTagRulesSqliteReaderTest : public CppUnit::TestFixture
 {
+  CPPUNIT_TEST_SUITE(ImplicitTagRulesSqliteReaderTest);
+  //CPPUNIT_TEST(elementAsJsonTest);
+  CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  ImplicitTagRulesSqlLiteWriter();
-  ~ImplicitTagRulesSqlLiteWriter();
 
-  void open(const QString input);
-
-  void write(const QMap<QString, QMap<QString, long> >& tagRules);
-
-  void close();
-
-private:
-
-  QSqlDatabase _db;
 };
 
-}
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ImplicitTagRulesSqliteReaderTest, "quick");
 
-#endif // IMPLICITTAGRULESSQLLITEWRITER_H
+}
