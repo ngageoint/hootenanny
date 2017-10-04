@@ -78,6 +78,10 @@ void ImplicitTagRulesJsonWriter::write(QMap<QString, QMap<QString, long> > rules
     _file->write(QString("  {\n").toUtf8());
 
     const QString word = words.at(i);
+    if (word.contains("="))
+    {
+      LOG_VARE(word);
+    }
     const QString wordLine = "    \"word\": \"" % word % "\",\n";
     _file->write(wordLine.toUtf8());
 

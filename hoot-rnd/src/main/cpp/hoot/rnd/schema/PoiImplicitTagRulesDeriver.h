@@ -61,13 +61,11 @@ private:
   //key=<word>;<tag key> value=<tag values>
   QMap<QString, QStringList> _wordTagKeysToTagValues;
 
-  int _minOccurancesThreshold;
-
   void _updateForNewWord(const QString word, const QString kvp);
   QString _getMostSpecificPoiKvp(const Tags& tags) const;
-  void _removeKvpsBelowOccuranceThreshold();
+  void _removeKvpsBelowOccuranceThreshold(const int minOccurancesThreshold);
   void _removeDuplicatedKvpTypes();
-  QMap<QString, QMap<QString, long> > _combineWordMaps();
+  QMap<QString, QMap<QString, long> > _generateOutput();
 };
 
 }

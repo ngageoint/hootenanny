@@ -26,6 +26,8 @@
  */
 // Hoot
 #include <hoot/core/TestUtils.h>
+#include <hoot/rnd/schema/PoiImplicitTagRulesDeriver.h>
+#include <hoot/rnd/io/ImplicitTagRulesJsonWriter.h>
 
 // Qt
 #include <QDir>
@@ -36,12 +38,61 @@ namespace hoot
 class PoiImplicitTagRulesDeriverTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(PoiImplicitTagRulesDeriverTest);
-  //CPPUNIT_TEST(elementAsJsonTest);
+  CPPUNIT_TEST(runBasicTest);
+  //CPPUNIT_TEST(runMultipleInputsTest);
+  //CPPUNIT_TEST(runTypeKeysTest);
+  //CPPUNIT_TEST(runMinOccuranceThresholdTest);
+  //CPPUNIT_TEST(runWrongWayTagTest);
+  //CPPUNIT_TEST(runHandleSemicolonInNameTest);
+  //CPPUNIT_TEST(runNameCaseTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
+  void runBasicTest()
+  {
+    PoiImplicitTagRulesDeriver deriver;
 
+    QStringList inputs;
+    inputs.append("/home/vagrant/hoot/tmp/yemen-crop-2.osm.pbf");
+
+    const QMap<QString, QMap<QString, long> > rules = deriver.deriveRules(inputs);
+
+    ImplicitTagRulesJsonWriter writer;
+    writer.open("/home/vagrant/hoot/tmp/yemen-test-out.json");
+    writer.write(rules);
+    writer.close();
+  }
+
+  void runMultipleInputsTest()
+  {
+
+  }
+
+  void runTypeKeysTest()
+  {
+
+  }
+
+  void runMinOccuranceThresholdTest()
+  {
+
+  }
+
+  void runWrongWayTagTest()
+  {
+
+  }
+
+  void runHandleSemicolonInNameTest()
+  {
+
+  }
+
+  void runNameCaseTest()
+  {
+
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PoiImplicitTagRulesDeriverTest, "quick");
