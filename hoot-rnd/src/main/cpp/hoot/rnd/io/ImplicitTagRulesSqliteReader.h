@@ -43,16 +43,19 @@ class ImplicitTagRulesSqliteReader
 {
 public:
 
-  ImplicitTagRulesSqliteReader(const QString path);
+  ImplicitTagRulesSqliteReader();
+  ~ImplicitTagRulesSqliteReader();
 
+  void open(const QString path);
+  void close();
   bool wordsInvolveMultipleRules(const QSet<QString>& words);
-  Tags getTags(const QString word);
+  Tags getImplicitTags(const QString word);
 
 private:
 
   QString _path;
   QSqlDatabase _db;
-  QSqlQuery _selectTagsForWord;
+  QSqlQuery _selectWordIdsForWord;
 
   void _prepareQueries();
 };

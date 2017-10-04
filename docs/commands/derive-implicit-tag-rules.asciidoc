@@ -2,18 +2,23 @@
 
 === Description
 
-Given an input data source, derives a list of feature types implicitly from the input feature names that can be used during 
-conflation for better type matching.  Only POI's are currently supported.
+Given an input data source, creates a set of rules which can be used to apply feature types implicitly from input 
+feature names.  The implied types can then be used during conflation for better type matching.  Only POI's are 
+currently supported.
 
-* +input+             - path to a supported Hootenanny data input format
-* +minTagOccurances+  - the minimum number of occurances of a type tag in order for a rule to be derived for it
-* +typeKeys+          - comma separated list of tag keys to parse when deriving implicit types; specify "" to use all types
-* +output+            - list output path; supported formats are ?
+* +inputs+                 - semicolon delimited list of paths to supported Hootenanny OSM data input formats
+* +typeKeys+               - semicolon delimited list of tag keys to consider when deriving implicit types; specify 
+                             "" to use all types
+* +minOccurancesThreshold+ - the minimum number of occurances of a type tag in order for a rule to be derived for 
+                             it; specify '1' to consider all type tag occurances
+* +outputs+                - output path to one or more supported implicit tag rule output formats; supported 
+                             formats: Sqlite (.db) and JSON (.json); NOTE: Only the Sqlite database format can be 
+                             used during conflation.
 
 === Usage
 
 --------------------------------------
-derive-implicit-tag-rules (input) (minTagOccurances) (tagKeysToIgnore) (output)
+derive-implicit-tag-rules (inputs) (typeKeys) (minOccurancesThreshold) (outputs)
 --------------------------------------
 
 ==== Examples

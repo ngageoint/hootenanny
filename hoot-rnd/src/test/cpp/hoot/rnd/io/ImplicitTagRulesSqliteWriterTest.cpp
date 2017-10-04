@@ -53,24 +53,24 @@ public:
 
     //words get sorted alphabetically during processing
     //tags for each word also get sorted alphabetically during processing
+    //we're assuming occurance thresholds have already been applied here
+    //There should be no rules with tags of the same type.  Those aren't allowed by the rule
+    //deriver.
 
     //rule #4
     kvps["amenity=place_of_worship"] = 1246; //tag #2
-    kvps["amenity=school"] = 2; //tag #6
-    kvps["amenity=fountain"] = 1; //tag #4
-    kvps["amenity=hospital"] = 1; //tag #5
-    kvps["amenity=religious_activities"] = 6; //tag #3
+    kvps["leisure=park"] = 2; //tag #4
     rules["Mosque"] = kvps; //word #5
 
     //rule #3
     kvps.clear();
     kvps["amenity=place_of_worship"] = 2672; //tag #2
-    kvps["amenity=religious_activities"] = 9; //tag #3
+    kvps["tourism=hotel"] = 9; //tag #3
     rules["Masjid"] = kvps; //word #4
 
     //rule #6
     kvps.clear();
-    kvps["amenity=grave_yard"] = 21; //tag #7
+    kvps["amenity=grave_yard"] = 21; //tag #6
     rules["Sidi Muhammad"] = kvps;  //word #8
 
     //rule #2
@@ -128,13 +128,13 @@ public:
     query.exec("SELECT COUNT(*) FROM tags");
     query.next();
     const int tagCount = query.value(0).toInt();
-    CPPUNIT_ASSERT_EQUAL(7, tagCount);
+    CPPUNIT_ASSERT_EQUAL(6, tagCount);
     query.clear();
 
     query.exec("SELECT COUNT(*) FROM rules");
     query.next();
     const int ruleRowCount = query.value(0).toInt();
-    CPPUNIT_ASSERT_EQUAL(13, ruleRowCount);
+    CPPUNIT_ASSERT_EQUAL(10, ruleRowCount);
     query.clear();
 
     query.exec("SELECT DISTINCT rule_id FROM rules");
@@ -189,7 +189,7 @@ public:
           break;
 
         case 4:
-          CPPUNIT_ASSERT_EQUAL(5, ruleRowCount);
+          CPPUNIT_ASSERT_EQUAL(2, ruleRowCount);
           break;
 
         case 5:
@@ -263,7 +263,7 @@ public:
           break;
 
         case 4:
-          CPPUNIT_ASSERT_EQUAL(5, tagCtr);
+          CPPUNIT_ASSERT_EQUAL(2, tagCtr);
           break;
 
         case 5:

@@ -73,7 +73,8 @@ private:
 
   int _insertWord(const QString word);
   int _insertTag(const QString kvp);
-  void _insertRuleRecord(const int ruleId, const int wordId, const int tagId);
+  void _insertRuleRecord(const int ruleId, const int wordId, const int tagId,
+                         const long occuranceCount);
   int _selectTagIdForKvp(const QString kvp);
   QSet<int> _selectRuleIdsContainingAllTags(const QSet<QString>& kvps);
   QSet<int> _selectTagIdsForKvps(const QSet<QString>& kvps);

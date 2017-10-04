@@ -44,6 +44,7 @@ public:
   static std::string className() { return "hoot::DeriveImplicitTagsVisitor2"; }
 
   DeriveImplicitTagsVisitor2();
+  ~DeriveImplicitTagsVisitor2();
 
   virtual void visit(const ElementPtr& e);
 

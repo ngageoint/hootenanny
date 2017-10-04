@@ -26,9 +26,12 @@
  */
 // Hoot
 #include <hoot/core/TestUtils.h>
+#include <hoot/rnd/io/ImplicitTagRulesSqliteReader.h>
 
 // Qt
 #include <QDir>
+#include <QSet>
+#include <QString>
 
 namespace hoot
 {
@@ -36,12 +39,120 @@ namespace hoot
 class ImplicitTagRulesSqliteReaderTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ImplicitTagRulesSqliteReaderTest);
-  //CPPUNIT_TEST(elementAsJsonTest);
+  CPPUNIT_TEST(runTagsTest);
+  CPPUNIT_TEST(runMultipleRulesTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
+  void runTagsTest()
+  {
+    ImplicitTagRulesSqliteReader reader;
+    reader.open("test-files/io/ImplicitTagRulesSqliteReaderTest/rules.db");
 
+    Tags tags = reader.getImplicitTags("Mosque");
+    CPPUNIT_ASSERT_EQUAL(2, tags.size());
+    CPPUNIT_ASSERT(tags["amenity"] == "place_of_worship");
+    CPPUNIT_ASSERT(tags["leisure"] == "park");
+
+    tags = reader.getImplicitTags("MOSQUE");
+    CPPUNIT_ASSERT_EQUAL(2, tags.size());
+    CPPUNIT_ASSERT(tags["amenity"] == "place_of_worship");
+    CPPUNIT_ASSERT(tags["leisure"] == "park");
+
+    tags = reader.getImplicitTags("mosque");
+    CPPUNIT_ASSERT_EQUAL(2, tags.size());
+    CPPUNIT_ASSERT(tags["amenity"] == "place_of_worship");
+    CPPUNIT_ASSERT(tags["leisure"] == "park");
+
+    tags = reader.getImplicitTags("Eid Prayer Ground");
+    CPPUNIT_ASSERT_EQUAL(1, tags.size());
+    CPPUNIT_ASSERT(tags["amenity"] == "place_of_worship");
+
+    tags = reader.getImplicitTags("Mustashfa");
+    CPPUNIT_ASSERT_EQUAL(1, tags.size());
+    CPPUNIT_ASSERT(tags["amenity"] == "hospital");
+
+    tags = reader.getImplicitTags("alwhdt");
+    CPPUNIT_ASSERT_EQUAL(1, tags.size());
+    CPPUNIT_ASSERT(tags["amenity"] == "clinic");
+
+    tags = reader.getImplicitTags("Mustashfa alwhdt");
+    CPPUNIT_ASSERT_EQUAL(1, tags.size());
+    CPPUNIT_ASSERT(tags["amenity"] == "hospital");
+
+    reader.close();
+  }
+
+  void runMultipleRulesTest()
+  {
+    ImplicitTagRulesSqliteReader reader;
+    reader.open("test-files/io/ImplicitTagRulesSqliteReaderTest/rules.db");
+
+    QSet<QString> words;
+
+    words.insert("Mosque");
+    CPPUNIT_ASSERT(!reader.wordsInvolveMultipleRules(words));
+    words.clear();
+
+    words.insert("MOSQUE");
+    CPPUNIT_ASSERT(!reader.wordsInvolveMultipleRules(words));
+    words.clear();
+
+    words.insert("mosque");
+    CPPUNIT_ASSERT(!reader.wordsInvolveMultipleRules(words));
+    words.clear();
+
+    words.insert("Mustashfa");
+    CPPUNIT_ASSERT(!reader.wordsInvolveMultipleRules(words));
+    words.clear();
+
+    words.insert("MUSTASHFA");
+    CPPUNIT_ASSERT(!reader.wordsInvolveMultipleRules(words));
+    words.clear();
+
+    words.insert("mustashfa");
+    CPPUNIT_ASSERT(!reader.wordsInvolveMultipleRules(words));
+    words.clear();
+
+    words.insert("mosque");
+    words.insert("Mustashfa");
+    CPPUNIT_ASSERT(reader.wordsInvolveMultipleRules(words)); //fix
+    words.clear();
+
+    words.insert("alwhdt");
+    CPPUNIT_ASSERT(!reader.wordsInvolveMultipleRules(words));
+    words.clear();
+
+    words.insert("Mustashfa");
+    words.insert("alwhdt");
+    CPPUNIT_ASSERT(reader.wordsInvolveMultipleRules(words));
+    words.clear();
+
+    words.insert("Mustashfa alwhdt");
+    CPPUNIT_ASSERT(!reader.wordsInvolveMultipleRules(words));
+    words.clear();
+
+    words.insert("Mustashfa alwhdt");
+    words.insert("Mustashfa");
+    words.insert("alwhdt");
+    CPPUNIT_ASSERT(reader.wordsInvolveMultipleRules(words));
+    words.clear();
+
+    words.insert("MUSTASHFA ALWHDT");
+    words.insert("MUSTASHFA");
+    words.insert("ALWHDT");
+    CPPUNIT_ASSERT(reader.wordsInvolveMultipleRules(words)); //fix
+    words.clear();
+
+    words.insert("mustashfa alwhdt");
+    words.insert("mustashfa");
+    words.insert("alwhdt");
+    CPPUNIT_ASSERT(reader.wordsInvolveMultipleRules(words)); //fix
+    words.clear();
+
+    reader.close();
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ImplicitTagRulesSqliteReaderTest, "quick");

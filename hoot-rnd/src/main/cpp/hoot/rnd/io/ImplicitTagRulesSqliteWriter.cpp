@@ -70,12 +70,13 @@ void ImplicitTagRulesSqliteWriter::open(const QString output)
 
 void ImplicitTagRulesSqliteWriter::_createTables()
 {
+  //TODO: add text indexes on words and tags
   DbUtils::execNoPrepare(_db, "CREATE TABLE words (id INTEGER PRIMARY KEY, word TEXT)");
   DbUtils::execNoPrepare(_db, "CREATE TABLE tags (id INTEGER PRIMARY KEY, kvp TEXT)");
   DbUtils::execNoPrepare(
     _db,
     QString("CREATE TABLE rules (id INTEGER PRIMARY KEY, rule_id INTEGER, word_id INTEGER, ") +
-    QString("tag_id INTEGER, count INT, FOREIGN KEY(word_id) REFERENCES words(id), ") +
+    QString("tag_id INTEGER, count INTEGER, FOREIGN KEY(word_id) REFERENCES words(id), ") +
     QString("FOREIGN KEY(tag_id) REFERENCES tags(id))"));
 }
 
@@ -97,7 +98,7 @@ void ImplicitTagRulesSqliteWriter::_prepareQueries()
 
   _insertRuleQuery = QSqlQuery(_db);
   if (!_insertRuleQuery.prepare(
-        "INSERT INTO rules (rule_id, word_id, tag_id) VALUES(:ruleId, :wordId, :tagId)"))
+        "INSERT INTO rules (rule_id, word_id, tag_id, count) VALUES(:ruleId, :wordId, :tagId, :count)"))
   {
     throw HootException(
       QString("Error preparing query: %1").arg(_insertRuleQuery.lastError().text()));
@@ -179,7 +180,7 @@ void ImplicitTagRulesSqliteWriter::write(QMap<QString, QMap<QString, long> > rul
 
     for (QMap<QString, long>::const_iterator kvpItr = kvps.begin(); kvpItr != kvps.end(); ++kvpItr)
     {
-      const QString kvp = kvpItr.key();
+      const QString kvp = kvpItr.key().toLower();
 
       //if tag doesn't exist, insert tag
       int tagId = _selectTagIdForKvp(kvp);
@@ -188,7 +189,7 @@ void ImplicitTagRulesSqliteWriter::write(QMap<QString, QMap<QString, long> > rul
         tagId = _insertTag(kvp);
       }
 
-      _insertRuleRecord(ruleId, wordId, tagId);
+      _insertRuleRecord(ruleId, wordId, tagId, kvpItr.value());
     }
   }
 
@@ -299,7 +300,7 @@ int ImplicitTagRulesSqliteWriter::_insertTag(const QString kvp)
 }
 
 void ImplicitTagRulesSqliteWriter::_insertRuleRecord(const int ruleId, const int wordId,
-                                                     const int tagId)
+                                                     const int tagId, const long occuranceCount)
 {
   LOG_TRACE(
     "Inserting rule record with ID: " << ruleId << ", word ID: " << wordId << " and tag ID: " <<
@@ -308,6 +309,7 @@ void ImplicitTagRulesSqliteWriter::_insertRuleRecord(const int ruleId, const int
   _insertRuleQuery.bindValue(":ruleId", ruleId);
   _insertRuleQuery.bindValue(":wordId", wordId);
   _insertRuleQuery.bindValue(":tagId", tagId);
+  _insertRuleQuery.bindValue(":count", (qlonglong)occuranceCount);
   if (!_insertRuleQuery.exec())
   {
     QString err = QString("Error executing query: %1 (%2)").arg(_insertRuleQuery.executedQuery()).
@@ -321,7 +323,7 @@ QSet<int> ImplicitTagRulesSqliteWriter::_selectTagIdsForKvps(const QSet<QString>
   LOG_TRACE("Selecting tag IDs for kvps: " << kvps);
 
   //can't prepare this one due to variable inputs
-  QSqlQuery selectTagIdsForTagsQuery = QSqlQuery(_db);
+  QSqlQuery selectTagIdsForTagsQuery(_db);
   QString queryStr = "SELECT id FROM tags WHERE kvp IN (";
   for (QSet<QString>::const_iterator kvpItr = kvps.begin(); kvpItr != kvps.end(); ++kvpItr)
   {
@@ -384,7 +386,7 @@ QSet<int> ImplicitTagRulesSqliteWriter::_selectRuleIdsContainingAllTags(const QS
 
   //There is probably a better way to do this...this returns all rules which have any of the
   //specified tags.  This narrows down the rules but obviously isn't complete.
-  QSqlQuery selectRuleIdsForTagsQuery = QSqlQuery(_db);
+  QSqlQuery selectRuleIdsForTagsQuery(_db);
   QString queryStr = "SELECT rule_id, tag_id FROM rules WHERE tag_id IN (";
   for (QSet<int>::const_iterator tagIdItr = tagIds.begin(); tagIdItr != tagIds.end(); ++tagIdItr)
   {

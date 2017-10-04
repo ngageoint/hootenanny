@@ -52,15 +52,12 @@ public:
     QMap<QString, long> kvps;
 
     kvps["amenity=place_of_worship"] = 1246;
-    kvps["amenity=school"] = 2;
-    kvps["amenity=fountain"] = 1;
-    kvps["amenity=hospital"] = 1;
-    kvps["amenity=religious_activities"] = 6;
+    kvps["leisure=park"] = 2;
     rules["Mosque"] = kvps;
 
     kvps.clear();
     kvps["amenity=place_of_worship"] = 2672;
-    kvps["amenity=religious_activities"] = 9;
+    kvps["tourism=hotel"] = 9;
     rules["Masjid"] = kvps;
 
     kvps.clear();

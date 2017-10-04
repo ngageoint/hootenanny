@@ -50,19 +50,24 @@ public:
 
   QMap<QString, QMap<QString, long> > deriveRules(const QStringList inputs,
                                                   const QStringList typeKeys = QStringList(),
-                                                  const int minOccurances = 1);
+                                                  const int minOccurancesThreshold = 1);
 
 private:
 
   //ImplicitTagRules _tokensToKvpsWithCounts;
   //TODO: replace with stxxl map
-  QMap<QString, QMap<QString, long> > _tokensToKvpsWithCounts;
+  //key=<word>;<kvp> value=<kvp occurance count>
+  QMap<QString, long> _wordKvpsToOccuranceCounts;
+  //key=<word>;<tag key> value=<tag values>
+  QMap<QString, QStringList> _wordTagKeysToTagValues;
 
-  int _minOccurances;
+  int _minOccurancesThreshold;
 
-  void _updateForNewToken(const QString token, const QString kvp);
+  void _updateForNewWord(const QString word, const QString kvp);
   QString _getMostSpecificPoiKvp(const Tags& tags) const;
   void _removeKvpsBelowOccuranceThreshold();
+  void _removeDuplicatedKvpTypes();
+  QMap<QString, QMap<QString, long> > _combineWordMaps();
 };
 
 }

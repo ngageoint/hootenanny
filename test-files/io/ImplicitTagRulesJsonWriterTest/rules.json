@@ -6,15 +6,12 @@
   {
     "word": "Masjid",
     "amenity=place_of_worship": 2672,
-    "amenity=religious_activities": 9
+    "tourism=hotel": 9
   },
   {
     "word": "Mosque",
-    "amenity=fountain": 1,
-    "amenity=hospital": 1,
     "amenity=place_of_worship": 1246,
-    "amenity=religious_activities": 6,
-    "amenity=school": 2
+    "leisure=park": 2
   },
   {
     "word": "Sidi Muhammad",

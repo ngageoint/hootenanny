@@ -55,8 +55,8 @@ public:
     }
 
     bool ok = false;
-    const int minOccurances = args[1].toInt(&ok);
-    if (!ok || minOccurances < 1)
+    const int minOccurancesThreshold = args[1].toInt(&ok);
+    if (!ok || minOccurancesThreshold < 1)
     {
       throw IllegalArgumentException(
         "Invalid value for the minimum number of type occurrances allowed: " + args[1]);
@@ -64,7 +64,7 @@ public:
 
     QMap<QString, QMap<QString, long> > rules =
       PoiImplicitTagRulesDeriver().deriveRules(
-        args[0].trimmed().split(";"), args[1].trimmed().split(";"), minOccurances);
+        args[0].trimmed().split(";"), args[1].trimmed().split(";"), minOccurancesThreshold);
 
     const QStringList outputs = args[3].trimmed().split(";");
     for (int i = 0; i < outputs.size(); i++)

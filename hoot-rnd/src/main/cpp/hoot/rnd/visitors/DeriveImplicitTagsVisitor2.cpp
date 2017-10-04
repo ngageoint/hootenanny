@@ -43,13 +43,20 @@ HOOT_FACTORY_REGISTER(ElementVisitor, DeriveImplicitTagsVisitor2)
 
 DeriveImplicitTagsVisitor2::DeriveImplicitTagsVisitor2()
 {
-  _ruleReader.reset(
-    new ImplicitTagRulesSqliteReader(ConfigOptions().getDeriveImplicitTagsDatabase()));
+  _ruleReader.reset(new ImplicitTagRulesSqliteReader());
+  _ruleReader->open(ConfigOptions().getDeriveImplicitTagsDatabase());
+}
+
+DeriveImplicitTagsVisitor2::~DeriveImplicitTagsVisitor2()
+{
+  if (_ruleReader)
+  {
+    _ruleReader->close();
+  }
 }
 
 void DeriveImplicitTagsVisitor2::visit(const ElementPtr& e)
 {
-  //bool foundMatch = false;
   bool foundDuplicateMatch = false;
   Tags tagsToAdd;
   QString matchWord;
@@ -69,21 +76,12 @@ void DeriveImplicitTagsVisitor2::visit(const ElementPtr& e)
          namesAndNameWordsItr != namesAndNameWords.end(); ++namesAndNameWordsItr)
     {
       const QString word = *namesAndNameWordsItr;
-//      if (_ruleReader->wordInvolvesMultipleRules(word))
-//      {
-//        foundDuplicateMatch = true;
-//        matchWord = word;
-//        return;
-//      }
-//      else
-//      {
-        tagsToAdd = _ruleReader->getTags(word);
-        if (!tagsToAdd.isEmpty())
-        {
-          matchWord = word;
-          return;
-        }
-      //}
+      tagsToAdd = _ruleReader->getImplicitTags(word);
+      if (!tagsToAdd.isEmpty())
+      {
+        matchWord = word;
+        return;
+      }
     }
 
     if (foundDuplicateMatch)

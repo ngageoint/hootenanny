@@ -44,27 +44,6 @@ PoiImplicitTagRulesDeriver::PoiImplicitTagRulesDeriver()
 {
 }
 
-void PoiImplicitTagRulesDeriver::_updateForNewToken(const QString token, const QString kvp)
-{
-  //TODO: deal with case sensitivity?
-  if (!_tokensToKvpsWithCounts.contains(token))
-  {
-    QMap<QString, long> kvpWithCount;
-    kvpWithCount[kvp] = 1;
-    _tokensToKvpsWithCounts[token] = kvpWithCount;
-  }
-  else if (!_tokensToKvpsWithCounts[token].contains(kvp))
-  {
-    QMap<QString, long> kvpWithCount = _tokensToKvpsWithCounts[token];
-    kvpWithCount[kvp]++;
-    _tokensToKvpsWithCounts[token] = kvpWithCount;
-  }
-  else
-  {
-    _tokensToKvpsWithCounts[token][kvp]++;
-  }
-}
-
 QString PoiImplicitTagRulesDeriver::_getMostSpecificPoiKvp(const Tags& tags) const
 {
   QString mostSpecificPoiKvp;
@@ -84,39 +63,39 @@ QString PoiImplicitTagRulesDeriver::_getMostSpecificPoiKvp(const Tags& tags) con
   return mostSpecificPoiKvp;
 }
 
-//bool maxOccuranceFirst(const QMap<QString, long>& a, const QMap<QString, long>& b)
-//{
-//  //TODO: make a function for this
-//  long highestKvpOccuranceA = 0;
-//  for (QMap<QString, long>::const_iterator kvpWithCountItr = a.begin();
-//         kvpWithCountItr != a.end(); ++kvpWithCountItr)
-//  {
-//    const long kvpCountA = kvpWithCountItr.value();
-//    if (kvpCountA > highestKvpOccuranceA)
-//    {
-//      highestKvpOccuranceA = kvpCountA;
-//    }
-//  }
+void PoiImplicitTagRulesDeriver::_updateForNewWord(const QString word, const QString kvp)
+{
+  const QString wordKvp = word % ";" % kvp;
+  if (!_wordKvpsToOccuranceCounts.contains(wordKvp))
+  {
+    _wordKvpsToOccuranceCounts[wordKvp] = 1;
+  }
+  else
+  {
+    _wordKvpsToOccuranceCounts[wordKvp]++;
+  }
 
-//  long highestKvpOccuranceB = 0;
-//  for (QMap<QString, long>::const_iterator kvpWithCountItr = b.begin();
-//         kvpWithCountItr != b.end(); ++kvpWithCountItr)
-//  {
-//    const long kvpCountB = kvpWithCountItr.value();
-//    if (kvpCountB > highestKvpOccuranceB)
-//    {
-//      highestKvpOccuranceB = kvpCountB;
-//    }
-//  }
-
-//  return highestKvpOccuranceA > highestKvpOccuranceB;
-//} 
+  const QStringList kvpParts = kvp.split("=");
+  const QString kvpKey = kvpParts[0];
+  const QString kvpVal = kvpParts[1];
+  const QString wordKvpKey = word % ";" % kvpKey;
+  if (!_wordTagKeysToTagValues.contains(wordKvpKey))
+  {
+    QStringList valsList;
+    valsList.append(kvpVal);
+    _wordTagKeysToTagValues[wordKvpKey] = valsList;
+  }
+  else
+  {
+    _wordTagKeysToTagValues[wordKvpKey].append(kvpVal);
+  }
+}
 
 QMap<QString, QMap<QString, long> > PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs,
                                                                          const QStringList typeKeys,
-                                                                         const int minOccurances)
+                                                                   const int minOccurancesThreshold)
 {
-  _minOccurances = minOccurances;
+  _minOccurancesThreshold = minOccurancesThreshold;
 
   for (int i = 0; i < inputs.size(); i++)
   {
@@ -146,12 +125,12 @@ QMap<QString, QMap<QString, long> > PoiImplicitTagRulesDeriver::deriveRules(cons
             {
               const QString name = names.at(i);
 
-              _updateForNewToken(name, mostSpecificPoiKvp);
+              _updateForNewWord(name, mostSpecificPoiKvp);
 
               const QStringList nameTokens = tokenizer.tokenize(name);
               for (int j = 0; j < nameTokens.size(); j++)
               {
-                _updateForNewToken(nameTokens.at(i), mostSpecificPoiKvp);
+                _updateForNewWord(nameTokens.at(i), mostSpecificPoiKvp);
               }
             }
           }
@@ -162,45 +141,117 @@ QMap<QString, QMap<QString, long> > PoiImplicitTagRulesDeriver::deriveRules(cons
   }
 
   _removeKvpsBelowOccuranceThreshold();
+  _removeDuplicatedKvpTypes();
 
-  //TODO: sort by descending kvp occurance per word also?
-  //qSort(_tokensToKvpsWithCounts.begin(), _tokensToKvpsWithCounts.end(), maxOccuranceFirst);
-
-  return _tokensToKvpsWithCounts;
+  return _combineWordMaps();
 }
 
 void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccuranceThreshold()
 {
-  QMap<QString, QMap<QString, long> > updatedData;
-  for (QMap<QString, QMap<QString, long> >::const_iterator tokenItr = _tokensToKvpsWithCounts.begin();
-       tokenItr != _tokensToKvpsWithCounts.end(); ++tokenItr)
+  QMap<QString, long> updatedCounts;
+  QMap<QString, QStringList> updatedValues;
+
+  for (QMap<QString, long>::const_iterator kvpCountsItr = _wordKvpsToOccuranceCounts.begin();
+       kvpCountsItr != _wordKvpsToOccuranceCounts.end(); ++kvpCountsItr)
   {
-    const QString token = tokenItr.key();
-    const QMap<QString, long> kvpsWithCounts = tokenItr.value();
-    for (QMap<QString, long>::const_iterator kvpWithCountItr = kvpsWithCounts.begin();
-         kvpWithCountItr != kvpsWithCounts.end(); ++kvpWithCountItr)
+    const long count = kvpCountsItr.value();
+    if (count >= _minOccurancesThreshold)
     {
-      const QString kvp = kvpWithCountItr.key();
-      const long kvpCountForToken =  kvpWithCountItr.value();
-      if (kvpCountForToken >= _minOccurances)
+      const QStringList keyParts = kvpCountsItr.key().split(";");
+      const QString word = keyParts[0];
+      const QString kvp = keyParts[1];
+      const QStringList kvpParts = kvp.split("=");
+      const QString kvpKey = kvpParts[0];
+      const QString kvpVal = kvpParts[1];
+      const QString wordKvpKey = word % ";" % kvpKey;
+
+      updatedCounts[kvpCountsItr.key()] = count;
+      if (!updatedValues.contains(wordKvpKey))
       {
-        //TODO: deal with case sensitivity?
-        if (!_tokensToKvpsWithCounts.contains(token))
-        {
-          QMap<QString, long> updatedKvpsWithCounts;
-          updatedKvpsWithCounts[kvp] = kvpCountForToken;
-          updatedData[token] = updatedKvpsWithCounts;
-        }
-        else
-        {
-          QMap<QString, long> updatedKvpsWithCounts = _tokensToKvpsWithCounts[token];
-          updatedKvpsWithCounts[kvp] = kvpCountForToken;
-          updatedData[token] = updatedKvpsWithCounts;
-        }
+        updatedValues[wordKvpKey] = QStringList();
       }
+      updatedValues[wordKvpKey].append(kvpVal);
     }
   }
-  _tokensToKvpsWithCounts = updatedData;
+
+  _wordKvpsToOccuranceCounts = updatedCounts;
+  _wordTagKeysToTagValues= updatedValues;
+}
+
+void PoiImplicitTagRulesDeriver::_removeDuplicatedKvpTypes()
+{
+  QMap<QString, long> updatedCounts;
+  QMap<QString, QStringList> updatedValues;
+
+  for (QMap<QString, QStringList>::const_iterator valsItr = _wordTagKeysToTagValues.begin();
+       valsItr != _wordTagKeysToTagValues.end(); ++valsItr)
+  {
+    const QString wordKvpKey = valsItr.key();
+    const QStringList vals = valsItr.value();
+
+    assert(vals.size() != 0);
+    if (vals.size() > 1)
+    {
+      QString highestOccurranceKvp;
+      long highestOccurranceCount = 0;
+
+      for (int i = 0; i < vals.size(); i++)
+      {
+        const QString wordKvp = wordKvpKey % "=" % vals.at(i);
+        const long occurranceCount = _wordKvpsToOccuranceCounts[wordKvp];
+        if (occurranceCount > highestOccurranceCount)
+        {
+          highestOccurranceCount = occurranceCount;
+          highestOccurranceKvp = wordKvp;
+        }
+      }
+
+      if (highestOccurranceCount > 0)
+      {
+        updatedCounts[highestOccurranceKvp] = highestOccurranceCount;
+        const QString highestOccurranceVal = highestOccurranceKvp.split("=")[1];
+        if (!updatedValues.contains(wordKvpKey))
+        {
+          updatedValues[wordKvpKey] = QStringList();
+        }
+        updatedValues[wordKvpKey].append(highestOccurranceVal);
+      }
+    }
+    else //size == 1
+    {
+      const QString wordKvp = wordKvpKey % "=" % vals.at(0);
+      updatedCounts[wordKvp] = _wordKvpsToOccuranceCounts[wordKvp];
+      updatedValues[wordKvpKey] = _wordTagKeysToTagValues[wordKvpKey];
+    }
+  }
+
+  _wordKvpsToOccuranceCounts = updatedCounts;
+  _wordTagKeysToTagValues= updatedValues;
+}
+
+QMap<QString, QMap<QString, long> > PoiImplicitTagRulesDeriver::_combineWordMaps()
+{
+  QMap<QString, QMap<QString, long> > wordsToKvpsWithCounts;
+
+  for (QMap<QString, long>::const_iterator kvpsWithCountsItr = _wordKvpsToOccuranceCounts.begin();
+       kvpsWithCountsItr != _wordKvpsToOccuranceCounts.end(); ++kvpsWithCountsItr)
+  {
+    const QString wordKvp = kvpsWithCountsItr.key();
+    const QStringList wordKvpParts = wordKvp.split(";");
+    const QString word = wordKvpParts[0];
+    const QString kvp = wordKvpParts[1];
+    const long kvpCount = kvpsWithCountsItr.value();
+
+    if (!wordsToKvpsWithCounts.contains(word))
+    {
+      wordsToKvpsWithCounts[kvp] = QMap<QString, long>();
+    }
+    QMap<QString, long> kvpsWithCounts = wordsToKvpsWithCounts[word];
+    kvpsWithCounts[kvp] = kvpCount;
+    wordsToKvpsWithCounts[word] = kvpsWithCounts;
+  }
+
+  return wordsToKvpsWithCounts;
 }
 
 }
