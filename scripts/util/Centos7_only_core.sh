@@ -134,6 +134,7 @@ sudo yum -y install \
     gcc \
     gcc-c++ \
     gdal \
+    gdal-devel \
     geos \
     geos-devel \
     glpk \
