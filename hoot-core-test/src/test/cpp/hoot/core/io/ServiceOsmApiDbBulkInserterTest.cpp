@@ -544,5 +544,6 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceOsmApiDbBulkInserterTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceOsmApiDbBulkInserterTest, "serial");
 
 }
