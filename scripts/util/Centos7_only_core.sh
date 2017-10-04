@@ -129,6 +129,7 @@ echo "### Installing dependencies from repos..."
 sudo yum -y install \
     autoconf \
     automake \
+    bc \
     boost-devel \
     bzip2 \
     ccache \
@@ -181,7 +182,6 @@ sudo yum -y install \
 
 # Removed Doc and UI stuff
 #     asciidoc \
-#     bc \
 #     dblatex \
 #     doxygen \
 #     gdb \
@@ -390,7 +390,7 @@ if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --version | grep -q ${GDAL_VERSI
             wget --quiet https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_${FGDB_VERSION}/FileGDB_API_${FGDB_VERSION2}-64.tar.gz
             echo "### Extracting FileGDB API source & installing lib..."
             sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp FileGDB_API_${FGDB_VERSION2}-64.tar.gz --directory /usr/local/FileGDB_API --strip-components 1
-            sudo chmod -R a+rx /usr/local/FileGDB_API
+            sudo chmod -R +rX /usr/local/FileGDB_API
         fi
         sudo sh -c "echo '/usr/local/FileGDB_API/lib' > /etc/ld.so.conf.d/filegdb.conf"
     fi
