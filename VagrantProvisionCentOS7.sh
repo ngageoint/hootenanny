@@ -497,24 +497,6 @@ autovacuum = off
 EOT
 fi
 
-# configure kernel parameters
-
-SYSCTL_CONF=/etc/sysctl.conf
-sudo touch $SYSCTL_CONF
-if ! grep --quiet 1173741824 $SYSCTL_CONF; then
-    sudo cp $SYSCTL_CONF $SYSCTL_CONF.orig
-    echo "Setting kernel.shmmax"
-    sudo sysctl -w kernel.shmmax=1173741824
-    sudo sh -c "echo 'kernel.shmmax=1173741824' >> $SYSCTL_CONF"
-    #                 kernel.shmmax=68719476736
-fi
-if ! grep --quiet 2097152 $SYSCTL_CONF; then
-    echo "Setting kernel.shmall"
-    sudo sysctl -w kernel.shmall=2097152
-    sudo sh -c "echo 'kernel.shmall=2097152' >> $SYSCTL_CONF"
-    #                 kernel.shmall=4294967296
-fi
-
 echo "Restarting postgres"
 sudo systemctl restart postgresql-$PG_VERSION
 
