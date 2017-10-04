@@ -93,14 +93,13 @@ sudo yum -q -y update >> CentOS_upgrade.txt 2>&1
 echo "### Upgrade ###" >> CentOS_upgrade.txt
 sudo yum -q -y upgrade >> CentOS_upgrade.txt 2>&1
 
-echo "### Setup NTP..."
-sudo yum -q -y install ntp
-sudo chkconfig ntpd on
-#TODO: Better way to do this?
-sudo systemctl stop ntpd
-sudo ntpd -gq
-sudo systemctl start ntpd
-
+# echo "### Setup NTP..."
+# sudo yum -q -y install ntp
+# sudo chkconfig ntpd on
+# #TODO: Better way to do this?
+# sudo systemctl stop ntpd
+# sudo ntpd -gq
+# sudo systemctl start ntpd
 
 # Make sure that we are in ~ before trying to wget & install stuff
 cd ~
@@ -134,6 +133,7 @@ sudo yum -y install \
     cppunit-devel \
     gcc \
     gcc-c++ \
+    gdal \
     geos \
     geos-devel \
     glpk \
