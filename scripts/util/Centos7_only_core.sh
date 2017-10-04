@@ -53,15 +53,18 @@
 # NOTE: This is _VERY_ site specific. DO NOT USE THIS UNLESS YOU _REALLY_ KNOW WHAT YOU ARE DOING
 SRC_DIR=/home/centos/hoot-deps
 
+#################################################
+# CHANGE THIS TO POINT TO WHERE EVER YOU PUT HOOT
+HOOT_HOME=~/hoot
+echo HOOT_HOME: $HOOT_HOME
+#################################################
+
 
 VMUSER=`id -u -n`
 echo USER: $VMUSER
 VMGROUP=`groups | grep -o $VMUSER`
 echo GROUP: $VMGROUP
 
-# This is not optimal
-HOOT_HOME=~/hoot
-echo HOOT_HOME: $HOOT_HOME
 
 cd ~
 source ~/.bash_profile
@@ -133,8 +136,6 @@ sudo yum -y install \
     cppunit-devel \
     gcc \
     gcc-c++ \
-    gdal \
-    gdal-devel \
     geos \
     geos-devel \
     glpk \
@@ -359,64 +360,66 @@ if [ ! -f /etc/ld.so.conf.d/postgres${PG_VERSION}.conf ]; then
 fi
 
 # For convenience, set the version of GDAL and FileGDB to download and install
-# GDAL_VERSION=2.1.4
-# FGDB_VERSION=1.5.1
-# FGDB_VERSION2=`echo $FGDB_VERSION | sed 's/\./_/g;'`
+GDAL_VERSION=2.1.4
+FGDB_VERSION=1.5.1
+FGDB_VERSION2=`echo $FGDB_VERSION | sed 's/\./_/g;'`
 
-# if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --version | grep -q ${GDAL_VERSION} && ogrinfo --formats | grep -q FileGDB ); then
-#     if [ ! -d "gdal-${GDAL_VERSION}" ]; then
-#         if [ -f "$SRC_DIR/gdal-${GDAL_VERSION}.tar.gz" ]; then
-#             echo "### Extracting GDAL $GDAL_VERSION source..."
-#             tar zxfp $SRC_DIR/gdal-${GDAL_VERSION}.tar.gz
-#         elif [ -f "./gdal-${GDAL_VERSION}.tar.gz" ]; then
-#             echo "### Extracting GDAL $GDAL_VERSION source..."
-#             tar zxfp ./gdal-${GDAL_VERSION}.tar.gz
-#         else
-#             echo "### Downloading GDAL $GDAL_VERSION source..."
-#             wget --quiet http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION}.tar.gz
-#             echo "### Extracting GDAL $GDAL_VERSION source..."
-#             tar zxfp ./gdal-${GDAL_VERSION}.tar.gz
-#         fi
-#     fi # GDAL dir
-#
-#     if [ ! -d /usr/local/FileGDB_API ]; then
-#         if [ -f "$SRC_DIR/FileGDB_API_${FGDB_VERSION2}-64.tar.gz" ]; then
-#             echo "### Extracting FileGDB API source & installing lib..."
-#             sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp $SRC_DIR/FileGDB_API_${FGDB_VERSION2}-64.tar.gz --directory /usr/local/FileGDB_API --strip-components 1
-#         elif [ ! -f "FileGDB_API_${FGDB_VERSION2}-64.tar.gz" ]; then
-#             echo "### Downloading FileGDB API source..."
-#             wget --quiet https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_${FGDB_VERSION}/FileGDB_API_${FGDB_VERSION2}-64.tar.gz
-#             echo "### Extracting FileGDB API source & installing lib..."
-#             sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp FileGDB_API_${FGDB_VERSION2}-64.tar.gz --directory /usr/local/FileGDB_API --strip-components 1
-#         fi
-#         sudo sh -c "echo '/usr/local/FileGDB_API/lib' > /etc/ld.so.conf.d/filegdb.conf"
-#     fi
-#
-#     echo "### Building GDAL $GDAL_VERSION w/ FileGDB..."
-#     export PATH=/usr/local/lib:/usr/local/bin:$PATH
-#     cd gdal-$GDAL_VERSION
-#     touch config.rpath
-#     echo "GDAL: configure"
-#     sudo ./configure --quiet --with-fgdb=/usr/local/FileGDB_API --with-pg=/usr/pgsql-${PG_VERSION}/bin/pg_config --with-python CFLAGS='-std=c11' CXXFLAGS='-std=c++11'
-#     echo "GDAL: make"
-#     sudo make -sj$(nproc) > GDAL_Build.txt 2>&1
-#     echo "GDAL: install"
-#     sudo make -s install >> GDAL_Build.txt 2>&1
-#     cd swig/python
-#     echo "GDAL: python build"
-#     python setup.py build >> GDAL_Build.txt 2>&1
-#     echo "GDAL: python install"
-#     sudo python setup.py install >> GDAL_Build.txt 2>&1
-#     sudo ldconfig
-#     cd ~
-# fi
+if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --version | grep -q ${GDAL_VERSION} && ogrinfo --formats | grep -q FileGDB ); then
+    if [ ! -d "gdal-${GDAL_VERSION}" ]; then
+        if [ -f "$SRC_DIR/gdal-${GDAL_VERSION}.tar.gz" ]; then
+            echo "### Extracting GDAL $GDAL_VERSION source..."
+            tar zxfp $SRC_DIR/gdal-${GDAL_VERSION}.tar.gz
+        elif [ -f "./gdal-${GDAL_VERSION}.tar.gz" ]; then
+            echo "### Extracting GDAL $GDAL_VERSION source..."
+            tar zxfp ./gdal-${GDAL_VERSION}.tar.gz
+        else
+            echo "### Downloading GDAL $GDAL_VERSION source..."
+            wget --quiet http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION}.tar.gz
+            echo "### Extracting GDAL $GDAL_VERSION source..."
+            tar zxfp ./gdal-${GDAL_VERSION}.tar.gz
+        fi
+    fi # GDAL dir
 
-# if ! mocha --version &>/dev/null; then
-#     echo "### Installing mocha for plugins test..."
-#     sudo npm install --silent -g mocha
-#     # Clean up after the npm install
-#     sudo rm -rf ~/tmp
-# fi
+    if [ ! -d /usr/local/FileGDB_API ]; then
+        if [ -f "$SRC_DIR/FileGDB_API_${FGDB_VERSION2}-64.tar.gz" ]; then
+            echo "### Extracting FileGDB API source & installing lib..."
+            sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp $SRC_DIR/FileGDB_API_${FGDB_VERSION2}-64.tar.gz --directory /usr/local/FileGDB_API --strip-components 1
+            sudo chmod -R +rX /usr/local/FileGDB_API
+        elif [ ! -f "FileGDB_API_${FGDB_VERSION2}-64.tar.gz" ]; then
+            echo "### Downloading FileGDB API source..."
+            wget --quiet https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_${FGDB_VERSION}/FileGDB_API_${FGDB_VERSION2}-64.tar.gz
+            echo "### Extracting FileGDB API source & installing lib..."
+            sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp FileGDB_API_${FGDB_VERSION2}-64.tar.gz --directory /usr/local/FileGDB_API --strip-components 1
+            sudo chmod -R a+rx /usr/local/FileGDB_API
+        fi
+        sudo sh -c "echo '/usr/local/FileGDB_API/lib' > /etc/ld.so.conf.d/filegdb.conf"
+    fi
+
+    echo "### Building GDAL $GDAL_VERSION w/ FileGDB..."
+    export PATH=/usr/local/lib:/usr/local/bin:$PATH
+    cd gdal-$GDAL_VERSION
+    touch config.rpath
+    echo "GDAL: configure"
+    sudo ./configure --quiet --with-fgdb=/usr/local/FileGDB_API --with-pg=/usr/pgsql-${PG_VERSION}/bin/pg_config --with-python CFLAGS='-std=c11' CXXFLAGS='-std=c++11'
+    echo "GDAL: make"
+    sudo make -sj$(nproc) > GDAL_Build.txt 2>&1
+    echo "GDAL: install"
+    sudo make -s install >> GDAL_Build.txt 2>&1
+    cd swig/python
+    echo "GDAL: python build"
+    python setup.py build >> GDAL_Build.txt 2>&1
+    echo "GDAL: python install"
+    sudo python setup.py install >> GDAL_Build.txt 2>&1
+    sudo ldconfig
+    cd ~
+fi
+
+if ! mocha --version &>/dev/null; then
+    echo "### Installing mocha for plugins test..."
+    sudo npm install --silent -g mocha
+    # Clean up after the npm install
+    sudo rm -rf ~/tmp
+fi
 
 
 echo "### Configureing Postgres..."
