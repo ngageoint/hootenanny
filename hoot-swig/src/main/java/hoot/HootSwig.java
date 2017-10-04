@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot;
 
@@ -110,7 +110,10 @@ public class HootSwig
           addDir(s);
         }
         
+        // Load all the relevant Hoot libraries.
         System.loadLibrary("HootCore");
+        System.loadLibrary("HootJs");
+        System.loadLibrary("HootRnd");
         System.loadLibrary("HootSwig");
         _initialized = true;
       }

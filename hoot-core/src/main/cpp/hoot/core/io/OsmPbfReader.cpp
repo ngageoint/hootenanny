@@ -1011,6 +1011,15 @@ void OsmPbfReader::parseElements(istream* strm, const OsmMapPtr& map)
   _loadOsmData();
 }
 
+void OsmPbfReader::parseElements(QByteArray bytes, const OsmMapPtr& map)
+{
+  // this could be made more efficient by reading directly into the buffer, but that comes at the
+  // expense of complexity.
+  std::stringstream ss;
+  ss.str(std::string(bytes.data(), bytes.size()));
+  parseElements(&ss, map);
+}
+
 int OsmPbfReader::_parseInt(QString s)
 {
   bool ok;

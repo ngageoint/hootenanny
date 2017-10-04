@@ -39,7 +39,7 @@
 							<goal>exec</goal>
 						</goals>
 						<configuration>
-							<executable>qmake</executable>
+							<executable>qmake-qt4</executable>
 						</configuration>
 					</execution>
 					<execution>

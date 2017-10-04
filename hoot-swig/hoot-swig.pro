@@ -13,11 +13,6 @@ else {
     include("../Configure.pri")
 }
 
-QT += script \
-    sql \
-    testlib \
-    xml \
-
 TARGET = HootSwig
 TEMPLATE = lib
 
@@ -26,6 +21,7 @@ DEPENDPATH += \
     ../tgs/src/main/cpp/ \
     ../hoot-core/src/main/cpp/ \
     ../hoot-core-test/src/test/cpp/ \
+    ../hoot-rnd/src/main/cpp/ \
     src/main/cpp/ \
 
 INCLUDEPATH += \
@@ -39,13 +35,15 @@ CONFIG += rtti \
     qtestlib \
     precompile_header
 
-OTHER_FILES += README.txt
+OTHER_FILES += README.txt \
+    src/main/cpp/hoot/swig/util/GeosDataConvert.i \
+    src/main/cpp/hoot/swig/TestUtils.i
 
 include(../Configure.pri)
 
 QMAKE_CXXFLAGS = $$QMAKE_CXXFLAGS
 
-LIBS += -L../lib/ -lTgs -ltbs -lHootCore -lv8
+LIBS += -L../lib/ -lTgs -ltbs -lHootCore -lHootRnd -lHootJs -lv8
 
 UI_DIR = tmp/ui
 MOC_DIR = tmp/moc
@@ -56,30 +54,20 @@ DESTDIR = ../lib/
 # This is needed to make the swig code happy.
 QMAKE_CXXFLAGS += -fno-strict-aliasing
 
-SWIG_FILES = src/main/cpp/hoot/swig/swig.i
-
-#swig.name=swig
-##swig.files=src/main/cpp/hoot/swig
-#swig.depends=$$files(src/*.i, true)
-#swig.commands=swig -c++ -java -package hoot \
-#  -I../hoot-core/src/main/cpp/ \
-#  -outdir src/main/java-swig/hoot/ \
-#  -o tmp/swig/HootSwigJni.cxx src/main/cpp/hoot/swig/swig.i
-#swig.input=SWIG_FILES
-#swig.variable_out=dum
-#swig.output=tmp/swig/HootSwigJni.cxx
-#swig.target=HootSwig_wrap.cxx
-
-SWIG_FILES = src/main/cpp/hoot/swig/swig.i
+SWIG_FILES = $$files(src/*.i, true)
 
 swig.files=src/main/cpp/hoot/swig
-swig.commands=swig -c++ -java -package hoot -I../hoot-core/src/main/cpp/ -outdir src/main/java/pp/ -o tmp/swig/HootSwigJni.cxx src/main/cpp/hoot/swig/swig.i
-swig.input=SWIG_FILES
+swig.commands=swig -c++ -java -package hoot -DGEOS_DLL= $$find(QMAKE_CXXFLAGS, -I.*) -I../hoot-core/src/main/cpp/ -I../hoot-rnd/src/main/cpp/ -outdir src/main/java-swig/hoot/ -o tmp/swig/HootSwigJni.cxx src/main/cpp/hoot/swig/swig.i
+swig.input=src/main/cpp/hoot/swig/swig.i
 swig.variable_out=dum
 swig.output=tmp/swig/HootSwigJni.cxx
 swig.name=swig
 
-QMAKE_EXTRA_COMPILERS += swig
+message($$QMAKE_CXXFLAGS)
+
+PRE_TARGETDEPS=swig
+
+QMAKE_EXTRA_TARGETS += swig
 QMAKE_CLEAN += $${swig.output}
 
 SOURCES += $$files(src/*.cpp, true)

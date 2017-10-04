@@ -46,5 +46,17 @@ $2 = (int)    JCALL1(GetArrayLength,       jenv, $input);
   JCALL4(SetByteArrayRegion, jenv, $result, 0, length, $1);
 }
 
+%{
+void throwJavaError(JNIEnv* jenv, const char* message)
+{
+  LOG_FATAL(message);
+  jclass clazz = jenv->FindClass("java/lang/AssertionError");
+  jenv->ThrowNew(clazz, message);
+}
+%}
+
+%include "TestUtils.i"
+%include "util/JavaDataConvert.i"
+%include "util/GeosDataConvert.i"
 %include "Version.i"
-/*%include "io/OsmPbfReader.i"*/
+%include "conflate/multiary/MultiaryUtilities.i"
