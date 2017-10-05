@@ -101,7 +101,8 @@ bool ImplicitTagRulesSqliteReader::wordsInvolveMultipleRules(const QSet<QString>
   QString queryStr = "SELECT id, word FROM words WHERE ";
   for (QSet<QString>::const_iterator wordItr = words.begin(); wordItr != words.end(); ++wordItr)
   {
-    queryStr += "UPPER(word)='" + (*wordItr).toUpper() + "' OR ";
+    //queryStr += "UPPER(word)='" + (*wordItr).toUpper() + "' OR ";
+    queryStr += "LOWER(word)='" + (*wordItr).toLower() + "' OR ";
   }
   queryStr.chop(4);
   LOG_VART(queryStr);
@@ -184,7 +185,8 @@ Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,
   QString queryStr = "SELECT id, word FROM words WHERE ";
   for (QSet<QString>::const_iterator wordItr = words.begin(); wordItr != words.end(); ++wordItr)
   {
-    queryStr += "UPPER(word)='" + (*wordItr).toUpper() + "' OR ";
+    //queryStr += "UPPER(word)='" + (*wordItr).toUpper() + "' OR ";
+    queryStr += "LOWER(word)='" + (*wordItr).toLower() + "' OR ";
   }
   queryStr.chop(4);
   LOG_VART(queryStr);
@@ -206,6 +208,7 @@ Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,
   }
   query.chop(1);
   query += ")";
+  LOG_VART(numWordIds);
   if (numWordIds == 0)
   {
     LOG_TRACE("No associated tag IDs found for words: " << words);

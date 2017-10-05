@@ -35,7 +35,7 @@ namespace hoot
 {
 
 /**
- * Derive tags based on the names.
+ * Derive tags based on the names.  Eventually this will replace DeriveImplicitTagsVisitor.
  */
 class DeriveImplicitTagsVisitor2 : public ElementVisitor
 {
@@ -44,6 +44,7 @@ public:
   static std::string className() { return "hoot::DeriveImplicitTagsVisitor2"; }
 
   DeriveImplicitTagsVisitor2();
+  DeriveImplicitTagsVisitor2(const QString databasePath);
   ~DeriveImplicitTagsVisitor2();
 
   virtual void visit(const ElementPtr& e);

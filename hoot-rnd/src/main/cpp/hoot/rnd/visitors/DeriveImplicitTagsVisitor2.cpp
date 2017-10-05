@@ -47,6 +47,12 @@ DeriveImplicitTagsVisitor2::DeriveImplicitTagsVisitor2()
   _ruleReader->open(ConfigOptions().getDeriveImplicitTagsDatabase());
 }
 
+DeriveImplicitTagsVisitor2::DeriveImplicitTagsVisitor2(const QString databasePath)
+{
+  _ruleReader.reset(new ImplicitTagRulesSqliteReader());
+  _ruleReader->open(databasePath);
+}
+
 DeriveImplicitTagsVisitor2::~DeriveImplicitTagsVisitor2()
 {
   if (_ruleReader)
@@ -78,17 +84,18 @@ void DeriveImplicitTagsVisitor2::visit(const ElementPtr& e)
 
     if (foundDuplicateMatch)
     {
-      const QStringList matchingRuleWordsList = matchingRuleWords.toList();
+      QStringList matchingRuleWordsList = matchingRuleWords.toList();
+      matchingRuleWordsList.sort();
       e->getTags().appendValue(
         "note",
-        "Found multiple possible matches for implicit tags based on: " +
-          matchingRuleWordsList.join(", "));
+        "Found multiple possible matches for implicit tags: " + matchingRuleWordsList.join(", "));
     }
     else if (!tagsToAdd.isEmpty())
     {
       e->getTags().addTags(tagsToAdd);
       assert(matchingWords.size() != 0);
-      const QStringList matchingWordsList = matchingWords.toList();
+      QStringList matchingWordsList = matchingWords.toList();
+      matchingWordsList.sort();
       e->getTags().appendValue(
         "note", "Implicitly derived tags based on: " + matchingWordsList.join(", "));
     }

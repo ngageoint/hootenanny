@@ -32,7 +32,14 @@
 
 namespace hoot
 {
-class ImplicitRule;
+  class ImplicitRule
+  {
+  public:
+    QStringList words;
+    //QStringList wholeName;
+    Tags tags;
+  };
+  typedef boost::shared_ptr<ImplicitRule> ImplicitRulePtr;
 
 /**
  * Derive tags based on the names.
@@ -46,6 +53,9 @@ public:
   DeriveImplicitTagsVisitor();
 
   virtual void visit(const ElementPtr& e);
+
+  //TODO: temp
+  QList< boost::shared_ptr<ImplicitRule> > getTestRules() { return _rules; }
 
 public:
 
