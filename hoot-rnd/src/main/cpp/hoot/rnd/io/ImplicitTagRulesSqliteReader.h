@@ -48,14 +48,13 @@ public:
 
   void open(const QString path);
   void close();
-  bool wordsInvolveMultipleRules(const QSet<QString>& words);
-  Tags getImplicitTags(const QString word);
+  bool wordsInvolveMultipleRules(const QSet<QString>& words, QSet<QString>& matchingRuleWords);
+  Tags getImplicitTags(const QSet<QString>& words, QSet<QString>& matchingWords);
 
 private:
 
   QString _path;
   QSqlDatabase _db;
-  QSqlQuery _selectWordIdsForWord;
 
   void _prepareQueries();
 };

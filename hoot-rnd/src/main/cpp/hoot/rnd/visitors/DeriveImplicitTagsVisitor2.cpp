@@ -59,7 +59,6 @@ void DeriveImplicitTagsVisitor2::visit(const ElementPtr& e)
 {
   bool foundDuplicateMatch = false;
   Tags tagsToAdd;
-  QString matchWord;
   if (e->getElementType() == ElementType::Node &&
       // either the element isn't a poi, or it contains a generic poi type
       (!OsmSchema::getInstance().hasCategory(e->getTags(), "poi") ||
@@ -67,31 +66,31 @@ void DeriveImplicitTagsVisitor2::visit(const ElementPtr& e)
   {
     const QSet<QString> namesAndNameWords = _extractNamesAndNameWords(e->getTags());
 
-    if (_ruleReader->wordsInvolveMultipleRules(namesAndNameWords))
+    QSet<QString> matchingRuleWords;
+    if (_ruleReader->wordsInvolveMultipleRules(namesAndNameWords, matchingRuleWords))
     {
       foundDuplicateMatch = true;
+      assert(matchingRuleWords.size() != 0);
     }
 
-    for (QSet<QString>::const_iterator namesAndNameWordsItr = namesAndNameWords.begin();
-         namesAndNameWordsItr != namesAndNameWords.end(); ++namesAndNameWordsItr)
-    {
-      const QString word = *namesAndNameWordsItr;
-      tagsToAdd = _ruleReader->getImplicitTags(word);
-      if (!tagsToAdd.isEmpty())
-      {
-        matchWord = word;
-        return;
-      }
-    }
+    QSet<QString> matchingWords;
+    tagsToAdd = _ruleReader->getImplicitTags(namesAndNameWords, matchingWords);
 
     if (foundDuplicateMatch)
     {
-      e->getTags().appendValue("note", "Found multiple possible matches for implicit tags.");
+      const QStringList matchingRuleWordsList = matchingRuleWords.toList();
+      e->getTags().appendValue(
+        "note",
+        "Found multiple possible matches for implicit tags based on: " +
+          matchingRuleWordsList.join(", "));
     }
     else if (!tagsToAdd.isEmpty())
     {
       e->getTags().addTags(tagsToAdd);
-      e->getTags().appendValue("note", "Implicitly derived tags based on: " + matchWord);
+      assert(matchingWords.size() != 0);
+      const QStringList matchingWordsList = matchingWords.toList();
+      e->getTags().appendValue(
+        "note", "Implicitly derived tags based on: " + matchingWordsList.join(", "));
     }
   }
 }

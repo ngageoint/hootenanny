@@ -48,7 +48,69 @@ public:
     TestUtils::resetEnvironment();
   }
 
+  void runBasicTest()
+  {
+    QString testJsonStr = QString::fromUtf8(
+      "{                                      \n"
+      " 'elements': [                         \n"
+      " { 'type': 'node', 'id': -1, 'lat': 2.0, 'lon': -3.0, \n"
+      "   'tags': { 'amenity': 'pub', 'name': 'Alshy Burgers' } },\n"
+      " { 'type': 'node', 'id': -2, 'lat': 3.0, 'lon': -3.0, \n"
+      "   'tags': { 'name': 'Alshy Clinic' } },\n"
+      " { 'type': 'node', 'id': -3, 'lat': 14.0, 'lon': -3.0, \n"
+      "   'tags': { 'poi': 'yes', 'name': 'masjid' } },\n"
+      " { 'type': 'node', 'id': -4, 'lat': 14.0, 'lon': -3.0, \n"
+      "   'tags': { 'place': 'locality', 'name': 'Mustashfa alwhdt' } },\n"
+      " { 'type': 'node', 'id': -5, 'lat': 14.0, 'lon': -3.0, \n"
+      "   'tags': { 'name': 'Sihhi' } },\n"
+      " { 'type': 'node', 'id': -6, 'lat': 14.0, 'lon': -3.0, \n"
+      "   'tags': { 'name': 'Sihhi', 'alt_name': 'Clinic' } }\n"
+      "]                                      \n"
+      "}                                      \n");
 
+    OsmMapPtr map = OsmJsonReader().loadFromString(testJsonStr);
+    // the JSON parser doesn't handle exotic characters.
+    map->getNode(-5)->getTags()["alt_name"] = QString::fromUtf8("Şiḩḩī");
+
+    DeriveImplicitTagsVisitor2 uut;
+
+    map->visitRw(uut);
+
+//    LOG_VAR(TestUtils::toQuotedString(map->getNode(-1)->getTags().toString()));
+//    LOG_VAR(TestUtils::toQuotedString(map->getNode(-2)->getTags().toString()));
+//    LOG_VAR(TestUtils::toQuotedString(map->getNode(-3)->getTags().toString()));
+//    LOG_VAR(TestUtils::toQuotedString(map->getNode(-4)->getTags().toString()));
+//    LOG_VAR(TestUtils::toQuotedString(map->getNode(-5)->getTags().toString()));
+//    LOG_VAR(TestUtils::toQuotedString(map->getNode(-6)->getTags().toString()));
+
+    HOOT_STR_EQUALS("name = Alshy Burgers\n"
+                    "amenity = pub\n",
+                    map->getNode(-1)->getTags());
+    HOOT_STR_EQUALS("note = Implicitly derived tags based on: alshy\n"
+                    "name = Alshy Clinic\n"
+                    "amenity = clinic\n",
+                    map->getNode(-2)->getTags());
+    HOOT_STR_EQUALS("note = Implicitly derived tags based on: masjid\n"
+                    "poi = yes\n"
+                    "religion = muslim\n"
+                    "name = masjid\n"
+                    "amenity = place_of_worship\n",
+                    map->getNode(-3)->getTags());
+    HOOT_STR_EQUALS("place = locality\n"
+                    "note = Found multiple possible matches for implicit tags: alwhdt, mustashfa\n"
+                    "name = Mustashfa alwhdt\n",
+                    map->getNode(-4)->getTags());
+    HOOT_STR_EQUALS("note = Implicitly derived tags based on: sihhi, şiḩḩī\n"
+                    "alt_name = Şiḩḩī\n"
+                    "name = Sihhi\n"
+                    "amenity = clinic\n",
+                    map->getNode(-5)->getTags());
+    HOOT_STR_EQUALS("note = Implicitly derived tags based on: sihhi\n"
+                    "alt_name = Clinic\n"
+                    "name = Sihhi\n"
+                    "amenity = clinic\n",
+                    map->getNode(-6)->getTags());
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(DeriveImplicitTagsVisitor2Test, "quick");
