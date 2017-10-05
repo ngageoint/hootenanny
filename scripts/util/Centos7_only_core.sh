@@ -70,7 +70,7 @@ echo GROUP: $VMGROUP
 STXXL_VERSION=stxxl-1.3.1
 
 # Ancient version of NodeJS
-NODEJS_URL=https://rpm.nodesource.com/pub_0.10/el/7
+NODEJS_URL=https://rpm.nodesource.com/pub_0.10/el/7/x86_64
 NODEJS_RPM=nodejs-0.10.48-1nodesource.el7.centos.x86_64.rpm
 NODEJS_DEVEL_RPM=nodejs-devel-0.10.48-1nodesource.el7.centos.x86_64.rpm
 
