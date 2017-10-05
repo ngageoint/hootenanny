@@ -21,11 +21,11 @@
 # Java8: jdk-8u144-linux-x64.rpm
 # From: http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jdk-8u144-linux-x64.rpm
 #
-# NodeJS: nodejs-0.10.46 and nodejs-devel-0.10.46
-# Installed via this repo: https://rpm.nodesource.com/setup
+# NodeJS: nodejs-0.10.48 and nodejs-devel-0.10.48
+# Grabbed from: https://rpm.nodesource.com/pub_0.10/el/7
 #
 # STXXL: Release v1.3.1
-# Pulled from GitHub: git clone http://github.com/stxxl/stxxl.git stxxl
+# Pulled from GitHub: https://github.com/ngageoint/hootenanny-rpms/raw/master/src/SOURCES/stxxl-1.3.1.tar.gz
 #
 # American-english-insane dictionary & words.sqlite. There isn't a package available for these so we use our own
 # copy stored on S3
@@ -48,23 +48,44 @@
 # From: https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_1.5.1/FileGDB_API_1_5_1-64.tar.gz
 #
 
-# Setup some "local" config stuff. This directory has RPMs and source for things that have been already downloaded
-# so we don't have to try to download them again.
-# NOTE: This is _VERY_ site specific. DO NOT USE THIS UNLESS YOU _REALLY_ KNOW WHAT YOU ARE DOING
-SRC_DIR=/home/centos/hoot-deps
-
 #################################################
-# CHANGE THIS TO POINT TO WHERE EVER YOU PUT HOOT
+# VERY IMPORTANT: CHANGE THIS TO POINT TO WHERE EVER YOU PUT HOOT
 HOOT_HOME=~/hoot
 echo HOOT_HOME: $HOOT_HOME
 #################################################
 
+#################################################
+# THIS IS VERY SPECIFIC TO ONE ENVIRONMENT
+SRC_DIR=/home/centos/hoot-deps
+#################################################
 
+# Who are we?
 VMUSER=`id -u -n`
 echo USER: $VMUSER
 VMGROUP=`groups | grep -o $VMUSER`
 echo GROUP: $VMGROUP
 
+
+# Setting up versions and locations:
+STXXL_VERSION=stxxl-1.3.1
+
+# Ancient version of NodeJS
+NODEJS_URL=https://rpm.nodesource.com/pub_0.10/el/7
+NODEJS_RPM=nodejs-0.10.48-1nodesource.el7.centos.x86_64.rpm
+NODEJS_DEVEL_RPM=nodejs-devel-0.10.48-1nodesource.el7.centos.x86_64.rpm
+
+# JAVA JDK download URL
+JDKURL=http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jdk-8u144-linux-x64.rpm
+
+# GDAL & FGDB. NOTE We parse the FGDB version later in the script to get the tar file name
+GDAL_VERSION=2.1.4
+FGDB_VERSION=1.5.1
+
+# Postgresql version
+PG_VERSION=9.5
+
+
+#################################################
 
 cd ~
 source ~/.bash_profile
@@ -107,22 +128,47 @@ sudo yum -q -y upgrade >> CentOS_upgrade.txt 2>&1
 # Make sure that we are in ~ before trying to wget & install stuff
 cd ~
 
-# add EPEL repo for extra packages - ONLY if we DONT have SRC_DIR
-if [ ! -d "$SRC_DIR" ] ; then
-    echo "### Installing the repo for an ancient version of NodeJS"
-    curl --silent --location https://rpm.nodesource.com/setup | sudo bash -
+# if [ ! -d "$SRC_DIR" ] ; then
+# https://rpm.nodesource.com/pub_0.10/el/7/x86_64/nodejs-0.10.48-1nodesource.el7.centos.x86_64.rpm
+# https://rpm.nodesource.com/pub_0.10/el/7/x86_64/nodejs-devel-0.10.48-1nodesource.el7.centos.x86_64.rpm
+#
+#     echo "### Getting an ancient version of NodeJS"
+#     curl --silent --location https://rpm.nodesource.com/setup | sudo bash -
+#
+#
+#
+#     echo "### Installing an ancient version of NodeJS"
+#     sudo yum install -y \
+#         nodejs-0.10.48 \
+#         nodejs-devel-0.10.48
+# else
+#     # VERY HARDCODED
+#     echo "### Installing an ancient version of NodeJS"
+#     sudo yum install -y \
+#         $SRC_DIR/nodejs-0.10.48-1nodesource.el7.centos.x86_64.rpm \
+#         $SRC_DIR/nodejs-devel-0.10.48-1nodesource.el7.centos.x86_64.rpm
+# fi
 
-    echo "### Installing an ancient version of NodeJS"
-    sudo yum install -y \
-        nodejs-0.10.46 \
-        nodejs-devel-0.10.46
+
+echo "### Installing an ancient version of NodeJS"
+if [ -f "${SRC_DIR}/${NODEJS_RPM}" ]; then
+    sudo yum -y install $SRC_DIR/$NODEJS_RPM
+elif [ -f "./${NODEJS_RPM}" ]; then
+    sudo yum -y install ./$NODEJS_RPM
 else
-    # VERY HARDCODED
-    echo "### Installing an ancient version of NodeJS"
-    sudo yum install -y \
-        $SRC_DIR/nodejs-0.10.46-1nodesource.el7.centos.x86_64.rpm \
-        $SRC_DIR/nodejs-devel-0.10.46-1nodesource.el7.centos.x86_64.rpm
+    wget --quiet $NODEJS_URL/$NODEJS_RPM
+    sudo yum -y install ./$NODEJS_RPM
 fi
+echo "### Installing an ancient version of NodeJS development files"
+if [ -f "${SRC_DIR}/${NODEJS_DEVEL_RPM}" ]; then
+    sudo yum -y install $SRC_DIR/$NODEJS_DEVEL_RPM
+elif [ -f "./${NODEJS_DEVEL_RPM}" ]; then
+    sudo yum -y install ./$NODEJS_DEVEL_RPM
+else
+    wget --quiet $NODEJS_URL/$NODEJS_DEVEL_RPM
+    sudo yum -y install ./$NODEJS_DEVEL_RPM
+fi
+
 
 # install useful and needed packages for working with hootenanny
 echo "### Installing dependencies from repos..."
@@ -137,6 +183,7 @@ sudo yum -y install \
     cppunit-devel \
     gcc \
     gcc-c++ \
+    gdb \
     geos \
     geos-devel \
     glpk \
@@ -184,7 +231,6 @@ sudo yum -y install \
 #     asciidoc \
 #     dblatex \
 #     doxygen \
-#     gdb \
 #     qtwebkit \
 #     qtwebkit-devel \
 #     tex* \
@@ -200,7 +246,6 @@ if  ! rpm -qa | grep jdk1.8.0_144-1.8.0_144; then
     elif [ -f ./jdk-8u144-linux-x64.rpm ]; then
       sudo yum -y install ./jdk-8u144-linux-x64.rpm
     else
-      JDKURL=http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jdk-8u144-linux-x64.rpm
       wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" $JDKURL
       sudo yum -y install ./jdk-8u144-linux-x64.rpm
     fi
@@ -237,9 +282,13 @@ fi
 if [ -d "$SRC_DIR/stxxl" ] ; then
     cd $SRC_DIR/stxxl
 else
-    git clone http://github.com/stxxl/stxxl.git stxxl
-    cd stxxl
-    git checkout -q tags/1.3.1
+#     git clone http://github.com/stxxl/stxxl.git stxxl
+#     cd stxxl
+#     git checkout -q tags/1.3.1
+    if [ ! -f "${STXXL_VERSION}.tar.gz" ]; then
+        wget --quiet https://github.com/ngageoint/hootenanny-rpms/raw/master/src/SOURCES/${STXXL_VERSION}.tar.gz
+    fi
+    mkdir -p stxxl && tar zxof ${STXXL_VERSION}.tar.gz --directory ./stxxl --strip-components 1
 fi
 make config_gnu
 echo "STXXL_ROOT	=`pwd`" > make.settings.local
@@ -346,8 +395,6 @@ fi
 
 # Need to figure out a way to do this automagically
 #PG_VERSION=$(sudo -u postgres psql -c 'SHOW SERVER_VERSION;' | egrep -o '[0-9]{1,}\.[0-9]{1,}'); do
-PG_VERSION=9.5
-
 if ! grep --quiet "psql-" ~/.bash_profile; then
     echo "Adding PostGres path vars to profile..."
     echo "export PATH=\$PATH:/usr/pgsql-${PG_VERSION}/bin" >> ~/.bash_profile
@@ -360,8 +407,6 @@ if [ ! -f /etc/ld.so.conf.d/postgres${PG_VERSION}.conf ]; then
 fi
 
 # For convenience, set the version of GDAL and FileGDB to download and install
-GDAL_VERSION=2.1.4
-FGDB_VERSION=1.5.1
 FGDB_VERSION2=`echo $FGDB_VERSION | sed 's/\./_/g;'`
 
 if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --version | grep -q ${GDAL_VERSION} && ogrinfo --formats | grep -q FileGDB ); then
