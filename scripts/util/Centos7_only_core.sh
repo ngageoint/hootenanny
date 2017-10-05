@@ -289,6 +289,7 @@ else
         wget --quiet https://github.com/ngageoint/hootenanny-rpms/raw/master/src/SOURCES/${STXXL_VERSION}.tar.gz
     fi
     mkdir -p stxxl && tar zxof ${STXXL_VERSION}.tar.gz --directory ./stxxl --strip-components 1
+    cd stxxl
 fi
 make config_gnu
 echo "STXXL_ROOT	=`pwd`" > make.settings.local
