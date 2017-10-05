@@ -56,15 +56,18 @@ private:
 
   //ImplicitTagRules _tokensToKvpsWithCounts;
   //TODO: replace with stxxl map
-  //key=<word>;<kvp> value=<kvp occurance count>
+  //key=<word>;<kvp>, value=<kvp occurance count>
   QMap<QString, long> _wordKvpsToOccuranceCounts;
-  //key=<word>;<tag key> value=<tag values>
+  //key=<word>;<tag key>, value=<tag values>
   QMap<QString, QStringList> _wordTagKeysToTagValues;
+  //key=<lower case word>, value=<word>
+  QMap<QString, QString> _wordCaseMappings;
 
-  void _updateForNewWord(const QString word, const QString kvp);
+  void _updateForNewWord(QString word, const QString kvp);
   QString _getMostSpecificPoiKvp(const Tags& tags) const;
   void _removeKvpsBelowOccuranceThreshold(const int minOccurancesThreshold);
-  void _removeDuplicatedKvpTypes();
+  void _removeDuplicatedKeyTypes();
+  void _removeIrrelevantKeyTypes(const QStringList typeKeysAllowed);
   QMap<QString, QMap<QString, long> > _generateOutput();
 };
 

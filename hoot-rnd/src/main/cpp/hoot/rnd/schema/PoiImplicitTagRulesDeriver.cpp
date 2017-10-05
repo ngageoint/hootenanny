@@ -69,11 +69,19 @@ QString PoiImplicitTagRulesDeriver::_getMostSpecificPoiKvp(const Tags& tags) con
   return mostSpecificPoiKvp;
 }
 
-void PoiImplicitTagRulesDeriver::_updateForNewWord(const QString word, const QString kvp)
+void PoiImplicitTagRulesDeriver::_updateForNewWord(QString word, const QString kvp)
 {
-  //TODO: handle case
-
   LOG_TRACE("Updating word: " << word << " with kvp: " << kvp << "...");
+
+  const QString lowerCaseWord = word.toLower();
+  if (_wordCaseMappings.contains(lowerCaseWord))
+  {
+    word = _wordCaseMappings[lowerCaseWord];
+  }
+  else
+  {
+    _wordCaseMappings[lowerCaseWord] = word;
+  }
 
   const QString wordKvp = word % ";" % kvp;
   LOG_VART(wordKvp);
@@ -113,6 +121,12 @@ QMap<QString, QMap<QString, long> > PoiImplicitTagRulesDeriver::deriveRules(cons
     "Deriving POI implicit tag rules for inputs: " << inputs << " type keys: " << typeKeys <<
     " with minimum occurance threshold: " << minOccurancesThreshold << "...");
 
+  QStringList typeKeysAllowed;
+  for (int i = 0; i < typeKeys.size(); i++)
+  {
+    typeKeysAllowed.append(typeKeys.at(i).toLower());
+  }
+
   for (int i = 0; i < inputs.size(); i++)
   {
     boost::shared_ptr<PartialOsmMapReader> inputReader =
@@ -128,6 +142,7 @@ QMap<QString, QMap<QString, long> > PoiImplicitTagRulesDeriver::deriveRules(cons
       ElementPtr element = inputStream->readNextElement();
       const Tags& tags = element->getTags();
       LOG_VART(element);
+      LOG_VART(typeKeys.isEmpty());
       LOG_VART(tags.hasAnyKey(typeKeys));
 
       if (element->getElementType() == ElementType::Node &&
@@ -162,17 +177,17 @@ QMap<QString, QMap<QString, long> > PoiImplicitTagRulesDeriver::deriveRules(cons
     }
     inputReader->finalizePartial();
   }
+  _wordCaseMappings.clear();
 
   _removeKvpsBelowOccuranceThreshold(minOccurancesThreshold);
-  _removeDuplicatedKvpTypes();
+  _removeDuplicatedKeyTypes();
+  _removeIrrelevantKeyTypes(typeKeysAllowed);
 
   return _generateOutput();
 }
 
 void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccuranceThreshold(const int minOccurancesThreshold)
 {
-  //TODO: handle case
-
   LOG_DEBUG(
     "Removing duplicated kvp below mininum occurance threshold: " << minOccurancesThreshold <<
     "...");
@@ -213,10 +228,39 @@ void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccuranceThreshold(const int mi
   _wordTagKeysToTagValues= updatedValues;
 }
 
-void PoiImplicitTagRulesDeriver::_removeDuplicatedKvpTypes()
+void PoiImplicitTagRulesDeriver::_removeIrrelevantKeyTypes(const QStringList typeKeysAllowed)
 {
-  //TODO: handle case
+  LOG_DEBUG("Removing irrelevant kvps...");
 
+  if (typeKeysAllowed.size() == 0)
+  {
+    return;
+  }
+
+  QMap<QString, long> updatedCounts;
+  QMap<QString, QStringList> updatedValues;
+
+  for (QMap<QString, long>::const_iterator kvpCountsItr = _wordKvpsToOccuranceCounts.begin();
+       kvpCountsItr != _wordKvpsToOccuranceCounts.end(); ++kvpCountsItr)
+  {
+    const QStringList keyParts = kvpCountsItr.key().split(";");
+    const QString word = keyParts[0];
+    const QString key = keyParts[1].split("=")[0];
+
+    if (typeKeysAllowed.contains(key.toLower()))
+    {
+      updatedCounts[kvpCountsItr.key()] = kvpCountsItr.value();
+      const QString wordKvpKey = word % ";" % key;
+      updatedValues[wordKvpKey] = _wordTagKeysToTagValues[wordKvpKey];
+    }
+  }
+
+  _wordKvpsToOccuranceCounts = updatedCounts;
+  _wordTagKeysToTagValues= updatedValues;
+}
+
+void PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
+{
   LOG_DEBUG("Removing duplicated kvp types...");
 
   QMap<QString, long> updatedCounts;
@@ -292,8 +336,6 @@ void PoiImplicitTagRulesDeriver::_removeDuplicatedKvpTypes()
 
 QMap<QString, QMap<QString, long> > PoiImplicitTagRulesDeriver::_generateOutput()
 {
-  //TODO: handle case
-
   LOG_DEBUG("Generating output...");
 
   QMap<QString, QMap<QString, long> > wordsToKvpsWithCounts;

@@ -39,12 +39,12 @@ class PoiImplicitTagRulesDeriverTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(PoiImplicitTagRulesDeriverTest);
   CPPUNIT_TEST(runBasicTest);
-  //CPPUNIT_TEST(runMultipleInputsTest);
-  //CPPUNIT_TEST(runTypeKeysTest);
-  //CPPUNIT_TEST(runMinOccuranceThresholdTest);
-  //CPPUNIT_TEST(runWrongWayTagTest);
-  //CPPUNIT_TEST(runHandleSemicolonInNameTest);
+  CPPUNIT_TEST(runTypeKeysTest);
+  CPPUNIT_TEST(runMinOccuranceThresholdTest);
+  CPPUNIT_TEST(runMultipleInputsTest);
+  //CPPUNIT_TEST(runSemicolonInNameTest);
   //CPPUNIT_TEST(runNameCaseTest);
+  //CPPUNIT_TEST(runLessSpecificTagTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -52,39 +52,78 @@ public:
   void runBasicTest()
   {
     PoiImplicitTagRulesDeriver deriver;
+    QDir().mkpath(_outDir);
 
     QStringList inputs;
-    inputs.append("/home/vagrant/hoot/tmp/yemen-crop-2.osm.pbf");
+    inputs.append(_inputDir + "/yemen-crop-2.osm.pbf");
 
     const QMap<QString, QMap<QString, long> > rules = deriver.deriveRules(inputs);
 
-    ImplicitTagRulesJsonWriter writer;
-    writer.open("/home/vagrant/hoot/tmp/yemen-test-out.json");
-    writer.write(rules);
-    writer.close();
-  }
+    const QString outputFile = _outDir + "/PoiImplicitTagRulesDeriverTest-runBasicTest-out.json";
+    _writeOutputFile(rules, outputFile);
 
-  void runMultipleInputsTest()
-  {
-
+    HOOT_FILE_EQUALS(_inputDir + "/PoiImplicitTagRulesDeriverTest-runBasicTest.json", outputFile);
   }
 
   void runTypeKeysTest()
   {
+    PoiImplicitTagRulesDeriver deriver;
+    QDir().mkpath(_outDir);
 
+    QStringList inputs;
+    inputs.append(_inputDir + "/yemen-crop-2.osm.pbf");
+
+    QStringList typeKeys;
+    typeKeys.append("amenity");
+    typeKeys.append("tourism");
+    typeKeys.append("building");
+
+    const QMap<QString, QMap<QString, long> > rules = deriver.deriveRules(inputs, typeKeys);
+
+    const QString outputFile = _outDir + "/PoiImplicitTagRulesDeriverTest-runTypeKeysTest-out.json";
+    _writeOutputFile(rules, outputFile);
+
+    HOOT_FILE_EQUALS(_inputDir + "/PoiImplicitTagRulesDeriverTest-runTypeKeysTest.json", outputFile);
   }
 
   void runMinOccuranceThresholdTest()
   {
+    PoiImplicitTagRulesDeriver deriver;
+    QDir().mkpath(_outDir);
 
+    QStringList inputs;
+    inputs.append(_inputDir + "/yemen-crop-2.osm.pbf");
+
+    const QMap<QString, QMap<QString, long> > rules = deriver.deriveRules(inputs, QStringList(), 4);
+
+    const QString outputFile =
+      _outDir + "/PoiImplicitTagRulesDeriverTest-runMinOccuranceThresholdTest-out.json";
+    _writeOutputFile(rules, outputFile);
+
+    HOOT_FILE_EQUALS(
+      _inputDir + "/PoiImplicitTagRulesDeriverTest-runMinOccuranceThresholdTest.json", outputFile);
   }
 
-  void runWrongWayTagTest()
+  void runMultipleInputsTest()
   {
+    PoiImplicitTagRulesDeriver deriver;
+    QDir().mkpath(_outDir);
 
+    QStringList inputs;
+    inputs.append(_inputDir + "/yemen-crop-2.osm.pbf");
+    inputs.append(_inputDir + "/philippines-1.osm.pbf");
+
+    const QMap<QString, QMap<QString, long> > rules = deriver.deriveRules(inputs);
+
+    const QString outputFile =
+      _outDir + "/PoiImplicitTagRulesDeriverTest-runMultipleInputsTest-out.json";
+    _writeOutputFile(rules, outputFile);
+
+    HOOT_FILE_EQUALS(
+      _inputDir + "/PoiImplicitTagRulesDeriverTest-runMultipleInputsTest.json", outputFile);
   }
 
-  void runHandleSemicolonInNameTest()
+  void runSemicolonInNameTest()
   {
 
   }
@@ -92,6 +131,24 @@ public:
   void runNameCaseTest()
   {
 
+  }
+
+  void runLessSpecificTagTest()
+  {
+
+  }
+
+private:
+
+  QString _outDir = "test-output/io/PoiImplicitTagRulesDeriverTest";
+  QString _inputDir = "test-files/io/PoiImplicitTagRulesDeriverTest";
+
+  void _writeOutputFile(const QMap<QString, QMap<QString, long> >& rules, const QString outputFile)
+  {
+    ImplicitTagRulesJsonWriter writer;
+    writer.open(outputFile);
+    writer.write(rules);
+    writer.close();
   }
 };
 
