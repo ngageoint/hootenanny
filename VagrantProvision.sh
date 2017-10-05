@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 #################################################
-# VERY IMPORTANT: CHANGE THIS TO POINT TO WHERE EVER YOU PUT HOOT
+# VERY IMPORTANT: CHANGE THIS TO POINT TO WHERE YOU PUT HOOT
 HOOT_HOME=~/hoot
 echo HOOT_HOME: $HOOT_HOME
 #################################################
