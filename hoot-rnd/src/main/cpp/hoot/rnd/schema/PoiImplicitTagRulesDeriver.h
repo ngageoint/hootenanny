@@ -54,6 +54,9 @@ public:
 
 private:
 
+  //for testing
+  friend class PoiImplicitTagRulesDeriverTest;
+
   //ImplicitTagRules _tokensToKvpsWithCounts;
   //TODO: replace with stxxl map
   //key=<word>;<kvp>, value=<kvp occurance count>
@@ -64,7 +67,8 @@ private:
   QMap<QString, QString> _wordCaseMappings;
 
   void _updateForNewWord(QString word, const QString kvp);
-  QString _getMostSpecificPoiKvp(const Tags& tags) const;
+  //QString _getMostSpecificPoiKvp(const Tags& tags) const;
+  QStringList _getPoiKvps(const Tags& tags) const;
   void _removeKvpsBelowOccuranceThreshold(const int minOccurancesThreshold);
   void _removeDuplicatedKeyTypes();
   void _removeIrrelevantKeyTypes(const QStringList typeKeysAllowed);

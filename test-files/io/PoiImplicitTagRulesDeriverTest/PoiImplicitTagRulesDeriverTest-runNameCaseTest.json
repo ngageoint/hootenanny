@@ -1,0 +1,29 @@
+[
+  {
+    "word": "Great",
+    "amenity=place_of_worship": 1
+  },
+  {
+    "word": "Handel",
+    "amenity=place_of_worship": 1,
+    "building=mosque": 1
+  },
+  {
+    "word": "Handel mosque",
+    "amenity=place_of_worship": 1,
+    "building=mosque": 1
+  },
+  {
+    "word": "Mosque",
+    "amenity=place_of_worship": 2,
+    "building=mosque": 1
+  },
+  {
+    "word": "Old",
+    "amenity=place_of_worship": 1
+  },
+  {
+    "word": "Old Great Mosque",
+    "amenity=place_of_worship": 1
+  }
+]

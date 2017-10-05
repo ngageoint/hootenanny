@@ -360,7 +360,8 @@
   },
   {
     "word": "مسجد",
-    "amenity=place_of_worship": 6
+    "amenity=place_of_worship": 6,
+    "building=mosque": 4
   },
   {
     "word": "مكتب",

@@ -446,11 +446,13 @@
   },
   {
     "word": "Handel",
-    "amenity=place_of_worship": 1
+    "amenity=place_of_worship": 1,
+    "building=mosque": 1
   },
   {
     "word": "Handel mosque",
-    "amenity=place_of_worship": 1
+    "amenity=place_of_worship": 1,
+    "building=mosque": 1
   },
   {
     "word": "Hay",
@@ -739,7 +741,8 @@
   },
   {
     "word": "mosque",
-    "amenity=place_of_worship": 4
+    "amenity=place_of_worship": 4,
+    "building=mosque": 1
   },
   {
     "word": "Museum",
@@ -1658,7 +1661,8 @@
   },
   {
     "word": "جامع",
-    "amenity=place_of_worship": 7
+    "amenity=place_of_worship": 7,
+    "building=mosque": 1
   },
   {
     "word": "جامع القيلر",
@@ -1666,7 +1670,8 @@
   },
   {
     "word": "جامع حنظل",
-    "amenity=place_of_worship": 1
+    "amenity=place_of_worship": 1,
+    "building=mosque": 1
   },
   {
     "word": "جامع صنعاء الكبير",
@@ -1698,7 +1703,8 @@
   },
   {
     "word": "حنظل",
-    "amenity=place_of_worship": 1
+    "amenity=place_of_worship": 1,
+    "building=mosque": 1
   },
   {
     "word": "ذيزن",
@@ -2030,7 +2036,8 @@
   },
   {
     "word": "مسجد",
-    "amenity=place_of_worship": 6
+    "amenity=place_of_worship": 6,
+    "building=mosque": 4
   },
   {
     "word": "مسجد الشهيدين",
