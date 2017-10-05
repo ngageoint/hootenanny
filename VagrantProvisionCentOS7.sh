@@ -1,19 +1,37 @@
 #!/usr/bin/env bash
+
+#################################################
+# VERY IMPORTANT: CHANGE THIS TO POINT TO WHERE EVER YOU PUT HOOT
+HOOT_HOME=~/hoot
+echo HOOT_HOME: $HOOT_HOME
+#################################################
+
 VMUSER=`id -u -n`
 echo USER: $VMUSER
 VMGROUP=`groups | grep -o $VMUSER`
 echo GROUP: $VMGROUP
 
-HOOT_HOME=~/hoot
-echo HOOT_HOME: $HOOT_HOME
-cd ~
-source ~/.bash_profile
+# Setting up versions and locations:
+STXXL_VERSION=stxxl-1.3.1
+
+# Ancient version of NodeJS
+NODEJS_URL=https://rpm.nodesource.com/pub_0.10/el/7/x86_64
+NODEJS_RPM=nodejs-0.10.48-1nodesource.el7.centos.x86_64.rpm
+NODEJS_DEVEL_RPM=nodejs-devel-0.10.48-1nodesource.el7.centos.x86_64.rpm
+
+# GDAL & FGDB. NOTE We parse the FGDB version later in the script to get the tar file name
+GDAL_VERSION=2.1.4
+FGDB_VERSION=1.5.1
+
+# Postgresql version
+PG_VERSION=9.5
+
+
 
 export LANG=en_US.UTF-8
 
-
-# Keep VagrantBuild.sh happy
-#ln -s ~/.bash_profile ~/.profile
+cd ~
+source ~/.bash_profile
 
 # add EPEL repo for extra packages
 echo "### Add epel repo ###" > CentOS_upgrade.txt
@@ -41,27 +59,26 @@ sudo systemctl start ntpd
 # Make sure that we are in ~ before trying to wget & install stuff
 cd ~
 
-echo "### Installing the repo for an ancient version of NodeJS"
-curl --silent --location https://rpm.nodesource.com/setup | sudo bash -
-
 echo "### Installing an ancient version of NodeJS"
-sudo yum install -y \
-  nodejs-0.10.46 \
-  nodejs-devel-0.10.46 \
-  yum-plugin-versionlock
+if [ -f "./${NODEJS_RPM}" ]; then
+    sudo yum -y install ./$NODEJS_RPM
+else
+    wget --quiet $NODEJS_URL/$NODEJS_RPM
+    sudo yum -y install ./$NODEJS_RPM
+fi
+
+echo "### Installing an ancient version of NodeJS development files"
+if [ -f "./${NODEJS_DEVEL_RPM}" ]; then
+    sudo yum -y install ./$NODEJS_DEVEL_RPM
+else
+    wget --quiet $NODEJS_URL/$NODEJS_DEVEL_RPM
+    sudo yum -y install ./$NODEJS_DEVEL_RPM
+fi
 
 # Now try to lock NodeJS so that the next yum update doesn't remove it.
+echo "### Locking the version of NodeJS"
+sudo yum install -y yum-plugin-versionlock
 sudo yum versionlock nodejs*
-
-
-# echo "### Installing and locking the GEOS version to 3.4.2"
-# This works but yum conflicts with postgis2_95
-# sudo yum install -y yum-plugin-versionlock
-# sudo yum install -y \
-#     geos-3.4.2-2.el7 \
-#     geos-devel-3.4.2-2.el7
-#
-# sudo yum versionlock geos*
 
 
 # install useful and needed packages for working with hootenanny
@@ -136,10 +153,11 @@ sudo yum -y install \
 # Install Java8
 # Official download page:
 # http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
+# JAVA JDK download URL
+JDKURL=http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jdk-8u144-linux-x64.rpm
 if  ! rpm -qa | grep jdk1.8.0_144-1.8.0_144; then
     echo "### Installing Java8..."
     if [ ! -f jdk-8u144-linux-x64.rpm ]; then
-      JDKURL=http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jdk-8u144-linux-x64.rpm
       wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" $JDKURL
     fi
     sudo yum -y install ./jdk-8u144-linux-x64.rpm
@@ -173,10 +191,13 @@ sudo alternatives --set javac /usr/java/jdk1.8.0_144/bin/javac
 
 echo "##### Temp installs #####"
 
-# Stxxl:
-git clone http://github.com/stxxl/stxxl.git stxxl
+# Stxxl
+if [ ! -f "${STXXL_VERSION}.tar.gz" ]; then
+    wget --quiet https://github.com/ngageoint/hootenanny-rpms/raw/master/src/SOURCES/${STXXL_VERSION}.tar.gz
+fi
+mkdir -p stxxl && tar zxof ${STXXL_VERSION}.tar.gz --directory ./stxxl --strip-components 1
 cd stxxl
-git checkout -q tags/1.3.1
+
 make config_gnu
 echo "STXXL_ROOT	=`pwd`" > make.settings.local
 echo "ENABLE_SHARED     = yes" >> make.settings.local
@@ -217,8 +238,12 @@ fi
 # We need this big dictionary for text matching. On Ubuntu, this is a package
 if [ ! -f /usr/share/dict/american-english-insane ]; then
     echo "### Installing american-english-insane dictionary..."
-    wget --quiet -N https://s3.amazonaws.com/hoot-rpms/support-files/american-english-insane.bz2
-    sudo bash -c "bzcat american-english-insane.bz2 > /usr/share/dict/american-english-insane"
+    if [ -f ./american-english-insane.bz2 ] ; then
+        sudo bash -c "bzcat ./american-english-insane.bz2 > /usr/share/dict/american-english-insane"
+    else
+        wget --quiet -N https://s3.amazonaws.com/hoot-rpms/support-files/american-english-insane.bz2
+        sudo bash -c "bzcat american-english-insane.bz2 > /usr/share/dict/american-english-insane"
+    fi
 fi
 
 #####
@@ -378,9 +403,7 @@ if [ ! -f /etc/ld.so.conf.d/postgres$PG_VERSION.conf ]; then
     sudo ldconfig
 fi
 
-# For convenience, set the version of GDAL and FileGDB to download and install
-GDAL_VERSION=2.1.4
-FGDB_VERSION=1.5.1
+# Tweak the FGDB version so we can get the filename
 FGDB_VERSION2=`echo $FGDB_VERSION | sed 's/\./_/g;'`
 
 if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --version | grep -q $GDAL_VERSION && ogrinfo --formats | grep -q FileGDB ); then
