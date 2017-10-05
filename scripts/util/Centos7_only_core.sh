@@ -81,10 +81,6 @@ JDKURL=http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b72
 GDAL_VERSION=2.1.4
 FGDB_VERSION=1.5.1
 
-# Postgresql version
-PG_VERSION=9.5
-
-
 #################################################
 
 cd ~
@@ -282,9 +278,6 @@ fi
 if [ -d "$SRC_DIR/stxxl" ] ; then
     cd $SRC_DIR/stxxl
 else
-#     git clone http://github.com/stxxl/stxxl.git stxxl
-#     cd stxxl
-#     git checkout -q tags/1.3.1
     if [ ! -f "${STXXL_VERSION}.tar.gz" ]; then
         wget --quiet https://github.com/ngageoint/hootenanny-rpms/raw/master/src/SOURCES/${STXXL_VERSION}.tar.gz
     fi
@@ -396,6 +389,8 @@ fi
 
 # Need to figure out a way to do this automagically
 #PG_VERSION=$(sudo -u postgres psql -c 'SHOW SERVER_VERSION;' | egrep -o '[0-9]{1,}\.[0-9]{1,}'); do
+PG_VERSION=$(psql --version | egrep -o '[0-9]{1,}\.[0-9]{1,}')
+
 if ! grep --quiet "psql-" ~/.bash_profile; then
     echo "Adding PostGres path vars to profile..."
     echo "export PATH=\$PATH:/usr/pgsql-${PG_VERSION}/bin" >> ~/.bash_profile
@@ -407,7 +402,7 @@ if [ ! -f /etc/ld.so.conf.d/postgres${PG_VERSION}.conf ]; then
     sudo ldconfig
 fi
 
-# For convenience, set the version of GDAL and FileGDB to download and install
+# Tweak the FGDB version so we can get the filename
 FGDB_VERSION2=`echo $FGDB_VERSION | sed 's/\./_/g;'`
 
 if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --version | grep -q ${GDAL_VERSION} && ogrinfo --formats | grep -q FileGDB ); then
