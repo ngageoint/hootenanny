@@ -27,6 +27,7 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/rnd/io/ImplicitTagRulesJsonWriter.h>
+#include <hoot/rnd/schema/PoiImplicitTagRulesDeriver.h>
 
 // Qt
 #include <QDir>
@@ -48,7 +49,7 @@ public:
     const QString outputFile = outputDir + "/rules-out.json";
     QDir().mkpath(outputDir);
 
-    QMap<QString, QMap<QString, long> > rules;
+    ImplicitTagRules rules;
     QMap<QString, long> kvps;
 
     kvps["amenity=place_of_worship"] = 1246;

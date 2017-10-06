@@ -125,10 +125,9 @@ public:
   }
 
   //temporary method to convert between rule data structures; shouldn't need it permanently
-  QMap<QString, QMap<QString, long> > convertRulesToRulesMap(
-    const QList<ImplicitRulePtr>& rules)
+  ImplicitTagRules convertRulesToRulesMap(const QList<ImplicitRulePtr>& rules)
   {
-    QMap<QString, QMap<QString, long> > rulesMap;
+    ImplicitTagRules rulesMap;
     for (QList<ImplicitRulePtr>::const_iterator rulesItr = rules.begin();
          rulesItr != rules.end(); ++rulesItr)
     {

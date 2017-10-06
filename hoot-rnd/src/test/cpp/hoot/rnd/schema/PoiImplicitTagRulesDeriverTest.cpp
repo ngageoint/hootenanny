@@ -140,7 +140,7 @@ public:
     HOOT_FILE_EQUALS(inDir() + "/PoiImplicitTagRulesDeriverTest-runNameCaseTest.json", outputFile);
   }
 
-  void writeOutputFile(const QMap<QString, QMap<QString, long> >& rules, const QString outputFile)
+  void writeOutputFile(const ImplicitTagRules& rules, const QString outputFile)
   {
     ImplicitTagRulesJsonWriter writer;
     writer.open(outputFile);
