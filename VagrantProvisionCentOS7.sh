@@ -23,10 +23,6 @@ NODEJS_DEVEL_RPM=nodejs-devel-0.10.48-1nodesource.el7.centos.x86_64.rpm
 GDAL_VERSION=2.1.4
 FGDB_VERSION=1.5.1
 
-# Postgresql version
-PG_VERSION=9.5
-
-
 
 export LANG=en_US.UTF-8
 

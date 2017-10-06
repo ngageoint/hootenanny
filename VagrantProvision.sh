@@ -50,7 +50,7 @@ if ! java -version 2>&1 | grep --quiet $JDK_VERSION; then
 
     if [ ! -f ./${JDK_TAR} ] || ! md5sum -c ./jdk.md5; then
         echo "Downloading ${JDK_TAR} ...."
-        sudo wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" $JDK_URL -P /tmp
+        sudo wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" $JDK_URL
         echo "Finished download of ${JDK_TAR}"
     fi
 
