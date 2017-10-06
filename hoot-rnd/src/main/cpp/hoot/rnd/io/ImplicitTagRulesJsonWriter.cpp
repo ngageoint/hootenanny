@@ -64,7 +64,7 @@ bool caseInsensitiveLessThan(const QString s1, const QString s2)
   return s1.toLower() < s2.toLower();
 }
 
-void ImplicitTagRulesJsonWriter::write(QMap<QString, QMap<QString, long> > rules)
+void ImplicitTagRulesJsonWriter::write(const ImplicitTagRules& rules)
 {
   _file->write(QString("[\n").toUtf8());
 

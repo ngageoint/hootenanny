@@ -27,6 +27,9 @@
 #ifndef IMPLICITTAGRULESSQLITEWRITER_H
 #define IMPLICITTAGRULESSQLITEWRITER_H
 
+// Hoot
+#include <hoot/rnd/schema/PoiImplicitTagRulesDeriver.h>
+
 // Qt
 #include <QString>
 #include <QMap>
@@ -50,7 +53,7 @@ public:
 
   void open(const QString input);
 
-  void write(QMap<QString, QMap<QString, long> > rules);
+  void write(const ImplicitTagRules& rules);
 
   void close();
 

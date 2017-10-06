@@ -62,7 +62,7 @@ public:
         "Invalid value for the minimum number of type occurrances allowed: " + args[1]);
     }
 
-    QMap<QString, QMap<QString, long> > rules =
+    ImplicitTagRules rules =
       PoiImplicitTagRulesDeriver().deriveRules(
         args[0].trimmed().split(";"), args[1].trimmed().split(";"), minOccurancesThreshold);
 

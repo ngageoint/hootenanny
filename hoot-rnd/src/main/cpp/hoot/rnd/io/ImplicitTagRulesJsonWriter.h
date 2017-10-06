@@ -27,6 +27,9 @@
 #ifndef IMPLICITTAGRULESJSONWRITER_H
 #define IMPLICITTAGRULESJSONWRITER_H
 
+// Hoot
+#include <hoot/rnd/schema/PoiImplicitTagRulesDeriver.h>
+
 // Qt
 #include <QFile>
 #include <QMap>
@@ -47,7 +50,7 @@ public:
 
   void open(const QString output);
 
-  void write(QMap<QString, QMap<QString, long> > rules);
+  void write(const ImplicitTagRules& rules);
 
   void close();
 

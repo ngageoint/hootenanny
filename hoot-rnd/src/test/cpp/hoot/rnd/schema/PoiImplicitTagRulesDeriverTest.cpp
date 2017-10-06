@@ -43,9 +43,6 @@ class PoiImplicitTagRulesDeriverTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runMinOccuranceThresholdTest);
   CPPUNIT_TEST(runMultipleInputsTest);
   CPPUNIT_TEST(runNameCaseTest);
-  //CPPUNIT_TEST(runMostSpecificPoiKvpTest);
-  //TODO: not sure this test is actually needed
-  //CPPUNIT_TEST(runSemicolonInNameTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -60,8 +57,7 @@ public:
     QStringList inputs;
     inputs.append(inDir() + "/yemen-crop-2.osm.pbf");
 
-    const QMap<QString, QMap<QString, long> > rules =
-      PoiImplicitTagRulesDeriver().deriveRules(inputs);
+    const ImplicitTagRules rules = PoiImplicitTagRulesDeriver().deriveRules(inputs);
 
     const QString outputFile = outDir() + "/PoiImplicitTagRulesDeriverTest-runBasicTest-out.json";
     writeOutputFile(rules, outputFile);
@@ -81,8 +77,7 @@ public:
     typeKeys.append("tourism");
     typeKeys.append("building");
 
-    const QMap<QString, QMap<QString, long> > rules =
-      PoiImplicitTagRulesDeriver().deriveRules(inputs, typeKeys);
+    const ImplicitTagRules rules = PoiImplicitTagRulesDeriver().deriveRules(inputs, typeKeys);
 
     const QString outputFile = outDir() + "/PoiImplicitTagRulesDeriverTest-runTypeKeysTest-out.json";
     writeOutputFile(rules, outputFile);
@@ -97,7 +92,7 @@ public:
     QStringList inputs;
     inputs.append(inDir() + "/yemen-crop-2.osm.pbf");
 
-    const QMap<QString, QMap<QString, long> > rules =
+    const ImplicitTagRules rules =
       PoiImplicitTagRulesDeriver().deriveRules(inputs, QStringList(), 4);
 
     const QString outputFile =
@@ -116,8 +111,7 @@ public:
     inputs.append(inDir() + "/yemen-crop-2.osm.pbf");
     inputs.append(inDir() + "/philippines-1.osm.pbf");
 
-    const QMap<QString, QMap<QString, long> > rules =
-      PoiImplicitTagRulesDeriver().deriveRules(inputs);
+    const ImplicitTagRules rules = PoiImplicitTagRulesDeriver().deriveRules(inputs);
 
     const QString outputFile =
       outDir() + "/PoiImplicitTagRulesDeriverTest-runMultipleInputsTest-out.json";
@@ -137,8 +131,7 @@ public:
     QStringList inputs;
     inputs.append(inDir() + "/PoiImplicitTagRulesDeriverTest-runNameCaseTest.osm");
 
-    const QMap<QString, QMap<QString, long> > rules =
-      PoiImplicitTagRulesDeriver().deriveRules(inputs);
+    const ImplicitTagRules rules = PoiImplicitTagRulesDeriver().deriveRules(inputs);
 
     const QString outputFile =
       outDir() + "/PoiImplicitTagRulesDeriverTest-runNameCaseTest-out.json";
@@ -146,60 +139,6 @@ public:
 
     HOOT_FILE_EQUALS(inDir() + "/PoiImplicitTagRulesDeriverTest-runNameCaseTest.json", outputFile);
   }
-
-//  void runMostSpecificPoiKvpTest()
-//  {
-//    Tags tags;
-//    PoiImplicitTagRulesDeriver deriver;
-
-//    tags["poi"] = "yes";
-//    tags["amenity"] = "restaurant";
-//    CPPUNIT_ASSERT_EQUAL(
-//      QString("amenity=restaurant").toStdString(),
-//      deriver._getMostSpecificPoiKvp(tags).toStdString());
-//    tags.clear();
-
-//    tags["poi"] = "yes";
-//    CPPUNIT_ASSERT_EQUAL(
-//      QString("").toStdString(),
-//      deriver._getMostSpecificPoiKvp(tags).toStdString());
-//    tags.clear();
-
-//    tags["amenity"] = "restaurant";
-//    CPPUNIT_ASSERT_EQUAL(
-//      QString("amenity=restaurant").toStdString(),
-//      deriver._getMostSpecificPoiKvp(tags).toStdString());
-//    tags.clear();
-
-//    //tags["natural"] = "scrub";
-////    tags["parking"] = "covered";
-////    CPPUNIT_ASSERT_EQUAL(
-////      QString("").toStdString(),
-////      deriver._getMostSpecificPoiKvp(tags).toStdString());
-////    tags.clear();
-
-//    //inheritance situation where keys are different
-
-//    //conflicting tags
-//  }
-
-//  void runSemicolonInNameTest()
-//  {
-//    QDir().mkpath(_outDir);
-
-//    QStringList inputs;
-//    inputs.append(_inputDir + "/PoiImplicitTagRulesDeriverTest-runSemicolonInNameTest.osm");
-
-//    const QMap<QString, QMap<QString, long> > rules =
-//      PoiImplicitTagRulesDeriver().deriveRules(inputs);
-
-//    const QString outputFile =
-//      _outDir + "/PoiImplicitTagRulesDeriverTest-runSemicolonInNameTest-out.json";
-//    _writeOutputFile(rules, outputFile);
-
-//    HOOT_FILE_EQUALS(
-//      _inputDir + "/PoiImplicitTagRulesDeriverTest-runSemicolonInNameTest.json", outputFile);
-//  }
 
   void writeOutputFile(const QMap<QString, QMap<QString, long> >& rules, const QString outputFile)
   {
