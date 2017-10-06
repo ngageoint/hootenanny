@@ -29,19 +29,15 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/rnd/visitors/DeriveImplicitTagsVisitor2.h>
-#include <hoot/rnd/visitors/DeriveImplicitTagsVisitor.h>
-#include <hoot/rnd/io/ImplicitTagRulesSqliteWriter.h>
+#include <hoot/rnd/visitors/DeriveImplicitTagRulesVisitor.h>
 
-// Qt
-#include <QDir>
 
 namespace hoot
 {
 
-class DeriveImplicitTagsVisitor2Test : public CppUnit::TestFixture
+class DeriveImplicitTagRulesVisitorTest : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(DeriveImplicitTagsVisitor2Test);
+  CPPUNIT_TEST_SUITE(DeriveImplicitTagRulesVisitorTest);
   CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -52,14 +48,8 @@ public:
     TestUtils::resetEnvironment();
   }
 
-  static QString outDir() { return "test-output/io/DeriveImplicitTagsVisitor2Test"; }
-
   void runBasicTest()
   {
-    QDir().mkpath(outDir());
-    const QString databaseFile = outDir() + "/DeriveImplicitTagsVisitor2Test-runBasicTest-rules.db";
-    writeRules(databaseFile);
-
     QString testJsonStr = QString::fromUtf8(
       "{                                      \n"
       " 'elements': [                         \n"
@@ -82,9 +72,16 @@ public:
     // the JSON parser doesn't handle exotic characters.
     map->getNode(-5)->getTags()["alt_name"] = QString::fromUtf8("Şiḩḩī");
 
-    DeriveImplicitTagsVisitor2 uut(databaseFile);
+    DeriveImplicitTagRulesVisitor uut;
 
     map->visitRw(uut);
+
+//    LOG_VAR(TestUtils::toQuotedString(map->getNode(-1)->getTags().toString()));
+//    LOG_VAR(TestUtils::toQuotedString(map->getNode(-2)->getTags().toString()));
+//    LOG_VAR(TestUtils::toQuotedString(map->getNode(-3)->getTags().toString()));
+//    LOG_VAR(TestUtils::toQuotedString(map->getNode(-4)->getTags().toString()));
+//    LOG_VAR(TestUtils::toQuotedString(map->getNode(-5)->getTags().toString()));
+//    LOG_VAR(TestUtils::toQuotedString(map->getNode(-6)->getTags().toString()));
 
     HOOT_STR_EQUALS("name = Alshy Burgers\n"
                     "amenity = pub\n",
@@ -103,59 +100,19 @@ public:
                     "note = Found multiple possible matches for implicit tags: alwhdt, mustashfa\n"
                     "name = Mustashfa alwhdt\n",
                     map->getNode(-4)->getTags());
-    //TODO: fix
-//    HOOT_STR_EQUALS("note = Implicitly derived tags based on: sihhi, şiḩḩī\n"
-//                    "alt_name = Şiḩḩī\n"
-//                    "name = Sihhi\n"
-//                    "amenity = clinic\n",
-//                    map->getNode(-5)->getTags());
+    HOOT_STR_EQUALS("note = Implicitly derived tags based on: sihhi, şiḩḩī\n"
+                    "alt_name = Şiḩḩī\n"
+                    "name = Sihhi\n"
+                    "amenity = clinic\n",
+                    map->getNode(-5)->getTags());
     HOOT_STR_EQUALS("note = Implicitly derived tags based on: sihhi\n"
                     "alt_name = Clinic\n"
                     "name = Sihhi\n"
                     "amenity = clinic\n",
                     map->getNode(-6)->getTags());
   }
-
-  void writeRules(const QString outputPath)
-  {
-    ImplicitTagRulesSqliteWriter rulesWriter;
-    rulesWriter.open(outputPath);
-    rulesWriter.write(convertRulesToMap(DeriveImplicitTagsVisitor().getTestRules()));
-    rulesWriter.close();
-  }
-
-  //temporary method to convert between rule data structures; shouldn't need it permanently
-  QMap<QString, QMap<QString, long> > convertRulesToMap(
-    const QList<ImplicitRulePtr>& rules)
-  {
-    QMap<QString, QMap<QString, long> > rulesMap;
-    for (QList<ImplicitRulePtr>::const_iterator rulesItr = rules.begin();
-         rulesItr != rules.end(); ++rulesItr)
-    {
-      ImplicitRulePtr rule = *rulesItr;
-      const QStringList words = rule->words;
-      const Tags& tags = rule->tags;
-
-      for (int i = 0; i < words.size(); i++)
-      {
-        const QString word = words.at(i);
-        LOG_VART(word);
-        if (!rulesMap.contains(word))
-        {
-          rulesMap[word] = QMap<QString, long>();
-        }
-        for (Tags::const_iterator tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
-        {
-          //we're not concerned with the occurrance count values here
-          rulesMap[word][tagItr.key() + "=" + tagItr.value()] = 1;
-        }
-      }
-    }
-    LOG_VART(rulesMap);
-    return rulesMap;
-  }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(DeriveImplicitTagsVisitor2Test, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(DeriveImplicitTagRulesVisitorTest, "quick");
 
 }

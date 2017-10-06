@@ -56,6 +56,7 @@ void ImplicitTagRulesSqliteWriter::open(const QString output)
     throw HootException(QObject::tr("Error removing existing %1 for writing.").arg(output));
   }
 
+  //_db = QSqlDatabase::addDatabase("QSQLITE", output);
   _db = QSqlDatabase::addDatabase("QSQLITE");
   _db.setDatabaseName(output);
   if (!_db.open())
@@ -126,7 +127,7 @@ void ImplicitTagRulesSqliteWriter::_prepareQueries()
   }
 
   _numTagsForRuleQuery = QSqlQuery(_db);
-  if (!_numTagsForRuleQuery.prepare("SELECT tag_id FROM rules where rule_id = :ruleId"))
+  if (!_numTagsForRuleQuery.prepare("SELECT DISTINCT tag_id FROM rules where rule_id = :ruleId"))
   {
     throw HootException(
       QString("Error preparing query: %1").arg(_getLastTagIdQuery.lastError().text()));
@@ -362,6 +363,7 @@ int ImplicitTagRulesSqliteWriter::_getNumTagsForRule(const int ruleId)
   int tagCtr = 0;
   while (_numTagsForRuleQuery.next())
   {
+    LOG_TRACE("tag id: " << _numTagsForRuleQuery.value(0).toInt());
     tagCtr++;
   }
   return tagCtr;

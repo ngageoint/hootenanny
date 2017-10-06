@@ -102,7 +102,10 @@ bool ImplicitTagRulesSqliteReader::wordsInvolveMultipleRules(const QSet<QString>
   for (QSet<QString>::const_iterator wordItr = words.begin(); wordItr != words.end(); ++wordItr)
   {
     //queryStr += "UPPER(word)='" + (*wordItr).toUpper() + "' OR ";
-    queryStr += "LOWER(word)='" + (*wordItr).toLower() + "' OR ";
+    //LIKE is case insensitive by default, so using that instead of '='; using toUpper() with '='
+    //for comparisons won't work for unicode chars in SQLite w/o quite a bit of additional setup
+    //to link in special unicode libs (I think)
+    queryStr += "word LIKE '" + *wordItr + "' OR ";
   }
   queryStr.chop(4);
   LOG_VART(queryStr);
@@ -118,6 +121,8 @@ bool ImplicitTagRulesSqliteReader::wordsInvolveMultipleRules(const QSet<QString>
   int wordIdCount = 0;
   while (selectWordIdsForWords.next())
   {
+    const QString word = selectWordIdsForWords.value(1).toString();
+    LOG_VART(word);
     queryStr += QString::number(selectWordIdsForWords.value(0).toInt()) + ",";
     wordIdCount++;
   }
@@ -137,10 +142,17 @@ bool ImplicitTagRulesSqliteReader::wordsInvolveMultipleRules(const QSet<QString>
   //TODO: make better
   int ruleIdCount = 0;
   QSet<int> matchingRuleWordIds;
+  QSet<int> ruleIds;
   while (uniqueRuleCountForWords.next())
   {
+    const int ruleId = uniqueRuleCountForWords.value(0).toInt();
+    LOG_VART(ruleId);
     matchingRuleWordIds.insert(uniqueRuleCountForWords.value(1).toInt());
-    ruleIdCount++;
+    if (!ruleIds.contains(ruleId))
+    {
+      ruleIds.insert(ruleId);
+      ruleIdCount++;
+    }
   }
   LOG_VART(ruleIdCount);
   const bool wordsInvolveMultipleRules = ruleIdCount > 1;
@@ -149,7 +161,7 @@ bool ImplicitTagRulesSqliteReader::wordsInvolveMultipleRules(const QSet<QString>
   if (wordsInvolveMultipleRules)
   {
     //can't prepare this one due to variable inputs
-    QSqlQuery selectWordForWordIds = QSqlQuery(_db);
+    QSqlQuery selectWordForWordIds(_db);
     queryStr = "SELECT word FROM words WHERE id IN (";
     for (QSet<int>::const_iterator wordIdItr = matchingRuleWordIds.begin();
          wordIdItr != matchingRuleWordIds.end(); ++wordIdItr)
@@ -186,7 +198,8 @@ Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,
   for (QSet<QString>::const_iterator wordItr = words.begin(); wordItr != words.end(); ++wordItr)
   {
     //queryStr += "UPPER(word)='" + (*wordItr).toUpper() + "' OR ";
-    queryStr += "LOWER(word)='" + (*wordItr).toLower() + "' OR ";
+    //see comment about use of LIKE in wordsInvolveMultipleRules
+    queryStr += "word LIKE '" + *wordItr + "' OR ";
   }
   queryStr.chop(4);
   LOG_VART(queryStr);
@@ -202,8 +215,10 @@ Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,
   int numWordIds = 0;
   while (selectWordIdsForWords.next())
   {
+    const QString word = selectWordIdsForWords.value(1).toString();
+    LOG_VART(word);
     query += QString::number(selectWordIdsForWords.value(0).toInt()) + ",";
-    matchingWords.insert(selectWordIdsForWords.value(1).toString());
+    matchingWords.insert(word);
     numWordIds++;
   }
   query.chop(1);

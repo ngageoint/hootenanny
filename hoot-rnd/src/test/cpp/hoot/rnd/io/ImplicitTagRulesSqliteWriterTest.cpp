@@ -42,6 +42,7 @@ class ImplicitTagRulesSqliteWriterTest : public CppUnit::TestFixture
 
 public:
 
+  //TODO: fix dupe database conn qt warning caused by this test
   void runWriteTest()
   {
     const QString outputDir = "test-output/io/ImplicitTagRulesSqliteWriterTest";
@@ -291,6 +292,7 @@ private:
     if (!QSqlDatabase::contains(path))
     {
       _db = QSqlDatabase::addDatabase("QSQLITE", path);
+      //_db = QSqlDatabase::addDatabase("QSQLITE");
       _db.setDatabaseName(path);
     }
     else

@@ -82,6 +82,20 @@ public:
     words.clear();
     wordsInvolved.clear();
 
+    words.insert("mosque2");
+    tags = reader.getImplicitTags(words, wordsInvolved);
+    CPPUNIT_ASSERT_EQUAL(0, tags.size());
+    CPPUNIT_ASSERT_EQUAL(0, wordsInvolved.size());
+    words.clear();
+    wordsInvolved.clear();
+
+    words.insert("mosque 3");
+    tags = reader.getImplicitTags(words, wordsInvolved);
+    CPPUNIT_ASSERT_EQUAL(0, tags.size());
+    CPPUNIT_ASSERT_EQUAL(0, wordsInvolved.size());
+    words.clear();
+    wordsInvolved.clear();
+
     words.insert("Eid Prayer Ground");
     tags = reader.getImplicitTags(words, wordsInvolved);
     CPPUNIT_ASSERT_EQUAL(1, tags.size());
@@ -182,9 +196,22 @@ public:
     words.insert("Mustashfa");
     CPPUNIT_ASSERT(reader.wordsInvolveMultipleRules(words, ruleWordsInvolved));
     CPPUNIT_ASSERT_EQUAL(2, ruleWordsInvolved.size());
-    LOG_VART(ruleWordsInvolved);
     CPPUNIT_ASSERT(ruleWordsInvolved.contains("Mustashfa"));
     CPPUNIT_ASSERT(ruleWordsInvolved.contains("Mosque"));
+    words.clear();
+    ruleWordsInvolved.clear();
+
+    words.insert("mosque2");
+    words.insert("Mustashfa");
+    CPPUNIT_ASSERT(!reader.wordsInvolveMultipleRules(words, ruleWordsInvolved));
+    CPPUNIT_ASSERT_EQUAL(0, ruleWordsInvolved.size());
+    words.clear();
+    ruleWordsInvolved.clear();
+
+    words.insert("mosque 3");
+    words.insert("Mustashfa");
+    CPPUNIT_ASSERT(!reader.wordsInvolveMultipleRules(words, ruleWordsInvolved));
+    CPPUNIT_ASSERT_EQUAL(0, ruleWordsInvolved.size());
     words.clear();
     ruleWordsInvolved.clear();
 
