@@ -24,12 +24,12 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef DERIVEIMPLICITTAGRULESVISITOR_H
-#define DERIVEIMPLICITTAGRULESVISITOR_H
+#ifndef DERIVEIMPLICITTAGSVISITOR_H
+#define DERIVEIMPLICITTAGSVISITOR_H
 
 // hoot
 #include <hoot/core/elements/ElementVisitor.h>
-#include <hoot/rnd/schema/ImplicitTagRule.h>
+#include <hoot/rnd/io/ImplicitTagRulesSqliteReader.h>
 
 namespace hoot
 {
@@ -37,34 +37,26 @@ namespace hoot
 /**
  * Derive tags based on the names.
  */
-class DeriveImplicitTagRulesVisitor : public ElementVisitor
+class DeriveImplicitTagsVisitor : public ElementVisitor
 {
 public:
 
-  static std::string className() { return "hoot::DeriveImplicitTagRulesVisitor"; }
+  static std::string className() { return "hoot::DeriveImplicitTagsVisitor"; }
 
-  DeriveImplicitTagRulesVisitor();
+  DeriveImplicitTagsVisitor();
+  DeriveImplicitTagsVisitor(const QString databasePath);
+  ~DeriveImplicitTagsVisitor();
 
   virtual void visit(const ElementPtr& e);
 
-  //TODO: temp
-  ImplicitTagRules getTestRules() { return _rules; }
+private:
 
-public:
+  boost::shared_ptr<ImplicitTagRulesSqliteReader> _ruleReader;
 
-  ImplicitTagRules _rules;
+  QSet<QString> _extractNamesAndNameWords(const Tags& t);
 
-  /**
-   * Ensure all rules are in lower case.
-   */
-  void _rulesToLower();
-
-  /**
-   * Extract the names from tags and then tokenize the names into a set of words.
-   */
-  QSet<QString> _extractNameWords(const Tags& t);
 };
 
 }
 
-#endif // DERIVEIMPLICITTAGRULESVISITOR_H
+#endif // DERIVEIMPLICITTAGSVISITOR_H

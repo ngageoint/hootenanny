@@ -206,8 +206,8 @@ void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccuranceThreshold(const int mi
     "Removing duplicated kvp below mininum occurance threshold: " << minOccurancesThreshold <<
     "...");
 
-  QMap<QString, long> updatedCounts;
-  QMap<QString, QStringList> updatedValues;
+  QMap<QString, long> updatedCounts; //*
+  QMap<QString, QStringList> updatedValues; //*
 
   for (QMap<QString, long>::const_iterator kvpCountsItr = _wordKvpsToOccuranceCounts.begin();
        kvpCountsItr != _wordKvpsToOccuranceCounts.end(); ++kvpCountsItr)
@@ -251,8 +251,8 @@ void PoiImplicitTagRulesDeriver::_removeIrrelevantKeyTypes(const QStringList typ
     return;
   }
 
-  QMap<QString, long> updatedCounts;
-  QMap<QString, QStringList> updatedValues;
+  QMap<QString, long> updatedCounts; //*
+  QMap<QString, QStringList> updatedValues; //*
 
   for (QMap<QString, long>::const_iterator kvpCountsItr = _wordKvpsToOccuranceCounts.begin();
        kvpCountsItr != _wordKvpsToOccuranceCounts.end(); ++kvpCountsItr)
@@ -277,8 +277,8 @@ void PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
 {
   LOG_DEBUG("Removing duplicated kvp types...");
 
-  QMap<QString, long> updatedCounts;
-  QMap<QString, QStringList> updatedValues;
+  QMap<QString, long> updatedCounts; //*
+  QMap<QString, QStringList> updatedValues; //*
 
   for (QMap<QString, QStringList>::const_iterator valsItr = _wordTagKeysToTagValues.begin();
        valsItr != _wordTagKeysToTagValues.end(); ++valsItr)

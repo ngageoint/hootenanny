@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "DeriveImplicitTagRulesVisitor2.h"
+#include "DeriveImplicitTagsVisitor.h"
 
 #include <hoot/core/algorithms/string/StringTokenizer.h>
 #include <hoot/core/schema/OsmSchema.h>
@@ -39,21 +39,21 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, DeriveImplicitTagRulesVisitor2)
+HOOT_FACTORY_REGISTER(ElementVisitor, DeriveImplicitTagsVisitor)
 
-DeriveImplicitTagRulesVisitor2::DeriveImplicitTagRulesVisitor2()
+DeriveImplicitTagsVisitor::DeriveImplicitTagsVisitor()
 {
   _ruleReader.reset(new ImplicitTagRulesSqliteReader());
   _ruleReader->open(ConfigOptions().getDeriveImplicitTagsDatabase());
 }
 
-DeriveImplicitTagRulesVisitor2::DeriveImplicitTagRulesVisitor2(const QString databasePath)
+DeriveImplicitTagsVisitor::DeriveImplicitTagsVisitor(const QString databasePath)
 {
   _ruleReader.reset(new ImplicitTagRulesSqliteReader());
   _ruleReader->open(databasePath);
 }
 
-DeriveImplicitTagRulesVisitor2::~DeriveImplicitTagRulesVisitor2()
+DeriveImplicitTagsVisitor::~DeriveImplicitTagsVisitor()
 {
   if (_ruleReader)
   {
@@ -61,7 +61,7 @@ DeriveImplicitTagRulesVisitor2::~DeriveImplicitTagRulesVisitor2()
   }
 }
 
-void DeriveImplicitTagRulesVisitor2::visit(const ElementPtr& e)
+void DeriveImplicitTagsVisitor::visit(const ElementPtr& e)
 {
   bool foundDuplicateMatch = false;
   Tags tagsToAdd;
@@ -102,7 +102,7 @@ void DeriveImplicitTagRulesVisitor2::visit(const ElementPtr& e)
   }
 }
 
-QSet<QString> DeriveImplicitTagRulesVisitor2::_extractNamesAndNameWords(const Tags& t)
+QSet<QString> DeriveImplicitTagsVisitor::_extractNamesAndNameWords(const Tags& t)
 {
   QSet<QString> result;
 

@@ -55,9 +55,9 @@ private:
 };
 
 typedef boost::shared_ptr<ImplicitTagRule> ImplicitTagRulePtr;
-typedef QList<ImplicitTagRulePtr> ImplicitTagRules;
+typedef QList<ImplicitTagRulePtr> ImplicitTagRules; //*?
 //key=<word>, value=<key=kvp, value=kvp occurrance count>>
-typedef QMap<QString, QMap<QString, long> > ImplicitTagRulesByWord;
+typedef QMap<QString, QMap<QString, long> > ImplicitTagRulesByWord; //*
 
 }
 

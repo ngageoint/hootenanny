@@ -59,11 +59,11 @@ private:
 
   //TODO: replace with stxxl map
   //key=<word>;<kvp>, value=<kvp occurance count>
-  QMap<QString, long> _wordKvpsToOccuranceCounts;
+  QMap<QString, long> _wordKvpsToOccuranceCounts; //*
   //key=<word>;<tag key>, value=<tag values>
   QMap<QString, QStringList> _wordTagKeysToTagValues;
   //key=<lower case word>, value=<word>
-  QMap<QString, QString> _wordCaseMappings;
+  QMap<QString, QString> _wordCaseMappings; //*
 
   ImplicitTagRulesByWord _tagRulesByWord;
   ImplicitTagRules _tagRules;
