@@ -143,7 +143,7 @@ void ImplicitTagRulesSqliteWriter::write(const ImplicitTagRules& rules)
 {
   DbUtils::execNoPrepare(_db, "BEGIN");
 
-  QMap<QString, int> kvpsToTagIds;
+  QMap<QString, long> kvpsToTagIds;
   int ruleIdCtr = 1;
   for (ImplicitTagRules::const_iterator rulesItr = rules.begin(); rulesItr != rules.end();
        ++rulesItr)
@@ -152,7 +152,7 @@ void ImplicitTagRulesSqliteWriter::write(const ImplicitTagRules& rules)
 
     //Words per rule are all unique, so insert them every time.
     const QStringList words = rule->getWords();
-    QList<int> wordIds;
+    QList<long> wordIds;
     for (int i = 0; i < words.size(); i++)
     {
       wordIds.append(_insertWord(words.at(i)));
@@ -161,7 +161,7 @@ void ImplicitTagRulesSqliteWriter::write(const ImplicitTagRules& rules)
     //Each tag grouping per rule is unique, but each tag is not.  So, check to see if a tag
     //record has already been inserted each time.
     const Tags tags = rule->getTags();
-    QList<int> tagIds;
+    QList<long> tagIds;
     for (Tags::const_iterator tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
     {
       const QString kvp = tagItr.key() % "=" % tagItr.value();
@@ -197,7 +197,7 @@ void ImplicitTagRulesSqliteWriter::write(const ImplicitTagRulesByWord& /*rules*/
     "The writing of implicit tag rules to Sqlite may only be done when the input is a list of rules.");
 }
 
-int ImplicitTagRulesSqliteWriter::_insertWord(const QString word)
+long ImplicitTagRulesSqliteWriter::_insertWord(const QString word)
 {
   LOG_TRACE("Inserting word: " << word << "...");
 
@@ -218,10 +218,10 @@ int ImplicitTagRulesSqliteWriter::_insertWord(const QString word)
   }
 
   bool ok = false;
-  int id = -1;
+  long id = -1;
   if (_getLastWordIdQuery.next())
   {
-    id = _getLastWordIdQuery.value(0).toInt(&ok);
+    id = _getLastWordIdQuery.value(0).toLongLong(&ok);
   }
   if (!ok || id == -1)
   {
@@ -234,7 +234,7 @@ int ImplicitTagRulesSqliteWriter::_insertWord(const QString word)
   return id;
 }
 
-int ImplicitTagRulesSqliteWriter::_insertTag(const QString kvp)
+long ImplicitTagRulesSqliteWriter::_insertTag(const QString kvp)
 {
   LOG_TRACE("Inserting tag: " << kvp << "...");
 
@@ -255,10 +255,10 @@ int ImplicitTagRulesSqliteWriter::_insertTag(const QString kvp)
   }
 
   bool ok = false;
-  int id = -1;
+  long id = -1;
   if (_getLastTagIdQuery.next())
   {
-    id = _getLastTagIdQuery.value(0).toInt(&ok);
+    id = _getLastTagIdQuery.value(0).toLongLong(&ok);
   }
   if (!ok || id == -1)
   {
@@ -271,16 +271,16 @@ int ImplicitTagRulesSqliteWriter::_insertTag(const QString kvp)
   return id;
 }
 
-void ImplicitTagRulesSqliteWriter::_insertRuleRecord(const int ruleId, const int wordId,
-                                                     const int tagId)
+void ImplicitTagRulesSqliteWriter::_insertRuleRecord(const long ruleId, const long wordId,
+                                                     const long tagId)
 {
   LOG_TRACE(
     "Inserting rule record with ID: " << ruleId << ", word ID: " << wordId << " and tag ID: " <<
     tagId << "...");
 
-  _insertRuleQuery.bindValue(":ruleId", ruleId);
-  _insertRuleQuery.bindValue(":wordId", wordId);
-  _insertRuleQuery.bindValue(":tagId", tagId);
+  _insertRuleQuery.bindValue(":ruleId", qlonglong(ruleId));
+  _insertRuleQuery.bindValue(":wordId", qlonglong(wordId));
+  _insertRuleQuery.bindValue(":tagId", qlonglong(tagId));
   if (!_insertRuleQuery.exec())
   {
     QString err = QString("Error executing query: %1 (%2)").arg(_insertRuleQuery.executedQuery()).

@@ -30,6 +30,9 @@
 // Hoot
 #include <hoot/rnd/schema/ImplicitTagRule.h>
 
+// Tgs
+#include <tgs/BigContainers/BigMap.h>
+
 // Qt
 #include <QString>
 #include <QMap>

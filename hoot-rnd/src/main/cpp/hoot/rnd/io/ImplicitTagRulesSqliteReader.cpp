@@ -193,7 +193,7 @@ bool ImplicitTagRulesSqliteReader::wordsInvolveMultipleRules(const QSet<QString>
   return wordsInvolveMultipleRules;
 }
 
-int ImplicitTagRulesSqliteReader::getRuleCount()
+long ImplicitTagRulesSqliteReader::getRuleCount()
 {
   LOG_TRACE("Retrieving rule count...");
 
@@ -204,7 +204,7 @@ int ImplicitTagRulesSqliteReader::getRuleCount()
   }
 
   _ruleCountQuery.next();
-  return _ruleCountQuery.value(0).toInt();
+  return _ruleCountQuery.value(0).toLongLong();
 }
 
 Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,

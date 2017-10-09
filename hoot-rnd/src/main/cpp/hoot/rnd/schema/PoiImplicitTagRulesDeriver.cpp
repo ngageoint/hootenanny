@@ -35,6 +35,7 @@
 #include <hoot/core/elements/Tags.h>
 #include <hoot/rnd/io/ImplicitTagRulesWriter.h>
 #include <hoot/rnd/io/ImplicitTagRulesWriterFactory.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QStringBuilder>
@@ -190,7 +191,7 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs, const QSt
   for (int i = 0; i < outputs.size(); i++)
   {
     const QString output = outputs.at(i);
-    LOG_VART(output);
+    LOG_INFO("Writing implicit tag rules to " << output << "...");
     boost::shared_ptr<ImplicitTagRulesWriter> rulesWriter =
       ImplicitTagRulesWriterFactory::getInstance().createWriter(output);
     rulesWriter->open(output);
@@ -207,8 +208,12 @@ void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccuranceThreshold(const int mi
     "...");
 
   QMap<QString, long> updatedCounts; //*
+  //Tgs::BigMap<QString, long> updatedCounts;
+//  fixed_name_map myFixedMap(
+//    (fixed_name_map::node_block_type::raw_size)*5, (fixed_name_map::leaf_block_type::raw_size)*5);
   QMap<QString, QStringList> updatedValues; //*
 
+  long kvpRemovalCount = 0;
   for (QMap<QString, long>::const_iterator kvpCountsItr = _wordKvpsToOccuranceCounts.begin();
        kvpCountsItr != _wordKvpsToOccuranceCounts.end(); ++kvpCountsItr)
   {
@@ -236,24 +241,33 @@ void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccuranceThreshold(const int mi
       updatedValues[wordKvpKey].append(kvpVal);
       LOG_VART(updatedValues[wordKvpKey]);
     }
+    else
+    {
+      kvpRemovalCount++;
+    }
   }
 
   _wordKvpsToOccuranceCounts = updatedCounts;
   _wordTagKeysToTagValues= updatedValues;
+
+  LOG_DEBUG(
+    "Removed " << StringUtils::formatLargeNumber(kvpRemovalCount) << " tag instances that " <<
+    "fell below the minimum occurrance threshold of " << minOccurancesThreshold);
 }
 
 void PoiImplicitTagRulesDeriver::_removeIrrelevantKeyTypes(const QStringList typeKeysAllowed)
 {
-  LOG_DEBUG("Removing irrelevant kvps...");
-
   if (typeKeysAllowed.size() == 0)
   {
     return;
   }
 
+  LOG_DEBUG("Removing irrelevant kvps...");
+
   QMap<QString, long> updatedCounts; //*
   QMap<QString, QStringList> updatedValues; //*
 
+  long irrelevantKvpRemovalCount = 0;
   for (QMap<QString, long>::const_iterator kvpCountsItr = _wordKvpsToOccuranceCounts.begin();
        kvpCountsItr != _wordKvpsToOccuranceCounts.end(); ++kvpCountsItr)
   {
@@ -267,10 +281,18 @@ void PoiImplicitTagRulesDeriver::_removeIrrelevantKeyTypes(const QStringList typ
       const QString wordKvpKey = word % ";" % key;
       updatedValues[wordKvpKey] = _wordTagKeysToTagValues[wordKvpKey];
     }
+    else
+    {
+      irrelevantKvpRemovalCount++;
+    }
   }
 
   _wordKvpsToOccuranceCounts = updatedCounts;
   _wordTagKeysToTagValues= updatedValues;
+
+  LOG_DEBUG(
+    "Removed " << StringUtils::formatLargeNumber(irrelevantKvpRemovalCount) <<
+    " tag instances that did not belong to the specified types list.");
 }
 
 void PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
@@ -280,6 +302,7 @@ void PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
   QMap<QString, long> updatedCounts; //*
   QMap<QString, QStringList> updatedValues; //*
 
+  long duplicatedKeyTypeRemovalCount = 0;
   for (QMap<QString, QStringList>::const_iterator valsItr = _wordTagKeysToTagValues.begin();
        valsItr != _wordTagKeysToTagValues.end(); ++valsItr)
   {
@@ -327,8 +350,11 @@ void PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
         updatedValues[wordKvpKey].append(highestOccurranceVal);
         LOG_VART(updatedValues[wordKvpKey]);
       }
+
+      //removed all but one of the tag values for the same tag key
+      duplicatedKeyTypeRemovalCount += vals.size() - 1;
     }
-    else //size == 1
+    else //size == 1 - tag key has only one tag value associated with it, so no removal necessary
     {
       LOG_TRACE("One value mapped to wordKvpKey: " << wordKvpKey);
 
@@ -346,6 +372,10 @@ void PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
 
   _wordKvpsToOccuranceCounts = updatedCounts;
   _wordTagKeysToTagValues= updatedValues;
+
+  LOG_DEBUG(
+    "Removed " << StringUtils::formatLargeNumber(duplicatedKeyTypeRemovalCount) <<
+    " tag values belonged to the same tag key for a give word.");
 }
 
 ImplicitTagRulesByWord PoiImplicitTagRulesDeriver::_generateTagRulesByWord()
@@ -376,6 +406,10 @@ ImplicitTagRulesByWord PoiImplicitTagRulesDeriver::_generateTagRulesByWord()
     kvpsWithCounts[kvp] = kvpCount;
     wordsToKvpsWithCounts[word] = kvpsWithCounts;
   }
+
+  LOG_INFO(
+    "Generated implicit tag rules for " <<
+    StringUtils::formatLargeNumber(wordsToKvpsWithCounts.size()) << " unique words.");
 
   return wordsToKvpsWithCounts;
 }
@@ -424,7 +458,8 @@ ImplicitTagRules PoiImplicitTagRulesDeriver::_rulesByWordToRules(
     LOG_VART(rule->getTags());
   }
 
-  LOG_VART(tagRules.size());
+  LOG_INFO(
+    "Generated " << StringUtils::formatLargeNumber(tagRules.size()) << " implicit tag rules.");
   return tagRules;
 }
 

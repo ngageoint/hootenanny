@@ -54,7 +54,7 @@ public:
 
   Tags getImplicitTags(const QSet<QString>& words, QSet<QString>& matchingWords);
 
-  int getRuleCount();
+  long getRuleCount();
 
 private:
 

@@ -76,9 +76,9 @@ private:
   void _createTables();
   void _prepareQueries();
 
-  int _insertWord(const QString word);
-  int _insertTag(const QString kvp);
-  void _insertRuleRecord(const int ruleId, const int wordId, const int tagId);
+  long _insertWord(const QString word);
+  long _insertTag(const QString kvp);
+  void _insertRuleRecord(const long ruleId, const long wordId, const long tagId);
 };
 
 }
