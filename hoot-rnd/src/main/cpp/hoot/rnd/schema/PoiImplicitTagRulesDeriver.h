@@ -27,6 +27,9 @@
 #ifndef POIIMPLICITTAGRULESDERIVER_H
 #define POIIMPLICITTAGRULESDERIVER_H
 
+// Hoot
+#include <hoot/rnd/schema/ImplicitTagRule.h>
+
 // Qt
 #include <QString>
 #include <QMap>
@@ -44,12 +47,10 @@ class PoiImplicitTagRulesDeriver
 
 public:
 
-  typedef QMap<QString, QMap<QString, long> > ImplicitTagRules;
-
   PoiImplicitTagRulesDeriver();
 
-  ImplicitTagRules deriveRules(const QStringList inputs, const QStringList typeKeys = QStringList(),
-                               const int minOccurancesThreshold = 1);
+  void deriveRules(const QStringList inputs, const QStringList outputs,
+                   const QStringList typeKeys = QStringList(), const int minOccurancesThreshold = 1);
 
 private:
 
@@ -64,15 +65,17 @@ private:
   //key=<lower case word>, value=<word>
   QMap<QString, QString> _wordCaseMappings;
 
+  ImplicitTagRulesByWord _tagRulesByWord;
+  ImplicitTagRules _tagRules;
+
   void _updateForNewWord(QString word, const QString kvp);
   QStringList _getPoiKvps(const Tags& tags) const;
   void _removeKvpsBelowOccuranceThreshold(const int minOccurancesThreshold);
   void _removeDuplicatedKeyTypes();
   void _removeIrrelevantKeyTypes(const QStringList typeKeysAllowed);
-  ImplicitTagRules _generateOutput();
+  ImplicitTagRulesByWord _generateTagRulesByWord();
+  ImplicitTagRules _rulesByWordToRules(const ImplicitTagRulesByWord& rulesByWord);
 };
-
-typedef QMap<QString, QMap<QString, long> > ImplicitTagRules;
 
 }
 

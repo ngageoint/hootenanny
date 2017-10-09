@@ -33,6 +33,8 @@
 #include <hoot/core/algorithms/string/StringTokenizer.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/elements/Tags.h>
+#include <hoot/rnd/io/ImplicitTagRulesWriter.h>
+#include <hoot/rnd/io/ImplicitTagRulesWriterFactory.h>
 
 // Qt
 #include <QStringBuilder>
@@ -107,13 +109,14 @@ void PoiImplicitTagRulesDeriver::_updateForNewWord(QString word, const QString k
   LOG_VART(_wordTagKeysToTagValues[wordKvpKey]);
 }
 
-ImplicitTagRules PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs,
-                                                         const QStringList typeKeys,
-                                                         const int minOccurancesThreshold)
+void PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs, const QStringList outputs,
+                                             const QStringList typeKeys,
+                                             const int minOccurancesThreshold)
 {
   LOG_INFO(
     "Deriving POI implicit tag rules for inputs: " << inputs << " type keys: " << typeKeys <<
-    " with minimum occurance threshold: " << minOccurancesThreshold << "...");
+    " with minimum occurance threshold: " << minOccurancesThreshold <<
+    ".  Writing to outputs: " << outputs << "...");
 
   QStringList typeKeysAllowed;
   for (int i = 0; i < typeKeys.size(); i++)
@@ -177,11 +180,24 @@ ImplicitTagRules PoiImplicitTagRulesDeriver::deriveRules(const QStringList input
   }
   _wordCaseMappings.clear();
 
+  //TODO: try to reduce these mutiple passes over the data down to a single pass
   _removeKvpsBelowOccuranceThreshold(minOccurancesThreshold);
   _removeDuplicatedKeyTypes();
   _removeIrrelevantKeyTypes(typeKeysAllowed);
+  _tagRulesByWord = _generateTagRulesByWord();
+  _tagRules = _rulesByWordToRules(_tagRulesByWord);
 
-  return _generateOutput();
+  for (int i = 0; i < outputs.size(); i++)
+  {
+    const QString output = outputs.at(i);
+    LOG_VART(output);
+    boost::shared_ptr<ImplicitTagRulesWriter> rulesWriter =
+      ImplicitTagRulesWriterFactory::getInstance().createWriter(output);
+    rulesWriter->open(output);
+    rulesWriter->write(_tagRules);
+    rulesWriter->write(_tagRulesByWord);
+    rulesWriter->close();
+  }
 }
 
 void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccuranceThreshold(const int minOccurancesThreshold)
@@ -332,12 +348,12 @@ void PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
   _wordTagKeysToTagValues= updatedValues;
 }
 
-ImplicitTagRules PoiImplicitTagRulesDeriver::_generateOutput()
+ImplicitTagRulesByWord PoiImplicitTagRulesDeriver::_generateTagRulesByWord()
 {
-  LOG_DEBUG("Generating output...");
+  LOG_DEBUG("Generating rules by word output...");
 
   //key=<word>, value=map: key=<kvp>, value=<kvp occurance count>
-  ImplicitTagRules wordsToKvpsWithCounts;
+  ImplicitTagRulesByWord wordsToKvpsWithCounts;
 
   for (QMap<QString, long>::const_iterator kvpsWithCountsItr = _wordKvpsToOccuranceCounts.begin();
        kvpsWithCountsItr != _wordKvpsToOccuranceCounts.end(); ++kvpsWithCountsItr)
@@ -362,6 +378,54 @@ ImplicitTagRules PoiImplicitTagRulesDeriver::_generateOutput()
   }
 
   return wordsToKvpsWithCounts;
+}
+
+ImplicitTagRules PoiImplicitTagRulesDeriver::_rulesByWordToRules(
+  const ImplicitTagRulesByWord& rulesByWord)
+{
+  LOG_DEBUG("Generating rules output...");
+
+  ImplicitTagRules tagRules;
+
+  QMap<QString, ImplicitTagRulePtr> tagsToRules;
+  //key=<word>, value=map: key=<kvp>, value=<kvp occurance count>
+  for (ImplicitTagRulesByWord::const_iterator rulesByWordItr = rulesByWord.begin();
+       rulesByWordItr != rulesByWord.end(); ++rulesByWordItr)
+  {
+    const QString word = rulesByWordItr.key();
+    LOG_VART(word);
+    QMap<QString, long> kvpsWithCounts = rulesByWordItr.value();
+    LOG_VART(kvpsWithCounts);
+    ImplicitTagRulePtr rule;
+    for (QMap<QString, long>::const_iterator kvpsWithCountsItr = kvpsWithCounts.begin();
+         kvpsWithCountsItr != kvpsWithCounts.end(); ++kvpsWithCountsItr)
+    {
+      const QString kvp =  kvpsWithCountsItr.key();
+      LOG_VART(kvp);
+      //not concerned with counts here, b/c we've already eliminated all rules below the min
+      //allowed threshold
+      if (tagsToRules.contains(kvp))
+      {
+        LOG_TRACE("Tag: " << kvp << " already exists for rule.");
+        rule = tagsToRules[kvp];
+      }
+      else
+      {
+        LOG_TRACE("Creating new rule for tag: " << kvp << "...");
+        rule.reset(new ImplicitTagRule());
+        tagsToRules[kvp] = rule;
+        tagRules.append(rule);
+        LOG_VART(tagRules.size());
+        rule->getTags().appendValue(kvp);
+      }
+      rule->getWords().append(word);
+    }
+    LOG_VART(rule->getWords());
+    LOG_VART(rule->getTags());
+  }
+
+  LOG_VART(tagRules.size());
+  return tagRules;
 }
 
 }

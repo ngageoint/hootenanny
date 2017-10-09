@@ -24,18 +24,14 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef IMPLICITTAGRULESSQLITEWRITER_H
-#define IMPLICITTAGRULESSQLITEWRITER_H
+#ifndef IMPLICITTAGRULE_H
+#define IMPLICITTAGRULE_H
 
 // Hoot
-#include <hoot/rnd/io/ImplicitTagRulesWriter.h>
+#include <hoot/core/elements/Tags.h>
 
 // Qt
-#include <QString>
-#include <QMap>
-#include <QtSql/QSqlDatabase>
-#include <QSqlQuery>
-#include <QSet>
+#include <QStringList>
 
 namespace hoot
 {
@@ -43,44 +39,26 @@ namespace hoot
 /**
  *
  */
-class ImplicitTagRulesSqliteWriter : public ImplicitTagRulesWriter
+class ImplicitTagRule
 {
-
 public:
 
-  static std::string className() { return "hoot::ImplicitTagRulesSqliteWriter"; }
+  ImplicitTagRule();
 
-  ImplicitTagRulesSqliteWriter();
-  ~ImplicitTagRulesSqliteWriter();
-
-  virtual bool isSupported(const QString url);
-
-  virtual void open(const QString url);
-
-  virtual void write(const ImplicitTagRules& rules);
-
-  virtual void write(const ImplicitTagRulesByWord& rules);
-
-  virtual void close();
+  QStringList& getWords() { return _words; }
+  Tags& getTags() { return _tags; }
 
 private:
 
-  QSqlDatabase _db;
-
-  QSqlQuery _insertRuleQuery;
-  QSqlQuery _insertWordQuery;
-  QSqlQuery _insertTagQuery;
-  QSqlQuery _getLastWordIdQuery;
-  QSqlQuery _getLastTagIdQuery;
-
-  void _createTables();
-  void _prepareQueries();
-
-  int _insertWord(const QString word);
-  int _insertTag(const QString kvp);
-  void _insertRuleRecord(const int ruleId, const int wordId, const int tagId);
+  QStringList _words;
+  Tags _tags;
 };
+
+typedef boost::shared_ptr<ImplicitTagRule> ImplicitTagRulePtr;
+typedef QList<ImplicitTagRulePtr> ImplicitTagRules;
+//key=<word>, value=<key=kvp, value=kvp occurrance count>>
+typedef QMap<QString, QMap<QString, long> > ImplicitTagRulesByWord;
 
 }
 
-#endif // IMPLICITTAGRULESSQLITEWRITER_H
+#endif // IMPLICITTAGRULE_H

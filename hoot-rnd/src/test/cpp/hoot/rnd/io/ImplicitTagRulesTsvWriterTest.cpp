@@ -26,7 +26,7 @@
  */
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/rnd/io/ImplicitTagRulesJsonWriter.h>
+#include <hoot/rnd/io/ImplicitTagRulesTsvWriter.h>
 #include <hoot/rnd/schema/ImplicitTagRule.h>
 
 // Qt
@@ -35,9 +35,9 @@
 namespace hoot
 {
 
-class ImplicitTagRulesJsonWriterTest : public CppUnit::TestFixture
+class ImplicitTagRulesTsvWriterTest : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(ImplicitTagRulesJsonWriterTest);
+  CPPUNIT_TEST_SUITE(ImplicitTagRulesTsvWriterTest);
   CPPUNIT_TEST(runWriteTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -45,8 +45,8 @@ public:
 
   void runWriteTest()
   {
-    const QString outputDir = "test-output/io/ImplicitTagRulesJsonWriterTest";
-    const QString outputFile = outputDir + "/rules-out.json";
+    const QString outputDir = "test-output/io/ImplicitTagRulesTsvWriterTest";
+    const QString outputFile = outputDir + "/rules-out.tsv";
     QDir().mkpath(outputDir);
 
     ImplicitTagRulesByWord rules;
@@ -69,15 +69,15 @@ public:
     kvps["amenity=place_of_worship"] = 18;
     rules["Eid Prayer Ground"] = kvps;
 
-    ImplicitTagRulesJsonWriter writer;
+    ImplicitTagRulesTsvWriter writer;
     writer.open(outputFile);
     writer.write(rules);
     writer.close();
 
-    HOOT_FILE_EQUALS("test-files/io/ImplicitTagRulesJsonWriterTest/rules.json", outputFile);
+    HOOT_FILE_EQUALS("test-files/io/ImplicitTagRulesTsvWriterTest/rules.tsv", outputFile);
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ImplicitTagRulesJsonWriterTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ImplicitTagRulesTsvWriterTest, "quick");
 
 }

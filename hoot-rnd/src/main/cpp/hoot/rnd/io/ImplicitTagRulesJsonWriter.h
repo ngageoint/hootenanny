@@ -28,11 +28,10 @@
 #define IMPLICITTAGRULESJSONWRITER_H
 
 // Hoot
-#include <hoot/rnd/schema/PoiImplicitTagRulesDeriver.h>
+#include <hoot/rnd/io/ImplicitTagRulesWriter.h>
 
 // Qt
 #include <QFile>
-#include <QMap>
 
 namespace hoot
 {
@@ -40,19 +39,25 @@ namespace hoot
 /**
  *
  */
-class ImplicitTagRulesJsonWriter
+class ImplicitTagRulesJsonWriter : public ImplicitTagRulesWriter
 {
 
 public:
 
+  static std::string className() { return "hoot::ImplicitTagRulesJsonWriter"; }
+
   ImplicitTagRulesJsonWriter();
   ~ImplicitTagRulesJsonWriter();
 
-  void open(const QString output);
+  virtual bool isSupported(const QString url);
 
-  void write(const ImplicitTagRules& rules);
+  virtual void open(const QString url);
 
-  void close();
+  virtual void write(const ImplicitTagRules& rules);
+
+  virtual void write(const ImplicitTagRulesByWord& rules);
+
+  virtual void close();
 
 private:
 

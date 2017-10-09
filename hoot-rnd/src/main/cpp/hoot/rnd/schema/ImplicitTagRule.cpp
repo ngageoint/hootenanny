@@ -22,50 +22,16 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
+#include "ImplicitTagRule.h"
 
-#ifndef IMPLICITTAGRULESSQLITEREADER_H
-#define IMPLICITTAGRULESSQLITEREADER_H
 
-// Hoot
-#include <hoot/core/elements/Tags.h>
-
-// Qt
-#include <QString>
-#include <QtSql/QSqlDatabase>
-#include <QSqlQuery>
-
-namespace  hoot
+namespace hoot
 {
 
-class ImplicitTagRulesSqliteReader
+ImplicitTagRule::ImplicitTagRule()
 {
-public:
-
-  ImplicitTagRulesSqliteReader();
-  ~ImplicitTagRulesSqliteReader();
-
-  void open(const QString url);
-
-  void close();
-
-  bool wordsInvolveMultipleRules(const QSet<QString>& words, QSet<QString>& matchingRuleWords);
-
-  Tags getImplicitTags(const QSet<QString>& words, QSet<QString>& matchingWords);
-
-  int getRuleCount();
-
-private:
-
-  QString _path;
-  QSqlDatabase _db;
-
-  QSqlQuery _ruleCountQuery;
-
-  void _prepareQueries();
-};
-
 }
 
-#endif // IMPLICITTAGRULESSQLITEREADER_H
+}
