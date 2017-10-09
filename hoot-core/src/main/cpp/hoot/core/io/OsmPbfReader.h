@@ -135,6 +135,7 @@ public:
    * PrimitiveBlock from the stream specified into the provided map.
    */
   void parseElements(std::istream* strm, const OsmMapPtr& map);
+  void parseElements(QByteArray bytes, const OsmMapPtr& map);
 
   /**
    * Allows loading of data that isn't complete such as unknown node IDs in a way.
