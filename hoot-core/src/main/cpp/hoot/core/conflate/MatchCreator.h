@@ -157,6 +157,9 @@ protected:
 
 };
 
+typedef boost::shared_ptr<MatchCreator> MatchCreatorPtr;
+typedef boost::shared_ptr<const MatchCreator> ConstMatchCreatorPtr;
+
 }
 
 #endif // MATCHCREATOR_H

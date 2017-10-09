@@ -3,11 +3,12 @@
 
 === Description
 
-Conflates two input sources into a single output using the differential conflation algorithm.
+Calculates the differential between two conflation inputs. Output will be all elements in input2
+that do not conflict with any elements in input1.
 
 * +input1+ - First input.
 * +input2+ - Second input.
-* +output+ - The output path. If the output is a .osc, a changeset will be created, otherwise expect .osm output.
+* +output+ - The output path. This will be an osm file.
 * +--stats+ - Hootenanny map statistics such as node and way count.
 
 === Usage

@@ -41,7 +41,7 @@ namespace hoot
 class ScriptTestSuite : public CppUnit::TestSuite
 {
 public:
-  ScriptTestSuite(QString dir, bool printDiff);
+  ScriptTestSuite(QString dir, bool printDiff, double waitTime);
 
 private:
   std::vector<boost::shared_ptr<ScriptTest> > _tests;
