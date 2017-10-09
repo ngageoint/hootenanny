@@ -49,11 +49,8 @@ public:
 
   PoiImplicitTagRulesDeriver();
 
-  void deriveRules(const QStringList inputs, const QStringList typeKeys = QStringList(),
-                   const int minOccurancesThreshold = 1);
-
-  ImplicitTagRulesByWord getImplicitTagRulesByWord() const { return _tagRulesByWord; }
-  QList<ImplicitTagRulePtr> getImplicitTagRules() const  { return _tagRules; }
+  void deriveRules(const QStringList inputs, const QStringList outputs,
+                   const QStringList typeKeys = QStringList(), const int minOccurancesThreshold = 1);
 
 private:
 
@@ -69,7 +66,7 @@ private:
   QMap<QString, QString> _wordCaseMappings;
 
   ImplicitTagRulesByWord _tagRulesByWord;
-  QList<ImplicitTagRulePtr> _tagRules;
+  ImplicitTagRules _tagRules;
 
   void _updateForNewWord(QString word, const QString kvp);
   QStringList _getPoiKvps(const Tags& tags) const;
@@ -77,7 +74,7 @@ private:
   void _removeDuplicatedKeyTypes();
   void _removeIrrelevantKeyTypes(const QStringList typeKeysAllowed);
   ImplicitTagRulesByWord _generateTagRulesByWord();
-  QList<ImplicitTagRulePtr> _rulesByWordToRules(const ImplicitTagRulesByWord& rulesByWord);
+  ImplicitTagRules _rulesByWordToRules(const ImplicitTagRulesByWord& rulesByWord);
 };
 
 }

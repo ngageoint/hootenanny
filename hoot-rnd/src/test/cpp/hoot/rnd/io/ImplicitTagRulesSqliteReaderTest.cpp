@@ -137,7 +137,8 @@ public:
     words.insert("Mustashfa alwhdt");
     tags = reader.getImplicitTags(words, wordsInvolved);
     CPPUNIT_ASSERT_EQUAL(1, tags.size());
-    CPPUNIT_ASSERT(tags["amenity"] == "clinic;hospital");
+    LOG_VART(tags["amenity"]);
+    CPPUNIT_ASSERT(tags["amenity"] == "hospital;clinic");
     CPPUNIT_ASSERT_EQUAL(3, wordsInvolved.size());
     CPPUNIT_ASSERT(wordsInvolved.contains("Mustashfa"));
     CPPUNIT_ASSERT(wordsInvolved.contains("alwhdt"));

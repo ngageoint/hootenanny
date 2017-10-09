@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "ImplicitTagRulesJsonWriter.h"
+#include "ImplicitTagRulesTsvWriter.h"
 
 // hoot
 #include <hoot/core/util/HootException.h>
@@ -36,23 +36,23 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ImplicitTagRulesWriter, ImplicitTagRulesJsonWriter)
+HOOT_FACTORY_REGISTER(ImplicitTagRulesWriter, ImplicitTagRulesTsvWriter)
 
-ImplicitTagRulesJsonWriter::ImplicitTagRulesJsonWriter()
+ImplicitTagRulesTsvWriter::ImplicitTagRulesTsvWriter()
 {
 }
 
-ImplicitTagRulesJsonWriter::~ImplicitTagRulesJsonWriter()
+ImplicitTagRulesTsvWriter::~ImplicitTagRulesTsvWriter()
 {
   close();
 }
 
-bool ImplicitTagRulesJsonWriter::isSupported(const QString url)
+bool ImplicitTagRulesTsvWriter::isSupported(const QString url)
 {
-  return url.endsWith(".json", Qt::CaseInsensitive);
+  return url.endsWith(".tsv", Qt::CaseInsensitive);
 }
 
-void ImplicitTagRulesJsonWriter::open(const QString url)
+void ImplicitTagRulesTsvWriter::open(const QString url)
 {
   _file.reset(new QFile());
   _file->setFileName(url);
@@ -67,67 +67,48 @@ void ImplicitTagRulesJsonWriter::open(const QString url)
   LOG_DEBUG("Opened: " << url << ".");
 }
 
-bool caseInsensitiveLessThan(const QString s1, const QString s2)
+bool caseInsensitiveLessThan3(const QString s1, const QString s2)
 {
   return s1.toLower() < s2.toLower();
 }
 
-void ImplicitTagRulesJsonWriter::write(const ImplicitTagRulesByWord& rules)
+void ImplicitTagRulesTsvWriter::write(const ImplicitTagRulesByWord& rules)
 {
-  _file->write(QString("[\n").toUtf8());
+  //each word takes up two rows; first col in first row contains words; remaining cols in first row
+  //contain kvps; in second row, each kvp has the count directly below it
 
-  long ruleCtr = 0;
   //sort rules alphabetically by word case insensitively (QMap sorts them case sensitively by
   //default)
   QStringList words = rules.keys();
-  qSort(words.begin(), words.end(), caseInsensitiveLessThan);
+  qSort(words.begin(), words.end(), caseInsensitiveLessThan3);
   for (int i = 0; i < rules.size(); i++)
   {
-    _file->write(QString("  {\n").toUtf8());
-
     const QString word = words.at(i);
-    if (word.contains("="))
-    {
-      LOG_VARE(word);
-    }
-    const QString wordLine = "    \"word\": \"" % word % "\",\n";
-    _file->write(wordLine.toUtf8());
-
-    long kvpCtr = 0;
+    QString row1 = word % "\t";
+    QString row2 = "\t";
     const QMap<QString, long> kvpsWithCount = rules[word];
     for (QMap<QString, long>::const_iterator kvpItr = kvpsWithCount.begin();
        kvpItr != kvpsWithCount.end(); ++kvpItr)
     {
-      QString kvpLine = "    \"" % kvpItr.key() % "\": " % QString::number(kvpItr.value());
-      if (kvpCtr < (kvpsWithCount.size() - 1))
-      {
-        kvpLine += ",";
-      }
-      kvpLine += "\n";
-      _file->write(kvpLine.toUtf8());
-      kvpCtr++;
+      row1 += kvpItr.key() % "\t";
+      row2 += QString::number(kvpItr.value()) % "\t";
     }
-
-    QString closingRuleLine = "  }";
-    if (ruleCtr < (rules.size() - 1))
-    {
-      closingRuleLine += ",";
-    }
-    closingRuleLine += "\n";
-    _file->write(closingRuleLine.toUtf8());
-    ruleCtr++;
+    row1.chop(1);
+    row1 += "\n";
+    _file->write(row1.toUtf8());
+    row2.chop(1);
+    row2 += "\n";
+    _file->write(row2.toUtf8());
   }
-
-  _file->write(QString("]").toUtf8());
 }
 
-void ImplicitTagRulesJsonWriter::write(const ImplicitTagRules& /*rules*/)
+void ImplicitTagRulesTsvWriter::write(const ImplicitTagRules& /*rules*/)
 {
   LOG_DEBUG(
     "The writing of implicit tag rules to JSON may only be done when the output is sorted by word.");
 }
 
-void ImplicitTagRulesJsonWriter::close()
+void ImplicitTagRulesTsvWriter::close()
 {
   if (_file.get())
   {

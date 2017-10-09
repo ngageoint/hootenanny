@@ -46,10 +46,7 @@ public:
   ImplicitTagRule();
 
   QStringList& getWords() { return _words; }
-  //void addWord(const QString word) { _words.append(word); }
-
   Tags& getTags() { return _tags; }
-  //void addTag(const QString kvp) { _tags.appendValue(kvp); }
 
 private:
 
@@ -58,6 +55,7 @@ private:
 };
 
 typedef boost::shared_ptr<ImplicitTagRule> ImplicitTagRulePtr;
+typedef QList<ImplicitTagRulePtr> ImplicitTagRules;
 //key=<word>, value=<key=kvp, value=kvp occurrance count>>
 typedef QMap<QString, QMap<QString, long> > ImplicitTagRulesByWord;
 

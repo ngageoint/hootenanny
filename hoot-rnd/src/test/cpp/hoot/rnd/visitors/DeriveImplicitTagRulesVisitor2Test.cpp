@@ -120,38 +120,8 @@ public:
   {
     ImplicitTagRulesSqliteWriter rulesWriter;
     rulesWriter.open(outputPath);
-    rulesWriter.write(convertRulesToRulesMap(DeriveImplicitTagRulesVisitor().getTestRules()));
+    rulesWriter.write(DeriveImplicitTagRulesVisitor().getTestRules());
     rulesWriter.close();
-  }
-
-  //temporary method to convert between rule data structures; shouldn't need it permanently
-  ImplicitTagRulesByWord convertRulesToRulesMap(const QList<ImplicitTagRulePtr>& rules)
-  {
-    ImplicitTagRulesByWord rulesMap;
-    for (QList<ImplicitTagRulePtr>::const_iterator rulesItr = rules.begin();
-         rulesItr != rules.end(); ++rulesItr)
-    {
-      ImplicitTagRulePtr rule = *rulesItr;
-      const QStringList& words = rule->getWords();
-      const Tags& tags = rule->getTags();
-
-      for (int i = 0; i < words.size(); i++)
-      {
-        const QString word = words.at(i);
-        LOG_VART(word);
-        if (!rulesMap.contains(word))
-        {
-          rulesMap[word] = QMap<QString, long>();
-        }
-        for (Tags::const_iterator tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
-        {
-          //we're not concerned with the occurrance count values here
-          rulesMap[word][tagItr.key() + "=" + tagItr.value()] = 1;
-        }
-      }
-    }
-    LOG_VART(rulesMap);
-    return rulesMap;
   }
 };
 

@@ -48,28 +48,29 @@ ImplicitTagRulesSqliteReader::~ImplicitTagRulesSqliteReader()
   close();
 }
 
-void ImplicitTagRulesSqliteReader::open(const QString path)
+void ImplicitTagRulesSqliteReader::open(const QString url)
 {
-  if (!QSqlDatabase::contains(path))
+  if (!QSqlDatabase::contains(url))
   {
-    _db = QSqlDatabase::addDatabase("QSQLITE", path);
-    _db.setDatabaseName(path);
+    _db = QSqlDatabase::addDatabase("QSQLITE", url);
+    _db.setDatabaseName(url);
     if (!_db.open())
     {
-      throw HootException("Error opening DB. " + path);
+      throw HootException("Error opening DB. " + url);
     }
   }
   else
   {
-    _db = QSqlDatabase::database(path);
+    _db = QSqlDatabase::database(url);
   }
 
   if (!_db.isOpen())
   {
-    throw HootException("Error DB is not open. " + path);
+    throw HootException("Error DB is not open. " + url);
   }
+  LOG_DEBUG("Opened: " << url << ".");
 
-  //_prepareQueries();
+  _prepareQueries();
 }
 
 void ImplicitTagRulesSqliteReader::close()
@@ -82,6 +83,12 @@ void ImplicitTagRulesSqliteReader::close()
 
 void ImplicitTagRulesSqliteReader::_prepareQueries()
 {
+  _ruleCountQuery = QSqlQuery(_db);
+  if (!_ruleCountQuery.prepare("SELECT COUNT(*) FROM rules"))
+  {
+    throw HootException(
+      QString("Error preparing query: %1").arg(_ruleCountQuery.lastError().text()));
+  }
 }
 
 bool ImplicitTagRulesSqliteReader::wordsInvolveMultipleRules(const QSet<QString>& words,
@@ -184,6 +191,20 @@ bool ImplicitTagRulesSqliteReader::wordsInvolveMultipleRules(const QSet<QString>
   }
 
   return wordsInvolveMultipleRules;
+}
+
+int ImplicitTagRulesSqliteReader::getRuleCount()
+{
+  LOG_TRACE("Retrieving rule count...");
+
+  if (!_ruleCountQuery.exec())
+  {
+    throw HootException(
+      QString("Error executing query: %1").arg(_ruleCountQuery.lastError().text()));
+  }
+
+  _ruleCountQuery.next();
+  return _ruleCountQuery.value(0).toInt();
 }
 
 Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,

@@ -48,11 +48,11 @@ public:
   virtual void visit(const ElementPtr& e);
 
   //TODO: temp
-  QList<ImplicitTagRulePtr> getTestRules() { return _rules; }
+  ImplicitTagRules getTestRules() { return _rules; }
 
 public:
 
-  QList<ImplicitTagRulePtr> _rules;
+  ImplicitTagRules _rules;
 
   /**
    * Ensure all rules are in lower case.

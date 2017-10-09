@@ -27,7 +27,7 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/rnd/schema/PoiImplicitTagRulesDeriver.h>
-#include <hoot/rnd/io/ImplicitTagRulesJsonWriter.h>
+#include <hoot/rnd/io/ImplicitTagRulesSqliteReader.h>
 
 // Qt
 #include <QDir>
@@ -56,15 +56,21 @@ public:
 
     QStringList inputs;
     inputs.append(inDir() + "/yemen-crop-2.osm.pbf");
+    const QString jsonOutputFile =
+      outDir() + "/PoiImplicitTagRulesDeriverTest-runBasicTest-out.json";
+    const QString dbOutputFile = outDir() + "/PoiImplicitTagRulesDeriverTest-runBasicTest-out.db";
+    QStringList outputs;
+    outputs.append(jsonOutputFile);
+    outputs.append(dbOutputFile);
 
-    PoiImplicitTagRulesDeriver rulesDeriver;
-    rulesDeriver.deriveRules(inputs);
-    const ImplicitTagRulesByWord rules = rulesDeriver.getImplicitTagRulesByWord();
+    PoiImplicitTagRulesDeriver().deriveRules(inputs, outputs);
 
-    const QString outputFile = outDir() + "/PoiImplicitTagRulesDeriverTest-runBasicTest-out.json";
-    writeOutputFile(rules, outputFile);
+    HOOT_FILE_EQUALS(inDir() + "/PoiImplicitTagRulesDeriverTest-runBasicTest.json", jsonOutputFile);
 
-    HOOT_FILE_EQUALS(inDir() + "/PoiImplicitTagRulesDeriverTest-runBasicTest.json", outputFile);
+    ImplicitTagRulesSqliteReader dbReader;
+    dbReader.open(dbOutputFile);
+    CPPUNIT_ASSERT_EQUAL(441, dbReader.getRuleCount());
+    dbReader.close();
   }
 
   void runTypeKeysTest()
@@ -73,20 +79,28 @@ public:
 
     QStringList inputs;
     inputs.append(inDir() + "/yemen-crop-2.osm.pbf");
+    const QString jsonOutputFile =
+      outDir() + "/PoiImplicitTagRulesDeriverTest-runTypeKeysTest-out.json";
+    const QString dbOutputFile =
+      outDir() + "/PoiImplicitTagRulesDeriverTest-runTypeKeysTest-out.db";
+    QStringList outputs;
+    outputs.append(jsonOutputFile);
+    outputs.append(dbOutputFile);
 
     QStringList typeKeys;
     typeKeys.append("amenity");
     typeKeys.append("tourism");
     typeKeys.append("building");
 
-    PoiImplicitTagRulesDeriver rulesDeriver;
-    rulesDeriver.deriveRules(inputs, typeKeys);
-    const ImplicitTagRulesByWord rules = rulesDeriver.getImplicitTagRulesByWord();
+    PoiImplicitTagRulesDeriver().deriveRules(inputs, outputs, typeKeys);
 
-    const QString outputFile = outDir() + "/PoiImplicitTagRulesDeriverTest-runTypeKeysTest-out.json";
-    writeOutputFile(rules, outputFile);
+    HOOT_FILE_EQUALS(
+      inDir() + "/PoiImplicitTagRulesDeriverTest-runTypeKeysTest.json", jsonOutputFile);
 
-    HOOT_FILE_EQUALS(inDir() + "/PoiImplicitTagRulesDeriverTest-runTypeKeysTest.json", outputFile);
+    ImplicitTagRulesSqliteReader dbReader;
+    dbReader.open(dbOutputFile);
+    CPPUNIT_ASSERT_EQUAL(247, dbReader.getRuleCount());
+    dbReader.close();
   }
 
   void runMinOccuranceThresholdTest()
@@ -95,17 +109,23 @@ public:
 
     QStringList inputs;
     inputs.append(inDir() + "/yemen-crop-2.osm.pbf");
-
-    PoiImplicitTagRulesDeriver rulesDeriver;
-    rulesDeriver.deriveRules(inputs, QStringList(), 4);
-    const ImplicitTagRulesByWord rules = rulesDeriver.getImplicitTagRulesByWord();
-
-    const QString outputFile =
+    const QString jsonOutputFile =
       outDir() + "/PoiImplicitTagRulesDeriverTest-runMinOccuranceThresholdTest-out.json";
-    writeOutputFile(rules, outputFile);
+    const QString dbOutputFile =
+      outDir() + "/PoiImplicitTagRulesDeriverTest-runMinOccuranceThresholdTest-out.db";
+    QStringList outputs;
+    outputs.append(jsonOutputFile);
+    outputs.append(dbOutputFile);
+
+    PoiImplicitTagRulesDeriver().deriveRules(inputs, outputs, QStringList(), 4);
 
     HOOT_FILE_EQUALS(
-      inDir() + "/PoiImplicitTagRulesDeriverTest-runMinOccuranceThresholdTest.json", outputFile);
+      inDir() + "/PoiImplicitTagRulesDeriverTest-runMinOccuranceThresholdTest.json", jsonOutputFile);
+
+    ImplicitTagRulesSqliteReader dbReader;
+    dbReader.open(dbOutputFile);
+    CPPUNIT_ASSERT_EQUAL(108, dbReader.getRuleCount());
+    dbReader.close();
   }
 
   void runMultipleInputsTest()
@@ -115,17 +135,23 @@ public:
     QStringList inputs;
     inputs.append(inDir() + "/yemen-crop-2.osm.pbf");
     inputs.append(inDir() + "/philippines-1.osm.pbf");
-
-    PoiImplicitTagRulesDeriver rulesDeriver;
-    rulesDeriver.deriveRules(inputs);
-    const ImplicitTagRulesByWord rules = rulesDeriver.getImplicitTagRulesByWord();
-
-    const QString outputFile =
+    const QString jsonOutputFile =
       outDir() + "/PoiImplicitTagRulesDeriverTest-runMultipleInputsTest-out.json";
-    writeOutputFile(rules, outputFile);
+    const QString dbOutputFile =
+      outDir() + "/PoiImplicitTagRulesDeriverTest-runMultipleInputsTest-out.db";
+    QStringList outputs;
+    outputs.append(jsonOutputFile);
+    outputs.append(dbOutputFile);
+
+    PoiImplicitTagRulesDeriver().deriveRules(inputs, outputs);
 
     HOOT_FILE_EQUALS(
-      inDir() + "/PoiImplicitTagRulesDeriverTest-runMultipleInputsTest.json", outputFile);
+      inDir() + "/PoiImplicitTagRulesDeriverTest-runMultipleInputsTest.json", jsonOutputFile);
+
+    ImplicitTagRulesSqliteReader dbReader;
+    dbReader.open(dbOutputFile);
+    CPPUNIT_ASSERT_EQUAL(602, dbReader.getRuleCount());
+    dbReader.close();
   }
 
   void runNameCaseTest()
@@ -137,24 +163,23 @@ public:
 
     QStringList inputs;
     inputs.append(inDir() + "/PoiImplicitTagRulesDeriverTest-runNameCaseTest.osm");
-
-    PoiImplicitTagRulesDeriver rulesDeriver;
-    rulesDeriver.deriveRules(inputs);
-    const ImplicitTagRulesByWord rules = rulesDeriver.getImplicitTagRulesByWord();
-
-    const QString outputFile =
+    const QString jsonOutputFile =
       outDir() + "/PoiImplicitTagRulesDeriverTest-runNameCaseTest-out.json";
-    writeOutputFile(rules, outputFile);
+    const QString dbOutputFile =
+      outDir() + "/PoiImplicitTagRulesDeriverTest-runNameCaseTest-out.db";
+    QStringList outputs;
+    outputs.append(jsonOutputFile);
+    outputs.append(dbOutputFile);
 
-    HOOT_FILE_EQUALS(inDir() + "/PoiImplicitTagRulesDeriverTest-runNameCaseTest.json", outputFile);
-  }
+    PoiImplicitTagRulesDeriver().deriveRules(inputs, outputs);
 
-  void writeOutputFile(const ImplicitTagRulesByWord& rules, const QString outputFile)
-  {
-    ImplicitTagRulesJsonWriter writer;
-    writer.open(outputFile);
-    writer.write(rules);
-    writer.close();
+    HOOT_FILE_EQUALS(
+      inDir() + "/PoiImplicitTagRulesDeriverTest-runNameCaseTest.json", jsonOutputFile);
+
+    ImplicitTagRulesSqliteReader dbReader;
+    dbReader.open(dbOutputFile);
+    CPPUNIT_ASSERT_EQUAL(9, dbReader.getRuleCount());
+    dbReader.close();
   }
 };
 

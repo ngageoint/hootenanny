@@ -50,55 +50,41 @@ public:
     const QString outputFile = outputDir + "/rules-out.db";
     QDir().mkpath(outputDir);
 
-    ImplicitTagRulesByWord rules;
-    QMap<QString, long> kvps;
-
-    //words get sorted alphabetically during processing
-    //tags for each word also get sorted alphabetically during processing
-    //we're assuming occurance thresholds have already been applied here
-    //There should be no rules with tags of the same type.  Those aren't allowed by the rule
-    //deriver.
-
-    //rule #4
-    kvps["amenity=place_of_worship"] = 1246; //tag #2
-    kvps["leisure=park"] = 2; //tag #4
-    rules["Mosque"] = kvps; //word #5
-
-    //rule #3
-    kvps.clear();
-    kvps["amenity=place_of_worship"] = 2672; //tag #2
-    kvps["tourism=hotel"] = 9; //tag #3
-    rules["Masjid"] = kvps; //word #4
-
-    //rule #6
-    kvps.clear();
-    kvps["amenity=grave_yard"] = 21; //tag #6
-    rules["Sidi Muhammad"] = kvps;  //word #8
-
-    //rule #2
-    kvps.clear();
-    kvps["amenity=place_of_worship"] = 18; //tag #2
-    rules["Eid Prayer Ground"] = kvps; //word #2
-
-    //rule #2
-    kvps.clear();
-    kvps["amenity=place_of_worship"] = 18; //tag #2
-    rules["Eid Prayer Ground 2"] = kvps; //word #3
-
-    //rule #5
-    kvps.clear();
-    kvps["amenity=hospital"] = 502; //tag #5
-    rules["Mustashfa"] = kvps; //word #6
+    ImplicitTagRules rules;
 
     //rule #1
-    kvps.clear();
-    kvps["amenity=clinic"] = 916; //tag #1
-    rules["alwhdt"] = kvps; //word #1
+    rules.append(ImplicitTagRulePtr(new ImplicitTagRule()));
+    rules.back()->getWords().append(QString::fromUtf8("Mosque")); //word #1
+    rules.back()->getTags().appendValue("amenity=place_of_worship"); //tag #1
+    rules.back()->getTags().appendValue("leisure=park"); //tag #2
+
+    //rule #2
+    rules.append(ImplicitTagRulePtr(new ImplicitTagRule()));
+    rules.back()->getWords().append(QString::fromUtf8("Masjid")); //word #2
+    rules.back()->getTags().appendValue("amenity=place_of_worship"); //tag #1
+    rules.back()->getTags().appendValue("tourism=hotel"); //tag #3
+
+    //rule #3
+    rules.append(ImplicitTagRulePtr(new ImplicitTagRule()));
+    rules.back()->getWords().append(QString::fromUtf8("Sidi Muhammad")); //word #3
+    rules.back()->getTags().appendValue("amenity=grave_yard"); //tag #4
+
+    //rule #4
+    rules.append(ImplicitTagRulePtr(new ImplicitTagRule()));
+    rules.back()->getWords().append(QString::fromUtf8("Eid Prayer Ground")); //word #4
+    rules.back()->getWords().append(QString::fromUtf8("Eid Prayer Ground 2")); //word #5
+    rules.back()->getTags().appendValue("amenity=place_of_worship"); //tag #1
 
     //rule #5
-    kvps.clear();
-    kvps["amenity=hospital"] = 1; //tag #5
-    rules["Mustashfa alwhdt"] = kvps; //word #7
+    rules.append(ImplicitTagRulePtr(new ImplicitTagRule()));
+    rules.back()->getWords().append(QString::fromUtf8("Mustashfa")); //word #6
+    rules.back()->getWords().append(QString::fromUtf8("Mustashfa alwhdt")); //word #7
+    rules.back()->getTags().appendValue("amenity=hospital"); //tag #5
+
+    //rule #6
+    rules.append(ImplicitTagRulePtr(new ImplicitTagRule()));
+    rules.back()->getWords().append(QString::fromUtf8("alwhdt")); //word #8
+    rules.back()->getTags().appendValue("amenity=clinic"); //tag #6
 
     ImplicitTagRulesSqliteWriter writer;
     writer.open(outputFile);
@@ -179,7 +165,7 @@ public:
       switch (i)
       {
         case 1:
-          CPPUNIT_ASSERT_EQUAL(1, ruleRowCount);
+          CPPUNIT_ASSERT_EQUAL(2, ruleRowCount);
           break;
 
         case 2:
@@ -187,7 +173,7 @@ public:
           break;
 
         case 3:
-          CPPUNIT_ASSERT_EQUAL(2, ruleRowCount);
+          CPPUNIT_ASSERT_EQUAL(1, ruleRowCount);
           break;
 
         case 4:
@@ -220,7 +206,7 @@ public:
           break;
 
         case 2:
-          CPPUNIT_ASSERT_EQUAL(2, wordCtr);
+          CPPUNIT_ASSERT_EQUAL(1, wordCtr);
           break;
 
         case 3:
@@ -228,7 +214,7 @@ public:
           break;
 
         case 4:
-          CPPUNIT_ASSERT_EQUAL(1, wordCtr);
+          CPPUNIT_ASSERT_EQUAL(2, wordCtr);
           break;
 
         case 5:
@@ -253,19 +239,19 @@ public:
       switch (i)
       {
         case 1:
-          CPPUNIT_ASSERT_EQUAL(1, tagCtr);
+          CPPUNIT_ASSERT_EQUAL(2, tagCtr);
           break;
 
         case 2:
-          CPPUNIT_ASSERT_EQUAL(1, tagCtr);
+          CPPUNIT_ASSERT_EQUAL(2, tagCtr);
           break;
 
         case 3:
-          CPPUNIT_ASSERT_EQUAL(2, tagCtr);
+          CPPUNIT_ASSERT_EQUAL(1, tagCtr);
           break;
 
         case 4:
-          CPPUNIT_ASSERT_EQUAL(2, tagCtr);
+          CPPUNIT_ASSERT_EQUAL(1, tagCtr);
           break;
 
         case 5:

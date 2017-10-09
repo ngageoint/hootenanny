@@ -48,6 +48,7 @@ public:
 
   virtual int runSimple(QStringList args)
   {
+    //TODO: make the second two params not required?
     if (args.size() != 4)
     {
       std::cout << getHelp() << std::endl << std::endl;
@@ -55,36 +56,16 @@ public:
     }
 
     bool ok = false;
-    const int minOccurancesThreshold = args[1].toInt(&ok);
+    const int minOccurancesThreshold = args[3].toInt(&ok);
     if (!ok || minOccurancesThreshold < 1)
     {
       throw IllegalArgumentException(
-        "Invalid value for the minimum number of type occurrances allowed: " + args[1]);
+        "Invalid value for the minimum number of type occurrances allowed: " + args[3]);
     }
 
-    PoiImplicitTagRulesDeriver rulesDeriver;
-    rulesDeriver.deriveRules(
-      args[0].trimmed().split(";"), args[1].trimmed().split(";"), minOccurancesThreshold);
-    ImplicitTagRulesByWord rulesByWord = rulesDeriver.getImplicitTagRulesByWord();
-
-    const QStringList outputs = args[3].trimmed().split(";");
-    for (int i = 0; i < outputs.size(); i++)
-    {
-      if (outputs.at(i).trimmed().endsWith(".json")) //TODO: cleanup
-      {
-        ImplicitTagRulesJsonWriter rulesWriter;
-        rulesWriter.open(outputs.at(i));
-        rulesWriter.write(rulesByWord);
-        rulesWriter.close();
-      }
-      else
-      {
-        ImplicitTagRulesSqliteWriter rulesWriter;
-        rulesWriter.open(outputs.at(i));
-        rulesWriter.write(rulesByWord);
-        rulesWriter.close();
-      }
-    }
+    PoiImplicitTagRulesDeriver().deriveRules(
+      args[0].trimmed().split(";"), args[1].trimmed().split(";"),  args[2].trimmed().split(";"),
+      minOccurancesThreshold);
 
     return 0;
   }
