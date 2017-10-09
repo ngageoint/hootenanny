@@ -125,15 +125,15 @@ public:
   }
 
   //temporary method to convert between rule data structures; shouldn't need it permanently
-  ImplicitTagRules convertRulesToRulesMap(const QList<ImplicitRulePtr>& rules)
+  ImplicitTagRulesByWord convertRulesToRulesMap(const QList<ImplicitTagRulePtr>& rules)
   {
-    ImplicitTagRules rulesMap;
-    for (QList<ImplicitRulePtr>::const_iterator rulesItr = rules.begin();
+    ImplicitTagRulesByWord rulesMap;
+    for (QList<ImplicitTagRulePtr>::const_iterator rulesItr = rules.begin();
          rulesItr != rules.end(); ++rulesItr)
     {
-      ImplicitRulePtr rule = *rulesItr;
-      const QStringList words = rule->words;
-      const Tags& tags = rule->tags;
+      ImplicitTagRulePtr rule = *rulesItr;
+      const QStringList& words = rule->getWords();
+      const Tags& tags = rule->getTags();
 
       for (int i = 0; i < words.size(); i++)
       {

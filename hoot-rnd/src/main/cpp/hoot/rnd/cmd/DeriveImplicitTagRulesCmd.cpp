@@ -62,9 +62,10 @@ public:
         "Invalid value for the minimum number of type occurrances allowed: " + args[1]);
     }
 
-    ImplicitTagRules rules =
-      PoiImplicitTagRulesDeriver().deriveRules(
-        args[0].trimmed().split(";"), args[1].trimmed().split(";"), minOccurancesThreshold);
+    PoiImplicitTagRulesDeriver rulesDeriver;
+    rulesDeriver.deriveRules(
+      args[0].trimmed().split(";"), args[1].trimmed().split(";"), minOccurancesThreshold);
+    ImplicitTagRulesByWord rulesByWord = rulesDeriver.getImplicitTagRulesByWord();
 
     const QStringList outputs = args[3].trimmed().split(";");
     for (int i = 0; i < outputs.size(); i++)
@@ -73,14 +74,14 @@ public:
       {
         ImplicitTagRulesJsonWriter rulesWriter;
         rulesWriter.open(outputs.at(i));
-        rulesWriter.write(rules);
+        rulesWriter.write(rulesByWord);
         rulesWriter.close();
       }
       else
       {
         ImplicitTagRulesSqliteWriter rulesWriter;
         rulesWriter.open(outputs.at(i));
-        rulesWriter.write(rules);
+        rulesWriter.write(rulesByWord);
         rulesWriter.close();
       }
     }

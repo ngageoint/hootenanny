@@ -24,41 +24,14 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef IMPLICITTAGRULESJSONWRITER_H
-#define IMPLICITTAGRULESJSONWRITER_H
+#include "ImplicitTagRule.h"
 
-// Hoot
-#include <hoot/rnd/schema/ImplicitTagRule.h>
-
-// Qt
-#include <QFile>
-#include <QMap>
 
 namespace hoot
 {
 
-/**
- *
- */
-class ImplicitTagRulesJsonWriter
+ImplicitTagRule::ImplicitTagRule()
 {
-
-public:
-
-  ImplicitTagRulesJsonWriter();
-  ~ImplicitTagRulesJsonWriter();
-
-  void open(const QString output);
-
-  void write(const ImplicitTagRulesByWord& rules);
-
-  void close();
-
-private:
-
-  boost::shared_ptr<QFile> _file;
-};
-
 }
 
-#endif // IMPLICITTAGRULESJSONWRITER_H
+}

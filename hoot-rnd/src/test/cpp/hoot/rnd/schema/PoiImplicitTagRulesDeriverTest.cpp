@@ -57,7 +57,9 @@ public:
     QStringList inputs;
     inputs.append(inDir() + "/yemen-crop-2.osm.pbf");
 
-    const ImplicitTagRules rules = PoiImplicitTagRulesDeriver().deriveRules(inputs);
+    PoiImplicitTagRulesDeriver rulesDeriver;
+    rulesDeriver.deriveRules(inputs);
+    const ImplicitTagRulesByWord rules = rulesDeriver.getImplicitTagRulesByWord();
 
     const QString outputFile = outDir() + "/PoiImplicitTagRulesDeriverTest-runBasicTest-out.json";
     writeOutputFile(rules, outputFile);
@@ -77,7 +79,9 @@ public:
     typeKeys.append("tourism");
     typeKeys.append("building");
 
-    const ImplicitTagRules rules = PoiImplicitTagRulesDeriver().deriveRules(inputs, typeKeys);
+    PoiImplicitTagRulesDeriver rulesDeriver;
+    rulesDeriver.deriveRules(inputs, typeKeys);
+    const ImplicitTagRulesByWord rules = rulesDeriver.getImplicitTagRulesByWord();
 
     const QString outputFile = outDir() + "/PoiImplicitTagRulesDeriverTest-runTypeKeysTest-out.json";
     writeOutputFile(rules, outputFile);
@@ -92,8 +96,9 @@ public:
     QStringList inputs;
     inputs.append(inDir() + "/yemen-crop-2.osm.pbf");
 
-    const ImplicitTagRules rules =
-      PoiImplicitTagRulesDeriver().deriveRules(inputs, QStringList(), 4);
+    PoiImplicitTagRulesDeriver rulesDeriver;
+    rulesDeriver.deriveRules(inputs, QStringList(), 4);
+    const ImplicitTagRulesByWord rules = rulesDeriver.getImplicitTagRulesByWord();
 
     const QString outputFile =
       outDir() + "/PoiImplicitTagRulesDeriverTest-runMinOccuranceThresholdTest-out.json";
@@ -111,7 +116,9 @@ public:
     inputs.append(inDir() + "/yemen-crop-2.osm.pbf");
     inputs.append(inDir() + "/philippines-1.osm.pbf");
 
-    const ImplicitTagRules rules = PoiImplicitTagRulesDeriver().deriveRules(inputs);
+    PoiImplicitTagRulesDeriver rulesDeriver;
+    rulesDeriver.deriveRules(inputs);
+    const ImplicitTagRulesByWord rules = rulesDeriver.getImplicitTagRulesByWord();
 
     const QString outputFile =
       outDir() + "/PoiImplicitTagRulesDeriverTest-runMultipleInputsTest-out.json";
@@ -131,7 +138,9 @@ public:
     QStringList inputs;
     inputs.append(inDir() + "/PoiImplicitTagRulesDeriverTest-runNameCaseTest.osm");
 
-    const ImplicitTagRules rules = PoiImplicitTagRulesDeriver().deriveRules(inputs);
+    PoiImplicitTagRulesDeriver rulesDeriver;
+    rulesDeriver.deriveRules(inputs);
+    const ImplicitTagRulesByWord rules = rulesDeriver.getImplicitTagRulesByWord();
 
     const QString outputFile =
       outDir() + "/PoiImplicitTagRulesDeriverTest-runNameCaseTest-out.json";
@@ -140,7 +149,7 @@ public:
     HOOT_FILE_EQUALS(inDir() + "/PoiImplicitTagRulesDeriverTest-runNameCaseTest.json", outputFile);
   }
 
-  void writeOutputFile(const ImplicitTagRules& rules, const QString outputFile)
+  void writeOutputFile(const ImplicitTagRulesByWord& rules, const QString outputFile)
   {
     ImplicitTagRulesJsonWriter writer;
     writer.open(outputFile);

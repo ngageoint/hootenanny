@@ -139,7 +139,7 @@ bool caseInsensitiveLessThan2(const QString s1, const QString s2)
   return s1.toLower() < s2.toLower();
 }
 
-void ImplicitTagRulesSqliteWriter::write(const ImplicitTagRules& rules)
+void ImplicitTagRulesSqliteWriter::write(const ImplicitTagRulesByWord& rules)
 {
   DbUtils::execNoPrepare(_db, "BEGIN");
 

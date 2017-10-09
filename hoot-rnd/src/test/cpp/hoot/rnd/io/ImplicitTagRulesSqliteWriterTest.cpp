@@ -27,7 +27,7 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/rnd/io/ImplicitTagRulesSqliteWriter.h>
-#include <hoot/rnd/schema/PoiImplicitTagRulesDeriver.h>
+#include <hoot/rnd/schema/ImplicitTagRule.h>
 
 // Qt
 #include <QDir>
@@ -50,7 +50,7 @@ public:
     const QString outputFile = outputDir + "/rules-out.db";
     QDir().mkpath(outputDir);
 
-    ImplicitTagRules rules;
+    ImplicitTagRulesByWord rules;
     QMap<QString, long> kvps;
 
     //words get sorted alphabetically during processing

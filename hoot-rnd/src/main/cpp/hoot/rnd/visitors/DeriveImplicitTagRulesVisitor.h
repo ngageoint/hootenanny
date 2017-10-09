@@ -29,17 +29,10 @@
 
 // hoot
 #include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/rnd/schema/ImplicitTagRule.h>
 
 namespace hoot
 {
-  class ImplicitRule
-  {
-  public:
-    QStringList words;
-    //QStringList wholeName;
-    Tags tags;
-  };
-  typedef boost::shared_ptr<ImplicitRule> ImplicitRulePtr;
 
 /**
  * Derive tags based on the names.
@@ -55,11 +48,11 @@ public:
   virtual void visit(const ElementPtr& e);
 
   //TODO: temp
-  QList< boost::shared_ptr<ImplicitRule> > getTestRules() { return _rules; }
+  QList<ImplicitTagRulePtr> getTestRules() { return _rules; }
 
 public:
 
-  QList< boost::shared_ptr<ImplicitRule> > _rules;
+  QList<ImplicitTagRulePtr> _rules;
 
   /**
    * Ensure all rules are in lower case.

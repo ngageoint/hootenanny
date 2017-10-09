@@ -107,9 +107,8 @@ void PoiImplicitTagRulesDeriver::_updateForNewWord(QString word, const QString k
   LOG_VART(_wordTagKeysToTagValues[wordKvpKey]);
 }
 
-ImplicitTagRules PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs,
-                                                         const QStringList typeKeys,
-                                                         const int minOccurancesThreshold)
+void PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs, const QStringList typeKeys,
+                                             const int minOccurancesThreshold)
 {
   LOG_INFO(
     "Deriving POI implicit tag rules for inputs: " << inputs << " type keys: " << typeKeys <<
@@ -177,11 +176,12 @@ ImplicitTagRules PoiImplicitTagRulesDeriver::deriveRules(const QStringList input
   }
   _wordCaseMappings.clear();
 
+  //TODO: try to reduce these down to a single pass over the data
   _removeKvpsBelowOccuranceThreshold(minOccurancesThreshold);
   _removeDuplicatedKeyTypes();
   _removeIrrelevantKeyTypes(typeKeysAllowed);
-
-  return _generateOutput();
+  _tagRulesByWord = _generateTagRulesByWord();
+  //_tagRules = _rulesByWordToRules(_tagRulesByWord);
 }
 
 void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccuranceThreshold(const int minOccurancesThreshold)
@@ -332,12 +332,12 @@ void PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
   _wordTagKeysToTagValues= updatedValues;
 }
 
-ImplicitTagRules PoiImplicitTagRulesDeriver::_generateOutput()
+ImplicitTagRulesByWord PoiImplicitTagRulesDeriver::_generateTagRulesByWord()
 {
   LOG_DEBUG("Generating output...");
 
   //key=<word>, value=map: key=<kvp>, value=<kvp occurance count>
-  ImplicitTagRules wordsToKvpsWithCounts;
+  ImplicitTagRulesByWord wordsToKvpsWithCounts;
 
   for (QMap<QString, long>::const_iterator kvpsWithCountsItr = _wordKvpsToOccuranceCounts.begin();
        kvpsWithCountsItr != _wordKvpsToOccuranceCounts.end(); ++kvpsWithCountsItr)
@@ -362,6 +362,13 @@ ImplicitTagRules PoiImplicitTagRulesDeriver::_generateOutput()
   }
 
   return wordsToKvpsWithCounts;
+}
+
+QList<ImplicitTagRulePtr> PoiImplicitTagRulesDeriver::_rulesByWordToRules(
+  const ImplicitTagRulesByWord& rulesByWord)
+{
+  //TODO: finish
+  return QList<ImplicitTagRulePtr>();
 }
 
 }

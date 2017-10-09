@@ -24,15 +24,14 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef IMPLICITTAGRULESJSONWRITER_H
-#define IMPLICITTAGRULESJSONWRITER_H
+#ifndef IMPLICITTAGRULE_H
+#define IMPLICITTAGRULE_H
 
 // Hoot
-#include <hoot/rnd/schema/ImplicitTagRule.h>
+#include <hoot/core/elements/Tags.h>
 
 // Qt
-#include <QFile>
-#include <QMap>
+#include <QStringList>
 
 namespace hoot
 {
@@ -40,25 +39,28 @@ namespace hoot
 /**
  *
  */
-class ImplicitTagRulesJsonWriter
+class ImplicitTagRule
 {
-
 public:
 
-  ImplicitTagRulesJsonWriter();
-  ~ImplicitTagRulesJsonWriter();
+  ImplicitTagRule();
 
-  void open(const QString output);
+  QStringList& getWords() { return _words; }
+  //void addWord(const QString word) { _words.append(word); }
 
-  void write(const ImplicitTagRulesByWord& rules);
-
-  void close();
+  Tags& getTags() { return _tags; }
+  //void addTag(const QString kvp) { _tags.appendValue(kvp); }
 
 private:
 
-  boost::shared_ptr<QFile> _file;
+  QStringList _words;
+  Tags _tags;
 };
+
+typedef boost::shared_ptr<ImplicitTagRule> ImplicitTagRulePtr;
+//key=<word>, value=<key=kvp, value=kvp occurrance count>>
+typedef QMap<QString, QMap<QString, long> > ImplicitTagRulesByWord;
 
 }
 
-#endif // IMPLICITTAGRULESJSONWRITER_H
+#endif // IMPLICITTAGRULE_H
