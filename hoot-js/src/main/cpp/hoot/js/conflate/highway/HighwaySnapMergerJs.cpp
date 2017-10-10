@@ -66,44 +66,48 @@ HighwaySnapMergerJs::~HighwaySnapMergerJs()
 
 void HighwaySnapMergerJs::Init(Handle<Object> target)
 {
+  Isolate* current = target->GetIsolate();
   // Prepare constructor template
-  Local<FunctionTemplate> tpl = FunctionTemplate::New(New);
-  tpl->SetClassName(String::NewSymbol(HighwaySnapMerger::className().data()));
+  Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
+  tpl->SetClassName(String::NewFromUtf8(current, HighwaySnapMerger::className().data()));
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
   // Prototype
   tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
-    String::New(MergerBase::className().data()));
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("apply"),
-      FunctionTemplate::New(apply)->GetFunction());
+    String::NewFromUtf8(current, MergerBase::className().data()));
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "apply"),
+      FunctionTemplate::New(current, apply)->GetFunction());
 
-  _constructor = Persistent<Function>::New(tpl->GetFunction());
-  target->Set(String::NewSymbol("HighwaySnapMerger"), _constructor);
+  _constructor.Reset(current, tpl->GetFunction());
+  target->Set(String::NewFromUtf8(current, "HighwaySnapMerger"), ToLocal(&_constructor));
 }
 
 Handle<Object> HighwaySnapMergerJs::New(const HighwaySnapMergerPtr &ptr)
 {
-  HandleScope scope;
+  Isolate* current = Isolate::GetCurrent();
+  EscapableHandleScope scope(current);
 
-  Handle<Object> result = _constructor->NewInstance();
+  Handle<Object> result = _constructor.Get(current)->NewInstance();
   HighwaySnapMergerJs* from = ObjectWrap::Unwrap<HighwaySnapMergerJs>(result);
   from->_ptr = ptr;
 
-  return scope.Close(result);
+  return scope.Escape(result);
 }
 
-Handle<Value> HighwaySnapMergerJs::New(const FunctionCallbackInfo<Value>& args)
+void HighwaySnapMergerJs::New(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   HighwaySnapMergerJs* obj = new HighwaySnapMergerJs();
   obj->Wrap(args.This());
 
-  return args.This();
+  args.GetReturnValue().Set(args.This());
 }
 
-Handle<Value> HighwaySnapMergerJs::apply(const FunctionCallbackInfo<Value>& args)
+void HighwaySnapMergerJs::apply(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   SublineStringMatcherPtr sublineMatcher = toCpp<SublineStringMatcherPtr>(args[0]);
   OsmMapPtr map = toCpp<OsmMapPtr>(args[1]);
@@ -118,13 +122,13 @@ Handle<Value> HighwaySnapMergerJs::apply(const FunctionCallbackInfo<Value>& args
   // modify the parameter that was passed in
   Handle<Array> newArr = Handle<Array>::Cast(toV8(replaced));
   Handle<Array> arr = Handle<Array>::Cast(args[3]);
-  arr->Set(String::New("length"), v8::Integer::New(newArr->Length()));
+  arr->Set(String::NewFromUtf8(current, "length"), v8::Integer::New(current, newArr->Length()));
   for (uint32_t i = 0; i < newArr->Length(); i++)
   {
     arr->Set(i, newArr->Get(i));
   }
 
-  return scope.Close(Undefined());
+  args.GetReturnValue().SetUndefined();
 }
 
 }
