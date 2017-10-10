@@ -84,19 +84,19 @@ endif
 
 check: test
 test: build services-test pp-test plugins-test
-	bin/HootTest $(HOOT_TEST_DIFF) --slow
+	bin/HootTest $(HOOT_TEST_DIFF) --slow --parallel $(nproc)
 
 docs: always HOOT_VERSION_FILE services-docs
 	echo Building documentation...
 	cd docs; $(MAKE)
 
 test-quick: build pp-test
-	bin/HootTest $(HOOT_TEST_DIFF) --quick
+	bin/HootTest $(HOOT_TEST_DIFF) --quick --parallel $(nproc)
 
 test-all-core: services-test-all pp-test plugins-test
 	# Don't run services tests at the same time as glacial -- that may stomp
 	# on each other's DB changes.
-	bin/HootTest $(HOOT_TEST_DIFF) --glacial
+	bin/HootTest $(HOOT_TEST_DIFF) --glacial --parallel $(nproc)
 
 test-all-no-core: services-test-all pp-test plugins-test
 	$(MAKE) ui-test
@@ -104,7 +104,7 @@ test-all-no-core: services-test-all pp-test plugins-test
 test-all: test-all-no-core
 	# Don't run services tests at the same time as glacial -- that may stomp
 	# on each other's DB changes.
-	bin/HootTest $(HOOT_TEST_DIFF) --glacial
+	bin/HootTest $(HOOT_TEST_DIFF) --glacial --parallel $(nproc)
 
 licenses:
 	scripts/copyright/UpdateAllCopyrightHeaders.sh

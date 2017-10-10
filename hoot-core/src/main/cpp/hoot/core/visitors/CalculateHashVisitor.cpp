@@ -113,7 +113,7 @@ QByteArray CalculateHashVisitor::toHash(const ConstElementPtr& e)
 
 QString CalculateHashVisitor::toHashString(const ConstElementPtr& e)
 {
-  return QString::fromUtf8(toHash(e).toHex());
+  return "sha1sum:" + QString::fromUtf8(toHash(e).toHex());
 }
 
 void CalculateHashVisitor::visit(const ElementPtr& e)
@@ -121,9 +121,7 @@ void CalculateHashVisitor::visit(const ElementPtr& e)
   // don't calculate hashes on review relations.
   if (ReviewMarker::isReview(e) == false)
   {
-    QByteArray hash = toHash(e);
-
-    e->getTags()[MetadataTags::HootHash()] = "sha1sum:" + QString::fromUtf8(hash.toHex());
+    e->getTags()[MetadataTags::HootHash()] = toHashString(e);
   }
 }
 
