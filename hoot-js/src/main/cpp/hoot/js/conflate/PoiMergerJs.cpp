@@ -60,28 +60,32 @@ PoiMergerJs::~PoiMergerJs()
 {
 }
 
-void PoiMergerJs::Init(v8::Handle<v8::Object> exports)
+void PoiMergerJs::Init(Handle<Object> exports)
 {
-  exports->Set(v8::String::NewSymbol("poiMerge"), v8::FunctionTemplate::New(jsPoiMerge)->GetFunction());
+  Isolate* current = exports->GetIsolate();
+  exports->Set(String::NewFromUtf8(current, "poiMerge"),
+               FunctionTemplate::New(current, jsPoiMerge)->GetFunction());
 }
 
-v8::Handle<v8::Value> PoiMergerJs::jsPoiMerge(const v8::Arguments& args)
+void PoiMergerJs::jsPoiMerge(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
-  try{
+  try
+  {
     if (args.Length() > 3)
     {
-      return v8::ThrowException(HootExceptionJs::create(IllegalArgumentException(
-        "Expected two or three arguments to 'poiMerge'.")));
+      args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(IllegalArgumentException(
+        "Expected two or three arguments to 'poiMerge'."))));
+      return;
     }
 
     // Argument 1: script -- note second param is directory to search under (~/hoot/rules)
     const QString scriptPath = ConfPath::search(toCpp<QString>(args[0]), "rules");
     int elementId = -1;
-    if (args.Length() == 3) {
+    if (args.Length() == 3)
        elementId = toCpp<int>(args[2]);
-    }
 
     // Argument 2: Map with POIs
     OsmMapJs* mapJs = node::ObjectWrap::Unwrap<OsmMapJs>(args[1]->ToObject());
@@ -91,24 +95,26 @@ v8::Handle<v8::Value> PoiMergerJs::jsPoiMerge(const v8::Arguments& args)
 
     // Instantiate script merger
     boost::shared_ptr<PluginContext> script(new PluginContext());
-    v8::HandleScope handleScope;
-    v8::Context::Scope context_scope(script->getContext());
+    v8::HandleScope handleScope(current);
+    v8::Context::Scope context_scope(script->getContext(current));
     script->loadScript(scriptPath, "plugin");
 
-    v8::Handle<v8::Object> global = script->getContext()->Global();
+    v8::Handle<v8::Object> global = script->getContext(current)->Global();
 
-    if (global->Has(String::New("plugin")) == false)
+    if (global->Has(String::NewFromUtf8(current, "plugin")) == false)
     {
-      return v8::ThrowException(HootExceptionJs::create(IllegalArgumentException(
-        "Expected the script to have exports.")));
+      args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(IllegalArgumentException(
+        "Expected the script to have exports."))));
+      return;
     }
 
-    v8::Handle<v8::Value> pluginValue = global->Get(String::New("plugin"));
-    v8::Persistent<v8::Object> plugin = v8::Persistent<v8::Object>::New(v8::Handle<v8::Object>::Cast(pluginValue));
-    if (plugin.IsEmpty() || plugin->IsObject() == false)
+    v8::Handle<v8::Value> pluginValue = global->Get(String::NewFromUtf8(current, "plugin"));
+    v8::Persistent<v8::Object> plugin(current, v8::Handle<v8::Object>::Cast(pluginValue));
+    if (plugin.IsEmpty() || plugin.Get(current)->IsObject() == false)
     {
-      return v8::ThrowException(HootExceptionJs::create(IllegalArgumentException(
-        "Expected plugin to be a valid object.")));
+      args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(IllegalArgumentException(
+        "Expected plugin to be a valid object."))));
+      return;
     }
 
     // Got in Map with POIs A, B, C, D, E
@@ -147,11 +153,11 @@ v8::Handle<v8::Value> PoiMergerJs::jsPoiMerge(const v8::Arguments& args)
 
     // Hand merged POIs back to caller in OsmMap
     v8::Handle<v8::Object> returnMap = OsmMapJs::create(mergedMap);
-    return scope.Close(returnMap);
+    args.GetReturnValue().Set(returnMap);
   }
   catch ( const HootException& e )
   {
-    return v8::ThrowException(HootExceptionJs::create(e));
+    args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(e)));
   }
 }
 

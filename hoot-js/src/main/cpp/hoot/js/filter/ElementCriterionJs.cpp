@@ -59,7 +59,7 @@ ElementCriterionJs::~ElementCriterionJs()
 {
 }
 
-Handle<Value> ElementCriterionJs::addCriterion(const Arguments& args) {
+Handle<Value> ElementCriterionJs::addCriterion(const FunctionCallbackInfo<Value>& args) {
   HandleScope scope;
 
   ElementCriterionPtr addTo = ObjectWrap::Unwrap<ElementCriterionJs>(args.This())->getCriterion();
@@ -122,7 +122,7 @@ Handle<Value> ElementCriterionJs::isSatisfied(const v8::Arguments& args)
   return scope.Close(Boolean::New(ec->isSatisfied(e)));
 }
 
-Handle<Value> ElementCriterionJs::New(const Arguments& args) {
+Handle<Value> ElementCriterionJs::New(const FunctionCallbackInfo<Value>& args) {
   HandleScope scope;
 
   QString className = str(args.This()->GetConstructorName());

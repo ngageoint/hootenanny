@@ -62,7 +62,8 @@ OsmMapJs::OsmMapJs(OsmMapPtr map)
 
 OsmMapJs::~OsmMapJs()
 {
-  while (!v8::V8::IdleNotification());
+  Isolate* current = Isolate::GetCurrent();
+  while (!current->IdleNotification(100));
 }
 
 void OsmMapJs::Init(Handle<Object> target)
@@ -106,9 +107,10 @@ Handle<Object> OsmMapJs::create(ConstOsmMapPtr map)
   return scope.Escape(result);
 }
 
-Handle<Value> OsmMapJs::setIdGenerator(const Arguments& args)
+void OsmMapJs::setIdGenerator(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(args.This());
 
@@ -118,33 +120,36 @@ Handle<Value> OsmMapJs::setIdGenerator(const Arguments& args)
     obj->getMap()->setIdGenerator(idGen);
   }
 
-  return scope.Close(Undefined());
+  args.GetReturnValue().SetUndefined();
 }
 
 Handle<Object> OsmMapJs::create(OsmMapPtr map)
 {
-  HandleScope scope;
+  Isolate* current = Isolate::GetCurrent();
+  EscapableHandleScope scope(current);
 
-  Handle<Object> result = _constructor->NewInstance();
+  Handle<Object> result = _constructor.Get(current)->NewInstance();
   OsmMapJs* from = ObjectWrap::Unwrap<OsmMapJs>(result);
   from->_setMap(map);
 
-  return scope.Close(result);
+  return scope.Escape(result);
 }
 
-Handle<Value> OsmMapJs::New(const Arguments& args)
+void OsmMapJs::New(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   OsmMapJs* obj = new OsmMapJs();
   obj->Wrap(args.This());
 
-  return args.This();
+  args.GetReturnValue().Set(args.This());
 }
 
-Handle<Value> OsmMapJs::clone(const Arguments& args)
+void OsmMapJs::clone(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   OsmMapJs* from = ObjectWrap::Unwrap<OsmMapJs>(args.This());
 
@@ -152,11 +157,11 @@ Handle<Value> OsmMapJs::clone(const Arguments& args)
 
   const unsigned argc = 1;
   Handle<Value> argv[argc] = { args[0] };
-  Local<Object> result = _constructor->NewInstance(argc, argv);
+  Local<Object> result = _constructor.Get(current)->NewInstance(argc, argv);
   OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(result);
   obj->_map = newMap;
 
-  return scope.Close(result);
+  args.GetReturnValue().Set(result);
 }
 
 OsmMapPtr& OsmMapJs::getMap()
@@ -169,9 +174,10 @@ OsmMapPtr& OsmMapJs::getMap()
   return _map;
 }
 
-Handle<Value> OsmMapJs::getElement(const Arguments& args)
+void OsmMapJs::getElement(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   try
   {
@@ -181,29 +187,33 @@ Handle<Value> OsmMapJs::getElement(const Arguments& args)
 
     if (obj->isConst())
     {
-      return scope.Close(toV8(obj->getConstMap()->getElement(eid)));
+      args.GetReturnValue().Set(toV8(obj->getConstMap()->getElement(eid)));
     }
     else
     {
-      return scope.Close(toV8(obj->getMap()->getElement(eid)));
+      args.GetReturnValue().Set(toV8(obj->getMap()->getElement(eid)));
     }
   }
   catch (const HootException& e)
   {
-    return v8::ThrowException(HootExceptionJs::create(e));
+    args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(e)));
   }
 }
 
-Handle<Value> OsmMapJs::getElementCount(const Arguments& args) {
-  HandleScope scope;
+void OsmMapJs::getElementCount(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(args.This());
 
-  return scope.Close(Number::New(obj->getConstMap()->getElementCount()));
+  args.GetReturnValue().Set(Number::New(current, obj->getConstMap()->getElementCount()));
 }
 
-Handle<Value> OsmMapJs::getParents(const Arguments& args) {
-  HandleScope scope;
+void OsmMapJs::getParents(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   try
   {
@@ -211,16 +221,18 @@ Handle<Value> OsmMapJs::getParents(const Arguments& args) {
 
     ElementId eid = toCpp<ElementId>(args[0]->ToObject());
 
-    return scope.Close(toV8(obj->getConstMap()->getParents(eid)));
+    args.GetReturnValue().Set(toV8(obj->getConstMap()->getParents(eid)));
   }
   catch (const HootException& e)
   {
-    return v8::ThrowException(HootExceptionJs::create(e));
+    args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(e)));
   }
 }
 
-Handle<Value> OsmMapJs::removeElement(const Arguments& args) {
-  HandleScope scope;
+void OsmMapJs::removeElement(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(args.This());
 
@@ -228,12 +240,13 @@ Handle<Value> OsmMapJs::removeElement(const Arguments& args) {
 
   RemoveElementOp::removeElement(obj->getMap(), eid);
 
-  return scope.Close(Undefined());
+  args.GetReturnValue().SetUndefined();
 }
 
-Handle<Value> OsmMapJs::visit(const Arguments& args)
+void OsmMapJs::visit(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   try
   {
@@ -241,10 +254,10 @@ Handle<Value> OsmMapJs::visit(const Arguments& args)
 
     if (args[0]->IsFunction())
     {
-      Persistent<Function> func = Persistent<Function>::New(Handle<Function>::Cast(args[0]));
+      Local<Function> func(Handle<Function>::Cast(args[0]));
 
       JsFunctionVisitor v;
-      v.addFunction(func);
+      v.addFunction(current, func);
 
       map->getMap()->visitRw(v);
     }
@@ -255,14 +268,13 @@ Handle<Value> OsmMapJs::visit(const Arguments& args)
 
       map->getMap()->visitRw(*v);
     }
+    args.GetReturnValue().SetUndefined();
   }
   catch (const HootException& err)
   {
     LOG_VAR(err.getWhat());
-    return v8::ThrowException(HootExceptionJs::create(err));
+    args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(err)));
   }
-
-  return scope.Close(Undefined());
 }
 
 }

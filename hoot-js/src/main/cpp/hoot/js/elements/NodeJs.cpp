@@ -63,7 +63,7 @@ NodeJs::~NodeJs()
 {
 }
 
-Handle<Value> NodeJs::getX(const Arguments& args) {
+Handle<Value> NodeJs::getX(const FunctionCallbackInfo<Value>& args) {
   HandleScope scope;
 
   ConstNodePtr n = ObjectWrap::Unwrap<NodeJs>(args.This())->getConstNode();
@@ -71,7 +71,7 @@ Handle<Value> NodeJs::getX(const Arguments& args) {
   return scope.Close(Number::New(n->getX()));
 }
 
-Handle<Value> NodeJs::getY(const Arguments& args) {
+Handle<Value> NodeJs::getY(const FunctionCallbackInfo<Value>& args) {
   HandleScope scope;
 
   ConstNodePtr n = ObjectWrap::Unwrap<NodeJs>(args.This())->getConstNode();
@@ -118,7 +118,7 @@ Handle<Object> NodeJs::New(NodePtr node)
   return scope.Close(result);
 }
 
-Handle<Value> NodeJs::New(const Arguments& args)
+Handle<Value> NodeJs::New(const FunctionCallbackInfo<Value>& args)
 {
   HandleScope scope;
 

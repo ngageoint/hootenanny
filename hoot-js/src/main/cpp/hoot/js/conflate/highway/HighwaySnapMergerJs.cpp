@@ -91,7 +91,7 @@ Handle<Object> HighwaySnapMergerJs::New(const HighwaySnapMergerPtr &ptr)
   return scope.Close(result);
 }
 
-Handle<Value> HighwaySnapMergerJs::New(const Arguments& args)
+Handle<Value> HighwaySnapMergerJs::New(const FunctionCallbackInfo<Value>& args)
 {
   HandleScope scope;
 
@@ -101,7 +101,7 @@ Handle<Value> HighwaySnapMergerJs::New(const Arguments& args)
   return args.This();
 }
 
-Handle<Value> HighwaySnapMergerJs::apply(const Arguments& args)
+Handle<Value> HighwaySnapMergerJs::apply(const FunctionCallbackInfo<Value>& args)
 {
   HandleScope scope;
 

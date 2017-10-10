@@ -57,79 +57,87 @@ ElementIdJs::~ElementIdJs()
 
 void ElementIdJs::Init(Handle<Object> target)
 {
+  Isolate* current = target->GetIsolate();
   // Prepare constructor template
-  Local<FunctionTemplate> tpl = FunctionTemplate::New(New);
-  tpl->SetClassName(String::NewSymbol(Element::className().data()));
+  Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
+  tpl->SetClassName(String::NewFromUtf8(current, Element::className().data()));
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
   // Prototype
   tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
-    String::New(ElementId::className().data()));
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("getId"),
-      FunctionTemplate::New(getType)->GetFunction());
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("getType"),
-      FunctionTemplate::New(getType)->GetFunction());
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("toString"),
-      FunctionTemplate::New(toString)->GetFunction());
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("toJSON"),
-      FunctionTemplate::New(toJSON)->GetFunction());
+    String::NewFromUtf8(current, ElementId::className().data()));
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getId"),
+      FunctionTemplate::New(current, getType)->GetFunction());
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getType"),
+      FunctionTemplate::New(current, getType)->GetFunction());
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "toString"),
+      FunctionTemplate::New(current, toString)->GetFunction());
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "toJSON"),
+      FunctionTemplate::New(current, toJSON)->GetFunction());
   tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
-                                String::New(ElementId::className().data()));
+                                String::NewFromUtf8(current, ElementId::className().data()));
 
 
-  _constructor = Persistent<Function>::New(tpl->GetFunction());
-  target->Set(String::NewSymbol("ElementId"), _constructor);
+  _constructor.Reset(current, tpl->GetFunction());
+  target->Set(String::NewFromUtf8(current, "ElementId"), ToLocal(&_constructor));
 }
 
 Handle<Object> ElementIdJs::New(ElementId eid)
 {
-  HandleScope scope;
+  Isolate* current = Isolate::GetCurrent();
+  EscapableHandleScope scope(current);
 
-  Handle<Object> result = _constructor->NewInstance();
+  Handle<Object> result = _constructor.Get(current)->NewInstance();
   ElementIdJs* from = ObjectWrap::Unwrap<ElementIdJs>(result);
   from->_eid = eid;
 
-  return scope.Close(result);
+  return scope.Escape(result);
 }
 
-Handle<Value> ElementIdJs::New(const Arguments& args)
+void ElementIdJs::New(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   ElementIdJs* obj = new ElementIdJs();
   obj->Wrap(args.This());
 
-  return args.This();
+  args.GetReturnValue().Set(args.This());
 }
 
-Handle<Value> ElementIdJs::getType(const Arguments& args)
+void ElementIdJs::getType(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   ElementId eid = ObjectWrap::Unwrap<ElementIdJs>(args.This())->getElementId();
 
-  return scope.Close(String::New(eid.getType().toString().toUtf8().data()));
+  args.GetReturnValue().Set(String::NewFromUtf8(current, eid.getType().toString().toUtf8().data()));
 }
 
-Handle<Value> ElementIdJs::toJSON(const Arguments& args)
+void ElementIdJs::toJSON(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   ElementId eid = ObjectWrap::Unwrap<ElementIdJs>(args.This())->getElementId();
 
-  Handle<Object> result = Object::New();
-  result->Set(String::NewSymbol("type"), String::New(eid.getType().toString().toUtf8().data()));
-  result->Set(String::NewSymbol("id"), v8::Integer::New(eid.getId()));
+  Handle<Object> result = Object::New(current);
+  result->Set(String::NewFromUtf8(current, "type"),
+              String::NewFromUtf8(current, eid.getType().toString().toUtf8().data()));
+  result->Set(String::NewFromUtf8(current, "id"),
+              v8::Integer::New(current, eid.getId()));
 
-  return scope.Close(result);
+  args.GetReturnValue().Set(result);
 }
 
-Handle<Value> ElementIdJs::toString(const Arguments& args)
+void ElementIdJs::toString(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   ElementId eid = ObjectWrap::Unwrap<ElementIdJs>(args.This())->getElementId();
 
-  return scope.Close(String::New(eid.toString().toUtf8().data()));
+  args.GetReturnValue().Set(String::NewFromUtf8(current, eid.toString().toUtf8().data()));
 }
 
 }

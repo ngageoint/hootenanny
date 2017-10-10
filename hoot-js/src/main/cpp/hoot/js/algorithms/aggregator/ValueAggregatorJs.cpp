@@ -81,7 +81,8 @@ void ValueAggregatorJs::Init(Handle<Object> target)
   }
 }
 
-Handle<Value> ValueAggregatorJs::New(const Arguments& args) {
+Handle<Value> ValueAggregatorJs::New(const FunctionCallbackInfo<Value>& args)
+{
   HandleScope scope;
 
   QString className = str(args.This()->GetConstructorName());
@@ -95,7 +96,7 @@ Handle<Value> ValueAggregatorJs::New(const Arguments& args) {
   return args.This();
 }
 
-Handle<Value> ValueAggregatorJs::toString(const Arguments& args)
+Handle<Value> ValueAggregatorJs::toString(const FunctionCallbackInfo<Value>& args)
 {
   HandleScope scope;
 

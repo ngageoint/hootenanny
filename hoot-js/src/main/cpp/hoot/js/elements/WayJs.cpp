@@ -98,7 +98,7 @@ Handle<Object> WayJs::New(WayPtr way)
   return scope.Close(result);
 }
 
-Handle<Value> WayJs::New(const Arguments& args)
+Handle<Value> WayJs::New(const FunctionCallbackInfo<Value>& args)
 {
   HandleScope scope;
 

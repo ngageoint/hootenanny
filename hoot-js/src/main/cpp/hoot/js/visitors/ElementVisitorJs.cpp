@@ -73,7 +73,7 @@ void ElementVisitorJs::Init(Handle<Object> target)
   }
 }
 
-Handle<Value> ElementVisitorJs::New(const Arguments& args) {
+Handle<Value> ElementVisitorJs::New(const FunctionCallbackInfo<Value>& args) {
   HandleScope scope;
 
   QString className = str(args.This()->GetConstructorName());

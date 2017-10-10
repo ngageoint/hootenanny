@@ -51,7 +51,8 @@ void PrintJs::Init(Handle<Object> exports)
   exports->Set(String::NewSymbol("print"), FunctionTemplate::New(jsPrint)->GetFunction());
 }
 
-Handle<Value> PrintJs::jsPrint(const Arguments& args) {
+Handle<Value> PrintJs::jsPrint(const FunctionCallbackInfo<Value>& args)
+{
   HandleScope scope;
 //  Context::Scope context_scope(Context::GetCurrent());
 

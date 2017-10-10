@@ -47,22 +47,24 @@ const double PluginContext::UNSPECIFIED_DEFAULT = -999999e9;
 
 PluginContext::PluginContext()
 {
-  HandleScope handleScope;
+  Isolate* current = Isolate::GetCurrent();
+  HandleScope handleScope(current);
 
   // Create a new context.
-  _context = Context::New();
-  _context->AllowCodeGenerationFromStrings(true);
+  _context.Reset(current, Context::New(current));
+  Handle<Context> context = _context.Get(current);
+  context->AllowCodeGenerationFromStrings(true);
 
   // Create a template for the global object where we set the
   // built-in global functions.
-  Handle<Object> global = _context->Global();
+  Handle<Object> global = context->Global();
 
   // Enter the created context for compiling and
   // running the hello world script.
-  Context::Scope context_scope(_context);
+  Context::Scope context_scope(context);
 
-  Handle<v8::Object> hns = Object::New();
-  global->Set(String::New("hoot"), hns);
+  Handle<v8::Object> hns = Object::New(current);
+  global->Set(String::NewFromUtf8(current, "hoot"), hns);
   JsRegistrar::getInstance().initAll(hns);
 
   QStringList includes = ConfigOptions().getPluginContextIncludes();
@@ -81,12 +83,13 @@ PluginContext::~PluginContext()
 
 Local<Value> PluginContext::call(Handle<Object> obj, QString name, QList<QVariant> args)
 {
-  HandleScope handleScope;
-  if (obj->Has(String::NewSymbol(name.toUtf8().data())) == false)
+  Isolate* current = obj->GetIsolate();
+  EscapableHandleScope handleScope(current);
+  if (obj->Has(String::NewFromUtf8(current, name.toUtf8().data())) == false)
   {
     throw InternalErrorException("Unable to find method in JS: " + name);
   }
-  Handle<v8::Value> value = obj->Get(String::NewSymbol(name.toUtf8().data()));
+  Handle<v8::Value> value = obj->Get(String::NewFromUtf8(current, name.toUtf8().data()));
   if (value->IsFunction() == false)
   {
     throw InternalErrorException("The specified object is not a function: " + name);
@@ -99,32 +102,34 @@ Local<Value> PluginContext::call(Handle<Object> obj, QString name, QList<QVarian
     jsArgs[i] = toValue(args[i]);
   }
 
-  return handleScope.Close(func->Call(obj, args.size(), jsArgs.data()));
+  return handleScope.Escape(func->Call(obj, args.size(), jsArgs.data()));
 }
 
 Local<Value> PluginContext::eval(QString e)
 {
-  return call(getContext()->Global(), "eval", QVariantList() << e);
+  return call(getContext(Isolate::GetCurrent())->Global(), "eval", QVariantList() << e);
 }
 
 bool PluginContext::hasKey(Handle<Value> v, QString key)
 {
+  Isolate* current = Isolate::GetCurrent();
   if (v->IsObject() == false)
   {
     throw IllegalArgumentException("Expected value to be an object.");
   }
   Handle<Object> obj = Handle<Object>::Cast(v);
 
-  Handle<String> keyStr = String::New(key.toUtf8());
+  Handle<String> keyStr = String::NewFromUtf8(current, key.toUtf8());
   return obj->Has(keyStr) == false;
 }
 
 Local<Object> PluginContext::loadScript(QString filename, QString loadInto)
 {
-  HandleScope handleScope;
+  Isolate* current = Isolate::GetCurrent();
+  EscapableHandleScope handleScope(current);
   // Enter the created context for compiling and
   // running the hello world script.
-  Context::Scope context_scope(_context);
+  Context::Scope context_scope(_context.Get(current));
 
   QFile fp(filename);
   LOG_TRACE("Loading script " << filename << "...");
@@ -137,25 +142,26 @@ Local<Object> PluginContext::loadScript(QString filename, QString loadInto)
 
   Handle<Object> result = loadText(text, loadInto, filename);
 
-  return handleScope.Close(result);
+  return handleScope.Escape(result);
 }
 
 // This is a duplicate of loadScript. Will refactor later once the rest is working
 Local<Object> PluginContext::loadText(QString text, QString loadInto, QString scriptName)
 {
-  HandleScope handleScope;
-  Context::Scope context_scope(_context);
+  Isolate* current = Isolate::GetCurrent();
+  EscapableHandleScope handleScope(current);
+  Context::Scope context_scope(_context.Get(current));
 
   Handle<Script> script;
 
-  Handle<Object> exports(Object::New());
-  _context->Global()->Set(String::New("exports"), exports);
+  Handle<Object> exports(Object::New(current));
+  _context.Get(current)->Global()->Set(String::NewFromUtf8(current, "exports"), exports);
 
   TryCatch try_catch;
 
   // Compile the source code.
   v8::ScriptOrigin origin(toV8(scriptName));
-  script = Script::Compile(String::New(text.toUtf8().data()), &origin);
+  script = Script::Compile(String::NewFromUtf8(current, text.toUtf8().data()), &origin);
 
   if (script.IsEmpty())
   {
@@ -167,22 +173,23 @@ Local<Object> PluginContext::loadText(QString text, QString loadInto, QString sc
 
   if (loadInto != "")
   {
-    _context->Global()->Set(String::New(loadInto.toUtf8()), exports);
+    _context.Get(current)->Global()->Set(String::NewFromUtf8(current, loadInto.toUtf8()), exports);
   }
 
-  return handleScope.Close(exports);
+  return handleScope.Escape(exports);
 }
 
 
 double PluginContext::toNumber(Handle<Value> v, QString key, double defaultValue)
 {
+  Isolate* current = Isolate::GetCurrent();
   if (v->IsObject() == false)
   {
     throw IllegalArgumentException("Expected value to be an object.");
   }
   Handle<Object> obj = Handle<Object>::Cast(v);
 
-  Handle<String> keyStr = String::New(key.toUtf8());
+  Handle<String> keyStr = String::NewFromUtf8(current, key.toUtf8());
   double result = defaultValue;
   if (obj->Has(keyStr) == false)
   {
@@ -201,7 +208,8 @@ double PluginContext::toNumber(Handle<Value> v, QString key, double defaultValue
 
 Local<Value> PluginContext::toValue(QVariant v)
 {
-  HandleScope handleScope;
+  Isolate* current = Isolate::GetCurrent();
+  EscapableHandleScope handleScope(current);
   Handle<Value> result;
   switch (v.type())
   {
@@ -210,13 +218,13 @@ Local<Value> PluginContext::toValue(QVariant v)
   case QVariant::LongLong:
   case QVariant::ULongLong:
   case QVariant::Double:
-    result = Number::New(v.toDouble());
+    result = Number::New(current, v.toDouble());
     break;
   default:
-    result = String::New(v.toString().toUtf8().data());
+    result = String::NewFromUtf8(current, v.toString().toUtf8().data());
   }
 
-  return handleScope.Close(result);
+  return handleScope.Escape(result);
 }
 
 }

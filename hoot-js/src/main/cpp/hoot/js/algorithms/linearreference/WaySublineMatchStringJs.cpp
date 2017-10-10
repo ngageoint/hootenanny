@@ -71,7 +71,7 @@ void WaySublineMatchStringJs::Init(Handle<Object> target)
   target->Set(String::NewSymbol("WaySublineMatchString"), _constructor);
 }
 
-Handle<Value> WaySublineMatchStringJs::New(const Arguments& args)
+Handle<Value> WaySublineMatchStringJs::New(const FunctionCallbackInfo<Value>& args)
 {
   HandleScope scope;
 
@@ -92,7 +92,7 @@ Handle<Object> WaySublineMatchStringJs::New(WaySublineMatchStringPtr sm)
   return scope.Close(result);
 }
 
-Handle<Value> WaySublineMatchStringJs::toString(const Arguments& args)
+Handle<Value> WaySublineMatchStringJs::toString(const FunctionCallbackInfo<Value>& args)
 {
   HandleScope scope;
 

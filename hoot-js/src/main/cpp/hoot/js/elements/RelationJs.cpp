@@ -101,7 +101,7 @@ Handle<Object> RelationJs::New(RelationPtr relation)
   return scope.Close(result);
 }
 
-Handle<Value> RelationJs::New(const Arguments& args)
+Handle<Value> RelationJs::New(const FunctionCallbackInfo<Value>& args)
 {
   HandleScope scope;
 
