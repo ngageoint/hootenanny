@@ -21,7 +21,7 @@ sudo yum -y install epel-release >> CentOS_upgrade.txt 2>&1
 
 # add the Postgres repo
 echo "### Add Postgres repo ###" > CentOS_upgrade.txt
-sudo rpm -Uvh http://yum.postgresql.org/9.5/redhat/rhel-7-x86_64/pgdg-centos95-9.5-3.noarch.rpm >> CentOS_upgrade.txt 2>&1
+sudo rpm -Uvh https://download.postgresql.org/pub/repos/yum/9.5/redhat/rhel-7-x86_64/pgdg-centos95-9.5-3.noarch.rpm  >> CentOS_upgrade.txt 2>&1
 
 echo "Updating OS..."
 echo "### Update ###" >> CentOS_upgrade.txt
