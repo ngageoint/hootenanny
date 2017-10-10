@@ -29,14 +29,14 @@
 // hoot
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
-#include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/algorithms/string/StringTokenizer.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/elements/Tags.h>
-#include <hoot/rnd/io/ImplicitTagRulesWriter.h>
 #include <hoot/rnd/io/ImplicitTagRulesWriterFactory.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/io/ElementVisitorInputStream.h>
+#include <hoot/core/visitors/TranslationVisitor.h>
 
 // Qt
 #include <QStringBuilder>
@@ -47,7 +47,9 @@ namespace hoot
 PoiImplicitTagRulesDeriver::PoiImplicitTagRulesDeriver() :
 _avgTagsPerRule(0),
 _avgWordsPerRule(0),
-_statusUpdateInterval(ConfigOptions().getApidbBulkInserterFileOutputStatusUpdateInterval())
+_statusUpdateInterval(ConfigOptions().getApidbBulkInserterFileOutputStatusUpdateInterval()),
+_highestRuleWordCount(0),
+_highestRuleTagCount(0)
 {
 }
 
@@ -73,6 +75,12 @@ QStringList PoiImplicitTagRulesDeriver::_getPoiKvps(const Tags& tags) const
 void PoiImplicitTagRulesDeriver::_updateForNewWord(QString word, const QString kvp)
 {
   LOG_TRACE("Updating word: " << word << " with kvp: " << kvp << "...");
+
+  //'=' is used as a map key for kvps, so it needs to be escaped in the word
+  if (word.contains("="))
+  {
+    word = word.replace("=", "%3D");
+  }
 
   const QString lowerCaseWord = word.toLower();
   if (_wordCaseMappings.contains(lowerCaseWord))
@@ -114,14 +122,24 @@ void PoiImplicitTagRulesDeriver::_updateForNewWord(QString word, const QString k
   LOG_VART(_wordTagKeysToTagValues[wordKvpKey]);
 }
 
-void PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs, const QStringList outputs,
+void PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs,
+                                             const QStringList translationScripts,
+                                             const QStringList outputs,
                                              const QStringList typeKeys,
                                              const int minOccurancesThreshold)
 {
+  if (inputs.size() != translationScripts.size())
+  {
+    LOG_VARD(inputs.size());
+    LOG_VARD(translationScripts.size());
+    throw HootException(
+      "The size of the input datasets list must equal the size of the list of translation scripts.");
+  }
+
   LOG_INFO(
-    "Deriving POI implicit tag rules for inputs: " << inputs << " type keys: " << typeKeys <<
-    " with minimum occurance threshold: " << minOccurancesThreshold <<
-    ".  Writing to outputs: " << outputs << "...");
+    "Deriving POI implicit tag rules for inputs: " << inputs << ", translation scripts: " <<
+    translationScripts << ", type keys: " << typeKeys << ", and minimum occurance threshold: " <<
+    minOccurancesThreshold << ".  Writing to outputs: " << outputs << "...");
 
   QStringList typeKeysAllowed;
   for (int i = 0; i < typeKeys.size(); i++)
@@ -139,6 +157,9 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs, const QSt
     inputReader->open(inputs.at(i));
     boost::shared_ptr<ElementInputStream> inputStream =
       boost::dynamic_pointer_cast<ElementInputStream>(inputReader);
+    boost::shared_ptr<TranslationVisitor> translationVisitor(new TranslationVisitor());
+    translationVisitor->setPath(translationScripts.at(i));
+    inputStream.reset(new ElementVisitorInputStream(inputReader, translationVisitor));
 
     StringTokenizer tokenizer;
     while (inputStream->hasMoreElements())
@@ -193,7 +214,7 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs, const QSt
 
         nodeCount++;
 
-        if (nodeCount % _statusUpdateInterval == 0)
+        if (nodeCount % (_statusUpdateInterval * 100) == 0)
         {
           PROGRESS_INFO(
             "Parsed " << StringUtils::formatLargeNumber(nodeCount) << " nodes from input.");
@@ -202,20 +223,28 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs, const QSt
     }
     inputReader->finalizePartial();
   }
+  LOG_VARD(_wordCaseMappings.size());
   _wordCaseMappings.clear();
 
   //TODO: try to reduce these mutiple passes over the data down to a single pass
   _removeKvpsBelowOccuranceThreshold(minOccurancesThreshold);
   _removeDuplicatedKeyTypes();
   _removeIrrelevantKeyTypes(typeKeysAllowed);
-  _tagRulesByWord = _generateTagRulesByWord();
-  _tagRules = _rulesByWordToRules(_tagRulesByWord);
+  LOG_VARD(_wordTagKeysToTagValues.size());
+  _wordTagKeysToTagValues.clear();
+  _generateTagRulesByWord();
+  _rulesByWordToRules(_tagRulesByWord);
+  _unescapeRuleWords();
 
   LOG_INFO(
     "Generated " << StringUtils::formatLargeNumber(_tagRules.size()) <<
     " implicit tag rules for " << StringUtils::formatLargeNumber(_tagRulesByWord.size()) <<
     " unique words and " << StringUtils::formatLargeNumber(poiCount) << " POIs (" <<
-    StringUtils::formatLargeNumber(nodeCount) << "nodes parsed).");
+    StringUtils::formatLargeNumber(nodeCount) << " nodes parsed).");
+  LOG_INFO("Average words per rule: " << _avgWordsPerRule);
+  LOG_INFO("Average tags per rule: " << _avgTagsPerRule);
+  LOG_INFO("Highest rule word count: " << _highestRuleWordCount);
+  LOG_INFO("Highest rule tag count: " << _highestRuleTagCount);
 
   for (int i = 0; i < outputs.size(); i++)
   {
@@ -232,9 +261,12 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs, const QSt
 
 void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccuranceThreshold(const int minOccurancesThreshold)
 {
-  LOG_DEBUG(
-    "Removing duplicated kvp below mininum occurance threshold: " << minOccurancesThreshold <<
-    "...");
+  if (minOccurancesThreshold == 1)
+  {
+    return;
+  }
+
+  LOG_DEBUG("Removing tags below mininum occurance threshold: " << minOccurancesThreshold << "...");
 
   QMap<QString, long> updatedCounts; //*
   //Tgs::BigMap<QString, long> updatedCounts;
@@ -277,10 +309,10 @@ void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccuranceThreshold(const int mi
   }
 
   _wordKvpsToOccuranceCounts = updatedCounts;
-  _wordTagKeysToTagValues= updatedValues;
+  _wordTagKeysToTagValues = updatedValues;
 
   LOG_DEBUG(
-    "Removed " << StringUtils::formatLargeNumber(kvpRemovalCount) << " tag instances that " <<
+    "Removed " << StringUtils::formatLargeNumber(kvpRemovalCount) << " tags that " <<
     "fell below the minimum occurrance threshold of " << minOccurancesThreshold);
 }
 
@@ -291,7 +323,7 @@ void PoiImplicitTagRulesDeriver::_removeIrrelevantKeyTypes(const QStringList typ
     return;
   }
 
-  LOG_DEBUG("Removing irrelevant kvps...");
+  LOG_DEBUG("Removing irrelevant tags...");
 
   QMap<QString, long> updatedCounts; //*
   QMap<QString, QStringList> updatedValues; //*
@@ -317,16 +349,16 @@ void PoiImplicitTagRulesDeriver::_removeIrrelevantKeyTypes(const QStringList typ
   }
 
   _wordKvpsToOccuranceCounts = updatedCounts;
-  _wordTagKeysToTagValues= updatedValues;
+  _wordTagKeysToTagValues = updatedValues;
 
   LOG_DEBUG(
     "Removed " << StringUtils::formatLargeNumber(irrelevantKvpRemovalCount) <<
-    " tag instances that did not belong to the specified types list.");
+    " irrelevant tags that did not belong to the specified tag types list.");
 }
 
 void PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
 {
-  LOG_DEBUG("Removing duplicated kvp types...");
+  LOG_DEBUG("Removing duplicated tag types...");
 
   QMap<QString, long> updatedCounts; //*
   QMap<QString, QStringList> updatedValues; //*
@@ -404,15 +436,14 @@ void PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
 
   LOG_DEBUG(
     "Removed " << StringUtils::formatLargeNumber(duplicatedKeyTypeRemovalCount) <<
-    " tag values belonged to the same tag key for a give word.");
+    " tag values belonged to the same tag key for a given word.");
 }
 
-ImplicitTagRulesByWord PoiImplicitTagRulesDeriver::_generateTagRulesByWord()
+void PoiImplicitTagRulesDeriver::_generateTagRulesByWord()
 {
   LOG_DEBUG("Generating rules by word output...");
 
-  //key=<word>, value=map: key=<kvp>, value=<kvp occurance count>
-  ImplicitTagRulesByWord wordsToKvpsWithCounts;
+  //_tagRulesByWord: key=<word>, value=map: key=<kvp>, value=<kvp occurance count>
 
   for (QMap<QString, long>::const_iterator kvpsWithCountsItr = _wordKvpsToOccuranceCounts.begin();
        kvpsWithCountsItr != _wordKvpsToOccuranceCounts.end(); ++kvpsWithCountsItr)
@@ -424,73 +455,166 @@ ImplicitTagRulesByWord PoiImplicitTagRulesDeriver::_generateTagRulesByWord()
     {
       LOG_VARE(word);
     }
+    LOG_VART(word);
+
     const QString kvp = wordKvpParts[1];
+    LOG_VART(kvp);
     const long kvpCount = kvpsWithCountsItr.value();
+    LOG_VART(kvpCount);
 
-    if (!wordsToKvpsWithCounts.contains(word))
+    if (!_tagRulesByWord.contains(word))
     {
-      wordsToKvpsWithCounts[word] = QMap<QString, long>();
+      _tagRulesByWord[word] = QMap<QString, long>();
     }
-    QMap<QString, long> kvpsWithCounts = wordsToKvpsWithCounts[word];
+    QMap<QString, long> kvpsWithCounts = _tagRulesByWord[word];
     kvpsWithCounts[kvp] = kvpCount;
-    wordsToKvpsWithCounts[word] = kvpsWithCounts;
+    _tagRulesByWord[word] = kvpsWithCounts;
   }
-
-  return wordsToKvpsWithCounts;
+  LOG_VARD(_wordKvpsToOccuranceCounts.size());
+  _wordKvpsToOccuranceCounts.clear();
 }
 
-ImplicitTagRules PoiImplicitTagRulesDeriver::_rulesByWordToRules(
-  const ImplicitTagRulesByWord& rulesByWord)
+void PoiImplicitTagRulesDeriver::_rulesByWordToRules(const ImplicitTagRulesByWord& rulesByWord)
 {
   LOG_DEBUG("Generating rules output...");
 
-  ImplicitTagRules tagRules;
-
-  long totalWordInstances = 0;
-  long totalTagInstances = 0;
+  //key=<concatenated kvps list>, value=<rule>
   QMap<QString, ImplicitTagRulePtr> tagsToRules;
   //key=<word>, value=map: key=<kvp>, value=<kvp occurance count>
   for (ImplicitTagRulesByWord::const_iterator rulesByWordItr = rulesByWord.begin();
        rulesByWordItr != rulesByWord.end(); ++rulesByWordItr)
   {
-    const QString word = rulesByWordItr.key();
+    QString word = rulesByWordItr.key();
+    if (word.contains("="))
+    {
+      LOG_VARE(word);
+    }
     LOG_VART(word);
 
-    QMap<QString, long> kvpsWithCounts = rulesByWordItr.value();
-    LOG_VART(kvpsWithCounts);
+    const QSet<QString> kvps = rulesByWordItr.value().keys().toSet();
+    const QString kvpsStr = _kvpsToString(kvps);
+    LOG_VART(kvpsStr);
+
     ImplicitTagRulePtr rule;
-    for (QMap<QString, long>::const_iterator kvpsWithCountsItr = kvpsWithCounts.begin();
-         kvpsWithCountsItr != kvpsWithCounts.end(); ++kvpsWithCountsItr)
+    if (tagsToRules.contains(kvpsStr))
     {
-      const QString kvp =  kvpsWithCountsItr.key();
-      LOG_VART(kvp);
-      //not concerned with counts here, b/c we've already eliminated all rules below the min
-      //allowed threshold
-      if (tagsToRules.contains(kvp))
-      {
-        LOG_TRACE("Tag: " << kvp << " already exists for rule.");
-        rule = tagsToRules[kvp];
-      }
-      else
-      {
-        LOG_TRACE("Creating new rule for tag: " << kvp << "...");
-        rule.reset(new ImplicitTagRule());
-        tagsToRules[kvp] = rule;
-        tagRules.append(rule);
-        LOG_VART(tagRules.size());
-        rule->getTags().appendValue(kvp);
-      }
-      rule->getWords().insert(word);
+      LOG_TRACE("Tag set already exists for rule.");
+      rule = tagsToRules[kvpsStr];
     }
+    else
+    {
+      LOG_TRACE("Creating new rule for tag set...");
+      rule.reset(new ImplicitTagRule());
+      tagsToRules[kvpsStr] = rule;
+      _tagRules.append(rule);
+      LOG_VART(_tagRules.size());
+      const Tags tags = _kvpsToTags(kvps);
+      LOG_VART(tags);
+      rule->setTags(tags);
+    }
+    rule->getWords().insert(word);
 
     LOG_VART(rule->getWords());
     LOG_VART(rule->getTags());
   }
 
-  _avgWordsPerRule = 0;
-  _avgTagsPerRule = 0;
+  long totalWordInstances = 0;
+  long totalTagInstances = 0;
+  for (ImplicitTagRules::const_iterator rulesItr = _tagRules.begin(); rulesItr != _tagRules.end();
+       ++rulesItr)
+  {
+    const ImplicitTagRulePtr rule = *rulesItr;
 
-  return tagRules;
+    const long ruleWordCount = rule->getWords().size();
+    totalWordInstances += ruleWordCount;
+    if (ruleWordCount > _highestRuleWordCount)
+    {
+      _highestRuleWordCount = ruleWordCount;
+    }
+
+    const long ruleTagCount = rule->getTags().size();
+    totalTagInstances += ruleTagCount;
+    if (ruleTagCount > _highestRuleTagCount)
+    {
+      _highestRuleTagCount = ruleTagCount;
+    }
+  }
+  if (_tagRules.size() > 0)
+  {
+    _avgWordsPerRule = totalWordInstances / _tagRules.size();
+    _avgTagsPerRule = totalTagInstances / _tagRules.size();
+  }
+}
+
+Tags PoiImplicitTagRulesDeriver::_kvpsToTags(const QSet<QString>& kvps)
+{
+  Tags tags;
+  for (QSet<QString>::const_iterator kvpsItr = kvps.begin(); kvpsItr != kvps.end(); ++kvpsItr)
+  {
+    tags.appendValue(*kvpsItr);
+  }
+  return tags;
+}
+
+QString PoiImplicitTagRulesDeriver::_kvpsToString(const QSet<QString>& kvps)
+{
+  QString kvpsStr;
+  for (QSet<QString>::const_iterator kvpsItr = kvps.begin(); kvpsItr != kvps.end(); ++kvpsItr)
+  {
+    kvpsStr += *kvpsItr % ";";
+  }
+  kvpsStr.chop(1);
+  return kvpsStr;
+}
+
+void PoiImplicitTagRulesDeriver::_unescapeRuleWords()
+{
+  LOG_DEBUG("Unescaping rule words...");
+
+  ImplicitTagRulesByWord rulesByWord;
+  for (ImplicitTagRulesByWord::const_iterator rulesByWordItr = _tagRulesByWord.begin();
+       rulesByWordItr != _tagRulesByWord.end(); ++rulesByWordItr)
+  {
+    QString word = rulesByWordItr.key();
+    if (word.contains("="))
+    {
+      LOG_VARE(word);
+    }
+    if (word.contains("%3D"))
+    {
+      word = word.replace("%3D", "=");
+    }
+    else if (word.contains("%3d"))
+    {
+      word = word.replace("%3d", "=");
+    }
+
+    rulesByWord[word] = rulesByWordItr.value();
+  }
+  _tagRulesByWord = rulesByWord;
+
+  for (ImplicitTagRules::iterator rulesItr = _tagRules.begin(); rulesItr != _tagRules.end();
+       ++rulesItr)
+  {
+    ImplicitTagRulePtr rule = *rulesItr;
+    const QSet<QString> ruleWords = rule->getWords();
+    QSet<QString> modifiedRuleWords;
+    for (QSet<QString>::const_iterator wordsItr = ruleWords.begin(); wordsItr != ruleWords.end();
+         ++wordsItr)
+    {
+      QString word = *wordsItr;
+      if (word.contains("%3D"))
+      {
+        word = word.replace("%3D", "=");
+      }
+      else if (word.contains("%3d"))
+      {
+        word = word.replace("%3d", "=");
+      }
+      modifiedRuleWords.insert(word);
+    }
+    rule->setWords(modifiedRuleWords);
+  }
 }
 
 }

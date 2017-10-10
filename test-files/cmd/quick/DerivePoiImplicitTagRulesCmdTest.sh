@@ -18,9 +18,7 @@ INPUT_DIR=test-files/io/PoiImplicitTagRulesDeriverTest
 rm -rf $OUTPUT_DIR
 mkdir -p $OUTPUT_DIR
 
-#HOOT_OPTS="--warn -D uuid.helper.repeatable=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D max.elements.per.partial.map=2"
-
-hoot derive-poi-implicit-tag-rules --warn "$INPUT_DIR/yemen-crop-2.osm.pbf;$INPUT_DIR/philippines-1.osm.pbf" "$OUTPUT_DIR/DerivePoiImplicitTagRulesCmdTest-out.json;$OUTPUT_DIR/DerivePoiImplicitTagRulesCmdTest-out.tsv;$OUTPUT_DIR/DerivePoiImplicitTagRulesCmdTest-out.sqlite" "amenity;tourism;building" 4
+hoot derive-poi-implicit-tag-rules --warn "$INPUT_DIR/yemen-crop-2.osm.pbf;$INPUT_DIR/philippines-1.osm.pbf" "translations/OSM_Ingest.js;translations/OSM_Ingest.js" "$OUTPUT_DIR/DerivePoiImplicitTagRulesCmdTest-out.json;$OUTPUT_DIR/DerivePoiImplicitTagRulesCmdTest-out.tsv;$OUTPUT_DIR/DerivePoiImplicitTagRulesCmdTest-out.sqlite" "amenity;tourism;building" 4
 
 #only checking the json and tsv files here
 diff $REF_DIR/DerivePoiImplicitTagRulesCmdTest.json $OUTPUT_DIR/DerivePoiImplicitTagRulesCmdTest-out.json

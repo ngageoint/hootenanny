@@ -63,6 +63,7 @@ void ImplicitTagRulesSqliteWriter::open(const QString url)
   {
     throw HootException(QObject::tr("Error removing existing %1 for writing.").arg(url));
   }
+  outputFile.open(QIODevice::WriteOnly);
 
   if (!QSqlDatabase::contains(url))
   {

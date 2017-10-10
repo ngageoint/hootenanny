@@ -43,6 +43,9 @@ class PoiImplicitTagRulesDeriverTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runMinOccuranceThresholdTest);
   CPPUNIT_TEST(runMultipleInputsTest);
   CPPUNIT_TEST(runNameCaseTest);
+  //TODO
+  //CPPUNIT_TEST(runInputTranslationScriptSizeMismatchTest);
+  //CPPUNIT_TEST(runEqualsInNameTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -60,11 +63,15 @@ public:
       outDir() + "/PoiImplicitTagRulesDeriverTest-runBasicTest-out.json";
     const QString dbOutputFile =
       outDir() + "/PoiImplicitTagRulesDeriverTest-runBasicTest-out.sqlite";
+
+    QStringList translationScripts;
+    translationScripts.append("translations/OSM_Ingest.js");
+
     QStringList outputs;
     outputs.append(jsonOutputFile);
     outputs.append(dbOutputFile);
 
-    PoiImplicitTagRulesDeriver().deriveRules(inputs, outputs);
+    PoiImplicitTagRulesDeriver().deriveRules(inputs, translationScripts, outputs);
 
     HOOT_FILE_EQUALS(inDir() + "/PoiImplicitTagRulesDeriverTest-runBasicTest.json", jsonOutputFile);
 
@@ -80,6 +87,10 @@ public:
 
     QStringList inputs;
     inputs.append(inDir() + "/yemen-crop-2.osm.pbf");
+
+    QStringList translationScripts;
+    translationScripts.append("translations/OSM_Ingest.js");
+
     const QString jsonOutputFile =
       outDir() + "/PoiImplicitTagRulesDeriverTest-runTypeKeysTest-out.json";
     const QString dbOutputFile =
@@ -93,7 +104,7 @@ public:
     typeKeys.append("tourism");
     typeKeys.append("building");
 
-    PoiImplicitTagRulesDeriver().deriveRules(inputs, outputs, typeKeys);
+    PoiImplicitTagRulesDeriver().deriveRules(inputs, translationScripts, outputs, typeKeys);
 
     HOOT_FILE_EQUALS(
       inDir() + "/PoiImplicitTagRulesDeriverTest-runTypeKeysTest.json", jsonOutputFile);
@@ -110,6 +121,10 @@ public:
 
     QStringList inputs;
     inputs.append(inDir() + "/yemen-crop-2.osm.pbf");
+
+    QStringList translationScripts;
+    translationScripts.append("translations/OSM_Ingest.js");
+
     const QString jsonOutputFile =
       outDir() + "/PoiImplicitTagRulesDeriverTest-runMinOccuranceThresholdTest-out.json";
     const QString dbOutputFile =
@@ -118,7 +133,7 @@ public:
     outputs.append(jsonOutputFile);
     outputs.append(dbOutputFile);
 
-    PoiImplicitTagRulesDeriver().deriveRules(inputs, outputs, QStringList(), 4);
+    PoiImplicitTagRulesDeriver().deriveRules(inputs, translationScripts, outputs, QStringList(), 4);
 
     HOOT_FILE_EQUALS(
       inDir() + "/PoiImplicitTagRulesDeriverTest-runMinOccuranceThresholdTest.json", jsonOutputFile);
@@ -136,6 +151,11 @@ public:
     QStringList inputs;
     inputs.append(inDir() + "/yemen-crop-2.osm.pbf");
     inputs.append(inDir() + "/philippines-1.osm.pbf");
+
+    QStringList translationScripts;
+    translationScripts.append("translations/OSM_Ingest.js");
+    translationScripts.append("translations/OSM_Ingest.js");
+
     const QString jsonOutputFile =
       outDir() + "/PoiImplicitTagRulesDeriverTest-runMultipleInputsTest-out.json";
     const QString dbOutputFile =
@@ -144,7 +164,7 @@ public:
     outputs.append(jsonOutputFile);
     outputs.append(dbOutputFile);
 
-    PoiImplicitTagRulesDeriver().deriveRules(inputs, outputs);
+    PoiImplicitTagRulesDeriver().deriveRules(inputs, translationScripts, outputs);
 
     HOOT_FILE_EQUALS(
       inDir() + "/PoiImplicitTagRulesDeriverTest-runMultipleInputsTest.json", jsonOutputFile);
@@ -164,6 +184,10 @@ public:
 
     QStringList inputs;
     inputs.append(inDir() + "/PoiImplicitTagRulesDeriverTest-runNameCaseTest.osm");
+
+    QStringList translationScripts;
+    translationScripts.append("translations/OSM_Ingest.js");
+
     const QString jsonOutputFile =
       outDir() + "/PoiImplicitTagRulesDeriverTest-runNameCaseTest-out.json";
     const QString dbOutputFile =
@@ -172,7 +196,7 @@ public:
     outputs.append(jsonOutputFile);
     outputs.append(dbOutputFile);
 
-    PoiImplicitTagRulesDeriver().deriveRules(inputs, outputs);
+    PoiImplicitTagRulesDeriver().deriveRules(inputs, translationScripts, outputs);
 
     HOOT_FILE_EQUALS(
       inDir() + "/PoiImplicitTagRulesDeriverTest-runNameCaseTest.json", jsonOutputFile);

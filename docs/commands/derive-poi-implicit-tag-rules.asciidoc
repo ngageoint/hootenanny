@@ -1,0 +1,28 @@
+== derive-poi-implicit-tag-rules
+
+=== Description
+
+Given input features, creates a set of rules which can be used to add tags implicitly to POIs, given their names.
+
+* +inputs+                 - semicolon delimited list of input paths to supported Hootenanny OSM data formats
+* +translations+           - semicolon delimited list of translation scripts used to translate each input dataset
+* +outputs+                - semicolon delimited list of output paths to supported tag rules output formats; supported
+                             formats include Sqlite database (.db), JSON (.json), and comma delimited (.tsv); NOTE: 
+                             Only the Sqlite database 
+                             format can be used by conflation.
+* +typeKeys+               - optional semicolon delimited list of tag keys to use when deriving implicit types; by default
+                             all types are considered parameter required if minOccurancesThreshold is specified
+* +minOccurancesThreshold+ - optional minimum number of occurances of a tag in order for a rule to be derived for 
+                             the tag; specify '1' to consider all type tag occurances
+
+=== Usage
+
+--------------------------------------
+derive-poi-implicit-tag-rules (inputs) (translations) (outputs) [typeKeys] [minOccurancesThreshold]
+--------------------------------------
+
+==== Examples
+
+--------------------------------------
+hoot derive-poi-implicit-tag-rules "myInput.osm.pbf;myInput.geonames" "translations/OSM_Ingest.js;translations/GeoNames.js" "rules.json;rules.sqlite" "amenity;tourism;building" 4
+--------------------------------------

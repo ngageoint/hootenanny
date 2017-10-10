@@ -48,24 +48,33 @@ public:
 
   virtual int runSimple(QStringList args)
   {
-    //TODO: make the second two params not required?
-    if (args.size() != 4)
+    if (args.size() < 3 || args.size() > 5)
     {
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes four parameters.").arg(getName()));
+      throw HootException(QString("%1 takes three to five parameters.").arg(getName()));
     }
 
-    bool ok = false;
-    const int minOccurancesThreshold = args[3].toInt(&ok);
-    if (!ok || minOccurancesThreshold < 1)
+    QStringList types;
+    if (args.size() > 3)
     {
-      throw IllegalArgumentException(
-        "Invalid value for the minimum number of type occurrances allowed: " + args[3]);
+      types = args[3].trimmed().split(";");
+    }
+
+    int minOccurancesThreshold = 1;
+    if (args.size() > 4)
+    {
+      bool ok = false;
+      minOccurancesThreshold = args[4].toInt(&ok);
+      if (!ok || minOccurancesThreshold < 1)
+      {
+        throw IllegalArgumentException(
+          "Invalid value for the minimum number of type occurrances allowed: " + args[4]);
+      }
     }
 
     PoiImplicitTagRulesDeriver().deriveRules(
-      args[0].trimmed().split(";"), args[1].trimmed().split(";"),  args[2].trimmed().split(";"),
-      minOccurancesThreshold);
+      args[0].trimmed().split(";"), args[1].trimmed().split(";"), args[2].trimmed().split(";"),
+      types, minOccurancesThreshold);
 
     return 0;
   }

@@ -98,6 +98,7 @@ public:
    * @return a collection of tags
    */
   Tags& getTags() { return _tags; }
+  void setTags(const Tags& tags) { _tags = tags; }
 
 private:
 

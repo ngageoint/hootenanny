@@ -56,6 +56,8 @@ public:
    * Derives implicit tag rules for POIs given input data and writes the rules to output
    *
    * @param inputs a list of hoot supported feature input formats to derive rules from
+   * @param translationScripts list of OSM translation scripts corresponding to the datasets
+   * specified by the inputs parameter
    * @param outputs a list of hoot supported implicit tag rule output formats
    * @param typeKeys an optional list of OSM tag keys for which to derive rules; if empty, rules
    * will be derived for all OSM types
@@ -63,8 +65,9 @@ public:
    * deriving rules; rules will only be derived when a word is associated with a particular tag
    * at least as many times as this value
    */
-  void deriveRules(const QStringList inputs, const QStringList outputs,
-                   const QStringList typeKeys = QStringList(), const int minOccurancesThreshold = 1);
+  void deriveRules(const QStringList inputs, const QStringList translationScripts,
+                   const QStringList outputs, const QStringList typeKeys = QStringList(),
+                   const int minOccurancesThreshold = 1);
 
 private:
 
@@ -79,10 +82,12 @@ private:
   //key=<lower case word>, value=<word>
   QMap<QString, QString> _wordCaseMappings; //*
   //TODO
-  QStringList _wordsToIgnore;
-  long _avgTagsPerRule;
-  long _avgWordsPerRule;
+  //QStringList _wordsToIgnore;
+  double _avgTagsPerRule;
+  double _avgWordsPerRule;
   long _statusUpdateInterval;
+  long _highestRuleWordCount;
+  long _highestRuleTagCount;
 
   ImplicitTagRulesByWord _tagRulesByWord;
   ImplicitTagRules _tagRules;
@@ -92,8 +97,11 @@ private:
   void _removeKvpsBelowOccuranceThreshold(const int minOccurancesThreshold);
   void _removeDuplicatedKeyTypes();
   void _removeIrrelevantKeyTypes(const QStringList typeKeysAllowed);
-  ImplicitTagRulesByWord _generateTagRulesByWord();
-  ImplicitTagRules _rulesByWordToRules(const ImplicitTagRulesByWord& rulesByWord);
+  void _generateTagRulesByWord();
+  void _rulesByWordToRules(const ImplicitTagRulesByWord& rulesByWord);
+  Tags _kvpsToTags(const QSet<QString>& kvps);
+  QString _kvpsToString(const QSet<QString>& kvps);
+  void _unescapeRuleWords();
 };
 
 }

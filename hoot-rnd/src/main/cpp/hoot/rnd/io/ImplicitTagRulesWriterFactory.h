@@ -27,12 +27,14 @@
 #ifndef IMPLICITTAGRULESWRITERFACTORY_H
 #define IMPLICITTAGRULESWRITERFACTORY_H
 
+// Hoot
+#include <hoot/rnd/io/ImplicitTagRulesWriter.h>
+
 // Qt
 #include <QString>
 
 namespace hoot
 {
-class ImplicitTagRulesWriter;
 
 /**
  * A factory for constructing implicit tag rule writers based on an output URL

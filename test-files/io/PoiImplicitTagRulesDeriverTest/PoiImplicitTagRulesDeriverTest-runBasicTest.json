@@ -119,7 +119,7 @@
   },
   {
     "word": "Burj",
-    "tourism=hotel": 1
+    "tourism=viewpoint": 1
   },
   {
     "word": "Burj Al Salam",
@@ -377,7 +377,7 @@
   {
     "word": "National",
     "amenity=arts_centre": 1,
-    "tourism=museum": 1
+    "tourism=viewpoint": 1
   },
   {
     "word": "National Art Center Roof Terrace",
@@ -484,7 +484,7 @@
   },
   {
     "word": "Salam",
-    "tourism=hotel": 1
+    "tourism=viewpoint": 1
   },
   {
     "word": "Sam",
@@ -965,7 +965,7 @@
   {
     "word": "الوطني",
     "amenity=arts_centre": 3,
-    "tourism=museum": 3
+    "tourism=viewpoint": 3
   },
   {
     "word": "اليمن",

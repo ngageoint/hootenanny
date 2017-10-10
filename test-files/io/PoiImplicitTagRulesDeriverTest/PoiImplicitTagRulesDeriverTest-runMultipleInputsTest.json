@@ -212,7 +212,7 @@
   },
   {
     "word": "Burj",
-    "tourism=hotel": 1
+    "tourism=viewpoint": 1
   },
   {
     "word": "Burj Al Salam",
@@ -224,7 +224,7 @@
   },
   {
     "word": "Cafe",
-    "amenity=bar": 1
+    "amenity=cafe": 1
   },
   {
     "word": "CALES",
@@ -614,7 +614,7 @@
   {
     "word": "MACTAN",
     "amenity=school": 3,
-    "historic=memorial": 1,
+    "historic=monument": 1,
     "place=village": 2,
     "tourism=guest_house": 2
   },
@@ -759,7 +759,7 @@
   {
     "word": "National",
     "amenity=school": 3,
-    "tourism=museum": 1
+    "tourism=viewpoint": 1
   },
   {
     "word": "National Art Center Roof Terrace",
@@ -939,7 +939,7 @@
   },
   {
     "word": "Salam",
-    "tourism=hotel": 1
+    "tourism=viewpoint": 1
   },
   {
     "word": "Sam",
@@ -1137,15 +1137,15 @@
   },
   {
     "word": "Womb",
-    "amenity=bar": 1
+    "amenity=cafe": 1
   },
   {
     "word": "Wombat's",
-    "amenity=bar": 1
+    "amenity=cafe": 1
   },
   {
     "word": "Wombat's Womb Cafe",
-    "amenity=bar": 1
+    "amenity=cafe": 1
   },
   {
     "word": "Yassin",
@@ -1564,7 +1564,7 @@
   {
     "word": "الوطني",
     "amenity=arts_centre": 3,
-    "tourism=museum": 3
+    "tourism=viewpoint": 3
   },
   {
     "word": "اليمن",
