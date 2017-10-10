@@ -48,13 +48,15 @@ PrintJs::~PrintJs() {}
 
 void PrintJs::Init(Handle<Object> exports)
 {
-  exports->Set(String::NewSymbol("print"), FunctionTemplate::New(jsPrint)->GetFunction());
+  Isolate* current = exports->GetIsolate();
+  exports->Set(String::NewFromUtf8(current, "print"),
+               FunctionTemplate::New(current, jsPrint)->GetFunction());
 }
 
-Handle<Value> PrintJs::jsPrint(const FunctionCallbackInfo<Value>& args)
+void PrintJs::jsPrint(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
-//  Context::Scope context_scope(Context::GetCurrent());
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   QString result;
 
@@ -70,7 +72,7 @@ Handle<Value> PrintJs::jsPrint(const FunctionCallbackInfo<Value>& args)
 
   cout << result.toUtf8().data() << endl;
 
-  return scope.Close(Undefined());
+  args.GetReturnValue().SetUndefined();
 }
 
 }

@@ -43,7 +43,7 @@ private:
   OsmWriterJs();
   ~OsmWriterJs();
 
-  static v8::Handle<v8::Value> toString(const v8::Arguments& args);
+  static void toString(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
 

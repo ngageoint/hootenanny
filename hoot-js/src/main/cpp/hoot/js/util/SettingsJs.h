@@ -42,11 +42,11 @@ private:
   SettingsJs();
   ~SettingsJs();
 
-  static v8::Handle<v8::Value> get(const v8::Arguments& args);
-  static v8::Handle<v8::Value> getAll(const v8::Arguments& args);
-  static v8::Handle<v8::Value> getValue(const v8::Arguments& args);
-  static v8::Handle<v8::Value> loadJson(const v8::Arguments& args);
-  static v8::Handle<v8::Value> set(const v8::Arguments& args);
+  static void get(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void getAll(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void getValue(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void loadJson(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void set(const v8::FunctionCallbackInfo<v8::Value>& args);
 
 };
 

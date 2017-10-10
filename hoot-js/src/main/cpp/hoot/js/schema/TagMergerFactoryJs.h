@@ -42,7 +42,7 @@ private:
   TagMergerFactoryJs();
   ~TagMergerFactoryJs();
 
-  static v8::Handle<v8::Value> mergeTags(const v8::Arguments& args);
+  static void mergeTags(const v8::FunctionCallbackInfo<v8::Value>& args);
 
 };
 
