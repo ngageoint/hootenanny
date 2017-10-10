@@ -55,23 +55,30 @@ namespace hoot {
 
 HOOT_FACTORY_REGISTER(OsmMapWriter, OsmJsonWriter)
 
-OsmJsonWriter::OsmJsonWriter(int precision) :
-_includeDebug(ConfigOptions().getWriterIncludeDebugTags()),
-_precision(precision),
-_out(0),
-_pretty(false)
+OsmJsonWriter::OsmJsonWriter(int precision)
+  : _includeDebug(ConfigOptions().getWriterIncludeDebugTags()),
+    _precision(precision),
+    _out(0),
+    _pretty(false),
+    _writeEmptyTags(false)
 {
 }
 
 QString OsmJsonWriter::markupString(const QString& str)
 {
   QString s = str;
-  s.replace('\\', "\\\\");
-  s.replace('\"', "\\\"");
   s.replace('\n', "\\n");
   s.replace('\t', "\\t");
   s.replace('\r', "\\r");
-  return "\"" % s % "\"";
+  //  Don't add quotes around JSON values
+  if (s.startsWith("{") || s.startsWith("[") || s == "null")
+    return s;
+  else
+  {
+    s.replace('\\', "\\\\");
+    s.replace('\"', "\\\"");
+    return "\"" % s % "\"";
+  }
 }
 
 void OsmJsonWriter::open(QString url)
@@ -200,7 +207,7 @@ bool OsmJsonWriter::_hasTags(ConstElementPtr e)
 
 void OsmJsonWriter::_writeTag(const QString& key, const QString& value, bool& firstTag)
 {
-  if (key.isEmpty() == false && value.isEmpty() == false)
+  if (key.isEmpty() == false && (value.isEmpty() == false || _writeEmptyTags))
   {
     if (firstTag)
     {

@@ -91,6 +91,11 @@ public:
    */
   QString toString(ConstOsmMapPtr map);
 
+  /**
+   * Allow the writer to write empty tags to JSON
+   */
+  void SetWriteEmptyTags(bool writeEmpty) { _writeEmptyTags = writeEmpty; }
+
 protected:
   ConstOsmMapPtr _map;
   bool _includeDebug;
@@ -99,6 +104,7 @@ protected:
   QIODevice* _out;
   bool _pretty;
   bool _firstElement;
+  bool _writeEmptyTags;
 
   static QString _typeName(ElementType e);
 

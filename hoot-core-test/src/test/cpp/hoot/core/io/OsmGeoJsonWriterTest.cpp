@@ -53,6 +53,7 @@ class OsmGeoJsonWriterTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runAllDataTypesTest);
   CPPUNIT_TEST(runDcTigerTest);
   CPPUNIT_TEST(runBostonSubsetRoadBuildingTest);
+  CPPUNIT_TEST(runObjectGeoJsonTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -75,6 +76,11 @@ public:
     Log::getInstance().setLevel(Log::Error);
     runTest("test-files/BostonSubsetRoadBuilding_FromOsm.osm", "BostonSubsetRoadBuilding.geojson");
     Log::getInstance().setLevel(loglLevel);
+  }
+
+  void runObjectGeoJsonTest()
+  {
+    runTest("test-files/io/GeoJson/SampleObjectsWriter.osm", "SampleObjectsWriter.geojson");
   }
 
   void runTest(const QString& input, const QString& output)

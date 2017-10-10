@@ -61,8 +61,10 @@ namespace hoot {
 
 HOOT_FACTORY_REGISTER(OsmMapWriter, OsmGeoJsonWriter)
 
-OsmGeoJsonWriter::OsmGeoJsonWriter(int precision) : OsmJsonWriter(precision)
+OsmGeoJsonWriter::OsmGeoJsonWriter(int precision)
+  : OsmJsonWriter(precision)
 {
+  _writeEmptyTags = true;
 }
 
 void OsmGeoJsonWriter::write(ConstOsmMapPtr map)
