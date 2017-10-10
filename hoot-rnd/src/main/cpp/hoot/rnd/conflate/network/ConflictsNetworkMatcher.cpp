@@ -139,31 +139,32 @@ void ConflictsNetworkMatcher::_removeDupes()
 {
   LOG_DEBUG("Removing duplicate edges...");
 
+  // Bail out if we only have one match
+  if (_edgeMatches->getAllMatches().size() < 2)
+    return;
+
   QHash<ConstEdgeMatchPtr,double>::iterator it1 = _edgeMatches->getAllMatches().begin();
   QHash<ConstEdgeMatchPtr,double>::iterator it2 = _edgeMatches->getAllMatches().begin();
 
-  //  Check for empty edge matches, only test it1 because currently it1 == it2
-  if (it1 == _edgeMatches->getAllMatches().end())
-    return;
-
-  ++it2;
-
   while (it1 != _edgeMatches->getAllMatches().end())
   {
+    it2 = it1;
+    ++it2;
+
     while (it2 != _edgeMatches->getAllMatches().end())
     {
-      if (it2.key()->isVerySimilarTo(it1.key()))
+      if (it1.key()->isVerySimilarTo(it2.key()))
       {
         double score1 = it1.value();
         double score2 = it2.value();
         if (score1 > score2)
         {
-          LOG_TRACE("Removing " << *it2);
+          LOG_TRACE("Removing " << it2.key()->toString());
           it2 = _edgeMatches->getAllMatches().erase(it2);
         }
         else
         {
-          LOG_TRACE("Removing " << *it1);
+          LOG_TRACE("Removing " << it1.key()->toString());
           it1 = _edgeMatches->getAllMatches().erase(it1);
           it2 = it1;
           ++it2;
@@ -533,8 +534,8 @@ void ConflictsNetworkMatcher::_iterateSimple()
       LOG_VART(denominator);
     }
 
-    // If the denominator trends to 0, we pollute the system with NaNs
-    if (denominator > 0.0)
+    // If the denominator trends to close to 0, we pollute the system with NaNs
+    if (denominator > EPSILON)
       newScores[em] = pow(numerator / denominator, aggression);
     else
       newScores[em] = 0.0;
@@ -550,6 +551,9 @@ void ConflictsNetworkMatcher::_iterateSimple()
              newWeights[em]);
   }
 
+  // Some testing shows that 0.1 works pretty swell here. 2 works as well, but seems aggressive.
+  // .1 seems conservative...
+  _weightInfluence = 0.1;
   foreach (ConstEdgeMatchPtr em, newWeights.keys())
   {
     newWeights[em] = pow(newWeights[em] * newWeights.size() / weightSum, _weightInfluence);

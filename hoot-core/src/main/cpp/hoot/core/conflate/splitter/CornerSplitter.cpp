@@ -94,7 +94,7 @@ void CornerSplitter::splitCorners()
         double h2 = atan2(next.getCoordinate().y - current.getCoordinate().y,
                           next.getCoordinate().x - current.getCoordinate().x);
 
-        double threshold = toRadians(45.0);
+        double threshold = toRadians(55.0);
         double delta = fabs(h2-h1);
 
         if (delta > M_PI)

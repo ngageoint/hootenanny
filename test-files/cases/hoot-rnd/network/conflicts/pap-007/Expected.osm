@@ -733,6 +733,10 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-316"/>
     </node>
+    <node visible="true" id="-315" timestamp="2017-06-07T15:18:21Z" version="1" changeset="119" lat="18.5495872999999953" lon="-72.3396675000000045">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-315"/>
+    </node>
     <node visible="true" id="-314" timestamp="2017-06-07T15:18:21Z" version="1" changeset="119" lat="18.5490552999999991" lon="-72.3397614000000004">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-314"/>
@@ -2024,7 +2028,7 @@
     </way>
     <way visible="true" id="-769" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-316"/>
-        <nd ref="-200"/>
+        <nd ref="-315"/>
         <nd ref="-314"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="source" v="osm;osm"/>
@@ -4373,22 +4377,33 @@
         <tag k="hoot:id" v="-606"/>
     </way>
     <way visible="true" id="-605" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-200"/>
+        <nd ref="-315"/>
         <nd ref="-316"/>
         <nd ref="-200"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="hot_iom_cosmha;osm;osm"/>
-        <tag k="uuid" v="{3bfb20f5-daa2-4cbb-bcca-7e45b88828eb}"/>
+        <tag k="width:minimum_traveled_way" v="8"/>
+        <tag k="source" v="hot_iom_cosmha;osm;mgcp"/>
+        <tag k="condition" v="functional"/>
         <tag k="name" v="Rue Docteur Aubry"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="bad"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="tertiary"/>
+        <tag k="lanes" v="2"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="median" v="no"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="operational_status" v="open"/>
+        <tag k="attribution" v="osm;osm"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.145Z"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="highway" v="tertiary"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="uuid" v="{3bfb20f5-daa2-4cbb-bcca-7e45b88828eb};{{d5dd6c71-1f98-4bf2-9238-6a9acd8e5934}}"/>
+        <tag k="location" v="surface"/>
+        <tag k="smoothness" v="bad"/>
+        <tag k="operational_status_quality" v="confirmed"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-605"/>
     </way>
@@ -6258,7 +6273,7 @@
     </way>
     <way visible="true" id="-484" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-138"/>
-        <nd ref="-200"/>
+        <nd ref="-315"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="source" v="osm;osm"/>
         <tag k="uuid" v="{a6c936cc-e2ad-49d5-9dad-8fe5537675f8}"/>
@@ -8162,7 +8177,7 @@
     </way>
     <way visible="true" id="-297" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-314"/>
-        <nd ref="-200"/>
+        <nd ref="-315"/>
         <tag k="width:minimum_traveled_way" v="8"/>
         <tag k="source" v="hot_iom_cosmha;osm;mgcp"/>
         <tag k="condition" v="functional"/>
@@ -10476,16 +10491,6 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-3"/>
     </way>
-    <relation visible="true" id="-315" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-200" role="reviewee"/>
-        <member type="way" ref="-605" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="type" v="review"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-315"/>
-    </relation>
     <relation visible="true" id="-314" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-574" role="reviewee"/>
         <member type="way" ref="-365" role="reviewee"/>

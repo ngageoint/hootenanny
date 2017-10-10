@@ -28,6 +28,7 @@
 
 // hoot
 #include <hoot/core/util/Log.h>
+#include <hoot/core/elements/Node.h>
 
 namespace hoot
 {
@@ -57,6 +58,20 @@ QString NetworkVertex::toString() const
   }
 
   return result;
+}
+
+geos::geom::Coordinate NetworkVertex::getCentroid() const
+{
+  if (ElementType::Node == _e->getElementType().getEnum())
+  {
+    ConstNodePtr pNode = boost::dynamic_pointer_cast<const Node>(_e);
+    return pNode->toCoordinate();
+  }
+  else
+  {
+    LOG_ERROR("Please implement getCentroid for ElementType: " << _e->getElementType());
+    return geos::geom::Coordinate();
+  }
 }
 
 }
