@@ -36,6 +36,7 @@
 #include <hoot/rnd/io/ImplicitTagRulesWriter.h>
 #include <hoot/rnd/io/ImplicitTagRulesWriterFactory.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 // Qt
 #include <QStringBuilder>
@@ -43,7 +44,10 @@
 namespace hoot
 {
 
-PoiImplicitTagRulesDeriver::PoiImplicitTagRulesDeriver()
+PoiImplicitTagRulesDeriver::PoiImplicitTagRulesDeriver() :
+_avgTagsPerRule(0),
+_avgWordsPerRule(0),
+_statusUpdateInterval(ConfigOptions().getApidbBulkInserterFileOutputStatusUpdateInterval())
 {
 }
 
@@ -125,6 +129,8 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs, const QSt
     typeKeysAllowed.append(typeKeys.at(i).toLower());
   }
 
+  long poiCount = 0;
+  long nodeCount = 0;
   for (int i = 0; i < inputs.size(); i++)
   {
     boost::shared_ptr<PartialOsmMapReader> inputReader =
@@ -173,7 +179,24 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs, const QSt
                 }
               }
             }
+
+            poiCount++;
+
+            if (poiCount % _statusUpdateInterval == 0)
+            {
+              PROGRESS_INFO(
+                "Derived implicit tags for " << StringUtils::formatLargeNumber(poiCount) <<
+                " POIs.");
+            }
           }
+        }
+
+        nodeCount++;
+
+        if (nodeCount % _statusUpdateInterval == 0)
+        {
+          PROGRESS_INFO(
+            "Parsed " << StringUtils::formatLargeNumber(nodeCount) << " nodes from input.");
         }
       }
     }
@@ -187,6 +210,12 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs, const QSt
   _removeIrrelevantKeyTypes(typeKeysAllowed);
   _tagRulesByWord = _generateTagRulesByWord();
   _tagRules = _rulesByWordToRules(_tagRulesByWord);
+
+  LOG_INFO(
+    "Generated " << StringUtils::formatLargeNumber(_tagRules.size()) <<
+    " implicit tag rules for " << StringUtils::formatLargeNumber(_tagRulesByWord.size()) <<
+    " unique words and " << StringUtils::formatLargeNumber(poiCount) << " POIs (" <<
+    StringUtils::formatLargeNumber(nodeCount) << "nodes parsed).");
 
   for (int i = 0; i < outputs.size(); i++)
   {
@@ -407,10 +436,6 @@ ImplicitTagRulesByWord PoiImplicitTagRulesDeriver::_generateTagRulesByWord()
     wordsToKvpsWithCounts[word] = kvpsWithCounts;
   }
 
-  LOG_INFO(
-    "Generated implicit tag rules for " <<
-    StringUtils::formatLargeNumber(wordsToKvpsWithCounts.size()) << " unique words.");
-
   return wordsToKvpsWithCounts;
 }
 
@@ -421,6 +446,8 @@ ImplicitTagRules PoiImplicitTagRulesDeriver::_rulesByWordToRules(
 
   ImplicitTagRules tagRules;
 
+  long totalWordInstances = 0;
+  long totalTagInstances = 0;
   QMap<QString, ImplicitTagRulePtr> tagsToRules;
   //key=<word>, value=map: key=<kvp>, value=<kvp occurance count>
   for (ImplicitTagRulesByWord::const_iterator rulesByWordItr = rulesByWord.begin();
@@ -428,6 +455,7 @@ ImplicitTagRules PoiImplicitTagRulesDeriver::_rulesByWordToRules(
   {
     const QString word = rulesByWordItr.key();
     LOG_VART(word);
+
     QMap<QString, long> kvpsWithCounts = rulesByWordItr.value();
     LOG_VART(kvpsWithCounts);
     ImplicitTagRulePtr rule;
@@ -452,14 +480,16 @@ ImplicitTagRules PoiImplicitTagRulesDeriver::_rulesByWordToRules(
         LOG_VART(tagRules.size());
         rule->getTags().appendValue(kvp);
       }
-      rule->getWords().append(word);
+      rule->getWords().insert(word);
     }
+
     LOG_VART(rule->getWords());
     LOG_VART(rule->getTags());
   }
 
-  LOG_INFO(
-    "Generated " << StringUtils::formatLargeNumber(tagRules.size()) << " implicit tag rules.");
+  _avgWordsPerRule = 0;
+  _avgTagsPerRule = 0;
+
   return tagRules;
 }
 

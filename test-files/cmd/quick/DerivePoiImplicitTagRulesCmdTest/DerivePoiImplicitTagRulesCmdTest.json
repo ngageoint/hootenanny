@@ -1,0 +1,160 @@
+[
+  {
+    "word": "Abhar",
+    "amenity=hospital": 4
+  },
+  {
+    "word": "BF Country Homes Subdivision",
+    "tourism=guest_house": 4
+  },
+  {
+    "word": "Camella",
+    "tourism=viewpoint": 4
+  },
+  {
+    "word": "Choobi",
+    "amenity=restaurant": 4
+  },
+  {
+    "word": "Country",
+    "tourism=guest_house": 4
+  },
+  {
+    "word": "Hay",
+    "amenity=hospital": 4
+  },
+  {
+    "word": "HOMES",
+    "tourism=viewpoint": 8
+  },
+  {
+    "word": "Hotel",
+    "tourism=hotel": 4
+  },
+  {
+    "word": "lapu",
+    "tourism=viewpoint": 4
+  },
+  {
+    "word": "Lapu-Lapu",
+    "tourism=viewpoint": 4
+  },
+  {
+    "word": "Markaz",
+    "amenity=hospital": 4
+  },
+  {
+    "word": "Markaz al Umumah wa at Tufulah fi Hay al Abhar",
+    "amenity=hospital": 4
+  },
+  {
+    "word": "mosque",
+    "amenity=place_of_worship": 4
+  },
+  {
+    "word": "Petron",
+    "amenity=fuel": 4
+  },
+  {
+    "word": "Phase",
+    "tourism=viewpoint": 4
+  },
+  {
+    "word": "School",
+    "amenity=school": 8
+  },
+  {
+    "word": "Subdivision",
+    "tourism=guest_house": 4
+  },
+  {
+    "word": "Tufulah",
+    "amenity=hospital": 4
+  },
+  {
+    "word": "Umumah",
+    "amenity=hospital": 4
+  },
+  {
+    "word": "الأبهر",
+    "amenity=hospital": 4
+  },
+  {
+    "word": "الأمومة",
+    "amenity=hospital": 4
+  },
+  {
+    "word": "التحرير",
+    "amenity=post_office": 4,
+    "tourism=attraction": 4
+  },
+  {
+    "word": "الزبيب",
+    "tourism=attraction": 4
+  },
+  {
+    "word": "الطفولة",
+    "amenity=hospital": 4
+  },
+  {
+    "word": "المتحف",
+    "tourism=museum": 5
+  },
+  {
+    "word": "باب",
+    "tourism=attraction": 5
+  },
+  {
+    "word": "بريد",
+    "amenity=post_office": 4
+  },
+  {
+    "word": "جامع",
+    "amenity=place_of_worship": 7
+  },
+  {
+    "word": "فندق",
+    "tourism=hotel": 10
+  },
+  {
+    "word": "قبة",
+    "amenity=place_of_worship": 5
+  },
+  {
+    "word": "كباب",
+    "amenity=restaurant": 4
+  },
+  {
+    "word": "لشراب",
+    "tourism=attraction": 4
+  },
+  {
+    "word": "مدرسة",
+    "amenity=school": 5
+  },
+  {
+    "word": "مركز",
+    "amenity=hospital": 4
+  },
+  {
+    "word": "مركز الأمومة و الطفولة في حي الأبهر",
+    "amenity=hospital": 4
+  },
+  {
+    "word": "مسجد",
+    "amenity=place_of_worship": 6,
+    "building=mosque": 4
+  },
+  {
+    "word": "مكتب",
+    "amenity=post_office": 7
+  },
+  {
+    "word": "مكتب بريد التحرير",
+    "amenity=post_office": 4
+  },
+  {
+    "word": "والشعير",
+    "tourism=attraction": 4
+  }
+]

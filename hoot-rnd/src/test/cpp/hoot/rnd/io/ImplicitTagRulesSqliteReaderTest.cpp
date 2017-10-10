@@ -48,7 +48,7 @@ public:
   void runTagsTest()
   {
     ImplicitTagRulesSqliteReader reader;
-    reader.open("test-files/io/ImplicitTagRulesSqliteReaderTest/rules.db");
+    reader.open("test-files/io/ImplicitTagRulesSqliteReaderTest/rules.sqlite");
 
     QSet<QString> words;
     words.insert("Mosque");
@@ -152,7 +152,7 @@ public:
   void runMultipleRulesTest()
   {
     ImplicitTagRulesSqliteReader reader;
-    reader.open("test-files/io/ImplicitTagRulesSqliteReaderTest/rules.db");
+    reader.open("test-files/io/ImplicitTagRulesSqliteReaderTest/rules.sqlite");
 
     QSet<QString> words;
     QSet<QString> ruleWordsInvolved;

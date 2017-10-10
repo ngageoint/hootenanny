@@ -47,43 +47,43 @@ public:
   void runWriteTest()
   {
     const QString outputDir = "test-output/io/ImplicitTagRulesSqliteWriterTest";
-    const QString outputFile = outputDir + "/rules-out.db";
+    const QString outputFile = outputDir + "/rules-out.sqlite";
     QDir().mkpath(outputDir);
 
     ImplicitTagRules rules;
 
     //rule #1
     rules.append(ImplicitTagRulePtr(new ImplicitTagRule()));
-    rules.back()->getWords().append(QString::fromUtf8("Mosque")); //word #1
+    rules.back()->getWords().insert(QString::fromUtf8("Mosque")); //word #1
     rules.back()->getTags().appendValue("amenity=place_of_worship"); //tag #1
     rules.back()->getTags().appendValue("leisure=park"); //tag #2
 
     //rule #2
     rules.append(ImplicitTagRulePtr(new ImplicitTagRule()));
-    rules.back()->getWords().append(QString::fromUtf8("Masjid")); //word #2
+    rules.back()->getWords().insert(QString::fromUtf8("Masjid")); //word #2
     rules.back()->getTags().appendValue("amenity=place_of_worship"); //tag #1
     rules.back()->getTags().appendValue("tourism=hotel"); //tag #3
 
     //rule #3
     rules.append(ImplicitTagRulePtr(new ImplicitTagRule()));
-    rules.back()->getWords().append(QString::fromUtf8("Sidi Muhammad")); //word #3
+    rules.back()->getWords().insert(QString::fromUtf8("Sidi Muhammad")); //word #3
     rules.back()->getTags().appendValue("amenity=grave_yard"); //tag #4
 
     //rule #4
     rules.append(ImplicitTagRulePtr(new ImplicitTagRule()));
-    rules.back()->getWords().append(QString::fromUtf8("Eid Prayer Ground")); //word #4
-    rules.back()->getWords().append(QString::fromUtf8("Eid Prayer Ground 2")); //word #5
+    rules.back()->getWords().insert(QString::fromUtf8("Eid Prayer Ground")); //word #4
+    rules.back()->getWords().insert(QString::fromUtf8("Eid Prayer Ground 2")); //word #5
     rules.back()->getTags().appendValue("amenity=place_of_worship"); //tag #1
 
     //rule #5
     rules.append(ImplicitTagRulePtr(new ImplicitTagRule()));
-    rules.back()->getWords().append(QString::fromUtf8("Mustashfa")); //word #6
-    rules.back()->getWords().append(QString::fromUtf8("Mustashfa alwhdt")); //word #7
+    rules.back()->getWords().insert(QString::fromUtf8("Mustashfa")); //word #6
+    rules.back()->getWords().insert(QString::fromUtf8("Mustashfa alwhdt")); //word #7
     rules.back()->getTags().appendValue("amenity=hospital"); //tag #5
 
     //rule #6
     rules.append(ImplicitTagRulePtr(new ImplicitTagRule()));
-    rules.back()->getWords().append(QString::fromUtf8("alwhdt")); //word #8
+    rules.back()->getWords().insert(QString::fromUtf8("alwhdt")); //word #8
     rules.back()->getTags().appendValue("amenity=clinic"); //tag #6
 
     ImplicitTagRulesSqliteWriter writer;
@@ -279,7 +279,6 @@ private:
     if (!QSqlDatabase::contains(path))
     {
       _db = QSqlDatabase::addDatabase("QSQLITE", path);
-      //_db = QSqlDatabase::addDatabase("QSQLITE");
       _db.setDatabaseName(path);
     }
     else

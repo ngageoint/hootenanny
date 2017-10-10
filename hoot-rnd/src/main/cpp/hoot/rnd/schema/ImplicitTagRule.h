@@ -31,10 +31,10 @@
 #include <hoot/core/elements/Tags.h>
 
 // Qt
-#include <QStringList>
+#include <QSet>
 
 // STXXL
-#include <stxxl/map>
+//#include <stxxl/map>
 
 namespace hoot
 {
@@ -76,7 +76,7 @@ namespace hoot
 //};
 
 /**
- *
+ * A rule that can be applied to add tags to a feature derived implicitly from the feature's name
  */
 class ImplicitTagRule
 {
@@ -84,12 +84,24 @@ public:
 
   ImplicitTagRule();
 
-  QStringList& getWords() { return _words; }
+  /**
+   * Returns all words associated with this rule
+   *
+   * @return a collection of words
+   */
+  QSet<QString>& getWords() { return _words; }
+  void setWords(const QSet<QString>& words) { _words = words; }
+
+  /**
+   * Returns all tags associated with this rule
+   *
+   * @return a collection of tags
+   */
   Tags& getTags() { return _tags; }
 
 private:
 
-  QStringList _words;
+  QSet<QString> _words;
   Tags _tags;
 };
 

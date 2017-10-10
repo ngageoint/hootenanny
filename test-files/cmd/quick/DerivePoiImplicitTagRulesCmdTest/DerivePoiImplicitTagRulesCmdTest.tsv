@@ -1,0 +1,78 @@
+Abhar	amenity=hospital
+	4
+BF Country Homes Subdivision	tourism=guest_house
+	4
+Camella	tourism=viewpoint
+	4
+Choobi	amenity=restaurant
+	4
+Country	tourism=guest_house
+	4
+Hay	amenity=hospital
+	4
+HOMES	tourism=viewpoint
+	8
+Hotel	tourism=hotel
+	4
+lapu	tourism=viewpoint
+	4
+Lapu-Lapu	tourism=viewpoint
+	4
+Markaz	amenity=hospital
+	4
+Markaz al Umumah wa at Tufulah fi Hay al Abhar	amenity=hospital
+	4
+mosque	amenity=place_of_worship
+	4
+Petron	amenity=fuel
+	4
+Phase	tourism=viewpoint
+	4
+School	amenity=school
+	8
+Subdivision	tourism=guest_house
+	4
+Tufulah	amenity=hospital
+	4
+Umumah	amenity=hospital
+	4
+الأبهر	amenity=hospital
+	4
+الأمومة	amenity=hospital
+	4
+التحرير	amenity=post_office	tourism=attraction
+	4	4
+الزبيب	tourism=attraction
+	4
+الطفولة	amenity=hospital
+	4
+المتحف	tourism=museum
+	5
+باب	tourism=attraction
+	5
+بريد	amenity=post_office
+	4
+جامع	amenity=place_of_worship
+	7
+فندق	tourism=hotel
+	10
+قبة	amenity=place_of_worship
+	5
+كباب	amenity=restaurant
+	4
+لشراب	tourism=attraction
+	4
+مدرسة	amenity=school
+	5
+مركز	amenity=hospital
+	4
+مركز الأمومة و الطفولة في حي الأبهر	amenity=hospital
+	4
+مسجد	amenity=place_of_worship	building=mosque
+	6	4
+مكتب	amenity=post_office
+	7
+مكتب بريد التحرير	amenity=post_office
+	4
+والشعير	tourism=attraction
+	4

@@ -35,7 +35,7 @@ namespace hoot
 class ImplicitTagRulesWriter;
 
 /**
- * A factory for constructing changeset writers based on the URL.
+ * A factory for constructing implicit tag rule writers based on an output URL
  */
 class ImplicitTagRulesWriterFactory
 {
@@ -43,8 +43,19 @@ public:
 
   ImplicitTagRulesWriterFactory();
 
+  /**
+   * Creates an implicit tag rules writer, given an output URL
+   *
+   * @param url output location
+   * @return an ImplicitTagRulesWriter object
+   */
   boost::shared_ptr<ImplicitTagRulesWriter> createWriter(QString url);
 
+  /**
+   * Retrieves the Singleton instance for this factory
+   *
+   * @return a factory instance
+   */
   static ImplicitTagRulesWriterFactory& getInstance();
 
 private:

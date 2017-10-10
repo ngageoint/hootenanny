@@ -496,13 +496,6 @@ Bounds used by the map cropper when cropping a map, of the form: minx,miny,maxx,
 
 Debugging: The filename to use when saving the debug map during conflation.
 
-=== derive.implicit.tags.database
-
-* Data Type: string
-* Default Value: `dictionary/ImplicitTags.sqlite`
-
-TODO
-
 === dual.way.splitter.driving.side
 
 * Data Type: string
@@ -1798,6 +1791,13 @@ current directory (CWD), $CWD/rules, $HOOT_HOME/rules.
 
 If true, POI conflation will ignore the types of the features being compared completely as long as
 those being compared have a populated name field.
+
+=== poi.implicit.tag.rules.database
+
+* Data Type: string
+* Default Value: `conf/dictionary/ImplicitTagRules.sqlite`
+
+Database used to derive POI type tags implicitly based on a POI's name.
 
 === poi.match.threshold
 

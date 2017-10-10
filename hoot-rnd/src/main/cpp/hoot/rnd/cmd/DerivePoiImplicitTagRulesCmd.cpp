@@ -36,15 +36,15 @@ namespace hoot
 {
 
 /**
- *
+ * Derives implicit tag rules for POIs and writes the output in various formats
  */
-class DeriveImplicitTagRulesCmd : public BaseCommand
+class DerivePoiImplicitTagRulesCmd : public BaseCommand
 {
 public:
 
-  static std::string className() { return "hoot::DeriveImplicitTagRulesCmd"; }
+  static std::string className() { return "hoot::DerivePoiImplicitTagRulesCmd"; }
 
-  virtual QString getName() const { return "derive-implicit-tag-rules"; }
+  virtual QString getName() const { return "derive-poi-implicit-tag-rules"; }
 
   virtual int runSimple(QStringList args)
   {
@@ -71,6 +71,6 @@ public:
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, DeriveImplicitTagRulesCmd)
+HOOT_FACTORY_REGISTER(Command, DerivePoiImplicitTagRulesCmd)
 
 }

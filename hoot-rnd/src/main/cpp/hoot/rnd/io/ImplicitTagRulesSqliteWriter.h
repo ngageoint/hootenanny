@@ -41,7 +41,7 @@ namespace hoot
 {
 
 /**
- *
+ * Writes implicit tag rules ot a Sqlite database
  */
 class ImplicitTagRulesSqliteWriter : public ImplicitTagRulesWriter
 {
@@ -53,14 +53,29 @@ public:
   ImplicitTagRulesSqliteWriter();
   ~ImplicitTagRulesSqliteWriter();
 
+  /**
+   * @see ImplicitTagRulesWriter
+   */
   virtual bool isSupported(const QString url);
 
+  /**
+   * @see ImplicitTagRulesWriter
+   */
   virtual void open(const QString url);
 
+  /**
+   * @see ImplicitTagRulesWriter
+   */
   virtual void write(const ImplicitTagRules& rules);
 
+  /**
+   * not supported
+   */
   virtual void write(const ImplicitTagRulesByWord& rules);
 
+  /**
+   * @see ImplicitTagRulesWriter
+   */
   virtual void close();
 
 private:

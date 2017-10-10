@@ -53,7 +53,7 @@ ImplicitTagRulesSqliteWriter::~ImplicitTagRulesSqliteWriter()
 
 bool ImplicitTagRulesSqliteWriter::isSupported(const QString url)
 {
-  return url.endsWith(".db", Qt::CaseInsensitive);
+  return url.endsWith(".sqlite", Qt::CaseInsensitive);
 }
 
 void ImplicitTagRulesSqliteWriter::open(const QString url)
@@ -151,11 +151,11 @@ void ImplicitTagRulesSqliteWriter::write(const ImplicitTagRules& rules)
     ImplicitTagRulePtr rule = *rulesItr;
 
     //Words per rule are all unique, so insert them every time.
-    const QStringList words = rule->getWords();
+    const QSet<QString> words = rule->getWords();
     QList<long> wordIds;
-    for (int i = 0; i < words.size(); i++)
+    for (QSet<QString>::const_iterator wordItr = words.begin(); wordItr != words.end(); ++wordItr)
     {
-      wordIds.append(_insertWord(words.at(i)));
+      wordIds.append(_insertWord(*wordItr));
     }
 
     //Each tag grouping per rule is unique, but each tag is not.  So, check to see if a tag

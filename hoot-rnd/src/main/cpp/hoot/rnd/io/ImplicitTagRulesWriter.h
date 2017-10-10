@@ -34,7 +34,7 @@ namespace hoot
 {
 
 /**
- *
+ * Interface for writing implicit tag rules to output
  */
 class ImplicitTagRulesWriter
 {
@@ -43,8 +43,18 @@ public:
 
   static std::string className() { return "hoot::ImplicitTagRulesWriter"; }
 
+  /**
+   * Writes implicit tag rules to output
+   *
+   * @param rules a collection of implicit tag rules
+   */
   virtual void write(const ImplicitTagRules& rules) = 0;
 
+  /**
+   *  Writes implicit tag rules organized by word to output
+   *
+   * @param rules a collection of implicit tag rules organized by word
+   */
   virtual void write(const ImplicitTagRulesByWord& rules) = 0;
 
   /**

@@ -37,7 +37,7 @@ namespace hoot
 {
 
 /**
- *
+ * Writes implicit tag rules to a JSON file
  */
 class ImplicitTagRulesTsvWriter : public ImplicitTagRulesWriter
 {
@@ -49,14 +49,29 @@ public:
   ImplicitTagRulesTsvWriter();
   ~ImplicitTagRulesTsvWriter();
 
+  /**
+   * @see ImplicitTagRulesWriter
+   */
   virtual bool isSupported(const QString url);
 
+  /**
+   * @see ImplicitTagRulesWriter
+   */
   virtual void open(const QString url);
 
+  /**
+   * not supported
+   */
   virtual void write(const ImplicitTagRules& rules);
 
+  /**
+   * @see ImplicitTagRulesWriter
+   */
   virtual void write(const ImplicitTagRulesByWord& rules);
 
+  /**
+   * @see ImplicitTagRulesWriter
+   */
   virtual void close();
 
 private:

@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef DERIVEIMPLICITTAGSVISITOR_H
-#define DERIVEIMPLICITTAGSVISITOR_H
+#ifndef ADDIMPLICITLYDERIVEDTAGSPOIVISITOR_H
+#define ADDIMPLICITLYDERIVEDTAGSPOIVISITOR_H
 
 // hoot
 #include <hoot/core/elements/ElementVisitor.h>
@@ -35,18 +35,23 @@ namespace hoot
 {
 
 /**
- * Derive tags based on the names.
+ * Adds tags implicitly derived from POI names to POIs
  */
-class DeriveImplicitTagsVisitor : public ElementVisitor
+class AddImplicitlyDerivedTagsPoiVisitor : public ElementVisitor
 {
 public:
 
-  static std::string className() { return "hoot::DeriveImplicitTagsVisitor"; }
+  static std::string className() { return "hoot::AddImplicitlyDerivedTagsPoiVisitor"; }
 
-  DeriveImplicitTagsVisitor();
-  DeriveImplicitTagsVisitor(const QString databasePath);
-  ~DeriveImplicitTagsVisitor();
+  AddImplicitlyDerivedTagsPoiVisitor();
+  AddImplicitlyDerivedTagsPoiVisitor(const QString databasePath);
+  ~AddImplicitlyDerivedTagsPoiVisitor();
 
+  /**
+   * Adds implicitly derived tags to an element
+   *
+   * @param e element to add derived tags to
+   */
   virtual void visit(const ElementPtr& e);
 
 private:
@@ -59,4 +64,4 @@ private:
 
 }
 
-#endif // DERIVEIMPLICITTAGSVISITOR_H
+#endif // ADDIMPLICITLYDERIVEDTAGSPOIVISITOR_H

@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "DeriveImplicitTagsVisitor.h"
+#include "AddImplicitlyDerivedTagsPoiVisitor.h"
 
 #include <hoot/core/algorithms/string/StringTokenizer.h>
 #include <hoot/core/schema/OsmSchema.h>
@@ -39,21 +39,21 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, DeriveImplicitTagsVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, AddImplicitlyDerivedTagsPoiVisitor)
 
-DeriveImplicitTagsVisitor::DeriveImplicitTagsVisitor()
+AddImplicitlyDerivedTagsPoiVisitor::AddImplicitlyDerivedTagsPoiVisitor()
 {
   _ruleReader.reset(new ImplicitTagRulesSqliteReader());
-  _ruleReader->open(ConfigOptions().getDeriveImplicitTagsDatabase());
+  _ruleReader->open(ConfigOptions().getPoiImplicitTagRulesDatabase());
 }
 
-DeriveImplicitTagsVisitor::DeriveImplicitTagsVisitor(const QString databasePath)
+AddImplicitlyDerivedTagsPoiVisitor::AddImplicitlyDerivedTagsPoiVisitor(const QString databasePath)
 {
   _ruleReader.reset(new ImplicitTagRulesSqliteReader());
   _ruleReader->open(databasePath);
 }
 
-DeriveImplicitTagsVisitor::~DeriveImplicitTagsVisitor()
+AddImplicitlyDerivedTagsPoiVisitor::~AddImplicitlyDerivedTagsPoiVisitor()
 {
   if (_ruleReader)
   {
@@ -61,7 +61,7 @@ DeriveImplicitTagsVisitor::~DeriveImplicitTagsVisitor()
   }
 }
 
-void DeriveImplicitTagsVisitor::visit(const ElementPtr& e)
+void AddImplicitlyDerivedTagsPoiVisitor::visit(const ElementPtr& e)
 {
   bool foundDuplicateMatch = false;
   Tags tagsToAdd;
@@ -102,7 +102,7 @@ void DeriveImplicitTagsVisitor::visit(const ElementPtr& e)
   }
 }
 
-QSet<QString> DeriveImplicitTagsVisitor::_extractNamesAndNameWords(const Tags& t)
+QSet<QString> AddImplicitlyDerivedTagsPoiVisitor::_extractNamesAndNameWords(const Tags& t)
 {
   QSet<QString> result;
 

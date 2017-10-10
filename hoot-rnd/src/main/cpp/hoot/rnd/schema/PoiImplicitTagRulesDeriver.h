@@ -43,7 +43,7 @@ namespace hoot
 class Tags;
 
 /**
- *
+ * Derives implicit tag rules for POIs and writes the rules to various output formats
  */
 class PoiImplicitTagRulesDeriver
 {
@@ -52,6 +52,17 @@ public:
 
   PoiImplicitTagRulesDeriver();
 
+  /**
+   * Derives implicit tag rules for POIs given input data and writes the rules to output
+   *
+   * @param inputs a list of hoot supported feature input formats to derive rules from
+   * @param outputs a list of hoot supported implicit tag rule output formats
+   * @param typeKeys an optional list of OSM tag keys for which to derive rules; if empty, rules
+   * will be derived for all OSM types
+   * @param minOccurancesThreshold an optional minimum tag occurrance threshold to use when
+   * deriving rules; rules will only be derived when a word is associated with a particular tag
+   * at least as many times as this value
+   */
   void deriveRules(const QStringList inputs, const QStringList outputs,
                    const QStringList typeKeys = QStringList(), const int minOccurancesThreshold = 1);
 
@@ -67,6 +78,11 @@ private:
   QMap<QString, QStringList> _wordTagKeysToTagValues;
   //key=<lower case word>, value=<word>
   QMap<QString, QString> _wordCaseMappings; //*
+  //TODO
+  QStringList _wordsToIgnore;
+  long _avgTagsPerRule;
+  long _avgWordsPerRule;
+  long _statusUpdateInterval;
 
   ImplicitTagRulesByWord _tagRulesByWord;
   ImplicitTagRules _tagRules;

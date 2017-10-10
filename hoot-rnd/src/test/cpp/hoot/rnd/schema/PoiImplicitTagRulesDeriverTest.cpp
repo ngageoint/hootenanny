@@ -58,7 +58,8 @@ public:
     inputs.append(inDir() + "/yemen-crop-2.osm.pbf");
     const QString jsonOutputFile =
       outDir() + "/PoiImplicitTagRulesDeriverTest-runBasicTest-out.json";
-    const QString dbOutputFile = outDir() + "/PoiImplicitTagRulesDeriverTest-runBasicTest-out.db";
+    const QString dbOutputFile =
+      outDir() + "/PoiImplicitTagRulesDeriverTest-runBasicTest-out.sqlite";
     QStringList outputs;
     outputs.append(jsonOutputFile);
     outputs.append(dbOutputFile);
@@ -82,7 +83,7 @@ public:
     const QString jsonOutputFile =
       outDir() + "/PoiImplicitTagRulesDeriverTest-runTypeKeysTest-out.json";
     const QString dbOutputFile =
-      outDir() + "/PoiImplicitTagRulesDeriverTest-runTypeKeysTest-out.db";
+      outDir() + "/PoiImplicitTagRulesDeriverTest-runTypeKeysTest-out.sqlite";
     QStringList outputs;
     outputs.append(jsonOutputFile);
     outputs.append(dbOutputFile);
@@ -112,7 +113,7 @@ public:
     const QString jsonOutputFile =
       outDir() + "/PoiImplicitTagRulesDeriverTest-runMinOccuranceThresholdTest-out.json";
     const QString dbOutputFile =
-      outDir() + "/PoiImplicitTagRulesDeriverTest-runMinOccuranceThresholdTest-out.db";
+      outDir() + "/PoiImplicitTagRulesDeriverTest-runMinOccuranceThresholdTest-out.sqlite";
     QStringList outputs;
     outputs.append(jsonOutputFile);
     outputs.append(dbOutputFile);
@@ -138,7 +139,7 @@ public:
     const QString jsonOutputFile =
       outDir() + "/PoiImplicitTagRulesDeriverTest-runMultipleInputsTest-out.json";
     const QString dbOutputFile =
-      outDir() + "/PoiImplicitTagRulesDeriverTest-runMultipleInputsTest-out.db";
+      outDir() + "/PoiImplicitTagRulesDeriverTest-runMultipleInputsTest-out.sqlite";
     QStringList outputs;
     outputs.append(jsonOutputFile);
     outputs.append(dbOutputFile);
@@ -166,7 +167,7 @@ public:
     const QString jsonOutputFile =
       outDir() + "/PoiImplicitTagRulesDeriverTest-runNameCaseTest-out.json";
     const QString dbOutputFile =
-      outDir() + "/PoiImplicitTagRulesDeriverTest-runNameCaseTest-out.db";
+      outDir() + "/PoiImplicitTagRulesDeriverTest-runNameCaseTest-out.sqlite";
     QStringList outputs;
     outputs.append(jsonOutputFile);
     outputs.append(dbOutputFile);
