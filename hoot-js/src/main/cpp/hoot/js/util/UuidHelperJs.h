@@ -42,8 +42,8 @@ private:
   UuidHelperJs();
   ~UuidHelperJs();
 
-  static v8::Handle<v8::Value> createUuid(const v8::Arguments& /*args*/);
-  static v8::Handle<v8::Value> createUuid5(const v8::Arguments& args);
+  static void createUuid(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void createUuid5(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
 

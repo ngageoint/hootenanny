@@ -64,21 +64,21 @@ private:
   TagsJs();
   ~TagsJs();
 
-  static v8::Handle<v8::Value> New(const v8::Arguments& args);
+  static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   Tags _tags;
   static v8::Persistent<v8::Function> _constructor;
 
-  static v8::Handle<v8::Value> contains(const v8::Arguments& args);
-  static v8::Handle<v8::Value> get(const v8::Arguments& args);
-  static v8::Handle<v8::Value> getCreateUuid(const v8::Arguments& args);
-  static v8::Handle<v8::Value> getInformationCount(const v8::Arguments& args);
-  static v8::Handle<v8::Value> getLengthInMeters(const v8::Arguments& args);
-  static v8::Handle<v8::Value> getNames(const v8::Arguments& args);
-  static v8::Handle<v8::Value> getVelocityInMeters(const v8::Arguments& args);
-  static v8::Handle<v8::Value> set(const v8::Arguments& args);
-  static v8::Handle<v8::Value> toDict(const v8::Arguments& args);
-  static v8::Handle<v8::Value> toString(const v8::Arguments& args);
+  static void contains(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void get(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void getCreateUuid(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void getInformationCount(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void getLengthInMeters(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void getNames(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void getVelocityInMeters(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void set(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void toDict(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void toString(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   void _setTags(const Tags& t) { _tags = t; }
 };

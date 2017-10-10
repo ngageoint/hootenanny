@@ -55,7 +55,7 @@ private:
    * can be a way or a relation (multipolygon)
    * @return a map with the polygon and POI merged
    */
-  static v8::Handle<v8::Value> jsPoiPolyMerge(const v8::Arguments& args);
+  static void jsPoiPolyMerge(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
 }

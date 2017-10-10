@@ -65,6 +65,7 @@ IdGeneratorJs::~IdGeneratorJs()
 
 void IdGeneratorJs::Init(Handle<Object> target)
 {
+  Isolate* current = target->GetIsolate();
   vector<string> opNames =
     Factory::getInstance().getObjectNamesByBase(IdGenerator::className());
 
@@ -73,34 +74,39 @@ void IdGeneratorJs::Init(Handle<Object> target)
     QByteArray utf8 = QString::fromStdString(opNames[i]).replace("hoot::", "").toUtf8();
     const char* n = utf8.data();
     // Prepare constructor template
-    Local<FunctionTemplate> tpl = FunctionTemplate::New(New);
-    tpl->SetClassName(String::NewSymbol(opNames[i].data()));
+    Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
+    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].data()));
     tpl->InstanceTemplate()->SetInternalFieldCount(2);
 
     tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
-                                  String::New(IdGenerator::className().data()));
+                                  String::NewFromUtf8(current, IdGenerator::className().data()));
 
-    Persistent<Function> constructor = Persistent<Function>::New(tpl->GetFunction());
-    target->Set(String::NewSymbol(n), constructor);
+    Persistent<Function> constructor(current, tpl->GetFunction());
+    target->Set(String::NewFromUtf8(current, n), ToLocal(&constructor));
   }
 }
 
-Handle<Value> IdGeneratorJs::New(const Arguments& args) {
-  HandleScope scope;
+void IdGeneratorJs::New(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   QString className = str(args.This()->GetConstructorName());
   if (className == "Object")
   {
-    return v8::ThrowException(HootExceptionJs::create(IllegalArgumentException(
-      "Invalid IdGenerator. Did you forget 'new'?")));
+    args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(IllegalArgumentException(
+      "Invalid IdGenerator. Did you forget 'new'?"))));
   }
-  IdGenerator* idGen = Factory::getInstance().constructObject<IdGenerator>(className);
-  IdGeneratorJs* obj = new IdGeneratorJs(IdGeneratorPtr(idGen));
-  obj->Wrap(args.This());
+  else
+  {
+    IdGenerator* idGen = Factory::getInstance().constructObject<IdGenerator>(className);
+    IdGeneratorJs* obj = new IdGeneratorJs(IdGeneratorPtr(idGen));
+    obj->Wrap(args.This());
 
-  PopulateConsumersJs::populateConsumers<IdGenerator>(idGen, args);
+    PopulateConsumersJs::populateConsumers<IdGenerator>(idGen, args);
 
-  return args.This();
+    args.GetReturnValue().Set(args.This());
+  }
 }
 
 }

@@ -91,8 +91,9 @@ public:
   void uuidHashTest()
   {
     boost::shared_ptr<PluginContext> _pc(new PluginContext());
-    HandleScope handleScope;
-    Context::Scope context_scope(_pc->getContext());
+    Isolate* current = Isolate::GetCurrent();
+    HandleScope handleScope(current);
+    Context::Scope context_scope(_pc->getContext(current));
 
     // From the standard Uuid Test
     // QUuid r = UuidHelper::createUuid5("foo", QUuid("{6ba7b812-9dad-11d1-80b4-00c04fd430c8}"));

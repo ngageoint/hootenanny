@@ -61,8 +61,10 @@ FeatureExtractorJs::~FeatureExtractorJs()
 {
 }
 
-Handle<Value> FeatureExtractorJs::extract(const Arguments& args) {
-  HandleScope scope;
+void FeatureExtractorJs::extract(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   FeatureExtractorJs* feJs = ObjectWrap::Unwrap<FeatureExtractorJs>(args.This());
 
@@ -82,16 +84,17 @@ Handle<Value> FeatureExtractorJs::extract(const Arguments& args) {
 
   if (result == feJs->getFeatureExtractor()->nullValue())
   {
-    return scope.Close(Null());
+    args.GetReturnValue().SetNull();
   }
   else
   {
-    return scope.Close(Number::New(result));
+    args.GetReturnValue().Set(Number::New(current, result));
   }
 }
 
 void FeatureExtractorJs::Init(Handle<Object> target)
 {
+  Isolate* current = target->GetIsolate();
   vector<string> opNames =
     Factory::getInstance().getObjectNamesByBase(FeatureExtractor::className());
 
@@ -101,22 +104,23 @@ void FeatureExtractorJs::Init(Handle<Object> target)
     const char* n = utf8.data();
 
     // Prepare constructor template
-    Local<FunctionTemplate> tpl = FunctionTemplate::New(New);
-    tpl->SetClassName(String::NewSymbol(opNames[i].data()));
+    Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
+    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].data()));
     tpl->InstanceTemplate()->SetInternalFieldCount(1);
     // Prototype
-    tpl->PrototypeTemplate()->Set(String::NewSymbol("extract"),
-        FunctionTemplate::New(extract)->GetFunction());
-    tpl->PrototypeTemplate()->Set(String::NewSymbol("getName"),
-        FunctionTemplate::New(getName)->GetFunction());
+    tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "extract"),
+        FunctionTemplate::New(current, extract)->GetFunction());
+    tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getName"),
+        FunctionTemplate::New(current, getName)->GetFunction());
 
-    Persistent<Function> constructor = Persistent<Function>::New(tpl->GetFunction());
-    target->Set(String::NewSymbol(n), constructor);
+    Persistent<Function> constructor(current, tpl->GetFunction());
+    target->Set(String::NewFromUtf8(current, n), constructor.Get(current));
   }
 }
 
-Handle<Value> FeatureExtractorJs::New(const Arguments& args) {
-  HandleScope scope;
+void FeatureExtractorJs::New(const FunctionCallbackInfo<Value>& args)
+{
+  HandleScope scope(Isolate::GetCurrent());
 
   QString className = str(args.This()->GetConstructorName());
 
@@ -126,13 +130,14 @@ Handle<Value> FeatureExtractorJs::New(const Arguments& args) {
 
   PopulateConsumersJs::populateConsumers<FeatureExtractor>(fe.get(), args);
 
-  return args.This();
+  args.GetReturnValue().Set(args.This());
 }
 
-Handle<Value> FeatureExtractorJs::getName(const Arguments& args) {
-  HandleScope scope;
+void FeatureExtractorJs::getName(const FunctionCallbackInfo<Value>& args)
+{
+  HandleScope scope(args.GetIsolate());
 
-  return scope.Close(toV8(toCpp<FeatureExtractorPtr>(args.This())->getName()));
+  args.GetReturnValue().Set(toV8(toCpp<FeatureExtractorPtr>(args.This())->getName()));
 }
 
 }

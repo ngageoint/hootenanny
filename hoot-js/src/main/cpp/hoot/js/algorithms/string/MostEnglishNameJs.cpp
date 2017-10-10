@@ -58,23 +58,25 @@ MostEnglishNameJs::~MostEnglishNameJs()
 
 void MostEnglishNameJs::Init(Handle<Object> target)
 {
+  Isolate* current = target->GetIsolate();
   QString name = QString::fromStdString(MostEnglishName::className()).replace("hoot::", "");
   // Prepare constructor template
-  Local<FunctionTemplate> tpl = FunctionTemplate::New(New);
-  tpl->SetClassName(String::New(MostEnglishName::className().data()));
+  Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
+  tpl->SetClassName(String::NewFromUtf8(current, MostEnglishName::className().data()));
   tpl->InstanceTemplate()->SetInternalFieldCount(2);
   // Prototype
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("getMostEnglishName"),
-      FunctionTemplate::New(getMostEnglishName)->GetFunction());
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getMostEnglishName"),
+      FunctionTemplate::New(current, getMostEnglishName)->GetFunction());
   tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
-                                String::New(MostEnglishName::className().data()));
+                                String::NewFromUtf8(current, MostEnglishName::className().data()));
 
-  Persistent<Function> constructor = Persistent<Function>::New(tpl->GetFunction());
-  target->Set(String::NewSymbol(name.toUtf8().data()), constructor);
+  Persistent<Function> constructor(current, tpl->GetFunction());
+  target->Set(String::NewFromUtf8(current, name.toUtf8().data()), constructor.Get(current));
 }
 
-Handle<Value> MostEnglishNameJs::New(const Arguments& args) {
-  HandleScope scope;
+void MostEnglishNameJs::New(const FunctionCallbackInfo<Value>& args)
+{
+  HandleScope scope(args.GetIsolate());
 
   MostEnglishName* c = new MostEnglishName();
   MostEnglishNameJs* obj = new MostEnglishNameJs(MostEnglishNamePtr(c));
@@ -82,17 +84,17 @@ Handle<Value> MostEnglishNameJs::New(const Arguments& args) {
 
   PopulateConsumersJs::populateConsumers<MostEnglishName>(c, args);
 
-  return args.This();
+  args.GetReturnValue().Set(args.This());
 }
 
-Handle<Value> MostEnglishNameJs::getMostEnglishName(const Arguments& args)
+void MostEnglishNameJs::getMostEnglishName(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  HandleScope scope(Isolate::GetCurrent());
 
   MostEnglishNamePtr sd = toCpp<MostEnglishNamePtr>(args.This());
   Tags t = toCpp<Tags>(args[0]);
 
-  return scope.Close(toV8(sd->getMostEnglishName(t)));
+  args.GetReturnValue().Set(toV8(sd->getMostEnglishName(t)));
 }
 
 }

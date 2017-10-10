@@ -60,10 +60,11 @@ public:
 
   void qvariantTest()
   {
-    HandleScope handleScope;
+    Isolate* current = Isolate::GetCurrent();
+    HandleScope handleScope(current);
 
     // Create a new context.
-    Persistent<Context> context = Context::New();
+    Local<Context> context = Context::New(current);
 
     // Enter the created context for compiling and
     // running the hello world script.

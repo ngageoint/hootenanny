@@ -64,7 +64,7 @@ public:
 
   v8::Local<v8::Value> eval(QString e);
 
-  v8::Persistent<v8::Context> getContext() { return _context; }
+  v8::Local<v8::Context> getContext(v8::Isolate* isolate) { return _context.Get(isolate); }
 
 
   bool hasFunction(QString name);

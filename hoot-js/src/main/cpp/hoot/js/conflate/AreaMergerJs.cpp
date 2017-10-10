@@ -81,7 +81,7 @@
 //    v8::FunctionTemplate::New(jsAreaMerge)->GetFunction());
 //}
 
-//v8::Handle<v8::Value> AreaMergerJs::jsAreaMerge(const v8::Arguments& args)
+//v8::Handle<v8::Value> AreaMergerJs::jsAreaMerge(const v8::FunctionCallbackInfo<v8::Value>& args)
 //{
 //  HandleScope scope;
 //  try

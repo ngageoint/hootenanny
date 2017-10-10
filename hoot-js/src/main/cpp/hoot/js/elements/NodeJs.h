@@ -63,9 +63,9 @@ private:
   NodeJs();
   ~NodeJs();
 
-  static v8::Handle<v8::Value> getX(const v8::Arguments& args);
-  static v8::Handle<v8::Value> getY(const v8::Arguments& args);
-  static v8::Handle<v8::Value> New(const v8::Arguments& args);
+  static void getX(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void getY(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   QString _className;
   ConstNodePtr _constNode;

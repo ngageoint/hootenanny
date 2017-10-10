@@ -51,15 +51,16 @@ public:
   void basicTest()
   {
     boost::shared_ptr<PluginContext> _pc(new PluginContext());
-    HandleScope handleScope;
-    Context::Scope context_scope(_pc->getContext());
+    Isolate* current = Isolate::GetCurrent();
+    HandleScope handleScope(current);
+    Context::Scope context_scope(_pc->getContext(current));
 
     Handle<Object> exports = _pc->loadScript("rules/PolygonBuilding.js");
 
     Handle<Value> result = _pc->call(exports, "isWholeGroup");
     HOOT_STR_EQUALS("true", result);
 
-    result = _pc->call(_pc->getContext()->Global(), "testAdd",
+    result = _pc->call(_pc->getContext(current)->Global(), "testAdd",
       QList<QVariant>() << 1 << 2);
     HOOT_STR_EQUALS(3, result);
   }

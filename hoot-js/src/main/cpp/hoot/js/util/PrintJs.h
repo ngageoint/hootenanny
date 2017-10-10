@@ -43,7 +43,7 @@ private:
   PrintJs();
   ~PrintJs();
 
-  static v8::Handle<v8::Value> jsPrint(const v8::Arguments& args);
+  static void jsPrint(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
 }

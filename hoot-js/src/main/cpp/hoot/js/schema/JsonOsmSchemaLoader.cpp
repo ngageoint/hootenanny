@@ -49,7 +49,7 @@ HOOT_FACTORY_REGISTER(OsmSchemaLoader, JsonOsmSchemaLoader)
 
 JsonOsmSchemaLoader::JsonOsmSchemaLoader()
 {
-  _context = Context::New();
+  _context.Reset();
 }
 
 void JsonOsmSchemaLoader::load(QString path, OsmSchema& s)
@@ -65,8 +65,9 @@ void JsonOsmSchemaLoader::load(QString path, OsmSchema& s)
   _deps.insert(path);
   QByteArray ba = fp.readAll();
 
-  HandleScope handleScope;
-  Context::Scope context_scope(_context);
+  Isolate* current = Isolate::GetCurrent();
+  HandleScope handleScope(current);
+  Context::Scope context_scope(_context.Get(current));
 
   // If needed, this will throw an exception with user readable(ish) error message.
   v8::Handle<v8::Value> result = fromJson(QString::fromUtf8(ba.data(), ba.size()), path);

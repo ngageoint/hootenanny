@@ -47,14 +47,14 @@ public:
 
   JsFunctionCriterion() {}
 
-  virtual void addFunction(v8::Persistent<v8::Function> func) { _func = v8::Persistent<v8::Function>(func); }
+  virtual void addFunction(v8::Isolate* isolate, v8::Local<v8::Function>& func) { _func.Reset(isolate, func); }
 
   bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
   virtual ElementCriterion* clone() { return new JsFunctionCriterion(_func); }
 
 private:
-  JsFunctionCriterion(v8::Persistent<v8::Function> func) { _func = func; }
+  JsFunctionCriterion(v8::Persistent<v8::Function>& func) { _func.Reset(v8::Isolate::GetCurrent(), func); }
 
   v8::Persistent<v8::Function> _func;
 };

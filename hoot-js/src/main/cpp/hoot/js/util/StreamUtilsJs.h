@@ -45,15 +45,16 @@ namespace hoot
  */
 inline v8::Handle<v8::Value> fromJson(QString qstr, QString fileName="")
 {
-  v8::HandleScope scope;
-  v8::Handle<v8::Context> context = v8::Context::GetCurrent();
+  v8::Isolate* current = v8::Isolate::GetCurrent();
+  v8::EscapableHandleScope scope(current);
+  v8::Handle<v8::Context> context = v8::Context::New(current);
   v8::Handle<v8::Object> global = context->Global();
 
   QByteArray utf8 = qstr.toUtf8();
-  v8::Handle<v8::Value> str = v8::String::New(utf8.data(), utf8.length());
+  v8::Handle<v8::Value> str = v8::String::NewFromUtf8(current, utf8.data(), v8::NewStringType::kNormal, utf8.length()).ToLocalChecked();
 
-  v8::Handle<v8::Object> JSON = global->Get(v8::String::New("JSON"))->ToObject();
-  v8::Handle<v8::Function> JSON_parse = v8::Handle<v8::Function>::Cast(JSON->Get(v8::String::New("parse")));
+  v8::Handle<v8::Object> JSON = global->Get(v8::String::NewFromUtf8(current, "JSON"))->ToObject();
+  v8::Handle<v8::Function> JSON_parse = v8::Handle<v8::Function>::Cast(JSON->Get(v8::String::NewFromUtf8(current, "parse")));
 
   v8::Handle<v8::Value> args[1];
   args[0] = str;
@@ -85,7 +86,7 @@ inline v8::Handle<v8::Value> fromJson(QString qstr, QString fileName="")
       arg(blank + wave));
   }
 
-  return scope.Close(result);
+  return scope.Escape(result);
 }
 
 /**
@@ -94,13 +95,14 @@ inline v8::Handle<v8::Value> fromJson(QString qstr, QString fileName="")
 template <class T>
 QString toJson(const v8::Handle<T> object)
 {
-  v8::HandleScope scope;
+  v8::Isolate* current = v8::Isolate::GetCurrent();
+  v8::EscapableHandleScope scope(current);
 
-  v8::Local<v8::Context> context = v8::Context::GetCurrent();
+  v8::Local<v8::Context> context = v8::Context::New(current);
   v8::Local<v8::Object> global = context->Global();
 
-  v8::Local<v8::Object> JSON = global->Get(v8::String::New("JSON"))->ToObject();
-  v8::Handle<v8::Function> JSON_stringify = v8::Handle<v8::Function>::Cast(JSON->Get(v8::String::New("stringify")));
+  v8::Local<v8::Object> JSON = global->Get(v8::String::NewFromUtf8(current, "JSON"))->ToObject();
+  v8::Handle<v8::Function> JSON_stringify = v8::Handle<v8::Function>::Cast(JSON->Get(v8::String::NewFromUtf8(current, "stringify")));
 
   v8::Handle<v8::Value> args[1];
   args[0] = object;

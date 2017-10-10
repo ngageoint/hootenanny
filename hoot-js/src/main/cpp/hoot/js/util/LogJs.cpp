@@ -53,21 +53,22 @@ LogJs::~LogJs() {}
 
 void LogJs::Init(Handle<Object> exports)
 {
-  Handle<Object> log = Object::New();
-  exports->Set(String::NewSymbol("Log"), log);
-  log->Set(String::NewSymbol("setLogLevel"), FunctionTemplate::New(setLogLevel)->GetFunction());
-  log->Set(String::NewSymbol("init"), FunctionTemplate::New(init)->GetFunction());
+  Isolate* current = exports->GetIsolate();
+  Handle<Object> log = Object::New(current);
+  exports->Set(String::NewFromUtf8(current, "Log"), log);
+  log->Set(String::NewFromUtf8(current, "setLogLevel"), FunctionTemplate::New(current, setLogLevel)->GetFunction());
+  log->Set(String::NewFromUtf8(current, "init"), FunctionTemplate::New(current, init)->GetFunction());
 
-  exports->Set(String::NewSymbol("log"), FunctionTemplate::New(logInfo)->GetFunction());
-  exports->Set(String::NewSymbol("trace"), FunctionTemplate::New(logTrace)->GetFunction());
-  exports->Set(String::NewSymbol("debug"), FunctionTemplate::New(logDebug)->GetFunction());
-  exports->Set(String::NewSymbol("logTrace"), FunctionTemplate::New(logTrace)->GetFunction());
-  exports->Set(String::NewSymbol("logDebug"), FunctionTemplate::New(logDebug)->GetFunction());
-  exports->Set(String::NewSymbol("logInfo"), FunctionTemplate::New(logInfo)->GetFunction());
-  exports->Set(String::NewSymbol("warn"), FunctionTemplate::New(logWarn)->GetFunction());
-  exports->Set(String::NewSymbol("logWarn"), FunctionTemplate::New(logWarn)->GetFunction());
-  exports->Set(String::NewSymbol("logError"), FunctionTemplate::New(logError)->GetFunction());
-  exports->Set(String::NewSymbol("logFatal"), FunctionTemplate::New(logFatal)->GetFunction());
+  exports->Set(String::NewFromUtf8(current, "log"), FunctionTemplate::New(current, logInfo)->GetFunction());
+  exports->Set(String::NewFromUtf8(current, "trace"), FunctionTemplate::New(current, logTrace)->GetFunction());
+  exports->Set(String::NewFromUtf8(current, "debug"), FunctionTemplate::New(current, logDebug)->GetFunction());
+  exports->Set(String::NewFromUtf8(current, "logTrace"), FunctionTemplate::New(current, logTrace)->GetFunction());
+  exports->Set(String::NewFromUtf8(current, "logDebug"), FunctionTemplate::New(current, logDebug)->GetFunction());
+  exports->Set(String::NewFromUtf8(current, "logInfo"), FunctionTemplate::New(current, logInfo)->GetFunction());
+  exports->Set(String::NewFromUtf8(current, "warn"), FunctionTemplate::New(current, logWarn)->GetFunction());
+  exports->Set(String::NewFromUtf8(current, "logWarn"), FunctionTemplate::New(current, logWarn)->GetFunction());
+  exports->Set(String::NewFromUtf8(current, "logError"), FunctionTemplate::New(current, logError)->GetFunction());
+  exports->Set(String::NewFromUtf8(current, "logFatal"), FunctionTemplate::New(current, logFatal)->GetFunction());
 }
 
 int LogJs::getLogCount(QString log)
@@ -88,13 +89,15 @@ int LogJs::getLogCount(QString log)
   return result;
 }
 
-Handle<Value> LogJs::log(const Arguments& args, Log::WarningLevel level) {
-  HandleScope scope;
-  Context::Scope context_scope(Context::GetCurrent());
+void LogJs::log(const FunctionCallbackInfo<Value>& args, Log::WarningLevel level)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+  Context::Scope context_scope(Context::New(current));
 
   if (level >= Log::getInstance().getLevel())
   {
-    Local<StackTrace> stack = StackTrace::CurrentStackTrace(1);
+    Local<StackTrace> stack = StackTrace::CurrentStackTrace(current, 1);
     Local<StackFrame> frame = stack->GetFrame(0);
     int lineNumber = -1;
     QString script("<unknown>");
@@ -133,80 +136,81 @@ Handle<Value> LogJs::log(const Arguments& args, Log::WarningLevel level) {
     }
   }
 
-  return scope.Close(Undefined());
+  args.GetReturnValue().SetUndefined();
 }
 
-Handle<Value> LogJs::logTrace(const Arguments& args)
+void LogJs::logTrace(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
-//  Context::Scope context_scope(Context::GetCurrent());
+  Isolate* current = args.GetIsolate();
+  EscapableHandleScope scope(current);
   log(args, Log::Trace);
-  return scope.Close(Undefined());
+  args.GetReturnValue().SetUndefined();
 }
 
-Handle<Value> LogJs::logDebug(const Arguments& args)
+void LogJs::logDebug(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
-//  Context::Scope context_scope(Context::GetCurrent());
+  Isolate* current = args.GetIsolate();
+  EscapableHandleScope scope(current);
   log(args, Log::Debug);
-  return scope.Close(Undefined());
+  args.GetReturnValue().SetUndefined();
 }
 
-Handle<Value> LogJs::logInfo(const Arguments& args)
+void LogJs::logInfo(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
-//  Context::Scope context_scope(Context::GetCurrent());
+  Isolate* current = args.GetIsolate();
+  EscapableHandleScope scope(current);
   log(args, Log::Info);
-  return scope.Close(Undefined());
+  args.GetReturnValue().SetUndefined();
 }
 
-Handle<Value> LogJs::logWarn(const Arguments& args)
+void LogJs::logWarn(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
-//  Context::Scope context_scope(Context::GetCurrent());
+  Isolate* current = args.GetIsolate();
+  EscapableHandleScope scope(current);
   log(args, Log::Warn);
-  return scope.Close(Undefined());
+  args.GetReturnValue().SetUndefined();
 }
 
-Handle<Value> LogJs::logError(const Arguments& args)
+void LogJs::logError(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
-//  Context::Scope context_scope(Context::GetCurrent());
+  Isolate* current = args.GetIsolate();
+  EscapableHandleScope scope(current);
   log(args, Log::Error);
-  return scope.Close(Undefined());
+  args.GetReturnValue().SetUndefined();
 }
 
-Handle<Value> LogJs::logFatal(const Arguments& args)
+void LogJs::logFatal(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
-//  Context::Scope context_scope(Context::GetCurrent());
+  Isolate* current = args.GetIsolate();
+  EscapableHandleScope scope(current);
   log(args, Log::Fatal);
-  return scope.Close(Undefined());
+  args.GetReturnValue().SetUndefined();
 }
 
-Handle<Value> LogJs::init(const Arguments& /*args*/)
+void LogJs::init(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  EscapableHandleScope scope(args.GetIsolate());
   Log::getInstance().init();
-  return scope.Close(Undefined());
+  args.GetReturnValue().SetUndefined();
 }
 
-Handle<Value> LogJs::setLogLevel(const Arguments& args)
+void LogJs::setLogLevel(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
-  Context::Scope context_scope(Context::GetCurrent());
+  Isolate* current = args.GetIsolate();
+  EscapableHandleScope scope(current);
+  Context::Scope context_scope(Context::New(v8::Isolate::GetCurrent()));
 
   try
   {
     QString logLevel = toCpp<QString>(args[0]);
     Log::getInstance().setLevel(Log::getLevelFromString(logLevel));
+
+    args.GetReturnValue().SetUndefined();
   }
   catch (const HootException& e)
   {
-    return v8::ThrowException(HootExceptionJs::create(e));
+    args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(e)));
   }
-
-  return scope.Close(Undefined());
 }
 
 }

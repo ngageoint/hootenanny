@@ -34,9 +34,11 @@ using namespace v8;
 namespace hoot
 {
 
-Handle<Value> Method(const Arguments& /*args*/) {
-  HandleScope scope;
-  return scope.Close(String::New("world"));
+void Method(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+  args.GetReturnValue().Set(String::NewFromUtf8(current, "world"));
 }
 
 JsRegistrar* JsRegistrar::_theInstance = 0;
@@ -63,8 +65,9 @@ void JsRegistrar::Init(Handle<Object> exports)
 
 void JsRegistrar::initAll(Handle<Object> exports)
 {
-  exports->Set(String::NewSymbol("hello"),
-      FunctionTemplate::New(Method)->GetFunction());
+  Isolate* current = exports->GetIsolate();
+  exports->Set(String::NewFromUtf8(current, "hello"),
+      FunctionTemplate::New(current, Method)->GetFunction());
 
   for (size_t i = 0; i < _initializers.size(); i++)
   {

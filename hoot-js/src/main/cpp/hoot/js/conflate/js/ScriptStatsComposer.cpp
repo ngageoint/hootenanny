@@ -136,8 +136,9 @@ QString ScriptStatsComposer::compose(QList< QList<SingleStat> >& stats, const QS
   //   other drawing packages by using the stats passed into the JS file.
 
   // vars
-  HandleScope handleScope;
-  Context::Scope context_scope(_script->getContext());
+  Isolate* current = Isolate::GetCurrent();
+  HandleScope handleScope(current);
+  Context::Scope context_scope(_script->getContext(current));
   QString report = "";
 
   // get exports from script
@@ -166,7 +167,7 @@ QString ScriptStatsComposer::compose(QList< QList<SingleStat> >& stats, const QS
   {
     std::string tokenString = histTokens[p].toStdString();
     //cout << "token String = " << tokenString << endl;
-    vector<QString> tokenList = toCpp< vector<QString> >( exports->Get(String::New(tokenString.c_str())));
+    vector<QString> tokenList = toCpp< vector<QString> >( exports->Get(String::NewFromUtf8(current, tokenString.c_str())));
     _insertionText1 = "\"Input 1\"\n";
     _insertionText2 = "\"Input 2\"\n";
     _insertionText3 = "\"Output\"\n";
@@ -212,7 +213,7 @@ QString ScriptStatsComposer::compose(QList< QList<SingleStat> >& stats, const QS
   ///////////////////////////////////////////////////////////////
   // load text body
   ///////////////////////////////////////////////////////////////
-  Handle<Function> textbodyFunc = Handle<Function>::Cast( exports->Get(String::New("textBody")) );
+  Handle<Function> textbodyFunc = Handle<Function>::Cast( exports->Get(String::NewFromUtf8(current, "textBody")) );
   Handle<Value> jsArgs[7];
 
   int argc = 0;

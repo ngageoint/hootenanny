@@ -33,4 +33,15 @@
 // v8
 #include <v8.h>
 
+namespace hoot
+{
+
+//  v8::Persistent is no longer derived from v8::Local requiring these conversion functions
+template<class T>
+inline v8::Local<T> ToLocal(v8::Persistent<T>* p) { return *reinterpret_cast<v8::Local<T>*>(p); }
+template<class T>
+inline v8::Persistent<T> ToPersistent(v8::Local<T>* l) { return *reinterpret_cast<v8::Persistent<T>*>(l); }
+
+}
+
 #endif // HOOTJSSTABLE_H

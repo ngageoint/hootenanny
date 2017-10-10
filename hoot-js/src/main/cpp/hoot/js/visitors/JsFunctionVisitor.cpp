@@ -43,8 +43,10 @@ HOOT_FACTORY_REGISTER(ConstElementVisitor, JsFunctionVisitor)
 
 void JsFunctionVisitor::visit(const ConstElementPtr& e)
 {
-  HandleScope handleScope;
-  Context::Scope context_scope(Context::GetCalling());
+  Isolate* current = Isolate::GetCurrent();
+  HandleScope handleScope(current);
+  Local<Context> context(current->GetCallingContext());
+  Context::Scope context_scope(context);
 
   Handle<Value> jsArgs[3];
 
@@ -66,7 +68,7 @@ void JsFunctionVisitor::visit(const ConstElementPtr& e)
   jsArgs[argc++] = elementObj;
 
   TryCatch trycatch;
-  Handle<Value> funcResult = _func->Call(Context::GetCalling()->Global(), argc, jsArgs);
+  Handle<Value> funcResult = _func.Get(current)->Call(context->Global(), argc, jsArgs);
 
   if (funcResult.IsEmpty())
   {

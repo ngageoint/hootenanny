@@ -41,29 +41,6 @@ sudo systemctl start ntpd
 # Make sure that we are in ~ before trying to wget & install stuff
 cd ~
 
-echo "### Installing the repo for an ancient version of NodeJS"
-curl --silent --location https://rpm.nodesource.com/setup | sudo bash -
-
-echo "### Installing an ancient version of NodeJS"
-sudo yum install -y \
-  nodejs-0.10.46 \
-  nodejs-devel-0.10.46 \
-  yum-plugin-versionlock
-
-# Now try to lock NodeJS so that the next yum update doesn't remove it.
-sudo yum versionlock nodejs*
-
-
-# echo "### Installing and locking the GEOS version to 3.4.2"
-# This works but yum conflicts with postgis2_95
-# sudo yum install -y yum-plugin-versionlock
-# sudo yum install -y \
-#     geos-3.4.2-2.el7 \
-#     geos-devel-3.4.2-2.el7
-#
-# sudo yum versionlock geos*
-
-
 # install useful and needed packages for working with hootenanny
 echo "### Installing dependencies from repos..."
 sudo localedef -i en_US -f UTF-8 en_US.UTF-8
@@ -95,6 +72,8 @@ sudo yum -y install \
     m4 \
     maven \
     mlocate \
+    nodejs \
+    nodejs-devel \
     opencv \
     opencv-core \
     opencv-devel \
@@ -136,29 +115,32 @@ sudo yum -y install \
 # Install Java8
 # Official download page:
 # http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
-if  ! rpm -qa | grep jdk1.8.0_144-1.8.0_144; then
+JAVA_VERSION=144
+JAVA_B_VERSION=01
+JAVA_HASH=090f390dda5b47b9b721c7dfaa008135
+if  ! rpm -qa | grep jdk1.8.0_${JAVA_VERSION}-1.8.0_${JAVA_VERSION}; then
     echo "### Installing Java8..."
-    if [ ! -f jdk-8u144-linux-x64.rpm ]; then
-      JDKURL=http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jdk-8u144-linux-x64.rpm
+    if [ ! -f jdk-8u${JAVA_VERSION}-linux-x64.rpm ]; then
+      JDKURL=http://download.oracle.com/otn-pub/java/jdk/8u${JAVA_VERSION}-b${JAVA_B_VERSION}/${JAVA_HASH}/jdk-8u${JAVA_VERSION}-linux-x64.rpm
       wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" $JDKURL
     fi
-    sudo yum -y install ./jdk-8u144-linux-x64.rpm
+    sudo yum -y install ./jdk-8u${JAVA_VERSION}-linux-x64.rpm
 fi
 
 # Trying the following instead of removing the OpenJDK
 # Setting /usr/java/jdk1.8.0_144/bin/java's priority to something really atrocious to guarantee that it will be
 # the one used when alternatives' auto mode is used.
-sudo alternatives --install /usr/bin/java java /usr/java/jdk1.8.0_144/bin/java 999999
+sudo alternatives --install /usr/bin/java java /usr/java/jdk1.8.0_${JAVA_VERSION}/bin/java 999999
 
 # Setting /usr/java/jdk1.8.0_144/bin/javac's priority to something really atrocious to guarantee that it will be
 # the one used when alternatives' auto mode is enabled.
-sudo alternatives --install /usr/bin/javac javac /usr/java/jdk1.8.0_144/bin/javac 9999999
+sudo alternatives --install /usr/bin/javac javac /usr/java/jdk1.8.0_${JAVA_VERSION}/bin/javac 9999999
 
 # switching to manual and forcing the desired version of java be configured
-sudo alternatives --set java /usr/java/jdk1.8.0_144/bin/java
+sudo alternatives --set java /usr/java/jdk1.8.0_${JAVA_VERSION}/bin/java
 
 # switching to manual and forcing the desired version of javac be configured
-sudo alternatives --set javac /usr/java/jdk1.8.0_144/bin/javac
+sudo alternatives --set javac /usr/java/jdk1.8.0_${JAVA_VERSION}/bin/javac
 
 # Now make sure that the version of Java we installed gets used.
 # maven installs java-1.8.0-openjdk
@@ -244,11 +226,11 @@ fi
 
 if ! grep --quiet "export JAVA_HOME" ~/.bash_profile; then
     echo "Adding Java home to profile..."
-    echo "export JAVA_HOME=/usr/java/jdk1.8.0_144" >> ~/.bash_profile
+    echo "export JAVA_HOME=/usr/java/jdk1.8.0_${JAVA_VERSION}" >> ~/.bash_profile
     echo "export PATH=\$PATH:\$JAVA_HOME/bin" >> ~/.bash_profile
     source ~/.bash_profile
 else
-    sed -i '/^export JAVA_HOME=.*/c\export JAVA_HOME=\/usr\/java\/jdk1.8.0_144' ~/.bash_profile
+    sed -i "/^export JAVA_HOME=.*/export JAVA_HOME=\/usr\/java\/jdk1.8.0_${JAVA_VERSION}" ~/.bash_profile
 fi
 
 if ! grep --quiet "export HADOOP_HOME" ~/.bash_profile; then
@@ -438,7 +420,7 @@ if ! mocha --version &>/dev/null; then
 fi
 
 
-echo "### Configureing Postgres..."
+echo "### Configuring Postgres..."
 cd /tmp # Stop postgres "could not change directory to" warnings
 
 # NOTE: These have been changed to pg9.5
@@ -658,8 +640,8 @@ sudo bash -c "cat >> $HADOOP_HOME/conf/hdfs-site.xml" <<EOT
 </configuration>
 EOT
 
-  sudo sed -i.bak 's/# export JAVA_HOME=\/usr\/lib\/j2sdk1.5-sun/export JAVA_HOME=\/usr\/java\/jdk1.8.0_144/g' $HADOOP_HOME/conf/hadoop-env.sh
-  sudo sed -i.bak 's/#include <pthread.h>/#include <pthread.h>\n#include <unistd.h>/g' $HADOOP_HOME/src/c++/pipes/impl/HadoopPipes.cc
+  sudo sed -i.bak "s/# export JAVA_HOME=\/usr\/lib\/j2sdk1.5-sun/export JAVA_HOME=\/usr\/java\/jdk1.8.0_${JAVA_VERSION}/g" $HADOOP_HOME/conf/hadoop-env.sh
+  sudo sed -i.bak "s/#include <pthread.h>/#include <pthread.h>\n#include <unistd.h>/g" $HADOOP_HOME/src/c++/pipes/impl/HadoopPipes.cc
 
   sudo mkdir -p $HADOOP_HOME/dfs/name/current
   # this could perhaps be more strict

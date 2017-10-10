@@ -47,17 +47,20 @@ OsmWriterJs::~OsmWriterJs() {}
 
 void OsmWriterJs::Init(Handle<Object> exports)
 {
-  Handle<Object> writer = Object::New();
-  exports->Set(String::NewSymbol("OsmWriter"), writer);
-  writer->Set(String::NewSymbol("toString"), FunctionTemplate::New(toString)->GetFunction());
+  Isolate* current = exports->GetIsolate();
+  Handle<Object> writer = Object::New(current);
+  exports->Set(String::NewFromUtf8(current, "OsmWriter"), writer);
+  writer->Set(String::NewFromUtf8(current, "toString"),
+              FunctionTemplate::New(current, toString)->GetFunction());
 }
 
-Handle<Value> OsmWriterJs::toString(const Arguments& args) {
-  HandleScope scope;
+void OsmWriterJs::toString(const FunctionCallbackInfo<Value>& args)
+{
+  HandleScope scope(args.GetIsolate());
 
   ConstOsmMapPtr map = toCpp<ConstOsmMapPtr>(args[0]);
 
-  return toV8(OsmXmlWriter::toString(map));
+  args.GetReturnValue().Set(toV8(OsmXmlWriter::toString(map)));
 }
 
 }

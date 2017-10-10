@@ -46,7 +46,7 @@ private:
   RequireJs();
   ~RequireJs();
 
-  static v8::Handle<v8::Value> jsRequire(const v8::Arguments& args);
+  static void jsRequire(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
 }

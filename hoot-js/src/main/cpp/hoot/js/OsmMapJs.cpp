@@ -65,42 +65,45 @@ OsmMapJs::~OsmMapJs()
   while (!v8::V8::IdleNotification());
 }
 
-void OsmMapJs::Init(Handle<Object> target) {
+void OsmMapJs::Init(Handle<Object> target)
+{
+  Isolate* current = target->GetIsolate();
   // Prepare constructor template
-  Local<FunctionTemplate> tpl = FunctionTemplate::New(New);
-  tpl->SetClassName(String::NewSymbol("OsmMap"));
+  Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
+  tpl->SetClassName(String::NewFromUtf8(current, "OsmMap"));
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
   // Prototype
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("clone"),
-      FunctionTemplate::New(clone)->GetFunction());
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("getElement"),
-      FunctionTemplate::New(getElement)->GetFunction());
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("getElementCount"),
-      FunctionTemplate::New(getElementCount)->GetFunction());
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("getParents"),
-      FunctionTemplate::New(getParents)->GetFunction());
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("removeElement"),
-      FunctionTemplate::New(removeElement)->GetFunction());
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("visit"),
-      FunctionTemplate::New(visit)->GetFunction());
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("setIdGenerator"),
-      FunctionTemplate::New(setIdGenerator)->GetFunction());
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "clone"),
+      FunctionTemplate::New(current, clone)->GetFunction());
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getElement"),
+      FunctionTemplate::New(current, getElement)->GetFunction());
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getElementCount"),
+      FunctionTemplate::New(current, getElementCount)->GetFunction());
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getParents"),
+      FunctionTemplate::New(current, getParents)->GetFunction());
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "removeElement"),
+      FunctionTemplate::New(current, removeElement)->GetFunction());
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "visit"),
+      FunctionTemplate::New(current, visit)->GetFunction());
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "setIdGenerator"),
+      FunctionTemplate::New(current, setIdGenerator)->GetFunction());
   tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
-                                String::New(OsmMap::className().data()));
+                                String::NewFromUtf8(current, OsmMap::className().data()));
 
-  _constructor = Persistent<Function>::New(tpl->GetFunction());
-  target->Set(String::NewSymbol("OsmMap"), _constructor);
+  _constructor.Reset(current, tpl->GetFunction());
+  target->Set(String::NewFromUtf8(current, "OsmMap"), ToLocal(&_constructor));
 }
 
 Handle<Object> OsmMapJs::create(ConstOsmMapPtr map)
 {
-  HandleScope scope;
+  Isolate* current = Isolate::GetCurrent();
+  EscapableHandleScope scope(current);
 
-  Handle<Object> result = _constructor->NewInstance();
+  Handle<Object> result = _constructor.Get(current)->NewInstance();
   OsmMapJs* from = ObjectWrap::Unwrap<OsmMapJs>(result);
   from->_setMap(map);
 
-  return scope.Close(result);
+  return scope.Escape(result);
 }
 
 Handle<Value> OsmMapJs::setIdGenerator(const Arguments& args)

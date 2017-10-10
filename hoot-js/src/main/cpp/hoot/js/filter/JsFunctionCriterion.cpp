@@ -42,8 +42,10 @@ HOOT_FACTORY_REGISTER(ElementCriterion, JsFunctionCriterion)
 
 bool JsFunctionCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
 {
-  HandleScope handleScope;
-  Context::Scope context_scope(Context::GetCalling());
+  Isolate* current = Isolate::GetCurrent();
+  HandleScope handleScope(current);
+  Local<Context> context(current->GetCallingContext());
+  Context::Scope context_scope(context);
 
   Handle<Value> jsArgs[3];
 
@@ -58,7 +60,7 @@ bool JsFunctionCriterion::isSatisfied(const boost::shared_ptr<const Element> &e)
   jsArgs[argc++] = elementObj;
 
   TryCatch trycatch;
-  Handle<Value> funcResult = _func->Call(Context::GetCalling()->Global(), argc, jsArgs);
+  Handle<Value> funcResult = _func.Get(current)->Call(context->Global(), argc, jsArgs);
   // avoids a warning, the default value of false should never be used.
   bool result = false;
 
