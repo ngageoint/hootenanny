@@ -7,6 +7,9 @@ AC_INIT([hootenanny], [VERSION_NUMBER], [jason.surratt@digitalglobe.com])
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([hoot-core/src])
 
+# Use C++11
+CPPFLAGS="$CPPFLAGS -std=c++11"
+
 ###
 # Checks for programs.
 ###
