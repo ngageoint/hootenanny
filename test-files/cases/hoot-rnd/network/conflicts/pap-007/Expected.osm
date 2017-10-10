@@ -733,10 +733,6 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-316"/>
     </node>
-    <node visible="true" id="-315" timestamp="2017-06-07T15:18:21Z" version="1" changeset="119" lat="18.5495872999999953" lon="-72.3396675000000045">
-        <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-315"/>
-    </node>
     <node visible="true" id="-314" timestamp="2017-06-07T15:18:21Z" version="1" changeset="119" lat="18.5490552999999991" lon="-72.3397614000000004">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-314"/>
@@ -2012,7 +2008,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1"/>
     </node>
-    <way visible="true" id="-770" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-758" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-314"/>
         <nd ref="-318"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
@@ -2024,11 +2020,11 @@
         <tag k="highway" v="pedestrian"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-770"/>
+        <tag k="hoot:id" v="-758"/>
     </way>
-    <way visible="true" id="-769" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-757" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-316"/>
-        <nd ref="-315"/>
+        <nd ref="-200"/>
         <nd ref="-314"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="source" v="osm;osm"/>
@@ -2039,9 +2035,9 @@
         <tag k="highway" v="pedestrian"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-769"/>
+        <tag k="hoot:id" v="-757"/>
     </way>
-    <way visible="true" id="-768" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-756" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-452"/>
         <nd ref="-462"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
@@ -2053,9 +2049,9 @@
         <tag k="highway" v="pedestrian"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-768"/>
+        <tag k="hoot:id" v="-756"/>
     </way>
-    <way visible="true" id="-767" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-755" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-453"/>
         <nd ref="-452"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
@@ -2067,9 +2063,9 @@
         <tag k="highway" v="pedestrian"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-767"/>
+        <tag k="hoot:id" v="-755"/>
     </way>
-    <way visible="true" id="-761" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-751" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-317"/>
         <nd ref="-316"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
@@ -2081,9 +2077,9 @@
         <tag k="highway" v="pedestrian"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-761"/>
+        <tag k="hoot:id" v="-751"/>
     </way>
-    <way visible="true" id="-759" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-749" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-454"/>
         <nd ref="-453"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
@@ -2095,66 +2091,9 @@
         <tag k="highway" v="pedestrian"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-759"/>
+        <tag k="hoot:id" v="-749"/>
     </way>
-    <way visible="true" id="-758" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-334"/>
-        <nd ref="-333"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="GeoEye;osm;osm"/>
-        <tag k="uuid" v="{ef653cac-8797-4979-91bf-c67b6ea663e4}"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-758"/>
-    </way>
-    <way visible="true" id="-757" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-338"/>
-        <nd ref="-334"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="GeoEye;osm;osm"/>
-        <tag k="uuid" v="{ef653cac-8797-4979-91bf-c67b6ea663e4}"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-757"/>
-    </way>
-    <way visible="true" id="-755" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-101"/>
-        <nd ref="-100"/>
-        <nd ref="-99"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="osm"/>
-        <tag k="uuid" v="{6a07b25b-60a7-4944-8e1d-361936b2eb89}"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="footway"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-755"/>
-    </way>
-    <way visible="true" id="-753" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-103"/>
-        <nd ref="-90"/>
-        <nd ref="-89"/>
-        <nd ref="-88"/>
-        <nd ref="-87"/>
-        <nd ref="-123"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="osm"/>
-        <tag k="uuid" v="{1b094678-4e70-4726-9c60-efc6c19f6588}"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="footway"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-753"/>
-    </way>
-    <way visible="true" id="-752" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-748" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-135"/>
         <nd ref="-136"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
@@ -2165,9 +2104,9 @@
         <tag k="highway" v="footway"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-752"/>
+        <tag k="hoot:id" v="-748"/>
     </way>
-    <way visible="true" id="-751" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-747" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-138"/>
         <nd ref="-135"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
@@ -2178,9 +2117,9 @@
         <tag k="highway" v="footway"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-751"/>
+        <tag k="hoot:id" v="-747"/>
     </way>
-    <way visible="true" id="-750" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-746" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-245"/>
         <nd ref="-368"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
@@ -2197,9 +2136,9 @@
         <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-750"/>
+        <tag k="hoot:id" v="-746"/>
     </way>
-    <way visible="true" id="-749" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-745" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-398"/>
         <nd ref="-245"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
@@ -2216,9 +2155,9 @@
         <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-749"/>
+        <tag k="hoot:id" v="-745"/>
     </way>
-    <way visible="true" id="-748" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-744" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-423"/>
         <nd ref="-421"/>
         <nd ref="-420"/>
@@ -2248,9 +2187,9 @@
         <tag k="operational_status_quality" v="confirmed"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-748"/>
+        <tag k="hoot:id" v="-744"/>
     </way>
-    <way visible="true" id="-747" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-743" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-447"/>
         <nd ref="-423"/>
         <tag k="width:minimum_traveled_way" v="8"/>
@@ -2279,75 +2218,9 @@
         <tag k="operational_status_quality" v="confirmed"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-747"/>
+        <tag k="hoot:id" v="-743"/>
     </way>
-    <way visible="true" id="-746" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-17"/>
-        <nd ref="-428"/>
-        <tag k="width:minimum_traveled_way" v="10"/>
-        <tag k="source" v="CNIGS/OIM/ FOCS;osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="name" v="Ruelle Saint Laurent"/>
-        <tag k="lanes" v="4"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="operational_status" v="closed"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.134Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{b9fe3118-c22c-498a-9ffb-8ce997308ef4};{{8ba9326b-283f-4888-9ef7-e341e49a4887}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="type" v="roadblock"/>
-        <tag k="smoothness" v="bad"/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-746"/>
-    </way>
-    <way visible="true" id="-745" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-200"/>
-        <nd ref="-21"/>
-        <nd ref="-20"/>
-        <nd ref="-19"/>
-        <nd ref="-18"/>
-        <nd ref="-17"/>
-        <tag k="width:minimum_traveled_way" v="10"/>
-        <tag k="source" v="CNIGS/OIM/ FOCS;osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="name" v="Ruelle Saint Laurent"/>
-        <tag k="lanes" v="4"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="operational_status" v="closed"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.134Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{b9fe3118-c22c-498a-9ffb-8ce997308ef4};{{8ba9326b-283f-4888-9ef7-e341e49a4887}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="type" v="roadblock"/>
-        <tag k="smoothness" v="bad"/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-745"/>
-    </way>
-    <way visible="true" id="-744" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-742" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-37"/>
         <nd ref="-36"/>
         <nd ref="-35"/>
@@ -2370,9 +2243,9 @@
         <tag k="highway" v="footway"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-744"/>
+        <tag k="hoot:id" v="-742"/>
     </way>
-    <way visible="true" id="-743" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-741" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-63"/>
         <nd ref="-39"/>
         <nd ref="-38"/>
@@ -2386,9 +2259,9 @@
         <tag k="highway" v="footway"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-743"/>
+        <tag k="hoot:id" v="-741"/>
     </way>
-    <way visible="true" id="-741" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-739" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-147"/>
         <nd ref="-146"/>
         <nd ref="-145"/>
@@ -2401,9 +2274,9 @@
         <tag k="highway" v="footway"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-741"/>
+        <tag k="hoot:id" v="-739"/>
     </way>
-    <way visible="true" id="-740" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-738" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-183"/>
         <nd ref="-182"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
@@ -2414,9 +2287,9 @@
         <tag k="highway" v="path"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-740"/>
+        <tag k="hoot:id" v="-738"/>
     </way>
-    <way visible="true" id="-739" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-737" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-184"/>
         <nd ref="-183"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
@@ -2427,9 +2300,9 @@
         <tag k="highway" v="path"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-739"/>
+        <tag k="hoot:id" v="-737"/>
     </way>
-    <way visible="true" id="-738" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-736" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-239"/>
         <nd ref="-238"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
@@ -2446,9 +2319,9 @@
         <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-738"/>
+        <tag k="hoot:id" v="-736"/>
     </way>
-    <way visible="true" id="-737" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-735" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-242"/>
         <nd ref="-241"/>
         <nd ref="-240"/>
@@ -2467,9 +2340,9 @@
         <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-737"/>
+        <tag k="hoot:id" v="-735"/>
     </way>
-    <way visible="true" id="-735" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-733" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-318"/>
         <nd ref="-317"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
@@ -2481,9 +2354,9 @@
         <tag k="highway" v="pedestrian"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-735"/>
+        <tag k="hoot:id" v="-733"/>
     </way>
-    <way visible="true" id="-733" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-731" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-462"/>
         <nd ref="-461"/>
         <nd ref="-460"/>
@@ -2502,9 +2375,9 @@
         <tag k="highway" v="pedestrian"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-733"/>
+        <tag k="hoot:id" v="-731"/>
     </way>
-    <way visible="true" id="-730" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-728" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-62"/>
         <nd ref="-61"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
@@ -2515,29 +2388,15 @@
         <tag k="highway" v="footway"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-730"/>
+        <tag k="hoot:id" v="-728"/>
     </way>
-    <way visible="true" id="-729" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-727" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-68"/>
         <nd ref="-62"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="source" v="GeoEye;osm;osm"/>
         <tag k="uuid" v="{e29636b1-5133-49ab-92e5-3dae1d6bba00}"/>
         <tag k="attribution" v="osm;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="footway"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-729"/>
-    </way>
-    <way visible="true" id="-727" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-65"/>
-        <nd ref="-64"/>
-        <nd ref="-63"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="GeoEye;osm"/>
-        <tag k="uuid" v="{fa87d52d-7977-4434-b478-f4da3c7bc81c}"/>
-        <tag k="attribution" v="osm"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="footway"/>
         <tag k="hoot:status" v="1"/>
@@ -4377,33 +4236,22 @@
         <tag k="hoot:id" v="-606"/>
     </way>
     <way visible="true" id="-605" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-315"/>
+        <nd ref="-200"/>
         <nd ref="-316"/>
         <nd ref="-200"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
-        <tag k="source" v="hot_iom_cosmha;osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="name" v="Rue Docteur Aubry"/>
-        <tag k="lanes" v="2"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.145Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="highway" v="tertiary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{3bfb20f5-daa2-4cbb-bcca-7e45b88828eb};{{d5dd6c71-1f98-4bf2-9238-6a9acd8e5934}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="smoothness" v="bad"/>
         <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="hoot:status" v="3"/>
+        <tag k="operational_status" v="open"/>
+        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
+        <tag k="source" v="hot_iom_cosmha;osm;osm"/>
+        <tag k="uuid" v="{3bfb20f5-daa2-4cbb-bcca-7e45b88828eb}"/>
+        <tag k="name" v="Rue Docteur Aubry"/>
+        <tag k="attribution" v="osm;osm"/>
+        <tag k="smoothness" v="bad"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="highway" v="tertiary"/>
+        <tag k="surface" v="paved"/>
+        <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-605"/>
     </way>
@@ -6273,7 +6121,7 @@
     </way>
     <way visible="true" id="-484" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-138"/>
-        <nd ref="-315"/>
+        <nd ref="-200"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="source" v="osm;osm"/>
         <tag k="uuid" v="{a6c936cc-e2ad-49d5-9dad-8fe5537675f8}"/>
@@ -7272,6 +7120,23 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-401"/>
     </way>
+    <way visible="true" id="-400" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-103"/>
+        <nd ref="-90"/>
+        <nd ref="-89"/>
+        <nd ref="-88"/>
+        <nd ref="-87"/>
+        <nd ref="-123"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="source" v="osm;osm"/>
+        <tag k="uuid" v="{1b094678-4e70-4726-9c60-efc6c19f6588}"/>
+        <tag k="attribution" v="osm;osm"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="highway" v="footway"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-400"/>
+    </way>
     <way visible="true" id="-399" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-290"/>
         <nd ref="-91"/>
@@ -7285,6 +7150,20 @@
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-399"/>
+    </way>
+    <way visible="true" id="-398" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-101"/>
+        <nd ref="-100"/>
+        <nd ref="-99"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="source" v="osm;osm"/>
+        <tag k="uuid" v="{6a07b25b-60a7-4944-8e1d-361936b2eb89}"/>
+        <tag k="attribution" v="osm;osm"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="highway" v="footway"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-398"/>
     </way>
     <way visible="true" id="-396" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-101"/>
@@ -7688,6 +7567,20 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-363"/>
     </way>
+    <way visible="true" id="-362" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-338"/>
+        <nd ref="-334"/>
+        <nd ref="-333"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="source" v="GeoEye;osm;osm"/>
+        <tag k="uuid" v="{ef653cac-8797-4979-91bf-c67b6ea663e4}"/>
+        <tag k="attribution" v="osm;osm"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-362"/>
+    </way>
     <way visible="true" id="-361" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-335"/>
         <nd ref="-338"/>
@@ -8003,6 +7896,20 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-335"/>
     </way>
+    <way visible="true" id="-332" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-65"/>
+        <nd ref="-64"/>
+        <nd ref="-63"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="source" v="GeoEye;osm;osm"/>
+        <tag k="uuid" v="{fa87d52d-7977-4434-b478-f4da3c7bc81c}"/>
+        <tag k="attribution" v="osm;osm"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="highway" v="footway"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-332"/>
+    </way>
     <way visible="true" id="-330" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-65"/>
         <nd ref="-223"/>
@@ -8177,7 +8084,7 @@
     </way>
     <way visible="true" id="-297" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-314"/>
-        <nd ref="-315"/>
+        <nd ref="-200"/>
         <tag k="width:minimum_traveled_way" v="8"/>
         <tag k="source" v="hot_iom_cosmha;osm;mgcp"/>
         <tag k="condition" v="functional"/>
@@ -10368,6 +10275,42 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-16"/>
     </way>
+    <way visible="true" id="-13" timestamp="2017-06-07T15:18:21Z" version="1" changeset="119">
+        <nd ref="-200"/>
+        <nd ref="-21"/>
+        <nd ref="-20"/>
+        <nd ref="-19"/>
+        <nd ref="-18"/>
+        <nd ref="-17"/>
+        <nd ref="-428"/>
+        <tag k="width:minimum_traveled_way" v="10"/>
+        <tag k="source" v="CNIGS/OIM/ FOCS;osm;mgcp"/>
+        <tag k="condition" v="functional"/>
+        <tag k="name" v="Ruelle Saint Laurent"/>
+        <tag k="lanes" v="4"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="surface" v="paved"/>
+        <tag k="median" v="no"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="operational_status" v="closed"/>
+        <tag k="attribution" v="osm;osm"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.134Z"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="uuid" v="{b9fe3118-c22c-498a-9ffb-8ce997308ef4};{{8ba9326b-283f-4888-9ef7-e341e49a4887}}"/>
+        <tag k="location" v="surface"/>
+        <tag k="type" v="roadblock"/>
+        <tag k="smoothness" v="bad"/>
+        <tag k="operational_status_quality" v="confirmed"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-13"/>
+    </way>
     <way visible="true" id="-11" timestamp="2017-06-07T15:18:21Z" version="1" changeset="119">
         <nd ref="-215"/>
         <nd ref="-205"/>
@@ -10491,7 +10434,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-3"/>
     </way>
-    <relation visible="true" id="-314" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-312" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-574" role="reviewee"/>
         <member type="way" ref="-365" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -10499,9 +10442,9 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="type" v="review"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-314"/>
+        <tag k="hoot:id" v="-312"/>
     </relation>
-    <relation visible="true" id="-313" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-311" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-428" role="reviewee"/>
         <member type="way" ref="-365" role="reviewee"/>
         <member type="way" ref="-190" role="reviewee"/>
@@ -10510,9 +10453,9 @@
         <tag k="hoot:review:members" v="3"/>
         <tag k="type" v="review"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-313"/>
+        <tag k="hoot:id" v="-311"/>
     </relation>
-    <relation visible="true" id="-312" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-310" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-574" role="reviewee"/>
         <member type="way" ref="-573" role="reviewee"/>
         <member type="way" ref="-365" role="reviewee"/>
@@ -10521,32 +10464,11 @@
         <tag k="hoot:review:members" v="3"/>
         <tag k="type" v="review"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-312"/>
-    </relation>
-    <relation visible="true" id="-311" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-428" role="reviewee"/>
-        <member type="way" ref="-365" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="type" v="review"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-311"/>
-    </relation>
-    <relation visible="true" id="-310" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-218" role="reviewee"/>
-        <member type="way" ref="-198" role="reviewee"/>
-        <member type="way" ref="-72" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:members" v="3"/>
-        <tag k="type" v="review"/>
-        <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-310"/>
     </relation>
     <relation visible="true" id="-309" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-218" role="reviewee"/>
-        <member type="way" ref="-198" role="reviewee"/>
+        <member type="way" ref="-428" role="reviewee"/>
+        <member type="way" ref="-365" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="Highway"/>
         <tag k="hoot:review:members" v="2"/>
@@ -10555,6 +10477,27 @@
         <tag k="hoot:id" v="-309"/>
     </relation>
     <relation visible="true" id="-308" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-218" role="reviewee"/>
+        <member type="way" ref="-198" role="reviewee"/>
+        <member type="way" ref="-72" role="reviewee"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:type" v="Highway"/>
+        <tag k="hoot:review:members" v="3"/>
+        <tag k="type" v="review"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-308"/>
+    </relation>
+    <relation visible="true" id="-307" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-218" role="reviewee"/>
+        <member type="way" ref="-198" role="reviewee"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:type" v="Highway"/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="type" v="review"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-307"/>
+    </relation>
+    <relation visible="true" id="-306" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-151" role="reviewee"/>
         <member type="way" ref="-72" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -10562,9 +10505,9 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="type" v="review"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-308"/>
+        <tag k="hoot:id" v="-306"/>
     </relation>
-    <relation visible="true" id="-307" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-305" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-218" role="reviewee"/>
         <member type="way" ref="-198" role="reviewee"/>
         <member type="way" ref="-151" role="reviewee"/>
@@ -10573,6 +10516,6 @@
         <tag k="hoot:review:members" v="3"/>
         <tag k="type" v="review"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-307"/>
+        <tag k="hoot:id" v="-305"/>
     </relation>
 </osm>

@@ -975,7 +975,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1"/>
     </node>
-    <way visible="true" id="-1323" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1321" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1010"/>
         <nd ref="-74"/>
         <nd ref="-73"/>
@@ -1005,9 +1005,9 @@
         <tag k="location" v="surface"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-1323"/>
+        <tag k="hoot:id" v="-1321"/>
     </way>
-    <way visible="true" id="-1322" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1320" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-210"/>
         <nd ref="-85"/>
         <nd ref="-84"/>
@@ -1046,9 +1046,9 @@
         <tag k="location" v="surface"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-1322"/>
+        <tag k="hoot:id" v="-1320"/>
     </way>
-    <way visible="true" id="-137" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-135" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-37"/>
         <nd ref="-36"/>
         <nd ref="-35"/>
@@ -1062,9 +1062,9 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-137"/>
+        <tag k="hoot:id" v="-135"/>
     </way>
-    <way visible="true" id="-136" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-134" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-40"/>
         <nd ref="-39"/>
         <nd ref="-38"/>
@@ -1077,7 +1077,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-136"/>
+        <tag k="hoot:id" v="-134"/>
     </way>
     <way visible="true" id="-133" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-16"/>
@@ -1113,9 +1113,9 @@
         <nd ref="-41"/>
         <nd ref="-40"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="GeoEye;osm"/>
+        <tag k="source" v="GeoEye;osm;osm"/>
         <tag k="uuid" v="{67a9b0b5-d2ef-4b13-b6ab-f79fa3424084}"/>
-        <tag k="attribution" v="osm"/>
+        <tag k="attribution" v="osm;osm"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="1"/>

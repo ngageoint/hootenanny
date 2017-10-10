@@ -5,6 +5,10 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-19"/>
     </node>
+    <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="-6.1969622623099987" lon="106.7865273480000070">
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-11"/>
+    </node>
     <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="-6.1969908769799993" lon="106.7865669170000018">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-10"/>
@@ -48,7 +52,23 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1"/>
     </node>
-    <way visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1"/>
+        <nd ref="-9"/>
+        <nd ref="-10"/>
+        <nd ref="-11"/>
+        <nd ref="-7"/>
+        <tag k="width" v="2.5"/>
+        <tag k="name" v="KEMANGGISAN 3G"/>
+        <tag k="all_weather" v="yes"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="lanes" v="1"/>
+        <tag k="surface" v="paved"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="error:circular" v="10.08"/>
+        <tag k="hoot:id" v="-15"/>
+    </way>
+    <way visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-19"/>
         <nd ref="-6"/>
         <nd ref="-7"/>
@@ -61,9 +81,9 @@
         <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-17"/>
+        <tag k="hoot:id" v="-13"/>
     </way>
-    <way visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-3"/>
         <nd ref="-4"/>
         <nd ref="-5"/>
@@ -72,22 +92,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-16"/>
-    </way>
-    <way visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1"/>
-        <nd ref="-9"/>
-        <nd ref="-10"/>
-        <nd ref="-7"/>
-        <tag k="width" v="2.5"/>
-        <tag k="name" v="KEMANGGISAN 3G"/>
-        <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="lanes" v="1"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="error:circular" v="10.08"/>
-        <tag k="hoot:id" v="-15"/>
+        <tag k="hoot:id" v="-12"/>
     </way>
     <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1"/>
