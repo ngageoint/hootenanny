@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+source $HOME/hoot/VagrantProvisionVars.sh
+
 VMUSER=`id -u -n`
 echo USER: $VMUSER
 VMGROUP=`groups | grep -o $VMUSER`
@@ -37,13 +39,13 @@ if ! java -version 2>&1 | grep --quiet 1.8.0_131; then
     #    md5: 75b2cb2249710d822a60f83e28860053
     echo "75b2cb2249710d822a60f83e28860053  /tmp/jdk-8u131-linux-x64.tar.gz " > /tmp/jdk.md5
 
-    if [ ! -f /tmp/jdk-8u131-linux-x64.tar.gz ] || ! md5sum -c /tmp/jdk.md5; then
-        echo "Downloading jdk-8u131-linux-x64.tar.gz ...."
-        sudo wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jdk-8u131-linux-x64.tar.gz -P /tmp
-        echo "Finished download of jdk-8u131-linux-x64.tar.gz"
+    if [ ! -f /tmp/$JDK_FILE ] || ! md5sum -c /tmp/jdk.md5; then
+        echo "Downloading $JDK_FILE ...."
+        sudo wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" $JDK_URL -P /tmp
+        echo "Finished download of $JDK_FILE"
     fi
 
-    sudo tar -xvzf /tmp/jdk-8u131-linux-x64.tar.gz --directory=/tmp >/dev/null
+    sudo tar -xvzf /tmp/$JDK_FILE --directory=/tmp >/dev/null
 
     if [[ ! -e /usr/lib/jvm ]]; then
         sudo mkdir /usr/lib/jvm
@@ -53,7 +55,7 @@ if ! java -version 2>&1 | grep --quiet 1.8.0_131; then
         fi
     fi
 
-    sudo mv -f /tmp/jdk1.8.0_131 /usr/lib/jvm/oracle_jdk8
+    sudo mv -f /tmp/$JDK_DIR /usr/lib/jvm/oracle_jdk8
     sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/oracle_jdk8/jre/bin/java 9999
     sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/oracle_jdk8/bin/javac 9999
     echo "### Done with Java 8 install..."
@@ -242,11 +244,6 @@ if [ ! -f bin/osmosis ]; then
 fi
 
 
-# For convenience, set the version of GDAL and FileGDB to download and install
-GDAL_VERSION=2.1.4
-FGDB_VERSION=1.5.1
-FGDB_VERSION2=`echo $FGDB_VERSION | sed 's/\./_/g;'`
-
 if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --version | grep -q $GDAL_VERSION && ogrinfo --formats | grep -q FileGDB ); then
     if [ ! -f gdal-$GDAL_VERSION.tar.gz ]; then
         echo "### Downloading GDAL $GDAL_VERSION source..."
@@ -257,13 +254,13 @@ if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --version | grep -q $GDAL_VERSIO
         tar zxfp gdal-$GDAL_VERSION.tar.gz
     fi
 
-    if [ ! -f FileGDB_API_${FGDB_VERSION2}-64.tar.gz ]; then
+    if [ ! -f $FGDB_FILE ]; then
         echo "### Downloading FileGDB API source..."
-        wget --quiet https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_${FGDB_VERSION}/FileGDB_API_${FGDB_VERSION2}-64.tar.gz
+        wget --quiet $FGDB_URL
     fi
-    if [ ! -d /usr/local/FileGDB_API ]; then
+    if [ ! -d /usr/local/FileGDB_API/lib ]; then
         echo "### Extracting FileGDB API source & installing lib..."
-        sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp FileGDB_API_${FGDB_VERSION2}-64.tar.gz --directory /usr/local/FileGDB_API --strip-components 1
+        sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp $FGDB_FILE --directory /usr/local/FileGDB_API --strip-components 1
         sudo sh -c "echo '/usr/local/FileGDB_API/lib' > /etc/ld.so.conf.d/filegdb.conf"
     fi
 
