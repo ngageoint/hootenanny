@@ -104,8 +104,8 @@ Vagrant.configure(2) do |config|
     #hoot_ubuntu1604.vm.box_url = "https://atlas.hashicorp.com/ubuntu/boxes/xenial64"
 
     # Why does this box have an ubuntu user, not a vagrant user?   Why?????
-    #config.vm.synced_folder ".", "/home/ubuntu/hoot"
 
+    hoot_ubuntu1604.vm.synced_folder ".", "/home/vagrant/hoot"
     # This should work for libvirt and virtualbox.
     hoot_ubuntu1604.vm.box = "elastic/ubuntu-16.04-x86_64"
     hoot_ubuntu1604.vm.box_url = "https://app.vagrantup.com/elastic/boxes/ubuntu-16.04-x86_64"
