@@ -104,6 +104,7 @@ sudo apt-get -q -y install \
  libnewmat10-dev \
  libogdi3.2-dev \
  libopencv-dev \
+ libpq-dev \
  libproj-dev \
  libprotobuf-dev \
  libqt4-dev \
@@ -112,7 +113,6 @@ sudo apt-get -q -y install \
  libstxxl-dev \
  libv8-dev \
  maven \
- npm \
  node-gyp \
  openssh-server \
  patch \
@@ -317,9 +317,9 @@ if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --formats | grep --quiet FileGDB
     cd gdal-$GDAL_VERSION
     touch config.rpath
     echo "GDAL: configure"
-    sudo ./configure --quiet --with-fgdb=/usr/local/FileGDB_API --with-pg=/usr/bin/pg_config --with-python
+    ./configure --quiet --with-static-proj4 --with-fgdb=/usr/local/FileGDB_API --with-pg=/usr/bin/pg_config --with-python
     echo "GDAL: make"
-    sudo make -sj$(nproc) > GDAL_Build.txt 2>&1
+    make -sj$(nproc) > GDAL_Build.txt 2>&1
     echo "GDAL: install"
     sudo make -s install >> GDAL_Build.txt 2>&1
     cd swig/python
