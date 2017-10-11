@@ -1,5 +1,12 @@
 pipeline {
     agent any
+    triggers {
+        // Set nightly triggers
+        cron(BRANCH_NAME == "develop" ? "H H(21-22) * * 1-5" : "")
+        cron(BRANCH_NAME == "master" ? "H H(21-22) * * 1-5" : "")
+        cron(BRANCH_NAME == "regression" ? "H H(21-22) * * 1-5" : "")
+        cron(BRANCH_NAME == "DD-188" ? "H H(21-22) * * 1-5" : "")
+    }
     // Checkbox parameters for users to skip steps and control pipeline behavior
     parameters {
         // TODO: Need logic to reuse VM.  Current logic destroys it every run
