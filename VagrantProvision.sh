@@ -295,7 +295,7 @@ fi
 
 if ! mocha --version &>/dev/null; then
     echo "### Installing mocha for plugins test..."
-    sudo npm install --silent -g mocha
+    sudo npm install --silent -g mocha@3.5.3
     # Clean up after the npm install
     sudo rm -rf ~/tmp
 fi
