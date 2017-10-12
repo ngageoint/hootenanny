@@ -93,7 +93,7 @@ void MapIoJs::loadMap(const FunctionCallbackInfo<Value>& args)
   }
 }
 
-void loadMapFromString(const FunctionCallbackInfo<Value>& args)
+void MapIoJs::loadMapFromString(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
@@ -122,7 +122,7 @@ void loadMapFromString(const FunctionCallbackInfo<Value>& args)
   args.GetReturnValue().SetUndefined();
 }
 
-void saveMap(const FunctionCallbackInfo<Value>& args)
+void MapIoJs::saveMap(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
