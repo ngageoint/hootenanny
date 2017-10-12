@@ -55,7 +55,7 @@ public:
     }
 
     QStringList types;
-    if (args.size() > 3)
+    if (args.size() > 3 && args[3].trimmed().toLower() != "all")
     {
       types = args[3].trimmed().split(";");
     }

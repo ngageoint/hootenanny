@@ -96,12 +96,12 @@ private:
   QStringList _getPoiKvps(const Tags& tags) const;
   void _removeKvpsBelowOccuranceThreshold(const int minOccurancesThreshold);
   void _removeDuplicatedKeyTypes();
-  void _removeIrrelevantKeyTypes(const QStringList typeKeysAllowed);
   void _generateTagRulesByWord();
   void _rulesByWordToRules(const ImplicitTagRulesByWord& rulesByWord);
   Tags _kvpsToTags(const QSet<QString>& kvps);
   QString _kvpsToString(const QSet<QString>& kvps);
   void _unescapeRuleWords();
+  bool _outputsContainsSqlite(const QStringList outputs);
 };
 
 }

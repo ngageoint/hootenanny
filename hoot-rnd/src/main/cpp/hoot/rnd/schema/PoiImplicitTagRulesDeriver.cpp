@@ -122,12 +122,39 @@ void PoiImplicitTagRulesDeriver::_updateForNewWord(QString word, const QString k
   LOG_VART(_wordTagKeysToTagValues[wordKvpKey]);
 }
 
+bool PoiImplicitTagRulesDeriver::_outputsContainsSqlite(const QStringList outputs)
+{
+  bool containsSqlite = false;
+  for (int i = 0; i < outputs.size(); i++)
+  {
+    if (outputs.at(i).endsWith(".sqlite"))
+    {
+      containsSqlite = true;
+    }
+  }
+  return containsSqlite;
+}
+
 void PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs,
                                              const QStringList translationScripts,
                                              const QStringList outputs,
                                              const QStringList typeKeys,
                                              const int minOccurancesThreshold)
 {
+  if (inputs.isEmpty())
+  {
+    throw HootException("No inputs were specified.");
+  }
+
+  if (outputs.isEmpty())
+  {
+    throw HootException("No outputs were specified.");
+  }
+  else if (!_outputsContainsSqlite(outputs))
+  {
+    throw HootException("Outputs must contain at least on Sqlite database.");
+  }
+
   if (inputs.size() != translationScripts.size())
   {
     LOG_VARD(inputs.size());
@@ -146,6 +173,7 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs,
   {
     typeKeysAllowed.append(typeKeys.at(i).toLower());
   }
+  LOG_VART(typeKeysAllowed.isEmpty());
 
   long poiCount = 0;
   long nodeCount = 0;
@@ -165,26 +193,45 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs,
     while (inputStream->hasMoreElements())
     {
       ElementPtr element = inputStream->readNextElement();
-      const Tags& tags = element->getTags();
-      LOG_VART(element);
-      LOG_VART(typeKeys.isEmpty());
-      LOG_VART(tags.hasAnyKey(typeKeys));
-
-      if (element->getElementType() == ElementType::Node &&
-          (typeKeys.isEmpty() || tags.hasAnyKey(typeKeys)))
+      if (element->getElementType() == ElementType::Node)
       {
-        const QStringList names = tags.getNames();
-        LOG_VART(names);
+        LOG_VART(element->getTags());
+        const QStringList names = element->getTags().getNames();
+        LOG_VART(names.size());
         if (names.size() > 0)
         {
-          const QStringList kvps = _getPoiKvps(tags);
+          LOG_VART(names);
+          Tags relevantTags;
+          if (typeKeysAllowed.isEmpty())
+          {
+            relevantTags = element->getTags();
+          }
+          else
+          {
+            for (Tags::const_iterator tagsItr = element->getTags().begin();
+                 tagsItr != element->getTags().end(); ++tagsItr)
+            {
+              const QString tagKey = tagsItr.key();
+              if (typeKeysAllowed.contains(tagKey))
+              {
+                relevantTags.appendValue(tagKey, tagsItr.value());
+              }
+            }
+          }
+          LOG_VART(relevantTags);
+
+          const QStringList kvps = _getPoiKvps(relevantTags);
           LOG_VART(kvps.size());
           if (!kvps.isEmpty())
           {
             for (int i = 0; i < names.size(); i++)
             {
-              const QString name = names.at(i);
-
+              QString name = names.at(i);
+              //'=' is used as a map key for kvps, so it needs to be escaped in the word
+              if (name.contains("="))
+              {
+                name = name.replace("=", "%3D");
+              }
               for (int j = 0; j < kvps.size(); j++)
               {
                 _updateForNewWord(name, kvps.at(j));
@@ -229,7 +276,6 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs,
   //TODO: try to reduce these mutiple passes over the data down to a single pass
   _removeKvpsBelowOccuranceThreshold(minOccurancesThreshold);
   _removeDuplicatedKeyTypes();
-  _removeIrrelevantKeyTypes(typeKeysAllowed);
   LOG_VARD(_wordTagKeysToTagValues.size());
   _wordTagKeysToTagValues.clear();
   _generateTagRulesByWord();
@@ -314,46 +360,6 @@ void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccuranceThreshold(const int mi
   LOG_DEBUG(
     "Removed " << StringUtils::formatLargeNumber(kvpRemovalCount) << " tags that " <<
     "fell below the minimum occurrance threshold of " << minOccurancesThreshold);
-}
-
-void PoiImplicitTagRulesDeriver::_removeIrrelevantKeyTypes(const QStringList typeKeysAllowed)
-{
-  if (typeKeysAllowed.size() == 0)
-  {
-    return;
-  }
-
-  LOG_DEBUG("Removing irrelevant tags...");
-
-  QMap<QString, long> updatedCounts; //*
-  QMap<QString, QStringList> updatedValues; //*
-
-  long irrelevantKvpRemovalCount = 0;
-  for (QMap<QString, long>::const_iterator kvpCountsItr = _wordKvpsToOccuranceCounts.begin();
-       kvpCountsItr != _wordKvpsToOccuranceCounts.end(); ++kvpCountsItr)
-  {
-    const QStringList keyParts = kvpCountsItr.key().split(";");
-    const QString word = keyParts[0];
-    const QString key = keyParts[1].split("=")[0];
-
-    if (typeKeysAllowed.contains(key.toLower()))
-    {
-      updatedCounts[kvpCountsItr.key()] = kvpCountsItr.value();
-      const QString wordKvpKey = word % ";" % key;
-      updatedValues[wordKvpKey] = _wordTagKeysToTagValues[wordKvpKey];
-    }
-    else
-    {
-      irrelevantKvpRemovalCount++;
-    }
-  }
-
-  _wordKvpsToOccuranceCounts = updatedCounts;
-  _wordTagKeysToTagValues = updatedValues;
-
-  LOG_DEBUG(
-    "Removed " << StringUtils::formatLargeNumber(irrelevantKvpRemovalCount) <<
-    " irrelevant tags that did not belong to the specified tag types list.");
 }
 
 void PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
