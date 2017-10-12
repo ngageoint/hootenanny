@@ -54,6 +54,7 @@ class OsmGeoJsonWriterTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runDcTigerTest);
   CPPUNIT_TEST(runBostonSubsetRoadBuildingTest);
   CPPUNIT_TEST(runObjectGeoJsonTest);
+  CPPUNIT_TEST(runObjectGeoJsonHootTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -83,7 +84,16 @@ public:
     runTest("test-files/io/GeoJson/SampleObjectsWriter.osm", "SampleObjectsWriter.geojson");
   }
 
-  void runTest(const QString& input, const QString& output)
+  void runObjectGeoJsonHootTest()
+  {
+    Settings s;
+    s.set(ConfigOptions::getJsonPrettyPrintKey(), true);
+    s.set(ConfigOptions::getJsonFormatHootenannyKey(), true);
+
+    runTest("test-files/io/GeoJson/SampleObjectsWriter.osm", "SampleObjectsWriterHoot.geojson", &s);
+  }
+
+  void runTest(const QString& input, const QString& output, Settings* settings = NULL)
   {
     OsmXmlReader reader;
 
@@ -95,6 +105,10 @@ public:
     QDir().mkpath("test-output/io/GeoJson/");
     OsmGeoJsonWriter writer;
     writer.open(QString("test-output/io/GeoJson/%1").arg(output));
+
+    if (settings)
+      writer.setConfiguration(*settings);
+
     writer.write(map);
     HOOT_FILE_EQUALS(QString("test-files/io/GeoJson/%1").arg(output),
                      QString("test-output/io/GeoJson/%1").arg(output));

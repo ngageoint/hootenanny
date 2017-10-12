@@ -105,6 +105,7 @@ protected:
   bool _pretty;
   bool _firstElement;
   bool _writeEmptyTags;
+  bool _writeHootFormat;
 
   static QString _typeName(ElementType e);
 

@@ -59,8 +59,9 @@ OsmJsonWriter::OsmJsonWriter(int precision)
   : _includeDebug(ConfigOptions().getWriterIncludeDebugTags()),
     _precision(precision),
     _out(0),
-    _pretty(false),
-    _writeEmptyTags(false)
+    _pretty(ConfigOptions().getJsonPrettyPrint()),
+    _writeEmptyTags(ConfigOptions().getJsonPerserveEmptyTags()),
+    _writeHootFormat(true)
 {
 }
 
@@ -187,14 +188,9 @@ void OsmJsonWriter::_writeNodes()
 
 void OsmJsonWriter::_write(const QString& str, bool newLine)
 {
+  _out->write(str.toUtf8());
   if (newLine)
-  {
-    _out->write((str + "\n").toUtf8());
-  }
-  else
-  {
-    _out->write(str.toUtf8());
-  }
+    _out->write(QString("\n").toUtf8());
 }
 
 bool OsmJsonWriter::_hasTags(ConstElementPtr e)
@@ -211,7 +207,10 @@ void OsmJsonWriter::_writeTag(const QString& key, const QString& value, bool& fi
   {
     if (firstTag)
     {
-      _write("\"tags\":{");
+      if (_writeHootFormat)
+        _write("\"tags\":{");
+      else
+        _write("\"properties\":{");
       firstTag = false;
     }
     else
@@ -232,9 +231,9 @@ void OsmJsonWriter::_writeTags(ConstElementPtr e)
     }
   }
 
-  // turn this on when we start using node circularError.
-  if (e->getElementType() != ElementType::Node ||
-      (e->getCircularError() >= 0 && e->getTags().getInformationCount() > 0))
+  if (_writeHootFormat &&
+      (e->getElementType() != ElementType::Node || // turn this on when we start using node circularError.
+      (e->getCircularError() >= 0 && e->getTags().getInformationCount() > 0)))
   {
     _writeTag(MetadataTags::ErrorCircular(), QString::number(e->getCircularError(), 'g', _precision), firstTag);
   }
