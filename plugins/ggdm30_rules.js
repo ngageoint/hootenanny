@@ -85,6 +85,7 @@ ggdm30.rules = {
      ['F_CODE','BA030','place','islet'], // Island - From OSM
      ['F_CODE','BH140','waterway','yes'], // Make unknown waterways into rivers
      ['F_CODE','BH145','natural','sinkhole'],
+     ['F_CODE','BH155','man_made','salt_pond'], // Due to the default translation changing
      // ['F_CODE','EA010','landuse','farm'], // Alt version of "landuse=farmland"
      // ['F_CODE','EC015','natural','wood'], // Alt version of Forest
      ['F_CODE','GB005','aeroway','sport_airport'], // Land Aerodrome
