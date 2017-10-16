@@ -345,6 +345,20 @@ if ! mocha --version &>/dev/null; then
     sudo rm -rf ~/tmp/*
 fi
 
+sudo apt -y -qq remove postgresql-9.6
+sudo apt -y -qq autoremove
+
+# If the DB encoding isn't correcct, delete and recreate the DB.
+if ! sudo -u postgres psql $DB_NAME -c "SHOW SERVER_ENCODING" | grep UTF8; then
+  echo "Now stop the postgresql instance so we can recreate the DB w/ UTF8 encoding."
+  sudo service postgresql stop
+
+  sudo rm -rf /var/lib/postgresql/9.5/main/ && sudo -u postgres /usr/lib/postgresql/9.5/bin/initdb -E UTF8 -D /var/lib/postgresql/9.5/main/
+
+  echo "Starting postgresql back up."
+  sudo service postgresql start
+fi
+
 # NOTE: These have been changed to pg9.5
 if ! sudo -u postgres psql -lqt | grep -i --quiet hoot; then
     echo "### Creating Services Database..."
