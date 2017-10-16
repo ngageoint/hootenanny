@@ -123,7 +123,10 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
   }
   for (size_t i = 0; i < numIterations; ++i)
   {
-    if (ConfigOptions().getNetworkMatchWriteDebugMaps())
+    matcher->iterate();
+    LOG_INFO("Optimization iteration: " << i + 1 << "/" << numIterations << " complete.");
+
+    if (true || ConfigOptions().getNetworkMatchWriteDebugMaps())
     {
       OsmMapPtr copy(new OsmMap(map));
       DebugNetworkMapCreator(matcher->getMatchThreshold()).addDebugElements(copy,
@@ -135,15 +138,13 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
       LOG_INFO("Writing debug map: " << name);
       OsmMapWriterFactory::getInstance().write(copy, name);
     }
-
-    matcher->iterate();
-
-    LOG_INFO("Optimization iteration: " << i + 1 << "/" << numIterations << " complete.");
   }
 
-  LOG_DEBUG("Retrieving edge scores...");
+  // Finalize
+  matcher->finalize();
 
-  // convert graph edge matches into NetworkMatch objects.
+  LOG_DEBUG("Retrieving edge scores...");
+  // Convert graph edge matches into NetworkMatch objects.
   QList<NetworkEdgeScorePtr> edgeMatch = matcher->getAllEdgeScores();
 
   LOG_VART(matcher->getMatchThreshold());
@@ -153,11 +154,29 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
     LOG_VART(edgeMatch[i]->getScore());
     LOG_VART(edgeMatch[i]->getEdgeMatch());
 
+    // MICAH DEBUG
+    if (edgeMatch[i]->getEdgeMatch()->getUid() == "ec0a1ec2")
+    {
+      double t1 = edgeMatch[i]->getScore();
+      double t2 = matcher->getMatchThreshold();
+
+      int crap = 0;
+      crap++;
+    }
+
     /// @todo tunable parameter
     if (edgeMatch[i]->getScore() > matcher->getMatchThreshold())
     {
       LOG_TRACE("is match");
+      LOG_VART(edgeMatch[i]->getEdgeMatch()->getUid());
       matches.push_back(_createMatch(details, edgeMatch[i], threshold));
+
+      // MICAH DEBUG
+      if (edgeMatch[i]->getEdgeMatch()->getUid() == "ec0a1ec2")
+      {
+        int crap = 0;
+        crap++;
+      }
     }
   }
 }

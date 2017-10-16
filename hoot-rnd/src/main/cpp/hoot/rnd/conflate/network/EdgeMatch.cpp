@@ -156,6 +156,13 @@ bool EdgeMatch::isVerySimilarTo(const boost::shared_ptr<const EdgeMatch>& other)
   return false;
 }
 
+QString EdgeMatch::getUid() const
+{
+  QString hexStr;
+  hexStr.setNum(_hash, 16);
+  return hexStr;
+}
+
 QString EdgeMatch::toString() const
 {
   return QString("s1: %1 s2: %2").arg(_edges1->toString()).arg(_edges2->toString());

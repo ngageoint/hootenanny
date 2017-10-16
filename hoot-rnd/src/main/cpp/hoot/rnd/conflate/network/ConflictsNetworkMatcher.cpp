@@ -30,6 +30,11 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/rnd/conflate/network/EdgeMatch.h>
+#include <hoot/rnd/conflate/frechet/FrechetDistance.h>
+
+// Debug
+#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 
 #include "EdgeMatchSetFinder.h"
 
@@ -176,6 +181,52 @@ void ConflictsNetworkMatcher::_removeDupes()
       }
     }
     ++it1;
+  }
+}
+
+void ConflictsNetworkMatcher::_sanityCheckMatches()
+{
+  LOG_DEBUG("Performing Match Sanity Check");
+
+  QHash<ConstEdgeMatchPtr,double>::iterator matchIt = _edgeMatches->getAllMatches().begin();
+
+  while (matchIt != _edgeMatches->getAllMatches().end())
+  {
+    // convert the EdgeStrings into WaySublineStrings
+    WayStringPtr str1 = _details->toWayString(matchIt.key()->getString1());
+    WayStringPtr str2 = _details->toWayString(matchIt.key()->getString2());
+
+    LOG_INFO(str1->toString());
+    LOG_INFO(str2->toString());
+    LOG_INFO("Match ID: " << matchIt.key()->getUid());
+
+    if (str1->getSize() > 0 && str2->getSize() > 0)
+    {
+      //  Create a temp map, and add the ways
+      OsmMapPtr tempMap(new OsmMap());
+      tempMap->setProjection(_details->getMap()->getProjection());
+      //MapProjector::projectToPlanar(tempMap);
+
+      WayPtr pWay1 = str1->copySimplifiedWayIntoMap(*(_details->getMap()), tempMap);
+      WayPtr pWay2 = str2->copySimplifiedWayIntoMap(*(_details->getMap()), tempMap);
+
+      // Make our frechet object
+      FrechetDistance distanceCalc(tempMap, pWay1, pWay2);
+      Meters d = distanceCalc.distance();
+
+      // Write debug map real quick
+      MapProjector::projectToWgs84(tempMap);
+      OsmMapWriterFactory::getInstance().write(tempMap, "tmp/tmp.osm");
+
+      LOG_INFO("Frechet Distance: " << d);
+      if ("d8df7b82" == matchIt.key()->getUid())
+      {
+        int i = 0;
+        i++;
+      }
+    }
+
+    ++matchIt;
   }
 }
 
@@ -551,9 +602,8 @@ void ConflictsNetworkMatcher::_iterateSimple()
              newWeights[em]);
   }
 
-  // Some testing shows that 0.1 works pretty swell here. 2 works as well, but seems aggressive.
-  // .1 seems conservative...
-  _weightInfluence = 0.1;
+  // Setting this really helps reduce scoring oscillation
+  _weightInfluence = 0.68;
   foreach (ConstEdgeMatchPtr em, newWeights.keys())
   {
     newWeights[em] = pow(newWeights[em] * newWeights.size() / weightSum, _weightInfluence);
@@ -588,7 +638,31 @@ void ConflictsNetworkMatcher::matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1
 
   _removeDupes();
 
+  _sanityCheckMatches();
+
   _createMatchRelationships();
+}
+
+void ConflictsNetworkMatcher::finalize()
+{
+  // Check our relationships
+  foreach(ConstEdgeMatchPtr em, _scores.keys())
+  {
+    foreach(ConstMatchRelationshipPtr r, _matchRelationships[em])
+    {
+      double myScore = _scores[em];
+      double theirScore = _scores[r->getEdge()];
+
+      // If it's a conflict, AND we score a lot better, ax the other one
+      if (r->isConflict())
+      {
+        if (myScore > 0.3 + theirScore)
+        {
+          _scores[r->getEdge()] = 0.0001;
+        }
+      }
+    }
+  }
 }
 
 void ConflictsNetworkMatcher::_seedEdgeScores()
