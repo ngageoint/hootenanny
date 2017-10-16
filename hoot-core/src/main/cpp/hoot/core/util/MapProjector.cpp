@@ -95,7 +95,8 @@ void ReprojectCoordinateFilter::project(Coordinate* c) const
   {
     QString err = QString("Error projecting point. Is the point outside of the projection's "
                           "bounds?");
-    if (MapProjector::logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    const unsigned int logWarnMessageLimit = ConfigOptions().getLogWarnMessageLimit();
+    if (MapProjector::logWarnCount < logWarnMessageLimit)
     {
       LOG_WARN(err);
       LOG_TRACE("Source Point, x:" << inx << " y: " << iny);
@@ -104,7 +105,7 @@ void ReprojectCoordinateFilter::project(Coordinate* c) const
       LOG_TRACE("Target SRS: " << MapProjector::toWkt(_transform->GetTargetCS()));
       MapProjector::logWarnCount++;
     }
-    else if (MapProjector::logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (MapProjector::logWarnCount == logWarnMessageLimit)
     {
       LOG_WARN(MapProjector::className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }
@@ -572,11 +573,12 @@ void MapProjector::project(boost::shared_ptr<OsmMap> map, boost::shared_ptr<OGRS
     }
     catch(const IllegalArgumentException&)
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      const unsigned int logWarnMessageLimit = ConfigOptions().getLogWarnMessageLimit();
+      if (logWarnCount < logWarnMessageLimit)
       {
         LOG_WARN("Failure projecting node: " << n->toString());
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == logWarnMessageLimit)
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }

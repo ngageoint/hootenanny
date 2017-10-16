@@ -87,7 +87,6 @@ private:
 
   std::set<long> _emptySet;
   HashMap< ElementId, std::set<long> > _mapping;
-
 };
 
 }

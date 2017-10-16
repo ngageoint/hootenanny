@@ -88,7 +88,6 @@ private:
 
   double _strictness;
 
-
   double _calculateAngleScore(const std::vector<Radians>& theta1, const std::vector<Radians>& theta2,
     std::vector<bool>& exclude, size_t depth, bool debug = false);
 };

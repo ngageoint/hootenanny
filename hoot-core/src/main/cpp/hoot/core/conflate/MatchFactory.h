@@ -75,9 +75,8 @@ public:
   std::vector<MatchCreator::Description> getAllAvailableCreators() const;
 
   /**
-   *
-   *
-   * @return
+   * @return Return all of the registered match creators. This is the list of creators that will
+   * be used if createMatches is called.
    */
   std::vector< boost::shared_ptr<MatchCreator> > getCreators() const { return _creators; }
 

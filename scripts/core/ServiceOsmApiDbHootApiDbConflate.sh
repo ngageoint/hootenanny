@@ -58,7 +58,7 @@ HOOT_DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
 # generic debugging options applicable to multiple commands
 HOOT_OPTS="--warn -D uuid.helper.repeatable=true -D writer.include.debug.tags=true"
 if [ "$CONFLATION_TYPE" == "network" ]; then
-  HOOT_OPTS=$HOOT_OPTS" -D match.creators=hoot::NetworkMatchCreator -D merger.creators=hoot::NetworkMergerCreator -D network.matcher=hoot::ConflictsNetworkMatcher -D conflate.match.highway.classifier=hoot::HighwayExpertClassifier -D way.subline.matcher=hoot::MaximalSublineMatcher"
+  HOOT_OPTS=$HOOT_OPTS" -D match.creators=hoot::NetworkMatchCreator -D merger.creators=hoot::NetworkMergerCreator -D network.matcher=hoot::ConflictsNetworkMatcher -D conflate.match.highway.classifier=hoot::HighwayExpertClassifier -D way.subline.matcher=hoot::MaximalSublineMatcher -D rubber.sheet.minimum.ties=4 -D rubber.sheet.ref=true"
 fi
 
 REF_DIR=test-files/cmd/$TEST_CATEGORY/$TEST_NAME
@@ -90,7 +90,7 @@ if [ "$LOAD_REF_DATA" == "true" ]; then
   else
     cp $REF_DATASET $OUTPUT_DIR/2-ref-raw-complete.osm
   fi 
-  hoot convert $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D changeset.user.id=1 -D osmapidb.bulk.inserter.validate.data=true -D osmapidb.bulk.inserter.reserve.record.ids.before.writing.data=true -D osmapidb.bulk.inserter.output.files.copy.location=$OUTPUT_DIR/2-ref-raw-complete.sql $OUTPUT_DIR/2-ref-raw-complete.osm $OSM_API_DB_URL
+  hoot convert $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D changeset.user.id=1 -D apidb.bulk.inserter.validate.data=true -D osmapidb.bulk.inserter.reserve.record.ids.before.writing.data=true -D apidb.bulk.inserter.output.files.copy.location=$OUTPUT_DIR/2-ref-raw-complete.sql $OUTPUT_DIR/2-ref-raw-complete.osm $OSM_API_DB_URL
 fi
 
 if [ "$RUN_DEBUG_STEPS" == "true" ]; then

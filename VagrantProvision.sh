@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+source $HOME/hoot/VagrantProvisionVars.sh
+
 VMUSER=`id -u -n`
 echo USER: $VMUSER
 VMGROUP=`groups | grep -o $VMUSER`
@@ -37,13 +39,13 @@ if ! java -version 2>&1 | grep --quiet 1.8.0_131; then
     #    md5: 75b2cb2249710d822a60f83e28860053
     echo "75b2cb2249710d822a60f83e28860053  /tmp/jdk-8u131-linux-x64.tar.gz " > /tmp/jdk.md5
 
-    if [ ! -f /tmp/jdk-8u131-linux-x64.tar.gz ] || ! md5sum -c /tmp/jdk.md5; then
-        echo "Downloading jdk-8u131-linux-x64.tar.gz ...."
-        sudo wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jdk-8u131-linux-x64.tar.gz -P /tmp
-        echo "Finished download of jdk-8u131-linux-x64.tar.gz"
+    if [ ! -f /tmp/$JDK_FILE ] || ! md5sum -c /tmp/jdk.md5; then
+        echo "Downloading $JDK_FILE ...."
+        sudo wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" $JDK_URL -P /tmp
+        echo "Finished download of $JDK_FILE"
     fi
 
-    sudo tar -xvzf /tmp/jdk-8u131-linux-x64.tar.gz --directory=/tmp >/dev/null
+    sudo tar -xvzf /tmp/$JDK_FILE --directory=/tmp >/dev/null
 
     if [[ ! -e /usr/lib/jvm ]]; then
         sudo mkdir /usr/lib/jvm
@@ -53,7 +55,7 @@ if ! java -version 2>&1 | grep --quiet 1.8.0_131; then
         fi
     fi
 
-    sudo mv -f /tmp/jdk1.8.0_131 /usr/lib/jvm/oracle_jdk8
+    sudo mv -f /tmp/$JDK_DIR /usr/lib/jvm/oracle_jdk8
     sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/oracle_jdk8/jre/bin/java 9999
     sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/oracle_jdk8/bin/javac 9999
     echo "### Done with Java 8 install..."
@@ -76,7 +78,7 @@ sudo apt-get -q -y install texinfo g++ libicu-dev libqt4-dev git-core libboost-d
  w3m texlive-lang-cyrillic graphviz python-setuptools python python-pip git ccache distcc libogdi3.2-dev \
  gnuplot python-matplotlib libqt4-sql-sqlite ruby ruby-dev xvfb zlib1g-dev patch x11vnc openssh-server \
  htop unzip postgresql-9.5 postgresql-client-9.5 postgresql-9.5-postgis-scripts postgresql-9.5-postgis-2.3 \
- libpango-1.0-0 libappindicator1 valgrind dos2unix >> Ubuntu_upgrade.txt 2>&1
+ libpango-1.0-0 libappindicator1 valgrind dos2unix bc mlocate vim >> Ubuntu_upgrade.txt 2>&1
 
 if ! dpkg -l | grep --quiet dictionaries-common; then
     # See /usr/share/doc/dictionaries-common/README.problems for details
@@ -95,7 +97,7 @@ sudo apt-get -y autoremove
 
 echo "### Configuring environment..."
 
-# Configure https alternative mirror for maven isntall, this can likely be removed once
+# Configure https alternative mirror for maven install, this can likely be removed once
 # we are using maven 3.2.3 or higher
 sudo /usr/bin/perl $HOOT_HOME/scripts/maven/SetMavenHttps.pl
 
@@ -242,9 +244,6 @@ if [ ! -f bin/osmosis ]; then
 fi
 
 
-# For convenience, set the version of GDAL to download and install
-GDAL_VERSION=2.1.3
-
 if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --version | grep -q $GDAL_VERSION && ogrinfo --formats | grep -q FileGDB ); then
     if [ ! -f gdal-$GDAL_VERSION.tar.gz ]; then
         echo "### Downloading GDAL $GDAL_VERSION source..."
@@ -255,13 +254,13 @@ if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --version | grep -q $GDAL_VERSIO
         tar zxfp gdal-$GDAL_VERSION.tar.gz
     fi
 
-    if [ ! -f FileGDB_API_1_5_64.tar.gz ]; then
+    if [ ! -f $FGDB_FILE ]; then
         echo "### Downloading FileGDB API source..."
-        wget --quiet https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_1.5/FileGDB_API_1_5_64.tar.gz
+        wget --quiet $FGDB_URL
     fi
-    if [ ! -d /usr/local/FileGDB_API ]; then
+    if [ ! -d /usr/local/FileGDB_API/lib ]; then
         echo "### Extracting FileGDB API source & installing lib..."
-        sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp FileGDB_API_1_5_64.tar.gz --directory /usr/local/FileGDB_API --strip-components 1
+        sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp $FGDB_FILE --directory /usr/local/FileGDB_API --strip-components 1
         sudo sh -c "echo '/usr/local/FileGDB_API/lib' > /etc/ld.so.conf.d/filegdb.conf"
     fi
 
@@ -282,6 +281,13 @@ if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --version | grep -q $GDAL_VERSIO
     sudo python setup.py install >> GDAL_Build.txt 2>&1
     sudo ldconfig
     cd ~
+
+    # Update the GDAL_DATA folder in ~/.profile
+    if ! grep --quiet GDAL_DATA ~/.profile; then
+      echo "Adding GDAL data path to profile..."
+      echo "export GDAL_DATA=`gdal-config --datadir`" >> ~/.profile
+      source ~/.profile
+    fi
 fi
 
 if ! mocha --version &>/dev/null; then
@@ -294,6 +300,9 @@ fi
 
 # Get the configuration for the Database
 source $HOOT_HOME/conf/database/DatabaseConfig.sh
+
+echo "New postgres restart for docker box tknerr/baseimage-ubuntu-14.04"
+sudo service postgresql restart
 
 # NOTE: These have been changed to pg9.5
 # See if we already have a dB user
@@ -311,7 +320,6 @@ if ! sudo -u postgres psql -c "\du" | awk -F"|" '{print $1}' | grep -iw --quiet 
     sudo -u postgres createuser --superuser "$DB_USER_OSMAPI"
     sudo -u postgres psql -c "alter user \"$DB_USER_OSMAPI\" with password '$DB_PASSWORD_OSMAPI';"
 fi
-
 
 # Check for a hoot Db
 if ! sudo -u postgres psql -lqt | awk -F"|" '{print $1}' | grep -iw --quiet $DB_NAME; then
@@ -617,3 +625,4 @@ fi
 
 # Always start with a clean $HOOT_HOME/userfiles/tmp
 rm -rf $HOOT_HOME/userfiles/tmp
+

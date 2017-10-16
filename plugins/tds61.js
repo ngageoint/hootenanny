@@ -865,6 +865,7 @@ tds61 = {
             // Rules format:  ["test expression","output result"];
             // Note: t = tags, a = attrs and attrs can only be on the RHS
             var rulesList = [
+            ["t.barrier == 'dragons_teeth' && !(t.tank_trap)","t.barrier = 'tank_trap'; t.tank_trap = 'dragons_teeth'"],
             ["t['bridge:movable'] && t['bridge:movable'] !== 'no' && t['bridge:movable'] !== 'unknown'","t.bridge = 'movable'"],
             ["t.navigationaid && !(t.aeroway)","t.aeroway = 'navigationaid'"],
             ["t.amenity == 'stop' && t['transport:type'] == 'bus'","t.highway = 'bus_stop'"],
@@ -1215,6 +1216,7 @@ tds61 = {
             var rulesList = [
             ["t.amenity == 'bus_station'","t.public_transport = 'station'; t['transport:type'] = 'bus'"],
             ["t.amenity == 'marketplace'","t.facility = 'yes'"],
+            ["t.barrier == 'tank_trap' && t.tank_trap == 'dragons_teeth'","t.barrier = 'dragons_teeth'; delete t.tank_trap"],
             ["t.content && !(t.product)","t.product = t.content; delete t.content"],
             ["t.control_tower && t.man_made == 'tower'","delete t.man_made"],
             ["t.crossing == 'tank' && t.highway == 'crossing'","delete t.highway"],
@@ -1976,6 +1978,9 @@ tds61 = {
             tds61.configIn = {};
             tds61.configIn.OgrDebugAddfcode = config.getOgrDebugAddfcode();
             tds61.configIn.OgrDebugDumptags = config.getOgrDebugDumptags();
+
+            // Get any changes
+            tds61.toChange = hoot.Settings.get("translation.override");
         }
 
         // Debug:
@@ -2082,6 +2087,9 @@ tds61 = {
             print('');
         }
 
+        // Override tag values if appropriate
+        translate.overrideValues(tags,tds61.toChange);
+
         return tags;
     }, // End of toOsm
 
@@ -2108,6 +2116,10 @@ tds61 = {
             tds61.configOut.OgrSplitO2s = config.getOgrSplitO2s();
             tds61.configOut.OgrThematicStructure = config.getOgrThematicStructure();
             tds61.configOut.OgrThrowError = config.getOgrThrowError();
+
+            // Get any changes to OSM tags
+            // NOTE: the rest of the config variables will change to this style of assignment soon
+            tds61.toChange = hoot.Settings.get("translation.override");
         }
 
         // Check if we have a schema. This is a quick way to workout if various lookup tables have been built
@@ -2175,6 +2187,9 @@ tds61 = {
 //                 }
 //             }
         } // End tds61.lookup Undefined
+
+        // Override values if appropriate
+        translate.overrideValues(tags,tds61.toChange);
 
         // Pre Processing
         tds61.applyToTdsPreProcessing(tags, attrs, geometryType);

@@ -28,6 +28,9 @@
 #include <hoot/rnd/io/SparkChangesetWriter.h>
 #include <hoot/core/TestUtils.h>
 
+#include <hoot/core/io/GeoNamesReader.h>
+#include <hoot/rnd/io/SparkChangesetReader.h>
+
 // Qt
 #include <QDir>
 
@@ -37,24 +40,22 @@ namespace hoot
 class SparkChangesetWriterTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(SparkChangesetWriterTest);
-  CPPUNIT_TEST(basicTest);
+  CPPUNIT_TEST(elementAsJsonTest);
+  CPPUNIT_TEST(elementAsXmlTest);
   CPPUNIT_TEST(missingHashTest);
   CPPUNIT_TEST(missingPreviousHashTest);
   CPPUNIT_TEST(wrongElementTypeTest);
+  //CPPUNIT_TEST(passingUnicodeConversionTest);
+  //CPPUNIT_TEST(failingUnicodeConversionTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  void basicTest()
+  void writeNodes(const QString output, const QString format)
   {
-    DisableLog dl;
-
-    const QString outputDir = "test-output/io/SparkChangesetWriterTest";
-    QDir().mkpath(outputDir);
-    const QString changesetOutput = outputDir + "/changeset-1.spark.1";
-
     SparkChangesetWriter changesetFileWriter;
-    changesetFileWriter.open(changesetOutput);
+    changesetFileWriter.setElementPayloadFormat(format);
+    changesetFileWriter.open(output);
 
     NodePtr node1(new Node(Status::Unknown1, 1, 56.546465, 99.21651651, 15.0));
     node1->getTags().set(MetadataTags::HootHash(), "1");
@@ -63,6 +64,8 @@ public:
 
     NodePtr node2(new Node(Status::Unknown1, 2, -34.44534436, 45.6575656, 15.0));
     node2->getTags().set(MetadataTags::HootHash(), "2");
+    node2->getTags().set("test2", "2");
+    node2->getTags().set("test3", "3");
     NodePtr node3(new Node(Status::Unknown1, 3, -34.44534436, 45.6575656, 15.0));
     node3->getTags().set(MetadataTags::HootHash(), "3");
     changesetFileWriter.writeChange(Change(Change::Modify, node2, node3));
@@ -72,8 +75,32 @@ public:
     changesetFileWriter.writeChange(Change(Change::Delete, node4));
 
     changesetFileWriter.close();
+  }
+
+  void elementAsJsonTest()
+  {
+    DisableLog dl;
+
+    const QString outputDir = "test-output/io/SparkChangesetWriterTest";
+    QDir().mkpath(outputDir);
+    const QString changesetOutput = outputDir + "/changeset-1.spark.1";
+
+    writeNodes(changesetOutput, "json");
 
     HOOT_FILE_EQUALS("test-files/io/SparkChangesetWriterTest/changeset-1.spark.1", changesetOutput);
+  }
+
+  void elementAsXmlTest()
+  {
+    DisableLog dl;
+
+    const QString outputDir = "test-output/io/SparkChangesetWriterTest";
+    QDir().mkpath(outputDir);
+    const QString changesetOutput = outputDir + "/changeset-2.spark.1";
+
+    writeNodes(changesetOutput, "xml");
+
+    HOOT_FILE_EQUALS("test-files/io/SparkChangesetWriterTest/changeset-2.spark.1", changesetOutput);
   }
 
   void missingHashTest()
@@ -82,7 +109,7 @@ public:
 
     const QString outputDir = "test-output/io/SparkChangesetWriterTest";
     QDir().mkpath(outputDir);
-    const QString changesetOutput = outputDir + "/changeset-1.spark.1";
+    const QString changesetOutput = outputDir + "/changeset-1.spark.2";
 
     SparkChangesetWriter changesetFileWriter;
     changesetFileWriter.open(changesetOutput);
@@ -108,7 +135,7 @@ public:
 
     const QString outputDir = "test-output/io/SparkChangesetWriterTest";
     QDir().mkpath(outputDir);
-    const QString changesetOutput = outputDir + "/changeset-1.spark.1";
+    const QString changesetOutput = outputDir + "/changeset-1.spark.3";
 
     SparkChangesetWriter changesetFileWriter;
     changesetFileWriter.open(changesetOutput);
@@ -136,7 +163,7 @@ public:
 
     const QString outputDir = "test-output/io/SparkChangesetWriterTest";
     QDir().mkpath(outputDir);
-    const QString changesetOutput = outputDir + "/changeset-1.spark.1";
+    const QString changesetOutput = outputDir + "/changeset-1.spark.4";
 
     SparkChangesetWriter changesetFileWriter;
     changesetFileWriter.open(changesetOutput);
@@ -161,6 +188,87 @@ public:
     }
     CPPUNIT_ASSERT(exceptionMsg.contains("Only nodes are supported"));
   }
+
+//  void passingUnicodeConversionTest()
+//  {
+//    //TODO: to use this you have to comment out the line:
+      //if (!change.getElement()->getTags().contains(MetadataTags::HootHash()))
+      //in SparkChangesetWriter
+
+//    GeoNamesReader geonamesReader;
+//    geonamesReader.setUseDataSourceIds(true);
+//    geonamesReader.open(
+//      "test-files/cmd/slow/ServiceMultiaryIngestCmdTest/allCountries-8-15-17-10.geonames");
+
+//    SparkChangesetWriter sparkChangesetWriter;
+//    //This line is the only difference between this test and failingConversionTest
+//    sparkChangesetWriter.setElementPayloadFormat("xml");
+//    sparkChangesetWriter.open("tmp/test.spark.1");
+//
+//    LOG_DEBUG("Reading geonames and writing to spark xml...");
+//    while (geonamesReader.hasMoreElements())
+//    {
+//      ElementPtr element = geonamesReader.readNextElement();
+//      //these elements will *not* have uncorrupted tags
+//      LOG_VART(element);
+//      sparkChangesetWriter.writeChange(Change(Change::Create, element));
+//    }
+//    geonamesReader.close();
+//    sparkChangesetWriter.close();
+
+//    SparkChangesetReader sparkChangesetReader;
+//    sparkChangesetReader.open("tmp/test.spark.1");
+//    LOG_DEBUG("Reading spark xml...");
+//    while (sparkChangesetReader.hasMoreChanges())
+//    {
+//      Change change = sparkChangesetReader.readNextChange();
+//      //these elements will *not* have corrupted tags
+//      //reader
+//      LOG_VART(change.getElement());
+//    }
+//    sparkChangesetReader.close();
+//  }
+
+//  //this reproduces #1772
+//  void failingUnicodeConversionTest()
+//  {
+//    //TODO: to use this you have to comment out the line:
+//    //if (!change.getElement()->getTags().contains(MetadataTags::HootHash()))
+//    //in SparkChangesetWriter
+
+//    GeoNamesReader geonamesReader;
+//    geonamesReader.setUseDataSourceIds(true);
+//    geonamesReader.open(
+//      "test-files/cmd/slow/ServiceMultiaryIngestCmdTest/allCountries-8-15-17-10.geonames");
+
+//    SparkChangesetWriter sparkChangesetWriter;
+//    //This line is the only difference between this test and passingConversionTest
+//    sparkChangesetWriter.setElementPayloadFormat("json");
+//    sparkChangesetWriter.open("tmp/test.spark.1");
+
+//    LOG_DEBUG("Reading geonames and writing to spark json...");
+//    while (geonamesReader.hasMoreElements())
+//    {
+//      ElementPtr element = geonamesReader.readNextElement();
+//      //these elements will *not* have uncorrupted tags
+//      LOG_VART(element);
+//      sparkChangesetWriter.writeChange(Change(Change::Create, element));
+//    }
+//    geonamesReader.close();
+//    sparkChangesetWriter.close();
+
+//    SparkChangesetReader sparkChangesetReader;
+//    sparkChangesetReader.open("tmp/test.spark.1");
+//    LOG_DEBUG("Reading spark json...");
+//    while (sparkChangesetReader.hasMoreChanges())
+//    {
+//      Change change = sparkChangesetReader.readNextChange();
+//      //these elements *will* have corrupted tags; seems to be caused by the boost property json
+//      //reader
+//      LOG_VART(change.getElement());
+//    }
+//    sparkChangesetReader.close();
+//  }
 
 };
 

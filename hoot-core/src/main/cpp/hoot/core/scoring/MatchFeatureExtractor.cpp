@@ -72,12 +72,12 @@ MatchType MatchFeatureExtractor::_getActualMatchType(const set<ElementId> &eids,
 
   if (eids.size() > 2)
   {
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       LOG_WARN("More than two eids. This may not give the intended result. As written now it only "
                "needs one match to call the whole set good.");
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }
@@ -127,13 +127,13 @@ MatchType MatchFeatureExtractor::_getActualMatchType(const set<ElementId> &eids,
     }
     else
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN("Expected the element to be either " << MetadataTags::Unknown1() << " or " <<
                  MetadataTags::Unknown2() << ". " << e->getStatus() << " element: " <<
                  e->toString());
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }
@@ -149,11 +149,11 @@ MatchType MatchFeatureExtractor::_getActualMatchType(const set<ElementId> &eids,
     {
       if (result == MatchType::Review)
       {
-        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        if (logWarnCount < Log::getWarnMessageLimit())
         {
           LOG_WARN("Feature with multiple REF/REVIEW meanings. Bad data? " << eids);
         }
-        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        else if (logWarnCount == Log::getWarnMessageLimit())
         {
           LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }
@@ -165,11 +165,11 @@ MatchType MatchFeatureExtractor::_getActualMatchType(const set<ElementId> &eids,
     {
       if (result == MatchType::Match)
       {
-        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        if (logWarnCount < Log::getWarnMessageLimit())
         {
           LOG_WARN("Feature with multiple REF/REVIEW meanings. Bad data? " << eids);
         }
-        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        else if (logWarnCount == Log::getWarnMessageLimit())
         {
           LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }
@@ -260,11 +260,11 @@ void MatchFeatureExtractor::processMap(const boost::shared_ptr<const OsmMap> &ma
     const MatchDetails* d = dynamic_cast<const MatchDetails*>(matches[i]);
     if (d == 0)
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN("Match does not implement MatchDetails. " << matches[i]->toString());
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }
@@ -279,11 +279,11 @@ void MatchFeatureExtractor::processMap(const boost::shared_ptr<const OsmMap> &ma
         set< pair<ElementId, ElementId> > pairs = matches[i]->getMatchPairs();
         if (pairs.size() != 1)
         {
-          if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+          if (logWarnCount < Log::getWarnMessageLimit())
           {
             LOG_WARN("Got more than one match pair, this case is not handled.");
           }
-          else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+          else if (logWarnCount == Log::getWarnMessageLimit())
           {
             LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
           }

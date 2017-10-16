@@ -37,7 +37,6 @@ Vagrant.configure(2) do |config|
 
   # Global settings - default for Ubuntu1404
 
-
   # Ubuntu1404 Box
   # This is the standard, working box
   config.vm.define "default", primary: true do |hoot|
@@ -51,14 +50,65 @@ Vagrant.configure(2) do |config|
     hoot.vm.provision "hadoop", type: "shell", :privileged => false, :inline => "stop-all.sh && start-all.sh", run: "always"
   end
 
+  config.vm.define "docker14.04", autostart: false do |dock1404|
+    dock1404.vm.box = "tknerr/baseimage-ubuntu-14.04"
+    dock1404.vm.box_version = "1.0.0"
+    #dock1404.vm.box_url = "https://atlas.hashicorp.com/ubuntu/boxes/trusty64"
+    dock1404.vm.synced_folder ".", "/home/vagrant/hoot"
+
+    dock1404.vm.provider "docker" do |docker|
+        #docker.create_args = ['--security-opt', 'seccomp=./chrome.json']
+        docker.create_args = ['--privileged','--shm-size', '1g']
+    end
+
+    dock1404.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvision.sh"
+    dock1404.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
+    dock1404.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo service tomcat8 restart", run: "always"
+    dock1404.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo service node-mapnik-server start", run: "always"
+    dock1404.vm.provision "hadoop", type: "shell", :privileged => false, :inline => "stop-all.sh && start-all.sh", run: "always"
+  end
+
+  config.vm.define "dockercentos7.2", autostart: false do |dockcentos72|
+
+    dockcentos72.ssh.insert_key = false
+    dockcentos72.vm.provider "docker" do |d|
+      d.image = "local/centos7.2vagrant"
+      d.create_args = ['-td','--privileged','--shm-size','1g']
+      d.has_ssh = true
+    end
+
+    dockcentos72.vm.synced_folder ".", "/home/vagrant/hoot"
+
+    # Stop the default vagrant rsyncing
+    config.vm.synced_folder '.', '/home/vagrant/sync', disabled: true
+
+    dockcentos72.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvisionCentOS7.sh"
+    dockcentos72.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
+
+    dockcentos72.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo systemctl restart tomcat8", run: "always"
+    dockcentos72.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-mapnik", run: "always"
+    dockcentos72.vm.provision "export", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-export", run: "always"
+    dockcentos72.vm.provision "hadoop", type: "shell", :privileged => false, :inline => "stop-all.sh && start-all.sh", run: "always"
+    
+    
+  end
+
+
+  # Ubuntu1604 Box
+
+
   # Ubuntu1604 Box
   # For testing before we upgrade from Ubuntu1404
   config.vm.define "hoot_ubuntu1604", autostart: false do |hoot_ubuntu1604|
-    hoot_ubuntu1604.vm.box = "ubuntu/xenial64"
-    hoot_ubuntu1604.vm.box_url = "https://atlas.hashicorp.com/ubuntu/boxes/xenial64"
+    #hoot_ubuntu1604.vm.box = "ubuntu/xenial64"
+    #hoot_ubuntu1604.vm.box_url = "https://atlas.hashicorp.com/ubuntu/boxes/xenial64"
 
     # Why does this box have an ubuntu user, not a vagrant user?   Why?????
-    config.vm.synced_folder ".", "/home/ubuntu/hoot"
+
+    hoot_ubuntu1604.vm.synced_folder ".", "/home/vagrant/hoot"
+    # This should work for libvirt and virtualbox.
+    hoot_ubuntu1604.vm.box = "elastic/ubuntu-16.04-x86_64"
+    hoot_ubuntu1604.vm.box_url = "https://app.vagrantup.com/elastic/boxes/ubuntu-16.04-x86_64"
 
     hoot_ubuntu1604.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvisionUbuntu1604.sh"
     hoot_ubuntu1604.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
@@ -68,7 +118,6 @@ Vagrant.configure(2) do |config|
   end
 
   # Centos7 box
-  # For testing
   config.vm.define "hoot_centos7", autostart: false do |hoot_centos7|
     # This seems to be the "latest" version of centos7
     # hoot_centos7.vm.box = "centos/7"
@@ -93,9 +142,41 @@ Vagrant.configure(2) do |config|
     hoot_centos7.bindfs.bind_folder "/home/vagrant/.hoot-nfs", "/home/vagrant/hoot", perms: nil
 
     hoot_centos7.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvisionCentOS7.sh"
-    #hoot_centos7.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
-    #hoot_centos7.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo service tomcat8 restart", run: "always"
-    #hoot_centos7.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo service node-mapnik-server start", run: "always"
+    hoot_centos7.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
+    hoot_centos7.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo systemctl restart tomcat8", run: "always"
+    hoot_centos7.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-mapnik", run: "always"
+    hoot_centos7.vm.provision "export", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-export", run: "always"
+    hoot_centos7.vm.provision "hadoop", type: "shell", :privileged => false, :inline => "stop-all.sh && start-all.sh", run: "always"
+  end
+
+
+  # Centos7 - Hoot core ONLY. No UI
+  config.vm.define "hoot_centos7_core", autostart: false do |hoot_centos7_core|
+    # Turn off port forwarding
+    config.vm.network "forwarded_port", guest: 8080, host: tomcatPort, disabled: true
+    config.vm.network "forwarded_port", guest: 8094, host: transPort, disabled: true
+    config.vm.network "forwarded_port", guest: 8096, host: mergePort, disabled: true
+    config.vm.network "forwarded_port", guest: 8000, host: mapnikPort, disabled: true
+
+    hoot_centos7_core.vm.box = "bento/centos-7.2"
+    hoot_centos7_core.vm.box_url = "https://atlas.hashicorp.com/bento/boxes/centos-7.2"
+
+    # Stop the default vagrant rsyncing
+    config.vm.synced_folder '.', '/home/vagrant/sync', disabled: true
+
+    # Use the plugin to install bindfs and make a dummy mount
+    hoot_centos7_core.bindfs.bind_folder "/tmp", "/home/vagrant/bindfstmp", perms: nil
+
+    # Create an empty directory
+    config.vm.synced_folder ".", "/vagrant/home/.workspace-nfs", type: "rsync", disabled: true
+
+    hoot_centos7_core.vm.network "private_network", ip: "192.168.33.10"
+    hoot_centos7_core.nfs.map_uid = Process.uid
+    hoot_centos7_core.nfs.map_gid = Process.gid
+    hoot_centos7_core.vm.synced_folder ".", "/home/vagrant/.hoot-nfs", type: "nfs", :linux__nfs_options => ['rw','no_subtree_check','all_squash','async']
+    hoot_centos7_core.bindfs.bind_folder "/home/vagrant/.hoot-nfs", "/home/vagrant/hoot", perms: nil
+
+    hoot_centos7_core.vm.provision "hoot", type: "shell", :privileged => false, :path => "scripts/util/Centos7_only_core.sh"
   end
 
   # Provider-specific configuration so you can fine-tune various
@@ -107,7 +188,8 @@ Vagrant.configure(2) do |config|
   #vb.gui = true
 
   # Customize the amount of memory on the VM:
-    vb.memory = 8192
+#    vb.memory = 8192
+    vb.memory = 10240
     vb.cpus = 4
   end
 
@@ -136,13 +218,15 @@ Vagrant.configure(2) do |config|
       chgrp_ignore: true,
       chown_ignore: true,
       perms: nil
-    override.vm.box = "s3than/trusty64"
-    override.vm.box_url = "https://app.vagrantup.com/s3than/boxes/trusty64"
+    libvirt.cpu_model = "host-passthrough"
+    #override.vm.box = "s3than/trusty64"
+    #override.vm.box_url = "https://app.vagrantup.com/s3than/boxes/trusty64"
     #override.vm.box = "iknite/trusty64"
     #override.vm.box_url = "https://app.vagrantup.com/iknite/boxes/trusty64"
     libvirt.memory = 8192
     libvirt.cpus = 8
   end
+
 
   # This is a provider for the Parallels Virtualization Software
   # Run "vagrant up --provider=parallels" to spin up using parallels.

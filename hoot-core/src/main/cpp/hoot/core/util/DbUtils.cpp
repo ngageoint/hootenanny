@@ -47,7 +47,7 @@ QSqlQuery DbUtils::execNoPrepare(QSqlDatabase& database, const QString sql)
   if (q.exec(sql) == false)
   {
     throw HootException(
-      QString("Error executing query: %1 (%2)").arg(q.lastError().text()).arg(sql));
+      QString("Error executing query: %1 (%2)").arg(q.lastError().text().left(500)).arg(sql));
   }
   LOG_VART(q.numRowsAffected());
 

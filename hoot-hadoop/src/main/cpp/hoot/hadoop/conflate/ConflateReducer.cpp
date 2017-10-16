@@ -193,11 +193,11 @@ void ConflateReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
   {
     if (result->containsNode(it->first))
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN("Strange, a replaced node is still in the map.  nid: " << it->first);
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }

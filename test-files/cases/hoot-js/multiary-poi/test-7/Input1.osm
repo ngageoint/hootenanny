@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <node id='-42407' action='modify' lat='15.37132633308' lon='44.20595163051'>
+    <tag k='ID' v='1-00258' />
+    <tag k='MATCH' v='none' />
+    <tag k='REVIEW' v='1-00258;3-00326' />
+    <tag k='addr:street' v='الحصبة' />
+    <tag k='amenity' v='restaurant' />
+    <tag k='attribution' v='osm' />
+    <tag k='cuisine' v='chicken;fish;beef_bowl;arab' />
+    <tag k='error:circular' v='15' />
+    <tag k='hoot:hash' v='sha1sum:aae095b693b3d36dda192a61678e0996da38b0ad' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='name' v='مطعم الشلال' />
+    <tag k='opening_hours' v='Mo-Su 08:00-19:00' />
+    <tag k='source' v='osm' />
+    <tag k='source:datetime' v='2016-06-10T02:20:10.000Z' />
+    <tag k='uuid' v='{2818e063-83bf-4544-8ddc-7dbb2327b763}' />
+  </node>
+  <node id='-42408' action='modify' lat='15.3695864331' lon='44.20592013051'>
+    <tag k='ID' v='1-00268' />
+    <tag k='MATCH' v='none' />
+    <tag k='REVIEW' v='none' />
+    <tag k='amenity' v='fast_food' />
+    <tag k='attribution' v='osm' />
+    <tag k='cuisine' v='sandwich;friture' />
+    <tag k='error:circular' v='15' />
+    <tag k='hoot:hash' v='sha1sum:3a75e190afc16a1e471f5bfab673aeaaf400831c' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='name' v='بوفية' />
+    <tag k='source' v='osm' />
+    <tag k='source:datetime' v='2016-06-14T11:01:03.000Z' />
+    <tag k='uuid' v='{6b20eaa4-7207-4d06-9215-4ecee875ac1a}' />
+  </node>
+</osm>

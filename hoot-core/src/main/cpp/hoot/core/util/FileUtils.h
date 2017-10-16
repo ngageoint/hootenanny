@@ -34,6 +34,9 @@
 namespace hoot
 {
 
+/**
+ * General utilities needed when working with files
+ */
 class FileUtils
 {
 
@@ -41,15 +44,17 @@ public:
 
   /**
    * Delete a directory along with all of its contents.
+   *
    * @param dirName Path of directory to remove.
    * @return true on success; false on error.
    */
   static void removeDir(const QString& dirName);
 
   /**
-   * @brief tokenizeOutputFileWithoutDates
-   * @param filePath
-   * @return
+   * Tokenize a file by line and remove the date from each line
+   *
+   * @param filePath file to read
+   * @return a list of file lines
    */
   static QStringList tokenizeOutputFileWithoutDates(const QString filePath);
 
@@ -68,22 +73,6 @@ public:
    * @param text text to be written
    */
   static void writeFully(const QString path, const QString text);
-
-  /**
-   * Converts seconds to DD:MM:SS
-   *
-   * @param durationInMilliseconds seconds to convert
-   * @return a DD:MM:SS string
-   */
-  static QString secondsToDhms(const qint64 durationInMilliseconds);
-
-  /**
-   *
-   *
-   * @param number
-   * @return
-   */
-  static QString formatPotentiallyLargeNumber(const unsigned long number);
 };
 
 }
