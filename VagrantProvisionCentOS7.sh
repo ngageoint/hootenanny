@@ -111,6 +111,7 @@ sudo yum -y install \
     qt-postgresql \
     qtwebkit \
     qtwebkit-devel \
+    redhat-lsb-core \
     swig \
     tex* \
     unzip \
