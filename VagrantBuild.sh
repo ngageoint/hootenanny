@@ -38,7 +38,15 @@ fi
 
 echo "Building Hoot... "
 echo "Will take several extra minutes to build the training data the initial time Hootenanny is installed only."
-make -s clean && make -sj$(nproc)
+if [ "${OS_NAME}" == "Ubuntu" ]; then
+    make -s clean && make -sj$(nproc)
+else
+    # CentOS fails during the first `make` command because it can't
+    # the libHadoop library can't reference the libPrettyPipes during
+    # a linking step in `hoot-cmd`.  On second invocation everything is
+    # fine.  Root cause has yet to be determined.
+    make -s clean && make -sj$(nproc) || true && make -sj$(nproc)
+fi
 
 # Waiting until Tomcat8 is installed
 # vagrant will auto start the tomcat service for us, so just copy the web app files w/o manipulating the server
