@@ -24,56 +24,47 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef IMPLICITTAGRULESTSVWRITER_H
-#define IMPLICITTAGRULESTSVWRITER_H
+#ifndef IMPLICITTAGRULEWORDPARTWRITERFACTORY_H
+#define IMPLICITTAGRULEWORDPARTWRITERFACTORY_H
 
 // Hoot
 #include <hoot/rnd/io/ImplicitTagRuleWordPartWriter.h>
 
 // Qt
-#include <QFile>
+#include <QString>
 
 namespace hoot
 {
 
 /**
- * Writes implicit tag rules to a JSON file
+ * A factory for constructing implicit tag rule writers based on an output URL
  */
-class ImplicitTagRulesTsvWriter : public ImplicitTagRuleWordPartWriter
+class ImplicitTagRuleWordPartWriterFactory
 {
-
 public:
 
-  static std::string className() { return "hoot::ImplicitTagRulesTsvWriter"; }
-
-  ImplicitTagRulesTsvWriter();
-  ~ImplicitTagRulesTsvWriter();
+  ImplicitTagRuleWordPartWriterFactory();
 
   /**
-   * @see ImplicitTagRulesWriter
+   * Creates an implicit tag rules writer, given an output URL
+   *
+   * @param url output location
+   * @return an ImplicitTagRulesWriter object
    */
-  virtual bool isSupported(const QString url);
+  boost::shared_ptr<ImplicitTagRuleWordPartWriter> createWriter(QString url);
 
   /**
-   * @see ImplicitTagRulesWriter
+   * Retrieves the Singleton instance for this factory
+   *
+   * @return a factory instance
    */
-  virtual void open(const QString url);
-
-  /**
-   * @see ImplicitTagRulesWriter
-   */
-  virtual void write(const ImplicitTagRuleWordPart& ruleWordPart, const long totalParts = -1);
-
-  /**
-   * @see ImplicitTagRulesWriter
-   */
-  virtual void close();
+  static ImplicitTagRuleWordPartWriterFactory& getInstance();
 
 private:
 
-  boost::shared_ptr<QFile> _file;
+  static boost::shared_ptr<ImplicitTagRuleWordPartWriterFactory> _theInstance;
 };
 
 }
 
-#endif // IMPLICITTAGRULESTSVWRITER_H
+#endif // IMPLICITTAGRULEWORDPARTWRITERFACTORY_H

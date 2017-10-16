@@ -30,6 +30,10 @@
 // hoot
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/ConfigOptions.h>
+
+// Tgs
+#include <tgs/System/Time.h>
 
 // Qt
 #include <QSqlError>
@@ -39,13 +43,17 @@
 namespace hoot
 {
 
-ImplicitTagRulesSqliteReader::ImplicitTagRulesSqliteReader()
+ImplicitTagRulesSqliteReader::ImplicitTagRulesSqliteReader() :
+_currentRuleId(0),
+_maxRuleId(0),
+_maxQueryResults(ConfigOptions().getMaxElementsPerPartialMap())
 {
 }
 
 ImplicitTagRulesSqliteReader::~ImplicitTagRulesSqliteReader()
 {
   close();
+  _ruleWordPartIterator.reset();
 }
 
 void ImplicitTagRulesSqliteReader::open(const QString url)
@@ -89,6 +97,31 @@ void ImplicitTagRulesSqliteReader::_prepareQueries()
     throw HootException(
       QString("Error preparing query: %1").arg(_ruleCountQuery.lastError().text()));
   }
+
+  _ruleWordPartIterator.reset(new QSqlQuery(_db));
+  if (!_ruleWordPartIterator->prepare(
+        QString("SELECT rule_id FROM rules WHERE rule_id > :minId ") +
+        QString("JOIN words.word ON rules.word_id = words.id ") +
+        QString("JOIN tags.kvp ON rules.tag_id = tags.id ORDER BY words.word LIMIT ") +
+        QString::number(_maxQueryResults)))
+  {
+    throw HootException(
+      QString("Error preparing query: %1").arg(_ruleWordPartIterator->lastError().text()));
+  }
+
+  _maxRuleIdQuery = QSqlQuery(_db);
+  if (!_maxRuleIdQuery.prepare("SELECT id FROM rules ORDER by id DESC LIMIT 1"))
+  {
+    throw HootException(
+      QString("Error preparing query: %1").arg(_maxRuleIdQuery.lastError().text()));
+  }
+}
+
+long ImplicitTagRulesSqliteReader::_getMaxRuleId()
+{
+  _maxRuleIdQuery.exec();
+  _maxRuleIdQuery.next();
+  return _maxRuleIdQuery.value(0).toLongLong();
 }
 
 bool ImplicitTagRulesSqliteReader::wordsInvolveMultipleRules(const QSet<QString>& words,
@@ -289,6 +322,66 @@ Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,
   }
   LOG_VART(tags);
   return tags;
+}
+
+bool ImplicitTagRulesSqliteReader::hasMoreRuleWordParts()
+{
+  if (_maxRuleId == 0)
+  {
+    _maxRuleId = _getMaxRuleId();
+    assert(_maxRuleId > 0);
+  }
+  return _currentRuleId <= _maxRuleId;
+}
+
+ImplicitTagRuleWordPartPtr ImplicitTagRulesSqliteReader::getNextRuleWordPart()
+{
+  //sort by word
+  if (!_ruleWordPartIterator.get() || !_ruleWordPartIterator->isActive())
+  {
+    //no results are available, so request some more results
+    LOG_DEBUG("Requesting more query results...");
+    const double start = Tgs::Time::getTime();
+    _ruleWordPartIterator->bindValue(":minId", (qlonglong)_currentRuleId);
+    if (!_ruleWordPartIterator->exec())
+    {
+      const QString err =
+        "Error selecting rule word parts.  Error: " + _ruleWordPartIterator->lastError().text();
+      LOG_ERROR(err);
+      throw HootException(err);
+    }
+    _currentRuleId += _maxQueryResults;
+    LOG_DEBUG("Query took " << Tgs::Time::getTime() - start << " seconds.");
+  }
+
+  ImplicitTagRuleWordPartPtr ruleWordPart = _resultToRuleWordPart(*_ruleWordPartIterator);
+  if (!ruleWordPart.get())
+  {
+    LOG_TRACE("Received null element.");
+    return getNextRuleWordPart();
+  }
+  return ruleWordPart;
+}
+
+ImplicitTagRuleWordPartPtr ImplicitTagRulesSqliteReader::_resultToRuleWordPart(
+  QSqlQuery& resultIterator)
+{
+  assert(resultIterator.isActive());
+  if (resultIterator.next())
+  {
+    //LOG_VART(resultIterator);
+    const long ruleId = resultIterator.value(0).toLongLong();
+    const QString word = resultIterator.value(1).toString();
+    const QString kvp = resultIterator.value(2).toString();
+    QMap<QString, long> tags; //TODO: finish
+    return ImplicitTagRuleWordPartPtr(new ImplicitTagRuleWordPart(word, tags));
+  }
+  else
+  {
+    //don't call clear here, as the prepared query may be executed again in a following iteration
+    resultIterator.finish();
+    return ImplicitTagRuleWordPartPtr();
+  }
 }
 
 }

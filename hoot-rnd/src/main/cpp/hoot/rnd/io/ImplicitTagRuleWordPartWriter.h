@@ -22,58 +22,51 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef IMPLICITTAGRULESTSVWRITER_H
-#define IMPLICITTAGRULESTSVWRITER_H
+#ifndef IMPLICITTAGRULEWORDPARTWRITER_H
+#define IMPLICITTAGRULEWORDPARTWRITER_H
 
-// Hoot
-#include <hoot/rnd/io/ImplicitTagRuleWordPartWriter.h>
-
-// Qt
-#include <QFile>
+// hoot
+#include <hoot/rnd/schema/ImplicitTagRuleWordPart.h>
 
 namespace hoot
 {
 
 /**
- * Writes implicit tag rules to a JSON file
+ * Interface for writing implicit tag rules to output
  */
-class ImplicitTagRulesTsvWriter : public ImplicitTagRuleWordPartWriter
+class ImplicitTagRuleWordPartWriter
 {
 
 public:
 
-  static std::string className() { return "hoot::ImplicitTagRulesTsvWriter"; }
-
-  ImplicitTagRulesTsvWriter();
-  ~ImplicitTagRulesTsvWriter();
+  static std::string className() { return "hoot::ImplicitTagRuleWordPartWriter"; }
 
   /**
-   * @see ImplicitTagRulesWriter
+   *  Writes an implicit tag word rule part to output
+   *
+   * @param wordRulePart an implicit tag word rule part
    */
-  virtual bool isSupported(const QString url);
+  virtual void write(const ImplicitTagRuleWordPart& ruleWordPart, const long totalParts = -1) = 0;
 
   /**
-   * @see ImplicitTagRulesWriter
+   * Returns true if the output URL is supported.
    */
-  virtual void open(const QString url);
+  virtual bool isSupported(const QString url) = 0;
 
   /**
-   * @see ImplicitTagRulesWriter
+   * Opens the specified URL for writing.
    */
-  virtual void write(const ImplicitTagRuleWordPart& ruleWordPart, const long totalParts = -1);
+  virtual void open(const QString url) = 0;
 
   /**
-   * @see ImplicitTagRulesWriter
+   * Closes the output file
    */
-  virtual void close();
+  virtual void close() = 0;
 
-private:
-
-  boost::shared_ptr<QFile> _file;
 };
 
 }
 
-#endif // IMPLICITTAGRULESTSVWRITER_H
+#endif // IMPLICITTAGRULEWORDPARTWRITER_H

@@ -33,47 +33,8 @@
 // Qt
 #include <QSet>
 
-// STXXL
-//#include <stxxl/map>
-
 namespace hoot
 {
-
-//static const int MAX_KEY_LEN = 16;
-
-//class FixedString
-//{
-//public:
-
-//  char charStr[MAX_KEY_LEN];
-
-//  bool operator< (const FixedString& fixedString) const
-//  {
-//    return
-//      std::lexicographical_compare(
-//        charStr, charStr + MAX_KEY_LEN, fixedString.charStr, fixedString.charStr + MAX_KEY_LEN);
-//  }
-
-//  bool operator==(const FixedString& fixedString) const
-//  {
-//    return std::equal(charStr, charStr + MAX_KEY_LEN, fixedString.charStr);
-//  }
-
-//  bool operator!=(const FixedString& fixedString) const
-//  {
-//    return !std::equal(charStr, charStr + MAX_KEY_LEN, fixedString.charStr);
-//  }
-//};
-
-//struct comp_type : public std::less<FixedString>
-//{
-//  static FixedString max_value()
-//  {
-//    FixedString s;
-//    std::fill(s.charStr, s.charStr+MAX_KEY_LEN, 0x7f);
-//    return s;
-//  }
-//};
 
 /**
  * A rule that can be applied to add tags to a feature derived implicitly from the feature's name
@@ -100,18 +61,18 @@ public:
   Tags& getTags() { return _tags; }
   void setTags(const Tags& tags) { _tags = tags; }
 
+//  long getCount() { return _count; }
+//  void setCount(const long count) { _count = count; }
+
 private:
 
   QSet<QString> _words;
   Tags _tags;
+  //long _count;
 };
 
 typedef boost::shared_ptr<ImplicitTagRule> ImplicitTagRulePtr;
-typedef QList<ImplicitTagRulePtr> ImplicitTagRules; //*?
-//key=<word>, value=<key=kvp, value=kvp occurrance count>>
-typedef QMap<QString, QMap<QString, long> > ImplicitTagRulesByWord; //*
-//typedef stxxl::map<QString, long, CompareGreater, DATA_NODE_BLOCK_SIZE, DATA_LEAF_BLOCK_SIZE> map_type;
-//typedef stxxl::map<FixedString, long, comp_type, 4096, 4096> fixed_name_map;
+typedef QList<ImplicitTagRulePtr> ImplicitTagRules;
 
 }
 

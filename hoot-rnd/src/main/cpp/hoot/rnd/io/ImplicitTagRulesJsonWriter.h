@@ -28,7 +28,7 @@
 #define IMPLICITTAGRULESJSONWRITER_H
 
 // Hoot
-#include <hoot/rnd/io/ImplicitTagRulesWriter.h>
+#include <hoot/rnd/io/ImplicitTagRuleWordPartWriter.h>
 
 // Qt
 #include <QFile>
@@ -39,7 +39,7 @@ namespace hoot
 /**
  * Writes implicit tag rules to a JSON file
  */
-class ImplicitTagRulesJsonWriter : public ImplicitTagRulesWriter
+class ImplicitTagRulesJsonWriter : public ImplicitTagRuleWordPartWriter
 {
 
 public:
@@ -60,14 +60,9 @@ public:
   virtual void open(const QString url);
 
   /**
-   * not supported
-   */
-  virtual void write(const ImplicitTagRules& rules);
-
-  /**
    * @see ImplicitTagRulesWriter
    */
-  virtual void write(const ImplicitTagRulesByWord& rules);
+  virtual void write(const ImplicitTagRuleWordPart& ruleWordPart, const long totalParts = -1);
 
   /**
    * @see ImplicitTagRulesWriter
@@ -77,6 +72,7 @@ public:
 private:
 
   boost::shared_ptr<QFile> _file;
+  long _ruleCtr;
 };
 
 }

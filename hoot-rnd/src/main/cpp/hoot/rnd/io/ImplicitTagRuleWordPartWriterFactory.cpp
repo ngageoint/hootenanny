@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "ImplicitTagRulesWriterFactory.h"
+#include "ImplicitTagRuleWordPartWriterFactory.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
@@ -35,32 +35,33 @@ using namespace std;
 namespace hoot
 {
 
-boost::shared_ptr<ImplicitTagRulesWriterFactory> ImplicitTagRulesWriterFactory::_theInstance;
+boost::shared_ptr<ImplicitTagRuleWordPartWriterFactory> ImplicitTagRuleWordPartWriterFactory::_theInstance;
 
-ImplicitTagRulesWriterFactory::ImplicitTagRulesWriterFactory()
+ImplicitTagRuleWordPartWriterFactory::ImplicitTagRuleWordPartWriterFactory()
 {
 }
 
-ImplicitTagRulesWriterFactory& ImplicitTagRulesWriterFactory::getInstance()
+ImplicitTagRuleWordPartWriterFactory& ImplicitTagRuleWordPartWriterFactory::getInstance()
 {
   if (!_theInstance.get())
   {
-    _theInstance.reset(new ImplicitTagRulesWriterFactory());
+    _theInstance.reset(new ImplicitTagRuleWordPartWriterFactory());
   }
   return *_theInstance;
 }
 
-boost::shared_ptr<ImplicitTagRulesWriter> ImplicitTagRulesWriterFactory::createWriter(QString url)
+boost::shared_ptr<ImplicitTagRuleWordPartWriter> ImplicitTagRuleWordPartWriterFactory::createWriter(
+  QString url)
 {
   LOG_VART(url);
 
   vector<std::string> names =
-    Factory::getInstance().getObjectNamesByBase(ImplicitTagRulesWriter::className());
-  boost::shared_ptr<ImplicitTagRulesWriter> writer;
+    Factory::getInstance().getObjectNamesByBase(ImplicitTagRuleWordPartWriter::className());
+  boost::shared_ptr<ImplicitTagRuleWordPartWriter> writer;
   for (size_t i = 0; i < names.size() && !writer; ++i)
   {
     LOG_VART(names[i]);
-    writer.reset(Factory::getInstance().constructObject<ImplicitTagRulesWriter>(names[i]));
+    writer.reset(Factory::getInstance().constructObject<ImplicitTagRuleWordPartWriter>(names[i]));
     if (writer->isSupported(url))
     {
       LOG_DEBUG("Using implicit tag rules writer: " << names[i]);

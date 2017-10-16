@@ -24,47 +24,22 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef IMPLICITTAGRULESWRITERFACTORY_H
-#define IMPLICITTAGRULESWRITERFACTORY_H
+#include "ImplicitTagRuleWordPart.h"
 
-// Hoot
-#include <hoot/rnd/io/ImplicitTagRulesWriter.h>
-
-// Qt
-#include <QString>
 
 namespace hoot
 {
 
-/**
- * A factory for constructing implicit tag rule writers based on an output URL
- */
-class ImplicitTagRulesWriterFactory
+ImplicitTagRuleWordPart::ImplicitTagRuleWordPart(const QString word,
+                                                 const QMap<QString, long>& tagsToCounts) :
+_word(word),
+_tagsToCounts(tagsToCounts)
 {
-public:
-
-  ImplicitTagRulesWriterFactory();
-
-  /**
-   * Creates an implicit tag rules writer, given an output URL
-   *
-   * @param url output location
-   * @return an ImplicitTagRulesWriter object
-   */
-  boost::shared_ptr<ImplicitTagRulesWriter> createWriter(QString url);
-
-  /**
-   * Retrieves the Singleton instance for this factory
-   *
-   * @return a factory instance
-   */
-  static ImplicitTagRulesWriterFactory& getInstance();
-
-private:
-
-  static boost::shared_ptr<ImplicitTagRulesWriterFactory> _theInstance;
-};
-
 }
 
-#endif // IMPLICITTAGRULESWRITERFACTORY_H
+bool ImplicitTagRuleWordPart::operator<(const ImplicitTagRuleWordPart& part) const
+{
+  return _word.toLower() < part.getWord().toLower();
+}
+
+}

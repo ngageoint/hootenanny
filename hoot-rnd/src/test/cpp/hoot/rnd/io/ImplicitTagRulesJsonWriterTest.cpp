@@ -27,7 +27,7 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/rnd/io/ImplicitTagRulesJsonWriter.h>
-#include <hoot/rnd/schema/ImplicitTagRule.h>
+#include <hoot/rnd/schema/ImplicitTagRuleWordPart.h>
 
 // Qt
 #include <QDir>
@@ -49,29 +49,38 @@ public:
     const QString outputFile = outputDir + "/rules-out.json";
     QDir().mkpath(outputDir);
 
-    ImplicitTagRulesByWord rules;
+    ImplicitTagRuleWordParts rules;
     QMap<QString, long> kvps;
 
     kvps["amenity=place_of_worship"] = 1246;
     kvps["leisure=park"] = 2;
-    rules["Mosque"] = kvps;
+    rules.append(ImplicitTagRuleWordPartPtr(new ImplicitTagRuleWordPart("Mosque", kvps)));
 
     kvps.clear();
     kvps["amenity=place_of_worship"] = 2672;
     kvps["tourism=hotel"] = 9;
-    rules["Masjid"] = kvps;
+    rules.append(ImplicitTagRuleWordPartPtr(new ImplicitTagRuleWordPart("Masjid", kvps)));
 
     kvps.clear();
     kvps["amenity=grave_yard"] = 21;
-    rules["Sidi Muhammad"] = kvps;
+    rules.append(ImplicitTagRuleWordPartPtr(new ImplicitTagRuleWordPart("Sidi Muhammad", kvps)));
 
     kvps.clear();
     kvps["amenity=place_of_worship"] = 18;
-    rules["Eid Prayer Ground"] = kvps;
+    rules.append(ImplicitTagRuleWordPartPtr(new ImplicitTagRuleWordPart("Eid Prayer Ground", kvps)));
+
+    //qSort(rules.begin(), rules.end(), sortByWord);
+    qSort(rules);
 
     ImplicitTagRulesJsonWriter writer;
     writer.open(outputFile);
-    writer.write(rules);
+    const long numRules = rules.size();
+    for (ImplicitTagRuleWordParts::const_iterator ruleItr = rules.begin(); ruleItr != rules.end();
+         ++ruleItr)
+    {
+      const ImplicitTagRuleWordPartPtr rule = *ruleItr;
+      writer.write(*rule, numRules);
+    }
     writer.close();
 
     HOOT_FILE_EQUALS("test-files/io/ImplicitTagRulesJsonWriterTest/rules.json", outputFile);

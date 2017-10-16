@@ -26,7 +26,7 @@
  */
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/rnd/io/ImplicitTagRulesSqliteWriter.h>
+#include <hoot/rnd/io/ImplicitTagRuleSqliteRecordWriter.h>
 #include <hoot/rnd/schema/ImplicitTagRule.h>
 
 // Qt
@@ -35,18 +35,17 @@
 namespace hoot
 {
 
-class ImplicitTagRulesSqliteWriterTest : public CppUnit::TestFixture
+class ImplicitTagRuleSqliteRecordWriterTest : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(ImplicitTagRulesSqliteWriterTest);
+  CPPUNIT_TEST_SUITE(ImplicitTagRuleSqliteRecordWriterTest);
   CPPUNIT_TEST(runWriteTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  //TODO: fix dupe database conn qt warning caused by this test
   void runWriteTest()
   {
-    const QString outputDir = "test-output/io/ImplicitTagRulesSqliteWriterTest";
+    const QString outputDir = "test-output/io/ImplicitTagRuleSqliteRecordWriter";
     const QString outputFile = outputDir + "/rules-out.sqlite";
     QDir().mkpath(outputDir);
 
@@ -86,9 +85,26 @@ public:
     rules.back()->getWords().insert(QString::fromUtf8("alwhdt")); //word #8
     rules.back()->getTags().appendValue("amenity=clinic"); //tag #6
 
-    ImplicitTagRulesSqliteWriter writer;
+    ImplicitTagRuleSqliteRecordWriter writer;
     writer.open(outputFile);
-    writer.write(rules);
+    for (ImplicitTagRules::const_iterator ruleItr = rules.begin(); ruleItr != rules.end();
+         ++ruleItr)
+    {
+      const ImplicitTagRulePtr rule = *ruleItr;
+      const QSet<QString> words = rule->getWords();
+      const Tags tags = rule->getTags();
+      for (QSet<QString>::const_iterator wordItr = words.begin(); wordItr != words.end();
+           ++wordItr)
+      {
+        const QString word = *wordItr;
+        for (Tags::const_iterator tagItr = tags.begin(); tagItr != tags.end();
+             ++tagItr)
+        {
+          const QString kvp = tagItr.key() + "=" + tagItr.value();
+          writer.write(word, kvp);
+        }
+      }
+    }
     writer.close();
 
     _openDb(outputFile);
@@ -299,6 +315,6 @@ private:
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ImplicitTagRulesSqliteWriterTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ImplicitTagRuleSqliteRecordWriterTest, "quick");
 
 }

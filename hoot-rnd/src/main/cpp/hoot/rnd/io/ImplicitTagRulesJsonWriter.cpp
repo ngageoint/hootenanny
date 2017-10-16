@@ -36,9 +36,10 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ImplicitTagRulesWriter, ImplicitTagRulesJsonWriter)
+HOOT_FACTORY_REGISTER(ImplicitTagRuleWordPartWriter, ImplicitTagRulesJsonWriter)
 
-ImplicitTagRulesJsonWriter::ImplicitTagRulesJsonWriter()
+ImplicitTagRulesJsonWriter::ImplicitTagRulesJsonWriter() :
+_ruleCtr(0)
 {
 }
 
@@ -54,6 +55,8 @@ bool ImplicitTagRulesJsonWriter::isSupported(const QString url)
 
 void ImplicitTagRulesJsonWriter::open(const QString url)
 {
+  _ruleCtr = 0;
+
   _file.reset(new QFile());
   _file->setFileName(url);
   if (_file->exists() && !_file->remove())
@@ -65,70 +68,52 @@ void ImplicitTagRulesJsonWriter::open(const QString url)
     throw HootException(QObject::tr("Error opening %1 for writing.").arg(url));
   }
   LOG_DEBUG("Opened: " << url << ".");
-}
 
-bool caseInsensitiveLessThan(const QString s1, const QString s2)
-{
-  return s1.toLower() < s2.toLower();
-}
-
-void ImplicitTagRulesJsonWriter::write(const ImplicitTagRulesByWord& rules)
-{
   _file->write(QString("[\n").toUtf8());
+}
 
-  long ruleCtr = 0;
-  //sort rules alphabetically by word case insensitively (QMap sorts them case sensitively by
-  //default)
-  QStringList words = rules.keys();
-  qSort(words.begin(), words.end(), caseInsensitiveLessThan);
-  for (int i = 0; i < rules.size(); i++)
-  {
-    _file->write(QString("  {\n").toUtf8());
+void ImplicitTagRulesJsonWriter::write(const ImplicitTagRuleWordPart& ruleWordPart,
+                                       const long totalParts)
+{
+  _file->write(QString("  {\n").toUtf8());
 
-    const QString word = words.at(i);
-    const QString wordLine = "    \"word\": \"" % word % "\",\n";
-    _file->write(wordLine.toUtf8());
+  const QString word = ruleWordPart.getWord();
+  const QString wordLine = "    \"word\": \"" % word % "\",\n";
+  _file->write(wordLine.toUtf8());
 
-    long kvpCtr = 0;
-    const QMap<QString, long> kvpsWithCount = rules[word];
-    for (QMap<QString, long>::const_iterator kvpItr = kvpsWithCount.begin();
+  long kvpCtr = 0;
+  const QMap<QString, long> kvpsWithCount = ruleWordPart.getTagsToCounts();
+  for (QMap<QString, long>::const_iterator kvpItr = kvpsWithCount.begin();
        kvpItr != kvpsWithCount.end(); ++kvpItr)
+  {
+    QString kvpLine = "    \"" % kvpItr.key() % "\": " % QString::number(kvpItr.value());
+    if (kvpCtr < (kvpsWithCount.size() - 1))
     {
-      QString kvpLine = "    \"" % kvpItr.key() % "\": " % QString::number(kvpItr.value());
-      if (kvpCtr < (kvpsWithCount.size() - 1))
-      {
-        kvpLine += ",";
-      }
-      kvpLine += "\n";
-      _file->write(kvpLine.toUtf8());
-      kvpCtr++;
+       kvpLine += ",";
     }
-
-    QString closingRuleLine = "  }";
-    if (ruleCtr < (rules.size() - 1))
-    {
-      closingRuleLine += ",";
-    }
-    closingRuleLine += "\n";
-    _file->write(closingRuleLine.toUtf8());
-    ruleCtr++;
+    kvpLine += "\n";
+    _file->write(kvpLine.toUtf8());
+    kvpCtr++;
   }
 
-  _file->write(QString("]").toUtf8());
-}
-
-void ImplicitTagRulesJsonWriter::write(const ImplicitTagRules& /*rules*/)
-{
-  LOG_DEBUG(
-    "The writing of implicit tag rules to JSON may only be done when the output is sorted by word.");
+  QString closingRuleLine = "  }";
+  if (_ruleCtr < (totalParts - 1))
+  {
+    closingRuleLine += ",";
+  }
+  closingRuleLine += "\n";
+  _file->write(closingRuleLine.toUtf8());
+  _ruleCtr++;
 }
 
 void ImplicitTagRulesJsonWriter::close()
 {
   if (_file.get())
   {
+    _file->write(QString("]").toUtf8());
     _file->close();
     _file.reset();
+    _ruleCtr = 0;
   }
 }
 

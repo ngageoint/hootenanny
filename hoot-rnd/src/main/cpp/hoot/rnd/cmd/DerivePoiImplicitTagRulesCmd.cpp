@@ -29,8 +29,6 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/rnd/schema/PoiImplicitTagRulesDeriver.h>
-#include <hoot/rnd/io/ImplicitTagRulesJsonWriter.h>
-#include <hoot/rnd/io/ImplicitTagRulesSqliteWriter.h>
 
 namespace hoot
 {

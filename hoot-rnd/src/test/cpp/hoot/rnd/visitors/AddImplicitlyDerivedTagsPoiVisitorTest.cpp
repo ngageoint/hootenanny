@@ -30,7 +30,8 @@
 #include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/rnd/visitors/AddImplicitlyDerivedTagsPoiVisitor.h>
-#include <hoot/rnd/io/ImplicitTagRulesSqliteWriter.h>
+#include <hoot/rnd/io/ImplicitTagRuleSqliteRecordWriter.h>
+#include <hoot/rnd/schema/ImplicitTagRule.h>
 
 // Qt
 #include <QDir>
@@ -192,9 +193,27 @@ public:
 
   void writeRules(const QString outputPath)
   {
-    ImplicitTagRulesSqliteWriter rulesWriter;
+    ImplicitTagRuleSqliteRecordWriter rulesWriter;
     rulesWriter.open(outputPath);
-    rulesWriter.write(getTestRules());
+    const ImplicitTagRules rules = getTestRules();
+    for (ImplicitTagRules::const_iterator ruleItr = rules.begin(); ruleItr != rules.end();
+         ++ruleItr)
+    {
+      const ImplicitTagRulePtr rule = *ruleItr;
+      const QSet<QString> words = rule->getWords();
+      const Tags tags = rule->getTags();
+      for (QSet<QString>::const_iterator wordItr = words.begin(); wordItr != words.end();
+           ++wordItr)
+      {
+        const QString word = *wordItr;
+        for (Tags::const_iterator tagItr = tags.begin(); tagItr != tags.end();
+             ++tagItr)
+        {
+          const QString kvp = tagItr.key() + "=" + tagItr.value();
+          rulesWriter.write(word, kvp);
+        }
+      }
+    }
     rulesWriter.close();
   }
 };

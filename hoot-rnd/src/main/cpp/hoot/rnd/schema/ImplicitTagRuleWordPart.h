@@ -22,58 +22,53 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef IMPLICITTAGRULESWRITER_H
-#define IMPLICITTAGRULESWRITER_H
+#ifndef IMPLICITTAGRULEWORDPART_H
+#define IMPLICITTAGRULEWORDPART_H
 
-// hoot
-#include <hoot/rnd/schema/ImplicitTagRule.h>
+// Qt
+#include <QMap>
 
 namespace hoot
 {
 
 /**
- * Interface for writing implicit tag rules to output
+ * A rule that can be applied to add tags to a feature derived implicitly from the feature's name
  */
-class ImplicitTagRulesWriter
+class ImplicitTagRuleWordPart
 {
-
 public:
 
-  static std::string className() { return "hoot::ImplicitTagRulesWriter"; }
+  ImplicitTagRuleWordPart(const QString word, const QMap<QString, long>& tagsToCounts);
 
   /**
-   * Writes implicit tag rules to output
+   * Returns the word associated with this rule part
    *
-   * @param rules a collection of implicit tag rules
+   * @return a word
    */
-  virtual void write(const ImplicitTagRules& rules) = 0;
+  QString getWord() const { return _word; }
+  void setWord(const QString word) { _word = word; }
 
   /**
-   *  Writes implicit tag rules organized by word to output
+   * Returns all tags associated with this rule part
    *
-   * @param rules a collection of implicit tag rules organized by word
+   * @return a collection of tags
    */
-  virtual void write(const ImplicitTagRulesByWord& rules) = 0;
+  QMap<QString, long> getTagsToCounts() const { return _tagsToCounts; }
+  void setTagsToCounts(const QMap<QString, long>& tagsToCounts) { _tagsToCounts = tagsToCounts; }
 
-  /**
-   * Returns true if the output URL is supported.
-   */
-  virtual bool isSupported(const QString url) = 0;
+  bool operator<(const ImplicitTagRuleWordPart& part) const;
 
-  /**
-   * Opens the specified URL for writing.
-   */
-  virtual void open(const QString url) = 0;
+private:
 
-  /**
-   * Closes the output file
-   */
-  virtual void close() = 0;
-
+  QString _word;
+  QMap<QString, long> _tagsToCounts;
 };
+
+typedef boost::shared_ptr<ImplicitTagRuleWordPart> ImplicitTagRuleWordPartPtr;
+typedef QList<ImplicitTagRuleWordPartPtr> ImplicitTagRuleWordParts;
 
 }
 
-#endif // IMPLICITTAGRULESWRITER_H
+#endif // IMPLICITTAGRULEWORDPART_H

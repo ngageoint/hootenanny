@@ -24,11 +24,8 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef IMPLICITTAGRULESSQLITEWRITER_H
-#define IMPLICITTAGRULESSQLITEWRITER_H
-
-// Hoot
-#include <hoot/rnd/io/ImplicitTagRulesWriter.h>
+#ifndef IMPLICITTAGRULESQLITERECORDWRITER_H
+#define IMPLICITTAGRULESQLITERECORDWRITER_H
 
 // Qt
 #include <QString>
@@ -43,40 +40,19 @@ namespace hoot
 /**
  * Writes implicit tag rules ot a Sqlite database
  */
-class ImplicitTagRulesSqliteWriter : public ImplicitTagRulesWriter
+class ImplicitTagRuleSqliteRecordWriter
 {
 
 public:
 
-  static std::string className() { return "hoot::ImplicitTagRulesSqliteWriter"; }
+  ImplicitTagRuleSqliteRecordWriter();
+  ~ImplicitTagRuleSqliteRecordWriter();
 
-  ImplicitTagRulesSqliteWriter();
-  ~ImplicitTagRulesSqliteWriter();
+  void open(const QString url);
 
-  /**
-   * @see ImplicitTagRulesWriter
-   */
-  virtual bool isSupported(const QString url);
+  void write(const QString word, const QString kvp);
 
-  /**
-   * @see ImplicitTagRulesWriter
-   */
-  virtual void open(const QString url);
-
-  /**
-   * @see ImplicitTagRulesWriter
-   */
-  virtual void write(const ImplicitTagRules& rules);
-
-  /**
-   * not supported
-   */
-  virtual void write(const ImplicitTagRulesByWord& rules);
-
-  /**
-   * @see ImplicitTagRulesWriter
-   */
-  virtual void close();
+  void close();
 
 private:
 
@@ -87,15 +63,27 @@ private:
   QSqlQuery _insertTagQuery;
   QSqlQuery _getLastWordIdQuery;
   QSqlQuery _getLastTagIdQuery;
+  QSqlQuery _getWordIdForWord;
+  QSqlQuery _getTagIdForTag;
+  QSqlQuery _getRuleIdForWordKvp;
+  QSqlQuery _updateRuleTagCountQuery;
+
+  long _currentRuleId;
 
   void _createTables();
   void _prepareQueries();
 
   long _insertWord(const QString word);
   long _insertTag(const QString kvp);
-  void _insertRuleRecord(const long ruleId, const long wordId, const long tagId);
+  void _insertRuleRecord(const long ruleId, const long wordId, const long tagId,
+                         const long ruleCount);
+  long _getWordId(const QString word);
+  long _getTagId(const QString kvp);
+  long _getRuleId(const QString word, const QString kvp, long& count);
+  void _updateRuleTagCount(const long ruleId, const long wordId, const long tagId,
+                           const long count);
 };
 
 }
 
-#endif // IMPLICITTAGRULESSQLITEWRITER_H
+#endif // IMPLICITTAGRULESQLITERECORDWRITER_H

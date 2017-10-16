@@ -36,7 +36,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ImplicitTagRulesWriter, ImplicitTagRulesTsvWriter)
+HOOT_FACTORY_REGISTER(ImplicitTagRuleWordPartWriter, ImplicitTagRulesTsvWriter)
 
 ImplicitTagRulesTsvWriter::ImplicitTagRulesTsvWriter()
 {
@@ -67,45 +67,28 @@ void ImplicitTagRulesTsvWriter::open(const QString url)
   LOG_DEBUG("Opened: " << url << ".");
 }
 
-bool caseInsensitiveLessThan3(const QString s1, const QString s2)
-{
-  return s1.toLower() < s2.toLower();
-}
-
-void ImplicitTagRulesTsvWriter::write(const ImplicitTagRulesByWord& rules)
+void ImplicitTagRulesTsvWriter::write(const ImplicitTagRuleWordPart& ruleWordPart,
+                                      const long /*totalParts*/)
 {
   //each word takes up two rows; first col in first row contains words; remaining cols in first row
   //contain kvps; in second row, each kvp has the count directly below it
 
-  //sort rules alphabetically by word case insensitively (QMap sorts them case sensitively by
-  //default)
-  QStringList words = rules.keys();
-  qSort(words.begin(), words.end(), caseInsensitiveLessThan3);
-  for (int i = 0; i < rules.size(); i++)
-  {
-    const QString word = words.at(i);
-    QString row1 = word % "\t";
-    QString row2 = "\t";
-    const QMap<QString, long> kvpsWithCount = rules[word];
-    for (QMap<QString, long>::const_iterator kvpItr = kvpsWithCount.begin();
+  const QString word = ruleWordPart.getWord();
+  QString row1 = word % "\t";
+  QString row2 = "\t";
+  const QMap<QString, long> kvpsWithCount = ruleWordPart.getTagsToCounts();
+  for (QMap<QString, long>::const_iterator kvpItr = kvpsWithCount.begin();
        kvpItr != kvpsWithCount.end(); ++kvpItr)
-    {
-      row1 += kvpItr.key() % "\t";
-      row2 += QString::number(kvpItr.value()) % "\t";
-    }
-    row1.chop(1);
-    row1 += "\n";
-    _file->write(row1.toUtf8());
-    row2.chop(1);
-    row2 += "\n";
-    _file->write(row2.toUtf8());
+  {
+    row1 += kvpItr.key() % "\t";
+    row2 += QString::number(kvpItr.value()) % "\t";
   }
-}
-
-void ImplicitTagRulesTsvWriter::write(const ImplicitTagRules& /*rules*/)
-{
-  LOG_DEBUG(
-    "The writing of implicit tag rules to JSON may only be done when the output is sorted by word.");
+  row1.chop(1);
+  row1 += "\n";
+  _file->write(row1.toUtf8());
+  row2.chop(1);
+  row2 += "\n";
+  _file->write(row2.toUtf8());
 }
 
 void ImplicitTagRulesTsvWriter::close()
