@@ -75,5 +75,15 @@ If you've updated the code, you must connect to the vm via ssh to build and rede
     cd hoot
     source ./SetupEnv.sh
     make -sj$(nproc)
-    sudo -u tomcat8 scripts/tomcat/CopyWebAppsToTomcat.sh
+    ~~sudo -u tomcat8~~ scripts/tomcat/CopyWebAppsToTomcat.sh
 
+If you run into permission errors running the tomcat script, remove files that may be owned by tomcat and then re-run the script:
+ 
+    sudo rm -rf /usr/share/tomcat8/webapps/hootenannyid
+    sudo rm -rf /usr/share/tomcat8/webapps/hoot-services.war
+    sudo rm -rf /usr/share/tomcat8/webapps/hoot-services
+    scripts/tomcat/CopyWebAppsToTomcat.sh
+
+# Running UI Tests in the VM
+
+UI Tests get run on localhost:8888 (tomcat), so if changes to the UI have been made, you will need to deploy them to tomcat (script above). If you typically use hoot-server for development, make sure that the UI on localhost:8080 matches localhost:8888. See [here](https://github.com/ngageoint/hootenanny/blob/develop/test-files/ui/README.md) for further instructions on how to run tests.
