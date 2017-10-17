@@ -2,6 +2,7 @@ Feature: Translation Assistant
 
     Scenario: Opening Management Tab
         Given I am on Hootenanny
+        And I resize the window
         And I click Get Started
         When I select the "sprocket" div
 
@@ -89,6 +90,7 @@ Feature: Translation Assistant
     Scenario: Delete custom translation
         When I click on the "Translations" option in the "settingsSidebar"
         And I wait
+        And I scroll "cali-Cucumber" into view
         Then I delete the "cali-Cucumber" translation
         Then I accept the alert
 
@@ -98,7 +100,7 @@ Feature: Translation Assistant
         And I context click the "cali_shp_Cucumber" Dataset
         And I click the "Delete" context menu item
         And I accept the alert
-        # Then I wait 30 "seconds" to not see "cali_shp_Cucumber"
+        Then I wait 30 "seconds" to not see "cali_shp_Cucumber"
 
     Scenario: Build an TDS translation mapping for gdb
         Then I click on the "Translation Assistant" option in the "settingsSidebar"
