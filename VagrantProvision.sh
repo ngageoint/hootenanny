@@ -1,12 +1,16 @@
 #!/usr/bin/env bash
 
+#################################################
+# VERY IMPORTANT: CHANGE THIS TO POINT TO WHERE YOU PUT HOOT
+HOOT_HOME=~/hoot
+echo HOOT_HOME: $HOOT_HOME
+#################################################
+
 VMUSER=`id -u -n`
 echo USER: $VMUSER
 VMGROUP=`groups | grep -o $VMUSER`
 echo GROUP: $VMGROUP
 
-HOOT_HOME=~/hoot
-echo HOOT_HOME: $HOOT_HOME
 cd ~
 source ~/.profile
 
@@ -29,21 +33,28 @@ sudo service ntp stop
 sudo ntpd -gq
 sudo service ntp start
 
-if ! java -version 2>&1 | grep --quiet 1.8.0_131; then
+
+JDK_URL=http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jdk-8u144-linux-x64.tar.gz
+JDK_TAR=jdk-8u144-linux-x64.tar.gz
+JDK_VERSION=1.8.0_144
+
+if ! java -version 2>&1 | grep --quiet $JDK_VERSION; then
     echo "### Installing Java 8..."
 
-    # jdk-8u112-linux-x64.tar.gz's official checksums:
-    #    sha256:  62b215bdfb48bace523723cdbb2157c665e6a25429c73828a32f00e587301236
-    #    md5: 75b2cb2249710d822a60f83e28860053
-    echo "75b2cb2249710d822a60f83e28860053  /tmp/jdk-8u131-linux-x64.tar.gz " > /tmp/jdk.md5
+    # jdk-8u144-linux-x64.tar.gz's official checksums:
+    # sha256: e8a341ce566f32c3d06f6d0f0eeea9a0f434f538d22af949ae58bc86f2eeaae4
+    # md5: 2d59a3add1f213cd249a67684d4aeb83
 
-    if [ ! -f /tmp/jdk-8u131-linux-x64.tar.gz ] || ! md5sum -c /tmp/jdk.md5; then
-        echo "Downloading jdk-8u131-linux-x64.tar.gz ...."
-        sudo wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jdk-8u131-linux-x64.tar.gz -P /tmp
-        echo "Finished download of jdk-8u131-linux-x64.tar.gz"
+    echo "2d59a3add1f213cd249a67684d4aeb83  ./${JDK_TAR} " > ./jdk.md5
+
+
+    if [ ! -f ./${JDK_TAR} ] || ! md5sum -c ./jdk.md5; then
+        echo "Downloading ${JDK_TAR} ...."
+        sudo wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" $JDK_URL
+        echo "Finished download of ${JDK_TAR}"
     fi
 
-    sudo tar -xvzf /tmp/jdk-8u131-linux-x64.tar.gz --directory=/tmp >/dev/null
+    sudo tar -xvzf ./${JDK_TAR} >/dev/null
 
     if [[ ! -e /usr/lib/jvm ]]; then
         sudo mkdir /usr/lib/jvm
@@ -53,7 +64,7 @@ if ! java -version 2>&1 | grep --quiet 1.8.0_131; then
         fi
     fi
 
-    sudo mv -f /tmp/jdk1.8.0_131 /usr/lib/jvm/oracle_jdk8
+    sudo mv -f ./jdk1.8.0_144 /usr/lib/jvm/oracle_jdk8
     sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/oracle_jdk8/jre/bin/java 9999
     sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/oracle_jdk8/bin/javac 9999
     echo "### Done with Java 8 install..."
