@@ -21,11 +21,11 @@
 # Java8: jdk-8u144-linux-x64.rpm
 # From: http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jdk-8u144-linux-x64.rpm
 #
-# NodeJS: nodejs-0.10.46 and nodejs-devel-0.10.46
-# Installed via this repo: https://rpm.nodesource.com/setup
+# NodeJS: nodejs-0.10.48 and nodejs-devel-0.10.48
+# Grabbed from: https://rpm.nodesource.com/pub_0.10/el/7
 #
 # STXXL: Release v1.3.1
-# Pulled from GitHub: git clone http://github.com/stxxl/stxxl.git stxxl
+# Pulled from GitHub: https://github.com/ngageoint/hootenanny-rpms/raw/master/src/SOURCES/stxxl-1.3.1.tar.gz
 #
 # American-english-insane dictionary & words.sqlite. There isn't a package available for these so we use our own
 # copy stored on S3
@@ -48,26 +48,64 @@
 # From: https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_1.5.1/FileGDB_API_1_5_1-64.tar.gz
 #
 
+#################################################
+# VERY IMPORTANT: CHANGE THIS TO POINT TO WHERE YOU PUT HOOT
+HOOT_HOME=~/hoot
+echo HOOT_HOME: $HOOT_HOME
+#################################################
+
+#################################################
+# THIS IS VERY SPECIFIC TO ONE ENVIRONMENT
+SRC_DIR=/home/centos/hoot-deps
+#################################################
+
+# Who are we?
 VMUSER=`id -u -n`
 echo USER: $VMUSER
 VMGROUP=`groups | grep -o $VMUSER`
 echo GROUP: $VMGROUP
 
-HOOT_HOME=~/hoot
-echo HOOT_HOME: $HOOT_HOME
+
+# Setting up versions and locations:
+STXXL_VERSION=stxxl-1.3.1
+
+# Ancient version of NodeJS
+NODEJS_URL=https://rpm.nodesource.com/pub_0.10/el/7/x86_64
+NODEJS_RPM=nodejs-0.10.48-1nodesource.el7.centos.x86_64.rpm
+NODEJS_DEVEL_RPM=nodejs-devel-0.10.48-1nodesource.el7.centos.x86_64.rpm
+
+# JAVA JDK download URL
+JDKURL=http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jdk-8u144-linux-x64.rpm
+
+# GDAL & FGDB. NOTE We parse the FGDB version later in the script to get the tar file name
+GDAL_VERSION=2.1.4
+FGDB_VERSION=1.5.1
+
+#################################################
+
 cd ~
 source ~/.bash_profile
 
 # Keep VagrantBuild.sh happy
 #ln -s ~/.bash_profile ~/.profile
 
-# add EPEL repo for extra packages
-echo "### Add epel repo ###" > CentOS_upgrade.txt
-sudo yum -y install epel-release >> CentOS_upgrade.txt 2>&1
+# add EPEL repo for extra packages - ONLY if we DONT have SRC_DIR
+if [ ! -d "$SRC_DIR" ] ; then
+    echo "### Add epel repo ###" > CentOS_upgrade.txt
+    sudo yum -y install epel-release >> CentOS_upgrade.txt 2>&1
 
-# add the Postgres repo
-echo "### Add Postgres repo ###" > CentOS_upgrade.txt
-sudo rpm -Uvh http://yum.postgresql.org/9.5/redhat/rhel-7-x86_64/pgdg-centos95-9.5-3.noarch.rpm >> CentOS_upgrade.txt 2>&1
+    # This comes from the postgres repo
+    POSTGIS_PACKAGE=postgis23_95
+
+    # add the Postgres repo
+    echo "### Add Postgres repo ###" > CentOS_upgrade.txt
+    sudo rpm -Uvh http://yum.postgresql.org/9.5/redhat/rhel-7-x86_64/pgdg-centos95-9.5-3.noarch.rpm >> CentOS_upgrade.txt 2>&1
+else
+    echo "### Skipping the epel and postgresql repos..."
+
+    # This one is from the site specific repo
+    POSTGIS_PACKAGE=postgis2_95
+fi
 
 echo "Updating OS..."
 echo "### Update ###" >> CentOS_upgrade.txt
@@ -75,48 +113,75 @@ sudo yum -q -y update >> CentOS_upgrade.txt 2>&1
 echo "### Upgrade ###" >> CentOS_upgrade.txt
 sudo yum -q -y upgrade >> CentOS_upgrade.txt 2>&1
 
-echo "### Setup NTP..."
-sudo yum -q -y install ntp
-sudo chkconfig ntpd on
-#TODO: Better way to do this?
-sudo systemctl stop ntpd
-sudo ntpd -gq
-sudo systemctl start ntpd
+# echo "### Setup NTP..."
+# sudo yum -q -y install ntp
+# sudo chkconfig ntpd on
+# #TODO: Better way to do this?
+# sudo systemctl stop ntpd
+# sudo ntpd -gq
+# sudo systemctl start ntpd
 
-
-# Install Java8
 # Make sure that we are in ~ before trying to wget & install stuff
 cd ~
 
-echo "### Installing the repo for an ancient version of NodeJS"
-curl --silent --location https://rpm.nodesource.com/setup | sudo bash -
+# if [ ! -d "$SRC_DIR" ] ; then
+# https://rpm.nodesource.com/pub_0.10/el/7/x86_64/nodejs-0.10.48-1nodesource.el7.centos.x86_64.rpm
+# https://rpm.nodesource.com/pub_0.10/el/7/x86_64/nodejs-devel-0.10.48-1nodesource.el7.centos.x86_64.rpm
+#
+#     echo "### Getting an ancient version of NodeJS"
+#     curl --silent --location https://rpm.nodesource.com/setup | sudo bash -
+#
+#
+#
+#     echo "### Installing an ancient version of NodeJS"
+#     sudo yum install -y \
+#         nodejs-0.10.48 \
+#         nodejs-devel-0.10.48
+# else
+#     # VERY HARDCODED
+#     echo "### Installing an ancient version of NodeJS"
+#     sudo yum install -y \
+#         $SRC_DIR/nodejs-0.10.48-1nodesource.el7.centos.x86_64.rpm \
+#         $SRC_DIR/nodejs-devel-0.10.48-1nodesource.el7.centos.x86_64.rpm
+# fi
+
 
 echo "### Installing an ancient version of NodeJS"
-sudo yum install -y \
-  nodejs-0.10.46 \
-  nodejs-devel-0.10.46
+if [ -f "${SRC_DIR}/${NODEJS_RPM}" ]; then
+    sudo yum -y install $SRC_DIR/$NODEJS_RPM
+elif [ -f "./${NODEJS_RPM}" ]; then
+    sudo yum -y install ./$NODEJS_RPM
+else
+    wget --quiet $NODEJS_URL/$NODEJS_RPM
+    sudo yum -y install ./$NODEJS_RPM
+fi
+echo "### Installing an ancient version of NodeJS development files"
+if [ -f "${SRC_DIR}/${NODEJS_DEVEL_RPM}" ]; then
+    sudo yum -y install $SRC_DIR/$NODEJS_DEVEL_RPM
+elif [ -f "./${NODEJS_DEVEL_RPM}" ]; then
+    sudo yum -y install ./$NODEJS_DEVEL_RPM
+else
+    wget --quiet $NODEJS_URL/$NODEJS_DEVEL_RPM
+    sudo yum -y install ./$NODEJS_DEVEL_RPM
+fi
 
 
 # install useful and needed packages for working with hootenanny
 echo "### Installing dependencies from repos..."
 sudo yum -y install \
-    asciidoc \
     autoconf \
     automake \
     bc \
     boost-devel \
+    bzip2 \
     ccache \
     cmake \
     cppunit-devel \
-    dblatex \
-    doxygen \
     gcc \
     gcc-c++ \
     gdb \
     geos \
     geos-devel \
-    git \
-    git-core \
     glpk \
     glpk-devel \
     gnuplot \
@@ -130,7 +195,7 @@ sudo yum -y install \
     opencv-devel \
     opencv-python \
     perl-XML-LibXML \
-    postgis23_95 \
+    $POSTGIS_PACKAGE \
     postgresql95 \
     postgresql95-contrib \
     postgresql95-devel \
@@ -148,30 +213,38 @@ sudo yum -y install \
     qt \
     qt-devel \
     qt-postgresql \
-    qtwebkit \
-    qtwebkit-devel \
+    sqlite \
+    sqlite-devel \
     swig \
-    tex* \
     unzip \
     v8-devel \
-    w3m \
     wget \
     words \
     zip \
 
 
-# Not installed:
+# Removed Doc and UI stuff
+#     asciidoc \
+#     dblatex \
+#     doxygen \
+#     qtwebkit \
+#     qtwebkit-devel \
+#     tex* \
+#     w3m \
 #    xorg-x11-server-Xvfb \
 
 # Official download page:
 # http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 if  ! rpm -qa | grep jdk1.8.0_144-1.8.0_144; then
     echo "### Installing Java8..."
-    if [ ! -f jdk-8u144-linux-x64.rpm ]; then
-      JDKURL=http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jdk-8u144-linux-x64.rpm
+    if [ -f "$SRC_DIR/jdk-8u144-linux-x64.rpm" ]; then
+      sudo yum -y install $SRC_DIR/jdk-8u144-linux-x64.rpm
+    elif [ -f ./jdk-8u144-linux-x64.rpm ]; then
+      sudo yum -y install ./jdk-8u144-linux-x64.rpm
+    else
       wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" $JDKURL
+      sudo yum -y install ./jdk-8u144-linux-x64.rpm
     fi
-    sudo yum -y install ./jdk-8u144-linux-x64.rpm
 fi
 
 # Trying the following instead of removing the OpenJDK
@@ -195,13 +268,21 @@ sudo alternatives --set javac /usr/java/jdk1.8.0_144/bin/javac
 
 echo "##### Temp installs #####"
 
-# Stxxl:
-if [ -d /home/centos/hoot-deps/stxxl ]
-    cd /home/centos/hoot-deps/stxxl
+# Words1.sqlite is normally installed by Makefile.old
+if [ -f "$SRC_DIR/words1.sqlite" ]; then
+    echo "### Copying words1.sqlite..."
+    cp $SRC_DIR/words1.sqlite $HOOT_HOME/conf/dictionary
+fi
+
+# Stxxl: We are expecting this to already be unpacked.
+if [ -d "$SRC_DIR/stxxl" ] ; then
+    cd $SRC_DIR/stxxl
 else
-    git clone http://github.com/stxxl/stxxl.git stxxl
+    if [ ! -f "${STXXL_VERSION}.tar.gz" ]; then
+        wget --quiet https://github.com/ngageoint/hootenanny-rpms/raw/master/src/SOURCES/${STXXL_VERSION}.tar.gz
+    fi
+    mkdir -p stxxl && tar zxof ${STXXL_VERSION}.tar.gz --directory ./stxxl --strip-components 1
     cd stxxl
-    git checkout -q tags/1.3.1
 fi
 make config_gnu
 echo "STXXL_ROOT	=`pwd`" > make.settings.local
@@ -245,8 +326,12 @@ fi
 # We need this big dictionary for text matching. On Ubuntu, this is a package
 if [ ! -f /usr/share/dict/american-english-insane ]; then
     echo "### Installing american-english-insane dictionary..."
-    if [ -f /home/centos/hoot-deps/american-english-insane.bz2 ]
-        sudo bash -c "bzcat /home/centos/hoot-deps/american-english-insane.bz2 > /usr/share/dict/american-english-insane"
+    if [ -f "$SRC_DIR/american-english-insane.bz2" ] ; then
+        sudo bash -c "bzcat $SRC_DIR/american-english-insane.bz2 > /usr/share/dict/american-english-insane"
+    elif  [ -f "$SRC_DIR/american-english-insane" ] ; then
+        sudo bash -c "cp $SRC_DIR/american-english-insane /usr/share/dict/american-english-insane"
+    elif [ -f ./american-english-insane.bz2 ] ; then
+        sudo bash -c "bzcat ./american-english-insane.bz2 > /usr/share/dict/american-english-insane"
     else
         wget --quiet -N https://s3.amazonaws.com/hoot-rpms/support-files/american-english-insane.bz2
         sudo bash -c "bzcat american-english-insane.bz2 > /usr/share/dict/american-english-insane"
@@ -269,7 +354,7 @@ sudo /usr/bin/perl $HOOT_HOME/scripts/maven/SetMavenHttps.pl
 
 if ! grep --quiet "export HOOT_HOME" ~/.bash_profile; then
     echo "Adding hoot home to profile..."
-    echo "export HOOT_HOME=~/hoot" >> ~/.bash_profile
+    echo "export HOOT_HOME=$HOOT_HOME" >> ~/.bash_profile
     echo "export PATH=\$PATH:\$HOOT_HOME/bin" >> ~/.bash_profile
     source ~/.bash_profile
 fi
@@ -283,155 +368,71 @@ else
     sed -i '/^export JAVA_HOME=.*/c\export JAVA_HOME=\/usr\/java\/jdk1.8.0_144' ~/.bash_profile
 fi
 
-# if ! grep --quiet "export HADOOP_HOME" ~/.bash_profile; then
-#     echo "Adding Hadoop home to profile..."
-#     echo "export HADOOP_HOME=~/hadoop" >> ~/.bash_profile
-#     echo "export PATH=\$PATH:\$HADOOP_HOME/bin" >> ~/.bash_profile
-#     source ~/.bash_profile
-# fi
-
-# if ! ruby -v | grep --quiet 2.3.0; then
-#     # Ruby via rvm - from rvm.io
-#     # Running this twice so that it should not error out
-#     gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 || \
-#         gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3  2>&1
-#
-#     curl -sSL https://raw.githubusercontent.com/rvm/rvm/master/binscripts/rvm-installer | bash -s stable
-#
-# #     source /home/$VMUSER/.rvm/scripts/rvm
-#     source ~/.rvm/scripts/rvm
-#
-#     stdbuf -o L -e L rvm install ruby-2.3
-#     rvm --default use 2.3
-
-# Don't install documentation for gems
-# cat > ~/.gemrc <<EOT
-#   install: --no-document
-#   update: --no-document
-# EOT
-# fi
-
-# gem installs are *very* slow, hence all the checks in place here to facilitate debugging
-# gem list --local | grep -q mime-types
-# if [ $? -eq 1 ]; then
-#    #sudo gem install mime-types -v 2.6.2
-#    gem install mime-types
-# fi
-# gem list --local | grep -q cucumber
-# if [ $? -eq 1 ]; then
-#    #sudo gem install cucumber
-#    gem install cucumber
-# fi
-# gem list --local | grep -q capybara-webkit
-# if [ $? -eq 1 ]; then
-#    #sudo gem install capybara-webkit
-#    gem install capybara-webkit
-# fi
-# gem list --local | grep -q selenium-webdriver
-# if [ $? -eq 1 ]; then
-#    #sudo gem install selenium-webdriver
-#    gem install selenium-webdriver
-# fi
-# gem list --local | grep -q rspec
-# if [ $? -eq 1 ]; then
-#    #sudo gem install rspec
-#    gem install rspec
-# fi
-# gem list --local | grep -q capybara-screenshot
-# if [ $? -eq 1 ]; then
-#    #sudo gem install capybara-screenshot
-#    gem install capybara-screenshot
-# fi
-# gem list --local | grep -q selenium-cucumber
-# if [ $? -eq 1 ]; then
-#    #sudo gem install selenium-cucumber
-#    gem install selenium-cucumber
-# fi
-
 # Make sure that we are in ~ before trying to wget & install stuff
 cd ~
 
-
-# if  ! rpm -qa | grep google-chrome-stable; then
-#     echo "### Installing Chrome..."
-#     if [ ! -f google-chrome-stable_current_x86_64.rpm ]; then
-#       wget --quiet https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
-#     fi
-#     sudo yum -y install ./google-chrome-stable_current_*.rpm
-# fi
-#
-# if [ ! -f bin/chromedriver ]; then
-#     echo "### Installing Chromedriver..."
-#     mkdir -p ~/bin
-#     if [ ! -f chromedriver_linux64.zip ]; then
-# #       LATEST_RELEASE="`wget --quiet -O- http://chromedriver.storage.googleapis.com/LATEST_RELEASE`"
-# #       wget --quiet http://chromedriver.storage.googleapis.com/$LATEST_RELEASE/chromedriver_linux64.zip
-#
-# # Errors with the latest release (2/31) wanting glibc v2.18 when only glibc v2.17 is available
-# # https://bugs.chromium.org/p/chromedriver/issues/detail?id=1894#c2
-#       wget --quiet http://chromedriver.storage.googleapis.com/2.30/chromedriver_linux64.zip
-#     fi
-#     unzip -d ~/bin chromedriver_linux64.zip
-# else
-#   LATEST_RELEASE="`wget --quiet -O- http://chromedriver.storage.googleapis.com/LATEST_RELEASE`"
-#   if [[ "$(chromedriver --version)" != "ChromeDriver $LATEST_RELEASE."* ]]; then
-#     echo "### Updating Chromedriver"
-#     rm ~/bin/chromedriver
-#     rm ~/chromedriver_linux64.zip
-#     wget --quiet http://chromedriver.storage.googleapis.com/$LATEST_RELEASE/chromedriver_linux64.zip
-#     unzip -o -d ~/bin chromedriver_linux64.zip
-#   fi
-# fi
-
 if [ ! -f bin/osmosis ]; then
     echo "### Installing Osmosis"
-    mkdir -p ~/bin
-    if [ ! -f osmosis-latest.tgz ]; then
-      wget --quiet http://bretth.dev.openstreetmap.org/osmosis-build/osmosis-latest.tgz
-    fi
     mkdir -p ~/bin/osmosis_src
-    tar -zxf osmosis-latest.tgz -C ~/bin/osmosis_src
+
+    if [ -f "$SRC_DIR/osmosis-latest.tgz" ]; then
+      tar -zxf $SRC_DIR/osmosis-latest.tgz -C ~/bin/osmosis_src
+    elif [ -f ./osmosis-latest.tgz ]; then
+      tar -zxf ./osmosis-latest.tgz -C ~/bin/osmosis_src
+    else
+      wget --quiet http://bretth.dev.openstreetmap.org/osmosis-build/osmosis-latest.tgz
+      tar -zxf osmosis-latest.tgz -C ~/bin/osmosis_src
+    fi
+
     ln -s ~/bin/osmosis_src/bin/osmosis ~/bin/osmosis
 fi
 
 # Need to figure out a way to do this automagically
 #PG_VERSION=$(sudo -u postgres psql -c 'SHOW SERVER_VERSION;' | egrep -o '[0-9]{1,}\.[0-9]{1,}'); do
-PG_VERSION=9.5
+PG_VERSION=$(psql --version | egrep -o '[0-9]{1,}\.[0-9]{1,}')
 
 if ! grep --quiet "psql-" ~/.bash_profile; then
     echo "Adding PostGres path vars to profile..."
-    echo "export PATH=\$PATH:/usr/pgsql-$PG_VERSION/bin" >> ~/.bash_profile
+    echo "export PATH=\$PATH:/usr/pgsql-${PG_VERSION}/bin" >> ~/.bash_profile
     source ~/.bash_profile
 fi
 
-if [ ! -f /etc/ld.so.conf.d/postgres$PG_VERSION.conf ]; then
-    sudo sh -c "echo '/usr/pgsql-$PG_VERSION/lib' > /etc/ld.so.conf.d/postgres$PG_VERSION.conf"
+if [ ! -f /etc/ld.so.conf.d/postgres${PG_VERSION}.conf ]; then
+    sudo sh -c "echo '/usr/pgsql-${PG_VERSION}/lib' > /etc/ld.so.conf.d/postgres${PG_VERSION}.conf"
     sudo ldconfig
 fi
 
-# For convenience, set the version of GDAL and FileGDB to download and install
-GDAL_VERSION=2.1.4
-FGDB_VERSION=1.5.1
+# Tweak the FGDB version so we can get the filename
 FGDB_VERSION2=`echo $FGDB_VERSION | sed 's/\./_/g;'`
 
-if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --version | grep -q $GDAL_VERSION && ogrinfo --formats | grep -q FileGDB ); then
-    if [ ! -f gdal-$GDAL_VERSION.tar.gz ]; then
-        echo "### Downloading GDAL $GDAL_VERSION source..."
-        wget --quiet http://download.osgeo.org/gdal/$GDAL_VERSION/gdal-$GDAL_VERSION.tar.gz
-    fi
-    if [ ! -d gdal-$GDAL_VERSION ]; then
-        echo "### Extracting GDAL $GDAL_VERSION source..."
-        tar zxfp gdal-$GDAL_VERSION.tar.gz
-    fi
-
-    if [ ! -f FileGDB_API_${FGDB_VERSION2}-64.tar.gz ]; then
-        echo "### Downloading FileGDB API source..."
-        wget --quiet https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_${FGDB_VERSION}/FileGDB_API_${FGDB_VERSION2}-64.tar.gz
-    fi
+if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --version | grep -q ${GDAL_VERSION} && ogrinfo --formats | grep -q FileGDB ); then
+    if [ ! -d "gdal-${GDAL_VERSION}" ]; then
+        if [ -f "$SRC_DIR/gdal-${GDAL_VERSION}.tar.gz" ]; then
+            echo "### Extracting GDAL $GDAL_VERSION source..."
+            tar zxfp $SRC_DIR/gdal-${GDAL_VERSION}.tar.gz
+        elif [ -f "./gdal-${GDAL_VERSION}.tar.gz" ]; then
+            echo "### Extracting GDAL $GDAL_VERSION source..."
+            tar zxfp ./gdal-${GDAL_VERSION}.tar.gz
+        else
+            echo "### Downloading GDAL $GDAL_VERSION source..."
+            wget --quiet http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION}.tar.gz
+            echo "### Extracting GDAL $GDAL_VERSION source..."
+            tar zxfp ./gdal-${GDAL_VERSION}.tar.gz
+        fi
+    fi # GDAL dir
 
     if [ ! -d /usr/local/FileGDB_API ]; then
-        echo "### Extracting FileGDB API source & installing lib..."
-        sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp FileGDB_API_${FGDB_VERSION2}-64.tar.gz --directory /usr/local/FileGDB_API --strip-components 1
+        if [ -f "$SRC_DIR/FileGDB_API_${FGDB_VERSION2}-64.tar.gz" ]; then
+            echo "### Extracting FileGDB API source & installing lib..."
+            sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp $SRC_DIR/FileGDB_API_${FGDB_VERSION2}-64.tar.gz --directory /usr/local/FileGDB_API --strip-components 1
+            sudo chmod -R +rX /usr/local/FileGDB_API
+        elif [ ! -f "FileGDB_API_${FGDB_VERSION2}-64.tar.gz" ]; then
+            echo "### Downloading FileGDB API source..."
+            wget --quiet https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_${FGDB_VERSION}/FileGDB_API_${FGDB_VERSION2}-64.tar.gz
+            echo "### Extracting FileGDB API source & installing lib..."
+            sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp FileGDB_API_${FGDB_VERSION2}-64.tar.gz --directory /usr/local/FileGDB_API --strip-components 1
+            sudo chmod -R +rX /usr/local/FileGDB_API
+        fi
         sudo sh -c "echo '/usr/local/FileGDB_API/lib' > /etc/ld.so.conf.d/filegdb.conf"
     fi
 
@@ -440,7 +441,7 @@ if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --version | grep -q $GDAL_VERSIO
     cd gdal-$GDAL_VERSION
     touch config.rpath
     echo "GDAL: configure"
-    sudo ./configure --quiet --with-fgdb=/usr/local/FileGDB_API --with-pg=/usr/pgsql-$PG_VERSION/bin/pg_config --with-python CFLAGS='-std=c11' CXXFLAGS='-std=c++11'
+    sudo ./configure --quiet --with-fgdb=/usr/local/FileGDB_API --with-pg=/usr/pgsql-${PG_VERSION}/bin/pg_config --with-python CFLAGS='-std=c11' CXXFLAGS='-std=c++11'
     echo "GDAL: make"
     sudo make -sj$(nproc) > GDAL_Build.txt 2>&1
     echo "GDAL: install"
@@ -544,268 +545,10 @@ if ! grep --quiet 2097152 $SYSCTL_CONF; then
 fi
 sudo systemctl restart postgresql-$PG_VERSION
 
-##### Hadoop #####
-cd ~
-# hoot has only been tested successfully with hadoop 0.20.2, which is not available from public repos,
-# so purposefully not installing hoot from the repos.
-# if ! hash hadoop >/dev/null 2>&1 ; then
-#   echo "Installing Hadoop..."
-#   if [ ! -f hadoop-0.20.2.tar.gz ]; then
-#     wget --quiet https://archive.apache.org/dist/hadoop/core/hadoop-0.20.2/hadoop-0.20.2.tar.gz
-#   fi
-#
-#   if [ ! -f ~/.ssh/id_rsa ]; then
-#     ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
-#     cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
-#     ssh-keyscan -H localhost >> ~/.ssh/known_hosts
-#   fi
-#   chmod 600 ~/.ssh/authorized_keys
-#
-#   #cd /usr/local
-#   cd ~
-#   sudo tar -zxf ~/hadoop-0.20.2.tar.gz
-#   sudo chown -R $VMUSER:$VMGROUP hadoop-0.20.2
-#   sudo ln -s hadoop-0.20.2 hadoop
-#   sudo chown -R $VMUSER:$VMGROUP hadoop
-#   cd hadoop
-#   sudo find . -type d -exec chmod a+rwx {} \;
-#   sudo find . -type f -exec chmod a+rw {} \;
-#   cd ~
-#
-# sudo rm -f $HADOOP_HOME/conf/core-site.xml
-# sudo bash -c "cat >> $HADOOP_HOME/conf/core-site.xml" <<EOT
-#
-# <configuration>
-#   <property>
-#     <name>fs.default.name</name>
-#     <value>hdfs://localhost:9000/</value>
-#   </property>
-# </configuration>
-# EOT
-# sudo rm -f $HADOOP_HOME/conf/mapred-site.xml
-# sudo bash -c "cat >> $HADOOP_HOME/conf/mapred-site.xml" <<EOT
-#
-# <configuration>
-#   <property>
-#     <name>mapred.job.tracker</name>
-#     <value>localhost:9001</value>
-#   </property>
-#   <property>
-#     <name>mapred.job.tracker.http.address</name>
-#     <value>0.0.0.0:50030</value>
-#   </property>
-#   <property>
-#     <name>mapred.task.tracker.http.address</name>
-#     <value>0.0.0.0:50060</value>
-#   </property>
-#   <property>
-#     <name>mapred.child.java.opts</name>
-#     <value>-Xmx2048m</value>
-#   </property>
-#   <property>
-#     <name>mapred.map.tasks</name>
-#     <value>17</value>
-#   </property>
-#   <property>
-#     <name>mapred.tasktracker.map.tasks.maximum</name>
-#     <value>4</value>
-#   </property>
-#   <property>
-#     <name>mapred.tasktracker.reduce.tasks.maximum</name>
-#     <value>2</value>
-#   </property>
-#   <property>
-#     <name>mapred.reduce.tasks</name>
-#     <value>1</value>
-#   </property>
-# </configuration>
-# EOT
-# sudo rm -f $HADOOP_HOME/conf/hdfs-site.xml
-# sudo bash -c "cat >> $HADOOP_HOME/conf/hdfs-site.xml" <<EOT
-#
-# <configuration>
-#   <property>
-#     <name>dfs.secondary.http.address</name>
-#     <value>0.0.0.0:50090</value>
-#   </property>
-#   <property>
-#     <name>dfs.datanode.address</name>
-#     <value>0.0.0.0:50010</value>
-#   </property>
-#   <property>
-#     <name>dfs.datanode.http.address</name>
-#     <value>0.0.0.0:50075</value>
-#   </property>
-#   <property>
-#     <name>dfs.datanode.ipc.address</name>
-#     <value>0.0.0.0:50020</value>
-#   </property>
-#   <property>
-#     <name>dfs.http.address</name>
-#     <value>0.0.0.0:50070</value>
-#   </property>
-#   <property>
-#     <name>dfs.datanode.https.address</name>
-#     <value>0.0.0.0:50475</value>
-#   </property>
-#   <property>
-#     <name>dfs.https.address</name>
-#     <value>0.0.0.0:50470</value>
-#   </property>
-#   <property>
-#     <name>dfs.replication</name>
-#     <value>2</value>
-#   </property>
-#   <property>
-#     <name>dfs.umaskmode</name>
-#     <value>002</value>
-#   </property>
-#   <property>
-#     <name>fs.checkpoint.dir</name>
-#     <value>$HADOOP_HOME/dfs/namesecondary</value>
-#   </property>
-#   <property>
-#     <name>dfs.name.dir</name>
-#     <value>$HADOOP_HOME/dfs/name</value>
-#   </property>
-#   <property>
-#     <name>dfs.data.dir</name>
-#     <value>$HADOOP_HOME/dfs/data</value>
-#   </property>
-# </configuration>
-# EOT
-#
-#   sudo sed -i.bak 's/# export JAVA_HOME=\/usr\/lib\/j2sdk1.5-sun/export JAVA_HOME=\/usr\/java\/jdk1.8.0_144/g' $HADOOP_HOME/conf/hadoop-env.sh
-#   sudo sed -i.bak 's/#include <pthread.h>/#include <pthread.h>\n#include <unistd.h>/g' $HADOOP_HOME/src/c++/pipes/impl/HadoopPipes.cc
-#
-#   sudo mkdir -p $HADOOP_HOME/dfs/name/current
-#   # this could perhaps be more strict
-#   sudo chmod -R 777 $HADOOP_HOME
-#   sudo chmod go-w $HADOOP_HOME/bin $HADOOP_HOME
-#   echo 'Y' | hadoop namenode -format
-#
-#   cd /lib
-#   sudo ln -s $JAVA_HOME/jre/lib/amd64/server/libjvm.so libjvm.so
-#   cd /lib64
-#   sudo ln -s $JAVA_HOME/jre/lib/amd64/server/libjvm.so libjvm.so
-#   cd ~
-#
-#   # test hadoop out
-#   #stop-all.sh
-#   #start-all.sh
-#   #hadoop fs -ls /
-#   #hadoop jar ./hadoop-0.20.2-examples.jar pi 2 100
-# fi
-##### End Hadoop #####
-
-
 # Get ready to build Hoot
-cd $HOOT_HOME
-source ./SetupEnv.sh
-
-# Not sure if we really need this...
-if [ ! "$(ls -A hoot-ui)" ]; then
-    echo "hoot-ui is empty"
-    echo "init'ing and updating submodule"
-    git submodule init && git submodule update
-fi
-
-# echo "### Installing Tomcat8..."
-# TOMCAT_HOME=/usr/share/tomcat8
-
-# Install Tomcat 8
-# $HOOT_HOME/scripts/tomcat/tomcat8/centos7/tomcat8_install.sh
-
-# Configure Tomcat for the user
-# if ! grep --quiet TOMCAT8_HOME ~/.bash_profile; then
-#     echo "### Adding Tomcat to profile..."
-#     echo "export TOMCAT8_HOME=$TOMCAT_HOME" >> ~/.bash_profile
-#     source ~/.bash_profile
-# fi
-
-if [ -f $HOOT_HOME/conf/LocalHoot.json ]; then
-    echo "Removing LocalHoot.json..."
-    rm -f $HOOT_HOME/conf/LocalHoot.json
-fi
-
-if [ -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf ]; then
-    echo "Removing services local.conf..."
-    rm -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf
-fi
-
-# Making sure we know where we are
-cd ~
-
-##### These two are next to do.
-# echo "### Installing node-mapnik-server..."
-# sudo cp $HOOT_HOME/node-mapnik-server/systemd/node-mapnik.service /etc/systemd/system/node-mapnik.service
-# # Make sure all npm modules are installed
-# cd $HOOT_HOME/node-mapnik-server
-# npm install --silent
-# # Clean up after the npm install
-# rm -rf ~/tmp
-#
-# echo "### Installing node-export-server..."
-# sudo cp $HOOT_HOME/node-export-server/systemd/node-export.service /etc/systemd/system/node-export.service
-# # Make sure all npm modules are installed
-# cd $HOOT_HOME/node-export-server
-# npm install --silent
-# # Clean up after the npm install
-# rm -rf ~/tmp
-
-cd $HOOT_HOME
-
-# # Update marker file date now that dependency and config stuff has run
-# # The make command will exit and provide a warning to run 'vagrant provision'
-# # if the marker file is older than this file (VagrantProvision.sh)
-# touch Vagrant.marker
-#
-# # Setup and clean out the directories that the UI uses
-# if [ ! -d "$HOOT_HOME/userfiles/ingest/processed" ]; then
-#     mkdir -p $HOOT_HOME/userfiles/ingest/processed
-# fi
-#
-# # wipe out all dirs. tmp and upload now reside under $HOOT_HOME/userfiles/
-# rm -rf $HOOT_HOME/upload
-# rm -rf $HOOT_HOME/tmp
-#
-# if [ -d "$HOOT_HOME/data/reports" ]; then
-#     echo "Moving contents of $HOOT_HOME/data/reports to $HOOT_HOME/userfiles/"
-#     cp -R $HOOT_HOME/data/reports $HOOT_HOME/userfiles/
-#     rm -rf $HOOT_HOME/data/reports
-# fi
-#
-# if [ -d "$HOOT_HOME/customscript" ]; then
-#     echo "Moving contents of $HOOT_HOME/customscript to $HOOT_HOME/userfiles/"
-#     cp -R $HOOT_HOME/customscript $HOOT_HOME/userfiles/
-#     rm -rf $HOOT_HOME/customscript
-# fi
-#
-# if [ -d "$HOOT_HOME/ingest" ]; then
-#     echo "Moving contents of $HOOT_HOME/ingest to $HOOT_HOME/userfiles/"
-#     cp -R $HOOT_HOME/ingest $HOOT_HOME/userfiles/
-#     rm -rf $HOOT_HOME/ingest
-# fi
-#
-# # Always start with a clean $HOOT_HOME/userfiles/tmp
-# rm -rf $HOOT_HOME/userfiles/tmp
-#
-# # This is defensive!
-# # We do this so that Tomcat doesnt. If it does, it screws the permissions up
-# mkdir -p $HOOT_HOME/userfiles/tmp
-#
-# # OK, this is seriously UGLY but it fixes an NFS problem
-# chmod -R 777 $HOOT_HOME/userfiles
-#
-# # This is very ugly.
-# # If we don't have access to the directory where HOOT_HOME is, Tomcat chokes
-# chmod go+rx ~
-
-
-# Now build Hoot
-source ./SetupEnv.sh
-
 echo "### Configuring Hoot..."
+cd $HOOT_HOME
+source ./SetupEnv.sh
 echo HOOT_HOME: $HOOT_HOME
 
 # Going to remove this so that it gets updated

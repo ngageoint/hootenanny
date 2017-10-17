@@ -4,6 +4,7 @@ echo USER: $VMUSER
 VMGROUP=`groups | grep -o $VMUSER`
 echo GROUP: $VMGROUP
 
+# This is not optimal
 HOOT_HOME=~/hoot
 echo HOOT_HOME: $HOOT_HOME
 cd ~
@@ -120,6 +121,8 @@ sudo yum -y install \
     qt-postgresql \
     qtwebkit \
     qtwebkit-devel \
+    sqlite \
+    sqlite-devel \
     swig \
     tex* \
     unzip \
@@ -138,7 +141,7 @@ sudo yum -y install \
 # http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 if  ! rpm -qa | grep jdk1.8.0_144-1.8.0_144; then
     echo "### Installing Java8..."
-    if [ ! -f jdk-8u144-linux-x64.rpm ]; then
+    if [ ! -f ./jdk-8u144-linux-x64.rpm ]; then
       JDKURL=http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jdk-8u144-linux-x64.rpm
       wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" $JDKURL
     fi
@@ -173,10 +176,15 @@ sudo alternatives --set javac /usr/java/jdk1.8.0_144/bin/javac
 
 echo "##### Temp installs #####"
 
-# Stxxl:
-git clone http://github.com/stxxl/stxxl.git stxxl
-cd stxxl
-git checkout -q tags/1.3.1
+# Stxxl
+if [ -d stxxl ] ; then
+    cd stxxl
+else
+    git clone http://github.com/stxxl/stxxl.git stxxl
+    cd stxxl
+    git checkout -q tags/1.3.1
+fi
+echo "### Building STXXL..."
 make config_gnu
 echo "STXXL_ROOT	=`pwd`" > make.settings.local
 echo "ENABLE_SHARED     = yes" >> make.settings.local
@@ -237,7 +245,7 @@ sudo /usr/bin/perl $HOOT_HOME/scripts/maven/SetMavenHttps.pl
 
 if ! grep --quiet "export HOOT_HOME" ~/.bash_profile; then
     echo "Adding hoot home to profile..."
-    echo "export HOOT_HOME=~/hoot" >> ~/.bash_profile
+    echo "export HOOT_HOME=$HOOT_HOME" >> ~/.bash_profile
     echo "export PATH=\$PATH:\$HOOT_HOME/bin" >> ~/.bash_profile
     source ~/.bash_profile
 fi
@@ -353,11 +361,11 @@ fi
 
 if [ ! -f bin/osmosis ]; then
     echo "### Installing Osmosis"
-    mkdir -p ~/bin
-    if [ ! -f osmosis-latest.tgz ]; then
+    mkdir -p ~/bin/osmosis_src
+
+    if [ ! -f ./osmosis-latest.tgz ]; then
       wget --quiet http://bretth.dev.openstreetmap.org/osmosis-build/osmosis-latest.tgz
     fi
-    mkdir -p ~/bin/osmosis_src
     tar -zxf osmosis-latest.tgz -C ~/bin/osmosis_src
     ln -s ~/bin/osmosis_src/bin/osmosis ~/bin/osmosis
 fi
@@ -369,12 +377,12 @@ PG_VERSION=$(psql --version | egrep -o '[0-9]{1,}\.[0-9]{1,}')
 
 if ! grep --quiet "psql-" ~/.bash_profile; then
     echo "Adding PostGres path vars to profile..."
-    echo "export PATH=\$PATH:/usr/pgsql-$PG_VERSION/bin" >> ~/.bash_profile
+    echo "export PATH=\$PATH:/usr/pgsql-{PG_VERSION}/bin" >> ~/.bash_profile
     source ~/.bash_profile
 fi
 
-if [ ! -f /etc/ld.so.conf.d/postgres$PG_VERSION.conf ]; then
-    sudo sh -c "echo '/usr/pgsql-$PG_VERSION/lib' > /etc/ld.so.conf.d/postgres$PG_VERSION.conf"
+if [ ! -f /etc/ld.so.conf.d/postgres${PG_VERSION}.conf ]; then
+    sudo sh -c "echo '/usr/pgsql-${PG_VERSION}/lib' > /etc/ld.so.conf.d/postgres${PG_VERSION}.conf"
     sudo ldconfig
 fi
 
@@ -384,21 +392,20 @@ FGDB_VERSION=1.5.1
 FGDB_VERSION2=`echo $FGDB_VERSION | sed 's/\./_/g;'`
 
 if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --version | grep -q $GDAL_VERSION && ogrinfo --formats | grep -q FileGDB ); then
-    if [ ! -f gdal-$GDAL_VERSION.tar.gz ]; then
-        echo "### Downloading GDAL $GDAL_VERSION source..."
-        wget --quiet http://download.osgeo.org/gdal/$GDAL_VERSION/gdal-$GDAL_VERSION.tar.gz
-    fi
-    if [ ! -d gdal-$GDAL_VERSION ]; then
+    if [ ! -d "gdal-${GDAL_VERSION}" ]; then
+        if [ ! -f "gdal-${GDAL_VERSION}.tar.gz" ]; then
+            echo "### Downloading GDAL $GDAL_VERSION source..."
+            wget --quiet http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION}.tar.gz
+        fi
         echo "### Extracting GDAL $GDAL_VERSION source..."
-        tar zxfp gdal-$GDAL_VERSION.tar.gz
-    fi
-
-    if [ ! -f FileGDB_API_${FGDB_VERSION2}-64.tar.gz ]; then
-        echo "### Downloading FileGDB API source..."
-        wget --quiet https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_${FGDB_VERSION}/FileGDB_API_${FGDB_VERSION2}-64.tar.gz
+        tar zxfp gdal-${GDAL_VERSION}.tar.gz
     fi
 
     if [ ! -d /usr/local/FileGDB_API ]; then
+        if [ ! -f "FileGDB_API_${FGDB_VERSION2}-64.tar.gz" ]; then
+            echo "### Downloading FileGDB API source..."
+            wget --quiet https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_${FGDB_VERSION}/FileGDB_API_${FGDB_VERSION2}-64.tar.gz
+        fi
         echo "### Extracting FileGDB API source & installing lib..."
         sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp FileGDB_API_${FGDB_VERSION2}-64.tar.gz --directory /usr/local/FileGDB_API --strip-components 1
         sudo sh -c "echo '/usr/local/FileGDB_API/lib' > /etc/ld.so.conf.d/filegdb.conf"
@@ -409,7 +416,7 @@ if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --version | grep -q $GDAL_VERSIO
     cd gdal-$GDAL_VERSION
     touch config.rpath
     echo "GDAL: configure"
-    sudo ./configure --quiet --with-fgdb=/usr/local/FileGDB_API --with-pg=/usr/pgsql-$PG_VERSION/bin/pg_config --with-python CFLAGS='-std=c11' CXXFLAGS='-std=c++11'
+    sudo ./configure --quiet --with-fgdb=/usr/local/FileGDB_API --with-pg=/usr/pgsql-${PG_VERSION}/bin/pg_config --with-python CFLAGS='-std=c11' CXXFLAGS='-std=c++11'
     echo "GDAL: make"
     sudo make -sj$(nproc) > GDAL_Build.txt 2>&1
     echo "GDAL: install"
