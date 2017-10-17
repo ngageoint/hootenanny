@@ -627,6 +627,18 @@
                                 "defaultvalue":"hoot::ConflictsNetworkMatcher"
                             },
                             "hoot_key": "network.matcher"
+                          },
+                          {
+                            "id": "way_subline_matcher",
+                            "elem_type": "string",
+                            "description": "The subline matcher to use",
+                            "name": "Way Subline Matcher",
+                            "required": "true",
+                            "defaultvalue": "hoot::MaximalSublineMatcher",
+                            "override": {
+                                "defaultvalue":"hoot::MaximalSublineMatcher"
+                            },
+                            "hoot_key": "way.subline.matcher"
                           }
                        ]
                   },
