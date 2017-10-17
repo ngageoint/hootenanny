@@ -22,8 +22,6 @@ fi
 
 echo "Updating OS..."
 sudo apt-get -qq update > Ubuntu_upgrade.txt 2>&1
-# Don't automatically update the oracle jdk, we need to control the version
-sudo apt-mark -qq hold oracle-java8-installer oracle-java8-set-default >> Ubuntu_upgrade.txt 2>&1
 sudo apt-get -q -y upgrade >> Ubuntu_upgrade.txt 2>&1
 sudo apt-get -q -y dist-upgrade >> Ubuntu_upgrade.txt 2>&1
 
