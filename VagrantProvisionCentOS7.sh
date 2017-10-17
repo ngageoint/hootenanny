@@ -134,7 +134,10 @@ sudo yum -y install \
     qtwebkit \
     qtwebkit-devel \
     swig \
-    tex* \
+    tex-fonts-hebrew \
+    texlive \
+    texlive-collection-fontsrecommended \
+    texlive-collection-langcyrillic \
     unzip \
     v8-devel \
     vim \
