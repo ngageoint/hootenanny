@@ -236,8 +236,17 @@ Vagrant.configure(2) do |config|
   # AWS Provider.  Set enviornment variables for values below to use
   config.vm.provider :aws do |aws, override|
     override.nfs.functional  = false
-    aws.instance_type        = 'm3.xlarge'
+    aws.instance_type        = ENV.fetch('AWS_INSTANCE_TYPE', 'm3.xlarge')
     aws.block_device_mapping = [{ 'DeviceName' => '/dev/sda1', 'Ebs.VolumeSize' => 32 }]
+
+    # By default we assume that we're using the AWS "dummy" box and manually
+    # specify an Ubuntu AMI.  These assumptions will be removed when we migrate
+    # to boxes that have native AWS providers that use the standard Vagrant key.
+    if ENV.fetch('AWS_DUMMY_BOX', 'yes') == 'yes'
+      override.vm.box = 'dummmy'
+      override.ssh.private_key_path = ENV['AWS_PRIVATE_KEY_PATH']
+      aws.ami = ENV['AWS_AMI_UBUNTU1404']
+    end
 
     if ENV.key?('AWS_KEYPAIR_NAME')
       aws.keypair_name = ENV['AWS_KEYPAIR_NAME']
@@ -246,6 +255,11 @@ Vagrant.configure(2) do |config|
     if ENV.key?('AWS_SECURITY_GROUP')
       aws.security_groups = ENV['AWS_SECURITY_GROUP']
     end
+
+    aws.tags = {
+      'Name' => ENV.fetch('AWS_INSTANCE_NAME_TAG', 'jenkins-hootenanny'),
+      'URL'  => ENV.fetch('AWS_INSTANCE_URL_TAG', 'https://github.com/ngageoint/hootenanny'),
+    }
 
     # Copy over predownloaded packages if they are found
     override.vm.provision "software", type: "shell", run: "always", :inline => "( [ -d /home/vagrant/hoot/software ] && cp /home/vagrant/hoot/software/* /home/vagrant ) || true"
