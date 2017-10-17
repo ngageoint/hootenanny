@@ -71,6 +71,9 @@ public class ConflateParams {
     @JsonProperty("USER_EMAIL")
     private String userEmail;
 
+    @JsonProperty("CONFLATION_COMMAND")
+    private String conflationCommand;
+
     public String getInputType1() {
         return inputType1;
     }
@@ -175,6 +178,14 @@ public class ConflateParams {
         this.userEmail = userEmail;
     }
 
+    public String getConflationCommand() {
+        return conflationCommand;
+    }
+
+    public void setConflationCommand(String conflationCommand) {
+        this.conflationCommand = conflationCommand;
+    }
+
     @Override
     public String toString() {
         return "ConflateParams{" +
@@ -191,6 +202,7 @@ public class ConflateParams {
                 ", generateReport='" + generateReport + '\'' +
                 ", timeStamp='" + timeStamp + '\'' +
                 ", userEmail='" + userEmail + '\'' +
+                ", conflationCommand='" + conflationCommand + '\'' +
                 '}';
     }
 }
