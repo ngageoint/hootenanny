@@ -647,7 +647,7 @@ sudo bash -c "cat >> $HADOOP_HOME/conf/hdfs-site.xml" <<EOT
 </configuration>
 EOT
 
-  sudo sed -i.bak 's/# export JAVA_HOME=\/usr\/lib\/j2sdk1.5-sun/export JAVA_HOME=\/usr\/java\/jdk1.8.0_144/g' $HADOOP_HOME/conf/hadoop-env.sh
+  sudo sed -i.bak "s/# export JAVA_HOME=\/usr\/lib\/j2sdk1.5-sun/export JAVA_HOME=\/usr\/lib\/jvm\/java-1.8.0-openjdk/g" $HADOOP_HOME/conf/hadoop-env.sh
   sudo sed -i.bak 's/#include <pthread.h>/#include <pthread.h>\n#include <unistd.h>/g' $HADOOP_HOME/src/c++/pipes/impl/HadoopPipes.cc
 
   sudo mkdir -p $HADOOP_HOME/dfs/name/current
