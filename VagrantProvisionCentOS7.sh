@@ -112,6 +112,7 @@ sudo yum -y install \
     opencv-core \
     opencv-devel \
     opencv-python \
+    java-1.8.0-openjdk \
     perl-XML-LibXML \
     postgis23_95 \
     postgresql95 \
@@ -146,40 +147,6 @@ sudo yum -y install \
     words \
     xorg-x11-server-Xvfb \
     zip \
-
-
-
-# Install Java8
-# Official download page:
-# http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
-# JAVA JDK download URL
-JDKURL=http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jdk-8u144-linux-x64.rpm
-if  ! rpm -qa | grep jdk1.8.0_144-1.8.0_144; then
-    echo "### Installing Java8..."
-    if [ ! -f jdk-8u144-linux-x64.rpm ]; then
-      wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" $JDKURL
-    fi
-    sudo yum -y install ./jdk-8u144-linux-x64.rpm
-fi
-
-# Trying the following instead of removing the OpenJDK
-# Setting /usr/java/jdk1.8.0_144/bin/java's priority to something really atrocious to guarantee that it will be
-# the one used when alternatives' auto mode is used.
-sudo alternatives --install /usr/bin/java java /usr/java/jdk1.8.0_144/bin/java 999999
-
-# Setting /usr/java/jdk1.8.0_144/bin/javac's priority to something really atrocious to guarantee that it will be
-# the one used when alternatives' auto mode is enabled.
-sudo alternatives --install /usr/bin/javac javac /usr/java/jdk1.8.0_144/bin/javac 9999999
-
-# switching to manual and forcing the desired version of java be configured
-sudo alternatives --set java /usr/java/jdk1.8.0_144/bin/java
-
-# switching to manual and forcing the desired version of javac be configured
-sudo alternatives --set javac /usr/java/jdk1.8.0_144/bin/javac
-
-# Now make sure that the version of Java we installed gets used.
-# maven installs java-1.8.0-openjdk
-#sudo rpm -e --nodeps java-1.8.0-openjdk-headless java-1.8.0-openjdk-devel java-1.8.0-openjdk
 
 
 ##### tex* is not optimal. I think this adds too much stuff that we don't need. But, to remove it, we need
@@ -268,11 +235,11 @@ fi
 
 if ! grep --quiet "export JAVA_HOME" ~/.bash_profile; then
     echo "Adding Java home to profile..."
-    echo "export JAVA_HOME=/usr/java/jdk1.8.0_144" >> ~/.bash_profile
+    echo "export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk" >> ~/.bash_profile
     echo "export PATH=\$PATH:\$JAVA_HOME/bin" >> ~/.bash_profile
     source ~/.bash_profile
 else
-    sed -i '/^export JAVA_HOME=.*/c\export JAVA_HOME=\/usr\/java\/jdk1.8.0_144' ~/.bash_profile
+    sed -i '/^export JAVA_HOME=.*/c\export JAVA_HOME=\/usr\/lib\/jvm\/java-1.8.0-openjdk' ~/.bash_profile
 fi
 
 if ! grep --quiet "export HADOOP_HOME" ~/.bash_profile; then
