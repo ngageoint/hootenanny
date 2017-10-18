@@ -254,7 +254,7 @@ function doExport(req, res, hash, input) {
         if (isFile) {
             command += ' convert';
             if (bbox) command += ' -D ' + bbox_param + '=' + bbox;
-            if (config.schemas[req.params.schema] !== '') {
+            if (req.params.schema !== 'OSM' && config.schemas[req.params.schema] !== '') {
                 command += ' -D convert.ops=hoot::TranslationOp -D translation.script=' + config.schemas[req.params.schema] + ' -D translation.direction=toogr';
             }
         } else {
