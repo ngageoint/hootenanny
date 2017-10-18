@@ -101,7 +101,8 @@ public:
              ++tagItr)
         {
           const QString kvp = tagItr.key() + "=" + tagItr.value();
-          writer.write(word, kvp);
+          //TODO: fix
+          //writer.write(word, kvp);
         }
       }
     }

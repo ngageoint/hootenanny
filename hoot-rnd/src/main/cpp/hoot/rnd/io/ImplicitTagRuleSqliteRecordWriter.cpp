@@ -239,7 +239,8 @@ void ImplicitTagRuleSqliteRecordWriter::_updateRuleTagCount(const long ruleId, c
   }
 }
 
-void ImplicitTagRuleSqliteRecordWriter::write(const QString word, const QString kvp)
+void ImplicitTagRuleSqliteRecordWriter::write(const QString word, const QString kvp,
+                                              const long /*ruleTagCount*/) //TODO: fix
 {
   DbUtils::execNoPrepare(_db, "BEGIN");
 

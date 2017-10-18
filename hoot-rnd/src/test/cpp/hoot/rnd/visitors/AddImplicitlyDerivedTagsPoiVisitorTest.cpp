@@ -210,7 +210,7 @@ public:
              ++tagItr)
         {
           const QString kvp = tagItr.key() + "=" + tagItr.value();
-          rulesWriter.write(word, kvp);
+          //rulesWriter.write(word, kvp);   //TODO: fix
         }
       }
     }

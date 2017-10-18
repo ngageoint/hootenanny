@@ -31,10 +31,12 @@
 //#include <hoot/rnd/schema/ImplicitTagRule.h>
 #include <hoot/rnd/io/ImplicitTagRuleSqliteRecordWriter.h>
 #include <hoot/rnd/io/ImplicitTagRuleWordPartWriterFactory.h>
+#include <hoot/rnd/util/FixedLengthString.h>
 
 // Qt
 #include <QString>
-//#include <QMap>
+#include <QMap>
+#include <QTemporaryFile>
 
 namespace hoot
 {
@@ -73,6 +75,14 @@ private:
   //for testing
   friend class PoiImplicitTagRulesDeriverTest;
 
+  QMap<QString, QString>/*FixedLengthStringToFixedLengthStringMap*//*Tgs::BigMap<FixedLengthString, FixedLengthString>*/ _wordCaseMappings;
+  //Technically, this could be done with a vector, but I want to piggy back off BigMap.
+  /*FixedLengthStringToLongMap*/QMap<QString, long> _wordKeysToCounts;   //TODO: replace with BigMap
+
+  boost::shared_ptr<QTemporaryFile> _countFile;
+  boost::shared_ptr<QTemporaryFile> _sortedCountFile;
+  boost::shared_ptr<QTemporaryFile> _sortedDedupedCountFile;
+
   //TODO: replace with stxxl map
   //key=<word>;<kvp>, value=<kvp occurance count>
   //QMap<QString, long> _wordKvpsToOccuranceCounts; //*
@@ -90,24 +100,24 @@ private:
 
   ImplicitTagRuleSqliteRecordWriter _ruleWriter;
 
-  //ImplicitTagRulesByWord _tagRulesByWord;
-  //ImplicitTagRules _tagRules;
-
-  //void _updateForNewWord(QString word, const QString kvp);
+  void _updateForNewWord(QString word, const QString kvp);
   QStringList _getPoiKvps(const Tags& tags) const;
-  void _removeKvpsBelowOccuranceThreshold(const int minOccurancesThreshold);
+
+  //temp
+  QMap<QString, long> _stxxlMapToQtMap(const FixedLengthStringToLongMap& stxxlMap);
+  FixedLengthString _qStrToFixedLengthStr(const QString wordKvp);
+  QString _fixedLengthStrToQStr(const FixedLengthString& fixedLengthStr);
+  bool _outputsContainsSqlite(const QStringList outputs);
+  void _removeKvpsBelowOccuranceThresholdAndSortByOccurrence(const int minOccurancesThreshold);
   void _removeDuplicatedKeyTypes();
-  //void _generateTagRulesByWord();
-  //void _rulesByWordToRules(const ImplicitTagRulesByWord& rulesByWord);
-  //Tags _kvpsToTags(const QSet<QString>& kvps);
-  //QString _kvpsToString(const QSet<QString>& kvps);
-  //void _unescapeRuleWords();
+
   QString _getSqliteOutput(const QStringList outputs);
   QList<boost::shared_ptr<ImplicitTagRuleWordPartWriter> > _getNonSqliteOutputWriters(
     const QStringList outputs);
   void _writeToNonSqliteOutputs(
     QList<boost::shared_ptr<ImplicitTagRuleWordPartWriter> >& ruleWordPartWriters,
     const QString sqliteOutput);
+  void _writeRulesToSqlite(const QString sqliteOutput);
 };
 
 }

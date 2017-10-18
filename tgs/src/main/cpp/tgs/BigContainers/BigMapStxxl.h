@@ -45,6 +45,17 @@
 namespace Tgs
 {
 
+//void maxValue(QByteArray& /*ba*/)
+//{
+
+//}
+
+template <typename T>
+void maxValue(T& v)
+{
+  v = std::numeric_limits<T>::max();
+}
+
 /**
  * This is not thread safe or re-entrant.
  */
@@ -118,7 +129,7 @@ private:
       return a < b;
     }
 
-    static long max_value() { return std::numeric_limits<A>::max(); }
+    static A max_value() { A result; maxValue(result); return result; }
   };
 
   typedef stxxl::map<K, V, CompareLess<K>, 4096, 4096> MapType;

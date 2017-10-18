@@ -50,7 +50,7 @@ public:
 
   void open(const QString url);
 
-  void write(const QString word, const QString kvp);
+  void write(const QString word, const QString kvp, const long ruleTagCount);
 
   void close();
 
