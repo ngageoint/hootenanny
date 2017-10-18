@@ -158,7 +158,7 @@ JDK_URL=http://download.oracle.com/otn-pub/java/jdk/8u152-b16/aa0333dd3019491ca4
 JDK_VERSION=1.8.0_152
 if  ! rpm -qa | grep jdk$JDK_VERSION-$JDK_VERSION; then
     echo "### Installing Java8..."
-    if [ ! -f jdk-8u152-linux-x64.rpm ]; then
+    if [ ! -f $JDK_RPM ]; then
       wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" $JDK_URL
     fi
     sudo yum -y install ./$JDK_RPM
