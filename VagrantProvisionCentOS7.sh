@@ -270,11 +270,11 @@ fi
 
 if ! grep --quiet "export JAVA_HOME" ~/.bash_profile; then
     echo "Adding Java home to profile..."
-    echo "export JAVA_HOME=/usr/java/jdk$JDK_VERSION" >> ~/.bash_profile
+    echo "export JAVA_HOME=/usr/java/jdk${JDK_VERSION}" >> ~/.bash_profile
     echo "export PATH=\$PATH:\$JAVA_HOME/bin" >> ~/.bash_profile
     source ~/.bash_profile
 else
-    sed -i '/^export JAVA_HOME=.*/c\export JAVA_HOME=\/usr\/java\/jdk$JDK_VERSION' ~/.bash_profile
+    sed -i "/^export JAVA_HOME=.*/c\export JAVA_HOME=\/usr\/java\/jdk${JDK_VERSION}" ~/.bash_profile
 fi
 
 if ! grep --quiet "export HADOOP_HOME" ~/.bash_profile; then
