@@ -50,10 +50,10 @@ if ! java -version 2>&1 | grep --quiet $JDK_VERSION; then
         echo "Finished download of ${JDK_TAR}"
     fi
 
-    sudo tar -xvzf ./$JDK_TAR
     sudo mkdir -p /usr/lib/jvm
     sudo rm -rf /usr/lib/jvm/oracle_jdk8
 
+    sudo tar -xzf ./$JDK_TAR
     sudo chown -R root:root ./jdk$JDK_VERSION
     sudo mv -f ./jdk$JDK_VERSION /usr/lib/jvm/oracle_jdk8
     sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/oracle_jdk8/jre/bin/java 9999
@@ -129,8 +129,8 @@ if ! grep --quiet "PATH=" ~/.profile; then
     source ~/.profile
 fi
 
-# Whether the client uses distcc or not, have distcc set up and ready to go.  To turn it on, 
-# enable it in LocalConfig.pri, configure the slaves in ~/.distcc/hosts, and launch distccd on 
+# Whether the client uses distcc or not, have distcc set up and ready to go.  To turn it on,
+# enable it in LocalConfig.pri, configure the slaves in ~/.distcc/hosts, and launch distccd on
 # the slaves.
 if [ ! -f ~/.distcc/hosts ]; then
     echo "Adding distcc hosts file..."
@@ -630,4 +630,3 @@ fi
 
 # Always start with a clean $HOOT_HOME/userfiles/tmp
 rm -rf $HOOT_HOME/userfiles/tmp
-
