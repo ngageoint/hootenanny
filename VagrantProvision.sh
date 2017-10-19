@@ -161,7 +161,7 @@ EOT
 fi
 
 # gem installs are *very* slow, hence all the checks in place here to facilitate debugging
-if [ `gem list --local | grep -q mime-types` -eq 1 ]; then
+if ! gem list --local | grep -q mime-types; then
     echo "Gem Install: mime-types"
 # gem list --local | grep -q mime-types
 # if [ $? -eq 1 ]; then
@@ -169,7 +169,7 @@ if [ `gem list --local | grep -q mime-types` -eq 1 ]; then
    gem install mime-types
 fi
 
-if [ `gem list --local | grep -q cucumber` -eq 1 ]; then
+if ! gem list --local | grep -q cucumber; then
     echo "Gem Install: cucumber"
 # gem list --local | grep -q cucumber
 # if [ $? -eq 1 ]; then
@@ -177,7 +177,7 @@ if [ `gem list --local | grep -q cucumber` -eq 1 ]; then
    gem install cucumber
 fi
 
-if [ `gem list --local | grep -q capybara-webkit` -eq 1 ]; then
+if ! gem list --local | grep -q capybara-webkit; then
     echo "Gem Install: capybara-webkit"
 # gem list --local | grep -q capybara-webkit
 # if [ $? -eq 1 ]; then
@@ -185,7 +185,7 @@ if [ `gem list --local | grep -q capybara-webkit` -eq 1 ]; then
    gem install capybara-webkit
 fi
 
-if [ `gem list --local | grep -q selenium-webdriver` -eq 1 ]; then
+if ! gem list --local | grep -q selenium-webdriver; then
     echo "Gem Install: selenium-webdriver"
 # gem list --local | grep -q selenium-webdriver
 # if [ $? -eq 1 ]; then
@@ -193,7 +193,7 @@ if [ `gem list --local | grep -q selenium-webdriver` -eq 1 ]; then
    gem install selenium-webdriver
 fi
 
-if [ `gem list --local | grep -q rspec` -eq 1 ]; then
+if ! gem list --local | grep -q rspec; then
     echo "Gem Install: rspec"
 # gem list --local | grep -q rspec
 # if [ $? -eq 1 ]; then
@@ -201,7 +201,7 @@ if [ `gem list --local | grep -q rspec` -eq 1 ]; then
    gem install rspec
 fi
 
-if [ `gem list --local | grep -q capybara-screenshot` -eq 1 ]; then
+if ! gem list --local | grep -q capybara-screenshot; then
     echo "Gem Install: capybara-screenshot"
 # gem list --local | grep -q capybara-screenshot
 # if [ $? -eq 1 ]; then
@@ -209,7 +209,7 @@ if [ `gem list --local | grep -q capybara-screenshot` -eq 1 ]; then
    gem install capybara-screenshot
 fi
 
-if [ `gem list --local | grep -q selenium-cucumber` -eq 1 ]; then
+if ! gem list --local | grep -q selenium-cucumber; then
     echo "Gem Install: selenium-cucumber"
 # gem list --local | grep -q selenium-cucumber
 # if [ $? -eq 1 ]; then

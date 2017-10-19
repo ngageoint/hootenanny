@@ -127,7 +127,6 @@ sudo apt-get -q -y install \
  postgresql-9.5-postgis-2.3 \
  postgresql-9.5-postgis-scripts \
  postgresql-client-9.5 \
- postgis \
  protobuf-compiler \
  python \
  python-dev \
@@ -222,44 +221,44 @@ EOT
 fi
 
 # gem installs are *very* slow, hence all the checks in place here to facilitate debugging
-if [ `gem list --local | grep -q mime-types` -eq 1 ]; then
+if ! gem list --local | grep -q mime-types; then
     echo "Gem Install: mime-types"
    #sudo gem install mime-types -v 2.6.2
    gem install mime-types
 fi
 
-if [ `gem list --local | grep -q cucumber` -eq 1 ]; then
+if ! gem list --local | grep -q cucumber; then
     echo "Gem Install: cucumber"
    #sudo gem install cucumber
    gem install cucumber
 fi
 
-if [ `gem list --local | grep -q capybara-webkit` -eq 1 ]; then
+if ! gem list --local | grep -q capybara-webkit; then
     echo "Gem Install: capybara-webkit"
    sudo apt-get install qt5-default libqt5webkit5-dev gstreamer1.0-plugins-base gstreamer1.0-tools gstreamer1.0-x
    #sudo gem install capybara-webkit
    gem install capybara-webkit
 fi
 
-if [ `gem list --local | grep -q selenium-webdriver` -eq 1 ]; then
+if ! gem list --local | grep -q selenium-webdriver; then
     echo "Gem Install: selenium-webdriver"
    #sudo gem install selenium-webdriver
    gem install selenium-webdriver
 fi
 
-if [ `gem list --local | grep -q rspec` -eq 1 ]; then
+if ! gem list --local | grep -q rspec; then
     echo "Gem Install: rspec"
    #sudo gem install rspec
    gem install rspec
 fi
 
-if [ `gem list --local | grep -q capybara-screenshot` -eq 1 ]; then
+if ! gem list --local | grep -q capybara-screenshot; then
     echo "Gem Install: capybara-screenshot"
    #sudo gem install capybara-screenshot
    gem install capybara-screenshot
 fi
 
-if [ `gem list --local | grep -q selenium-cucumber` -eq 1 ]; then
+if ! gem list --local | grep -q selenium-cucumber; then
     echo "Gem Install: selenium-cucumber"
    #sudo gem install selenium-cucumber
    gem install selenium-cucumber
