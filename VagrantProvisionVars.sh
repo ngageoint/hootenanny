@@ -10,6 +10,4 @@ export GDAL_VERSION=2.1.4
 # FGDB 1.5 is required to compile using g++ >= 5.1
 # https://trac.osgeo.org/gdal/wiki/FileGDB#HowtodealwithGCC5.1C11ABIonLinux
 export FGDB_VERSION=1.5.1
-export FGDB_VERSION2=`echo $FGDB_VERSION | sed 's/\./_/g;'`
-export FGDB_TAR=FileGDB_API_1_5_64gcc51.tar.gz
-export FGDB_URL=https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_1.5/$FGDB_FILE
+export FGDB_URL=https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_${FGDB_VERSION}/

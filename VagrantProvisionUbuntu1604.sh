@@ -311,28 +311,33 @@ if [ ! -f bin/osmosis ]; then
 fi
 
 if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --formats | grep --quiet FileGDB ); then
-    if [ ! -f gdal-$GDAL_VERSION.tar.gz ]; then
+    if [ ! -f gdal-${GDAL_VERSION}.tar.gz ]; then
         echo "### Downloading GDAL $GDAL_VERSION source..."
-        wget --quiet http://download.osgeo.org/gdal/$GDAL_VERSION/gdal-$GDAL_VERSION.tar.gz
+        wget --quiet http://download.osgeo.org/gdal/$GDAL_VERSION/gdal-${GDAL_VERSION}.tar.gz
     fi
-    if [ ! -d gdal-$GDAL_VERSION ]; then
+    if [ ! -d gdal-${GDAL_VERSION} ]; then
         echo "### Extracting GDAL $GDAL_VERSION source..."
-        tar zxfp gdal-$GDAL_VERSION.tar.gz
+        tar zxfp gdal-${GDAL_VERSION}.tar.gz
     fi
 
-    if [ ! -f FileGDB_API_${FGDB_VERSION2}-64.tar.gz ]; then
+    FGDB_VERSION2=`echo $FGDB_VERSION | sed 's/\./_/g;'`
+
+    # FGDB 1.5 is required to compile using g++ >= 5.1
+    # https://trac.osgeo.org/gdal/wiki/FileGDB#HowtodealwithGCC5.1C11ABIonLinux
+    if [ ! -f FileGDB_API_${FGDB_VERSION2}-64gcc51.tar.gz ]; then
         echo "### Downloading FileGDB API source..."
-        wget --quiet $FGDB_URL
+        wget --quiet $FGDB_URL/FileGDB_API_${FGDB_VERSION2}-64gcc51.tar.gz
     fi
+
     if [ ! -d /usr/local/FileGDB_API/lib ]; then
         echo "### Extracting FileGDB API source & installing lib..."
-        sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp $FGDB_FILE --directory /usr/local/FileGDB_API --strip-components 1
+        sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp FileGDB_API_${FGDB_VERSION2}-64gcc51.tar.gz --directory /usr/local/FileGDB_API --strip-components 1
         sudo sh -c "echo '/usr/local/FileGDB_API/lib' > /etc/ld.so.conf.d/filegdb.conf"
     fi
 
     echo "### Building GDAL $GDAL_VERSION w/ FileGDB..."
     export PATH=/usr/local/lib:/usr/local/bin:$PATH
-    cd gdal-$GDAL_VERSION
+    cd gdal-${GDAL_VERSION}
     touch config.rpath
     echo "GDAL: configure"
     ./configure --quiet --with-static-proj4 --with-fgdb=/usr/local/FileGDB_API --with-pg=/usr/bin/pg_config --with-python
