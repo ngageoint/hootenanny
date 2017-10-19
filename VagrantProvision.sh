@@ -225,9 +225,8 @@ if  ! dpkg -l | grep --quiet google-chrome-stable; then
     if [ ! -f google-chrome-stable_current_amd64.deb ]; then
       wget --quiet https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
     fi
-    sudo apt-get -f -y -q install
+    sudo apt-get -q -y install gconf-service libgconf-2-4 gconf-service-backend gconf2-common
     sudo dpkg -i google-chrome-stable_current_amd64.deb
-    sudo apt-get -f -y -q install
 fi
 
 if [ ! -f bin/chromedriver ]; then
