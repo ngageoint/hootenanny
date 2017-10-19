@@ -11,10 +11,6 @@ source ~/.bash_profile
 
 export LANG=en_US.UTF-8
 
-
-# Keep VagrantBuild.sh happy
-#ln -s ~/.bash_profile ~/.profile
-
 # add EPEL repo for extra packages
 echo "### Add epel repo ###" > CentOS_upgrade.txt
 sudo yum -y install epel-release >> CentOS_upgrade.txt 2>&1
@@ -106,8 +102,6 @@ sudo yum -y install \
     xorg-x11-server-Xvfb \
     zip \
 
-
-
 # Install Java8
 # Official download page:
 # http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
@@ -152,39 +146,42 @@ sudo alternatives --set javac /usr/java/jdk1.8.0_${JAVA_VERSION}/bin/javac
 echo "##### Temp installs #####"
 
 # ICU:
+echo "##### ICU #####"
 cd ~
-wget http://download.icu-project.org/files/icu4c/59.1/icu4c-59_1-src.tgz
+wget --quiet http://download.icu-project.org/files/icu4c/59.1/icu4c-59_1-src.tgz
 tar xzf icu4c-59_1-src.tgz
 cd icu/source/
-./runConfigureICU Linux
-gmake -j4
-sudo gmake install
+./runConfigureICU Linux > centos7_install.txt
+gmake -sj$(nproc)
+sudo gmake -s install
 
 # Google depot tools
+echo "##### Depot Tools #####"
 cd ~
-git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git >> centos7_install.txt
 export PATH=$PATH:~/depot_tools
 
 # V8
+echo "##### V8 #####"
 cd ~
-fetch v8
+fetch v8 >> centos7_install.txt
 cd v8
-gclient sync
-tools/dev/v8gen.py x64.release
-make x64.release library=shared -j4
-isudo cp out/x64.release/lib.target/*.so /usr/lib64/
+gclient sync >> centos7_install.txt
+tools/dev/v8gen.py x64.release >> centos7_install.txt
+make x64.release library=shared -sj$(nproc)
+sudo cp out/x64.release/lib.target/*.so /usr/lib64/
 sudo cp include/*.h /usr/include/
 sudo cp -r include/libplatform /usr/include
 
 # Node
-wget https://nodejs.org/dist/v6.11.4/node-v6.11.4-linux-x64.tar.xz
+echo "##### NodeJs #####"
+wget --quiet https://nodejs.org/dist/v6.11.4/node-v6.11.4-linux-x64.tar.xz
 tar xf node-v6.11.4-linux-x64.tar.xz 
 cd node-v6.11.4-linux-x64
 sudo cp -r bin /usr/
 sudo cp -r include /usr/
 sudo cp -r lib /usr/
 sudo cp -r share /usr/
-
 
 # Stxxl:
 cd ~
