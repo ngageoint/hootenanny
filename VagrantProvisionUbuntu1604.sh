@@ -84,6 +84,8 @@ sudo apt-get -q -y install \
  automake \
  ccache \
  curl \
+ dblatex \
+ docbook-xml \
  doxygen \
  g++ \
  gdb \
@@ -110,6 +112,7 @@ sudo apt-get -q -y install \
  libqt4-dev \
  libqt4-sql-psql \
  libqt4-sql-sqlite \
+ libqtwebkit-dev \
  libstxxl-dev \
  libv8-dev \
  maven \
@@ -118,6 +121,8 @@ sudo apt-get -q -y install \
  patch \
  pgadmin3 \
  postgresql-9.5 \
+ postgresql-client-9.5 \
+ postgresql-contrib-9.5 \
  postgresql-9.5-postgis-2.3 \
  postgresql-9.5-postgis-scripts \
  postgresql-client-9.5 \

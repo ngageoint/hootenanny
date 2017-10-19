@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 
+#################################################
+# VERY IMPORTANT: CHANGE THIS TO POINT TO WHERE YOU PUT HOOT
+HOOT_HOME=~/hoot
+echo HOOT_HOME: $HOOT_HOME
+#################################################
+
+# Common set of file versions
 source $HOME/hoot/VagrantProvisionVars.sh
 
 VMUSER=`id -u -n`
@@ -7,8 +14,6 @@ echo USER: $VMUSER
 VMGROUP=`groups | grep -o $VMUSER`
 echo GROUP: $VMGROUP
 
-HOOT_HOME=~/hoot
-echo HOOT_HOME: $HOOT_HOME
 cd ~
 source ~/.profile
 
@@ -20,8 +25,6 @@ fi
 
 echo "Updating OS..."
 sudo apt-get -qq update > Ubuntu_upgrade.txt 2>&1
-# Don't automatically update the oracle jdk, we need to control the version
-sudo apt-mark -qq hold oracle-java8-installer oracle-java8-set-default >> Ubuntu_upgrade.txt 2>&1
 sudo apt-get -q -y upgrade >> Ubuntu_upgrade.txt 2>&1
 sudo apt-get -q -y dist-upgrade >> Ubuntu_upgrade.txt 2>&1
 
@@ -31,31 +34,23 @@ sudo service ntp stop
 sudo ntpd -gq
 sudo service ntp start
 
-if ! java -version 2>&1 | grep --quiet 1.8.0_131; then
+if ! java -version 2>&1 | grep --quiet $JDK_VERSION; then
     echo "### Installing Java 8..."
 
-    # jdk-8u112-linux-x64.tar.gz's official checksums:
-    #    sha256:  62b215bdfb48bace523723cdbb2157c665e6a25429c73828a32f00e587301236
-    #    md5: 75b2cb2249710d822a60f83e28860053
-    echo "75b2cb2249710d822a60f83e28860053  /tmp/jdk-8u131-linux-x64.tar.gz " > /tmp/jdk.md5
-
-    if [ ! -f /tmp/$JDK_FILE ] || ! md5sum -c /tmp/jdk.md5; then
-        echo "Downloading $JDK_FILE ...."
-        sudo wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" $JDK_URL -P /tmp
-        echo "Finished download of $JDK_FILE"
+    echo "${JDK_MD5}  ${JDK_TAR} " > ./jdk.md5
+    if [ ! -f ./${JDK_TAR} ] || ! md5sum -c ./jdk.md5; then
+        echo "Downloading ${JDK_TAR} ...."
+        wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" $JDK_URL
+        echo "Finished download of ${JDK_TAR}"
     fi
 
-    sudo tar -xvzf /tmp/$JDK_FILE --directory=/tmp >/dev/null
+    sudo mkdir -p /usr/lib/jvm
+    sudo rm -rf /usr/lib/jvm/oracle_jdk8
 
-    if [[ ! -e /usr/lib/jvm ]]; then
-        sudo mkdir /usr/lib/jvm
-    else
-        if [[ -e /usr/lib/jvm/oracle_jdk8 ]]; then
-            sudo rm -rf /usr/lib/jvm/oracle_jdk8
-        fi
-    fi
+    sudo tar -xzf ./$JDK_TAR
+    sudo chown -R root:root ./jdk$JDK_VERSION
+    sudo mv -f ./jdk$JDK_VERSION /usr/lib/jvm/oracle_jdk8
 
-    sudo mv -f /tmp/$JDK_DIR /usr/lib/jvm/oracle_jdk8
     sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/oracle_jdk8/jre/bin/java 9999
     sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/oracle_jdk8/bin/javac 9999
     echo "### Done with Java 8 install..."
@@ -70,15 +65,15 @@ if [ ! -f /etc/apt/sources.list.d/pgdg.list ]; then
 fi
 
 echo "### Installing dependencies from repos..."
-sudo apt-get -q -y install texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev \
+sudo apt-get -q -y install texinfo g++ libicu-dev libqt4-dev libqtwebkit-dev git-core libboost-dev libcppunit-dev \
  libcv-dev libopencv-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev \
  automake protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov maven \
  libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc curl npm libxerces-c28 \
  libglpk-dev libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew \
  w3m texlive-lang-cyrillic graphviz python-setuptools python python-pip git ccache distcc libogdi3.2-dev \
  gnuplot python-matplotlib libqt4-sql-sqlite ruby ruby-dev xvfb zlib1g-dev patch x11vnc openssh-server \
- htop unzip postgresql-9.5 postgresql-client-9.5 postgresql-9.5-postgis-scripts postgresql-9.5-postgis-2.3 \
- libpango-1.0-0 libappindicator1 valgrind dos2unix bc mlocate vim >> Ubuntu_upgrade.txt 2>&1
+ htop unzip postgresql-9.5 postgresql-client-9.5 postgresql-contrib-9.5 postgresql-9.5-postgis-scripts postgresql-9.5-postgis-2.3 \
+ libpango-1.0-0 libappindicator1 valgrind dos2unix bc mlocate vim docbook-xml dblatex >> Ubuntu_upgrade.txt 2>&1
 
 if ! dpkg -l | grep --quiet dictionaries-common; then
     # See /usr/share/doc/dictionaries-common/README.problems for details
@@ -129,8 +124,8 @@ if ! grep --quiet "PATH=" ~/.profile; then
     source ~/.profile
 fi
 
-# Whether the client uses distcc or not, have distcc set up and ready to go.  To turn it on, 
-# enable it in LocalConfig.pri, configure the slaves in ~/.distcc/hosts, and launch distccd on 
+# Whether the client uses distcc or not, have distcc set up and ready to go.  To turn it on,
+# enable it in LocalConfig.pri, configure the slaves in ~/.distcc/hosts, and launch distccd on
 # the slaves.
 if [ ! -f ~/.distcc/hosts ]; then
     echo "Adding distcc hosts file..."
@@ -292,7 +287,7 @@ fi
 
 if ! mocha --version &>/dev/null; then
     echo "### Installing mocha for plugins test..."
-    sudo npm install --silent -g mocha
+    sudo npm install --silent -g mocha@3.5.3
     # Clean up after the npm install
     sudo rm -rf ~/tmp
 fi
@@ -625,4 +620,3 @@ fi
 
 # Always start with a clean $HOOT_HOME/userfiles/tmp
 rm -rf $HOOT_HOME/userfiles/tmp
-
