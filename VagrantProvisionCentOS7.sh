@@ -122,24 +122,24 @@ cd ~
 wget --quiet http://download.icu-project.org/files/icu4c/59.1/icu4c-59_1-src.tgz
 tar xzf icu4c-59_1-src.tgz
 cd icu/source/
-./runConfigureICU Linux > centos7_install.txt
+./runConfigureICU Linux > ~/centos7_install.txt
 gmake -sj$(nproc)
 sudo gmake -s install
 
 # Google depot tools
 echo "##### Depot Tools #####"
 cd ~
-git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git >> centos7_install.txt
+git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git >> ~/centos7_install.txt
 export PATH=$PATH:~/depot_tools
 
 # V8
 echo "##### V8 #####"
 cd ~
-fetch v8 >> centos7_install.txt
+fetch v8 >> ~/centos7_install.txt
 cd v8
-gclient sync >> centos7_install.txt
-tools/dev/v8gen.py x64.release >> centos7_install.txt
-make x64.release library=shared -sj$(nproc)
+gclient sync >> ~/centos7_install.txt
+tools/dev/v8gen.py x64.release >> ~/centos7_install.txt
+make -sj$(nproc) x64.release library=shared
 sudo cp out/x64.release/lib.target/*.so /usr/lib64/
 sudo cp include/*.h /usr/include/
 sudo cp -r include/libplatform /usr/include
