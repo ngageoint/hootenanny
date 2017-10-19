@@ -74,6 +74,12 @@ public:
 
     QString toString() const;
 
+    bool operator== (const EdgeEntry &ee)
+    {
+      bool eq = (0 == _subline->toString().compare(ee.getSubline()->toString()));
+      return eq;
+    }
+
   private:
     /// The portion of the edge. The portion is always measured starting at "from" regardless of
     /// whether or not reversed is set. It is always a value in [0, 1]. If toPortion < fromPortion

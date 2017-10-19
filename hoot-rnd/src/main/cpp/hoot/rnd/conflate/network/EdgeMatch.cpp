@@ -146,10 +146,39 @@ bool EdgeMatch::isVerySimilarTo(const boost::shared_ptr<const EdgeMatch>& other)
   this2.replace(QRegExp("_portion: \\d+\\.\\d+"), "");
   other2.replace(QRegExp("_portion: \\d+\\.\\d+"), "");
 
-  if (0 == this1.compare(other1) && 0 == this2.compare(other2))
+  if (0 == this1.compare(other1))
   {
-    LOG_TRACE("Matches very similar: " << this << "; " << other);
-    return true;
+    if (0 == this2.compare((other2)))
+    {
+      LOG_TRACE("Matches very similar: " << this << "; " << other);
+      return true;
+    }
+    else
+    {
+      // Reverse other2
+      other->reverse();
+      other2 = other->getString2()->toString();
+      other->reverse(); // put it back the way it was
+      other2.replace(QRegExp("_portion: \\d+\\.\\d+"), "");
+      if (0 == this2.compare(other2))
+      {
+        LOG_TRACE("Matches very similar: " << this << "; " << other);
+        return true;
+      }
+    }
+  }
+  else if (0 == this2.compare(other2))
+  {
+    // Reverse other1
+    other->reverse();
+    other1 = other->getString1()->toString();
+    other->reverse(); // put it back the way it was
+    other1.replace(QRegExp("_portion: \\d+\\.\\d+"), "");
+    if (0 == this1.compare(other1))
+    {
+      LOG_TRACE("Matches very similar: " << this << "; " << other);
+      return true;
+    }
   }
 
   LOG_TRACE("Matches not very similar: " << this << "; " << other);

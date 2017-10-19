@@ -658,7 +658,7 @@ void ConflictsNetworkMatcher::finalize()
       {
         if (myScore > 0.3 + theirScore)
         {
-          _scores[r->getEdge()] = 0.0001;
+          _scores[r->getEdge()] = 1.0e-5;
         }
       }
     }

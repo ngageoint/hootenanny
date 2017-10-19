@@ -126,6 +126,7 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
     matcher->iterate();
     LOG_INFO("Optimization iteration: " << i + 1 << "/" << numIterations << " complete.");
 
+    // MICAH DEBUG
     if (true || ConfigOptions().getNetworkMatchWriteDebugMaps())
     {
       OsmMapPtr copy(new OsmMap(map));
@@ -143,6 +144,21 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
   // Finalize
   matcher->finalize();
 
+  // MICAH DEBUG
+  // Write final debug map
+  if (true || ConfigOptions().getNetworkMatchWriteDebugMaps())
+  {
+    OsmMapPtr copy(new OsmMap(map));
+    DebugNetworkMapCreator(matcher->getMatchThreshold()).addDebugElements(copy,
+      matcher->getAllEdgeScores(), matcher->getAllVertexScores());
+
+    MapProjector::projectToWgs84(copy);
+    conf().set(ConfigOptions().getWriterIncludeDebugTagsKey(), true);
+    QString name = QString("tmp/debug-final.osm");
+    LOG_INFO("Writing debug map: " << name);
+    OsmMapWriterFactory::getInstance().write(copy, name);
+  }
+
   LOG_DEBUG("Retrieving edge scores...");
   // Convert graph edge matches into NetworkMatch objects.
   QList<NetworkEdgeScorePtr> edgeMatch = matcher->getAllEdgeScores();
@@ -154,29 +170,11 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
     LOG_VART(edgeMatch[i]->getScore());
     LOG_VART(edgeMatch[i]->getEdgeMatch());
 
-    // MICAH DEBUG
-    if (edgeMatch[i]->getEdgeMatch()->getUid() == "ec0a1ec2")
-    {
-      double t1 = edgeMatch[i]->getScore();
-      double t2 = matcher->getMatchThreshold();
-
-      int crap = 0;
-      crap++;
-    }
-
-    /// @todo tunable parameter
     if (edgeMatch[i]->getScore() > matcher->getMatchThreshold())
     {
       LOG_TRACE("is match");
       LOG_VART(edgeMatch[i]->getEdgeMatch()->getUid());
       matches.push_back(_createMatch(details, edgeMatch[i], threshold));
-
-      // MICAH DEBUG
-      if (edgeMatch[i]->getEdgeMatch()->getUid() == "ec0a1ec2")
-      {
-        int crap = 0;
-        crap++;
-      }
     }
   }
 }
