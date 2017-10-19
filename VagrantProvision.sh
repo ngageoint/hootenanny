@@ -1,12 +1,16 @@
 #!/usr/bin/env bash
 
+#################################################
+# VERY IMPORTANT: CHANGE THIS TO POINT TO WHERE YOU PUT HOOT
+HOOT_HOME=~/hoot
+echo HOOT_HOME: $HOOT_HOME
+#################################################
+
 VMUSER=`id -u -n`
 echo USER: $VMUSER
 VMGROUP=`groups | grep -o $VMUSER`
 echo GROUP: $VMGROUP
 
-HOOT_HOME=~/hoot
-echo HOOT_HOME: $HOOT_HOME
 cd ~
 source ~/.profile
 
@@ -52,7 +56,6 @@ if ! java -version 2>&1 | grep --quiet $JDK_VERSION; then
     sudo tar -xzf ./$JDK_TAR
     sudo chown -R root:root ./jdk$JDK_VERSION
     sudo mv -f ./jdk$JDK_VERSION /usr/lib/jvm/oracle_jdk8
-
     sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/oracle_jdk8/jre/bin/java 9999
     sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/oracle_jdk8/bin/javac 9999
     echo "### Done with Java 8 install..."

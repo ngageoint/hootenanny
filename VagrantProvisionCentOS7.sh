@@ -1,19 +1,29 @@
 #!/usr/bin/env bash
+
+#################################################
+# VERY IMPORTANT: CHANGE THIS TO POINT TO WHERE YOU PUT HOOT
+HOOT_HOME=~/hoot
+echo HOOT_HOME: $HOOT_HOME
+#################################################
+
 VMUSER=`id -u -n`
 echo USER: $VMUSER
 VMGROUP=`groups | grep -o $VMUSER`
 echo GROUP: $VMGROUP
 
-HOOT_HOME=~/hoot
-echo HOOT_HOME: $HOOT_HOME
-cd ~
-source ~/.bash_profile
+# Setting up versions and locations:
+STXXL_VERSION=stxxl-1.3.1
+
+# GDAL & FGDB. NOTE We parse the FGDB version later in the script to get the tar file name
+GDAL_VERSION=2.1.4
+FGDB_VERSION=1.5.1
+
 
 export LANG=en_US.UTF-8
 
+cd ~
+source ~/.bash_profile
 
-# Keep VagrantBuild.sh happy
-#ln -s ~/.bash_profile ~/.profile
 
 # add EPEL repo for extra packages
 echo "### Add epel repo ###" > CentOS_upgrade.txt
@@ -43,16 +53,6 @@ sudo yum install -y \
 
 # Now try to lock NodeJS so that the next yum update doesn't remove it.
 sudo yum versionlock nodejs*
-
-
-# echo "### Installing and locking the GEOS version to 3.4.2"
-# This works but yum conflicts with postgis2_95
-# sudo yum install -y yum-plugin-versionlock
-# sudo yum install -y \
-#     geos-3.4.2-2.el7 \
-#     geos-devel-3.4.2-2.el7
-#
-# sudo yum versionlock geos*
 
 
 # install useful and needed packages for working with hootenanny
@@ -338,9 +338,7 @@ if [ ! -f /etc/ld.so.conf.d/postgres$PG_VERSION.conf ]; then
     sudo ldconfig
 fi
 
-# For convenience, set the version of GDAL and FileGDB to download and install
-GDAL_VERSION=2.1.4
-FGDB_VERSION=1.5.1
+# Tweak the FGDB version so we can get the filename
 FGDB_VERSION2=`echo $FGDB_VERSION | sed 's/\./_/g;'`
 
 if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --version | grep -q $GDAL_VERSION && ogrinfo --formats | grep -q FileGDB ); then
