@@ -112,7 +112,7 @@ AC_SEARCH_LIBS([_ZTIN6google8protobuf20FieldDescriptorProtoE], [protobuf], [], [
 
 AC_CHECK_LIB([icui18n], [main], [], [echo "Error! icui18n (libicu) is required."; exit -1])
 AC_CHECK_LIB([icuio], [main], [], [echo "Error! icuio (libicu) is required."; exit -1])
-AC_CHECK_LIB([iculx], [main], [], [echo "Error! iculx (libicu) is required."; exit -1])
+#AC_CHECK_LIB([iculx], [main], [], [echo "Error! iculx (libicu) is required."; exit -1])
 AC_CHECK_LIB([icutu], [main], [], [echo "Error! icutu (libicu) is required."; exit -1])
 AC_CHECK_LIB([icuuc], [main], [], [echo "Error! icuuc (libicu) is required."; exit -1])
 #AC_CHECK_LIB([pthread], [main], [], [echo "Error! pthread is required."; exit -1])
