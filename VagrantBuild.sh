@@ -3,9 +3,9 @@
 set -e
 
 # Set this for use later
-export OS_NAME="$(lsb_release -i -s)"
+export OS_NAME=$(awk -F= '/^NAME/{print $2}' /etc/os-release)
 
-if [ "${OS_NAME}" == "Ubuntu" ]; then
+if [ "$OS_NAME" == \"Ubuntu\" ]; then
   source ~/.profile
 else # Centos
   source ~/.bash_profile
