@@ -112,6 +112,7 @@ sudo yum -y install \
     opencv-core \
     opencv-devel \
     opencv-python \
+    java-1.8.0-openjdk \
     perl-XML-LibXML \
     postgis23_95 \
     postgresql95 \
@@ -146,42 +147,6 @@ sudo yum -y install \
     words \
     xorg-x11-server-Xvfb \
     zip \
-
-
-
-# Install Java8
-# Official download page:
-# http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
-# JAVA JDK download URL
-JDK_RPM=jdk-8u152-linux-x64.rpm
-JDK_URL=http://download.oracle.com/otn-pub/java/jdk/8u152-b16/aa0333dd3019491ca4f6ddbe78cdb6d0/$JDK_RPM
-JDK_VERSION=1.8.0_152
-if  ! rpm -qa | grep "^jdk${JDK_VERSION:0:3}-${JDK_VERSION}"; then
-    echo "### Installing Java8..."
-    if [ ! -f $JDK_RPM ]; then
-      wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" $JDK_URL
-    fi
-    sudo yum -y install ./$JDK_RPM
-fi
-
-# Trying the following instead of removing the OpenJDK
-# Setting /usr/java/jdk$JDK_VERSION/bin/java's priority to something really atrocious to guarantee that it will be
-# the one used when alternatives' auto mode is used.
-sudo alternatives --install /usr/bin/java java /usr/java/jdk$JDK_VERSION/bin/java 999999
-
-# Setting /usr/java/jdk$JDK_VERSION/bin/javac's priority to something really atrocious to guarantee that it will be
-# the one used when alternatives' auto mode is enabled.
-sudo alternatives --install /usr/bin/javac javac /usr/java/jdk$JDK_VERSION/bin/javac 9999999
-
-# switching to manual and forcing the desired version of java be configured
-sudo alternatives --set java /usr/java/jdk$JDK_VERSION/bin/java
-
-# switching to manual and forcing the desired version of javac be configured
-sudo alternatives --set javac /usr/java/jdk$JDK_VERSION/bin/javac
-
-# Now make sure that the version of Java we installed gets used.
-# maven installs java-1.8.0-openjdk
-#sudo rpm -e --nodeps java-1.8.0-openjdk-headless java-1.8.0-openjdk-devel java-1.8.0-openjdk
 
 
 ##### tex* is not optimal. I think this adds too much stuff that we don't need. But, to remove it, we need
@@ -270,11 +235,11 @@ fi
 
 if ! grep --quiet "export JAVA_HOME" ~/.bash_profile; then
     echo "Adding Java home to profile..."
-    echo "export JAVA_HOME=/usr/java/jdk${JDK_VERSION}" >> ~/.bash_profile
+    echo "export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk" >> ~/.bash_profile
     echo "export PATH=\$PATH:\$JAVA_HOME/bin" >> ~/.bash_profile
     source ~/.bash_profile
 else
-    sed -i "/^export JAVA_HOME=.*/c\export JAVA_HOME=\/usr\/java\/jdk${JDK_VERSION}" ~/.bash_profile
+    sed -i '/^export JAVA_HOME=.*/c\export JAVA_HOME=\/usr\/lib\/jvm\/java-1.8.0-openjdk' ~/.bash_profile
 fi
 
 if ! grep --quiet "export HADOOP_HOME" ~/.bash_profile; then
@@ -682,7 +647,7 @@ sudo bash -c "cat >> $HADOOP_HOME/conf/hdfs-site.xml" <<EOT
 </configuration>
 EOT
 
-  sudo sed -i.bak "s/# export JAVA_HOME=\/usr\/lib\/j2sdk1.5-sun/export JAVA_HOME=\/usr\/java\/jdk${JDK_VERSION}/g" $HADOOP_HOME/conf/hadoop-env.sh
+  sudo sed -i.bak "s/# export JAVA_HOME=\/usr\/lib\/j2sdk1.5-sun/export JAVA_HOME=\/usr\/lib\/jvm\/java-1.8.0-openjdk/g" $HADOOP_HOME/conf/hadoop-env.sh
   sudo sed -i.bak 's/#include <pthread.h>/#include <pthread.h>\n#include <unistd.h>/g' $HADOOP_HOME/src/c++/pipes/impl/HadoopPipes.cc
 
   sudo mkdir -p $HADOOP_HOME/dfs/name/current
