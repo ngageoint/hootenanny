@@ -263,28 +263,28 @@ fi
 
 
 if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --version | grep -q $GDAL_VERSION && ogrinfo --formats | grep -q FileGDB ); then
-    if [ ! -f gdal-$GDAL_VERSION.tar.gz ]; then
+    if [ ! -f gdal-${GDAL_VERSION}.tar.gz ]; then
         echo "### Downloading GDAL $GDAL_VERSION source..."
-        wget --quiet http://download.osgeo.org/gdal/$GDAL_VERSION/gdal-$GDAL_VERSION.tar.gz
+        wget --quiet http://download.osgeo.org/gdal/$GDAL_VERSION/gdal-${GDAL_VERSION}.tar.gz
     fi
-    if [ ! -d gdal-$GDAL_VERSION ]; then
+    if [ ! -d gdal-${GDAL_VERSION} ]; then
         echo "### Extracting GDAL $GDAL_VERSION source..."
-        tar zxfp gdal-$GDAL_VERSION.tar.gz
+        tar zxfp gdal-${GDAL_VERSION}.tar.gz
     fi
 
-    if [ ! -f $FGDB_FILE ]; then
+    if [ ! -f ${FGDB_TAR} ]; then
         echo "### Downloading FileGDB API source..."
         wget --quiet $FGDB_URL
     fi
     if [ ! -d /usr/local/FileGDB_API/lib ]; then
         echo "### Extracting FileGDB API source & installing lib..."
-        sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp $FGDB_FILE --directory /usr/local/FileGDB_API --strip-components 1
+        sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp $FGDB_TAR --directory /usr/local/FileGDB_API --strip-components 1
         sudo sh -c "echo '/usr/local/FileGDB_API/lib' > /etc/ld.so.conf.d/filegdb.conf"
     fi
 
     echo "### Building GDAL $GDAL_VERSION w/ FileGDB..."
     export PATH=/usr/local/lib:/usr/local/bin:$PATH
-    cd gdal-$GDAL_VERSION
+    cd gdal-${GDAL_VERSION}
     touch config.rpath
     echo "GDAL: configure"
     sudo ./configure --quiet --with-fgdb=/usr/local/FileGDB_API --with-pg=/usr/bin/pg_config --with-python
