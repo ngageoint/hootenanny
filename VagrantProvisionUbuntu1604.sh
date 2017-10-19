@@ -2,7 +2,14 @@
 set -e
 set -x
 
-source $HOME/hoot/VagrantProvisionVars.sh
+#################################################
+# VERY IMPORTANT: CHANGE THIS TO POINT TO WHERE YOU PUT HOOT
+HOOT_HOME=~/hoot
+echo HOOT_HOME: $HOOT_HOME
+#################################################
+
+# Common set of file versions
+source $HOOT_HOME/VagrantProvisionVars.sh
 
 #
 # Initial basic provisioning script for Ubuntu1604
@@ -13,8 +20,6 @@ echo USER: $VMUSER
 VMGROUP=`groups | grep -o $VMUSER`
 echo GROUP: $VMGROUP
 
-HOOT_HOME=~/hoot
-echo HOOT_HOME: $HOOT_HOME
 cd ~
 source ~/.profile
 
@@ -35,28 +40,24 @@ sudo service ntp stop
 sudo ntpd -gq
 sudo service ntp start
 
-if ! java -version 2>&1 | grep --quiet 1.8.0_112; then
+if ! java -version 2>&1 | grep --quiet $JDK_VERSION; then
     echo "### Installing Java 8..."
 
-    echo "$JDK_MD5  /tmp/$JDK_FILE" > /tmp/jdk.md5
+    echo "$JDK_MD5  $JDK_FILE" > ./jdk.md5
 
-    if [ ! -f /tmp/$JDK_FILE ] || ! md5sum -c /tmp/jdk.md5; then
-        echo "Downloading $JDK_FILE...."
+    if [ ! -f ./$JDK_TAR ] || ! md5sum -c ./jdk.md5; then
+        echo "Downloading ${JDK_TAR}...."
         sudo wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" $JDK_URL -P /tmp
-        echo "Finished download of $JDK_FILE"
+        echo "Finished download of ${JDK_TAR}"
     fi
 
-    sudo tar -xzf /tmp/$JDK_FILE --directory=/tmp
+    sudo mkdir -p /usr/lib/jvm
+    sudo rm -rf /usr/lib/jvm/oracle_jdk8
 
-    if [[ ! -e /usr/lib/jvm ]]; then
-        sudo mkdir /usr/lib/jvm
-    else
-        if [[ -e /usr/lib/jvm/oracle_jdk8 ]]; then
-            sudo rm -rf /usr/lib/jvm/oracle_jdk8
-        fi
-    fi
+    sudo tar -xzf ./$JDK_TAR
+    sudo chown -R root:root ./jdk$JDK_VERSION
+    sudo mv -f ./jdk$JDK_VERSION /usr/lib/jvm/oracle_jdk8
 
-    sudo mv -f /tmp/$JDK_DIR /usr/lib/jvm/oracle_jdk8
     sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/oracle_jdk8/jre/bin/java 9999
     sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/oracle_jdk8/bin/javac 9999
     echo "### Done with Java 8 install..."
@@ -222,31 +223,44 @@ fi
 
 # gem installs are *very* slow, hence all the checks in place here to facilitate debugging
 if [ `gem list --local | grep -q mime-types` -eq 1 ]; then
+    echo "Gem Install: mime-types"
    #sudo gem install mime-types -v 2.6.2
    gem install mime-types
 fi
+
 if [ `gem list --local | grep -q cucumber` -eq 1 ]; then
+    echo "Gem Install: cucumber"
    #sudo gem install cucumber
    gem install cucumber
 fi
+
 if [ `gem list --local | grep -q capybara-webkit` -eq 1 ]; then
+    echo "Gem Install: capybara-webkit"
    sudo apt-get install qt5-default libqt5webkit5-dev gstreamer1.0-plugins-base gstreamer1.0-tools gstreamer1.0-x
    #sudo gem install capybara-webkit
    gem install capybara-webkit
 fi
+
 if [ `gem list --local | grep -q selenium-webdriver` -eq 1 ]; then
+    echo "Gem Install: selenium-webdriver"
    #sudo gem install selenium-webdriver
    gem install selenium-webdriver
 fi
+
 if [ `gem list --local | grep -q rspec` -eq 1 ]; then
+    echo "Gem Install: rspec"
    #sudo gem install rspec
    gem install rspec
 fi
+
 if [ `gem list --local | grep -q capybara-screenshot` -eq 1 ]; then
+    echo "Gem Install: capybara-screenshot"
    #sudo gem install capybara-screenshot
    gem install capybara-screenshot
 fi
+
 if [ `gem list --local | grep -q selenium-cucumber` -eq 1 ]; then
+    echo "Gem Install: selenium-cucumber"
    #sudo gem install selenium-cucumber
    gem install selenium-cucumber
 fi

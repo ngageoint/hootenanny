@@ -1,28 +1,28 @@
 #!/usr/bin/env bash
 
+set -e
+
 #################################################
 # VERY IMPORTANT: CHANGE THIS TO POINT TO WHERE YOU PUT HOOT
 HOOT_HOME=~/hoot
 echo HOOT_HOME: $HOOT_HOME
 #################################################
 
+# Common set of file versions
+source $HOOT_HOME/VagrantProvisionVars.sh
+
 VMUSER=`id -u -n`
 echo USER: $VMUSER
 VMGROUP=`groups | grep -o $VMUSER`
 echo GROUP: $VMGROUP
 
-# Setting up versions and locations:
-STXXL_VERSION=stxxl-1.3.1
+# Centos7 specific file versions
+export STXXL_VERSION=stxxl-1.3.1
 
 # Ancient version of NodeJS
 NODEJS_URL=https://rpm.nodesource.com/pub_0.10/el/7/x86_64
 NODEJS_RPM=nodejs-0.10.48-1nodesource.el7.centos.x86_64.rpm
 NODEJS_DEVEL_RPM=nodejs-devel-0.10.48-1nodesource.el7.centos.x86_64.rpm
-
-# GDAL & FGDB. NOTE We parse the FGDB version later in the script to get the tar file name
-GDAL_VERSION=2.1.4
-FGDB_VERSION=1.5.1
-
 
 export LANG=en_US.UTF-8
 

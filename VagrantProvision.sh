@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 #################################################
 # VERY IMPORTANT: CHANGE THIS TO POINT TO WHERE YOU PUT HOOT
 HOOT_HOME=~/hoot
@@ -7,7 +9,7 @@ echo HOOT_HOME: $HOOT_HOME
 #################################################
 
 # Common set of file versions
-source $HOME/hoot/VagrantProvisionVars.sh
+source $HOOT_HOME/VagrantProvisionVars.sh
 
 VMUSER=`id -u -n`
 echo USER: $VMUSER
@@ -25,7 +27,7 @@ fi
 
 echo "Updating OS..."
 sudo apt-get -qq update > Ubuntu_upgrade.txt 2>&1
-sudo apt-get -q -y upgrade >> Ubuntu_upgrade.txt 2>&1
+# sudo apt-get -q -y upgrade >> Ubuntu_upgrade.txt 2>&1
 sudo apt-get -q -y dist-upgrade >> Ubuntu_upgrade.txt 2>&1
 
 echo "### Setup NTP..."
@@ -38,6 +40,7 @@ if ! java -version 2>&1 | grep --quiet $JDK_VERSION; then
     echo "### Installing Java 8..."
 
     echo "${JDK_MD5}  ${JDK_TAR} " > ./jdk.md5
+
     if [ ! -f ./${JDK_TAR} ] || ! md5sum -c ./jdk.md5; then
         echo "Downloading ${JDK_TAR} ...."
         wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" $JDK_URL
@@ -139,6 +142,7 @@ if ! grep --quiet "DISTCC_TCP_CORK=0" ~/.profile; then
 fi
 
 if ! ruby -v | grep --quiet 2.3.0; then
+    echo "### Installing ruby..."
     # Ruby via rvm - from rvm.io
     gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 2>&1
 
@@ -157,38 +161,58 @@ EOT
 fi
 
 # gem installs are *very* slow, hence all the checks in place here to facilitate debugging
-gem list --local | grep -q mime-types
-if [ $? -eq 1 ]; then
+if [ `gem list --local | grep -q mime-types` -eq 1 ]; then
+    echo "Gem Install: mime-types"
+# gem list --local | grep -q mime-types
+# if [ $? -eq 1 ]; then
    #sudo gem install mime-types -v 2.6.2
    gem install mime-types
 fi
-gem list --local | grep -q cucumber
-if [ $? -eq 1 ]; then
+
+if [ `gem list --local | grep -q cucumber` -eq 1 ]; then
+    echo "Gem Install: cucumber"
+# gem list --local | grep -q cucumber
+# if [ $? -eq 1 ]; then
    #sudo gem install cucumber
    gem install cucumber
 fi
-gem list --local | grep -q capybara-webkit
-if [ $? -eq 1 ]; then
+
+if [ `gem list --local | grep -q capybara-webkit` -eq 1 ]; then
+    echo "Gem Install: capybara-webkit"
+# gem list --local | grep -q capybara-webkit
+# if [ $? -eq 1 ]; then
    #sudo gem install capybara-webkit
    gem install capybara-webkit
 fi
-gem list --local | grep -q selenium-webdriver
-if [ $? -eq 1 ]; then
+
+if [ `gem list --local | grep -q selenium-webdriver` -eq 1 ]; then
+    echo "Gem Install: selenium-webdriver"
+# gem list --local | grep -q selenium-webdriver
+# if [ $? -eq 1 ]; then
    #sudo gem install selenium-webdriver
    gem install selenium-webdriver
 fi
-gem list --local | grep -q rspec
-if [ $? -eq 1 ]; then
+
+if [ `gem list --local | grep -q rspec` -eq 1 ]; then
+    echo "Gem Install: rspec"
+# gem list --local | grep -q rspec
+# if [ $? -eq 1 ]; then
    #sudo gem install rspec
    gem install rspec
 fi
-gem list --local | grep -q capybara-screenshot
-if [ $? -eq 1 ]; then
+
+if [ `gem list --local | grep -q capybara-screenshot` -eq 1 ]; then
+    echo "Gem Install: capybara-screenshot"
+# gem list --local | grep -q capybara-screenshot
+# if [ $? -eq 1 ]; then
    #sudo gem install capybara-screenshot
    gem install capybara-screenshot
 fi
-gem list --local | grep -q selenium-cucumber
-if [ $? -eq 1 ]; then
+
+if [ `gem list --local | grep -q selenium-cucumber` -eq 1 ]; then
+    echo "Gem Install: selenium-cucumber"
+# gem list --local | grep -q selenium-cucumber
+# if [ $? -eq 1 ]; then
    #sudo gem install selenium-cucumber
    gem install selenium-cucumber
 fi
