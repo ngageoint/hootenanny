@@ -1,15 +1,22 @@
 #!/usr/bin/env bash
+
+#################################################
+# VERY IMPORTANT: CHANGE THIS TO POINT TO WHERE YOU PUT HOOT
+HOOT_HOME=~/hoot
+echo HOOT_HOME: $HOOT_HOME
+#################################################
+
 VMUSER=`id -u -n`
 echo USER: $VMUSER
 VMGROUP=`groups | grep -o $VMUSER`
 echo GROUP: $VMGROUP
 
-HOOT_HOME=~/hoot
-echo HOOT_HOME: $HOOT_HOME
-cd ~
-source ~/.bash_profile
+# Setting up versions and locations:
+STXXL_VERSION=stxxl-1.3.1
 
-export LANG=en_US.UTF-8
+# GDAL & FGDB. NOTE We parse the FGDB version later in the script to get the tar file name
+GDAL_VERSION=2.1.4
+FGDB_VERSION=1.5.1
 
 # add EPEL repo for extra packages
 echo "### Add epel repo ###" > CentOS_upgrade.txt
@@ -71,6 +78,7 @@ sudo yum -y install \
     opencv-core \
     opencv-devel \
     opencv-python \
+    java-1.8.0-openjdk \
     perl-XML-LibXML \
     postgis23_95 \
     postgresql95 \
@@ -93,7 +101,10 @@ sudo yum -y install \
     qtwebkit \
     qtwebkit-devel \
     swig \
-    tex* \
+    tex-fonts-hebrew \
+    texlive \
+    texlive-collection-fontsrecommended \
+    texlive-collection-langcyrillic \
     unzip \
     vim \
     w3m \
@@ -102,46 +113,6 @@ sudo yum -y install \
     xorg-x11-server-Xvfb \
     zip \
 
-# Install Java8
-# Official download page:
-# http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
-JAVA_VERSION=144
-JAVA_B_VERSION=01
-JAVA_HASH=090f390dda5b47b9b721c7dfaa008135
-if  ! rpm -qa | grep jdk1.8.0_${JAVA_VERSION}-1.8.0_${JAVA_VERSION}; then
-    echo "### Installing Java8..."
-    if [ ! -f jdk-8u${JAVA_VERSION}-linux-x64.rpm ]; then
-      JDKURL=http://download.oracle.com/otn-pub/java/jdk/8u${JAVA_VERSION}-b${JAVA_B_VERSION}/${JAVA_HASH}/jdk-8u${JAVA_VERSION}-linux-x64.rpm
-      wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" $JDKURL
-    fi
-    sudo yum -y install ./jdk-8u${JAVA_VERSION}-linux-x64.rpm
-fi
-
-# Trying the following instead of removing the OpenJDK
-# Setting /usr/java/jdk1.8.0_144/bin/java's priority to something really atrocious to guarantee that it will be
-# the one used when alternatives' auto mode is used.
-sudo alternatives --install /usr/bin/java java /usr/java/jdk1.8.0_${JAVA_VERSION}/bin/java 999999
-
-# Setting /usr/java/jdk1.8.0_144/bin/javac's priority to something really atrocious to guarantee that it will be
-# the one used when alternatives' auto mode is enabled.
-sudo alternatives --install /usr/bin/javac javac /usr/java/jdk1.8.0_${JAVA_VERSION}/bin/javac 9999999
-
-# switching to manual and forcing the desired version of java be configured
-sudo alternatives --set java /usr/java/jdk1.8.0_${JAVA_VERSION}/bin/java
-
-# switching to manual and forcing the desired version of javac be configured
-sudo alternatives --set javac /usr/java/jdk1.8.0_${JAVA_VERSION}/bin/javac
-
-# Now make sure that the version of Java we installed gets used.
-# maven installs java-1.8.0-openjdk
-#sudo rpm -e --nodeps java-1.8.0-openjdk-headless java-1.8.0-openjdk-devel java-1.8.0-openjdk
-
-
-##### tex* is not optimal. I think this adds too much stuff that we don't need. But, to remove it, we need
-# to crawl through the Hoot documentation dependencies
-# Things to look at:
-#     texlive \
-#     texlive-cyrillic \
 
 echo "##### Temp installs #####"
 
@@ -186,9 +157,15 @@ sudo cp -r share /usr/
 # Stxxl:
 cd ~
 git clone http://github.com/stxxl/stxxl.git stxxl
+
+# Stxxl
+if [ ! -f "${STXXL_VERSION}.tar.gz" ]; then
+    wget --quiet https://github.com/ngageoint/hootenanny-rpms/raw/master/src/SOURCES/${STXXL_VERSION}.tar.gz
+fi
+mkdir -p stxxl && tar zxof ${STXXL_VERSION}.tar.gz --directory ./stxxl --strip-components 1
+
 cd stxxl
-git checkout -q tags/1.3.1
-make config_gnu
+make -s config_gnu
 echo "STXXL_ROOT	=`pwd`" > make.settings.local
 echo "ENABLE_SHARED     = yes" >> make.settings.local
 echo "COMPILER_GCC      = g++ -std=c++0x" >> make.settings.local
@@ -228,8 +205,8 @@ fi
 # We need this big dictionary for text matching. On Ubuntu, this is a package
 if [ ! -f /usr/share/dict/american-english-insane ]; then
     echo "### Installing american-english-insane dictionary..."
-    wget --quiet -N https://s3.amazonaws.com/hoot-rpms/support-files/american-english-insane.bz2
-    sudo bash -c "bzcat american-english-insane.bz2 > /usr/share/dict/american-english-insane"
+        wget --quiet -N https://s3.amazonaws.com/hoot-rpms/support-files/american-english-insane.bz2
+        sudo bash -c "bzcat american-english-insane.bz2 > /usr/share/dict/american-english-insane"
 fi
 
 #####
@@ -255,11 +232,11 @@ fi
 
 if ! grep --quiet "export JAVA_HOME" ~/.bash_profile; then
     echo "Adding Java home to profile..."
-    echo "export JAVA_HOME=/usr/java/jdk1.8.0_${JAVA_VERSION}" >> ~/.bash_profile
+    echo "export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk" >> ~/.bash_profile
     echo "export PATH=\$PATH:\$JAVA_HOME/bin" >> ~/.bash_profile
     source ~/.bash_profile
 else
-    sed -i "/^export JAVA_HOME=.*/export JAVA_HOME=\/usr\/java\/jdk1.8.0_${JAVA_VERSION}" ~/.bash_profile
+    sed -i '/^export JAVA_HOME=.*/c\export JAVA_HOME=\/usr\/lib\/jvm\/java-1.8.0-openjdk' ~/.bash_profile
 fi
 
 if ! grep --quiet "export HADOOP_HOME" ~/.bash_profile; then
@@ -277,7 +254,6 @@ if ! ruby -v | grep --quiet 2.3.0; then
 
     curl -sSL https://raw.githubusercontent.com/rvm/rvm/master/binscripts/rvm-installer | bash -s stable
 
-#     source /home/$VMUSER/.rvm/scripts/rvm
     source ~/.rvm/scripts/rvm
 
     stdbuf -o L -e L rvm install ruby-2.3
@@ -389,9 +365,7 @@ if [ ! -f /etc/ld.so.conf.d/postgres$PG_VERSION.conf ]; then
     sudo ldconfig
 fi
 
-# For convenience, set the version of GDAL and FileGDB to download and install
-GDAL_VERSION=2.1.4
-FGDB_VERSION=1.5.1
+# Tweak the FGDB version so we can get the filename
 FGDB_VERSION2=`echo $FGDB_VERSION | sed 's/\./_/g;'`
 
 if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --version | grep -q $GDAL_VERSION && ogrinfo --formats | grep -q FileGDB ); then
@@ -669,7 +643,7 @@ sudo bash -c "cat >> $HADOOP_HOME/conf/hdfs-site.xml" <<EOT
 </configuration>
 EOT
 
-  sudo sed -i.bak "s/# export JAVA_HOME=\/usr\/lib\/j2sdk1.5-sun/export JAVA_HOME=\/usr\/java\/jdk1.8.0_${JAVA_VERSION}/g" $HADOOP_HOME/conf/hadoop-env.sh
+  sudo sed -i.bak "s/# export JAVA_HOME=\/usr\/lib\/j2sdk1.5-sun/export JAVA_HOME=\/usr\/lib\/jvm\/java-1.8.0-openjdk/g" $HADOOP_HOME/conf/hadoop-env.sh
   sudo sed -i.bak "s/#include <pthread.h>/#include <pthread.h>\n#include <unistd.h>/g" $HADOOP_HOME/src/c++/pipes/impl/HadoopPipes.cc
 
   sudo mkdir -p $HADOOP_HOME/dfs/name/current

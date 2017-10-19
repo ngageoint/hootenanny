@@ -308,7 +308,7 @@ fcodeCommon = {
       ['F_CODE','BH140','waterway','river'], // River - See custom rules
       ['F_CODE','BH145','waterway','vanishing_point'], // Vanishing point
       ['F_CODE','BH150','natural','salt_flat'], // Salt Flat, Salt Pan
-      ['F_CODE','BH155','man_made','salt_pond'], // Salt Evaporator
+      ['F_CODE','BH155','landuse','salt_pond'], // Salt Evaporator
       ['F_CODE','BH160','natural','sabkha'], // Sabkha
       ['F_CODE','BH165','waterway','spillway'], // Spillway
       ['F_CODE','BH170','natural','spring'], // Natural Pool, Spring/Water Hole

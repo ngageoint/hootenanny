@@ -3,6 +3,7 @@ Feature: Translation Ingest, Edit, and Save
     Scenario: Opening Management Tab
         Given I am on Hootenanny
         And I click Get Started
+        And I resize the window
         Then I select the "sprocket" div
 
     Scenario: Ingest Translation
@@ -38,6 +39,7 @@ Feature: Translation Ingest, Edit, and Save
     #     Then the download file pattern "Cucumber Translation*.js" should exist
 
     Scenario: Delete Translation
-        When I click the "trash" icon under the "Cucumber Translation" link
+        Then I scroll "Cucumber Translation" into view
+        Then I delete the "Cucumber Translation" translation
         And I accept the alert
         And I should not see a link "Cucumber Translation"

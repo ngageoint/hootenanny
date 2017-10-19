@@ -95,6 +95,7 @@ mgcp.rules = {
         ['F_CODE','BB190','man_made','pier'], // From OSM
         ['F_CODE','BH080','landuse','basin'], // From OSM - Lake is close but not great
         ['F_CODE','BH130','landuse','reservoir'], // From OSM
+        ['F_CODE','BH155','man_made','salt_pond'], // Due to the default translation changing
         // ['F_CODE','ZD040','place','state'], // From OSM
         // ['F_CODE','ZD040','place','county'], // From OSM
         // ['F_CODE','ZD040','place','quarter'], // From OSM
