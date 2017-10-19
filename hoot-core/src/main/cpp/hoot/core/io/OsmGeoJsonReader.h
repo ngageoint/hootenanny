@@ -41,6 +41,7 @@
 #include <boost/property_tree/ptree.hpp>
 
 // Hoot
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OsmJsonReader.h>
 
@@ -190,7 +191,6 @@ private:
    * @brief _roles List of roles for the current relation, saved for recursive relations
    */
   std::queue<std::string> _roles;
-
 };
 
 } // end namespace hoot

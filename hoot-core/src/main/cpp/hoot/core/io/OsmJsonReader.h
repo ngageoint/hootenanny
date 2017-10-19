@@ -40,6 +40,7 @@
 #include <boost/property_tree/ptree.hpp>
 
 // Hoot
+#include <hoot/core/util/ConfigOptions.h>
 #include "hoot/core/OsmMap.h"
 #include "hoot/core/io/OsmMapReader.h"
 
@@ -220,6 +221,7 @@ public:
   static void scrubBigInts(QString &jsonStr);
 
 protected:
+  bool _addBboxTag;
 
   // Items to conform to OsmMapReader ifc
   Status _defaultStatus;
