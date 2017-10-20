@@ -43,11 +43,11 @@ sudo service ntp start
 if ! java -version 2>&1 | grep --quiet $JDK_VERSION; then
     echo "### Installing Java 8..."
 
-    echo "$JDK_MD5  $JDK_FILE" > ./jdk.md5
+    echo "$JDK_MD5  $JDK_TAR" > ./jdk.md5
 
     if [ ! -f ./$JDK_TAR ] || ! md5sum -c ./jdk.md5; then
         echo "Downloading ${JDK_TAR}...."
-        sudo wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" $JDK_URL -P /tmp
+        sudo wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" $JDK_URL
         echo "Finished download of ${JDK_TAR}"
     fi
 
@@ -235,7 +235,7 @@ fi
 
 if ! gem list --local | grep -q capybara-webkit; then
     echo "Gem Install: capybara-webkit"
-   sudo apt-get install qt5-default libqt5webkit5-dev gstreamer1.0-plugins-base gstreamer1.0-tools gstreamer1.0-x
+   sudo apt-get install -y qt5-default libqt5webkit5-dev gstreamer1.0-plugins-base gstreamer1.0-tools gstreamer1.0-x
    #sudo gem install capybara-webkit
    gem install capybara-webkit
 fi
