@@ -61,14 +61,10 @@ public:
   Tags& getTags() { return _tags; }
   void setTags(const Tags& tags) { _tags = tags; }
 
-//  long getCount() { return _count; }
-//  void setCount(const long count) { _count = count; }
-
 private:
 
   QSet<QString> _words;
   Tags _tags;
-  //long _count;
 };
 
 typedef boost::shared_ptr<ImplicitTagRule> ImplicitTagRulePtr;

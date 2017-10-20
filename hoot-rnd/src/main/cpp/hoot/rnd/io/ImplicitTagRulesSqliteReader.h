@@ -96,6 +96,8 @@ public:
   bool hasMoreRuleWordParts();
   ImplicitTagRuleWordPartPtr getNextRuleWordPart();
 
+  void setMaxQueryResultsSize(const long size) { _maxQueryResultsSize = size; }
+
 private:
 
   QString _path;
@@ -107,7 +109,7 @@ private:
   long _currentRuleId;
   long _maxRuleId;
   //ImplicitTagRuleWordPartPtr _nextRuleWordPart;
-  int _maxQueryResults;
+  int _maxQueryResultsSize;
 
   void _prepareQueries();
   long _getMaxRuleId();

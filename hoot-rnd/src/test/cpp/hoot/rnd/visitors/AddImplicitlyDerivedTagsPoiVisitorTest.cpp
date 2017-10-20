@@ -206,11 +206,10 @@ public:
            ++wordItr)
       {
         const QString word = *wordItr;
-        for (Tags::const_iterator tagItr = tags.begin(); tagItr != tags.end();
-             ++tagItr)
+        for (Tags::const_iterator tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
         {
           const QString kvp = tagItr.key() + "=" + tagItr.value();
-          //rulesWriter.write(word, kvp);   //TODO: fix
+          rulesWriter.write(word, kvp, 1);   //don't care about the tag counts for this test
         }
       }
     }

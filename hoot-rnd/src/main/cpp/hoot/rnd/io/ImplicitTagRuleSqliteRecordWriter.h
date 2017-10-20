@@ -50,7 +50,7 @@ public:
 
   void open(const QString url);
 
-  void write(const QString word, const QString kvp, const long ruleTagCount);
+  void write(const QString word, const QString kvp, const long wordTagOccurranceCount);
 
   void close();
 
@@ -66,7 +66,6 @@ private:
   QSqlQuery _getWordIdForWord;
   QSqlQuery _getTagIdForTag;
   QSqlQuery _getRuleIdForWordKvp;
-  QSqlQuery _updateRuleTagCountQuery;
 
   long _currentRuleId;
 
@@ -76,12 +75,10 @@ private:
   long _insertWord(const QString word);
   long _insertTag(const QString kvp);
   void _insertRuleRecord(const long ruleId, const long wordId, const long tagId,
-                         const long ruleCount);
+                         const long wordTagOccurranceCount);
   long _getWordId(const QString word);
   long _getTagId(const QString kvp);
-  long _getRuleId(const QString word, const QString kvp, long& count);
-  void _updateRuleTagCount(const long ruleId, const long wordId, const long tagId,
-                           const long count);
+  long _getRuleId(const long wordId, const long tagId);
 };
 
 }

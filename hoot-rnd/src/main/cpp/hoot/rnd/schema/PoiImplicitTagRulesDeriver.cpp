@@ -155,6 +155,17 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs,
     translationScripts << ", type keys: " << typeKeys << ", and minimum occurance threshold: " <<
     minOccurancesThreshold << ".  Writing to outputs: " << outputs << "...");
 
+  _countFile.reset(
+    new QTemporaryFile(
+      ConfigOptions().getApidbBulkInserterTempFileDir() +
+      "/poi-implicit-tag-rules-deriver-temp-XXXXXX"));
+  _countFile->setAutoRemove(false); //for debugging only
+  if (!_countFile->open())
+  {
+    throw HootException(QObject::tr("Error opening %1 for writing.").arg(_countFile->fileName()));
+  }
+  LOG_DEBUG("Opened temp file: " << _countFile->fileName());
+
   QStringList typeKeysAllowed;
   for (int i = 0; i < typeKeys.size(); i++)
   {
@@ -268,10 +279,10 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs,
 //    " implicit tag rules for " << StringUtils::formatLargeNumber(_tagRulesByWord.size()) <<
 //    " unique words and " << StringUtils::formatLargeNumber(poiCount) << " POIs (" <<
 //    StringUtils::formatLargeNumber(nodeCount) << " nodes parsed).");
-  LOG_INFO("Average words per rule: " << _avgWordsPerRule);
-  LOG_INFO("Average tags per rule: " << _avgTagsPerRule);
-  LOG_INFO("Highest rule word count: " << _highestRuleWordCount);
-  LOG_INFO("Highest rule tag count: " << _highestRuleTagCount);
+//  LOG_INFO("Average words per rule: " << _avgWordsPerRule);
+//  LOG_INFO("Average tags per rule: " << _avgTagsPerRule);
+//  LOG_INFO("Highest rule word count: " << _highestRuleWordCount);
+//  LOG_INFO("Highest rule tag count: " << _highestRuleTagCount);
 
   _writeRulesToSqlite(sqliteOutput);
 
@@ -331,6 +342,7 @@ void PoiImplicitTagRulesDeriver::_writeToNonSqliteOutputs(
   while (rulesReader.hasMoreRuleWordParts())
   {
     const ImplicitTagRuleWordPartPtr ruleWordPart = rulesReader.getNextRuleWordPart();
+    //LOG_VART(ruleWordPart);
     for (QList<boost::shared_ptr<ImplicitTagRuleWordPartWriter> >::iterator writersItr = ruleWordPartWriters.begin();
        writersItr != ruleWordPartWriters.end();
        ++writersItr)
