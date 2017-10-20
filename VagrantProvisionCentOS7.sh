@@ -19,11 +19,6 @@ echo GROUP: $VMGROUP
 # Centos7 specific file versions
 export STXXL_VERSION=stxxl-1.3.1
 
-# Ancient version of NodeJS
-NODEJS_URL=https://rpm.nodesource.com/pub_0.10/el/7/x86_64
-NODEJS_RPM=nodejs-0.10.48-1nodesource.el7.centos.x86_64.rpm
-NODEJS_DEVEL_RPM=nodejs-devel-0.10.48-1nodesource.el7.centos.x86_64.rpm
-
 export LANG=en_US.UTF-8
 
 cd ~
@@ -35,7 +30,7 @@ sudo yum -y install epel-release >> CentOS_upgrade.txt 2>&1
 
 # add the Postgres repo
 echo "### Add Postgres repo ###" > CentOS_upgrade.txt
-sudo rpm -Uvh http://yum.postgresql.org/9.5/redhat/rhel-7-x86_64/pgdg-centos95-9.5-3.noarch.rpm >> CentOS_upgrade.txt 2>&1
+sudo rpm -Uvh https://download.postgresql.org/pub/repos/yum/9.5/redhat/rhel-7-x86_64/pgdg-centos95-9.5-3.noarch.rpm  >> CentOS_upgrade.txt 2>&1
 
 echo "Updating OS..."
 echo "### Update ###" >> CentOS_upgrade.txt
@@ -43,37 +38,19 @@ sudo yum -q -y update >> CentOS_upgrade.txt 2>&1
 echo "### Upgrade ###" >> CentOS_upgrade.txt
 sudo yum -q -y upgrade >> CentOS_upgrade.txt 2>&1
 
-
-echo "### Setup NTP..."
-sudo yum -q -y install ntp
-sudo chkconfig ntpd on
-#TODO: Better way to do this?
-sudo systemctl stop ntpd
-sudo ntpd -gq
-sudo systemctl start ntpd
-
 # Make sure that we are in ~ before trying to wget & install stuff
 cd ~
 
-echo "### Installing an ancient version of NodeJS"
-if [ -f "./${NODEJS_RPM}" ]; then
-    sudo yum -y install ./$NODEJS_RPM
-else
-    wget --quiet $NODEJS_URL/$NODEJS_RPM
-    sudo yum -y install ./$NODEJS_RPM
-fi
+echo "### Installing the repo for an ancient version of NodeJS"
+curl --silent --location https://rpm.nodesource.com/setup | sudo bash -
 
-echo "### Installing an ancient version of NodeJS development files"
-if [ -f "./${NODEJS_DEVEL_RPM}" ]; then
-    sudo yum -y install ./$NODEJS_DEVEL_RPM
-else
-    wget --quiet $NODEJS_URL/$NODEJS_DEVEL_RPM
-    sudo yum -y install ./$NODEJS_DEVEL_RPM
-fi
+echo "### Installing an ancient version of NodeJS"
+sudo yum install -y \
+  nodejs-0.10.46 \
+  nodejs-devel-0.10.46 \
+  yum-plugin-versionlock
 
 # Now try to lock NodeJS so that the next yum update doesn't remove it.
-echo "### Locking the version of NodeJS"
-sudo yum install -y yum-plugin-versionlock
 sudo yum versionlock nodejs*
 
 
@@ -134,6 +111,7 @@ sudo yum -y install \
     qt-postgresql \
     qtwebkit \
     qtwebkit-devel \
+    redhat-lsb-core \
     swig \
     tex-fonts-hebrew \
     texlive \
@@ -148,12 +126,6 @@ sudo yum -y install \
     xorg-x11-server-Xvfb \
     zip \
 
-
-##### tex* is not optimal. I think this adds too much stuff that we don't need. But, to remove it, we need
-# to crawl through the Hoot documentation dependencies
-# Things to look at:
-#     texlive \
-#     texlive-cyrillic \
 
 echo "##### Temp installs #####"
 
@@ -203,7 +175,6 @@ fi
 
 # We need this big dictionary for text matching. On Ubuntu, this is a package
 if [ ! -f /usr/share/dict/american-english-insane ]; then
-    echo "### Installing american-english-insane dictionary..."
     if [ -f ./american-english-insane.bz2 ] ; then
         sudo bash -c "bzcat ./american-english-insane.bz2 > /usr/share/dict/american-english-insane"
     else
@@ -421,7 +392,7 @@ fi
 
 if ! mocha --version &>/dev/null; then
     echo "### Installing mocha for plugins test..."
-    sudo npm install --silent -g mocha
+    sudo npm install --silent -g mocha@3.5.3
     # Clean up after the npm install
     sudo rm -rf ~/tmp
 fi
@@ -493,24 +464,6 @@ maintenance_work_mem = 256MB
 #checkpoint_segments = 20
 autovacuum = off
 EOT
-fi
-
-# configure kernel parameters
-
-SYSCTL_CONF=/etc/sysctl.conf
-sudo touch $SYSCTL_CONF
-if ! grep --quiet 1173741824 $SYSCTL_CONF; then
-    sudo cp $SYSCTL_CONF $SYSCTL_CONF.orig
-    echo "Setting kernel.shmmax"
-    sudo sysctl -w kernel.shmmax=1173741824
-    sudo sh -c "echo 'kernel.shmmax=1173741824' >> $SYSCTL_CONF"
-    #                 kernel.shmmax=68719476736
-fi
-if ! grep --quiet 2097152 $SYSCTL_CONF; then
-    echo "Setting kernel.shmall"
-    sudo sysctl -w kernel.shmall=2097152
-    sudo sh -c "echo 'kernel.shmall=2097152' >> $SYSCTL_CONF"
-    #                 kernel.shmall=4294967296
 fi
 
 echo "Restarting postgres"
