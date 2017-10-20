@@ -1,12 +1,21 @@
 #!/usr/bin/env bash
 
+set -e
+
+#################################################
+# VERY IMPORTANT: CHANGE THIS TO POINT TO WHERE YOU PUT HOOT
+HOOT_HOME=~/hoot
+echo HOOT_HOME: $HOOT_HOME
+#################################################
+
+# Common set of file versions
+source $HOOT_HOME/VagrantProvisionVars.sh
+
 VMUSER=`id -u -n`
 echo USER: $VMUSER
 VMGROUP=`groups | grep -o $VMUSER`
 echo GROUP: $VMGROUP
 
-HOOT_HOME=~/hoot
-echo HOOT_HOME: $HOOT_HOME
 cd ~
 source ~/.profile
 
@@ -18,9 +27,7 @@ fi
 
 echo "Updating OS..."
 sudo apt-get -qq update > Ubuntu_upgrade.txt 2>&1
-# Don't automatically update the oracle jdk, we need to control the version
-sudo apt-mark -qq hold oracle-java8-installer oracle-java8-set-default >> Ubuntu_upgrade.txt 2>&1
-sudo apt-get -q -y upgrade >> Ubuntu_upgrade.txt 2>&1
+# sudo apt-get -q -y upgrade >> Ubuntu_upgrade.txt 2>&1
 sudo apt-get -q -y dist-upgrade >> Ubuntu_upgrade.txt 2>&1
 
 echo "### Setup NTP..."
@@ -29,31 +36,24 @@ sudo service ntp stop
 sudo ntpd -gq
 sudo service ntp start
 
-if ! java -version 2>&1 | grep --quiet 1.8.0_131; then
+if ! java -version 2>&1 | grep --quiet $JDK_VERSION; then
     echo "### Installing Java 8..."
 
-    # jdk-8u112-linux-x64.tar.gz's official checksums:
-    #    sha256:  62b215bdfb48bace523723cdbb2157c665e6a25429c73828a32f00e587301236
-    #    md5: 75b2cb2249710d822a60f83e28860053
-    echo "75b2cb2249710d822a60f83e28860053  /tmp/jdk-8u131-linux-x64.tar.gz " > /tmp/jdk.md5
+    echo "${JDK_MD5}  ${JDK_TAR} " > ./jdk.md5
 
-    if [ ! -f /tmp/jdk-8u131-linux-x64.tar.gz ] || ! md5sum -c /tmp/jdk.md5; then
-        echo "Downloading jdk-8u131-linux-x64.tar.gz ...."
-        sudo wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jdk-8u131-linux-x64.tar.gz -P /tmp
-        echo "Finished download of jdk-8u131-linux-x64.tar.gz"
+    if [ ! -f ./${JDK_TAR} ] || ! md5sum -c ./jdk.md5; then
+        echo "Downloading ${JDK_TAR} ...."
+        wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" $JDK_URL
+        echo "Finished download of ${JDK_TAR}"
     fi
 
-    sudo tar -xvzf /tmp/jdk-8u131-linux-x64.tar.gz --directory=/tmp >/dev/null
+    sudo mkdir -p /usr/lib/jvm
+    sudo rm -rf /usr/lib/jvm/oracle_jdk8
 
-    if [[ ! -e /usr/lib/jvm ]]; then
-        sudo mkdir /usr/lib/jvm
-    else
-        if [[ -e /usr/lib/jvm/oracle_jdk8 ]]; then
-            sudo rm -rf /usr/lib/jvm/oracle_jdk8
-        fi
-    fi
+    sudo tar -xzf ./$JDK_TAR
+    sudo chown -R root:root ./jdk$JDK_VERSION
+    sudo mv -f ./jdk$JDK_VERSION /usr/lib/jvm/oracle_jdk8
 
-    sudo mv -f /tmp/jdk1.8.0_131 /usr/lib/jvm/oracle_jdk8
     sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/oracle_jdk8/jre/bin/java 9999
     sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/oracle_jdk8/bin/javac 9999
     echo "### Done with Java 8 install..."
@@ -68,15 +68,15 @@ if [ ! -f /etc/apt/sources.list.d/pgdg.list ]; then
 fi
 
 echo "### Installing dependencies from repos..."
-sudo apt-get -q -y install texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev \
+sudo apt-get -q -y install texinfo g++ libicu-dev libqt4-dev libqtwebkit-dev git-core libboost-dev libcppunit-dev \
  libcv-dev libopencv-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev \
  automake protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov maven \
  libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc curl npm libxerces-c28 \
  libglpk-dev libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew \
  w3m texlive-lang-cyrillic graphviz python-setuptools python python-pip git ccache distcc libogdi3.2-dev \
  gnuplot python-matplotlib libqt4-sql-sqlite ruby ruby-dev xvfb zlib1g-dev patch x11vnc openssh-server \
- htop unzip postgresql-9.5 postgresql-client-9.5 postgresql-9.5-postgis-scripts postgresql-9.5-postgis-2.3 \
- libpango-1.0-0 libappindicator1 valgrind dos2unix bc mlocate vim >> Ubuntu_upgrade.txt 2>&1
+ htop unzip postgresql-9.5 postgresql-client-9.5 postgresql-contrib-9.5 postgresql-9.5-postgis-scripts postgresql-9.5-postgis-2.3 \
+ libpango-1.0-0 libappindicator1 valgrind dos2unix bc mlocate vim docbook-xml dblatex >> Ubuntu_upgrade.txt 2>&1
 
 if ! dpkg -l | grep --quiet dictionaries-common; then
     # See /usr/share/doc/dictionaries-common/README.problems for details
@@ -127,8 +127,8 @@ if ! grep --quiet "PATH=" ~/.profile; then
     source ~/.profile
 fi
 
-# Whether the client uses distcc or not, have distcc set up and ready to go.  To turn it on, 
-# enable it in LocalConfig.pri, configure the slaves in ~/.distcc/hosts, and launch distccd on 
+# Whether the client uses distcc or not, have distcc set up and ready to go.  To turn it on,
+# enable it in LocalConfig.pri, configure the slaves in ~/.distcc/hosts, and launch distccd on
 # the slaves.
 if [ ! -f ~/.distcc/hosts ]; then
     echo "Adding distcc hosts file..."
@@ -142,6 +142,7 @@ if ! grep --quiet "DISTCC_TCP_CORK=0" ~/.profile; then
 fi
 
 if ! ruby -v | grep --quiet 2.3.0; then
+    echo "### Installing ruby..."
     # Ruby via rvm - from rvm.io
     gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 2>&1
 
@@ -160,38 +161,58 @@ EOT
 fi
 
 # gem installs are *very* slow, hence all the checks in place here to facilitate debugging
-gem list --local | grep -q mime-types
-if [ $? -eq 1 ]; then
+if ! gem list --local | grep -q mime-types; then
+    echo "Gem Install: mime-types"
+# gem list --local | grep -q mime-types
+# if [ $? -eq 1 ]; then
    #sudo gem install mime-types -v 2.6.2
    gem install mime-types
 fi
-gem list --local | grep -q cucumber
-if [ $? -eq 1 ]; then
+
+if ! gem list --local | grep -q cucumber; then
+    echo "Gem Install: cucumber"
+# gem list --local | grep -q cucumber
+# if [ $? -eq 1 ]; then
    #sudo gem install cucumber
    gem install cucumber
 fi
-gem list --local | grep -q capybara-webkit
-if [ $? -eq 1 ]; then
+
+if ! gem list --local | grep -q capybara-webkit; then
+    echo "Gem Install: capybara-webkit"
+# gem list --local | grep -q capybara-webkit
+# if [ $? -eq 1 ]; then
    #sudo gem install capybara-webkit
    gem install capybara-webkit
 fi
-gem list --local | grep -q selenium-webdriver
-if [ $? -eq 1 ]; then
+
+if ! gem list --local | grep -q selenium-webdriver; then
+    echo "Gem Install: selenium-webdriver"
+# gem list --local | grep -q selenium-webdriver
+# if [ $? -eq 1 ]; then
    #sudo gem install selenium-webdriver
    gem install selenium-webdriver
 fi
-gem list --local | grep -q rspec
-if [ $? -eq 1 ]; then
+
+if ! gem list --local | grep -q rspec; then
+    echo "Gem Install: rspec"
+# gem list --local | grep -q rspec
+# if [ $? -eq 1 ]; then
    #sudo gem install rspec
    gem install rspec
 fi
-gem list --local | grep -q capybara-screenshot
-if [ $? -eq 1 ]; then
+
+if ! gem list --local | grep -q capybara-screenshot; then
+    echo "Gem Install: capybara-screenshot"
+# gem list --local | grep -q capybara-screenshot
+# if [ $? -eq 1 ]; then
    #sudo gem install capybara-screenshot
    gem install capybara-screenshot
 fi
-gem list --local | grep -q selenium-cucumber
-if [ $? -eq 1 ]; then
+
+if ! gem list --local | grep -q selenium-cucumber; then
+    echo "Gem Install: selenium-cucumber"
+# gem list --local | grep -q selenium-cucumber
+# if [ $? -eq 1 ]; then
    #sudo gem install selenium-cucumber
    gem install selenium-cucumber
 fi
@@ -204,9 +225,8 @@ if  ! dpkg -l | grep --quiet google-chrome-stable; then
     if [ ! -f google-chrome-stable_current_amd64.deb ]; then
       wget --quiet https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
     fi
-    sudo apt-get -f -y -q install
+    sudo apt-get -q -y install gconf-service libgconf-2-4 gconf-service-backend gconf2-common
     sudo dpkg -i google-chrome-stable_current_amd64.deb
-    sudo apt-get -f -y -q install
 fi
 
 if [ ! -f bin/chromedriver ]; then
@@ -241,27 +261,22 @@ if [ ! -f bin/osmosis ]; then
     ln -s ~/bin/osmosis_src/bin/osmosis ~/bin/osmosis
 fi
 
-
-# For convenience, set the version of GDAL and FileGDB to download and install
-GDAL_VERSION=2.1.4
-FGDB_VERSION=1.5.1
-FGDB_VERSION2=`echo $FGDB_VERSION | sed 's/\./_/g;'`
-
 if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --version | grep -q $GDAL_VERSION && ogrinfo --formats | grep -q FileGDB ); then
-    if [ ! -f gdal-$GDAL_VERSION.tar.gz ]; then
+    if [ ! -f gdal-${GDAL_VERSION}.tar.gz ]; then
         echo "### Downloading GDAL $GDAL_VERSION source..."
-        wget --quiet http://download.osgeo.org/gdal/$GDAL_VERSION/gdal-$GDAL_VERSION.tar.gz
+        wget --quiet http://download.osgeo.org/gdal/$GDAL_VERSION/gdal-${GDAL_VERSION}.tar.gz
     fi
-    if [ ! -d gdal-$GDAL_VERSION ]; then
+    if [ ! -d gdal-${GDAL_VERSION} ]; then
         echo "### Extracting GDAL $GDAL_VERSION source..."
-        tar zxfp gdal-$GDAL_VERSION.tar.gz
+        tar zxfp gdal-${GDAL_VERSION}.tar.gz
     fi
 
+    FGDB_VERSION2=`echo $FGDB_VERSION | sed 's/\./_/g;'`
     if [ ! -f FileGDB_API_${FGDB_VERSION2}-64.tar.gz ]; then
         echo "### Downloading FileGDB API source..."
-        wget --quiet https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_${FGDB_VERSION}/FileGDB_API_${FGDB_VERSION2}-64.tar.gz
+        wget --quiet $FGDB_URL/FileGDB_API_${FGDB_VERSION2}-64.tar.gz
     fi
-    if [ ! -d /usr/local/FileGDB_API ]; then
+    if [ ! -d /usr/local/FileGDB_API/lib ]; then
         echo "### Extracting FileGDB API source & installing lib..."
         sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp FileGDB_API_${FGDB_VERSION2}-64.tar.gz --directory /usr/local/FileGDB_API --strip-components 1
         sudo sh -c "echo '/usr/local/FileGDB_API/lib' > /etc/ld.so.conf.d/filegdb.conf"
@@ -269,7 +284,7 @@ if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --version | grep -q $GDAL_VERSIO
 
     echo "### Building GDAL $GDAL_VERSION w/ FileGDB..."
     export PATH=/usr/local/lib:/usr/local/bin:$PATH
-    cd gdal-$GDAL_VERSION
+    cd gdal-${GDAL_VERSION}
     touch config.rpath
     echo "GDAL: configure"
     sudo ./configure --quiet --with-fgdb=/usr/local/FileGDB_API --with-pg=/usr/bin/pg_config --with-python
@@ -628,4 +643,3 @@ fi
 
 # Always start with a clean $HOOT_HOME/userfiles/tmp
 rm -rf $HOOT_HOME/userfiles/tmp
-

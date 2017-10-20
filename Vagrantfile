@@ -100,11 +100,15 @@ Vagrant.configure(2) do |config|
   # Ubuntu1604 Box
   # For testing before we upgrade from Ubuntu1404
   config.vm.define "hoot_ubuntu1604", autostart: false do |hoot_ubuntu1604|
-    hoot_ubuntu1604.vm.box = "ubuntu/xenial64"
-    hoot_ubuntu1604.vm.box_url = "https://atlas.hashicorp.com/ubuntu/boxes/xenial64"
+    #hoot_ubuntu1604.vm.box = "ubuntu/xenial64"
+    #hoot_ubuntu1604.vm.box_url = "https://atlas.hashicorp.com/ubuntu/boxes/xenial64"
 
     # Why does this box have an ubuntu user, not a vagrant user?   Why?????
-    config.vm.synced_folder ".", "/home/ubuntu/hoot"
+
+    hoot_ubuntu1604.vm.synced_folder ".", "/home/vagrant/hoot"
+    # This should work for libvirt and virtualbox.
+    hoot_ubuntu1604.vm.box = "elastic/ubuntu-16.04-x86_64"
+    hoot_ubuntu1604.vm.box_url = "https://app.vagrantup.com/elastic/boxes/ubuntu-16.04-x86_64"
 
     hoot_ubuntu1604.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvisionUbuntu1604.sh"
     hoot_ubuntu1604.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
@@ -214,8 +218,9 @@ Vagrant.configure(2) do |config|
       chgrp_ignore: true,
       chown_ignore: true,
       perms: nil
-    override.vm.box = "s3than/trusty64"
-    override.vm.box_url = "https://app.vagrantup.com/s3than/boxes/trusty64"
+    libvirt.cpu_model = "host-passthrough"
+    #override.vm.box = "s3than/trusty64"
+    #override.vm.box_url = "https://app.vagrantup.com/s3than/boxes/trusty64"
     #override.vm.box = "iknite/trusty64"
     #override.vm.box_url = "https://app.vagrantup.com/iknite/boxes/trusty64"
     libvirt.memory = 8192
