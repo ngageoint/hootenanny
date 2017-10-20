@@ -115,7 +115,7 @@ tds.rules = {
      'SSE':'seasonal_ice_limit', // Seasonal Ice Limit
      'UFI':'uuid', // Unique Feature Identifier. Handled in pre-processing
      'URI':'source:ref', // Unique Resource Identifier
-     'VOI':'vertical_obstruction_identifier', // Vertical Obstruction Identifier
+     'VOI':'aeroway:obstruction', // Vertical Obstruction Identifier
      'WAD':'well:description', // Water Well Construction Description
      'WPI':'world_port_index', // World Port Index Identifier - This is part of Built Up Area. What??
      'ZI001_NSD':'source:non_spatial_source:datetime', // Source Information : Non-spatial Source Date and Time
@@ -205,7 +205,7 @@ tds.rules = {
      'OHC':'max_clearance', // Overhead Clearance
      'PFD':'depth:predominant', // Predominant Feature Depth
      'PFH':'height:predominant', // Predominant Feature Height
-     'PVH':'raw:PVH', // Predominant Vegetation Height
+     'PVH':'height:vegetation', // Predominant Vegetation Height
      'PWA':'waterway:predominant_depth', // Predominant Water Depth
      'RAD':'curve_radius', // Curve Radius
      'RMWL':'median:min_width', // Route Median Width (lower value)
@@ -757,11 +757,11 @@ tds.rules = {
 
      // CCG - Military Environmental Hazard Category
      // ['CCG','-999999',undefined,undefined], // No Information
-     ['CCG','1','raw:CCG','biological'], // Biological
-     ['CCG','2','raw:CCG','chemical'], // Chemical
-     ['CCG','3','raw:CCG','nuclear_and/or_radiological'], // Nuclear and/or Radiological
-     ['CCG','4','raw:CCG','thermal'], // Thermal
-     ['CCG','999','raw:CCG','other'], // Other
+     ['CCG','1','military:hazard','biological'], // Biological
+     ['CCG','2','military:hazard','chemical'], // Chemical
+     ['CCG','3','military:hazard','nuclear_and/or_radiological'], // Nuclear and/or Radiological
+     ['CCG','4','military:hazard','thermal'], // Thermal
+     ['CCG','999','military:hazard','other'], // Other
 
      // CCT - Cover Closure Type
      // ['CCT','-999999',undefined,undefined], // No Information

@@ -1702,6 +1702,13 @@ tds61 = {
 
        // Debug
        // for (var i in tags) print('End PreProc Tags: ' + i + ': :' + tags[i] + ':');
+        // Tag changed
+
+        if (tags.vertical_obstruction_identifier)
+        {
+            tags['aeroway:obstruction'] = tags.vertical_obstruction_identifier;
+            delete tags.vertical_obstruction_identifier;
+        }
 
     }, // End applyToTdsPreProcessing
 
