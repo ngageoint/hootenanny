@@ -464,6 +464,11 @@ When(/^I press span with text "([^"]*)"$/) do |txt|
   find('span', :text=>txt).click
 end
 
+And(/^I scroll "([^"]*)" into view$/) do |txt|
+    element = page.driver.browser.find_element(:xpath=>"//*[contains(text(), '" + txt + "')]")
+    page.driver.browser.execute_script("arguments[0].scrollIntoView(true)", element)
+end
+
 When(/^I scroll "([^"]*)" element into view and press it$/) do |txt|
   include_hidden_fields do
     element = page.driver.browser.find_element(:xpath=>"//*[contains(text(), '" + txt + "')]")
@@ -998,6 +1003,6 @@ Then(/^I should (not )?see "([^"]*)" dataset after ([0-9]*) "([^"]*)"$/) do |neg
 end
 
 Then(/^I delete the "([^"]*)" translation/) do |txt|
-  el = find('a', :text=>txt)
+  el = find('span.hoverDiv2', :text=>txt)
   el.find('button.trash').click
 end

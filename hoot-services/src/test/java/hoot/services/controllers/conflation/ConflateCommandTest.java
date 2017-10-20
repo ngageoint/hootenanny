@@ -77,7 +77,7 @@ public class ConflateCommandTest {
         assertNotNull(conflateCommand.getWorkDir());
         assertNotNull(conflateCommand.getCommand());
 
-        String expectedCommand = "hoot conflate --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${STATS}";
+        String expectedCommand = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${STATS}";
         assertEquals(expectedCommand, conflateCommand.getCommand());
 
         assertTrue(conflateCommand.getSubstitutionMap().containsKey("DEBUG_LEVEL"));
