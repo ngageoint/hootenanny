@@ -22,7 +22,7 @@ pipeline {
         stage("Setup") {
             steps {
                 // Attempt to destroy exiting VM but don't stop job if not there
-                sh 'vagrant destroy -f || true'
+                sh 'vagrant destroy -f default || true'
                 // Make sure we have the tags info because figuring out the version is required in the build process
                 sh 'git fetch --tags'
                 sh 'cp -R ../software.ubuntu1404 software'
@@ -57,7 +57,7 @@ pipeline {
 	stage("Vagrant Up") {
             steps {
                 // NOTE: Only installs hoot build dependencies
-                sh 'vagrant up --provision-with software,hoot --provider aws'
+                sh 'vagrant up default --provision-with software,hoot --provider aws'
             }       
         }
         stage("Test Configure") {
@@ -72,7 +72,7 @@ pipeline {
             }
             steps {
                 // Run configuration tests
-                sh 'vagrant ssh -c "cd hoot; source ./SetupEnv.sh; ./scripts/TestConfigure.sh &> Hoot_Config_Test || { cat Hoot_Config_Test; false; }"'
+                sh 'vagrant ssh default -c "cd hoot; source ./SetupEnv.sh; ./scripts/TestConfigure.sh &> Hoot_Config_Test || { cat Hoot_Config_Test; false; }"'
             }
         }
         stage("Vagrant Provision") {
@@ -84,7 +84,7 @@ pipeline {
                 sh 'sed -i s/"#QMAKE_CXX=ccache g++"/"QMAKE_CXX=ccache g++"/g LocalConfig.pri'
                 
                 // Perform remainder of provisioning
-                sh 'vagrant provision --provision-with build,EGD,tomcat,mapnik,hadoop'
+                sh 'vagrant provision default --provision-with build,EGD,tomcat,mapnik,hadoop'
             }       
         }
 	stage("Core Tests") {
@@ -94,9 +94,9 @@ pipeline {
                 }
             }
             steps {
-                sh 'vagrant ssh -c "cd hoot; source ./SetupEnv.sh; hoot --version --debug"'
-                sh 'vagrant ssh -c "export HOOT_TEST_DIFF=--diff"'
-                sh 'vagrant ssh -c "cd hoot; bin/HootTest $HOOT_TEST_DIFF --glacial --parallel $(nproc)"'
+                sh 'vagrant ssh default -c "cd hoot; source ./SetupEnv.sh; hoot --version --debug"'
+                sh 'vagrant ssh default -c "export HOOT_TEST_DIFF=--diff"'
+                sh 'vagrant ssh default -c "cd hoot; bin/HootTest $HOOT_TEST_DIFF --glacial --parallel $(nproc)"'
             }
         }
         stage("Services Tests") {
@@ -106,9 +106,9 @@ pipeline {
                 }
             }
             steps {
-                sh 'vagrant ssh -c "cd hoot; make -sj`nproc` pp-test"'
-                sh 'vagrant ssh -c "cd hoot; make -sj`nproc` plugins-test"'
-                sh 'vagrant ssh -c "cd hoot; make -sj`nproc` services-test"'
+                sh 'vagrant ssh default -c "cd hoot; make -sj`nproc` pp-test"'
+                sh 'vagrant ssh default -c "cd hoot; make -sj`nproc` plugins-test"'
+                sh 'vagrant ssh default -c "cd hoot; make -sj`nproc` services-test"'
             }
         }
 	stage("UI Tests") {
@@ -118,14 +118,14 @@ pipeline {
                 }
             }
             steps {
-                sh 'vagrant ssh -c "cd hoot; make -s ui-test"'
+                sh 'vagrant ssh default -c "cd hoot; make -s ui-test"'
             }
         }
     }
     post {
         success {
             // If all tests passed, clean everything up
-            sh 'vagrant destroy -f'
+            sh 'vagrant destroy -f default'
             cleanWs()
         }
 	failure {

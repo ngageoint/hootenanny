@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 
 ###################################################
 # VERY IMPORTANT: Set the $HOOT_HOME environment  #
@@ -11,17 +12,21 @@ fi
 echo HOOT_HOME: $HOOT_HOME
 #################################################
 
+# Common set of file versions
+source $HOOT_HOME/VagrantProvisionVars.sh
+
 VMUSER=`id -u -n`
 echo USER: $VMUSER
 VMGROUP=`groups | grep -o $VMUSER`
 echo GROUP: $VMGROUP
 
-# Setting up versions and locations:
-STXXL_VERSION=stxxl-1.3.1
+# Centos7 specific file versions
+export STXXL_VERSION=stxxl-1.3.1
 
-# GDAL & FGDB. NOTE We parse the FGDB version later in the script to get the tar file name
-GDAL_VERSION=2.1.4
-FGDB_VERSION=1.5.1
+export LANG=en_US.UTF-8
+
+cd ~
+source ~/.bash_profile
 
 # add EPEL repo for extra packages
 echo "### Add epel repo ###" > CentOS_upgrade.txt
@@ -29,22 +34,13 @@ sudo yum -y install epel-release >> CentOS_upgrade.txt 2>&1
 
 # add the Postgres repo
 echo "### Add Postgres repo ###" > CentOS_upgrade.txt
-sudo rpm -Uvh http://yum.postgresql.org/9.5/redhat/rhel-7-x86_64/pgdg-centos95-9.5-3.noarch.rpm >> CentOS_upgrade.txt 2>&1
+sudo rpm -Uvh https://download.postgresql.org/pub/repos/yum/9.5/redhat/rhel-7-x86_64/pgdg-centos95-9.5-3.noarch.rpm  >> CentOS_upgrade.txt 2>&1
 
 echo "Updating OS..."
 echo "### Update ###" >> CentOS_upgrade.txt
 sudo yum -q -y update >> CentOS_upgrade.txt 2>&1
 echo "### Upgrade ###" >> CentOS_upgrade.txt
 sudo yum -q -y upgrade >> CentOS_upgrade.txt 2>&1
-
-
-echo "### Setup NTP..."
-sudo yum -q -y install ntp
-sudo chkconfig ntpd on
-#TODO: Better way to do this?
-sudo systemctl stop ntpd
-sudo ntpd -gq
-sudo systemctl start ntpd
 
 # Make sure that we are in ~ before trying to wget & install stuff
 cd ~
@@ -105,6 +101,7 @@ sudo yum -y install \
     qt-postgresql \
     qtwebkit \
     qtwebkit-devel \
+    redhat-lsb-core \
     swig \
     tex-fonts-hebrew \
     texlive \
@@ -209,9 +206,12 @@ fi
 
 # We need this big dictionary for text matching. On Ubuntu, this is a package
 if [ ! -f /usr/share/dict/american-english-insane ]; then
-    echo "### Installing american-english-insane dictionary..."
+    if [ -f ./american-english-insane.bz2 ] ; then
+        sudo bash -c "bzcat ./american-english-insane.bz2 > /usr/share/dict/american-english-insane"
+    else
         wget --quiet -N https://s3.amazonaws.com/hoot-rpms/support-files/american-english-insane.bz2
         sudo bash -c "bzcat american-english-insane.bz2 > /usr/share/dict/american-english-insane"
+    fi
 fi
 
 #####
@@ -422,7 +422,7 @@ fi
 
 if ! mocha --version &>/dev/null; then
     echo "### Installing mocha for plugins test..."
-    sudo npm install --silent -g mocha
+    sudo npm install --silent -g mocha@3.5.3
     # Clean up after the npm install
     sudo rm -rf ~/tmp
 fi
@@ -494,24 +494,6 @@ maintenance_work_mem = 256MB
 #checkpoint_segments = 20
 autovacuum = off
 EOT
-fi
-
-# configure kernel parameters
-
-SYSCTL_CONF=/etc/sysctl.conf
-sudo touch $SYSCTL_CONF
-if ! grep --quiet 1173741824 $SYSCTL_CONF; then
-    sudo cp $SYSCTL_CONF $SYSCTL_CONF.orig
-    echo "Setting kernel.shmmax"
-    sudo sysctl -w kernel.shmmax=1173741824
-    sudo sh -c "echo 'kernel.shmmax=1173741824' >> $SYSCTL_CONF"
-    #                 kernel.shmmax=68719476736
-fi
-if ! grep --quiet 2097152 $SYSCTL_CONF; then
-    echo "Setting kernel.shmall"
-    sudo sysctl -w kernel.shmall=2097152
-    sudo sh -c "echo 'kernel.shmall=2097152' >> $SYSCTL_CONF"
-    #                 kernel.shmall=4294967296
 fi
 
 echo "Restarting postgres"

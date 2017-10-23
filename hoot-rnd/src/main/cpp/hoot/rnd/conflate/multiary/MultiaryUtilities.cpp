@@ -91,9 +91,9 @@ QList<MultiaryElement> MultiaryUtilities::conflateCluster(QList<QByteArray> pbfE
     {
       throw IllegalArgumentException("Expected exactly one element in each pbfElements entry.");
     }
-    NodePtr n = tmpMap->getNodes().begin()->second;
+    ElementPtr n = tmpMap->getNodes().begin()->second->cloneSp();
     n->setStatus(Status::fromInput(0));
-    map->addElement(tmpMap->getNodes().begin()->second);
+    map->addElement(n);
   }
 
   // we only work with nodes right now.
@@ -155,7 +155,7 @@ QList<hoot::MultiarySimpleMatch> MultiaryUtilities::findMatches(QByteArray check
       throw IllegalArgumentException("Expected exactly one element in each againstElements entry.");
     }
     ids.append(tmpMap->getNodes().begin()->first);
-    map->addElement(tmpMap->getNodes().begin()->second);
+    map->addElement(tmpMap->getNodes().begin()->second->cloneSp());
   }
 
   // we only work with nodes right now.

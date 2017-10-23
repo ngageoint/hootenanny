@@ -1,10 +1,15 @@
 #!/usr/bin/env bash
 
+set -e
+
 #################################################
 # VERY IMPORTANT: CHANGE THIS TO POINT TO WHERE YOU PUT HOOT
 HOOT_HOME=~/hoot
 echo HOOT_HOME: $HOOT_HOME
 #################################################
+
+# Common set of file versions
+source $HOOT_HOME/VagrantProvisionVars.sh
 
 VMUSER=`id -u -n`
 echo USER: $VMUSER
@@ -22,7 +27,7 @@ fi
 
 echo "Updating OS..."
 sudo apt-get -qq update > Ubuntu_upgrade.txt 2>&1
-sudo apt-get -q -y upgrade >> Ubuntu_upgrade.txt 2>&1
+# sudo apt-get -q -y upgrade >> Ubuntu_upgrade.txt 2>&1
 sudo apt-get -q -y dist-upgrade >> Ubuntu_upgrade.txt 2>&1
 
 echo "### Setup NTP..."
@@ -31,18 +36,10 @@ sudo service ntp stop
 sudo ntpd -gq
 sudo service ntp start
 
-JDK_TAR=jdk-8u152-linux-x64.tar.gz
-JDK_URL=http://download.oracle.com/otn-pub/java/jdk/8u152-b16/aa0333dd3019491ca4f6ddbe78cdb6d0/$JDK_TAR
-JDK_VERSION=1.8.0_152
-
 if ! java -version 2>&1 | grep --quiet $JDK_VERSION; then
     echo "### Installing Java 8..."
 
-    # jdk-8u152-linux-x64.tar.gz's official checksums:
-    #    sha256: 218b3b340c3f6d05d940b817d0270dfe0cfd657a636bad074dcabe0c111961bf
-    #    md5: 20dddd28ced3179685a5f58d3fcbecd8
-    echo "20dddd28ced3179685a5f58d3fcbecd8  ${JDK_TAR} " > ./jdk.md5
-
+    echo "${JDK_MD5}  ${JDK_TAR} " > ./jdk.md5
 
     if [ ! -f ./${JDK_TAR} ] || ! md5sum -c ./jdk.md5; then
         echo "Downloading ${JDK_TAR} ...."
@@ -56,6 +53,7 @@ if ! java -version 2>&1 | grep --quiet $JDK_VERSION; then
     sudo tar -xzf ./$JDK_TAR
     sudo chown -R root:root ./jdk$JDK_VERSION
     sudo mv -f ./jdk$JDK_VERSION /usr/lib/jvm/oracle_jdk8
+
     sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/oracle_jdk8/jre/bin/java 9999
     sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/oracle_jdk8/bin/javac 9999
     echo "### Done with Java 8 install..."
@@ -144,6 +142,7 @@ if ! grep --quiet "DISTCC_TCP_CORK=0" ~/.profile; then
 fi
 
 if ! ruby -v | grep --quiet 2.3.0; then
+    echo "### Installing ruby..."
     # Ruby via rvm - from rvm.io
     gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 2>&1
 
@@ -162,38 +161,58 @@ EOT
 fi
 
 # gem installs are *very* slow, hence all the checks in place here to facilitate debugging
-gem list --local | grep -q mime-types
-if [ $? -eq 1 ]; then
+if ! gem list --local | grep -q mime-types; then
+    echo "Gem Install: mime-types"
+# gem list --local | grep -q mime-types
+# if [ $? -eq 1 ]; then
    #sudo gem install mime-types -v 2.6.2
    gem install mime-types
 fi
-gem list --local | grep -q cucumber
-if [ $? -eq 1 ]; then
+
+if ! gem list --local | grep -q cucumber; then
+    echo "Gem Install: cucumber"
+# gem list --local | grep -q cucumber
+# if [ $? -eq 1 ]; then
    #sudo gem install cucumber
    gem install cucumber
 fi
-gem list --local | grep -q capybara-webkit
-if [ $? -eq 1 ]; then
+
+if ! gem list --local | grep -q capybara-webkit; then
+    echo "Gem Install: capybara-webkit"
+# gem list --local | grep -q capybara-webkit
+# if [ $? -eq 1 ]; then
    #sudo gem install capybara-webkit
    gem install capybara-webkit
 fi
-gem list --local | grep -q selenium-webdriver
-if [ $? -eq 1 ]; then
+
+if ! gem list --local | grep -q selenium-webdriver; then
+    echo "Gem Install: selenium-webdriver"
+# gem list --local | grep -q selenium-webdriver
+# if [ $? -eq 1 ]; then
    #sudo gem install selenium-webdriver
    gem install selenium-webdriver
 fi
-gem list --local | grep -q rspec
-if [ $? -eq 1 ]; then
+
+if ! gem list --local | grep -q rspec; then
+    echo "Gem Install: rspec"
+# gem list --local | grep -q rspec
+# if [ $? -eq 1 ]; then
    #sudo gem install rspec
    gem install rspec
 fi
-gem list --local | grep -q capybara-screenshot
-if [ $? -eq 1 ]; then
+
+if ! gem list --local | grep -q capybara-screenshot; then
+    echo "Gem Install: capybara-screenshot"
+# gem list --local | grep -q capybara-screenshot
+# if [ $? -eq 1 ]; then
    #sudo gem install capybara-screenshot
    gem install capybara-screenshot
 fi
-gem list --local | grep -q selenium-cucumber
-if [ $? -eq 1 ]; then
+
+if ! gem list --local | grep -q selenium-cucumber; then
+    echo "Gem Install: selenium-cucumber"
+# gem list --local | grep -q selenium-cucumber
+# if [ $? -eq 1 ]; then
    #sudo gem install selenium-cucumber
    gem install selenium-cucumber
 fi
@@ -206,9 +225,8 @@ if  ! dpkg -l | grep --quiet google-chrome-stable; then
     if [ ! -f google-chrome-stable_current_amd64.deb ]; then
       wget --quiet https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
     fi
-    sudo apt-get -f -y -q install
+    sudo apt-get -q -y install gconf-service libgconf-2-4 gconf-service-backend gconf2-common
     sudo dpkg -i google-chrome-stable_current_amd64.deb
-    sudo apt-get -f -y -q install
 fi
 
 if [ ! -f bin/chromedriver ]; then
@@ -243,27 +261,22 @@ if [ ! -f bin/osmosis ]; then
     ln -s ~/bin/osmosis_src/bin/osmosis ~/bin/osmosis
 fi
 
-
-# For convenience, set the version of GDAL and FileGDB to download and install
-GDAL_VERSION=2.1.4
-FGDB_VERSION=1.5.1
-FGDB_VERSION2=`echo $FGDB_VERSION | sed 's/\./_/g;'`
-
 if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --version | grep -q $GDAL_VERSION && ogrinfo --formats | grep -q FileGDB ); then
-    if [ ! -f gdal-$GDAL_VERSION.tar.gz ]; then
+    if [ ! -f gdal-${GDAL_VERSION}.tar.gz ]; then
         echo "### Downloading GDAL $GDAL_VERSION source..."
-        wget --quiet http://download.osgeo.org/gdal/$GDAL_VERSION/gdal-$GDAL_VERSION.tar.gz
+        wget --quiet http://download.osgeo.org/gdal/$GDAL_VERSION/gdal-${GDAL_VERSION}.tar.gz
     fi
-    if [ ! -d gdal-$GDAL_VERSION ]; then
+    if [ ! -d gdal-${GDAL_VERSION} ]; then
         echo "### Extracting GDAL $GDAL_VERSION source..."
-        tar zxfp gdal-$GDAL_VERSION.tar.gz
+        tar zxfp gdal-${GDAL_VERSION}.tar.gz
     fi
 
+    FGDB_VERSION2=`echo $FGDB_VERSION | sed 's/\./_/g;'`
     if [ ! -f FileGDB_API_${FGDB_VERSION2}-64.tar.gz ]; then
         echo "### Downloading FileGDB API source..."
-        wget --quiet https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_${FGDB_VERSION}/FileGDB_API_${FGDB_VERSION2}-64.tar.gz
+        wget --quiet $FGDB_URL/FileGDB_API_${FGDB_VERSION2}-64.tar.gz
     fi
-    if [ ! -d /usr/local/FileGDB_API ]; then
+    if [ ! -d /usr/local/FileGDB_API/lib ]; then
         echo "### Extracting FileGDB API source & installing lib..."
         sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp FileGDB_API_${FGDB_VERSION2}-64.tar.gz --directory /usr/local/FileGDB_API --strip-components 1
         sudo sh -c "echo '/usr/local/FileGDB_API/lib' > /etc/ld.so.conf.d/filegdb.conf"
@@ -271,7 +284,7 @@ if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --version | grep -q $GDAL_VERSIO
 
     echo "### Building GDAL $GDAL_VERSION w/ FileGDB..."
     export PATH=/usr/local/lib:/usr/local/bin:$PATH
-    cd gdal-$GDAL_VERSION
+    cd gdal-${GDAL_VERSION}
     touch config.rpath
     echo "GDAL: configure"
     sudo ./configure --quiet --with-fgdb=/usr/local/FileGDB_API --with-pg=/usr/bin/pg_config --with-python
