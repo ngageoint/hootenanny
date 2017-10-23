@@ -2,9 +2,14 @@
 
 set -e
 
-#################################################
-# VERY IMPORTANT: CHANGE THIS TO POINT TO WHERE YOU PUT HOOT
-HOOT_HOME=~/hoot
+###################################################
+# VERY IMPORTANT: Set the $HOOT_HOME environment  #
+# variable prior to running this script if ~/hoot #
+# isn't the correct location for HOOT_HOME        #
+###################################################
+if [ -z "$HOOT_HOME" ]; then
+    HOOT_HOME="~/hoot"
+fi
 echo HOOT_HOME: $HOOT_HOME
 #################################################
 
@@ -101,7 +106,7 @@ sudo /usr/bin/perl $HOOT_HOME/scripts/maven/SetMavenHttps.pl
 
 if ! grep --quiet "export HOOT_HOME" ~/.profile; then
     echo "Adding hoot home to profile..."
-    echo "export HOOT_HOME=~/hoot" >> ~/.profile
+    echo "export HOOT_HOME=$HOOT_HOME" >> ~/.profile
     echo "export PATH=\$PATH:\$HOOT_HOME/bin" >> ~/.profile
     source ~/.profile
 fi

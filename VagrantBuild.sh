@@ -11,7 +11,9 @@ else # Centos
   source ~/.bash_profile
 fi
 
-HOOT_HOME=~/hoot
+if [ -z "$HOOT_HOME" ]; then
+    HOOT_HOME=~/hoot
+fi
 echo HOOT_HOME: $HOOT_HOME
 
 cd $HOOT_HOME
@@ -40,7 +42,6 @@ echo "Building Hoot... "
 echo "Will take several extra minutes to build the training data the initial time Hootenanny is installed only."
 make -s clean && make -sj$(nproc)
 
-# Waiting until Tomcat8 is installed
 # vagrant will auto start the tomcat service for us, so just copy the web app files w/o manipulating the server
 TOMCAT_USER=tomcat8
 VMUSER=`id -u -n`
