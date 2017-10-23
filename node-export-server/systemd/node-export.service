@@ -4,8 +4,8 @@ After=syslog.target network.target
 
 [Service]
 Type=single
-User=vagrant
-WorkingDirectory=/home/vagrant/hoot/node-export-server
+User=SERVICE_USER
+WorkingDirectory=HOOT_HOME/node-export-server
 ExecStart=/usr/bin/npm start
 ExecStop=kill -HUP $MAINPID
 Restart=on-abort

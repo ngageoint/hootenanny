@@ -156,11 +156,8 @@ sudo cp -r include /usr/
 sudo cp -r lib /usr/
 sudo cp -r share /usr/
 
-# Stxxl:
-cd ~
-git clone http://github.com/stxxl/stxxl.git stxxl
-
 # Stxxl
+cd ~
 if [ ! -f "${STXXL_VERSION}.tar.gz" ]; then
     wget --quiet https://github.com/ngageoint/hootenanny-rpms/raw/master/src/SOURCES/${STXXL_VERSION}.tar.gz
 fi
@@ -170,7 +167,7 @@ cd stxxl
 make -s config_gnu
 echo "STXXL_ROOT	=`pwd`" > make.settings.local
 echo "ENABLE_SHARED     = yes" >> make.settings.local
-echo "COMPILER_GCC      = g++ -std=c++0x" >> make.settings.local
+echo "COMPILER_GCC      = g++ -std=c++11" >> make.settings.local
 # Total hack because 1.3.1 doesn't compile right on CentOS7
 sed -i 's/#include <sys\/mman.h>/#include <sys\/mman.h>\n#include <unistd.h>/g' ./utils/mlock.cpp
 
@@ -188,6 +185,7 @@ popd
 
 sudo /sbin/ldconfig
 
+cd ~
 #### So much easier to make later versions, uncomment when we upgrade to 1.4.0+
 #mkdir build
 #cd build
@@ -230,7 +228,7 @@ sudo /usr/bin/perl $HOOT_HOME/scripts/maven/SetMavenHttps.pl
 
 if ! grep --quiet "export HOOT_HOME" ~/.bash_profile; then
     echo "Adding hoot home to profile..."
-    echo "export HOOT_HOME=~/hoot" >> ~/.bash_profile
+    echo "export HOOT_HOME=$\$HOOT_HOME" >> ~/.bash_profile
     echo "export PATH=\$PATH:\$HOOT_HOME/bin" >> ~/.bash_profile
     source ~/.bash_profile
 fi
@@ -369,6 +367,9 @@ if [ ! -f /etc/ld.so.conf.d/postgres$PG_VERSION.conf ]; then
     sudo sh -c "echo '/usr/pgsql-$PG_VERSION/lib' > /etc/ld.so.conf.d/postgres$PG_VERSION.conf"
     sudo ldconfig
 fi
+
+# Make sure that we are in the home directory when downloading packages
+cd ~
 
 # Tweak the FGDB version so we can get the filename
 FGDB_VERSION2=`echo $FGDB_VERSION | sed 's/\./_/g;'`
@@ -697,6 +698,8 @@ cd ~
 ##### These two are next to do.
 echo "### Installing node-mapnik-server..."
 sudo cp $HOOT_HOME/node-mapnik-server/systemd/node-mapnik.service /etc/systemd/system/node-mapnik.service
+sudo sed -i "s/SERVICE_USER/$VMUSER/g" /etc/systemd/system/node-mapnik.service
+sudo sed -i "s|HOOT_HOME|$HOOT_HOME|g" /etc/systemd/system/node-mapnik.service
 # Make sure all npm modules are installed
 cd $HOOT_HOME/node-mapnik-server
 npm install --silent
@@ -705,6 +708,8 @@ rm -rf ~/tmp
 
 echo "### Installing node-export-server..."
 sudo cp $HOOT_HOME/node-export-server/systemd/node-export.service /etc/systemd/system/node-export.service
+sudo sed -i "s/SERVICE_USER/$VMUSER/g" /etc/systemd/system/node-export.service
+sudo sed -i "s|HOOT_HOME|$HOOT_HOME|g" /etc/systemd/system/node-export.service
 # Make sure all npm modules are installed
 cd $HOOT_HOME/node-export-server
 npm install --silent
