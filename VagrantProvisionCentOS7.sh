@@ -1,8 +1,13 @@
 #!/usr/bin/env bash
 
-#################################################
-# VERY IMPORTANT: CHANGE THIS TO POINT TO WHERE YOU PUT HOOT
-HOOT_HOME=~/hoot
+###################################################
+# VERY IMPORTANT: Set the $HOOT_HOME environment  #
+# variable prior to running this script if ~/hoot #
+# isn't the correct location for HOOT_HOME        #
+###################################################
+if [ -z "$HOOT_HOME" ]; then
+    HOOT_HOME="~/hoot"
+fi
 echo HOOT_HOME: $HOOT_HOME
 #################################################
 
