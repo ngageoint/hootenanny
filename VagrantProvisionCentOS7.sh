@@ -250,7 +250,7 @@ if ! grep --quiet "export HADOOP_HOME" ~/.bash_profile; then
     source ~/.bash_profile
 fi
 
-if ! ruby -v | grep --quiet 2.3.0; then
+if ! $( hash ruby >/dev/null 2>&1 && ruby -v | grep --quiet 2.3.0); then
     # Ruby via rvm - from rvm.io
     # Running this twice so that it should not error out
     gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 || \
