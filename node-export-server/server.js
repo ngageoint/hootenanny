@@ -247,6 +247,8 @@ function doExport(req, res, hash, input) {
             temp_file = outDir + '.osm';
             command += 'wget -q ' + cert_param + ' -O ' + temp_file + ' ' + input + '?bbox=' + bbox + ' && ';
             input = temp_file;
+            //bbox not valid with osm file input source
+            bbox = null;
         }
 
         //create command and run
