@@ -51,9 +51,9 @@ fi
 
 if [ $REBUILD_VAGRANT == 'true' ]; then
     vagrant destroy default -f
-    time -p vagrant up default --provider vsphere
+    time -p vagrant up default --provider aws
 else
-    time -p vagrant up default --provision-with nfs,build,EGD,tomcat,mapnik,hadoop --provider vsphere
+    time -p vagrant up default --provision-with build,EGD,tomcat,mapnik,hadoop --provider aws
 fi
 
 # Disableing this until it gets moved earlier into the build.
