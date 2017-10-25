@@ -17,13 +17,13 @@ pipeline {
             defaultValue: true)
         booleanParam(name: 'UI_tests',
             defaultValue: true)
-        string(name: 'BOX', defaultValue: 'default', description: 'Vagrant Box')
+        string(name: 'Box', defaultValue: 'default', description: 'Vagrant Box')
     }
     stages {
         stage("Setup") {
             steps {
                 // Attempt to destroy exiting VM but don't stop job if not there
-                sh "vagrant destroy -f ${params.BOX} || true"
+                sh "vagrant destroy -f ${params.Box} || true"
                 // Make sure we have the tags info because figuring out the version is required in the build process
                 sh 'git fetch --tags'
                 sh 'cp -R ../software.ubuntu1404 software'
@@ -58,7 +58,7 @@ pipeline {
 	stage("Vagrant Up") {
             steps {
                 // NOTE: Only installs hoot build dependencies
-                sh "vagrant up ${params.BOX} --provision-with software,hoot --provider aws"
+                sh "vagrant up ${params.Box} --provision-with software,hoot --provider aws"
             }       
         }
         stage("Test Configure") {
@@ -73,7 +73,7 @@ pipeline {
             }
             steps {
                 // Run configuration tests
-                sh "vagrant ssh ${params.BOX} -c \"cd hoot; source ./SetupEnv.sh; ./scripts/TestConfigure.sh &> Hoot_Config_Test || { cat Hoot_Config_Test; false; }\""
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; ./scripts/TestConfigure.sh &> Hoot_Config_Test || { cat Hoot_Config_Test; false; }'"
             }
         }
         stage("Vagrant Provision") {
@@ -85,7 +85,7 @@ pipeline {
                 sh 'sed -i s/"#QMAKE_CXX=ccache g++"/"QMAKE_CXX=ccache g++"/g LocalConfig.pri'
                 
                 // Perform remainder of provisioning
-                sh "vagrant provision ${params.BOX} --provision-with build,EGD,tomcat,mapnik,hadoop"
+                sh "vagrant provision ${params.Box} --provision-with build,EGD,tomcat,mapnik,hadoop"
             }       
         }
 	stage("Core Tests") {
@@ -95,7 +95,7 @@ pipeline {
                 }
             }
             steps {
-                sh "vagrant ssh ${params.BOX} -c 'cd hoot; source ./SetupEnv.sh; hoot --version --debug; export HOOT_TEST_DIFF=--diff; bin/HootTest \$HOOT_TEST_DIFF --glacial --parallel \$(nproc)'"
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot --version --debug; export HOOT_TEST_DIFF=--diff; bin/HootTest \$HOOT_TEST_DIFF --glacial --parallel \$(nproc)'"
             }
         }
         stage("Services Tests") {
@@ -105,9 +105,9 @@ pipeline {
                 }
             }
             steps {
-                sh "vagrant ssh ${params.BOX} -c \"cd hoot; make -sj`nproc` pp-test\""
-                sh "vagrant ssh ${params.BOX} -c \"cd hoot; make -sj`nproc` plugins-test\""
-                sh "vagrant ssh ${params.BOX} -c \"cd hoot; make -sj`nproc` services-test\""
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` pp-test'"
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` plugins-test'"
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` services-test'"
             }
         }
 	stage("UI Tests") {
@@ -117,14 +117,14 @@ pipeline {
                 }
             }
             steps {
-                sh "vagrant ssh ${params.BOX} -c \"cd hoot; make -s ui-test\""
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; make -s ui-test'"
             }
         }
     }
     post {
         success {
             // If all tests passed, clean everything up
-            sh "vagrant destroy -f ${params.BOX}"
+            sh "vagrant destroy -f ${params.Box}"
             cleanWs()
         }
 	failure {
@@ -132,7 +132,7 @@ pipeline {
                 // Check to see if we failed last time
                 if (currentBuild.previousBuild.result == 'FAILURE') {
                     // Copy over any UI failure screenshots
-                    sh "vagrant scp ${params.BOX}:~/hoot/test-files/ui/screenshot_*.png ./test-files/ui/"
+                    sh "vagrant scp ${params.Box}:~/hoot/test-files/ui/screenshot_*.png ./test-files/ui/"
                     emailext (
                         to: '$DEFAULT_RECIPIENTS',
                         subject: "Still Failing: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
@@ -166,7 +166,7 @@ pipeline {
                         )
                 } else  if (currentBuild.currentResult == 'FAILURE') {
                     // Copy over any UI failure screenshots
-                    sh "vagrant scp ${params.BOX}:~/hoot/test-files/ui/screenshot_*.png ./test-files/ui/"
+                    sh "vagrant scp ${params.Box}:~/hoot/test-files/ui/screenshot_*.png ./test-files/ui/"
                     emailext (
                         to: '$DEFAULT_RECIPIENTS',
                         subject: "Failed: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
