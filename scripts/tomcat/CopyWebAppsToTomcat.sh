@@ -5,9 +5,9 @@ set -e
 echo Deploying web application files...
 
 # Set this for use later
-export OS_NAME=$(awk -F= '/^NAME/{print $2}' /etc/os-release)
+export OS_NAME="$(lsb_release -i -s)"
 
-if [ "$OS_NAME" == "\"Ubuntu\"" ]
+if [ "$OS_NAME" == "Ubuntu" ]
 then
   source ~/.profile
 else # Centos
