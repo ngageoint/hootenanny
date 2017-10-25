@@ -35,6 +35,76 @@ Vagrant.configure(2) do |config|
     config.vm.network "forwarded_port", guest: 8000, host: mapnikPort
   end
 
+  def aws_provider(config, os)
+    # AWS Provider.  Set enviornment variables for values below to use
+    config.vm.provider :aws do |aws, override|
+      override.nfs.functional = false
+      aws.instance_type = ENV.fetch('AWS_INSTANCE_TYPE', 'm3.xlarge')
+      aws.block_device_mapping = [{ 'DeviceName' => '/dev/sda1', 'Ebs.VolumeSize' => 32 }]
+
+      # By default we assume that we're using the AWS "dummy" box and manually
+      # specify an Ubuntu AMI.  These assumptions will be removed when we migrate
+      # to boxes that have native AWS providers that use the standard Vagrant key.
+      if os == 'Ubuntu1404'
+        override.vm.box = 'dummmy'
+        override.ssh.private_key_path = ENV['AWS_PRIVATE_KEY_PATH']
+        aws.ami = ENV['AWS_AMI_UBUNTU1404']
+      end
+
+      if ENV.key?('AWS_KEYPAIR_NAME')
+        aws.keypair_name = ENV['AWS_KEYPAIR_NAME']
+      end
+
+      if ENV.key?('AWS_SECURITY_GROUP')
+        aws.security_groups = ENV['AWS_SECURITY_GROUP']
+      end
+
+      aws.tags = {
+        'Name' => ENV.fetch('AWS_INSTANCE_NAME_TAG', "jenkins-hootenanny-#{os.downcase}"),
+        'URL'  => ENV.fetch('AWS_INSTANCE_URL_TAG', 'https://github.com/ngageoint/hootenanny'),
+      }
+
+      if ENV.key?('JOB_NAME')
+        aws.tags['JobName'] = ENV['JOB_NAME']
+      end
+
+      if ENV.key?('BUILD_NUMBER')
+        aws.tags['BuildNumber'] = ENV['BUILD_NUMBER']
+      end
+
+      # Copy over predownloaded packages if they are found
+      override.vm.provision 'software', type: 'shell', run: 'always', :inline => '( [ -d /home/vagrant/hoot/software ] && cp /home/vagrant/hoot/software/* /home/vagrant ) || true'
+
+      # Setting up provisioners for AWS, in the correct order, depending on the OS platform.
+      if os == 'Ubuntu1404'
+        override.vm.provision 'hoot', type: 'shell', :privileged => false, :path => 'VagrantProvision.sh'
+        tomcat_script = 'sudo service tomcat8 restart'
+        mapnik_script = 'sudo service node-mapnik-server start'
+      elsif os == 'Ubuntu1604'
+        override.vm.provision 'hoot', type: 'shell', :privileged => false, :path => 'VagrantProvision1604.sh'
+        # TODO: Doesn't 16.04 use systemd too?
+        tomcat_script = 'sudo service tomcat8 restart'
+        mapnik_script = 'sudo service node-mapnik-server start'
+      elsif os == 'CentOS7'
+        override.vm.provision 'hoot', type: 'shell', :privileged => false, :path => 'VagrantProvisionCentOS7.sh'
+        tomcat_script = 'sudo systemctl restart tomcat8'
+        mapnik_script = 'sudo systemctl restart node-mapnik'
+      end
+
+      override.vm.provision 'build', type: 'shell', :privileged => false, :path => 'VagrantBuild.sh'
+      override.vm.provision 'EGD', type: 'shell', :privileged => false, :inline  => '([ -f ~/ActivateEGDplugin.sh ] && sudo -u tomcat8 ~/ActivateEGDplugin.sh /var/lib/tomcat8) || true'
+      override.vm.provision 'tomcat', type: 'shell', :privileged => false, :inline => tomcat_script, run: 'always'
+      override.vm.provision 'mapnik', type: 'shell', :privileged => false, :inline => mapnik_script, run: 'always'
+
+      # TODO: Why is node-export only on CentOS?
+      if os.start_with?('CentOS')
+        override.vm.provision 'export', type: 'shell', :privileged => false, :inline => 'sudo systemctl restart node-export'
+      end
+
+      override.vm.provision 'hadoop', type: 'shell', :privileged => false, :inline => 'stop-all.sh && start-all.sh', run: 'always'
+    end
+  end
+
   # Global settings - default for Ubuntu1404
 
   # Ubuntu1404 Box
@@ -48,6 +118,8 @@ Vagrant.configure(2) do |config|
     hoot.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo service tomcat8 restart", run: "always"
     hoot.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo service node-mapnik-server start", run: "always"
     hoot.vm.provision "hadoop", type: "shell", :privileged => false, :inline => "stop-all.sh && start-all.sh", run: "always"
+
+    aws_provider(hoot, 'Ubuntu1404')
   end
 
   config.vm.define "docker14.04", autostart: false do |dock1404|
@@ -89,8 +161,8 @@ Vagrant.configure(2) do |config|
     dockcentos72.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-mapnik", run: "always"
     dockcentos72.vm.provision "export", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-export", run: "always"
     dockcentos72.vm.provision "hadoop", type: "shell", :privileged => false, :inline => "stop-all.sh && start-all.sh", run: "always"
-    
-    
+
+
   end
 
 
@@ -119,27 +191,9 @@ Vagrant.configure(2) do |config|
 
   # Centos7 box
   config.vm.define "hoot_centos7", autostart: false do |hoot_centos7|
-    # This seems to be the "latest" version of centos7
-    # hoot_centos7.vm.box = "centos/7"
-    # hoot_centos7.vm.box_url = "https://atlas.hashicorp.com/centos/boxes/7"
-
-    # There are a lot of different Centos7.2 boxes.
-    hoot_centos7.vm.box = "bento/centos-7.2"
-    hoot_centos7.vm.box_url = "https://atlas.hashicorp.com/bento/boxes/centos-7.2"
-
-    # Stop the default vagrant rsyncing
-    config.vm.synced_folder '.', '/home/vagrant/sync', disabled: true
-
-    # NOTE: Networking needs some tweaking.
-    # If you don't want to use NFS, then something like this will work:
-    # hoot_centos7.vm.synced_folder '.', '/home/vagrant/hoot', type: 'rsync'
-
-    hoot_centos7.vm.network "private_network", ip: "192.168.33.10"
-    hoot_centos7.nfs.map_uid = Process.uid
-    hoot_centos7.nfs.map_gid = Process.gid
-    # Enabled async, this makes small file writes much faster (e.g. unzip)
-    hoot_centos7.vm.synced_folder ".", "/home/vagrant/.hoot-nfs", type: "nfs", :linux__nfs_options => ['rw','no_subtree_check','all_squash','async']
-    hoot_centos7.bindfs.bind_folder "/home/vagrant/.hoot-nfs", "/home/vagrant/hoot", perms: nil
+    hoot_centos7.vm.box = "hoot/centos7-minimal"
+    hoot_centos7.vm.hostname = "hoot-centos"
+    hoot_centos7.vm.synced_folder ".", "/home/vagrant/hoot"
 
     hoot_centos7.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvisionCentOS7.sh"
     hoot_centos7.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
@@ -147,6 +201,8 @@ Vagrant.configure(2) do |config|
     hoot_centos7.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-mapnik", run: "always"
     hoot_centos7.vm.provision "export", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-export", run: "always"
     hoot_centos7.vm.provision "hadoop", type: "shell", :privileged => false, :inline => "stop-all.sh && start-all.sh", run: "always"
+
+    aws_provider(hoot_centos7, 'CentOS7')
   end
 
 
@@ -227,7 +283,6 @@ Vagrant.configure(2) do |config|
     libvirt.cpus = 8
   end
 
-
   # This is a provider for the Parallels Virtualization Software
   # Run "vagrant up --provider=parallels" to spin up using parallels.
   # WARNING: Minimally tested
@@ -256,30 +311,6 @@ Vagrant.configure(2) do |config|
       override.hoot_ubuntu1604.vm.box_url = "https://atlas.hashicorp.com/puphpet/boxes/ubuntu1604-x64"
   end
 
-  # AWS Provider.  Set enviornment variables for values below to use
-  config.vm.provider "aws" do |aws, override|
-    override.vm.box               = "dummy"
-    override.nfs.functional       = false
-    override.ssh.username         = "vagrant"
-    override.ssh.private_key_path = ENV['AWS_PRIVATE_KEY_PATH']
-    aws.instance_type             = "m3.xlarge"
-    aws.block_device_mapping      = [{ 'DeviceName' => '/dev/sda1', 'Ebs.VolumeSize' => 32 }]
-    aws.access_key_id             = ENV['AWS_ACCESS_KEY_ID']
-    aws.secret_access_key         = ENV['AWS_SECRET_ACCESS_KEY']
-    aws.keypair_name              = ENV['AWS_KEYPAIR_NAME']
-    aws.security_groups           = ENV['AWS_SECURITY_GROUP']
-    aws.ami                       = ENV['AWS_AMI_UBUNTU1404']
-
-    # Copy over predownloaded packages if they are found
-    override.vm.provision "software", type: "shell", run: "always", :inline => "( [ -d /home/vagrant/hoot/software ] && cp /home/vagrant/hoot/software/* /home/vagrant ) || true"
-    override.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvision.sh"
-    override.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
-    override.vm.provision "EGD", type: "shell", :privileged => false, :inline  => "([ -f ~/ActivateEGDplugin.sh ] && sudo -u tomcat8 ~/ActivateEGDplugin.sh /var/lib/tomcat8) || true"
-    override.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo service tomcat8 restart", run: "always"
-    override.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo service node-mapnik-server start", run: "always"
-    override.vm.provision "hadoop", type: "shell", :privileged => false, :inline => "stop-all.sh && start-all.sh", run: "always"
-  end
-
   # TODO: Add vSphere provider
 end
 
@@ -291,4 +322,3 @@ else
     load 'VagrantfileLocal.vbox'
   end
 end
-
