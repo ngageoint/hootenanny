@@ -27,6 +27,9 @@
 #ifndef IMPLICITTAGRULESQLITERECORDWRITER_H
 #define IMPLICITTAGRULESQLITERECORDWRITER_H
 
+// Hoot
+#include <hoot/rnd/io/ImplicitTagRuleWordPartWriter.h>
+
 // Qt
 #include <QString>
 #include <QMap>
@@ -40,19 +43,35 @@ namespace hoot
 /**
  * Writes implicit tag rules ot a Sqlite database
  */
-class ImplicitTagRuleSqliteRecordWriter
+class ImplicitTagRuleSqliteRecordWriter : public ImplicitTagRuleWordPartWriter
 {
 
 public:
 
+  static std::string className() { return "hoot::ImplicitTagRuleSqliteRecordWriter"; }
+
   ImplicitTagRuleSqliteRecordWriter();
   ~ImplicitTagRuleSqliteRecordWriter();
 
-  void open(const QString url);
+  /**
+   * @see ImplicitTagRuleWordPartWriter
+   */
+  virtual bool isSupported(const QString url);
 
-  void write(const QString word, const QString kvp, const long wordTagOccurranceCount);
+  /**
+   * @see ImplicitTagRuleWordPartWriter
+   */
+  virtual void open(const QString url);
 
-  void close();
+  /**
+   * @see ImplicitTagRuleWordPartWriter
+   */
+  virtual void write(const long totalParts = -1);
+
+  /**
+   * @see ImplicitTagRuleWordPartWriter
+   */
+  virtual void close();
 
 private:
 

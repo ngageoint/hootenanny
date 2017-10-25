@@ -72,38 +72,38 @@ void ImplicitTagRulesJsonWriter::open(const QString url)
   _file->write(QString("[\n").toUtf8());
 }
 
-void ImplicitTagRulesJsonWriter::write(const ImplicitTagRuleWordPart& ruleWordPart,
-                                       const long totalParts)
+//TODO: fix
+void ImplicitTagRulesJsonWriter::write(const long /*totalParts*/)
 {
-  _file->write(QString("  {\n").toUtf8());
+//  _file->write(QString("  {\n").toUtf8());
 
-  const QString word = ruleWordPart.getWord();
-  const QString wordLine = "    \"word\": \"" % word % "\",\n";
-  _file->write(wordLine.toUtf8());
+//  const QString word = ruleWordPart.getWord();
+//  const QString wordLine = "    \"word\": \"" % word % "\",\n";
+//  _file->write(wordLine.toUtf8());
 
-  long kvpCtr = 0;
-  const QMap<QString, long> kvpsWithCount = ruleWordPart.getTagsToCounts();
-  for (QMap<QString, long>::const_iterator kvpItr = kvpsWithCount.begin();
-       kvpItr != kvpsWithCount.end(); ++kvpItr)
-  {
-    QString kvpLine = "    \"" % kvpItr.key() % "\": " % QString::number(kvpItr.value());
-    if (kvpCtr < (kvpsWithCount.size() - 1))
-    {
-       kvpLine += ",";
-    }
-    kvpLine += "\n";
-    _file->write(kvpLine.toUtf8());
-    kvpCtr++;
-  }
+//  long kvpCtr = 0;
+//  const QMap<QString, long> kvpsWithCount = ruleWordPart.getTagsToCounts();
+//  for (QMap<QString, long>::const_iterator kvpItr = kvpsWithCount.begin();
+//       kvpItr != kvpsWithCount.end(); ++kvpItr)
+//  {
+//    QString kvpLine = "    \"" % kvpItr.key() % "\": " % QString::number(kvpItr.value());
+//    if (kvpCtr < (kvpsWithCount.size() - 1))
+//    {
+//       kvpLine += ",";
+//    }
+//    kvpLine += "\n";
+//    _file->write(kvpLine.toUtf8());
+//    kvpCtr++;
+//  }
 
-  QString closingRuleLine = "  }";
-  if (_ruleCtr < (totalParts - 1))
-  {
-    closingRuleLine += ",";
-  }
-  closingRuleLine += "\n";
-  _file->write(closingRuleLine.toUtf8());
-  _ruleCtr++;
+//  QString closingRuleLine = "  }";
+//  if (_ruleCtr < (totalParts - 1))
+//  {
+//    closingRuleLine += ",";
+//  }
+//  closingRuleLine += "\n";
+//  _file->write(closingRuleLine.toUtf8());
+//  _ruleCtr++;
 }
 
 void ImplicitTagRulesJsonWriter::close()

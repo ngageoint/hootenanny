@@ -67,28 +67,28 @@ void ImplicitTagRulesTsvWriter::open(const QString url)
   LOG_DEBUG("Opened: " << url << ".");
 }
 
-void ImplicitTagRulesTsvWriter::write(const ImplicitTagRuleWordPart& ruleWordPart,
-                                      const long /*totalParts*/)
+//TODO: fix
+void ImplicitTagRulesTsvWriter::write(const long /*totalParts*/)
 {
   //each word takes up two rows; first col in first row contains words; remaining cols in first row
   //contain kvps; in second row, each kvp has the count directly below it
 
-  const QString word = ruleWordPart.getWord();
-  QString row1 = word % "\t";
-  QString row2 = "\t";
-  const QMap<QString, long> kvpsWithCount = ruleWordPart.getTagsToCounts();
-  for (QMap<QString, long>::const_iterator kvpItr = kvpsWithCount.begin();
-       kvpItr != kvpsWithCount.end(); ++kvpItr)
-  {
-    row1 += kvpItr.key() % "\t";
-    row2 += QString::number(kvpItr.value()) % "\t";
-  }
-  row1.chop(1);
-  row1 += "\n";
-  _file->write(row1.toUtf8());
-  row2.chop(1);
-  row2 += "\n";
-  _file->write(row2.toUtf8());
+//  const QString word = ruleWordPart.getWord();
+//  QString row1 = word % "\t";
+//  QString row2 = "\t";
+//  const QMap<QString, long> kvpsWithCount = ruleWordPart.getTagsToCounts();
+//  for (QMap<QString, long>::const_iterator kvpItr = kvpsWithCount.begin();
+//       kvpItr != kvpsWithCount.end(); ++kvpItr)
+//  {
+//    row1 += kvpItr.key() % "\t";
+//    row2 += QString::number(kvpItr.value()) % "\t";
+//  }
+//  row1.chop(1);
+//  row1 += "\n";
+//  _file->write(row1.toUtf8());
+//  row2.chop(1);
+//  row2 += "\n";
+//  _file->write(row2.toUtf8());
 }
 
 void ImplicitTagRulesTsvWriter::close()

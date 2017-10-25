@@ -30,7 +30,6 @@
 
 // Hoot
 #include <hoot/core/elements/Tags.h>
-#include <hoot/rnd/schema/ImplicitTagRuleWordPart.h>
 
 // Qt
 #include <QString>
@@ -93,27 +92,15 @@ public:
    */
   long getRuleCount();
 
-  bool hasMoreRuleWordParts();
-  ImplicitTagRuleWordPartPtr getNextRuleWordPart();
-
-  void setMaxQueryResultsSize(const long size) { _maxQueryResultsSize = size; }
-
 private:
 
   QString _path;
   QSqlDatabase _db;
 
   QSqlQuery _ruleCountQuery;
-  boost::shared_ptr<QSqlQuery> _ruleWordPartIterator;
-  QSqlQuery _maxRuleIdQuery;
   long _currentRuleId;
-  long _maxRuleId;
-  //ImplicitTagRuleWordPartPtr _nextRuleWordPart;
-  int _maxQueryResultsSize;
 
   void _prepareQueries();
-  long _getMaxRuleId();
-  ImplicitTagRuleWordPartPtr _resultToRuleWordPart(QSqlQuery& resultIterator);
 };
 
 }

@@ -36,7 +36,6 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/io/ElementVisitorInputStream.h>
 #include <hoot/core/visitors/TranslationVisitor.h>
-#include <hoot/rnd/io/ImplicitTagRulesSqliteReader.h>
 
 // Qt
 #include <QStringBuilder>
@@ -225,7 +224,7 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs,
             for (int i = 0; i < names.size(); i++)
             {
               QString name = names.at(i);
-              //'=' is used as a map key for kvps, so it needs to be escaped in the word
+              //'=' is used in the map key for kvps, so it needs to be escaped in the word
               if (name.contains("="))
               {
                 name = name.replace("=", "%3D");
@@ -284,79 +283,56 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs,
 //  LOG_INFO("Highest rule word count: " << _highestRuleWordCount);
 //  LOG_INFO("Highest rule tag count: " << _highestRuleTagCount);
 
-  _writeRulesToSqlite(sqliteOutput);
-
-  QList<boost::shared_ptr<ImplicitTagRuleWordPartWriter> > ruleWordPartWriters =
-    _getNonSqliteOutputWriters(outputs);
-  if (!ruleWordPartWriters.isEmpty())
-  {
-    _writeToNonSqliteOutputs(ruleWordPartWriters, sqliteOutput);
-  }
+  _writeRules(outputs, sqliteOutput);
 }
 
-void PoiImplicitTagRulesDeriver::_writeRulesToSqlite(const QString sqliteOutput)
-{
-  _ruleWriter.open(sqliteOutput);
-  while (!_sortedDedupedCountFile->atEnd())
-  {
-    const QString line = QString::fromUtf8(_sortedCountFile->readLine().constData());
-    LOG_VART(line);
-    const QStringList lineParts = line.split("\t");
-    LOG_VART(lineParts);
-    const QString word = lineParts[1];
-    LOG_VART(word);
-    const QString kvp = lineParts[2];
-    LOG_VART(kvp);
-    const long ruleTagCount = lineParts[0].toLong();
-    LOG_VART(ruleTagCount);
+//void PoiImplicitTagRulesDeriver::_writeRulesToSqlite(const QString sqliteOutput)
+//{
+//  _ruleWriter.open(sqliteOutput);
+//  while (!_sortedDedupedCountFile->atEnd())
+//  {
+//    const QString line = QString::fromUtf8(_sortedCountFile->readLine().constData());
+//    LOG_VART(line);
+//    const QStringList lineParts = line.split("\t");
+//    LOG_VART(lineParts);
+//    const QString word = lineParts[1];
+//    LOG_VART(word);
+//    const QString kvp = lineParts[2];
+//    LOG_VART(kvp);
+//    const long ruleTagCount = lineParts[0].toLong();
+//    LOG_VART(ruleTagCount);
 
-    _ruleWriter.write(word, kvp, ruleTagCount);
-  }
-  _ruleWriter.close();
-}
+//    _ruleWriter.write(word, kvp, ruleTagCount);
+//  }
+//  _ruleWriter.close();
+//}
 
-QList<boost::shared_ptr<ImplicitTagRuleWordPartWriter> > PoiImplicitTagRulesDeriver::_getNonSqliteOutputWriters(
+QList<boost::shared_ptr<ImplicitTagRuleWordPartWriter> > PoiImplicitTagRulesDeriver::_getOutputWriters(
   const QStringList outputs)
 {
   QList<boost::shared_ptr<ImplicitTagRuleWordPartWriter> > ruleWordPartWriters;
   for (int i = 0; i < outputs.size(); i++)
   {
     const QString output = outputs.at(i);
-    if (!output.endsWith(".sqlite"))
-    {
-      boost::shared_ptr<ImplicitTagRuleWordPartWriter> ruleWordPartWriter =
-        ImplicitTagRuleWordPartWriterFactory::getInstance().createWriter(output);
-      ruleWordPartWriter->open(output);
-      ruleWordPartWriters.append(ruleWordPartWriter);
-    }
+    boost::shared_ptr<ImplicitTagRuleWordPartWriter> ruleWordPartWriter =
+      ImplicitTagRuleWordPartWriterFactory::getInstance().createWriter(output);
+    ruleWordPartWriter->open(output);
+    ruleWordPartWriters.append(ruleWordPartWriter);
   }
   return ruleWordPartWriters;
 }
 
-void PoiImplicitTagRulesDeriver::_writeToNonSqliteOutputs(
-  QList<boost::shared_ptr<ImplicitTagRuleWordPartWriter> >& ruleWordPartWriters,
-  const QString sqliteOutput)
+void PoiImplicitTagRulesDeriver::_writeRules(const QStringList outputs,
+                                             const QString sqliteOutputFile)
 {
-  ImplicitTagRulesSqliteReader rulesReader;
-  rulesReader.open(sqliteOutput);
-  while (rulesReader.hasMoreRuleWordParts())
-  {
-    const ImplicitTagRuleWordPartPtr ruleWordPart = rulesReader.getNextRuleWordPart();
-    //LOG_VART(ruleWordPart);
-    for (QList<boost::shared_ptr<ImplicitTagRuleWordPartWriter> >::iterator writersItr = ruleWordPartWriters.begin();
-       writersItr != ruleWordPartWriters.end();
-       ++writersItr)
-    {
-      boost::shared_ptr<ImplicitTagRuleWordPartWriter> rulesWriter = *writersItr;
-      rulesWriter->write(*ruleWordPart);
-    }
-  }
-  rulesReader.close();
+  QList<boost::shared_ptr<ImplicitTagRuleWordPartWriter> > ruleWordPartWriters =
+    _getOutputWriters(outputs);
   for (QList<boost::shared_ptr<ImplicitTagRuleWordPartWriter> >::iterator writersItr = ruleWordPartWriters.begin();
-       writersItr != ruleWordPartWriters.end();
-       ++writersItr)
+       writersItr != ruleWordPartWriters.end(); ++writersItr)
   {
     boost::shared_ptr<ImplicitTagRuleWordPartWriter> rulesWriter = *writersItr;
+    rulesWriter->open(sqliteOutputFile);
+    rulesWriter->write();
     rulesWriter->close();
   }
 }
@@ -380,7 +356,9 @@ void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccuranceThresholdAndSortByOccu
   //occurrance counts below the specified threshold, and replaces the space between the prepended
   //count and the word with a tab. - not sure why 1 needs to be subtracted from
   //minOccurancesThreshold here...
-  //TODO: should this be sorted by word instead?
+
+  //TODO: should this be sorted by word instead? - sort alphabetically on second col
+
   const QString cmd =
     "sort " + _countFile->fileName() + " | uniq -c | sort -n -r | awk -v limit=" +
     QString::number(minOccurancesThreshold - 1) +
@@ -393,7 +371,7 @@ void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccuranceThresholdAndSortByOccu
 
 void PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
 {
-  //TODO: in case of ties, pick the more specific tag (?)
+  //i.e. don't allow amenity=school AND amenity=building in the same rule
 
   _sortedDedupedCountFile.reset(
     new QTemporaryFile(
@@ -423,6 +401,8 @@ void PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
     LOG_VART(key);
     const QString wordKey = word % ";" % key;
     LOG_VART(wordKey);
+
+    //TODO: in case of ties, pick the more specific tag (?)
 
     //The lines are sorted by occurrence count.  So the first time we see one word-key combo, we
     //know it had the highest occurrence count, and we can ignore all subsequent instances since

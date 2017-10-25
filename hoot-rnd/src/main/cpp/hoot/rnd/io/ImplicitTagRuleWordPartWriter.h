@@ -27,9 +27,6 @@
 #ifndef IMPLICITTAGRULEWORDPARTWRITER_H
 #define IMPLICITTAGRULEWORDPARTWRITER_H
 
-// hoot
-#include <hoot/rnd/schema/ImplicitTagRuleWordPart.h>
-
 namespace hoot
 {
 
@@ -48,7 +45,7 @@ public:
    *
    * @param wordRulePart an implicit tag word rule part
    */
-  virtual void write(const ImplicitTagRuleWordPart& ruleWordPart, const long totalParts = -1) = 0;
+  virtual void write(const long totalParts = -1) = 0;
 
   /**
    * Returns true if the output URL is supported.

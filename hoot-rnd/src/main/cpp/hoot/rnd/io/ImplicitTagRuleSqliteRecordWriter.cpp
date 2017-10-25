@@ -49,6 +49,11 @@ ImplicitTagRuleSqliteRecordWriter::~ImplicitTagRuleSqliteRecordWriter()
   close();
 }
 
+bool ImplicitTagRuleSqliteRecordWriter::isSupported(const QString url)
+{
+  return url.endsWith(".db", Qt::CaseInsensitive);
+}
+
 void ImplicitTagRuleSqliteRecordWriter::open(const QString url)
 {
   QFile outputFile(url);
@@ -215,55 +220,55 @@ long ImplicitTagRuleSqliteRecordWriter::_getRuleId(const long wordId, const long
   }
 }
 
-void ImplicitTagRuleSqliteRecordWriter::write(const QString word, const QString kvp,
-                                              const long wordTagOccurranceCount)
+void ImplicitTagRuleSqliteRecordWriter::write(const long /*totalParts*/)
 {
   DbUtils::execNoPrepare(_db, "BEGIN");
 
-  bool wordPreviouslyExisted = false;
-  long wordId = _getWordId(word);
-  if (wordId == -1)
-  {
-    wordId = _insertWord(word);
-  }
-  else
-  {
-    wordPreviouslyExisted = true;
-  }
+//TODO: fix
+//  bool wordPreviouslyExisted = false;
+//  long wordId = _getWordId(word);
+//  if (wordId == -1)
+//  {
+//    wordId = _insertWord(word);
+//  }
+//  else
+//  {
+//    wordPreviouslyExisted = true;
+//  }
 
-  bool tagPreviouslyExisted = false;
-  long tagId = _getTagId(word);
-  if (tagId == -1)
-  {
-    tagId = _insertTag(kvp);
-  }
-  else
-  {
-    tagPreviouslyExisted = true;
-  }
+//  bool tagPreviouslyExisted = false;
+//  long tagId = _getTagId(word);
+//  if (tagId == -1)
+//  {
+//    tagId = _insertTag(kvp);
+//  }
+//  else
+//  {
+//    tagPreviouslyExisted = true;
+//  }
 
-  long ruleId = -1;
-  long ruleCount = -1;
-  if (!wordPreviouslyExisted || !tagPreviouslyExisted)
-  {
-    ruleId = _currentRuleId;
-    _currentRuleId++;
-  }
-  else
-  {
-    ruleId = _getRuleId(wordId, tagId);
-  }
-  if (ruleId == -1)
-  {
-    ruleId = _currentRuleId;;
-    _currentRuleId++;
-  }
-  else
-  {
-    assert(ruleCount != -1);
-    ruleCount++;
-  }
-  _insertRuleRecord(ruleId, wordId, tagId, wordTagOccurranceCount);
+//  long ruleId = -1;
+//  long ruleCount = -1;
+//  if (!wordPreviouslyExisted || !tagPreviouslyExisted)
+//  {
+//    ruleId = _currentRuleId;
+//    _currentRuleId++;
+//  }
+//  else
+//  {
+//    ruleId = _getRuleId(wordId, tagId);
+//  }
+//  if (ruleId == -1)
+//  {
+//    ruleId = _currentRuleId;;
+//    _currentRuleId++;
+//  }
+//  else
+//  {
+//    assert(ruleCount != -1);
+//    ruleCount++;
+//  }
+//  _insertRuleRecord(ruleId, wordId, tagId, wordTagOccurranceCount);
 
   DbUtils::execNoPrepare(_db, "COMMIT");
 

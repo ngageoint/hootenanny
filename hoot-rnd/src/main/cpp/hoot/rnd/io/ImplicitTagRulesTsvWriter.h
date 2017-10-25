@@ -50,22 +50,22 @@ public:
   ~ImplicitTagRulesTsvWriter();
 
   /**
-   * @see ImplicitTagRulesWriter
+   * @see ImplicitTagRuleWordPartWriter
    */
   virtual bool isSupported(const QString url);
 
   /**
-   * @see ImplicitTagRulesWriter
+   * @see ImplicitTagRuleWordPartWriter
    */
   virtual void open(const QString url);
 
   /**
-   * @see ImplicitTagRulesWriter
+   * @see ImplicitTagRuleWordPartWriter
    */
-  virtual void write(const ImplicitTagRuleWordPart& ruleWordPart, const long totalParts = -1);
+  virtual void write(const long totalParts = -1);
 
   /**
-   * @see ImplicitTagRulesWriter
+   * @see ImplicitTagRuleWordPartWriter
    */
   virtual void close();
 

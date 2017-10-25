@@ -75,6 +75,7 @@ private:
   //for testing
   friend class PoiImplicitTagRulesDeriverTest;
 
+  //TODO: replace with BigMap
   QMap<QString, QString>/*FixedLengthStringToFixedLengthStringMap*//*Tgs::BigMap<FixedLengthString, FixedLengthString>*/ _wordCaseMappings;
   //Technically, this could be done with a vector, but I want to piggy back off BigMap.
   /*FixedLengthStringToLongMap*/QMap<QString, long> _wordKeysToCounts;   //TODO: replace with BigMap
@@ -112,12 +113,9 @@ private:
   void _removeDuplicatedKeyTypes();
 
   QString _getSqliteOutput(const QStringList outputs);
-  QList<boost::shared_ptr<ImplicitTagRuleWordPartWriter> > _getNonSqliteOutputWriters(
+  QList<boost::shared_ptr<ImplicitTagRuleWordPartWriter> > _getOutputWriters(
     const QStringList outputs);
-  void _writeToNonSqliteOutputs(
-    QList<boost::shared_ptr<ImplicitTagRuleWordPartWriter> >& ruleWordPartWriters,
-    const QString sqliteOutput);
-  void _writeRulesToSqlite(const QString sqliteOutput);
+  void _writeRules(const QStringList outputs, const QString sqliteOutputFile);
 };
 
 }

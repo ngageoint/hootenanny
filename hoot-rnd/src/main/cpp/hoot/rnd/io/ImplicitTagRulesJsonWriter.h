@@ -62,7 +62,7 @@ public:
   /**
    * @see ImplicitTagRulesWriter
    */
-  virtual void write(const ImplicitTagRuleWordPart& ruleWordPart, const long totalParts = -1);
+  virtual void write(const long totalParts = -1);
 
   /**
    * @see ImplicitTagRulesWriter
