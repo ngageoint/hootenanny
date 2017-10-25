@@ -72,13 +72,16 @@ public:
     map->addNode(n1);
 
     {
-      PoiPolygonMatch uut(map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+      PoiPolygonMatch uut(
+        map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
       uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
       uut.setNameScoreThreshold(0.8);
       uut.setTypeScoreThreshold(0.8);
+      uut.setMatchEvidenceThreshold(3);
+      uut.setReviewEvidenceThreshold(1);
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
 
       HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
@@ -88,13 +91,16 @@ public:
     n1->getTags().set("name", "foo");
 
     {
-      PoiPolygonMatch uut(map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+      PoiPolygonMatch uut(
+        map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
       uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
       uut.setNameScoreThreshold(0.8);
       uut.setTypeScoreThreshold(0.8);
+      uut.setMatchEvidenceThreshold(3);
+      uut.setReviewEvidenceThreshold(1);
       uut.calculateMatch(n1->getElementId(), w1->getElementId());
 
       HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
@@ -120,13 +126,16 @@ public:
     n1->getTags().set("poi", true);
 
     {
-      PoiPolygonMatch uut(map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+      PoiPolygonMatch uut(
+        map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
       uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
       uut.setNameScoreThreshold(0.8);
       uut.setTypeScoreThreshold(0.8);
+      uut.setMatchEvidenceThreshold(3);
+      uut.setReviewEvidenceThreshold(1);
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
 
       HOOT_STR_EQUALS("match: 0 miss: 1 review: 0", uut.getClassification());
@@ -136,13 +145,16 @@ public:
     n1->getTags().set("name", "foo");
     n1->setX(-8);
     {
-      PoiPolygonMatch uut(map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+      PoiPolygonMatch uut(
+        map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
       uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
       uut.setNameScoreThreshold(0.8);
       uut.setTypeScoreThreshold(0.8);
+      uut.setMatchEvidenceThreshold(3);
+      uut.setReviewEvidenceThreshold(1);
       uut.calculateMatch(n1->getElementId(), w1->getElementId());
 
       HOOT_STR_EQUALS("match: 0 miss: 1 review: 0", uut.getClassification());
@@ -168,13 +180,16 @@ public:
     n1->getTags().set("poi", true);
 
     {
-      PoiPolygonMatch uut(map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+      PoiPolygonMatch uut(
+        map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
       uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
       uut.setNameScoreThreshold(0.8);
       uut.setTypeScoreThreshold(0.8);
+      uut.setMatchEvidenceThreshold(3);
+      uut.setReviewEvidenceThreshold(1);
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
 
       HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());
@@ -183,13 +198,16 @@ public:
     n1->getTags().set("name", "foo");
     n1->setX(-5);
     {
-      PoiPolygonMatch uut(map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+      PoiPolygonMatch uut(
+        map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
       uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
       uut.setNameScoreThreshold(0.8);
       uut.setTypeScoreThreshold(0.8);
+      uut.setMatchEvidenceThreshold(3);
+      uut.setReviewEvidenceThreshold(1);
       uut.calculateMatch(n1->getElementId(), w1->getElementId());
 
       HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());
@@ -198,13 +216,16 @@ public:
     n1->getTags().set("name", "foo");
     n1->setX(-7);
     {
-      PoiPolygonMatch uut(map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+      PoiPolygonMatch uut(
+        map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
       uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
       uut.setNameScoreThreshold(0.8);
       uut.setTypeScoreThreshold(0.8);
+      uut.setMatchEvidenceThreshold(3);
+      uut.setReviewEvidenceThreshold(1);
       uut.calculateMatch(n1->getElementId(), w1->getElementId());
 
       HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());
@@ -233,13 +254,16 @@ public:
     map->addNode(n1);
 
     {
-      PoiPolygonMatch uut(map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+      PoiPolygonMatch uut(
+        map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
       uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
       uut.setNameScoreThreshold(0.8);
       uut.setTypeScoreThreshold(0.8);
+      uut.setMatchEvidenceThreshold(3);
+      uut.setReviewEvidenceThreshold(1);
       QStringList reviewIfMatchedTypes;
       reviewIfMatchedTypes.append("area=yes");
       reviewIfMatchedTypes.append("blah=bleh");
@@ -250,13 +274,16 @@ public:
     }
 
     {
-      PoiPolygonMatch uut(map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+      PoiPolygonMatch uut(
+        map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
       uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
       uut.setNameScoreThreshold(0.8);
       uut.setTypeScoreThreshold(0.8);
+      uut.setMatchEvidenceThreshold(3);
+      uut.setReviewEvidenceThreshold(1);
       QStringList reviewIfMatchedTypes;
       reviewIfMatchedTypes.append("building=yes");
       reviewIfMatchedTypes.append("blah=bleh");
@@ -267,13 +294,16 @@ public:
     }
 
     {
-      PoiPolygonMatch uut(map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+      PoiPolygonMatch uut(
+        map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
       uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
       uut.setNameScoreThreshold(0.8);
       uut.setTypeScoreThreshold(0.8);
+      uut.setMatchEvidenceThreshold(3);
+      uut.setReviewEvidenceThreshold(1);
       QStringList reviewIfMatchedTypes;
       reviewIfMatchedTypes.append("blah=bleh");
       uut.setReviewIfMatchedTypes(reviewIfMatchedTypes);

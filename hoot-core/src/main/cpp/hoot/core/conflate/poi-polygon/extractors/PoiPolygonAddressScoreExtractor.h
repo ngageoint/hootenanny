@@ -68,12 +68,20 @@ public:
   virtual double extract(const OsmMap& map, const ConstElementPtr& poi,
                          const ConstElementPtr& poly) const;
 
+  /**
+   * Determines if an element has an address
+   *
+   * @param element the element to examine for an address
+   * @return true if the element has an address; false otherwise
+   */
+  static bool hasAddress(const Element& element);
+
 private:
 
-  void _collectAddressesFromElement(ConstElementPtr element, QSet<QString>& addresses) const;
-  void _collectAddressesFromWayNodes(ConstWayPtr way, QSet<QString>& addresses,
+  void _collectAddressesFromElement(const Element& element, QSet<QString>& addresses) const;
+  void _collectAddressesFromWayNodes(const Way& way, QSet<QString>& addresses,
                                      const OsmMap& map) const;
-  void _collectAddressesFromRelationMembers(ConstRelationPtr relation, QSet<QString>& addresses,
+  void _collectAddressesFromRelationMembers(const Relation& relation, QSet<QString>& addresses,
                                      const OsmMap& map) const;
   void _parseAddressesAsRange(const QString houseNum, const QString street,
                               QSet<QString>& addresses) const;

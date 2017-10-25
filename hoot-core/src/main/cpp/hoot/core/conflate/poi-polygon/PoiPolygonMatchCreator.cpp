@@ -60,7 +60,7 @@ Match* PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId 
 
     if (foundPoi && foundPoly)
     {
-      result = new PoiPolygonMatch(map, /*eid1, eid2,*/ getMatchThreshold(), _getRf());
+      result = new PoiPolygonMatch(map, getMatchThreshold(), _getRf());
       result->setConfiguration(conf());
       result->calculateMatch(eid1, eid2);
     }
