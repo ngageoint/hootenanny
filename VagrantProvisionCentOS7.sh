@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+#set -e
 
 ###################################################
 # VERY IMPORTANT: Set the $HOOT_HOME environment  #
@@ -48,7 +48,8 @@ cd ~
 
 # install useful and needed packages for working with hootenanny
 echo "### Installing dependencies from repos..."
-sudo localedef -i en_US -f UTF-8 en_US.UTF-8
+sudo localectl set-locale LANG=en_US.utf8
+#sudo localedef -i en_US -f UTF-8 en_US.UTF-8
 sudo yum -y install \
     asciidoc \
     autoconf \
