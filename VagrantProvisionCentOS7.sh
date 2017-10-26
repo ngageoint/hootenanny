@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#set -e
+set -e
 
 ###################################################
 # VERY IMPORTANT: Set the $HOOT_HOME environment  #
@@ -25,16 +25,19 @@ echo GROUP: $VMGROUP
 export STXXL_VERSION=stxxl-1.3.1
 
 export LANG=en_US.UTF-8
+echo "### Reinstall libc-common ###" > CentOS_upgrade.txt 2>&1
+sudo yum -q -y reinstall glibc-common
+sudo localedef -i en_US -f UTF-8 en_US.UTF-8
 
 cd ~
 source ~/.bash_profile
 
 # add EPEL repo for extra packages
-echo "### Add epel repo ###" > CentOS_upgrade.txt
+echo "### Add epel repo ###" >> CentOS_upgrade.txt
 sudo yum -y install epel-release >> CentOS_upgrade.txt 2>&1
 
 # add the Postgres repo
-echo "### Add Postgres repo ###" > CentOS_upgrade.txt
+echo "### Add Postgres repo ###" >> CentOS_upgrade.txt
 sudo rpm -Uvh https://download.postgresql.org/pub/repos/yum/9.5/redhat/rhel-7-x86_64/pgdg-centos95-9.5-3.noarch.rpm  >> CentOS_upgrade.txt 2>&1
 
 echo "Updating OS..."
@@ -48,8 +51,6 @@ cd ~
 
 # install useful and needed packages for working with hootenanny
 echo "### Installing dependencies from repos..."
-sudo localectl set-locale LANG=en_US.utf8
-#sudo localedef -i en_US -f UTF-8 en_US.UTF-8
 sudo yum -y install \
     asciidoc \
     autoconf \
