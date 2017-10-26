@@ -7,8 +7,7 @@ echo Deploying web application files...
 # Set this for use later
 export OS_NAME="$(lsb_release -i -s)"
 
-if [ "$OS_NAME" == "Ubuntu" ]
-then
+if [ "$OS_NAME" == "Ubuntu" ] then;
   source ~/.profile
 else # Centos
   source ~/.bash_profile
