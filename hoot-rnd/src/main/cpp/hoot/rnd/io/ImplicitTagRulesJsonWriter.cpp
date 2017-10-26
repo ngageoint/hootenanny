@@ -74,6 +74,7 @@ void ImplicitTagRulesJsonWriter::open(const QString outputUrl)
 
 void ImplicitTagRulesJsonWriter::write(const QString inputUrl, const long totalParts)
 {
+  //The input is assumed sorted by word, then by kvp.
   QFile inputFile(inputUrl);
   if (!inputFile.open(QIODevice::ReadOnly))
   {

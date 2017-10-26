@@ -337,7 +337,7 @@ void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccuranceThresholdAndSortByWord
   //from minOccurancesThreshold here, though...
 
   const QString cmd =
-    "sort " + _countFile->fileName() + " | uniq -c | sort -t\t -k2,2 | awk -v limit=" +
+    "sort " + _countFile->fileName() + " | uniq -c | sort -k2,2 | awk -v limit=" +
     QString::number(minOccurancesThreshold - 1) +
     " '$1 > limit{print}' | sed -e 's/^ *//;s/ /\t/' > " + _sortedCountFile->fileName();
   if (std::system(cmd.toStdString().c_str()) != 0)

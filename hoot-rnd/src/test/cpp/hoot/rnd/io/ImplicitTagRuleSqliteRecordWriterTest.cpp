@@ -48,63 +48,10 @@ public:
     const QString outputFile = outputDir + "/rules-out.sqlite";
     QDir().mkpath(outputDir);
 
-//TODO: fix
-//    ImplicitTagRules rules;
-
-//    //rule #1
-//    rules.append(ImplicitTagRulePtr(new ImplicitTagRule()));
-//    rules.back()->getWords().insert(QString::fromUtf8("Mosque")); //word #1
-//    rules.back()->getTags().appendValue("amenity=place_of_worship"); //tag #1
-//    rules.back()->getTags().appendValue("leisure=park"); //tag #2
-
-//    //rule #2
-//    rules.append(ImplicitTagRulePtr(new ImplicitTagRule()));
-//    rules.back()->getWords().insert(QString::fromUtf8("Masjid")); //word #2
-//    rules.back()->getTags().appendValue("amenity=place_of_worship"); //tag #1
-//    rules.back()->getTags().appendValue("tourism=hotel"); //tag #3
-
-//    //rule #3
-//    rules.append(ImplicitTagRulePtr(new ImplicitTagRule()));
-//    rules.back()->getWords().insert(QString::fromUtf8("Sidi Muhammad")); //word #3
-//    rules.back()->getTags().appendValue("amenity=grave_yard"); //tag #4
-
-//    //rule #4
-//    rules.append(ImplicitTagRulePtr(new ImplicitTagRule()));
-//    rules.back()->getWords().insert(QString::fromUtf8("Eid Prayer Ground")); //word #4
-//    rules.back()->getWords().insert(QString::fromUtf8("Eid Prayer Ground 2")); //word #5
-//    rules.back()->getTags().appendValue("amenity=place_of_worship"); //tag #1
-
-//    //rule #5
-//    rules.append(ImplicitTagRulePtr(new ImplicitTagRule()));
-//    rules.back()->getWords().insert(QString::fromUtf8("Mustashfa")); //word #6
-//    rules.back()->getWords().insert(QString::fromUtf8("Mustashfa alwhdt")); //word #7
-//    rules.back()->getTags().appendValue("amenity=hospital"); //tag #5
-
-//    //rule #6
-//    rules.append(ImplicitTagRulePtr(new ImplicitTagRule()));
-//    rules.back()->getWords().insert(QString::fromUtf8("alwhdt")); //word #8
-//    rules.back()->getTags().appendValue("amenity=clinic"); //tag #6
-
-//    ImplicitTagRuleSqliteRecordWriter writer;
-//    writer.open(outputFile);
-//    for (ImplicitTagRules::const_iterator ruleItr = rules.begin(); ruleItr != rules.end();
-//         ++ruleItr)
-//    {
-//      const ImplicitTagRulePtr rule = *ruleItr;
-//      const QSet<QString> words = rule->getWords();
-//      const Tags tags = rule->getTags();
-//      for (QSet<QString>::const_iterator wordItr = words.begin(); wordItr != words.end();
-//           ++wordItr)
-//      {
-//        const QString word = *wordItr;
-//        for (Tags::const_iterator tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
-//        {
-//          const QString kvp = tagItr.key() + "=" + tagItr.value();
-//          writer.write(word, kvp, 1);   //don't care about the tag counts for this test
-//        }
-//      }
-//    }
-//    writer.close();
+    ImplicitTagRuleSqliteRecordWriter writer;
+    writer.open(outputFile);
+    writer.write("test-files/io/ImplicitTagRuleSqliteRecordWriter/ruleWordParts");
+    writer.close();
 
     _openDb(outputFile);
 

@@ -143,6 +143,7 @@ void ImplicitTagRuleSqliteRecordWriter::write(const QString inputUrl, const long
 {
   DbUtils::execNoPrepare(_db, "BEGIN");
 
+  //The input is assumed sorted by word, then by kvp.
   QFile inputFile(inputUrl);
   if (!inputFile.open(QIODevice::ReadOnly))
   {

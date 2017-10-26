@@ -74,6 +74,7 @@ void ImplicitTagRulesTsvWriter::write(const QString inputUrl, const long /*total
   //each word takes up two rows; first col in first row contains words; remaining cols in first row
   //contain kvps; in second row, each kvp has the count directly below it
 
+  //The input is assumed sorted by word, then by kvp.
   QFile inputFile(inputUrl);
   if (!inputFile.open(QIODevice::ReadOnly))
   {
