@@ -622,15 +622,46 @@ void OsmGeoJsonReader::_addTags(const pt::ptree &item, ElementPtr element)
   {
     for (pt::ptree::const_iterator tagIt = item.begin(); tagIt != item.end(); ++tagIt)
     {
-      const QString key = QString::fromStdString(tagIt->first).trimmed();
-      const QString value = QString::fromStdString(tagIt->second.get_value<string>()).trimmed();
-      if (!value.isEmpty())
-      {
-        element->setTag(key, value);
-      }
+      QString key = QString::fromStdString(tagIt->first).trimmed();
+      QString value;
+      if (tagIt->second.begin() != tagIt->second.end())
+        value = QString::fromStdString(_parseSubTags(tagIt->second)).trimmed();
+      else
+        value = QString::fromStdString(tagIt->second.get_value<string>()).trimmed();
+      element->setTag(key, value);
     }
   }
 }
+
+string OsmGeoJsonReader::_parseSubTags(const pt::ptree &item)
+{
+  stringstream ss;
+  bool isObject = false;
+  bool isArray = true;
+  for (pt::ptree::const_iterator it = item.begin(); it != item.end(); ++it)
+  {
+    if (it != item.begin())
+      ss << ",";
+    else if (it->first != "")
+    {
+      isObject = true;
+      isArray = false;
+    }
+    if (!isArray)
+      ss << "\"" << it->first << "\":";
+    if (it->second.get_value<string>() != "")
+      ss << "\"" << it->second.get_value<string>() << "\"";
+    else
+      ss << _parseSubTags(it->second);
+  }
+  if (isObject)
+    return "{" + ss.str() + "}";
+  else if (isArray)
+    return "[" + ss.str() + "]";
+  else
+    return ss.str();
+}
+
 
 } //  namespace hoot
 
