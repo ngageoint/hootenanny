@@ -25,15 +25,12 @@ echo GROUP: $VMGROUP
 export STXXL_VERSION=stxxl-1.3.1
 
 export LANG=en_US.UTF-8
-echo "### Reinstall libc-common ###" > CentOS_upgrade.txt 2>&1
-sudo yum -q -y reinstall glibc-common
-sudo localedef -i en_US -f UTF-8 en_US.UTF-8
 
 cd ~
 source ~/.bash_profile
 
 # add EPEL repo for extra packages
-echo "### Add epel repo ###" >> CentOS_upgrade.txt
+echo "### Add epel repo ###" > CentOS_upgrade.txt
 sudo yum -y install epel-release >> CentOS_upgrade.txt 2>&1
 
 # add the Postgres repo
@@ -45,6 +42,9 @@ echo "### Update ###" >> CentOS_upgrade.txt
 sudo yum -q -y update >> CentOS_upgrade.txt 2>&1
 echo "### Upgrade ###" >> CentOS_upgrade.txt
 sudo yum -q -y upgrade >> CentOS_upgrade.txt 2>&1
+echo "### Reinstall libc-common ###" >> CentOS_upgrade.txt 2>&1
+sudo yum -q -y reinstall glibc-common >> CentOS_upgrade.txt 2>&1
+sudo localedef -i en_US -f UTF-8 en_US.UTF-8
 
 # Make sure that we are in ~ before trying to wget & install stuff
 cd ~
