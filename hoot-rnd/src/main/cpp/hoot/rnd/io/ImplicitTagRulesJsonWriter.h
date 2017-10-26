@@ -52,17 +52,17 @@ public:
   /**
    * @see ImplicitTagRulesWriter
    */
-  virtual bool isSupported(const QString url);
+  virtual bool isSupported(const QString outputUrl);
 
   /**
    * @see ImplicitTagRulesWriter
    */
-  virtual void open(const QString url);
+  virtual void open(const QString outputUrl);
 
   /**
    * @see ImplicitTagRulesWriter
    */
-  virtual void write(const long totalParts = -1);
+  virtual void write(const QString inputUrl, const long totalParts = -1);
 
   /**
    * @see ImplicitTagRulesWriter
@@ -71,8 +71,9 @@ public:
 
 private:
 
-  boost::shared_ptr<QFile> _file;
-  long _ruleCtr;
+  boost::shared_ptr<QFile> _outputFile;
+  long _ruleWordPartCtr;
+  QString _currentWord;
 };
 
 }

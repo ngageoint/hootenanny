@@ -109,13 +109,13 @@ private:
   FixedLengthString _qStrToFixedLengthStr(const QString wordKvp);
   QString _fixedLengthStrToQStr(const FixedLengthString& fixedLengthStr);
   bool _outputsContainsSqlite(const QStringList outputs);
-  void _removeKvpsBelowOccuranceThresholdAndSortByOccurrence(const int minOccurancesThreshold);
-  void _removeDuplicatedKeyTypes();
+  void _removeKvpsBelowOccuranceThresholdAndSortByWord(const int minOccurancesThreshold);
+  long _removeDuplicatedKeyTypes();
 
   QString _getSqliteOutput(const QStringList outputs);
   QList<boost::shared_ptr<ImplicitTagRuleWordPartWriter> > _getOutputWriters(
     const QStringList outputs);
-  void _writeRules(const QStringList outputs, const QString sqliteOutputFile);
+  void _writeRules(const QStringList outputs, const QString sqliteOutputFile, const long lineCount);
 };
 
 }

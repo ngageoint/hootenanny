@@ -39,7 +39,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ImplicitTagRuleWordPartWriter, ImplicitTagRulesJsonWriter)
 
 ImplicitTagRulesJsonWriter::ImplicitTagRulesJsonWriter() :
-_ruleCtr(0)
+_ruleWordPartCtr(0)
 {
 }
 
@@ -48,72 +48,83 @@ ImplicitTagRulesJsonWriter::~ImplicitTagRulesJsonWriter()
   close();
 }
 
-bool ImplicitTagRulesJsonWriter::isSupported(const QString url)
+bool ImplicitTagRulesJsonWriter::isSupported(const QString outputUrl)
 {
-  return url.endsWith(".json", Qt::CaseInsensitive);
+  return outputUrl.endsWith(".json", Qt::CaseInsensitive);
 }
 
-void ImplicitTagRulesJsonWriter::open(const QString url)
+void ImplicitTagRulesJsonWriter::open(const QString outputUrl)
 {
-  _ruleCtr = 0;
+  _ruleWordPartCtr = 0;
 
-  _file.reset(new QFile());
-  _file->setFileName(url);
-  if (_file->exists() && !_file->remove())
+  _outputFile.reset(new QFile());
+  _outputFile->setFileName(outputUrl);
+  if (_outputFile->exists() && !_outputFile->remove())
   {
-    throw HootException(QObject::tr("Error removing existing %1 for writing.").arg(url));
+    throw HootException(QObject::tr("Error removing existing %1 for writing.").arg(outputUrl));
   }
-  if (!_file->open(QIODevice::WriteOnly | QIODevice::Text))
+  if (!_outputFile->open(QIODevice::WriteOnly | QIODevice::Text))
   {
-    throw HootException(QObject::tr("Error opening %1 for writing.").arg(url));
+    throw HootException(QObject::tr("Error opening %1 for writing.").arg(outputUrl));
   }
-  LOG_DEBUG("Opened: " << url << ".");
+  LOG_DEBUG("Opened: " << outputUrl << ".");
 
-  _file->write(QString("[\n").toUtf8());
+  _outputFile->write(QString("[\n").toUtf8());
 }
 
-//TODO: fix
-void ImplicitTagRulesJsonWriter::write(const long /*totalParts*/)
+void ImplicitTagRulesJsonWriter::write(const QString inputUrl, const long totalParts)
 {
-//  _file->write(QString("  {\n").toUtf8());
+  QFile inputFile(inputUrl);
+  if (!inputFile.open(QIODevice::ReadOnly))
+  {
+    throw HootException(QObject::tr("Error opening %1 for reading.").arg(inputUrl));
+  }
 
-//  const QString word = ruleWordPart.getWord();
-//  const QString wordLine = "    \"word\": \"" % word % "\",\n";
-//  _file->write(wordLine.toUtf8());
+  //QString::number(count) % "\t" % word % "\t" % kvp;
+  while (!inputFile.atEnd())
+  {
+    const QString line = QString::fromUtf8(inputFile.readLine().constData());
+    const QStringList lineParts = line.split("\t");
+    const QString count = lineParts[0]; //skipping numeric error checking here
+    const QString word = lineParts[1];
+    const QString kvp = lineParts[2];
 
-//  long kvpCtr = 0;
-//  const QMap<QString, long> kvpsWithCount = ruleWordPart.getTagsToCounts();
-//  for (QMap<QString, long>::const_iterator kvpItr = kvpsWithCount.begin();
-//       kvpItr != kvpsWithCount.end(); ++kvpItr)
-//  {
-//    QString kvpLine = "    \"" % kvpItr.key() % "\": " % QString::number(kvpItr.value());
-//    if (kvpCtr < (kvpsWithCount.size() - 1))
-//    {
-//       kvpLine += ",";
-//    }
-//    kvpLine += "\n";
-//    _file->write(kvpLine.toUtf8());
-//    kvpCtr++;
-//  }
+    if (_currentWord.isEmpty())
+    {
+      _currentWord = word;
+    }
+    else if (word != _currentWord)
+    {
+      QString closingRuleLine = "  }";
+      if (_ruleWordPartCtr < (totalParts - 1))
+      {
+        closingRuleLine += ",";
+      }
+      closingRuleLine += "\n";
+      _outputFile->write(closingRuleLine.toUtf8());
+      _outputFile->write(QString("  {\n").toUtf8());
+      _currentWord = word;
+    }
 
-//  QString closingRuleLine = "  }";
-//  if (_ruleCtr < (totalParts - 1))
-//  {
-//    closingRuleLine += ",";
-//  }
-//  closingRuleLine += "\n";
-//  _file->write(closingRuleLine.toUtf8());
-//  _ruleCtr++;
+    const QString wordLine = "    \"word\": \"" % word % "\",\n";
+    _outputFile->write(wordLine.toUtf8());
+
+    const QString kvpLine = "    \"" + kvp + "\": " % count % ",\n";
+    _outputFile->write(kvpLine.toUtf8());
+  }
+  inputFile.close();
+
+  _ruleWordPartCtr++;
 }
 
 void ImplicitTagRulesJsonWriter::close()
 {
-  if (_file.get())
+  if (_outputFile.get())
   {
-    _file->write(QString("]").toUtf8());
-    _file->close();
-    _file.reset();
-    _ruleCtr = 0;
+    _outputFile->write(QString("]").toUtf8());
+    _outputFile->close();
+    _outputFile.reset();
+    _ruleWordPartCtr = 0;
   }
 }
 

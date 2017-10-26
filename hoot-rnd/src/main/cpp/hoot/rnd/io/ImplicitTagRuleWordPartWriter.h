@@ -41,21 +41,21 @@ public:
   static std::string className() { return "hoot::ImplicitTagRuleWordPartWriter"; }
 
   /**
-   *  Writes an implicit tag word rule part to output
+   *  Writes a file containing implicit tag word rule parts to output
    *
-   * @param wordRulePart an implicit tag word rule part
+   * @param totalParts optional line count of the input file
    */
-  virtual void write(const long totalParts = -1) = 0;
+  virtual void write(const QString inputUrl, const long totalParts = -1) = 0;
 
   /**
    * Returns true if the output URL is supported.
    */
-  virtual bool isSupported(const QString url) = 0;
+  virtual bool isSupported(const QString outputUrl) = 0;
 
   /**
    * Opens the specified URL for writing.
    */
-  virtual void open(const QString url) = 0;
+  virtual void open(const QString outputUrl) = 0;
 
   /**
    * Closes the output file

@@ -49,39 +49,39 @@ ImplicitTagRuleSqliteRecordWriter::~ImplicitTagRuleSqliteRecordWriter()
   close();
 }
 
-bool ImplicitTagRuleSqliteRecordWriter::isSupported(const QString url)
+bool ImplicitTagRuleSqliteRecordWriter::isSupported(const QString outputUrl)
 {
-  return url.endsWith(".db", Qt::CaseInsensitive);
+  return outputUrl.endsWith(".db", Qt::CaseInsensitive);
 }
 
-void ImplicitTagRuleSqliteRecordWriter::open(const QString url)
+void ImplicitTagRuleSqliteRecordWriter::open(const QString outputUrl)
 {
-  QFile outputFile(url);
+  QFile outputFile(outputUrl);
   if (outputFile.exists() && !outputFile.remove())
   {
-    throw HootException(QObject::tr("Error removing existing %1 for writing.").arg(url));
+    throw HootException(QObject::tr("Error removing existing %1 for writing.").arg(outputUrl));
   }
   outputFile.open(QIODevice::WriteOnly);
 
-  if (!QSqlDatabase::contains(url))
+  if (!QSqlDatabase::contains(outputUrl))
   {
-    _db = QSqlDatabase::addDatabase("QSQLITE", url);
-    _db.setDatabaseName(url);
+    _db = QSqlDatabase::addDatabase("QSQLITE", outputUrl);
+    _db.setDatabaseName(outputUrl);
     if (!_db.open())
     {
-      throw HootException("Error opening DB. " + url);
+      throw HootException("Error opening DB. " + outputUrl);
     }
   }
   else
   {
-    _db = QSqlDatabase::database(url);
+    _db = QSqlDatabase::database(outputUrl);
   }
 
   if (!_db.isOpen())
   {
-    throw HootException("Error DB is not open. " + url);
+    throw HootException("Error DB is not open. " + outputUrl);
   }
-  LOG_DEBUG("Opened: " << url << ".");
+  LOG_DEBUG("Opened: " << outputUrl << ".");
 
   _createTables();
   _prepareQueries();
@@ -137,138 +137,64 @@ void ImplicitTagRuleSqliteRecordWriter::_prepareQueries()
     throw HootException(
       QString("Error preparing _getLastTagIdQuery: %1").arg(_getLastTagIdQuery.lastError().text()));
   }
-
-  _getWordIdForWord = QSqlQuery(_db);
-  if (!_getWordIdForWord.prepare("SELECT id FROM words WHERE word LIKE ':word'"))
-  {
-    throw HootException(
-      QString("Error preparing _getWordIdForWord: %1").arg(_getWordIdForWord.lastError().text()));
-  }
-
-  _getTagIdForTag = QSqlQuery(_db);
-  if (!_getTagIdForTag.prepare("SELECT id FROM tags WHERE kvp LIKE ':kvp'"))
-  {
-    throw HootException(
-      QString("Error preparing _getTagIdForTag: %1").arg(_getTagIdForTag.lastError().text()));
-  }
-
-  _getRuleIdForWordKvp = QSqlQuery(_db);
-  if (!_getRuleIdForWordKvp.prepare(
-        "SELECT DISTINCT rule_id, count FROM rules WHERE word_id = :wordId AND tag_id = :tagId"))
-  {
-    throw HootException(
-      QString("Error preparing _getRuleIdForWordKvp: %1").arg(_getRuleIdForWordKvp.lastError().text()));
-  }
 }
 
-long ImplicitTagRuleSqliteRecordWriter::_getWordId(const QString word)
-{
-  _getWordIdForWord.bindValue(":word", word);
-  if (!_getWordIdForWord.exec())
-  {
-    QString err = QString("Error executing query: %1 (%2)").arg(_getWordIdForWord.executedQuery()).
-        arg(_getWordIdForWord.lastError().text());
-    throw HootException(err);
-  }
-  if (!_getWordIdForWord.next())
-  {
-    return false;
-  }
-  else
-  {
-    return _getWordIdForWord.value(0).toLongLong();
-  }
-}
-
-long ImplicitTagRuleSqliteRecordWriter::_getTagId(const QString kvp)
-{
-  _getTagIdForTag.bindValue(":kvp", kvp);
-  if (!_getTagIdForTag.exec())
-  {
-    QString err = QString("Error executing query: %1 (%2)").arg(_getTagIdForTag.executedQuery()).
-        arg(_getTagIdForTag.lastError().text());
-    throw HootException(err);
-  }
-  if (!_getTagIdForTag.next())
-  {
-    return false;
-  }
-  else
-  {
-    return _getTagIdForTag.value(0).toLongLong();
-  }
-}
-
-long ImplicitTagRuleSqliteRecordWriter::_getRuleId(const long wordId, const long tagId)
-{
-  _getRuleIdForWordKvp.bindValue(":wordId", (qlonglong)wordId);
-  _getRuleIdForWordKvp.bindValue(":tagId", (qlonglong)tagId);
-  if (!_getRuleIdForWordKvp.exec())
-  {
-    QString err = QString("Error executing query: %1 (%2)").arg(_getRuleIdForWordKvp.executedQuery()).
-        arg(_getRuleIdForWordKvp.lastError().text());
-    throw HootException(err);
-  }
-  if (!_getRuleIdForWordKvp.next())
-  {
-    return false;
-  }
-  else
-  {
-    //count = _getRuleIdForWordKvp.value(1).toLongLong();
-    return _getRuleIdForWordKvp.value(0).toLongLong();
-  }
-}
-
-void ImplicitTagRuleSqliteRecordWriter::write(const long /*totalParts*/)
+void ImplicitTagRuleSqliteRecordWriter::write(const QString inputUrl, const long /*totalParts*/)
 {
   DbUtils::execNoPrepare(_db, "BEGIN");
 
-//TODO: fix
-//  bool wordPreviouslyExisted = false;
-//  long wordId = _getWordId(word);
-//  if (wordId == -1)
-//  {
-//    wordId = _insertWord(word);
-//  }
-//  else
-//  {
-//    wordPreviouslyExisted = true;
-//  }
+  QFile inputFile(inputUrl);
+  if (!inputFile.open(QIODevice::ReadOnly))
+  {
+    throw HootException(QObject::tr("Error opening %1 for reading.").arg(inputUrl));
+  }
 
-//  bool tagPreviouslyExisted = false;
-//  long tagId = _getTagId(word);
-//  if (tagId == -1)
-//  {
-//    tagId = _insertTag(kvp);
-//  }
-//  else
-//  {
-//    tagPreviouslyExisted = true;
-//  }
+  while (!inputFile.atEnd())
+  {
+    const QString line = QString::fromUtf8(inputFile.readLine().constData());
+    const QStringList lineParts = line.split("\t");
+    const long wordTagOccurranceCount = lineParts[0].toLong();
+    const QString word = lineParts[1];
+    const QString kvp = lineParts[2];
 
-//  long ruleId = -1;
-//  long ruleCount = -1;
-//  if (!wordPreviouslyExisted || !tagPreviouslyExisted)
-//  {
-//    ruleId = _currentRuleId;
-//    _currentRuleId++;
-//  }
-//  else
-//  {
-//    ruleId = _getRuleId(wordId, tagId);
-//  }
-//  if (ruleId == -1)
-//  {
-//    ruleId = _currentRuleId;;
-//    _currentRuleId++;
-//  }
-//  else
-//  {
-//    assert(ruleCount != -1);
-//    ruleCount++;
-//  }
-//  _insertRuleRecord(ruleId, wordId, tagId, wordTagOccurranceCount);
+    long wordId = -1;
+    if (_wordsToWordIds.contains(word))
+    {
+      wordId = _wordsToWordIds[word];
+    }
+    else
+    {
+      wordId = _insertWord(word);
+      _wordsToWordIds[word] = wordId;
+    }
+
+    long tagId = -1;
+    if (_tagsToTagIds.contains(kvp))
+    {
+      tagId = _tagsToTagIds[kvp];
+    }
+    else
+    {
+      tagId = _insertTag(kvp);
+      _tagsToTagIds[kvp] = tagId;
+    }
+
+    long ruleId = -1;
+    const QString wordIdTagId = QString::number(wordId) % ";" % QString::number(tagId);
+    if (_wordIdTagIdsToRuleIds.contains(wordIdTagId))
+    {
+      ruleId = _wordIdTagIdsToRuleIds[wordIdTagId];
+    }
+    else
+    {
+      ruleId = _currentRuleId;
+      _currentRuleId++;
+      _wordIdTagIdsToRuleIds[wordIdTagId] = ruleId;
+    }
+
+    _insertRuleRecord(ruleId, wordId, tagId, wordTagOccurranceCount);
+  }
+  inputFile.close();
 
   DbUtils::execNoPrepare(_db, "COMMIT");
 

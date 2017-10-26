@@ -270,8 +270,8 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs,
   LOG_VARD(_wordCaseMappings.size());
   _wordCaseMappings.clear();
 
-  _removeKvpsBelowOccuranceThresholdAndSortByOccurrence(minOccurancesThreshold);
-  _removeDuplicatedKeyTypes();
+  _removeKvpsBelowOccuranceThresholdAndSortByWord(minOccurancesThreshold);
+  const long lineCount = _removeDuplicatedKeyTypes();
 
 //  LOG_INFO(
 //    "Generated " << StringUtils::formatLargeNumber(_tagRules.size()) <<
@@ -283,29 +283,8 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs,
 //  LOG_INFO("Highest rule word count: " << _highestRuleWordCount);
 //  LOG_INFO("Highest rule tag count: " << _highestRuleTagCount);
 
-  _writeRules(outputs, sqliteOutput);
+  _writeRules(outputs, sqliteOutput, lineCount);
 }
-
-//void PoiImplicitTagRulesDeriver::_writeRulesToSqlite(const QString sqliteOutput)
-//{
-//  _ruleWriter.open(sqliteOutput);
-//  while (!_sortedDedupedCountFile->atEnd())
-//  {
-//    const QString line = QString::fromUtf8(_sortedCountFile->readLine().constData());
-//    LOG_VART(line);
-//    const QStringList lineParts = line.split("\t");
-//    LOG_VART(lineParts);
-//    const QString word = lineParts[1];
-//    LOG_VART(word);
-//    const QString kvp = lineParts[2];
-//    LOG_VART(kvp);
-//    const long ruleTagCount = lineParts[0].toLong();
-//    LOG_VART(ruleTagCount);
-
-//    _ruleWriter.write(word, kvp, ruleTagCount);
-//  }
-//  _ruleWriter.close();
-//}
 
 QList<boost::shared_ptr<ImplicitTagRuleWordPartWriter> > PoiImplicitTagRulesDeriver::_getOutputWriters(
   const QStringList outputs)
@@ -323,7 +302,7 @@ QList<boost::shared_ptr<ImplicitTagRuleWordPartWriter> > PoiImplicitTagRulesDeri
 }
 
 void PoiImplicitTagRulesDeriver::_writeRules(const QStringList outputs,
-                                             const QString sqliteOutputFile)
+                                             const QString sqliteOutputFile, const long lineCount)
 {
   QList<boost::shared_ptr<ImplicitTagRuleWordPartWriter> > ruleWordPartWriters =
     _getOutputWriters(outputs);
@@ -331,13 +310,13 @@ void PoiImplicitTagRulesDeriver::_writeRules(const QStringList outputs,
        writersItr != ruleWordPartWriters.end(); ++writersItr)
   {
     boost::shared_ptr<ImplicitTagRuleWordPartWriter> rulesWriter = *writersItr;
-    rulesWriter->open(sqliteOutputFile);
-    rulesWriter->write();
+    //rulesWriter->open(sqliteOutputFile);
+    rulesWriter->write(sqliteOutputFile, lineCount);
     rulesWriter->close();
   }
 }
 
-void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccuranceThresholdAndSortByOccurrence(
+void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccuranceThresholdAndSortByWord(
   const int minOccurancesThreshold)
 {
   _sortedCountFile.reset(
@@ -352,15 +331,13 @@ void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccuranceThresholdAndSortByOccu
   }
   LOG_DEBUG("Opened sorted temp file: " << _sortedCountFile->fileName());
 
-  //This counts each unique line occurrance, sorts by decreasing count, removes lines with
-  //occurrance counts below the specified threshold, and replaces the space between the prepended
-  //count and the word with a tab. - not sure why 1 needs to be subtracted from
-  //minOccurancesThreshold here...
-
-  //TODO: should this be sorted by word instead? - sort alphabetically on second col
+  //This counts each unique line occurrance, sorts alphabetically on the second column (word),
+  //removes lines with occurrance counts below the specified threshold, and replaces the space
+  //between the prepended count and the word with a tab. - not sure why 1 needs to be subtracted
+  //from minOccurancesThreshold here, though...
 
   const QString cmd =
-    "sort " + _countFile->fileName() + " | uniq -c | sort -n -r | awk -v limit=" +
+    "sort " + _countFile->fileName() + " | uniq -c | sort -t\t -k2,2 | awk -v limit=" +
     QString::number(minOccurancesThreshold - 1) +
     " '$1 > limit{print}' | sed -e 's/^ *//;s/ /\t/' > " + _sortedCountFile->fileName();
   if (std::system(cmd.toStdString().c_str()) != 0)
@@ -369,7 +346,7 @@ void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccuranceThresholdAndSortByOccu
   }
 }
 
-void PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
+long PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
 {
   //i.e. don't allow amenity=school AND amenity=building in the same rule
 
@@ -385,6 +362,7 @@ void PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
   }
   LOG_DEBUG("Opened sorted, deduped temp file: " << _sortedDedupedCountFile->fileName());
 
+  long lineCount = 0;
   while (!_sortedCountFile->atEnd())
   {
     const QString line = QString::fromUtf8(_sortedCountFile->readLine().constData());
@@ -422,8 +400,11 @@ void PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
       const QString updatedLine = QString::number(count) % "\t" % word % "\t" % kvp;
       LOG_VART(updatedLine);
       _sortedDedupedCountFile->write(updatedLine.toUtf8());
+      lineCount++;
     }
   }
+
+  return lineCount;
 }
 
 }

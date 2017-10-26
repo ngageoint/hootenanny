@@ -35,7 +35,6 @@
 #include <QMap>
 #include <QtSql/QSqlDatabase>
 #include <QSqlQuery>
-#include <QSet>
 
 namespace hoot
 {
@@ -56,17 +55,17 @@ public:
   /**
    * @see ImplicitTagRuleWordPartWriter
    */
-  virtual bool isSupported(const QString url);
+  virtual bool isSupported(const QString outputUrl);
 
   /**
    * @see ImplicitTagRuleWordPartWriter
    */
-  virtual void open(const QString url);
+  virtual void open(const QString outputUrl);
 
   /**
    * @see ImplicitTagRuleWordPartWriter
    */
-  virtual void write(const long totalParts = -1);
+  virtual void write(const QString inputUrl, const long totalParts = -1);
 
   /**
    * @see ImplicitTagRuleWordPartWriter
@@ -82,11 +81,11 @@ private:
   QSqlQuery _insertTagQuery;
   QSqlQuery _getLastWordIdQuery;
   QSqlQuery _getLastTagIdQuery;
-  QSqlQuery _getWordIdForWord;
-  QSqlQuery _getTagIdForTag;
-  QSqlQuery _getRuleIdForWordKvp;
 
   long _currentRuleId;
+  QMap<QString, long> _wordsToWordIds;
+  QMap<QString, long> _tagsToTagIds;
+  QMap<QString, long> _wordIdTagIdsToRuleIds;
 
   void _createTables();
   void _prepareQueries();
@@ -95,9 +94,6 @@ private:
   long _insertTag(const QString kvp);
   void _insertRuleRecord(const long ruleId, const long wordId, const long tagId,
                          const long wordTagOccurranceCount);
-  long _getWordId(const QString word);
-  long _getTagId(const QString kvp);
-  long _getRuleId(const long wordId, const long tagId);
 };
 
 }

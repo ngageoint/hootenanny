@@ -39,10 +39,10 @@ class PoiImplicitTagRulesDeriverTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(PoiImplicitTagRulesDeriverTest);
   CPPUNIT_TEST(runBasicTest);
-//  CPPUNIT_TEST(runTypeKeysTest);
-//  CPPUNIT_TEST(runMinOccuranceThresholdTest);
-//  CPPUNIT_TEST(runMultipleInputsTest);
-//  CPPUNIT_TEST(runNameCaseTest);
+  CPPUNIT_TEST(runTypeKeysTest);
+  CPPUNIT_TEST(runMinOccuranceThresholdTest);
+  CPPUNIT_TEST(runMultipleInputsTest);
+  CPPUNIT_TEST(runNameCaseTest);
   //TODO
   //CPPUNIT_TEST(runInputTranslationScriptSizeMismatchTest);
   //CPPUNIT_TEST(runEqualsInNameTest);

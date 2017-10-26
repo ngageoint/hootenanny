@@ -47,56 +47,82 @@ ImplicitTagRulesTsvWriter::~ImplicitTagRulesTsvWriter()
   close();
 }
 
-bool ImplicitTagRulesTsvWriter::isSupported(const QString url)
+bool ImplicitTagRulesTsvWriter::isSupported(const QString outputUrl)
 {
-  return url.endsWith(".tsv", Qt::CaseInsensitive);
+  return outputUrl.endsWith(".tsv", Qt::CaseInsensitive);
 }
 
-void ImplicitTagRulesTsvWriter::open(const QString url)
+void ImplicitTagRulesTsvWriter::open(const QString outputUrl)
 {
-  _file.reset(new QFile());
-  _file->setFileName(url);
-  if (_file->exists() && !_file->remove())
+  _outputFile.reset(new QFile());
+  _outputFile->setFileName(outputUrl);
+  if (_outputFile->exists() && !_outputFile->remove())
   {
-    throw HootException(QObject::tr("Error removing existing %1 for writing.").arg(url));
+    throw HootException(QObject::tr("Error removing existing %1 for writing.").arg(outputUrl));
   }
-  if (!_file->open(QIODevice::WriteOnly | QIODevice::Text))
+  if (!_outputFile->open(QIODevice::WriteOnly | QIODevice::Text))
   {
-    throw HootException(QObject::tr("Error opening %1 for writing.").arg(url));
+    throw HootException(QObject::tr("Error opening %1 for writing.").arg(outputUrl));
   }
-  LOG_DEBUG("Opened: " << url << ".");
+  LOG_DEBUG("Opened: " << outputUrl << ".");
 }
 
-//TODO: fix
-void ImplicitTagRulesTsvWriter::write(const long /*totalParts*/)
+void ImplicitTagRulesTsvWriter::write(const QString inputUrl, const long /*totalParts*/)
 {
+  //QString::number(count) % "\t" % word % "\t" % kvp;
+
   //each word takes up two rows; first col in first row contains words; remaining cols in first row
   //contain kvps; in second row, each kvp has the count directly below it
 
-//  const QString word = ruleWordPart.getWord();
-//  QString row1 = word % "\t";
-//  QString row2 = "\t";
-//  const QMap<QString, long> kvpsWithCount = ruleWordPart.getTagsToCounts();
-//  for (QMap<QString, long>::const_iterator kvpItr = kvpsWithCount.begin();
-//       kvpItr != kvpsWithCount.end(); ++kvpItr)
-//  {
-//    row1 += kvpItr.key() % "\t";
-//    row2 += QString::number(kvpItr.value()) % "\t";
-//  }
-//  row1.chop(1);
-//  row1 += "\n";
-//  _file->write(row1.toUtf8());
-//  row2.chop(1);
-//  row2 += "\n";
-//  _file->write(row2.toUtf8());
+  QFile inputFile(inputUrl);
+  if (!inputFile.open(QIODevice::ReadOnly))
+  {
+    throw HootException(QObject::tr("Error opening %1 for reading.").arg(inputUrl));
+  }
+
+  QString row1;
+  QString row2;
+  while (!inputFile.atEnd())
+  {
+    const QString line = QString::fromUtf8(inputFile.readLine().constData());
+    const QStringList lineParts = line.split("\t");
+    const QString count = lineParts[0]; //skipping numeric error checking here
+    const QString word = lineParts[1];
+    const QString kvp = lineParts[2];
+
+    if (_currentWord.isEmpty())
+    {
+      _currentWord = word;
+    }
+    else if (word != _currentWord)
+    {
+      row1 += "\n";
+      _outputFile->write(row1.toUtf8());
+      row1 = "";
+      row2 += "\n";
+      _outputFile->write(row2.toUtf8());
+      row2 = "";
+    }
+
+    if (row1.isEmpty())
+    {
+      row1 = word % "\t";
+    }
+    else
+    {
+      row1 += "\t" % kvp;
+      row2 += "\t" % count;
+    }
+  }
+  inputFile.close();
 }
 
 void ImplicitTagRulesTsvWriter::close()
 {
-  if (_file.get())
+  if (_outputFile.get())
   {
-    _file->close();
-    _file.reset();
+    _outputFile->close();
+    _outputFile.reset();
   }
 }
 
