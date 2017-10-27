@@ -45,7 +45,7 @@ public:
    *
    * @param totalParts optional line count of the input file
    */
-  virtual void write(const QString inputUrl, const long totalParts = -1) = 0;
+  virtual void write(const QString inputUrl) = 0;
 
   /**
    * Returns true if the output URL is supported.

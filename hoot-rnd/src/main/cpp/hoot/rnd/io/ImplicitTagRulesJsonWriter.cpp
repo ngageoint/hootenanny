@@ -32,6 +32,7 @@
 
 // Qt
 #include <QStringBuilder>
+#include <QMap>
 
 namespace hoot
 {
@@ -72,7 +73,7 @@ void ImplicitTagRulesJsonWriter::open(const QString outputUrl)
   _outputFile->write(QString("[\n").toUtf8());
 }
 
-void ImplicitTagRulesJsonWriter::write(const QString inputUrl, const long totalParts)
+void ImplicitTagRulesJsonWriter::write(const QString inputUrl)
 {
   //The input is assumed sorted by word, then by kvp.
   QFile inputFile(inputUrl);
@@ -81,41 +82,63 @@ void ImplicitTagRulesJsonWriter::write(const QString inputUrl, const long totalP
     throw HootException(QObject::tr("Error opening %1 for reading.").arg(inputUrl));
   }
 
-  //QString::number(count) % "\t" % word % "\t" % kvp;
+  //QString kvpLine;
   while (!inputFile.atEnd())
   {
     const QString line = QString::fromUtf8(inputFile.readLine().constData());
-    const QStringList lineParts = line.split("\t");
-    const QString count = lineParts[0]; //skipping numeric error checking here
-    const QString word = lineParts[1];
-    const QString kvp = lineParts[2];
+    LOG_VART(line);
+    const QString word = line.split("\t")[1].trimmed();
 
-    if (_currentWord.isEmpty())
+    LOG_VART(word);
+    LOG_VART(_currentWord);
+    if (_currentWord.isEmpty() || word == _currentWord)
     {
-      _currentWord = word;
+      LOG_TRACE("Line the same or empty.  Appending line to buffer: " << line);
     }
-    else if (word != _currentWord)
+    else
     {
-      QString closingRuleLine = "  }";
-      if (_ruleWordPartCtr < (totalParts - 1))
-      {
-        closingRuleLine += ",";
-      }
-      closingRuleLine += "\n";
-      _outputFile->write(closingRuleLine.toUtf8());
-      _outputFile->write(QString("  {\n").toUtf8());
-      _currentWord = word;
+      assert(_wordPartsBuffer.size() > 0);
+      LOG_TRACE(
+        "New word encountered.  Flushing previous word buffer for " << _currentWord << "...");
+      //LOG_VART(_wordPartsBuffer);
+      _flushWordPartsBuffer();
     }
-
-    const QString wordLine = "    \"word\": \"" % word % "\",\n";
-    _outputFile->write(wordLine.toUtf8());
-
-    const QString kvpLine = "    \"" + kvp + "\": " % count % ",\n";
-    _outputFile->write(kvpLine.toUtf8());
+    _currentWord = word;
+    _wordPartsBuffer.append(line);
   }
+  _flushWordPartsBuffer(true);
   inputFile.close();
 
   _ruleWordPartCtr++;
+}
+
+void ImplicitTagRulesJsonWriter::_flushWordPartsBuffer(const bool lastRule)
+{
+  QString wordRule = "  {\n    \"word\": \"" % _currentWord % "\",\n";
+
+  for (int i = 0; i < _wordPartsBuffer.size(); i++)
+  {
+    const QStringList lineParts = _wordPartsBuffer.at(i).split("\t");
+    const QString kvp = lineParts[2].trimmed();
+    const QString count = lineParts[0].trimmed(); //skipping numeric error checking here
+    wordRule += "    \"" + kvp + "\": " % count;
+    if (i < _wordPartsBuffer.size() - 1)
+    {
+      wordRule += ",";
+    }
+    wordRule += "\n";
+  }
+
+  wordRule += "  }";
+  if (!lastRule)
+  {
+    wordRule += ",";
+  }
+  wordRule += "\n";
+
+  LOG_VART(wordRule);
+  _outputFile->write(wordRule.toUtf8());
+  _wordPartsBuffer.clear();
 }
 
 void ImplicitTagRulesJsonWriter::close()

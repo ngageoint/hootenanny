@@ -62,7 +62,7 @@ public:
   /**
    * @see ImplicitTagRulesWriter
    */
-  virtual void write(const QString inputUrl, const long totalParts = -1);
+  virtual void write(const QString inputUrl);
 
   /**
    * @see ImplicitTagRulesWriter
@@ -74,6 +74,9 @@ private:
   boost::shared_ptr<QFile> _outputFile;
   long _ruleWordPartCtr;
   QString _currentWord;
+  QStringList _wordPartsBuffer;
+
+  void _flushWordPartsBuffer(const bool lastRule = false);
 };
 
 }

@@ -65,7 +65,7 @@ public:
   /**
    * @see ImplicitTagRuleWordPartWriter
    */
-  virtual void write(const QString inputUrl, const long totalParts = -1);
+  virtual void write(const QString inputUrl);
 
   /**
    * @see ImplicitTagRuleWordPartWriter

@@ -311,7 +311,7 @@ void PoiImplicitTagRulesDeriver::_writeRules(const QStringList outputs,
   {
     boost::shared_ptr<ImplicitTagRuleWordPartWriter> rulesWriter = *writersItr;
     //rulesWriter->open(sqliteOutputFile);
-    rulesWriter->write(sqliteOutputFile, lineCount);
+    rulesWriter->write(sqliteOutputFile);
     rulesWriter->close();
   }
 }

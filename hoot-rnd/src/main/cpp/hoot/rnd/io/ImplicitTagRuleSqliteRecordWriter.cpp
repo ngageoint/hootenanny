@@ -139,7 +139,7 @@ void ImplicitTagRuleSqliteRecordWriter::_prepareQueries()
   }
 }
 
-void ImplicitTagRuleSqliteRecordWriter::write(const QString inputUrl, const long /*totalParts*/)
+void ImplicitTagRuleSqliteRecordWriter::write(const QString inputUrl)
 {
   DbUtils::execNoPrepare(_db, "BEGIN");
 

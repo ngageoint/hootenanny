@@ -67,7 +67,7 @@ void ImplicitTagRulesTsvWriter::open(const QString outputUrl)
   LOG_DEBUG("Opened: " << outputUrl << ".");
 }
 
-void ImplicitTagRulesTsvWriter::write(const QString inputUrl, const long /*totalParts*/)
+void ImplicitTagRulesTsvWriter::write(const QString inputUrl)
 {
   //QString::number(count) % "\t" % word % "\t" % kvp;
 
