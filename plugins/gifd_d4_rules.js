@@ -359,7 +359,7 @@ gifd.rules = {
        'VA4':'raw:VA4', // Variation Anomaly String
        'VCR':'safe_clearance:vertical:remarks', // Vertical Clearance Remarks
        'VDR':'source:datum:sounding:name', // Vertical Datum Record ## Check
-       'VOI':'vertical_obstruction_identifier', // Vertical Obstruction Identifier
+       'VOI':'aeroway:obstruction', // Vertical Obstruction Identifier
        'WPI':'world_port_index', // Port Index
        }, // End txtBiased
 
