@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-set -e
 
 ###################################################
 # VERY IMPORTANT: Set the $HOOT_HOME environment  #
@@ -25,9 +24,6 @@ echo GROUP: $VMGROUP
 export STXXL_VERSION=stxxl-1.3.1
 
 export LANG=en_US.UTF-8
-echo "### Reinstall libc-common ###" > CentOS_upgrade.txt 2>&1
-sudo yum -q -y reinstall glibc-common
-sudo localedef -i en_US -f UTF-8 en_US.UTF-8
 
 cd ~
 source ~/.bash_profile
@@ -50,6 +46,9 @@ sudo yum -q -y upgrade >> CentOS_upgrade.txt 2>&1
 cd ~
 
 # install useful and needed packages for working with hootenanny
+echo "### Reinstall libc-common ###" > CentOS_upgrade.txt 2>&1
+sudo yum -q -y reinstall glibc-common
+sudo localedef -i en_US -f UTF-8 en_US.UTF-8
 echo "### Installing dependencies from repos..."
 sudo yum -y install \
     asciidoc \
