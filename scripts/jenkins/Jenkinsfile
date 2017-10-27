@@ -25,6 +25,7 @@ pipeline {
                 sh 'vagrant destroy -f default || true'
                 // Make sure we have the tags info because figuring out the version is required in the build process
                 sh 'git fetch --tags'
+		sh 'git submodule update --init'
                 sh 'cp -R ../software.ubuntu1404 software'
             }
         }
