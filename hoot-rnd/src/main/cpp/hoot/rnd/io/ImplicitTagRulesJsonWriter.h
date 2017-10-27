@@ -72,7 +72,6 @@ public:
 private:
 
   boost::shared_ptr<QFile> _outputFile;
-  long _ruleWordPartCtr;
   QString _currentWord;
   QStringList _wordPartsBuffer;
 

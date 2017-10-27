@@ -69,8 +69,6 @@ void ImplicitTagRulesTsvWriter::open(const QString outputUrl)
 
 void ImplicitTagRulesTsvWriter::write(const QString inputUrl)
 {
-  //QString::number(count) % "\t" % word % "\t" % kvp;
-
   //each word takes up two rows; first col in first row contains words; remaining cols in first row
   //contain kvps; in second row, each kvp has the count directly below it
 
@@ -81,41 +79,55 @@ void ImplicitTagRulesTsvWriter::write(const QString inputUrl)
     throw HootException(QObject::tr("Error opening %1 for reading.").arg(inputUrl));
   }
 
-  QString row1;
-  QString row2;
   while (!inputFile.atEnd())
   {
     const QString line = QString::fromUtf8(inputFile.readLine().constData());
-    const QStringList lineParts = line.split("\t");
-    const QString count = lineParts[0]; //skipping numeric error checking here
-    const QString word = lineParts[1];
-    const QString kvp = lineParts[2];
+    LOG_VART(line);
+    const QString word = line.split("\t")[1].trimmed();
+    LOG_VART(word);
 
-    if (_currentWord.isEmpty())
+    LOG_VART(_currentWord);
+    if (!_currentWord.isEmpty() && word != _currentWord)
     {
-      _currentWord = word;
+      assert(_wordPartsBuffer.size() > 0);
+      LOG_TRACE(
+        "New word encountered while previous word's data still held.  Flushing previous word " <<
+        "buffer for " << _currentWord << "...");
+      _flushWordPartsBuffer();
     }
-    else if (word != _currentWord)
-    {
-      row1 += "\n";
-      _outputFile->write(row1.toUtf8());
-      row1 = "";
-      row2 += "\n";
-      _outputFile->write(row2.toUtf8());
-      row2 = "";
-    }
+    _currentWord = word;
+    _wordPartsBuffer.append(line);
+  }
+  _flushWordPartsBuffer(true);
+  inputFile.close();
+}
 
-    if (row1.isEmpty())
+void ImplicitTagRulesTsvWriter::_flushWordPartsBuffer(const bool lastRule)
+{
+  QString row1 = _currentWord % "\t";
+  QString row2 = "\t";
+  for (int i = 0; i < _wordPartsBuffer.size(); i++)
+  {
+    const QStringList lineParts = _wordPartsBuffer.at(i).split("\t");
+    const QString kvp = lineParts[2].trimmed();
+    const QString count = lineParts[0].trimmed(); //skipping numeric error checking here
+
+    row1 += kvp;
+    row2 += count;
+    if (i < _wordPartsBuffer.size() - 1)
     {
-      row1 = word % "\t";
-    }
-    else
-    {
-      row1 += "\t" % kvp;
-      row2 += "\t" % count;
+      row1 += "\t";
+      row2 += "\t";
     }
   }
-  inputFile.close();
+  row1 += "\n";
+  if (!lastRule)
+  {
+    row2 += "\n";
+  }
+  _outputFile->write(row1.toUtf8());
+  _outputFile->write(row2.toUtf8());
+  _wordPartsBuffer.clear();
 }
 
 void ImplicitTagRulesTsvWriter::close()

@@ -73,6 +73,9 @@ private:
 
   boost::shared_ptr<QFile> _outputFile;
   QString _currentWord;
+  QStringList _wordPartsBuffer;
+
+  void _flushWordPartsBuffer(const bool lastRule = false);
 };
 
 }

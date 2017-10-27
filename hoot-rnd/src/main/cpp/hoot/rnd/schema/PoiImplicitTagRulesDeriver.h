@@ -110,12 +110,12 @@ private:
   QString _fixedLengthStrToQStr(const FixedLengthString& fixedLengthStr);
   bool _outputsContainsSqlite(const QStringList outputs);
   void _removeKvpsBelowOccuranceThresholdAndSortByWord(const int minOccurancesThreshold);
-  long _removeDuplicatedKeyTypes();
+  void _removeDuplicatedKeyTypes();
 
   QString _getSqliteOutput(const QStringList outputs);
   QList<boost::shared_ptr<ImplicitTagRuleWordPartWriter> > _getOutputWriters(
     const QStringList outputs);
-  void _writeRules(const QStringList outputs, const QString sqliteOutputFile, const long lineCount);
+  void _writeRules(const QStringList outputs, const QString sqliteOutputFile);
 };
 
 }

@@ -271,7 +271,7 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs,
   _wordCaseMappings.clear();
 
   _removeKvpsBelowOccuranceThresholdAndSortByWord(minOccurancesThreshold);
-  const long lineCount = _removeDuplicatedKeyTypes();
+  _removeDuplicatedKeyTypes();
 
 //  LOG_INFO(
 //    "Generated " << StringUtils::formatLargeNumber(_tagRules.size()) <<
@@ -283,7 +283,7 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs,
 //  LOG_INFO("Highest rule word count: " << _highestRuleWordCount);
 //  LOG_INFO("Highest rule tag count: " << _highestRuleTagCount);
 
-  _writeRules(outputs, sqliteOutput, lineCount);
+  _writeRules(outputs, sqliteOutput);
 }
 
 QList<boost::shared_ptr<ImplicitTagRuleWordPartWriter> > PoiImplicitTagRulesDeriver::_getOutputWriters(
@@ -302,7 +302,7 @@ QList<boost::shared_ptr<ImplicitTagRuleWordPartWriter> > PoiImplicitTagRulesDeri
 }
 
 void PoiImplicitTagRulesDeriver::_writeRules(const QStringList outputs,
-                                             const QString sqliteOutputFile, const long lineCount)
+                                             const QString sqliteOutputFile)
 {
   QList<boost::shared_ptr<ImplicitTagRuleWordPartWriter> > ruleWordPartWriters =
     _getOutputWriters(outputs);
@@ -346,7 +346,7 @@ void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccuranceThresholdAndSortByWord
   }
 }
 
-long PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
+void PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
 {
   //i.e. don't allow amenity=school AND amenity=building in the same rule
 
@@ -362,7 +362,6 @@ long PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
   }
   LOG_DEBUG("Opened sorted, deduped temp file: " << _sortedDedupedCountFile->fileName());
 
-  long lineCount = 0;
   while (!_sortedCountFile->atEnd())
   {
     const QString line = QString::fromUtf8(_sortedCountFile->readLine().constData());
@@ -400,11 +399,8 @@ long PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
       const QString updatedLine = QString::number(count) % "\t" % word % "\t" % kvp;
       LOG_VART(updatedLine);
       _sortedDedupedCountFile->write(updatedLine.toUtf8());
-      lineCount++;
     }
   }
-
-  return lineCount;
 }
 
 }

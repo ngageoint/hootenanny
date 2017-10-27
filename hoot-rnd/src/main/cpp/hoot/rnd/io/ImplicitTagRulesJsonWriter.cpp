@@ -39,8 +39,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ImplicitTagRuleWordPartWriter, ImplicitTagRulesJsonWriter)
 
-ImplicitTagRulesJsonWriter::ImplicitTagRulesJsonWriter() :
-_ruleWordPartCtr(0)
+ImplicitTagRulesJsonWriter::ImplicitTagRulesJsonWriter()
 {
 }
 
@@ -56,8 +55,6 @@ bool ImplicitTagRulesJsonWriter::isSupported(const QString outputUrl)
 
 void ImplicitTagRulesJsonWriter::open(const QString outputUrl)
 {
-  _ruleWordPartCtr = 0;
-
   _outputFile.reset(new QFile());
   _outputFile->setFileName(outputUrl);
   if (_outputFile->exists() && !_outputFile->remove())
@@ -82,25 +79,20 @@ void ImplicitTagRulesJsonWriter::write(const QString inputUrl)
     throw HootException(QObject::tr("Error opening %1 for reading.").arg(inputUrl));
   }
 
-  //QString kvpLine;
   while (!inputFile.atEnd())
   {
     const QString line = QString::fromUtf8(inputFile.readLine().constData());
     LOG_VART(line);
     const QString word = line.split("\t")[1].trimmed();
-
     LOG_VART(word);
+
     LOG_VART(_currentWord);
-    if (_currentWord.isEmpty() || word == _currentWord)
-    {
-      LOG_TRACE("Line the same or empty.  Appending line to buffer: " << line);
-    }
-    else
+    if (!_currentWord.isEmpty() && word != _currentWord)
     {
       assert(_wordPartsBuffer.size() > 0);
       LOG_TRACE(
-        "New word encountered.  Flushing previous word buffer for " << _currentWord << "...");
-      //LOG_VART(_wordPartsBuffer);
+        "New word encountered while previous word's data still held.  Flushing previous word " <<
+        "buffer for " << _currentWord << "...");
       _flushWordPartsBuffer();
     }
     _currentWord = word;
@@ -108,8 +100,6 @@ void ImplicitTagRulesJsonWriter::write(const QString inputUrl)
   }
   _flushWordPartsBuffer(true);
   inputFile.close();
-
-  _ruleWordPartCtr++;
 }
 
 void ImplicitTagRulesJsonWriter::_flushWordPartsBuffer(const bool lastRule)
@@ -148,7 +138,6 @@ void ImplicitTagRulesJsonWriter::close()
     _outputFile->write(QString("]").toUtf8());
     _outputFile->close();
     _outputFile.reset();
-    _ruleWordPartCtr = 0;
   }
 }
 
