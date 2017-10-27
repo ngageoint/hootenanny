@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 set -e
+RVM_HOME="${RVM_HOME:-${HOME}/.rvm}"
 
 # TODO: Download a cache and extract it.
+source $RVM_HOME/scripts/rvm
 
 # gem installs are *very* slow, hence all the checks in place here to facilitate debugging
 if ! gem list --local | grep -q mime-types; then
