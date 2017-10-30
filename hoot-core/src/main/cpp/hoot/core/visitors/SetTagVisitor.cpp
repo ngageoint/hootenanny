@@ -62,7 +62,10 @@ void SetTagVisitor::setConfiguration(const Settings& conf)
     throw IllegalArgumentException("set.tag.visitor key and value must be the same length.");
   }
   _appendToExistingValue = configOptions.getSetTagVisitorAppendToExistingValue();
-  _elementType = ElementType::fromString(configOptions.getSetTagVisitorElementType());
+  if (!configOptions.getSetTagVisitorElementType().trimmed().isEmpty())
+  {
+    _elementType = ElementType::fromString(configOptions.getSetTagVisitorElementType());
+  }
 }
 
 void SetTagVisitor::_setTag(const ElementPtr& e, QString k, QString v)
