@@ -125,10 +125,6 @@
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-599"/>
     </node>
-    <node visible="true" id="-565" timestamp="2017-06-07T15:18:19Z" version="1" changeset="118" lat="18.5531288932297436" lon="-72.3325268809589232">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-565"/>
-    </node>
     <node visible="true" id="-467" timestamp="2017-06-07T15:18:21Z" version="1" changeset="119" lat="18.5516157000000028" lon="-72.3434306000000049">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-467"/>
@@ -216,6 +212,10 @@
     <node visible="true" id="-446" timestamp="2017-06-07T15:18:21Z" version="1" changeset="119" lat="18.5473271000000004" lon="-72.3470496999999995">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-446"/>
+    </node>
+    <node visible="true" id="-445" timestamp="2017-06-07T15:18:21Z" version="1" changeset="119" lat="18.5483079999999951" lon="-72.3468175999999943">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-445"/>
     </node>
     <node visible="true" id="-444" timestamp="2017-06-07T15:18:21Z" version="1" changeset="119" lat="18.5486804999999997" lon="-72.3467308000000031">
         <tag k="hoot:status" v="1"/>
@@ -732,6 +732,10 @@
     <node visible="true" id="-316" timestamp="2017-06-07T15:18:21Z" version="1" changeset="119" lat="18.5496304999999992" lon="-72.3396572000000049">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-316"/>
+    </node>
+    <node visible="true" id="-315" timestamp="2017-06-07T15:18:21Z" version="1" changeset="119" lat="18.5495872999999953" lon="-72.3396675000000045">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-315"/>
     </node>
     <node visible="true" id="-314" timestamp="2017-06-07T15:18:21Z" version="1" changeset="119" lat="18.5490552999999991" lon="-72.3397614000000004">
         <tag k="hoot:status" v="1"/>
@@ -2024,7 +2028,7 @@
     </way>
     <way visible="true" id="-757" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-316"/>
-        <nd ref="-200"/>
+        <nd ref="-315"/>
         <nd ref="-314"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="source" v="osm;osm"/>
@@ -3831,7 +3835,7 @@
     </way>
     <way visible="true" id="-630" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-209"/>
-        <nd ref="-120"/>
+        <nd ref="-445"/>
         <tag k="width:minimum_traveled_way" v="8"/>
         <tag k="source" v="CNIGS/OIM/ FOCS;osm;mgcp"/>
         <tag k="condition" v="functional"/>
@@ -4236,22 +4240,33 @@
         <tag k="hoot:id" v="-606"/>
     </way>
     <way visible="true" id="-605" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-200"/>
+        <nd ref="-315"/>
         <nd ref="-316"/>
         <nd ref="-200"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="hot_iom_cosmha;osm;osm"/>
-        <tag k="uuid" v="{3bfb20f5-daa2-4cbb-bcca-7e45b88828eb}"/>
+        <tag k="width:minimum_traveled_way" v="8"/>
+        <tag k="source" v="hot_iom_cosmha;osm;mgcp"/>
+        <tag k="condition" v="functional"/>
         <tag k="name" v="Rue Docteur Aubry"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="bad"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="tertiary"/>
+        <tag k="lanes" v="2"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="median" v="no"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="operational_status" v="open"/>
+        <tag k="attribution" v="osm;osm"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.145Z"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="highway" v="tertiary"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="uuid" v="{3bfb20f5-daa2-4cbb-bcca-7e45b88828eb};{{d5dd6c71-1f98-4bf2-9238-6a9acd8e5934}}"/>
+        <tag k="location" v="surface"/>
+        <tag k="smoothness" v="bad"/>
+        <tag k="operational_status_quality" v="confirmed"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-605"/>
     </way>
@@ -4746,7 +4761,7 @@
     </way>
     <way visible="true" id="-574" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-446"/>
-        <nd ref="-120"/>
+        <nd ref="-445"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="oneway" v="yes"/>
         <tag k="source" v="survey; OSM-adjusted Bing;osm;osm"/>
@@ -4814,7 +4829,7 @@
         <tag k="hoot:id" v="-570"/>
     </way>
     <way visible="true" id="-568" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-120"/>
+        <nd ref="-445"/>
         <nd ref="-120"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="operational_status_quality" v="confirmed"/>
@@ -4836,17 +4851,29 @@
         <tag k="hoot:id" v="-568"/>
     </way>
     <way visible="true" id="-566" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-120"/>
+        <nd ref="-445"/>
         <nd ref="-444"/>
+        <tag k="width:minimum_traveled_way" v="8"/>
+        <tag k="source" v="survey; OSM-adjusted Bing;osm;mgcp"/>
+        <tag k="condition" v="functional"/>
+        <tag k="name" v="Avenue Marie Jeanne"/>
+        <tag k="lanes" v="4"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="oneway" v="yes"/>
-        <tag k="source" v="survey; OSM-adjusted Bing;osm;osm"/>
-        <tag k="uuid" v="{04371857-9646-4a0a-a3a2-84792edc3095}"/>
-        <tag k="name" v="Avenue Marie Jeanne"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="surface" v="paved"/>
+        <tag k="median" v="yes"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="source:description" v="IKONOS Imagery"/>
         <tag k="attribution" v="osm;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.132Z"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="highway" v="tertiary"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="uuid" v="{04371857-9646-4a0a-a3a2-84792edc3095};{{4c6565c4-9ac3-4175-a398-7633e498309d}}"/>
+        <tag k="location" v="surface"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-566"/>
     </way>
@@ -4903,15 +4930,27 @@
     <way visible="true" id="-560" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-444"/>
         <nd ref="-443"/>
+        <tag k="width:minimum_traveled_way" v="8"/>
+        <tag k="source" v="survey; OSM-adjusted Bing;osm;mgcp"/>
+        <tag k="condition" v="functional"/>
+        <tag k="name" v="Avenue Marie Jeanne"/>
+        <tag k="lanes" v="4"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="oneway" v="yes"/>
-        <tag k="source" v="survey; OSM-adjusted Bing;osm;osm"/>
-        <tag k="uuid" v="{04371857-9646-4a0a-a3a2-84792edc3095}"/>
-        <tag k="name" v="Avenue Marie Jeanne"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="surface" v="paved"/>
+        <tag k="median" v="yes"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="source:description" v="IKONOS Imagery"/>
         <tag k="attribution" v="osm;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.132Z"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="highway" v="tertiary"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="uuid" v="{04371857-9646-4a0a-a3a2-84792edc3095};{{4c6565c4-9ac3-4175-a398-7633e498309d}}"/>
+        <tag k="location" v="surface"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-560"/>
     </way>
@@ -5004,15 +5043,27 @@
     <way visible="true" id="-554" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-443"/>
         <nd ref="-442"/>
+        <tag k="width:minimum_traveled_way" v="8"/>
+        <tag k="source" v="survey; OSM-adjusted Bing;osm;mgcp"/>
+        <tag k="condition" v="functional"/>
+        <tag k="name" v="Avenue Marie Jeanne"/>
+        <tag k="lanes" v="4"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="oneway" v="yes"/>
-        <tag k="source" v="survey; OSM-adjusted Bing;osm;osm"/>
-        <tag k="uuid" v="{04371857-9646-4a0a-a3a2-84792edc3095}"/>
-        <tag k="name" v="Avenue Marie Jeanne"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="surface" v="paved"/>
+        <tag k="median" v="yes"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="source:description" v="IKONOS Imagery"/>
         <tag k="attribution" v="osm;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.132Z"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="highway" v="tertiary"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="uuid" v="{04371857-9646-4a0a-a3a2-84792edc3095};{{4c6565c4-9ac3-4175-a398-7633e498309d}}"/>
+        <tag k="location" v="surface"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-554"/>
     </way>
@@ -6121,7 +6172,7 @@
     </way>
     <way visible="true" id="-484" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-138"/>
-        <nd ref="-200"/>
+        <nd ref="-315"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="source" v="osm;osm"/>
         <tag k="uuid" v="{a6c936cc-e2ad-49d5-9dad-8fe5537675f8}"/>
@@ -6759,27 +6810,15 @@
     <way visible="true" id="-427" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-14"/>
         <nd ref="-120"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
-        <tag k="source" v="survey; OSM-adjusted Bing;osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="name" v="Avenue Marie Jeanne"/>
-        <tag k="lanes" v="4"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="oneway" v="yes"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="yes"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="source" v="survey; OSM-adjusted Bing;osm;osm"/>
+        <tag k="uuid" v="{b211a83c-4c16-49e1-82db-f9c74b3aef73}"/>
+        <tag k="name" v="Avenue Marie Jeanne"/>
         <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.132Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="tertiary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{b211a83c-4c16-49e1-82db-f9c74b3aef73};{{4c6565c4-9ac3-4175-a398-7633e498309d}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-427"/>
     </way>
@@ -7507,7 +7546,7 @@
     <way visible="true" id="-365" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-635"/>
         <nd ref="-599"/>
-        <nd ref="-120"/>
+        <nd ref="-445"/>
         <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.132Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="condition" v="functional"/>
@@ -8084,7 +8123,7 @@
     </way>
     <way visible="true" id="-297" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-314"/>
-        <nd ref="-200"/>
+        <nd ref="-315"/>
         <tag k="width:minimum_traveled_way" v="8"/>
         <tag k="source" v="hot_iom_cosmha;osm;mgcp"/>
         <tag k="condition" v="functional"/>
@@ -8707,29 +8746,6 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-220"/>
     </way>
-    <way visible="true" id="-218" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-278"/>
-        <nd ref="-565"/>
-        <tag k="width:minimum_traveled_way" v="5"/>
-        <tag k="source" v="mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="lanes" v="2"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.142Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="highway" v="road"/>
-        <tag k="source:datetime" v="2010-01-13"/>
-        <tag k="uuid" v="{{1385da9c-23ca-48fc-b5fd-ba3560a6c748}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-218"/>
-    </way>
     <way visible="true" id="-214" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-289"/>
         <nd ref="-288"/>
@@ -8846,19 +8862,30 @@
     <way visible="true" id="-198" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-278"/>
         <nd ref="-228"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="OIM/GIS/DTM;osm;osm"/>
-        <tag k="uuid" v="{5494e606-2981-4133-a8e8-a2ba653da7c7}"/>
+        <tag k="width:minimum_traveled_way" v="5"/>
+        <tag k="source" v="OIM/GIS/DTM;osm;mgcp"/>
+        <tag k="condition" v="functional"/>
         <tag k="name" v="Delmas 4"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="unclassified"/>
+        <tag k="lanes" v="2"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="median" v="no"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="operational_status" v="open"/>
+        <tag k="attribution" v="osm;osm"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.142Z"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="uuid" v="{5494e606-2981-4133-a8e8-a2ba653da7c7};{{1385da9c-23ca-48fc-b5fd-ba3560a6c748}}"/>
+        <tag k="location" v="surface"/>
+        <tag k="smoothness" v="intermediate"/>
+        <tag k="operational_status_quality" v="confirmed"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-198"/>
     </way>
@@ -9004,27 +9031,15 @@
         <nd ref="-261"/>
         <nd ref="-12"/>
         <nd ref="-14"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
-        <tag k="source" v="survey; OSM-adjusted Bing;osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="name" v="Avenue Marie Jeanne"/>
-        <tag k="lanes" v="4"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="oneway" v="yes"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="yes"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="source" v="survey; OSM-adjusted Bing;osm;osm"/>
+        <tag k="uuid" v="{b211a83c-4c16-49e1-82db-f9c74b3aef73}"/>
+        <tag k="name" v="Avenue Marie Jeanne"/>
         <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.132Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="tertiary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{b211a83c-4c16-49e1-82db-f9c74b3aef73};{{4c6565c4-9ac3-4175-a398-7633e498309d}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-185"/>
     </way>
@@ -9216,27 +9231,15 @@
         <nd ref="-442"/>
         <nd ref="-13"/>
         <nd ref="-261"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
-        <tag k="source" v="survey; OSM-adjusted Bing;osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="name" v="Avenue Marie Jeanne"/>
-        <tag k="lanes" v="4"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="oneway" v="yes"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="yes"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="source" v="survey; OSM-adjusted Bing;osm;osm"/>
+        <tag k="uuid" v="{b211a83c-4c16-49e1-82db-f9c74b3aef73}"/>
+        <tag k="name" v="Avenue Marie Jeanne"/>
         <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.132Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="tertiary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{b211a83c-4c16-49e1-82db-f9c74b3aef73};{{4c6565c4-9ac3-4175-a398-7633e498309d}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-167"/>
     </way>
@@ -9312,7 +9315,7 @@
         <tag k="hoot:id" v="-155"/>
     </way>
     <way visible="true" id="-151" timestamp="2017-06-07T15:18:19Z" version="1" changeset="118">
-        <nd ref="-565"/>
+        <nd ref="-227"/>
         <nd ref="-227"/>
         <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.142Z"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
@@ -9904,16 +9907,28 @@
     <way visible="true" id="-72" timestamp="2017-06-07T15:18:21Z" version="1" changeset="119">
         <nd ref="-228"/>
         <nd ref="-227"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="width:minimum_traveled_way" v="5"/>
+        <tag k="source" v="GeoEye;osm;mgcp"/>
         <tag k="bridge" v="yes"/>
-        <tag k="layer" v="1"/>
-        <tag k="source" v="GeoEye;osm;osm"/>
-        <tag k="uuid" v="{8c19f6b5-0a0e-4f20-80dd-0c2b051ab13b}"/>
+        <tag k="condition" v="functional"/>
         <tag k="name" v="Delmas 4"/>
+        <tag k="lanes" v="2"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="seasonal" v="no"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="surface" v="paved"/>
+        <tag k="layer" v="1"/>
+        <tag k="median" v="no"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="source:description" v="IKONOS Imagery"/>
         <tag k="attribution" v="osm;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.142Z"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="highway" v="residential"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="uuid" v="{8c19f6b5-0a0e-4f20-80dd-0c2b051ab13b};{{1385da9c-23ca-48fc-b5fd-ba3560a6c748}}"/>
+        <tag k="location" v="surface"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-72"/>
     </way>
@@ -10434,7 +10449,17 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-3"/>
     </way>
-    <relation visible="true" id="-312" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-931" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-200" role="reviewee"/>
+        <member type="way" ref="-484" role="reviewee"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:type" v="Highway"/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="type" v="review"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-931"/>
+    </relation>
+    <relation visible="true" id="-930" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-574" role="reviewee"/>
         <member type="way" ref="-365" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -10442,9 +10467,9 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="type" v="review"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-312"/>
+        <tag k="hoot:id" v="-930"/>
     </relation>
-    <relation visible="true" id="-311" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-929" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-428" role="reviewee"/>
         <member type="way" ref="-365" role="reviewee"/>
         <member type="way" ref="-190" role="reviewee"/>
@@ -10453,9 +10478,9 @@
         <tag k="hoot:review:members" v="3"/>
         <tag k="type" v="review"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-311"/>
+        <tag k="hoot:id" v="-929"/>
     </relation>
-    <relation visible="true" id="-310" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-928" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-574" role="reviewee"/>
         <member type="way" ref="-573" role="reviewee"/>
         <member type="way" ref="-365" role="reviewee"/>
@@ -10464,9 +10489,9 @@
         <tag k="hoot:review:members" v="3"/>
         <tag k="type" v="review"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-310"/>
+        <tag k="hoot:id" v="-928"/>
     </relation>
-    <relation visible="true" id="-309" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-927" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-428" role="reviewee"/>
         <member type="way" ref="-365" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -10474,48 +10499,6 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="type" v="review"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-309"/>
-    </relation>
-    <relation visible="true" id="-308" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-218" role="reviewee"/>
-        <member type="way" ref="-198" role="reviewee"/>
-        <member type="way" ref="-72" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:members" v="3"/>
-        <tag k="type" v="review"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-308"/>
-    </relation>
-    <relation visible="true" id="-307" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-218" role="reviewee"/>
-        <member type="way" ref="-198" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="type" v="review"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-307"/>
-    </relation>
-    <relation visible="true" id="-306" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-151" role="reviewee"/>
-        <member type="way" ref="-72" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="type" v="review"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-306"/>
-    </relation>
-    <relation visible="true" id="-305" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-218" role="reviewee"/>
-        <member type="way" ref="-198" role="reviewee"/>
-        <member type="way" ref="-151" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:members" v="3"/>
-        <tag k="type" v="review"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-305"/>
+        <tag k="hoot:id" v="-927"/>
     </relation>
 </osm>

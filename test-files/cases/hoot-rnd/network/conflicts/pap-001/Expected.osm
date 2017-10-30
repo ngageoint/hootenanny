@@ -1,50 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="18.53802799999999" minlon="-72.334763" maxlat="18.541352" maxlon="-72.33079299999999"/>
-    <node visible="true" id="-98" timestamp="2017-06-07T14:34:46Z" version="1" changeset="106" lat="18.5405373648799952" lon="-72.3328278768299953">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-98"/>
-    </node>
-    <node visible="true" id="-97" timestamp="2017-06-07T14:34:46Z" version="1" changeset="106" lat="18.5406742681300010" lon="-72.3327907988699934">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-97"/>
-    </node>
-    <node visible="true" id="-96" timestamp="2017-06-07T14:34:46Z" version="1" changeset="106" lat="18.5410364913099954" lon="-72.3325940004399968">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-96"/>
-    </node>
-    <node visible="true" id="-95" timestamp="2017-06-07T14:34:46Z" version="1" changeset="106" lat="18.5389287516999985" lon="-72.3320635003500030">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-95"/>
-    </node>
-    <node visible="true" id="-94" timestamp="2017-06-07T14:34:46Z" version="1" changeset="106" lat="18.5397273539899921" lon="-72.3325940004399968">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-94"/>
-    </node>
-    <node visible="true" id="-90" timestamp="2017-06-07T14:34:46Z" version="1" changeset="106" lat="18.5399098916499945" lon="-72.3326054090500037">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-90"/>
-    </node>
-    <node visible="true" id="-89" timestamp="2017-06-07T14:34:46Z" version="1" changeset="106" lat="18.5398072142199979" lon="-72.3323886455700062">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-89"/>
-    </node>
-    <node visible="true" id="-88" timestamp="2017-06-07T14:34:46Z" version="1" changeset="106" lat="18.5396104158000021" lon="-72.3317269465299972">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-88"/>
-    </node>
-    <node visible="true" id="-86" timestamp="2017-06-07T14:34:46Z" version="1" changeset="106" lat="18.5392981625900006" lon="-72.3307929999999857">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-86"/>
-    </node>
-    <node visible="true" id="-85" timestamp="2017-06-07T14:34:46Z" version="1" changeset="106" lat="18.5380279999999971" lon="-72.3315548113799878">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-85"/>
-    </node>
-    <node visible="true" id="-83" timestamp="2017-06-07T14:34:46Z" version="1" changeset="106" lat="18.5413519999999998" lon="-72.3324453124399867">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-83"/>
-    </node>
     <node visible="true" id="-82" timestamp="2017-06-07T14:34:47Z" version="1" changeset="107" lat="18.5407356000000050" lon="-72.3327463999999907">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-82"/>
@@ -142,10 +98,10 @@
     <node visible="true" id="-60" timestamp="2017-06-07T14:34:47Z" version="1" changeset="107" lat="18.5400817999999994" lon="-72.3328508000000028">
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="alt_name" v="Carrefour Ti Four"/>
-        <tag k="source" v="survey;osm;osm"/>
+        <tag k="source" v="survey;osm"/>
         <tag k="uuid" v="{19a614ad-9f90-4313-96cf-d3042134737b}"/>
         <tag k="name" v="Carrefour Tifour"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="highway" v="traffic_signals"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
@@ -655,44 +611,64 @@
         <nd ref="-41"/>
         <nd ref="-40"/>
         <nd ref="-39"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="oneway" v="yes"/>
+        <tag k="width:minimum_traveled_way" v="5"/>
+        <tag k="source" v="GPS; survey; CNIGS/FOCS/OIM;osm;mgcp"/>
+        <tag k="condition" v="functional"/>
         <tag k="loc_name" v="Bois Verna"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="GPS; survey; CNIGS/FOCS/OIM;osm;osm"/>
-        <tag k="uuid" v="{0cae07eb-5026-4d13-a117-b81d561b6c22}"/>
         <tag k="name" v="Avenue Lamartinière"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="tertiary"/>
         <tag k="lanes" v="2"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="oneway" v="yes"/>
+        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="median" v="no"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="operational_status" v="open"/>
+        <tag k="attribution" v="osm;osm"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.117Z"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="highway" v="tertiary"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="uuid" v="{0cae07eb-5026-4d13-a117-b81d561b6c22};{{1740bac5-921f-4300-a4f0-935cf759d8d9}}"/>
+        <tag k="location" v="surface"/>
+        <tag k="smoothness" v="intermediate"/>
+        <tag k="operational_status_quality" v="confirmed"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-71"/>
     </way>
     <way visible="true" id="-70" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-44"/>
         <nd ref="-63"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="oneway" v="yes"/>
+        <tag k="width:minimum_traveled_way" v="5"/>
+        <tag k="source" v="GPS; survey; CNIGS/FOCS/OIM;osm;mgcp"/>
+        <tag k="condition" v="functional"/>
         <tag k="loc_name" v="Bois Verna"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="GPS; survey; CNIGS/FOCS/OIM;osm;osm"/>
-        <tag k="uuid" v="{0cae07eb-5026-4d13-a117-b81d561b6c22}"/>
         <tag k="name" v="Avenue Lamartinière"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="tertiary"/>
         <tag k="lanes" v="2"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="oneway" v="yes"/>
+        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="median" v="no"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="operational_status" v="open"/>
+        <tag k="attribution" v="osm;osm"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.117Z"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="highway" v="tertiary"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="uuid" v="{0cae07eb-5026-4d13-a117-b81d561b6c22};{{1740bac5-921f-4300-a4f0-935cf759d8d9}}"/>
+        <tag k="location" v="surface"/>
+        <tag k="smoothness" v="intermediate"/>
+        <tag k="operational_status_quality" v="confirmed"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-70"/>
     </way>
@@ -763,21 +739,31 @@
         <nd ref="-34"/>
         <nd ref="-33"/>
         <nd ref="-5"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="CNIGS/OIM/ FOCS;osm;osm"/>
-        <tag k="uuid" v="{545693df-434b-4f9c-a7b3-ada52d3cefa5}"/>
+        <tag k="width:minimum_traveled_way" v="8"/>
+        <tag k="source" v="CNIGS/OIM/ FOCS;osm;mgcp"/>
+        <tag k="condition" v="functional"/>
         <tag k="name" v="Avenue Charles Sumner"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="unclassified"/>
         <tag k="lanes" v="2"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="oneway" v="yes"/>
+        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="median" v="no"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="operational_status" v="open"/>
+        <tag k="attribution" v="osm;osm"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.117Z"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="uuid" v="{545693df-434b-4f9c-a7b3-ada52d3cefa5};{{b42d0f12-b8a3-45d6-860f-de5e65d58670}}"/>
+        <tag k="location" v="surface"/>
+        <tag k="smoothness" v="intermediate"/>
+        <tag k="operational_status_quality" v="confirmed"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-67"/>
     </way>
@@ -786,21 +772,31 @@
         <nd ref="-37"/>
         <nd ref="-36"/>
         <nd ref="-35"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="CNIGS/OIM/ FOCS;osm;osm"/>
-        <tag k="uuid" v="{545693df-434b-4f9c-a7b3-ada52d3cefa5}"/>
+        <tag k="width:minimum_traveled_way" v="8"/>
+        <tag k="source" v="CNIGS/OIM/ FOCS;osm;mgcp"/>
+        <tag k="condition" v="functional"/>
         <tag k="name" v="Avenue Charles Sumner"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="unclassified"/>
         <tag k="lanes" v="2"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="oneway" v="yes"/>
+        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="median" v="no"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="operational_status" v="open"/>
+        <tag k="attribution" v="osm;osm"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.117Z"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="uuid" v="{545693df-434b-4f9c-a7b3-ada52d3cefa5};{{b42d0f12-b8a3-45d6-860f-de5e65d58670}}"/>
+        <tag k="location" v="surface"/>
+        <tag k="smoothness" v="intermediate"/>
+        <tag k="operational_status_quality" v="confirmed"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-66"/>
     </way>
@@ -964,7 +960,7 @@
         <nd ref="-56"/>
         <nd ref="-55"/>
         <nd ref="-54"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
+        <tag k="width:minimum_traveled_way" v="5"/>
         <tag k="source" v="CNIGS/OIM/ FOCS;osm;mgcp"/>
         <tag k="condition" v="functional"/>
         <tag k="name" v="Rue Magny"/>
@@ -980,11 +976,11 @@
         <tag k="source:description" v="IKONOS Imagery"/>
         <tag k="operational_status" v="open"/>
         <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.116Z"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.117Z"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="highway" v="tertiary"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{dff8ca11-5ac8-4eda-90e2-bb79ca069dd2};{{40f3d9cd-427e-4e4f-ab09-f0eff75bfe98}}"/>
+        <tag k="uuid" v="{dff8ca11-5ac8-4eda-90e2-bb79ca069dd2};{{1740bac5-921f-4300-a4f0-935cf759d8d9}}"/>
         <tag k="location" v="surface"/>
         <tag k="smoothness" v="intermediate"/>
         <tag k="operational_status_quality" v="confirmed"/>
@@ -992,101 +988,69 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-58"/>
     </way>
-    <way visible="true" id="-57" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-54"/>
-        <nd ref="-90"/>
-        <nd ref="-89"/>
-        <nd ref="-88"/>
-        <nd ref="-86"/>
-        <tag k="width:minimum_traveled_way" v="5"/>
-        <tag k="source" v="mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="lanes" v="2"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.117Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="highway" v="road"/>
-        <tag k="source:datetime" v="2010-01-13"/>
-        <tag k="uuid" v="{{1740bac5-921f-4300-a4f0-935cf759d8d9}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-57"/>
-    </way>
-    <way visible="true" id="-55" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-54"/>
-        <nd ref="-98"/>
-        <nd ref="-97"/>
-        <nd ref="-96"/>
-        <nd ref="-83"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
-        <tag k="source" v="mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="lanes" v="2"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.116Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="highway" v="road"/>
-        <tag k="source:datetime" v="2010-01-13"/>
-        <tag k="uuid" v="{{40f3d9cd-427e-4e4f-ab09-f0eff75bfe98}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-55"/>
-    </way>
     <way visible="true" id="-53" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-52"/>
         <nd ref="-51"/>
         <nd ref="-50"/>
         <nd ref="-60"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="alt_name" v="Avenue Christophe"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="CNIGS/OIM/ FOCS;osm;osm"/>
-        <tag k="uuid" v="{94af6812-a4f3-4543-97e3-bac54b1793c8}"/>
+        <tag k="width:minimum_traveled_way" v="8"/>
+        <tag k="source" v="CNIGS/OIM/ FOCS;osm;mgcp"/>
+        <tag k="condition" v="functional"/>
         <tag k="name" v="Route des Dalles"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="tertiary"/>
         <tag k="lanes" v="2"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="oneway" v="yes"/>
+        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="alt_name" v="Avenue Christophe"/>
         <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="median" v="no"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="operational_status" v="open"/>
+        <tag k="attribution" v="osm;osm"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.116Z"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="highway" v="tertiary"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="uuid" v="{94af6812-a4f3-4543-97e3-bac54b1793c8};{{40f3d9cd-427e-4e4f-ab09-f0eff75bfe98}}"/>
+        <tag k="location" v="surface"/>
+        <tag k="smoothness" v="intermediate"/>
+        <tag k="operational_status_quality" v="confirmed"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-53"/>
     </way>
     <way visible="true" id="-52" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-82"/>
         <nd ref="-52"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="alt_name" v="Avenue Christophe"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="CNIGS/OIM/ FOCS;osm;osm"/>
-        <tag k="uuid" v="{94af6812-a4f3-4543-97e3-bac54b1793c8}"/>
+        <tag k="width:minimum_traveled_way" v="8"/>
+        <tag k="source" v="CNIGS/OIM/ FOCS;osm;mgcp"/>
+        <tag k="condition" v="functional"/>
         <tag k="name" v="Route des Dalles"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="tertiary"/>
         <tag k="lanes" v="2"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="oneway" v="yes"/>
+        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="alt_name" v="Avenue Christophe"/>
         <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="median" v="no"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="operational_status" v="open"/>
+        <tag k="attribution" v="osm;osm"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.116Z"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="highway" v="tertiary"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="uuid" v="{94af6812-a4f3-4543-97e3-bac54b1793c8};{{40f3d9cd-427e-4e4f-ab09-f0eff75bfe98}}"/>
+        <tag k="location" v="surface"/>
+        <tag k="smoothness" v="intermediate"/>
+        <tag k="operational_status_quality" v="confirmed"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-52"/>
     </way>
@@ -1151,88 +1115,128 @@
     <way visible="true" id="-47" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-46"/>
         <nd ref="-45"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="oneway" v="yes"/>
+        <tag k="width:minimum_traveled_way" v="5"/>
+        <tag k="source" v="GPS; survey; CNIGS/FOCS/OIM;osm;mgcp"/>
+        <tag k="condition" v="functional"/>
         <tag k="loc_name" v="Bois Verna"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="GPS; survey; CNIGS/FOCS/OIM;osm;osm"/>
-        <tag k="uuid" v="{0cae07eb-5026-4d13-a117-b81d561b6c22}"/>
         <tag k="name" v="Avenue Lamartinière"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="tertiary"/>
         <tag k="lanes" v="2"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="oneway" v="yes"/>
+        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="median" v="no"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="operational_status" v="open"/>
+        <tag k="attribution" v="osm;osm"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.117Z"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="highway" v="tertiary"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="uuid" v="{0cae07eb-5026-4d13-a117-b81d561b6c22};{{1740bac5-921f-4300-a4f0-935cf759d8d9}}"/>
+        <tag k="location" v="surface"/>
+        <tag k="smoothness" v="intermediate"/>
+        <tag k="operational_status_quality" v="confirmed"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-47"/>
     </way>
     <way visible="true" id="-46" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-74"/>
         <nd ref="-46"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="oneway" v="yes"/>
+        <tag k="width:minimum_traveled_way" v="5"/>
+        <tag k="source" v="GPS; survey; CNIGS/FOCS/OIM;osm;mgcp"/>
+        <tag k="condition" v="functional"/>
         <tag k="loc_name" v="Bois Verna"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="GPS; survey; CNIGS/FOCS/OIM;osm;osm"/>
-        <tag k="uuid" v="{0cae07eb-5026-4d13-a117-b81d561b6c22}"/>
         <tag k="name" v="Avenue Lamartinière"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="tertiary"/>
         <tag k="lanes" v="2"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="oneway" v="yes"/>
+        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="median" v="no"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="operational_status" v="open"/>
+        <tag k="attribution" v="osm;osm"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.117Z"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="highway" v="tertiary"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="uuid" v="{0cae07eb-5026-4d13-a117-b81d561b6c22};{{1740bac5-921f-4300-a4f0-935cf759d8d9}}"/>
+        <tag k="location" v="surface"/>
+        <tag k="smoothness" v="intermediate"/>
+        <tag k="operational_status_quality" v="confirmed"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-46"/>
     </way>
     <way visible="true" id="-44" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-79"/>
         <nd ref="-82"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="alt_name" v="Avenue Christophe"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="CNIGS/OIM/ FOCS;osm;osm"/>
-        <tag k="uuid" v="{94af6812-a4f3-4543-97e3-bac54b1793c8}"/>
+        <tag k="width:minimum_traveled_way" v="8"/>
+        <tag k="source" v="CNIGS/OIM/ FOCS;osm;mgcp"/>
+        <tag k="condition" v="functional"/>
         <tag k="name" v="Route des Dalles"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="tertiary"/>
         <tag k="lanes" v="2"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="oneway" v="yes"/>
+        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="alt_name" v="Avenue Christophe"/>
         <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="median" v="no"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="operational_status" v="open"/>
+        <tag k="attribution" v="osm;osm"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.116Z"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="highway" v="tertiary"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="uuid" v="{94af6812-a4f3-4543-97e3-bac54b1793c8};{{40f3d9cd-427e-4e4f-ab09-f0eff75bfe98}}"/>
+        <tag k="location" v="surface"/>
+        <tag k="smoothness" v="intermediate"/>
+        <tag k="operational_status_quality" v="confirmed"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-44"/>
     </way>
     <way visible="true" id="-43" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-45"/>
         <nd ref="-44"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="oneway" v="yes"/>
+        <tag k="width:minimum_traveled_way" v="5"/>
+        <tag k="source" v="GPS; survey; CNIGS/FOCS/OIM;osm;mgcp"/>
+        <tag k="condition" v="functional"/>
         <tag k="loc_name" v="Bois Verna"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="GPS; survey; CNIGS/FOCS/OIM;osm;osm"/>
-        <tag k="uuid" v="{0cae07eb-5026-4d13-a117-b81d561b6c22}"/>
         <tag k="name" v="Avenue Lamartinière"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="tertiary"/>
         <tag k="lanes" v="2"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="oneway" v="yes"/>
+        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="median" v="no"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="operational_status" v="open"/>
+        <tag k="attribution" v="osm;osm"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.117Z"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="highway" v="tertiary"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="uuid" v="{0cae07eb-5026-4d13-a117-b81d561b6c22};{{1740bac5-921f-4300-a4f0-935cf759d8d9}}"/>
+        <tag k="location" v="surface"/>
+        <tag k="smoothness" v="intermediate"/>
+        <tag k="operational_status_quality" v="confirmed"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-43"/>
     </way>
@@ -1265,43 +1269,63 @@
     <way visible="true" id="-34" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-73"/>
         <nd ref="-79"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="alt_name" v="Avenue Christophe"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="CNIGS/OIM/ FOCS;osm;osm"/>
-        <tag k="uuid" v="{94af6812-a4f3-4543-97e3-bac54b1793c8}"/>
+        <tag k="width:minimum_traveled_way" v="8"/>
+        <tag k="source" v="CNIGS/OIM/ FOCS;osm;mgcp"/>
+        <tag k="condition" v="functional"/>
         <tag k="name" v="Route des Dalles"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="tertiary"/>
         <tag k="lanes" v="2"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="oneway" v="yes"/>
+        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="alt_name" v="Avenue Christophe"/>
         <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="median" v="no"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="operational_status" v="open"/>
+        <tag k="attribution" v="osm;osm"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.116Z"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="highway" v="tertiary"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="uuid" v="{94af6812-a4f3-4543-97e3-bac54b1793c8};{{40f3d9cd-427e-4e4f-ab09-f0eff75bfe98}}"/>
+        <tag k="location" v="surface"/>
+        <tag k="smoothness" v="intermediate"/>
+        <tag k="operational_status_quality" v="confirmed"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-34"/>
     </way>
     <way visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-5"/>
         <nd ref="-75"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="CNIGS/OIM/ FOCS;osm;osm"/>
-        <tag k="uuid" v="{545693df-434b-4f9c-a7b3-ada52d3cefa5}"/>
+        <tag k="width:minimum_traveled_way" v="8"/>
+        <tag k="source" v="CNIGS/OIM/ FOCS;osm;mgcp"/>
+        <tag k="condition" v="functional"/>
         <tag k="name" v="Avenue Charles Sumner"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="unclassified"/>
         <tag k="lanes" v="2"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="oneway" v="yes"/>
+        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="median" v="no"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="operational_status" v="open"/>
+        <tag k="attribution" v="osm;osm"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.117Z"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="uuid" v="{545693df-434b-4f9c-a7b3-ada52d3cefa5};{{b42d0f12-b8a3-45d6-860f-de5e65d58670}}"/>
+        <tag k="location" v="surface"/>
+        <tag k="smoothness" v="intermediate"/>
+        <tag k="operational_status_quality" v="confirmed"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-33"/>
     </way>
@@ -1310,49 +1334,34 @@
         <nd ref="-38"/>
         <nd ref="-14"/>
         <nd ref="-60"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="oneway" v="yes"/>
+        <tag k="width:minimum_traveled_way" v="5"/>
+        <tag k="source" v="GPS; survey; CNIGS/FOCS/OIM;osm;mgcp"/>
+        <tag k="condition" v="functional"/>
         <tag k="loc_name" v="Bois Verna"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="GPS; survey; CNIGS/FOCS/OIM;osm;osm"/>
-        <tag k="uuid" v="{0cae07eb-5026-4d13-a117-b81d561b6c22}"/>
         <tag k="name" v="Avenue Lamartinière"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="tertiary"/>
         <tag k="lanes" v="2"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="oneway" v="yes"/>
+        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="median" v="no"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="operational_status" v="open"/>
+        <tag k="attribution" v="osm;osm"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.117Z"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="highway" v="tertiary"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="uuid" v="{0cae07eb-5026-4d13-a117-b81d561b6c22};{{1740bac5-921f-4300-a4f0-935cf759d8d9}}"/>
+        <tag k="location" v="surface"/>
+        <tag k="smoothness" v="intermediate"/>
+        <tag k="operational_status_quality" v="confirmed"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-31"/>
-    </way>
-    <way visible="true" id="-28" timestamp="2017-06-07T14:34:46Z" version="1" changeset="106">
-        <nd ref="-85"/>
-        <nd ref="-95"/>
-        <nd ref="-94"/>
-        <nd ref="-54"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.117Z"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="condition" v="functional"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
-        <tag k="location" v="surface"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="median" v="no"/>
-        <tag k="source" v="mgcp"/>
-        <tag k="uuid" v="{{b42d0f12-b8a3-45d6-860f-de5e65d58670}}"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="source:datetime" v="2010-01-13"/>
-        <tag k="highway" v="road"/>
-        <tag k="lanes" v="2"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-28"/>
     </way>
     <way visible="true" id="-26" timestamp="2017-06-07T14:34:47Z" version="1" changeset="107">
         <nd ref="-63"/>

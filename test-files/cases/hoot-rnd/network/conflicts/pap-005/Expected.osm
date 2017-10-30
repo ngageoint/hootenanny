@@ -9,10 +9,6 @@
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-405"/>
     </node>
-    <node visible="true" id="-403" timestamp="2017-06-07T14:55:59Z" version="1" changeset="114" lat="18.5509071603812643" lon="-72.3275175756518678">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-403"/>
-    </node>
     <node visible="true" id="-350" timestamp="2017-06-07T14:56:00Z" version="1" changeset="115" lat="18.5485419000000000" lon="-72.3295490000000001">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-350"/>
@@ -405,9 +401,9 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-253"/>
     </node>
-    <node visible="true" id="-252" timestamp="2017-06-07T14:56:00Z" version="1" changeset="115" lat="18.5506598000000018" lon="-72.3271359999999959">
+    <node visible="true" id="-251" timestamp="2017-06-07T14:56:00Z" version="1" changeset="115" lat="18.5506552000000049" lon="-72.3271138000000064">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-252"/>
+        <tag k="hoot:id" v="-251"/>
     </node>
     <node visible="true" id="-250" timestamp="2017-06-07T14:56:00Z" version="1" changeset="115" lat="18.5490232000000006" lon="-72.3277451999999954">
         <tag k="hoot:status" v="1"/>
@@ -1744,8 +1740,8 @@
         <tag k="hoot:id" v="-257"/>
     </way>
     <way visible="true" id="-256" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-252"/>
-        <nd ref="-252"/>
+        <nd ref="-251"/>
+        <nd ref="-251"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="source" v="Google Aerial;osm;osm"/>
         <tag k="uuid" v="{837e3f8b-d1d7-4d60-89d0-d597a6a65a96}"/>
@@ -1758,7 +1754,7 @@
     </way>
     <way visible="true" id="-255" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-255"/>
-        <nd ref="-252"/>
+        <nd ref="-251"/>
         <tag k="width:minimum_traveled_way" v="8"/>
         <tag k="source" v="Google Aerial;osm;mgcp"/>
         <tag k="condition" v="functional"/>
@@ -2774,7 +2770,7 @@
         <tag k="hoot:id" v="-191"/>
     </way>
     <way visible="true" id="-189" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-252"/>
+        <nd ref="-251"/>
         <nd ref="-144"/>
         <nd ref="-143"/>
         <nd ref="-142"/>
@@ -3996,7 +3992,7 @@
         <tag k="hoot:id" v="-104"/>
     </way>
     <way visible="true" id="-100" timestamp="2017-06-07T14:55:59Z" version="1" changeset="114">
-        <nd ref="-403"/>
+        <nd ref="-29"/>
         <nd ref="-406"/>
         <nd ref="-405"/>
         <nd ref="-29"/>
@@ -4019,29 +4015,6 @@
         <tag k="hoot:status" v="2"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-100"/>
-    </way>
-    <way visible="true" id="-99" timestamp="2017-06-07T14:55:59Z" version="1" changeset="114">
-        <nd ref="-255"/>
-        <nd ref="-403"/>
-        <tag k="width:minimum_traveled_way" v="5"/>
-        <tag k="source" v="mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="lanes" v="2"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.140Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="highway" v="road"/>
-        <tag k="source:datetime" v="2010-01-13"/>
-        <tag k="uuid" v="{{9f35bc29-da61-4686-a38b-86726924dad5}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-99"/>
     </way>
     <way visible="true" id="-87" timestamp="2017-06-07T14:56:00Z" version="1" changeset="115">
         <nd ref="-29"/>
@@ -4156,7 +4129,7 @@
         <tag k="hoot:id" v="-83"/>
     </way>
     <way visible="true" id="-81" timestamp="2017-06-07T14:56:00Z" version="1" changeset="115">
-        <nd ref="-252"/>
+        <nd ref="-251"/>
         <nd ref="-149"/>
         <nd ref="-148"/>
         <nd ref="-275"/>
@@ -4445,14 +4418,30 @@
         <nd ref="-255"/>
         <nd ref="-254"/>
         <nd ref="-253"/>
+        <nd ref="-30"/>
+        <nd ref="-29"/>
+        <tag k="width:minimum_traveled_way" v="5"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="source" v="Google Aerial;osm;mgcp"/>
+        <tag k="condition" v="functional"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="Google Aerial;osm;osm"/>
-        <tag k="uuid" v="{f531e2d6-17bd-459b-a197-7bb65e2627be}"/>
         <tag k="name" v="Rue Barthélemy"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="lanes" v="2"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="surface" v="paved"/>
+        <tag k="layer" v="1"/>
+        <tag k="median" v="no"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.140Z"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="uuid" v="{f531e2d6-17bd-459b-a197-7bb65e2627be};{{9f35bc29-da61-4686-a38b-86726924dad5}};{9b40ca8b-2188-4ad8-a956-40a78a7863bb}"/>
+        <tag k="location" v="surface"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-60"/>
     </way>
@@ -4694,7 +4683,7 @@
         <tag k="hoot:id" v="-37"/>
     </way>
     <way visible="true" id="-36" timestamp="2017-06-07T14:56:00Z" version="1" changeset="115">
-        <nd ref="-252"/>
+        <nd ref="-251"/>
         <nd ref="-145"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="source" v="Google Aerial;osm;osm"/>
@@ -4950,23 +4939,6 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-14"/>
     </way>
-    <way visible="true" id="-12" timestamp="2017-06-07T14:56:00Z" version="1" changeset="115">
-        <nd ref="-253"/>
-        <nd ref="-30"/>
-        <nd ref="-29"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="bridge" v="yes"/>
-        <tag k="layer" v="1"/>
-        <tag k="source" v="osm;osm"/>
-        <tag k="uuid" v="{9b40ca8b-2188-4ad8-a956-40a78a7863bb}"/>
-        <tag k="name" v="Rue Barthélemy"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-12"/>
-    </way>
     <way visible="true" id="-11" timestamp="2017-06-07T14:56:00Z" version="1" changeset="115">
         <nd ref="-27"/>
         <nd ref="-26"/>
@@ -5048,46 +5020,4 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-1"/>
     </way>
-    <relation visible="true" id="-156" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-100" role="reviewee"/>
-        <member type="way" ref="-99" role="reviewee"/>
-        <member type="way" ref="-60" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:members" v="3"/>
-        <tag k="type" v="review"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-156"/>
-    </relation>
-    <relation visible="true" id="-155" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-99" role="reviewee"/>
-        <member type="way" ref="-60" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="type" v="review"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-155"/>
-    </relation>
-    <relation visible="true" id="-154" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-99" role="reviewee"/>
-        <member type="way" ref="-60" role="reviewee"/>
-        <member type="way" ref="-12" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:members" v="3"/>
-        <tag k="type" v="review"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-154"/>
-    </relation>
-    <relation visible="true" id="-153" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-100" role="reviewee"/>
-        <member type="way" ref="-12" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="type" v="review"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-153"/>
-    </relation>
 </osm>

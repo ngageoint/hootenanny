@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="18.546063" minlon="-72.323514" maxlat="18.553024" maxlon="-72.3164799"/>
+    <node visible="true" id="-1002" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5486976693356986" lon="-72.3207641242250503">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-1002"/>
+    </node>
     <node visible="true" id="-536" timestamp="2017-06-07T14:42:49Z" version="1" changeset="112" lat="18.5490267214600024" lon="-72.3208411239100002">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-536"/>
@@ -8,26 +12,6 @@
     <node visible="true" id="-535" timestamp="2017-06-07T14:42:49Z" version="1" changeset="112" lat="18.5489967123499966" lon="-72.3208337394700038">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-535"/>
-    </node>
-    <node visible="true" id="-534" timestamp="2017-06-07T14:42:49Z" version="1" changeset="112" lat="18.5486956785600015" lon="-72.3207640557299953">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-534"/>
-    </node>
-    <node visible="true" id="-533" timestamp="2017-06-07T14:42:49Z" version="1" changeset="112" lat="18.5486711568599958" lon="-72.3208971734999864">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-533"/>
-    </node>
-    <node visible="true" id="-532" timestamp="2017-06-07T14:42:49Z" version="1" changeset="112" lat="18.5485975917799983" lon="-72.3210968501699938">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-532"/>
-    </node>
-    <node visible="true" id="-531" timestamp="2017-06-07T14:42:49Z" version="1" changeset="112" lat="18.5485292813399987" lon="-72.3212614958499813">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-531"/>
-    </node>
-    <node visible="true" id="-530" timestamp="2017-06-07T14:42:49Z" version="1" changeset="112" lat="18.5484644739999993" lon="-72.3215417438100019">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-530"/>
     </node>
     <node visible="true" id="-461" timestamp="2017-06-07T14:42:50Z" version="1" changeset="113" lat="18.5486755999999993" lon="-72.3219205999999986">
         <tag k="hoot:status" v="1"/>
@@ -112,10 +96,6 @@
     <node visible="true" id="-441" timestamp="2017-06-07T14:42:50Z" version="1" changeset="113" lat="18.5484453999999950" lon="-72.3216386000000000">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-441"/>
-    </node>
-    <node visible="true" id="-440" timestamp="2017-06-07T14:42:50Z" version="1" changeset="113" lat="18.5485973000000008" lon="-72.3216445000000050">
-        <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-440"/>
     </node>
     <node visible="true" id="-439" timestamp="2017-06-07T14:42:50Z" version="1" changeset="113" lat="18.5486293999999994" lon="-72.3215952999999843">
         <tag k="hoot:status" v="1"/>
@@ -1943,11 +1923,62 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1"/>
     </node>
-    <way visible="true" id="-1079" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1311" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1002"/>
+        <nd ref="-101"/>
+        <nd ref="-100"/>
+        <nd ref="-99"/>
+        <nd ref="-98"/>
+        <nd ref="-97"/>
+        <nd ref="-96"/>
+        <nd ref="-95"/>
+        <nd ref="-94"/>
+        <nd ref="-93"/>
+        <nd ref="-92"/>
+        <nd ref="-359"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="source" v="Google Aerial;osm;osm"/>
+        <tag k="uuid" v="{3d0a1849-adb5-40c8-bc77-de0398292d48}"/>
+        <tag k="name" v="Rue Coquillo"/>
+        <tag k="attribution" v="osm;osm"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-1311"/>
+    </way>
+    <way visible="true" id="-1310" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-436"/>
+        <nd ref="-102"/>
+        <nd ref="-1002"/>
+        <tag k="width:minimum_traveled_way" v="5"/>
+        <tag k="source" v="Google Aerial;osm;mgcp"/>
+        <tag k="condition" v="functional"/>
+        <tag k="name" v="Rue Coquillo"/>
+        <tag k="lanes" v="2"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="seasonal" v="no"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="surface" v="paved"/>
+        <tag k="median" v="no"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="attribution" v="osm;osm"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.130Z"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="uuid" v="{3d0a1849-adb5-40c8-bc77-de0398292d48};{{90d8985c-d68e-4a86-ada5-0bbeb1ab4686}}"/>
+        <tag k="location" v="surface"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-1310"/>
+    </way>
+    <way visible="true" id="-1299" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-117"/>
         <nd ref="-536"/>
         <nd ref="-535"/>
-        <nd ref="-534"/>
+        <nd ref="-1002"/>
         <tag k="width:minimum_traveled_way" v="5"/>
         <tag k="source" v="mgcp"/>
         <tag k="condition" v="functional"/>
@@ -1966,34 +1997,7 @@
         <tag k="location" v="surface"/>
         <tag k="hoot:status" v="2"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-1079"/>
-    </way>
-    <way visible="true" id="-317" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-534"/>
-        <nd ref="-533"/>
-        <nd ref="-532"/>
-        <nd ref="-531"/>
-        <nd ref="-530"/>
-        <nd ref="-440"/>
-        <tag k="width:minimum_traveled_way" v="5"/>
-        <tag k="source" v="mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="lanes" v="2"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.130Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="highway" v="road"/>
-        <tag k="source:datetime" v="2010-01-13"/>
-        <tag k="uuid" v="{{90d8985c-d68e-4a86-ada5-0bbeb1ab4686}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-317"/>
+        <tag k="hoot:id" v="-1299"/>
     </way>
     <way visible="true" id="-316" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-437"/>
@@ -2015,7 +2019,7 @@
         <tag k="hoot:id" v="-316"/>
     </way>
     <way visible="true" id="-315" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-440"/>
+        <nd ref="-441"/>
         <nd ref="-439"/>
         <nd ref="-438"/>
         <nd ref="-437"/>
@@ -2075,7 +2079,7 @@
     </way>
     <way visible="true" id="-309" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-441"/>
-        <nd ref="-440"/>
+        <nd ref="-441"/>
         <tag k="width:minimum_traveled_way" v="5"/>
         <tag k="source" v="CNIGS/OIM/ FOCS;osm;mgcp"/>
         <tag k="condition" v="functional"/>
@@ -3310,31 +3314,6 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-236"/>
     </way>
-    <way visible="true" id="-235" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-436"/>
-        <nd ref="-102"/>
-        <nd ref="-101"/>
-        <nd ref="-100"/>
-        <nd ref="-99"/>
-        <nd ref="-98"/>
-        <nd ref="-97"/>
-        <nd ref="-96"/>
-        <nd ref="-95"/>
-        <nd ref="-94"/>
-        <nd ref="-93"/>
-        <nd ref="-92"/>
-        <nd ref="-359"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="Google Aerial;osm;osm"/>
-        <tag k="uuid" v="{3d0a1849-adb5-40c8-bc77-de0398292d48}"/>
-        <tag k="name" v="Rue Coquillo"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-235"/>
-    </way>
     <way visible="true" id="-234" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-227"/>
         <nd ref="-224"/>
@@ -4501,14 +4480,26 @@
         <nd ref="-441"/>
         <nd ref="-103"/>
         <nd ref="-436"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="Google Aerial;osm;osm"/>
-        <tag k="uuid" v="{3d0a1849-adb5-40c8-bc77-de0398292d48}"/>
+        <tag k="width:minimum_traveled_way" v="5"/>
+        <tag k="source" v="Google Aerial;osm;mgcp"/>
+        <tag k="condition" v="functional"/>
         <tag k="name" v="Rue Coquillo"/>
+        <tag k="lanes" v="2"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="seasonal" v="no"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="surface" v="paved"/>
+        <tag k="median" v="no"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="source:description" v="IKONOS Imagery"/>
         <tag k="attribution" v="osm;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.130Z"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="highway" v="residential"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="uuid" v="{3d0a1849-adb5-40c8-bc77-de0398292d48};{{90d8985c-d68e-4a86-ada5-0bbeb1ab4686}}"/>
+        <tag k="location" v="surface"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-149"/>
     </way>
