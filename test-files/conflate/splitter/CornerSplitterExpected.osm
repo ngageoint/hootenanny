@@ -39,7 +39,7 @@
     <node visible="true" id="-3" timestamp="2017-06-16T07:48:22Z" version="1" changeset="239" lat="1.1560228130000001" lon="-1.1190072513000000"/>
     <node visible="true" id="-2" timestamp="2017-06-16T07:48:22Z" version="1" changeset="239" lat="1.1597809990000001" lon="-1.1207548609000000"/>
     <node visible="true" id="-1" timestamp="2017-06-16T07:48:22Z" version="1" changeset="239" lat="1.1559378410000001" lon="-1.1188862060000000"/>
-    <way visible="true" id="-11">
+    <way visible="true" id="-9">
         <nd ref="-11"/>
         <nd ref="-10"/>
         <nd ref="-9"/>
@@ -59,28 +59,10 @@
         <tag k="lanes" v="2"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-10">
+    <way visible="true" id="-8">
         <nd ref="-13"/>
         <nd ref="-12"/>
         <nd ref="-11"/>
-        <tag k="condition" v="functional"/>
-        <tag k="location" v="surface"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="median" v="no"/>
-        <tag k="source:datetime" v="2017-06-16T07:25:49Z"/>
-        <tag k="highway" v="road"/>
-        <tag k="lanes" v="2"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-8">
-        <nd ref="-20"/>
-        <nd ref="-19"/>
-        <nd ref="-18"/>
-        <nd ref="-17"/>
-        <nd ref="-16"/>
-        <nd ref="-15"/>
-        <nd ref="-14"/>
-        <nd ref="-13"/>
         <tag k="condition" v="functional"/>
         <tag k="location" v="surface"/>
         <tag k="seasonal" v="no"/>
@@ -98,6 +80,13 @@
         <nd ref="-22"/>
         <nd ref="-21"/>
         <nd ref="-20"/>
+        <nd ref="-19"/>
+        <nd ref="-18"/>
+        <nd ref="-17"/>
+        <nd ref="-16"/>
+        <nd ref="-15"/>
+        <nd ref="-14"/>
+        <nd ref="-13"/>
         <tag k="condition" v="functional"/>
         <tag k="location" v="surface"/>
         <tag k="seasonal" v="no"/>

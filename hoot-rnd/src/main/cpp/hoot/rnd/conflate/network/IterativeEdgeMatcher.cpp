@@ -345,22 +345,8 @@ void IterativeEdgeMatcher::_updateEdgeScores(EdgeScoreMap &em, const VertexScore
 
       if (!reversed)
       {
-        if (e1->getMembers()[0]->getId() == -1803179 || e2->getMembers()[0]->getId() == -1803179)
-        {
-          LOG_INFO(from1 << " => " << from2);
-          LOG_INFO(to1 << " => " << to2);
-        }
         v = _calculateEdgeVertexScore(vm, from1, from2, to1, to2);
         e = _scoreEdges(e1, e2);
-        if (e1->getMembers()[0]->getId() == -1803179 || e2->getMembers()[0]->getId() == -1803179)
-        {
-          LOG_INFO(from1 << " => " << from2);
-          LOG_INFO(to1 << " => " << to2);
-          LOG_VAR(e1);
-          LOG_VAR(e2);
-          LOG_VAR(v);
-          LOG_VAR(e);
-        }
       }
       else
       {

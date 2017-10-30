@@ -76,10 +76,7 @@ public:
 
     bool operator== (const EdgeEntry &ee)
     {
-      //LOG_INFO(_subline->toString());
-      //LOG_INFO(ee.getSubline()->toString());
       bool eq = _subline->overlaps(ee.getSubline());
-      //bool eq = (0 == _subline->toString().compare(ee.getSubline()->toString()));
       return eq;
     }
 

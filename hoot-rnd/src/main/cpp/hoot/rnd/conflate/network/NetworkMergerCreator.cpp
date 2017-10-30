@@ -56,14 +56,18 @@ NetworkMergerCreator::NetworkMergerCreator()
 bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merger*>& mergers) const
 {
   LOG_TRACE("Creating mergers with " << className() << "...");
-  LOG_INFO("Creating mergers for match set: ");
-  QString matchesString = "";
-  for (MatchSet::const_iterator it = matchesIn.begin(); it != matchesIn.end(); ++it)
+  LOG_TRACE("Creating mergers for match set: ");
+
+  QString matchesList = "";
+  if (hoot::Log::Trace == hoot::Log::getInstance().getLevel())
   {
-    const NetworkMatch* nmi = dynamic_cast<const NetworkMatch*>(*it);
-    matchesString += nmi->getEdgeMatch()->getUid() + " ";
+    for (MatchSet::const_iterator it = matchesIn.begin(); it != matchesIn.end(); ++it)
+    {
+      const NetworkMatch* nmi = dynamic_cast<const NetworkMatch*>(*it);
+      matchesList += nmi->getEdgeMatch()->getUid() + " ";
+    }
   }
-  LOG_INFO(matchesString);
+  LOG_TRACE(matchesList);
 
   MatchSet matches = matchesIn;
   _removeDuplicates(matches);
@@ -115,7 +119,7 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
         {
           //LOG_TRACE("Returning largest match");
           const NetworkMatch* largest = _getLargest(matches);
-          LOG_INFO("Largest Match: " << largest->getEdgeMatch()->getUid());
+          LOG_TRACE("Largest Match: " << largest->getEdgeMatch()->getUid());
           mergers.push_back(
             new PartialNetworkMerger(
               largest->getMatchPairs(),
@@ -217,9 +221,9 @@ double NetworkMergerCreator::_getOverlapPercent(const MatchSet& matches) const
     for (++jt; jt != matches.end(); ++jt)
     {
       const NetworkMatch* nmj = dynamic_cast<const NetworkMatch*>(*jt);
-      LOG_INFO(nmi->getEdgeMatch()->getUid() << ":" << nmj->getEdgeMatch()->getUid());
+      LOG_TRACE(nmi->getEdgeMatch()->getUid() << ":" << nmj->getEdgeMatch()->getUid());
       double percent = _getOverlapPercent(nmi, nmj);
-      LOG_INFO(percent);
+      LOG_TRACE(percent);
       count += percent;
       total += 100.0;
     }

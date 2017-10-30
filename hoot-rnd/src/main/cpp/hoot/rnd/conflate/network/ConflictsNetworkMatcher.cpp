@@ -244,11 +244,9 @@ void ConflictsNetworkMatcher::_sanityCheckRelationships()
 
         if (myDistance > 5.0 && myDistance*2.5 < theirDistance)
         {
-          LOG_INFO("Removing insane match: " << r->getEdge()->getUid() << " - " << theirDistance <<
-                   " keeping: " << em->getUid() << " - " << myDistance); // MICAH DEBUG
-
-          int blah = 0;
-          blah++;
+          LOG_DEBUG("Removing insane match: " << r->getEdge()->getUid() << " - "
+                    << theirDistance << " keeping: " << em->getUid()
+                    << " - " << myDistance);
 
           // Remove match
           _edgeMatches->getAllMatches().remove(r->getEdge());
