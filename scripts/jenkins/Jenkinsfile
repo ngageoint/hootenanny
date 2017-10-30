@@ -2,9 +2,8 @@ pipeline {
     agent any
     // Checkbox parameters for users to skip steps and control pipeline behavior
     parameters {
-        // TODO: Need logic to reuse VM.  Current logic destroys it every run
-        //booleanParam(name: 'Destroy_VM (Coming Soon)',
-        //    defaultValue: true)
+        booleanParam(name: 'Destroy_VM',
+            defaultValue: false)
         booleanParam(name: 'Static_analysis',
             defaultValue: true)
         booleanParam(name: 'License_headers',
@@ -18,12 +17,13 @@ pipeline {
         booleanParam(name: 'UI_tests',
             defaultValue: true)
         string(name: 'Box', defaultValue: 'default', description: 'Vagrant Box')
+        string(name: 'Provider', defaultValue: 'aws', description: 'Vagrant Provider')
     }
     stages {
         stage("Setup") {
             steps {
                 // Attempt to destroy exiting VM but don't stop job if not there
-                sh "vagrant destroy -f ${params.Box} || true"
+                sh "if [ 'true' == '${param.Destroy_VM}' ] ; then ; vagrant destroy -f ${params.Box} || true; fi"
                 // Make sure we have the tags info because figuring out the version is required in the build process
                 sh 'git fetch --tags'
                 sh 'git submodule update --init'
@@ -56,11 +56,11 @@ pipeline {
                 sh 'export HOOT_HOME=`pwd`; ./scripts/copyright/UpdateAllCopyrightHeaders.sh'
             }
         }
-	stage("Vagrant Up") {
+        stage("Vagrant Up") {
             steps {
                 // NOTE: Only installs hoot build dependencies
-                sh "vagrant up ${params.Box} --provision-with software,hoot --provider aws"
-            }       
+                sh "vagrant up ${params.Box} --provision-with software,hoot --provider ${params.Provider}"
+            }
         }
         stage("Test Configure") {
             when {
@@ -84,7 +84,7 @@ pipeline {
                 sh 'echo "QMAKE_CXXFLAGS += -Werror" >> LocalConfig.pri'
                 sh 'sed -i s/"QMAKE_CXX=g++"/"#QMAKE_CXX=g++"/g LocalConfig.pri'                 
                 sh 'sed -i s/"#QMAKE_CXX=ccache g++"/"QMAKE_CXX=ccache g++"/g LocalConfig.pri'
-                
+
                 // Perform remainder of provisioning
                 sh "vagrant provision ${params.Box} --provision-with build,EGD,tomcat,mapnik,hadoop"
             }       
@@ -125,7 +125,7 @@ pipeline {
     post {
         success {
             // If all tests passed, clean everything up
-            sh "vagrant destroy -f ${params.Box}"
+            sh "if [ 'true' == '${param.Destroy_VM}' ] ; then ; vagrant destroy -f ${params.Box} || true; fi"
             cleanWs()
         }
 	failure {
