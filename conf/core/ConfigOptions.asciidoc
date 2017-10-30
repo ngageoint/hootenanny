@@ -865,6 +865,96 @@ default the first assigned id will be -1)
 
 A list of paths to include in the javascript translator search path.
 
+=== json.format.hootenanny
+
+* Data Type: bool
+* Default Value: `false`
+
+Output JSON in a more Hootenanny specific way that includes Hootenanny-specific tags
+including `hoot:*`, `error:circluar`, `type=node/way/relation`, tags in the `tags`
+section, etc.
+
+`Generic Format`
+-----
+...
+{
+  "type":"Feature",
+  "properties":{
+    "type":"LineString",
+    "REF1":"Panera",
+    "access":{ "groups":[],"users":[] },
+    "attributes":{
+      "item_date":"2017-10-09T12:34:56.789Z",
+      "category_id":"123456",
+      "asset_id":"ABC123"
+      },
+    "alt_name":null,
+    "building":"yes",
+    "name":"Panera Bread",
+    "item_type":[ "building","restaurant" ],
+    },
+  "geometry":{
+    "type":"Polygon",
+    "coordinates":[[[-104.8065566424573,39.59327717293566],
+                    [-104.8061245919961,39.59330667331412],
+                    [-104.8060931452853,39.59315284977403],
+                    [-104.8065292974914,39.59311913497989],
+                    [-104.8065566424573,39.59327717293566]]]
+    }
+},
+...
+-----
+vs
+`Hootenanny-specific Format`
+-----
+...
+{
+  "type":"Feature",
+  "id":"-2",
+  "properties":{
+    "type":"way",
+    "tags":{
+      "REF1":"Panera",
+      "access":{ "groups":[],"users":[] },
+      "attributes":{
+        "item_date":"2017-10-09T12:34:56.789Z",
+        "category_id":"123456",
+        "asset_id":"ABC123"
+        },
+      "alt_name":null,
+      "building":"yes",
+      "type":"way",
+      "name":"Panera Bread",
+      "item_type":[ "building","restaurant" ],
+      "error:circular":"15"
+      }
+    },
+  "geometry":{
+    "type":"Polygon",
+    "coordinates":[[[-104.8065566424573,39.59327717293566],
+                    [-104.8061245919961,39.59330667331412],
+                    [-104.8060931452853,39.59315284977403],
+                    [-104.8065292974914,39.59311913497989],
+                    [-104.8065566424573,39.59327717293566]]]
+    }
+},
+...
+-----
+
+=== json.perserve.empty.tags
+
+* Data Type: bool
+* Default Value: `true`
+
+Write out empty OSM tags to JSON such as `"text":""`
+
+=== json.pretty.print
+
+* Data Type: bool
+* Default Value: `false`
+
+Write out JSON in a more legible manner
+
 === keep.tags.visitor.keys
 
 * Data Type: list

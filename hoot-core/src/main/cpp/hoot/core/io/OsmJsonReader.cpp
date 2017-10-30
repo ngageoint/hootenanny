@@ -440,7 +440,7 @@ void OsmJsonReader::scrubQuotes(QString &jsonStr)
   // test strings into c++. Single quotes within string literals
   // should be escaped as \'
   // Detect if they are using single quotes or doubles
-  if (jsonStr.indexOf("\"node\"", Qt::CaseInsensitive) > -1)
+  if (jsonStr.indexOf("\"features\"", Qt::CaseInsensitive) > -1)
     return; // No need to scrub
   else
   {

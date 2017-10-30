@@ -54,6 +54,7 @@ class OsmGeoJsonReaderTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runDcTigerTest);
   CPPUNIT_TEST(runBostonSubsetRoadBuildingTest);
   CPPUNIT_TEST(runGenericGeoJsonTest);
+  CPPUNIT_TEST(runObjectGeoJsonTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -76,6 +77,11 @@ public:
   void runGenericGeoJsonTest()
   {
     runTest("test-files/io/GeoJson/CensusUnitedStates.geojson", "CensusUnitedStates.osm");
+  }
+
+  void runObjectGeoJsonTest()
+  {
+    runTest("test-files/io/GeoJson/SampleObjectsReader.geojson", "SampleObjectsReader.osm");
   }
 
   void runTest(const QString& input, const QString& output)

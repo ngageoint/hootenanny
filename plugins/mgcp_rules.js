@@ -95,6 +95,7 @@ mgcp.rules = {
         ['F_CODE','BB190','man_made','pier'], // From OSM
         ['F_CODE','BH080','landuse','basin'], // From OSM - Lake is close but not great
         ['F_CODE','BH130','landuse','reservoir'], // From OSM
+        ['F_CODE','BH155','man_made','salt_pond'], // Due to the default translation changing
         // ['F_CODE','ZD040','place','state'], // From OSM
         // ['F_CODE','ZD040','place','county'], // From OSM
         // ['F_CODE','ZD040','place','quarter'], // From OSM
@@ -127,7 +128,7 @@ mgcp.rules = {
         'UID':'uuid', // Universally Unique Identifier
         'UPD_DATE':'source:update:datetime', // Review Source Date and Time
         'UPD_INFO':'source:update:description', // Review Source Description
-        'VOI':'vertical_obstruction_identifier', // Vertical Obstruction Identifier
+        'VOI':'aeroway:obstruction', // Vertical Obstruction Identifier
         }, // End txtBiased
 
     // One2one rules for Number attributes

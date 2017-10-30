@@ -82,6 +82,7 @@ tds61.rules = {
      ['F_CODE','BA030','place','islet'], // Island - From OSM
      ['F_CODE','BH140','waterway','yes'], // Make unknown waterways into rivers
      ['F_CODE','BH145','natural','sinkhole'], 
+     ['F_CODE','BH155','man_made','salt_pond'], // Due to the default translation changing
      // ['F_CODE','EA010','landuse','farm'], // Alt version of "landuse=farmland"
      // ['F_CODE','EC015','natural','wood'], // Alt version of Forest
      ['F_CODE','GB005','aeroway','sport_airport'], // Land Aerodrome
@@ -143,7 +144,7 @@ tds61.rules = {
      'UFI':'uuid', // Unique Feature Identifier. This gets cleaned up in post processing
      'URI':'source:ref', // Unique Resource Identifier
      'VCS_VCR':'max_clearance:note', // Vertical Clearance, Safe <reference level remark>
-     'VOI':'vertical_obstruction_identifier', // Vertical Obstruction Identifier
+     'VOI':'aeroway:obstruction', // Vertical Obstruction Identifier
      'WAD':'well:description', // Water Well Construction Description
      'WPI':'world_port_index', // World Port Index Identifier - This is part of Built Up Area. What??
      //'ZI001_SDP':'source:description', // Source Information : Source Description
