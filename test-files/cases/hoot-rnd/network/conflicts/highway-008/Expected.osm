@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="38.89515050534" minlon="-77.0471701988" maxlat="38.89630425215999" maxlon="-77.04635609292001"/>
     <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8956904830300019" lon="-77.0467622909300047">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-16"/>
@@ -128,7 +129,7 @@
         <tag k="error:circular" v="25"/>
         <tag k="hoot:id" v="-1"/>
     </way>
-    <relation visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-187" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-2" role="reviewee"/>
         <member type="way" ref="-3" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -136,6 +137,6 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="type" v="review"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-29"/>
+        <tag k="hoot:id" v="-187"/>
     </relation>
 </osm>

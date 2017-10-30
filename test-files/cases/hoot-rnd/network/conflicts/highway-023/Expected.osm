@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="-0.29126677493" minlon="3.8655211266" maxlat="-0.28529088888" maxlon="3.867119723170001"/>
-    <node visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.2891961361299999" lon="3.8662185009400001">
+    <node visible="true" id="-35" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.2891961361299999" lon="3.8662185009400001">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-32"/>
+        <tag k="hoot:id" v="-35"/>
     </node>
     <node visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.2863208443299999" lon="3.8664974506799998">
         <tag k="hoot:status" v="2"/>
@@ -81,8 +81,8 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1"/>
     </node>
-    <way visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-32"/>
+    <way visible="true" id="-41" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-35"/>
         <nd ref="-19"/>
         <nd ref="-20"/>
         <nd ref="-21"/>
@@ -92,18 +92,18 @@
         <nd ref="-13"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-15"/>
+        <tag k="hoot:id" v="-41"/>
     </way>
-    <way visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-39" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-13"/>
         <nd ref="-11"/>
         <nd ref="-12"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-13"/>
+        <tag k="hoot:id" v="-39"/>
     </way>
-    <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-32"/>
+    <way visible="true" id="-38" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-35"/>
         <nd ref="-4"/>
         <nd ref="-5"/>
         <nd ref="-6"/>
@@ -114,15 +114,15 @@
         <nd ref="-13"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-12"/>
+        <tag k="hoot:id" v="-38"/>
     </way>
-    <way visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1"/>
         <nd ref="-2"/>
         <nd ref="-3"/>
-        <nd ref="-32"/>
+        <nd ref="-35"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-11"/>
+        <tag k="hoot:id" v="-37"/>
     </way>
 </osm>
