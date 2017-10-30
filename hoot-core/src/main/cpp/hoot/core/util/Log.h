@@ -126,6 +126,8 @@ public:
 
   void setLevel(WarningLevel l);
 
+  static unsigned int getWarnMessageLimit();
+
 #if HOOT_HAVE_LIBLOG4CXX
   log4cxx::LoggerPtr _logger;
 #endif
@@ -135,6 +137,7 @@ public:
 private:
   WarningLevel _level;
   static Log* _theInstance;
+  static unsigned int _warnMessageLimit;
 
   Log();
 };

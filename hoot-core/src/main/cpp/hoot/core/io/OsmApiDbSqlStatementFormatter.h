@@ -41,29 +41,30 @@ namespace hoot
 
 //These match up exclusively with the v0.6 OSM API database and shouldn't be changed:
 
-static const QString CHANGESETS_OUTPUT_FORMAT_STRING_DEFAULT =
+static const QString OSMAPIDB_CHANGESETS_OUTPUT_FORMAT_STRING_DEFAULT =
   "%1\t%2\t%3\t%4\t%5\t%6\t%7\t%8\t%9\n";
-static const QString CURRENT_NODES_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t%4\tt\t%5\t%6\t1\n";
-static const QString HISTORICAL_NODES_OUTPUT_FORMAT_STRING_DEFAULT =
+static const QString OSMAPIDB_CURRENT_NODES_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t%4\tt\t%5\t%6\t1\n";
+static const QString OSMAPIDB_HISTORICAL_NODES_OUTPUT_FORMAT_STRING_DEFAULT =
   "%1\t%2\t%3\t%4\tt\t%5\t%6\t1\t\\N\n";
-static const QString CURRENT_WAYS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\tt\t1\n";
-static const QString HISTORICAL_WAYS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t1\tt\t\\N\n";
-static const QString CURRENT_WAY_NODES_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\n";
-static const QString HISTORICAL_WAY_NODES_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t1\t%3\n";
-static const QString CURRENT_RELATIONS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\tt\t1\n";
-static const QString HISTORICAL_RELATIONS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t1\tt\t\\N\n";
-static const QString CURRENT_RELATION_MEMBERS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t%4\t%5\n";
-static const QString HISTORICAL_RELATION_MEMBERS_OUTPUT_FORMAT_STRING_DEFAULT =
+static const QString OSMAPIDB_CURRENT_WAYS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\tt\t1\n";
+static const QString OSMAPIDB_HISTORICAL_WAYS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t1\tt\t\\N\n";
+static const QString OSMAPIDB_CURRENT_WAY_NODES_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\n";
+static const QString OSMAPIDB_HISTORICAL_WAY_NODES_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t1\t%3\n";
+static const QString OSMAPIDB_CURRENT_RELATIONS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\tt\t1\n";
+static const QString OSMAPIDB_HISTORICAL_RELATIONS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t1\tt\t\\N\n";
+static const QString OSMAPIDB_CURRENT_RELATION_MEMBERS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t%4\t%5\n";
+static const QString OSMAPIDB_HISTORICAL_RELATION_MEMBERS_OUTPUT_FORMAT_STRING_DEFAULT =
   "%1\t%2\t%3\t%4\t1\t%5\n";
-static const QString CURRENT_TAGS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\n";
-static const QString HISTORICAL_TAGS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t1\n";
+static const QString OSMAPIDB_CURRENT_TAGS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\n";
+static const QString OSMAPIDB_HISTORICAL_TAGS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t1\n";
 //for whatever strange reason, the historical node tags table column order in the API datbase
 //is different than the other historical tags tables; this makes a difference when using the
 //offline loader, since it is sensitive to ordering
-static const QString HISTORICAL_NODE_TAGS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t1\t%2\t%3\n";
+static const QString OSMAPIDB_HISTORICAL_NODE_TAGS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t1\t%2\t%3\n";
 
 /**
- * Converts OSM elements and their children into executable SQL statements
+ * Converts OSM elements and their children into executable Postgres SQL COPY statements against an
+ * OSM API database
  */
 class OsmApiDbSqlStatementFormatter
 {
@@ -72,7 +73,8 @@ public:
 
   OsmApiDbSqlStatementFormatter(const QString delimiter);
 
-  QStringList nodeToSqlStrings(const ConstNodePtr& node, const long nodeId, const long changesetId);
+  QStringList nodeToSqlStrings(const ConstNodePtr& node, const long nodeId, const long changesetId,
+                               const bool validate = false);
   QStringList wayToSqlStrings(const long wayId, const long changesetId);
   QStringList wayNodeToSqlStrings(const long wayId, const long wayNodeId,
                                   const unsigned int wayNodeIndex);
@@ -83,9 +85,17 @@ public:
   QStringList tagToSqlStrings(const long elementId, const ElementType& elementType,
                               const QString tagKey, const QString tagValue);
   QString changesetToSqlString(const long changesetId, const long changesetUserId,
-                               const long numChangesInChangeset, const geos::geom::Envelope& changesetBounds);
+                               const long numChangesInChangeset,
+                               const geos::geom::Envelope& changesetBounds);
   QStringList elementToSqlStrings(const ConstElementPtr& element, const long elementId,
                                   const long changesetId);
+
+  static QString escapeCopyToData(const QString stringToOutput);
+
+  inline unsigned int _convertDegreesToNanodegrees(const double degrees)
+  {
+    return round(degrees * ApiDb::COORDINATE_SCALE);
+  }
 
   inline static QStringList getNodeSqlHeaderStrings()
   {
@@ -195,10 +205,9 @@ public:
 private:
 
   QMap<QString, QString> _outputFormatStrings;
+  QString _dateString;
 
   void _initOutputFormatStrings(const QString delimiter);
-  static unsigned int _convertDegreesToNanodegrees(const double degrees);
-  static QString _escapeCopyToData(const QString stringToOutput);
 };
 
 }

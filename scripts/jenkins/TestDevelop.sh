@@ -11,7 +11,7 @@ hoot --version --debug
 export HOOT_TEST_DIFF=--diff
 # Run all of the tests - from the "test-all" target
 echo "Running core glacial tests..."
-bin/HootTest $HOOT_TEST_DIFF --glacial
+bin/HootTest $HOOT_TEST_DIFF --glacial --parallel $(nproc)
 
 
 echo "Running pretty-pipes tests..."

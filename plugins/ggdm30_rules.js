@@ -85,6 +85,7 @@ ggdm30.rules = {
      ['F_CODE','BA030','place','islet'], // Island - From OSM
      ['F_CODE','BH140','waterway','yes'], // Make unknown waterways into rivers
      ['F_CODE','BH145','natural','sinkhole'],
+     ['F_CODE','BH155','man_made','salt_pond'], // Due to the default translation changing
      // ['F_CODE','EA010','landuse','farm'], // Alt version of "landuse=farmland"
      // ['F_CODE','EC015','natural','wood'], // Alt version of Forest
      ['F_CODE','GB005','aeroway','sport_airport'], // Land Aerodrome
@@ -458,7 +459,7 @@ ggdm30.rules = {
 
 
     // Common one2one rules. Used for both import and export
-    // taken from TDSv60 with the NGA TDSv61 additions
+    // taken from the GGDM30 spec
     one2one : [
 
      // ACH - Anchorage Type
@@ -6330,6 +6331,7 @@ ggdm30.rules = {
         'BC010_REF':'REF',
         'BC010_TZP':'TZP',
         'BC040_CAA':'CAA',
+        'BH010_CAA':'CAA',
         'BH010_TZP':'TZP',
         'EOL':'BC040_EOL',
         'BRF':'BC034_BRF',
@@ -6365,11 +6367,12 @@ ggdm30.rules = {
         'WTSI':'ZI024_WTSI',
         'YWQ':'ZI024_YWQ',
         'ZHBH_DCR':'ZHDP_DCR',
+        'ZHBH_DKC':'ZHDP_DKC',
         'ZHBH_SVC':'ZHDP_SVC',
         'ZHBH_TEC':'ZHDP_TEC',
         'ZHBH_TEC2':'ZHDP_TEC2',
         'ZHBH_TEC3':'ZHDP_TEC3',
-        'ZHBH_VCD':'ZHDP_VCD',
+        'ZHBH_VDC':'ZHDP_VDC',
         'ZHBH_VDR':'ZHDP_VDR',
         'ZI012_DCR':'ZHDP_DCR',
         'ZI012_DKC':'ZHDP_DKC',

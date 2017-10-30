@@ -61,6 +61,7 @@ private:
 
   std::string _workDir;
   int _partition;
+
 };
 
 }

@@ -63,7 +63,7 @@ using namespace geos::geom;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(OsmJsonReader, OsmGeoJsonReader)
+HOOT_FACTORY_REGISTER(OsmMapReader, OsmGeoJsonReader)
 
 OsmGeoJsonReader::OsmGeoJsonReader() : OsmJsonReader()
 {
@@ -174,6 +174,10 @@ void OsmGeoJsonReader::_parseGeoJson()
   {
     const pt::ptree& feature = featureIt->second;
     string id = feature.get("id", string(""));
+    //  Some IDs may be strings that start with "node/" or "way/", remove that
+    size_t pos = id.find("/");
+    if (pos != string::npos)
+      id = id.erase(0, pos + 1);
     if (feature.not_found() != feature.find("properties"))
     {
       pt::ptree properties = feature.get_child("properties");
@@ -221,11 +225,11 @@ void OsmGeoJsonReader::_parseGeoJson()
         }
         else
         {
-          if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+          if (logWarnCount < Log::getWarnMessageLimit())
           {
             LOG_WARN("Unknown JSON elment type (" << typeStr << ") when parsing GeoJSON");
           }
-          else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+          else if (logWarnCount == Log::getWarnMessageLimit())
           {
             LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
           }
@@ -618,9 +622,12 @@ void OsmGeoJsonReader::_addTags(const pt::ptree &item, ElementPtr element)
   {
     for (pt::ptree::const_iterator tagIt = item.begin(); tagIt != item.end(); ++tagIt)
     {
-      QString k = QString::fromStdString(tagIt->first);
-      QString v = QString::fromStdString(tagIt->second.get_value<string>());
-      element->setTag(k, v);
+      const QString key = QString::fromStdString(tagIt->first).trimmed();
+      const QString value = QString::fromStdString(tagIt->second.get_value<string>()).trimmed();
+      if (!value.isEmpty())
+      {
+        element->setTag(key, value);
+      }
     }
   }
 }

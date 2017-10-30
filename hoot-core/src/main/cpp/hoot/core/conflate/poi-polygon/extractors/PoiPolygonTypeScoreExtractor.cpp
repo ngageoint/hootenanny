@@ -57,6 +57,7 @@ void PoiPolygonTypeScoreExtractor::setConfiguration(const Settings& conf)
 {
   ConfigOptions config = ConfigOptions(conf);
   setTypeScoreThreshold(config.getPoiPolygonTypeScoreThreshold());
+  setPrintMatchDistanceTruth(config.getPoiPolygonPrintMatchDistanceTruth());
 }
 
 bool PoiPolygonTypeScoreExtractor::_failsCuisineMatch(const Tags& t1, const Tags& t2) const
@@ -159,7 +160,7 @@ double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi,
 
       if (result == 1.0)
       {
-        if (ConfigOptions().getPoiPolygonPrintMatchDistanceTruth())
+        if (_printMatchDistanceTruth)
         {
           LOG_VART(poiBestKvp);
           LOG_VART(polyBestKvp);
@@ -174,7 +175,7 @@ double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi,
   LOG_VART(poiBestKvp);
   LOG_VART(polyBestKvp);
 
-  if (ConfigOptions().getPoiPolygonPrintMatchDistanceTruth())
+  if (_printMatchDistanceTruth)
   {
     PoiPolygonDistanceTruthRecorder::recordDistanceTruth(
       poi, poly, poiBestKvp, polyBestKvp, _featureDistance);

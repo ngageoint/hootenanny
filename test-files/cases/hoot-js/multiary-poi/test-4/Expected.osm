@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="15.3697127" minlon="44.2208847" maxlat="15.3697869" maxlon="44.2210439"/>
+    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3697869000000011" lon="44.2210438999999980">
+        <tag k="note" v="Implicitly derived tags based on: petroleumeum"/>
+        <tag k="hoot:hash" v="sha1sum:ad34a7247d0b4dda44faca335774aa78edb42f0b"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="REVIEW" v="none"/>
+        <tag k="ID" v="1-00017"/>
+        <tag k="source" v="osm"/>
+        <tag k="uuid" v="{36e57ff3-31b4-4cdd-bbd8-4801ef8e326c}"/>
+        <tag k="name" v="Almnsor Petroleumeum Station"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="amenity" v="fuel"/>
+        <tag k="source:datetime" v="2016-07-12T10:46:16.000Z"/>
+        <tag k="MATCH" v="1-00017"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3697126999999991" lon="44.2208846999999992">
+        <tag k="name:ar" v="محطة المنصور"/>
+        <tag k="addr:street" v="شارع شيراتون"/>
+        <tag k="hoot:hash" v="sha1sum:28e5f1b16a43a9da0b7889c6e677b2b4898019a5"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="source:hash" v="sha1sum:353d321861c4a150028ddeb59dce102df51a8ac6;sha1sum:e5434cc706dc77c5a037aa4b3cc0a7bf80f5bbbf"/>
+        <tag k="REVIEW" v="none"/>
+        <tag k="source" v="osm"/>
+        <tag k="uuid" v="{2a001995-87f7-4c55-b882-8c9512fb59d1};{b504605b-e3e7-4423-93be-8af8423f2d69}"/>
+        <tag k="ID" v="1-00116"/>
+        <tag k="name" v="محطة المنصور"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="amenity" v="fuel"/>
+        <tag k="source:datetime" v="2016-10-18T14:34:52.000Z;2016-09-19T18:19:51.000Z"/>
+        <tag k="MATCH" v="1-00017"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-1" role="reviewee"/>
+        <member type="node" ref="-3" role="reviewee"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:type" v="POI"/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:score" v="-1"/>
+        <tag k="hoot:review:note" v="Somewhat similar (19m) - very close together, similar POI type"/>
+        <tag k="hoot:review:sort_order" v="0"/>
+        <tag k="type" v="review"/>
+    </relation>
+</osm>

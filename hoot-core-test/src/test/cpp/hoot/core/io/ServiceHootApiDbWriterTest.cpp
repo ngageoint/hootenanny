@@ -123,7 +123,7 @@ public:
 
     compareRecords("SELECT tags FROM " + HootApiDb::getCurrentNodesTableName(mapId) +
                    " ORDER BY longitude",
-                   "\"note\"=>\"n1',\n\", \"" + MetadataTags::HootId() + "\"=>\"-1\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"10\"\n"
+                   "\"note\"=>\"n1',\", \"" + MetadataTags::HootId() + "\"=>\"-1\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"10\"\n"
                    "\"note\"=>\"n2\\\\\\\"\", \"" + MetadataTags::HootId() + "\"=>\"-2\", \"" + MetadataTags::HootStatus() + "\"=>\"2\", \"" + MetadataTags::ErrorCircular() + "\"=>\"11\"\n"
                    "\"note\"=>\"n3\\\\\\\\\", \"" + MetadataTags::HootId() + "\"=>\"-3\", \"" + MetadataTags::HootStatus() + "\"=>\"3\", \"" + MetadataTags::ErrorCircular() + "\"=>\"12\"",
                    (qlonglong)mapId);
@@ -352,5 +352,6 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceHootApiDbWriterTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceHootApiDbWriterTest, "serial");
 
 }

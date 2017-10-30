@@ -76,7 +76,7 @@ public:
     double p;
   };
 
-  RubberSheet(bool logNotEnoughTiePointsAsWarning = true);
+  RubberSheet(bool logNotEnoughTiePointsAsWarning = false);
 
   void apply(boost::shared_ptr<OsmMap>& map);
 

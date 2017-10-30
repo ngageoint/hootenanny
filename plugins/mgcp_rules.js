@@ -40,6 +40,7 @@ mgcp.rules = {
         ['F_CODE','AQ064','man_made','causeway'], // Causeway - NFDD AQ063
         ['F_CODE','AT080','tower:type','communication'], // Communications Tower - NFDD AL241
         ['F_CODE','BB008','landuse','harbour'], // Harbour Waters - NFDD BB005
+        ['F_CODE','DB030','natural','cave_entrance'], // Cave - FCODE Retired, moveing to DB029
         ['F_CODE','GA035','aeroway','navigationaid'], // Aeronautical NAVAID - FCODE Retired
         ['F_CODE','GB010','man_made','beacon'], // Airport Navigation Lights - FCODE Retired
         ], // End fcodeOne2oneInV3
@@ -94,6 +95,7 @@ mgcp.rules = {
         ['F_CODE','BB190','man_made','pier'], // From OSM
         ['F_CODE','BH080','landuse','basin'], // From OSM - Lake is close but not great
         ['F_CODE','BH130','landuse','reservoir'], // From OSM
+        ['F_CODE','BH155','man_made','salt_pond'], // Due to the default translation changing
         // ['F_CODE','ZD040','place','state'], // From OSM
         // ['F_CODE','ZD040','place','county'], // From OSM
         // ['F_CODE','ZD040','place','quarter'], // From OSM

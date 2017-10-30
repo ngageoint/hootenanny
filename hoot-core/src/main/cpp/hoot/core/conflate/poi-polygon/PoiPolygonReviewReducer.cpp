@@ -225,7 +225,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   }
   catch (const geos::util::TopologyException& e)
   {
-    if (_badGeomCount <= ConfigOptions().getLogWarnMessageLimit())
+    if (_badGeomCount <= Log::getWarnMessageLimit())
     {
       LOG_TRACE(
         "Feature passed to PoiPolygonMatchCreator caused topology exception on conversion to a " <<
@@ -291,7 +291,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
         if (polyNeighborGeom.get() &&
             QString::fromStdString(polyNeighborGeom->toString()).toUpper().contains("EMPTY"))
         {
-          if (_badGeomCount <= ConfigOptions().getLogWarnMessageLimit())
+          if (_badGeomCount <= Log::getWarnMessageLimit())
           {
             LOG_TRACE(
               "Invalid area neighbor polygon passed to PoiPolygonMatchCreator: " <<
@@ -433,7 +433,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
       }
       catch (const geos::util::TopologyException& e)
       {
-        if (_badGeomCount <= ConfigOptions().getLogWarnMessageLimit())
+        if (_badGeomCount <= Log::getWarnMessageLimit())
         {
           LOG_TRACE(
             "Feature passed to PoiPolygonMatchCreator caused topology exception on conversion to a " <<

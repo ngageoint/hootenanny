@@ -56,12 +56,10 @@ app.post('/export/:datasource/:schema/:format', function(req, res) {
         + req.params.datasource
         + req.params.schema
         + req.params.format;
-    var fileNameHash = crypto.createHash('sha1').update(params).digest('hex');
+    var fileNameHash = crypto.createHash('sha1').update(params, 'utf-8').digest('hex');
 
     //Write payload to file
     var input = 'export_' + fileNameHash + '.osm';
-
-    var sha1_for_file = crypto.createHash('sha1');
 
     var writeStream = fs.createWriteStream(input, { flags : 'w' });
     req.pipe(writeStream);
@@ -69,18 +67,23 @@ app.post('/export/:datasource/:schema/:format', function(req, res) {
         if(err) {
             return console.log(err);
         }
-    }).on('data', function(data) {
-        //Calculate hash for file content
-        sha1_for_file.update(data);
-    }).on('close', function (err) {
-        var fileHash = sha1_for_file.digest('hex');
-        var jobParams = fileHash
-            + req.params.schema
-            + req.params.format;
-        //Create job hash from input file content and export params
-        var jobHash = crypto.createHash('sha1').update(jobParams).digest('hex');
-        //Make sure input is absolute path
-        doExport(req, res, jobHash, __dirname + '/' + input);
+    }).on('close', function () {
+        //Calc sha1 for input file contents
+        var read = fs.createReadStream(input);
+        var hash = crypto.createHash('sha1');
+        hash.setEncoding('hex');
+        read.pipe(hash);
+        read.on('end', function () {
+            hash.end();
+            var fileHash = hash.read();
+            var jobParams = fileHash
+                + req.params.schema
+                + req.params.format;
+            //Create job hash from input file content and export params
+            var jobHash = crypto.createHash('sha1').update(jobParams, 'utf-8').digest('hex');
+            //Make sure input is absolute path
+            doExport(req, res, jobHash, __dirname + '/' + input);
+        });
     });
 
 });
@@ -123,79 +126,85 @@ function doExport(req, res, hash, input) {
 
     if (job) {
         if (job.status === completeStatus) { //if complete, return file
-            res.download(job.outZip, downloadFile, function(err) {
-                if (jobs[hash].timeout)
-                    clearTimeout(jobs[hash].timeout);
+            if (req.method === 'POST') {
+                res.send(hash);
+            } else {
+                res.download(job.outZip, job.downloadFile, function(err) {
+                    if (jobs[hash].timeout)
+                        clearTimeout(jobs[hash].timeout);
 
-                // clean up export files after configured delay
-                jobs[hash].timeout = setTimeout(function() {
-                    if (jobs[hash]) {
-                        var job = jobs[hash];
-                        //delete export files
-                        if (isFile) {
-                            fs.unlink(job.outFile, function(err) {
-                                if (err) {
-                                    console.error(err);
-                                } else {
-                                    console.log('deleted ' + job.outFile);
-                                }
-                            });
-                        } else {
-                            rmdir(job.outDir, function(err) {
-                                if (err) {
-                                    console.error(err);
-                                } else {
-                                    console.log('deleted ' + job.outDir);
-                                }
-                            });
-                        }
-                        fs.unlink(job.outZip, function(err) {
-                            if (err) {
-                                console.error(err);
+                    // clean up export files after configured delay
+                    jobs[hash].timeout = setTimeout(function() {
+                        if (jobs[hash]) {
+                            var job = jobs[hash];
+                            //delete export files
+                            if (isFile) {
+                                fs.unlink(job.outFile, function(err) {
+                                    if (err) {
+                                        console.error(err);
+                                    } else {
+                                        console.log('deleted ' + job.outFile);
+                                    }
+                                });
                             } else {
-                                console.log('deleted ' + job.outZip);
+                                rmdir(job.outDir, function(err) {
+                                    if (err) {
+                                        console.error(err);
+                                    } else {
+                                        console.log('deleted ' + job.outDir);
+                                    }
+                                });
                             }
-                        });
-                        if (fs.existsSync(job.outDir + '.osm')) {
-                            fs.unlink(job.outDir + '.osm', function(err) {
+                            fs.unlink(job.outZip, function(err) {
                                 if (err) {
                                     console.error(err);
                                 } else {
-                                    console.log('deleted ' + job.outDir + '.osm');
+                                    console.log('deleted ' + job.outZip);
                                 }
                             });
+                            if (fs.existsSync(job.outDir + '.osm')) {
+                                fs.unlink(job.outDir + '.osm', function(err) {
+                                    if (err) {
+                                        console.error(err);
+                                    } else {
+                                        console.log('deleted ' + job.outDir + '.osm');
+                                    }
+                                });
+                            }
+                            //Attempt to remove superfluous POST payload file if job is already running
+                            if (fs.existsSync(input)) {
+                                fs.unlink(input, function(err) {
+                                    if (err) {
+                                        console.error(err);
+                                    } else {
+                                        console.log('deleted ' + input);
+                                    }
+                                });
+                            }
+                            //This deletes the input files used by the job
+                            if (fs.existsSync(job.input)) {
+                                fs.unlink(job.input, function(err) {
+                                    if (err) {
+                                        console.error(err);
+                                    } else {
+                                        console.log('deleted ' + job.input);
+                                    }
+                                });
+                            }
+                            delete jobs[hash];
                         }
-                        //Attempt to remove superfluous POST payload file if job is already running
-                        if (fs.existsSync(input)) {
-                            fs.unlink(input, function(err) {
-                                if (err) {
-                                    console.error(err);
-                                } else {
-                                    console.log('deleted ' + input);
-                                }
-                            });
-                        }
-                        //This deletes the input files used by the job
-                        if (fs.existsSync(job.input)) {
-                            fs.unlink(job.input, function(err) {
-                                if (err) {
-                                    console.error(err);
-                                } else {
-                                    console.log('deleted ' + job.input);
-                                }
-                            });
-                        }
-                        delete jobs[hash];
-                    }
-                }, config.settings.cleanupDelay);
-            });
-        } else { //if present, return status
+                    }, config.settings.cleanupDelay);
+                });
+            }
+        } else { //if present, return status or hash
             if (job.status !== runningStatus) {
                 res.status(500);
+                res.send(job.status);
                 //remove error'd job
                 if (req.method === 'GET') delete jobs[hash];
+            } else {
+                res.send(hash);
             }
-            res.send(job.status);
             //Attempt to remove superfluous POST payload file if job is already running
             if (fs.existsSync(input)) {
                 fs.unlink(input, function(err) {
@@ -238,6 +247,8 @@ function doExport(req, res, hash, input) {
             temp_file = outDir + '.osm';
             command += 'wget -q ' + cert_param + ' -O ' + temp_file + ' ' + input + '?bbox=' + bbox + ' && ';
             input = temp_file;
+            //bbox not valid with osm file input source
+            bbox = null;
         }
 
         //create command and run
@@ -245,7 +256,7 @@ function doExport(req, res, hash, input) {
         if (isFile) {
             command += ' convert';
             if (bbox) command += ' -D ' + bbox_param + '=' + bbox;
-            if (config.schemas[req.params.schema] !== '') {
+            if (req.params.schema !== 'OSM' && config.schemas[req.params.schema] !== '') {
                 command += ' -D convert.ops=hoot::TranslationOp -D translation.script=' + config.schemas[req.params.schema] + ' -D translation.direction=toogr';
             }
         } else {
@@ -263,9 +274,9 @@ function doExport(req, res, hash, input) {
         console.log(command);
 
         //hoot osm2ogr -D ogr.reader.bounding.box=106.851,-6.160,107.052,-5.913 translations/TDSv61.js "PG:dbname='osmsyria' host='192.168.33.12' port='5432' user='vagrant' password=''" osm.shp
-        //setTimeout(function() { //used to simulate a long request
         var child = exec(command, {cwd: hootHome},
             function(error, stdout, stderr) {
+                //setTimeout(function() { //used to simulate a long request
                 if (stderr || error) {
                     //res.send({command: command, stderr: stderr, error: error});
                     jobs[hash].status = stderr;
@@ -293,9 +304,9 @@ function doExport(req, res, hash, input) {
                     zip.finalize();
 
                 }
+                //}, 10000); //used to simulate a long request
             }
         );
-        //}, 5000); //used to simulate a long request
 
         //create new job entry
         jobs[hash] = {

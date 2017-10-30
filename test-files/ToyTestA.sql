@@ -1,4 +1,4 @@
-﻿
+
 SELECT pg_catalog.setval('users_id_seq', 2);
 SELECT pg_catalog.setval('changesets_id_seq', 2);
 SELECT pg_catalog.setval('current_nodes_id_seq', 37);
@@ -231,5 +231,4 @@ COPY way_tags (way_id, version, k, v) FROM stdin;
 4	1	note	2
 4	1	highway	road
 \.
-
 

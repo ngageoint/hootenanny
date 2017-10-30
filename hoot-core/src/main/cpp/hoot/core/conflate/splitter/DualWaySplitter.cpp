@@ -81,7 +81,8 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, DualWaySplitter)
 
 DualWaySplitter::DualWaySplitter()
 {
-  if (ConfigOptions().getDualWaySplitterDrivingSideDefaultValue().toLower() == "left")
+  ConfigOptions opts = ConfigOptions();
+  if (opts.getDualWaySplitterDrivingSideDefaultValue().toLower() == "left")
   {
     _drivingSide = DualWaySplitter::Left;
     LOG_DEBUG("Assuming drives on left.");
@@ -91,7 +92,9 @@ DualWaySplitter::DualWaySplitter()
     _drivingSide = DualWaySplitter::Right;
     LOG_DEBUG("Assuming drives on right.");
   }
-  _defaultSplitSize = ConfigOptions().getDualWaySplitterSplitSizeDefaultValue();
+  _defaultSplitSize = opts.getDualWaySplitterSplitSizeDefaultValue();
+  _preserveUnknown1ElementIdWhenModifyingFeatures =
+    opts.getPreserveUnknown1ElementIdWhenModifyingFeatures();
 }
 
 DualWaySplitter::DualWaySplitter(boost::shared_ptr<const OsmMap> map, DrivingSide drivingSide,
@@ -122,12 +125,12 @@ boost::shared_ptr<Way> DualWaySplitter::_createOneWay(boost::shared_ptr<const Wa
   {
     /// @todo MultiLineString not handled properly See r2275
 
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       LOG_WARN(
         "Inappropriate handling of geometry.  Adding original line back in to keep things moving...");
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }
@@ -462,8 +465,7 @@ void DualWaySplitter::_splitWay(long wid)
   RemoveWayOp::removeWay(_result, wid);
 
   // see comments for similar functionality in HighwaySnapMerger::_mergePair
-  if (ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures() &&
-      _working->getStatus() == Status::Unknown1)
+  if (_preserveUnknown1ElementIdWhenModifyingFeatures && _working->getStatus() == Status::Unknown1)
   {
     LOG_TRACE(
       "Setting unknown1 " << _working->getElementId().getId() << " on " <<

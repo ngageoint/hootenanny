@@ -130,36 +130,4 @@ void FileUtils::writeFully(const QString path, const QString text)
   outFile.close();
 }
 
-QString FileUtils::secondsToDhms(const qint64 durationInMilliseconds)
-{
-  //TODO: move to utility class
-  QString res;
-  int duration = (int)(durationInMilliseconds / 1000);
-  const int seconds = (int)(duration % 60);
-  duration /= 60;
-  const int minutes = (int)(duration % 60);
-  duration /= 60;
-  const int hours = (int)(duration % 24);
-  const int days = (int)(duration / 24);
-  if ((hours == 0) && (days == 0))
-  {
-    return res.sprintf("%02d:%02d", minutes, seconds);
-  }
-  if (days == 0)
-  {
-    return res.sprintf("%02d:%02d:%02d", hours, minutes, seconds);
-  }
-  return res.sprintf("%dd%02d:%02d:%02d", days, hours, minutes, seconds);
-}
-
-QString FileUtils::formatPotentiallyLargeNumber(const unsigned long number)
-{
-  //I want to see comma separators...probably a better way to handle this...will go with this for
-  //now.
-  const QLocale& cLocale = QLocale::c();
-  QString ss = cLocale.toString((qulonglong)number);
-  ss.replace(cLocale.groupSeparator(), ',');
-  return ss;
-}
-
 }

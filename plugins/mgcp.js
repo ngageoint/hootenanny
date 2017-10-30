@@ -735,6 +735,7 @@ mgcp = {
             // Rules format:  ["test expression","output result"];
             // Note: t = tags, a = attrs and attrs can only be on the RHS
             var rulesList = [
+            ["t.barrier == 'dragons_teeth' && !(t.tank_trap)","t.barrier = 'tank_trap'; t.tank_trap = 'dragons_teeth'"],
             ["t['bridge:movable'] && t['bridge:movable'] !== 'no' && t['bridge:movable'] !== 'unknown'","t.bridge = 'movable'"],
             ["t['building:religious'] == 'other'","t.amenity = 'religion'"],
             ["t['cable:type'] && !(t.cable)","t.cable = 'yes'"],
@@ -1007,6 +1008,7 @@ mgcp = {
             // See ToOsmPostProcessing for more details about rulesList.
             var rulesList = [
             ["t.amenity == 'marketplace'","t.facility = 'yes'"],
+            ["t.barrier == 'tank_trap' && t.tank_trap == 'dragons_teeth'","t.barrier = 'dragons_teeth'; delete t.tank_trap"],
             ["t.construction && t.railway","t.railway = t.construction; t.condition = 'construction'; delete t.construction"],
             ["t.construction && t.highway","t.highway = t.construction; t.condition = 'construction'; delete t.construction"],
             ["t.content && !(t.product)","t.product = t.content; delete t.content"],
@@ -1608,6 +1610,9 @@ mgcp = {
             mgcp.configIn = {};
             mgcp.configIn.OgrDebugAddfcode = config.getOgrDebugAddfcode();
             mgcp.configIn.OgrDebugDumptags = config.getOgrDebugDumptags();
+
+            // Get any changes
+            mgcp.toChange = hoot.Settings.get("translation.override");
         }
 
         // Debug:
@@ -1706,6 +1711,9 @@ mgcp = {
             print('');
         }
 
+        // Override tag values if appropriate
+        translate.overrideValues(tags,mgcp.toChange);
+
         return tags;
     }, // End of ToOsm
 
@@ -1728,6 +1736,10 @@ mgcp = {
             mgcp.configOut.OgrNoteExtra = config.getOgrNoteExtra();
             mgcp.configOut.OgrSplitO2s = config.getOgrSplitO2s();
             mgcp.configOut.OgrThrowError = config.getOgrThrowError();
+
+            // Get any changes to OSM tags
+            // NOTE: the rest of the config variables will change to this style of assignment soon
+            mgcp.toChange = hoot.Settings.get("translation.override");
         }
 
         // Check if we have a schema. This is a quick way to workout if various lookup tables have been built
@@ -1773,6 +1785,9 @@ mgcp = {
             // Debug
             // translate.dumpOne2OneLookup(mgcp.lookup);
         }
+
+        // Override values if appropriate
+        translate.overrideValues(tags,mgcp.toChange);
 
         // pre processing
         mgcp.applyToMgcpPreProcessing(tags,attrs, geometryType);

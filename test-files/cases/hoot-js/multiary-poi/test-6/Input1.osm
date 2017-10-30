@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <node id='-50738' action='modify' lat='15.36969255691' lon='44.21476013367'>
+    <tag k='ID' v='1-00113' />
+    <tag k='MATCH' v='1-00112' />
+    <tag k='REVIEW' v='none' />
+    <tag k='addr:street' v='Shu&apos;ob street' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='hoot:hash' v='sha1sum:b0dc4356bb40515819e6ea73c78674457b6434e1' />
+    <tag k='landuse' v='cemetery' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='name' v='مقبرة الصياح الشرقيه' />
+    <tag k='source' v='osm' />
+    <tag k='source:datetime' v='2016-10-11T05:20:03.000Z' />
+    <tag k='uuid' v='{b10ffdde-c5c6-443d-b3ba-b15714c83097}' />
+  </node>
+  <node id='-50739' action='modify' lat='15.36952035691' lon='44.21470173367'>
+    <tag k='ID' v='1-00112' />
+    <tag k='MATCH' v='1-00112' />
+    <tag k='REVIEW' v='none' />
+    <tag k='addr:street' v='Shu&apos;ob street' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='hoot:hash' v='sha1sum:9e7d35426464499e85ca1097c9cc2e01743c4986' />
+    <tag k='landuse' v='cemetery' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='name' v='مقبرة الصياح الشرقيه' />
+    <tag k='source' v='osm' />
+    <tag k='source:datetime' v='2016-10-11T05:18:02.000Z' />
+    <tag k='uuid' v='{70e64f51-c2c7-4c4c-933e-07256f43cae9}' />
+  </node>
+</osm>

@@ -128,7 +128,7 @@ fcodeCommon = {
       ['F_CODE','AL025','man_made','cairn'], // Cairn
       ['F_CODE','AL030','landuse','cemetery'], // Cemetery
       ['F_CODE','AL036','tomb','yes'], // Tomb
-      ['F_CODE','AL060','barrier','dragons_teeth'], // Dragon's Teeth
+      ['F_CODE','AL060','barrier','dragons_teeth'], // Dragon's Teeth - fixed in pre/post processing
       ['F_CODE','AL065','hazard','minefield'], // Minefield
       ['F_CODE','AL070','barrier','fence'], // Fence
       ['F_CODE','AL073','man_made','flagpole'], // Flagpole
@@ -308,7 +308,7 @@ fcodeCommon = {
       ['F_CODE','BH140','waterway','river'], // River - See custom rules
       ['F_CODE','BH145','waterway','vanishing_point'], // Vanishing point
       ['F_CODE','BH150','natural','salt_flat'], // Salt Flat, Salt Pan
-      ['F_CODE','BH155','man_made','salt_pond'], // Salt Evaporator
+      ['F_CODE','BH155','landuse','salt_pond'], // Salt Evaporator
       ['F_CODE','BH160','natural','sabkha'], // Sabkha
       ['F_CODE','BH165','waterway','spillway'], // Spillway
       ['F_CODE','BH170','natural','spring'], // Natural Pool, Spring/Water Hole

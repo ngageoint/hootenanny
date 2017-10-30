@@ -1,89 +1,55 @@
-22:56:57.465 INFO  ...hoot/core/schema/OsmSchema.cpp(1851) Loading translation files...
-22:56:57.692 INFO  ...ore/io/OsmMapReaderFactory.cpp( 138) Loading map from /home/vagrant/hoot/test-files/cmd/slow/RndMultiaryScoreMatchesCmdTest/Input1.osm...
-22:56:57.697 INFO  ...ore/io/OsmMapReaderFactory.cpp( 138) Loading map from /home/vagrant/hoot/test-files/cmd/slow/RndMultiaryScoreMatchesCmdTest/Input2.osm...
-22:56:57.698 INFO  ...ore/io/OsmMapReaderFactory.cpp( 138) Loading map from /home/vagrant/hoot/test-files/cmd/slow/RndMultiaryScoreMatchesCmdTest/Input3.osm...
-22:56:57.700 INFO  ...ore/io/OsmMapWriterFactory.cpp( 108) Writing map to /tmp/score-matches-after-prep.osm...
-22:56:57.702 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::BuildingOutlineRemoveOp
-22:56:57.702 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::MapCleaner
-22:56:57.702 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::ReprojectToPlanarOp
+15:52:27.215 INFO  ...hoot/core/schema/OsmSchema.cpp(1890) Loading translation files...
+15:52:27.265 INFO  ...ore/io/OsmMapReaderFactory.cpp( 160) Loading map from /home/vagrant/hoot/test-files/cmd/slow/RndMultiaryScoreMatchesCmdTest/Input1.osm...
+15:52:27.269 INFO  ...ore/io/OsmMapReaderFactory.cpp( 160) Loading map from /home/vagrant/hoot/test-files/cmd/slow/RndMultiaryScoreMatchesCmdTest/Input2.osm...
+15:52:27.269 INFO  ...ore/io/OsmMapReaderFactory.cpp( 160) Loading map from /home/vagrant/hoot/test-files/cmd/slow/RndMultiaryScoreMatchesCmdTest/Input3.osm...
+15:52:27.270 INFO  ...ore/io/OsmMapWriterFactory.cpp( 130) Writing map to /tmp/score-matches-after-prep.osm...
 
-22:56:57.714 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DuplicateWayRemover
-22:56:57.714 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SuperfluousWayRemover
-22:56:57.714 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::IntersectionSplitter
-22:56:57.715 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::UnlikelyIntersectionRemover
-22:56:57.715 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DualWaySplitter
-22:56:57.715 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::ImpliedDividedMarker
-22:56:57.715 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DuplicateNameRemover
-22:56:57.715 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SmallWayMerger
-22:56:57.715 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveEmptyAreasVisitor
-22:56:57.715 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveDuplicateAreaVisitor
-22:56:57.715 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::NoInformationElementRemover
-22:56:57.776 INFO  ...conflate/UnifyingConflator.cpp( 126) Applying pre-unifying conflation operations...
-22:56:57.778 INFO  ...late/js/ScriptMatchCreator.cpp( 483) Creating matches with: hoot::ScriptMatchCreator; rules: MultiaryPoiGeneric.js...
-22:56:57.831 INFO  ...conflate/UnifyingConflator.cpp( 228) Match count: 0
-22:56:57.831 INFO  ...conflate/UnifyingConflator.cpp( 245) Creating mergers...
-22:56:57.831 INFO  ...conflate/UnifyingConflator.cpp( 262) Applying 3 mergers...
-22:56:57.896 INFO  ...conflate/UnifyingConflator.cpp( 294) Applying post-unifying conflation operations...
-22:56:57.896 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SuperfluousNodeRemover
+15:52:27.277 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  59) Applying operation: hoot::BuildingOutlineRemoveOp
+15:52:27.277 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  59) Applying operation: hoot::MapCleaner
+15:52:27.277 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  59) Applying operation: hoot::ReprojectToPlanarOp
+15:52:27.277 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  59) Applying operation: hoot::DuplicateWayRemover
+15:52:27.277 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  59) Applying operation: hoot::SuperfluousWayRemover
+15:52:27.277 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  59) Applying operation: hoot::IntersectionSplitter
+15:52:27.277 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  59) Applying operation: hoot::UnlikelyIntersectionRemover
+15:52:27.277 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  59) Applying operation: hoot::DualWaySplitter
+15:52:27.278 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  59) Applying operation: hoot::ImpliedDividedMarker
+15:52:27.278 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  59) Applying operation: hoot::DuplicateNameRemover
+15:52:27.278 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  59) Applying operation: hoot::SmallWayMerger
+15:52:27.278 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  79) Applying visitor: hoot::RemoveEmptyAreasVisitor
+15:52:27.278 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  79) Applying visitor: hoot::RemoveDuplicateAreaVisitor
+15:52:27.278 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  59) Applying operation: hoot::NoInformationElementRemover
+15:52:27.317 INFO  ...conflate/UnifyingConflator.cpp( 126) Applying pre-unifying conflation operations...
+15:52:27.318 INFO  ...late/js/ScriptMatchCreator.cpp( 531) Creating matches with: hoot::ScriptMatchCreator; rules: MultiaryPoiGeneric.js...
+15:52:27.338 INFO  ...conflate/UnifyingConflator.cpp( 228) Match count: 0
+15:52:27.338 INFO  ...conflate/UnifyingConflator.cpp( 245) Creating mergers...
+15:52:27.338 INFO  ...conflate/UnifyingConflator.cpp( 262) Applying 3 mergers...
+15:52:27.363 INFO  ...conflate/UnifyingConflator.cpp( 294) Applying post-unifying conflation operations...
+15:52:27.363 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  59) Applying operation: hoot::SuperfluousNodeRemover
 
-22:56:57.897 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SmallWayMerger
-22:56:57.897 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveMissingElementsVisitor
-22:56:57.897 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveInvalidReviewRelationsVisitor
-22:56:57.897 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::RemoveDuplicateReviewsOp
-22:56:57.897 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::BuildingOutlineUpdateOp
-22:56:57.897 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveInvalidMultilineStringMembersVisitor
-22:56:57.897 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::AddHilbertReviewSortOrderOp
-22:56:57.897 INFO  ...ry/MultiaryMatchComparator.cpp( 199) ids: [1]{3-00001}
-22:56:57.897 INFO  ...ry/MultiaryMatchComparator.cpp( 199) ids: [1]{2-00000}
-22:56:57.897 INFO  ...ry/MultiaryMatchComparator.cpp( 199) ids: [3]{1-00002, 2-00002, 3-00000}
-22:56:57.897 INFO  ...ry/MultiaryMatchComparator.cpp( 199) ids: [2]{1-00001, 2-00001}
-22:56:57.898 INFO  ...ry/MultiaryMatchComparator.cpp( 199) ids: [1]{1-00000}
-22:56:57.898 INFO  ...ry/MultiaryMatchComparator.cpp(  91) _actualMatchGroups: [8]{(1-00000, [1-00000]), (2-00000, [2-00000]), (1-00001, [1-00001, 2-00001]), (1-00002, [1-00002, 3-00000, 2-00002]), (3-00000, [1-00002, 3-00000, 2-00002]), (2-00001, [1-00001, 2-00001]), (3-00001, [3-00001]), (2-00002, [1-00002, 3-00000, 2-00002])}
-22:56:57.898 INFO  ...ry/MultiaryMatchComparator.cpp(  92) _expectedMatchGroups: [8]{(1-00000, [1-00000]), (2-00000, [2-00000, 3-00001]), (1-00001, [1-00001, 2-00001]), (3-00000, [3-00000, 1-00002, 2-00002]), (1-00002, [3-00000, 1-00002, 2-00002]), (2-00001, [1-00001, 2-00001]), (3-00001, [2-00000, 3-00001]), (2-00002, [3-00000, 1-00002, 2-00002])}
-22:56:57.898 INFO  ...ry/MultiaryMatchComparator.cpp(  93) _actualReviews: [0]{}
-22:56:57.898 INFO  ...ry/MultiaryMatchComparator.cpp(  94) _expectedReviews: [0]{}
-22:56:57.898 INFO  ...ry/MultiaryMatchComparator.cpp(  99) id: 1-00000
-22:56:57.898 INFO  ...ry/MultiaryMatchComparator.cpp( 113) actualMatchSet: []
-22:56:57.898 INFO  ...ry/MultiaryMatchComparator.cpp( 114) expectedMatchSet: []
-22:56:57.898 INFO  ...ry/MultiaryMatchComparator.cpp( 115) actualReviewSet: []
-22:56:57.898 INFO  ...ry/MultiaryMatchComparator.cpp( 116) expectedReviewSet: []
-22:56:57.898 INFO  ...ry/MultiaryMatchComparator.cpp(  99) id: 1-00001
-22:56:57.898 INFO  ...ry/MultiaryMatchComparator.cpp( 113) actualMatchSet: [2-00001]
-22:56:57.898 INFO  ...ry/MultiaryMatchComparator.cpp( 114) expectedMatchSet: [2-00001]
-22:56:57.898 INFO  ...ry/MultiaryMatchComparator.cpp( 115) actualReviewSet: []
-22:56:57.898 INFO  ...ry/MultiaryMatchComparator.cpp( 116) expectedReviewSet: []
-22:56:57.898 INFO  ...ry/MultiaryMatchComparator.cpp(  99) id: 1-00002
-22:56:57.898 INFO  ...ry/MultiaryMatchComparator.cpp( 113) actualMatchSet: [3-00000, 2-00002]
-22:56:57.898 INFO  ...ry/MultiaryMatchComparator.cpp( 114) expectedMatchSet: [3-00000, 2-00002]
-22:56:57.898 INFO  ...ry/MultiaryMatchComparator.cpp( 115) actualReviewSet: []
-22:56:57.898 INFO  ...ry/MultiaryMatchComparator.cpp( 116) expectedReviewSet: []
-22:56:57.898 INFO  ...ry/MultiaryMatchComparator.cpp(  99) id: 2-00000
-22:56:57.898 INFO  ...ry/MultiaryMatchComparator.cpp( 113) actualMatchSet: []
-22:56:57.898 INFO  ...ry/MultiaryMatchComparator.cpp( 114) expectedMatchSet: [3-00001]
-22:56:57.898 INFO  ...ry/MultiaryMatchComparator.cpp( 115) actualReviewSet: []
-22:56:57.898 INFO  ...ry/MultiaryMatchComparator.cpp( 116) expectedReviewSet: []
-22:56:57.898 INFO  ...ry/MultiaryMatchComparator.cpp(  99) id: 2-00001
-22:56:57.898 INFO  ...ry/MultiaryMatchComparator.cpp( 113) actualMatchSet: [1-00001]
-22:56:57.898 INFO  ...ry/MultiaryMatchComparator.cpp( 114) expectedMatchSet: [1-00001]
-22:56:57.898 INFO  ...ry/MultiaryMatchComparator.cpp( 115) actualReviewSet: []
-22:56:57.898 INFO  ...ry/MultiaryMatchComparator.cpp( 116) expectedReviewSet: []
-22:56:57.898 INFO  ...ry/MultiaryMatchComparator.cpp(  99) id: 2-00002
-22:56:57.898 INFO  ...ry/MultiaryMatchComparator.cpp( 113) actualMatchSet: [1-00002, 3-00000]
-22:56:57.898 INFO  ...ry/MultiaryMatchComparator.cpp( 114) expectedMatchSet: [3-00000, 1-00002]
-22:56:57.898 INFO  ...ry/MultiaryMatchComparator.cpp( 115) actualReviewSet: []
-22:56:57.899 INFO  ...ry/MultiaryMatchComparator.cpp( 116) expectedReviewSet: []
-22:56:57.899 INFO  ...ry/MultiaryMatchComparator.cpp(  99) id: 3-00000
-22:56:57.899 INFO  ...ry/MultiaryMatchComparator.cpp( 113) actualMatchSet: [1-00002, 2-00002]
-22:56:57.899 INFO  ...ry/MultiaryMatchComparator.cpp( 114) expectedMatchSet: [1-00002, 2-00002]
-22:56:57.899 INFO  ...ry/MultiaryMatchComparator.cpp( 115) actualReviewSet: []
-22:56:57.899 INFO  ...ry/MultiaryMatchComparator.cpp( 116) expectedReviewSet: []
-22:56:57.899 INFO  ...ry/MultiaryMatchComparator.cpp(  99) id: 3-00001
-22:56:57.899 INFO  ...ry/MultiaryMatchComparator.cpp( 113) actualMatchSet: []
-22:56:57.899 INFO  ...ry/MultiaryMatchComparator.cpp( 114) expectedMatchSet: [2-00000]
-22:56:57.899 INFO  ...ry/MultiaryMatchComparator.cpp( 115) actualReviewSet: []
-22:56:57.899 INFO  ...ry/MultiaryMatchComparator.cpp( 116) expectedReviewSet: []
+15:52:27.363 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  59) Applying operation: hoot::SmallWayMerger
+15:52:27.363 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  79) Applying visitor: hoot::RemoveMissingElementsVisitor
+15:52:27.363 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  79) Applying visitor: hoot::RemoveInvalidReviewRelationsVisitor
+15:52:27.363 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  59) Applying operation: hoot::RemoveDuplicateReviewsOp
+15:52:27.363 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  59) Applying operation: hoot::BuildingOutlineUpdateOp
+15:52:27.363 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  79) Applying visitor: hoot::RemoveInvalidMultilineStringMembersVisitor
+15:52:27.363 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  59) Applying operation: hoot::AddHilbertReviewSortOrderOp
 
-22:56:57.899 INFO  ...ore/io/OsmMapWriterFactory.cpp( 108) Writing map to /home/vagrant/hoot/test-output/cmd/slow/RndMultiaryScoreMatchesCmdTest/Output.osm...
+15:52:27.363 INFO  ...ore/io/OsmMapWriterFactory.cpp( 130) Writing map to /home/vagrant/hoot/test-output/cmd/slow/RndMultiaryScoreMatchesCmdTest/Output.osm...
+== Node-based Statistics
+
+
+=== All Layers
+
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |     1 |     2 |     0  |
+                  | match  |     0 |     2 |     0  |
+                  | review |     0 |     0 |     0  |
+
+All Layers	3	2	0	0	0	0	5
+
+=== Edge-based Scoring
+
 |                 |        |\3=.       expected     |
 |                 |        | miss  | match | review |
 |/3. test outcome | miss   |   -   |     1 |     0  |
@@ -104,5 +70,5 @@ unnecessary review count: 0
 ratio of unnecessary reviews to correct matches: 0
 F1 Score: 0.888889
 -1,0.8,0.2,0
-        <tag k="hoot:wrong" v="1"/>
-        <tag k="hoot:wrong" v="1"/>
+        <tag k="hoot:wrong" v="missMatch"/>
+        <tag k="hoot:wrong" v="missMatch"/>

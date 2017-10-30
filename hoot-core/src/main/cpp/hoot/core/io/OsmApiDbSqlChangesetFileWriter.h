@@ -115,6 +115,8 @@ private:
   long _changesetMaxSize;
   double _changesetUserId;
 
+  bool _includeDebugTags;
+
   friend class ServiceOsmApiDbSqlChangesetFileWriterTest;
 };
 

@@ -34,7 +34,7 @@
 #include <sstream>
 
 // STXXL
-#include <stxxl/bits/mng/diskallocator.h>
+//#include <stxxl/bits/mng/diskallocator.h>
 #include <stxxl/map>
 #include <stxxl/vector>
 

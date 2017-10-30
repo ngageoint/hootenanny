@@ -30,6 +30,7 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/DbUtils.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 // Qt
 #include <QtSql/QSqlDatabase>
@@ -42,7 +43,8 @@ using namespace geos::geom;
 namespace hoot
 {
 
-OsmApiDbSqlChangesetApplier::OsmApiDbSqlChangesetApplier(const QUrl targetDatabaseUrl)
+OsmApiDbSqlChangesetApplier::OsmApiDbSqlChangesetApplier(const QUrl targetDatabaseUrl) :
+_precision(ConfigOptions().getWriterPrecision())
 {
   if (!_db.isSupported(targetDatabaseUrl))
   {
@@ -141,7 +143,7 @@ void OsmApiDbSqlChangesetApplier::write(const QString sql)
             const double newCoord = OsmApiDb::fromOsmApiDbCoord(oldCoordStr.toLong());
             _changesetDetailsStr=
               _changesetDetailsStr.replace(
-                oldCoordStr, QString::number(newCoord, ConfigOptions().getWriterPrecision()));
+                oldCoordStr, QString::number(newCoord, 'g', _precision));
           }
         }
       }

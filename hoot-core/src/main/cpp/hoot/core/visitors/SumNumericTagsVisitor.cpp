@@ -36,6 +36,11 @@ unsigned int SumNumericTagsVisitor::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(ConstElementVisitor, SumNumericTagsVisitor)
 
+SumNumericTagsVisitor::SumNumericTagsVisitor()
+{
+
+}
+
 SumNumericTagsVisitor::SumNumericTagsVisitor(const QString key) :
 _key(key),
 _sum(0)
@@ -55,13 +60,13 @@ void SumNumericTagsVisitor::visit(const ConstElementPtr& e)
     }
     else
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN(
           "Unsuccessfully attempted to convert tag with key: " << _key << " and value: " <<
           strValue << " to number.");
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }

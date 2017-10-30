@@ -56,7 +56,8 @@ static double min(double a, double b, double c) { return std::min(a, std::min(b,
 NetworkDetails::NetworkDetails(ConstOsmMapPtr map, ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2) :
   _map(map),
   _n1(n1),
-  _n2(n2)
+  _n2(n2),
+  _maxStubLength(ConfigOptions().getNetworkMaxStubLength())
 {
   setConfiguration(conf());
 }
@@ -605,7 +606,7 @@ double NetworkDetails::getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeS
 
     bool candidate = true;
 
-    if (notStub->calculateLength(_map) > ConfigOptions().getNetworkMaxStubLength())
+    if (notStub->calculateLength(_map) > _maxStubLength)
     {
       candidate = false;
     }

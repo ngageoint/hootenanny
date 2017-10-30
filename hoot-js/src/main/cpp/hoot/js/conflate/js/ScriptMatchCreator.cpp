@@ -92,7 +92,6 @@ public:
   {
     _neighborCountMax = -1;
     _neighborCountSum = 0;
-    _elementCount = map->getElementCount();
     _elementsEvaluated = 0;
     _elementsVisited = 0;
     _maxGroupSize = 0;
@@ -276,13 +275,13 @@ public:
     //optional method, so don't throw an error
     if (plugin->Has(initStr) == false)
     {
-      LOG_DEBUG("calculateSearchRadius function not present.");
+      LOG_TRACE("calculateSearchRadius function not present.");
       return;
     }
     Handle<v8::Value> value = plugin->Get(initStr);
     if (value->IsFunction() == false)
     {
-      LOG_DEBUG("calculateSearchRadius function not present.");
+      LOG_TRACE("calculateSearchRadius function not present.");
       return;
     }
 
@@ -414,7 +413,7 @@ public:
     _elementsVisited++;
     if (_elementsVisited % 10 == 0 && Log::getInstance().getLevel() <= Log::Info)
     {
-      cout << "Progress: " << _elementsVisited << " of " << _elementCount <<
+      cout << "Progress: " << _elementsVisited <<
               " _neighborCountSum: " << _neighborCountSum << "          \r";
       cout << flush;
     }

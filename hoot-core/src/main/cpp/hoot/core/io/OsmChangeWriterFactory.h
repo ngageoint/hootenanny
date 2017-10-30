@@ -30,15 +30,12 @@
 // Qt
 #include <QString>
 
-// tgs
-#include <tgs/SharedPtr.h>
-
 namespace hoot
 {
 class OsmChangeWriter;
 
 /**
- * A factory for constructing writers based on the URL.
+ * A factory for constructing changeset writers based on the URL.
  */
 class OsmChangeWriterFactory
 {
@@ -46,7 +43,8 @@ public:
 
   OsmChangeWriterFactory();
 
-  boost::shared_ptr<OsmChangeWriter> createWriter(QString url);
+  boost::shared_ptr<OsmChangeWriter> createWriter(
+    QString url, QString elementPayloadFormat = "json");
 
   static OsmChangeWriterFactory& getInstance();
 

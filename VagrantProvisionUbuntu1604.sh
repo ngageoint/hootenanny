@@ -1,4 +1,15 @@
 #!/usr/bin/env bash
+set -e
+set -x
+
+#################################################
+# VERY IMPORTANT: CHANGE THIS TO POINT TO WHERE YOU PUT HOOT
+HOOT_HOME=~/hoot
+echo HOOT_HOME: $HOOT_HOME
+#################################################
+
+# Common set of file versions
+source $HOOT_HOME/VagrantProvisionVars.sh
 
 #
 # Initial basic provisioning script for Ubuntu1604
@@ -9,8 +20,6 @@ echo USER: $VMUSER
 VMGROUP=`groups | grep -o $VMUSER`
 echo GROUP: $VMGROUP
 
-HOOT_HOME=~/hoot
-echo HOOT_HOME: $HOOT_HOME
 cd ~
 source ~/.profile
 
@@ -31,31 +40,24 @@ sudo service ntp stop
 sudo ntpd -gq
 sudo service ntp start
 
-if ! java -version 2>&1 | grep --quiet 1.8.0_112; then
+if ! java -version 2>&1 | grep --quiet $JDK_VERSION; then
     echo "### Installing Java 8..."
 
-    # jdk-8u112-linux-x64.tar.gz's official checksums:
-    #    sha256: 777bd7d5268408a5a94f5e366c2e43e720c6ce4fe8c59d9a71e2961e50d774a5
-    #    md5: de9b7a90f0f5a13cfcaa3b01451d0337
-    echo "de9b7a90f0f5a13cfcaa3b01451d0337  /tmp/jdk-8u112-linux-x64.tar.gz" > /tmp/jdk.md5
+    echo "$JDK_MD5  $JDK_TAR" > ./jdk.md5
 
-    if [ ! -f /tmp/jdk-8u112-linux-x64.tar.gz ] || ! md5sum -c /tmp/jdk.md5; then
-        echo "Downloading jdk-8u112-linux-x64.tar.gz ...."
-        sudo wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u112-b15/jdk-8u112-linux-x64.tar.gz -P /tmp
-        echo "Finished download of jdk-8u112-linux-x64.tar.gz"
+    if [ ! -f ./$JDK_TAR ] || ! md5sum -c ./jdk.md5; then
+        echo "Downloading ${JDK_TAR}...."
+        sudo wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" $JDK_URL
+        echo "Finished download of ${JDK_TAR}"
     fi
 
-    sudo tar -xvzf /tmp/jdk-8u112-linux-x64.tar.gz --directory=/tmp >/dev/null
+    sudo mkdir -p /usr/lib/jvm
+    sudo rm -rf /usr/lib/jvm/oracle_jdk8
 
-    if [[ ! -e /usr/lib/jvm ]]; then
-        sudo mkdir /usr/lib/jvm
-    else
-        if [[ -e /usr/lib/jvm/oracle_jdk8 ]]; then
-            sudo rm -rf /usr/lib/jvm/oracle_jdk8
-        fi
-    fi
+    sudo tar -xzf ./$JDK_TAR
+    sudo chown -R root:root ./jdk$JDK_VERSION
+    sudo mv -f ./jdk$JDK_VERSION /usr/lib/jvm/oracle_jdk8
 
-    sudo mv -f /tmp/jdk1.8.0_112 /usr/lib/jvm/oracle_jdk8
     sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/oracle_jdk8/jre/bin/java 9999
     sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/oracle_jdk8/bin/javac 9999
     echo "### Done with Java 8 install..."
@@ -74,7 +76,7 @@ echo "### Installing the PPA for an ancient version of NodeJS"
 curl -sL https://deb.nodesource.com/setup_0.10 | sudo -E bash -
 
 echo "### Installing an ancient version of NodeJS"
-sudo apt-get install nodejs=0.10.48-1nodesource1~xenial1
+sudo apt-get -q -y --allow-downgrades install nodejs=0.10.48-1nodesource1~xenial1
 
 
 echo "### Installing dependencies from repos..."
@@ -83,6 +85,8 @@ sudo apt-get -q -y install \
  automake \
  ccache \
  curl \
+ dblatex \
+ docbook-xml \
  doxygen \
  g++ \
  gdb \
@@ -96,7 +100,6 @@ sudo apt-get -q -y install \
  libboost-dev \
  libcppunit-dev \
  libcv-dev \
- libgdal-dev \
  libgeos++-dev \
  libglpk-dev \
  libicu-dev \
@@ -104,18 +107,23 @@ sudo apt-get -q -y install \
  libnewmat10-dev \
  libogdi3.2-dev \
  libopencv-dev \
+ libpq-dev \
  libproj-dev \
  libprotobuf-dev \
  libqt4-dev \
  libqt4-sql-psql \
  libqt4-sql-sqlite \
+ libqtwebkit-dev \
  libstxxl-dev \
+ libv8-dev \
  maven \
- npm \
+ node-gyp \
  openssh-server \
  patch \
  pgadmin3 \
  postgresql-9.5 \
+ postgresql-client-9.5 \
+ postgresql-contrib-9.5 \
  postgresql-9.5-postgis-2.3 \
  postgresql-9.5-postgis-scripts \
  postgresql-client-9.5 \
@@ -180,12 +188,13 @@ else
     sed -i '/^export JAVA_HOME=.*/c\export JAVA_HOME=\/usr\/lib\/jvm\/oracle_jdk8' ~/.profile
 fi
 
-if ! grep --quiet "export HADOOP_HOME" ~/.profile; then
-    echo "Adding Hadoop home to profile..."
-    echo "export HADOOP_HOME=~/hadoop" >> ~/.profile
-    echo "export PATH=\$PATH:\$HADOOP_HOME/bin" >> ~/.profile
-    source ~/.profile
-fi
+# Disabling Hadoop on Ubuntu 16.04
+#if ! grep --quiet "export HADOOP_HOME" ~/.profile; then
+#    echo "Adding Hadoop home to profile..."
+#    echo "export HADOOP_HOME=~/hadoop" >> ~/.profile
+#    echo "export PATH=\$PATH:\$HADOOP_HOME/bin" >> ~/.profile
+#    source ~/.profile
+#fi
 
 if ! grep --quiet "PATH=" ~/.profile; then
     echo "Adding path vars to profile..."
@@ -212,38 +221,45 @@ EOT
 fi
 
 # gem installs are *very* slow, hence all the checks in place here to facilitate debugging
-gem list --local | grep -q mime-types
-if [ $? -eq 1 ]; then
+if ! gem list --local | grep -q mime-types; then
+    echo "Gem Install: mime-types"
    #sudo gem install mime-types -v 2.6.2
    gem install mime-types
 fi
-gem list --local | grep -q cucumber
-if [ $? -eq 1 ]; then
+
+if ! gem list --local | grep -q cucumber; then
+    echo "Gem Install: cucumber"
    #sudo gem install cucumber
    gem install cucumber
 fi
-gem list --local | grep -q capybara-webkit
-if [ $? -eq 1 ]; then
+
+if ! gem list --local | grep -q capybara-webkit; then
+    echo "Gem Install: capybara-webkit"
+   sudo apt-get install -y qt5-default libqt5webkit5-dev gstreamer1.0-plugins-base gstreamer1.0-tools gstreamer1.0-x
    #sudo gem install capybara-webkit
    gem install capybara-webkit
 fi
-gem list --local | grep -q selenium-webdriver
-if [ $? -eq 1 ]; then
+
+if ! gem list --local | grep -q selenium-webdriver; then
+    echo "Gem Install: selenium-webdriver"
    #sudo gem install selenium-webdriver
    gem install selenium-webdriver
 fi
-gem list --local | grep -q rspec
-if [ $? -eq 1 ]; then
+
+if ! gem list --local | grep -q rspec; then
+    echo "Gem Install: rspec"
    #sudo gem install rspec
    gem install rspec
 fi
-gem list --local | grep -q capybara-screenshot
-if [ $? -eq 1 ]; then
+
+if ! gem list --local | grep -q capybara-screenshot; then
+    echo "Gem Install: capybara-screenshot"
    #sudo gem install capybara-screenshot
    gem install capybara-screenshot
 fi
-gem list --local | grep -q selenium-cucumber
-if [ $? -eq 1 ]; then
+
+if ! gem list --local | grep -q selenium-cucumber; then
+    echo "Gem Install: selenium-cucumber"
    #sudo gem install selenium-cucumber
    gem install selenium-cucumber
 fi
@@ -256,9 +272,10 @@ if  ! dpkg -l | grep --quiet google-chrome-stable; then
     if [ ! -f google-chrome-stable_current_amd64.deb ]; then
       wget --quiet https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
     fi
+    sudo apt-get -f -y -q install || echo ignore failure
+    sudo dpkg -i google-chrome-stable_current_amd64.deb  || echo ignore failure
     sudo apt-get -f -y -q install
     sudo dpkg -i google-chrome-stable_current_amd64.deb
-    sudo apt-get -f -y -q install
 fi
 
 if [ ! -f bin/chromedriver ]; then
@@ -293,38 +310,39 @@ if [ ! -f bin/osmosis ]; then
     ln -s ~/bin/osmosis_src/bin/osmosis ~/bin/osmosis
 fi
 
-
-# For convenience, set the version of GDAL to download and install
-GDAL_VERSION=2.1.3
-
 if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --formats | grep --quiet FileGDB ); then
-    if [ ! -f gdal-$GDAL_VERSION.tar.gz ]; then
+    if [ ! -f gdal-${GDAL_VERSION}.tar.gz ]; then
         echo "### Downloading GDAL $GDAL_VERSION source..."
-        wget --quiet http://download.osgeo.org/gdal/$GDAL_VERSION/gdal-$GDAL_VERSION.tar.gz
+        wget --quiet http://download.osgeo.org/gdal/$GDAL_VERSION/gdal-${GDAL_VERSION}.tar.gz
     fi
-    if [ ! -d gdal-$GDAL_VERSION ]; then
+    if [ ! -d gdal-${GDAL_VERSION} ]; then
         echo "### Extracting GDAL $GDAL_VERSION source..."
-        tar zxfp gdal-$GDAL_VERSION.tar.gz
+        tar zxfp gdal-${GDAL_VERSION}.tar.gz
     fi
 
-    if [ ! -f FileGDB_API_1_4-64.tar.gz ]; then
+    FGDB_VERSION2=`echo $FGDB_VERSION | sed 's/\./_/g;'`
+
+    # FGDB 1.5 is required to compile using g++ >= 5.1
+    # https://trac.osgeo.org/gdal/wiki/FileGDB#HowtodealwithGCC5.1C11ABIonLinux
+    if [ ! -f FileGDB_API_${FGDB_VERSION2}-64gcc51.tar.gz ]; then
         echo "### Downloading FileGDB API source..."
-        wget --quiet https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_1_4-64.tar.gz
+        wget --quiet $FGDB_URL/FileGDB_API_${FGDB_VERSION2}-64gcc51.tar.gz
     fi
-    if [ ! -d /usr/local/FileGDB_API ]; then
+
+    if [ ! -d /usr/local/FileGDB_API/lib ]; then
         echo "### Extracting FileGDB API source & installing lib..."
-        sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp FileGDB_API_1_4-64.tar.gz --directory /usr/local/FileGDB_API --strip-components 1
+        sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp FileGDB_API_${FGDB_VERSION2}-64gcc51.tar.gz --directory /usr/local/FileGDB_API --strip-components 1
         sudo sh -c "echo '/usr/local/FileGDB_API/lib' > /etc/ld.so.conf.d/filegdb.conf"
     fi
 
     echo "### Building GDAL $GDAL_VERSION w/ FileGDB..."
     export PATH=/usr/local/lib:/usr/local/bin:$PATH
-    cd gdal-$GDAL_VERSION
+    cd gdal-${GDAL_VERSION}
     touch config.rpath
     echo "GDAL: configure"
-    sudo ./configure --quiet --with-fgdb=/usr/local/FileGDB_API --with-pg=/usr/bin/pg_config --with-python
+    ./configure --quiet --with-static-proj4 --with-fgdb=/usr/local/FileGDB_API --with-pg=/usr/bin/pg_config --with-python
     echo "GDAL: make"
-    sudo make -sj$(nproc) > GDAL_Build.txt 2>&1
+    make -sj$(nproc) > GDAL_Build.txt 2>&1
     echo "GDAL: install"
     sudo make -s install >> GDAL_Build.txt 2>&1
     cd swig/python
@@ -334,13 +352,34 @@ if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --formats | grep --quiet FileGDB
     sudo python setup.py install >> GDAL_Build.txt 2>&1
     sudo ldconfig
     cd ~
+
+    # Update the GDAL_DATA folder in ~/.profile
+    if ! grep --quiet GDAL_DATA ~/.profile; then
+      echo "Adding GDAL data path to profile..."
+      echo "export GDAL_DATA=`gdal-config --datadir`" >> ~/.profile
+      source ~/.profile
+    fi
 fi
 
 if ! mocha --version &>/dev/null; then
     echo "### Installing mocha for plugins test..."
     sudo npm install --silent -g mocha
     # Clean up after the npm install
-    sudo rm -rf ~/tmp
+    sudo rm -rf ~/tmp/*
+fi
+
+sudo apt -y -qq remove postgresql-9.6
+sudo apt -y -qq autoremove
+
+# If the DB encoding isn't correcct, delete and recreate the DB.
+if ! sudo -u postgres psql $DB_NAME -c "SHOW SERVER_ENCODING" | grep UTF8; then
+  echo "Now stop the postgresql instance so we can recreate the DB w/ UTF8 encoding."
+  sudo service postgresql stop
+
+  sudo rm -rf /var/lib/postgresql/9.5/main/ && sudo -u postgres /usr/lib/postgresql/9.5/bin/initdb -E UTF8 -D /var/lib/postgresql/9.5/main/
+
+  echo "Starting postgresql back up."
+  sudo service postgresql start
 fi
 
 # NOTE: These have been changed to pg9.5
@@ -417,7 +456,7 @@ fi
 TOMCAT_HOME=/usr/share/tomcat8
 
 # Install Tomcat 8
-$HOOT_HOME/scripts/tomcat8/ubuntu/tomcat8_install.sh
+$HOOT_HOME/scripts/tomcat/tomcat8/ubuntu/tomcat8_install.sh
 
 # Configure Tomcat
 if ! grep --quiet TOMCAT8_HOME ~/.profile; then
@@ -449,7 +488,7 @@ sudo chmod a+x /etc/init.d/node-mapnik-server
 cd $HOOT_HOME/node-mapnik-server
 npm install --silent
 # Clean up after the npm install
-rm -rf ~/tmp
+rm -rf ~/tmp/*
 
 echo "### Installing node-export-server..."
 sudo cp $HOOT_HOME/node-export-server/init.d/node-export-server /etc/init.d
@@ -458,7 +497,7 @@ sudo chmod a+x /etc/init.d/node-export-server
 cd $HOOT_HOME/node-export-server
 npm install --silent
 # Clean up after the npm install
-rm -rf ~/tmp
+rm -rf ~/tmp/*
 
 cd $HOOT_HOME
 

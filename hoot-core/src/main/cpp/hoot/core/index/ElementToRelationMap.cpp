@@ -187,12 +187,12 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
         {
           if (childEid != r->getElementId() && containsRecursive(r, ElementId(type, id)) == false)
           {
-            if (_logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+            if (_logWarnCount < Log::getWarnMessageLimit())
             {
               LOG_WARN("ElementToRelationMap expected relation " << *it <<
                 " to contain: " << type.toString() << " " << id << " but it does not.");
             }
-            else if (_logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+            else if (_logWarnCount == Log::getWarnMessageLimit())
             {
               LOG_WARN(typeid(this).name() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
             }
@@ -205,12 +205,12 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
           if (containsRecursive(r, ElementId(type, id)) == true &&
             r->getElementId() != ElementId(type, id))
           {
-            if (_logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+            if (_logWarnCount < Log::getWarnMessageLimit())
             {
               LOG_WARN("ElementToRelationMap didn't expect relation " << *it <<
                 " to contain: " << type.toString() << " " << id << " but it does.");
             }
-            else if (_logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+            else if (_logWarnCount == Log::getWarnMessageLimit())
             {
               LOG_WARN(typeid(this).name() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
             }

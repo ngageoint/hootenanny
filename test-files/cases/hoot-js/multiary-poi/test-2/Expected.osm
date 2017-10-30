@@ -1,19 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
-    <bounds minlat="39.74864230528" minlon="-105.00768136212" maxlat="39.74867533006001" maxlon="-105.00740241239"/>
-    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7486753300600100" lon="-105.0074024123899932">
-        <tag k="note" v="1a;2a"/>
-        <tag k="hoot:hash" v="sha1sum:dd8b240f84fcfbb200613dcdd1fb8dbc29c098a8"/>
-        <tag k="source:hash" v="sha1sum:ba8f741e9f3f4a02bcccb6f279513f36c5bc7cff;sha1sum:beba062ebbeda730a8b7412a5baabb35f1cd3685"/>
-        <tag k="leisure" v="stadium"/>
-        <tag k="alt_name" v="Pepsi Center"/>
-        <tag k="name" v="Pepsi"/>
-        <tag k="error:circular" v="15"/>
-    </node>
+    <bounds minlat="39.74864230528" minlon="-105.00768136212" maxlat="39.74864230528" maxlon="-105.00768136212"/>
     <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7486423052800006" lon="-105.0076813621199960">
-        <tag k="note" v="1b;3a"/>
-        <tag k="hoot:hash" v="sha1sum:669e81fbde7b368ca3f8dc27acce3e911ba53b33"/>
-        <tag k="source:hash" v="sha1sum:2014b924c45123b30da3c37facbe1c9ef3ed5084;sha1sum:1d2f37fcd1bcffeb1aebbb25acb0916506df8a16"/>
+        <tag k="note" v="1b;1a;2a;3a"/>
+        <tag k="hoot:hash" v="sha1sum:c88140177f56baa2972068871ad314d010f6570c"/>
+        <tag k="source:hash" v="sha1sum:2014b924c45123b30da3c37facbe1c9ef3ed5084;sha1sum:ba8f741e9f3f4a02bcccb6f279513f36c5bc7cff;sha1sum:beba062ebbeda730a8b7412a5baabb35f1cd3685;sha1sum:1d2f37fcd1bcffeb1aebbb25acb0916506df8a16"/>
         <tag k="leisure" v="stadium"/>
         <tag k="alt_name" v="Pepsi"/>
         <tag k="source" v="wikimapia"/>

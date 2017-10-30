@@ -156,7 +156,10 @@ class ConflateCommand extends ExternalCommand {
             stats = "--stats";
         }
 
+        String conflationCommand = params.getConflationCommand();
+
         Map<String, Object> substitutionMap = new HashMap<>();
+        substitutionMap.put("CONFLATION_COMMAND", conflationCommand);
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
         substitutionMap.put("HOOT_OPTIONS", hootOptions);
         substitutionMap.put("INPUT1", input1);
@@ -164,7 +167,7 @@ class ConflateCommand extends ExternalCommand {
         substitutionMap.put("OUTPUT", output);
         substitutionMap.put("STATS", stats);
 
-        String command = "hoot conflate --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${STATS}";
+        String command = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${STATS}";
 
         super.configureCommand(command, substitutionMap, caller);
     }

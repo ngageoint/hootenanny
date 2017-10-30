@@ -9,23 +9,28 @@ Feature: OSM/TDS Switcher
         And I press "Add Layer"
         Then I wait 30 "seconds" to see "span.strong" element with text "DcGisRoadsCucumber"
 
-    Scenario: I can select a feature and switch between attribute schemas
-        When I select a way map feature with OSM id "w309"
-        Then I wait 10 "seconds" to see "Edit feature:"
-        Then I should see element "#preset-input-name" with value "23RD ST NW"
-        Then I select the "TDSv61" option labelled "Tag Schema"
-        Then I wait 10 "seconds" to see "label" element with text "Feature Code"
-        Then I should see element "#preset-input-TDSv61\/F_CODE" with value "AP030"
-        Then I select the "TDSv40" option labelled "Tag Schema"
-        Then I wait 10 "seconds" to see "label" element with text "Geographic Name Information : Full Name"
-        Then I wait 5 seconds
-        Then I should see element "#preset-input-TDSv40\/ZI005_FNA" with value "23RD ST NW"
-        Then I select the "MGCP" option labelled "Tag Schema"
-        Then I wait 10 "seconds" to see "label" element with text "Thoroughfare Class"
-        Then I should see element "#preset-input-MGCP\/HCT" with value "Unknown"
+    # Scenario: I can select a feature and switch between attribute schemas
+        # When I click the "zoom-in" button
+        # When I click the "zoom-in" button
+        # When I click the "zoom-in" button
+        # And I wait 3 seconds
+        # And I hover over "#map"
+        # When I select a way map feature with OSM id "w352"
+        # Then I wait 10 "seconds" to see "Edit feature:"
+        # Then I should see element "#preset-input-name" with value "21ST ST NW"
+        # Then I select the "TDSv61" option labelled "Tag Schema"
+        # Then I wait 10 "seconds" to see "label" element with text "Feature Code"
+        # Then I should see element "#preset-input-TDSv61\/F_CODE" with value "AP030"
+        # Then I select the "TDSv40" option labelled "Tag Schema"
+        # Then I wait 10 "seconds" to see "label" element with text "Geographic Name Information : Full Name"
+        # Then I wait 5 seconds
+        # Then I should see element "#preset-input-TDSv40\/ZI005_FNA" with value "21ST ST NW"
+        # Then I select the "MGCP" option labelled "Tag Schema"
+        # Then I wait 10 "seconds" to see "label" element with text "Thoroughfare Class"
+        # Then I should see element "#preset-input-MGCP\/HCT" with value "Unknown"
 
-    Scenario: I can add a new tag using an MGCP field
-        Then I select the "Secondary Route" option labelled "Thoroughfare Class"
+    # Scenario: I can add a new tag using an MGCP field
+        # Then I select the "Secondary Route" option labelled "Thoroughfare Class"
         # Then I select the "Median Present" option labelled "Add field:"
         # Then I select the "Without Median" option labelled "Median Present"
 
