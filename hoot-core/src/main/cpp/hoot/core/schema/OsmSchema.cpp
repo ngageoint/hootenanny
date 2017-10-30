@@ -1765,6 +1765,7 @@ bool OsmSchema::isLinear(const Element &e)
     const Relation& r = dynamic_cast<const Relation&>(e);
     result |= r.getType() == MetadataTags::RelationMultilineString();
     result |= r.getType() == MetadataTags::RelationRoute();
+    result |= r.getType() == MetadataTags::RelationBoundary();
   }
 
   for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)

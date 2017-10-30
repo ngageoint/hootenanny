@@ -123,6 +123,7 @@ public:
 
   inline static const QString BuildingPart()            { return "building:part"; }
 
+  inline static const QString RelationBoundary()        { return "boundary"; }
   inline static const QString RelationBuilding()        { return "building"; }
   inline static const QString RelationCollection()      { return "collection"; }
   inline static const QString RelationInner()           { return "inner"; }
