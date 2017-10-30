@@ -11,6 +11,12 @@ echo HOOT_HOME: $HOOT_HOME
 # Common set of file versions
 source $HOOT_HOME/VagrantProvisionVars.sh
 
+# Can be used on commands that have a tendency to fail due to network or similar
+# issues.
+function retry {
+    $* || $*
+}
+
 #
 # Initial basic provisioning script for Ubuntu1604
 #
@@ -138,6 +144,7 @@ sudo apt-get -q -y install \
  source-highlight \
  swig \
  texinfo \
+ texlive-lang-cyrillic \
  unzip \
  w3m \
  x11vnc \
@@ -204,7 +211,7 @@ fi
 
 if ! ruby -v | grep --quiet 2.3.0; then
     # Ruby via rvm - from rvm.io
-    gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 2>&1
+    retry gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 2>&1
 
     curl -sSL https://raw.githubusercontent.com/rvm/rvm/master/binscripts/rvm-installer | bash -s stable
 
