@@ -22,9 +22,9 @@ UI_DIR = tmp/ui
 MOC_DIR = tmp/moc
 release:OBJECTS_DIR = tmp/release
 else:OBJECTS_DIR = tmp/debug
-DESTDIR = ../bin/
+DESTDIR = ../../bin/
 
-LIBS += -L../lib/ -lPrettyPipes \
+LIBS += -L../../lib/ -lPrettyPipes \
     #setting this in ax_lib_hadoop.m4 causes a linking error 
     -lhadooputils \
 
