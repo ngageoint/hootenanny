@@ -56,14 +56,14 @@ NetworkMergerCreator::NetworkMergerCreator()
 bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merger*>& mergers) const
 {
   LOG_TRACE("Creating mergers with " << className() << "...");
-  // LOG_DEBUG("Creating mergers for match set: ");
-  // QString matchesString = "";
-  // for (MatchSet::const_iterator it = matchesIn.begin(); it != matchesIn.end(); ++it)
-  // {
-  //   const NetworkMatch* nmi = dynamic_cast<const NetworkMatch*>(*it);
-  //   matchesString += nmi->getEdgeMatch()->getUid() + " ";
-  // }
-  // LOG_DEBUG(matchesString);
+  LOG_INFO("Creating mergers for match set: ");
+  QString matchesString = "";
+  for (MatchSet::const_iterator it = matchesIn.begin(); it != matchesIn.end(); ++it)
+  {
+    const NetworkMatch* nmi = dynamic_cast<const NetworkMatch*>(*it);
+    matchesString += nmi->getEdgeMatch()->getUid() + " ";
+  }
+  LOG_INFO(matchesString);
 
   MatchSet matches = matchesIn;
   _removeDuplicates(matches);
@@ -115,6 +115,7 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
         {
           //LOG_TRACE("Returning largest match");
           const NetworkMatch* largest = _getLargest(matches);
+          LOG_INFO("Largest Match: " << largest->getEdgeMatch()->getUid());
           mergers.push_back(
             new PartialNetworkMerger(
               largest->getMatchPairs(),
@@ -216,7 +217,10 @@ double NetworkMergerCreator::_getOverlapPercent(const MatchSet& matches) const
     for (++jt; jt != matches.end(); ++jt)
     {
       const NetworkMatch* nmj = dynamic_cast<const NetworkMatch*>(*jt);
-      count += _getOverlapPercent(nmi, nmj);
+      LOG_INFO(nmi->getEdgeMatch()->getUid() << ":" << nmj->getEdgeMatch()->getUid());
+      double percent = _getOverlapPercent(nmi, nmj);
+      LOG_INFO(percent);
+      count += percent;
       total += 100.0;
     }
   }
@@ -224,12 +228,14 @@ double NetworkMergerCreator::_getOverlapPercent(const MatchSet& matches) const
   return 100.0*count / total;
 }
 
+// Tricky: lets approach this from the perspective of the smaller match, not the larger
 double NetworkMergerCreator::_getOverlapPercent(const NetworkMatch* m1, const NetworkMatch* m2) const
 {
   QList<EdgeString::EdgeEntry> m1e1, m1e2, m2e1, m2e2;
+  boost::shared_ptr<const OsmMap> pMap(_map->shared_from_this());
 
-  if (m1->getEdgeMatch()->getString1()->getCount()
-      > m2->getEdgeMatch()->getString1()->getCount())
+  if (m1->getEdgeMatch()->getString1()->calculateLength(pMap)
+      <= m2->getEdgeMatch()->getString1()->calculateLength(pMap))
   {
     m1e1 = m1->getEdgeMatch()->getString1()->getAllEdges();
     m2e1 = m2->getEdgeMatch()->getString1()->getAllEdges();
@@ -240,8 +246,8 @@ double NetworkMergerCreator::_getOverlapPercent(const NetworkMatch* m1, const Ne
     m2e1 = m1->getEdgeMatch()->getString1()->getAllEdges();
   }
 
-  if (m1->getEdgeMatch()->getString2()->getCount()
-      > m2->getEdgeMatch()->getString2()->getCount())
+  if (m1->getEdgeMatch()->getString2()->calculateLength(pMap)
+      <= m2->getEdgeMatch()->getString2()->calculateLength(pMap))
   {
     m1e2 = m1->getEdgeMatch()->getString2()->getAllEdges();
     m2e2 = m2->getEdgeMatch()->getString2()->getAllEdges();
@@ -254,36 +260,39 @@ double NetworkMergerCreator::_getOverlapPercent(const NetworkMatch* m1, const Ne
 
   double count = 0;
   double total = 0;
-  foreach (EdgeString::EdgeEntry ee, m2e1)
+  foreach (EdgeString::EdgeEntry ee, m1e1)
   {
-    if (m1e1.contains(ee))
+    Meters edgeLen = ee.getEdge()->calculateLength(pMap);
+    if (m2e1.contains(ee))
     {
-      ++count;
+      count += edgeLen;
     }
     else // try the reverse
     {
       ee.reverse();
-      if (m1e1.contains(ee))
-        ++count;
+      if (m2e1.contains(ee))
+        count += edgeLen;
       ee.reverse(); // reverse back to be nice
     }
-    ++total;
+    total += edgeLen;
   }
 
-  foreach (EdgeString::EdgeEntry ee, m2e2)
+  foreach (EdgeString::EdgeEntry ee, m1e2)
   {
-    if (m1e2.contains(ee))
+    boost::shared_ptr<const OsmMap> pMap(_map->shared_from_this());
+    Meters edgeLen = ee.getEdge()->calculateLength(pMap);
+    if (m2e2.contains(ee))
     {
-      ++count;
+      count += edgeLen;
     }
     else // try the reverse
     {
       ee.reverse();
-      if (m1e2.contains(ee))
-        ++count;
+      if (m2e2.contains(ee))
+        count += edgeLen;
       ee.reverse(); // reverse back to be nice
     }
-    ++total;
+    total += edgeLen;
   }
 
   return 100.0*count / total;
@@ -300,17 +309,15 @@ const NetworkMatch* NetworkMergerCreator::_getLargest(const MatchSet& matches) c
   }
 
   const NetworkMatch* largest = dynamic_cast<const NetworkMatch*>(*matches.begin());
-  int largestCount = -1;
+  double longestLen = 0.0;
   foreach (const Match* m, matches)
   {
     const NetworkMatch* nm = dynamic_cast<const NetworkMatch*>(m);
-    LOG_INFO(nm->getEdgeMatch()->getUid());
 
-    int count = nm->getEdgeMatch()->getString1()->getCount()
-              + nm->getEdgeMatch()->getString2()->getCount();
-    if (count > largestCount)
+    double testLen = nm->getEdgeMatch()->getString1()->calculateLength(_map->shared_from_this());
+    if (testLen > longestLen)
     {
-      largestCount = count;
+      longestLen = testLen;
       largest = nm;
     }
   }

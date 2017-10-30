@@ -148,8 +148,11 @@ private:
    */
   void _removeDupes();
 
-  /* Remove insane matches, based on frechet */
-  void _sanityCheckMatches();
+  /* Gets the separation between the pairs in the match, in terms of Frechet distance */
+  Meters _getMatchSeparation(ConstEdgeMatchPtr pMatch);
+
+  /* Remove matches that don't make sense, based on frechet distance */
+  void _sanityCheckRelationships();
 
   void _createMatchRelationships();
 

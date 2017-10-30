@@ -184,49 +184,83 @@ void ConflictsNetworkMatcher::_removeDupes()
   }
 }
 
-void ConflictsNetworkMatcher::_sanityCheckMatches()
+Meters ConflictsNetworkMatcher::_getMatchSeparation(ConstEdgeMatchPtr pMatch)
 {
-  LOG_DEBUG("Performing Match Sanity Check");
+  // convert the EdgeStrings into WaySublineStrings
+  WayStringPtr str1 = _details->toWayString(pMatch->getString1());
+  WayStringPtr str2 = _details->toWayString(pMatch->getString2());
 
+  if (str1->getSize() > 0 && str2->getSize() > 0)
+  {
+    //  Create a temp map, and add the ways
+    OsmMapPtr tempMap(new OsmMap());
+    tempMap->setProjection(_details->getMap()->getProjection());
+    WayPtr pWay1 = str1->copySimplifiedWayIntoMap(*(_details->getMap()), tempMap);
+    WayPtr pWay2 = str2->copySimplifiedWayIntoMap(*(_details->getMap()), tempMap);
+
+    // Make our frechet object
+    FrechetDistance distanceCalc(tempMap, pWay1, pWay2);
+    Meters d = distanceCalc.distance();
+
+    LOG_DEBUG("Match (" << pMatch->getUid() << ") separation: " << d);
+
+    return d;
+  }
+  else
+  {
+    return 0.0;
+  }
+}
+
+void ConflictsNetworkMatcher::_sanityCheckRelationships()
+{
+  LOG_DEBUG("Performing Relationship Sanity Check");
+
+  /*
   QHash<ConstEdgeMatchPtr,double>::iterator matchIt = _edgeMatches->getAllMatches().begin();
 
   while (matchIt != _edgeMatches->getAllMatches().end())
   {
-    // convert the EdgeStrings into WaySublineStrings
-    WayStringPtr str1 = _details->toWayString(matchIt.key()->getString1());
-    WayStringPtr str2 = _details->toWayString(matchIt.key()->getString2());
+    Meters d = _getMatchSeparation(matchIt.key());
 
-    LOG_INFO(str1->toString());
-    LOG_INFO(str2->toString());
-    LOG_INFO("Match ID: " << matchIt.key()->getUid());
+    if (d > 15.0)
+      matchIt = _edgeMatches->getAllMatches().erase(matchIt);
+    else
+      ++matchIt;
+  }
+  */
 
-    if (str1->getSize() > 0 && str2->getSize() > 0)
+  // Check our relationships for sanity...
+  foreach(ConstEdgeMatchPtr em, _scores.keys())
+  {
+    double myDistance = _getMatchSeparation(em);
+
+    foreach(ConstMatchRelationshipPtr r, _matchRelationships[em])
     {
-      //  Create a temp map, and add the ways
-      OsmMapPtr tempMap(new OsmMap());
-      tempMap->setProjection(_details->getMap()->getProjection());
-      //MapProjector::projectToPlanar(tempMap);
-
-      WayPtr pWay1 = str1->copySimplifiedWayIntoMap(*(_details->getMap()), tempMap);
-      WayPtr pWay2 = str2->copySimplifiedWayIntoMap(*(_details->getMap()), tempMap);
-
-      // Make our frechet object
-      FrechetDistance distanceCalc(tempMap, pWay1, pWay2);
-      Meters d = distanceCalc.distance();
-
-      // Write debug map real quick
-      MapProjector::projectToWgs84(tempMap);
-      OsmMapWriterFactory::getInstance().write(tempMap, "tmp/tmp.osm");
-
-      LOG_INFO("Frechet Distance: " << d);
-      if ("d8df7b82" == matchIt.key()->getUid())
+      // If it's a conflict, AND we are a lot closer, ax the other one
+      if (r->isConflict())
       {
-        int i = 0;
-        i++;
+        double theirDistance = _getMatchSeparation(r->getEdge());
+
+        if (myDistance > 5.0 && myDistance*2.5 < theirDistance)
+        {
+          LOG_INFO("Removing insane match: " << r->getEdge()->getUid() << " - " << theirDistance <<
+                   " keeping: " << em->getUid() << " - " << myDistance); // MICAH DEBUG
+
+          int blah = 0;
+          blah++;
+
+          // Remove match
+          _edgeMatches->getAllMatches().remove(r->getEdge());
+
+          // Remove from scores
+          _scores.remove(r->getEdge());
+
+          // Remove from relationships
+          _matchRelationships.remove(r->getEdge());
+        }
       }
     }
-
-    ++matchIt;
   }
 }
 
@@ -253,28 +287,24 @@ void ConflictsNetworkMatcher::_createMatchRelationships()
     {
       from1 = em->getString1()->getFromVertex();
       touches.unite(_edgeMatches->getMatchesThatTerminateAt(from1));
-      conflict += _edgeMatches->getMatchesWithInteriorVertex(from1);
       LOG_VART(conflict.size());
     }
     if (em->getString1()->getTo()->isExtreme())
     {
       to1 = em->getString1()->getToVertex();
       touches.unite(_edgeMatches->getMatchesThatTerminateAt(to1));
-      conflict += _edgeMatches->getMatchesWithInteriorVertex(to1);
       LOG_VART(conflict.size());
     }
     if (em->getString2()->getFrom()->isExtreme())
     {
       from2 = em->getString2()->getFromVertex();
       touches.unite(_edgeMatches->getMatchesThatTerminateAt(from2));
-      conflict += _edgeMatches->getMatchesWithInteriorVertex(from2);
       LOG_VART(conflict.size());
     }
     if (em->getString2()->getTo()->isExtreme())
     {
       to2 = em->getString2()->getToVertex();
       touches.unite(_edgeMatches->getMatchesThatTerminateAt(to2));
-      conflict += _edgeMatches->getMatchesWithInteriorVertex(to2);
       LOG_VART(conflict.size());
     }
     conflict -= em;
@@ -303,23 +333,26 @@ void ConflictsNetworkMatcher::_createMatchRelationships()
     // any edge that touches, but isn't supporting its a conflict.
     touches -= em;
     touches -= support;
+
     // TODO: Removing the non-supporting, touching edges from the conflicts was done to make
     // a case test pass at the expense of no other case tests failing and no decrease
     // in regression performance.  However, this seems like an important piece of logic, so we need
     // to keep in mind that this change may have to be reverted if we encounter a situation where
     // having it disabled causes problems.
     //conflict += touches;
-    LOG_VART(conflict.size());
 
+    LOG_VART(conflict.size());
     LOG_VART(em);
     LOG_VART(conflict);
     LOG_VART(touches);
     LOG_VART(support);
 
+    // Conflicts
     foreach (ConstEdgeMatchPtr other, conflict)
     {
       _matchRelationships[em].append(ConstMatchRelationshipPtr(new MatchRelationship(other, true)));
     }
+
     foreach (ConstEdgeMatchPtr other, support)
     {
       MatchRelationshipPtr mr(new MatchRelationship(other, false));
@@ -638,9 +671,9 @@ void ConflictsNetworkMatcher::matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1
 
   _removeDupes();
 
-  _sanityCheckMatches();
-
   _createMatchRelationships();
+
+  _sanityCheckRelationships();
 }
 
 void ConflictsNetworkMatcher::finalize()

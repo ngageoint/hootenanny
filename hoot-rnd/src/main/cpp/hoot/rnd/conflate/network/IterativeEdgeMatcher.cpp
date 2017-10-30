@@ -127,9 +127,9 @@ void IterativeEdgeMatcher::iterate()
 
   // create a more refined estimate of edge match based on the typical similarity scores and
   // the neighboring node scores (product of neighboring scores?)
-  LOG_INFO("1 to 2");
+  LOG_DEBUG("1 to 2");
   _updateEdgeScores(_edge12Scores, _vertex12Scores);
-  LOG_INFO("2 to 1");
+  LOG_DEBUG("2 to 1");
   _updateEdgeScores(_edge21Scores, _vertex21Scores);
   _normalizeAllScores();
 }

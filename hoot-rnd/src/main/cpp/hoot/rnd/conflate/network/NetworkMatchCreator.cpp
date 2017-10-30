@@ -144,8 +144,8 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
   // Finalize
   matcher->finalize();
 
-  // MICAH DEBUG
   // Write final debug map
+  // MICAH DEBUG
   if (true || ConfigOptions().getNetworkMatchWriteDebugMaps())
   {
     OsmMapPtr copy(new OsmMap(map));
