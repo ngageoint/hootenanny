@@ -56,7 +56,6 @@ sudo yum versionlock nodejs*
 
 # install useful and needed packages for working with hootenanny
 echo "### Installing dependencies from repos..."
-sudo localedef -i en_US -f UTF-8 en_US.UTF-8
 sudo yum -y install \
     asciidoc \
     autoconf \
