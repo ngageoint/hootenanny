@@ -128,7 +128,7 @@ mgcp.rules = {
         'UID':'uuid', // Universally Unique Identifier
         'UPD_DATE':'source:update:datetime', // Review Source Date and Time
         'UPD_INFO':'source:update:description', // Review Source Description
-        'VOI':'vertical_obstruction_identifier', // Vertical Obstruction Identifier
+        'VOI':'aeroway:obstruction', // Vertical Obstruction Identifier
         }, // End txtBiased
 
     // One2one rules for Number attributes

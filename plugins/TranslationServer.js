@@ -280,8 +280,13 @@ var osmtotds = function(params) {
         //Get fields for F_CODE from schema
         var schema = (params.translation) ? schemaMap[params.translation].getDbSchema() : schemaMap['TDSv61'].getDbSchema();
 
+
+        //geom type may be Vertex for tagged nodes that are members of ways
+        var geom = params.geom;
+        if (geom === 'Vertex') geom = 'Point';
+
         var match = schema.filter(function(d) {
-            return d[params.idelem] === params.idval && d.geom === params.geom;
+            return d[params.idelem] === params.idval && d.geom === geom;
         });
 
         if (match.length !== 1) {
