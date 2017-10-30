@@ -144,7 +144,7 @@ tds61.rules = {
      'UFI':'uuid', // Unique Feature Identifier. This gets cleaned up in post processing
      'URI':'source:ref', // Unique Resource Identifier
      'VCS_VCR':'max_clearance:note', // Vertical Clearance, Safe <reference level remark>
-     'VOI':'vertical_obstruction_identifier', // Vertical Obstruction Identifier
+     'VOI':'aeroway:obstruction', // Vertical Obstruction Identifier
      'WAD':'well:description', // Water Well Construction Description
      'WPI':'world_port_index', // World Port Index Identifier - This is part of Built Up Area. What??
      //'ZI001_SDP':'source:description', // Source Information : Source Description

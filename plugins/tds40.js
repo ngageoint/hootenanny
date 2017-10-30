@@ -1633,6 +1633,13 @@ tds = {
 
        } // End if highway || railway
 
+       // Tag changed
+       if (tags.vertical_obstruction_identifier)
+       {
+           tags['aeroway:obstruction'] = tags.vertical_obstruction_identifier;
+           delete tags.vertical_obstruction_identifier;
+       }
+
     }, // End applyToTdsPreProcessing
 
     applyToTdsPostProcessing : function (tags, attrs, geometryType, notUsedTags)

@@ -4,6 +4,7 @@
         "geometries": [
             "node",
             "area",
+            "way",
             "relation"
         ],
         "influence": 2,
