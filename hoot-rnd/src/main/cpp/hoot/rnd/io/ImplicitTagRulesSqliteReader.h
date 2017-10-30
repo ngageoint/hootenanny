@@ -71,7 +71,7 @@ public:
    * if the input words were not involved in multiple rules
    * @return true if the input words are involved in multiple implicit tag rules; false otherwise
    */
-  bool wordsInvolveMultipleRules(const QSet<QString>& words, QSet<QString>& matchingRuleWords);
+  //bool wordsInvolveMultipleRules(const QSet<QString>& words, QSet<QString>& matchingRuleWords);
 
   /**
    * Returns a set of tags derived implicitly given a set of words (either single words or word
@@ -83,7 +83,10 @@ public:
    * of the input words were associated with a rule
    * @return
    */
-  Tags getImplicitTags(const QSet<QString>& words, QSet<QString>& matchingWords);
+  //Tags getImplicitTags(const QSet<QString>& words, QSet<QString>& matchingWords);
+
+  Tags getImplicitTags(const QSet<QString>& words, QSet<QString>& matchingWords,
+                       bool& wordsInvolvedInMultipleRules);
 
   /**
    * Retrieves total number of implicit tag rules in the database
@@ -98,7 +101,6 @@ private:
   QSqlDatabase _db;
 
   QSqlQuery _ruleCountQuery;
-  long _currentRuleId;
 
   void _prepareQueries();
 };

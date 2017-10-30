@@ -283,36 +283,48 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs,
 //  LOG_INFO("Highest rule word count: " << _highestRuleWordCount);
 //  LOG_INFO("Highest rule tag count: " << _highestRuleTagCount);
 
-  _writeRules(outputs, sqliteOutput);
+  _writeRules(outputs, _sortedDedupedCountFile->fileName());
 }
 
-QList<boost::shared_ptr<ImplicitTagRuleWordPartWriter> > PoiImplicitTagRulesDeriver::_getOutputWriters(
-  const QStringList outputs)
+//QList<boost::shared_ptr<ImplicitTagRuleWordPartWriter> > PoiImplicitTagRulesDeriver::_getOutputWriters(
+//  const QStringList outputs)
+//{
+//  QList<boost::shared_ptr<ImplicitTagRuleWordPartWriter> > ruleWordPartWriters;
+//  for (int i = 0; i < outputs.size(); i++)
+//  {
+//    const QString output = outputs.at(i);
+//    LOG_VART(output);
+//    boost::shared_ptr<ImplicitTagRuleWordPartWriter> ruleWordPartWriter =
+//      ImplicitTagRuleWordPartWriterFactory::getInstance().createWriter(output);
+//    ruleWordPartWriter->open(output);
+//    ruleWordPartWriters.append(ruleWordPartWriter);
+//  }
+//  return ruleWordPartWriters;
+//}
+
+void PoiImplicitTagRulesDeriver::_writeRules(const QStringList outputs,
+                                             const QString inputFile)
 {
-  QList<boost::shared_ptr<ImplicitTagRuleWordPartWriter> > ruleWordPartWriters;
+//  QList<boost::shared_ptr<ImplicitTagRuleWordPartWriter> > ruleWordPartWriters =
+//    _getOutputWriters(outputs);
+//  LOG_VART(ruleWordPartWriters.size());
+//  for (QList<boost::shared_ptr<ImplicitTagRuleWordPartWriter> >::iterator writersItr = ruleWordPartWriters.begin();
+//       writersItr != ruleWordPartWriters.end(); ++writersItr)
+//  {
+//    boost::shared_ptr<ImplicitTagRuleWordPartWriter> rulesWriter = *writersItr;
+//    rulesWriter->write(inputFile);
+//    rulesWriter->close();
+//  }
+
   for (int i = 0; i < outputs.size(); i++)
   {
     const QString output = outputs.at(i);
+    LOG_VART(output);
     boost::shared_ptr<ImplicitTagRuleWordPartWriter> ruleWordPartWriter =
       ImplicitTagRuleWordPartWriterFactory::getInstance().createWriter(output);
     ruleWordPartWriter->open(output);
-    ruleWordPartWriters.append(ruleWordPartWriter);
-  }
-  return ruleWordPartWriters;
-}
-
-void PoiImplicitTagRulesDeriver::_writeRules(const QStringList outputs,
-                                             const QString sqliteOutputFile)
-{
-  QList<boost::shared_ptr<ImplicitTagRuleWordPartWriter> > ruleWordPartWriters =
-    _getOutputWriters(outputs);
-  for (QList<boost::shared_ptr<ImplicitTagRuleWordPartWriter> >::iterator writersItr = ruleWordPartWriters.begin();
-       writersItr != ruleWordPartWriters.end(); ++writersItr)
-  {
-    boost::shared_ptr<ImplicitTagRuleWordPartWriter> rulesWriter = *writersItr;
-    //rulesWriter->open(sqliteOutputFile);
-    rulesWriter->write(sqliteOutputFile);
-    rulesWriter->close();
+    ruleWordPartWriter->write(inputFile);
+    ruleWordPartWriter->close();
   }
 }
 
@@ -344,6 +356,7 @@ void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccuranceThresholdAndSortByWord
   {
     throw HootException("Unable to sort input file.");
   }
+  _sortedCountFile->close();
 }
 
 void PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
@@ -361,6 +374,12 @@ void PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
       QObject::tr("Error opening %1 for writing.").arg(_sortedDedupedCountFile->fileName()));
   }
   LOG_DEBUG("Opened sorted, deduped temp file: " << _sortedDedupedCountFile->fileName());
+  if (!_sortedCountFile->open())
+  {
+    throw HootException(
+      QObject::tr("Error opening %1 for reading.").arg(_sortedCountFile->fileName()));
+  }
+  LOG_DEBUG("Opened sorted input temp file: " << _sortedCountFile->fileName());
 
   while (!_sortedCountFile->atEnd())
   {
@@ -401,6 +420,8 @@ void PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
       _sortedDedupedCountFile->write(updatedLine.toUtf8());
     }
   }
+  _sortedCountFile->close();
+  _sortedDedupedCountFile->close();
 }
 
 }

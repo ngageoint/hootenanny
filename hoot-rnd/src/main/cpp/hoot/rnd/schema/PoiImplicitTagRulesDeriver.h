@@ -28,8 +28,6 @@
 #define POIIMPLICITTAGRULESDERIVER_H
 
 // Hoot
-//#include <hoot/rnd/schema/ImplicitTagRule.h>
-#include <hoot/rnd/io/ImplicitTagRuleSqliteRecordWriter.h>
 #include <hoot/rnd/io/ImplicitTagRuleWordPartWriterFactory.h>
 #include <hoot/rnd/util/FixedLengthString.h>
 
@@ -84,13 +82,6 @@ private:
   boost::shared_ptr<QTemporaryFile> _sortedCountFile;
   boost::shared_ptr<QTemporaryFile> _sortedDedupedCountFile;
 
-  //TODO: replace with stxxl map
-  //key=<word>;<kvp>, value=<kvp occurance count>
-  //QMap<QString, long> _wordKvpsToOccuranceCounts; //*
-  //key=<word>;<tag key>, value=<tag values>
-  //QMap<QString, QStringList> _wordTagKeysToTagValues;
-  //key=<lower case word>, value=<word>
-  //QMap<QString, QString> _wordCaseMappings; //*
   //TODO
   //QStringList _wordsToIgnore;
   double _avgTagsPerRule;
@@ -98,8 +89,6 @@ private:
   long _statusUpdateInterval;
   long _highestRuleWordCount;
   long _highestRuleTagCount;
-
-  ImplicitTagRuleSqliteRecordWriter _ruleWriter;
 
   void _updateForNewWord(QString word, const QString kvp);
   QStringList _getPoiKvps(const Tags& tags) const;
@@ -113,8 +102,8 @@ private:
   void _removeDuplicatedKeyTypes();
 
   QString _getSqliteOutput(const QStringList outputs);
-  QList<boost::shared_ptr<ImplicitTagRuleWordPartWriter> > _getOutputWriters(
-    const QStringList outputs);
+//  QList<boost::shared_ptr<ImplicitTagRuleWordPartWriter> > _getOutputWriters(
+//    const QStringList outputs);
   void _writeRules(const QStringList outputs, const QString sqliteOutputFile);
 };
 

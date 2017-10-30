@@ -51,100 +51,104 @@ public:
     reader.open("test-files/io/ImplicitTagRulesSqliteReaderTest/rules.sqlite");
 
     QSet<QString> words;
-    words.insert("Mosque");
     QSet<QString> wordsInvolved;
-    Tags tags = reader.getImplicitTags(words, wordsInvolved);
+    bool wordsInvolvedInMultipleRules = false;
+    Tags tags;
+
+    words.insert("Mosque");
+    tags = reader.getImplicitTags(words, wordsInvolved, wordsInvolvedInMultipleRules);
     CPPUNIT_ASSERT_EQUAL(2, tags.size());
     CPPUNIT_ASSERT(tags["amenity"] == "place_of_worship");
     CPPUNIT_ASSERT(tags["leisure"] == "park");
     CPPUNIT_ASSERT_EQUAL(1, wordsInvolved.size());
     CPPUNIT_ASSERT(wordsInvolved.contains("Mosque"));
+    CPPUNIT_ASSERT(!wordsInvolvedInMultipleRules);
     words.clear();
-    wordsInvolved.clear();
 
     words.insert("MOSQUE");
-    tags = reader.getImplicitTags(words, wordsInvolved);
+    tags = reader.getImplicitTags(words, wordsInvolved, wordsInvolvedInMultipleRules);
     CPPUNIT_ASSERT_EQUAL(2, tags.size());
     CPPUNIT_ASSERT(tags["amenity"] == "place_of_worship");
     CPPUNIT_ASSERT(tags["leisure"] == "park");
     CPPUNIT_ASSERT_EQUAL(1, wordsInvolved.size());
     CPPUNIT_ASSERT(wordsInvolved.contains("Mosque"));
+    CPPUNIT_ASSERT(!wordsInvolvedInMultipleRules);
     words.clear();
-    wordsInvolved.clear();
 
     words.insert("mosque");
-    tags = reader.getImplicitTags(words, wordsInvolved);
+    tags = reader.getImplicitTags(words, wordsInvolved, wordsInvolvedInMultipleRules);
     CPPUNIT_ASSERT_EQUAL(2, tags.size());
     CPPUNIT_ASSERT(tags["amenity"] == "place_of_worship");
     CPPUNIT_ASSERT(tags["leisure"] == "park");
     CPPUNIT_ASSERT_EQUAL(1, wordsInvolved.size());
     CPPUNIT_ASSERT(wordsInvolved.contains("Mosque"));
+    CPPUNIT_ASSERT(!wordsInvolvedInMultipleRules);
     words.clear();
-    wordsInvolved.clear();
 
     words.insert("mosque2");
-    tags = reader.getImplicitTags(words, wordsInvolved);
+    tags = reader.getImplicitTags(words, wordsInvolved, wordsInvolvedInMultipleRules);
     CPPUNIT_ASSERT_EQUAL(0, tags.size());
     CPPUNIT_ASSERT_EQUAL(0, wordsInvolved.size());
+    CPPUNIT_ASSERT(!wordsInvolvedInMultipleRules);
     words.clear();
-    wordsInvolved.clear();
 
     words.insert("mosque 3");
-    tags = reader.getImplicitTags(words, wordsInvolved);
+    tags = reader.getImplicitTags(words, wordsInvolved, wordsInvolvedInMultipleRules);
     CPPUNIT_ASSERT_EQUAL(0, tags.size());
     CPPUNIT_ASSERT_EQUAL(0, wordsInvolved.size());
+    CPPUNIT_ASSERT(!wordsInvolvedInMultipleRules);
     words.clear();
-    wordsInvolved.clear();
 
     words.insert("Eid Prayer Ground");
-    tags = reader.getImplicitTags(words, wordsInvolved);
+    tags = reader.getImplicitTags(words, wordsInvolved, wordsInvolvedInMultipleRules);
     CPPUNIT_ASSERT_EQUAL(1, tags.size());
     CPPUNIT_ASSERT(tags["amenity"] == "place_of_worship");
     CPPUNIT_ASSERT_EQUAL(1, wordsInvolved.size());
     CPPUNIT_ASSERT(wordsInvolved.contains("Eid Prayer Ground"));
+    CPPUNIT_ASSERT(!wordsInvolvedInMultipleRules);
     words.clear();
-    wordsInvolved.clear();
 
     words.insert("Mustashfa");
-    tags = reader.getImplicitTags(words, wordsInvolved);
+    tags = reader.getImplicitTags(words, wordsInvolved, wordsInvolvedInMultipleRules);
     CPPUNIT_ASSERT_EQUAL(1, tags.size());
     CPPUNIT_ASSERT(tags["amenity"] == "hospital");
     CPPUNIT_ASSERT_EQUAL(1, wordsInvolved.size());
     CPPUNIT_ASSERT(wordsInvolved.contains("Mustashfa"));
+    CPPUNIT_ASSERT(!wordsInvolvedInMultipleRules);
     words.clear();
-    wordsInvolved.clear();
 
     words.insert("alwhdt");
-    tags = reader.getImplicitTags(words, wordsInvolved);
+    tags = reader.getImplicitTags(words, wordsInvolved, wordsInvolvedInMultipleRules);
     CPPUNIT_ASSERT_EQUAL(1, tags.size());
     CPPUNIT_ASSERT(tags["amenity"] == "clinic");
     CPPUNIT_ASSERT_EQUAL(1, wordsInvolved.size());
     CPPUNIT_ASSERT(wordsInvolved.contains("alwhdt"));
+    CPPUNIT_ASSERT(!wordsInvolvedInMultipleRules);
     words.clear();
-    wordsInvolved.clear();
 
     words.insert("Mustashfa alwhdt");
-    tags = reader.getImplicitTags(words, wordsInvolved);
+    tags = reader.getImplicitTags(words, wordsInvolved, wordsInvolvedInMultipleRules);
     CPPUNIT_ASSERT_EQUAL(1, tags.size());
     CPPUNIT_ASSERT(tags["amenity"] == "hospital");
     CPPUNIT_ASSERT_EQUAL(1, wordsInvolved.size());
     CPPUNIT_ASSERT(wordsInvolved.contains("Mustashfa alwhdt"));
+    CPPUNIT_ASSERT(!wordsInvolvedInMultipleRules);
     words.clear();
-    wordsInvolved.clear();
 
+    //the AddImplicitlyDerivedTagsPoiVisitor won't pass a word phrase and its constituent
+    //tokens in the same tags request, but if it did, then it should identify the words as
+    //belonging to multiple rules
     words.insert("Mustashfa");
     words.insert("alwhdt");
     words.insert("Mustashfa alwhdt");
-    tags = reader.getImplicitTags(words, wordsInvolved);
-    CPPUNIT_ASSERT_EQUAL(1, tags.size());
-    LOG_VART(tags["amenity"]);
-    CPPUNIT_ASSERT(tags["amenity"] == "hospital;clinic");
+    tags = reader.getImplicitTags(words, wordsInvolved, wordsInvolvedInMultipleRules);
+    CPPUNIT_ASSERT_EQUAL(0, tags.size());
     CPPUNIT_ASSERT_EQUAL(3, wordsInvolved.size());
     CPPUNIT_ASSERT(wordsInvolved.contains("Mustashfa"));
     CPPUNIT_ASSERT(wordsInvolved.contains("alwhdt"));
     CPPUNIT_ASSERT(wordsInvolved.contains("Mustashfa alwhdt"));
+    CPPUNIT_ASSERT(wordsInvolvedInMultipleRules);
     words.clear();
-    wordsInvolved.clear();
 
     reader.close();
   }
@@ -156,119 +160,131 @@ public:
 
     QSet<QString> words;
     QSet<QString> ruleWordsInvolved;
+    bool wordsInvolvedInMultipleRules = false;
+    Tags tags;
 
     words.insert("Mosque");
-    CPPUNIT_ASSERT(!reader.wordsInvolveMultipleRules(words, ruleWordsInvolved));
-    CPPUNIT_ASSERT_EQUAL(0, ruleWordsInvolved.size());
+    tags = reader.getImplicitTags(words, ruleWordsInvolved, wordsInvolvedInMultipleRules);
+    CPPUNIT_ASSERT_EQUAL(1, ruleWordsInvolved.size());
+    CPPUNIT_ASSERT(ruleWordsInvolved.contains("Mosque"));
+    CPPUNIT_ASSERT(!wordsInvolvedInMultipleRules);
     words.clear();
-    ruleWordsInvolved.clear();
 
     words.insert("MOSQUE");
-    CPPUNIT_ASSERT(!reader.wordsInvolveMultipleRules(words, ruleWordsInvolved));
-    CPPUNIT_ASSERT_EQUAL(0, ruleWordsInvolved.size());
+    tags = reader.getImplicitTags(words, ruleWordsInvolved, wordsInvolvedInMultipleRules);
+    CPPUNIT_ASSERT_EQUAL(1, ruleWordsInvolved.size());
+    CPPUNIT_ASSERT(ruleWordsInvolved.contains("Mosque"));
+    CPPUNIT_ASSERT(!wordsInvolvedInMultipleRules);
     words.clear();
-    ruleWordsInvolved.clear();
 
     words.insert("mosque");
-    CPPUNIT_ASSERT(!reader.wordsInvolveMultipleRules(words, ruleWordsInvolved));
-    CPPUNIT_ASSERT_EQUAL(0, ruleWordsInvolved.size());
+    tags = reader.getImplicitTags(words, ruleWordsInvolved, wordsInvolvedInMultipleRules);
+    CPPUNIT_ASSERT_EQUAL(1, ruleWordsInvolved.size());
+    CPPUNIT_ASSERT(ruleWordsInvolved.contains("Mosque"));
+    CPPUNIT_ASSERT(!wordsInvolvedInMultipleRules);
     words.clear();
-    ruleWordsInvolved.clear();
 
     words.insert("Mustashfa");
-    CPPUNIT_ASSERT(!reader.wordsInvolveMultipleRules(words, ruleWordsInvolved));
-    CPPUNIT_ASSERT_EQUAL(0, ruleWordsInvolved.size());
+    tags = reader.getImplicitTags(words, ruleWordsInvolved, wordsInvolvedInMultipleRules);
+    CPPUNIT_ASSERT_EQUAL(1, ruleWordsInvolved.size());
+    CPPUNIT_ASSERT(ruleWordsInvolved.contains("Mustashfa"));
+    CPPUNIT_ASSERT(!wordsInvolvedInMultipleRules);
     words.clear();
-    ruleWordsInvolved.clear();
 
     words.insert("MUSTASHFA");
-    CPPUNIT_ASSERT(!reader.wordsInvolveMultipleRules(words, ruleWordsInvolved));
-    CPPUNIT_ASSERT_EQUAL(0, ruleWordsInvolved.size());
+    tags = reader.getImplicitTags(words, ruleWordsInvolved, wordsInvolvedInMultipleRules);
+    CPPUNIT_ASSERT_EQUAL(1, ruleWordsInvolved.size());
+    CPPUNIT_ASSERT(ruleWordsInvolved.contains("Mustashfa"));
+    CPPUNIT_ASSERT(!wordsInvolvedInMultipleRules);
     words.clear();
-    ruleWordsInvolved.clear();
 
     words.insert("mustashfa");
-    CPPUNIT_ASSERT(!reader.wordsInvolveMultipleRules(words, ruleWordsInvolved));
-    CPPUNIT_ASSERT_EQUAL(0, ruleWordsInvolved.size());
+    tags = reader.getImplicitTags(words, ruleWordsInvolved, wordsInvolvedInMultipleRules);
+    CPPUNIT_ASSERT_EQUAL(1, ruleWordsInvolved.size());
+    CPPUNIT_ASSERT(ruleWordsInvolved.contains("Mustashfa"));
+    CPPUNIT_ASSERT(!wordsInvolvedInMultipleRules);
     words.clear();
-    ruleWordsInvolved.clear();
 
     words.insert("mosque");
     words.insert("Mustashfa");
-    CPPUNIT_ASSERT(reader.wordsInvolveMultipleRules(words, ruleWordsInvolved));
+    tags = reader.getImplicitTags(words, ruleWordsInvolved, wordsInvolvedInMultipleRules);
     CPPUNIT_ASSERT_EQUAL(2, ruleWordsInvolved.size());
     CPPUNIT_ASSERT(ruleWordsInvolved.contains("Mustashfa"));
     CPPUNIT_ASSERT(ruleWordsInvolved.contains("Mosque"));
+    CPPUNIT_ASSERT(wordsInvolvedInMultipleRules);
     words.clear();
-    ruleWordsInvolved.clear();
 
     words.insert("mosque2");
     words.insert("Mustashfa");
-    CPPUNIT_ASSERT(!reader.wordsInvolveMultipleRules(words, ruleWordsInvolved));
-    CPPUNIT_ASSERT_EQUAL(0, ruleWordsInvolved.size());
+    tags = reader.getImplicitTags(words, ruleWordsInvolved, wordsInvolvedInMultipleRules);
+    CPPUNIT_ASSERT_EQUAL(1, ruleWordsInvolved.size());
+    CPPUNIT_ASSERT(ruleWordsInvolved.contains("Mustashfa"));
+    CPPUNIT_ASSERT(!wordsInvolvedInMultipleRules);
     words.clear();
-    ruleWordsInvolved.clear();
 
     words.insert("mosque 3");
     words.insert("Mustashfa");
-    CPPUNIT_ASSERT(!reader.wordsInvolveMultipleRules(words, ruleWordsInvolved));
-    CPPUNIT_ASSERT_EQUAL(0, ruleWordsInvolved.size());
+    tags = reader.getImplicitTags(words, ruleWordsInvolved, wordsInvolvedInMultipleRules);
+    CPPUNIT_ASSERT_EQUAL(1, ruleWordsInvolved.size());
+    CPPUNIT_ASSERT(ruleWordsInvolved.contains("Mustashfa"));
+    CPPUNIT_ASSERT(!wordsInvolvedInMultipleRules);
     words.clear();
-    ruleWordsInvolved.clear();
 
     words.insert("alwhdt");
-    CPPUNIT_ASSERT(!reader.wordsInvolveMultipleRules(words, ruleWordsInvolved));
-    CPPUNIT_ASSERT_EQUAL(0, ruleWordsInvolved.size());
+    tags = reader.getImplicitTags(words, ruleWordsInvolved, wordsInvolvedInMultipleRules);
+    CPPUNIT_ASSERT_EQUAL(1, ruleWordsInvolved.size());
+    CPPUNIT_ASSERT(ruleWordsInvolved.contains("alwhdt"));
+    CPPUNIT_ASSERT(!wordsInvolvedInMultipleRules);
     words.clear();
-    ruleWordsInvolved.clear();
 
     words.insert("Mustashfa");
     words.insert("alwhdt");
-    CPPUNIT_ASSERT(reader.wordsInvolveMultipleRules(words, ruleWordsInvolved));
+    tags = reader.getImplicitTags(words, ruleWordsInvolved, wordsInvolvedInMultipleRules);
     CPPUNIT_ASSERT_EQUAL(2, ruleWordsInvolved.size());
     CPPUNIT_ASSERT(ruleWordsInvolved.contains("Mustashfa"));
     CPPUNIT_ASSERT(ruleWordsInvolved.contains("alwhdt"));
+    CPPUNIT_ASSERT(wordsInvolvedInMultipleRules);
     words.clear();
-    ruleWordsInvolved.clear();
 
     words.insert("Mustashfa alwhdt");
-    CPPUNIT_ASSERT(!reader.wordsInvolveMultipleRules(words, ruleWordsInvolved));
-    CPPUNIT_ASSERT_EQUAL(0, ruleWordsInvolved.size());
+    tags = reader.getImplicitTags(words, ruleWordsInvolved, wordsInvolvedInMultipleRules);
+    CPPUNIT_ASSERT_EQUAL(1, ruleWordsInvolved.size());
+    CPPUNIT_ASSERT(ruleWordsInvolved.contains("Mustashfa alwhdt"));
+    CPPUNIT_ASSERT(!wordsInvolvedInMultipleRules);
     words.clear();
-    ruleWordsInvolved.clear();
 
     words.insert("Mustashfa alwhdt");
     words.insert("Mustashfa");
     words.insert("alwhdt");
-    CPPUNIT_ASSERT(reader.wordsInvolveMultipleRules(words, ruleWordsInvolved));
+    tags = reader.getImplicitTags(words, ruleWordsInvolved, wordsInvolvedInMultipleRules);
     CPPUNIT_ASSERT_EQUAL(3, ruleWordsInvolved.size());
     CPPUNIT_ASSERT(ruleWordsInvolved.contains("Mustashfa"));
     CPPUNIT_ASSERT(ruleWordsInvolved.contains("alwhdt"));
     CPPUNIT_ASSERT(ruleWordsInvolved.contains("Mustashfa alwhdt"));
+    CPPUNIT_ASSERT(wordsInvolvedInMultipleRules);
     words.clear();
-    ruleWordsInvolved.clear();
 
     words.insert("MUSTASHFA ALWHDT");
     words.insert("MUSTASHFA");
     words.insert("ALWHDT");
-    CPPUNIT_ASSERT(reader.wordsInvolveMultipleRules(words, ruleWordsInvolved));
+    tags = reader.getImplicitTags(words, ruleWordsInvolved, wordsInvolvedInMultipleRules);
     CPPUNIT_ASSERT_EQUAL(3, ruleWordsInvolved.size());
     CPPUNIT_ASSERT(ruleWordsInvolved.contains("Mustashfa"));
     CPPUNIT_ASSERT(ruleWordsInvolved.contains("alwhdt"));
     CPPUNIT_ASSERT(ruleWordsInvolved.contains("Mustashfa alwhdt"));
+    CPPUNIT_ASSERT(wordsInvolvedInMultipleRules);
     words.clear();
-    ruleWordsInvolved.clear();
 
     words.insert("mustashfa alwhdt");
     words.insert("mustashfa");
     words.insert("alwhdt");
-    CPPUNIT_ASSERT(reader.wordsInvolveMultipleRules(words, ruleWordsInvolved));
+    tags = reader.getImplicitTags(words, ruleWordsInvolved, wordsInvolvedInMultipleRules);
     CPPUNIT_ASSERT_EQUAL(3, ruleWordsInvolved.size());
     CPPUNIT_ASSERT(ruleWordsInvolved.contains("Mustashfa"));
     CPPUNIT_ASSERT(ruleWordsInvolved.contains("alwhdt"));
     CPPUNIT_ASSERT(ruleWordsInvolved.contains("Mustashfa alwhdt"));
+    CPPUNIT_ASSERT(wordsInvolvedInMultipleRules);
     words.clear();
-    ruleWordsInvolved.clear();
 
     reader.close();
   }

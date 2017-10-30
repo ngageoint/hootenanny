@@ -26,7 +26,7 @@
  */
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/rnd/io/ImplicitTagRuleSqliteRecordWriter.h>
+#include <hoot/rnd/io/ImplicitTagRulesSqliteRecordWriter.h>
 
 // Qt
 #include <QDir>
@@ -34,9 +34,9 @@
 namespace hoot
 {
 
-class ImplicitTagRuleSqliteRecordWriterTest : public CppUnit::TestFixture
+class ImplicitTagRulesSqliteRecordWriterTest : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(ImplicitTagRuleSqliteRecordWriterTest);
+  CPPUNIT_TEST_SUITE(ImplicitTagRulesSqliteRecordWriterTest);
   CPPUNIT_TEST(runWriteTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -44,13 +44,13 @@ public:
 
   void runWriteTest()
   {
-    const QString outputDir = "test-output/io/ImplicitTagRuleSqliteRecordWriter";
+    const QString outputDir = "test-output/io/ImplicitTagRulesSqliteRecordWriterTest";
     const QString outputFile = outputDir + "/rules-out.sqlite";
     QDir().mkpath(outputDir);
 
-    ImplicitTagRuleSqliteRecordWriter writer;
+    ImplicitTagRulesSqliteRecordWriter writer;
     writer.open(outputFile);
-    writer.write("test-files/io/ImplicitTagRuleSqliteRecordWriter/ruleWordParts");
+    writer.write("test-files/io/ImplicitTagRulesSqliteRecordWriterTest/ruleWordParts");
     writer.close();
 
     _openDb(outputFile);
@@ -59,7 +59,26 @@ public:
 
 //    for debugging
 //
-//    query.exec("SELECT * FROM rules ORDER BY rule_id");
+//    LOG_TRACE("Querying words...");
+//    query.exec("SELECT * FROM words ORDER BY id");
+//    LOG_TRACE("------------------------------");
+//    while (query.next())
+//    {
+//      LOG_VART(query.value(0).toInt());
+//      LOG_VART(query.value(1).toString());
+//    }
+//    query.clear();
+//    LOG_TRACE("Querying tags...");
+//    query.exec("SELECT * FROM tags ORDER BY id");
+//    LOG_TRACE("------------------------------");
+//    while (query.next())
+//    {
+//      LOG_VART(query.value(0).toInt());
+//      LOG_VART(query.value(1).toString());
+//    }
+//    query.clear();
+//    LOG_TRACE("Querying rules...");
+//    query.exec("SELECT * FROM rules ORDER BY word_id");
 //    LOG_TRACE("------------------------------");
 //    while (query.next())
 //    {
@@ -68,6 +87,7 @@ public:
 //      LOG_VART(query.value(2).toInt());
 //    }
 //    query.clear();
+//    return;
 
     query.exec("SELECT COUNT(*) FROM words");
     query.next();
@@ -87,16 +107,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(10, ruleRowCount);
     query.clear();
 
-    query.exec("SELECT DISTINCT rule_id FROM rules");
-    int ruleCtr = 0;
-    while (query.next())
-    {
-      ruleCtr++;
-    }
-    CPPUNIT_ASSERT_EQUAL(6, ruleCtr);
-    query.clear();
-
-    query.prepare("SELECT COUNT(*) FROM words where word = :word");
+    query.prepare("SELECT COUNT(*) FROM words WHERE word = :word");
     query.bindValue(":word", "Mosque");
     query.exec();
     query.next();
@@ -104,7 +115,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(1, word1Count);
     query.clear();
 
-    query.prepare("SELECT COUNT(*) FROM tags where kvp = :kvp");
+    query.prepare("SELECT COUNT(*) FROM tags WHERE kvp = :kvp");
     query.bindValue(":kvp", "amenity=place_of_worship");
     query.exec();
     query.next();
@@ -112,116 +123,85 @@ public:
     CPPUNIT_ASSERT_EQUAL(1, tag1Count);
     query.clear();
 
-    QSqlQuery ruleCountQuery(_db);
-    ruleCountQuery.prepare("SELECT COUNT(*) FROM rules where rule_id = :ruleId");
     QSqlQuery wordIdQuery(_db);
-    wordIdQuery.prepare("SELECT DISTINCT word_id FROM rules where rule_id = :ruleId");
+    wordIdQuery.prepare("SELECT COUNT(*) FROM rules WHERE word_id = :wordId");
+    for (int i = 1; i < 9; i++)
+    {
+      wordIdQuery.bindValue(":wordId", i);
+      wordIdQuery.exec();
+      wordIdQuery.next();
+      int wordCount = wordIdQuery.value(0).toInt();
+      switch (i)
+      {
+        case 1:
+          CPPUNIT_ASSERT_EQUAL(1, wordCount);
+          break;
+
+        case 2:
+          CPPUNIT_ASSERT_EQUAL(1, wordCount);
+          break;
+
+        case 3:
+          CPPUNIT_ASSERT_EQUAL(1, wordCount);
+          break;
+
+        case 4:
+          CPPUNIT_ASSERT_EQUAL(2, wordCount);
+          break;
+
+        case 5:
+          CPPUNIT_ASSERT_EQUAL(2, wordCount);
+          break;
+
+        case 6:
+          CPPUNIT_ASSERT_EQUAL(1, wordCount);
+          break;
+
+        case 7:
+          CPPUNIT_ASSERT_EQUAL(1, wordCount);
+          break;
+
+        case 8:
+          CPPUNIT_ASSERT_EQUAL(1, wordCount);
+          break;
+
+        default:
+          assert(false);
+      }
+    }
+
     QSqlQuery tagIdQuery(_db);
-    tagIdQuery.prepare("SELECT DISTINCT tag_id FROM rules where rule_id = :ruleId");
+    tagIdQuery.prepare("SELECT COUNT(*) FROM rules WHERE tag_id = :tagId");
     for (int i = 1; i < 7; i++)
     {
-      ruleCountQuery.bindValue(":ruleId", i);
-      ruleCountQuery.exec();
-      ruleCountQuery.next();
-      const int ruleRowCount = ruleCountQuery.value(0).toInt();
-      switch (i)
-      {
-        case 1:
-          CPPUNIT_ASSERT_EQUAL(2, ruleRowCount);
-          break;
-
-        case 2:
-          CPPUNIT_ASSERT_EQUAL(2, ruleRowCount);
-          break;
-
-        case 3:
-          CPPUNIT_ASSERT_EQUAL(1, ruleRowCount);
-          break;
-
-        case 4:
-          CPPUNIT_ASSERT_EQUAL(2, ruleRowCount);
-          break;
-
-        case 5:
-          CPPUNIT_ASSERT_EQUAL(2, ruleRowCount);
-          break;
-
-        case 6:
-          CPPUNIT_ASSERT_EQUAL(1, ruleRowCount);
-          break;
-
-        default:
-          assert(false);
-      }
-
-      wordIdQuery.bindValue(":ruleId", i);
-      wordIdQuery.exec();
-      int wordCtr = 0;
-      while (wordIdQuery.next())
-      {
-        wordCtr++;
-      }
-      switch (i)
-      {
-        case 1:
-          CPPUNIT_ASSERT_EQUAL(1, wordCtr);
-          break;
-
-        case 2:
-          CPPUNIT_ASSERT_EQUAL(1, wordCtr);
-          break;
-
-        case 3:
-          CPPUNIT_ASSERT_EQUAL(1, wordCtr);
-          break;
-
-        case 4:
-          CPPUNIT_ASSERT_EQUAL(2, wordCtr);
-          break;
-
-        case 5:
-          CPPUNIT_ASSERT_EQUAL(2, wordCtr);
-          break;
-
-        case 6:
-          CPPUNIT_ASSERT_EQUAL(1, wordCtr);
-          break;
-
-        default:
-          assert(false);
-      }
-
-      tagIdQuery.bindValue(":ruleId", i);
+      tagIdQuery.bindValue(":tagId", i);
       tagIdQuery.exec();
-      int tagCtr = 0;
-      while (tagIdQuery.next())
-      {
-        tagCtr++;
-      }
+      tagIdQuery.next();
+      int tagCount = tagIdQuery.value(0).toInt();
       switch (i)
       {
         case 1:
-          CPPUNIT_ASSERT_EQUAL(2, tagCtr);
+          CPPUNIT_ASSERT_EQUAL(1, tagCount);
           break;
 
         case 2:
-          CPPUNIT_ASSERT_EQUAL(2, tagCtr);
+          CPPUNIT_ASSERT_EQUAL(4, tagCount);
           break;
 
         case 3:
-          CPPUNIT_ASSERT_EQUAL(1, tagCtr);
+          CPPUNIT_ASSERT_EQUAL(1, tagCount);
           break;
 
         case 4:
-          CPPUNIT_ASSERT_EQUAL(1, tagCtr);
+          CPPUNIT_ASSERT_EQUAL(1, tagCount);
           break;
 
         case 5:
-          CPPUNIT_ASSERT_EQUAL(1, tagCtr);
+          CPPUNIT_ASSERT_EQUAL(2, tagCount);
           break;
 
         case 6:
-          CPPUNIT_ASSERT_EQUAL(1, tagCtr);
+          CPPUNIT_ASSERT_EQUAL(1, tagCount);
           break;
 
         default:
@@ -261,6 +241,6 @@ private:
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ImplicitTagRuleSqliteRecordWriterTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ImplicitTagRulesSqliteRecordWriterTest, "quick");
 
 }

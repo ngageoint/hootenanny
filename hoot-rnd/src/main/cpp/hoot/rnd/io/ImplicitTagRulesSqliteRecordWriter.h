@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef IMPLICITTAGRULESQLITERECORDWRITER_H
-#define IMPLICITTAGRULESQLITERECORDWRITER_H
+#ifndef IMPLICITTAGRULESSQLITERECORDWRITER_H
+#define IMPLICITTAGRULESSQLITERECORDWRITER_H
 
 // Hoot
 #include <hoot/rnd/io/ImplicitTagRuleWordPartWriter.h>
@@ -42,15 +42,15 @@ namespace hoot
 /**
  * Writes implicit tag rules ot a Sqlite database
  */
-class ImplicitTagRuleSqliteRecordWriter : public ImplicitTagRuleWordPartWriter
+class ImplicitTagRulesSqliteRecordWriter : public ImplicitTagRuleWordPartWriter
 {
 
 public:
 
-  static std::string className() { return "hoot::ImplicitTagRuleSqliteRecordWriter"; }
+  static std::string className() { return "hoot::ImplicitTagRulesSqliteRecordWriter"; }
 
-  ImplicitTagRuleSqliteRecordWriter();
-  ~ImplicitTagRuleSqliteRecordWriter();
+  ImplicitTagRulesSqliteRecordWriter();
+  ~ImplicitTagRulesSqliteRecordWriter();
 
   /**
    * @see ImplicitTagRuleWordPartWriter
@@ -81,21 +81,18 @@ private:
   QSqlQuery _insertTagQuery;
   QSqlQuery _getLastWordIdQuery;
   QSqlQuery _getLastTagIdQuery;
-
-  long _currentRuleId;
+;
   QMap<QString, long> _wordsToWordIds;
   QMap<QString, long> _tagsToTagIds;
-  QMap<QString, long> _wordIdTagIdsToRuleIds;
 
   void _createTables();
   void _prepareQueries();
 
   long _insertWord(const QString word);
   long _insertTag(const QString kvp);
-  void _insertRuleRecord(const long ruleId, const long wordId, const long tagId,
-                         const long wordTagOccurranceCount);
+  void _insertRuleRecord(const long wordId, const long tagId, const long tagOccurranceCount);
 };
 
 }
 
-#endif // IMPLICITTAGRULESQLITERECORDWRITER_H
+#endif // IMPLICITTAGRULESSQLITERECORDWRITER_H

@@ -61,48 +61,109 @@ AddImplicitlyDerivedTagsPoiVisitor::~AddImplicitlyDerivedTagsPoiVisitor()
   }
 }
 
+bool caseInsensitiveLessThan(const QString s1, const QString s2)
+{
+  return s1.toLower() < s2.toLower();
+}
+
 void AddImplicitlyDerivedTagsPoiVisitor::visit(const ElementPtr& e)
 {
-  bool foundDuplicateMatch = false;
-  Tags tagsToAdd;
   if (e->getElementType() == ElementType::Node &&
       // either the element isn't a poi, or it contains a generic poi type
       (!OsmSchema::getInstance().hasCategory(e->getTags(), "poi") ||
        e->getTags().contains("poi") || e->getTags().get("place") == QLatin1String("locality")))
   {
-    const QSet<QString> namesAndNameWords = _extractNamesAndNameWords(e->getTags());
+    //get names
+    //query for implicit tags for the names; pass in a ref wordsInvolvedInMultipleRules param
+    //if wordsInvolvedInMultipleRules is true, mark the feature
+    //else if tags size > 0, add the tags
+    //else get name tokens
+    //name token logic follows above
 
-    QSet<QString> matchingRuleWords;
-    if (_ruleReader->wordsInvolveMultipleRules(namesAndNameWords, matchingRuleWords))
+    bool foundDuplicateMatch = false;
+    Tags tagsToAdd;
+
+    const QStringList names = e->getTags().getNames();
+    LOG_VART(names);
+    QSet<QString> matchingWords;
+    bool wordsInvolvedInMultipleRules = false;
+    //the name phrases take precendence over the tokenized names, so look for tags associated with
+    //them first
+    Tags implicitlyDerivedTags =
+      _ruleReader->getImplicitTags(names.toSet(), matchingWords, wordsInvolvedInMultipleRules);
+    LOG_VART(implicitlyDerivedTags);
+    LOG_VART(matchingWords);
+    LOG_VART(wordsInvolvedInMultipleRules)
+    if (wordsInvolvedInMultipleRules)
     {
+      LOG_TRACE(
+        "Found duplicate match for names: " << names << " with matching words: " << matchingWords);
       foundDuplicateMatch = true;
-      assert(matchingRuleWords.size() != 0);
+    }
+    else if (implicitlyDerivedTags.size() > 0)
+    {
+      LOG_TRACE(
+        "Derived implicit tags for names: " << names << " with matching words: " << matchingWords);
+      tagsToAdd = implicitlyDerivedTags;
+    }
+    else
+    {
+      //we didn't find any tags for the whole names, so let's look for them with the tokenized name
+      //parts
+      const QSet<QString> nameTokens = _getNameTokens(e->getTags());
+      implicitlyDerivedTags =
+        _ruleReader->getImplicitTags(nameTokens, matchingWords, wordsInvolvedInMultipleRules);
+      if (wordsInvolvedInMultipleRules)
+      {
+        LOG_TRACE(
+          "Found duplicate match for name tokens: " << nameTokens << " with matching words: " <<
+          matchingWords);
+        foundDuplicateMatch = true;
+      }
+      else if (implicitlyDerivedTags.size() > 0)
+      {
+        LOG_TRACE(
+          "Derived implicit tags for name tokens: " << nameTokens << " with matching words: " <<
+          matchingWords);
+        tagsToAdd = implicitlyDerivedTags;
+      }
     }
 
-    QSet<QString> matchingWords;
-    tagsToAdd = _ruleReader->getImplicitTags(namesAndNameWords, matchingWords);
+//    const QSet<QString> namesAndNameWords = _extractNamesAndNameWords(e->getTags());
+
+//    QSet<QString> matchingRuleWords;
+//    if (_ruleReader->wordsInvolveMultipleRules(namesAndNameWords, matchingRuleWords))
+//    {
+//      foundDuplicateMatch = true;
+//      assert(matchingRuleWords.size() != 0);
+//    }
+
+//    QSet<QString> matchingWords;
+//    tagsToAdd = _ruleReader->getImplicitTags(namesAndNameWords, matchingWords);
 
     if (foundDuplicateMatch)
     {
-      QStringList matchingRuleWordsList = matchingRuleWords.toList();
-      matchingRuleWordsList.sort();
+      QStringList matchingWordsList = matchingWords.toList();
+      //matchingWordsList.sort();
+      qSort(matchingWordsList.begin(), matchingWordsList.end(), caseInsensitiveLessThan);
       e->getTags().appendValue(
         "note",
-        "Found multiple possible matches for implicit tags: " + matchingRuleWordsList.join(", "));
+        "Found multiple possible matches for implicit tags: " + matchingWordsList.join(", "));
     }
     else if (!tagsToAdd.isEmpty())
     {
       e->getTags().addTags(tagsToAdd);
       assert(matchingWords.size() != 0);
       QStringList matchingWordsList = matchingWords.toList();
-      matchingWordsList.sort();
+      qSort(matchingWordsList.begin(), matchingWordsList.end(), caseInsensitiveLessThan);
+      //matchingWordsList.sort();
       e->getTags().appendValue(
         "note", "Implicitly derived tags based on: " + matchingWordsList.join(", "));
     }
   }
 }
 
-QSet<QString> AddImplicitlyDerivedTagsPoiVisitor::_extractNamesAndNameWords(const Tags& t)
+QSet<QString> AddImplicitlyDerivedTagsPoiVisitor::_getNameTokens(const Tags& t)
 {
   QSet<QString> result;
 
@@ -111,7 +172,6 @@ QSet<QString> AddImplicitlyDerivedTagsPoiVisitor::_extractNamesAndNameWords(cons
 
   foreach (const QString& n, names)
   {
-    result.insert(n.toLower());
     QStringList words = tokenizer.tokenize(n);
     foreach (const QString& w, words)
     {
@@ -121,5 +181,25 @@ QSet<QString> AddImplicitlyDerivedTagsPoiVisitor::_extractNamesAndNameWords(cons
 
   return result;
 }
+
+//QSet<QString> AddImplicitlyDerivedTagsPoiVisitor::_extractNamesAndNameWords(const Tags& t)
+//{
+//  QSet<QString> result;
+
+//  QStringList names = t.getNames();
+//  StringTokenizer tokenizer;
+
+//  foreach (const QString& n, names)
+//  {
+//    result.insert(n.toLower());
+//    QStringList words = tokenizer.tokenize(n);
+//    foreach (const QString& w, words)
+//    {
+//      result.insert(w.toLower());
+//    }
+//  }
+
+//  return result;
+//}
 
 }

@@ -58,7 +58,8 @@ private:
 
   boost::shared_ptr<ImplicitTagRulesSqliteReader> _ruleReader;
 
-  QSet<QString> _extractNamesAndNameWords(const Tags& t);
+  //QSet<QString> _extractNamesAndNameWords(const Tags& t);
+  QSet<QString> _getNameTokens(const Tags& t);
 
 };
 

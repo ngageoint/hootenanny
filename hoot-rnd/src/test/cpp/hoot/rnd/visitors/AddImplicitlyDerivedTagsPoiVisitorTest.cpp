@@ -30,7 +30,7 @@
 #include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/rnd/visitors/AddImplicitlyDerivedTagsPoiVisitor.h>
-#include <hoot/rnd/io/ImplicitTagRuleSqliteRecordWriter.h>
+#include <hoot/rnd/io/ImplicitTagRulesSqliteRecordWriter.h>
 
 // Qt
 #include <QDir>
@@ -58,10 +58,12 @@ public:
     QDir().mkpath(outDir());
     const QString databaseFile =
       outDir() + "/AddImplicitlyDerivedTagsPoiVisitorTest-runBasicTest-rules.sqlite";
-    ImplicitTagRuleSqliteRecordWriter writer;
-    writer.open(databaseFile);
-    writer.write("test-files/io/AddImplicitlyDerivedTagsPoiVisitorTest/ruleWordParts");
-    writer.close();
+    //use this to regenerate the db file
+//    ImplicitTagRulesSqliteRecordWriter writer;
+//    writer.open(databaseFile);
+//    writer.write("test-files/io/AddImplicitlyDerivedTagsPoiVisitorTest/ruleWordParts");
+//    writer.close();
+//    return;
 
     QString testJsonStr = QString::fromUtf8(
       "{                                      \n"
@@ -73,11 +75,17 @@ public:
       " { 'type': 'node', 'id': -3, 'lat': 14.0, 'lon': -3.0, \n"
       "   'tags': { 'poi': 'yes', 'name': 'masjid' } },\n"
       " { 'type': 'node', 'id': -4, 'lat': 14.0, 'lon': -3.0, \n"
-      "   'tags': { 'place': 'locality', 'name': 'Mustashfa alwhdt' } },\n"
+      "   'tags': { 'place': 'locality', 'name': 'alwhdt Mustashfa' } },\n"
       " { 'type': 'node', 'id': -5, 'lat': 14.0, 'lon': -3.0, \n"
       "   'tags': { 'name': 'Sihhi' } },\n"
       " { 'type': 'node', 'id': -6, 'lat': 14.0, 'lon': -3.0, \n"
-      "   'tags': { 'name': 'Sihhi', 'alt_name': 'Clinic' } }\n"
+      "   'tags': { 'name': 'Sihhi', 'alt_name': 'Clinic' } },\n"
+      " { 'type': 'node', 'id': -7, 'lat': 14.0, 'lon': -3.0, \n"
+      "   'tags': { 'name': 'masjid mosque' } },\n"
+      " { 'type': 'node', 'id': -8, 'lat': 14.0, 'lon': -3.0, \n"
+      "   'tags': { 'name': 'Mustashfa alwhdt' } },\n"
+      " { 'type': 'node', 'id': -9, 'lat': 14.0, 'lon': -3.0, \n"
+      "   'tags': { 'name': 'alwhdt' } }\n"
       "]                                      \n"
       "}                                      \n");
 
@@ -103,19 +111,32 @@ public:
                     "amenity = place_of_worship\n",
                     map->getNode(-3)->getTags());
     HOOT_STR_EQUALS("place = locality\n"
-                    "note = Found multiple possible matches for implicit tags: alwhdt, mustashfa\n"
-                    "name = Mustashfa alwhdt\n",
+                    "note = Found multiple possible matches for implicit tags: alwhdt, Mustashfa\n"
+                    "name = alwhdt Mustashfa\n",
                     map->getNode(-4)->getTags());
-    HOOT_STR_EQUALS("note = Implicitly derived tags based on: sihhi, şiḩḩī\n"
+    HOOT_STR_EQUALS("note = Implicitly derived tags based on: Sihhi, Şiḩḩī\n"
                     "alt_name = Şiḩḩī\n"
                     "name = Sihhi\n"
                     "amenity = clinic\n",
                     map->getNode(-5)->getTags());
-    HOOT_STR_EQUALS("note = Implicitly derived tags based on: sihhi\n"
+    HOOT_STR_EQUALS("note = Implicitly derived tags based on: Sihhi\n"
                     "alt_name = Clinic\n"
                     "name = Sihhi\n"
                     "amenity = clinic\n",
                     map->getNode(-6)->getTags());
+    HOOT_STR_EQUALS("note = Implicitly derived tags based on: masjid, mosque\n"
+                    "religion = muslim\n"
+                    "name = masjid mosque\n"
+                    "amenity = place_of_worship\n",
+                    map->getNode(-7)->getTags());
+    HOOT_STR_EQUALS("note = Implicitly derived tags based on: Mustashfa alwhdt\n"
+                    "name = Mustashfa alwhdt\n"
+                    "amenity = hospital\n",
+                    map->getNode(-8)->getTags());
+    HOOT_STR_EQUALS("note = Implicitly derived tags based on: alwhdt\n"
+                    "name = alwhdt\n"
+                    "amenity = clinic\n",
+                    map->getNode(-9)->getTags());
   }
 };
 
