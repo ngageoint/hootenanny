@@ -140,9 +140,9 @@ poiHistogram.png
 summaryChart.png
 tagCountHistogram1.png
 tagCountHistogram2.png
-uniqueHistogram.png
 test-files/cmd/current
 test-files/DcTigerRoadsHighwayExactMatchInputs.osm
+uniqueHistogram.png
 .vagrant/
 inputFeatures.png
 docs/developer/restDocs/
