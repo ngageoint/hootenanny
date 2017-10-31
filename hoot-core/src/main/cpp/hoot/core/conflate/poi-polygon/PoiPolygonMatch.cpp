@@ -412,7 +412,7 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
   LOG_VART(_distance);
   LOG_VART(_closeMatch);
 
-  return _distance <= _matchDistanceThreshold ? 2 : 0;
+  return _distance <= _matchDistanceThreshold ? 2u : 0u;
 }
 
 unsigned int PoiPolygonMatch::_getConvexPolyDistanceEvidence(ConstElementPtr poi,
@@ -423,7 +423,7 @@ unsigned int PoiPolygonMatch::_getConvexPolyDistanceEvidence(ConstElementPtr poi
   const double alphaShapeDist =
     PoiPolygonAlphaShapeDistanceExtractor().extract(*_map, poi, poly);
   LOG_VART(alphaShapeDist);
-  return alphaShapeDist <= _matchDistanceThreshold ? 2 : 0;
+  return alphaShapeDist <= _matchDistanceThreshold ? 2u : 0u;
 }
 
 unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElementPtr poly)
@@ -442,7 +442,7 @@ unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElement
   LOG_VART(typeMatch);
   LOG_VART(PoiPolygonTypeScoreExtractor::poiBestKvp);
   LOG_VART(PoiPolygonTypeScoreExtractor::polyBestKvp);
-  return typeMatch ? 1 : 0;
+  return typeMatch ? 1u : 0u;
 }
 
 unsigned int PoiPolygonMatch::_getNameEvidence(ConstElementPtr poi, ConstElementPtr poly)
@@ -452,7 +452,7 @@ unsigned int PoiPolygonMatch::_getNameEvidence(ConstElementPtr poi, ConstElement
   _nameScore = nameScorer.extract(*_map, poi, poly);
   const bool nameMatch = _nameScore >= _nameScoreThreshold;
   LOG_VART(nameMatch);
-  return nameMatch ? 1 : 0;
+  return nameMatch ? 1u : 0u;
 }
 
 unsigned int PoiPolygonMatch::_getAddressEvidence(ConstElementPtr poi, ConstElementPtr poly)
@@ -460,7 +460,7 @@ unsigned int PoiPolygonMatch::_getAddressEvidence(ConstElementPtr poi, ConstElem
   _addressScore = PoiPolygonAddressScoreExtractor().extract(*_map, poi, poly);
   const bool addressMatch = _addressScore == 1.0;
   LOG_VART(addressMatch);
-  return addressMatch ? 1 : 0;
+  return addressMatch ? 1u : 0u;
 }
 
 unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstElementPtr poly)
