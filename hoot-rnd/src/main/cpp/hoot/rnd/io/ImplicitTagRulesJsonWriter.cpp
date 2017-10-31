@@ -72,6 +72,8 @@ void ImplicitTagRulesJsonWriter::open(const QString outputUrl)
 
 void ImplicitTagRulesJsonWriter::write(const QString inputUrl)
 {
+  LOG_INFO("Writing implicit tag rules to: " << _outputFile->fileName() << "...");
+
   //The input is assumed sorted by word, then by kvp.
   QFile inputFile(inputUrl);
   if (!inputFile.open(QIODevice::ReadOnly))

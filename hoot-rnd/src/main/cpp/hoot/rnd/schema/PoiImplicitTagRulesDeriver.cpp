@@ -172,9 +172,10 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs,
     translationScripts << ", type keys: " << typeKeys << ", and minimum occurance threshold: " <<
     minOccurancesThreshold << ".  Writing to outputs: " << outputs << "...");
 
-  _wordCaseMappings.clear();
   _wordKeysToCounts.clear();
+  _wordCaseMappings.clear();
   const bool tokenize = ConfigOptions().getPoiImplicitTagRulesTokenizeNames();
+  LOG_VART(tokenize);
 
   _countFile.reset(
     new QTemporaryFile(
@@ -305,20 +306,18 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs,
   LOG_VARD(_wordCaseMappings.size());
   _wordCaseMappings.clear();
 
+  LOG_INFO(
+    "Parsed " << StringUtils::formatLargeNumber(poiCount) << " POIs from " <<
+    StringUtils::formatLargeNumber(nodeCount) << " nodes.");
+
   _removeKvpsBelowOccuranceThresholdAndSortByOccurrance(minOccurancesThreshold);
   _removeDuplicatedKeyTypes();
   _sortByWord();
 
-  //TODO: see how much of this can be salvaged
-//  LOG_INFO(
-//    "Generated " << StringUtils::formatLargeNumber(_tagRules.size()) <<
-//    " implicit tag rules for " << StringUtils::formatLargeNumber(_tagRulesByWord.size()) <<
-//    " unique words and " << StringUtils::formatLargeNumber(poiCount) << " POIs (" <<
-//    StringUtils::formatLargeNumber(nodeCount) << " nodes parsed).");
-//  LOG_INFO("Average words per rule: " << _avgWordsPerRule);
-//  LOG_INFO("Average tags per rule: " << _avgTagsPerRule);
-//  LOG_INFO("Highest rule word count: " << _highestRuleWordCount);
-//  LOG_INFO("Highest rule tag count: " << _highestRuleTagCount);
+  LOG_INFO(
+    "Extracted "  << StringUtils::formatLargeNumber(_wordKeysToCounts.size()) <<
+    " word/tag associations.");
+  _wordKeysToCounts.clear();
 
   _writeRules(outputs, _sortedByWordDedupedCountFile->fileName());
 }
@@ -326,6 +325,7 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs,
 void PoiImplicitTagRulesDeriver::_writeRules(const QStringList outputs,
                                              const QString inputFile)
 {
+
   for (int i = 0; i < outputs.size(); i++)
   {
     const QString output = outputs.at(i);
@@ -341,11 +341,13 @@ void PoiImplicitTagRulesDeriver::_writeRules(const QStringList outputs,
 void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccuranceThresholdAndSortByOccurrance(
   const int minOccurancesThreshold)
 {
+  LOG_INFO("Removing tags below minimum occurance threshold of: " << minOccurancesThreshold << "...");
+
   _sortedCountFile.reset(
     new QTemporaryFile(
       ConfigOptions().getApidbBulkInserterTempFileDir() +
       "/poi-implicit-tag-rules-deriver-temp-XXXXXX"));
-  _sortedCountFile->setAutoRemove(false); //for debugging only
+  //_sortedCountFile->setAutoRemove(false); //for debugging only
   if (!_sortedCountFile->open())
   {
     throw HootException(
@@ -371,6 +373,8 @@ void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccuranceThresholdAndSortByOccu
 
 void PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
 {
+  LOG_INFO("Removing duplicated key types...");
+
   //i.e. don't allow amenity=school AND amenity=shop to be associated with the same word...pick one
   //of them
 
@@ -378,7 +382,7 @@ void PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
     new QTemporaryFile(
       ConfigOptions().getApidbBulkInserterTempFileDir() +
       "/poi-implicit-tag-rules-deriver-temp-XXXXXX"));
-  _sortedDedupedCountFile->setAutoRemove(false); //for debugging only
+  //_sortedDedupedCountFile->setAutoRemove(false); //for debugging only
   if (!_sortedDedupedCountFile->open())
   {
     throw HootException(
@@ -444,11 +448,13 @@ void PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
 
 void PoiImplicitTagRulesDeriver::_sortByWord()
 {
+  LOG_INFO("Sorting output file...");
+
   _sortedByWordDedupedCountFile.reset(
     new QTemporaryFile(
       ConfigOptions().getApidbBulkInserterTempFileDir() +
       "/poi-implicit-tag-rules-deriver-temp-XXXXXX"));
-  _sortedByWordDedupedCountFile->setAutoRemove(false); //for debugging only
+  //_sortedByWordDedupedCountFile->setAutoRemove(false); //for debugging only
   if (!_sortedByWordDedupedCountFile->open())
   {
     throw HootException(

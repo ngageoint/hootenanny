@@ -31,6 +31,7 @@
 #include <hoot/core/util/DbUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QSqlError>
@@ -142,6 +143,8 @@ void ImplicitTagRulesSqliteRecordWriter::_prepareQueries()
 
 void ImplicitTagRulesSqliteRecordWriter::write(const QString inputUrl)
 {
+  LOG_INFO("Writing implicit tag rules to: " << _db.databaseName() << "...");
+
   DbUtils::execNoPrepare(_db, "BEGIN");
 
   //The input is assumed sorted by word, then by kvp.
@@ -151,6 +154,8 @@ void ImplicitTagRulesSqliteRecordWriter::write(const QString inputUrl)
     throw HootException(QObject::tr("Error opening %1 for reading.").arg(inputUrl));
   }
 
+  //TODO: batch this write?
+  long ruleWordPartCtr = 0;
   while (!inputFile.atEnd())
   {
     const QString line = QString::fromUtf8(inputFile.readLine().constData());
@@ -188,7 +193,8 @@ void ImplicitTagRulesSqliteRecordWriter::write(const QString inputUrl)
       LOG_TRACE("Created new tag with ID: " << tagId);
     }
 
-    _insertRuleRecord(wordId, tagId, tagOccurranceCount);
+    _insertRuleWordPart(wordId, tagId, tagOccurranceCount);
+    ruleWordPartCtr++;
 
     LOG_VART("************************************")
   }
@@ -197,6 +203,15 @@ void ImplicitTagRulesSqliteRecordWriter::write(const QString inputUrl)
   DbUtils::execNoPrepare(_db, "COMMIT");
 
   //TODO: add text indexes on words and tags after writing
+
+  LOG_INFO(
+    "Wrote " << StringUtils::formatLargeNumber(_wordsToWordIds.size()) << " words, " <<
+    StringUtils::formatLargeNumber(_tagsToTagIds.size()) << " tags, and " <<
+    StringUtils::formatLargeNumber(ruleWordPartCtr) <<
+    " word/tag associations to implicit tag rules database: " << _db.databaseName());
+
+  _wordsToWordIds.clear();
+  _tagsToTagIds.clear();
 }
 
 long ImplicitTagRulesSqliteRecordWriter::_insertWord(const QString word)
@@ -273,8 +288,8 @@ long ImplicitTagRulesSqliteRecordWriter::_insertTag(const QString kvp)
   return id;
 }
 
-void ImplicitTagRulesSqliteRecordWriter::_insertRuleRecord(const long wordId, const long tagId,
-                                                           const long tagOccurranceCount)
+void ImplicitTagRulesSqliteRecordWriter::_insertRuleWordPart(const long wordId, const long tagId,
+                                                             const long tagOccurranceCount)
 {
   LOG_TRACE(
     "Inserting rule record for: word ID: " << wordId << " tag ID: " <<

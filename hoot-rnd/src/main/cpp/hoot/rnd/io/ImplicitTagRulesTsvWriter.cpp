@@ -69,6 +69,8 @@ void ImplicitTagRulesTsvWriter::open(const QString outputUrl)
 
 void ImplicitTagRulesTsvWriter::write(const QString inputUrl)
 {
+  LOG_INFO("Writing implicit tag rules to: " << _outputFile->fileName() << "...");
+
   //each word takes up two rows; first col in first row contains words; remaining cols in first row
   //contain kvps; in second row, each kvp has the count directly below it
 
