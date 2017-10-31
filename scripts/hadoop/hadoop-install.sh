@@ -14,7 +14,7 @@ cd ~
 # hoot has only been tested successfully with hadoop 0.20.2, which is not available from public repos,
 # so purposefully not installing hoot from the repos.
 if ! hash hadoop >/dev/null 2>&1 ; then
-  echo "Installing Hadoop..."
+  echo "Installing Hadoop v${HADOOP_VERSION}..."
   if [ ! -f ~/$HADOOP_TAR ]; then
     wget --quiet $HADOOP_URL
   fi
