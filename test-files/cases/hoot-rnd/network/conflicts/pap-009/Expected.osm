@@ -983,7 +983,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1"/>
     </node>
-    <way visible="true" id="-1748" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1612" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1286"/>
         <nd ref="-74"/>
         <nd ref="-73"/>
@@ -1013,9 +1013,9 @@
         <tag k="location" v="surface"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-1748"/>
+        <tag k="hoot:id" v="-1612"/>
     </way>
-    <way visible="true" id="-1747" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1611" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-173"/>
         <nd ref="-85"/>
         <nd ref="-84"/>
@@ -1054,7 +1054,7 @@
         <tag k="location" v="surface"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-1747"/>
+        <tag k="hoot:id" v="-1611"/>
     </way>
     <way visible="true" id="-135" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-37"/>

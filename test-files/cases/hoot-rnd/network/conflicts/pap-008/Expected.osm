@@ -105,74 +105,6 @@
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-430"/>
     </node>
-    <node visible="true" id="-409" timestamp="2017-06-07T15:19:29Z" version="1" changeset="120" lat="18.5365329448399976" lon="-72.3232703187400006">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-409"/>
-    </node>
-    <node visible="true" id="-408" timestamp="2017-06-07T15:19:29Z" version="1" changeset="120" lat="18.5364673453599984" lon="-72.3230592595599973">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-408"/>
-    </node>
-    <node visible="true" id="-407" timestamp="2017-06-07T15:19:29Z" version="1" changeset="120" lat="18.5363817808299949" lon="-72.3229480256700015">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-407"/>
-    </node>
-    <node visible="true" id="-406" timestamp="2017-06-07T15:19:29Z" version="1" changeset="120" lat="18.5362249125300025" lon="-72.3227854530600069">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-406"/>
-    </node>
-    <node visible="true" id="-405" timestamp="2017-06-07T15:19:29Z" version="1" changeset="120" lat="18.5360594877699967" lon="-72.3226285847599968">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-405"/>
-    </node>
-    <node visible="true" id="-404" timestamp="2017-06-07T15:19:29Z" version="1" changeset="120" lat="18.5359853318399956" lon="-72.3225059422599941">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-404"/>
-    </node>
-    <node visible="true" id="-403" timestamp="2017-06-07T15:19:29Z" version="1" changeset="120" lat="18.5359168802200003" lon="-72.3222635094199973">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-403"/>
-    </node>
-    <node visible="true" id="-402" timestamp="2017-06-07T15:19:29Z" version="1" changeset="120" lat="18.5358227592300011" lon="-72.3218442432199993">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-402"/>
-    </node>
-    <node visible="true" id="-401" timestamp="2017-06-07T15:19:29Z" version="1" changeset="120" lat="18.5356801516800047" lon="-72.3212823694699978">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-401"/>
-    </node>
-    <node visible="true" id="-400" timestamp="2017-06-07T15:19:29Z" version="1" changeset="120" lat="18.5356174043599999" lon="-72.3210114151199974">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-400"/>
-    </node>
-    <node visible="true" id="-399" timestamp="2017-06-07T15:19:29Z" version="1" changeset="120" lat="18.5356088479000007" lon="-72.3208916247800033">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-399"/>
-    </node>
-    <node visible="true" id="-398" timestamp="2017-06-07T15:19:29Z" version="1" changeset="120" lat="18.5356231086600012" lon="-72.3207975037999944">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-398"/>
-    </node>
-    <node visible="true" id="-397" timestamp="2017-06-07T15:19:29Z" version="1" changeset="120" lat="18.5356117000599987" lon="-72.3206948263599969">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-397"/>
-    </node>
-    <node visible="true" id="-396" timestamp="2017-06-07T15:19:29Z" version="1" changeset="120" lat="18.5355090226200012" lon="-72.3204809150300036">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-396"/>
-    </node>
-    <node visible="true" id="-395" timestamp="2017-06-07T15:19:29Z" version="1" changeset="120" lat="18.5353493021600038" lon="-72.3201129875500044">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-395"/>
-    </node>
-    <node visible="true" id="-394" timestamp="2017-06-07T15:19:29Z" version="1" changeset="120" lat="18.5351667645000013" lon="-72.3197307993099940">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-394"/>
-    </node>
-    <node visible="true" id="-393" timestamp="2017-06-07T15:19:29Z" version="1" changeset="120" lat="18.5350355655500003" lon="-72.3194569928100037">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-393"/>
-    </node>
     <node visible="true" id="-392" timestamp="2017-06-07T15:19:29Z" version="1" changeset="120" lat="18.5349614096199993" lon="-72.3193200895599944">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-392"/>
@@ -1829,25 +1761,8 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1"/>
     </node>
-    <way visible="true" id="-8505" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-302"/>
-        <nd ref="-409"/>
-        <nd ref="-408"/>
-        <nd ref="-407"/>
-        <nd ref="-406"/>
-        <nd ref="-405"/>
-        <nd ref="-404"/>
-        <nd ref="-403"/>
-        <nd ref="-402"/>
-        <nd ref="-401"/>
-        <nd ref="-400"/>
-        <nd ref="-399"/>
-        <nd ref="-398"/>
-        <nd ref="-397"/>
-        <nd ref="-396"/>
-        <nd ref="-395"/>
-        <nd ref="-394"/>
-        <nd ref="-393"/>
+    <way visible="true" id="-8826" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-345"/>
         <nd ref="-392"/>
         <nd ref="-391"/>
         <nd ref="-390"/>
@@ -1892,9 +1807,9 @@
         <tag k="location" v="surface"/>
         <tag k="hoot:status" v="2"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-8505"/>
+        <tag k="hoot:id" v="-8826"/>
     </way>
-    <way visible="true" id="-8468" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-8788" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-361"/>
         <nd ref="-458"/>
         <nd ref="-457"/>
@@ -1919,7 +1834,7 @@
         <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="2"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-8468"/>
+        <tag k="hoot:id" v="-8788"/>
     </way>
     <way visible="true" id="-321" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-80"/>
@@ -5556,24 +5471,34 @@
         <nd ref="-268"/>
         <nd ref="-267"/>
         <nd ref="-302"/>
+        <tag k="width:minimum_traveled_way" v="5"/>
         <tag k="addr:city" v="Delmas"/>
-        <tag k="source" v="GPS; survey;osm;osm"/>
+        <tag k="source" v="GPS; survey;osm;mgcp"/>
+        <tag k="condition" v="functional"/>
         <tag k="loc_name" v="Bois Verna"/>
+        <tag k="name" v="Rue Fernand"/>
+        <tag k="lanes" v="2"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="oneway" v="yes"/>
         <tag k="addr:housenumber" v="8"/>
-        <tag k="name" v="Rue Fernand"/>
-        <tag k="lanes" v="2"/>
+        <tag k="seasonal" v="no"/>
         <tag k="FIXME" v="where does Avenue Lamartinière change to Rue Fernand? Split accordingly."/>
-        <tag k="source:name" v="DMA Topo Map"/>
+        <tag k="source:name" v="DMA Topo Map;very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="surface" v="paved"/>
+        <tag k="median" v="no"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
         <tag k="source:haiti" v="CNIGS and CartONG"/>
+        <tag k="source:description" v="IKONOS Imagery"/>
         <tag k="attribution" v="osm;osm"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.117Z"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="type:haiti" v="Autre Route"/>
-        <tag k="addr:street" v="Rue Fernand"/>
         <tag k="highway" v="tertiary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="uuid" v="{3a6e8920-5722-4b18-a7ea-071a74c3f104}"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="addr:street" v="Rue Fernand"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="uuid" v="{3a6e8920-5722-4b18-a7ea-071a74c3f104};{{1740bac5-921f-4300-a4f0-935cf759d8d9}}"/>
+        <tag k="location" v="surface"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-63"/>
     </way>

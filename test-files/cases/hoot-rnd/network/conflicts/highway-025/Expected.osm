@@ -1309,7 +1309,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1"/>
     </node>
-    <way visible="true" id="-1076" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-840" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-882"/>
         <nd ref="-66"/>
         <nd ref="-65"/>
@@ -1328,9 +1328,9 @@
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-1076"/>
+        <tag k="hoot:id" v="-840"/>
     </way>
-    <way visible="true" id="-1075" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-839" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-881"/>
         <nd ref="-78"/>
         <nd ref="-77"/>
@@ -1350,9 +1350,9 @@
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-1075"/>
+        <tag k="hoot:id" v="-839"/>
     </way>
-    <way visible="true" id="-1074" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-838" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-171"/>
         <nd ref="-100"/>
         <nd ref="-99"/>
@@ -1382,9 +1382,9 @@
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-1074"/>
+        <tag k="hoot:id" v="-838"/>
     </way>
-    <way visible="true" id="-1071" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-835" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-869"/>
         <nd ref="-168"/>
         <nd ref="-167"/>
@@ -1399,9 +1399,9 @@
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-1071"/>
+        <tag k="hoot:id" v="-835"/>
     </way>
-    <way visible="true" id="-1070" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-834" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-235"/>
         <nd ref="-170"/>
         <nd ref="-169"/>
@@ -1411,18 +1411,18 @@
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-1070"/>
+        <tag k="hoot:id" v="-834"/>
     </way>
-    <way visible="true" id="-1069" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-833" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-864"/>
         <nd ref="-35"/>
         <tag k="name" v="E ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-1069"/>
+        <tag k="hoot:id" v="-833"/>
     </way>
-    <way visible="true" id="-1068" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-832" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-152"/>
         <nd ref="-45"/>
         <nd ref="-44"/>
@@ -1440,9 +1440,9 @@
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-1068"/>
+        <tag k="hoot:id" v="-832"/>
     </way>
-    <way visible="true" id="-1067" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-831" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-857"/>
         <nd ref="-122"/>
         <nd ref="-121"/>
@@ -1466,9 +1466,9 @@
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-1067"/>
+        <tag k="hoot:id" v="-831"/>
     </way>
-    <way visible="true" id="-1066" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-830" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-856"/>
         <nd ref="-142"/>
         <nd ref="-141"/>
@@ -1496,9 +1496,9 @@
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-1066"/>
+        <tag k="hoot:id" v="-830"/>
     </way>
-    <way visible="true" id="-1065" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-829" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-152"/>
         <nd ref="-151"/>
         <nd ref="-150"/>
@@ -1515,9 +1515,9 @@
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-1065"/>
+        <tag k="hoot:id" v="-829"/>
     </way>
-    <way visible="true" id="-1064" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-828" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-842"/>
         <nd ref="-154"/>
         <nd ref="-177"/>
@@ -1526,9 +1526,9 @@
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-1064"/>
+        <tag k="hoot:id" v="-828"/>
     </way>
-    <way visible="true" id="-1063" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-827" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-176"/>
         <nd ref="-161"/>
         <nd ref="-160"/>
@@ -1543,9 +1543,9 @@
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-1063"/>
+        <tag k="hoot:id" v="-827"/>
     </way>
-    <way visible="true" id="-1060" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-824" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-836"/>
         <nd ref="-53"/>
         <nd ref="-52"/>
@@ -1561,9 +1561,9 @@
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-1060"/>
+        <tag k="hoot:id" v="-824"/>
     </way>
-    <way visible="true" id="-1059" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-823" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-222"/>
         <nd ref="-54"/>
         <nd ref="-836"/>
@@ -1572,7 +1572,7 @@
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-1059"/>
+        <tag k="hoot:id" v="-823"/>
     </way>
     <way visible="true" id="-80" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-178"/>

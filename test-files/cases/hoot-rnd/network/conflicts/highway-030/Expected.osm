@@ -157,7 +157,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1"/>
     </node>
-    <way visible="true" id="-368" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-229" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-92"/>
         <nd ref="-8"/>
         <nd ref="-9"/>
@@ -168,9 +168,9 @@
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-368"/>
+        <tag k="hoot:id" v="-229"/>
     </way>
-    <way visible="true" id="-367" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-228" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-7"/>
         <nd ref="-92"/>
         <tag k="alt_name" v="24th St NW"/>
@@ -178,7 +178,7 @@
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-367"/>
+        <tag k="hoot:id" v="-228"/>
     </way>
     <way visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-13"/>
@@ -344,7 +344,7 @@
         <tag k="error:circular" v="5"/>
         <tag k="hoot:id" v="-1"/>
     </way>
-    <relation visible="true" id="-169" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-37" role="reviewee"/>
         <member type="way" ref="-13" role="reviewee"/>
         <member type="way" ref="-1" role="reviewee"/>
@@ -353,9 +353,9 @@
         <tag k="hoot:review:members" v="3"/>
         <tag k="type" v="review"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-169"/>
+        <tag k="hoot:id" v="-30"/>
     </relation>
-    <relation visible="true" id="-168" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-31" role="reviewee"/>
         <member type="way" ref="-30" role="reviewee"/>
         <member type="way" ref="-1" role="reviewee"/>
@@ -364,6 +364,6 @@
         <tag k="hoot:review:members" v="3"/>
         <tag k="type" v="review"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-168"/>
+        <tag k="hoot:id" v="-29"/>
     </relation>
 </osm>

@@ -129,7 +129,7 @@
         <tag k="error:circular" v="25"/>
         <tag k="hoot:id" v="-1"/>
     </way>
-    <relation visible="true" id="-187" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-2" role="reviewee"/>
         <member type="way" ref="-3" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -137,6 +137,6 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="type" v="review"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-187"/>
+        <tag k="hoot:id" v="-29"/>
     </relation>
 </osm>

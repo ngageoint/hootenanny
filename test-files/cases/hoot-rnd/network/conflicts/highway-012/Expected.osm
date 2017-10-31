@@ -236,7 +236,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1"/>
     </node>
-    <way visible="true" id="-1027" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-923" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-762"/>
         <nd ref="-13"/>
         <nd ref="-14"/>
@@ -250,9 +250,9 @@
         <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-1027"/>
+        <tag k="hoot:id" v="-923"/>
     </way>
-    <way visible="true" id="-1026" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-922" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-761"/>
         <nd ref="-12"/>
         <nd ref="-762"/>
@@ -266,9 +266,9 @@
         <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-1026"/>
+        <tag k="hoot:id" v="-922"/>
     </way>
-    <way visible="true" id="-1025" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-921" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-760"/>
         <nd ref="-761"/>
         <tag k="width" v="5"/>
@@ -281,9 +281,9 @@
         <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-1025"/>
+        <tag k="hoot:id" v="-921"/>
     </way>
-    <way visible="true" id="-1024" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-920" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-759"/>
         <nd ref="-10"/>
         <nd ref="-11"/>
@@ -298,9 +298,9 @@
         <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-1024"/>
+        <tag k="hoot:id" v="-920"/>
     </way>
-    <way visible="true" id="-1023" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-919" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-758"/>
         <nd ref="-759"/>
         <tag k="width" v="5"/>
@@ -313,9 +313,9 @@
         <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-1023"/>
+        <tag k="hoot:id" v="-919"/>
     </way>
-    <way visible="true" id="-1022" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-918" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-757"/>
         <nd ref="-9"/>
         <nd ref="-758"/>
@@ -329,9 +329,9 @@
         <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-1022"/>
+        <tag k="hoot:id" v="-918"/>
     </way>
-    <way visible="true" id="-1021" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-917" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-756"/>
         <nd ref="-8"/>
         <nd ref="-757"/>
@@ -345,9 +345,9 @@
         <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-1021"/>
+        <tag k="hoot:id" v="-917"/>
     </way>
-    <way visible="true" id="-1020" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-916" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-6"/>
         <nd ref="-7"/>
         <nd ref="-756"/>
@@ -361,9 +361,9 @@
         <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-1020"/>
+        <tag k="hoot:id" v="-916"/>
     </way>
-    <way visible="true" id="-1019" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-915" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-749"/>
         <nd ref="-6"/>
         <tag k="width" v="5"/>
@@ -376,9 +376,9 @@
         <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-1019"/>
+        <tag k="hoot:id" v="-915"/>
     </way>
-    <way visible="true" id="-1018" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-914" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-748"/>
         <nd ref="-4"/>
         <nd ref="-5"/>
@@ -393,9 +393,9 @@
         <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-1018"/>
+        <tag k="hoot:id" v="-914"/>
     </way>
-    <way visible="true" id="-1017" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-913" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1"/>
         <nd ref="-2"/>
         <nd ref="-3"/>
@@ -410,7 +410,7 @@
         <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-1017"/>
+        <tag k="hoot:id" v="-913"/>
     </way>
     <way visible="true" id="-34" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-67"/>

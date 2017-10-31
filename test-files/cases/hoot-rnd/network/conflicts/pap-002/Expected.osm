@@ -1845,7 +1845,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1"/>
     </node>
-    <way visible="true" id="-5877" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-5086" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2840"/>
         <nd ref="-184"/>
         <nd ref="-2840"/>
@@ -1859,9 +1859,9 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-5877"/>
+        <tag k="hoot:id" v="-5086"/>
     </way>
-    <way visible="true" id="-5876" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-5085" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-315"/>
         <nd ref="-186"/>
         <nd ref="-185"/>
@@ -1887,9 +1887,9 @@
         <tag k="location" v="surface"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-5876"/>
+        <tag k="hoot:id" v="-5085"/>
     </way>
-    <way visible="true" id="-5815" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-5024" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2701"/>
         <nd ref="-292"/>
         <tag k="width:minimum_traveled_way" v="5"/>
@@ -1912,9 +1912,9 @@
         <tag k="location" v="surface"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-5815"/>
+        <tag k="hoot:id" v="-5024"/>
     </way>
-    <way visible="true" id="-5814" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-5023" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-296"/>
         <nd ref="-2701"/>
         <tag k="width:minimum_traveled_way" v="5"/>
@@ -1937,7 +1937,7 @@
         <tag k="location" v="overground"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-5814"/>
+        <tag k="hoot:id" v="-5023"/>
     </way>
     <way visible="true" id="-421" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-52"/>
@@ -7176,7 +7176,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-3"/>
     </way>
-    <relation visible="true" id="-1144" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-353" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-217" role="reviewee"/>
         <member type="way" ref="-357" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -7184,6 +7184,6 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="type" v="review"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-1144"/>
+        <tag k="hoot:id" v="-353"/>
     </relation>
 </osm>
