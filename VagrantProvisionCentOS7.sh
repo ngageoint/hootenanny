@@ -145,7 +145,8 @@ cd ~
 fetch v8 >> ~/centos7_install.txt
 cd v8
 gclient sync >> ~/centos7_install.txt
-tools/dev/v8gen.py x64.release >> ~/centos7_install.txt
+git checkout 5.1-lkgr
+#tools/dev/v8gen.py x64.release >> ~/centos7_install.txt
 make -sj$(nproc) x64.release library=shared
 sudo cp out/x64.release/lib.target/*.so /usr/lib64/
 sudo cp include/*.h /usr/include/
