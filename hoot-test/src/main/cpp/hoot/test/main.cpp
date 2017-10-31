@@ -419,7 +419,10 @@ int main(int argc, char *argv[])
       while (testName != HOOT_TEST_FINISHED)
       {
         rootSuite = new CppUnit::TestSuite( "All tests" );
+        // don't warn about disabled tests in every listening process.
+        DisableLog dl;
         populateTests(ALL, rootSuite, printDiff);
+        dl.reset();
         CppUnit::Test* t = rootSuite->findTest(testName);
         if (t != 0)
         {
