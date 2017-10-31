@@ -29,6 +29,8 @@ pipeline {
                 // Make sure we have the tags info because figuring out the version is required in the build process
                 sh 'git fetch --tags'
                 sh 'git submodule update --init'
+                // remove any files from previous builds
+                sh 'git clean -f -x'
                 sh 'cp -R ../software.ubuntu1404 software'
             }
         }
