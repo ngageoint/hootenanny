@@ -27,17 +27,11 @@ if ! hash hadoop >/dev/null 2>&1 ; then
   chmod 0600 ~/.ssh/authorized_keys
 
   cd ~
-  sudo tar -zxf ~/$HADOOP_TAR
-  sudo chown -R $VMUSER:$VMGROUP hadoop-0.20.2
-  sudo ln -s hadoop-0.20.2 hadoop
-  sudo chown -R $VMUSER:$VMGROUP hadoop
-  cd hadoop
-  sudo find . -type d -exec chmod a+rwx {} \;
-  sudo find . -type f -exec chmod a+rw {} \;
-  cd ~
+  tar -zxf ~/$HADOOP_TAR
+  ln -s hadoop-$HADOOP_VERSION hadoop
 
-sudo rm -f $HADOOP_HOME/conf/core-site.xml
-sudo bash -c "cat >> $HADOOP_HOME/conf/core-site.xml" <<EOT
+  rm -f $HADOOP_HOME/conf/core-site.xml
+  cat >> $HADOOP_HOME/conf/core-site.xml <<EOT
 
 <configuration>
   <property>
@@ -46,8 +40,8 @@ sudo bash -c "cat >> $HADOOP_HOME/conf/core-site.xml" <<EOT
   </property>
 </configuration>
 EOT
-sudo rm -f $HADOOP_HOME/conf/mapred-site.xml
-sudo bash -c "cat >> $HADOOP_HOME/conf/mapred-site.xml" <<EOT
+  rm -f $HADOOP_HOME/conf/mapred-site.xml
+  cat >> $HADOOP_HOME/conf/mapred-site.xml <<EOT
 
 <configuration>
   <property>
@@ -84,8 +78,8 @@ sudo bash -c "cat >> $HADOOP_HOME/conf/mapred-site.xml" <<EOT
   </property>
 </configuration>
 EOT
-sudo rm -f $HADOOP_HOME/conf/hdfs-site.xml
-sudo bash -c "cat >> $HADOOP_HOME/conf/hdfs-site.xml" <<EOT
+  rm -f $HADOOP_HOME/conf/hdfs-site.xml
+  cat >> $HADOOP_HOME/conf/hdfs-site.xml <<EOT
 
 <configuration>
   <property>
@@ -139,18 +133,13 @@ sudo bash -c "cat >> $HADOOP_HOME/conf/hdfs-site.xml" <<EOT
 </configuration>
 EOT
 
-  sudo sed -i.bak "s/# export JAVA_HOME=\/usr\/lib\/j2sdk1.5-sun/export JAVA_HOME=${JAVA_HOME//\//\\/}/g" $HADOOP_HOME/conf/hadoop-env.sh
-  sudo sed -i.bak 's/#include <pthread.h>/#include <pthread.h>\n#include <unistd.h>/g' $HADOOP_HOME/src/c++/pipes/impl/HadoopPipes.cc
+  sed -i.bak "s/# export JAVA_HOME=\/usr\/lib\/j2sdk1.5-sun/export JAVA_HOME=${JAVA_HOME//\//\\/}/g" $HADOOP_HOME/conf/hadoop-env.sh
+  sed -i.bak 's/#include <pthread.h>/#include <pthread.h>\n#include <unistd.h>/g' $HADOOP_HOME/src/c++/pipes/impl/HadoopPipes.cc
 
-  sudo mkdir -p $HADOOP_HOME/dfs/name/current
-  # this could perhaps be more strict
-  sudo chmod -R 777 $HADOOP_HOME
-  sudo chmod go-w $HADOOP_HOME/bin $HADOOP_HOME
+  mkdir -p $HADOOP_HOME/dfs/name/current
   echo 'Y' | hadoop namenode -format
 
-  cd /lib
-  sudo ln -s $JAVA_HOME/jre/lib/amd64/server/libjvm.so libjvm.so
-  cd /lib64
-  sudo ln -s $JAVA_HOME/jre/lib/amd64/server/libjvm.so libjvm.so
+  sudo ln -s $JAVA_HOME/jre/lib/amd64/server/libjvm.so /lib/libjvm.so
+  sudo ln -s $JAVA_HOME/jre/lib/amd64/server/libjvm.so /lib64/libjvm.so
   cd ~
 fi
