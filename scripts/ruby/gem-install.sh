@@ -1,9 +1,24 @@
 #!/usr/bin/env bash
 set -e
-RVM_HOME="${RVM_HOME:-${HOME}/.rvm}"
 
-# TODO: Download a cache and extract it.
-source $RVM_HOME/scripts/rvm
+# Don't install documentation for gems
+if [ ! -f $HOME/.gemrc ]; then
+    cat > $HOME/.gemrc <<EOT
+install: --no-document --no-ri
+update: --no-document --no-ri
+EOT
+fi
+
+if [ "${WITH_RVM}" == "yes" ]; then
+    source $RVM_HOME/scripts/rvm
+fi
+
+# Seed the cache.
+if [ -f $HOME/hoot-gems.tar ]; then
+    curl -sSL -o $HOME/hoot-gems.tar $RUBY_GEMS_URL/hoot-gems.tar
+    # TODO: Extract into non-RVM cache directory.
+    tar -C "$(rvm gemdir)/cache" -xf $HOME/hoot-gems.tar
+fi
 
 # gem installs are *very* slow, hence all the checks in place here to facilitate debugging
 if ! gem list --local | grep -q mime-types; then

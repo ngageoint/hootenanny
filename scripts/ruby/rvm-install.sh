@@ -1,9 +1,18 @@
 #!/usr/bin/env bash
 set -e
 SCRIPT_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-RVM_HOME="${RVM_HOME:-${HOME}/.rvm}"
 
-if ! ruby -v | grep -q $RUBY_VERSION; then
+RVM_INSTALLER_DIR="${RVM_INSTALLER_DIR:-${HOME}/rvm-installer}"
+RVM_TAR="${RVM_VERSION}.tar.gz"
+RVM_TARBALL_URL="${RVM_TARBALL_URL:-${RVM_BASE_URL}/archive/${RVM_TAR}}"
+RVM_SIGNATURE_URL="${RVM_SIGNATURE_URL:-${RVM_BASE_URL}/releases/download/${RVM_VERSION}/${RVM_TAR}.asc}"
+
+# Assume that Ruby is installed with packages instead.
+if [ "${WITH_RVM}" != "yes" ]; then
+    exit 0
+fi
+
+if ! $RVM_HOME/bin/rvm --version | grep "^rvm ${RVM_VERSION}"; then
     # RVM signing keys obtained via following command:
     #
     #  gpg --keyserver hkp://keyserver.ubuntu.com \
@@ -20,55 +29,52 @@ if ! ruby -v | grep -q $RUBY_VERSION; then
         cat $SCRIPT_HOME/rvm-signing.gpg | gpg --import --quiet
     fi
 
-    mkdir -p $RVM_HOME/archives
-    if [ ! -f $RVM_HOME/archives/rvm-installer.asc ]; then
-        # Download RVM installation script signature.
-        curl -sSL \
-             -o $RVM_HOME/archives/rvm-installer.asc \
-             https://raw.githubusercontent.com/rvm/rvm/master/binscripts/rvm-installer.asc
+    # Setting the home directory the place to look for downloads.
+    if [ ! -f $HOME/.rvmrc ]; then
+        echo "rvm_archives_path=${HOME}" >> ~/.rvmrc
     fi
 
-    if [ ! -f $RVM_HOME/archives/rvm-installer ]; then
-        # Download RVM installation script.
-        curl -sSL \
-             -o $RVM_HOME/archives/rvm-installer-unverified \
-             https://raw.githubusercontent.com/rvm/rvm/master/binscripts/rvm-installer
-        # Verify that the script comes from the proper source.
-        gpg --verify --quiet \
-            $RVM_HOME/archives/rvm-installer.asc \
-            $RVM_HOME/archives/rvm-installer-unverified
-        mv $RVM_HOME/archives/rvm-installer-unverified \
-           $RVM_HOME/archives/rvm-installer
-        chmod +x $RVM_HOME/archives/rvm-installer
+    # Download RVM installation tarball signature.
+    if [ ! -f $HOME/$RVM_TAR.asc ]; then
+        curl -sSL -o $HOME/$RVM_TAR.asc $RVM_SIGNATURE_URL
+    fi
+
+    # Download RVM installation tarball.
+    if [ ! -f $HOME/$RVM_TAR ]; then
+        curl -sSL -o $HOME/$RVM_TAR.unverified $RVM_TARBALL_URL
+        gpg --verify --quiet $HOME/$RVM_TAR.asc $HOME/$RVM_TAR.unverified
+        mv $HOME/$RVM_TAR.unverified $HOME/$RVM_TAR
+
+        mkdir -p $RVM_INSTALLER_DIR
+        tar -C $RVM_INSTALLER_DIR --strip-components=1 -xzf $HOME/$RVM_TAR
         echo 'Downloaded and verified RVM Installer!'
     fi
 
-    if [ ! -f $RVM_HOME/scripts/rvm ]; then
-        # Install RVM.
-        $RVM_HOME/archives/rvm-installer stable
+    # Install RVM.
+    cd $RVM_INSTALLER_DIR
+    ./install --auto-dotfiles
+    cd $HOME
 
-        # Point to our pre-built binary packages, add checksums for known versions.
-        mkdir -p $RVM_HOME/user
-        cat > $RVM_HOME/user/db <<EOF
-rvm_remote_server_url=${RUBY_BINARIES_URL}
+    # Point to our pre-built binary packages, add checksums for known versions.
+    mkdir -p $RVM_HOME/user
+    cat > $RVM_HOME/user/db <<EOF
+rvm_remote_server_url=${RVM_BINARIES_URL}
 EOF
-        cat > $RVM_HOME/user/sha512 <<EOF
-${RUBY_BINARIES_URL}/centos/7/x86_64/ruby-2.3.4.tar.bz2=b64a05e81b0fc121e8be515a894492ca5ee340ad71a9be63518fea5f4c10fe087e2d2c800882543f09409783d484d09bf99697ddc98c4a5658b9db415696b7d5
-${RUBY_BINARIES_URL}/centos/7/x86_64/ruby-2.4.2.tar.bz2=685652d6afcb99647e5a453816d87c157c778e9dedc3a3f883f0a88860261db69804e92bb2250341cc11f1668d93f7f1348f1e881bf13b2cef3b4fe16b99e32d
-${RUBY_BINARIES_URL}/ubuntu/14.04/x86_64/ruby-2.3.4.tar.bz2=a1d2335b20e619735775cc3a33d003c5859b87de1ecb86bece9366e42b524e437b8489f32f6842f514006784efcb70504af2a35db5559a5d9c64a27f31be3bf7
-${RUBY_BINARIES_URL}/ubuntu/14.04/x86_64/ruby-2.4.2.tar.bz2=d25ca12cd29945bf10435792bd791bc53295673cd8a1923cfaa611923e36a8a37cebd5f92de05570b95e22702556ef4b690d7147e2f5f48770b6845b784b72ae
+    # SHA-512 checksums for the binary releases.
+    cat > $RVM_HOME/user/sha512 <<EOF
+${RVM_BINARIES_URL}/centos/7/x86_64/ruby-2.3.4.tar.bz2=a84cf1788a35d0be80cee161cc91015052c8bc7b4a8c5883b5ec47c39902be42aedd907a52c11c5bb929b4b37ac14ea4ae26dcd9fb48f9606c85c8af2824bd4a
+${RVM_BINARIES_URL}/centos/7/x86_64/ruby-2.4.2.tar.bz2=f1dba0895b13e363cd8065b09df56acbd403c15fcc20bf896c826b77c25042cad3e1c4419bcb69f8fb926712830f2066a1d46ac484f994f1d4bdddec068ed925
+${RVM_BINARIES_URL}/ubuntu/14.04/x86_64/ruby-2.3.4.tar.bz2=ae2a7f880cf07778714cd63d79bdd6a5c420bd391af75e381656b9ae9251f3db41c11f6ab3a0ea07f7dcad3f43849e37f54c964c4b442f4cb2ad5dd5e8e7e651
+${RVM_BINARIES_URL}/ubuntu/14.04/x86_64/ruby-2.4.2.tar.bz2=a5ab53e7f4f94f9296a70580e938287ccd1f72a67552359522e8fb005902b816f88840ec3bc5ccc95bc70e09b3bc9ac8dd5fdca1ecfa4ace09a3b38d02f11af7
+${RVM_BINARIES_URL}/ubuntu/16.04/x86_64/ruby-2.3.4.tar.bz2=d4b9064c8e9039c1c5b9fc38969493a12030948c702a5d4f2ffaba8d0ac1fef4162c7a96810ccb89489621f31ee17a03a3f4fc5968a2ac712ffc371737592c02
+${RVM_BINARIES_URL}/ubuntu/16.04/x86_64/ruby-2.4.2.tar.bz2=30c37483456405c34eb5f4824451fc5b93c4bf172df2bc48d68834bb4355f2be11f2619861a31fec7a5c12a0ef716d868175c6d6a114bdcfa03250eb460cd0de
 EOF
-        echo 'Installed RVM!'
-    fi
+    echo 'Installed RVM!'
+fi
+
+# Install desired Ruby version.
+if ! ruby -v | grep -q $RUBY_VERSION; then
     source $RVM_HOME/scripts/rvm
-
-    # Install desired Ruby version.
     rvm install ruby-$RUBY_VERSION --quiet-curl
     rvm use $RUBY_VERSION --default
-
-    # Don't install documentation for gems
-    cat > ~/.gemrc <<EOT
-install: --no-document
-update: --no-document
-EOT
 fi
