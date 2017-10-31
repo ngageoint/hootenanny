@@ -10,6 +10,8 @@ pipeline {
             defaultValue: true)
         booleanParam(name: 'Configure_Tests',
             defaultValue: true)
+        booleanParam(name: 'Global_POI_tests',
+            defaultValue: false)
         booleanParam(name: 'Core_tests',
             defaultValue: true)
         booleanParam(name: 'Services_tests',
@@ -82,21 +84,32 @@ pipeline {
                 // NOTE: Ubuntu only, may need more complex logic if other OS are included in pipeline
                 sh 'cp LocalConfig.pri.orig LocalConfig.pri'
                 sh 'echo "QMAKE_CXXFLAGS += -Werror" >> LocalConfig.pri'
-                sh 'sed -i s/"QMAKE_CXX=g++"/"#QMAKE_CXX=g++"/g LocalConfig.pri'                 
+                sh 'sed -i s/"QMAKE_CXX=g++"/"#QMAKE_CXX=g++"/g LocalConfig.pri'
                 sh 'sed -i s/"#QMAKE_CXX=ccache g++"/"QMAKE_CXX=ccache g++"/g LocalConfig.pri'
 
                 // Perform remainder of provisioning
                 sh "vagrant provision ${params.Box} --provision-with build,EGD,tomcat,mapnik,hadoop"
-            }       
+            }
         }
-	stage("Core Tests") {
+        stage("Global POI Tests") {
+            when {
+                expression {
+                    return params.Global_POI_tests
+                }
+            }
+            steps {
+                // exclusions get us moving and are irrelevant to the global POI use case.
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot --version --debug; HootTest --slow --exclude=.*PrintNamesCmdTest.sh --exclude=.*ConflateCmdStatsGenericRiversTest.sh --exclude=.*PertyScoreCmdTest.sh --exclude=.*ScoreCmdTest.sh --exclude=.*StatsFileTest.sh --exclude=.*PertyMatchScorerTest.* --exclude=.*BigPertyOpTest.* --exclude=.*TDistributionTest.* --exclude=.*ExpectationIntersectionTest.* --exclude=.*PertyDuplicatePoiOpTest.* --exclude=hoot::PertyOpTest.* --parallel \$(nproc)'"
+            }
+        }
+        stage("Core Tests") {
             when {
                 expression {
                     return params.Core_tests
                 }
             }
             steps {
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot --version --debug; export HOOT_TEST_DIFF=--diff; bin/HootTest \$HOOT_TEST_DIFF --glacial --parallel \$(nproc)'"
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot --version --debug; bin/HootTest --diff --glacial --parallel \$(nproc)'"
             }
         }
         stage("Services Tests") {
@@ -125,7 +138,7 @@ pipeline {
     post {
         success {
             // If all tests passed, clean everything up
-            sh "if [ 'true' == '${params.Destroy_VM}' ] ; then ; vagrant destroy -f ${params.Box} || true; fi"
+            sh "if [ 'true' == '${params.Destroy_VM}' ] ; then vagrant destroy -f ${params.Box} || true; else vagrant halt ${params.Box} || true; fi"
             cleanWs()
         }
 	failure {
