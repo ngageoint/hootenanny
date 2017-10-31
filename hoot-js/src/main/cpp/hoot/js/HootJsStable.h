@@ -31,6 +31,9 @@
 #include <hoot/core/HootCoreStable.h>
 
 // v8
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 #include <v8.h>
+#pragma GCC diagnostic pop
 
 #endif // HOOTJSSTABLE_H
