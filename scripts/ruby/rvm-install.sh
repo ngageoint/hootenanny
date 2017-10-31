@@ -3,16 +3,16 @@ set -e
 SCRIPT_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 RVM_INSTALLER_DIR="${RVM_INSTALLER_DIR:-${HOME}/rvm-installer}"
-RVM_TAR="${RVM_VERSION}.tar.gz"
-RVM_TARBALL_URL="${RVM_TARBALL_URL:-${RVM_BASE_URL}/archive/${RVM_TAR}}"
-RVM_SIGNATURE_URL="${RVM_SIGNATURE_URL:-${RVM_BASE_URL}/releases/download/${RVM_VERSION}/${RVM_TAR}.asc}"
+RVM_TAR="rvm-${RVM_VERSION}.tar.gz"
+RVM_TAR_URL="${RVM_TAR_URL:-${RVM_BASE_URL}/archive/${RVM_VERSION}.tar.gz}"
+RVM_SIG_URL="${RVM_SIG_URL:-${RVM_BASE_URL}/releases/download/${RVM_VERSION}/${RVM_VERSION}.tar.gz.asc}"
 
 # Assume that Ruby is installed with packages instead.
 if [ "${WITH_RVM}" != "yes" ]; then
     exit 0
 fi
 
-if ! $RVM_HOME/bin/rvm --version | grep "^rvm ${RVM_VERSION}"; then
+if ! $RVM_HOME/bin/rvm --version | grep -q "^rvm ${RVM_VERSION//\./\\.}"; then
     # RVM signing keys obtained via following command:
     #
     #  gpg --keyserver hkp://keyserver.ubuntu.com \
@@ -29,25 +29,26 @@ if ! $RVM_HOME/bin/rvm --version | grep "^rvm ${RVM_VERSION}"; then
         cat $SCRIPT_HOME/rvm-signing.gpg | gpg --import --quiet
     fi
 
-    # Setting the home directory the place to look for downloads.
+    # Setting the home directory the place to look for preseed archives.
     if [ ! -f $HOME/.rvmrc ]; then
         echo "rvm_archives_path=${HOME}" >> ~/.rvmrc
     fi
 
     # Download RVM installation tarball signature.
     if [ ! -f $HOME/$RVM_TAR.asc ]; then
-        curl -sSL -o $HOME/$RVM_TAR.asc $RVM_SIGNATURE_URL
+        curl -sSL -o $HOME/$RVM_TAR.asc $RVM_SIG_URL
     fi
 
-    # Download RVM installation tarball.
     if [ ! -f $HOME/$RVM_TAR ]; then
-        curl -sSL -o $HOME/$RVM_TAR.unverified $RVM_TARBALL_URL
-        gpg --verify --quiet $HOME/$RVM_TAR.asc $HOME/$RVM_TAR.unverified
-        mv $HOME/$RVM_TAR.unverified $HOME/$RVM_TAR
+        # Download to temporary location, move into place when GPG verified.
+        curl -sSL -o /tmp/$RVM_TAR $RVM_TAR_URL
+        gpg --verify --quiet $HOME/$RVM_TAR.asc /tmp/$RVM_TAR
+        mv /tmp/$RVM_TAR $HOME/$RVM_TAR
 
+        # Extract RVM installer tarball.
         mkdir -p $RVM_INSTALLER_DIR
         tar -C $RVM_INSTALLER_DIR --strip-components=1 -xzf $HOME/$RVM_TAR
-        echo 'Downloaded and verified RVM Installer!'
+        echo 'Downloaded, verified, and extracted RVM Installer!'
     fi
 
     # Install RVM.
@@ -55,7 +56,7 @@ if ! $RVM_HOME/bin/rvm --version | grep "^rvm ${RVM_VERSION}"; then
     ./install --auto-dotfiles
     cd $HOME
 
-    # Point to our pre-built binary packages, add checksums for known versions.
+    # Point to our pre-built binary packages.
     mkdir -p $RVM_HOME/user
     cat > $RVM_HOME/user/db <<EOF
 rvm_remote_server_url=${RVM_BINARIES_URL}
@@ -72,9 +73,11 @@ EOF
     echo 'Installed RVM!'
 fi
 
+# Setup environment to use RVM.
+source $RVM_HOME/scripts/rvm
+
 # Install desired Ruby version.
-if ! ruby -v | grep -q $RUBY_VERSION; then
-    source $RVM_HOME/scripts/rvm
+if ! ruby -v | grep -q "${RUBY_VERSION//\./\\.}"; then
     rvm install ruby-$RUBY_VERSION --quiet-curl
     rvm use $RUBY_VERSION --default
 fi
