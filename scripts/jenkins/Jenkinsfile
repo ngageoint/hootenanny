@@ -99,6 +99,7 @@ pipeline {
             }
             steps {
                 // exclusions get us moving and are irrelevant to the global POI use case.
+                // errors are likely caused by library discrepencies in Ubuntu 16.04
                 sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot --version --debug; HootTest --slow --exclude=.*PrintNamesCmdTest.sh --exclude=.*ConflateCmdStatsGenericRiversTest.sh --exclude=.*PertyScoreCmdTest.sh --exclude=.*ScoreCmdTest.sh --exclude=.*StatsFileTest.sh --exclude=.*PertyMatchScorerTest.* --exclude=.*BigPertyOpTest.* --exclude=.*TDistributionTest.* --exclude=.*ExpectationIntersectionTest.* --exclude=.*PertyDuplicatePoiOpTest.* --exclude=hoot::PertyOpTest.* --parallel \$(nproc)'"
             }
         }
@@ -124,7 +125,7 @@ pipeline {
                 sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` services-test'"
             }
         }
-	stage("UI Tests") {
+        stage("UI Tests") {
             when {
                 expression {
                     return params.UI_tests
@@ -137,11 +138,17 @@ pipeline {
     }
     post {
         success {
-            // If all tests passed, clean everything up
-            sh "if [ 'true' == '${params.Destroy_VM}' ] ; then vagrant destroy -f ${params.Box} || true; else vagrant halt ${params.Box} || true; fi"
-            cleanWs()
+            script {
+                // If all tests passed, clean everything up
+                if (params.Destroy_VM == 'true') {
+                    sh "vagrant destroy -f ${params.Box} || true"
+                    cleanWs()
+                } else {
+                    sh "vagrant halt ${params.Box} || true"
+                }
+            }
         }
-	failure {
+        failure {
             script {
                 // Check to see if we failed last time
                 if (currentBuild.previousBuild.result == 'FAILURE') {
@@ -162,7 +169,7 @@ pipeline {
                 }
             }
         }
-	changed {
+        changed {
             script {
                 // Job has been fixed
                 if (currentBuild.currentResult == 'SUCCESS') {
