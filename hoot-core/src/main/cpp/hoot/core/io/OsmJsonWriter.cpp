@@ -227,7 +227,10 @@ void OsmJsonWriter::_writeTags(ConstElementPtr e)
   {
     for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
     {
-      _writeTag(it.key(), it.value(), firstTag);
+      if (it.key() != "" && it.value() != "")
+      {
+        _writeTag(it.key(), it.value(), firstTag);
+      }
     }
   }
 
