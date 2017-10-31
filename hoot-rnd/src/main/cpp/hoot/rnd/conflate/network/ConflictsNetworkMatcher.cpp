@@ -31,11 +31,6 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/rnd/conflate/network/EdgeMatch.h>
 #include <hoot/rnd/conflate/frechet/FrechetDistance.h>
-
-// Debug
-#include <hoot/core/util/MapProjector.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-
 #include "EdgeMatchSetFinder.h"
 
 using namespace geos::geom;
@@ -215,20 +210,6 @@ Meters ConflictsNetworkMatcher::_getMatchSeparation(ConstEdgeMatchPtr pMatch)
 void ConflictsNetworkMatcher::_sanityCheckRelationships()
 {
   LOG_DEBUG("Performing Relationship Sanity Check");
-
-  /*
-  QHash<ConstEdgeMatchPtr,double>::iterator matchIt = _edgeMatches->getAllMatches().begin();
-
-  while (matchIt != _edgeMatches->getAllMatches().end())
-  {
-    Meters d = _getMatchSeparation(matchIt.key());
-
-    if (d > 15.0)
-      matchIt = _edgeMatches->getAllMatches().erase(matchIt);
-    else
-      ++matchIt;
-  }
-  */
 
   // Check our relationships for sanity...
   foreach(ConstEdgeMatchPtr em, _scores.keys())

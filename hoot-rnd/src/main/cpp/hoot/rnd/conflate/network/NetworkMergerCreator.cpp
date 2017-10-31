@@ -238,6 +238,7 @@ double NetworkMergerCreator::_getOverlapPercent(const NetworkMatch* m1, const Ne
   QList<EdgeString::EdgeEntry> m1e1, m1e2, m2e1, m2e2;
   boost::shared_ptr<const OsmMap> pMap(_map->shared_from_this());
 
+  // We want m1e1 to be the shorter match set
   if (m1->getEdgeMatch()->getString1()->calculateLength(pMap)
       <= m2->getEdgeMatch()->getString1()->calculateLength(pMap))
   {
@@ -250,6 +251,7 @@ double NetworkMergerCreator::_getOverlapPercent(const NetworkMatch* m1, const Ne
     m2e1 = m1->getEdgeMatch()->getString1()->getAllEdges();
   }
 
+  // We want m1e2 to be the shorter match set
   if (m1->getEdgeMatch()->getString2()->calculateLength(pMap)
       <= m2->getEdgeMatch()->getString2()->calculateLength(pMap))
   {

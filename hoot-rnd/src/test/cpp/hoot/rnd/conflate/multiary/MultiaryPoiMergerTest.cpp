@@ -84,8 +84,8 @@ public:
 
     //LOG_VAR(TestUtils::toQuotedString(OsmJsonWriter().toString(map)));
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
-                    "{\"type\":\"node\",\"id\":-1,\"lat\":2,\"lon\":-3,\"tags\":{\"source:hash\":\"AAA;BBB\",\"alt_name\":\"my Restaurant\",\"name\":\"My Restaurant\",\"amenity\":\"pub\",\"error:circular\":\"15\"}},\n"
-                    "{\"type\":\"node\",\"id\":-3,\"lat\":14,\"lon\":-3,\"tags\":{\"place\":\"locality\",\"source:hash\":\"CCC;DDD\",\"name\":\"Not the same\",\"amenity\":\"pub\",\"error:circular\":\"15\"}},\n"
+                    "{\"type\":\"node\",\"id\":-1,\"lat\":2,\"lon\":-3,\"tags\":{\"hoot:hash\":\"\",\"source:hash\":\"AAA;BBB\",\"alt_name\":\"my Restaurant\",\"name\":\"My Restaurant\",\"amenity\":\"pub\",\"error:circular\":\"15\"}},\n"
+                    "{\"type\":\"node\",\"id\":-3,\"lat\":14,\"lon\":-3,\"tags\":{\"place\":\"locality\",\"hoot:hash\":\"\",\"source:hash\":\"CCC;DDD\",\"name\":\"Not the same\",\"amenity\":\"pub\",\"error:circular\":\"15\"}},\n"
                     "{\"type\":\"relation\",\"id\":-1,\"members\":[\n"
                     "{\"type\":\"node\",\"ref\":-3,\"role\":\"reviewee\"},\n"
                     "{\"type\":\"node\",\"ref\":-1,\"role\":\"reviewee\"}],\"tags\":{\"hoot:review:needs\":\"yes\",\"hoot:review:type\":\"POI\",\"hoot:review:members\":\"2\",\"hoot:review:score\":\"-1\",\"hoot:review:note\":\"Somewhat similar (12m) - very close together, similar POI type\",\"error:circular\":\"15\"}]\n"

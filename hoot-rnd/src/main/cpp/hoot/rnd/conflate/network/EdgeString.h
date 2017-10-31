@@ -74,6 +74,8 @@ public:
 
     QString toString() const;
 
+    // TRICKY: This is used right now for a .Contains() call on a container full of
+    // EdgeEntries. "Overlap" works better than strict equality in this case.
     bool operator== (const EdgeEntry &ee)
     {
       bool eq = _subline->overlaps(ee.getSubline());
