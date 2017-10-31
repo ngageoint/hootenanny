@@ -2564,6 +2564,7 @@ after the operations in `conflate.pre.ops`.
 
 * Data Type: list
 * Default Value:
+** `hoot::CornerSplitter`
 ** `hoot::RubberSheet`
 
 List of operations to apply immediately before conflating when using Network Conflation only.  Runs
