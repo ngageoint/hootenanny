@@ -1,7 +1,7 @@
 [
   {
-    "word": "(الضالعي",
-    "historic=memorial": 2
+    "word": "ラプ＝ラプ",
+    "place=city": 2
   },
   {
     "word": "Aa Barbeque",
@@ -20,26 +20,6 @@
     "amenity=school": 1
   },
   {
-    "word": "Al hidari Sony",
-    "shop=electronics": 1
-  },
-  {
-    "word": "Al Ikhwa Hotel",
-    "tourism=hotel": 1
-  },
-  {
-    "word": "Al Quilar Mosque",
-    "amenity=place_of_worship": 1
-  },
-  {
-    "word": "Al Shahidayn Mosque",
-    "amenity=place_of_worship": 1
-  },
-  {
-    "word": "Al-Mahdi",
-    "amenity=place_of_worship": 1
-  },
-  {
     "word": "Aldea",
     "tourism=viewpoint": 2
   },
@@ -56,8 +36,16 @@
     "shop=musical_instrument": 1
   },
   {
+    "word": "Al hidari Sony",
+    "shop=electronics": 1
+  },
+  {
     "word": "Ali",
     "shop=travel_agency": 1
+  },
+  {
+    "word": "Al Ikhwa Hotel",
+    "tourism=hotel": 1
   },
   {
     "word": "Ali Voyages",
@@ -66,6 +54,18 @@
   {
     "word": "Aljarbani",
     "tourism=attraction": 1
+  },
+  {
+    "word": "Al-Mahdi",
+    "amenity=place_of_worship": 1
+  },
+  {
+    "word": "Al Quilar Mosque",
+    "amenity=place_of_worship": 1
+  },
+  {
+    "word": "Al Shahidayn Mosque",
+    "amenity=place_of_worship": 1
   },
   {
     "word": "Alttabri",
@@ -148,7 +148,7 @@
   {
     "word": "BANKAL",
     "amenity=school": 2,
-    "tourism=guest_house": 2
+    "tourism=viewpoint": 2
   },
   {
     "word": "bankal elementary school",
@@ -224,7 +224,7 @@
   },
   {
     "word": "Cafe",
-    "amenity=cafe": 1
+    "amenity=restaurant": 1
   },
   {
     "word": "CALES",
@@ -282,12 +282,8 @@
   },
   {
     "word": "City",
-    "place=locality": 3,
+    "place=locality": 5,
     "tourism=viewpoint": 2
-  },
-  {
-    "word": "City,",
-    "place=locality": 2
   },
   {
     "word": "Civil",
@@ -340,11 +336,7 @@
   {
     "word": "DECA",
     "amenity=community_centre": 2,
-    "tourism=guest_house": 2
-  },
-  {
-    "word": "DECA HOMES  MACTAN 4,  BANKAL GATE 2",
-    "tourism=guest_house": 1
+    "tourism=viewpoint": 2
   },
   {
     "word": "Deca Homes 2",
@@ -353,6 +345,10 @@
   },
   {
     "word": "DECA HOMES MACTAN 4,  BANKAL GATE 1",
+    "tourism=guest_house": 1
+  },
+  {
+    "word": "DECA HOMES  MACTAN 4,  BANKAL GATE 2",
     "tourism=guest_house": 1
   },
   {
@@ -785,11 +781,7 @@
   {
     "word": "Office",
     "amenity=post_office": 1,
-    "place=locality": 8
-  },
-  {
-    "word": "Office,",
-    "place=locality": 1
+    "place=locality": 9
   },
   {
     "word": "Old",
@@ -882,12 +874,12 @@
     "place=locality": 4
   },
   {
-    "word": "Prime Ministers Office",
-    "place=locality": 3
-  },
-  {
     "word": "Prime Minister’s Office",
     "place=locality": 1
+  },
+  {
+    "word": "Prime Ministers Office",
+    "place=locality": 3
   },
   {
     "word": "Qada",
@@ -898,11 +890,11 @@
     "place=county": 4
   },
   {
-    "word": "Qadimah,",
+    "word": "Qadimah",
     "place=locality": 1
   },
   {
-    "word": "Qadīmah,",
+    "word": "Qadīmah",
     "place=locality": 1
   },
   {
@@ -954,16 +946,20 @@
     "place=county": 4
   },
   {
+    "word": "Şan‘ā’",
+    "place=locality": 1
+  },
+  {
+    "word": "Sanaa",
+    "tourism=hotel": 1
+  },
+  {
     "word": "Sana'a",
     "tourism=attraction": 1
   },
   {
     "word": "Sana'a Heritage House",
     "tourism=attraction": 1
-  },
-  {
-    "word": "Sanaa",
-    "tourism=hotel": 1
   },
   {
     "word": "School",
@@ -1116,7 +1112,7 @@
     "amenity=hospital": 4
   },
   {
-    "word": "Village,",
+    "word": "Village",
     "tourism=viewpoint": 2
   },
   {
@@ -1137,15 +1133,15 @@
   },
   {
     "word": "Womb",
-    "amenity=cafe": 1
+    "amenity=restaurant": 1
   },
   {
     "word": "Wombat's",
-    "amenity=cafe": 1
+    "amenity=restaurant": 1
   },
   {
     "word": "Wombat's Womb Cafe",
-    "amenity=cafe": 1
+    "amenity=restaurant": 1
   },
   {
     "word": "Yassin",
@@ -1165,38 +1161,6 @@
     "tourism=attraction": 2
   },
   {
-    "word": "Şan‘ā’",
-    "place=locality": 1
-  },
-  {
-    "word": "мотобайков",
-    "amenity=car_rental": 1
-  },
-  {
-    "word": "Прокат",
-    "amenity=car_rental": 1
-  },
-  {
-    "word": "СМРС",
-    "amenity=car_rental": 1
-  },
-  {
-    "word": "СМРС Прокат мотобайков",
-    "amenity=car_rental": 1
-  },
-  {
-    "word": "أمانة",
-    "place=region": 4
-  },
-  {
-    "word": "أمانة العاصمة",
-    "place=region": 4
-  },
-  {
-    "word": "إياد",
-    "shop=electronics": 2
-  },
-  {
     "word": "ابو",
     "historic=memorial": 2
   },
@@ -1205,32 +1169,24 @@
     "amenity=hospital": 4
   },
   {
+    "word": "الإتصالات",
+    "place=locality": 4
+  },
+  {
+    "word": "الاتصالات",
+    "office=telecommunication": 2
+  },
+  {
+    "word": "الإخوة",
+    "tourism=hotel": 3
+  },
+  {
     "word": "الأخوه",
     "tourism=hotel": 2
   },
   {
     "word": "الأرصاد",
     "place=locality": 4
-  },
-  {
-    "word": "الأمومة",
-    "amenity=hospital": 4
-  },
-  {
-    "word": "الأول",
-    "amenity=pharmacy": 2
-  },
-  {
-    "word": "الأول فارما",
-    "amenity=pharmacy": 2
-  },
-  {
-    "word": "الإتصالات",
-    "place=locality": 4
-  },
-  {
-    "word": "الإخوة",
-    "tourism=hotel": 3
   },
   {
     "word": "الإستئناف",
@@ -1245,17 +1201,25 @@
     "place=locality": 4
   },
   {
-    "word": "الاتصالات",
-    "office=telecommunication": 2
-  },
-  {
     "word": "الامارات",
     "shop=clothes": 2
+  },
+  {
+    "word": "الأمومة",
+    "amenity=hospital": 4
   },
   {
     "word": "الاوقاف",
     "historic=memorial": 2,
     "office=government": 2
+  },
+  {
+    "word": "الأول",
+    "amenity=pharmacy": 2
+  },
+  {
+    "word": "الأول فارما",
+    "amenity=pharmacy": 2
   },
   {
     "word": "البريد",
@@ -1393,6 +1357,10 @@
     "place=locality": 4
   },
   {
+    "word": "(الضالعي",
+    "historic=memorial": 2
+  },
+  {
     "word": "الطبري",
     "amenity=school": 1,
     "shop=greengrocer": 1
@@ -1455,12 +1423,8 @@
   },
   {
     "word": "القديمة",
-    "place=locality": 5,
+    "place=locality": 6,
     "tourism=hotel": 3
-  },
-  {
-    "word": "القديمة,",
-    "place=locality": 1
   },
   {
     "word": "القصر",
@@ -1579,6 +1543,18 @@
   {
     "word": "اليمني لشراب الزبيب والشعير",
     "tourism=attraction": 2
+  },
+  {
+    "word": "أمانة",
+    "place=region": 4
+  },
+  {
+    "word": "أمانة العاصمة",
+    "place=region": 4
+  },
+  {
+    "word": "إياد",
+    "shop=electronics": 2
   },
   {
     "word": "باب",
@@ -1792,7 +1768,7 @@
   {
     "word": "شركة",
     "amenity=pharmacy": 2,
-    "shop=car": 2
+    "shop=electronics": 2
   },
   {
     "word": "شركة الحيدري سوني",
@@ -1875,12 +1851,12 @@
     "tourism=hotel": 10
   },
   {
-    "word": "فندق الأخوه",
-    "tourism=hotel": 2
-  },
-  {
     "word": "فندق الإخوة",
     "tourism=hotel": 3
+  },
+  {
+    "word": "فندق الأخوه",
+    "tourism=hotel": 2
   },
   {
     "word": "فندق بالاس صنعاء القديمة",
@@ -1950,14 +1926,6 @@
   {
     "word": "للمستلزمات",
     "amenity=doctors": 2
-  },
-  {
-    "word": "مؤسسة",
-    "shop=electronics": 2
-  },
-  {
-    "word": "مؤسسة بن ياسين الكهرباء والطاقة الشمسية",
-    "shop=electronics": 2
   },
   {
     "word": "ماء",
@@ -2085,16 +2053,16 @@
     "amenity=post_office": 4
   },
   {
-    "word": "مكتب رئيس الوزراء",
-    "place=locality": 4
-  },
-  {
     "word": "مكتبة",
     "amenity=library": 2
   },
   {
     "word": "مكتبة الجيل الجديد",
     "amenity=library": 2
+  },
+  {
+    "word": "مكتب رئيس الوزراء",
+    "place=locality": 4
   },
   {
     "word": "ملعب",
@@ -2109,6 +2077,14 @@
     "tourism=attraction": 2
   },
   {
+    "word": "مؤسسة",
+    "shop=electronics": 2
+  },
+  {
+    "word": "مؤسسة بن ياسين الكهرباء والطاقة الشمسية",
+    "shop=electronics": 2
+  },
+  {
     "word": "ميدان",
     "tourism=attraction": 2
   },
@@ -2117,12 +2093,12 @@
     "tourism=attraction": 2
   },
   {
-    "word": "هائل",
-    "amenity=bus_station": 2
-  },
-  {
     "word": "هاشم)",
     "historic=memorial": 2
+  },
+  {
+    "word": "هائل",
+    "amenity=bus_station": 2
   },
   {
     "word": "والارشاد",
@@ -2213,15 +2189,27 @@
     "amenity=bank": 1
   },
   {
+    "word": "мотобайков",
+    "amenity=car_rental": 1
+  },
+  {
+    "word": "Прокат",
+    "amenity=car_rental": 1
+  },
+  {
+    "word": "СМРС",
+    "amenity=car_rental": 1
+  },
+  {
+    "word": "СМРС Прокат мотобайков",
+    "amenity=car_rental": 1
+  },
+  {
     "word": "マクタンシュライン/ラプラプ王の像",
     "historic=memorial": 2
   },
   {
     "word": "マクタン・シュライン/ラプラプ王の像",
     "historic=monument": 2
-  },
-  {
-    "word": "ラプ＝ラプ",
-    "place=city": 2
   }
 ]

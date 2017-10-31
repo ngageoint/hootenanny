@@ -1799,6 +1799,28 @@ those being compared have a populated name field.
 
 Database used to derive POI type tags implicitly based on a POI's name.
 
+=== poi.implicit.tag.rules.tag.ignore.list
+
+* Data Type: string
+* Default Value: `conf/core/poiImplicitTagRulesTagIgnoreList`
+
+Flat file containing key/value pairs, one per line, to ignore when deriving implicit tags from POI
+names.
+
+=== poi.implicit.tag.rules.word.ignore.list
+
+* Data Type: string
+* Default Value: `conf/core/poiImplicitTagRulesWordIgnoreList`
+
+Flat file containing words, one per line, to ignore when deriving implicit tags from POI names.
+
+=== poi.implicit.tag.rules.tokenize.names
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, the POI implicit tags will be derived/added using tokenized names.
+
 === poi.match.threshold
 
 * Data Type: double

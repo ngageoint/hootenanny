@@ -39,10 +39,10 @@ class PoiImplicitTagRulesDeriverTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(PoiImplicitTagRulesDeriverTest);
   CPPUNIT_TEST(runBasicTest);
-//  CPPUNIT_TEST(runTypeKeysTest);
-//  CPPUNIT_TEST(runMinOccuranceThresholdTest);
-//  CPPUNIT_TEST(runMultipleInputsTest);
-//  CPPUNIT_TEST(runNameCaseTest);
+  CPPUNIT_TEST(runTypeKeysTest);
+  CPPUNIT_TEST(runMinOccuranceThresholdTest);
+  CPPUNIT_TEST(runMultipleInputsTest);
+  CPPUNIT_TEST(runNameCaseTest);
   //TODO
   //CPPUNIT_TEST(runInputTranslationScriptSizeMismatchTest);
   //CPPUNIT_TEST(runEqualsInNameTest);
@@ -77,7 +77,7 @@ public:
 
     ImplicitTagRulesSqliteReader dbReader;
     dbReader.open(dbOutputFile);
-    CPPUNIT_ASSERT_EQUAL(441L, dbReader.getRuleCount());
+    CPPUNIT_ASSERT_EQUAL(438L, dbReader.getRuleWordPartCount());
     dbReader.close();
   }
 
@@ -111,7 +111,7 @@ public:
 
     ImplicitTagRulesSqliteReader dbReader;
     dbReader.open(dbOutputFile);
-    CPPUNIT_ASSERT_EQUAL(247L, dbReader.getRuleCount());
+    CPPUNIT_ASSERT_EQUAL(247L, dbReader.getRuleWordPartCount());
     dbReader.close();
   }
 
@@ -140,7 +140,7 @@ public:
 
     ImplicitTagRulesSqliteReader dbReader;
     dbReader.open(dbOutputFile);
-    CPPUNIT_ASSERT_EQUAL(108L, dbReader.getRuleCount());
+    CPPUNIT_ASSERT_EQUAL(109L, dbReader.getRuleWordPartCount());
     dbReader.close();
   }
 
@@ -171,7 +171,7 @@ public:
 
     ImplicitTagRulesSqliteReader dbReader;
     dbReader.open(dbOutputFile);
-    CPPUNIT_ASSERT_EQUAL(602L, dbReader.getRuleCount());
+    CPPUNIT_ASSERT_EQUAL(599L, dbReader.getRuleWordPartCount());
     dbReader.close();
   }
 
@@ -203,7 +203,7 @@ public:
 
     ImplicitTagRulesSqliteReader dbReader;
     dbReader.open(dbOutputFile);
-    CPPUNIT_ASSERT_EQUAL(9L, dbReader.getRuleCount());
+    CPPUNIT_ASSERT_EQUAL(9L, dbReader.getRuleWordPartCount());
     dbReader.close();
   }
 };

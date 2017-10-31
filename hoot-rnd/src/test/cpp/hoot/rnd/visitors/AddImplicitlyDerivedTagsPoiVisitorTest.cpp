@@ -56,13 +56,15 @@ public:
   void runBasicTest()
   {
     QDir().mkpath(outDir());
-    const QString databaseFile =
-      outDir() + "/AddImplicitlyDerivedTagsPoiVisitorTest-runBasicTest-rules.sqlite";
+
+    //TODO: don't regen the database every time
     //use this to regenerate the db file
-//    ImplicitTagRulesSqliteRecordWriter writer;
-//    writer.open(databaseFile);
-//    writer.write("test-files/io/AddImplicitlyDerivedTagsPoiVisitorTest/ruleWordParts");
-//    writer.close();
+    const QString databaseOutFile =
+      outDir() + "/AddImplicitlyDerivedTagsPoiVisitorTest-runBasicTest-rules.sqlite";
+    ImplicitTagRulesSqliteRecordWriter writer;
+    writer.open(databaseOutFile);
+    writer.write("test-files/io/AddImplicitlyDerivedTagsPoiVisitorTest/ruleWordParts");
+    writer.close();
 //    return;
 
     QString testJsonStr = QString::fromUtf8(
@@ -93,7 +95,9 @@ public:
     // the JSON parser doesn't handle exotic characters.
     map->getNode(-5)->getTags()["alt_name"] = QString::fromUtf8("Şiḩḩī");
 
-    AddImplicitlyDerivedTagsPoiVisitor uut(databaseFile);
+    //const QString databaseInFile =
+      //"test-files/io/AddImplicitlyDerivedTagsPoiVisitorTest-runBasicTest-rules.sqlite";
+    AddImplicitlyDerivedTagsPoiVisitor uut(/*databaseInFile*/databaseOutFile);
 
     map->visitRw(uut);
 

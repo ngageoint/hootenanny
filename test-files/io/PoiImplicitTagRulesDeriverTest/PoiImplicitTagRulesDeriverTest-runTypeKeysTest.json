@@ -8,20 +8,20 @@
     "tourism=hotel": 1
   },
   {
-    "word": "Al Quilar Mosque",
-    "amenity=place_of_worship": 1
-  },
-  {
-    "word": "Al Shahidayn Mosque",
-    "amenity=place_of_worship": 1
+    "word": "Aljarbani",
+    "tourism=attraction": 1
   },
   {
     "word": "Al-Mahdi",
     "amenity=place_of_worship": 1
   },
   {
-    "word": "Aljarbani",
-    "tourism=attraction": 1
+    "word": "Al Quilar Mosque",
+    "amenity=place_of_worship": 1
+  },
+  {
+    "word": "Al Shahidayn Mosque",
+    "amenity=place_of_worship": 1
   },
   {
     "word": "Alyamani",
@@ -277,16 +277,16 @@
     "tourism=hotel": 1
   },
   {
+    "word": "Sanaa",
+    "tourism=hotel": 1
+  },
+  {
     "word": "Sana'a",
     "tourism=attraction": 1
   },
   {
     "word": "Sana'a Heritage House",
     "tourism=attraction": 1
-  },
-  {
-    "word": "Sanaa",
-    "tourism=hotel": 1
   },
   {
     "word": "Shahidayn",
@@ -338,8 +338,16 @@
     "amenity=hospital": 4
   },
   {
+    "word": "الإخوة",
+    "tourism=hotel": 3
+  },
+  {
     "word": "الأخوه",
     "tourism=hotel": 2
+  },
+  {
+    "word": "الإستئناف",
+    "amenity=courthouse": 1
   },
   {
     "word": "الأمومة",
@@ -352,14 +360,6 @@
   {
     "word": "الأول فارما",
     "amenity=pharmacy": 2
-  },
-  {
-    "word": "الإخوة",
-    "tourism=hotel": 3
-  },
-  {
-    "word": "الإستئناف",
-    "amenity=courthouse": 1
   },
   {
     "word": "البريد",
@@ -709,12 +709,12 @@
     "tourism=hotel": 10
   },
   {
-    "word": "فندق الأخوه",
-    "tourism=hotel": 2
-  },
-  {
     "word": "فندق الإخوة",
     "tourism=hotel": 3
+  },
+  {
+    "word": "فندق الأخوه",
+    "tourism=hotel": 2
   },
   {
     "word": "فندق بالاس صنعاء القديمة",

@@ -28,6 +28,10 @@
     "place=locality": 4
   },
   {
+    "word": "City",
+    "place=locality": 5
+  },
+  {
     "word": "Civil",
     "place=locality": 5
   },
@@ -129,7 +133,7 @@
   },
   {
     "word": "Office",
-    "place=locality": 8
+    "place=locality": 9
   },
   {
     "word": "Old",
@@ -172,27 +176,15 @@
     "amenity=hospital": 4
   },
   {
-    "word": "أمانة",
-    "place=region": 4
-  },
-  {
-    "word": "أمانة العاصمة",
-    "place=region": 4
-  },
-  {
     "word": "الأبهر",
     "amenity=hospital": 4
   },
   {
-    "word": "الأرصاد",
+    "word": "الإتصالات",
     "place=locality": 4
   },
   {
-    "word": "الأمومة",
-    "amenity=hospital": 4
-  },
-  {
-    "word": "الإتصالات",
+    "word": "الأرصاد",
     "place=locality": 4
   },
   {
@@ -202,6 +194,10 @@
   {
     "word": "الإقتصاد",
     "place=locality": 4
+  },
+  {
+    "word": "الأمومة",
+    "amenity=hospital": 4
   },
   {
     "word": "التحرير",
@@ -254,7 +250,7 @@
   },
   {
     "word": "القديمة",
-    "place=locality": 5
+    "place=locality": 6
   },
   {
     "word": "المتحف",
@@ -267,6 +263,14 @@
   {
     "word": "الوزراء",
     "place=locality": 4
+  },
+  {
+    "word": "أمانة",
+    "place=region": 4
+  },
+  {
+    "word": "أمانة العاصمة",
+    "place=region": 4
   },
   {
     "word": "باب",

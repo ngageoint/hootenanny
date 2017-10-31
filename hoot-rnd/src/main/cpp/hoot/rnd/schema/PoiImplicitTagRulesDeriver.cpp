@@ -50,6 +50,36 @@ _statusUpdateInterval(ConfigOptions().getApidbBulkInserterFileOutputStatusUpdate
 _highestRuleWordCount(0),
 _highestRuleTagCount(0)
 {
+  _readIgnoreLists();
+}
+
+void PoiImplicitTagRulesDeriver::_readIgnoreLists()
+{
+  QFile tagIgnoreFile(ConfigOptions().getPoiImplicitTagRulesTagIgnoreList());
+  if (!tagIgnoreFile.open(QIODevice::ReadOnly))
+  {
+    throw HootException(
+      QObject::tr("Error opening %1 for writing.").arg(tagIgnoreFile.fileName()));
+  }
+  _tagIgnoreList.clear();
+  while (!tagIgnoreFile.atEnd())
+  {
+    _tagIgnoreList.append(QString::fromUtf8(tagIgnoreFile.readLine().constData()));
+  }
+  tagIgnoreFile.close();
+
+  QFile wordIgnoreFile(ConfigOptions().getPoiImplicitTagRulesWordIgnoreList());
+  if (!wordIgnoreFile.open(QIODevice::ReadOnly))
+  {
+    throw HootException(
+      QObject::tr("Error opening %1 for writing.").arg(wordIgnoreFile.fileName()));
+  }
+  _wordIgnoreList.clear();
+  while (!wordIgnoreFile.atEnd())
+  {
+    _wordIgnoreList.append(QString::fromUtf8(wordIgnoreFile.readLine().constData()));
+  }
+  wordIgnoreFile.close();
 }
 
 QStringList PoiImplicitTagRulesDeriver::_getPoiKvps(const Tags& tags) const
@@ -63,7 +93,8 @@ QStringList PoiImplicitTagRulesDeriver::_getPoiKvps(const Tags& tags) const
     LOG_VART(kvp);
     LOG_VART(OsmSchema::getInstance().getCategories(kvp).intersects(OsmSchemaCategory::poi()));
     if (kvp != QLatin1String("poi=yes") &&
-        OsmSchema::getInstance().getCategories(kvp).intersects(OsmSchemaCategory::poi()))
+        OsmSchema::getInstance().getCategories(kvp).intersects(OsmSchemaCategory::poi()) &&
+        !_tagIgnoreList.contains(kvp))
     {
       poiKvps.append(kvp);
     }
@@ -93,19 +124,6 @@ void PoiImplicitTagRulesDeriver::_updateForNewWord(QString word, const QString k
 
   const QString line = word % QString("\t") % kvp % QString("\n");
   _countFile->write(line.toUtf8());
-}
-
-bool PoiImplicitTagRulesDeriver::_outputsContainsSqlite(const QStringList outputs)
-{
-  bool containsSqlite = false;
-  for (int i = 0; i < outputs.size(); i++)
-  {
-    if (outputs.at(i).endsWith(".sqlite"))
-    {
-      containsSqlite = true;
-    }
-  }
-  return containsSqlite;
 }
 
 QString PoiImplicitTagRulesDeriver::_getSqliteOutput(const QStringList outputs)
@@ -153,6 +171,10 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs,
     "Deriving POI implicit tag rules for inputs: " << inputs << ", translation scripts: " <<
     translationScripts << ", type keys: " << typeKeys << ", and minimum occurance threshold: " <<
     minOccurancesThreshold << ".  Writing to outputs: " << outputs << "...");
+
+  _wordCaseMappings.clear();
+  _wordKeysToCounts.clear();
+  const bool tokenize = ConfigOptions().getPoiImplicitTagRulesTokenizeNames();
 
   _countFile.reset(
     new QTemporaryFile(
@@ -224,23 +246,35 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs,
             for (int i = 0; i < names.size(); i++)
             {
               QString name = names.at(i);
-              //'=' is used in the map key for kvps, so it needs to be escaped in the word
-              if (name.contains("="))
+              if (!_wordIgnoreList.contains(name))
               {
-                name = name.replace("=", "%3D");
-              }
-              for (int j = 0; j < kvps.size(); j++)
-              {
-                _updateForNewWord(name, kvps.at(j));
-              }
-
-              const QStringList nameTokens = tokenizer.tokenize(name);
-              LOG_VART(nameTokens.size());
-              for (int j = 0; j < nameTokens.size(); j++)
-              {
-                for (int k = 0; k < kvps.size(); k++)
+                //'=' is used in the map key for kvps, so it needs to be escaped in the word
+                if (name.contains("="))
                 {
-                  _updateForNewWord(nameTokens.at(j), kvps.at(k));
+                  name = name.replace("=", "%3D");
+                }
+                for (int j = 0; j < kvps.size(); j++)
+                {
+                  _updateForNewWord(name, kvps.at(j));
+                }
+
+                if (tokenize)
+                {
+                  const QStringList nameTokens = tokenizer.tokenize(name);
+                  LOG_VART(nameTokens.size());
+                   for (int j = 0; j < nameTokens.size(); j++)
+                  {
+                    QString nameToken = nameTokens.at(j);
+                    //may need to replace more puncutation chars here
+                    nameToken = nameToken.replace(",", "");
+                    if (!_wordIgnoreList.contains(name))
+                    {
+                      for (int k = 0; k < kvps.size(); k++)
+                      {
+                        _updateForNewWord(nameToken, kvps.at(k));
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -267,12 +301,15 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs,
     }
     inputReader->finalizePartial();
   }
+  _countFile->close();
   LOG_VARD(_wordCaseMappings.size());
   _wordCaseMappings.clear();
 
-  _removeKvpsBelowOccuranceThresholdAndSortByWord(minOccurancesThreshold);
+  _removeKvpsBelowOccuranceThresholdAndSortByOccurrance(minOccurancesThreshold);
   _removeDuplicatedKeyTypes();
+  _sortByWord();
 
+  //TODO: see how much of this can be salvaged
 //  LOG_INFO(
 //    "Generated " << StringUtils::formatLargeNumber(_tagRules.size()) <<
 //    " implicit tag rules for " << StringUtils::formatLargeNumber(_tagRulesByWord.size()) <<
@@ -283,39 +320,12 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs,
 //  LOG_INFO("Highest rule word count: " << _highestRuleWordCount);
 //  LOG_INFO("Highest rule tag count: " << _highestRuleTagCount);
 
-  _writeRules(outputs, _sortedDedupedCountFile->fileName());
+  _writeRules(outputs, _sortedByWordDedupedCountFile->fileName());
 }
-
-//QList<boost::shared_ptr<ImplicitTagRuleWordPartWriter> > PoiImplicitTagRulesDeriver::_getOutputWriters(
-//  const QStringList outputs)
-//{
-//  QList<boost::shared_ptr<ImplicitTagRuleWordPartWriter> > ruleWordPartWriters;
-//  for (int i = 0; i < outputs.size(); i++)
-//  {
-//    const QString output = outputs.at(i);
-//    LOG_VART(output);
-//    boost::shared_ptr<ImplicitTagRuleWordPartWriter> ruleWordPartWriter =
-//      ImplicitTagRuleWordPartWriterFactory::getInstance().createWriter(output);
-//    ruleWordPartWriter->open(output);
-//    ruleWordPartWriters.append(ruleWordPartWriter);
-//  }
-//  return ruleWordPartWriters;
-//}
 
 void PoiImplicitTagRulesDeriver::_writeRules(const QStringList outputs,
                                              const QString inputFile)
 {
-//  QList<boost::shared_ptr<ImplicitTagRuleWordPartWriter> > ruleWordPartWriters =
-//    _getOutputWriters(outputs);
-//  LOG_VART(ruleWordPartWriters.size());
-//  for (QList<boost::shared_ptr<ImplicitTagRuleWordPartWriter> >::iterator writersItr = ruleWordPartWriters.begin();
-//       writersItr != ruleWordPartWriters.end(); ++writersItr)
-//  {
-//    boost::shared_ptr<ImplicitTagRuleWordPartWriter> rulesWriter = *writersItr;
-//    rulesWriter->write(inputFile);
-//    rulesWriter->close();
-//  }
-
   for (int i = 0; i < outputs.size(); i++)
   {
     const QString output = outputs.at(i);
@@ -328,7 +338,7 @@ void PoiImplicitTagRulesDeriver::_writeRules(const QStringList outputs,
   }
 }
 
-void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccuranceThresholdAndSortByWord(
+void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccuranceThresholdAndSortByOccurrance(
   const int minOccurancesThreshold)
 {
   _sortedCountFile.reset(
@@ -343,13 +353,13 @@ void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccuranceThresholdAndSortByWord
   }
   LOG_DEBUG("Opened sorted temp file: " << _sortedCountFile->fileName());
 
-  //This counts each unique line occurrance, sorts alphabetically on the second column (word),
-  //removes lines with occurrance counts below the specified threshold, and replaces the space
-  //between the prepended count and the word with a tab. - not sure why 1 needs to be subtracted
-  //from minOccurancesThreshold here, though...
-
+  //This counts each unique line occurrance, sorts by decreasing occurrence count (necessary for
+  //next step which removes duplicate tag keys associated with the same word), removes lines with
+  //occurrance counts below the specified threshold, and replaces the space between the prepended
+  //count and the word with a tab. - not sure why 1 needs to be subtracted from
+  //minOccurancesThreshold here, though...
   const QString cmd =
-    "sort " + _countFile->fileName() + " | uniq -c | sort -k2,2 | awk -v limit=" +
+    "sort " + _countFile->fileName() + " | uniq -c | sort -n -r | awk -v limit=" +
     QString::number(minOccurancesThreshold - 1) +
     " '$1 > limit{print}' | sed -e 's/^ *//;s/ /\t/' > " + _sortedCountFile->fileName();
   if (std::system(cmd.toStdString().c_str()) != 0)
@@ -361,7 +371,8 @@ void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccuranceThresholdAndSortByWord
 
 void PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
 {
-  //i.e. don't allow amenity=school AND amenity=building in the same rule
+  //i.e. don't allow amenity=school AND amenity=shop to be associated with the same word...pick one
+  //of them
 
   _sortedDedupedCountFile.reset(
     new QTemporaryFile(
@@ -398,8 +409,6 @@ void PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
     const QString wordKey = word % ";" % key;
     LOG_VART(wordKey);
 
-    //TODO: in case of ties, pick the more specific tag (?)
-
     //The lines are sorted by occurrence count.  So the first time we see one word-key combo, we
     //know it had the highest occurrence count, and we can ignore all subsequent instances since
     //any one feature can't have more than one tag applied to it with the same key.
@@ -419,9 +428,44 @@ void PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
       LOG_VART(updatedLine);
       _sortedDedupedCountFile->write(updatedLine.toUtf8());
     }
+    //TODO: if this becomes a common occurrance, should probably pick the best of the tags that
+    //have occurrance count ties
+    else if (_wordKeysToCounts[wordKey] == count)
+    {
+      LOG_DEBUG(
+        "Found word with multiple tag occurrance counts of the same size.  Arbitrarily " <<
+        "chose first tag.  Not creating implicit tag entry for word: " << word << ", tag: " <<
+        kvp << ", count: " << count);
+    }
   }
   _sortedCountFile->close();
   _sortedDedupedCountFile->close();
+}
+
+void PoiImplicitTagRulesDeriver::_sortByWord()
+{
+  _sortedByWordDedupedCountFile.reset(
+    new QTemporaryFile(
+      ConfigOptions().getApidbBulkInserterTempFileDir() +
+      "/poi-implicit-tag-rules-deriver-temp-XXXXXX"));
+  _sortedByWordDedupedCountFile->setAutoRemove(false); //for debugging only
+  if (!_sortedByWordDedupedCountFile->open())
+  {
+    throw HootException(
+      QObject::tr("Error opening %1 for writing.").arg(_sortedByWordDedupedCountFile->fileName()));
+  }
+  LOG_DEBUG("Opened sorted by word temp file: " << _sortedByWordDedupedCountFile->fileName());
+
+  //sort by word, then by tag
+  //-d -k2,3 -t$'\t'
+  const QString cmd =
+    "sort -t'\t' -k2,2 -k3,3 " + _sortedDedupedCountFile->fileName() + " -o " +
+    _sortedByWordDedupedCountFile->fileName();
+  if (std::system(cmd.toStdString().c_str()) != 0)
+  {
+    throw HootException("Unable to sort input file.");
+  }
+  _sortedByWordDedupedCountFile->close();
 }
 
 }

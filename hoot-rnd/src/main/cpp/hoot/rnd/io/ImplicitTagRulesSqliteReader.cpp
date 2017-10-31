@@ -87,11 +87,12 @@ void ImplicitTagRulesSqliteReader::close()
 
 void ImplicitTagRulesSqliteReader::_prepareQueries()
 {
-  _ruleCountQuery = QSqlQuery(_db);
-  if (!_ruleCountQuery.prepare("SELECT COUNT(*) FROM rules"))
+  _ruleWordPartCountQuery = QSqlQuery(_db);
+  if (!_ruleWordPartCountQuery.prepare("SELECT COUNT(*) FROM rules"))
   {
     throw HootException(
-      QString("Error preparing _ruleCountQuery: %1").arg(_ruleCountQuery.lastError().text()));
+      QString("Error preparing _ruleWordPartCountQuery: %1")
+        .arg(_ruleWordPartCountQuery.lastError().text()));
   }
 }
 
@@ -184,204 +185,18 @@ Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,
   return tags;
 }
 
-//bool ImplicitTagRulesSqliteReader::wordsInvolveMultipleRules(const QSet<QString>& words,
-//                                                             QSet<QString>& matchingRuleWords)
-//{
-//  LOG_TRACE("Determining if words: " << words << " involve multiple implicit tag rules...");
-
-//  if (words.size() == 0)
-//  {
-//    LOG_TRACE("No words specified.");
-//    return false;
-//  }
-
-//  //can't prepare this one due to variable inputs
-//  QSqlQuery selectWordIdsForWords(_db);
-//  //the WHERE IN clause is case sensitive, so OR'ing them together instead
-//  QString queryStr = "SELECT id, word FROM words WHERE ";
-//  for (QSet<QString>::const_iterator wordItr = words.begin(); wordItr != words.end(); ++wordItr)
-//  {
-//    //queryStr += "UPPER(word)='" + (*wordItr).toUpper() + "' OR ";
-//    //LIKE is case insensitive by default, so using that instead of '='; using toUpper() with '='
-//    //for comparisons won't work for unicode chars in SQLite w/o quite a bit of additional setup
-//    //to link in special unicode libs (I think)
-//    queryStr += "word LIKE '" + *wordItr + "' OR ";
-//  }
-//  queryStr.chop(4);
-//  LOG_VART(queryStr);
-//  if (!selectWordIdsForWords.exec(queryStr))
-//  {
-//    throw HootException(
-//      QString("Error executing query: %1").arg(selectWordIdsForWords.lastError().text()));
-//  }
-
-//  //can't prepare this one due to variable inputs
-//  QSqlQuery uniqueRuleCountForWords(_db);
-//  queryStr = "SELECT DISTINCT rule_id, word_id FROM rules WHERE word_id IN (";
-//  int wordIdCount = 0;
-//  while (selectWordIdsForWords.next())
-//  {
-//    const QString word = selectWordIdsForWords.value(1).toString();
-//    LOG_VART(word);
-//    queryStr += QString::number(selectWordIdsForWords.value(0).toInt()) + ",";
-//    wordIdCount++;
-//  }
-//  queryStr.chop(1);
-//  queryStr += ")";
-//  LOG_VART(queryStr);
-//  if (wordIdCount == 0)
-//  {
-//    LOG_TRACE("Found no word IDs for words: " << words);
-//    return false;
-//  }
-//  if (!uniqueRuleCountForWords.exec(queryStr))
-//  {
-//    throw HootException(
-//      QString("Error executing query: %1").arg(uniqueRuleCountForWords.lastError().text()));
-//  }
-//  //TODO: make better
-//  int ruleIdCount = 0;
-//  QSet<int> matchingRuleWordIds;
-//  QSet<int> ruleIds;
-//  while (uniqueRuleCountForWords.next())
-//  {
-//    const int ruleId = uniqueRuleCountForWords.value(0).toInt();
-//    LOG_VART(ruleId);
-//    matchingRuleWordIds.insert(uniqueRuleCountForWords.value(1).toInt());
-//    if (!ruleIds.contains(ruleId))
-//    {
-//      ruleIds.insert(ruleId);
-//      ruleIdCount++;
-//    }
-//  }
-//  LOG_VART(ruleIdCount);
-//  const bool wordsInvolveMultipleRules = ruleIdCount > 1;
-//  LOG_VART(wordsInvolveMultipleRules);
-
-//  if (wordsInvolveMultipleRules)
-//  {
-//    //can't prepare this one due to variable inputs
-//    QSqlQuery selectWordForWordIds(_db);
-//    queryStr = "SELECT word FROM words WHERE id IN (";
-//    for (QSet<int>::const_iterator wordIdItr = matchingRuleWordIds.begin();
-//         wordIdItr != matchingRuleWordIds.end(); ++wordIdItr)
-//    {
-//      queryStr += QString::number(*wordIdItr) + ",";
-//    }
-//    queryStr.chop(1);
-//    queryStr += ")";
-//    LOG_VART(queryStr);
-//    if (!selectWordForWordIds.exec(queryStr))
-//    {
-//      throw HootException(
-//        QString("Error executing query: %1").arg(selectWordForWordIds.lastError().text()));
-//    }
-//    while (selectWordForWordIds.next())
-//    {
-//      matchingRuleWords.insert(selectWordForWordIds.value(0).toString());
-//    }
-//    LOG_VART(matchingRuleWords);
-//  }
-
-//  return wordsInvolveMultipleRules;
-//}
-
-long ImplicitTagRulesSqliteReader::getRuleCount()
+long ImplicitTagRulesSqliteReader::getRuleWordPartCount()
 {
   LOG_TRACE("Retrieving rule count...");
 
-  if (!_ruleCountQuery.exec())
+  if (!_ruleWordPartCountQuery.exec())
   {
     throw HootException(
-      QString("Error executing query: %1").arg(_ruleCountQuery.lastError().text()));
+      QString("Error executing query: %1").arg(_ruleWordPartCountQuery.lastError().text()));
   }
 
-  _ruleCountQuery.next();
-  return _ruleCountQuery.value(0).toLongLong();
+  _ruleWordPartCountQuery.next();
+  return _ruleWordPartCountQuery.value(0).toLongLong();
 }
-
-//Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,
-//                                                   QSet<QString>& matchingWords)
-//{
-//  LOG_TRACE("Retrieving implicit tags for words: " << words << "...");
-
-//  //can't prepare this one due to variable inputs
-//  QSqlQuery selectWordIdsForWords = QSqlQuery(_db);
-//  //the WHERE IN clause is case sensitive, so or'ing them together instead
-//  QString queryStr = "SELECT id, word FROM words WHERE ";
-//  for (QSet<QString>::const_iterator wordItr = words.begin(); wordItr != words.end(); ++wordItr)
-//  {
-//    //queryStr += "UPPER(word)='" + (*wordItr).toUpper() + "' OR ";
-//    //see comment about use of LIKE in wordsInvolveMultipleRules
-//    queryStr += "word LIKE '" + *wordItr + "' OR ";
-//  }
-//  queryStr.chop(4);
-//  LOG_VART(queryStr);
-//  if (!selectWordIdsForWords.exec(queryStr))
-//  {
-//    throw HootException(
-//      QString("Error executing query: %1").arg(selectWordIdsForWords.lastError().text()));
-//  }
-
-//  //can't prepare this one due to variable inputs
-//  QSqlQuery selectTagIdsForWordIds(_db);
-//  QString query = "SELECT DISTINCT tag_id FROM rules WHERE word_id IN (";
-//  int numWordIds = 0;
-//  while (selectWordIdsForWords.next())
-//  {
-//    const QString word = selectWordIdsForWords.value(1).toString();
-//    LOG_VART(word);
-//    query += QString::number(selectWordIdsForWords.value(0).toInt()) + ",";
-//    matchingWords.insert(word);
-//    numWordIds++;
-//  }
-//  query.chop(1);
-//  query += ")";
-//  LOG_VART(numWordIds);
-//  if (numWordIds == 0)
-//  {
-//    LOG_TRACE("No associated tag IDs found for words: " << words);
-//    matchingWords.clear();
-//    return Tags();
-//  }
-//  LOG_VART(query);
-//  if (!selectTagIdsForWordIds.exec(query))
-//  {
-//    throw HootException(
-//      QString("Error executing query: %1").arg(selectTagIdsForWordIds.lastError().text()));
-//  }
-
-//  //can't prepare this one due to variable inputs
-//  QSqlQuery selectTagsForTagIds(_db);
-//  query = "SELECT kvp FROM tags where id IN (";
-//  int numTagIds = 0;
-//  while (selectTagIdsForWordIds.next())
-//  {
-//    query += selectTagIdsForWordIds.value(0).toString() + ",";
-//    numTagIds++;
-//  }
-//  query.chop(1);
-//  query += ")";
-//  if (numTagIds == 0)
-//  {
-//    LOG_TRACE("No associated tags found for words: " << words);
-//    matchingWords.clear();
-//    return Tags();
-//  }
-//  LOG_VART(query);
-//  if (!selectTagsForTagIds.exec(query))
-//  {
-//    throw HootException(
-//      QString("Error executing query: %1").arg(selectTagsForTagIds.lastError().text()));
-//  }
-
-//  Tags tags;
-//  while (selectTagsForTagIds.next())
-//  {
-//    tags.appendValue(selectTagsForTagIds.value(0).toString());
-//  }
-//  LOG_VART(tags);
-//  return tags;
-//}
 
 }

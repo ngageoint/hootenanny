@@ -41,13 +41,15 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, AddImplicitlyDerivedTagsPoiVisitor)
 
-AddImplicitlyDerivedTagsPoiVisitor::AddImplicitlyDerivedTagsPoiVisitor()
+AddImplicitlyDerivedTagsPoiVisitor::AddImplicitlyDerivedTagsPoiVisitor() :
+_tokenizeNames(ConfigOptions().getPoiImplicitTagRulesTokenizeNames())
 {
   _ruleReader.reset(new ImplicitTagRulesSqliteReader());
   _ruleReader->open(ConfigOptions().getPoiImplicitTagRulesDatabase());
 }
 
-AddImplicitlyDerivedTagsPoiVisitor::AddImplicitlyDerivedTagsPoiVisitor(const QString databasePath)
+AddImplicitlyDerivedTagsPoiVisitor::AddImplicitlyDerivedTagsPoiVisitor(const QString databasePath) :
+_tokenizeNames(ConfigOptions().getPoiImplicitTagRulesTokenizeNames())
 {
   _ruleReader.reset(new ImplicitTagRulesSqliteReader());
   _ruleReader->open(databasePath);
@@ -106,7 +108,7 @@ void AddImplicitlyDerivedTagsPoiVisitor::visit(const ElementPtr& e)
         "Derived implicit tags for names: " << names << " with matching words: " << matchingWords);
       tagsToAdd = implicitlyDerivedTags;
     }
-    else
+    else if (_tokenizeNames)
     {
       //we didn't find any tags for the whole names, so let's look for them with the tokenized name
       //parts
@@ -129,22 +131,9 @@ void AddImplicitlyDerivedTagsPoiVisitor::visit(const ElementPtr& e)
       }
     }
 
-//    const QSet<QString> namesAndNameWords = _extractNamesAndNameWords(e->getTags());
-
-//    QSet<QString> matchingRuleWords;
-//    if (_ruleReader->wordsInvolveMultipleRules(namesAndNameWords, matchingRuleWords))
-//    {
-//      foundDuplicateMatch = true;
-//      assert(matchingRuleWords.size() != 0);
-//    }
-
-//    QSet<QString> matchingWords;
-//    tagsToAdd = _ruleReader->getImplicitTags(namesAndNameWords, matchingWords);
-
     if (foundDuplicateMatch)
     {
       QStringList matchingWordsList = matchingWords.toList();
-      //matchingWordsList.sort();
       qSort(matchingWordsList.begin(), matchingWordsList.end(), caseInsensitiveLessThan);
       e->getTags().appendValue(
         "note",
@@ -156,7 +145,6 @@ void AddImplicitlyDerivedTagsPoiVisitor::visit(const ElementPtr& e)
       assert(matchingWords.size() != 0);
       QStringList matchingWordsList = matchingWords.toList();
       qSort(matchingWordsList.begin(), matchingWordsList.end(), caseInsensitiveLessThan);
-      //matchingWordsList.sort();
       e->getTags().appendValue(
         "note", "Implicitly derived tags based on: " + matchingWordsList.join(", "));
     }
@@ -181,25 +169,5 @@ QSet<QString> AddImplicitlyDerivedTagsPoiVisitor::_getNameTokens(const Tags& t)
 
   return result;
 }
-
-//QSet<QString> AddImplicitlyDerivedTagsPoiVisitor::_extractNamesAndNameWords(const Tags& t)
-//{
-//  QSet<QString> result;
-
-//  QStringList names = t.getNames();
-//  StringTokenizer tokenizer;
-
-//  foreach (const QString& n, names)
-//  {
-//    result.insert(n.toLower());
-//    QStringList words = tokenizer.tokenize(n);
-//    foreach (const QString& w, words)
-//    {
-//      result.insert(w.toLower());
-//    }
-//  }
-
-//  return result;
-//}
 
 }

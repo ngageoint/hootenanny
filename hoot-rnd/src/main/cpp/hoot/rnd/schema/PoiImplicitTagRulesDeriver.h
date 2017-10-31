@@ -81,6 +81,7 @@ private:
   boost::shared_ptr<QTemporaryFile> _countFile;
   boost::shared_ptr<QTemporaryFile> _sortedCountFile;
   boost::shared_ptr<QTemporaryFile> _sortedDedupedCountFile;
+  boost::shared_ptr<QTemporaryFile> _sortedByWordDedupedCountFile;
 
   //TODO
   //QStringList _wordsToIgnore;
@@ -90,21 +91,27 @@ private:
   long _highestRuleWordCount;
   long _highestRuleTagCount;
 
+  //not expecting these to be too large, so keeping in memory
+  QStringList _tagIgnoreList;
+  QStringList _wordIgnoreList;
+
   void _updateForNewWord(QString word, const QString kvp);
   QStringList _getPoiKvps(const Tags& tags) const;
 
   //temp
   QMap<QString, long> _stxxlMapToQtMap(const FixedLengthStringToLongMap& stxxlMap);
+
   FixedLengthString _qStrToFixedLengthStr(const QString wordKvp);
   QString _fixedLengthStrToQStr(const FixedLengthString& fixedLengthStr);
-  bool _outputsContainsSqlite(const QStringList outputs);
-  void _removeKvpsBelowOccuranceThresholdAndSortByWord(const int minOccurancesThreshold);
+
+  void _removeKvpsBelowOccuranceThresholdAndSortByOccurrance(const int minOccurancesThreshold);
   void _removeDuplicatedKeyTypes();
+  void _sortByWord();
 
   QString _getSqliteOutput(const QStringList outputs);
-//  QList<boost::shared_ptr<ImplicitTagRuleWordPartWriter> > _getOutputWriters(
-//    const QStringList outputs);
   void _writeRules(const QStringList outputs, const QString sqliteOutputFile);
+
+  void _readIgnoreLists();
 };
 
 }
