@@ -68,41 +68,40 @@ public:
                    const QStringList outputs, const QStringList typeKeys = QStringList(),
                    const int minOccurancesThreshold = 1);
 
+  static FixedLengthString qStrToFixedLengthStr(const QString wordKvp);
+  static QString fixedLengthStrToQStr(const FixedLengthString& fixedLengthStr);
+
 private:
 
   //for testing
   friend class PoiImplicitTagRulesDeriverTest;
 
   //TODO: replace with BigMap
-  QMap<QString, QString>/*FixedLengthStringToFixedLengthStringMap*//*Tgs::BigMap<FixedLengthString, FixedLengthString>*/ _wordCaseMappings;
+  /*FixedLengthStringToFixedLengthStringMap*//*Tgs::BigMap<FixedLengthString, FixedLengthString>*/
+  QMap<QString, QString> _wordCaseMappings;
+  //TODO: replace with BigMap
   //Technically, this could be done with a vector, but I want to piggy back off BigMap.
-  /*FixedLengthStringToLongMap*/QMap<QString, long> _wordKeysToCounts;   //TODO: replace with BigMap
+  /*FixedLengthStringToLongMap*/QMap<QString, long> _wordKeysToCounts;
 
   boost::shared_ptr<QTemporaryFile> _countFile;
   boost::shared_ptr<QTemporaryFile> _sortedCountFile;
   boost::shared_ptr<QTemporaryFile> _sortedDedupedCountFile;
   boost::shared_ptr<QTemporaryFile> _sortedByWordDedupedCountFile;
+  boost::shared_ptr<QTemporaryFile> _tempDbFile;
 
-  //TODO
-  //QStringList _wordsToIgnore;
-  double _avgTagsPerRule;
-  double _avgWordsPerRule;
   long _statusUpdateInterval;
-  long _highestRuleWordCount;
-  long _highestRuleTagCount;
 
   //not expecting these to be too large, so keeping in memory
   QStringList _tagIgnoreList;
   QStringList _wordIgnoreList;
 
+  QSqlDatabase _db;
+
   void _updateForNewWord(QString word, const QString kvp);
   QStringList _getPoiKvps(const Tags& tags) const;
 
   //temp
-  QMap<QString, long> _stxxlMapToQtMap(const FixedLengthStringToLongMap& stxxlMap);
-
-  FixedLengthString _qStrToFixedLengthStr(const QString wordKvp);
-  QString _fixedLengthStrToQStr(const FixedLengthString& fixedLengthStr);
+  static QMap<QString, long> _stxxlMapToQtMap(const FixedLengthStringToLongMap& stxxlMap);
 
   void _removeKvpsBelowOccuranceThresholdAndSortByOccurrance(const int minOccurancesThreshold);
   void _removeDuplicatedKeyTypes();
@@ -110,6 +109,8 @@ private:
 
   QString _getSqliteOutput(const QStringList outputs);
   void _writeRules(const QStringList outputs, const QString sqliteOutputFile);
+  void _createTempTables();
+  void _prepareQueries();
 
   void _readIgnoreLists();
 };

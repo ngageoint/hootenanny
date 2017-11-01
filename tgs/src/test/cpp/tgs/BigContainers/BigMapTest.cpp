@@ -54,6 +54,11 @@ class BigMapTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE_END();
 public:
 
+  void stxxlStringKeyTest()
+  {
+
+  }
+
   void simpleTest()
   {
     BigMap<long, long> t;

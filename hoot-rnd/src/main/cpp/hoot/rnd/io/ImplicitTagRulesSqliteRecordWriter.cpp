@@ -139,6 +139,22 @@ void ImplicitTagRulesSqliteRecordWriter::_prepareQueries()
     throw HootException(
       QString("Error preparing _getLastTagIdQuery: %1").arg(_getLastTagIdQuery.lastError().text()));
   }
+
+  _getWordIdForWordQuery = QSqlQuery(_db);
+  if (!_getWordIdForWordQuery.prepare("SELECT id FROM words WHERE word LIKE ':word'"))
+  {
+    throw HootException(
+      QString("Error preparing _getWordIdForWordQuery: %1")
+        .arg(_getWordIdForWordQuery.lastError().text()));
+  }
+
+  _getTagIdForTagQuery = QSqlQuery(_db);
+  if (!_getTagIdForTagQuery.prepare("SELECT id FROM tags WHERE kvp = :kvp"))
+  {
+    throw HootException(
+      QString("Error preparing _getTagIdForTagQuery: %1")
+        .arg(_getTagIdForTagQuery.lastError().text()));
+  }
 }
 
 void ImplicitTagRulesSqliteRecordWriter::write(const QString inputUrl)
@@ -156,6 +172,8 @@ void ImplicitTagRulesSqliteRecordWriter::write(const QString inputUrl)
 
   //TODO: batch this write?
   long ruleWordPartCtr = 0;
+  long wordCtr = 0;
+  long tagCtr = 0;
   while (!inputFile.atEnd())
   {
     const QString line = QString::fromUtf8(inputFile.readLine().constData());
@@ -167,30 +185,52 @@ void ImplicitTagRulesSqliteRecordWriter::write(const QString inputUrl)
     const QString kvp = lineParts[2].trimmed();
     LOG_VART(kvp);
 
-    long wordId = -1;
-    if (_wordsToWordIds.contains(word))
-    {
-      wordId = _wordsToWordIds[word];
-      LOG_TRACE("Found existing word with ID: " << wordId);
-    }
-    else
+//    long wordId = -1;
+//    if (_wordsToWordIds.contains(word))
+//    {
+//      wordId = _wordsToWordIds[word];
+//      LOG_TRACE("Found existing word with ID: " << wordId);
+//    }
+//    else
+//    {
+//      wordId = _insertWord(word);
+//      _wordsToWordIds[word] = wordId;
+//      LOG_TRACE("Created new word with ID: " << wordId);
+//    }
+    long wordId = _getWordIdForWord(word);
+    if (wordId == -1)
     {
       wordId = _insertWord(word);
-      _wordsToWordIds[word] = wordId;
+      wordCtr++;
       LOG_TRACE("Created new word with ID: " << wordId);
-    }
-
-    long tagId = -1;
-    if (_tagsToTagIds.contains(kvp))
-    {
-      tagId = _tagsToTagIds[kvp];
-      LOG_TRACE("Found existing tag with ID: " << tagId);
     }
     else
     {
+      LOG_TRACE("Found existing word with ID: " << wordId);
+    }
+
+//    long tagId = -1;
+//    if (_tagsToTagIds.contains(kvp))
+//    {
+//      tagId = _tagsToTagIds[kvp];
+//      LOG_TRACE("Found existing tag with ID: " << tagId);
+//    }
+//    else
+//    {
+//      tagId = _insertTag(kvp);
+//      _tagsToTagIds[kvp] = tagId;
+//      LOG_TRACE("Created new tag with ID: " << tagId);
+//    }
+    long tagId = _getTagIdForTag(kvp);
+    if (tagId == -1)
+    {
       tagId = _insertTag(kvp);
-      _tagsToTagIds[kvp] = tagId;
+      tagCtr++;
       LOG_TRACE("Created new tag with ID: " << tagId);
+    }
+    else
+    {
+      LOG_TRACE("Found existing tag with ID: " << tagId);
     }
 
     _insertRuleWordPart(wordId, tagId, tagOccurranceCount);
@@ -205,13 +245,53 @@ void ImplicitTagRulesSqliteRecordWriter::write(const QString inputUrl)
   //TODO: add text indexes on words and tags after writing
 
   LOG_INFO(
-    "Wrote " << StringUtils::formatLargeNumber(_wordsToWordIds.size()) << " words, " <<
-    StringUtils::formatLargeNumber(_tagsToTagIds.size()) << " tags, and " <<
+    "Wrote " << StringUtils::formatLargeNumber(/*_wordsToWordIds.size()*/wordCtr) << " words, " <<
+    StringUtils::formatLargeNumber(/*_tagsToTagIds.size()*/tagCtr) << " tags, and " <<
     StringUtils::formatLargeNumber(ruleWordPartCtr) <<
     " word/tag associations to implicit tag rules database: " << _db.databaseName());
 
-  _wordsToWordIds.clear();
-  _tagsToTagIds.clear();
+  //_wordsToWordIds.clear();
+  //_tagsToTagIds.clear();
+}
+
+long ImplicitTagRulesSqliteRecordWriter::_getWordIdForWord(const QString word)
+{
+  _getWordIdForWordQuery.bindValue(":word", word);
+  if (!_getWordIdForWordQuery.exec())
+  {
+    QString err =
+      QString("Error executing query: %1 (%2)")
+        .arg(_getWordIdForWordQuery.executedQuery())
+        .arg(_getWordIdForWordQuery.lastError().text());
+    throw HootException(err);
+  }
+  //bool ok = false;
+  long id = -1;
+  if (_getWordIdForWordQuery.next())
+  {
+    id = _getWordIdForWordQuery.value(0).toLongLong(/*&ok*/);
+  }
+  return id;
+}
+
+long ImplicitTagRulesSqliteRecordWriter::_getTagIdForTag(const QString kvp)
+{
+  _getTagIdForTagQuery.bindValue(":kvp", kvp);
+  if (!_getTagIdForTagQuery.exec())
+  {
+    QString err =
+      QString("Error executing query: %1 (%2)")
+        .arg(_getTagIdForTagQuery.executedQuery())
+        .arg(_getTagIdForTagQuery.lastError().text());
+    throw HootException(err);
+  }
+  //bool ok = false;
+  long id = -1;
+  if (_getTagIdForTagQuery.next())
+  {
+    id = _getTagIdForTagQuery.value(0).toLongLong(/*&ok*/);
+  }
+  return id;
 }
 
 long ImplicitTagRulesSqliteRecordWriter::_insertWord(const QString word)

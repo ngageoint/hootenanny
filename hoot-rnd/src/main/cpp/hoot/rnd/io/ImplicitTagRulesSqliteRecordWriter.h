@@ -32,7 +32,7 @@
 
 // Qt
 #include <QString>
-#include <QMap>
+//#include <QMap>
 #include <QtSql/QSqlDatabase>
 #include <QSqlQuery>
 
@@ -81,10 +81,12 @@ private:
   QSqlQuery _insertTagQuery;
   QSqlQuery _getLastWordIdQuery;
   QSqlQuery _getLastTagIdQuery;
+  QSqlQuery _getWordIdForWordQuery;
+  QSqlQuery _getTagIdForTagQuery;
 
   //TODO: replace with BigMap
-  QMap<QString, long> _wordsToWordIds;
-  QMap<QString, long> _tagsToTagIds;
+  //QMap<QString, long> _wordsToWordIds;
+  //QMap<QString, long> _tagsToTagIds;
 
   void _createTables();
   void _prepareQueries();
@@ -92,6 +94,8 @@ private:
   long _insertWord(const QString word);
   long _insertTag(const QString kvp);
   void _insertRuleWordPart(const long wordId, const long tagId, const long tagOccurranceCount);
+  long _getWordIdForWord(const QString word);
+  long _getTagIdForTag(const QString kvp);
 };
 
 }

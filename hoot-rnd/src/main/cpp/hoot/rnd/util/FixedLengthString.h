@@ -58,8 +58,19 @@ struct FixedLengthStringCompare : public std::less<FixedLengthString>
   }
 };
 
+//struct CompareLess
+//{
+// bool operator () (const long& a, const long& b) const
+// { return a < b; }
+
+// static long max_value()
+// { return std::numeric_limits<long>::max(); }
+//};
+
 typedef stxxl::map<FixedLengthString, long, FixedLengthStringCompare, 4096, 4096> FixedLengthStringToLongMap;
 typedef stxxl::map<FixedLengthString, FixedLengthString, FixedLengthStringCompare, 4096, 4096> FixedLengthStringToFixedLengthStringMap;
+
+//typedef stxxl::map<long, long, CompareLess, 4096, 4096> LongToLongMap;
 
 }
 

@@ -36,6 +36,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/io/ElementVisitorInputStream.h>
 #include <hoot/core/visitors/TranslationVisitor.h>
+#include <hoot/core/util/DbUtils.h>
 
 // Qt
 #include <QStringBuilder>
@@ -44,13 +45,136 @@ namespace hoot
 {
 
 PoiImplicitTagRulesDeriver::PoiImplicitTagRulesDeriver() :
-_avgTagsPerRule(0),
-_avgWordsPerRule(0),
-_statusUpdateInterval(ConfigOptions().getApidbBulkInserterFileOutputStatusUpdateInterval()),
-_highestRuleWordCount(0),
-_highestRuleTagCount(0)
+_statusUpdateInterval(ConfigOptions().getApidbBulkInserterFileOutputStatusUpdateInterval())
 {
   _readIgnoreLists();
+  _createTempTables();
+  _prepareQueries();
+}
+
+PoiImplicitTagRulesDeriver::~PoiImplicitTagRulesDeriver()
+{
+  if (_db.open())
+  {
+    _db.close();
+  }
+}
+
+void PoiImplicitTagRulesDeriver::_createTempTables()
+{
+  _tempDbFile.reset(
+    new QTemporaryFile(
+      ConfigOptions().getApidbBulkInserterTempFileDir() +
+      "/poi-implicit-tag-rules-deriver-temp-XXXXXX"));
+  _tempDbFile->setAutoRemove(false); //for debugging only
+  if (!_tempDbFile->open())
+  {
+    throw HootException(
+      QObject::tr("Error opening %1 for writing.").arg(_tempDbFile->fileName()));
+  }
+  LOG_DEBUG("Opened db temp file: " << _tempDbFile->fileName());
+
+  _db = QSqlDatabase::addDatabase("QSQLITE", _tempDbFile->fileName());
+  _db.setDatabaseName(_tempDbFile->fileName());
+  if (!_db.open())
+  {
+    throw HootException("Error opening DB. " + _tempDbFile->fileName());
+  }
+  LOG_DEBUG("Opened: " << _tempDbFile->fileName() << ".");
+
+  DbUtils::execNoPrepare(_db, "CREATE TABLE words (id INTEGER PRIMARY KEY, word TEXT)");
+  DbUtils::execNoPrepare(_db, "CREATE TABLE tag_keys (id INTEGER PRIMARY KEY, key TEXT)");
+  DbUtils::execNoPrepare(
+    _db,
+    QString("CREATE TABLE word_tag_keys (id INTEGER PRIMARY KEY, word_id INTEGER, ") +
+    QString("tag_key_id INTEGER, tag_count INTEGER, FOREIGN KEY(word_id) REFERENCES words(id), ") +
+    QString("FOREIGN KEY(tag_key_id) REFERENCES tag_keys(id))"));
+}
+
+void PoiImplicitTagRulesDeriver::_prepareQueries()
+{
+  _insertWordQuery = QSqlQuery(_db);
+  if (!_insertWordQuery.prepare("INSERT INTO words (word) VALUES(:word)"))
+  {
+    throw HootException(
+      QString("Error preparing _insertWordQuery: %1").arg(_insertWordQuery.lastError().text()));
+  }
+
+  _insertTagKeyQuery = QSqlQuery(_db);
+  if (!_insertTagKeyQuery.prepare("INSERT INTO tag_keys (key) VALUES(:key)"))
+  {
+    throw HootException(
+      QString("Error preparing _insertTagKeyQuery: %1").arg(_insertTagKeyQuery.lastError().text()));
+  }
+
+  _insertWordTagKeyQuery = QSqlQuery(_db);
+  if (!_insertWordTagKeyQuery.prepare(
+        "INSERT INTO word_tag_keys (word, key, tag_count) VALUES(:word, :key, :tag_count)"))
+  {
+    throw HootException(
+      QString("Error preparing _insertWordTagKeyQuery: %1").arg(_insertWordTagKeyQuery.lastError().text()));
+  }
+
+  _getWordQuery = QSqlQuery(_db);
+  if (!_getWordQuery.prepare("SELECT word FROM words WHERE word LIKE ':word'"))
+  {
+    throw HootException(
+      QString("Error preparing _getWordQuery: %1").arg(_getWordQuery.lastError().text()));
+  }
+
+  //TODO: fix
+  _getWordKeyCountQuery = QSqlQuery(_db);
+  if (!_getWordKeyCountQuery.prepare(
+        "SELECT tag_count FROM word_tag_keys WHERE word_id = :wordId AND tag_key_id = :tagKeyId"))
+  {
+    throw HootException(
+      QString("Error preparing _getWordKeyCountQuery: %1").arg(_getWordKeyCountQuery.lastError().text()));
+  }
+}
+
+void PoiImplicitTagRulesDeriver::_insertWord(const QString word)
+{
+  _insertWordQuery.bindValue(":word", word);
+  if (!_insertWordQuery.exec())
+  {
+    QString err = QString("Error executing query: %1 (%2)").arg(_insertWordQuery.executedQuery()).
+        arg(_insertWordQuery.lastError().text());
+    throw HootException(err);
+  }
+}
+
+void PoiImplicitTagRulesDeriver::_insertTagKey(const QString key)
+{
+  _insertTagKeyQuery.bindValue(":key", key);
+  if (!_insertTagKeyQuery.exec())
+  {
+    QString err = QString("Error executing query: %1 (%2)").arg(_insertTagKeyQuery.executedQuery()).
+        arg(_insertTagKeyQuery.lastError().text());
+    throw HootException(err);
+  }
+}
+
+//TODO: fix
+void PoiImplicitTagRulesDeriver::_insertWordTagKey(const long wordId, const long tagKeyId,
+                                                   const long tagOccuranceCount)
+{
+  _insertWordTagKeyQuery.bindValue(":key", key);
+  if (!_insertWordTagKeyQuery.exec())
+  {
+    QString err = QString("Error executing query: %1 (%2)").arg(_insertTagKeyQuery.executedQuery()).
+        arg(_insertTagKeyQuery.lastError().text());
+    throw HootException(err);
+  }
+}
+
+QString PoiImplicitTagRulesDeriver::_getWord(const QString word)
+{
+
+}
+
+long PoiImplicitTagRulesDeriver::_getWordKeyCount(const QString wordKey)
+{
+
 }
 
 void PoiImplicitTagRulesDeriver::_readIgnoreLists()
@@ -472,6 +596,38 @@ void PoiImplicitTagRulesDeriver::_sortByWord()
     throw HootException("Unable to sort input file.");
   }
   _sortedByWordDedupedCountFile->close();
+}
+
+FixedLengthString PoiImplicitTagRulesDeriver::qStrToFixedLengthStr(const QString str)
+{
+  FixedLengthString fixedLengthStr;
+  memset(fixedLengthStr.data, 0, sizeof fixedLengthStr.data);
+  std::wcstombs(fixedLengthStr.data, str.toStdWString().c_str(), MAX_KEY_LEN);
+  return fixedLengthStr;
+}
+
+QString PoiImplicitTagRulesDeriver::fixedLengthStrToQStr(const FixedLengthString& fixedLengthStr)
+{
+  wchar_t wKey[MAX_KEY_LEN];
+  std::mbstowcs(wKey, fixedLengthStr.data, MAX_KEY_LEN);
+  return QString::fromWCharArray(wKey);
+}
+
+QMap<QString, long> PoiImplicitTagRulesDeriver::_stxxlMapToQtMap(
+  const FixedLengthStringToLongMap& stxxlMap)
+{
+  LOG_DEBUG("Converting stxxl map to qt map...");
+  QMap<QString, long> qtMap;
+  for (FixedLengthStringToLongMap::const_iterator mapItr = stxxlMap.begin();
+       mapItr != stxxlMap.end(); ++mapItr)
+  {
+    const QString key = fixedLengthStrToQStr(mapItr->first);
+    LOG_VART(key);
+    const long value = mapItr->second;
+    LOG_VART(value);
+    qtMap[key] = value;
+  }
+  return qtMap;
 }
 
 }

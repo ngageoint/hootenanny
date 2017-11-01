@@ -28,6 +28,11 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/rnd/schema/PoiImplicitTagRulesDeriver.h>
 #include <hoot/rnd/io/ImplicitTagRulesSqliteReader.h>
+#include <hoot/rnd/util/FixedLengthString.h>
+
+// Tgs
+#include <tgs/BigContainers/BigMap.h>
+#include <tgs/System/Time.h>
 
 // Qt
 #include <QDir>
@@ -43,6 +48,12 @@ class PoiImplicitTagRulesDeriverTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runMinOccuranceThresholdTest);
   CPPUNIT_TEST(runMultipleInputsTest);
   CPPUNIT_TEST(runNameCaseTest);
+//  CPPUNIT_TEST(qtMapLongKeyTest);
+//  CPPUNIT_TEST(qtMapStringKeyTest);
+//  CPPUNIT_TEST(rawStxxlLongKeyTest);
+//  CPPUNIT_TEST(rawStxxlStringKeyTest);
+//  CPPUNIT_TEST(bigMapLongKeyTest);
+//  CPPUNIT_TEST(bigMapStringKeyTest);
   //TODO
   //CPPUNIT_TEST(runInputTranslationScriptSizeMismatchTest);
   //CPPUNIT_TEST(runEqualsInNameTest);
@@ -52,6 +63,170 @@ public:
 
   static QString inDir() { return "test-files/io/PoiImplicitTagRulesDeriverTest"; }
   static QString outDir() { return "test-output/io/PoiImplicitTagRulesDeriverTest"; }
+
+  //static const long NUM_ITERATIONS = 100000;
+
+//  //.02s
+//  void qtMapLongKeyTest()
+//  {
+//    const double start = Tgs::Time::getTime();
+//    QMap<long, long> uut;
+
+//    for (long i = 0; i < NUM_ITERATIONS; i++)
+//    {
+//      uut[i] = i;
+//      if (i % (NUM_ITERATIONS / 10) == 0)
+//      {
+//        LOG_VART(i);
+//      }
+//    }
+
+//    for (long i = 0; i < NUM_ITERATIONS; i++)
+//    {
+//      const long val = uut[i];
+//      if (val % (NUM_ITERATIONS / 10) == 0)
+//      {
+//        LOG_VART(i);
+//      }
+//    }
+
+//     LOG_INFO("qtMapLongKeyTest took " << Tgs::Time::getTime() - start << " seconds.");
+//  }
+
+//  //.13s
+//  void qtMapStringKeyTest()
+//  {
+//    const double start = Tgs::Time::getTime();
+//    QMap<QString, long> uut;
+
+//    for (long i = 0; i < NUM_ITERATIONS; i++)
+//    {
+//      uut[QString::number(i)] = i;
+//      if (i % (NUM_ITERATIONS / 10) == 0)
+//      {
+//        LOG_VART(i);
+//      }
+//    }
+
+//    for (long i = 0; i < NUM_ITERATIONS; i++)
+//    {
+//      const long val = uut[QString::number(i)];
+//      if (val % (NUM_ITERATIONS / 10) == 0)
+//      {
+//        LOG_VART(i);
+//      }
+//    }
+
+//    LOG_INFO("qtMapStringKeyTest took " << Tgs::Time::getTime() - start << " seconds.");
+//  }
+
+//  //1.03s
+//  void rawStxxlLongKeyTest()
+//  {
+//    const double start = Tgs::Time::getTime();
+//    LongToLongMap uut(
+//      FixedLengthStringToLongMap::node_block_type::raw_size * 10,
+//      FixedLengthStringToLongMap::node_block_type::raw_size * 10);
+
+//    for (long i = 0; i < NUM_ITERATIONS; i++)
+//    {
+//      uut[i] = i;
+//      if (i % (NUM_ITERATIONS / 10) == 0)
+//      {
+//        LOG_VART(i);
+//      }
+//    }
+//    for (long i = 0; i < NUM_ITERATIONS; i++)
+//    {
+//      long val = uut[i];
+//      if (val % (NUM_ITERATIONS / 10) == 0)
+//      {
+//        LOG_VART(i);
+//      }
+//    }
+
+//    LOG_INFO("rawStxxlLongKeyTest took " << Tgs::Time::getTime() - start << " seconds.");
+//  }
+
+//  //17.65s
+//  void rawStxxlStringKeyTest()
+//  {
+//    const double start = Tgs::Time::getTime();
+//    FixedLengthStringToLongMap uut(
+//      FixedLengthStringToLongMap::node_block_type::raw_size * 10,
+//      FixedLengthStringToLongMap::node_block_type::raw_size * 10);
+
+//    for (long i = 0; i < NUM_ITERATIONS; i++)
+//    {
+//      uut[PoiImplicitTagRulesDeriver::qStrToFixedLengthStr(QString::number(i))] = i;
+//      if (i % (NUM_ITERATIONS / 10) == 0)
+//      {
+//        LOG_VART(i);
+//      }
+//    }
+//    for (long i = 0; i < NUM_ITERATIONS; i++)
+//    {
+//      long val = uut[PoiImplicitTagRulesDeriver::qStrToFixedLengthStr(QString::number(i))];
+//      if (val % (NUM_ITERATIONS / 10) == 0)
+//      {
+//        LOG_VART(i);
+//      }
+//    }
+
+//    LOG_INFO("rawStxxlStringKeyTest took " << Tgs::Time::getTime() - start << " seconds.");
+//  }
+
+//  //.035s
+//  void bigMapLongKeyTest()
+//  {
+//    const double start = Tgs::Time::getTime();
+//    Tgs::BigMap<long, long> uut;
+
+//    for (long i = 0; i < NUM_ITERATIONS; i++)
+//    {
+//      uut[i] = i;
+//      if (i % (NUM_ITERATIONS / 10) == 0)
+//      {
+//        LOG_VART(i);
+//      }
+//    }
+//    for (long i = 0; i < NUM_ITERATIONS; i++)
+//    {
+//      long val = uut[i];
+//      if (val % (NUM_ITERATIONS / 10) == 0)
+//      {
+//        LOG_VART(i);
+//      }
+//    }
+
+//    LOG_INFO("bigMapLongKeyTest took " << Tgs::Time::getTime() - start << " seconds.");
+//  }
+
+//  //
+//  void bigMapStringKeyTest()
+//  {
+//    const double start = Tgs::Time::getTime();
+////    Tgs::BigMap<FixedLengthString, long> uut;
+
+////    for (long i = 0; i < NUM_ITERATIONS; i++)
+////    {
+////      uut[PoiImplicitTagRulesDeriver::qStrToFixedLengthStr(QString::number(i))] = i;
+////      if (i % (NUM_ITERATIONS / 10) == 0)
+////      {
+////        LOG_VART(i);
+////      }
+////    }
+////    for (long i = 0; i < NUM_ITERATIONS; i++)
+////    {
+////      long val = uut[PoiImplicitTagRulesDeriver::qStrToFixedLengthStr(QString::number(i))];
+////      if (val % (NUM_ITERATIONS / 10) == 0)
+////      {
+////        LOG_VART(i);
+////      }
+////    }
+
+//    LOG_INFO("bigMapStringKeyTest took " << Tgs::Time::getTime() - start << " seconds.");
+//  }
 
   void runBasicTest()
   {
