@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="39.59143867710475" minlon="-104.8070473857991" maxlat="39.59330667331412" maxlon="-104.8060931452853"/>
+    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5917678695682369" lon="-104.8066608840727980"/>
+    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5914711576245608" lon="-104.8066874362091028"/>
+    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5914386771047475" lon="-104.8069965303087940"/>
+    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5917260674373566" lon="-104.8070473857990947"/>
+    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5931191349798866" lon="-104.8065292974913945"/>
+    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5931528497740288" lon="-104.8060931452853026"/>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5933066733141175" lon="-104.8061245919960953"/>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5932771729356574" lon="-104.8065566424572950"/>
+    <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-5"/>
+        <nd ref="-6"/>
+        <nd ref="-7"/>
+        <nd ref="-8"/>
+        <nd ref="-5"/>
+        <tag k="REF2" v="Convoluted No Match 2"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="access" v="{&quot;groups&quot;:[],&quot;users&quot;:[]}"/>
+        <tag k="attributes" v="{&quot;item_date&quot;:&quot;2017-10-09T23:45:12.345Z&quot;,&quot;category_id&quot;:&quot;654321&quot;,&quot;asset_id&quot;:&quot;123ABC&quot;}"/>
+        <tag k="building" v="yes"/>
+        <tag k="type" v="way"/>
+        <tag k="name" v="Bad Pair"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1"/>
+        <nd ref="-2"/>
+        <nd ref="-3"/>
+        <nd ref="-4"/>
+        <nd ref="-1"/>
+        <tag k="REF1" v="Panera"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="access" v="{&quot;groups&quot;:[],&quot;users&quot;:[]}"/>
+        <tag k="attributes" v="{&quot;item_date&quot;:&quot;2017-10-09T12:34:56.789Z&quot;,&quot;category_id&quot;:&quot;123456&quot;,&quot;asset_id&quot;:&quot;ABC123&quot;}"/>
+        <tag k="alt_name" v="null"/>
+        <tag k="building" v="yes"/>
+        <tag k="type" v="way"/>
+        <tag k="name" v="Panera Bread"/>
+        <tag k="item_type" v="[&quot;building&quot;,&quot;restaurant&quot;]"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+</osm>

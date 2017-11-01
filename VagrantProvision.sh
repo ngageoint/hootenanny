@@ -141,81 +141,9 @@ if ! grep --quiet "DISTCC_TCP_CORK=0" ~/.profile; then
     source ~/.profile
 fi
 
-if ! ruby -v | grep --quiet 2.3.0; then
-    echo "### Installing ruby..."
-    # Ruby via rvm - from rvm.io
-    gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 2>&1
-
-    curl -sSL https://raw.githubusercontent.com/rvm/rvm/master/binscripts/rvm-installer | bash -s stable
-
-    source ~/.rvm/scripts/rvm
-
-    stdbuf -o L -e L rvm install ruby-2.3
-    rvm --default use 2.3
-
-# Don't install documentation for gems
-cat > ~/.gemrc <<EOT
-  install: --no-document
-  update: --no-document
-EOT
-fi
-
-# gem installs are *very* slow, hence all the checks in place here to facilitate debugging
-if ! gem list --local | grep -q mime-types; then
-    echo "Gem Install: mime-types"
-# gem list --local | grep -q mime-types
-# if [ $? -eq 1 ]; then
-   #sudo gem install mime-types -v 2.6.2
-   gem install mime-types
-fi
-
-if ! gem list --local | grep -q cucumber; then
-    echo "Gem Install: cucumber"
-# gem list --local | grep -q cucumber
-# if [ $? -eq 1 ]; then
-   #sudo gem install cucumber
-   gem install cucumber
-fi
-
-if ! gem list --local | grep -q capybara-webkit; then
-    echo "Gem Install: capybara-webkit"
-# gem list --local | grep -q capybara-webkit
-# if [ $? -eq 1 ]; then
-   #sudo gem install capybara-webkit
-   gem install capybara-webkit
-fi
-
-if ! gem list --local | grep -q selenium-webdriver; then
-    echo "Gem Install: selenium-webdriver"
-# gem list --local | grep -q selenium-webdriver
-# if [ $? -eq 1 ]; then
-   #sudo gem install selenium-webdriver
-   gem install selenium-webdriver
-fi
-
-if ! gem list --local | grep -q rspec; then
-    echo "Gem Install: rspec"
-# gem list --local | grep -q rspec
-# if [ $? -eq 1 ]; then
-   #sudo gem install rspec
-   gem install rspec
-fi
-
-if ! gem list --local | grep -q capybara-screenshot; then
-    echo "Gem Install: capybara-screenshot"
-# gem list --local | grep -q capybara-screenshot
-# if [ $? -eq 1 ]; then
-   #sudo gem install capybara-screenshot
-   gem install capybara-screenshot
-fi
-
-if ! gem list --local | grep -q selenium-cucumber; then
-    echo "Gem Install: selenium-cucumber"
-# gem list --local | grep -q selenium-cucumber
-# if [ $? -eq 1 ]; then
-   #sudo gem install selenium-cucumber
-   gem install selenium-cucumber
-fi
+# Use RVM to install the desired Ruby version, then install the gems.
+$HOOT_HOME/scripts/ruby/rvm-install.sh
+$HOOT_HOME/scripts/ruby/gem-install.sh
 
 # Make sure that we are in ~ before trying to wget & install stuff
 cd ~

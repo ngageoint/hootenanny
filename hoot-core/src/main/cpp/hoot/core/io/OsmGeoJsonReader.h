@@ -180,6 +180,13 @@ private:
   void _addTags(const boost::property_tree::ptree &item, ElementPtr element);
 
   /**
+   * @brief _parseSubTags Reads tags that are objects or arrays into a JSON string
+   * @param item Property Tree (subtree)
+   * @return JSON string of sub-tags
+   */
+  std::string _parseSubTags(const boost::property_tree::ptree &item);
+
+  /**
    * @brief _roles List of roles for the current relation, saved for recursive relations
    */
   std::queue<std::string> _roles;

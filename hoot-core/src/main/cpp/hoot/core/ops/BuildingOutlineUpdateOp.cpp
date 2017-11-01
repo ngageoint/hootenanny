@@ -301,7 +301,7 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
           }
           else if (logWarnCount == Log::getWarnMessageLimit())
           {
-            LOG_WARN(className << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+            LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
           }
           logWarnCount++;
         }
