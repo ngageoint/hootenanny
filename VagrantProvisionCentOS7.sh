@@ -123,6 +123,17 @@ sudo yum -y install \
 
 echo "##### Temp installs #####"
 
+# Node
+cd ~
+echo "##### NodeJs #####"
+wget --quiet https://nodejs.org/dist/v6.11.4/node-v6.11.4-linux-x64.tar.xz
+tar xf node-v6.11.4-linux-x64.tar.xz 
+cd node-v6.11.4-linux-x64
+sudo cp -r bin /usr/
+sudo cp -r include /usr/
+sudo cp -r lib /usr/
+sudo cp -r share /usr/
+
 # ICU:
 echo "##### ICU #####"
 cd ~
@@ -144,23 +155,12 @@ echo "##### V8 #####"
 cd ~
 fetch v8 >> ~/centos7_install.txt
 cd v8
+git checkout 5.1-lkgr >> ~/centos7_install.txt
 gclient sync >> ~/centos7_install.txt
-git checkout 5.1-lkgr
-#tools/dev/v8gen.py x64.release >> ~/centos7_install.txt
-make -sj$(nproc) x64.release library=shared
+make -sj$(nproc) x64.release library=shared use_system_icu=1 >> ~/centos7_install.txt
 sudo cp out/x64.release/lib.target/*.so /usr/lib64/
-sudo cp include/*.h /usr/include/
-sudo cp -r include/libplatform /usr/include
-
-# Node
-echo "##### NodeJs #####"
-wget --quiet https://nodejs.org/dist/v6.11.4/node-v6.11.4-linux-x64.tar.xz
-tar xf node-v6.11.4-linux-x64.tar.xz 
-cd node-v6.11.4-linux-x64
-sudo cp -r bin /usr/
-sudo cp -r include /usr/
-sudo cp -r lib /usr/
-sudo cp -r share /usr/
+sudo cp include/* /usr/include/node/
+sudo cp -r include/libplatform /usr/include/node/
 
 # Stxxl
 cd ~

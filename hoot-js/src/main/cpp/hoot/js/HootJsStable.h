@@ -30,8 +30,14 @@
 // hoot
 #include <hoot/core/HootCoreStable.h>
 
+//  Remove unused-parameter warnings from v8
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+
 // v8
 #include <v8.h>
+
+#pragma GCC diagnostic pop
 
 namespace hoot
 {
