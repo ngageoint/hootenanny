@@ -2,7 +2,7 @@ pipeline {
     agent any
     triggers {
         // Set nightly triggers
-        cron(BRANCH_NAME == "DD-188" ? "@hourly" : "")
+        cron(BRANCH_NAME == "DD-188|release" ? "@hourly" : "")
     }
     // Checkbox parameters for users to skip steps and control pipeline behavior
     parameters {
