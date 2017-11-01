@@ -74,6 +74,14 @@ public:
 
     QString toString() const;
 
+    // TRICKY: This is used right now for a .Contains() call on a container full of
+    // EdgeEntries. "Overlap" works better than strict equality in this case.
+    bool operator== (const EdgeEntry &ee)
+    {
+      bool eq = _subline->overlaps(ee.getSubline());
+      return eq;
+    }
+
   private:
     /// The portion of the edge. The portion is always measured starting at "from" regardless of
     /// whether or not reversed is set. It is always a value in [0, 1]. If toPortion < fromPortion

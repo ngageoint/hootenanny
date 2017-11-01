@@ -46,6 +46,11 @@ NetworkMatcher::~NetworkMatcher()
 {
 }
 
+void NetworkMatcher::finalize()
+{
+
+}
+
 void NetworkMatcher::_createEdge2Index()
 {
   LOG_DEBUG("Creating edge index...");

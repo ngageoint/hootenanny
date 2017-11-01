@@ -1,61 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="-0.2410994805699999" minlon="5.01228789033" maxlat="-0.23831883692" maxlon="5.012791149999999"/>
     <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.2383188369200000" lon="5.0127911499999991">
         <tag k="created_by" v="Merkaartor 0.12"/>
-        <tag k="hoot:id" v="-11"/>
         <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-11"/>
     </node>
     <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.2410994805699999" lon="5.0124886893299996">
-        <tag k="hoot:id" v="-10"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-10"/>
     </node>
     <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.2406254656600000" lon="5.0125346553299996">
-        <tag k="hoot:id" v="-9"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-9"/>
     </node>
     <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.2403391226099999" lon="5.0125624213300002">
-        <tag k="hoot:id" v="-8"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-8"/>
     </node>
     <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.2403061372300000" lon="5.0125656173299999">
-        <tag k="hoot:id" v="-7"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-7"/>
     </node>
     <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.2399198936600000" lon="5.0125892573300002">
-        <tag k="hoot:id" v="-6"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-6"/>
     </node>
     <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.2395664652100000" lon="5.0126197073299998">
-        <tag k="hoot:id" v="-5"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-5"/>
     </node>
     <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.2394186638600000" lon="5.0126409793300004">
-        <tag k="hoot:id" v="-4"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-4"/>
     </node>
     <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.2393830729899999" lon="5.0122878903299997">
-        <tag k="hoot:id" v="-3"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-3"/>
     </node>
     <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.2388975582700000" lon="5.0123426193299991">
-        <tag k="hoot:id" v="-2"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-2"/>
     </node>
     <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.2388258698899999" lon="5.0123476503299988">
-        <tag k="hoot:id" v="-1"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-1"/>
     </node>
-    <way visible="true" id="-96" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-100" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-11"/>
         <nd ref="-4"/>
         <tag k="created_by" v="Merkaartor 0.12"/>
         <tag k="name" v="Kemanggisan Pulo"/>
         <tag k="highway" v="residential"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-96"/>
         <tag k="hoot:status" v="2"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-100"/>
     </way>
-    <way visible="true" id="-95" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-4"/>
         <nd ref="-5"/>
         <tag k="width" v="5"/>
@@ -66,13 +67,11 @@
         <tag k="all_weather" v="yes"/>
         <tag k="lanes" v="2"/>
         <tag k="surface" v="paved"/>
-        <tag k="error:circular" v="10.08"/>
-        <tag k="hoot:id" v="-95"/>
         <tag k="hoot:status" v="3"/>
+        <tag k="error:circular" v="10.08"/>
+        <tag k="hoot:id" v="-9"/>
     </way>
-    <way visible="true" id="-94" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1"/>
-        <nd ref="-2"/>
+    <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-3"/>
         <nd ref="-4"/>
         <tag k="width" v="5"/>
@@ -81,9 +80,23 @@
         <tag k="highway" v="secondary"/>
         <tag k="lanes" v="2"/>
         <tag k="surface" v="paved"/>
-        <tag k="error:circular" v="10.08"/>
-        <tag k="hoot:id" v="-94"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="error:circular" v="10.08"/>
+        <tag k="hoot:id" v="-8"/>
+    </way>
+    <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1"/>
+        <nd ref="-2"/>
+        <nd ref="-3"/>
+        <tag k="width" v="5"/>
+        <tag k="name" v="KEMANGGISAN PULO 1"/>
+        <tag k="all_weather" v="yes"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="lanes" v="2"/>
+        <tag k="surface" v="paved"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="error:circular" v="10.08"/>
+        <tag k="hoot:id" v="-6"/>
     </way>
     <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-9"/>
@@ -96,9 +109,9 @@
         <tag k="all_weather" v="yes"/>
         <tag k="lanes" v="2"/>
         <tag k="surface" v="paved"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="10.08"/>
         <tag k="hoot:id" v="-4"/>
-        <tag k="hoot:status" v="3"/>
     </way>
     <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-8"/>
@@ -111,9 +124,9 @@
         <tag k="all_weather" v="yes"/>
         <tag k="lanes" v="2"/>
         <tag k="surface" v="paved"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="10.08"/>
         <tag k="hoot:id" v="-3"/>
-        <tag k="hoot:status" v="3"/>
     </way>
     <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-5"/>
@@ -128,8 +141,8 @@
         <tag k="all_weather" v="yes"/>
         <tag k="lanes" v="2"/>
         <tag k="surface" v="paved"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="10.08"/>
         <tag k="hoot:id" v="-2"/>
-        <tag k="hoot:status" v="3"/>
     </way>
 </osm>

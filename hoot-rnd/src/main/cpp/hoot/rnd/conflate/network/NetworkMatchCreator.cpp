@@ -123,6 +123,9 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
   }
   for (size_t i = 0; i < numIterations; ++i)
   {
+    matcher->iterate();
+    LOG_INFO("Optimization iteration: " << i + 1 << "/" << numIterations << " complete.");
+
     if (ConfigOptions().getNetworkMatchWriteDebugMaps())
     {
       OsmMapPtr copy(new OsmMap(map));
@@ -135,15 +138,27 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
       LOG_INFO("Writing debug map: " << name);
       OsmMapWriterFactory::getInstance().write(copy, name);
     }
+  }
 
-    matcher->iterate();
+  // Finalize
+  matcher->finalize();
 
-    LOG_INFO("Optimization iteration: " << i + 1 << "/" << numIterations << " complete.");
+  // Write final debug map
+  if (ConfigOptions().getNetworkMatchWriteDebugMaps())
+  {
+    OsmMapPtr copy(new OsmMap(map));
+    DebugNetworkMapCreator(matcher->getMatchThreshold()).addDebugElements(copy,
+      matcher->getAllEdgeScores(), matcher->getAllVertexScores());
+
+    MapProjector::projectToWgs84(copy);
+    conf().set(ConfigOptions().getWriterIncludeDebugTagsKey(), true);
+    QString name = QString("tmp/debug-final.osm");
+    LOG_INFO("Writing debug map: " << name);
+    OsmMapWriterFactory::getInstance().write(copy, name);
   }
 
   LOG_DEBUG("Retrieving edge scores...");
-
-  // convert graph edge matches into NetworkMatch objects.
+  // Convert graph edge matches into NetworkMatch objects.
   QList<NetworkEdgeScorePtr> edgeMatch = matcher->getAllEdgeScores();
 
   LOG_VART(matcher->getMatchThreshold());
@@ -153,10 +168,10 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
     LOG_VART(edgeMatch[i]->getScore());
     LOG_VART(edgeMatch[i]->getEdgeMatch());
 
-    /// @todo tunable parameter
     if (edgeMatch[i]->getScore() > matcher->getMatchThreshold())
     {
       LOG_TRACE("is match");
+      LOG_VART(edgeMatch[i]->getEdgeMatch()->getUid());
       matches.push_back(_createMatch(details, edgeMatch[i], threshold));
     }
   }
