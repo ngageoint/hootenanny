@@ -1413,18 +1413,18 @@ Operations that should be applied to ingested OGR data before saving the data.
 * Data Type: bool
 * Default Value: `false`
 
-If true, the OSM API database writer drops the database constraints before writing the data and
-re-enables them after the writing is complete.  This can only be used with databases that have been
-taken offline from other users.
+When the OSM API database bulk inserter is writing directly to a database, if true, the inserter
+drops the database constraints before writing the data and re-enables them after the writing is
+complete.  This can only be used with databases that have been taken offline from other users.
 
 === osmapidb.bulk.inserter.disable.database.indexes.during.write
 
 * Data Type: bool
 * Default Value: `false`
 
-If true, the OSM API database writer drops the database indexes before writing the data and
-re-enables them after the writing is complete.  This can only be used with databases that have been
-taken offline from other users.
+When the OSM API database bulk inserter is writing directly to a database, if true, the inserter
+drops the database indexes before writing the data and re-enables them after the writing is
+complete.  This can only be used with databases that have been taken offline from other users.
 
 === osmapidb.bulk.inserter.reserve.record.ids.before.writing.data
 
@@ -1438,6 +1438,14 @@ environments, the risk of record ID conflicts will be present in the database.  
 destination must be an OSM API database or this setting will always be treated as being "false".
 If the output destination is a SQL file, the SQL statements to update the record IDs will be
 written to the SQL output for later execution.
+
+=== osmapidb.bulk.inserter.write.sql.file.id.sequence.updates
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, the OSM API database bulk inserter write element ID sequence update SQL statements when
+the output is a SQL file.  If false, the ID update statements will not be written.
 
 === osmapidb.id.aware.url
 

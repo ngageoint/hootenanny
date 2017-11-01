@@ -190,6 +190,8 @@ public:
   void setTempDir(QString location) { _tempDir = location; }
   void setDisableDatabaseIndexesDuringWrite(bool disable)
   { _disableDatabaseIndexesDuringWrite = disable; }
+  void setWriteIdSequenceUpdates(bool write)
+  { _writeIdSequenceUpdates = write; }
 
 protected:
 
@@ -274,6 +276,8 @@ private:
   bool _disableDatabaseConstraintsDuringWrite;
   QString _tempDir;
   bool _disableDatabaseIndexesDuringWrite;
+  //TODO: need test for this
+  bool _writeIdSequenceUpdates;
 
   OsmApiDb _database;
   boost::shared_ptr<OsmApiDbSqlStatementFormatter> _sqlFormatter;
