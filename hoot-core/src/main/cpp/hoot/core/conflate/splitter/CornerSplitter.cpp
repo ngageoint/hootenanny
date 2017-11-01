@@ -88,18 +88,23 @@ void CornerSplitter::splitCorners()
         WayLocation next(_map, pWay, nodeIdx+1, 0.0);
 
         // Calculate headings
+        const double twopi = M_PI*2.0;
         double h1 = atan2(current.getCoordinate().y - prev.getCoordinate().y,
                           current.getCoordinate().x - prev.getCoordinate().x);
         double h2 = atan2(next.getCoordinate().y - current.getCoordinate().y,
                           next.getCoordinate().x - current.getCoordinate().x);
 
-        double threshold = toRadians(45.0);
+        double threshold = toRadians(55.0);
         double delta = fabs(h2-h1);
+
+        if (delta > M_PI)
+          delta = twopi - delta;
 
 
         // If we make enough of a turn, split the way
         if (delta > threshold)
         {
+          LOG_DEBUG("splitting way with delta: " << delta);
           _splitWay(pWay->getId(), nodeIdx, pWay->getNodeId(nodeIdx));
         }
       }

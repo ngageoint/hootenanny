@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/elements/Element.h>
-
+#include <geos/geom/Coordinate.h>
 #include <tgs/SharedPtr.h>
 
 namespace hoot
@@ -57,6 +57,8 @@ public:
   static void reset();
 
   QString toString() const;
+
+  geos::geom::Coordinate getCentroid() const;
 
 private:
   ConstElementPtr _e;

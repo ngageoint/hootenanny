@@ -865,6 +865,96 @@ default the first assigned id will be -1)
 
 A list of paths to include in the javascript translator search path.
 
+=== json.format.hootenanny
+
+* Data Type: bool
+* Default Value: `false`
+
+Output JSON in a more Hootenanny specific way that includes Hootenanny-specific tags
+including `hoot:*`, `error:circluar`, `type=node/way/relation`, tags in the `tags`
+section, etc.
+
+`Generic Format`
+-----
+...
+{
+  "type":"Feature",
+  "properties":{
+    "type":"LineString",
+    "REF1":"Panera",
+    "access":{ "groups":[],"users":[] },
+    "attributes":{
+      "item_date":"2017-10-09T12:34:56.789Z",
+      "category_id":"123456",
+      "asset_id":"ABC123"
+      },
+    "alt_name":null,
+    "building":"yes",
+    "name":"Panera Bread",
+    "item_type":[ "building","restaurant" ],
+    },
+  "geometry":{
+    "type":"Polygon",
+    "coordinates":[[[-104.8065566424573,39.59327717293566],
+                    [-104.8061245919961,39.59330667331412],
+                    [-104.8060931452853,39.59315284977403],
+                    [-104.8065292974914,39.59311913497989],
+                    [-104.8065566424573,39.59327717293566]]]
+    }
+},
+...
+-----
+vs
+`Hootenanny-specific Format`
+-----
+...
+{
+  "type":"Feature",
+  "id":"-2",
+  "properties":{
+    "type":"way",
+    "tags":{
+      "REF1":"Panera",
+      "access":{ "groups":[],"users":[] },
+      "attributes":{
+        "item_date":"2017-10-09T12:34:56.789Z",
+        "category_id":"123456",
+        "asset_id":"ABC123"
+        },
+      "alt_name":null,
+      "building":"yes",
+      "type":"way",
+      "name":"Panera Bread",
+      "item_type":[ "building","restaurant" ],
+      "error:circular":"15"
+      }
+    },
+  "geometry":{
+    "type":"Polygon",
+    "coordinates":[[[-104.8065566424573,39.59327717293566],
+                    [-104.8061245919961,39.59330667331412],
+                    [-104.8060931452853,39.59315284977403],
+                    [-104.8065292974914,39.59311913497989],
+                    [-104.8065566424573,39.59327717293566]]]
+    }
+},
+...
+-----
+
+=== json.perserve.empty.tags
+
+* Data Type: bool
+* Default Value: `true`
+
+Write out empty OSM tags to JSON such as `"text":""`
+
+=== json.pretty.print
+
+* Data Type: bool
+* Default Value: `false`
+
+Write out JSON in a more legible manner
+
 === keep.tags.visitor.keys
 
 * Data Type: list
@@ -1832,15 +1922,16 @@ If true, POI to polygon conflation will attempt to reduce unnecessary reviews wi
 incorrect matches.  This setting is somewhat experimental and can be runtime expensive when
 enabled.
 
-=== poi.polygon.review.if.matched.types
+=== poi.polygon.match.evidence.threshold
 
-* Data Type: list
-* Default Value:
-** ``
+* Data Type: int
+* Default Value: `3`
 
-List of key value pairs (key=value) for features to always review if marked as matches with POI to
-polygon conflation.  When specifying the list from the command line, delimit the types with ';'
-and surround the entire value string in double quotes.
+The minimum evidence score at which a POI will be matched to a polygon.  Valid values are 1 to 4.
+If an evidence score for a feature pair falls below this value, the relationship between the
+features will be classified as a review or miss, depending on the value of
+'poi.polygon.review.evidence.threshold'.  Generally, this setting should not be changed except
+when working with specific POI/Polygon conflation use cases that require it.
 
 === poi.polygon.match.threshold
 
@@ -1853,14 +1944,6 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
-=== poi.polygon.match.distance.threshold
-
-* Data Type: double
-* Default Value: `5.0`
-
-The maximum distance, in meters, between a POI and a polygon where they can still be considered
-a match based on distance criteria only.
-
 === poi.polygon.miss.threshold
 
 * Data Type: double
@@ -1871,6 +1954,14 @@ The threshold at which a miss is called a miss when comparing POIs to polygons.
 See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== poi.polygon.match.distance.threshold
+
+* Data Type: double
+* Default Value: `5.0`
+
+The maximum distance, in meters, between a POI and a polygon where they can still be considered
+a match based on distance criteria only.
 
 === poi.polygon.name.score.threshold
 
@@ -1889,6 +1980,14 @@ present (null).
 If true, debug match distance output will be obtained from manually matched source data and printed
 if running 'hoot score-matches' with POI to polygon conflation.
 
+=== poi.polygon.promote.points.with.addresses.to.pois
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, POI to polygon conflation will classify all points with OSM address tags as POIs even if
+they do not have specific type tags.
+
 === poi.polygon.review.distance.threshold
 
 * Data Type: double
@@ -1898,6 +1997,30 @@ The maximum distance, in meters, between a POI and a polygon where they can stil
 for review based on distance criteria only (value is added to the circular error of the compared
 features).
 
+=== poi.polygon.review.evidence.threshold
+
+* Data Type: int
+* Default Value: `1`
+
+The minimum evidence score at which a POI will be reviewed against a polygon, if the evidence score
+does not meet the threshold defined by 'poi.polygon.match.evidence.threshold'.  Valid values are
+0 to 3.  If an evidence score for a feature pair falls below this value, the relationship between
+the features will be classified as a miss.  If the value is set to 0, all feature pairs which did
+not match will be reviewed.  If the value is set greater than or equal to
+'poi.polygon.match.evidence.threshold', an error will occur.  Generally, this setting
+should not be changed except when working with specific POI/Polygon conflation use cases that
+require it.
+
+=== poi.polygon.review.if.matched.types
+
+* Data Type: list
+* Default Value:
+** ``
+
+List of key value pairs (key=value) for features to always review if marked as matches with POI to
+polygon conflation.  When specifying the list from the command line, delimit the types with ';'
+and surround the entire value string in double quotes.
+
 === poi.polygon.review.threshold
 
 * Data Type: double
@@ -1905,10 +2028,6 @@ features).
 
 The threshold at which a review is called a review for PoiPolygon. See
 `conflate.review.threshold.default`.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
 
 === poi.polygon.type.score.threshold
 
@@ -2161,6 +2280,14 @@ will have the value specified in the set.tag.visitor.value option appended to it
 Set the key member in the SetTagVisitor class.  SetTagVisitor allows for adding/modifying a
 particular tag on all elements in a map. The number of keys in `set.tag.visitor.key` should match
 the number of keys in `set.tag.visitor.value`.
+
+=== set.tag.visitor.element.type
+
+* Data Type: string
+* Default Value: ``
+
+An optional element type filter for the SetTagVisitor.  Valid values are: 'node', 'way', or
+'relation'.  If left empty, all elements will receive tag additions.
 
 === set.tag.visitor.value
 
@@ -2474,6 +2601,7 @@ after the operations in `conflate.pre.ops`.
 
 * Data Type: list
 * Default Value:
+** `hoot::CornerSplitter`
 ** `hoot::RubberSheet`
 
 List of operations to apply immediately before conflating when using Network Conflation only.  Runs

@@ -1288,6 +1288,13 @@ mgcp = {
         // The FCODE for Buildings changed...
         if (attrs.F_CODE == 'AL013') attrs.F_CODE = 'AL015';
 
+        // Tag changed
+        if (tags.vertical_obstruction_identifier)
+        {
+            tags['aeroway:obstruction'] = tags.vertical_obstruction_identifier;
+            delete tags.vertical_obstruction_identifier;
+        }
+
     }, // End applyToMgcpPreProcessing
 
 

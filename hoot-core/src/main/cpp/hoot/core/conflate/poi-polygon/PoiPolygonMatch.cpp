@@ -52,15 +52,14 @@ namespace hoot
 
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
 
-const unsigned int PoiPolygonMatch::MATCH_EVIDENCE_THRESHOLD = 3;
-const unsigned int PoiPolygonMatch::REVIEW_EVIDENCE_THRESHOLD = 1;
-
 PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
                                  boost::shared_ptr<const PoiPolygonRfClassifier> rf,
                                  const set<ElementId>& polyNeighborIds,
                                  const set<ElementId>& poiNeighborIds) :
 Match(threshold),
 _map(map),
+_matchEvidenceThreshold(3),
+_reviewEvidenceThreshold(1),
 _closeMatch(false),
 _typeScore(-1.0),
 _nameScore(-1.0),
@@ -145,6 +144,25 @@ void PoiPolygonMatch::setConfiguration(const Settings& conf)
   setReviewIfMatchedTypes(config.getPoiPolygonReviewIfMatchedTypes());
   setEnableAdvancedMatching(config.getPoiPolygonEnableAdvancedMatching());
   setEnableReviewReduction(config.getPoiPolygonEnableReviewReduction());
+  const int matchEvidenceThreshold = config.getPoiPolygonMatchEvidenceThreshold();
+  if (matchEvidenceThreshold < 1 || matchEvidenceThreshold > 4)
+  {
+    throw HootException(
+      "Invalid value for POI/Polygon match evidence threshold: " +
+      QString::number(matchEvidenceThreshold) + ".  Valid values are 1 to 4.");
+  }
+  setMatchEvidenceThreshold(matchEvidenceThreshold);
+  LOG_VART(_matchEvidenceThreshold);
+  const int reviewEvidenceThreshold = config.getPoiPolygonReviewEvidenceThreshold();
+  if (reviewEvidenceThreshold < 0 || reviewEvidenceThreshold > matchEvidenceThreshold - 1)
+  {
+    throw HootException(
+      "Invalid value for POI/Polygon review evidence threshold: " +
+      QString::number(reviewEvidenceThreshold) + ".  Valid values are 0 to " +
+      QString::number(matchEvidenceThreshold - 1) + ".");
+  }
+  setReviewEvidenceThreshold(reviewEvidenceThreshold);
+  LOG_VART(_reviewEvidenceThreshold);
 }
 
 bool PoiPolygonMatch::isPoly(const Element& e)
@@ -188,9 +206,17 @@ bool PoiPolygonMatch::isPoi(const Element& e)
   const bool inABuildingOrPoiCategory =
     OsmSchema::getInstance().getCategories(tags).intersects(
       OsmSchemaCategory::building() | OsmSchemaCategory::poi());
-  const bool isPoi =
+  bool isPoi =
     e.getElementType() == ElementType::Node &&
       (inABuildingOrPoiCategory || tags.getNames().size() > 0);
+
+  if (!isPoi && e.getElementType() == ElementType::Node &&
+      ConfigOptions().getPoiPolygonPromotePointsWithAddressesToPois() &&
+      PoiPolygonAddressScoreExtractor::hasAddress(e))
+  {
+    isPoi = true;
+  }
+
   LOG_VART(e);
   LOG_VART(isPoi);
   return isPoi;
@@ -326,7 +352,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
   unsigned int evidence = _calculateEvidence(_poi, _poly);
 
   //no point in trying to reduce reviews if we're still at a miss here
-  if (_enableReviewReduction && evidence >= REVIEW_EVIDENCE_THRESHOLD)
+  if (_enableReviewReduction && evidence >= _reviewEvidenceThreshold)
   {
     PoiPolygonReviewReducer reviewReducer(
       _map, _polyNeighborIds, _poiNeighborIds, _distance, _nameScoreThreshold,
@@ -338,7 +364,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
     }
   }
 
-  if (evidence >= MATCH_EVIDENCE_THRESHOLD)
+  if (evidence >= _matchEvidenceThreshold)
   {
     if (!foundReviewIfMatchedType)
     {
@@ -349,7 +375,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
       _class.setReview();
     }
   }
-  else if (evidence >= REVIEW_EVIDENCE_THRESHOLD)
+  else if (evidence >= _reviewEvidenceThreshold)
   {
     _class.setReview();
   }
@@ -412,7 +438,7 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
   LOG_VART(_distance);
   LOG_VART(_closeMatch);
 
-  return _distance <= _matchDistanceThreshold ? 2 : 0;
+  return _distance <= _matchDistanceThreshold ? 2u : 0u;
 }
 
 unsigned int PoiPolygonMatch::_getConvexPolyDistanceEvidence(ConstElementPtr poi,
@@ -423,7 +449,7 @@ unsigned int PoiPolygonMatch::_getConvexPolyDistanceEvidence(ConstElementPtr poi
   const double alphaShapeDist =
     PoiPolygonAlphaShapeDistanceExtractor().extract(*_map, poi, poly);
   LOG_VART(alphaShapeDist);
-  return alphaShapeDist <= _matchDistanceThreshold ? 2 : 0;
+  return alphaShapeDist <= _matchDistanceThreshold ? 2u : 0u;
 }
 
 unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElementPtr poly)
@@ -442,7 +468,7 @@ unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElement
   LOG_VART(typeMatch);
   LOG_VART(PoiPolygonTypeScoreExtractor::poiBestKvp);
   LOG_VART(PoiPolygonTypeScoreExtractor::polyBestKvp);
-  return typeMatch ? 1 : 0;
+  return typeMatch ? 1u : 0u;
 }
 
 unsigned int PoiPolygonMatch::_getNameEvidence(ConstElementPtr poi, ConstElementPtr poly)
@@ -452,7 +478,7 @@ unsigned int PoiPolygonMatch::_getNameEvidence(ConstElementPtr poi, ConstElement
   _nameScore = nameScorer.extract(*_map, poi, poly);
   const bool nameMatch = _nameScore >= _nameScoreThreshold;
   LOG_VART(nameMatch);
-  return nameMatch ? 1 : 0;
+  return nameMatch ? 1u : 0u;
 }
 
 unsigned int PoiPolygonMatch::_getAddressEvidence(ConstElementPtr poi, ConstElementPtr poly)
@@ -460,7 +486,7 @@ unsigned int PoiPolygonMatch::_getAddressEvidence(ConstElementPtr poi, ConstElem
   _addressScore = PoiPolygonAddressScoreExtractor().extract(*_map, poi, poly);
   const bool addressMatch = _addressScore == 1.0;
   LOG_VART(addressMatch);
-  return addressMatch ? 1 : 0;
+  return addressMatch ? 1u : 0u;
 }
 
 unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstElementPtr poly)
@@ -478,19 +504,19 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
 
   evidence += _getNameEvidence(poi, poly);
   //if we already have a match, no point in doing more calculations
-  if (_reviewIfMatchedTypes.isEmpty() && evidence >= MATCH_EVIDENCE_THRESHOLD)
+  if (_reviewIfMatchedTypes.isEmpty() && evidence >= _matchEvidenceThreshold)
   {
     return evidence;
   }
 
   evidence += _getTypeEvidence(poi, poly);
-  if (evidence >= MATCH_EVIDENCE_THRESHOLD)
+  if (evidence >= _matchEvidenceThreshold)
   {
     return evidence;
   }
 
   evidence += _getAddressEvidence(poi, poly);
-  if (evidence >= MATCH_EVIDENCE_THRESHOLD)
+  if (evidence >= _matchEvidenceThreshold)
   {
     return evidence;
   }
@@ -506,7 +532,7 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
       OsmSchema::getInstance().isBuilding(poly))
   {
     evidence += _getConvexPolyDistanceEvidence(poi, poly);
-    if (evidence >= MATCH_EVIDENCE_THRESHOLD)
+    if (evidence >= _matchEvidenceThreshold)
     {
       return evidence;
     }
@@ -523,7 +549,7 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
   }*/
 
   //no point in trying to increase evidence if we're already at a match
-  if (_enableAdvancedMatching && evidence < MATCH_EVIDENCE_THRESHOLD)
+  if (_enableAdvancedMatching && evidence < _matchEvidenceThreshold)
   {
     PoiPolygonAdvancedMatcher advancedMatcher(
       _map, _polyNeighborIds, _poiNeighborIds, _distance);

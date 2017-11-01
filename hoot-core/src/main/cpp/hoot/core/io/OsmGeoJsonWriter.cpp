@@ -57,12 +57,23 @@ using namespace boost;
 using namespace geos::geom;
 using namespace std;
 
-namespace hoot {
+namespace hoot
+{
 
 HOOT_FACTORY_REGISTER(OsmMapWriter, OsmGeoJsonWriter)
 
-OsmGeoJsonWriter::OsmGeoJsonWriter(int precision) : OsmJsonWriter(precision)
+OsmGeoJsonWriter::OsmGeoJsonWriter(int precision)
+  : OsmJsonWriter(precision)
 {
+  _writeHootFormat = ConfigOptions().getJsonFormatHootenanny();
+}
+
+void OsmGeoJsonWriter::setConfiguration(const Settings& conf)
+{
+  _includeDebug = ConfigOptions(conf).getWriterIncludeDebugTags();
+  _pretty = ConfigOptions(conf).getJsonPrettyPrint();
+  _writeEmptyTags = ConfigOptions(conf).getJsonPerserveEmptyTags();
+  _writeHootFormat = ConfigOptions(conf).getJsonFormatHootenanny();
 }
 
 void OsmGeoJsonWriter::write(ConstOsmMapPtr map)
@@ -202,10 +213,14 @@ void OsmGeoJsonWriter::_writeGeometry(const vector<long> &nodes, string type)
 
 void OsmGeoJsonWriter::_writeFeature(ConstElementPtr e)
 {
-  _writeKvp("type", "Feature"); _write(",");
-  _writeKvp("id", QString::number(e->getId())); _write(",");
-  _write("\"properties\": {");
-  _writeKvp("type", _typeName(e->getElementType()));
+  _writeKvp("type", "Feature");
+  if (_writeHootFormat)
+  {
+    _write(",");
+    _writeKvp("id", QString::number(e->getId()));
+    _write(",");
+    _writeKvp("type", _typeName(e->getElementType()));
+  }
   if (_hasTags(e))
   {
     _write(",");
@@ -216,7 +231,6 @@ void OsmGeoJsonWriter::_writeFeature(ConstElementPtr e)
     _write(",");
     _writeRelationInfo(boost::dynamic_pointer_cast<const Relation>(e));
   }
-  _write("}");
 }
 
 void OsmGeoJsonWriter::_writeNodes()
