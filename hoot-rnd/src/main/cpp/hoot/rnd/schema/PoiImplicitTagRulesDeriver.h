@@ -100,6 +100,8 @@ private:
 
   bool _runInMemory;
   QCache<QString, QString> _wordCaseMappingsCache;
+  long _maxCacheSize;
+  bool _wordCaseCacheLimitMessageShown;
 
   void _updateForNewWord(QString word, const QString kvp);
   QStringList _getPoiKvps(const Tags& tags) const;

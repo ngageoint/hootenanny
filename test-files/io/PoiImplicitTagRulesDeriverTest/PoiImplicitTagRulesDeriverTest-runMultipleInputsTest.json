@@ -344,11 +344,11 @@
     "tourism=viewpoint": 2
   },
   {
-    "word": "DECA HOMES MACTAN 4,  BANKAL GATE 1",
+    "word": "DECA HOMES MACTAN 4, BANKAL GATE 1",
     "tourism=guest_house": 1
   },
   {
-    "word": "DECA HOMES  MACTAN 4,  BANKAL GATE 2",
+    "word": "DECA HOMES MACTAN 4, BANKAL GATE 2",
     "tourism=guest_house": 1
   },
   {
@@ -695,7 +695,7 @@
     "place=locality": 1
   },
   {
-    "word": "Ministry of Defence   Army HQ",
+    "word": "Ministry of Defence Army HQ",
     "place=locality": 3
   },
   {

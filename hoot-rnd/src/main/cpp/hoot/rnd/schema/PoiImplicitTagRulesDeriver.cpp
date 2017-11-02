@@ -47,7 +47,9 @@ namespace hoot
 PoiImplicitTagRulesDeriver::PoiImplicitTagRulesDeriver() :
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
 _runInMemory(ConfigOptions().getPoiImplicitTagRulesRunInMemory()),
-_wordCaseMappingsCache(ConfigOptions().getPoiImplicitTagRulesCacheSize())
+_wordCaseMappingsCache(ConfigOptions().getPoiImplicitTagRulesCacheSize()),
+_maxCacheSize(ConfigOptions().getPoiImplicitTagRulesCacheSize()),
+_wordCaseCacheLimitMessageShown(false)
 {
   _readIgnoreLists();
 }
@@ -103,6 +105,7 @@ QStringList PoiImplicitTagRulesDeriver::_getPoiKvps(const Tags& tags) const
 
 void PoiImplicitTagRulesDeriver::_updateForNewWord(QString word, const QString kvp)
 {
+  word = word.simplified();
   LOG_TRACE("Updating word: " << word << " with kvp: " << kvp << "...");
 
   const QString lowerCaseWord = word.toLower();
@@ -149,6 +152,11 @@ void PoiImplicitTagRulesDeriver::_updateForNewWord(QString word, const QString k
       QString* wordPtr = new QString();
       *wordPtr = word;
       _wordCaseMappingsCache.insert(lowerCaseWord, wordPtr);
+      if (!_wordCaseCacheLimitMessageShown && _wordCaseMappingsCache.size() == _maxCacheSize)
+      {
+        LOG_INFO("Reached max size: " << _maxCacheSize << " for word case mappings cache.");
+        _wordCaseCacheLimitMessageShown = true;
+      }
       _tempDbWriter.insertWord(word);
     }
   }
@@ -213,7 +221,7 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs,
     new QTemporaryFile(
       ConfigOptions().getApidbBulkInserterTempFileDir() +
       "/poi-implicit-tag-rules-deriver-temp-XXXXXX"));
-  //_countFile->setAutoRemove(false); //for debugging only
+  _countFile->setAutoRemove(false); //for debugging only
   if (!_countFile->open())
   {
     throw HootException(QObject::tr("Error opening %1 for writing.").arg(_countFile->fileName()));
@@ -229,11 +237,14 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs,
 
   long poiCount = 0;
   long nodeCount = 0;
+  long elementCount = 0;
   for (int i = 0; i < inputs.size(); i++)
   {
+    const QString input = inputs.at(i);
+    const bool inputIsPbf = input.endsWith(".pbf");
     boost::shared_ptr<PartialOsmMapReader> inputReader =
       boost::dynamic_pointer_cast<PartialOsmMapReader>(
-        OsmMapReaderFactory::getInstance().createReader(inputs.at(i)));
+        OsmMapReaderFactory::getInstance().createReader(input));
     inputReader->open(inputs.at(i));
     boost::shared_ptr<ElementInputStream> inputStream =
       boost::dynamic_pointer_cast<ElementInputStream>(inputReader);
@@ -331,6 +342,19 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs,
             "Parsed " << StringUtils::formatLargeNumber(nodeCount) << " nodes from input.");
         }
       }
+      else if (inputIsPbf)
+      {
+        LOG_INFO("Reached end of PBF nodes.");
+        break;
+      }
+
+      elementCount++;
+
+      if (elementCount % (_statusUpdateInterval * 1000) == 0)
+      {
+        PROGRESS_INFO(
+          "Parsed " << StringUtils::formatLargeNumber(elementCount) << " elements from input.");
+      }
     }
     inputReader->finalizePartial();
   }
@@ -416,7 +440,7 @@ void PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
     new QTemporaryFile(
       ConfigOptions().getApidbBulkInserterTempFileDir() +
       "/poi-implicit-tag-rules-deriver-temp-XXXXXX"));
-  //_sortedDedupedCountFile->setAutoRemove(false); //for debugging only
+  _sortedDedupedCountFile->setAutoRemove(false); //for debugging only
   if (!_sortedDedupedCountFile->open())
   {
     throw HootException(
@@ -433,6 +457,9 @@ void PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
   QCache<QString, long> wordTagKeysToCountsCache(ConfigOptions().getPoiImplicitTagRulesCacheSize());
   QCache<QString, long> wordIdCache(ConfigOptions().getPoiImplicitTagRulesCacheSize());
   QCache<QString, long> tagKeyIdCache(ConfigOptions().getPoiImplicitTagRulesCacheSize());
+  bool wordTagKeyCountsCacheLimitMessageShown = false;
+  bool wordIdCacheLimitMessageShown = false;
+  bool tagKeyIdCacheLimitMessageShown = false;
   while (!_sortedCountFile->atEnd())
   {
     const QString line = QString::fromUtf8(_sortedCountFile->readLine().constData()).trimmed();
@@ -476,10 +503,10 @@ void PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
       //have occurrance count ties
       else if (_wordKeysToCounts[wordTagKey] == count)
       {
-        LOG_DEBUG(
-          "Found word with multiple tag occurrance counts of the same size.  Arbitrarily " <<
-          "chose first tag.  Not creating implicit tag entry for word: " << word << ", tag: " <<
-          kvp << ", count: " << count);
+//        LOG_DEBUG(
+//          "Found word with multiple tag occurrance counts of the same size.  Arbitrarily " <<
+//          "chose first tag.  Not creating implicit tag entry for word: " << word << ", tag: " <<
+//          kvp << ", count: " << count);
       }
     }
     else
@@ -515,6 +542,11 @@ void PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
           wordIdPtr = new long();
           *wordIdPtr = wordId;
           wordIdCache.insert(word.toLower(), wordIdPtr);
+          if (!wordIdCacheLimitMessageShown && wordIdCache.size() == _maxCacheSize)
+          {
+            LOG_INFO("Reached max size: " << _maxCacheSize << " for word ids cache.");
+            wordIdCacheLimitMessageShown = true;
+          }
         }
         LOG_VART(wordId);
         assert(wordId != -1);
@@ -545,6 +577,12 @@ void PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
             long* countPtr = new long();
             *countPtr = count;
             wordTagKeysToCountsCache.insert(wordTagKey, countPtr);
+            if (!wordTagKeyCountsCacheLimitMessageShown &&
+                 wordTagKeysToCountsCache.size() == _maxCacheSize)
+            {
+              LOG_INFO("Reached max size: " << _maxCacheSize << " for word tag key counts cache.");
+              wordTagKeyCountsCacheLimitMessageShown = true;
+            }
             _tempDbWriter.insertWordTagKey(wordId, tagKeyId, count);
             _updateSortedDedupedFile(word, kvp, count);
           }
@@ -565,11 +603,23 @@ void PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
           tagKeyIdPtr = new long();
           *tagKeyIdPtr = tagKeyId;
           tagKeyIdCache.insert(tagKey, tagKeyIdPtr);
+          if (!tagKeyIdCacheLimitMessageShown &&
+               tagKeyIdCache.size() == _maxCacheSize)
+          {
+            LOG_INFO("Reached max size: " << _maxCacheSize << " for tag key id cache.");
+            tagKeyIdCacheLimitMessageShown = true;
+          }
           LOG_VART(tagKeyId);
           LOG_TRACE("Writing combination to database and updating temp file...");
           long* countPtr = new long();
           *countPtr = count;
           wordTagKeysToCountsCache.insert(wordTagKey, countPtr);
+          if (!wordTagKeyCountsCacheLimitMessageShown &&
+               wordTagKeysToCountsCache.size() == _maxCacheSize)
+          {
+            LOG_INFO("Reached max size: " << _maxCacheSize << " for word tag key counts cache.");
+            wordTagKeyCountsCacheLimitMessageShown = true;
+          }
           _tempDbWriter.insertWordTagKey(wordId, tagKeyId, count);
           _updateSortedDedupedFile(word, kvp, count);
         }
@@ -606,7 +656,7 @@ void PoiImplicitTagRulesDeriver::_sortByWord()
     new QTemporaryFile(
       ConfigOptions().getApidbBulkInserterTempFileDir() +
       "/poi-implicit-tag-rules-deriver-temp-XXXXXX"));
-  //_sortedByWordDedupedCountFile->setAutoRemove(false); //for debugging only
+  _sortedByWordDedupedCountFile->setAutoRemove(false); //for debugging only
   if (!_sortedByWordDedupedCountFile->open())
   {
     throw HootException(
