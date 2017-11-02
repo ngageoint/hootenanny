@@ -293,12 +293,12 @@ void ImplicitTagRulesSqliteRecordWriter::write(const QString inputUrl)
 
   DbUtils::execNoPrepare(_db, "COMMIT");
 
-  //TODO: add text indexes on words and tags after writing
-  //  LOG_INFO("Creating database indexes...");
-  //  DbUtils::execNoPrepare(_db, "CREATE INDEX word_idx ON words USING btree (word)");
-  //  DbUtils::execNoPrepare(_db, "CREATE INDEX tag_idx ON tags USING btree (kvp)");
-  //  DbUtils::execNoPrepare(_db, "CREATE INDEX word_id_idx ON rules USING btree (word_id)");
-  //  DbUtils::execNoPrepare(_db, "CREATE INDEX tag_id_idx ON rules USING btree (tag_id)");
+  LOG_INFO("Creating database indexes...");
+  DbUtils::execNoPrepare(_db, "CREATE UNIQUE INDEX word_idx ON words (word)");
+  DbUtils::execNoPrepare(_db, "CREATE UNIQUE INDEX tag_idx ON tags (kvp)");
+  //TODO: fix
+  //DbUtils::execNoPrepare(_db, "CREATE UNIQUE INDEX word_id_idx ON rules (word_id)");
+  //DbUtils::execNoPrepare(_db, "CREATE UNIQUE INDEX tag_id_idx ON rules (tag_id)");
 
   LOG_INFO(
     "Wrote " << StringUtils::formatLargeNumber(/*_wordsToWordIds.size()*/wordCtr) << " words, " <<
