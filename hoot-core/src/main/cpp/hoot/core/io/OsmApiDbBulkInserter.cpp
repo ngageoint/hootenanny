@@ -238,11 +238,15 @@ void OsmApiDbBulkInserter::_logStats(const bool debug)
   messages.append(QString("\tNodes: ") + StringUtils::formatLargeNumber(_writeStats.nodesWritten));
   messages.append(
     QString("\tNode tags: ") + StringUtils::formatLargeNumber(_writeStats.nodeTagsWritten));
+  messages.append(
+    QString("\tMaximum node ID: ") + StringUtils::formatLargeNumber(_idMappings.currentNodeId));
   messages.append(QString("\tWays: ") + StringUtils::formatLargeNumber(_writeStats.waysWritten));
   messages.append(
     QString("\tWay nodes: ") + StringUtils::formatLargeNumber(_writeStats.wayNodesWritten));
   messages.append(
     QString("\tWay tags: ") + StringUtils::formatLargeNumber(_writeStats.wayTagsWritten));
+  messages.append(
+    QString("\tMaximum way ID: ") + StringUtils::formatLargeNumber(_idMappings.currentWayId));
   messages.append(
     QString("\tRelations: ") + StringUtils::formatLargeNumber(_writeStats.relationsWritten));
   messages.append(
@@ -250,6 +254,9 @@ void OsmApiDbBulkInserter::_logStats(const bool debug)
     StringUtils::formatLargeNumber(_writeStats.relationMembersWritten));
   messages.append(
     QString("\tRelation tags: ") + StringUtils::formatLargeNumber(_writeStats.relationTagsWritten));
+  messages.append(
+    QString("\tMaximum relation ID: ") +
+    StringUtils::formatLargeNumber(_idMappings.currentRelationId));
   messages.append(
     QString("\tUnresolved relation members: ") +
     StringUtils::formatLargeNumber(_writeStats.relationMembersUnresolved));
@@ -385,24 +392,23 @@ void OsmApiDbBulkInserter::finalizePartial()
   //out
   _writeCombinedSqlFile();
 
-  LOG_DEBUG("File write stats:");
-  _logStats(true);
-
   if (_destinationIsDatabase())
   {
+    LOG_INFO("File write stats:");
+    _logStats(false);
+
     _writeDataToDb();
     if (_outputFilesCopyLocation.isEmpty())
     {
       _sqlOutputCombinedFile->remove();
     }
-    LOG_DEBUG("Final database write stats:");
   }
   else
   {
     LOG_DEBUG("Skipping SQL execution against database due to configuration...");
-    LOG_DEBUG("Final file write stats:");
+    LOG_INFO("File write stats:");
+    _logStats(false);
   }
-  _logStats(true);
 }
 
 bool OsmApiDbBulkInserter::_destinationIsDatabase() const
@@ -499,7 +505,7 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
 
   _sqlOutputCombinedFile->write(QString("BEGIN TRANSACTION;\n\n").toUtf8());
 
-  if (!_reserveRecordIdsBeforeWritingData)
+  if (!_reserveRecordIdsBeforeWritingData && _writeIdSequenceUpdates)
   {
     //We're not reserving the ID ranges in the database, so we'll write the appropriate setval
     //statements to the sql output here for applying at a later time.  we want
@@ -944,6 +950,7 @@ void OsmApiDbBulkInserter::setConfiguration(const Settings& conf)
   setTempDir(confOptions.getApidbBulkInserterTempFileDir());
   setDisableDatabaseIndexesDuringWrite(
     confOptions.getOsmapidbBulkInserterDisableDatabaseIndexesDuringWrite());
+  setWriteIdSequenceUpdates(confOptions.getOsmapidbBulkInserterWriteSqlFileIdSequenceUpdates());
 }
 
 QStringList OsmApiDbBulkInserter::_createSectionNameList()

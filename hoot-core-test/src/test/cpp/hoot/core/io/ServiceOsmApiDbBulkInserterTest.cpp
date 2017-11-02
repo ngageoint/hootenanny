@@ -37,6 +37,7 @@
 #include <hoot/core/io/OsmApiDbReader.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/DbUtils.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QDir>
@@ -58,6 +59,7 @@ namespace hoot
 class ServiceOsmApiDbBulkInserterTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceOsmApiDbBulkInserterTest);
+  //CPPUNIT_TEST(maxDataTypeSizeTest);
   CPPUNIT_TEST(runPsqlDbOfflineTest);
   CPPUNIT_TEST(runPsqlDbOfflineValidateOffTest);
   CPPUNIT_TEST(runPsqlDbOfflineStxxlTest);
@@ -67,6 +69,34 @@ class ServiceOsmApiDbBulkInserterTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
+
+  void maxDataTypeSizeTest()
+  {
+    std::cout << "size of short: " << sizeof(short) << std::endl;
+    std::cout << "max size of short: " <<
+                 StringUtils::formatLargeNumber(std::numeric_limits<short>::max()) << std::endl;
+    std::cout << "size of unsigned short: " << sizeof(unsigned short) << std::endl;
+    std::cout << "max size of unsigned short: " <<
+                 StringUtils::formatLargeNumber(std::numeric_limits<unsigned short>::max()) << std::endl;
+    std::cout << "size of int: " << sizeof(int) << std::endl;
+    std::cout << "max size of int : " <<
+                 StringUtils::formatLargeNumber(std::numeric_limits<int>::max()) << std::endl;
+    std::cout << "size of unsigned int: " << sizeof(unsigned int) << std::endl;
+    std::cout << "max size of unsigned int : " <<
+                 StringUtils::formatLargeNumber(std::numeric_limits<unsigned int>::max()) << std::endl;
+    std::cout << "size of long: " << sizeof(long) << std::endl;
+    std::cout << "max size of long : " <<
+                 StringUtils::formatLargeNumber(std::numeric_limits<long>::max()) << std::endl;
+    std::cout << "size of unsigned long: " << sizeof(unsigned long) << std::endl;
+    std::cout << "max size of unsigned long : " <<
+                 StringUtils::formatLargeNumber(std::numeric_limits<unsigned long>::max()) << std::endl;
+    std::cout << "size of float: " << sizeof(float) << std::endl;
+    std::cout << "max size of float : " <<
+                 StringUtils::formatLargeNumber(std::numeric_limits<float>::max()) << std::endl;
+    std::cout << "size of double: " << sizeof(double) << std::endl;
+    std::cout << "max size of double : " <<
+                 StringUtils::formatLargeNumber(std::numeric_limits<double>::max()) << std::endl;
+  }
 
   void verifyDatabaseOutputOffline()
   {
