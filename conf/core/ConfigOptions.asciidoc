@@ -1905,7 +1905,7 @@ names.
 === poi.implicit.tag.rules.run.in.memory
 
 * Data Type: bool
-* Default Value: `false`
+* Default Value: `true`
 
 If true, the POI implicit tag deriver will store all data in memory.  temp setting
 

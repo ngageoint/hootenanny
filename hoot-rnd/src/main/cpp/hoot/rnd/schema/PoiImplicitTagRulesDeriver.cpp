@@ -115,15 +115,14 @@ void PoiImplicitTagRulesDeriver::_updateForNewWord(QString word, const QString k
     //FixedLengthString fixedLengthLowerCaseWord = _qStrToFixedLengthStr(lowerCaseWord);
     //if (_wordCaseMappings.find(fixedLengthLowerCaseWord) != _wordCaseMappings.end())
     //if (_wordCaseMappings.contains(fixedLengthLowerCaseWord))
-    if (_wordCaseMappings.contains(lowerCaseWord))
+    const QString queriedWord = _wordCaseMappings.value(lowerCaseWord, "");
+    if (queriedWord.isEmpty())
     {
-      //word = _fixedLengthStrToQStr(_wordCaseMappings[fixedLengthLowerCaseWord]);
-      word = _wordCaseMappings[lowerCaseWord];
+      _wordCaseMappings[lowerCaseWord] = word;
     }
     else
     {
-      //_wordCaseMappings[fixedLengthLowerCaseWord] = fixedLengthWord;
-      _wordCaseMappings[lowerCaseWord] = word;
+      word = queriedWord;
     }
   }
   else
