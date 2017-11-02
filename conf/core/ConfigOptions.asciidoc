@@ -1882,6 +1882,13 @@ current directory (CWD), $CWD/rules, $HOOT_HOME/rules.
 If true, POI conflation will ignore the types of the features being compared completely as long as
 those being compared have a populated name field.
 
+=== poi.implicit.tag.rules.cache.size
+
+* Data Type: int
+* Default Value: `1000000`
+
+The maximum size of entries allowed in each POI implicit tag rules deriver cache data structure.
+
 === poi.implicit.tag.rules.database
 
 * Data Type: string

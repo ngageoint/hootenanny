@@ -90,6 +90,8 @@ private:
 
   bool _runInMemory;
 
+  long _statusUpdateInterval;
+
   void _createTables();
   void _prepareQueries();
 

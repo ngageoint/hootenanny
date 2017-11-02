@@ -29,6 +29,7 @@
 // hoot
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QStringBuilder>
@@ -39,7 +40,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ImplicitTagRuleWordPartWriter, ImplicitTagRulesJsonWriter)
 
-ImplicitTagRulesJsonWriter::ImplicitTagRulesJsonWriter()
+ImplicitTagRulesJsonWriter::ImplicitTagRulesJsonWriter() :
+_statusUpdateInterval(ConfigOptions().getApidbBulkInserterFileOutputStatusUpdateInterval())
 {
 }
 
@@ -81,6 +83,7 @@ void ImplicitTagRulesJsonWriter::write(const QString inputUrl)
     throw HootException(QObject::tr("Error opening %1 for reading.").arg(inputUrl));
   }
 
+  long lineCtr = 0;
   while (!inputFile.atEnd())
   {
     const QString line = QString::fromUtf8(inputFile.readLine().constData());
@@ -99,6 +102,14 @@ void ImplicitTagRulesJsonWriter::write(const QString inputUrl)
     }
     _currentWord = word;
     _wordPartsBuffer.append(line);
+    lineCtr++;
+
+    if (lineCtr % _statusUpdateInterval == 0)
+    {
+      PROGRESS_INFO(
+        "JSON implicit tag rules writer has parsed " << StringUtils::formatLargeNumber(lineCtr) <<
+        " input file lines.");
+    }
   }
   _flushWordPartsBuffer(true);
   inputFile.close();

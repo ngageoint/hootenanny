@@ -38,6 +38,7 @@
 #include <QSqlError>
 #include <QFile>
 #include <QStringBuilder>
+#include <QCache>
 
 namespace hoot
 {
@@ -45,7 +46,8 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ImplicitTagRuleWordPartWriter, ImplicitTagRulesSqliteRecordWriter)
 
 ImplicitTagRulesSqliteRecordWriter::ImplicitTagRulesSqliteRecordWriter() :
-_runInMemory(ConfigOptions().getPoiImplicitTagRulesRunInMemory())
+_runInMemory(ConfigOptions().getPoiImplicitTagRulesRunInMemory()),
+_statusUpdateInterval(ConfigOptions().getApidbBulkInserterFileOutputStatusUpdateInterval() / 1000)
 {
 }
 
@@ -176,6 +178,8 @@ void ImplicitTagRulesSqliteRecordWriter::write(const QString inputUrl)
   long ruleWordPartCtr = 0;
   long wordCtr = 0;
   long tagCtr = 0;
+  QCache<QString, long> wordIdCache(ConfigOptions().getPoiImplicitTagRulesCacheSize());
+  QCache<QString, long> tagIdCache(ConfigOptions().getPoiImplicitTagRulesCacheSize());
   while (!inputFile.atEnd())
   {
     const QString line = QString::fromUtf8(inputFile.readLine().constData());
@@ -220,10 +224,24 @@ void ImplicitTagRulesSqliteRecordWriter::write(const QString inputUrl)
     }
     else
     {
-      wordId = _getWordIdForWord(word);
+      long* wordIdPtr = wordIdCache[word.toLower()];
+      if (wordIdPtr != 0)
+      {
+        wordId = *wordIdPtr;
+        assert(wordId != -1);
+      }
+      else
+      {
+        wordId = _getWordIdForWord(word);
+      }
+      LOG_VART(wordId);
+
       if (wordId == -1)
       {
         wordId = _insertWord(word);
+        wordIdPtr = new long();
+        *wordIdPtr = wordId;
+        wordIdCache.insert(word.toLower(), wordIdPtr);
         wordCtr++;
         LOG_TRACE("Created new word with ID: " << wordId);
       }
@@ -232,10 +250,24 @@ void ImplicitTagRulesSqliteRecordWriter::write(const QString inputUrl)
         LOG_TRACE("Found existing word with ID: " << wordId);
       }
 
-      tagId = _getTagIdForTag(kvp);
+      long* tagIdPtr = tagIdCache[kvp];
+      if (tagIdPtr != 0)
+      {
+        tagId = *tagIdPtr;
+        assert(tagId != -1);
+      }
+      else
+      {
+        tagId = _getTagIdForTag(kvp);
+      }
+      LOG_VART(tagId);
+
       if (tagId == -1)
       {
         tagId = _insertTag(kvp);
+        tagIdPtr = new long();
+        *tagIdPtr = tagId;
+        tagIdCache.insert(kvp, tagIdPtr);
         tagCtr++;
         LOG_TRACE("Created new tag with ID: " << tagId);
       }
@@ -247,6 +279,13 @@ void ImplicitTagRulesSqliteRecordWriter::write(const QString inputUrl)
 
     _insertRuleWordPart(wordId, tagId, tagOccurranceCount);
     ruleWordPartCtr++;
+
+    if (ruleWordPartCtr % _statusUpdateInterval == 0)
+    {
+      PROGRESS_INFO(
+        "Sqlite implicit tag rules writer has parsed " <<
+        StringUtils::formatLargeNumber(ruleWordPartCtr) << " input file lines.");
+    }
 
     LOG_VART("************************************")
   }

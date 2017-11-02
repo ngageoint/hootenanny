@@ -36,6 +36,7 @@
 #include <QString>
 #include <QMap>
 #include <QTemporaryFile>
+#include <QCache>
 
 namespace hoot
 {
@@ -98,6 +99,7 @@ private:
   PoiImplicitTagRulesDeriverTempDbWriter _tempDbWriter;
 
   bool _runInMemory;
+  QCache<QString, QString> _wordCaseMappingsCache;
 
   void _updateForNewWord(QString word, const QString kvp);
   QStringList _getPoiKvps(const Tags& tags) const;
@@ -108,8 +110,7 @@ private:
   void _removeKvpsBelowOccuranceThresholdAndSortByOccurrance(const int minOccurancesThreshold);
   void _removeDuplicatedKeyTypes();
   void _sortByWord();
-  void _updateSortedDedupedFile(const long wordId, QString word, const long tagKeyId,
-                                const QString kvp, const long count);
+  void _updateSortedDedupedFile(QString word, const QString kvp, const long count);
 
   QString _getSqliteOutput(const QStringList outputs);
   void _writeRules(const QStringList outputs, const QString sqliteOutputFile);

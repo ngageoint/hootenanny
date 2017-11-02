@@ -45,8 +45,9 @@ namespace hoot
 {
 
 PoiImplicitTagRulesDeriver::PoiImplicitTagRulesDeriver() :
-_statusUpdateInterval(ConfigOptions().getApidbBulkInserterFileOutputStatusUpdateInterval()),
-_runInMemory(ConfigOptions().getPoiImplicitTagRulesRunInMemory())
+_statusUpdateInterval(ConfigOptions().getApidbBulkInserterFileOutputStatusUpdateInterval() / 1000),
+_runInMemory(ConfigOptions().getPoiImplicitTagRulesRunInMemory()),
+_wordCaseMappingsCache(ConfigOptions().getPoiImplicitTagRulesCacheSize())
 {
   _readIgnoreLists();
 }
@@ -104,10 +105,10 @@ void PoiImplicitTagRulesDeriver::_updateForNewWord(QString word, const QString k
 {
   LOG_TRACE("Updating word: " << word << " with kvp: " << kvp << "...");
 
+  const QString lowerCaseWord = word.toLower();
   if (_runInMemory)
   {
     //FixedLengthString fixedLengthWord = _qStrToFixedLengthStr(word);
-    const QString lowerCaseWord = word.toLower();
     //FixedLengthString fixedLengthLowerCaseWord = _qStrToFixedLengthStr(lowerCaseWord);
     //if (_wordCaseMappings.find(fixedLengthLowerCaseWord) != _wordCaseMappings.end())
     //if (_wordCaseMappings.contains(fixedLengthLowerCaseWord))
@@ -127,7 +128,16 @@ void PoiImplicitTagRulesDeriver::_updateForNewWord(QString word, const QString k
     //If the bloom filter can be made to work with FixedLengthString, then we can replace this block
     //with something like the above but using BigMap instead of QMap.  FixedLengthString with a
     //raw stxxl map is ~3 orders of magnitude slower than using QMap.
-    const QString queriedWord = _tempDbWriter.getWord(word);
+    QString queriedWord;
+    QString* queriedWordPtr = _wordCaseMappingsCache[lowerCaseWord];
+    if (queriedWordPtr != 0)
+    {
+      queriedWord = *queriedWordPtr;
+    }
+    else
+    {
+      queriedWord = _tempDbWriter.getWord(word);
+    }
     LOG_VART(queriedWord);
     if (!queriedWord.isEmpty())
     {
@@ -135,6 +145,9 @@ void PoiImplicitTagRulesDeriver::_updateForNewWord(QString word, const QString k
     }
     else
     {
+      QString* wordPtr = new QString();
+      *wordPtr = word;
+      _wordCaseMappingsCache.insert(lowerCaseWord, wordPtr);
       _tempDbWriter.insertWord(word);
     }
   }
@@ -191,6 +204,7 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs,
 
   _wordKeysToCounts.clear();
   _wordCaseMappings.clear();
+  _wordCaseMappingsCache.clear();
   const bool tokenize = ConfigOptions().getPoiImplicitTagRulesTokenizeNames();
   LOG_VART(tokenize);
 
@@ -198,7 +212,7 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs,
     new QTemporaryFile(
       ConfigOptions().getApidbBulkInserterTempFileDir() +
       "/poi-implicit-tag-rules-deriver-temp-XXXXXX"));
-  _countFile->setAutoRemove(false); //for debugging only
+  //_countFile->setAutoRemove(false); //for debugging only
   if (!_countFile->open())
   {
     throw HootException(QObject::tr("Error opening %1 for writing.").arg(_countFile->fileName()));
@@ -322,6 +336,7 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs,
   _countFile->close();
   LOG_VARD(_wordCaseMappings.size());
   _wordCaseMappings.clear();
+  _wordCaseMappingsCache.clear();
 
   LOG_INFO(
     "Parsed " << StringUtils::formatLargeNumber(poiCount) << " POIs from " <<
@@ -365,7 +380,7 @@ void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccuranceThresholdAndSortByOccu
     new QTemporaryFile(
       ConfigOptions().getApidbBulkInserterTempFileDir() +
       "/poi-implicit-tag-rules-deriver-temp-XXXXXX"));
-  _sortedCountFile->setAutoRemove(false); //for debugging only
+  //_sortedCountFile->setAutoRemove(false); //for debugging only
   if (!_sortedCountFile->open())
   {
     throw HootException(
@@ -400,7 +415,7 @@ void PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
     new QTemporaryFile(
       ConfigOptions().getApidbBulkInserterTempFileDir() +
       "/poi-implicit-tag-rules-deriver-temp-XXXXXX"));
-  _sortedDedupedCountFile->setAutoRemove(false); //for debugging only
+  //_sortedDedupedCountFile->setAutoRemove(false); //for debugging only
   if (!_sortedDedupedCountFile->open())
   {
     throw HootException(
@@ -414,6 +429,9 @@ void PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
   }
   LOG_DEBUG("Opened sorted input temp file: " << _sortedCountFile->fileName());
 
+  QCache<QString, long> wordTagKeysToCountsCache(ConfigOptions().getPoiImplicitTagRulesCacheSize());
+  QCache<QString, long> wordIdCache(ConfigOptions().getPoiImplicitTagRulesCacheSize());
+  QCache<QString, long> tagKeyIdCache(ConfigOptions().getPoiImplicitTagRulesCacheSize());
   while (!_sortedCountFile->atEnd())
   {
     const QString line = QString::fromUtf8(_sortedCountFile->readLine().constData()).trimmed();
@@ -466,51 +484,105 @@ void PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
     else
     {
       //see comment in _updateForNewWord
-      const long wordId = _tempDbWriter.getWordIdForWord(word);
-      LOG_VART(wordId);
-      assert(wordId != -1);
-      long tagKeyId = _tempDbWriter.getTagKeyIdForTagKey(tagKey);
-      LOG_VART(tagKeyId);
-      if (tagKeyId != -1)
+      long queriedCount = -1;
+      long* queriedCountPtr = wordTagKeysToCountsCache[wordTagKey];
+      if (queriedCountPtr != 0)
       {
-        LOG_TRACE("Found tag key id: " << tagKeyId << " for tag key: " << tagKey << ".");
-        const long queriedCount = _tempDbWriter.getWordTagKeyCount(wordId, tagKeyId);
-        LOG_VART(queriedCount);
-        if (queriedCount == -1)
-        {
-          LOG_TRACE(
-            "Found no existing tag count for word: " << word << " and tag key: " << tagKey <<
-            ".  Writing combination to database and updating temp file...");
-          _updateSortedDedupedFile(wordId, word, tagKeyId, kvp, count);
-        }
-        else if (queriedCount == count)
+        queriedCount = *queriedCountPtr;
+        assert(queriedCount != -1);
+        if (queriedCount == count)
         {
           LOG_DEBUG(
             "Found word with multiple tag occurrance counts of the same size.  Arbitrarily " <<
             "chose first tag.  Not creating implicit tag entry for word: " << word << ", tag: " <<
             kvp << ", count: " << count);
         }
+        //do nothing
       }
       else
       {
-        LOG_TRACE(
-          "Found no tag key id: " << tagKeyId << " for tag key: " << tagKey << ".  Adding tag key...");
-        tagKeyId = _tempDbWriter.insertTagKey(tagKey);
+        long wordId = -1;
+        long* wordIdPtr = wordIdCache[word.toLower()];
+        if (wordIdPtr != 0)
+        {
+          wordId = *wordIdPtr;
+          assert(wordId != -1);
+        }
+        else
+        {
+          wordId = _tempDbWriter.getWordIdForWord(word);
+          wordIdPtr = new long();
+          *wordIdPtr = wordId;
+          wordIdCache.insert(word.toLower(), wordIdPtr);
+        }
+        LOG_VART(wordId);
+        assert(wordId != -1);
+
+        long tagKeyId = -1;
+        long* tagKeyIdPtr = tagKeyIdCache[tagKey];
+        if (tagKeyIdPtr != 0)
+        {
+          tagKeyId = *tagKeyIdPtr;
+          assert(tagKeyId != -1);
+        }
+        else
+        {
+          tagKeyId = _tempDbWriter.getTagKeyIdForTagKey(tagKey);
+        }
         LOG_VART(tagKeyId);
-        LOG_TRACE("Writing combination to database and updating temp file...");
-        _updateSortedDedupedFile(wordId, word, tagKeyId, kvp, count);
+
+        if (tagKeyId != -1)
+        {
+          LOG_TRACE("Found tag key id: " << tagKeyId << " for tag key: " << tagKey << ".");
+          const long queriedCount = _tempDbWriter.getWordTagKeyCount(wordId, tagKeyId);
+          LOG_VART(queriedCount);
+          if (queriedCount == -1)
+          {
+            LOG_TRACE(
+              "Found no existing tag count for word: " << word << " and tag key: " << tagKey <<
+              ".  Writing combination to database and updating temp file...");
+            long* countPtr = new long();
+            *countPtr = count;
+            wordTagKeysToCountsCache.insert(wordTagKey, countPtr);
+            _tempDbWriter.insertWordTagKey(wordId, tagKeyId, count);
+            _updateSortedDedupedFile(word, kvp, count);
+          }
+          else if (queriedCount == count)
+          {
+            LOG_DEBUG(
+              "Found word with multiple tag occurrance counts of the same size.  Arbitrarily " <<
+              "chose first tag.  Not creating implicit tag entry for word: " << word << ", tag: " <<
+              kvp << ", count: " << count);
+          }
+        }
+        else
+        {
+          LOG_TRACE(
+            "Found no tag key id: " << tagKeyId << " for tag key: " << tagKey <<
+             ".  Adding tag key...");
+          tagKeyId = _tempDbWriter.insertTagKey(tagKey);
+          tagKeyIdPtr = new long();
+          *tagKeyIdPtr = tagKeyId;
+          tagKeyIdCache.insert(tagKey, tagKeyIdPtr);
+          LOG_VART(tagKeyId);
+          LOG_TRACE("Writing combination to database and updating temp file...");
+          long* countPtr = new long();
+          *countPtr = count;
+          wordTagKeysToCountsCache.insert(wordTagKey, countPtr);
+          _tempDbWriter.insertWordTagKey(wordId, tagKeyId, count);
+          _updateSortedDedupedFile(word, kvp, count);
+        }
       }
     }
   }
+  wordTagKeysToCountsCache.clear();
   _sortedCountFile->close();
   _sortedDedupedCountFile->close();
 }
 
-void PoiImplicitTagRulesDeriver::_updateSortedDedupedFile(const long wordId, QString word,
-                                                          const long tagKeyId, const QString kvp,
+void PoiImplicitTagRulesDeriver::_updateSortedDedupedFile(QString word, const QString kvp,
                                                           const long count)
 {
-  _tempDbWriter.insertWordTagKey(wordId, tagKeyId, count);
   //this unescaping must occur during the final temp file write
   if (word.contains("%3D"))
   {
@@ -533,7 +605,7 @@ void PoiImplicitTagRulesDeriver::_sortByWord()
     new QTemporaryFile(
       ConfigOptions().getApidbBulkInserterTempFileDir() +
       "/poi-implicit-tag-rules-deriver-temp-XXXXXX"));
-  _sortedByWordDedupedCountFile->setAutoRemove(false); //for debugging only
+  //_sortedByWordDedupedCountFile->setAutoRemove(false); //for debugging only
   if (!_sortedByWordDedupedCountFile->open())
   {
     throw HootException(
