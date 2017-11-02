@@ -45,136 +45,10 @@ namespace hoot
 {
 
 PoiImplicitTagRulesDeriver::PoiImplicitTagRulesDeriver() :
-_statusUpdateInterval(ConfigOptions().getApidbBulkInserterFileOutputStatusUpdateInterval())
+_statusUpdateInterval(ConfigOptions().getApidbBulkInserterFileOutputStatusUpdateInterval()),
+_runInMemory(ConfigOptions().getPoiImplicitTagRulesRunInMemory())
 {
   _readIgnoreLists();
-  _createTempTables();
-  _prepareQueries();
-}
-
-PoiImplicitTagRulesDeriver::~PoiImplicitTagRulesDeriver()
-{
-  if (_db.open())
-  {
-    _db.close();
-  }
-}
-
-void PoiImplicitTagRulesDeriver::_createTempTables()
-{
-  _tempDbFile.reset(
-    new QTemporaryFile(
-      ConfigOptions().getApidbBulkInserterTempFileDir() +
-      "/poi-implicit-tag-rules-deriver-temp-XXXXXX"));
-  _tempDbFile->setAutoRemove(false); //for debugging only
-  if (!_tempDbFile->open())
-  {
-    throw HootException(
-      QObject::tr("Error opening %1 for writing.").arg(_tempDbFile->fileName()));
-  }
-  LOG_DEBUG("Opened db temp file: " << _tempDbFile->fileName());
-
-  _db = QSqlDatabase::addDatabase("QSQLITE", _tempDbFile->fileName());
-  _db.setDatabaseName(_tempDbFile->fileName());
-  if (!_db.open())
-  {
-    throw HootException("Error opening DB. " + _tempDbFile->fileName());
-  }
-  LOG_DEBUG("Opened: " << _tempDbFile->fileName() << ".");
-
-  DbUtils::execNoPrepare(_db, "CREATE TABLE words (id INTEGER PRIMARY KEY, word TEXT)");
-  DbUtils::execNoPrepare(_db, "CREATE TABLE tag_keys (id INTEGER PRIMARY KEY, key TEXT)");
-  DbUtils::execNoPrepare(
-    _db,
-    QString("CREATE TABLE word_tag_keys (id INTEGER PRIMARY KEY, word_id INTEGER, ") +
-    QString("tag_key_id INTEGER, tag_count INTEGER, FOREIGN KEY(word_id) REFERENCES words(id), ") +
-    QString("FOREIGN KEY(tag_key_id) REFERENCES tag_keys(id))"));
-}
-
-void PoiImplicitTagRulesDeriver::_prepareQueries()
-{
-  _insertWordQuery = QSqlQuery(_db);
-  if (!_insertWordQuery.prepare("INSERT INTO words (word) VALUES(:word)"))
-  {
-    throw HootException(
-      QString("Error preparing _insertWordQuery: %1").arg(_insertWordQuery.lastError().text()));
-  }
-
-  _insertTagKeyQuery = QSqlQuery(_db);
-  if (!_insertTagKeyQuery.prepare("INSERT INTO tag_keys (key) VALUES(:key)"))
-  {
-    throw HootException(
-      QString("Error preparing _insertTagKeyQuery: %1").arg(_insertTagKeyQuery.lastError().text()));
-  }
-
-  _insertWordTagKeyQuery = QSqlQuery(_db);
-  if (!_insertWordTagKeyQuery.prepare(
-        "INSERT INTO word_tag_keys (word, key, tag_count) VALUES(:word, :key, :tag_count)"))
-  {
-    throw HootException(
-      QString("Error preparing _insertWordTagKeyQuery: %1").arg(_insertWordTagKeyQuery.lastError().text()));
-  }
-
-  _getWordQuery = QSqlQuery(_db);
-  if (!_getWordQuery.prepare("SELECT word FROM words WHERE word LIKE ':word'"))
-  {
-    throw HootException(
-      QString("Error preparing _getWordQuery: %1").arg(_getWordQuery.lastError().text()));
-  }
-
-  //TODO: fix
-  _getWordKeyCountQuery = QSqlQuery(_db);
-  if (!_getWordKeyCountQuery.prepare(
-        "SELECT tag_count FROM word_tag_keys WHERE word_id = :wordId AND tag_key_id = :tagKeyId"))
-  {
-    throw HootException(
-      QString("Error preparing _getWordKeyCountQuery: %1").arg(_getWordKeyCountQuery.lastError().text()));
-  }
-}
-
-void PoiImplicitTagRulesDeriver::_insertWord(const QString word)
-{
-  _insertWordQuery.bindValue(":word", word);
-  if (!_insertWordQuery.exec())
-  {
-    QString err = QString("Error executing query: %1 (%2)").arg(_insertWordQuery.executedQuery()).
-        arg(_insertWordQuery.lastError().text());
-    throw HootException(err);
-  }
-}
-
-void PoiImplicitTagRulesDeriver::_insertTagKey(const QString key)
-{
-  _insertTagKeyQuery.bindValue(":key", key);
-  if (!_insertTagKeyQuery.exec())
-  {
-    QString err = QString("Error executing query: %1 (%2)").arg(_insertTagKeyQuery.executedQuery()).
-        arg(_insertTagKeyQuery.lastError().text());
-    throw HootException(err);
-  }
-}
-
-//TODO: fix
-void PoiImplicitTagRulesDeriver::_insertWordTagKey(const long wordId, const long tagKeyId,
-                                                   const long tagOccuranceCount)
-{
-  _insertWordTagKeyQuery.bindValue(":key", key);
-  if (!_insertWordTagKeyQuery.exec())
-  {
-    QString err = QString("Error executing query: %1 (%2)").arg(_insertTagKeyQuery.executedQuery()).
-        arg(_insertTagKeyQuery.lastError().text());
-    throw HootException(err);
-  }
-}
-
-QString PoiImplicitTagRulesDeriver::_getWord(const QString word)
-{
-
-}
-
-long PoiImplicitTagRulesDeriver::_getWordKeyCount(const QString wordKey)
-{
-
 }
 
 void PoiImplicitTagRulesDeriver::_readIgnoreLists()
@@ -230,20 +104,39 @@ void PoiImplicitTagRulesDeriver::_updateForNewWord(QString word, const QString k
 {
   LOG_TRACE("Updating word: " << word << " with kvp: " << kvp << "...");
 
-  //FixedLengthString fixedLengthWord = _qStrToFixedLengthStr(word);
-  const QString lowerCaseWord = word.toLower();
-  //FixedLengthString fixedLengthLowerCaseWord = _qStrToFixedLengthStr(lowerCaseWord);
-  //if (_wordCaseMappings.find(fixedLengthLowerCaseWord) != _wordCaseMappings.end())
-  //if (_wordCaseMappings.contains(fixedLengthLowerCaseWord))
-  if (_wordCaseMappings.contains(lowerCaseWord))
+  if (_runInMemory)
   {
-    //word = _fixedLengthStrToQStr(_wordCaseMappings[fixedLengthLowerCaseWord]);
-    word = _wordCaseMappings[lowerCaseWord];
+    //FixedLengthString fixedLengthWord = _qStrToFixedLengthStr(word);
+    const QString lowerCaseWord = word.toLower();
+    //FixedLengthString fixedLengthLowerCaseWord = _qStrToFixedLengthStr(lowerCaseWord);
+    //if (_wordCaseMappings.find(fixedLengthLowerCaseWord) != _wordCaseMappings.end())
+    //if (_wordCaseMappings.contains(fixedLengthLowerCaseWord))
+    if (_wordCaseMappings.contains(lowerCaseWord))
+    {
+      //word = _fixedLengthStrToQStr(_wordCaseMappings[fixedLengthLowerCaseWord]);
+      word = _wordCaseMappings[lowerCaseWord];
+    }
+    else
+    {
+      //_wordCaseMappings[fixedLengthLowerCaseWord] = fixedLengthWord;
+      _wordCaseMappings[lowerCaseWord] = word;
+    }
   }
   else
   {
-    //_wordCaseMappings[fixedLengthLowerCaseWord] = fixedLengthWord;
-    _wordCaseMappings[lowerCaseWord] = word;
+    //If the bloom filter can be made to work with FixedLengthString, then we can replace this block
+    //with something like the above but using BigMap instead of QMap.  FixedLengthString with a
+    //raw stxxl map is ~3 orders of magnitude slower than using QMap.
+    const QString queriedWord = _tempDbWriter.getWord(word);
+    LOG_VART(queriedWord);
+    if (!queriedWord.isEmpty())
+    {
+      word = queriedWord;
+    }
+    else
+    {
+      _tempDbWriter.insertWord(word);
+    }
   }
 
   const QString line = word % QString("\t") % kvp % QString("\n");
@@ -436,12 +329,13 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs,
 
   _removeKvpsBelowOccuranceThresholdAndSortByOccurrance(minOccurancesThreshold);
   _removeDuplicatedKeyTypes();
+  _tempDbWriter.close();
   _sortByWord();
 
-  LOG_INFO(
-    "Extracted "  << StringUtils::formatLargeNumber(_wordKeysToCounts.size()) <<
-    " word/tag associations.");
-  _wordKeysToCounts.clear();
+//  LOG_INFO(
+//    "Extracted "  << StringUtils::formatLargeNumber(_wordKeysToCounts.size()) <<
+//    " word/tag associations.");
+//  _wordKeysToCounts.clear();
 
   _writeRules(outputs, _sortedByWordDedupedCountFile->fileName());
 }
@@ -471,7 +365,7 @@ void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccuranceThresholdAndSortByOccu
     new QTemporaryFile(
       ConfigOptions().getApidbBulkInserterTempFileDir() +
       "/poi-implicit-tag-rules-deriver-temp-XXXXXX"));
-  //_sortedCountFile->setAutoRemove(false); //for debugging only
+  _sortedCountFile->setAutoRemove(false); //for debugging only
   if (!_sortedCountFile->open())
   {
     throw HootException(
@@ -506,7 +400,7 @@ void PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
     new QTemporaryFile(
       ConfigOptions().getApidbBulkInserterTempFileDir() +
       "/poi-implicit-tag-rules-deriver-temp-XXXXXX"));
-  //_sortedDedupedCountFile->setAutoRemove(false); //for debugging only
+  _sortedDedupedCountFile->setAutoRemove(false); //for debugging only
   if (!_sortedDedupedCountFile->open())
   {
     throw HootException(
@@ -522,52 +416,113 @@ void PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
 
   while (!_sortedCountFile->atEnd())
   {
-    const QString line = QString::fromUtf8(_sortedCountFile->readLine().constData());
+    const QString line = QString::fromUtf8(_sortedCountFile->readLine().constData()).trimmed();
     LOG_VART(line);
     const QStringList lineParts = line.split("\t");
     LOG_VART(lineParts);
-    QString word = lineParts[1];
+    QString word = lineParts[1].trimmed();
     LOG_VART(word);
-    const QString kvp = lineParts[2];
+    const QString kvp = lineParts[2].trimmed();
     LOG_VART(kvp);
-    const long count = lineParts[0].toLong();
+    const long count = lineParts[0].trimmed().toLong();
     LOG_VART(count);
-    const QString key = kvp.split("=")[0];
-    LOG_VART(key);
-    const QString wordKey = word % ";" % key;
-    LOG_VART(wordKey);
+    const QString tagKey = kvp.split("=")[0];
+    LOG_VART(tagKey);
+    const QString wordTagKey = word.trimmed() % ";" % tagKey.trimmed();
+    LOG_VART(wordTagKey);
 
     //The lines are sorted by occurrence count.  So the first time we see one word-key combo, we
     //know it had the highest occurrence count, and we can ignore all subsequent instances since
     //any one feature can't have more than one tag applied to it with the same key.
-    if (!_wordKeysToCounts.contains(wordKey))
+
+    if (_runInMemory)
     {
-      _wordKeysToCounts[wordKey] = count;
-      //this unescaping must occur during the final temp file write
-      if (word.contains("%3D"))
+      if (!_wordKeysToCounts.contains(wordTagKey))
       {
-        word = word.replace("%3D", "=");
+        _wordKeysToCounts[wordTagKey] = count;
+        //this unescaping must occur during the final temp file write
+        if (word.contains("%3D"))
+        {
+          word = word.replace("%3D", "=");
+        }
+        else if (word.contains("%3d"))
+        {
+          word = word.replace("%3d", "=");
+        }
+        const QString updatedLine = QString::number(count) % "\t" % word % "\t" % kvp % "\n";
+        LOG_VART(updatedLine);
+        _sortedDedupedCountFile->write(updatedLine.toUtf8());
       }
-      else if (word.contains("%3d"))
+      //TODO: if this becomes a common occurrance, should probably pick the best of the tags that
+      //have occurrance count ties
+      else if (_wordKeysToCounts[wordTagKey] == count)
       {
-        word = word.replace("%3d", "=");
+        LOG_DEBUG(
+          "Found word with multiple tag occurrance counts of the same size.  Arbitrarily " <<
+          "chose first tag.  Not creating implicit tag entry for word: " << word << ", tag: " <<
+          kvp << ", count: " << count);
       }
-      const QString updatedLine = QString::number(count) % "\t" % word % "\t" % kvp;
-      LOG_VART(updatedLine);
-      _sortedDedupedCountFile->write(updatedLine.toUtf8());
     }
-    //TODO: if this becomes a common occurrance, should probably pick the best of the tags that
-    //have occurrance count ties
-    else if (_wordKeysToCounts[wordKey] == count)
+    else
     {
-      LOG_DEBUG(
-        "Found word with multiple tag occurrance counts of the same size.  Arbitrarily " <<
-        "chose first tag.  Not creating implicit tag entry for word: " << word << ", tag: " <<
-        kvp << ", count: " << count);
+      //see comment in _updateForNewWord
+      const long wordId = _tempDbWriter.getWordIdForWord(word);
+      LOG_VART(wordId);
+      assert(wordId != -1);
+      long tagKeyId = _tempDbWriter.getTagKeyIdForTagKey(tagKey);
+      LOG_VART(tagKeyId);
+      if (tagKeyId != -1)
+      {
+        LOG_TRACE("Found tag key id: " << tagKeyId << " for tag key: " << tagKey << ".");
+        const long queriedCount = _tempDbWriter.getWordTagKeyCount(wordId, tagKeyId);
+        LOG_VART(queriedCount);
+        if (queriedCount == -1)
+        {
+          LOG_TRACE(
+            "Found no existing tag count for word: " << word << " and tag key: " << tagKey <<
+            ".  Writing combination to database and updating temp file...");
+          _updateSortedDedupedFile(wordId, word, tagKeyId, kvp, count);
+        }
+        else if (queriedCount == count)
+        {
+          LOG_DEBUG(
+            "Found word with multiple tag occurrance counts of the same size.  Arbitrarily " <<
+            "chose first tag.  Not creating implicit tag entry for word: " << word << ", tag: " <<
+            kvp << ", count: " << count);
+        }
+      }
+      else
+      {
+        LOG_TRACE(
+          "Found no tag key id: " << tagKeyId << " for tag key: " << tagKey << ".  Adding tag key...");
+        tagKeyId = _tempDbWriter.insertTagKey(tagKey);
+        LOG_VART(tagKeyId);
+        LOG_TRACE("Writing combination to database and updating temp file...");
+        _updateSortedDedupedFile(wordId, word, tagKeyId, kvp, count);
+      }
     }
   }
   _sortedCountFile->close();
   _sortedDedupedCountFile->close();
+}
+
+void PoiImplicitTagRulesDeriver::_updateSortedDedupedFile(const long wordId, QString word,
+                                                          const long tagKeyId, const QString kvp,
+                                                          const long count)
+{
+  _tempDbWriter.insertWordTagKey(wordId, tagKeyId, count);
+  //this unescaping must occur during the final temp file write
+  if (word.contains("%3D"))
+  {
+    word = word.replace("%3D", "=");
+  }
+  else if (word.contains("%3d"))
+  {
+    word = word.replace("%3d", "=");
+  }
+  const QString updatedLine = QString::number(count) % "\t" % word % "\t" % kvp % "\n";
+  LOG_VART(updatedLine);
+  _sortedDedupedCountFile->write(updatedLine.toUtf8());
 }
 
 void PoiImplicitTagRulesDeriver::_sortByWord()
@@ -578,7 +533,7 @@ void PoiImplicitTagRulesDeriver::_sortByWord()
     new QTemporaryFile(
       ConfigOptions().getApidbBulkInserterTempFileDir() +
       "/poi-implicit-tag-rules-deriver-temp-XXXXXX"));
-  //_sortedByWordDedupedCountFile->setAutoRemove(false); //for debugging only
+  _sortedByWordDedupedCountFile->setAutoRemove(false); //for debugging only
   if (!_sortedByWordDedupedCountFile->open())
   {
     throw HootException(
@@ -598,36 +553,36 @@ void PoiImplicitTagRulesDeriver::_sortByWord()
   _sortedByWordDedupedCountFile->close();
 }
 
-FixedLengthString PoiImplicitTagRulesDeriver::qStrToFixedLengthStr(const QString str)
-{
-  FixedLengthString fixedLengthStr;
-  memset(fixedLengthStr.data, 0, sizeof fixedLengthStr.data);
-  std::wcstombs(fixedLengthStr.data, str.toStdWString().c_str(), MAX_KEY_LEN);
-  return fixedLengthStr;
-}
+//FixedLengthString PoiImplicitTagRulesDeriver::qStrToFixedLengthStr(const QString str)
+//{
+//  FixedLengthString fixedLengthStr;
+//  memset(fixedLengthStr.data, 0, sizeof fixedLengthStr.data);
+//  std::wcstombs(fixedLengthStr.data, str.toStdWString().c_str(), MAX_KEY_LEN);
+//  return fixedLengthStr;
+//}
 
-QString PoiImplicitTagRulesDeriver::fixedLengthStrToQStr(const FixedLengthString& fixedLengthStr)
-{
-  wchar_t wKey[MAX_KEY_LEN];
-  std::mbstowcs(wKey, fixedLengthStr.data, MAX_KEY_LEN);
-  return QString::fromWCharArray(wKey);
-}
+//QString PoiImplicitTagRulesDeriver::fixedLengthStrToQStr(const FixedLengthString& fixedLengthStr)
+//{
+//  wchar_t wKey[MAX_KEY_LEN];
+//  std::mbstowcs(wKey, fixedLengthStr.data, MAX_KEY_LEN);
+//  return QString::fromWCharArray(wKey);
+//}
 
-QMap<QString, long> PoiImplicitTagRulesDeriver::_stxxlMapToQtMap(
-  const FixedLengthStringToLongMap& stxxlMap)
-{
-  LOG_DEBUG("Converting stxxl map to qt map...");
-  QMap<QString, long> qtMap;
-  for (FixedLengthStringToLongMap::const_iterator mapItr = stxxlMap.begin();
-       mapItr != stxxlMap.end(); ++mapItr)
-  {
-    const QString key = fixedLengthStrToQStr(mapItr->first);
-    LOG_VART(key);
-    const long value = mapItr->second;
-    LOG_VART(value);
-    qtMap[key] = value;
-  }
-  return qtMap;
-}
+//QMap<QString, long> PoiImplicitTagRulesDeriver::_stxxlMapToQtMap(
+//  const FixedLengthStringToLongMap& stxxlMap)
+//{
+//  LOG_DEBUG("Converting stxxl map to qt map...");
+//  QMap<QString, long> qtMap;
+//  for (FixedLengthStringToLongMap::const_iterator mapItr = stxxlMap.begin();
+//       mapItr != stxxlMap.end(); ++mapItr)
+//  {
+//    const QString key = fixedLengthStrToQStr(mapItr->first);
+//    LOG_VART(key);
+//    const long value = mapItr->second;
+//    LOG_VART(value);
+//    qtMap[key] = value;
+//  }
+//  return qtMap;
+//}
 
 }

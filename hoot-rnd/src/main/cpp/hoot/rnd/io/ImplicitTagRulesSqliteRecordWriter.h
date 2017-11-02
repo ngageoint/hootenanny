@@ -32,7 +32,7 @@
 
 // Qt
 #include <QString>
-//#include <QMap>
+#include <QMap>
 #include <QtSql/QSqlDatabase>
 #include <QSqlQuery>
 
@@ -85,8 +85,10 @@ private:
   QSqlQuery _getTagIdForTagQuery;
 
   //TODO: replace with BigMap
-  //QMap<QString, long> _wordsToWordIds;
-  //QMap<QString, long> _tagsToTagIds;
+  QMap<QString, long> _wordsToWordIds;
+  QMap<QString, long> _tagsToTagIds;
+
+  bool _runInMemory;
 
   void _createTables();
   void _prepareQueries();

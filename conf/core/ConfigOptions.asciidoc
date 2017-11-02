@@ -1897,6 +1897,13 @@ Database used to derive POI type tags implicitly based on a POI's name.
 Flat file containing key/value pairs, one per line, to ignore when deriving implicit tags from POI
 names.
 
+=== poi.implicit.tag.rules.run.in.memory
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, the POI implicit tag deriver will store all data in memory.  temp setting
+
 === poi.implicit.tag.rules.word.ignore.list
 
 * Data Type: string

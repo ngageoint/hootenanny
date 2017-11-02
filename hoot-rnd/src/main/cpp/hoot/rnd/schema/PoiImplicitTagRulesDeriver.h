@@ -29,7 +29,8 @@
 
 // Hoot
 #include <hoot/rnd/io/ImplicitTagRuleWordPartWriterFactory.h>
-#include <hoot/rnd/util/FixedLengthString.h>
+//#include <hoot/rnd/util/FixedLengthString.h>
+#include <hoot/rnd/schema/PoiImplicitTagRulesDeriverTempDbWriter.h>
 
 // Qt
 #include <QString>
@@ -68,8 +69,8 @@ public:
                    const QStringList outputs, const QStringList typeKeys = QStringList(),
                    const int minOccurancesThreshold = 1);
 
-  static FixedLengthString qStrToFixedLengthStr(const QString wordKvp);
-  static QString fixedLengthStrToQStr(const FixedLengthString& fixedLengthStr);
+  //static FixedLengthString qStrToFixedLengthStr(const QString wordKvp);
+  //static QString fixedLengthStrToQStr(const FixedLengthString& fixedLengthStr);
 
 private:
 
@@ -87,7 +88,6 @@ private:
   boost::shared_ptr<QTemporaryFile> _sortedCountFile;
   boost::shared_ptr<QTemporaryFile> _sortedDedupedCountFile;
   boost::shared_ptr<QTemporaryFile> _sortedByWordDedupedCountFile;
-  boost::shared_ptr<QTemporaryFile> _tempDbFile;
 
   long _statusUpdateInterval;
 
@@ -95,22 +95,24 @@ private:
   QStringList _tagIgnoreList;
   QStringList _wordIgnoreList;
 
-  QSqlDatabase _db;
+  PoiImplicitTagRulesDeriverTempDbWriter _tempDbWriter;
+
+  bool _runInMemory;
 
   void _updateForNewWord(QString word, const QString kvp);
   QStringList _getPoiKvps(const Tags& tags) const;
 
   //temp
-  static QMap<QString, long> _stxxlMapToQtMap(const FixedLengthStringToLongMap& stxxlMap);
+  //static QMap<QString, long> _stxxlMapToQtMap(const FixedLengthStringToLongMap& stxxlMap);
 
   void _removeKvpsBelowOccuranceThresholdAndSortByOccurrance(const int minOccurancesThreshold);
   void _removeDuplicatedKeyTypes();
   void _sortByWord();
+  void _updateSortedDedupedFile(const long wordId, QString word, const long tagKeyId,
+                                const QString kvp, const long count);
 
   QString _getSqliteOutput(const QStringList outputs);
   void _writeRules(const QStringList outputs, const QString sqliteOutputFile);
-  void _createTempTables();
-  void _prepareQueries();
 
   void _readIgnoreLists();
 };
