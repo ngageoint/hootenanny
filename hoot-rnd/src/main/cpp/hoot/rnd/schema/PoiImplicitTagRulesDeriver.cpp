@@ -45,7 +45,7 @@ namespace hoot
 {
 
 PoiImplicitTagRulesDeriver::PoiImplicitTagRulesDeriver() :
-_statusUpdateInterval(ConfigOptions().getApidbBulkInserterFileOutputStatusUpdateInterval() / 1000),
+_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
 _runInMemory(ConfigOptions().getPoiImplicitTagRulesRunInMemory()),
 _wordCaseMappingsCache(ConfigOptions().getPoiImplicitTagRulesCacheSize())
 {
@@ -127,7 +127,8 @@ void PoiImplicitTagRulesDeriver::_updateForNewWord(QString word, const QString k
   {
     //If the bloom filter can be made to work with FixedLengthString, then we can replace this block
     //with something like the above but using BigMap instead of QMap.  FixedLengthString with a
-    //raw stxxl map is ~3 orders of magnitude slower than using QMap.
+    //raw stxxl map is ~3 orders of magnitude slower than using QMap.  BigMap would be expected to
+    //to perform much faster than that but still more slowly than using QMap, obviously.
     QString queriedWord;
     QString* queriedWordPtr = _wordCaseMappingsCache[lowerCaseWord];
     if (queriedWordPtr != 0)

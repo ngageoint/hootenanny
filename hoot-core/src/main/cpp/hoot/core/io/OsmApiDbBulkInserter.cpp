@@ -930,7 +930,7 @@ void OsmApiDbBulkInserter::setConfiguration(const Settings& conf)
   setOutputFilesCopyLocation(confOptions.getApidbBulkInserterOutputFilesCopyLocation().trimmed());
   _changesetData.changesetUserId = confOptions.getChangesetUserId();
   setFileOutputElementBufferSize(confOptions.getMaxElementsPerPartialMap());
-  setStatusUpdateInterval(confOptions.getApidbBulkInserterFileOutputStatusUpdateInterval());
+  setStatusUpdateInterval(confOptions.getTaskStatusUpdateInterval());
   setMaxChangesetSize(confOptions.getChangesetMaxSize());
   setReserveRecordIdsBeforeWritingData(
     confOptions.getOsmapidbBulkInserterReserveRecordIdsBeforeWritingData());

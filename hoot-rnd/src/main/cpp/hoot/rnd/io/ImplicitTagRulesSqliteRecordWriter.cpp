@@ -47,7 +47,7 @@ HOOT_FACTORY_REGISTER(ImplicitTagRuleWordPartWriter, ImplicitTagRulesSqliteRecor
 
 ImplicitTagRulesSqliteRecordWriter::ImplicitTagRulesSqliteRecordWriter() :
 _runInMemory(ConfigOptions().getPoiImplicitTagRulesRunInMemory()),
-_statusUpdateInterval(ConfigOptions().getApidbBulkInserterFileOutputStatusUpdateInterval() / 1000)
+_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
 }
 

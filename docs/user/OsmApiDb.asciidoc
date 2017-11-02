@@ -96,7 +96,7 @@ constraints during writing.  This may speed up data loads.  Similarly, the confi
 indexes during writing and re-enabling them after writing is finished, which may also speed up data loads.  Both options 
 should only be used with databases that have been taken completely offline.
 
-The configuration option, 'osmapidb.bulk.inserter.file.output.status.update.interval', simply determines how often you see progress updates when generating the output files.  The default value is fairly large, but for very large amounts of data you may wish to increase the value of this option to avoid too frequent of progress update messages.
+The configuration option, 'task.status.update.interval', simply determines how often you see progress updates when generating the output files.  The default value is fairly large, but for very large amounts of data you may wish to increase the value of this option to avoid too frequent of progress update messages.
 
 IMPORTANT: The configuration option, 'changeset.user.id', is required and must match a valid user ID in your OSM API database.  All writes you do with 'hoot convert' will be associated with this user ID.
 

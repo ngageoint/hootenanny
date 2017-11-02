@@ -30,6 +30,7 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 // Qt
 #include <QStringBuilder>
@@ -41,7 +42,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ImplicitTagRuleWordPartWriter, ImplicitTagRulesJsonWriter)
 
 ImplicitTagRulesJsonWriter::ImplicitTagRulesJsonWriter() :
-_statusUpdateInterval(ConfigOptions().getApidbBulkInserterFileOutputStatusUpdateInterval())
+_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
 }
 
