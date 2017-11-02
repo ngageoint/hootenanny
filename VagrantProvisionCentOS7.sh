@@ -212,13 +212,6 @@ else
     sed -i '/^export JAVA_HOME=.*/c\export JAVA_HOME=\/usr\/lib\/jvm\/java-1.8.0-openjdk' ~/.bash_profile
 fi
 
-if ! grep --quiet "export HADOOP_HOME" ~/.bash_profile; then
-    echo "Adding Hadoop home to profile..."
-    echo "export HADOOP_HOME=~/hadoop" >> ~/.bash_profile
-    echo "export PATH=\$PATH:\$HADOOP_HOME/bin" >> ~/.bash_profile
-    source ~/.bash_profile
-fi
-
 # Use RVM to install the desired Ruby version, then install the gems.
 $HOOT_HOME/scripts/ruby/rvm-install.sh
 $HOOT_HOME/scripts/ruby/gem-install.sh

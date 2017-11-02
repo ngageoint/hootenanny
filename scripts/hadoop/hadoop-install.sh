@@ -1,13 +1,26 @@
 #!/usr/bin/env bash
 set -e
 
-# Don't install Hadoop if requested.
+# Don't install Hadoop when WITH_HADOOP set to value other than 'yes'.
 if [ "${WITH_HADOOP}" != "yes" ]; then
     exit 0
 fi
 
 HADOOP_TAR=hadoop-$HADOOP_VERSION.tar.gz
 HADOOP_URL=$HADOOP_BASE_URL/hadoop-$HADOOP_VERSION/$HADOOP_TAR
+
+if [ "$(lsb_release -i -s)" == "Ubuntu" ]; then
+    PROFILE_FILE=$HOME/.profile
+else
+    PROFILE_FILE=$HOME/.bash_profile
+fi
+
+if ! grep --quiet "export HADOOP_HOME" $PROFILE_FILE; then
+    echo "Adding Hadoop home to profile..."
+    echo "export HADOOP_HOME=~/hadoop" >> $PROFILE_FILE
+    echo "export PATH=\$PATH:\$HADOOP_HOME/bin" >> $PROFILE_FILE
+    source $PROFILE_FILE
+fi
 
 cd ~
 
