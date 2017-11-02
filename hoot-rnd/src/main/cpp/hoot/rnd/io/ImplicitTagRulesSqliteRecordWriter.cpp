@@ -196,30 +196,30 @@ void ImplicitTagRulesSqliteRecordWriter::write(const QString inputUrl)
     long tagId = -1;
     if (_runInMemory)
     {
-      if (_wordsToWordIds.contains(word))
-      {
-        wordId = _wordsToWordIds[word];
-        LOG_TRACE("Found existing word with ID: " << wordId);
-      }
-      else
+      wordId = _wordsToWordIds.value(word, -1);
+      if (wordId == -1)
       {
         wordId = _insertWord(word);
         wordCtr++;
         _wordsToWordIds[word] = wordId;
         LOG_TRACE("Created new word with ID: " << wordId);
       }
-
-      if (_tagsToTagIds.contains(kvp))
-      {
-        tagId = _tagsToTagIds[kvp];
-        LOG_TRACE("Found existing tag with ID: " << tagId);
-      }
       else
+      {
+        LOG_TRACE("Found existing word with ID: " << wordId);
+      }
+
+      tagId = _tagsToTagIds.value(kvp, -1);
+      if (tagId == -1)
       {
         tagId = _insertTag(kvp);
         tagCtr++;
         _tagsToTagIds[kvp] = tagId;
         LOG_TRACE("Created new tag with ID: " << tagId);
+      }
+      else
+      {
+        LOG_TRACE("Found existing tag with ID: " << tagId);
       }
     }
     else
@@ -294,6 +294,11 @@ void ImplicitTagRulesSqliteRecordWriter::write(const QString inputUrl)
   DbUtils::execNoPrepare(_db, "COMMIT");
 
   //TODO: add text indexes on words and tags after writing
+  //  LOG_INFO("Creating database indexes...");
+  //  DbUtils::execNoPrepare(_db, "CREATE INDEX word_idx ON words USING btree (word)");
+  //  DbUtils::execNoPrepare(_db, "CREATE INDEX tag_idx ON tags USING btree (kvp)");
+  //  DbUtils::execNoPrepare(_db, "CREATE INDEX word_id_idx ON rules USING btree (word_id)");
+  //  DbUtils::execNoPrepare(_db, "CREATE INDEX tag_id_idx ON rules USING btree (tag_id)");
 
   LOG_INFO(
     "Wrote " << StringUtils::formatLargeNumber(/*_wordsToWordIds.size()*/wordCtr) << " words, " <<
