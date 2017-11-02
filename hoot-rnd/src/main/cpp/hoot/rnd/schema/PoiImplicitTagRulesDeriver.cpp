@@ -382,7 +382,6 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs,
 void PoiImplicitTagRulesDeriver::_writeRules(const QStringList outputs,
                                              const QString inputFile)
 {
-
   for (int i = 0; i < outputs.size(); i++)
   {
     const QString output = outputs.at(i);
@@ -398,7 +397,15 @@ void PoiImplicitTagRulesDeriver::_writeRules(const QStringList outputs,
 void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccuranceThresholdAndSortByOccurrance(
   const int minOccurancesThreshold)
 {
-  LOG_INFO("Removing tags below minimum occurance threshold of: " << minOccurancesThreshold << "...");
+  QString msg;
+  if (minOccurancesThreshold > 1)
+  {
+    msg +=
+      "Removing tags below minimum occurance threshold of: " +
+      QString::number(minOccurancesThreshold) + " and ";
+  }
+  msg += "sorting by tag occurrance count...";
+  LOG_INFO(msg);
 
   _sortedCountFile.reset(
     new QTemporaryFile(
@@ -417,10 +424,16 @@ void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccuranceThresholdAndSortByOccu
   //occurrance counts below the specified threshold, and replaces the space between the prepended
   //count and the word with a tab. - not sure why 1 needs to be subtracted from
   //minOccurancesThreshold here, though...
-  const QString cmd =
-    "sort " + _countFile->fileName() + " | uniq -c | sort -n -r | awk -v limit=" +
-    QString::number(minOccurancesThreshold - 1) +
-    " '$1 > limit{print}' | sed -e 's/^ *//;s/ /\t/' > " + _sortedCountFile->fileName();
+//  const QString cmd =
+//    "sort " + _countFile->fileName() + " | uniq -c | sort -n -r | awk -v limit=" +
+//    QString::number(minOccurancesThreshold - 1) +
+//    " '$1 > limit{print}' | sed -e 's/^ *//;s/ /\t/' > " + _sortedCountFile->fileName();
+  QString cmd = "sort " + _countFile->fileName() + " | uniq -c | sort -n -r";
+  if (minOccurancesThreshold > 1)
+  {
+    cmd += "| awk -v limit=" + QString::number(minOccurancesThreshold - 1) + " '$1 > limit{print}'";
+  }
+  cmd += " | sed -e 's/^ *//;s/ /\t/' > " + _sortedCountFile->fileName();
   if (std::system(cmd.toStdString().c_str()) != 0)
   {
     throw HootException("Unable to sort input file.");
