@@ -14,7 +14,7 @@ default: build
 MVN_DEFAULTS=$(MVN_QUIET) -DskipTests
 
 build:
-	rm -f ../lib/PrettyPipesLib-*.jar
+	rm -f ../../lib/PrettyPipesLib-*.jar
 	mvn $(MVN_DEFAULTS) package
 
 clean:
