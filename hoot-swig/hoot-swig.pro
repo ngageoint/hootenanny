@@ -43,7 +43,7 @@ include(../Configure.pri)
 
 QMAKE_CXXFLAGS = $$QMAKE_CXXFLAGS
 
-LIBS += -L../lib/ -lTgs -ltbs -lHootCore -lHootRnd -lHootJs -lv8
+LIBS += -L../lib/ -lTgs -ltbs -lHootCore -lHootRnd -lHootJs -lnode
 
 UI_DIR = tmp/ui
 MOC_DIR = tmp/moc

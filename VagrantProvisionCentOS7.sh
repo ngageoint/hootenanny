@@ -123,41 +123,49 @@ echo "##### Temp installs #####"
 # Node
 cd ~
 echo "##### NodeJs #####"
-wget --quiet https://nodejs.org/dist/v6.11.4/node-v6.11.4-linux-x64.tar.xz
-tar xf node-v6.11.4-linux-x64.tar.xz 
-cd node-v6.11.4-linux-x64
-sudo cp -r bin /usr/
-sudo cp -r include /usr/
-sudo cp -r lib /usr/
-sudo cp -r share /usr/
+wget --quiet https://nodejs.org/dist/v8.9.0/node-v8.9.0.tar.gz
+tar xf node-v8.9.0.tar.gz
+cd node-v8.9.0
+./configure --quite --shared
+make -sj$(nproc)
+sudo make -s install
+
+#wget --quiet https://nodejs.org/dist/v6.11.4/node-v6.11.4-linux-x64.tar.xz
+#tar xf node-v6.11.4-linux-x64.tar.xz 
+#cd node-v6.11.4-linux-x64
+#sudo cp -r bin /usr/
+#sudo cp -r include /usr/
+#sudo cp -r lib /usr/
+#sudo cp -r share /usr/
 
 # ICU:
-echo "##### ICU #####"
-cd ~
-wget --quiet http://download.icu-project.org/files/icu4c/59.1/icu4c-59_1-src.tgz
-tar xzf icu4c-59_1-src.tgz
-cd icu/source/
-./runConfigureICU Linux > ~/centos7_install.txt
-gmake -sj$(nproc)
-sudo gmake -s install
+#echo "##### ICU #####"
+#cd ~
+#wget --quiet http://download.icu-project.org/files/icu4c/57.1/icu4c-57_1-src.tgz
+#tar xzf icu4c-57_1-src.tgz
+#cd icu/source/
+#CXXFLAGS=-std=c++11 ./runConfigureICU Linux/gcc > ~/centos7_install.txt
+#gmake -sj$(nproc)
+#sudo gmake -s install
 
 # Google depot tools
-echo "##### Depot Tools #####"
-cd ~
-git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git >> ~/centos7_install.txt
-export PATH=$PATH:~/depot_tools
+#echo "##### Depot Tools #####"
+#cd ~
+#git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git >> ~/centos7_install.txt
+#export PATH=$PATH:~/depot_tools
 
 # V8
-echo "##### V8 #####"
-cd ~
-fetch v8 >> ~/centos7_install.txt
-cd v8
-git checkout 5.1-lkgr >> ~/centos7_install.txt
-gclient sync >> ~/centos7_install.txt
-make -sj$(nproc) x64.release library=shared use_system_icu=1 >> ~/centos7_install.txt
-sudo cp out/x64.release/lib.target/*.so /usr/lib64/
-sudo cp include/* /usr/include/node/
-sudo cp -r include/libplatform /usr/include/node/
+#echo "##### V8 #####"
+#cd ~
+#fetch v8 >> ~/centos7_install.txt
+#cd v8
+#git checkout 5.1-lkgr >> ~/centos7_install.txt
+#gclient sync >> ~/centos7_install.txt
+#make -sj$(nproc) x64.release library=shared use_system_icu=1 >> ~/centos7_install.txt
+# i18nsupport=off
+#sudo cp out/x64.release/lib.target/*.so /usr/lib64/
+#sudo cp include/* /usr/include/node/
+#sudo cp -r include/libplatform /usr/include/node/
 
 # Stxxl
 cd ~
