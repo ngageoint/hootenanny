@@ -427,7 +427,7 @@ void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccuranceThresholdAndSortByOccu
   QString cmd = "sort " + _countFile->fileName() + " | uniq -c | sort -n -r";
   if (minOccurancesThreshold > 1)
   {
-    cmd += "| awk -v limit=" + QString::number(minOccurancesThreshold - 1) + " '$1 > limit{print}'";
+    cmd += " | awk -v limit=" + QString::number(minOccurancesThreshold - 1) + " '$1 > limit{print}'";
   }
   cmd += " | sed -e 's/^ *//;s/ /\t/' > " + _sortedCountFile->fileName();
   if (std::system(cmd.toStdString().c_str()) != 0)
