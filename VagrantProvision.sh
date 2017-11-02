@@ -39,7 +39,7 @@ sudo service ntp start
 if ! java -version 2>&1 | grep --quiet $JDK_VERSION; then
     echo "### Installing Java 8..."
 
-    echo "${JDK_MD5}  ${JDK_TAR} " > ./jdk.md5
+    echo "${JDK_MD5}  ${JDK_TAR}" > ./jdk.md5
 
     if [ ! -f ./${JDK_TAR} ] || ! md5sum -c ./jdk.md5; then
         echo "Downloading ${JDK_TAR} ...."
