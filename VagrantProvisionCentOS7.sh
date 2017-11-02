@@ -120,33 +120,37 @@ sudo yum -y install \
 
 echo "##### Temp installs #####"
 
-# Node
-cd ~
-echo "##### NodeJs #####"
-wget --quiet https://nodejs.org/dist/v8.9.0/node-v8.9.0.tar.gz
-tar xf node-v8.9.0.tar.gz
-cd node-v8.9.0
-./configure --quite --shared
-make -sj$(nproc)
-sudo make -s install
-
-#wget --quiet https://nodejs.org/dist/v6.11.4/node-v6.11.4-linux-x64.tar.xz
-#tar xf node-v6.11.4-linux-x64.tar.xz 
-#cd node-v6.11.4-linux-x64
-#sudo cp -r bin /usr/
-#sudo cp -r include /usr/
-#sudo cp -r lib /usr/
-#sudo cp -r share /usr/
-
 # ICU:
-#echo "##### ICU #####"
-#cd ~
-#wget --quiet http://download.icu-project.org/files/icu4c/57.1/icu4c-57_1-src.tgz
-#tar xzf icu4c-57_1-src.tgz
-#cd icu/source/
-#CXXFLAGS=-std=c++11 ./runConfigureICU Linux/gcc > ~/centos7_install.txt
-#gmake -sj$(nproc)
-#sudo gmake -s install
+echo "##### ICU #####"
+cd ~
+wget --quiet http://download.icu-project.org/files/icu4c/57.1/icu4c-57_1-src.tgz
+tar xzf icu4c-57_1-src.tgz
+cd icu/source/
+CXXFLAGS=-std=c++11 ./runConfigureICU Linux/gcc > ~/centos7_install.txt
+gmake -sj$(nproc) >> ~/centos7_install.txt
+sudo gmake -s install >> ~/centos7_install.txt
+
+# Node
+echo "##### NodeJs #####"
+NODE_VERSION=8.9.0
+# Install the binary version of NodeJs for some uses (including npm)
+cd ~
+wget --quiet https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz
+tar xf node-v${NODE_VERSION}-linux-x64.tar.xz
+cd node-v${NODE_VERSION}-linux-x64
+sudo cp -r bin /usr/
+sudo cp -r include /usr/
+sudo cp -r lib /usr/
+sudo cp -r share /usr/
+# Build the shared library version of NodeJs for hootenanny
+cd ~
+wget --quiet https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}.tar.gz
+tar xf node-v${NODE_VERSION}.tar.gz
+cd node-v${NODE_VERSION}
+./configure --shared --prefix=/usr >> ~/centos_install.txt
+make -j$(nproc) >> ~/centos_install.txt
+sudo make install >> ~/centos_install.txt
+
 
 # Google depot tools
 #echo "##### Depot Tools #####"
