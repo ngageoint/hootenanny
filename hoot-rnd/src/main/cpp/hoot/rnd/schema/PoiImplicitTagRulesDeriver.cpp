@@ -424,10 +424,6 @@ void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccuranceThresholdAndSortByOccu
   //occurrance counts below the specified threshold, and replaces the space between the prepended
   //count and the word with a tab. - not sure why 1 needs to be subtracted from
   //minOccurancesThreshold here, though...
-//  const QString cmd =
-//    "sort " + _countFile->fileName() + " | uniq -c | sort -n -r | awk -v limit=" +
-//    QString::number(minOccurancesThreshold - 1) +
-//    " '$1 > limit{print}' | sed -e 's/^ *//;s/ /\t/' > " + _sortedCountFile->fileName();
   QString cmd = "sort " + _countFile->fileName() + " | uniq -c | sort -n -r";
   if (minOccurancesThreshold > 1)
   {
@@ -495,7 +491,8 @@ void PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
 
     if (_runInMemory)
     {
-      if (!_wordKeysToCounts.contains(wordTagKey))
+      const long queriedCount = _wordKeysToCounts.value(wordTagKey, -1);
+      if (queriedCount == -1)
       {
         _wordKeysToCounts[wordTagKey] = count;
         //this unescaping must occur during the final temp file write
@@ -511,14 +508,12 @@ void PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
         LOG_VART(updatedLine);
         _sortedDedupedCountFile->write(updatedLine.toUtf8());
       }
-      //TODO: if this becomes a common occurrance, should probably pick the best of the tags that
-      //have occurrance count ties
-      else if (_wordKeysToCounts[wordTagKey] == count)
+      else if (queriedCount == count)
       {
-//        LOG_DEBUG(
-//          "Found word with multiple tag occurrance counts of the same size.  Arbitrarily " <<
-//          "chose first tag.  Not creating implicit tag entry for word: " << word << ", tag: " <<
-//          kvp << ", count: " << count);
+        LOG_DEBUG(
+          "Found word with multiple tag occurrance counts of the same size.  Arbitrarily " <<
+          "chose first tag.  Not creating implicit tag entry for word: " << word << ", tag: " <<
+          kvp << ", count: " << count);
       }
     }
     else
