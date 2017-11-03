@@ -62,7 +62,7 @@ pipeline {
         }
         stage("Test Configure") {
             when { 
-                anyof {
+                anyOf {
                     expression { return params.Configure_Tests }
                     // Work around to run configuration tests during nightly cron triggers but not on commits to develop.  Logic can be udpated
                     // once this https://issues.jenkins-ci.org/browse/JENKINS-41272 is implemented
