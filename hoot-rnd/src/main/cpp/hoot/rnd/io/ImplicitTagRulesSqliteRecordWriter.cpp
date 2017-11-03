@@ -94,13 +94,15 @@ void ImplicitTagRulesSqliteRecordWriter::open(const QString outputUrl)
 
 void ImplicitTagRulesSqliteRecordWriter::_createTables()
 {
-  DbUtils::execNoPrepare(_db, "CREATE TABLE words (id INTEGER PRIMARY KEY, word TEXT)");
-  DbUtils::execNoPrepare(_db, "CREATE TABLE tags (id INTEGER PRIMARY KEY, kvp TEXT)");
+  DbUtils::execNoPrepare(
+    _db, "CREATE TABLE words (id INTEGER PRIMARY KEY, word TEXT NOT NULL UNIQUE)");
+  DbUtils::execNoPrepare(
+    _db, "CREATE TABLE tags (id INTEGER PRIMARY KEY, kvp TEXT NOT NULL UNIQUE)");
   DbUtils::execNoPrepare(
     _db,
-    QString("CREATE TABLE rules (id INTEGER PRIMARY KEY, word_id INTEGER, ") +
-    QString("tag_id INTEGER, tag_count INTEGER, FOREIGN KEY(word_id) REFERENCES words(id), ") +
-    QString("FOREIGN KEY(tag_id) REFERENCES tags(id))"));
+    QString("CREATE TABLE rules (id INTEGER PRIMARY KEY, word_id INTEGER NOT NULL, ") +
+    QString("tag_id INTEGER NOT NULL, tag_count INTEGER NOT NULL, FOREIGN KEY(word_id) ") +
+    QString("REFERENCES words(id), FOREIGN KEY(tag_id) REFERENCES tags(id))"));
 }
 
 void ImplicitTagRulesSqliteRecordWriter::_prepareQueries()
@@ -214,11 +216,12 @@ void ImplicitTagRulesSqliteRecordWriter::write(const QString inputUrl)
   DbUtils::execNoPrepare(_db, "COMMIT");
 
   //TODO: fix
-  //LOG_INFO("Creating database indexes...");
-  //DbUtils::execNoPrepare(_db, "CREATE UNIQUE INDEX word_idx ON words (word)");
-  //DbUtils::execNoPrepare(_db, "CREATE UNIQUE INDEX tag_idx ON tags (kvp)");
-  //DbUtils::execNoPrepare(_db, "CREATE UNIQUE INDEX word_id_idx ON rules (word_id)");
-  //DbUtils::execNoPrepare(_db, "CREATE UNIQUE INDEX tag_id_idx ON rules (tag_id)");
+  LOG_INFO("Creating database indexes...");
+  DbUtils::execNoPrepare(_db, "CREATE UNIQUE INDEX word_idx ON words (word)");
+  DbUtils::execNoPrepare(_db, "CREATE UNIQUE INDEX tag_idx ON tags (kvp)");
+  DbUtils::execNoPrepare(_db, "CREATE INDEX word_id_idx ON rules (word_id)");
+  DbUtils::execNoPrepare(_db, "CREATE INDEX tag_id_idx ON rules (tag_id)");
+  DbUtils::execNoPrepare(_db, "CREATE INDEX tag_count_idx ON rules (tag_count)");
 
   LOG_INFO(
     "Wrote " << StringUtils::formatLargeNumber(_wordsToWordIds.size()) << " words, " <<
