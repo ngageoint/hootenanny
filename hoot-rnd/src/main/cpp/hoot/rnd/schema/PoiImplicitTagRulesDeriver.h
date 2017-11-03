@@ -87,6 +87,7 @@ private:
   QStringList _wordIgnoreList;
   QMap<QString, QString> _customRulesList;
   QMap<QString, QString> _rulesIgnoreList;
+  int _minWordLength;
 
   void _updateForNewWord(QString word, const QString kvp);
   QStringList _getPoiKvps(const Tags& tags) const;

@@ -44,7 +44,8 @@ namespace hoot
 {
 
 PoiImplicitTagRulesDeriver::PoiImplicitTagRulesDeriver() :
-_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
+_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
+_minWordLength(ConfigOptions().getPoiImplicitTagRulesMinimumWordLength())
 {
   _readIgnoreLists();
   _readRulesLists();
@@ -149,21 +150,30 @@ QStringList PoiImplicitTagRulesDeriver::_getPoiKvps(const Tags& tags) const
 void PoiImplicitTagRulesDeriver::_updateForNewWord(QString word, const QString kvp)
 {
   word = word.simplified();
-  LOG_TRACE("Updating word: " << word << " with kvp: " << kvp << "...");
-
-  const QString lowerCaseWord = word.toLower();
-  const QString queriedWord = _wordCaseMappings.value(lowerCaseWord, "");
-  if (queriedWord.isEmpty())
+  if (word.length() >= _minWordLength)
   {
-    _wordCaseMappings[lowerCaseWord] = word;
+    LOG_TRACE("Updating word: " << word << " with kvp: " << kvp << "...");
+
+    const QString lowerCaseWord = word.toLower();
+    const QString queriedWord = _wordCaseMappings.value(lowerCaseWord, "");
+    if (queriedWord.isEmpty())
+    {
+      _wordCaseMappings[lowerCaseWord] = word;
+    }
+    else
+    {
+      word = queriedWord;
+    }
+
+    const QString line = word % QString("\t") % kvp % QString("\n");
+    _countFile->write(line.toUtf8());
   }
   else
   {
-    word = queriedWord;
+    LOG_TRACE(
+      "Skipping word: " << word << ", the length of which is less than the minimum allowed word " <<
+      "length of: " << _minWordLength);
   }
-
-  const QString line = word % QString("\t") % kvp % QString("\n");
-  _countFile->write(line.toUtf8());
 }
 
 QString PoiImplicitTagRulesDeriver::_getSqliteOutput(const QStringList outputs)

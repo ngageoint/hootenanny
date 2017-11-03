@@ -1895,6 +1895,13 @@ when deriving implicit tags from POI names.
 
 Database used to derive POI type tags implicitly based on a POI's name.
 
+=== poi.implicit.tag.rules.minimum.word.length
+
+* Data Type: int
+* Default Value: `3`
+
+The minimum allowed word length when associating word tokens with OSM tags.
+
 === poi.implicit.tag.rules.rule.ignore.list
 
 * Data Type: string
@@ -1919,19 +1926,19 @@ names.
 Flat file containing key/value pairs, one per line, to use when deriving implicit tags from POI
 names.
 
-=== poi.implicit.tag.rules.word.ignore.list
-
-* Data Type: string
-* Default Value: `conf/core/poi-implicit-tag-rules/poiImplicitTagRulesWordIgnoreList`
-
-Flat file containing words, one per line, to ignore when deriving implicit tags from POI names.
-
 === poi.implicit.tag.rules.tokenize.names
 
 * Data Type: bool
 * Default Value: `true`
 
 If true, the POI implicit tags will be derived/added using tokenized names.
+
+=== poi.implicit.tag.rules.word.ignore.list
+
+* Data Type: string
+* Default Value: `conf/core/poi-implicit-tag-rules/poiImplicitTagRulesWordIgnoreList`
+
+Flat file containing words, one per line, to ignore when deriving implicit tags from POI names.
 
 === poi.match.threshold
 
