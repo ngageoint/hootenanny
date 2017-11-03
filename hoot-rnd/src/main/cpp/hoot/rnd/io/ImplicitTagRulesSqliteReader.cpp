@@ -111,6 +111,8 @@ Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,
     return Tags();
   }
 
+  //TODO: put a cache in front of this?
+
   //can't prepare this one due to variable inputs
   QSqlQuery selectWordIdsForWords(_db);
   //the WHERE IN clause is case sensitive, so OR'ing them together instead

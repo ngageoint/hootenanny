@@ -81,14 +81,9 @@ private:
   QSqlQuery _insertTagQuery;
   QSqlQuery _getLastWordIdQuery;
   QSqlQuery _getLastTagIdQuery;
-  QSqlQuery _getWordIdForWordQuery;
-  QSqlQuery _getTagIdForTagQuery;
 
-  //TODO: replace with BigMap
   QMap<QString, long> _wordsToWordIds;
   QMap<QString, long> _tagsToTagIds;
-
-  bool _runInMemory;
 
   long _statusUpdateInterval;
 
@@ -98,8 +93,6 @@ private:
   long _insertWord(const QString word);
   long _insertTag(const QString kvp);
   void _insertRuleWordPart(const long wordId, const long tagId, const long tagOccurranceCount);
-  long _getWordIdForWord(const QString word);
-  long _getTagIdForTag(const QString kvp);
 };
 
 }

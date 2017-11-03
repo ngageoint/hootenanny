@@ -1880,39 +1880,49 @@ current directory (CWD), $CWD/rules, $HOOT_HOME/rules.
 If true, POI conflation will ignore the types of the features being compared completely as long as
 those being compared have a populated name field.
 
-=== poi.implicit.tag.rules.cache.size
+=== poi.implicit.tag.rules.custom.rule.list
 
-* Data Type: int
-* Default Value: `1000000`
+* Data Type: string
+* Default Value: `conf/core/poi-implicit-tag-rules/poiImplicitTagRulesCustomRuleList`
 
-The maximum size of entries allowed in each POI implicit tag rules deriver cache data structure.
+Flat file containing tab separated word key/value pairs, one per line, to use as custom rules
+when deriving implicit tags from POI names.
 
 === poi.implicit.tag.rules.database
 
 * Data Type: string
-* Default Value: `conf/dictionary/ImplicitTagRules.sqlite`
+* Default Value: `conf/core/poi-implicit-tag-rules/ImplicitTagRules.sqlite`
 
 Database used to derive POI type tags implicitly based on a POI's name.
+
+=== poi.implicit.tag.rules.rule.ignore.list
+
+* Data Type: string
+* Default Value: `conf/core/poi-implicit-tag-rules/poiImplicitTagRulesRuleIgnoreList`
+
+Flat file containing tab separated word key/value pairs, one per line, to ignore as rules
+when deriving implicit tags from POI names.
 
 === poi.implicit.tag.rules.tag.ignore.list
 
 * Data Type: string
-* Default Value: `conf/core/poiImplicitTagRulesTagIgnoreList`
+* Default Value: `conf/core/poi-implicit-tag-rules/poiImplicitTagRulesTagIgnoreList`
 
 Flat file containing key/value pairs, one per line, to ignore when deriving implicit tags from POI
 names.
 
-=== poi.implicit.tag.rules.run.in.memory
+=== poi.implicit.tag.rules.tag.key.list
 
-* Data Type: bool
-* Default Value: `true`
+* Data Type: string
+* Default Value: `conf/core/poi-implicit-tag-rules/poiImplicitTagRulesTagKeyList`
 
-If true, the POI implicit tag deriver will store all data in memory.  temp setting
+Flat file containing key/value pairs, one per line, to use when deriving implicit tags from POI
+names.
 
 === poi.implicit.tag.rules.word.ignore.list
 
 * Data Type: string
-* Default Value: `conf/core/poiImplicitTagRulesWordIgnoreList`
+* Default Value: `conf/core/poi-implicit-tag-rules/poiImplicitTagRulesWordIgnoreList`
 
 Flat file containing words, one per line, to ignore when deriving implicit tags from POI names.
 

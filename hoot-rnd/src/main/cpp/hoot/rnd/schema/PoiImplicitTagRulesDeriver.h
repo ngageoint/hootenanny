@@ -29,14 +29,11 @@
 
 // Hoot
 #include <hoot/rnd/io/ImplicitTagRuleWordPartWriterFactory.h>
-//#include <hoot/rnd/util/FixedLengthString.h>
-#include <hoot/rnd/schema/PoiImplicitTagRulesDeriverTempDbWriter.h>
 
 // Qt
 #include <QString>
 #include <QMap>
 #include <QTemporaryFile>
-#include <QCache>
 
 namespace hoot
 {
@@ -70,20 +67,13 @@ public:
                    const QStringList outputs, const QStringList typeKeys = QStringList(),
                    const int minOccurancesThreshold = 1);
 
-  //static FixedLengthString qStrToFixedLengthStr(const QString wordKvp);
-  //static QString fixedLengthStrToQStr(const FixedLengthString& fixedLengthStr);
-
 private:
 
   //for testing
   friend class PoiImplicitTagRulesDeriverTest;
 
-  //TODO: replace with BigMap
-  /*FixedLengthStringToFixedLengthStringMap*//*Tgs::BigMap<FixedLengthString, FixedLengthString>*/
   QMap<QString, QString> _wordCaseMappings;
-  //TODO: replace with BigMap
-  //Technically, this could be done with a vector, but I want to piggy back off BigMap.
-  /*FixedLengthStringToLongMap*/QMap<QString, long> _wordKeysToCounts;
+  QMap<QString, long> _wordKeysToCounts;
 
   boost::shared_ptr<QTemporaryFile> _countFile;
   boost::shared_ptr<QTemporaryFile> _sortedCountFile;
@@ -95,29 +85,21 @@ private:
   //not expecting these to be too large, so keeping in memory
   QStringList _tagIgnoreList;
   QStringList _wordIgnoreList;
-
-  PoiImplicitTagRulesDeriverTempDbWriter _tempDbWriter;
-
-  bool _runInMemory;
-  QCache<QString, QString> _wordCaseMappingsCache;
-  long _maxCacheSize;
-  bool _wordCaseCacheLimitMessageShown;
+  QMap<QString, QString> _customRulesList;
+  QMap<QString, QString> _rulesIgnoreList;
 
   void _updateForNewWord(QString word, const QString kvp);
   QStringList _getPoiKvps(const Tags& tags) const;
 
-  //temp
-  //static QMap<QString, long> _stxxlMapToQtMap(const FixedLengthStringToLongMap& stxxlMap);
-
   void _removeKvpsBelowOccuranceThresholdAndSortByOccurrance(const int minOccurancesThreshold);
   void _removeDuplicatedKeyTypes();
   void _sortByWord();
-  void _updateSortedDedupedFile(QString word, const QString kvp, const long count);
 
   QString _getSqliteOutput(const QStringList outputs);
   void _writeRules(const QStringList outputs, const QString sqliteOutputFile);
 
   void _readIgnoreLists();
+  void _readRulesLists();
 };
 
 }
