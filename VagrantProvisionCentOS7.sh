@@ -150,7 +150,7 @@ cd node-v${NODE_VERSION}
 ./configure --shared --prefix=/usr >> ~/centos_install.txt
 make -j$(nproc) >> ~/centos_install.txt
 sudo make install >> ~/centos_install.txt
-
+sudo ln -s /usr/lib/libnode.so.57 /usr/lib/libnode.so
 
 # Google depot tools
 #echo "##### Depot Tools #####"
