@@ -45,17 +45,6 @@
 namespace Tgs
 {
 
-//void maxValue(QByteArray& /*ba*/)
-//{
-
-//}
-
-template <typename T>
-void maxValue(T& v)
-{
-  v = std::numeric_limits<T>::max();
-}
-
 /**
  * This is not thread safe or re-entrant.
  */
@@ -129,14 +118,14 @@ private:
       return a < b;
     }
 
-    static A max_value() { A result; maxValue(result); return result; }
+    static long max_value() { return std::numeric_limits<A>::max(); }
   };
 
   typedef stxxl::map<K, V, CompareLess<K>, 4096, 4096> MapType;
 
   // scaled for ~100M entries and FPR of 0.001
   // http://hur.st/bloomfilter?n=100000000&p=0.001
-  typedef boost::bloom_filters::basic_bloom_filter<long/*K*/, 1437 * 1000 * 1000, boost::mpl::vector<
+  typedef boost::bloom_filters::basic_bloom_filter<long, 1437 * 1000 * 1000, boost::mpl::vector<
       boost::bloom_filters::boost_hash<size_t, 0x327B23C66B8B4567>,
       boost::bloom_filters::boost_hash<size_t, 0x66334873643C9869>,
       boost::bloom_filters::boost_hash<size_t, 0x19495CFF74B0DC51>,
