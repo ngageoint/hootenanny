@@ -33,6 +33,7 @@
 // Qt
 #include <QString>
 #include <QMap>
+#include <QHash>
 #include <QtSql/QSqlDatabase>
 #include <QSqlQuery>
 
@@ -82,8 +83,8 @@ private:
   QSqlQuery _getLastWordIdQuery;
   QSqlQuery _getLastTagIdQuery;
 
-  QMap<QString, long> _wordsToWordIds;
-  QMap<QString, long> _tagsToTagIds;
+  /*QMap*/QHash<QString, long> _wordsToWordIds;
+  /*QMap*/QHash<QString, long> _tagsToTagIds;
 
   long _statusUpdateInterval;
 

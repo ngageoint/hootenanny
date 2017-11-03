@@ -33,6 +33,7 @@
 // Qt
 #include <QString>
 #include <QMap>
+#include <QHash>
 #include <QTemporaryFile>
 
 namespace hoot
@@ -72,8 +73,8 @@ private:
   //for testing
   friend class PoiImplicitTagRulesDeriverTest;
 
-  QMap<QString, QString> _wordCaseMappings;
-  QMap<QString, long> _wordKeysToCounts;
+  /*QMap*/QHash<QString, QString> _wordCaseMappings;
+  /*QMap*/QHash<QString, long> _wordKeysToCounts;
 
   boost::shared_ptr<QTemporaryFile> _countFile;
   boost::shared_ptr<QTemporaryFile> _sortedCountFile;
