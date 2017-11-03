@@ -12,6 +12,11 @@ export GDAL_VERSION=2.1.4
 export FGDB_VERSION=1.5.1
 export FGDB_URL=https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_${FGDB_VERSION}/
 
+# Hadoop versions and locations
+export HADOOP_VERSION=0.20.2
+export HADOOP_BASE_URL=https://archive.apache.org/dist/hadoop/core
+export WITH_HADOOP="${WITH_HADOOP:-yes}"
+
 # Ruby versions and locations.
 export RUBY_BASE_URL=https://s3.amazonaws.com/hoot-ruby
 export RUBY_GEMS_URL="${RUBY_BASE_URL}/gems"
@@ -21,4 +26,4 @@ export RVM_BASE_URL=https://github.com/rvm/rvm
 export RVM_BINARIES_URL="${RUBY_BASE_URL}/binaries"
 export RVM_HOME="${RVM_HOME:-${HOME}/.rvm}"
 export RVM_VERSION=1.29.3
-export WITH_RVM=yes
+export WITH_RVM="${WITH_RVM:-yes}"

@@ -27,7 +27,7 @@ UI_DIR = tmp/ui
 MOC_DIR = tmp/moc
 release:OBJECTS_DIR = tmp/release
 else:OBJECTS_DIR = tmp/debug
-DESTDIR = ../lib/
+DESTDIR = ../../lib/
 
 # This is needed to make the swig code happy.
 QMAKE_CXXFLAGS += -fno-strict-aliasing
