@@ -246,7 +246,7 @@ void populateTests(_TestType t, CppUnit::TestSuite *suite, bool printDiff)
   /** This section is a bit verbose but ordering is very important as the order must go as follows:
    *  Default Registry
    *  Script Tests
-   *  Named Registries (current, quick, etc.
+   *  Named Registries (current, quick, etc.)
    */
   switch(t)
   {
@@ -372,14 +372,18 @@ int main(int argc, char *argv[])
 
     bool printDiff = args.contains("--diff");
 
+    // Print all names & exit without running anything
+    CppUnit::TestSuite * pRootSuite = NULL;
     if (args.contains("--all-names"))
     {
-      CppUnit::TestSuite testSuite("All tests");
-      populateTests(ALL, &testSuite, printDiff);
-      printNames(&testSuite);
+      pRootSuite = new CppUnit::TestSuite( "All tests" );
+      populateTests(ALL, pRootSuite, printDiff);
+      printNames(pRootSuite);
+      delete pRootSuite;
       return 0;
     }
-    CppUnit::TestSuite *rootSuite = NULL;
+
+    // Run a single test
     if (args.contains("--single"))
     {
       int i = args.indexOf("--single") + 1;
@@ -391,16 +395,25 @@ int main(int argc, char *argv[])
 
       listener.reset(new HootTestListener(false, -1));
       Log::getInstance().setLevel(Log::Info);
-      rootSuite = new CppUnit::TestSuite( "All tests" );
-      populateTests(ALL, rootSuite, printDiff);
-      CppUnit::Test* t = rootSuite->findTest(testName.toStdString());
+      pRootSuite = new CppUnit::TestSuite( "All tests" );
+      populateTests(ALL, pRootSuite, printDiff);
+      CppUnit::Test* t = pRootSuite->findTest(testName.toStdString());
       if (t == 0)
       {
         cout << "Could not find the specified test: " << testName.toStdString() << endl;
-        delete rootSuite;
+        delete pRootSuite;
         return -1;
       }
-      runner.addTest(t);
+
+      // clear all user configuration so we have consistent tests.
+      conf().clear();
+      ConfigOptions::populateDefaults(conf());
+      conf().set("HOOT_HOME", getenv("HOOT_HOME"));
+      Settings::parseCommonArguments(args);
+      result.addListener(listener.get());
+      t->run(&result);
+      delete pRootSuite;
+      return result.failures().size() > 0 ? -1 : 0;
     }
     else if (args.contains("--listen"))
     {
@@ -418,9 +431,9 @@ int main(int argc, char *argv[])
       cin >> testName;
       while (testName != HOOT_TEST_FINISHED)
       {
-        rootSuite = new CppUnit::TestSuite( "All tests" );
-        populateTests(ALL, rootSuite, printDiff);
-        CppUnit::Test* t = rootSuite->findTest(testName);
+        pRootSuite = new CppUnit::TestSuite( "All tests" );
+        populateTests(ALL, pRootSuite, printDiff);
+        CppUnit::Test* t = pRootSuite->findTest(testName);
         if (t != 0)
         {
           // clear all user configuration so we have consistent tests.
@@ -429,8 +442,9 @@ int main(int argc, char *argv[])
           conf().set("HOOT_HOME", getenv("HOOT_HOME"));
           //  Run only the test sent from the main process
           CppUnit::TestRunner test_runner;
-          test_runner.addTest(t);
-          test_runner.run(result);
+          //test_runner.addTest(t);
+          //test_runner.run(result);
+          t->run(&result);
           cout << endl << HOOT_TEST_FINISHED << endl;
         }
         else
@@ -438,48 +452,49 @@ int main(int argc, char *argv[])
           cerr << "Could not find the specified test: " <<  testName << endl;
           cout << HOOT_TEST_FINISHED << endl;
         }
+        delete pRootSuite;
         cin >> testName;
       }
       return result.failures().size() > 0 ? -1 : 0;
     }
     else
     {
-      rootSuite = new CppUnit::TestSuite( "All tests" );
+      pRootSuite = new CppUnit::TestSuite( "All tests" );
       if (args.contains("--current"))
       {
         listener.reset(new HootTestListener(true));
         Log::getInstance().setLevel(Log::Info);
-        populateTests(CURRENT, rootSuite, printDiff);
+        populateTests(CURRENT, pRootSuite, printDiff);
       }
       else if (args.contains("--quick"))
       {
         listener.reset(new HootTestListener(false, QUICK_WAIT));
-        populateTests(QUICK, rootSuite, printDiff);
+        populateTests(QUICK, pRootSuite, printDiff);
       }
       else if (args.contains("--quick-only"))
       {
         listener.reset(new HootTestListener(false, QUICK_WAIT));
-        populateTests(QUICK_ONLY, rootSuite, printDiff);
+        populateTests(QUICK_ONLY, pRootSuite, printDiff);
       }
       else if (args.contains("--slow"))
       {
         listener.reset(new HootTestListener(false, SLOW_WAIT));
-        populateTests(SLOW, rootSuite, printDiff);
+        populateTests(SLOW, pRootSuite, printDiff);
       }
       else if (args.contains("--slow-only"))
       {
         listener.reset(new HootTestListener(false, SLOW_WAIT));
-        populateTests(SLOW_ONLY, rootSuite, printDiff);
+        populateTests(SLOW_ONLY, pRootSuite, printDiff);
       }
       else if (args.contains("--all") || args.contains("--glacial"))
       {
         listener.reset(new HootTestListener(false, GLACIAL_WAIT));
-        populateTests(GLACIAL, rootSuite, printDiff);
+        populateTests(GLACIAL, pRootSuite, printDiff);
       }
       else if (args.contains("--glacial-only"))
       {
         listener.reset(new HootTestListener(false, GLACIAL_WAIT));
-        populateTests(GLACIAL_ONLY, rootSuite, printDiff);
+        populateTests(GLACIAL_ONLY, pRootSuite, printDiff);
       }
 
       for (int i = 0; i < args.size(); i++)
@@ -490,8 +505,9 @@ int main(int argc, char *argv[])
           int equalsPos = args[i].indexOf('=');
           QString regex = args[i].mid(equalsPos + 1);
           LOG_WARN("Excluding pattern: " << regex);
-          filterPattern(rootSuite, newSuite, regex, false);
-          rootSuite = newSuite;
+          filterPattern(pRootSuite, newSuite, regex, false); // This is a minefield of pointer scaryness
+          delete pRootSuite;
+          pRootSuite = newSuite;
         }
         else if (args[i].startsWith("--include="))
         {
@@ -499,13 +515,14 @@ int main(int argc, char *argv[])
           int equalsPos = args[i].indexOf('=');
           QString regex = args[i].mid(equalsPos + 1);
           LOG_WARN("Including only tests that match: " << regex);
-          filterPattern(rootSuite, newSuite, regex, true);
-          rootSuite = newSuite;
+          filterPattern(pRootSuite, newSuite, regex, true);  // This is a minefield of pointer scaryness
+          delete pRootSuite;
+          pRootSuite = newSuite;
         }
       }
 
-      runner.addTest(rootSuite);
-      cout << "Running core tests.  Test count: " << rootSuite->countTestCases() << endl;
+      runner.addTest(pRootSuite);
+      cout << "Running core tests.  Test count: " << pRootSuite->countTestCases() << endl;
     }
 
     if (args.contains("--parallel"))
@@ -515,23 +532,23 @@ int main(int argc, char *argv[])
       int i = args.indexOf("--parallel") + 1;
       if (i >= args.size())
       {
-        delete rootSuite;
         throw HootException("Expected integer after --parallel.");
       }
       bool ok = false;
       int nproc = args[i].toInt(&ok);
       if (!ok || nproc < 1)
       {
-        delete rootSuite;
         throw HootException("Expected integer after --parallel");
       }
       ProcessPool pool(nproc, listener->getSlowTest(), (bool)args.contains("--names"));
+
       //  Get the names of all of the tests to run
       vector<string> allNames;
-      getNames(allNames, rootSuite);
+      getNames(allNames, pRootSuite);
       set<string> nameCheck;
       for (vector<string>::iterator it = allNames.begin(); it != allNames.end(); ++it)
         nameCheck.insert(*it);
+
       //  Add all of the jobs that must be done serially and are a part of the selected tests
       CppUnit::TestSuite serialTests;
       populateTests(SERIAL, &serialTests, printDiff);
@@ -542,6 +559,7 @@ int main(int argc, char *argv[])
         if (nameCheck.find(*it) != nameCheck.end())
           pool.addJob(QString(it->c_str()), false);
       }
+
       //  Add all of the remaining jobs in the test suite
       for (vector<string>::iterator it = allNames.begin(); it != allNames.end(); ++it)
         pool.addJob(QString(it->c_str()));
@@ -551,13 +569,15 @@ int main(int argc, char *argv[])
 
       cout << endl;
       cout << "Elapsed: " << Tgs::Time::getTime() - start << endl;
-
+      // delete pRootSuite; Don't need to delete suite, because it was added to the runner
+      // and the runner deletes it
       return pool.getFailures() > 0 ? -1 : 0;
     }
     else
     {
       if (args.contains("--names"))
         listener->showTestNames(true);
+
       // clear all user configuration so we have consistent tests.
       conf().clear();
       ConfigOptions::populateDefaults(conf());
