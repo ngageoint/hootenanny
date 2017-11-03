@@ -193,14 +193,6 @@ else
     sed -i '/^export JAVA_HOME=.*/c\export JAVA_HOME=\/usr\/lib\/jvm\/oracle_jdk8' ~/.profile
 fi
 
-# Disabling Hadoop on Ubuntu 16.04
-#if ! grep --quiet "export HADOOP_HOME" ~/.profile; then
-#    echo "Adding Hadoop home to profile..."
-#    echo "export HADOOP_HOME=~/hadoop" >> ~/.profile
-#    echo "export PATH=\$PATH:\$HADOOP_HOME/bin" >> ~/.profile
-#    source ~/.profile
-#fi
-
 if ! grep --quiet "PATH=" ~/.profile; then
     echo "Adding path vars to profile..."
     echo "export PATH=\$PATH:\$JAVA_HOME/bin:~/bin:$HOOT_HOME/bin" >> ~/.profile
