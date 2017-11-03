@@ -150,7 +150,14 @@ QStringList PoiImplicitTagRulesDeriver::_getPoiKvps(const Tags& tags) const
 void PoiImplicitTagRulesDeriver::_updateForNewWord(QString word, const QString kvp)
 {
   word = word.simplified();
-  if (word.length() >= _minWordLength)
+
+  const bool wordTooSmall = word.length() < _minWordLength;
+
+  bool ok = false;
+  word.toLong(&ok);
+  const bool wordIsNumber = ok;
+
+  if (!wordTooSmall && !wordIsNumber)
   {
     LOG_TRACE("Updating word: " << word << " with kvp: " << kvp << "...");
 
@@ -170,9 +177,16 @@ void PoiImplicitTagRulesDeriver::_updateForNewWord(QString word, const QString k
   }
   else
   {
-    LOG_TRACE(
-      "Skipping word: " << word << ", the length of which is less than the minimum allowed word " <<
-      "length of: " << _minWordLength);
+    if (wordTooSmall)
+    {
+      LOG_TRACE(
+        "Skipping word: " << word << ", the length of which is less than the minimum allowed word " <<
+        "length of: " << _minWordLength);
+    }
+    if (wordIsNumber)
+    {
+      LOG_TRACE("Skipping word: " << word << ", which is a number.");
+    }
   }
 }
 
