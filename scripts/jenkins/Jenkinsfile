@@ -9,18 +9,12 @@ pipeline {
         // TODO: Need logic to reuse VM.  Current logic destroys it every run
         //booleanParam(name: 'Destroy_VM (Coming Soon)',
         //    defaultValue: true)
-        booleanParam(name: 'Static_analysis',
-            defaultValue: true)
-        booleanParam(name: 'License_headers',
-            defaultValue: true)
-        booleanParam(name: 'Configure_Tests',
-            defaultValue: true)
-        booleanParam(name: 'Core_tests',
-            defaultValue: true)
-        booleanParam(name: 'Services_tests',
-            defaultValue: true)
-        booleanParam(name: 'UI_tests',
-            defaultValue: true)
+        booleanParam(name: 'Static_analysis', defaultValue: true)
+        booleanParam(name: 'License_headers', defaultValue: true)
+        booleanParam(name: 'Configure_Tests', defaultValue: true)
+        booleanParam(name: 'Core_tests', defaultValue: true)
+        booleanParam(name: 'Services_tests', defaultValue: true)
+        booleanParam(name: 'UI_tests', defaultValue: true)
         string(name: 'Box', defaultValue: 'default', description: 'Vagrant Box')
     }
     stages {
@@ -67,7 +61,13 @@ pipeline {
             }       
         }
         stage("Test Configure") {
-            when { expression { return params.Configure_Tests }
+            when { 
+                anyof {
+                    expression { return params.Configure_Tests }
+                    // Work around to run configuration tests during nightly cron triggers but not on commits to develop.  Logic can be udpated
+                    // once this https://issues.jenkins-ci.org/browse/JENKINS-41272 is implemented
+                    expression { return Calendar.instance.get(Calendar.HOUR_OF_DAY) in 21..23 }
+                }
                 not { branch 'PR-*' }
             }
             steps {
