@@ -41,15 +41,25 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, AddImplicitlyDerivedTagsPoiVisitor)
 
+long _numPoisModified;
+long _numTagsAdded;
+long _numPoisInvolvedInMultipleRules;
+
 AddImplicitlyDerivedTagsPoiVisitor::AddImplicitlyDerivedTagsPoiVisitor() :
-_tokenizeNames(ConfigOptions().getPoiImplicitTagRulesTokenizeNames())
+_tokenizeNames(ConfigOptions().getPoiImplicitTagRulesTokenizeNames()),
+_numPoisModified(0),
+_numTagsAdded(0),
+_numPoisInvolvedInMultipleRules(0)
 {
   _ruleReader.reset(new ImplicitTagRulesSqliteReader());
   _ruleReader->open(ConfigOptions().getPoiImplicitTagRulesDatabase());
 }
 
 AddImplicitlyDerivedTagsPoiVisitor::AddImplicitlyDerivedTagsPoiVisitor(const QString databasePath) :
-_tokenizeNames(ConfigOptions().getPoiImplicitTagRulesTokenizeNames())
+_tokenizeNames(ConfigOptions().getPoiImplicitTagRulesTokenizeNames()),
+_numPoisModified(0),
+_numTagsAdded(0),
+_numPoisInvolvedInMultipleRules(0)
 {
   _ruleReader.reset(new ImplicitTagRulesSqliteReader());
   _ruleReader->open(databasePath);
@@ -61,6 +71,11 @@ AddImplicitlyDerivedTagsPoiVisitor::~AddImplicitlyDerivedTagsPoiVisitor()
   {
     _ruleReader->close();
   }
+
+  LOG_INFO(
+    "Added " << _numTagsAdded << " tags to " << _numPoisModified << " POIs.  " <<
+    _numPoisInvolvedInMultipleRules <<
+    " POIs were involved in multiple tag rules and were not modified.")
 }
 
 bool caseInsensitiveLessThan(const QString s1, const QString s2)
@@ -138,6 +153,7 @@ void AddImplicitlyDerivedTagsPoiVisitor::visit(const ElementPtr& e)
       e->getTags().appendValue(
         "note",
         "Found multiple possible matches for implicit tags: " + matchingWordsList.join(", "));
+      _numPoisInvolvedInMultipleRules++;
     }
     else if (!tagsToAdd.isEmpty())
     {
@@ -147,6 +163,8 @@ void AddImplicitlyDerivedTagsPoiVisitor::visit(const ElementPtr& e)
       qSort(matchingWordsList.begin(), matchingWordsList.end(), caseInsensitiveLessThan);
       e->getTags().appendValue(
         "note", "Implicitly derived tags based on: " + matchingWordsList.join(", "));
+      _numPoisModified++;
+      _numTagsAdded += tagsToAdd.size();
     }
   }
 }
