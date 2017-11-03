@@ -512,40 +512,51 @@ void PoiImplicitTagRulesDeriver::_removeDuplicatedKeyTypes()
     const QString wordTagKey = word.trimmed() % ";" % tagKey.trimmed();
     LOG_VART(wordTagKey);
 
-    //TODO: remove and add rules
-    //QMap<QString, QString> _customRulesList;
-    //QMap<QString, QString> _rulesIgnoreList;
-
-    //The lines are sorted by occurrence count.  So the first time we see one word-key combo, we
-    //know it had the highest occurrence count, and we can ignore all subsequent instances since
-    //any one feature can't have more than one tag applied to it with the same key.
-
-    const long queriedCount = _wordKeysToCounts.value(wordTagKey, -1);
-    if (queriedCount == -1)
+    const QString ignoreRuleTag = _rulesIgnoreList.value(word, "");
+    const QString customRuleTag = _customRulesList.value(word, "");
+    if (ignoreRuleTag != kvp && customRuleTag != kvp)
     {
-      _wordKeysToCounts[wordTagKey] = count;
-      //this unescaping must occur during the final temp file write
-      if (word.contains("%3D"))
+      //The lines are sorted by occurrence count.  So the first time we see one word-key combo, we
+      //know it had the highest occurrence count, and we can ignore all subsequent instances since
+      //any one feature can't have more than one tag applied to it with the same key.
+
+      const long queriedCount = _wordKeysToCounts.value(wordTagKey, -1);
+      if (queriedCount == -1)
       {
-        word = word.replace("%3D", "=");
+        _wordKeysToCounts[wordTagKey] = count;
+        //this unescaping must occur during the final temp file write
+        if (word.contains("%3D"))
+        {
+          word = word.replace("%3D", "=");
+        }
+        else if (word.contains("%3d"))
+        {
+          word = word.replace("%3d", "=");
+        }
+        const QString updatedLine = QString::number(count) % "\t" % word % "\t" % kvp % "\n";
+        LOG_VART(updatedLine);
+        _sortedDedupedCountFile->write(updatedLine.toUtf8());
       }
-      else if (word.contains("%3d"))
+      else if (queriedCount == count)
       {
-        word = word.replace("%3d", "=");
+        //TODO: fix
+        LOG_DEBUG(
+          "Found word with multiple tag occurrance counts of the same size.  Arbitrarily " <<
+          "chose first tag.  Not creating implicit tag entry for word: " << word << ", tag: " <<
+          kvp << ", count: " << count);
       }
-      const QString updatedLine = QString::number(count) % "\t" % word % "\t" % kvp % "\n";
-      LOG_VART(updatedLine);
-      _sortedDedupedCountFile->write(updatedLine.toUtf8());
-    }
-    else if (queriedCount == count)
-    {
-      //TODO: fix
-      LOG_DEBUG(
-        "Found word with multiple tag occurrance counts of the same size.  Arbitrarily " <<
-        "chose first tag.  Not creating implicit tag entry for word: " << word << ", tag: " <<
-        kvp << ", count: " << count);
     }
   }
+
+  for (QMap<QString, QString>::const_iterator customRulesItr = _customRulesList.begin();
+       customRulesItr != _customRulesList.end(); ++customRulesItr)
+  {
+    const QString line =
+      QString::number(999999) % "\t" % customRulesItr.key() % "\t" % customRulesItr.value() % "\n";
+    LOG_VART(line);
+    _sortedDedupedCountFile->write(line.toUtf8());
+  }
+
   _sortedCountFile->close();
   _sortedDedupedCountFile->close();
 }
