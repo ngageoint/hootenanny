@@ -57,6 +57,14 @@ public:
    * @return a formatted number string
    */
   static QString formatLargeNumber(const unsigned long number);
+
+  /**
+   * Determines whether a string contains an alphabetic character
+   *
+   * @param input string to examine
+   * @return true if the input has at least one alphabetic character; false otherwise
+   */
+  static bool hasAlphabeticCharacter(const QString input);
 };
 
 }

@@ -153,11 +153,12 @@ void PoiImplicitTagRulesDeriver::_updateForNewWord(QString word, const QString k
 
   const bool wordTooSmall = word.length() < _minWordLength;
 
-  bool ok = false;
-  word.toLong(&ok);
-  const bool wordIsNumber = ok;
+  bool wordIsNumber = false;
+  word.toLong(&wordIsNumber);
 
-  if (!wordTooSmall && !wordIsNumber)
+  const bool hasAlphaChar = StringUtils::hasAlphabeticCharacter(word);
+
+  if (!wordTooSmall && !wordIsNumber && hasAlphaChar)
   {
     LOG_TRACE("Updating word: " << word << " with kvp: " << kvp << "...");
 
@@ -177,16 +178,22 @@ void PoiImplicitTagRulesDeriver::_updateForNewWord(QString word, const QString k
   }
   else
   {
+    QString msg = "Skipping word: " + word;
     if (wordTooSmall)
     {
-      LOG_TRACE(
-        "Skipping word: " << word << ", the length of which is less than the minimum allowed word " <<
-        "length of: " << _minWordLength);
+      msg +=
+        ", the length of which is less than the minimum allowed word length of: " +
+        QString::number(_minWordLength);
     }
     if (wordIsNumber)
     {
-      LOG_TRACE("Skipping word: " << word << ", which is a number.");
+      msg += ", which is a number";
     }
+    if (!hasAlphaChar)
+    {
+      msg += ", which has no alphabetic characters.";
+    }
+    LOG_TRACE(msg);
   }
 }
 

@@ -65,4 +65,16 @@ QString StringUtils::formatLargeNumber(const unsigned long number)
   return ss;
 }
 
+bool StringUtils::hasAlphabeticCharacter(const QString input)
+{
+  for (int i = 0; i < input.length(); i++)
+  {
+    if (input.at(i).isLetter())
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
 }
