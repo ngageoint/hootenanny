@@ -59,4 +59,4 @@ void init(Handle<Object> exports)
   JsRegistrar::Init(exports);
 }
 
-//NODE_MODULE(HootJs, init)
+NODE_MODULE(HootJs, init)
