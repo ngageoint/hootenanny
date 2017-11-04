@@ -64,6 +64,7 @@ using namespace hoot;
 
 // Standard
 #include <iostream>
+#include <vector>
 using namespace std;
 
 // Tgs
@@ -172,6 +173,26 @@ void filterPattern(CppUnit::Test* from, CppUnit::TestSuite* to, QString pattern,
   }
 }
 
+void filterPattern(CppUnit::Test* from, std::vector<CppUnit::Test*> &to, QString pattern,
+  bool includeOnMatch)
+{
+  QRegExp regex(pattern);
+
+  for (int i = 0; i < from->getChildTestCount(); i++)
+  {
+    CppUnit::Test* child = from->getChildTestAt(i);
+    QString name = QString::fromStdString(child->getName());
+    if (dynamic_cast<CppUnit::TestComposite*>(child))
+    {
+      filterPattern(child, to, pattern, includeOnMatch);
+    }
+    else if (regex.exactMatch(name) == includeOnMatch)
+    {
+      to.push_back(child);
+    }
+  }
+}
+
 CppUnit::Test* findTest(CppUnit::Test* t, QString name)
 {
   if (QString::fromStdString(t->getName()) == name)
@@ -213,6 +234,12 @@ void getNames(vector<string>& names, CppUnit::Test* t)
   }
 }
 
+void getNames(std::vector<string>& names, const std::vector<CppUnit::Test*> &vTests)
+{
+  for (size_t i = 0; i < vTests.size(); i++)
+    names.push_back(vTests[i]->getName());
+}
+
 void printNames(CppUnit::Test* t)
 {
   vector<string> names;
@@ -240,6 +267,16 @@ enum _TimeOutValue
   SLOW_WAIT     = 30,
   GLACIAL_WAIT  = 900
 };
+
+void runSingleTest(CppUnit::Test * pTest, QStringList &args, CppUnit::TextTestResult * pResult)
+{
+  // clear all user configuration so we have consistent tests.
+  conf().clear();
+  ConfigOptions::populateDefaults(conf());
+  conf().set("HOOT_HOME", getenv("HOOT_HOME"));
+  Settings::parseCommonArguments(args);
+  pTest->run(pResult);
+}
 
 void populateTests(_TestType t, CppUnit::TestSuite *suite, bool printDiff)
 {
@@ -358,7 +395,7 @@ int main(int argc, char *argv[])
     }
 
     Log::getInstance().setLevel(Log::Warn);
-    CppUnit::TextTestRunner runner;
+    std::vector<CppUnit::Test*> vTests;
     CppUnit::TextTestResult result;
 
 # if HOOT_HAVE_HADOOP
@@ -394,6 +431,7 @@ int main(int argc, char *argv[])
       QString testName = args[i];
 
       listener.reset(new HootTestListener(false, -1));
+      result.addListener(listener.get());
       Log::getInstance().setLevel(Log::Info);
       pRootSuite = new CppUnit::TestSuite( "All tests" );
       populateTests(ALL, pRootSuite, printDiff);
@@ -405,13 +443,7 @@ int main(int argc, char *argv[])
         return -1;
       }
 
-      // clear all user configuration so we have consistent tests.
-      conf().clear();
-      ConfigOptions::populateDefaults(conf());
-      conf().set("HOOT_HOME", getenv("HOOT_HOME"));
-      Settings::parseCommonArguments(args);
-      result.addListener(listener.get());
-      t->run(&result);
+      runSingleTest(t, args, &result);
       delete pRootSuite;
       return result.failures().size() > 0 ? -1 : 0;
     }
@@ -436,15 +468,7 @@ int main(int argc, char *argv[])
         CppUnit::Test* t = pRootSuite->findTest(testName);
         if (t != 0)
         {
-          // clear all user configuration so we have consistent tests.
-          conf().clear();
-          ConfigOptions::populateDefaults(conf());
-          conf().set("HOOT_HOME", getenv("HOOT_HOME"));
-          //  Run only the test sent from the main process
-          CppUnit::TestRunner test_runner;
-          //test_runner.addTest(t);
-          //test_runner.run(result);
-          t->run(&result);
+          runSingleTest(t, args, &result);
           cout << endl << HOOT_TEST_FINISHED << endl;
         }
         else
@@ -497,32 +521,33 @@ int main(int argc, char *argv[])
         populateTests(GLACIAL_ONLY, pRootSuite, printDiff);
       }
 
+      bool filtered = false;
       for (int i = 0; i < args.size(); i++)
       {
+        // TODO: Set up a vector of tests to run, and do away with the newSuite
         if (args[i].startsWith("--exclude="))
         {
-          CppUnit::TestSuite *newSuite = new CppUnit::TestSuite( "All tests" );
           int equalsPos = args[i].indexOf('=');
           QString regex = args[i].mid(equalsPos + 1);
           LOG_WARN("Excluding pattern: " << regex);
-          filterPattern(pRootSuite, newSuite, regex, false); // This is a minefield of pointer scaryness
-          delete pRootSuite;
-          pRootSuite = newSuite;
+          filterPattern(pRootSuite, vTests, regex, false);
+          filtered = true;
         }
         else if (args[i].startsWith("--include="))
         {
-          CppUnit::TestSuite *newSuite = new CppUnit::TestSuite( "All tests" );
           int equalsPos = args[i].indexOf('=');
           QString regex = args[i].mid(equalsPos + 1);
           LOG_WARN("Including only tests that match: " << regex);
-          filterPattern(pRootSuite, newSuite, regex, true);  // This is a minefield of pointer scaryness
-          delete pRootSuite;
-          pRootSuite = newSuite;
+          filterPattern(pRootSuite, vTests, regex, true);
+          filtered = true;
         }
       }
 
-      runner.addTest(pRootSuite);
-      cout << "Running core tests.  Test count: " << pRootSuite->countTestCases() << endl;
+      if  (!filtered) // Do all tests
+      {
+        filterPattern(pRootSuite, vTests, ".*", true);
+      }
+      cout << "Running core tests.  Test count: " << vTests.size() << endl;
     }
 
     if (args.contains("--parallel"))
@@ -544,7 +569,7 @@ int main(int argc, char *argv[])
 
       //  Get the names of all of the tests to run
       vector<string> allNames;
-      getNames(allNames, pRootSuite);
+      getNames(allNames, vTests);
       set<string> nameCheck;
       for (vector<string>::iterator it = allNames.begin(); it != allNames.end(); ++it)
         nameCheck.insert(*it);
@@ -569,12 +594,13 @@ int main(int argc, char *argv[])
 
       cout << endl;
       cout << "Elapsed: " << Tgs::Time::getTime() - start << endl;
-      // delete pRootSuite; Don't need to delete suite, because it was added to the runner
-      // and the runner deletes it
+      delete pRootSuite;
       return pool.getFailures() > 0 ? -1 : 0;
     }
     else
     {
+      double start = Tgs::Time::getTime();
+
       if (args.contains("--names"))
         listener->showTestNames(true);
 
@@ -584,11 +610,19 @@ int main(int argc, char *argv[])
       LOG_DEBUG("HOOT_HOME: " + QString(getenv("HOOT_HOME")))
       conf().set("HOOT_HOME", getenv("HOOT_HOME"));
 
-      //allows us to pass config options through HootTest
+      // allows us to pass config options through HootTest
       Settings::parseCommonArguments(args);
 
+      // set up listener
       result.addListener(listener.get());
-      runner.run(result);
+
+      // run all tests
+      for (size_t i = 0; i < vTests.size(); i++)
+        vTests[i]->run(&result);
+
+      cout << endl;
+      cout << "Elapsed: " << Tgs::Time::getTime() - start << endl;
+      delete pRootSuite;
       return result.failures().size() > 0 ? -1 : 0;
     }
   }
