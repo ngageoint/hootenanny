@@ -304,6 +304,7 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QStringList inputs,
           }
           else
           {
+            //TODO: can't this be changed to element->getTags().contains(tagKey) ?
             for (Tags::const_iterator tagsItr = element->getTags().begin();
                  tagsItr != element->getTags().end(); ++tagsItr)
             {
