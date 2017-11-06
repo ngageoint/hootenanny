@@ -150,51 +150,45 @@ QStringList PoiImplicitTagRulesDeriver::_getPoiKvps(const Tags& tags) const
 void PoiImplicitTagRulesDeriver::_updateForNewWord(QString word, const QString kvp)
 {
   word = word.simplified();
+  LOG_TRACE("Updating word: " << word << " with kvp: " << kvp << "...");
 
   const bool wordTooSmall = word.length() < _minWordLength;
+  if (wordTooSmall)
+  {
+    LOG_TRACE(
+      "Skipping word: " << word << ", the length of which is less than the minimum allowed word " <<
+      "length of: " << _minWordLength);
+    return;
+  }
 
   bool wordIsNumber = false;
   word.toLong(&wordIsNumber);
+  if (wordIsNumber)
+  {
+    LOG_TRACE("Skipping word: " << word << ", which is a number.");
+    return;
+  }
 
   const bool hasAlphaChar = StringUtils::hasAlphabeticCharacter(word);
-
-  if (!wordTooSmall && !wordIsNumber && hasAlphaChar)
+  if (!hasAlphaChar)
   {
-    LOG_TRACE("Updating word: " << word << " with kvp: " << kvp << "...");
+    LOG_TRACE("Skipping word: " << word << ", which has no alphabetic characters.");
+    return;
+  }
 
-    const QString lowerCaseWord = word.toLower();
-    const QString queriedWord = _wordCaseMappings.value(lowerCaseWord, "");
-    if (queriedWord.isEmpty())
-    {
-      _wordCaseMappings[lowerCaseWord] = word;
-    }
-    else
-    {
-      word = queriedWord;
-    }
-
-    const QString line = word % QString("\t") % kvp % QString("\n");
-    _countFile->write(line.toUtf8());
+  const QString lowerCaseWord = word.toLower();
+  const QString queriedWord = _wordCaseMappings.value(lowerCaseWord, "");
+  if (queriedWord.isEmpty())
+  {
+    _wordCaseMappings[lowerCaseWord] = word;
   }
   else
   {
-    QString msg = "Skipping word: " + word;
-    if (wordTooSmall)
-    {
-      msg +=
-        ", the length of which is less than the minimum allowed word length of: " +
-        QString::number(_minWordLength);
-    }
-    if (wordIsNumber)
-    {
-      msg += ", which is a number";
-    }
-    if (!hasAlphaChar)
-    {
-      msg += ", which has no alphabetic characters.";
-    }
-    LOG_TRACE(msg);
+    word = queriedWord;
   }
+
+  const QString line = word % QString("\t") % kvp % QString("\n");
+  _countFile->write(line.toUtf8());
 }
 
 QString PoiImplicitTagRulesDeriver::_getSqliteOutput(const QStringList outputs)
