@@ -97,7 +97,7 @@ Feature: Advanced Conflation Options
         And I should see "Road Options"
         Then I click on "#hoot_road_options_label"
         And I should see checkbox "Enabled" checked
-        And I should see element "#hoot_road_opt_engine" with no value and placeholder "Unify"
+        And I should see element "#hoot_road_opt_engine" with no value and placeholder "Network"
         Then I click on "#hoot_road_options_label"
         And I should see "Building Options"
         And I should see "POI Options"
