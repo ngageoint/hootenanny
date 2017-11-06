@@ -86,13 +86,16 @@ Feature: Advanced Conflation Options
 
 	Scenario: Test Cookie Cutter Options that are different than Reference or Average Options
 		Then I press "big.loud-red" span with text "Cancel"
-		When I select the "Cookie Cutter & Horizontal" option in "#containerofConfType"
 		Then I click the "►" link
 		And I should see "Advanced Conflation Options"
+		And I should see "Road Options"
+		And I click on "#hoot_road_options_label"
+		And I should see checkbox "Enabled" enabled
+		And I should see element "#hoot_road_opt_engine" with value "Network"
 
 		Scenario Outline:
-			Then I should see "<option name>"
-			Then I click on "#<option id>"
+			When I select the "<conflation option>" in the "div.contain.combobox-caret"
+			And I should see element "#hoot_road_opt_engine" with value "<conflation option>"
 			And I should see element "#<element>" with no value and placeholder <placeholder>
 			When I fill "#<element>" with "abc"
 			When I press enter in the "#<element>" input
@@ -114,10 +117,39 @@ Feature: Advanced Conflation Options
 			And I should see element "#<element>" with no value and placeholder <placeholder>
 			Then I click on "#<option id>"
 
+
 			Examples:
-				| option name | option id | element | placeholder | might |
-				| Road Options | hoot_road_options_label | search_radius_highway | "-1" | should |
-				| Road Options | hoot_road_options_label | highway_matcher_heading_delta | "5.0" | should|
-				| Road Options | hoot_road_options_label | highway_matcher_max_angle | 60 | should |
-				| Road Options | hoot_road_options_label | way_merger_min_split_size | 5 | should |
-				| Cookie Cutter & Horizontal Options | horizontal_conflation_options_label | horizontal_cookie_cutter_alpha_shape_buffer | 0 | should_not |
+				| conflation option | option id | element | placeholder | might |
+				| Unify | hoot_road_options_label | search_radius_highway | "-1" | should |
+				| Unify | hoot_road_options_label | highway_matcher_heading_delta | "5.0" | should|
+				| Unify | hoot_road_options_label | highway_matcher_max_angle | 60 | should |
+				| Unify | hoot_road_options_label | way_merger_min_split_size | 5 | should |
+
+				#need to also add examples for Greedy & Differential
+				
+
+		# now test cookie cutter options
+		# this can probable be reduced to another scenario outline
+		And I click on "#hoot_road_options_label"
+		And I should see "Cookie Cutter & Horizontal Options"
+		And I click on "#horizontal_conflation_options_group"
+		And I should see "Cookie Cutter Alpha Shape Buffer"
+		And I should see element "#horizontal_cookie_cutter_alpha_shape_buffer" with no value and placeholder "0"
+		When I fill "#horizontal_cookie_cutter_alpha_shape_buffer" with "abc"
+		When I press enter in the "#horizontal_cookie_cutter_alpha_shape_buffer" input
+		Then I should see an invalid input warning for "#horizontal_cookie_cutter_alpha_shape_buffer"
+		When I fill "#horizontal_cookie_cutter_alpha_shape_buffer" with ""
+		When I press tab in the "#horizontal_cookie_cutter_alpha_shape_buffer" input
+		And I should see element "#horizontal_cookie_cutter_alpha_shape_buffer" with no value and placeholder "0"
+		When I fill "#horizontal_cookie_cutter_alpha_shape_buffer" with "-10000000"
+		When I press enter in the "#horizontal_cookie_cutter_alpha_shape_buffer" input
+		Then I "should_not" see an invalid input warning for "#horizontal_cookie_cutter_alpha_shape_buffer"
+		When I fill "#horizontal_cookie_cutter_alpha_shape_buffer" with ""
+		When I press tab in the "#horizontal_cookie_cutter_alpha_shape_buffer" input
+		And I should see element "#horizontal_cookie_cutter_alpha_shape_buffer" with no value and placeholder "0"
+		When I fill "#horizontal_cookie_cutter_alpha_shape_buffer" with "!@("
+		When I press enter in the "#horizontal_cookie_cutter_alpha_shape_buffer" input
+		Then I should see an invalid input warning for "#horizontal_cookie_cutter_alpha_shape_buffer"
+		When I fill "#horizontal_cookie_cutter_alpha_shape_buffer" with ""
+		When I press tab in the "#horizontal_cookie_cutter_alpha_shape_buffer" input
+		And I should see element "#horizontal_cookie_cutter_alpha_shape_buffer" with no value and placeholder "0"
