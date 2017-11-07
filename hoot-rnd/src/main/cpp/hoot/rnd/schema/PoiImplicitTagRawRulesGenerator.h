@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef POIIMPLICITTAGRULESDERIVER_H
-#define POIIMPLICITTAGRULESDERIVER_H
+#ifndef POIIMPLICITTAGRAWRULESGENERATOR_H
+#define POIIMPLICITTAGRAWRULESGENERATOR_H
 
 // Hoot
 #include <hoot/rnd/io/ImplicitTagRuleWordPartWriterFactory.h>
@@ -44,12 +44,12 @@ class Tags;
 /**
  * Derives implicit tag rules for POIs and writes the rules to various output formats
  */
-class PoiImplicitTagRulesDeriver
+class PoiImplicitTagRawRulesGenerator
 {
 
 public:
 
-  PoiImplicitTagRulesDeriver();
+  PoiImplicitTagRawRulesGenerator();
 
   /**
    * Derives implicit tag rules for POIs given input data and writes the rules to output
@@ -59,37 +59,30 @@ public:
    * specified by the inputs parameter
    * @param outputs a list of hoot supported implicit tag rule output formats
    */
-  void deriveRules(const QString input, const QStringList outputs);
+  void generatorRules(const QStringList inputs, const QStringList translationScripts,
+                      const QString output);
 
 private:
 
   //for testing
-  friend class PoiImplicitTagRulesDeriverTest;
+  friend class PoiImplicitTagRawRulesGeneratorTest;
 
-  boost::shared_ptr<QTemporaryFile> _thresholdedCountFile;
-  boost::shared_ptr<QTemporaryFile> _filteredCountFile;
-  boost::shared_ptr<QTemporaryFile> _finalSortedByWordCountFile;
+  QHash<QString, QString> _wordCaseMappings;
+  QHash<QString, long> _wordKeysToCounts;
+
+  boost::shared_ptr<QTemporaryFile> _countFile;
+  boost::shared_ptr<QTemporaryFile> _sortedCountFile;
+  boost::shared_ptr<QTemporaryFile> _sortedDedupedCountFile;
 
   long _statusUpdateInterval;
 
-  QStringList _tagIgnoreList;
-  QStringList _wordIgnoreList;
-  QMap<QString, QString> _customRulesList;
-  QMap<QString, QString> _rulesIgnoreList;
-  QStringList _tagsAllowList;
-  int _minWordLength;
+  void _updateForNewWord(QString word, const QString kvp);
+  QStringList _getPoiKvps(const Tags& tags) const;
 
-  void _removeKvpsBelowOccuranceThreshold(const QString input, const int minOccurancesThreshold);
-  void _applyFiltering();
-  void _sortByWord();
-
-  QString _getSqliteOutput(const QStringList outputs);
-  void _writeRules(const QStringList outputs, const QString sqliteOutputFile);
-
-  void _readIgnoreLists();
-  void _readAllowLists();
+  void _sortByTagOccurrance();
+  void _removeDuplicatedKeyTypes();
 };
 
 }
 
-#endif // POIIMPLICITTAGRULESDERIVER_H
+#endif // POIIMPLICITTAGRAWRULESGENERATOR_H

@@ -149,6 +149,8 @@ void ImplicitTagRulesSqliteRecordWriter::write(const QString inputUrl)
 {
   LOG_INFO("Writing implicit tag rules to: " << _db.databaseName() << "...");
 
+  long duplicatedWordCount = 0;
+
   DbUtils::execNoPrepare(_db, "BEGIN");
 
   //The input is assumed sorted by word, then by kvp.
@@ -171,23 +173,28 @@ void ImplicitTagRulesSqliteRecordWriter::write(const QString inputUrl)
     const QString kvp = lineParts[2].trimmed();
     LOG_VART(kvp);
 
-    //see associated comments in PoiImplicitTagRulesDeriver
-    long wordId = -1;
-    long tagId = -1;
-
-    wordId = _wordsToWordIds.value(word, -1);
+    long wordId = _wordsToWordIds.value(word, -1);
     if (wordId == -1)
     {
-      wordId = _insertWord(word);
-      _wordsToWordIds[word] = wordId;
-      LOG_TRACE("Created new word with ID: " << wordId);
+//      if (_words.contains(word))
+//      {
+//        LOG_ERROR("Found duplicate word: " << word);
+//        duplicatedWordCount++;
+//      }
+//      else
+//      {
+        //_words.insert(word);
+        wordId = _insertWord(word);
+        _wordsToWordIds[word] = wordId;
+        LOG_TRACE("Created new word with ID: " << wordId);
+      //}
     }
     else
     {
       LOG_TRACE("Found existing word with ID: " << wordId);
     }
 
-    tagId = _tagsToTagIds.value(kvp, -1);
+    long tagId = _tagsToTagIds.value(kvp, -1);
     if (tagId == -1)
     {
       tagId = _insertTag(kvp);
@@ -213,24 +220,29 @@ void ImplicitTagRulesSqliteRecordWriter::write(const QString inputUrl)
   }
   inputFile.close();
 
-  DbUtils::execNoPrepare(_db, "COMMIT");
-
-  //TODO: fix
-  LOG_INFO("Creating database indexes...");
-  DbUtils::execNoPrepare(_db, "CREATE UNIQUE INDEX word_idx ON words (word)");
-  DbUtils::execNoPrepare(_db, "CREATE UNIQUE INDEX tag_idx ON tags (kvp)");
-  DbUtils::execNoPrepare(_db, "CREATE INDEX word_id_idx ON rules (word_id)");
-  DbUtils::execNoPrepare(_db, "CREATE INDEX tag_id_idx ON rules (tag_id)");
-  DbUtils::execNoPrepare(_db, "CREATE INDEX tag_count_idx ON rules (tag_count)");
-
   LOG_INFO(
     "Wrote " << StringUtils::formatLargeNumber(_wordsToWordIds.size()) << " words, " <<
     StringUtils::formatLargeNumber(_tagsToTagIds.size()) << " tags, and " <<
     StringUtils::formatLargeNumber(ruleWordPartCtr) <<
     " word/tag associations to implicit tag rules database: " << _db.databaseName());
+  if (duplicatedWordCount > 0)
+  {
+    LOG_ERROR("Found " << duplicatedWordCount << " duplicated words.");
+  }
 
   _wordsToWordIds.clear();
   _tagsToTagIds.clear();
+  //_words.clear();
+
+  LOG_INFO("Creating database indexes...");
+  DbUtils::execNoPrepare(_db, "CREATE UNIQUE INDEX tag_idx ON tags (kvp)");
+  //oddly, making the id indexes unique changes test results
+  DbUtils::execNoPrepare(_db, "CREATE INDEX word_id_idx ON rules (word_id)");
+  DbUtils::execNoPrepare(_db, "CREATE INDEX tag_id_idx ON rules (tag_id)");
+  DbUtils::execNoPrepare(_db, "CREATE INDEX tag_count_idx ON rules (tag_count)");
+  DbUtils::execNoPrepare(_db, "CREATE UNIQUE INDEX word_idx ON words (word)");
+
+  DbUtils::execNoPrepare(_db, "COMMIT");
 }
 
 long ImplicitTagRulesSqliteRecordWriter::_insertWord(const QString word)

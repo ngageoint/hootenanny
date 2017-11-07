@@ -36,6 +36,7 @@
 #include <QHash>
 #include <QtSql/QSqlDatabase>
 #include <QSqlQuery>
+#include <QSet>
 
 namespace hoot
 {
@@ -85,6 +86,7 @@ private:
 
   /*QMap*/QHash<QString, long> _wordsToWordIds;
   /*QMap*/QHash<QString, long> _tagsToTagIds;
+  QSet<QString> _words; //temp??
 
   long _statusUpdateInterval;
 

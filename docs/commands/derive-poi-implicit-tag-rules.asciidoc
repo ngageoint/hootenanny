@@ -2,27 +2,38 @@
 
 === Description
 
-Given input features, creates a set of rules which can be used to add tags implicitly to POIs, given their names.
+Given a raw implicit tag rules file created by the 'generate-raw-poi-implicit-tag-rules' command, allows for filtering the rules and 
+writing them to a database.  The database can then be used to add tags implicitly to POIs, given their names using the 
+'AddImplicitlyDerivedTagsPoiVisitor'.
 
-* +inputs+                 - semicolon delimited list of input paths to supported Hootenanny OSM data formats
-* +translations+           - semicolon delimited list of translation scripts used to translate each input dataset
+* +input+                  - a .implicitTagRules tab delimited rules file
 * +outputs+                - semicolon delimited list of output paths to supported tag rules output formats; supported
                              formats include Sqlite database (.db), JSON (.json), and comma delimited (.tsv); NOTE: 
                              Only the Sqlite database format can be used to apply implicit tag to input data.
-* +typeKeys+               - optional semicolon delimited list of tag keys to use when deriving implicit types; use 'all' 
-                             to specify all types; by default all types are considered parameter required if 
-                             minOccurancesThreshold is specified
-* +minOccurancesThreshold+ - optional minimum number of occurances of a tag in order for a rule to be derived for 
-                             the tag; specify '1' to consider all type tag occurances
+
+The following additional configuration parameters apply to rule derivation:
+
+* poi.implicit.tag.rules.custom.rule.list - used to inject custom rules into the database
+* poi.implicit.tag.rules.minimum.word.length - minimum number of occurances of a tag in order for a rule to be derived for the tag; specify 
+'1' to consider all type tag occurances
+* poi.implicit.tag.rules.rule.ignore.list - used to explicitly ignore generated rules
+* poi.implicit.tag.rules.tag.ignore.list - used to explicitly ignore tags
+* poi.implicit.tag.rules.tag.list - used to allow only specific tags
+* poi.implicit.tag.rules.word.ignore.list - used to explicitly ignore words
+
+See the configuration option descriptions in conf/ConfigOptions.asciidoc for more details.
 
 === Usage
 
 --------------------------------------
-derive-poi-implicit-tag-rules (inputs) (translations) (outputs) [typeKeys] [minOccurancesThreshold]
+derive-poi-implicit-tag-rules (input) (outputs)
 --------------------------------------
 
 ==== Examples
 
 --------------------------------------
-hoot derive-poi-implicit-tag-rules "myInput.osm.pbf;myInput.geonames" "translations/OSM_Ingest.js;translations/GeoNames.js" "rules.json;rules.sqlite" "amenity;tourism;building" 4
+hoot derive-poi-implicit-tag-rules myInput.implicitTagRules "rules.json;rules.sqlite;rules.tsv"
+
+derive-poi-implicit-tag-rules -D poi.implicit.tag.rules.custom.rule.list=myCustomRules -D poi.implicit.tag.rules.minimum.word.length=3 -D poi.implicit.tag.rules.rule.ignore.list=myRuleIgnoreList -D poi.implicit.tag.rules.tag.ignore.list=myTagIgnoreList -D poi.implicit.tag.rules.tag.list=myTagList -D poi.implicit.tag.rules.tokenize.names=true -D poi.implicit.tag.rules.word.ignore.list=myWordIgnoreList myInput.implicitTagRules "rules.json;rules.sqlite;rules.tsv"
 --------------------------------------
+

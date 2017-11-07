@@ -1886,14 +1886,23 @@ those being compared have a populated name field.
 * Default Value: `conf/core/poi-implicit-tag-rules/poiImplicitTagRulesCustomRuleList`
 
 Flat file containing tab separated word key/value pairs, one per line, to use as custom rules
-when deriving implicit tags from POI names.
+when deriving implicit tags from POI names.  Overridden by
+'poi.implicit.tag.rules.rule.ignore.list'.
 
 === poi.implicit.tag.rules.database
 
 * Data Type: string
 * Default Value: `conf/core/poi-implicit-tag-rules/ImplicitTagRules.sqlite`
 
-Database used to derive POI type tags implicitly based on a POI's name.
+Database used by the AddImplicitlyDerivedTagsPoiVisitor to derive POI type tags implicitly based
+on a POI's name.
+
+=== poi.implicit.tag.rules.keep.temp.files
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, the POI implicit tag deriver will keep all temporary files.  For debugging only.
 
 === poi.implicit.tag.rules.minimum.word.length
 
@@ -1916,15 +1925,16 @@ when deriving implicit tags from POI names.
 * Default Value: `conf/core/poi-implicit-tag-rules/poiImplicitTagRulesTagIgnoreList`
 
 Flat file containing key/value pairs, one per line, to ignore when deriving implicit tags from POI
-names.
+names.  Use 'key=*' to ignore all tags for a given key.
 
-=== poi.implicit.tag.rules.tag.key.list
+=== poi.implicit.tag.rules.tag.list
 
 * Data Type: string
 * Default Value: `conf/core/poi-implicit-tag-rules/poiImplicitTagRulesTagKeyList`
 
 Flat file containing key/value pairs, one per line, to use when deriving implicit tags from POI
-names.
+names.  Use 'key=*' to accept all tags for a given key.  Overridden by
+'poi.implicit.tag.rules.tag.ignore.list'.
 
 === poi.implicit.tag.rules.tokenize.names
 
