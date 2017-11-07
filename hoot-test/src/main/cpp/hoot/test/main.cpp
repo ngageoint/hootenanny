@@ -410,13 +410,12 @@ int main(int argc, char *argv[])
     bool printDiff = args.contains("--diff");
 
     // Print all names & exit without running anything
-    CppUnit::TestSuite * pRootSuite = NULL;
+    boost::shared_ptr<CppUnit::TestSuite> pRootSuite;
     if (args.contains("--all-names"))
     {
-      pRootSuite = new CppUnit::TestSuite( "All tests" );
-      populateTests(ALL, pRootSuite, printDiff);
-      printNames(pRootSuite);
-      delete pRootSuite;
+      pRootSuite.reset(new CppUnit::TestSuite( "All tests" ));
+      populateTests(ALL, pRootSuite.get(), printDiff);
+      printNames(pRootSuite.get());
       return 0;
     }
 
@@ -433,18 +432,16 @@ int main(int argc, char *argv[])
       listener.reset(new HootTestListener(false, -1));
       result.addListener(listener.get());
       Log::getInstance().setLevel(Log::Info);
-      pRootSuite = new CppUnit::TestSuite( "All tests" );
-      populateTests(ALL, pRootSuite, printDiff);
+      pRootSuite.reset(new CppUnit::TestSuite( "All tests" ));
+      populateTests(ALL, pRootSuite.get(), printDiff);
       CppUnit::Test* t = pRootSuite->findTest(testName.toStdString());
       if (t == 0)
       {
         cout << "Could not find the specified test: " << testName.toStdString() << endl;
-        delete pRootSuite;
         return -1;
       }
 
       runSingleTest(t, args, &result);
-      delete pRootSuite;
       return result.failures().size() > 0 ? -1 : 0;
     }
     else if (args.contains("--listen"))
@@ -463,8 +460,8 @@ int main(int argc, char *argv[])
       cin >> testName;
       while (testName != HOOT_TEST_FINISHED)
       {
-        pRootSuite = new CppUnit::TestSuite( "All tests" );
-        populateTests(ALL, pRootSuite, printDiff);
+        pRootSuite.reset(new CppUnit::TestSuite( "All tests" ));
+        populateTests(ALL, pRootSuite.get(), printDiff);
         CppUnit::Test* t = pRootSuite->findTest(testName);
         if (t != 0)
         {
@@ -476,49 +473,48 @@ int main(int argc, char *argv[])
           cerr << "Could not find the specified test: " <<  testName << endl;
           cout << HOOT_TEST_FINISHED << endl;
         }
-        delete pRootSuite;
         cin >> testName;
       }
       return result.failures().size() > 0 ? -1 : 0;
     }
     else
     {
-      pRootSuite = new CppUnit::TestSuite( "All tests" );
+      pRootSuite.reset(new CppUnit::TestSuite( "All tests" ));
       if (args.contains("--current"))
       {
         listener.reset(new HootTestListener(true));
         Log::getInstance().setLevel(Log::Info);
-        populateTests(CURRENT, pRootSuite, printDiff);
+        populateTests(CURRENT, pRootSuite.get(), printDiff);
       }
       else if (args.contains("--quick"))
       {
         listener.reset(new HootTestListener(false, QUICK_WAIT));
-        populateTests(QUICK, pRootSuite, printDiff);
+        populateTests(QUICK, pRootSuite.get(), printDiff);
       }
       else if (args.contains("--quick-only"))
       {
         listener.reset(new HootTestListener(false, QUICK_WAIT));
-        populateTests(QUICK_ONLY, pRootSuite, printDiff);
+        populateTests(QUICK_ONLY, pRootSuite.get(), printDiff);
       }
       else if (args.contains("--slow"))
       {
         listener.reset(new HootTestListener(false, SLOW_WAIT));
-        populateTests(SLOW, pRootSuite, printDiff);
+        populateTests(SLOW, pRootSuite.get(), printDiff);
       }
       else if (args.contains("--slow-only"))
       {
         listener.reset(new HootTestListener(false, SLOW_WAIT));
-        populateTests(SLOW_ONLY, pRootSuite, printDiff);
+        populateTests(SLOW_ONLY, pRootSuite.get(), printDiff);
       }
       else if (args.contains("--all") || args.contains("--glacial"))
       {
         listener.reset(new HootTestListener(false, GLACIAL_WAIT));
-        populateTests(GLACIAL, pRootSuite, printDiff);
+        populateTests(GLACIAL, pRootSuite.get(), printDiff);
       }
       else if (args.contains("--glacial-only"))
       {
         listener.reset(new HootTestListener(false, GLACIAL_WAIT));
-        populateTests(GLACIAL_ONLY, pRootSuite, printDiff);
+        populateTests(GLACIAL_ONLY, pRootSuite.get(), printDiff);
       }
 
       bool filtered = false;
@@ -530,7 +526,7 @@ int main(int argc, char *argv[])
           int equalsPos = args[i].indexOf('=');
           QString regex = args[i].mid(equalsPos + 1);
           LOG_WARN("Excluding pattern: " << regex);
-          filterPattern(pRootSuite, vTests, regex, false);
+          filterPattern(pRootSuite.get(), vTests, regex, false);
           filtered = true;
         }
         else if (args[i].startsWith("--include="))
@@ -538,14 +534,14 @@ int main(int argc, char *argv[])
           int equalsPos = args[i].indexOf('=');
           QString regex = args[i].mid(equalsPos + 1);
           LOG_WARN("Including only tests that match: " << regex);
-          filterPattern(pRootSuite, vTests, regex, true);
+          filterPattern(pRootSuite.get(), vTests, regex, true);
           filtered = true;
         }
       }
 
       if  (!filtered) // Do all tests
       {
-        filterPattern(pRootSuite, vTests, ".*", true);
+        filterPattern(pRootSuite.get(), vTests, ".*", true);
       }
       cout << "Running core tests.  Test count: " << vTests.size() << endl;
     }
@@ -594,7 +590,6 @@ int main(int argc, char *argv[])
 
       cout << endl;
       cout << "Elapsed: " << Tgs::Time::getTime() - start << endl;
-      delete pRootSuite;
       return pool.getFailures() > 0 ? -1 : 0;
     }
     else
@@ -622,7 +617,6 @@ int main(int argc, char *argv[])
 
       cout << endl;
       cout << "Elapsed: " << Tgs::Time::getTime() - start << endl;
-      delete pRootSuite;
       return result.failures().size() > 0 ? -1 : 0;
     }
   }
