@@ -41,7 +41,6 @@ class SparkChangesetWriterTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(SparkChangesetWriterTest);
   CPPUNIT_TEST(elementAsJsonTest);
-  CPPUNIT_TEST(elementAsXmlTest);
   CPPUNIT_TEST(missingHashTest);
   CPPUNIT_TEST(missingPreviousHashTest);
   CPPUNIT_TEST(wrongElementTypeTest);
@@ -93,24 +92,6 @@ public:
     HOOT_FILE_EQUALS(
       "test-files/io/SparkChangesetWriterTest/changeset-1-delete.spark.1",
       outputDir + "/changeset-1-delete.spark.1");
-  }
-
-  void elementAsXmlTest()
-  {
-    DisableLog dl;
-
-    const QString outputDir = "test-output/io/SparkChangesetWriterTest";
-    QDir().mkpath(outputDir);
-    const QString changesetOutput = outputDir + "/changeset-2.spark.1";
-
-    writeNodes(changesetOutput, "xml");
-
-    HOOT_FILE_EQUALS(
-      "test-files/io/SparkChangesetWriterTest/changeset-2-add.spark.1",
-      outputDir + "/changeset-2-add.spark.1");
-    HOOT_FILE_EQUALS(
-      "test-files/io/SparkChangesetWriterTest/changeset-2-delete.spark.1",
-      outputDir + "/changeset-2-delete.spark.1");
   }
 
   void missingHashTest()

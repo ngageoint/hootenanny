@@ -50,8 +50,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmChangeWriter, SparkChangesetWriter)
 
 SparkChangesetWriter::SparkChangesetWriter() :
-_precision(16),
-_elementPayloadFormat("json")
+_precision(16)
 {
 }
 
@@ -64,7 +63,6 @@ void SparkChangesetWriter::setConfiguration(const Settings& conf)
 {
   ConfigOptions options(conf);
   _precision = options.getWriterPrecision();
-  _elementPayloadFormat = options.getSparkChangesetWriterElementPayloadFormat().toLower();
 }
 
 void SparkChangesetWriter::open(QString fileName)
@@ -212,40 +210,35 @@ void SparkChangesetWriter::writeChange(const Change& change)
     createChangeLine += nodeHash % "\t";  // element hash after change
 
     //element payload
-    if (_elementPayloadFormat == QLatin1String("json"))
-    {
-      //TODO: some of this may be redundant with what's in OsmJsonWriter
 
-      //using elements in an array here, since that's what OsmJsonReader expects when using that
-      //to parse (although we're not currently doing that with multiary ingest due to #1772)
-      createChangeLine += "{\"elements\":[{\"type\":\"node\"";
-      createChangeLine += ",\"id\":" % QString::number(nodeCopy->getId(), 'g', _precision);
-      createChangeLine += ",\"lat\":" % QString::number(nodeCopy->getY(), 'g', _precision);
-      createChangeLine += ",\"lon\":" % QString::number(nodeCopy->getX(), 'g', _precision);
-      createChangeLine += ",\"tags\":{";
-      bool first = true;
-      const Tags& tags = nodeCopy->getTags();
-      for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
-      {
-        const QString tagKey = it.key();
-        const QString tagValue = it.value().trimmed();
-        if (!tagValue.isEmpty())
-        {
-          if (!first)
-          {
-            createChangeLine += ",";
-          }
-          createChangeLine +=
-            OsmJsonWriter::markupString(tagKey) % ":" % OsmJsonWriter::markupString(tagValue);
-          first = false;
-        }
-      }
-      createChangeLine += "}}]}\n";
-    }
-    else //xml
+    //TODO: some of this may be redundant with what's in OsmJsonWriter and in
+    //MultiaryIngestChangesetWriter
+
+    //using elements in an array here, since that's what OsmJsonReader expects when using that
+    //to parse (although we're not currently doing that with multiary ingest due to #1772)
+    createChangeLine += "{\"elements\":[{\"type\":\"node\"";
+    createChangeLine += ",\"id\":" % QString::number(nodeCopy->getId(), 'g', _precision);
+    createChangeLine += ",\"lat\":" % QString::number(nodeCopy->getY(), 'g', _precision);
+    createChangeLine += ",\"lon\":" % QString::number(nodeCopy->getX(), 'g', _precision);
+    createChangeLine += ",\"tags\":{";
+    bool first = true;
+    const Tags& tags = nodeCopy->getTags();
+    for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
     {
-      createChangeLine += OsmXmlWriter::toString(tmpMap, false);
+      const QString tagKey = it.key();
+      const QString tagValue = it.value().trimmed();
+      if (!tagValue.isEmpty())
+      {
+        if (!first)
+        {
+          createChangeLine += ",";
+        }
+        createChangeLine +=
+          OsmJsonWriter::markupString(tagKey) % ":" % OsmJsonWriter::markupString(tagValue);
+        first = false;
+      }
     }
+    createChangeLine += "}}]}\n";
 
     if (change.getType() == Change::Modify)
     {
@@ -278,11 +271,10 @@ void SparkChangesetWriter::writeChange(const Change& change)
 
 void SparkChangesetWriter::setElementPayloadFormat(const QString format)
 {
-  if (format != "json" && format != "xml")
+  if (format != "json")
   {
     throw IllegalArgumentException("Invalid format: " + format);
   }
-  _elementPayloadFormat = format;
 }
 
 }
