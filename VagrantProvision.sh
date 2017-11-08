@@ -141,33 +141,9 @@ $HOOT_HOME/scripts/ruby/gem-install.sh
 # Make sure that we are in ~ before trying to wget & install stuff
 cd ~
 
-if  ! dpkg -l | grep --quiet google-chrome-stable; then
-    echo "### Installing Chrome..."
-    if [ ! -f google-chrome-stable_current_amd64.deb ]; then
-      wget --quiet https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-    fi
-    sudo apt-get -q -y install gconf-service libgconf-2-4 gconf-service-backend gconf2-common
-    sudo dpkg -i google-chrome-stable_current_amd64.deb
-fi
-
-if [ ! -f bin/chromedriver ]; then
-    echo "### Installing Chromedriver..."
-    mkdir -p ~/bin
-    if [ ! -f chromedriver_linux64.zip ]; then
-      LATEST_RELEASE="`wget --quiet -O- http://chromedriver.storage.googleapis.com/LATEST_RELEASE`"
-      wget --quiet http://chromedriver.storage.googleapis.com/$LATEST_RELEASE/chromedriver_linux64.zip
-    fi
-    unzip -d ~/bin chromedriver_linux64.zip
-else
-  LATEST_RELEASE="`wget --quiet -O- http://chromedriver.storage.googleapis.com/LATEST_RELEASE`"
-  if [[ "$(chromedriver --version)" != "ChromeDriver $LATEST_RELEASE."* ]]; then
-    echo "### Updating Chromedriver"
-    rm ~/bin/chromedriver
-    rm ~/chromedriver_linux64.zip
-    wget --quiet http://chromedriver.storage.googleapis.com/$LATEST_RELEASE/chromedriver_linux64.zip
-    unzip -o -d ~/bin chromedriver_linux64.zip
-  fi
-fi
+# Install Google Chrome and ChromeDriver.
+$HOOT_HOME/scripts/chrome/chrome-install.sh
+$HOOT_HOME/scripts/chrome/driver-install.sh
 
 sudo apt-get autoremove -y
 

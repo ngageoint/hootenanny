@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+export CHROMEDRIVER_VERSION=2.33
+
 export JDK_VERSION=1.8.0_152
 export JDK_URL=http://download.oracle.com/otn-pub/java/jdk/8u152-b16/aa0333dd3019491ca4f6ddbe78cdb6d0/jdk-8u152-linux-x64.tar.gz
 export JDK_TAR=jdk-8u152-linux-x64.tar.gz
