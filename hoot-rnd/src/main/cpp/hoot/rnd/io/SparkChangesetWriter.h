@@ -75,7 +75,6 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  QString getElementPayloadFormat() const { return _elementPayloadFormat; }
   virtual void setElementPayloadFormat(const QString format);
 
 private:
@@ -86,8 +85,6 @@ private:
   int _precision;
   OsmJsonWriter _jsonWriter;
   AddExportTagsVisitor _exportTagsVisitor;
-  //TODO: can remove this
-  QString _elementPayloadFormat;
 
 };
 
