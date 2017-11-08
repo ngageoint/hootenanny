@@ -153,26 +153,6 @@ private:
   double _slowTest;
 };
 
-void filterPattern(CppUnit::Test* from, CppUnit::TestSuite* to, QString pattern,
-  bool includeOnMatch)
-{
-  QRegExp regex(pattern);
-
-  for (int i = 0; i < from->getChildTestCount(); i++)
-  {
-    CppUnit::Test* child = from->getChildTestAt(i);
-    QString name = QString::fromStdString(child->getName());
-    if (dynamic_cast<CppUnit::TestComposite*>(child))
-    {
-      filterPattern(child, to, pattern, includeOnMatch);
-    }
-    else if (regex.exactMatch(name) == includeOnMatch)
-    {
-      to->addTest(child);
-    }
-  }
-}
-
 void filterPattern(CppUnit::Test* from, std::vector<CppUnit::Test*> &to, QString pattern,
   bool includeOnMatch)
 {
@@ -520,7 +500,6 @@ int main(int argc, char *argv[])
       bool filtered = false;
       for (int i = 0; i < args.size(); i++)
       {
-        // TODO: Set up a vector of tests to run, and do away with the newSuite
         if (args[i].startsWith("--exclude="))
         {
           int equalsPos = args[i].indexOf('=');
