@@ -36,8 +36,6 @@
 // Qt
 #include <QFile>
 
-#include "../conflate/multiary/SearchBoundsCalculator.h"
-
 namespace hoot
 {
 
@@ -81,7 +79,6 @@ public:
 private:
 
   boost::shared_ptr<QFile> _fp;
-  SearchBoundsCalculatorPtr _boundsCalculator;
   int _precision;
   OsmJsonWriter _jsonWriter;
   AddExportTagsVisitor _exportTagsVisitor;

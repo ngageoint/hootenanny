@@ -86,7 +86,6 @@ Change MultiaryIngestChangesetReader::readNextChange()
   QStringList lineParts = QString::fromUtf8(_file.readLine().constData()).split("\t");
   LOG_VART(lineParts);
 
-  int nodePayloadIndex = 6;
   Change::ChangeType changeType;
   const QString parsedChangeType = lineParts[0];
   if (parsedChangeType == QLatin1String("A"))
@@ -96,7 +95,6 @@ Change MultiaryIngestChangesetReader::readNextChange()
   else if (parsedChangeType == QLatin1String("M"))
   {
     changeType = Change::Modify;
-    nodePayloadIndex = 7;
   }
   else if (parsedChangeType == QLatin1String("D"))
   {
@@ -107,18 +105,17 @@ Change MultiaryIngestChangesetReader::readNextChange()
     throw HootException("Unsupported change type: " + parsedChangeType);
   }
   LOG_VART(changeType);
-  LOG_VART(nodePayloadIndex);
 
-  LOG_VART(lineParts[nodePayloadIndex]);
+  LOG_VART(lineParts[1]);
   OsmMapPtr tmpMap(new OsmMap());
-  if (lineParts[nodePayloadIndex].startsWith("{"))
+  if (lineParts[1].startsWith("{"))
   {
     //json - don't use this until #1772 is fixed
-    tmpMap = _jsonReader.loadFromString(lineParts[nodePayloadIndex]);
+    tmpMap = _jsonReader.loadFromString(lineParts[1]);
   }
   else
   {
-    _xmlReader.readFromString(lineParts[nodePayloadIndex], tmpMap);
+    _xmlReader.readFromString(lineParts[1], tmpMap);
   }
   if (tmpMap->getWayCount() > 0 || tmpMap->getRelationCount() > 0)
   {

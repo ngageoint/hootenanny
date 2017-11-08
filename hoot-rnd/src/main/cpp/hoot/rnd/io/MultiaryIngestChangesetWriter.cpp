@@ -81,30 +81,6 @@ void MultiaryIngestChangesetWriter::open(QString fileName)
     throw HootException(QObject::tr("Error opening %1 for writing.").arg(fileName));
   }
   LOG_DEBUG("Opened: " << fileName << ".");
-
-  // find a match creator that can provide the search bounds.
-  foreach (boost::shared_ptr<MatchCreator> mc, MatchFactory::getInstance().getCreators())
-  {
-    //TODO: Why is ScriptMatchVisitor::calculateSearchRadius getting called a ton of times by this?
-    SearchRadiusProviderPtr sbc = boost::dynamic_pointer_cast<SearchRadiusProvider>(mc);
-    if (sbc.get())
-    {
-      if (_boundsCalculator.get())
-      {
-        LOG_WARN("Found more than one bounds calculator. Using the first one.");
-      }
-      else
-      {
-        _boundsCalculator.reset(new SearchBoundsCalculator(sbc));
-      }
-    }
-  }
-
-  if (!_boundsCalculator.get())
-  {
-    throw HootException(
-      "You must specify one match creator that supports search radius calculation.");
-  }
 }
 
 void MultiaryIngestChangesetWriter::writeChange(const Change& change)
@@ -155,44 +131,14 @@ void MultiaryIngestChangesetWriter::writeChange(const Change& change)
 
   NodePtr nodeCopy = (boost::dynamic_pointer_cast<const Node>(change.getElement()))->cloneSp();
 
-  //TODO: can remove hash id writing?
-  const QString nodeHash = nodeCopy->getTags()[MetadataTags::HootHash()];
   nodeCopy->getTags().remove(MetadataTags::HootHash());
   _exportTagsVisitor.visit(nodeCopy);
 
   OsmMapPtr tmpMap(new OsmMap());
   tmpMap->addElement(nodeCopy);
 
-  //TODO: can remove bounds writing
-  const Envelope env = _boundsCalculator->calculateSearchBounds(tmpMap, nodeCopy);
-
   QString changeLine;
-  changeLine +=
-    changeType % "\t" %
-    QString::number(env.getMinX(), 'g', _precision) % "\t" %
-    QString::number(env.getMinY(), 'g', _precision) % "\t" %
-    QString::number(env.getMaxX(), 'g', _precision) % "\t" %
-    QString::number(env.getMaxY(), 'g', _precision) % "\t";
-  //TODO: can remove hash id writing?
-  if (change.getType() == Change::Modify)
-  {
-    if (!change.getPreviousElement().get())
-    {
-      throw HootException("No previous element specified for modify change.");
-    }
-    else if (change.getPreviousElement()->getElementType() != ElementType::Node)
-    {
-      throw NotImplementedException("Only nodes are supported.");
-    }
-
-    NodePtr previousNodeCopy =
-      (boost::dynamic_pointer_cast<const Node>(change.getPreviousElement()))->cloneSp();
-
-    _exportTagsVisitor.visit(previousNodeCopy);
-    // element hash before change
-    changeLine += QString(previousNodeCopy->getTags()[MetadataTags::HootHash()]) % "\t";
-  }
-  changeLine += nodeHash % "\t";  // element hash after change
+  changeLine += changeType % "\t";
 
   //element payload
 
