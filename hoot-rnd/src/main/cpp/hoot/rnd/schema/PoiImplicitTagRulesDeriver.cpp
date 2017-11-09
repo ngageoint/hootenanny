@@ -30,6 +30,7 @@
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/HootException.h>
 
 // Qt
 #include <QStringBuilder>
@@ -38,16 +39,25 @@ namespace hoot
 {
 
 PoiImplicitTagRulesDeriver::PoiImplicitTagRulesDeriver() :
-_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
-_minWordLength(ConfigOptions().getPoiImplicitTagRulesMinimumWordLength())
+_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
-  _readIgnoreLists();
-  _readAllowLists();
+}
+
+void PoiImplicitTagRulesDeriver::setConfiguration(const Settings& conf)
+{
+  const ConfigOptions confOptions(conf);
+  setCustomRuleFile(confOptions.getPoiImplicitTagRulesCustomRuleFile());
+  setMinTagOccurrencesPerWord(confOptions.getPoiImplicitTagRulesMinimumTagOccurrencesPerWord());
+  setMinWordLength(confOptions.getPoiImplicitTagRulesMinimumWordLength());
+  setRuleIgnoreFile(confOptions.getPoiImplicitTagRulesRuleIgnoreFile());
+  setTagIgnoreRuleFile(confOptions.getPoiImplicitTagRulesTagIgnoreFile());
+  setTagFile(confOptions.getPoiImplicitTagRulesTagFile());
+  setWordIgnoreFile(confOptions.getPoiImplicitTagRulesWordIgnoreFile());
 }
 
 void PoiImplicitTagRulesDeriver::_readAllowLists()
 {
-  QFile tagsAllowFile(ConfigOptions().getPoiImplicitTagRulesTagList());
+  QFile tagsAllowFile(_tagFile);
   if (!tagsAllowFile.open(QIODevice::ReadOnly))
   {
     throw HootException(
@@ -62,9 +72,9 @@ void PoiImplicitTagRulesDeriver::_readAllowLists()
       _tagsAllowList.append(line);
     }
   }
-  _tagsAllowList.close();
+  tagsAllowFile.close();
 
-  QFile customRulesFile(ConfigOptions().getPoiImplicitTagRulesCustomRuleList());
+  QFile customRulesFile(_customRuleFile);
   if (!customRulesFile.open(QIODevice::ReadOnly))
   {
     throw HootException(
@@ -85,7 +95,7 @@ void PoiImplicitTagRulesDeriver::_readAllowLists()
 
 void PoiImplicitTagRulesDeriver::_readIgnoreLists()
 {
-  QFile tagIgnoreFile(ConfigOptions().getPoiImplicitTagRulesTagIgnoreList());
+  QFile tagIgnoreFile(_tagIgnoreFile);
   if (!tagIgnoreFile.open(QIODevice::ReadOnly))
   {
     throw HootException(
@@ -102,7 +112,7 @@ void PoiImplicitTagRulesDeriver::_readIgnoreLists()
   }
   tagIgnoreFile.close();
 
-  QFile wordIgnoreFile(ConfigOptions().getPoiImplicitTagRulesWordIgnoreList());
+  QFile wordIgnoreFile(_wordIgnoreFile);
   if (!wordIgnoreFile.open(QIODevice::ReadOnly))
   {
     throw HootException(
@@ -119,7 +129,7 @@ void PoiImplicitTagRulesDeriver::_readIgnoreLists()
   }
   wordIgnoreFile.close();
 
-  QFile rulesIgnoreFile(ConfigOptions().getPoiImplicitTagRulesRuleIgnoreList());
+  QFile rulesIgnoreFile(_ruleIgnoreFile);
   if (!rulesIgnoreFile.open(QIODevice::ReadOnly))
   {
     throw HootException(
@@ -156,6 +166,12 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QString input, const QStringL
   {
     throw HootException("No input was specified.");
   }
+  if (!input.endsWith(".implicitTagRules"))
+  {
+    throw IllegalArgumentException(
+      QString("A *.implicitTagRules file must be the input to implicit tag rules derivation.  ") +
+      QString("Input specified: ") + input);
+  }
 
   if (outputs.isEmpty())
   {
@@ -171,7 +187,10 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QString input, const QStringL
     "Deriving POI implicit tag rules for input: " << input << ".  Writing to outputs: " <<
     outputs << "...");
 
-  _removeKvpsBelowOccuranceThreshold(input, minOccurancesThreshold);
+  _readIgnoreLists();
+  _readAllowLists();
+
+  _removeKvpsBelowOccurrenceThreshold(input, _minTagOccurrencesPerWord);
   _sortByWord();
 
 //  LOG_INFO(
@@ -179,7 +198,7 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QString input, const QStringL
 //    " word/tag associations.");
 //  _wordKeysToCounts.clear();
 
-  _writeRules(outputs, _sortedByWordDedupedCountFile->fileName());
+  _writeRules(outputs, _finalSortedByWordCountFile->fileName());
 }
 
 void PoiImplicitTagRulesDeriver::_writeRules(const QStringList outputs,
@@ -197,15 +216,15 @@ void PoiImplicitTagRulesDeriver::_writeRules(const QStringList outputs,
   }
 }
 
-void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccuranceThreshold(const QString input,
-  const int minOccurancesThreshold)
+void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccurrenceThreshold(const QString input,
+  const int minOccurrencesThreshold)
 {
-  if (minOccurancesThreshold < 2)
+  if (minOccurrencesThreshold < 2)
   {
     return;
   }
-  LOG_INFO("Removing tags below minimum occurance threshold of: " +
-           QString::number(minOccurancesThreshold));
+  LOG_INFO("Removing tags below minimum occurrence threshold of: " +
+           QString::number(minOccurrencesThreshold));
 
   _thresholdedCountFile.reset(
     new QTemporaryFile(
@@ -215,7 +234,7 @@ void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccuranceThreshold(const QStrin
   if (!_thresholdedCountFile->open())
   {
     throw HootException(
-      QObject::tr("Error opening %1 for writing.").arg(_sortedCountFile->fileName()));
+      QObject::tr("Error opening %1 for writing.").arg(_thresholdedCountFile->fileName()));
   }
   LOG_DEBUG("Opened sorted temp file: " << _thresholdedCountFile->fileName());
   if (ConfigOptions().getPoiImplicitTagRulesKeepTempFiles())
@@ -223,13 +242,13 @@ void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccuranceThreshold(const QStrin
     LOG_WARN("Keeping temp file: " << _thresholdedCountFile->fileName());
   }
 
-  //This counts each unique line occurrance, sorts by decreasing occurrence count (necessary for
+  //This counts each unique line occurrence, sorts by decreasing occurrence count (necessary for
   //next step which removes duplicate tag keys associated with the same word), removes lines with
-  //occurrance counts below the specified threshold, and replaces the space between the prepended
+  //occurrence counts below the specified threshold, and replaces the space between the prepended
   //count and the word with a tab. - not sure why 1 needs to be subtracted from
-  //minOccurancesThreshold here, though...
+  //the min occurrences here, though...
   const QString cmd =
-    "cat " + input + " | awk -v limit=" + QString::number(minOccurancesThreshold - 1) +
+    "cat " + input + " | awk -v limit=" + QString::number(minOccurrencesThreshold - 1) +
     " '$1 > limit{print}'";
   if (std::system(cmd.toStdString().c_str()) != 0)
   {

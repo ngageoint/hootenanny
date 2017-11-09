@@ -29,6 +29,7 @@
 
 // Hoot
 #include <hoot/rnd/io/ImplicitTagRuleWordPartWriterFactory.h>
+#include <hoot/core/util/Configurable.h>
 
 // Qt
 #include <QString>
@@ -44,7 +45,7 @@ class Tags;
 /**
  * Derives implicit tag rules for POIs and writes the rules to various output formats
  */
-class PoiImplicitTagRawRulesGenerator
+class PoiImplicitTagRawRulesGenerator : public Configurable
 {
 
 public:
@@ -59,8 +60,12 @@ public:
    * specified by the inputs parameter
    * @param outputs a list of hoot supported implicit tag rule output formats
    */
-  void generatorRules(const QStringList inputs, const QStringList translationScripts,
-                      const QString output);
+  void generateRules(const QStringList inputs, const QStringList translationScripts,
+                     const QString output);
+
+  virtual void setConfiguration(const Settings& conf);
+
+  void setTokenizeNames(bool tokenizeNames) { _tokenizeNames = tokenizeNames; }
 
 private:
 
@@ -75,11 +80,12 @@ private:
   boost::shared_ptr<QTemporaryFile> _sortedDedupedCountFile;
 
   long _statusUpdateInterval;
+  bool _tokenizeNames;
 
   void _updateForNewWord(QString word, const QString kvp);
   QStringList _getPoiKvps(const Tags& tags) const;
 
-  void _sortByTagOccurrance();
+  void _sortByTagOccurrence();
   void _removeDuplicatedKeyTypes();
 };
 

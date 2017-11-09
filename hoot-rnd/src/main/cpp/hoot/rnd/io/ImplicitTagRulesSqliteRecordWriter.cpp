@@ -166,8 +166,8 @@ void ImplicitTagRulesSqliteRecordWriter::write(const QString inputUrl)
   {
     const QString line = QString::fromUtf8(inputFile.readLine().constData());
     const QStringList lineParts = line.split("\t");
-    const long tagOccurranceCount = lineParts[0].trimmed().toLong();
-    LOG_VART(tagOccurranceCount);
+    const long tagOccurrenceCount = lineParts[0].trimmed().toLong();
+    LOG_VART(tagOccurrenceCount);
     const QString word = lineParts[1].trimmed();
     LOG_VART(word);
     const QString kvp = lineParts[2].trimmed();
@@ -206,7 +206,7 @@ void ImplicitTagRulesSqliteRecordWriter::write(const QString inputUrl)
       LOG_TRACE("Found existing tag with ID: " << tagId);
     }
 
-    _insertRuleWordPart(wordId, tagId, tagOccurranceCount);
+    _insertRuleWordPart(wordId, tagId, tagOccurrenceCount);
     ruleWordPartCtr++;
 
     if (ruleWordPartCtr % _statusUpdateInterval == 0)
@@ -320,15 +320,15 @@ long ImplicitTagRulesSqliteRecordWriter::_insertTag(const QString kvp)
 }
 
 void ImplicitTagRulesSqliteRecordWriter::_insertRuleWordPart(const long wordId, const long tagId,
-                                                             const long tagOccurranceCount)
+                                                             const long tagOccurrenceCount)
 {
   LOG_TRACE(
     "Inserting rule record for: word ID: " << wordId << " tag ID: " <<
-    tagId << " and tag count: " << tagOccurranceCount << "...");
+    tagId << " and tag count: " << tagOccurrenceCount << "...");
 
   _insertRuleQuery.bindValue(":wordId", qlonglong(wordId));
   _insertRuleQuery.bindValue(":tagId", qlonglong(tagId));
-  _insertRuleQuery.bindValue(":tagCount", qlonglong(tagOccurranceCount));
+  _insertRuleQuery.bindValue(":tagCount", qlonglong(tagOccurrenceCount));
   if (!_insertRuleQuery.exec())
   {
     QString err = QString("Error executing query: %1 (%2)").arg(_insertRuleQuery.executedQuery()).

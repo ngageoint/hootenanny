@@ -29,6 +29,7 @@
 
 // Hoot
 #include <hoot/rnd/io/ImplicitTagRuleWordPartWriterFactory.h>
+#include <hoot/core/util/Configurable.h>
 
 // Qt
 #include <QString>
@@ -44,7 +45,7 @@ class Tags;
 /**
  * Derives implicit tag rules for POIs and writes the rules to various output formats
  */
-class PoiImplicitTagRulesDeriver
+class PoiImplicitTagRulesDeriver : public Configurable
 {
 
 public:
@@ -61,25 +62,42 @@ public:
    */
   void deriveRules(const QString input, const QStringList outputs);
 
+  virtual void setConfiguration(const Settings& conf);
+
+  void setCustomRuleFile(const QString file) { _customRuleFile = file; }
+  void setMinTagOccurrencesPerWord(const int minOccurrences)
+  { _minTagOccurrencesPerWord = minOccurrences; }
+  void setMinWordLength(const int length) { _minWordLength = length; }
+  void setRuleIgnoreFile(const QString file) { _ruleIgnoreFile = file; }
+  void setTagIgnoreRuleFile(const QString file) { _tagIgnoreFile = file; }
+  void setTagFile(const QString file) { _tagFile = file; }
+  void setWordIgnoreFile(const QString file) { _wordIgnoreFile = file; }
+
 private:
 
   //for testing
   friend class PoiImplicitTagRulesDeriverTest;
 
-  boost::shared_ptr<QTemporaryFile> _thresholdedCountFile;
-  boost::shared_ptr<QTemporaryFile> _filteredCountFile;
-  boost::shared_ptr<QTemporaryFile> _finalSortedByWordCountFile;
-
   long _statusUpdateInterval;
+  QString _customRuleFile;
+  int _minTagOccurrencesPerWord;
+  int _minWordLength;
+  QString _ruleIgnoreFile;
+  QString _tagIgnoreFile;
+  QString _tagFile;
+  QString _wordIgnoreFile;
 
   QStringList _tagIgnoreList;
   QStringList _wordIgnoreList;
   QMap<QString, QString> _customRulesList;
   QMap<QString, QString> _rulesIgnoreList;
   QStringList _tagsAllowList;
-  int _minWordLength;
 
-  void _removeKvpsBelowOccuranceThreshold(const QString input, const int minOccurancesThreshold);
+  boost::shared_ptr<QTemporaryFile> _thresholdedCountFile;
+  boost::shared_ptr<QTemporaryFile> _filteredCountFile;
+  boost::shared_ptr<QTemporaryFile> _finalSortedByWordCountFile;
+
+  void _removeKvpsBelowOccurrenceThreshold(const QString input, const int minOccurrencesThreshold);
   void _applyFiltering();
   void _sortByWord();
 

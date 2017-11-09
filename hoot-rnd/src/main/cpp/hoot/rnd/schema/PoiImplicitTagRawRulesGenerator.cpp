@@ -46,7 +46,11 @@ namespace hoot
 PoiImplicitTagRawRulesGenerator::PoiImplicitTagRawRulesGenerator() :
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
+}
 
+void PoiImplicitTagRawRulesGenerator::setConfiguration(const Settings& conf)
+{
+  setTokenizeNames(ConfigOptions(conf).getPoiImplicitTagRulesTokenizeNames());
 }
 
 QStringList PoiImplicitTagRawRulesGenerator::_getPoiKvps(const Tags& tags) const
@@ -104,8 +108,8 @@ void PoiImplicitTagRawRulesGenerator::_updateForNewWord(QString word, const QStr
 }
 
 void PoiImplicitTagRawRulesGenerator::generateRules(const QStringList inputs,
-                                             const QStringList translationScripts,
-                                             const QString output)
+                                                    const QStringList translationScripts,
+                                                    const QString output)
 {
   if (inputs.isEmpty())
   {
@@ -127,7 +131,7 @@ void PoiImplicitTagRawRulesGenerator::generateRules(const QStringList inputs,
 
   LOG_INFO(
     "Deriving POI implicit tag rules for inputs: " << inputs << ", translation scripts: " <<
-    translationScripts << ".  Writing to outputs: " << outputs << "...");
+    translationScripts << ".  Writing to output: " << output << "...");
 
   _wordKeysToCounts.clear();
   _wordCaseMappings.clear();
@@ -261,7 +265,7 @@ void PoiImplicitTagRawRulesGenerator::generateRules(const QStringList inputs,
     "Parsed " << StringUtils::formatLargeNumber(poiCount) << " POIs from " <<
     StringUtils::formatLargeNumber(nodeCount) << " nodes.");
 
-  _sortByTagOccurrance();
+  _sortByTagOccurrence();
   _removeDuplicatedKeyTypes();
 
   LOG_INFO(
@@ -270,9 +274,9 @@ void PoiImplicitTagRawRulesGenerator::generateRules(const QStringList inputs,
   _wordKeysToCounts.clear();
 }
 
-void PoiImplicitTagRawRulesGenerator::_sortByTagOccurrance()
+void PoiImplicitTagRawRulesGenerator::_sortByTagOccurrence()
 {
-  LOG_INFO("Sorting by tag occurrance count...");
+  LOG_INFO("Sorting by tag occurrence count...");
 
   _sortedCountFile.reset(
     new QTemporaryFile(
@@ -290,11 +294,12 @@ void PoiImplicitTagRawRulesGenerator::_sortByTagOccurrance()
     LOG_WARN("Keeping temp file: " << _sortedCountFile->fileName());
   }
 
-  //This counts each unique line occurrance, sorts by decreasing occurrence count (necessary for
+  //TODO: update this comment
+  //This counts each unique line occurrence, sorts by decreasing occurrence count (necessary for
   //next step which removes duplicate tag keys associated with the same word), removes lines with
-  //occurrance counts below the specified threshold, and replaces the space between the prepended
+  //occurrence counts below the specified threshold, and replaces the space between the prepended
   //count and the word with a tab. - not sure why 1 needs to be subtracted from
-  //minOccurancesThreshold here, though...
+  //the min occurrences here, though...
   QString cmd = "sort " + _countFile->fileName() + " | uniq -c | sort -n -r";
   cmd += " | sed -e 's/^ *//;s/ /\t/' > " + _sortedCountFile->fileName();
   if (std::system(cmd.toStdString().c_str()) != 0)
@@ -375,7 +380,7 @@ void PoiImplicitTagRawRulesGenerator::_removeDuplicatedKeyTypes()
     {
       //TODO: fix
       LOG_DEBUG(
-        "Found word with multiple tag occurrance counts of the same size.  Arbitrarily " <<
+        "Found word with multiple tag occurrence counts of the same size.  Arbitrarily " <<
         "chose first tag.  Not creating implicit tag entry for word: " << word << ", tag: " <<
         kvp << ", count: " << count);
     }

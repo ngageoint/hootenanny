@@ -57,26 +57,16 @@ public:
 
     QStringList inputs;
     inputs.append(inDir() + "/yemen-crop-2.osm.pbf");
-    const QString jsonOutputFile =
-      outDir() + "/PoiImplicitTagRawRulesGeneratorTest-runBasicTest-out.json";
-    const QString dbOutputFile =
-      outDir() + "/PoiImplicitTagRawRulesGeneratorTest-runBasicTest-out.sqlite";
+    const QString outputFile =
+      outDir() + "/PoiImplicitTagRawRulesGeneratorTest-runBasicTest-out.implicitTagRules";
 
     QStringList translationScripts;
     translationScripts.append("translations/OSM_Ingest.js");
 
-    QStringList outputs;
-    outputs.append(jsonOutputFile);
-    outputs.append(dbOutputFile);
+    PoiImplicitTagRawRulesGenerator().generateRules(inputs, translationScripts, outputFile);
 
-    PoiImplicitTagRawRulesGenerator().generateRules(inputs, translationScripts, outputs);
-
-    HOOT_FILE_EQUALS(inDir() + "/PoiImplicitTagRawRulesGeneratorTest-runBasicTest.json", jsonOutputFile);
-
-    ImplicitTagRulesSqliteReader dbReader;
-    dbReader.open(dbOutputFile);
-    CPPUNIT_ASSERT_EQUAL(438L, dbReader.getRuleWordPartCount());
-    dbReader.close();
+    HOOT_FILE_EQUALS(
+      inDir() + "/PoiImplicitTagRawRulesGeneratorTest-runBasicTest.implicitTagRules", outputFile);
   }
 
   void runMultipleInputsTest()
@@ -91,23 +81,14 @@ public:
     translationScripts.append("translations/OSM_Ingest.js");
     translationScripts.append("translations/OSM_Ingest.js");
 
-    const QString jsonOutputFile =
-      outDir() + "/PoiImplicitTagRawRulesGeneratorTest-runMultipleInputsTest-out.json";
-    const QString dbOutputFile =
-      outDir() + "/PoiImplicitTagRawRulesGeneratorTest-runMultipleInputsTest-out.sqlite";
-    QStringList outputs;
-    outputs.append(jsonOutputFile);
-    outputs.append(dbOutputFile);
+    const QString outputFile =
+      outDir() + "/PoiImplicitTagRawRulesGeneratorTest-runMultipleInputsTest-out.implicitTagRules";
 
-    PoiImplicitTagRawRulesGenerator().generateRules(inputs, translationScripts, outputs);
+    PoiImplicitTagRawRulesGenerator().generateRules(inputs, translationScripts, outputFile);
 
     HOOT_FILE_EQUALS(
-      inDir() + "/PoiImplicitTagRawRulesGeneratorTest-runMultipleInputsTest.json", jsonOutputFile);
-
-    ImplicitTagRulesSqliteReader dbReader;
-    dbReader.open(dbOutputFile);
-    CPPUNIT_ASSERT_EQUAL(599L, dbReader.getRuleWordPartCount());
-    dbReader.close();
+      inDir() + "/PoiImplicitTagRawRulesGeneratorTest-runMultipleInputsTest.implicitTagRules",
+      outputFile);
   }
 
   void runNameCaseTest()
@@ -123,23 +104,13 @@ public:
     QStringList translationScripts;
     translationScripts.append("translations/OSM_Ingest.js");
 
-    const QString jsonOutputFile =
-      outDir() + "/PoiImplicitTagRawRulesGeneratorTest-runNameCaseTest-out.json";
-    const QString dbOutputFile =
-      outDir() + "/PoiImplicitTagRawRulesGeneratorTest-runNameCaseTest-out.sqlite";
-    QStringList outputs;
-    outputs.append(jsonOutputFile);
-    outputs.append(dbOutputFile);
+    const QString outputFile =
+      outDir() + "/PoiImplicitTagRawRulesGeneratorTest-runNameCaseTest-out.implicitTagRules";
 
-    PoiImplicitTagRawRulesGenerator().generateRules(inputs, translationScripts, outputs);
+    PoiImplicitTagRawRulesGenerator().generateRules(inputs, translationScripts, outputFile);
 
     HOOT_FILE_EQUALS(
-      inDir() + "/PoiImplicitTagRulesDeriverTest-runNameCaseTest.json", jsonOutputFile);
-
-    ImplicitTagRulesSqliteReader dbReader;
-    dbReader.open(dbOutputFile);
-    CPPUNIT_ASSERT_EQUAL(9L, dbReader.getRuleWordPartCount());
-    dbReader.close();
+      inDir() + "/PoiImplicitTagRulesDeriverTest-runNameCaseTest.implicitTagRules", outputFile);
   }
 };
 

@@ -46,33 +46,13 @@ public:
 
   virtual int runSimple(QStringList args)
   {
-    if (args.size() < 3 || args.size() > 5)
+    if (args.size() != 2)
     {
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes three to five parameters.").arg(getName()));
+      throw HootException(QString("%1 takes two parameters.").arg(getName()));
     }
 
-    QStringList types;
-    if (args.size() > 3 && args[3].trimmed().toLower() != "all")
-    {
-      types = args[3].trimmed().split(";");
-    }
-
-    int minOccurancesThreshold = 1;
-    if (args.size() > 4)
-    {
-      bool ok = false;
-      minOccurancesThreshold = args[4].toInt(&ok);
-      if (!ok || minOccurancesThreshold < 1)
-      {
-        throw IllegalArgumentException(
-          "Invalid value for the minimum number of type occurrances allowed: " + args[4]);
-      }
-    }
-
-    PoiImplicitTagRulesDeriver().deriveRules(
-      args[0].trimmed().split(";"), args[1].trimmed().split(";"), args[2].trimmed().split(";"),
-      types, minOccurancesThreshold);
+    PoiImplicitTagRulesDeriver().deriveRules(args[0].trimmed(), args[1].trimmed().split(";"));
 
     return 0;
   }

@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/rnd/schema/PoiImplicitTagRulesDeriver.h>
+#include <hoot/rnd/schema/PoiImplicitTagRawRulesGenerator.h>
 
 namespace hoot
 {
@@ -36,48 +36,29 @@ namespace hoot
 /**
  * Derives implicit tag rules for POIs and writes the output in various formats
  */
-class DerivePoiImplicitTagRulesCmd : public BaseCommand
+class GenerateRawPoiImplicitTagRulesCmd : public BaseCommand
 {
 public:
 
-  static std::string className() { return "hoot::DerivePoiImplicitTagRulesCmd"; }
+  static std::string className() { return "hoot::GenerateRawPoiImplicitTagRulesCmd"; }
 
-  virtual QString getName() const { return "derive-poi-implicit-tag-rules"; }
+  virtual QString getName() const { return "generate-raw-poi-implicit-tag-rules"; }
 
   virtual int runSimple(QStringList args)
   {
-    if (args.size() < 3 || args.size() > 5)
+    if (args.size() != 3)
     {
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes three to five parameters.").arg(getName()));
+      throw HootException(QString("%1 takes three parameters.").arg(getName()));
     }
 
-    QStringList types;
-    if (args.size() > 3 && args[3].trimmed().toLower() != "all")
-    {
-      types = args[3].trimmed().split(";");
-    }
-
-    int minOccurancesThreshold = 1;
-    if (args.size() > 4)
-    {
-      bool ok = false;
-      minOccurancesThreshold = args[4].toInt(&ok);
-      if (!ok || minOccurancesThreshold < 1)
-      {
-        throw IllegalArgumentException(
-          "Invalid value for the minimum number of type occurrances allowed: " + args[4]);
-      }
-    }
-
-    PoiImplicitTagRulesDeriver().deriveRules(
-      args[0].trimmed().split(";"), args[1].trimmed().split(";"), args[2].trimmed().split(";"),
-      types, minOccurancesThreshold);
+    PoiImplicitTagRawRulesGenerator().generateRules(
+      args[0].trimmed().split(";"), args[1].trimmed().split(";"), args[2].trimmed());
 
     return 0;
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, DerivePoiImplicitTagRulesCmd)
+HOOT_FACTORY_REGISTER(Command, GenerateRawPoiImplicitTagRulesCmd)
 
 }
