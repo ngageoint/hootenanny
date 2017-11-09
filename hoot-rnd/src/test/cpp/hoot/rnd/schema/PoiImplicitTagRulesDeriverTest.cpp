@@ -39,8 +39,15 @@ class PoiImplicitTagRulesDeriverTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(PoiImplicitTagRulesDeriverTest);
   CPPUNIT_TEST(runBasicTest);
-  CPPUNIT_TEST(runTypeKeysTest);
-  CPPUNIT_TEST(runMinOccurrenceThresholdTest);
+  CPPUNIT_TEST(runExplicitTagsTest);
+  CPPUNIT_TEST(runMinTagOccurrencePerWordTest);
+  //TODO
+  //CPPUNIT_TEST(runBadInputsTest);
+  //CPPUNIT_TEST(runCustomRuleFileTest);
+  //CPPUNIT_TEST(runMinWordLengthTest);
+  //CPPUNIT_TEST(runRuleIgnoreTest);
+  //CPPUNIT_TEST(runTagIgnoreTest);
+  //CPPUNIT_TEST(runWordIgnoreTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -72,7 +79,7 @@ public:
     dbReader.close();
   }
 
-  void runTypeKeysTest()
+  void runExplicitTagsTest()
   {
     QDir().mkpath(outDir());
 
@@ -107,7 +114,7 @@ public:
     dbReader.close();
   }
 
-  void runMinOccurrenceThresholdTest()
+  void runMinTagOccurrencePerWordTest()
   {
     QDir().mkpath(outDir());
 

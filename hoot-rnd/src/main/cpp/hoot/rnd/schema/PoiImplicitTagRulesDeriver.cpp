@@ -57,6 +57,8 @@ void PoiImplicitTagRulesDeriver::setConfiguration(const Settings& conf)
 
 void PoiImplicitTagRulesDeriver::_readAllowLists()
 {
+  LOG_DEBUG("Reading allow lists...");
+
   QFile tagsAllowFile(_tagFile);
   if (!tagsAllowFile.open(QIODevice::ReadOnly))
   {
@@ -95,6 +97,8 @@ void PoiImplicitTagRulesDeriver::_readAllowLists()
 
 void PoiImplicitTagRulesDeriver::_readIgnoreLists()
 {
+  LOG_DEBUG("Reading ignore lists...");
+
   QFile tagIgnoreFile(_tagIgnoreFile);
   if (!tagIgnoreFile.open(QIODevice::ReadOnly))
   {
@@ -186,6 +190,13 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QString input, const QStringL
   LOG_INFO(
     "Deriving POI implicit tag rules for input: " << input << ".  Writing to outputs: " <<
     outputs << "...");
+  LOG_VAR(_minTagOccurrencesPerWord);
+  LOG_VAR(_minWordLength);
+  LOG_VAR(_wordIgnoreFile);
+  LOG_VAR(_tagIgnoreFile);
+  LOG_VAR(_tagFile);
+  LOG_VAR(_customRuleFile);
+  LOG_VAR(_ruleIgnoreFile);
 
   _readIgnoreLists();
   _readAllowLists();
@@ -259,7 +270,7 @@ void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccurrenceThreshold(const QStri
 
 void PoiImplicitTagRulesDeriver::_applyFiltering()
 {
-  LOG_INFO("Applying filtering...");
+  LOG_INFO("Applying word/tag/rule filtering to output...");
 
   _filteredCountFile.reset(
     new QTemporaryFile(
@@ -356,7 +367,7 @@ void PoiImplicitTagRulesDeriver::_applyFiltering()
 
 void PoiImplicitTagRulesDeriver::_sortByWord()
 {
-  LOG_INFO("Sorting output file by word...");
+  LOG_INFO("Sorting output by word...");
 
   _finalSortedByWordCountFile.reset(
     new QTemporaryFile(

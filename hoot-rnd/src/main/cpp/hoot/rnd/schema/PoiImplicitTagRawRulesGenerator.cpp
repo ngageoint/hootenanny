@@ -115,12 +115,6 @@ void PoiImplicitTagRawRulesGenerator::generateRules(const QStringList inputs,
   {
     throw HootException("No inputs were specified.");
   }
-
-  if (output.isEmpty())
-  {
-    throw HootException("No output was specified.");
-  }
-
   if (inputs.size() != translationScripts.size())
   {
     LOG_VARD(inputs.size());
@@ -128,15 +122,29 @@ void PoiImplicitTagRawRulesGenerator::generateRules(const QStringList inputs,
     throw HootException(
       "The size of the input datasets list must equal the size of the list of translation scripts.");
   }
+  if (output.isEmpty())
+  {
+    throw HootException("No output was specified.");
+  }
+  _output.reset(new QFile());
+  _output->setFileName(output);
+  if (_output->exists() && !_output->remove())
+  {
+    throw HootException(QObject::tr("Error removing existing %1 for writing.").arg(output));
+  }
+  if (!_output->open(QIODevice::WriteOnly | QIODevice::Text))
+  {
+    throw HootException(QObject::tr("Error opening %1 for writing.").arg(output));
+  }
+  LOG_DEBUG("Opened output: " << output << ".");
 
   LOG_INFO(
-    "Deriving POI implicit tag rules for inputs: " << inputs << ", translation scripts: " <<
-    translationScripts << ".  Writing to output: " << output << "...");
+    "Generating POI implicit tag rules raw file for inputs: " << inputs <<
+    ", translation scripts: " << translationScripts << ".  Writing to output: " << output << "...");
+  LOG_VAR(_tokenizeNames);
 
   _wordKeysToCounts.clear();
   _wordCaseMappings.clear();
-  const bool tokenize = ConfigOptions().getPoiImplicitTagRulesTokenizeNames();
-  LOG_VART(tokenize);
 
   _countFile.reset(
     new QTemporaryFile(
@@ -203,7 +211,7 @@ void PoiImplicitTagRawRulesGenerator::generateRules(const QStringList inputs,
                 _updateForNewWord(name, kvps.at(j));
               }
 
-              if (tokenize)
+              if (_tokenizeNames)
               {
                 const QStringList nameTokens = tokenizer.tokenize(name);
                 LOG_VART(nameTokens.size());
@@ -276,7 +284,7 @@ void PoiImplicitTagRawRulesGenerator::generateRules(const QStringList inputs,
 
 void PoiImplicitTagRawRulesGenerator::_sortByTagOccurrence()
 {
-  LOG_INFO("Sorting by tag occurrence count...");
+  LOG_INFO("Sorting output by tag occurrence count...");
 
   _sortedCountFile.reset(
     new QTemporaryFile(
@@ -300,43 +308,22 @@ void PoiImplicitTagRawRulesGenerator::_sortByTagOccurrence()
   //occurrence counts below the specified threshold, and replaces the space between the prepended
   //count and the word with a tab. - not sure why 1 needs to be subtracted from
   //the min occurrences here, though...
-  QString cmd = "sort " + _countFile->fileName() + " | uniq -c | sort -n -r";
-  cmd += " | sed -e 's/^ *//;s/ /\t/' > " + _sortedCountFile->fileName();
+  const QString cmd =
+    "sort " + _countFile->fileName() + " | uniq -c | sort -n -r | sed -e 's/^ *//;s/ /\t/' > " +
+    _sortedCountFile->fileName();
   if (std::system(cmd.toStdString().c_str()) != 0)
   {
-    throw HootException("Unable to sort input file.");
+    throw HootException("Unable to sort file.");
   }
   _sortedCountFile->close();
 }
 
 void PoiImplicitTagRawRulesGenerator::_removeDuplicatedKeyTypes()
 {
-  LOG_INFO("Removing duplicated key types...");
+  LOG_INFO("Removing duplicated tag key types from output...");
 
   //i.e. don't allow amenity=school AND amenity=shop to be associated with the same word...pick one
   //of them
-
-  _sortedDedupedCountFile.reset(
-    new QTemporaryFile(
-      ConfigOptions().getApidbBulkInserterTempFileDir() +
-      "/poi-implicit-tag-rules-deriver-temp-XXXXXX"));
-  _sortedDedupedCountFile->setAutoRemove(!ConfigOptions().getPoiImplicitTagRulesKeepTempFiles());
-  if (!_sortedDedupedCountFile->open())
-  {
-    throw HootException(
-      QObject::tr("Error opening %1 for writing.").arg(_sortedDedupedCountFile->fileName()));
-  }
-  LOG_DEBUG("Opened sorted, deduped temp file: " << _sortedDedupedCountFile->fileName());
-  if (ConfigOptions().getPoiImplicitTagRulesKeepTempFiles())
-  {
-    LOG_WARN("Keeping temp file: " << _sortedDedupedCountFile->fileName());
-  }
-  if (!_sortedCountFile->open())
-  {
-    throw HootException(
-      QObject::tr("Error opening %1 for reading.").arg(_sortedCountFile->fileName()));
-  }
-  LOG_DEBUG("Opened sorted input temp file: " << _sortedCountFile->fileName());
 
   while (!_sortedCountFile->atEnd())
   {
@@ -374,7 +361,7 @@ void PoiImplicitTagRawRulesGenerator::_removeDuplicatedKeyTypes()
       }
       const QString updatedLine = QString::number(count) % "\t" % word % "\t" % kvp % "\n";
       LOG_VART(updatedLine);
-      _sortedDedupedCountFile->write(updatedLine.toUtf8());
+      _output->write(updatedLine.toUtf8());
     }
     else if (queriedCount == count)
     {
@@ -387,6 +374,6 @@ void PoiImplicitTagRawRulesGenerator::_removeDuplicatedKeyTypes()
   }
 
   _sortedCountFile->close();
-  _sortedDedupedCountFile->close();
+  _output->close();
 }
 }

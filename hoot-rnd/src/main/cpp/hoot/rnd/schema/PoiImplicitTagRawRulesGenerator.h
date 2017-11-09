@@ -72,15 +72,16 @@ private:
   //for testing
   friend class PoiImplicitTagRawRulesGeneratorTest;
 
-  QHash<QString, QString> _wordCaseMappings;
-  QHash<QString, long> _wordKeysToCounts;
+  long _statusUpdateInterval;
+  bool _tokenizeNames;
+  boost::shared_ptr<QFile> _output;
 
   boost::shared_ptr<QTemporaryFile> _countFile;
   boost::shared_ptr<QTemporaryFile> _sortedCountFile;
-  boost::shared_ptr<QTemporaryFile> _sortedDedupedCountFile;
+  //boost::shared_ptr<QTemporaryFile> _sortedDedupedCountFile;
 
-  long _statusUpdateInterval;
-  bool _tokenizeNames;
+  QHash<QString, QString> _wordCaseMappings;
+  QHash<QString, long> _wordKeysToCounts;
 
   void _updateForNewWord(QString word, const QString kvp);
   QStringList _getPoiKvps(const Tags& tags) const;

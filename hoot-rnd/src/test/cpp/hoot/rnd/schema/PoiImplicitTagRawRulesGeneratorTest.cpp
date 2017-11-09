@@ -39,11 +39,13 @@ class PoiImplicitTagRawRulesGeneratorTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(PoiImplicitTagRawRulesGeneratorTest);
   CPPUNIT_TEST(runBasicTest);
-  CPPUNIT_TEST(runMultipleInputsTest);
-  CPPUNIT_TEST(runNameCaseTest);
+//  CPPUNIT_TEST(runMultipleInputsTest);
+//  CPPUNIT_TEST(runNameCaseTest);
   //TODO
   //CPPUNIT_TEST(runInputTranslationScriptSizeMismatchTest);
   //CPPUNIT_TEST(runEqualsInNameTest);
+  //CPPUNIT_TEST(runNoNameTokenizationTest);
+  //CPPUNIT_TEST(runBadInputsTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -54,7 +56,6 @@ public:
   void runBasicTest()
   {
     QDir().mkpath(outDir());
-
     QStringList inputs;
     inputs.append(inDir() + "/yemen-crop-2.osm.pbf");
     const QString outputFile =
