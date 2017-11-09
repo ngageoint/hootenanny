@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef SPARKCHANGESETWRITER_H
-#define SPARKCHANGESETWRITER_H
+#ifndef MULTIARY_INGEST_CHANGESET_WRITER_H
+#define MULTIARY_INGEST_CHANGESET_WRITER_H
 
 // hoot
 #include <hoot/core/io/OsmChangeWriter.h>
@@ -36,37 +36,35 @@
 // Qt
 #include <QFile>
 
-#include "../conflate/multiary/SearchBoundsCalculator.h"
-
 namespace hoot
 {
 
 /**
- * Outputs a changeset usable by Spark
- *
- * @note Only nodes are supported.
+ * This is a writer for the internal temp changeset format used by the multiary ingester.
  */
-class SparkChangesetWriter : public OsmChangeWriter, public Configurable
+class MultiaryIngestChangesetWriter : public OsmChangeWriter, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::SparkChangesetWriter"; }
+  static std::string className() { return "hoot::MultiaryIngestChangesetWriter"; }
 
-  SparkChangesetWriter();
+  MultiaryIngestChangesetWriter();
 
-  virtual ~SparkChangesetWriter();
+  virtual ~MultiaryIngestChangesetWriter();
+
+  void close() { if (_fp.get()) { _fp->close(); _fp.reset(); } }
 
   /**
    * @see OsmChangeWriter
+   *
+   * "mic" stands for "multiary ingest changeset"
    */
-  virtual bool isSupported(QString url) { return url.endsWith(".spark.1"); }  //TODO: fix
+  virtual bool isSupported(QString url) { return url.endsWith(".mic"); }
 
   /**
    * Open the specified filename for writing.
    */
   virtual void open(QString fileName);
-
-  void close();
 
   /**
    * @see OsmChangeWriter
@@ -75,19 +73,20 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
+  QString getElementPayloadFormat() const { return _elementPayloadFormat; }
   virtual void setElementPayloadFormat(const QString format);
 
 private:
 
-  boost::shared_ptr<QFile> _addFile;
-  boost::shared_ptr<QFile> _deleteFile;
-  SearchBoundsCalculatorPtr _boundsCalculator;
+  boost::shared_ptr<QFile> _fp;
   int _precision;
   OsmJsonWriter _jsonWriter;
   AddExportTagsVisitor _exportTagsVisitor;
+  //needed due to #1772 - options are "json" (default) and "xml"
+  QString _elementPayloadFormat;
 
 };
 
 }
 
-#endif // SPARKCHANGESETWRITER_H
+#endif // MULTIARY_INGEST_CHANGESET_WRITER_H

@@ -23,7 +23,8 @@ HOOT_DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
 HOOT_OPTS="--warn -D uuid.helper.repeatable=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D max.elements.per.partial.map=2"
 
 GOLD_OUTPUT=$REF_DIR/allCountries-geonames-output.osm
-GOLD_CHANGESET=$REF_DIR/allCountries-geonames-changeset.spark.1
+GOLD_ADD_CHANGESET=$REF_DIR/allCountries-geonames-changeset-add.spark.1
+GOLD_DELETE_CHANGESET=$REF_DIR/allCountries-geonames-changeset-delete.spark.1
 
 # GEONAMES
 
@@ -31,6 +32,8 @@ REFERENCE_INPUT=$REF_DIR/allCountries-11-18-13-10.geonames
 NEW_INPUT=$REF_DIR/allCountries-8-15-17-10.geonames
 FINAL_OUTPUT=$OUTPUT_DIR/allCountries-geonames-output.osm
 CHANGESET_OUTPUT=$OUTPUT_DIR/allCountries-geonames-changeset.spark.1
+CHANGESET_ADD_OUTPUT=$OUTPUT_DIR/allCountries-geonames-changeset-add.spark.1
+CHANGESET_DELETE_OUTPUT=$OUTPUT_DIR/allCountries-geonames-changeset-delete.spark.1
 TRANSLATION_SCRIPT=translations/GeoNames.js
 
 echo ""
@@ -54,12 +57,17 @@ echo "MULTIARY INGEST - COMPARING GEONAMES REFERENCE LAYER OUTPUT..."
 echo ""
 hoot is-match $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
 echo ""
-echo "MULTIARY INGEST - COMPARING GEONAMES CHANGESET OUTPUT..."
+echo "MULTIARY INGEST - COMPARING GEONAMES ADD CHANGESET OUTPUT..."
 echo ""
-diff $GOLD_CHANGESET $CHANGESET_OUTPUT
+diff $GOLD_ADD_CHANGESET $CHANGESET_ADD_OUTPUT
+echo ""
+echo "MULTIARY INGEST - COMPARING GEONAMES DELETE CHANGESET OUTPUT..."
+echo ""
+diff $GOLD_DELETE_CHANGESET $CHANGESET_DELETE_OUTPUT
 
 GOLD_OUTPUT=$REF_DIR/allCountries-osmpbf-output.osm
-GOLD_CHANGESET=$REF_DIR/allCountries-osmpbf-changeset.spark.1
+GOLD_ADD_CHANGESET=$REF_DIR/allCountries-osmpbf-changeset-add.spark.1
+GOLD_DELETE_CHANGESET=$REF_DIR/allCountries-osmpbf-changeset-delete.spark.1
 
 # OSM PBF
 
@@ -67,6 +75,8 @@ REFERENCE_INPUT=$REF_DIR/allCountries-11-18-13-10.osm.pbf
 NEW_INPUT=$REF_DIR/allCountries-8-15-17-10.osm.pbf
 FINAL_OUTPUT=$OUTPUT_DIR/allCountries-osmpbf-output.osm
 CHANGESET_OUTPUT=$OUTPUT_DIR/allCountries-osmpbf-changeset.spark.1
+CHANGESET_ADD_OUTPUT=$OUTPUT_DIR/allCountries-osmpbf-changeset-add.spark.1
+CHANGESET_DELETE_OUTPUT=$OUTPUT_DIR/allCountries-osmpbf-changeset-delete.spark.1
 TRANSLATION_SCRIPT=translations/OSM_Ingest.js
 
 echo ""
@@ -90,12 +100,17 @@ echo "MULTIARY INGEST - COMPARING OSM PBF REFERENCE LAYER OUTPUT..."
 echo ""
 hoot is-match $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
 echo ""
-echo "MULTIARY INGEST - COMPARING OSM PBF CHANGESET OUTPUT..."
+echo "MULTIARY INGEST - COMPARING OSM PBF ADD CHANGESET OUTPUT..."
 echo ""
-diff $GOLD_CHANGESET $CHANGESET_OUTPUT
+diff $GOLD_ADD_CHANGESET $CHANGESET_ADD_OUTPUT
+echo ""
+echo "MULTIARY INGEST - COMPARING OSM PBF DELETE CHANGESET OUTPUT..."
+echo ""
+diff $GOLD_DELETE_CHANGESET $CHANGESET_DELETE_OUTPUT
 
 GOLD_OUTPUT=$REF_DIR/allCountries-osmxml-output.osm
-GOLD_CHANGESET=$REF_DIR/allCountries-osmxml-changeset.spark.1
+GOLD_ADD_CHANGESET=$REF_DIR/allCountries-osmxml-changeset-add.spark.1
+GOLD_DELETE_CHANGESET=$REF_DIR/allCountries-osmxml-changeset-delete.spark.1
 
 # OSM XML
 
@@ -103,6 +118,8 @@ REFERENCE_INPUT=$REF_DIR/allCountries-11-18-13-10.osm
 NEW_INPUT=$REF_DIR/allCountries-8-15-17-10.osm
 FINAL_OUTPUT=$OUTPUT_DIR/allCountries-osmxml-output.osm
 CHANGESET_OUTPUT=$OUTPUT_DIR/allCountries-osmxml-changeset.spark.1
+CHANGESET_ADD_OUTPUT=$OUTPUT_DIR/allCountries-osmxml-changeset-add.spark.1
+CHANGESET_DELETE_OUTPUT=$OUTPUT_DIR/allCountries-osmxml-changeset-delete.spark.1
 TRANSLATION_SCRIPT=translations/OSM_Ingest.js
 
 echo ""
@@ -126,12 +143,17 @@ echo "MULTIARY INGEST - COMPARING OSM XML REFERENCE LAYER OUTPUT..."
 echo ""
 hoot is-match $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
 echo ""
-echo "MULTIARY INGEST - COMPARING OSM XML CHANGESET OUTPUT..."
+echo "MULTIARY INGEST - COMPARING OSM XML ADD CHANGESET OUTPUT..."
 echo ""
-diff $GOLD_CHANGESET $CHANGESET_OUTPUT
+diff $GOLD_ADD_CHANGESET $CHANGESET_ADD_OUTPUT
+echo ""
+echo "MULTIARY INGEST - COMPARING OSM XML DELETE CHANGESET OUTPUT..."
+echo ""
+diff $GOLD_DELETE_CHANGESET $CHANGESET_DELETE_OUTPUT
 
 GOLD_OUTPUT=$REF_DIR/allCountries-shp-output.osm
-GOLD_CHANGESET=$REF_DIR/allCountries-shp-changeset.spark.1
+GOLD_ADD_CHANGESET=$REF_DIR/allCountries-shp-changeset-add.spark.1
+GOLD_DELETE_CHANGESET=$REF_DIR/allCountries-shp-changeset-delete.spark.1
 
 # SHP
 
@@ -139,6 +161,8 @@ REFERENCE_INPUT=$REF_DIR/allCountries-11-18-13-10.shp/Points.shp
 NEW_INPUT=$REF_DIR/allCountries-8-15-17-10.shp/Points.shp
 FINAL_OUTPUT=$OUTPUT_DIR/allCountries-shp-output.osm
 CHANGESET_OUTPUT=$OUTPUT_DIR/allCountries-shp-changeset.spark.1
+CHANGESET_ADD_OUTPUT=$OUTPUT_DIR/allCountries-shp-changeset-add.spark.1
+CHANGESET_DELETE_OUTPUT=$OUTPUT_DIR/allCountries-shp-changeset-delete.spark.1
 TRANSLATION_SCRIPT=translations/OSM_Ingest.js
 
 echo ""
@@ -162,7 +186,11 @@ echo "MULTIARY INGEST - COMPARING SHP REFERENCE LAYER OUTPUT..."
 echo ""
 hoot is-match $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
 echo ""
-echo "MULTIARY INGEST - COMPARING SHP CHANGESET OUTPUT..."
+echo "MULTIARY INGEST - COMPARING SHP ADD CHANGESET OUTPUT..."
 echo ""
-diff $GOLD_CHANGESET $CHANGESET_OUTPUT
+diff $GOLD_ADD_CHANGESET $CHANGESET_ADD_OUTPUT
+echo ""
+echo "MULTIARY INGEST - COMPARING SHP DELETE CHANGESET OUTPUT..."
+echo ""
+diff $GOLD_DELETE_CHANGESET $CHANGESET_DELETE_OUTPUT
 
