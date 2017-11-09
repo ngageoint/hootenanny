@@ -881,6 +881,7 @@ tds = {
             ["t.amenity == 'stop' && t['transport:type'] == 'bus'","t.highway = 'bus_stop';"],
             ["t.boundary == 'protected_area' && !(t.protect_class)","t.protect_class = '4';"],
             ["t['bridge:movable'] && t['bridge:movable'] !== 'no' && t['bridge:movable'] !== 'unknown'","t.bridge = 'movable'"],
+            ["t.cable =='yes' && t['cable:type'] == 'power'"," t.power = 'line'; delete t.cable; delete t['cable:type']"],
             ["t.control_tower == 'yes' && t.use == 'air_traffic_control'","t['tower:type'] = 'observation'"],
             ["t.desert_surface","t.surface = t.desert_surface; delete t.desert_surface"],
             ["t.diplomatic && !(t.amenity)","t.amenity = 'embassy'"],

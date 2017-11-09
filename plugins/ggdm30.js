@@ -786,6 +786,7 @@ ggdm30 = {
             ["t.diplomatic && !(t.amenity)","t.amenity = 'embassy'"],
             ["t.boundary == 'protected_area' && !(t.protect_class)","t.protect_class = '4'"],
             ["t.bunker_type && !(t.military)","t.military = 'bunker'"],
+            ["t.cable =='yes' && t['cable:type'] == 'power'"," t.power = 'line'; delete t.cable; delete t['cable:type']"],
             ["t.control_tower == 'yes' && t.use == 'air_traffic_control'","t['tower:type'] = 'observation'"],
             ["t.crossing == 'tank'","t.highway = 'crossing'"],
             ["t.desert_surface","t.surface = t.desert_surface; delete t.desert_surface"],
