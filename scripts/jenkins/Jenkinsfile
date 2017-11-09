@@ -11,7 +11,7 @@ pipeline {
         //    defaultValue: true)
         booleanParam(name: 'Static_analysis', defaultValue: true)
         booleanParam(name: 'License_headers', defaultValue: true)
-        booleanParam(name: 'Configure_Tests', defaultValue: true)
+        booleanParam(name: 'Configure_Tests', defaultValue: false)
         booleanParam(name: 'Core_tests', defaultValue: true)
         booleanParam(name: 'Services_tests', defaultValue: true)
         booleanParam(name: 'UI_tests', defaultValue: true)
