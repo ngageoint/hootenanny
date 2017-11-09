@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "SparkChangesetReader.h"
+#include "MultiaryIngestChangesetReader.h"
 
 // hoot
 #include <hoot/core/util/ConfigOptions.h>
@@ -35,18 +35,18 @@
 namespace hoot
 {
 
-SparkChangesetReader::SparkChangesetReader()
+MultiaryIngestChangesetReader::MultiaryIngestChangesetReader()
 {
   _jsonReader.setUseDataSourceIds(true);
   _xmlReader.setUseDataSourceIds(true);
 }
 
-SparkChangesetReader::~SparkChangesetReader()
+MultiaryIngestChangesetReader::~MultiaryIngestChangesetReader()
 {
   close();
 }
 
-void SparkChangesetReader::open(QString fileName)
+void MultiaryIngestChangesetReader::open(QString fileName)
 {
   close();
 
@@ -58,7 +58,7 @@ void SparkChangesetReader::open(QString fileName)
   LOG_DEBUG("Opened: " << fileName << ".");
 }
 
-boost::shared_ptr<OGRSpatialReference> SparkChangesetReader::getProjection() const
+boost::shared_ptr<OGRSpatialReference> MultiaryIngestChangesetReader::getProjection() const
 {
   if (!_wgs84)
   {
@@ -67,12 +67,12 @@ boost::shared_ptr<OGRSpatialReference> SparkChangesetReader::getProjection() con
   return _wgs84;
 }
 
-void SparkChangesetReader::close()
+void MultiaryIngestChangesetReader::close()
 {
   _file.close();
 }
 
-bool SparkChangesetReader::hasMoreChanges()
+bool MultiaryIngestChangesetReader::hasMoreChanges()
 {
   if (!_file.isOpen())
   {
@@ -81,12 +81,11 @@ bool SparkChangesetReader::hasMoreChanges()
   return !_file.atEnd();
 }
 
-Change SparkChangesetReader::readNextChange()
+Change MultiaryIngestChangesetReader::readNextChange()
 {
   QStringList lineParts = QString::fromUtf8(_file.readLine().constData()).split("\t");
   LOG_VART(lineParts);
 
-  int nodePayloadIndex = 6;
   Change::ChangeType changeType;
   const QString parsedChangeType = lineParts[0];
   if (parsedChangeType == QLatin1String("A"))
@@ -96,7 +95,6 @@ Change SparkChangesetReader::readNextChange()
   else if (parsedChangeType == QLatin1String("M"))
   {
     changeType = Change::Modify;
-    nodePayloadIndex = 7;
   }
   else if (parsedChangeType == QLatin1String("D"))
   {
@@ -107,18 +105,17 @@ Change SparkChangesetReader::readNextChange()
     throw HootException("Unsupported change type: " + parsedChangeType);
   }
   LOG_VART(changeType);
-  LOG_VART(nodePayloadIndex);
 
-  LOG_VART(lineParts[nodePayloadIndex]);
+  LOG_VART(lineParts[1]);
   OsmMapPtr tmpMap(new OsmMap());
-  if (lineParts[nodePayloadIndex].startsWith("{"))
+  if (lineParts[1].startsWith("{"))
   {
     //json - don't use this until #1772 is fixed
-    tmpMap = _jsonReader.loadFromString(lineParts[nodePayloadIndex]);
+    tmpMap = _jsonReader.loadFromString(lineParts[1]);
   }
   else
   {
-    _xmlReader.readFromString(lineParts[nodePayloadIndex], tmpMap);
+    _xmlReader.readFromString(lineParts[1], tmpMap);
   }
   if (tmpMap->getWayCount() > 0 || tmpMap->getRelationCount() > 0)
   {

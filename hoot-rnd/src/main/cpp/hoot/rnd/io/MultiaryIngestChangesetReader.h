@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef SPARKCHANGESETREADER_H
-#define SPARKCHANGESETREADER_H
+#ifndef MULTIARY_INGEST_CHANGESET_READER_H
+#define MULTIARY_INGEST_CHANGESET_READER_H
 
 // hoot
 #include <hoot/core/io/OsmJsonReader.h>
@@ -38,14 +38,17 @@
 namespace hoot
 {
 
-class SparkChangesetReader : public ChangeSetProvider
+/**
+ * This is a reader for the internal temp changeset format used by the multiary ingester.
+ */
+class MultiaryIngestChangesetReader : public ChangeSetProvider
 {
 
 public:
 
-  SparkChangesetReader();
+  MultiaryIngestChangesetReader();
 
-  virtual ~SparkChangesetReader();
+  virtual ~MultiaryIngestChangesetReader();
 
   /**
    * @see ChangesetProvider
@@ -80,4 +83,4 @@ private:
 
 }
 
-#endif // SPARKCHANGESETREADER_H
+#endif // MULTIARY_INGEST_CHANGESET_READER_H

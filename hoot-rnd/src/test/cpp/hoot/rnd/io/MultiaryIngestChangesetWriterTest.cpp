@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 // Hoot
-#include <hoot/rnd/io/SparkChangesetWriter.h>
+#include <hoot/rnd/io/MultiaryIngestChangesetWriter.h>
 #include <hoot/core/TestUtils.h>
 
 //#include <hoot/core/io/GeoNamesReader.h>
@@ -37,10 +37,11 @@
 namespace hoot
 {
 
-class SparkChangesetWriterTest : public CppUnit::TestFixture
+class MultiaryIngestChangesetWriterTest : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(SparkChangesetWriterTest);
+  CPPUNIT_TEST_SUITE(MultiaryIngestChangesetWriterTest);
   CPPUNIT_TEST(elementAsJsonTest);
+  CPPUNIT_TEST(elementAsXmlTest);
   CPPUNIT_TEST(missingHashTest);
   CPPUNIT_TEST(missingPreviousHashTest);
   CPPUNIT_TEST(wrongElementTypeTest);
@@ -52,7 +53,7 @@ public:
 
   void writeNodes(const QString output, const QString format)
   {
-    SparkChangesetWriter changesetFileWriter;
+    MultiaryIngestChangesetWriter changesetFileWriter;
     changesetFileWriter.setElementPayloadFormat(format);
     changesetFileWriter.open(output);
 
@@ -80,29 +81,39 @@ public:
   {
     DisableLog dl;
 
-    const QString outputDir = "test-output/io/SparkChangesetWriterTest";
+    const QString outputDir = "test-output/io/MultiaryIngestChangesetWriterTest";
     QDir().mkpath(outputDir);
     const QString changesetOutput = outputDir + "/changeset-1.spark.1";
 
     writeNodes(changesetOutput, "json");
 
     HOOT_FILE_EQUALS(
-      "test-files/io/SparkChangesetWriterTest/changeset-1-add.spark.1",
-      outputDir + "/changeset-1-add.spark.1");
+      "test-files/io/MultiaryIngestChangesetWriterTest/changeset-1.spark.1", changesetOutput);
+  }
+
+  void elementAsXmlTest()
+  {
+    DisableLog dl;
+
+    const QString outputDir = "test-output/io/MultiaryIngestChangesetWriterTest";
+    QDir().mkpath(outputDir);
+    const QString changesetOutput = outputDir + "/changeset-2.spark.1";
+
+    writeNodes(changesetOutput, "xml");
+
     HOOT_FILE_EQUALS(
-      "test-files/io/SparkChangesetWriterTest/changeset-1-delete.spark.1",
-      outputDir + "/changeset-1-delete.spark.1");
+      "test-files/io/MultiaryIngestChangesetWriterTest/changeset-2.spark.1", changesetOutput);
   }
 
   void missingHashTest()
   {
     DisableLog dl;
 
-    const QString outputDir = "test-output/io/SparkChangesetWriterTest";
+    const QString outputDir = "test-output/io/MultiaryIngestChangesetWriterTest";
     QDir().mkpath(outputDir);
     const QString changesetOutput = outputDir + "/changeset-3.spark.1";
 
-    SparkChangesetWriter changesetFileWriter;
+    MultiaryIngestChangesetWriter changesetFileWriter;
     changesetFileWriter.open(changesetOutput);
 
     NodePtr node1(new Node(Status::Unknown1, 1, 56.546465, 99.21651651, 15.0));
@@ -124,11 +135,11 @@ public:
   {
     DisableLog dl;
 
-    const QString outputDir = "test-output/io/SparkChangesetWriterTest";
+    const QString outputDir = "test-output/io/MultiaryIngestChangesetWriterTest";
     QDir().mkpath(outputDir);
     const QString changesetOutput = outputDir + "/changeset-4.spark.1";
 
-    SparkChangesetWriter changesetFileWriter;
+    MultiaryIngestChangesetWriter changesetFileWriter;
     changesetFileWriter.open(changesetOutput);
 
     NodePtr node1(new Node(Status::Unknown1, 1, 56.546465, 99.21651651, 15.0));
@@ -152,11 +163,11 @@ public:
   {
     DisableLog dl;
 
-    const QString outputDir = "test-output/io/SparkChangesetWriterTest";
+    const QString outputDir = "test-output/io/MultiaryIngestChangesetWriterTest";
     QDir().mkpath(outputDir);
     const QString changesetOutput = outputDir + "/changeset-5.spark.1";
 
-    SparkChangesetWriter changesetFileWriter;
+    MultiaryIngestChangesetWriter changesetFileWriter;
     changesetFileWriter.open(changesetOutput);
 
     NodePtr node1(new Node(Status::Unknown1, 1, 56.546465, 99.21651651, 15.0));
@@ -263,6 +274,6 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SparkChangesetWriterTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MultiaryIngestChangesetWriterTest, "quick");
 
 }
