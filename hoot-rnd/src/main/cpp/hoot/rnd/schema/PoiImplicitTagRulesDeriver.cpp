@@ -202,14 +202,15 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QString input, const QStringL
   _readAllowLists();
 
   _removeKvpsBelowOccurrenceThreshold(input, _minTagOccurrencesPerWord);
-  _sortByWord();
+  _applyFiltering();
+  //_sortByWord();
 
 //  LOG_INFO(
 //    "Extracted "  << StringUtils::formatLargeNumber(_wordKeysToCounts.size()) <<
 //    " word/tag associations.");
 //  _wordKeysToCounts.clear();
 
-  _writeRules(outputs, _finalSortedByWordCountFile->fileName());
+  _writeRules(outputs, _filteredCountFile->fileName());
 }
 
 void PoiImplicitTagRulesDeriver::_writeRules(const QStringList outputs,
@@ -253,6 +254,7 @@ void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccurrenceThreshold(const QStri
     LOG_WARN("Keeping temp file: " << _thresholdedCountFile->fileName());
   }
 
+  //TODO: update comment
   //This counts each unique line occurrence, sorts by decreasing occurrence count (necessary for
   //next step which removes duplicate tag keys associated with the same word), removes lines with
   //occurrence counts below the specified threshold, and replaces the space between the prepended
@@ -365,37 +367,37 @@ void PoiImplicitTagRulesDeriver::_applyFiltering()
   _filteredCountFile->close();
 }
 
-void PoiImplicitTagRulesDeriver::_sortByWord()
-{
-  LOG_INFO("Sorting output by word...");
+//void PoiImplicitTagRulesDeriver::_sortByWord()
+//{
+//  LOG_INFO("Sorting output by word...");
 
-  _finalSortedByWordCountFile.reset(
-    new QTemporaryFile(
-      ConfigOptions().getApidbBulkInserterTempFileDir() +
-      "/poi-implicit-tag-rules-deriver-temp-XXXXXX"));
-  _finalSortedByWordCountFile->setAutoRemove(
-    !ConfigOptions().getPoiImplicitTagRulesKeepTempFiles());
-  if (!_finalSortedByWordCountFile->open())
-  {
-    throw HootException(
-      QObject::tr("Error opening %1 for writing.").arg(_finalSortedByWordCountFile->fileName()));
-  }
-  LOG_DEBUG("Opened sorted by word temp file: " << _finalSortedByWordCountFile->fileName());
-  if (ConfigOptions().getPoiImplicitTagRulesKeepTempFiles())
-  {
-    LOG_WARN("Keeping temp file: " << _finalSortedByWordCountFile->fileName());
-  }
+//  _finalSortedByWordCountFile.reset(
+//    new QTemporaryFile(
+//      ConfigOptions().getApidbBulkInserterTempFileDir() +
+//      "/poi-implicit-tag-rules-deriver-temp-XXXXXX"));
+//  _finalSortedByWordCountFile->setAutoRemove(
+//    !ConfigOptions().getPoiImplicitTagRulesKeepTempFiles());
+//  if (!_finalSortedByWordCountFile->open())
+//  {
+//    throw HootException(
+//      QObject::tr("Error opening %1 for writing.").arg(_finalSortedByWordCountFile->fileName()));
+//  }
+//  LOG_DEBUG("Opened sorted by word temp file: " << _finalSortedByWordCountFile->fileName());
+//  if (ConfigOptions().getPoiImplicitTagRulesKeepTempFiles())
+//  {
+//    LOG_WARN("Keeping temp file: " << _finalSortedByWordCountFile->fileName());
+//  }
 
-  //sort by word, then by tag
-  //-d -k2,3 -t$'\t'
-  const QString cmd =
-    "sort -t'\t' -k2,2 -k3,3 " + _thresholdedCountFile->fileName() + " -o " +
-    _finalSortedByWordCountFile->fileName();
-  if (std::system(cmd.toStdString().c_str()) != 0)
-  {
-    throw HootException("Unable to sort input file.");
-  }
-  _finalSortedByWordCountFile->close();
-}
+//  //sort by word, then by tag
+//  //-d -k2,3 -t$'\t'
+//  const QString cmd =
+//    "sort -t'\t' -k2,2 -k3,3 " + _thresholdedCountFile->fileName() + " -o " +
+//    _finalSortedByWordCountFile->fileName();
+//  if (std::system(cmd.toStdString().c_str()) != 0)
+//  {
+//    throw HootException("Unable to sort input file.");
+//  }
+//  _finalSortedByWordCountFile->close();
+//}
 
 }

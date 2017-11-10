@@ -132,11 +132,12 @@ void PoiImplicitTagRawRulesGenerator::generateRules(const QStringList inputs,
   {
     throw HootException(QObject::tr("Error removing existing %1 for writing.").arg(output));
   }
-  if (!_output->open(QIODevice::WriteOnly | QIODevice::Text))
-  {
-    throw HootException(QObject::tr("Error opening %1 for writing.").arg(output));
-  }
-  LOG_DEBUG("Opened output: " << output << ".");
+//  if (!_output->open(QIODevice::WriteOnly | QIODevice::Text))
+//  {
+//    throw HootException(QObject::tr("Error opening %1 for writing.").arg(output));
+//  }
+//  LOG_DEBUG("Opened output: " << output << ".");
+  _output->close();
 
   LOG_INFO(
     "Generating POI implicit tag rules raw file for inputs: " << inputs <<
@@ -275,6 +276,7 @@ void PoiImplicitTagRawRulesGenerator::generateRules(const QStringList inputs,
 
   _sortByTagOccurrence();
   _removeDuplicatedKeyTypes();
+  _sortByWord();
 
   LOG_INFO(
     "Extracted "  << StringUtils::formatLargeNumber(_wordKeysToCounts.size()) <<
@@ -315,7 +317,6 @@ void PoiImplicitTagRawRulesGenerator::_sortByTagOccurrence()
   {
     throw HootException("Unable to sort file.");
   }
-  _sortedCountFile->close();
 }
 
 void PoiImplicitTagRawRulesGenerator::_removeDuplicatedKeyTypes()
@@ -324,6 +325,23 @@ void PoiImplicitTagRawRulesGenerator::_removeDuplicatedKeyTypes()
 
   //i.e. don't allow amenity=school AND amenity=shop to be associated with the same word...pick one
   //of them
+
+  _sortedDedupedCountFile.reset(
+    new QTemporaryFile(
+      ConfigOptions().getApidbBulkInserterTempFileDir() +
+      "/poi-implicit-tag-rules-deriver-temp-XXXXXX"));
+  _sortedDedupedCountFile->setAutoRemove(
+    !ConfigOptions().getPoiImplicitTagRulesKeepTempFiles());
+  if (!_sortedDedupedCountFile->open())
+  {
+    throw HootException(
+      QObject::tr("Error opening %1 for writing.").arg(_sortedDedupedCountFile->fileName()));
+  }
+  LOG_DEBUG("Opened dedupe temp file: " << _sortedDedupedCountFile->fileName());
+  if (ConfigOptions().getPoiImplicitTagRulesKeepTempFiles())
+  {
+    LOG_WARN("Keeping temp file: " << _sortedDedupedCountFile->fileName());
+  }
 
   while (!_sortedCountFile->atEnd())
   {
@@ -361,7 +379,7 @@ void PoiImplicitTagRawRulesGenerator::_removeDuplicatedKeyTypes()
       }
       const QString updatedLine = QString::number(count) % "\t" % word % "\t" % kvp % "\n";
       LOG_VART(updatedLine);
-      _output->write(updatedLine.toUtf8());
+      _sortedDedupedCountFile->write(updatedLine.toUtf8());
     }
     else if (queriedCount == count)
     {
@@ -374,6 +392,23 @@ void PoiImplicitTagRawRulesGenerator::_removeDuplicatedKeyTypes()
   }
 
   _sortedCountFile->close();
-  _output->close();
+  _sortedDedupedCountFile->close();
 }
+
+void PoiImplicitTagRawRulesGenerator::_sortByWord()
+{
+  LOG_INFO("Sorting output by word...");
+
+  //sort by word, then by tag
+  //-d -k2,3 -t$'\t'
+  const QString cmd =
+    "sort -t'\t' -k2,2 -k3,3 " + _sortedDedupedCountFile->fileName() + " -o " +
+    _output->fileName();
+  if (std::system(cmd.toStdString().c_str()) != 0)
+  {
+    throw HootException("Unable to sort input file.");
+  }
+  //_output->close();
+}
+
 }

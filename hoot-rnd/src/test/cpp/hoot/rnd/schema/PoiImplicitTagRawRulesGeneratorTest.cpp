@@ -39,8 +39,10 @@ class PoiImplicitTagRawRulesGeneratorTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(PoiImplicitTagRawRulesGeneratorTest);
   CPPUNIT_TEST(runBasicTest);
-//  CPPUNIT_TEST(runMultipleInputsTest);
-//  CPPUNIT_TEST(runNameCaseTest);
+  CPPUNIT_TEST(runMultipleInputsTest);
+  //TODO: fix; for some strange reason, even though the output is identical to the gold file,
+  //HOOT_FILE_EQUALS says it isn't
+  //CPPUNIT_TEST(runNameCaseTest);
   //TODO
   //CPPUNIT_TEST(runInputTranslationScriptSizeMismatchTest);
   //CPPUNIT_TEST(runEqualsInNameTest);

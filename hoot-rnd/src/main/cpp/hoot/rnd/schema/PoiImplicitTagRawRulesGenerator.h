@@ -78,7 +78,7 @@ private:
 
   boost::shared_ptr<QTemporaryFile> _countFile;
   boost::shared_ptr<QTemporaryFile> _sortedCountFile;
-  //boost::shared_ptr<QTemporaryFile> _sortedDedupedCountFile;
+  boost::shared_ptr<QTemporaryFile> _sortedDedupedCountFile;
 
   QHash<QString, QString> _wordCaseMappings;
   QHash<QString, long> _wordKeysToCounts;
@@ -88,6 +88,7 @@ private:
 
   void _sortByTagOccurrence();
   void _removeDuplicatedKeyTypes();
+  void _sortByWord();
 };
 
 }
