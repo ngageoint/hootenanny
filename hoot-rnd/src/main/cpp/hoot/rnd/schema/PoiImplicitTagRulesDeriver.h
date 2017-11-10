@@ -95,11 +95,9 @@ private:
 
   boost::shared_ptr<QTemporaryFile> _thresholdedCountFile;
   boost::shared_ptr<QTemporaryFile> _filteredCountFile;
-  //boost::shared_ptr<QTemporaryFile> _finalSortedByWordCountFile;
 
   void _removeKvpsBelowOccurrenceThreshold(const QString input, const int minOccurrencesThreshold);
-  void _applyFiltering();
-  void _sortByWord();
+  void _applyFiltering(const QString input);
 
   QString _getSqliteOutput(const QStringList outputs);
   void _writeRules(const QStringList outputs, const QString sqliteOutputFile);

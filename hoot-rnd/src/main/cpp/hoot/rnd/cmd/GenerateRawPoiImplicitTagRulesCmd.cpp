@@ -52,7 +52,9 @@ public:
       throw HootException(QString("%1 takes three parameters.").arg(getName()));
     }
 
-    PoiImplicitTagRawRulesGenerator().generateRules(
+    PoiImplicitTagRawRulesGenerator rulesGenerator;
+    rulesGenerator.setConfiguration(conf());
+    rulesGenerator.generateRules(
       args[0].trimmed().split(";"), args[1].trimmed().split(";"), args[2].trimmed());
 
     return 0;

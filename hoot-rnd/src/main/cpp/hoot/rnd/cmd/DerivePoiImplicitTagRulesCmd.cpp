@@ -52,7 +52,9 @@ public:
       throw HootException(QString("%1 takes two parameters.").arg(getName()));
     }
 
-    PoiImplicitTagRulesDeriver().deriveRules(args[0].trimmed(), args[1].trimmed().split(";"));
+    PoiImplicitTagRulesDeriver rulesDeriver;
+    rulesDeriver.setConfiguration(conf());
+    rulesDeriver.deriveRules(args[0].trimmed(), args[1].trimmed().split(";"));
 
     return 0;
   }

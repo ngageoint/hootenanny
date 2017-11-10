@@ -39,7 +39,9 @@ namespace hoot
 {
 
 PoiImplicitTagRulesDeriver::PoiImplicitTagRulesDeriver() :
-_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
+_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
+_minTagOccurrencesPerWord(1),
+_minWordLength(1)
 {
 }
 
@@ -59,97 +61,118 @@ void PoiImplicitTagRulesDeriver::_readAllowLists()
 {
   LOG_DEBUG("Reading allow lists...");
 
-  QFile tagsAllowFile(_tagFile);
-  if (!tagsAllowFile.open(QIODevice::ReadOnly))
+  if (!_tagFile.trimmed().isEmpty())
   {
-    throw HootException(
-      QObject::tr("Error opening %1 for writing.").arg(tagsAllowFile.fileName()));
-  }
-  _tagsAllowList.clear();
-  while (!tagsAllowFile.atEnd())
-  {
-    const QString line = QString::fromUtf8(tagsAllowFile.readLine().constData());
-    if (!line.startsWith("#"))
+    QFile tagsAllowFile(_tagFile);
+    if (!tagsAllowFile.open(QIODevice::ReadOnly))
     {
-      _tagsAllowList.append(line);
+      throw HootException(
+        QObject::tr("Error opening %1 for writing.").arg(tagsAllowFile.fileName()));
     }
+    _tagsAllowList.clear();
+    while (!tagsAllowFile.atEnd())
+    {
+      const QString line = QString::fromUtf8(tagsAllowFile.readLine().constData());
+      if (!line.startsWith("#"))
+      {
+        _tagsAllowList.append(line.trimmed());
+      }
+    }
+    tagsAllowFile.close();
   }
-  tagsAllowFile.close();
+  LOG_VART(_tagsAllowList);
 
-  QFile customRulesFile(_customRuleFile);
-  if (!customRulesFile.open(QIODevice::ReadOnly))
+  if (!_customRuleFile.trimmed().isEmpty())
   {
-    throw HootException(
-      QObject::tr("Error opening %1 for writing.").arg(customRulesFile.fileName()));
-  }
-  _customRulesList.clear();
-  while (!customRulesFile.atEnd())
-  {
-    const QString line = QString::fromUtf8(customRulesFile.readLine().constData());
-    if (!line.startsWith("#"))
+    QFile customRulesFile(_customRuleFile);
+    if (!customRulesFile.open(QIODevice::ReadOnly))
     {
-      const QStringList lineParts = line.trimmed().split("\t");
-      _customRulesList[lineParts[0].trimmed()] = lineParts[1].trimmed();
+      throw HootException(
+        QObject::tr("Error opening %1 for writing.").arg(customRulesFile.fileName()));
     }
+    _customRulesList.clear();
+    while (!customRulesFile.atEnd())
+    {
+      const QString line = QString::fromUtf8(customRulesFile.readLine().constData());
+      if (!line.startsWith("#"))
+      {
+        const QStringList lineParts = line.trimmed().split("\t");
+        _customRulesList[lineParts[0].trimmed()] = lineParts[1].trimmed();
+      }
+    }
+    customRulesFile.close();
   }
-  customRulesFile.close();
+  LOG_VART(_customRulesList);
 }
 
 void PoiImplicitTagRulesDeriver::_readIgnoreLists()
 {
   LOG_DEBUG("Reading ignore lists...");
 
-  QFile tagIgnoreFile(_tagIgnoreFile);
-  if (!tagIgnoreFile.open(QIODevice::ReadOnly))
+  if (!_tagIgnoreFile.trimmed().isEmpty())
   {
-    throw HootException(
-      QObject::tr("Error opening %1 for writing.").arg(tagIgnoreFile.fileName()));
-  }
-  _tagIgnoreList.clear();
-  while (!tagIgnoreFile.atEnd())
-  {
-    const QString line = QString::fromUtf8(tagIgnoreFile.readLine().constData());
-    if (!line.startsWith("#"))
+    QFile tagIgnoreFile(_tagIgnoreFile);
+    if (!tagIgnoreFile.open(QIODevice::ReadOnly))
     {
-      _tagIgnoreList.append(line);
+      throw HootException(
+        QObject::tr("Error opening %1 for writing.").arg(tagIgnoreFile.fileName()));
     }
+    _tagIgnoreList.clear();
+    while (!tagIgnoreFile.atEnd())
+    {
+      const QString line = QString::fromUtf8(tagIgnoreFile.readLine().constData());
+      if (!line.startsWith("#"))
+      {
+        _tagIgnoreList.append(line.trimmed());
+      }
+    }
+    tagIgnoreFile.close();
   }
-  tagIgnoreFile.close();
+  LOG_VART(_tagIgnoreList);
 
-  QFile wordIgnoreFile(_wordIgnoreFile);
-  if (!wordIgnoreFile.open(QIODevice::ReadOnly))
-  {
-    throw HootException(
-      QObject::tr("Error opening %1 for writing.").arg(wordIgnoreFile.fileName()));
-  }
-  _wordIgnoreList.clear();
-  while (!wordIgnoreFile.atEnd())
-  {
-    const QString line = QString::fromUtf8(wordIgnoreFile.readLine().constData());
-    if (!line.startsWith("#"))
-    {
-      _wordIgnoreList.append(line);
-    }
-  }
-  wordIgnoreFile.close();
+  //TODO: re-enable
+//  if (!_wordIgnoreFile.trimmed().isEmpty())
+//  {
+//    QFile wordIgnoreFile(_wordIgnoreFile);
+//    if (!wordIgnoreFile.open(QIODevice::ReadOnly))
+//    {
+//      throw HootException(
+//        QObject::tr("Error opening %1 for writing.").arg(wordIgnoreFile.fileName()));
+//    }
+//    _wordIgnoreList.clear();
+//    while (!wordIgnoreFile.atEnd())
+//    {
+//      const QString line = QString::fromUtf8(wordIgnoreFile.readLine().constData());
+//      if (!line.startsWith("#"))
+//       {
+//        _wordIgnoreList.append(line.trimmed());
+//      }
+//    }
+//    wordIgnoreFile.close();
+//  }
+  LOG_VART(_wordIgnoreList);
 
-  QFile rulesIgnoreFile(_ruleIgnoreFile);
-  if (!rulesIgnoreFile.open(QIODevice::ReadOnly))
+  if (!_ruleIgnoreFile.trimmed().isEmpty())
   {
-    throw HootException(
-      QObject::tr("Error opening %1 for writing.").arg(rulesIgnoreFile.fileName()));
-  }
-  _rulesIgnoreList.clear();
-  while (!rulesIgnoreFile.atEnd())
-  {
-    const QString line = QString::fromUtf8(rulesIgnoreFile.readLine().constData());
-    if (!line.startsWith("#"))
+    QFile rulesIgnoreFile(_ruleIgnoreFile);
+    if (!rulesIgnoreFile.open(QIODevice::ReadOnly))
     {
-      const QStringList lineParts = line.trimmed().split("\t");
-      _rulesIgnoreList[lineParts[0].trimmed()] = lineParts[1].trimmed();
+      throw HootException(
+        QObject::tr("Error opening %1 for writing.").arg(rulesIgnoreFile.fileName()));
     }
+    _rulesIgnoreList.clear();
+    while (!rulesIgnoreFile.atEnd())
+    {
+      const QString line = QString::fromUtf8(rulesIgnoreFile.readLine().constData());
+      if (!line.startsWith("#"))
+      {
+        const QStringList lineParts = line.trimmed().split("\t");
+        _rulesIgnoreList[lineParts[0].trimmed()] = lineParts[1].trimmed();
+      }
+    }
+    rulesIgnoreFile.close();
   }
-  rulesIgnoreFile.close();
+  LOG_VART(_rulesIgnoreList);
 }
 
 QString PoiImplicitTagRulesDeriver::_getSqliteOutput(const QStringList outputs)
@@ -201,9 +224,15 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QString input, const QStringL
   _readIgnoreLists();
   _readAllowLists();
 
-  _removeKvpsBelowOccurrenceThreshold(input, _minTagOccurrencesPerWord);
-  _applyFiltering();
-  //_sortByWord();
+  if (_minTagOccurrencesPerWord >= 2)
+  {
+    _removeKvpsBelowOccurrenceThreshold(input, _minTagOccurrencesPerWord);
+    _applyFiltering(_thresholdedCountFile->fileName());
+  }
+  else
+  {
+    _applyFiltering(input);
+  }
 
 //  LOG_INFO(
 //    "Extracted "  << StringUtils::formatLargeNumber(_wordKeysToCounts.size()) <<
@@ -231,10 +260,6 @@ void PoiImplicitTagRulesDeriver::_writeRules(const QStringList outputs,
 void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccurrenceThreshold(const QString input,
   const int minOccurrencesThreshold)
 {
-  if (minOccurrencesThreshold < 2)
-  {
-    return;
-  }
   LOG_INFO("Removing tags below minimum occurrence threshold of: " +
            QString::number(minOccurrencesThreshold));
 
@@ -248,7 +273,7 @@ void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccurrenceThreshold(const QStri
     throw HootException(
       QObject::tr("Error opening %1 for writing.").arg(_thresholdedCountFile->fileName()));
   }
-  LOG_DEBUG("Opened sorted temp file: " << _thresholdedCountFile->fileName());
+  LOG_DEBUG("Opened thresholded temp file: " << _thresholdedCountFile->fileName());
   if (ConfigOptions().getPoiImplicitTagRulesKeepTempFiles())
   {
     LOG_WARN("Keeping temp file: " << _thresholdedCountFile->fileName());
@@ -262,7 +287,8 @@ void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccurrenceThreshold(const QStri
   //the min occurrences here, though...
   const QString cmd =
     "cat " + input + " | awk -v limit=" + QString::number(minOccurrencesThreshold - 1) +
-    " '$1 > limit{print}'";
+    " '$1 > limit{print}' > " + _thresholdedCountFile->fileName();
+  LOG_DEBUG(cmd);
   if (std::system(cmd.toStdString().c_str()) != 0)
   {
     throw HootException("Unable to sort input file.");
@@ -270,7 +296,7 @@ void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccurrenceThreshold(const QStri
   _thresholdedCountFile->close();
 }
 
-void PoiImplicitTagRulesDeriver::_applyFiltering()
+void PoiImplicitTagRulesDeriver::_applyFiltering(const QString input)
 {
   LOG_INFO("Applying word/tag/rule filtering to output...");
 
@@ -284,21 +310,21 @@ void PoiImplicitTagRulesDeriver::_applyFiltering()
     throw HootException(
       QObject::tr("Error opening %1 for writing.").arg(_filteredCountFile->fileName()));
   }
-  LOG_DEBUG("Opened sorted, deduped temp file: " << _filteredCountFile->fileName());
+  LOG_DEBUG("Opened filtered temp file: " << _filteredCountFile->fileName());
   if (ConfigOptions().getPoiImplicitTagRulesKeepTempFiles())
   {
     LOG_WARN("Keeping temp file: " << _filteredCountFile->fileName());
   }
-  if (!_thresholdedCountFile->open())
+  QFile inputFile(input);
+  if (!inputFile.open(QIODevice::ReadOnly))
   {
-    throw HootException(
-      QObject::tr("Error opening %1 for reading.").arg(_thresholdedCountFile->fileName()));
+    throw HootException(QObject::tr("Error opening %1 for reading.").arg(input));
   }
-  LOG_DEBUG("Opened sorted input temp file: " << _thresholdedCountFile->fileName());
+  LOG_DEBUG("Opened input file: " << input);
 
-  while (!_thresholdedCountFile->atEnd())
+  while (!inputFile.atEnd())
   {
-    const QString line = QString::fromUtf8(_thresholdedCountFile->readLine().constData()).trimmed();
+    const QString line = QString::fromUtf8(inputFile.readLine().constData()).trimmed();
     LOG_VART(line);
     const QStringList lineParts = line.split("\t");
     LOG_VART(lineParts);
@@ -315,7 +341,16 @@ void PoiImplicitTagRulesDeriver::_applyFiltering()
 //      const QString wordTagKey = word.trimmed() % ";" % tagKey.trimmed();
 //      LOG_VART(wordTagKey);
 
-      if (!_tagIgnoreList.contains(kvp) && !_tagIgnoreList.contains(tagKey % "=*"))
+      const QString keyWildCard = tagKey % "=*";
+
+      const bool ignoreTag =
+        !_tagIgnoreList.isEmpty() && !_tagIgnoreList.contains(kvp) &&
+        !_tagIgnoreList.contains(keyWildCard);
+      const bool allowListExcludesTag =
+        !_tagsAllowList.isEmpty() && !_tagsAllowList.contains(kvp) &&
+        !_tagsAllowList.contains(keyWildCard);
+
+      if (!ignoreTag && !allowListExcludesTag)
       {
         const QString ignoreRuleTag = _rulesIgnoreList.value(word, "");
         const QString customRuleTag = _customRulesList.value(word, "");
@@ -336,7 +371,14 @@ void PoiImplicitTagRulesDeriver::_applyFiltering()
       }
       else
       {
-        LOG_TRACE("Skipping tag on the ignore list: " << kvp << ".");
+        if (ignoreTag)
+        {
+          LOG_TRACE("Skipping tag on the ignore list: " << kvp << ".");
+        }
+        else
+        {
+          LOG_TRACE("Skipping tag not on the include list: " << kvp << ".");
+        }
       }
     }
     else
@@ -363,41 +405,8 @@ void PoiImplicitTagRulesDeriver::_applyFiltering()
     _filteredCountFile->write(line.toUtf8());
   }
 
-  _thresholdedCountFile->close();
+  inputFile.close();
   _filteredCountFile->close();
 }
-
-//void PoiImplicitTagRulesDeriver::_sortByWord()
-//{
-//  LOG_INFO("Sorting output by word...");
-
-//  _finalSortedByWordCountFile.reset(
-//    new QTemporaryFile(
-//      ConfigOptions().getApidbBulkInserterTempFileDir() +
-//      "/poi-implicit-tag-rules-deriver-temp-XXXXXX"));
-//  _finalSortedByWordCountFile->setAutoRemove(
-//    !ConfigOptions().getPoiImplicitTagRulesKeepTempFiles());
-//  if (!_finalSortedByWordCountFile->open())
-//  {
-//    throw HootException(
-//      QObject::tr("Error opening %1 for writing.").arg(_finalSortedByWordCountFile->fileName()));
-//  }
-//  LOG_DEBUG("Opened sorted by word temp file: " << _finalSortedByWordCountFile->fileName());
-//  if (ConfigOptions().getPoiImplicitTagRulesKeepTempFiles())
-//  {
-//    LOG_WARN("Keeping temp file: " << _finalSortedByWordCountFile->fileName());
-//  }
-
-//  //sort by word, then by tag
-//  //-d -k2,3 -t$'\t'
-//  const QString cmd =
-//    "sort -t'\t' -k2,2 -k3,3 " + _thresholdedCountFile->fileName() + " -o " +
-//    _finalSortedByWordCountFile->fileName();
-//  if (std::system(cmd.toStdString().c_str()) != 0)
-//  {
-//    throw HootException("Unable to sort input file.");
-//  }
-//  _finalSortedByWordCountFile->close();
-//}
 
 }

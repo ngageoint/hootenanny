@@ -66,7 +66,9 @@ public:
     QStringList translationScripts;
     translationScripts.append("translations/OSM_Ingest.js");
 
-    PoiImplicitTagRawRulesGenerator().generateRules(inputs, translationScripts, outputFile);
+    PoiImplicitTagRawRulesGenerator rulesGenerator;
+    rulesGenerator.setConfiguration(conf());
+    rulesGenerator.generateRules(inputs, translationScripts, outputFile);
 
     HOOT_FILE_EQUALS(
       inDir() + "/PoiImplicitTagRawRulesGeneratorTest-runBasicTest.implicitTagRules", outputFile);
@@ -87,7 +89,9 @@ public:
     const QString outputFile =
       outDir() + "/PoiImplicitTagRawRulesGeneratorTest-runMultipleInputsTest-out.implicitTagRules";
 
-    PoiImplicitTagRawRulesGenerator().generateRules(inputs, translationScripts, outputFile);
+    PoiImplicitTagRawRulesGenerator rulesGenerator;
+    rulesGenerator.setConfiguration(conf());
+    rulesGenerator.generateRules(inputs, translationScripts, outputFile);
 
     HOOT_FILE_EQUALS(
       inDir() + "/PoiImplicitTagRawRulesGeneratorTest-runMultipleInputsTest.implicitTagRules",
@@ -110,7 +114,9 @@ public:
     const QString outputFile =
       outDir() + "/PoiImplicitTagRawRulesGeneratorTest-runNameCaseTest-out.implicitTagRules";
 
-    PoiImplicitTagRawRulesGenerator().generateRules(inputs, translationScripts, outputFile);
+    PoiImplicitTagRawRulesGenerator rulesGenerator;
+    rulesGenerator.setConfiguration(conf());
+    rulesGenerator.generateRules(inputs, translationScripts, outputFile);
 
     HOOT_FILE_EQUALS(
       inDir() + "/PoiImplicitTagRulesDeriverTest-runNameCaseTest.implicitTagRules", outputFile);

@@ -44,7 +44,8 @@ namespace hoot
 {
 
 PoiImplicitTagRawRulesGenerator::PoiImplicitTagRawRulesGenerator() :
-_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
+_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
+_tokenizeNames(true)
 {
 }
 
@@ -132,11 +133,6 @@ void PoiImplicitTagRawRulesGenerator::generateRules(const QStringList inputs,
   {
     throw HootException(QObject::tr("Error removing existing %1 for writing.").arg(output));
   }
-//  if (!_output->open(QIODevice::WriteOnly | QIODevice::Text))
-//  {
-//    throw HootException(QObject::tr("Error opening %1 for writing.").arg(output));
-//  }
-//  LOG_DEBUG("Opened output: " << output << ".");
   _output->close();
 
   LOG_INFO(
@@ -408,7 +404,6 @@ void PoiImplicitTagRawRulesGenerator::_sortByWord()
   {
     throw HootException("Unable to sort input file.");
   }
-  //_output->close();
 }
 
 }
