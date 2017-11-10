@@ -1,0 +1,52 @@
+config:
+  target: "http://localhost:8094"
+  payload:
+    - path: "translations.csv"
+      fields:
+        - "translation"
+    - path: "schema.csv"
+      fields:
+        - "code"
+        - "geom"
+    - path: "osm.csv"
+      fields:
+        - "osm"
+    # - path: "translated.csv"
+    #   fields:
+    #     - "trans"
+    #     - "body"
+  phases:
+    - duration: 120
+      arrivalRate: 5
+      rampTo: 10
+      name: "Warm up the application"
+    - duration: 300
+      arrivalRate: 10
+      name: "Sustained max load"
+scenarios:
+  - name: "capabilities"
+    weight: "1"
+    flow:
+    - get:
+        url: "/capabilities"
+  - name: "translateTo"
+    weight: "10"
+    flow:
+    - post:
+        url: "/translateTo?translation={{translation}}"
+        headers:
+          Content-Type: "text/xml"
+        body: "{{osm}}"
+  # - flow:
+  #   name: "translateFrom"
+  #   weight: "8"
+  #   - post:
+  #       url: "/translateFrom?translation={{trans}}"
+  #       headers:
+  #         Content-Type: "text/xml"
+  #       body: {{body}}
+  - name: "getSchema"
+    weight: "10"
+    flow:
+      - get:
+          url: "/translateTo?idelem=fcode&idval={{code}}&geom={{geom}}&translation={{translation}}"
