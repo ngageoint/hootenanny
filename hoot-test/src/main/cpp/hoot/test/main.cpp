@@ -241,7 +241,7 @@ enum _TimeOutValue
   GLACIAL_WAIT  = 900
 };
 
-void populateTests(_TestType t, CppUnit::TestSuite *suite, bool printDiff)
+void populateTests(_TestType t, CppUnit::TestSuite *suite, bool printDiff, bool hideDisableTests = false)
 {
   /** This section is a bit verbose but ordering is very important as the order must go as follows:
    *  Default Registry
@@ -253,28 +253,28 @@ void populateTests(_TestType t, CppUnit::TestSuite *suite, bool printDiff)
   default:
   case CURRENT:
     suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest());
-    suite->addTest(new ScriptTestSuite("test-files/cmd/current/", printDiff, QUICK_WAIT));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/current/", printDiff, QUICK_WAIT, hideDisableTests));
     break;
   case QUICK:
     suite->addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
-    suite->addTest(new ScriptTestSuite("test-files/cmd/current/", printDiff, QUICK_WAIT));
-    suite->addTest(new ScriptTestSuite("test-files/cmd/quick/", printDiff, QUICK_WAIT));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/current/", printDiff, QUICK_WAIT, hideDisableTests));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/quick/", printDiff, QUICK_WAIT, hideDisableTests));
     suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest());
     suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest());
     suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest());
     break;
   case QUICK_ONLY:
     suite->addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
-    suite->addTest(new ScriptTestSuite("test-files/cmd/quick/", printDiff, QUICK_WAIT));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/quick/", printDiff, QUICK_WAIT, hideDisableTests));
     suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest());
     suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest());
     break;
   case SLOW:
     suite->addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
-    suite->addTest(new ScriptTestSuite("test-files/cmd/current/", printDiff, QUICK_WAIT));
-    suite->addTest(new ScriptTestSuite("test-files/cmd/quick/", printDiff, QUICK_WAIT));
-    suite->addTest(new ScriptTestSuite("test-files/cmd/slow/", printDiff, SLOW_WAIT));
-    suite->addTest(new ScriptTestSuite("test-files/cmd/slow/serial/", printDiff, SLOW_WAIT));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/current/", printDiff, QUICK_WAIT, hideDisableTests));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/quick/", printDiff, QUICK_WAIT, hideDisableTests));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/slow/", printDiff, SLOW_WAIT, hideDisableTests));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/slow/serial/", printDiff, SLOW_WAIT, hideDisableTests));
     suite->addTest(new ConflateCaseTestSuite("test-files/cases"));
     suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest());
     suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest());
@@ -282,20 +282,20 @@ void populateTests(_TestType t, CppUnit::TestSuite *suite, bool printDiff)
     suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("slow").makeTest());
     break;
   case SLOW_ONLY:
-    suite->addTest(new ScriptTestSuite("test-files/cmd/slow/", printDiff, SLOW_WAIT));
-    suite->addTest(new ScriptTestSuite("test-files/cmd/slow/serial/", printDiff, SLOW_WAIT));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/slow/", printDiff, SLOW_WAIT, hideDisableTests));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/slow/serial/", printDiff, SLOW_WAIT, hideDisableTests));
     suite->addTest(new ConflateCaseTestSuite("test-files/cases"));
     suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("slow").makeTest());
     break;
   case GLACIAL:
   case ALL:
     suite->addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
-    suite->addTest(new ScriptTestSuite("test-files/cmd/current/", printDiff, QUICK_WAIT));
-    suite->addTest(new ScriptTestSuite("test-files/cmd/quick/", printDiff, QUICK_WAIT));
-    suite->addTest(new ScriptTestSuite("test-files/cmd/slow/", printDiff, SLOW_WAIT));
-    suite->addTest(new ScriptTestSuite("test-files/cmd/slow/serial/", printDiff, SLOW_WAIT));
-    suite->addTest(new ScriptTestSuite("test-files/cmd/glacial/", printDiff, GLACIAL_WAIT));
-    suite->addTest(new ScriptTestSuite("test-files/cmd/glacial/serial/", printDiff, GLACIAL_WAIT));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/current/", printDiff, QUICK_WAIT, hideDisableTests));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/quick/", printDiff, QUICK_WAIT, hideDisableTests));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/slow/", printDiff, SLOW_WAIT, hideDisableTests));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/slow/serial/", printDiff, SLOW_WAIT, hideDisableTests));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/glacial/", printDiff, GLACIAL_WAIT, hideDisableTests));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/glacial/serial/", printDiff, GLACIAL_WAIT, hideDisableTests));
     suite->addTest(new ConflateCaseTestSuite("test-files/cases"));
     suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest());
     suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest());
@@ -304,13 +304,13 @@ void populateTests(_TestType t, CppUnit::TestSuite *suite, bool printDiff)
     suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("glacial").makeTest());
     break;
   case GLACIAL_ONLY:
-    suite->addTest(new ScriptTestSuite("test-files/cmd/glacial/", printDiff, GLACIAL_WAIT));
-    suite->addTest(new ScriptTestSuite("test-files/cmd/glacial/serial/", printDiff, GLACIAL_WAIT));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/glacial/", printDiff, GLACIAL_WAIT, hideDisableTests));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/glacial/serial/", printDiff, GLACIAL_WAIT, hideDisableTests));
     suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("glacial").makeTest());
     break;
   case SERIAL:
-    suite->addTest(new ScriptTestSuite("test-files/cmd/glacial/serial/", printDiff, GLACIAL_WAIT));
-    suite->addTest(new ScriptTestSuite("test-files/cmd/slow/serial/", printDiff, SLOW_WAIT));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/glacial/serial/", printDiff, GLACIAL_WAIT, hideDisableTests));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/slow/serial/", printDiff, SLOW_WAIT, hideDisableTests));
     suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("serial").makeTest());
     break;
   }
@@ -419,7 +419,7 @@ int main(int argc, char *argv[])
       while (testName != HOOT_TEST_FINISHED)
       {
         rootSuite = new CppUnit::TestSuite( "All tests" );
-        populateTests(ALL, rootSuite, printDiff);
+        populateTests(ALL, rootSuite, printDiff, true);
         CppUnit::Test* t = rootSuite->findTest(testName);
         if (t != 0)
         {
@@ -534,7 +534,7 @@ int main(int argc, char *argv[])
         nameCheck.insert(*it);
       //  Add all of the jobs that must be done serially and are a part of the selected tests
       CppUnit::TestSuite serialTests;
-      populateTests(SERIAL, &serialTests, printDiff);
+      populateTests(SERIAL, &serialTests, printDiff, true);
       vector<string> serialNames;
       getNames(serialNames, &serialTests);
       for (vector<string>::iterator it = serialNames.begin(); it != serialNames.end(); ++it)
