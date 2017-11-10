@@ -79,23 +79,4 @@
         <url-pattern>/config/*</url-pattern>
     </servlet-mapping>
 
-    <!-- EVWHS - DG's imagery service for non-commercial clients.
-         As of 05/17/2017 this proxy is still needed by the GUI tier. -->
-    <servlet>
-        <servlet-name>evwhs</servlet-name>
-        <servlet-class>org.mitre.dsmiley.httpproxy.ProxyServlet</servlet-class>
-        <init-param>
-            <param-name>targetUri</param-name>
-            <param-value>https://evwhs.digitalglobe.com</param-value>
-        </init-param>
-        <init-param>
-            <param-name>log</param-name>
-            <param-value>true</param-value>
-        </init-param>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>evwhs</servlet-name>
-        <url-pattern>/evwhs/*</url-pattern>
-    </servlet-mapping>
-
 </web-app>
