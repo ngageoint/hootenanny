@@ -18,7 +18,7 @@ INPUT_DIR=test-files/io/PoiImplicitTagRulesDeriverTest
 rm -rf $OUTPUT_DIR
 mkdir -p $OUTPUT_DIR
 
-hoot derive-poi-implicit-tag-rules --warn $INPUT_DIR/PoiImplicitTagRulesDeriverTest-input.implicitTagRules "$OUTPUT_DIR/DerivePoiImplicitTagRulesCmdTest-out.json;$OUTPUT_DIR/DerivePoiImplicitTagRulesCmdTest-out.tsv;$OUTPUT_DIR/DerivePoiImplicitTagRulesCmdTest-out.sqlite"
+hoot derive-poi-implicit-tag-rules --warn -D poi.implicit.tag.rules.word.ignore.file="" $INPUT_DIR/PoiImplicitTagRulesDeriverTest-input.implicitTagRules "$OUTPUT_DIR/DerivePoiImplicitTagRulesCmdTest-out.json;$OUTPUT_DIR/DerivePoiImplicitTagRulesCmdTest-out.tsv;$OUTPUT_DIR/DerivePoiImplicitTagRulesCmdTest-out.sqlite"
 
 #only checking the json and tsv files here
 diff $REF_DIR/DerivePoiImplicitTagRulesCmdTest.json $OUTPUT_DIR/DerivePoiImplicitTagRulesCmdTest-out.json

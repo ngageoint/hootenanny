@@ -8,8 +8,16 @@
     "shop=electronics": 1
   },
   {
+    "word": "Ali",
+    "shop=travel_agency": 1
+  },
+  {
     "word": "Al Ikhwa Hotel",
     "tourism=hotel": 1
+  },
+  {
+    "word": "Ali Voyages",
+    "shop=travel_agency": 1
   },
   {
     "word": "Aljarbani",
@@ -28,6 +36,14 @@
     "amenity=place_of_worship": 1
   },
   {
+    "word": "Alttabri",
+    "shop=greengrocer": 1
+  },
+  {
+    "word": "Alttabri Garden",
+    "shop=greengrocer": 1
+  },
+  {
     "word": "Alyamani",
     "tourism=attraction": 1
   },
@@ -36,8 +52,17 @@
     "tourism=attraction": 1
   },
   {
+    "word": "Amanat",
+    "place=region": 4
+  },
+  {
+    "word": "Amanat al Asimah",
+    "place=region": 4
+  },
+  {
     "word": "And",
     "building=school": 1,
+    "place=locality": 9,
     "tourism=attraction": 2
   },
   {
@@ -53,12 +78,20 @@
     "building=school": 1
   },
   {
+    "word": "Army",
+    "place=locality": 3
+  },
+  {
     "word": "Art",
     "tourism=viewpoint": 1
   },
   {
-    "word": "Arts",
-    "amenity=arts_centre": 1
+    "word": "Asimah",
+    "place=region": 4
+  },
+  {
+    "word": "Aviation",
+    "place=locality": 5
   },
   {
     "word": "Bab",
@@ -103,8 +136,25 @@
     "building=school": 1
   },
   {
+    "word": "centre",
+    "place=locality": 4
+  },
+  {
     "word": "City",
+    "place=locality": 5,
     "tourism=hotel": 1
+  },
+  {
+    "word": "Civil",
+    "place=locality": 5
+  },
+  {
+    "word": "Civil Aviation and Meteorological Office",
+    "place=locality": 3
+  },
+  {
+    "word": "Civil Aviation and Meteorological Office, Civil Aviation and Meteorological Office",
+    "place=locality": 1
   },
   {
     "word": "Company",
@@ -119,12 +169,36 @@
     "amenity=courthouse": 1
   },
   {
+    "word": "Cultural",
+    "place=locality": 4
+  },
+  {
+    "word": "Cultural centre",
+    "place=locality": 4
+  },
+  {
+    "word": "Culture",
+    "place=locality": 4
+  },
+  {
+    "word": "Defence",
+    "place=locality": 4
+  },
+  {
     "word": "Drink",
     "tourism=attraction": 2
   },
   {
     "word": "Eastern",
     "building=school": 1
+  },
+  {
+    "word": "Economy",
+    "place=locality": 4
+  },
+  {
+    "word": "Education",
+    "place=locality": 4
   },
   {
     "word": "First",
@@ -140,6 +214,10 @@
     "tourism=attraction": 2
   },
   {
+    "word": "Garden",
+    "shop=greengrocer": 1
+  },
+  {
     "word": "Great",
     "amenity=place_of_worship": 1
   },
@@ -149,7 +227,6 @@
   },
   {
     "word": "Handel",
-    "amenity=place_of_worship": 1,
     "building=mosque": 1
   },
   {
@@ -162,6 +239,10 @@
     "amenity=hospital": 4
   },
   {
+    "word": "Health",
+    "place=locality": 4
+  },
+  {
     "word": "Heritage",
     "tourism=attraction": 1
   },
@@ -170,11 +251,17 @@
     "shop=electronics": 1
   },
   {
+    "word": "HONDA",
+    "shop=car": 4
+  },
+  {
     "word": "Hotel",
+    "place=locality": 4,
     "tourism=hotel": 3
   },
   {
     "word": "Hotel Taj Sheba",
+    "place=locality": 4,
     "tourism=hotel": 1
   },
   {
@@ -184,6 +271,14 @@
   {
     "word": "Ikhwa",
     "tourism=hotel": 1
+  },
+  {
+    "word": "Information",
+    "place=locality": 4
+  },
+  {
+    "word": "Interior",
+    "place=locality": 4
   },
   {
     "word": "Kebab",
@@ -200,6 +295,50 @@
   {
     "word": "Markaz al Umumah wa at Tufulah fi Hay al Abhar",
     "amenity=hospital": 4
+  },
+  {
+    "word": "Meteorological",
+    "place=locality": 5
+  },
+  {
+    "word": "Ministers",
+    "place=locality": 3
+  },
+  {
+    "word": "Minister’s",
+    "place=locality": 1
+  },
+  {
+    "word": "Ministry",
+    "place=locality": 28
+  },
+  {
+    "word": "Ministry of Defence",
+    "place=locality": 1
+  },
+  {
+    "word": "Ministry of Defence Army HQ",
+    "place=locality": 3
+  },
+  {
+    "word": "Ministry of Education",
+    "place=locality": 4
+  },
+  {
+    "word": "Ministry of Health",
+    "place=locality": 4
+  },
+  {
+    "word": "Ministry of Information and Culture",
+    "place=locality": 4
+  },
+  {
+    "word": "Ministry of Interior",
+    "place=locality": 4
+  },
+  {
+    "word": "Ministry of Telecommunications",
+    "place=locality": 4
   },
   {
     "word": "Mohammed",
@@ -237,12 +376,22 @@
   },
   {
     "word": "Office",
-    "amenity=post_office": 1
+    "amenity=post_office": 1,
+    "place=locality": 9
   },
   {
     "word": "Old",
     "amenity=place_of_worship": 1,
+    "place=locality": 5,
     "tourism=hotel": 1
+  },
+  {
+    "word": "Old City",
+    "place=locality": 3
+  },
+  {
+    "word": "Old City, Şan‘ā’ al Qadīmah, صنعاء القديمة, Old City, Sana al Qadimah, صنعاء القديمة",
+    "place=locality": 1
   },
   {
     "word": "Old Great Mosque",
@@ -267,6 +416,34 @@
   {
     "word": "Post Office",
     "amenity=post_office": 1
+  },
+  {
+    "word": "Prime",
+    "place=locality": 4
+  },
+  {
+    "word": "Prime Minister’s Office",
+    "place=locality": 1
+  },
+  {
+    "word": "Prime Ministers Office",
+    "place=locality": 3
+  },
+  {
+    "word": "Qada",
+    "place=county": 4
+  },
+  {
+    "word": "Qada Sana",
+    "place=county": 4
+  },
+  {
+    "word": "Qadimah",
+    "place=locality": 1
+  },
+  {
+    "word": "Qadīmah",
+    "place=locality": 1
   },
   {
     "word": "Qubbat",
@@ -297,6 +474,14 @@
     "tourism=hotel": 1
   },
   {
+    "word": "Sana",
+    "place=county": 4
+  },
+  {
+    "word": "Şan‘ā’",
+    "place=locality": 1
+  },
+  {
     "word": "Sanaa",
     "tourism=hotel": 1
   },
@@ -318,6 +503,7 @@
   },
   {
     "word": "Sheba",
+    "place=locality": 4,
     "tourism=hotel": 1
   },
   {
@@ -338,7 +524,12 @@
   },
   {
     "word": "Taj",
+    "place=locality": 4,
     "tourism=hotel": 1
+  },
+  {
+    "word": "Telecommunications",
+    "place=locality": 4
   },
   {
     "word": "Terrace",
@@ -351,6 +542,10 @@
   {
     "word": "Umumah",
     "amenity=hospital": 4
+  },
+  {
+    "word": "Voyages",
+    "shop=travel_agency": 1
   },
   {
     "word": "Yassin",
@@ -370,8 +565,20 @@
     "tourism=attraction": 2
   },
   {
+    "word": "ابو",
+    "historic=memorial": 2
+  },
+  {
     "word": "الأبهر",
     "amenity=hospital": 4
+  },
+  {
+    "word": "الإتصالات",
+    "place=locality": 4
+  },
+  {
+    "word": "الاتصالات",
+    "office=telecommunication": 2
   },
   {
     "word": "الإخوة",
@@ -382,12 +589,33 @@
     "tourism=hotel": 2
   },
   {
+    "word": "الأرصاد",
+    "place=locality": 4
+  },
+  {
     "word": "الإستئناف",
     "amenity=courthouse": 1
   },
   {
+    "word": "الإعلام",
+    "place=locality": 4
+  },
+  {
+    "word": "الإقتصاد",
+    "place=locality": 4
+  },
+  {
+    "word": "الامارات",
+    "shop=clothes": 2
+  },
+  {
     "word": "الأمومة",
     "amenity=hospital": 4
+  },
+  {
+    "word": "الاوقاف",
+    "historic=memorial": 2,
+    "office=government": 2
   },
   {
     "word": "الأول",
@@ -420,11 +648,20 @@
   {
     "word": "التحرير",
     "amenity=post_office": 4,
+    "shop=greengrocer": 2,
     "tourism=attraction": 4
   },
   {
     "word": "التراث",
     "tourism=attraction": 3
+  },
+  {
+    "word": "التعليم",
+    "place=locality": 4
+  },
+  {
+    "word": "الثقافة",
+    "place=locality": 4
   },
   {
     "word": "الجديد",
@@ -436,7 +673,12 @@
   },
   {
     "word": "الجمهوري",
+    "office=government": 1,
     "tourism=attraction": 2
+  },
+  {
+    "word": "الجوية",
+    "place=locality": 4
   },
   {
     "word": "الجيل",
@@ -459,6 +701,30 @@
     "shop=electronics": 2
   },
   {
+    "word": "الخامري",
+    "shop=convenience": 1
+  },
+  {
+    "word": "الخامري للبطاريات - المركز الرئيسي",
+    "shop=convenience": 1
+  },
+  {
+    "word": "الخامس",
+    "historic=memorial": 2
+  },
+  {
+    "word": "الداخلية",
+    "place=locality": 4
+  },
+  {
+    "word": "الدفاع",
+    "place=locality": 4
+  },
+  {
+    "word": "الرئيسي",
+    "shop=convenience": 1
+  },
+  {
     "word": "الزبيب",
     "tourism=attraction": 4
   },
@@ -479,6 +745,10 @@
     "amenity=doctors": 2
   },
   {
+    "word": "السنيدار",
+    "historic=monument": 2
+  },
+  {
     "word": "الشمسية",
     "shop=electronics": 2
   },
@@ -487,8 +757,17 @@
     "amenity=place_of_worship": 2
   },
   {
+    "word": "الصحة",
+    "place=locality": 4
+  },
+  {
+    "word": "(الضالعي",
+    "historic=memorial": 2
+  },
+  {
     "word": "الطبري",
-    "amenity=school": 1
+    "amenity=school": 1,
+    "shop=greengrocer": 1
   },
   {
     "word": "الطبيبة",
@@ -507,6 +786,38 @@
     "amenity=hospital": 4
   },
   {
+    "word": "الطيران",
+    "place=locality": 4
+  },
+  {
+    "word": "الظرافي",
+    "leisure=playground": 2
+  },
+  {
+    "word": "العاصمة",
+    "place=region": 4
+  },
+  {
+    "word": "العدل",
+    "historic=monument": 2
+  },
+  {
+    "word": "العربي",
+    "shop=sports": 1
+  },
+  {
+    "word": "العسكري",
+    "office=government": 1
+  },
+  {
+    "word": "العمادللتجره",
+    "shop=clothes": 2
+  },
+  {
+    "word": "العمادللتجره والمطرزات",
+    "shop=clothes": 2
+  },
+  {
     "word": "الفن",
     "amenity=arts_centre": 3
   },
@@ -516,18 +827,22 @@
   },
   {
     "word": "القديمة",
+    "place=locality": 6,
     "tourism=hotel": 3
   },
   {
     "word": "القصر",
+    "office=government": 1,
     "tourism=attraction": 2
   },
   {
     "word": "القصر الجمهوري",
+    "office=government": 1,
     "tourism=attraction": 2
   },
   {
     "word": "القيادة",
+    "historic=monument": 2,
     "tourism=attraction": 1
   },
   {
@@ -541,6 +856,30 @@
   {
     "word": "الكهرباء",
     "shop=electronics": 2
+  },
+  {
+    "word": "اللغات",
+    "office=government": 1
+  },
+  {
+    "word": "المأمون",
+    "office=telecommunication": 2
+  },
+  {
+    "word": "المأمون لتقنية الاتصالات",
+    "office=telecommunication": 2
+  },
+  {
+    "word": "المبنى",
+    "historic=memorial": 2
+  },
+  {
+    "word": "المتجر",
+    "shop=sports": 1
+  },
+  {
+    "word": "المتجر العربي",
+    "shop=sports": 1
   },
   {
     "word": "المتحف",
@@ -563,12 +902,32 @@
     "amenity=pharmacy": 2
   },
   {
+    "word": "المدني",
+    "place=locality": 4
+  },
+  {
+    "word": "المركز",
+    "shop=convenience": 1
+  },
+  {
     "word": "المركزي",
     "amenity=bank": 2
   },
   {
     "word": "المهدي",
     "amenity=place_of_worship": 3
+  },
+  {
+    "word": "الوتاري",
+    "shop=car": 2
+  },
+  {
+    "word": "الوزراء",
+    "place=locality": 4
+  },
+  {
+    "word": "الوصابي",
+    "shop=supermarket": 1
   },
   {
     "word": "الوطني",
@@ -590,11 +949,20 @@
     "tourism=attraction": 2
   },
   {
+    "word": "أمانة",
+    "place=region": 4
+  },
+  {
+    "word": "أمانة العاصمة",
+    "place=region": 4
+  },
+  {
     "word": "إياد",
     "shop=electronics": 2
   },
   {
     "word": "باب",
+    "historic=monument": 2,
     "tourism=attraction": 5
   },
   {
@@ -604,6 +972,10 @@
   {
     "word": "باب اليمن",
     "tourism=attraction": 3
+  },
+  {
+    "word": "باب شعوب",
+    "historic=monument": 2
   },
   {
     "word": "بالاس",
@@ -627,6 +999,18 @@
     "tourism=attraction": 2
   },
   {
+    "word": "بقالة",
+    "shop=supermarket": 1
+  },
+  {
+    "word": "بقالة الوصابي",
+    "shop=supermarket": 1
+  },
+  {
+    "word": "بهارات",
+    "shop=department_store": 1
+  },
+  {
     "word": "بيت",
     "tourism=attraction": 3
   },
@@ -636,7 +1020,24 @@
   },
   {
     "word": "تاج",
+    "place=locality": 4,
     "tourism=hotel": 2
+  },
+  {
+    "word": "تقاطع",
+    "historic=monument": 2
+  },
+  {
+    "word": "تقاطع تونس مع العدل",
+    "historic=monument": 2
+  },
+  {
+    "word": "تونس",
+    "historic=monument": 2
+  },
+  {
+    "word": "ثقافي",
+    "place=locality": 4
   },
   {
     "word": "جامع",
@@ -657,6 +1058,30 @@
     "amenity=place_of_worship": 3
   },
   {
+    "word": "جولة",
+    "historic=monument": 4
+  },
+  {
+    "word": "جولة القيادة السنيدار",
+    "historic=monument": 2
+  },
+  {
+    "word": "جولة مدرسة عبدالناصر",
+    "historic=monument": 2
+  },
+  {
+    "word": "حديقة",
+    "shop=greengrocer": 3
+  },
+  {
+    "word": "حديقة التحرير",
+    "shop=greengrocer": 2
+  },
+  {
+    "word": "حديقة الطبري",
+    "shop=greengrocer": 1
+  },
+  {
     "word": "حنظل",
     "amenity=place_of_worship": 1,
     "building=mosque": 1
@@ -666,12 +1091,25 @@
     "amenity=school": 2
   },
   {
+    "word": "رئيس",
+    "place=locality": 4
+  },
+  {
+    "word": "زين",
+    "shop=clothes": 2
+  },
+  {
+    "word": "زين الامارات",
+    "shop=clothes": 2
+  },
+  {
     "word": "سام",
     "amenity=car_wash": 1,
     "tourism=hotel": 1
   },
   {
     "word": "سبا",
+    "place=locality": 4,
     "tourism=hotel": 2
   },
   {
@@ -689,6 +1127,18 @@
   {
     "word": "سطح مركز الفنون الوطني",
     "tourism=viewpoint": 3
+  },
+  {
+    "word": "سفريات",
+    "shop=travel_agency": 3
+  },
+  {
+    "word": "سفريات علي",
+    "shop=travel_agency": 3
+  },
+  {
+    "word": "سمراء",
+    "shop=department_store": 1
   },
   {
     "word": "سوق",
@@ -733,9 +1183,22 @@
     "amenity=pharmacy": 2
   },
   {
+    "word": "شركة الوتاري - وكيل HONDA",
+    "shop=car": 2
+  },
+  {
+    "word": "شعوب",
+    "historic=monument": 2
+  },
+  {
     "word": "صنعاء",
     "amenity=place_of_worship": 3,
+    "place=locality": 6,
     "tourism=hotel": 3
+  },
+  {
+    "word": "صنعاء القديمة",
+    "place=locality": 4
   },
   {
     "word": "عاشور",
@@ -743,7 +1206,24 @@
   },
   {
     "word": "عبدالناصر",
-    "amenity=school": 2
+    "amenity=school": 2,
+    "historic=monument": 2
+  },
+  {
+    "word": "عدن",
+    "shop=department_store": 1
+  },
+  {
+    "word": "علي",
+    "shop=travel_agency": 3
+  },
+  {
+    "word": "عمارة",
+    "historic=memorial": 2
+  },
+  {
+    "word": "عمارة الاوقاف المبنى الخامس (الضالعي ابو هاشم)",
+    "historic=memorial": 2
   },
   {
     "word": "فارما",
@@ -771,6 +1251,7 @@
   },
   {
     "word": "فندق",
+    "place=locality": 4,
     "tourism=hotel": 10
   },
   {
@@ -787,6 +1268,7 @@
   },
   {
     "word": "فندق تاج سبا",
+    "place=locality": 4,
     "tourism=hotel": 2
   },
   {
@@ -802,8 +1284,20 @@
     "amenity=place_of_worship": 3
   },
   {
+    "word": "قضاء",
+    "place=county": 4
+  },
+  {
+    "word": "قضاء صنعاء",
+    "place=county": 4
+  },
+  {
     "word": "كباب",
     "amenity=restaurant": 4
+  },
+  {
+    "word": "لتقنية",
+    "office=telecommunication": 2
   },
   {
     "word": "لشراب",
@@ -816,6 +1310,10 @@
   {
     "word": "للإنشاء",
     "amenity=bank": 1
+  },
+  {
+    "word": "للبطاريات",
+    "shop=convenience": 1
   },
   {
     "word": "للدقة",
@@ -867,7 +1365,8 @@
   },
   {
     "word": "مدرسة",
-    "amenity=school": 5
+    "amenity=school": 5,
+    "historic=monument": 2
   },
   {
     "word": "مدرسة الطبري",
@@ -892,6 +1391,7 @@
   {
     "word": "مركز",
     "amenity=hospital": 4,
+    "place=locality": 4,
     "tourism=viewpoint": 3
   },
   {
@@ -901,6 +1401,10 @@
   {
     "word": "مركز الفن الوطني",
     "amenity=arts_centre": 3
+  },
+  {
+    "word": "مركز ثقافي",
+    "place=locality": 4
   },
   {
     "word": "مسجد",
@@ -920,12 +1424,33 @@
     "amenity=restaurant": 2
   },
   {
+    "word": "معمل",
+    "shop=department_store": 1
+  },
+  {
+    "word": "معمل بهارات سمراء عدن",
+    "shop=department_store": 1
+  },
+  {
+    "word": "معهد",
+    "office=government": 1
+  },
+  {
+    "word": "معهد اللغات العسكري",
+    "office=government": 1
+  },
+  {
     "word": "مكتب",
-    "amenity=post_office": 7
+    "amenity=post_office": 7,
+    "place=locality": 8
   },
   {
     "word": "مكتب البريد",
     "amenity=post_office": 3
+  },
+  {
+    "word": "مكتب الطيران المدني و الأرصاد الجوية",
+    "place=locality": 4
   },
   {
     "word": "مكتب بريد التحرير",
@@ -938,6 +1463,18 @@
   {
     "word": "مكتبة الجيل الجديد",
     "amenity=library": 2
+  },
+  {
+    "word": "مكتب رئيس الوزراء",
+    "place=locality": 4
+  },
+  {
+    "word": "ملعب",
+    "leisure=playground": 2
+  },
+  {
+    "word": "ملعب الظرافي",
+    "leisure=playground": 2
   },
   {
     "word": "موبايل",
@@ -960,8 +1497,16 @@
     "tourism=attraction": 2
   },
   {
+    "word": "هاشم)",
+    "historic=memorial": 2
+  },
+  {
     "word": "هائل",
     "amenity=bus_station": 2
+  },
+  {
+    "word": "والارشاد",
+    "office=government": 2
   },
   {
     "word": "والتعمير",
@@ -978,6 +1523,54 @@
   {
     "word": "والطاقة",
     "shop=electronics": 2
+  },
+  {
+    "word": "والمطرزات",
+    "shop=clothes": 2
+  },
+  {
+    "word": "وزارة",
+    "place=locality": 28
+  },
+  {
+    "word": "وزارة الإتصالات",
+    "place=locality": 4
+  },
+  {
+    "word": "وزارة الإعلام و الثقافة",
+    "place=locality": 4
+  },
+  {
+    "word": "وزارة الإقتصاد",
+    "place=locality": 4
+  },
+  {
+    "word": "وزارة التعليم",
+    "place=locality": 4
+  },
+  {
+    "word": "وزارة الداخلية",
+    "place=locality": 4
+  },
+  {
+    "word": "وزارة الدفاع",
+    "place=locality": 4
+  },
+  {
+    "word": "وزارة الصحة",
+    "place=locality": 4
+  },
+  {
+    "word": "وزراة",
+    "office=government": 2
+  },
+  {
+    "word": "وزراة الاوقاف والارشاد",
+    "office=government": 2
+  },
+  {
+    "word": "وكيل",
+    "shop=car": 2
   },
   {
     "word": "ياسين",

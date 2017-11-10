@@ -69,7 +69,7 @@ public:
   { _minTagOccurrencesPerWord = minOccurrences; }
   void setMinWordLength(const int length) { _minWordLength = length; }
   void setRuleIgnoreFile(const QString file) { _ruleIgnoreFile = file; }
-  void setTagIgnoreRuleFile(const QString file) { _tagIgnoreFile = file; }
+  void setTagIgnoreFile(const QString file) { _tagIgnoreFile = file; }
   void setTagFile(const QString file) { _tagFile = file; }
   void setWordIgnoreFile(const QString file) { _wordIgnoreFile = file; }
 
