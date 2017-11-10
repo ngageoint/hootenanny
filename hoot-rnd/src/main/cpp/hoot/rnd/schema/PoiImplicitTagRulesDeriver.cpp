@@ -321,6 +321,7 @@ void PoiImplicitTagRulesDeriver::_applyFiltering(const QString input)
   }
   LOG_DEBUG("Opened input file: " << input);
 
+  long lineCount = 0;
   while (!inputFile.atEnd())
   {
     const QString line = QString::fromUtf8(inputFile.readLine().constData()).trimmed();
@@ -337,15 +338,10 @@ void PoiImplicitTagRulesDeriver::_applyFiltering(const QString input)
       LOG_VART(kvp);
       const QString tagKey = kvp.split("=")[0];
       LOG_VART(tagKey);
-//      const QString wordTagKey = word.trimmed() % ";" % tagKey.trimmed();
-//      LOG_VART(wordTagKey);
 
       const QString keyWildCard = tagKey % "=*";
       LOG_VART(keyWildCard);
 
-      LOG_VART(_tagIgnoreList.isEmpty());
-      LOG_VART(_tagIgnoreList.contains(kvp));
-      LOG_VART(_tagIgnoreList.contains(keyWildCard));
       const bool ignoreTag =
         !_tagIgnoreList.isEmpty() &&
         (_tagIgnoreList.contains(kvp) || _tagIgnoreList.contains(keyWildCard));
@@ -400,7 +396,15 @@ void PoiImplicitTagRulesDeriver::_applyFiltering(const QString input)
         LOG_TRACE("Skipping word on the ignore list: " << word << ".");
       }
     }
+
+    lineCount++;
+    if (lineCount % _statusUpdateInterval == 0)
+    {
+      PROGRESS_INFO(
+        "Filtered " << StringUtils::formatLargeNumber(lineCount) << " elements from input.");
+    }
   }
+  inputFile.close();
 
   for (QMap<QString, QString>::const_iterator customRulesItr = _customRulesList.begin();
        customRulesItr != _customRulesList.end(); ++customRulesItr)
@@ -411,7 +415,6 @@ void PoiImplicitTagRulesDeriver::_applyFiltering(const QString input)
     _filteredCountFile->write(line.toUtf8());
   }
 
-  inputFile.close();
   _filteredCountFile->close();
 }
 

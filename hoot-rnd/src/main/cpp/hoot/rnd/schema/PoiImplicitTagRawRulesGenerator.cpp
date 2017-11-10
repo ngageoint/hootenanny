@@ -339,6 +339,7 @@ void PoiImplicitTagRawRulesGenerator::_removeDuplicatedKeyTypes()
     LOG_WARN("Keeping temp file: " << _sortedDedupedCountFile->fileName());
   }
 
+  long lineCount = 0;
   while (!_sortedCountFile->atEnd())
   {
     const QString line = QString::fromUtf8(_sortedCountFile->readLine().constData()).trimmed();
@@ -385,8 +386,15 @@ void PoiImplicitTagRawRulesGenerator::_removeDuplicatedKeyTypes()
         "chose first tag.  Not creating implicit tag entry for word: " << word << ", tag: " <<
         kvp << ", count: " << count);
     }
-  }
 
+    lineCount++;
+    if (lineCount % _statusUpdateInterval == 0)
+    {
+      PROGRESS_INFO(
+        "Parsed " << StringUtils::formatLargeNumber(lineCount) <<
+        " elements from input for duplicated tag key removal.");
+    }
+  }
   _sortedCountFile->close();
   _sortedDedupedCountFile->close();
 }
