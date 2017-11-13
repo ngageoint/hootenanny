@@ -33,6 +33,7 @@
 #include <hoot/rnd/conflate/network/NetworkEdgeScore.h>
 #include <hoot/rnd/conflate/network/NetworkVertexScore.h>
 #include <hoot/rnd/conflate/network/OsmNetwork.h>
+#include <hoot/rnd/conflate/network/IndexedEdgeMatchSet.h>
 
 // tgs
 #include <tgs/RStarTree/HilbertRTree.h>
@@ -63,6 +64,8 @@ public:
   virtual void iterate() = 0;
 
   virtual void matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1, OsmNetworkPtr n2) = 0;
+
+  virtual void finalize();
 
   virtual QList<NetworkEdgeScorePtr> getAllEdgeScores() const = 0;
 

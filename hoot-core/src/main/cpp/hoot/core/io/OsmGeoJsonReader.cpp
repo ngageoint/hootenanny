@@ -675,6 +675,5 @@ string OsmGeoJsonReader::_parseSubTags(const pt::ptree &item)
     return ss.str();
 }
 
-
 } //  namespace hoot
 

@@ -798,7 +798,7 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Relation>& newR
   _elementCache->addElement(constRelation);
 
   ElementProviderPtr cacheProvider(_elementCache);
-    _writePartial(cacheProvider, newRelation);
+  _writePartial(cacheProvider, newRelation);
 }
 
 void OgrWriter::writeElement(ElementPtr &element)

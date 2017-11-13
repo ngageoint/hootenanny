@@ -170,7 +170,7 @@ void PaintNodesDriver::_loadPartFile(const QString& partPath)
   s.resize(1024);
   PaintNodesReducer::Pixel pixel;
   int32_t sum;
-  while (reader.nextFixed<PaintNodesReducer::Pixel, int>(pixel, sum))
+  while (reader.nextFixed<PaintNodesReducer::Pixel, int32_t>(pixel, sum))
   {
     assert(pixel.x < _width);
     assert(pixel.y < _height);

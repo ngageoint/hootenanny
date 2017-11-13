@@ -60,12 +60,22 @@ private:
   const OsmMap* _map;
 
   /**
-   * If there are exactly 2 matches
-   * and one match contains the other.
-   * return the matches that contains the other.
+   * Gets the largest match (in terms of number of elements, not necessarily physical size)
+   */
+  const NetworkMatch* _getLargest(const MatchSet& matches) const;
+
+
+  /**
+   * If one match contains the the rest, return the largest match.
    * Otherwise, return 0.
    */
   const NetworkMatch* _getLargestContainer(const MatchSet& matches) const;
+
+  double _getOverlapPercent(const MatchSet& matches) const;
+
+  double _getOverlapPercent(const NetworkMatch* m1, const NetworkMatch* m2) const;
+
+  bool _containsOverlap(const MatchSet& matches) const;
 
   /**
    * Returns true if one or more matches are conflicting matches.

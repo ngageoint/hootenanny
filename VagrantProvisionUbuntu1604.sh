@@ -188,114 +188,22 @@ else
     sed -i '/^export JAVA_HOME=.*/c\export JAVA_HOME=\/usr\/lib\/jvm\/oracle_jdk8' ~/.profile
 fi
 
-# Disabling Hadoop on Ubuntu 16.04
-#if ! grep --quiet "export HADOOP_HOME" ~/.profile; then
-#    echo "Adding Hadoop home to profile..."
-#    echo "export HADOOP_HOME=~/hadoop" >> ~/.profile
-#    echo "export PATH=\$PATH:\$HADOOP_HOME/bin" >> ~/.profile
-#    source ~/.profile
-#fi
-
 if ! grep --quiet "PATH=" ~/.profile; then
     echo "Adding path vars to profile..."
     echo "export PATH=\$PATH:\$JAVA_HOME/bin:~/bin:$HOOT_HOME/bin" >> ~/.profile
     source ~/.profile
 fi
 
-if ! ruby -v | grep --quiet 2.3.0; then
-    # Ruby via rvm - from rvm.io
-    gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 2>&1
-
-    curl -sSL https://raw.githubusercontent.com/rvm/rvm/master/binscripts/rvm-installer | bash -s stable
-
-    source ~/.rvm/scripts/rvm
-
-    stdbuf -o L -e L rvm install ruby-2.3
-    rvm --default use 2.3
-
-# Don't install documentation for gems
-cat > ~/.gemrc <<EOT
-  install: --no-document
-  update: --no-document
-EOT
-fi
-
-# gem installs are *very* slow, hence all the checks in place here to facilitate debugging
-if ! gem list --local | grep -q mime-types; then
-    echo "Gem Install: mime-types"
-   #sudo gem install mime-types -v 2.6.2
-   gem install mime-types
-fi
-
-if ! gem list --local | grep -q cucumber; then
-    echo "Gem Install: cucumber"
-   #sudo gem install cucumber
-   gem install cucumber
-fi
-
-if ! gem list --local | grep -q capybara-webkit; then
-    echo "Gem Install: capybara-webkit"
-   sudo apt-get install -y qt5-default libqt5webkit5-dev gstreamer1.0-plugins-base gstreamer1.0-tools gstreamer1.0-x
-   #sudo gem install capybara-webkit
-   gem install capybara-webkit
-fi
-
-if ! gem list --local | grep -q selenium-webdriver; then
-    echo "Gem Install: selenium-webdriver"
-   #sudo gem install selenium-webdriver
-   gem install selenium-webdriver
-fi
-
-if ! gem list --local | grep -q rspec; then
-    echo "Gem Install: rspec"
-   #sudo gem install rspec
-   gem install rspec
-fi
-
-if ! gem list --local | grep -q capybara-screenshot; then
-    echo "Gem Install: capybara-screenshot"
-   #sudo gem install capybara-screenshot
-   gem install capybara-screenshot
-fi
-
-if ! gem list --local | grep -q selenium-cucumber; then
-    echo "Gem Install: selenium-cucumber"
-   #sudo gem install selenium-cucumber
-   gem install selenium-cucumber
-fi
+# Use RVM to install the desired Ruby version, then install the gems.
+$HOOT_HOME/scripts/ruby/rvm-install.sh
+$HOOT_HOME/scripts/ruby/gem-install.sh
 
 # Make sure that we are in ~ before trying to wget & install stuff
 cd ~
 
-if  ! dpkg -l | grep --quiet google-chrome-stable; then
-    echo "### Installing Chrome..."
-    if [ ! -f google-chrome-stable_current_amd64.deb ]; then
-      wget --quiet https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-    fi
-    sudo apt-get -f -y -q install || echo ignore failure
-    sudo dpkg -i google-chrome-stable_current_amd64.deb  || echo ignore failure
-    sudo apt-get -f -y -q install
-    sudo dpkg -i google-chrome-stable_current_amd64.deb
-fi
-
-if [ ! -f bin/chromedriver ]; then
-    echo "### Installing Chromedriver..."
-    mkdir -p ~/bin
-    if [ ! -f chromedriver_linux64.zip ]; then
-      LATEST_RELEASE="`wget --quiet -O- http://chromedriver.storage.googleapis.com/LATEST_RELEASE`"
-      wget --quiet http://chromedriver.storage.googleapis.com/$LATEST_RELEASE/chromedriver_linux64.zip
-    fi
-    unzip -d ~/bin chromedriver_linux64.zip
-else
-  LATEST_RELEASE="`wget --quiet -O- http://chromedriver.storage.googleapis.com/LATEST_RELEASE`"
-  if [[ "$(chromedriver --version)" != "ChromeDriver $LATEST_RELEASE."* ]]; then
-    echo "### Updating Chromedriver"
-    rm ~/bin/chromedriver
-    rm ~/chromedriver_linux64.zip
-    wget --quiet http://chromedriver.storage.googleapis.com/$LATEST_RELEASE/chromedriver_linux64.zip
-    unzip -o -d ~/bin chromedriver_linux64.zip
-  fi
-fi
+# Install Google Chrome and ChromeDriver.
+$HOOT_HOME/scripts/chrome/chrome-install.sh
+$HOOT_HOME/scripts/chrome/driver-install.sh
 
 sudo apt-get autoremove -y
 

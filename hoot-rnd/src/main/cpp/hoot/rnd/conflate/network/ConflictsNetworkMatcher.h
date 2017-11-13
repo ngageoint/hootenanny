@@ -72,9 +72,13 @@ public:
 
   virtual void matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1, OsmNetworkPtr n2);
 
+  virtual void finalize();
+
   virtual QList<NetworkEdgeScorePtr> getAllEdgeScores() const;
 
   virtual QList<NetworkVertexScorePtr> getAllVertexScores() const;
+
+  virtual IndexedEdgeMatchSetPtr getMatches() { return _edgeMatches; }
 
 private:
 
@@ -143,6 +147,12 @@ private:
    * similarity, and if similar, the higher-scoring match is kept
    */
   void _removeDupes();
+
+  /* Gets the separation between the pairs in the match, in terms of Frechet distance */
+  Meters _getMatchSeparation(ConstEdgeMatchPtr pMatch);
+
+  /* Remove matches that don't make sense, based on frechet distance */
+  void _sanityCheckRelationships();
 
   void _createMatchRelationships();
 

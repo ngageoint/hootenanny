@@ -90,7 +90,7 @@ public:
 
     //LOG_VAR(TestUtils::toQuotedString(OsmJsonWriter().toString(map)));
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
-                    "{\"type\":\"node\",\"id\":-1,\"lat\":0,\"lon\":0,\"tags\":{\"poi\":\"yes\",\"source:hash\":\"AAA;BBB;CCC\",\"alt_name\":\"bar;baz;qux\",\"name\":\"foo\",\"error:circular\":\"15\"}}]\n"
+                    "{\"type\":\"node\",\"id\":-1,\"lat\":0,\"lon\":0,\"tags\":{\"hoot:hash\":\"\",\"poi\":\"yes\",\"source:hash\":\"AAA;BBB;CCC\",\"alt_name\":\"bar;baz;qux\",\"name\":\"foo\",\"error:circular\":\"15\"}}]\n"
                     "}\n", OsmJsonWriter().toString(map));
   }
 

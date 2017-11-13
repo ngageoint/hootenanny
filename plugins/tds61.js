@@ -872,6 +872,7 @@ tds61 = {
             ["t.diplomatic && !(t.amenity)","t.amenity = 'embassy'"],
             ["t.boundary == 'protected_area' && !(t.protect_class)","t.protect_class = '4'"],
             ["t.bunker_type && !(t.military)","t.military = 'bunker'"],
+            ["t.cable =='yes' && t['cable:type'] == 'power'"," t.power = 'line'; delete t.cable; delete t['cable:type']"],
             ["t.control_tower == 'yes' && t.use == 'air_traffic_control'","t['tower:type'] = 'observation'"],
             ["t.crossing == 'tank'","t.highway = 'crossing'"],
             ["t.desert_surface","t.surface = t.desert_surface; delete t.desert_surface"],
@@ -1243,7 +1244,7 @@ tds61 = {
             ["t.natural == 'wood'","t.landuse = 'forest'; delete t.natural"],
             ["t.power == 'pole'","t['cable:type'] = 'power'; t['tower:shape'] = 'pole'"],
             ["t.power == 'tower'","t['cable:type'] = 'power'; t.pylon = 'yes'; delete t.power"],
-            ["t.power == 'line'","t['cable:type'] = 'power'; t.cable = 'yes'"],
+            ["t.power == 'line'","t['cable:type'] = 'power'; t.cable = 'yes'; delete t.power"],
             ["t.power == 'generator'","t.use = 'power_generation'; a.F_CODE = 'AL013'"],
             ["t.rapids == 'yes'","t.waterway = 'rapids'; delete t.rapids"],
             ["t.railway == 'station'","t.public_transport = 'station';  t['transport:type'] = 'railway'"],
@@ -1702,6 +1703,13 @@ tds61 = {
 
        // Debug
        // for (var i in tags) print('End PreProc Tags: ' + i + ': :' + tags[i] + ':');
+        // Tag changed
+
+        if (tags.vertical_obstruction_identifier)
+        {
+            tags['aeroway:obstruction'] = tags.vertical_obstruction_identifier;
+            delete tags.vertical_obstruction_identifier;
+        }
 
     }, // End applyToTdsPreProcessing
 

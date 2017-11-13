@@ -38,7 +38,7 @@ sed -i s/"QMAKE_CXX=g++"/"#QMAKE_CXX=g++"/g LocalConfig.pri
 sed -i s/"#QMAKE_CXX=ccache g++"/"QMAKE_CXX=ccache g++"/g LocalConfig.pri
 
 # Make sure we are not running
-vagrant halt
+vagrant halt default
 
 REBUILD_VAGRANT=false
 
@@ -50,10 +50,10 @@ if [ "`date +%F`" != "`test -e ../BuildDate.txt && cat ../BuildDate.txt`" ]; the
 fi
 
 if [ $REBUILD_VAGRANT == 'true' ]; then
-    vagrant destroy -f
-    time -p vagrant up --provider vsphere
+    vagrant destroy default -f
+    time -p vagrant up default --provider aws
 else
-    time -p vagrant up --provision-with nfs,build,EGD,tomcat,mapnik,hadoop --provider vsphere
+    time -p vagrant up default --provision-with build,EGD,tomcat,mapnik,hadoop --provider aws
 fi
 
 # Disableing this until it gets moved earlier into the build.

@@ -123,6 +123,7 @@ public:
 
   inline static const QString BuildingPart()            { return "building:part"; }
 
+  inline static const QString RelationBoundary()        { return "boundary"; }
   inline static const QString RelationBuilding()        { return "building"; }
   inline static const QString RelationCollection()      { return "collection"; }
   inline static const QString RelationInner()           { return "inner"; }
@@ -130,6 +131,7 @@ public:
   inline static const QString RelationMultiPolygon()    { return "multipolygon"; }
   inline static const QString RelationNetwork()         { return "network"; }
   inline static const QString RelationOuter()           { return "outer"; }
+  inline static const QString RelationRestriction()     { return "restriction"; }
   inline static const QString RelationReview()          { return "review"; }
   inline static const QString RelationRoute()           { return "route"; }
   inline static const QString RelationRouteMaster()     { return "route_master"; }

@@ -565,7 +565,9 @@ end
 
 When(/^I close the UI alert$/) do
   alerts = find('#alerts')
-  alerts.all('.x')[0].click unless alerts.nil?
+  alerts.all('.x').each do |alt|
+    alt.click unless alerts.nil?
+  end
 end
 
 When(/^I change the reference layer color to ([^"]*)$/) do |color|

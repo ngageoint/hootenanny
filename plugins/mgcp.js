@@ -1019,7 +1019,7 @@ mgcp = {
             ["t.natural == 'scrub'","t.natural = 'grassland'; t['grassland:type'] = 'grassland_with_trees'"],
             ["t.natural == 'wood'","t.landuse = 'forest'"],
             ["t.power == 'generator'","a.F_CODE = 'AL015'; t.use = 'power_generation'"],
-            ["t.power == 'line'","t['cable:type'] = 'power'; t.cable = 'yes'"],
+            //["t.power == 'line'","t['cable:type'] = 'power'; t.cable = 'yes'"],
             ["t.power == 'tower'","t['cable:type'] = 'power'; t.pylon = 'yes'; delete t.power"],
             ["t.rapids == 'yes'","t.waterway = 'rapids'"],
             ["t.resource","t.product = t.resource; delete t.resource"],
@@ -1287,6 +1287,13 @@ mgcp = {
 
         // The FCODE for Buildings changed...
         if (attrs.F_CODE == 'AL013') attrs.F_CODE = 'AL015';
+
+        // Tag changed
+        if (tags.vertical_obstruction_identifier)
+        {
+            tags['aeroway:obstruction'] = tags.vertical_obstruction_identifier;
+            delete tags.vertical_obstruction_identifier;
+        }
 
     }, // End applyToMgcpPreProcessing
 
@@ -1806,7 +1813,7 @@ mgcp = {
         translate.applySimpleTxtBiased(attrs, notUsedTags,  mgcp.rules.txtBiased,'backward');
 
         // one 2 one
-        translate.applyOne2One(notUsedTags, attrs, mgcp.lookup, mgcp.fcodeLookup, mgcp.ignoreList);
+        translate.applyOne2One(notUsedTags, attrs, mgcp.lookup, mgcp.fcodeLookup);
 
         // post processing
         // mgcp.applyToMgcpPostProcessing(attrs, tableName, geometryType);

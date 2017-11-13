@@ -91,7 +91,7 @@ namespace hoot
  *   "   'lon': -3.0,                        \n"
  *   "   'tags': {                           \n"
  *   "     'highway': 'bus_stop',            \n"
- *   "     'name': 'Micah\\'s Street'        \n"
+ *   "     'name': 'Mike\\'s Street'        \n"
  *   "   }                                   \n"
  *   " }                                     \n"
  *   "]                                      \n"

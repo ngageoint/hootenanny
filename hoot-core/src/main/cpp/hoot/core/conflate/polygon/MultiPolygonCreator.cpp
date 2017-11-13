@@ -377,10 +377,14 @@ deque<ConstWayPtr> MultiPolygonCreator::_orderWaysForRing(const vector<ConstWayP
     if (w->getNodeId(0) == lastId)
     {
       result.push_back(w);
+      //  Update the last id with the new last id
+      lastId = w->getLastNodeId();
     }
     else if (w->getLastNodeId() == firstId)
     {
       result.push_front(w);
+      //  Update the first id with the new first id
+      firstId = w->getNodeId(0);
     }
     else
     {

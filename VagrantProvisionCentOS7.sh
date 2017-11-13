@@ -19,11 +19,6 @@ echo GROUP: $VMGROUP
 # Centos7 specific file versions
 export STXXL_VERSION=stxxl-1.3.1
 
-# Ancient version of NodeJS
-NODEJS_URL=https://rpm.nodesource.com/pub_0.10/el/7/x86_64
-NODEJS_RPM=nodejs-0.10.48-1nodesource.el7.centos.x86_64.rpm
-NODEJS_DEVEL_RPM=nodejs-devel-0.10.48-1nodesource.el7.centos.x86_64.rpm
-
 export LANG=en_US.UTF-8
 
 cd ~
@@ -35,7 +30,7 @@ sudo yum -y install epel-release >> CentOS_upgrade.txt 2>&1
 
 # add the Postgres repo
 echo "### Add Postgres repo ###" > CentOS_upgrade.txt
-sudo rpm -Uvh http://yum.postgresql.org/9.5/redhat/rhel-7-x86_64/pgdg-centos95-9.5-3.noarch.rpm >> CentOS_upgrade.txt 2>&1
+sudo rpm -Uvh https://download.postgresql.org/pub/repos/yum/9.5/redhat/rhel-7-x86_64/pgdg-centos95-9.5-3.noarch.rpm  >> CentOS_upgrade.txt 2>&1
 
 echo "Updating OS..."
 echo "### Update ###" >> CentOS_upgrade.txt
@@ -43,43 +38,24 @@ sudo yum -q -y update >> CentOS_upgrade.txt 2>&1
 echo "### Upgrade ###" >> CentOS_upgrade.txt
 sudo yum -q -y upgrade >> CentOS_upgrade.txt 2>&1
 
-
-echo "### Setup NTP..."
-sudo yum -q -y install ntp
-sudo chkconfig ntpd on
-#TODO: Better way to do this?
-sudo systemctl stop ntpd
-sudo ntpd -gq
-sudo systemctl start ntpd
-
 # Make sure that we are in ~ before trying to wget & install stuff
 cd ~
 
-echo "### Installing an ancient version of NodeJS"
-if [ -f "./${NODEJS_RPM}" ]; then
-    sudo yum -y install ./$NODEJS_RPM
-else
-    wget --quiet $NODEJS_URL/$NODEJS_RPM
-    sudo yum -y install ./$NODEJS_RPM
-fi
+echo "### Installing the repo for an ancient version of NodeJS"
+curl --silent --location https://rpm.nodesource.com/setup | sudo bash -
 
-echo "### Installing an ancient version of NodeJS development files"
-if [ -f "./${NODEJS_DEVEL_RPM}" ]; then
-    sudo yum -y install ./$NODEJS_DEVEL_RPM
-else
-    wget --quiet $NODEJS_URL/$NODEJS_DEVEL_RPM
-    sudo yum -y install ./$NODEJS_DEVEL_RPM
-fi
+echo "### Installing an ancient version of NodeJS"
+sudo yum install -y \
+  nodejs-0.10.46 \
+  nodejs-devel-0.10.46 \
+  yum-plugin-versionlock
 
 # Now try to lock NodeJS so that the next yum update doesn't remove it.
-echo "### Locking the version of NodeJS"
-sudo yum install -y yum-plugin-versionlock
 sudo yum versionlock nodejs*
 
 
 # install useful and needed packages for working with hootenanny
 echo "### Installing dependencies from repos..."
-sudo localedef -i en_US -f UTF-8 en_US.UTF-8
 sudo yum -y install \
     asciidoc \
     autoconf \
@@ -134,6 +110,7 @@ sudo yum -y install \
     qt-postgresql \
     qtwebkit \
     qtwebkit-devel \
+    redhat-lsb-core \
     swig \
     tex-fonts-hebrew \
     texlive \
@@ -148,12 +125,6 @@ sudo yum -y install \
     xorg-x11-server-Xvfb \
     zip \
 
-
-##### tex* is not optimal. I think this adds too much stuff that we don't need. But, to remove it, we need
-# to crawl through the Hoot documentation dependencies
-# Things to look at:
-#     texlive \
-#     texlive-cyrillic \
 
 echo "##### Temp installs #####"
 
@@ -203,7 +174,6 @@ fi
 
 # We need this big dictionary for text matching. On Ubuntu, this is a package
 if [ ! -f /usr/share/dict/american-english-insane ]; then
-    echo "### Installing american-english-insane dictionary..."
     if [ -f ./american-english-insane.bz2 ] ; then
         sudo bash -c "bzcat ./american-english-insane.bz2 > /usr/share/dict/american-english-insane"
     else
@@ -242,105 +212,16 @@ else
     sed -i '/^export JAVA_HOME=.*/c\export JAVA_HOME=\/usr\/lib\/jvm\/java-1.8.0-openjdk' ~/.bash_profile
 fi
 
-if ! grep --quiet "export HADOOP_HOME" ~/.bash_profile; then
-    echo "Adding Hadoop home to profile..."
-    echo "export HADOOP_HOME=~/hadoop" >> ~/.bash_profile
-    echo "export PATH=\$PATH:\$HADOOP_HOME/bin" >> ~/.bash_profile
-    source ~/.bash_profile
-fi
-
-if ! ruby -v | grep --quiet 2.3.0; then
-    # Ruby via rvm - from rvm.io
-    # Running this twice so that it should not error out
-    gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 || \
-        gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3  2>&1
-
-    curl -sSL https://raw.githubusercontent.com/rvm/rvm/master/binscripts/rvm-installer | bash -s stable
-
-#     source /home/$VMUSER/.rvm/scripts/rvm
-    source ~/.rvm/scripts/rvm
-
-    stdbuf -o L -e L rvm install ruby-2.3
-    rvm --default use 2.3
-
-# Don't install documentation for gems
-cat > ~/.gemrc <<EOT
-  install: --no-document
-  update: --no-document
-EOT
-fi
-
-# gem installs are *very* slow, hence all the checks in place here to facilitate debugging
-gem list --local | grep -q mime-types
-if [ $? -eq 1 ]; then
-   #sudo gem install mime-types -v 2.6.2
-   gem install mime-types
-fi
-gem list --local | grep -q cucumber
-if [ $? -eq 1 ]; then
-   #sudo gem install cucumber
-   gem install cucumber
-fi
-gem list --local | grep -q capybara-webkit
-if [ $? -eq 1 ]; then
-   #sudo gem install capybara-webkit
-   gem install capybara-webkit
-fi
-gem list --local | grep -q selenium-webdriver
-if [ $? -eq 1 ]; then
-   #sudo gem install selenium-webdriver
-   gem install selenium-webdriver
-fi
-gem list --local | grep -q rspec
-if [ $? -eq 1 ]; then
-   #sudo gem install rspec
-   gem install rspec
-fi
-gem list --local | grep -q capybara-screenshot
-if [ $? -eq 1 ]; then
-   #sudo gem install capybara-screenshot
-   gem install capybara-screenshot
-fi
-gem list --local | grep -q selenium-cucumber
-if [ $? -eq 1 ]; then
-   #sudo gem install selenium-cucumber
-   gem install selenium-cucumber
-fi
+# Use RVM to install the desired Ruby version, then install the gems.
+$HOOT_HOME/scripts/ruby/rvm-install.sh
+$HOOT_HOME/scripts/ruby/gem-install.sh
 
 # Make sure that we are in ~ before trying to wget & install stuff
 cd ~
 
-
-if  ! rpm -qa | grep google-chrome-stable; then
-    echo "### Installing Chrome..."
-    if [ ! -f google-chrome-stable_current_x86_64.rpm ]; then
-      wget --quiet https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
-    fi
-    sudo yum -y install ./google-chrome-stable_current_*.rpm
-fi
-
-if [ ! -f bin/chromedriver ]; then
-    echo "### Installing Chromedriver..."
-    mkdir -p ~/bin
-    if [ ! -f chromedriver_linux64.zip ]; then
-#       LATEST_RELEASE="`wget --quiet -O- http://chromedriver.storage.googleapis.com/LATEST_RELEASE`"
-#       wget --quiet http://chromedriver.storage.googleapis.com/$LATEST_RELEASE/chromedriver_linux64.zip
-
-# Errors with the latest release (2.31) wanting glibc v2.18 when only glibc v2.17 is available
-# https://bugs.chromium.org/p/chromedriver/issues/detail?id=1894#c2
-      wget --quiet http://chromedriver.storage.googleapis.com/2.30/chromedriver_linux64.zip
-    fi
-    unzip -d ~/bin chromedriver_linux64.zip
-else
-  LATEST_RELEASE="`wget --quiet -O- http://chromedriver.storage.googleapis.com/LATEST_RELEASE`"
-  if [[ "$(chromedriver --version)" != "ChromeDriver $LATEST_RELEASE."* ]]; then
-    echo "### Updating Chromedriver"
-    rm ~/bin/chromedriver
-    rm ~/chromedriver_linux64.zip
-    wget --quiet http://chromedriver.storage.googleapis.com/$LATEST_RELEASE/chromedriver_linux64.zip
-    unzip -o -d ~/bin chromedriver_linux64.zip
-  fi
-fi
+# Install Google Chrome and ChromeDriver.
+$HOOT_HOME/scripts/chrome/chrome-install.sh
+$HOOT_HOME/scripts/chrome/driver-install.sh
 
 if [ ! -f bin/osmosis ]; then
     echo "### Installing Osmosis"
@@ -421,7 +302,7 @@ fi
 
 if ! mocha --version &>/dev/null; then
     echo "### Installing mocha for plugins test..."
-    sudo npm install --silent -g mocha
+    sudo npm install --silent -g mocha@3.5.3
     # Clean up after the npm install
     sudo rm -rf ~/tmp
 fi
@@ -495,181 +376,11 @@ autovacuum = off
 EOT
 fi
 
-# configure kernel parameters
-
-SYSCTL_CONF=/etc/sysctl.conf
-sudo touch $SYSCTL_CONF
-if ! grep --quiet 1173741824 $SYSCTL_CONF; then
-    sudo cp $SYSCTL_CONF $SYSCTL_CONF.orig
-    echo "Setting kernel.shmmax"
-    sudo sysctl -w kernel.shmmax=1173741824
-    sudo sh -c "echo 'kernel.shmmax=1173741824' >> $SYSCTL_CONF"
-    #                 kernel.shmmax=68719476736
-fi
-if ! grep --quiet 2097152 $SYSCTL_CONF; then
-    echo "Setting kernel.shmall"
-    sudo sysctl -w kernel.shmall=2097152
-    sudo sh -c "echo 'kernel.shmall=2097152' >> $SYSCTL_CONF"
-    #                 kernel.shmall=4294967296
-fi
-
 echo "Restarting postgres"
 sudo systemctl restart postgresql-$PG_VERSION
 
-##### Hadoop #####
-cd ~
-# hoot has only been tested successfully with hadoop 0.20.2, which is not available from public repos,
-# so purposefully not installing hoot from the repos.
-if ! hash hadoop >/dev/null 2>&1 ; then
-  echo "Installing Hadoop..."
-  if [ ! -f hadoop-0.20.2.tar.gz ]; then
-    wget --quiet https://archive.apache.org/dist/hadoop/core/hadoop-0.20.2/hadoop-0.20.2.tar.gz
-  fi
-
-  if [ ! -f ~/.ssh/id_rsa ]; then
-    ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
-    cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
-    ssh-keyscan -H localhost >> ~/.ssh/known_hosts
-  fi
-  chmod 600 ~/.ssh/authorized_keys
-
-  #cd /usr/local
-  cd ~
-  sudo tar -zxf ~/hadoop-0.20.2.tar.gz
-  sudo chown -R $VMUSER:$VMGROUP hadoop-0.20.2
-  sudo ln -s hadoop-0.20.2 hadoop
-  sudo chown -R $VMUSER:$VMGROUP hadoop
-  cd hadoop
-  sudo find . -type d -exec chmod a+rwx {} \;
-  sudo find . -type f -exec chmod a+rw {} \;
-  cd ~
-
-sudo rm -f $HADOOP_HOME/conf/core-site.xml
-sudo bash -c "cat >> $HADOOP_HOME/conf/core-site.xml" <<EOT
-
-<configuration>
-  <property>
-    <name>fs.default.name</name>
-    <value>hdfs://localhost:9000/</value>
-  </property>
-</configuration>
-EOT
-sudo rm -f $HADOOP_HOME/conf/mapred-site.xml
-sudo bash -c "cat >> $HADOOP_HOME/conf/mapred-site.xml" <<EOT
-
-<configuration>
-  <property>
-    <name>mapred.job.tracker</name>
-    <value>localhost:9001</value>
-  </property>
-  <property>
-    <name>mapred.job.tracker.http.address</name>
-    <value>0.0.0.0:50030</value>
-  </property>
-  <property>
-    <name>mapred.task.tracker.http.address</name>
-    <value>0.0.0.0:50060</value>
-  </property>
-  <property>
-    <name>mapred.child.java.opts</name>
-    <value>-Xmx2048m</value>
-  </property>
-  <property>
-    <name>mapred.map.tasks</name>
-    <value>17</value>
-  </property>
-  <property>
-    <name>mapred.tasktracker.map.tasks.maximum</name>
-    <value>4</value>
-  </property>
-  <property>
-    <name>mapred.tasktracker.reduce.tasks.maximum</name>
-    <value>2</value>
-  </property>
-  <property>
-    <name>mapred.reduce.tasks</name>
-    <value>1</value>
-  </property>
-</configuration>
-EOT
-sudo rm -f $HADOOP_HOME/conf/hdfs-site.xml
-sudo bash -c "cat >> $HADOOP_HOME/conf/hdfs-site.xml" <<EOT
-
-<configuration>
-  <property>
-    <name>dfs.secondary.http.address</name>
-    <value>0.0.0.0:50090</value>
-  </property>
-  <property>
-    <name>dfs.datanode.address</name>
-    <value>0.0.0.0:50010</value>
-  </property>
-  <property>
-    <name>dfs.datanode.http.address</name>
-    <value>0.0.0.0:50075</value>
-  </property>
-  <property>
-    <name>dfs.datanode.ipc.address</name>
-    <value>0.0.0.0:50020</value>
-  </property>
-  <property>
-    <name>dfs.http.address</name>
-    <value>0.0.0.0:50070</value>
-  </property>
-  <property>
-    <name>dfs.datanode.https.address</name>
-    <value>0.0.0.0:50475</value>
-  </property>
-  <property>
-    <name>dfs.https.address</name>
-    <value>0.0.0.0:50470</value>
-  </property>
-  <property>
-    <name>dfs.replication</name>
-    <value>2</value>
-  </property>
-  <property>
-    <name>dfs.umaskmode</name>
-    <value>002</value>
-  </property>
-  <property>
-    <name>fs.checkpoint.dir</name>
-    <value>$HADOOP_HOME/dfs/namesecondary</value>
-  </property>
-  <property>
-    <name>dfs.name.dir</name>
-    <value>$HADOOP_HOME/dfs/name</value>
-  </property>
-  <property>
-    <name>dfs.data.dir</name>
-    <value>$HADOOP_HOME/dfs/data</value>
-  </property>
-</configuration>
-EOT
-
-  sudo sed -i.bak "s/# export JAVA_HOME=\/usr\/lib\/j2sdk1.5-sun/export JAVA_HOME=\/usr\/lib\/jvm\/java-1.8.0-openjdk/g" $HADOOP_HOME/conf/hadoop-env.sh
-  sudo sed -i.bak 's/#include <pthread.h>/#include <pthread.h>\n#include <unistd.h>/g' $HADOOP_HOME/src/c++/pipes/impl/HadoopPipes.cc
-
-  sudo mkdir -p $HADOOP_HOME/dfs/name/current
-  # this could perhaps be more strict
-  sudo chmod -R 777 $HADOOP_HOME
-  sudo chmod go-w $HADOOP_HOME/bin $HADOOP_HOME
-  echo 'Y' | hadoop namenode -format
-
-  cd /lib
-  sudo ln -s $JAVA_HOME/jre/lib/amd64/server/libjvm.so libjvm.so
-  cd /lib64
-  sudo ln -s $JAVA_HOME/jre/lib/amd64/server/libjvm.so libjvm.so
-  cd ~
-
-  # test hadoop out
-  #stop-all.sh
-  #start-all.sh
-  #hadoop fs -ls /
-  #hadoop jar ./hadoop-0.20.2-examples.jar pi 2 100
-fi
-##### End Hadoop #####
-
+# Install Hadoop.
+$HOOT_HOME/scripts/hadoop/hadoop-install.sh
 
 # Get ready to build Hoot
 
