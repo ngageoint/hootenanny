@@ -40,6 +40,7 @@ OTHER_FILES = \
 include(../Configure.pri)
 
 LIBS += -L../lib/ -lTgs -ltbs
+LIBS -= -lhdfs
 
 UI_DIR = tmp/ui
 MOC_DIR = tmp/moc
