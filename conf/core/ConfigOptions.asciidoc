@@ -1902,7 +1902,7 @@ on a POI's name.
 * Data Type: bool
 * Default Value: `false`
 
-If true, the POI implicit tag deriver will keep all temporary files.  For debugging only.
+If true, the POI implicit tag generator/deriver will keep all temporary files.  For debugging only.
 
 === poi.implicit.tag.rules.minimum.tag.occurrences.per.word
 
@@ -1926,6 +1926,23 @@ The minimum allowed word length when associating word tokens with OSM tags.
 
 Flat file containing tab separated word key/value pairs, one per line, to ignore as rules
 when deriving implicit tags from POI names.
+
+=== poi.implicit.tag.rules.skip.filtering
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, the POI implicit tag generator will keep node filtering.  Only set to true if the input
+data has been filtered with ImplicitTagEligiblePoiCriterion beforehand.
+
+=== poi.implicit.tag.rules.sort.parallel.count
+
+* Data Type: int
+* Default Value: `-1`
+
+The number of parallel processes used when sorting output.  The default value of -1 uses a count
+equal to the number of processors on the machine.  Valid values are -1 or 1 through the number
+of available processors.
 
 === poi.implicit.tag.rules.tag.ignore.file
 

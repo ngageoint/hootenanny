@@ -39,38 +39,31 @@
 
 // Qt
 #include <QStringBuilder>
+#include <QThread>
 
 namespace hoot
 {
 
 PoiImplicitTagRawRulesGenerator::PoiImplicitTagRawRulesGenerator() :
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
-_tokenizeNames(true)
+_tokenizeNames(true),
+_countFileLineCtr(0),
+_sortParallelCount(QThread::idealThreadCount()),
+_skipFiltering(false)
 {
 }
 
 void PoiImplicitTagRawRulesGenerator::setConfiguration(const Settings& conf)
 {
-  setTokenizeNames(ConfigOptions(conf).getPoiImplicitTagRulesTokenizeNames());
-}
-
-QStringList PoiImplicitTagRawRulesGenerator::_getPoiKvps(const Tags& tags) const
-{
-  LOG_TRACE("Retrieving POI kvps...");
-
-  QStringList poiKvps;
-  for (Tags::const_iterator tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
+  ConfigOptions options = ConfigOptions(conf);
+  setTokenizeNames(options.getPoiImplicitTagRulesTokenizeNames());
+  setSortParallelCount(options.getPoiImplicitTagRulesSortParallelCount());
+  const int idealThreads = QThread::idealThreadCount();
+  LOG_VART(idealThreads);
+  if (_sortParallelCount < 1 || _sortParallelCount > idealThreads)
   {
-    const QString kvp = tagItr.key() % "=" % tagItr.value();
-    LOG_VART(kvp);
-    LOG_VART(OsmSchema::getInstance().getCategories(kvp).intersects(OsmSchemaCategory::poi()));
-    if (kvp != QLatin1String("poi=yes") &&
-        OsmSchema::getInstance().getCategories(kvp).intersects(OsmSchemaCategory::poi()))
-    {
-      poiKvps.append(kvp);
-    }
+    setSortParallelCount(idealThreads);
   }
-  return poiKvps;
 }
 
 void PoiImplicitTagRawRulesGenerator::_updateForNewWord(QString word, const QString kvp)
@@ -106,6 +99,7 @@ void PoiImplicitTagRawRulesGenerator::_updateForNewWord(QString word, const QStr
 
   const QString line = word % QString("\t") % kvp % QString("\n");
   _countFile->write(line.toUtf8());
+  _countFileLineCtr++;
 }
 
 void PoiImplicitTagRawRulesGenerator::generateRules(const QStringList inputs,
@@ -139,9 +133,11 @@ void PoiImplicitTagRawRulesGenerator::generateRules(const QStringList inputs,
     "Generating POI implicit tag rules raw file for inputs: " << inputs <<
     ", translation scripts: " << translationScripts << ".  Writing to output: " << output << "...");
   LOG_VAR(_tokenizeNames);
+  LOG_VAR(_sortParallelCount);
 
   _wordKeysToCounts.clear();
   _wordCaseMappings.clear();
+  _countFileLineCtr = 0;
 
   _countFile.reset(
     new QTemporaryFile(
@@ -160,7 +156,6 @@ void PoiImplicitTagRawRulesGenerator::generateRules(const QStringList inputs,
 
   long poiCount = 0;
   long nodeCount = 0;
-  long elementCount = 0;
   for (int i = 0; i < inputs.size(); i++)
   {
     const QString input = inputs.at(i);
@@ -181,108 +176,89 @@ void PoiImplicitTagRawRulesGenerator::generateRules(const QStringList inputs,
     while (inputStream->hasMoreElements())
     {
       ElementPtr element = inputStream->readNextElement();
-      if (element->getElementType() == ElementType::Node)
-      {
-        LOG_VART(element->getTags());
-        const QStringList names = element->getTags().getNames();
-        LOG_VART(names.size());
-        if (names.size() > 0)
-        {
-          LOG_VART(names);
 
-          const QStringList kvps = _getPoiKvps(element->getTags());
-          LOG_VART(kvps.size());
-          if (!kvps.isEmpty())
-          {
-            for (int i = 0; i < names.size(); i++)
-            {
-              QString name = names.at(i);
-
-              //'=' is used in the map key for kvps, so it needs to be escaped in the word
-              if (name.contains("="))
-              {
-                name = name.replace("=", "%3D");
-              }
-              for (int j = 0; j < kvps.size(); j++)
-              {
-                _updateForNewWord(name, kvps.at(j));
-              }
-
-              if (_tokenizeNames)
-              {
-                const QStringList nameTokens = tokenizer.tokenize(name);
-                LOG_VART(nameTokens.size());
-                for (int j = 0; j < nameTokens.size(); j++)
-                {
-                  QString nameToken = nameTokens.at(j);
-                  //may need to replace more punctuation chars here
-                  nameToken = nameToken.replace(",", "");
-
-                  for (int k = 0; k < kvps.size(); k++)
-                  {
-                    _updateForNewWord(nameToken, kvps.at(k));
-                  }
-
-                }
-              }
-            }
-
-            poiCount++;
-
-            if (poiCount % _statusUpdateInterval == 0)
-            {
-              PROGRESS_INFO(
-                "Parsed " << StringUtils::formatLargeNumber(poiCount) << " eligible POIs.");
-            }
-          }
-        }
-
-        nodeCount++;
-
-        if (nodeCount % (_statusUpdateInterval * 100) == 0)
-        {
-          PROGRESS_INFO(
-            "Parsed " << StringUtils::formatLargeNumber(nodeCount) << " nodes from input.");
-        }
-      }
-      //nodes are parsed before other elements by the pbf reader, so we can get away with this
-      else if (inputIsPbf)
+      if (element->getElementType() != ElementType::Node && inputIsPbf)
       {
         LOG_INFO("Reached end of PBF nodes for input: " << input << ".");
         break;
       }
 
-      elementCount++;
-
-      if (elementCount % (_statusUpdateInterval * 1000) == 0)
+      if (_skipFiltering || _poiFilter.isSatisfied(element))
       {
-        PROGRESS_INFO(
-          "Parsed " << StringUtils::formatLargeNumber(elementCount) << " elements from input.");
+        const QStringList names = element->getTags().getNames();
+        assert(!names.isEmpty());
+        const QStringList kvps = ImplicitTagEligiblePoiCriterion::getPoiKvps(element->getTags());
+        assert(!kvps.isEmpty());
+
+        for (int i = 0; i < names.size(); i++)
+        {
+          QString name = names.at(i);
+
+          //'=' is used in the map key for kvps, so it needs to be escaped in the word
+          if (name.contains("="))
+          {
+            name = name.replace("=", "%3D");
+          }
+          for (int j = 0; j < kvps.size(); j++)
+          {
+            _updateForNewWord(name, kvps.at(j));
+          }
+
+          if (_tokenizeNames)
+          {
+            const QStringList nameTokens = tokenizer.tokenize(name);
+            LOG_VART(nameTokens.size());
+            for (int j = 0; j < nameTokens.size(); j++)
+            {
+              QString nameToken = nameTokens.at(j);
+              //may need to replace more punctuation chars here
+              nameToken = nameToken.replace(",", "");
+
+              for (int k = 0; k < kvps.size(); k++)
+              {
+                _updateForNewWord(nameToken, kvps.at(k));
+              }
+            }
+          }
+        }
+
+        poiCount++;
+
+        if (poiCount % _statusUpdateInterval == 0)
+        {
+          PROGRESS_INFO(
+            "Parsed " << StringUtils::formatLargeNumber(poiCount) << " eligible POIs / " <<
+            StringUtils::formatLargeNumber(nodeCount) << " nodes.");
+        }
       }
+
+      nodeCount++;
     }
     inputReader->finalizePartial();
   }
   _countFile->close();
-  LOG_VARD(_wordCaseMappings.size());
-  _wordCaseMappings.clear();
 
   LOG_INFO(
-    "Parsed " << StringUtils::formatLargeNumber(poiCount) << " POIs from " <<
+    "Parsed " << StringUtils::formatLargeNumber(_wordCaseMappings.size()) << " words from " <<
+    StringUtils::formatLargeNumber(poiCount) << " POIs and " <<
     StringUtils::formatLargeNumber(nodeCount) << " nodes.");
+  LOG_INFO(
+    "Wrote " << StringUtils::formatLargeNumber(_countFileLineCtr) << " lines to count file.");
+  _wordCaseMappings.clear();
 
   _sortByTagOccurrence();
   _removeDuplicatedKeyTypes();
-  _sortByWord();
-
   LOG_INFO(
     "Extracted "  << StringUtils::formatLargeNumber(_wordKeysToCounts.size()) <<
     " word/tag associations.");
   _wordKeysToCounts.clear();
+  _sortByWord();
 }
 
 void PoiImplicitTagRawRulesGenerator::_sortByTagOccurrence()
 {
   LOG_INFO("Sorting output by tag occurrence count...");
+  LOG_VART(_sortParallelCount);
 
   _sortedCountFile.reset(
     new QTemporaryFile(
@@ -306,9 +282,11 @@ void PoiImplicitTagRawRulesGenerator::_sortByTagOccurrence()
   //occurrence counts below the specified threshold, and replaces the space between the prepended
   //count and the word with a tab. - not sure why 1 needs to be subtracted from
   //the min occurrences here, though...
+  //--parallel=4
   const QString cmd =
-    "sort " + _countFile->fileName() + " | uniq -c | sort -n -r | sed -e 's/^ *//;s/ /\t/' > " +
-    _sortedCountFile->fileName();
+    "sort --parallel=" + QString::number(_sortParallelCount) + " " + _countFile->fileName() +
+    " | uniq -c | sort -n -r --parallel=" + QString::number(_sortParallelCount) + " | " +
+    "sed -e 's/^ *//;s/ /\t/' > " + _sortedCountFile->fileName();
   if (std::system(cmd.toStdString().c_str()) != 0)
   {
     throw HootException("Unable to sort file.");
@@ -402,12 +380,13 @@ void PoiImplicitTagRawRulesGenerator::_removeDuplicatedKeyTypes()
 void PoiImplicitTagRawRulesGenerator::_sortByWord()
 {
   LOG_INFO("Sorting output by word...");
+  LOG_VART(_sortParallelCount);
 
   //sort by word, then by tag
   //-d -k2,3 -t$'\t'
   const QString cmd =
-    "sort -t'\t' -k2,2 -k3,3 " + _sortedDedupedCountFile->fileName() + " -o " +
-    _output->fileName();
+    "sort -t'\t' -k2,2 -k3,3 --parallel=" + QString::number(_sortParallelCount) + " " +
+     _sortedDedupedCountFile->fileName() + " -o " + _output->fileName();
   if (std::system(cmd.toStdString().c_str()) != 0)
   {
     throw HootException("Unable to sort input file.");

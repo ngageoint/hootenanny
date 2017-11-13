@@ -30,6 +30,7 @@
 // Hoot
 #include <hoot/rnd/io/ImplicitTagRuleWordPartWriterFactory.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/rnd/filters/ImplicitTagEligiblePoiCriterion.h>
 
 // Qt
 #include <QString>
@@ -66,6 +67,8 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
   void setTokenizeNames(bool tokenizeNames) { _tokenizeNames = tokenizeNames; }
+  void setSortParallelCount(int count) { _sortParallelCount = count; }
+  void setSkipFiltering(bool skip) { _skipFiltering = skip; }
 
 private:
 
@@ -82,6 +85,12 @@ private:
 
   QHash<QString, QString> _wordCaseMappings;
   QHash<QString, long> _wordKeysToCounts;
+
+  long _countFileLineCtr;
+  int _sortParallelCount;
+  bool _skipFiltering;
+
+  ImplicitTagEligiblePoiCriterion _poiFilter;
 
   void _updateForNewWord(QString word, const QString kvp);
   QStringList _getPoiKvps(const Tags& tags) const;

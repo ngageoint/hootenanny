@@ -260,7 +260,7 @@ void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccurrenceThreshold(const QStri
   const int minOccurrencesThreshold)
 {
   LOG_INFO("Removing tags below minimum occurrence threshold of: " +
-           QString::number(minOccurrencesThreshold));
+           QString::number(minOccurrencesThreshold) << "...");
 
   _thresholdedCountFile.reset(
     new QTemporaryFile(
@@ -322,6 +322,11 @@ void PoiImplicitTagRulesDeriver::_applyFiltering(const QString input)
   LOG_DEBUG("Opened input file: " << input);
 
   long lineCount = 0;
+  long wordsTooSmallCount = 0;
+  long ignoredWordsCount = 0;
+  long ignoredTagsCount = 0;
+  long ignoredRuleCount = 0;
+
   while (!inputFile.atEnd())
   {
     const QString line = QString::fromUtf8(inputFile.readLine().constData()).trimmed();
@@ -368,6 +373,7 @@ void PoiImplicitTagRulesDeriver::_applyFiltering(const QString input)
           LOG_TRACE(
             "Skipping word/tag combo on the rule ignore list.  Word: " << word << ", tag: " <<
             kvp << ".");
+          ignoredRuleCount++;
         }
       }
       else
@@ -380,6 +386,7 @@ void PoiImplicitTagRulesDeriver::_applyFiltering(const QString input)
         {
           LOG_TRACE("Skipping tag not on the include list: " << kvp << ".");
         }
+        ignoredTagsCount++;
       }
     }
     else
@@ -390,10 +397,12 @@ void PoiImplicitTagRulesDeriver::_applyFiltering(const QString input)
           "Skipping word: " << word <<
           ", the length of which is less than the minimum allowed word length of: " <<
           _minWordLength);
+        wordsTooSmallCount++;
       }
       else
       {
         LOG_TRACE("Skipping word on the ignore list: " << word << ".");
+        ignoredWordsCount++;
       }
     }
 
@@ -406,6 +415,14 @@ void PoiImplicitTagRulesDeriver::_applyFiltering(const QString input)
   }
   inputFile.close();
 
+  LOG_INFO(
+    "Skipped " << StringUtils::formatLargeNumber(wordsTooSmallCount) << " words that were too small.");
+  LOG_INFO("Ignored " << StringUtils::formatLargeNumber(ignoredWordsCount) << " words.");
+  LOG_INFO("Ignored " << StringUtils::formatLargeNumber(ignoredTagsCount) << " tags.");
+  LOG_INFO("Ignored " << StringUtils::formatLargeNumber(ignoredRuleCount) << " rules.");
+
+  LOG_DEBUG("Writing custom rules...");
+  long ruleCount = 0;
   for (QMap<QString, QString>::const_iterator customRulesItr = _customRulesList.begin();
        customRulesItr != _customRulesList.end(); ++customRulesItr)
   {
@@ -413,7 +430,9 @@ void PoiImplicitTagRulesDeriver::_applyFiltering(const QString input)
       QString::number(999999) % "\t" % customRulesItr.key() % "\t" % customRulesItr.value() % "\n";
     LOG_VART(line);
     _filteredCountFile->write(line.toUtf8());
+    ruleCount++;
   }
+  LOG_INFO("Wrote " << ruleCount << "custom rules.");
 
   _filteredCountFile->close();
 }
