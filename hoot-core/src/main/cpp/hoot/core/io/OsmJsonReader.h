@@ -221,8 +221,6 @@ public:
   static void scrubBigInts(QString &jsonStr);
 
 protected:
-  bool _addBboxTag;
-
   // Items to conform to OsmMapReader ifc
   Status _defaultStatus;
   bool _useDataSourceIds;

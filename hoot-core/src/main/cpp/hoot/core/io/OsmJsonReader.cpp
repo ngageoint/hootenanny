@@ -89,8 +89,7 @@ OsmJsonReader::OsmJsonReader():
   _copyright(""),
   _url(""),
   _isFile(false),
-  _isWeb(false),
-  _addBboxTag(ConfigOptions().getJsonAddBbox())
+  _isWeb(false)
 {
   // Do nothing special
 }

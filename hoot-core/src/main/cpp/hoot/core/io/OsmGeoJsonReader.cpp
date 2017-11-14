@@ -67,6 +67,7 @@ HOOT_FACTORY_REGISTER(OsmMapReader, OsmGeoJsonReader)
 
 OsmGeoJsonReader::OsmGeoJsonReader() : OsmJsonReader()
 {
+  _addBboxTag = ConfigOptions().getJsonAddBbox();
 }
 
 OsmGeoJsonReader::~OsmGeoJsonReader()
@@ -308,12 +309,14 @@ void OsmGeoJsonReader::_parseGeoJsonWay(const string& id, const pt::ptree& prope
   //  Add way to map
   _map->addWay(way);
 
-  const Envelope& bounds = *(way->getEnvelope(_map));
-  way->setTag("hoot:bbox",QString("%1,%2,%3,%4").arg(QString::number(bounds.getMinX(), 'g', 10))
-                                    .arg(QString::number(bounds.getMinY(), 'g', 10))
-                                    .arg(QString::number(bounds.getMaxX(), 'g', 10))
-                                    .arg(QString::number(bounds.getMaxY(), 'g', 10)));
-
+  if (_addBboxTag)
+  {
+    const Envelope& bounds = *(way->getEnvelope(_map));
+    way->setTag("hoot:bbox",QString("%1,%2,%3,%4").arg(QString::number(bounds.getMinX(), 'g', 10))
+                .arg(QString::number(bounds.getMinY(), 'g', 10))
+                .arg(QString::number(bounds.getMaxX(), 'g', 10))
+                .arg(QString::number(bounds.getMaxY(), 'g', 10)));
+  }
 }
 
 void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& properties, const pt::ptree& geometry)
@@ -428,11 +431,14 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
   //  Add relation to map
   _map->addRelation(relation);
 
-  const Envelope& bounds = *(relation->getEnvelope(_map));
-  relation->setTag("hoot:bbox",QString("%1,%2,%3,%4").arg(QString::number(bounds.getMinX(), 'g', 10))
-                                    .arg(QString::number(bounds.getMinY(), 'g', 10))
-                                    .arg(QString::number(bounds.getMaxX(), 'g', 10))
-                                    .arg(QString::number(bounds.getMaxY(), 'g', 10)));
+  if (_addBboxTag)
+  {
+    const Envelope& bounds = *(relation->getEnvelope(_map));
+    relation->setTag("hoot:bbox",QString("%1,%2,%3,%4").arg(QString::number(bounds.getMinX(), 'g', 10))
+                     .arg(QString::number(bounds.getMinY(), 'g', 10))
+                     .arg(QString::number(bounds.getMaxX(), 'g', 10))
+                     .arg(QString::number(bounds.getMaxY(), 'g', 10)));
+  }
 }
 
 void OsmGeoJsonReader::_parseMultiPointGeometry(const boost::property_tree::ptree& geometry, const RelationPtr& relation)
