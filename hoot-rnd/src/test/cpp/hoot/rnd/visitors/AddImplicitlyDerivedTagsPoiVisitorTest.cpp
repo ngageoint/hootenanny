@@ -42,6 +42,9 @@ class AddImplicitlyDerivedTagsPoiVisitorTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(AddImplicitlyDerivedTagsPoiVisitorTest);
   CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST(runDuplicateTagKeyTest);
+  CPPUNIT_TEST(runLessSpecificImplicitTagTest);
+  CPPUNIT_TEST(runMoreSpecificImplicitTagTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -51,19 +54,20 @@ public:
     TestUtils::resetEnvironment();
   }
 
-  static QString outDir() { return "test-output/io/AddImplicitlyDerivedTagsPoiVisitorTest"; }
+  static QString outDir() { return "test-output/visitors/AddImplicitlyDerivedTagsPoiVisitorTest"; }
 
   void runBasicTest()
   {
     QDir().mkpath(outDir());
 
-    //TODO: don't regen the database every time
+    //TODO: don't regen this database every time
     //use this to regenerate the db file
     const QString databaseOutFile =
       outDir() + "/AddImplicitlyDerivedTagsPoiVisitorTest-runBasicTest-rules.sqlite";
     ImplicitTagRulesSqliteRecordWriter writer;
     writer.open(databaseOutFile);
-    writer.write("test-files/io/AddImplicitlyDerivedTagsPoiVisitorTest/ruleWordParts");
+    writer.write(
+      "test-files/visitors/AddImplicitlyDerivedTagsPoiVisitorTest/runBasicTest-ruleWordParts");
     writer.close();
 //    return;
 
@@ -98,49 +102,158 @@ public:
     //const QString databaseInFile =
       //"test-files/io/AddImplicitlyDerivedTagsPoiVisitorTest-runBasicTest-rules.sqlite";
     AddImplicitlyDerivedTagsPoiVisitor uut(/*databaseInFile*/databaseOutFile);
-
     map->visitRw(uut);
 
     HOOT_STR_EQUALS("name = Alshy Burgers\n"
                     "amenity = pub\n",
                     map->getNode(-1)->getTags());
-    HOOT_STR_EQUALS("note = Implicitly derived tags based on: alshy\n"
+    HOOT_STR_EQUALS("hoot:implicitTags:note = Added 1 implicitly derived tag(s) based on: alshy\n"
                     "name = Alshy Clinic\n"
                     "amenity = clinic\n",
                     map->getNode(-2)->getTags());
-    HOOT_STR_EQUALS("note = Implicitly derived tags based on: masjid\n"
+    HOOT_STR_EQUALS("hoot:implicitTags:note = Added 2 implicitly derived tag(s) based on: masjid\n"
                     "poi = yes\n"
                     "religion = muslim\n"
                     "name = masjid\n"
                     "amenity = place_of_worship\n",
                     map->getNode(-3)->getTags());
     HOOT_STR_EQUALS("place = locality\n"
-                    "note = Found multiple possible matches for implicit tags: alwhdt, Mustashfa\n"
+                    "hoot:implicitTags:note = No implicit tags added due to finding multiple possible matches for implicit tags: alwhdt, Mustashfa\n"
                     "name = alwhdt Mustashfa\n",
                     map->getNode(-4)->getTags());
-    HOOT_STR_EQUALS("note = Implicitly derived tags based on: Sihhi, Şiḩḩī\n"
+    HOOT_STR_EQUALS("hoot:implicitTags:note = Added 1 implicitly derived tag(s) based on: Sihhi, Şiḩḩī\n"
                     "alt_name = Şiḩḩī\n"
                     "name = Sihhi\n"
                     "amenity = clinic\n",
                     map->getNode(-5)->getTags());
-    HOOT_STR_EQUALS("note = Implicitly derived tags based on: Sihhi\n"
+    HOOT_STR_EQUALS("hoot:implicitTags:note = Added 1 implicitly derived tag(s) based on: Sihhi\n"
                     "alt_name = Clinic\n"
                     "name = Sihhi\n"
                     "amenity = clinic\n",
                     map->getNode(-6)->getTags());
-    HOOT_STR_EQUALS("note = Implicitly derived tags based on: masjid, mosque\n"
+    HOOT_STR_EQUALS("hoot:implicitTags:note = Added 2 implicitly derived tag(s) based on: masjid, mosque\n"
                     "religion = muslim\n"
                     "name = masjid mosque\n"
                     "amenity = place_of_worship\n",
                     map->getNode(-7)->getTags());
-    HOOT_STR_EQUALS("note = Implicitly derived tags based on: Mustashfa alwhdt\n"
+    HOOT_STR_EQUALS("hoot:implicitTags:note = Added 1 implicitly derived tag(s) based on: Mustashfa alwhdt\n"
                     "name = Mustashfa alwhdt\n"
                     "amenity = hospital\n",
                     map->getNode(-8)->getTags());
-    HOOT_STR_EQUALS("note = Implicitly derived tags based on: alwhdt\n"
+    HOOT_STR_EQUALS("hoot:implicitTags:note = Added 1 implicitly derived tag(s) based on: alwhdt\n"
                     "name = alwhdt\n"
                     "amenity = clinic\n",
                     map->getNode(-9)->getTags());
+  }
+
+  void runDuplicateTagKeyTest()
+  {
+    QDir().mkpath(outDir());
+
+    //TODO: don't regen this database every time
+    //use this to regenerate the db file
+    const QString databaseOutFile =
+      outDir() + "/AddImplicitlyDerivedTagsPoiVisitorTest-runDuplicateTagKeyTest-rules.sqlite";
+    ImplicitTagRulesSqliteRecordWriter writer;
+    writer.open(databaseOutFile);
+    writer.write(
+      "test-files/visitors/AddImplicitlyDerivedTagsPoiVisitorTest/runDuplicateTagKeyTest-ruleWordParts");
+    writer.close();
+  //    return;
+
+    OsmMapPtr map(new OsmMap());
+    NodePtr node(new Node(Status::Unknown1, 1, geos::geom::Coordinate(1, 1), 15.0));
+    //Even though this node has school in the name and could likely be a school, since it already
+    //is tagged at a bank, we don't want to risk introducing a false positive tag...so don't add
+    //amenity=school to it.
+    node->getTags()["name"] = "school";
+    node->getTags()["amenity"] = "bank";
+    map->addNode(node);
+
+    //const QString databaseInFile =
+      //"test-files/io/AddImplicitlyDerivedTagsPoiVisitorTest-runBasicTest-rules.sqlite";
+    AddImplicitlyDerivedTagsPoiVisitor uut(/*databaseInFile*/databaseOutFile);
+    map->visitRw(uut);
+
+    CPPUNIT_ASSERT_EQUAL(2, map->getNode(1)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(
+      QString("school").toStdString(), map->getNode(1)->getTags()["name"].toStdString());
+    CPPUNIT_ASSERT_EQUAL(
+      QString("bank").toStdString(), map->getNode(1)->getTags()["amenity"].toStdString());
+    CPPUNIT_ASSERT(!map->getNode(1)->getTags().contains("hoot:implicitTags:note"));
+  }
+
+  void runLessSpecificImplicitTagTest()
+  {
+    QDir().mkpath(outDir());
+
+    //TODO: don't regen this database every time
+    //use this to regenerate the db file
+    const QString databaseOutFile =
+      outDir() + "/AddImplicitlyDerivedTagsPoiVisitorTest-runLessSpecificImplicitTagTest-rules.sqlite";
+    ImplicitTagRulesSqliteRecordWriter writer;
+    writer.open(databaseOutFile);
+    writer.write(
+      "test-files/visitors/AddImplicitlyDerivedTagsPoiVisitorTest/runLessSpecificImplicitTagTest-ruleWordParts");
+    writer.close();
+  //    return;
+
+    OsmMapPtr map(new OsmMap());
+    NodePtr node(new Node(Status::Unknown1, 1, geos::geom::Coordinate(1, 1), 15.0));
+    //This node has a more specific amenity tag than the one in the rules file, so the node should
+    //keep the amenity tag it starts with.
+    node->getTags()["name"] = "hall";
+    node->getTags()["amenity"] = "public_hall";
+    map->addNode(node);
+
+    //const QString databaseInFile =
+      //"test-files/io/AddImplicitlyDerivedTagsPoiVisitorTest-runLessSpecificImplicitTagTest-rules.sqlite";
+    AddImplicitlyDerivedTagsPoiVisitor uut(/*databaseInFile*/databaseOutFile);
+    map->visitRw(uut);
+
+    CPPUNIT_ASSERT_EQUAL(2, map->getNode(1)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(
+      QString("hall").toStdString(), map->getNode(1)->getTags()["name"].toStdString());
+    CPPUNIT_ASSERT_EQUAL(
+      QString("public_hall").toStdString(), map->getNode(1)->getTags()["amenity"].toStdString());
+    CPPUNIT_ASSERT(!map->getNode(1)->getTags().contains("hoot:implicitTags:note"));
+  }
+
+  void runMoreSpecificImplicitTagTest()
+  {
+    QDir().mkpath(outDir());
+
+    //TODO: don't regen this database every time
+    //use this to regenerate the db file
+    const QString databaseOutFile =
+      outDir() + "/AddImplicitlyDerivedTagsPoiVisitorTest-runMoreSpecificImplicitTagTest-rules.sqlite";
+    ImplicitTagRulesSqliteRecordWriter writer;
+    writer.open(databaseOutFile);
+    writer.write(
+      "test-files/visitors/AddImplicitlyDerivedTagsPoiVisitorTest/runMoreSpecificImplicitTagTest-ruleWordParts");
+    writer.close();
+  //    return;
+
+    OsmMapPtr map(new OsmMap());
+    NodePtr node(new Node(Status::Unknown1, 1, geos::geom::Coordinate(1, 1), 15.0));
+    //The amenity tag referenced in the rules file is more specific than the one this node has, so
+    //the node's amenity tag should be replaced by the one in the rules file.
+    node->getTags()["name"] = "hall";
+    node->getTags()["amenity"] = "hall";
+    map->addNode(node);
+
+    //const QString databaseInFile =
+      //"test-files/io/AddImplicitlyDerivedTagsPoiVisitorTest-runMoreSpecificImplicitTagTest-rules.sqlite";
+    AddImplicitlyDerivedTagsPoiVisitor uut(/*databaseInFile*/databaseOutFile);
+    map->visitRw(uut);
+    LOG_VART(map->getNode(1)->getTags());
+
+    CPPUNIT_ASSERT_EQUAL(3, map->getNode(1)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(
+      QString("hall").toStdString(), map->getNode(1)->getTags()["name"].toStdString());
+    CPPUNIT_ASSERT_EQUAL(
+      QString("public_hall").toStdString(), map->getNode(1)->getTags()["amenity"].toStdString());
+    CPPUNIT_ASSERT(map->getNode(1)->getTags().contains("hoot:implicitTags:note"));
   }
 };
 
