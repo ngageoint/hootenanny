@@ -44,16 +44,12 @@ Factory::Factory()
 
 Factory::~Factory()
 {
-  for (std::map<std::string, ObjectCreator*>::const_iterator it = _creators.begin();
-    it != _creators.end(); ++it)
-  {
-    delete it->second;
-  }
 }
 
-void Factory::registerCreator(ObjectCreator* oc)
+void Factory::registerCreator(boost::shared_ptr<ObjectCreator> oc)
 {
   QMutexLocker locker(&_m);
+
   //cout << "Registering: " << oc->getName() << endl;
   if (_creators.find(oc->getName()) == _creators.end())
   {
