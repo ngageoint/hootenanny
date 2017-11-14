@@ -13,7 +13,7 @@ fi
 
 REF_DIR=test-files/cmd/quick/DerivePoiImplicitTagRulesCmdTest
 OUTPUT_DIR=test-output/cmd/quick/DerivePoiImplicitTagRulesCmdTest
-INPUT_DIR=test-files/io/PoiImplicitTagRulesDeriverTest
+INPUT_DIR=test-files/schema/PoiImplicitTagRulesDeriverTest
 
 rm -rf $OUTPUT_DIR
 mkdir -p $OUTPUT_DIR

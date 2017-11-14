@@ -70,6 +70,8 @@ public:
   void setSortParallelCount(int count) { _sortParallelCount = count; }
   void setSkipFiltering(bool skip) { _skipFiltering = skip; }
   void setSkipTranslation(bool skip) { _skipTranslation = skip; }
+  void setKeepTempFiles(bool keep) { _keepTempFiles = keep; }
+  void setTempFileDir(QString dir) { _tempFileDir = dir; }
 
 private:
 
@@ -91,6 +93,8 @@ private:
   int _sortParallelCount;
   bool _skipFiltering;
   bool _skipTranslation;
+  bool _keepTempFiles;
+  QString _tempFileDir;
 
   ImplicitTagEligiblePoiCriterion _poiFilter;
 
@@ -99,6 +103,7 @@ private:
 
   void _sortByTagOccurrence();
   void _removeDuplicatedKeyTypes();
+  void _removeDuplicatedKeyTypesOriginal();
   void _sortByWord();
 };
 

@@ -31,6 +31,7 @@
 
 // Qt
 #include <QDir>
+#include <QTemporaryFile>
 
 namespace hoot
 {
@@ -39,7 +40,8 @@ class PoiImplicitTagRawRulesGeneratorTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(PoiImplicitTagRawRulesGeneratorTest);
   CPPUNIT_TEST(runBasicTest);
-  //CPPUNIT_TEST(runMultipleInputsTest);
+  CPPUNIT_TEST(runMultipleInputsTest);
+  CPPUNIT_TEST(runDuplicateWordKeyCountTest);
   //TODO: fix; for some strange reason, even though the output is identical to the gold file,
   //HOOT_FILE_EQUALS says it isn't
   //CPPUNIT_TEST(runNameCaseTest);
@@ -52,8 +54,8 @@ class PoiImplicitTagRawRulesGeneratorTest : public CppUnit::TestFixture
 
 public:
 
-  static QString inDir() { return "test-files/io/PoiImplicitTagRawRulesGeneratorTest"; }
-  static QString outDir() { return "test-output/io/PoiImplicitTagRawRulesGeneratorTest"; }
+  static QString inDir() { return "test-files/schema/PoiImplicitTagRawRulesGeneratorTest"; }
+  static QString outDir() { return "test-output/schema/PoiImplicitTagRawRulesGeneratorTest"; }
 
   void runBasicTest()
   {
@@ -68,6 +70,7 @@ public:
 
     PoiImplicitTagRawRulesGenerator rulesGenerator;
     rulesGenerator.setConfiguration(conf());
+    rulesGenerator.setKeepTempFiles(false); //set true for debugging
     rulesGenerator.generateRules(inputs, translationScripts, outputFile);
 
     HOOT_FILE_EQUALS(
@@ -91,11 +94,50 @@ public:
 
     PoiImplicitTagRawRulesGenerator rulesGenerator;
     rulesGenerator.setConfiguration(conf());
+    rulesGenerator.setKeepTempFiles(false); //set true for debugging
     rulesGenerator.generateRules(inputs, translationScripts, outputFile);
 
     HOOT_FILE_EQUALS(
       inDir() + "/PoiImplicitTagRawRulesGeneratorTest-runMultipleInputsTest.implicitTagRules",
       outputFile);
+  }
+
+  void runDuplicateWordKeyCountTest()
+  {
+    DisableLog dl;
+    QDir().mkpath(outDir());
+
+    boost::shared_ptr<QTemporaryFile> sortedCountFile(
+      new QTemporaryFile(
+        outDir() +
+        "/PoiImplicitTagRawRulesGeneratorTest-runDuplicateWordKeyCountTest-sortedCountsInput-XXXXXX"));
+    sortedCountFile->setAutoRemove(false);
+    if (!sortedCountFile->open())
+    {
+      throw HootException(
+        QObject::tr("Error opening %1 for writing.").arg(sortedCountFile->fileName()));
+    }
+    QString line = "5\thall\tamenity=hall\n";
+    sortedCountFile->write(line.toUtf8());
+    line = "5\thall\tamenity=public_hall\n";
+    sortedCountFile->write(line.toUtf8());
+    line = "4\tschool\tamenity=school\n";
+    sortedCountFile->write(line.toUtf8());
+    line = "4\tschool\tbuilding=school\n";
+    sortedCountFile->write(line.toUtf8());
+    sortedCountFile->close();
+    sortedCountFile->open();
+
+    PoiImplicitTagRawRulesGenerator rulesGenerator;
+    rulesGenerator.setConfiguration(conf());
+    rulesGenerator.setTempFileDir(outDir());
+    rulesGenerator._sortedCountFile = sortedCountFile;
+    rulesGenerator.setKeepTempFiles(true);
+    rulesGenerator._removeDuplicatedKeyTypes();
+
+    HOOT_FILE_EQUALS(
+      inDir() + "/PoiImplicitTagRawRulesGeneratorTest-runDuplicateWordKeyCountTest-deduped-output",
+      rulesGenerator._sortedDedupedCountFile->fileName());
   }
 
   void runNameCaseTest()
@@ -116,6 +158,7 @@ public:
 
     PoiImplicitTagRawRulesGenerator rulesGenerator;
     rulesGenerator.setConfiguration(conf());
+    rulesGenerator.setKeepTempFiles(false); //set true for debugging
     rulesGenerator.generateRules(inputs, translationScripts, outputFile);
 
     HOOT_FILE_EQUALS(

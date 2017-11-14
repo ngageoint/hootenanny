@@ -283,12 +283,8 @@ void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccurrenceThreshold(const QStri
     LOG_WARN("Keeping temp file: " << _thresholdedCountFile->fileName());
   }
 
-  //TODO: update comment
-  //This counts each unique line occurrence, sorts by decreasing occurrence count (necessary for
-  //next step which removes duplicate tag keys associated with the same word), removes lines with
-  //occurrence counts below the specified threshold, and replaces the space between the prepended
-  //count and the word with a tab. - not sure why 1 needs to be subtracted from
-  //the min occurrences here, though...
+  //This removes lines with occurrence counts below the specified threshold - not sure why 1 needs
+  //to be subtracted from the min occurrences here, though...
   const QString cmd =
     "cat " + input + " | awk -v limit=" + QString::number(minOccurrencesThreshold - 1) +
     " '$1 > limit{print}' > " + _thresholdedCountFile->fileName();

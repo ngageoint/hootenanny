@@ -52,8 +52,8 @@ class PoiImplicitTagRulesDeriverTest : public CppUnit::TestFixture
 
 public:
 
-  static QString inDir() { return "test-files/io/PoiImplicitTagRulesDeriverTest"; }
-  static QString outDir() { return "test-output/io/PoiImplicitTagRulesDeriverTest"; }
+  static QString inDir() { return "test-files/schema/PoiImplicitTagRulesDeriverTest"; }
+  static QString outDir() { return "test-output/schema/PoiImplicitTagRulesDeriverTest"; }
 
   void runBasicTest()
   {
@@ -71,7 +71,6 @@ public:
 
     PoiImplicitTagRulesDeriver rulesDeriver;
     rulesDeriver.setConfiguration(conf());
-    //rulesDeriver.setWordIgnoreFile("");
     rulesDeriver.deriveRules(input, outputs);
 
     HOOT_FILE_EQUALS(inDir() + "/PoiImplicitTagRulesDeriverTest-runBasicTest.json", jsonOutputFile);
@@ -98,7 +97,6 @@ public:
 
     PoiImplicitTagRulesDeriver rulesDeriver;
     rulesDeriver.setConfiguration(conf());
-    //rulesDeriver.setWordIgnoreFile("");
     rulesDeriver.setTagFile(inDir() + "/PoiImplicitTagRulesDeriverTest-tag-list");
     rulesDeriver.deriveRules(input, outputs);
 
@@ -127,7 +125,6 @@ public:
 
     PoiImplicitTagRulesDeriver rulesDeriver;
     rulesDeriver.setConfiguration(conf());
-    //rulesDeriver.setWordIgnoreFile("");
     rulesDeriver.setMinTagOccurrencesPerWord(4);
     rulesDeriver.deriveRules(input, outputs);
 
@@ -157,7 +154,6 @@ public:
 
     PoiImplicitTagRulesDeriver rulesDeriver;
     rulesDeriver.setConfiguration(conf());
-    //rulesDeriver.setWordIgnoreFile("");
     rulesDeriver.setMinWordLength(10);
     rulesDeriver.deriveRules(input, outputs);
 
@@ -187,7 +183,6 @@ public:
 
     PoiImplicitTagRulesDeriver rulesDeriver;
     rulesDeriver.setConfiguration(conf());
-    //rulesDeriver.setWordIgnoreFile("");
     rulesDeriver.setTagIgnoreFile(inDir() + "/PoiImplicitTagRulesDeriverTest-tag-ignore-list");
     rulesDeriver.deriveRules(input, outputs);
 
@@ -246,7 +241,6 @@ public:
 
     PoiImplicitTagRulesDeriver rulesDeriver;
     rulesDeriver.setConfiguration(conf());
-    //rulesDeriver.setWordIgnoreFile("");
     rulesDeriver.setRuleIgnoreFile(inDir() + "/PoiImplicitTagRulesDeriverTest-rule-ignore-list");
     rulesDeriver.deriveRules(input, outputs);
 
