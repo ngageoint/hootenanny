@@ -49,7 +49,8 @@ _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
 _tokenizeNames(true),
 _countFileLineCtr(0),
 _sortParallelCount(QThread::idealThreadCount()),
-_skipFiltering(false)
+_skipFiltering(false),
+_skipTranslation(false)
 {
 }
 
@@ -64,6 +65,8 @@ void PoiImplicitTagRawRulesGenerator::setConfiguration(const Settings& conf)
   {
     setSortParallelCount(idealThreads);
   }
+  setSkipFiltering(options.getPoiImplicitTagRulesSkipFiltering());
+  setSkipTranslation(options.getPoiImplicitTagRulesSkipTranslation());
 }
 
 void PoiImplicitTagRawRulesGenerator::_updateForNewWord(QString word, const QString kvp)
@@ -134,6 +137,8 @@ void PoiImplicitTagRawRulesGenerator::generateRules(const QStringList inputs,
     ", translation scripts: " << translationScripts << ".  Writing to output: " << output << "...");
   LOG_VAR(_tokenizeNames);
   LOG_VAR(_sortParallelCount);
+  LOG_VAR(_skipFiltering);
+  LOG_VAR(_skipTranslation);
 
   _wordKeysToCounts.clear();
   _wordCaseMappings.clear();
@@ -168,9 +173,12 @@ void PoiImplicitTagRawRulesGenerator::generateRules(const QStringList inputs,
     inputReader->open(inputs.at(i));
     boost::shared_ptr<ElementInputStream> inputStream =
       boost::dynamic_pointer_cast<ElementInputStream>(inputReader);
-    boost::shared_ptr<TranslationVisitor> translationVisitor(new TranslationVisitor());
-    translationVisitor->setPath(translationScripts.at(i));
-    inputStream.reset(new ElementVisitorInputStream(inputReader, translationVisitor));
+    if (!_skipTranslation)
+    {
+      boost::shared_ptr<TranslationVisitor> translationVisitor(new TranslationVisitor());
+      translationVisitor->setPath(translationScripts.at(i));
+      inputStream.reset(new ElementVisitorInputStream(inputReader, translationVisitor));
+    }
 
     StringTokenizer tokenizer;
     while (inputStream->hasMoreElements())
@@ -183,12 +191,21 @@ void PoiImplicitTagRawRulesGenerator::generateRules(const QStringList inputs,
         break;
       }
 
+      //TODO: skip filtering may go away
       if (_skipFiltering || _poiFilter.isSatisfied(element))
       {
         const QStringList names = element->getTags().getNames();
         assert(!names.isEmpty());
+        if (names.isEmpty())
+        {
+          throw HootException("Names empty.");
+        }
         const QStringList kvps = ImplicitTagEligiblePoiCriterion::getPoiKvps(element->getTags());
         assert(!kvps.isEmpty());
+        if (kvps.isEmpty())
+        {
+          throw HootException("POI kvps empty.");
+        }
 
         for (int i = 0; i < names.size(); i++)
         {

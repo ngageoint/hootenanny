@@ -215,10 +215,15 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QString input, const QStringL
   LOG_VAR(_minTagOccurrencesPerWord);
   LOG_VAR(_minWordLength);
   LOG_VAR(_wordIgnoreFile);
+  LOG_VAR(_wordIgnoreList.size());
   LOG_VAR(_tagIgnoreFile);
+  LOG_VAR(_tagIgnoreList.size());
   LOG_VAR(_tagFile);
+  LOG_VAR(_tagsAllowList.size());
   LOG_VAR(_customRuleFile);
+  LOG_VAR(_customRulesList.size());
   LOG_VAR(_ruleIgnoreFile);
+  LOG_VAR(_rulesIgnoreList.size());
 
   _readIgnoreLists();
   _readAllowLists();
@@ -407,16 +412,17 @@ void PoiImplicitTagRulesDeriver::_applyFiltering(const QString input)
     }
 
     lineCount++;
-    if (lineCount % _statusUpdateInterval == 0)
+    if (lineCount % (_statusUpdateInterval * 100) == 0)
     {
       PROGRESS_INFO(
-        "Filtered " << StringUtils::formatLargeNumber(lineCount) << " elements from input.");
+        "Filtered " << StringUtils::formatLargeNumber(lineCount) << " count file lines from input.");
     }
   }
   inputFile.close();
 
   LOG_INFO(
-    "Skipped " << StringUtils::formatLargeNumber(wordsTooSmallCount) << " words that were too small.");
+    "Skipped " << StringUtils::formatLargeNumber(wordsTooSmallCount) <<
+    " words that were too small.");
   LOG_INFO("Ignored " << StringUtils::formatLargeNumber(ignoredWordsCount) << " words.");
   LOG_INFO("Ignored " << StringUtils::formatLargeNumber(ignoredTagsCount) << " tags.");
   LOG_INFO("Ignored " << StringUtils::formatLargeNumber(ignoredRuleCount) << " rules.");
@@ -432,7 +438,7 @@ void PoiImplicitTagRulesDeriver::_applyFiltering(const QString input)
     _filteredCountFile->write(line.toUtf8());
     ruleCount++;
   }
-  LOG_INFO("Wrote " << ruleCount << "custom rules.");
+  LOG_INFO("Wrote " << ruleCount << " custom rules.");
 
   _filteredCountFile->close();
 }

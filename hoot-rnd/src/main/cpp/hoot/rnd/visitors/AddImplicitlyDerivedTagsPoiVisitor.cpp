@@ -41,10 +41,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, AddImplicitlyDerivedTagsPoiVisitor)
 
-long _numPoisModified;
-long _numTagsAdded;
-long _numPoisInvolvedInMultipleRules;
-
 AddImplicitlyDerivedTagsPoiVisitor::AddImplicitlyDerivedTagsPoiVisitor() :
 _tokenizeNames(ConfigOptions().getPoiImplicitTagRulesTokenizeNames()),
 _numPoisModified(0),

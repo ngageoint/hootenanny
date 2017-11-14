@@ -185,8 +185,15 @@ void ImplicitTagRulesSqliteRecordWriter::write(const QString inputUrl)
 //      {
         //_words.insert(word);
         wordId = _insertWord(word);
-        _wordsToWordIds[word] = wordId;
-        LOG_TRACE("Created new word with ID: " << wordId);
+        if (wordId == -1)
+        {
+          LOG_WARN("Unable to insert word: " << word);
+        }
+        else
+        {
+          _wordsToWordIds[word] = wordId;
+          LOG_TRACE("Created new word with ID: " << wordId);
+        }
       //}
     }
     else
@@ -206,8 +213,16 @@ void ImplicitTagRulesSqliteRecordWriter::write(const QString inputUrl)
       LOG_TRACE("Found existing tag with ID: " << tagId);
     }
 
-    _insertRuleWordPart(wordId, tagId, tagOccurrenceCount);
-    ruleWordPartCtr++;
+    if (wordId != -1)
+    {
+      _insertRuleWordPart(wordId, tagId, tagOccurrenceCount);
+      ruleWordPartCtr++;
+    }
+    else
+    {
+      LOG_WARN(
+        "Skipping inserting rule word part for word: " << word << " and tag: " << kvp << "...");
+    }
 
     if (ruleWordPartCtr % _statusUpdateInterval == 0)
     {
@@ -227,19 +242,25 @@ void ImplicitTagRulesSqliteRecordWriter::write(const QString inputUrl)
     " word/tag associations to implicit tag rules database: " << _db.databaseName());
   if (duplicatedWordCount > 0)
   {
-    LOG_ERROR("Found " << duplicatedWordCount << " duplicated words.");
+    LOG_WARN("Found " << duplicatedWordCount << " duplicated words.");
   }
 
+  LOG_DEBUG("Clearing word/tags cache...");
   _wordsToWordIds.clear();
   _tagsToTagIds.clear();
   //_words.clear();
 
   LOG_INFO("Creating database indexes...");
+  LOG_DEBUG("Creating tags index...");
   DbUtils::execNoPrepare(_db, "CREATE UNIQUE INDEX tag_idx ON tags (kvp)");
   //oddly, making the id indexes unique changes test results
+  LOG_DEBUG("Creating word id index...");
   DbUtils::execNoPrepare(_db, "CREATE INDEX word_id_idx ON rules (word_id)");
+  LOG_DEBUG("Creating tag id index...");
   DbUtils::execNoPrepare(_db, "CREATE INDEX tag_id_idx ON rules (tag_id)");
+  LOG_DEBUG("Creating tag count index...");
   DbUtils::execNoPrepare(_db, "CREATE INDEX tag_count_idx ON rules (tag_count)");
+  LOG_DEBUG("Creating words index...");
   DbUtils::execNoPrepare(_db, "CREATE UNIQUE INDEX word_idx ON words (word)");
 
   DbUtils::execNoPrepare(_db, "COMMIT");
@@ -252,9 +273,16 @@ long ImplicitTagRulesSqliteRecordWriter::_insertWord(const QString word)
   _insertWordQuery.bindValue(":word", word);
   if (!_insertWordQuery.exec())
   {
-    QString err = QString("Error executing query: %1 (%2)").arg(_insertWordQuery.executedQuery()).
-        arg(_insertWordQuery.lastError().text());
-    throw HootException(err);
+    QString err =
+      QString("Error inserting word: %1; query: %2 (%3)")
+        .arg(word)
+        .arg(_insertWordQuery.executedQuery())
+        .arg(_insertWordQuery.lastError().text());
+    //Strange...getting a duplicate word here Абранка for waterway=river.  Passing
+    //on the dupe for now until it apparent what's going on.
+    //throw HootException(err);
+    LOG_WARN(err);
+    return -1;
   }
 
   if (!_getLastWordIdQuery.exec())

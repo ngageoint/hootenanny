@@ -11,6 +11,7 @@ Given input features, creates a rules file which can be used to derive a POI imp
 
 The following additional configuration parameters apply to raw rule generation:
 
+* poi.implicit.tag.rules.skip.filtering - If set to true, assumes the input data has been pre-filtered and skips input filtering.
 * poi.implicit.tag.rules.sort.parallel.count - The number of concurrent threads used to sort output files.
 * poi.implicit.tag.rules.tokenize.names - If true, the POI implicit tags will be derived/added using tokenized names.
 
@@ -26,11 +27,14 @@ generate-raw-poi-implicit-tag-rules (inputs) (translations) (output)
 hoot generate-raw-poi-implicit-tag-rules "myInput.osm.pbf;myInput.geonames" "translations/OSM_Ingest.js;translations/GeoNames.js" myRules.implicitTagRules
 --------------------------------------
 
-NOTE: If you will be repeatedly generating tag rules files as part of experimentation, you should pre-filter your input datasets to 
-POIs that are eligible to have implicit tags derived from them to save processing time.
+NOTE: If you will be repeatedly generating tag rules files as part of implicit tag rule tweaking, you should pre-filter your input datasets to 
+POIs that are eligible to have implicit tags derived from them to save processing time.  The pre-filtered input datasets must be translated if
+in a format other than OSM.
 
 An example:
 
 ---------------------------
-hoot convert -D convert.ops="hoot::ImplicitTagEligiblePoiCriterion" myInput myOutput
+hoot convert -D convert.ops="hoot::TranslationVisitor;hoot::ImplicitTagEligiblePoiCriterion" -D translation.script="translations/GeoNames.js" myInput.geonames myOutput.geonames
+
+hoot convert -D convert.ops="hoot::ImplicitTagEligiblePoiCriterion" myInput.osm.pbf myOutput.osm.pbf
 ----------------------------

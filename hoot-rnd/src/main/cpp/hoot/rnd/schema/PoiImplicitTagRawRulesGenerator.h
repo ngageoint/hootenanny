@@ -69,6 +69,7 @@ public:
   void setTokenizeNames(bool tokenizeNames) { _tokenizeNames = tokenizeNames; }
   void setSortParallelCount(int count) { _sortParallelCount = count; }
   void setSkipFiltering(bool skip) { _skipFiltering = skip; }
+  void setSkipTranslation(bool skip) { _skipTranslation = skip; }
 
 private:
 
@@ -89,6 +90,7 @@ private:
   long _countFileLineCtr;
   int _sortParallelCount;
   bool _skipFiltering;
+  bool _skipTranslation;
 
   ImplicitTagEligiblePoiCriterion _poiFilter;
 
