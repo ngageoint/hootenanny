@@ -164,7 +164,7 @@ public:
    * @param baseClass If set to true, then the object creator may implement the base class. This is
    *  very unusual, but accidentally forgetting to implement "string className()" is quite common.
    */
-  void registerCreator(ObjectCreator* oc, bool baseClass = false);
+  void registerCreator(boost::shared_ptr<ObjectCreator> oc, bool baseClass = false);
 
 private:
   Factory();
@@ -173,7 +173,7 @@ private:
 
   QMutex _mutex;
 
-  std::map<std::string, ObjectCreator*> _creators;
+  std::map<std::string, boost::shared_ptr<ObjectCreator> > _creators;
 };
 
 template<class Base, class T>
@@ -184,8 +184,8 @@ public:
    */
   AutoRegister(std::string baseName, std::string name, bool baseClass = false)
   {
-    Factory::getInstance().registerCreator(
-      new ObjectCreatorTemplate<Base, T>(baseName, name), baseClass);
+    Factory::getInstance().registerCreator(boost::shared_ptr<ObjectCreatorTemplate<Base, T> >(
+      new ObjectCreatorTemplate<Base, T>(baseName, name)), baseClass);
   }
 };
 

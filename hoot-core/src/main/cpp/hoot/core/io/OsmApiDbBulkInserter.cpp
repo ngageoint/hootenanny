@@ -1026,7 +1026,7 @@ void OsmApiDbBulkInserter::_reset()
 }
 
 unsigned long OsmApiDbBulkInserter::_establishIdMapping(const ElementId& sourceId)
-{
+{  
   unsigned long dbIdentifier;
 
   switch (sourceId.getType().getEnum())
@@ -1040,7 +1040,9 @@ unsigned long OsmApiDbBulkInserter::_establishIdMapping(const ElementId& sourceI
       }
       else
       {
-        dbIdentifier = abs(sourceId.getId());
+        //be sure to use the std version of abs here, b/c the global one doesn't handle 8 byte
+        //long as expected
+        dbIdentifier = std::abs(sourceId.getId());
         if (dbIdentifier > _idMappings.currentNodeId)
         {
           _idMappings.currentNodeId = dbIdentifier;
@@ -1057,7 +1059,7 @@ unsigned long OsmApiDbBulkInserter::_establishIdMapping(const ElementId& sourceI
       }
       else
       {
-        dbIdentifier = abs(sourceId.getId());
+        dbIdentifier = std::abs(sourceId.getId());
         if (dbIdentifier > _idMappings.currentWayId)
         {
           _idMappings.currentWayId = dbIdentifier;
@@ -1074,7 +1076,7 @@ unsigned long OsmApiDbBulkInserter::_establishIdMapping(const ElementId& sourceI
       }
       else
       {
-        dbIdentifier = abs(sourceId.getId());
+        dbIdentifier = std::abs(sourceId.getId());
         if (dbIdentifier > _idMappings.currentRelationId)
         {
           _idMappings.currentRelationId = dbIdentifier;
@@ -1156,7 +1158,7 @@ void OsmApiDbBulkInserter::_writeWayNodes(const unsigned long dbWayId,
     unsigned long wayNodeIdVal;
     if (!_validateData)
     {
-      wayNodeIdVal = abs(*it);
+      wayNodeIdVal = std::abs(*it);
     }
     else if (_idMappings.nodeIdMap->contains(*it))
     {
@@ -1244,7 +1246,7 @@ void OsmApiDbBulkInserter::_writeRelationMembers(const ConstRelationPtr& relatio
 
     if (!_validateData)
     {
-      unsigned long memberIdVal = abs(memberElementId.getId());
+      unsigned long memberIdVal = std::abs(memberElementId.getId());
       _writeRelationMember(dbRelationId, *it, memberIdVal, memberSequenceIndex);
     }
     else if (knownElementMap && knownElementMap->contains(memberElementId.getId()))

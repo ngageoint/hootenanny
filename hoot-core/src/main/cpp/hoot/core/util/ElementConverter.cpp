@@ -308,8 +308,11 @@ geos::geom::GeometryTypeId ElementConverter::getGeometryType(const ConstElementP
           return GEOS_MULTIPOLYGON;
         else if (OsmSchema::getInstance().isLinear(*r))
           return GEOS_MULTILINESTRING;
+        // an empty geometry, pass back a collection
         else if (r->getMembers().size() == 0 || OsmSchema::getInstance().isCollection(*r))
-          // an empty geometry, pass back a collection
+          return GEOS_GEOMETRYCOLLECTION;
+        // Restriction relations are empty geometry
+        else if (r->isRestriction())
           return GEOS_GEOMETRYCOLLECTION;
         // Need to find a better way of doing this.
         // If we have a review, send back a collection. This gets converted into an empty geometry.
