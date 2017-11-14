@@ -60,6 +60,9 @@ public:
    */
   FilteredVisitor(const ElementCriterion& criterion, ConstElementVisitorPtr visitor);
 
+  /**
+   * Similar to the first, but takes smart pointer params.
+   */
   FilteredVisitor(ElementCriterionPtr criterion, ConstElementVisitorPtr visitor);
 
   /**

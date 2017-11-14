@@ -544,12 +544,11 @@ void CalculateStatsOp::_generateFeatureStats(boost::shared_ptr<const OsmMap>& ma
   LOG_VARD(poisMergedIntoPolys);
   const QString description = MatchCreator::BaseFeatureTypeToString(featureType);
   LOG_VARD(description);
-  boost::shared_ptr<ElementCriterion> e_criterion(criterion);
 
   double totalFeatures = 0.0;
   totalFeatures =
     _applyVisitor(
-      map, FilteredVisitor(*(e_criterion->clone()), *(_getElementVisitorForFeatureType(featureType))));
+      map, FilteredVisitor(criterion->clone(), _getElementVisitorForFeatureType(featureType)));
   LOG_VARD(totalFeatures);
   _stats.append(SingleStat(QString("%1 Count").arg(description), totalFeatures));
   _stats.append(SingleStat(QString("Conflatable %1s").arg(description), conflatableCount));
@@ -559,7 +558,7 @@ void CalculateStatsOp::_generateFeatureStats(boost::shared_ptr<const OsmMap>& ma
       map,
       FilteredVisitor(
         ChainCriterion(
-          new StatusCriterion(Status::Conflated), e_criterion->clone()),
+          new StatusCriterion(Status::Conflated), criterion->clone()),
       _getElementVisitorForFeatureType(featureType)));
   LOG_VARD(conflatedFeatureCount);
   if (featureType == MatchCreator::PoiPolygonPOI)
@@ -576,7 +575,7 @@ void CalculateStatsOp::_generateFeatureStats(boost::shared_ptr<const OsmMap>& ma
       FilteredVisitor(
         ChainCriterion(
           new NeedsReviewCriterion(map),
-          e_criterion->clone()),
+          criterion->clone()),
       _getElementVisitorForFeatureType(featureType)));
   _stats.append(
     SingleStat(QString("Conflated %1s").arg(description), conflatedFeatureCount));
@@ -586,7 +585,7 @@ void CalculateStatsOp::_generateFeatureStats(boost::shared_ptr<const OsmMap>& ma
     _applyVisitor(
       map,
        FilteredVisitor(
-         e_criterion->clone(),
+         criterion->clone(),
          ConstElementVisitorPtr(new CountUniqueReviewsVisitor())));
   _stats.append(
     SingleStat(
@@ -598,7 +597,7 @@ void CalculateStatsOp::_generateFeatureStats(boost::shared_ptr<const OsmMap>& ma
       FilteredVisitor(
         ChainCriterion(
           new NotCriterion(new StatusCriterion(Status::Conflated)),
-          e_criterion->clone()),
+          criterion->clone()),
       _getElementVisitorForFeatureType(featureType)));
   LOG_VARD(unconflatedFeatureCount);
   if (featureType == MatchCreator::PoiPolygonPOI)
@@ -614,13 +613,13 @@ void CalculateStatsOp::_generateFeatureStats(boost::shared_ptr<const OsmMap>& ma
   {
     _stats.append(SingleStat(QString("Meters of %1 Processed by Conflation").arg(description),
       _applyVisitor(map, FilteredVisitor(ChainCriterion(ElementCriterionPtr(new StatusCriterion(Status::Conflated)),
-        e_criterion->clone()), ConstElementVisitorPtr(new LengthOfWaysVisitor())))));
+        criterion->clone()), ConstElementVisitorPtr(new LengthOfWaysVisitor())))));
   }
   else if (type == MatchCreator::CalcTypeArea)
   {
     _stats.append(SingleStat(QString("Meters Squared of %1s Processed by Conflation").arg(description),
       _applyVisitor(map, FilteredVisitor(ChainCriterion(ElementCriterionPtr(new StatusCriterion(Status::Conflated)),
-        e_criterion->clone()), ConstElementVisitorPtr(new CalculateAreaVisitor())))));
+        criterion->clone()), ConstElementVisitorPtr(new CalculateAreaVisitor())))));
   }
 
   double percentageOfTotalFeaturesConflated = 0.0;
