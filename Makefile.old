@@ -21,7 +21,7 @@ default: build
 all: build
 always:
 
-build: makedirs js-make qt-make pp-build model-build conf/dictionary/words.sqlite \
+build: makedirs js-make qt-make pp-build services-build ui-build model-build conf/dictionary/words.sqlite \
 	conf/dictionary/WordsAbridged.sqlite osmapidb
 
 makedirs: 
