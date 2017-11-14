@@ -28,8 +28,8 @@
 #include <hoot/rnd/io/SparkChangesetWriter.h>
 #include <hoot/core/TestUtils.h>
 
-#include <hoot/core/io/GeoNamesReader.h>
-#include <hoot/rnd/io/SparkChangesetReader.h>
+//#include <hoot/core/io/GeoNamesReader.h>
+//#include <hoot/rnd/io/MultiaryIngestChangesetReader.h>
 
 // Qt
 #include <QDir>
@@ -41,7 +41,6 @@ class SparkChangesetWriterTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(SparkChangesetWriterTest);
   CPPUNIT_TEST(elementAsJsonTest);
-  CPPUNIT_TEST(elementAsXmlTest);
   CPPUNIT_TEST(missingHashTest);
   CPPUNIT_TEST(missingPreviousHashTest);
   CPPUNIT_TEST(wrongElementTypeTest);
@@ -87,20 +86,12 @@ public:
 
     writeNodes(changesetOutput, "json");
 
-    HOOT_FILE_EQUALS("test-files/io/SparkChangesetWriterTest/changeset-1.spark.1", changesetOutput);
-  }
-
-  void elementAsXmlTest()
-  {
-    DisableLog dl;
-
-    const QString outputDir = "test-output/io/SparkChangesetWriterTest";
-    QDir().mkpath(outputDir);
-    const QString changesetOutput = outputDir + "/changeset-2.spark.1";
-
-    writeNodes(changesetOutput, "xml");
-
-    HOOT_FILE_EQUALS("test-files/io/SparkChangesetWriterTest/changeset-2.spark.1", changesetOutput);
+    HOOT_FILE_EQUALS(
+      "test-files/io/SparkChangesetWriterTest/changeset-1-add.spark.1",
+      outputDir + "/changeset-1-add.spark.1");
+    HOOT_FILE_EQUALS(
+      "test-files/io/SparkChangesetWriterTest/changeset-1-delete.spark.1",
+      outputDir + "/changeset-1-delete.spark.1");
   }
 
   void missingHashTest()
@@ -109,7 +100,7 @@ public:
 
     const QString outputDir = "test-output/io/SparkChangesetWriterTest";
     QDir().mkpath(outputDir);
-    const QString changesetOutput = outputDir + "/changeset-1.spark.2";
+    const QString changesetOutput = outputDir + "/changeset-3.spark.1";
 
     SparkChangesetWriter changesetFileWriter;
     changesetFileWriter.open(changesetOutput);
@@ -135,7 +126,7 @@ public:
 
     const QString outputDir = "test-output/io/SparkChangesetWriterTest";
     QDir().mkpath(outputDir);
-    const QString changesetOutput = outputDir + "/changeset-1.spark.3";
+    const QString changesetOutput = outputDir + "/changeset-4.spark.1";
 
     SparkChangesetWriter changesetFileWriter;
     changesetFileWriter.open(changesetOutput);
@@ -163,7 +154,7 @@ public:
 
     const QString outputDir = "test-output/io/SparkChangesetWriterTest";
     QDir().mkpath(outputDir);
-    const QString changesetOutput = outputDir + "/changeset-1.spark.4";
+    const QString changesetOutput = outputDir + "/changeset-5.spark.1";
 
     SparkChangesetWriter changesetFileWriter;
     changesetFileWriter.open(changesetOutput);

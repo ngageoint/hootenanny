@@ -56,8 +56,6 @@ public:
 
   virtual ~SparkChangesetWriter();
 
-  void close() { if (_fp.get()) { _fp->close(); _fp.reset(); } }
-
   /**
    * @see OsmChangeWriter
    */
@@ -68,6 +66,8 @@ public:
    */
   virtual void open(QString fileName);
 
+  void close();
+
   /**
    * @see OsmChangeWriter
    */
@@ -75,18 +75,16 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  QString getElementPayloadFormat() const { return _elementPayloadFormat; }
   virtual void setElementPayloadFormat(const QString format);
 
 private:
 
-  boost::shared_ptr<QFile> _fp;
+  boost::shared_ptr<QFile> _addFile;
+  boost::shared_ptr<QFile> _deleteFile;
   SearchBoundsCalculatorPtr _boundsCalculator;
   int _precision;
   OsmJsonWriter _jsonWriter;
   AddExportTagsVisitor _exportTagsVisitor;
-  //needed due to #1772 - options are "json" (default) and "xml"
-  QString _elementPayloadFormat;
 
 };
 

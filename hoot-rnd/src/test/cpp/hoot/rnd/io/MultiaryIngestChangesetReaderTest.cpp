@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 // Hoot
-#include <hoot/rnd/io/SparkChangesetReader.h>
+#include <hoot/rnd/io/MultiaryIngestChangesetReader.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/Node.h>
 
@@ -35,9 +35,9 @@
 namespace hoot
 {
 
-class SparkChangesetReaderTest : public CppUnit::TestFixture
+class MultiaryIngestChangesetReaderTest : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(SparkChangesetReaderTest);
+  CPPUNIT_TEST_SUITE(MultiaryIngestChangesetReaderTest);
   CPPUNIT_TEST(elementAsJsonTest);
   CPPUNIT_TEST(elementAsXmlTest);
   CPPUNIT_TEST(wrongElementTypeTest);
@@ -47,10 +47,10 @@ public:
 
   void verifyInput(const QString inputFile)
   {
-    SparkChangesetReader changesetFileReader;
+    MultiaryIngestChangesetReader changesetFileReader;
     changesetFileReader.open(inputFile);
 
-    //SparkChangesetReader doesn't parse all the info from the input, as it doesn't currently
+    //MultiaryIngestChangesetReader doesn't parse all the info from the input, as it doesn't currently
     //need all of it...we only test for what it actually parses.
 
     int ctr = 0;
@@ -101,21 +101,21 @@ public:
 
   void elementAsJsonTest()
   {
-    verifyInput("test-files/io/SparkChangesetWriterTest/changeset-1.spark.1");
+    verifyInput("test-files/io/MultiaryIngestChangesetWriterTest/changeset-1.spark.1");
   }
 
   void elementAsXmlTest()
   {
-    verifyInput("test-files/io/SparkChangesetWriterTest/changeset-2.spark.1");
+    verifyInput("test-files/io/MultiaryIngestChangesetWriterTest/changeset-2.spark.1");
   }
 
   void wrongElementTypeTest()
   {
-    SparkChangesetReader changesetFileReader;
+    MultiaryIngestChangesetReader changesetFileReader;
     QString exceptionMsg("");
     try
     {
-      changesetFileReader.open("test-files/io/SparkChangesetReaderTest/changeset-3.spark.1");
+      changesetFileReader.open("test-files/io/MultiaryIngestChangesetReaderTest/changeset-3.spark.1");
       while (changesetFileReader.hasMoreChanges())
       {
         changesetFileReader.readNextChange();
@@ -131,6 +131,6 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SparkChangesetReaderTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MultiaryIngestChangesetReaderTest, "quick");
 
 }

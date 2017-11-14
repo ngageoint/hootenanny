@@ -329,6 +329,80 @@ describe('TranslationServer', function () {
             });
         });
 
+        it('should handle OSM to MGCP POST of power line feature', function() {
+            var osm2trans = server.handleInputs({
+                osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-1" version="0"><nd ref="-1"/><nd ref="-4"/><nd ref="-7"/><nd ref="-10"/><nd ref="-1"/><tag k="power" v="line"/><tag k="uuid" v="{d7cdbdfe-88c6-4d8a-979d-ad88cfc65ef1}"/></way></osm>',
+                method: 'POST',
+                translation: 'MGCP',
+                path: '/translateTo'
+            });
+            xml2js.parseString(osm2trans, function(err, result) {
+                if (err) console.error(err);
+                assert.equal(result.osm.$.schema, "MGCP");
+                assert.equal(result.osm.way[0].tag[0].$.k, "UID");
+                assert.equal(result.osm.way[0].tag[0].$.v, "d7cdbdfe-88c6-4d8a-979d-ad88cfc65ef1");
+                assert.equal(result.osm.way[0].tag[1].$.k, "FCODE");
+                assert.equal(result.osm.way[0].tag[1].$.v, "AT030");
+            });
+        });
+
+        it('should handle OSM to TDSv40 POST of power line feature', function() {
+            var osm2trans = server.handleInputs({
+                osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-1" version="0"><nd ref="-1"/><nd ref="-4"/><nd ref="-7"/><nd ref="-10"/><nd ref="-1"/><tag k="power" v="line"/><tag k="uuid" v="{d7cdbdfe-88c6-4d8a-979d-ad88cfc65ef1}"/></way></osm>',
+                method: 'POST',
+                translation: 'TDSv40',
+                path: '/translateTo'
+            });
+            xml2js.parseString(osm2trans, function(err, result) {
+                if (err) console.error(err);
+                assert.equal(result.osm.$.schema, "TDSv40");
+                assert.equal(result.osm.way[0].tag[0].$.k, "CAB");
+                assert.equal(result.osm.way[0].tag[0].$.v, "2");
+                assert.equal(result.osm.way[0].tag[1].$.k, "UFI");
+                assert.equal(result.osm.way[0].tag[1].$.v, "d7cdbdfe-88c6-4d8a-979d-ad88cfc65ef1");
+                assert.equal(result.osm.way[0].tag[2].$.k, "F_CODE");
+                assert.equal(result.osm.way[0].tag[2].$.v, "AT005");
+            });
+        });
+
+        it('should handle OSM to TDSv61 POST of power line feature', function() {
+            var osm2trans = server.handleInputs({
+                osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-1" version="0"><nd ref="-1"/><nd ref="-4"/><nd ref="-7"/><nd ref="-10"/><nd ref="-1"/><tag k="power" v="line"/><tag k="uuid" v="{d7cdbdfe-88c6-4d8a-979d-ad88cfc65ef1}"/></way></osm>',
+                method: 'POST',
+                translation: 'TDSv61',
+                path: '/translateTo'
+            });
+            xml2js.parseString(osm2trans, function(err, result) {
+                if (err) console.error(err);
+                assert.equal(result.osm.$.schema, "TDSv61");
+                assert.equal(result.osm.way[0].tag[0].$.k, "CAB");
+                assert.equal(result.osm.way[0].tag[0].$.v, "2");
+                assert.equal(result.osm.way[0].tag[1].$.k, "UFI");
+                assert.equal(result.osm.way[0].tag[1].$.v, "d7cdbdfe-88c6-4d8a-979d-ad88cfc65ef1");
+                assert.equal(result.osm.way[0].tag[2].$.k, "F_CODE");
+                assert.equal(result.osm.way[0].tag[2].$.v, "AT005");
+            });
+        });
+
+        it('should handle OSM to GGDMv30 POST of power line feature', function() {
+            var osm2trans = server.handleInputs({
+                osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-1" version="0"><nd ref="-1"/><nd ref="-4"/><nd ref="-7"/><nd ref="-10"/><nd ref="-1"/><tag k="power" v="line"/><tag k="uuid" v="{d7cdbdfe-88c6-4d8a-979d-ad88cfc65ef1}"/></way></osm>',
+                method: 'POST',
+                translation: 'GGDMv30',
+                path: '/translateTo'
+            });
+            xml2js.parseString(osm2trans, function(err, result) {
+                if (err) console.error(err);
+                assert.equal(result.osm.$.schema, "GGDMv30");
+                assert.equal(result.osm.way[0].tag[0].$.k, "CAB");
+                assert.equal(result.osm.way[0].tag[0].$.v, "2");
+                assert.equal(result.osm.way[0].tag[1].$.k, "UFI");
+                assert.equal(result.osm.way[0].tag[1].$.v, "d7cdbdfe-88c6-4d8a-979d-ad88cfc65ef1");
+                assert.equal(result.osm.way[0].tag[2].$.k, "F_CODE");
+                assert.equal(result.osm.way[0].tag[2].$.v, "AT005");
+            });
+        });
+
         it('should handle OSM to MGCP POST of road line feature with width', function() {
             //http://localhost:8094/osmtotds
             var osm2trans = server.handleInputs({
@@ -471,6 +545,38 @@ describe('TranslationServer', function () {
                 assert.equal(result.osm.way[0].nd[0].$.ref, "-1669731");
                 assert.equal(result.osm.way[0].nd[1].$.ref, "-1669791");
                 assert.equal(result.osm.way[0].nd[2].$.ref, "-1669793");
+            });
+        });
+
+        it('should handle tdstoosm POST of power line feature', function() {
+            var trans2osm = server.handleInputs({
+                osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-6" version="0"><nd ref="-13"/><nd ref="-14"/><nd ref="-15"/><nd ref="-16"/><tag k="UID" v="fee4529b-5ecc-4e5c-b06d-1b26a8e830e6"/><tag k="FCODE" v="AT030"/></way></osm>',
+                method: 'POST',
+                translation: 'MGCP',
+                path: '/translateFrom'
+            });
+            var output = xml2js.parseString(trans2osm, function(err, result) {
+                if (err) console.error(err);
+                assert.equal(result.osm.way[0].tag[0].$.k, "uuid");
+                assert.equal(result.osm.way[0].tag[0].$.v, "{fee4529b-5ecc-4e5c-b06d-1b26a8e830e6}");
+                assert.equal(result.osm.way[0].tag[1].$.k, "power");
+                assert.equal(result.osm.way[0].tag[1].$.v, "line");
+            });
+        });
+
+        it('should handle tdstoosm POST of power line feature', function() {
+            var trans2osm = server.handleInputs({
+                osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-6" version="0"><nd ref="-13"/><nd ref="-14"/><nd ref="-15"/><nd ref="-16"/><tag k="UFI" v="fee4529b-5ecc-4e5c-b06d-1b26a8e830e6"/><tag k="F_CODE" v="AT005"/><tag k="CAB" v="2"/></way></osm>',
+                method: 'POST',
+                translation: 'TDSv61',
+                path: '/translateFrom'
+            });
+            var output = xml2js.parseString(trans2osm, function(err, result) {
+                if (err) console.error(err);
+                assert.equal(result.osm.way[0].tag[0].$.k, "uuid");
+                assert.equal(result.osm.way[0].tag[0].$.v, "{fee4529b-5ecc-4e5c-b06d-1b26a8e830e6}");
+                assert.equal(result.osm.way[0].tag[1].$.k, "power");
+                assert.equal(result.osm.way[0].tag[1].$.v, "line");
             });
         });
 

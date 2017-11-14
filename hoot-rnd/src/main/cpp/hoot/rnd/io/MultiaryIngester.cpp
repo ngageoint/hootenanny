@@ -39,7 +39,7 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/io/OsmChangeWriterFactory.h>
 #include <hoot/core/io/PartialOsmMapWriter.h>
-#include <hoot/rnd/io/SparkChangesetReader.h>
+#include <hoot/rnd/io/MultiaryIngestChangesetReader.h>
 #include <hoot/core/io/OsmFileSorter.h>
 #include <hoot/core/io/OgrReader.h>
 
@@ -317,7 +317,7 @@ boost::shared_ptr<QTemporaryFile> MultiaryIngester::_deriveAndWriteChangesToChan
   boost::shared_ptr<QTemporaryFile> tmpChangeset(
     new QTemporaryFile(
       ConfigOptions().getApidbBulkInserterTempFileDir() +
-      "/multiary-ingest-changeset-temp-XXXXXX.spark.1"));
+      "/multiary-ingest-changeset-temp-XXXXXX.mic"));
   //for debugging only
   //tmpChangeset->setAutoRemove(false);
   if (!tmpChangeset->open())
@@ -424,7 +424,7 @@ void MultiaryIngester::_writeChangesToReferenceLayer(const QString changesetOutp
   //_deriveAndWriteChangesToChangeset)
   //TODO: add a ChangesetProviderFactory or an OsmChangeReaderFactory to get rid of this
   //SparkChangesetReader dependency?
-  SparkChangesetReader changesetFileReader;
+  MultiaryIngestChangesetReader changesetFileReader;
   changesetFileReader.open(changesetOutput);
   LOG_DEBUG("Opened temp changeset file reader.");
 
