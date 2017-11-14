@@ -134,10 +134,11 @@ public:
     rulesGenerator._sortedCountFile = sortedCountFile;
     rulesGenerator.setKeepTempFiles(true);
     rulesGenerator._removeDuplicatedKeyTypes();
+    rulesGenerator._resolveCountTies();
 
     HOOT_FILE_EQUALS(
       inDir() + "/PoiImplicitTagRawRulesGeneratorTest-runDuplicateWordKeyCountTest-deduped-output",
-      rulesGenerator._sortedDedupedCountFile->fileName());
+      rulesGenerator._tieResolvedCountFile->fileName());
   }
 
   void runNameCaseTest()

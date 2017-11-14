@@ -36,6 +36,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/io/ElementVisitorInputStream.h>
 #include <hoot/core/visitors/TranslationVisitor.h>
+#include <hoot/core/util/FileUtils.h>
 
 // Qt
 #include <QStringBuilder>
@@ -143,9 +144,12 @@ void PoiImplicitTagRawRulesGenerator::generateRules(const QStringList inputs,
   LOG_VAR(_sortParallelCount);
   LOG_VAR(_skipFiltering);
   LOG_VAR(_skipTranslation);
+  LOG_VART(_sortParallelCount);
 
-  _wordKeysToCounts.clear();
+  _wordKeysToCountsValues.clear();
   _wordCaseMappings.clear();
+  _duplicatedWordTagKeyCountsToValues.clear();
+  _wordKeysToCounts.clear();
   _countFileLineCtr = 0;
 
   _countFile.reset(
@@ -267,11 +271,24 @@ void PoiImplicitTagRawRulesGenerator::generateRules(const QStringList inputs,
 
   _sortByTagOccurrence();
   _removeDuplicatedKeyTypes();
+  bool tieCountsNeededResolved = false;
+  if (_duplicatedWordTagKeyCountsToValues.size() > 0)
+  {
+    _resolveCountTies();
+    tieCountsNeededResolved = true;
+  }
   LOG_INFO(
-    "Extracted "  << StringUtils::formatLargeNumber(_wordKeysToCounts.size()) <<
+    "Extracted "  << StringUtils::formatLargeNumber(_wordKeysToCountsValues.size()) <<
     " word/tag associations.");
-  _wordKeysToCounts.clear();
-  _sortByWord();
+  _wordKeysToCountsValues.clear();
+  if (tieCountsNeededResolved)
+  {
+    _sortByWord(_tieResolvedCountFile);
+  }
+  else
+  {
+    _sortByWord(_dedupedCountFile);
+  }
 }
 
 void PoiImplicitTagRawRulesGenerator::_sortByTagOccurrence()
@@ -306,6 +323,197 @@ void PoiImplicitTagRawRulesGenerator::_sortByTagOccurrence()
   {
     throw HootException("Unable to sort file.");
   }
+  LOG_INFO(
+    "Wrote " <<
+    StringUtils::formatLargeNumber(FileUtils::getNumberOfLinesInFile(_sortedCountFile->fileName())) <<
+    " lines to sorted file.");
+}
+
+void PoiImplicitTagRawRulesGenerator::_removeDuplicatedKeyTypes()
+{
+  LOG_INFO("Removing duplicated tag key types from output...");
+
+  //i.e. don't allow amenity=school AND amenity=shop to be associated with the same word...pick one
+  //of them
+
+  _dedupedCountFile.reset(
+    new QTemporaryFile(
+      _tempFileDir + "/poi-implicit-tag-raw-rules-generator-temp-XXXXXX"));
+  _dedupedCountFile->setAutoRemove(!_keepTempFiles);
+  if (!_dedupedCountFile->open())
+  {
+    throw HootException(
+      QObject::tr("Error opening %1 for writing.").arg(_dedupedCountFile->fileName()));
+  }
+  LOG_DEBUG("Opened dedupe temp file: " << _dedupedCountFile->fileName());
+  if (_keepTempFiles)
+  {
+    LOG_WARN("Keeping temp file: " << _dedupedCountFile->fileName());
+  }
+
+  long lineCount = 0;
+  long writtenLineCount = 0;
+  while (!_sortedCountFile->atEnd())
+  {
+    const QString line = QString::fromUtf8(_sortedCountFile->readLine().constData()).trimmed();
+    LOG_VART(line);
+    const QStringList lineParts = line.split("\t");
+    LOG_VART(lineParts);
+    QString word = lineParts[1].trimmed();
+    LOG_VART(word);
+    const QString kvp = lineParts[2].trimmed();
+    LOG_VART(kvp);
+    const QString countStr = lineParts[0].trimmed();
+    const long count = countStr.toLong();
+    LOG_VART(count);
+    const QStringList kvpParts = kvp.split("=");
+    const QString tagKey = kvpParts[0];
+    LOG_VART(tagKey);
+    const QString wordTagKey = word.trimmed() % ";" % tagKey.trimmed();
+    LOG_VART(wordTagKey);
+    const QString wordTagKeyCount = word.trimmed() % ";" % tagKey.trimmed() % ";" % countStr.trimmed();
+    LOG_VART(wordTagKeyCount);
+    const QString tagValue = kvpParts[1];
+    LOG_VART(tagValue);
+
+    //The lines are sorted by occurrence count.  So the first time we see one word-key combo, we
+    //know it had the highest occurrence count, and we can ignore all subsequent instances since
+    //any one feature can't have more than one tag applied to it with the same key.
+
+    const QString queriedCountAndValue = _wordKeysToCountsValues.value(wordTagKey, "");
+    if (queriedCountAndValue.isEmpty())
+    {
+      _wordKeysToCountsValues[wordTagKey] = countStr % ";" % tagValue;
+      //this unescaping must occur during the final temp file write
+      if (word.contains("%3D"))
+      {
+        word = word.replace("%3D", "=");
+      }
+      else if (word.contains("%3d"))
+      {
+        word = word.replace("%3d", "=");
+      }
+      const QString updatedLine = countStr % "\t" % word % "\t" % kvp % "\n";
+      LOG_VART(updatedLine);
+      _dedupedCountFile->write(updatedLine.toUtf8());
+      writtenLineCount++;
+    }
+    else
+    {
+      const long queriedCount = queriedCountAndValue.split(";")[0].toLong();
+      if (queriedCount == count)
+      {
+        LOG_TRACE(
+          "Recording duplicated word/tag key/count for: " << wordTagKeyCount << " with value: " <<
+          tagValue);
+        _duplicatedWordTagKeyCountsToValues[wordTagKeyCount].append(tagValue);
+      }
+    }
+
+    lineCount++;
+    if (lineCount % _statusUpdateInterval == 0)
+    {
+      PROGRESS_INFO(
+        "Parsed " << StringUtils::formatLargeNumber(lineCount) <<
+        " elements from input for duplicated tag key removal.");
+    }
+  }
+  _sortedCountFile->close();
+  LOG_INFO(
+    "Wrote " << StringUtils::formatLargeNumber(writtenLineCount) << " lines to deduped file.");
+  _dedupedCountFile->close();
+}
+
+void PoiImplicitTagRawRulesGenerator::_resolveCountTies()
+{
+  LOG_INFO(
+    "Resolving word/tag key/count ties for " <<
+    StringUtils::formatLargeNumber(_duplicatedWordTagKeyCountsToValues.size()) <<
+    " duplicated word/tag key/counts.");
+
+  _tieResolvedCountFile.reset(
+    new QTemporaryFile(
+      _tempFileDir + "/poi-implicit-tag-raw-rules-generator-temp-XXXXXX"));
+  _tieResolvedCountFile->setAutoRemove(!_keepTempFiles);
+  if (!_tieResolvedCountFile->open())
+  {
+    throw HootException(
+      QObject::tr("Error opening %1 for writing.").arg(_tieResolvedCountFile->fileName()));
+  }
+  LOG_DEBUG("Opened tie resolve temp file: " << _tieResolvedCountFile->fileName());
+  if (_keepTempFiles)
+  {
+    LOG_WARN("Keeping temp file: " << _tieResolvedCountFile->fileName());
+  }
+  if (!_dedupedCountFile->open())
+  {
+    throw HootException(
+      QObject::tr("Error opening %1 for reading.").arg(_dedupedCountFile->fileName()));
+  }
+
+  long lineCount = 0;
+  long duplicateResolutions = 0;
+  while (!_dedupedCountFile->atEnd())
+  {
+    const QString line = QString::fromUtf8(_dedupedCountFile->readLine().constData()).trimmed();
+    LOG_VART(line);
+    const QStringList lineParts = line.split("\t");
+    LOG_VART(lineParts);
+    QString word = lineParts[1].trimmed();
+    LOG_VART(word);
+    const QString kvp = lineParts[2].trimmed();
+    LOG_VART(kvp);
+    const QString countStr = lineParts[0].trimmed();
+    const long count = countStr.toLong();
+    LOG_VART(count);
+    const QStringList kvpParts = kvp.split("=");
+    const QString tagKey = kvpParts[0];
+    LOG_VART(tagKey);
+    const QString wordTagKey = word.trimmed() % ";" % tagKey.trimmed();
+    LOG_VART(wordTagKey);
+    const QString wordTagKeyCount = word.trimmed() % ";" % tagKey.trimmed() % ";" % countStr.trimmed();
+    LOG_VART(wordTagKeyCount);
+    const QString tagValue = kvpParts[1];
+    LOG_VART(tagValue);
+
+    if (_duplicatedWordTagKeyCountsToValues.contains(wordTagKeyCount))
+    {
+      LOG_TRACE("Resolving duplicated word/tag key/count for " << wordTagKeyCount << "...");
+
+      QString lineWithMostSpecificKvp = line % "\n";
+      const QStringList tagValues = _duplicatedWordTagKeyCountsToValues[wordTagKeyCount];
+      for (int i = 0; i < tagValues.size(); i++)
+      {
+        const QString childKvp = tagKey % "=" % tagValues[i];
+        if (OsmSchema::getInstance().isAncestor(childKvp, tagKey % "=" % tagValue))
+        {
+          lineWithMostSpecificKvp = countStr % "\t" % word % "\t" % childKvp % "\n";
+        }
+      }
+      LOG_VART(lineWithMostSpecificKvp);
+      _tieResolvedCountFile->write(lineWithMostSpecificKvp.toUtf8());
+      duplicateResolutions++;
+    }
+    else
+    {
+      const QString updatedLine = countStr % "\t" % word % "\t" % kvp % "\n";
+      LOG_VART(updatedLine);
+      _tieResolvedCountFile->write(updatedLine.toUtf8());
+    }
+
+    lineCount++;
+    if (lineCount % _statusUpdateInterval == 0)
+    {
+      PROGRESS_INFO(
+        "Parsed " << StringUtils::formatLargeNumber(lineCount) <<
+        " elements from input for duplicated tag key removal.");
+    }
+  }
+  LOG_INFO(
+    "Resolved " << StringUtils::formatLargeNumber(duplicateResolutions) <<
+    " word/tag key/count ties.");
+  _duplicatedWordTagKeyCountsToValues.clear();
+  _tieResolvedCountFile->close();
 }
 
 void PoiImplicitTagRawRulesGenerator::_removeDuplicatedKeyTypesOriginal()
@@ -315,19 +523,19 @@ void PoiImplicitTagRawRulesGenerator::_removeDuplicatedKeyTypesOriginal()
   //i.e. don't allow amenity=school AND amenity=shop to be associated with the same word...pick one
   //of them
 
-  _sortedDedupedCountFile.reset(
+  _dedupedCountFile.reset(
     new QTemporaryFile(
       _tempFileDir + "/poi-implicit-tag-raw-rules-generator-temp-XXXXXX"));
-  _sortedDedupedCountFile->setAutoRemove(!_keepTempFiles);
-  if (!_sortedDedupedCountFile->open())
+  _dedupedCountFile->setAutoRemove(!_keepTempFiles);
+  if (!_dedupedCountFile->open())
   {
     throw HootException(
-      QObject::tr("Error opening %1 for writing.").arg(_sortedDedupedCountFile->fileName()));
+      QObject::tr("Error opening %1 for writing.").arg(_dedupedCountFile->fileName()));
   }
-  LOG_DEBUG("Opened dedupe temp file: " << _sortedDedupedCountFile->fileName());
+  LOG_DEBUG("Opened dedupe temp file: " << _dedupedCountFile->fileName());
   if (_keepTempFiles)
   {
-    LOG_WARN("Keeping temp file: " << _sortedDedupedCountFile->fileName());
+    LOG_WARN("Keeping temp file: " << _dedupedCountFile->fileName());
   }
 
   //Tried initially to make this use less memory by making the sorting coming from
@@ -338,6 +546,7 @@ void PoiImplicitTagRawRulesGenerator::_removeDuplicatedKeyTypesOriginal()
   //may have to revisit the sorting.
 
   long lineCount = 0;
+  long writtenLineCount = 0;
   while (!_sortedCountFile->atEnd())
   {
     const QString line = QString::fromUtf8(_sortedCountFile->readLine().constData()).trimmed();
@@ -374,7 +583,8 @@ void PoiImplicitTagRawRulesGenerator::_removeDuplicatedKeyTypesOriginal()
       }
       const QString updatedLine = QString::number(count) % "\t" % word % "\t" % kvp % "\n";
       LOG_VART(updatedLine);
-      _sortedDedupedCountFile->write(updatedLine.toUtf8());
+      _dedupedCountFile->write(updatedLine.toUtf8());
+      writtenLineCount++;
     }
     else if (queriedCount == count)
     {
@@ -393,28 +603,36 @@ void PoiImplicitTagRawRulesGenerator::_removeDuplicatedKeyTypesOriginal()
         " elements from input for duplicated tag key removal.");
     }
   }
+  LOG_INFO("Wrote " << StringUtils::formatLargeNumber(writtenLineCount) << " lines to deduped file.");
   _sortedCountFile->close();
-  _sortedDedupedCountFile->close();
+  _dedupedCountFile->close();
 }
 
-void PoiImplicitTagRawRulesGenerator::_removeDuplicatedKeyTypes()
+void PoiImplicitTagRawRulesGenerator::_removeDuplicatedKeyTypesSlow()
 {
   //i.e. don't allow amenity=school AND amenity=shop to be associated with the same word...pick one
   //of them
 
-  _sortedDedupedCountFile.reset(
+  _dedupedCountFile.reset(
     new QTemporaryFile(_tempFileDir + "/poi-implicit-tag-raw-rules-generator-temp-XXXXXX"));
-  _sortedDedupedCountFile->setAutoRemove(!_keepTempFiles);
-  if (!_sortedDedupedCountFile->open())
+  _dedupedCountFile->setAutoRemove(!_keepTempFiles);
+  if (!_dedupedCountFile->open())
   {
     throw HootException(
-      QObject::tr("Error opening %1 for writing.").arg(_sortedDedupedCountFile->fileName()));
+      QObject::tr("Error opening %1 for writing.").arg(_dedupedCountFile->fileName()));
   }
-  LOG_DEBUG("Opened dedupe temp file: " << _sortedDedupedCountFile->fileName());
+  LOG_DEBUG("Opened dedupe temp file: " << _dedupedCountFile->fileName());
   if (_keepTempFiles)
   {
-    LOG_WARN("Keeping temp file: " << _sortedDedupedCountFile->fileName());
+    LOG_WARN("Keeping temp file: " << _dedupedCountFile->fileName());
   }
+
+  //Tried initially to make this use less memory by making the sorting coming from
+  //_sortByTagOccurrence not only reverse sort on count, but then also sort on name, then tag.  In
+  //doing that, would have to keep at most a set of file lines for a single word in memory at any
+  //one time.  Had trouble getting that sorting to work, so had to rely on multiple passes over
+  //the data and storing more things in memory instead.  If this method proves too memory hungry,
+  //may have to revisit the sorting.
 
   LOG_INFO("Collecting duplicated word/tag key/counts...");
   long lineCount = 0;
@@ -506,7 +724,7 @@ void PoiImplicitTagRawRulesGenerator::_removeDuplicatedKeyTypes()
         }
         const QString updatedLine = countStr % "\t" % word % "\t" % kvp % "\n";
         LOG_VART(updatedLine);
-        _sortedDedupedCountFile->write(updatedLine.toUtf8());
+        _dedupedCountFile->write(updatedLine.toUtf8());
       }
       assert(queriedCount != count);
       if (queriedCount == count)
@@ -574,7 +792,7 @@ void PoiImplicitTagRawRulesGenerator::_removeDuplicatedKeyTypes()
 
     const QString updatedLine = countStr % "\t" % word % "\t" % kvp % "\n";
     LOG_VART(updatedLine);
-    _sortedDedupedCountFile->write(updatedLine.toUtf8());
+    _dedupedCountFile->write(updatedLine.toUtf8());
 
     lineCount++;
     if (lineCount % _statusUpdateInterval == 0)
@@ -585,22 +803,26 @@ void PoiImplicitTagRawRulesGenerator::_removeDuplicatedKeyTypes()
     }
   }
   duplicatedWordTagKeyCountsToLines.clear();
-  _sortedDedupedCountFile->close();
+  _dedupedCountFile->close();
 }
 
-void PoiImplicitTagRawRulesGenerator::_sortByWord()
+void PoiImplicitTagRawRulesGenerator::_sortByWord(boost::shared_ptr<QTemporaryFile> input)
 {
   LOG_INFO("Sorting output by word...");
-  LOG_VART(_sortParallelCount);
 
   //sort by word, then by tag
   const QString cmd =
     "sort -t'\t' -k2,2 -k3,3 --parallel=" + QString::number(_sortParallelCount) + " " +
-     _sortedDedupedCountFile->fileName() + " -o " + _output->fileName();
+     input->fileName() + " -o " + _output->fileName();
   if (std::system(cmd.toStdString().c_str()) != 0)
   {
     throw HootException("Unable to sort input file.");
   }
+
+  LOG_INFO(
+    "Wrote " <<
+    StringUtils::formatLargeNumber(
+      FileUtils::getNumberOfLinesInFile(_output->fileName())) << " lines to sorted file.");
 }
 
 }

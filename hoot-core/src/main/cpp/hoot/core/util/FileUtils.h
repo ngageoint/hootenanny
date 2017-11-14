@@ -73,6 +73,14 @@ public:
    * @param text text to be written
    */
   static void writeFully(const QString path, const QString text);
+
+  /**
+   *
+   *
+   * @param file
+   * @return
+   */
+  static long getNumberOfLinesInFile(const QString file);
 };
 
 }

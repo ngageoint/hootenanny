@@ -84,10 +84,14 @@ private:
 
   boost::shared_ptr<QTemporaryFile> _countFile;
   boost::shared_ptr<QTemporaryFile> _sortedCountFile;
-  boost::shared_ptr<QTemporaryFile> _sortedDedupedCountFile;
+  boost::shared_ptr<QTemporaryFile> _dedupedCountFile;
+  boost::shared_ptr<QTemporaryFile> _tieResolvedCountFile;
 
   QHash<QString, QString> _wordCaseMappings;
+  QHash<QString, QString> _wordKeysToCountsValues;
+  //TODO: get rid of
   QHash<QString, long> _wordKeysToCounts;
+  QHash<QString, QStringList> _duplicatedWordTagKeyCountsToValues;
 
   long _countFileLineCtr;
   int _sortParallelCount;
@@ -103,8 +107,10 @@ private:
 
   void _sortByTagOccurrence();
   void _removeDuplicatedKeyTypes();
+  void _removeDuplicatedKeyTypesSlow();
   void _removeDuplicatedKeyTypesOriginal();
-  void _sortByWord();
+  void _resolveCountTies();
+  void _sortByWord(boost::shared_ptr<QTemporaryFile> input);
 };
 
 }

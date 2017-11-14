@@ -27,6 +27,10 @@
 
 #include "FileUtils.h"
 
+// Hoot
+#include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
+
 // Qt
 #include <QDir>
 #include <QFile>
@@ -34,9 +38,11 @@
 #include <QFileInfoList>
 #include <QTextStream>
 
-// Hoot
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
+// Std
+#include <fstream>
+//#include <iostream>
+//#include <iterator>
+#include <algorithm>
 
 namespace hoot
 {
@@ -128,6 +134,14 @@ void FileUtils::writeFully(const QString path, const QString text)
   out << text;
   out.flush();
   outFile.close();
+}
+
+long FileUtils::getNumberOfLinesInFile(const QString file)
+{
+  std::ifstream inFile(file.toStdString().c_str());
+  size_t lineCount =
+    std::count(std::istreambuf_iterator<char>(inFile), std::istreambuf_iterator<char>(), '\n');
+  return lineCount;
 }
 
 }
