@@ -58,7 +58,9 @@ public:
    * Similar to above but this is convenient if you want to pass in a temporary visitor. In this
    * case FilteredVisitor will take ownership of the visitor and delete it when destructed.
    */
-  FilteredVisitor(const ElementCriterion& criterion, ConstElementVisitor* visitor);
+  FilteredVisitor(const ElementCriterion& criterion, ConstElementVisitorPtr visitor);
+
+  FilteredVisitor(ElementCriterionPtr criterion, ConstElementVisitorPtr visitor);
 
   /**
    * Similar to above but this is convenient if you want to pass in a temporary criterion and

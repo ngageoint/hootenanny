@@ -52,7 +52,7 @@ public:
 
   virtual void setOsmMap(const OsmMap* map);
 
-  virtual ElementCriterion* clone();
+  virtual ElementCriterionPtr clone();
 
 private:
 

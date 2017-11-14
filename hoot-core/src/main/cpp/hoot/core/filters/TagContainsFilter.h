@@ -47,7 +47,7 @@ public:
    */
   void addPair(QString key, QString valueSubstring);
 
-  virtual ElementCriterion* clone() { return new TagContainsFilter(_type, _key, _valueSubstring); }
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new TagContainsFilter(_type, _key, _valueSubstring)); }
 
 protected:
   virtual bool isFiltered(const Element& e) const;
