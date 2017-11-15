@@ -53,7 +53,7 @@ public:
 
   void setConfiguration(const Settings& s);
 
-  virtual ElementCriterion* clone() { return new TagCriterion(_k, _v); }
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new TagCriterion(_k, _v)); }
 
 private:
 

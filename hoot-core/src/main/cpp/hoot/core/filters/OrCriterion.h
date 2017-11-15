@@ -46,11 +46,15 @@ public:
     ChainCriterion(child1, child2)
   {
   }
+  OrCriterion(ElementCriterionPtr child1, ElementCriterionPtr child2) :
+    ChainCriterion(child1, child2)
+  {
+  }
 
   virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
 
-  virtual ElementCriterion* clone()
-  { return new OrCriterion(_filters[0]->clone(), _filters[1]->clone()); }
+  virtual ElementCriterionPtr clone()
+  { return ElementCriterionPtr(new OrCriterion(_filters[0]->clone(), _filters[1]->clone())); }
 
 };
 
