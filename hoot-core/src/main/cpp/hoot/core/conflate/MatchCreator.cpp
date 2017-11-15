@@ -101,25 +101,25 @@ MatchCreator::FeatureCalcType MatchCreator::getFeatureCalcType (BaseFeatureType 
   }
 }
 
-ElementCriterion* MatchCreator::getElementCriterion (BaseFeatureType t, ConstOsmMapPtr map)
+ElementCriterionPtr MatchCreator::getElementCriterion (BaseFeatureType t, ConstOsmMapPtr map)
 {
   switch (t)
   {
     case POI:
-      return new PoiCriterion();
+      return ElementCriterionPtr(new PoiCriterion());
     case Highway:
-      return new HighwayFilter(Filter::KeepMatches);
+      return ElementCriterionPtr(new HighwayFilter(Filter::KeepMatches));
     case Building:
-      return new BuildingCriterion(map);
+      return ElementCriterionPtr(new BuildingCriterion(map));
     case Waterway:
-      return new WaterwayCriterion();
+      return ElementCriterionPtr(new WaterwayCriterion());
     case PoiPolygonPOI:
-      return new PoiPolygonPoiCriterion();
+      return ElementCriterionPtr(new PoiPolygonPoiCriterion());
     case Polygon:
-      return new PoiPolygonPolyCriterion();
+      return ElementCriterionPtr(new PoiPolygonPolyCriterion());
     case Unknown:
     default:
-      return NULL;
+      return ElementCriterionPtr();
   }
 }
 

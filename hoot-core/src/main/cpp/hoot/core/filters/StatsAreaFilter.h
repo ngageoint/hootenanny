@@ -43,7 +43,7 @@ public:
 
   virtual bool isMatch(const Element& e) const;
 
-  virtual ElementCriterion* clone() { return new StatsAreaFilter(_type); }
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new StatsAreaFilter(_type)); }
 
 };
 

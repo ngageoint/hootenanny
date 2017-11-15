@@ -15,6 +15,8 @@ exists ("../Configure.pri") {
     include("../Configure.pri")
 }
 
+LIBS -= -lhdfs
+
 unix:QMAKE_CXXFLAGS += -Wno-deprecated
 unix:QT -= gui
 UI_DIR = tmp/ui

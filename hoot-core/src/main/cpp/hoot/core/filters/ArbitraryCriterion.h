@@ -62,7 +62,7 @@ public:
     return _f(e);
   }
 
-  virtual ElementCriterion* clone() { return new ArbitraryCriterion(_f); }
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new ArbitraryCriterion(_f)); }
 
 private:
   boost::function<bool (const boost::shared_ptr<const Element> &e)> _f;
