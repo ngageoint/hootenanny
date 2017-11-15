@@ -35,16 +35,14 @@ using namespace std;
 namespace hoot
 {
 
-WayFeatureExtractor::WayFeatureExtractor(ValueAggregator *agg)
+WayFeatureExtractor::WayFeatureExtractor(ValueAggregatorPtr agg):
+  _agg(agg)
 {
-  if (agg != 0)
-  {
-    _agg.reset(agg);
-  }
-  else
-  {
-    _agg.reset(new MeanAggregator());
-  }
+}
+
+WayFeatureExtractor::WayFeatureExtractor()
+{
+  _agg.reset(new MeanAggregator());
 }
 
 double WayFeatureExtractor::extract(const OsmMap& map,

@@ -90,13 +90,15 @@ private:
   vector<Geometry*>& _lines;
 };
 
-EdgeDistanceExtractor::EdgeDistanceExtractor(ValueAggregator* a, Meters spacing)
+EdgeDistanceExtractor::EdgeDistanceExtractor(ValueAggregatorPtr a, Meters spacing):
+  _aggregator(a)
 {
-  if (a == 0)
-  {
-    a = new MeanAggregator();
-  }
-  _aggregator.reset(a);
+  setSpacing(spacing);
+}
+
+EdgeDistanceExtractor::EdgeDistanceExtractor(Meters spacing)
+{
+  _aggregator.reset(new MeanAggregator());
   setSpacing(spacing);
 }
 

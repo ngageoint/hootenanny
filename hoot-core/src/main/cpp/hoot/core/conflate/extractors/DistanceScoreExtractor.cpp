@@ -34,6 +34,16 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, DistanceScoreExtractor)
 
+DistanceScoreExtractor::DistanceScoreExtractor(ValueAggregatorPtr wayAgg):
+  WayFeatureExtractor(wayAgg)
+{
+}
+
+DistanceScoreExtractor::DistanceScoreExtractor():
+  WayFeatureExtractor()
+{
+}
+
 double DistanceScoreExtractor::_extract(const OsmMap& map, const ConstWayPtr& w1,
                                         const ConstWayPtr& w2) const
 {

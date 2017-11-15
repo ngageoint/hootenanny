@@ -39,11 +39,16 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, AttributeScoreExtractor)
 
-AttributeScoreExtractor::AttributeScoreExtractor(ValueAggregator* wayAgg, bool useWeight) :
-WayFeatureExtractor(wayAgg),
-_useWeight(useWeight)
+AttributeScoreExtractor::AttributeScoreExtractor(ValueAggregatorPtr wayAgg, bool useWeight) :
+  WayFeatureExtractor(wayAgg),
+  _useWeight(useWeight)
 {
-  setUseWeight(useWeight);
+}
+
+AttributeScoreExtractor::AttributeScoreExtractor(bool useWeight) :
+  WayFeatureExtractor(),
+  _useWeight(useWeight)
+{
 }
 
 void AttributeScoreExtractor::setUseWeight(const bool useWeight)

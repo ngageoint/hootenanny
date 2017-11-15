@@ -41,7 +41,9 @@ public:
 
   static std::string className() { return "hoot::LengthScoreExtractor"; }
 
-  LengthScoreExtractor(ValueAggregator* wayAgg = 0) : WayFeatureExtractor(wayAgg) {}
+  LengthScoreExtractor(ValueAggregatorPtr wayAgg);
+
+  LengthScoreExtractor();
 
   virtual std::string getClassName() const { return className(); }
 

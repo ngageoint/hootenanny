@@ -142,20 +142,20 @@ void HighwayRfClassifier::_createAllExtractors() const
 
   // These are all the factors that seem reasonable. Many of the other factors will overtrain due
   // to distance values and such.
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new AngleHistogramExtractor()));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new AttributeScoreExtractor(NULL, false)));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new AttributeScoreExtractor(NULL, true)));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new WeightedShapeDistanceExtractor()));
+  _extractors.push_back(FeatureExtractorPtr(new AngleHistogramExtractor()));
+  _extractors.push_back(FeatureExtractorPtr(new AttributeScoreExtractor(false)));
+  _extractors.push_back(FeatureExtractorPtr(new WeightedShapeDistanceExtractor()));
+  _extractors.push_back(FeatureExtractorPtr(new AttributeScoreExtractor(true)));
 
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new WeightedMetricDistanceExtractor(
-    new MeanAggregator(), new SigmaAggregator())));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new WeightedMetricDistanceExtractor(
-    new MeanAggregator(), new RmseAggregator())));
+  _extractors.push_back(FeatureExtractorPtr(new WeightedMetricDistanceExtractor(
+    ValueAggregatorPtr(new MeanAggregator()), ValueAggregatorPtr(new SigmaAggregator()))));
+  _extractors.push_back(FeatureExtractorPtr(new WeightedMetricDistanceExtractor(
+    ValueAggregatorPtr(new MeanAggregator()), ValueAggregatorPtr(new RmseAggregator()))));
 
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(
-    new EdgeDistanceExtractor(new RmseAggregator())));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(
-    new EdgeDistanceExtractor(new SigmaAggregator())));
+  _extractors.push_back(FeatureExtractorPtr(
+    new EdgeDistanceExtractor(ValueAggregatorPtr(new RmseAggregator()))));
+  _extractors.push_back(FeatureExtractorPtr(
+    new EdgeDistanceExtractor(ValueAggregatorPtr(new SigmaAggregator()))));
 
   // at some point names will make sense, but for now there isn't enough name data.
 //  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
@@ -210,10 +210,10 @@ void HighwayRfClassifier::_createTestExtractors() const
 {
   _extractors.clear();
 
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(
-    new EdgeDistanceExtractor(new RmseAggregator())));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(
-    new EdgeDistanceExtractor(new SigmaAggregator())));
+  _extractors.push_back(FeatureExtractorPtr(
+    new EdgeDistanceExtractor(ValueAggregatorPtr(new RmseAggregator()))));
+  _extractors.push_back(FeatureExtractorPtr(
+    new EdgeDistanceExtractor(ValueAggregatorPtr(new SigmaAggregator()))));
   _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new AngleHistogramExtractor()));
 //  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new AttributeScoreExtractor(false)));
 //  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new AttributeScoreExtractor(true)));
@@ -221,8 +221,10 @@ void HighwayRfClassifier::_createTestExtractors() const
 
 //  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new WeightedMetricDistanceExtractor(
 //    new MeanAggregator(), new SigmaAggregator())));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new WeightedMetricDistanceExtractor(
-    new MeanAggregator(), new RmseAggregator(), ConfigOptions().getSearchRadiusHighway())));
+  _extractors.push_back(FeatureExtractorPtr(new WeightedMetricDistanceExtractor(
+                        ValueAggregatorPtr(new MeanAggregator()),
+                        ValueAggregatorPtr(new RmseAggregator()),
+                        ConfigOptions().getSearchRadiusHighway())));
 
 }
 

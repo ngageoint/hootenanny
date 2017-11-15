@@ -43,8 +43,11 @@ class WeightedMetricDistanceExtractor : public WayFeatureExtractor, public Confi
 public:
   static std::string className() { return "hoot::WeightedMetricDistanceExtractor"; }
 
-  WeightedMetricDistanceExtractor(ValueAggregator* wayAgg = 0, ValueAggregator* pointAgg = 0,
+  WeightedMetricDistanceExtractor(ValueAggregatorPtr wayAgg, ValueAggregatorPtr pointAgg,
                                   Meters searchRadius = -1);
+
+  // Get point aggregator from ConfigOptions()
+  WeightedMetricDistanceExtractor(Meters searchRadius = -1);
 
   virtual std::string getClassName() const { return className(); }
 
@@ -59,7 +62,7 @@ public:
 protected:
   double _extract(const OsmMap& /*map*/, const ConstWayPtr& w1, const ConstWayPtr& w2) const;
 
-  std::auto_ptr<ValueAggregator> _pointAgg;
+  boost::shared_ptr<ValueAggregator> _pointAgg;
   Meters _searchRadius;
 };
 

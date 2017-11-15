@@ -41,7 +41,9 @@ class WeightedShapeDistanceExtractor : public WayFeatureExtractor
 public:
   static std::string className() { return "hoot::WeightedShapeDistanceExtractor"; }
 
-  WeightedShapeDistanceExtractor(ValueAggregator* wayAgg = 0);
+  WeightedShapeDistanceExtractor(ValueAggregatorPtr wayAgg);
+
+  WeightedShapeDistanceExtractor();
 
   virtual std::string getClassName() const { return className(); }
 

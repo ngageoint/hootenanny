@@ -220,8 +220,9 @@ private:
 
     // found experimentally when doing building name comparisons
     double score = NameExtractor(
-          new TranslateStringDistance(
-            new MeanWordSetDistance(new LevenshteinDistance(1.45)))).extract(e1, e2);
+          StringDistancePtr(new TranslateStringDistance(
+            StringDistancePtr(new MeanWordSetDistance(
+              StringDistancePtr(new LevenshteinDistance(1.45))))))).extract(e1, e2);
 
     return score;
   }

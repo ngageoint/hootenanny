@@ -46,16 +46,21 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, WeightedMetricDistanceExtractor)
 
-WeightedMetricDistanceExtractor::WeightedMetricDistanceExtractor(ValueAggregator* wayAgg,
-  ValueAggregator* pointAgg, Meters searchRadius) :
+WeightedMetricDistanceExtractor::WeightedMetricDistanceExtractor(ValueAggregatorPtr wayAgg,
+  ValueAggregatorPtr pointAgg, Meters searchRadius) :
   WayFeatureExtractor(wayAgg),
-  _pointAgg(pointAgg),
+  _pointAgg(pointAgg)
+{
+  if (searchRadius == -1)
+  {
+    setSearchRadius(ConfigOptions().getWeightedMetricDistanceExtractorSearchRadius());
+  }
+}
+
+WeightedMetricDistanceExtractor::WeightedMetricDistanceExtractor(Meters searchRadius):
   _searchRadius(searchRadius)
 {
-  if (_pointAgg.get() == 0)
-  {
-    setPointAggregator(ConfigOptions().getWeightedMetricDistanceExtractorPointAggregator());
-  }
+  setPointAggregator(ConfigOptions().getWeightedMetricDistanceExtractorPointAggregator());
   if (searchRadius == -1)
   {
     setSearchRadius(ConfigOptions().getWeightedMetricDistanceExtractorSearchRadius());
