@@ -49,7 +49,8 @@ HOOT_FACTORY_REGISTER(FeatureExtractor, WeightedMetricDistanceExtractor)
 WeightedMetricDistanceExtractor::WeightedMetricDistanceExtractor(ValueAggregatorPtr wayAgg,
   ValueAggregatorPtr pointAgg, Meters searchRadius) :
   WayFeatureExtractor(wayAgg),
-  _pointAgg(pointAgg)
+  _pointAgg(pointAgg),
+  _searchRadius(searchRadius)
 {
   if (searchRadius == -1)
   {
@@ -58,6 +59,8 @@ WeightedMetricDistanceExtractor::WeightedMetricDistanceExtractor(ValueAggregator
 }
 
 WeightedMetricDistanceExtractor::WeightedMetricDistanceExtractor(Meters searchRadius):
+  WayFeatureExtractor(),
+  _pointAgg(),
   _searchRadius(searchRadius)
 {
   setPointAggregator(ConfigOptions().getWeightedMetricDistanceExtractorPointAggregator());
