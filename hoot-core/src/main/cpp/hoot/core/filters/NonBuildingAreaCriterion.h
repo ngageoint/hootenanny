@@ -49,7 +49,8 @@ public:
 
   bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
-  virtual ElementCriterion* clone() { return new NonBuildingAreaCriterion(); }
+  virtual ElementCriterionPtr clone()
+  { return ElementCriterionPtr(new NonBuildingAreaCriterion()); }
 
 };
 

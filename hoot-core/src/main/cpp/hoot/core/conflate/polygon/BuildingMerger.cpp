@@ -72,7 +72,7 @@ public:
     return result;
   }
 
-  virtual ElementCriterion* clone() { return new DeletableBuildingPart(); }
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new DeletableBuildingPart()); }
 
 };
 

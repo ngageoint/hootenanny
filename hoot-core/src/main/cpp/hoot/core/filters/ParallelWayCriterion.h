@@ -60,7 +60,8 @@ public:
 
   virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
-  ParallelWayCriterion* clone() { return new ParallelWayCriterion(_map, _baseWay, _isParallel); }
+  ElementCriterionPtr clone()
+  { return ElementCriterionPtr(new ParallelWayCriterion(_map, _baseWay, _isParallel)); }
 
 private:
 

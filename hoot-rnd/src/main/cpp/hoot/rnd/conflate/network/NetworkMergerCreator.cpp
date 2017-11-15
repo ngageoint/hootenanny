@@ -386,21 +386,24 @@ void NetworkMergerCreator::_removeDuplicates(MatchSet& matches) const
     {
       const NetworkMatch* nmj = dynamic_cast<const NetworkMatch*>(*jt);
 
-      if (nmi->isVerySimilarTo(nmj))
-        LOG_TRACE(nmi->getEdgeMatch()->getUid() << " is very similar to " << nmj->getEdgeMatch()->getUid());
-
-      if (nmi->contains(nmj))
-        LOG_TRACE(nmi->getEdgeMatch()->getUid() << " contains " << nmj->getEdgeMatch()->getUid());
-
-      if (nmi->isVerySimilarTo(nmj))
+      if (nmi && nmj)
       {
-        MatchSet::iterator tmp = jt;
-        ++tmp;
-        matches.erase(jt);
-        jt = tmp;
-      }
-    }
-  }
+        if (nmi->isVerySimilarTo(nmj))
+          LOG_TRACE(nmi->getEdgeMatch()->getUid() << " is very similar to " << nmj->getEdgeMatch()->getUid());
+
+        if (nmi->contains(nmj))
+          LOG_TRACE(nmi->getEdgeMatch()->getUid() << " contains " << nmj->getEdgeMatch()->getUid());
+
+        if (nmi->isVerySimilarTo(nmj))
+        {
+          MatchSet::iterator tmp = jt;
+          ++tmp;
+          matches.erase(jt);
+          jt = tmp;
+        } // end if very similar
+      } // end if valid pointers
+    } // inner for
+  } // outer for
 }
 
 }

@@ -141,6 +141,11 @@ then
   sudo sed -i "s/User=tomcat8/User=${TOMCAT_USER}/g" /etc/systemd/system/${TOMCAT_NAME}.service
   sudo sed -i "s/Group=tomcat8/Group=${TOMCAT_GROUP}/g" /etc/systemd/system/${TOMCAT_NAME}.service
 fi
+if [ "$HADOOP_HOME" != "" ]
+then
+  # add hadoop library path to the LD_LIBRARY_PATH for tomcat
+  sudo sed -i 's|$LD_LIBRARY_PATH|$LD_LIBRARY_PATH:$HADOOP_HOME/c++/Linux-amd64-64/lib|g' ${TOMCAT_HOME}/bin/tomcat8_start.sh
+fi
 sudo systemctl daemon-reload
 sudo systemctl enable ${TOMCAT_NAME}
 

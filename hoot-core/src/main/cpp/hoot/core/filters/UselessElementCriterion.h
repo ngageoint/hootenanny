@@ -54,7 +54,7 @@ public:
 
   virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
-  virtual ElementCriterion* clone() { return new UselessElementCriterion(); }
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new UselessElementCriterion()); }
 
 private:
 

@@ -124,6 +124,6 @@ Feature: Review Bookmarks
         And I accept the alert
         And I accept the alert
         Then I click on the "Review Bookmarks" option in the "settingsSidebar"
-        And I wait 5 "seconds" to not see "Cucumber Bookmark"
+        And I wait 10 "seconds" to not see "Cucumber Bookmark"
         Then I click on the "Datasets" option in the "settingsSidebar"
         #And I wait 5 "seconds" to not see "mergedBookmarkCucumberTest"

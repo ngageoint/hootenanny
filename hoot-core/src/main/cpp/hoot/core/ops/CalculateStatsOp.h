@@ -110,9 +110,10 @@ private:
                              const MatchCreator::BaseFeatureType& featureType,
                              const float conflatableCount,
                              const MatchCreator::FeatureCalcType& type,
-                             ElementCriterion* criterion, const long poisMergedIntoPolys);
+                             ElementCriterionPtr criterion,
+                             const long poisMergedIntoPolys);
 
-  ConstElementVisitor* _getElementVisitorForFeatureType(
+  ConstElementVisitorPtr _getElementVisitorForFeatureType(
       const MatchCreator::BaseFeatureType& featureType);
 };
 

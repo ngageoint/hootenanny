@@ -50,12 +50,6 @@ Factory::Factory()
 
 Factory::~Factory()
 {
-  QMutexLocker locker(&_mutex);
-  for (std::map<std::string, ObjectCreator*>::const_iterator it = _creators.begin();
-       it != _creators.end(); ++it)
-  {
-    delete it->second;
-  }
 }
 
 any Factory::constructObject(const std::string& name)
@@ -65,7 +59,7 @@ any Factory::constructObject(const std::string& name)
   {
     throw HootException("Could not find object to construct. (" + name + ")");
   }
-  ObjectCreator* c = _creators[name];
+  boost::shared_ptr<ObjectCreator> c = _creators[name];
   locker.unlock();
 
   return c->create();
@@ -85,10 +79,10 @@ vector<std::string> Factory::getObjectNamesByBase(const std::string& baseName)
   QMutexLocker locker(&_mutex);
   vector<std::string> result;
 
-  for (std::map<std::string, ObjectCreator*>::const_iterator it = _creators.begin();
+  for (std::map<std::string, boost::shared_ptr<ObjectCreator> >::const_iterator it = _creators.begin();
        it != _creators.end(); ++it)
   {
-    ObjectCreator* c = it->second;
+    boost::shared_ptr<ObjectCreator> c = it->second;
     if (c->getBaseName() == baseName)
     {
       result.push_back(c->getName());
@@ -102,7 +96,7 @@ bool Factory::hasClass(const std::string& name)
   return _creators.find(name) != _creators.end();
 }
 
-void Factory::registerCreator(ObjectCreator* oc, bool baseClass)
+void Factory::registerCreator(boost::shared_ptr<ObjectCreator> oc, bool baseClass)
 {
   QMutexLocker locker(&_mutex);
   if (baseClass == false && oc->getBaseName() == oc->getName())

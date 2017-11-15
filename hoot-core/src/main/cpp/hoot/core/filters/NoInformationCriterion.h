@@ -56,8 +56,8 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  virtual ElementCriterion* clone()
-  { return new NoInformationCriterion(_treatReviewTagsAsMetadata); }
+  virtual ElementCriterionPtr clone()
+  { return ElementCriterionPtr(new NoInformationCriterion(_treatReviewTagsAsMetadata)); }
 
 private:
 

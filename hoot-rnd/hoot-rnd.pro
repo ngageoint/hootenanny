@@ -36,6 +36,7 @@ include(../Configure.pri)
 QMAKE_CXXFLAGS = -I/usr/include/nodejs $$QMAKE_CXXFLAGS
 
 LIBS += -L../lib/ -lTgs -ltbs -lHootCore -lHootCoreTest
+LIBS -= -lhdfs
 
 UI_DIR = tmp/ui
 MOC_DIR = tmp/moc

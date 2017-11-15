@@ -46,7 +46,7 @@ public:
 
   virtual bool isFiltered(const Element& e) const;
 
-  virtual ElementCriterion* clone() { return new IsNodeFilter(_type); }
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new IsNodeFilter(_type)); }
 
 private:
 

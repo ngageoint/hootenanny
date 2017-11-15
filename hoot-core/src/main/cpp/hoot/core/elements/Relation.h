@@ -112,6 +112,11 @@ public:
    */
   bool isReview() const { return _relationData->getType() == MetadataTags::RelationReview(); }
 
+  /**
+   *
+   */
+  bool isRestriction() const { return _relationData->getType() == MetadataTags::RelationRestriction(); }
+
 
   /**
    * Remove all members that meet the speicified criteria. If no members meet the criteria then

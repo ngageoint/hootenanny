@@ -59,44 +59,17 @@ namespace hoot
 class ServiceOsmApiDbBulkInserterTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceOsmApiDbBulkInserterTest);
-  //CPPUNIT_TEST(maxDataTypeSizeTest);
   CPPUNIT_TEST(runPsqlDbOfflineTest);
   CPPUNIT_TEST(runPsqlDbOfflineValidateOffTest);
   CPPUNIT_TEST(runPsqlDbOfflineStxxlTest);
   CPPUNIT_TEST(runPsqlDbOnlineTest);
   CPPUNIT_TEST(runPsqlCustomStartingIdsDbOfflineTest);
+  CPPUNIT_TEST(runPsqlLargeCustomStartingIdsDbOfflineTest);
   CPPUNIT_TEST(runSqlFileOutputTest);
+  //CPPUNIT_TEST(maxDataTypeSizeTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
-
-  void maxDataTypeSizeTest()
-  {
-    std::cout << "size of short: " << sizeof(short) << std::endl;
-    std::cout << "max size of short: " <<
-                 StringUtils::formatLargeNumber(std::numeric_limits<short>::max()) << std::endl;
-    std::cout << "size of unsigned short: " << sizeof(unsigned short) << std::endl;
-    std::cout << "max size of unsigned short: " <<
-                 StringUtils::formatLargeNumber(std::numeric_limits<unsigned short>::max()) << std::endl;
-    std::cout << "size of int: " << sizeof(int) << std::endl;
-    std::cout << "max size of int : " <<
-                 StringUtils::formatLargeNumber(std::numeric_limits<int>::max()) << std::endl;
-    std::cout << "size of unsigned int: " << sizeof(unsigned int) << std::endl;
-    std::cout << "max size of unsigned int : " <<
-                 StringUtils::formatLargeNumber(std::numeric_limits<unsigned int>::max()) << std::endl;
-    std::cout << "size of long: " << sizeof(long) << std::endl;
-    std::cout << "max size of long : " <<
-                 StringUtils::formatLargeNumber(std::numeric_limits<long>::max()) << std::endl;
-    std::cout << "size of unsigned long: " << sizeof(unsigned long) << std::endl;
-    std::cout << "max size of unsigned long : " <<
-                 StringUtils::formatLargeNumber(std::numeric_limits<unsigned long>::max()) << std::endl;
-    std::cout << "size of float: " << sizeof(float) << std::endl;
-    std::cout << "max size of float : " <<
-                 StringUtils::formatLargeNumber(std::numeric_limits<float>::max()) << std::endl;
-    std::cout << "size of double: " << sizeof(double) << std::endl;
-    std::cout << "max size of double : " <<
-                 StringUtils::formatLargeNumber(std::numeric_limits<double>::max()) << std::endl;
-  }
 
   void verifyDatabaseOutputOffline()
   {
@@ -244,7 +217,7 @@ public:
     //verify current elements
 
     CPPUNIT_ASSERT_EQUAL((size_t)14, map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL((int)2, map->getNode(16)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getNode(16)->getTags().size());;
 
     CPPUNIT_ASSERT_EQUAL((size_t)5, map->getWays().size());
     CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(6)->getTags().size());
@@ -259,6 +232,74 @@ public:
     CPPUNIT_ASSERT_EQUAL((size_t)1, map->getRelations().size());
     CPPUNIT_ASSERT_EQUAL((int)2, map->getRelation(5)->getTags().size());
     CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelation(5)->getMembers().size());
+
+    //verify historical element table sizes
+    CPPUNIT_ASSERT_EQUAL(
+      (long)14,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodesTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)2,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodeTagsTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)5,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWaysTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)7,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayTagsTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)16,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayNodesTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)1,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationsTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)2,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationTagsTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)2,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationMembersTableName()));
+
+    //verify changeset table size
+    CPPUNIT_ASSERT_EQUAL(
+      (long)4,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getChangesetsTableName()));
+
+    //verify sequences
+//    boost::shared_ptr<OsmApiDb> osmApiDb = boost::dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
+//    //TODO: fix?
+//    CPPUNIT_ASSERT_EQUAL((long)17, osmApiDb->getNextId(ElementType::Node));
+//    CPPUNIT_ASSERT_EQUAL((long)9, osmApiDb->getNextId(ElementType::Way));
+//    CPPUNIT_ASSERT_EQUAL((long)6, osmApiDb->getNextId(ElementType::Relation));
+//    CPPUNIT_ASSERT_EQUAL((long)5, osmApiDb->getNextId(ApiDb::getChangesetsTableName()));
+
+    reader.close();
+  }
+
+  void verifyDatabaseOutputOfflineWithLargeCustomStartingIds()
+  {
+    OsmApiDbReader reader;
+    OsmMapPtr map(new OsmMap());
+    reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
+    reader.read(map);
+
+    //verify current elements
+
+    CPPUNIT_ASSERT_EQUAL((size_t)14, map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getNode(3000000016)->getTags().size());;
+
+    CPPUNIT_ASSERT_EQUAL((size_t)5, map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(3000000006)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(3000000007)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((int)3, map->getWay(3000000008)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(3000000004)->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(3000000005)->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getWay(3000000006)->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getWay(3000000007)->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(3000000008)->getNodeCount());
+
+    CPPUNIT_ASSERT_EQUAL((size_t)1, map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getRelation(3000000005)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelation(3000000005)->getMembers().size());
 
     //verify historical element table sizes
     CPPUNIT_ASSERT_EQUAL(
@@ -544,6 +585,45 @@ public:
     verifyDatabaseOutputOfflineWithCustomStartingIds();
   }
 
+  void runPsqlLargeCustomStartingIdsDbOfflineTest()
+  {
+    QDir().mkpath("test-output/io/ServiceOsmApiDbBulkInserterTest/");
+
+    //init db
+    ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
+    const QString scriptDir = "test-files/servicesdb";
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
+
+    OsmApiDbBulkInserter writer;
+    const QString outFile =
+      "test-output/io/ServiceOsmApiDbBulkInserterTest/psql-offline-large-starting-ids-out.sql";
+    writer.setReserveRecordIdsBeforeWritingData(false);
+    writer.setOutputFilesCopyLocation(outFile);
+    writer.setStatusUpdateInterval(1);
+    writer.setChangesetUserId(1);
+    writer.setMaxChangesetSize(5);
+    writer.setFileOutputElementBufferSize(3);
+    //c++ global abs, being used by mistake at one point, wasn't handling conversions correctly for
+    //8 byte longs, so lets verify that we're using std::abs with these ID's that are above that
+    //range
+    writer.setStartingNodeId(3000000003);
+    writer.setStartingWayId(3000000004);
+    writer.setStartingRelationId(3000000005);
+    writer.setValidateData(true);
+    writer.setDisableDatabaseConstraintsDuringWrite(true);
+    writer.setDisableDatabaseIndexesDuringWrite(true);
+
+    writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
+    writer.write(ServicesDbTestUtils::createTestMap1());
+    writer.close();
+
+    TestUtils::verifyStdMatchesOutputIgnoreDate(
+      "test-files/io/ServiceOsmApiDbBulkInserterTest/psql-offline-large-starting-ids.sql",
+      outFile);
+
+    verifyDatabaseOutputOfflineWithLargeCustomStartingIds();
+  }
+
   void runSqlFileOutputTest()
   {
     QDir().mkpath("test-output/io/ServiceOsmApiDbBulkInserterTest/");
@@ -570,6 +650,34 @@ public:
     TestUtils::verifyStdMatchesOutputIgnoreDate(
       "test-files/io/ServiceOsmApiDbBulkInserterTest/psql-offline.sql", outFile);
     ServicesDbTestUtils::verifyTestDatabaseEmpty();
+  }
+
+  void maxDataTypeSizeTest()
+  {
+    std::cout << "size of short: " << sizeof(short) << std::endl;
+    std::cout << "max size of short: " <<
+                 StringUtils::formatLargeNumber(std::numeric_limits<short>::max()) << std::endl;
+    std::cout << "size of unsigned short: " << sizeof(unsigned short) << std::endl;
+    std::cout << "max size of unsigned short: " <<
+                 StringUtils::formatLargeNumber(std::numeric_limits<unsigned short>::max()) << std::endl;
+    std::cout << "size of int: " << sizeof(int) << std::endl;
+    std::cout << "max size of int : " <<
+                 StringUtils::formatLargeNumber(std::numeric_limits<int>::max()) << std::endl;
+    std::cout << "size of unsigned int: " << sizeof(unsigned int) << std::endl;
+    std::cout << "max size of unsigned int : " <<
+                 StringUtils::formatLargeNumber(std::numeric_limits<unsigned int>::max()) << std::endl;
+    std::cout << "size of long: " << sizeof(long) << std::endl;
+    std::cout << "max size of long : " <<
+                 StringUtils::formatLargeNumber(std::numeric_limits<long>::max()) << std::endl;
+    std::cout << "size of unsigned long: " << sizeof(unsigned long) << std::endl;
+    std::cout << "max size of unsigned long : " <<
+                 StringUtils::formatLargeNumber(std::numeric_limits<unsigned long>::max()) << std::endl;
+    std::cout << "size of float: " << sizeof(float) << std::endl;
+    std::cout << "max size of float : " <<
+                 StringUtils::formatLargeNumber(std::numeric_limits<float>::max()) << std::endl;
+    std::cout << "size of double: " << sizeof(double) << std::endl;
+    std::cout << "max size of double : " <<
+                 StringUtils::formatLargeNumber(std::numeric_limits<double>::max()) << std::endl;
   }
 };
 
