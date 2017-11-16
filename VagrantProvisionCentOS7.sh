@@ -82,6 +82,8 @@ sudo yum -y install \
     glpk \
     glpk-devel \
     gnuplot \
+    hoot-gdal \
+    hoot-gdal-devel \
     libicu-devel \
     libpng-devel \
     libtool \
@@ -196,6 +198,13 @@ if ! grep --quiet "psql-" ~/.bash_profile; then
     echo "Adding PostGres path vars to profile..."
     echo "export PATH=\$PATH:/usr/pgsql-$PG_VERSION/bin" >> ~/.bash_profile
     source ~/.bash_profile
+fi
+
+if ! mocha --version &>/dev/null; then
+    echo "### Installing mocha for plugins test..."
+    sudo npm install --silent -g mocha@3.5.3
+    # Clean up after the npm install
+    sudo rm -rf ~/tmp
 fi
 
 echo "### Configuring Postgres..."
