@@ -106,6 +106,7 @@ public:
   {
     DisableLog dl;
     QDir().mkpath(outDir());
+    //TODO: remove output temp file by wildcard here
 
     boost::shared_ptr<QTemporaryFile> sortedCountFile(
       new QTemporaryFile(

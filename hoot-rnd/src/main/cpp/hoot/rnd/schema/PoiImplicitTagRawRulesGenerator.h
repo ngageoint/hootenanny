@@ -34,7 +34,6 @@
 
 // Qt
 #include <QString>
-#include <QMap>
 #include <QHash>
 #include <QTemporaryFile>
 
@@ -87,10 +86,8 @@ private:
   boost::shared_ptr<QTemporaryFile> _dedupedCountFile;
   boost::shared_ptr<QTemporaryFile> _tieResolvedCountFile;
 
-  QHash<QString, QString> _wordCaseMappings;
+  //QHash<QString, QString> _wordCaseMappings;
   QHash<QString, QString> _wordKeysToCountsValues;
-  //TODO: get rid of
-  QHash<QString, long> _wordKeysToCounts;
   QHash<QString, QStringList> _duplicatedWordTagKeyCountsToValues;
 
   long _countFileLineCtr;
@@ -107,8 +104,6 @@ private:
 
   void _sortByTagOccurrence();
   void _removeDuplicatedKeyTypes();
-  void _removeDuplicatedKeyTypesSlow();
-  void _removeDuplicatedKeyTypesOriginal();
   void _resolveCountTies();
   void _sortByWord(boost::shared_ptr<QTemporaryFile> input);
 };
