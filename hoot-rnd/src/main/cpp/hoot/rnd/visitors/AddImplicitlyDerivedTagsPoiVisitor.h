@@ -59,9 +59,11 @@ private:
   boost::shared_ptr<ImplicitTagRulesSqliteReader> _ruleReader;
   bool _tokenizeNames;
 
-  long _numPoisModified;
+  long _numNodesModified;
   long _numTagsAdded;
-  long _numPoisInvolvedInMultipleRules;
+  long _numNodesInvolvedInMultipleRules;
+  long _numNodesParsed;
+  long _statusUpdateInterval;
 
   QSet<QString> _getNameTokens(const Tags& t);
 

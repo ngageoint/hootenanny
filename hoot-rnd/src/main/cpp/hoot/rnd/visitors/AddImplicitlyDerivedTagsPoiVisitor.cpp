@@ -32,6 +32,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QSet>
@@ -44,9 +45,11 @@ HOOT_FACTORY_REGISTER(ElementVisitor, AddImplicitlyDerivedTagsPoiVisitor)
 
 AddImplicitlyDerivedTagsPoiVisitor::AddImplicitlyDerivedTagsPoiVisitor() :
 _tokenizeNames(ConfigOptions().getPoiImplicitTagRulesTokenizeNames()),
-_numPoisModified(0),
+_numNodesModified(0),
 _numTagsAdded(0),
-_numPoisInvolvedInMultipleRules(0)
+_numNodesInvolvedInMultipleRules(0),
+_numNodesParsed(0),
+_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
   _ruleReader.reset(new ImplicitTagRulesSqliteReader());
   _ruleReader->open(ConfigOptions().getPoiImplicitTagRulesDatabase());
@@ -54,9 +57,9 @@ _numPoisInvolvedInMultipleRules(0)
 
 AddImplicitlyDerivedTagsPoiVisitor::AddImplicitlyDerivedTagsPoiVisitor(const QString databasePath) :
 _tokenizeNames(ConfigOptions().getPoiImplicitTagRulesTokenizeNames()),
-_numPoisModified(0),
+_numNodesModified(0),
 _numTagsAdded(0),
-_numPoisInvolvedInMultipleRules(0)
+_numNodesInvolvedInMultipleRules(0)
 {
   _ruleReader.reset(new ImplicitTagRulesSqliteReader());
   _ruleReader->open(databasePath);
@@ -70,9 +73,11 @@ AddImplicitlyDerivedTagsPoiVisitor::~AddImplicitlyDerivedTagsPoiVisitor()
   }
 
   LOG_INFO(
-    "Added " << _numTagsAdded << " tags to " << _numPoisModified << " POIs.  " <<
-    _numPoisInvolvedInMultipleRules <<
-    " POIs were involved in multiple tag rules and were not modified.")
+    "Added " << StringUtils::formatLargeNumber(_numTagsAdded) << " tags to " <<
+    StringUtils::formatLargeNumber(_numNodesModified) << " nodes / " <<
+    StringUtils::formatLargeNumber(_numNodesParsed)  << " total nodes.  " <<
+    StringUtils::formatLargeNumber(_numNodesInvolvedInMultipleRules) <<
+    " nodes were involved in multiple tag rules and were not modified.")
 }
 
 bool caseInsensitiveLessThan(const QString s1, const QString s2)
@@ -204,7 +209,13 @@ void AddImplicitlyDerivedTagsPoiVisitor::visit(const ElementPtr& e)
         "hoot:implicitTags:note",
         "No implicit tags added due to finding multiple possible matches for implicit tags: " +
          matchingWordsList.join(", "));
-      _numPoisInvolvedInMultipleRules++;
+      _numNodesInvolvedInMultipleRules++;
+      if (_numNodesInvolvedInMultipleRules % (_statusUpdateInterval * 10) == 0)
+      {
+        PROGRESS_INFO(
+          StringUtils::formatLargeNumber(_numNodesInvolvedInMultipleRules) << " nodes have been " <<
+          "involved in multiple rules.";
+      }
     }
     else if (!tagsToAdd.isEmpty())
     {
@@ -216,8 +227,22 @@ void AddImplicitlyDerivedTagsPoiVisitor::visit(const ElementPtr& e)
         "hoot:implicitTags:note",
         "Added " + QString::number(tagsToAdd.size()) + " implicitly derived tag(s) based on: " +
         matchingWordsList.join(", "));
-      _numPoisModified++;
+      _numNodesModified++;
       _numTagsAdded += tagsToAdd.size();
+      if (_numNodesModified % (_statusUpdateInterval * 10) == 0)
+      {
+        PROGRESS_INFO(
+          "Added " << StringUtils::formatLargeNumber(_numTagsAdded) << " tags total to " <<
+          StringUtils::formatLargeNumber(_numNodesModified) << " nodes.");
+      }
+    }
+
+    _numNodesParsed++;
+    if (_numNodesParsed % (_statusUpdateInterval * 10) == 0)
+    {
+      PROGRESS_INFO(
+        "Parsed " << StringUtils::formatLargeNumber(_numNodesParsed) <<
+        " nodes from input.");
     }
   }
 }

@@ -465,7 +465,8 @@ void PoiImplicitTagRulesDeriver::_applyFiltering(const QString input)
   }
   LOG_INFO("Wrote " << ruleCount << " custom rules.");
 
-  LOG_INFO("Wrote " << linesWrittenCount << " lines to filtered file.");
+  LOG_INFO(
+    "Wrote " << StringUtils::formatLargeNumber(linesWrittenCount) << " lines to filtered file.");
 
   _filteredCountFile->close();
 }
