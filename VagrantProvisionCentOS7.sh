@@ -16,9 +16,6 @@ echo USER: $VMUSER
 VMGROUP=`groups | grep -o $VMUSER`
 echo GROUP: $VMGROUP
 
-# Centos7 specific file versions
-export STXXL_VERSION=stxxl-1.3.1
-
 export LANG=en_US.UTF-8
 
 cd ~
@@ -119,6 +116,7 @@ sudo yum -y install \
     qtwebkit-devel \
     redhat-lsb-core \
     stxxl \
+    stxxl-devel \
     swig \
     tex-fonts-hebrew \
     texlive \
@@ -134,13 +132,6 @@ sudo yum -y install \
     xorg-x11-server-Xvfb \
     zip \
 
-
-#### So much easier to make later versions, uncomment when we upgrade to 1.4.0+
-#mkdir build
-#cd build
-#cmake -DCMAKE_BUILD_TYPE=Release ..
-#make -sj
-#sudo make install -s
 
 # Fix missing qmake
 if ! hash qmake >/dev/null 2>&1 ; then
