@@ -219,10 +219,10 @@ private:
     // "double PoiPolygonMatch::_calculateNameScore"
 
     // found experimentally when doing building name comparisons
-    double score = NameExtractor(
-          StringDistancePtr(new TranslateStringDistance(
-            StringDistancePtr(new MeanWordSetDistance(
-              StringDistancePtr(new LevenshteinDistance(1.45))))))).extract(e1, e2);
+    double score = NameExtractor(StringDistancePtr(new TranslateStringDistance(
+                                 StringDistancePtr(new MeanWordSetDistance(
+                                 StringDistancePtr(new LevenshteinDistance(1.45)))))))
+                   .extract(e1, e2);
 
     return score;
   }
