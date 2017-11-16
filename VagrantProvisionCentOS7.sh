@@ -26,11 +26,11 @@ echo "### Add epel repo ###" > CentOS_upgrade.txt
 sudo yum -y install epel-release >> CentOS_upgrade.txt 2>&1
 
 # add Hoot repo for our pre-built dependencies.
-echo "### Add Hoot repo ###"
+echo "### Add Hoot repo ###" >> CentOS_upgrade.txt
 $HOOT_HOME/scripts/hoot-repo/yum-configure.sh
 
 # add the Postgres repo
-echo "### Add Postgres repo ###" > CentOS_upgrade.txt
+echo "### Add Postgres repo ###" >> CentOS_upgrade.txt
 sudo rpm -Uvh https://download.postgresql.org/pub/repos/yum/9.5/redhat/rhel-7-x86_64/pgdg-centos95-9.5-3.noarch.rpm  >> CentOS_upgrade.txt 2>&1
 
 echo "Updating OS..."
@@ -81,6 +81,7 @@ sudo yum -y install \
     gnuplot \
     hoot-gdal \
     hoot-gdal-devel \
+    hoot-gdal-python \
     libicu-devel \
     libpng-devel \
     libtool \
