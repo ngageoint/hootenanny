@@ -26,22 +26,22 @@
  */
 #include <set>
 #include <utility>    // For std::pair
-#include <hoot/js/SystemNodeJs.h>
 
 #include "PoiMergerJs.h"
 
-#include <hoot/js/OsmMapJs.h>
 #include <boost/shared_ptr.hpp>
-#include <v8.h>
 #include <qstring.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/js/JsRegistrar.h>
-#include <hoot/core/util/HootException.h>
 #include <hoot/core/elements/ElementId.h>
-#include <hoot/js/util/DataConvertJs.h>
-#include <hoot/js/conflate/js/ScriptMerger.h>
-#include <hoot/js/PluginContext.h>
 #include <hoot/core/util/ConfPath.h>
+#include <hoot/core/util/HootException.h>
+#include <hoot/js/HootJsStable.h>
+#include <hoot/js/JsRegistrar.h>
+#include <hoot/js/OsmMapJs.h>
+#include <hoot/js/PluginContext.h>
+#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/conflate/js/ScriptMerger.h>
+#include <hoot/js/util/DataConvertJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
 
 using namespace v8;

@@ -54,7 +54,7 @@
 //#define AREAMERGERJS_H
 
 //#include <hoot/js/SystemNodeJs.h>
-//#include <v8.h>
+//#include "HootJsStable.h"
 
 //namespace hoot
 //{

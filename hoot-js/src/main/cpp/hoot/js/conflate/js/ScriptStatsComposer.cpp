@@ -37,6 +37,7 @@
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/js/OsmMapJs.h>
+#include <hoot/js/v8Engine.h>
 #include <hoot/js/elements/ElementJs.h>
 
 using namespace std;
@@ -136,7 +137,7 @@ QString ScriptStatsComposer::compose(QList< QList<SingleStat> >& stats, const QS
   //   other drawing packages by using the stats passed into the JS file.
 
   // vars
-  Isolate* current = Isolate::GetCurrent();
+  Isolate* current = v8Engine::getIsolate();
   HandleScope handleScope(current);
   Context::Scope context_scope(_script->getContext(current));
   QString report = "";

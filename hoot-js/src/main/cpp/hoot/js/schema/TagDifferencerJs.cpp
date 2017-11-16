@@ -33,6 +33,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/OsmMapJs.h>
+#include <hoot/js/v8Engine.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
@@ -61,7 +62,7 @@ TagDifferencerJs::~TagDifferencerJs()
 
 void TagDifferencerJs::diff(const FunctionCallbackInfo<Value>& args)
 {
-  Isolate* current = Isolate::GetCurrent();
+  Isolate* current = v8Engine::getIsolate();
   HandleScope scope(current);
 
   try
@@ -103,7 +104,7 @@ void TagDifferencerJs::Init(Handle<Object> target)
     tpl->InstanceTemplate()->SetInternalFieldCount(2);
     // Prototype
     tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "diff"),
-        FunctionTemplate::New(current, diff)->GetFunction());
+        FunctionTemplate::New(current, diff));
     tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
                                   String::NewFromUtf8(current, TagDifferencer::className().data()));
 

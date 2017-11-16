@@ -22,7 +22,7 @@ DEPENDPATH += \
 
 INCLUDEPATH += \
   $${DEPENDPATH} \
-  /usr/include/nodejs \
+  /usr/include/node \
   ../local/include/ \
 
 PRECOMPILED_HEADER = src/main/cpp/hoot/js/HootJsStable.h
@@ -37,7 +37,7 @@ OTHER_FILES += \
 
 include(../Configure.pri)
 
-QMAKE_CXXFLAGS = -I/usr/include/nodejs $$QMAKE_CXXFLAGS
+QMAKE_CXXFLAGS = -I/usr/include/node $$QMAKE_CXXFLAGS
 
 QMAKE_POST_LINK = cp -l ../lib/libHootJs.so.1.0.0 ../lib/HootJs.node 2>/dev/null || cp ../lib/libHootJs.so.1.0.0 ../lib/HootJs.node
 
@@ -50,13 +50,11 @@ release:OBJECTS_DIR = tmp/release
 else:OBJECTS_DIR = tmp/debug
 DESTDIR = ../lib/
 
-SOURCES += $$files(src/*.cpp, true)
-HEADERS += $$files(src/*.h, true)
+SOURCES += $$files(src/main/*.cpp, true)
+HEADERS += $$files(src/main/*.h, true)
 
 # test files
-SOURCES -= $$files(src/*Test*.cpp, true)
-SOURCES -= $$files(src/*Test*.h, true)
 cppunit {
-SOURCES += $$files(src/*Test*.cpp, true)
-SOURCES += $$files(src/*Test*.h, true)
+SOURCES += $$files(src/test/*.cpp, true)
+SOURCES += $$files(src/test/*.h, true)
 }

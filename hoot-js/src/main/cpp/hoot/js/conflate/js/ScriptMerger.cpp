@@ -30,6 +30,7 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/js/OsmMapJs.h>
+#include <hoot/js/v8Engine.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/elements/ElementIdJs.h>
 #include <hoot/js/util/DataConvertJs.h>
@@ -51,7 +52,7 @@ ScriptMerger::ScriptMerger(boost::shared_ptr<PluginContext> script, Persistent<O
   _pairs(pairs),
   _script(script)
 {
-  _plugin.Reset(Isolate::GetCurrent(), plugin);
+  _plugin.Reset(v8Engine::getIsolate(), plugin);
   _eid1 = _pairs.begin()->first;
   _eid2 = _pairs.begin()->second;
 }
@@ -85,7 +86,7 @@ void ScriptMerger::_applyMergePair(const OsmMapPtr& map,
                         "details.");
   }
 
-  Isolate* current = Isolate::GetCurrent();
+  Isolate* current = v8Engine::getIsolate();
   HandleScope handleScope(current);
   Context::Scope context_scope(_script->getContext(current));
   Handle<Value> v = _callMergePair(map);
@@ -120,7 +121,7 @@ void ScriptMerger::_applyMergeSets(const OsmMapPtr& map,
 
 Handle<Value> ScriptMerger::_callMergePair(const OsmMapPtr& map) const
 {
-  Isolate* current = Isolate::GetCurrent();
+  Isolate* current = v8Engine::getIsolate();
   EscapableHandleScope handleScope(current);
   Handle<Object> plugin =
     Handle<Object>::Cast(_script->getContext(current)->Global()->Get(String::NewFromUtf8(current, "plugin")));
@@ -154,7 +155,7 @@ Handle<Value> ScriptMerger::_callMergePair(const OsmMapPtr& map) const
 void ScriptMerger::_callMergeSets(const OsmMapPtr& map,
   vector< pair<ElementId, ElementId> >& replaced) const
 {
-  Isolate* current = Isolate::GetCurrent();
+  Isolate* current = v8Engine::getIsolate();
   HandleScope handleScope(current);
   Context::Scope context_scope(_script->getContext(current));
   Handle<Object> plugin =
@@ -184,7 +185,7 @@ void ScriptMerger::_callMergeSets(const OsmMapPtr& map,
 
 bool ScriptMerger::hasFunction(QString name) const
 {
-  Isolate* current = Isolate::GetCurrent();
+  Isolate* current = v8Engine::getIsolate();
   HandleScope handleScope(current);
   Context::Scope context_scope(_script->getContext(current));
   Handle<Object> plugin =

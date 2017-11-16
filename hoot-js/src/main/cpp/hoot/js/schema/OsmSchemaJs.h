@@ -31,6 +31,7 @@
 
 // node.js
 #include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/v8Engine.h>
 #include <hoot/js/util/DataConvertJs.h>
 
 namespace hoot
@@ -67,7 +68,7 @@ private:
 
 inline v8::Handle<v8::Value> toV8(const SchemaVertex& tv)
 {
-  v8::Isolate* current = v8::Isolate::GetCurrent();
+  v8::Isolate* current = v8Engine::getIsolate();
   v8::Handle<v8::Object> result = v8::Object::New(current);
 
   if (tv.isEmpty())

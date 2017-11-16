@@ -30,8 +30,9 @@
 
 // hoot
 #include <hoot/core/filters/ElementCriterion.h>
-#include <hoot/js/util/JsFunctionConsumer.h>
 #include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/v8Engine.h>
+#include <hoot/js/util/JsFunctionConsumer.h>
 
 namespace hoot
 {
@@ -54,7 +55,7 @@ public:
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new JsFunctionCriterion(_func)); }
 
 private:
-  JsFunctionCriterion(v8::Persistent<v8::Function>& func) { _func.Reset(v8::Isolate::GetCurrent(), func); }
+  JsFunctionCriterion(v8::Persistent<v8::Function>& func) { _func.Reset(v8Engine::getIsolate(), func); }
 
   v8::Persistent<v8::Function> _func;
 };

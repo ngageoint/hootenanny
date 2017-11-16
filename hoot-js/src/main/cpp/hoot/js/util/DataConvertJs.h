@@ -30,13 +30,12 @@
 // hoot
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Units.h>
+#include <hoot/js/HootJsStable.h>
+#include <hoot/js/v8Engine.h>
 
 // Qt
 #include <QHash>
 #include <QStringList>
-
-// v8
-#include <v8.h>
 
 #include "StreamUtilsJs.h"
 
@@ -265,28 +264,28 @@ inline T toCpp(v8::Handle<v8::Value> v)
 
 inline v8::Handle<v8::Value> toV8(bool v)
 {
-  return v8::Boolean::New(v8::Isolate::GetCurrent(), v);
+  return v8::Boolean::New(v8Engine::getIsolate(), v);
 }
 
 inline v8::Handle<v8::Value> toV8(int i)
 {
-  return v8::Integer::New(v8::Isolate::GetCurrent(), i);
+  return v8::Integer::New(v8Engine::getIsolate(), i);
 }
 
 inline v8::Handle<v8::Value> toV8(double v)
 {
-  return v8::Number::New(v8::Isolate::GetCurrent(),v);
+  return v8::Number::New(v8Engine::getIsolate(),v);
 }
 
 inline v8::Handle<v8::Value> toV8(const std::string& s)
 {
-  return v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), s.data(), v8::NewStringType::kNormal, s.length()).ToLocalChecked();
+  return v8::String::NewFromUtf8(v8Engine::getIsolate(), s.data(), v8::NewStringType::kNormal, s.length()).ToLocalChecked();
 }
 
 template<typename T, typename U>
 v8::Handle<v8::Value> toV8(const std::pair<T, U>& p)
 {
-  v8::Handle<v8::Array> result = v8::Array::New(v8::Isolate::GetCurrent(), 2);
+  v8::Handle<v8::Array> result = v8::Array::New(v8Engine::getIsolate(), 2);
   result->Set(0, toV8(p.first));
   result->Set(1, toV8(p.second));
   return result;
@@ -295,7 +294,7 @@ v8::Handle<v8::Value> toV8(const std::pair<T, U>& p)
 template<typename T>
 v8::Handle<v8::Value> toV8(const std::vector<T>& v)
 {
-  v8::Handle<v8::Array> result = v8::Array::New(v8::Isolate::GetCurrent(), v.size());
+  v8::Handle<v8::Array> result = v8::Array::New(v8Engine::getIsolate(), v.size());
 
   for (uint32_t i = 0; i < v.size(); i++)
   {
@@ -311,7 +310,7 @@ v8::Handle<v8::Value> toV8(const std::vector<T>& v)
 template<typename T>
 v8::Handle<v8::Value> toV8(const std::set<T>& v)
 {
-  v8::Handle<v8::Array> result = v8::Array::New(v8::Isolate::GetCurrent(), v.size());
+  v8::Handle<v8::Array> result = v8::Array::New(v8Engine::getIsolate(), v.size());
 
   uint32_t i = 0;
   for (typename std::set<T>::const_iterator it = v.begin(); it != v.end(); ++it)
@@ -324,18 +323,18 @@ v8::Handle<v8::Value> toV8(const std::set<T>& v)
 
 inline v8::Handle<v8::Value> toV8(const char* s)
 {
-  return v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), s);
+  return v8::String::NewFromUtf8(v8Engine::getIsolate(), s);
 }
 
 inline v8::Handle<v8::Value> toV8(const QString& s)
 {
   QByteArray utf8 = s.toUtf8();
-  return v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), utf8.data(), v8::NewStringType::kNormal, utf8.length()).ToLocalChecked();
+  return v8::String::NewFromUtf8(v8Engine::getIsolate(), utf8.data(), v8::NewStringType::kNormal, utf8.length()).ToLocalChecked();
 }
 
 inline v8::Handle<v8::Value> toV8(const QStringList& v)
 {
-  v8::Handle<v8::Array> result = v8::Array::New(v8::Isolate::GetCurrent(), v.size());
+  v8::Handle<v8::Array> result = v8::Array::New(v8Engine::getIsolate(), v.size());
   for (int i = 0; i < v.size(); i++)
   {
     result->Set(i, toV8(v[i]));
@@ -346,7 +345,7 @@ inline v8::Handle<v8::Value> toV8(const QStringList& v)
 
 inline v8::Handle<v8::Value> toV8(const QVariant& v)
 {
-  v8::Isolate* current = v8::Isolate::GetCurrent();
+  v8::Isolate* current = v8Engine::getIsolate();
   switch (v.type())
   {
   case QVariant::Invalid:
@@ -404,7 +403,7 @@ inline v8::Handle<v8::Value> toV8(const QVariant& v)
 template<typename T, typename U>
 inline v8::Handle<v8::Value> toV8(const QHash<T, U>& m)
 {
-  v8::Handle<v8::Object> result = v8::Object::New(v8::Isolate::GetCurrent());
+  v8::Handle<v8::Object> result = v8::Object::New(v8Engine::getIsolate());
 
   typename QHash<T, U>::const_iterator i;
   for (i = m.begin(); i != m.end(); i++)

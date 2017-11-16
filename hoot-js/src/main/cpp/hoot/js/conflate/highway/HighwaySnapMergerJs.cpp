@@ -30,6 +30,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/OsmMapJs.h>
+#include <hoot/js/v8Engine.h>
 #include <hoot/js/algorithms/SublineStringMatcherJs.h>
 #include <hoot/js/elements/ElementIdJs.h>
 #include <hoot/js/util/DataConvertJs.h>
@@ -75,7 +76,7 @@ void HighwaySnapMergerJs::Init(Handle<Object> target)
   tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
     String::NewFromUtf8(current, MergerBase::className().data()));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "apply"),
-      FunctionTemplate::New(current, apply)->GetFunction());
+      FunctionTemplate::New(current, apply));
 
   _constructor.Reset(current, tpl->GetFunction());
   target->Set(String::NewFromUtf8(current, "HighwaySnapMerger"), ToLocal(&_constructor));
@@ -83,7 +84,7 @@ void HighwaySnapMergerJs::Init(Handle<Object> target)
 
 Handle<Object> HighwaySnapMergerJs::New(const HighwaySnapMergerPtr &ptr)
 {
-  Isolate* current = Isolate::GetCurrent();
+  Isolate* current = v8Engine::getIsolate();
   EscapableHandleScope scope(current);
 
   Handle<Object> result = _constructor.Get(current)->NewInstance();

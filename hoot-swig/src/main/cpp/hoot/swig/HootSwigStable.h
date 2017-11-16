@@ -31,6 +31,6 @@
 #include <hoot/core/HootCoreStable.h>
 
 // v8
-#include <v8.h>
+#include "HootJsStable.h"
 
 #endif // HOOTSWIGSTABLE_H

@@ -33,6 +33,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/js/JsRegistrar.h>
+#include <hoot/js/v8Engine.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
 #include <hoot/js/util/StringUtilsJs.h>
 
@@ -92,9 +93,9 @@ void NodeJs::Init(Handle<Object> target)
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
   // Prototype
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getX"),
-      FunctionTemplate::New(current, getX)->GetFunction());
+      FunctionTemplate::New(current, getX));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getY"),
-      FunctionTemplate::New(current, getY)->GetFunction());
+      FunctionTemplate::New(current, getY));
   ElementJs::_addBaseFunctions(tpl);
 
   _constructor.Reset(current, tpl->GetFunction());
@@ -103,7 +104,7 @@ void NodeJs::Init(Handle<Object> target)
 
 Handle<Object> NodeJs::New(ConstNodePtr node)
 {
-  Isolate* current = Isolate::GetCurrent();
+  Isolate* current = v8Engine::getIsolate();
   EscapableHandleScope scope(current);
 
   Handle<Object> result = _constructor.Get(current)->NewInstance();
@@ -115,7 +116,7 @@ Handle<Object> NodeJs::New(ConstNodePtr node)
 
 Handle<Object> NodeJs::New(NodePtr node)
 {
-  Isolate* current = Isolate::GetCurrent();
+  Isolate* current = v8Engine::getIsolate();
   EscapableHandleScope scope(current);
 
   Handle<Object> result = _constructor.Get(current)->NewInstance();

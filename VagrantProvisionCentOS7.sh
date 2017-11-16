@@ -152,25 +152,6 @@ make -j$(nproc) >> ~/centos_install.txt
 sudo make install >> ~/centos_install.txt
 sudo ln -s /usr/lib/libnode.so.57 /usr/lib/libnode.so
 
-# Google depot tools
-#echo "##### Depot Tools #####"
-#cd ~
-#git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git >> ~/centos7_install.txt
-#export PATH=$PATH:~/depot_tools
-
-# V8
-#echo "##### V8 #####"
-#cd ~
-#fetch v8 >> ~/centos7_install.txt
-#cd v8
-#git checkout 5.1-lkgr >> ~/centos7_install.txt
-#gclient sync >> ~/centos7_install.txt
-#make -sj$(nproc) x64.release library=shared use_system_icu=1 >> ~/centos7_install.txt
-# i18nsupport=off
-#sudo cp out/x64.release/lib.target/*.so /usr/lib64/
-#sudo cp include/* /usr/include/node/
-#sudo cp -r include/libplatform /usr/include/node/
-
 # Stxxl
 cd ~
 if [ ! -f "${STXXL_VERSION}.tar.gz" ]; then
@@ -473,7 +454,7 @@ cd ~
 ##### These two are next to do.
 echo "### Installing node-mapnik-server..."
 sudo cp $HOOT_HOME/node-mapnik-server/systemd/node-mapnik.service /etc/systemd/system/node-mapnik.service
-sudo sed -i "s/SERVICE_USER/$VMUSER/g" /etc/systemd/system/node-mapnik.service
+sudo sed -i "s|SERVICE_USER|$VMUSER|g" /etc/systemd/system/node-mapnik.service
 sudo sed -i "s|HOOT_HOME|$HOOT_HOME|g" /etc/systemd/system/node-mapnik.service
 # Make sure all npm modules are installed
 cd $HOOT_HOME/node-mapnik-server
@@ -483,7 +464,7 @@ rm -rf ~/tmp
 
 echo "### Installing node-export-server..."
 sudo cp $HOOT_HOME/node-export-server/systemd/node-export.service /etc/systemd/system/node-export.service
-sudo sed -i "s/SERVICE_USER/$VMUSER/g" /etc/systemd/system/node-export.service
+sudo sed -i "s|SERVICE_USER|$VMUSER|g" /etc/systemd/system/node-export.service
 sudo sed -i "s|HOOT_HOME|$HOOT_HOME|g" /etc/systemd/system/node-export.service
 # Make sure all npm modules are installed
 cd $HOOT_HOME/node-export-server

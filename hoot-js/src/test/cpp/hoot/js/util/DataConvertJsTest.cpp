@@ -27,15 +27,16 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
+#include <hoot/js/HootJsStable.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/PluginContext.h>
+#include <hoot/js/v8Engine.h>
 #include <hoot/js/util/DataConvertJs.h>
 #include <hoot/js/util/StreamUtilsJs.h>
 
 // Qt
 #include <QVariant>
 
-#include <v8.h>
 #include <iostream>
 #include <string>
 
@@ -60,7 +61,7 @@ public:
 
   void qvariantTest()
   {
-    Isolate* current = Isolate::GetCurrent();
+    Isolate* current = v8Engine::getIsolate();
     HandleScope handleScope(current);
 
     // Create a new context.

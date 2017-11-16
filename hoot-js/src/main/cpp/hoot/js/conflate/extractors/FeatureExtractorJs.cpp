@@ -34,6 +34,7 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/OsmMapJs.h>
+#include <hoot/js/v8Engine.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
 #include <hoot/js/util/StreamUtilsJs.h>
@@ -109,9 +110,9 @@ void FeatureExtractorJs::Init(Handle<Object> target)
     tpl->InstanceTemplate()->SetInternalFieldCount(1);
     // Prototype
     tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "extract"),
-        FunctionTemplate::New(current, extract)->GetFunction());
+        FunctionTemplate::New(current, extract));
     tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getName"),
-        FunctionTemplate::New(current, getName)->GetFunction());
+        FunctionTemplate::New(current, getName));
 
     Persistent<Function> constructor(current, tpl->GetFunction());
     target->Set(String::NewFromUtf8(current, n), constructor.Get(current));
@@ -120,7 +121,7 @@ void FeatureExtractorJs::Init(Handle<Object> target)
 
 void FeatureExtractorJs::New(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope(Isolate::GetCurrent());
+  HandleScope scope(v8Engine::getIsolate());
 
   QString className = str(args.This()->GetConstructorName());
 

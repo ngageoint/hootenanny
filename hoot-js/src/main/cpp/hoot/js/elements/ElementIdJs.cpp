@@ -29,6 +29,7 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/js/JsRegistrar.h>
+#include <hoot/js/v8Engine.h>
 #include <hoot/js/util/StringUtilsJs.h>
 #include <hoot/core/filters/ElementCriterion.h>
 
@@ -58,24 +59,23 @@ ElementIdJs::~ElementIdJs()
 void ElementIdJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();
+  HandleScope handleScope(current);
+  Local<Context> context = v8::Context::New(current);
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-  tpl->SetClassName(String::NewFromUtf8(current, Element::className().data()));
+  tpl->SetClassName(String::NewFromUtf8(current, ElementId::className().data()));
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
   // Prototype
   tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
-    String::NewFromUtf8(current, ElementId::className().data()));
+      String::NewFromUtf8(current, ElementId::className().data()));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getId"),
-      FunctionTemplate::New(current, getType)->GetFunction());
+      FunctionTemplate::New(current, getType));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getType"),
-      FunctionTemplate::New(current, getType)->GetFunction());
+      FunctionTemplate::New(current, getType));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "toString"),
-      FunctionTemplate::New(current, toString)->GetFunction());
+      FunctionTemplate::New(current, toString));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "toJSON"),
-      FunctionTemplate::New(current, toJSON)->GetFunction());
-  tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
-                                String::NewFromUtf8(current, ElementId::className().data()));
-
+      FunctionTemplate::New(current, toJSON));
 
   _constructor.Reset(current, tpl->GetFunction());
   target->Set(String::NewFromUtf8(current, "ElementId"), ToLocal(&_constructor));
@@ -83,7 +83,7 @@ void ElementIdJs::Init(Handle<Object> target)
 
 Handle<Object> ElementIdJs::New(ElementId eid)
 {
-  Isolate* current = Isolate::GetCurrent();
+  Isolate* current = v8Engine::getIsolate();
   EscapableHandleScope scope(current);
 
   Handle<Object> result = _constructor.Get(current)->NewInstance();

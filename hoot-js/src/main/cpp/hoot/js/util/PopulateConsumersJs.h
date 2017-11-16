@@ -38,6 +38,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/js/OsmMapJs.h>
+#include <hoot/js/v8Engine.h>
 #include <hoot/js/algorithms/StringDistanceJs.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/filter/ElementCriterionJs.h>
@@ -58,7 +59,7 @@ class PopulateConsumersJs
 {
 public:
 
-  static v8::Local<v8::String> baseClass() { return v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), "baseClass"); }
+  static v8::Local<v8::String> baseClass() { return v8::String::NewFromUtf8(v8Engine::getIsolate(), "baseClass"); }
 
   template <typename T>
   static void populateConsumers(T* consumer, const v8::FunctionCallbackInfo<v8::Value>& args)
@@ -188,7 +189,7 @@ public:
       throw IllegalArgumentException("Expected the argument to be a valid function.");
     }
 
-    v8::Isolate* current = v8::Isolate::GetCurrent();
+    v8::Isolate* current = v8Engine::getIsolate();
     v8::Local<v8::Function> func(v8::Local<v8::Function>::Cast(v));
     JsFunctionConsumer* c = dynamic_cast<JsFunctionConsumer*>(consumer);
     ElementCriterionConsumer* ecc = dynamic_cast<ElementCriterionConsumer*>(consumer);

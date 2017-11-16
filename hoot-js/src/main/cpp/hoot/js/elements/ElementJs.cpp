@@ -33,6 +33,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/js/JsRegistrar.h>
+#include <hoot/js/v8Engine.h>
 #include <hoot/js/elements/NodeJs.h>
 #include <hoot/js/elements/RelationJs.h>
 #include <hoot/js/elements/TagsJs.h>
@@ -64,29 +65,29 @@ ElementJs::~ElementJs()
 
 void ElementJs::_addBaseFunctions(Local<FunctionTemplate> tpl)
 {
-  Isolate* current = Isolate::GetCurrent();
+  Isolate* current = v8Engine::getIsolate();
   tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
       String::NewFromUtf8(current, Element::className().data()));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getCircularError"),
-      FunctionTemplate::New(current, getCircularError)->GetFunction());
+      FunctionTemplate::New(current, getCircularError));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getElementId"),
-      FunctionTemplate::New(current, getElementId)->GetFunction());
+      FunctionTemplate::New(current, getElementId));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getId"),
-      FunctionTemplate::New(current, getId)->GetFunction());
+      FunctionTemplate::New(current, getId));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getStatusInput"),
-      FunctionTemplate::New(current, getStatusString)->GetFunction());
+      FunctionTemplate::New(current, getStatusString));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getStatusString"),
-      FunctionTemplate::New(current, getStatusString)->GetFunction());
+      FunctionTemplate::New(current, getStatusString));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getTags"),
-      FunctionTemplate::New(current, getTags)->GetFunction());
+      FunctionTemplate::New(current, getTags));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "setStatusString"),
-      FunctionTemplate::New(current, setStatusString)->GetFunction());
+      FunctionTemplate::New(current, setStatusString));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "setTags"),
-      FunctionTemplate::New(current, setTags)->GetFunction());
+      FunctionTemplate::New(current, setTags));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "toJSON"),
-      FunctionTemplate::New(current, toString)->GetFunction());
+      FunctionTemplate::New(current, toString));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "toString"),
-      FunctionTemplate::New(current, toString)->GetFunction());
+      FunctionTemplate::New(current, toString));
 }
 
 void ElementJs::getCircularError(const FunctionCallbackInfo<Value>& args)
@@ -147,7 +148,7 @@ void ElementJs::getTags(const FunctionCallbackInfo<Value>& args)
 
 Handle<Object> ElementJs::New(ConstElementPtr e)
 {
-  EscapableHandleScope scope(Isolate::GetCurrent());
+  EscapableHandleScope scope(v8Engine::getIsolate());
 
   Handle<Object> result;
 
@@ -180,7 +181,7 @@ Handle<Object> ElementJs::New(ConstElementPtr e)
 
 Handle<Object> ElementJs::New(ElementPtr e)
 {
-  EscapableHandleScope scope(Isolate::GetCurrent());
+  EscapableHandleScope scope(v8Engine::getIsolate());
 
   Handle<Object> result;
 

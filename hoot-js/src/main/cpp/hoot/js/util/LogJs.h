@@ -34,7 +34,7 @@
 #include <hoot/js/SystemNodeJs.h>
 
 // v8
-//#include <v8.h>
+#include <hoot/js/HootJsStable.h>
 
 namespace hoot
 {

@@ -24,31 +24,55 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef HOOTJSSTABLE_H
-#define HOOTJSSTABLE_H
+#ifndef V8ENGINE_H
+#define V8ENGINE_H
 
-// hoot
-#include <hoot/core/HootCoreStable.h>
-
-//  Remove unused-parameter warnings from v8
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-
-// v8
-#include <v8.h>
-#include <libplatform/libplatform.h>
-
-#pragma GCC diagnostic pop
+#include "HootJsStable.h"
 
 namespace hoot
 {
 
-//  v8::Persistent is no longer derived from v8::Local requiring these conversion functions
-template<class T>
-inline v8::Local<T> ToLocal(v8::Persistent<T>* p) { return *reinterpret_cast<v8::Local<T>*>(p); }
-template<class T>
-inline v8::Persistent<T> ToPersistent(v8::Local<T>* l) { return *reinterpret_cast<v8::Persistent<T>*>(l); }
+/**
+ * A singleton to initialize v8 JavaScript library. You should call getInstance() on this before any other
+ * use of v8Engine. You can call getInstance multiple times without any ill effects.
+ */
+class v8Engine
+{
+public:
+
+  /**
+   * @brief getInstance - create or return the singleton object
+   * @return reference to singleton object
+   */
+  static v8Engine& getInstance();
+
+  /**
+   * @brief init - A no-op that makes the code a little easier to read.
+   */
+  void init() {}
+
+  ~v8Engine();
+
+  static v8::Isolate* getIsolate() { return getInstance()._isolate; }
+
+private:
+  /** static pointer to the singleton instance */
+  static std::auto_ptr<v8Engine> _theInstance;
+
+  /**
+   * @brief v8Engine - private constructor
+   */
+  v8Engine();
+
+  /** Creation parameters allocator for main isolate */
+  boost::shared_ptr<v8::ArrayBuffer::Allocator> _allocator;
+  /** Main isolate */
+  v8::Isolate* _isolate;
+  /** Platform object */
+  boost::shared_ptr<v8::Platform> _platform;
+
+};
 
 }
 
-#endif // HOOTJSSTABLE_H
+#endif // V8ENGINE_H

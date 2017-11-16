@@ -120,13 +120,6 @@ void Hoot::_init()
 # ifdef HOOT_HAVE_RND
   loadLibrary("HootRnd");
 # endif
-  //TODO: I don't think hoot can operate at all now without nodejs due to the schema loader, so
-  //this should be reworked.
-# ifdef HOOT_HAVE_NODEJS
-  // sometimes HootJs is loaded by node.js before we get to init.
-  if (Factory::getInstance().hasClass(QString("hoot::HootJsLoaded")) == false)
-    loadLibrary("HootJs");
-# endif
 
   Log::getInstance().setLevel(Log::Info);
 }

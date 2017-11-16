@@ -46,6 +46,7 @@
 #include <hoot/core/schema/TranslateStringDistance.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/js/OsmMapJs.h>
+#include <hoot/js/v8Engine.h>
 #include <hoot/js/conflate/js/ScriptMergerCreator.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
@@ -79,14 +80,14 @@ ScriptMatch::ScriptMatch(boost::shared_ptr<PluginContext> script, Local<Object> 
   _neverCausesConflict(false),
   _script(script)
 {
-  _plugin.Reset(Isolate::GetCurrent(), plugin);
+  _plugin.Reset(v8Engine::getIsolate(), plugin);
   _calculateClassification(map, mapObj, plugin);
 }
 
 void ScriptMatch::_calculateClassification(const ConstOsmMapPtr& map, Handle<Object> mapObj,
   Handle<Object> plugin)
 {
-  Isolate* current = Isolate::GetCurrent();
+  Isolate* current = v8Engine::getIsolate();
   HandleScope handleScope(current);
   Handle<Context> context(_script->getContext(current));
   Context::Scope context_scope(context);
@@ -256,7 +257,7 @@ bool ScriptMatch::isConflicting(const Match& other, const ConstOsmMapPtr& map) c
 bool ScriptMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sharedEid,
   ElementId other1, ElementId other2) const
 {
-  Isolate* current = Isolate::GetCurrent();
+  Isolate* current = v8Engine::getIsolate();
   HandleScope handleScope(current);
   Handle<Context> context(_script->getContext(current));
   Context::Scope context_scope(context);
@@ -336,7 +337,7 @@ bool ScriptMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sha
 Handle<Value> ScriptMatch::_call(const ConstOsmMapPtr& map, v8::Handle<v8::Object> mapObj,
   Handle<Object> plugin)
 {
-  Isolate* current = Isolate::GetCurrent();
+  Isolate* current = v8Engine::getIsolate();
   EscapableHandleScope handleScope(current);
   Handle<Context> context(_script->getContext(current));
   Context::Scope context_scope(context);
@@ -366,7 +367,7 @@ Handle<Value> ScriptMatch::_call(const ConstOsmMapPtr& map, v8::Handle<v8::Objec
 
 Handle<Value> ScriptMatch::_callGetMatchFeatureDetails(const ConstOsmMapPtr& map) const
 {
-  Isolate* current = Isolate::GetCurrent();
+  Isolate* current = v8Engine::getIsolate();
   EscapableHandleScope handleScope(current);
   Handle<Context> context(_script->getContext(current));
   Context::Scope context_scope(context);
@@ -398,7 +399,7 @@ Handle<Value> ScriptMatch::_callGetMatchFeatureDetails(const ConstOsmMapPtr& map
 
 std::map<QString, double> ScriptMatch::getFeatures(const ConstOsmMapPtr& map) const
 {
-  Isolate* current = Isolate::GetCurrent();
+  Isolate* current = v8Engine::getIsolate();
   HandleScope handleScope(current);
   Handle<Context> context(_script->getContext(current));
   Context::Scope context_scope(context);

@@ -29,6 +29,7 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/js/JsRegistrar.h>
+#include <hoot/js/v8Engine.h>
 #include <hoot/js/elements/TagsJs.h>
 #include <hoot/js/util/DataConvertJs.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
@@ -79,25 +80,25 @@ void TagsJs::Init(Handle<Object> target)
   tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
     String::NewFromUtf8(current, Tags::className().data()));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "contains"),
-      FunctionTemplate::New(current, contains)->GetFunction());
+      FunctionTemplate::New(current, contains));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "get"),
-      FunctionTemplate::New(current, get)->GetFunction());
+      FunctionTemplate::New(current, get));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getCreateUuid"),
-      FunctionTemplate::New(current, getCreateUuid)->GetFunction());
+      FunctionTemplate::New(current, getCreateUuid));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getInformationCount"),
-      FunctionTemplate::New(current, getInformationCount)->GetFunction());
+      FunctionTemplate::New(current, getInformationCount));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getLengthInMeters"),
-      FunctionTemplate::New(current, getLengthInMeters)->GetFunction());
+      FunctionTemplate::New(current, getLengthInMeters));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getNames"),
-      FunctionTemplate::New(current, getNames)->GetFunction());
+      FunctionTemplate::New(current, getNames));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getVelocityInMeters"),
-      FunctionTemplate::New(current, getVelocityInMeters)->GetFunction());
+      FunctionTemplate::New(current, getVelocityInMeters));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "set"),
-      FunctionTemplate::New(current, set)->GetFunction());
+      FunctionTemplate::New(current, set));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "toDict"),
-      FunctionTemplate::New(current, toDict)->GetFunction());
+      FunctionTemplate::New(current, toDict));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "toString"),
-      FunctionTemplate::New(current, toString)->GetFunction());
+      FunctionTemplate::New(current, toString));
 
   _constructor.Reset(current, tpl->GetFunction());
   target->Set(String::NewFromUtf8(current, "Tags"), ToLocal(&_constructor));
@@ -105,7 +106,7 @@ void TagsJs::Init(Handle<Object> target)
 
 Handle<Object> TagsJs::New(const Tags& t)
 {
-  EscapableHandleScope scope(Isolate::GetCurrent());
+  EscapableHandleScope scope(v8Engine::getIsolate());
 
   Handle<Object> result = ToLocal(&_constructor)->NewInstance();
   TagsJs* from = ObjectWrap::Unwrap<TagsJs>(result);

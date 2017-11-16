@@ -30,6 +30,7 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/js/JsRegistrar.h>
+#include <hoot/js/v8Engine.h>
 #include <hoot/js/PluginContext.h>
 #include <hoot/js/util/DataConvertJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
@@ -54,7 +55,8 @@ RequireJs::~RequireJs() {}
 void RequireJs::Init(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
-  exports->Set(String::NewFromUtf8(current, "require"), FunctionTemplate::New(current, jsRequire)->GetFunction());
+  exports->Set(String::NewFromUtf8(current, "require"),
+               FunctionTemplate::New(current, jsRequire)->GetFunction());
 }
 
 void RequireJs::jsRequire(const FunctionCallbackInfo<Value>& args)
@@ -63,7 +65,7 @@ void RequireJs::jsRequire(const FunctionCallbackInfo<Value>& args)
   try
   {
     EscapableHandleScope scope(current);
-    Context::Scope context_scope(Context::New(v8::Isolate::GetCurrent()));
+    Context::Scope context_scope(Context::New(v8Engine::getIsolate()));
 
     if (args.Length() != 1)
     {
@@ -139,7 +141,7 @@ void RequireJs::jsRequire(const FunctionCallbackInfo<Value>& args)
       HootExceptionJs::throwAsHootException(try_catch);
     }
 
-    Local<Object> global = Context::New(v8::Isolate::GetCurrent())->Global();
+    Local<Object> global = Context::New(v8Engine::getIsolate())->Global();
 
     Local<Value> oldExports = global->Get(String::NewFromUtf8(current, "exports"));
 

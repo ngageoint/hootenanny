@@ -54,6 +54,7 @@ using namespace geos::geom;
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/SignalCatcher.h>
 #include <hoot/core/util/Settings.h>
+#include <hoot/js/v8Engine.h>
 using namespace hoot;
 
 // Qt
@@ -365,6 +366,8 @@ int main(int argc, char *argv[])
   else
   {
     Hoot::getInstance().init();
+
+    v8Engine::getInstance().init();
 
     QCoreApplication app(argc, argv);
 

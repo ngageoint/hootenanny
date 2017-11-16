@@ -31,6 +31,7 @@
 // node.js
 #include <hoot/core/conflate/MergerCreator.h>
 #include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/v8Engine.h>
 #include <hoot/js/util/DataConvertJs.h>
 
 namespace hoot
@@ -50,7 +51,7 @@ private:
 
 inline v8::Handle<v8::Value> toV8(const MergerCreator::Description& d)
 {
-  v8::Handle<v8::Object> result = v8::Object::New(v8::Isolate::GetCurrent());
+  v8::Handle<v8::Object> result = v8::Object::New(v8Engine::getIsolate());
   result->Set(toV8("className"), toV8(d.className));
   result->Set(toV8("description"), toV8(d.description));
   result->Set(toV8("experimental"), toV8(d.experimental));

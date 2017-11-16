@@ -29,6 +29,7 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/js/JsRegistrar.h>
+#include <hoot/js/v8Engine.h>
 #include <hoot/js/elements/TagsJs.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
 #include <hoot/js/util/StringUtilsJs.h>
@@ -66,7 +67,7 @@ void MostEnglishNameJs::Init(Handle<Object> target)
   tpl->InstanceTemplate()->SetInternalFieldCount(2);
   // Prototype
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getMostEnglishName"),
-      FunctionTemplate::New(current, getMostEnglishName)->GetFunction());
+      FunctionTemplate::New(current, getMostEnglishName));
   tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
                                 String::NewFromUtf8(current, MostEnglishName::className().data()));
 
@@ -89,7 +90,7 @@ void MostEnglishNameJs::New(const FunctionCallbackInfo<Value>& args)
 
 void MostEnglishNameJs::getMostEnglishName(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope(Isolate::GetCurrent());
+  HandleScope scope(v8Engine::getIsolate());
 
   MostEnglishNamePtr sd = toCpp<MostEnglishNamePtr>(args.This());
   Tags t = toCpp<Tags>(args[0]);

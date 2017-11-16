@@ -73,7 +73,7 @@ void StringDistanceJs::Init(Handle<Object> target)
     tpl->InstanceTemplate()->SetInternalFieldCount(2);
     // Prototype
     tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "toString"),
-        FunctionTemplate::New(current, toString)->GetFunction());
+        FunctionTemplate::New(current, toString));
     tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
                                   String::NewFromUtf8(current, StringDistance::className().data()));
 

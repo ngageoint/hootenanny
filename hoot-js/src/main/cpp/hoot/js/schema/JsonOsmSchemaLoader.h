@@ -31,7 +31,7 @@
 #include <hoot/core/schema/OsmSchemaLoader.h>
 
 // v8
-#include <v8.h>
+#include <hoot/js/HootJsStable.h>
 
 namespace hoot
 {
@@ -58,7 +58,6 @@ protected:
 
   std::set<QString> _deps;
   QList<QString> _baseDir;
-  v8::Persistent<v8::Context> _context;
 
   double _asDouble(const QVariant& v) const;
 

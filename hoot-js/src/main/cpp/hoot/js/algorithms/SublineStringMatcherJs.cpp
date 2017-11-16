@@ -36,6 +36,7 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/OsmMapJs.h>
+#include <hoot/js/v8Engine.h>
 #include <hoot/js/algorithms/linearreference/WaySublineMatchStringJs.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
@@ -147,7 +148,7 @@ void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<
 
 void SublineStringMatcherJs::findMatch(const FunctionCallbackInfo<Value>& args)
 {
-  EscapableHandleScope scope(Isolate::GetCurrent());
+  EscapableHandleScope scope(v8Engine::getIsolate());
 
   SublineStringMatcherJs* smJs = ObjectWrap::Unwrap<SublineStringMatcherJs>(args.This());
 
@@ -187,9 +188,9 @@ void SublineStringMatcherJs::Init(Handle<Object> target)
     tpl->InstanceTemplate()->SetInternalFieldCount(1);
     // Prototype
     tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "extractMatchingSublines"),
-        FunctionTemplate::New(current, extractMatchingSublines)->GetFunction());
+        FunctionTemplate::New(current, extractMatchingSublines));
     tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "findMatch"),
-        FunctionTemplate::New(current, findMatch)->GetFunction());
+        FunctionTemplate::New(current, findMatch));
 
     Persistent<Function> constructor(current, tpl->GetFunction());
     target->Set(String::NewFromUtf8(current, n), constructor.Get(current));

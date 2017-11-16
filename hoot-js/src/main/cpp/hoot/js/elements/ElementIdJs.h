@@ -28,6 +28,7 @@
 #define __ELEMENT_ID_JS_H__
 
 // hoot
+#include <hoot/js/v8Engine.h>
 #include <hoot/js/elements/ElementIdJs.h>
 #include <hoot/js/util/DataConvertJs.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
@@ -74,7 +75,7 @@ private:
 
 inline void toCpp(v8::Handle<v8::Value> v, ElementId& eid)
 {
-  v8::Isolate* current = v8::Isolate::GetCurrent();
+  v8::Isolate* current = v8Engine::getIsolate();
   if (v.IsEmpty() || !v->IsObject())
   {
     throw IllegalArgumentException("Expected an object, got: (" + toString(v) + ")");

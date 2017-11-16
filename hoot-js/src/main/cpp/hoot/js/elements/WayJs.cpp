@@ -33,6 +33,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/js/JsRegistrar.h>
+#include <hoot/js/v8Engine.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
 #include <hoot/js/util/StringUtilsJs.h>
 
@@ -79,7 +80,7 @@ void WayJs::Init(Handle<Object> target)
 
 Handle<Object> WayJs::New(ConstWayPtr way)
 {
-  Isolate* current = Isolate::GetCurrent();
+  Isolate* current = v8Engine::getIsolate();
   EscapableHandleScope scope(current);
 
   Handle<Object> result = _constructor.Get(current)->NewInstance();
@@ -91,7 +92,7 @@ Handle<Object> WayJs::New(ConstWayPtr way)
 
 Handle<Object> WayJs::New(WayPtr way)
 {
-  Isolate* current = Isolate::GetCurrent();
+  Isolate* current = v8Engine::getIsolate();
   EscapableHandleScope scope(current);
 
   Handle<Object> result = _constructor.Get(current)->NewInstance();

@@ -42,6 +42,7 @@
 #include <hoot/core/visitors/WorstCircularErrorVisitor.h>
 #include <hoot/core/visitors/IndexElementsVisitor.h>
 #include <hoot/js/OsmMapJs.h>
+#include <hoot/js/v8Engine.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/util/SettingsJs.h>
 
@@ -96,19 +97,20 @@ public:
     _elementsVisited = 0;
     _maxGroupSize = 0;
 
-    Isolate* current = Isolate::GetCurrent();
+    Isolate* current = v8Engine::getIsolate();
     HandleScope handleScope(current);
     Local<Context> context(_script->getContext(current));
     Context::Scope context_scope(context);
-    Persistent<Object> plugin(current, getPlugin(_script));
-    Local<Object> local_plugin(ToLocal(&plugin));
-    _candidateDistanceSigma = getNumber(local_plugin, "candidateDistanceSigma", 0.0, 1.0);
+    Local<Object> plugin = getPlugin(_script);
+//    Persistent<Object> plugin(current, getPlugin(_script));
+//    Local<Object> local_plugin(ToLocal(&plugin));
+    _candidateDistanceSigma = getNumber(plugin, "candidateDistanceSigma", 0.0, 1.0);
 
     //this is meant to have been set externally in a js rules file
-    _customSearchRadius = getNumber(local_plugin, "searchRadius", -1.0, 15.0);
+    _customSearchRadius = getNumber(plugin, "searchRadius", -1.0, 15.0);
     LOG_VART(_customSearchRadius);
 
-    Handle<v8::Value> value = local_plugin->Get(toV8("getSearchRadius"));
+    Handle<v8::Value> value = plugin->Get(toV8("getSearchRadius"));
     if (value->IsUndefined())
     {
       // pass
@@ -129,7 +131,7 @@ public:
 
   void checkForMatch(const boost::shared_ptr<const Element>& e)
   {
-    Isolate* current = Isolate::GetCurrent();
+    Isolate* current = v8Engine::getIsolate();
     HandleScope handleScope(current);
     Context::Scope context_scope(_script->getContext(current));
     Persistent<Object> plugin(current, getPlugin(_script));
@@ -177,8 +179,12 @@ public:
 
   static double getNumber(Handle<Object> obj, QString key, double minValue, double defaultValue)
   {
+    Isolate* current = v8Engine::getIsolate();
+    HandleScope handleScope(current);
+    Handle<Context> context(current->GetCurrentContext());
+    Context::Scope context_scope(context);
     double result = defaultValue;
-    Handle<String> cdtKey = String::NewFromUtf8(obj->GetIsolate(), key.toUtf8());
+    Handle<String> cdtKey = String::NewFromUtf8(current, key.toUtf8());
     if (obj->Has(cdtKey))
     {
       Local<Value> v = obj->Get(cdtKey);
@@ -199,13 +205,13 @@ public:
 /*
   Persistent<Object> getPlugin()
   {
-    Persistent<Object> plugin(Isolate::GetCurrent(), getPlugin());
+    Persistent<Object> plugin(v8Engine::getIsolate(), getPlugin());
     return plugin;
   }
 */
   static Local<Object> getPlugin(boost::shared_ptr<PluginContext> script)
   {
-    Isolate* current = Isolate::GetCurrent();
+    Isolate* current = v8Engine::getIsolate();
     HandleScope handleScope(current);
     Handle<Context> context(script->getContext(current));
     Context::Scope context_scope(context);
@@ -251,7 +257,7 @@ public:
       }
       else
       {
-        Isolate* current = Isolate::GetCurrent();
+        Isolate* current = v8Engine::getIsolate();
         Context::Scope context_scope(_script->getContext(current));
         HandleScope handleScope(current);
 
@@ -281,7 +287,7 @@ public:
    */
   void calculateSearchRadius()
   {
-    Isolate* current = Isolate::GetCurrent();
+    Isolate* current = v8Engine::getIsolate();
     Context::Scope context_scope(_script->getContext(current));
     HandleScope handleScope(current);
 
@@ -362,7 +368,7 @@ public:
   {
     if (_mapJs.IsEmpty())
     {
-      _mapJs.Reset(Isolate::GetCurrent(), OsmMapJs::create(getMap()));
+      _mapJs.Reset(v8Engine::getIsolate(), OsmMapJs::create(getMap()));
     }
     return ToLocal(&_mapJs);
   }
@@ -393,7 +399,7 @@ public:
       return _matchCandidateCache[e->getElementId()];
     }
 
-    Isolate* current = Isolate::GetCurrent();
+    Isolate* current = v8Engine::getIsolate();
     Context::Scope context_scope(_script->getContext(current));
     HandleScope handleScope(current);
     Persistent<Object> plugin(current, getPlugin(_script));
@@ -497,10 +503,10 @@ void ScriptMatchCreator::setArguments(QStringList args)
     throw HootException("The ScriptMatchCreator takes exactly one argument (script path).");
   }
 
+  Isolate* current = v8Engine::getIsolate();
+  HandleScope handleScope(current);
   _scriptPath = ConfPath::search(args[0], "rules");
   _script.reset(new PluginContext());
-  Isolate* current = Isolate::GetCurrent();
-  HandleScope handleScope(current);
   Context::Scope context_scope(_script->getContext(current));
   _script->loadScript(_scriptPath, "plugin");
   //bit of a hack...see MatchCreator.h...need to refactor
@@ -515,7 +521,7 @@ Match* ScriptMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1
 {
   if (isMatchCandidate(map->getElement(eid1), map) && isMatchCandidate(map->getElement(eid2), map))
   {
-    Isolate* current = Isolate::GetCurrent();
+    Isolate* current = v8Engine::getIsolate();
     Context::Scope context_scope(_script->getContext(current));
     HandleScope handleScope(current);
 
@@ -626,7 +632,7 @@ MatchCreator::Description ScriptMatchCreator::_getScriptDescription(QString path
   result.experimental = true;
 
   boost::shared_ptr<PluginContext> script(new PluginContext());
-  Isolate* current = Isolate::GetCurrent();
+  Isolate* current = v8Engine::getIsolate();
   HandleScope handleScope(current);
   Context::Scope context_scope(script->getContext(current));
   script->loadScript(path, "plugin");
@@ -675,7 +681,7 @@ boost::shared_ptr<MatchThreshold> ScriptMatchCreator::getMatchThreshold()
     {
       throw IllegalArgumentException("The script must be set on the ScriptMatchCreator.");
     }
-    Isolate* current = Isolate::GetCurrent();
+    Isolate* current = v8Engine::getIsolate();
     HandleScope handleScope(current);
     Context::Scope context_scope(_script->getContext(current));
     Handle<Object> plugin = ScriptMatchVisitor::getPlugin(_script);

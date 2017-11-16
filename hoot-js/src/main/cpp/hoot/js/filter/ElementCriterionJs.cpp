@@ -101,9 +101,9 @@ void ElementCriterionJs::Init(Handle<Object> target)
     tpl->InstanceTemplate()->SetInternalFieldCount(2);
     // Prototype
     tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "addCriterion"),
-        FunctionTemplate::New(current, addCriterion)->GetFunction());
+        FunctionTemplate::New(current, addCriterion));
     tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "isSatisfied"),
-        FunctionTemplate::New(current, isSatisfied)->GetFunction());
+        FunctionTemplate::New(current, isSatisfied));
     tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
                                   String::NewFromUtf8(current, ElementCriterion::className().data()));
 

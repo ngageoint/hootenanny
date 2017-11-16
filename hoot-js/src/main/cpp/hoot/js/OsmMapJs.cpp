@@ -25,21 +25,21 @@
  * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #define BUILDING_NODE_EXTENSION
-// #include <nodejs/node.h>
-#include <hoot/js/SystemNodeJs.h>
 
 #include "OsmMapJs.h"
 
 // hoot
-#include <hoot/js/elements/ElementIdJs.h>
 #include <hoot/core/io/OsmJsonWriter.h>
+#include <hoot/core/ops/RemoveElementOp.h>
+#include <hoot/js/JsRegistrar.h>
+#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/v8Engine.h>
+#include <hoot/js/elements/ElementIdJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
 #include <hoot/js/util/StreamUtilsJs.h>
 #include <hoot/js/visitors/ElementVisitorJs.h>
 #include <hoot/js/visitors/JsFunctionVisitor.h>
-#include <hoot/core/ops/RemoveElementOp.h>
-#include "JsRegistrar.h"
 
 using namespace v8;
 
@@ -62,32 +62,35 @@ OsmMapJs::OsmMapJs(OsmMapPtr map)
 
 OsmMapJs::~OsmMapJs()
 {
-  Isolate* current = Isolate::GetCurrent();
+  Isolate* current = v8Engine::getIsolate();
   while (!current->IdleNotification(100));
 }
 
 void OsmMapJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();
+  HandleScope handleScope(current);
+  Local<Context> context = v8::Context::New(current);
+
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
   tpl->SetClassName(String::NewFromUtf8(current, "OsmMap"));
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
   // Prototype
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "clone"),
-      FunctionTemplate::New(current, clone)->GetFunction());
+      FunctionTemplate::New(current, clone));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getElement"),
-      FunctionTemplate::New(current, getElement)->GetFunction());
+      FunctionTemplate::New(current, getElement));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getElementCount"),
-      FunctionTemplate::New(current, getElementCount)->GetFunction());
+      FunctionTemplate::New(current, getElementCount));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getParents"),
-      FunctionTemplate::New(current, getParents)->GetFunction());
+      FunctionTemplate::New(current, getParents));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "removeElement"),
-      FunctionTemplate::New(current, removeElement)->GetFunction());
+      FunctionTemplate::New(current, removeElement));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "visit"),
-      FunctionTemplate::New(current, visit)->GetFunction());
+      FunctionTemplate::New(current, visit));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "setIdGenerator"),
-      FunctionTemplate::New(current, setIdGenerator)->GetFunction());
+      FunctionTemplate::New(current, setIdGenerator));
   tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
                                 String::NewFromUtf8(current, OsmMap::className().data()));
 
@@ -97,7 +100,7 @@ void OsmMapJs::Init(Handle<Object> target)
 
 Handle<Object> OsmMapJs::create(ConstOsmMapPtr map)
 {
-  Isolate* current = Isolate::GetCurrent();
+  Isolate* current = v8Engine::getIsolate();
   EscapableHandleScope scope(current);
 
   Handle<Object> result = _constructor.Get(current)->NewInstance();
@@ -125,7 +128,7 @@ void OsmMapJs::setIdGenerator(const FunctionCallbackInfo<Value>& args)
 
 Handle<Object> OsmMapJs::create(OsmMapPtr map)
 {
-  Isolate* current = Isolate::GetCurrent();
+  Isolate* current = v8Engine::getIsolate();
   EscapableHandleScope scope(current);
 
   Handle<Object> result = _constructor.Get(current)->NewInstance();

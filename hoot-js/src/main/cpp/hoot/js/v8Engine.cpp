@@ -22,41 +22,52 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "HelloWorld.h"
+#include "v8Engine.h"
 
-// hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
-
-// node.js
-#include <hoot/js/SystemNodeJs.h>
-
-#include "HootJsStable.h"
-#include "JsRegistrar.h"
-#include "OsmMapJs.h"
-
-using namespace hoot;
 using namespace std;
 using namespace v8;
 
-/**
- * This class is used to determine if the HootJs library has already been loaded or not. This may
- * occur when using hoot from node.js. Unlike other classnames this string may be hard coded in
- * other spots. Be sure and do a thorough search before you change the class name.
- */
-class HootJsLoaded
+namespace hoot
 {
-public:
-  static string className() { return "hoot::HootJsLoaded"; }
-};
 
-HOOT_FACTORY_REGISTER_BASE(HootJsLoaded)
+auto_ptr<v8Engine> v8Engine::_theInstance;
 
-void init(Handle<Object> exports)
+v8Engine::v8Engine()
 {
-  JsRegistrar::Init(exports);
+  V8::InitializeICUDefaultLocation(NULL);
+  V8::InitializeExternalStartupData(NULL);
+  //  Setup and initialize the platform
+  _platform.reset(platform::CreateDefaultPlatform());
+  V8::InitializePlatform(_platform.get());
+  //  Initialize v8
+  V8::Initialize();
+  //  Create the main isolate
+  _allocator.reset(ArrayBuffer::Allocator::NewDefaultAllocator());
+  Isolate::CreateParams params;
+  params.array_buffer_allocator = _allocator.get();
+  _isolate = Isolate::New(params);
+  _isolate->Enter();
 }
 
-NODE_MODULE(HootJs, init)
+v8Engine::~v8Engine()
+{
+  _isolate->Exit();
+  //  Dispose of the v8 subsystem
+  _isolate->Dispose();
+  V8::Dispose();
+  //  Shutdown the platform
+  V8::ShutdownPlatform();
+}
+
+v8Engine& v8Engine::getInstance()
+{
+  if (_theInstance.get() == 0)
+  {
+    _theInstance.reset(new v8Engine());
+  }
+  return *_theInstance;
+}
+
+}

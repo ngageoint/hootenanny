@@ -29,6 +29,7 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/js/JsRegistrar.h>
+#include <hoot/js/v8Engine.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
 #include <hoot/js/util/StringUtilsJs.h>
 
@@ -66,7 +67,7 @@ void WaySublineMatchStringJs::Init(Handle<Object> target)
   tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
     String::NewFromUtf8(current, WaySublineMatchString::className().data()));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "toString"),
-      FunctionTemplate::New(current, toString)->GetFunction());
+      FunctionTemplate::New(current, toString));
 
   _constructor.Reset(current, tpl->GetFunction());
   target->Set(String::NewFromUtf8(current, "WaySublineMatchString"), ToLocal(&_constructor));
@@ -85,7 +86,7 @@ void WaySublineMatchStringJs::New(const FunctionCallbackInfo<Value>& args)
 
 Handle<Object> WaySublineMatchStringJs::New(WaySublineMatchStringPtr sm)
 {
-  Isolate* current = Isolate::GetCurrent();
+  Isolate* current = v8Engine::getIsolate();
   EscapableHandleScope scope(current);
 
   Handle<Object> result = _constructor.Get(current)->NewInstance();

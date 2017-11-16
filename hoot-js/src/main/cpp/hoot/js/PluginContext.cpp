@@ -31,6 +31,7 @@
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/js/JsRegistrar.h>
+#include <hoot/js/v8Engine.h>
 #include <hoot/js/util/DataConvertJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
 
@@ -47,7 +48,7 @@ const double PluginContext::UNSPECIFIED_DEFAULT = -999999e9;
 
 PluginContext::PluginContext()
 {
-  Isolate* current = Isolate::GetCurrent();
+  Isolate* current = v8Engine::getIsolate();
   HandleScope handleScope(current);
 
   // Create a new context.
@@ -107,12 +108,12 @@ Local<Value> PluginContext::call(Handle<Object> obj, QString name, QList<QVarian
 
 Local<Value> PluginContext::eval(QString e)
 {
-  return call(getContext(Isolate::GetCurrent())->Global(), "eval", QVariantList() << e);
+  return call(getContext(v8Engine::getIsolate())->Global(), "eval", QVariantList() << e);
 }
 
 bool PluginContext::hasKey(Handle<Value> v, QString key)
 {
-  Isolate* current = Isolate::GetCurrent();
+  Isolate* current = v8Engine::getIsolate();
   if (v->IsObject() == false)
   {
     throw IllegalArgumentException("Expected value to be an object.");
@@ -125,7 +126,7 @@ bool PluginContext::hasKey(Handle<Value> v, QString key)
 
 Local<Object> PluginContext::loadScript(QString filename, QString loadInto)
 {
-  Isolate* current = Isolate::GetCurrent();
+  Isolate* current = v8Engine::getIsolate();
   EscapableHandleScope handleScope(current);
   // Enter the created context for compiling and
   // running the hello world script.
@@ -148,7 +149,7 @@ Local<Object> PluginContext::loadScript(QString filename, QString loadInto)
 // This is a duplicate of loadScript. Will refactor later once the rest is working
 Local<Object> PluginContext::loadText(QString text, QString loadInto, QString scriptName)
 {
-  Isolate* current = Isolate::GetCurrent();
+  Isolate* current = v8Engine::getIsolate();
   EscapableHandleScope handleScope(current);
   Context::Scope context_scope(_context.Get(current));
 
@@ -182,7 +183,7 @@ Local<Object> PluginContext::loadText(QString text, QString loadInto, QString sc
 
 double PluginContext::toNumber(Handle<Value> v, QString key, double defaultValue)
 {
-  Isolate* current = Isolate::GetCurrent();
+  Isolate* current = v8Engine::getIsolate();
   if (v->IsObject() == false)
   {
     throw IllegalArgumentException("Expected value to be an object.");
@@ -208,7 +209,7 @@ double PluginContext::toNumber(Handle<Value> v, QString key, double defaultValue
 
 Local<Value> PluginContext::toValue(QVariant v)
 {
-  Isolate* current = Isolate::GetCurrent();
+  Isolate* current = v8Engine::getIsolate();
   EscapableHandleScope handleScope(current);
   Handle<Value> result;
   switch (v.type())

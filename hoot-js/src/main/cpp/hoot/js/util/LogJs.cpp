@@ -30,6 +30,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/js/JsRegistrar.h>
+#include <hoot/js/v8Engine.h>
 #include <hoot/js/util/DataConvertJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/js/util/StreamUtilsJs.h>
@@ -198,7 +199,7 @@ void LogJs::setLogLevel(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   EscapableHandleScope scope(current);
-  Context::Scope context_scope(Context::New(v8::Isolate::GetCurrent()));
+  Context::Scope context_scope(Context::New(v8Engine::getIsolate()));
 
   try
   {

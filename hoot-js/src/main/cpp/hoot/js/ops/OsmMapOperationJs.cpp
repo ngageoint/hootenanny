@@ -122,9 +122,9 @@ void OsmMapOperationJs::Init(Handle<Object> target)
     tpl->InstanceTemplate()->SetInternalFieldCount(2);
     // Prototype
     tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "apply"),
-        FunctionTemplate::New(current, apply)->GetFunction());
+        FunctionTemplate::New(current, apply));
     tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "applyAndGetResult"),
-        FunctionTemplate::New(current, applyAndGetResult)->GetFunction());
+        FunctionTemplate::New(current, applyAndGetResult));
     tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
                                   String::NewFromUtf8(current, OsmMapOperation::className().data()));
 

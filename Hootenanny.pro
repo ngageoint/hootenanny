@@ -22,8 +22,6 @@ hadoop {
 SUBDIRS += \
     pretty-pipes \
     hoot-hadoop \
-
-hoot-hadoop.depends = pretty-pipes
 }
 
 swig {

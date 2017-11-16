@@ -33,6 +33,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/js/JsRegistrar.h>
+#include <hoot/js/v8Engine.h>
 #include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
 #include <hoot/js/util/StringUtilsJs.h>
@@ -74,7 +75,7 @@ void RelationJs::Init(Handle<Object> target)
   // Prototype
   ElementJs::_addBaseFunctions(tpl);
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "replaceElement"),
-      FunctionTemplate::New(current, replaceElement)->GetFunction());
+      FunctionTemplate::New(current, replaceElement));
 
   _constructor.Reset(current, tpl->GetFunction());
   target->Set(String::NewFromUtf8(current, "Relation"), ToLocal(&_constructor));
@@ -82,7 +83,7 @@ void RelationJs::Init(Handle<Object> target)
 
 Handle<Object> RelationJs::New(ConstRelationPtr relation)
 {
-  Isolate* current = Isolate::GetCurrent();
+  Isolate* current = v8Engine::getIsolate();
   EscapableHandleScope scope(current);
 
   Handle<Object> result = _constructor.Get(current)->NewInstance();
@@ -94,7 +95,7 @@ Handle<Object> RelationJs::New(ConstRelationPtr relation)
 
 Handle<Object> RelationJs::New(RelationPtr relation)
 {
-  Isolate* current = Isolate::GetCurrent();
+  Isolate* current = v8Engine::getIsolate();
   EscapableHandleScope scope(current);
 
   Handle<Object> result = _constructor.Get(current)->NewInstance();

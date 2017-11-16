@@ -31,8 +31,8 @@
 #include <QString>
 
 // node.js
+#include <hoot/js/HootJsStable.h>
 #include <hoot/js/SystemNodeJs.h>
-#include <v8.h>
 
 namespace hoot
 {

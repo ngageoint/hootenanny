@@ -32,7 +32,8 @@
 #include <hoot/core/util/Log.h>
 
 // v8
-#include <v8.h>
+#include <hoot/js/HootJsStable.h>
+#include <hoot/js/v8Engine.h>
 
 namespace hoot
 {
@@ -45,9 +46,10 @@ namespace hoot
  */
 inline v8::Handle<v8::Value> fromJson(QString qstr, QString fileName="")
 {
-  v8::Isolate* current = v8::Isolate::GetCurrent();
+  v8::Isolate* current = v8Engine::getIsolate();
   v8::EscapableHandleScope scope(current);
   v8::Handle<v8::Context> context = v8::Context::New(current);
+  context->Enter();
   v8::Handle<v8::Object> global = context->Global();
 
   QByteArray utf8 = qstr.toUtf8();
@@ -95,7 +97,7 @@ inline v8::Handle<v8::Value> fromJson(QString qstr, QString fileName="")
 template <class T>
 QString toJson(const v8::Handle<T> object)
 {
-  v8::Isolate* current = v8::Isolate::GetCurrent();
+  v8::Isolate* current = v8Engine::getIsolate();
   v8::EscapableHandleScope scope(current);
 
   v8::Local<v8::Context> context = v8::Context::New(current);

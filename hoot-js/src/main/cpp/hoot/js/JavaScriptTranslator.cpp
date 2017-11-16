@@ -43,9 +43,10 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/js/PluginContext.h>
+#include <hoot/js/v8Engine.h>
 #include <hoot/js/util/DataConvertJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
-#include <hoot/js/PluginContext.h>
 
 // Qt
 #include <QCoreApplication>
@@ -190,7 +191,7 @@ void JavaScriptTranslator::_finalize()
   if (!_error)
   {
     // run the user's finalize function if it exists.
-    Isolate* current = Isolate::GetCurrent();
+    Isolate* current = v8Engine::getIsolate();
     HandleScope handleScope(current);
     Context::Scope context_scope(_gContext->getContext(current));
 
@@ -233,7 +234,7 @@ void JavaScriptTranslator::_init()
 
   _error = false;
   _gContext.reset(new PluginContext());
-  Isolate* current = Isolate::GetCurrent();
+  Isolate* current = v8Engine::getIsolate();
   HandleScope handleScope(current);
   Context::Scope context_scope(_gContext->getContext(current));
 
@@ -309,7 +310,7 @@ const QString JavaScriptTranslator::getLayerNameFilter()
     _init();
   }
 
-  Isolate* current = Isolate::GetCurrent();
+  Isolate* current = v8Engine::getIsolate();
   HandleScope handleScope(current);
   Context::Scope context_scope(_gContext->getContext(current));
 
@@ -384,7 +385,7 @@ boost::shared_ptr<const Schema> JavaScriptTranslator::getOgrOutputSchema()
       _init();
     }
 
-    Isolate* current = Isolate::GetCurrent();
+    Isolate* current = v8Engine::getIsolate();
     HandleScope handleScope(current);
     Context::Scope context_scope(_gContext->getContext(current));
 
@@ -814,7 +815,7 @@ vector<Tags> JavaScriptTranslator::translateToOgrTags(Tags& tags, ElementType el
   vector<Tags> result;
   QVariantList l = _translateToOgrVariants(tags, elementType, geometryType);
 
-  Isolate* current = Isolate::GetCurrent();
+  Isolate* current = v8Engine::getIsolate();
   HandleScope handleScope(current);
   Context::Scope context_scope(_gContext->getContext(current));
 
@@ -852,7 +853,7 @@ QVariantList JavaScriptTranslator::_translateToOgrVariants(Tags& tags,
 {
   _tags = &tags;
 
-  Isolate* current = Isolate::GetCurrent();
+  Isolate* current = v8Engine::getIsolate();
   HandleScope handleScope(current);
   Context::Scope context_scope(_gContext->getContext(current));
 
@@ -948,7 +949,7 @@ void JavaScriptTranslator::_translateToOsm(Tags& t, const char *layerName, const
 {
   _tags = &t;
 
-  Isolate* current = Isolate::GetCurrent();
+  Isolate* current = v8Engine::getIsolate();
   HandleScope handleScope(current);
   Context::Scope context_scope(_gContext->getContext(current));
 

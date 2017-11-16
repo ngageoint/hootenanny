@@ -28,6 +28,7 @@
 
 #include <hoot/core/util/Factory.h>
 #include <hoot/js/JsRegistrar.h>
+#include <hoot/js/v8Engine.h>
 #include <hoot/js/util/DataConvertJs.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
 #include <hoot/js/util/StringUtilsJs.h>
@@ -48,7 +49,7 @@ HootExceptionJs::HootExceptionJs()
 
 Handle<Object> HootExceptionJs::create(boost::shared_ptr<HootException> e)
 {
-  Isolate* current = Isolate::GetCurrent();
+  Isolate* current = v8Engine::getIsolate();
   EscapableHandleScope scope(current);
 
   Handle<Object> result = _constructor.Get(current)->NewInstance();
@@ -74,9 +75,9 @@ void HootExceptionJs::Init(Handle<Object> target)
     tpl->InstanceTemplate()->SetInternalFieldCount(2);
     // Prototype
     tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "toString"),
-        FunctionTemplate::New(current, toString)->GetFunction());
+        FunctionTemplate::New(current, toString));
     tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "toJSON"),
-        FunctionTemplate::New(current, toJSON)->GetFunction());
+        FunctionTemplate::New(current, toJSON));
     tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
                                   toV8(HootException::className()));
 

@@ -27,8 +27,8 @@
 #ifndef POIMERGERJS_H
 #define POIMERGERJS_H
 
+#include <hoot/js/HootJsStable.h>
 #include <hoot/js/SystemNodeJs.h>
-#include <v8.h>
 
 namespace hoot
 {

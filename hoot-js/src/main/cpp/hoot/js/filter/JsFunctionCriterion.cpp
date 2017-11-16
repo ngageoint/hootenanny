@@ -29,6 +29,7 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>
+#include <hoot/js/v8Engine.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/js/util/DataConvertJs.h>
@@ -42,7 +43,7 @@ HOOT_FACTORY_REGISTER(ElementCriterion, JsFunctionCriterion)
 
 bool JsFunctionCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
 {
-  Isolate* current = Isolate::GetCurrent();
+  Isolate* current = v8Engine::getIsolate();
   HandleScope handleScope(current);
   Local<Context> context(current->GetCallingContext());
   Context::Scope context_scope(context);
