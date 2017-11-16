@@ -94,6 +94,7 @@ sudo yum -y install \
     opencv-core \
     opencv-devel \
     opencv-python \
+    osmosis \
     java-1.8.0-openjdk \
     perl-XML-LibXML \
     hoot-postgis23_95 \
@@ -117,6 +118,7 @@ sudo yum -y install \
     qtwebkit \
     qtwebkit-devel \
     redhat-lsb-core \
+    stxxl \
     swig \
     tex-fonts-hebrew \
     texlive \
@@ -125,6 +127,7 @@ sudo yum -y install \
     unzip \
     v8-devel \
     vim \
+    wamerican-insane \
     w3m \
     wget \
     words \
