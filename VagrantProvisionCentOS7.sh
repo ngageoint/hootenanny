@@ -181,6 +181,13 @@ else
     sed -i '/^export JAVA_HOME=.*/c\export JAVA_HOME=\/usr\/lib\/jvm\/java-1.8.0-openjdk' ~/.bash_profile
 fi
 
+# Update the GDAL_DATA folder in ~/.bash_profile
+if ! grep --quiet GDAL_DATA ~/.bash_profile; then
+    echo "Adding GDAL data path to profile..."
+    echo "export GDAL_DATA=$(gdal-config --datadir)" >> ~/.bash_profile
+    source ~/.bash_profile
+fi
+
 # Use RVM to install the desired Ruby version, then install the gems.
 $HOOT_HOME/scripts/ruby/rvm-install.sh
 $HOOT_HOME/scripts/ruby/gem-install.sh
