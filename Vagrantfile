@@ -328,6 +328,9 @@ Vagrant.configure(2) do |config|
     if ENV.key?('VSPHERE_PASSWORD')
       vsphere.password = ENV['VSPHERE_PASSWORD']
     end
+    if ENV.key?('VSPHERE_NAME')
+      vsphere.name = ENV['VSPHERE_NAME']
+    end
   end
 end
 
