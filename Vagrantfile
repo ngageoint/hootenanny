@@ -309,7 +309,7 @@ Vagrant.configure(2) do |config|
     override.vm.box_url = 'VSphereDummy.box'
     vsphere.insecure    = true
     vsphere.cpu_count   = 8
-    vsphere.memory_mb   = 12288
+    vsphere.memory_mb   = 16384
     if ENV.key?('VSPHERE_HOST')
       vsphere.host = ENV['VSPHERE_HOST']
     end
