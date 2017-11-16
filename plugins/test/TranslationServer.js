@@ -1,157 +1,15 @@
 var assert = require('assert'),
     http = require('http'),
     xml2js = require('xml2js'),
-    fs = require('fs');
-var httpMocks = require('node-mocks-http');
+    fs = require('fs'),
+    httpMocks = require('node-mocks-http'),
+    osmtogeojson = require('osmtogeojson'),
+    DOMParser = new require('xmldom').DOMParser
+    parser = new DOMParser();
+
 var server = require('../TranslationServer.js');
 
 describe('TranslationServer', function () {
-
-//Comment out for now due to:
-//     TypeError: Cannot call method 'getDbSchema' of undefined
-
-    // describe('translate', function() {
-    //     //MGCP
-    //     it('should translate OSMtoRaw', function() {
-    //         var data = server.translate({
-    //             tags: {
-    //                 'error:circular': '5',
-    //                 'highway': 'road',
-    //                 'hoot:status': '1',
-    //                 'name': '23RD ST NW',
-    //                 'hoot': 'DcGisRoadsCucumber'
-    //             },
-    //             to: 'MGCP',
-    //             geom: 'Line'
-    //         });
-    //         assert.equal(data[0].attrs.NAM, '23RD ST NW');
-    //         assert.equal(data[0].attrs.FCODE, 'AP030');
-    //         assert.equal(data[0].attrs.TXT, '<OSM>{"highway":"road"}</OSM>');
-    //     });
-
-    //     it('should translate OSMtoEnglish', function() {
-    //         var data = server.translate({
-    //             tags: {
-    //                 'error:circular': '5',
-    //                 'highway': 'road',
-    //                 'hoot:status': '1',
-    //                 'name': '23RD ST NW',
-    //                 'hoot': 'DcGisRoadsCucumber'
-    //             },
-    //             to: 'MGCP',
-    //             geom: 'Line',
-    //             english: true
-    //         });
-    //         assert.equal(data.attrs['Name'], '23RD ST NW');
-    //         assert.equal(data.attrs['Feature Code'], 'AP030:Road');
-    //         assert.equal(data.attrs['Associated Text'], '<OSM>{"highway":"road"}</OSM>');
-    //     });
-
-    //     it('should translate EnglishtoOSM', function() {
-    //         var data = server.translate({
-    //             tags: {
-    //                 //'error:circular': '5',
-    //                 'Feature Code': 'AP030:Road',
-    //                 //'hoot:status': '1',
-    //                 'Name': '23RD ST NW',
-    //                 'Thoroughfare Class': 'Unknown'
-    //                 //'hoot': 'DcGisRoadsCucumber'
-    //             },
-    //             from: 'MGCP',
-    //             geom: 'Line',
-    //             english: true
-    //         });
-    //         assert.equal(data.attrs.highway, 'road');
-    //         assert.equal(data.attrs.name, '23RD ST NW');
-    //     });
-
-    //     it('should translate RawtoOSM', function() {
-    //         var data = server.translate({
-    //             tags: {
-    //                 //'error:circular': '5',
-    //                 'FCODE': 'AP030',
-    //                 //'hoot:status': '1',
-    //                 'NAM': '23RD ST NW',
-    //                 'HCT': '0'
-    //                 //'hoot': 'DcGisRoadsCucumber'
-    //             },
-    //             from: 'MGCP',
-    //             geom: 'Line'
-    //         });
-    //         assert.equal(data.highway, 'road');
-    //         assert.equal(data.name, '23RD ST NW');
-    //     });
-
-    //     //TDSv61
-    //     it('should translate OSMtoRaw', function() {
-    //         var data = server.translate({
-    //             tags: {
-    //                 'error:circular': '5',
-    //                 'highway': 'road',
-    //                 'hoot:status': '1',
-    //                 'name': '23RD ST NW',
-    //                 'hoot': 'DcGisRoadsCucumber'
-    //             },
-    //             to: 'TDSv61',
-    //             geom: 'Line'
-    //         });
-    //         assert.equal(data[0].attrs.NAM, '23RD ST NW');
-    //         assert.equal(data[0].attrs.FCODE, 'AP030');
-    //         assert.equal(data[0].attrs.TXT, '<OSM>{"highway":"road"}</OSM>');
-    //     });
-
-    //     it('should translate OSMtoEnglish', function() {
-    //         var data = server.translate({
-    //             tags: {
-    //                 'error:circular': '5',
-    //                 'highway': 'road',
-    //                 'hoot:status': '1',
-    //                 'name': '23RD ST NW',
-    //                 'hoot': 'DcGisRoadsCucumber'
-    //             },
-    //             to: 'TDSv61',
-    //             geom: 'Line',
-    //             english: true
-    //         });
-    //         assert.equal(data.attrs['Geographic Name Information : Full Name'], '23RD ST NW');
-    //         assert.equal(data.attrs['Feature Code'], 'AP030:Road');
-    //         assert.equal(data.attrs['Associated Text'], '<OSM>{"highway":"road"}</OSM>');
-    //     });
-
-    //     it('should translate EnglishtoOSM', function() {
-    //         var data = server.translate({
-    //             tags: {
-    //                 //'error:circular': '5',
-    //                 'Feature Code': 'AP030:Road',
-    //                 //'hoot:status': '1',
-    //                 'Geographic Name Information : Full Name': '23RD ST NW'
-    //                 //'hoot': 'DcGisRoadsCucumber'
-    //             },
-    //             from: 'TDSv61',
-    //             geom: 'Line',
-    //             english: true
-    //         });
-    //         assert.equal(data.attrs.highway, 'road');
-    //         assert.equal(data.attrs.name, '23RD ST NW');
-    //     });
-
-    //     it('should translate RawtoOSM', function() {
-    //         var data = server.translate({
-    //             tags: {
-    //                 'error:circular': '5',
-    //                 'FCODE': 'AP030',
-    //                 'hoot:status': '1',
-    //                 'ZI005_FNA': '23RD ST NW',
-    //                 'hoot': 'DcGisRoadsCucumber'
-    //             },
-    //             from: 'TDSv61',
-    //             geom: 'Line'
-    //         });
-    //         assert.equal(data.highway, 'road');
-    //         assert.equal(data.name, '23RD ST NW');
-    //     });
-
-    // });
 
     describe('searchSchema', function() {
 
@@ -195,15 +53,16 @@ describe('TranslationServer', function () {
 
     describe('handleInputs', function() {
 
-        it('should handle osmtotds GET', function() {
-            //http://localhost:8094/osmtotds?idval=AL015&geom=Point&translation=MGCP&idelem=fcode
+        it('should handle translateTo GET', function() {
+            // example url
+            // http://localhost:8094/translateTo?idval=AL015&geom=Point&translation=MGCP&idelem=fcode
             var schema = server.handleInputs({
                 idval: 'AL015',
                 geom: 'Point',
                 translation: 'MGCP',
                 idelem: 'fcode',
                 method: 'GET',
-                path: '/osmtotds'
+                path: '/translateTo'
             });
             assert.equal(schema.desc, 'General Building');
             assert.equal(schema.columns[0].name, 'ACC');
@@ -224,13 +83,13 @@ describe('TranslationServer', function () {
             }, Error, 'TDSv61 for Area with fcode=FB123 not found');
         });
 
-        it('should handle tdstoosm GET for TDSv61', function() {
-            //http://localhost:8094/tdstoosm?fcode=AL013&translation=TDSv61
+        it('should handle translateFrom GET for TDSv61', function() {
+            //http://localhost:8094/translateFrom?fcode=AL013&translation=TDSv61
             var attrs = server.handleInputs({
                 fcode: 'AL013',
                 translation: 'TDSv61',
                 method: 'GET',
-                path: '/tdstoosm'
+                path: '/translateFrom'
             }).attrs;
             assert.equal(attrs.building, 'yes');
         });
@@ -246,13 +105,13 @@ describe('TranslationServer', function () {
             assert.equal(attrs.highway, 'road');
         });
 
-        it('should handle tdstoosm GET for MGCP', function() {
-            //http://localhost:8094/tdstoosm?fcode=AL013&translation=TDSv61
+        it('should handle translateFrom GET for MGCP', function() {
+            //http://localhost:8094/translateFrom?fcode=AL013&translation=TDSv61
             var attrs = server.handleInputs({
                 fcode: 'BH140',
                 translation: 'MGCP',
                 method: 'GET',
-                path: '/tdstoosm'
+                path: '/translateFrom'
             }).attrs;
             assert.equal(attrs.waterway, 'river');
         });
@@ -277,22 +136,22 @@ describe('TranslationServer', function () {
             assert.equal(attrs.error, 'Feature Code ZZTOP is not valid for MGCP');
         });
 
-        it('should handle OSM to TDSv61 POST', function() {
-            //http://localhost:8094/osmtotds
-            var osm2trans = server.handleInputs({
+        it('should handle translateTo TDSv61 POST', function() {
+            var output = server.handleInputs({
                 osm: '<osm version="0.6" upload="true" generator="JOSM"><node id="-1" lon="-105.21811763904256" lat="39.35643172777992" version="0"><tag k="building" v="yes"/><tag k="uuid" v="{bfd3f222-8e04-4ddc-b201-476099761302}"/></node></osm>',
                 method: 'POST',
                 translation: 'TDSv61',
-                path: '/osmtotds'
+                path: '/translateTo'
             });
-            xml2js.parseString(osm2trans, function(err, result) {
-                if (err) console.error(err);
-                assert.equal(result.osm.$.schema, "TDSv61");
-                assert.equal(result.osm.node[0].tag[0].$.k, "Feature Code");
-                assert.equal(result.osm.node[0].tag[0].$.v, "AL013:Building");
-                assert.equal(result.osm.node[0].tag[1].$.k, "Unique Entity Identifier");
-                assert.equal(result.osm.node[0].tag[1].$.v, "bfd3f222-8e04-4ddc-b201-476099761302");
-            });
+
+            var xml = parser.parseFromString(output);
+            var gj = osmtogeojson(xml);
+
+            assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), "TDSv61");
+
+            var tags = gj.features[0].properties;
+            assert.equal(tags["F_CODE"], "AL013");
+            assert.equal(tags["UFI"], "bfd3f222-8e04-4ddc-b201-476099761302");
         });
 
         it('should handle osmtotds POST and preserve bounds tag and ids', function() {
@@ -548,6 +407,118 @@ describe('TranslationServer', function () {
             });
         });
 
+        it('should be lossy to go from osm -> mgcp -> osm', function() {
+
+            var data = '<osm version="0.6" upload="true" generator="JOSM"><node id="-4" lon="-105.24014094121263" lat="39.28928610944744" version="0"><tag k="poi" v="yes"/><tag k="amenity" v="cafe"/><tag k="uuid" v="{4632d15b-7c44-4ba1-a0c4-8cfbb30e39d4}"/></node></osm>';
+
+            var mgcp_xml = server.handleInputs({
+                osm: data,
+                method: 'POST',
+                translation: 'MGCP',
+                path: '/translateTo'
+            });
+
+            var xml = parser.parseFromString(mgcp_xml);
+            var gj = osmtogeojson(xml);
+
+            assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), "MGCP");
+
+            var tags = gj.features[0].properties;
+            assert.equal(tags["FCODE"], "AL015");
+            assert.equal(tags["FFN"], "572");
+            assert.equal(tags["HWT"], "998");
+            assert.equal(tags["UID"], "4632d15b-7c44-4ba1-a0c4-8cfbb30e39d4");
+
+            var osm_xml = server.handleInputs({
+                osm: mgcp_xml,
+                method: 'POST',
+                translation: 'MGCP',
+                path: '/translateFrom'
+            });
+
+            xml = parser.parseFromString(osm_xml);
+            gj = osmtogeojson(xml);
+
+            assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), "OSM");
+
+            var tags = gj.features[0].properties;
+            assert.equal(tags["building"], "yes");
+            assert.equal(tags["amenity"], "restaurant");
+            assert.equal(tags["uuid"], "{4632d15b-7c44-4ba1-a0c4-8cfbb30e39d4}");
+        });
+
+        it('should translate from osm -> mgcp', function() {
+
+            var data = '<osm version="0.6" upload="true" generator="JOSM"><node id="-4" lon="-105.24014094121263" lat="39.28928610944744" version="0"><tag k="poi" v="yes"/><tag k="place" v="town"/><tag k="name" v="Manitou Springs"/><tag k="uuid" v="{4632d15b-7c44-4ba1-a0c4-8cfbb30e39d4}"/></node></osm>';
+
+            var mgcp_xml = server.handleInputs({
+                osm: data,
+                method: 'POST',
+                translation: 'MGCP',
+                path: '/translateTo'
+            });
+
+            var xml = parser.parseFromString(mgcp_xml);
+            var gj = osmtogeojson(xml);
+
+            assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), "MGCP");
+
+            var tags = gj.features[0].properties;
+            assert.equal(tags["FCODE"], "AL020");
+            assert.equal(tags["NAM"], "Manitou Springs");
+            assert.equal(tags["FUC"], "999");
+            assert.equal(tags["UID"], "4632d15b-7c44-4ba1-a0c4-8cfbb30e39d4");
+        });
+
+        it('should translate OTH from tdsv61 -> osm -> tdsv61', function() {
+
+            var data = '<osm version="0.6" upload="true" generator="hootenanny"><node id="-19" lon="9.304397440128325" lat="41.65083522130027" version="0"><tag k="FCSUBTYPE" v="100080"/><tag k="ZI001_SDP" v="DigitalGlobe"/><tag k="UFI" v="0d8b2563-81cf-44d4-8ef7-52c0e862651f"/><tag k="F_CODE" v="AL010"/><tag k="ZI006_MEM" v="&lt;OSM&gt;{&quot;source:imagery:datetime&quot;:&quot;2017-11-11 10:45:15&quot;,&quot;source:imagery:sensor&quot;:&quot;WV02&quot;,&quot;source:imagery:id&quot;:&quot;756b80e1f695fb591caca8e7ce0f9ef5&quot;}&lt;/OSM&gt;"/><tag k="ZSAX_RS0" v="U"/><tag k="OTH" v="(FFN:foo)"/></node></osm>';
+
+            var osm_xml = server.handleInputs({
+                osm: data,
+                method: 'POST',
+                translation: 'TDSv61',
+                path: '/translateFrom'
+            });
+            console.log(osm_xml);
+
+            var xml = parser.parseFromString(osm_xml);
+            var gj = osmtogeojson(xml);
+
+            assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), "OSM");
+
+            var tags = gj.features[0].properties;
+            assert.equal(tags["facility"], "yes");
+            assert.equal(tags["note:oth"], "(FFN:foo)");
+            assert.equal(tags["security:classification"], "UNCLASSIFIED");
+            assert.equal(tags["uuid"], "{0d8b2563-81cf-44d4-8ef7-52c0e862651f}");
+            assert.equal(tags["source"], "DigitalGlobe");
+            assert.equal(tags["source:imagery:id"], "756b80e1f695fb591caca8e7ce0f9ef5");
+            assert.equal(tags["source:imagery:datetime"], "2017-11-11 10:45:15");
+            assert.equal(tags["source:imagery:sensor"], "WV02");
+
+            var tds_xml = server.handleInputs({
+                osm: osm_xml,
+                method: 'POST',
+                translation: 'TDSv61',
+                path: '/translateTo'
+            });
+            console.log(tds_xml);
+            xml = parser.parseFromString(tds_xml);
+            gj = osmtogeojson(xml);
+
+            assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), "TDSv61");
+
+            var tags = gj.features[0].properties;
+            assert.equal(tags["F_CODE"], "AL010");
+            assert.equal(tags["ZI001_SDP"], "DigitalGlobe");
+            assert.equal(tags["ZSAX_RS0"], "U");
+            assert.equal(tags["OTH"], "(FFN:foo)");
+            assert.equal(tags["UFI"], "0d8b2563-81cf-44d4-8ef7-52c0e862651f");
+
+        });
+
+
         it('should handle tdstoosm POST of power line feature', function() {
             var trans2osm = server.handleInputs({
                 osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-6" version="0"><nd ref="-13"/><nd ref="-14"/><nd ref="-15"/><nd ref="-16"/><tag k="UID" v="fee4529b-5ecc-4e5c-b06d-1b26a8e830e6"/><tag k="FCODE" v="AT030"/></way></osm>',
@@ -719,7 +690,7 @@ describe('TranslationServer', function () {
         });
         it('should handle /taginfo/key/values GET with NO enums', function() {
             //http://localhost:8094/taginfo/key/values?fcode=AP030&filter=ways&key=SGCC&page=1&query=Clo&rp=25&sortname=count_ways&sortorder=desc&translation=TDSv61
-//http://localhost:8094/taginfo/key/values?fcode=AA040&filter=nodes&key=ZSAX_RX3&page=1&query=undefined&rp=25&sortname=count_nodes&sortorder=desc&translation=TDSv61
+            //http://localhost:8094/taginfo/key/values?fcode=AA040&filter=nodes&key=ZSAX_RX3&page=1&query=undefined&rp=25&sortname=count_nodes&sortorder=desc&translation=TDSv61
             var enums = server.handleInputs({
                 fcode: 'AA040',
                 filter: 'ways',
@@ -737,7 +708,7 @@ describe('TranslationServer', function () {
         });
 
         it('should handle /taginfo/key/values GET with enums', function() {
-//http://localhost:8094/taginfo/key/values?fcode=AA040&filter=nodes&key=FUN&page=1&query=Damaged&rp=25&sortname=count_nodes&sortorder=desc&translation=MGCP
+            //http://localhost:8094/taginfo/key/values?fcode=AA040&filter=nodes&key=FUN&page=1&query=Damaged&rp=25&sortname=count_nodes&sortorder=desc&translation=MGCP
             var enums = server.handleInputs({
                 fcode: 'AA040',
                 filter: 'nodes',
@@ -755,7 +726,7 @@ describe('TranslationServer', function () {
         });
 
         it('should handle /taginfo/keys/all GET with enums', function() {
-//http://localhost:8094/taginfo/keys/all?fcode=AA040&page=1&query=&rawgeom=Point&rp=10&sortname=count_nodes&sortorder=desc&translation=MGCP
+            //http://localhost:8094/taginfo/keys/all?fcode=AA040&page=1&query=&rawgeom=Point&rp=10&sortname=count_nodes&sortorder=desc&translation=MGCP
 
             var enums = server.handleInputs({
                 fcode: 'AA040',
@@ -802,7 +773,7 @@ describe('TranslationServer', function () {
         });
 
         it('should handle /schema GET', function() {
-//http://localhost:8094/schema?geometry=point&translation=MGCP&searchstr=Buil&maxlevdst=20&limit=12
+            //http://localhost:8094/schema?geometry=point&translation=MGCP&searchstr=Buil&maxlevdst=20&limit=12
             var schm = server.handleInputs({
                 geometry: 'line',
                 translation: 'TDSv40',
@@ -817,7 +788,7 @@ describe('TranslationServer', function () {
             assert.equal(schm[0].desc, 'River');
         });
 
-//Checking the use of limit param
+        //Checking the use of limit param
         it('should handle /schema GET', function() {
             var schm = server.handleInputs({
                 geometry: 'line',
@@ -857,7 +828,7 @@ describe('TranslationServer', function () {
             assert(schm.length <= 100, 'Schema search results greater than requested');
         });
 
-//Checking the use of limit param with no search string
+        //Checking the use of limit param with no search string
         it('should handle /schema GET', function() {
             var schm = server.handleInputs({
                 geometry: 'line',
@@ -963,8 +934,7 @@ describe('TranslationServer', function () {
                 })
             }, Error, 'Unsupported method');
         });
-
-    });
+     });
 
     describe('capabilities', function () {
       it('should return 200', function (done) {

@@ -1,7 +1,7 @@
 /************************************************************************
 This is Node js implementation of Hoot Translation Server.
 The purpose of this module is to provide the hoot-ui fast way
-to translate OSM to TDS and TDS to OSM.
+to translate feature tags between OSM and supported schemas.
 ************************************************************************/
 var http = require('http');
 var url = require('url');
@@ -13,13 +13,24 @@ var availableTrans = {
     GGDMv30: {isavailable: true}
 };
 var HOOT_HOME = process.env.HOOT_HOME;
-hoot = require(HOOT_HOME + '/lib/HootJs');
+if (typeof hoot === 'undefined') {
+    hoot = require(HOOT_HOME + '/lib/HootJs');
+}
 
+//Getting schema for fcode, geom type
 var schemaMap = {
     TDSv40: require(HOOT_HOME + '/plugins/tds40_full_schema.js'),
     TDSv61: require(HOOT_HOME + '/plugins/tds61_full_schema.js'),
     MGCP: require(HOOT_HOME + '/plugins/mgcp_schema.js'),
     GGDMv30: require(HOOT_HOME + '/plugins/ggdm30_schema.js')
+};
+
+//Getting osm tags for fcode
+var fcodeLookup = {
+    TDSv40: require(HOOT_HOME + '/plugins/etds40_osm.js'),
+    TDSv61: require(HOOT_HOME + '/plugins/etds61_osm.js'),
+    MGCP: require(HOOT_HOME + '/plugins/emgcp_osm.js'),
+    GGDMv30: require(HOOT_HOME + '/plugins/eggdm30_osm.js')
 };
 
 var translationsMap = {
@@ -103,14 +114,6 @@ var tdsToOsmMap = {
     }
 };
 
-var englishTranslationsMap = {
-    TDSv40: '/plugins/etds40_osm.js',
-    TDSv61: '/plugins/etds61_osm.js',
-    MGCP: '/plugins/emgcp_osm.js',
-    GGDMv30: '/plugins/eggdm30_osm.js'
-};
-
-
 if (require.main === module) {
     //I'm a running server
 
@@ -125,16 +128,16 @@ if (require.main === module) {
         // Note that default port comes from serverPort var
         if (val.indexOf('port=') === 0) {
             var portArg = val.split('=');
-            if (portArg.length == 2) {
+            if (portArg.length === 2) {
                 serverPort = 1*portArg[1];
             }
         }
 
         // thread count arg
-        // defaults to numbers of CPU
-        if (val.indexOf('threadcount=') == 0) {
+        // defaults to number of CPU
+        if (val.indexOf('threadcount=') === 0) {
             var nThreadArg = val.split('=');
-            if (nThreadArg.length == 2) {
+            if (nThreadArg.length === 2) {
                 var nThreadCnt = 1*nThreadArg[1];
                 if (nThreadCnt > 0) {
                     nCPU = nThreadCnt;
@@ -179,16 +182,9 @@ function TranslationServer(request, response) {
                 var params = urlbits.query;
                 params.method = request.method;
                 params.path = urlbits.pathname;
-
-                if (params.path === '/translate') {
-                    params.tags = JSON.parse(payload);
-                    header['Accept'] = 'application/json';
-                    header['Content-Type'] = 'application/json';
-                } else {
-                    params.osm = payload;
-                    header['Accept'] = 'text/xml';
-                    header['Content-Type'] = 'text/xml';
-                }
+                params.osm = payload;
+                header['Accept'] = 'text/xml';
+                header['Content-Type'] = 'text/xml';
                 var result = handleInputs(params);
                 response.writeHead(200, header);
                 response.end(result);
@@ -199,7 +195,6 @@ function TranslationServer(request, response) {
             var params = urlbits.query;
             params.method = request.method;
             params.path = urlbits.pathname;
-
             var result = handleInputs(params);
             header['Content-Type'] = 'application/json';
             response.writeHead(200, header);
@@ -230,9 +225,6 @@ function TranslationServer(request, response) {
 function handleInputs(params) {
     var result;
     switch(params.path) {
-        case '/translate':
-            result = JSON.stringify(translate(params));
-            break;
         case '/osmtotds':
             params.transMap = osmToTdsMap;
             params.transDir = 'toogr';
@@ -271,7 +263,7 @@ function handleInputs(params) {
             result = getCapabilities(params);
             break;
         case '/version':
-            result = {version: '0.0.2'};
+            result = {version: '0.0.3'};
             break;
         default:
             throw new Error('Not found');
@@ -287,37 +279,17 @@ var getCapabilities = function(params) {
     }
 };
 
-var translate = function(data) {
-    data.translation = data.to || data.from;
-    if (!availableTrans[data.translation] || !availableTrans[data.translation].isavailable) {
-        throw new Error('Unsupported translation schema');
-    }
-    createUuid = hoot.UuidHelper.createUuid;
-    var trans = require(HOOT_HOME + englishTranslationsMap[data.translation]);
-    var result;
-    if (data.to) {
-        if (data.english) {
-            result = trans.OSMtoEnglish(data.tags, '', data.geom);
-        } else {
-            result = trans.OSMtoRaw(data.tags, '', data.geom);
-        }
-    } else if (data.from) {
-        if (data.english) {
-            result = trans.EnglishtoOSM(data.tags, '', data.geom);
-        } else {
-            result = trans.RawtoOSM(data.tags, '', data.geom);
-        }
-    }
-    return result;
-};
-
 // This is where all interesting things happen interfacing with hoot core lib directly
 var postHandler = function(data) {
     if (!availableTrans[data.translation] || !availableTrans[data.translation].isavailable) {
         throw new Error('Unsupported translation schema');
     }
     var translation = data.transMap[data.transDir][data.translation];
-    hoot.Settings.set({"osm.map.writer.schema":data.translation});
+    if (data.transDir === "toogr") {
+        hoot.Settings.set({"osm.map.writer.schema": data.translation});
+    } else {
+        hoot.Settings.set({"osm.map.writer.schema": "OSM"});
+    }
     var map = new hoot.OsmMap();
     // loadMapFromString arguments: map, XML, preserve ID's, hoot:status
     hoot.loadMapFromString(map, data.osm, true);
@@ -361,8 +333,7 @@ var tdstoosm = function(params) {
     } else if (params.method === 'GET') {
         //Get OSM tags for F_CODE
         createUuid = hoot.UuidHelper.createUuid;
-
-        var osm = require(HOOT_HOME + englishTranslationsMap[params.translation]).toOSM({
+        var osm = fcodeLookup[params.translation].toOSM({
             'Feature Code': params.fcode
         }, '', '');
 
@@ -646,5 +617,4 @@ if (typeof exports !== 'undefined') {
     exports.searchSchema = searchSchema;
     exports.handleInputs = handleInputs;
     exports.TranslationServer = TranslationServer;
-    exports.translate = translate;
 }
