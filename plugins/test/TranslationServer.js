@@ -480,7 +480,7 @@ describe('TranslationServer', function () {
                 translation: 'TDSv61',
                 path: '/translateFrom'
             });
-            console.log(osm_xml);
+            //console.log(osm_xml);
 
             var xml = parser.parseFromString(osm_xml);
             var gj = osmtogeojson(xml);
@@ -503,7 +503,7 @@ describe('TranslationServer', function () {
                 translation: 'TDSv61',
                 path: '/translateTo'
             });
-            console.log(tds_xml);
+            //console.log(tds_xml);
             xml = parser.parseFromString(tds_xml);
             gj = osmtogeojson(xml);
 
@@ -571,16 +571,23 @@ describe('TranslationServer', function () {
             });
         });
 
-        // it('should return error message for invalide F_CODE/geom combination in osmtotds POST', function() {
-        //     var osm2trans = server.handleInputs({
-        //         osm: '<osm version="0.6" upload="true" generator="hootenanny"><node id="72" lon="-104.878690508945" lat="38.8618557942463" version="1"><tag k="poi" v="yes"/><tag k="hoot:status" v="1"/><tag k="name" v="Garden of the Gods"/><tag k="leisure" v="park"/><tag k="error:circular" v="1000"/><tag k="hoot" v="AllDataTypesACucumber"/></node></osm>',
-        //         method: 'POST',
-        //         translation: 'MGCP',
-        //         path: '/osmtotds'
-        //     });
-        //     //console.log(osm2trans);
-        //     assert.equal(attrs.error, 'Point geometry is not valid for AK120 in MGCP TRD4');
-        // });
+        it('should return error message for invalid F_CODE/geom combination in osmtotds POST', function() {
+            var output = server.handleInputs({
+                osm: '<osm version="0.6" upload="true" generator="hootenanny"><node id="-24" lon="9.305143094234467" lat="41.65140640721789" version="0"><tag k="leisure" v="park"/><tag k="source" v="DigitalGlobe"/><tag k="source:imagery:sensor" v="WV02"/><tag k="source:imagery:id" v="756b80e1f695fb591caca8e7ce0f9ef5"/><tag k="source:imagery:datetime" v="2017-11-11 10:45:15"/><tag k="security:classification" v="UNCLASSIFIED"/></node></osm>',
+                //osm: '<osm version="0.6" upload="true" generator="hootenanny"><node id="72" lon="-104.878690508945" lat="38.8618557942463" version="1"><tag k="poi" v="yes"/><tag k="hoot:status" v="1"/><tag k="name" v="Garden of the Gods"/><tag k="leisure" v="park"/><tag k="error:circular" v="1000"/><tag k="hoot" v="AllDataTypesACucumber"/></node></osm>',
+                method: 'POST',
+                translation: 'MGCP',
+                path: '/translateTo'
+            });
+            //console.log(output);
+            var xml = parser.parseFromString(output);
+            var gj = osmtogeojson(xml);
+
+            assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), "MGCP");
+
+            var tags = gj.features[0].properties;
+            assert.equal(tags["error"], 'Point geometry is not valid for AK120 in MGCP TRD4');
+        });
 
         it('should handle bad translation schema value in osmtotds POST', function() {
             assert.throws(function error() {
@@ -592,24 +599,6 @@ describe('TranslationServer', function () {
                 });
             }, Error, 'Unsupported translation schema');
         });
-
-        // it('should throw an error for unable to translate in osmtotds POST', function(){
-        //     //http://localhost:8094/osmtotds
-        //     var osm2trans = server.handleInputs({
-        //         command: 'translate',
-        //         input: '<osm version="0.6" upload="true" generator="JOSM"><node id="-1" lon="-105.21811763904256" lat="39.35643172777992" version="0"><tag k="poi" v="yes"/><tag k="leisure" v="park"/><tag k="name" v="Garden of the Gods"/><tag k="uuid" v="{bfd3f222-8e04-4ddc-b201-476099761302}"/></node></osm>',
-        //         translation: 'MGCP',
-        //         method: 'POST',
-        //         path: '/osmtotds'
-        //     });
-        //     var output = xml2js.parseString(osm2trans.output, function(err, result) {
-        //         if (err) console.error(err);
-        //         assert.equal(result.osm.node[0].tag[0].$.k, "Feature Code");
-        //         assert.equal(result.osm.node[0].tag[0].$.v, "AL013:Building");
-        //         assert.equal(result.osm.node[0].tag[1].$.k, "Unique Entity Identifier");
-        //         assert.equal(result.osm.node[0].tag[1].$.v, "bfd3f222-8e04-4ddc-b201-476099761302");
-        //     });
-        // });
 
         it('should handle tdstoosm POST', function() {
             //http://localhost:8094/tdstoosm
@@ -953,7 +942,14 @@ describe('TranslationServer', function () {
       it('should return 200', function (done) {
         var request  = httpMocks.createRequest({
             method: 'GET',
-            url: '/schema?geometry=point&translation=MGCP&earchstr=Buil&maxlevdst=20&limit=12'
+            url: '/schema',
+            params: {
+                geometry: 'point',
+                translation: 'MGCP',
+                searchstr: 'Buil',
+                maxlevdst: 20,
+                limit: 12
+            }
         });
         var response = httpMocks.createResponse();
         server.TranslationServer(request, response);
@@ -966,7 +962,13 @@ describe('TranslationServer', function () {
       it('should return 200', function (done) {
         var request  = httpMocks.createRequest({
             method: 'GET',
-            url: '/osmtotds?idval=AP030&translation=MGCP&geom=Line&idelem=fcode'
+            url: '/osmtotds',
+            params: {
+                idval: 'AP030',
+                translation: 'MGCP',
+                geom: 'Line',
+                idelem: 'fcode'
+            }
         });
         var response = httpMocks.createResponse();
         server.TranslationServer(request, response);
@@ -975,64 +977,57 @@ describe('TranslationServer', function () {
       });
     });
 
-    // describe('tdstoosm', function () {
-    //   it('should return 200', function (done) {
-    //     var request  = httpMocks.createRequest({
-    //         method: 'GET',
-    //         url: '/tdstoosm',
-    //         query: {
-    //             fcode: 'AL013',
-    //             translation: 'TDSv61'
-    //         }
-    //     });
-    //     var response = httpMocks.createResponse();
-    //     server.TranslationServer(request, response);
-    //     assert.equal(response.statusCode, '200');
-    //   });
-    // });
+    describe('translateFrom', function () {
+      it('should return 200', function (done) {
+        var request  = httpMocks.createRequest({
+            method: 'GET',
+            url: '/translateFrom',
+            params: {
+                fcode: 'AL013',
+                translation: 'TDSv61'
+            }
+        });
+        var response = httpMocks.createResponse();
+        server.TranslationServer(request, response);
+        assert.equal(response.statusCode, '200');
+        done();
+      });
+    });
 
-    // describe('taginfo/key/values', function () {
-    //   it('should return 200', function (done) {
-    //     var request  = httpMocks.createRequest({
-    //         method: 'GET',
-    //         url: '/taginfo/key/values',
-    //         query: {
-    //             fcode: 'AP030',
-    //             translation: 'TDSv61',
-    //             filter: 'ways',
-    //             key: 'SGCC',
-    //             page: 1,
-    //             key: 'SGCC',
-    //             query: 'Clo',
-    //             rp: 25,
-    //             sortname: 'count_ways',
-    //             sortorder: 'desc'
-    //         }
-    //     });
-    //     var response = httpMocks.createResponse();
-    //     server.TranslationServer(request, response);
-    //     assert.equal(response.statusCode, '200');
-    //   });
-    // });
+    describe('translateTo', function () {
+      it('should return 200', function (done) {
+        var request  = httpMocks.createRequest({
+            method: 'GET',
+            url: '/translateFrom',
+            params: {
+                idelem: 'fcode',
+                idval: 'AL013',
+                geom: 'Area',
+                translation: 'MGCP'
+            }
+        });
+        var response = httpMocks.createResponse();
+        server.TranslationServer(request, response);
+        assert.equal(response.statusCode, '200');
+        done();
+      });
+    });
 
-    // describe('taginfo/keys/all', function () {
-    //   it('should return 200', function (done) {
-    //     http.get('http://localhost:8094/taginfo/keys/all?page=1&rp=10&sortname=count_ways&sortorder=desc&fcode=AP030&translation=TDSv61&geometry=Line', function (res) {
-    //       assert.equal(200, res.statusCode);
-    //       done();
-    //     });
-    //   });
-    // });
-
-    // describe('not found', function () {
-    //   it('should return 404', function (done) {
-    //     http.get('http://localhost:8094/foo', function (res) {
-    //         console.log(res.statusCode);
-    //       assert.equal(404, res.statusCode);
-    //       done();
-    //     });
-    //   });
-    // });
-
+    describe('not found', function () {
+      it('should return 404', function (done) {
+        var request  = httpMocks.createRequest({
+            method: 'GET',
+            url: '/foo',
+            params: {
+                fcode: 'AL013',
+                translation: 'TDSv61'
+            }
+        });
+        var response = httpMocks.createResponse();
+        server.TranslationServer(request, response);
+        assert.equal(response.statusCode, '404');
+        done();
+      });
+    });
 });
 

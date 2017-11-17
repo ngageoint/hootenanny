@@ -179,9 +179,9 @@ function TranslationServer(request, response) {
 
             request.on('end', function() {
                 var urlbits = url.parse(request.url, true);
-                var params = urlbits.query;
+                var params = request.params || urlbits.query;
                 params.method = request.method;
-                params.path = urlbits.pathname;
+                params.path = request.path || urlbits.pathname;
                 params.osm = payload;
                 header['Accept'] = 'text/xml';
                 header['Content-Type'] = 'text/xml';
@@ -192,9 +192,9 @@ function TranslationServer(request, response) {
 
         } else if (request.method === 'GET') {
             var urlbits = url.parse(request.url, true);
-            var params = urlbits.query;
+            var params = request.params || urlbits.query;
             params.method = request.method;
-            params.path = urlbits.pathname;
+            params.path = request.path || urlbits.pathname;
             var result = handleInputs(params);
             header['Content-Type'] = 'application/json';
             response.writeHead(200, header);
