@@ -50,7 +50,8 @@ public:
 
   virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
-  virtual ElementCriterion* clone() { return new NeedsReviewCriterion(_map); }
+  virtual ElementCriterionPtr clone()
+  { return ElementCriterionPtr(new NeedsReviewCriterion(_map)); }
 
   virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
 

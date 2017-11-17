@@ -41,7 +41,7 @@ public:
 
   virtual bool isMatch(const Element& e) const;
 
-  virtual ElementCriterion* clone() { return new LinearFilter(_type); }
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new LinearFilter(_type)); }
 
 };
 

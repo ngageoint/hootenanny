@@ -52,7 +52,7 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  virtual ElementCriterion* clone() { return new StatusCriterion(_status); }
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new StatusCriterion(_status)); }
 
 private:
 

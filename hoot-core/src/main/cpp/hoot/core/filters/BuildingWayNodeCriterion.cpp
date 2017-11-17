@@ -82,9 +82,9 @@ void BuildingWayNodeCriterion::setOsmMap(const OsmMap* map)
   _map = map->shared_from_this();
 }
 
-ElementCriterion* BuildingWayNodeCriterion::clone()
+ElementCriterionPtr BuildingWayNodeCriterion::clone()
 {
-  return new BuildingWayNodeCriterion(_map);
+  return ElementCriterionPtr(new BuildingWayNodeCriterion(_map));
 }
 
 }

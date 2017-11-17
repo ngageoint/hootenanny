@@ -82,7 +82,7 @@ public:
    */
   static FeatureCalcType getFeatureCalcType(BaseFeatureType t);
 
-  static ElementCriterion* getElementCriterion(BaseFeatureType t, ConstOsmMapPtr map);
+  static boost::shared_ptr<ElementCriterion> getElementCriterion(BaseFeatureType t, ConstOsmMapPtr map);
 
   class Description
   {

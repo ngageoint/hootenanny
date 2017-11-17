@@ -68,7 +68,8 @@ public:
 
   virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
-  WayBufferCriterion* clone() { return new WayBufferCriterion(_map, _baseLs, _buffer, 0, _matchPercent); }
+  ElementCriterionPtr clone()
+  { return ElementCriterionPtr(new WayBufferCriterion(_map, _baseLs, _buffer, 0, _matchPercent)); }
 
 private:
   Meters _buffer;
