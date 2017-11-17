@@ -49,7 +49,8 @@ _numNodesModified(0),
 _numTagsAdded(0),
 _numNodesInvolvedInMultipleRules(0),
 _numNodesParsed(0),
-_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
+_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
+_minWordLength(ConfigOptions().getPoiImplicitTagRulesMinimumWordLength())
 {
   _ruleReader.reset(new ImplicitTagRulesSqliteReader());
   _ruleReader->open(ConfigOptions().getPoiImplicitTagRulesDatabase());
@@ -59,7 +60,10 @@ AddImplicitlyDerivedTagsPoiVisitor::AddImplicitlyDerivedTagsPoiVisitor(const QSt
 _tokenizeNames(ConfigOptions().getPoiImplicitTagRulesTokenizeNames()),
 _numNodesModified(0),
 _numTagsAdded(0),
-_numNodesInvolvedInMultipleRules(0)
+_numNodesInvolvedInMultipleRules(0),
+_numNodesParsed(0),
+_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
+_minWordLength(ConfigOptions().getPoiImplicitTagRulesMinimumWordLength())
 {
   _ruleReader.reset(new ImplicitTagRulesSqliteReader());
   _ruleReader->open(databasePath);
@@ -104,137 +108,150 @@ void AddImplicitlyDerivedTagsPoiVisitor::visit(const ElementPtr& e)
 
     const QStringList names = e->getTags().getNames();
     LOG_VART(names);
-    QSet<QString> matchingWords;
-    bool wordsInvolvedInMultipleRules = false;
-    //the name phrases take precendence over the tokenized names, so look for tags associated with
-    //them first
-    Tags implicitlyDerivedTags =
+    QStringList filteredNames;
+    for (int i = 0; i < names.size(); i++)
+    {
+      const QString name = names.at(i);
+      if (name.length() >= _minWordLength)
+      {
+        filteredNames.append(name);
+      }
+    }
+    LOG_VART(filteredNames);
+    if (filteredNames.size() > 0)
+    {
+      QSet<QString> matchingWords;
+      bool wordsInvolvedInMultipleRules = false;
+      //the name phrases take precendence over the tokenized names, so look for tags associated with
+      //them first
+      Tags implicitlyDerivedTags =
       _ruleReader->getImplicitTags(names.toSet(), matchingWords, wordsInvolvedInMultipleRules);
-    LOG_VART(implicitlyDerivedTags);
-    LOG_VART(matchingWords);
-    LOG_VART(wordsInvolvedInMultipleRules)
-    if (wordsInvolvedInMultipleRules)
-    {
-      LOG_TRACE(
-        "Found duplicate match for names: " << names << " with matching words: " << matchingWords);
-      foundDuplicateMatch = true;
-    }
-    else if (implicitlyDerivedTags.size() > 0)
-    {
-      LOG_TRACE(
-        "Derived implicit tags for names: " << names << " with matching words: " << matchingWords);
-      tagsToAdd = implicitlyDerivedTags;
-    }
-    else if (_tokenizeNames)
-    {
-      //we didn't find any tags for the whole names, so let's look for them with the tokenized name
-      //parts
-      const QSet<QString> nameTokens = _getNameTokens(e->getTags());
-      implicitlyDerivedTags =
-        _ruleReader->getImplicitTags(nameTokens, matchingWords, wordsInvolvedInMultipleRules);
+      LOG_VART(implicitlyDerivedTags);
+      LOG_VART(matchingWords);
+      LOG_VART(wordsInvolvedInMultipleRules)
       if (wordsInvolvedInMultipleRules)
       {
         LOG_TRACE(
-          "Found duplicate match for name tokens: " << nameTokens << " with matching words: " <<
-          matchingWords);
+          "Found duplicate match for names: " << names << " with matching words: " << matchingWords);
         foundDuplicateMatch = true;
       }
       else if (implicitlyDerivedTags.size() > 0)
       {
         LOG_TRACE(
-          "Derived implicit tags for name tokens: " << nameTokens << " with matching words: " <<
-          matchingWords);
+          "Derived implicit tags for names: " << names << " with matching words: " << matchingWords);
         tagsToAdd = implicitlyDerivedTags;
       }
-    }
-    LOG_VART(tagsToAdd);
-
-    //don't add a less specific tag if the element already has one with the same key; e.g. if
-    //the element has amenity=public_hall, don't add amenity=hall
-    //for ties keep the one we already have; e.g. if the element has amenity=bank, don't add
-    //amenity=school
-    Tags updatedTags;
-    bool tagsAdded = false;
-    for (Tags::const_iterator tagItr = tagsToAdd.begin(); tagItr != tagsToAdd.end(); ++tagItr)
-    {
-      const QString implicitTagKey = tagItr.key();
-      const QString implicitTagValue = tagItr.value();
-      if (e->getTags().contains(implicitTagKey))
+      else if (_tokenizeNames)
       {
-        const QString elementTagKey = implicitTagKey;
-        const QString elementTagValue = e->getTags()[implicitTagKey];
-        //only use the implicit tag if it is more specific than the one the element already has;
-        //if neither is more specific than the other, we'll arbitrarily keep the one we already had
-        LOG_VART(OsmSchema::getInstance().isAncestor(implicitTagKey % "=" % implicitTagValue,
-                                                     elementTagKey % "=" % elementTagValue));
-        if (OsmSchema::getInstance().isAncestor(implicitTagKey % "=" % implicitTagValue,
-                                                elementTagKey % "=" % elementTagValue))
+        //we didn't find any tags for the whole names, so let's look for them with the tokenized name
+        //parts
+        const QSet<QString> nameTokens = _getNameTokens(e->getTags());
+        implicitlyDerivedTags =
+          _ruleReader->getImplicitTags(nameTokens, matchingWords, wordsInvolvedInMultipleRules);
+        if (wordsInvolvedInMultipleRules)
         {
           LOG_TRACE(
-            implicitTagKey % "=" % implicitTagValue << " is more specific than " <<
-            elementTagKey % "=" % elementTagValue << " on the input feature.  Replacing with " <<
-            "the more specific tag.")
-          updatedTags.appendValue(implicitTagKey, implicitTagValue);
-          tagsAdded = true;
+            "Found duplicate match for name tokens: " << nameTokens << " with matching words: " <<
+            matchingWords);
+          foundDuplicateMatch = true;
+        }
+        else if (implicitlyDerivedTags.size() > 0)
+        {
+          LOG_TRACE(
+            "Derived implicit tags for name tokens: " << nameTokens << " with matching words: " <<
+            matchingWords);
+          tagsToAdd = implicitlyDerivedTags;
+        }
+      }
+      LOG_VART(tagsToAdd);
+
+      //don't add a less specific tag if the element already has one with the same key; e.g. if
+      //the element has amenity=public_hall, don't add amenity=hall
+      //for ties keep the one we already have; e.g. if the element has amenity=bank, don't add
+      //amenity=school
+      Tags updatedTags;
+      bool tagsAdded = false;
+      for (Tags::const_iterator tagItr = tagsToAdd.begin(); tagItr != tagsToAdd.end(); ++tagItr)
+      {
+        const QString implicitTagKey = tagItr.key();
+        const QString implicitTagValue = tagItr.value();
+        if (e->getTags().contains(implicitTagKey))
+        {
+          const QString elementTagKey = implicitTagKey;
+          const QString elementTagValue = e->getTags()[implicitTagKey];
+          //only use the implicit tag if it is more specific than the one the element already has;
+          //if neither is more specific than the other, we'll arbitrarily keep the one we already had
+          LOG_VART(OsmSchema::getInstance().isAncestor(implicitTagKey % "=" % implicitTagValue,
+                                                       elementTagKey % "=" % elementTagValue));
+          if (OsmSchema::getInstance().isAncestor(implicitTagKey % "=" % implicitTagValue,
+                                                  elementTagKey % "=" % elementTagValue))
+          {
+            LOG_TRACE(
+              implicitTagKey % "=" % implicitTagValue << " is more specific than " <<
+              elementTagKey % "=" % elementTagValue << " on the input feature.  Replacing with " <<
+              "the more specific tag.")
+            updatedTags.appendValue(implicitTagKey, implicitTagValue);
+            tagsAdded = true;
+          }
+          else
+          {
+            updatedTags.appendValue(elementTagKey, elementTagValue);
+          }
         }
         else
         {
-          updatedTags.appendValue(elementTagKey, elementTagValue);
+          LOG_TRACE("Input feature does not contain tag: " <<
+                    implicitTagKey % "=" % implicitTagValue << ", so adding it...");
+          updatedTags.appendValue(implicitTagKey, implicitTagValue);
+          tagsAdded = true;
         }
+      }
+      LOG_VART(tagsAdded);
+      if (tagsAdded)
+      {
+        tagsToAdd = updatedTags;
       }
       else
       {
-        LOG_TRACE("Input feature does not contain tag: " <<
-                  implicitTagKey % "=" % implicitTagValue << ", so adding it...");
-        updatedTags.appendValue(implicitTagKey, implicitTagValue);
-        tagsAdded = true;
+        tagsToAdd.clear();
       }
-    }
-    LOG_VART(tagsAdded);
-    if (tagsAdded)
-    {
-      tagsToAdd = updatedTags;
-    }
-    else
-    {
-      tagsToAdd.clear();
-    }
-    LOG_VART(tagsToAdd);
+      LOG_VART(tagsToAdd);
 
-    if (foundDuplicateMatch)
-    {
-      QStringList matchingWordsList = matchingWords.toList();
-      qSort(matchingWordsList.begin(), matchingWordsList.end(), caseInsensitiveLessThan);
-      e->getTags().appendValue(
-        "hoot:implicitTags:note",
-        "No implicit tags added due to finding multiple possible matches for implicit tags: " +
-         matchingWordsList.join(", "));
-      _numNodesInvolvedInMultipleRules++;
-      //if (_numNodesInvolvedInMultipleRules % (_statusUpdateInterval / 10) == 0)
-      //{
-        PROGRESS_INFO(
-          StringUtils::formatLargeNumber(_numNodesInvolvedInMultipleRules) << " nodes have been " <<
-          "involved in multiple rules.");
-      //}
-    }
-    else if (!tagsToAdd.isEmpty())
-    {
-      e->getTags().addTags(tagsToAdd);
-      assert(matchingWords.size() != 0);
-      QStringList matchingWordsList = matchingWords.toList();
-      qSort(matchingWordsList.begin(), matchingWordsList.end(), caseInsensitiveLessThan);
-      e->getTags().appendValue(
-        "hoot:implicitTags:note",
-        "Added " + QString::number(tagsToAdd.size()) + " implicitly derived tag(s) based on: " +
-        matchingWordsList.join(", "));
-      _numNodesModified++;
-      _numTagsAdded += tagsToAdd.size();
-      //if (_numNodesModified % (_statusUpdateInterval * 10) == 0)
-      //{
-        PROGRESS_INFO(
-          "Added " << StringUtils::formatLargeNumber(_numTagsAdded) << " tags total to " <<
-          StringUtils::formatLargeNumber(_numNodesModified) << " nodes.");
-      //}
+      if (foundDuplicateMatch)
+      {
+        QStringList matchingWordsList = matchingWords.toList();
+        qSort(matchingWordsList.begin(), matchingWordsList.end(), caseInsensitiveLessThan);
+        e->getTags().appendValue(
+          "hoot:implicitTags:note",
+          "No implicit tags added due to finding multiple possible matches for implicit tags: " +
+           matchingWordsList.join(", "));
+        _numNodesInvolvedInMultipleRules++;
+        //if (_numNodesInvolvedInMultipleRules % (_statusUpdateInterval / 10) == 0)
+        //{
+          PROGRESS_INFO(
+            StringUtils::formatLargeNumber(_numNodesInvolvedInMultipleRules) << " nodes have been " <<
+            "involved in multiple rules.");
+        //}
+      }
+      else if (!tagsToAdd.isEmpty())
+      {
+        e->getTags().addTags(tagsToAdd);
+        assert(matchingWords.size() != 0);
+        QStringList matchingWordsList = matchingWords.toList();
+        qSort(matchingWordsList.begin(), matchingWordsList.end(), caseInsensitiveLessThan);
+        e->getTags().appendValue(
+          "hoot:implicitTags:note",
+          "Added " + QString::number(tagsToAdd.size()) + " implicitly derived tag(s) based on: " +
+          matchingWordsList.join(", "));
+        _numNodesModified++;
+        _numTagsAdded += tagsToAdd.size();
+        //if (_numNodesModified % (_statusUpdateInterval * 10) == 0)
+        //{
+          PROGRESS_INFO(
+            "Added " << StringUtils::formatLargeNumber(_numTagsAdded) << " tags total to " <<
+            StringUtils::formatLargeNumber(_numNodesModified) << " nodes.");
+        //}
+      }
     }
 
     _numNodesParsed++;

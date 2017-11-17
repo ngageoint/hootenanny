@@ -1915,7 +1915,7 @@ to be created.
 === poi.implicit.tag.rules.minimum.word.length
 
 * Data Type: int
-* Default Value: `3`
+* Default Value: `1`
 
 The minimum allowed word length when associating word tokens with OSM tags.
 

@@ -64,6 +64,7 @@ private:
   long _numNodesInvolvedInMultipleRules;
   long _numNodesParsed;
   long _statusUpdateInterval;
+  int _minWordLength;
 
   QSet<QString> _getNameTokens(const Tags& t);
 
