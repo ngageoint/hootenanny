@@ -91,6 +91,7 @@ private:
   QSqlDatabase _db;
 
   QSqlQuery _ruleWordPartCountQuery;
+  QSqlQuery _tagsForWordIds;
 
   QCache<QString, Tags> _tagsCache;
   bool _useTagsCache;

@@ -99,6 +99,15 @@ void ImplicitTagRulesSqliteReader::_prepareQueries()
       QString("Error preparing _ruleWordPartCountQuery: %1")
         .arg(_ruleWordPartCountQuery.lastError().text()));
   }
+
+  _tagsForWordIds = QSqlQuery(_db);
+  if (!_tagsForWordIds.prepare(
+       "SELECT tags.kvp FROM tags JOIN rules ON rules.tag_id = tags.id WHERE rules.word_id = :wordId"))
+  {
+    throw HootException(
+      QString("Error preparing _tagsForWordIds: %1")
+        .arg(_tagsForWordIds.lastError().text()));
+  }
 }
 
 Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,
@@ -174,9 +183,9 @@ Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,
 
   if (_useTagsCache)
   {
-    //the words passed in may not have been in the cache previously, if some words were passed in
-    //which don't exist in the db.  Now, that those words have been filtered out, let's check
-    //the cache again.
+    //The words passed in may not have been in the cache previously, if some words were passed in
+    //that didn't exist in the db.  Now that those words have been filtered out of the input, let's
+    //check the cache again.
     QStringList wordsList = queriedWords.toList();
     QString wordsKey = wordsList.join(";");
     Tags* cachedTags = _tagsCache[wordsKey];
@@ -194,20 +203,17 @@ Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,
   for (QSet<long>::const_iterator wordIdItr = queriedWordIds.begin();
        wordIdItr != queriedWordIds.end(); ++wordIdItr)
   {
-    QSqlQuery tagsForWordIds(_db);
-    QString queryStr =
-      QString("SELECT tags.kvp FROM tags JOIN rules ON rules.tag_id = tags.id") +
-      QString(" WHERE rules.word_id = ") + QString::number(*wordIdItr);
-    LOG_VART(queryStr);
-    if (!tagsForWordIds.exec(queryStr))
+    _tagsForWordIds.bindValue(":wordId", (qlonglong)*wordIdItr);
+    LOG_VART(_tagsForWordIds.lastQuery());
+    if (!_tagsForWordIds.exec())
     {
       throw HootException(
-        QString("Error executing query: %1").arg(tagsForWordIds.lastError().text()));
+        QString("Error executing query: %1").arg(_tagsForWordIds.lastError().text()));
     }
     Tags tags2;
-    while (tagsForWordIds.next())
+    while (_tagsForWordIds.next())
     {
-      tags2.appendValue(tagsForWordIds.value(0).toString());
+      tags2.appendValue(_tagsForWordIds.value(0).toString());
     }
     LOG_VART(tags2);
     if (tags.isEmpty())
