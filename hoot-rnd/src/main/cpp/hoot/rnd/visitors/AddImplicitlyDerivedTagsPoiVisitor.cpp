@@ -210,12 +210,12 @@ void AddImplicitlyDerivedTagsPoiVisitor::visit(const ElementPtr& e)
         "No implicit tags added due to finding multiple possible matches for implicit tags: " +
          matchingWordsList.join(", "));
       _numNodesInvolvedInMultipleRules++;
-      if (_numNodesInvolvedInMultipleRules % (_statusUpdateInterval * 10) == 0)
-      {
+      //if (_numNodesInvolvedInMultipleRules % (_statusUpdateInterval / 10) == 0)
+      //{
         PROGRESS_INFO(
           StringUtils::formatLargeNumber(_numNodesInvolvedInMultipleRules) << " nodes have been " <<
-          "involved in multiple rules.";
-      }
+          "involved in multiple rules.");
+      //}
     }
     else if (!tagsToAdd.isEmpty())
     {
@@ -229,21 +229,21 @@ void AddImplicitlyDerivedTagsPoiVisitor::visit(const ElementPtr& e)
         matchingWordsList.join(", "));
       _numNodesModified++;
       _numTagsAdded += tagsToAdd.size();
-      if (_numNodesModified % (_statusUpdateInterval * 10) == 0)
-      {
+      //if (_numNodesModified % (_statusUpdateInterval * 10) == 0)
+      //{
         PROGRESS_INFO(
           "Added " << StringUtils::formatLargeNumber(_numTagsAdded) << " tags total to " <<
           StringUtils::formatLargeNumber(_numNodesModified) << " nodes.");
-      }
+      //}
     }
 
     _numNodesParsed++;
-    if (_numNodesParsed % (_statusUpdateInterval * 10) == 0)
-    {
+    //if (_numNodesParsed % (_statusUpdateInterval / 10) == 0)
+    //{
       PROGRESS_INFO(
         "Parsed " << StringUtils::formatLargeNumber(_numNodesParsed) <<
         " nodes from input.");
-    }
+    //}
   }
 }
 
