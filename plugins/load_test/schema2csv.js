@@ -1,9 +1,9 @@
 "use strict";
-require('./validation_mocks.js');
-require('./mgcp_schema.js');
-require('./ggdm30_schema.js');
-require('./tds40_schema.js');
-require('./tds61_schema.js');
+require('../validation_mocks.js');
+require('../mgcp_schema.js');
+require('../ggdm30_schema.js');
+require('../tds40_schema.js');
+require('../tds61_schema.js');
 var fs = require('fs');
 
 
