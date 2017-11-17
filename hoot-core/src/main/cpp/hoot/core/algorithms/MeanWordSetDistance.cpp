@@ -38,10 +38,10 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(StringDistance, MeanWordSetDistance)
 
-MeanWordSetDistance::MeanWordSetDistance(StringDistance* d, double portion)
+MeanWordSetDistance::MeanWordSetDistance(StringDistancePtr d, double portion):
+  _d(d),
+  _p(portion)
 {
-  _d.reset(d);
-  _p = portion;
 }
 
 MeanWordSetDistance::MeanWordSetDistance()

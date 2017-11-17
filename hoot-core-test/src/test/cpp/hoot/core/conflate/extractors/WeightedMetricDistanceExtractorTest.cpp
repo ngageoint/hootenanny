@@ -89,7 +89,7 @@ public:
     w3->addNode(createNode(-104.899, 38.8549)->getId());
     _map->addWay(w3);
 
-    WeightedMetricDistanceExtractor uut(0, 0, 0.1);
+    WeightedMetricDistanceExtractor uut(0.1);
     const OsmMap* constMap = const_cast<const OsmMap*>(_map.get());
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.00384111,

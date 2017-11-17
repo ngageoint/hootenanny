@@ -52,10 +52,10 @@ class EdgeDistanceExtractor : public AbstractDistanceExtractor, public ValueAggr
 {
 public:
 
-  /**
-   * Takes ownership of the value aggregator.
-   */
-  EdgeDistanceExtractor(ValueAggregator* a = 0, Meters spacing = 5.0);
+  EdgeDistanceExtractor(ValueAggregatorPtr, Meters spacing = 5.0);
+
+  // Use default MeanAggregator
+  EdgeDistanceExtractor(Meters spacing = 5.0);
 
   static std::string className() { return "hoot::EdgeDistanceExtractor"; }
 

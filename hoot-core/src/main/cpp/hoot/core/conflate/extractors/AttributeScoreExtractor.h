@@ -42,7 +42,9 @@ class AttributeScoreExtractor : public WayFeatureExtractor, public Configurable
 public:
   static std::string className() { return "hoot::AttributeScoreExtractor"; }
 
-  AttributeScoreExtractor(ValueAggregator* wayAgg = 0, bool useWeight = false);
+  AttributeScoreExtractor(ValueAggregatorPtr wayAgg, bool useWeight = false);
+
+  AttributeScoreExtractor(bool useWeight = false);
 
   virtual std::string getClassName() const { return className(); }
 
