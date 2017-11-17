@@ -82,6 +82,9 @@ public:
    */
   long getRuleWordPartCount();
 
+  int getTagsCacheSize() { return _tagsCache.size(); }
+  long getTagsCacheHits() { return _tagsCacheHits; }
+
 private:
 
   QString _path;
@@ -91,6 +94,7 @@ private:
 
   QCache<QString, Tags> _tagsCache;
   bool _useTagsCache;
+  long _tagsCacheHits;
 
   void _prepareQueries();
 };

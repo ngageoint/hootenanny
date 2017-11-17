@@ -73,6 +73,8 @@ AddImplicitlyDerivedTagsPoiVisitor::~AddImplicitlyDerivedTagsPoiVisitor()
 {
   if (_ruleReader)
   {
+    LOG_VAR(_ruleReader->getTagsCacheSize());
+    LOG_VAR(_ruleReader->getTagsCacheHits());
     _ruleReader->close();
   }
 
@@ -81,7 +83,7 @@ AddImplicitlyDerivedTagsPoiVisitor::~AddImplicitlyDerivedTagsPoiVisitor()
     StringUtils::formatLargeNumber(_numNodesModified) << " nodes / " <<
     StringUtils::formatLargeNumber(_numNodesParsed)  << " total nodes.  " <<
     StringUtils::formatLargeNumber(_numNodesInvolvedInMultipleRules) <<
-    " nodes were involved in multiple tag rules and were not modified.")
+    " nodes were involved in multiple tag rules and were not modified.");
 }
 
 bool caseInsensitiveLessThan(const QString s1, const QString s2)

@@ -47,7 +47,8 @@ ImplicitTagRulesSqliteReader::ImplicitTagRulesSqliteReader() :
 //since we're inserting all objects with cost=1, the cost passed into the constructor
 //of QCache behaves as a max size
 _tagsCache(ConfigOptions().getPoiImplicitTagRulesReaderMaxTagCacheSize()),
-_useTagsCache(ConfigOptions().getPoiImplicitTagRulesReaderUseTagsCache())
+_useTagsCache(ConfigOptions().getPoiImplicitTagRulesReaderUseTagsCache()),
+_tagsCacheHits(0)
 {
 }
 
@@ -129,6 +130,7 @@ Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,
       matchingWords = words;
       const QString tagsStr = cachedTags->toString().trimmed().replace("\n", ", ");
       LOG_TRACE("Returning cached tags: " << tagsStr << " for words: " << matchingWords << ".");
+      _tagsCacheHits++;
       return *cachedTags;
     }
   }
@@ -183,6 +185,7 @@ Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,
       matchingWords = queriedWords;
       const QString tagsStr = cachedTags->toString().trimmed().replace("\n", ", ");
       LOG_TRACE("Returning cached tags: " << tagsStr << " for words: " << matchingWords << ".");
+      _tagsCacheHits++;
       return *cachedTags;
     }
   }
