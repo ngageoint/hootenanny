@@ -38,6 +38,8 @@ namespace hoot
 WayFeatureExtractor::WayFeatureExtractor(ValueAggregatorPtr agg):
   _agg(agg)
 {
+  if (!_agg)
+    _agg.reset(new MeanAggregator());
 }
 
 WayFeatureExtractor::WayFeatureExtractor()

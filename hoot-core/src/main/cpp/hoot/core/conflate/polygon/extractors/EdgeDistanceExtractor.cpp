@@ -93,6 +93,9 @@ private:
 EdgeDistanceExtractor::EdgeDistanceExtractor(ValueAggregatorPtr a, Meters spacing):
   _aggregator(a)
 {
+  if (!_aggregator)
+    _aggregator.reset(new MeanAggregator());
+
   setSpacing(spacing);
 }
 
