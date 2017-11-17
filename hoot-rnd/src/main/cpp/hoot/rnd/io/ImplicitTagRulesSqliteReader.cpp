@@ -43,7 +43,11 @@
 namespace hoot
 {
 
-ImplicitTagRulesSqliteReader::ImplicitTagRulesSqliteReader()
+ImplicitTagRulesSqliteReader::ImplicitTagRulesSqliteReader() :
+//since we're inserting all objects with cost=1, the cost passed into the constructor
+//of QCache behaves as a max size
+_tagsCache(ConfigOptions().getPoiImplicitTagRulesReaderMaxTagCacheSize()),
+_useTagsCache(ConfigOptions().getPoiImplicitTagRulesReaderUseTagsCache())
 {
 }
 
@@ -111,7 +115,23 @@ Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,
     return Tags();
   }
 
-  //TODO: put a cache in front of this?
+  if (_useTagsCache)
+  {
+    //The cache needs to check against a key composed of all of the words, due to possible multiple
+    //rule conflicts that can occur when combinations of full names and tokenized names are passed in.
+    //Its possible that the exact set of words passed in is in the cache, so check.
+    //TODO: handle ';' in words
+    QStringList wordsList = words.toList();
+    QString wordsKey = wordsList.join(";");
+    Tags* cachedTags = _tagsCache[wordsKey];
+    if (cachedTags != 0)
+    {
+      matchingWords = words;
+      const QString tagsStr = cachedTags->toString().trimmed().replace("\n", ", ");
+      LOG_TRACE("Returning cached tags: " << tagsStr << " for words: " << matchingWords << ".");
+      return *cachedTags;
+    }
+  }
 
   //can't prepare this one due to variable inputs
   QSqlQuery selectWordIdsForWords(_db);
@@ -123,7 +143,9 @@ Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,
     //LIKE is case insensitive by default, so using that instead of '='; using toUpper() with '='
     //for comparisons won't work for unicode chars in SQLite w/o quite a bit of additional setup
     //to link in special unicode libs (I think)
-    queryStr += "word LIKE '" + *wordItr + "' OR ";
+    QString word = *wordItr;
+    word = word.replace("'", "''");
+    queryStr += "word LIKE '" + word + "' OR ";
   }
   queryStr.chop(4);
   LOG_VART(queryStr);
@@ -146,6 +168,23 @@ Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,
   if (queriedWordIds.size() == 0)
   {
     return Tags();
+  }
+
+  if (_useTagsCache)
+  {
+    //the words passed in may not have been in the cache previously, if some words were passed in
+    //which don't exist in the db.  Now, that those words have been filtered out, let's check
+    //the cache again.
+    QStringList wordsList = queriedWords.toList();
+    QString wordsKey = wordsList.join(";");
+    Tags* cachedTags = _tagsCache[wordsKey];
+    if (cachedTags != 0)
+    {
+      matchingWords = queriedWords;
+      const QString tagsStr = cachedTags->toString().trimmed().replace("\n", ", ");
+      LOG_TRACE("Returning cached tags: " << tagsStr << " for words: " << matchingWords << ".");
+      return *cachedTags;
+    }
   }
 
   Tags tags;
@@ -183,6 +222,12 @@ Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,
   }
 
   matchingWords = queriedWords;
+  if (_useTagsCache)
+  {
+    QStringList wordsList = matchingWords.toList();
+    Tags* tagsToCache(new Tags(tags));
+    _tagsCache.insert(wordsList.join(";"), tagsToCache);
+  }
   LOG_TRACE("Returning tags: " << tags << " for words: " << matchingWords);
   return tags;
 }

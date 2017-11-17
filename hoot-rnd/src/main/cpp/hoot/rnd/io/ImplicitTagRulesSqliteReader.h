@@ -35,6 +35,7 @@
 #include <QString>
 #include <QtSql/QSqlDatabase>
 #include <QSqlQuery>
+#include <QCache>
 
 namespace  hoot
 {
@@ -87,6 +88,9 @@ private:
   QSqlDatabase _db;
 
   QSqlQuery _ruleWordPartCountQuery;
+
+  QCache<QString, Tags> _tagsCache;
+  bool _useTagsCache;
 
   void _prepareQueries();
 };

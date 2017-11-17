@@ -245,7 +245,6 @@ void ImplicitTagRulesSqliteRecordWriter::write(const QString inputUrl)
     LOG_WARN("Found " << duplicatedWordCount << " duplicated words.");
   }
 
-  LOG_DEBUG("Clearing word/tags cache...");
   _wordsToWordIds.clear();
   _tagsToTagIds.clear();
   //_words.clear();
