@@ -10,7 +10,7 @@ if [ ! -f $HOME/$CHROMEDRIVER_ZIP ]; then
     wget --quiet -O $HOME/$CHROMEDRIVER_ZIP $CHROMEDRIVER_URL
 fi
 
-if ! $HOME/bin/chromedriver --version | grep -q "^ChromeDriver ${CHROMEDRIVER_VERSION//\./\\.}"; then
+if [ ! -f $HOME/bin/chromedriver ] || ! $HOME/bin/chromedriver --version | grep -q "^ChromeDriver ${CHROMEDRIVER_VERSION//\./\\.}"; then
     echo "### Installing ChromeDriver v${CHROMEDRIVER_VERSION}..."
     mkdir -p $HOME/bin
     unzip -d $HOME/bin $HOME/$CHROMEDRIVER_ZIP
