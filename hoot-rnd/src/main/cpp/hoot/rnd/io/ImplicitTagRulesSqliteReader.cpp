@@ -48,7 +48,8 @@ ImplicitTagRulesSqliteReader::ImplicitTagRulesSqliteReader() :
 //of QCache behaves as a max size
 _tagsCache(ConfigOptions().getPoiImplicitTagRulesReaderMaxTagCacheSize()),
 _useTagsCache(ConfigOptions().getPoiImplicitTagRulesReaderUseTagsCache()),
-_tagsCacheHits(0)
+_firstRoundTagsCacheHits(0),
+_secondRoundTagsCacheHits(0)
 {
 }
 
@@ -139,7 +140,7 @@ Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,
       matchingWords = words;
       const QString tagsStr = cachedTags->toString().trimmed().replace("\n", ", ");
       LOG_TRACE("Returning cached tags: " << tagsStr << " for words: " << matchingWords << ".");
-      _tagsCacheHits++;
+      _firstRoundTagsCacheHits++;
       return *cachedTags;
     }
   }
@@ -163,7 +164,9 @@ Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,
   if (!selectWordIdsForWords.exec(queryStr))
   {
     throw HootException(
-      QString("Error executing query: %1").arg(selectWordIdsForWords.lastError().text()));
+      QString("Error executing query: %1; Error: %2")
+        .arg(selectWordIdsForWords.lastQuery())
+        .arg(selectWordIdsForWords.lastError().text()));
   }
 
   QSet<long> queriedWordIds;
@@ -194,7 +197,7 @@ Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,
       matchingWords = queriedWords;
       const QString tagsStr = cachedTags->toString().trimmed().replace("\n", ", ");
       LOG_TRACE("Returning cached tags: " << tagsStr << " for words: " << matchingWords << ".");
-      _tagsCacheHits++;
+      _secondRoundTagsCacheHits++;
       return *cachedTags;
     }
   }
@@ -208,7 +211,9 @@ Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,
     if (!_tagsForWordIds.exec())
     {
       throw HootException(
-        QString("Error executing query: %1").arg(_tagsForWordIds.lastError().text()));
+        QString("Error executing query: %1; Error: %2")
+          .arg(_tagsForWordIds.lastQuery())
+          .arg(_tagsForWordIds.lastError().text()));
     }
     Tags tags2;
     while (_tagsForWordIds.next())

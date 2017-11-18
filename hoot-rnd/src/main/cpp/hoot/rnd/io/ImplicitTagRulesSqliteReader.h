@@ -82,8 +82,9 @@ public:
    */
   long getRuleWordPartCount();
 
-  int getTagsCacheSize() { return _tagsCache.size(); }
-  long getTagsCacheHits() { return _tagsCacheHits; }
+  int getTagsCacheSize() const { return _tagsCache.size(); }
+  long getFirstRoundTagsCacheHits() const { return _firstRoundTagsCacheHits; }
+  long getSecondRoundTagsCacheHits() const { return _secondRoundTagsCacheHits; }
 
 private:
 
@@ -95,7 +96,8 @@ private:
 
   QCache<QString, Tags> _tagsCache;
   bool _useTagsCache;
-  long _tagsCacheHits;
+  long _firstRoundTagsCacheHits;
+  long _secondRoundTagsCacheHits;
 
   void _prepareQueries();
 };
