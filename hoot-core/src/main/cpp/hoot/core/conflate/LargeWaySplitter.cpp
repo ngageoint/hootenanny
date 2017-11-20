@@ -31,13 +31,14 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
+#include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/WaySplitter.h>
+#include <hoot/core/algorithms/linearreference/WayLocation.h>
+#include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/conflate/NodeToWayMap.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ElementConverter.h>
-#include <hoot/core/algorithms/linearreference/WayLocation.h>
-#include <hoot/core/OsmMap.h>
 #include <hoot/core/util/Log.h>
 
 using namespace geos::geom;
@@ -87,11 +88,11 @@ void LargeWaySplitter::_divideWay(boost::shared_ptr<Way> way, int numPieces)
     if (wl.getSegmentIndex() == 0 && wl.getSegmentFraction() == 0.0)
     {
       WayLocation wl2(_map, tmp, pieceLength);
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN("Invalid line piece. Odd: " << wl.toString());
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }

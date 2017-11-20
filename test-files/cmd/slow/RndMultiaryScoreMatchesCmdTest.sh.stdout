@@ -1,0 +1,74 @@
+15:52:27.215 INFO  ...hoot/core/schema/OsmSchema.cpp(1890) Loading translation files...
+15:52:27.265 INFO  ...ore/io/OsmMapReaderFactory.cpp( 160) Loading map from /home/vagrant/hoot/test-files/cmd/slow/RndMultiaryScoreMatchesCmdTest/Input1.osm...
+15:52:27.269 INFO  ...ore/io/OsmMapReaderFactory.cpp( 160) Loading map from /home/vagrant/hoot/test-files/cmd/slow/RndMultiaryScoreMatchesCmdTest/Input2.osm...
+15:52:27.269 INFO  ...ore/io/OsmMapReaderFactory.cpp( 160) Loading map from /home/vagrant/hoot/test-files/cmd/slow/RndMultiaryScoreMatchesCmdTest/Input3.osm...
+15:52:27.270 INFO  ...ore/io/OsmMapWriterFactory.cpp( 130) Writing map to /tmp/score-matches-after-prep.osm...
+
+15:52:27.277 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  59) Applying operation: hoot::BuildingOutlineRemoveOp
+15:52:27.277 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  59) Applying operation: hoot::MapCleaner
+15:52:27.277 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  59) Applying operation: hoot::ReprojectToPlanarOp
+15:52:27.277 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  59) Applying operation: hoot::DuplicateWayRemover
+15:52:27.277 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  59) Applying operation: hoot::SuperfluousWayRemover
+15:52:27.277 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  59) Applying operation: hoot::IntersectionSplitter
+15:52:27.277 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  59) Applying operation: hoot::UnlikelyIntersectionRemover
+15:52:27.277 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  59) Applying operation: hoot::DualWaySplitter
+15:52:27.278 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  59) Applying operation: hoot::ImpliedDividedMarker
+15:52:27.278 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  59) Applying operation: hoot::DuplicateNameRemover
+15:52:27.278 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  59) Applying operation: hoot::SmallWayMerger
+15:52:27.278 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  79) Applying visitor: hoot::RemoveEmptyAreasVisitor
+15:52:27.278 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  79) Applying visitor: hoot::RemoveDuplicateAreaVisitor
+15:52:27.278 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  59) Applying operation: hoot::NoInformationElementRemover
+15:52:27.317 INFO  ...conflate/UnifyingConflator.cpp( 126) Applying pre-unifying conflation operations...
+15:52:27.318 INFO  ...late/js/ScriptMatchCreator.cpp( 531) Creating matches with: hoot::ScriptMatchCreator; rules: MultiaryPoiGeneric.js...
+15:52:27.338 INFO  ...conflate/UnifyingConflator.cpp( 228) Match count: 0
+15:52:27.338 INFO  ...conflate/UnifyingConflator.cpp( 245) Creating mergers...
+15:52:27.338 INFO  ...conflate/UnifyingConflator.cpp( 262) Applying 3 mergers...
+15:52:27.363 INFO  ...conflate/UnifyingConflator.cpp( 294) Applying post-unifying conflation operations...
+15:52:27.363 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  59) Applying operation: hoot::SuperfluousNodeRemover
+
+15:52:27.363 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  59) Applying operation: hoot::SmallWayMerger
+15:52:27.363 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  79) Applying visitor: hoot::RemoveMissingElementsVisitor
+15:52:27.363 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  79) Applying visitor: hoot::RemoveInvalidReviewRelationsVisitor
+15:52:27.363 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  59) Applying operation: hoot::RemoveDuplicateReviewsOp
+15:52:27.363 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  59) Applying operation: hoot::BuildingOutlineUpdateOp
+15:52:27.363 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  79) Applying visitor: hoot::RemoveInvalidMultilineStringMembersVisitor
+15:52:27.363 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  59) Applying operation: hoot::AddHilbertReviewSortOrderOp
+
+15:52:27.363 INFO  ...ore/io/OsmMapWriterFactory.cpp( 130) Writing map to /home/vagrant/hoot/test-output/cmd/slow/RndMultiaryScoreMatchesCmdTest/Output.osm...
+== Node-based Statistics
+
+
+=== All Layers
+
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |     1 |     2 |     0  |
+                  | match  |     0 |     2 |     0  |
+                  | review |     0 |     0 |     0  |
+
+All Layers	3	2	0	0	0	0	5
+
+=== Edge-based Scoring
+
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     1 |     0  |
+                  | match  |     0 |     4 |     0  |
+                  | review |     0 |     0 |     0  |
+
+correct: 0.8
+wrong: 0.2
+unnecessary reviews: 0
+
+elements involved in a wrong match:
+  nodes: 2
+  ways: 0
+  relations: 0
+correct match count: 4
+wrong match count: 1
+unnecessary review count: 0
+ratio of unnecessary reviews to correct matches: 0
+F1 Score: 0.888889
+-1,0.8,0.2,0
+        <tag k="hoot:wrong" v="missMatch"/>
+        <tag k="hoot:wrong" v="missMatch"/>

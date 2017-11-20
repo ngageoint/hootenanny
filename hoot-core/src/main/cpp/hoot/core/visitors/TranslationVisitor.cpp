@@ -33,8 +33,10 @@
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/io/ScriptToOgrTranslator.h>
+#include <hoot/core/io/ScriptTranslatorFactory.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
@@ -47,12 +49,42 @@ using namespace std;
 namespace hoot
 {
 
-TranslationVisitor::TranslationVisitor(ScriptTranslator& t, bool toOgr, OsmMap* map) : _t(t),
-  _map(map), _toOgr(toOgr)
+HOOT_FACTORY_REGISTER(ElementVisitor, TranslationVisitor);
+
+TranslationVisitor::TranslationVisitor()
 {
-  if (toOgr)
+  setConfiguration(conf());
+}
+
+void TranslationVisitor::setConfiguration(const Settings& conf)
+{
+  ConfigOptions c(conf);
+  QString dir = c.getTranslationDirection();
+  if (dir == "toogr")
   {
-    _togr = dynamic_cast<ScriptToOgrTranslator*>(&t);
+    _toOgr = true;
+  }
+  else if (dir == "toosm")
+  {
+    _toOgr = false;
+  }
+  else
+  {
+    throw HootException("Expected a translation.direction of 'toogr' or 'toosm'.");
+  }
+  LOG_VART(_toOgr);
+  if (conf.hasKey(c.getTranslationScriptKey()) && c.getTranslationScript() != "")
+  {
+    setPath(c.getTranslationScript());
+  }
+}
+
+void TranslationVisitor::setPath(QString path)
+{
+  _t.reset(ScriptTranslatorFactory::getInstance().createTranslator(path));
+  if (_toOgr)
+  {
+    _togr = dynamic_cast<ScriptToOgrTranslator*>(_t.get());
     if (_togr == 0)
     {
       throw HootException("Translating to OGR requires a script that supports to OGR "
@@ -61,15 +93,12 @@ TranslationVisitor::TranslationVisitor(ScriptTranslator& t, bool toOgr, OsmMap* 
   }
 }
 
-void TranslationVisitor::visit(const ConstElementPtr& ce)
+void TranslationVisitor::visit(const ElementPtr& e)
 {
-  // this is a hack to get around the visitor interface. The visitor interface should probably be
-  // redesigned into ConstElementVisitor and ElementVisitor.
-  ElementPtr e = _map->getElement(ce->getElementId());
-  Tags& tags = e->getTags();
-
-  if (tags.getNonDebugCount() > 0)
+  if (e.get() && e->getTags().getNonDebugCount() > 0)
   {
+    Tags& tags = e->getTags();
+
     GeometryTypeId gtype = ElementConverter::getGeometryType(e, false);
 
     // If we don't know what it is, no point in translating it.
@@ -80,7 +109,6 @@ void TranslationVisitor::visit(const ConstElementPtr& ce)
 
     if (_toOgr)
     {
-
       vector<Tags> allTags = _togr->translateToOgrTags(tags, e->getElementType(), gtype);
 
       if (allTags.size() > 0)
@@ -95,6 +123,8 @@ void TranslationVisitor::visit(const ConstElementPtr& ce)
     }
     else
     {
+      LOG_TRACE("Tags before: " << tags);
+
       QByteArray layerName;
       if (tags.contains(MetadataTags::HootLayername()))
       {
@@ -124,7 +154,7 @@ void TranslationVisitor::visit(const ConstElementPtr& ce)
         throw InternalErrorException("Unexpected geometry type.");
       }
 
-      _t.translateToOsm(tags, layerName.data(), geomType);
+      _t->translateToOsm(tags, layerName.data(), geomType);
 
       if (tags.contains(MetadataTags::ErrorCircular()))
       {
@@ -138,6 +168,8 @@ void TranslationVisitor::visit(const ConstElementPtr& ce)
         tags.remove(MetadataTags::ErrorCircular());
         tags.remove(MetadataTags::Accuracy());
       }
+
+      LOG_TRACE("Tags after: " << tags);
     }
   }
 }

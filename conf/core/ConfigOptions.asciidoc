@@ -56,6 +56,86 @@ Prefix to apply to REF1 values.
 The REF1 values are typically used when training a model. See the Developer Documentation for
 details.
 
+=== apidb.bulk.inserter.file.output.status.update.interval
+
+* Data Type: long
+* Default Value: `10000`
+
+Count at which the parse status of each element type should be logged when writing to them to
+files by an OSM/Hootenanny API database bulk inserter.  e.g. With a value of 100, you will see a
+load status update message logged for every 100 elements parsed or file lines written.  This
+setting can have a negative impact on performance if set to a very low value.
+
+=== apidb.bulk.inserter.output.files.copy.location
+
+* Data Type: string
+* Default Value: ``
+
+Use this option if you wish to retain the file data generated during an OSM/Hootenanny API database
+write.  This option is not needed and will be ignored if writing OSM data to a SQL file that will be
+applied/written to an OSM API database at a later time.  If this option is populated, any file data
+files generated as a result of executing the hoot convert command with an OSM API database target
+are copied to the specified location.  This option should be set to a full file path to a SQL
+file (.sql).
+
+=== apidb.bulk.inserter.starting.node.id
+
+* Data Type: long
+* Default Value: `1`
+
+First record ID to assign to written nodes when writing to an OSM/Hootenanny API database or SQL
+file.  Must be a positive number.  Use this when working with an offline database and know the
+ID range you want to assign to node records.  If writing to an OSM API databse, this option is
+ignored if "osmapidb.bulk.inserter.reserve.record.ids.before.writing.data" is set to true.
+
+=== apidb.bulk.inserter.starting.way.id
+
+* Data Type: long
+* Default Value: `1`
+
+First record ID to assign to written ways when writing to an OSM/Hootenanny API database or SQL file.  Must
+be a positive number.  Use this when working with an offline database and know the ID range you
+want to assign to way records.  If writing to an OSM API databse, this option is
+ignored if "osmapidb.bulk.inserter.reserve.record.ids.before.writing.data" is set to true.
+
+=== apidb.bulk.inserter.starting.relation.id
+
+* Data Type: long
+* Default Value: `1`
+
+First record ID to assign to written relations when writing to an OSM/Hootenanny API database or
+SQL file.  Must be a positive number.  Use this when working with an offline database and know the
+ID range you want to assign to relation records.  If writing to an OSM API databse, this option is
+ignored if "osmapidb.bulk.inserter.reserve.record.ids.before.writing.data" is set to true.
+
+=== apidb.bulk.inserter.stxxl.map.min.size
+
+* Data Type: long
+* Default Value: `10000000`
+
+Size at which the ID mappings storage for the OSM/Hootenanny API database bulk inserter switches
+from a std::map to an stxxl::map, which is a container optimized for very large amounts of data.
+For debugging purposes only.
+
+=== apidb.bulk.inserter.temp.file.dir
+
+* Data Type: string
+* Default Value: `/tmp`
+
+Allows for customizing where the OSM/Hootenanny API database bulk inserter stores temp files.
+
+=== apidb.bulk.inserter.validate.data
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, the OSM/Hootenanny API database bulk inserter will renumber element IDs, check for
+duplicated element IDs, check for invalid way node references, and check for invalid relation member
+references.  Only duplicate element IDs and invalid way node references will cause a failure.
+Invalid relation members will cause a warning to be logged.  You should enable this setting if you
+are loading data that has not been previously validated in another OSM API database.  Enabling this
+setting may cause writing to an OSM API database to occur more slowly.
+
 === api.db.email
 
 * Data Type: string
@@ -695,6 +775,16 @@ The size of a pixel when calculating node density. See User Manual for details.
 Should the hootapi services DB writer automatically create the specified user if it doesn't exist.
 This is most useful when debugging and testing.
 
+=== hootapi.db.writer.copy.bulk.insert
+
+* Data Type: bool
+* Default Value: `false`
+
+If set to true, the Hootenanny API database writer will insert new records using Postgres COPY
+statements, which may increase performance when writing large datasets.  This setting can only
+be activated when writing new records and will not work when existing records need to be modified
+or deleted.  It also requires writing out temporary files, so extra disk space is needed.
+
 === hootapi.db.writer.output.id.mappings
 
 * Data Type: string
@@ -703,6 +793,15 @@ This is most useful when debugging and testing.
 If this value is set to a non-empty string, the system will attempt to open a file with the
 specified name and output all the ID mappings (source to destination) used for nodes, ways, and
 relations that were written to the database.
+
+=== hootapi.db.writer.remap.ids
+
+* Data Type: bool
+* Default Value: `true`
+
+If this value is set to true, then all incoming element IDs are remapped into new IDs as the
+elements are written to a Hootenanny API database. Setting it to true is appropriate if any of the
+incoming IDs are non-positive.
 
 === hootapi.db.writer.overwrite.map
 
@@ -762,8 +861,106 @@ default the first assigned id will be -1)
 ** `${HOOT_TRANSLATE_PATH}`
 ** `${HOOT_HOME}/plugins`
 ** `${HOOT_HOME}/plugins-local`
+** `${HOOT_HOME}/rules`
 
 A list of paths to include in the javascript translator search path.
+
+=== json.add.bbox
+
+* Data Type: bool
+* Default Value: `false`
+
+When reading JSON, add a tag with the bounding box for each element
+
+=== json.format.hootenanny
+
+* Data Type: bool
+* Default Value: `false`
+
+Output JSON in a more Hootenanny specific way that includes Hootenanny-specific tags
+including `hoot:*`, `error:circluar`, `type=node/way/relation`, tags in the `tags`
+section, etc.
+
+`Generic Format`
+-----
+...
+{
+  "type":"Feature",
+  "properties":{
+    "type":"LineString",
+    "REF1":"Panera",
+    "access":{ "groups":[],"users":[] },
+    "attributes":{
+      "item_date":"2017-10-09T12:34:56.789Z",
+      "category_id":"123456",
+      "asset_id":"ABC123"
+      },
+    "alt_name":null,
+    "building":"yes",
+    "name":"Panera Bread",
+    "item_type":[ "building","restaurant" ],
+    },
+  "geometry":{
+    "type":"Polygon",
+    "coordinates":[[[-104.8065566424573,39.59327717293566],
+                    [-104.8061245919961,39.59330667331412],
+                    [-104.8060931452853,39.59315284977403],
+                    [-104.8065292974914,39.59311913497989],
+                    [-104.8065566424573,39.59327717293566]]]
+    }
+},
+...
+-----
+vs
+`Hootenanny-specific Format`
+-----
+...
+{
+  "type":"Feature",
+  "id":"-2",
+  "properties":{
+    "type":"way",
+    "tags":{
+      "REF1":"Panera",
+      "access":{ "groups":[],"users":[] },
+      "attributes":{
+        "item_date":"2017-10-09T12:34:56.789Z",
+        "category_id":"123456",
+        "asset_id":"ABC123"
+        },
+      "alt_name":null,
+      "building":"yes",
+      "type":"way",
+      "name":"Panera Bread",
+      "item_type":[ "building","restaurant" ],
+      "error:circular":"15"
+      }
+    },
+  "geometry":{
+    "type":"Polygon",
+    "coordinates":[[[-104.8065566424573,39.59327717293566],
+                    [-104.8061245919961,39.59330667331412],
+                    [-104.8060931452853,39.59315284977403],
+                    [-104.8065292974914,39.59311913497989],
+                    [-104.8065566424573,39.59327717293566]]]
+    }
+},
+...
+-----
+
+=== json.perserve.empty.tags
+
+* Data Type: bool
+* Default Value: `true`
+
+Write out empty OSM tags to JSON such as `"text":""`
+
+=== json.pretty.print
+
+* Data Type: bool
+* Default Value: `false`
+
+Write out JSON in a more legible manner
 
 === keep.tags.visitor.keys
 
@@ -1054,6 +1251,22 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== node.comparison.coordinate.sensitivity
+
+* Data Type: int
+* Default Value: `7`
+
+The number of decimal places taken into account when comparing node coordinates.  Used by node
+hash calculation.
+
+=== node.comparison.circular.error.sensitivity
+
+* Data Type: int
+* Default Value: `6`
+
+The number of decimal places taken into account when comparing node circular error values.  Used by
+node hash calculation.
+
 === node.matcher.strictness
 
 * Data Type: double
@@ -1108,6 +1321,21 @@ Attribute columns and values that do not match a one2one rule.
 
 Debugging: Print out which attributes are dropped during export validation.
 
+=== ogr.esri.fcsubtype
+
+* Data Type: bool
+* Default Value: `true`
+
+Add the ESRI specific FCSUBTYPE field to the output.
+
+=== ogr.esri.fdname
+
+* Data Type: string
+* Default Value: `TDS`
+
+The name to use for the ESRI Feature Dataset on export. Note: This only applies to ESRI File
+Geodatabases.
+
 === ogr.import.filter
 
 * Data Type: string
@@ -1118,14 +1346,19 @@ Geodatabase. The default is to import all layers from a FGDB.  Setting this vari
 override the filter value that can be set by the layerNameFilter function inside a translation
 script.
 
-=== ogr.mgcp.extra
+=== ogr.note.extra
 
 * Data Type: string
-* Default Value: `file`
+* Default Value: `attribute`
+
+When exporting to TDSv40 and TDSv61:
+- "attribute" Add unused tags to the "ZI006_MEM" field.
+- "file" Save the unused tags in a new layer (extra_[PLA]).
+- "none" Don't save the unused tags, just drop them.
 
 When exporting to MGCP:
+- "attribute" Add unused tags to the "TXT" field.
 - "file" Save the unused tags in a new layer (extra_[PLA]).
-- "note" Add unused tags to the "TXT" field.
 - "none" Don't save the unused tags, just drop them.
 
 NOTE: According to the MGCP and Shapefile specifications, the "TXT" field has a maximum length of
@@ -1176,6 +1409,13 @@ This can sometimes be necessary when reading from a DB created with osm2pgsql. E
 hoot convert -D ogr.reader.epsg.override=900913 PG:"dbname='gis' host='localhost' port='5432' user='hoot' password='blahblah'" tmp/output.shp
 ----
 
+=== ogr.reader.node.id.field.name
+
+* Data Type: string
+* Default Value: ``
+
+If set, the ogr reader will use the value at the specified field to populate node IDs.
+
 === ogr.split.o2s
 
 * Data Type: bool
@@ -1210,27 +1450,12 @@ When exporting to TDSv40 and TDSv61:
 
 NOTE: If exporting to Shapefile, this field will be truncated to 255 characters.
 
-=== ogr.tds.add.fcsubtype
+=== ogr.thematic.structure
 
 * Data Type: bool
 * Default Value: `true`
 
-Add the ESRI specific FCSUBTYPE field to the output.
-
-=== ogr.tds.fdname
-
-* Data Type: string
-* Default Value: `TDS`
-
-The name to use for the ESRI Feature Dataset on export. Note: This only applies to ESRI File
-Geodatabases.
-
-=== ogr.tds.structure
-
-* Data Type: bool
-* Default Value: `true`
-
-Export TDS data in Thematic Groups (TransportationGroundCrv, StructurePnt etc) instead of one
+Where applicable, export data in Thematic Groups (TransportationGroundCrv, StructurePnt etc) instead of one
 FCODE per file/layer (ROAD_L, BUILDING_P etc).
 
 === ogr.throw.error
@@ -1280,40 +1505,25 @@ hoot --convert \
 
 Operations that should be applied to ingested OGR data before saving the data.
 
-=== osmapidb.bulk.writer.file.output.element.buffer.size
+=== osmapidb.bulk.inserter.disable.database.constraints.during.write
 
-* Data Type: long
-* Default Value: `10000`
+* Data Type: bool
+* Default Value: `false`
 
-Maximum number of elements to keep in memory when serializing input elements to a file output
-before they are written to an OSM API database.  If you have enough memory available and the
-dataset you are writing is significantly larger than the value of this setting, you may be able to
-increase the input file parsing performance by raising this value.  This setting has no impact on
-the performance of writing records to a database, only on the input data parsing done beforehand.
+When the OSM API database bulk inserter is writing directly to a database, if true, the inserter
+drops the database constraints before writing the data and re-enables them after the writing is
+complete.  This can only be used with databases that have been taken offline from other users.
 
-=== osmapidb.bulk.writer.file.output.status.update.interval
+=== osmapidb.bulk.inserter.disable.database.indexes.during.write
 
-* Data Type: long
-* Default Value: `1000000`
+* Data Type: bool
+* Default Value: `false`
 
-Count at which the parse status of each element type should be logged when writing to them to
-files.  e.g. With a value of 100, you will see a load status update message logged for every 100
-elements parsed or file lines written.  This setting will have a negative impact on performance
-if set to a very low value.
+When the OSM API database bulk inserter is writing directly to a database, if true, the inserter
+drops the database indexes before writing the data and re-enables them after the writing is
+complete.  This can only be used with databases that have been taken offline from other users.
 
-=== osmapidb.bulk.writer.output.files.copy.location
-
-* Data Type: string
-* Default Value: ``
-
-Use this option if you wish to retain the file data generated during an OSM API database write.
-This option is not needed and will be ignored if writing OSM data to a SQL file that will be
-applied/written to an OSM API database at a later time.  If this option is populated, any file data
-files generated as a result of executing the hoot convert command with an OSM API database target
-are copied to the specified location.  This option should be set to a full file path to a SQL
-file (.sql).
-
-=== osmapidb.bulk.writer.reserve.record.ids.before.writing.data
+=== osmapidb.bulk.inserter.reserve.record.ids.before.writing.data
 
 * Data Type: bool
 * Default Value: `false`
@@ -1326,57 +1536,13 @@ destination must be an OSM API database or this setting will always be treated a
 If the output destination is a SQL file, the SQL statements to update the record IDs will be
 written to the SQL output for later execution.
 
-=== osmapidb.bulk.writer.starting.node.id
-
-* Data Type: long
-* Default Value: `1`
-
-First record ID to assign to written nodes when writing to an OSM API database or SQL file.  Must
-be a positive number.  Use this when working with an offline database and know the ID range you
-want to assign to node records.  This option is ignored if
-"osmapidb.bulk.writer.reserve.record.ids.before.writing.data" is set to true.
-
-=== osmapidb.bulk.writer.starting.way.id
-
-* Data Type: long
-* Default Value: `1`
-
-First record ID to assign to written ways when writing to an OSM API database or SQL file.  Must
-be a positive number.  Use this when working with an offline database and know the ID range you
-want to assign to way records.  This option is ignored if
-"osmapidb.bulk.writer.reserve.record.ids.before.writing.data" is set to true.
-
-=== osmapidb.bulk.writer.starting.relation.id
-
-* Data Type: long
-* Default Value: `1`
-
-First record ID to assign to written relations when writing to an OSM API database or SQL file.
-Must be a positive number.  Use this when working with an offline database and know the ID range
-you want to assign to relation records.  This option is ignored if
-"osmapidb.bulk.writer.reserve.record.ids.before.writing.data" is set to true.
-
-=== osmapidb.bulk.writer.stxxl.map.min.size
-
-* Data Type: long
-* Default Value: `10000000`
-
-Size at which the ID mappings storage for the OSM API database bulk writer switches from a std::map
-to an stxxl::map, which is a container optimized for very large amounts of data.  For debugging
-purposes only.
-
-=== osmapidb.bulk.writer.validate.data
+=== osmapidb.bulk.inserter.write.sql.file.id.sequence.updates
 
 * Data Type: bool
 * Default Value: `true`
 
-If true, the OSM API database bulk writer will create new element ID mappings, check for duplicate
-element IDs, invalid way node references, and invalid relation member references.  Only duplicate
-element IDs and invalid way node references will cause a failure.  Invalid relation members will
-cause a warning to be logged.  You should only set this to false as an optimization if you are
-loading data that was previously validated in another OSM API database, all element IDs are
-unique in the data you are loading, and the IDs will not conflict with any existing data in the
-destination database.
+If true, the OSM API database bulk inserter write element ID sequence update SQL statements when
+the output is a SQL file.  If false, the ID update statements will not be written.
 
 === osmapidb.id.aware.url
 
@@ -1771,15 +1937,16 @@ If true, POI to polygon conflation will attempt to reduce unnecessary reviews wi
 incorrect matches.  This setting is somewhat experimental and can be runtime expensive when
 enabled.
 
-=== poi.polygon.review.if.matched.types
+=== poi.polygon.match.evidence.threshold
 
-* Data Type: list
-* Default Value:
-** ``
+* Data Type: int
+* Default Value: `3`
 
-List of key value pairs (key=value) for features to always review if marked as matches with POI to
-polygon conflation.  When specifying the list from the command line, delimit the types with ';'
-and surround the entire value string in double quotes.
+The minimum evidence score at which a POI will be matched to a polygon.  Valid values are 1 to 4.
+If an evidence score for a feature pair falls below this value, the relationship between the
+features will be classified as a review or miss, depending on the value of
+'poi.polygon.review.evidence.threshold'.  Generally, this setting should not be changed except
+when working with specific POI/Polygon conflation use cases that require it.
 
 === poi.polygon.match.threshold
 
@@ -1792,14 +1959,6 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
-=== poi.polygon.match.distance.threshold
-
-* Data Type: double
-* Default Value: `5.0`
-
-The maximum distance, in meters, between a POI and a polygon where they can still be considered
-a match based on distance criteria only.
-
 === poi.polygon.miss.threshold
 
 * Data Type: double
@@ -1810,6 +1969,14 @@ The threshold at which a miss is called a miss when comparing POIs to polygons.
 See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== poi.polygon.match.distance.threshold
+
+* Data Type: double
+* Default Value: `5.0`
+
+The maximum distance, in meters, between a POI and a polygon where they can still be considered
+a match based on distance criteria only.
 
 === poi.polygon.name.score.threshold
 
@@ -1828,6 +1995,14 @@ present (null).
 If true, debug match distance output will be obtained from manually matched source data and printed
 if running 'hoot score-matches' with POI to polygon conflation.
 
+=== poi.polygon.promote.points.with.addresses.to.pois
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, POI to polygon conflation will classify all points with OSM address tags as POIs even if
+they do not have specific type tags.
+
 === poi.polygon.review.distance.threshold
 
 * Data Type: double
@@ -1837,6 +2012,30 @@ The maximum distance, in meters, between a POI and a polygon where they can stil
 for review based on distance criteria only (value is added to the circular error of the compared
 features).
 
+=== poi.polygon.review.evidence.threshold
+
+* Data Type: int
+* Default Value: `1`
+
+The minimum evidence score at which a POI will be reviewed against a polygon, if the evidence score
+does not meet the threshold defined by 'poi.polygon.match.evidence.threshold'.  Valid values are
+0 to 3.  If an evidence score for a feature pair falls below this value, the relationship between
+the features will be classified as a miss.  If the value is set to 0, all feature pairs which did
+not match will be reviewed.  If the value is set greater than or equal to
+'poi.polygon.match.evidence.threshold', an error will occur.  Generally, this setting
+should not be changed except when working with specific POI/Polygon conflation use cases that
+require it.
+
+=== poi.polygon.review.if.matched.types
+
+* Data Type: list
+* Default Value:
+** ``
+
+List of key value pairs (key=value) for features to always review if marked as matches with POI to
+polygon conflation.  When specifying the list from the command line, delimit the types with ';'
+and surround the entire value string in double quotes.
+
 === poi.polygon.review.threshold
 
 * Data Type: double
@@ -1844,10 +2043,6 @@ features).
 
 The threshold at which a review is called a review for PoiPolygon. See
 `conflate.review.threshold.default`.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
 
 === poi.polygon.type.score.threshold
 
@@ -1894,7 +2089,8 @@ reported.
 * Data Type: bool
 * Default Value: `true`
 
-By default add the `source:datetime` stamp when reading files.  Not honored by all readers.
+By default add the `source:datetime` or `source:ingest:datetime` stamp when reading files.  Not
+honored by all readers.
 
 === reader.conflate.use.data.source.ids.1
 
@@ -1938,6 +2134,15 @@ an 'accuracy' tag will not be replaced by a 'error:circular' tag; both tags will
 
 Sets the status on data being read.  Valid values are "unknown1" and "unknown2".  Not honored by all
 readers.
+
+=== reader.use.data.source.ids
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, the element IDs in the source data will be assigned to written elements.  Otherwise,
+Hootenanny manages element IDs internally.  This should not be set to true if any source elements
+have negative IDs.  Not honored by all readers.
 
 === reader.use.file.status
 
@@ -2084,15 +2289,24 @@ will have the value specified in the set.tag.visitor.value option appended to it
 
 === set.tag.visitor.key
 
-* Data Type: string
+* Data Type: list
 * Default Value: ``
 
 Set the key member in the SetTagVisitor class.  SetTagVisitor allows for adding/modifying a
-particular tag on all elements in a map.
+particular tag on all elements in a map. The number of keys in `set.tag.visitor.key` should match
+the number of keys in `set.tag.visitor.value`.
+
+=== set.tag.visitor.element.type
+
+* Data Type: string
+* Default Value: ``
+
+An optional element type filter for the SetTagVisitor.  Valid values are: 'node', 'way', or
+'relation'.  If left empty, all elements will receive tag additions.
 
 === set.tag.visitor.value
 
-* Data Type: string
+* Data Type: list
 * Default Value: ``
 
 Set the value member in the SetTagVisitor class.  SetTagVisitor allows for adding/modifying a
@@ -2113,6 +2327,14 @@ then they'll be a candidate for merging.
 
 If highways are smaller than threshold and the tags matched, then they will be merged together into
 a single way.
+
+=== spark.changeset.writer.element.payload.format
+
+* Data Type: string
+* Default Value: `json`
+
+The format used to write the element payload portion of the Spark changeset file.  Valid options are
+'json' or 'xml'.
 
 === status.criterion.status
 
@@ -2227,6 +2449,14 @@ renaming existing tag keys on all elements in a map.
 The key to be replaced by the TagRenameKeyVisitor.  TagRenameKeyVisitor allows for
 renaming existing tag keys on all elements in a map.
 
+=== test.case.cmd
+
+* Data Type: string
+* Default Value: `hoot::ConflateCmd`
+
+Set the conflate command that should be used in a test case. This is only useful when writing
+test cases (`test-files/cases/`) and was originally added to support the MultiaryConflateCmd.
+
 === test.force.orthographic.projection
 
 * Data Type: bool
@@ -2325,6 +2555,20 @@ The direction that the translation script should translate. `toogr` will transla
 
 The script to use for translation.
 
+=== translation.override
+
+* Data Type: string
+* Default Value: ``
+
+Override the value of translated tags and attributes.
+
+VERY IMPORTANT NOTE: The changes apply to ALL elements and are applied to the OSM+ tags either before or
+after the translation. E.g.
+* After attributes are translated to OSM+ tags during Import
+* Before OSM+ tags are translated to attributes on Export
+
+NOTE: This assumes that you know exactly what tags you want to modify/delete
+
 === unify.enable.optimal.constrained.matches
 
 * Data Type: bool
@@ -2364,7 +2608,18 @@ before the operations in `conflate.post.ops`.
 * Default Value:
 ** ``
 
+
 List of operations to apply immediately before conflating when using Unifying Conflation only.  Runs
+after the operations in `conflate.pre.ops`.
+
+=== network.pre.ops
+
+* Data Type: list
+* Default Value:
+** `hoot::CornerSplitter`
+** `hoot::RubberSheet`
+
+List of operations to apply immediately before conflating when using Network Conflation only.  Runs
 after the operations in `conflate.pre.ops`.
 
 === uuid.helper.repeatable
@@ -2615,7 +2870,7 @@ NoInformationElementRemover cleaning operation.
 
 === writer.precision
 
-* Data Type: double
+* Data Type: int
 * Default Value: `16`
 
 Set the output precision when writing. Not honored by all writers.
@@ -2626,3 +2881,13 @@ Set the output precision when writing. Not honored by all writers.
 * Default Value: `false`
 
 Add hoot:status values as text (Reference, Merged etc) instead of numbers (1,2,3)
+
+=== writer.xml.sort.by.id
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, OSM elements written to XML file output (.osm) are sorted by ID.  Setting this to true
+will require reading the entire source dataset into memory.  Setting it to false may result in
+using smaller amounts of memory during writing if the data source being written is also a streamable
+format (see the "Supported Data Formats" section in README.md).

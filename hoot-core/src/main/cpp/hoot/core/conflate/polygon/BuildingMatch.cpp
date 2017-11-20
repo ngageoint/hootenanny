@@ -49,6 +49,7 @@
 #include <hoot/core/index/ElementToRelationMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/conflate/MatchClassification.h>
+#include <hoot/core/util/Log.h>
 
 // Standard
 #include <sstream>
@@ -106,7 +107,7 @@ BuildingMatch::BuildingMatch(const ConstOsmMapPtr& map, boost::shared_ptr<const 
       else if (angle >= 0.25)     description.append("Semi-similar building orientation.");
       else                        description.append("Building orientation not similar.");
       //  Finally the edge distance
-      double edge = EdgeDistanceExtractor(new QuantileAggregator(0.4)).extract(*map, element1, element2);
+      double edge = EdgeDistanceExtractor(ValueAggregatorPtr(new QuantileAggregator(0.4))).extract(*map, element1, element2);
       if (edge >= 90)             description.append("Building edges very close to each other.");
       else if (edge >= 70)        description.append("Building edges somewhat close to each other.");
       else                        description.append("Building edges not very close to each other.");

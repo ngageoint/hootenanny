@@ -26,7 +26,7 @@ include(../Configure.pri)
 LIBS += -L../tgs/ -lTgs -L../lib/ -lHootCore -ltbs
 
 hadoop {
-  LIBS += -lHootHadoop -lhadooppipes -lhadooputils
+  LIBS += -lHootHadoop -lhadooppipes -lhadooputils -lHootCoreTest
 }
 
 UI_DIR = tmp/ui

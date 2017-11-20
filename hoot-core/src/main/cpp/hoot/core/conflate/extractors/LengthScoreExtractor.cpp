@@ -35,6 +35,15 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, LengthScoreExtractor)
 
+LengthScoreExtractor::LengthScoreExtractor(ValueAggregatorPtr wayAgg):
+  WayFeatureExtractor(wayAgg)
+{
+}
+
+LengthScoreExtractor::LengthScoreExtractor():
+  WayFeatureExtractor()
+{
+}
 
 double LengthScoreExtractor::_extract(const OsmMap& map, const ConstWayPtr& w1,
                                       const ConstWayPtr& w2) const

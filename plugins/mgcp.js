@@ -56,7 +56,7 @@ mgcp = {
     mgcp.rawSchema = translate.addReviewFeature(mgcp.rawSchema);
 
     // Add empty "extra" feature layers if needed
-    if (config.getOgrMgcpExtra() == 'file') mgcp.rawSchema = translate.addExtraFeature(mgcp.rawSchema);
+    if (config.getOgrNoteExtra() == 'file') mgcp.rawSchema = translate.addExtraFeature(mgcp.rawSchema);
 
     // This function dumps the schema to the screen for debugging
     // translate.dumpSchema(mgcp.rawSchema);
@@ -74,7 +74,7 @@ mgcp = {
         if (attrList != undefined)
         {
             // The code is duplicated but it is quicker than doing the "if" on each iteration
-            if (config.getOgrDebugDumpvalidate() == 'true')
+            if (mgcp.configOut.OgrDebugDumpvalidate == 'true')
             {
                 for (var val in attrs)
                 {
@@ -182,7 +182,7 @@ mgcp = {
             // Check if it is a valid enumerated value
             if (enumValueList.indexOf(attrValue) == -1)
             {
-                if (config.getOgrDebugDumpvalidate() == 'true') hoot.logWarn('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName);
+                if (mgcp.configOut.OgrDebugDumpvalidate == 'true') hoot.logWarn('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName);
 
                 var othVal = '(' + enumName + ':' + attrValue + ')';
 
@@ -211,112 +211,144 @@ mgcp = {
     // This is generally for Roads, Railways, bridges, tunnels etc.
     manyFeatures: function(geometryType, tags, attrs)
     {
-        var newfeatures = [];
-
         // Add the first feature to the structure that we return
         var returnData = [{attrs:attrs, tableName:''}];
 
-        // Sort out Roads, Railways, Bridges, Tunnels, Embankments and Cuttings.
-        if (geometryType == 'Line' && (tags.highway || tags.railway))
+        // Quit early if we don't need to check anything. We are only looking at linework
+        if (geometryType !== 'Line') return returnData;
+
+        // Only looking at roads & railways with something else tacked on
+        if (!(tags.highway || tags.railway)) return returnData;
+
+        // Check the list of secondary/tertiary etc features
+        if (!(tags.bridge || tags.tunnel || tags.embankment || tags.cutting || tags.ford)) return returnData;
+
+        // We are going to make another feature so copy tags and trash the UUID so it gets a new one
+        var newFeatures = [];
+        var newAttributes = {};
+        var nTags = JSON.parse(JSON.stringify(tags));
+        delete nTags.uuid;
+        delete nTags['hoot:id'];
+
+        // Now drop the tags that made the FCODE
+        switch(attrs.F_CODE)
         {
-            // var tagList = ['bridge','tunnel','embankment','ford','cutting'];
-            var tagList = ['bridge','tunnel','embankment','cutting'];
+            case 'AN010': // Railway
+            case 'AN050': // Railway Sidetrack
+                delete nTags.railway;
+                newAttributes.TRS = '12'; // Transport Type = Railway
+                break;
 
-            // 1. Look at the fcodes
-            // Bridge, Tunnel, Ford, Embankment, Cut
-            if (['AQ040','AQ130','BH070','DB090','DB070'].indexOf(attrs.F_CODE) > -1)
-            {
-                var nTags = JSON.parse(JSON.stringify(tags));
-                delete nTags.uuid;
-
-                // Roads can go over a Ford, Railways can't
-                tagList.push('ford');
-
-                for (var i in tagList)
+            case 'AP010': // Cart Track
+            case 'AP030': // Road
+            case 'AP050': // Trail
+                switch (nTags.highway)
                 {
-                    if (nTags[tagList[i]] && nTags[tagList[i]] !== 'no')
-                    {
-                        delete nTags[tagList[i]];
-                    }
-                } // End for tag list
-
-                newfeatures.push({attrs: {}, tags: nTags});
-            }
-            // Now look for road type features
-            // Road, Cart Track, Trail
-            else if (['AP030','AP010','AP050'].indexOf(attrs.F_CODE) > -1)
-            {
-                // Roads can go over a Ford, Railways can't
-                tagList.push('ford');
-
-                for (var i in tagList)
-                {
-                    if (tags[tagList[i]] && tags[tagList[i]] !== 'no') // We have one of these...
-                    {
-                        var nTags = JSON.parse(JSON.stringify(tags));
-                        delete nTags.uuid;
-
-                        if (nTags.highway) // Paranoid.....
-                        {
-                            delete nTags.highway;
-                        }
-
-                        if (attrs.FCODE == 'AP050') // Trail
-                        {
-                            newfeatures.push({attrs: {'TRS':'9'}, tags: nTags}); // TRS:9 = Pedestrian
-                        }
-                        else
-                        {
-                            newfeatures.push({attrs: {'TRS':'13'}, tags: nTags}); // TRS:13 = Road
-                        }
-
+                    case 'pedestrian':
+                    case 'footway':
+                    case 'steps':
+                    case 'path':
+                    case 'bridleway':
+                        newAttributes.TRS = '9'; // Transport Type = Pedestrian
                         break;
-                    }
+
+                    default:
+                        newAttributes.TRS = '13'; // Transport Type = Road
                 }
-            }
-            // Now look for Railways
-            else if(['AN010','AN050'].indexOf(attrs.F_CODE) > -1)
-            {
-                for (var i in tagList)
-                {
-                    if (tags[tagList[i]] && tags[tagList[i]] !== 'no') // We have one of these...
-                    {
-                        var nTags = JSON.parse(JSON.stringify(tags));
-                        delete nTags.uuid;
+                delete nTags.highway;
+                break;
 
-                        if (nTags.railway) // Paranoid.....
-                        {
-                            delete nTags.railway;
-                        }
-                        newfeatures.push({attrs: {'TRS':'12'}, tags: nTags}); // TRS:12 = Rail
-                        break;
-                    }
-                }
+            case 'AQ040': // Bridge
+                delete nTags.bridge;
+                break;
 
-            } // End Railway
+            case 'AQ130': // Tunnel
+                delete nTags.tunnel;
+                break;
 
+            case 'BH070': // Ford
+                delete nTags.ford;
+                break;
 
-        } // End sort out Road, Railway, Bridge and Tunnel
+            case 'DB070': // Cutting
+                delete nTags.cutting;
+                break;
+
+            case 'DB090': // Embankment
+                delete nTags.embankment;
+                break;
+
+            default:
+                // Debug
+                hoot.logWarn('ManyFeatures: Should get to here');
+        } // end switch
+
+        // Now make new features based on what tags are left
+        if (nTags.railway)
+        {
+            newFeatures.push({attrs: JSON.parse(JSON.stringify(newAttributes)), tags: JSON.parse(JSON.stringify(nTags))});
+            delete nTags.railway;
+        }
+
+        if (nTags.highway)
+        {
+            newFeatures.push({attrs: JSON.parse(JSON.stringify(newAttributes)), tags: JSON.parse(JSON.stringify(nTags))});
+            delete nTags.highway;
+        }
+
+        if (nTags.cutting)
+        {
+            newAttributes.F_CODE = 'DB070';
+            newFeatures.push({attrs: JSON.parse(JSON.stringify(newAttributes)), tags: JSON.parse(JSON.stringify(nTags))});
+            delete nTags.cutting;
+        }
+
+        if (nTags.bridge)
+        {
+            newAttributes.F_CODE = 'AQ040';
+            newFeatures.push({attrs: JSON.parse(JSON.stringify(newAttributes)), tags: JSON.parse(JSON.stringify(nTags))});
+            delete nTags.bridge;
+        }
+
+        if (nTags.tunnel)
+        {
+            newAttributes.F_CODE = 'AQ130';
+            newFeatures.push({attrs: JSON.parse(JSON.stringify(newAttributes)), tags: JSON.parse(JSON.stringify(nTags))});
+            delete nTags.tunnel;
+        }
+
+        if (nTags.ford)
+        {
+            newAttributes.F_CODE = 'BH070';
+            newFeatures.push({attrs: JSON.parse(JSON.stringify(newAttributes)), tags: JSON.parse(JSON.stringify(nTags))});
+            delete nTags.ford;
+        }
+
+        if (nTags.embankment)
+        {
+            newAttributes.F_CODE = 'DB090';
+            newFeatures.push({attrs: JSON.parse(JSON.stringify(newAttributes)), tags: JSON.parse(JSON.stringify(nTags))});
+            delete nTags.embankment;
+        }
 
         // Loop through the new features and process them.
-        // Note: This is the same as we did for the main feature.
-        for (var i = 0, nFeat = newfeatures.length; i < nFeat; i++)
+        for (var i = 0, nFeat = newFeatures.length; i < nFeat; i++)
         {
             // pre processing
-            mgcp.applyToMgcpPreProcessing(newfeatures[i]['tags'], newfeatures[i]['attrs'], geometryType);
+            mgcp.applyToMgcpPreProcessing(newFeatures[i]['tags'], newFeatures[i]['attrs'], geometryType);
 
             var notUsedTags = (JSON.parse(JSON.stringify(tags)));
 
             // apply the simple number and text biased rules
             // Note: These are BACKWARD, not forward!
-            translate.applySimpleNumBiased(newfeatures[i]['attrs'], notUsedTags, mgcp.rules.numBiased, 'backward',mgcp.rules.intList);
-            translate.applySimpleTxtBiased(newfeatures[i]['attrs'], notUsedTags, mgcp.rules.txtBiased, 'backward');
+            translate.applySimpleNumBiased(newFeatures[i]['attrs'], notUsedTags, mgcp.rules.numBiased, 'backward',mgcp.rules.intList);
+            translate.applySimpleTxtBiased(newFeatures[i]['attrs'], notUsedTags, mgcp.rules.txtBiased, 'backward');
 
             // one 2 one - we call the version that knows about OTH fields
-            translate.applyOne2One(notUsedTags, newfeatures[i]['attrs'], mgcp.lookup, mgcp.fcodeLookup);
+            translate.applyOne2One(notUsedTags, newFeatures[i]['attrs'], mgcp.lookup, mgcp.fcodeLookup);
 
             // post processing
-            mgcp.applyToMgcpPostProcessing(newfeatures[i]['tags'], newfeatures[i]['attrs'], geometryType,notUsedTags);
+            mgcp.applyToMgcpPostProcessing(newFeatures[i]['tags'], newFeatures[i]['attrs'], geometryType,notUsedTags);
         }
 
         return returnData;
@@ -329,7 +361,7 @@ mgcp = {
     // Some people have been editing OSM files and inserting MGCP attributes
     untangleAttributes: function (attrs, tags)
     {
-        // If we use ogr2osm, the GDAL driver jams ant tag it doesn't know about into an "other_tags" tag.
+        // If we use ogr2osm, the GDAL driver jams any tag it doesn't know about into an "other_tags" tag.
         // We need to unpack this before we can do anything.
         if (attrs.other_tags)
         {
@@ -350,12 +382,22 @@ mgcp = {
 
         for (var col in attrs)
         {
-            // Find an FCODE
+            // Sort out FCODE funkyness:  f_CODE, F_Code etc
+            var tKey = col.toLowerCase();
+            tKey = tKey.replace(/\s/g, '').replace(/_/g, '');;
+
+            if (tKey == 'fcode' && col !== 'F_CODE')
+            {
+                attrs.F_CODE = attrs[col];
+                delete attrs[col];
+                continue;
+            }
+
+            // Check for an FCODE as a tag
             if (col in mgcp.fcodeLookup['F_CODE'])
             {
                 attrs.F_CODE = col;
                 delete attrs[col];
-
                 continue;
             }
 
@@ -445,8 +487,6 @@ mgcp = {
                 continue
             }
         } // End col in attrs loop
-
-
 
         if (attrs.F_CODE)
         {
@@ -695,6 +735,7 @@ mgcp = {
             // Rules format:  ["test expression","output result"];
             // Note: t = tags, a = attrs and attrs can only be on the RHS
             var rulesList = [
+            ["t.barrier == 'dragons_teeth' && !(t.tank_trap)","t.barrier = 'tank_trap'; t.tank_trap = 'dragons_teeth'"],
             ["t['bridge:movable'] && t['bridge:movable'] !== 'no' && t['bridge:movable'] !== 'unknown'","t.bridge = 'movable'"],
             ["t['building:religious'] == 'other'","t.amenity = 'religion'"],
             ["t['cable:type'] && !(t.cable)","t.cable = 'yes'"],
@@ -704,6 +745,7 @@ mgcp = {
             ["t.leisure == 'stadium'","t.building = 'yes'"],
             ["t['monitoring:weather'] == 'yes'","t.man_made = 'monitoring_station'"],
             ["t.public_transport == 'station'","t.bus = 'yes'"],
+            ["t.pylon =='yes' && t['cable:type'] == 'power'"," t.power = 'tower'"],
             ["t['social_facility:for'] == 'senior'","t.amenity = 'social_facility'; t.social_facility = 'group_home'"],
             ["t['tower:type'] && !(t.man_made)","t.man_made = 'tower'"],
             ["t.water && !(t.natural)","t.natural = 'water'"],
@@ -713,7 +755,13 @@ mgcp = {
             mgcp.osmPostRules = translate.buildComplexRules(rulesList);
         }
 
-        translate.applyComplexRules(tags,attrs,mgcp.osmPostRules);
+        // translate.applyComplexRules(tags,attrs,mgcp.osmPostRules);
+        // Pulling this out of translate
+        for (var i = 0, rLen = mgcp.osmPostRules.length; i < rLen; i++)
+        {
+            if (mgcp.osmPostRules[i][0](tags)) mgcp.osmPostRules[i][1](tags,attrs);
+        }
+
 
         // Lifecycle tags
         if (tags.condition)
@@ -890,6 +938,13 @@ mgcp = {
             }
         } // End process tags.note
 
+        // Content vs Product for storage tanks
+        if (tags.product && tags.man_made == 'storage_tank')
+        {
+            tags.content = tags.product;
+            delete tags.product;
+        }
+
         // AC000 (Processing Facility) vs AL010 (Facility)
         // In TDS, this is just AL010. Therefore, make it AL010 and use a custom rule if we are exporting
         // We are assumeing that it should produce something.
@@ -953,14 +1008,19 @@ mgcp = {
             // See ToOsmPostProcessing for more details about rulesList.
             var rulesList = [
             ["t.amenity == 'marketplace'","t.facility = 'yes'"],
+            ["t.barrier == 'tank_trap' && t.tank_trap == 'dragons_teeth'","t.barrier = 'dragons_teeth'; delete t.tank_trap"],
             ["t.construction && t.railway","t.railway = t.construction; t.condition = 'construction'; delete t.construction"],
             ["t.construction && t.highway","t.highway = t.construction; t.condition = 'construction'; delete t.construction"],
+            ["t.content && !(t.product)","t.product = t.content; delete t.content"],
             ["t.leisure == 'stadium' && t.building","delete t.building"],
+            ["t.man_made && t.building == 'yes'","delete t.building"],
             ["t.man_made == 'water_tower'","a.F_CODE = 'AL241'"],
+            ["t.natural == 'sinkhole'","a.F_CODE = 'BH145'; t['water:sink:type'] = 'disappearing'; delete t.natural"],
             ["t.natural == 'scrub'","t.natural = 'grassland'; t['grassland:type'] = 'grassland_with_trees'"],
             ["t.natural == 'wood'","t.landuse = 'forest'"],
             ["t.power == 'generator'","a.F_CODE = 'AL015'; t.use = 'power_generation'"],
-            ["t.power == 'line'","t['cable:type'] = 'power'; t.cable = 'yes'"],
+            //["t.power == 'line'","t['cable:type'] = 'power'; t.cable = 'yes'"],
+            ["t.power == 'tower'","t['cable:type'] = 'power'; t.pylon = 'yes'; delete t.power"],
             ["t.rapids == 'yes'","t.waterway = 'rapids'"],
             ["t.resource","t.product = t.resource; delete t.resource"],
             ["t.route == 'road' && !(t.highway)","t.highway = 'road'; delete t.route"],
@@ -976,8 +1036,11 @@ mgcp = {
         }
 
         // Apply the rulesList.
-        // translate.applyComplexRules(tags,attrs,rulesList);
-        translate.applyComplexRules(tags,attrs,mgcp.mgcpPreRules);
+        //translate.applyComplexRules(tags,attrs,mgcp.mgcpPreRules);
+        for (var i = 0, rLen = mgcp.mgcpPreRules.length; i < rLen; i++)
+        {
+            if (mgcp.mgcpPreRules[i][0](tags)) mgcp.mgcpPreRules[i][1](tags,attrs);
+        }
 
         // Sort out landuse
         switch (tags.landuse)
@@ -1225,6 +1288,13 @@ mgcp = {
         // The FCODE for Buildings changed...
         if (attrs.F_CODE == 'AL013') attrs.F_CODE = 'AL015';
 
+        // Tag changed
+        if (tags.vertical_obstruction_identifier)
+        {
+            tags['aeroway:obstruction'] = tags.vertical_obstruction_identifier;
+            delete tags.vertical_obstruction_identifier;
+        }
+
     }, // End applyToMgcpPreProcessing
 
 
@@ -1263,6 +1333,10 @@ mgcp = {
         {
             var str = tags['uuid'].split(';');
             attrs.UID = str[0].replace('{','').replace('}','');
+        }
+        else if (tags['hoot:id'])
+        {
+            attrs.UID = 'raw_id:' + tags['hoot:id'];
         }
         else
         {
@@ -1494,6 +1568,7 @@ mgcp = {
             var rulesList = [
             ["t.control_tower == 'yes'","a.F_CODE = 'AL241'"],
             ["t.man_made == 'water_well'","a.F_CODE = 'AA050'"],
+            ["t.man_made == 'well'","a.F_CODE = 'AA050'"],
             ["t.sport == 'tennis'","a.F_CODE = 'AK040'"],
             ["t.natural == 'tree'","a.F_CODE = 'EC030'"],
             ["t.amenity == 'ferry_terminal'","a.F_CODE = 'AQ125'; a.FFN = '7'"],
@@ -1504,8 +1579,11 @@ mgcp = {
             mgcp.mgcpPostRules = translate.buildComplexRules(rulesList);
         }
 
-        // translate.applyComplexRules(tags,attrs,rulesList);
-        translate.applyComplexRules(tags,attrs,mgcp.mgcpPostRules);
+        //translate.applyComplexRules(tags,attrs,mgcp.mgcpPostRules);
+        for (var i = 0, rLen = mgcp.mgcpPostRules.length; i < rLen; i++)
+        {
+            if (mgcp.mgcpPostRules[i][0](tags)) mgcp.mgcpPostRules[i][1](tags,attrs);
+        }
 
         // Fix up SRT values so we comply with the spec. These values came from data files
         // Format is: orig:new
@@ -1532,8 +1610,20 @@ mgcp = {
     {
         tags = {};  // This is the output
 
+        // Setup config variables. We could do this in initialize() but some things don't call it :-(
+        // Doing this so we don't have to keep calling into Hoot core
+        if (mgcp.configIn == undefined)
+        {
+            mgcp.configIn = {};
+            mgcp.configIn.OgrDebugAddfcode = config.getOgrDebugAddfcode();
+            mgcp.configIn.OgrDebugDumptags = config.getOgrDebugDumptags();
+
+            // Get any changes
+            mgcp.toChange = hoot.Settings.get("translation.override");
+        }
+
         // Debug:
-        if (config.getOgrDebugDumptags() == 'true')
+        if (mgcp.configIn.OgrDebugDumptags == 'true')
         {
             print('In Layername: ' + layerName + '  Geometry: ' + geometryType);
             var kList = Object.keys(attrs).sort()
@@ -1570,7 +1660,7 @@ mgcp = {
         mgcp.untangleAttributes(attrs, tags);
 
         // Debug:
-        if (config.getOgrDebugDumptags() == 'true')
+        if (mgcp.configIn.OgrDebugDumptags == 'true')
         {
             var kList = Object.keys(attrs).sort()
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('Untangle Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
@@ -1616,10 +1706,10 @@ mgcp = {
         mgcp.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
 
         // Debug: Add the FCODE to the tags
-        if (config.getOgrDebugAddfcode() == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
+        if (mgcp.configIn.OgrDebugAddfcode == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
 
         // Debug:
-        if (config.getOgrDebugDumptags() == 'true')
+        if (mgcp.configIn.OgrDebugDumptags == 'true')
         {
             for (var i in notUsedAttrs) print('NotUsed: ' + i + ': :' + notUsedAttrs[i] + ':');
 
@@ -1627,6 +1717,9 @@ mgcp = {
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
             print('');
         }
+
+        // Override tag values if appropriate
+        translate.overrideValues(tags,mgcp.toChange);
 
         return tags;
     }, // End of ToOsm
@@ -1639,6 +1732,22 @@ mgcp = {
         var returnData = []; // The array of features to return
         attrs = {}; // This is the output <GLOBAL>
         attrs.F_CODE = '';
+
+        // Setup config variables. We could do this in initialize() but some things don't call it :-(
+        // Doing this so we don't have to keep calling into Hoot core
+        if (mgcp.configOut == undefined)
+        {
+            mgcp.configOut = {};
+            mgcp.configOut.OgrDebugDumptags = config.getOgrDebugDumptags();
+            mgcp.configOut.OgrDebugDumpvalidate = config.getOgrDebugDumpvalidate();
+            mgcp.configOut.OgrNoteExtra = config.getOgrNoteExtra();
+            mgcp.configOut.OgrSplitO2s = config.getOgrSplitO2s();
+            mgcp.configOut.OgrThrowError = config.getOgrThrowError();
+
+            // Get any changes to OSM tags
+            // NOTE: the rest of the config variables will change to this style of assignment soon
+            mgcp.toChange = hoot.Settings.get("translation.override");
+        }
 
         // Check if we have a schema. This is a quick way to workout if various lookup tables have been built
         if (mgcp.rawSchema == undefined)
@@ -1654,7 +1763,7 @@ mgcp = {
         if (geometryType == 'Collection') return null;
 
         // Debug:
-        if (config.getOgrDebugDumptags() == 'true')
+        if (mgcp.configOut.OgrDebugDumptags == 'true')
         {
             print('In Geometry: ' + geometryType + '  In Element Type: ' + elementType);
             var kList = Object.keys(tags).sort()
@@ -1684,6 +1793,9 @@ mgcp = {
             // translate.dumpOne2OneLookup(mgcp.lookup);
         }
 
+        // Override values if appropriate
+        translate.overrideValues(tags,mgcp.toChange);
+
         // pre processing
         mgcp.applyToMgcpPreProcessing(tags,attrs, geometryType);
 
@@ -1693,13 +1805,15 @@ mgcp = {
         var notUsedTags = (JSON.parse(JSON.stringify(tags)));
 
         if (notUsedTags.hoot) delete notUsedTags.hoot; // Added by the UI
+        // Debug info. We use this in postprocessing via "tags"
+        if (notUsedTags['hoot:id']) delete notUsedTags['hoot:id'];
 
         // apply the simple number and text biased rules
         translate.applySimpleNumBiased(attrs, notUsedTags, mgcp.rules.numBiased, 'backward',mgcp.rules.intList);
         translate.applySimpleTxtBiased(attrs, notUsedTags,  mgcp.rules.txtBiased,'backward');
 
         // one 2 one
-        translate.applyOne2One(notUsedTags, attrs, mgcp.lookup, mgcp.fcodeLookup, mgcp.ignoreList);
+        translate.applyOne2One(notUsedTags, attrs, mgcp.lookup, mgcp.fcodeLookup);
 
         // post processing
         // mgcp.applyToMgcpPostProcessing(attrs, tableName, geometryType);
@@ -1710,7 +1824,7 @@ mgcp = {
 
         // If we have unused tags, add them to the TXT field.
         // NOTE: We are not checking if this is longer than 255 characters
-        if (Object.keys(notUsedTags).length > 0 && config.getOgrMgcpExtra() == 'note')
+        if (Object.keys(notUsedTags).length > 0 && mgcp.configOut.OgrNoteExtra == 'attribute')
         {
             var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
             attrs.TXT = translate.appendValue(attrs.TXT,tStr,';');
@@ -1726,7 +1840,7 @@ mgcp = {
         if (!mgcp.layerNameLookup[tableName])
         {
             // For the UI: Throw an error and die if we don't have a valid feature
-            if (config.getOgrThrowError() == 'true')
+            if (mgcp.configOut.OgrThrowError == 'true')
             {
                 if (! attrs.F_CODE)
                 {
@@ -1745,8 +1859,16 @@ mgcp = {
 
             tableName = 'o2s_' + geometryType.toString().charAt(0);
 
+            // Debug:
             // Dump out what attributes we have converted before they get wiped out
-            if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('Converted Attrs:' + i + ': :' + attrs[i] + ':');
+            if (mgcp.configOut.OgrDebugDumptags == 'true')
+            {
+                var kList = Object.keys(attrs).sort()
+                for (var i = 0, fLen = kList.length; i < fLen; i++) print('Converted Attrs:' + kList[i] + ': :' + attrs[kList[i]] + ':');
+            }
+
+            // We want to keep the hoot:id if present
+            if (tags['hoot:id']) tags.raw_id = tags['hoot:id'];
 
             for (var i in tags)
             {
@@ -1761,7 +1883,7 @@ mgcp = {
             // Shapefiles can't handle fields > 254 chars.
             // If the tags are > 254 char, split into pieces. Not pretty but stops errors.
             // A nicer thing would be to arrange the tags until they fit neatly
-            if (str.length < 255 || config.getOgrSplitO2s() == 'false')
+            if (str.length < 255 || mgcp.configOut.OgrSplitO2s == 'false')
             {
                 //return {attrs:{tag1:str}, tableName: tableName};
                 attrs = {tag1:str};
@@ -1817,7 +1939,7 @@ mgcp = {
             } // End returnData loop
 
             // If we have unused tags, throw them into the "extra" layer
-            if (Object.keys(notUsedTags).length > 0 && config.getOgrMgcpExtra() == 'file')
+            if (Object.keys(notUsedTags).length > 0 && mgcp.configOut.OgrNoteExtra == 'file')
             {
                 var extraFeature = {};
                 extraFeature.tags = JSON.stringify(notUsedTags);
@@ -1845,7 +1967,7 @@ mgcp = {
         } // End else We have a feature
 
         // Debug:
-        if (config.getOgrDebugDumptags() == 'true')
+        if (mgcp.configOut.OgrDebugDumptags == 'true')
         {
             for (var i = 0, fLen = returnData.length; i < fLen; i++)
             {

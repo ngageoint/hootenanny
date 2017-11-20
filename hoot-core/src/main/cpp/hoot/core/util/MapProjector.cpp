@@ -35,6 +35,7 @@ using namespace boost;
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/elements/Node.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/GeometryUtils.h>
@@ -94,7 +95,8 @@ void ReprojectCoordinateFilter::project(Coordinate* c) const
   {
     QString err = QString("Error projecting point. Is the point outside of the projection's "
                           "bounds?");
-    if (MapProjector::logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    const unsigned int logWarnMessageLimit = ConfigOptions().getLogWarnMessageLimit();
+    if (MapProjector::logWarnCount < logWarnMessageLimit)
     {
       LOG_WARN(err);
       LOG_TRACE("Source Point, x:" << inx << " y: " << iny);
@@ -103,7 +105,7 @@ void ReprojectCoordinateFilter::project(Coordinate* c) const
       LOG_TRACE("Target SRS: " << MapProjector::toWkt(_transform->GetTargetCS()));
       MapProjector::logWarnCount++;
     }
-    else if (MapProjector::logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (MapProjector::logWarnCount == logWarnMessageLimit)
     {
       LOG_WARN(MapProjector::className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }
@@ -275,6 +277,16 @@ boost::shared_ptr<OGRSpatialReference> MapProjector::createOrthographic(const OG
   boost::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
   double x = (env.MinX + env.MaxX) / 2.0;
   double y = (env.MinY + env.MaxY) / 2.0;
+  if (srs->SetOrthographic(y, x, 0, 0) != OGRERR_NONE)
+  {
+    throw HootException("Error creating orthographic projection.");
+  }
+  return srs;
+}
+
+boost::shared_ptr<OGRSpatialReference> MapProjector::createOrthographic(double x, double y)
+{
+  boost::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
   if (srs->SetOrthographic(y, x, 0, 0) != OGRERR_NONE)
   {
     throw HootException("Error creating orthographic projection.");
@@ -561,11 +573,12 @@ void MapProjector::project(boost::shared_ptr<OsmMap> map, boost::shared_ptr<OGRS
     }
     catch(const IllegalArgumentException&)
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      const unsigned int logWarnMessageLimit = ConfigOptions().getLogWarnMessageLimit();
+      if (logWarnCount < logWarnMessageLimit)
       {
         LOG_WARN("Failure projecting node: " << n->toString());
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == logWarnMessageLimit)
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }

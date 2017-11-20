@@ -28,7 +28,7 @@
 #define KEEPHIGHWAYSVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/ConstOsmMapConsumer.h>
 
 namespace hoot
@@ -38,7 +38,7 @@ namespace hoot
  * Removes all ways and relations that are not part of a linear highway.
  * Note: You may have to run this multiple times to get the desired effect.
  */
-class KeepHighwaysVisitor : public ElementVisitor, public ConstOsmMapConsumer
+class KeepHighwaysVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
 {
 public:
 

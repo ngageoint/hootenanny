@@ -37,7 +37,7 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
@@ -247,23 +247,23 @@ QString Relation::toString() const
   return QString::fromUtf8(ss.str().data());
 }
 
-void Relation::visitRo(const ElementProvider& map, ElementVisitor& filter) const
+void Relation::visitRo(const ElementProvider& map, ConstElementVisitor& filter) const
 {
   QList<long> visitedRelations;
   _visitRo(map, filter, visitedRelations);
   assert(visitedRelations.size() == 0);
 }
 
-void Relation::_visitRo(const ElementProvider& map, ElementVisitor& filter,
+void Relation::_visitRo(const ElementProvider& map, ConstElementVisitor& filter,
   QList<long> &visitedRelations) const
 {
   if (visitedRelations.contains(getId()))
   {
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       LOG_WARN("Invalid data. This relation contains a circular reference. " + toString());
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }
@@ -303,23 +303,23 @@ void Relation::_visitRo(const ElementProvider& map, ElementVisitor& filter,
 }
 
 
-void Relation::visitRw(ElementProvider& map, ElementVisitor& filter)
+void Relation::visitRw(ElementProvider& map, ConstElementVisitor& filter)
 {
   QList<long> visitedRelations;
   _visitRw(map, filter, visitedRelations);
   assert(visitedRelations.size() == 0);
 }
 
-void Relation::_visitRw(ElementProvider& map, ElementVisitor& filter,
+void Relation::_visitRw(ElementProvider& map, ConstElementVisitor& filter,
   QList<long> &visitedRelations)
 {
   if (visitedRelations.contains(getId()))
   {
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       LOG_WARN("Invalid data. This relation contains a circular reference. " + toString());
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }

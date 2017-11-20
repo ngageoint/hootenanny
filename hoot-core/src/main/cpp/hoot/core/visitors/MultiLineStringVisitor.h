@@ -33,7 +33,7 @@
 #include <geos/geom/MultiLineString.h>
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/ElementProvider.h>
 
 // standard
@@ -51,7 +51,7 @@ class Way;
  * Creates a multi-linestring out of all ways that are visited. There are no checks to be certain
  * that the ways are actually linear ways. Any way with < 2 nodes will be skipped.
  */
-class MultiLineStringVisitor : public ElementVisitor
+class MultiLineStringVisitor : public ConstElementVisitor
 {
 public:
   static std::string className() { return "hoot::MultiLineStringVisitor"; }

@@ -31,6 +31,7 @@
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/MetadataTags.h>
 
 #include "PoiPolygonMatch.h"
 
@@ -73,14 +74,14 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Eleme
     //building merger must not have been able to merge...maybe need an earlier check for this
     //and also handle it differently...
 
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       LOG_WARN("Building merger unable to merge.");
       LOG_VART(buildings1);
       LOG_VART(buildings2);
       LOG_VART(replaced);
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }
@@ -102,9 +103,9 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Eleme
       TagMergerFactory::getInstance().mergeTags(finalBuildingTags, poiTags2,
                                                 finalBuilding->getElementType());
   }
-  finalBuilding->setTags(finalBuildingTags);
 
   // do some book keeping to remove the POIs and mark them as replaced.
+  long poisMerged = 0;
   for (set< pair<ElementId, ElementId> >::const_iterator it = _pairs.begin(); it != _pairs.end();
        ++it)
   {
@@ -118,6 +119,7 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Eleme
         map->getElement(p.first)->getTags().clear();
         RecursiveElementRemover(p.first).apply(map);
       }
+      poisMerged++;
     }
 
     if (p.second.getType() == ElementType::Node)
@@ -129,8 +131,17 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Eleme
         map->getElement(p.second)->getTags().clear();
         RecursiveElementRemover(p.second).apply(map);
       }
+      poisMerged++;
     }
   }
+
+  if (poisMerged > 0)
+  {
+    finalBuildingTags.set(MetadataTags::HootPoiPolygonPoisMerged(), QString::number(poisMerged));
+    finalBuilding->setStatus(Status::Conflated);
+  }
+
+  finalBuilding->setTags(finalBuildingTags);
 }
 
 Tags PoiPolygonMerger::_mergePoiTags(const OsmMapPtr& map, Status s) const

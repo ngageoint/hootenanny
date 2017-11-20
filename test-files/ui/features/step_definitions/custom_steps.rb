@@ -58,6 +58,29 @@ When(/^I should (not )?see a way map feature with OSM id "([^"]*)"$/) do |negate
   find('div.layer-data').assert_selector('path[class*=" ' + id + '"]',:maximum => expectation)
 end
 
+When(/^I should (not )?see land use areas on the map$/) do |negate|
+  expectation = negate ? :should_not : :should
+  page.send(expectation, have_css('.area:not(.tag-building):not(.tag-natural-water):not(.activeReviewFeature):not(.activeReviewFeature2)'))
+end
+
+When(/^I should (not )?see service roads on the map$/) do |negate|
+  expectation = negate ? :should_not : :should
+  page.send(expectation, have_css('.tag-highway-road:not(.activeReviewFeature):not(.activeReviewFeature2)'))
+end
+
+When(/^I should (not )?see paths on the map$/) do |negate|
+  expectation = negate ? 0 : 1
+    if negate
+      find('div.layer-data').assert_selector('.tag-highway-path:not(.activeReviewFeature):not(.activeReviewFeature2)',:maximum => expectation)
+      find('div.layer-data').assert_selector('.tag-highway-footway:not(.activeReviewFeature):not(.activeReviewFeature2)',:maximum => expectation)
+      find('div.layer-data').assert_selector('.tag-highway-pedestrian:not(.activeReviewFeature):not(.activeReviewFeature2)',:maximum => expectation)
+    else
+      page.should have_css('.tag-highway-path')
+      page.should have_css('.tag-highway-footway')
+      page.should have_css('.tag-highway-pedestrian')
+    end
+end
+
 When(/^I select a way map feature with class "([^"]*)"$/) do |cls|
   oldTimeout = Capybara.default_max_wait_time
   Capybara.default_max_wait_time = 10
@@ -81,6 +104,16 @@ Then (/^I should (not )?see the element (.*)$/) do |negate, selector|
   expectation = negate ? :should_not : :should
   page.send(expectation, have_css(selector))
 end
+
+Then(/^I should (not )?see a paragraph with text "([^"]*)"$/) do |negate, txt|
+  expectation = negate ? :should_not : :should
+  if negate
+    page.should_not have_selector('p', :text=> txt)
+  else
+    page.should have_selector('p', :text=> txt)
+  end
+end
+
 
 Then(/^I should see "([^"]*)"$/) do |text|
   #page.should have_content(text)
@@ -168,6 +201,10 @@ end
 
 Then(/^I close the modal$/) do
   find('div.modal').find('div.x').click
+end
+
+Then(/^I close the modal window$/) do
+  find('div.detailModal').find('div.x').click
 end
 
 When(/^I select the first "([^"]*)" div$/) do |cls|
@@ -427,6 +464,19 @@ When(/^I press span with text "([^"]*)"$/) do |txt|
   find('span', :text=>txt).click
 end
 
+And(/^I scroll "([^"]*)" into view$/) do |txt|
+    element = page.driver.browser.find_element(:xpath=>"//*[contains(text(), '" + txt + "')]")
+    page.driver.browser.execute_script("arguments[0].scrollIntoView(true)", element)
+end
+
+When(/^I scroll "([^"]*)" element into view and press it$/) do |txt|
+  include_hidden_fields do
+    element = page.driver.browser.find_element(:xpath=>"//*[contains(text(), '" + txt + "')]")
+    page.driver.browser.execute_script("arguments[0].scrollIntoView(true)", element)
+    element.click
+  end
+end
+
 When(/^I press "([^"]*)" big loud link$/) do |cls|
   find('a.big.loud.' + cls).click
 end
@@ -441,6 +491,7 @@ When(/^I wait$/) do
 end
 
 When(/^I remove the first layer$/) do
+
   trash_cans = all('button._icon.trash')
   trash_cans[0].click
   sleep 5
@@ -504,9 +555,19 @@ When(/^I wait ([0-9]*) "([^"]*)" to see "([^"]*)" element with text "([^"]*)"$/)
   Capybara.default_max_wait_time = oldTimeout
 end
 
+When(/^I see the UI alert$/) do
+  alerts = find('#alerts')
+end
+
+When(/^I should not see the UI alert$/) do
+  page.should have_no_css('#alerts', :visible => true)
+end
+
 When(/^I close the UI alert$/) do
   alerts = find('#alerts')
-  alerts.all('.x')[0].click unless alerts.nil?
+  alerts.all('.x').each do |alt|
+    alt.click unless alerts.nil?
+  end
 end
 
 When(/^I change the reference layer color to ([^"]*)$/) do |color|
@@ -665,7 +726,7 @@ Then(/^I double click on the first thumbnail$/) do
 end
 
 Then(/^I accept the alert$/) do
-  sleep 5
+  sleep 10
   page.driver.browser.switch_to.alert.accept
 end
 
@@ -925,7 +986,7 @@ end
 Then(/^I should see element "([^"]*)" with no value and placeholder (\d+)$/) do |id, value|
   el = find(id)
   el.value.should eq ""
-  el['placeholder'].should eq value
+  el['placeholder'].should eq value.to_s
 end
 
 Then(/^I should (not )?see "([^"]*)" dataset after ([0-9]*) "([^"]*)"$/) do |negate, text, timeout, unit|
@@ -944,6 +1005,6 @@ Then(/^I should (not )?see "([^"]*)" dataset after ([0-9]*) "([^"]*)"$/) do |neg
 end
 
 Then(/^I delete the "([^"]*)" translation/) do |txt|
-  el = find('a', :text=>txt)
+  el = find('span.hoverDiv2', :text=>txt)
   el.find('button.trash').click
 end

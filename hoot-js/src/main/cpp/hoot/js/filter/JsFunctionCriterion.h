@@ -51,7 +51,7 @@ public:
 
   bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
-  virtual ElementCriterion* clone() { return new JsFunctionCriterion(_func); }
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new JsFunctionCriterion(_func)); }
 
 private:
   JsFunctionCriterion(v8::Persistent<v8::Function> func) { _func = func; }

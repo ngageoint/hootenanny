@@ -28,9 +28,11 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/ops/VisitorOp.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
@@ -72,10 +74,11 @@ void NamedOp::apply(boost::shared_ptr<OsmMap> &map)
 
       LOG_VARD(map->getElementCount());
     }
-    else if (f.hasBase<ElementVisitor>(s.toStdString()))
+    else if (f.hasBase<ConstElementVisitor>(s.toStdString()))
     {
       LOG_INFO("Applying visitor: " << s);
-      boost::shared_ptr<ElementVisitor> t(Factory::getInstance().constructObject<ElementVisitor>(s));
+      boost::shared_ptr<ConstElementVisitor> t(Factory::getInstance().
+        constructObject<ConstElementVisitor>(s));
 
       Configurable* c = dynamic_cast<Configurable*>(t.get());
       if (_conf != 0 && c != 0)
@@ -92,6 +95,29 @@ void NamedOp::apply(boost::shared_ptr<OsmMap> &map)
       op->apply(map);
 
       LOG_VARD(map->getElementCount());
+    }
+    else if (f.hasBase<ElementVisitor>(s.toStdString()))
+    {
+      LOG_INFO("Applying visitor: " << s);
+      boost::shared_ptr<ElementVisitor> t(Factory::getInstance().
+        constructObject<ElementVisitor>(s));
+
+      Configurable* c = dynamic_cast<Configurable*>(t.get());
+      if (_conf != 0 && c != 0)
+      {
+        c->setConfiguration(*_conf);
+      }
+
+      if (!t->toString().trimmed().isEmpty())
+      {
+        LOG_DEBUG("Details: " << t->toString());
+      }
+
+      map->visitRw(*t);
+    }
+    else
+    {
+      throw HootException("Unexpected named operation: " + s);
     }
   }
 }

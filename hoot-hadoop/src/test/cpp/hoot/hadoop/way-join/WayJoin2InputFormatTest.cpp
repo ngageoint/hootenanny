@@ -102,4 +102,4 @@ public:
 }
 
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::WayJoin2InputFormatTest, "current");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::WayJoin2InputFormatTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::WayJoin2InputFormatTest, "glacial");

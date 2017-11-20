@@ -15,6 +15,8 @@ CONFIG += rtti \
 
 DESTDIR = ../lib/
 
+LIBS -= -lhdfs
+
 # allow the <algorithm> std::min
 win32:QMAKE_CXXFLAGS += /EHsc
 unix:QMAKE_CXXFLAGS += -Wno-deprecated

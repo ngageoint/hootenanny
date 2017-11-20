@@ -104,9 +104,12 @@ public:
    */
   void reverse() const { _edges1->reverse(); _edges2->reverse(); _resetHash(); }
 
+  QString getUid() const;
+
   QString toString() const;
 
 private:
+
   mutable uint _hash;
 
   friend uint qHash(const boost::shared_ptr<const EdgeMatch>& em);

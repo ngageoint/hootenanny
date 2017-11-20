@@ -129,5 +129,5 @@ public:
 
 }
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::PbfRecordWriterTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::PbfRecordWriterTest, "glacial");
 

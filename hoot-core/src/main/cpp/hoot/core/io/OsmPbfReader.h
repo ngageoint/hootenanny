@@ -28,6 +28,12 @@
 #ifndef OSMPBFREADER_H
 #define OSMPBFREADER_H
 
+// boost
+#include <boost/shared_ptr.hpp>
+
+// GDAL
+class OGRSpatialReference;
+
 // Qt
 #include <QHash>
 #include <QString>
@@ -43,10 +49,6 @@
 
 // tgs
 #include <tgs/BigContainers/BigMap.h>
-
-#include <boost/shared_ptr.hpp>
-
-#include <ogr_spatialref.h>
 
 namespace hoot
 {
@@ -133,6 +135,7 @@ public:
    * PrimitiveBlock from the stream specified into the provided map.
    */
   void parseElements(std::istream* strm, const OsmMapPtr& map);
+  void parseElements(QByteArray bytes, const OsmMapPtr& map);
 
   /**
    * Allows loading of data that isn't complete such as unknown node IDs in a way.
@@ -159,12 +162,17 @@ public:
 
   virtual void setConfiguration(const Settings &conf);
 
-  virtual void closeStream(
-      void );
-
   virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
 
   bool getSortedTypeThenId() { return _typeThenId; }
+
+  /**
+   * Checks to see if an input is sorted
+   *
+   * @param file input file to examine
+   * @return true if the specified file is sorted by element type, then element ID; false otherwise
+   */
+  bool isSorted(const QString file);
 
 private:
 
@@ -172,6 +180,8 @@ private:
   std::string _buffer;
   std::istream* _in;
   bool _needToCloseInput;
+
+  std::vector< boost::shared_ptr<hoot::Node> > _denseNodeTmp;
 
   /// The last position of the pointer while reading data.
   long _lastPosition;

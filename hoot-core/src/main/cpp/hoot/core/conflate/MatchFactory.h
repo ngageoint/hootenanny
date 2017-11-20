@@ -75,9 +75,8 @@ public:
   std::vector<MatchCreator::Description> getAllAvailableCreators() const;
 
   /**
-   *
-   *
-   * @return
+   * @return Return all of the registered match creators. This is the list of creators that will
+   * be used if createMatches is called.
    */
   std::vector< boost::shared_ptr<MatchCreator> > getCreators() const { return _creators; }
 
@@ -85,6 +84,12 @@ public:
    * Registers the specified creator with the MergeFactory and takes ownership of the creator.
    */
   void registerCreator(boost::shared_ptr<MatchCreator> creator) { _creators.push_back(creator); }
+
+  /**
+   * @brief registerCreator Register the specified creator by string (constructs the creator)
+   * @param c @sa ConfigOptions::getMatchCreators()
+   */
+  void registerCreator(QString c);
 
   void reset() { _creators.clear(); }
 

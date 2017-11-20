@@ -32,6 +32,8 @@
 #include <hoot/core/filters/PoiCriterion.h>
 #include <hoot/core/filters/WaterwayCriterion.h>
 #include <hoot/core/filters/HighwayFilter.h>
+#include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPoiCriterion.h>
+#include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPolyCriterion.h>
 
 namespace hoot
 {
@@ -48,6 +50,10 @@ QString MatchCreator::BaseFeatureTypeToString(BaseFeatureType t)
       return "Building";
     case Waterway:
       return "Waterway";
+    case PoiPolygonPOI:
+      return "Polygon Conflatable POI";
+    case Polygon:
+      return "Polygon";
     case Unknown:
     default:
       return "Unknown";
@@ -65,6 +71,10 @@ MatchCreator::BaseFeatureType MatchCreator::StringToBaseFeatureType(QString s)
     return Building;
   else if (0 == s.compare("waterway"))
     return Waterway;
+  else if (0 == s.compare("polygon conflatable poi"))
+    return PoiPolygonPOI;
+  else if (0 == s.compare("polygon"))
+    return Polygon;
   else
     return Unknown;
 }
@@ -81,27 +91,35 @@ MatchCreator::FeatureCalcType MatchCreator::getFeatureCalcType (BaseFeatureType 
       return CalcTypeArea;
     case Waterway:
       return CalcTypeLength;
+    case PoiPolygonPOI:
+      return CalcTypeNone;
+    case Polygon:
+      return CalcTypeArea;
     case Unknown:
     default:
       return CalcTypeNone;
   }
 }
 
-ElementCriterion* MatchCreator::getElementCriterion (BaseFeatureType t, ConstOsmMapPtr map)
+ElementCriterionPtr MatchCreator::getElementCriterion (BaseFeatureType t, ConstOsmMapPtr map)
 {
   switch (t)
   {
     case POI:
-      return new PoiCriterion();
+      return ElementCriterionPtr(new PoiCriterion());
     case Highway:
-      return new HighwayFilter(Filter::KeepMatches);
+      return ElementCriterionPtr(new HighwayFilter(Filter::KeepMatches));
     case Building:
-      return new BuildingCriterion(map);
+      return ElementCriterionPtr(new BuildingCriterion(map));
     case Waterway:
-      return new WaterwayCriterion();
+      return ElementCriterionPtr(new WaterwayCriterion());
+    case PoiPolygonPOI:
+      return ElementCriterionPtr(new PoiPolygonPoiCriterion());
+    case Polygon:
+      return ElementCriterionPtr(new PoiPolygonPolyCriterion());
     case Unknown:
     default:
-      return NULL;
+      return ElementCriterionPtr();
   }
 }
 

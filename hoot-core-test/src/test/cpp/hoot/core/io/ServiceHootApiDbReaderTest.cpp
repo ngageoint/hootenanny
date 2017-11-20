@@ -101,6 +101,7 @@ public:
     }
   }
 
+  //TODO: this is redundant with code in ServiceOsmApiDbReaderTest; move to test utils class
   long populateMap()
   {
     OsmMapPtr map(new OsmMap());
@@ -263,7 +264,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(5, (int)map->getNodes().size());
 
     NodePtr node = map->getNode(1);
-    CPPUNIT_ASSERT_EQUAL(Status::Unknown1, node->getStatus().getEnum());
+    HOOT_STR_EQUALS(Status::Unknown1, node->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL((long)1, node->getId());
     CPPUNIT_ASSERT_EQUAL(0.0, node->getX());
     CPPUNIT_ASSERT_EQUAL(0.0, node->getY());
@@ -274,7 +275,7 @@ public:
     HOOT_STR_EQUALS("1", node->getTags().get(MetadataTags::HootId()));
 
     node = map->getNode(2);
-    CPPUNIT_ASSERT_EQUAL(Status::Unknown2, node->getStatus().getEnum());
+    HOOT_STR_EQUALS(Status::Unknown2, node->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL((long)2, node->getId());
     CPPUNIT_ASSERT_EQUAL(0.1, node->getX());
     CPPUNIT_ASSERT_EQUAL(0.0, node->getY());
@@ -286,7 +287,7 @@ public:
     HOOT_STR_EQUALS("2", node->getTags().get(MetadataTags::HootId()));
 
     node = map->getNode(3);
-    CPPUNIT_ASSERT_EQUAL(Status::Conflated, node->getStatus().getEnum());
+    HOOT_STR_EQUALS(Status::Conflated, node->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL((long)3, node->getId());
     CPPUNIT_ASSERT_EQUAL(0.2, node->getX());
     CPPUNIT_ASSERT_EQUAL(0.0, node->getY());
@@ -298,7 +299,7 @@ public:
     HOOT_STR_EQUALS("3", node->getTags().get(MetadataTags::HootId()));
 
     node = map->getNode(4);
-    CPPUNIT_ASSERT_EQUAL(Status::Conflated, node->getStatus().getEnum());
+    HOOT_STR_EQUALS(Status::Conflated, node->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL((long)4, node->getId());
     CPPUNIT_ASSERT_EQUAL(0.3, node->getX());
     CPPUNIT_ASSERT_EQUAL(0.0, node->getY());
@@ -310,7 +311,7 @@ public:
     HOOT_STR_EQUALS("4", node->getTags().get(MetadataTags::HootId()));
 
     node = map->getNode(5);
-    CPPUNIT_ASSERT_EQUAL(Status::Invalid, node->getStatus().getEnum());
+    HOOT_STR_EQUALS(Status::Invalid, node->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL((long)5, node->getId());
     CPPUNIT_ASSERT_EQUAL(0.4, node->getX());
     CPPUNIT_ASSERT_EQUAL(0.0, node->getY());
@@ -325,7 +326,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(3, (int)map->getWays().size());
 
     WayPtr way = map->getWay(1);
-    CPPUNIT_ASSERT_EQUAL(Status::Unknown1, way->getStatus().getEnum());
+    HOOT_STR_EQUALS(Status::Unknown1, way->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL((long)1, way->getId());
     CPPUNIT_ASSERT_EQUAL(15.0, way->getCircularError());
     CPPUNIT_ASSERT(way->hasNode(1));
@@ -337,7 +338,7 @@ public:
     HOOT_STR_EQUALS("1", way->getTags().get(MetadataTags::HootId()));
 
     way = map->getWay(2);
-    CPPUNIT_ASSERT_EQUAL(Status::Unknown2, way->getStatus().getEnum());
+    HOOT_STR_EQUALS(Status::Unknown2, way->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL((long)2, way->getId());
     CPPUNIT_ASSERT_EQUAL(16.0, way->getCircularError());
     CPPUNIT_ASSERT(way->hasNode(2));
@@ -349,7 +350,7 @@ public:
     HOOT_STR_EQUALS("2", way->getTags().get(MetadataTags::HootId()));
 
     way = map->getWay(3);
-    CPPUNIT_ASSERT_EQUAL(Status::Unknown2, way->getStatus().getEnum());
+    HOOT_STR_EQUALS(Status::Unknown2, way->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL((long)3, way->getId());
     CPPUNIT_ASSERT_EQUAL(17.0, way->getCircularError());
     CPPUNIT_ASSERT(way->hasNode(2));
@@ -363,7 +364,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getRelations().size());
 
     RelationPtr relation = map->getRelation(1);
-    CPPUNIT_ASSERT_EQUAL(Status::Unknown1, relation->getStatus().getEnum());
+    HOOT_STR_EQUALS(Status::Unknown1, relation->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL((long)1, relation->getId());
     CPPUNIT_ASSERT_EQUAL(18.1, relation->getCircularError());
     HOOT_STR_EQUALS(MetadataTags::RelationCollection(), relation->getType());
@@ -384,7 +385,7 @@ public:
     HOOT_STR_EQUALS("1", relation->getTags().get(MetadataTags::HootId()));
 
     relation = map->getRelation(2);
-    CPPUNIT_ASSERT_EQUAL(Status::Unknown1, relation->getStatus().getEnum());
+    HOOT_STR_EQUALS(Status::Unknown1, relation->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL((long)2, relation->getId());
     CPPUNIT_ASSERT_EQUAL(15.0, relation->getCircularError());
     HOOT_STR_EQUALS("", relation->getType());
@@ -406,7 +407,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(5, (int)map->getNodes().size());
 
     NodePtr node = map->getNode(3);
-    CPPUNIT_ASSERT_EQUAL(Status::Conflated, node->getStatus().getEnum());
+    HOOT_STR_EQUALS(Status::Conflated, node->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL((long)3, node->getId());
     CPPUNIT_ASSERT_EQUAL(0.2, node->getX());
     CPPUNIT_ASSERT_EQUAL(0.0, node->getY());
@@ -467,15 +468,12 @@ public:
     CPPUNIT_ASSERT(reader.hasMoreElements());
     reader.readPartial(map);
 
-    CPPUNIT_ASSERT_EQUAL(
-      chunkSize,
-      (int)(map->getNodes().size() + map->getWays().size() + map->getRelations().size()));
     CPPUNIT_ASSERT_EQUAL(3, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
 
     NodePtr node = map->getNode(1);
-    CPPUNIT_ASSERT_EQUAL(Status::Unknown1, node->getStatus().getEnum());
+    HOOT_STR_EQUALS(Status::Unknown1, node->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL((long)1, node->getId());
     CPPUNIT_ASSERT_EQUAL(0.0, node->getX());
     CPPUNIT_ASSERT_EQUAL(0.0, node->getY());
@@ -484,7 +482,7 @@ public:
     HOOT_STR_EQUALS("1", node->getTags().get(MetadataTags::HootId()));
 
     node = map->getNode(2);
-    CPPUNIT_ASSERT_EQUAL(Status::Unknown2, node->getStatus().getEnum());
+    HOOT_STR_EQUALS(Status::Unknown2, node->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL((long)2, node->getId());
     CPPUNIT_ASSERT_EQUAL(0.1, node->getX());
     CPPUNIT_ASSERT_EQUAL(0.0, node->getY());
@@ -494,7 +492,7 @@ public:
     HOOT_STR_EQUALS("2", node->getTags().get(MetadataTags::HootId()));
 
     node = map->getNode(3);
-    CPPUNIT_ASSERT_EQUAL(Status::Conflated, node->getStatus().getEnum());
+    HOOT_STR_EQUALS(Status::Conflated, node->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL((long)3, node->getId());
     CPPUNIT_ASSERT_EQUAL(0.2, node->getX());
     CPPUNIT_ASSERT_EQUAL(0.0, node->getY());
@@ -510,15 +508,12 @@ public:
     map.reset(new OsmMap());
     CPPUNIT_ASSERT(reader.hasMoreElements());
     reader.readPartial(map);
-    CPPUNIT_ASSERT_EQUAL(
-      chunkSize,
-      (int)(map->getNodes().size() + map->getWays().size() + map->getRelations().size()));
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getWays().size());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
 
     node = map->getNode(4);
-    CPPUNIT_ASSERT_EQUAL(Status::Conflated, node->getStatus().getEnum());
+    HOOT_STR_EQUALS(Status::Conflated, node->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL((long)4, node->getId());
     CPPUNIT_ASSERT_EQUAL(0.3, node->getX());
     CPPUNIT_ASSERT_EQUAL(0.0, node->getY());
@@ -528,7 +523,7 @@ public:
     HOOT_STR_EQUALS("4", node->getTags().get(MetadataTags::HootId()));
 
     node = map->getNode(5);
-    CPPUNIT_ASSERT_EQUAL(Status::Invalid, node->getStatus().getEnum());
+    HOOT_STR_EQUALS(Status::Invalid, node->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL((long)5, node->getId());
     CPPUNIT_ASSERT_EQUAL(0.4, node->getX());
     CPPUNIT_ASSERT_EQUAL(0.0, node->getY());
@@ -537,7 +532,7 @@ public:
     HOOT_STR_EQUALS("5", node->getTags().get(MetadataTags::HootId()));
 
     WayPtr way = map->getWay(1);
-    CPPUNIT_ASSERT_EQUAL(Status::Unknown1, way->getStatus().getEnum());
+    HOOT_STR_EQUALS(Status::Unknown1, way->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL((long)1, way->getId());
     CPPUNIT_ASSERT_EQUAL(15.0, way->getCircularError());
     CPPUNIT_ASSERT(way->hasNode(1));
@@ -553,15 +548,12 @@ public:
     map.reset(new OsmMap());
     CPPUNIT_ASSERT(reader.hasMoreElements());
     reader.readPartial(map);
-    CPPUNIT_ASSERT_EQUAL(
-      chunkSize,
-      (int)(map->getNodes().size() + map->getWays().size() + map->getRelations().size()));
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getWays().size());
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelations().size());
 
     way = map->getWay(2);
-    CPPUNIT_ASSERT_EQUAL(Status::Unknown2, way->getStatus().getEnum());
+    HOOT_STR_EQUALS(Status::Unknown2, way->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL((long)2, way->getId());
     CPPUNIT_ASSERT_EQUAL(16.0, way->getCircularError());
     CPPUNIT_ASSERT(way->hasNode(2));
@@ -571,7 +563,7 @@ public:
     HOOT_STR_EQUALS("2", way->getTags().get(MetadataTags::HootId()));
 
     way = map->getWay(3);
-    CPPUNIT_ASSERT_EQUAL(Status::Unknown2, way->getStatus().getEnum());
+    HOOT_STR_EQUALS(Status::Unknown2, way->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL((long)3, way->getId());
     CPPUNIT_ASSERT_EQUAL(17.0, way->getCircularError());
     CPPUNIT_ASSERT(way->hasNode(2));
@@ -579,7 +571,7 @@ public:
     HOOT_STR_EQUALS("3", way->getTags().get(MetadataTags::HootId()));
 
     RelationPtr relation = map->getRelation(1);
-    CPPUNIT_ASSERT_EQUAL(Status::Unknown1, relation->getStatus().getEnum());
+    HOOT_STR_EQUALS(Status::Unknown1, relation->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL((long)1, relation->getId());
     CPPUNIT_ASSERT_EQUAL(18.1, relation->getCircularError());
     HOOT_STR_EQUALS(MetadataTags::RelationCollection(), relation->getType());
@@ -603,15 +595,12 @@ public:
     map.reset(new OsmMap());
     CPPUNIT_ASSERT(reader.hasMoreElements());
     reader.readPartial(map);
-    CPPUNIT_ASSERT_EQUAL(
-      1,
-      (int)(map->getNodes().size() + map->getWays().size() + map->getRelations().size()));
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelations().size());
 
     relation = map->getRelation(2);
-    CPPUNIT_ASSERT_EQUAL(Status::Unknown1, relation->getStatus().getEnum());
+    HOOT_STR_EQUALS(Status::Unknown1, relation->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL((long)2, relation->getId());
     CPPUNIT_ASSERT_EQUAL(15.0, relation->getCircularError());
     HOOT_STR_EQUALS("", relation->getType());
@@ -687,5 +676,6 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceHootApiDbReaderTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceHootApiDbReaderTest, "serial");
 
 }

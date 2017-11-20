@@ -47,7 +47,7 @@ namespace hoot
 
 unsigned int SplitLongLinearWaysVisitor::logWarnCount = 0;
 
-HOOT_FACTORY_REGISTER(ElementVisitor, SplitLongLinearWaysVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, SplitLongLinearWaysVisitor)
 
 SplitLongLinearWaysVisitor::SplitLongLinearWaysVisitor():
   _maxNodesPerWay(0)
@@ -60,12 +60,12 @@ SplitLongLinearWaysVisitor::SplitLongLinearWaysVisitor():
 
   if ( _maxNodesPerWay < 2 )
   {
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       LOG_WARN("Invalid value for config value " << configOptions.getWayMaxNodesPerWayKey() <<
                ": " << _maxNodesPerWay << ", ignoring...");
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }

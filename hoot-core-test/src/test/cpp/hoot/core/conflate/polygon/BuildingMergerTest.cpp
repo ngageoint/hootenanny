@@ -44,7 +44,7 @@
 // Hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/polygon/BuildingMerger.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
@@ -129,7 +129,7 @@ public:
     HOOT_STR_EQUALS("[3]{(Way:-15, Way:-7), (Way:-14, Way:-7), (Way:-13, Way:-7)}", replaced);
   }
 
-  class RemoveMissVisitor : public ElementVisitor
+  class RemoveMissVisitor : public ConstElementVisitor
   {
   public:
     RemoveMissVisitor(OsmMapPtr map, QString ref) : _map(map), _ref(ref) {}

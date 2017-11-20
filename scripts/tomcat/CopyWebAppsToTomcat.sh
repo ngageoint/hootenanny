@@ -4,7 +4,14 @@ set -e
 
 echo Deploying web application files...
 
-source ~/.profile
+# Set this for use later
+export OS_NAME="$(lsb_release -i -s)"
+
+if [ "$OS_NAME" == "Ubuntu" ]; then
+  source ~/.profile
+else # Centos
+  source ~/.bash_profile
+fi
 
 rm -f $TOMCAT8_HOME/webapps/hoot-services.war
 
@@ -15,19 +22,9 @@ rm -rf $TOMCAT8_HOME/webapps/hoot-services/
 cp `ls -t hoot-services/target/hoot-services-*.war | sed -n 1p` $TOMCAT8_HOME/webapps/hoot-services.war
 
 rm -rf $TOMCAT8_HOME/webapps/hootenanny-id/
-cp -R hoot-ui $TOMCAT8_HOME/webapps/hootenanny-id
-
-rm -rf $TOMCAT8_HOME/webapps/hootenanny-id/css/img
-cp -R $TOMCAT8_HOME/webapps/hootenanny-id/dist/img $TOMCAT8_HOME/webapps/hootenanny-id/css/
-
-#rm -f $TOMCAT8_HOME/webapps/hoot-services.war
-#rm -rf $TOMCAT8_HOME/webapps/hoot-services/
-#cp $HOOT_HOME/hoot-services/target/hoot-services-*.war $TOMCAT8_HOME/webapps/hoot-services.war
-#unzip -q -d $TOMCAT8_HOME/webapps/hoot-services $TOMCAT8_HOME/webapps/hoot-services.war
-#cp $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf $TOMCAT8_HOME/webapps/hoot-services/WEB-INF/classes/conf
-#rm -rf $TOMCAT8_HOME/webapps/hootenanny-id/
-#cp -R $HOOT_HOME/hoot-ui $TOMCAT8_HOME/webapps/hootenanny-id
-#rm -rf $TOMCAT8_HOME/webapps/hootenanny-id/css/img
-#cp -R $TOMCAT8_HOME/webapps/hootenanny-id/dist/img $TOMCAT8_HOME/webapps/hootenanny-id/css/
+cp -R hoot-ui/dist $TOMCAT8_HOME/webapps/hootenanny-id
+mkdir -p $TOMCAT8_HOME/webapps/hootenanny-id/data
+cp hoot-ui/data/osm-plus-taginfo.csv $TOMCAT8_HOME/webapps/hootenanny-id/data
+cp hoot-ui/data/tdsv61_field_values.json $TOMCAT8_HOME/webapps/hootenanny-id/data
 
 echo Web application files deployed.

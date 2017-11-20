@@ -35,6 +35,7 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/WorstCircularErrorVisitor.h>
 
@@ -66,13 +67,14 @@ bool compareMatches(const RubberSheet::Match& m1, const RubberSheet::Match& m2)
   return m1.p > m2.p;
 }
 
-RubberSheet::RubberSheet()
+RubberSheet::RubberSheet(bool logNotEnoughTiePointsAsWarning) :
+_ref(ConfigOptions().getRubberSheetRef()),
+_debug(ConfigOptions().getRubberSheetDebug()),
+_minimumTies(ConfigOptions().getRubberSheetMinimumTies()),
+_logNotEnoughTiePointsAsWarning(logNotEnoughTiePointsAsWarning)
 {
   _emptyMatch.score = 0.0;
   _emptyMatch.p = 0.0;
-  _ref = ConfigOptions().getRubberSheetRef();
-  _debug = ConfigOptions().getRubberSheetDebug();
-  _minimumTies = ConfigOptions().getRubberSheetMinimumTies();
 }
 
 void RubberSheet::_addIntersection(long nid, const set<long>& /*wids*/)
@@ -144,11 +146,13 @@ void RubberSheet::applyTransform(boost::shared_ptr<OsmMap>& map)
 
   if (!_interpolator2to1)
   {
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit()
+        && _logNotEnoughTiePointsAsWarning)
     {
       LOG_WARN("No appropriate interpolator was specified, skipping rubber sheet transform.");
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit()
+             && _logNotEnoughTiePointsAsWarning)
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }
@@ -340,7 +344,7 @@ void RubberSheet::_findTies()
   t << "amenity=bench";
 
   set<long> touched;
-  LOG_DEBUG("Found " << _finalPairs.size() << " potential ties.");
+  LOG_DEBUG("Found " << _finalPairs.size() << " potential tie points.");
 
   for (size_t i = 0; i < _finalPairs.size(); ++i)
   {
@@ -378,10 +382,12 @@ void RubberSheet::_findTies()
     }
   }
 
-  LOG_DEBUG("Found " << _ties.size() << " confident ties.");
-
   if ((long)_ties.size() >= _minimumTies)
   {
+    LOG_DEBUG(
+      "Found " << _ties.size() << " tie points, out of a required minimum of " <<
+      _minimumTies << ", which is enough to perform rubbersheeting.");
+
     // experimentally determine the best interpolator.
     _interpolatorClassName.clear();
     _interpolator2to1 = _buildInterpolator(Status::Unknown2);
@@ -396,6 +402,19 @@ void RubberSheet::_findTies()
   }
   else
   {
+    const QString msg =
+      QString("Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is %1 and %2 tie points were found.")
+        .arg(QString::number(_minimumTies))
+        .arg(QString::number(_ties.size()));
+    if (_logNotEnoughTiePointsAsWarning)
+    {
+      LOG_WARN(msg);
+    }
+    else
+    {
+      LOG_INFO(msg);
+    }
+
     _interpolator1to2.reset();
     _interpolator2to1.reset();
     _interpolatorClassName.clear();

@@ -35,6 +35,7 @@ namespace hoot
 class WayMatchStringSplitter
 {
 public:
+
   WayMatchStringSplitter();
 
   /**
@@ -44,15 +45,22 @@ public:
   void applySplits(OsmMapPtr map, std::vector<std::pair<ElementId, ElementId> > &replaced,
     QList<WayMatchStringMerger::SublineMappingPtr> mappings) throw (NeedsReviewException);
 
+  std::set< std::pair<ElementId, ElementId> > getUnknown1Replacements()
+  { return _unknown1Replacements; }
+
 private:
+
   static QString _overlyAggressiveMergeReviewText;
+  std::set< std::pair<ElementId, ElementId> > _unknown1Replacements;
+
+  bool _preserveUnknown1ElementIdWhenModifyingFeatures;
 
   QMultiMap<WayPtr, WayMatchStringMerger::SublineMappingPtr> _buildWayIndex1(OsmMapPtr map,
     QList<WayMatchStringMerger::SublineMappingPtr> mappings) const;
   QMultiMap<WayPtr, WayMatchStringMerger::SublineMappingPtr> _buildWayIndex2(OsmMapPtr map,
     QList<WayMatchStringMerger::SublineMappingPtr> mappings) const;
 
-  /// @todo there is probably a clever way to make these two functions a single funtion that takes
+  /// @todo there is probably a clever way to make these two functions a single function that takes
   /// function pointers or similar
   void _splitWay1(OsmMapPtr map, std::vector<std::pair<ElementId, ElementId> > &replaced,
     QList<WayMatchStringMerger::SublineMappingPtr> mappings);

@@ -50,41 +50,12 @@ TranslationOp::TranslationOp()
 
 void TranslationOp::apply(boost::shared_ptr<OsmMap> &map)
 {
-  if (_translator.get() == 0)
-  {
-    throw Exception("The translation script must be set before the op can be applied. See "
-                    "the configuration key: " + ConfigOptions().getTranslationScriptKey());
-  }
-
-  TranslationVisitor v(*_translator, _toOgr, map.get());
-  map->visitRw(v);
+  map->visitRw(_translator);
 }
 
 void TranslationOp::setConfiguration(const Settings& conf)
 {
-  ConfigOptions c(conf);
-  if (conf.hasKey(c.getTranslationScriptKey()) && c.getTranslationScript() != "")
-  {
-    setPath(c.getTranslationScript());
-  }
-  QString dir = c.getTranslationDirection();
-  if (dir == "toogr")
-  {
-    _toOgr = true;
-  }
-  else if (dir == "toosm")
-  {
-    _toOgr = false;
-  }
-  else
-  {
-    throw HootException("Expected a translation.direction of 'toogr' or 'toosm'.");
-  }
-}
-
-void TranslationOp::setPath(QString path)
-{
-  _translator.reset(ScriptTranslatorFactory::getInstance().createTranslator(path));
+  _translator.setConfiguration(conf);
 }
 
 }

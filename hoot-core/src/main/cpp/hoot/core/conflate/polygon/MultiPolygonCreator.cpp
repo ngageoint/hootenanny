@@ -129,12 +129,12 @@ Geometry* MultiPolygonCreator::_addHoles(vector<LinearRing*> &outers,
       // if it isn't a valid inner ring then who cares.
       if (_isValidInner(inners[i]))
       {
-        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        if (logWarnCount < Log::getWarnMessageLimit())
         {
           LOG_WARN("Could not find a polygon that fully contains a hole. inner[" << i << "] " <<
             _r->toString());
         }
-        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        else if (logWarnCount == Log::getWarnMessageLimit())
         {
           LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }
@@ -314,11 +314,11 @@ void MultiPolygonCreator::_createSingleRing(const vector<ConstWayPtr>& partials,
 
   if (cs->getSize() <= 3)
   {
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       LOG_WARN("Unable to create ring -- fewer than 4 points.");
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }
@@ -377,19 +377,23 @@ deque<ConstWayPtr> MultiPolygonCreator::_orderWaysForRing(const vector<ConstWayP
     if (w->getNodeId(0) == lastId)
     {
       result.push_back(w);
+      //  Update the last id with the new last id
+      lastId = w->getLastNodeId();
     }
     else if (w->getLastNodeId() == firstId)
     {
       result.push_front(w);
+      //  Update the first id with the new first id
+      firstId = w->getNodeId(0);
     }
     else
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN("Unable to connect all ways in an outer ring. This may give unexpected results. " <<
                  partials[i]->getElementId());
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }

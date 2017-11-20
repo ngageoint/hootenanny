@@ -27,20 +27,15 @@
 #ifndef HOOTAPIDBREADER_H
 #define HOOTAPIDBREADER_H
 
-#include "PartialOsmMapReader.h"
 #include "ApiDbReader.h"
 #include "HootApiDb.h"
-
-// hoot
-#include <hoot/core/util/Configurable.h>
 
 #include "EnvelopeProvider.h"
 
 namespace hoot
 {
 
-class HootApiDbReader : public ApiDbReader, public PartialOsmMapReader, public Configurable,
-    public EnvelopeProvider
+class HootApiDbReader : public ApiDbReader
 {
 public:
 
@@ -51,46 +46,14 @@ public:
   virtual ~HootApiDbReader();
 
   /**
-   * Determines the reader's default element status. By default this is Invalid which specifies that
-   * the file's status will be used.
-   */
-  virtual void setDefaultStatus(Status status) { _status = status; }
-
-  /**
-   * Determines whether the reader should use the element id's from the file being read
-   */
-  virtual void setUseDataSourceIds(bool useDataSourceIds) { _useDataSourceIds = useDataSourceIds; }
-
-  virtual bool isSupported(QString urlStr);
-
-  virtual void open(QString urlStr);
-
-  virtual void initializePartial();
-
-  /**
-   * The read command called after open.
-   */
-  virtual void read(OsmMapPtr map);
-
-  virtual void finalizePartial();
-
-  void close();
-
-  /**
    * Called after open. This will read the bounds of the specified layer in a relatively efficient
    * manner. (e.g. SELECT min(x)...)
    */
   virtual geos::geom::Envelope calculateEnvelope() const;
 
-  virtual void setConfiguration(const Settings &conf);
+  virtual void setConfiguration(const Settings& conf);
 
-  void setUserEmail(const QString& email) { _email = email; }
-
-  virtual bool hasMoreElements();
-
-  virtual boost::shared_ptr<Element> readNextElement();
-
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
+  virtual void open(QString urlStr);
 
 protected:
 
@@ -102,24 +65,10 @@ protected:
 
 private:
 
+  //for white box testing
+  friend class ServiceHootApiDbBulkInserterTest;
+
   boost::shared_ptr<HootApiDb> _database;
-  boost::shared_ptr<QSqlQuery> _elementResultIterator;
-  QString _email;
-  ElementType _selectElementType;
-
-  boost::shared_ptr<Element> _nextElement;
-
-  const ElementType _getCurrentSelectElementType() const;
-
-  void _read(OsmMapPtr map, const ElementType& elementType);
-
-  boost::shared_ptr<Element> _getElementUsingIterator();
-
-  /**
-   * Converts a query result to an OSM element
-   */
-  boost::shared_ptr<Element> _resultToElement(QSqlQuery& resultIterator,
-                                              const ElementType& elementType, OsmMap& map);
 };
 
 }

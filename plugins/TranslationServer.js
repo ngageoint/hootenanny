@@ -1,44 +1,118 @@
 /************************************************************************
 This is Node js implementation of Hoot Translation Server.
 The purpose of this module is to provide the hoot-ui fast way
-to translate OSM to TDS and TDS to OSM.
+to translate feature tags between OSM and supported schemas.
 ************************************************************************/
 var http = require('http');
 var url = require('url');
 var serverPort = 8094;
-var availableTrans = {TDSv40: {isavailable: true}, TDSv61: {isavailable: true}, MGCP: {isavailable: true}};
+var availableTrans = {
+    TDSv40: {isavailable: true},
+    TDSv61: {isavailable: true},
+    MGCP: {isavailable: true},
+    GGDMv30: {isavailable: true}
+};
 var HOOT_HOME = process.env.HOOT_HOME;
+if (typeof hoot === 'undefined') {
+    hoot = require(HOOT_HOME + '/lib/HootJs');
+}
 
+//Getting schema for fcode, geom type
 var schemaMap = {
     TDSv40: require(HOOT_HOME + '/plugins/tds40_full_schema.js'),
     TDSv61: require(HOOT_HOME + '/plugins/tds61_full_schema.js'),
-    MGCP: require(HOOT_HOME + '/plugins/mgcp_schema.js')
+    MGCP: require(HOOT_HOME + '/plugins/mgcp_schema.js'),
+    GGDMv30: require(HOOT_HOME + '/plugins/ggdm30_schema.js')
+};
+
+//Getting osm tags for fcode
+var fcodeLookup = {
+    TDSv40: require(HOOT_HOME + '/plugins/etds40_osm.js'),
+    TDSv61: require(HOOT_HOME + '/plugins/etds61_osm.js'),
+    MGCP: require(HOOT_HOME + '/plugins/emgcp_osm.js'),
+    GGDMv30: require(HOOT_HOME + '/plugins/eggdm30_osm.js')
 };
 
 var translationsMap = {
-    TDSv40: '/translations/TDSv40.js',
-    TDSv61: '/translations/TDSv61.js',
-    MGCP: '/translations/MGCP_TRD4.js'
+    toogr: {
+        TDSv40: new hoot.TranslationOp({
+            'translation.script': HOOT_HOME + '/translations/TDSv40.js',
+            'translation.direction': 'toogr'
+        }),
+        TDSv61: new hoot.TranslationOp({
+            'translation.script': HOOT_HOME + '/translations/TDSv61.js',
+            'translation.direction': 'toogr'
+        }),
+        MGCP: new hoot.TranslationOp({
+            'translation.script': HOOT_HOME + '/translations/MGCP_TRD4.js',
+            'translation.direction': 'toogr'
+        }),
+        GGDMv30: new hoot.TranslationOp({
+            'translation.script': HOOT_HOME + '/translations/GGDMv30.js',
+            'translation.direction': 'toogr'
+        })
+    },
+    toosm: {
+        TDSv40: new hoot.TranslationOp({
+            'translation.script': HOOT_HOME + '/translations/TDSv40.js',
+            'translation.direction': 'toosm'
+        }),
+        TDSv61: new hoot.TranslationOp({
+            'translation.script': HOOT_HOME + '/translations/TDSv61.js',
+            'translation.direction': 'toosm'
+        }),
+        MGCP: new hoot.TranslationOp({
+            'translation.script': HOOT_HOME + '/translations/MGCP_TRD4.js',
+            'translation.direction': 'toosm'
+        }),
+        GGDMv30: new hoot.TranslationOp({
+            'translation.script': HOOT_HOME + '/translations/GGDMv30.js',
+            'translation.direction': 'toosm'
+        })
+    }
 };
 
 var osmToTdsMap = {
-    TDSv40: '/translations/OSM_to_englishTDS.js',
-    TDSv61: '/translations/OSM_to_englishTDS61.js',
-    MGCP: '/translations/OSM_to_englishMGCP.js'
+    toogr: {
+        TDSv40: new hoot.TranslationOp({
+            'translation.script': HOOT_HOME + '/translations/OSM_to_englishTDS.js',
+            'translation.direction': 'toogr'
+        }),
+        TDSv61: new hoot.TranslationOp({
+            'translation.script': HOOT_HOME + '/translations/OSM_to_englishTDS61.js',
+            'translation.direction': 'toogr'
+        }),
+        MGCP: new hoot.TranslationOp({
+            'translation.script': HOOT_HOME + '/translations/OSM_to_englishMGCP.js',
+            'translation.direction': 'toogr'
+        }),
+        GGDMv30: new hoot.TranslationOp({
+            'translation.script': HOOT_HOME + '/translations/OSM_to_englishGGDM30.js',
+            'translation.direction': 'toogr'
+        })
+    }
 };
 
 var tdsToOsmMap = {
-    TDSv40: '/translations/englishTDS_to_OSM.js',
-    TDSv61: '/translations/englishTDS61_to_OSM.js',
-    MGCP: '/translations/englishMGCP_to_OSM.js'
+    toosm: {
+        TDSv40: new hoot.TranslationOp({
+            'translation.script': HOOT_HOME + '/translations/englishTDS_to_OSM.js',
+            'translation.direction': 'toosm'
+        }),
+        TDSv61: new hoot.TranslationOp({
+            'translation.script': HOOT_HOME + '/translations/englishTDS61_to_OSM.js',
+            'translation.direction': 'toosm'
+        }),
+        MGCP: new hoot.TranslationOp({
+            'translation.script': HOOT_HOME + '/translations/englishMGCP_to_OSM.js',
+            'translation.direction': 'toosm'
+        }),
+        GGDMv30: new hoot.TranslationOp({
+            'translation.script': HOOT_HOME + '/translations/englishGGDM30_to_OSM.js',
+            'translation.direction': 'toosm'
+        })
+    }
 };
-
-var englishTranslationsMap = {
-    TDSv40: '/plugins/etds40_osm.js',
-    TDSv61: '/plugins/etds61_osm.js',
-    MGCP: '/plugins/emgcp_osm.js'
-};
-
 
 if (require.main === module) {
     //I'm a running server
@@ -52,18 +126,18 @@ if (require.main === module) {
     process.argv.forEach(function (val, index, array) {
         // port arg
         // Note that default port comes from serverPort var
-        if (val.indexOf('port=') == 0) {
+        if (val.indexOf('port=') === 0) {
             var portArg = val.split('=');
-            if (portArg.length == 2){
+            if (portArg.length === 2) {
                 serverPort = 1*portArg[1];
             }
         }
 
         // thread count arg
-        // defaults to numbers of CPU
-        if (val.indexOf('threadcount=') == 0) {
+        // defaults to number of CPU
+        if (val.indexOf('threadcount=') === 0) {
             var nThreadArg = val.split('=');
-            if (nThreadArg.length == 2) {
+            if (nThreadArg.length === 2) {
                 var nThreadCnt = 1*nThreadArg[1];
                 if (nThreadCnt > 0) {
                     nCPU = nThreadCnt;
@@ -75,7 +149,7 @@ if (require.main === module) {
     // This is when the cluster master gets invoked
     if (cluster.isMaster) {
         // Spawn off http server process by requested thread count
-        for(var i=0; i<nCPU; i++) {
+        for (var i=0; i<nCPU; i++) {
             cluster.fork();
         }
 
@@ -108,16 +182,9 @@ function TranslationServer(request, response) {
                 var params = urlbits.query;
                 params.method = request.method;
                 params.path = urlbits.pathname;
-
-                if (params.path === '/translate') {
-                    params.tags = JSON.parse(payload);
-                    header['Accept'] = 'application/json';
-                    header['Content-Type'] = 'application/json';
-                } else {
-                    params.osm = payload;
-                    header['Accept'] = 'text/xml';
-                    header['Content-Type'] = 'text/xml';
-                }
+                params.osm = payload;
+                header['Accept'] = 'text/xml';
+                header['Content-Type'] = 'text/xml';
                 var result = handleInputs(params);
                 response.writeHead(200, header);
                 response.end(result);
@@ -128,7 +195,6 @@ function TranslationServer(request, response) {
             var params = urlbits.query;
             params.method = request.method;
             params.path = urlbits.pathname;
-
             var result = handleInputs(params);
             header['Content-Type'] = 'application/json';
             response.writeHead(200, header);
@@ -159,9 +225,6 @@ function TranslationServer(request, response) {
 function handleInputs(params) {
     var result;
     switch(params.path) {
-        case '/translate':
-            result = JSON.stringify(translate(params));
-            break;
         case '/osmtotds':
             params.transMap = osmToTdsMap;
             params.transDir = 'toogr';
@@ -200,7 +263,7 @@ function handleInputs(params) {
             result = getCapabilities(params);
             break;
         case '/version':
-            result = {version: '0.0.2'};
+            result = {version: '0.0.3'};
             break;
         default:
             throw new Error('Not found');
@@ -216,44 +279,20 @@ var getCapabilities = function(params) {
     }
 };
 
-var translate = function(data) {
-    data.translation = data.to || data.from;
-    if (!availableTrans[data.translation] || !availableTrans[data.translation].isavailable) {
-        throw new Error('Unsupported translation schema');
-    }
-    hoot = require(HOOT_HOME + '/lib/HootJs');
-    createUuid = hoot.UuidHelper.createUuid;
-    var trans = require(HOOT_HOME + englishTranslationsMap[data.translation]);
-    var result;
-    if (data.to) {
-        if (data.english) {
-            result = trans.OSMtoEnglish(data.tags, '', data.geom);
-        } else {
-            result = trans.OSMtoRaw(data.tags, '', data.geom);
-        }
-    } else if (data.from) {
-        if (data.english) {
-            result = trans.EnglishtoOSM(data.tags, '', data.geom);
-        } else {
-            result = trans.RawtoOSM(data.tags, '', data.geom);
-        }
-    }
-    return result;
-};
-
 // This is where all interesting things happen interfacing with hoot core lib directly
 var postHandler = function(data) {
     if (!availableTrans[data.translation] || !availableTrans[data.translation].isavailable) {
         throw new Error('Unsupported translation schema');
     }
-    var hoot = require(HOOT_HOME + '/lib/HootJs');
-    var result = {};
-    var translation = new hoot.TranslationOp({
-        'translation.script': HOOT_HOME + data.transMap[data.translation],
-        'translation.direction': data.transDir});
-
+    var translation = data.transMap[data.transDir][data.translation];
+    if (data.transDir === "toogr") {
+        hoot.Settings.set({"osm.map.writer.schema": data.translation});
+    } else {
+        hoot.Settings.set({"osm.map.writer.schema": "OSM"});
+    }
     var map = new hoot.OsmMap();
-    hoot.loadMapFromString(map, data.osm);
+    // loadMapFromString arguments: map, XML, preserve ID's, hoot:status
+    hoot.loadMapFromString(map, data.osm, true);
     translation.apply(map);
     return hoot.OsmWriter.toString(map);
 };
@@ -268,8 +307,13 @@ var osmtotds = function(params) {
         //Get fields for F_CODE from schema
         var schema = (params.translation) ? schemaMap[params.translation].getDbSchema() : schemaMap['TDSv61'].getDbSchema();
 
+
+        //geom type may be Vertex for tagged nodes that are members of ways
+        var geom = params.geom;
+        if (geom === 'Vertex') geom = 'Point';
+
         var match = schema.filter(function(d) {
-            return d[params.idelem] === params.idval && d.geom === params.geom;
+            return d[params.idelem] === params.idval && d.geom === geom;
         });
 
         if (match.length !== 1) {
@@ -288,15 +332,8 @@ var tdstoosm = function(params) {
         return postHandler(params);
     } else if (params.method === 'GET') {
         //Get OSM tags for F_CODE
-        hoot = require(HOOT_HOME + '/lib/HootJs');
         createUuid = hoot.UuidHelper.createUuid;
-        var englishToOsmMap = {
-            TDSv40: require(HOOT_HOME + '/plugins/etds40_osm.js'),
-            TDSv61: require(HOOT_HOME + '/plugins/etds61_osm.js'),
-            MGCP: require(HOOT_HOME + '/plugins/emgcp_osm.js')
-        };
-
-        var osm = englishToOsmMap[params.translation].toOSM({
+        var osm = fcodeLookup[params.translation].toOSM({
             'Feature Code': params.fcode
         }, '', '');
 
@@ -580,5 +617,4 @@ if (typeof exports !== 'undefined') {
     exports.searchSchema = searchSchema;
     exports.handleInputs = handleInputs;
     exports.TranslationServer = TranslationServer;
-    exports.translate = translate;
 }

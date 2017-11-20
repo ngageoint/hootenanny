@@ -40,6 +40,17 @@ namespace hoot
 
 unsigned int WayMatchStringMerger::logWarnCount = 0;
 
+QString WayMatchStringMerger::SublineMapping::toString() const
+{
+  return QString("{start: %1, end: %2, newWay1: %3, way2: %4, subline2: %5, newWay2: %6}")
+    .arg(hoot::toString(_start))
+    .arg(hoot::toString(_end))
+    .arg(hoot::toString(newWay1 ? newWay1->getElementId() : ElementId()))
+    .arg(hoot::toString(way2 ? way2->getElementId() : ElementId()))
+    .arg(hoot::toString(subline2))
+    .arg(_newWay2 ? hoot::toString(_newWay2->getElementId()) : "<empty>");
+}
+
 WayMatchStringMerger::WayMatchStringMerger(const OsmMapPtr& map,
   WayMatchStringMappingPtr mapping, vector<pair<ElementId, ElementId> > &replaced) :
   _map(map),
@@ -206,7 +217,7 @@ void WayMatchStringMerger::mergeIntersection(ElementId scrapNodeId)
 
   if (wl1.isExtreme(WayLocation::SLOPPY_EPSILON) == false)
   {
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       //TODO: Possibly change this back to an exception as part of the work to be done in #1311.
       //throw IllegalArgumentException("scrapNode should line up with the beginning or end of a way.");
@@ -218,7 +229,7 @@ void WayMatchStringMerger::mergeIntersection(ElementId scrapNodeId)
       LOG_VART(wl1.getWay());
       LOG_VART(wl1);
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }
@@ -264,8 +275,9 @@ void WayMatchStringMerger::mergeTags()
   foreach (SublineMappingPtr sm, _sublineMappingOrder)
   {
     // merge the tags (order matters)
-    Tags mergedTags = _tagMerger->mergeTags(sm->newWay1->getTags(),
-      sm->getNewWay2()->getTags(), sm->newWay1->getElementType());
+    Tags mergedTags =
+      _tagMerger->mergeTags(
+        sm->newWay1->getTags(), sm->getNewWay2()->getTags(), sm->newWay1->getElementType());
     // set the new tags.
     sm->newWay1->setTags(mergedTags);
   }
@@ -381,10 +393,12 @@ void WayMatchStringMerger::replaceScraps()
 
   foreach (SublineMappingPtr sm, _sublineMappingOrder)
   {
-    LOG_VART(sm->subline2);
-
     ElementPtr w1 = _map->getElement(sm->newWay1->getElementId());
+    LOG_VART(w1->getElementId());
+    LOG_VART(w1->getStatus());
     WayPtr w2 = _map->getWay(sm->getNewWay2()->getId());
+    LOG_VART(w2->getElementId());
+    LOG_VART(w2->getStatus());
 
     // w1 should only occur once.
     assert(w2ToW1[w2].contains(w1) == false);
@@ -394,6 +408,7 @@ void WayMatchStringMerger::replaceScraps()
 
   for (QMap< WayPtr, QList<ElementPtr> >::iterator it = w2ToW1.begin(); it != w2ToW1.end(); ++it)
   {
+    LOG_TRACE("Replacing: " << it.key() << " with value: " << it.value());
     _map->replace(it.key(), it.value());
 
     // clean up any bits that might be left over.

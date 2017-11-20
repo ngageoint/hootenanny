@@ -50,8 +50,6 @@ public:
 
   virtual QString toString() const;
 
-  virtual std::set< std::pair<ElementId, ElementId> > getImpactedUnknown1ElementIds() const;
-
 protected:
 
   virtual PairsSet& getPairs() { return _pairs; }
@@ -62,7 +60,8 @@ private:
   double _minSplitSize;
   std::set< std::pair<ElementId, ElementId> > _pairs;
   boost::shared_ptr<SublineStringMatcher> _sublineMatcher;
-  std::set< std::pair<ElementId, ElementId> > _unknown1Replacements;
+
+  bool _preserveUnknown1ElementIdWhenModifyingFeatures;
 
   /**
    * Returns true if the way directly connects the left and right ways. There is some tolerance
@@ -93,7 +92,7 @@ private:
   void _splitElement(const OsmMapPtr& map, const WaySublineCollection& s,
                      const std::vector<bool>& reverse,
                      std::vector< std::pair<ElementId, ElementId> >& replaced,
-    const ConstElementPtr& splitee, ElementPtr& match, ElementPtr& scrap) const;
+                     const ConstElementPtr& splitee, ElementPtr& match, ElementPtr& scrap) const;
 
   bool _doesWayConnect(long node1, long node2, const ConstWayPtr& w) const;
 

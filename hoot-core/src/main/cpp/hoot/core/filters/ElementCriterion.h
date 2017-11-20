@@ -71,7 +71,7 @@ public:
   /**
    * Use the clone pattern for all classes based on the ElementCriterion class
    */
-  virtual ElementCriterion* clone() = 0;
+  virtual boost::shared_ptr<ElementCriterion> clone() = 0;
 };
 
 typedef boost::shared_ptr<ElementCriterion> ElementCriterionPtr;

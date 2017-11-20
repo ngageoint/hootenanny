@@ -31,6 +31,7 @@
 
 // hoot
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/visitors/TranslationVisitor.h>
 
 // Qt
 #include <QString>
@@ -58,10 +59,10 @@ public:
   /**
    * Set the path to the translation script.
    */
-  void setPath(QString path);
+  void setPath(QString path) { _translator.setPath(path); }
 
 private:
-  std::auto_ptr<ScriptTranslator> _translator;
+  TranslationVisitor _translator;
   bool _toOgr;
 };
 

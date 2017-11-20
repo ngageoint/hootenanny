@@ -47,6 +47,9 @@ class DataInputStream
 public:
   DataInputStream(std::istream& in) : _in(in) {}
 
+  template<class ValueClass>
+  int read(ValueClass& value);
+
   int read(char* data, int length);
 
   char readByte();
@@ -98,6 +101,14 @@ inline int DataInputStream::read(char* data, int length)
 {
   _in.read(data, length);
   _checkEof(length);
+  return _in.gcount();
+}
+
+template<class ValueClass>
+inline int DataInputStream::read(ValueClass& value)
+{
+  _in.read((char*)&value, sizeof(value));
+  _checkEof(sizeof(value));
   return _in.gcount();
 }
 

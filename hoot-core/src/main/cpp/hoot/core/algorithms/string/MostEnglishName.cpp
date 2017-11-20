@@ -103,13 +103,13 @@ const QSet<QString>& MostEnglishName::_getWords()
 
     if (_englishWords.size() == 0)
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN("Failed to load any English dictionaries. Please modify " +
           ConfigOptions::getEnglishWordsFilesKey() + " dictionary to list an appropriate "
           "dictionary. Search path: " << _wordPaths);
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }
@@ -137,11 +137,11 @@ long MostEnglishName::_loadEnglishWords(QString path)
       QByteArray ba = fp.readLine(MAX_LINE_SIZE);
       if (ba.size() == MAX_LINE_SIZE && wordCount < 10)
       {
-        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        if (logWarnCount < Log::getWarnMessageLimit())
         {
           LOG_WARN("Loaded a line of max size. Is this a proper dictionary?");
         }
-        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        else if (logWarnCount == Log::getWarnMessageLimit())
         {
           LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }

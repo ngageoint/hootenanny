@@ -32,6 +32,7 @@
 #include <hoot/core/io/PartialOsmMapWriter.h>
 #include <hoot/core/io/ElementOutputStream.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Log.h>
 
 using namespace std;
 
@@ -90,11 +91,32 @@ boost::shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(QString url)
   return writer;
 }
 
+QString OsmMapWriterFactory::getWriterName(const QString url)
+{
+  LOG_VARD(url);
+  vector<std::string> names =
+    Factory::getInstance().getObjectNamesByBase(OsmMapWriter::className());
+  LOG_VARD(names.size());
+  boost::shared_ptr<OsmMapWriter> writer;
+  for (size_t i = 0; i < names.size(); i++)
+  {
+    const std::string name = names[i];
+    LOG_VART(name);
+    writer.reset(Factory::getInstance().constructObject<OsmMapWriter>(name));
+    if (writer->isSupported(url))
+    {
+      return QString::fromStdString(name);
+    }
+  }
+  return "";
+}
+
 bool OsmMapWriterFactory::hasElementOutputStream(QString url)
 {
   bool result = false;
   boost::shared_ptr<OsmMapWriter> writer = createWriter(url);
-  boost::shared_ptr<ElementOutputStream> streamWriter = boost::dynamic_pointer_cast<ElementOutputStream>(writer);
+  boost::shared_ptr<ElementOutputStream> streamWriter =
+    boost::dynamic_pointer_cast<ElementOutputStream>(writer);
   if (streamWriter)
   {
     result = true;

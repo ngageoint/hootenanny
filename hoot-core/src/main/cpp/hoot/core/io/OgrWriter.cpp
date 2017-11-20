@@ -109,6 +109,7 @@ OgrWriter::OgrWriter():
   setConfiguration(conf());
 
   _textStatus = ConfigOptions().getWriterTextStatus();
+  _includeDebug = ConfigOptions().getWriterIncludeDebugTags();
 
   _wgs84.SetWellKnownGeogCS("WGS84");
 }
@@ -293,11 +294,11 @@ void OgrWriter::_createLayer(boost::shared_ptr<const Layer> layer)
 
       if (poFDefn->GetFieldIndex(f->getName().toAscii()) == -1)
       {
-        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        if (logWarnCount < Log::getWarnMessageLimit())
         {
           LOG_WARN("Unable to find field: " << QString(f->getName()) << " in layer " << layerName);
         }
-        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        else if (logWarnCount == Log::getWarnMessageLimit())
         {
           LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }
@@ -576,11 +577,11 @@ void OgrWriter::_writePartial(ElementProviderPtr& provider, const ConstElementPt
     }
     catch (const IllegalArgumentException& err)
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN("Error converting geometry: " << err.getWhat() << " (" << e->toString() << ")");
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }
@@ -600,6 +601,11 @@ void OgrWriter::_writePartial(ElementProviderPtr& provider, const ConstElementPt
     else
     {
       t[MetadataTags::HootStatus()] = e->getStatusString();
+    }
+
+    if (_includeDebug)
+    {
+      t[MetadataTags::HootId()] = QString::number(e->getId());
     }
 
     for (Tags::const_iterator it = e->getTags().begin(); it != e->getTags().end(); ++it)
@@ -792,7 +798,7 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Relation>& newR
   _elementCache->addElement(constRelation);
 
   ElementProviderPtr cacheProvider(_elementCache);
-    _writePartial(cacheProvider, newRelation);
+  _writePartial(cacheProvider, newRelation);
 }
 
 void OgrWriter::writeElement(ElementPtr &element)
@@ -800,26 +806,11 @@ void OgrWriter::writeElement(ElementPtr &element)
   writeElement(element, false);
 }
 
-void OgrWriter::writeElement(ElementInputStream& inputStream)
-{
-  writeElement(inputStream, false);
-}
-
-void OgrWriter::writeElement(ElementInputStream& inputStream, bool debug)
-{
-  // Make sure incoming element is in WGS84
-  assert( inputStream.getProjection()->IsSame(&_wgs84) == true );
-  ElementPtr nextElement = inputStream.readNextElement();
-
-  writeElement(nextElement, debug);
-}
-
 void OgrWriter::writeElement(ElementPtr &element, bool debug)
 {
   Tags sourceTags = element->getTags();
   Tags destTags;
-  for (Tags::const_iterator it = element->getTags().begin();
-       it != element->getTags().end(); ++it)
+  for (Tags::const_iterator it = element->getTags().begin(); it != element->getTags().end(); ++it)
   {
     if (sourceTags[it.key()] != "")
     {

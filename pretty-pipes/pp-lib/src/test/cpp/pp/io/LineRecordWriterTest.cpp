@@ -90,4 +90,4 @@ public:
 };
 
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(LineRecordWriterTest, "current");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(LineRecordWriterTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(LineRecordWriterTest, "glacial");

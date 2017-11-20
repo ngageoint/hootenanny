@@ -75,6 +75,11 @@ bool operator==(const ConstEdgeStringPtr& es1, const ConstEdgeStringPtr& es2)
   return result;
 }
 
+QString EdgeString::EdgeEntry::toString() const
+{
+  return hoot::toString(_subline);
+}
+
 EdgeString::EdgeString()
 {
 }
@@ -610,11 +615,11 @@ bool EdgeString::validate() const
     ConstEdgeSublinePtr esi = _edges[i].getSubline();
     if (esi->isZeroLength())
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN("EdgeString contains a zero length subline: " << esi);
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }
@@ -626,11 +631,11 @@ bool EdgeString::validate() const
       ConstEdgeSublinePtr esj = _edges[j].getSubline();
       if (esi->overlaps(esj))
       {
-        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        if (logWarnCount < Log::getWarnMessageLimit())
         {
           LOG_WARN("Two edges overlap that shouldn't: " << esi << " and " << esj);
         }
-        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        else if (logWarnCount == Log::getWarnMessageLimit())
         {
           LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }

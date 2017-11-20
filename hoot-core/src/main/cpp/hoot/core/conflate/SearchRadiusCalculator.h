@@ -64,6 +64,8 @@ public:
 
   void setRubberSheetMinTies(int minTies) { _minTies = minTies; }
 
+  void setPrecision(int precision) { _precision = precision; }
+
 private:
 
   void _calculateSearchRadius(const std::vector<double>& tiePointDistances);
@@ -75,6 +77,8 @@ private:
 
   bool _rubberSheetRef;
   int _minTies;
+
+  int _precision;
 
   friend class SearchRadiusCalculatorTest;
 };

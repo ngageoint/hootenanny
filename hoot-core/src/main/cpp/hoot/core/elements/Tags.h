@@ -84,6 +84,11 @@ public:
   void appendValueIfUnique(QString k, QString v);
   void appendValueIfUnique(QString k, QStringList v);
 
+  /**
+   * Return if there is at least one non-metadata tag. @sa getInformationalCount()
+   */
+  bool hasInformationTag() const;
+
   const QString get(const QString& k) const { return operator[](k); }
 
   /**

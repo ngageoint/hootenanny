@@ -63,8 +63,6 @@ void OgrUtilities::loadDriverInfo()
   _drivers.push_back(OgrDriverInfo(".gpx",      "GPX",            true,     true,   GDAL_OF_VECTOR));
   _drivers.push_back(OgrDriverInfo(".kml",      "KML/LIBKML",     true,     true,   GDAL_OF_ALL));
   _drivers.push_back(OgrDriverInfo(".kmz",      "LIBKML",         true,     true,   GDAL_OF_ALL));
-  _drivers.push_back(OgrDriverInfo(".json",     "GeoJSON",        true,     true,   GDAL_OF_VECTOR));
-  _drivers.push_back(OgrDriverInfo(".geojson",  "GeoJSON",        true,     true,   GDAL_OF_VECTOR));
   _drivers.push_back(OgrDriverInfo(".dxf",      "DXF",            true,     true,   GDAL_OF_VECTOR));
   //  Order is important here for the two FileGDB drivers, grab the first for read ops and the second for write
   _drivers.push_back(OgrDriverInfo(".gdb",      "OpenFileGDB",    true,     false,  GDAL_OF_VECTOR));
@@ -90,6 +88,18 @@ OgrUtilities::OgrUtilities()
 {
   GDALAllRegister();
   loadDriverInfo();
+}
+
+OgrUtilities::~OgrUtilities()
+{
+  if (Log::getInstance().getLevel() <= Log::Debug)
+  {
+    GDALDumpOpenDatasets( stderr );
+    CPLDumpSharedList( NULL );
+  }
+
+  GDALDestroyDriverManager();
+  OGRCleanupAll();
 }
 
 OgrUtilities& OgrUtilities::getInstance()

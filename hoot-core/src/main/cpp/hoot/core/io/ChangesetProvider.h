@@ -24,67 +24,18 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef CHANGSETPROVIDER_H
-#define CHANGSETPROVIDER_H
+#ifndef CHANGESETPROVIDER_H
+#define CHANGESETPROVIDER_H
 
 // GDAL
 #include <ogr_spatialref.h>
 
 // hoot
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/io/Change.h>
 
 namespace hoot
 {
-
-/**
- * Represents an individual OSM change in a changeset
- */
-class Change
-{
-
-public:
-
-  /**
-   * The allowable changeset types
-   */
-  enum ChangeType
-  {
-    Create = 0,
-    Modify = 1,
-    Delete = 2,
-    Unknown = 3
-  };
-
-   Change() {}
-
-  static QString changeTypeToString(const ChangeType changeType)
-  {
-    switch (changeType)
-    {
-      case Create:
-        return "Create";
-      case Modify:
-        return "Modify";
-      case Delete:
-        return "Delete";
-      case Unknown:
-        return "Unknown";
-    }
-    throw HootException("Invalid change type.");
-  }
-
-  QString toString() const
-  {
-    return
-      "Change type: " + changeTypeToString(type) + ", ID: " + e->getElementId().toString() +
-      ", Note: " + note + "\n" + e->toString();
-  }
-
-  ConstElementPtr e;
-  ChangeType type;
-  QString note;
-
-};
 
 /**
  * Interface for classes implementing OSM changeset capabilities
@@ -134,4 +85,4 @@ typedef boost::shared_ptr<ChangeSetProvider> ChangeSetProviderPtr;
 
 }
 
-#endif // CHANGSETPROVIDER_H
+#endif // CHANGESETPROVIDER_H

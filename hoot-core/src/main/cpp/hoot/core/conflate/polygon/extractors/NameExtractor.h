@@ -43,7 +43,7 @@ class NameExtractor : public FeatureExtractor, public StringDistanceConsumer
 public:
   NameExtractor();
 
-  NameExtractor(StringDistance* d);
+  NameExtractor(StringDistancePtr d);
 
   static std::string className() { return "hoot::NameExtractor"; }
 

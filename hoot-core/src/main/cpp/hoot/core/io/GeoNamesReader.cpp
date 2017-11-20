@@ -42,6 +42,7 @@ HOOT_FACTORY_REGISTER(OsmMapReader, GeoNamesReader)
 
 GeoNamesReader::GeoNamesReader()
 {
+  _maxSaveMemoryStrings = 100000;
   _circularError = 15.0;
   _useDataSourceIds = false;
 
@@ -82,7 +83,6 @@ boost::shared_ptr<OGRSpatialReference> GeoNamesReader::getProjection() const
   {
     _wgs84 = MapProjector::getInstance().createWgs84Projection();
   }
-
   return _wgs84;
 }
 
@@ -114,12 +114,15 @@ void GeoNamesReader::open(QString url)
 
 ElementPtr GeoNamesReader::readNextElement()
 {
-  QByteArray lineBytes = _fp.readLine();
-  QString line = QString::fromUtf8(lineBytes.constData());
-  QStringList fields = line.split('\t');
+  QString line = QString::fromUtf8(_fp.readLine().constData());
+  LOG_VART(line);
+  QStringList fields;
+  fields.append(line.split('\t'));
+  LOG_VART(fields);
 
   bool ok;
   double x = fields[_LONGITUDE].toDouble(&ok);
+  LOG_VART(x);
   if (ok == false)
   {
     throw HootException(QString("Error parsing longitude (%1): %2").arg(fields[_LONGITUDE]).
@@ -147,7 +150,7 @@ ElementPtr GeoNamesReader::readNextElement()
     id = _partialMap->createNextNodeId();
   }
 
-  NodePtr n(new Node(_status, id, x, y, _circularError));
+  NodePtr n(Node::newSp(_status, id, x, y, _circularError));
 
   if (_columns.size() != fields.size())
   {
@@ -158,19 +161,38 @@ ElementPtr GeoNamesReader::readNextElement()
   for (int i = 0; i < _columns.size(); i++)
   {
     int j = i; //convertColumns[i];
-    n->getTags()[_columns[j]] = _saveMemory(fields[j]);
+    QString val = fields[j].trimmed();
+    if (!val.isEmpty())
+    {
+      n->getTags()[_columns[j]] = _saveMemory(val);
+    }
   }
 
+  LOG_VART(n);
   return n;
 }
 
-const QString& GeoNamesReader::_saveMemory(const QString& s)
+QString GeoNamesReader::_saveMemory(const QString& s)
 {
-  if (!_strings.contains(s))
+  QString result;
+  if (_strings.size() < _maxSaveMemoryStrings)
   {
-    _strings[s] = s;
+    if (!_strings.contains(s))
+    {
+      result = s;
+      _strings[s] = s;
+    }
+    else
+    {
+      result = _strings[s];
+    }
   }
-  return _strings[s];
+  else
+  {
+    result = s;
+  }
+
+  return result;
 }
 
 }

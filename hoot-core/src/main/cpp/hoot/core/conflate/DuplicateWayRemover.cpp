@@ -39,6 +39,8 @@
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/ops/RemoveWayOp.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Log.h>
 
 // Standard
 #include <iostream>
@@ -156,7 +158,6 @@ bool DuplicateWayRemover::_isCandidateWay(const ConstWayPtr& w) const
       _map->getIndex().getParents(w->getElementId()).size() == 0);
 }
 
-
 void DuplicateWayRemover::_splitDuplicateWays(WayPtr w1, WayPtr w2, bool rev1, bool rev2)
 {
   // If the ways have any common geometry, then merge their tags.
@@ -168,8 +169,10 @@ void DuplicateWayRemover::_splitDuplicateWays(WayPtr w1, WayPtr w2, bool rev1, b
       TagMergerFactory::getInstance().mergeTags(w1->getTags(), w2->getTags(), ElementType::Way);
     const vector<long>& nodes1 = w1->getNodeIds();
     const vector<long>& nodes2 = w2->getNodeIds();
-    //  _splitDuplicateWays is always called where num_nodes(w1) >= num_nodes(w2) so the following logic works
-    if (nodes1.size() == nodes2.size() && nodes1.size() == static_cast<vector<long>::size_type>(length))
+    //  _splitDuplicateWays is always called where num_nodes(w1) >= num_nodes(w2) so the following
+    // logic works
+    if (nodes1.size() == nodes2.size() &&
+        nodes1.size() == static_cast<vector<long>::size_type>(length))
     {
       //  Merge the two ways' tags
       w1->setTags(mergedTags);
@@ -188,7 +191,8 @@ void DuplicateWayRemover::_splitDuplicateWays(WayPtr w1, WayPtr w2, bool rev1, b
     }
     else
     {
-      vector<long> newNodes(nodes1.begin() + lcs.getW1Index(), nodes1.begin() + lcs.getW1Index() + length);
+      vector<long> newNodes(
+        nodes1.begin() + lcs.getW1Index(), nodes1.begin() + lcs.getW1Index() + length);
       //  Split w1 with all new ids for the results
       vector<WayPtr> ways1 = _splitWay(w1, lcs.getW1Index(), length, true);
       //  Split w2 using the old id and new id(s)
@@ -277,13 +281,28 @@ WayPtr DuplicateWayRemover::_getUpdatedWay(WayPtr way, const vector<long>& nodes
     newWay.reset(new Way(way->getStatus(), _map->createNextWayId(), way->getRawCircularError()));
     newWay->addNodes(nodes);
     newWay->setTags(way->getTags());
+
+    // see comments for similar functionality in HighwaySnapMerger::_mergePair
+    if (ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures() &&
+        way->getStatus() == Status::Unknown1)
+    {
+      LOG_TRACE(
+        "Setting unknown1 " << way->getElementId().getId() << " on " <<
+        newWay->getElementId() << "...");
+      newWay->setId(way->getElementId().getId());
+    }
+
     _map->addWay(newWay);
+    LOG_TRACE(
+      "Created new way: " << newWay->getElementId() << " from old way: " << way->getElementId() <<
+      " with status: " << newWay->getStatus());
     return newWay;
   }
   else
   {
     //  Update the current way
     way->setNodes(nodes);
+    LOG_TRACE("Updating way: " << way->getElementId() << " with status: " << way->getStatus());
     return way;
   }
 }

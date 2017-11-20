@@ -34,6 +34,7 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/ShapefileWriter.h>
 #include <hoot/core/conflate/AlphaShapeGenerator.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {

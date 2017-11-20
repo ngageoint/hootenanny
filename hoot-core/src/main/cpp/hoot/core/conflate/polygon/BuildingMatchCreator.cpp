@@ -32,7 +32,7 @@
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/core/conflate/MatchType.h>
 #include <hoot/core/conflate/polygon/BuildingMatch.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/filters/ArbitraryCriterion.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/NotImplementedException.h>
@@ -70,7 +70,7 @@ using namespace Tgs;
 /**
  * Searches the specified map for any building match potentials.
  */
-class BuildingMatchVisitor : public ElementVisitor
+class BuildingMatchVisitor : public ConstElementVisitor
 {
 public:
   /**
@@ -226,7 +226,8 @@ private:
   deque<ElementId> _indexToEid;
 };
 
-BuildingMatchCreator::BuildingMatchCreator()
+BuildingMatchCreator::BuildingMatchCreator() :
+_conflateMatchBuildingModel(ConfigOptions().getConflateMatchBuildingModel())
 {
 }
 
@@ -261,9 +262,8 @@ void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const
 vector<MatchCreator::Description> BuildingMatchCreator::getAllCreators() const
 {
   vector<Description> result;
-
-  result.push_back(Description(className(), "Building Match Creator", MatchCreator::Building, false));
-
+  result.push_back(
+    Description(className(), "Building Match Creator", MatchCreator::Building, false));
   return result;
 }
 
@@ -271,7 +271,7 @@ boost::shared_ptr<BuildingRfClassifier> BuildingMatchCreator::_getRf()
 {
   if (!_rf)
   {
-    QString path = ConfPath::search(ConfigOptions().getConflateMatchBuildingModel());
+    QString path = ConfPath::search(_conflateMatchBuildingModel);
     LOG_DEBUG("Loading model from: " << path);
 
     QFile file(path.toAscii().data());

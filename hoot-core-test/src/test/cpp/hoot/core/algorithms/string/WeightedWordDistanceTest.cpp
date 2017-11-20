@@ -31,6 +31,7 @@
 #include <hoot/core/algorithms/string/TextFileWordWeightDictionary.h>
 #include <hoot/core/algorithms/string/SqliteWordWeightDictionary.h>
 #include <hoot/core/algorithms/string/WeightedWordDistance.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Log.h>
 
@@ -74,7 +75,7 @@ public:
     LOG_INFO("* " << s1 << " (" << normalize(s1) << ")  vs. " << s2 << " (" <<
       normalize(s2) << ")");
 
-    MeanWordSetDistance mwsd(new LevenshteinDistance(1.5));
+    MeanWordSetDistance mwsd(StringDistancePtr(new LevenshteinDistance(1.5)));
 
     LevenshteinDistance ld(1.5);
 

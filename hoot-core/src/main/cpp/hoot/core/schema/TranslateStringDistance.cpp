@@ -41,9 +41,9 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(StringDistance, TranslateStringDistance)
 
-TranslateStringDistance::TranslateStringDistance(StringDistance *d)
+TranslateStringDistance::TranslateStringDistance(StringDistancePtr d):
+  _d(d)
 {
-  _d.reset(d);
   setConfiguration(conf());
 }
 

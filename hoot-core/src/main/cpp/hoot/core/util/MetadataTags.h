@@ -34,24 +34,39 @@
 namespace hoot
 {
 
+/**
+ * Metadata tag names that are used throughout the code.  This class centralizes them
+ * into one place in the code base.  This class also includes a couple of key values too.
+ *
+ * @todo These static methods cause the QString to be recreated from the ASCII version every time
+ * the method is called. This does two things.
+ * 1. The QString is recreated and duplicate RAM is allocated, used then freed
+ * 2. The QString must parse the ASCII which takes time.
+ *
+ * In some non-critical places this isn't a big deal, however in other spots it can significantly
+ * impact the code. If this is the case, please entertain creating a static variable and returning
+ * a reference to that variable. @sa ErrorCircular() and ERROR_CIRCULAR
+ */
 class MetadataTags
 {
 public:
-  /** Metadata tag names that are used throughout the code.  This class centralizes them
-   *  into one place in the code base.  This class also includes a couple of key values too.
-   */
   inline static const QString HootTagPrefix()           { return "hoot:"; }
 
-  inline static const QString Accuracy()                { return "accuracy"; }
-  inline static const QString ErrorCircular()           { return "error:circular"; }
+  static const QString ACCURACY;
+  inline static const QString& Accuracy()               { return ACCURACY; }
+  static const QString ERROR_CIRCULAR;
+  inline static const QString& ErrorCircular()          { return ERROR_CIRCULAR; }
   inline static const QString SourceDateTime()          { return "source:datetime"; }
 
   inline static const QString HootBuildingMatch()       { return "hoot:building:match"; }
 
+  /// These tags are used when evaluating multiary conflation results.
+  /// See MultiaryMatchComparator
   inline static const QString HootActual()              { return "hoot:actual"; }
   inline static const QString HootExpected()            { return "hoot:expected"; }
   inline static const QString HootMismatch()            { return "hoot:mismatch"; }
   inline static const QString HootWrong()               { return "hoot:wrong"; }
+  inline static const QString HootCorrectReview()       { return "hoot:correct_review"; }
 
   inline static const QString HootEdge()                { return "hoot:edge"; }
   inline static const QString HootEdgeId()              { return "hoot:edge:id"; }
@@ -64,7 +79,9 @@ public:
   inline static const QString HootVertexScore12()       { return "hoot:vertex:score12"; }
   inline static const QString HootVertexScore21()       { return "hoot:vertex:score21"; }
 
-  inline static const QString HootId()                  { return "hoot:id"; }
+  static const QString HOOT_ID;
+  inline static const QString& HootId()                 { return HOOT_ID; }
+  inline static const QString HootHash()                { return "hoot:hash"; }
 
   inline static const QString HootLayername()           { return "hoot:layername"; }
 
@@ -73,6 +90,8 @@ public:
   inline static const QString HootMatchScore()          { return "hoot:match:score"; }
 
   inline static const QString HootPertied()             { return "hoot:pertied"; }
+
+  inline static const QString HootPoiPolygonPoisMerged(){ return "hoot:poipolygon:poismerged"; }
 
   inline static const QString HootReviewTagPrefix()     { return "hoot:review:"; }
   inline static const QString HootReviewChoices()       { return "hoot:review:choices"; }
@@ -89,7 +108,9 @@ public:
   inline static const QString HootScoreReview()         { return "hoot:score:review"; }
   inline static const QString HootScoreUuid()           { return "hoot:score:uuid"; }
 
-  inline static const QString HootStatus()              { return "hoot:status"; }
+  static const QString HOOT_STATUS;
+  inline static const QString& HootStatus()             { return HOOT_STATUS; }
+
   inline static const QString HootSource()              { return "hoot:source"; }
 
   inline static const QString HootStub()                { return "hoot:stub"; }
@@ -102,6 +123,7 @@ public:
 
   inline static const QString BuildingPart()            { return "building:part"; }
 
+  inline static const QString RelationBoundary()        { return "boundary"; }
   inline static const QString RelationBuilding()        { return "building"; }
   inline static const QString RelationCollection()      { return "collection"; }
   inline static const QString RelationInner()           { return "inner"; }
@@ -109,6 +131,7 @@ public:
   inline static const QString RelationMultiPolygon()    { return "multipolygon"; }
   inline static const QString RelationNetwork()         { return "network"; }
   inline static const QString RelationOuter()           { return "outer"; }
+  inline static const QString RelationRestriction()     { return "restriction"; }
   inline static const QString RelationReview()          { return "review"; }
   inline static const QString RelationRoute()           { return "route"; }
   inline static const QString RelationRouteMaster()     { return "route_master"; }
@@ -120,6 +143,23 @@ public:
   inline static const QString RoleOutline()             { return "outline"; }
   inline static const QString RolePart()                { return "part"; }
   inline static const QString RoleReviewee()            { return "reviewee"; }
+
+  /**
+   * ID Unique to a training data set with multiary training data.
+   * @sa MultiaryMatchComparator
+   */
+  inline static const QString TrainingId()              { return "ID"; }
+  /**
+   * Refers to a match between two or more elements in a multiary training data set.
+   * @sa MultiaryMatchComparator
+   */
+  inline static const QString TrainingMatch()           { return "MATCH"; }
+  /**
+   * Refers to a review between two or more elements in a multiary training data set.
+   * @sa MultiaryMatchComparator
+   */
+  inline static const QString TrainingReview()          { return "REVIEW"; }
+
 
 private:
 

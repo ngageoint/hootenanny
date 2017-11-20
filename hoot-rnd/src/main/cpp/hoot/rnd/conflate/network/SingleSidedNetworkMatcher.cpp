@@ -28,6 +28,7 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/rnd/conflate/network/EdgeMatch.h>
 
 #include "EdgeMatchSetFinder.h"

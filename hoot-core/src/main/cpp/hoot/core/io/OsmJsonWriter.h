@@ -29,6 +29,7 @@
 
 // hoot
 #include <hoot/core/io/OsmMapWriter.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 // Boost
 #include <boost/shared_ptr.hpp>
@@ -63,9 +64,14 @@ class OsmJsonWriter : public QXmlDefaultHandler, public OsmMapWriter
 public:
   static std::string className() { return "hoot::OsmJsonWriter"; }
 
-  OsmJsonWriter(int precision = 16);
+  OsmJsonWriter(int precision = ConfigOptions().getWriterPrecision());
 
   virtual bool isSupported(QString url) { return url.toLower().endsWith(".json"); }
+
+  /**
+   * Mark up a string so it can be used in JSON. This will add double quotes around the string too.
+   */
+  static QString markupString(const QString& str);
 
   virtual void open(QString url);
 
@@ -85,30 +91,34 @@ public:
    */
   QString toString(ConstOsmMapPtr map);
 
+  /**
+   * Allow the writer to write empty tags to JSON
+   */
+  void SetWriteEmptyTags(bool writeEmpty) { _writeEmptyTags = writeEmpty; }
+
 protected:
+  ConstOsmMapPtr _map;
   bool _includeDebug;
   int _precision;
   QFile _fp;
   QIODevice* _out;
   bool _pretty;
   bool _firstElement;
+  bool _writeEmptyTags;
+  bool _writeHootFormat;
 
   static QString _typeName(ElementType e);
 
-  /**
-   * Mark up a string so it can be used in JSON. This will add double quotes around the string too.
-   */
-  QString _markupString(const QString& str);
-
-  void _writeNodes(ConstOsmMapPtr map);
-  void _writeWays(ConstOsmMapPtr map);
-  void _writeRelations(ConstOsmMapPtr map);
+  void _writeNodes();
+  void _writeWays();
+  void _writeRelations();
   void _write(const QString& str) { _write(str, _pretty); }
   void _write(const QString& str, bool newLine);
   void _writeLn(const QString& str) { _write(str, true); }
   void _writeKvp(const QString& key, const QString& value);
   void _writeKvp(const QString& key, long value);
   void _writeKvp(const QString& key, double value);
+  bool _hasTags(ConstElementPtr e);
   void _writeTag(const QString& key, const QString& value, bool& firstTag);
   void _writeTags(ConstElementPtr e);
 };

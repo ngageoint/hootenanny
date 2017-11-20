@@ -26,21 +26,20 @@
  */
 
 // Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/OsmMapConsumer.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/conflate/MapCleaner.h>
-#include <hoot/core/conflate/RubberSheet.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/io/OsmMapWriter.h>
-#include <hoot/core/io/OsmMapReader.h>
-#include <hoot/core/io/ElementInputStream.h>
-#include <hoot/core/io/ElementOutputStream.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/io/PartialOsmMapReader.h>
-#include <hoot/core/io/PartialOsmMapWriter.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/io/ElementStreamer.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/filters/ElementCriterion.h>
+#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/util/ConfigUtils.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -74,6 +73,43 @@ public:
 
   virtual QString getName() const { return "convert"; }
 
+  /**
+   * Return true if all the specified operations are valid streaming operations.
+   *
+   * There are some ops that require the whole map be available in RAM (e.g. remove duplicate
+   * nodes). These operations are not applicable for streaming.
+   */
+  bool areValidStreamingOps(QStringList ops)
+  {
+    // add visitor/criterion operations if any of the convert ops are visitors.
+    foreach (QString opName, ops)
+    {
+      if (!opName.trimmed().isEmpty())
+      {
+        if (Factory::getInstance().hasBase<ElementCriterion>(opName.toStdString()))
+        {
+          ElementCriterionPtr criterion(
+            Factory::getInstance().constructObject<ElementCriterion>(opName));
+          // when streaming we can't provide a reliable OsmMap.
+          if (dynamic_cast<OsmMapConsumer*>(criterion.get()) != 0)
+          {
+            return false;
+          }
+        }
+        else if (Factory::getInstance().hasBase<ElementVisitor>(opName.toStdString()))
+        {
+          // good, pass
+        }
+        else
+        {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }
+
   virtual int runSimple(QStringList args)
   {
     if (args.size() != 2)
@@ -84,31 +120,54 @@ public:
 
     QElapsedTimer timer;
     timer.start();
-    LOG_INFO("Converting " << args[0].right(100) << " to " << args[1].right(100) << "...");
+
+    const QString input = args[0];
+    const QString output = args[1];
+    LOG_INFO("Converting " << input.right(100) << " to " << output.right(100) << "...");
 
     // This keeps the status and the tags.
     conf().set(ConfigOptions().getReaderUseFileStatusKey(), true);
     conf().set(ConfigOptions().getReaderKeepFileStatusKey(), true);
 
-    if (OsmMapReaderFactory::getInstance().hasElementInputStream(args[0]) &&
-        OsmMapWriterFactory::getInstance().hasElementOutputStream(args[1]) &&
-        //TODO: Why can't we use convert ops with streaming?
-        ConfigOptions().getConvertOps().size() == 0)
+//    QString readerName = ConfigOptions().getOsmMapReaderFactoryReader();
+//    if (readerName.trimmed().isEmpty())
+//    {
+//      readerName = OsmMapReaderFactory::getReaderName(input);
+//    }
+//    LOG_VARD(readerName);
+    LOG_VARD(OsmMapReaderFactory::getInstance().hasElementInputStream(input));
+
+    QString writerName = ConfigOptions().getOsmMapWriterFactoryWriter();
+    if (writerName.trimmed().isEmpty())
     {
-      streamElements(args[0], args[1]);
+      writerName = OsmMapWriterFactory::getWriterName(args[1]);
+    }
+    LOG_VARD(writerName);
+    LOG_VARD(OsmMapWriterFactory::getInstance().hasElementOutputStream(output));
+    LOG_VARD(ConfigUtils::boundsOptionEnabled());
+
+    if (OsmMapReaderFactory::getInstance().hasElementInputStream(input) &&
+        OsmMapWriterFactory::getInstance().hasElementOutputStream(output) &&
+        areValidStreamingOps(ConfigOptions().getConvertOps()) &&
+        //the XML writer can't keep sorted output when streaming, so require an additional config
+        //option be specified in order to stream when writing that format
+        (writerName != "hoot::OsmXmlWriter" ||
+         (writerName == "hoot::OsmXmlWriter" && !ConfigOptions().getWriterXmlSortById())) &&
+        //none of the convert bounding box supports are able to do streaming I/O at this point
+        !ConfigUtils::boundsOptionEnabled())
+    {
+      ElementStreamer::stream(input, output);
     }
     else
     {
       OsmMapPtr map(new OsmMap());
-
-      loadMap(map, args[0], true, Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
-
+      loadMap(
+        map, input, ConfigOptions().getReaderUseDataSourceIds(),
+        Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
       // Apply any user specified operations.
       NamedOp(ConfigOptions().getConvertOps()).apply(map);
-
       MapProjector::projectToWgs84(map);
-
-      saveMap(map, args[1]);
+      saveMap(map, output);
     }
 
     LOG_DEBUG("Convert operation complete.");
@@ -126,36 +185,6 @@ public:
 
     return 0;
   }
-
-  void streamElements(QString in, QString out)
-  {
-    LOG_INFO("Streaming data conversion from " << in << " to " << out << "...");
-
-    boost::shared_ptr<OsmMapReader> reader = OsmMapReaderFactory::getInstance().createReader(in);
-    reader->open(in);
-    boost::shared_ptr<ElementInputStream> streamReader =
-      boost::dynamic_pointer_cast<ElementInputStream>(reader);
-    boost::shared_ptr<OsmMapWriter> writer = OsmMapWriterFactory::getInstance().createWriter(out);
-    writer->open(out);
-    boost::shared_ptr<ElementOutputStream> streamWriter =
-      boost::dynamic_pointer_cast<ElementOutputStream>(writer);
-
-    ElementOutputStream::writeAllElements(*streamReader, *streamWriter);
-
-    boost::shared_ptr<PartialOsmMapReader> partialReader =
-      boost::dynamic_pointer_cast<PartialOsmMapReader>(reader);
-    if (partialReader.get())
-    {
-      partialReader->finalizePartial();
-    }
-    boost::shared_ptr<PartialOsmMapWriter> partialWriter =
-      boost::dynamic_pointer_cast<PartialOsmMapWriter>(writer);
-    if (partialWriter.get())
-    {
-      partialWriter->finalizePartial();
-    }
-  }
-
 };
 
 HOOT_FACTORY_REGISTER(Command, ConvertCmd)

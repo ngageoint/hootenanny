@@ -13,6 +13,9 @@ if [ -f missing ]; then
   rm -f missing
 fi
 
+# Remove C++11
+
+
 # Sort out what version of Postgres we have - MJ
 PG_VERSION=`ls /etc/init.d | grep postgresql- | sort | tail -1 | egrep -o '[0-9]{1,}\.[0-9]{1,}'`
 
@@ -28,6 +31,6 @@ mkdir -p $HOOT_HOME/ingest/processed
 mkdir -p $HOOT_HOME/upload
 
 #make -sj$(nproc) docs &> /dev/null || true
-#make -sj$(nproc) docs
+make -sj$(nproc) docs
 
 hoot version

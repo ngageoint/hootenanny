@@ -27,8 +27,6 @@
 #include "HootApiDb.h"
 
 // hoot
-#include <hoot/core/elements/Node.h>
-#include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/io/SqlBulkInsert.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -38,6 +36,7 @@
 #include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/io/TableType.h>
 #include <hoot/core/util/DbUtils.h>
+#include <hoot/core/io/SqlBulkDelete.h>
 
 // qt
 #include <QStringList>
@@ -63,7 +62,8 @@ namespace hoot
 
 unsigned int HootApiDb::logWarnCount = 0;
 
-HootApiDb::HootApiDb()
+HootApiDb::HootApiDb() :
+_precision(ConfigOptions().getWriterPrecision())
 {
   _init();
 }
@@ -87,6 +87,7 @@ void HootApiDb::_init()
   _nodesInsertElapsed = 0;
   // 500 found experimentally on my desktop -JRS
   _nodesPerBulkInsert = recordsPerBulkInsert;
+  _nodesPerBulkDelete = recordsPerBulkInsert; //TODO: figure out what this should be
 
   _wayNodesInsertElapsed = 0;
   // arbitrary, needs benchmarking
@@ -108,6 +109,8 @@ void HootApiDb::_init()
 
 Envelope HootApiDb::calculateEnvelope() const
 {
+  LOG_TRACE("Calculating envelope...");
+
   const long mapId = _currMapId;
   Envelope result;
 
@@ -136,21 +139,28 @@ Envelope HootApiDb::calculateEnvelope() const
 
 void HootApiDb::_checkLastMapId(long mapId)
 {
+  LOG_TRACE("Checking last map ID: " << mapId << "...");
+  LOG_VART(_lastMapId);
   if (_lastMapId != mapId)
   {
     _flushBulkInserts();
+    _flushBulkDeletes();
     _resetQueries();
     _nodeIdReserver.reset();
     _wayIdReserver.reset();
     _relationIdReserver.reset();
     _lastMapId = mapId;
+    LOG_VART(_lastMapId);
   }
 }
 
 void HootApiDb::close()
 {
+  LOG_DEBUG("Closing database connection...");
+
   createPendingMapIndexes();
   _flushBulkInserts();
+  _flushBulkDeletes();
 
   _resetQueries();
 
@@ -165,62 +175,16 @@ void HootApiDb::close()
   _db.close();
 }
 
-void HootApiDb::endChangeset()
-{
-  // If we're already closed, nothing to do
-  if ( _currChangesetId == -1 )
-  {
-    LOG_TRACE("Tried to end a changeset but there isn't an active changeset currently.");
-    return;
-  }
-
-  const long mapId = _currMapId;
-  if (!changesetExists(_currChangesetId))
-  {
-    throw HootException("No changeset exists with ID: " + _currChangesetId);
-  }
-
-  _checkLastMapId(mapId);
-  if (_closeChangeSet == 0)
-  {
-    _closeChangeSet.reset(new QSqlQuery(_db));
-    _closeChangeSet->prepare(
-      QString("UPDATE %1 SET min_lat=:min_lat, max_lat=:max_lat, min_lon=:min_lon, "
-        "max_lon=:max_lon, closed_at=NOW(), num_changes=:num_changes WHERE id=:id")
-         .arg(getChangesetsTableName(mapId)));
-  }
-  _closeChangeSet->bindValue(":min_lat", _changesetEnvelope.getMinY());
-  _closeChangeSet->bindValue(":max_lat", _changesetEnvelope.getMaxY());
-  _closeChangeSet->bindValue(":min_lon", _changesetEnvelope.getMinX());
-  _closeChangeSet->bindValue(":max_lon", _changesetEnvelope.getMaxX());
-  _closeChangeSet->bindValue(":num_changes", (int)_changesetChangeCount);
-  _closeChangeSet->bindValue(":id", (qlonglong)_currChangesetId);
-
-  if (_closeChangeSet->exec() == false)
-  {
-    LOG_ERROR("query bound values: ");
-    LOG_ERROR(_closeChangeSet->boundValues());
-    LOG_ERROR("\n");
-    throw HootException("Error executing close changeset: " + _closeChangeSet->lastError().text() +
-                        " (SQL: " + _closeChangeSet->executedQuery() + ")" + " with envelope: " +
-                        QString::fromStdString(_changesetEnvelope.toString()));
-  }
-
-  LOG_DEBUG("Successfully closed changeset " << QString::number(_currChangesetId));
-
-  // NOTE: do *not* alter _currChangesetId or _changesetEnvelope yet.  We haven't written data to
-  //database yet!   they will be refreshed upon opening a new database, so leave them alone!
-  _changesetChangeCount = 0;
-}
-
 void HootApiDb::commit()
 {
-  if ( _db.isOpen() == false )
+  LOG_TRACE("Committing transaction...");
+
+  if (_db.isOpen() == false)
   {
     throw HootException("Tried to commit a transaction on a closed database.");
   }
 
-  if ( _inTransaction == false )
+  if (_inTransaction == false)
   {
     throw HootException(QString("Tried to commit but weren't in a transaction.  You may ") +
                         QString("need to set hootapi.db.writer.create.user=true."));
@@ -228,6 +192,7 @@ void HootApiDb::commit()
 
   createPendingMapIndexes();
   _flushBulkInserts();
+  _flushBulkDeletes();
   _resetQueries();
   if (!_db.commit())
   {
@@ -266,6 +231,8 @@ void HootApiDb::_copyTableStructure(QString from, QString to)
 
 void HootApiDb::createPendingMapIndexes()
 {
+  LOG_TRACE("Creating map indexes...");
+
   for (int i = 0; i < _pendingMapIndexes.size(); i++)
   {
     long mapId = _pendingMapIndexes[i];
@@ -325,6 +292,8 @@ void HootApiDb::createPendingMapIndexes()
 
 void HootApiDb::deleteMap(long mapId)
 {
+  LOG_TRACE("Deleting map: " << mapId << "...");
+
   // Drop related renderDB First
   dropDatabase(_getRenderDBName(mapId));
 
@@ -359,6 +328,8 @@ bool HootApiDb::hasTable(const QString& tableName)
 
 void HootApiDb::dropDatabase(const QString& databaseName)
 {
+  LOG_TRACE("Dropping database: " << databaseName << "...");
+
   QString sql = QString("DROP DATABASE IF EXISTS \"%1\"").arg(databaseName);
 
   // TRICKY: You are not allowed to drop a database within a transaction.
@@ -378,6 +349,8 @@ void HootApiDb::dropDatabase(const QString& databaseName)
 
 void HootApiDb::dropTable(const QString& tableName)
 {
+  LOG_TRACE("Dropping table: " << tableName << "...");
+
   // inserting strings in this fashion is safe b/c it is private and we closely control the table
   // names.
   QString sql = QString("DROP TABLE IF EXISTS %1").arg(tableName);
@@ -393,6 +366,8 @@ void HootApiDb::dropTable(const QString& tableName)
 
 void HootApiDb::deleteUser(long userId)
 {
+  LOG_TRACE("Deleting user: " << userId << "...");
+
   QSqlQuery maps = _exec("SELECT id FROM " + ApiDb::getMapsTableName() +
                          " WHERE user_id=:user_id", (qlonglong)userId);
 
@@ -406,23 +381,24 @@ void HootApiDb::deleteUser(long userId)
   _exec("DELETE FROM " + ApiDb::getUsersTableName() + " WHERE id=:id", (qlonglong)userId);
 }
 
-QString HootApiDb::_escapeTags(const Tags& tags) const
+QString HootApiDb::_escapeTags(const Tags& tags)
 {
+  //TODO: this is likely redundant with other code
+
   QStringList l;
-  static QChar f1('\\'), f2('"'), f3('\'');
-  static QChar to('_');
+  static QChar f1('\\'), f2('"');
 
   for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
   {
-    if (it.value().isEmpty() == false && it.key().isEmpty() == false)
+    QString key = it.key();
+    QString val = it.value().trimmed();
+    if (val.isEmpty() == false)
     {
       // this doesn't appear to be working, but I think it is implementing the spec as described here:
       // http://www.postgresql.org/docs/9.0/static/hstore.html
       // The spec described above does seem to work on the psql command line. Curious.
-      QString k = QString(it.key()).replace(f1, "\\\\").replace(f2, "\\\"");
-      QString v = QString(it.value()).replace(f1, "\\\\").replace(f2, "\\\"");
-      k.replace("'", "''");
-      v.replace("'", "''");
+      QString k = QString(key).replace(f1, "\\\\").replace(f2, "\\\"").replace("'", "''");
+      QString v = QString(val).replace(f1, "\\\\").replace(f2, "\\\"").replace("'", "''");
 
       l << QString("'%1'").arg(k);
       l << QString("'%1'").arg(v);
@@ -463,6 +439,8 @@ QString HootApiDb::execToString(QString sql, QVariant v1, QVariant v2, QVariant 
 
 void HootApiDb::_flushBulkInserts()
 {
+  LOG_TRACE("Flushing bulk inserts...");
+
   if (_nodeBulkInsert != 0)
   {
     _nodeBulkInsert->flush();
@@ -478,6 +456,16 @@ void HootApiDb::_flushBulkInserts()
   if (_relationBulkInsert != 0)
   {
     _relationBulkInsert->flush();
+  }
+}
+
+void HootApiDb::_flushBulkDeletes()
+{
+  LOG_TRACE("Flushing bulk deletes...");
+
+  if (_nodeBulkDelete != 0)
+  {
+    _nodeBulkDelete->flush();
   }
 }
 
@@ -521,7 +509,6 @@ long HootApiDb::_getNextNodeId()
   {
     _nodeIdReserver.reset(new InternalIdReserver(_db, getCurrentNodesSequenceName(mapId)));
   }
-
   return _nodeIdReserver->getNextId();
 }
 
@@ -568,11 +555,13 @@ long HootApiDb::getNextId(const ElementType& elementType)
 void HootApiDb::beginChangeset()
 {
   Tags emptyTags;
-  beginChangeset(emptyTags);
+  return beginChangeset(emptyTags);
 }
 
 void HootApiDb::beginChangeset(const Tags& tags)
 {
+  LOG_DEBUG("Starting changeset...");
+
   _changesetEnvelope.init();
   _changesetChangeCount = 0;
   const long mapId = _currMapId;
@@ -595,15 +584,107 @@ void HootApiDb::beginChangeset(const Tags& tags)
   _insertChangeSet->bindValue(":max_lat", _changesetEnvelope.getMaxY());
   _insertChangeSet->bindValue(":min_lon", _changesetEnvelope.getMinX());
   _insertChangeSet->bindValue(":max_lon", _changesetEnvelope.getMaxX());
+  LOG_VARD(_insertChangeSet->lastQuery());
 
   _currChangesetId = _insertRecord(*_insertChangeSet);
+  LOG_VARD(_currChangesetId);
 
   _changesetChangeCount = 0;
   LOG_DEBUG("Started new changeset " << QString::number(_currChangesetId));
 }
 
+long HootApiDb::insertChangeset(const geos::geom::Envelope& bounds, const Tags& tags,
+                                const long numChanges)
+{
+  LOG_DEBUG("Inserting and closing changeset...");
+
+  const long mapId = _currMapId;
+  const long userId = _currUserId;
+
+  _checkLastMapId(mapId);
+  if (_insertChangeSet2 == 0)
+  {
+    _insertChangeSet2.reset(new QSqlQuery(_db));
+    _insertChangeSet2->prepare(
+      QString("INSERT INTO %1 (user_id, created_at, min_lat, max_lat, min_lon, max_lon, "
+        "closed_at, num_changes, tags) "
+        "VALUES (:user_id, NOW(), :min_lat, :max_lat, :min_lon, :max_lon, NOW(), :num_changes, " +
+        _escapeTags(tags) + ") "
+        "RETURNING id")
+        .arg(getChangesetsTableName(mapId)));
+  }
+  _insertChangeSet2->bindValue(":user_id", (qlonglong)userId);
+  _insertChangeSet2->bindValue(":min_lat", bounds.getMinY());
+  _insertChangeSet2->bindValue(":max_lat", bounds.getMaxY());
+  _insertChangeSet2->bindValue(":min_lon", bounds.getMinX());
+  _insertChangeSet2->bindValue(":max_lon", bounds.getMaxX());
+  _insertChangeSet2->bindValue(":num_changes", (int)numChanges);
+  LOG_VARD(_insertChangeSet2->lastQuery());
+
+  _currChangesetId = _insertRecord(*_insertChangeSet2);
+  LOG_VARD(_currChangesetId);
+
+  _changesetChangeCount = 0;
+  LOG_DEBUG("Inserted and closed changeset " << QString::number(_currChangesetId));
+
+  return _currChangesetId;
+}
+
+void HootApiDb::endChangeset()
+{
+  LOG_DEBUG("Ending changeset...");
+
+  // If we're already closed, nothing to do
+  if (_currChangesetId == -1)
+  {
+    LOG_DEBUG("Tried to end a changeset but there isn't an active changeset currently.");
+    return;
+  }
+
+  const long mapId = _currMapId;
+  if (!changesetExists(_currChangesetId))
+  {
+    throw HootException("No changeset exists with ID: " + _currChangesetId);
+  }
+
+  _checkLastMapId(mapId);
+  if (_closeChangeSet == 0)
+  {
+    _closeChangeSet.reset(new QSqlQuery(_db));
+    _closeChangeSet->prepare(
+      QString("UPDATE %1 SET min_lat=:min_lat, max_lat=:max_lat, min_lon=:min_lon, "
+        "max_lon=:max_lon, closed_at=NOW(), num_changes=:num_changes WHERE id=:id")
+         .arg(getChangesetsTableName(mapId)));
+  }
+  _closeChangeSet->bindValue(":min_lat", _changesetEnvelope.getMinY());
+  _closeChangeSet->bindValue(":max_lat", _changesetEnvelope.getMaxY());
+  _closeChangeSet->bindValue(":min_lon", _changesetEnvelope.getMinX());
+  _closeChangeSet->bindValue(":max_lon", _changesetEnvelope.getMaxX());
+  _closeChangeSet->bindValue(":num_changes", (int)_changesetChangeCount);
+  _closeChangeSet->bindValue(":id", (qlonglong)_currChangesetId);
+  LOG_VARD(_closeChangeSet->lastQuery());
+
+  if (_closeChangeSet->exec() == false)
+  {
+    LOG_ERROR("query bound values: ");
+    LOG_ERROR(_closeChangeSet->boundValues());
+    LOG_ERROR("\n");
+    throw HootException("Error executing close changeset: " + _closeChangeSet->lastError().text() +
+                        " (SQL: " + _closeChangeSet->executedQuery() + ")" + " with envelope: " +
+                        QString::fromStdString(_changesetEnvelope.toString()));
+  }
+
+  LOG_DEBUG("Successfully closed changeset " << QString::number(_currChangesetId));
+
+  // NOTE: do *not* alter _currChangesetId or _changesetEnvelope yet.  We haven't written data to
+  //database yet!   they will be refreshed upon opening a new database, so leave them alone!
+  _changesetChangeCount = 0;
+}
+
 long HootApiDb::insertMap(QString displayName, bool publicVisibility)
 {
+  LOG_TRACE("Inserting map...");
+
   const int userId = _currUserId;
 
   if (_insertMap == 0)
@@ -628,6 +709,7 @@ long HootApiDb::insertMap(QString displayName, bool publicVisibility)
   _copyTableStructure(ApiDb::getCurrentWayNodesTableName(), getCurrentWayNodesTableName(mapId));
   _copyTableStructure(ApiDb::getCurrentWaysTableName(), getCurrentWaysTableName(mapId));
 
+  DbUtils::execNoPrepare(_db, "CREATE SEQUENCE " + getChangesetsSequenceName(mapId));
   DbUtils::execNoPrepare(_db, "CREATE SEQUENCE " + getCurrentNodesSequenceName(mapId));
   DbUtils::execNoPrepare(_db, "CREATE SEQUENCE " + getCurrentRelationsSequenceName(mapId));
   DbUtils::execNoPrepare(_db, "CREATE SEQUENCE " + getCurrentWaysSequenceName(mapId));
@@ -663,8 +745,7 @@ long HootApiDb::insertMap(QString displayName, bool publicVisibility)
   return mapId;
 }
 
-bool HootApiDb::insertNode(const double lat, const double lon,
-  const Tags& tags, long& assignedId)
+bool HootApiDb::insertNode(const double lat, const double lon, const Tags& tags, long& assignedId)
 {
   assignedId = _getNextNodeId();
 
@@ -673,6 +754,8 @@ bool HootApiDb::insertNode(const double lat, const double lon,
 
 bool HootApiDb::insertNode(const long id, const double lat, const double lon, const Tags &tags)
 {
+  LOG_TRACE("Inserting node: " << id << "...");
+
   const long mapId = _currMapId;
   double start = Tgs::Time::getTime();
 
@@ -713,10 +796,49 @@ bool HootApiDb::insertNode(const long id, const double lat, const double lon, co
   _updateChangesetEnvelope(envelopeNode);
 
   LOG_TRACE("Inserted node: " << ElementId(ElementType::Node, id));
-  LOG_VART(QString::number(lat, 'g', 15))
-  LOG_VART(QString::number(lon, 'g', 15));
+  LOG_VART(QString::number(lat, 'g', _precision))
+  LOG_VART(QString::number(lon, 'g', _precision));
 
   return true;
+}
+
+bool HootApiDb::insertNode(ConstNodePtr node)
+{
+  return insertNode(node->getId(), node->getY(), node->getX(), node->getTags());
+}
+
+void HootApiDb::updateNode(ConstNodePtr node)
+{
+  return updateNode(node->getId(), node->getY(), node->getX(), node->getVersion(), node->getTags());
+}
+
+void HootApiDb::deleteNode(ConstNodePtr node)
+{
+  LOG_TRACE("Deleting node: " << node->getId() << "...");
+
+  const long mapId = _currMapId;
+  double start = Tgs::Time::getTime();
+
+  _checkLastMapId(mapId);
+
+  if (_nodeBulkDelete == 0)
+  {
+    _nodeBulkDelete.reset(new SqlBulkDelete(_db, getCurrentNodesTableName(mapId)));
+  }
+  _nodeBulkDelete->deleteElement(node->getId());
+
+  _nodesDeleteElapsed += Tgs::Time::getTime() - start;
+
+  if (_nodeBulkDelete->getPendingCount() >= _nodesPerBulkDelete)
+  {
+    _nodeBulkDelete->flush();
+  }
+
+  //TODO: multiary-ingest: how to update envelope here?
+  //ConstNodePtr envelopeNode(new Node(Status::Unknown1, id, lon, lat, 0.0));
+  //_updateChangesetEnvelope(envelopeNode);
+
+  LOG_TRACE("Deleted node: " << ElementId(ElementType::Node, node->getId()));
 }
 
 bool HootApiDb::insertRelation(const Tags &tags, long& assignedId)
@@ -728,6 +850,8 @@ bool HootApiDb::insertRelation(const Tags &tags, long& assignedId)
 
 bool HootApiDb::insertRelation(const long relationId, const Tags &tags)
 {
+  LOG_TRACE("Inserting relation: " << relationId << "...");
+
   const long mapId = _currMapId;
   _checkLastMapId(mapId);
 
@@ -760,8 +884,9 @@ bool HootApiDb::insertRelation(const long relationId, const Tags &tags)
 
 bool HootApiDb::insertRelationMember(const long relationId, const ElementType& type,
   const long elementId, const QString& role, const int sequenceId)
-
 {
+  LOG_TRACE("Inserting relation member for relation: " << relationId << "...");
+
   const long mapId = _currMapId;
   _checkLastMapId(mapId);
 
@@ -821,6 +946,7 @@ long HootApiDb::_insertRecord(QSqlQuery& query)
   {
     QString err = QString("Error executing query: %1 (%2)").arg(query.executedQuery()).
         arg(query.lastError().text());
+    LOG_ERROR(err);
     throw HootException(err);
   }
   bool ok = false;
@@ -848,7 +974,7 @@ bool HootApiDb::isSupported(const QUrl& url)
 {
   bool valid = ApiDb::isSupported(url);
 
-  //postgresql is deprecated but still support
+  //postgresql is deprecated but still supported
   if (url.scheme() != "hootapidb" && url.scheme() != "postgresql")
   {
     valid = false;
@@ -859,7 +985,7 @@ bool HootApiDb::isSupported(const QUrl& url)
     QString path = url.path();
     QStringList plist = path.split("/");
 
-    if ( plist.size() == 3 )
+    if (plist.size() == 3)
     {
       if (plist[1] == "")
       {
@@ -874,7 +1000,7 @@ bool HootApiDb::isSupported(const QUrl& url)
         valid = false;
       }
     }
-    else if ( (plist.size() == 4) && ((plist[1] == "") || (plist[2 ] == "") || (plist[3] == "")) )
+    else if ((plist.size() == 4) && ((plist[1] == "") || (plist[2 ] == "") || (plist[3] == "")))
     {
       LOG_WARN("Looks like a DB path, but a valid DB name, layer, and element was expected. E.g. "
                "postgresql://myhost:5432/mydb/mylayer/1");
@@ -919,6 +1045,8 @@ void HootApiDb::_lazyFlushBulkInsert()
 
 void HootApiDb::open(const QUrl& url)
 {
+  LOG_DEBUG("Opening database connection: " << url.toString() << "...");
+
   if (!isSupported(url))
   {
     throw HootException("An unsupported URL was passed into HootApiDb: " + url.toString());
@@ -939,6 +1067,8 @@ void HootApiDb::open(const QUrl& url)
 
 void HootApiDb::_resetQueries()
 {
+  LOG_DEBUG("Resetting queries...");
+
   ApiDb::_resetQueries();
 
   _closeChangeSet.reset();
@@ -948,12 +1078,9 @@ void HootApiDb::_resetQueries()
   _insertWayNodes.reset();
   _insertRelationMembers.reset();
   _selectHootDbVersion.reset();
-  _selectUserByEmail.reset();
   _insertUser.reset();
-  _mapExists.reset();
+  _mapExistsById.reset();
   _changesetExists.reset();
-  _numTypeElementsForMap.reset();
-  _selectElementsForMap.reset();
   _selectReserveNodeIds.reset();
   _selectNodeIdsForWay.reset();
   _selectMapIds.reset();
@@ -964,6 +1091,9 @@ void HootApiDb::_resetQueries()
   _updateJobStatus.reset();
   _insertJobStatus.reset();
   _jobStatusExists.reset();
+  _mapExistsByName.reset();
+  _getMapIdByName.reset();
+  _insertChangeSet2.reset();
 
   // bulk insert objects.
   _nodeBulkInsert.reset();
@@ -973,18 +1103,6 @@ void HootApiDb::_resetQueries()
   _wayNodeBulkInsert.reset();
   _wayBulkInsert.reset();
   _wayIdReserver.reset();
-}
-
-void HootApiDb::rollback()
-{
-  _resetQueries();
-
-  if (!_db.rollback())
-  {
-    throw HootException("Error rolling back transaction: " + _db.lastError().text());
-  }
-
-  _inTransaction = false;
 }
 
 set<long> HootApiDb::selectMapIds(QString name)
@@ -998,9 +1116,9 @@ set<long> HootApiDb::selectMapIds(QString name)
     _selectMapIds->prepare("SELECT id FROM " + ApiDb::getMapsTableName() +
                            " WHERE display_name LIKE :name AND user_id=:userId");
   }
-
   _selectMapIds->bindValue(":name", name);
   _selectMapIds->bindValue(":user_id", (qlonglong)userId);
+  LOG_VARD(_selectMapIds->lastQuery());
 
   if (_selectMapIds->exec() == false)
   {
@@ -1020,17 +1138,6 @@ set<long> HootApiDb::selectMapIds(QString name)
   }
 
   return result;
-}
-
-void HootApiDb::transaction()
-{
-  // Queries must be created from within the current transaction.
-  _resetQueries();
-  if (!_db.transaction())
-  {
-    throw HootException(_db.lastError().text());
-  }
-  _inTransaction = true;
 }
 
 QString HootApiDb::tableTypeToTableName(const TableType& tableType) const
@@ -1063,23 +1170,71 @@ QString HootApiDb::tableTypeToTableName(const TableType& tableType) const
 
 bool HootApiDb::mapExists(const long id)
 {
-  if (_mapExists == 0)
+  if (_mapExistsById == 0)
   {
-    _mapExists.reset(new QSqlQuery(_db));
-    _mapExists->prepare("SELECT display_name FROM " + ApiDb::getMapsTableName() +
+    _mapExistsById.reset(new QSqlQuery(_db));
+    _mapExistsById->prepare("SELECT display_name FROM " + ApiDb::getMapsTableName() +
                         " WHERE id = :mapId");
   }
-  _mapExists->bindValue(":mapId", (qlonglong)id);
-  if (_mapExists->exec() == false)
+  _mapExistsById->bindValue(":mapId", (qlonglong)id);
+  if (_mapExistsById->exec() == false)
   {
-    throw HootException(_mapExists->lastError().text());
+    throw HootException(_mapExistsById->lastError().text());
   }
 
-  return _mapExists->next();
+  return _mapExistsById->next();
+}
+
+bool HootApiDb::mapExists(const QString name)
+{
+  if (_mapExistsByName == 0)
+  {
+    _mapExistsByName.reset(new QSqlQuery(_db));
+    _mapExistsByName->prepare("SELECT id FROM " + ApiDb::getMapsTableName() +
+                              " WHERE display_name = :mapName");
+  }
+  _mapExistsByName->bindValue(":mapName", name);
+  if (_mapExistsByName->exec() == false)
+  {
+    throw HootException(_mapExistsByName->lastError().text());
+  }
+
+  return _mapExistsByName->next();
+}
+
+long HootApiDb::getMapIdByName(const QString name)
+{
+  //assuming unique name here
+  if (_getMapIdByName == 0)
+  {
+    _getMapIdByName.reset(new QSqlQuery(_db));
+    _getMapIdByName->prepare("SELECT id FROM " + ApiDb::getMapsTableName() +
+                             " WHERE display_name = :mapName");
+  }
+  _getMapIdByName->bindValue(":mapName", name);
+  if (_getMapIdByName->exec() == false)
+  {
+    throw HootException(_getMapIdByName->lastError().text());
+  }
+
+  long result = -1;
+  if (_getMapIdByName->next())
+  {
+    bool ok;
+    result = _getMapIdByName->value(0).toLongLong(&ok);
+    if (!ok)
+    {
+      throw HootException(_getMapIdByName->lastError().text());
+    }
+  }
+  _getMapIdByName->finish();
+  return result;
 }
 
 bool HootApiDb::changesetExists(const long id)
 {
+  LOG_DEBUG("Checking changeset exists...");
+
   const long mapId = _currMapId;
 
   _checkLastMapId(mapId);
@@ -1090,6 +1245,7 @@ bool HootApiDb::changesetExists(const long id)
       .arg(getChangesetsTableName(mapId)));
   }
   _changesetExists->bindValue(":changesetId", (qlonglong)id);
+  LOG_VARD(_changesetExists->lastQuery());
   if (_changesetExists->exec() == false)
   {
     throw HootException(_changesetExists->lastError().text());
@@ -1098,53 +1254,9 @@ bool HootApiDb::changesetExists(const long id)
   return _changesetExists->next();
 }
 
-long HootApiDb::numElements(const ElementType& elementType)
+QString HootApiDb::elementTypeToElementTableName(const ElementType& elementType) const
 {
-  _numTypeElementsForMap.reset(new QSqlQuery(_db));
-  _numTypeElementsForMap->prepare(
-    "SELECT COUNT(*) FROM " + tableTypeToTableName(TableType::fromElementType(elementType)));
-  if (_numTypeElementsForMap->exec() == false)
-  {
-    LOG_ERROR(_numTypeElementsForMap->executedQuery());
-    LOG_ERROR(_numTypeElementsForMap->lastError().text());
-    throw HootException(_numTypeElementsForMap->lastError().text());
-  }
-
-  long result = -1;
-  if (_numTypeElementsForMap->next())
-  {
-    bool ok;
-    result = _numTypeElementsForMap->value(0).toLongLong(&ok);
-    if (!ok)
-    {
-      throw HootException("Count not retrieve count for element type: " + elementType.toString());
-    }
-  }
-  _numTypeElementsForMap->finish();
-  return result;
-}
-
-boost::shared_ptr<QSqlQuery> HootApiDb::selectElements(const ElementType& elementType)
-{
-  const long mapId = _currMapId;
-  _selectElementsForMap.reset(new QSqlQuery(_db));
-  _selectElementsForMap->setForwardOnly(true);
-
-  QString sql = "SELECT * FROM " + tableTypeToTableName(TableType::fromElementType(elementType));
-  LOG_DEBUG(QString("SERVICES: Result sql query= "+sql));
-
-  _selectElementsForMap->prepare(sql);
-  _selectElementsForMap->bindValue(":mapId", (qlonglong)mapId);
-
-  if (_selectElementsForMap->exec() == false)
-  {
-    QString err = _selectElementsForMap->lastError().text();
-    throw HootException("Error selecting elements of type: " + elementType.toString() +
-      " for map ID: " + QString::number(mapId) + " Error: " + err);
-  }
-  LOG_VARD(_selectElementsForMap->numRowsAffected());
-  LOG_VARD(_selectElementsForMap->executedQuery());
-  return _selectElementsForMap;
+  return tableTypeToTableName(TableType::fromElementType(elementType));
 }
 
 vector<long> HootApiDb::selectNodeIdsForWay(long wayId)
@@ -1206,11 +1318,11 @@ vector<RelationData::Entry> HootApiDb::selectMembersForRelation(long relationId)
     }
     else
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN("Invalid relation member type: " + memberType + ".  Skipping relation member.");
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }
@@ -1224,6 +1336,8 @@ vector<RelationData::Entry> HootApiDb::selectMembersForRelation(long relationId)
 void HootApiDb::updateNode(const long id, const double lat, const double lon, const long version,
                            const Tags& tags)
 {
+  LOG_TRACE("Updating node: " << id << "...");
+
   const long mapId = _currMapId;
   _flushBulkInserts();
 
@@ -1261,6 +1375,8 @@ void HootApiDb::updateNode(const long id, const double lat, const double lon, co
 
 void HootApiDb::updateRelation(const long id, const long version, const Tags& tags)
 {
+  LOG_TRACE("Updating relation: " << id << "...");
+
   const long mapId = _currMapId;
   _flushBulkInserts();
   _checkLastMapId(mapId);
@@ -1293,6 +1409,8 @@ void HootApiDb::updateRelation(const long id, const long version, const Tags& ta
 
 void HootApiDb::updateWay(const long id, const long version, const Tags& tags)
 {
+  LOG_TRACE("Updating way: " << id << "...");
+
   const long mapId = _currMapId;
   _flushBulkInserts();
   _checkLastMapId(mapId);
@@ -1332,6 +1450,8 @@ bool HootApiDb::insertWay(const Tags &tags, long &assignedId)
 
 bool HootApiDb::insertWay(const long wayId, const Tags &tags)
 {
+  LOG_TRACE("Inserting way: " << wayId << "...");
+
   const long mapId = _currMapId;
 
   double start = Tgs::Time::getTime();
@@ -1370,6 +1490,8 @@ bool HootApiDb::insertWay(const long wayId, const Tags &tags)
 
 void HootApiDb::insertWayNodes(long wayId, const vector<long>& nodeIds)
 {
+  LOG_TRACE("Inserting way nodes for way: " << wayId << "...");
+
   const long mapId = _currMapId;
   double start = Tgs::Time::getTime();
 
@@ -1470,6 +1592,32 @@ QString HootApiDb::_getRenderDBName(long mapId)
   }
 
   return (dbName + "_renderdb_" + mapIdNumber);
+}
+
+QUrl HootApiDb::getBaseUrl()
+{
+  // read the DB values from the DB config file.
+  Settings s = readDbConfig();
+  QUrl result;
+  result.setScheme("hootapidb");
+  result.setHost(s.get("DB_HOST").toString());
+  result.setPort(s.get("DB_PORT").toInt());
+  result.setUserName(s.get("DB_USER").toString());
+  result.setPassword(s.get("DB_PASSWORD").toString());
+  result.setPath("/" + s.get("DB_NAME").toString());
+  return result;
+}
+
+QString HootApiDb::removeLayerName(const QString url)
+{
+  QStringList urlParts =  url.split("/");
+  QString modifiedUrl;
+  for (int i = 0; i < urlParts.size() - 1; i++)
+  {
+    modifiedUrl += urlParts[i] + "/";
+  }
+  modifiedUrl.chop(1);
+  return modifiedUrl;
 }
 
 }

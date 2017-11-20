@@ -1,0 +1,23 @@
+[[multiary-conflate]]
+== multiary-conflate
+
+=== Description
+
+Conflate two or more input sources into a single output. Only POIs are
+supported at this time.
+
+* +inputs+ - 2 or more input files to be conflated.
+* +output+ - The output path.
+
+=== Usage
+
+--------------------------------------
+multiary-conflate (input1) (input2) [input3, ...] (output)
+---------------------------------
+
+==== Example
+
+--------------------------------------
+hoot multiary-conflate input1.osm input2.osm input3.osm output.osm
+--------------------------------------
+

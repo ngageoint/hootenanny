@@ -40,6 +40,7 @@
 #include <boost/property_tree/ptree.hpp>
 
 // Hoot
+#include <hoot/core/util/ConfigOptions.h>
 #include "hoot/core/OsmMap.h"
 #include "hoot/core/io/OsmMapReader.h"
 
@@ -90,7 +91,7 @@ namespace hoot
  *   "   'lon': -3.0,                        \n"
  *   "   'tags': {                           \n"
  *   "     'highway': 'bus_stop',            \n"
- *   "     'name': 'Micah\\'s Street'        \n"
+ *   "     'name': 'Mike\\'s Street'        \n"
  *   "   }                                   \n"
  *   " }                                     \n"
  *   "]                                      \n"
@@ -166,6 +167,13 @@ public:
   OsmMapPtr loadFromString(QString jsonStr);
 
   /**
+   * @brief loadFromPtree - Builds a map from the supplied boost property tree
+   * @param ptree - input boost property tree
+   * @return Smart pointer to the OSM map
+   */
+  OsmMapPtr loadFromPtree(const boost::property_tree::ptree &tree);
+
+  /**
    * @brief loadFromFile - Reads the whole file as a string, passes it
    *        to loadFromString()
    * @param path - Path to file
@@ -197,8 +205,22 @@ public:
    */
   QString getCopyright() { return _copyright; }
 
-private:
+  /**
+   * @brief scrubQuotes Converts single quotes to double quotes, and escaped
+   *         apostrophes to regular apostrophes
+   * @param jsonStr proper JSON string
+   */
+  static void scrubQuotes(QString &jsonStr);
 
+  /**
+   * @brief scrubBigInts Ensures that we have quotes around big integers.
+   *        Numbers > 2^31 seem to cause trouble with the boost property_tree
+   *        json parser in boost 1.41
+   * @param jsonStr string upon which we operate
+   */
+  static void scrubBigInts(QString &jsonStr);
+
+protected:
   // Items to conform to OsmMapReader ifc
   Status _defaultStatus;
   bool _useDataSourceIds;
@@ -218,6 +240,8 @@ private:
   bool _isWeb;
   QFile _file;
 
+  OsmMapPtr _map;
+
   /**
    * @brief _loadJSON Loads JSON into a boost property tree
    * @param jsonStr String to load
@@ -227,36 +251,29 @@ private:
   /**
    * @brief parseOverpassJson Traverses our property tree and adds
    *        elements to the map
-   * @param pMap Append elements to this map
    */
-  void _parseOverpassJson(OsmMapPtr pMap);
+  void _parseOverpassJson();
 
   /**
    * @brief _parseOverpassNode Reads node info out of the property tree and
    *        builds a Node object. Adds the node to the map.
    * @param item Property Tree (likely a sub-tree)
-   * @param pMap Map to which we add the node
    */
-  void _parseOverpassNode(const boost::property_tree::ptree &item,
-                          OsmMapPtr pMap);
+  void _parseOverpassNode(const boost::property_tree::ptree &item);
 
   /**
    * @brief _parseOverpassWay Reads way info out of the property tree and
    *        builds a Way object. Adds the way to the map.
    * @param item Property Tree (or sub-tree)
-   * @param pMap Map to which we add the way
    */
-  void _parseOverpassWay(const boost::property_tree::ptree &item,
-                         OsmMapPtr pMap);
+  void _parseOverpassWay(const boost::property_tree::ptree &item);
 
   /**
    * @brief _parseOverpassRelation Reads relation info out of the property tree
    *        and builds a Relation object. Adds relation to the map.
    * @param item Property Tree (likely a subtree)
-   * @param pMap Map to which we add the Relation
    */
-  void _parseOverpassRelation(const boost::property_tree::ptree &item,
-                              OsmMapPtr pMap);
+  void _parseOverpassRelation(const boost::property_tree::ptree &item);
 
   /**
    * @brief _addTags Reads tags from the given ptree, and adds them to the
@@ -267,23 +284,8 @@ private:
   void _addTags(const boost::property_tree::ptree &item,
                 hoot::ElementPtr pElement);
 
-  /**
-   * @brief _scrubQuotes Converts single quotes to double quotes, and escaped
-   *         apostrophes to regular apostrophes
-   * @param jsonStr proper JSON string
-   */
-  void _scrubQuotes(QString &jsonStr);
-
-  /**
-   * @brief _scrubBigInts Ensures that we have quotes around big integers.
-   *        Numbers > 2^31 seem to cause trouble with the boost property_tree
-   *        json parser in boost 1.41
-   * @param jsonStr string upon which we operate
-   */
-  void _scrubBigInts(QString &jsonStr);
-
 };
 
-} // end namespace hoot
+}
 
 #endif // OSM_JSON_READER_H

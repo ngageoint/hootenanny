@@ -39,7 +39,7 @@ namespace hoot
 
 unsigned int DecomposeBuildingRelationsVisitor::logWarnCount = 0;
 
-HOOT_FACTORY_REGISTER(ElementVisitor, DecomposeBuildingRelationsVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, DecomposeBuildingRelationsVisitor)
 
 DecomposeBuildingRelationsVisitor::DecomposeBuildingRelationsVisitor()
 {
@@ -69,11 +69,11 @@ void DecomposeBuildingRelationsVisitor::_decomposeBuilding(const boost::shared_p
     r->removeElement(eid);
     if (eid.getType() == ElementType::Node)
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN("Unexpected node encountered in building relation. " << r->getElementId());
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }
@@ -87,11 +87,11 @@ void DecomposeBuildingRelationsVisitor::_decomposeBuilding(const boost::shared_p
     }
     else if (members[i].getRole() != MetadataTags::RolePart())
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN("Encountered an unexpected role in a building relation. " << r->getElementId());
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }

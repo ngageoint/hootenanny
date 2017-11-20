@@ -27,16 +27,9 @@
 
 #include "OsmXmlReader.h"
 
-#include <cstdlib> // std::system()
-#include <cstdio> // for std::remove()
-
-// Boost
-using namespace boost;
-#include <boost/lexical_cast.hpp>
-
 // Hoot
 #include <hoot/core/util/Exception.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Tags.h>
@@ -48,6 +41,7 @@ using namespace boost;
 #include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/util/MapProjector.h>
 
 // Qt
 #include <QBuffer>
@@ -55,24 +49,31 @@ using namespace boost;
 
 // Standard
 #include <iostream>
-using namespace std;
+#include <cstdlib> // std::system()
+#include <cstdio> // for std::remove()
 
 namespace hoot
 {
-using namespace elements;
 
 unsigned int OsmXmlReader::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapReader, OsmXmlReader)
 
-OsmXmlReader::OsmXmlReader()
+OsmXmlReader::OsmXmlReader() :
+_status(Status::Invalid),
+_circularError(-1),
+_keepFileStatus(ConfigOptions().getReaderKeepFileStatus()),
+_useFileStatus(ConfigOptions().getReaderUseFileStatus()),
+_useDataSourceId(false),
+_addSourceDateTime(ConfigOptions().getReaderAddSourceDatetime()),
+_inputCompressed(false),
+_preserveAllTags(ConfigOptions().getReaderPreserveAllTags())
 {
-  _status = hoot::Status::Invalid;
-  _circularError = -1;
-  _keepFileStatus = ConfigOptions().getReaderKeepFileStatus();
-  _useFileStatus = ConfigOptions().getReaderUseFileStatus();
-  _useDataSourceId = false;
-  _addSourceDateTime = ConfigOptions().getReaderAddSourceDatetime();
+}
+
+OsmXmlReader::~OsmXmlReader()
+{
+  close();
 }
 
 void OsmXmlReader::_parseTimeStamp(const QXmlAttributes &attributes)
@@ -83,12 +84,12 @@ void OsmXmlReader::_parseTimeStamp(const QXmlAttributes &attributes)
   {
     _element->setTag(MetadataTags::SourceDateTime(),attributes.value("timestamp"));
   }
-
 }
 
 void OsmXmlReader::_createNode(const QXmlAttributes &attributes)
 {
   long id = _parseLong(attributes.value("id"));
+  LOG_VART(id);
   long newId;
   if (_useDataSourceId)
   {
@@ -98,7 +99,9 @@ void OsmXmlReader::_createNode(const QXmlAttributes &attributes)
   {
     newId = _map->createNextNodeId();
   }
+  LOG_VART(newId);
   _nodeIdMap.insert(id, newId);
+
   double x = _parseDouble(attributes.value("lon"));
   double y = _parseDouble(attributes.value("lat"));
 
@@ -130,8 +133,8 @@ void OsmXmlReader::_createNode(const QXmlAttributes &attributes)
     uid = _parseDouble(attributes.value("uid"));
   }
 
-  _element.reset(new Node(_status, newId, x, y, _circularError, changeset, version, timestamp,
-                          user, uid));
+  _element =
+    Node::newSp(_status, newId, x, y, _circularError, changeset, version, timestamp, user, uid);
 
   if (_element->getTags().getInformationCount() > 0)
   {
@@ -172,8 +175,8 @@ void OsmXmlReader::_createRelation(const QXmlAttributes &attributes)
     uid = _parseDouble(attributes.value("uid"));
   }
 
-  _element.reset(new Relation(_status, newId, _circularError, "", changeset, version, timestamp,
-                              user, uid));
+  _element.reset(
+    new Relation(_status, newId, _circularError, "", changeset, version, timestamp, user, uid));
 
   _parseTimeStamp(attributes);
 }
@@ -193,8 +196,8 @@ void OsmXmlReader::_createWay(const QXmlAttributes &attributes)
   }
   _wayIdMap.insert(_wayId, newId);
 
-  // check the next 3 attributes to see if a value exist, if not, assign a default since these are not officially required by the DTD
-  // check the next 3 attributes to see if a value exist, if not, assign a default since these are not officially required by the DTD
+  // check the next 3 attributes to see if a value exist, if not, assign a default since
+  // these are not officially required by the DTD
   long version = ElementData::VERSION_EMPTY;
   if (attributes.value("version") != "")
   {
@@ -221,8 +224,8 @@ void OsmXmlReader::_createWay(const QXmlAttributes &attributes)
     uid = _parseDouble(attributes.value("uid"));
   }
 
-  _element.reset(new Way(_status, newId, _circularError, changeset, version, timestamp, user,
-                         uid));
+  _element.reset(
+    new Way(_status, newId, _circularError, changeset, version, timestamp, user, uid));
 
   _parseTimeStamp(attributes);
 }
@@ -242,7 +245,7 @@ bool OsmXmlReader::isSupported(QString url)
   const QString validExtensions[numExtensions] = { ".osm", ".osm.bz2", ".osm.gz" };
   const QString checkString( url.toLower() );
 
-  // Ticket 5871: support compressed osm files
+  // support compressed osm files
   for ( int i = 0; i < numExtensions; ++ i )
   {
     if ( checkString.endsWith(validExtensions[i]) == true )
@@ -262,7 +265,7 @@ double OsmXmlReader::_parseDouble(QString s)
 
   if (ok == false)
   {
-      throw Exception("Error parsing double: " + s);
+    throw Exception("Error parsing double: " + s);
   }
 
   return result;
@@ -275,7 +278,7 @@ long OsmXmlReader::_parseLong(QString s)
 
   if (ok == false)
   {
-      throw Exception("Error parsing long: " + s);
+    throw Exception("Error parsing long: " + s);
   }
 
   return result;
@@ -288,29 +291,7 @@ int OsmXmlReader::_parseInt(QString s)
 
   if (ok == false)
   {
-      throw Exception("Error parsing int: " + s);
-  }
-
-  return result;
-}
-
-Status OsmXmlReader::_parseStatus(QString s)
-{
-  Status result;
-
-  if (s.length() > 2)
-  {
-    // Try parsing the status as a string, not an int
-    result = Status::fromString(s);
-  }
-  else
-  {
-    result = Status((Status::Type)_parseInt(s));
-  }
-
-  if (result.getEnum() < Status::Invalid || result.getEnum() > Status::Conflated)
-  {
-    throw HootException(QObject::tr("Invalid status value: %1").arg(s));
+    throw Exception("Error parsing int: " + s);
   }
 
   return result;
@@ -323,56 +304,13 @@ void OsmXmlReader::open(QString url)
 
 void OsmXmlReader::read(OsmMapPtr map)
 {
-  _osmFound = false;
-
-  _missingNodeCount = 0;
-  _missingWayCount = 0;
-  _badAccuracyCount = 0;
+  finalizePartial();
   _map = map;
 
-  // Ticket 5871: uncompress .osm.bz2 or .osm.gz files before processing
-  QString originalFile;
-  if ( _path.endsWith(".osm.bz2") == true )
+  if (_path.endsWith(".osm.bz2") || _path.endsWith(".osm.gz"))
   {
-    originalFile = _path;
-    _path.chop(std::strlen(".bz2"));
-
-    // "man bunzip2" confirms success return code is zero
-    // -f option decompresses file even if decompressed file is already there
-    // -k option is "keep", meaning don't delete input .osm.bz2
-    const std::string cmd(std::string("bunzip2 -fk ") + originalFile.toStdString());
-    LOG_DEBUG("Running uncompress command: " << cmd);
-
-    int retVal;
-    if ( (retVal = std::system(cmd.c_str())) != 0 )
-    {
-      QString error = QString("Error %1 returned from uncompress command: %2").arg(retVal).
-        arg(QString::fromStdString(cmd));
-      throw HootException(error);
-    }
-
-    LOG_DEBUG("Uncompress succeeded!");
-  }
-  else if ( _path.endsWith(".osm.gz") == true )
-  {
-    originalFile = _path;
-    _path.chop(std::strlen(".gz"));
-
-    // "man gzip" confirms success return code is zero
-    //  -d option is "decompress"
-    //  -k option is "keep," meaning don't delete input .osm.gz
-    const std::string cmd(std::string("gzip -d -k ") + originalFile.toStdString());
-    LOG_DEBUG("Running uncompress command: " << cmd);
-
-    int retVal;
-    if ( (retVal = std::system(cmd.c_str())) != 0 )
-    {
-      QString error = QString("Error %1 returned from uncompress command: %2").arg(retVal).
-        arg(QString::fromStdString(cmd));
-      throw HootException(error);
-    }
-
-    LOG_DEBUG("Uncompress succeeded!");
+    _inputCompressed = true;
+    _uncompressInput();
   }
 
   // do xml parsing
@@ -381,26 +319,18 @@ void OsmXmlReader::read(OsmMapPtr map)
   reader.setErrorHandler(this);
 
   QFile file(_path);
-  if (!file.open(QFile::ReadOnly | QFile::Text)) {
-      throw Exception(QObject::tr("Error opening OSM file for parsing: %1").arg(_path));
+  if (!file.open(QFile::ReadOnly | QFile::Text))
+  {
+    throw Exception(QObject::tr("Error opening OSM file for parsing: %1").arg(_path));
   }
   LOG_DEBUG("File " << _path << " opened for read");
 
   QXmlInputSource xmlInputSource(&file);
-
   if (reader.parse(xmlInputSource) == false)
   {
-      throw HootException(_errorString);
+    throw HootException(_errorString);
   }
   file.close();
-
-  // Ticket 5871: if we did have to decompress, delete the decompressed file when we're done
-  if ( originalFile.length() > 0 )
-  {
-    // Delete the temp file
-    std::remove(_path.toStdString().c_str());
-    LOG_DEBUG("Removed decompressed file " << _path);
-  }
 
   ReportMissingElementsVisitor visitor;
   _map->visitRw(visitor);
@@ -410,11 +340,7 @@ void OsmXmlReader::read(OsmMapPtr map)
 
 void OsmXmlReader::readFromString(QString xml, OsmMapPtr map)
 {
-  _osmFound = false;
-
-  _missingNodeCount = 0;
-  _missingWayCount = 0;
-  _badAccuracyCount = 0;
+  finalizePartial();
   _map = map;
 
   // do xml parsing
@@ -453,73 +379,106 @@ const QString& OsmXmlReader::_saveMemory(const QString& s)
 }
 
 bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
-                             const QString & /* localName */,
-                             const QString &qName,
-                             const QXmlAttributes &attributes)
+                                const QString & /* localName */,
+                                const QString &qName,
+                                const QXmlAttributes &attributes)
 {
   try
   {
-      if (!_osmFound)
+    if (!_osmFound)
+    {
+      if (qName != "osm")
       {
-          if (qName != "osm")
-          {
-              throw Exception("The file is not an OSM file.");
-          }
-          else
-          {
-              _osmFound = true;
-              if (attributes.value("version") != "0.6")
-              {
-                  throw Exception("Only version 0.6 OSM files are supported.");
-              }
-          }
+        throw Exception("The file is not an OSM file.");
       }
+      else
+      {
+        _osmFound = true;
+        if (attributes.value("version") != "0.6")
+        {
+          throw Exception("Only version 0.6 OSM files are supported.");
+        }
+      }
+    }
 
-      if (qName == "node")
+    if (qName == QLatin1String("node"))
+    {
+      if (attributes.value("action") != QLatin1String("delete"))
       {
-        if (attributes.value("action") != "delete")
-        {
-          _createNode(attributes);
-        }
-        else
-        {
-          _element.reset();
-        }
+        _createNode(attributes);
       }
-      else if (qName == "way")
+      else
       {
-        if (attributes.value("action") != "delete")
-        {
-          _createWay(attributes);
-        }
-        else
-        {
-          _element.reset();
-        }
+        _element.reset();
       }
-      else if (qName == "relation")
+    }
+    else if (qName == QLatin1String("way"))
+    {
+      if (attributes.value("action") != QLatin1String("delete"))
       {
-        if (attributes.value("action") != "delete")
-        {
-          _createRelation(attributes);
-        }
-        else
-        {
-          _element.reset();
-        }
+        _createWay(attributes);
       }
-      else if (qName == "nd" && _element)
+      else
       {
-        long ref = _parseLong(attributes.value("ref"));
+        _element.reset();
+      }
+    }
+    else if (qName == QLatin1String("relation"))
+    {
+      if (attributes.value("action") != QLatin1String("delete"))
+      {
+        _createRelation(attributes);
+      }
+      else
+      {
+        _element.reset();
+      }
+    }
+    else if (qName == QLatin1String("nd") && _element)
+    {
+      long ref = _parseLong(attributes.value("ref"));
 
+      if (_nodeIdMap.contains(ref) == false)
+      {
+        _missingNodeCount++;
+        if (logWarnCount < Log::getWarnMessageLimit())
+        {
+          LOG_WARN("Missing node (" << ref << ") in way (" << _wayId << ").");
+        }
+        else if (logWarnCount == Log::getWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
+      }
+      else
+      {
+        long newRef = _nodeIdMap.value(ref);
+        //LOG_TRACE("Adding way node: " << newRef << "...");
+
+        WayPtr w = boost::dynamic_pointer_cast<Way, Element>(_element);
+
+        w->addNode(newRef);
+      }
+    }
+    else if (qName == QLatin1String("member") && _element)
+    {
+      long ref = _parseLong(attributes.value("ref"));
+      QString type = attributes.value("type");
+      QString role = attributes.value("role");
+
+      RelationPtr r = boost::dynamic_pointer_cast<Relation, Element>(_element);
+
+      if (type == QLatin1String("node"))
+      {
         if (_nodeIdMap.contains(ref) == false)
         {
           _missingNodeCount++;
-          if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+          if (logWarnCount < Log::getWarnMessageLimit())
           {
-            LOG_WARN("Missing node (" << ref << ") in way (" << _wayId << ").");
+            LOG_WARN("Missing node (" << ref << ") in relation (" << _relationId << ").");
           }
-          else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+          else if (logWarnCount == Log::getWarnMessageLimit())
           {
             LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
           }
@@ -528,99 +487,74 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
         else
         {
           long newRef = _nodeIdMap.value(ref);
-
-          WayPtr w = boost::dynamic_pointer_cast<Way, Element>(_element);
-
-          w->addNode(newRef);
+          //LOG_TRACE("Adding relation node member: " << newRef << "...");
+          r->addElement(role, ElementType::Node, newRef);
         }
       }
-      else if (qName == "member" && _element)
+      else if (type == QLatin1String("way"))
       {
-        long ref = _parseLong(attributes.value("ref"));
-        QString type = attributes.value("type");
-        QString role = attributes.value("role");
-
-        RelationPtr r = boost::dynamic_pointer_cast<Relation, Element>(_element);
-
-        if (type == "node")
+        if (_wayIdMap.contains(ref) == false)
         {
-          if (_nodeIdMap.contains(ref) == false)
+          _missingWayCount++;
+          if (logWarnCount < Log::getWarnMessageLimit())
           {
-            _missingNodeCount++;
-            if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
-            {
-              LOG_WARN("Missing node (" << ref << ") in relation (" << _relationId << ").");
-            }
-            else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
-            {
-              LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-            }
-            logWarnCount++;
+            LOG_WARN("Missing way (" << ref << ") in relation (" << _relationId << ").");
           }
-          else
-          {
-            long newRef = _nodeIdMap.value(ref);
-            r->addElement(role, ElementType::Node, newRef);
-          }
-        }
-        else if (type == "way")
-        {
-          if (_wayIdMap.contains(ref) == false)
-          {
-            _missingWayCount++;
-            if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
-            {
-              LOG_WARN("Missing way (" << ref << ") in relation (" << _relationId << ").");
-            }
-            else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
-            {
-              LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-            }
-            logWarnCount++;
-          }
-          else
-          {
-            long newRef = _wayIdMap.value(ref);
-            r->addElement(role, ElementType::Way, newRef);
-          }
-        }
-        else if (type == "relation")
-        {
-          // relations may be out of order so we don't check for consistency at this stage.
-          long newRef = _getRelationId(ref);
-          r->addElement(role, ElementType::Relation, newRef);
-        }
-        else
-        {
-          if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
-          {
-            LOG_WARN("Found a relation member with unexpected type: " << type << " in relation ("
-                     << _relationId << ")");
-          }
-          else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+          else if (logWarnCount == Log::getWarnMessageLimit())
           {
             LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
           }
           logWarnCount++;
         }
+        else
+        {
+          long newRef = _wayIdMap.value(ref);
+          //LOG_TRACE("Adding relation way member: " << newRef << "...");
+          r->addElement(role, ElementType::Way, newRef);
+        }
       }
-      else if (qName == "tag" && _element)
+      else if (type == QLatin1String("relation"))
       {
-        const QString& key = _saveMemory(attributes.value("k"));
-        const QString& value = _saveMemory(attributes.value("v"));
-
+        // relations may be out of order so we don't check for consistency at this stage.
+        long newRef = _getRelationId(ref);
+        //LOG_TRACE("Adding relation relation member: " << newRef << "...");
+        r->addElement(role, ElementType::Relation, newRef);
+      }
+      else
+      {
+        if (logWarnCount < Log::getWarnMessageLimit())
+        {
+          LOG_WARN("Found a relation member with unexpected type: " << type << " in relation ("
+                     << _relationId << ")");
+        }
+        else if (logWarnCount == Log::getWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
+      }
+    }
+    else if (qName == QLatin1String("tag") && _element)
+    {
+      const QString& key = _saveMemory(attributes.value("k").trimmed());
+      const QString& value = _saveMemory(attributes.value("v").trimmed());
+      //LOG_VART(key);
+      //LOG_VART(value);
+      if (!key.isEmpty() && !value.isEmpty())
+      {
         if (_useFileStatus && key == MetadataTags::HootStatus())
         {
-          _element->setStatus(_parseStatus(value));
+          _element->setStatus(Status::fromString(value));
 
           if (_keepFileStatus)  { _element->setTag(key, value); }
         }
-        else if (key == "type" && _element->getElementType() == ElementType::Relation)
+        else if (key == QLatin1String("type") &&
+                 _element->getElementType() == ElementType::Relation)
         {
           RelationPtr r = boost::dynamic_pointer_cast<Relation, Element>(_element);
           r->setType(value);
 
-          if (ConfigOptions().getReaderPreserveAllTags()) { _element->setTag(key, value); }
+          if (_preserveAllTags) { _element->setTag(key, value); }
         }
         else if (key == MetadataTags::Accuracy() || key == MetadataTags::ErrorCircular())
         {
@@ -656,60 +590,66 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
             if (isBad)
             {
               _badAccuracyCount++;
-              if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+              if (logWarnCount < Log::getWarnMessageLimit())
               {
                 LOG_WARN("Bad circular error value: " << value.toStdString());
               }
-              else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+              else if (logWarnCount == Log::getWarnMessageLimit())
               {
                 LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
               }
               logWarnCount++;
             }
           }
-          if (ConfigOptions().getReaderPreserveAllTags())
+          if (_preserveAllTags)
           {
+            //LOG_TRACE("setting tag with key: " << key << " and value: " << value);
             _element->setTag(key, value);
           }
         }
         else
         {
-          if (key != MetadataTags::HootId() && value != "")
+          if (key != MetadataTags::HootId() && !value.isEmpty())
           {
+            //LOG_TRACE("setting tag with key: " << key << " and value: " << value);
             _element->setTag(key, value);
           }
         }
       }
+    }
   }
   catch (const Exception& e)
   {
-      _errorString = e.what();
-      return false;
+    _errorString = e.what();
+    return false;
   }
 
   return true;
 }
 
 bool OsmXmlReader::endElement(const QString & /* namespaceURI */,
-                             const QString & /* localName */,
-                             const QString &qName)
+                              const QString & /* localName */,
+                              const QString &qName)
 {
   if (_element)
   {
-    if (qName == "node")
+    if (qName == QLatin1String("node"))
     {
-        NodePtr n = boost::dynamic_pointer_cast<Node, Element>(_element);
-        _map->addNode(n);
+      NodePtr n = boost::dynamic_pointer_cast<Node, Element>(_element);
+      _map->addNode(n);
+      LOG_VART(n);
     }
-    else if (qName == "way")
+    else if (qName == QLatin1String("way"))
     {
-        WayPtr w = boost::dynamic_pointer_cast<Way, Element>(_element);
-        _map->addWay(w);
+      WayPtr w = boost::dynamic_pointer_cast<Way, Element>(_element);
+      _map->addWay(w);
+      LOG_VART(w);
     }
-    else if (qName == "relation")
+    else if (qName == QLatin1String("relation"))
     {
-        RelationPtr r = boost::dynamic_pointer_cast<Relation, Element>(_element);
-        _map->addRelation(r);
+      RelationPtr r = boost::dynamic_pointer_cast<Relation, Element>(_element);
+      _map->addRelation(r);
+      LOG_VART(r);
     }
   }
 
@@ -739,5 +679,221 @@ long OsmXmlReader::_getRelationId(long fileId)
   return newId;
 }
 
+boost::shared_ptr<OGRSpatialReference> OsmXmlReader::getProjection() const
+{
+  if (!_wgs84)
+  {
+    _wgs84 = MapProjector::getInstance().createWgs84Projection();
+  }
+  return _wgs84;
+}
+
+void OsmXmlReader::_uncompressInput()
+{
+  // uncompress .osm.bz2 or .osm.gz files before processing
+
+  QString originalFile;
+  if (_path.endsWith(".osm.bz2") == true)
+  {
+    originalFile = _path;
+    _path.chop(std::strlen(".bz2"));
+
+    // "man bunzip2" confirms success return code is zero
+    // -f option decompresses file even if decompressed file is already there
+    // -k option is "keep", meaning don't delete input .osm.bz2
+    const std::string cmd(std::string("bunzip2 -fk ") + originalFile.toStdString());
+    LOG_DEBUG("Running uncompress command: " << cmd);
+
+    int retVal;
+    if ((retVal = std::system(cmd.c_str())) != 0)
+    {
+      QString error = QString("Error %1 returned from uncompress command: %2").arg(retVal).
+        arg(QString::fromStdString(cmd));
+      throw HootException(error);
+    }
+
+    LOG_DEBUG("Uncompress succeeded!");
+  }
+  else if (_path.endsWith(".osm.gz") == true)
+  {
+    originalFile = _path;
+    _path.chop(std::strlen(".gz"));
+
+    // "man gzip" confirms success return code is zero
+    //  -d option is "decompress"
+    //  -k option is "keep," meaning don't delete input .osm.gz
+    const std::string cmd(std::string("gzip -d -k ") + originalFile.toStdString());
+    LOG_DEBUG("Running uncompress command: " << cmd);
+
+    int retVal;
+    if ((retVal = std::system(cmd.c_str())) != 0)
+    {
+      QString error = QString("Error %1 returned from uncompress command: %2").arg(retVal).
+        arg(QString::fromStdString(cmd));
+      throw HootException(error);
+    }
+
+    LOG_DEBUG("Uncompress succeeded!");
+  }
+}
+
+QXmlAttributes OsmXmlReader::_streamAttributesToAttributes(
+  const QXmlStreamAttributes& streamAttributes)
+{
+  QXmlAttributes attributes;
+  for (QXmlStreamAttributes::const_iterator itr = streamAttributes.begin();
+       itr != streamAttributes.end(); ++itr)
+  {
+    const QXmlStreamAttribute streamAttribute = *itr;
+    attributes.append(
+      streamAttribute.qualifiedName().toString(), "", "", streamAttribute.value().toString());
+  }
+  return attributes;
+}
+
+bool OsmXmlReader::hasMoreElements()
+{
+  if (!_inputFile.isOpen())
+  {
+    finalizePartial();
+    //map needed for assigning new element ids only (not actually putting any of the elements that
+    //are read into this map, since this is the partial reading logic)
+    _map.reset(new OsmMap());
+
+    if (_path.endsWith(".osm.bz2") || _path.endsWith(".osm.gz"))
+    {
+      _inputCompressed = true;
+      _uncompressInput();
+    }
+
+    _inputFile.setFileName(_path);
+    if (!_inputFile.open(QFile::ReadOnly | QFile::Text))
+    {
+      throw Exception(QObject::tr("Error opening OSM file for parsing: %1").arg(_path));
+    }
+    _streamReader.setDevice(&_inputFile);
+
+    //check for a valid osm header as soon as the file is opened
+    while (!_foundOsmHeaderXmlStartElement() && !_streamReader.atEnd())
+    {
+      _streamReader.readNext();
+    }
+    if (!_osmFound)
+    {
+      throw HootException(_path + " is not an OSM file.");
+    }
+  }
+
+  //chew up tokens until we find a node/way/relation start element or read to the end of the file
+  while (!_foundOsmElementXmlStartElement() && !_streamReader.atEnd())
+  {
+    _streamReader.readNext();
+  }
+
+  if ((_streamReader.isEndElement() && _streamReader.name().toString() == "osm") ||
+       _streamReader.atEnd())
+  {
+    return false;
+  }
+  return true;
+}
+
+bool OsmXmlReader::_foundOsmHeaderXmlStartElement()
+{
+  //this is a little redundant with the logic at the beginning startElement
+
+  if (_streamReader.isStartElement() && _streamReader.name().toString() == "osm")
+  {
+    _osmFound = true;
+  }
+  if (_osmFound &&
+      _streamAttributesToAttributes(_streamReader.attributes()).value("version") != "0.6")
+  {
+    throw Exception("Only version 0.6 OSM files are supported.");
+  }
+  return _osmFound;
+}
+
+bool OsmXmlReader::_foundOsmElementXmlStartElement() const
+{
+  const QString xmlElementName = _streamReader.name().toString();
+  return
+    _streamReader.isStartElement() &&
+    (xmlElementName == QLatin1String("node") || xmlElementName == QLatin1String("way") ||
+     xmlElementName == QLatin1String("relation"));
+}
+
+bool OsmXmlReader::_foundOsmElementXmlEndElement() const
+{
+  const QString xmlElementName = _streamReader.name().toString();
+  return
+    _streamReader.isEndElement() &&
+    (xmlElementName == QLatin1String("node") || xmlElementName == QLatin1String("way") ||
+     xmlElementName == QLatin1String("relation"));
+}
+
+ElementPtr OsmXmlReader::readNextElement()
+{
+  //hasMoreElements should have always put us at a node/way/relation start xml element by this point
+  if (!_foundOsmElementXmlStartElement())
+  {
+    throw HootException("Call hasMoreElements before calling readNextElement.");
+  }
+
+  //chew up tokens until we find the end of the node/way/relation or read to the end of the file;
+  //if the osm file is valid, we should never read to the end of the file within this method, but
+  //the check is put in as a precaution to avoid an endless loop if the file is invalid
+  while (!_foundOsmElementXmlEndElement() && !_streamReader.atEnd())
+  {
+    //parse the start xml element; startElement is only interested in node/way/relation, tag,
+    //way nodes, or relation members...ignores the rest
+    if (_streamReader.isStartElement())
+    {
+      startElement(
+        "", "", _streamReader.qualifiedName().toString(),
+        //this attribute conversion isn't the best for performance...but will leave as is for now
+        _streamAttributesToAttributes(_streamReader.attributes()));
+    }
+
+    _streamReader.readNext();
+  }
+
+  //this should never happen here
+  if (_streamReader.atEnd())
+  {
+    throw HootException("Error reading XML file: readNextElement reached end of file.");
+  }
+
+  assert(_foundOsmElementXmlEndElement());
+
+  //we're parsed the entire node/way/relation, so return it
+  //LOG_TRACE("Parsing end xml element: " << _streamReader.name().toString());
+  assert(_element.get());
+  LOG_VART(_element);
+  return _element;
+}
+
+void OsmXmlReader::close()
+{
+  finalizePartial();
+  _inputFile.close();
+
+  if (_inputCompressed)
+  {
+    // Delete the temp file
+    std::remove(_path.toStdString().c_str());
+    LOG_DEBUG("Removed decompressed file " << _path);
+  }
+
+  _map.reset();
+}
+
+void OsmXmlReader::finalizePartial()
+{
+  _osmFound = false;
+  _missingNodeCount = 0;
+  _missingWayCount = 0;
+  _badAccuracyCount = 0;
+}
 
 }

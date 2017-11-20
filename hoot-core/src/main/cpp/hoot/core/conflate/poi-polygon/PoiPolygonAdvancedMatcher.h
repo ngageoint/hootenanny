@@ -64,7 +64,7 @@ private:
 
   QStringList _genericLandUseTagVals;
 
-  int _badGeomCount;
+  unsigned int _badGeomCount;
 
 };
 

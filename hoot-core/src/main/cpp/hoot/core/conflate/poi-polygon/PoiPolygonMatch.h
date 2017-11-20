@@ -50,9 +50,6 @@ class PoiPolygonMatch : public Match, public MatchDetails, public Configurable
 
 public:
 
-  static const unsigned int MATCH_EVIDENCE_THRESHOLD;
-  static const unsigned int REVIEW_EVIDENCE_THRESHOLD;
-
   PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
     boost::shared_ptr<const PoiPolygonRfClassifier> rf,
     const std::set<ElementId>& polyNeighborIds = std::set<ElementId>(),
@@ -119,13 +116,15 @@ public:
    */
   static void resetMatchDistanceInfo();
 
-  void setMatchDistanceThreshold(double distance) { _matchDistanceThreshold = distance; }
-  void setReviewDistanceThreshold(double distance) { _reviewDistanceThreshold = distance; }
-  void setNameScoreThreshold(double threshold) { _nameScoreThreshold = threshold; }
-  void setTypeScoreThreshold(double threshold) { _typeScoreThreshold = threshold; }
-  void setReviewIfMatchedTypes(const QStringList& types) { _reviewIfMatchedTypes = types; }
-  void setEnableAdvancedMatching(bool enabled) { _enableAdvancedMatching = enabled; }
-  void setEnableReviewReduction(bool enabled) { _enableReviewReduction = enabled; }
+  void setMatchDistanceThreshold(const double distance);
+  void setReviewDistanceThreshold(const double distance);
+  void setNameScoreThreshold(const double threshold);
+  void setTypeScoreThreshold(const double threshold);
+  void setReviewIfMatchedTypes(const QStringList& types);
+  void setEnableAdvancedMatching(const bool enabled) { _enableAdvancedMatching = enabled; }
+  void setEnableReviewReduction(const bool enabled) { _enableReviewReduction = enabled; }
+  void setMatchEvidenceThreshold(const int threshold) { _matchEvidenceThreshold = threshold; }
+  void setReviewEvidenceThreshold(const int threshold) { _reviewEvidenceThreshold = threshold; }
 
 private:
 
@@ -141,7 +140,11 @@ private:
   boost::shared_ptr<geos::geom::Geometry> _polyGeom;
   bool _e1IsPoi;
 
-  //Settings _settings;
+  //min number evidences pieces required to classify a match
+  unsigned int _matchEvidenceThreshold;
+  //min number evidences pieces required to classify a review; should be less than
+  //_matchEvidenceThreshold
+  unsigned int _reviewEvidenceThreshold;
 
   //measured distance between the two elements
   double _distance;

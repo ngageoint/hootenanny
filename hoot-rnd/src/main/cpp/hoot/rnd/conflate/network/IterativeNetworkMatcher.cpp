@@ -28,6 +28,7 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/rnd/conflate/network/EdgeMatch.h>
 
 #include "EdgeMatchSetFinder.h"
@@ -285,7 +286,7 @@ void IterativeNetworkMatcher::_createStubIntersection(OsmNetworkPtr na, OsmNetwo
     // if there are no unmatched edges, delete va
     if (edgeVMatch.size() > 0 && unmatched.size() == 0)
     {
-      LOG_INFO("Removing vertex: " << va);
+      LOG_TRACE("Removing vertex: " << va);
       na->removeVertex(va);
     }
     else

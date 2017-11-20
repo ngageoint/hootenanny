@@ -46,8 +46,8 @@ Feature: Advanced Conflation Options
         Then I click on "#hoot_general_conflation_options_label"
         And I should see element "#unify_optimizer_time_limit" with no value and placeholder "60"
         And I should see checkbox "OGR Split O2S" unchecked
-        And I should see checkbox "OGR TDS Add FCSubtype" checked
-        And I should see checkbox "OGR TDS Structure" checked
+        And I should see checkbox "OGR Esri FCSubtype" checked
+        And I should see checkbox "OGR Thematic Structure" checked
         And I should see checkbox "Duplicate Name Case Sensitive" checked
         And I should see element "#element_cache_size_node" with no value and placeholder "2000000"
         And I should see element "#element_cache_size_relation" with no value and placeholder "200000"
@@ -56,11 +56,11 @@ Feature: Advanced Conflation Options
         And I should see "Road Options"
         Then I click on "#hoot_road_options_label"
         And I should see checkbox "Enabled" checked
-        And I should see element "#hoot_road_opt_engine" with no value and placeholder "Unify"
-        And I should see element "#search_radius_highway" with no value and placeholder "-1"
-        And I should see element "#highway_matcher_heading_delta" with no value and placeholder "5.0"
-        And I should see element "#highway_matcher_max_angle" with no value and placeholder "60"
-        And I should see element "#way_merger_min_split_size" with no value and placeholder "5"
+        And I should see element "#hoot_road_opt_engine" with no value and placeholder "Network"
+        # And I should see element "#search_radius_highway" with no value and placeholder "-1"
+        # And I should see element "#highway_matcher_heading_delta" with no value and placeholder "5.0"
+        # And I should see element "#highway_matcher_max_angle" with no value and placeholder "60"
+        # And I should see element "#way_merger_min_split_size" with no value and placeholder "5"
         Then I click on "#hoot_road_options_label"
         And I should see "Building Options"
         And I click on "#hoot_building_options_label"
@@ -97,7 +97,7 @@ Feature: Advanced Conflation Options
         And I should see "Road Options"
         Then I click on "#hoot_road_options_label"
         And I should see checkbox "Enabled" checked
-        And I should see element "#hoot_road_opt_engine" with no value and placeholder "Unify"
+        And I should see element "#hoot_road_opt_engine" with no value and placeholder "Network"
         Then I click on "#hoot_road_options_label"
         And I should see "Building Options"
         And I should see "POI Options"

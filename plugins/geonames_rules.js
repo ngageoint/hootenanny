@@ -79,7 +79,7 @@ geonames.rules = {
         'BAYS':{'natural':'bay'}, //  bays: coastal indentations between two capes or headlands, larger than a cove but smaller than a gulf
         'BCH':{'natural':'beach'}, //  beach: a shore zone of coarse unconsolidated sediment that extends from the low-water line to the highest reach of storm waves
         'BCHS':{'natural':'beach'}, //  beaches: a shore zone of coarse unconsolidated sediment that extends from the low-water line to the highest reach of storm waves
-        'BCN':{'seamark:type':'beacon'}, //  beacon: a fixed artificial navigation mark
+        'BCN':{'man_made':'beacon'}, //  beacon: a fixed artificial navigation mark
         'BDG':{'bridge':'yes'}, //  bridge: a structure erected across an obstacle such as a stream, road, etc., in order to carry roads, railroads, and pedestrians across
         'BDGQ':{'destroyed:bridge':'yes'}, //  ruined bridge: a destroyed or decayed bridge which is no longer functional
         'BDLD':{'geological':'badlands'}, //  badlands: an area characterized by a maze of very closely spaced, deep, narrow, steep-sided ravines, and sharp crests and pinnacles
@@ -350,7 +350,7 @@ geonames.rules = {
         'MFGSG':{'building':'industrial','product':'sugar'}, //  sugar refinery: a facility for converting raw sugar into refined sugar
         'MGV':{'natural':'wetland','wetland':'mangrove'}, //  mangrove swamp: a tropical tidal mud flat characterized by mangrove vegetation
         'MILB':{'military':'base'}, //  military base: a place used by an army or other armed service for storing arms and supplies, and for accommodating and training troops, a base from which operations can be initiated
-        'MKT':{'amenity':'market_place'}, //  market: a place where goods are bought and sold at regular intervals
+        'MKT':{'amenity':'marketplace'}, //  market: a place where goods are bought and sold at regular intervals
         'MLM':{'building':'industrial','use':'ore_treatment'}, //  ore treatment plant: a facility for improving the metal content of ore by concentration
         'MLO':{'building':'industrial','product':'olive_oil'}, //  olive oil mill: a mill where oil is extracted from olives
         'ML':{'building':'industrial','use':'mill'}, //  mill(s): a building housing machines for transforming, shaping, finishing, grinding, or extracting products
@@ -386,7 +386,7 @@ geonames.rules = {
         'MTRO':{'railway':'station','station':'subway'}, //  metro station: metro station (Underground, Tube, or Metro)
         'MTS':{'natural':'mountain'}, //  mountains: a mountain range or a group of mountains or high ridges
         'MTU':{'natural':'undersea_mountain'}, //  mountain: a well-delineated subdivision of a large and complex positive feature
-        'MUS':{'amenity':'museum'}, //  museum: a building where objects of permanent interest in one or more of the arts and sciences are preserved and exhibited
+        'MUS':{'tourism':'museum'}, //  museum: a building where objects of permanent interest in one or more of the arts and sciences are preserved and exhibited
         'MVA':{'military':'maneuver_area'}, //  maneuver area: a tract of land where military field exercises are carried out
         'NKM':{'poi':'meander_neck'}, //  meander neck: a narrow strip of land between the two limbs of a meander loop at its narrowest point
         'NOV':{'amenity':'place_of_worship','building':'novitiate'}, //  novitiate: a religious house or school where novices are trained
@@ -479,7 +479,8 @@ geonames.rules = {
         'PRNQ':{'abandoned:amenity':'prison'}, //  abandoned prison: 
         'PROM':{'natural':'promontory'}, //  promontory(-ies): a bluff or prominent hill overlooking or projecting into a lowland
         'PRSH':{'place':'parish'}, //  parish: an ecclesiastical district
-        'PRT':{'landuse':'port'}, //  port: a place provided with terminal and transfer facilities for loading and discharging waterborne cargo or passengers, usually located in a harbor
+        // 'PRT':{'landuse':'port'}, //  port: a place provided with terminal and transfer facilities for loading and discharging waterborne cargo or passengers, usually located in a harbor
+        'PRT':{'port':'yes'}, //  port: a place provided with terminal and transfer facilities for loading and discharging waterborne cargo or passengers, usually located in a harbor
         'PRVU':{'place':'undersea_province'}, //  province: a region identifiable by a group of similar physiographic features whose characteristics are markedly in contrast with surrounding areas
         'PSH':{'power':'plant','landuse':'industrial','plant:type':'hydro'}, //  hydroelectric power station: a building where electricity is generated from water power
         'PS':{'power':'plant','landuse':'industrial'}, //  power station: a facility for generating electric power
@@ -680,20 +681,20 @@ geonames.rules = {
         'VINS':{'landuse':'vineyard'}, //  vineyards: plantings of grapevines
         'VLC':{'natural':'volcano'}, //  volcano: a conical elevation composed of volcanic materials with a crater at the top
         'VLSU':{'natural':'undersea_valleys'}, //  valleys: a relatively shallow, wide depression, the bottom of which usually has a continuous gradient
-        'WADB':{'waterway':'wadi','water:morphology':'bend'}, //  wadi bend: a conspicuously curved or bent segment of a wadi
+        'WADB':{'waterway':'river','intermittent':'yes','wadi':'yes','water:morphology':'bend'}, //  wadi bend: a conspicuously curved or bent segment of a wadi
         'WADJ':{'poi':'wadi_junction'}, //  wadi junction: a place where two or more wadies join
-        'WADM':{'waterway':'wadi','water:morphology':'mouth'}, //  wadi mouth: the lower terminus of a wadi where it widens into an adjoining floodplain, depression, or waterbody
-        'WADS':{'waterway':'wadi'}, //  wadies: valleys or ravines, bounded by relatively steep banks, which in the rainy season become watercourses; found primarily in North Africa and the Middle East
-        'WAD':{'waterway':'wadi'}, //  wadi: a valley or ravine, bounded by relatively steep banks, which in the rainy season becomes a watercourse; found primarily in North Africa and the Middle East
-        'WADX':{'waterway':'wadi_section'}, //  section of wadi:
+        'WADM':{'waterway':'river','intermittent':'yes','wadi':'yes','water:morphology':'mouth'}, //  wadi mouth: the lower terminus of a wadi where it widens into an adjoining floodplain, depression, or waterbody
+        'WADS':{'waterway':'river','intermittent':'yes','wadi':'yes'}, //  wadies: valleys or ravines, bounded by relatively steep banks, which in the rainy season become watercourses; found primarily in North Africa and the Middle East
+        'WAD':{'waterway':'river','intermittent':'yes','wadi':'yes'}, //  wadi: a valley or ravine, bounded by relatively steep banks, which in the rainy season becomes a watercourse; found primarily in North Africa and the Middle East
+        'WADX':{'poi':'wadi_section'}, //  section of wadi:
         'WALLA':{'historic':'wall'}, //  ancient wall: the remains of a linear defensive stone structure
         'WALL':{'barrier':'wall'}, //  wall: a thick masonry structure, usually enclosing a field or building, or forming the side of a structure
         'WEIR':{'waterway':'weir'}, //  weir(s): a small dam in a stream, designed to raise the water level or to divert stream flow through a desired channel
         'WHRF':{'waterway':'dock'}, //  wharf(-ves): a structure of open rather than solid construction along a shore or a bank which provides berthing for ships and cargo-handling facilities
         'WHRL':{'water':'whirlpool'}, //  whirlpool: a turbulent, rotating movement of water in a stream
         'WLLQ':{'abandoned:man_made':'well'}, //  abandoned well: 
-        'WLLS':{'waterway':'well'}, //  wells: cylindrical holes, pits, or tunnels drilled or dug down to a depth from which water, oil, or gas can be pumped or brought to the surface
-        'WLL':{'waterway':'well'}, //  well: a cylindrical hole, pit, or tunnel drilled or dug down to a depth from which water, oil, or gas can be pumped or brought to the surface
+        'WLLS':{'man_made':'well'}, //  wells: cylindrical holes, pits, or tunnels drilled or dug down to a depth from which water, oil, or gas can be pumped or brought to the surface
+        'WLL':{'man_made':'well'}, //  well: a cylindrical hole, pit, or tunnel drilled or dug down to a depth from which water, oil, or gas can be pumped or brought to the surface
         'WRCK':{'historic':'wreck'}, //  wreck: the site of the remains of a wrecked vessel
         'WTLDI':{'natural':'wetland','intermittent':'yes'}, //  intermittent wetland:
         'WTLD':{'natural':'wetland'}, //  wetland: an area subject to inundation, usually characterized by bog, marsh, or swamp vegetation

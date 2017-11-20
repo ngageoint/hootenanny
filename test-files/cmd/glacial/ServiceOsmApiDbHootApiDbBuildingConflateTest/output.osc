@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osmChange version="0.6" generator="hootenanny">
+    <delete>
+        <node id="2" version="1" lat="42.4832384999999988" lon="-71.4754999999999967">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="3" version="1" lat="42.4831999999999965" lon="-71.4756756000000024">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="6" version="1" lat="42.4841526000000016" lon="-71.4770000000000039">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="7" version="1" lat="42.4842294999999979" lon="-71.4770000000000039">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="10" version="1" lat="42.4851000000000028" lon="-71.4757943999999981">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="11" version="1" lat="42.4851000000000028" lon="-71.4758302000000043">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="12" version="1" lat="42.4834852999999981" lon="-71.4770000000000039">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="13" version="1" lat="42.4834759000000020" lon="-71.4770000000000039">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="14" version="1" lat="42.4844185999999979" lon="-71.4754999999999967">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="15" version="1" lat="42.4843514000000013" lon="-71.4754999999999967">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="16" version="1" lat="42.4847644000000031" lon="-71.4758463999999947">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="17" version="1" lat="42.4846294999999969" lon="-71.4758307999999971">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="18" version="1" lat="42.4846305000000015" lon="-71.4758156000000042">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="19" version="1" lat="42.4845982000000006" lon="-71.4758118999999965">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="20" version="1" lat="42.4845967999999985" lon="-71.4758336000000014">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="21" version="1" lat="42.4845528999999971" lon="-71.4758285000000058">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="22" version="1" lat="42.4845587000000009" lon="-71.4757369000000011">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="23" version="1" lat="42.4847243999999975" lon="-71.4757560000000041">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="24" version="1" lat="42.4847268999999983" lon="-71.4757158999999973">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="25" version="1" lat="42.4847600000000014" lon="-71.4757196999999991">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="26" version="1" lat="42.4847587000000004" lon="-71.4757402000000042">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="27" version="1" lat="42.4847710000000021" lon="-71.4757416000000063">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="28" version="1" lat="42.4849861000000004" lon="-71.4765016000000060">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="29" version="1" lat="42.4849093999999994" lon="-71.4764923000000039">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="30" version="1" lat="42.4849103999999969" lon="-71.4764770000000027">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="31" version="1" lat="42.4848923999999997" lon="-71.4764748000000054">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="32" version="1" lat="42.4848915000000034" lon="-71.4764887000000044">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="33" version="1" lat="42.4848203999999967" lon="-71.4764801999999975">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="34" version="1" lat="42.4848305000000011" lon="-71.4763265999999931">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="35" version="1" lat="42.4848732999999967" lon="-71.4763317000000029">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="36" version="1" lat="42.4848697999999985" lon="-71.4763846000000029">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="37" version="1" lat="42.4849001999999984" lon="-71.4763882999999964">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="38" version="1" lat="42.4849038999999991" lon="-71.4763315999999946">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="39" version="1" lat="42.4849966000000023" lon="-71.4763427000000036">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="40" version="1" lat="42.4840529000000018" lon="-71.4759126000000009">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="41" version="1" lat="42.4839661999999976" lon="-71.4760567999999950">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="42" version="1" lat="42.4839247999999969" lon="-71.4760114000000044">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="43" version="1" lat="42.4839520000000022" lon="-71.4759662000000020">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="44" version="1" lat="42.4840045999999987" lon="-71.4758596000000068">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="45" version="1" lat="42.4843095000000019" lon="-71.4765215000000040">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="46" version="1" lat="42.4842494999999971" lon="-71.4765045000000043">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="47" version="1" lat="42.4842592999999979" lon="-71.4764409000000001">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="48" version="1" lat="42.4842287999999968" lon="-71.4764322999999990">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="49" version="1" lat="42.4842484999999996" lon="-71.4763047000000000">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="50" version="1" lat="42.4843189999999993" lon="-71.4763245999999981">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="51" version="1" lat="42.4842993999999976" lon="-71.4764519999999948">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="52" version="1" lat="42.4843193999999968" lon="-71.4764576000000034">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="53" version="1" lat="42.4842139000000003" lon="-71.4769583000000068">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="60" version="1" lat="42.4845742999999985" lon="-71.4764294999999947">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="61" version="1" lat="42.4845876999999987" lon="-71.4763329000000027">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="62" version="1" lat="42.4847370999999967" lon="-71.4763705999999956">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="63" version="1" lat="42.4847184999999996" lon="-71.4765050999999971">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="64" version="1" lat="42.4845723000000035" lon="-71.4764681999999993">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="65" version="1" lat="42.4845703000000015" lon="-71.4764827000000054">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="66" version="1" lat="42.4845333999999966" lon="-71.4764732999999950">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="67" version="1" lat="42.4845406000000025" lon="-71.4764210000000020">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="68" version="1" lat="42.4850759999999994" lon="-71.4758523999999937">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="69" version="1" lat="42.4850429000000034" lon="-71.4757816999999989">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="70" version="1" lat="42.4850331999999966" lon="-71.4757876999999979">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="71" version="1" lat="42.4850214000000008" lon="-71.4757613000000021">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="72" version="1" lat="42.4850096999999991" lon="-71.4758570000000049">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="73" version="1" lat="42.4849643000000015" lon="-71.4758468999999934">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="74" version="1" lat="42.4849658999999988" lon="-71.4758334999999931">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="75" version="1" lat="42.4848648999999980" lon="-71.4758109999999931">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="76" version="1" lat="42.4848746999999989" lon="-71.4757247000000007">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="77" version="1" lat="42.4848929999999996" lon="-71.4757280999999978">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="78" version="1" lat="42.4848950000000016" lon="-71.4756974000000014">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="79" version="1" lat="42.4849219999999974" lon="-71.4757014000000055">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="80" version="1" lat="42.4849194999999966" lon="-71.4757326000000006">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="81" version="1" lat="42.4849935000000016" lon="-71.4757434999999930">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="82" version="1" lat="42.4849973999999975" lon="-71.4756954000000064">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="83" version="1" lat="42.4850323000000003" lon="-71.4757005999999961">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="84" version="1" lat="42.4850303999999994" lon="-71.4757230999999962">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="85" version="1" lat="42.4850679999999983" lon="-71.4757285999999965">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="86" version="1" lat="42.4843744000000001" lon="-71.4758642000000037">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="87" version="1" lat="42.4842745999999991" lon="-71.4758609000000007">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="88" version="1" lat="42.4842761999999965" lon="-71.4757701000000054">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="89" version="1" lat="42.4842543999999975" lon="-71.4757694000000043">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="90" version="1" lat="42.4842555999999973" lon="-71.4757048000000026">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="91" version="1" lat="42.4843771999999973" lon="-71.4757088000000067">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="92" version="1" lat="42.4834036999999967" lon="-71.4769809999999950">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="93" version="1" lat="42.4834105999999991" lon="-71.4769332000000048">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="94" version="1" lat="42.4833421000000016" lon="-71.4769150999999994">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="95" version="1" lat="42.4833549000000019" lon="-71.4768258999999944">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="96" version="1" lat="42.4834247000000005" lon="-71.4768442999999962">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="97" version="1" lat="42.4834163000000018" lon="-71.4769023000000061">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="98" version="1" lat="42.4834963999999999" lon="-71.4769232999999957">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="99" version="1" lat="42.4844183000000015" lon="-71.4755253999999951">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="100" version="1" lat="42.4843511999999990" lon="-71.4755241999999953">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="101" version="1" lat="42.4843094000000008" lon="-71.4765445000000028">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="102" version="1" lat="42.4842945999999984" lon="-71.4766350999999958">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="103" version="1" lat="42.4842226000000025" lon="-71.4766135999999932">
+            <tag k="hoot:status" v="0"/>
+        </node>
+        <node id="104" version="1" lat="42.4842373999999978" lon="-71.4765230999999943">
+            <tag k="hoot:status" v="0"/>
+        </node>
+    </delete>
+    <create>
+        <node id="-1" version="0" lat="42.4840441942981997" lon="-71.4759118000000058">
+            <tag k="hoot:id" v="128"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-2" version="0" lat="42.4839958942981966" lon="-71.4758589000000057">
+            <tag k="hoot:id" v="129"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-3" version="0" lat="42.4839574942982026" lon="-71.4760559999999998">
+            <tag k="hoot:id" v="130"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-4" version="0" lat="42.4839432942982000" lon="-71.4759655000000009">
+            <tag k="hoot:id" v="132"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-5" version="0" lat="42.4839363942980981" lon="-71.4759578999999974">
+            <tag k="hoot:id" v="133"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-6" version="0" lat="42.4839161942982031" lon="-71.4760105999999951">
+            <tag k="hoot:id" v="135"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+    </create>
+    <modify>
+        <way id="3" version="1">
+            <nd ref="5"/>
+            <nd ref="127"/>
+            <nd ref="126"/>
+            <nd ref="125"/>
+            <nd ref="124"/>
+            <nd ref="123"/>
+            <nd ref="122"/>
+            <nd ref="121"/>
+            <nd ref="120"/>
+            <nd ref="119"/>
+            <nd ref="4"/>
+            <tag k="width" v="9.8"/>
+            <tag k="source:ingest:datetime" v="2017-04-19T17:06:34.105Z"/>
+            <tag k="condition" v="functional"/>
+            <tag k="width:minimum_traveled_way" v="7.315200000000001"/>
+            <tag k="hoot:id" v="3"/>
+            <tag k="hoot:status" v="3"/>
+            <tag k="uuid" v="{c749fa63-2000-4490-a754-530cfdbb20c7}"/>
+            <tag k="source" v="MassNh_GIS;massgis_import_v0.1_20071009100433"/>
+            <tag k="name" v="Mohawk Drive"/>
+            <tag k="attribution" v="Office of Geographic and Environmental Information (MassGIS)"/>
+            <tag k="highway" v="tertiary"/>
+            <tag k="source:datetime" v="2007-10-15T15:32:17Z"/>
+            <tag k="lanes" v="2"/>
+            <tag k="surface" v="asphalt"/>
+            <tag k="massgis:way_id" v="181982"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+    </modify>
+    <modify>
+        <way id="15" version="1">
+            <nd ref="-4"/>
+            <nd ref="-6"/>
+            <nd ref="-3"/>
+            <nd ref="-1"/>
+            <nd ref="-2"/>
+            <nd ref="-5"/>
+            <nd ref="-4"/>
+            <tag k="source:ingest:datetime" v="2017-04-19T17:07:16.707Z"/>
+            <tag k="hoot:id" v="15"/>
+            <tag k="hoot:status" v="3"/>
+            <tag k="building" v="yes"/>
+            <tag k="uuid" v="{b40174d3-a4a4-4c78-82a1-f8092bd69d33}"/>
+            <tag k="source" v="MassNh_GIS"/>
+            <tag k="source:datetime" v="2012-12-15T01:53:48Z"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+    </modify>
+    <delete>
+        <way id="16" version="1">
+            <nd ref="39"/>
+            <nd ref="38"/>
+            <nd ref="37"/>
+            <nd ref="36"/>
+            <nd ref="35"/>
+            <nd ref="34"/>
+            <nd ref="33"/>
+            <nd ref="32"/>
+            <nd ref="31"/>
+            <nd ref="30"/>
+            <nd ref="29"/>
+            <nd ref="28"/>
+            <nd ref="39"/>
+            <tag k="source:ingest:datetime" v="2017-04-19T17:07:16.737Z"/>
+            <tag k="hoot:status" v="1"/>
+            <tag k="building" v="yes"/>
+            <tag k="source" v="MassNh_GIS"/>
+            <tag k="uuid" v="{cf34ffba-b6a4-4e64-b5d4-a296976451cb}"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+        <way id="17" version="1">
+            <nd ref="27"/>
+            <nd ref="26"/>
+            <nd ref="25"/>
+            <nd ref="24"/>
+            <nd ref="23"/>
+            <nd ref="22"/>
+            <nd ref="21"/>
+            <nd ref="20"/>
+            <nd ref="19"/>
+            <nd ref="18"/>
+            <nd ref="17"/>
+            <nd ref="16"/>
+            <nd ref="27"/>
+            <tag k="source:ingest:datetime" v="2017-04-19T17:07:16.793Z"/>
+            <tag k="hoot:status" v="1"/>
+            <tag k="building" v="yes"/>
+            <tag k="source" v="MassNh_GIS"/>
+            <tag k="uuid" v="{6d9cebf0-c8b3-4a61-a1ec-cb7a0bd27ff9}"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+    </delete>
+</osmChange>

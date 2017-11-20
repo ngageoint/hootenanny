@@ -1,53 +1,65 @@
-14:56:28.111 INFO  ...p/hoot/core/cmd/ConvertCmd.cpp(  83) Converting test-files/cmd/glacial/ConvertGeoNames.geonames to /dev/stdout...
-14:56:28.112 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/cmd/glacial/ConvertGeoNames.geonames ...
-14:56:28.112 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::TranslationOp
+23:11:03.219 INFO  ...p/hoot/core/cmd/ConvertCmd.cpp(  87) Converting test-files/cmd/quick/ConvertGeoNames.geonames to /dev/stdout...
+23:11:03.220 INFO  ...ore/io/OsmMapReaderFactory.cpp( 138) Loading map from test-files/cmd/quick/ConvertGeoNames.geonames...
+23:11:03.221 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::TranslationOp
+23:11:03.237 INFO  ...ore/io/OsmMapWriterFactory.cpp( 108) Writing map to /dev/stdout...
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="29.04518" minlon="25.58912" maxlat="30.9579" maxlon="34.87893"/>
     <node visible="true" id="293683" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.1234800000000007" lon="34.7174499999999995">
+        <tag k="wadi" v="yes"/>
+        <tag k="intermittent" v="yes"/>
         <tag k="ele" v="454"/>
         <tag k="alt_name" v="Wadi ar Rudayhi;Wadi el Rideihi;Wādī ar Rudayḩī;wdy ʼ-rdyhy;ודי א-רדיהי"/>
         <tag k="is_in:country_code" v="EG"/>
-        <tag k="waterway" v="wadi"/>
+        <tag k="waterway" v="river"/>
         <tag k="source" v="geonames"/>
         <tag k="uuid" v="GeoNames.org:293683"/>
         <tag k="name" v="Wādī ar Rudayḩī"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="293900" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.6862400000000015" lon="34.4035099999999971">
+        <tag k="wadi" v="yes"/>
+        <tag k="intermittent" v="yes"/>
         <tag k="ele" v="302"/>
         <tag k="alt_name" v="Nahal Qadesh Barnea`;Naẖal Qadesh Barnea‘;Wadi al Judayrat;Wadi al Qudayrat;Wadi el Qudeirat;Wādī al Judayrāt;Wādī al Qudayrāt"/>
         <tag k="is_in:country_code" v="EG"/>
-        <tag k="waterway" v="wadi"/>
+        <tag k="waterway" v="river"/>
         <tag k="source" v="geonames"/>
         <tag k="uuid" v="GeoNames.org:293900"/>
         <tag k="name" v="Wādī al Judayrāt"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="294386" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.3890500000000010" lon="34.5279600000000002">
+        <tag k="wadi" v="yes"/>
+        <tag k="intermittent" v="yes"/>
         <tag k="ele" v="611"/>
         <tag k="alt_name" v="Wadi Maghara;Wadi Magharah;Wadi Makra`a;Wadi Maqra`a;Wādī Maghāra;Wādī Maghārah;Wādī Makra‘a;Wādī Maqra‘a;wdy mqrʻh;ודי מקרעה"/>
         <tag k="is_in:country_code" v="EG"/>
-        <tag k="waterway" v="wadi"/>
+        <tag k="waterway" v="river"/>
         <tag k="source" v="geonames"/>
         <tag k="uuid" v="GeoNames.org:294386"/>
         <tag k="name" v="Wādī Maghārah"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="294428" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.9578999999999986" lon="34.3657299999999992">
+        <tag k="wadi" v="yes"/>
+        <tag k="intermittent" v="yes"/>
         <tag k="ele" v="172"/>
         <tag k="alt_name" v="Nahal Lavan;Naẖal Lavan;Wadi al Abyad;Wadi el Abiad;Wâdi el Abiad;Wādī al Abyaḑ;nhl lbn;נחל לבן"/>
         <tag k="is_in:country_code" v="EG"/>
-        <tag k="waterway" v="wadi"/>
+        <tag k="waterway" v="river"/>
         <tag k="source" v="geonames"/>
         <tag k="uuid" v="GeoNames.org:294428"/>
         <tag k="name" v="Naẖal Lavan"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="294618" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.0369400000000013" lon="34.7175000000000011">
+        <tag k="wadi" v="yes"/>
+        <tag k="intermittent" v="yes"/>
         <tag k="ele" v="495"/>
         <tag k="alt_name" v="Jureinat;Jureināt;Wadi Gureinat;Wadi al Juraynat;Wadi el Gerainat;Wadi el Gireinat;Wādī al Juraynāt;Wādī el Gireināt"/>
         <tag k="is_in:country_code" v="EG"/>
-        <tag k="waterway" v="wadi"/>
+        <tag k="waterway" v="river"/>
         <tag k="source" v="geonames"/>
         <tag k="uuid" v="GeoNames.org:294618"/>
         <tag k="name" v="Wādī al Juraynāt"/>
@@ -74,10 +86,12 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="295764" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.1270300000000013" lon="34.7050399999999968">
+        <tag k="wadi" v="yes"/>
+        <tag k="intermittent" v="yes"/>
         <tag k="ele" v="460"/>
         <tag k="alt_name" v="Abu `Urjan;Abū ‘Urjān;Wadi Abu Urgan;Wadi Abu Urgân;Wadi Abu `Urgan;Wadi Abu `Urjan;Wadi Abu `Urqan;Wādī Abū ‘Urgān;Wādī Abū ‘Urjān;Wādī Abū ‘Urqān;wdy ʼbw ʻrgn;wdy ʼbw ʻrqn;ודי אבו ערגן;ודי אבו ערקן"/>
         <tag k="is_in:country_code" v="EG"/>
-        <tag k="waterway" v="wadi"/>
+        <tag k="waterway" v="river"/>
         <tag k="source" v="geonames"/>
         <tag k="uuid" v="GeoNames.org:295764"/>
         <tag k="name" v="Wādī Abū ‘Urqān"/>
@@ -104,4 +118,3 @@
         <tag k="error:circular" v="15"/>
     </node>
 </osm>
-14:56:28.128 INFO  ...p/hoot/core/cmd/ConvertCmd.cpp( 118) Convert operation took 0 seconds

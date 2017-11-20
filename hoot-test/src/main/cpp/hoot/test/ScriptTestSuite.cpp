@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ScriptTestSuite.h"
 
@@ -37,7 +37,8 @@
 namespace hoot
 {
 
-ScriptTestSuite::ScriptTestSuite(QString dir, bool printDiff) : TestSuite(dir.toStdString())
+ScriptTestSuite::ScriptTestSuite(QString dir, bool printDiff, double waitTimeSec, bool hideDisableTests)
+  : TestSuite(dir.toStdString())
 {
   QDir d(dir);
   QStringList files = d.entryList(QDir::Files);
@@ -49,6 +50,9 @@ ScriptTestSuite::ScriptTestSuite(QString dir, bool printDiff) : TestSuite(dir.to
 # endif
 # ifndef HOOT_HAVE_HADOOP
     ignorePrefix << "Big";
+# endif
+# ifndef HOOT_HAVE_RND
+    ignorePrefix << "Rnd";
 # endif
 
   for (int i = 0; i < files.size(); i++)
@@ -67,7 +71,10 @@ ScriptTestSuite::ScriptTestSuite(QString dir, bool printDiff) : TestSuite(dir.to
       {
         if (fi.baseName().startsWith(ignorePrefix[j]))
         {
-          LOG_WARN("Disabling: " << fi.filePath());
+          if (!hideDisableTests)
+          {
+            LOG_WARN("Disabling: " << fi.filePath());
+          }
           ignore = true;
         }
       }
@@ -75,7 +82,7 @@ ScriptTestSuite::ScriptTestSuite(QString dir, bool printDiff) : TestSuite(dir.to
       if (!ignore)
       {
         QString path = d.absoluteFilePath(files[i]);
-        addTest(new ScriptTest(path, printDiff));
+        addTest(new ScriptTest(path, printDiff, waitTimeSec * 1000));
       }
     }
   }

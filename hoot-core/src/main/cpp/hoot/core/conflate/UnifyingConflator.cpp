@@ -42,8 +42,8 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/conflate/MatchClassification.h>
-#include <hoot/core/util/Settings.h>
 #include <hoot/core/elements/ElementId.h>
+#include <hoot/core/util/Log.h>
 
 // standard
 #include <algorithm>
@@ -125,6 +125,12 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 
   LOG_INFO("Applying pre-unifying conflation operations...");
   NamedOp(ConfigOptions().getUnifyPreOps()).apply(map);
+
+  if (ConfigOptions().getMatchCreators().contains("NetworkMatchCreator"))
+  {
+    LOG_INFO("Applying pre-network conflation operations...");
+    NamedOp(ConfigOptions().getNetworkPreOps()).apply(map);
+  }
 
   _stats.append(SingleStat("Apply Pre Ops Time (sec)", timer.getElapsedAndRestart()));
 
@@ -305,6 +311,8 @@ bool elementIdPairCompare(const pair<ElementId, ElementId>& pair1,
 
 void UnifyingConflator::_mapUnknown1IdsBackToModifiedElements(OsmMapPtr& map)
 { 
+  LOG_TRACE("Mapping unknown 1 IDs back to modified elements...");
+
   for (size_t i = 0; i < _mergers.size(); ++i)
   {
     set< pair<ElementId, ElementId> > impactedUnknown1ElementIds =

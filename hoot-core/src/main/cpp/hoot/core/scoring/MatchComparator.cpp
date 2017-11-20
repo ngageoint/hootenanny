@@ -59,7 +59,7 @@ unsigned int MatchComparator::logWarnCount = 0;
 /**
  * Traverses the OsmMap and creates a map from REF tags to all the uuids that have that REF.
  */
-class GetRefUuidVisitor : public ElementVisitor, public ConstOsmMapConsumer
+class GetRefUuidVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
 {
 public:
   typedef map<QString, set<QString> > RefToUuid;
@@ -114,7 +114,7 @@ private:
 /**
  * Traverses the OsmMap and creates a map from uuid tags to ElementIds.
  */
-class UuidToEidVisitor : public ElementVisitor, public ConstOsmMapConsumer
+class UuidToEidVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
 {
 public:
 
@@ -437,11 +437,11 @@ void MatchComparator::_findActualMatches(const ConstOsmMapPtr& in, const ConstOs
       ConstElementPtr element = conflated->getElement(p);
       if (!element.get())
       {
-        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        if (logWarnCount < Log::getWarnMessageLimit())
         {
           LOG_WARN("Missing element for " + p.toString());
         }
-        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        else if (logWarnCount == Log::getWarnMessageLimit())
         {
           LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }
@@ -451,11 +451,11 @@ void MatchComparator::_findActualMatches(const ConstOsmMapPtr& in, const ConstOs
       QString uuidStr = element->getTags()["uuid"];
       if (uuidStr.isEmpty())
       {
-        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        if (logWarnCount < Log::getWarnMessageLimit())
         {
           LOG_WARN("Missing uuid for " + p.toString());
         }
-        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        else if (logWarnCount == Log::getWarnMessageLimit())
         {
           LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }

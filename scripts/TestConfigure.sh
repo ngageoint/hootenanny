@@ -16,7 +16,7 @@ function build_notest {
 function build {
     make -s clean
     make -sj`nproc`
-    HootTest --quick
+    HootTest --quick --parallel $(nproc)
     # make sure hadoop is enabled
     hoot --help | grep -- big-conflate &> /dev/null
     make -s clean

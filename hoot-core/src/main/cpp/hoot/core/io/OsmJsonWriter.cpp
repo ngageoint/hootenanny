@@ -37,7 +37,6 @@ using namespace boost;
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/elements/ElementData.h>
 #include <hoot/core/elements/ElementType.h>
@@ -57,22 +56,30 @@ namespace hoot {
 HOOT_FACTORY_REGISTER(OsmMapWriter, OsmJsonWriter)
 
 OsmJsonWriter::OsmJsonWriter(int precision)
+  : _includeDebug(ConfigOptions().getWriterIncludeDebugTags()),
+    _precision(precision),
+    _out(0),
+    _pretty(ConfigOptions().getJsonPrettyPrint()),
+    _writeEmptyTags(ConfigOptions().getJsonPerserveEmptyTags()),
+    _writeHootFormat(true)
 {
-  _includeDebug = ConfigOptions().getWriterIncludeDebugTags();
-  _precision = precision;
-  _out = 0;
-  _pretty = false;
 }
 
-QString OsmJsonWriter::_markupString(const QString& str)
+QString OsmJsonWriter::markupString(const QString& str)
 {
   QString s = str;
-  s.replace('\\', "\\\\");
-  s.replace('\"', "\\\"");
-  s.replace('\n', "\\\n");
-  s.replace('\t', "\\\t");
-  s.replace('\r', "\\\r");
-  return "\"" % s % "\"";
+  s.replace('\n', "\\n");
+  s.replace('\t', "\\t");
+  s.replace('\r', "\\r");
+  //  Don't add quotes around JSON values
+  if (s.startsWith("{") || s.startsWith("[") || s == "null")
+    return s;
+  else
+  {
+    s.replace('\\', "\\\\");
+    s.replace('\"', "\\\"");
+    return "\"" % s % "\"";
+  }
 }
 
 void OsmJsonWriter::open(QString url)
@@ -118,6 +125,7 @@ void OsmJsonWriter::write(ConstOsmMapPtr map, const QString& path)
 
 void OsmJsonWriter::write(ConstOsmMapPtr map)
 {
+  _map = map;
   if (_out->isWritable() == false)
   {
     throw HootException("Please open the file before attempting to write.");
@@ -128,9 +136,9 @@ void OsmJsonWriter::write(ConstOsmMapPtr map)
   _write("\"generator\": \"Hootenanny\",");
   _write("\"elements\": [", true);
   _firstElement = true;
-  _writeNodes(map);
-  _writeWays(map);
-  _writeRelations(map);
+  _writeNodes();
+  _writeWays();
+  _writeRelations();
   _writeLn("]");
   _writeLn("}");
 
@@ -139,23 +147,23 @@ void OsmJsonWriter::write(ConstOsmMapPtr map)
 
 void OsmJsonWriter::_writeKvp(const QString& key, const QString& value)
 {
-  _write(_markupString(key) % ":" % _markupString(value), false);
+  _write(markupString(key) % ":" % markupString(value), false);
 }
 
 void OsmJsonWriter::_writeKvp(const QString& key, long value)
 {
-  _write(_markupString(key) % ":" % QString::number(value), false);
+  _write(markupString(key) % ":" % QString::number(value), false);
 }
 
 void OsmJsonWriter::_writeKvp(const QString& key, double value)
 {
-  _write(_markupString(key) % ":" % QString::number(value, 'g', _precision), false);
+  _write(markupString(key) % ":" % QString::number(value, 'g', _precision), false);
 }
 
-void OsmJsonWriter::_writeNodes(ConstOsmMapPtr map)
+void OsmJsonWriter::_writeNodes()
 {
   QList<long> nids;
-  const NodeMap& nodes = map->getNodes();
+  const NodeMap& nodes = _map->getNodes();
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
     nids.append(it->first);
@@ -164,7 +172,7 @@ void OsmJsonWriter::_writeNodes(ConstOsmMapPtr map)
   qSort(nids.begin(), nids.end(), qGreater<long>());
   for (int i = 0; i < nids.size(); i++)
   {
-    ConstNodePtr n = map->getNode(nids[i]);
+    ConstNodePtr n = _map->getNode(nids[i]);
     if (!_firstElement) _write(",", true);
     _firstElement = false;
     _write("{");
@@ -172,6 +180,7 @@ void OsmJsonWriter::_writeNodes(ConstOsmMapPtr map)
     _writeKvp("id", n->getId()); _write(",");
     _writeKvp("lat", n->getY()); _write(",");
     _writeKvp("lon", n->getX());
+    if (_hasTags(n)) _write(",");
     _writeTags(n);
     _write("}", false);
   }
@@ -179,26 +188,33 @@ void OsmJsonWriter::_writeNodes(ConstOsmMapPtr map)
 
 void OsmJsonWriter::_write(const QString& str, bool newLine)
 {
+  _out->write(str.toUtf8());
   if (newLine)
-  {
-    _out->write((str + "\n").toUtf8());
-  }
-  else
-  {
-    _out->write(str.toUtf8());
-  }
+    _out->write(QString("\n").toUtf8());
+}
+
+bool OsmJsonWriter::_hasTags(ConstElementPtr e)
+{
+  return e->getTags().size() > 0 ||
+         e->getElementType() != ElementType::Node ||
+        (e->getCircularError() >= 0 && e->getTags().getInformationCount() > 0) ||
+         _includeDebug;
 }
 
 void OsmJsonWriter::_writeTag(const QString& key, const QString& value, bool& firstTag)
 {
-  if (key.isEmpty() == false && value.isEmpty() == false)
+  if (key.isEmpty() == false && (value.isEmpty() == false || _writeEmptyTags))
   {
-    _write(",");
     if (firstTag)
     {
-      _write("\"tags\":{");
+      if (_writeHootFormat)
+        _write("\"tags\":{");
+      else
+        _write("\"properties\":{");
       firstTag = false;
     }
+    else
+      _write(",");
     _writeKvp(key, value);
   }
 }
@@ -215,9 +231,9 @@ void OsmJsonWriter::_writeTags(ConstElementPtr e)
     }
   }
 
-  // turn this on when we start using node circularError.
-  if (e->getElementType() != ElementType::Node ||
-      (e->getCircularError() >= 0 && e->getTags().getInformationCount() > 0))
+  if (_writeHootFormat &&
+      (e->getElementType() != ElementType::Node || // turn this on when we start using node circularError.
+      (e->getCircularError() >= 0 && e->getTags().getInformationCount() > 0)))
   {
     _writeTag(MetadataTags::ErrorCircular(), QString::number(e->getCircularError(), 'g', _precision), firstTag);
   }
@@ -234,10 +250,10 @@ void OsmJsonWriter::_writeTags(ConstElementPtr e)
   }
 }
 
-void OsmJsonWriter::_writeWays(ConstOsmMapPtr map)
+void OsmJsonWriter::_writeWays()
 {
-  WayMap::const_iterator it = map->getWays().begin();
-  while (it != map->getWays().end())
+  WayMap::const_iterator it = _map->getWays().begin();
+  while (it != _map->getWays().end())
   {
     if (!_firstElement) _write(",", true);
     _firstElement = false;
@@ -256,16 +272,17 @@ void OsmJsonWriter::_writeWays(ConstOsmMapPtr map)
       }
     }
     _write("]");
+    if (_hasTags(w)) _write(",");
     _writeTags(w);
 
     ++it;
   }
 }
 
-void OsmJsonWriter::_writeRelations(ConstOsmMapPtr map)
+void OsmJsonWriter::_writeRelations()
 {
-  RelationMap::const_iterator it = map->getRelations().begin();
-  while (it != map->getRelations().end())
+  RelationMap::const_iterator it = _map->getRelations().begin();
+  while (it != _map->getRelations().end())
   {
     if (!_firstElement) _write(",", true);
     _firstElement = false;
@@ -295,7 +312,7 @@ void OsmJsonWriter::_writeRelations(ConstOsmMapPtr map)
       _write("}");
     }
     _write("]");
-
+    if (_hasTags(r)) _write(",");
     _writeTags(r);
 
     ++it;

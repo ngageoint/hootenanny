@@ -28,15 +28,9 @@
 #ifndef WAYDIRECTIONCRITERION_H
 #define WAYDIRECTIONCRITERION_H
 
-// GEOS
-#include <geos/geom/LineString.h>
-
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/util/Units.h>
 #include <hoot/core/filters/ElementCriterion.h>
-
-#include "WayFilter.h"
 
 namespace hoot
 {
@@ -52,7 +46,8 @@ public:
 
   virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
-  WayDirectionCriterion* clone() { return new WayDirectionCriterion(_map, _baseWay, _similarDirection); }
+  ElementCriterionPtr clone()
+  { return ElementCriterionPtr(new WayDirectionCriterion(_map, _baseWay, _similarDirection)); }
 
 private:
   ConstOsmMapPtr _map;

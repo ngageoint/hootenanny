@@ -37,7 +37,7 @@ namespace hoot
 
 unsigned int RemoveRef2Visitor::logWarnCount = 0;
 
-HOOT_FACTORY_REGISTER(ElementVisitor, RemoveRef2Visitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveRef2Visitor)
 
 QStringList RemoveRef2Visitor::_ref2Keys;
 QMutex RemoveRef2Visitor::_mutex;
@@ -45,7 +45,7 @@ QMutex RemoveRef2Visitor::_mutex;
 /**
  * Traverses the OsmMap and creates a map from uuid tags to ElementIds.
  */
-class Ref1ToEidVisitor : public ElementVisitor, public ConstOsmMapConsumer
+class Ref1ToEidVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
 {
 public:
 
@@ -124,11 +124,11 @@ void RemoveRef2Visitor::_checkAndDeleteRef2(ElementPtr e, QString key)
       //}
       //else
       //{
-        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        if (logWarnCount < Log::getWarnMessageLimit())
         {
           LOG_WARN(errMsg);
         }
-        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        else if (logWarnCount == Log::getWarnMessageLimit())
         {
           LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }

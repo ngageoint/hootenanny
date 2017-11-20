@@ -29,6 +29,7 @@
 
 #include "PartialOsmMapWriter.h"
 #include "HootApiDb.h"
+#include "OsmChangeWriter.h"
 
 // hoot
 #include <hoot/core/util/Configurable.h>
@@ -39,14 +40,13 @@
 namespace hoot
 {
 
-class HootApiDbWriter : public PartialOsmMapWriter, public Configurable
+class HootApiDbWriter : public PartialOsmMapWriter, public Configurable, public OsmChangeWriter
 {
 public:
 
   static std::string className() { return "hoot::HootApiDbWriter"; }
 
   HootApiDbWriter();
-
   virtual ~HootApiDbWriter();
 
   void close();
@@ -88,7 +88,19 @@ public:
 
   virtual void writePartial(const ConstRelationPtr& r);
 
+  /**
+   * @see OsmChangeWriter
+   */
+  virtual void writeChange(const Change& change);
+  virtual void setElementPayloadFormat(const QString /*format*/) {}
+
+  void setCopyBulkInsertActivated(bool activated) { _copyBulkInsertActivated = activated; }
+
 protected:
+
+  void _createElement(ConstElementPtr element);
+  void _modifyElement(ConstElementPtr element);
+  void _deleteElement(ConstElementPtr element);
 
   /**
    * Return the remapped ID for the specified element if it exists
@@ -128,17 +140,20 @@ protected:
 
   bool _remapIds;
 
+  bool _includeDebug;
+
 private:
 
   bool _createUserIfNotFound;
   bool _overwriteMap;
   QString _userEmail;
-  bool _includeDebug;
   bool _includeIds;
   bool _textStatus;
   bool _includeCircularError;
 
   bool _open;
+
+  bool _copyBulkInsertActivated;
 
   std::set<long> _openDb(QString& urlStr);
 

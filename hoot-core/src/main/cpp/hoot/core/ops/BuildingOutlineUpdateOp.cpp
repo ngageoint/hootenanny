@@ -37,7 +37,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/ops/RemoveNodeOp.h>
 #include <hoot/core/util/ElementConverter.h>
@@ -46,6 +46,7 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/util/Log.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -57,7 +58,7 @@ unsigned int BuildingOutlineUpdateOp::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, BuildingOutlineUpdateOp)
 
-class NodeIdVisitor : public ElementVisitor
+class NodeIdVisitor : public ConstElementVisitor
 {
 public:
   set<long>& allNodes;
@@ -73,7 +74,7 @@ public:
   }
 };
 
-class NodeReplaceVisitor : public ElementVisitor
+class NodeReplaceVisitor : public ConstElementVisitor
 {
 public:
   NodeReplaceVisitor(OsmMap& map, const std::map<long, long>& fromTo) : _fromTo(fromTo), _map(map)
@@ -162,11 +163,11 @@ void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& building,
         QString("Element with uncleanable topology.  Error occurred during union ") +
         QString("operation of element: ") + buildingMember->getElementId().toString();
       ReviewMarker().mark(_map, building, errMsg + ".", ReviewMarker::getBadGeometryType());
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN(errMsg + ": " + QString(e.what()));
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }
@@ -220,11 +221,11 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
                   "Marking parent element for review for element with uncleanable topology: " +
                   way->getElementId().toString();
                 ReviewMarker().mark(_map, building, errMsg + ".", ReviewMarker::getBadGeometryType());
-                if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+                if (logWarnCount < Log::getWarnMessageLimit())
                 {
                   LOG_WARN(errMsg + ": " + QString(e.what()));
                 }
-                else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+                else if (logWarnCount == Log::getWarnMessageLimit())
                 {
                   LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
                 }
@@ -272,11 +273,11 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
                   "Marking parent element for review for element with uncleanable topology: " +
                   relation->getElementId().toString();
                 ReviewMarker().mark(_map, building, errMsg + ".", ReviewMarker::getBadGeometryType());
-                if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+                if (logWarnCount < Log::getWarnMessageLimit())
                 {
                   LOG_WARN(errMsg + ": " + QString(e.what()));
                 }
-                else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+                else if (logWarnCount == Log::getWarnMessageLimit())
                 {
                   LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
                 }
@@ -292,15 +293,15 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
         }
         else
         {
-          if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+          if (logWarnCount < Log::getWarnMessageLimit())
           {
             LOG_WARN(
               "Found a building with a non-multipolygon relation 'part'. " <<
               relation->toString() << "Building: " << building->toString());
           }
-          else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+          else if (logWarnCount == Log::getWarnMessageLimit())
           {
-            LOG_WARN(className << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+            LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
           }
           logWarnCount++;
         }

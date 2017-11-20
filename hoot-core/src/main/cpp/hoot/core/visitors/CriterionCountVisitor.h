@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/filters/ElementCriterionConsumer.h>
 #include <hoot/core/util/Configurable.h>
 
@@ -40,7 +40,7 @@ namespace hoot
  * Counts the number of elements matching the criterion
  */
 class CriterionCountVisitor :
-    public ElementVisitor,
+    public ConstElementVisitor,
     public ConstOsmMapConsumer,
     public ElementCriterionConsumer,
     public Configurable

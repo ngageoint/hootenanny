@@ -30,19 +30,20 @@
 #include <hoot/core/algorithms/DirectionFinder.h>
 #include <hoot/core/algorithms/MaximalSublineMatcher.h>
 #include <hoot/core/algorithms/ProbabilityOfMatch.h>
+#include <hoot/core/algorithms/SublineStringMatcher.h>
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/algorithms/WayMatchStringMerger.h>
 #include <hoot/core/algorithms/linearreference/NaiveWayMatchStringMapping.h>
 #include <hoot/core/algorithms/linearreference/WayMatchStringMappingConverter.h>
+#include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
+#include <hoot/core/conflate/highway/HighwayClassifier.h>
 #include <hoot/core/conflate/polygon/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/EuclideanDistanceExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/HausdorffDistanceExtractor.h>
 #include <hoot/core/ops/CopySubsetOp.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/algorithms/SublineStringMatcher.h>
-#include <hoot/core/conflate/highway/HighwayClassifier.h>
-#include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
+#include <hoot/core/util/Log.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -55,7 +56,8 @@ static double min(double a, double b, double c) { return std::min(a, std::min(b,
 NetworkDetails::NetworkDetails(ConstOsmMapPtr map, ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2) :
   _map(map),
   _n1(n1),
-  _n2(n2)
+  _n2(n2),
+  _maxStubLength(ConfigOptions().getNetworkMaxStubLength())
 {
   setConfiguration(conf());
 }
@@ -604,7 +606,7 @@ double NetworkDetails::getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeS
 
     bool candidate = true;
 
-    if (notStub->calculateLength(_map) > ConfigOptions().getNetworkMaxStubLength())
+    if (notStub->calculateLength(_map) > _maxStubLength)
     {
       candidate = false;
     }

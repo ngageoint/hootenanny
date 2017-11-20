@@ -123,7 +123,7 @@ PoiRfClassifier::PoiRfClassifier()
 
   if (missingExtractors.size() > 0)
   {
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       LOG_WARN(
         "An extractor used by the model is not being calculated. We will still try, but this will "
@@ -131,7 +131,7 @@ PoiRfClassifier::PoiRfClassifier()
       LOG_TRACE("Missing extractors: " << missingExtractors);
       LOG_TRACE("Available extractors: " << extractorNames);
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }
@@ -189,79 +189,105 @@ void PoiRfClassifier::_createAllExtractors()
 //  {
 //    FeatureExtractor* fe = Factory::getInstance().constructObject<FeatureExtractor>(
 //      extractorNames[i]);
-//    _extractors.push_back(boost::shared_ptr<FeatureExtractor>(fe));
+//    _extractors.push_back(FeatureExtractorPtr(fe));
 //  }
 
   // These are all the factors that seem reasonable. Many of the other factors will overtrain due
   // to distance values and such.
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new AttributeScoreExtractor(NULL, false)));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new AttributeScoreExtractor(NULL, true)));
+  _extractors.push_back(FeatureExtractorPtr(new AttributeScoreExtractor(false)));
+  _extractors.push_back(FeatureExtractorPtr(new AttributeScoreExtractor(true)));
 
   // at some point names will make sense, but for now there isn't enough name data.
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
-    new ExactStringDistance())));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
-    new MaxWordSetDistance(new ExactStringDistance()))));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
-    new MeanWordSetDistance(new ExactStringDistance()))));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
-    new TranslateStringDistance(new ExactStringDistance()))));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
-    new TranslateStringDistance(new MaxWordSetDistance(new ExactStringDistance())))));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
-    new TranslateStringDistance(new MeanWordSetDistance(new ExactStringDistance())))));
+  _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
+                        StringDistancePtr(new ExactStringDistance()))));
+  _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
+                        StringDistancePtr(new MaxWordSetDistance(
+                        StringDistancePtr(new ExactStringDistance()))))));
+  _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
+                        StringDistancePtr(new MeanWordSetDistance(
+                        StringDistancePtr(new ExactStringDistance()))))));
+  _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
+                        StringDistancePtr(new TranslateStringDistance(
+                        StringDistancePtr(new ExactStringDistance()))))));
+  _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
+                        StringDistancePtr(new TranslateStringDistance(
+                        StringDistancePtr(new MaxWordSetDistance(
+                        StringDistancePtr(new ExactStringDistance()))))))));
+  _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
+                        StringDistancePtr(new TranslateStringDistance(
+                        StringDistancePtr(new MeanWordSetDistance(
+                        StringDistancePtr(new ExactStringDistance()))))))));
 
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
-    new LevenshteinDistance())));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
-    new MaxWordSetDistance(new LevenshteinDistance()))));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
-    new MeanWordSetDistance(new LevenshteinDistance()))));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
-    new TranslateStringDistance(new LevenshteinDistance()))));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
-    new TranslateStringDistance(new MaxWordSetDistance(new LevenshteinDistance())))));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
-    new TranslateStringDistance(new MeanWordSetDistance(new LevenshteinDistance())))));
+  _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
+                        StringDistancePtr(new LevenshteinDistance()))));
+  _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
+                        StringDistancePtr(new MaxWordSetDistance(
+                        StringDistancePtr(new LevenshteinDistance()))))));
+  _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
+                        StringDistancePtr(new MeanWordSetDistance(
+                        StringDistancePtr(new LevenshteinDistance()))))));
+  _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
+                        StringDistancePtr(new TranslateStringDistance(
+                        StringDistancePtr(new LevenshteinDistance()))))));
+  _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
+                        StringDistancePtr(new TranslateStringDistance(
+                        StringDistancePtr(new MaxWordSetDistance(
+                        StringDistancePtr(new LevenshteinDistance()))))))));
+  _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
+                        StringDistancePtr(new TranslateStringDistance(
+                        StringDistancePtr(new MeanWordSetDistance(
+                        StringDistancePtr(new LevenshteinDistance()))))))));
 
   for (double a = 1.0; a < 1.8; a += 0.05)
   {
-    _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
-      new MeanWordSetDistance(new LevenshteinDistance(a)))));
-    _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
-      new TranslateStringDistance(new MeanWordSetDistance(new LevenshteinDistance(a))))));
+    _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
+                          StringDistancePtr(new MeanWordSetDistance(
+                          StringDistancePtr(new LevenshteinDistance(a)))))));
+    _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
+                          StringDistancePtr(new TranslateStringDistance(
+                          StringDistancePtr(new MeanWordSetDistance(
+                          StringDistancePtr(new LevenshteinDistance(a)))))))));
   }
 
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(new Soundex())));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
-    new MaxWordSetDistance(new Soundex()))));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
-    new MeanWordSetDistance(new Soundex()))));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
-    new TranslateStringDistance(new Soundex()))));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
-    new TranslateStringDistance(new MaxWordSetDistance(new Soundex())))));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
-    new TranslateStringDistance(new MeanWordSetDistance(new Soundex())))));
+  _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
+                        StringDistancePtr(new Soundex()))));
+  _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
+                        StringDistancePtr(new MaxWordSetDistance(
+                        StringDistancePtr(new Soundex()))))));
+  _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
+                        StringDistancePtr(new MeanWordSetDistance(
+                        StringDistancePtr(new Soundex()))))));
+  _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
+                        StringDistancePtr(new TranslateStringDistance(
+                        StringDistancePtr(new Soundex()))))));
+  _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
+                        StringDistancePtr(new TranslateStringDistance(
+                        StringDistancePtr(new MaxWordSetDistance(
+                        StringDistancePtr(new Soundex()))))))));
+  _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
+                        StringDistancePtr(new TranslateStringDistance(
+                        StringDistancePtr(new MeanWordSetDistance(
+                        StringDistancePtr(new Soundex()))))))));
 }
 
 void PoiRfClassifier::_createTestExtractors()
 {
   _extractors.clear();
 
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(
-    new EdgeDistanceExtractor(new RmseAggregator())));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(
-    new EdgeDistanceExtractor(new SigmaAggregator())));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new AngleHistogramExtractor()));
-//  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new AttributeScoreExtractor(false)));
-//  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new AttributeScoreExtractor(true)));
-//  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new WeightedShapeDistanceExtractor()));
+  _extractors.push_back(FeatureExtractorPtr(new EdgeDistanceExtractor(
+                        ValueAggregatorPtr(new RmseAggregator()))));
+  _extractors.push_back(FeatureExtractorPtr(new EdgeDistanceExtractor(
+                        ValueAggregatorPtr(new SigmaAggregator()))));
+  _extractors.push_back(FeatureExtractorPtr(new AngleHistogramExtractor()));
+//  _extractors.push_back(FeatureExtractorPtr(new AttributeScoreExtractor(false)));
+//  _extractors.push_back(FeatureExtractorPtr(new AttributeScoreExtractor(true)));
+//  _extractors.push_back(FeatureExtractorPtr(new WeightedShapeDistanceExtractor()));
 
-//  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new WeightedMetricDistanceExtractor(
+//  _extractors.push_back(FeatureExtractorPtr(new WeightedMetricDistanceExtractor(
 //    new MeanAggregator(), new SigmaAggregator())));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new WeightedMetricDistanceExtractor(
-    new MeanAggregator(), new RmseAggregator())));
+  _extractors.push_back(FeatureExtractorPtr(new WeightedMetricDistanceExtractor(
+                        ValueAggregatorPtr(new MeanAggregator()),
+                        ValueAggregatorPtr(new RmseAggregator()))));
 
 }
 

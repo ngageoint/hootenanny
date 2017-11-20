@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osmChange version="0.6" generator="hootenanny">
+    <create>
+        <node id="-1" version="0" lat="31.1801011930194001" lon="34.0526026703586027">
+            <tag k="hoot:id" v="45"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-2" version="0" lat="31.1821475631785994" lon="34.0507315991344015">
+            <tag k="hoot:id" v="50"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-3" version="0" lat="31.1832952383281992" lon="34.0565417686369969">
+            <tag k="hoot:id" v="51"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-4" version="0" lat="31.1816708426567004" lon="34.0482519434817021">
+            <tag k="hoot:id" v="52"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-5" version="0" lat="31.1815646720346002" lon="34.0472591500500030">
+            <tag k="hoot:id" v="53"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-6" version="0" lat="31.1806942014484996" lon="34.0508434650486009">
+            <tag k="hoot:id" v="136"/>
+            <tag k="hoot:status" v="1"/>
+        </node>
+        <node id="-7" version="0" lat="31.1800186168267004" lon="34.0525847494192035">
+            <tag k="hoot:id" v="141"/>
+            <tag k="hoot:status" v="1"/>
+        </node>
+        <node id="-8" version="0" lat="31.1790643923775015" lon="34.0528070894873025">
+            <tag k="hoot:id" v="142"/>
+            <tag k="hoot:status" v="1"/>
+        </node>
+        <node id="-9" version="0" lat="31.1798141000056006" lon="34.0513880469564967">
+            <tag k="hoot:id" v="146"/>
+            <tag k="hoot:status" v="1"/>
+        </node>
+        <node id="-10" version="0" lat="31.1798581538179000" lon="34.0563642624791996">
+            <tag k="hoot:id" v="150"/>
+            <tag k="hoot:status" v="1"/>
+        </node>
+    </create>
+    <modify>
+        <way id="2" version="1">
+            <nd ref="3"/>
+            <nd ref="-10"/>
+            <tag k="hoot:id" v="2"/>
+            <tag k="hoot:status" v="3"/>
+            <tag k="source" v="Bing"/>
+            <tag k="highway" v="unclassified"/>
+            <tag k="source:datetime" v="2016-08-06T20:08:03Z"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+    </modify>
+    <modify>
+        <way id="9" version="1">
+            <nd ref="35"/>
+            <nd ref="-6"/>
+            <nd ref="20"/>
+            <nd ref="21"/>
+            <tag k="hoot:id" v="9"/>
+            <tag k="hoot:status" v="3"/>
+            <tag k="source" v="digitalglobe"/>
+            <tag k="highway" v="residential"/>
+            <tag k="source:datetime" v="2016-05-02T23:46:04Z"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+        <way id="18" version="1">
+            <nd ref="-9"/>
+            <nd ref="26"/>
+            <nd ref="28"/>
+            <tag k="hoot:id" v="18"/>
+            <tag k="hoot:status" v="3"/>
+            <tag k="source" v="digitalglobe"/>
+            <tag k="highway" v="residential"/>
+            <tag k="source:datetime" v="2016-05-02T23:46:09Z"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+        <way id="20" version="1">
+            <nd ref="-7"/>
+            <nd ref="-8"/>
+            <tag k="hoot:id" v="20"/>
+            <tag k="hoot:status" v="3"/>
+            <tag k="source" v="digitalglobe"/>
+            <tag k="highway" v="residential"/>
+            <tag k="source:datetime" v="2016-05-02T23:46:09Z"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+    </modify>
+    <create>
+        <way id="-1" version="0">
+            <nd ref="39"/>
+            <nd ref="9"/>
+            <nd ref="41"/>
+            <tag k="hoot:id" v="25"/>
+            <tag k="hoot:status" v="3"/>
+            <tag k="source" v="Bing"/>
+            <tag k="highway" v="unclassified"/>
+            <tag k="source:datetime" v="2016-08-06T20:08:03Z"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+        <way id="-2" version="0">
+            <nd ref="41"/>
+            <nd ref="40"/>
+            <nd ref="10"/>
+            <nd ref="2"/>
+            <tag k="hoot:id" v="27"/>
+            <tag k="hoot:status" v="1"/>
+            <tag k="source" v="Bing"/>
+            <tag k="highway" v="unclassified"/>
+            <tag k="source:datetime" v="2016-08-06T20:08:03Z"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+        <way id="-3" version="0">
+            <nd ref="-5"/>
+            <nd ref="-4"/>
+            <nd ref="-2"/>
+            <tag k="hoot:id" v="28"/>
+            <tag k="hoot:status" v="2"/>
+            <tag k="highway" v="road"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+        <way id="-4" version="0">
+            <nd ref="-2"/>
+            <nd ref="-3"/>
+            <tag k="hoot:id" v="29"/>
+            <tag k="hoot:status" v="2"/>
+            <tag k="highway" v="road"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+        <way id="-5" version="0">
+            <nd ref="-2"/>
+            <nd ref="37"/>
+            <tag k="hoot:id" v="188"/>
+            <tag k="hoot:status" v="2"/>
+            <tag k="highway" v="road"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+        <way id="-6" version="0">
+            <nd ref="28"/>
+            <nd ref="-7"/>
+            <tag k="hoot:id" v="205"/>
+            <tag k="hoot:status" v="1"/>
+            <tag k="source" v="digitalglobe"/>
+            <tag k="highway" v="residential"/>
+            <tag k="source:datetime" v="2016-05-02T23:46:09Z"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+        <way id="-7" version="0">
+            <nd ref="-8"/>
+            <nd ref="41"/>
+            <tag k="hoot:id" v="206"/>
+            <tag k="hoot:status" v="1"/>
+            <tag k="source" v="digitalglobe"/>
+            <tag k="highway" v="residential"/>
+            <tag k="source:datetime" v="2016-05-02T23:46:09Z"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+        <way id="-8" version="0">
+            <nd ref="29"/>
+            <nd ref="-9"/>
+            <tag k="hoot:id" v="212"/>
+            <tag k="hoot:status" v="3"/>
+            <tag k="source" v="digitalglobe"/>
+            <tag k="highway" v="residential"/>
+            <tag k="source:datetime" v="2016-05-02T23:46:09Z"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+        <way id="-9" version="0">
+            <nd ref="-9"/>
+            <nd ref="-1"/>
+            <nd ref="-7"/>
+            <tag k="hoot:id" v="215"/>
+            <tag k="hoot:status" v="2"/>
+            <tag k="highway" v="road"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+        <way id="-10" version="0">
+            <nd ref="-10"/>
+            <nd ref="8"/>
+            <nd ref="42"/>
+            <nd ref="39"/>
+            <tag k="hoot:id" v="218"/>
+            <tag k="hoot:status" v="3"/>
+            <tag k="source" v="Bing"/>
+            <tag k="highway" v="unclassified"/>
+            <tag k="source:datetime" v="2016-08-06T20:08:03Z"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+    </create>
+</osmChange>

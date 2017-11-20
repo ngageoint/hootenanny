@@ -48,7 +48,7 @@ class TranslateStringDistance : public StringDistance, public StringDistanceCons
 public:
   static std::string className() { return "hoot::TranslateStringDistance"; }
 
-  TranslateStringDistance(StringDistance* d);
+  TranslateStringDistance(StringDistancePtr d);
   TranslateStringDistance() {}
 
   virtual ~TranslateStringDistance() {}

@@ -29,6 +29,7 @@
 
 // hoot
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 // GDAL
 #include <cpl_error.h>
@@ -44,6 +45,7 @@ namespace hoot
 {
 
 QString Log::LOG_WARN_LIMIT_REACHED_MESSAGE = "Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...";
+unsigned int Log::_warnMessageLimit = 0;
 
 Log* Log::_theInstance = 0;
 
@@ -103,6 +105,15 @@ Log::Log()
   CPLSetErrorHandler(cplErrorHandler);
 }
 
+unsigned int Log::getWarnMessageLimit()
+{
+  if (_warnMessageLimit == 0)
+  {
+    _warnMessageLimit = ConfigOptions().getLogWarnMessageLimit();
+  }
+  return _warnMessageLimit;
+}
+
 Log::WarningLevel Log::getLevelFromString(QString l)
 {
   l = l.toLower();
@@ -117,6 +128,10 @@ Log::WarningLevel Log::getLevelFromString(QString l)
   if (l == "debug")
   {
     return Debug;
+  }
+  if (l == "info")
+  {
+    return Info;
   }
   if (l == "warn")
   {

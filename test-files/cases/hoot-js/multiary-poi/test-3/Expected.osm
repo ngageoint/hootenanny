@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="15.364548" minlon="44.223589" maxlat="15.364548" maxlon="44.223589"/>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3645479999999974" lon="44.2235889999999969">
+        <tag k="is_in:place" v="Sana"/>
+        <tag k="note" v="Implicitly derived tags based on: mosque"/>
+        <tag k="hoot:hash" v="sha1sum:198d99b73cba75d3a28e9d7c419eda68b04b0c4d"/>
+        <tag k="source:hash" v="sha1sum:2802ac21f2d5a705765cbb98202ee78a58e9477a;sha1sum:06a350fe7d86a212c638f367c10b48bc24e79c17"/>
+        <tag k="is_in:city" v="امانة العاصمة;Sanaa"/>
+        <tag k="is_in:state" v="Amanah al-Asmah"/>
+        <tag k="wm_No_Category" v="yes"/>
+        <tag k="religion" v="muslim"/>
+        <tag k="alt_name" v="مسجد النور"/>
+        <tag k="is_in:country" v="Yemen"/>
+        <tag k="source" v="wikimapia"/>
+        <tag k="uuid" v="wikimapia:7439734;wikimapia:25696204"/>
+        <tag k="name" v="جامع النور"/>
+        <tag k="source:url" v="http://wikimapia.org/7439734/ar/%D8%AC%D8%A7%D9%85%D8%B9-%D8%A7%D9%84%D9%86%D9%88%D8%B1;http://wikimapia.org/25696204/%D9%85%D8%B3%D8%AC%D8%AF-%D8%A7%D9%84%D9%86%D9%88%D8%B1"/>
+        <tag k="amenity" v="place_of_worship"/>
+        <tag k="name:en" v="Mosque of Light"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+</osm>

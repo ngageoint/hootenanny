@@ -467,12 +467,12 @@ boost::shared_ptr<Geometry> AlphaShape::toGeometry()
   // We still carry on with a warning even though the output may not be correct.
   if (fabs(preUnionArea - result->getArea()) > 1)
   {
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       LOG_WARN("Area after union is inconsistent. GEOS error? pre union: " << (long)preUnionArea <<
         " post union: " << result->getArea());
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }

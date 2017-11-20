@@ -9,7 +9,7 @@ Feature: Bulk Import, Directory Import, and Multiselect Delete Datasets
         When I click on the "Datasets" option in the "settingsSidebar"
         And I context click "Import Single Dataset"
         And I click the first "dataset-option" list item
-        And I wait 5 "seconds" to see "Bulk Import Datasets"
+        And I wait 5 "seconds" to see "Import Multiple Datasets"
         Then I press "big.loud" span with text "Add Row"
         Then I select in row 0 the "File (osm,osm.zip,pbf)" option in the "Select Import Type" combobox
         And I select in row 0 the "/test-files/dcpoi_clip.osm" dataset
@@ -23,7 +23,7 @@ Feature: Bulk Import, Directory Import, and Multiselect Delete Datasets
         And I should see "Initializing..."
         And I wait 2 "minutes" to see "Close"
         Then I press "big.loud" span with text "Close"
-        Then I wait 2 "minutes" to not see "Bulk Import Datasets"
+        Then I wait 2 "minutes" to not see "Import Multiple Datasets"
         Then I wait 2 "minutes" to see "dcpoi_clip_bulkImport_Cucumber"
         And I wait 2 "minutes" to see "mapcruzinpoi_clip_bulkImport_Cucumber"
 
@@ -31,7 +31,7 @@ Feature: Bulk Import, Directory Import, and Multiselect Delete Datasets
         When I click on the "Datasets" option in the "settingsSidebar"
         And I context click "Import Single Dataset"
         And I click the first "dataset-option" list item
-        And I wait 5 "seconds" to see "Bulk Import Datasets"
+        And I wait 5 "seconds" to see "Import Multiple Datasets"
         Then I press "big.loud" span with text "Add Row"
         Then I select in row 0 the "File (osm,osm.zip,pbf)" option in the "Select Import Type" combobox
         And I select in row 0 the "/test-files/dcpoi_clip.osm" dataset
@@ -46,7 +46,7 @@ Feature: Bulk Import, Directory Import, and Multiselect Delete Datasets
         And I should see "Initializing..."
         And I wait 2 "minutes" to see "Close"
         Then I press "big.loud" span with text "Close"        
-        Then I wait 30 "seconds" to not see "Bulk Import Datasets"
+        Then I wait 30 "seconds" to not see "Import Multiple Datasets"
         Then I wait 30 "seconds" to see "dcpoi_clip_customSuffix"
         And I wait 2 "minutes" to see "mapcruzinpoi_clip_customSuffix"
 

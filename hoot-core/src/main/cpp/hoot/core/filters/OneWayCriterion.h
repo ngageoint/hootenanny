@@ -47,7 +47,7 @@ public:
 
   virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
-  OneWayCriterion* clone() { return new OneWayCriterion(); }
+  ElementCriterionPtr clone() { return ElementCriterionPtr(new OneWayCriterion()); }
 
 private:
 

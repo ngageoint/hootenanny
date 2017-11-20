@@ -66,7 +66,9 @@ HighwaySnapMerger::HighwaySnapMerger(Meters minSplitSize,
   const boost::shared_ptr<SublineStringMatcher> &sublineMatcher) :
   _minSplitSize(minSplitSize),
   _pairs(pairs),
-  _sublineMatcher(sublineMatcher)
+  _sublineMatcher(sublineMatcher),
+  _preserveUnknown1ElementIdWhenModifyingFeatures(
+    ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures())
 {
 }
 
@@ -173,11 +175,11 @@ void HighwaySnapMerger::_markNeedsReview(const OsmMapPtr &map, ElementPtr e1, El
 {
   if (!e1 && !e2)
   {
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       LOG_WARN("Unable to mark element as needing review. Neither element exists. " << note);
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }
@@ -293,7 +295,7 @@ void HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
     RemoveReviewsByEidOp(eid1, true).apply(result);
   }
 
-  if (ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures())
+  if (_preserveUnknown1ElementIdWhenModifyingFeatures)
   {
     //With this option enabled, we want to retain the element ID of the original modified
     //unknown1 way for provenance purposes.  So, we'll keep a mapping from the unknown 1 ID to the
@@ -344,11 +346,6 @@ void HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
     RemoveReviewsByEidOp(e2Match->getElementId(), true).apply(result);
     RemoveReviewsByEidOp(eid2, true).apply(result);
   }
-}
-
-set< pair<ElementId, ElementId> > HighwaySnapMerger::getImpactedUnknown1ElementIds() const
-{
-  return _unknown1Replacements;
 }
 
 void HighwaySnapMerger::_removeSpans(OsmMapPtr map, const ElementPtr& e1,

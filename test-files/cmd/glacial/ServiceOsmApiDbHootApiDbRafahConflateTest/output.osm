@@ -1,0 +1,765 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="31.178" minlon="34.046" maxlat="31.1832952" maxlon="34.057"/>
+    <node visible="true" id="2" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="31.1780000000000008" lon="34.0487657999999982">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="2"/>
+    </node>
+    <node visible="true" id="3" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="31.1799512000000014" lon="34.0570000000000022">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="3"/>
+    </node>
+    <node visible="true" id="4" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="31.1809550999999985" lon="34.0570000000000022">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="4"/>
+    </node>
+    <node visible="true" id="5" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="31.1780000000000008" lon="34.0525099999999981">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="5"/>
+    </node>
+    <node visible="true" id="6" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="31.1780000000000008" lon="34.0461211000000006">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="6"/>
+    </node>
+    <node visible="true" id="7" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="31.1812731999999997" lon="34.0459999999999994">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="7"/>
+    </node>
+    <node visible="true" id="8" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="31.1798527000000014" lon="34.0563270000000031">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="8"/>
+    </node>
+    <node visible="true" id="9" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="31.1792710000000000" lon="34.0537498999999997">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="9"/>
+    </node>
+    <node visible="true" id="10" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="31.1785812000000000" lon="34.0513309000000035">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="10"/>
+    </node>
+    <node visible="true" id="11" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="31.1803962000000006" lon="34.0462441000000027">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="11"/>
+    </node>
+    <node visible="true" id="12" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="31.1794875000000005" lon="34.0462869999999995">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="12"/>
+    </node>
+    <node visible="true" id="13" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="31.1806981999999984" lon="34.0548885999999982">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="13"/>
+    </node>
+    <node visible="true" id="14" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="31.1802987000000016" lon="34.0508943000000031">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="14"/>
+    </node>
+    <node visible="true" id="15" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="31.1808955999999995" lon="34.0562797999999987">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="15"/>
+    </node>
+    <node visible="true" id="16" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="31.1809718999999994" lon="34.0506655000000009">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="16"/>
+    </node>
+    <node visible="true" id="17" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="31.1805097000000018" lon="34.0554091999999997">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="17"/>
+    </node>
+    <node visible="true" id="18" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="31.1809271000000017" lon="34.0560284999999965">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="18"/>
+    </node>
+    <node visible="true" id="19" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="31.1802987000000016" lon="34.0534435000000002">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="19"/>
+    </node>
+    <node visible="true" id="20" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="31.1808283000000017" lon="34.0508269999999982">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="20"/>
+    </node>
+    <node visible="true" id="21" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="31.1809539999999998" lon="34.0508943000000031">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="21"/>
+    </node>
+    <node visible="true" id="22" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="31.1809225999999988" lon="34.0503154000000023">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="22"/>
+    </node>
+    <node visible="true" id="23" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="31.1808732000000006" lon="34.0554720000000017">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="23"/>
+    </node>
+    <node visible="true" id="24" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="31.1802853000000013" lon="34.0543321000000034">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="24"/>
+    </node>
+    <node visible="true" id="25" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="31.1807386000000015" lon="34.0515720000000002">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="25"/>
+    </node>
+    <node visible="true" id="26" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="31.1798141000000015" lon="34.0513924999999986">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="26"/>
+    </node>
+    <node visible="true" id="27" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="31.1810885999999989" lon="34.0509751000000023">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="27"/>
+    </node>
+    <node visible="true" id="28" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="31.1800698999999994" lon="34.0525728000000001">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="28"/>
+    </node>
+    <node visible="true" id="29" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="31.1798141000000015" lon="34.0510335000000026">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="29"/>
+    </node>
+    <node visible="true" id="30" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="31.1803795000000008" lon="34.0549468999999974">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="30"/>
+    </node>
+    <node visible="true" id="31" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="31.1806711999999990" lon="34.0545071000000021">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="31"/>
+    </node>
+    <node visible="true" id="32" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="31.1796569999999988" lon="34.0506519999999995">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="32"/>
+    </node>
+    <node visible="true" id="33" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="31.1808192999999996" lon="34.0552789999999987">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="33"/>
+    </node>
+    <node visible="true" id="34" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="31.1807969000000007" lon="34.0497992999999965">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="34"/>
+    </node>
+    <node visible="true" id="35" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="31.1806084000000006" lon="34.0508540000000011">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="35"/>
+    </node>
+    <node visible="true" id="36" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="31.1802403999999989" lon="34.0531203000000033">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="36"/>
+    </node>
+    <node visible="true" id="37" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="31.1811962999999999" lon="34.0509795999999980">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="37"/>
+    </node>
+    <node visible="true" id="38" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="31.1783150999999989" lon="34.0524247000000031">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="38"/>
+    </node>
+    <node visible="true" id="39" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="31.1795717000000003" lon="34.0550635999999969">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="39"/>
+    </node>
+    <node visible="true" id="40" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="31.1788042999999995" lon="34.0520791000000003">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="40"/>
+    </node>
+    <node visible="true" id="41" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="31.1790106999999992" lon="34.0528195999999994">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="41"/>
+    </node>
+    <node visible="true" id="42" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="31.1797691999999991" lon="34.0559342000000029">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="42"/>
+    </node>
+    <node visible="true" id="45" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="31.1801011999999993" lon="34.0526027000000013">
+        <tag k="hoot:id" v="45"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="45"/>
+    </node>
+    <node visible="true" id="50" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="31.1821476000000004" lon="34.0507315999999989">
+        <tag k="hoot:id" v="50"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="50"/>
+    </node>
+    <node visible="true" id="51" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="31.1832951999999999" lon="34.0565417999999980">
+        <tag k="hoot:id" v="51"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="51"/>
+    </node>
+    <node visible="true" id="52" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="31.1816707999999991" lon="34.0482518999999968">
+        <tag k="hoot:id" v="52"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="52"/>
+    </node>
+    <node visible="true" id="53" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="31.1815646999999991" lon="34.0472591999999992">
+        <tag k="hoot:id" v="53"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="53"/>
+    </node>
+    <node visible="true" id="55" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="31.1806942000000014" lon="34.0508434999999992">
+        <tag k="hoot:id" v="55"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="55"/>
+    </node>
+    <node visible="true" id="56" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="31.1798582000000017" lon="34.0563642999999985">
+        <tag k="hoot:id" v="56"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="56"/>
+    </node>
+    <node visible="true" id="57" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="31.1798141000000015" lon="34.0513880000000029">
+        <tag k="hoot:id" v="57"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="57"/>
+    </node>
+    <node visible="true" id="58" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="31.1790644000000015" lon="34.0528071000000025">
+        <tag k="hoot:id" v="58"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="58"/>
+    </node>
+    <node visible="true" id="59" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="31.1800186000000004" lon="34.0525846999999970">
+        <tag k="hoot:id" v="59"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="59"/>
+    </node>
+    <way visible="true" id="2" timestamp="1970-01-01T00:00:00Z" version="2" changeset="3">
+        <nd ref="3"/>
+        <nd ref="56"/>
+        <tag k="hoot:id" v="2"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="source" v="Bing"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="source:datetime" v="2016-08-06T20:08:03Z"/>
+        <tag k="hoot:id" v="2"/>
+    </way>
+    <way visible="true" id="3" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
+        <nd ref="33"/>
+        <nd ref="23"/>
+        <nd ref="18"/>
+        <nd ref="15"/>
+        <nd ref="4"/>
+        <tag k="source" v="digitalglobe"/>
+        <tag k="source:datetime" v="2016-05-02T23:46:05Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="3"/>
+    </way>
+    <way visible="true" id="4" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
+        <nd ref="40"/>
+        <nd ref="38"/>
+        <nd ref="5"/>
+        <tag k="source" v="digitalglobe"/>
+        <tag k="source:datetime" v="2016-05-02T23:45:56Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="4"/>
+    </way>
+    <way visible="true" id="5" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
+        <nd ref="7"/>
+        <nd ref="11"/>
+        <nd ref="12"/>
+        <nd ref="6"/>
+        <tag k="source:datetime" v="2016-05-02T23:46:19Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="5"/>
+    </way>
+    <way visible="true" id="6" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
+        <nd ref="37"/>
+        <nd ref="27"/>
+        <nd ref="21"/>
+        <tag k="source" v="digitalglobe"/>
+        <tag k="source:datetime" v="2016-05-02T23:46:02Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="6"/>
+    </way>
+    <way visible="true" id="7" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
+        <nd ref="35"/>
+        <nd ref="14"/>
+        <nd ref="29"/>
+        <tag k="source" v="digitalglobe"/>
+        <tag k="source:datetime" v="2016-05-02T23:46:04Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="7"/>
+    </way>
+    <way visible="true" id="8" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
+        <nd ref="35"/>
+        <nd ref="25"/>
+        <tag k="source" v="digitalglobe"/>
+        <tag k="source:datetime" v="2016-05-02T23:46:04Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="8"/>
+    </way>
+    <way visible="true" id="9" timestamp="1970-01-01T00:00:00Z" version="2" changeset="3">
+        <nd ref="35"/>
+        <nd ref="55"/>
+        <nd ref="20"/>
+        <nd ref="21"/>
+        <tag k="hoot:id" v="9"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="source" v="digitalglobe"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2016-05-02T23:46:04Z"/>
+        <tag k="hoot:id" v="9"/>
+    </way>
+    <way visible="true" id="10" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
+        <nd ref="34"/>
+        <nd ref="22"/>
+        <nd ref="16"/>
+        <nd ref="21"/>
+        <tag k="source" v="digitalglobe"/>
+        <tag k="source:datetime" v="2016-05-02T23:46:05Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="10"/>
+    </way>
+    <way visible="true" id="11" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
+        <nd ref="33"/>
+        <nd ref="17"/>
+        <tag k="source" v="digitalglobe"/>
+        <tag k="source:datetime" v="2016-05-02T23:46:05Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="11"/>
+    </way>
+    <way visible="true" id="12" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
+        <nd ref="33"/>
+        <nd ref="13"/>
+        <tag k="source" v="digitalglobe"/>
+        <tag k="source:datetime" v="2016-05-02T23:46:05Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="12"/>
+    </way>
+    <way visible="true" id="13" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
+        <nd ref="32"/>
+        <nd ref="29"/>
+        <tag k="source" v="digitalglobe"/>
+        <tag k="source:datetime" v="2016-05-02T23:46:07Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="13"/>
+    </way>
+    <way visible="true" id="14" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
+        <nd ref="31"/>
+        <nd ref="13"/>
+        <tag k="source" v="digitalglobe"/>
+        <tag k="source:datetime" v="2016-05-02T23:46:08Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="14"/>
+    </way>
+    <way visible="true" id="15" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
+        <nd ref="39"/>
+        <nd ref="30"/>
+        <tag k="source" v="digitalglobe"/>
+        <tag k="source:datetime" v="2016-05-02T23:46:09Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="15"/>
+    </way>
+    <way visible="true" id="16" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
+        <nd ref="30"/>
+        <nd ref="13"/>
+        <tag k="source" v="digitalglobe"/>
+        <tag k="source:datetime" v="2016-05-02T23:46:09Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="16"/>
+    </way>
+    <way visible="true" id="17" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
+        <nd ref="30"/>
+        <nd ref="24"/>
+        <tag k="source" v="digitalglobe"/>
+        <tag k="source:datetime" v="2016-05-02T23:46:09Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="17"/>
+    </way>
+    <way visible="true" id="18" timestamp="1970-01-01T00:00:00Z" version="2" changeset="3">
+        <nd ref="57"/>
+        <nd ref="26"/>
+        <nd ref="28"/>
+        <tag k="hoot:id" v="18"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="source" v="digitalglobe"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2016-05-02T23:46:09Z"/>
+        <tag k="hoot:id" v="18"/>
+    </way>
+    <way visible="true" id="19" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
+        <nd ref="28"/>
+        <nd ref="36"/>
+        <nd ref="19"/>
+        <tag k="source" v="digitalglobe"/>
+        <tag k="source:datetime" v="2016-05-02T23:46:09Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="19"/>
+    </way>
+    <way visible="true" id="20" timestamp="1970-01-01T00:00:00Z" version="2" changeset="3">
+        <nd ref="59"/>
+        <nd ref="58"/>
+        <tag k="hoot:id" v="20"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="source" v="digitalglobe"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2016-05-02T23:46:09Z"/>
+        <tag k="hoot:id" v="20"/>
+    </way>
+    <way visible="true" id="24" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+        <nd ref="50"/>
+        <nd ref="51"/>
+        <tag k="hoot:id" v="24"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="24"/>
+    </way>
+    <way visible="true" id="25" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+        <nd ref="53"/>
+        <nd ref="52"/>
+        <nd ref="50"/>
+        <tag k="hoot:id" v="25"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="25"/>
+    </way>
+    <way visible="true" id="26" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+        <nd ref="41"/>
+        <nd ref="40"/>
+        <nd ref="10"/>
+        <nd ref="2"/>
+        <tag k="hoot:id" v="26"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="source" v="Bing"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="source:datetime" v="2016-08-06T20:08:03Z"/>
+        <tag k="hoot:id" v="26"/>
+    </way>
+    <way visible="true" id="27" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+        <nd ref="39"/>
+        <nd ref="9"/>
+        <nd ref="41"/>
+        <tag k="hoot:id" v="27"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="source" v="Bing"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="source:datetime" v="2016-08-06T20:08:03Z"/>
+        <tag k="hoot:id" v="27"/>
+    </way>
+    <way visible="true" id="28" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+        <nd ref="56"/>
+        <nd ref="8"/>
+        <nd ref="42"/>
+        <nd ref="39"/>
+        <tag k="hoot:id" v="28"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="source" v="Bing"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="source:datetime" v="2016-08-06T20:08:03Z"/>
+        <tag k="hoot:id" v="28"/>
+    </way>
+    <way visible="true" id="29" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+        <nd ref="57"/>
+        <nd ref="45"/>
+        <nd ref="59"/>
+        <tag k="hoot:id" v="29"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="29"/>
+    </way>
+    <way visible="true" id="30" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+        <nd ref="29"/>
+        <nd ref="57"/>
+        <tag k="hoot:id" v="30"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="source" v="digitalglobe"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2016-05-02T23:46:09Z"/>
+        <tag k="hoot:id" v="30"/>
+    </way>
+    <way visible="true" id="31" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+        <nd ref="58"/>
+        <nd ref="41"/>
+        <tag k="hoot:id" v="31"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="source" v="digitalglobe"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2016-05-02T23:46:09Z"/>
+        <tag k="hoot:id" v="31"/>
+    </way>
+    <way visible="true" id="32" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+        <nd ref="28"/>
+        <nd ref="59"/>
+        <tag k="hoot:id" v="32"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="source" v="digitalglobe"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2016-05-02T23:46:09Z"/>
+        <tag k="hoot:id" v="32"/>
+    </way>
+    <way visible="true" id="33" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+        <nd ref="50"/>
+        <nd ref="37"/>
+        <tag k="hoot:id" v="33"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="33"/>
+    </way>
+    <relation visible="true" id="2" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
+        <tag k="name:ia" v="Egypto"/>
+        <tag k="name:hr" v="Egipat"/>
+        <tag k="name:kaa" v="Mısır"/>
+        <tag k="name:kab" v="Maṣer"/>
+        <tag k="name:ht" v="Ejip"/>
+        <tag k="name:id" v="Mesir"/>
+        <tag k="name:tpi" v="Ijip"/>
+        <tag k="name:hu" v="Egyiptom"/>
+        <tag k="name:ie" v="Egiptia"/>
+        <tag k="name:yi" v="עגיפטן"/>
+        <tag k="name:hy" v="Եգիպտոս"/>
+        <tag k="name:lad" v="Ayifto"/>
+        <tag k="name:be-tarask" v="Эгіпет"/>
+        <tag k="name:bat-smg" v="Egėpts"/>
+        <tag k="name:yo" v="Ẹ́gíptì"/>
+        <tag k="name:io" v="Egiptia"/>
+        <tag k="name:roa-tara" v="Egitte"/>
+        <tag k="name:nah" v="Egipto"/>
+        <tag k="official_name" v="جمهورية مصر العربية"/>
+        <tag k="name:ur" v="مصر"/>
+        <tag k="name:fa" v="مصر"/>
+        <tag k="name:sah" v="Эгиипэт"/>
+        <tag k="name:es" v="Egipto"/>
+        <tag k="name:et" v="Egiptus"/>
+        <tag k="name:eu" v="Egipto"/>
+        <tag k="name:pam" v="Ejiptu"/>
+        <tag k="name:vi" v="Ai Cập"/>
+        <tag k="name:nap" v="Naggitto"/>
+        <tag k="name:uz" v="Misr"/>
+        <tag k="name:fi" v="Egypti"/>
+        <tag k="name:fj" v="Ijipta"/>
+        <tag k="name:pap" v="Egipto"/>
+        <tag k="name:lbe" v="Мисри"/>
+        <tag k="name:xal" v="Иҗибдин Араб Орн"/>
+        <tag k="name:vo" v="Lägüptän"/>
+        <tag k="name:zh-yue" v="埃及"/>
+        <tag k="name:fo" v="Egyptaland"/>
+        <tag k="name:wa" v="Edjipe"/>
+        <tag k="name:pt-br" v="Egito"/>
+        <tag k="name:ga" v="An Éigipt"/>
+        <tag k="name:war" v="Ehipto"/>
+        <tag k="official_name:fr" v="République arabe d'Égypte"/>
+        <tag k="name:fr" v="Égypte"/>
+        <tag k="name:mrj" v="Египет"/>
+        <tag k="name:bpy" v="মিশর"/>
+        <tag k="name:jbo" v="misrygu'e"/>
+        <tag k="name:gd" v="An Èipheit"/>
+        <tag k="name:nrm" v="Êgypte"/>
+        <tag k="name:gag" v="Egipet"/>
+        <tag k="name:fy" v="Egypte"/>
+        <tag k="source:datetime" v="2016-10-04T08:19:19Z"/>
+        <tag k="name:gl" v="Exipto"/>
+        <tag k="name:gan" v="埃及"/>
+        <tag k="name:hak" v="Âi-khi̍p"/>
+        <tag k="name:srn" v="Egiptakondre"/>
+        <tag k="long_name:fr" v="République Arabe d'Égypte"/>
+        <tag k="name:bar" v="Egyptn"/>
+        <tag k="name:wo" v="Isipt"/>
+        <tag k="name:gn" v="Ehipto"/>
+        <tag k="name:arc" v="ܡܨܪܝܢ"/>
+        <tag k="name:sq" v="Egjipti"/>
+        <tag k="name:ta" v="எகிப்து"/>
+        <tag k="name:sr" v="Египат"/>
+        <tag k="name:da" v="Egypten"/>
+        <tag k="name:ss" v="IGibhithe"/>
+        <tag k="name:cs" v="Egypt"/>
+        <tag k="name:su" v="Mesir"/>
+        <tag k="name:te" v="ఈజిప్టు"/>
+        <tag k="name:sv" v="Egypten"/>
+        <tag k="name:cu" v="Єгѷптъ"/>
+        <tag k="name:de" v="Ägypten"/>
+        <tag k="name:zea" v="Ehypte"/>
+        <tag k="name:sw" v="Misri"/>
+        <tag k="name:tg" v="Миср"/>
+        <tag k="name:crh" v="Mısır"/>
+        <tag k="name:nso" v="Egypt"/>
+        <tag k="name:th" v="ประเทศอียิปต์"/>
+        <tag k="name:cy" v="Yr Aifft"/>
+        <tag k="name:haw" v="‘Aikupika"/>
+        <tag k="name:scn" v="Eggittu"/>
+        <tag k="name:tk" v="Müsür"/>
+        <tag k="name:sco" v="Egyp"/>
+        <tag k="name:tl" v="Ehipto"/>
+        <tag k="name:mdf" v="Египет"/>
+        <tag k="name:ace" v="Meusé"/>
+        <tag k="name:simple" v="Egypt"/>
+        <tag k="name:dsb" v="Egyptojska"/>
+        <tag k="name:frp" v="Èg·ipte"/>
+        <tag k="name:csb" v="Egipt"/>
+        <tag k="name:tr" v="Mısır"/>
+        <tag k="name:frr" v="Ägypten"/>
+        <tag k="name:ts" v="Egypt"/>
+        <tag k="name:tt" v="Мисыр"/>
+        <tag k="name:hsb" v="Egyptowska"/>
+        <tag k="name:arz" v="مصر"/>
+        <tag k="name:ug" v="مىسىر"/>
+        <tag k="name:dv" v="މިޞްރު"/>
+        <tag k="timezone" v="Africa/Cairo"/>
+        <tag k="ISO3166-1:numeric" v="818"/>
+        <tag k="name:bcl" v="Ehipto"/>
+        <tag k="name:ty" v="Egipt"/>
+        <tag k="name:uk" v="Єгипет"/>
+        <tag k="name:nds" v="Ägypten"/>
+        <tag k="name:el" v="Αίγυπτος"/>
+        <tag k="official_name:eo" v="Araba Respubliko Egiptio"/>
+        <tag k="name:en" v="Egypt"/>
+        <tag k="name:eo" v="Egiptio"/>
+        <tag k="name:stq" v="Ägypten"/>
+        <tag k="name:ast" v="Exiptu"/>
+        <tag k="name:rue" v="Еґіпет"/>
+        <tag k="name:ba" v="Мысыр"/>
+        <tag k="name:ar" v="مصر"/>
+        <tag k="name:vec" v="Egito"/>
+        <tag k="name:qu" v="Ihiptu"/>
+        <tag k="name:be" v="Егіпет"/>
+        <tag k="name:bg" v="Египет"/>
+        <tag k="is_in:continent" v="Africa"/>
+        <tag k="name:az" v="Misir"/>
+        <tag k="name:zgh" v="ⵎⵉⵙⵔ"/>
+        <tag k="name:rm" v="Egipta"/>
+        <tag k="name:ceb" v="Ehipto"/>
+        <tag k="name:rn" v="Egipto"/>
+        <tag k="name:bm" v="Misra"/>
+        <tag k="long_name:ar" v="جمهورية مصر العربية"/>
+        <tag k="name:ro" v="Egipt"/>
+        <tag k="name:bn" v="মিশর"/>
+        <tag k="name:bo" v="ཨའི་ཅི།"/>
+        <tag k="name:new" v="मिस्र"/>
+        <tag k="ISO3166-1" v="EG"/>
+        <tag k="name:sa" v="ईजिप्तदेशः"/>
+        <tag k="name:lez" v="Мисри"/>
+        <tag k="name:ca" v="Egipte"/>
+        <tag k="name:bug" v="Mesir"/>
+        <tag k="name:br" v="Egipt"/>
+        <tag k="name:sc" v="Egittu"/>
+        <tag k="name:tet" v="Ejitu"/>
+        <tag k="name:zh-classical" v="埃及"/>
+        <tag k="name:bs" v="Egipat"/>
+        <tag k="name:ru" v="Египет"/>
+        <tag k="name:se" v="Egypta"/>
+        <tag k="name:ce" v="Мисар"/>
+        <tag k="name:sg" v="Kâmitâ"/>
+        <tag k="name:sh" v="Egipat"/>
+        <tag k="name:wuu" v="埃及"/>
+        <tag k="name:sk" v="Egypt"/>
+        <tag k="alt_name:eo" v="Egiptujo"/>
+        <tag k="name:sl" v="Egipt"/>
+        <tag k="ISO3166-1:alpha2" v="EG"/>
+        <tag k="name:sm" v="Aikupito"/>
+        <tag k="ISO3166-1:alpha3" v="EGY"/>
+        <tag k="name:sn" v="Egypt"/>
+        <tag k="name:ber" v="ⵎⵉⵙⵔ"/>
+        <tag k="name:so" v="Masar"/>
+        <tag k="name:pa" v="ਮਿਸਰ"/>
+        <tag k="name:fur" v="Egjit"/>
+        <tag k="name:or" v="ଇଜିପ୍ଟ"/>
+        <tag k="name:os" v="Мысыр"/>
+        <tag k="name:pl" v="Egipt"/>
+        <tag k="name:ab" v="Мысры"/>
+        <tag k="name:ps" v="مصر"/>
+        <tag k="name:pt" v="Egito"/>
+        <tag k="name:af" v="Egipte"/>
+        <tag k="name:ak" v="Igyipt"/>
+        <tag k="name:am" v="ግብፅ"/>
+        <tag k="int_name" v="Egypten"/>
+        <tag k="name:an" v="Echipto"/>
+        <tag k="name:lij" v="Egitto"/>
+        <tag k="name:na" v="Idjipt"/>
+        <tag k="name:mr" v="इजिप्त"/>
+        <tag k="name:ms" v="Mesir"/>
+        <tag k="name:pih" v="Ejiipt"/>
+        <tag k="name:min" v="Masia"/>
+        <tag k="name:mt" v="Eġittu"/>
+        <tag k="name:ne" v="मिश्र"/>
+        <tag k="name:my" v="အီဂျစ်နိုင်ငံ"/>
+        <tag k="name:nl" v="Egypte"/>
+        <tag k="name:bxr" v="Египет"/>
+        <tag k="name:nn" v="Egypt"/>
+        <tag k="name:no" v="Egypt"/>
+        <tag k="name:oc" v="Egipte"/>
+        <tag k="name:chy" v="Egypt"/>
+        <tag k="name:ext" v="Egitu"/>
+        <tag k="name:mzn" v="مصر"/>
+        <tag k="name:nv" v="Ííjip"/>
+        <tag k="name:nds-nl" v="Egypte"/>
+        <tag k="name:hif" v="Egypt"/>
+        <tag k="name:tzl" v="Misiria"/>
+        <tag k="name:szl" v="Egipt"/>
+        <tag k="flag" v="http://upload.wikimedia.org/wikipedia/commons/f/fe/Flag_of_Egypt.svg"/>
+        <tag k="name:diq" v="Mısır"/>
+        <tag k="type" v="boundary"/>
+        <tag k="name:la" v="Aegyptus"/>
+        <tag k="wikipedia" v="en:Egypt"/>
+        <tag k="name:lb" v="Egypten"/>
+        <tag k="name:ks" v="مِسر"/>
+        <tag k="name:ku" v="Misir"/>
+        <tag k="name:kv" v="Египет Араб Республика"/>
+        <tag k="name:kw" v="Ejyp"/>
+        <tag k="name:ky" v="Египет"/>
+        <tag k="name:li" v="Egypte"/>
+        <tag k="name:bjn" v="Mesir"/>
+        <tag k="name:ckb" v="میسر"/>
+        <tag k="name:ln" v="Ejipte"/>
+        <tag k="admin_level" v="2"/>
+        <tag k="name:lt" v="Egiptas"/>
+        <tag k="name:lv" v="Ēģipte"/>
+        <tag k="name:mg" v="Ejipta"/>
+        <tag k="name:mk" v="Египет"/>
+        <tag k="name:ml" v="ഈജിപ്റ്റ്‌"/>
+        <tag k="name:mn" v="Египет"/>
+        <tag k="name:ja" v="エジプト"/>
+        <tag k="name:is" v="Egyptaland"/>
+        <tag k="name:vls" v="Egypte"/>
+        <tag k="name:it" v="Egitto"/>
+        <tag k="boundary" v="administrative"/>
+        <tag k="name:lmo" v="Egit"/>
+        <tag k="name:zh" v="埃及"/>
+        <tag k="name:xmf" v="ეგვიპტე"/>
+        <tag k="name:als" v="Ägypten"/>
+        <tag k="name:pnb" v="مصر"/>
+        <tag k="wikidata" v="Q79"/>
+        <tag k="name:pms" v="Egit"/>
+        <tag k="name:ilo" v="Ehípto"/>
+        <tag k="name:zh-min-nan" v="Ai-ki̍p"/>
+        <tag k="name:ka" v="ეგვიპტე"/>
+        <tag k="name:zu" v="IGibhithe"/>
+        <tag k="name:jv" v="Mesir"/>
+        <tag k="name:fiu-vro" v="Egüptüs"/>
+        <tag k="name:kg" v="Misiri"/>
+        <tag k="name:ki" v="Egypt"/>
+        <tag k="name:kk" v="Мысыр"/>
+        <tag k="name:kl" v="Egypt"/>
+        <tag k="name:km" v="អេហ៊្សីប"/>
+        <tag k="name:kn" v="ಈಜಿಪ್ಟ್"/>
+        <tag k="name:pnt" v="Αίγυπτος"/>
+        <tag k="name:ko" v="이집트"/>
+        <tag k="name:ang" v="Ægypt"/>
+        <tag k="name:ha" v="Misra"/>
+        <tag k="name" v="Egypt مصر"/>
+        <tag k="name:gu" v="ઇજિપ્ત"/>
+        <tag k="name:he" v="מצרים"/>
+        <tag k="name:gv" v="Yn Egypt"/>
+        <tag k="name:hi" v="मिस्र"/>
+        <tag k="name:nov" v="Egiptia"/>
+        <tag k="type" v="boundary"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="2"/>
+    </relation>
+    <relation visible="true" id="3" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
+        <tag k="name:ar" v="المستوطنات الإسرائيلية دمرت في قطاع غزة"/>
+        <tag k="type" v="collection"/>
+        <tag k="name:he" v="היישובים הישראליים המפונים ברצועת עזה"/>
+        <tag k="name" v="היישובים הישראליים המפונים ברצועת עזה"/>
+        <tag k="source:datetime" v="2016-09-25T13:15:33Z"/>
+        <tag k="name:en" v="The evacuated Israeli settlements in Gaza Strip"/>
+        <tag k="type" v="collection"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="3"/>
+    </relation>
+</osm>

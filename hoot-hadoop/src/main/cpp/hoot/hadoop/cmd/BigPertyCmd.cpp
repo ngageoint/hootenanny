@@ -23,8 +23,8 @@
 #include <hoot/core/fourpass/FourPassManager.h>
 #include <hoot/core/ops/OpList.h>
 #include <hoot/core/perty/BigPertyOp.h>
-#include <hoot/core/util/Settings.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/hadoop/HadoopTileWorker2.h>
 
 // Pretty Pipes

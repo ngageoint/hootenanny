@@ -290,12 +290,12 @@ void WayJoin2Reducer::_writeWay(HadoopPipes::ReduceContext& context)
     {
       missing.erase(*it);
     }
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       LOG_WARN("Dropping invalid way due to missing nodes. " << w->toString());
       LOG_WARN("  Missing nodes: " << missing);
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }

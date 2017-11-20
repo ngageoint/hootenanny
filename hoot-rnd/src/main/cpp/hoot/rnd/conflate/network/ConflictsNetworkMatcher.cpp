@@ -28,8 +28,9 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/rnd/conflate/network/EdgeMatch.h>
-
+#include <hoot/rnd/conflate/frechet/FrechetDistance.h>
 #include "EdgeMatchSetFinder.h"
 
 using namespace geos::geom;
@@ -138,31 +139,32 @@ void ConflictsNetworkMatcher::_removeDupes()
 {
   LOG_DEBUG("Removing duplicate edges...");
 
+  // Bail out if we only have one match
+  if (_edgeMatches->getAllMatches().size() < 2)
+    return;
+
   QHash<ConstEdgeMatchPtr,double>::iterator it1 = _edgeMatches->getAllMatches().begin();
   QHash<ConstEdgeMatchPtr,double>::iterator it2 = _edgeMatches->getAllMatches().begin();
 
-  //  Check for empty edge matches, only test it1 because currently it1 == it2
-  if (it1 == _edgeMatches->getAllMatches().end())
-    return;
-
-  ++it2;
-
   while (it1 != _edgeMatches->getAllMatches().end())
   {
+    it2 = it1;
+    ++it2;
+
     while (it2 != _edgeMatches->getAllMatches().end())
     {
-      if (it2.key()->isVerySimilarTo(it1.key()))
+      if (it1.key()->isVerySimilarTo(it2.key()))
       {
         double score1 = it1.value();
         double score2 = it2.value();
         if (score1 > score2)
         {
-          LOG_TRACE("Removing " << *it2);
+          LOG_TRACE("Removing " << it2.key()->toString());
           it2 = _edgeMatches->getAllMatches().erase(it2);
         }
         else
         {
-          LOG_TRACE("Removing " << *it1);
+          LOG_TRACE("Removing " << it1.key()->toString());
           it1 = _edgeMatches->getAllMatches().erase(it1);
           it2 = it1;
           ++it2;
@@ -174,6 +176,70 @@ void ConflictsNetworkMatcher::_removeDupes()
       }
     }
     ++it1;
+  }
+}
+
+Meters ConflictsNetworkMatcher::_getMatchSeparation(ConstEdgeMatchPtr pMatch)
+{
+  // convert the EdgeStrings into WaySublineStrings
+  WayStringPtr str1 = _details->toWayString(pMatch->getString1());
+  WayStringPtr str2 = _details->toWayString(pMatch->getString2());
+
+  if (str1->getSize() > 0 && str2->getSize() > 0)
+  {
+    //  Create a temp map, and add the ways
+    OsmMapPtr tempMap(new OsmMap());
+    tempMap->setProjection(_details->getMap()->getProjection());
+    WayPtr pWay1 = str1->copySimplifiedWayIntoMap(*(_details->getMap()), tempMap);
+    WayPtr pWay2 = str2->copySimplifiedWayIntoMap(*(_details->getMap()), tempMap);
+
+    // Make our frechet object
+    FrechetDistance distanceCalc(tempMap, pWay1, pWay2);
+    Meters d = distanceCalc.distance();
+
+    LOG_DEBUG("Match (" << pMatch->getUid() << ") separation: " << d);
+
+    return d;
+  }
+  else
+  {
+    return 0.0;
+  }
+}
+
+void ConflictsNetworkMatcher::_sanityCheckRelationships()
+{
+  LOG_DEBUG("Performing Relationship Sanity Check");
+
+  // Check our relationships for sanity...
+  foreach(ConstEdgeMatchPtr em, _scores.keys())
+  {
+    double myDistance = _getMatchSeparation(em);
+
+    foreach(ConstMatchRelationshipPtr r, _matchRelationships[em])
+    {
+      // If it's a conflict, AND we are a lot closer, ax the other one
+      if (r->isConflict())
+      {
+        double theirDistance = _getMatchSeparation(r->getEdge());
+
+        if (myDistance > 5.0 && myDistance*2.5 < theirDistance)
+        {
+          LOG_DEBUG("Removing insane match: " << r->getEdge()->getUid() << " - "
+                    << theirDistance << " keeping: " << em->getUid()
+                    << " - " << myDistance);
+
+          // Remove match
+          _edgeMatches->getAllMatches().remove(r->getEdge());
+
+          // Remove from scores
+          _scores.remove(r->getEdge());
+
+          // Remove from relationships
+          _matchRelationships.remove(r->getEdge());
+        }
+      }
+    }
   }
 }
 
@@ -200,28 +266,24 @@ void ConflictsNetworkMatcher::_createMatchRelationships()
     {
       from1 = em->getString1()->getFromVertex();
       touches.unite(_edgeMatches->getMatchesThatTerminateAt(from1));
-      conflict += _edgeMatches->getMatchesWithInteriorVertex(from1);
       LOG_VART(conflict.size());
     }
     if (em->getString1()->getTo()->isExtreme())
     {
       to1 = em->getString1()->getToVertex();
       touches.unite(_edgeMatches->getMatchesThatTerminateAt(to1));
-      conflict += _edgeMatches->getMatchesWithInteriorVertex(to1);
       LOG_VART(conflict.size());
     }
     if (em->getString2()->getFrom()->isExtreme())
     {
       from2 = em->getString2()->getFromVertex();
       touches.unite(_edgeMatches->getMatchesThatTerminateAt(from2));
-      conflict += _edgeMatches->getMatchesWithInteriorVertex(from2);
       LOG_VART(conflict.size());
     }
     if (em->getString2()->getTo()->isExtreme())
     {
       to2 = em->getString2()->getToVertex();
       touches.unite(_edgeMatches->getMatchesThatTerminateAt(to2));
-      conflict += _edgeMatches->getMatchesWithInteriorVertex(to2);
       LOG_VART(conflict.size());
     }
     conflict -= em;
@@ -250,23 +312,26 @@ void ConflictsNetworkMatcher::_createMatchRelationships()
     // any edge that touches, but isn't supporting its a conflict.
     touches -= em;
     touches -= support;
+
     // TODO: Removing the non-supporting, touching edges from the conflicts was done to make
     // a case test pass at the expense of no other case tests failing and no decrease
     // in regression performance.  However, this seems like an important piece of logic, so we need
     // to keep in mind that this change may have to be reverted if we encounter a situation where
     // having it disabled causes problems.
     //conflict += touches;
-    LOG_VART(conflict.size());
 
+    LOG_VART(conflict.size());
     LOG_VART(em);
     LOG_VART(conflict);
     LOG_VART(touches);
     LOG_VART(support);
 
+    // Conflicts
     foreach (ConstEdgeMatchPtr other, conflict)
     {
       _matchRelationships[em].append(ConstMatchRelationshipPtr(new MatchRelationship(other, true)));
     }
+
     foreach (ConstEdgeMatchPtr other, support)
     {
       MatchRelationshipPtr mr(new MatchRelationship(other, false));
@@ -532,8 +597,8 @@ void ConflictsNetworkMatcher::_iterateSimple()
       LOG_VART(denominator);
     }
 
-    // If the denominator trends to 0, we pollute the system with NaNs
-    if (denominator > 0.0)
+    // If the denominator trends to close to 0, we pollute the system with NaNs
+    if (denominator > EPSILON)
       newScores[em] = pow(numerator / denominator, aggression);
     else
       newScores[em] = 0.0;
@@ -549,6 +614,8 @@ void ConflictsNetworkMatcher::_iterateSimple()
              newWeights[em]);
   }
 
+  // Setting this really helps reduce scoring oscillation
+  _weightInfluence = 0.68;
   foreach (ConstEdgeMatchPtr em, newWeights.keys())
   {
     newWeights[em] = pow(newWeights[em] * newWeights.size() / weightSum, _weightInfluence);
@@ -584,6 +651,30 @@ void ConflictsNetworkMatcher::matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1
   _removeDupes();
 
   _createMatchRelationships();
+
+  _sanityCheckRelationships();
+}
+
+void ConflictsNetworkMatcher::finalize()
+{
+  // Check our relationships
+  foreach(ConstEdgeMatchPtr em, _scores.keys())
+  {
+    foreach(ConstMatchRelationshipPtr r, _matchRelationships[em])
+    {
+      double myScore = _scores[em];
+      double theirScore = _scores[r->getEdge()];
+
+      // If it's a conflict, AND we score a lot better, ax the other one
+      if (r->isConflict())
+      {
+        if (myScore > 0.3 + theirScore)
+        {
+          _scores[r->getEdge()] = 1.0e-5;
+        }
+      }
+    }
+  }
 }
 
 void ConflictsNetworkMatcher::_seedEdgeScores()

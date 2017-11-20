@@ -52,11 +52,13 @@ using namespace boost;
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/schema/OsmSchemaLoader.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/FileUtils.h>
 
 // Qt
 #include <QDomDocument>
 #include <QHash>
 #include <QSet>
+#include <QDir>
 
 // Standard
 #include <iostream>
@@ -868,11 +870,11 @@ public:
     const SchemaVertex& v = _graph[vid];
     if (v.isValid())
     {
-      if (_logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (_logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN(tv.name << " was specified multiple times in the schema file.");
       }
-      else if (_logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (_logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(typeid(this).name() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }
@@ -1295,11 +1297,11 @@ private:
     {
       if (childTv.influence == -1.0)
       {
-        if (_logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        if (_logWarnCount < Log::getWarnMessageLimit())
         {
           LOG_WARN("Influence for " << childTv.name << " has not been specified.");
         }
-        else if (_logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        else if (_logWarnCount == Log::getWarnMessageLimit())
         {
           LOG_WARN(typeid(this).name() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }
@@ -1308,11 +1310,11 @@ private:
       }
       if (childTv.valueType == Unknown)
       {
-        if (_logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        if (_logWarnCount < Log::getWarnMessageLimit())
         {
           LOG_WARN("Value type for " << childTv.name << " has not been specified.");
         }
-        else if (_logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        else if (_logWarnCount == Log::getWarnMessageLimit())
         {
           LOG_WARN(typeid(this).name() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }
@@ -1480,7 +1482,29 @@ OsmSchema& OsmSchema::getInstance()
   {
     _theInstance = new OsmSchema();
     _theInstance->loadDefault();
-    LOG_TRACE(_theInstance->toGraphvizString());
+
+    //write this out to a temp file instead of to the log due to its size
+    if (Log::getInstance().getLevel() == Log::Trace)
+    {
+      const QString graphvizPath = "tmp/schema-graphviz";
+      const QString errorMsg = "Unable to write schema graphviz file to " + graphvizPath;
+      try
+      {
+        if (QDir().mkpath("tmp"))
+        {
+          FileUtils::writeFully(graphvizPath, _theInstance->toGraphvizString());
+          LOG_TRACE("Wrote schema graph viz file to: " << graphvizPath);
+        }
+        else
+        {
+          LOG_TRACE(errorMsg);
+        }
+      }
+      catch (const HootException&)
+      {
+        LOG_TRACE(errorMsg);
+      }
+    }
   }
   return *_theInstance;
 }
@@ -1561,8 +1585,7 @@ bool OsmSchema::isArea(const Tags& t, ElementType type) const
     return false;
   }
 
-  // Print out tags
-  LOG_TRACE("Tags: " << t.toString() );
+  //LOG_VART(t.toString());
 
   result |= isBuilding(t, type);
   result |= t.isTrue("building:part");
@@ -1661,6 +1684,11 @@ bool OsmSchema::isBuildingPart(const Tags& t, ElementType type) const
   return result;
 }
 
+bool OsmSchema::isBuildingPart(const ConstElementPtr& e) const
+{
+  return isBuildingPart(e->getTags(), e->getElementType());
+}
+
 bool OsmSchema::isCollection(const Element& e) const
 {
   bool result = false;
@@ -1737,6 +1765,7 @@ bool OsmSchema::isLinear(const Element &e)
     const Relation& r = dynamic_cast<const Relation&>(e);
     result |= r.getType() == MetadataTags::RelationMultilineString();
     result |= r.getType() == MetadataTags::RelationRoute();
+    result |= r.getType() == MetadataTags::RelationBoundary();
   }
 
   for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)
@@ -1782,9 +1811,20 @@ bool OsmSchema::isMetaData(const QString& key, const QString& /*value*/)
     return true;
   }
 
-  // for now all metadata tags are text so they're referenced by the key only. If that changes then
-  // we'll need some logic here to check if a vertex is a text vertex.
-  return isAncestor(key, "metadata");
+  if (_metadataKey.contains(key))
+  {
+    return _metadataKey[key];
+  }
+  else
+  {
+    // for now all metadata tags are text so they're referenced by the key only. If that changes then
+    // we'll need some logic here to check if a vertex is a text vertex.
+    bool metadata = isAncestor(key, "metadata");
+
+    _metadataKey[key] = metadata;
+
+    return metadata;
+  }
 }
 
 bool OsmSchema::isMultiLineString(const Relation& r) const
@@ -1848,7 +1888,7 @@ void OsmSchema::loadDefault()
   delete d;
   d = new OsmSchemaData();
 
-  LOG_INFO("Loading translation files...");
+  LOG_DEBUG("Loading translation files...");
   OsmSchemaLoaderFactory::getInstance().createLoader(path)->load(path, *this);
 }
 

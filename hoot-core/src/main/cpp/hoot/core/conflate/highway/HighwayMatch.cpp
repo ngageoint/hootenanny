@@ -93,9 +93,11 @@ HighwayMatch::HighwayMatch(const boost::shared_ptr<HighwayClassifier>& classifie
         else if (angle >= 0.5)      description.append("Similar highway orientation.");
         else if (angle >= 0.25)     description.append("Semi-similar highway orientation.");
         else                        description.append("Highway orientation not similar.");
+
         //  Use the average of the edge distance extractors
-        double edge = (EdgeDistanceExtractor(new RmseAggregator()).extract(*map, e1, e2) +
-                       EdgeDistanceExtractor(new SigmaAggregator()).extract(*map, e1, e2)) / 2.0;
+        double edge = (EdgeDistanceExtractor(ValueAggregatorPtr(new RmseAggregator())).extract(*map, e1, e2) +
+                       EdgeDistanceExtractor(ValueAggregatorPtr(new SigmaAggregator())).extract(*map, e1, e2)) / 2.0;
+
         if (edge >= 90)             description.append("Highway edges very close to each other.");
         else if (edge >= 70)        description.append("Highway edges somewhat close to each other.");
         else                        description.append("Highway edges not very close to each other.");

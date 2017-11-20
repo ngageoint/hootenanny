@@ -27,7 +27,7 @@ UI_DIR = tmp/ui
 MOC_DIR = tmp/moc
 release:OBJECTS_DIR = tmp/release
 else:OBJECTS_DIR = tmp/debug
-DESTDIR = ../lib/
+DESTDIR = ../../lib/
 
 # This is needed to make the swig code happy.
 QMAKE_CXXFLAGS += -fno-strict-aliasing
@@ -131,9 +131,4 @@ SOURCES += \
     src/main/cpp/pp/mapreduce/Reducer.cpp \
     src/main/cpp/pp/mapreduce/RecordWriter.cpp
 
-OTHER_FILES += \
-    src/main/cpp/pp/swig.i \
-    src/main/cpp/pp/InputFormat.i \
-    src/main/cpp/pp/InputSplit.i \
-    src/main/cpp/pp/Configuration.i \
-    src/main/cpp/pp/Plugins.i
+OTHER_FILES += $$files(src/*.i, true)

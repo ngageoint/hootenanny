@@ -38,6 +38,9 @@
 #include <hoot/rnd/conflate/network/IterativeNetworkMatcher.h>
 #include <hoot/rnd/conflate/network/OsmNetworkExtractor.h>
 
+// Qt
+#include <QDir>
+
 namespace hoot
 {
 
@@ -53,6 +56,7 @@ public:
 
   void writeDebugMap(OsmMapPtr map, IterativeNetworkMatcher& uut, int index)
   {
+    QDir().mkpath("tmp");
     OsmMapPtr copy(new OsmMap(map));
     DebugNetworkMapCreator().addDebugElements(copy, uut.getAllEdgeScores(),
       uut.getAllVertexScores());

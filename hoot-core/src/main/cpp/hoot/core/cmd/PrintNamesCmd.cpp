@@ -29,11 +29,12 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/io/WordCount.h>
 #include <hoot/core/io/WordCountWriter.h>
+#include <hoot/core/util/Log.h>
 
 // Standard
 #include <iomanip>
@@ -54,7 +55,7 @@ class PrintNamesCmd : public BaseCommand
 public:
   static string className() { return "hoot::PrintNamesCmd"; }
 
-  class NameCountVisitor : public ElementVisitor
+  class NameCountVisitor : public ConstElementVisitor
   {
   public:
     NameCountVisitor(std::map<QString, int>& counts) : _counts(counts)
@@ -132,15 +133,16 @@ public:
     {
       if (OsmMapReaderFactory::getInstance().hasPartialReader(args[i]))
       {
-        boost::shared_ptr<OsmMapReader> reader = OsmMapReaderFactory::getInstance().createReader(args[i]);
-        boost::shared_ptr<PartialOsmMapReader> pomr = boost::dynamic_pointer_cast<PartialOsmMapReader>(reader);
+        boost::shared_ptr<OsmMapReader> reader =
+          OsmMapReaderFactory::getInstance().createReader(args[i]);
+        boost::shared_ptr<PartialOsmMapReader> pomr =
+          boost::dynamic_pointer_cast<PartialOsmMapReader>(reader);
 
         pomr->open(args[i]);
 
         while (pomr->hasMoreElements())
         {
-          ElementPtr e = pomr->readNextElement();
-          v.visit(e);
+          v.visit(pomr->readNextElement());
         }
       }
       else

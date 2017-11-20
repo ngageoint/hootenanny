@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="38.8885119273824" minlon="-104.717556492996" maxlat="38.8940860705602" maxlon="-104.717495801534"/>
+    <node visible="true" id="9" timestamp="2017-09-14T16:17:06Z" version="1" changeset="50" lat="38.8885119273824031" lon="-104.7175564929959961">
+        <tag k="note" v="1-c"/>
+        <tag k="poi" v="yes"/>
+        <tag k="name" v="Starbucks"/>
+        <tag k="amenity" v="cafe"/>
+    </node>
+    <node visible="true" id="10" timestamp="2017-09-14T16:17:06Z" version="1" changeset="50" lat="38.8940860705601992" lon="-104.7174958015339996">
+        <tag k="note" v="1-b"/>
+        <tag k="poi" v="yes"/>
+        <tag k="name" v="Starbucks"/>
+        <tag k="amenity" v="cafe"/>
+    </node>
+</osm>

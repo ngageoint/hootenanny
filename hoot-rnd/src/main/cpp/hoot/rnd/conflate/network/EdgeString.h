@@ -72,9 +72,14 @@ public:
 
     void setSubline(ConstEdgeSublinePtr s) { _subline = s; }
 
-    QString toString() const
+    QString toString() const;
+
+    // TRICKY: This is used right now for a .Contains() call on a container full of
+    // EdgeEntries. "Overlap" works better than strict equality in this case.
+    bool operator== (const EdgeEntry &ee)
     {
-      return hoot::toString(_subline);
+      bool eq = _subline->overlaps(ee.getSubline());
+      return eq;
     }
 
   private:
@@ -234,6 +239,7 @@ private:
   friend class EdgeStringTest;
 
   QList<EdgeEntry> _edges;
+
 };
 
 typedef boost::shared_ptr<EdgeString> EdgeStringPtr;

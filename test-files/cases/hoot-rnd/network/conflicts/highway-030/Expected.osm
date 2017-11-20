@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
-    <node visible="true" id="-88" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025804601605429" lon="-77.0514144252534834">
+    <bounds minlat="38.90223879999999" minlon="-77.0551" maxlat="38.90274" maxlon="-77.05133499999999"/>
+    <node visible="true" id="-92" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025804601605429" lon="-77.0514144252534834">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-88"/>
+        <tag k="hoot:id" v="-92"/>
     </node>
     <node visible="true" id="-53" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9027400000000014" lon="-77.0547488009000006">
         <tag k="hoot:status" v="2"/>
@@ -156,8 +157,8 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1"/>
     </node>
-    <way visible="true" id="-165" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-88"/>
+    <way visible="true" id="-229" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-92"/>
         <nd ref="-8"/>
         <nd ref="-9"/>
         <nd ref="-10"/>
@@ -167,17 +168,17 @@
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-165"/>
+        <tag k="hoot:id" v="-229"/>
     </way>
-    <way visible="true" id="-164" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-228" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-7"/>
-        <nd ref="-88"/>
+        <nd ref="-92"/>
         <tag k="alt_name" v="24th St NW"/>
         <tag k="name" v="24TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-164"/>
+        <tag k="hoot:id" v="-228"/>
     </way>
     <way visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-13"/>
@@ -230,7 +231,7 @@
         <tag k="hoot:id" v="-30"/>
     </way>
     <way visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-88"/>
+        <nd ref="-92"/>
         <nd ref="-13"/>
         <tag k="alt_name" v="K St NW"/>
         <tag k="name" v="US Hwy 29"/>
@@ -241,7 +242,7 @@
     </way>
     <way visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-51"/>
-        <nd ref="-88"/>
+        <nd ref="-92"/>
         <tag k="alt_name" v="K St NW"/>
         <tag k="name" v="US Hwy 29"/>
         <tag k="highway" v="secondary"/>

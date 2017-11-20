@@ -37,11 +37,12 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/algorithms/WayHeading.h>
+#include <hoot/core/util/MapProjector.h>
 using namespace hoot;
 
 // Tbs

@@ -69,7 +69,8 @@ public:
 class OgrUtilities
 {
 public:
-  OgrUtilities();
+
+  virtual ~OgrUtilities();
 
   static OgrUtilities& getInstance();
 
@@ -103,6 +104,11 @@ public:
   OgrDriverInfo getDriverInfo(const QString& url, bool readonly);
 
 private:
+  /**
+   * Use getInstance() instead of the constructor.
+   */
+  OgrUtilities();
+
   /**
    * @brief loadDriverInfo Loads a hard-coded set of GDAL driver information with file
    *    extensions, prefixes, and open flags used by getDriverInfo() function

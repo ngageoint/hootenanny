@@ -39,6 +39,9 @@ namespace geos {
   }
 }
 
+// hoot
+#include <hoot/core/util/SharedPtrPool.h>
+
 namespace hoot
 {
 
@@ -63,12 +66,47 @@ public:
   virtual ~Node() {}
 
   /**
+   * Allocate a node as a shared pointer. At this time the allocated node will be allocated as
+   * part of an object pool which should avoid some memory fragmentation and provide faster
+   * allocation/deletion. See: https://github.com/ngageoint/hootenanny/issues/1715
+   *
+   * The implementation details may change in the future.
+   *
+   * @param s Status of this Node.
+   * @param id The ID of the node, typically new nodes get negative IDs. See
+   *  OsmMap::getIdGenerator()
+   * @param x The x coordinate. The actual meaning depends on the projection of the containing
+   *  OsmMap.
+   * @param circularError The circular error in meters. @sa Element::getCircularError()
+   * @return A newly allocated and initialized Node shared pointer.
+   */
+  static boost::shared_ptr<Node> newSp(Status s, long id, double x, double y,
+    Meters circularError);
+
+  static boost::shared_ptr<Node> newSp(Status s, long id, double x, double y, Meters circularError,
+                                       long changeset, long version, unsigned int timestamp,
+                                       QString user = ElementData::USER_EMPTY,
+                                       long uid = ElementData::UID_EMPTY,
+                                       bool visible = ElementData::VISIBLE_EMPTY);
+
+  /**
    * Clears all tags. However, unlike the other elements the x/y data and circular error aren't
    * modified b/c there isn't a clear definition of "unset" for this value.
    */
   virtual void clear();
 
   virtual Element* clone() const { return new Node(*this); }
+
+  /**
+   * Clone this node as a shared pointer. At this time the allocated node will be allocated as
+   * part of an object pool which should avoid some memory fragmentation and provide faster
+   * allocation/deletion. See: https://github.com/ngageoint/hootenanny/issues/1715
+   *
+   * The implementation details may change in the future.
+   *
+   * @return A newly allocated and copied Node shared pointer.
+   */
+  boost::shared_ptr<Node> cloneSp() const;
 
   virtual geos::geom::Envelope* getEnvelope(const boost::shared_ptr<const ElementProvider>& ep) const;
 
@@ -89,11 +127,19 @@ public:
 
   QString toString() const;
 
-  virtual void visitRo(const ElementProvider& map, ElementVisitor& visitor) const;
+  virtual void visitRo(const ElementProvider& map, ConstElementVisitor& visitor) const;
 
-  virtual void visitRw(ElementProvider& map, ElementVisitor& visitor);
+  virtual void visitRw(ElementProvider& map, ConstElementVisitor& visitor);
 
 protected:
+
+  friend class SharedPtrPool<Node>;
+  /**
+   * The default constructor shouldn't really be used in typical code. We really _need_ the
+   * parameters passed into the other constructors. However, the pool method requires a default
+   * constructor. To work around this, the pool objects are friends (above).
+   */
+  Node() {}
 
   NodeData _nodeData;
 
@@ -106,11 +152,35 @@ protected:
 typedef boost::shared_ptr<Node> NodePtr;
 typedef boost::shared_ptr<const Node> ConstNodePtr;
 
+inline NodePtr Node::newSp(Status s, long id, double x, double y, Meters circularError)
+{
+  NodePtr result = SharedPtrPool<Node>::getInstance().allocate();
+
+  result->_nodeData.init(id, x, y);
+  result->_getElementData().setCircularError(circularError);
+  result->setStatus(s);
+
+  return result;
+}
+
+inline NodePtr Node::newSp(Status s, long id, double x, double y, Meters circularError,
+                           long changeset, long version, unsigned int timestamp, QString user,
+                           long uid, bool visible)
+{
+  NodePtr result = SharedPtrPool<Node>::getInstance().allocate();
+
+  result->_nodeData.init(id, x, y, changeset, version, timestamp, user, uid, visible);
+  result->_getElementData().setCircularError(circularError);
+  result->setStatus(s);
+
+  return result;
+}
+
 inline uint qHash(const ConstNodePtr& n)
 {
   return qHash(n->getElementId());
 }
 
-} // hoot
+}
 
 #endif

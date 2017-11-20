@@ -35,6 +35,8 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QDebug>
@@ -46,12 +48,15 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, IntersectionSplitter)
 
-IntersectionSplitter::IntersectionSplitter()
+IntersectionSplitter::IntersectionSplitter() :
+_preserveUnknown1ElementIdWhenModifyingFeatures(
+  ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures())
 {
-
 }
 
-IntersectionSplitter::IntersectionSplitter(boost::shared_ptr<OsmMap> map)
+IntersectionSplitter::IntersectionSplitter(boost::shared_ptr<OsmMap> map) :
+_preserveUnknown1ElementIdWhenModifyingFeatures(
+  ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures())
 {
   _map = map;
 }
@@ -256,11 +261,9 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
         // they're split.
         _map->replace(way, newWays);
 
-        if (ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures() &&
-            way->getStatus() == Status::Unknown1)
+        // see comments for similar functionality in HighwaySnapMerger::_mergePair
+        if (_preserveUnknown1ElementIdWhenModifyingFeatures && way->getStatus() == Status::Unknown1)
         {
-          //see similar notes in HighwaySnapMerger::_mergePair
-
           LOG_TRACE(
             "Setting unknown1 " << way->getElementId().getId() << " on " <<
             splits[0]->getElementId() << "...");

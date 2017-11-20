@@ -30,13 +30,14 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Relation.h>
+#include <hoot/core/util/Log.h>
 
 using namespace std;
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, ReportMissingElementsVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, ReportMissingElementsVisitor)
 
 ReportMissingElementsVisitor::ReportMissingElementsVisitor(bool removeMissing, int maxReport) :
 _maxReport(maxReport),
@@ -56,17 +57,17 @@ void ReportMissingElementsVisitor::_reportMissing(ElementId referer, ElementId m
   {
     if (_removeMissing)
     {
-      LOG_WARN("Removing missing " << missing.toString() << " in " << referer.toString() << ".");
+      LOG_INFO("Removing missing " << missing.toString() << " in " << referer.toString() << ".");
     }
     else
     {
-      LOG_WARN("Missing " << missing.toString() << " in " << referer.toString() << ".");
+      LOG_INFO("Missing " << missing.toString() << " in " << referer.toString() << ".");
     }
   }
   _missingCount++;
   if (_missingCount == _maxReport)
   {
-    LOG_WARN("Reached maximum number of missing reports. No longer reporting.");
+    LOG_INFO("Reached maximum number of missing reports. No longer reporting.");
   }
 }
 

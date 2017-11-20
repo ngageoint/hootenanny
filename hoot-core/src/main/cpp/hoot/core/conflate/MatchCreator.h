@@ -55,7 +55,9 @@ public:
     Highway = 1,
     Building = 2,
     Waterway = 3,
-    Unknown = 4 // Unknown must always be last
+    PoiPolygonPOI = 4,  //this is a superset of POI specific to poi/poly conflation
+    Polygon = 5,    //polygon is a superset of building
+    Unknown = 6 // Unknown must always be last
   };
 
   enum FeatureCalcType
@@ -78,9 +80,9 @@ public:
    * class. SO, rather than that - we'll just keep all of this feature type
    * stuff grouped together in one place.
    */
-  static FeatureCalcType getFeatureCalcType (BaseFeatureType t);
+  static FeatureCalcType getFeatureCalcType(BaseFeatureType t);
 
-  static ElementCriterion* getElementCriterion (BaseFeatureType t, ConstOsmMapPtr map);
+  static boost::shared_ptr<ElementCriterion> getElementCriterion(BaseFeatureType t, ConstOsmMapPtr map);
 
   class Description
   {
@@ -154,6 +156,9 @@ protected:
   QString _description;
 
 };
+
+typedef boost::shared_ptr<MatchCreator> MatchCreatorPtr;
+typedef boost::shared_ptr<const MatchCreator> ConstMatchCreatorPtr;
 
 }
 
