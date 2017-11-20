@@ -40,9 +40,9 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(StringDistance, MaxWordSetDistance)
 
-MaxWordSetDistance::MaxWordSetDistance(StringDistance* d)
+MaxWordSetDistance::MaxWordSetDistance(StringDistancePtr d):
+  _d(d)
 {
-  _d.reset(d);
 }
 
 double MaxWordSetDistance::compare(const QString& s1, const QString& s2) const

@@ -38,7 +38,7 @@ using namespace geos::geom;
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
-#include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/rnd/conflate/multiary/MultiaryUtilities.h>
 
 // Qt
 #include <QStringBuilder>
@@ -214,31 +214,36 @@ void SparkChangesetWriter::writeChange(const Change& change)
     //TODO: some of this may be redundant with what's in OsmJsonWriter and in
     //MultiaryIngestChangesetWriter
 
-    //using elements in an array here, since that's what OsmJsonReader expects when using that
-    //to parse (although we're not currently doing that with multiary ingest due to #1772)
-    createChangeLine += "{\"elements\":[{\"type\":\"node\"";
-    createChangeLine += ",\"id\":" % QString::number(nodeCopy->getId(), 'g', _precision);
-    createChangeLine += ",\"lat\":" % QString::number(nodeCopy->getY(), 'g', _precision);
-    createChangeLine += ",\"lon\":" % QString::number(nodeCopy->getX(), 'g', _precision);
-    createChangeLine += ",\"tags\":{";
-    bool first = true;
-    const Tags& tags = nodeCopy->getTags();
-    for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
-    {
-      const QString tagKey = it.key();
-      const QString tagValue = it.value().trimmed();
-      if (!tagValue.isEmpty())
-      {
-        if (!first)
-        {
-          createChangeLine += ",";
-        }
-        createChangeLine +=
-          OsmJsonWriter::markupString(tagKey) % ":" % OsmJsonWriter::markupString(tagValue);
-        first = false;
-      }
-    }
-    createChangeLine += "}}]}\n";
+//    //using elements in an array here, since that's what OsmJsonReader expects when using that
+//    //to parse (although we're not currently doing that with multiary ingest due to #1772)
+//    createChangeLine += "{\"elements\":[{\"type\":\"node\"";
+//    createChangeLine += ",\"id\":" % QString::number(nodeCopy->getId(), 'g', _precision);
+//    createChangeLine += ",\"lat\":" % QString::number(nodeCopy->getY(), 'g', _precision);
+//    createChangeLine += ",\"lon\":" % QString::number(nodeCopy->getX(), 'g', _precision);
+//    createChangeLine += ",\"tags\":{";
+//    bool first = true;
+//    const Tags& tags = nodeCopy->getTags();
+//    for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
+//    {
+//      const QString tagKey = it.key();
+//      const QString tagValue = it.value().trimmed();
+//      if (!tagValue.isEmpty())
+//      {
+//        if (!first)
+//        {
+//          createChangeLine += ",";
+//        }
+//        createChangeLine +=
+//          OsmJsonWriter::markupString(tagKey) % ":" % OsmJsonWriter::markupString(tagValue);
+//        first = false;
+//      }
+//    }
+//    createChangeLine += "}}]}\n";
+    createChangeLine +=
+      /*"sha1sum:" +*/
+      /*QString::fromUtf8(MultiaryUtilities::convertElementToPbf(nodeCopy).toHex())*/
+      QString(MultiaryUtilities::convertElementToPbf(nodeCopy).toBase64().data()) +
+      "\n";
 
     if (change.getType() == Change::Modify)
     {

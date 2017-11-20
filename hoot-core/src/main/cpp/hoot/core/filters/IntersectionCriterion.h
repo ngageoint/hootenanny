@@ -52,7 +52,8 @@ public:
 
   IntersectionCriterion(ConstOsmMapPtr map);
 
-  virtual ElementCriterion* clone() { return new IntersectionCriterion(_map); }
+  virtual ElementCriterionPtr clone()
+  { return ElementCriterionPtr(new IntersectionCriterion(_map)); }
 
   virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
 

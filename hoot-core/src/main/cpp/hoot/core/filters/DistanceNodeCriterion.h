@@ -55,7 +55,8 @@ public:
 
   virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
-  DistanceNodeCriterion* clone() { return new DistanceNodeCriterion(_center, _distance); }
+  ElementCriterionPtr clone()
+  { return ElementCriterionPtr(new DistanceNodeCriterion(_center, _distance)); }
 
 private:
 
