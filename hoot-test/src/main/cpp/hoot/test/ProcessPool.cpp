@@ -165,11 +165,20 @@ void ProcessThread::processJobs(JobQueue* queue)
           if (output != "" && output != "." && !output.endsWith("\n"))
             output.append("\n");
         }
-        else if (line.contains(" ERROR "))
+        else if (line.contains(" ERROR ") || line.contains("Failure: "))
         {
           ++_failures;
+          line.append("\n");
+          QString next;
+          while (next != HOOT_TEST_FINISHED)
+          {
+            if (_proc->bytesAvailable() < 1)
+              _proc->waitForReadyRead(READ_TIMEOUT);
+            next = QString(_proc->readLine()).trimmed();
+            if (next != HOOT_TEST_FINISHED)
+              line.append(next.append("\n"));
+          }
           output.append(line);
-          output.append("\n");
           //  Reset the process
           resetProcess();
           line = HOOT_TEST_FINISHED;
