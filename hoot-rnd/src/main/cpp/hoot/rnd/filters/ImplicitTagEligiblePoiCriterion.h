@@ -51,7 +51,8 @@ public:
 
   virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
 
-  virtual ElementCriterion* clone() { return new ImplicitTagEligiblePoiCriterion(); }
+  virtual boost::shared_ptr<ElementCriterion> clone()
+  { return  boost::shared_ptr<ElementCriterion>(new ImplicitTagEligiblePoiCriterion()); }
 
   static QStringList getPoiKvps(const Tags& tags);
   static bool hasPoiKvp(const Tags& tags);
