@@ -485,6 +485,9 @@ var searchSchema = function(options) {
     var maxLevDistance = options.maxLevDistance || 20;
     var schema = schemaMap[translation].getDbSchema();
 
+    //Treat vertex geom type as point
+    if (geomType.toLowerCase() === 'vertex') geomType = 'point';
+
     var result = [];
     if (searchStr.length > 0) {
 
@@ -610,7 +613,9 @@ var getLevenshteinDistance = function(s, t) {
 }
 
 var schemaError = function(params) {
-    throw new Error(params.translation + ' for ' + params.geom + ' with ' + params.idelem + '=' + params.idval + ' not found');
+    var msg = params.translation + ' for ' + params.geom + ' with ' + params.idelem + '=' + params.idval + ' not found';
+    console.error(msg);
+    throw new Error(msg);
 }
 
 if (typeof exports !== 'undefined') {

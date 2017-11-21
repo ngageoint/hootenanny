@@ -42,12 +42,28 @@ describe('TranslationServer', function () {
                                 idx: -1
                             }];
 
+        var MgcpVertexCulvert = {
+                                translation: 'MGCP',
+                                geomType: 'vertex',
+                                searchStr: 'culvert'
+                            };
+        var MgcpVertexResult = [{
+                                name: "PAQ065",
+                                fcode: "AQ065",
+                                desc: "Culvert",
+                                geom: "Point",
+                                idx: -1
+                            }];
         it('should search for default options', function(){
             assert.equal(JSON.stringify(server.searchSchema(defaults)[0]), JSON.stringify(defaultsResult));
         });
 
         it('should search for "Bui" point feature types in the MGCP schema', function(){
             assert.equal(JSON.stringify(server.searchSchema(MgcpPointBui).slice(0,2)), JSON.stringify(MgcpResult));
+        });
+
+        it('should search for "culvert" vertex feature types in the MGCP schema', function(){
+            assert.equal(JSON.stringify(server.searchSchema(MgcpVertexCulvert).slice(0,1)), JSON.stringify(MgcpVertexResult));
         });
     });
 
