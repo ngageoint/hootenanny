@@ -50,7 +50,9 @@ _numTagsAdded(0),
 _numNodesInvolvedInMultipleRules(0),
 _numNodesParsed(0),
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
-_minWordLength(ConfigOptions().getPoiImplicitTagRulesMinimumWordLength())
+_minWordLength(ConfigOptions().getPoiImplicitTagRulesMinimumWordLength()),
+_smallestNumberOfTagsAdded(LONG_MAX),
+_largestNumberOfTagsAdded(0)
 {
   _ruleReader.reset(new ImplicitTagRulesSqliteReader());
   _ruleReader->open(ConfigOptions().getPoiImplicitTagRulesDatabase());
@@ -63,7 +65,9 @@ _numTagsAdded(0),
 _numNodesInvolvedInMultipleRules(0),
 _numNodesParsed(0),
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
-_minWordLength(ConfigOptions().getPoiImplicitTagRulesMinimumWordLength())
+_minWordLength(ConfigOptions().getPoiImplicitTagRulesMinimumWordLength()),
+_smallestNumberOfTagsAdded(LONG_MAX),
+_largestNumberOfTagsAdded(0)
 {
   _ruleReader.reset(new ImplicitTagRulesSqliteReader());
   _ruleReader->open(databasePath);
@@ -85,7 +89,16 @@ AddImplicitlyDerivedTagsPoiVisitor::~AddImplicitlyDerivedTagsPoiVisitor()
     StringUtils::formatLargeNumber(_numNodesParsed)  << " total nodes.");
   LOG_INFO(
     StringUtils::formatLargeNumber(_numNodesInvolvedInMultipleRules) <<
-    " nodes were involved in multiple tag rules and were not modified.")
+    " nodes were involved in multiple tag rules and were not modified.");
+  LOG_INFO(
+    "Average tags added per node: " <<
+     StringUtils::formatLargeNumber(_numTagsAdded / _numNodesModified));
+  LOG_INFO(
+    "Smallest number of tags added to a node: " <<
+     StringUtils::formatLargeNumber(_smallestNumberOfTagsAdded));
+  LOG_INFO(
+    "Largest number of tags added to a node: " <<
+     StringUtils::formatLargeNumber(_largestNumberOfTagsAdded));
 }
 
 bool caseInsensitiveLessThan(const QString s1, const QString s2)
@@ -230,12 +243,12 @@ void AddImplicitlyDerivedTagsPoiVisitor::visit(const ElementPtr& e)
           "No implicit tags added due to finding multiple possible matches for implicit tags: " +
            matchingWordsList.join(", "));
         _numNodesInvolvedInMultipleRules++;
-        //if (_numNodesInvolvedInMultipleRules % (_statusUpdateInterval / 10) == 0)
-        //{
+        if (_numNodesInvolvedInMultipleRules % 10 == 0)
+        {
           PROGRESS_INFO(
             StringUtils::formatLargeNumber(_numNodesInvolvedInMultipleRules) << " nodes have been " <<
             "involved in multiple rules.");
-        //}
+        }
       }
       else if (!tagsToAdd.isEmpty())
       {
@@ -243,28 +256,38 @@ void AddImplicitlyDerivedTagsPoiVisitor::visit(const ElementPtr& e)
         assert(matchingWords.size() != 0);
         QStringList matchingWordsList = matchingWords.toList();
         qSort(matchingWordsList.begin(), matchingWordsList.end(), caseInsensitiveLessThan);
-        e->getTags().appendValue(
-          "hoot:implicitTags:note",
+        QString tagValue =
           "Added " + QString::number(tagsToAdd.size()) + " implicitly derived tag(s) based on: " +
-          matchingWordsList.join(", "));
+          matchingWordsList.join(", ");
+        //TODO: change this to trace
+        tagValue += "; tags added: " + tagsToAdd.toString().simplified();
+        e->getTags().appendValue("hoot:implicitTags:note", tagValue);
         _numNodesModified++;
         _numTagsAdded += tagsToAdd.size();
-        //if (_numNodesModified % (_statusUpdateInterval * 10) == 0)
-        //{
+        if (_numTagsAdded < _smallestNumberOfTagsAdded)
+        {
+          _smallestNumberOfTagsAdded = _numTagsAdded;
+        }
+        if (_numTagsAdded > _largestNumberOfTagsAdded)
+        {
+          _largestNumberOfTagsAdded = _numTagsAdded;
+        }
+        if (_numNodesModified % 100 == 0)
+        {
           PROGRESS_INFO(
             "Added " << StringUtils::formatLargeNumber(_numTagsAdded) << " tags total to " <<
             StringUtils::formatLargeNumber(_numNodesModified) << " nodes.");
-        //}
+        }
       }
     }
 
     _numNodesParsed++;
-    //if (_numNodesParsed % (_statusUpdateInterval / 10) == 0)
-    //{
+    if (_numNodesParsed % 1000 == 0)
+    {
       PROGRESS_INFO(
         "Parsed " << StringUtils::formatLargeNumber(_numNodesParsed) <<
         " nodes from input.");
-    //}
+    }
   }
 }
 

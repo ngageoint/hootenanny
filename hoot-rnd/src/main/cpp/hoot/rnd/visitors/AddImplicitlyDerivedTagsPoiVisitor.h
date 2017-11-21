@@ -65,6 +65,8 @@ private:
   long _numNodesParsed;
   long _statusUpdateInterval;
   int _minWordLength;
+  long _smallestNumberOfTagsAdded;
+  long _largestNumberOfTagsAdded;
 
   QSet<QString> _getNameTokens(const Tags& t);
 
