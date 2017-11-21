@@ -1112,7 +1112,7 @@ public class MapResource {
      * @param mapid
      *            id of the maps record
      */
-    private void updateLastAccessed(Long mapid) {
+    public static void updateLastAccessed(Long mapid) {
         java.util.Map<String, String> tags = DbUtils.getMapsTableTags(mapid);
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
@@ -1122,7 +1122,7 @@ public class MapResource {
         long count = DbUtils.updateMapsTableTags(tags, mapid);
 
         if (count < 1) {
-            throw new RuntimeException("Error updating map " + mapid + "'s tags!");
+            throw new RuntimeException("Error updating map " + mapid + "'s last accessed tag!");
         }
 
     }
