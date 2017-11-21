@@ -90,15 +90,18 @@ AddImplicitlyDerivedTagsPoiVisitor::~AddImplicitlyDerivedTagsPoiVisitor()
   LOG_INFO(
     StringUtils::formatLargeNumber(_numNodesInvolvedInMultipleRules) <<
     " nodes were involved in multiple tag rules and were not modified.");
-  LOG_INFO(
-    "Average tags added per node: " <<
-     StringUtils::formatLargeNumber(_numTagsAdded / _numNodesModified));
-  LOG_INFO(
-    "Smallest number of tags added to a node: " <<
-     StringUtils::formatLargeNumber(_smallestNumberOfTagsAdded));
-  LOG_INFO(
-    "Largest number of tags added to a node: " <<
-     StringUtils::formatLargeNumber(_largestNumberOfTagsAdded));
+  if (_numTagsAdded > 0 && _numNodesModified > 0)
+  {
+    long avgTagsAdded = (long)(_numTagsAdded / _numNodesModified);
+    LOG_INFO(
+      "Average tags added per node: " << StringUtils::formatLargeNumber(avgTagsAdded));
+    LOG_INFO(
+      "Smallest number of tags added to a node: " <<
+       StringUtils::formatLargeNumber(_smallestNumberOfTagsAdded));
+    LOG_INFO(
+      "Largest number of tags added to a node: " <<
+       StringUtils::formatLargeNumber(_largestNumberOfTagsAdded));
+  }
 }
 
 bool caseInsensitiveLessThan(const QString s1, const QString s2)
