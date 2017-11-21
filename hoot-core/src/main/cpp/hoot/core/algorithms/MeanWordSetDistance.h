@@ -53,7 +53,7 @@ public:
   /**
    * @param portion The portion parameter passed off to ScoreMatrix.
    */
-  MeanWordSetDistance(StringDistance* d, double portion=1.0);
+  MeanWordSetDistance(StringDistancePtr d, double portion=1.0);
   MeanWordSetDistance();
 
   static std::string className() { return "hoot::MeanWordSetDistance"; }

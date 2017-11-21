@@ -64,7 +64,7 @@ public:
 
   void runTest()
   {
-    MeanWordSetDistance uut(new ExactStringDistance());
+    MeanWordSetDistance uut(StringDistancePtr(new ExactStringDistance()));
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1, uut.compare("Hello world", "hello World"), 0.01);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1, uut.compare("world", "hello World"), 0.01);
@@ -75,7 +75,7 @@ public:
 
   void runLevenshteinTest()
   {
-    MeanWordSetDistance uut(new LevenshteinDistance(1.5));
+    MeanWordSetDistance uut(StringDistancePtr(new LevenshteinDistance(1.5)));
 
     Settings s;
     s.set("token.separator", "[\\s-,';]+");

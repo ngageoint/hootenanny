@@ -40,8 +40,9 @@ class AttributeDistanceExtractor : public WayFeatureExtractor
 public:
   static std::string className() { return "hoot::AttributeDistanceExtractor"; }
 
-  AttributeDistanceExtractor(ValueAggregator* wayAgg = 0, QString key = "") :
-    WayFeatureExtractor(wayAgg), _key(key) {}
+  AttributeDistanceExtractor(ValueAggregatorPtr wayAgg, QString key = "");
+
+  AttributeDistanceExtractor(QString key = "");
 
   virtual std::string getClassName() const { return className(); }
 

@@ -42,7 +42,9 @@ public:
 
   static std::string className() { return "hoot::DistanceScoreExtractor"; }
 
-  DistanceScoreExtractor(ValueAggregator* wayAgg = 0) : WayFeatureExtractor(wayAgg) {}
+  DistanceScoreExtractor(ValueAggregatorPtr wayAgg);
+
+  DistanceScoreExtractor();
 
   virtual std::string getClassName() const { return className(); }
 

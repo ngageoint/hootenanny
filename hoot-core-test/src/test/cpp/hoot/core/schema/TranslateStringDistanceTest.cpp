@@ -59,7 +59,8 @@ public:
 
   void runTest()
   {
-    TranslateStringDistance uut(new MeanWordSetDistance(new ExactStringDistance()));
+    TranslateStringDistance uut(StringDistancePtr(new MeanWordSetDistance(
+                                StringDistancePtr(new ExactStringDistance()))));
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5, uut.compare("embassy of hungary", "Kedutaan Besar Swiss"),
       0.01);
