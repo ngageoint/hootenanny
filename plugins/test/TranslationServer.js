@@ -1029,6 +1029,52 @@ describe('TranslationServer', function () {
       });
     });
 
+    describe('taginfo/key/values', function () {
+      it('should return 200', function (done) {
+        var request  = httpMocks.createRequest({
+            method: 'GET',
+            url: '/taginfo/key/values',
+            params: {
+                fcode: 'AP030',
+                translation: 'MGCP',
+                filter: 'ways',
+                key: 'LTN',
+                page: '1',
+                query: 'Clo',
+                rp: '25',
+                sortname: 'count_ways',
+                sortorder: 'desc'
+            }
+        });
+        var response = httpMocks.createResponse();
+        server.TranslationServer(request, response);
+        assert.equal(response.statusCode, '200');
+        done();
+      });
+    });
+
+    describe('taginfo/keys/all', function () {
+      it('should return 200', function (done) {
+        var request  = httpMocks.createRequest({
+            method: 'GET',
+            url: '/taginfo/keys/all',
+            params: {
+                fcode: 'AP030',
+                rawgeom: 'Line',
+                translation: 'MGCP',
+                page: 1,
+                rp: 10,
+                sortname: 'count_ways',
+                sortorder: 'desc'
+            }
+        });
+        var response = httpMocks.createResponse();
+        server.TranslationServer(request, response);
+        assert.equal(response.statusCode, '200');
+        done();
+      });
+    });
+
     describe('not found', function () {
       it('should return 404', function (done) {
         var request  = httpMocks.createRequest({
