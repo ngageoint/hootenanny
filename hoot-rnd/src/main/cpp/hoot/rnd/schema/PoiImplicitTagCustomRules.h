@@ -79,6 +79,7 @@ private:
 
   void _readIgnoreLists();
   void _readAllowLists();
+  void _clear();
 };
 
 }

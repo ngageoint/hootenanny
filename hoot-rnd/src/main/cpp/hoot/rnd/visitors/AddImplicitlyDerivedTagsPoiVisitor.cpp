@@ -106,6 +106,7 @@ AddImplicitlyDerivedTagsPoiVisitor::~AddImplicitlyDerivedTagsPoiVisitor()
 
 void AddImplicitlyDerivedTagsPoiVisitor::setConfiguration(const Settings& conf)
 {
+  LOG_DEBUG("set config");
   const ConfigOptions confOptions(conf);
   _customRules.setCustomRuleFile(confOptions.getPoiImplicitTagRulesCustomRuleFile());
   _customRules.setRuleIgnoreFile(confOptions.getPoiImplicitTagRulesRuleIgnoreFile());

@@ -48,6 +48,7 @@ class AddImplicitlyDerivedTagsPoiVisitorTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runWordIgnoreTest);
   CPPUNIT_TEST(runTagIgnoreTest);
   CPPUNIT_TEST(runRuleIgnoreTest);
+  //TODO: top tag test
   CPPUNIT_TEST_SUITE_END();
 
 public:
