@@ -16,9 +16,6 @@ echo USER: $VMUSER
 VMGROUP=`groups | grep -o $VMUSER`
 echo GROUP: $VMGROUP
 
-# Centos7 specific file versions
-export STXXL_VERSION=stxxl-1.3.1
-
 export LANG=en_US.UTF-8
 
 cd ~
@@ -28,8 +25,12 @@ source ~/.bash_profile
 echo "### Add epel repo ###" > CentOS_upgrade.txt
 sudo yum -y install epel-release >> CentOS_upgrade.txt 2>&1
 
+# add Hoot repo for our pre-built dependencies.
+echo "### Add Hoot repo ###" >> CentOS_upgrade.txt
+$HOOT_HOME/scripts/hoot-repo/yum-configure.sh
+
 # add the Postgres repo
-echo "### Add Postgres repo ###" > CentOS_upgrade.txt
+echo "### Add Postgres repo ###" >> CentOS_upgrade.txt
 sudo rpm -Uvh https://download.postgresql.org/pub/repos/yum/9.5/redhat/rhel-7-x86_64/pgdg-centos95-9.5-3.noarch.rpm  >> CentOS_upgrade.txt 2>&1
 
 echo "Updating OS..."
@@ -78,6 +79,9 @@ sudo yum -y install \
     glpk \
     glpk-devel \
     gnuplot \
+    hoot-gdal \
+    hoot-gdal-devel \
+    hoot-gdal-python \
     libicu-devel \
     libpng-devel \
     libtool \
@@ -88,9 +92,10 @@ sudo yum -y install \
     opencv-core \
     opencv-devel \
     opencv-python \
+    osmosis \
     java-1.8.0-openjdk \
     perl-XML-LibXML \
-    postgis23_95 \
+    hoot-postgis23_95 \
     postgresql95 \
     postgresql95-contrib \
     postgresql95-devel \
@@ -111,6 +116,8 @@ sudo yum -y install \
     qtwebkit \
     qtwebkit-devel \
     redhat-lsb-core \
+    stxxl \
+    stxxl-devel \
     swig \
     tex-fonts-hebrew \
     texlive \
@@ -119,6 +126,7 @@ sudo yum -y install \
     unzip \
     v8-devel \
     vim \
+    wamerican-insane \
     w3m \
     wget \
     words \
@@ -126,59 +134,12 @@ sudo yum -y install \
     zip \
 
 
-echo "##### Temp installs #####"
-
-# Stxxl
-if [ ! -f "${STXXL_VERSION}.tar.gz" ]; then
-    wget --quiet https://github.com/ngageoint/hootenanny-rpms/raw/master/src/SOURCES/${STXXL_VERSION}.tar.gz
-fi
-mkdir -p stxxl && tar zxof ${STXXL_VERSION}.tar.gz --directory ./stxxl --strip-components 1
-cd stxxl
-
-make config_gnu
-echo "STXXL_ROOT	=`pwd`" > make.settings.local
-echo "ENABLE_SHARED     = yes" >> make.settings.local
-echo "COMPILER_GCC      = g++ -std=c++0x" >> make.settings.local
-# Total hack because 1.3.1 doesn't compile right on CentOS7
-sed -i 's/#include <sys\/mman.h>/#include <sys\/mman.h>\n#include <unistd.h>/g' ./utils/mlock.cpp
-
-make -s library_g++
-
-#### Isn't easy, no 'make install'
-sudo install -p -D -m 0755 lib/libstxxl.so /usr/local/lib/libstxxl.so.1.3.1
-sudo mkdir -p /usr/local/include
-sudo cp -pr include/* /usr/local/include/
-pushd .
-cd /usr/local/lib
-sudo ln -s libstxxl.so.1.3.1 libstxxl.so.1
-sudo ln -s libstxxl.so.1.3.1 libstxxl.so
-popd
-
-sudo /sbin/ldconfig
-
-#### So much easier to make later versions, uncomment when we upgrade to 1.4.0+
-#mkdir build
-#cd build
-#cmake -DCMAKE_BUILD_TYPE=Release ..
-#make -sj
-#sudo make install -s
-
 # Fix missing qmake
 if ! hash qmake >/dev/null 2>&1 ; then
     if hash qmake-qt4 >/dev/null 2>&1 ; then
       sudo alternatives --install /usr/bin/qmake qmake /usr/bin/qmake-qt4 500
     else
       echo "##### No qmake! #####"
-    fi
-fi
-
-# We need this big dictionary for text matching. On Ubuntu, this is a package
-if [ ! -f /usr/share/dict/american-english-insane ]; then
-    if [ -f ./american-english-insane.bz2 ] ; then
-        sudo bash -c "bzcat ./american-english-insane.bz2 > /usr/share/dict/american-english-insane"
-    else
-        wget --quiet -N https://s3.amazonaws.com/hoot-rpms/support-files/american-english-insane.bz2
-        sudo bash -c "bzcat american-english-insane.bz2 > /usr/share/dict/american-english-insane"
     fi
 fi
 
@@ -212,6 +173,13 @@ else
     sed -i '/^export JAVA_HOME=.*/c\export JAVA_HOME=\/usr\/lib\/jvm\/java-1.8.0-openjdk' ~/.bash_profile
 fi
 
+# Update the GDAL_DATA folder in ~/.bash_profile
+if ! grep --quiet GDAL_DATA ~/.bash_profile; then
+    echo "Adding GDAL data path to profile..."
+    echo "export GDAL_DATA=$(gdal-config --datadir)" >> ~/.bash_profile
+    source ~/.bash_profile
+fi
+
 # Use RVM to install the desired Ruby version, then install the gems.
 $HOOT_HOME/scripts/ruby/rvm-install.sh
 $HOOT_HOME/scripts/ruby/gem-install.sh
@@ -222,17 +190,6 @@ cd ~
 # Install Google Chrome and ChromeDriver.
 $HOOT_HOME/scripts/chrome/chrome-install.sh
 $HOOT_HOME/scripts/chrome/driver-install.sh
-
-if [ ! -f bin/osmosis ]; then
-    echo "### Installing Osmosis"
-    mkdir -p ~/bin
-    if [ ! -f osmosis-latest.tgz ]; then
-      wget --quiet http://bretth.dev.openstreetmap.org/osmosis-build/osmosis-latest.tgz
-    fi
-    mkdir -p ~/bin/osmosis_src
-    tar -zxf osmosis-latest.tgz -C ~/bin/osmosis_src
-    ln -s ~/bin/osmosis_src/bin/osmosis ~/bin/osmosis
-fi
 
 # Need to figure out a way to do this automagically
 #PG_VERSION=$(sudo -u postgres psql -c 'SHOW SERVER_VERSION;' | egrep -o '[0-9]{1,}\.[0-9]{1,}')
@@ -245,61 +202,6 @@ if ! grep --quiet "psql-" ~/.bash_profile; then
     source ~/.bash_profile
 fi
 
-if [ ! -f /etc/ld.so.conf.d/postgres$PG_VERSION.conf ]; then
-    sudo sh -c "echo '/usr/pgsql-$PG_VERSION/lib' > /etc/ld.so.conf.d/postgres$PG_VERSION.conf"
-    sudo ldconfig
-fi
-
-# Tweak the FGDB version so we can get the filename
-FGDB_VERSION2=`echo $FGDB_VERSION | sed 's/\./_/g;'`
-
-if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --version | grep -q $GDAL_VERSION && ogrinfo --formats | grep -q FileGDB ); then
-    if [ ! -f gdal-$GDAL_VERSION.tar.gz ]; then
-        echo "### Downloading GDAL $GDAL_VERSION source..."
-        wget --quiet http://download.osgeo.org/gdal/$GDAL_VERSION/gdal-$GDAL_VERSION.tar.gz
-    fi
-    if [ ! -d gdal-$GDAL_VERSION ]; then
-        echo "### Extracting GDAL $GDAL_VERSION source..."
-        tar zxfp gdal-$GDAL_VERSION.tar.gz
-    fi
-
-    if [ ! -f FileGDB_API_${FGDB_VERSION2}-64.tar.gz ]; then
-        echo "### Downloading FileGDB API source..."
-        wget --quiet https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_${FGDB_VERSION}/FileGDB_API_${FGDB_VERSION2}-64.tar.gz
-    fi
-
-    if [ ! -d /usr/local/FileGDB_API ]; then
-        echo "### Extracting FileGDB API source & installing lib..."
-        sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp FileGDB_API_${FGDB_VERSION2}-64.tar.gz --directory /usr/local/FileGDB_API --strip-components 1
-        sudo sh -c "echo '/usr/local/FileGDB_API/lib' > /etc/ld.so.conf.d/filegdb.conf"
-    fi
-
-    echo "### Building GDAL $GDAL_VERSION w/ FileGDB..."
-    export PATH=/usr/local/lib:/usr/local/bin:$PATH
-    cd gdal-$GDAL_VERSION
-    touch config.rpath
-    echo "GDAL: configure"
-    sudo ./configure --quiet --with-fgdb=/usr/local/FileGDB_API --with-pg=/usr/pgsql-$PG_VERSION/bin/pg_config --with-python CFLAGS='-std=c11' CXXFLAGS='-std=c++11'
-    echo "GDAL: make"
-    sudo make -sj$(nproc) > GDAL_Build.txt 2>&1
-    echo "GDAL: install"
-    sudo make -s install >> GDAL_Build.txt 2>&1
-    cd swig/python
-    echo "GDAL: python build"
-    python setup.py build >> GDAL_Build.txt 2>&1
-    echo "GDAL: python install"
-    sudo python setup.py install >> GDAL_Build.txt 2>&1
-    sudo ldconfig
-    cd ~
-
-    # Update the GDAL_DATA folder in ~/.bash_profile
-    if ! grep --quiet GDAL_DATA ~/.bash_profile; then
-      echo "Adding GDAL data path to profile..."
-      echo "export GDAL_DATA=`gdal-config --datadir`" >> ~/.bash_profile
-      source ~/.bash_profile
-    fi
-fi
-
 if ! mocha --version &>/dev/null; then
     echo "### Installing mocha for plugins test..."
     sudo npm install --silent -g mocha@3.5.3
@@ -307,14 +209,8 @@ if ! mocha --version &>/dev/null; then
     sudo rm -rf ~/tmp
 fi
 
-
-echo "### Configureing Postgres..."
+echo "### Configuring Postgres..."
 cd /tmp # Stop postgres "could not change directory to" warnings
-
-# NOTE: These have been changed to pg9.5
-# Postgresql startup
-#PGSETUP_INITDB_OPTIONS="-E 'UTF-8' --lc-collate='en_US.UTF-8' --lc-ctype='en_US.UTF-8'"
-
 
 sudo PGSETUP_INITDB_OPTIONS="-E 'UTF-8' --lc-collate='en_US.UTF-8' --lc-ctype='en_US.UTF-8'" /usr/pgsql-$PG_VERSION/bin/postgresql95-setup initdb
 sudo systemctl start postgresql-$PG_VERSION
