@@ -320,9 +320,9 @@ void AddImplicitlyDerivedTagsPoiVisitor::visit(const ElementPtr& e)
           {
             _smallestNumberOfTagsAdded = _numTagsAdded;
           }
-          if (_numTagsAdded > _largestNumberOfTagsAdded)
+          if (tagsToAdd.size() > _largestNumberOfTagsAdded)
           {
-            _largestNumberOfTagsAdded = _numTagsAdded;
+            _largestNumberOfTagsAdded = tagsToAdd.size();
           }
           if (_numNodesModified % 100 == 0)
           {
