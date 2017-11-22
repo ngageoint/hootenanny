@@ -43,7 +43,7 @@ public:
   static std::string className() { return "hoot::ChainCriterion"; }
 
   ChainCriterion() {}
-  ChainCriterion(boost::shared_ptr<ElementCriterion> child1, boost::shared_ptr<ElementCriterion> child2);
+  ChainCriterion(ElementCriterionPtr child1, ElementCriterionPtr child2);
   ChainCriterion(ElementCriterion* child1, ElementCriterion* child2);
   ChainCriterion(ElementCriterion* child1, ElementCriterionPtr child2);
   ChainCriterion(ElementCriterion* child1, ElementCriterion* child2, ElementCriterion* child3);
