@@ -94,6 +94,7 @@ import hoot.services.models.db.Users;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.ElementFactory;
 import hoot.services.models.osm.Map;
+import hoot.services.models.osm.MapLayer;
 import hoot.services.models.osm.MapLayers;
 import hoot.services.utils.DbUtils;
 import hoot.services.controllers.osm.OsmResponseHeaderGenerator;
@@ -1115,7 +1116,7 @@ public class MapResource {
     public static void updateLastAccessed(Long mapid) {
         java.util.Map<String, String> tags = DbUtils.getMapsTableTags(mapid);
 
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+        DateFormat dateFormat = MapLayer.format;
         Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
         tags.put("lastAccessed", dateFormat.format(now));
 
