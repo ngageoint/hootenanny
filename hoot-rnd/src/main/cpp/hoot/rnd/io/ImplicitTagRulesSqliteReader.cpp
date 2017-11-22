@@ -49,7 +49,8 @@ ImplicitTagRulesSqliteReader::ImplicitTagRulesSqliteReader() :
 _tagsCache(ConfigOptions().getPoiImplicitTagRulesReaderMaxTagCacheSize()),
 _useTagsCache(ConfigOptions().getPoiImplicitTagRulesReaderUseTagsCache()),
 _firstRoundTagsCacheHits(0),
-_secondRoundTagsCacheHits(0)
+_secondRoundTagsCacheHits(0),
+_addTopTagOnly(ConfigOptions().getPoiImplicitTagRulesAddTopTagOnly())
 {
 }
 
@@ -102,12 +103,26 @@ void ImplicitTagRulesSqliteReader::_prepareQueries()
   }
 
   _tagsForWordIds = QSqlQuery(_db);
-  if (!_tagsForWordIds.prepare(
-       "SELECT tags.kvp FROM tags JOIN rules ON rules.tag_id = tags.id WHERE rules.word_id = :wordId"))
+  if (_addTopTagOnly)
   {
-    throw HootException(
-      QString("Error preparing _tagsForWordIds: %1")
-        .arg(_tagsForWordIds.lastError().text()));
+    if (!_tagsForWordIds.prepare(
+         QString("SELECT tags.kvp FROM tags JOIN rules ON rules.tag_id = tags.id ") +
+         QString("WHERE rules.word_id = :wordId ORDER BY rules.tag_count DESC LIMIT 1")))
+    {
+      throw HootException(
+        QString("Error preparing _topTagForWordIds: %1")
+          .arg(_tagsForWordIds.lastError().text()));
+    }
+  }
+  else
+  {
+    if (!_tagsForWordIds.prepare(
+         "SELECT tags.kvp FROM tags JOIN rules ON rules.tag_id = tags.id WHERE rules.word_id = :wordId"))
+    {
+      throw HootException(
+        QString("Error preparing _tagsForWordIds: %1")
+          .arg(_tagsForWordIds.lastError().text()));
+    }
   }
 }
 
@@ -137,11 +152,22 @@ Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,
     Tags* cachedTags = _tagsCache[wordsKey];
     if (cachedTags != 0)
     {
+      LOG_TRACE("Found cached tags.");
       matchingWords = words;
-      const QString tagsStr = cachedTags->toString().trimmed().replace("\n", ", ");
+      Tags tagsToReturn;
+      if (!cachedTags->contains("wordsInvolvedInMultipleRules"))
+      {
+        tagsToReturn = *cachedTags;
+      }
+      else
+      {
+        wordsInvolvedInMultipleRules = true;
+        LOG_TRACE("Cached tags involved in multiple rules.");
+      }
+      const QString tagsStr = tagsToReturn.toString().trimmed().replace("\n", ", ");
       LOG_TRACE("Returning cached tags: " << tagsStr << " for words: " << matchingWords << ".");
       _firstRoundTagsCacheHits++;
-      return *cachedTags;
+      return tagsToReturn;
     }
   }
 
@@ -181,6 +207,13 @@ Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,
 
   if (queriedWordIds.size() == 0)
   {
+    if (_useTagsCache)
+    {
+      //cache empty set of tags
+      QStringList wordsList = words.toList();
+      Tags* tagsToCache(new Tags());
+      _tagsCache.insert(wordsList.join(";"), tagsToCache);
+    }
     return Tags();
   }
 
@@ -194,11 +227,22 @@ Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,
     Tags* cachedTags = _tagsCache[wordsKey];
     if (cachedTags != 0)
     {
+      LOG_TRACE("Found cached tags.");
       matchingWords = queriedWords;
-      const QString tagsStr = cachedTags->toString().trimmed().replace("\n", ", ");
+      Tags tagsToReturn;
+      if (!cachedTags->contains("wordsInvolvedInMultipleRules"))
+      {
+        tagsToReturn = *cachedTags;
+      }
+      else
+      {
+        wordsInvolvedInMultipleRules = true;
+        LOG_TRACE("Cached tags involved in multiple rules.");
+      }
+      const QString tagsStr = tagsToReturn.toString().trimmed().replace("\n", ", ");
       LOG_TRACE("Returning cached tags: " << tagsStr << " for words: " << matchingWords << ".");
       _secondRoundTagsCacheHits++;
-      return *cachedTags;
+      return tagsToReturn;
     }
   }
 
@@ -216,6 +260,7 @@ Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,
           .arg(_tagsForWordIds.lastError().text()));
     }
     Tags tags2;
+    //TODO: with _topTagForWordIds should just be one record returned
     while (_tagsForWordIds.next())
     {
       tags2.appendValue(_tagsForWordIds.value(0).toString());
@@ -229,10 +274,70 @@ Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,
     {
       wordsInvolvedInMultipleRules = true;
       matchingWords = queriedWords;
+      if (_useTagsCache)
+      {
+        //bit of a hack...cache a single tag "wordsInvolvedInMultipleRules=true"; that tells us to
+        //return an empty set of tags and set wordsInvolvedInMultipleRules = true on output
+        QStringList wordsList = matchingWords.toList();
+        Tags* tagsToCache(new Tags());
+        tagsToCache->insert("wordsInvolvedInMultipleRules", "true");
+        _tagsCache.insert(wordsList.join(";"), tagsToCache);
+        if (matchingWords != words)
+        {
+          //also cache the originally passed in words
+          wordsList = words.toList();
+          Tags* tagsToCache(new Tags());
+          tagsToCache->insert("wordsInvolvedInMultipleRules", "true");
+          _tagsCache.insert(wordsList.join(";"), tagsToCache);
+        }
+      }
       LOG_TRACE(
         "Words: " << matchingWords << " involved in multiple rules due to tag sets not matching.");
       return Tags();
     }
+  }
+
+  //don't return more than one tag that have the same value; arbitrarily pick the first one;
+  //e.g. amenity=hospital and building=hospital; this behavior could be captured in the rules
+  //deriver instead
+  QStringList tagValues;
+  QStringList tagKeysWithDuplicatedValues;
+  for (Tags::const_iterator tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
+  {
+    const QString tagValue = tagItr.value();
+    if (!tagValues.contains(tagValue))
+    {
+      tagValues.append(tagValue);
+    }
+    else
+    {
+      tagKeysWithDuplicatedValues.append(tagItr.key());
+    }
+  }
+  LOG_VART(tagKeysWithDuplicatedValues);
+  for (int i = 0; i < tagKeysWithDuplicatedValues.size(); i++)
+  {
+    const QString tagKey = tagKeysWithDuplicatedValues[i];
+    tags.remove(tagKey);
+    LOG_TRACE("Removed tag key: " << tagKey << " due to value duplication.");
+  }
+  if (tags.size() == 0)
+  {
+    if (_useTagsCache)
+    {
+      //cache empty set of tags
+      QStringList wordsList = matchingWords.toList();
+      Tags* tagsToCache(new Tags());
+      _tagsCache.insert(wordsList.join(";"), tagsToCache);
+      if (matchingWords != words)
+      {
+        //also cache the originally passed in words
+        wordsList = words.toList();
+        Tags* tagsToCache(new Tags());
+        _tagsCache.insert(wordsList.join(";"), tagsToCache);
+      }
+    }
+    return Tags();
   }
 
   matchingWords = queriedWords;
@@ -241,6 +346,13 @@ Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,
     QStringList wordsList = matchingWords.toList();
     Tags* tagsToCache(new Tags(tags));
     _tagsCache.insert(wordsList.join(";"), tagsToCache);
+    if (matchingWords != words)
+    {
+      //also cache the originally passed in words
+      wordsList = words.toList();
+      Tags* tagsToCache(new Tags());
+      _tagsCache.insert(wordsList.join(";"), tagsToCache);
+    }
   }
   LOG_TRACE("Returning tags: " << tags << " for words: " << matchingWords);
   return tags;

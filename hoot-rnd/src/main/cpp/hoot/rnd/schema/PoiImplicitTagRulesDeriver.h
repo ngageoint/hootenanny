@@ -30,6 +30,7 @@
 // Hoot
 #include <hoot/rnd/io/ImplicitTagRuleWordPartWriterFactory.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/rnd/schema/PoiImplicitTagCustomRules.h>
 
 // Qt
 #include <QString>
@@ -64,14 +65,16 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  void setCustomRuleFile(const QString file) { _customRuleFile = file; }
   void setMinTagOccurrencesPerWord(const int minOccurrences)
   { _minTagOccurrencesPerWord = minOccurrences; }
   void setMinWordLength(const int length) { _minWordLength = length; }
-  void setRuleIgnoreFile(const QString file) { _ruleIgnoreFile = file; }
-  void setTagIgnoreFile(const QString file) { _tagIgnoreFile = file; }
-  void setTagFile(const QString file) { _tagFile = file; }
-  void setWordIgnoreFile(const QString file) { _wordIgnoreFile = file; }
+
+  //TODO: remove these and have PoiImplicitTagRulesDeriverTest set them directly on _customRules (?)
+  void setCustomRuleFile(const QString file) { _customRules.setCustomRuleFile(file); }
+  void setRuleIgnoreFile(const QString file) { _customRules.setRuleIgnoreFile(file); }
+  void setTagIgnoreFile(const QString file) { _customRules.setTagIgnoreFile(file); }
+  void setTagFile(const QString file) { _customRules.setTagFile(file); }
+  void setWordIgnoreFile(const QString file) { _customRules.setWordIgnoreFile(file); }
 
 private:
 
@@ -79,19 +82,10 @@ private:
   friend class PoiImplicitTagRulesDeriverTest;
 
   long _statusUpdateInterval;
-  QString _customRuleFile;
   int _minTagOccurrencesPerWord;
   int _minWordLength;
-  QString _ruleIgnoreFile;
-  QString _tagIgnoreFile;
-  QString _tagFile;
-  QString _wordIgnoreFile;
 
-  QStringList _tagIgnoreList;
-  QStringList _wordIgnoreList;
-  QMap<QString, QString> _customRulesList;
-  QMap<QString, QString> _rulesIgnoreList;
-  QStringList _tagsAllowList;
+  PoiImplicitTagCustomRules _customRules;
 
   boost::shared_ptr<QTemporaryFile> _thresholdedCountFile;
   boost::shared_ptr<QTemporaryFile> _filteredCountFile;
@@ -101,9 +95,6 @@ private:
 
   QString _getSqliteOutput(const QStringList outputs);
   void _writeRules(const QStringList outputs, const QString sqliteOutputFile);
-
-  void _readIgnoreLists();
-  void _readAllowLists();
 };
 
 }

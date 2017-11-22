@@ -1,1 +1,4 @@
-# this will probably be mostly higher level generic tags
+# tags that are always ignored; key=value; 
+# keep alphabetized
+place=administrative
+place=locality

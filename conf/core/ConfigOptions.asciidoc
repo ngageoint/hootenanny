@@ -1887,6 +1887,14 @@ current directory (CWD), $CWD/rules, $HOOT_HOME/rules.
 If true, POI conflation will ignore the types of the features being compared completely as long as
 those being compared have a populated name field.
 
+=== poi.implicit.tag.rules.add.top.tag.only
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, the POI implicit tagger will only add the tag to the node with the highest tag occurrence
+count.
+
 === poi.implicit.tag.rules.custom.rule.file
 
 * Data Type: string
@@ -1973,7 +1981,6 @@ true if the input data has been translated beforehand.
 The number of parallel processes used when sorting output.  The default value of -1 uses a count
 equal to the number of processors on the machine.  Valid values are -1 or 1 through the number
 of available processors.
-
 
 === poi.implicit.tag.rules.tag.ignore.file
 

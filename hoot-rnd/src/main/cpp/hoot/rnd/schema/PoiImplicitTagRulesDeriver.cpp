@@ -48,130 +48,13 @@ _minWordLength(1)
 void PoiImplicitTagRulesDeriver::setConfiguration(const Settings& conf)
 {
   const ConfigOptions confOptions(conf);
-  setCustomRuleFile(confOptions.getPoiImplicitTagRulesCustomRuleFile());
+  _customRules.setCustomRuleFile(confOptions.getPoiImplicitTagRulesCustomRuleFile());
   setMinTagOccurrencesPerWord(confOptions.getPoiImplicitTagRulesMinimumTagOccurrencesPerWord());
   setMinWordLength(confOptions.getPoiImplicitTagRulesMinimumWordLength());
-  setRuleIgnoreFile(confOptions.getPoiImplicitTagRulesRuleIgnoreFile());
-  setTagIgnoreFile(confOptions.getPoiImplicitTagRulesTagIgnoreFile());
-  setTagFile(confOptions.getPoiImplicitTagRulesTagFile());
-  setWordIgnoreFile(confOptions.getPoiImplicitTagRulesWordIgnoreFile());
-}
-
-void PoiImplicitTagRulesDeriver::_readAllowLists()
-{
-  LOG_DEBUG("Reading allow lists...");
-
-  if (!_tagFile.trimmed().isEmpty())
-  {
-    QFile tagsAllowFile(_tagFile);
-    if (!tagsAllowFile.open(QIODevice::ReadOnly))
-    {
-      throw HootException(
-        QObject::tr("Error opening %1 for writing.").arg(tagsAllowFile.fileName()));
-    }
-    _tagsAllowList.clear();
-    while (!tagsAllowFile.atEnd())
-    {
-      const QString line = QString::fromUtf8(tagsAllowFile.readLine().constData()).trimmed();
-      if (!line.isEmpty() && !line.startsWith("#"))
-      {
-        _tagsAllowList.append(line);
-      }
-    }
-    tagsAllowFile.close();
-  }
-  LOG_VART(_tagsAllowList);
-
-  if (!_customRuleFile.trimmed().isEmpty())
-  {
-    QFile customRulesFile(_customRuleFile);
-    if (!customRulesFile.open(QIODevice::ReadOnly))
-    {
-      throw HootException(
-        QObject::tr("Error opening %1 for writing.").arg(customRulesFile.fileName()));
-    }
-    _customRulesList.clear();
-    while (!customRulesFile.atEnd())
-    {
-      const QString line = QString::fromUtf8(customRulesFile.readLine().constData()).trimmed();
-      if (!line.isEmpty() && !line.startsWith("#"))
-      {
-        const QStringList lineParts = line.trimmed().split("\t");
-        _customRulesList[lineParts[0].trimmed()] = lineParts[1].trimmed();
-      }
-    }
-    customRulesFile.close();
-  }
-  LOG_VART(_customRulesList);
-}
-
-void PoiImplicitTagRulesDeriver::_readIgnoreLists()
-{
-  LOG_DEBUG("Reading ignore lists...");
-
-  if (!_tagIgnoreFile.trimmed().isEmpty())
-  {
-    QFile tagIgnoreFile(_tagIgnoreFile);
-    if (!tagIgnoreFile.open(QIODevice::ReadOnly))
-    {
-      throw HootException(
-        QObject::tr("Error opening %1 for writing.").arg(tagIgnoreFile.fileName()));
-    }
-    _tagIgnoreList.clear();
-    while (!tagIgnoreFile.atEnd())
-    {
-      const QString line = QString::fromUtf8(tagIgnoreFile.readLine().constData()).trimmed();
-      if (!line.isEmpty() && !line.startsWith("#"))
-      {
-        _tagIgnoreList.append(line);
-      }
-    }
-    tagIgnoreFile.close();
-  }
-  LOG_VART(_tagIgnoreList);
-
-  if (!_wordIgnoreFile.trimmed().isEmpty())
-  {
-    QFile wordIgnoreFile(_wordIgnoreFile);
-    if (!wordIgnoreFile.open(QIODevice::ReadOnly))
-    {
-      throw HootException(
-        QObject::tr("Error opening %1 for writing.").arg(wordIgnoreFile.fileName()));
-    }
-    _wordIgnoreList.clear();
-    while (!wordIgnoreFile.atEnd())
-    {
-      const QString line = QString::fromUtf8(wordIgnoreFile.readLine().constData()).trimmed();
-      if (!line.isEmpty() && !line.startsWith("#"))
-       {
-        _wordIgnoreList.append(line);
-      }
-    }
-    wordIgnoreFile.close();
-  }
-  LOG_VART(_wordIgnoreList);
-
-  if (!_ruleIgnoreFile.trimmed().isEmpty())
-  {
-    QFile rulesIgnoreFile(_ruleIgnoreFile);
-    if (!rulesIgnoreFile.open(QIODevice::ReadOnly))
-    {
-      throw HootException(
-        QObject::tr("Error opening %1 for writing.").arg(rulesIgnoreFile.fileName()));
-    }
-    _rulesIgnoreList.clear();
-    while (!rulesIgnoreFile.atEnd())
-    {
-      const QString line = QString::fromUtf8(rulesIgnoreFile.readLine().constData()).trimmed();
-      if (!line.isEmpty() && !line.startsWith("#"))
-      {
-        const QStringList lineParts = line.trimmed().split("\t");
-        _rulesIgnoreList[lineParts[0].trimmed()] = lineParts[1].trimmed();
-      }
-    }
-    rulesIgnoreFile.close();
-  }
-  LOG_VART(_rulesIgnoreList);
+  _customRules.setRuleIgnoreFile(confOptions.getPoiImplicitTagRulesRuleIgnoreFile());
+  _customRules.setTagIgnoreFile(confOptions.getPoiImplicitTagRulesTagIgnoreFile());
+  _customRules.setTagFile(confOptions.getPoiImplicitTagRulesTagFile());
+  _customRules.setWordIgnoreFile(confOptions.getPoiImplicitTagRulesWordIgnoreFile());
 }
 
 QString PoiImplicitTagRulesDeriver::_getSqliteOutput(const QStringList outputs)
@@ -214,29 +97,29 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QString input, const QStringL
     outputs << "...");
   LOG_VAR(_minTagOccurrencesPerWord);
   LOG_VAR(_minWordLength);
-  LOG_VAR(_wordIgnoreFile);
-  LOG_VAR(_tagIgnoreFile);
-  LOG_VAR(_tagFile);
-  LOG_VAR(_customRuleFile);
-  LOG_VAR(_ruleIgnoreFile);
+  LOG_VAR(_customRules.getWordIgnoreFile());
+  LOG_VAR(_customRules.getTagIgnoreFile());
+  LOG_VAR(_customRules.getTagFile());
+  LOG_VAR(_customRules.getCustomRuleFile());
+  LOG_VAR(_customRules.getRuleIgnoreFile());
 
-  _readIgnoreLists();
-  _readAllowLists();
+  _customRules.init();
 
-  LOG_VAR(_wordIgnoreList.size());
-  LOG_VAR(_wordIgnoreList);
-  LOG_VAR(_tagIgnoreList.size());
-  LOG_VAR(_tagIgnoreList);
-  LOG_VAR(_tagsAllowList.size());
-  LOG_VAR(_tagsAllowList);
-  LOG_VAR(_customRulesList.size());
-  LOG_VAR(_customRulesList);
-  LOG_VAR(_rulesIgnoreList.size());
-  LOG_VAR(_rulesIgnoreList);
+  LOG_VAR(_customRules.getWordIgnoreList().size());
+  LOG_VAR(_customRules.getWordIgnoreList());
+  LOG_VAR(_customRules.getTagIgnoreList().size());
+  LOG_VAR(_customRules.getTagIgnoreList());
+  LOG_VAR(_customRules.getTagsAllowList().size());
+  LOG_VAR(_customRules.getTagsAllowList());
+  LOG_VAR(_customRules.getCustomRulesList().size());
+  LOG_VAR(_customRules.getCustomRulesList());
+  LOG_VAR(_customRules.getRulesIgnoreList().size());
+  LOG_VAR(_customRules.getRulesIgnoreList());
 
-  if (_minTagOccurrencesPerWord == 1 && _minWordLength == 1 && _wordIgnoreList.size() == 0 &&
-      _tagIgnoreList.size() == 0 && _tagsAllowList.size() == 0 && _customRulesList.size() == 0 &&
-      _rulesIgnoreList.size() == 0)
+  if (_minTagOccurrencesPerWord == 1 && _minWordLength == 1 &&
+      _customRules.getWordIgnoreList().size() == 0 &&
+      _customRules.getTagIgnoreList().size() == 0 && _customRules.getTagsAllowList().size() == 0 &&
+      _customRules.getCustomRulesList().size() == 0 && _customRules.getRulesIgnoreList().size() == 0)
   {
     LOG_INFO("Skipping filtering as no filtering criteria were specified...");
     if (_minTagOccurrencesPerWord >= 2)
@@ -365,7 +248,7 @@ void PoiImplicitTagRulesDeriver::_applyFiltering(const QString input)
     LOG_VART(word);
 
     const bool wordTooSmall = word.length() < _minWordLength;
-    if (!wordTooSmall && !_wordIgnoreList.contains(word, Qt::CaseInsensitive))
+    if (!wordTooSmall && !_customRules.getWordIgnoreList().contains(word, Qt::CaseInsensitive))
     {
       const QString kvp = lineParts[2].trimmed();
       LOG_VART(kvp);
@@ -375,19 +258,21 @@ void PoiImplicitTagRulesDeriver::_applyFiltering(const QString input)
       const QString keyWildCard = tagKey % "=*";
       LOG_VART(keyWildCard);
 
+      const QStringList tagIgnoreList = _customRules.getTagIgnoreList();
       const bool ignoreTag =
-        !_tagIgnoreList.isEmpty() &&
-        (_tagIgnoreList.contains(kvp) || _tagIgnoreList.contains(keyWildCard));
+        !tagIgnoreList.isEmpty() &&
+        (tagIgnoreList.contains(kvp) || tagIgnoreList.contains(keyWildCard));
       LOG_VART(ignoreTag);
+      const QStringList tagsAllowList = _customRules.getTagsAllowList();
       const bool allowListExcludesTag =
-        !_tagsAllowList.isEmpty() && !_tagsAllowList.contains(kvp) &&
-        !_tagsAllowList.contains(keyWildCard);
+        !tagsAllowList.isEmpty() && !tagsAllowList.contains(kvp) &&
+        !tagsAllowList.contains(keyWildCard);
       LOG_VART(allowListExcludesTag);
 
       if (!ignoreTag && !allowListExcludesTag)
       {
-        const QString ignoreRuleTag = _rulesIgnoreList.value(word, "");
-        const QString customRuleTag = _customRulesList.value(word, "");
+        const QString ignoreRuleTag = _customRules.getRulesIgnoreList().value(word, "");
+        const QString customRuleTag = _customRules.getCustomRulesList().value(word, "");
         if (ignoreRuleTag != kvp && customRuleTag != kvp)
         {
           const long count = lineParts[0].trimmed().toLong();
@@ -454,16 +339,20 @@ void PoiImplicitTagRulesDeriver::_applyFiltering(const QString input)
 
   LOG_DEBUG("Writing custom rules...");
   long ruleCount = 0;
-  for (QMap<QString, QString>::const_iterator customRulesItr = _customRulesList.begin();
-       customRulesItr != _customRulesList.end(); ++customRulesItr)
+  LOG_VARD(_customRules.getCustomRulesList().size());
+  if (_customRules.getCustomRulesList().size() > 0)
   {
-    const QString line =
-      QString::number(999999) % "\t" % customRulesItr.key() % "\t" % customRulesItr.value() % "\n";
-    LOG_VART(line);
-    _filteredCountFile->write(line.toUtf8());
-    ruleCount++;
+    for (QMap<QString, QString>::const_iterator customRulesItr = _customRules.getCustomRulesList().begin();
+         customRulesItr != _customRules.getCustomRulesList().end(); ++customRulesItr)
+    {
+      const QString line =
+        QString::number(999999) % "\t" % customRulesItr.key() % "\t" % customRulesItr.value() % "\n";
+      LOG_VART(line);
+      _filteredCountFile->write(line.toUtf8());
+      ruleCount++;
+    }
+    LOG_INFO("Wrote " << ruleCount << " custom rules.");
   }
-  LOG_INFO("Wrote " << ruleCount << " custom rules.");
 
   LOG_INFO(
     "Wrote " << StringUtils::formatLargeNumber(linesWrittenCount) << " lines to filtered file.");

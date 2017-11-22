@@ -45,16 +45,21 @@ class AddImplicitlyDerivedTagsPoiVisitorTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runDuplicateTagKeyTest);
   CPPUNIT_TEST(runLessSpecificImplicitTagTest);
   CPPUNIT_TEST(runMoreSpecificImplicitTagTest);
+  CPPUNIT_TEST(runWordIgnoreTest);
+  CPPUNIT_TEST(runTagIgnoreTest);
+  CPPUNIT_TEST(runRuleIgnoreTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
+
+  //TODO: use these throughout test
+  static QString inDir() { return "test-files/visitors/AddImplicitlyDerivedTagsPoiVisitorTest"; }
+  static QString outDir() { return "test-output/visitors/AddImplicitlyDerivedTagsPoiVisitorTest"; }
 
   void tearDown()
   {
     TestUtils::resetEnvironment();
   }
-
-  static QString outDir() { return "test-output/visitors/AddImplicitlyDerivedTagsPoiVisitorTest"; }
 
   void runBasicTest()
   {
@@ -102,16 +107,23 @@ public:
     //const QString databaseInFile =
       //"test-files/io/AddImplicitlyDerivedTagsPoiVisitorTest-runBasicTest-rules.sqlite";
     AddImplicitlyDerivedTagsPoiVisitor uut(/*databaseInFile*/databaseOutFile);
+    Settings conf;
+    conf.set("poi.implicit.tag.rules.rule.ignore.file", "");
+    conf.set("poi.implicit.tag.rules.tag.ignore.file", "");
+    conf.set("poi.implicit.tag.rules.tag.file", "");
+    conf.set("poi.implicit.tag.rules.word.ignore.file", "");
+    conf.set("poi.implicit.tag.rules.custom.rule.file", "");
+    uut.setConfiguration(conf);
     map->visitRw(uut);
 
     HOOT_STR_EQUALS("name = Alshy Burgers\n"
                     "amenity = pub\n",
                     map->getNode(-1)->getTags());
-    HOOT_STR_EQUALS("hoot:implicitTags:note = Added 1 implicitly derived tag(s) based on: alshy\n"
+    HOOT_STR_EQUALS("hoot:implicitTags:note = Added 1 implicitly derived tag(s) based on: alshy; tags added: amenity = clinic\n"
                     "name = Alshy Clinic\n"
                     "amenity = clinic\n",
                     map->getNode(-2)->getTags());
-    HOOT_STR_EQUALS("hoot:implicitTags:note = Added 2 implicitly derived tag(s) based on: masjid\n"
+    HOOT_STR_EQUALS("hoot:implicitTags:note = Added 2 implicitly derived tag(s) based on: masjid; tags added: religion = muslim, amenity = place_of_worship\n"
                     "poi = yes\n"
                     "religion = muslim\n"
                     "name = masjid\n"
@@ -121,26 +133,26 @@ public:
                     "hoot:implicitTags:note = No implicit tags added due to finding multiple possible matches for implicit tags: alwhdt, Mustashfa\n"
                     "name = alwhdt Mustashfa\n",
                     map->getNode(-4)->getTags());
-    HOOT_STR_EQUALS("hoot:implicitTags:note = Added 1 implicitly derived tag(s) based on: Sihhi, Şiḩḩī\n"
+    HOOT_STR_EQUALS("hoot:implicitTags:note = Added 1 implicitly derived tag(s) based on: Sihhi, Şiḩḩī; tags added: amenity = clinic\n"
                     "alt_name = Şiḩḩī\n"
                     "name = Sihhi\n"
                     "amenity = clinic\n",
                     map->getNode(-5)->getTags());
-    HOOT_STR_EQUALS("hoot:implicitTags:note = Added 1 implicitly derived tag(s) based on: Sihhi\n"
+    HOOT_STR_EQUALS("hoot:implicitTags:note = Added 1 implicitly derived tag(s) based on: Sihhi; tags added: amenity = clinic\n"
                     "alt_name = Clinic\n"
                     "name = Sihhi\n"
                     "amenity = clinic\n",
                     map->getNode(-6)->getTags());
-    HOOT_STR_EQUALS("hoot:implicitTags:note = Added 2 implicitly derived tag(s) based on: masjid, mosque\n"
+    HOOT_STR_EQUALS("hoot:implicitTags:note = Added 2 implicitly derived tag(s) based on: masjid, mosque; tags added: religion = muslim, amenity = place_of_worship\n"
                     "religion = muslim\n"
                     "name = masjid mosque\n"
                     "amenity = place_of_worship\n",
                     map->getNode(-7)->getTags());
-    HOOT_STR_EQUALS("hoot:implicitTags:note = Added 1 implicitly derived tag(s) based on: Mustashfa alwhdt\n"
+    HOOT_STR_EQUALS("hoot:implicitTags:note = Added 1 implicitly derived tag(s) based on: Mustashfa alwhdt; tags added: amenity = hospital\n"
                     "name = Mustashfa alwhdt\n"
                     "amenity = hospital\n",
                     map->getNode(-8)->getTags());
-    HOOT_STR_EQUALS("hoot:implicitTags:note = Added 1 implicitly derived tag(s) based on: alwhdt\n"
+    HOOT_STR_EQUALS("hoot:implicitTags:note = Added 1 implicitly derived tag(s) based on: alwhdt; tags added: amenity = clinic\n"
                     "name = alwhdt\n"
                     "amenity = clinic\n",
                     map->getNode(-9)->getTags());
@@ -173,6 +185,13 @@ public:
     //const QString databaseInFile =
       //"test-files/io/AddImplicitlyDerivedTagsPoiVisitorTest-runBasicTest-rules.sqlite";
     AddImplicitlyDerivedTagsPoiVisitor uut(/*databaseInFile*/databaseOutFile);
+    Settings conf;
+    conf.set("poi.implicit.tag.rules.rule.ignore.file", "");
+    conf.set("poi.implicit.tag.rules.tag.ignore.file", "");
+    conf.set("poi.implicit.tag.rules.tag.file", "");
+    conf.set("poi.implicit.tag.rules.word.ignore.file", "");
+    conf.set("poi.implicit.tag.rules.custom.rule.file", "");
+    uut.setConfiguration(conf);
     map->visitRw(uut);
 
     CPPUNIT_ASSERT_EQUAL(2, map->getNode(1)->getTags().size());
@@ -209,6 +228,13 @@ public:
     //const QString databaseInFile =
       //"test-files/io/AddImplicitlyDerivedTagsPoiVisitorTest-runLessSpecificImplicitTagTest-rules.sqlite";
     AddImplicitlyDerivedTagsPoiVisitor uut(/*databaseInFile*/databaseOutFile);
+    Settings conf;
+    conf.set("poi.implicit.tag.rules.rule.ignore.file", "");
+    conf.set("poi.implicit.tag.rules.tag.ignore.file", "");
+    conf.set("poi.implicit.tag.rules.tag.file", "");
+    conf.set("poi.implicit.tag.rules.word.ignore.file", "");
+    conf.set("poi.implicit.tag.rules.custom.rule.file", "");
+    uut.setConfiguration(conf);
     map->visitRw(uut);
 
     CPPUNIT_ASSERT_EQUAL(2, map->getNode(1)->getTags().size());
@@ -245,6 +271,13 @@ public:
     //const QString databaseInFile =
       //"test-files/io/AddImplicitlyDerivedTagsPoiVisitorTest-runMoreSpecificImplicitTagTest-rules.sqlite";
     AddImplicitlyDerivedTagsPoiVisitor uut(/*databaseInFile*/databaseOutFile);
+    Settings conf;
+    conf.set("poi.implicit.tag.rules.rule.ignore.file", "");
+    conf.set("poi.implicit.tag.rules.tag.ignore.file", "");
+    conf.set("poi.implicit.tag.rules.tag.file", "");
+    conf.set("poi.implicit.tag.rules.word.ignore.file", "");
+    conf.set("poi.implicit.tag.rules.custom.rule.file", "");
+    uut.setConfiguration(conf);
     map->visitRw(uut);
     LOG_VART(map->getNode(1)->getTags());
 
@@ -254,6 +287,120 @@ public:
     CPPUNIT_ASSERT_EQUAL(
       QString("public_hall").toStdString(), map->getNode(1)->getTags()["amenity"].toStdString());
     CPPUNIT_ASSERT(map->getNode(1)->getTags().contains("hoot:implicitTags:note"));
+  }
+
+  void runWordIgnoreTest()
+  {
+    QDir().mkpath(outDir());
+
+    //TODO: don't regen this database every time
+    //use this to regenerate the db file
+    const QString databaseOutFile =
+      outDir() + "/AddImplicitlyDerivedTagsPoiVisitorTest-runWordIgnoreTest-rules.sqlite";
+    ImplicitTagRulesSqliteRecordWriter writer;
+    writer.open(databaseOutFile);
+    writer.write(
+      "test-files/visitors/AddImplicitlyDerivedTagsPoiVisitorTest/runWordIgnoreTest-ruleWordParts");
+    writer.close();
+  //    return;
+
+    OsmMapPtr map(new OsmMap());
+    NodePtr node(new Node(Status::Unknown1, 1, geos::geom::Coordinate(1, 1), 15.0));
+    node->getTags()["name"] = "hall";
+    map->addNode(node);
+
+    //const QString databaseInFile =
+      //"test-files/io/AddImplicitlyDerivedTagsPoiVisitorTest-runWordIgnoreTest-rules.sqlite";
+    AddImplicitlyDerivedTagsPoiVisitor uut(/*databaseInFile*/databaseOutFile);
+    Settings conf;
+    conf.set("poi.implicit.tag.rules.rule.ignore.file", "");
+    conf.set("poi.implicit.tag.rules.tag.ignore.file", "");
+    conf.set("poi.implicit.tag.rules.tag.file", "");
+    conf.set("poi.implicit.tag.rules.word.ignore.file", inDir() + "/wordIgnoreList");
+    conf.set("poi.implicit.tag.rules.custom.rule.file", "");
+    uut.setConfiguration(conf);
+    map->visitRw(uut);
+    LOG_VART(map->getNode(1)->getTags());
+
+    CPPUNIT_ASSERT_EQUAL(1, map->getNode(1)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(
+      QString("hall").toStdString(), map->getNode(1)->getTags()["name"].toStdString());
+  }
+
+  void runTagIgnoreTest()
+  {
+    QDir().mkpath(outDir());
+
+    //TODO: don't regen this database every time
+    //use this to regenerate the db file
+    const QString databaseOutFile =
+      outDir() + "/AddImplicitlyDerivedTagsPoiVisitorTest-runTagIgnoreTest-rules.sqlite";
+    ImplicitTagRulesSqliteRecordWriter writer;
+    writer.open(databaseOutFile);
+    writer.write(
+      "test-files/visitors/AddImplicitlyDerivedTagsPoiVisitorTest/runTagIgnoreTest-ruleWordParts");
+    writer.close();
+  //    return;
+
+    OsmMapPtr map(new OsmMap());
+    NodePtr node(new Node(Status::Unknown1, 1, geos::geom::Coordinate(1, 1), 15.0));
+    node->getTags()["name"] = "hall";
+    map->addNode(node);
+
+    //const QString databaseInFile =
+      //"test-files/io/AddImplicitlyDerivedTagsPoiVisitorTest-runTagIgnoreTest-rules.sqlite";
+    AddImplicitlyDerivedTagsPoiVisitor uut(/*databaseInFile*/databaseOutFile);
+    Settings conf;
+    conf.set("poi.implicit.tag.rules.rule.ignore.file", "");
+    conf.set("poi.implicit.tag.rules.tag.ignore.file", inDir() + "/tagIgnoreList");
+    conf.set("poi.implicit.tag.rules.tag.file", "");
+    conf.set("poi.implicit.tag.rules.word.ignore.file", "");
+    conf.set("poi.implicit.tag.rules.custom.rule.file", "");
+    uut.setConfiguration(conf);
+    map->visitRw(uut);
+    LOG_VART(map->getNode(1)->getTags());
+
+    CPPUNIT_ASSERT_EQUAL(1, map->getNode(1)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(
+      QString("hall").toStdString(), map->getNode(1)->getTags()["name"].toStdString());
+  }
+
+  void runRuleIgnoreTest()
+  {
+    QDir().mkpath(outDir());
+
+    //TODO: don't regen this database every time
+    //use this to regenerate the db file
+    const QString databaseOutFile =
+      outDir() + "/AddImplicitlyDerivedTagsPoiVisitorTest-runRuleIgnoreTest-rules.sqlite";
+    ImplicitTagRulesSqliteRecordWriter writer;
+    writer.open(databaseOutFile);
+    writer.write(
+      "test-files/visitors/AddImplicitlyDerivedTagsPoiVisitorTest/runRuleIgnoreTest-ruleWordParts");
+    writer.close();
+  //    return;
+
+    OsmMapPtr map(new OsmMap());
+    NodePtr node(new Node(Status::Unknown1, 1, geos::geom::Coordinate(1, 1), 15.0));
+    node->getTags()["name"] = "hall";
+    map->addNode(node);
+
+    //const QString databaseInFile =
+      //"test-files/io/AddImplicitlyDerivedTagsPoiVisitorTest-runRuleIgnoreTest-rules.sqlite";
+    AddImplicitlyDerivedTagsPoiVisitor uut(/*databaseInFile*/databaseOutFile);
+    Settings conf;
+    conf.set("poi.implicit.tag.rules.rule.ignore.file", inDir() + "/ruleIgnoreList");
+    conf.set("poi.implicit.tag.rules.tag.ignore.file", "");
+    conf.set("poi.implicit.tag.rules.tag.file", "");
+    conf.set("poi.implicit.tag.rules.word.ignore.file", "");
+    conf.set("poi.implicit.tag.rules.custom.rule.file", "");
+    uut.setConfiguration(conf);
+    map->visitRw(uut);
+    LOG_VART(map->getNode(1)->getTags());
+
+    CPPUNIT_ASSERT_EQUAL(1, map->getNode(1)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(
+      QString("hall").toStdString(), map->getNode(1)->getTags()["name"].toStdString());
   }
 };
 

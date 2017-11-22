@@ -39,7 +39,7 @@ namespace hoot
 class ImplicitTagRulesSqliteReaderTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ImplicitTagRulesSqliteReaderTest);
-  CPPUNIT_TEST(runTagsTest);
+  //CPPUNIT_TEST(runTagsTest);
   CPPUNIT_TEST(runMultipleRulesTest);
   //TODO
   //CPPUNIT_TEST(runQuoteInNameTest);
@@ -170,6 +170,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(1, ruleWordsInvolved.size());
     CPPUNIT_ASSERT(ruleWordsInvolved.contains("Mosque"));
     CPPUNIT_ASSERT(!wordsInvolvedInMultipleRules);
+    CPPUNIT_ASSERT(!tags.isEmpty());
     words.clear();
 
     words.insert("MOSQUE");
@@ -177,6 +178,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(1, ruleWordsInvolved.size());
     CPPUNIT_ASSERT(ruleWordsInvolved.contains("Mosque"));
     CPPUNIT_ASSERT(!wordsInvolvedInMultipleRules);
+    CPPUNIT_ASSERT(!tags.isEmpty());
     words.clear();
 
     words.insert("mosque");
@@ -184,6 +186,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(1, ruleWordsInvolved.size());
     CPPUNIT_ASSERT(ruleWordsInvolved.contains("Mosque"));
     CPPUNIT_ASSERT(!wordsInvolvedInMultipleRules);
+    CPPUNIT_ASSERT(!tags.isEmpty());
     words.clear();
 
     words.insert("Mustashfa");
@@ -191,6 +194,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(1, ruleWordsInvolved.size());
     CPPUNIT_ASSERT(ruleWordsInvolved.contains("Mustashfa"));
     CPPUNIT_ASSERT(!wordsInvolvedInMultipleRules);
+    CPPUNIT_ASSERT(!tags.isEmpty());
     words.clear();
 
     words.insert("MUSTASHFA");
@@ -198,6 +202,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(1, ruleWordsInvolved.size());
     CPPUNIT_ASSERT(ruleWordsInvolved.contains("Mustashfa"));
     CPPUNIT_ASSERT(!wordsInvolvedInMultipleRules);
+    CPPUNIT_ASSERT(!tags.isEmpty());
     words.clear();
 
     words.insert("mustashfa");
@@ -205,6 +210,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(1, ruleWordsInvolved.size());
     CPPUNIT_ASSERT(ruleWordsInvolved.contains("Mustashfa"));
     CPPUNIT_ASSERT(!wordsInvolvedInMultipleRules);
+    CPPUNIT_ASSERT(!tags.isEmpty());
     words.clear();
 
     words.insert("mosque");
@@ -214,6 +220,7 @@ public:
     CPPUNIT_ASSERT(ruleWordsInvolved.contains("Mustashfa"));
     CPPUNIT_ASSERT(ruleWordsInvolved.contains("Mosque"));
     CPPUNIT_ASSERT(wordsInvolvedInMultipleRules);
+    CPPUNIT_ASSERT(tags.isEmpty());
     words.clear();
 
     words.insert("mosque2");
@@ -222,6 +229,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(1, ruleWordsInvolved.size());
     CPPUNIT_ASSERT(ruleWordsInvolved.contains("Mustashfa"));
     CPPUNIT_ASSERT(!wordsInvolvedInMultipleRules);
+    CPPUNIT_ASSERT(!tags.isEmpty());
     words.clear();
 
     words.insert("mosque 3");
@@ -230,6 +238,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(1, ruleWordsInvolved.size());
     CPPUNIT_ASSERT(ruleWordsInvolved.contains("Mustashfa"));
     CPPUNIT_ASSERT(!wordsInvolvedInMultipleRules);
+    CPPUNIT_ASSERT(!tags.isEmpty());
     words.clear();
 
     words.insert("alwhdt");
@@ -237,6 +246,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(1, ruleWordsInvolved.size());
     CPPUNIT_ASSERT(ruleWordsInvolved.contains("alwhdt"));
     CPPUNIT_ASSERT(!wordsInvolvedInMultipleRules);
+    CPPUNIT_ASSERT(!tags.isEmpty());
     words.clear();
 
     words.insert("Mustashfa");
@@ -246,6 +256,7 @@ public:
     CPPUNIT_ASSERT(ruleWordsInvolved.contains("Mustashfa"));
     CPPUNIT_ASSERT(ruleWordsInvolved.contains("alwhdt"));
     CPPUNIT_ASSERT(wordsInvolvedInMultipleRules);
+    CPPUNIT_ASSERT(tags.isEmpty());
     words.clear();
 
     words.insert("Mustashfa alwhdt");
@@ -253,6 +264,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(1, ruleWordsInvolved.size());
     CPPUNIT_ASSERT(ruleWordsInvolved.contains("Mustashfa alwhdt"));
     CPPUNIT_ASSERT(!wordsInvolvedInMultipleRules);
+    CPPUNIT_ASSERT(!tags.isEmpty());
     words.clear();
 
     words.insert("Mustashfa alwhdt");
@@ -264,6 +276,7 @@ public:
     CPPUNIT_ASSERT(ruleWordsInvolved.contains("alwhdt"));
     CPPUNIT_ASSERT(ruleWordsInvolved.contains("Mustashfa alwhdt"));
     CPPUNIT_ASSERT(wordsInvolvedInMultipleRules);
+    CPPUNIT_ASSERT(tags.isEmpty());
     words.clear();
 
     words.insert("MUSTASHFA ALWHDT");
@@ -275,6 +288,7 @@ public:
     CPPUNIT_ASSERT(ruleWordsInvolved.contains("alwhdt"));
     CPPUNIT_ASSERT(ruleWordsInvolved.contains("Mustashfa alwhdt"));
     CPPUNIT_ASSERT(wordsInvolvedInMultipleRules);
+    CPPUNIT_ASSERT(tags.isEmpty());
     words.clear();
 
     words.insert("mustashfa alwhdt");
@@ -286,6 +300,7 @@ public:
     CPPUNIT_ASSERT(ruleWordsInvolved.contains("alwhdt"));
     CPPUNIT_ASSERT(ruleWordsInvolved.contains("Mustashfa alwhdt"));
     CPPUNIT_ASSERT(wordsInvolvedInMultipleRules);
+    CPPUNIT_ASSERT(tags.isEmpty());
     words.clear();
 
     reader.close();

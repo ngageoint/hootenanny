@@ -104,6 +104,18 @@ AddImplicitlyDerivedTagsPoiVisitor::~AddImplicitlyDerivedTagsPoiVisitor()
   }
 }
 
+void AddImplicitlyDerivedTagsPoiVisitor::setConfiguration(const Settings& conf)
+{
+  const ConfigOptions confOptions(conf);
+  _customRules.setCustomRuleFile(confOptions.getPoiImplicitTagRulesCustomRuleFile());
+  _customRules.setRuleIgnoreFile(confOptions.getPoiImplicitTagRulesRuleIgnoreFile());
+  _customRules.setTagIgnoreFile(confOptions.getPoiImplicitTagRulesTagIgnoreFile());
+  _customRules.setTagFile(confOptions.getPoiImplicitTagRulesTagFile());
+  _customRules.setWordIgnoreFile(confOptions.getPoiImplicitTagRulesWordIgnoreFile());
+
+  _customRules.init();
+}
+
 bool caseInsensitiveLessThan(const QString s1, const QString s2)
 {
   return s1.toLower() < s2.toLower();
@@ -132,12 +144,13 @@ void AddImplicitlyDerivedTagsPoiVisitor::visit(const ElementPtr& e)
     for (int i = 0; i < names.size(); i++)
     {
       const QString name = names.at(i);
-      if (name.length() >= _minWordLength)
+      if (name.length() >= _minWordLength && !_customRules.getWordIgnoreList().contains(name))
       {
         filteredNames.append(name);
       }
     }
     LOG_VART(filteredNames);
+
     if (filteredNames.size() > 0)
     {
       QSet<QString> matchingWords;
@@ -185,58 +198,6 @@ void AddImplicitlyDerivedTagsPoiVisitor::visit(const ElementPtr& e)
       }
       LOG_VART(tagsToAdd);
 
-      //don't add a less specific tag if the element already has one with the same key; e.g. if
-      //the element has amenity=public_hall, don't add amenity=hall
-      //for ties keep the one we already have; e.g. if the element has amenity=bank, don't add
-      //amenity=school
-      Tags updatedTags;
-      bool tagsAdded = false;
-      for (Tags::const_iterator tagItr = tagsToAdd.begin(); tagItr != tagsToAdd.end(); ++tagItr)
-      {
-        const QString implicitTagKey = tagItr.key();
-        const QString implicitTagValue = tagItr.value();
-        if (e->getTags().contains(implicitTagKey))
-        {
-          const QString elementTagKey = implicitTagKey;
-          const QString elementTagValue = e->getTags()[implicitTagKey];
-          //only use the implicit tag if it is more specific than the one the element already has;
-          //if neither is more specific than the other, we'll arbitrarily keep the one we already had
-          LOG_VART(OsmSchema::getInstance().isAncestor(implicitTagKey % "=" % implicitTagValue,
-                                                       elementTagKey % "=" % elementTagValue));
-          if (OsmSchema::getInstance().isAncestor(implicitTagKey % "=" % implicitTagValue,
-                                                  elementTagKey % "=" % elementTagValue))
-          {
-            LOG_TRACE(
-              implicitTagKey % "=" % implicitTagValue << " is more specific than " <<
-              elementTagKey % "=" % elementTagValue << " on the input feature.  Replacing with " <<
-              "the more specific tag.")
-            updatedTags.appendValue(implicitTagKey, implicitTagValue);
-            tagsAdded = true;
-          }
-          else
-          {
-            updatedTags.appendValue(elementTagKey, elementTagValue);
-          }
-        }
-        else
-        {
-          LOG_TRACE("Input feature does not contain tag: " <<
-                    implicitTagKey % "=" % implicitTagValue << ", so adding it...");
-          updatedTags.appendValue(implicitTagKey, implicitTagValue);
-          tagsAdded = true;
-        }
-      }
-      LOG_VART(tagsAdded);
-      if (tagsAdded)
-      {
-        tagsToAdd = updatedTags;
-      }
-      else
-      {
-        tagsToAdd.clear();
-      }
-      LOG_VART(tagsToAdd);
-
       if (foundDuplicateMatch)
       {
         QStringList matchingWordsList = matchingWords.toList();
@@ -254,32 +215,120 @@ void AddImplicitlyDerivedTagsPoiVisitor::visit(const ElementPtr& e)
         }
       }
       else if (!tagsToAdd.isEmpty())
-      {
-        e->getTags().addTags(tagsToAdd);
-        assert(matchingWords.size() != 0);
-        QStringList matchingWordsList = matchingWords.toList();
-        qSort(matchingWordsList.begin(), matchingWordsList.end(), caseInsensitiveLessThan);
-        QString tagValue =
-          "Added " + QString::number(tagsToAdd.size()) + " implicitly derived tag(s) based on: " +
-          matchingWordsList.join(", ");
-        //TODO: change this to trace
-        tagValue += "; tags added: " + tagsToAdd.toString().simplified();
-        e->getTags().appendValue("hoot:implicitTags:note", tagValue);
-        _numNodesModified++;
-        _numTagsAdded += tagsToAdd.size();
-        if (_numTagsAdded < _smallestNumberOfTagsAdded)
+      {  
+        assert(!matchingWords.isEmpty());
+
+        Tags ruleFilteredTags;
+        QMap<QString, QString> rulesToIgnore = _customRules.getRulesIgnoreList();
+        for (QSet<QString>::const_iterator wordItr = matchingWords.begin();
+             wordItr != matchingWords.end(); ++wordItr)
         {
-          _smallestNumberOfTagsAdded = _numTagsAdded;
+          const QString word = *wordItr;
+          LOG_VART(word);
+          for (Tags::const_iterator tagItr = tagsToAdd.begin(); tagItr != tagsToAdd.end(); ++tagItr)
+          {
+            const QString tagKey = tagItr.key();
+            LOG_VART(tagKey);
+            const QString tagValue = tagItr.value();
+            LOG_VART(tagValue);
+            if (!ruleFilteredTags.contains(tagKey) && rulesToIgnore[word] != tagKey % "=" % tagValue)
+            {
+              LOG_VART(tagKey % "=" % tagValue);
+              ruleFilteredTags.appendValue(tagKey, tagValue);
+            }
+          }
         }
-        if (_numTagsAdded > _largestNumberOfTagsAdded)
+
+        Tags updatedTags;
+        bool tagsAdded = false;
+        //TODO: check tag include list
+        for (Tags::const_iterator tagItr = ruleFilteredTags.begin();
+             tagItr != ruleFilteredTags.end(); ++tagItr)
         {
-          _largestNumberOfTagsAdded = _numTagsAdded;
+          const QString implicitTagKey = tagItr.key();
+          LOG_VART(implicitTagKey);
+          const QString implicitTagValue = tagItr.value();
+          LOG_VART(implicitTagValue);
+          const QString tagStr = implicitTagKey % "=" % implicitTagValue;
+          if (_customRules.getTagIgnoreList().contains(tagStr))
+          {
+            //skip
+          }
+          else if (e->getTags().contains(implicitTagKey))
+          {
+            //don't add a less specific tag if the element already has one with the same key; e.g. if
+            //the element has amenity=public_hall, don't add amenity=hall
+            //for ties keep the one we already have; e.g. if the element has amenity=bank, don't add
+            //amenity=school
+
+            const QString elementTagKey = implicitTagKey;
+            const QString elementTagValue = e->getTags()[implicitTagKey];
+            //only use the implicit tag if it is more specific than the one the element already has;
+            //if neither is more specific than the other, we'll arbitrarily keep the one we already had
+            LOG_VART(OsmSchema::getInstance().isAncestor(implicitTagKey % "=" % implicitTagValue,
+                                                         elementTagKey % "=" % elementTagValue));
+            if (OsmSchema::getInstance().isAncestor(implicitTagKey % "=" % implicitTagValue,
+                                                    elementTagKey % "=" % elementTagValue))
+            {
+              LOG_TRACE(
+                implicitTagKey % "=" % implicitTagValue << " is more specific than " <<
+                elementTagKey % "=" % elementTagValue << " on the input feature.  Replacing with " <<
+                "the more specific tag.")
+              updatedTags.appendValue(implicitTagKey, implicitTagValue);
+              tagsAdded = true;
+            }
+            else
+            {
+              updatedTags.appendValue(elementTagKey, elementTagValue);
+            }
+          }
+          else
+          {
+            LOG_TRACE("Input feature does not contain tag: " <<
+                      implicitTagKey % "=" % implicitTagValue << ", so adding it...");
+            updatedTags.appendValue(implicitTagKey, implicitTagValue);
+            tagsAdded = true;
+          }
         }
-        if (_numNodesModified % 100 == 0)
+        LOG_VART(tagsAdded);
+        if (tagsAdded)
         {
-          PROGRESS_INFO(
-            "Added " << StringUtils::formatLargeNumber(_numTagsAdded) << " tags total to " <<
-            StringUtils::formatLargeNumber(_numNodesModified) << " nodes.");
+          tagsToAdd = updatedTags;
+        }
+        else
+        {
+          tagsToAdd.clear();
+        }
+        LOG_VART(tagsToAdd);
+
+        if (!tagsToAdd.isEmpty())
+        {
+          e->getTags().addTags(tagsToAdd);
+          assert(matchingWords.size() != 0);
+          QStringList matchingWordsList = matchingWords.toList();
+          qSort(matchingWordsList.begin(), matchingWordsList.end(), caseInsensitiveLessThan);
+          QString tagValue =
+            "Added " + QString::number(tagsToAdd.size()) + " implicitly derived tag(s) based on: " +
+            matchingWordsList.join(", ");
+          //TODO: change this to trace
+          tagValue += "; tags added: " + tagsToAdd.toString().trimmed().replace("\n", ", ");
+          e->getTags().appendValue("hoot:implicitTags:note", tagValue);
+          _numNodesModified++;
+          _numTagsAdded += tagsToAdd.size();
+          if (_numTagsAdded < _smallestNumberOfTagsAdded)
+          {
+            _smallestNumberOfTagsAdded = _numTagsAdded;
+          }
+          if (_numTagsAdded > _largestNumberOfTagsAdded)
+          {
+            _largestNumberOfTagsAdded = _numTagsAdded;
+          }
+          if (_numNodesModified % 100 == 0)
+          {
+            PROGRESS_INFO(
+              "Added " << StringUtils::formatLargeNumber(_numTagsAdded) << " tags total to " <<
+              StringUtils::formatLargeNumber(_numNodesModified) << " nodes.");
+          }
         }
       }
     }
@@ -306,7 +355,10 @@ QSet<QString> AddImplicitlyDerivedTagsPoiVisitor::_getNameTokens(const Tags& t)
     QStringList words = tokenizer.tokenize(n);
     foreach (const QString& w, words)
     {
-      result.insert(w.toLower());
+      if (!_customRules.getWordIgnoreList().contains(w))
+      {
+        result.insert(w.toLower());
+      }
     }
   }
 

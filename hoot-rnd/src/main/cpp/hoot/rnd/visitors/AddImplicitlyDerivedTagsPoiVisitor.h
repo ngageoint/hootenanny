@@ -30,6 +30,8 @@
 // hoot
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/rnd/io/ImplicitTagRulesSqliteReader.h>
+#include <hoot/rnd/schema/PoiImplicitTagCustomRules.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -37,7 +39,7 @@ namespace hoot
 /**
  * Adds tags implicitly derived from POI names to POIs
  */
-class AddImplicitlyDerivedTagsPoiVisitor : public ElementVisitor
+class AddImplicitlyDerivedTagsPoiVisitor : public ElementVisitor, public Configurable
 {
 public:
 
@@ -54,6 +56,14 @@ public:
    */
   virtual void visit(const ElementPtr& e);
 
+  virtual void setConfiguration(const Settings& conf);
+
+  void setCustomRuleFile(const QString file) { _customRules.setCustomRuleFile(file); }
+  void setRuleIgnoreFile(const QString file) { _customRules.setRuleIgnoreFile(file); }
+  void setTagIgnoreFile(const QString file) { _customRules.setTagIgnoreFile(file); }
+  void setTagFile(const QString file) { _customRules.setTagFile(file); }
+  void setWordIgnoreFile(const QString file) { _customRules.setWordIgnoreFile(file); }
+
 private:
 
   boost::shared_ptr<ImplicitTagRulesSqliteReader> _ruleReader;
@@ -67,6 +77,8 @@ private:
   int _minWordLength;
   long _smallestNumberOfTagsAdded;
   long _largestNumberOfTagsAdded;
+
+  PoiImplicitTagCustomRules _customRules;
 
   QSet<QString> _getNameTokens(const Tags& t);
 

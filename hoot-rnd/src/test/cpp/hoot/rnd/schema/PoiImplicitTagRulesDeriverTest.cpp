@@ -71,6 +71,11 @@ public:
 
     PoiImplicitTagRulesDeriver rulesDeriver;
     rulesDeriver.setConfiguration(conf());
+    rulesDeriver.setCustomRuleFile("");
+    rulesDeriver.setRuleIgnoreFile("");
+    rulesDeriver.setTagIgnoreFile("");
+    rulesDeriver.setTagFile("");
+    rulesDeriver.setWordIgnoreFile("");
     rulesDeriver.deriveRules(input, outputs);
 
     HOOT_FILE_EQUALS(inDir() + "/PoiImplicitTagRulesDeriverTest-runBasicTest.json", jsonOutputFile);
@@ -98,6 +103,10 @@ public:
     PoiImplicitTagRulesDeriver rulesDeriver;
     rulesDeriver.setConfiguration(conf());
     rulesDeriver.setTagFile(inDir() + "/PoiImplicitTagRulesDeriverTest-tag-list");
+    rulesDeriver.setCustomRuleFile("");
+    rulesDeriver.setRuleIgnoreFile("");
+    rulesDeriver.setTagIgnoreFile("");
+    rulesDeriver.setWordIgnoreFile("");
     rulesDeriver.deriveRules(input, outputs);
 
     HOOT_FILE_EQUALS(
@@ -126,6 +135,11 @@ public:
     PoiImplicitTagRulesDeriver rulesDeriver;
     rulesDeriver.setConfiguration(conf());
     rulesDeriver.setMinTagOccurrencesPerWord(4);
+    rulesDeriver.setCustomRuleFile("");
+    rulesDeriver.setRuleIgnoreFile("");
+    rulesDeriver.setTagIgnoreFile("");
+    rulesDeriver.setTagFile("");
+    rulesDeriver.setWordIgnoreFile("");
     rulesDeriver.deriveRules(input, outputs);
 
     HOOT_FILE_EQUALS(
@@ -155,6 +169,11 @@ public:
     PoiImplicitTagRulesDeriver rulesDeriver;
     rulesDeriver.setConfiguration(conf());
     rulesDeriver.setMinWordLength(10);
+    rulesDeriver.setCustomRuleFile("");
+    rulesDeriver.setRuleIgnoreFile("");
+    rulesDeriver.setTagIgnoreFile("");
+    rulesDeriver.setTagFile("");
+    rulesDeriver.setWordIgnoreFile("");
     rulesDeriver.deriveRules(input, outputs);
 
     HOOT_FILE_EQUALS(
@@ -184,6 +203,10 @@ public:
     PoiImplicitTagRulesDeriver rulesDeriver;
     rulesDeriver.setConfiguration(conf());
     rulesDeriver.setTagIgnoreFile(inDir() + "/PoiImplicitTagRulesDeriverTest-tag-ignore-list");
+    rulesDeriver.setCustomRuleFile("");
+    rulesDeriver.setRuleIgnoreFile("");
+    rulesDeriver.setTagFile("");
+    rulesDeriver.setWordIgnoreFile("");
     rulesDeriver.deriveRules(input, outputs);
 
     HOOT_FILE_EQUALS(
@@ -213,6 +236,10 @@ public:
     PoiImplicitTagRulesDeriver rulesDeriver;
     rulesDeriver.setConfiguration(conf());
     rulesDeriver.setWordIgnoreFile(inDir() + "/PoiImplicitTagRulesDeriverTest-word-ignore-list");
+    rulesDeriver.setCustomRuleFile("");
+    rulesDeriver.setRuleIgnoreFile("");
+    rulesDeriver.setTagIgnoreFile("");
+    rulesDeriver.setTagFile("");
     rulesDeriver.deriveRules(input, outputs);
 
     HOOT_FILE_EQUALS(
@@ -242,6 +269,10 @@ public:
     PoiImplicitTagRulesDeriver rulesDeriver;
     rulesDeriver.setConfiguration(conf());
     rulesDeriver.setRuleIgnoreFile(inDir() + "/PoiImplicitTagRulesDeriverTest-rule-ignore-list");
+    rulesDeriver.setCustomRuleFile("");
+    rulesDeriver.setTagIgnoreFile("");
+    rulesDeriver.setTagFile("");
+    rulesDeriver.setWordIgnoreFile("");
     rulesDeriver.deriveRules(input, outputs);
 
     HOOT_FILE_EQUALS(

@@ -98,6 +98,7 @@ private:
   bool _useTagsCache;
   long _firstRoundTagsCacheHits;
   long _secondRoundTagsCacheHits;
+  bool _addTopTagOnly;
 
   void _prepareQueries();
 };

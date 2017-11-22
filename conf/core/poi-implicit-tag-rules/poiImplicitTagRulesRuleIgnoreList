@@ -1,0 +1,3 @@
+# rules that are always ignored; tab separated: word	key=value
+# keep alphabetized
+jabal	natural=peak

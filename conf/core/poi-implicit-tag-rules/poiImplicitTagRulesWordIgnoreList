@@ -1,4 +1,8 @@
+# words to always ignore
+# keep alphabetized
+
 # pronouns
+
 #i
 #you
 #he
@@ -21,7 +25,9 @@
 #himself
 #herself
 #themselves
+
 # prepositions
+
 #under
 #between
 #over
@@ -34,16 +40,20 @@
 #next to
 #to
 #on
+
 # conjunctions
+
 #or
 #and
 #but
 #until
 #because
+
 # determiners
+
 #a
 #an
-#the
+the
 #every
 #this
 #those
