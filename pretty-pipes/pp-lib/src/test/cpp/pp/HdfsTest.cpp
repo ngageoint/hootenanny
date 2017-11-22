@@ -44,7 +44,6 @@ using namespace std;
 class HdfsTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(HdfsTest);
-  CPPUNIT_TEST(testWrite);
   CPPUNIT_TEST(testReadAll);
   CPPUNIT_TEST(testReadSeek);
   CPPUNIT_TEST_SUITE_END();
@@ -53,16 +52,14 @@ public:
 
   const static int count = 1000000;
 
-  void testWrite()
+  void createFile(const string& filename)
   {
     Hdfs hdfs("default", 0);
 
-    if (hdfs.exists("sequence.txt"))
-    {
-      hdfs.remove("sequence.txt");
-    }
+    if (hdfs.exists(filename))
+      hdfs.remove(filename);
 
-    auto_ptr<ostream> osPtr(hdfs.create("sequence.txt"));
+    auto_ptr<ostream> osPtr(hdfs.create(filename));
     ostream& os = *osPtr;
 
     char buf[12];
@@ -72,24 +69,25 @@ public:
       os << buf;
     }
     os.flush();
-
-    CPPUNIT_ASSERT_EQUAL(true, hdfs.exists("sequence.txt"));
   }
 
   void testReadAll()
   {
     Hdfs hdfs("default", 0);
 
-    auto_ptr<istream> isPtr(hdfs.open("sequence.txt"));
+    string filename = "readAll.sequence.txt";
+    createFile(filename);
+    CPPUNIT_ASSERT_EQUAL(true, hdfs.exists(filename));
+
+    auto_ptr<istream> isPtr(hdfs.open(filename));
     istream& is = *isPtr;
 
     string bufIn, bufExpected;
     bufIn.resize(12);
     bufExpected.resize(12);
     for (int i = 0; i < 12; i++)
-    {
       bufIn[i] = 0;
-    }
+
     for (int i = 0; i < count; i++)
     {
       snprintf((char*)bufExpected.data(), 12, "%8d\n", i);
@@ -109,7 +107,11 @@ public:
   {
     Hdfs hdfs("default", 0);
 
-    auto_ptr<istream> isPtr(hdfs.open("sequence.txt"));
+    string filename = "readSeek.sequence.txt";
+    createFile(filename);
+    CPPUNIT_ASSERT_EQUAL(true, hdfs.exists(filename));
+
+    auto_ptr<istream> isPtr(hdfs.open(filename));
     istream& is = *isPtr;
 
     is.seekg(0, ios_base::end);
@@ -121,9 +123,7 @@ public:
     bufIn.resize(12);
     bufExpected.resize(12);
     for (int i = 0; i < 12; i++)
-    {
       bufIn[i] = 0;
-    }
 
     for (int i = 0; i < 1000; i++)
     {
@@ -139,6 +139,4 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(HdfsTest, "glacial");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(HdfsTest, "serial");
-
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(HdfsTest, "slow");
