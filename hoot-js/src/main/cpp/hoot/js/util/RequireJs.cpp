@@ -64,8 +64,8 @@ void RequireJs::jsRequire(const FunctionCallbackInfo<Value>& args)
   Isolate* current = args.GetIsolate();
   try
   {
-    EscapableHandleScope scope(current);
-    Context::Scope context_scope(Context::New(v8Engine::getIsolate()));
+    HandleScope scope(current);
+    Context::Scope context_scope(current->GetCurrentContext());
 
     if (args.Length() != 1)
     {
@@ -141,16 +141,18 @@ void RequireJs::jsRequire(const FunctionCallbackInfo<Value>& args)
       HootExceptionJs::throwAsHootException(try_catch);
     }
 
+    Local<String> exp = String::NewFromUtf8(current, "exports");
+
     Local<Object> global = Context::New(v8Engine::getIsolate())->Global();
 
-    Local<Value> oldExports = global->Get(String::NewFromUtf8(current, "exports"));
+    Local<Value> oldExports = global->Get(exp);
 
     Handle<Object> exports(Object::New(current));
-    global->Set(String::NewFromUtf8(current, "exports"), exports);
+    global->Set(exp, exports);
 
     Handle<Value> result = jsScript->Run();
 
-    global->Set(String::NewFromUtf8(current, "exports"), oldExports);
+    global->Set(exp, oldExports);
 
     // Run the script to get the result.
     HootExceptionJs::checkV8Exception(result, try_catch);

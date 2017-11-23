@@ -147,6 +147,9 @@ cd ~
 wget --quiet https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}.tar.gz
 tar xf node-v${NODE_VERSION}.tar.gz
 cd node-v${NODE_VERSION}
+# Fix an error that screws up our codebase
+sed -i 's/Local<Object> json_object/Local<Value> json_object/g' deps/v8/include/v8.h
+sed -i 's/Local<Object> json_object/Local<Value> json_object/g' deps/v8/src/api.cc
 ./configure --shared --prefix=/usr >> ~/centos_install.txt
 make -j$(nproc) >> ~/centos_install.txt
 sudo make install >> ~/centos_install.txt

@@ -64,13 +64,6 @@ public:
     Isolate* current = v8Engine::getIsolate();
     HandleScope handleScope(current);
 
-    // Create a new context.
-    Local<Context> context = Context::New(current);
-
-    // Enter the created context for compiling and
-    // running the hello world script.
-    Context::Scope context_scope(context);
-
     HOOT_STR_EQUALS(fixQ("'hello world'"), toJson(toV8(QVariant("hello world"))));
     HOOT_STR_EQUALS(fixQ("1"), toJson(toV8(QVariant(1))));
     HOOT_STR_EQUALS(fixQ("3.14"), toJson(toV8(QVariant(3.14))));

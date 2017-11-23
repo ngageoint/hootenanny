@@ -49,6 +49,12 @@ v8Engine::v8Engine()
   params.array_buffer_allocator = _allocator.get();
   _isolate = Isolate::New(params);
   _isolate->Enter();
+  //  Create the main context
+  HandleScope handleScope(_isolate);
+  Local<Context> context = Context::New(_isolate);
+  context->Enter();
+  _context.reset(new Persistent<Context>());
+  _context->Reset(_isolate, context);
 }
 
 v8Engine::~v8Engine()

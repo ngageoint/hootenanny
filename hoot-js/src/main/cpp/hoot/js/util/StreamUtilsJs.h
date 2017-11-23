@@ -95,40 +95,33 @@ inline v8::Handle<v8::Value> fromJson(QString qstr, QString fileName="")
  * @todo strangely this class can sometimes cause objects to go wonky.
  */
 template <class T>
-QString toJson(const v8::Handle<T> object)
+QString toJson(v8::Local<T> object)
 {
-  v8::Isolate* current = v8Engine::getIsolate();
-  v8::EscapableHandleScope scope(current);
-
-  v8::Local<v8::Context> context = v8::Context::New(current);
-  v8::Local<v8::Object> global = context->Global();
-
-  v8::Local<v8::Object> JSON = global->Get(v8::String::NewFromUtf8(current, "JSON"))->ToObject();
-  v8::Handle<v8::Function> JSON_stringify = v8::Handle<v8::Function>::Cast(JSON->Get(v8::String::NewFromUtf8(current, "stringify")));
-
-  v8::Handle<v8::Value> args[1];
-  args[0] = object;
-
   QString result;
-  if (args[0].IsEmpty())
+  if (object.IsEmpty())
   {
     result = "";
   }
-  else if (args[0]->IsNull())
+  else if (object->IsNull())
   {
     result = "null";
   }
-  else if (args[0]->IsUndefined())
+  else if (object->IsUndefined())
   {
     result = "undefined";
   }
   else
   {
-    v8::Handle<v8::Value> resultValue = JSON_stringify->Call(JSON, 1, args);
-    v8::Handle<v8::String> s = v8::Handle<v8::String>::Cast(resultValue);
+    v8::Local<v8::Value> x;
+
+    v8::Isolate* current = v8Engine::getIsolate();
+    v8::HandleScope scope(current);
+    v8::Local<v8::Context> context = current->GetCurrentContext();
+
+    v8::Local<v8::String> s = v8::JSON::Stringify(context, object).ToLocalChecked();
 
     size_t utf8Length = s->Utf8Length() + 1;
-    std::auto_ptr<char> buffer(new char[utf8Length]);
+    boost::shared_ptr<char> buffer(new char[utf8Length]);
     s->WriteUtf8(buffer.get(), utf8Length);
 
     result = QString::fromUtf8(buffer.get());
@@ -137,7 +130,19 @@ QString toJson(const v8::Handle<T> object)
   return result;
 }
 
-std::ostream& operator<<(std::ostream& o, const v8::Handle<v8::Function>& f);
+inline std::ostream& operator<<(std::ostream& o, const v8::Handle<v8::Function>& f)
+{
+  QString name = toJson(f->GetName());
+  if (name != "\"\"")
+  {
+    o << name << "()";
+  }
+  else
+  {
+    o << "<function>";
+  }
+  return o;
+}
 
 template <class T>
 inline std::ostream& operator<<(std::ostream& o, const v8::Handle<T>& v)
@@ -162,20 +167,6 @@ inline std::ostream& operator<<(std::ostream& o, const v8::Handle<T>& v)
   else
   {
     o << toJson(v).toUtf8().data();
-  }
-  return o;
-}
-
-inline std::ostream& operator<<(std::ostream& o, const v8::Handle<v8::Function>& f)
-{
-  QString name = toJson(f->GetName());
-  if (name != "\"\"")
-  {
-    o << name << "()";
-  }
-  else
-  {
-    o << "<function>";
   }
   return o;
 }

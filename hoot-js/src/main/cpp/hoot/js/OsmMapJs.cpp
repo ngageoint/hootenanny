@@ -62,15 +62,11 @@ OsmMapJs::OsmMapJs(OsmMapPtr map)
 
 OsmMapJs::~OsmMapJs()
 {
-  Isolate* current = v8Engine::getIsolate();
-  while (!current->IdleNotification(100));
 }
 
 void OsmMapJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();
-  HandleScope handleScope(current);
-  Local<Context> context = v8::Context::New(current);
 
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);

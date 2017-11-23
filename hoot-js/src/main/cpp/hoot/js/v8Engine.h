@@ -55,6 +55,8 @@ public:
 
   static v8::Isolate* getIsolate() { return getInstance()._isolate; }
 
+  static v8::Local<v8::Context> getContext() { return ToLocal(getInstance()._context.get()); }
+
 private:
   /** static pointer to the singleton instance */
   static std::auto_ptr<v8Engine> _theInstance;
@@ -70,6 +72,8 @@ private:
   v8::Isolate* _isolate;
   /** Platform object */
   boost::shared_ptr<v8::Platform> _platform;
+  /** Main context */
+  boost::shared_ptr<v8::Persistent<v8::Context> > _context;
 
 };
 

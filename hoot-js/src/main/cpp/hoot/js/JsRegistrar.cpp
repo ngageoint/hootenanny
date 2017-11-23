@@ -66,8 +66,6 @@ void JsRegistrar::Init(Handle<Object> exports)
 void JsRegistrar::initAll(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
-  HandleScope handleScope(current);
-  Local<Context> context = v8::Context::New(current);
   exports->Set(String::NewFromUtf8(current, "hello"),
       FunctionTemplate::New(current, Method)->GetFunction());
 

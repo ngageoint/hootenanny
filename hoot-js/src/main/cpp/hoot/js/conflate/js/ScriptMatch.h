@@ -55,7 +55,7 @@ public:
    * @param mapObj This could be derived from the map, but destructing an OsmMapJs object is quite
    *  expensive due to the amount of memory cleanup we must do in the general case.
    */
-  ScriptMatch(boost::shared_ptr<PluginContext> script, v8::Local<v8::Object> plugin,
+  ScriptMatch(boost::shared_ptr<PluginContext> script, const v8::Persistent<v8::Object>& plugin,
               const ConstOsmMapPtr& map, v8::Handle<v8::Object> mapObj,
               const ElementId& eid1, const ElementId& eid2, ConstMatchThresholdPtr mt);
 
@@ -102,10 +102,8 @@ private:
 
   friend class ScriptMatchTest;
 
-  void _calculateClassification(const ConstOsmMapPtr& map, v8::Handle<v8::Object> mapObj,
-    v8::Handle<v8::Object> plugin);
-  v8::Handle<v8::Value> _call(const ConstOsmMapPtr& map, v8::Handle<v8::Object> mapObj,
-    v8::Handle<v8::Object> plugin);
+  void _calculateClassification(const ConstOsmMapPtr& map, v8::Handle<v8::Object> mapObj);
+  v8::Handle<v8::Value> _call(const ConstOsmMapPtr& map, v8::Handle<v8::Object> mapObj);
   ConflictKey _getConflictKey() const { return ConflictKey(_eid1, _eid2); }
   bool _isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sharedEid,
     ElementId other1, ElementId other2) const;

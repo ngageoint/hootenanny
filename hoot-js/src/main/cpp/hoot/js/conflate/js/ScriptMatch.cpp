@@ -70,7 +70,7 @@ namespace hoot
 
 unsigned int ScriptMatch::logWarnCount = 0;
 
-ScriptMatch::ScriptMatch(boost::shared_ptr<PluginContext> script, Local<Object> plugin,
+ScriptMatch::ScriptMatch(boost::shared_ptr<PluginContext> script, const Persistent<Object>& plugin,
   const ConstOsmMapPtr& map, Handle<Object> mapObj, const ElementId& eid1,
   const ElementId& eid2, ConstMatchThresholdPtr mt) :
   Match(mt),
@@ -81,11 +81,10 @@ ScriptMatch::ScriptMatch(boost::shared_ptr<PluginContext> script, Local<Object> 
   _script(script)
 {
   _plugin.Reset(v8Engine::getIsolate(), plugin);
-  _calculateClassification(map, mapObj, plugin);
+  _calculateClassification(map, mapObj);
 }
 
-void ScriptMatch::_calculateClassification(const ConstOsmMapPtr& map, Handle<Object> mapObj,
-  Handle<Object> plugin)
+void ScriptMatch::_calculateClassification(const ConstOsmMapPtr& map, Handle<Object> mapObj)
 {
   Isolate* current = v8Engine::getIsolate();
   HandleScope handleScope(current);
@@ -111,7 +110,7 @@ void ScriptMatch::_calculateClassification(const ConstOsmMapPtr& map, Handle<Obj
 
   try
   {
-    Handle<Value> v = _call(map, mapObj, plugin);
+    Handle<Value> v = _call(map, mapObj);
 
     if (v.IsEmpty() || v->IsObject() == false)
     {
@@ -289,7 +288,7 @@ bool ScriptMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sha
     eid22 = sharedEid;
   }
 
-  auto_ptr<ScriptMatch> m1(new ScriptMatch(_script, _plugin.Get(current), copiedMap, copiedMapJs, eid11, eid12,
+  auto_ptr<ScriptMatch> m1(new ScriptMatch(_script, _plugin, copiedMap, copiedMapJs, eid11, eid12,
     _threshold));
   MatchSet ms;
   ms.insert(m1.get());
@@ -323,7 +322,7 @@ bool ScriptMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sha
     if (copiedMap->containsElement(eid21) &&
         copiedMap->containsElement(eid22))
     {
-      ScriptMatch m2(_script, _plugin.Get(current), copiedMap, copiedMapJs, eid21, eid22, _threshold);
+      ScriptMatch m2(_script, _plugin, copiedMap, copiedMapJs, eid21, eid22, _threshold);
       if (m2.getType() == MatchType::Match)
       {
         conflicting = false;
@@ -334,18 +333,15 @@ bool ScriptMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sha
   return conflicting;
 }
 
-Handle<Value> ScriptMatch::_call(const ConstOsmMapPtr& map, v8::Handle<v8::Object> mapObj,
-  Handle<Object> plugin)
+Handle<Value> ScriptMatch::_call(const ConstOsmMapPtr& map, Handle<Object> mapObj)
 {
   Isolate* current = v8Engine::getIsolate();
   EscapableHandleScope handleScope(current);
   Handle<Context> context(_script->getContext(current));
   Context::Scope context_scope(context);
 
-  plugin =
-    Handle<Object>::Cast(context->Global()->Get(String::NewFromUtf8(current, "plugin")));
-  Handle<v8::Value> value = plugin->Get(String::NewFromUtf8(current, "matchScore"));
-  Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(value);
+  Handle<Value> value = _plugin.Get(current)->Get(String::NewFromUtf8(current, "matchScore"));
+  Handle<Function> func = Handle<Function>::Cast(value);
   Handle<Value> jsArgs[3];
 
   if (func.IsEmpty() || func->IsFunction() == false)
@@ -359,7 +355,7 @@ Handle<Value> ScriptMatch::_call(const ConstOsmMapPtr& map, v8::Handle<v8::Objec
   jsArgs[argc++] = ElementJs::New(map->getElement(_eid2));
 
   TryCatch trycatch;
-  Handle<Value> result = func->Call(plugin, argc, jsArgs);
+  Handle<Value> result = func->Call(_plugin.Get(current), argc, jsArgs);
   HootExceptionJs::checkV8Exception(result, trycatch);
 
   return handleScope.Escape(result);
@@ -374,8 +370,8 @@ Handle<Value> ScriptMatch::_callGetMatchFeatureDetails(const ConstOsmMapPtr& map
 
   Handle<Object> plugin =
     Handle<Object>::Cast(context->Global()->Get(String::NewFromUtf8(current, "plugin")));
-  Handle<v8::Value> value = plugin->Get(String::NewFromUtf8(current, "getMatchFeatureDetails"));
-  Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(value);
+  Handle<Value> value = plugin->Get(String::NewFromUtf8(current, "getMatchFeatureDetails"));
+  Handle<Function> func = Handle<Function>::Cast(value);
   Handle<Value> jsArgs[3];
 
   if (func.IsEmpty() || func->IsFunction() == false)

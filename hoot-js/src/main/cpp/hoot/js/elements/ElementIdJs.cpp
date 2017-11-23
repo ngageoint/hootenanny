@@ -59,8 +59,6 @@ ElementIdJs::~ElementIdJs()
 void ElementIdJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();
-  HandleScope handleScope(current);
-  Local<Context> context = v8::Context::New(current);
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
   tpl->SetClassName(String::NewFromUtf8(current, ElementId::className().data()));
