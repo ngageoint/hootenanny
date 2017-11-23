@@ -154,16 +154,15 @@ Local<Object> PluginContext::loadText(QString text, QString loadInto, QString sc
   Local<Context> context(_context.Get(current));
   Context::Scope context_scope(context);
 
-  Handle<Script> script;
-
-  Handle<Object> exports(Object::New(current));
-  context->Global()->Set(String::NewFromUtf8(current, "exports"), exports);
+  Local<Object> exports(Object::New(current));
+  Local<Object> global = context->Global();
+  global->Set(String::NewFromUtf8(current, "exports"), exports);
 
   TryCatch try_catch;
 
   // Compile the source code.
   v8::ScriptOrigin origin(toV8(scriptName));
-  script = Script::Compile(context, String::NewFromUtf8(current, text.toUtf8().data()), &origin).ToLocalChecked();
+  MaybeLocal<Script> script = Script::Compile(context, String::NewFromUtf8(current, text.toUtf8().data()), &origin);
 
   if (script.IsEmpty())
   {
@@ -171,11 +170,11 @@ Local<Object> PluginContext::loadText(QString text, QString loadInto, QString sc
   }
 
   // Run the script to get the result.
-  HootExceptionJs::checkV8Exception(script->Run(), try_catch);
+  HootExceptionJs::checkV8Exception(script.ToLocalChecked()->Run(), try_catch);
 
   if (loadInto != "")
   {
-    context->Global()->Set(String::NewFromUtf8(current, loadInto.toUtf8()), exports);
+    global->Set(String::NewFromUtf8(current, loadInto.toUtf8()), exports);
   }
 
   return handleScope.Escape(exports);

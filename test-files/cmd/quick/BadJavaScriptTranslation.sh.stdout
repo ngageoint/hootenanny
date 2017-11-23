@@ -1,19 +1,22 @@
+20:31:26.186 INFO  ...ot/js/JavaScriptTranslator.cpp( 233) Loading script: test-files/cmd/slow/tSimple.js
 Initialize works!
-16:11:06.333 ERROR ...ot/js/JavaScriptTranslator.cpp( 344) Error initializing JavaScript: test-files/cmd/slow/tSimple.js (63) 
+20:31:26.195 ERROR ...ot/js/JavaScriptTranslator.cpp( 355) Error initializing JavaScript: test-files/cmd/slow/tSimple.js (63) 
     if (translate !== undefined)
-        ^ 
+    ^ 
 ReferenceError: translate is not defined
-16:11:06.333 INFO  ...t/core/io/PythonTranslator.cpp(  66) Initializing Python
-16:11:06.333 INFO  ...t/core/io/PythonTranslator.cpp(  96) Python path: translations:PYTHONPATH:/home/matt/dg/src/hoot/translations
-16:11:06.413 ERROR ...ot/js/JavaScriptTranslator.cpp( 344) Error initializing JavaScript: plugins/BadSyntaxTest.js (4) 
+20:31:26.195 INFO  ...t/core/io/PythonTranslator.cpp(  68) Initializing Python
+20:31:26.195 INFO  ...t/core/io/PythonTranslator.cpp(  99) Python path: translations:PYTHONPATH:/fouo/hoot-release-ui/hoot/translations
+20:31:26.347 INFO  ...ot/js/JavaScriptTranslator.cpp( 233) Loading script: plugins/BadSyntaxTest.js
+20:31:26.354 ERROR ...ot/js/JavaScriptTranslator.cpp( 355) Error initializing JavaScript: plugins/BadSyntaxTest.js (4) 
 foo is bad.
     ^^ 
 SyntaxError: Unexpected identifier
-16:11:06.413 INFO  ...t/core/io/PythonTranslator.cpp(  66) Initializing Python
-16:11:06.413 INFO  ...t/core/io/PythonTranslator.cpp(  96) Python path: translations:PYTHONPATH:/home/matt/dg/src/hoot/translations
-16:11:06.493 ERROR ...ot/js/JavaScriptTranslator.cpp( 344) Error initializing JavaScript: /home/matt/dg/src/hoot/plugins/BadSyntaxTest.js (4) 
+20:31:26.354 INFO  ...t/core/io/PythonTranslator.cpp(  68) Initializing Python
+20:31:26.354 INFO  ...t/core/io/PythonTranslator.cpp(  99) Python path: translations:PYTHONPATH:/fouo/hoot-release-ui/hoot/translations
+20:31:26.519 INFO  ...ot/js/JavaScriptTranslator.cpp( 233) Loading script: test-files/cmd/slow/BadRequire.js
+20:31:26.528 ERROR ...ot/js/JavaScriptTranslator.cpp( 355) Error initializing JavaScript: /fouo/hoot-release-ui/hoot/plugins/BadSyntaxTest.js (4) 
 foo is bad.
     ^^ 
 SyntaxError: Unexpected identifier
-16:11:06.493 INFO  ...t/core/io/PythonTranslator.cpp(  66) Initializing Python
-16:11:06.493 INFO  ...t/core/io/PythonTranslator.cpp(  96) Python path: translations:PYTHONPATH:/home/matt/dg/src/hoot/translations
+20:31:26.528 INFO  ...t/core/io/PythonTranslator.cpp(  68) Initializing Python
+20:31:26.528 INFO  ...t/core/io/PythonTranslator.cpp(  99) Python path: translations:PYTHONPATH:/fouo/hoot-release-ui/hoot/translations
