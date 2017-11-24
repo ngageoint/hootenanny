@@ -46,7 +46,7 @@ void JsFunctionVisitor::visit(const ConstElementPtr& e)
 {
   Isolate* current = v8Engine::getIsolate();
   HandleScope handleScope(current);
-  Local<Context> context(current->GetCallingContext());
+  Local<Context> context(current->GetCurrentContext());
   Context::Scope context_scope(context);
 
   Handle<Value> jsArgs[3];

@@ -67,7 +67,7 @@ void JsonOsmSchemaLoader::load(QString path, OsmSchema& s)
 
   Isolate* current = v8Engine::getIsolate();
   HandleScope handleScope(current);
-  Local<Context> context = v8::Context::New(current);
+  Local<Context> context(current->GetCurrentContext());
 
   // If needed, this will throw an exception with user readable(ish) error message.
   v8::Handle<v8::Value> result = fromJson(QString::fromUtf8(ba.data(), ba.size()), path);

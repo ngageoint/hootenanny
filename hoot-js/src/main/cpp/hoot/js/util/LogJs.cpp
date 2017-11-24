@@ -199,7 +199,7 @@ void LogJs::setLogLevel(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   EscapableHandleScope scope(current);
-  Context::Scope context_scope(Context::New(v8Engine::getIsolate()));
+  Context::Scope context_scope(Context::New(current));
 
   try
   {
