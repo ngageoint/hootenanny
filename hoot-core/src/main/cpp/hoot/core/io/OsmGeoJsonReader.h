@@ -41,6 +41,7 @@
 #include <boost/property_tree/ptree.hpp>
 
 // Hoot
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OsmJsonReader.h>
 
@@ -191,6 +192,10 @@ private:
    */
   std::queue<std::string> _roles;
 
+  /**
+   * @brief Add the bounding box of an element as a tag
+   */
+  bool _addBboxTag;
 };
 
 } // end namespace hoot

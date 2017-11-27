@@ -75,7 +75,7 @@ public:
     LOG_INFO("* " << s1 << " (" << normalize(s1) << ")  vs. " << s2 << " (" <<
       normalize(s2) << ")");
 
-    MeanWordSetDistance mwsd(new LevenshteinDistance(1.5));
+    MeanWordSetDistance mwsd(StringDistancePtr(new LevenshteinDistance(1.5)));
 
     LevenshteinDistance ld(1.5);
 

@@ -865,6 +865,13 @@ default the first assigned id will be -1)
 
 A list of paths to include in the javascript translator search path.
 
+=== json.add.bbox
+
+* Data Type: bool
+* Default Value: `false`
+
+When reading JSON, add a tag with the bounding box for each element
+
 === json.format.hootenanny
 
 * Data Type: bool

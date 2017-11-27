@@ -61,7 +61,8 @@ public:
     n2->setTag("name:en", "Sheraton hotel");
     n2->setTag("alt_name", QString::fromUtf8("فندق شيراتون"));
 
-    NameExtractor uut(new MeanWordSetDistance(new LevenshteinDistance(1.5)));
+    NameExtractor uut(StringDistancePtr(new MeanWordSetDistance(
+                      StringDistancePtr(new LevenshteinDistance(1.5)))));
 
     HOOT_STR_EQUALS(1, uut.extract(n1, n2));
   }

@@ -46,7 +46,7 @@ class MaxWordSetDistance : public StringDistance, public StringDistanceConsumer,
 public:
   static std::string className() { return "hoot::MaxWordSetDistance"; }
 
-  MaxWordSetDistance(StringDistance* d);
+  MaxWordSetDistance(StringDistancePtr d);
   MaxWordSetDistance() {}
 
   virtual double compare(const QString& s1, const QString& s2) const;

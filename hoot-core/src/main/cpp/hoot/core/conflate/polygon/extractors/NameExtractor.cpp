@@ -45,14 +45,14 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, NameExtractor)
 
-NameExtractor::NameExtractor()
+NameExtractor::NameExtractor():
+  _d(new LevenshteinDistance())
 {
-  _d.reset(new LevenshteinDistance());
 }
 
-NameExtractor::NameExtractor(StringDistance* d)
+NameExtractor::NameExtractor(StringDistancePtr d):
+  _d(d)
 {
-  _d.reset(d);
 }
 
 double NameExtractor::extract(const OsmMap& /*map*/, const boost::shared_ptr<const Element>& target,

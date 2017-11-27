@@ -129,8 +129,8 @@ Vagrant.configure(2) do |config|
     dock1404.vm.synced_folder ".", "/home/vagrant/hoot"
 
     dock1404.vm.provider "docker" do |docker|
-        #docker.create_args = ['--security-opt', 'seccomp=./chrome.json']
-        docker.create_args = ['--privileged','--shm-size', '1g']
+      #docker.create_args = ['--security-opt', 'seccomp=./chrome.json']
+      docker.create_args = ['--privileged','--shm-size', '1g']
     end
 
     dock1404.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvision.sh"
@@ -141,7 +141,6 @@ Vagrant.configure(2) do |config|
   end
 
   config.vm.define "dockercentos7.2", autostart: false do |dockcentos72|
-
     dockcentos72.ssh.insert_key = false
     dockcentos72.vm.provider "docker" do |d|
       d.image = "local/centos7.2vagrant"
@@ -161,13 +160,7 @@ Vagrant.configure(2) do |config|
     dockcentos72.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-mapnik", run: "always"
     dockcentos72.vm.provision "export", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-export", run: "always"
     dockcentos72.vm.provision "hadoop", type: "shell", :privileged => false, :inline => "stop-all.sh && start-all.sh", run: "always"
-
-
   end
-
-
-  # Ubuntu1604 Box
-
 
   # Ubuntu1604 Box
   # For testing before we upgrade from Ubuntu1404
@@ -205,7 +198,6 @@ Vagrant.configure(2) do |config|
     aws_provider(hoot_centos7, 'CentOS7')
   end
 
-
   # Centos7 - Hoot core ONLY. No UI
   config.vm.define "hoot_centos7_core", autostart: false do |hoot_centos7_core|
     # Turn off port forwarding
@@ -240,11 +232,11 @@ Vagrant.configure(2) do |config|
   # Example for VirtualBox:
   #
   config.vm.provider "virtualbox" do |vb|
-  # Display the VirtualBox GUI when booting the machine
-  #vb.gui = true
+    # Display the VirtualBox GUI when booting the machine
+    #vb.gui = true
 
   # Customize the amount of memory on the VM:
-#    vb.memory = 8192
+    #vb.memory = 8192
     vb.memory = 10240
     vb.cpus = 4
   end
@@ -287,31 +279,59 @@ Vagrant.configure(2) do |config|
   # Run "vagrant up --provider=parallels" to spin up using parallels.
   # WARNING: Minimally tested
   config.vm.provider "parallels" do |para, override|
-        para.memory = 8192
-        para.cpus = 4
-        override.hoot.vm.box = "parallels/ubuntu-14.04"
-        override.hoot.vm.box_url = "https://atlas.hashicorp.com/parallels/boxes/ubuntu-14.04"
+    para.memory = 8192
+    para.cpus = 4
+    override.hoot.vm.box = "parallels/ubuntu-14.04"
+    override.hoot.vm.box_url = "https://atlas.hashicorp.com/parallels/boxes/ubuntu-14.04"
 
-        override.hoot_ubuntu1604.vm.box = "parallels/ubuntu-16.04"
-        override.hoot_ubuntu1604.vm.box_url = "https://atlas.hashicorp.com/parallels/boxes/ubuntu-16.04"
-        override.hoot_centos7.vm.box = "parallels/centos-7.3"
-        override.hoot_centos7.vm.box_url = "https://atlas.hashicorp.com/parallels/boxes/centos-7.3"
+    override.hoot_ubuntu1604.vm.box = "parallels/ubuntu-16.04"
+    override.hoot_ubuntu1604.vm.box_url = "https://atlas.hashicorp.com/parallels/boxes/ubuntu-16.04"
+    override.hoot_centos7.vm.box = "parallels/centos-7.3"
+    override.hoot_centos7.vm.box_url = "https://atlas.hashicorp.com/parallels/boxes/centos-7.3"
   end
 
   # This is a provider for VMware Workstation
   # Run "vagrant up --provider=vmware_workstation" to spin up using VMware.
   # WARNING: Minimally tested
   config.vm.provider "vmware_workstation" do |vw, override|
-      vw.memory = 8192
-      vw.cpus = 4
-      override.hoot.vm.box = "puphpet/ubuntu1404-x64"
-      override.hoot.vm.box_url = "https://atlas.hashicorp.com/puphpet/boxes/ubuntu1404-x64"
+    vw.memory = 8192
+    vw.cpus = 4
+    override.hoot.vm.box = "puphpet/ubuntu1404-x64"
+    override.hoot.vm.box_url = "https://atlas.hashicorp.com/puphpet/boxes/ubuntu1404-x64"
 
-      override.hoot_ubuntu1604.vm.box = "puphpet/ubuntu1604-x64"
-      override.hoot_ubuntu1604.vm.box_url = "https://atlas.hashicorp.com/puphpet/boxes/ubuntu1604-x64"
+    override.hoot_ubuntu1604.vm.box = "puphpet/ubuntu1604-x64"
+    override.hoot_ubuntu1604.vm.box_url = "https://atlas.hashicorp.com/puphpet/boxes/ubuntu1604-x64"
   end
 
-  # TODO: Add vSphere provider
+  # VSphere provider
+  config.vm.provider "vsphere" do |vsphere, override|
+    override.vm.box     = 'VSphereDummy'
+    override.vm.box_url = 'VSphereDummy.box'
+    vsphere.insecure    = true
+    vsphere.cpu_count   = 8
+    vsphere.memory_mb   = 16384
+    if ENV.key?('VSPHERE_HOST')
+      vsphere.host = ENV['VSPHERE_HOST']
+    end
+    if ENV.key?('VSPHERE_RESOURCE')
+      vsphere.compute_resource_name = ENV['VSPHERE_RESOURCE']
+    end
+    if ENV.key?('VSPHERE_PATH')
+      vsphere.vm_base_path = ENV['VSPHERE_PATH']
+    end
+    if ENV.key?('VSPHERE_TEMPLATE')
+      vsphere.template_name = ENV['VSPHERE_TEMPLATE']
+    end
+    if ENV.key?('VSPHERE_USER')
+      vsphere.user = ENV['VSPHERE_USER']
+    end
+    if ENV.key?('VSPHERE_PASSWORD')
+      vsphere.password = ENV['VSPHERE_PASSWORD']
+    end
+    if ENV.key?('VSPHERE_NAME')
+      vsphere.name = ENV['VSPHERE_NAME']
+    end
+  end
 end
 
 # Allow local overrides of vagrant settings
