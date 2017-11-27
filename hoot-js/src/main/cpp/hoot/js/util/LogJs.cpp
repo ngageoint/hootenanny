@@ -143,7 +143,7 @@ void LogJs::log(const FunctionCallbackInfo<Value>& args, Log::WarningLevel level
 void LogJs::logTrace(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
-  EscapableHandleScope scope(current);
+  HandleScope scope(current);
   log(args, Log::Trace);
   args.GetReturnValue().SetUndefined();
 }
@@ -151,7 +151,7 @@ void LogJs::logTrace(const FunctionCallbackInfo<Value>& args)
 void LogJs::logDebug(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
-  EscapableHandleScope scope(current);
+  HandleScope scope(current);
   log(args, Log::Debug);
   args.GetReturnValue().SetUndefined();
 }
@@ -159,7 +159,7 @@ void LogJs::logDebug(const FunctionCallbackInfo<Value>& args)
 void LogJs::logInfo(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
-  EscapableHandleScope scope(current);
+  HandleScope scope(current);
   log(args, Log::Info);
   args.GetReturnValue().SetUndefined();
 }
@@ -167,7 +167,7 @@ void LogJs::logInfo(const FunctionCallbackInfo<Value>& args)
 void LogJs::logWarn(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
-  EscapableHandleScope scope(current);
+  HandleScope scope(current);
   log(args, Log::Warn);
   args.GetReturnValue().SetUndefined();
 }
@@ -175,7 +175,7 @@ void LogJs::logWarn(const FunctionCallbackInfo<Value>& args)
 void LogJs::logError(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
-  EscapableHandleScope scope(current);
+  HandleScope scope(current);
   log(args, Log::Error);
   args.GetReturnValue().SetUndefined();
 }
@@ -183,14 +183,14 @@ void LogJs::logError(const FunctionCallbackInfo<Value>& args)
 void LogJs::logFatal(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
-  EscapableHandleScope scope(current);
+  HandleScope scope(current);
   log(args, Log::Fatal);
   args.GetReturnValue().SetUndefined();
 }
 
 void LogJs::init(const FunctionCallbackInfo<Value>& args)
 {
-  EscapableHandleScope scope(args.GetIsolate());
+  HandleScope scope(args.GetIsolate());
   Log::getInstance().init();
   args.GetReturnValue().SetUndefined();
 }
@@ -198,7 +198,7 @@ void LogJs::init(const FunctionCallbackInfo<Value>& args)
 void LogJs::setLogLevel(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
-  EscapableHandleScope scope(current);
+  HandleScope scope(current);
   Context::Scope context_scope(Context::New(current));
 
   try

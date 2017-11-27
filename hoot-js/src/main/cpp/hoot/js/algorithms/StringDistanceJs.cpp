@@ -84,7 +84,7 @@ void StringDistanceJs::Init(Handle<Object> target)
 
 void StringDistanceJs::New(const FunctionCallbackInfo<Value>& args)
 {
-  EscapableHandleScope scope(args.GetIsolate());
+  HandleScope scope(args.GetIsolate());
 
   QString className = str(args.This()->GetConstructorName());
 
@@ -99,7 +99,7 @@ void StringDistanceJs::New(const FunctionCallbackInfo<Value>& args)
 
 void StringDistanceJs::toString(const FunctionCallbackInfo<Value>& args)
 {
-  EscapableHandleScope scope(args.GetIsolate());
+  HandleScope scope(args.GetIsolate());
 
   StringDistancePtr sd = toCpp<StringDistancePtr>(args.This());
 

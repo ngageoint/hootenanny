@@ -72,7 +72,7 @@ SublineStringMatcherJs::~SublineStringMatcherJs()
 void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
-  EscapableHandleScope scope(current);
+  HandleScope scope(current);
 
   SublineStringMatcherJs* smJs = ObjectWrap::Unwrap<SublineStringMatcherJs>(args.This());
   SublineStringMatcherPtr sm = smJs->getSublineStringMatcher();
@@ -148,7 +148,7 @@ void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<
 
 void SublineStringMatcherJs::findMatch(const FunctionCallbackInfo<Value>& args)
 {
-  EscapableHandleScope scope(v8Engine::getIsolate());
+  HandleScope scope(args.GetIsolate());
 
   SublineStringMatcherJs* smJs = ObjectWrap::Unwrap<SublineStringMatcherJs>(args.This());
 
@@ -199,7 +199,7 @@ void SublineStringMatcherJs::Init(Handle<Object> target)
 
 void SublineStringMatcherJs::New(const FunctionCallbackInfo<Value>& args)
 {
-  EscapableHandleScope scope(args.GetIsolate());
+  HandleScope scope(args.GetIsolate());
 
   QString className = str(args.This()->GetConstructorName());
 
