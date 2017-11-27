@@ -285,6 +285,8 @@ var postHandler = function(data) {
         throw new Error('Unsupported translation schema');
     }
     var translation = data.transMap[data.transDir][data.translation];
+    hoot.Settings.set({"ogr.esri.fcsubtype": "false"});
+    hoot.Settings.set({"ogr.note.extra": "attribute"});
     if (data.transDir === "toogr") {
         hoot.Settings.set({"osm.map.writer.schema": data.translation});
     } else {
