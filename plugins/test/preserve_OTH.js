@@ -30,7 +30,7 @@ describe('TranslationServer', function () {
             path: '/translateFrom'
         });
 
-        console.log(osm_xml);
+        // console.log(osm_xml);
 
         var xml = parser.parseFromString(osm_xml);
         var gj = osmtogeojson(xml);
@@ -54,7 +54,7 @@ describe('TranslationServer', function () {
             path: '/translateTo'
         });
 
-        console.log(tds_xml);
+        // console.log(tds_xml);
         
         xml = parser.parseFromString(tds_xml);
         gj = osmtogeojson(xml);
@@ -65,7 +65,7 @@ describe('TranslationServer', function () {
         assert.equal(tags["F_CODE"], "AL010");
         assert.equal(tags["ZI001_SDP"], "DigitalGlobe");
         assert.equal(tags["ZSAX_RS0"], "U");
-        assert.equal(tags["ZI006_MEM"], "&lt;OSM&gt;{&quot;source:imagery:datetime&quot;:&quot;2017-11-11 10:45:15&quot;,&quot;source:imagery:sensor&quot;:&quot;WV02&quot;,&quot;source:imagery:id&quot;:&quot;756b80e1f695fb591caca8e7ce0f9ef5&quot;}&lt;/OSM&gt;");
+        assert.equal(tags["ZI006_MEM"], "<OSM>{\"source:imagery:datetime\":\"2017-11-11 10:45:15\",\"source:imagery:sensor\":\"WV02\",\"source:imagery:id\":\"756b80e1f695fb591caca8e7ce0f9ef5\"}</OSM>");
         assert.equal(tags["OTH"], "(FFN:foo)");
         assert.equal(tags["UFI"], "0d8b2563-81cf-44d4-8ef7-52c0e862651f");
 
