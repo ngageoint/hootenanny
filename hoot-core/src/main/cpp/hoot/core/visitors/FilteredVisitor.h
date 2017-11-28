@@ -83,7 +83,7 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
-  static double getStat(ElementCriterion* criterion, ConstElementVisitor* visitor,
+  static double getStat(ElementCriterionPtr criterion, ConstElementVisitorPtr visitor,
                         const ConstOsmMapPtr& map);
   static double getStat(ElementCriterion* criterion, ConstElementVisitor* visitor,
                         const ConstOsmMapPtr& map, const ElementPtr& element);

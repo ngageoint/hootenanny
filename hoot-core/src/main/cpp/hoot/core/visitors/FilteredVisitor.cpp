@@ -111,7 +111,7 @@ void FilteredVisitor::visit(const ConstElementPtr& e)
   }
 }
 
-double FilteredVisitor::getStat(ElementCriterion* criterion, ConstElementVisitor* visitor,
+double FilteredVisitor::getStat(ElementCriterionPtr criterion, ConstElementVisitorPtr visitor,
                                 const ConstOsmMapPtr& map)
 {
   FilteredVisitor filteredVisitor(criterion, visitor);

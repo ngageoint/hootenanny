@@ -54,7 +54,7 @@ private:
 
   int64_t _calculateHilbertValue(const ConstOsmMapPtr &map, const std::set<ElementId> eids);
 
-  geos::geom::Envelope::AutoPtr _mapEnvelope;
+  boost::shared_ptr<geos::geom::Envelope> _mapEnvelope;
 };
 
 }
