@@ -1009,8 +1009,15 @@ ggdm30 = {
                     if (tags[tTags[i]]) hoot.logWarn('Unpacking ZI006_MEM, overwriteing ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
                     tags[i] = tTags[i];
                 }
+            }
 
+            if (tObj.text && tObj.text !== '')
+            {
                 tags.note = tObj.text;
+            }
+            else
+            {
+                delete tags.note;
             }
         } // End process tags.note
 
