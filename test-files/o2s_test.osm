@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <node id='-7' action='modify' lat='-25.4257085107' lon='153.16023944736'>
+    <tag k='papa' v='smurf' />
+    <tag k='source' v='cartoon' />
+    <tag k='uuid' v='{bfbf2946-4342-444c-9926-1477c7bcce05}' />
+  </node>
+  <node id='-1' action='modify' lat='-25.42501085241' lon='153.16166638255' />
+  <node id='-2' action='modify' lat='-25.4270166091' lon='153.16178439975' />
+  <node id='-6' action='modify' lat='-25.4249430243' lon='153.16386579394' />
+  <node id='-4' action='modify' lat='-25.42705536735' lon='153.16280363917' />
+  <node id='-5' action='modify' lat='-25.42724915844' lon='153.16570042491' />
+  <way id='-1' action='modify'>
+    <nd ref='-1' />
+    <nd ref='-2' />
+    <tag k='papa' v='smurf' />
+    <tag k='source' v='cartoon' />
+    <tag k='uuid' v='{79cd86b0-882c-4d66-b7ec-60fed3cac8f7}' />
+  </way>
+  <way id='-2' action='modify'>
+    <nd ref='-6' />
+    <nd ref='-4' />
+    <nd ref='-5' />
+    <nd ref='-6' />
+    <tag k='papa' v='smurf' />
+    <tag k='source' v='cartoon' />
+    <tag k='uuid' v='{c0b66070-d3be-44bd-bb52-03d34716cd49}' />
+  </way>
+</osm>

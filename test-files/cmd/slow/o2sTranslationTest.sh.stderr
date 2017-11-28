@@ -1,0 +1,3 @@
+ImportError: Import by filename is not supported.
+Error running ogr2osm:
+Unable to find an appropriate scripting language for: test-output/o2s/tds40.osm

@@ -1046,7 +1046,6 @@ ggdm30 = {
     {
         // Remove Hoot assigned tags for the source of the data
         if (tags['source:ingest:datetime']) delete tags['source:ingest:datetime'];
-        if (tags.source) delete tags.source;
         if (tags.area) delete tags.area;
         if (tags['error:circular']) delete tags['error:circular'];
         if (tags['hoot:status']) delete tags['hoot:status'];
@@ -2033,6 +2032,22 @@ ggdm30 = {
 
         if (!(ggdmAttrLookup[gFcode]))
         {
+            // For the UI: Throw an error and die if we don't have a valid feature
+            if (ggdm30.config.OgrThrowError == 'true')
+            {
+                if (! attrs.F_CODE)
+                {
+                    returnData.push({attrs:{'error':'No Valid Feature Code'}, tableName: ''});
+                    return returnData;
+                }
+                else
+                {
+                    //throw new Error(geometryType.toString() + ' geometry is not valid for F_CODE ' + attrs.F_CODE);
+                    returnData.push({attrs:{'error':geometryType + ' geometry is not valid for ' + attrs.F_CODE + ' in TDSv61'}, tableName: ''});
+                    return returnData;
+                }
+            }
+
             hoot.logTrace('FCODE and Geometry: ' + gFcode + ' is not in the schema');
 
             tableName = 'o2s_' + geometryType.toString().charAt(0);
@@ -2046,7 +2061,11 @@ ggdm30 = {
             }
 
             // We want to keep the hoot:id if present
-            if (tags['hoot:id']) tags.raw_id = tags['hoot:id'];
+            if (tags['hoot:id'])
+            {
+                tags.raw_id = tags['hoot:id'];
+                delete tags['hoot:id'];
+            }
 
             // Convert all of the Tags to a string so we can jam it into an attribute
             var str = JSON.stringify(tags);

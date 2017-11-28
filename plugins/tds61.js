@@ -2303,6 +2303,7 @@ tds61 = {
                 for (var i = 0, fLen = kList.length; i < fLen; i++) print('Converted Attrs:' + kList[i] + ': :' + attrs[kList[i]] + ':');
             }
 
+            // We want to keep the hoot:id if present
             if (tags['hoot:id'])
             {
                 tags.raw_id = tags['hoot:id'];
