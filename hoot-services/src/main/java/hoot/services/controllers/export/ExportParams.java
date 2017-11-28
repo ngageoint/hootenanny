@@ -43,6 +43,9 @@ public class ExportParams {
     @JsonProperty("textstatus")
     private Boolean textStatus;
 
+    @JsonProperty("tagoverrides")
+    private String tagOverrides;
+
     @JsonProperty("inputtype")
     private String inputType;
 
@@ -108,6 +111,14 @@ public class ExportParams {
 
     public void setTextStatus(Boolean textStatus) {
         this.textStatus = textStatus;
+    }
+
+    public String getTagOverrides() {
+        return tagOverrides;
+    }
+
+    public void setTagOverrides(String tagOverrides) {
+        this.tagOverrides = tagOverrides;
     }
 
     public Boolean getAppend() {
