@@ -722,7 +722,7 @@ void OsmXmlReader::_uncompressInput()
     // "man gzip" confirms success return code is zero
     //  -d option is "decompress"
     //  -c option is "write on standard output, keep original files unchanged" meaning won't delete input .osm.gz
-    const std::string cmd(std::string("gzip -dc") + originalFile.toStdString() + " > " + _path);
+    const std::string cmd(std::string("gzip -dc ") + originalFile.toStdString() + " > " + _path);
     LOG_DEBUG("Running uncompress command: " << cmd);
 
     int retVal;
