@@ -24,11 +24,13 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef ADDIMPLICITLYDERIVEDTAGSPOIVISITOR_H
-#define ADDIMPLICITLYDERIVEDTAGSPOIVISITOR_H
+#ifndef ADDIMPLICITLYDERIVEDTAGSPOIPOLYGONVISITOR_H
+#define ADDIMPLICITLYDERIVEDTAGSPOIPOLYGONVISITOR_H
 
 // hoot
 #include <hoot/rnd/visitors/AddImplicitlyDerivedTagsBaseVisitor.h>
+#include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPoiCriterion.h>
+#include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPolyCriterion.h>
 
 namespace hoot
 {
@@ -36,21 +38,26 @@ namespace hoot
 /**
  * Adds tags implicitly derived from POI names to POIs
  */
-class AddImplicitlyDerivedTagsPoiVisitor : public AddImplicitlyDerivedTagsBaseVisitor
+class AddImplicitlyDerivedTagsPoiPolygonVisitor : public AddImplicitlyDerivedTagsBaseVisitor
 {
 public:
 
-  static std::string className() { return "hoot::AddImplicitlyDerivedTagsPoiVisitor"; }
+  static std::string className() { return "hoot::AddImplicitlyDerivedTagsPoiPolygonVisitor"; }
 
-  AddImplicitlyDerivedTagsPoiVisitor();
-  AddImplicitlyDerivedTagsPoiVisitor(const QString databasePath);
+  AddImplicitlyDerivedTagsPoiPolygonVisitor();
+  AddImplicitlyDerivedTagsPoiPolygonVisitor(const QString databasePath);
 
 protected:
 
   virtual bool _visitElement(const ElementPtr& e);
 
+private:
+
+  PoiPolygonPoiCriterion _poiFilter;
+  PoiPolygonPolyCriterion _polyFilter;
+
 };
 
 }
 
-#endif // ADDIMPLICITLYDERIVEDTAGSPOIVISITOR_H
+#endif // ADDIMPLICITLYDERIVEDTAGSPOIPOLYGONVISITOR_H

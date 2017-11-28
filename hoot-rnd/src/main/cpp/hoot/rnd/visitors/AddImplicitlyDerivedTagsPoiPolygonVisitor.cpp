@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "AddImplicitlyDerivedTagsPoiVisitor.h"
+#include "AddImplicitlyDerivedTagsPoiPolygonVisitor.h"
 
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>
@@ -33,30 +33,40 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, AddImplicitlyDerivedTagsPoiVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, AddImplicitlyDerivedTagsPoiPolygonVisitor)
 
-AddImplicitlyDerivedTagsPoiVisitor::AddImplicitlyDerivedTagsPoiVisitor() :
+AddImplicitlyDerivedTagsPoiPolygonVisitor::AddImplicitlyDerivedTagsPoiPolygonVisitor() :
 AddImplicitlyDerivedTagsBaseVisitor()
 {
 }
 
-AddImplicitlyDerivedTagsPoiVisitor::AddImplicitlyDerivedTagsPoiVisitor(const QString databasePath) :
+AddImplicitlyDerivedTagsPoiPolygonVisitor::AddImplicitlyDerivedTagsPoiPolygonVisitor(
+  const QString databasePath) :
 AddImplicitlyDerivedTagsBaseVisitor(databasePath)
 {
 }
 
-bool AddImplicitlyDerivedTagsPoiVisitor::_visitElement(const ElementPtr& e)
+bool AddImplicitlyDerivedTagsPoiPolygonVisitor::_visitElement(const ElementPtr& e)
 {
   const bool elementIsANode = e->getElementType() == ElementType::Node;
-  const bool elementIsAPoi =
-    elementIsANode && OsmSchema::getInstance().hasCategory(e->getTags(), "poi");
+  const bool elementIsAPoi = _poiFilter.isSatisfied(e);
   const bool elementIsASpecificPoi =
     elementIsAPoi && !e->getTags().contains("poi") &&
     e->getTags().get("place") != QLatin1String("locality");
   const bool elementIsAGenericPoi = !elementIsASpecificPoi;
-
   if ((elementIsAGenericPoi && _allowTaggingGenericPois) ||
       (elementIsASpecificPoi && _allowTaggingSpecificPois) || (!elementIsAPoi && elementIsANode))
+  {
+    return true;
+  }
+
+  const bool elementIsAWay = e->getElementType() == ElementType::Way;
+  const bool elementIsAPoly = _polyFilter.isSatisfied(e);
+  const bool elementIsASpecificPoly =
+    elementIsAPoly && e->getTags().get("building") != QLatin1String("yes");
+  const bool elementIsAGenericPoly = !elementIsASpecificPoly;
+  if ((elementIsAGenericPoly && _allowTaggingGenericPois) ||
+      (elementIsASpecificPoly && _allowTaggingSpecificPois) || (!elementIsAPoly && elementIsAWay))
   {
     return true;
   }
