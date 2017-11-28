@@ -30,6 +30,7 @@
 
 // Hoot
 #include <hoot/core/elements/Tags.h>
+#include <hoot/rnd/schema/PoiImplicitTagCustomRules.h>
 
 // Qt
 #include <QString>
@@ -86,6 +87,8 @@ public:
   long getFirstRoundTagsCacheHits() const { return _firstRoundTagsCacheHits; }
   long getSecondRoundTagsCacheHits() const { return _secondRoundTagsCacheHits; }
 
+  void setCustomRules(const PoiImplicitTagCustomRules& rules) { _customRules = rules; }
+
 private:
 
   QString _path;
@@ -93,12 +96,16 @@ private:
 
   QSqlQuery _ruleWordPartCountQuery;
   QSqlQuery _tagsForWordIds;
+  QSqlQuery _tagCountsForWordIds;
 
   QCache<QString, Tags> _tagsCache;
   bool _useTagsCache;
   long _firstRoundTagsCacheHits;
   long _secondRoundTagsCacheHits;
   bool _addTopTagOnly;
+  bool _allowWordsInvolvedInMultipleRules;
+
+  PoiImplicitTagCustomRules _customRules;
 
   void _prepareQueries();
 };

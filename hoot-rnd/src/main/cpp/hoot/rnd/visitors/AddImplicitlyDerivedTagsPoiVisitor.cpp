@@ -52,7 +52,9 @@ _numNodesParsed(0),
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
 _minWordLength(ConfigOptions().getPoiImplicitTagRulesMinimumWordLength()),
 _smallestNumberOfTagsAdded(LONG_MAX),
-_largestNumberOfTagsAdded(0)
+_largestNumberOfTagsAdded(0),
+_allowTaggingSpecificPois(ConfigOptions().getPoiImplicitTagRulesAllowTaggingSpecificPois()),
+_allowTaggingGenericPois(ConfigOptions().getPoiImplicitTagRulesAllowTaggingGenericPois())
 {
   _ruleReader.reset(new ImplicitTagRulesSqliteReader());
   _ruleReader->open(ConfigOptions().getPoiImplicitTagRulesDatabase());
@@ -67,7 +69,9 @@ _numNodesParsed(0),
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
 _minWordLength(ConfigOptions().getPoiImplicitTagRulesMinimumWordLength()),
 _smallestNumberOfTagsAdded(LONG_MAX),
-_largestNumberOfTagsAdded(0)
+_largestNumberOfTagsAdded(0),
+_allowTaggingSpecificPois(ConfigOptions().getPoiImplicitTagRulesAllowTaggingSpecificPois()),
+_allowTaggingGenericPois(ConfigOptions().getPoiImplicitTagRulesAllowTaggingGenericPois())
 {
   _ruleReader.reset(new ImplicitTagRulesSqliteReader());
   _ruleReader->open(databasePath);
@@ -106,6 +110,7 @@ AddImplicitlyDerivedTagsPoiVisitor::~AddImplicitlyDerivedTagsPoiVisitor()
 
 void AddImplicitlyDerivedTagsPoiVisitor::setConfiguration(const Settings& conf)
 {
+  LOG_DEBUG("set config");
   const ConfigOptions confOptions(conf);
   _customRules.setCustomRuleFile(confOptions.getPoiImplicitTagRulesCustomRuleFile());
   _customRules.setRuleIgnoreFile(confOptions.getPoiImplicitTagRulesRuleIgnoreFile());
@@ -114,6 +119,7 @@ void AddImplicitlyDerivedTagsPoiVisitor::setConfiguration(const Settings& conf)
   _customRules.setWordIgnoreFile(confOptions.getPoiImplicitTagRulesWordIgnoreFile());
 
   _customRules.init();
+  _ruleReader->setCustomRules(_customRules);
 }
 
 bool caseInsensitiveLessThan(const QString s1, const QString s2)
@@ -123,10 +129,22 @@ bool caseInsensitiveLessThan(const QString s1, const QString s2)
 
 void AddImplicitlyDerivedTagsPoiVisitor::visit(const ElementPtr& e)
 {
-  if (e->getElementType() == ElementType::Node /*&&
-      // either the element isn't a poi, or it contains a generic poi type
-      (!OsmSchema::getInstance().hasCategory(e->getTags(), "poi") ||
-       e->getTags().contains("poi") || e->getTags().get("place") == QLatin1String("locality"))*/)
+  const bool elementIsANode = e->getElementType() == ElementType::Node;
+  const bool elementIsAPoi =
+    elementIsANode && OsmSchema::getInstance().hasCategory(e->getTags(), "poi");
+  const bool elementIsASpecificPoi =
+    elementIsAPoi && !e->getTags().contains("poi") &&
+    e->getTags().get("place") != QLatin1String("locality");
+  const bool elementIsAGenericPoi = !elementIsASpecificPoi;
+
+  bool visitElement = false;
+  if ((elementIsAGenericPoi && _allowTaggingGenericPois) ||
+      (elementIsASpecificPoi && _allowTaggingSpecificPois) || (!elementIsAPoi && elementIsANode))
+  {
+    visitElement = true;
+  }
+
+  if (visitElement)
   {
     //get names
     //query for implicit tags for the names; pass in a ref wordsInvolvedInMultipleRules param
@@ -319,9 +337,9 @@ void AddImplicitlyDerivedTagsPoiVisitor::visit(const ElementPtr& e)
           {
             _smallestNumberOfTagsAdded = _numTagsAdded;
           }
-          if (_numTagsAdded > _largestNumberOfTagsAdded)
+          if (tagsToAdd.size() > _largestNumberOfTagsAdded)
           {
-            _largestNumberOfTagsAdded = _numTagsAdded;
+            _largestNumberOfTagsAdded = tagsToAdd.size();
           }
           if (_numNodesModified % 100 == 0)
           {

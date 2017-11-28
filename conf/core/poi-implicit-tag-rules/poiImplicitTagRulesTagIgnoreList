@@ -1,4 +1,5 @@
-# tags that are always ignored; key=value; 
+# tags that are always ignored; key=value
 # keep alphabetized
 place=administrative
 place=locality
+place=populated

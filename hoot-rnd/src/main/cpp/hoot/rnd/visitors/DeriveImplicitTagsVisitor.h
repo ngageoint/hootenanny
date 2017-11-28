@@ -22,46 +22,48 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef NAMEDOP_H
-#define NAMEDOP_H
+#ifndef DERIVEIMPLICITTAGSVISITOR_H
+#define DERIVEIMPLICITTAGSVISITOR_H
 
 // hoot
-#include <hoot/core/util/Configurable.h>
-
-#include "OsmMapOperation.h"
-
-// Qt
-#include <QStringList>
+#include <hoot/core/elements/ElementVisitor.h>
 
 namespace hoot
 {
+class ImplicitRule;
 
 /**
- * Applies a list of named operations to the given map. The named operations must implement either
- * OsmMapOperation or ConstElementVisitor and must be registered with the factory.
+ * Derive tags based on the names.
+ *
+ * OLD VERSION - to be replaced by AddImplicitlyDerivedTagsPoiVisitor
  */
-class NamedOp : public OsmMapOperation, public Configurable
+class DeriveImplicitTagsVisitor : public ElementVisitor
 {
 public:
 
-  static std::string className() { return "hoot::NamedOp"; }
+  static std::string className() { return "hoot::DeriveImplicitTagsVisitor"; }
 
-  NamedOp();
-  NamedOp(QStringList namedOps);
+  DeriveImplicitTagsVisitor();
 
-  virtual ~NamedOp() {}
+  virtual void visit(const ElementPtr& e);
 
-  virtual void apply(boost::shared_ptr<OsmMap>& map);
+public:
 
-  virtual void setConfiguration(const Settings& conf);
+  QList< boost::shared_ptr<ImplicitRule> > _rules;
 
-private:
-  const Settings* _conf;
-  QStringList _namedOps;
+  /**
+   * Ensure all rules are in lower case.
+   */
+  void _rulesToLower();
+
+  /**
+   * Extract the names from tags and then tokenize the names into a set of words.
+   */
+  QSet<QString> _extractNameWords(const Tags& t);
 };
 
 }
 
-#endif // NAMEDOP_H
+#endif // DERIVEIMPLICITTAGSVISITOR_H

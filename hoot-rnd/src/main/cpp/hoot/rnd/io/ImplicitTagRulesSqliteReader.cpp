@@ -50,7 +50,9 @@ _tagsCache(ConfigOptions().getPoiImplicitTagRulesReaderMaxTagCacheSize()),
 _useTagsCache(ConfigOptions().getPoiImplicitTagRulesReaderUseTagsCache()),
 _firstRoundTagsCacheHits(0),
 _secondRoundTagsCacheHits(0),
-_addTopTagOnly(ConfigOptions().getPoiImplicitTagRulesAddTopTagOnly())
+_addTopTagOnly(ConfigOptions().getPoiImplicitTagRulesAddTopTagOnly()),
+_allowWordsInvolvedInMultipleRules(
+  ConfigOptions().getPoiImplicitTagRulesAllowWordsInvolvedInMultipleRules())
 {
 }
 
@@ -105,9 +107,12 @@ void ImplicitTagRulesSqliteReader::_prepareQueries()
   _tagsForWordIds = QSqlQuery(_db);
   if (_addTopTagOnly)
   {
+//    if (!_tagsForWordIds.prepare(
+//         QString("SELECT tags.kvp FROM tags JOIN rules ON rules.tag_id = tags.id ") +
+//         QString("WHERE rules.word_id = :wordId ORDER BY rules.tag_count DESC LIMIT 1")))
     if (!_tagsForWordIds.prepare(
          QString("SELECT tags.kvp FROM tags JOIN rules ON rules.tag_id = tags.id ") +
-         QString("WHERE rules.word_id = :wordId ORDER BY rules.tag_count DESC LIMIT 1")))
+         QString("WHERE rules.word_id = :wordId ORDER BY rules.tag_count DESC")))
     {
       throw HootException(
         QString("Error preparing _topTagForWordIds: %1")
@@ -117,12 +122,24 @@ void ImplicitTagRulesSqliteReader::_prepareQueries()
   else
   {
     if (!_tagsForWordIds.prepare(
-         "SELECT tags.kvp FROM tags JOIN rules ON rules.tag_id = tags.id WHERE rules.word_id = :wordId"))
+         QString("SELECT tags.kvp FROM tags JOIN rules ON rules.tag_id = tags.id ") +
+         QString("WHERE rules.word_id = :wordId")))
     {
       throw HootException(
         QString("Error preparing _tagsForWordIds: %1")
           .arg(_tagsForWordIds.lastError().text()));
     }
+  }
+
+  _tagCountsForWordIds = QSqlQuery(_db);
+  if (!_tagCountsForWordIds.prepare(
+       QString("SELECT rules.tag_count FROM rules JOIN tags on rules.tag_id = tags.id ") +
+       QString("WHERE rules.word_id = :wordId ") +
+       QString("ORDER BY rules.tag_count DESC LIMIT 1")))
+  {
+    throw HootException(
+      QString("Error preparing _tagCountsForWordIds: %1")
+        .arg(_tagCountsForWordIds.lastError().text()));
   }
 }
 
@@ -163,6 +180,7 @@ Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,
       {
         wordsInvolvedInMultipleRules = true;
         LOG_TRACE("Cached tags involved in multiple rules.");
+        LOG_VART(matchingWords);
       }
       const QString tagsStr = tagsToReturn.toString().trimmed().replace("\n", ", ");
       LOG_TRACE("Returning cached tags: " << tagsStr << " for words: " << matchingWords << ".");
@@ -238,11 +256,61 @@ Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,
       {
         wordsInvolvedInMultipleRules = true;
         LOG_TRACE("Cached tags involved in multiple rules.");
+        LOG_VART(matchingWords);
       }
       const QString tagsStr = tagsToReturn.toString().trimmed().replace("\n", ", ");
       LOG_TRACE("Returning cached tags: " << tagsStr << " for words: " << matchingWords << ".");
       _secondRoundTagsCacheHits++;
       return tagsToReturn;
+    }
+  }
+
+  if (_allowWordsInvolvedInMultipleRules)
+  {
+    long wordIdWithHighestTagOccurrenceCount = -1;
+    long highestTagOccurrenceCount = -1;
+    for (QSet<long>::const_iterator wordIdItr = queriedWordIds.begin();
+         wordIdItr != queriedWordIds.end(); ++wordIdItr)
+    {
+      const long wordId = *wordIdItr;
+      _tagCountsForWordIds.bindValue(":wordId", (qlonglong)wordId);
+      LOG_VART(_tagCountsForWordIds.lastQuery());
+      if (!_tagCountsForWordIds.exec())
+      {
+        throw HootException(
+          QString("Error executing query: %1; Error: %2")
+            .arg(_tagCountsForWordIds.lastQuery())
+            .arg(_tagCountsForWordIds.lastError().text()));
+      }
+      while (_tagCountsForWordIds.next()) //only one record should be returned
+      {
+        const long tagCount = _tagCountsForWordIds.value(0).toLongLong();
+        if (tagCount > highestTagOccurrenceCount)
+        {
+          highestTagOccurrenceCount = tagCount;
+          wordIdWithHighestTagOccurrenceCount = wordId;
+        }
+      }
+    }
+    LOG_VART(highestTagOccurrenceCount);
+    LOG_VART(wordIdWithHighestTagOccurrenceCount);
+
+    queriedWordIds.clear();
+    if (wordIdWithHighestTagOccurrenceCount != -1)
+    {
+      queriedWordIds.insert(wordIdWithHighestTagOccurrenceCount);
+      LOG_VART(queriedWordIds);
+    }
+    else
+    {
+      if (_useTagsCache)
+      {
+        //cache empty set of tags
+        QStringList wordsList = words.toList();
+        Tags* tagsToCache(new Tags());
+        _tagsCache.insert(wordsList.join(";"), tagsToCache);
+      }
+      return Tags();
     }
   }
 
@@ -260,17 +328,22 @@ Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,
           .arg(_tagsForWordIds.lastError().text()));
     }
     Tags tags2;
-    //TODO: with _topTagForWordIds should just be one record returned
     while (_tagsForWordIds.next())
     {
-      tags2.appendValue(_tagsForWordIds.value(0).toString());
+      const QString kvp = _tagsForWordIds.value(0).toString();
+      if (!_customRules.getTagIgnoreList().contains(kvp) &&
+          (!_addTopTagOnly || (_addTopTagOnly && tags2.isEmpty())))
+      {
+        tags2.appendValue(kvp);
+      }
     }
+    LOG_VART(tags);
     LOG_VART(tags2);
     if (tags.isEmpty())
     {
       tags = tags2;
     }
-    else if (tags != tags2)
+    else if (!tags2.isEmpty() && tags != tags2)
     {
       wordsInvolvedInMultipleRules = true;
       matchingWords = queriedWords;
@@ -293,6 +366,8 @@ Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,
       }
       LOG_TRACE(
         "Words: " << matchingWords << " involved in multiple rules due to tag sets not matching.");
+      LOG_VART(tags);
+      LOG_VART(tags2);
       return Tags();
     }
   }

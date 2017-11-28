@@ -42,14 +42,26 @@ PoiImplicitTagCustomRules::PoiImplicitTagCustomRules()
 
 void PoiImplicitTagCustomRules::init()
 {
+  LOG_DEBUG("Intializing POI implicit tag custom rules...");
+  _clear();
   _readAllowLists();
   _readIgnoreLists();
+}
+
+void PoiImplicitTagCustomRules::_clear()
+{
+  _tagIgnoreList.clear();
+  _wordIgnoreList.clear();
+  _customRulesList.clear();
+  _rulesIgnoreList.clear();
+  _tagsAllowList.clear();
 }
 
 void PoiImplicitTagCustomRules::_readAllowLists()
 {
   LOG_DEBUG("Reading allow lists...");
 
+  LOG_VARD(_tagFile);
   if (!_tagFile.trimmed().isEmpty())
   {
     QFile tagsAllowFile(_tagFile);
@@ -69,8 +81,9 @@ void PoiImplicitTagCustomRules::_readAllowLists()
     }
     tagsAllowFile.close();
   }
-  LOG_VART(_tagsAllowList);
+  LOG_VARD(_tagsAllowList);
 
+  LOG_VARD(_customRuleFile);
   if (!_customRuleFile.trimmed().isEmpty())
   {
     QFile customRulesFile(_customRuleFile);
@@ -83,7 +96,7 @@ void PoiImplicitTagCustomRules::_readAllowLists()
     while (!customRulesFile.atEnd())
     {
       const QString line = QString::fromUtf8(customRulesFile.readLine().constData()).trimmed();
-      if (!line.isEmpty() && !line.startsWith("#"))
+      if (!line.trimmed().isEmpty() && !line.startsWith("#"))
       {
         const QStringList lineParts = line.trimmed().split("\t");
         _customRulesList[lineParts[0].trimmed()] = lineParts[1].trimmed();
@@ -91,13 +104,14 @@ void PoiImplicitTagCustomRules::_readAllowLists()
     }
     customRulesFile.close();
   }
-  LOG_VART(_customRulesList);
+  LOG_VARD(_customRulesList);
 }
 
 void PoiImplicitTagCustomRules::_readIgnoreLists()
 {
   LOG_DEBUG("Reading ignore lists...");
 
+  LOG_VARD(_tagIgnoreFile);
   if (!_tagIgnoreFile.trimmed().isEmpty())
   {
     QFile tagIgnoreFile(_tagIgnoreFile);
@@ -110,15 +124,16 @@ void PoiImplicitTagCustomRules::_readIgnoreLists()
     while (!tagIgnoreFile.atEnd())
     {
       const QString line = QString::fromUtf8(tagIgnoreFile.readLine().constData()).trimmed();
-      if (!line.isEmpty() && !line.startsWith("#"))
+      if (!line.trimmed().isEmpty() && !line.startsWith("#"))
       {
         _tagIgnoreList.append(line);
       }
     }
     tagIgnoreFile.close();
   }
-  LOG_VART(_tagIgnoreList);
+  LOG_VARD(_tagIgnoreList);
 
+  LOG_VARD(_wordIgnoreFile);
   if (!_wordIgnoreFile.trimmed().isEmpty())
   {
     QFile wordIgnoreFile(_wordIgnoreFile);
@@ -131,15 +146,17 @@ void PoiImplicitTagCustomRules::_readIgnoreLists()
     while (!wordIgnoreFile.atEnd())
     {
       const QString line = QString::fromUtf8(wordIgnoreFile.readLine().constData()).trimmed();
-      if (!line.isEmpty() && !line.startsWith("#"))
-       {
+      if (!line.trimmed().isEmpty() && !line.startsWith("#"))
+      {
+        LOG_VART(line);
         _wordIgnoreList.append(line);
       }
     }
     wordIgnoreFile.close();
   }
-  LOG_VART(_wordIgnoreList);
+  LOG_VARD(_wordIgnoreList);
 
+  LOG_VARD(_ruleIgnoreFile);
   if (!_ruleIgnoreFile.trimmed().isEmpty())
   {
     QFile rulesIgnoreFile(_ruleIgnoreFile);
@@ -152,7 +169,7 @@ void PoiImplicitTagCustomRules::_readIgnoreLists()
     while (!rulesIgnoreFile.atEnd())
     {
       const QString line = QString::fromUtf8(rulesIgnoreFile.readLine().constData()).trimmed();
-      if (!line.isEmpty() && !line.startsWith("#"))
+      if (!line.trimmed().isEmpty() && !line.startsWith("#"))
       {
         const QStringList lineParts = line.trimmed().split("\t");
         _rulesIgnoreList[lineParts[0].trimmed()] = lineParts[1].trimmed();
@@ -160,7 +177,7 @@ void PoiImplicitTagCustomRules::_readIgnoreLists()
     }
     rulesIgnoreFile.close();
   }
-  LOG_VART(_rulesIgnoreList);
+  LOG_VARD(_rulesIgnoreList);
 }
 
 }

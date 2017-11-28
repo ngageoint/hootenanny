@@ -77,6 +77,8 @@ private:
   int _minWordLength;
   long _smallestNumberOfTagsAdded;
   long _largestNumberOfTagsAdded;
+  bool _allowTaggingSpecificPois;
+  bool _allowTaggingGenericPois;
 
   PoiImplicitTagCustomRules _customRules;
 
