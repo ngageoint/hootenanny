@@ -48,15 +48,25 @@ AddImplicitlyDerivedTagsBaseVisitor(databasePath)
 bool AddImplicitlyDerivedTagsPoiVisitor::_visitElement(const ElementPtr& e)
 {
   const bool elementIsANode = e->getElementType() == ElementType::Node;
-  const bool elementIsAPoi =
-    elementIsANode && OsmSchema::getInstance().hasCategory(e->getTags(), "poi");
-  const bool elementIsASpecificPoi =
-    elementIsAPoi && !e->getTags().contains("poi") &&
-    e->getTags().get("place") != QLatin1String("locality");
-  const bool elementIsAGenericPoi = !elementIsASpecificPoi;
+//  const bool elementIsAPoi =
+//    /*elementIsANode && OsmSchema::getInstance().hasCategory(e->getTags(), "poi")*/
+//    OsmSchema::getInstance().isPoi(*e);
+  _elementIsASpecificPoi =
+    OsmSchema::getInstance().hasCategory(e->getTags(), "poi") && !e->getTags().contains("poi") /*&&
+    (e->getTags().get("place").trimmed().isEmpty() ||
+     e->getTags().get("place") != QLatin1String("locality"))*/ &&
+     e->getTags().get("building") != QLatin1String("yes");
+  const bool elementIsAGenericPoi = !_elementIsASpecificPoi;
 
-  if ((elementIsAGenericPoi && _allowTaggingGenericPois) ||
-      (elementIsASpecificPoi && _allowTaggingSpecificPois) || (!elementIsAPoi && elementIsANode))
+  if (elementIsAGenericPoi && _allowTaggingGenericPois)
+  {
+    return true;
+  }
+  else if (_elementIsASpecificPoi && _allowTaggingSpecificPois)
+  {
+    return true;
+  }
+  else if (elementIsANode && e->getTags().getNames().size() > 0)
   {
     return true;
   }

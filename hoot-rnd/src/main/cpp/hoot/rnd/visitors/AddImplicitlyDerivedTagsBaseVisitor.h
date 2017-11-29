@@ -70,6 +70,7 @@ protected:
 
   bool _allowTaggingSpecificPois;
   bool _allowTaggingGenericPois;
+  bool _elementIsASpecificPoi;
 
 private:
 
