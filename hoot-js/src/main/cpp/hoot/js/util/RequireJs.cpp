@@ -65,7 +65,6 @@ void RequireJs::jsRequire(const FunctionCallbackInfo<Value>& args)
   try
   {
     HandleScope scope(current);
-    Context::Scope context_scope(current->GetCurrentContext());
 
     if (args.Length() != 1)
     {

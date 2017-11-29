@@ -54,15 +54,12 @@ PluginContext::PluginContext()
   // Create a new context.
   _context.Reset(current, Context::New(current));
   Handle<Context> context = _context.Get(current);
+  context->Enter();
   context->AllowCodeGenerationFromStrings(true);
 
   // Create a template for the global object where we set the
   // built-in global functions.
   Handle<Object> global = context->Global();
-
-  // Enter the created context for compiling and
-  // running the hello world script.
-  Context::Scope context_scope(context);
 
   Handle<v8::Object> hns = Object::New(current);
   global->Set(String::NewFromUtf8(current, "hoot"), hns);
@@ -79,7 +76,6 @@ PluginContext::PluginContext()
 
 PluginContext::~PluginContext()
 {
-
 }
 
 Local<Value> PluginContext::call(Handle<Object> obj, QString name, QList<QVariant> args)
@@ -128,9 +124,6 @@ Local<Object> PluginContext::loadScript(QString filename, QString loadInto)
 {
   Isolate* current = v8Engine::getIsolate();
   EscapableHandleScope handleScope(current);
-  // Enter the created context for compiling and
-  // running the hello world script.
-  Context::Scope context_scope(_context.Get(current));
 
   QFile fp(filename);
   LOG_TRACE("Loading script " << filename << "...");
@@ -152,7 +145,6 @@ Local<Object> PluginContext::loadText(QString text, QString loadInto, QString sc
   Isolate* current = v8Engine::getIsolate();
   EscapableHandleScope handleScope(current);
   Local<Context> context(_context.Get(current));
-  Context::Scope context_scope(context);
 
   Local<Object> exports(Object::New(current));
   Local<Object> global = context->Global();
@@ -161,7 +153,7 @@ Local<Object> PluginContext::loadText(QString text, QString loadInto, QString sc
   TryCatch try_catch;
 
   // Compile the source code.
-  v8::ScriptOrigin origin(toV8(scriptName));
+  ScriptOrigin origin(toV8(scriptName));
   MaybeLocal<Script> script = Script::Compile(context, String::NewFromUtf8(current, text.toUtf8().data()), &origin);
 
   if (script.IsEmpty())

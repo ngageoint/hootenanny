@@ -95,11 +95,11 @@ void PoiMergerJs::jsPoiMerge(const FunctionCallbackInfo<Value>& args)
 
     // Instantiate script merger
     boost::shared_ptr<PluginContext> script(new PluginContext());
-    v8::HandleScope handleScope(current);
-    v8::Context::Scope context_scope(script->getContext(current));
+    HandleScope handleScope(current);
+    Context::Scope context_scope(script->getContext(current));
     script->loadScript(scriptPath, "plugin");
 
-    v8::Handle<v8::Object> global = script->getContext(current)->Global();
+    Handle<Object> global = script->getContext(current)->Global();
 
     if (global->Has(String::NewFromUtf8(current, "plugin")) == false)
     {
@@ -108,8 +108,8 @@ void PoiMergerJs::jsPoiMerge(const FunctionCallbackInfo<Value>& args)
       return;
     }
 
-    v8::Handle<v8::Value> pluginValue = global->Get(String::NewFromUtf8(current, "plugin"));
-    v8::Persistent<v8::Object> plugin(current, v8::Handle<v8::Object>::Cast(pluginValue));
+    Handle<Value> pluginValue = global->Get(String::NewFromUtf8(current, "plugin"));
+    Persistent<Object> plugin(current, Handle<Object>::Cast(pluginValue));
     if (plugin.IsEmpty() || plugin.Get(current)->IsObject() == false)
     {
       args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(IllegalArgumentException(
@@ -152,7 +152,7 @@ void PoiMergerJs::jsPoiMerge(const FunctionCallbackInfo<Value>& args)
     }
 
     // Hand merged POIs back to caller in OsmMap
-    v8::Handle<v8::Object> returnMap = OsmMapJs::create(mergedMap);
+    Handle<Object> returnMap = OsmMapJs::create(mergedMap);
     args.GetReturnValue().Set(returnMap);
   }
   catch ( const HootException& e )

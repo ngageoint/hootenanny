@@ -193,7 +193,6 @@ void JavaScriptTranslator::_finalize()
     // run the user's finalize function if it exists.
     Isolate* current = v8Engine::getIsolate();
     HandleScope handleScope(current);
-    Context::Scope context_scope(_gContext->getContext(current));
 
     Handle<Object> tObj = _gContext->getContext(current)->Global();
 
@@ -236,7 +235,8 @@ void JavaScriptTranslator::_init()
   _gContext.reset(new PluginContext());
   Isolate* current = v8Engine::getIsolate();
   HandleScope handleScope(current);
-  Context::Scope context_scope(_gContext->getContext(current));
+  Local<Context> context = _gContext->getContext(current);
+  Local<Object> tObj = context->Global();
 
   if (_scriptPath.isEmpty())
   {
@@ -254,14 +254,10 @@ void JavaScriptTranslator::_init()
     _gContext->loadScript(_scriptPath);
   }
 
-  // Less typeing
-  Handle<Object> tObj = _gContext->getContext(current)->Global();
-
   // Set up a small function
   tObj->Set(String::NewFromUtf8(current, "timeNow"), FunctionTemplate::New(current, jsGetTimeNow)->GetFunction());
 
-
-  // Run Initiallise, if it exists
+  // Run Initialize, if it exists
   if (tObj->Has(String::NewFromUtf8(current, "initialize")))
   {
     TryCatch trycatch;
@@ -312,7 +308,6 @@ const QString JavaScriptTranslator::getLayerNameFilter()
 
   Isolate* current = v8Engine::getIsolate();
   HandleScope handleScope(current);
-  Context::Scope context_scope(_gContext->getContext(current));
 
   Handle<Object> tObj = _gContext->getContext(current)->Global();
 
@@ -387,7 +382,6 @@ boost::shared_ptr<const Schema> JavaScriptTranslator::getOgrOutputSchema()
 
     Isolate* current = v8Engine::getIsolate();
     HandleScope handleScope(current);
-    Context::Scope context_scope(_gContext->getContext(current));
 
     Handle<Object> tObj = _gContext->getContext(current)->Global();
 
@@ -817,7 +811,6 @@ vector<Tags> JavaScriptTranslator::translateToOgrTags(Tags& tags, ElementType el
 
   Isolate* current = v8Engine::getIsolate();
   HandleScope handleScope(current);
-  Context::Scope context_scope(_gContext->getContext(current));
 
   result.resize(l.size());
   for (int i = 0; i < l.size(); i++)
@@ -855,7 +848,6 @@ QVariantList JavaScriptTranslator::_translateToOgrVariants(Tags& tags,
 
   Isolate* current = v8Engine::getIsolate();
   HandleScope handleScope(current);
-  Context::Scope context_scope(_gContext->getContext(current));
 
   Handle<Object> v8tags = Object::New(current);
   for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
@@ -951,7 +943,6 @@ void JavaScriptTranslator::_translateToOsm(Tags& t, const char *layerName, const
 
   Isolate* current = v8Engine::getIsolate();
   HandleScope handleScope(current);
-  Context::Scope context_scope(_gContext->getContext(current));
 
   Handle<Object> tags = Object::New(current);
   for (Tags::const_iterator it = t.begin(); it != t.end(); ++it)
