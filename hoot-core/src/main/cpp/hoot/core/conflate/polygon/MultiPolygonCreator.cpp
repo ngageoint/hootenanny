@@ -68,8 +68,8 @@ Geometry* MultiPolygonCreator::_addHoles(vector<LinearRing*> &outers,
 {
   const GeometryFactory& gf = *GeometryFactory::getDefaultInstance();
 
-  vector<Geometry*>* polygons = new vector<Geometry*>();
-  vector<Geometry*>& tmpPolygons = *polygons;
+  vector<Geometry*> polygons;
+  vector<Geometry*>& tmpPolygons = polygons;
   tmpPolygons.reserve(outers.size());
 
   vector<double> outerArea;
@@ -110,7 +110,7 @@ Geometry* MultiPolygonCreator::_addHoles(vector<LinearRing*> &outers,
       // containing polygon we've found so far.
       else if (polygonIndex == -1 || (outerArea[j] < outerArea[polygonIndex]))
       {
-        auto_ptr<IntersectionMatrix> im(tmpPolygons[j]->relate(inners[i]));
+        boost::shared_ptr<IntersectionMatrix> im(tmpPolygons[j]->relate(inners[i]));
         if (im->isContains())
         {
           contained = true;

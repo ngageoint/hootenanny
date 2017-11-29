@@ -72,8 +72,8 @@ public:
   virtual ~MergerCreator() {}
 
   /**
-   * Either creates a one or more merges that can merge all the matches in the provided set, or
-   * does nothing.
+   * Either creates one or more mergers that can merge all the matches in the
+   * provided set, or does nothing.
    *
    * @param matches Set of matches that should evaluated to look for mergers.
    * @param mergers Vector of mergers that will contain the new mergers created. Newly created

@@ -90,15 +90,17 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
 
   // use another class to extract graph nodes and graph edges.
   OsmNetworkExtractor e1;
-  ElementCriterionPtr c1(new ChainCriterion(new StatusCriterion(Status::Unknown1),
-    _userCriterion));
+  ElementCriterionPtr c1(new ChainCriterion(
+                         ElementCriterionPtr(new StatusCriterion(Status::Unknown1)),
+                         _userCriterion));
   e1.setCriterion(c1);
   OsmNetworkPtr n1 = e1.extractNetwork(map);
   LOG_TRACE("Extracted Network 1: " << n1->toString());
 
   OsmNetworkExtractor e2;
-  ElementCriterionPtr c2(new ChainCriterion(new StatusCriterion(Status::Unknown2),
-    _userCriterion));
+  ElementCriterionPtr c2(new ChainCriterion(
+                         ElementCriterionPtr(new StatusCriterion(Status::Unknown2)),
+                         _userCriterion));
   e2.setCriterion(c2);
   OsmNetworkPtr n2 = e2.extractNetwork(map);
   LOG_TRACE("Extracted Network 2: " << n2->toString());
