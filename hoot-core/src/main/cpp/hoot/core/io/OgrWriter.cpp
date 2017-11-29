@@ -573,7 +573,7 @@ void OgrWriter::_writePartial(ElementProviderPtr& provider, const ConstElementPt
 
     try
     {
-      g = ElementConverter(provider).convertToGeometry(e);
+      g = ElementConverter(provider).convertToGeometry(e, false);
     }
     catch (const IllegalArgumentException& err)
     {
