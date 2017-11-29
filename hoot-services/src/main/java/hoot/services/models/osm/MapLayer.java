@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -37,7 +37,9 @@ public class MapLayer {
     private long id;
     private String name;
     private Timestamp date;
+    private String lastAccessed;
     private boolean canExportToOsmApiDb;
+    public static final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
     public MapLayer() {}
 
@@ -58,7 +60,6 @@ public class MapLayer {
     }
 
     public String getDate() {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
         return format.format(this.date);
     }
 
@@ -72,5 +73,13 @@ public class MapLayer {
 
     public void setCanExportToOsmApiDb(boolean canExport) {
         this.canExportToOsmApiDb = canExport;
+    }
+
+    public String getLastAccessed() {
+        return this.lastAccessed;
+    }
+
+    public void setLastAccessed(String lastAccessed) {
+        this.lastAccessed = lastAccessed;
     }
 }
