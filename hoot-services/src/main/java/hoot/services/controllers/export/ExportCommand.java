@@ -119,7 +119,7 @@ class ExportCommand extends ExternalCommand {
             options.add("writer.text.status=true");
         }
 
-        options.add("translation.override=" + "\"" + params.getTagOverrides() + "\"");
+        options.add("translation.override=" + params.getTagOverrides() );
 
         /*if (params.getTagOverrides() != null && !params.getTagOverrides().trim().isEmpty()) {
            
