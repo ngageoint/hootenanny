@@ -892,7 +892,7 @@ QVariantList JavaScriptTranslator::_translateToOgrVariants(Tags& tags,
   Handle<Object> tObj = _gContext->getContext(current)->Global();
 
   // We assume this exists. we checked during Init.
-  Handle<v8::Function> tFunc = Handle<v8::Function>::Cast(tObj->Get(String::NewFromUtf8(current, "translateToOgr")));
+  Handle<Function> tFunc = Handle<Function>::Cast(tObj->Get(String::NewFromUtf8(current, "translateToOgr")));
 
   // Make sure we have a translation function. No easy way to do this earlier than now
   if (tFunc->IsUndefined())
@@ -958,7 +958,7 @@ void JavaScriptTranslator::_translateToOsm(Tags& t, const char *layerName, const
   Handle<Object> tObj = _gContext->getContext(current)->Global();
 
   // This has a variable since we don't know if it will be "translateToOsm" or "translateAttributes"
-  Handle<v8::Function> tFunc = Handle<v8::Function>::Cast(tObj->Get(toV8(_toOsmFunctionName)));
+  Handle<Function> tFunc = Handle<Function>::Cast(tObj->Get(toV8(_toOsmFunctionName)));
   TryCatch trycatch;
 
   // NOTE: the "3" here is the number of arguments

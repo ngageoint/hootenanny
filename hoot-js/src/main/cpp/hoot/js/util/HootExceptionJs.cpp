@@ -92,7 +92,7 @@ bool HootExceptionJs::isHootException(Handle<Value> v)
 
   if (v->IsObject())
   {
-    v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
+    Handle<Object> obj = Handle<Object>::Cast(v);
     HootExceptionJs* e = 0;
     if (obj->InternalFieldCount() >= 1)
     {

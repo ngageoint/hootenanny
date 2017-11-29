@@ -115,7 +115,7 @@ void ElementJs::getId(const FunctionCallbackInfo<Value>& args)
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args.This())->getConstElement();
 
-  args.GetReturnValue().Set(v8::Integer::New(current, e->getId()));
+  args.GetReturnValue().Set(Integer::New(current, e->getId()));
 }
 
 void ElementJs::getStatusInput(const FunctionCallbackInfo<Value>& args)

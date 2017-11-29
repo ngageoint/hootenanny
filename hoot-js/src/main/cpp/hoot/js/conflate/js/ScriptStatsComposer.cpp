@@ -242,7 +242,7 @@ QString ScriptStatsComposer::compose(QList< QList<SingleStat> >& stats, const QS
   jsArgs[argc++] = toV8(_extraArgs);
 
   Handle<Value> tbResultHandle = textbodyFunc->Call(exports, argc, jsArgs);
-  v8::String::Utf8Value tbParam(tbResultHandle->ToString());
+  String::Utf8Value tbParam(tbResultHandle->ToString());
   report = QString::fromStdString(string(*tbParam));
 
   delete(_tokenIndex);

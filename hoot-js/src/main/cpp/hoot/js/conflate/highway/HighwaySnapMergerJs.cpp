@@ -123,7 +123,7 @@ void HighwaySnapMergerJs::apply(const FunctionCallbackInfo<Value>& args)
   // modify the parameter that was passed in
   Handle<Array> newArr = Handle<Array>::Cast(toV8(replaced));
   Handle<Array> arr = Handle<Array>::Cast(args[3]);
-  arr->Set(String::NewFromUtf8(current, "length"), v8::Integer::New(current, newArr->Length()));
+  arr->Set(String::NewFromUtf8(current, "length"), Integer::New(current, newArr->Length()));
   for (uint32_t i = 0; i < newArr->Length(); i++)
   {
     arr->Set(i, newArr->Get(i));

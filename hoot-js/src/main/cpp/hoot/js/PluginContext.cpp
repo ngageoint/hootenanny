@@ -61,7 +61,7 @@ PluginContext::PluginContext()
   // built-in global functions.
   Handle<Object> global = context->Global();
 
-  Handle<v8::Object> hns = Object::New(current);
+  Handle<Object> hns = Object::New(current);
   global->Set(String::NewFromUtf8(current, "hoot"), hns);
   JsRegistrar::getInstance().initAll(hns);
 
@@ -86,12 +86,12 @@ Local<Value> PluginContext::call(Handle<Object> obj, QString name, QList<QVarian
   {
     throw InternalErrorException("Unable to find method in JS: " + name);
   }
-  Handle<v8::Value> value = obj->Get(String::NewFromUtf8(current, name.toUtf8().data()));
+  Handle<Value> value = obj->Get(String::NewFromUtf8(current, name.toUtf8().data()));
   if (value->IsFunction() == false)
   {
     throw InternalErrorException("The specified object is not a function: " + name);
   }
-  Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(value);
+  Handle<Function> func = Handle<Function>::Cast(value);
   vector< Handle<Value> > jsArgs(args.size());
 
   for (int i = 0; i < args.size(); i++)

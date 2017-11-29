@@ -123,7 +123,7 @@ void ElementIdJs::toJSON(const FunctionCallbackInfo<Value>& args)
   result->Set(String::NewFromUtf8(current, "type"),
               String::NewFromUtf8(current, eid.getType().toString().toUtf8().data()));
   result->Set(String::NewFromUtf8(current, "id"),
-              v8::Integer::New(current, eid.getId()));
+              Integer::New(current, eid.getId()));
 
   args.GetReturnValue().Set(result);
 }

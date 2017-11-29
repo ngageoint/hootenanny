@@ -74,14 +74,14 @@
 //{
 //}
 
-//void AreaMergerJs::Init(v8::Handle<v8::Object> exports)
+//void AreaMergerJs::Init(Handle<Object> exports)
 //{
 //  exports->Set(
-//    v8::String::NewSymbol("areaMerge"),
-//    v8::FunctionTemplate::New(jsAreaMerge)->GetFunction());
+//    String::NewSymbol("areaMerge"),
+//    FunctionTemplate::New(jsAreaMerge)->GetFunction());
 //}
 
-//v8::Handle<v8::Value> AreaMergerJs::jsAreaMerge(const v8::FunctionCallbackInfo<v8::Value>& args)
+//Handle<Value> AreaMergerJs::jsAreaMerge(const FunctionCallbackInfo<Value>& args)
 //{
 //  HandleScope scope;
 //  try
@@ -89,7 +89,7 @@
 //    if (args.Length() != 1)
 //    {
 //      return
-//        v8::ThrowException(
+//        ThrowException(
 //          HootExceptionJs::create(
 //            IllegalArgumentException("Expected on argument for 'areaMerge'.")));
 //    }
@@ -99,12 +99,12 @@
 
 //    AreaMerger::merge(map);
 
-//    v8::Handle<v8::Object> returnMap = OsmMapJs::create(map);
+//    Handle<Object> returnMap = OsmMapJs::create(map);
 //    return scope.Close(returnMap);
 //  }
 //  catch (const HootException& e)
 //  {
-//    return v8::ThrowException(HootExceptionJs::create(e));
+//    return ThrowException(HootExceptionJs::create(e));
 //  }
 //}
 

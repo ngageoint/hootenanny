@@ -68,7 +68,7 @@ void MapIoJs::loadMap(const FunctionCallbackInfo<Value>& args)
   {
     OsmMapJs* map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
 
-    v8::String::Utf8Value param1(args[1]->ToString());
+    String::Utf8Value param1(args[1]->ToString());
     QString url = QString::fromUtf8(*param1);
 
     bool useFileId = true;
@@ -131,7 +131,7 @@ void MapIoJs::saveMap(const FunctionCallbackInfo<Value>& args)
 
   MapProjector::projectToWgs84(map);
 
-  v8::String::Utf8Value param1(args[1]->ToString());
+  String::Utf8Value param1(args[1]->ToString());
   QString url = QString::fromUtf8(*param1);
 
   OsmMapWriterFactory::getInstance().write(map, url);
