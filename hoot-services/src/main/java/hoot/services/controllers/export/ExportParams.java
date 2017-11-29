@@ -191,6 +191,7 @@ public class ExportParams {
                 ", append=" + append +
                 ", userEmail='" + userEmail + '\'' +
                 ", maxNodeCountPerTile='" + maxNodeCountPerTile + '\'' +
+                ", overrides='" + tagOverrides + '\'' +
                 ", pixelSize='" + pixelSize + '\'' +
                 '}';
     }
