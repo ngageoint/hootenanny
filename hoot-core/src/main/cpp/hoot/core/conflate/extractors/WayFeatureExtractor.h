@@ -48,7 +48,9 @@ class WayFeatureExtractor : public FeatureExtractorBase, public ValueAggregatorC
 public:
   static std::string className() { return "hoot::WayFeatureExtractor"; }
 
-  WayFeatureExtractor(ValueAggregator* agg = 0);
+  WayFeatureExtractor(ValueAggregatorPtr agg);
+
+  WayFeatureExtractor();
 
   virtual double extract(const OsmMap& map, const boost::shared_ptr<const Element>& target,
     const boost::shared_ptr<const Element>& candidate) const;

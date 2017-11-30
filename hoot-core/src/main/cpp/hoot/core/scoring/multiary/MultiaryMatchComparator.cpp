@@ -702,10 +702,10 @@ void MultiaryMatchComparator::_setElementWrongCount(const ConstOsmMapPtr& map,
 {
   _elementWrongCounts[elementType] =
     (int)FilteredVisitor::getStat(
-      new ChainCriterion(
-        new ElementTypeCriterion(elementType),
-        new TagKeyCriterion(MetadataTags::HootWrong())),
-      new ElementCountVisitor(),
+      ElementCriterionPtr(new ChainCriterion(
+      ElementCriterionPtr(new ElementTypeCriterion(elementType)),
+      ElementCriterionPtr(new TagKeyCriterion(MetadataTags::HootWrong())))),
+      ConstElementVisitorPtr(new ElementCountVisitor()),
       map);
 }
 

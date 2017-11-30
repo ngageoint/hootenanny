@@ -94,7 +94,7 @@ void SparkJsonWriter::open(QString fileName)
 
 void SparkJsonWriter::writePartial(const ConstNodePtr& n)
 {
-  NodePtr copy(dynamic_cast<Node*>(n->clone()));
+  NodePtr copy = n->cloneSp();
   _addExportTagsVisitor.visit(copy);
   Envelope e = _bounds->calculateSearchBounds(OsmMapPtr(), copy);
 

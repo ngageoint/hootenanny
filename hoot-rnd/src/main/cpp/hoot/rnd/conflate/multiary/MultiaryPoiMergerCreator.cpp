@@ -58,10 +58,9 @@ bool MultiaryPoiMergerCreator::createMergers(const MatchSet& matches, std::vecto
     eids.insert(s.begin(), s.end());
   }
 
-  MultiaryPoiMerger* pm = new MultiaryPoiMerger(eids);
   if (eids.size() >= 1)
   {
-    mergers.push_back(pm);
+    mergers.push_back(new MultiaryPoiMerger(eids));
     result = true;
   }
 
