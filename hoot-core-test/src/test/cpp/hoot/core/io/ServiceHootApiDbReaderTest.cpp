@@ -378,7 +378,7 @@ public:
     member = relationMembers.at(1);
     HOOT_STR_EQUALS("w1", member.role);
     CPPUNIT_ASSERT_EQUAL((long)1, member.getElementId().getId());
-    CPPUNIT_ASSERT_EQUAL(3, relation->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(2, relation->getTags().size());
     HOOT_STR_EQUALS("r1", relation->getTags().get("note"));
     CPPUNIT_ASSERT_EQUAL((long)1, relation->getVersion());
     CPPUNIT_ASSERT(relation->getTimestamp() != ElementData::TIMESTAMP_EMPTY);
@@ -584,7 +584,7 @@ public:
     member = relation->getMembers().at(1);
     HOOT_STR_EQUALS("w1", member.role);
     CPPUNIT_ASSERT_EQUAL((long)1, member.getElementId().getId());
-    CPPUNIT_ASSERT_EQUAL(3, relation->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(2, relation->getTags().size());
     HOOT_STR_EQUALS("r1", relation->getTags().get("note"));
     HOOT_STR_EQUALS("1", relation->getTags().get(MetadataTags::HootId()));
 

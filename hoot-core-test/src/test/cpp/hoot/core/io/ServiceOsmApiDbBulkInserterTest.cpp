@@ -117,7 +117,7 @@ public:
       (long)1,
       DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationsTableName()));
     CPPUNIT_ASSERT_EQUAL(
-      (long)2,
+      (long)3,
       DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationTagsTableName()));
     CPPUNIT_ASSERT_EQUAL(
       (long)2,
@@ -185,7 +185,7 @@ public:
       (long)1,
       DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationsTableName()));
     CPPUNIT_ASSERT_EQUAL(
-      (long)2,
+      (long)3,
       DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationTagsTableName()));
     CPPUNIT_ASSERT_EQUAL(
       (long)2,
@@ -253,7 +253,7 @@ public:
       (long)1,
       DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationsTableName()));
     CPPUNIT_ASSERT_EQUAL(
-      (long)2,
+      (long)3,
       DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationTagsTableName()));
     CPPUNIT_ASSERT_EQUAL(
       (long)2,
@@ -321,7 +321,7 @@ public:
       (long)1,
       DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationsTableName()));
     CPPUNIT_ASSERT_EQUAL(
-      (long)2,
+      (long)3,
       DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationTagsTableName()));
     CPPUNIT_ASSERT_EQUAL(
       (long)2,
@@ -389,7 +389,7 @@ public:
       (long)2,
       DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationsTableName()));
     CPPUNIT_ASSERT_EQUAL(
-      (long)3,
+      (long)4,
       DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationTagsTableName()));
     CPPUNIT_ASSERT_EQUAL(
       (long)4,
