@@ -200,8 +200,8 @@ boost::shared_ptr<Geometry> MultiPolygonCreator::createMultipolygon() const
         (e.role == MetadataTags::RoleOuter() || e.role == MetadataTags::RolePart()))
     {
       ConstRelationPtr r = _provider->getRelation(e.getElementId().getId());
-      if (r->isMultiPolygon() ||
-        OsmSchema::getInstance().isArea(r->getTags(), ElementType::Relation))
+      if (r && (r->isMultiPolygon() ||
+        OsmSchema::getInstance().isArea(r->getTags(), ElementType::Relation)))
       {
         boost::shared_ptr<Geometry> child(MultiPolygonCreator(_provider, r).createMultipolygon());
         try
