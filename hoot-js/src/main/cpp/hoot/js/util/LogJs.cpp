@@ -55,6 +55,7 @@ LogJs::~LogJs() {}
 void LogJs::Init(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
+  HandleScope scope(current);
   Handle<Object> log = Object::New(current);
   exports->Set(String::NewFromUtf8(current, "Log"), log);
   log->Set(String::NewFromUtf8(current, "setLogLevel"), FunctionTemplate::New(current, setLogLevel)->GetFunction());

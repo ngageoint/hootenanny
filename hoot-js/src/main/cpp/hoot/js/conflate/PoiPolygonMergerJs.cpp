@@ -55,6 +55,7 @@ PoiPolygonMergerJs::~PoiPolygonMergerJs()
 void PoiPolygonMergerJs::Init(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
+  HandleScope scope(current);
   exports->Set(String::NewFromUtf8(current, "poiPolyMerge"),
                FunctionTemplate::New(current, jsPoiPolyMerge)->GetFunction());
 }

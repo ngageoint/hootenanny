@@ -87,6 +87,7 @@ void NodeJs::getY(const FunctionCallbackInfo<Value>& args)
 void NodeJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();
+  HandleScope scope(current);
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
   tpl->SetClassName(String::NewFromUtf8(current, Node::className().data()));

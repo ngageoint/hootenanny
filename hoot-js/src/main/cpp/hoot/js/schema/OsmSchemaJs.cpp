@@ -48,6 +48,7 @@ OsmSchemaJs::~OsmSchemaJs() {}
 void OsmSchemaJs::Init(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
+  HandleScope scope(current);
   Handle<Object> schema = Object::New(current);
   exports->Set(String::NewFromUtf8(current, "OsmSchema"), schema);
   schema->Set(String::NewFromUtf8(current, "getAllTags"),

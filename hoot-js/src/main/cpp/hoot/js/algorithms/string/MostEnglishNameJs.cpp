@@ -60,6 +60,7 @@ MostEnglishNameJs::~MostEnglishNameJs()
 void MostEnglishNameJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();
+  HandleScope scope(current);
   QString name = QString::fromStdString(MostEnglishName::className()).replace("hoot::", "");
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);

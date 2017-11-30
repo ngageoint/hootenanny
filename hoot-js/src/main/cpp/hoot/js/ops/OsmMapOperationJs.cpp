@@ -109,6 +109,7 @@ void OsmMapOperationJs::applyAndGetResult(const FunctionCallbackInfo<Value>& arg
 void OsmMapOperationJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();
+  HandleScope scope(current);
   vector<string> opNames =
     Factory::getInstance().getObjectNamesByBase(OsmMapOperation::className());
 

@@ -53,6 +53,7 @@ HOOT_JS_REGISTER(ElementVisitorJs)
 void ElementVisitorJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();
+  HandleScope scope(current);
   vector<string> opNames =
     Factory::getInstance().getObjectNamesByBase(ConstElementVisitor::className());
 

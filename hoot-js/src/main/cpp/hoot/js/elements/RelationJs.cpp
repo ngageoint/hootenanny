@@ -68,6 +68,7 @@ RelationJs::~RelationJs()
 void RelationJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();
+  HandleScope scope(current);
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
   tpl->SetClassName(String::NewFromUtf8(current, Relation::className().data()));

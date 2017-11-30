@@ -51,6 +51,7 @@ HOOT_JS_REGISTER(MapIoJs)
 void MapIoJs::Init(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
+  HandleScope scope(current);
   exports->Set(String::NewFromUtf8(current, "loadMap"),
                FunctionTemplate::New(current, loadMap)->GetFunction());
   exports->Set(String::NewFromUtf8(current, "loadMapFromString"),

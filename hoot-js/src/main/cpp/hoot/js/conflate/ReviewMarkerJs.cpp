@@ -53,6 +53,7 @@ ReviewMarkerJs::~ReviewMarkerJs() {}
 void ReviewMarkerJs::Init(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
+  HandleScope scope(current);
   Handle<Object> reviewMarker = Object::New(current);
   exports->Set(String::NewFromUtf8(current, "ReviewMarker"), reviewMarker);
   reviewMarker->Set(String::NewFromUtf8(current, "mark"),

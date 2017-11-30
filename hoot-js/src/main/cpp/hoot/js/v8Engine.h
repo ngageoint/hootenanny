@@ -57,9 +57,13 @@ public:
 
   static v8::Local<v8::Context> getContext() { return ToLocal(getInstance()._context.get()); }
 
+  static void setPlatformInit(bool needsPlatform = true) { _needPlatform = needsPlatform; }
+
 private:
   /** static pointer to the singleton instance */
   static std::auto_ptr<v8Engine> _theInstance;
+  /** static flag for platform initialization */
+  static bool _needPlatform;
 
   /**
    * @brief v8Engine - private constructor
@@ -72,6 +76,7 @@ private:
   v8::Isolate* _isolate;
   /** Platform object */
   boost::shared_ptr<v8::Platform> _platform;
+  boost::shared_ptr<v8::Locker> _locker;
   /** Main context */
   boost::shared_ptr<v8::Persistent<v8::Context> > _context;
 

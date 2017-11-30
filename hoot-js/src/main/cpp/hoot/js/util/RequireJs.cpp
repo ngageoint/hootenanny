@@ -55,6 +55,7 @@ RequireJs::~RequireJs() {}
 void RequireJs::Init(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
+  HandleScope scope(current);
   exports->Set(String::NewFromUtf8(current, "require"),
                FunctionTemplate::New(current, jsRequire)->GetFunction());
 }

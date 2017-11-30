@@ -66,6 +66,7 @@ IdGeneratorJs::~IdGeneratorJs()
 void IdGeneratorJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();
+  HandleScope scope(current);
   vector<string> opNames =
     Factory::getInstance().getObjectNamesByBase(IdGenerator::className());
 
@@ -81,8 +82,7 @@ void IdGeneratorJs::Init(Handle<Object> target)
     tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
                                   String::NewFromUtf8(current, IdGenerator::className().data()));
 
-    Persistent<Function> constructor(current, tpl->GetFunction());
-    target->Set(String::NewFromUtf8(current, n), ToLocal(&constructor));
+    target->Set(String::NewFromUtf8(current, n), tpl->GetFunction());
   }
 }
 

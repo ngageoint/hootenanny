@@ -66,13 +66,12 @@ void JsRegistrar::Init(Handle<Object> exports)
 void JsRegistrar::initAll(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
+  HandleScope scope(current);
   exports->Set(String::NewFromUtf8(current, "hello"),
       FunctionTemplate::New(current, Method)->GetFunction());
 
   for (size_t i = 0; i < _initializers.size(); i++)
-  {
     _initializers[i]->Init(exports);
-  }
 }
 
 void JsRegistrar::registerInitializer(boost::shared_ptr<ClassInitializer> ci)

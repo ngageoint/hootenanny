@@ -47,6 +47,7 @@ TagMergerFactoryJs::~TagMergerFactoryJs() {}
 void TagMergerFactoryJs::Init(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
+  HandleScope scope(current);
   Handle<Object> tagMergerFactory = Object::New(current);
   exports->Set(String::NewFromUtf8(current, "TagMergerFactory"), tagMergerFactory);
   tagMergerFactory->Set(String::NewFromUtf8(current, "mergeTags"),

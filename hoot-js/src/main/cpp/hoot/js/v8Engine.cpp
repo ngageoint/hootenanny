@@ -34,13 +34,18 @@ namespace hoot
 
 auto_ptr<v8Engine> v8Engine::_theInstance;
 
+bool v8Engine::_needPlatform = false;
+
 v8Engine::v8Engine()
 {
   V8::InitializeICUDefaultLocation(NULL);
   V8::InitializeExternalStartupData(NULL);
   //  Setup and initialize the platform
-  _platform.reset(platform::CreateDefaultPlatform());
-  V8::InitializePlatform(_platform.get());
+  if (v8Engine::_needPlatform)
+  {
+    _platform.reset(platform::CreateDefaultPlatform());
+    V8::InitializePlatform(_platform.get());
+  }
   //  Initialize v8
   V8::Initialize();
   //  Create the main isolate
@@ -50,6 +55,7 @@ v8Engine::v8Engine()
   _isolate = Isolate::New(params);
   _isolate->Enter();
   //  Create the main context
+  _locker.reset(new Locker(_isolate));
   HandleScope handleScope(_isolate);
   Local<Context> context = Context::New(_isolate);
   context->Enter();
@@ -59,6 +65,7 @@ v8Engine::v8Engine()
 
 v8Engine::~v8Engine()
 {
+  _locker.reset();
   _isolate->Exit();
   //  Dispose of the v8 subsystem
   _isolate->Dispose();

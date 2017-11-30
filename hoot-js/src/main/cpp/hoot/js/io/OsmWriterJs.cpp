@@ -48,6 +48,7 @@ OsmWriterJs::~OsmWriterJs() {}
 void OsmWriterJs::Init(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
+  HandleScope scope(current);
   Handle<Object> writer = Object::New(current);
   exports->Set(String::NewFromUtf8(current, "OsmWriter"), writer);
   writer->Set(String::NewFromUtf8(current, "toString"),

@@ -87,6 +87,7 @@ void ElementCriterionJs::addCriterion(const FunctionCallbackInfo<Value>& args)
 void ElementCriterionJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();
+  HandleScope scope(current);
   vector<string> opNames =
     Factory::getInstance().getObjectNamesByBase(ElementCriterion::className());
 

@@ -55,6 +55,7 @@ int main(int argc, char *argv[])
 {
   Hoot::getInstance().init();
 
+  v8Engine::setPlatformInit();
   v8Engine::getInstance().init();
 
   QCoreApplication app(argc, argv);

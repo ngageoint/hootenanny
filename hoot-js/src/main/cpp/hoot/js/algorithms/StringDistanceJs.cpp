@@ -59,6 +59,7 @@ StringDistanceJs::~StringDistanceJs()
 void StringDistanceJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();
+  HandleScope scope(current);
   vector<string> opNames =
     Factory::getInstance().getObjectNamesByBase(StringDistance::className());
 

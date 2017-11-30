@@ -49,6 +49,7 @@ PrintJs::~PrintJs() {}
 void PrintJs::Init(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
+  HandleScope scope(current);
   exports->Set(String::NewFromUtf8(current, "print"),
                FunctionTemplate::New(current, jsPrint)->GetFunction());
 }

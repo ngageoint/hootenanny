@@ -46,6 +46,7 @@ MatchFactoryJs::~MatchFactoryJs() {}
 void MatchFactoryJs::Init(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
+  HandleScope scope(current);
   Handle<Object> schema = Object::New(current);
   exports->Set(String::NewFromUtf8(current, "MatchFactory"), schema);
   schema->Set(String::NewFromUtf8(current, "getAllAvailableCreators"),

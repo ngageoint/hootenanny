@@ -65,7 +65,8 @@ ElementJs::~ElementJs()
 
 void ElementJs::_addBaseFunctions(Local<FunctionTemplate> tpl)
 {
-  Isolate* current = v8Engine::getIsolate();
+  Isolate* current = v8::Isolate::GetCurrent();
+  HandleScope scope(current);
   tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
       String::NewFromUtf8(current, Element::className().data()));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getCircularError"),

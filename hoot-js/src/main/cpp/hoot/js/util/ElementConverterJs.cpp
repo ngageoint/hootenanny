@@ -53,6 +53,7 @@ ElementConverterJs::~ElementConverterJs() {}
 void ElementConverterJs::Init(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
+  HandleScope scope(current);
   Handle<Object> thisObj = Object::New(current);
   exports->Set(String::NewFromUtf8(current, "ElementConverter"), thisObj);
   thisObj->Set(String::NewFromUtf8(current, "calculateLength"),

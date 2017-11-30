@@ -51,6 +51,7 @@ UuidHelperJs::~UuidHelperJs() {}
 void UuidHelperJs::Init(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
+  HandleScope scope(current);
   Handle<Object> helpUuid = Object::New(current);
   exports->Set(String::NewFromUtf8(current, "UuidHelper"), helpUuid);
   helpUuid->Set(String::NewFromUtf8(current, "createUuid"),
