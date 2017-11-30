@@ -138,8 +138,6 @@ sudo yum -y install \
     xorg-x11-server-Xvfb \
     zip \
 
-
-
 # Fix missing qmake
 if ! hash qmake >/dev/null 2>&1 ; then
     if hash qmake-qt4 >/dev/null 2>&1 ; then
@@ -155,7 +153,6 @@ cd $HOOT_HOME
 cp LocalConfig.pri.orig LocalConfig.pri
 echo "QMAKE_CXXFLAGS += -std=c++11" >> LocalConfig.pri
 #####
-
 
 echo "### Configuring environment..."
 
@@ -208,14 +205,12 @@ if ! grep --quiet "psql-" ~/.bash_profile; then
     source ~/.bash_profile
 fi
 
-
 if ! mocha --version &>/dev/null; then
     echo "### Installing mocha for plugins test..."
     sudo npm install --silent -g mocha@3.5.3
     # Clean up after the npm install
     sudo rm -rf ~/tmp
 fi
-
 
 echo "### Configuring Postgres..."
 cd /tmp # Stop postgres "could not change directory to" warnings
