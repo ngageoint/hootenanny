@@ -730,6 +730,7 @@ public class MapResource {
                         .execute();
 
                 logger.debug("Renamed map with id {} {}...", mapId, modName);
+                updateLastAccessed(Long.valueOf(mapId));
             }
             else if (inputType.toLowerCase(Locale.ENGLISH).equals("folder")) {
                 createQuery().update(folders)
@@ -739,7 +740,6 @@ public class MapResource {
 
                 logger.debug("Renamed folder with id {} {}...", mapId, modName);
             }
-            updateLastAccessed(Long.valueOf(mapId));
         }
         catch (Exception e) {
             handleError(e, null, null);
