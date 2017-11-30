@@ -60,6 +60,10 @@ protected:
 
   std::vector< boost::shared_ptr<ElementCriterion> > _filters;
 
+private:
+
+  friend class RemoveRef2VisitorMultipleCriterion;
+
 };
 
 }

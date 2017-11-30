@@ -8,7 +8,7 @@ Percentage of Total Features Conflatable	100	100	0
 Untagged Feature Count	0	0	0	
 Total Unconflatable Features	0	0	0	
 Percentage of Total Features Unconflatable	0	0	0	
-Number of Match Creators	5	5	5	
+Number of Match Creators	6	6	6	
 Features Conflatable by: hoot::BuildingMatchCreator	10	8	0	
 Polygons Conflatable by: hoot::PoiPolygonMatchCreator	10	8	0	
 POIs Conflatable by: hoot::PoiPolygonMatchCreator	0	0	0	
@@ -75,7 +75,8 @@ Unmatched Polygons	10	8	7
 Percentage of Polygons Conflated	0	0	41.66666666666667	
 Percentage of Polygons Marked for Review	0	0	0	
 Percentage of Unmatched Polygons	100	100	58.33333333333334	
+Features Conflatable by: hoot::ScriptMatchCreator,Area.js			0	
 Difference Between Total Features in Output and Total Features in Inputs			-4	
 Percentage Difference Between Total Features in Output and Total Features in Inputs			-22.22222222222222	
 
-19:20:55.799 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 251) Conflation job completed.
+20:11:34.013 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 252) Conflation job completed.

@@ -50,48 +50,44 @@
 // *
 // * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
 // */
-//#ifndef REMOVEREF2VISITORMULTIPLECRITERION_H
-//#define REMOVEREF2VISITORMULTIPLECRITERION_H
+#ifndef REMOVEREF2VISITORMULTIPLECRITERION_H
+#define REMOVEREF2VISITORMULTIPLECRITERION_H
 
-//This is disabled for now.  May be needed later for area to area conflation.  See #1174.
+#include "RemoveRef2Visitor.h"
 
-//// hoot
+namespace hoot
+{
 
-//#include "RemoveRef2Visitor.h"
+/**
+ * If one specified criterion meets for REF1 and another for REF2 elements, then the REF2 tag is
+ * removed.
+ *
+ * This class is re-entrant, but not thread safe.
+ */
+class RemoveRef2VisitorMultipleCriterion : public RemoveRef2Visitor
+{
 
-//namespace hoot
-//{
+public:
 
-///**
-// * If one specified criterion meets for REF1 and another for REF2 elements, then the REF2 tag is
-// * removed.
-// *
-// * This class is re-entrant, but not thread safe.
-// */
-//class RemoveRef2VisitorMultipleCriterion : public RemoveRef2Visitor
-//{
+  static std::string className() { return "hoot::RemoveRef2VisitorMultipleCriterion"; }
 
-//public:
+  RemoveRef2VisitorMultipleCriterion();
+  virtual ~RemoveRef2VisitorMultipleCriterion() {}
 
-//  static std::string className() { return "hoot::RemoveRef2VisitorMultipleCriterion"; }
+  virtual void addCriterion(const ElementCriterionPtr& e);
 
-//  RemoveRef2VisitorMultipleCriterion();
-//  virtual ~RemoveRef2VisitorMultipleCriterion() {}
+  virtual void visit(const ConstElementPtr& e);
 
-//  virtual void addCriterion(const ElementCriterionPtr& e);
+  virtual bool ref1CriterionSatisfied(const ConstElementPtr& e) const;
+  virtual bool ref2CriterionSatisfied(const ConstElementPtr& e) const;
 
-//  virtual void visit(const ConstElementPtr& e);
+private:
 
-//  virtual bool ref1CriterionSatisfied(const ConstElementPtr& e) const;
-//  virtual bool ref2CriterionSatisfied(const ConstElementPtr& e) const;
+  ElementCriterionPtr _ref1Criterion;
+  ElementCriterionPtr _ref2Criterion;
 
-//private:
+};
 
-//  ElementCriterionPtr _ref1Criterion;
-//  ElementCriterionPtr _ref2Criterion;
+}
 
-//};
-
-//}
-
-//#endif // REMOVEREF2VISITORMULTIPLECRITERION_H
+#endif // REMOVEREF2VISITORMULTIPLECRITERION_H
