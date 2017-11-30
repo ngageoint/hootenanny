@@ -108,7 +108,7 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
             try {
                 start = LocalDateTime.now();
 
-                logger.debug("Command {} started at: [{}]", obfuscatedCommand, start);
+                logger.info("Command {} started at: [{}]", obfuscatedCommand, start);
 
                 exitCode = executor.execute(cmdLine);
             }
