@@ -50,6 +50,7 @@ class OsmXmlReaderTest : public CppUnit::TestFixture
     CPPUNIT_TEST(runTest);
     CPPUNIT_TEST(runUseIdTest);
     CPPUNIT_TEST(runUseStatusTest);
+    CPPUNIT_TEST(runUncompressTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -136,6 +137,36 @@ public:
 
         OsmXmlWriter writer;
         writer.write(map, "output.osm");
+    }
+
+    void runUncompressTest()
+    {
+      const std::string cmd("gzip -c test-files/ToyTestA.osm > test-files/ToyTestA_compressed.osm.gz");
+      LOG_DEBUG("Running compress command: " << cmd);
+
+      int retVal;
+      if ((retVal = std::system(cmd.c_str())) != 0)
+      {
+        QString error = QString("Error %1 returned from compress command: %2").arg(retVal).
+          arg(QString::fromStdString(cmd));
+        throw HootException(error);
+      }
+
+      OsmXmlReader uut;
+      OsmMap::resetCounters();
+      OsmMapPtr map(new OsmMap());
+      uut.setUseDataSourceIds(true);
+
+      // Excercise the code
+      uut.read("test-files/ToyTestA_compressed.osm.gz", map);
+
+      // Checka a few things
+      CPPUNIT_ASSERT_EQUAL(36,(int)map->getNodes().size());
+      CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
+
+      QFile f("test-files/ToyTestA_compressed.osm.gz");
+      CPPUNIT_ASSERT(f.exists());
+      CPPUNIT_ASSERT(f.remove());
     }
 };
 
