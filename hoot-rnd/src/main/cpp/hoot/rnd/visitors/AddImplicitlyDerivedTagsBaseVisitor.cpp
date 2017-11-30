@@ -43,6 +43,7 @@ namespace hoot
 AddImplicitlyDerivedTagsBaseVisitor::AddImplicitlyDerivedTagsBaseVisitor() :
 _allowTaggingSpecificPois(ConfigOptions().getPoiImplicitTagRulesAllowTaggingSpecificPois()),
 _allowTaggingGenericPois(ConfigOptions().getPoiImplicitTagRulesAllowTaggingGenericPois()),
+_elementIsASpecificPoi(false),
 _tokenizeNames(ConfigOptions().getPoiImplicitTagRulesTokenizeNames()),
 _numNodesModified(0),
 _numTagsAdded(0),
@@ -60,6 +61,7 @@ _largestNumberOfTagsAdded(0)
 AddImplicitlyDerivedTagsBaseVisitor::AddImplicitlyDerivedTagsBaseVisitor(const QString databasePath) :
 _allowTaggingSpecificPois(ConfigOptions().getPoiImplicitTagRulesAllowTaggingSpecificPois()),
 _allowTaggingGenericPois(ConfigOptions().getPoiImplicitTagRulesAllowTaggingGenericPois()),
+_elementIsASpecificPoi(false),
 _tokenizeNames(ConfigOptions().getPoiImplicitTagRulesTokenizeNames()),
 _numNodesModified(0),
 _numTagsAdded(0),
@@ -242,6 +244,7 @@ void AddImplicitlyDerivedTagsBaseVisitor::visit(const ElementPtr& e)
         Tags updatedTags;
         bool tagsAdded = false;
         //TODO: check tag include list
+        LOG_VART(_elementIsASpecificPoi);
         for (Tags::const_iterator tagItr = ruleFilteredTags.begin();
              tagItr != ruleFilteredTags.end(); ++tagItr)
         {
@@ -282,7 +285,8 @@ void AddImplicitlyDerivedTagsBaseVisitor::visit(const ElementPtr& e)
               updatedTags.appendValue(elementTagKey, elementTagValue);
             }
           }
-          else
+          //TODO: Silver Avenue clinic - but increases wrong ways in C
+          else if (!_elementIsASpecificPoi)
           {
             LOG_TRACE("Input feature does not contain tag: " <<
                       implicitTagKey % "=" % implicitTagValue << ", so adding it...");
