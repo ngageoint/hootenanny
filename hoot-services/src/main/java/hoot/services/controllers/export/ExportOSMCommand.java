@@ -37,6 +37,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import hoot.services.HootProperties;
+
 
 class ExportOSMCommand extends ExportCommand {
     private static final Logger logger = LoggerFactory.getLogger(ExportOSMCommand.class);
@@ -52,7 +54,7 @@ class ExportOSMCommand extends ExportCommand {
 
             options.add("convert.ops=hoot::TranslationOp");
 
-            File trans = new File(new File(HOME_FOLDER, "translations"),"OSM_Ingest.js");
+            File trans = new File(new File(HootProperties.HOME_FOLDER, "translations"),"OSM_Ingest.js");
             options.add("translation.script=" + trans.getAbsolutePath());
 
             options.add("translation.override=" + params.getTagOverrides() );

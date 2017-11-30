@@ -114,7 +114,7 @@ public class ExportParams {
     }
 
     public String getTagOverrides() {
-        return tagOverrides;
+        return (this.tagOverrides == null) ? "" : tagOverrides;
     }
 
     public void setTagOverrides(String tagOverrides) {
