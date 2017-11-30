@@ -489,7 +489,7 @@ void HootApiDbBulkInserter::writePartial(const ConstRelationPtr& relation)
     _idMappings.relationIdMap.reset(new Tgs::BigMap<long, unsigned long>(_stxxlMapMinSize));
   }
 
-  // Do we already know about this node?
+  //  Do we already know about this node?
   if (_validateData && _idMappings.relationIdMap->contains(relation->getId()))
   {
     throw NotImplementedException("Writer class does not support update operations");
@@ -498,17 +498,17 @@ void HootApiDbBulkInserter::writePartial(const ConstRelationPtr& relation)
   const unsigned long relationDbId = _establishIdMapping(relation->getElementId());
   LOG_VART(ElementId(ElementType::Relation, relationDbId));
 
+  Tags tags = relation->getTags();
+  //  keep the hoot:id tag in sync with what could be a newly assigned id
   if (_includeDebugTags)
-  {
-    Tags tags = relation->getTags();
-    //keep the hoot:id tag in sync with what could be a newly assigned id
     tags.set(MetadataTags::HootId(), QString::number(relationDbId));
-  }
+  if (relation->getType() != "")
+    tags["type"] = relation->getType();
 
-  //increment the changeset counter before writing the element in order to stay in sync with
-  //HootApiDb
+  //  increment the changeset counter before writing the element in order to stay in sync with
+  //  HootApiDb
   _incrementChangesInChangeset();
-  _writeRelation(relationDbId, relation->getTags());
+  _writeRelation(relationDbId, tags);
   _writeRelationMembers(relation, relationDbId);
   _writeStats.relationsWritten++;
   _writeStats.relationTagsWritten += relation->getTags().size();
