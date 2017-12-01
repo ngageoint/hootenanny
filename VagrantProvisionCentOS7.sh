@@ -2,9 +2,14 @@
 
 set -e
 
-#################################################
-# VERY IMPORTANT: CHANGE THIS TO POINT TO WHERE YOU PUT HOOT
-HOOT_HOME=~/hoot
+###################################################
+# VERY IMPORTANT: Set the $HOOT_HOME environment  #
+# variable prior to running this script if ~/hoot #
+# isn't the correct location for HOOT_HOME        #
+###################################################
+if [ -z "$HOOT_HOME" ]; then
+    HOOT_HOME=~/hoot
+fi
 echo HOOT_HOME: $HOOT_HOME
 #################################################
 
@@ -133,7 +138,6 @@ sudo yum -y install \
     xorg-x11-server-Xvfb \
     zip \
 
-
 # Fix missing qmake
 if ! hash qmake >/dev/null 2>&1 ; then
     if hash qmake-qt4 >/dev/null 2>&1 ; then
@@ -150,7 +154,6 @@ cp LocalConfig.pri.orig LocalConfig.pri
 echo "QMAKE_CXXFLAGS += -std=c++11" >> LocalConfig.pri
 #####
 
-
 echo "### Configuring environment..."
 
 # Configure https alternative mirror for maven install, this can likely be removed once
@@ -159,7 +162,7 @@ sudo /usr/bin/perl $HOOT_HOME/scripts/maven/SetMavenHttps.pl
 
 if ! grep --quiet "export HOOT_HOME" ~/.bash_profile; then
     echo "Adding hoot home to profile..."
-    echo "export HOOT_HOME=~/hoot" >> ~/.bash_profile
+    echo "export HOOT_HOME=$HOOT_HOME" >> ~/.bash_profile
     echo "export PATH=\$PATH:\$HOOT_HOME/bin" >> ~/.bash_profile
     source ~/.bash_profile
 fi
@@ -321,6 +324,8 @@ cd ~
 ##### These two are next to do.
 echo "### Installing node-mapnik-server..."
 sudo cp $HOOT_HOME/node-mapnik-server/systemd/node-mapnik.service /etc/systemd/system/node-mapnik.service
+sudo sed -i "s|SERVICE_USER|$VMUSER|g" /etc/systemd/system/node-mapnik.service
+sudo sed -i "s|HOOT_HOME|$HOOT_HOME|g" /etc/systemd/system/node-mapnik.service
 # Make sure all npm modules are installed
 cd $HOOT_HOME/node-mapnik-server
 npm install --silent
@@ -329,6 +334,8 @@ rm -rf ~/tmp
 
 echo "### Installing node-export-server..."
 sudo cp $HOOT_HOME/node-export-server/systemd/node-export.service /etc/systemd/system/node-export.service
+sudo sed -i "s|SERVICE_USER|$VMUSER|g" /etc/systemd/system/node-export.service
+sudo sed -i "s|HOOT_HOME|$HOOT_HOME|g" /etc/systemd/system/node-export.service
 # Make sure all npm modules are installed
 cd $HOOT_HOME/node-export-server
 npm install --silent

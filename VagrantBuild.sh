@@ -11,11 +11,12 @@ else # Centos
   source ~/.bash_profile
 fi
 
-HOOT_HOME=~/hoot
+if [ -z "$HOOT_HOME" ]; then
+    HOOT_HOME=~/hoot
+fi
 echo HOOT_HOME: $HOOT_HOME
 
 cd $HOOT_HOME
-#cd hoot
 source ./SetupEnv.sh
 
 echo "### Configuring Hoot..."
@@ -37,18 +38,11 @@ if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
 fi
 
 echo "Building Hoot... "
-echo "Will take several extra minutes to build the training data the initial time Hootenanny is installed only."
 make -s clean && make -sj$(nproc)
 
-# Waiting until Tomcat8 is installed
 # vagrant will auto start the tomcat service for us, so just copy the web app files w/o manipulating the server
-TOMCAT_USER=tomcat8
-VMUSER=`id -u -n`
-if [ "$VMUSER" = 'vagrant' ]
-then
-  TOMCAT_USER=$VMUSER
-fi
-sudo -u $TOMCAT_USER  scripts/tomcat/CopyWebAppsToTomcat.sh #&> /dev/null
+# Copy the web apps, no need to use sudo
+./scripts/tomcat/CopyWebAppsToTomcat.sh
 
 # docs build is always failing the first time during the npm install portion for an unknown reason, but then
 # always passes the second time its run...needs fixed, but this is the workaround for now
