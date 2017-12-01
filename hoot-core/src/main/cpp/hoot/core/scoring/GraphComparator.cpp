@@ -240,7 +240,10 @@ double GraphComparator::compareMaps()
 
     if (Log::getInstance().isInfoEnabled())
     {
-      cout << i << " / " << _iterations << " mean: " << _mean << "   \r";
+      cout << i << " / " << _iterations << " mean: ";
+      if (!std::isnan(_mean))
+        cout << _mean;
+      cout << "   \r";
       cout.flush();
     }
     //qDebug() << _median << 1 - error << _mean << "+/-" << _ci << "sd: " << _s;

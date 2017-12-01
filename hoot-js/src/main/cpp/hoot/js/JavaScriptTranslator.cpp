@@ -846,8 +846,10 @@ QVariantList JavaScriptTranslator::_translateToOgrVariants(Tags& tags,
 {
   _tags = &tags;
 
-  Isolate* current = v8Engine::getIsolate();
+  Isolate* current = Isolate::GetCurrent();
   HandleScope handleScope(current);
+  Local<Context> context = _gContext->getContext(current);
+  Context::Scope scope(context);
 
   Handle<Object> v8tags = Object::New(current);
   for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
@@ -889,7 +891,7 @@ QVariantList JavaScriptTranslator::_translateToOgrVariants(Tags& tags,
   }
 
 //  QScriptValue translated = _translateToOgrFunction->call(QScriptValue(), args);
-  Handle<Object> tObj = _gContext->getContext(current)->Global();
+  Handle<Object> tObj = context->Global();
 
   // We assume this exists. we checked during Init.
   Handle<Function> tFunc = Handle<Function>::Cast(tObj->Get(String::NewFromUtf8(current, "translateToOgr")));
@@ -941,8 +943,10 @@ void JavaScriptTranslator::_translateToOsm(Tags& t, const char *layerName, const
 {
   _tags = &t;
 
-  Isolate* current = v8Engine::getIsolate();
+  Isolate* current = Isolate::GetCurrent();
   HandleScope handleScope(current);
+  Local<Context> context = _gContext->getContext(current);
+  Context::Scope scope(context);
 
   Handle<Object> tags = Object::New(current);
   for (Tags::const_iterator it = t.begin(); it != t.end(); ++it)
@@ -955,7 +959,7 @@ void JavaScriptTranslator::_translateToOsm(Tags& t, const char *layerName, const
   args[1] = toV8(layerName);
   args[2] = toV8(geomType);
 
-  Handle<Object> tObj = _gContext->getContext(current)->Global();
+  Handle<Object> tObj = context->Global();
 
   // This has a variable since we don't know if it will be "translateToOsm" or "translateAttributes"
   Handle<Function> tFunc = Handle<Function>::Cast(tObj->Get(toV8(_toOsmFunctionName)));

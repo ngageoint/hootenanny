@@ -145,7 +145,10 @@ double AttributeComparator::compareMaps()
 
     if (Log::getInstance().isInfoEnabled())
     {
-      cout << i << " / " << _iterations << " mean: " << _mean << "   \r";
+      cout << i << " / " << _iterations << " mean: ";
+      if (!std::isnan(_mean))
+        cout << _mean;
+      cout << "   \r";
       cout.flush();
     }
   }
