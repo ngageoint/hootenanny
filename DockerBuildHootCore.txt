@@ -1,0 +1,37 @@
+Build a Very Limited Hootenanny core-only Docker image
+
+TODO:
+* Merge the build and install into the Dockerfile
+* Figure out how to get systemd working in a non-privileged container.
+* Turn on Postgres and the UI
+
+
+* Build a small Centos7 image:
+docker build --rm -t dhoot .
+
+
+* Run the image and mount this directory in it:
+docker run --rm -v $(pwd):/root/hoot -it dhoot
+
+
+* Inside the container:
+cd ~/hoot
+./DockerBuildHootCore.sh
+
+
+* Check that Hoot was installed and the tests run cleanly.
+# NOTE: There is a failure with one of the print tests. I can't figure out
+# what the difference in the test output is but Hoot complains.
+cd /var/lib/hootenanny
+HootTest --slow --diff
+
+
+* Then ctrl-p ctrl-q to get out
+docker commit -m "Hoot for GBDX" <container ID>  <Docker username>/hoot-core
+
+
+* Push the image upto the Docker repo
+docker push <Docker username>/hoot-core
+
+
+* Em Tasol

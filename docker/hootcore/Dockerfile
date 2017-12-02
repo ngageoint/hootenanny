@@ -1,0 +1,15 @@
+FROM centos:centos7.4.1708
+ENV container docker
+ENV LANG en_US.UTF-8
+ENV LC_ALL en_US.UTF-8
+
+RUN yum install -y wget curl sudo python file
+RUN localedef --quiet -c -i en_US -f UTF-8 en_US.UTF-8
+
+RUN rm -f /etc/udev/rules.d/70-persistent-net.rules /var/log/wtmp /var/log/btmp
+RUN rm -rf /tmp/*
+RUN yum clean all
+
+# Add all scripts in the hootcore directory to the root directory of image
+ADD ./docker/hootcore/*.py /
+
