@@ -180,7 +180,6 @@ cp LocalConfig.pri.orig LocalConfig.pri
 echo "QMAKE_CXXFLAGS += -std=c++11" >> LocalConfig.pri
 #####
 
-
 echo "### Configuring environment..."
 
 # Configure https alternative mirror for maven install, this can likely be removed once
