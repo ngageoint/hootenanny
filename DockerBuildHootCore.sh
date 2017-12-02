@@ -31,6 +31,9 @@ echo HOOT_HOME: $HOOT_HOME
 source $HOOT_HOME/VagrantProvisionVars.sh
 source ~/.bash_profile
 
+# Copy the GBDX python scripts to the root dir.
+cp $HOOT_HOME/docker/hootcore/*.py /
+
 # add EPEL repo for extra packages
 echo "### Add epel repo ###"
 yum -y install epel-release
@@ -39,6 +42,7 @@ echo "### Add Hoot repo ###"
 $HOOT_HOME/scripts/hoot-repo/yum-configure.sh
 
 # add the Postgres repo
+# Currently, we are only installing this to keep the Hoot packages happy
 echo "### Add Postgres repo ###"
 rpm -Uvh https://download.postgresql.org/pub/repos/yum/9.5/redhat/rhel-7-x86_64/pgdg-centos95-9.5-3.noarch.rpm  >> CentOS_upgrade.txt 2>&1
 

@@ -7,7 +7,7 @@ TODO:
 
 
 * Build a small Centos7 image:
-docker build --rm -t dhoot .
+docker build --rm -t dhoot ./docker/hootcore/
 
 
 * Run the image and mount this directory in it:
