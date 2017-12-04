@@ -39,8 +39,21 @@ class HootGbdxTask(GbdxTaskInterface):
         hootCmd.append(inputFile)
         hootCmd.append(outputFile)
 
-        # TODO: Add error checking
-        subprocess.call(hootCmd)
+        hootOut = ''
+        # Very basic error checking
+        try:
+            hootOut = subprocess.check_output(hootCmd)
+
+        except subprocess.CalledProcessError, e:
+            self.status = 'failed'
+            self.reason = e.output
+
+        # with "--error" the Hoot command shoud not have any output. If it does then
+        # it is an error.
+        if len(hootOut) > 0:
+            self.status = 'failed'
+            self.reason = hootOut
+
 
 if __name__ == "__main__":
     with HootGbdxTask() as task:
