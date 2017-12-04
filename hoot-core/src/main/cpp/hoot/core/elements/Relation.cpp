@@ -135,7 +135,13 @@ bool Relation::contains(ElementId eid) const
 
 Envelope* Relation::getEnvelope(const boost::shared_ptr<const ElementProvider> &ep) const
 {
-  Envelope* result = new Envelope();
+  return new Envelope(getEnvelopeInternal(ep));
+}
+
+Envelope Relation::getEnvelopeInternal(const boost::shared_ptr<const ElementProvider> &ep) const
+{
+  Envelope result;
+  result.init();
   const vector<RelationData::Entry>& members = getMembers();
 
   for (size_t i = 0; i < members.size(); i++)
@@ -144,7 +150,7 @@ Envelope* Relation::getEnvelope(const boost::shared_ptr<const ElementProvider> &
     // if any of the elements don't exist then return an empty envelope.
     if (ep->containsElement(m.getElementId()) == false)
     {
-      result->setToNull();
+      result.setToNull();
       return result;
     }
     const boost::shared_ptr<const Element> e = ep->getElement(m.getElementId());
@@ -152,11 +158,11 @@ Envelope* Relation::getEnvelope(const boost::shared_ptr<const ElementProvider> &
 
     if (childEnvelope->isNull())
     {
-      result->setToNull();
+      result.setToNull();
       return result;
     }
 
-    result->expandToInclude(childEnvelope.get());
+    result.expandToInclude(childEnvelope.get());
   }
 
   return result;
