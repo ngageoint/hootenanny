@@ -311,7 +311,7 @@ void OsmGeoJsonReader::_parseGeoJsonWay(const string& id, const pt::ptree& prope
 
   if (_addBboxTag)
   {
-    const Envelope& bounds = *(way->getEnvelope(_map));
+    const Envelope& bounds = way->getEnvelopeInternal(_map);
     way->setTag("hoot:bbox",QString("%1,%2,%3,%4").arg(QString::number(bounds.getMinX(), 'g', 10))
                 .arg(QString::number(bounds.getMinY(), 'g', 10))
                 .arg(QString::number(bounds.getMaxX(), 'g', 10))
