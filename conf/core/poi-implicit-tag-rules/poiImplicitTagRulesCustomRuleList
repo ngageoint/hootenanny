@@ -1,2 +1,6 @@
 # custom rules; tab separated: word	key=value 
 # keep alphabetized
+Jāmi	amenity=place_of_worship
+Şiḩḩī	amenity=clinic
+Şiḩḩīy	amenity=hospital
+petroleumeum	amenity=fuel

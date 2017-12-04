@@ -118,6 +118,8 @@ void AddImplicitlyDerivedTagsBaseVisitor::setConfiguration(const Settings& conf)
   _customRules.setWordIgnoreFile(confOptions.getPoiImplicitTagRulesWordIgnoreFile());
 
   _customRules.init();
+  LOG_VARD(_customRules.getWordIgnoreList());
+  LOG_VARD(_customRules.getCustomRulesList());
   _ruleReader->setCustomRules(_customRules);
 }
 
@@ -140,13 +142,42 @@ void AddImplicitlyDerivedTagsBaseVisitor::visit(const ElementPtr& e)
     bool foundDuplicateMatch = false;
     Tags tagsToAdd;
 
-    const QStringList names = e->getTags().getNames();
+    //TODO: if name:en doesn't exist (or is not the same as name), translate here (?) - also see
+    //tokenize method
+    QStringList names;
+    if (e->getTags().contains("name:en"))
+    {
+      LOG_VART(e->getTags());
+      Tags tagsCopy;
+      for (Tags::const_iterator tagItr = e->getTags().begin();
+           tagItr != e->getTags().end(); ++tagItr)
+      {
+        const QString tagKey = tagItr.key();
+        if (tagKey.contains("name:") && tagKey != QLatin1String("name:en"))
+        {
+        }
+        else if (tagKey == QLatin1String("alt_name") || tagKey == QLatin1String("name"))
+        {
+        }
+        else
+        {
+          tagsCopy.appendValue(tagKey, tagItr.value());
+        }
+      }
+      LOG_VART(tagsCopy);
+      names = tagsCopy.getNames();
+    }
+    else
+    {
+      names = e->getTags().getNames();
+    }
     LOG_VART(names);
     QStringList filteredNames;
     for (int i = 0; i < names.size(); i++)
     {
       const QString name = names.at(i);
-      if (name.length() >= _minWordLength && !_customRules.getWordIgnoreList().contains(name))
+      if (name.length() >= _minWordLength &&
+          !_customRules.getWordIgnoreList().contains(name.toLower()))
       {
         filteredNames.append(name);
       }
@@ -155,34 +186,83 @@ void AddImplicitlyDerivedTagsBaseVisitor::visit(const ElementPtr& e)
 
     if (filteredNames.size() > 0)
     {
+      Tags implicitlyDerivedTags;
       QSet<QString> matchingWords;
       bool wordsInvolvedInMultipleRules = false;
-      //the name phrases take precendence over the tokenized names, so look for tags associated with
-      //them first
-      Tags implicitlyDerivedTags =
-      _ruleReader->getImplicitTags(names.toSet(), matchingWords, wordsInvolvedInMultipleRules);
+
+      //check custom rules first
+      for (int i = 0; i < filteredNames.size(); i++)
+      {
+        const QString word = filteredNames.at(i);
+        const QString tag = _customRules.getCustomRulesList().value(word, "");
+        if (!tag.trimmed().isEmpty())
+        {
+          implicitlyDerivedTags.appendValue(tag);
+          matchingWords.insert(word);
+          LOG_TRACE("Found custom rule for word: " << word << " and tag: " << tag);
+          break;
+        }
+      }
+
+      if (implicitlyDerivedTags.size() == 0)
+      {
+        //the name phrases take precendence over the tokenized names, so look for tags associated with
+        //them first
+        implicitlyDerivedTags =
+          _ruleReader->getImplicitTags(
+            /*names*/filteredNames.toSet(), matchingWords, wordsInvolvedInMultipleRules);
+      }
+
       LOG_VART(implicitlyDerivedTags);
       LOG_VART(matchingWords);
-      LOG_VART(wordsInvolvedInMultipleRules)
+      LOG_VART(wordsInvolvedInMultipleRules);
+
       if (wordsInvolvedInMultipleRules)
       {
         LOG_TRACE(
-          "Found duplicate match for names: " << names << " with matching words: " << matchingWords);
+          "Found duplicate match for names: " << filteredNames << " with matching words: " <<
+          matchingWords);
         foundDuplicateMatch = true;
       }
       else if (implicitlyDerivedTags.size() > 0)
       {
         LOG_TRACE(
-          "Derived implicit tags for names: " << names << " with matching words: " << matchingWords);
+          "Derived implicit tags for names: " << filteredNames << " with matching words: " <<
+            matchingWords);
         tagsToAdd = implicitlyDerivedTags;
       }
+      //TODO: modify this to do 2 and 3 word token groups
       else if (_tokenizeNames)
       {
         //we didn't find any tags for the whole names, so let's look for them with the tokenized name
         //parts
         const QSet<QString> nameTokens = _getNameTokens(e->getTags());
-        implicitlyDerivedTags =
-          _ruleReader->getImplicitTags(nameTokens, matchingWords, wordsInvolvedInMultipleRules);
+
+        //check custom rules first
+        const QStringList nameTokensList = nameTokens.toList();
+        for (int i = 0; i < nameTokensList.size(); i++)
+        {
+          const QString word = nameTokensList.at(i);
+          const QString tag = _customRules.getCustomRulesList().value(word, "");
+          if (!tag.trimmed().isEmpty())
+          {
+            implicitlyDerivedTags.appendValue(tag);
+            matchingWords.insert(word);
+            LOG_DEBUG("Found custom rule for word: " << word << " and tag: " << tag);
+            break;
+          }
+        }
+
+        if (implicitlyDerivedTags.size() == 0)
+        {
+          implicitlyDerivedTags =
+            _ruleReader->getImplicitTags(nameTokens, matchingWords, wordsInvolvedInMultipleRules);
+        }
+
+        LOG_VART(implicitlyDerivedTags);
+        LOG_VART(matchingWords);
+        LOG_VART(wordsInvolvedInMultipleRules);
+
         if (wordsInvolvedInMultipleRules)
         {
           LOG_TRACE(
@@ -200,14 +280,16 @@ void AddImplicitlyDerivedTagsBaseVisitor::visit(const ElementPtr& e)
       }
       LOG_VART(tagsToAdd);
 
+      LOG_VART(foundDuplicateMatch);
       if (foundDuplicateMatch)
       {
         QStringList matchingWordsList = matchingWords.toList();
         qSort(matchingWordsList.begin(), matchingWordsList.end(), caseInsensitiveLessThan);
-        e->getTags().appendValue(
-          "hoot:implicitTags:note",
+        const QString tagValue =
           "No implicit tags added due to finding multiple possible matches for implicit tags: " +
-           matchingWordsList.join(", "));
+          matchingWordsList.join(", ");
+        LOG_VART(tagValue);
+        e->getTags().appendValue("hoot:implicitTags:multipleRules", tagValue);
         _numNodesInvolvedInMultipleRules++;
         if (_numNodesInvolvedInMultipleRules % 10 == 0)
         {
@@ -219,6 +301,7 @@ void AddImplicitlyDerivedTagsBaseVisitor::visit(const ElementPtr& e)
       else if (!tagsToAdd.isEmpty())
       {  
         assert(!matchingWords.isEmpty());
+        LOG_VART(matchingWords);
 
         Tags ruleFilteredTags;
         QMap<QString, QString> rulesToIgnore = _customRules.getRulesIgnoreList();
@@ -240,6 +323,7 @@ void AddImplicitlyDerivedTagsBaseVisitor::visit(const ElementPtr& e)
             }
           }
         }
+        LOG_VART(ruleFilteredTags);
 
         Tags updatedTags;
         bool tagsAdded = false;
@@ -294,6 +378,7 @@ void AddImplicitlyDerivedTagsBaseVisitor::visit(const ElementPtr& e)
             tagsAdded = true;
           }
         }
+        LOG_VART(updatedTags);
         LOG_VART(tagsAdded);
         if (tagsAdded)
         {
@@ -314,9 +399,9 @@ void AddImplicitlyDerivedTagsBaseVisitor::visit(const ElementPtr& e)
           QString tagValue =
             "Added " + QString::number(tagsToAdd.size()) + " implicitly derived tag(s) based on: " +
             matchingWordsList.join(", ");
-          //TODO: change this to trace
           tagValue += "; tags added: " + tagsToAdd.toString().trimmed().replace("\n", ", ");
-          e->getTags().appendValue("hoot:implicitTags:note", tagValue);
+          LOG_VART(tagValue);
+          e->getTags().appendValue("hoot:implicitTags:tagsAdded", tagValue);
           _numNodesModified++;
           _numTagsAdded += tagsToAdd.size();
           if (_numTagsAdded < _smallestNumberOfTagsAdded)
@@ -349,9 +434,35 @@ void AddImplicitlyDerivedTagsBaseVisitor::visit(const ElementPtr& e)
 
 QSet<QString> AddImplicitlyDerivedTagsBaseVisitor::_getNameTokens(const Tags& t)
 {
-  QSet<QString> result;
+  QStringList result;
 
-  QStringList names = t.getNames();
+  QStringList names;
+  if (t.contains("name:en"))
+  {
+    LOG_VART(t);
+    Tags tagsCopy;
+    for (Tags::const_iterator tagItr = t.begin(); tagItr != t.end(); ++tagItr)
+    {
+      const QString tagKey = tagItr.key();
+      if (tagKey.contains("name:") && tagKey != QLatin1String("name:en"))
+      {
+      }
+      else if (tagKey == QLatin1String("alt_name") || tagKey == QLatin1String("name"))
+      {
+      }
+      else
+      {
+        tagsCopy.appendValue(tagKey, tagItr.value());
+      }
+    }
+    LOG_VART(tagsCopy);
+    names = tagsCopy.getNames();
+  }
+  else
+  {
+    names = t.getNames();
+  }
+  LOG_VART(names);
   StringTokenizer tokenizer;
 
   foreach (const QString& n, names)
@@ -359,14 +470,27 @@ QSet<QString> AddImplicitlyDerivedTagsBaseVisitor::_getNameTokens(const Tags& t)
     QStringList words = tokenizer.tokenize(n);
     foreach (const QString& w, words)
     {
-      if (!_customRules.getWordIgnoreList().contains(w))
+      if (!_customRules.getWordIgnoreList().contains(w.toLower()))
       {
-        result.insert(w.toLower());
+        LOG_TRACE("Inserting token: " << w);
+        result.append(w.toLower());
       }
     }
   }
 
-  return result;
+  QStringList filteredNames;
+  for (int i = 0; i < result.size(); i++)
+  {
+    const QString name = result.at(i);
+    if (name.length() >= _minWordLength &&
+        !_customRules.getWordIgnoreList().contains(name.toLower()))
+    {
+      filteredNames.append(name);
+    }
+  }
+  LOG_VART(filteredNames);
+
+  return filteredNames.toSet();
 }
 
 }

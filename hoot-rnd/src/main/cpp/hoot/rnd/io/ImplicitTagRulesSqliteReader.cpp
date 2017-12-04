@@ -157,7 +157,7 @@ Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,
     LOG_TRACE("No words specified.");
     return Tags();
   }
-
+  
   if (_useTagsCache)
   {
     //The cache needs to check against a key composed of all of the words, due to possible multiple
