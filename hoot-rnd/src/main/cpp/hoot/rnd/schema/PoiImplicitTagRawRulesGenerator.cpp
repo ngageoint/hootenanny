@@ -94,18 +94,6 @@ void PoiImplicitTagRawRulesGenerator::_updateForNewWord(QString word, const QStr
     return;
   }
 
-//  const QString lowerCaseWord = word.toLower();
-//  const QString queriedWord = _wordCaseMappings.value(lowerCaseWord, "");
-//  if (queriedWord.isEmpty())
-//  {
-//    _wordCaseMappings[lowerCaseWord] = word;
-//  }
-//  else
-//  {
-//    word = queriedWord;
-//  }
-
-//  const QString line = word % QString("\t") % kvp % QString("\n");
   const QString line = word.toLower() % QString("\t") % kvp % QString("\n");
   _countFile->write(line.toUtf8());
   _countFileLineCtr++;
