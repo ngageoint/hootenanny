@@ -47,20 +47,20 @@ bool MapScoringStatusAndRefTagValidator::allTagsAreValid(const ConstOsmMapPtr& m
   //then fail
   const long numFirstInputBadTags =
     (int)FilteredVisitor::getStat(
-      new ChainCriterion(
-        new StatusCriterion(Status::Unknown1),
-        new TagKeyCriterion(MetadataTags::Ref2())),
-      new ElementCountVisitor(),
+      ElementCriterionPtr(new ChainCriterion(
+      ElementCriterionPtr(new StatusCriterion(Status::Unknown1)),
+      ElementCriterionPtr(new TagKeyCriterion(MetadataTags::Ref2())))),
+      ConstElementVisitorPtr(new ElementCountVisitor()),
       map);
 
   //if second map has any element with a hoot::status = Unknown2 tag and a tag with key = REF1,
   //then fail
   const long numSecondInputBadTags =
     (int)FilteredVisitor::getStat(
-      new ChainCriterion(
-        new StatusCriterion(Status::Unknown2),
-        new TagKeyCriterion(MetadataTags::Ref1())),
-      new ElementCountVisitor(),
+      ElementCriterionPtr(new ChainCriterion(
+      ElementCriterionPtr(new StatusCriterion(Status::Unknown2)),
+      ElementCriterionPtr(new TagKeyCriterion(MetadataTags::Ref1())))),
+      ConstElementVisitorPtr(new ElementCountVisitor()),
       map);
 
   return (numFirstInputBadTags + numSecondInputBadTags) == 0;

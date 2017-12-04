@@ -201,8 +201,7 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
     if (r)
     {
       r->setType(tags["type"]);
-      //I don't think OSM non-hoot metadata tags should be removed here...
-      //tags.remove("type");
+      tags.remove("type");
     }
   }
 

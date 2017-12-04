@@ -12,7 +12,7 @@ if [ "${WITH_RVM}" != "yes" ]; then
     exit 0
 fi
 
-if ! $RVM_HOME/bin/rvm --version | grep -q "^rvm ${RVM_VERSION//\./\\.}"; then
+if [ ! -f $RVM_HOME/bin/rvm ] || ! $RVM_HOME/bin/rvm --version | grep -q "^rvm ${RVM_VERSION//\./\\.}"; then
     # RVM signing keys obtained via following command:
     #
     #  gpg --keyserver hkp://keyserver.ubuntu.com \
@@ -77,7 +77,7 @@ fi
 source $RVM_HOME/scripts/rvm
 
 # Install desired Ruby version.
-if ! ruby -v | grep -q "${RUBY_VERSION//\./\\.}"; then
+if ! hash ruby >& /dev/null || ! ruby -v | grep -q "${RUBY_VERSION//\./\\.}"; then
     rvm install ruby-$RUBY_VERSION --quiet-curl
     rvm use $RUBY_VERSION --default
 fi

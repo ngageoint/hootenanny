@@ -179,9 +179,9 @@ function TranslationServer(request, response) {
 
             request.on('end', function() {
                 var urlbits = url.parse(request.url, true);
-                var params = urlbits.query;
+                var params = request.params || urlbits.query;
                 params.method = request.method;
-                params.path = urlbits.pathname;
+                params.path = request.path || urlbits.pathname;
                 params.osm = payload;
                 header['Accept'] = 'text/xml';
                 header['Content-Type'] = 'text/xml';
@@ -192,9 +192,9 @@ function TranslationServer(request, response) {
 
         } else if (request.method === 'GET') {
             var urlbits = url.parse(request.url, true);
-            var params = urlbits.query;
+            var params = request.params || urlbits.query;
             params.method = request.method;
-            params.path = urlbits.pathname;
+            params.path = request.path || urlbits.pathname;
             var result = handleInputs(params);
             header['Content-Type'] = 'application/json';
             response.writeHead(200, header);
@@ -285,6 +285,8 @@ var postHandler = function(data) {
         throw new Error('Unsupported translation schema');
     }
     var translation = data.transMap[data.transDir][data.translation];
+    hoot.Settings.set({"ogr.esri.fcsubtype": "false"});
+    hoot.Settings.set({"ogr.note.extra": "attribute"});
     if (data.transDir === "toogr") {
         hoot.Settings.set({"osm.map.writer.schema": data.translation});
     } else {
@@ -485,6 +487,9 @@ var searchSchema = function(options) {
     var maxLevDistance = options.maxLevDistance || 20;
     var schema = schemaMap[translation].getDbSchema();
 
+    //Treat vertex geom type as point
+    if (geomType.toLowerCase() === 'vertex') geomType = 'point';
+
     var result = [];
     if (searchStr.length > 0) {
 
@@ -610,7 +615,9 @@ var getLevenshteinDistance = function(s, t) {
 }
 
 var schemaError = function(params) {
-    throw new Error(params.translation + ' for ' + params.geom + ' with ' + params.idelem + '=' + params.idval + ' not found');
+    var msg = params.translation + ' for ' + params.geom + ' with ' + params.idelem + '=' + params.idval + ' not found';
+    console.error(msg);
+    throw new Error(msg);
 }
 
 if (typeof exports !== 'undefined') {

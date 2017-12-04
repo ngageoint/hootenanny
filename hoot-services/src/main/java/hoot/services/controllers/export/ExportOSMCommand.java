@@ -26,6 +26,9 @@
  */
 package hoot.services.controllers.export;
 
+import static hoot.services.HootProperties.*;
+
+import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,6 +36,8 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import hoot.services.HootProperties;
 
 
 class ExportOSMCommand extends ExportCommand {
@@ -44,6 +49,16 @@ class ExportOSMCommand extends ExportCommand {
         List<String> options = new LinkedList<>();
         options.add("hootapi.db.writer.create.user=true");
         options.add("api.db.email=" + params.getUserEmail());
+
+        if (!params.getTagOverrides().isEmpty()) {
+
+            options.add("convert.ops=hoot::TranslationOp");
+
+            File trans = new File(new File(HootProperties.HOME_FOLDER, "translations"),"OSM_Ingest.js");
+            options.add("translation.script=" + trans.getAbsolutePath());
+
+            options.add("translation.override=" + params.getTagOverrides() );
+        }
 
         if (params.getTextStatus()) {
             options.add("writer.text.status=true");

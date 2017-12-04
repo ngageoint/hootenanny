@@ -35,9 +35,12 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.net.SocketException;
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -91,6 +94,7 @@ import hoot.services.models.db.Users;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.ElementFactory;
 import hoot.services.models.osm.Map;
+import hoot.services.models.osm.MapLayer;
 import hoot.services.models.osm.MapLayers;
 import hoot.services.utils.DbUtils;
 import hoot.services.controllers.osm.OsmResponseHeaderGenerator;
@@ -726,6 +730,7 @@ public class MapResource {
                         .execute();
 
                 logger.debug("Renamed map with id {} {}...", mapId, modName);
+                updateLastAccessed(Long.valueOf(mapId));
             }
             else if (inputType.toLowerCase(Locale.ENGLISH).equals("folder")) {
                 createQuery().update(folders)
@@ -944,6 +949,7 @@ public class MapResource {
                     logger.debug("Retrieving map tags for map with ID: {} ...", mapIdNum);
 
                     try {
+                        updateLastAccessed(mapIdNum);
                         java.util.Map<String, String> tags = DbUtils.getMapsTableTags(mapIdNum);
                         if (tags != null) {
                             logger.debug(tags.toString());
@@ -1098,5 +1104,27 @@ public class MapResource {
         linkRecords.setLinks(linkRecordList.toArray(new LinkRecord[linkRecordList.size()]));
 
         return linkRecords;
+    }
+
+    /**
+     * Updates the lastAccessed key in the maps
+     * tags hstore to the current timestamp
+     *
+     * @param mapid
+     *            id of the maps record
+     */
+    public static void updateLastAccessed(Long mapid) {
+        java.util.Map<String, String> tags = DbUtils.getMapsTableTags(mapid);
+
+        DateFormat dateFormat = MapLayer.format;
+        Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
+        tags.put("lastAccessed", dateFormat.format(now));
+
+        long count = DbUtils.updateMapsTableTags(tags, mapid);
+
+        if (count < 1) {
+            throw new RuntimeException("Error updating map " + mapid + "'s last accessed tag!");
+        }
+
     }
 }

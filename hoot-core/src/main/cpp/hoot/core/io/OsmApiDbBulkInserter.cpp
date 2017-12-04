@@ -900,16 +900,17 @@ void OsmApiDbBulkInserter::writePartial(const ConstRelationPtr& relation)
   const unsigned long relationDbId = _establishIdMapping(relation->getElementId());
   LOG_VART(ElementId(ElementType::Relation, relationDbId));
 
+  Tags tags = relation->getTags();
+  //  keep the hoot:id tag in sync with what could be a newly assigned id
   if (_includeDebugTags)
-  {
-    Tags tags = relation->getTags();
-    //keep the hoot:id tag in sync with what could be a newly assigned id
     tags.set(MetadataTags::HootId(), QString::number(relationDbId));
-  }
+  //  Add the "type" of the relation to the tags
+  if (relation->getType() != "")
+    tags["type"] = relation->getType();
 
   _writeRelation(relationDbId);
   _writeRelationMembers(relation, relationDbId);
-  _writeTags(relation->getTags(), ElementType::Relation, relationDbId,
+  _writeTags(tags, ElementType::Relation, relationDbId,
     _outputSections[ApiDb::getCurrentRelationTagsTableName()],
     _outputSections[ApiDb::getRelationTagsTableName()]);
   _writeStats.relationsWritten++;
