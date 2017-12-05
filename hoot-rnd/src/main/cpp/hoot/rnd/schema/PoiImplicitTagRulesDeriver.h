@@ -37,6 +37,7 @@
 #include <QMap>
 #include <QHash>
 #include <QTemporaryFile>
+#include <QSet>
 
 namespace hoot
 {
@@ -75,6 +76,7 @@ public:
   void setTagIgnoreFile(const QString file) { _customRules.setTagIgnoreFile(file); }
   void setTagFile(const QString file) { _customRules.setTagFile(file); }
   void setWordIgnoreFile(const QString file) { _customRules.setWordIgnoreFile(file); }
+  void setUseSchemaTagValuesForWordsOnly(bool use) { _useSchemaTagValuesForWordsOnly = use; }
 
 private:
 
@@ -84,6 +86,8 @@ private:
   long _statusUpdateInterval;
   int _minTagOccurrencesPerWord;
   int _minWordLength;
+  bool _useSchemaTagValuesForWordsOnly;
+  QSet<QString> _schemaTagValues;
 
   PoiImplicitTagCustomRules _customRules;
 
