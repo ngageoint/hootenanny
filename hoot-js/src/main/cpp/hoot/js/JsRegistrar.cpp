@@ -28,6 +28,7 @@
 
 #include <hoot/core/Hoot.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/js/v8Engine.h>
 
 using namespace v8;
 
@@ -59,6 +60,7 @@ JsRegistrar& JsRegistrar::getInstance()
 void JsRegistrar::Init(Handle<Object> exports)
 {
   LOG_DEBUG("JS registrar init...");
+  v8Engine::getInstance().init();
   Hoot::getInstance().init();
   getInstance().initAll(exports);
 }
@@ -67,6 +69,8 @@ void JsRegistrar::initAll(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
+  Local<Context> context(current->GetCurrentContext());
+  Context::Scope contextScope(context);
   exports->Set(String::NewFromUtf8(current, "hello"),
       FunctionTemplate::New(current, Method)->GetFunction());
 

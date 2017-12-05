@@ -236,7 +236,6 @@ void JavaScriptTranslator::_init()
   Isolate* current = v8Engine::getIsolate();
   HandleScope handleScope(current);
   Local<Context> context = _gContext->getContext(current);
-  Local<Object> tObj = context->Global();
 
   if (_scriptPath.isEmpty())
   {
@@ -253,6 +252,8 @@ void JavaScriptTranslator::_init()
   {
     _gContext->loadScript(_scriptPath);
   }
+
+  Local<Object> tObj = context->Global();
 
   // Set up a small function
   tObj->Set(String::NewFromUtf8(current, "timeNow"), FunctionTemplate::New(current, jsGetTimeNow)->GetFunction());
@@ -308,8 +309,10 @@ const QString JavaScriptTranslator::getLayerNameFilter()
 
   Isolate* current = v8Engine::getIsolate();
   HandleScope handleScope(current);
+  Local<Context> context = _gContext->getContext(current);
+  Context::Scope contextScope(context);
 
-  Handle<Object> tObj = _gContext->getContext(current)->Global();
+  Handle<Object> tObj = context->Global();
 
   if (tObj->Has(String::NewFromUtf8(current, "layerNameFilter")))
   {
@@ -382,8 +385,10 @@ boost::shared_ptr<const Schema> JavaScriptTranslator::getOgrOutputSchema()
 
     Isolate* current = v8Engine::getIsolate();
     HandleScope handleScope(current);
+    Local<Context> context(_gContext->getContext(current));
+    Context::Scope contextScope(context);
 
-    Handle<Object> tObj = _gContext->getContext(current)->Global();
+    Handle<Object> tObj = context->Global();
 
     if (!tObj->Has(String::NewFromUtf8(current, "getDbSchema")))
     {
@@ -809,9 +814,6 @@ vector<Tags> JavaScriptTranslator::translateToOgrTags(Tags& tags, ElementType el
   vector<Tags> result;
   QVariantList l = _translateToOgrVariants(tags, elementType, geometryType);
 
-  Isolate* current = v8Engine::getIsolate();
-  HandleScope handleScope(current);
-
   result.resize(l.size());
   for (int i = 0; i < l.size(); i++)
   {
@@ -846,7 +848,7 @@ QVariantList JavaScriptTranslator::_translateToOgrVariants(Tags& tags,
 {
   _tags = &tags;
 
-  Isolate* current = Isolate::GetCurrent();
+  Isolate* current = v8Engine::getIsolate();
   HandleScope handleScope(current);
   Local<Context> context = _gContext->getContext(current);
   Context::Scope scope(context);
@@ -943,7 +945,7 @@ void JavaScriptTranslator::_translateToOsm(Tags& t, const char *layerName, const
 {
   _tags = &t;
 
-  Isolate* current = Isolate::GetCurrent();
+  Isolate* current = v8Engine::getIsolate();
   HandleScope handleScope(current);
   Local<Context> context = _gContext->getContext(current);
   Context::Scope scope(context);

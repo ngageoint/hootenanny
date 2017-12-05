@@ -71,7 +71,7 @@ void TagsJs::contains(const FunctionCallbackInfo<Value>& args)
 
 void TagsJs::Init(Handle<Object> target)
 {
-  Isolate* current = target->GetIsolate();
+  Isolate* current = v8Engine::getIsolate();
   HandleScope scope(current);
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);

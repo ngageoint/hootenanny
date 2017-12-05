@@ -46,7 +46,6 @@ bool JsFunctionCriterion::isSatisfied(const boost::shared_ptr<const Element> &e)
   Isolate* current = v8Engine::getIsolate();
   HandleScope handleScope(current);
   Local<Context> context(current->GetCurrentContext());
-  Context::Scope context_scope(context);
 
   Handle<Value> jsArgs[3];
 

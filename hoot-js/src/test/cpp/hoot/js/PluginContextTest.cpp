@@ -51,10 +51,11 @@ public:
 
   void basicTest()
   {
-    boost::shared_ptr<PluginContext> _pc(new PluginContext());
     Isolate* current = v8Engine::getIsolate();
+    boost::shared_ptr<PluginContext> _pc(new PluginContext());
     HandleScope handleScope(current);
-    Context::Scope context_scope(_pc->getContext(current));
+    Local<Context> context(_pc->getContext(current));
+    Context::Scope context_scope(context);
 
     Handle<Object> exports = _pc->loadScript("rules/PolygonBuilding.js");
 

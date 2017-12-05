@@ -74,6 +74,8 @@ private:
   boost::shared_ptr<v8::ArrayBuffer::Allocator> _allocator;
   /** Main isolate */
   v8::Isolate* _isolate;
+  /** In Hootenanny we own the Isolate, when called from Node we do not */
+  bool _ownIsolate;
   /** Platform object */
   boost::shared_ptr<v8::Platform> _platform;
   boost::shared_ptr<v8::Locker> _locker;

@@ -62,10 +62,10 @@ void RequireJs::Init(Handle<Object> exports)
 
 void RequireJs::jsRequire(const FunctionCallbackInfo<Value>& args)
 {
-  Isolate* current = args.GetIsolate();
+  Isolate* current = v8Engine::getIsolate();
+  HandleScope scope(current);
   try
   {
-    HandleScope scope(current);
 
     if (args.Length() != 1)
     {

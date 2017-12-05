@@ -50,7 +50,9 @@ LogJs::LogJs()
 {
 }
 
-LogJs::~LogJs() {}
+LogJs::~LogJs()
+{
+}
 
 void LogJs::Init(Handle<Object> exports)
 {
@@ -95,7 +97,6 @@ void LogJs::log(const FunctionCallbackInfo<Value>& args, Log::WarningLevel level
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
-  Context::Scope context_scope(Context::New(current));
 
   if (level >= Log::getInstance().getLevel())
   {
@@ -200,7 +201,6 @@ void LogJs::setLogLevel(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
-  Context::Scope context_scope(Context::New(current));
 
   try
   {

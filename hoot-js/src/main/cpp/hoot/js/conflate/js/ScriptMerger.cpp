@@ -52,7 +52,9 @@ ScriptMerger::ScriptMerger(boost::shared_ptr<PluginContext> script, Persistent<O
   _pairs(pairs),
   _script(script)
 {
-  _plugin.Reset(v8Engine::getIsolate(), plugin);
+  Isolate* current = v8Engine::getIsolate();
+  HandleScope scope(current);
+  _plugin.Reset(current, plugin);
   _eid1 = _pairs.begin()->first;
   _eid2 = _pairs.begin()->second;
 }
@@ -88,7 +90,6 @@ void ScriptMerger::_applyMergePair(const OsmMapPtr& map,
 
   Isolate* current = v8Engine::getIsolate();
   HandleScope handleScope(current);
-  Context::Scope context_scope(_script->getContext(current));
   Handle<Value> v = _callMergePair(map);
 
   Handle<Object> o = Handle<Object>::Cast(v);
@@ -157,7 +158,6 @@ void ScriptMerger::_callMergeSets(const OsmMapPtr& map,
 {
   Isolate* current = v8Engine::getIsolate();
   HandleScope handleScope(current);
-  Context::Scope context_scope(_script->getContext(current));
   Handle<Object> plugin =
     Handle<Object>::Cast(_script->getContext(current)->Global()->Get(String::NewFromUtf8(current, "plugin")));
   Handle<Value> value = plugin->Get(String::NewFromUtf8(current, "mergeSets"));
@@ -187,7 +187,6 @@ bool ScriptMerger::hasFunction(QString name) const
 {
   Isolate* current = v8Engine::getIsolate();
   HandleScope handleScope(current);
-  Context::Scope context_scope(_script->getContext(current));
   Handle<Object> plugin =
     Handle<Object>::Cast(_script->getContext(current)->Global()->Get(String::NewFromUtf8(current, "plugin")));
   Handle<Value> value = plugin->Get(String::NewFromUtf8(current, name.toUtf8().data()));

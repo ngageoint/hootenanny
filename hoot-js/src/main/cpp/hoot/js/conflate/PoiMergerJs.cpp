@@ -63,6 +63,7 @@ PoiMergerJs::~PoiMergerJs()
 void PoiMergerJs::Init(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
+  HandleScope scope(current);
   exports->Set(String::NewFromUtf8(current, "poiMerge"),
                FunctionTemplate::New(current, jsPoiMerge)->GetFunction());
 }
@@ -70,16 +71,18 @@ void PoiMergerJs::Init(Handle<Object> exports)
 void PoiMergerJs::jsPoiMerge(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
   try
   {
+    HandleScope scope(current);
     if (args.Length() > 3)
     {
       args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(IllegalArgumentException(
         "Expected two or three arguments to 'poiMerge'."))));
       return;
     }
+    // Instantiate script merger
+    boost::shared_ptr<PluginContext> script(new PluginContext());
+    Local<Context> context(script->getContext(current));
 
     // Argument 1: script -- note second param is directory to search under (~/hoot/rules)
     const QString scriptPath = ConfPath::search(toCpp<QString>(args[0]), "rules");
@@ -93,22 +96,17 @@ void PoiMergerJs::jsPoiMerge(const FunctionCallbackInfo<Value>& args)
     // Pull out internal POI map
     OsmMapPtr map( mapJs->getMap() );
 
-    // Instantiate script merger
-    boost::shared_ptr<PluginContext> script(new PluginContext());
-    HandleScope handleScope(current);
-    Context::Scope context_scope(script->getContext(current));
+    //  Load the script
     script->loadScript(scriptPath, "plugin");
 
-    Handle<Object> global = script->getContext(current)->Global();
-
-    if (global->Has(String::NewFromUtf8(current, "plugin")) == false)
+    if (context->Global()->Has(String::NewFromUtf8(current, "plugin")) == false)
     {
       args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(IllegalArgumentException(
         "Expected the script to have exports."))));
       return;
     }
 
-    Handle<Value> pluginValue = global->Get(String::NewFromUtf8(current, "plugin"));
+    Handle<Value> pluginValue = context->Global()->Get(String::NewFromUtf8(current, "plugin"));
     Persistent<Object> plugin(current, Handle<Object>::Cast(pluginValue));
     if (plugin.IsEmpty() || plugin.Get(current)->IsObject() == false)
     {

@@ -65,7 +65,7 @@ ElementJs::~ElementJs()
 
 void ElementJs::_addBaseFunctions(Local<FunctionTemplate> tpl)
 {
-  Isolate* current = v8::Isolate::GetCurrent();
+  Isolate* current = v8Engine::getIsolate();
   HandleScope scope(current);
   tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
       String::NewFromUtf8(current, Element::className().data()));

@@ -67,10 +67,8 @@ void ElementConverterJs::calculateLength(const FunctionCallbackInfo<Value>& args
  
   try
   {
-    Context::Scope context_scope(current->GetCurrentContext());
-
-  	ConstOsmMapPtr m = toCpp<ConstOsmMapPtr>(args[0]);
-  	ConstElementPtr e = toCpp<ConstElementPtr>(args[1]);
+    ConstOsmMapPtr m = toCpp<ConstOsmMapPtr>(args[0]);
+    ConstElementPtr e = toCpp<ConstElementPtr>(args[1]);
 
     args.GetReturnValue().Set(toV8(ElementConverter(m).calculateLength(e)));
   }

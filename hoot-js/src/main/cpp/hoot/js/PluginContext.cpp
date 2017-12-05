@@ -104,12 +104,23 @@ Local<Value> PluginContext::call(Handle<Object> obj, QString name, QList<QVarian
 
 Local<Value> PluginContext::eval(QString e)
 {
-  return call(getContext(v8Engine::getIsolate())->Global(), "eval", QVariantList() << e);
+  Isolate* current = v8Engine::getIsolate();
+  EscapableHandleScope escapableHandleScope(current);
+  return escapableHandleScope.Escape(call(_context.Get(current)->Global(), "eval", QVariantList() << e));
 }
+
+Local<Context> PluginContext::getContext(Isolate* isolate)
+{
+  EscapableHandleScope escapableHandleScope(isolate);
+  Local<Context> context(_context.Get(isolate));
+  return escapableHandleScope.Escape(context);
+}
+
 
 bool PluginContext::hasKey(Handle<Value> v, QString key)
 {
   Isolate* current = v8Engine::getIsolate();
+  HandleScope handleScope(current);
   if (v->IsObject() == false)
   {
     throw IllegalArgumentException("Expected value to be an object.");
@@ -123,7 +134,7 @@ bool PluginContext::hasKey(Handle<Value> v, QString key)
 Local<Object> PluginContext::loadScript(QString filename, QString loadInto)
 {
   Isolate* current = v8Engine::getIsolate();
-  EscapableHandleScope handleScope(current);
+  EscapableHandleScope escapableHandleScope(current);
 
   QFile fp(filename);
   LOG_TRACE("Loading script " << filename << "...");
@@ -136,15 +147,14 @@ Local<Object> PluginContext::loadScript(QString filename, QString loadInto)
 
   Handle<Object> result = loadText(text, loadInto, filename);
 
-  return handleScope.Escape(result);
+  return escapableHandleScope.Escape(result);
 }
 
-// This is a duplicate of loadScript. Will refactor later once the rest is working
 Local<Object> PluginContext::loadText(QString text, QString loadInto, QString scriptName)
 {
   Isolate* current = v8Engine::getIsolate();
   EscapableHandleScope handleScope(current);
-  Local<Context> context(_context.Get(current));
+  Local<Context> context = _context.Get(current);
 
   Local<Object> exports(Object::New(current));
   Local<Object> global = context->Global();
@@ -176,6 +186,7 @@ Local<Object> PluginContext::loadText(QString text, QString loadInto, QString sc
 double PluginContext::toNumber(Handle<Value> v, QString key, double defaultValue)
 {
   Isolate* current = v8Engine::getIsolate();
+  HandleScope handleScope(current);
   if (v->IsObject() == false)
   {
     throw IllegalArgumentException("Expected value to be an object.");

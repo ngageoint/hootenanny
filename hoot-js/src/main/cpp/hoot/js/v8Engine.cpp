@@ -48,11 +48,17 @@ v8Engine::v8Engine()
   }
   //  Initialize v8
   V8::Initialize();
-  //  Create the main isolate
-  _allocator.reset(ArrayBuffer::Allocator::NewDefaultAllocator());
-  Isolate::CreateParams params;
-  params.array_buffer_allocator = _allocator.get();
-  _isolate = Isolate::New(params);
+  _ownIsolate = v8::Isolate::GetCurrent() == NULL;
+  if (_ownIsolate)
+  {
+    //  Create the main isolate
+    _allocator.reset(ArrayBuffer::Allocator::NewDefaultAllocator());
+    Isolate::CreateParams params;
+    params.array_buffer_allocator = _allocator.get();
+    _isolate = Isolate::New(params);
+  }
+  else
+    _isolate = v8::Isolate::GetCurrent();
   _isolate->Enter();
   //  Create the main context
   _locker.reset(new Locker(_isolate));
@@ -66,9 +72,12 @@ v8Engine::v8Engine()
 v8Engine::~v8Engine()
 {
   _locker.reset();
-  _isolate->Exit();
-  //  Dispose of the v8 subsystem
-  _isolate->Dispose();
+  if (_ownIsolate)
+  {
+    _isolate->Exit();
+    //  Dispose of the v8 subsystem
+    _isolate->Dispose();
+  }
   V8::Dispose();
   //  Shutdown the platform
   V8::ShutdownPlatform();
