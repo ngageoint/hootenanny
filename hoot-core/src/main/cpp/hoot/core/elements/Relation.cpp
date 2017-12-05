@@ -154,7 +154,7 @@ Envelope Relation::getEnvelopeInternal(const boost::shared_ptr<const ElementProv
       return result;
     }
     const boost::shared_ptr<const Element> e = ep->getElement(m.getElementId());
-    auto_ptr<Envelope> childEnvelope(e->getEnvelope(ep));
+    boost::shared_ptr<Envelope> childEnvelope(e->getEnvelope(ep));
 
     if (childEnvelope->isNull())
     {
