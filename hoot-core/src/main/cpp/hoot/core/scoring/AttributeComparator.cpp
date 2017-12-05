@@ -48,9 +48,13 @@ namespace hoot
 {
 
 AttributeComparator::AttributeComparator(boost::shared_ptr<OsmMap> map1, boost::shared_ptr<OsmMap> map2) :
-  BaseComparator(map1, map2)
+  BaseComparator(map1, map2),
+  _iterations(10),
+  _median(0.0),
+  _mean(0.0),
+  _ci(-1.0),
+  _s(-1.0)
 {
-  _iterations = 10;
 }
 
 double AttributeComparator::compareMaps()
@@ -145,10 +149,7 @@ double AttributeComparator::compareMaps()
 
     if (Log::getInstance().isInfoEnabled())
     {
-      cout << i << " / " << _iterations << " mean: ";
-      if (!std::isnan(_mean))
-        cout << _mean;
-      cout << "   \r";
+      cout << i << " / " << _iterations << " mean: " << _mean << "   \r";
       cout.flush();
     }
   }

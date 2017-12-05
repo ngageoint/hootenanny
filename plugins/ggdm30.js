@@ -1009,8 +1009,15 @@ ggdm30 = {
                     if (tags[tTags[i]]) hoot.logWarn('Unpacking ZI006_MEM, overwriteing ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
                     tags[i] = tTags[i];
                 }
+            }
 
+            if (tObj.text && tObj.text !== '')
+            {
                 tags.note = tObj.text;
+            }
+            else
+            {
+                delete tags.note;
             }
         } // End process tags.note
 
@@ -1046,7 +1053,6 @@ ggdm30 = {
     {
         // Remove Hoot assigned tags for the source of the data
         if (tags['source:ingest:datetime']) delete tags['source:ingest:datetime'];
-        if (tags.source) delete tags.source;
         if (tags.area) delete tags.area;
         if (tags['error:circular']) delete tags['error:circular'];
         if (tags['hoot:status']) delete tags['hoot:status'];
@@ -1772,6 +1778,26 @@ ggdm30 = {
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
         }
 
+        // See if we have an o2s_X layer and try to unpack it.
+        if (layerName.indexOf('o2s_') > -1)
+        {
+            tags = translate.parseO2S(attrs);
+
+            // Add some metadata
+            if (! tags.uuid) tags.uuid = createUuid();
+            if (! tags.source) tags.source = 'ggdmv30:' + layerName.toLowerCase();
+
+            // Debug:
+            if (ggdm30.config.OgrDebugDumptags == 'true')
+            {
+                var kList = Object.keys(tags).sort()
+                for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
+                print('');
+            }
+
+            return tags;
+        } // End layername = o2s_X
+
         // Set up the fcode translation rules. We need this due to clashes between the one2one and
         // the fcode one2one rules
         if (ggdm30.fcodeLookup == undefined)
@@ -2013,6 +2039,22 @@ ggdm30 = {
 
         if (!(ggdmAttrLookup[gFcode]))
         {
+            // For the UI: Throw an error and die if we don't have a valid feature
+            if (ggdm30.config.OgrThrowError == 'true')
+            {
+                if (! attrs.F_CODE)
+                {
+                    returnData.push({attrs:{'error':'No Valid Feature Code'}, tableName: ''});
+                    return returnData;
+                }
+                else
+                {
+                    //throw new Error(geometryType.toString() + ' geometry is not valid for F_CODE ' + attrs.F_CODE);
+                    returnData.push({attrs:{'error':geometryType + ' geometry is not valid for ' + attrs.F_CODE + ' in TDSv61'}, tableName: ''});
+                    return returnData;
+                }
+            }
+
             hoot.logTrace('FCODE and Geometry: ' + gFcode + ' is not in the schema');
 
             tableName = 'o2s_' + geometryType.toString().charAt(0);
@@ -2026,7 +2068,11 @@ ggdm30 = {
             }
 
             // We want to keep the hoot:id if present
-            if (tags['hoot:id']) tags.raw_id = tags['hoot:id'];
+            if (tags['hoot:id'])
+            {
+                tags.raw_id = tags['hoot:id'];
+                delete tags['hoot:id'];
+            }
 
             // Convert all of the Tags to a string so we can jam it into an attribute
             var str = JSON.stringify(tags);

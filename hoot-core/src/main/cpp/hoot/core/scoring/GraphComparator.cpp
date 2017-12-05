@@ -67,9 +67,15 @@ namespace hoot
 {
 
 GraphComparator::GraphComparator(OsmMapPtr map1, OsmMapPtr map2) :
-      BaseComparator(map1, map2)
+      BaseComparator(map1, map2),
+      _iterations(100),
+      _median(0.0),
+      _mean(0.0),
+      _ci(-1.0),
+      _s(-1.0),
+      _maxGraphCost(0.),
+      _debugImages(false)
 {
-  _iterations = 100;
   _init();
 }
 
@@ -237,13 +243,9 @@ double GraphComparator::compareMaps()
       _ci = zalpha * _s / sqrt(scores.size());
     }
 
-
     if (Log::getInstance().isInfoEnabled())
     {
-      cout << i << " / " << _iterations << " mean: ";
-      if (!std::isnan(_mean))
-        cout << _mean;
-      cout << "   \r";
+      cout << i << " / " << _iterations << " mean: " << _mean << "   \r";
       cout.flush();
     }
     //qDebug() << _median << 1 - error << _mean << "+/-" << _ci << "sd: " << _s;

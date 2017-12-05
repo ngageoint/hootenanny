@@ -1999,6 +1999,26 @@ tds61 = {
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
         }
 
+        // See if we have an o2s_X layer and try to unpack it.
+        if (layerName.indexOf('o2s_') > -1)
+        {
+            tags = translate.parseO2S(attrs);
+
+            // Add some metadata
+            if (! tags.uuid) tags.uuid = createUuid();
+            if (! tags.source) tags.source = 'tdsv61:' + layerName.toLowerCase();
+
+            // Debug:
+            if (tds61.configIn.OgrDebugDumptags == 'true')
+            {
+                var kList = Object.keys(tags).sort()
+                for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
+                print('');
+            }
+
+            return tags;
+        } // End layername = o2s_X
+
         // Set up the fcode translation rules. We need this due to clashes between the one2one and
         // the fcode one2one rules
         if (tds61.fcodeLookup == undefined)
@@ -2283,6 +2303,7 @@ tds61 = {
                 for (var i = 0, fLen = kList.length; i < fLen; i++) print('Converted Attrs:' + kList[i] + ': :' + attrs[kList[i]] + ':');
             }
 
+            // We want to keep the hoot:id if present
             if (tags['hoot:id'])
             {
                 tags.raw_id = tags['hoot:id'];
