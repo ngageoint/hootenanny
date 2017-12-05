@@ -53,7 +53,7 @@ function getDbSchema()
 function layerNameFilter()
 {
     // Drop all of the "SRC_*", "o2s_*" and "extra_*" layers
-    return "^(?!SRC_|o2s_|extra_)";
+    return "^(?!SRC_|extra_)";
 }
 
 
