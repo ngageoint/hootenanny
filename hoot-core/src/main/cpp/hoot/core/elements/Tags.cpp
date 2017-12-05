@@ -417,7 +417,7 @@ const QStringList& Tags::getNameKeys()
   if (_nameKeys.size() == 0)
   {
     const vector<SchemaVertex>& tags =
-        OsmSchema::getInstance().getTagByCategory(OsmSchemaCategory::name());
+      OsmSchema::getInstance().getTagByCategory(OsmSchemaCategory::name());
 
     for (size_t i = 0; i < tags.size(); i++)
     {

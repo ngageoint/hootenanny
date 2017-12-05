@@ -36,6 +36,7 @@
 #include <QString>
 #include <QHash>
 #include <QTemporaryFile>
+#include <QSet>
 
 namespace hoot
 {
@@ -71,6 +72,9 @@ public:
   void setSkipTranslation(bool skip) { _skipTranslation = skip; }
   void setKeepTempFiles(bool keep) { _keepTempFiles = keep; }
   void setTempFileDir(QString dir) { _tempFileDir = dir; }
+  void setTranslateAllNamesToEnglish(bool translate) { _translateAllNamesToEnglish = translate; }
+  void setUseSchemaTagValuesForWordsOnly(bool use) { _useSchemaTagValuesForWordsOnly = use; }
+  void setMaxWordTokenizationGroupSize(int size) { _maxWordTokenizationGroupSize = size; }
 
 private:
 
@@ -86,7 +90,6 @@ private:
   boost::shared_ptr<QTemporaryFile> _dedupedCountFile;
   boost::shared_ptr<QTemporaryFile> _tieResolvedCountFile;
 
-  //QHash<QString, QString> _wordCaseMappings;
   QHash<QString, QString> _wordKeysToCountsValues;
   QHash<QString, QStringList> _duplicatedWordTagKeyCountsToValues;
 
@@ -96,6 +99,10 @@ private:
   bool _skipTranslation;
   bool _keepTempFiles;
   QString _tempFileDir;
+  bool _translateAllNamesToEnglish;
+  bool _useSchemaTagValuesForWordsOnly;
+  QSet<QString> _schemaTagValues;
+  int _maxWordTokenizationGroupSize;
 
   ImplicitTagEligiblePoiCriterion _poiFilter;
 

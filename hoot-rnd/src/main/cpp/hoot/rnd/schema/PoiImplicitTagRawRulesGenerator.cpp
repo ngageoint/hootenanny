@@ -37,6 +37,7 @@
 #include <hoot/core/io/ElementVisitorInputStream.h>
 #include <hoot/core/visitors/TranslationVisitor.h>
 #include <hoot/core/util/FileUtils.h>
+#include <hoot/core/algorithms/Translator.h>
 
 // Qt
 #include <QStringBuilder>
@@ -53,7 +54,10 @@ _sortParallelCount(QThread::idealThreadCount()),
 _skipFiltering(false),
 _skipTranslation(false),
 _keepTempFiles(false),
-_tempFileDir(ConfigOptions().getApidbBulkInserterTempFileDir())
+_tempFileDir(ConfigOptions().getApidbBulkInserterTempFileDir()),
+_translateAllNamesToEnglish(false),
+_useSchemaTagValuesForWordsOnly(false),
+_maxWordTokenizationGroupSize(1)
 {
 }
 
@@ -72,6 +76,28 @@ void PoiImplicitTagRawRulesGenerator::setConfiguration(const Settings& conf)
   setSkipTranslation(options.getPoiImplicitTagRulesSkipTranslation());
   setKeepTempFiles(options.getPoiImplicitTagRulesKeepTempFiles());
   setTempFileDir(options.getApidbBulkInserterTempFileDir());
+  setTranslateAllNamesToEnglish(options.getPoiImplicitTagRulesTranslateAllNamesToEnglish());
+  setUseSchemaTagValuesForWordsOnly(options.getPoiImplicitTagRulesUseSchemaTagValuesForWordsOnly());
+  setMaxWordTokenizationGroupSize(options.getPoiImplicitTagRulesMaximumWordTokenizationGroupSize());
+
+  if (_useSchemaTagValuesForWordsOnly)
+  {
+    _schemaTagValues.clear();
+    const std::vector<SchemaVertex> tags =
+      OsmSchema::getInstance().getTagByCategory(OsmSchemaCategory::poi());
+    for (std::vector<SchemaVertex>::const_iterator tagItr = tags.begin();
+         tagItr != tags.end(); ++tagItr)
+    {
+      SchemaVertex tag = *tagItr;
+      const QString tagVal = tag.value.replace("_", " ");
+      if (!tagVal.contains("*") && !_schemaTagValues.contains(tagVal))
+      {
+        _schemaTagValues.insert(tagVal);
+        LOG_TRACE("Appended " << tagVal << " to schema tag values.");
+      }
+    }
+    LOG_VART(_schemaTagValues.size());
+  }
 }
 
 void PoiImplicitTagRawRulesGenerator::_updateForNewWord(QString word, const QString kvp)
@@ -129,14 +155,16 @@ void PoiImplicitTagRawRulesGenerator::generateRules(const QStringList inputs,
   LOG_INFO(
     "Generating POI implicit tag rules raw file for inputs: " << inputs <<
     ", translation scripts: " << translationScripts << ".  Writing to output: " << output << "...");
-  LOG_VAR(_tokenizeNames);
-  LOG_VAR(_sortParallelCount);
-  LOG_VAR(_skipFiltering);
-  LOG_VAR(_skipTranslation);
-  LOG_VART(_sortParallelCount);
+  LOG_VARD(_tokenizeNames);
+  LOG_VARD(_sortParallelCount);
+  LOG_VARD(_skipFiltering);
+  LOG_VARD(_skipTranslation);
+  LOG_VARD(_sortParallelCount);
+  LOG_VARD(_translateAllNamesToEnglish);
+  LOG_VARD(_useSchemaTagValuesForWordsOnly);
+  LOG_VARD(_maxWordTokenizationGroupSize);
 
   _wordKeysToCountsValues.clear();
-  //_wordCaseMappings.clear();
   _duplicatedWordTagKeyCountsToValues.clear();
   _countFileLineCtr = 0;
 
@@ -167,10 +195,11 @@ void PoiImplicitTagRawRulesGenerator::generateRules(const QStringList inputs,
     inputReader->open(inputs.at(i));
     boost::shared_ptr<ElementInputStream> inputStream =
       boost::dynamic_pointer_cast<ElementInputStream>(inputReader);
-    if (!_skipTranslation)
+    const QString translationScript = translationScripts.at(i);
+    if (!_skipTranslation || translationScript.toLower() == "none")
     {
       boost::shared_ptr<TranslationVisitor> translationVisitor(new TranslationVisitor());
-      translationVisitor->setPath(translationScripts.at(i));
+      translationVisitor->setPath(translationScript);
       inputStream.reset(new ElementVisitorInputStream(inputReader, translationVisitor));
     }
 
@@ -187,15 +216,66 @@ void PoiImplicitTagRawRulesGenerator::generateRules(const QStringList inputs,
 
       nodeCount++;
 
-      //TODO: skip filtering may go away
+      //TODO: _skipFiltering may go away
       if (_skipFiltering || _poiFilter.isSatisfied(element))
       {
-        const QStringList names = element->getTags().getNames();
+        QStringList names = element->getTags().getNames();
         assert(!names.isEmpty());
         if (names.isEmpty())
         {
           throw HootException("Names empty.");
         }
+
+        if (_translateAllNamesToEnglish)
+        {
+          QStringList filteredNames;
+          if (element->getTags().contains("name:en"))
+          {
+            filteredNames.append(element->getTags().get("name:en"));
+          }
+          else
+          {
+            for (int i = 0; i < names.size(); i++)
+            {
+              const QString name = names.at(i);
+              LOG_VART(name);
+              if (name != element->getTags().get("alt_name"))
+              {
+                const QString englishName = Translator::getInstance().toEnglish(name);
+                LOG_VART(englishName);
+//                if (englishName.toLower() != name.toLower().replace("-", " ").replace("'", " "))
+//                {
+//                  LOG_TRACE(
+//                    "Successfully translated " << name << " to " << englishName << ".");
+//                }
+                filteredNames.append(englishName);
+                break;
+              }
+            }
+            if (filteredNames.isEmpty() && element->getTags().contains("alt_name"))
+            {
+              QString altName = element->getTags().get("alt_name");
+              if (altName.contains(";"))
+              {
+                altName = altName.split(";")[0];
+              }
+              LOG_VART(altName);
+              const QString englishName = Translator::getInstance().toEnglish(altName);
+//              if (englishName.toLower() != altName.toLower().replace("-", " ").replace("'", " "))
+//              {
+//                LOG_TRACE(
+//                  "Successfully translated " << altName << " to " << englishName << ".");
+//              }
+              LOG_VART(englishName);
+              filteredNames.append(englishName);
+            }
+          }
+          LOG_VART(filteredNames);
+          assert(!filteredNames.isEmpty());
+          names = filteredNames;
+        }
+        LOG_VART(names);
+
         const QStringList kvps = ImplicitTagEligiblePoiCriterion::getPoiKvps(element->getTags());
         assert(!kvps.isEmpty());
         if (kvps.isEmpty())
@@ -206,30 +286,148 @@ void PoiImplicitTagRawRulesGenerator::generateRules(const QStringList inputs,
         for (int i = 0; i < names.size(); i++)
         {
           QString name = names.at(i);
+          LOG_VART(name);
+          //TODO: replace name multiple spaces with one?
 
-          //'=' is used in the map key for kvps, so it needs to be escaped in the word
-          if (name.contains("="))
+          bool useWord = true;
+          if (_useSchemaTagValuesForWordsOnly && !_schemaTagValues.contains(name.toLower()))
           {
-            name = name.replace("=", "%3D");
+            useWord = false;
           }
-          for (int j = 0; j < kvps.size(); j++)
+          LOG_VART(useWord);
+
+          if (useWord)
           {
-            _updateForNewWord(name, kvps.at(j));
+            //'=' is used in the map key for kvps, so it needs to be escaped in the word
+            if (name.contains("="))
+            {
+              name = name.replace("=", "%3D");
+            }
+            for (int j = 0; j < kvps.size(); j++)
+            {
+              _updateForNewWord(name, kvps.at(j));
+            }
           }
 
           if (_tokenizeNames)
           {
-            const QStringList nameTokens = tokenizer.tokenize(name);
+            QStringList nameTokens = tokenizer.tokenize(name);
             LOG_VART(nameTokens.size());
+
+            //tokenization - we'll just do 1, 2, 3 for now
+
             for (int j = 0; j < nameTokens.size(); j++)
             {
+              useWord = true;
               QString nameToken = nameTokens.at(j);
-              //may need to replace more punctuation chars here
+              //TODO: may need to replace more punctuation chars here
               nameToken = nameToken.replace(",", "");
+              LOG_VART(nameToken);
 
-              for (int k = 0; k < kvps.size(); k++)
+              if (_translateAllNamesToEnglish)
               {
-                _updateForNewWord(nameToken, kvps.at(k));
+                const QString englishNameToken = Translator::getInstance().toEnglish(nameToken);
+//                if (englishNameToken.toLower() != nameToken.toLower().replace("-", " ").replace("'", " "))
+//                {
+//                  LOG_TRACE(
+//                    "Successfully translated " << nameToken << " to " << englishNameToken << ".");
+//                }
+                nameToken = englishNameToken;
+                LOG_VART(englishNameToken);
+              }
+
+              if (_useSchemaTagValuesForWordsOnly &&
+                  !_schemaTagValues.contains(nameToken.toLower()))
+              {
+                useWord = false;
+              }
+              LOG_VART(useWord);
+
+              if (useWord)
+              {
+                for (int k = 0; k < kvps.size(); k++)
+                {
+                  _updateForNewWord(nameToken, kvps.at(k));
+                }
+              }
+            }
+
+            if (nameTokens.size() > 2 && _maxWordTokenizationGroupSize >= 2)
+            {
+              for (int j = 0; j < nameTokens.size() - 1; j++)
+              {
+                useWord = true;
+                QString nameToken = nameTokens.at(j) + " " + nameTokens.at(j + 1);
+                //TODO: may need to replace more punctuation chars here
+                nameToken = nameToken.replace(",", "");
+                LOG_VART(nameToken);
+
+                if (_translateAllNamesToEnglish)
+                {
+                  const QString englishNameToken = Translator::getInstance().toEnglish(nameToken);
+//                  if (englishNameToken.toLower() != nameToken.toLower().replace("-", " ").replace("'", " "))
+//                  {
+//                    LOG_TRACE(
+//                      "Successfully translated " << nameToken << " to " << englishNameToken << ".");
+//                  }
+                  nameToken = englishNameToken;
+                  LOG_VART(englishNameToken);
+                }
+
+                if (_useSchemaTagValuesForWordsOnly &&
+                    !_schemaTagValues.contains(nameToken.toLower()))
+                {
+                  useWord = false;
+                }
+                LOG_VART(useWord);
+
+                if (useWord)
+                {
+                  for (int k = 0; k < kvps.size(); k++)
+                  {
+                    _updateForNewWord(nameToken, kvps.at(k));
+                  }
+                }
+              }
+            }
+
+            if (nameTokens.size() > 3 && _maxWordTokenizationGroupSize >= 3)
+            {
+              for (int j = 0; j < nameTokens.size() - 2; j++)
+              {
+                useWord = true;
+                QString nameToken =
+                  nameTokens.at(j) + " " + nameTokens.at(j + 1) + " " + nameTokens.at(j + 2);
+                //TODO: may need to replace more punctuation chars here
+                nameToken = nameToken.replace(",", "");
+                LOG_VART(nameToken);
+
+                if (_translateAllNamesToEnglish)
+                {
+                  const QString englishNameToken = Translator::getInstance().toEnglish(nameToken);
+//                  if (englishNameToken.toLower() != nameToken.toLower().replace("-", " ").replace("'", " "))
+//                  {
+//                    LOG_TRACE(
+//                      "Successfully translated " << nameToken << " to " << englishNameToken << ".");
+//                  }
+                  nameToken = englishNameToken;
+                  LOG_VART(englishNameToken);
+                }
+
+                if (_useSchemaTagValuesForWordsOnly &&
+                    !_schemaTagValues.contains(nameToken.toLower()))
+                {
+                  useWord = false;
+                }
+                LOG_VART(useWord);
+
+                if (useWord)
+                {
+                  for (int k = 0; k < kvps.size(); k++)
+                  {
+                    _updateForNewWord(nameToken, kvps.at(k));
+                  }
+                }
               }
             }
           }
@@ -249,16 +447,11 @@ void PoiImplicitTagRawRulesGenerator::generateRules(const QStringList inputs,
   }
   _countFile->close();
 
-//  LOG_INFO(
-//    "Parsed " << StringUtils::formatLargeNumber(_wordCaseMappings.size()) << " words from " <<
-//    StringUtils::formatLargeNumber(poiCount) << " POIs and " <<
-//    StringUtils::formatLargeNumber(nodeCount) << " nodes.");
   LOG_INFO(
     "Parsed " << StringUtils::formatLargeNumber(poiCount) << " POIs from " <<
     StringUtils::formatLargeNumber(nodeCount) << " nodes.");
   LOG_INFO(
     "Wrote " << StringUtils::formatLargeNumber(_countFileLineCtr) << " lines to count file.");
-  //_wordCaseMappings.clear();
 
   _sortByTagOccurrence();
   _removeDuplicatedKeyTypes();
