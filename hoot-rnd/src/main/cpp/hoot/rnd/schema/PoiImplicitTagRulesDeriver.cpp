@@ -143,7 +143,8 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QString input, const QStringL
   if (_minTagOccurrencesPerWord == 1 && _minWordLength == 1 &&
       _customRules.getWordIgnoreList().size() == 0 &&
       _customRules.getTagIgnoreList().size() == 0 && _customRules.getTagsAllowList().size() == 0 &&
-      _customRules.getCustomRulesList().size() == 0 && _customRules.getRulesIgnoreList().size() == 0)
+      _customRules.getCustomRulesList().size() == 0 &&
+      _customRules.getRulesIgnoreList().size() == 0 && !_useSchemaTagValuesForWordsOnly)
   {
     LOG_INFO("Skipping filtering as no filtering criteria were specified...");
     if (_minTagOccurrencesPerWord >= 2)
@@ -169,11 +170,6 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QString input, const QStringL
       LOG_INFO("Skipping count thresholding since threshold = 1...");
       _applyFiltering(input);
     }
-
-  //  LOG_INFO(
-  //    "Extracted "  << StringUtils::formatLargeNumber(_wordKeysToCounts.size()) <<
-  //    " word/tag associations.");
-  //  _wordKeysToCounts.clear();
 
     _writeRules(outputs, _filteredCountFile->fileName());
   }

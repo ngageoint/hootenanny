@@ -25,7 +25,7 @@ Conflation occurs at the dataset level, where the user’s workflow determines t
 
 # Supported Geodata Types
 **Hootenanny can conflate:**
-* Area polygons
+* Area polygons (parks, parking lots, etc.)
 * Building polygons
 * Points of Interest (POIs)
 * Transportation polylines
