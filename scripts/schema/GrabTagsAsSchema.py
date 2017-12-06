@@ -136,13 +136,14 @@ def getWikiDetails(k, v):
         (urlQuote(k), urlQuote(v)))
     values = json.load(data)
     result = None
-    for v in values:
+
+    for v in values['data']:
         if v['lang'] == 'en':
             result = v
 
     if result == None:
-        if len(values) > 0:
-            result = values[0]
+        if len(values["data"]) > 0:
+            result = values["data"][0]
         else:
             result = {}
 

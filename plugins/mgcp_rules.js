@@ -81,7 +81,7 @@ mgcp.rules = {
         // Note: These get swapped around before being used
         fcodeOne2oneOut : [
         ['F_CODE','AK040','sport','soccer'], // From OSM
-        ['F_CODE','AK120','landuse','recreation_ground'], // From OSM - PArk, not great
+        ['F_CODE','AK120','landuse','recreation_ground'], // From OSM - Park, not great
         ['F_CODE','AL015','building','yes'], // To fix amenity etc
         ['F_CODE','AL015','tourism','hotel'], // To fix amenity etc
         ['F_CODE','AL030','amenity','grave_yard'], // From OSM Data
@@ -102,6 +102,7 @@ mgcp.rules = {
         // ['F_CODE','ZD040','place','suburb'], // From OSM
         // ['F_CODE','ZD040','place','neighbourhood'], // From OSM
         // ['F_CODE','ZD040','place','unknown'], // From OSM
+        ['F_CODE','ZD040','natural','bay'], // From OSM
         ['F_CODE','ZD040','natural','cape'], // From OSM
         // ['F_CODE','AL105','place','town'], // From OSM
         // ['F_CODE','AL105','place','village'], // From OSM
