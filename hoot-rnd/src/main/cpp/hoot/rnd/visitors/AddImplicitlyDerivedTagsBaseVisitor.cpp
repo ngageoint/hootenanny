@@ -116,6 +116,8 @@ void AddImplicitlyDerivedTagsBaseVisitor::setConfiguration(const Settings& conf)
 {
   const ConfigOptions confOptions(conf);
   setTranslateAllNamesToEnglish(confOptions.getPoiImplicitTagRulesTranslateAllNamesToEnglish());
+  setMaxWordTokenizationGroupSize(
+    confOptions.getPoiImplicitTagRulesMaximumWordTokenizationGroupSize());
   _customRules.setCustomRuleFile(confOptions.getPoiImplicitTagRulesCustomRuleFile());
   _customRules.setRuleIgnoreFile(confOptions.getPoiImplicitTagRulesRuleIgnoreFile());
   _customRules.setTagIgnoreFile(confOptions.getPoiImplicitTagRulesTagIgnoreFile());
@@ -147,8 +149,6 @@ void AddImplicitlyDerivedTagsBaseVisitor::visit(const ElementPtr& e)
     bool foundDuplicateMatch = false;
     Tags tagsToAdd;
 
-    //TODO: if name:en doesn't exist (or is not the same as name), translate here (?) - also see
-    //tokenize method
     QStringList names = e->getTags().getNames();
 
     if (_translateAllNamesToEnglish)
@@ -186,46 +186,6 @@ void AddImplicitlyDerivedTagsBaseVisitor::visit(const ElementPtr& e)
       LOG_VART(filteredNames);
       assert(!filteredNames.isEmpty());
       names = filteredNames;
-
-//      if (!names.contains("name:en"))
-//      {
-//        for (int i = 0; i < names.size(); i++)
-//        {
-//          const QString name = names.at(i);
-//          if (name.startsWith("name"))
-//          {
-//            const QString englishTranslatedName = _englishTranslator.toEnglish(name);
-//            e->getTags().set("name:en", englishTranslatedName);
-//            break;
-//          }
-//        }
-//        if (!e->getTags().contains("name:en") && names.contains("alt_name"))
-//        {
-//          const QString englishTranslatedName =
-//            _englishTranslator.toEnglish(e->getTags().get("alt_name"));
-//          e->getTags().set("name:en", englishTranslatedName);
-//        }
-//      }
-//      LOG_VART(e->getTags());
-
-//      Tags tagsCopy;
-//      for (Tags::const_iterator tagItr = e->getTags().begin();
-//           tagItr != e->getTags().end(); ++tagItr)
-//      {
-//        const QString tagKey = tagItr.key();
-//        if (tagKey.contains("name:") && tagKey != QLatin1String("name:en"))
-//        {
-//        }
-//        else if (tagKey == QLatin1String("alt_name") || tagKey == QLatin1String("name"))
-//        {
-//        }
-//        else
-//        {
-//          tagsCopy.appendValue(tagKey, tagItr.value());
-//        }
-//      }
-//      LOG_VART(tagsCopy);
-//      names = tagsCopy.getNames();
     }
     LOG_VART(names);
 
@@ -248,18 +208,18 @@ void AddImplicitlyDerivedTagsBaseVisitor::visit(const ElementPtr& e)
       bool wordsInvolvedInMultipleRules = false;
 
       //check custom rules first
-      for (int i = 0; i < filteredNames.size(); i++)
-      {
-        const QString word = filteredNames.at(i);
-        const QString tag = _customRules.getCustomRulesList().value(word, "");
-        if (!tag.trimmed().isEmpty())
-        {
-          implicitlyDerivedTags.appendValue(tag);
-          matchingWords.insert(word);
-          LOG_TRACE("Found custom rule for word: " << word << " and tag: " << tag);
-          break;
-        }
-      }
+//      for (int i = 0; i < filteredNames.size(); i++)
+//      {
+//        const QString word = filteredNames.at(i);
+//        const QString tag = _customRules.getCustomRulesList().value(word, "");
+//        if (!tag.trimmed().isEmpty())
+//        {
+//          implicitlyDerivedTags.appendValue(tag);
+//          matchingWords.insert(word);
+//          LOG_TRACE("Found custom rule for word: " << word << " and tag: " << tag);
+//          break;
+//        }
+//      }
 
       if (implicitlyDerivedTags.size() == 0)
       {
@@ -270,20 +230,20 @@ void AddImplicitlyDerivedTagsBaseVisitor::visit(const ElementPtr& e)
             /*names*/filteredNames.toSet(), matchingWords, wordsInvolvedInMultipleRules);
       }
 
-      LOG_VART(implicitlyDerivedTags);
-      LOG_VART(matchingWords);
-      LOG_VART(wordsInvolvedInMultipleRules);
+      LOG_VARD(implicitlyDerivedTags);
+      LOG_VARD(matchingWords);
+      LOG_VARD(wordsInvolvedInMultipleRules);
 
       if (wordsInvolvedInMultipleRules)
       {
-        LOG_TRACE(
+        LOG_DEBUG(
           "Found duplicate match for names: " << filteredNames << " with matching words: " <<
           matchingWords);
         foundDuplicateMatch = true;
       }
       else if (implicitlyDerivedTags.size() > 0)
       {
-        LOG_TRACE(
+        LOG_DEBUG(
           "Derived implicit tags for names: " << filteredNames << " with matching words: " <<
             matchingWords);
         tagsToAdd = implicitlyDerivedTags;
@@ -295,7 +255,12 @@ void AddImplicitlyDerivedTagsBaseVisitor::visit(const ElementPtr& e)
         const QSet<QString> nameTokens = _getNameTokens(filteredNames);
         QStringList nameTokensList = nameTokens.toList();
 
+        LOG_VARD(implicitlyDerivedTags.size());
+        LOG_VARD(nameTokens.size());
+
         //check custom rules first, then db for each group size in descending group size order
+
+        LOG_VARD(_maxWordTokenizationGroupSize);
 
         if (implicitlyDerivedTags.size() == 0 && nameTokens.size() > 3 &&
             _maxWordTokenizationGroupSize >= 3)
@@ -318,24 +283,28 @@ void AddImplicitlyDerivedTagsBaseVisitor::visit(const ElementPtr& e)
             }
             nameTokensListGroupSizeThree.append(nameToken);
           }
-          for (int i = 0; i < nameTokensListGroupSizeThree.size(); i++)
-          {
-            const QString word = nameTokensListGroupSizeThree.at(i);
-            const QString tag = _customRules.getCustomRulesList().value(word, "");
-            if (!tag.trimmed().isEmpty())
-            {
-              implicitlyDerivedTags.appendValue(tag);
-              matchingWords.insert(word);
-              LOG_TRACE("Found custom rule for word: " << word << " and tag: " << tag);
-              break;
-            }
-          }
+//          for (int i = 0; i < nameTokensListGroupSizeThree.size(); i++)
+//          {
+//            const QString word = nameTokensListGroupSizeThree.at(i);
+//            const QString tag = _customRules.getCustomRulesList().value(word, "");
+//            if (!tag.trimmed().isEmpty())
+//            {
+//              implicitlyDerivedTags.appendValue(tag);
+//              matchingWords.insert(word);
+//              LOG_TRACE("Found custom rule for word: " << word << " and tag: " << tag);
+//              break;
+//            }
+//          }
           if (implicitlyDerivedTags.size() == 0)
           {
             implicitlyDerivedTags =
               _ruleReader->getImplicitTags(
                 nameTokensListGroupSizeThree.toSet(), matchingWords, wordsInvolvedInMultipleRules);
           }
+
+          LOG_VARD(implicitlyDerivedTags);
+          LOG_VARD(matchingWords);
+          LOG_VARD(wordsInvolvedInMultipleRules);
         }
 
         if (implicitlyDerivedTags.size() == 0 && nameTokens.size() > 2 &&
@@ -358,18 +327,18 @@ void AddImplicitlyDerivedTagsBaseVisitor::visit(const ElementPtr& e)
             }
             nameTokensListGroupSizeTwo.append(nameToken);
           }
-          for (int i = 0; i < nameTokensListGroupSizeTwo.size(); i++)
-          {
-            const QString word = nameTokensListGroupSizeTwo.at(i);
-            const QString tag = _customRules.getCustomRulesList().value(word, "");
-            if (!tag.trimmed().isEmpty())
-            {
-              implicitlyDerivedTags.appendValue(tag);
-              matchingWords.insert(word);
-              LOG_TRACE("Found custom rule for word: " << word << " and tag: " << tag);
-              break;
-            }
-          }
+//          for (int i = 0; i < nameTokensListGroupSizeTwo.size(); i++)
+//          {
+//            const QString word = nameTokensListGroupSizeTwo.at(i);
+//            const QString tag = _customRules.getCustomRulesList().value(word, "");
+//            if (!tag.trimmed().isEmpty())
+//            {
+//              implicitlyDerivedTags.appendValue(tag);
+//              matchingWords.insert(word);
+//              LOG_TRACE("Found custom rule for word: " << word << " and tag: " << tag);
+//              break;
+//            }
+//          }
           if (implicitlyDerivedTags.size() == 0)
           {
             implicitlyDerivedTags =
@@ -396,18 +365,18 @@ void AddImplicitlyDerivedTagsBaseVisitor::visit(const ElementPtr& e)
             }
             nameTokensList = translatedNameTokens;
           }
-          for (int i = 0; i < nameTokensList.size(); i++)
-          {
-            const QString word = nameTokensList.at(i);
-            const QString tag = _customRules.getCustomRulesList().value(word, "");
-            if (!tag.trimmed().isEmpty())
-            {
-              implicitlyDerivedTags.appendValue(tag);
-              matchingWords.insert(word);
-              LOG_TRACE("Found custom rule for word: " << word << " and tag: " << tag);
-              break;
-            }
-          }
+//          for (int i = 0; i < nameTokensList.size(); i++)
+//          {
+//            const QString word = nameTokensList.at(i);
+//            const QString tag = _customRules.getCustomRulesList().value(word, "");
+//            if (!tag.trimmed().isEmpty())
+//            {
+//              implicitlyDerivedTags.appendValue(tag);
+//              matchingWords.insert(word);
+//              LOG_TRACE("Found custom rule for word: " << word << " and tag: " << tag);
+//              break;
+//            }
+//          }
 
           if (implicitlyDerivedTags.size() == 0)
           {

@@ -377,14 +377,17 @@ void PoiImplicitTagRulesDeriver::_applyFiltering(const QString input)
   LOG_VARD(_customRules.getCustomRulesList().size());
   if (_customRules.getCustomRulesList().size() > 0)
   {
-    for (QMap<QString, QString>::const_iterator customRulesItr = _customRules.getCustomRulesList().begin();
-         customRulesItr != _customRules.getCustomRulesList().end(); ++customRulesItr)
+    const QMap<QString, QString> customRulesList = _customRules.getCustomRulesList();
+    for (QMap<QString, QString>::const_iterator customRulesItr = customRulesList.begin();
+         customRulesItr != customRulesList.end(); ++customRulesItr)
     {
       const QString line =
-        QString::number(999999) % "\t" % customRulesItr.key() % "\t" % customRulesItr.value() % "\n";
+        QString::number(999999) % "\t" % customRulesItr.key().trimmed() % "\t" %
+        customRulesItr.value().trimmed() % "\n";
       LOG_VART(line);
       _filteredCountFile->write(line.toUtf8());
       ruleCount++;
+      linesWrittenCount++;
     }
     LOG_INFO("Wrote " << ruleCount << " custom rules.");
   }

@@ -63,6 +63,7 @@ public:
   void setTagIgnoreFile(const QString file) { _customRules.setTagIgnoreFile(file); }
   void setTagFile(const QString file) { _customRules.setTagFile(file); }
   void setWordIgnoreFile(const QString file) { _customRules.setWordIgnoreFile(file); }
+  void setMaxWordTokenizationGroupSize(int size) { _maxWordTokenizationGroupSize = size; }
   void setTranslateAllNamesToEnglish(bool translate) { _translateAllNamesToEnglish = translate; }
 
 protected:
