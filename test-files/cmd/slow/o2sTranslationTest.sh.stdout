@@ -1,0 +1,119 @@
+### TDSv40 ###
+23:53:42.867 INFO  ...ot/js/JavaScriptTranslator.cpp( 231) Loading script: /home/matt/dg/src/hoot/translations/TDSv40.js
+23:53:43.554 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: o2s_P not found.  Creating layer...
+23:53:43.558 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: HUT_P not found.  Creating layer...
+23:53:43.559 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: RIVER_C not found.  Creating layer...
+23:53:43.560 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: ORCHARD_S not found.  Creating layer...
+23:53:43.560 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: o2s_L not found.  Creating layer...
+23:53:43.629 INFO  ...ot/js/JavaScriptTranslator.cpp( 231) Loading script: /home/matt/dg/src/hoot/translations/TDSv40.js
+23:53:43.771 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 173) Reading: test-output/o2s/tds40/HUT_P.shp HUT_P
+Loading test-output/o2s/tds40/HUT_P.shp HUT_P 0 / 1   
+23:53:43.783 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 173) Reading: test-output/o2s/tds40/o2s_L.shp o2s_L
+Loading test-output/o2s/tds40/o2s_L.shp o2s_L 0 / 2   
+23:53:43.785 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 173) Reading: test-output/o2s/tds40/o2s_P.shp o2s_P
+Loading test-output/o2s/tds40/o2s_P.shp o2s_P 0 / 1   
+23:53:43.786 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 173) Reading: test-output/o2s/tds40/ORCHARD_S.shp ORCHARD_S
+Loading test-output/o2s/tds40/ORCHARD_S.shp ORCHARD_S 0 / 1   
+23:53:43.864 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 173) Reading: test-output/o2s/tds40/RIVER_C.shp RIVER_C
+Loading test-output/o2s/tds40/RIVER_C.shp RIVER_C 0 / 1   
+
+23:53:43.902 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  59) Applying operation: hoot::MergeNearbyNodes
+23:53:43.902 INFO  .../core/ops/MergeNearbyNodes.cpp(  78) MergeNearbyNodes start
+MergeNearbyNodes 0 1    MergeNearbyNodes 12 elapsed: 0ms        
+23:53:43.902 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  59) Applying operation: hoot::BuildingPartMergeOp
+Ways: 0 / 4        Ways: 4 / 4        
+Relations: 0 / 0        
+Combining Parts: 0 / 0        
+
+23:53:43.902 INFO  ...ore/io/OsmMapWriterFactory.cpp( 130) Writing map to test-output/o2s/tds40.osm...
+
+### TDSv61 ###
+23:53:43.967 INFO  ...ot/js/JavaScriptTranslator.cpp( 231) Loading script: /home/matt/dg/src/hoot/translations/TDSv61.js
+23:53:45.019 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: o2s_P not found.  Creating layer...
+23:53:45.023 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: HUT_P not found.  Creating layer...
+23:53:45.024 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: RIVER_C not found.  Creating layer...
+23:53:45.025 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: ORCHARD_S not found.  Creating layer...
+23:53:45.026 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: o2s_L not found.  Creating layer...
+23:53:45.103 INFO  ...ot/js/JavaScriptTranslator.cpp( 231) Loading script: /home/matt/dg/src/hoot/translations/TDSv61.js
+23:53:45.500 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 173) Reading: test-output/o2s/tds61/HUT_P.shp HUT_P
+Loading test-output/o2s/tds61/HUT_P.shp HUT_P 0 / 1   
+23:53:45.517 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 173) Reading: test-output/o2s/tds61/o2s_L.shp o2s_L
+Loading test-output/o2s/tds61/o2s_L.shp o2s_L 0 / 2   
+23:53:45.519 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 173) Reading: test-output/o2s/tds61/o2s_P.shp o2s_P
+Loading test-output/o2s/tds61/o2s_P.shp o2s_P 0 / 1   
+23:53:45.520 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 173) Reading: test-output/o2s/tds61/ORCHARD_S.shp ORCHARD_S
+Loading test-output/o2s/tds61/ORCHARD_S.shp ORCHARD_S 0 / 1   
+23:53:45.523 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 173) Reading: test-output/o2s/tds61/RIVER_C.shp RIVER_C
+Loading test-output/o2s/tds61/RIVER_C.shp RIVER_C 0 / 1   
+
+23:53:45.566 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  59) Applying operation: hoot::MergeNearbyNodes
+23:53:45.566 INFO  .../core/ops/MergeNearbyNodes.cpp(  78) MergeNearbyNodes start
+MergeNearbyNodes 0 1    MergeNearbyNodes 12 elapsed: 0ms        
+23:53:45.566 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  59) Applying operation: hoot::BuildingPartMergeOp
+Ways: 0 / 4        Ways: 4 / 4        
+Relations: 0 / 0        
+Combining Parts: 0 / 0        
+
+23:53:45.566 INFO  ...ore/io/OsmMapWriterFactory.cpp( 130) Writing map to test-output/o2s/tds61.osm...
+23:53:45.631 INFO  ...ore/io/OsmMapReaderFactory.cpp( 160) Loading map from test-output/o2s/tds61.osm...
+23:53:45.633 INFO  ...ore/io/OsmMapReaderFactory.cpp( 160) Loading map from test-files/o2s_test.osm...
+
+### MGCP ###
+23:53:45.695 INFO  ...ot/js/JavaScriptTranslator.cpp( 231) Loading script: /home/matt/dg/src/hoot/translations/MGCP_TRD4.js
+23:53:45.889 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: o2s_P not found.  Creating layer...
+23:53:45.893 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: PAL099 not found.  Creating layer...
+23:53:45.893 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: LBH140 not found.  Creating layer...
+23:53:45.894 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: AEA040 not found.  Creating layer...
+23:53:45.894 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: o2s_L not found.  Creating layer...
+23:53:45.961 INFO  ...ot/js/JavaScriptTranslator.cpp( 231) Loading script: /home/matt/dg/src/hoot/translations/MGCP_TRD4.js
+23:53:45.999 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 173) Reading: test-output/o2s/mgcp/PAL099.shp PAL099
+Loading test-output/o2s/mgcp/PAL099.shp PAL099 0 / 1   
+23:53:46.010 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 173) Reading: test-output/o2s/mgcp/o2s_L.shp o2s_L
+Loading test-output/o2s/mgcp/o2s_L.shp o2s_L 0 / 2   
+23:53:46.012 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 173) Reading: test-output/o2s/mgcp/o2s_P.shp o2s_P
+Loading test-output/o2s/mgcp/o2s_P.shp o2s_P 0 / 1   
+23:53:46.013 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 173) Reading: test-output/o2s/mgcp/AEA040.shp AEA040
+Loading test-output/o2s/mgcp/AEA040.shp AEA040 0 / 1   
+23:53:46.047 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 173) Reading: test-output/o2s/mgcp/LBH140.shp LBH140
+Loading test-output/o2s/mgcp/LBH140.shp LBH140 0 / 1   
+
+23:53:46.085 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  59) Applying operation: hoot::MergeNearbyNodes
+23:53:46.085 INFO  .../core/ops/MergeNearbyNodes.cpp(  78) MergeNearbyNodes start
+MergeNearbyNodes 0 1    MergeNearbyNodes 12 elapsed: 0ms        
+23:53:46.085 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  59) Applying operation: hoot::BuildingPartMergeOp
+Ways: 0 / 4        Ways: 4 / 4        
+Relations: 0 / 0        
+Combining Parts: 0 / 0        
+
+23:53:46.085 INFO  ...ore/io/OsmMapWriterFactory.cpp( 130) Writing map to test-output/o2s/mgcp.osm...
+23:53:46.148 INFO  ...ore/io/OsmMapReaderFactory.cpp( 160) Loading map from test-output/o2s/mgcp.osm...
+23:53:46.150 INFO  ...ore/io/OsmMapReaderFactory.cpp( 160) Loading map from test-files/o2s_test.osm...
+
+### GGDM ###
+23:53:46.212 INFO  ...ot/js/JavaScriptTranslator.cpp( 231) Loading script: /home/matt/dg/src/hoot/translations/GGDMv30.js
+23:53:47.132 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: o2s_P not found.  Creating layer...
+23:53:47.136 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: HUT_P not found.  Creating layer...
+23:53:47.138 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: RIVER_C not found.  Creating layer...
+23:53:47.140 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: ORCHARD_S not found.  Creating layer...
+23:53:47.141 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 311) Layer: o2s_L not found.  Creating layer...
+23:53:47.222 INFO  ...ot/js/JavaScriptTranslator.cpp( 231) Loading script: /home/matt/dg/src/hoot/translations/GGDMv30.js
+23:53:47.372 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 173) Reading: test-output/o2s/ggdm/HUT_P.shp HUT_P
+Loading test-output/o2s/ggdm/HUT_P.shp HUT_P 0 / 1   
+23:53:47.387 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 173) Reading: test-output/o2s/ggdm/o2s_L.shp o2s_L
+Loading test-output/o2s/ggdm/o2s_L.shp o2s_L 0 / 2   
+23:53:47.388 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 173) Reading: test-output/o2s/ggdm/o2s_P.shp o2s_P
+Loading test-output/o2s/ggdm/o2s_P.shp o2s_P 0 / 1   
+23:53:47.389 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 173) Reading: test-output/o2s/ggdm/ORCHARD_S.shp ORCHARD_S
+Loading test-output/o2s/ggdm/ORCHARD_S.shp ORCHARD_S 0 / 1   
+23:53:47.391 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 173) Reading: test-output/o2s/ggdm/RIVER_C.shp RIVER_C
+Loading test-output/o2s/ggdm/RIVER_C.shp RIVER_C 0 / 1   
+
+23:53:47.430 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  59) Applying operation: hoot::MergeNearbyNodes
+23:53:47.430 INFO  .../core/ops/MergeNearbyNodes.cpp(  78) MergeNearbyNodes start
+MergeNearbyNodes 0 1    MergeNearbyNodes 12 elapsed: 0ms        
+23:53:47.430 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  59) Applying operation: hoot::BuildingPartMergeOp
+Ways: 0 / 4        Ways: 4 / 4        
+Relations: 0 / 0        
+Combining Parts: 0 / 0        
+
+23:53:47.430 INFO  ...ore/io/OsmMapWriterFactory.cpp( 130) Writing map to test-output/o2s/ggdm.osm...

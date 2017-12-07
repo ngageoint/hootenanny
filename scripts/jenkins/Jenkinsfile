@@ -94,7 +94,7 @@ pipeline {
                 expression { return params.Core_tests }
             }
             steps {
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot --version --debug; export HOOT_TEST_DIFF=--diff; bin/HootTest \$HOOT_TEST_DIFF --glacial --parallel \$(nproc)'"
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot --version --debug; bin/HootTest --diff --glacial --parallel \$(nproc)'"
             }
         }
         stage("Services Tests") {
