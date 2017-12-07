@@ -92,4 +92,20 @@ v8Engine& v8Engine::getInstance()
   return *_theInstance;
 }
 
+Isolate* v8Engine::getIsolate()
+{
+  return getInstance()._isolate;
+}
+
+Local<Context> v8Engine::getContext()
+{
+  return ToLocal(getInstance()._context.get());
+}
+
+void v8Engine::setPlatformInit(bool needsPlatform)
+{
+  _needPlatform = needsPlatform;
+}
+
+
 }

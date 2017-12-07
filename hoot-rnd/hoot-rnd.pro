@@ -48,8 +48,6 @@ SOURCES += $$files(src/*.cpp, true)
 HEADERS += $$files(src/*.h, true)
 
 # test files
-SOURCES -= $$files(src/*Test*.cpp, true)
-SOURCES -= $$files(src/*Test*.h, true)
 cppunit {
 SOURCES += $$files(src/*Test*.cpp, true)
 SOURCES += $$files(src/*Test*.h, true)

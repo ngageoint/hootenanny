@@ -75,7 +75,6 @@ public:
 
   v8::Local<v8::Object> loadScript(QString filename, QString loadInto = "");
 
-  // Will refactor this later to get rid of duplication
   v8::Local<v8::Object> loadText(QString text, QString loadInto = "", QString scriptName = "<Unknown>");
 
   /**

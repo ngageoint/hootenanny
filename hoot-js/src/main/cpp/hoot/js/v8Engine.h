@@ -53,11 +53,11 @@ public:
 
   ~v8Engine();
 
-  static v8::Isolate* getIsolate() { return getInstance()._isolate; }
+  static v8::Isolate* getIsolate();
 
-  static v8::Local<v8::Context> getContext() { return ToLocal(getInstance()._context.get()); }
+  static v8::Local<v8::Context> getContext();
 
-  static void setPlatformInit(bool needsPlatform = true) { _needPlatform = needsPlatform; }
+  static void setPlatformInit(bool needsPlatform = true);
 
 private:
   /** static pointer to the singleton instance */
