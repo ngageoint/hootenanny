@@ -32,6 +32,14 @@
     },
     {
         "geometries": [
+            "linestring"
+        ],
+        "isA": "natural",
+        "name": "natural=coastline",
+        "objectType": "tag"
+    },
+    {
+        "geometries": [
             "node",
             "linestring",
             "area"

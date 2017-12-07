@@ -74,7 +74,7 @@ mgcp.rules = {
         ['F_CODE','EC030','landuse','forest'], // Wood - NFDD EC015
         ['F_CODE','ED030','wetland','mangrove'], // Mangrove Swamp - NFDD ED020
         ['F_CODE','FA090','raw:fcode','FA090'], // Geophysical Prospecting Grid - No replacement code
-        ['F_CODE','GB220','raw:fcode','GB220'], // Aeronautical Obstacle - No replacement codd
+        ['F_CODE','GB220','raw:fcode','GB220'], // Aeronautical Obstacle - No replacement code
         ], // End fcodeOne2oneV4
 
         // These are for finding an FCODE for export.
@@ -91,6 +91,7 @@ mgcp.rules = {
         ['F_CODE','AP050','highway','bridleway'],
         ['F_CODE','AP050','highway','cycleway'],
         ['F_CODE','AT050','landuse','facility'],
+        ['F_CODE','BA010','natural','coastline'], // Land/Water Boundary - From OSM
         ['F_CODE','BA030','place','islet'], // From OSM
         ['F_CODE','BB190','man_made','pier'], // From OSM
         ['F_CODE','BH080','landuse','basin'], // From OSM - Lake is close but not great
@@ -104,11 +105,13 @@ mgcp.rules = {
         // ['F_CODE','ZD040','place','unknown'], // From OSM
         ['F_CODE','ZD040','natural','bay'], // From OSM
         ['F_CODE','ZD040','natural','cape'], // From OSM
+        ['F_CODE','ZD040','natural','hill'], // From OSM
+        ['F_CODE','ZD040','natural','peak'], // From OSM
+        ['F_CODE','ZD040','natural','valley'], // From GeoNames
         // ['F_CODE','AL105','place','town'], // From OSM
         // ['F_CODE','AL105','place','village'], // From OSM
         // ['F_CODE','AL105','place','hamlet'], // From OSM
         // ['F_CODE','AL105','place','isolated_dwelling'], // From OSM
-        ['F_CODE','ZD040','natural','hill'], // From OSM
         ], // End fcodeOne2oneOut
 
     // One2one rules for Text attributes

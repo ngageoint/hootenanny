@@ -42,56 +42,58 @@ tds.rules = {
     // These are for finding an FCODE for export.
     // Note: These get swapped around before being used
     fcodeOne2oneOut : [
+     // ['F_CODE','EA010','landuse','farm'], // Alt version of "landuse=farmland"
+     // ['F_CODE','EC015','natural','wood'], // Alt version of Forest
      ['F_CODE','AA010','landuse','quarry'], // Extraction Mine
-     ['F_CODE','AK120','leisure','playground'], // Park
      ['F_CODE','AK120','landuse','recreation_ground'], // Park
      ['F_CODE','AK120','leisure','common'], // Park - close but not great
-     ['F_CODE','AL020','landuse','residential'], // From OSM - Map to BUA
+     ['F_CODE','AK120','leisure','playground'], // Park
      ['F_CODE','AL020','landuse','industrial'], // From OSM - Map to BUA
+     ['F_CODE','AL020','landuse','residential'], // From OSM - Map to BUA
      ['F_CODE','AL030','amenity','grave_yard'], // From OSM Data
      ['F_CODE','AL105','tourism','caravan_site'], // From OSM data, not a building so...
      ['F_CODE','AL130','historic','memorial'], // From OSM data, not great
      ['F_CODE','AL200','historic','ruins'], // Ruins
-     ['F_CODE','AL241','tower','communication'], 
-     ['F_CODE','AL241','tower','yes'], // OSM
      ['F_CODE','AL241','man_made','mast'], // OSM
+     ['F_CODE','AL241','tower','communication'],
+     ['F_CODE','AL241','tower','yes'], // OSM
      ['F_CODE','AM080','tower:type','water'],
      ['F_CODE','AN060','railway','yes'], // Rail yards
      ['F_CODE','AP030','highway','motorway'], // Limited Access Motorway
      ['F_CODE','AP030','highway','motorway_link'], // Limited Access Motorway
-     ['F_CODE','AP030','highway','trunk'], // Motorway
-     ['F_CODE','AP030','highway','trunk_link'], // Motorway
      ['F_CODE','AP030','highway','primary'],
      ['F_CODE','AP030','highway','primary_link'],
+     ['F_CODE','AP030','highway','residential'],
      ['F_CODE','AP030','highway','secondary'],
      ['F_CODE','AP030','highway','secondary_link'],
+     ['F_CODE','AP030','highway','service'],
      ['F_CODE','AP030','highway','tertiary'],
      ['F_CODE','AP030','highway','tertiary_link'],
-     ['F_CODE','AP030','highway','residential'],
+     ['F_CODE','AP030','highway','trunk'], // Motorway
+     ['F_CODE','AP030','highway','trunk_link'], // Motorway
      ['F_CODE','AP030','highway','unclassified'],
-     ['F_CODE','AP030','highway','service'],
      ['F_CODE','AP030','highway','yes'], // Just in case...
      ['F_CODE','AP040','barrier','lift_gate'], // Gate
      ['F_CODE','AP050','highway','footway'], // Trail
-     ['F_CODE','AQ125','railway','station'], // Railway Station
-     ['F_CODE','AQ125','highway','bus_stop'], // Transportaion Station
      ['F_CODE','AQ125','highway','bus_station'], // Transportaion Station
+     ['F_CODE','AQ125','highway','bus_stop'], // Transportaion Station
      ['F_CODE','AQ125','public_transport','stop_position'],
+     ['F_CODE','AQ125','railway','station'], // Railway Station
      ['F_CODE','AQ141','parking','multi-story'], // Parking Garage
      ['F_CODE','AT042','power','pole'], // OSM
      ['F_CODE','AT042','power','tower'], // OSM
+     ['F_CODE','BA010','natural','coastline'], // Land/Water Boundary - From OSM
      ['F_CODE','BA030','place','islet'], // Island - From OSM
      ['F_CODE','BH140','waterway','yes'], // Make unknown waterways into rivers
-     ['F_CODE','BH155','man_made','salt_pond'], // Due to the default translation changing
      ['F_CODE','BH145','natural','sinkhole'],
-     // ['F_CODE','EA010','landuse','farm'], // Alt version of "landuse=farmland"
-     // ['F_CODE','EC015','natural','wood'], // Alt version of Forest
+     ['F_CODE','BH155','man_made','salt_pond'], // Due to the default translation changing
      ['F_CODE','GB005','aeroway','sport_airport'], // Land Aerodrome
      ['F_CODE','ZB035','man_made','survey_point'], // Control Point - Superseded by ZB050
-     ['F_CODE','ZD040','natural','hill'], // From GeoNames
-     ['F_CODE','ZD040','natural','valley'], // From GeoNames
+     ['F_CODE','ZD040','natural','bay'], // From OSM
      ['F_CODE','ZD040','natural','cape'], // From OSM
+     ['F_CODE','ZD040','natural','hill'], // From GeoNames
      ['F_CODE','ZD040','natural','peak'], // From OSM
+     ['F_CODE','ZD040','natural','valley'], // From GeoNames
      ], // End fcodeOne2oneOut
 
     // One2one rules for Text Fields
