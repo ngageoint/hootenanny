@@ -882,6 +882,10 @@ mgcp = {
                 if (geometryType == 'Line' && !tags.highway) tags.highway = 'road';
                 break;
 
+            case 'GB485': // Approach Lighting System
+                tags.navigationaid = 'als';
+                break;
+
         } // End switch FCODE
 
         // Sort out TRS (Transport Type)
@@ -1008,6 +1012,7 @@ mgcp = {
             // See ToOsmPostProcessing for more details about rulesList.
             var rulesList = [
             ["t.amenity == 'marketplace'","t.facility = 'yes'"],
+            ["t.aeroway == 'navigationaid' && t.navigationaid","delete t.navigationaid"],
             ["t.barrier == 'tank_trap' && t.tank_trap == 'dragons_teeth'","t.barrier = 'dragons_teeth'; delete t.tank_trap"],
             ["t.construction && t.railway","t.railway = t.construction; t.condition = 'construction'; delete t.construction"],
             ["t.construction && t.highway","t.highway = t.construction; t.condition = 'construction'; delete t.construction"],

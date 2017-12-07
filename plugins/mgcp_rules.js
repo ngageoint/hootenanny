@@ -73,8 +73,10 @@ mgcp.rules = {
         ['F_CODE','DB200','natural','gully'], // Gully - FCODE Retired
         ['F_CODE','EC030','landuse','forest'], // Wood - NFDD EC015
         ['F_CODE','ED030','wetland','mangrove'], // Mangrove Swamp - NFDD ED020
-        ['F_CODE','FA090','raw:fcode','FA090'], // Geophysical Prospecting Grid - No replacement code
-        ['F_CODE','GB220','raw:fcode','GB220'], // Aeronautical Obstacle - No replacement code
+        ['F_CODE','FA090','man_made','geophysical_prospecting_grid'], // Geophysical Prospecting Grid - No replacement code
+        ['F_CODE','GA034','airmark','beacon'], // Aeronautical Radio Navigation Service - TDS GA033
+        ['F_CODE','GB220','aeroway','obstacle'], // Aeronautical Obstacle - No replacement code
+        ['F_CODE','GB485','navigationaid','als'], // Approach Lighting System - Not in TDS
         ], // End fcodeOne2oneV4
 
         // These are for finding an FCODE for export.
