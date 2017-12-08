@@ -76,7 +76,7 @@ mgcp.rules = {
         ['F_CODE','FA090','man_made','geophysical_prospecting_grid'], // Geophysical Prospecting Grid - No replacement code
         ['F_CODE','GA034','airmark','beacon'], // Aeronautical Radio Navigation Service - TDS GA033
         ['F_CODE','GB220','aeroway','obstacle'], // Aeronautical Obstacle - No replacement code
-        ['F_CODE','GB485','navigationaid','als'], // Approach Lighting System - Not in TDS
+        ['F_CODE','GB485','aeroway','navigationaid'], // Approach Lighting System - Not in TDS
         ], // End fcodeOne2oneV4
 
         // These are for finding an FCODE for export.
@@ -88,6 +88,10 @@ mgcp.rules = {
         ['F_CODE','AL015','tourism','hotel'], // To fix amenity etc
         ['F_CODE','AL030','amenity','grave_yard'], // From OSM Data
         ['F_CODE','AL105','tourism','caravan_site'], // From OSM data, not a building so...
+        // ['F_CODE','AL105','place','town'], // From OSM
+        // ['F_CODE','AL105','place','village'], // From OSM
+        // ['F_CODE','AL105','place','hamlet'], // From OSM
+        // ['F_CODE','AL105','place','isolated_dwelling'], // From OSM
         ['F_CODE','AL130','tourism','attraction'], // From OSM data, not great
         ['F_CODE','AP050','highway','footway'],
         ['F_CODE','AP050','highway','bridleway'],
@@ -99,21 +103,22 @@ mgcp.rules = {
         ['F_CODE','BH080','landuse','basin'], // From OSM - Lake is close but not great
         ['F_CODE','BH130','landuse','reservoir'], // From OSM
         ['F_CODE','BH155','man_made','salt_pond'], // Due to the default translation changing
+        ['F_CODE','GB485','aeroway','approach_light'], // From OSM
+        ['F_CODE','GB485','aeroway','landing_light'], // From OSM
+        ['F_CODE','GB485','aeroway','navigation_aid'], // From OSM
+        ['F_CODE','GB485','aeroway','papi'], // From OSM
+        ['F_CODE','GB485','aeroway','vasi'], // From OSM
+        ['F_CODE','ZD040','natural','bay'], // From OSM
+        ['F_CODE','ZD040','natural','cape'], // From OSM
+        ['F_CODE','ZD040','natural','hill'], // From OSM
+        ['F_CODE','ZD040','natural','peak'], // From OSM
+        ['F_CODE','ZD040','natural','valley'], // From GeoNames
         // ['F_CODE','ZD040','place','state'], // From OSM
         // ['F_CODE','ZD040','place','county'], // From OSM
         // ['F_CODE','ZD040','place','quarter'], // From OSM
         // ['F_CODE','ZD040','place','suburb'], // From OSM
         // ['F_CODE','ZD040','place','neighbourhood'], // From OSM
         // ['F_CODE','ZD040','place','unknown'], // From OSM
-        ['F_CODE','ZD040','natural','bay'], // From OSM
-        ['F_CODE','ZD040','natural','cape'], // From OSM
-        ['F_CODE','ZD040','natural','hill'], // From OSM
-        ['F_CODE','ZD040','natural','peak'], // From OSM
-        ['F_CODE','ZD040','natural','valley'], // From GeoNames
-        // ['F_CODE','AL105','place','town'], // From OSM
-        // ['F_CODE','AL105','place','village'], // From OSM
-        // ['F_CODE','AL105','place','hamlet'], // From OSM
-        // ['F_CODE','AL105','place','isolated_dwelling'], // From OSM
         ], // End fcodeOne2oneOut
 
     // One2one rules for Text attributes
@@ -184,9 +189,9 @@ mgcp.rules = {
         // AFA - Available Vessel Service 
         // ['AFA','0','raw:AFA','unknown'], // Unknown 
         ['AFA','0',undefined,undefined], // Unknown 
-        ['AFA','19','raw:AFA','helipad'], // Helipad 
-        ['AFA','41','raw:AFA','none_available'], // None Available 
-        ['AFA','999','raw:AFA','other'], // Other 
+        ['AFA','19','available_service','helipad'], // Helipad
+        ['AFA','41','available_service','none'], // None Available
+        ['AFA','999','available_service','other'], // Other
 
         // ATC - Aqueduct Type 
         // ['ATC','0','aqueduct:type','unknown'], // Unknown 
@@ -442,15 +447,15 @@ mgcp.rules = {
         ['FFP','999','farm:pattern','other'], // Other 
 
         // FHC - Harbour Facility Function 
-        //['FHC','0','raw:FHC','unknown'], // Unknown 
+        //['FHC','0','harbour:use','unknown'], // Unknown
         ['FHC','0',undefined,undefined], // Unknown 
-        ['FHC','10','raw:FHC','container_terminal'], // Container Terminal 
-        ['FHC','3','raw:FHC','ferry_terminal'], // Ferry Terminal 
-        ['FHC','4','raw:FHC','fishing_harbour'], // Fishing Harbour 
-        ['FHC','5','raw:FHC','marina'], // Marina 
-        ['FHC','6','raw:FHC','naval_base'], // Naval Base 
-        ['FHC','7','raw:FHC','tanker_terminal'], // Tanker Terminal 
-        ['FHC','999','raw:FHC','other'], // Other 
+        ['FHC','10','harbour:use','container_terminal'], // Container Terminal
+        ['FHC','3','harbour:use','ferry_terminal'], // Ferry Terminal
+        ['FHC','4','harbour:use','fishing_harbour'], // Fishing Harbour
+        ['FHC','5','harbour:use','marina'], // Marina
+        ['FHC','6','harbour:use','naval_base'], // Naval Base
+        ['FHC','7','harbour:use','tanker_terminal'], // Tanker Terminal
+        ['FHC','999','harbour:use','other'], // Other
 
         // FIC - Embankment Type 
         // ['FIC','0','embankment:type','unknown'], // Unknown
@@ -639,52 +644,52 @@ mgcp.rules = {
 
         // NST - Navigation System Type
         ['NST','-32768',undefined,undefined],  // Null
-        // ['NST','0','navigationaid','unknown'],
+        // ['NST','0','beacon:type','unknown'],
         ['NST','0',undefined,undefined],
-        ['NST','2','navigationaid','consol'],
-        ['NST','3','navigationaid','decca'],
-        ['NST','7','navigationaid','loran'], // long_range_air_navigation_system
-        ['NST','8','navigationaid','omega'],
-        ['NST','11','navigationaid','radar'],
-        ['NST','12','navigationaid','radio'],
-        ['NST','13','navigationaid','radio_telephone'],
-        ['NST','15','navigationaid','television'],
-        ['NST','16','navigationaid','microwave'],
-        ['NST','17','navigationaid','ndb'], // non-directional_radio_beacon
-        ['NST','18','navigationaid','non-directional_radio_beacon/distance_measuring_equipment'],
-        ['NST','20','navigationaid','vor'], // vhf_omni_directional_radio_range
-        ['NST','21','navigationaid','vor-dme'], // vhf_omni_directional_radio_range/distance_measuring_equipment
-        ['NST','22','navigationaid','vortac'], // vhf_omni_directional_radio_range_and_tacan
-        ['NST','23','navigationaid','tacan'], // tactical_air_navigation_equipment tacan
-        ['NST','24','navigationaid','ils'], // instrument_landing_system
-        ['NST','25','navigationaid','ils-dme'], // instrument_landing_system/distance_measuring_equipment
-        ['NST','26','navigationaid','localizer'],
-        ['NST','27','navigationaid','localizer/distance_measuring_equipment'],
-        ['NST','30','navigationaid','microwave_landing_system'],
-        ['NST','33','navigationaid','radio_telegraph'],
-        ['NST','35','navigationaid','radar_antenna'],
-        ['NST','37','navigationaid','precision_approach_radar'],
-        ['NST','38','navigationaid','aeronautical_radio'],
-        ['NST','58','navigationaid','dme'], // distance_measuring_equipment
-        ['NST','74','navigationaid','ils_back_course'],
-        ['NST','75','navigationaid','loc_back_course'],
-        ['NST','76','navigationaid','marker'],
-        ['NST','78','navigationaid','outer_marker'],
-        ['NST','79','navigationaid','middle_marker'],
-        ['NST','80','navigationaid','locator_outer_marker'],
-        ['NST','81','navigationaid','locator_middle_marker'],
-        ['NST','82','navigationaid','rotating_beacon_light'],
-        ['NST','999','navigationaid','other'],
+        ['NST','2','beacon:type','consol'],
+        ['NST','3','beacon:type','decca'],
+        ['NST','7','beacon:type','loran'], // long_range_air_navigation_system
+        ['NST','8','beacon:type','omega'],
+        ['NST','11','beacon:type','radar'],
+        ['NST','12','beacon:type','radio'],
+        ['NST','13','beacon:type','radio_telephone'],
+        ['NST','15','beacon:type','television'],
+        ['NST','16','beacon:type','microwave'],
+        ['NST','17','beacon:type','ndb'], // non-directional_radio_beacon
+        ['NST','18','beacon:type','non-directional_radio_beacon/distance_measuring_equipment'],
+        ['NST','20','beacon:type','vor'], // vhf_omni_directional_radio_range
+        ['NST','21','beacon:type','vor-dme'], // vhf_omni_directional_radio_range/distance_measuring_equipment
+        ['NST','22','beacon:type','vortac'], // vhf_omni_directional_radio_range_and_tacan
+        ['NST','23','beacon:type','tacan'], // tactical_air_navigation_equipment tacan
+        ['NST','24','beacon:type','ils'], // instrument_landing_system
+        ['NST','25','beacon:type','ils-dme'], // instrument_landing_system/distance_measuring_equipment
+        ['NST','26','beacon:type','localizer'],
+        ['NST','27','beacon:type','localizer/distance_measuring_equipment'],
+        ['NST','30','beacon:type','microwave_landing_system'],
+        ['NST','33','beacon:type','radio_telegraph'],
+        ['NST','35','beacon:type','radar_antenna'],
+        ['NST','37','beacon:type','precision_approach_radar'],
+        ['NST','38','beacon:type','aeronautical_radio'],
+        ['NST','58','beacon:type','dme'], // distance_measuring_equipment
+        ['NST','74','beacon:type','ils_back_course'],
+        ['NST','75','beacon:type','loc_back_course'],
+        ['NST','76','beacon:type','marker'],
+        ['NST','78','beacon:type','outer_marker'],
+        ['NST','79','beacon:type','middle_marker'],
+        ['NST','80','beacon:type','locator_outer_marker'],
+        ['NST','81','beacon:type','locator_middle_marker'],
+        ['NST','82','beacon:type','rotating_beacon_light'],
+        ['NST','999','beacon:type','other'],
 
         // OPC - Offshore Platform Type 
-        // ['OPC','0','raw:OPC','unknown'], // Unknown 
+        // ['OPC','0','offshore_construction','unknown'], // Unknown
         ['OPC','0',undefined,undefined], // Unknown 
-        ['OPC','10','raw:OPC','navigation_aid_support'], // Navigation Aid Support 
-        ['OPC','2','raw:OPC','production_platform'], // Production Platform 
-        ['OPC','3','raw:OPC','observation_platform'], // Observation Platform 
-        ['OPC','4','raw:OPC','articulated_loading_platform_(alp)'], // Articulated Loading Platform (ALP) 
-        ['OPC','9','raw:OPC','accommodation_platform'], // Accommodation Platform 
-        ['OPC','999','raw:OPC','other'], // Other 
+        ['OPC','10','offshore_construction','navigation_aid_support'], // Navigation Aid Support
+        ['OPC','2','offshore_construction','production_platform'], // Production Platform
+        ['OPC','3','offshore_construction','observation_platform'], // Observation Platform
+        ['OPC','4','offshore_construction','articulated_loading_platform_(alp)'], // Articulated Loading Platform (ALP)
+        ['OPC','9','offshore_construction','accommodation_platform'], // Accommodation Platform
+        ['OPC','999','offshore_construction','other'], // Other
 
         // ORD - Relative Importance
         ['ORD','-32768',undefined,undefined], // From data
@@ -1435,8 +1440,8 @@ mgcp.rules = {
         // ['CLI','-32768',undefined,undefined], // Null (Reserved) 
         // ['CLI','0','raw:CLI','unknown'], // Unknown 
         ['CLI','0',undefined,undefined], // Unknown 
-        ['CLI','1000','raw:CLI','not_isolated'], // Not isolated 
-        ['CLI','1001','raw:CLI','isolated'], // Isolated
+        ['CLI','1000','cable:isolated','no'], // Not isolated
+        ['CLI','1001','cable:isolated','yes'], // Isolated
 
         // COS - Facility Operational Status 
         // ['COS','-32768',undefined,undefined], // Null (Reserved) 

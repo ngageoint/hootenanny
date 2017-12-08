@@ -43,59 +43,64 @@ ggdm30.rules = {
     // These are for finding an FCODE for export.
     // Note: These get swapped around before being used
     fcodeOne2oneOut : [
-//      ['F_CODE','AN060','railway','yes'], // Rail yards
-     // ['F_CODE','EA010','landuse','farm'], // Alt version of "landuse=farmland"
-     // ['F_CODE','EC015','natural','wood'], // Alt version of Forest
-     ['F_CODE','AA010','landuse','quarry'], // Extraction Mine
-     ['F_CODE','AK120','landuse','recreation_ground'], // Park
-     ['F_CODE','AK120','leisure','common'], // Park - close but not great
-     ['F_CODE','AK120','leisure','playground'], // Park
-     ['F_CODE','AL020','landuse','industrial'], // From OSM - Map to BUA
-     ['F_CODE','AL020','landuse','residential'], // From OSM - Map to BUA
-     ['F_CODE','AL024','place','neighborhood'], // Neighbourhood - US spelling
-     ['F_CODE','AL030','amenity','grave_yard'], // From OSM Data
-     ['F_CODE','AL130','historic','memorial'], // From OSM data, not great
-     ['F_CODE','AL200','historic','ruins'], // Ruins
-     ['F_CODE','AL241','tower','communication'],
-     ['F_CODE','AL241','tower','yes'],
-     ['F_CODE','AM080','tower:type','water'],
-     ['F_CODE','AP030','highway','motorway'], // Limited Access Motorway
-     ['F_CODE','AP030','highway','motorway_link'], // Limited Access Motorway
-     ['F_CODE','AP030','highway','primary'],
-     ['F_CODE','AP030','highway','primary_link'],
-     ['F_CODE','AP030','highway','residential'],
-     ['F_CODE','AP030','highway','secondary'],
-     ['F_CODE','AP030','highway','secondary_link'],
-     ['F_CODE','AP030','highway','service'],
-     ['F_CODE','AP030','highway','tertiary'],
-     ['F_CODE','AP030','highway','tertiary_link'],
-     ['F_CODE','AP030','highway','trunk'], // Motorway
-     ['F_CODE','AP030','highway','trunk_link'], // Motorway
-     ['F_CODE','AP030','highway','unclassified'],
-     ['F_CODE','AP030','highway','yes'], // Just in case...
-     ['F_CODE','AP040','barrier','lift_gate'], // Gate
-     ['F_CODE','AP040','railway','crossing'], // Pedestrian Crossing - See custom rules
-     ['F_CODE','AP040','railway','level_crossing'], // Level Crossing - See custom rules
-     ['F_CODE','AP050','highway','footway'], // Trail
-     ['F_CODE','AQ125','highway','bus_station'], // Transportaion Station
-     ['F_CODE','AQ125','highway','bus_stop'], // Transportaion Station
-     ['F_CODE','AQ125','public_transport','stop_position'],
-     ['F_CODE','AQ125','railway','station'], // Railway Station
-     ['F_CODE','AQ141','parking','multi-story'], // Parking Garage
-     ['F_CODE','AT042','power','pole'], // OSM
-     ['F_CODE','AT042','power','tower'], // OSM
-     ['F_CODE','BA010','natural','coastline'], // Land/Water Boundary - From OSM
-     ['F_CODE','BA030','place','islet'], // Island - From OSM
-     ['F_CODE','BH140','waterway','yes'], // Make unknown waterways into rivers
-     ['F_CODE','BH145','natural','sinkhole'],
-     ['F_CODE','BH155','man_made','salt_pond'], // Due to the default translation changing
-     ['F_CODE','GB005','aeroway','sport_airport'], // Land Aerodrome
-     ['F_CODE','ZD040','natural','bay'], // From OSM
-     ['F_CODE','ZD040','natural','cape'], // From OSM
-     ['F_CODE','ZD040','natural','hill'], // From GeoNames
-     ['F_CODE','ZD040','natural','peak'], // From OSM
-     ['F_CODE','ZD040','natural','valley'], // From GeoNames
-     ], // End fcodeOne2oneOut
+    // ['F_CODE','AN060','railway','yes'], // Rail yards
+    // ['F_CODE','EA010','landuse','farm'], // Alt version of "landuse=farmland"
+    // ['F_CODE','EC015','natural','wood'], // Alt version of Forest
+    ['F_CODE','AA010','landuse','quarry'], // Extraction Mine
+    ['F_CODE','AK120','landuse','recreation_ground'], // Park
+    ['F_CODE','AK120','leisure','common'], // Park - close but not great
+    ['F_CODE','AK120','leisure','playground'], // Park
+    ['F_CODE','AL020','landuse','industrial'], // From OSM - Map to BUA
+    ['F_CODE','AL020','landuse','residential'], // From OSM - Map to BUA
+    ['F_CODE','AL024','place','neighborhood'], // Neighbourhood - US spelling
+    ['F_CODE','AL030','amenity','grave_yard'], // From OSM Data
+    ['F_CODE','AL130','historic','memorial'], // From OSM data, not great
+    ['F_CODE','AL200','historic','ruins'], // Ruins
+    ['F_CODE','AL241','tower','communication'],
+    ['F_CODE','AL241','tower','yes'],
+    ['F_CODE','AM080','tower:type','water'],
+    ['F_CODE','AP030','highway','motorway'], // Limited Access Motorway
+    ['F_CODE','AP030','highway','motorway_link'], // Limited Access Motorway
+    ['F_CODE','AP030','highway','primary'],
+    ['F_CODE','AP030','highway','primary_link'],
+    ['F_CODE','AP030','highway','residential'],
+    ['F_CODE','AP030','highway','secondary'],
+    ['F_CODE','AP030','highway','secondary_link'],
+    ['F_CODE','AP030','highway','service'],
+    ['F_CODE','AP030','highway','tertiary'],
+    ['F_CODE','AP030','highway','tertiary_link'],
+    ['F_CODE','AP030','highway','trunk'], // Motorway
+    ['F_CODE','AP030','highway','trunk_link'], // Motorway
+    ['F_CODE','AP030','highway','unclassified'],
+    ['F_CODE','AP030','highway','yes'], // Just in case...
+    ['F_CODE','AP040','barrier','lift_gate'], // Gate
+    ['F_CODE','AP040','railway','crossing'], // Pedestrian Crossing - See custom rules
+    ['F_CODE','AP040','railway','level_crossing'], // Level Crossing - See custom rules
+    ['F_CODE','AP050','highway','footway'], // Trail
+    ['F_CODE','AQ125','highway','bus_station'], // Transportaion Station
+    ['F_CODE','AQ125','highway','bus_stop'], // Transportaion Station
+    ['F_CODE','AQ125','public_transport','stop_position'],
+    ['F_CODE','AQ125','railway','station'], // Railway Station
+    ['F_CODE','AQ141','parking','multi-story'], // Parking Garage
+    ['F_CODE','AT042','power','pole'], // OSM
+    ['F_CODE','AT042','power','tower'], // OSM
+    ['F_CODE','BA010','natural','coastline'], // Land/Water Boundary - From OSM
+    ['F_CODE','BA030','place','islet'], // Island - From OSM
+    ['F_CODE','BH140','waterway','yes'], // Make unknown waterways into rivers
+    ['F_CODE','BH145','natural','sinkhole'],
+    ['F_CODE','BH155','man_made','salt_pond'], // Due to the default translation changing
+    ['F_CODE','GB013','aeroway','approach_light'], // From OSM
+    ['F_CODE','GB013','aeroway','landing_light'], // From OSM
+    ['F_CODE','GB013','aeroway','navigation_aid'], // From OSM
+    ['F_CODE','GB013','aeroway','papi'], // From OSM
+    ['F_CODE','GB013','aeroway','vasi'], // From OSM
+    ['F_CODE','GB005','aeroway','sport_airport'], // Land Aerodrome
+    ['F_CODE','ZD040','natural','bay'], // From OSM
+    ['F_CODE','ZD040','natural','cape'], // From OSM
+    ['F_CODE','ZD040','natural','hill'], // From GeoNames
+    ['F_CODE','ZD040','natural','peak'], // From OSM
+    ['F_CODE','ZD040','natural','valley'], // From GeoNames
+    ], // End fcodeOne2oneOut
 
     // One2one rules for Text Fields
     txtBiased : {
@@ -5859,23 +5864,23 @@ ggdm30.rules = {
 
      // ZI024_DRL - Water : Device Relative Location
      // ['ZI024_DRL','-999999',undefined,undefined], // No Information
-     ['ZI024_DRL','17','raw:ZI024_DRL','on_waterbody_bottom'], // On Waterbody Bottom
-     ['ZI024_DRL','40','raw:ZI024_DRL','below_ground_surface'], // Below Ground Surface
-     ['ZI024_DRL','44','raw:ZI024_DRL','on_surface'], // On Surface
-     ['ZI024_DRL','45','raw:ZI024_DRL','above_surface'], // Above Surface
-     ['ZI024_DRL','50','raw:ZI024_DRL','submerged'], // Submerged
-     ['ZI024_DRL','999','raw:ZI024_DRL','other'], // Other
+     ['ZI024_DRL','17','device:location','on_waterbody_bottom'], // On Waterbody Bottom
+     ['ZI024_DRL','40','device:location','below_ground_surface'], // Below Ground Surface
+     ['ZI024_DRL','44','device:location','on_surface'], // On Surface
+     ['ZI024_DRL','45','device:location','above_surface'], // Above Surface
+     ['ZI024_DRL','50','device:location','submerged'], // Submerged
+     ['ZI024_DRL','999','device:location','other'], // Other
 
      // ZI024_DVPT - Water : Device Power Type
      // ['ZI024_DVPT','-999999',undefined,undefined], // No Information
-     ['ZI024_DVPT','1','raw:ZI024_DVPT','electricity'], // Electricity
-     ['ZI024_DVPT','2','raw:ZI024_DVPT','petroleum_product'], // Petroleum Product
-     ['ZI024_DVPT','3','raw:ZI024_DVPT','manual'], // Manual
-     ['ZI024_DVPT','4','raw:ZI024_DVPT','gravity'], // Gravity
-     ['ZI024_DVPT','5','raw:ZI024_DVPT','compressed_air'], // Compressed Air
-     ['ZI024_DVPT','6','raw:ZI024_DVPT','steam'], // Steam
-     ['ZI024_DVPT','7','raw:ZI024_DVPT','solar'], // Solar
-     ['ZI024_DVPT','999','raw:ZI024_DVPT','other'], // Other
+     ['ZI024_DVPT','1','device:power','electricity'], // Electricity
+     ['ZI024_DVPT','2','device:power','petroleum_product'], // Petroleum Product
+     ['ZI024_DVPT','3','device:power','manual'], // Manual
+     ['ZI024_DVPT','4','device:power','gravity'], // Gravity
+     ['ZI024_DVPT','5','device:power','compressed_air'], // Compressed Air
+     ['ZI024_DVPT','6','device:power','steam'], // Steam
+     ['ZI024_DVPT','7','device:power','solar'], // Solar
+     ['ZI024_DVPT','999','device:power','other'], // Other
 
      // ZI024_HYP - Water : Hydrologic Persistence
      // ['ZI024_HYP','-999999',undefined,undefined], // No Information
@@ -5885,30 +5890,30 @@ ggdm30.rules = {
 
      // ZI024_PMP - Water : Pump Type
      // ['ZI024_PMP','-999999',undefined,undefined], // No Information
-     ['ZI024_PMP','1','raw:ZI024_PMP','airlift'], // Airlift
-     ['ZI024_PMP','2','raw:ZI024_PMP','centrifugal'], // Centrifugal
-     ['ZI024_PMP','3','raw:ZI024_PMP','jet'], // Jet
-     ['ZI024_PMP','4','raw:ZI024_PMP','reciprocating'], // Reciprocating
-     ['ZI024_PMP','5','raw:ZI024_PMP','turbine'], // Turbine
-     ['ZI024_PMP','6','raw:ZI024_PMP','gravity'], // Gravity
-     ['ZI024_PMP','7','raw:ZI024_PMP','vacuum'], // Vacuum
-     ['ZI024_PMP','8','raw:ZI024_PMP','rotary'], // Rotary
-     ['ZI024_PMP','999','raw:ZI024_PMP','other'], // Other
+     ['ZI024_PMP','1','pump:type','airlift'], // Airlift
+     ['ZI024_PMP','2','pump:type','centrifugal'], // Centrifugal
+     ['ZI024_PMP','3','pump:type','jet'], // Jet
+     ['ZI024_PMP','4','pump:type','reciprocating'], // Reciprocating
+     ['ZI024_PMP','5','pump:type','turbine'], // Turbine
+     ['ZI024_PMP','6','pump:type','gravity'], // Gravity
+     ['ZI024_PMP','7','pump:type','vacuum'], // Vacuum
+     ['ZI024_PMP','8','pump:type','rotary'], // Rotary
+     ['ZI024_PMP','999','pump:type','other'], // Other
 
      // ZI024_PUR - Water : Purification Process
      // ['ZI024_PUR','-999999',undefined,undefined], // No Information
-     ['ZI024_PUR','1','raw:ZI024_PUR','desalination'], // Desalination
-     ['ZI024_PUR','2','raw:ZI024_PUR','filtration'], // Filtration
-     ['ZI024_PUR','3','raw:ZI024_PUR','sedimentation/coagulation'], // Sedimentation/coagulation
-     ['ZI024_PUR','4','raw:ZI024_PUR','reverse_osmosis'], // Reverse Osmosis
-     ['ZI024_PUR','5','raw:ZI024_PUR','electrolysis'], // Electrolysis
-     ['ZI024_PUR','6','raw:ZI024_PUR','disinfection'], // Disinfection
-     ['ZI024_PUR','7','raw:ZI024_PUR','blending'], // Blending
-     ['ZI024_PUR','8','raw:ZI024_PUR','freezing'], // Freezing
-     ['ZI024_PUR','9','raw:ZI024_PUR','multi-stage_flash'], // Multi-stage flash
-     ['ZI024_PUR','10','raw:ZI024_PUR','multi-effect_evaporation'], // Multi-effect evaporation
-     ['ZI024_PUR','11','raw:ZI024_PUR','vapor_compression'], // Vapor Compression
-     ['ZI024_PUR','999','raw:ZI024_PUR','other'], // Other
+     ['ZI024_PUR','1','water_purification','desalination'], // Desalination
+     ['ZI024_PUR','2','water_purification','filtration'], // Filtration
+     ['ZI024_PUR','3','water_purification','sedimentation/coagulation'], // Sedimentation/coagulation
+     ['ZI024_PUR','4','water_purification','reverse_osmosis'], // Reverse Osmosis
+     ['ZI024_PUR','5','water_purification','electrolysis'], // Electrolysis
+     ['ZI024_PUR','6','water_purification','disinfection'], // Disinfection
+     ['ZI024_PUR','7','water_purification','blending'], // Blending
+     ['ZI024_PUR','8','water_purification','freezing'], // Freezing
+     ['ZI024_PUR','9','water_purification','multi-stage_flash'], // Multi-stage flash
+     ['ZI024_PUR','10','water_purification','multi-effect_evaporation'], // Multi-effect evaporation
+     ['ZI024_PUR','11','water_purification','vapor_compression'], // Vapor Compression
+     ['ZI024_PUR','999','water_purification','other'], // Other
 
      // ZI024_PUR2 - Water : Purification Process [2]
      // ZI024_PUR3 - Water : Purification Process [3]
@@ -5917,9 +5922,9 @@ ggdm30.rules = {
 
      // ZI024_RTP - Water : Reservoir Type
      // ['ZI024_RTP','-999999',undefined,undefined], // No Information
-     ['ZI024_RTP','1','raw:ZI024_RTP','constructed_basin'], // Constructed Basin
-     ['ZI024_RTP','2','raw:ZI024_RTP','back-up_water_impounded_by_a_dam'], // Back-up Water Impounded by a Dam
-     ['ZI024_RTP','999','raw:ZI024_RTP','other'], // Other
+     ['ZI024_RTP','1','reservoir:type','constructed_basin'], // Constructed Basin
+     ['ZI024_RTP','2','reservoir:type','back-up_water_impounded_by_a_dam'], // Back-up Water Impounded by a Dam
+     ['ZI024_RTP','999','reservoir:type','other'], // Other
 
      // ZI024_SCC - Water : Water Type
      // ['ZI024_SCC','-999999',undefined,undefined], // No Information
@@ -5935,43 +5940,43 @@ ggdm30.rules = {
 
      // ZI024_SQN - Water : Water Flow Rate Category
      // ['ZI024_SQN','-999999',undefined,undefined], // No Information
-     ['ZI024_SQN','1','raw:ZI024_SQN','small'], // Small
-     ['ZI024_SQN','2','raw:ZI024_SQN','moderate'], // Moderate
-     ['ZI024_SQN','3','raw:ZI024_SQN','large'], // Large
-     ['ZI024_SQN','999','raw:ZI024_SQN','other'], // Other
+     ['ZI024_SQN','1','water:flow_rate','small'], // Small
+     ['ZI024_SQN','2','water:flow_rate','moderate'], // Moderate
+     ['ZI024_SQN','3','water:flow_rate','large'], // Large
+     ['ZI024_SQN','999','water:flow_rate','other'], // Other
 
      // ZI024_WPAC - Water : Water Pump Accessibility
      // ['ZI024_WPAC','-999999',undefined,undefined], // No Information
-     ['ZI024_WPAC','100','raw:ZI024_WPAC','from_left'], // From Left
-     ['ZI024_WPAC','101','raw:ZI024_WPAC','from_right'], // From Right
-     ['ZI024_WPAC','102','raw:ZI024_WPAC','from_all_sides'], // From All Sides
-     ['ZI024_WPAC','103','raw:ZI024_WPAC','no_accessibility'], // No Accessibility
-     ['ZI024_WPAC','104','raw:ZI024_WPAC','from_north'], // From North
-     ['ZI024_WPAC','105','raw:ZI024_WPAC','from_south'], // From South
-     ['ZI024_WPAC','106','raw:ZI024_WPAC','from_east'], // From East
-     ['ZI024_WPAC','107','raw:ZI024_WPAC','from_west'], // From West
+     ['ZI024_WPAC','100','pump:accessibility','from_left'], // From Left
+     ['ZI024_WPAC','101','pump:accessibility','from_right'], // From Right
+     ['ZI024_WPAC','102','pump:accessibility','from_all_sides'], // From All Sides
+     ['ZI024_WPAC','103','pump:accessibility','no_accessibility'], // No Accessibility
+     ['ZI024_WPAC','104','pump:accessibility','from_north'], // From North
+     ['ZI024_WPAC','105','pump:accessibility','from_south'], // From South
+     ['ZI024_WPAC','106','pump:accessibility','from_east'], // From East
+     ['ZI024_WPAC','107','pump:accessibility','from_west'], // From West
 
      // ZI024_WSG - Water : Water Stage
      // ['ZI024_WSG','-999999',undefined,undefined], // No Information
-     ['ZI024_WSG','1','raw:ZI024_WSG','low'], // Low
-     ['ZI024_WSG','2','raw:ZI024_WSG','mean'], // Mean
-     ['ZI024_WSG','3','raw:ZI024_WSG','high'], // High
-     ['ZI024_WSG','999','raw:ZI024_WSG','other'], // Other
+     ['ZI024_WSG','1','water:stage','low'], // Low
+     ['ZI024_WSG','2','water:stage','mean'], // Mean
+     ['ZI024_WSG','3','water:stage','high'], // High
+     ['ZI024_WSG','999','water:stage','other'], // Other
 
      // ZI024_WUR - Water : Water Use
      // ['ZI024_WUR','-999999',undefined,undefined], // No Information
-     ['ZI024_WUR','1','raw:ZI024_WUR','agricultural_irrigation'], // Agricultural Irrigation
-     ['ZI024_WUR','2','raw:ZI024_WUR','commercial'], // Commercial
-     ['ZI024_WUR','3','raw:ZI024_WUR','domestic_irrigation'], // Domestic Irrigation
-     ['ZI024_WUR','4','raw:ZI024_WUR','industrial'], // Industrial
-     ['ZI024_WUR','5','raw:ZI024_WUR','institutional'], // Institutional
-     ['ZI024_WUR','6','raw:ZI024_WUR','livestock'], // Livestock
-     ['ZI024_WUR','7','raw:ZI024_WUR','municipal'], // Municipal
-     ['ZI024_WUR','8','raw:ZI024_WUR','power_generation'], // Power Generation
-     ['ZI024_WUR','9','raw:ZI024_WUR','recreational'], // Recreational
-     ['ZI024_WUR','10','raw:ZI024_WUR','sanitary_domestic'], // Sanitary Domestic
-     ['ZI024_WUR','11','raw:ZI024_WUR','military'], // Military
-     ['ZI024_WUR','999','raw:ZI024_WUR','other'], // Other
+     ['ZI024_WUR','1','water:use','agricultural_irrigation'], // Agricultural Irrigation
+     ['ZI024_WUR','2','water:use','commercial'], // Commercial
+     ['ZI024_WUR','3','water:use','domestic_irrigation'], // Domestic Irrigation
+     ['ZI024_WUR','4','water:use','industrial'], // Industrial
+     ['ZI024_WUR','5','water:use','institutional'], // Institutional
+     ['ZI024_WUR','6','water:use','livestock'], // Livestock
+     ['ZI024_WUR','7','water:use','municipal'], // Municipal
+     ['ZI024_WUR','8','water:use','power_generation'], // Power Generation
+     ['ZI024_WUR','9','water:use','recreational'], // Recreational
+     ['ZI024_WUR','10','water:use','sanitary_domestic'], // Sanitary Domestic
+     ['ZI024_WUR','11','water:use','military'], // Military
+     ['ZI024_WUR','999','water:use','other'], // Other
 
      // ZI024_WUR2 - Water : Water Use [2]
      // ZI024_WUR3 - Water : Water Use [3]
@@ -5985,25 +5990,25 @@ ggdm30.rules = {
      ['ZI024_YWQ','4','water:potable','no'], // Nonpotable
      ['ZI024_YWQ','999','water:potable','other'], // Other
 
-     // ZI025_MAN - Vert Pos : Maritime Navigation Marked
+     // ZI025_MAN - Vert Pos : Maritime Navigation Marked - See MAN
      // ['ZI025_MAN','-999999',undefined,undefined], // No Information
-     ['ZI025_MAN','1000','raw:ZI025_MAN','no'],
-     ['ZI025_MAN','1001','raw:ZI025_MAN','yes'],
+     // ['ZI025_MAN','1000','raw:ZI025_MAN','no'],
+     // ['ZI025_MAN','1001','raw:ZI025_MAN','yes'],
 
      // ZI025_UHS - Vert Pos : Uncovering Height Known
      // ['ZI025_UHS','-999999',undefined,undefined], // No Information
-     ['ZI025_UHS','1000','raw:ZI025_UHS','no'],
-     ['ZI025_UHS','1001','raw:ZI025_UHS','yes'],
+     ['ZI025_UHS','1000','hydrographic_depth_information','uncovering_height_unknown'],
+     ['ZI025_UHS','1001','hydrographic_depth_information','uncovering_height_known'],
 
-     // ZI025_WLE - Vert Pos : Water Level Effect
+     // ZI025_WLE - Vert Pos : Water Level Effect - See WLE
      // ['ZI025_WLE','-999999',undefined,undefined], // No Information
-     ['ZI025_WLE','1','raw:ZI025_WLE','partly_submerged'], // Partly Submerged
-     ['ZI025_WLE','2','raw:ZI025_WLE','always_dry'], // Always Dry
-     ['ZI025_WLE','3','raw:ZI025_WLE','always_submerged'], // Always Submerged
-     ['ZI025_WLE','4','raw:ZI025_WLE','covers_and_uncovers'], // Covers and Uncovers
-     ['ZI025_WLE','5','raw:ZI025_WLE','awash_at_low_water'], // Awash at Low Water
-     ['ZI025_WLE','9','raw:ZI025_WLE','awash_at_chart_datum'], // Awash at Chart Datum
-     ['ZI025_WLE','999','raw:ZI025_WLE','other'], // Other
+     // ['ZI025_WLE','1','raw:ZI025_WLE','partly_submerged'], // Partly Submerged
+     // ['ZI025_WLE','2','raw:ZI025_WLE','always_dry'], // Always Dry
+     // ['ZI025_WLE','3','raw:ZI025_WLE','always_submerged'], // Always Submerged
+     // ['ZI025_WLE','4','raw:ZI025_WLE','covers_and_uncovers'], // Covers and Uncovers
+     // ['ZI025_WLE','5','raw:ZI025_WLE','awash_at_low_water'], // Awash at Low Water
+     // ['ZI025_WLE','9','raw:ZI025_WLE','awash_at_chart_datum'], // Awash at Chart Datum
+     // ['ZI025_WLE','999','raw:ZI025_WLE','other'], // Other
 
      // ZI026_CTUC - Physical Object Metadata : Cartographic Topography Usability Range <interval closure>
      ['ZI026_CTUC','2','cartographic_scale:closure','open_interval'], // Open Interval
@@ -6021,40 +6026,40 @@ ggdm30.rules = {
      ['ZI026_SUR','2','source:surveyed','inadequately_surveyed'], // Inadequately Surveyed
      ['ZI026_SUR','3','source:surveyed','no'], // Unsurveyed
 
-     // ZI032_GUG - Pylon Information : Guyed
+     // ZI032_GUG - Pylon Information : Guyed - See GUG
      // ['ZI032_GUG','-999999',undefined,undefined], // No Information
-     ['ZI032_GUG','1000','raw:ZI032_GUG','no'],
-     ['ZI032_GUG','1001','raw:ZI032_GUG','yes'],
+     // ['ZI032_GUG','1000','raw:ZI032_GUG','no'],
+     // ['ZI032_GUG','1001','raw:ZI032_GUG','yes'],
 
-     // ZI032_PYC - Pylon Information : Pylon Configuration
+     // ZI032_PYC - Pylon Information : Pylon Configuration - See PYC
      // ['ZI032_PYC','-999999',undefined,undefined], // No Information
-     ['ZI032_PYC','1','raw:ZI032_PYC','a"'], // A"
-     ['ZI032_PYC','2','raw:ZI032_PYC','h"'], // H"
-     ['ZI032_PYC','3','raw:ZI032_PYC','i"'], // I"
-     ['ZI032_PYC','4','raw:ZI032_PYC','y"'], // Y"
-     ['ZI032_PYC','5','raw:ZI032_PYC','t"'], // T"
-     ['ZI032_PYC','999','raw:ZI032_PYC','other'], // Other
+     // ['ZI032_PYC','1','raw:ZI032_PYC','a"'], // A"
+     // ['ZI032_PYC','2','raw:ZI032_PYC','h"'], // H"
+     // ['ZI032_PYC','3','raw:ZI032_PYC','i"'], // I"
+     // ['ZI032_PYC','4','raw:ZI032_PYC','y"'], // Y"
+     // ['ZI032_PYC','5','raw:ZI032_PYC','t"'], // T"
+     // ['ZI032_PYC','999','raw:ZI032_PYC','other'], // Other
 
-     // ZI032_PYM - Pylon Information : Pylon Material
+     // ZI032_PYM - Pylon Information : Pylon Material - See PYM
      // ['ZI032_PYM','-999999',undefined,undefined], // No Information
-     ['ZI032_PYM','1','raw:ZI032_PYM','aluminium'], // Aluminium
-     ['ZI032_PYM','3','raw:ZI032_PYM','concrete'], // Concrete
-     ['ZI032_PYM','4','raw:ZI032_PYM','masonry'], // Masonry
-     ['ZI032_PYM','5','raw:ZI032_PYM','metal'], // Metal
-     ['ZI032_PYM','7','raw:ZI032_PYM','wood'], // Wood
-     ['ZI032_PYM','8','raw:ZI032_PYM','steel'], // Steel
-     ['ZI032_PYM','9','raw:ZI032_PYM','fibreglass'], // Fibreglass
-     ['ZI032_PYM','10','raw:ZI032_PYM','iron'], // Iron
-     ['ZI032_PYM','999','raw:ZI032_PYM','other'], // Other
+     // ['ZI032_PYM','1','raw:ZI032_PYM','aluminium'], // Aluminium
+     // ['ZI032_PYM','3','raw:ZI032_PYM','concrete'], // Concrete
+     // ['ZI032_PYM','4','raw:ZI032_PYM','masonry'], // Masonry
+     // ['ZI032_PYM','5','raw:ZI032_PYM','metal'], // Metal
+     // ['ZI032_PYM','7','raw:ZI032_PYM','wood'], // Wood
+     // ['ZI032_PYM','8','raw:ZI032_PYM','steel'], // Steel
+     // ['ZI032_PYM','9','raw:ZI032_PYM','fibreglass'], // Fibreglass
+     // ['ZI032_PYM','10','raw:ZI032_PYM','iron'], // Iron
+     // ['ZI032_PYM','999','raw:ZI032_PYM','other'], // Other
 
      // ZI032_TOS - Pylon Information : Tower Shape
      // ['ZI032_TOS','-999999',undefined,undefined], // No Information
-     ['ZI032_TOS','6','raw:ZI032_TOS','mast'], // Mast
-     ['ZI032_TOS','8','raw:ZI032_TOS','pole'], // Pole
-     ['ZI032_TOS','11','raw:ZI032_TOS','tripod'], // Tripod
-     ['ZI032_TOS','12','raw:ZI032_TOS','truss'], // Truss
-     ['ZI032_TOS','13','raw:ZI032_TOS','tubular'], // Tubular
-     ['ZI032_TOS','999','raw:ZI032_TOS','other'], // Other
+     // ['ZI032_TOS','6','raw:ZI032_TOS','mast'], // Mast
+     // ['ZI032_TOS','8','raw:ZI032_TOS','pole'], // Pole
+     // ['ZI032_TOS','11','raw:ZI032_TOS','tripod'], // Tripod
+     // ['ZI032_TOS','12','raw:ZI032_TOS','truss'], // Truss
+     // ['ZI032_TOS','13','raw:ZI032_TOS','tubular'], // Tubular
+     // ['ZI032_TOS','999','raw:ZI032_TOS','other'], // Other
 
      // ZI037_REL - Religious Information : Religious Designation
      // ['ZI037_REL','-999999',undefined,undefined], // No Information

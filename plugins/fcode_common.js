@@ -400,7 +400,6 @@ fcodeCommon = {
       ['F_CODE','FC165','seamark:type','route'], // GGDM3/NAS7 MARITIME_ROUTE
       ['F_CODE','FC177','waterway','swept_area'], // GGDM3/NAS7 SWEPT_AREA
       ['F_CODE','GA033','airmark','beacon'], // GGDM3/NAS7 AERO_RADIO_NAV_INSTALLATION
-      ['F_CODE','GA034','man_made','radio_navigation_service'], // Aeronautical Radio Navigation Service - Valid NFDD Not in TDS
       ['F_CODE','GB005','aeroway','aerodrome'], // Land Aerodrome
       ['F_CODE','GB013','aeroway','navigationaid'], // GGDM3/NAS7 AERODROME_BEACON
       ['F_CODE','GB015','aeroway','apron'], // Apron/Hardstand
@@ -417,7 +416,6 @@ fcodeCommon = {
       ['F_CODE','GB075','aeroway','taxiway'], // Taxiway
       ['F_CODE','GB230','building','hangar'], // Aircraft Hangar
       ['F_CODE','GB250','bunker_type','hardened_aircraft_shelter'], // Hardened Aircraft Shelter
-      ['F_CODE','GB485','navigationaid','als'], // Approach Lighting System - Valid NFDD Not in TDS
       ['F_CODE','IA040','boundary','land_parcel'], // Land Parcel
       ['F_CODE','NA170','basin','drainage'], // GGDM3/NAS7 DRAINAGE_BASIN
       ['F_CODE','NM010','landuse','aqueducts'], // GGDM3/NAS7 AQUEDUCT_AON

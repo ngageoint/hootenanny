@@ -4080,26 +4080,26 @@ tds.rules = {
 
      // AMB - Special Administrative Unit TDSv30
      // ['AMB','-999999',undefined,undefined], // No Information
-     ['AMB','1','raw:AMB','lease_area'], // Lease Area
-     ['AMB','2','raw:AMB','concession_area'], // Concession Area
-     ['AMB','3','raw:AMB','free_trade_zone'], // Free Trade Zone
-     ['AMB','4','raw:AMB','economic_region'], // Economic Region
-     ['AMB','5','raw:AMB','postal_district'], // Postal District
-     ['AMB','6','raw:AMB','census_district'], // Census District
-     ['AMB','7','raw:AMB','water_management_district'], // Water Management District
-     ['AMB','8','raw:AMB','congressional_district'], // Congressional District
-     ['AMB','9','raw:AMB','environmental_protection_agency_region'], // Environmental Protection Agency Region
-     ['AMB','10','raw:AMB','federal_emergency_management_agency_region'], // Federal Emergency Management Agency Region
-     ['AMB','11','raw:AMB','federal_energy_regulatory_commission_region'], // Federal Energy Regulatory Commission Region
-     ['AMB','12','raw:AMB','native_american_reservation'], // Native American Reservation
-     ['AMB','13','raw:AMB','radiological_assistance_program_region'], // Radiological Assistance Program Region
-     ['AMB','14','raw:AMB','federal_aviation_administration_region'], // Federal Aviation Administration Region
-     ['AMB','15','raw:AMB','army_corps_of_engineers_district'], // Army Corps of Engineers District
-     ['AMB','16','raw:AMB','army_corps_of_engineers_division'], // Army Corps of Engineers Division
-     ['AMB','17','raw:AMB','coast_guard_sector'], // Coast Guard Sector
-     ['AMB','18','raw:AMB','border_patrol_sector'], // Border Patrol Sector
-     ['AMB','19','raw:AMB','fbi_field_office_jurisdiction'], // FBI Field Office Jurisdiction
-     ['AMB','20','raw:AMB','fbi_resident_agency_district'], // FBI Resident Agency District
+     ['AMB','1','administrative_unit:type','lease_area'], // Lease Area
+     ['AMB','2','administrative_unit:type','concession_area'], // Concession Area
+     ['AMB','3','administrative_unit:type','free_trade_zone'], // Free Trade Zone
+     ['AMB','4','administrative_unit:type','economic_region'], // Economic Region
+     ['AMB','5','administrative_unit:type','postal_district'], // Postal District
+     ['AMB','6','administrative_unit:type','census_district'], // Census District
+     ['AMB','7','administrative_unit:type','water_management_district'], // Water Management District
+     ['AMB','8','administrative_unit:type','congressional_district'], // Congressional District
+     ['AMB','9','administrative_unit:type','environmental_protection_agency_region'], // Environmental Protection Agency Region
+     ['AMB','10','administrative_unit:type','federal_emergency_management_agency_region'], // Federal Emergency Management Agency Region
+     ['AMB','11','administrative_unit:type','federal_energy_regulatory_commission_region'], // Federal Energy Regulatory Commission Region
+     ['AMB','12','administrative_unit:type','native_american_reservation'], // Native American Reservation
+     ['AMB','13','administrative_unit:type','radiological_assistance_program_region'], // Radiological Assistance Program Region
+     ['AMB','14','administrative_unit:type','federal_aviation_administration_region'], // Federal Aviation Administration Region
+     ['AMB','15','administrative_unit:type','army_corps_of_engineers_district'], // Army Corps of Engineers District
+     ['AMB','16','administrative_unit:type','army_corps_of_engineers_division'], // Army Corps of Engineers Division
+     ['AMB','17','administrative_unit:type','coast_guard_sector'], // Coast Guard Sector
+     ['AMB','18','administrative_unit:type','border_patrol_sector'], // Border Patrol Sector
+     ['AMB','19','administrative_unit:type','fbi_field_office_jurisdiction'], // FBI Field Office Jurisdiction
+     ['AMB','20','administrative_unit:type','fbi_resident_agency_district'], // FBI Resident Agency District
 
      // BAL - BGN Administrative Level TDSv30
      // ['BAL','-999999',undefined,undefined], // No Information
@@ -4203,12 +4203,12 @@ tds.rules = {
 
      // RPC - Boundary Representation Policy TDSv30
      // ['RPC','-999999',undefined,undefined], // No Information
-     ['RPC','1','raw:RPC','show_no_line'], // Show No Line
-     ['RPC','2','raw:RPC','definite'], // Definite
-     ['RPC','3','raw:RPC','indefinite'], // Indefinite
-     ['RPC','4','raw:RPC','in_dispute'], // In Dispute
-     ['RPC','5','raw:RPC','administrative_as_international'], // Administrative as International
-     ['RPC','999','raw:RPC','other'], // Other
+     ['RPC','1','boundary_representation_policy','show_no_line'], // Show No Line
+     ['RPC','2','boundary_representation_policy','definite'], // Definite
+     ['RPC','3','boundary_representation_policy','indefinite'], // Indefinite
+     ['RPC','4','boundary_representation_policy','in_dispute'], // In Dispute
+     ['RPC','5','boundary_representation_policy','administrative_as_international'], // Administrative as International
+     ['RPC','999','boundary_representation_policy','other'], // Other
 
      // VDT - Vertical Datum
      // From MAAX data

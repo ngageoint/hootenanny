@@ -632,10 +632,10 @@ gifd.rules = {
        ['ACR','2','raw:ACR','approximate'], // Approximate
 
        // AFA - Available Facilities
-       ['AFA','0','raw:AFA','unknown'], // Unknown
-       ['AFA','19','raw:AFA','helipad'], // Helipad
-       ['AFA','995','raw:AFA','none'], // None
-       ['AFA','999','raw:AFA','other'], // Other
+       // ['AFA','0','available_service','unknown'], // Unknown
+       ['AFA','19','available_service','helipad'], // Helipad
+       ['AFA','995','available_service','none'], // None
+       ['AFA','999','available_service','other'], // Other
 
        // AGC - Arresting Gear Category
        ['AGC','0','raw:AGC','unknown'], // Unknown
@@ -1605,17 +1605,17 @@ gifd.rules = {
        ['FER','997',undefined,undefined], // Unpopulated
 
        // FHC - Harbor Facility Classification
-       ['FHC','0','raw:FHC','undefined'], // Undefined
-       ['FHC','1','raw:FHC','ro-ro_terminal_(roll_on,_roll_off)'], // Ro-Ro terminal (Roll on, Roll off)
-       ['FHC','2','raw:FHC','timber_yard'], // Timber yard
-       ['FHC','3','raw:FHC','ferry_terminal'], // Ferry Terminal
-       ['FHC','4','raw:FHC','fishing_harbor'], // Fishing Harbor
-       ['FHC','5','raw:FHC','yacht_harbor/marina'], // Yacht harbor/marina
-       ['FHC','6','raw:FHC','naval_base'], // Naval base
-       ['FHC','7','raw:FHC','tanker_terminal'], // Tanker terminal
-       ['FHC','8','raw:FHC','passenger_terminal'], // Passenger terminal
-       ['FHC','9','raw:FHC','shipyard'], // Shipyard
-       ['FHC','10','raw:FHC','container_terminal'], // Container terminal
+       ['FHC','0','harbour:use','undefined'], // Undefined
+       ['FHC','1','harbour:use','ro-ro_terminal_(roll_on,_roll_off)'], // Ro-Ro terminal (Roll on, Roll off)
+       ['FHC','2','harbour:use','timber_yard'], // Timber yard
+       ['FHC','3','harbour:use','ferry_terminal'], // Ferry Terminal
+       ['FHC','4','harbour:use','fishing_harbor'], // Fishing Harbor
+       ['FHC','5','harbour:use','yacht_harbor/marina'], // Yacht harbor/marina
+       ['FHC','6','harbour:use','naval_base'], // Naval base
+       ['FHC','7','harbour:use','tanker_terminal'], // Tanker terminal
+       ['FHC','8','harbour:use','passenger_terminal'], // Passenger terminal
+       ['FHC','9','harbour:use','shipyard'], // Shipyard
+       ['FHC','10','harbour:use','container_terminal'], // Container terminal
 
        // FLT - Floodlit Illumination
        ['FLT','0','raw:FLT','unknown'], // Unknown
@@ -2854,61 +2854,61 @@ gifd.rules = {
        ['NS2','997',undefined,undefined], // Unpopulated
 
        // NST - Navigation System Types
-       ['NST','0','raw:NST','unknown'], // Unknown
-       ['NST','1','raw:NST','circular_radio_beacon'], // Circular Radio Beacon
-       ['NST','2','raw:NST','consol'], // CONSOL
-       ['NST','3','raw:NST','decca'], // DECCA
-       ['NST','4','raw:NST','radio_direction_finding'], // Radio Direction Finding
-       ['NST','5','raw:NST','directional_radio_beacon'], // Directional Radio Beacon
-       ['NST','7','raw:NST','long_range_air_navigation_system_(loran)'], // Long Range Air Navigation System (LORAN)
-       ['NST','8','raw:NST','omega'], // OMEGA
-       ['NST','10','raw:NST','radar_responder_beacon_(racon)'], // Radar Responder Beacon (RACON)
-       ['NST','11','raw:NST','radar'], // Radar
-       ['NST','12','raw:NST','radio'], // Radio
-       ['NST','13','raw:NST','radio_telephone'], // Radio Telephone
-       ['NST','15','raw:NST','tv'], // TV
-       ['NST','16','raw:NST','microwave'], // Microwave
-       ['NST','17','raw:NST','non-directional_radio_beacon_(ndb)'], // Non-Directional Radio Beacon (NDB)
-       ['NST','18','raw:NST','ndb/distance_measuring_equipment_(ndb/dme)'], // NDB/Distance Measuring Equipment (NDB/DME)
-       ['NST','19','raw:NST','radio_range_(rng)'], // Radio Range (RNG)
-       ['NST','20','raw:NST','vhf_omni_directional_radio_range_(vor)'], // VHF Omni Directional Radio Range (VOR)
-       ['NST','21','raw:NST','vhf_omni_directional_radio_range/distance_measuring_equipment_(vor/dme)'], // VHF Omni Directional Radio Range/Distance Measuring Equipment (VOR/DME)
-       ['NST','22','raw:NST','vhf_omni_directional_radio_range_and_tacan_(vortac)'], // VHF Omni Directional Radio Range and TACAN (VORTAC)
-       ['NST','23','raw:NST','tactical_air_navigation_equipment_(tacan)'], // Tactical Air Navigation Equipment (TACAN)
-       ['NST','24','raw:NST','instrument_landing_system_(ils)'], // Instrument Landing System (ILS)
-       ['NST','25','raw:NST','instrument_landing_system/distance_measuring_equipment_(ils/dme)'], // Instrument Landing System/Distance Measuring Equipment (ILS/DME)
-       ['NST','26','raw:NST','localizer_(loc)'], // Localizer (LOC)
-       ['NST','27','raw:NST','localizer/distance_measuring_equipment_(loc/dme)'], // Localizer/Distance Measuring Equipment (LOC/DME)
-       ['NST','30','raw:NST','microwave_landing_system_(mls)'], // Microwave Landing System (MLS)
-       ['NST','31','raw:NST','fan_marker'], // Fan Marker
-       ['NST','32','raw:NST','bone_marker'], // Bone Marker
-       ['NST','33','raw:NST','radio_telegraph'], // Radio Telegraph
-       ['NST','35','raw:NST','radar_antenna'], // Radar Antenna
-       ['NST','37','raw:NST','precision_approach_radar_(par)'], // Precision Approach Radar (PAR)
-       ['NST','38','raw:NST','aeronautical_radio'], // Aeronautical Radio
-       ['NST','40','raw:NST','radio_beacon'], // Radio Beacon
-       ['NST','41','raw:NST','rotating_loop_radio_beacon'], // Rotating Loop Radio Beacon
-       ['NST','42','raw:NST','visual_flight_rules_(vfr)_test_signal_maker'], // Visual Flight Rules (VFR) Test Signal Maker
-       ['NST','45','raw:NST','radar_station'], // Radar Station
-       ['NST','46','raw:NST','aeronautical_radio_range'], // Aeronautical Radio Range
-       ['NST','51','raw:NST','radiobeacon,_type_unknown'], // Radiobeacon, Type Unknown
-       ['NST','52','raw:NST','none'], // None
-       ['NST','53','raw:NST','qtg_station_(r)'], // QTG Station (R)
-       ['NST','54','raw:NST','ramark_(ramark)'], // Ramark (Ramark)
-       ['NST','55','raw:NST','radar_reflector'], // Radar reflector
-       ['NST','58','raw:NST','dme_(distance_measuring_equipment)'], // DME (Distance Measuring Equipment)
-       ['NST','74','raw:NST','ils_back_course'], // Ils Back Course
-       ['NST','75','raw:NST','loc_back_course'], // Loc Back Course
-       ['NST','76','raw:NST','marker'], // Marker
-       ['NST','77','raw:NST','fm_-_fan_marker'], // Fm - Fan Marker
-       ['NST','78','raw:NST','om_-_outer_marker'], // Om - Outer Marker
-       ['NST','79','raw:NST','mm_-_middle_marker'], // Mm - Middle Marker
-       ['NST','80','raw:NST','lom_-_locator_outer_marker'], // Lom - Locator Outer Marker
-       ['NST','81','raw:NST','lmm_-_locator_middle_marker'], // Lmm - Locator Middle Marker
-       ['NST','82','raw:NST','rotating_beacon_light'], // Rotating Beacon Light
+       ['NST','0','beacon:type','unknown'], // Unknown
+       ['NST','1','beacon:type','circular_radio_beacon'], // Circular Radio Beacon
+       ['NST','2','beacon:type','consol'], // CONSOL
+       ['NST','3','beacon:type','decca'], // DECCA
+       ['NST','4','beacon:type','radio_direction_finding'], // Radio Direction Finding
+       ['NST','5','beacon:type','directional_radio_beacon'], // Directional Radio Beacon
+       ['NST','7','beacon:type','loran'], // Long Range Air Navigation System (LORAN)
+       ['NST','8','beacon:type','omega'], // OMEGA
+       ['NST','10','beacon:type','radar_responder_beacon_(racon)'], // Radar Responder Beacon (RACON)
+       ['NST','11','beacon:type','radar'], // Radar
+       ['NST','12','beacon:type','radio'], // Radio
+       ['NST','13','beacon:type','radio_telephone'], // Radio Telephone
+       ['NST','15','beacon:type','television'], // TV
+       ['NST','16','beacon:type','microwave'], // Microwave
+       ['NST','17','beacon:type','ndb'], // Non-Directional Radio Beacon (NDB)
+       ['NST','18','beacon:type','non-directional_radio_beacon/distance_measuring_equipment'], // NDB/Distance Measuring Equipment (NDB/DME)
+       ['NST','19','beacon:type','radio_range'], // Radio Range (RNG)
+       ['NST','20','beacon:type','vor'], // VHF Omni Directional Radio Range (VOR)
+       ['NST','21','beacon:type','vor-dme'], // VHF Omni Directional Radio Range/Distance Measuring Equipment (VOR/DME)
+       ['NST','22','beacon:type','vortac'], // VHF Omni Directional Radio Range and TACAN (VORTAC)
+       ['NST','23','beacon:type','tacan'], // Tactical Air Navigation Equipment (TACAN)
+       ['NST','24','beacon:type','ils'], // Instrument Landing System (ILS)
+       ['NST','25','beacon:type','ils-dme'], // Instrument Landing System/Distance Measuring Equipment (ILS/DME)
+       ['NST','26','beacon:type','localizer'], // Localizer (LOC)
+       ['NST','27','beacon:type','localizer/distance_measuring_equipment'], // Localizer/Distance Measuring Equipment (LOC/DME)
+       ['NST','30','beacon:type','microwave_landing_system'], // Microwave Landing System (MLS)
+       ['NST','31','beacon:type','fan_marker'], // Fan Marker
+       ['NST','32','beacon:type','bone_marker'], // Bone Marker
+       ['NST','33','beacon:type','radio_telegraph'], // Radio Telegraph
+       ['NST','35','beacon:type','radar_antenna'], // Radar Antenna
+       ['NST','37','beacon:type','precision_approach_radar'], // Precision Approach Radar (PAR)
+       ['NST','38','beacon:type','aeronautical_radio'], // Aeronautical Radio
+       ['NST','40','beacon:type','radio_beacon'], // Radio Beacon
+       ['NST','41','beacon:type','rotating_loop_radio_beacon'], // Rotating Loop Radio Beacon
+       ['NST','42','beacon:type','visual_flight_rules_test_signal_maker'], // Visual Flight Rules (VFR) Test Signal Maker
+       ['NST','45','beacon:type','radar_station'], // Radar Station
+       ['NST','46','beacon:type','aeronautical_radio_range'], // Aeronautical Radio Range
+       ['NST','51','beacon:type','radiobeacon,_type_unknown'], // Radiobeacon, Type Unknown
+       ['NST','52','beacon:type','none'], // None
+       ['NST','53','beacon:type','qtg_station_(r)'], // QTG Station (R)
+       ['NST','54','beacon:type','ramark_(ramark)'], // Ramark (Ramark)
+       ['NST','55','beacon:type','radar_reflector'], // Radar reflector
+       ['NST','58','beacon:type','dme'], // DME (Distance Measuring Equipment)
+       ['NST','74','beacon:type','ils_back_course'], // Ils Back Course
+       ['NST','75','beacon:type','loc_back_course'], // Loc Back Course
+       ['NST','76','beacon:type','marker'], // Marker
+       ['NST','77','beacon:type','fm_-_fan_marker'], // Fm - Fan Marker
+       ['NST','78','beacon:type','outer_marker'], // Om - Outer Marker
+       ['NST','79','beacon:type','middle_marker'], // Mm - Middle Marker
+       ['NST','80','beacon:type','locator_outer_marker'], // Lom - Locator Outer Marker
+       ['NST','81','beacon:type','locator_middle_marker'], // Lmm - Locator Middle Marker
+       ['NST','82','beacon:type','rotating_beacon_light'], // Rotating Beacon Light
        ['NST','997',undefined,undefined], // Unpopulated
        ['NST','998',undefined,undefined], // Not Applicable
-       ['NST','999','raw:NST','other'], // Other
+       ['NST','999','beacon:type','other'], // Other
 
        // OAC - Ordnance Area Construction Activity
        ['OAC','0','raw:OAC','unknown'], // Unknown
@@ -2957,18 +2957,18 @@ gifd.rules = {
        ['OOC','999','raw:OOC','other'], // Other
 
        // OPC - Offshore Platform Classification
-       ['OPC','0','raw:OPC','undefined'], // Undefined
-       ['OPC','1','raw:OPC','oil_derrick/rig'], // Oil derrick/rig
-       ['OPC','2','raw:OPC','production_platform'], // Production Platform
-       ['OPC','3','raw:OPC','observation/research_platform'], // Observation/Research Platform
-       ['OPC','4','raw:OPC','articulated_loading_platform_(alp)'], // Articulated Loading Platform (ALP)
-       ['OPC','5','raw:OPC','single_anchor_leg_mooring_(salm)'], // Single anchor leg mooring (SALM)
-       ['OPC','6','raw:OPC','mooring_tower'], // Mooring Tower
-       ['OPC','7','raw:OPC','artificial_island'], // Artificial Island
-       ['OPC','8','raw:OPC','floating_production,_storage_and_off-loading_vessel_(fpso)'], // Floating production, storage and off-loading vessel (FPSO)
-       ['OPC','9','raw:OPC','accommodation_platform'], // Accommodation Platform
-       ['OPC','10','raw:OPC','navigation_aid_support'], // Navigation Aid Support
-       ['OPC','999','raw:OPC','other'], // Other
+       ['OPC','0','offshore_construction','undefined'], // Undefined
+       ['OPC','1','offshore_construction','oil_derrick/rig'], // Oil derrick/rig
+       ['OPC','2','offshore_construction','production_platform'], // Production Platform
+       ['OPC','3','offshore_construction','observation/research_platform'], // Observation/Research Platform
+       ['OPC','4','offshore_construction','articulated_loading_platform_(alp)'], // Articulated Loading Platform (ALP)
+       ['OPC','5','offshore_construction','single_anchor_leg_mooring_(salm)'], // Single anchor leg mooring (SALM)
+       ['OPC','6','offshore_construction','mooring_tower'], // Mooring Tower
+       ['OPC','7','offshore_construction','artificial_island'], // Artificial Island
+       ['OPC','8','offshore_construction','floating_production,_storage_and_off-loading_vessel_(fpso)'], // Floating production, storage and off-loading vessel (FPSO)
+       ['OPC','9','offshore_construction','accommodation_platform'], // Accommodation Platform
+       ['OPC','10','offshore_construction','navigation_aid_support'], // Navigation Aid Support
+       ['OPC','999','offshore_construction','other'], // Other
 
        // OPS - Operational Status
        ['OPS','0','raw:OPS','unknown'], // Unknown
