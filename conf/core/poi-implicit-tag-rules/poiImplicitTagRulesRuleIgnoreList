@@ -1,6 +1,3 @@
-# rules that are always ignored; tab separated: word	key=value
+# rules that are always ignored; this list is for words that you never want associated with a tagging rule; tab separated: word	key=value
 # keep alphabetized
-jabal	natural=peak
-property	office=estate_agent
-community	building=church
-hei	waterway=river
+#TODO: this list is no longer needed

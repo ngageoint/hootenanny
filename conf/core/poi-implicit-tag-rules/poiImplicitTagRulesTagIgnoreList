@@ -1,8 +1,5 @@
-# tags that are always ignored; key=value
-# keep alphabetized
-# TODO: change to place=*
-#place=administrative
-#place=locality
-#place=populated
-#place=city
-#place=village
+# These are tags that we never want to apply during implicit tagging based on name.
+# Use this list to fine tune tagging rules behavior based on the auto-generated rules database.
+# key=value
+# keep list alphabetized and in lower case
+# TODO: is this list still needed?

@@ -255,9 +255,6 @@ void AddImplicitlyDerivedTagsBaseVisitor::visit(const ElementPtr& e)
         const QSet<QString> nameTokens = _getNameTokens(filteredNames);
         QStringList nameTokensList = nameTokens.toList();
 
-        LOG_VARD(implicitlyDerivedTags.size());
-        LOG_VARD(nameTokens.size());
-
         //check custom rules first, then db for each group size in descending group size order
 
         LOG_VARD(_maxWordTokenizationGroupSize);

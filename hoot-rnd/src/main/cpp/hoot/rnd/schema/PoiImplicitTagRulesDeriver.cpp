@@ -32,6 +32,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/algorithms/string/StringTokenizer.h>
 
 // Qt
 #include <QStringBuilder>
@@ -60,23 +61,63 @@ void PoiImplicitTagRulesDeriver::setConfiguration(const Settings& conf)
   setUseSchemaTagValuesForWordsOnly(
     confOptions.getPoiImplicitTagRulesUseSchemaTagValuesForWordsOnly());
 
+  LOG_VARD(_minTagOccurrencesPerWord);
+  LOG_VARD(_minWordLength);
+  LOG_VARD(_customRules.getWordIgnoreFile());
+  LOG_VARD(_customRules.getTagIgnoreFile());
+  LOG_VARD(_customRules.getTagFile());
+  LOG_VARD(_customRules.getCustomRuleFile());
+  LOG_VARD(_customRules.getRuleIgnoreFile());
+  LOG_VARD(_useSchemaTagValuesForWordsOnly);
+
+  _customRules.init();
+
+  LOG_VARD(_customRules.getWordIgnoreList().size());
+  LOG_VARD(_customRules.getWordIgnoreList());
+  LOG_VARD(_customRules.getTagIgnoreList().size());
+  LOG_VARD(_customRules.getTagIgnoreList());
+  LOG_VARD(_customRules.getTagsAllowList().size());
+  LOG_VARD(_customRules.getTagsAllowList());
+  LOG_VARD(_customRules.getCustomRulesList().size());
+  LOG_VARD(_customRules.getCustomRulesList());
+  LOG_VARD(_customRules.getRulesIgnoreList().size());
+  LOG_VARD(_customRules.getRulesIgnoreList());
+
   if (_useSchemaTagValuesForWordsOnly)
   {
     _schemaTagValues.clear();
+    _wordsNotInSchema.clear();
     const std::vector<SchemaVertex> tags =
       OsmSchema::getInstance().getTagByCategory(OsmSchemaCategory::poi());
+    StringTokenizer tokenizer;
     for (std::vector<SchemaVertex>::const_iterator tagItr = tags.begin();
          tagItr != tags.end(); ++tagItr)
     {
       SchemaVertex tag = *tagItr;
-      const QString tagVal = tag.value.replace("_", " ");
-      if (!tagVal.contains("*") && !_schemaTagValues.contains(tagVal))
+      const QString tagVal = tag.value.toLower().replace("_", " ");
+      if (!tagVal.contains("*"))
       {
-        _schemaTagValues.insert(tagVal);
-        LOG_TRACE("Appended " << tagVal << " to schema tag values.");
+        if (!_customRules.getWordIgnoreList().contains(tagVal, Qt::CaseInsensitive))
+        {
+          _schemaTagValues.insert(tagVal);
+          LOG_TRACE("Appended " << tagVal << " to schema tag values.");
+        }
+        QStringList vals = tokenizer.tokenize(tagVal);
+        for (int i = 0; i < vals.size(); i++)
+        {
+          const QString val = vals.at(i);
+          if (!_customRules.getWordIgnoreList().contains(val, Qt::CaseInsensitive))
+          {
+            _schemaTagValues.insert(val);
+            LOG_TRACE("Appended " << val << " to schema tag values.");
+          }
+        }
       }
     }
-    LOG_VART(_schemaTagValues.size());
+    LOG_VARD(_schemaTagValues.size());
+    QStringList schemaTagValuesList = _schemaTagValues.toList();
+    qSort(schemaTagValuesList.begin(), schemaTagValuesList.end());
+    LOG_VART(schemaTagValuesList);
   }
 }
 
@@ -118,27 +159,27 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QString input, const QStringL
   LOG_INFO(
     "Deriving POI implicit tag rules for input: " << input << ".  Writing to outputs: " <<
     outputs << "...");
-  LOG_VARD(_minTagOccurrencesPerWord);
-  LOG_VARD(_minWordLength);
-  LOG_VARD(_customRules.getWordIgnoreFile());
-  LOG_VARD(_customRules.getTagIgnoreFile());
-  LOG_VARD(_customRules.getTagFile());
-  LOG_VARD(_customRules.getCustomRuleFile());
-  LOG_VARD(_customRules.getRuleIgnoreFile());
-  LOG_VARD(_useSchemaTagValuesForWordsOnly);
+//  LOG_VARD(_minTagOccurrencesPerWord);
+//  LOG_VARD(_minWordLength);
+//  LOG_VARD(_customRules.getWordIgnoreFile());
+//  LOG_VARD(_customRules.getTagIgnoreFile());
+//  LOG_VARD(_customRules.getTagFile());
+//  LOG_VARD(_customRules.getCustomRuleFile());
+//  LOG_VARD(_customRules.getRuleIgnoreFile());
+//  LOG_VARD(_useSchemaTagValuesForWordsOnly);
 
-  _customRules.init();
+//  _customRules.init();
 
-  LOG_VARD(_customRules.getWordIgnoreList().size());
-  LOG_VARD(_customRules.getWordIgnoreList());
-  LOG_VARD(_customRules.getTagIgnoreList().size());
-  LOG_VARD(_customRules.getTagIgnoreList());
-  LOG_VARD(_customRules.getTagsAllowList().size());
-  LOG_VARD(_customRules.getTagsAllowList());
-  LOG_VARD(_customRules.getCustomRulesList().size());
-  LOG_VARD(_customRules.getCustomRulesList());
-  LOG_VARD(_customRules.getRulesIgnoreList().size());
-  LOG_VARD(_customRules.getRulesIgnoreList());
+//  LOG_VARD(_customRules.getWordIgnoreList().size());
+//  LOG_VARD(_customRules.getWordIgnoreList());
+//  LOG_VARD(_customRules.getTagIgnoreList().size());
+//  LOG_VARD(_customRules.getTagIgnoreList());
+//  LOG_VARD(_customRules.getTagsAllowList().size());
+//  LOG_VARD(_customRules.getTagsAllowList());
+//  LOG_VARD(_customRules.getCustomRulesList().size());
+//  LOG_VARD(_customRules.getCustomRulesList());
+//  LOG_VARD(_customRules.getRulesIgnoreList().size());
+//  LOG_VARD(_customRules.getRulesIgnoreList());
 
   if (_minTagOccurrencesPerWord == 1 && _minWordLength == 1 &&
       _customRules.getWordIgnoreList().size() == 0 &&
@@ -256,9 +297,11 @@ void PoiImplicitTagRulesDeriver::_applyFiltering(const QString input)
   long wordsTooSmallCount = 0;
   long ignoredWordsCount = 0;
   long ignoredTagsCount = 0;
-  long ignoredRuleCount = 0;
+  long ignoredRuleCountDueToCustomRules = 0;
+  long ignoredRuleCountDueToIgnoredRules = 0;
   long wordNotASchemaValueCount = 0;
 
+  StringTokenizer tokenizer;
   while (!inputFile.atEnd())
   {
     const QString line = QString::fromUtf8(inputFile.readLine().constData()).trimmed();
@@ -268,8 +311,23 @@ void PoiImplicitTagRulesDeriver::_applyFiltering(const QString input)
     QString word = lineParts[1].trimmed();
     LOG_VART(word);
 
-    const bool wordNotASchemaTagValue =
-      _useSchemaTagValuesForWordsOnly && !_schemaTagValues.contains(word.toLower());
+    bool wordNotASchemaTagValue = false;
+    if (_useSchemaTagValuesForWordsOnly &&
+        !_customRules.getWordIgnoreList().contains(word, Qt::CaseInsensitive))
+    {
+      wordNotASchemaTagValue = true;
+      const QStringList tokenizedWords = tokenizer.tokenize(word.toLower());
+      for (int i = 0; i < tokenizedWords.size(); i++)
+      {
+        const QString tokenizedWord = tokenizedWords.at(i);
+        if (_schemaTagValues.contains(tokenizedWord) &&
+            !_customRules.getWordIgnoreList().contains(tokenizedWord, Qt::CaseInsensitive))
+        {
+          wordNotASchemaTagValue = false;
+          break;
+        }
+      }
+    }
 
     const bool wordTooSmall = word.length() < _minWordLength;
     if (!wordTooSmall && !_customRules.getWordIgnoreList().contains(word, Qt::CaseInsensitive) &&
@@ -296,9 +354,23 @@ void PoiImplicitTagRulesDeriver::_applyFiltering(const QString input)
 
       if (!ignoreTag && !allowListExcludesTag)
       {
-        const QString ignoreRuleTag = _customRules.getRulesIgnoreList().value(word, "");
-        const QString customRuleTag = _customRules.getCustomRulesList().value(word, "");
-        if (ignoreRuleTag != kvp && customRuleTag != kvp)
+        const QString ignoreRuleTag = _customRules.getRulesIgnoreList().value(word.toLower(), "");
+        const QString customRuleTag = _customRules.getCustomRulesList().value(word.toLower(), "");
+        if (ignoreRuleTag == kvp)
+        {
+          LOG_TRACE(
+            "Skipping word/tag combo on the rule ignore list.  Word: " << word << ", tag: " <<
+            kvp << ".");
+          ignoredRuleCountDueToIgnoredRules++;
+        }
+        else if (customRuleTag == kvp)
+        {
+          LOG_TRACE(
+            "Skipping word/tag combo on custom rule list.  Word: " << word << ", tag: " <<
+            kvp << ".");
+          ignoredRuleCountDueToCustomRules++;
+        }
+        else
         {
           const long count = lineParts[0].trimmed().toLong();
           LOG_VART(count);
@@ -306,13 +378,6 @@ void PoiImplicitTagRulesDeriver::_applyFiltering(const QString input)
           LOG_VART(line);
           _filteredCountFile->write(line.toUtf8());
           linesWrittenCount++;
-        }
-        else
-        {
-          LOG_TRACE(
-            "Skipping word/tag combo on the rule ignore list.  Word: " << word << ", tag: " <<
-            kvp << ".");
-          ignoredRuleCount++;
         }
       }
       else
@@ -342,7 +407,8 @@ void PoiImplicitTagRulesDeriver::_applyFiltering(const QString input)
       {
         LOG_TRACE(
           "Schema tag value requirement for word is being enforced and word is not a schema " <<
-          "tag value: " << word << ".");
+          "tag value: " << word.toLower() << ".");
+        _wordsNotInSchema.insert(word.toLower());
         wordNotASchemaValueCount++;
       }
       else
@@ -362,15 +428,28 @@ void PoiImplicitTagRulesDeriver::_applyFiltering(const QString input)
   }
   inputFile.close();
 
+  LOG_INFO("Parsed " << StringUtils::formatLargeNumber(linesParsedCount) << " words.");
   LOG_INFO(
     "Skipped " << StringUtils::formatLargeNumber(wordsTooSmallCount) <<
     " words that were too small.");
   LOG_INFO("Ignored " << StringUtils::formatLargeNumber(ignoredWordsCount) << " words.");
   LOG_INFO("Ignored " << StringUtils::formatLargeNumber(ignoredTagsCount) << " tags.");
-  LOG_INFO("Ignored " << StringUtils::formatLargeNumber(ignoredRuleCount) << " rules.");
+  LOG_INFO(
+    "Ignored " << StringUtils::formatLargeNumber(ignoredRuleCountDueToIgnoredRules) <<
+    " rules due to them being on the ignore list.");
+  LOG_INFO(
+    "Ignored " << StringUtils::formatLargeNumber(ignoredRuleCountDueToCustomRules) <<
+    " rules due to them overlapping with the custom rules list.");
   LOG_INFO(
     "Skipped " << StringUtils::formatLargeNumber(wordNotASchemaValueCount) <<
     " words that were not a schema value.");
+  if (wordNotASchemaValueCount > 0)
+  {
+    //TODO: change to trace
+    QStringList wordsNotInSchemaList = _wordsNotInSchema.toList();
+    qSort(wordsNotInSchemaList.begin(), wordsNotInSchemaList.end());
+    LOG_VART(wordsNotInSchemaList);
+  }
 
   LOG_DEBUG("Writing custom rules...");
   long ruleCount = 0;
@@ -393,7 +472,8 @@ void PoiImplicitTagRulesDeriver::_applyFiltering(const QString input)
   }
 
   LOG_INFO(
-    "Wrote " << StringUtils::formatLargeNumber(linesWrittenCount) << " lines to filtered file.");
+    "Wrote " << StringUtils::formatLargeNumber(linesWrittenCount) << " / " <<
+     StringUtils::formatLargeNumber(linesParsedCount) << " lines to filtered file.");
 
   _filteredCountFile->close();
 }

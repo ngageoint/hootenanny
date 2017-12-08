@@ -88,6 +88,7 @@ private:
   int _minWordLength;
   bool _useSchemaTagValuesForWordsOnly;
   QSet<QString> _schemaTagValues;
+  QSet<QString> _wordsNotInSchema;
 
   PoiImplicitTagCustomRules _customRules;
 

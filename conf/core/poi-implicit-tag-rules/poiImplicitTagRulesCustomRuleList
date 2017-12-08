@@ -1,6 +1,75 @@
-# custom rules; tab separated: word	key=value 
-# keep alphabetized
-Jāmi	amenity=place_of_worship
-Şiḩḩī	amenity=clinic
-Şiḩḩīy	amenity=hospital
+# A list of custom implicit tagging rules based on name.  These rules override any rules associated with the same word in the rules database.
+# Use this list to fine tune tagging rules behavior based on the auto-generated rules database.
+# tab separated: word	key=value 
+# keep list alphabetized and in lower case
+
+apartment	building=apartment
+apartments	building=apartment
+# TODO: this should override all other words in the name?
+association	building=office
+bay	natural=bay
+boathouse	amenity=boathouse
+bike rental	amenity=bicycle_rental
+bike shop	shop=bicycle
+building	building=yes
+buildings	building=yes
+bus station	amenity=bus_station
+cemetery	amenity=grave_yard
+cemeteries	amenity=grave_yard
+# TODO: not sure about this
+center	building=office
+centre	building=office
+# TODO: not sure about this
+child development	amenity=childcare
+clinic	amenity=clinic
+# TODO: not sure about this
+clubhouse	building=civic
+cultural center	building=civic
+company	building=office
+condo	building=apartment
+condos	building=apartment
+# TODO: this should override all other words in the name?
+department	building=office
+fire department	amenity=fire_station
+education center	amenity=school
+garden	leisure=garden
+grocery	shop=grocery
+#headquarters	building=office
+health center	amenity=clinic
+# TODO: this should override all other words in the name?
+heliport	aeroway=heliport
+house	building=house
+home	building=house
+homes	building=house
+# TODO: this should override all other words in the name?
+institute	building=office
+internet cafe	amenity=internet_cafe
+lake	water=lake
+# TODO: not sure about this
+lot	amenity=parking
+marina	leisure=marina
+# TODO: this should override all other words in the name?
+metro station	railway=subway
+ministry of	building=office
+nursery	amenity=nursery
+# TODO: this should override all other words in the name?
+office	building=office
+offices	building=office
+opera house	amenity=theatre
 petroleumeum	amenity=fuel
+plant nursery	landuse=plant_nursery
+playground	leisure=playground
+preschool	amenity=preschool
+rec center	building=civic
+recreation center	building=civic
+reservoir	water=reservoir
+sea	natural=sea
+shop	shop=yes
+spa	amenity=spa
+sports club	leisure=sports_centre
+stables	amenity=stables
+substation	power=substation
+temple	amenity=place_of_worship
+tennis	sport=tennis
+water tower	man_made=water_tower
+zoo	tourism=zoo

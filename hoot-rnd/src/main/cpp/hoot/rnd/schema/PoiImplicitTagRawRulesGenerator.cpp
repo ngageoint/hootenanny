@@ -267,7 +267,6 @@ void PoiImplicitTagRawRulesGenerator::generateRules(const QStringList inputs,
           LOG_VART(name);
           //TODO: replace name multiple spaces with one?
 
-
           //'=' is used in the map key for kvps, so it needs to be escaped in the word
           if (name.contains("="))
           {
@@ -288,7 +287,8 @@ void PoiImplicitTagRawRulesGenerator::generateRules(const QStringList inputs,
             for (int j = 0; j < nameTokens.size(); j++)
             {
               QString nameToken = nameTokens.at(j);
-              //TODO: may need to replace more punctuation chars here
+              //TODO: may need to replace more punctuation chars here - replace all non-alphanumeric?
+              //esp ()/
               nameToken = nameToken.replace(",", "");
               LOG_VART(nameToken);
 
