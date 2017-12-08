@@ -5,6 +5,8 @@ TODO:
 * Figure out how to get systemd working in a non-privileged container.
 * Turn on Postgres and the UI
 
+* Get the base box:
+sudo docker pull centos:centos7.4.1708
 
 * Build a small Centos7 image:
 docker build --rm -t dhoot ./docker/hootcore/
