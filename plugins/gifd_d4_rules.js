@@ -4250,13 +4250,13 @@ gifd.rules = {
        ['SWC','999','raw:SWC','other'], // Other
 
        // SWT - Well/Spring Feature Type
-       ['SWT','0','raw:SWT','unknown'], // Unknown
-       ['SWT','1','raw:SWT','geyser'], // Geyser
-       ['SWT','2','raw:SWT','hot_spring'], // Hot Spring
-       ['SWT','3','raw:SWT','fumarole'], // Fumarole
-       ['SWT','4','raw:SWT','artesian'], // Artesian
-       ['SWT','5','raw:SWT','water-hole'], // Water-hole
-       ['SWT','6','raw:SWT','walled-in_spring'], // Walled-In Spring
+       ['SWT','0',undefined,undefined], // Unknown
+       ['SWT','1','natural','geyser'], // Geyser
+       ['SWT','2','natural','hot_spring'], // Hot Spring
+       ['SWT','3','natural','fumarole'], // Fumarole
+       ['SWT','4','natural','artesian'], // Artesian
+       ['SWT','5','water','water-hole'], // Water-hole
+       ['SWT','6','spring:type','walled-in'], // Walled-In Spring
        ['SWT','997',undefined,undefined], // Unpopulated
 
        // T01 - Refueling Units Type

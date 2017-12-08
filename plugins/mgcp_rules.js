@@ -1149,9 +1149,9 @@ mgcp.rules = {
         // SWT - Natural Pool Type 
         // ['SWT','0','raw:SWT','unknown'], // Unknown 
         ['SWT','0',undefined,undefined], // Unknown 
-        ['SWT','4','natural','spring'], // Spring 
-        ['SWT','5','natural','water-hole'], // Water-hole 
-        ['SWT','999','natural','other_pool_type'], // Other 
+        ['SWT','4','spring:type','spring'], // Spring - Will remove this in post processing
+        ['SWT','5','water','water-hole'], // Water-hole
+        ['SWT','999','spring:type','other'], // Other
 
         // TID - Tide Influenced
         ['TID','-32768',undefined,undefined],  // Null

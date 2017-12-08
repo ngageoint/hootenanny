@@ -4488,10 +4488,10 @@ ggdm30.rules = {
 
      // SWT - Natural Pool Type
      // ['SWT','-999999',undefined,undefined], // No Information
-     ['SWT','4','natural','spring'], // Spring
-     ['SWT','6','natural','walled-in_spring'], // Walled-in Spring
-     ['SWT','7','natural','resurgence'], // Resurgence
-     ['SWT','999','natural','other_pool_type'], // Other -- Not great
+     ['SWT','4','spring:type','spring'], // Spring
+     ['SWT','6','spring:type','walled-in'], // Walled-in Spring
+     ['SWT','7','spring:type','resurgence'], // Resurgence
+     ['SWT','999','spring:type','other'], // Other -- Not great
 
      // TCS - Cross-sectional Profile
      // ['TCS','-999999',undefined,undefined], // No Information
