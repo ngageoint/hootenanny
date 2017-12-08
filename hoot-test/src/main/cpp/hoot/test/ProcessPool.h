@@ -98,13 +98,14 @@ public:
   /**
    * @brief ProcessThread constructor
    * @param showTestName - boolean flag indicating if the thread should pass the '--names' flag to the process
+   * @param printDiff - boolean flag indicating if the thread should pass the '--diff' flag to the process
    * @param waitTime - number of seconds to wait before reporting that a test took too long
    * @param outMutex - mutex for preserving output ordering to standard out
    * @param parallelJobs - JobQueue object that contains a set of jobs that can all be run in parallel
    * @param serialJobs - JobQueue object (NULL for all threads but one) that contains a set of all jobs
    *  that cannot be run in parallel but must be run serially
    */
-  ProcessThread(bool showTestName, double waitTime, QMutex* outMutex, JobQueue* parallelJobs, JobQueue* serialJobs = NULL);
+  ProcessThread(bool showTestName, bool printDiff, double waitTime, QMutex* outMutex, JobQueue* parallelJobs, JobQueue* serialJobs = NULL);
 
   /**
    * @brief run method for thread, called by ::start()
@@ -137,6 +138,8 @@ private:
 
   /** Flag for showing test names in output */
   bool _showTestName;
+  /** Flag for showing diff for script test failures in output */
+  bool _printDiff;
   /** Time (in seconds) to wait before reporting a tests is "taking too long" */
   double _waitTime;
   /** Mutex guarding standard out so that output messages aren't scrambled */
@@ -166,8 +169,9 @@ public:
    * @param nproc - number of threads/processes to add to the pool
    * @param waitTime - number of seconds to wait before reporting that a test took too long
    * @param showTestName - boolean flag indicating if the thread should pass the '--names' flag to the process
+   * @param printDiff - boolean flag indicating if the thread should pass the '--diff' flag to the process
    */
-  ProcessPool(int nproc, double waitTime, bool showTestName);
+  ProcessPool(int nproc, double waitTime, bool showTestName, bool printDiff);
 
   /** Destructor */
   ~ProcessPool();

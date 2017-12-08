@@ -165,7 +165,7 @@ ggdm30.rules = {
      'WTCL':'water:colour', // Water Colour
      // 'ZHBH_VDR':'raw:ZHBH_VDR', // Base Hgt : Snd Meta : Sounding Datum Name - ZHDP_VDR
      'ZHDP_VDR':'source:datum:sounding:name', // Hydro Dpth : Snd Meta : Sounding Datum Name
-     'ZI001_SDP':'source:description', // Source : Source Description
+     'ZI001_SDP':'source', // Source : Source Description
      'ZI001_SDV':'source:datetime', // Source : Source Date and Time
      'ZI001_VSD':'source:vertical_source:datetime', // Source : Vertical Source Date and Time
      'ZI001_VSN':'source:vertical_source:description', // Source : Vertical Source Description

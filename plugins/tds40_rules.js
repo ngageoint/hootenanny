@@ -4458,11 +4458,24 @@ tds.rules = {
     // ##### End of swapList #####
 
     // ##### Start of closureList #####
-    closureList : { 'RMWC':['RMWL','RMWU'], 'SGCC':['SGCL','SGCU'],
-                    'BPWHAC':['BPWHAL','BPWHAU'], 'BPWHBC':['BPWHBL','BPWHBU'],
-                    'BPWSAC':['BPWSAL','BPWSAU'], 'BPWSBC':['BPWSBL','BPWSBU'],
-                    'BWVCAC':['BWVCAL','BWVCAU'], 'BWVCBC':['BWVCBL','BWVCBU'],
-                    'GSGCHC':['GSGCHL','GSGCHU'], 'GSGCLC':['GSGCLL','GSGCLU']
+    closureList : {
+                    'AQTC':['AQTL','AQTU'],
+                    'AYRC':['AYRL','AYRU'],
+                    'BPWHAC':['BPWHAL','BPWHAU'],
+                    'BPWHBC':['BPWHBL','BPWHBU'],
+                    'BPWSAC':['BPWSAL','BPWSAU'],
+                    'BPWSBC':['BPWSBL','BPWSBU'],
+                    'BWVCAC':['BWVCAL','BWVCAU'],
+                    'BWVCBC':['BWVCBL','BWVCBU'],
+                    'DMBC':['DMBL','DMBU'],
+                    'DPAC':['DPAL','DPAU'],
+                    'GSGCHC':['GSGCHL','GSGCHU'],
+                    'GSGCLC':['GSGCLL','GSGCLU'],
+                    'RMWC':['RMWL','RMWU'],
+                    'SDCC':['SDCL','SDCU'],
+                    'SDSC':['SDSL','SDSU'],
+                    'SGCC':['SGCL','SGCU'],
+                    'TSCC':['TSCL','TSCU']
                     },
     // ##### End of closureList #####
 

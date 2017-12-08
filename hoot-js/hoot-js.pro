@@ -50,13 +50,11 @@ release:OBJECTS_DIR = tmp/release
 else:OBJECTS_DIR = tmp/debug
 DESTDIR = ../lib/
 
-SOURCES += $$files(src/*.cpp, true)
-HEADERS += $$files(src/*.h, true)
+SOURCES += $$files(src/main/*.cpp, true)
+HEADERS += $$files(src/main/*.h, true)
 
 # test files
-SOURCES -= $$files(src/*Test*.cpp, true)
-SOURCES -= $$files(src/*Test*.h, true)
 cppunit {
-SOURCES += $$files(src/*Test*.cpp, true)
-SOURCES += $$files(src/*Test*.h, true)
+SOURCES += $$files(src/test/*.cpp, true)
+SOURCES += $$files(src/test/*.h, true)
 }

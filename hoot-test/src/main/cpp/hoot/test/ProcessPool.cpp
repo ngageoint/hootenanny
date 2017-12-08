@@ -73,11 +73,13 @@ void JobQueue::push(const QString& job)
 }
 
 ProcessThread::ProcessThread(bool showTestName,
+                             bool printDiff,
                              double waitTime,
                              QMutex* outMutex,
                              JobQueue* parallelJobs,
                              JobQueue* serialJobs)
   : _showTestName(showTestName),
+    _printDiff(printDiff),
     _waitTime(waitTime),
     _outMutex(outMutex),
     _parallelJobs(parallelJobs),
@@ -108,7 +110,8 @@ QProcess* ProcessThread::createProcess()
   QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
   proc->setProcessEnvironment(env);
   QString names = (_showTestName ? "--names" : "");
-  proc->start(QString("HootTest %1 --listen %2").arg(names).arg((int)_waitTime));
+  QString diff = (_printDiff ? "--diff" : "");
+  proc->start(QString("HootTest %1 %2 --listen %3").arg(names).arg(diff).arg((int)_waitTime));
   return proc;
 }
 
@@ -202,14 +205,19 @@ void ProcessThread::processJobs(JobQueue* queue)
   }
 }
 
-ProcessPool::ProcessPool(int nproc, double waitTime, bool showTestName)
+ProcessPool::ProcessPool(int nproc, double waitTime,
+                         bool showTestName, bool printDiff)
   : _failed(0)
 {
   for (int i = 0; i < nproc; ++i)
   {
     //  First process gets the serial jobs
     JobQueue* serial = (i == 0) ? &_serialJobs : NULL;
-    ProcessThreadPtr thread(new ProcessThread(showTestName, waitTime, &_mutex, &_parallelJobs, serial));
+    ProcessThreadPtr thread(new ProcessThread(showTestName,
+                                              printDiff,
+                                              waitTime, &_mutex,
+                                              &_parallelJobs,
+                                              serial));
     _threads.push_back(thread);
   }
 }
