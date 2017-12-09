@@ -2,35 +2,88 @@
 # Use this list to fine tune tagging rules behavior based on the auto-generated rules database.
 # keep list alphabetized and in lower case
 
+air
 and
+animal
+area
+bed
 bin
 boutique
-business park
+bureau
+camp
+car
+care
 club
 city
+county
+country
+course
+court
+cross
 department
+district
+dry
+entrance
+estate
 facility
+fast
+first
 food
+free
+game
 garage
 gate
 general
+government
+guest
 hall
 headquarters
+health
+historical
 home
 house
 homes
-office
+hut
+institute
+lane
+life
+mini
+mud lake
+municipal
+number historical
+#office
+office historical
 offices
 parish
+park road
+parts
+pet
+place
+plant
 plaza
 point
+post
+public
+recreation
+repair
 rescue
+reservoir number
+ride
+ring
+road
+rock
 service
 service station
+sports
+stand
+state
 station
+stop
 # TODO: this should negate other matches?
 street
+strip
 studio
+terminal
 town
 tree
 village

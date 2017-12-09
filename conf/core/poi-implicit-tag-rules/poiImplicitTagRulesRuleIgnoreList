@@ -1,3 +1,4 @@
-# rules that are always ignored; this list is for words that you never want associated with a tagging rule; tab separated: word	key=value
-# keep alphabetized
-#TODO: this list is no longer needed
+# Rules that are always ignored; These anti-rules override any rules associated with the same word in the rules database.
+# tab separated: word	key=value
+# Use this list to fine tune tagging rules behavior based on the auto-generated rules database.
+# keep list alphabetized and in lower case
