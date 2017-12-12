@@ -607,7 +607,9 @@ int main(int argc, char *argv[])
       {
         throw HootException("Expected integer after --parallel");
       }
-      ProcessPool pool(nproc, listener->getSlowTest(), (bool)args.contains("--names"));
+      ProcessPool pool(nproc, listener->getSlowTest(),
+                       (bool)args.contains("--names"),
+                       (bool)args.contains("--diff"));
 
       //  Get the names of all of the tests to run
       vector<string> allNames;

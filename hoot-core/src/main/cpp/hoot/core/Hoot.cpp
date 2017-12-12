@@ -121,6 +121,12 @@ void Hoot::_init()
   loadLibrary("HootRnd");
 # endif
 
+# ifdef HOOT_HAVE_NODEJS
+  // sometimes HootJs is loaded by node.js before we get to init.
+  if (Factory::getInstance().hasClass(QString("hoot::HootJsLoaded")) == false)
+    loadLibrary("HootJs");
+# endif
+
   Log::getInstance().setLevel(Log::Info);
 }
 
