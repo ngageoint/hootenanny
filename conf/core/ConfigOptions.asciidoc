@@ -855,13 +855,6 @@ default the first assigned id will be -1)
 
 A list of paths to include in the javascript translator search path.
 
-=== json.add.bbox
-
-* Data Type: bool
-* Default Value: `false`
-
-When reading JSON, add a tag with the bounding box for each element
-
 === json.format.hootenanny
 
 * Data Type: bool
@@ -1501,18 +1494,18 @@ Operations that should be applied to ingested OGR data before saving the data.
 * Data Type: bool
 * Default Value: `false`
 
-When the OSM API database bulk inserter is writing directly to a database, if true, the inserter
-drops the database constraints before writing the data and re-enables them after the writing is
-complete.  This can only be used with databases that have been taken offline from other users.
+If true, the OSM API database writer drops the database constraints before writing the data and
+re-enables them after the writing is complete.  This can only be used with databases that have been
+taken offline from other users.
 
 === osmapidb.bulk.inserter.disable.database.indexes.during.write
 
 * Data Type: bool
 * Default Value: `false`
 
-When the OSM API database bulk inserter is writing directly to a database, if true, the inserter
-drops the database indexes before writing the data and re-enables them after the writing is
-complete.  This can only be used with databases that have been taken offline from other users.
+If true, the OSM API database writer drops the database indexes before writing the data and
+re-enables them after the writing is complete.  This can only be used with databases that have been
+taken offline from other users.
 
 === osmapidb.bulk.inserter.reserve.record.ids.before.writing.data
 
@@ -1526,14 +1519,6 @@ environments, the risk of record ID conflicts will be present in the database.  
 destination must be an OSM API database or this setting will always be treated as being "false".
 If the output destination is a SQL file, the SQL statements to update the record IDs will be
 written to the SQL output for later execution.
-
-=== osmapidb.bulk.inserter.write.sql.file.id.sequence.updates
-
-* Data Type: bool
-* Default Value: `true`
-
-If true, the OSM API database bulk inserter write element ID sequence update SQL statements when
-the output is a SQL file.  If false, the ID update statements will not be written.
 
 === osmapidb.id.aware.url
 
@@ -1944,6 +1929,13 @@ on a POI's name.
 
 If true, the POI implicit tag generator/deriver will keep all temporary files.  For debugging only.
 
+=== poi.implicit.tag.rules.maximum.word.tokenization.group.size
+
+* Data Type: int
+* Default Value: `1`
+
+The largest word group size used when tokenizing words.  Valid values are 1 to 3.
+
 === poi.implicit.tag.rules.minimum.tag.occurrences.per.word
 
 * Data Type: int
@@ -2038,6 +2030,21 @@ names.  Use 'key=*' to accept all tags for a given key.  Overridden by
 
 If true, the raw generated POI implicit tag rules will be generated using tokenized names.
 
+=== poi.implicit.tag.rules.translate.all.names.to.english
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, the POI implicit tag raw rules generator will translate all name words to English.
+
+=== poi.implicit.tag.rules.use.schema.tag.values.for.words.only
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, the POI implicit tag raw rules generator will only consider words that correspond to a
+TagInfo tag value.
+
 === poi.implicit.tag.rules.word.ignore.file
 
 * Data Type: string
@@ -2085,16 +2092,15 @@ If true, POI to polygon conflation will attempt to reduce unnecessary reviews wi
 incorrect matches.  This setting is somewhat experimental and can be runtime expensive when
 enabled.
 
-=== poi.polygon.match.evidence.threshold
+=== poi.polygon.review.if.matched.types
 
-* Data Type: int
-* Default Value: `3`
+* Data Type: list
+* Default Value:
+** ``
 
-The minimum evidence score at which a POI will be matched to a polygon.  Valid values are 1 to 4.
-If an evidence score for a feature pair falls below this value, the relationship between the
-features will be classified as a review or miss, depending on the value of
-'poi.polygon.review.evidence.threshold'.  Generally, this setting should not be changed except
-when working with specific POI/Polygon conflation use cases that require it.
+List of key value pairs (key=value) for features to always review if marked as matches with POI to
+polygon conflation.  When specifying the list from the command line, delimit the types with ';'
+and surround the entire value string in double quotes.
 
 === poi.polygon.match.threshold
 
@@ -2107,6 +2113,14 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== poi.polygon.match.distance.threshold
+
+* Data Type: double
+* Default Value: `5.0`
+
+The maximum distance, in meters, between a POI and a polygon where they can still be considered
+a match based on distance criteria only.
+
 === poi.polygon.miss.threshold
 
 * Data Type: double
@@ -2117,14 +2131,6 @@ The threshold at which a miss is called a miss when comparing POIs to polygons.
 See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
-
-=== poi.polygon.match.distance.threshold
-
-* Data Type: double
-* Default Value: `5.0`
-
-The maximum distance, in meters, between a POI and a polygon where they can still be considered
-a match based on distance criteria only.
 
 === poi.polygon.name.score.threshold
 
@@ -2143,14 +2149,6 @@ present (null).
 If true, debug match distance output will be obtained from manually matched source data and printed
 if running 'hoot score-matches' with POI to polygon conflation.
 
-=== poi.polygon.promote.points.with.addresses.to.pois
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, POI to polygon conflation will classify all points with OSM address tags as POIs even if
-they do not have specific type tags.
-
 === poi.polygon.review.distance.threshold
 
 * Data Type: double
@@ -2160,30 +2158,6 @@ The maximum distance, in meters, between a POI and a polygon where they can stil
 for review based on distance criteria only (value is added to the circular error of the compared
 features).
 
-=== poi.polygon.review.evidence.threshold
-
-* Data Type: int
-* Default Value: `1`
-
-The minimum evidence score at which a POI will be reviewed against a polygon, if the evidence score
-does not meet the threshold defined by 'poi.polygon.match.evidence.threshold'.  Valid values are
-0 to 3.  If an evidence score for a feature pair falls below this value, the relationship between
-the features will be classified as a miss.  If the value is set to 0, all feature pairs which did
-not match will be reviewed.  If the value is set greater than or equal to
-'poi.polygon.match.evidence.threshold', an error will occur.  Generally, this setting
-should not be changed except when working with specific POI/Polygon conflation use cases that
-require it.
-
-=== poi.polygon.review.if.matched.types
-
-* Data Type: list
-* Default Value:
-** ``
-
-List of key value pairs (key=value) for features to always review if marked as matches with POI to
-polygon conflation.  When specifying the list from the command line, delimit the types with ';'
-and surround the entire value string in double quotes.
-
 === poi.polygon.review.threshold
 
 * Data Type: double
@@ -2191,6 +2165,10 @@ and surround the entire value string in double quotes.
 
 The threshold at which a review is called a review for PoiPolygon. See
 `conflate.review.threshold.default`.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
 
 === poi.polygon.type.score.threshold
 
@@ -2444,14 +2422,6 @@ Set the key member in the SetTagVisitor class.  SetTagVisitor allows for adding/
 particular tag on all elements in a map. The number of keys in `set.tag.visitor.key` should match
 the number of keys in `set.tag.visitor.value`.
 
-=== set.tag.visitor.element.type
-
-* Data Type: string
-* Default Value: ``
-
-An optional element type filter for the SetTagVisitor.  Valid values are: 'node', 'way', or
-'relation'.  If left empty, all elements will receive tag additions.
-
 === set.tag.visitor.value
 
 * Data Type: list
@@ -2696,6 +2666,21 @@ This differencer can be used with:
 * `small.way.merger.diff`
 * `remove.duplicate.areas.diff`
 
+=== translation.debug.in.script
+
+* Data Type: string
+* Default Value: ``
+
+The translation script when translating input OGR data when using hoot::TranslationDebugOp.
+
+=== translation.debug.out.script
+
+* Data Type: string
+* Default Value: ``
+
+The translation script when translating OSM data to an OGR output when using
+hoot::TranslationDebugOp.
+
 === translation.direction
 
 * Data Type: string
@@ -2772,7 +2757,6 @@ after the operations in `conflate.pre.ops`.
 
 * Data Type: list
 * Default Value:
-** `hoot::CornerSplitter`
 ** `hoot::RubberSheet`
 
 List of operations to apply immediately before conflating when using Network Conflation only.  Runs
