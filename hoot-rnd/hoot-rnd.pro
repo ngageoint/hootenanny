@@ -19,6 +19,7 @@ DEPENDPATH += \
     ../hoot-core/src/main/cpp/ \
     ../hoot-core-test/src/test/cpp/ \
     src/main/cpp/ \
+    src/test/cpp/ \
 
 INCLUDEPATH += \
   $${DEPENDPATH} \
@@ -44,11 +45,11 @@ release:OBJECTS_DIR = tmp/release
 else:OBJECTS_DIR = tmp/debug
 DESTDIR = ../lib/
 
-SOURCES += $$files(src/*.cpp, true)
-HEADERS += $$files(src/*.h, true)
+SOURCES += $$files(src/main/*.cpp, true)
+HEADERS += $$files(src/main/*.h, true)
 
 # test files
 cppunit {
-SOURCES += $$files(src/*Test*.cpp, true)
-SOURCES += $$files(src/*Test*.h, true)
+SOURCES += $$files(src/test/*.cpp, true)
+HEADERS += $$files(src/test/*.h, true)
 }

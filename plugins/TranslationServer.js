@@ -259,6 +259,9 @@ function handleInputs(params) {
         case '/schema':
             result = getFilteredSchema(params);
             break;
+        case '/fcodes':
+            result = getFCodes(params);
+            break;
         case '/capabilities':
             result = getCapabilities(params);
             break;
@@ -457,6 +460,40 @@ var getTaginfoKeys = function(params)
     }
 }
 
+var getFCodes = function(params) {
+    if (params.method === 'POST') {
+        throw new Error('Unsupported method');
+    } else if (params.method === 'GET') {
+
+        // get query params
+        var geomType = params.geometry;
+        var translation = params.translation;
+
+        //Treat vertex geom type as point
+        if (geomType.toLowerCase() === 'vertex') geomType = 'point';
+
+        //Get valid FCODEs for this translation and geometry type
+        var schema = schemaMap[translation].getDbSchema();
+
+        console.log(geomType + ', ' + translation + ', ' + schema.length);
+        var fcodes = schema
+            .filter(function(d) {
+                return d.geom.toLowerCase() === geomType.toLowerCase();
+            })
+            .map(function(d) {
+                return {
+                    fcode: d.fcode,
+                    desc: d.desc
+                }
+            })
+            .sort(function(a, b) {
+                return a.fcode - b.fcode;
+            });
+
+        return fcodes;
+    }
+}
+
 var getFilteredSchema = function(params) {
     if (params.method === 'POST') {
         throw new Error('Unsupported method');
@@ -621,6 +658,7 @@ var schemaError = function(params) {
 }
 
 if (typeof exports !== 'undefined') {
+    exports.getFCodes = getFCodes;
     exports.searchSchema = searchSchema;
     exports.handleInputs = handleInputs;
     exports.TranslationServer = TranslationServer;
