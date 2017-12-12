@@ -56,7 +56,8 @@ _skipTranslation(false),
 _keepTempFiles(false),
 _tempFileDir(ConfigOptions().getApidbBulkInserterTempFileDir()),
 _translateAllNamesToEnglish(false),
-_maxWordTokenizationGroupSize(1)
+_maxWordTokenizationGroupSize(1),
+_skipOldNameTag(true)
 {
 }
 
@@ -77,6 +78,7 @@ void PoiImplicitTagRawRulesGenerator::setConfiguration(const Settings& conf)
   setTempFileDir(options.getApidbBulkInserterTempFileDir());
   setTranslateAllNamesToEnglish(options.getPoiImplicitTagRulesTranslateAllNamesToEnglish());
   setMaxWordTokenizationGroupSize(options.getPoiImplicitTagRulesMaximumWordTokenizationGroupSize());
+  setSkipOldNameTag(options.getPoiImplicitTagRulesSkipOldNameTag());
 }
 
 void PoiImplicitTagRawRulesGenerator::_updateForNewWord(QString word, const QString kvp)
@@ -141,6 +143,7 @@ void PoiImplicitTagRawRulesGenerator::generateRules(const QStringList inputs,
   LOG_VARD(_sortParallelCount);
   LOG_VARD(_translateAllNamesToEnglish);
   LOG_VARD(_maxWordTokenizationGroupSize);
+  LOG_VARD(_skipOldNameTag);
 
   _wordKeysToCountsValues.clear();
   _duplicatedWordTagKeyCountsToValues.clear();
@@ -199,6 +202,15 @@ void PoiImplicitTagRawRulesGenerator::generateRules(const QStringList inputs,
       {
         QStringList names = element->getTags().getNames();
         assert(!names.isEmpty());
+
+        if (_skipOldNameTag)
+        {
+          if (names.removeAll("old_name") > 0)
+          {
+            LOG_VARD("Removed old name tag.");
+          }
+        }
+
         if (names.isEmpty())
         {
           throw HootException("Names empty.");

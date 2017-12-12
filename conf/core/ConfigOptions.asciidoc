@@ -1990,6 +1990,13 @@ when deriving implicit tags from POI names.
 If true, the POI implicit tag generator will keep node filtering.  Only set to true if the input
 data has been filtered with ImplicitTagEligiblePoiCriterion beforehand.
 
+=== poi.implicit.tag.rules.skip.old.name.tag
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, the POI implicit tag tagger will not consider the OSM "old_name" tag as a name tag.
+
 === poi.implicit.tag.rules.skip.translation
 
 * Data Type: bool

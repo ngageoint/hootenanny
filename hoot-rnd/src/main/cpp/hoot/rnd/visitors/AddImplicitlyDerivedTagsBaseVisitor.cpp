@@ -55,7 +55,8 @@ _minWordLength(ConfigOptions().getPoiImplicitTagRulesMinimumWordLength()),
 _smallestNumberOfTagsAdded(LONG_MAX),
 _largestNumberOfTagsAdded(0),
 _maxWordTokenizationGroupSize(1),
-_translateAllNamesToEnglish(false)
+_translateAllNamesToEnglish(false),
+_skipOldNameTag(true)
 {
   _ruleReader.reset(new ImplicitTagRulesSqliteReader());
   _ruleReader->open(ConfigOptions().getPoiImplicitTagRulesDatabase());
@@ -75,7 +76,8 @@ _minWordLength(ConfigOptions().getPoiImplicitTagRulesMinimumWordLength()),
 _smallestNumberOfTagsAdded(LONG_MAX),
 _largestNumberOfTagsAdded(0),
 _maxWordTokenizationGroupSize(1),
-_translateAllNamesToEnglish(false)
+_translateAllNamesToEnglish(false),
+_skipOldNameTag(true)
 {
   _ruleReader.reset(new ImplicitTagRulesSqliteReader());
   _ruleReader->open(databasePath);
@@ -150,6 +152,14 @@ void AddImplicitlyDerivedTagsBaseVisitor::visit(const ElementPtr& e)
     Tags tagsToAdd;
 
     QStringList names = e->getTags().getNames();
+
+    if (_skipOldNameTag)
+    {
+      if (names.removeAll("old_name") > 0)
+      {
+        LOG_VARD("Removed old name tag.");
+      }
+    }
 
     if (_translateAllNamesToEnglish)
     {

@@ -65,6 +65,7 @@ public:
   void setWordIgnoreFile(const QString file) { _customRules.setWordIgnoreFile(file); }
   void setMaxWordTokenizationGroupSize(int size) { _maxWordTokenizationGroupSize = size; }
   void setTranslateAllNamesToEnglish(bool translate) { _translateAllNamesToEnglish = translate; }
+  void setSkipOldNameTag(bool skip) { _skipOldNameTag = skip; }
 
 protected:
 
@@ -89,6 +90,7 @@ private:
   long _largestNumberOfTagsAdded;
   int _maxWordTokenizationGroupSize;
   bool _translateAllNamesToEnglish;
+  bool _skipOldNameTag;
 
   PoiImplicitTagCustomRules _customRules;
 

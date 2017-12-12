@@ -73,6 +73,7 @@ public:
   void setTempFileDir(QString dir) { _tempFileDir = dir; }
   void setTranslateAllNamesToEnglish(bool translate) { _translateAllNamesToEnglish = translate; }
   void setMaxWordTokenizationGroupSize(int size) { _maxWordTokenizationGroupSize = size; }
+  void setSkipOldNameTag(bool skip) { _skipOldNameTag = skip; }
 
 private:
 
@@ -99,6 +100,7 @@ private:
   QString _tempFileDir;
   bool _translateAllNamesToEnglish;
   int _maxWordTokenizationGroupSize;
+  bool _skipOldNameTag;
 
   ImplicitTagEligiblePoiCriterion _poiFilter;
 
