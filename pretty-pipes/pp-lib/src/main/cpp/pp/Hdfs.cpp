@@ -34,7 +34,7 @@
 #include <fstream>
 
 //Boost
-#include <boost/shared_array.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include "HdfsConnection.h"
 #include "HdfsDevice.hpp"
