@@ -40,7 +40,7 @@ boost::shared_ptr<OsmMap> PbfRecordReader::getMap()
   boost::shared_ptr<OsmMap> result(new OsmMap());
 
   Hdfs fs;
-  auto_ptr<istream> is(fs.open(_path));
+  boost::shared_ptr<istream> is(fs.open(_path));
 
   OsmPbfReader reader(true);
 

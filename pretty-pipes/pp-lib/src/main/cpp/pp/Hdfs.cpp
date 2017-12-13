@@ -33,6 +33,9 @@
 // Standard
 #include <fstream>
 
+//Boost
+#include <boost/shared_array.hpp>
+
 #include "HdfsConnection.h"
 #include "HdfsDevice.hpp"
 
@@ -50,7 +53,7 @@ Hdfs::Hdfs(const string& host, int port)
 
 void Hdfs::copyFromLocal(string src, string dst)
 {
-  auto_ptr<ostream> dstStream(create(dst));
+  boost::shared_ptr<ostream> dstStream(create(dst));
   fstream srcStream;
   srcStream.open(src.data(), fstream::in);
   if (srcStream.good() == false)

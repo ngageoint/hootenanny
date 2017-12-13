@@ -71,7 +71,7 @@ public:
   void write(const std::vector<Sample>& samples);
 
 private:
-  std::auto_ptr<std::fstream> _autoStrm;
+  boost::shared_ptr<std::fstream> _autoStrm;
   std::ostream* _strm;
   bool _useNulls;
 

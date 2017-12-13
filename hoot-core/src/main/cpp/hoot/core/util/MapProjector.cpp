@@ -420,7 +420,7 @@ bool MapProjector::_evaluateProjection(const OGREnvelope& env,
   DisableCplErrors disableErrors;
   boost::shared_ptr<OGRSpatialReference> wgs84 = MapProjector::createWgs84Projection();
 
-  auto_ptr<OGRCoordinateTransformation> t(OGRCreateCoordinateTransformation(wgs84.get(),
+  boost::shared_ptr<OGRCoordinateTransformation> t(OGRCreateCoordinateTransformation(wgs84.get(),
                                                                             srs.get()));
   if (t.get() == 0)
   {
@@ -439,7 +439,7 @@ bool MapProjector::_evaluateProjection(const OGREnvelope& env,
   int stepsY = (height) / stepSize;
   double stepSizeX = (width) / (double)stepsX;
   double stepSizeY = (height) / (double)stepsY;
-  auto_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(env));
+  boost::shared_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(env));
 
   bool success = true;
 

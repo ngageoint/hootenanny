@@ -99,7 +99,7 @@ public:
 private:
   OsmMapPtr _map;
   WayPtr _a;
-  std::auto_ptr<FindNodesInWayFactory> _nf;
+  boost::shared_ptr<FindNodesInWayFactory> _nf;
 
   NodePtr _createNode(const geos::geom::Coordinate& c);
 };

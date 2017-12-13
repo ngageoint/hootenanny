@@ -129,7 +129,7 @@ private:
   QString _osmSchema;
   QString _timestamp;
   int _precision;
-  std::auto_ptr<QIODevice> _fp;
+  boost::shared_ptr<QIODevice> _fp;
   int _encodingErrorCount;
   boost::shared_ptr<QXmlStreamWriter> _writer;
   geos::geom::Envelope _bounds;

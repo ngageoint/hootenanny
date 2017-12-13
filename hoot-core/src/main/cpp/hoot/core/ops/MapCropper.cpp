@@ -183,7 +183,7 @@ void MapCropper::apply(OsmMapPtr& map)
     }
     else
     {
-      auto_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(c));
+      boost::shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(c));
 
       if (_invert == false)
       {

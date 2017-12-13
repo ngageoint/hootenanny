@@ -88,7 +88,7 @@ public:
   {
     Hdfs fs;
 
-    auto_ptr<ostream> out(fs.create(fn));
+    boost::shared_ptr<ostream> out(fs.create(fn));
     CppSeqFile::Writer writer(*out);
 
     int count = 100;
