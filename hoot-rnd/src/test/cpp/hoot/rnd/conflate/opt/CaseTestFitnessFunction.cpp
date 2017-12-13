@@ -32,9 +32,9 @@
 namespace hoot
 {
 
-CaseTestFitnessFunction::CaseTestFitnessFunction(QString dir, QString configFile) :
-AbstractTestFitnessFunction(),
-_configFile(configFile)
+CaseTestFitnessFunction::CaseTestFitnessFunction(QString dir, QString configFile)
+  : AbstractTestFitnessFunction(),
+    _configFile(configFile)
 {
   _testSuite.reset(new ConflateCaseTestSuite(dir));
   QStringList confs;
