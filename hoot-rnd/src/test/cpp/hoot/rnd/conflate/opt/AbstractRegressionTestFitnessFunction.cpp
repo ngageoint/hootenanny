@@ -42,9 +42,9 @@ namespace hoot
 
 AbstractRegressionTestFitnessFunction::AbstractRegressionTestFitnessFunction(QString dir,
                                                                              QString configFile,
-                                                                             QString testDirExtension) :
-AbstractTestFitnessFunction(),
-_configFile(configFile)
+                                                                             QString testDirExtension)
+  : AbstractTestFitnessFunction(),
+    _configFile(configFile)
 {
   _testSuite.reset(new RegressionTestSuite(dir, testDirExtension));
   QStringList confs;
