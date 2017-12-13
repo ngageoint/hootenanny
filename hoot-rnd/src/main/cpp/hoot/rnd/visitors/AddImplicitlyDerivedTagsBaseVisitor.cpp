@@ -202,7 +202,9 @@ void AddImplicitlyDerivedTagsBaseVisitor::visit(const ElementPtr& e)
     QStringList filteredNames;
     for (int i = 0; i < names.size(); i++)
     {
-      const QString name = names.at(i);
+      QString name = names.at(i);
+      //TODO: fix
+      //name = StringUtils::replaceNonAlphaNumericCharsWithSpace(name).trimmed();
       if (name.length() >= _minWordLength &&
           !_customRules.getWordIgnoreList().contains(name.toLower()))
       {

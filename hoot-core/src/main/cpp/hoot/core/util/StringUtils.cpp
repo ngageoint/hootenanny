@@ -77,4 +77,18 @@ bool StringUtils::hasAlphabeticCharacter(const QString input)
   return false;
 }
 
+//QString StringUtils::replaceNonAlphaNumericChars(const QString input, const QChar replacement)
+//{
+//  std::string stdStrInput = input.toStdString();
+//  std::replace_if(stdStrInput.begin(), stdStrInput.end(), std::isalnum, replacement.toLatin1());
+//  return QString::fromStdString(stdStrInput);
+//}
+
+QString StringUtils::replaceNonAlphaNumericCharsWithSpace(const QString input)
+{
+  std::string stdStrInput = input.toStdString();
+  std::replace_if(stdStrInput.begin(), stdStrInput.end(), ::iswpunct, ' ');
+  return QString::fromStdString(stdStrInput);
+}
+
 }

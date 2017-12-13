@@ -65,6 +65,16 @@ public:
    * @return true if the input has at least one alphabetic character; false otherwise
    */
   static bool hasAlphabeticCharacter(const QString input);
+
+  /**
+   * @brief replaceNonAlphaNumericChars
+   * @param input
+   * @param replacement
+   * @return
+   */
+  //static QString replaceNonAlphaNumericChars(const QString input, const QChar replacement);
+
+  static QString replaceNonAlphaNumericCharsWithSpace(const QString input);
 };
 
 }

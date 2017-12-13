@@ -60,6 +60,46 @@ void PoiImplicitTagRulesDeriver::setConfiguration(const Settings& conf)
   _customRules.setWordIgnoreFile(confOptions.getPoiImplicitTagRulesWordIgnoreFile());
   setUseSchemaTagValuesForWordsOnly(
     confOptions.getPoiImplicitTagRulesUseSchemaTagValuesForWordsOnly());
+}
+
+QString PoiImplicitTagRulesDeriver::_getSqliteOutput(const QStringList outputs)
+{
+  for (int i = 0; i < outputs.size(); i++)
+  {
+    if (outputs.at(i).endsWith(".sqlite"))
+    {
+      return outputs.at(i);
+    }
+  }
+  return "";
+}
+
+void PoiImplicitTagRulesDeriver::deriveRules(const QString input, const QStringList outputs)
+{
+  if (input.isEmpty())
+  {
+    throw HootException("No input was specified.");
+  }
+  if (!input.endsWith(".implicitTagRules"))
+  {
+    throw IllegalArgumentException(
+      QString("A *.implicitTagRules file must be the input to implicit tag rules derivation.  ") +
+      QString("Input specified: ") + input);
+  }
+
+  if (outputs.isEmpty())
+  {
+    throw HootException("No outputs were specified.");
+  }
+  const QString sqliteOutput = _getSqliteOutput(outputs);
+  if (sqliteOutput.isEmpty())
+  {
+    throw HootException("Outputs must contain at least one Sqlite database.");
+  }
+
+  LOG_INFO(
+    "Deriving POI implicit tag rules for input: " << input << ".  Writing to outputs: " <<
+    outputs << "...");
 
   LOG_VARD(_minTagOccurrencesPerWord);
   LOG_VARD(_minWordLength);
@@ -119,67 +159,6 @@ void PoiImplicitTagRulesDeriver::setConfiguration(const Settings& conf)
     qSort(schemaTagValuesList.begin(), schemaTagValuesList.end());
     LOG_VART(schemaTagValuesList);
   }
-}
-
-QString PoiImplicitTagRulesDeriver::_getSqliteOutput(const QStringList outputs)
-{
-  for (int i = 0; i < outputs.size(); i++)
-  {
-    if (outputs.at(i).endsWith(".sqlite"))
-    {
-      return outputs.at(i);
-    }
-  }
-  return "";
-}
-
-void PoiImplicitTagRulesDeriver::deriveRules(const QString input, const QStringList outputs)
-{
-  if (input.isEmpty())
-  {
-    throw HootException("No input was specified.");
-  }
-  if (!input.endsWith(".implicitTagRules"))
-  {
-    throw IllegalArgumentException(
-      QString("A *.implicitTagRules file must be the input to implicit tag rules derivation.  ") +
-      QString("Input specified: ") + input);
-  }
-
-  if (outputs.isEmpty())
-  {
-    throw HootException("No outputs were specified.");
-  }
-  const QString sqliteOutput = _getSqliteOutput(outputs);
-  if (sqliteOutput.isEmpty())
-  {
-    throw HootException("Outputs must contain at least one Sqlite database.");
-  }
-
-  LOG_INFO(
-    "Deriving POI implicit tag rules for input: " << input << ".  Writing to outputs: " <<
-    outputs << "...");
-//  LOG_VARD(_minTagOccurrencesPerWord);
-//  LOG_VARD(_minWordLength);
-//  LOG_VARD(_customRules.getWordIgnoreFile());
-//  LOG_VARD(_customRules.getTagIgnoreFile());
-//  LOG_VARD(_customRules.getTagFile());
-//  LOG_VARD(_customRules.getCustomRuleFile());
-//  LOG_VARD(_customRules.getRuleIgnoreFile());
-//  LOG_VARD(_useSchemaTagValuesForWordsOnly);
-
-//  _customRules.init();
-
-//  LOG_VARD(_customRules.getWordIgnoreList().size());
-//  LOG_VARD(_customRules.getWordIgnoreList());
-//  LOG_VARD(_customRules.getTagIgnoreList().size());
-//  LOG_VARD(_customRules.getTagIgnoreList());
-//  LOG_VARD(_customRules.getTagsAllowList().size());
-//  LOG_VARD(_customRules.getTagsAllowList());
-//  LOG_VARD(_customRules.getCustomRulesList().size());
-//  LOG_VARD(_customRules.getCustomRulesList());
-//  LOG_VARD(_customRules.getRulesIgnoreList().size());
-//  LOG_VARD(_customRules.getRulesIgnoreList());
 
   if (_minTagOccurrencesPerWord == 1 && _minWordLength == 1 &&
       _customRules.getWordIgnoreList().size() == 0 &&
@@ -311,8 +290,11 @@ void PoiImplicitTagRulesDeriver::_applyFiltering(const QString input)
     QString word = lineParts[1].trimmed();
     LOG_VART(word);
 
+    //TODO: move to generator - FIX
+    //word = StringUtils::replaceNonAlphaNumericCharsWithSpace(word).trimmed();
+
     bool wordNotASchemaTagValue = false;
-    if (_useSchemaTagValuesForWordsOnly &&
+    if (_useSchemaTagValuesForWordsOnly && !word.isEmpty() &&
         !_customRules.getWordIgnoreList().contains(word, Qt::CaseInsensitive))
     {
       wordNotASchemaTagValue = true;
