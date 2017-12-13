@@ -5,6 +5,7 @@ var http = require('http');
 var url = require('url');
 var serverPort = 8096;
 var HOOT_HOME = process.env.HOOT_HOME;
+var hoot = require(HOOT_HOME + '/lib/HootJs');
 
 if (require.main === module) {
     //I'm a running server
@@ -127,7 +128,6 @@ var mergeElement = function(payload)
 // This is where all interesting things happen interfacing with hoot core lib directly
 var postHandler = function(data)
 {
-    var hoot = require(HOOT_HOME + '/lib/HootJs');
     var map = new hoot.OsmMap();
     map.setIdGenerator(new hoot.DefaultIdGenerator());
     hoot.loadMapFromString(map, data);

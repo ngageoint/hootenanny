@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <node id='-8' action='modify' lat='-25.42570849717' lon='153.16023944736'>
+    <tag k='papa' v='smurf' />
+    <tag k='source' v='cartoon' />
+    <tag k='uuid' v='{bfbf2946-4342-444c-9926-1477c7bcce05}' />
+  </node>
+  <node id='-1' action='modify' lat='-25.42795647973' lon='153.16031454921'>
+    <tag k='building' v='hut' />
+    <tag k='source' v='me' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='uuid' v='{1514e475-0a8b-450d-8138-af8623cbdd56}' />
+  </node>
+  <node id='-13' action='modify' lat='-25.42945349658' lon='153.16196142554' />
+  <node id='-12' action='modify' lat='-25.42744778045' lon='153.16184340834' />
+  <node id='-11' action='modify' lat='-25.42945834127' lon='153.16297530055' />
+  <node id='-10' action='modify' lat='-25.42965212849' lon='153.16587208629' />
+  <node id='-9' action='modify' lat='-25.42734604034' lon='153.16403745532' />
+  <node id='-5' action='modify' lat='-25.42494301077' lon='153.16386579394' />
+  <node id='-4' action='modify' lat='-25.42724914491' lon='153.16570042491' />
+  <node id='-3' action='modify' lat='-25.42705535382' lon='153.16280363917' />
+  <node id='-7' action='modify' lat='-25.42701659557' lon='153.16178439975' />
+  <node id='-6' action='modify' lat='-25.42501083888' lon='153.16166638255' />
+  <way id='-4' action='modify'>
+    <nd ref='-12' />
+    <nd ref='-13' />
+    <tag k='source' v='me' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='uuid' v='{16006a93-ad6c-451e-b5ae-b530e6c5427a}' />
+    <tag k='waterway' v='river' />
+  </way>
+  <way id='-3' action='modify'>
+    <nd ref='-9' />
+    <nd ref='-10' />
+    <nd ref='-11' />
+    <nd ref='-9' />
+    <tag k='landuse' v='orchard' />
+    <tag k='source' v='me' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='uuid' v='{162abddf-bb8a-470a-8986-afdf5a171d45}' />
+  </way>
+  <way id='-1' action='modify'>
+    <nd ref='-5' />
+    <nd ref='-3' />
+    <nd ref='-4' />
+    <nd ref='-5' />
+    <tag k='papa' v='smurf' />
+    <tag k='source' v='cartoon' />
+    <tag k='uuid' v='{c0b66070-d3be-44bd-bb52-03d34716cd49}' />
+  </way>
+  <way id='-2' action='modify'>
+    <nd ref='-6' />
+    <nd ref='-7' />
+    <tag k='papa' v='smurf' />
+    <tag k='source' v='cartoon' />
+    <tag k='uuid' v='{79cd86b0-882c-4d66-b7ec-60fed3cac8f7}' />
+  </way>
+</osm>

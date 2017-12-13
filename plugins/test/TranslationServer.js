@@ -11,6 +11,42 @@ var server = require('../TranslationServer.js');
 
 describe('TranslationServer', function () {
 
+    describe('fcodes', function() {
+
+        it('should return fcodes for MGCP Line', function(){
+            assert.equal(server.getFCodes({
+                method: 'GET',
+                translation: 'MGCP',
+                geometry: 'line'
+            }).length, 59);
+        });
+
+        it('should return fcodes for TDSv61 Point', function(){
+            assert.equal(server.getFCodes({
+                method: 'GET',
+                translation: 'TDSv61',
+                geometry: 'Point'
+            }).length, 193);
+        });
+
+        it('should return fcodes for GGDMv30 Area', function(){
+            assert.equal(server.getFCodes({
+                method: 'GET',
+                translation: 'GGDMv30',
+                geometry: 'Area'
+            }).length, 280);
+        });
+
+        it('should return fcodes for TDSv40 Vertex', function(){
+            assert.equal(server.getFCodes({
+                method: 'GET',
+                translation: 'TDSv40',
+                geometry: 'vertex'
+            }).length, 190);
+        });
+
+    });
+
     describe('searchSchema', function() {
 
         var defaults = {};

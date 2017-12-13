@@ -891,6 +891,7 @@ tds = {
             ["t.leisure == 'stadium'","t.building = 'yes'"],
             ["t['material:vertical']","t.material = t['material:vertical']; delete t['material:vertical']"],
             ["t['monitoring:weather'] == 'yes'","t.man_made = 'monitoring_station'"],
+            ["t.natural =='spring' && t['spring:type'] == 'spring'","delete t['spring:type']"],
             ["t.product && t.man_made == 'storage_tank'","t.content = t.product; delete t.product"],
             ["t.public_transport == 'station' && t['transport:type'] == 'railway'","t.railway = 'station'"],
             ["t.public_transport == 'station' && t['transport:type'] == 'bus'","t.bus = 'yes'"],
@@ -1228,13 +1229,16 @@ tds = {
             ["t.landuse == 'farmland' && t.crop == 'fruit_tree'","t.landuse = 'orchard'"],
             ["t.landuse == 'reservoir'","t.water = 'reservoir'; delete t.landuse"],
             ["t.landuse == 'scrub'","t.natural = 'scrub'; delete t.landuse"],
+            ["t.launch_pad","delete t.launch_pad; t.aeroway='launchpad'"],
             ["t.leisure == 'recreation_ground'","t.landuse = 'recreation_ground'; delete t.leisure"],
             ["t.leisure == 'sports_centre'","t.facility = 'yes'; t.use = 'recreation'; delete t.leisure"],
             ["t.leisure == 'stadium' && t.building","delete t.building"],
             ["t.man_made && t.building == 'yes'","delete t.building"],
+            ["t.man_made == 'launch_pad'","delete t.man_made; t.aeroway='launchpad'"],
             ["t.median == 'yes'","t.is_divided = 'yes'"],
             ["t.natural == 'desert' && t.surface","t.desert_surface = t.surface; delete t.surface"],
             ["t.natural == 'sinkhole'","a.F_CODE = 'BH145'; t['water:sink:type'] = 'sinkhole'; delete t.natural"],
+            ["t.natural == 'spring' && !(t['spring:type'])","t['spring:type'] = 'spring'"],
             ["t.natural == 'wood'","t.landuse = 'forest'; delete t.natural"],
             ["t.power == 'pole'","t['cable:type'] = 'power';t['tower:shape'] = 'pole'"],
             ["t.power == 'tower'","t['cable:type'] = 'power'; t.pylon = 'yes'; delete t.power"],
@@ -1491,6 +1495,23 @@ tds = {
                         tags.memo = 'annotation:' + tags.place;
                     }
                     delete tags.place;
+                    break;
+
+                case 'island':
+                case 'islet':
+                    // If we have a coastline around an Island, decide if we are going make an Island
+                    // or a Coastline
+                    if (tags.natural == 'coastline')
+                    {
+                        if (geometryType == 'Area') // Islands are Areas
+                        {
+                            delete tags.natural;
+                        }
+                        else if (geometryType =='Line') // Coastlines are lines
+                        {
+                            delete tags.place;
+                        }
+                    }
                     break;
 
             } // End switch
@@ -1897,6 +1918,26 @@ tds = {
             var kList = Object.keys(attrs).sort()
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
         }
+
+        // See if we have an o2s_X layer and try to unpack it.
+        if (layerName.indexOf('o2s_') > -1)
+        {
+            tags = translate.parseO2S(attrs);
+
+            // Add some metadata
+            if (! tags.uuid) tags.uuid = createUuid();
+            if (! tags.source) tags.source = 'tdsv40:' + layerName.toLowerCase();
+
+            // Debug:
+            if (tds.configIn.OgrDebugDumptags == 'true')
+            {
+                var kList = Object.keys(tags).sort()
+                for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
+                print('');
+            }
+
+            return tags;
+        } // End layername = o2s_X
 
         // Set up the fcode translation rules. We need this due to clashes between the one2one and
         // the fcode one2one rules

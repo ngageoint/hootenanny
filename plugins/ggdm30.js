@@ -802,6 +802,7 @@ ggdm30 = {
             ["t.leisure == 'stadium'","t.building = 'yes'"],
             ["t['material:vertical']","t.material = t['material:vertical']; delete t['material:vertical']"],
             ["t['monitoring:weather'] == 'yes'","t.man_made = 'monitoring_station'"],
+            ["t.natural =='spring' && t['spring:type'] == 'spring'","delete t['spring:type']"],
             //["t.on_bridge == 'yes' && !(t.bridge)","t.bridge = 'yes'; delete t.on_bridge"],
             ["t.product && t.man_made == 'storage_tank'","t.content = t.product; delete t.product"],
             ["t.public_transport == 'station' && t['transport:type'] == 'railway'","t.railway = 'station'"],
@@ -1009,8 +1010,15 @@ ggdm30 = {
                     if (tags[tTags[i]]) hoot.logWarn('Unpacking ZI006_MEM, overwriteing ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
                     tags[i] = tTags[i];
                 }
+            }
 
+            if (tObj.text && tObj.text !== '')
+            {
                 tags.note = tObj.text;
+            }
+            else
+            {
+                delete tags.note;
             }
         } // End process tags.note
 
@@ -1046,7 +1054,6 @@ ggdm30 = {
     {
         // Remove Hoot assigned tags for the source of the data
         if (tags['source:ingest:datetime']) delete tags['source:ingest:datetime'];
-        if (tags.source) delete tags.source;
         if (tags.area) delete tags.area;
         if (tags['error:circular']) delete tags['error:circular'];
         if (tags['hoot:status']) delete tags['hoot:status'];
@@ -1078,6 +1085,7 @@ ggdm30 = {
         {
         // See ToOsmPostProcessing for more details about rulesList.
             var rulesList = [
+            ["t.aeroway == 'navigationaid' && t.navigationaid","delete t.navigationaid"],
             ["t.amenity == 'bus_station'","t.public_transport = 'station'; t['transport:type'] = 'bus'"],
             ["t.amenity == 'marketplace'","t.facility = 'yes'"],
             ["t.barrier == 'tank_trap' && t.tank_trap == 'dragons_teeth'","t.barrier = 'dragons_teeth'; delete t.tank_trap"],
@@ -1106,15 +1114,16 @@ ggdm30 = {
             ["t.landuse == 'reservoir'","t.water = 'reservoir'; delete t.landuse"],
             ["t.landuse == 'retail'","t.landuse = 'built_up_area'; t.use = 'commercial'"],
             ["t.landuse == 'scrub'","t.natural = 'scrub'; delete t.landuse"],
-            // ["t.landuse == 'grass'","a.F_CODE = 'EB010'; t['grassland:type'] = 'grassland';"],
-            // ["t.landuse == 'meadow'","a.F_CODE = 'EB010'; t['grassland:type'] = 'meadow';"],
+            ["t.launch_pad","delete t.launch_pad; t.aeroway='launchpad'"],
             ["t.leisure == 'sports_centre'","t.facility = 'yes'; t.use = 'recreation'; delete t.leisure"],
             ["t.leisure == 'stadium' && t.building","delete t.building"],
             ["t.man_made && t.building == 'yes'","delete t.building"],
             ["t.man_made == 'embankment'","t.embankment = 'yes'; delete t.man_made"],
+            ["t.man_made == 'launch_pad'","delete t.man_made; t.aeroway='launchpad'"],
             ["t.median == 'yes'","t.is_divided = 'yes'"],
             ["t.natural == 'desert' && t.surface","t.desert_surface = t.surface; delete t.surface"],
             ["t.natural == 'sinkhole'","a.F_CODE = 'BH145'; t['water:sink:type'] = 'sinkhole'; delete t.natural"],
+            ["t.natural == 'spring' && !(t['spring:type'])","t['spring:type'] = 'spring'"],
             ["t.natural == 'wood'","t.landuse = 'forest'; delete t.natural"],
             ["t.power == 'pole'","t['cable:type'] = 'power'; t['tower:shape'] = 'pole'"],
             ["t.power == 'tower'","t['cable:type'] = 'power'"],
@@ -1292,6 +1301,23 @@ ggdm30 = {
                         tags.memo = 'annotation:' + tags.place;
                     }
                     delete tags.place;
+                    break;
+
+                case 'island':
+                case 'islet':
+                    // If we have a coastline around an Island, decide if we are going make an Island
+                    // or a Coastline
+                    if (tags.natural == 'coastline')
+                    {
+                        if (geometryType == 'Area') // Islands are Areas
+                        {
+                            delete tags.natural;
+                        }
+                        else if (geometryType =='Line') // Coastlines are lines
+                        {
+                            delete tags.place;
+                        }
+                    }
                     break;
 
             } // End switch
@@ -1772,6 +1798,26 @@ ggdm30 = {
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
         }
 
+        // See if we have an o2s_X layer and try to unpack it.
+        if (layerName.indexOf('o2s_') > -1)
+        {
+            tags = translate.parseO2S(attrs);
+
+            // Add some metadata
+            if (! tags.uuid) tags.uuid = createUuid();
+            if (! tags.source) tags.source = 'ggdmv30:' + layerName.toLowerCase();
+
+            // Debug:
+            if (ggdm30.config.OgrDebugDumptags == 'true')
+            {
+                var kList = Object.keys(tags).sort()
+                for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
+                print('');
+            }
+
+            return tags;
+        } // End layername = o2s_X
+
         // Set up the fcode translation rules. We need this due to clashes between the one2one and
         // the fcode one2one rules
         if (ggdm30.fcodeLookup == undefined)
@@ -2013,6 +2059,22 @@ ggdm30 = {
 
         if (!(ggdmAttrLookup[gFcode]))
         {
+            // For the UI: Throw an error and die if we don't have a valid feature
+            if (ggdm30.config.OgrThrowError == 'true')
+            {
+                if (! attrs.F_CODE)
+                {
+                    returnData.push({attrs:{'error':'No Valid Feature Code'}, tableName: ''});
+                    return returnData;
+                }
+                else
+                {
+                    //throw new Error(geometryType.toString() + ' geometry is not valid for F_CODE ' + attrs.F_CODE);
+                    returnData.push({attrs:{'error':geometryType + ' geometry is not valid for ' + attrs.F_CODE + ' in TDSv61'}, tableName: ''});
+                    return returnData;
+                }
+            }
+
             hoot.logTrace('FCODE and Geometry: ' + gFcode + ' is not in the schema');
 
             tableName = 'o2s_' + geometryType.toString().charAt(0);
@@ -2026,7 +2088,11 @@ ggdm30 = {
             }
 
             // We want to keep the hoot:id if present
-            if (tags['hoot:id']) tags.raw_id = tags['hoot:id'];
+            if (tags['hoot:id'])
+            {
+                tags.raw_id = tags['hoot:id'];
+                delete tags['hoot:id'];
+            }
 
             // Convert all of the Tags to a string so we can jam it into an attribute
             var str = JSON.stringify(tags);
