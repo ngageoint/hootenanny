@@ -278,9 +278,6 @@ fi
 echo "Restarting postgres"
 sudo systemctl restart postgresql-$PG_VERSION
 
-# Install Hadoop.
-$HOOT_HOME/scripts/hadoop/hadoop-install.sh
-
 # Get ready to build Hoot
 
 echo "SetupEnv.sh"
