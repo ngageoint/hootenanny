@@ -1922,6 +1922,13 @@ when deriving implicit tags from POI names.  Overridden by
 Database used by the AddImplicitlyDerivedTagsPoiVisitor to derive POI type tags implicitly based
 on a POI's name.
 
+=== poi.implicit.tag.rules.english.words.file
+
+* Data Type: string
+* Default Value: `${HOOT_HOME}/conf/core/poi-implicit-tag-rules/google-10000-english`
+
+TODO
+
 === poi.implicit.tag.rules.keep.temp.files
 
 * Data Type: bool
