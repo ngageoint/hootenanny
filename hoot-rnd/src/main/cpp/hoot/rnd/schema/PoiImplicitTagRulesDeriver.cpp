@@ -36,6 +36,7 @@
 
 // Qt
 #include <QStringBuilder>
+#include <QRegExp>
 
 namespace hoot
 {
@@ -140,6 +141,14 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QString input, const QStringL
         if (!_customRules.getWordIgnoreList().contains(tagVal, Qt::CaseInsensitive))
         {
           _schemaTagValues.insert(tagVal);
+          if (tagVal == "theatre")
+          {
+            _schemaTagValues.insert("theater");
+          }
+          if (tagVal == "centre")
+          {
+            _schemaTagValues.insert("center");
+          }
           LOG_TRACE("Appended " << tagVal << " to schema tag values.");
         }
         QStringList vals = tokenizer.tokenize(tagVal);
@@ -149,6 +158,14 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QString input, const QStringL
           if (!_customRules.getWordIgnoreList().contains(val, Qt::CaseInsensitive))
           {
             _schemaTagValues.insert(val);
+            if (val == "theatre")
+            {
+              _schemaTagValues.insert("theater");
+            }
+            if (val == "centre")
+            {
+              _schemaTagValues.insert("center");
+            }
             LOG_TRACE("Appended " << val << " to schema tag values.");
           }
         }
@@ -292,6 +309,37 @@ void PoiImplicitTagRulesDeriver::_applyFiltering(const QString input)
 
     //TODO: move to generator - FIX
     //word = StringUtils::replaceNonAlphaNumericCharsWithSpace(word).trimmed();
+
+    //TODO: move to common class and call from generator
+    word =
+      word.replace("(", "").replace(")", "").replace(".", "").replace("/", " ").replace("<", "")
+          .replace(">", "").replace("[", "").replace("]", "").replace("@", "").replace("&", "and");
+    if (word.startsWith("-"))
+    {
+      word = word.replace(0, 1, "");
+    }
+    if (word.startsWith("_"))
+    {
+      word = word.replace(0, 1, "");
+    }
+    //TOOD: expand this
+    if (word.at(0).isDigit() &&
+        (word.endsWith("th") || word.endsWith("nd") || word.endsWith("rd") || word.endsWith("st") ||
+         word.endsWith("ave") || word.endsWith("avenue") || word.endsWith("st") ||
+         word.endsWith("street") || word.endsWith("pl") || word.endsWith("plaza")))
+    {
+      word = "";
+    }
+    //TODO: fix and add to base visitor
+//    const QStringList wordTokens = word.split(" ");
+//    if (wordTokens.size() == 1)
+//    {
+//       QRegExp addressStart1Regex("\d{1,5}[a-z]{1}");
+//       if (addressStart1Regex.exactMatch(word))
+//       {
+//         word = "";
+//       }
+//    }
 
     bool wordNotASchemaTagValue = false;
     if (_useSchemaTagValuesForWordsOnly && !word.isEmpty() &&

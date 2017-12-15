@@ -6,34 +6,59 @@ air
 and
 animal
 area
+art
+bake
+basin
+bay
+beach
 bed
+before
 bin
 boutique
+building
+buildings
 bureau
+bus
 camp
 car
 care
+# TODO: want to ignore this
+center
+centre
 club
 city
+community
+community service
+company
+corner
 county
 country
 course
 court
 cross
+dean
 department
 district
 dry
+education
+eng
+engineering
 entrance
 estate
 facility
+faculty
 fast
 first
 food
+for
+former
 free
 game
 garage
+gas
 gate
 general
+gold
 government
 guest
 hall
@@ -41,19 +66,26 @@ headquarters
 health
 historical
 home
-house
 homes
+host
+house
+housing
 hut
 institute
+island
 lane
 life
+lot
 mini
 mud lake
 municipal
+national
+neighborhood
 number historical
 #office
 office historical
-offices
+#offices
+oil
 parish
 park road
 parts
@@ -68,10 +100,12 @@ recreation
 repair
 rescue
 reservoir number
+residence
 ride
 ring
 road
 rock
+sea
 service
 service station
 sports
@@ -79,13 +113,15 @@ stand
 state
 station
 stop
-# TODO: this should negate other matches?
+store
 street
 strip
 studio
 terminal
+the
 town
 tree
+under
 village
 water
 wood

@@ -1929,6 +1929,13 @@ on a POI's name.
 
 If true, the POI implicit tag generator/deriver will keep all temporary files.  For debugging only.
 
+=== poi.implicit.tag.rules.match.end.of.name.single.token.first
+
+* Data Type: bool
+* Default Value: `false`
+
+TODO
+
 === poi.implicit.tag.rules.maximum.word.tokenization.group.size
 
 * Data Type: int

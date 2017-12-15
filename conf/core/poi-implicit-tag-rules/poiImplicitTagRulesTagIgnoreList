@@ -3,3 +3,18 @@
 # key=value
 # keep list alphabetized and in lower case
 # TODO: is this list still needed?
+abandoned:place=populated
+capital=yes
+historic=yes
+place=county
+place=hamlet
+place=locality
+place=municipality
+place=neighbourhood
+place=populated
+place=province
+place=region
+place=state
+place=suburb
+place=town
+place=village

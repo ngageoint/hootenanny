@@ -66,6 +66,7 @@ public:
   void setMaxWordTokenizationGroupSize(int size) { _maxWordTokenizationGroupSize = size; }
   void setTranslateAllNamesToEnglish(bool translate) { _translateAllNamesToEnglish = translate; }
   void setSkipOldNameTag(bool skip) { _skipOldNameTag = skip; }
+  void setMatchEndOfNameSingleTokenFirst(bool match) { _matchEndOfNameSingleTokenFirst = match; }
 
 protected:
 
@@ -91,6 +92,7 @@ private:
   int _maxWordTokenizationGroupSize;
   bool _translateAllNamesToEnglish;
   bool _skipOldNameTag;
+  bool _matchEndOfNameSingleTokenFirst;
 
   PoiImplicitTagCustomRules _customRules;
 
