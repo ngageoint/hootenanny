@@ -6,14 +6,14 @@
   "directories": {
     "test": "test"
   },
-  "dependencies": {},
   "devDependencies": {
     "node-mocks-http": "~1.5.3",
     "osmtogeojson": "~3.0.0-beta.2",
     "xmldom": "~0.1.27",
     "istanbul": "~0.4.5",
     "xml2js": "~0.4.19",
-    "artillery": "~1.6.0-12"
+    "artillery": "~1.6.0-12",
+    "xmlbuilder": "^9.0.4"
   },
   "scripts": {
     "test": "mocha --reporter dot",

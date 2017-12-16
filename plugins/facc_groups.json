@@ -1,0 +1,14 @@
+{
+  "A": "Culture",
+  "B": "Hydrography",
+  "C": "Hypsography",
+  "D": "Physiography",
+  "E": "Vegetation",
+  "F": "Demarcation",
+  "G": "Aeronautical Information",
+  "I": "Cadastral",
+  "N": "N",
+  "S": "Special Use (Dataset-specific)",
+  "T": "T",
+  "Z": "General"
+}
