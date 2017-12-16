@@ -47,6 +47,7 @@ Object.keys(objs).forEach(s => {
     var chunks = {};
     var groups = require('./facc_groups.json');
     var subgroups = require('./facc_subgroups.json');
+    var groupCodeElements = {};
     var subGroupCodeElements = {};
     var presets = builder.create('presets');
 
@@ -109,6 +110,7 @@ Object.keys(objs).forEach(s => {
     let schemaGroup = presets.ele('group', {name: s.toUpperCase()});
     Object.keys(groups).forEach(g => {
         let group = schemaGroup.ele('group', {name: groups[g]});
+        groupCodeElements[g] = group;
         Object.keys(subgroups).filter(s => {
             return s.charAt(0) == g;
         }).forEach(s => {
@@ -117,17 +119,33 @@ Object.keys(objs).forEach(s => {
         });
     });
 
+    let usedGroups = new Set(); //Keep a list of used sub groups
+
     Object.keys(items).forEach(i => {
-        //Get the right subgroup element to append to
+        //Get the right subgroup (two-letter) element to append to
         let code = items[i].fcode.slice(0,2);
 
         let it = subGroupCodeElements[code].ele('item', {name: i, type: lookupType(items[i].geoms), preset_name_label: true});
 
-        it.ele('key', {key: 'FCODE', value: items[i].fcode});
+        usedGroups.add(code); //Sub-group
+        usedGroups.add(code.charAt(0)); //Group
+
+        it.ele('key', {key: (s === 'mgcp') ? 'FCODE' : 'F_CODE', value: items[i].fcode}); //MGCP uses 'FCODE' as key
 
         items[i].columns.forEach(col => {
-            it.ele('reference', {ref: col});
+            if (col !== 'FCODE' && col !== 'F_CODE') //FCODE is set as a key above
+                it.ele('reference', {ref: col});
         });
+    });
+
+    //Remove empty groups
+    Object.keys(subGroupCodeElements).forEach(sg => {
+        if (!usedGroups.has(sg))
+            subGroupCodeElements[sg].remove();
+    });
+    Object.keys(groupCodeElements).forEach(g => {
+        if (!usedGroups.has(g))
+            groupCodeElements[g].remove();
     });
 
     let xml = presets.end({pretty: true});
