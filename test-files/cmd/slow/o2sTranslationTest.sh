@@ -33,7 +33,6 @@ hoot ogr2osm $HOOT_OPT $TRANS_TDS40 $outputDir/tds40.osm \
   $outputDir/tds40/ORCHARD_S.shp \
   $outputDir/tds40/RIVER_C.shp
 
-# TDSv40 complains about the "source" tag. It maps to an attibute but it is not on each element
 hoot is-match $outputDir/tds40.osm $tds40File || diff $outputDir/tds40.osm $tds40File
 
 echo
@@ -50,7 +49,6 @@ hoot is-match $outputDir/tds61.osm $inputFile || diff $outputDir/tds61.osm $inpu
 echo
 echo "### MGCP ###"
 hoot osm2ogr $HOOT_OPT $TRANS_MGCP $inputFile $outputDir/mgcp.shp
-# hoot ogr2osm $HOOT_OPT $TRANS_MGCP $outputDir/mgcp.osm  $outputDir/mgcp/*.shp
 hoot ogr2osm $HOOT_OPT $TRANS_MGCP $outputDir/mgcp.osm \
   $outputDir/mgcp/PAL099.shp \
   $outputDir/mgcp/o2s_*.shp \
@@ -68,5 +66,4 @@ hoot ogr2osm $HOOT_OPT $TRANS_GGDM $outputDir/ggdm.osm \
   $outputDir/ggdm/ORCHARD_S.shp \
   $outputDir/ggdm/RIVER_C.shp
 
-# GGDMv30 complains about the "source" tag. It maps to an attibute but it is not on each element
 hoot is-match $outputDir/ggdm.osm $ggdmFile || diff $outputDir/ggdm.osm $ggdmFile
