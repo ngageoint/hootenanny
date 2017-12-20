@@ -12,10 +12,26 @@ var builder = require('xmlbuilder');
 
 
 const objs = {
-    tds40: tds40_schema,
-    tds61: tds61_schema,
-    mgcp: mgcp_schema,
-    ggdm30: ggdm30_schema
+    tds40: {
+        schema: tds40_schema,
+        name: 'TDSv40',
+        icon: 'presets/misc/nga_logo.png'
+    },
+    tds61: {
+        schema: tds61_schema,
+        name: 'TDSv61',
+        icon: 'presets/misc/nga_logo.png'
+    },
+    mgcp: {
+        schema: mgcp_schema,
+        name: 'MGCP',
+        icon: 'presets/misc/MGCP_logo.png'
+    },
+    ggdm30: {
+        schema: ggdm30_schema,
+        name: 'GGDMv30',
+        icon: 'presets/misc/usace_logo.png'
+    },
 };
 
 function lookupType(geoms) {
@@ -51,7 +67,7 @@ Object.keys(objs).forEach(s => {
     var subGroupCodeElements = {};
     var presets = builder.create('presets');
 
-    objs[s].forEach(i => {
+    objs[s].schema.forEach(i => {
         //Must de-dup the items and build up the geom array
         if (items[i.desc]) {
             items[i.desc].geoms.push(i.geom);
@@ -107,14 +123,14 @@ Object.keys(objs).forEach(s => {
         }
     });
 
-    let schemaGroup = presets.ele('group', {name: s.toUpperCase()});
+    let schemaGroup = presets.ele('group', {name: objs[s].name, icon: objs[s].icon});
     Object.keys(groups).forEach(g => {
-        let group = schemaGroup.ele('group', {name: groups[g]});
+        let group = schemaGroup.ele('group', {name: groups[g].title, icon: groups[g].icon});
         groupCodeElements[g] = group;
         Object.keys(subgroups).filter(s => {
             return s.charAt(0) == g;
         }).forEach(s => {
-            let sub = group.ele('group', {name: subgroups[s]});
+            let sub = group.ele('group', {name: subgroups[s].title, icon: subgroups[s].icon});
             subGroupCodeElements[s] = sub; //use this to find the subgroup element to stick the items
         });
     });
