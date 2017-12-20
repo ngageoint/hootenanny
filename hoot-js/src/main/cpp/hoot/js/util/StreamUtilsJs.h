@@ -48,8 +48,8 @@ inline v8::Handle<v8::Value> fromJson(QString qstr, QString fileName="")
 {
   v8::Isolate* current = v8Engine::getIsolate();
   v8::EscapableHandleScope scope(current);
-  v8::Handle<v8::Context> context = v8::Context::New(current);
-  context->Enter();
+  v8::Handle<v8::Context> context = current->GetCurrentContext();
+  v8::Context::Scope contextScope(context);
   v8::Handle<v8::Object> global = context->Global();
 
   QByteArray utf8 = qstr.toUtf8();

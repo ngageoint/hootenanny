@@ -38,49 +38,45 @@ bool v8Engine::_needPlatform = false;
 
 v8Engine::v8Engine()
 {
-  V8::InitializeICUDefaultLocation(NULL);
-  V8::InitializeExternalStartupData(NULL);
   //  Setup and initialize the platform
   if (v8Engine::_needPlatform)
   {
+    V8::InitializeICUDefaultLocation(NULL);
+    V8::InitializeExternalStartupData(NULL);
     _platform.reset(platform::CreateDefaultPlatform());
     V8::InitializePlatform(_platform.get());
-  }
-  //  Initialize v8
-  V8::Initialize();
-  _ownIsolate = v8::Isolate::GetCurrent() == NULL;
-  if (_ownIsolate)
-  {
+    //  Initialize v8
+    V8::Initialize();
     //  Create the main isolate
     _allocator.reset(ArrayBuffer::Allocator::NewDefaultAllocator());
     Isolate::CreateParams params;
     params.array_buffer_allocator = _allocator.get();
     _isolate = Isolate::New(params);
+    _isolate->Enter();
+    //  Create the main context
+    _locker.reset(new Locker(_isolate));
+    HandleScope handleScope(_isolate);
+    Local<Context> context = Context::New(_isolate);
+    context->Enter();
+    _context.reset(new Persistent<Context>());
+    _context->Reset(_isolate, context);
   }
   else
     _isolate = v8::Isolate::GetCurrent();
-  _isolate->Enter();
-  //  Create the main context
-  _locker.reset(new Locker(_isolate));
-  HandleScope handleScope(_isolate);
-  Local<Context> context = Context::New(_isolate);
-  context->Enter();
-  _context.reset(new Persistent<Context>());
-  _context->Reset(_isolate, context);
 }
 
 v8Engine::~v8Engine()
 {
-  _locker.reset();
-  if (_ownIsolate)
+  if (v8Engine::_needPlatform)
   {
+    _locker.reset();
     _isolate->Exit();
     //  Dispose of the v8 subsystem
     _isolate->Dispose();
+    V8::Dispose();
+    //  Shutdown the platform
+    V8::ShutdownPlatform();
   }
-  V8::Dispose();
-  //  Shutdown the platform
-  V8::ShutdownPlatform();
 }
 
 v8Engine& v8Engine::getInstance()

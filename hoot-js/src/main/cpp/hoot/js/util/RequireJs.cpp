@@ -143,7 +143,7 @@ void RequireJs::jsRequire(const FunctionCallbackInfo<Value>& args)
 
     Local<String> exp = String::NewFromUtf8(current, "exports");
 
-    Local<Object> global = Context::New(current)->Global();
+    Local<Object> global = current->GetCurrentContext()->Global();
 
     Local<Value> oldExports = global->Get(exp);
 
