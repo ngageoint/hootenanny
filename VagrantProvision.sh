@@ -8,7 +8,7 @@ set -e
 # isn't the correct location for HOOT_HOME        #
 ###################################################
 if [ -z "$HOOT_HOME" ]; then
-    HOOT_HOME="~/hoot"
+    HOOT_HOME=~/hoot
 fi
 echo HOOT_HOME: $HOOT_HOME
 #################################################
