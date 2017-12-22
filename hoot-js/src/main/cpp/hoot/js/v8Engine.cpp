@@ -62,7 +62,9 @@ v8Engine::v8Engine()
     _context->Reset(_isolate, context);
   }
   else
+  {
     _isolate = v8::Isolate::GetCurrent();
+  }
 }
 
 v8Engine::~v8Engine()

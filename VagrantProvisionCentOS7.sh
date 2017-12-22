@@ -141,7 +141,7 @@ echo "##### Temp installs #####"
 
 # Node
 echo "##### NodeJs #####"
-NODE_VERSION=8.9.0
+NODE_VERSION=8.9.3
 # Install the binary version of NodeJs for some uses (including npm)
 cd ~
 wget --quiet https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz

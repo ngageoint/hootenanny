@@ -55,9 +55,10 @@ RequireJs::~RequireJs() {}
 void RequireJs::Init(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
-  HandleScope scope(current);
-  exports->Set(String::NewFromUtf8(current, "require"),
-               FunctionTemplate::New(current, jsRequire)->GetFunction());
+//  HandleScope scope(current);
+//  exports->Set(String::NewFromUtf8(current, "require"),
+//               FunctionTemplate::New(current, jsRequire)->GetFunction());
+  NODE_SET_METHOD(exports,"require",jsRequire);
 }
 
 void RequireJs::jsRequire(const FunctionCallbackInfo<Value>& args)
@@ -143,7 +144,7 @@ void RequireJs::jsRequire(const FunctionCallbackInfo<Value>& args)
 
     Local<String> exp = String::NewFromUtf8(current, "exports");
 
-    Local<Object> global = current->GetCurrentContext()->Global();
+    Local<Object> global = Context::New(current)->Global();
 
     Local<Value> oldExports = global->Get(exp);
 

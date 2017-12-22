@@ -38,7 +38,7 @@ namespace hoot
 void Method(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
+//  HandleScope scope(current);
   args.GetReturnValue().Set(String::NewFromUtf8(current, "world"));
 }
 
@@ -59,23 +59,19 @@ JsRegistrar& JsRegistrar::getInstance()
 
 void JsRegistrar::Init(Handle<Object> exports)
 {
-  LOG_DEBUG("JS registrar init...");
-  v8Engine::getInstance().init();
-  Hoot::getInstance().init();
   getInstance().initAll(exports);
 }
 
 void JsRegistrar::initAll(Handle<Object> exports)
 {
-  Isolate* current = exports->GetIsolate();
-  HandleScope scope(current);
-  Local<Context> context(current->GetCurrentContext());
-  Context::Scope contextScope(context);
-  exports->Set(String::NewFromUtf8(current, "hello"),
-      FunctionTemplate::New(current, Method)->GetFunction());
+  // Got this from the NodeJS docs. Seems to be a bit simpler than
+  // what we were doing.
+  NODE_SET_METHOD(exports,"hello",Method);
 
   for (size_t i = 0; i < _initializers.size(); i++)
+  {
     _initializers[i]->Init(exports);
+  }
 }
 
 void JsRegistrar::registerInitializer(boost::shared_ptr<ClassInitializer> ci)
