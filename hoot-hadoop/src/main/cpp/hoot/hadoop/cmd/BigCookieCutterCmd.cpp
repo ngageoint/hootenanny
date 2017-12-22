@@ -55,7 +55,7 @@ public:
     {
       throw HootException("Error creating EPSG:4326 projection.");
     }
-    auto_ptr<OGREnvelope> e(GeometryUtils::toOGREnvelope(*g->getEnvelopeInternal()));
+    boost::shared_ptr<OGREnvelope> e(GeometryUtils::toOGREnvelope(*g->getEnvelopeInternal()));
     boost::shared_ptr<OGRSpatialReference> planar = MapProjector::createAeacProjection(*e);
 
     MapProjector::project(g, wgs84, planar);

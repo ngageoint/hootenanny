@@ -41,8 +41,8 @@ double AbstractDistanceExtractor::combinedEnvelopeDiagonalDistance(const OsmMap&
   const boost::shared_ptr<const Element>& target, const boost::shared_ptr<const Element>& candidate) const
 {
   ConstOsmMapPtr m = map.shared_from_this();
-  auto_ptr<Envelope> env(target->getEnvelope(m));
-  auto_ptr<Envelope> candidateEnv(candidate->getEnvelope(m));
+  boost::shared_ptr<Envelope> env(target->getEnvelope(m));
+  boost::shared_ptr<Envelope> candidateEnv(candidate->getEnvelope(m));
   env->expandToInclude(candidateEnv.get());
   return sqrt(env->getWidth() * env->getWidth() + env->getHeight() * env->getHeight());
 }

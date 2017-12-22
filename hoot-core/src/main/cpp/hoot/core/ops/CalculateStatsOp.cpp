@@ -443,7 +443,7 @@ double CalculateStatsOp::_applyVisitor(boost::shared_ptr<const OsmMap> &map,
 {
   // this is a hack to let C++ pass v as a temporary. Bad Jason.
   FilteredVisitor* fv = const_cast<FilteredVisitor*>(&v);
-  auto_ptr<FilteredVisitor> critFv;
+  boost::shared_ptr<FilteredVisitor> critFv;
   if (_criterion)
   {
     critFv.reset(new FilteredVisitor(*_criterion, *fv));
@@ -465,7 +465,7 @@ double CalculateStatsOp::_applyVisitor(boost::shared_ptr<const OsmMap> &map,
 
 void CalculateStatsOp::_applyVisitor(boost::shared_ptr<const OsmMap>& map, ConstElementVisitor *v)
 {
-  auto_ptr<FilteredVisitor> critFv;
+  boost::shared_ptr<FilteredVisitor> critFv;
   if (_criterion)
   {
     critFv.reset(new FilteredVisitor(*_criterion, *v));

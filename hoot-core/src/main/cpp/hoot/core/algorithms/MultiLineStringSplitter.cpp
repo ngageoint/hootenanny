@@ -48,10 +48,10 @@ MultiLineStringSplitter::MultiLineStringSplitter()
 {
 }
 
-auto_ptr<FindNodesInWayFactory> MultiLineStringSplitter::_createNodeFactory(
+boost::shared_ptr<FindNodesInWayFactory> MultiLineStringSplitter::_createNodeFactory(
     const WaySublineCollection& string) const
 {
-  auto_ptr<FindNodesInWayFactory> nfPtr;
+  boost::shared_ptr<FindNodesInWayFactory> nfPtr;
 
   set<ConstWayPtr, WayPtrCompare> ways;
   for (size_t i = 0; i < string.getSublines().size(); i++)
@@ -79,7 +79,7 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
   ElementPtr result;
   vector<WayPtr> matches;
 
-  auto_ptr<FindNodesInWayFactory> nfPtr;
+  boost::shared_ptr<FindNodesInWayFactory> nfPtr;
   if (nf == 0)
   {
     nfPtr = _createNodeFactory(string);
@@ -129,7 +129,7 @@ void MultiLineStringSplitter::split(const OsmMapPtr& map, const WaySublineCollec
   const vector<bool> &reverse, ElementPtr& match, ElementPtr &scraps,
   GeometryConverter::NodeFactory *nf) const
 {
-  auto_ptr<FindNodesInWayFactory> nfPtr;
+  boost::shared_ptr<FindNodesInWayFactory> nfPtr;
   if (nf == 0)
   {
     nfPtr = _createNodeFactory(string);

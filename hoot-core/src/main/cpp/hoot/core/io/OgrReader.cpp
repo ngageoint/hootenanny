@@ -149,8 +149,8 @@ protected:
   QString _path;
   QString _layerName;
   OGRCoordinateTransformation* _transform;
-  auto_ptr<OGRSpatialReference> _wgs84;
-  auto_ptr<ScriptTranslator> _translator;
+  boost::shared_ptr<OGRSpatialReference> _wgs84;
+  boost::shared_ptr<ScriptTranslator> _translator;
   long _streamFeatureCount;
   QStringList _pendingLayers;
   bool _addSourceDateTime;
@@ -879,7 +879,7 @@ boost::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(const Se
 
     result.reset(new Envelope());
     boost::shared_ptr<OGRSpatialReference> wgs84 = MapProjector::getInstance().createWgs84Projection();
-    auto_ptr<OGRCoordinateTransformation> transform(
+    boost::shared_ptr<OGRCoordinateTransformation> transform(
       OGRCreateCoordinateTransformation(wgs84.get(), srs));
     const int steps = 8;
     for (int xi = 0; xi <= steps; xi++)

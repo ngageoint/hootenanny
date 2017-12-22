@@ -50,8 +50,8 @@ public:
   PbfElementIterator(QString path);
 
 private:
-  std::auto_ptr<std::istream> _in;
-  std::auto_ptr<OsmPbfReader> _reader;
+  boost::shared_ptr<std::istream> _in;
+  boost::shared_ptr<OsmPbfReader> _reader;
   std::vector<OsmPbfReader::BlobLocation> _blobs;
   OsmMapPtr _map;
   int _blobIndex;

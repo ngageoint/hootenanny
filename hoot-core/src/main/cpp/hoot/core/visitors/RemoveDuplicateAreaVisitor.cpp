@@ -163,7 +163,7 @@ void RemoveDuplicateAreaVisitor::visit(const boost::shared_ptr<Element>& e1)
 {
   OsmSchema& schema = OsmSchema::getInstance();
 
-  auto_ptr<Envelope> env(e1->getEnvelope(_map->shared_from_this()));
+  boost::shared_ptr<Envelope> env(e1->getEnvelope(_map->shared_from_this()));
   // if the envelope is null or the element is incomplete.
   if (env->isNull() ||
       CompletelyContainedByMapElementVisitor::isComplete(_map, e1->getElementId()) == false ||

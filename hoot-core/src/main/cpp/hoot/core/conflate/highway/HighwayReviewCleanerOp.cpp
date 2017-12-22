@@ -80,7 +80,7 @@ bool HighwayReviewCleanerOp::_isBadHighwayReview(OsmMapPtr& map,
 
       // By using the match factory instead of explicity calling the highway match we're more
       // robust to changes in the factory configuration that may occur at runtime.
-      auto_ptr<Match> m(MatchFactory::getInstance().createMatch(map, eid1, eid2));
+      boost::shared_ptr<Match> m(MatchFactory::getInstance().createMatch(map, eid1, eid2));
       // if we failed to find a match of any kind
       if (!m.get())
       {

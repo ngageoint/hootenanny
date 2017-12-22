@@ -48,8 +48,8 @@ public:
 
   static bool commandCompare(const std::string& n1, const std::string& n2)
   {
-    auto_ptr<Command> c1(Factory::getInstance().constructObject<Command>(n1));
-    auto_ptr<Command> c2(Factory::getInstance().constructObject<Command>(n2));
+    boost::shared_ptr<Command> c1(Factory::getInstance().constructObject<Command>(n1));
+    boost::shared_ptr<Command> c2(Factory::getInstance().constructObject<Command>(n2));
 
     return c1->getName() < c2->getName();
   }
@@ -82,7 +82,7 @@ private:
     bool foundIt = false;
     for (size_t i = 0; i < cmds.size(); i++)
     {
-      auto_ptr<Command> c(Factory::getInstance().constructObject<Command>(cmds[i]));
+      boost::shared_ptr<Command> c(Factory::getInstance().constructObject<Command>(cmds[i]));
 
       if (c->getName() == command)
       {
@@ -114,7 +114,7 @@ private:
     sort(cmds.begin(), cmds.end(), commandCompare);
     for (size_t i = 0; i < cmds.size(); i++)
     {
-      auto_ptr<Command> c(Factory::getInstance().constructObject<Command>(cmds[i]));
+      boost::shared_ptr<Command> c(Factory::getInstance().constructObject<Command>(cmds[i]));
       if (c->displayInHelp())
       {
         cout << "  " << c->getName().toStdString() << endl;
@@ -130,7 +130,7 @@ private:
     sort(cmds.begin(), cmds.end(), commandCompare);
     for (size_t i = 0; i < cmds.size(); i++)
     {
-      auto_ptr<Command> c(Factory::getInstance().constructObject<Command>(cmds[i]));
+      boost::shared_ptr<Command> c(Factory::getInstance().constructObject<Command>(cmds[i]));
       if (c->displayInHelp())
       {
         cout << endl;

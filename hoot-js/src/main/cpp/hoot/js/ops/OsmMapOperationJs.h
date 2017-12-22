@@ -57,7 +57,7 @@ private:
   static v8::Handle<v8::Value> New(const v8::Arguments& args);
 
   QString _className;
-  std::auto_ptr<OsmMapOperation> _op;
+  boost::shared_ptr<OsmMapOperation> _op;
 };
 
 }
