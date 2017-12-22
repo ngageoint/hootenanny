@@ -63,7 +63,7 @@ if [ $REBUILD_VAGRANT == 'true' ]; then
     vagrant destroy -f
     time -p vagrant up --provider vsphere
 else
-    time -p vagrant up --provision-with nfs,build,EGD,tomcat,mapnik,hadoop --provider vsphere
+    time -p vagrant up --provision-with nfs,build,EGD,tomcat,mapnik --provider vsphere
 fi
 
 # Disableing this until it gets moved earlier into the build.
