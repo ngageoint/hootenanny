@@ -77,12 +77,6 @@ public:
       MergeNearbyNodes::mergeNodes(map, 1.0);
 
       CPPUNIT_ASSERT_EQUAL(601, (int)map->getNodes().size());
-
-      MapProjector::projectToWgs84(map);
-
-      OsmXmlWriter writer;
-      writer.write(map, "output.osm");
-
     }
 
 };

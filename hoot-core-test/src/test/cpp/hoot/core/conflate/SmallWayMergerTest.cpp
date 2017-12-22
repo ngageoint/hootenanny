@@ -68,7 +68,7 @@ public:
       SmallWayMerger::mergeWays(map, 15.0);
       MapProjector::projectToWgs84(map);
 
-      QDir().mkdir("test-output/conflate/");
+      QDir().mkpath("test-output/conflate/");
       OsmXmlWriter writer;
       writer.write(map, "test-output/conflate/SmallWayMergerOutput1.osm");
 

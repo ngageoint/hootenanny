@@ -77,6 +77,8 @@ public:
 
     FileUtils::removeDir("test-output/fourpass/FourPassManagerTest.osm-cache");
 
+    QDir().mkpath("test-output/fourpass");
+
     boost::shared_ptr<TileWorker2> worker(new LocalTileWorker2());
     FourPassManager uut(worker);
     // ~240m

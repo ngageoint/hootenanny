@@ -122,7 +122,7 @@ public:
 
       MapProjector::projectToWgs84(map);
 
-      QDir().mkdir("test-output/conflate/");
+      QDir().mkpath("test-output/conflate/");
       OsmXmlWriter writer;
       // for testing we don't need a high precision.
       writer.setPrecision(7);
@@ -154,7 +154,7 @@ public:
 
     MapProjector::projectToWgs84(map);
 
-    QDir().mkdir("test-output/conflate/");
+    QDir().mkpath("test-output/conflate/");
     OsmXmlWriter writer;
     writer.write(map, "test-output/conflate/RubberSheetSimple.osm");
 

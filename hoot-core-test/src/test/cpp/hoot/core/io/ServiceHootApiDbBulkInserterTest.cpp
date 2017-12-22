@@ -124,7 +124,8 @@ public:
     actualMapWriter->open(actualOutputFile);
     actualMapWriter->write(actualMap);
 
-     HOOT_FILE_EQUALS(outputDir + "/psqlOffline.osm", actualOutputFile);
+    HOOT_FILE_EQUALS(
+      "test-files/io/ServiceHootApiDbBulkInserterTest/psqlOffline.osm", actualOutputFile);
   }
 };
 
