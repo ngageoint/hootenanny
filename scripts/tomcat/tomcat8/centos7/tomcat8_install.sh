@@ -3,7 +3,7 @@
 # Set HOOT_HOME to another location prior to running this script
 # if ~/hoot isn't the correct location
 if [ -z "$HOOT_HOME" ]; then
-    HOOT_HOME="~/hoot"
+    HOOT_HOME=~/hoot
 fi
 TOMCAT_NAME=tomcat8
 TOMCAT_GROUP=tomcat8
