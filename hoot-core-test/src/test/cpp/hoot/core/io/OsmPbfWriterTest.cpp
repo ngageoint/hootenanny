@@ -42,6 +42,9 @@
 using namespace hoot;
 using namespace hoot::pb;
 
+// Qt
+#include <QDir>
+
 // Standard
 #include <sstream>
 using namespace std;
@@ -69,6 +72,8 @@ public:
 
     OsmMapPtr map(new OsmMap());
     reader.read("test-files/ToyTestA.osm", map);
+
+    QDir().mkpath("test-output/io/");
 
     OsmPbfWriter writer;
     writer.write(map, "test-output/io/OsmPbfWriterTest.pbf");

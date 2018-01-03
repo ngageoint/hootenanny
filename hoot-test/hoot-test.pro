@@ -42,3 +42,6 @@ SOURCES += src/main/cpp/hoot/test/main.cpp \
     src/main/cpp/hoot/test/ScriptTest.cpp \
     src/main/cpp/hoot/test/ProcessPool.cpp
 
+OTHER_FILES = \
+    $$files(../test-files/cmd/*.sh, true) \
+    $$files(../scripts/core/*.sh, true) \

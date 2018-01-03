@@ -94,7 +94,7 @@ public:
     QDir().mkpath(outputDir);
 
     HootApiDbBulkInserter writer;
-    const QString outFile = "test-output/io/ServiceHootApiDbBulkInserterTest/psql-offline-out.sql";
+    const QString outFile = outputDir + "/psql-offline-out.sql";
     writer.setOutputFilesCopyLocation(outFile);
     writer.setStatusUpdateInterval(1);
     writer.setChangesetUserId(1);
@@ -124,8 +124,8 @@ public:
     actualMapWriter->open(actualOutputFile);
     actualMapWriter->write(actualMap);
 
-     HOOT_FILE_EQUALS(
-       "test-files/io/ServiceHootApiDbBulkInserterTest/psqlOffline.osm", actualOutputFile);
+    HOOT_FILE_EQUALS(
+      "test-files/io/ServiceHootApiDbBulkInserterTest/psqlOffline.osm", actualOutputFile);
   }
 };
 
