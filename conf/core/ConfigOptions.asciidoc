@@ -1950,21 +1950,6 @@ to be created.
 
 The minimum allowed word length when associating word tokens with OSM tags.
 
-=== poi.implicit.tag.rules.reader.max.tag.cache.size
-
-* Data Type: int
-* Default Value: `1000000`
-
-The maximum number of word/tag combinations cached by the POI implicit tag rules reader when
-applying implicit tags to POIs.
-
-=== poi.implicit.tag.rules.reader.use.tags.cache
-
-* Data Type: bool
-* Default Value: `true`
-
-Determines whether the POI implicit tag rules reader uses a tags cache or not.
-
 === poi.implicit.tag.rules.rule.ignore.file
 
 * Data Type: string

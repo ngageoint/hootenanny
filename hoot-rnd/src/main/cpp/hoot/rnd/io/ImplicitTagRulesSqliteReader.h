@@ -105,7 +105,6 @@ private:
   QSqlQuery _tagCountsForWordIds;
 
   QCache<QString, Tags> _tagsCache;
-  bool _useTagsCache;
   long _firstRoundTagsCacheHits;
   long _secondRoundTagsCacheHits;
   bool _addTopTagOnly;
