@@ -47,7 +47,6 @@ class AddImplicitlyDerivedTagsPoiVisitorTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runMoreSpecificImplicitTagTest);
   CPPUNIT_TEST(runWordIgnoreTest);
   CPPUNIT_TEST(runTagIgnoreTest);
-  CPPUNIT_TEST(runRuleIgnoreTest);
   //TODO: top tag test
   CPPUNIT_TEST_SUITE_END();
 
@@ -109,9 +108,7 @@ public:
       //"test-files/io/AddImplicitlyDerivedTagsPoiVisitorTest-runBasicTest-rules.sqlite";
     AddImplicitlyDerivedTagsPoiVisitor uut(/*databaseInFile*/databaseOutFile);
     Settings conf;
-    conf.set("poi.implicit.tag.rules.rule.ignore.file", "");
     conf.set("poi.implicit.tag.rules.tag.ignore.file", "");
-    conf.set("poi.implicit.tag.rules.tag.file", "");
     conf.set("poi.implicit.tag.rules.word.ignore.file", "");
     conf.set("poi.implicit.tag.rules.custom.rule.file", "");
     uut.setConfiguration(conf);
@@ -186,9 +183,7 @@ public:
       //"test-files/io/AddImplicitlyDerivedTagsPoiVisitorTest-runBasicTest-rules.sqlite";
     AddImplicitlyDerivedTagsPoiVisitor uut(/*databaseInFile*/databaseOutFile);
     Settings conf;
-    conf.set("poi.implicit.tag.rules.rule.ignore.file", "");
     conf.set("poi.implicit.tag.rules.tag.ignore.file", "");
-    conf.set("poi.implicit.tag.rules.tag.file", "");
     conf.set("poi.implicit.tag.rules.word.ignore.file", "");
     conf.set("poi.implicit.tag.rules.custom.rule.file", "");
     uut.setConfiguration(conf);
@@ -229,9 +224,7 @@ public:
       //"test-files/io/AddImplicitlyDerivedTagsPoiVisitorTest-runLessSpecificImplicitTagTest-rules.sqlite";
     AddImplicitlyDerivedTagsPoiVisitor uut(/*databaseInFile*/databaseOutFile);
     Settings conf;
-    conf.set("poi.implicit.tag.rules.rule.ignore.file", "");
     conf.set("poi.implicit.tag.rules.tag.ignore.file", "");
-    conf.set("poi.implicit.tag.rules.tag.file", "");
     conf.set("poi.implicit.tag.rules.word.ignore.file", "");
     conf.set("poi.implicit.tag.rules.custom.rule.file", "");
     uut.setConfiguration(conf);
@@ -274,7 +267,6 @@ public:
     Settings conf;
     conf.set("poi.implicit.tag.rules.rule.ignore.file", "");
     conf.set("poi.implicit.tag.rules.tag.ignore.file", "");
-    conf.set("poi.implicit.tag.rules.tag.file", "");
     conf.set("poi.implicit.tag.rules.word.ignore.file", "");
     conf.set("poi.implicit.tag.rules.custom.rule.file", "");
     uut.setConfiguration(conf);
@@ -313,9 +305,7 @@ public:
       //"test-files/io/AddImplicitlyDerivedTagsPoiVisitorTest-runWordIgnoreTest-rules.sqlite";
     AddImplicitlyDerivedTagsPoiVisitor uut(/*databaseInFile*/databaseOutFile);
     Settings conf;
-    conf.set("poi.implicit.tag.rules.rule.ignore.file", "");
     conf.set("poi.implicit.tag.rules.tag.ignore.file", "");
-    conf.set("poi.implicit.tag.rules.tag.file", "");
     conf.set("poi.implicit.tag.rules.word.ignore.file", inDir() + "/wordIgnoreList");
     conf.set("poi.implicit.tag.rules.custom.rule.file", "");
     uut.setConfiguration(conf);
@@ -351,47 +341,7 @@ public:
       //"test-files/io/AddImplicitlyDerivedTagsPoiVisitorTest-runTagIgnoreTest-rules.sqlite";
     AddImplicitlyDerivedTagsPoiVisitor uut(/*databaseInFile*/databaseOutFile);
     Settings conf;
-    conf.set("poi.implicit.tag.rules.rule.ignore.file", "");
     conf.set("poi.implicit.tag.rules.tag.ignore.file", inDir() + "/tagIgnoreList");
-    conf.set("poi.implicit.tag.rules.tag.file", "");
-    conf.set("poi.implicit.tag.rules.word.ignore.file", "");
-    conf.set("poi.implicit.tag.rules.custom.rule.file", "");
-    uut.setConfiguration(conf);
-    map->visitRw(uut);
-    LOG_VART(map->getNode(1)->getTags());
-
-    CPPUNIT_ASSERT_EQUAL(1, map->getNode(1)->getTags().size());
-    CPPUNIT_ASSERT_EQUAL(
-      QString("hall").toStdString(), map->getNode(1)->getTags()["name"].toStdString());
-  }
-
-  void runRuleIgnoreTest()
-  {
-    QDir().mkpath(outDir());
-
-    //TODO: don't regen this database every time
-    //use this to regenerate the db file
-    const QString databaseOutFile =
-      outDir() + "/AddImplicitlyDerivedTagsPoiVisitorTest-runRuleIgnoreTest-rules.sqlite";
-    ImplicitTagRulesSqliteRecordWriter writer;
-    writer.open(databaseOutFile);
-    writer.write(
-      "test-files/visitors/AddImplicitlyDerivedTagsPoiVisitorTest/runRuleIgnoreTest-ruleWordParts");
-    writer.close();
-  //    return;
-
-    OsmMapPtr map(new OsmMap());
-    NodePtr node(new Node(Status::Unknown1, 1, geos::geom::Coordinate(1, 1), 15.0));
-    node->getTags()["name"] = "hall";
-    map->addNode(node);
-
-    //const QString databaseInFile =
-      //"test-files/io/AddImplicitlyDerivedTagsPoiVisitorTest-runRuleIgnoreTest-rules.sqlite";
-    AddImplicitlyDerivedTagsPoiVisitor uut(/*databaseInFile*/databaseOutFile);
-    Settings conf;
-    conf.set("poi.implicit.tag.rules.rule.ignore.file", inDir() + "/ruleIgnoreList");
-    conf.set("poi.implicit.tag.rules.tag.ignore.file", "");
-    conf.set("poi.implicit.tag.rules.tag.file", "");
     conf.set("poi.implicit.tag.rules.word.ignore.file", "");
     conf.set("poi.implicit.tag.rules.custom.rule.file", "");
     uut.setConfiguration(conf);

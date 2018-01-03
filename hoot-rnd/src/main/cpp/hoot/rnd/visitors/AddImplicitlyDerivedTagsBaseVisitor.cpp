@@ -127,9 +127,7 @@ void AddImplicitlyDerivedTagsBaseVisitor::setConfiguration(const Settings& conf)
   setMinWordLength(confOptions.getPoiImplicitTagRulesMinimumWordLength());
 
   _customRules.setCustomRuleFile(confOptions.getPoiImplicitTagRulesCustomRuleFile());
-  _customRules.setRuleIgnoreFile(confOptions.getPoiImplicitTagRulesRuleIgnoreFile());
   _customRules.setTagIgnoreFile(confOptions.getPoiImplicitTagRulesTagIgnoreFile());
-  _customRules.setTagFile(confOptions.getPoiImplicitTagRulesTagFile());
   _customRules.setWordIgnoreFile(confOptions.getPoiImplicitTagRulesWordIgnoreFile());
 
   _customRules.init();
@@ -590,26 +588,28 @@ void AddImplicitlyDerivedTagsBaseVisitor::visit(const ElementPtr& e)
         assert(!matchingWords.isEmpty());
         LOG_VART(matchingWords);
 
-        Tags ruleFilteredTags;
-        QMap<QString, QString> rulesToIgnore = _customRules.getRulesIgnoreList();
-        for (QSet<QString>::const_iterator wordItr = matchingWords.begin();
-             wordItr != matchingWords.end(); ++wordItr)
-        {
-          const QString word = *wordItr;
-          LOG_VART(word);
-          for (Tags::const_iterator tagItr = tagsToAdd.begin(); tagItr != tagsToAdd.end(); ++tagItr)
-          {
-            const QString tagKey = tagItr.key();
-            LOG_VART(tagKey);
-            const QString tagValue = tagItr.value();
-            LOG_VART(tagValue);
-            if (!ruleFilteredTags.contains(tagKey) && rulesToIgnore[word] != tagKey % "=" % tagValue)
-            {
-              LOG_VART(tagKey % "=" % tagValue);
-              ruleFilteredTags.appendValue(tagKey, tagValue);
-            }
-          }
-        }
+        //TODO: remove this
+        Tags ruleFilteredTags = tagsToAdd;
+//        Tags ruleFilteredTags;
+//        QMap<QString, QString> rulesToIgnore = _customRules.getRulesIgnoreList();
+//        for (QSet<QString>::const_iterator wordItr = matchingWords.begin();
+//             wordItr != matchingWords.end(); ++wordItr)
+//        {
+//          const QString word = *wordItr;
+//          LOG_VART(word);
+//          for (Tags::const_iterator tagItr = tagsToAdd.begin(); tagItr != tagsToAdd.end(); ++tagItr)
+//          {
+//            const QString tagKey = tagItr.key();
+//            LOG_VART(tagKey);
+//            const QString tagValue = tagItr.value();
+//            LOG_VART(tagValue);
+//            if (!ruleFilteredTags.contains(tagKey) && rulesToIgnore[word] != tagKey % "=" % tagValue)
+//            {
+//              LOG_VART(tagKey % "=" % tagValue);
+//              ruleFilteredTags.appendValue(tagKey, tagValue);
+//            }
+//          }
+//        }
         LOG_VARD(ruleFilteredTags);
 
         Tags updatedTags;

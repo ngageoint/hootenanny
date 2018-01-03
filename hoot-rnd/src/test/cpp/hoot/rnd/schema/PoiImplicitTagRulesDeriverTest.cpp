@@ -39,11 +39,8 @@ class PoiImplicitTagRulesDeriverTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(PoiImplicitTagRulesDeriverTest);
   CPPUNIT_TEST(runBasicTest);
-  CPPUNIT_TEST(runExplicitTagsTest);
   CPPUNIT_TEST(runMinTagOccurrencePerWordTest);
   CPPUNIT_TEST(runMinWordLengthTest);
-  //TODO: fix
-  //CPPUNIT_TEST(runRuleIgnoreTest);
   CPPUNIT_TEST(runTagIgnoreTest);
   CPPUNIT_TEST(runWordIgnoreTest);
   //TODO
@@ -73,9 +70,7 @@ public:
     PoiImplicitTagRulesDeriver rulesDeriver;
     rulesDeriver.setConfiguration(conf());
     rulesDeriver.setCustomRuleFile("");
-    rulesDeriver.setRuleIgnoreFile("");
     rulesDeriver.setTagIgnoreFile("");
-    rulesDeriver.setTagFile("");
     rulesDeriver.setWordIgnoreFile("");
     rulesDeriver.deriveRules(input, outputs);
 
@@ -84,38 +79,6 @@ public:
     ImplicitTagRulesSqliteReader dbReader;
     dbReader.open(dbOutputFile);
     CPPUNIT_ASSERT_EQUAL(438L, dbReader.getRuleWordPartCount());
-    dbReader.close();
-  }
-
-  void runExplicitTagsTest()
-  {
-    QDir().mkpath(outDir());
-
-    const QString input = inDir() + "/PoiImplicitTagRulesDeriverTest-input.implicitTagRules";
-
-    const QString jsonOutputFile =
-      outDir() + "/PoiImplicitTagRulesDeriverTest-runExplicitTagsTest-out.json";
-    const QString dbOutputFile =
-      outDir() + "/PoiImplicitTagRulesDeriverTest-runExplicitTagsTest-out.sqlite";
-    QStringList outputs;
-    outputs.append(jsonOutputFile);
-    outputs.append(dbOutputFile);
-
-    PoiImplicitTagRulesDeriver rulesDeriver;
-    rulesDeriver.setConfiguration(conf());
-    rulesDeriver.setTagFile(inDir() + "/PoiImplicitTagRulesDeriverTest-tag-list");
-    rulesDeriver.setCustomRuleFile("");
-    rulesDeriver.setRuleIgnoreFile("");
-    rulesDeriver.setTagIgnoreFile("");
-    rulesDeriver.setWordIgnoreFile("");
-    rulesDeriver.deriveRules(input, outputs);
-
-    HOOT_FILE_EQUALS(
-      inDir() + "/PoiImplicitTagRulesDeriverTest-runExplicitTagsTest.json", jsonOutputFile);
-
-    ImplicitTagRulesSqliteReader dbReader;
-    dbReader.open(dbOutputFile);
-    CPPUNIT_ASSERT_EQUAL(268L, dbReader.getRuleWordPartCount());
     dbReader.close();
   }
 
@@ -137,9 +100,7 @@ public:
     rulesDeriver.setConfiguration(conf());
     rulesDeriver.setMinTagOccurrencesPerWord(4);
     rulesDeriver.setCustomRuleFile("");
-    rulesDeriver.setRuleIgnoreFile("");
     rulesDeriver.setTagIgnoreFile("");
-    rulesDeriver.setTagFile("");
     rulesDeriver.setWordIgnoreFile("");
     rulesDeriver.deriveRules(input, outputs);
 
@@ -171,9 +132,7 @@ public:
     rulesDeriver.setConfiguration(conf());
     rulesDeriver.setMinWordLength(10);
     rulesDeriver.setCustomRuleFile("");
-    rulesDeriver.setRuleIgnoreFile("");
     rulesDeriver.setTagIgnoreFile("");
-    rulesDeriver.setTagFile("");
     rulesDeriver.setWordIgnoreFile("");
     rulesDeriver.deriveRules(input, outputs);
 
@@ -205,8 +164,6 @@ public:
     rulesDeriver.setConfiguration(conf());
     rulesDeriver.setTagIgnoreFile(inDir() + "/PoiImplicitTagRulesDeriverTest-tag-ignore-list");
     rulesDeriver.setCustomRuleFile("");
-    rulesDeriver.setRuleIgnoreFile("");
-    rulesDeriver.setTagFile("");
     rulesDeriver.setWordIgnoreFile("");
     rulesDeriver.deriveRules(input, outputs);
 
@@ -238,9 +195,7 @@ public:
     rulesDeriver.setConfiguration(conf());
     rulesDeriver.setWordIgnoreFile(inDir() + "/PoiImplicitTagRulesDeriverTest-word-ignore-list");
     rulesDeriver.setCustomRuleFile("");
-    rulesDeriver.setRuleIgnoreFile("");
     rulesDeriver.setTagIgnoreFile("");
-    rulesDeriver.setTagFile("");
     rulesDeriver.deriveRules(input, outputs);
 
     HOOT_FILE_EQUALS(
@@ -249,39 +204,6 @@ public:
     ImplicitTagRulesSqliteReader dbReader;
     dbReader.open(dbOutputFile);
     CPPUNIT_ASSERT_EQUAL(433L, dbReader.getRuleWordPartCount()); //TODO: is this right?
-    dbReader.close();
-  }
-
-  //TODO: test that ignore overrides explicit list
-  void runRuleIgnoreTest()
-  {
-    QDir().mkpath(outDir());
-
-    const QString input = inDir() + "/PoiImplicitTagRulesDeriverTest-input.implicitTagRules";
-
-    const QString jsonOutputFile =
-      outDir() + "/PoiImplicitTagRulesDeriverTest-runRuleIgnoreTest-out.json";
-    const QString dbOutputFile =
-      outDir() + "/PoiImplicitTagRulesDeriverTest-runRuleIgnoreTest-out.sqlite";
-    QStringList outputs;
-    outputs.append(jsonOutputFile);
-    outputs.append(dbOutputFile);
-
-    PoiImplicitTagRulesDeriver rulesDeriver;
-    rulesDeriver.setConfiguration(conf());
-    rulesDeriver.setRuleIgnoreFile(inDir() + "/PoiImplicitTagRulesDeriverTest-rule-ignore-list");
-    rulesDeriver.setCustomRuleFile("");
-    rulesDeriver.setTagIgnoreFile("");
-    rulesDeriver.setTagFile("");
-    rulesDeriver.setWordIgnoreFile("");
-    rulesDeriver.deriveRules(input, outputs);
-
-    HOOT_FILE_EQUALS(
-      inDir() + "/PoiImplicitTagRulesDeriverTest-runRuleIgnoreTest.json", jsonOutputFile);
-
-    ImplicitTagRulesSqliteReader dbReader;
-    dbReader.open(dbOutputFile);
-    CPPUNIT_ASSERT_EQUAL(435L, dbReader.getRuleWordPartCount());  //TODO: is this right?
     dbReader.close();
   }
 };

@@ -71,9 +71,7 @@ public:
   void setMinWordLength(const int length) { _minWordLength = length; }
 
   void setCustomRuleFile(const QString file) { _customRules.setCustomRuleFile(file); }
-  void setRuleIgnoreFile(const QString file) { _customRules.setRuleIgnoreFile(file); }
   void setTagIgnoreFile(const QString file) { _customRules.setTagIgnoreFile(file); }
-  void setTagFile(const QString file) { _customRules.setTagFile(file); }
   void setWordIgnoreFile(const QString file) { _customRules.setWordIgnoreFile(file); }
   void setUseSchemaTagValuesForWordsOnly(bool use) { _useSchemaTagValuesForWordsOnly = use; }
   void setTranslateAllNamesToEnglish(bool translate) { _translateAllNamesToEnglish = translate; }

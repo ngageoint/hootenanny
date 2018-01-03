@@ -48,34 +48,24 @@ public:
 
   QString getCustomRuleFile() const { return _customRuleFile; }
   void setCustomRuleFile(const QString file) { _customRuleFile = file; }
-  QString getRuleIgnoreFile() const { return _ruleIgnoreFile; }
-  void setRuleIgnoreFile(const QString file) { _ruleIgnoreFile = file; }
   QString getTagIgnoreFile() const { return _tagIgnoreFile; }
   void setTagIgnoreFile(const QString file) { _tagIgnoreFile = file; }
-  QString getTagFile() const { return _tagFile; }
-  void setTagFile(const QString file) { _tagFile = file; }
   QString getWordIgnoreFile() const { return _wordIgnoreFile; }
   void setWordIgnoreFile(const QString file) { _wordIgnoreFile = file; }
 
   QStringList getTagIgnoreList() const { return _tagIgnoreList; }
   QStringList getWordIgnoreList() const { return _wordIgnoreList; }
   QMap<QString, QString> getCustomRulesList() const { return _customRulesList; }
-  QMap<QString, QString> getRulesIgnoreList() const { return _rulesIgnoreList; }
-  QStringList getTagsAllowList() const { return _tagsAllowList; }
 
 private:
 
   QString _customRuleFile;
-  QString _ruleIgnoreFile;
   QString _tagIgnoreFile;
-  QString _tagFile;
   QString _wordIgnoreFile;
 
   QStringList _tagIgnoreList;
   QStringList _wordIgnoreList;
   QMap<QString, QString> _customRulesList;
-  QMap<QString, QString> _rulesIgnoreList;
-  QStringList _tagsAllowList;
 
   void _readIgnoreLists();
   void _readAllowLists();

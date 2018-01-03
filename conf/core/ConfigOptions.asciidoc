@@ -1903,8 +1903,7 @@ word is involved in more than one tagging rule.
 * Default Value: `${HOOT_HOME}/conf/core/poi-implicit-tag-rules/poiImplicitTagRulesCustomRuleList`
 
 Flat file containing tab separated word key/value pairs, one per line, to use as custom rules
-when deriving implicit tags from POI names.  Overridden by
-'poi.implicit.tag.rules.rule.ignore.file'.
+when deriving implicit tags from POI names.
 
 === poi.implicit.tag.rules.database
 
@@ -1950,14 +1949,6 @@ to be created.
 
 The minimum allowed word length when associating word tokens with OSM tags.
 
-=== poi.implicit.tag.rules.rule.ignore.file
-
-* Data Type: string
-* Default Value: `${HOOT_HOME}/conf/core/poi-implicit-tag-rules/poiImplicitTagRulesRuleIgnoreList`
-
-Flat file containing tab separated word key/value pairs, one per line, to ignore as rules
-when deriving implicit tags from POI names.
-
 === poi.implicit.tag.rules.skip.filtering
 
 * Data Type: bool
@@ -1997,15 +1988,6 @@ of available processors.
 
 Flat file containing key/value pairs, one per line, to ignore when deriving implicit tags from POI
 names.  Use 'key=*' to ignore all tags for a given key.
-
-=== poi.implicit.tag.rules.tag.file
-
-* Data Type: string
-* Default Value: `${HOOT_HOME}/conf/core/poi-implicit-tag-rules/poiImplicitTagRulesTagKeyList`
-
-Flat file containing key/value pairs, one per line, to use when deriving implicit tags from POI
-names.  Use 'key=*' to accept all tags for a given key.  Overridden by
-'poi.implicit.tag.rules.tag.ignore.file'.
 
 === poi.implicit.tag.rules.tokenize.names
 

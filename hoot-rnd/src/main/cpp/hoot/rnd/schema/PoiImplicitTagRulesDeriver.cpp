@@ -56,9 +56,7 @@ void PoiImplicitTagRulesDeriver::setConfiguration(const Settings& conf)
   _customRules.setCustomRuleFile(confOptions.getPoiImplicitTagRulesCustomRuleFile());
   setMinTagOccurrencesPerWord(confOptions.getPoiImplicitTagRulesMinimumTagOccurrencesPerWord());
   setMinWordLength(confOptions.getPoiImplicitTagRulesMinimumWordLength());
-  _customRules.setRuleIgnoreFile(confOptions.getPoiImplicitTagRulesRuleIgnoreFile());
   _customRules.setTagIgnoreFile(confOptions.getPoiImplicitTagRulesTagIgnoreFile());
-  _customRules.setTagFile(confOptions.getPoiImplicitTagRulesTagFile());
   _customRules.setWordIgnoreFile(confOptions.getPoiImplicitTagRulesWordIgnoreFile());
   setUseSchemaTagValuesForWordsOnly(
     confOptions.getPoiImplicitTagRulesUseSchemaTagValuesForWordsOnly());
@@ -108,9 +106,7 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QString input, const QStringL
   LOG_VARD(_minWordLength);
   LOG_VARD(_customRules.getWordIgnoreFile());
   LOG_VARD(_customRules.getTagIgnoreFile());
-  LOG_VARD(_customRules.getTagFile());
   LOG_VARD(_customRules.getCustomRuleFile());
-  LOG_VARD(_customRules.getRuleIgnoreFile());
   LOG_VARD(_useSchemaTagValuesForWordsOnly);
 
   _customRules.init();
@@ -119,12 +115,8 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QString input, const QStringL
   LOG_VARD(_customRules.getWordIgnoreList());
   LOG_VARD(_customRules.getTagIgnoreList().size());
   LOG_VARD(_customRules.getTagIgnoreList());
-  LOG_VARD(_customRules.getTagsAllowList().size());
-  LOG_VARD(_customRules.getTagsAllowList());
   LOG_VARD(_customRules.getCustomRulesList().size());
   LOG_VARD(_customRules.getCustomRulesList());
-  LOG_VARD(_customRules.getRulesIgnoreList().size());
-  LOG_VARD(_customRules.getRulesIgnoreList());
 
   if (_useSchemaTagValuesForWordsOnly)
   {
@@ -181,10 +173,8 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QString input, const QStringL
   }
 
   if (_minTagOccurrencesPerWord == 1 && _minWordLength == 1 &&
-      _customRules.getWordIgnoreList().size() == 0 &&
-      _customRules.getTagIgnoreList().size() == 0 && _customRules.getTagsAllowList().size() == 0 &&
-      _customRules.getCustomRulesList().size() == 0 &&
-      _customRules.getRulesIgnoreList().size() == 0 && !_useSchemaTagValuesForWordsOnly)
+      _customRules.getWordIgnoreList().size() == 0 && _customRules.getTagIgnoreList().size() == 0 &&
+      _customRules.getCustomRulesList().size() == 0 && !_useSchemaTagValuesForWordsOnly)
   {
     LOG_INFO("Skipping filtering as no filtering criteria were specified...");
     if (_minTagOccurrencesPerWord >= 2)
@@ -297,7 +287,6 @@ void PoiImplicitTagRulesDeriver::_applyFiltering(const QString input)
   long ignoredWordsCount = 0;
   long ignoredTagsCount = 0;
   long ignoredRuleCountDueToCustomRules = 0;
-  long ignoredRuleCountDueToIgnoredRules = 0;
   long wordNotASchemaValueCount = 0;
   long wordNotInCommonEnglishList = 0;
 
@@ -387,24 +376,11 @@ void PoiImplicitTagRulesDeriver::_applyFiltering(const QString input)
         !tagIgnoreList.isEmpty() &&
         (tagIgnoreList.contains(kvp) || tagIgnoreList.contains(keyWildCard));
       LOG_VART(ignoreTag);
-      const QStringList tagsAllowList = _customRules.getTagsAllowList();
-      const bool allowListExcludesTag =
-        !tagsAllowList.isEmpty() && !tagsAllowList.contains(kvp) &&
-        !tagsAllowList.contains(keyWildCard);
-      LOG_VART(allowListExcludesTag);
 
-      if (!ignoreTag && !allowListExcludesTag)
+      if (!ignoreTag)
       {
-        const QString ignoreRuleTag = _customRules.getRulesIgnoreList().value(word.toLower(), "");
         const QString customRuleTag = _customRules.getCustomRulesList().value(word.toLower(), "");
-        if (ignoreRuleTag == kvp)
-        {
-          LOG_TRACE(
-            "Skipping word/tag combo on the rule ignore list.  Word: " << word << ", tag: " <<
-            kvp << ".");
-          ignoredRuleCountDueToIgnoredRules++;
-        }
-        else if (customRuleTag == kvp)
+        if (customRuleTag == kvp)
         {
           LOG_TRACE(
             "Skipping word/tag combo on custom rule list.  Word: " << word << ", tag: " <<
@@ -476,9 +452,6 @@ void PoiImplicitTagRulesDeriver::_applyFiltering(const QString input)
   LOG_INFO("Ignored " << StringUtils::formatLargeNumber(ignoredWordsCount) << " words.");
   LOG_INFO("Ignored " << StringUtils::formatLargeNumber(ignoredTagsCount) << " tags.");
   LOG_INFO(
-    "Ignored " << StringUtils::formatLargeNumber(ignoredRuleCountDueToIgnoredRules) <<
-    " rules due to them being on the ignore list.");
-  LOG_INFO(
     "Ignored " << StringUtils::formatLargeNumber(ignoredRuleCountDueToCustomRules) <<
     " rules due to them overlapping with the custom rules list.");
   LOG_INFO(
@@ -486,7 +459,6 @@ void PoiImplicitTagRulesDeriver::_applyFiltering(const QString input)
     " words that were not a schema value.");
   if (wordNotASchemaValueCount > 0)
   {
-    //TODO: change to trace
     QStringList wordsNotInSchemaList = _wordsNotInSchema.toList();
     qSort(wordsNotInSchemaList.begin(), wordsNotInSchemaList.end());
     LOG_VART(wordsNotInSchemaList);

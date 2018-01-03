@@ -53,35 +53,11 @@ void PoiImplicitTagCustomRules::_clear()
   _tagIgnoreList.clear();
   _wordIgnoreList.clear();
   _customRulesList.clear();
-  _rulesIgnoreList.clear();
-  _tagsAllowList.clear();
 }
 
 void PoiImplicitTagCustomRules::_readAllowLists()
 {
   LOG_DEBUG("Reading allow lists...");
-
-  LOG_VARD(_tagFile);
-  if (!_tagFile.trimmed().isEmpty())
-  {
-    QFile tagsAllowFile(_tagFile);
-    if (!tagsAllowFile.open(QIODevice::ReadOnly))
-    {
-      throw HootException(
-        QObject::tr("Error opening %1 for writing.").arg(tagsAllowFile.fileName()));
-    }
-    _tagsAllowList.clear();
-    while (!tagsAllowFile.atEnd())
-    {
-      const QString line = QString::fromUtf8(tagsAllowFile.readLine().constData()).trimmed();
-      if (!line.isEmpty() && !line.startsWith("#"))
-      {
-        _tagsAllowList.append(line);
-      }
-    }
-    tagsAllowFile.close();
-  }
-  LOG_VARD(_tagsAllowList);
 
   LOG_VARD(_customRuleFile);
   if (!_customRuleFile.trimmed().isEmpty())
@@ -155,29 +131,6 @@ void PoiImplicitTagCustomRules::_readIgnoreLists()
     wordIgnoreFile.close();
   }
   LOG_VARD(_wordIgnoreList);
-
-  LOG_VARD(_ruleIgnoreFile);
-  if (!_ruleIgnoreFile.trimmed().isEmpty())
-  {
-    QFile rulesIgnoreFile(_ruleIgnoreFile);
-    if (!rulesIgnoreFile.open(QIODevice::ReadOnly))
-    {
-      throw HootException(
-        QObject::tr("Error opening %1 for writing.").arg(rulesIgnoreFile.fileName()));
-    }
-    _rulesIgnoreList.clear();
-    while (!rulesIgnoreFile.atEnd())
-    {
-      const QString line = QString::fromUtf8(rulesIgnoreFile.readLine().constData()).trimmed();
-      if (!line.trimmed().isEmpty() && !line.startsWith("#"))
-      {
-        const QStringList lineParts = line.trimmed().split("\t");
-        _rulesIgnoreList[lineParts[0].trimmed()] = lineParts[1].trimmed();
-      }
-    }
-    rulesIgnoreFile.close();
-  }
-  LOG_VARD(_rulesIgnoreList);
 }
 
 }
