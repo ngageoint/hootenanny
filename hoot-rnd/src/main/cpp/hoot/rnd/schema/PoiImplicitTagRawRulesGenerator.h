@@ -67,7 +67,6 @@ public:
 
   void setSortParallelCount(int count) { _sortParallelCount = count; }
   void setSkipFiltering(bool skip) { _skipFiltering = skip; }
-  void setSkipTranslation(bool skip) { _skipTranslation = skip; }
   void setKeepTempFiles(bool keep) { _keepTempFiles = keep; }
   void setTempFileDir(QString dir) { _tempFileDir = dir; }
   void setTranslateAllNamesToEnglish(bool translate) { _translateAllNamesToEnglish = translate; }
@@ -91,7 +90,6 @@ private:
   long _countFileLineCtr;
   int _sortParallelCount;
   bool _skipFiltering;
-  bool _skipTranslation;
   bool _keepTempFiles;
   QString _tempFileDir;
   bool _translateAllNamesToEnglish;

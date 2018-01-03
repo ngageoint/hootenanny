@@ -304,25 +304,26 @@ void PoiImplicitTagRulesDeriver::_applyFiltering(const QString input)
     //word = StringUtils::replaceNonAlphaNumericCharsWithSpace(word).trimmed();
 
     //TODO: move to common class and call from generator
-    word =
-      word.replace("(", "").replace(")", "").replace(".", "").replace("/", " ").replace("<", "")
-          .replace(">", "").replace("[", "").replace("]", "").replace("@", "").replace("&", "and");
-    if (word.startsWith("-"))
-    {
-      word = word.replace(0, 1, "");
-    }
-    if (word.startsWith("_"))
-    {
-      word = word.replace(0, 1, "");
-    }
+//    word =
+//      word.replace("(", "").replace(")", "").replace(".", "").replace("/", " ").replace("<", "")
+//          .replace(">", "").replace("[", "").replace("]", "").replace("@", "").replace("&", "and");
+//    if (word.startsWith("-"))
+//    {
+//      word = word.replace(0, 1, "");
+//    }
+//    if (word.startsWith("_"))
+//    {
+//      word = word.replace(0, 1, "");
+//    }
     //TOOD: expand this
-    if (word.at(0).isDigit() &&
-        (word.endsWith("th") || word.endsWith("nd") || word.endsWith("rd") || word.endsWith("st") ||
-         word.endsWith("ave") || word.endsWith("avenue") || word.endsWith("st") ||
-         word.endsWith("street") || word.endsWith("pl") || word.endsWith("plaza")))
-    {
-      word = "";
-    }
+//    if (word.at(0).isDigit() &&
+//        (word.endsWith("th") || word.endsWith("nd") || word.endsWith("rd") || word.endsWith("st") ||
+//         word.endsWith("ave") || word.endsWith("avenue") || word.endsWith("st") ||
+//         word.endsWith("street") || word.endsWith("pl") || word.endsWith("plaza")))
+//    {
+//      word = "";
+//    }
+
     //TODO: fix and add to base visitor
 //    const QStringList wordTokens = word.split(" ");
 //    if (wordTokens.size() == 1)

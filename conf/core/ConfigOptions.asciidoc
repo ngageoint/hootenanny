@@ -1950,14 +1950,6 @@ The minimum allowed word length when associating word tokens with OSM tags.
 If true, the POI implicit tag generator will keep node filtering.  Only set to true if the input
 data has been filtered with ImplicitTagEligiblePoiCriterion beforehand.
 
-=== poi.implicit.tag.rules.skip.translation
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, the POI implicit tag generator will keep skip translation of input data.  Only set to
-true if the input data has been translated beforehand.
-
 === poi.implicit.tag.rules.sort.parallel.count
 
 * Data Type: int

@@ -51,7 +51,6 @@ _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
 _countFileLineCtr(0),
 _sortParallelCount(QThread::idealThreadCount()),
 _skipFiltering(false),
-_skipTranslation(false),
 _keepTempFiles(false),
 _tempFileDir(ConfigOptions().getApidbBulkInserterTempFileDir()),
 _translateAllNamesToEnglish(true)
@@ -69,7 +68,6 @@ void PoiImplicitTagRawRulesGenerator::setConfiguration(const Settings& conf)
     setSortParallelCount(idealThreads);
   }
   setSkipFiltering(options.getPoiImplicitTagRulesSkipFiltering());
-  setSkipTranslation(options.getPoiImplicitTagRulesSkipTranslation());
   setKeepTempFiles(options.getPoiImplicitTagRulesKeepTempFiles());
   setTempFileDir(options.getApidbBulkInserterTempFileDir());
   setTranslateAllNamesToEnglish(options.getPoiImplicitTagRulesTranslateAllNamesToEnglish());
@@ -79,6 +77,30 @@ void PoiImplicitTagRawRulesGenerator::_updateForNewWord(QString word, const QStr
 {
   word = word.simplified();
   LOG_TRACE("Updating word: " << word << " with kvp: " << kvp << "...");
+
+  //TODO: fix
+  //word = StringUtils::replaceNonAlphaNumericCharsWithSpace(word).trimmed();
+
+  word =
+    word.replace("(", "").replace(")", "").replace(".", "").replace("/", " ").replace("<", "")
+        .replace(">", "").replace("[", "").replace("]", "").replace("@", "").replace("&", "and")
+        .replace("(historical)", "");
+  if (word.startsWith("-"))
+  {
+    word = word.replace(0, 1, "");
+  }
+  if (word.startsWith("_"))
+  {
+    word = word.replace(0, 1, "");
+  }
+  //TODO: expand this
+  if (word.at(0).isDigit() &&
+      (word.endsWith("th") || word.endsWith("nd") || word.endsWith("rd") || word.endsWith("st") ||
+       word.endsWith("ave") || word.endsWith("avenue") || word.endsWith("st") ||
+       word.endsWith("street") || word.endsWith("pl") || word.endsWith("plaza")))
+  {
+    word = "";
+  }
 
   bool wordIsNumber = false;
   word.toLong(&wordIsNumber);
@@ -132,7 +154,6 @@ void PoiImplicitTagRawRulesGenerator::generateRules(const QStringList inputs,
     ", translation scripts: " << translationScripts << ".  Writing to output: " << output << "...");
   LOG_VARD(_sortParallelCount);
   LOG_VARD(_skipFiltering);
-  LOG_VARD(_skipTranslation);
   LOG_VARD(_sortParallelCount);
   LOG_VARD(_translateAllNamesToEnglish);
 
@@ -168,7 +189,7 @@ void PoiImplicitTagRawRulesGenerator::generateRules(const QStringList inputs,
     boost::shared_ptr<ElementInputStream> inputStream =
       boost::dynamic_pointer_cast<ElementInputStream>(inputReader);
     const QString translationScript = translationScripts.at(i);
-    if (!_skipTranslation && translationScript.toLower() != "none")
+    if (translationScript.toLower() != "none")
     {
       boost::shared_ptr<TranslationVisitor> translationVisitor(new TranslationVisitor());
       translationVisitor->setPath(translationScript);
