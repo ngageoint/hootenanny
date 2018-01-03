@@ -48,23 +48,19 @@ namespace hoot
 
 PoiImplicitTagRawRulesGenerator::PoiImplicitTagRawRulesGenerator() :
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
-_tokenizeNames(true),
 _countFileLineCtr(0),
 _sortParallelCount(QThread::idealThreadCount()),
 _skipFiltering(false),
 _skipTranslation(false),
 _keepTempFiles(false),
 _tempFileDir(ConfigOptions().getApidbBulkInserterTempFileDir()),
-_translateAllNamesToEnglish(false),
-_maxWordTokenizationGroupSize(1),
-_skipOldNameTag(true)
+_translateAllNamesToEnglish(true)
 {
 }
 
 void PoiImplicitTagRawRulesGenerator::setConfiguration(const Settings& conf)
 {
   ConfigOptions options = ConfigOptions(conf);
-  setTokenizeNames(options.getPoiImplicitTagRulesTokenizeNames());
   setSortParallelCount(options.getPoiImplicitTagRulesSortParallelCount());
   const int idealThreads = QThread::idealThreadCount();
   LOG_VART(idealThreads);
@@ -77,8 +73,6 @@ void PoiImplicitTagRawRulesGenerator::setConfiguration(const Settings& conf)
   setKeepTempFiles(options.getPoiImplicitTagRulesKeepTempFiles());
   setTempFileDir(options.getApidbBulkInserterTempFileDir());
   setTranslateAllNamesToEnglish(options.getPoiImplicitTagRulesTranslateAllNamesToEnglish());
-  setMaxWordTokenizationGroupSize(options.getPoiImplicitTagRulesMaximumWordTokenizationGroupSize());
-  setSkipOldNameTag(options.getPoiImplicitTagRulesSkipOldNameTag());
 }
 
 void PoiImplicitTagRawRulesGenerator::_updateForNewWord(QString word, const QString kvp)
@@ -136,14 +130,11 @@ void PoiImplicitTagRawRulesGenerator::generateRules(const QStringList inputs,
   LOG_INFO(
     "Generating POI implicit tag rules raw file for inputs: " << inputs <<
     ", translation scripts: " << translationScripts << ".  Writing to output: " << output << "...");
-  LOG_VARD(_tokenizeNames);
   LOG_VARD(_sortParallelCount);
   LOG_VARD(_skipFiltering);
   LOG_VARD(_skipTranslation);
   LOG_VARD(_sortParallelCount);
   LOG_VARD(_translateAllNamesToEnglish);
-  LOG_VARD(_maxWordTokenizationGroupSize);
-  LOG_VARD(_skipOldNameTag);
 
   _wordKeysToCountsValues.clear();
   _duplicatedWordTagKeyCountsToValues.clear();
@@ -203,12 +194,9 @@ void PoiImplicitTagRawRulesGenerator::generateRules(const QStringList inputs,
         QStringList names = element->getTags().getNames();
         assert(!names.isEmpty());
 
-        if (_skipOldNameTag)
+        if (names.removeAll("old_name") > 0)
         {
-          if (names.removeAll("old_name") > 0)
-          {
-            LOG_VARD("Removed old name tag.");
-          }
+          LOG_VARD("Removed old name tag.");
         }
 
         if (names.isEmpty())
@@ -289,27 +277,52 @@ void PoiImplicitTagRawRulesGenerator::generateRules(const QStringList inputs,
             _updateForNewWord(name, kvps.at(j));
           }
 
-          if (_tokenizeNames)
+          QStringList nameTokens = tokenizer.tokenize(name);
+          LOG_VART(nameTokens.size());
+
+          //tokenization - we'll just do 1, 2, 3 for now
+
+          for (int j = 0; j < nameTokens.size(); j++)
           {
-            QStringList nameTokens = tokenizer.tokenize(name);
-            LOG_VART(nameTokens.size());
+            QString nameToken = nameTokens.at(j);
+            //TODO: may need to replace more punctuation chars here - replace all non-alphanumeric?
+            //esp ()/
+              nameToken = nameToken.replace(",", "");
+            LOG_VART(nameToken);
 
-            //tokenization - we'll just do 1, 2, 3 for now
-
-            for (int j = 0; j < nameTokens.size(); j++)
+            if (_translateAllNamesToEnglish)
             {
-              QString nameToken = nameTokens.at(j);
-              //TODO: may need to replace more punctuation chars here - replace all non-alphanumeric?
-              //esp ()/
+              const QString englishNameToken = Translator::getInstance().toEnglish(nameToken);
+//            if (englishNameToken.toLower() != nameToken.toLower().replace("-", " ").replace("'", " "))
+//            {
+//              LOG_TRACE(
+//                "Successfully translated " << nameToken << " to " << englishNameToken << ".");
+//            }
+              nameToken = englishNameToken;
+              LOG_VART(englishNameToken);
+            }
+
+            for (int k = 0; k < kvps.size(); k++)
+            {
+              _updateForNewWord(nameToken, kvps.at(k));
+            }
+          }
+
+          if (nameTokens.size() > 2)
+          {
+            for (int j = 0; j < nameTokens.size() - 1; j++)
+            {
+              QString nameToken = nameTokens.at(j) + " " + nameTokens.at(j + 1);
+              //TODO: may need to replace more punctuation chars here
               nameToken = nameToken.replace(",", "");
               LOG_VART(nameToken);
 
               if (_translateAllNamesToEnglish)
               {
                 const QString englishNameToken = Translator::getInstance().toEnglish(nameToken);
-//                if (englishNameToken.toLower() != nameToken.toLower().replace("-", " ").replace("'", " "))
-//                {
-//                  LOG_TRACE(
+//              if (englishNameToken.toLower() != nameToken.toLower().replace("-", " ").replace("'", " "))
+//              {
+//                LOG_TRACE(
 //                    "Successfully translated " << nameToken << " to " << englishNameToken << ".");
 //                }
                 nameToken = englishNameToken;
@@ -319,63 +332,6 @@ void PoiImplicitTagRawRulesGenerator::generateRules(const QStringList inputs,
               for (int k = 0; k < kvps.size(); k++)
               {
                 _updateForNewWord(nameToken, kvps.at(k));
-              }
-            }
-
-            if (nameTokens.size() > 2 && _maxWordTokenizationGroupSize >= 2)
-            {
-              for (int j = 0; j < nameTokens.size() - 1; j++)
-              {
-                QString nameToken = nameTokens.at(j) + " " + nameTokens.at(j + 1);
-                //TODO: may need to replace more punctuation chars here
-                nameToken = nameToken.replace(",", "");
-                LOG_VART(nameToken);
-
-                if (_translateAllNamesToEnglish)
-                {
-                  const QString englishNameToken = Translator::getInstance().toEnglish(nameToken);
-//                  if (englishNameToken.toLower() != nameToken.toLower().replace("-", " ").replace("'", " "))
-//                  {
-//                    LOG_TRACE(
-//                      "Successfully translated " << nameToken << " to " << englishNameToken << ".");
-//                  }
-                  nameToken = englishNameToken;
-                  LOG_VART(englishNameToken);
-                }
-
-                for (int k = 0; k < kvps.size(); k++)
-                {
-                  _updateForNewWord(nameToken, kvps.at(k));
-                }
-              }
-            }
-
-            if (nameTokens.size() > 3 && _maxWordTokenizationGroupSize >= 3)
-            {
-              for (int j = 0; j < nameTokens.size() - 2; j++)
-              {
-                QString nameToken =
-                  nameTokens.at(j) + " " + nameTokens.at(j + 1) + " " + nameTokens.at(j + 2);
-                //TODO: may need to replace more punctuation chars here
-                nameToken = nameToken.replace(",", "");
-                LOG_VART(nameToken);
-
-                if (_translateAllNamesToEnglish)
-                {
-                  const QString englishNameToken = Translator::getInstance().toEnglish(nameToken);
-//                  if (englishNameToken.toLower() != nameToken.toLower().replace("-", " ").replace("'", " "))
-//                  {
-//                    LOG_TRACE(
-//                      "Successfully translated " << nameToken << " to " << englishNameToken << ".");
-//                  }
-                  nameToken = englishNameToken;
-                  LOG_VART(englishNameToken);
-                }
-
-                for (int k = 0; k < kvps.size(); k++)
-                {
-                  _updateForNewWord(nameToken, kvps.at(k));
-                }
               }
             }
           }

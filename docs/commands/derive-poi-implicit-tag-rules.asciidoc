@@ -17,9 +17,7 @@ The following additional configuration parameters apply to rule derivation:
 * poi.implicit.tag.rules.minimum.tag.occurrences.per.word - how many times must a tag be associated with a word before a rule is created
 * poi.implicit.tag.rules.minimum.word.length - minimum number of occurrences of a tag in order for a rule to be derived for the tag; specify
 '1' to consider all type tag occurrences
-* poi.implicit.tag.rules.rule.ignore.file - used to explicitly ignore generated rules
 * poi.implicit.tag.rules.tag.ignore.file - used to explicitly ignore tags
-* poi.implicit.tag.rules.tag.file - used to allow only specific tags
 * poi.implicit.tag.rules.word.ignore.file - used to explicitly ignore words
 
 See the configuration option descriptions in conf/ConfigOptions.asciidoc for more details.
@@ -35,6 +33,6 @@ derive-poi-implicit-tag-rules (input) (outputs)
 --------------------------------------
 hoot derive-poi-implicit-tag-rules myInput.implicitTagRules "rules.json;rules.sqlite;rules.tsv"
 
-derive-poi-implicit-tag-rules -D poi.implicit.tag.rules.custom.rule.file=myCustomRules -D poi.implicit.tag.rules.minimum.tag.occurrences.per.word=5 -D poi.implicit.tag.rules.minimum.word.length=3 -D poi.implicit.tag.rules.rule.ignore.file=myRuleIgnoreList -D poi.implicit.tag.rules.tag.ignore.file=myTagIgnoreList -D poi.implicit.tag.rules.tag.file=myTagList -D poi.implicit.tag.rules.tokenize.names=true -D poi.implicit.tag.rules.word.ignore.file=myWordIgnoreList myInput.implicitTagRules "rules.json;rules.sqlite;rules.tsv"
+derive-poi-implicit-tag-rules -D poi.implicit.tag.rules.custom.rule.file=myCustomRules -D poi.implicit.tag.rules.minimum.tag.occurrences.per.word=5 -D poi.implicit.tag.rules.minimum.word.length=3 -D poi.implicit.tag.rules.tag.ignore.file=myTagIgnoreList -D poi.implicit.tag.rules.tokenize.names=true -D poi.implicit.tag.rules.word.ignore.file=myWordIgnoreList myInput.implicitTagRules "rules.json;rules.sqlite;rules.tsv"
 --------------------------------------
 

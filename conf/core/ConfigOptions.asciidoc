@@ -1927,13 +1927,6 @@ If true, the POI implicit tag generator/deriver will keep all temporary files.  
 
 TODO
 
-=== poi.implicit.tag.rules.maximum.word.tokenization.group.size
-
-* Data Type: int
-* Default Value: `1`
-
-The largest word group size used when tokenizing words.  Valid values are 1 to 3.
-
 === poi.implicit.tag.rules.minimum.tag.occurrences.per.word
 
 * Data Type: int
@@ -1956,13 +1949,6 @@ The minimum allowed word length when associating word tokens with OSM tags.
 
 If true, the POI implicit tag generator will keep node filtering.  Only set to true if the input
 data has been filtered with ImplicitTagEligiblePoiCriterion beforehand.
-
-=== poi.implicit.tag.rules.skip.old.name.tag
-
-* Data Type: bool
-* Default Value: `true`
-
-If true, the POI implicit tag tagger will not consider the OSM "old_name" tag as a name tag.
 
 === poi.implicit.tag.rules.skip.translation
 
@@ -1989,17 +1975,10 @@ of available processors.
 Flat file containing key/value pairs, one per line, to ignore when deriving implicit tags from POI
 names.  Use 'key=*' to ignore all tags for a given key.
 
-=== poi.implicit.tag.rules.tokenize.names
-
-* Data Type: bool
-* Default Value: `true`
-
-If true, the raw generated POI implicit tag rules will be generated using tokenized names.
-
 === poi.implicit.tag.rules.translate.all.names.to.english
 
 * Data Type: bool
-* Default Value: `false`
+* Default Value: `true`
 
 If true, the POI implicit tag raw rules generator will translate all name words to English.
 

@@ -45,8 +45,8 @@ PoiImplicitTagRulesDeriver::PoiImplicitTagRulesDeriver() :
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
 _minTagOccurrencesPerWord(1),
 _minWordLength(1),
-_useSchemaTagValuesForWordsOnly(false),
-_translateAllNamesToEnglish(false)
+_useSchemaTagValuesForWordsOnly(true),
+_translateAllNamesToEnglish(true)
 {
 }
 

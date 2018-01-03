@@ -65,15 +65,12 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  void setTokenizeNames(bool tokenizeNames) { _tokenizeNames = tokenizeNames; }
   void setSortParallelCount(int count) { _sortParallelCount = count; }
   void setSkipFiltering(bool skip) { _skipFiltering = skip; }
   void setSkipTranslation(bool skip) { _skipTranslation = skip; }
   void setKeepTempFiles(bool keep) { _keepTempFiles = keep; }
   void setTempFileDir(QString dir) { _tempFileDir = dir; }
   void setTranslateAllNamesToEnglish(bool translate) { _translateAllNamesToEnglish = translate; }
-  void setMaxWordTokenizationGroupSize(int size) { _maxWordTokenizationGroupSize = size; }
-  void setSkipOldNameTag(bool skip) { _skipOldNameTag = skip; }
 
 private:
 
@@ -81,7 +78,6 @@ private:
   friend class PoiImplicitTagRawRulesGeneratorTest;
 
   long _statusUpdateInterval;
-  bool _tokenizeNames;
   boost::shared_ptr<QFile> _output;
 
   boost::shared_ptr<QTemporaryFile> _countFile;
@@ -99,8 +95,6 @@ private:
   bool _keepTempFiles;
   QString _tempFileDir;
   bool _translateAllNamesToEnglish;
-  int _maxWordTokenizationGroupSize;
-  bool _skipOldNameTag;
 
   ImplicitTagEligiblePoiCriterion _poiFilter;
 

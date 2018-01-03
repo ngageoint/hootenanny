@@ -61,12 +61,9 @@ public:
   void setCustomRuleFile(const QString file) { _customRules.setCustomRuleFile(file); }
   void setTagIgnoreFile(const QString file) { _customRules.setTagIgnoreFile(file); }
   void setWordIgnoreFile(const QString file) { _customRules.setWordIgnoreFile(file); }
-  void setMaxWordTokenizationGroupSize(int size) { _maxWordTokenizationGroupSize = size; }
   void setTranslateAllNamesToEnglish(bool translate) { _translateAllNamesToEnglish = translate; }
-  void setSkipOldNameTag(bool skip) { _skipOldNameTag = skip; }
   void setMatchEndOfNameSingleTokenFirst(bool match) { _matchEndOfNameSingleTokenFirst = match; }
   void setAllowTaggingSpecificPois(bool allow) { _allowTaggingSpecificPois = allow; }
-  void setTokenizeNames(bool tokenize) { _tokenizeNames = tokenize; }
   void setMinWordLength(int length) { _minWordLength = length; }
 
 protected:
@@ -79,7 +76,6 @@ protected:
 private:
 
   boost::shared_ptr<ImplicitTagRulesSqliteReader> _ruleReader;
-  bool _tokenizeNames;
 
   long _numNodesModified;
   long _numTagsAdded;
@@ -89,9 +85,7 @@ private:
   int _minWordLength;
   long _smallestNumberOfTagsAdded;
   long _largestNumberOfTagsAdded;
-  int _maxWordTokenizationGroupSize;
   bool _translateAllNamesToEnglish;
-  bool _skipOldNameTag;
   bool _matchEndOfNameSingleTokenFirst;
 
   PoiImplicitTagCustomRules _customRules;

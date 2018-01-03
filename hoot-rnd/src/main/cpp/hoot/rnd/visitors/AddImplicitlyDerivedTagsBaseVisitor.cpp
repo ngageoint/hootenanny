@@ -44,7 +44,6 @@ namespace hoot
 AddImplicitlyDerivedTagsBaseVisitor::AddImplicitlyDerivedTagsBaseVisitor() :
 _allowTaggingSpecificPois(true),
 _elementIsASpecificPoi(false),
-_tokenizeNames(true),
 _numNodesModified(0),
 _numTagsAdded(0),
 _numNodesInvolvedInMultipleRules(0),
@@ -53,10 +52,8 @@ _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
 _minWordLength(3),
 _smallestNumberOfTagsAdded(LONG_MAX),
 _largestNumberOfTagsAdded(0),
-_maxWordTokenizationGroupSize(1),
-_translateAllNamesToEnglish(false),
-_skipOldNameTag(true),
-_matchEndOfNameSingleTokenFirst(false)
+_translateAllNamesToEnglish(true),
+_matchEndOfNameSingleTokenFirst(true)
 {
   _ruleReader.reset(new ImplicitTagRulesSqliteReader());
   _ruleReader->open(ConfigOptions().getPoiImplicitTagRulesDatabase());
@@ -65,7 +62,6 @@ _matchEndOfNameSingleTokenFirst(false)
 AddImplicitlyDerivedTagsBaseVisitor::AddImplicitlyDerivedTagsBaseVisitor(const QString databasePath) :
 _allowTaggingSpecificPois(true),
 _elementIsASpecificPoi(false),
-_tokenizeNames(true),
 _numNodesModified(0),
 _numTagsAdded(0),
 _numNodesInvolvedInMultipleRules(0),
@@ -74,10 +70,8 @@ _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
 _minWordLength(3),
 _smallestNumberOfTagsAdded(LONG_MAX),
 _largestNumberOfTagsAdded(0),
-_maxWordTokenizationGroupSize(1),
-_translateAllNamesToEnglish(false),
-_skipOldNameTag(true),
-_matchEndOfNameSingleTokenFirst(false)
+_translateAllNamesToEnglish(true),
+_matchEndOfNameSingleTokenFirst(true)
 {
   _ruleReader.reset(new ImplicitTagRulesSqliteReader());
   _ruleReader->open(databasePath);
@@ -119,11 +113,8 @@ void AddImplicitlyDerivedTagsBaseVisitor::setConfiguration(const Settings& conf)
   const ConfigOptions confOptions(conf);
 
   setTranslateAllNamesToEnglish(confOptions.getPoiImplicitTagRulesTranslateAllNamesToEnglish());
-  setMaxWordTokenizationGroupSize(
-    confOptions.getPoiImplicitTagRulesMaximumWordTokenizationGroupSize());
   setMatchEndOfNameSingleTokenFirst(confOptions.getPoiImplicitTagRulesMatchEndOfNameSingleTokenFirst());
   setAllowTaggingSpecificPois(confOptions.getPoiImplicitTagRulesAllowTaggingSpecificPois());
-  setTokenizeNames(confOptions.getPoiImplicitTagRulesTokenizeNames());
   setMinWordLength(confOptions.getPoiImplicitTagRulesMinimumWordLength());
 
   _customRules.setCustomRuleFile(confOptions.getPoiImplicitTagRulesCustomRuleFile());
@@ -158,12 +149,9 @@ void AddImplicitlyDerivedTagsBaseVisitor::visit(const ElementPtr& e)
 
     QStringList names = e->getTags().getNames();
 
-    if (_skipOldNameTag)
+    if (names.removeAll("old_name") > 0)
     {
-      if (names.removeAll("old_name") > 0)
-      {
-        LOG_VARD("Removed old name tag.");
-      }
+      LOG_VARD("Removed old name tag.");
     }
 
     if (_translateAllNamesToEnglish)
@@ -276,7 +264,7 @@ void AddImplicitlyDerivedTagsBaseVisitor::visit(const ElementPtr& e)
             matchingWords);
         tagsToAdd = implicitlyDerivedTags;
       }
-      else if (_tokenizeNames)
+      else
       {
         //we didn't find any tags for the whole names, so let's look for them with the tokenized name
         //parts
@@ -289,47 +277,7 @@ void AddImplicitlyDerivedTagsBaseVisitor::visit(const ElementPtr& e)
 
         //check custom rules first, then db for each group size in descending group size order
 
-        LOG_VARD(_maxWordTokenizationGroupSize);
-
-        if (implicitlyDerivedTags.size() == 0 && nameTokensList.size() > 3 &&
-            _maxWordTokenizationGroupSize >= 3)
-        {
-          LOG_DEBUG("Attempting match with token group size of 3...");
-
-          QStringList nameTokensListGroupSizeThree;
-          for (int i = 0; i < nameTokensList.size() - 2; i++)
-          {
-            QString nameToken =
-              nameTokensList.at(i) + " " + nameTokensList.at(i + 1) + " " + nameTokensList.at(i + 2);
-            if (_translateAllNamesToEnglish)
-            {
-              const QString englishNameToken = Translator::getInstance().toEnglish(nameToken);
-//              if (englishNameToken.toLower() != nameToken.toLower())
-//              {
-//                LOG_TRACE(
-//                  "Successfully translated " << nameToken << " to " << englishNameToken << ".");
-//              }
-              nameToken = englishNameToken;
-              LOG_VART(englishNameToken);
-            }
-            nameTokensListGroupSizeThree.append(nameToken);
-          }
-          LOG_VARD(nameTokensListGroupSizeThree);
-
-          if (implicitlyDerivedTags.size() == 0)
-          {
-            implicitlyDerivedTags =
-              _ruleReader->getImplicitTags(
-                nameTokensListGroupSizeThree.toSet(), matchingWords, wordsInvolvedInMultipleRules);
-          }
-
-          LOG_VARD(implicitlyDerivedTags);
-          LOG_VARD(matchingWords);
-          LOG_VARD(wordsInvolvedInMultipleRules);
-        }
-
-        if (implicitlyDerivedTags.size() == 0 && nameTokensList.size() > 2 &&
-            _maxWordTokenizationGroupSize >= 2)
+        if (implicitlyDerivedTags.size() == 0 && nameTokensList.size() > 2)
         {
           LOG_DEBUG("Attempting match with token group size of 2...");
 
