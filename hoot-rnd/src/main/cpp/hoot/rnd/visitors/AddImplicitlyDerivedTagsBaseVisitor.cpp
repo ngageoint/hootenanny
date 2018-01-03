@@ -42,16 +42,16 @@ namespace hoot
 {
 
 AddImplicitlyDerivedTagsBaseVisitor::AddImplicitlyDerivedTagsBaseVisitor() :
-_allowTaggingSpecificPois(ConfigOptions().getPoiImplicitTagRulesAllowTaggingSpecificPois()),
-_allowTaggingGenericPois(ConfigOptions().getPoiImplicitTagRulesAllowTaggingGenericPois()),
+_allowTaggingSpecificPois(/*ConfigOptions().getPoiImplicitTagRulesAllowTaggingSpecificPois()*/true),
+_allowTaggingGenericPois(/*ConfigOptions().getPoiImplicitTagRulesAllowTaggingGenericPois()*/true),
 _elementIsASpecificPoi(false),
-_tokenizeNames(ConfigOptions().getPoiImplicitTagRulesTokenizeNames()),
+_tokenizeNames(/*ConfigOptions().getPoiImplicitTagRulesTokenizeNames()*/true),
 _numNodesModified(0),
 _numTagsAdded(0),
 _numNodesInvolvedInMultipleRules(0),
 _numNodesParsed(0),
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
-_minWordLength(ConfigOptions().getPoiImplicitTagRulesMinimumWordLength()),
+_minWordLength(/*ConfigOptions().getPoiImplicitTagRulesMinimumWordLength()*/3),
 _smallestNumberOfTagsAdded(LONG_MAX),
 _largestNumberOfTagsAdded(0),
 _maxWordTokenizationGroupSize(1),
@@ -64,16 +64,16 @@ _matchEndOfNameSingleTokenFirst(false)
 }
 
 AddImplicitlyDerivedTagsBaseVisitor::AddImplicitlyDerivedTagsBaseVisitor(const QString databasePath) :
-_allowTaggingSpecificPois(ConfigOptions().getPoiImplicitTagRulesAllowTaggingSpecificPois()),
-_allowTaggingGenericPois(ConfigOptions().getPoiImplicitTagRulesAllowTaggingGenericPois()),
+_allowTaggingSpecificPois(/*ConfigOptions().getPoiImplicitTagRulesAllowTaggingSpecificPois()*/true),
+_allowTaggingGenericPois(/*ConfigOptions().getPoiImplicitTagRulesAllowTaggingGenericPois()*/true),
 _elementIsASpecificPoi(false),
-_tokenizeNames(ConfigOptions().getPoiImplicitTagRulesTokenizeNames()),
+_tokenizeNames(/*ConfigOptions().getPoiImplicitTagRulesTokenizeNames()*/true),
 _numNodesModified(0),
 _numTagsAdded(0),
 _numNodesInvolvedInMultipleRules(0),
 _numNodesParsed(0),
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
-_minWordLength(ConfigOptions().getPoiImplicitTagRulesMinimumWordLength()),
+_minWordLength(/*ConfigOptions().getPoiImplicitTagRulesMinimumWordLength()*/3),
 _smallestNumberOfTagsAdded(LONG_MAX),
 _largestNumberOfTagsAdded(0),
 _maxWordTokenizationGroupSize(1),
@@ -119,10 +119,16 @@ AddImplicitlyDerivedTagsBaseVisitor::~AddImplicitlyDerivedTagsBaseVisitor()
 void AddImplicitlyDerivedTagsBaseVisitor::setConfiguration(const Settings& conf)
 {
   const ConfigOptions confOptions(conf);
+
   setTranslateAllNamesToEnglish(confOptions.getPoiImplicitTagRulesTranslateAllNamesToEnglish());
   setMaxWordTokenizationGroupSize(
     confOptions.getPoiImplicitTagRulesMaximumWordTokenizationGroupSize());
   setMatchEndOfNameSingleTokenFirst(confOptions.getPoiImplicitTagRulesMatchEndOfNameSingleTokenFirst());
+  setAllowTaggingSpecificPois(confOptions.getPoiImplicitTagRulesAllowTaggingSpecificPois());
+  setAllowTaggingGenericPois(confOptions.getPoiImplicitTagRulesAllowTaggingGenericPois());
+  setTokenizeNames(confOptions.getPoiImplicitTagRulesTokenizeNames());
+  setMinWordLength(confOptions.getPoiImplicitTagRulesMinimumWordLength());
+
   _customRules.setCustomRuleFile(confOptions.getPoiImplicitTagRulesCustomRuleFile());
   _customRules.setRuleIgnoreFile(confOptions.getPoiImplicitTagRulesRuleIgnoreFile());
   _customRules.setTagIgnoreFile(confOptions.getPoiImplicitTagRulesTagIgnoreFile());
@@ -132,6 +138,7 @@ void AddImplicitlyDerivedTagsBaseVisitor::setConfiguration(const Settings& conf)
   _customRules.init();
   LOG_VARD(_customRules.getWordIgnoreList());
   LOG_VARD(_customRules.getCustomRulesList());
+  _ruleReader->setConfiguration(conf);
   _ruleReader->setCustomRules(_customRules);
 }
 

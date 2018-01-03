@@ -50,15 +50,23 @@ _tagsCache(ConfigOptions().getPoiImplicitTagRulesReaderMaxTagCacheSize()),
 _useTagsCache(ConfigOptions().getPoiImplicitTagRulesReaderUseTagsCache()),
 _firstRoundTagsCacheHits(0),
 _secondRoundTagsCacheHits(0),
-_addTopTagOnly(ConfigOptions().getPoiImplicitTagRulesAddTopTagOnly()),
+_addTopTagOnly(/*ConfigOptions().getPoiImplicitTagRulesAddTopTagOnly()*/true),
 _allowWordsInvolvedInMultipleRules(
-  ConfigOptions().getPoiImplicitTagRulesAllowWordsInvolvedInMultipleRules())
+  /*ConfigOptions().getPoiImplicitTagRulesAllowWordsInvolvedInMultipleRules()*/false)
 {
 }
 
 ImplicitTagRulesSqliteReader::~ImplicitTagRulesSqliteReader()
 {
   close();
+}
+
+void ImplicitTagRulesSqliteReader::setConfiguration(const Settings& conf)
+{
+  const ConfigOptions confOptions(conf);
+  setAddTopTagOnly(confOptions.getPoiImplicitTagRulesAddTopTagOnly());
+  setAllowWordsInvolvedInMultipleRules(
+    confOptions.getPoiImplicitTagRulesAllowWordsInvolvedInMultipleRules());
 }
 
 void ImplicitTagRulesSqliteReader::open(const QString url)

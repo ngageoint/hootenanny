@@ -67,6 +67,10 @@ public:
   void setTranslateAllNamesToEnglish(bool translate) { _translateAllNamesToEnglish = translate; }
   void setSkipOldNameTag(bool skip) { _skipOldNameTag = skip; }
   void setMatchEndOfNameSingleTokenFirst(bool match) { _matchEndOfNameSingleTokenFirst = match; }
+  void setAllowTaggingSpecificPois(bool allow) { _allowTaggingSpecificPois = allow; }
+  void setAllowTaggingGenericPois(bool allow) { _allowTaggingGenericPois = allow; }
+  void setTokenizeNames(bool tokenize) { _tokenizeNames = tokenize; }
+  void setMinWordLength(int length) { _minWordLength = length; }
 
 protected:
 

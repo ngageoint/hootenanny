@@ -9,7 +9,7 @@ area
 art
 bake
 basin
-bay
+#bay
 beach
 bed
 before
@@ -49,6 +49,7 @@ facility
 faculty
 fast
 first
+fish
 food
 for
 former
@@ -62,7 +63,7 @@ gold
 government
 guest
 hall
-headquarters
+#headquarters
 health
 historical
 home
@@ -72,6 +73,7 @@ house
 housing
 hut
 information
+inlet
 institute
 island
 lane

@@ -78,7 +78,7 @@ public:
   void setWordIgnoreFile(const QString file) { _customRules.setWordIgnoreFile(file); }
   void setUseSchemaTagValuesForWordsOnly(bool use) { _useSchemaTagValuesForWordsOnly = use; }
   void setTranslateAllNamesToEnglish(bool translate) { _translateAllNamesToEnglish = translate; }
-  void setEnglishWordsFile(const QString file) { _englishWordsFile = file; }
+  //void setEnglishWordsFile(const QString file) { _englishWordsFile = file; }
 
 private:
 
@@ -93,7 +93,7 @@ private:
   QSet<QString> _wordsNotInSchema;
   QSet<QString> _englishWords;
   bool _translateAllNamesToEnglish;
-  QString _englishWordsFile;
+  //QString _englishWordsFile;
 
   PoiImplicitTagCustomRules _customRules;
 

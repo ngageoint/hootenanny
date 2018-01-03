@@ -63,7 +63,7 @@ void PoiImplicitTagRulesDeriver::setConfiguration(const Settings& conf)
   setUseSchemaTagValuesForWordsOnly(
     confOptions.getPoiImplicitTagRulesUseSchemaTagValuesForWordsOnly());
   setTranslateAllNamesToEnglish(confOptions.getPoiImplicitTagRulesTranslateAllNamesToEnglish());
-  setEnglishWordsFile(confOptions.getPoiImplicitTagRulesEnglishWordsFile());
+  //setEnglishWordsFile(confOptions.getPoiImplicitTagRulesEnglishWordsFile());
 }
 
 QString PoiImplicitTagRulesDeriver::_getSqliteOutput(const QStringList outputs)

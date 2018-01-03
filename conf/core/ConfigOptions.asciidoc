@@ -1876,7 +1876,7 @@ those being compared have a populated name field.
 === poi.implicit.tag.rules.add.top.tag.only
 
 * Data Type: bool
-* Default Value: `false`
+* Default Value: `true`
 
 If true, the POI implicit tagger will only add the tag to the node with the highest tag occurrence
 count.
@@ -1917,17 +1917,10 @@ when deriving implicit tags from POI names.  Overridden by
 === poi.implicit.tag.rules.database
 
 * Data Type: string
-* Default Value: `${HOOT_HOME}/conf/core/poi-implicit-tag-rules/ImplicitTagRules.sqlite`
+* Default Value: `${HOOT_HOME}/conf/core/poi-implicit-tag-rules/allCountries-planet-11-2-17-minwordocc=1000-schemaonly=true.sqlite`
 
 Database used by the AddImplicitlyDerivedTagsPoiVisitor to derive POI type tags implicitly based
 on a POI's name.
-
-=== poi.implicit.tag.rules.english.words.file
-
-* Data Type: string
-* Default Value: `${HOOT_HOME}/conf/core/poi-implicit-tag-rules/google-10000-english`
-
-TODO
 
 === poi.implicit.tag.rules.keep.temp.files
 
@@ -1953,7 +1946,7 @@ The largest word group size used when tokenizing words.  Valid values are 1 to 3
 === poi.implicit.tag.rules.minimum.tag.occurrences.per.word
 
 * Data Type: int
-* Default Value: `1`
+* Default Value: `1000`
 
 The minimum number of times a tag must be associated with a word in order for an implicit tag rule
 to be created.
@@ -1961,7 +1954,7 @@ to be created.
 === poi.implicit.tag.rules.minimum.word.length
 
 * Data Type: int
-* Default Value: `1`
+* Default Value: `3`
 
 The minimum allowed word length when associating word tokens with OSM tags.
 
@@ -2054,7 +2047,7 @@ If true, the POI implicit tag raw rules generator will translate all name words 
 === poi.implicit.tag.rules.use.schema.tag.values.for.words.only
 
 * Data Type: bool
-* Default Value: `false`
+* Default Value: `true`
 
 If true, the POI implicit tag raw rules generator will only consider words that correspond to a
 TagInfo tag value.
