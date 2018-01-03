@@ -48,17 +48,13 @@ AddImplicitlyDerivedTagsBaseVisitor(databasePath)
 bool AddImplicitlyDerivedTagsPoiVisitor::_visitElement(const ElementPtr& e)
 {
   const bool elementIsANode = e->getElementType() == ElementType::Node;
-//  const bool elementIsAPoi =
-//    /*elementIsANode && OsmSchema::getInstance().hasCategory(e->getTags(), "poi")*/
-//    OsmSchema::getInstance().isPoi(*e);
   _elementIsASpecificPoi =
-    OsmSchema::getInstance().hasCategory(e->getTags(), "poi") && !e->getTags().contains("poi") /*&&
-    (e->getTags().get("place").trimmed().isEmpty() ||
-     e->getTags().get("place") != QLatin1String("locality"))*/ &&
-     e->getTags().get("building") != QLatin1String("yes");
+    OsmSchema::getInstance().hasCategory(e->getTags(), "poi") && !e->getTags().contains("poi") &&
+     e->getTags().get("building") != QLatin1String("yes") &&
+     e->getTags().get("office") != QLatin1String("yes");
   const bool elementIsAGenericPoi = !_elementIsASpecificPoi;
 
-  if (elementIsAGenericPoi && _allowTaggingGenericPois)
+  if (elementIsAGenericPoi)
   {
     return true;
   }

@@ -63,7 +63,6 @@ void PoiImplicitTagRulesDeriver::setConfiguration(const Settings& conf)
   setUseSchemaTagValuesForWordsOnly(
     confOptions.getPoiImplicitTagRulesUseSchemaTagValuesForWordsOnly());
   setTranslateAllNamesToEnglish(confOptions.getPoiImplicitTagRulesTranslateAllNamesToEnglish());
-  //setEnglishWordsFile(confOptions.getPoiImplicitTagRulesEnglishWordsFile());
 }
 
 QString PoiImplicitTagRulesDeriver::_getSqliteOutput(const QStringList outputs)
@@ -180,32 +179,6 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QString input, const QStringL
     qSort(schemaTagValuesList.begin(), schemaTagValuesList.end());
     LOG_VART(schemaTagValuesList);
   }
-
-//  if (_translateAllNamesToEnglish && _useSchemaTagValuesForWordsOnly)
-//  {
-//    LOG_VARD(_englishWordsFile);
-//    if (!_englishWordsFile.trimmed().isEmpty())
-//    {
-//      QFile englishWordsFile(_englishWordsFile);
-//      if (!englishWordsFile.open(QIODevice::ReadOnly))
-//      {
-//        throw HootException(
-//          QObject::tr("Error opening %1 for writing.").arg(englishWordsFile.fileName()));
-//      }
-//      _englishWords.clear();
-//      while (!englishWordsFile.atEnd())
-//      {
-//        const QString line = QString::fromUtf8(englishWordsFile.readLine().constData()).trimmed();
-//        if (!line.trimmed().isEmpty())
-//        {
-//          _englishWords.insert(line);
-//        }
-//      }
-//      englishWordsFile.close();
-//    }
-//    LOG_VART(_englishWords);
-//    LOG_VARD(_englishWords.size());
-//  }
 
   if (_minTagOccurrencesPerWord == 1 && _minWordLength == 1 &&
       _customRules.getWordIgnoreList().size() == 0 &&

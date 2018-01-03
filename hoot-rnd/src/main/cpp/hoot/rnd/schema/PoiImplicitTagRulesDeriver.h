@@ -70,7 +70,6 @@ public:
   { _minTagOccurrencesPerWord = minOccurrences; }
   void setMinWordLength(const int length) { _minWordLength = length; }
 
-  //TODO: remove these and have PoiImplicitTagRulesDeriverTest set them directly on _customRules (?)
   void setCustomRuleFile(const QString file) { _customRules.setCustomRuleFile(file); }
   void setRuleIgnoreFile(const QString file) { _customRules.setRuleIgnoreFile(file); }
   void setTagIgnoreFile(const QString file) { _customRules.setTagIgnoreFile(file); }
@@ -78,7 +77,6 @@ public:
   void setWordIgnoreFile(const QString file) { _customRules.setWordIgnoreFile(file); }
   void setUseSchemaTagValuesForWordsOnly(bool use) { _useSchemaTagValuesForWordsOnly = use; }
   void setTranslateAllNamesToEnglish(bool translate) { _translateAllNamesToEnglish = translate; }
-  //void setEnglishWordsFile(const QString file) { _englishWordsFile = file; }
 
 private:
 
@@ -93,7 +91,6 @@ private:
   QSet<QString> _wordsNotInSchema;
   QSet<QString> _englishWords;
   bool _translateAllNamesToEnglish;
-  //QString _englishWordsFile;
 
   PoiImplicitTagCustomRules _customRules;
 

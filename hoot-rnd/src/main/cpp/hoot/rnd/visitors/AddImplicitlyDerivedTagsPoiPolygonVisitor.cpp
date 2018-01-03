@@ -50,25 +50,16 @@ bool AddImplicitlyDerivedTagsPoiPolygonVisitor::_visitElement(const ElementPtr& 
 {
   const bool elementIsANode = e->getElementType() == ElementType::Node;
   LOG_VART(elementIsANode);
-//  const bool elementIsAPoi =
-//    _poiFilter.isSatisfied(e)/*OsmSchema::getInstance().hasCategory(e->getTags(), "poi")*/;
-//  const bool elementIsAPoi =
-//    /*elementIsANode && OsmSchema::getInstance().hasCategory(e->getTags(), "poi")*/
-//    OsmSchema::getInstance().isPoi(*e);
-//  LOG_VART(elementIsAPoi);
   const bool inABuildingOrPoiCategory =
     OsmSchema::getInstance().getCategories(e->getTags()).intersects(
       OsmSchemaCategory::building() | OsmSchemaCategory::poi());
   _elementIsASpecificPoi =
-    /*inABuildingOrPoiCategory*/OsmSchema::getInstance().hasCategory(e->getTags(), "poi") &&
-    !e->getTags().contains("poi") /*&&
-    (e->getTags().get("place").trimmed().isEmpty() ||
-     e->getTags().get("place") != QLatin1String("locality"))*/ &&
-     e->getTags().get("building") != QLatin1String("yes");
+    OsmSchema::getInstance().hasCategory(e->getTags(), "poi") &&
+    !e->getTags().contains("poi") && e->getTags().get("building") != QLatin1String("yes");
   LOG_VART(_elementIsASpecificPoi);
   const bool elementIsAGenericPoi = !_elementIsASpecificPoi;
 
-  if (elementIsAGenericPoi && _allowTaggingGenericPois)
+  if (elementIsAGenericPoi)
   {
     return true;
   }
@@ -86,15 +77,13 @@ bool AddImplicitlyDerivedTagsPoiPolygonVisitor::_visitElement(const ElementPtr& 
   const bool elementIsAPoly = _polyFilter.isSatisfied(e);
   LOG_VART(elementIsAPoly);
   const bool elementIsASpecificPoly =
-    inABuildingOrPoiCategory &&
-    /*(e->getTags().get("building").trimmed().isEmpty() ||*/
-     e->getTags().get("building") != QLatin1String("yes")/*)*/;
+    inABuildingOrPoiCategory && e->getTags().get("building") != QLatin1String("yes");
   //TODO: hack
   _elementIsASpecificPoi = elementIsASpecificPoly;
   LOG_VART(_elementIsASpecificPoi);
   const bool elementIsAGenericPoly = !elementIsASpecificPoly;
 
-  if (elementIsAGenericPoly && _allowTaggingGenericPois)
+  if (elementIsAGenericPoly)
   {
     return true;
   }

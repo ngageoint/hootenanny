@@ -42,16 +42,15 @@ namespace hoot
 {
 
 AddImplicitlyDerivedTagsBaseVisitor::AddImplicitlyDerivedTagsBaseVisitor() :
-_allowTaggingSpecificPois(/*ConfigOptions().getPoiImplicitTagRulesAllowTaggingSpecificPois()*/true),
-_allowTaggingGenericPois(/*ConfigOptions().getPoiImplicitTagRulesAllowTaggingGenericPois()*/true),
+_allowTaggingSpecificPois(true),
 _elementIsASpecificPoi(false),
-_tokenizeNames(/*ConfigOptions().getPoiImplicitTagRulesTokenizeNames()*/true),
+_tokenizeNames(true),
 _numNodesModified(0),
 _numTagsAdded(0),
 _numNodesInvolvedInMultipleRules(0),
 _numNodesParsed(0),
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
-_minWordLength(/*ConfigOptions().getPoiImplicitTagRulesMinimumWordLength()*/3),
+_minWordLength(3),
 _smallestNumberOfTagsAdded(LONG_MAX),
 _largestNumberOfTagsAdded(0),
 _maxWordTokenizationGroupSize(1),
@@ -64,16 +63,15 @@ _matchEndOfNameSingleTokenFirst(false)
 }
 
 AddImplicitlyDerivedTagsBaseVisitor::AddImplicitlyDerivedTagsBaseVisitor(const QString databasePath) :
-_allowTaggingSpecificPois(/*ConfigOptions().getPoiImplicitTagRulesAllowTaggingSpecificPois()*/true),
-_allowTaggingGenericPois(/*ConfigOptions().getPoiImplicitTagRulesAllowTaggingGenericPois()*/true),
+_allowTaggingSpecificPois(true),
 _elementIsASpecificPoi(false),
-_tokenizeNames(/*ConfigOptions().getPoiImplicitTagRulesTokenizeNames()*/true),
+_tokenizeNames(true),
 _numNodesModified(0),
 _numTagsAdded(0),
 _numNodesInvolvedInMultipleRules(0),
 _numNodesParsed(0),
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
-_minWordLength(/*ConfigOptions().getPoiImplicitTagRulesMinimumWordLength()*/3),
+_minWordLength(3),
 _smallestNumberOfTagsAdded(LONG_MAX),
 _largestNumberOfTagsAdded(0),
 _maxWordTokenizationGroupSize(1),
@@ -125,7 +123,6 @@ void AddImplicitlyDerivedTagsBaseVisitor::setConfiguration(const Settings& conf)
     confOptions.getPoiImplicitTagRulesMaximumWordTokenizationGroupSize());
   setMatchEndOfNameSingleTokenFirst(confOptions.getPoiImplicitTagRulesMatchEndOfNameSingleTokenFirst());
   setAllowTaggingSpecificPois(confOptions.getPoiImplicitTagRulesAllowTaggingSpecificPois());
-  setAllowTaggingGenericPois(confOptions.getPoiImplicitTagRulesAllowTaggingGenericPois());
   setTokenizeNames(confOptions.getPoiImplicitTagRulesTokenizeNames());
   setMinWordLength(confOptions.getPoiImplicitTagRulesMinimumWordLength());
 

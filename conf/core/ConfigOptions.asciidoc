@@ -1881,14 +1881,6 @@ those being compared have a populated name field.
 If true, the POI implicit tagger will only add the tag to the node with the highest tag occurrence
 count.
 
-=== poi.implicit.tag.rules.allow.tagging.generic.pois
-
-* Data Type: bool
-* Default Value: `true`
-
-If true, the POI implicit tagger will attempt to add more specific tags to existing generic
-POIs.  If false, the POI implicit tagger will ignore all POIs during tagging.
-
 === poi.implicit.tag.rules.allow.tagging.specific.pois
 
 * Data Type: bool
