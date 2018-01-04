@@ -29,8 +29,8 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/rnd/visitors/AddImplicitlyDerivedTagsPoiVisitor.h>
-#include <hoot/rnd/io/ImplicitTagRulesSqliteRecordWriter.h>
+#include <hoot/rnd/visitors/ImplicitPoiTagger.h>
+#include <hoot/rnd/io/ImplicitTagRulesSqliteWriter.h>
 
 // Qt
 #include <QDir>
@@ -38,9 +38,9 @@
 namespace hoot
 {
 
-class AddImplicitlyDerivedTagsPoiVisitorTest : public CppUnit::TestFixture
+class ImplicitPoiTaggerTest : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(AddImplicitlyDerivedTagsPoiVisitorTest);
+  CPPUNIT_TEST_SUITE(ImplicitPoiTaggerTest);
   CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST(runDuplicateTagKeyTest);
   CPPUNIT_TEST(runLessSpecificImplicitTagTest);
@@ -53,8 +53,8 @@ class AddImplicitlyDerivedTagsPoiVisitorTest : public CppUnit::TestFixture
 public:
 
   //TODO: use these throughout test
-  static QString inDir() { return "test-files/visitors/AddImplicitlyDerivedTagsPoiVisitorTest"; }
-  static QString outDir() { return "test-output/visitors/AddImplicitlyDerivedTagsPoiVisitorTest"; }
+  static QString inDir() { return "test-files/visitors/ImplicitPoiTaggerTest"; }
+  static QString outDir() { return "test-output/visitors/ImplicitPoiTaggerTest"; }
 
   void tearDown()
   {
@@ -68,11 +68,11 @@ public:
     //TODO: don't regen this database every time
     //use this to regenerate the db file
     const QString databaseOutFile =
-      outDir() + "/AddImplicitlyDerivedTagsPoiVisitorTest-runBasicTest-rules.sqlite";
-    ImplicitTagRulesSqliteRecordWriter writer;
+      outDir() + "/ImplicitPoiTaggerTest-runBasicTest-rules.sqlite";
+    ImplicitTagRulesSqliteWriter writer;
     writer.open(databaseOutFile);
     writer.write(
-      "test-files/visitors/AddImplicitlyDerivedTagsPoiVisitorTest/runBasicTest-ruleWordParts");
+      "test-files/visitors/ImplicitPoiTaggerTest/runBasicTest-ruleWordParts");
     writer.close();
 //    return;
 
@@ -105,8 +105,8 @@ public:
     map->getNode(-5)->getTags()["alt_name"] = QString::fromUtf8("Şiḩḩī");
 
     //const QString databaseInFile =
-      //"test-files/io/AddImplicitlyDerivedTagsPoiVisitorTest-runBasicTest-rules.sqlite";
-    AddImplicitlyDerivedTagsPoiVisitor uut(/*databaseInFile*/databaseOutFile);
+      //"test-files/io/ImplicitPoiTaggerTest-runBasicTest-rules.sqlite";
+    ImplicitPoiTagger uut(/*databaseInFile*/databaseOutFile);
     Settings conf;
     conf.set("poi.implicit.tag.rules.tag.ignore.file", "");
     conf.set("poi.implicit.tag.rules.word.ignore.file", "");
@@ -162,11 +162,11 @@ public:
     //TODO: don't regen this database every time
     //use this to regenerate the db file
     const QString databaseOutFile =
-      outDir() + "/AddImplicitlyDerivedTagsPoiVisitorTest-runDuplicateTagKeyTest-rules.sqlite";
-    ImplicitTagRulesSqliteRecordWriter writer;
+      outDir() + "/ImplicitPoiTaggerTest-runDuplicateTagKeyTest-rules.sqlite";
+    ImplicitTagRulesSqliteWriter writer;
     writer.open(databaseOutFile);
     writer.write(
-      "test-files/visitors/AddImplicitlyDerivedTagsPoiVisitorTest/runDuplicateTagKeyTest-ruleWordParts");
+      "test-files/visitors/ImplicitPoiTaggerTest/runDuplicateTagKeyTest-ruleWordParts");
     writer.close();
   //    return;
 
@@ -180,8 +180,8 @@ public:
     map->addNode(node);
 
     //const QString databaseInFile =
-      //"test-files/io/AddImplicitlyDerivedTagsPoiVisitorTest-runBasicTest-rules.sqlite";
-    AddImplicitlyDerivedTagsPoiVisitor uut(/*databaseInFile*/databaseOutFile);
+      //"test-files/io/ImplicitPoiTaggerTest-runBasicTest-rules.sqlite";
+    ImplicitPoiTagger uut(/*databaseInFile*/databaseOutFile);
     Settings conf;
     conf.set("poi.implicit.tag.rules.tag.ignore.file", "");
     conf.set("poi.implicit.tag.rules.word.ignore.file", "");
@@ -204,11 +204,11 @@ public:
     //TODO: don't regen this database every time
     //use this to regenerate the db file
     const QString databaseOutFile =
-      outDir() + "/AddImplicitlyDerivedTagsPoiVisitorTest-runLessSpecificImplicitTagTest-rules.sqlite";
-    ImplicitTagRulesSqliteRecordWriter writer;
+      outDir() + "/ImplicitPoiTaggerTest-runLessSpecificImplicitTagTest-rules.sqlite";
+    ImplicitTagRulesSqliteWriter writer;
     writer.open(databaseOutFile);
     writer.write(
-      "test-files/visitors/AddImplicitlyDerivedTagsPoiVisitorTest/runLessSpecificImplicitTagTest-ruleWordParts");
+      "test-files/visitors/ImplicitPoiTaggerTest/runLessSpecificImplicitTagTest-ruleWordParts");
     writer.close();
   //    return;
 
@@ -221,8 +221,8 @@ public:
     map->addNode(node);
 
     //const QString databaseInFile =
-      //"test-files/io/AddImplicitlyDerivedTagsPoiVisitorTest-runLessSpecificImplicitTagTest-rules.sqlite";
-    AddImplicitlyDerivedTagsPoiVisitor uut(/*databaseInFile*/databaseOutFile);
+      //"test-files/io/ImplicitPoiTaggerTest-runLessSpecificImplicitTagTest-rules.sqlite";
+    ImplicitPoiTagger uut(/*databaseInFile*/databaseOutFile);
     Settings conf;
     conf.set("poi.implicit.tag.rules.tag.ignore.file", "");
     conf.set("poi.implicit.tag.rules.word.ignore.file", "");
@@ -245,11 +245,11 @@ public:
     //TODO: don't regen this database every time
     //use this to regenerate the db file
     const QString databaseOutFile =
-      outDir() + "/AddImplicitlyDerivedTagsPoiVisitorTest-runMoreSpecificImplicitTagTest-rules.sqlite";
-    ImplicitTagRulesSqliteRecordWriter writer;
+      outDir() + "/ImplicitPoiTaggerTest-runMoreSpecificImplicitTagTest-rules.sqlite";
+    ImplicitTagRulesSqliteWriter writer;
     writer.open(databaseOutFile);
     writer.write(
-      "test-files/visitors/AddImplicitlyDerivedTagsPoiVisitorTest/runMoreSpecificImplicitTagTest-ruleWordParts");
+      "test-files/visitors/ImplicitPoiTaggerTest/runMoreSpecificImplicitTagTest-ruleWordParts");
     writer.close();
   //    return;
 
@@ -262,8 +262,8 @@ public:
     map->addNode(node);
 
     //const QString databaseInFile =
-      //"test-files/io/AddImplicitlyDerivedTagsPoiVisitorTest-runMoreSpecificImplicitTagTest-rules.sqlite";
-    AddImplicitlyDerivedTagsPoiVisitor uut(/*databaseInFile*/databaseOutFile);
+      //"test-files/io/ImplicitPoiTaggerTest-runMoreSpecificImplicitTagTest-rules.sqlite";
+    ImplicitPoiTagger uut(/*databaseInFile*/databaseOutFile);
     Settings conf;
     conf.set("poi.implicit.tag.rules.rule.ignore.file", "");
     conf.set("poi.implicit.tag.rules.tag.ignore.file", "");
@@ -288,11 +288,11 @@ public:
     //TODO: don't regen this database every time
     //use this to regenerate the db file
     const QString databaseOutFile =
-      outDir() + "/AddImplicitlyDerivedTagsPoiVisitorTest-runWordIgnoreTest-rules.sqlite";
-    ImplicitTagRulesSqliteRecordWriter writer;
+      outDir() + "/ImplicitPoiTaggerTest-runWordIgnoreTest-rules.sqlite";
+    ImplicitTagRulesSqliteWriter writer;
     writer.open(databaseOutFile);
     writer.write(
-      "test-files/visitors/AddImplicitlyDerivedTagsPoiVisitorTest/runWordIgnoreTest-ruleWordParts");
+      "test-files/visitors/ImplicitPoiTaggerTest/runWordIgnoreTest-ruleWordParts");
     writer.close();
   //    return;
 
@@ -302,8 +302,8 @@ public:
     map->addNode(node);
 
     //const QString databaseInFile =
-      //"test-files/io/AddImplicitlyDerivedTagsPoiVisitorTest-runWordIgnoreTest-rules.sqlite";
-    AddImplicitlyDerivedTagsPoiVisitor uut(/*databaseInFile*/databaseOutFile);
+      //"test-files/io/ImplicitPoiTaggerTest-runWordIgnoreTest-rules.sqlite";
+    ImplicitPoiTagger uut(/*databaseInFile*/databaseOutFile);
     Settings conf;
     conf.set("poi.implicit.tag.rules.tag.ignore.file", "");
     conf.set("poi.implicit.tag.rules.word.ignore.file", inDir() + "/wordIgnoreList");
@@ -324,11 +324,11 @@ public:
     //TODO: don't regen this database every time
     //use this to regenerate the db file
     const QString databaseOutFile =
-      outDir() + "/AddImplicitlyDerivedTagsPoiVisitorTest-runTagIgnoreTest-rules.sqlite";
-    ImplicitTagRulesSqliteRecordWriter writer;
+      outDir() + "/ImplicitPoiTaggerTest-runTagIgnoreTest-rules.sqlite";
+    ImplicitTagRulesSqliteWriter writer;
     writer.open(databaseOutFile);
     writer.write(
-      "test-files/visitors/AddImplicitlyDerivedTagsPoiVisitorTest/runTagIgnoreTest-ruleWordParts");
+      "test-files/visitors/ImplicitPoiTaggerTest/runTagIgnoreTest-ruleWordParts");
     writer.close();
   //    return;
 
@@ -338,8 +338,8 @@ public:
     map->addNode(node);
 
     //const QString databaseInFile =
-      //"test-files/io/AddImplicitlyDerivedTagsPoiVisitorTest-runTagIgnoreTest-rules.sqlite";
-    AddImplicitlyDerivedTagsPoiVisitor uut(/*databaseInFile*/databaseOutFile);
+      //"test-files/io/ImplicitPoiTaggerTest-runTagIgnoreTest-rules.sqlite";
+    ImplicitPoiTagger uut(/*databaseInFile*/databaseOutFile);
     Settings conf;
     conf.set("poi.implicit.tag.rules.tag.ignore.file", inDir() + "/tagIgnoreList");
     conf.set("poi.implicit.tag.rules.word.ignore.file", "");
@@ -354,6 +354,6 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(AddImplicitlyDerivedTagsPoiVisitorTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ImplicitPoiTaggerTest, "quick");
 
 }

@@ -24,11 +24,11 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef ADDIMPLICITLYDERIVEDTAGSPOIPOLYGONVISITOR_H
-#define ADDIMPLICITLYDERIVEDTAGSPOIPOLYGONVISITOR_H
+#ifndef IMPLICIT_POI_POLYGON_TAGGER_H
+#define IMPLICIT_POI_POLYGON_TAGGER_H
 
 // hoot
-#include <hoot/rnd/visitors/AddImplicitlyDerivedTagsBaseVisitor.h>
+#include <hoot/rnd/visitors/ImplicitTaggerBase.h>
 #include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPoiCriterion.h>
 #include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPolyCriterion.h>
 
@@ -38,14 +38,14 @@ namespace hoot
 /**
  * Adds tags implicitly derived from POI names to POIs
  */
-class AddImplicitlyDerivedTagsPoiPolygonVisitor : public AddImplicitlyDerivedTagsBaseVisitor
+class ImplicitPoiPolygonTagger : public ImplicitTaggerBase
 {
 public:
 
-  static std::string className() { return "hoot::AddImplicitlyDerivedTagsPoiPolygonVisitor"; }
+  static std::string className() { return "hoot::ImplicitPoiPolygonTagger"; }
 
-  AddImplicitlyDerivedTagsPoiPolygonVisitor();
-  AddImplicitlyDerivedTagsPoiPolygonVisitor(const QString databasePath);
+  ImplicitPoiPolygonTagger();
+  ImplicitPoiPolygonTagger(const QString databasePath);
 
 protected:
 
@@ -60,4 +60,4 @@ private:
 
 }
 
-#endif // ADDIMPLICITLYDERIVEDTAGSPOIPOLYGONVISITOR_H
+#endif // IMPLICIT_POI_POLYGON_TAGGER_H

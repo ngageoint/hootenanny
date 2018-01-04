@@ -26,7 +26,7 @@
  */
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/rnd/io/ImplicitTagRulesSqliteRecordWriter.h>
+#include <hoot/rnd/io/ImplicitTagRulesSqliteWriter.h>
 
 // Qt
 #include <QDir>
@@ -34,9 +34,9 @@
 namespace hoot
 {
 
-class ImplicitTagRulesSqliteRecordWriterTest : public CppUnit::TestFixture
+class ImplicitTagRulesSqliteWriterTest : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(ImplicitTagRulesSqliteRecordWriterTest);
+  CPPUNIT_TEST_SUITE(ImplicitTagRulesSqliteWriterTest);
   CPPUNIT_TEST(runWriteTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -44,13 +44,13 @@ public:
 
   void runWriteTest()
   {
-    const QString outputDir = "test-output/io/ImplicitTagRulesSqliteRecordWriterTest";
+    const QString outputDir = "test-output/io/ImplicitTagRulesSqliteWriterTest";
     const QString outputFile = outputDir + "/rules-out.sqlite";
     QDir().mkpath(outputDir);
 
-    ImplicitTagRulesSqliteRecordWriter writer;
+    ImplicitTagRulesSqliteWriter writer;
     writer.open(outputFile);
-    writer.write("test-files/io/ImplicitTagRulesSqliteRecordWriterTest/ruleWordParts");
+    writer.write("test-files/io/ImplicitTagRulesSqliteWriterTest/ruleWordParts");
     writer.close();
 
     _openDb(outputFile);
@@ -241,6 +241,6 @@ private:
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ImplicitTagRulesSqliteRecordWriterTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ImplicitTagRulesSqliteWriterTest, "quick");
 
 }

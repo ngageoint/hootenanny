@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "AddImplicitlyDerivedTagsPoiVisitor.h"
+#include "ImplicitPoiPolygonTagger.h"
 
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>
@@ -33,25 +33,29 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, AddImplicitlyDerivedTagsPoiVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, ImplicitPoiPolygonTagger)
 
-AddImplicitlyDerivedTagsPoiVisitor::AddImplicitlyDerivedTagsPoiVisitor() :
-AddImplicitlyDerivedTagsBaseVisitor()
+ImplicitPoiPolygonTagger::ImplicitPoiPolygonTagger() :
+ImplicitTaggerBase()
 {
 }
 
-AddImplicitlyDerivedTagsPoiVisitor::AddImplicitlyDerivedTagsPoiVisitor(const QString databasePath) :
-AddImplicitlyDerivedTagsBaseVisitor(databasePath)
+ImplicitPoiPolygonTagger::ImplicitPoiPolygonTagger(const QString databasePath) :
+ImplicitTaggerBase(databasePath)
 {
 }
 
-bool AddImplicitlyDerivedTagsPoiVisitor::_visitElement(const ElementPtr& e)
+bool ImplicitPoiPolygonTagger::_visitElement(const ElementPtr& e)
 {
   const bool elementIsANode = e->getElementType() == ElementType::Node;
+  LOG_VART(elementIsANode);
+  const bool inABuildingOrPoiCategory =
+    OsmSchema::getInstance().getCategories(e->getTags()).intersects(
+      OsmSchemaCategory::building() | OsmSchemaCategory::poi());
   _elementIsASpecificPoi =
-    OsmSchema::getInstance().hasCategory(e->getTags(), "poi") && !e->getTags().contains("poi") &&
-     e->getTags().get("building") != QLatin1String("yes") &&
-     e->getTags().get("office") != QLatin1String("yes");
+    OsmSchema::getInstance().hasCategory(e->getTags(), "poi") &&
+    !e->getTags().contains("poi") && e->getTags().get("building") != QLatin1String("yes");
+  LOG_VART(_elementIsASpecificPoi);
   const bool elementIsAGenericPoi = !_elementIsASpecificPoi;
 
   if (elementIsAGenericPoi)
@@ -63,6 +67,30 @@ bool AddImplicitlyDerivedTagsPoiVisitor::_visitElement(const ElementPtr& e)
     return true;
   }
   else if (elementIsANode && e->getTags().getNames().size() > 0)
+  {
+    return true;
+  }
+
+  const bool elementIsAWay = e->getElementType() == ElementType::Way;
+  LOG_VART(elementIsAWay);
+  const bool elementIsAPoly = _polyFilter.isSatisfied(e);
+  LOG_VART(elementIsAPoly);
+  const bool elementIsASpecificPoly =
+    inABuildingOrPoiCategory && e->getTags().get("building") != QLatin1String("yes");
+  //TODO: hack
+  _elementIsASpecificPoi = elementIsASpecificPoly;
+  LOG_VART(_elementIsASpecificPoi);
+  const bool elementIsAGenericPoly = !elementIsASpecificPoly;
+
+  if (elementIsAGenericPoly)
+  {
+    return true;
+  }
+  else if (elementIsASpecificPoly && _allowTaggingSpecificPois)
+  {
+    return true;
+  }
+  else if (elementIsAWay && e->getTags().getNames().size() > 0)
   {
     return true;
   }

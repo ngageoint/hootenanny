@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/rnd/schema/PoiImplicitTagRulesDeriver.h>
+#include <hoot/rnd/schema/ImplicitTagRulesDatabaseDeriver.h>
 
 namespace hoot
 {
@@ -36,13 +36,13 @@ namespace hoot
 /**
  * Derives implicit tag rules for POIs and writes the output in various formats
  */
-class DerivePoiImplicitTagRulesCmd : public BaseCommand
+class DeriveImplicitTagRulesDatabaseCmd : public BaseCommand
 {
 public:
 
-  static std::string className() { return "hoot::DerivePoiImplicitTagRulesCmd"; }
+  static std::string className() { return "hoot::DeriveImplicitTagRulesDatabaseCmd"; }
 
-  virtual QString getName() const { return "derive-poi-implicit-tag-rules"; }
+  virtual QString getName() const { return "implicit-tagging-derive-rules-database"; }
 
   virtual int runSimple(QStringList args)
   {
@@ -52,14 +52,14 @@ public:
       throw HootException(QString("%1 takes two parameters.").arg(getName()));
     }
 
-    PoiImplicitTagRulesDeriver rulesDeriver;
-    rulesDeriver.setConfiguration(conf());
-    rulesDeriver.deriveRules(args[0].trimmed(), args[1].trimmed());
+    ImplicitTagRulesDatabaseDeriver rulesDatabaseDeriver;
+    rulesDatabaseDeriver.setConfiguration(conf());
+    rulesDatabaseDeriver.deriveRulesDatabase(args[0].trimmed(), args[1].trimmed());
 
     return 0;
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, DerivePoiImplicitTagRulesCmd)
+HOOT_FACTORY_REGISTER(Command, DeriveImplicitTagRulesDatabaseCmd)
 
 }

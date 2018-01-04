@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "PoiImplicitTagRawRulesGenerator.h"
+#include "PoiImplicitTagRawRulesDeriver.h"
 
 // hoot
 #include <hoot/core/io/OsmMapReaderFactory.h>
@@ -46,7 +46,7 @@
 namespace hoot
 {
 
-PoiImplicitTagRawRulesGenerator::PoiImplicitTagRawRulesGenerator() :
+PoiImplicitTagRawRulesDeriver::PoiImplicitTagRawRulesDeriver() :
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
 _countFileLineCtr(0),
 _sortParallelCount(QThread::idealThreadCount()),
@@ -57,7 +57,7 @@ _translateAllNamesToEnglish(true)
 {
 }
 
-void PoiImplicitTagRawRulesGenerator::setConfiguration(const Settings& conf)
+void PoiImplicitTagRawRulesDeriver::setConfiguration(const Settings& conf)
 {
   ConfigOptions options = ConfigOptions(conf);
   setSortParallelCount(options.getPoiImplicitTagRulesSortParallelCount());
@@ -73,7 +73,7 @@ void PoiImplicitTagRawRulesGenerator::setConfiguration(const Settings& conf)
   setTranslateAllNamesToEnglish(options.getPoiImplicitTagRulesTranslateAllNamesToEnglish());
 }
 
-void PoiImplicitTagRawRulesGenerator::_updateForNewWord(QString word, const QString kvp)
+void PoiImplicitTagRawRulesDeriver::_updateForNewWord(QString word, const QString kvp)
 {
   word = word.simplified();
   LOG_TRACE("Updating word: " << word << " with kvp: " << kvp << "...");
@@ -119,9 +119,9 @@ void PoiImplicitTagRawRulesGenerator::_updateForNewWord(QString word, const QStr
   _countFileLineCtr++;
 }
 
-void PoiImplicitTagRawRulesGenerator::generateRules(const QStringList inputs,
-                                                    const QStringList translationScripts,
-                                                    const QString output)
+void PoiImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
+                                                   const QStringList translationScripts,
+                                                   const QString output)
 {
   if (inputs.isEmpty())
   {
@@ -377,7 +377,7 @@ void PoiImplicitTagRawRulesGenerator::generateRules(const QStringList inputs,
   }
 }
 
-void PoiImplicitTagRawRulesGenerator::_sortByTagOccurrence()
+void PoiImplicitTagRawRulesDeriver::_sortByTagOccurrence()
 {
   LOG_INFO("Sorting output by tag occurrence count...");
   LOG_VART(_sortParallelCount);
@@ -415,7 +415,7 @@ void PoiImplicitTagRawRulesGenerator::_sortByTagOccurrence()
     " lines to sorted file.");
 }
 
-void PoiImplicitTagRawRulesGenerator::_removeDuplicatedKeyTypes()
+void PoiImplicitTagRawRulesDeriver::_removeDuplicatedKeyTypes()
 {
   LOG_INFO("Removing duplicated tag key types from output...");
 
@@ -510,7 +510,7 @@ void PoiImplicitTagRawRulesGenerator::_removeDuplicatedKeyTypes()
   _dedupedCountFile->close();
 }
 
-void PoiImplicitTagRawRulesGenerator::_resolveCountTies()
+void PoiImplicitTagRawRulesDeriver::_resolveCountTies()
 {
   LOG_INFO(
     "Resolving word/tag key/count ties for " <<
@@ -602,7 +602,7 @@ void PoiImplicitTagRawRulesGenerator::_resolveCountTies()
   _tieResolvedCountFile->close();
 }
 
-void PoiImplicitTagRawRulesGenerator::_sortByWord(boost::shared_ptr<QTemporaryFile> input)
+void PoiImplicitTagRawRulesDeriver::_sortByWord(boost::shared_ptr<QTemporaryFile> input)
 {
   LOG_INFO("Sorting output by word...");
 

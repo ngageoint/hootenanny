@@ -24,17 +24,19 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef POIIMPLICITTAGRAWRULESGENERATOR_H
-#define POIIMPLICITTAGRAWRULESGENERATOR_H
+#ifndef IMPLICITTAGRULESDATABASEDERIVER_H
+#define IMPLICITTAGRULESDATABASEDERIVER_H
 
 // Hoot
 #include <hoot/core/util/Configurable.h>
-#include <hoot/rnd/filters/ImplicitTagEligiblePoiCriterion.h>
+#include <hoot/rnd/schema/ImplicitTagCustomRules.h>
 
 // Qt
 #include <QString>
+#include <QMap>
 #include <QHash>
 #include <QTemporaryFile>
+#include <QSet>
 
 namespace hoot
 {
@@ -44,12 +46,12 @@ class Tags;
 /**
  * Derives implicit tag rules for POIs and writes the rules to various output formats
  */
-class PoiImplicitTagRawRulesGenerator : public Configurable
+class ImplicitTagRulesDatabaseDeriver : public Configurable
 {
 
 public:
 
-  PoiImplicitTagRawRulesGenerator();
+  ImplicitTagRulesDatabaseDeriver();
 
   /**
    * Derives implicit tag rules for POIs given input data and writes the rules to output
@@ -59,51 +61,45 @@ public:
    * specified by the inputs parameter
    * @param outputs a list of hoot supported implicit tag rule output formats
    */
-  void generateRules(const QStringList inputs, const QStringList translationScripts,
-                     const QString output);
+  void deriveRulesDatabase(const QString input, const QString output);
 
   virtual void setConfiguration(const Settings& conf);
 
-  void setSortParallelCount(int count) { _sortParallelCount = count; }
-  void setSkipFiltering(bool skip) { _skipFiltering = skip; }
-  void setKeepTempFiles(bool keep) { _keepTempFiles = keep; }
-  void setTempFileDir(QString dir) { _tempFileDir = dir; }
+  void setMinTagOccurrencesPerWord(const int minOccurrences)
+  { _minTagOccurrencesPerWord = minOccurrences; }
+  void setMinWordLength(const int length) { _minWordLength = length; }
+
+  void setCustomRuleFile(const QString file) { _customRules.setCustomRuleFile(file); }
+  void setTagIgnoreFile(const QString file) { _customRules.setTagIgnoreFile(file); }
+  void setWordIgnoreFile(const QString file) { _customRules.setWordIgnoreFile(file); }
+  void setUseSchemaTagValuesForWordsOnly(bool use) { _useSchemaTagValuesForWordsOnly = use; }
   void setTranslateAllNamesToEnglish(bool translate) { _translateAllNamesToEnglish = translate; }
 
 private:
 
   //for testing
-  friend class PoiImplicitTagRawRulesGeneratorTest;
+  friend class ImplicitTagRulesDatabaseDeriverTest;
 
   long _statusUpdateInterval;
-  boost::shared_ptr<QFile> _output;
-
-  boost::shared_ptr<QTemporaryFile> _countFile;
-  boost::shared_ptr<QTemporaryFile> _sortedCountFile;
-  boost::shared_ptr<QTemporaryFile> _dedupedCountFile;
-  boost::shared_ptr<QTemporaryFile> _tieResolvedCountFile;
-
-  QHash<QString, QString> _wordKeysToCountsValues;
-  QHash<QString, QStringList> _duplicatedWordTagKeyCountsToValues;
-
-  long _countFileLineCtr;
-  int _sortParallelCount;
-  bool _skipFiltering;
-  bool _keepTempFiles;
-  QString _tempFileDir;
+  int _minTagOccurrencesPerWord;
+  int _minWordLength;
+  bool _useSchemaTagValuesForWordsOnly;
+  QSet<QString> _schemaTagValues;
+  QSet<QString> _wordsNotInSchema;
+  QSet<QString> _englishWords;
   bool _translateAllNamesToEnglish;
 
-  ImplicitTagEligiblePoiCriterion _poiFilter;
+  ImplicitTagCustomRules _customRules;
 
-  void _updateForNewWord(QString word, const QString kvp);
-  QStringList _getPoiKvps(const Tags& tags) const;
+  boost::shared_ptr<QTemporaryFile> _thresholdedCountFile;
+  boost::shared_ptr<QTemporaryFile> _filteredCountFile;
 
-  void _sortByTagOccurrence();
-  void _removeDuplicatedKeyTypes();
-  void _resolveCountTies();
-  void _sortByWord(boost::shared_ptr<QTemporaryFile> input);
+  void _removeKvpsBelowOccurrenceThreshold(const QString input, const int minOccurrencesThreshold);
+  void _applyFiltering(const QString input);
+
+  void _writeRules(const QString input, const QString output);
 };
 
 }
 
-#endif // POIIMPLICITTAGRAWRULESGENERATOR_H
+#endif // IMPLICITTAGRULESDATABASEDERIVER_H

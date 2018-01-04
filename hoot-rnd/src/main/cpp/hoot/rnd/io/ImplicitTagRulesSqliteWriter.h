@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef IMPLICITTAGRULESSQLITERECORDWRITER_H
-#define IMPLICITTAGRULESSQLITERECORDWRITER_H
+#ifndef IMPLICITTAGRULESSQLITEWRITER_H
+#define IMPLICITTAGRULESSQLITEWRITER_H
 
 // Qt
 #include <QString>
@@ -41,13 +41,13 @@ namespace hoot
 /**
  * Writes implicit tag rules ot a Sqlite database
  */
-class ImplicitTagRulesSqliteRecordWriter
+class ImplicitTagRulesSqliteWriter
 {
 
 public:
 
-  ImplicitTagRulesSqliteRecordWriter();
-  ~ImplicitTagRulesSqliteRecordWriter();
+  ImplicitTagRulesSqliteWriter();
+  ~ImplicitTagRulesSqliteWriter();
 
   /**
    * @see ImplicitTagRuleWordPartWriter
@@ -95,4 +95,4 @@ private:
 
 }
 
-#endif // IMPLICITTAGRULESSQLITERECORDWRITER_H
+#endif // IMPLICITTAGRULESSQLITEWRITER_H

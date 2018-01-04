@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "AddImplicitlyDerivedTagsBaseVisitor.h"
+#include "ImplicitTaggerBase.h"
 
 #include <hoot/core/algorithms/string/StringTokenizer.h>
 #include <hoot/core/schema/OsmSchema.h>
@@ -41,7 +41,7 @@
 namespace hoot
 {
 
-AddImplicitlyDerivedTagsBaseVisitor::AddImplicitlyDerivedTagsBaseVisitor() :
+ImplicitTaggerBase::ImplicitTaggerBase() :
 _allowTaggingSpecificPois(true),
 _elementIsASpecificPoi(false),
 _numNodesModified(0),
@@ -59,7 +59,7 @@ _matchEndOfNameSingleTokenFirst(true)
   _ruleReader->open(ConfigOptions().getPoiImplicitTagRulesDatabase());
 }
 
-AddImplicitlyDerivedTagsBaseVisitor::AddImplicitlyDerivedTagsBaseVisitor(const QString databasePath) :
+ImplicitTaggerBase::ImplicitTaggerBase(const QString databasePath) :
 _allowTaggingSpecificPois(true),
 _elementIsASpecificPoi(false),
 _numNodesModified(0),
@@ -77,7 +77,7 @@ _matchEndOfNameSingleTokenFirst(true)
   _ruleReader->open(databasePath);
 }
 
-AddImplicitlyDerivedTagsBaseVisitor::~AddImplicitlyDerivedTagsBaseVisitor()
+ImplicitTaggerBase::~ImplicitTaggerBase()
 {
   if (_ruleReader)
   {
@@ -108,7 +108,7 @@ AddImplicitlyDerivedTagsBaseVisitor::~AddImplicitlyDerivedTagsBaseVisitor()
   }
 }
 
-void AddImplicitlyDerivedTagsBaseVisitor::setConfiguration(const Settings& conf)
+void ImplicitTaggerBase::setConfiguration(const Settings& conf)
 {
   const ConfigOptions confOptions(conf);
 
@@ -133,7 +133,7 @@ bool caseInsensitiveLessThan(const QString s1, const QString s2)
   return s1.toLower() < s2.toLower();
 }
 
-void AddImplicitlyDerivedTagsBaseVisitor::visit(const ElementPtr& e)
+void ImplicitTaggerBase::visit(const ElementPtr& e)
 {
   if (_visitElement(e))
   {
@@ -189,9 +189,6 @@ void AddImplicitlyDerivedTagsBaseVisitor::visit(const ElementPtr& e)
     for (int i = 0; i < names.size(); i++)
     {
       QString name = names.at(i);
-
-      //TODO: fix
-      //name = StringUtils::replaceNonAlphaNumericCharsWithSpace(name).trimmed();
 
       //TODO: move to common class
       name =
@@ -657,7 +654,7 @@ void AddImplicitlyDerivedTagsBaseVisitor::visit(const ElementPtr& e)
   }
 }
 
-QStringList AddImplicitlyDerivedTagsBaseVisitor::_getNameTokens(const QStringList names)
+QStringList ImplicitTaggerBase::_getNameTokens(const QStringList names)
 {
   QStringList result;
 

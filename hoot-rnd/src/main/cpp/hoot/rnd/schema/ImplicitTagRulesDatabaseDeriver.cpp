@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "PoiImplicitTagRulesDeriver.h"
+#include "ImplicitTagRulesDatabaseDeriver.h"
 
 // hoot
 #include <hoot/core/elements/Tags.h>
@@ -33,7 +33,7 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/algorithms/string/StringTokenizer.h>
-#include <hoot/rnd/io/ImplicitTagRulesSqliteRecordWriter.h>
+#include <hoot/rnd/io/ImplicitTagRulesSqliteWriter.h>
 
 // Qt
 #include <QStringBuilder>
@@ -42,7 +42,7 @@
 namespace hoot
 {
 
-PoiImplicitTagRulesDeriver::PoiImplicitTagRulesDeriver() :
+ImplicitTagRulesDatabaseDeriver::ImplicitTagRulesDatabaseDeriver() :
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
 _minTagOccurrencesPerWord(1),
 _minWordLength(1),
@@ -51,7 +51,7 @@ _translateAllNamesToEnglish(true)
 {
 }
 
-void PoiImplicitTagRulesDeriver::setConfiguration(const Settings& conf)
+void ImplicitTagRulesDatabaseDeriver::setConfiguration(const Settings& conf)
 {
   const ConfigOptions confOptions(conf);
   _customRules.setCustomRuleFile(confOptions.getPoiImplicitTagRulesCustomRuleFile());
@@ -64,7 +64,7 @@ void PoiImplicitTagRulesDeriver::setConfiguration(const Settings& conf)
   setTranslateAllNamesToEnglish(confOptions.getPoiImplicitTagRulesTranslateAllNamesToEnglish());
 }
 
-void PoiImplicitTagRulesDeriver::deriveRules(const QString input, const QString output)
+void ImplicitTagRulesDatabaseDeriver::deriveRulesDatabase(const QString input, const QString output)
 {
   if (input.isEmpty())
   {
@@ -190,16 +190,16 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QString input, const QString 
   }
 }
 
-void PoiImplicitTagRulesDeriver::_writeRules(const QString input, const QString output)
+void ImplicitTagRulesDatabaseDeriver::_writeRules(const QString input, const QString output)
 {
   LOG_VART(output);
-  ImplicitTagRulesSqliteRecordWriter ruleWordPartWriter;
+  ImplicitTagRulesSqliteWriter ruleWordPartWriter;
   ruleWordPartWriter.open(output);
   ruleWordPartWriter.write(input);
   ruleWordPartWriter.close();
 }
 
-void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccurrenceThreshold(const QString input,
+void ImplicitTagRulesDatabaseDeriver::_removeKvpsBelowOccurrenceThreshold(const QString input,
   const int minOccurrencesThreshold)
 {
   LOG_INFO("Removing tags below minimum occurrence threshold of: " +
@@ -234,7 +234,7 @@ void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccurrenceThreshold(const QStri
   _thresholdedCountFile->close();
 }
 
-void PoiImplicitTagRulesDeriver::_applyFiltering(const QString input)
+void ImplicitTagRulesDatabaseDeriver::_applyFiltering(const QString input)
 {
   LOG_INFO("Applying word/tag/rule filtering to output...");
 

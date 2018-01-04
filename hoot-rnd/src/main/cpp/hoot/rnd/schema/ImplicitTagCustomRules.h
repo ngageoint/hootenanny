@@ -24,33 +24,54 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef ADDIMPLICITLYDERIVEDTAGSPOIVISITOR_H
-#define ADDIMPLICITLYDERIVEDTAGSPOIVISITOR_H
+#ifndef IMPLICITTAGCUSTOMRULES_H
+#define IMPLICITTAGCUSTOMRULES_H
 
-// hoot
-#include <hoot/rnd/visitors/AddImplicitlyDerivedTagsBaseVisitor.h>
+// Qt
+#include <QStringList>
+#include <QMap>
 
 namespace hoot
 {
 
 /**
- * Adds tags implicitly derived from POI names to POIs
+ *
  */
-class AddImplicitlyDerivedTagsPoiVisitor : public AddImplicitlyDerivedTagsBaseVisitor
+class ImplicitTagCustomRules
 {
+
 public:
 
-  static std::string className() { return "hoot::AddImplicitlyDerivedTagsPoiVisitor"; }
+  ImplicitTagCustomRules();
 
-  AddImplicitlyDerivedTagsPoiVisitor();
-  AddImplicitlyDerivedTagsPoiVisitor(const QString databasePath);
+  void init();
 
-protected:
+  QString getCustomRuleFile() const { return _customRuleFile; }
+  void setCustomRuleFile(const QString file) { _customRuleFile = file; }
+  QString getTagIgnoreFile() const { return _tagIgnoreFile; }
+  void setTagIgnoreFile(const QString file) { _tagIgnoreFile = file; }
+  QString getWordIgnoreFile() const { return _wordIgnoreFile; }
+  void setWordIgnoreFile(const QString file) { _wordIgnoreFile = file; }
 
-  virtual bool _visitElement(const ElementPtr& e);
+  QStringList getTagIgnoreList() const { return _tagIgnoreList; }
+  QStringList getWordIgnoreList() const { return _wordIgnoreList; }
+  QMap<QString, QString> getCustomRulesList() const { return _customRulesList; }
 
+private:
+
+  QString _customRuleFile;
+  QString _tagIgnoreFile;
+  QString _wordIgnoreFile;
+
+  QStringList _tagIgnoreList;
+  QStringList _wordIgnoreList;
+  QMap<QString, QString> _customRulesList;
+
+  void _readIgnoreLists();
+  void _readAllowLists();
+  void _clear();
 };
 
 }
 
-#endif // ADDIMPLICITLYDERIVEDTAGSPOIVISITOR_H
+#endif // IMPLICITTAGCUSTOMRULES_H

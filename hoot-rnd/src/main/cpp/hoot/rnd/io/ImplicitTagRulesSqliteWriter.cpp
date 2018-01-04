@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "ImplicitTagRulesSqliteRecordWriter.h"
+#include "ImplicitTagRulesSqliteWriter.h"
 
 // hoot
 #include <hoot/core/util/HootException.h>
@@ -41,22 +41,22 @@
 namespace hoot
 {
 
-ImplicitTagRulesSqliteRecordWriter::ImplicitTagRulesSqliteRecordWriter() :
+ImplicitTagRulesSqliteWriter::ImplicitTagRulesSqliteWriter() :
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
 }
 
-ImplicitTagRulesSqliteRecordWriter::~ImplicitTagRulesSqliteRecordWriter()
+ImplicitTagRulesSqliteWriter::~ImplicitTagRulesSqliteWriter()
 {
   close();
 }
 
-bool ImplicitTagRulesSqliteRecordWriter::isSupported(const QString outputUrl)
+bool ImplicitTagRulesSqliteWriter::isSupported(const QString outputUrl)
 {
   return outputUrl.endsWith(".sqlite", Qt::CaseInsensitive);
 }
 
-void ImplicitTagRulesSqliteRecordWriter::open(const QString outputUrl)
+void ImplicitTagRulesSqliteWriter::open(const QString outputUrl)
 {
   QFile outputFile(outputUrl);
   if (outputFile.exists() && !outputFile.remove())
@@ -89,7 +89,7 @@ void ImplicitTagRulesSqliteRecordWriter::open(const QString outputUrl)
   _prepareQueries();
 }
 
-void ImplicitTagRulesSqliteRecordWriter::_createTables()
+void ImplicitTagRulesSqliteWriter::_createTables()
 {
   DbUtils::execNoPrepare(
     _db, "CREATE TABLE words (id INTEGER PRIMARY KEY, word TEXT NOT NULL UNIQUE)");
@@ -102,7 +102,7 @@ void ImplicitTagRulesSqliteRecordWriter::_createTables()
     QString("REFERENCES words(id), FOREIGN KEY(tag_id) REFERENCES tags(id))"));
 }
 
-void ImplicitTagRulesSqliteRecordWriter::_prepareQueries()
+void ImplicitTagRulesSqliteWriter::_prepareQueries()
 {
   _insertWordQuery = QSqlQuery(_db);
   if (!_insertWordQuery.prepare("INSERT INTO words (word) VALUES(:word)"))
@@ -142,7 +142,7 @@ void ImplicitTagRulesSqliteRecordWriter::_prepareQueries()
   }
 }
 
-void ImplicitTagRulesSqliteRecordWriter::write(const QString inputUrl)
+void ImplicitTagRulesSqliteWriter::write(const QString inputUrl)
 {
   LOG_INFO("Writing implicit tag rules to: " << _db.databaseName() << "...");
 
@@ -252,7 +252,7 @@ void ImplicitTagRulesSqliteRecordWriter::write(const QString inputUrl)
   DbUtils::execNoPrepare(_db, "COMMIT");
 }
 
-long ImplicitTagRulesSqliteRecordWriter::_insertWord(const QString word)
+long ImplicitTagRulesSqliteWriter::_insertWord(const QString word)
 {
   LOG_TRACE("Inserting word: " << word << "...");
 
@@ -296,7 +296,7 @@ long ImplicitTagRulesSqliteRecordWriter::_insertWord(const QString word)
   return id;
 }
 
-long ImplicitTagRulesSqliteRecordWriter::_insertTag(const QString kvp)
+long ImplicitTagRulesSqliteWriter::_insertTag(const QString kvp)
 {
   LOG_TRACE("Inserting tag: " << kvp << "...");
 
@@ -333,8 +333,8 @@ long ImplicitTagRulesSqliteRecordWriter::_insertTag(const QString kvp)
   return id;
 }
 
-void ImplicitTagRulesSqliteRecordWriter::_insertRuleWordPart(const long wordId, const long tagId,
-                                                             const long tagOccurrenceCount)
+void ImplicitTagRulesSqliteWriter::_insertRuleWordPart(const long wordId, const long tagId,
+                                                       const long tagOccurrenceCount)
 {
   LOG_TRACE(
     "Inserting rule record for: word ID: " << wordId << " tag ID: " <<
@@ -351,7 +351,7 @@ void ImplicitTagRulesSqliteRecordWriter::_insertRuleWordPart(const long wordId, 
   }
 }
 
-void ImplicitTagRulesSqliteRecordWriter::close()
+void ImplicitTagRulesSqliteWriter::close()
 {
   if (_db.open())
   {

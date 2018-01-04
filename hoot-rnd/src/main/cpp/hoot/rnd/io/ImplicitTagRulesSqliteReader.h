@@ -30,7 +30,7 @@
 
 // Hoot
 #include <hoot/core/elements/Tags.h>
-#include <hoot/rnd/schema/PoiImplicitTagCustomRules.h>
+#include <hoot/rnd/schema/ImplicitTagCustomRules.h>
 #include <hoot/core/util/Configurable.h>
 
 // Qt
@@ -90,7 +90,7 @@ public:
   long getFirstRoundTagsCacheHits() const { return _firstRoundTagsCacheHits; }
   long getSecondRoundTagsCacheHits() const { return _secondRoundTagsCacheHits; }
 
-  void setCustomRules(const PoiImplicitTagCustomRules& rules) { _customRules = rules; }
+  void setCustomRules(const ImplicitTagCustomRules& rules) { _customRules = rules; }
   void setAddTopTagOnly(bool add) { _addTopTagOnly = add; }
   void setAllowWordsInvolvedInMultipleRules(bool allow)
   { _allowWordsInvolvedInMultipleRules = allow; }
@@ -110,7 +110,7 @@ private:
   bool _addTopTagOnly;
   bool _allowWordsInvolvedInMultipleRules;
 
-  PoiImplicitTagCustomRules _customRules;
+  ImplicitTagCustomRules _customRules;
 
   void _prepareQueries();
 };

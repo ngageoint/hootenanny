@@ -24,13 +24,13 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef ADDIMPLICITLYDERIVEDTAGSBASEVISITOR_H
-#define ADDIMPLICITLYDERIVEDTAGSBASEVISITOR_H
+#ifndef IMPLICITTAGGERBASE_H
+#define IMPLICITTAGGERBASE_H
 
 // hoot
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/rnd/io/ImplicitTagRulesSqliteReader.h>
-#include <hoot/rnd/schema/PoiImplicitTagCustomRules.h>
+#include <hoot/rnd/schema/ImplicitTagCustomRules.h>
 #include <hoot/core/util/Configurable.h>
 
 namespace hoot
@@ -39,13 +39,13 @@ namespace hoot
 /**
  * Adds tags implicitly derived from POI names to POIs
  */
-class AddImplicitlyDerivedTagsBaseVisitor : public ElementVisitor, public Configurable
+class ImplicitTaggerBase : public ElementVisitor, public Configurable
 {
 public:
 
-  AddImplicitlyDerivedTagsBaseVisitor();
-  AddImplicitlyDerivedTagsBaseVisitor(const QString databasePath);
-  ~AddImplicitlyDerivedTagsBaseVisitor();
+  ImplicitTaggerBase();
+  ImplicitTaggerBase(const QString databasePath);
+  ~ImplicitTaggerBase();
 
   /**
    * Adds implicitly derived tags to an element
@@ -86,7 +86,7 @@ private:
   bool _translateAllNamesToEnglish;
   bool _matchEndOfNameSingleTokenFirst;
 
-  PoiImplicitTagCustomRules _customRules;
+  ImplicitTagCustomRules _customRules;
 
   QSet<QString> _getNameTokens(const QStringList names);
 
@@ -94,4 +94,4 @@ private:
 
 }
 
-#endif // ADDIMPLICITLYDERIVEDTAGSBASEVISITOR_H
+#endif // IMPLICITTAGGERBASE_H

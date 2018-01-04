@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "PoiImplicitTagCustomRules.h"
+#include "ImplicitTagCustomRules.h"
 
 // hoot
 #include <hoot/core/util/Log.h>
@@ -36,11 +36,11 @@
 namespace hoot
 {
 
-PoiImplicitTagCustomRules::PoiImplicitTagCustomRules()
+ImplicitTagCustomRules::ImplicitTagCustomRules()
 {
 }
 
-void PoiImplicitTagCustomRules::init()
+void ImplicitTagCustomRules::init()
 {
   LOG_DEBUG("Intializing POI implicit tag custom rules...");
   _clear();
@@ -48,14 +48,14 @@ void PoiImplicitTagCustomRules::init()
   _readIgnoreLists();
 }
 
-void PoiImplicitTagCustomRules::_clear()
+void ImplicitTagCustomRules::_clear()
 {
   _tagIgnoreList.clear();
   _wordIgnoreList.clear();
   _customRulesList.clear();
 }
 
-void PoiImplicitTagCustomRules::_readAllowLists()
+void ImplicitTagCustomRules::_readAllowLists()
 {
   LOG_DEBUG("Reading allow lists...");
 
@@ -83,7 +83,7 @@ void PoiImplicitTagCustomRules::_readAllowLists()
   LOG_VARD(_customRulesList);
 }
 
-void PoiImplicitTagCustomRules::_readIgnoreLists()
+void ImplicitTagCustomRules::_readIgnoreLists()
 {
   LOG_DEBUG("Reading ignore lists...");
 

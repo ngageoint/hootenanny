@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/rnd/schema/PoiImplicitTagRawRulesGenerator.h>
+#include <hoot/rnd/schema/PoiImplicitTagRawRulesDeriver.h>
 
 namespace hoot
 {
@@ -36,31 +36,36 @@ namespace hoot
 /**
  * Derives implicit tag rules for POIs and writes the output in various formats
  */
-class GenerateRawPoiImplicitTagRulesCmd : public BaseCommand
+class DeriveRawImplicitTagRulesCmd : public BaseCommand
 {
 public:
 
-  static std::string className() { return "hoot::GenerateRawPoiImplicitTagRulesCmd"; }
+  static std::string className() { return "hoot::DeriveRawImplicitTagRulesCmd"; }
 
-  virtual QString getName() const { return "generate-raw-poi-implicit-tag-rules"; }
+  virtual QString getName() const { return "implicit-tagging-derive-raw-rules"; }
 
   virtual int runSimple(QStringList args)
   {
-    if (args.size() != 3)
+    if (args.size() != 4)
     {
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes three parameters.").arg(getName()));
+      throw HootException(QString("%1 takes four parameters.").arg(getName()));
     }
 
-    PoiImplicitTagRawRulesGenerator rulesGenerator;
-    rulesGenerator.setConfiguration(conf());
-    rulesGenerator.generateRules(
+    if (args[0].trimmed().toUpper() != "POI")
+    {
+      throw HootException("Only POI implicit tagging is supported.");
+    }
+
+    PoiImplicitTagRawRulesDeriver rawRulesDeriver;
+    rawRulesDeriver.setConfiguration(conf());
+    rawRulesDeriver.deriveRawRules(
       args[0].trimmed().split(";"), args[1].trimmed().split(";"), args[2].trimmed());
 
     return 0;
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, GenerateRawPoiImplicitTagRulesCmd)
+HOOT_FACTORY_REGISTER(Command, DeriveRawImplicitTagRulesCmd)
 
 }

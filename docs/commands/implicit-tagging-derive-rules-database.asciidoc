@@ -1,0 +1,25 @@
+== implicit-tagging-derive-rules-database
+
+=== Description
+
+Given a raw implicit tag rules file created by the 'implicit-tagging-derive-raw-rules' command, allows for filtering the rules and 
+writing them to a database.  The database can then, for example, be used to add tags implicitly to POIs, given their names using the 
+'ImplicitPoiTagger'.
+
+* +input+  - a .implicitTagRules tab delimited rules for input
+* +output+ - a .sqlite database file for output
+
+See conf/core/ConfigOptions.asciidoc rules poi.implicit.tag.rules.* for relevant configuration options.
+
+=== Usage
+
+--------------------------------------
+implicit-tagging-derive-rules-database (input) (output)
+--------------------------------------
+
+==== Examples
+
+--------------------------------------
+hoot implicit-tagging-derive-rules-database myInput.implicitTagRules rules.sqlite
+--------------------------------------
+

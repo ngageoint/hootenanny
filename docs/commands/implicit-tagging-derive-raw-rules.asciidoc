@@ -1,13 +1,14 @@
-== generate-raw-poi-implicit-tag-rules
+== implicit-tagging-derive-raw-rules
 
 === Description
 
 Given input features, creates a rules file which can be used to derive a POI implicit tag rules database using the 
 'filter-poi-implicit-tag-rules' command.  The database can then be used to add tags implicitly to POIs, given their names.
 
-* +inputs+                - semicolon delimited list of input paths to supported Hootenanny OSM data formats
-* +translations+          - semicolon delimited list of translation scripts used to translate each input dataset
-* +output+                - a *.implicitTagRules tab delimited rules file
+* +type+	 - currently the only type supported is "POI"
+* +inputs+       - semicolon delimited list of input paths to supported Hootenanny OSM data formats
+* +translations+ - semicolon delimited list of translation scripts used to translate each input dataset
+* +output+       - a *.implicitTagRules tab delimited rules file
 
 The following additional configuration parameters apply to raw rule generation:
 
@@ -18,13 +19,13 @@ The following additional configuration parameters apply to raw rule generation:
 === Usage
 
 --------------------------------------
-generate-raw-poi-implicit-tag-rules (inputs) (translations) (output)
+implicit-tagging-derive-raw-rules (type) (inputs) (translations) (output)
 --------------------------------------
 
 ==== Examples
 
 --------------------------------------
-hoot generate-raw-poi-implicit-tag-rules "myInput.osm.pbf;myInput.geonames" "translations/OSM_Ingest.js;translations/GeoNames.js" myRules.implicitTagRules
+hoot implicit-tagging-derive-raw-rules POI "myInput.osm.pbf;myInput.geonames" "translations/OSM_Ingest.js;translations/GeoNames.js" myRules.implicitTagRules
 --------------------------------------
 
 NOTE: If you will be repeatedly generating tag rules files as part of implicit tag rule tweaking, you should pre-filter your input datasets to 
