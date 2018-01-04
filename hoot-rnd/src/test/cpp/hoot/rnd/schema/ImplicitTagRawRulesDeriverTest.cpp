@@ -26,7 +26,7 @@
  */
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/rnd/schema/PoiImplicitTagRawRulesDeriver.h>
+#include <hoot/rnd/schema/ImplicitTagRawRulesDeriver.h>
 #include <hoot/rnd/io/ImplicitTagRulesSqliteReader.h>
 
 // Qt
@@ -36,9 +36,9 @@
 namespace hoot
 {
 
-class PoiImplicitTagRawRulesDeriverTest : public CppUnit::TestFixture
+class ImplicitTagRawRulesDeriverTest : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(PoiImplicitTagRawRulesDeriverTest);
+  CPPUNIT_TEST_SUITE(ImplicitTagRawRulesDeriverTest);
   CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST(runMultipleInputsTest);
   CPPUNIT_TEST(runDuplicateWordKeyCountTest);
@@ -54,8 +54,8 @@ class PoiImplicitTagRawRulesDeriverTest : public CppUnit::TestFixture
 
 public:
 
-  static QString inDir() { return "test-files/schema/PoiImplicitTagRawRulesDeriverTest"; }
-  static QString outDir() { return "test-output/schema/PoiImplicitTagRawRulesDeriverTest"; }
+  static QString inDir() { return "test-files/schema/ImplicitTagRawRulesDeriverTest"; }
+  static QString outDir() { return "test-output/schema/ImplicitTagRawRulesDeriverTest"; }
 
   void runBasicTest()
   {
@@ -63,18 +63,18 @@ public:
     QStringList inputs;
     inputs.append(inDir() + "/yemen-crop-2.osm.pbf");
     const QString outputFile =
-      outDir() + "/PoiImplicitTagRawRulesDeriverTest-runBasicTest-out.implicitTagRules";
+      outDir() + "/ImplicitTagRawRulesDeriverTest-runBasicTest-out.implicitTagRules";
 
     QStringList translationScripts;
     translationScripts.append("translations/OSM_Ingest.js");
 
-    PoiImplicitTagRawRulesDeriver rulesGenerator;
+    ImplicitTagRawRulesDeriver rulesGenerator;
     rulesGenerator.setConfiguration(conf());
     rulesGenerator.setKeepTempFiles(false); //set true for debugging
     rulesGenerator.deriveRawRules(inputs, translationScripts, outputFile);
 
     HOOT_FILE_EQUALS(
-      inDir() + "/PoiImplicitTagRawRulesGeneratorTest-runBasicTest.implicitTagRules", outputFile);
+      inDir() + "/ImplicitTagRawRulesGeneratorTest-runBasicTest.implicitTagRules", outputFile);
   }
 
   void runMultipleInputsTest()
@@ -90,15 +90,15 @@ public:
     translationScripts.append("translations/OSM_Ingest.js");
 
     const QString outputFile =
-      outDir() + "/PoiImplicitTagRawRulesDeriverTest-runMultipleInputsTest-out.implicitTagRules";
+      outDir() + "/ImplicitTagRawRulesDeriverTest-runMultipleInputsTest-out.implicitTagRules";
 
-    PoiImplicitTagRawRulesDeriver rulesGenerator;
+    ImplicitTagRawRulesDeriver rulesGenerator;
     rulesGenerator.setConfiguration(conf());
     rulesGenerator.setKeepTempFiles(false); //set true for debugging
     rulesGenerator.deriveRawRules(inputs, translationScripts, outputFile);
 
     HOOT_FILE_EQUALS(
-      inDir() + "/PoiImplicitTagRawRulesDeriverTest-runMultipleInputsTest.implicitTagRules",
+      inDir() + "/ImplicitTagRawRulesDeriverTest-runMultipleInputsTest.implicitTagRules",
       outputFile);
   }
 
@@ -111,7 +111,7 @@ public:
     boost::shared_ptr<QTemporaryFile> sortedCountFile(
       new QTemporaryFile(
         outDir() +
-        "/PoiImplicitTagRawRulesDeriverTest-runDuplicateWordKeyCountTest-sortedCountsInput-XXXXXX"));
+        "/ImplicitTagRawRulesDeriverTest-runDuplicateWordKeyCountTest-sortedCountsInput-XXXXXX"));
     sortedCountFile->setAutoRemove(false);
     if (!sortedCountFile->open())
     {
@@ -129,7 +129,7 @@ public:
     sortedCountFile->close();
     sortedCountFile->open();
 
-    PoiImplicitTagRawRulesDeriver rulesGenerator;
+    ImplicitTagRawRulesDeriver rulesGenerator;
     rulesGenerator.setConfiguration(conf());
     rulesGenerator.setTempFileDir(outDir());
     rulesGenerator._sortedCountFile = sortedCountFile;
@@ -138,7 +138,7 @@ public:
     rulesGenerator._resolveCountTies();
 
     HOOT_FILE_EQUALS(
-      inDir() + "/PoiImplicitTagRawRulesDeriverTest-runDuplicateWordKeyCountTest-deduped-output",
+      inDir() + "/ImplicitTagRawRulesDeriverTest-runDuplicateWordKeyCountTest-deduped-output",
       rulesGenerator._tieResolvedCountFile->fileName());
   }
 
@@ -150,24 +150,24 @@ public:
     QDir().mkpath(outDir());
 
     QStringList inputs;
-    inputs.append(inDir() + "/PoiImplicitTagRawRulesDeriverTest-runNameCaseTest.osm");
+    inputs.append(inDir() + "/ImplicitTagRawRulesDeriverTest-runNameCaseTest.osm");
 
     QStringList translationScripts;
     translationScripts.append("translations/OSM_Ingest.js");
 
     const QString outputFile =
-      outDir() + "/PoiImplicitTagRawRulesDeriverTest-runNameCaseTest-out.implicitTagRules";
+      outDir() + "/ImplicitTagRawRulesDeriverTest-runNameCaseTest-out.implicitTagRules";
 
-    PoiImplicitTagRawRulesDeriver rulesGenerator;
+    ImplicitTagRawRulesDeriver rulesGenerator;
     rulesGenerator.setConfiguration(conf());
     rulesGenerator.setKeepTempFiles(false); //set true for debugging
     rulesGenerator.deriveRawRules(inputs, translationScripts, outputFile);
 
     HOOT_FILE_EQUALS(
-      inDir() + "/PoiImplicitTagRawRulesDeriverTest-runNameCaseTest.implicitTagRules", outputFile);
+      inDir() + "/ImplicitTagRawRulesDeriverTest-runNameCaseTest.implicitTagRules", outputFile);
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PoiImplicitTagRawRulesDeriverTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ImplicitTagRawRulesDeriverTest, "quick");
 
 }

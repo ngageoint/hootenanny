@@ -24,12 +24,12 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef POIIMPLICITTAGRAWRULESDERIVER_H
-#define POIIMPLICITTAGRAWRULESDERIVER_H
+#ifndef IMPLICITTAGRAWRULESDERIVER_H
+#define IMPLICITTAGRAWRULESDERIVER_H
 
 // Hoot
 #include <hoot/core/util/Configurable.h>
-#include <hoot/rnd/filters/ImplicitTagEligiblePoiCriterion.h>
+#include <hoot/rnd/filters/ImplicitTagEligibleCriterion.h>
 
 // Qt
 #include <QString>
@@ -44,12 +44,12 @@ class Tags;
 /**
  * Derives implicit tag rules for POIs and writes the rules to various output formats
  */
-class PoiImplicitTagRawRulesDeriver : public Configurable
+class ImplicitTagRawRulesDeriver : public Configurable
 {
 
 public:
 
-  PoiImplicitTagRawRulesDeriver();
+  ImplicitTagRawRulesDeriver();
 
   /**
    * Derives implicit tag rules for POIs given input data and writes the rules to output
@@ -69,11 +69,12 @@ public:
   void setKeepTempFiles(bool keep) { _keepTempFiles = keep; }
   void setTempFileDir(QString dir) { _tempFileDir = dir; }
   void setTranslateAllNamesToEnglish(bool translate) { _translateAllNamesToEnglish = translate; }
+  void setElementFilter(const QString type);
 
 private:
 
   //for testing
-  friend class PoiImplicitTagRawRulesDeriverTest;
+  friend class ImplicitTagRawRulesDeriverTest;
 
   long _statusUpdateInterval;
   boost::shared_ptr<QFile> _output;
@@ -93,7 +94,7 @@ private:
   QString _tempFileDir;
   bool _translateAllNamesToEnglish;
 
-  ImplicitTagEligiblePoiCriterion _poiFilter;
+  boost::shared_ptr<ImplicitTagEligibleCriterion> _elementFilter;
 
   void _updateForNewWord(QString word, const QString kvp);
   QStringList _getPoiKvps(const Tags& tags) const;
@@ -106,4 +107,4 @@ private:
 
 }
 
-#endif // POIIMPLICITTAGRAWRULESDERIVER_H
+#endif // IMPLICITTAGRAWRULESDERIVER_H

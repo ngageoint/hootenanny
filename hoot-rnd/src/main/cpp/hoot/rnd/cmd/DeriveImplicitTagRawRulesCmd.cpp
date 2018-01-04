@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/rnd/schema/PoiImplicitTagRawRulesDeriver.h>
+#include <hoot/rnd/schema/ImplicitTagRawRulesDeriver.h>
 
 namespace hoot
 {
@@ -52,15 +52,11 @@ public:
       throw HootException(QString("%1 takes four parameters.").arg(getName()));
     }
 
-    if (args[0].trimmed().toUpper() != "POI")
-    {
-      throw HootException("Only POI implicit tag raw rules generation is supported.");
-    }
-
-    PoiImplicitTagRawRulesDeriver rawRulesDeriver;
+    ImplicitTagRawRulesDeriver rawRulesDeriver;
     rawRulesDeriver.setConfiguration(conf());
+    rawRulesDeriver.setElementFilter(args[0].trimmed());
     rawRulesDeriver.deriveRawRules(
-      args[0].trimmed().split(";"), args[1].trimmed().split(";"), args[2].trimmed());
+      args[1].trimmed().split(";"), args[2].trimmed().split(";"), args[3].trimmed());
 
     return 0;
   }

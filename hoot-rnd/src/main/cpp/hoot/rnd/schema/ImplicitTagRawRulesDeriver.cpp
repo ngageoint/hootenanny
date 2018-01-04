@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "PoiImplicitTagRawRulesDeriver.h"
+#include "ImplicitTagRawRulesDeriver.h"
 
 // hoot
 #include <hoot/core/io/OsmMapReaderFactory.h>
@@ -38,6 +38,7 @@
 #include <hoot/core/visitors/TranslationVisitor.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/algorithms/Translator.h>
+#include <hoot/rnd/filters/ImplicitTagEligiblePoiCriterion.h>
 
 // Qt
 #include <QStringBuilder>
@@ -46,7 +47,7 @@
 namespace hoot
 {
 
-PoiImplicitTagRawRulesDeriver::PoiImplicitTagRawRulesDeriver() :
+ImplicitTagRawRulesDeriver::ImplicitTagRawRulesDeriver() :
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
 _countFileLineCtr(0),
 _sortParallelCount(QThread::idealThreadCount()),
@@ -57,7 +58,7 @@ _translateAllNamesToEnglish(true)
 {
 }
 
-void PoiImplicitTagRawRulesDeriver::setConfiguration(const Settings& conf)
+void ImplicitTagRawRulesDeriver::setConfiguration(const Settings& conf)
 {
   ConfigOptions options = ConfigOptions(conf);
   setSortParallelCount(options.getImplicitTaggingRawRulesDeriverSortParallelCount());
@@ -73,7 +74,17 @@ void PoiImplicitTagRawRulesDeriver::setConfiguration(const Settings& conf)
   setTranslateAllNamesToEnglish(options.getImplicitTaggingTranslateAllNamesToEnglish());
 }
 
-void PoiImplicitTagRawRulesDeriver::_updateForNewWord(QString word, const QString kvp)
+void ImplicitTagRawRulesDeriver::setElementFilter(const QString type)
+{
+  if (type.trimmed().toUpper() != "POI")
+  {
+    throw HootException("Only POI implicit tag raw rules generation is supported.");
+  }
+
+  _elementFilter.reset(new ImplicitTagEligiblePoiCriterion());
+}
+
+void ImplicitTagRawRulesDeriver::_updateForNewWord(QString word, const QString kvp)
 {
   word = word.simplified();
   LOG_TRACE("Updating word: " << word << " with kvp: " << kvp << "...");
@@ -119,9 +130,9 @@ void PoiImplicitTagRawRulesDeriver::_updateForNewWord(QString word, const QStrin
   _countFileLineCtr++;
 }
 
-void PoiImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
-                                                   const QStringList translationScripts,
-                                                   const QString output)
+void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
+                                                const QStringList translationScripts,
+                                                const QString output)
 {
   if (inputs.isEmpty())
   {
@@ -207,7 +218,7 @@ void PoiImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
 
       nodeCount++;
 
-      if (_skipFiltering || _poiFilter.isSatisfied(element))
+      if (_skipFiltering || _elementFilter->isSatisfied(element))
       {
         QStringList names = element->getTags().getNames();
         assert(!names.isEmpty());
@@ -262,7 +273,7 @@ void PoiImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
         }
         LOG_VART(names);
 
-        const QStringList kvps = ImplicitTagEligiblePoiCriterion::getPoiKvps(element->getTags());
+        const QStringList kvps = _elementFilter->getEligibleKvps(element->getTags());
         assert(!kvps.isEmpty());
         if (kvps.isEmpty())
         {
@@ -377,7 +388,7 @@ void PoiImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
   }
 }
 
-void PoiImplicitTagRawRulesDeriver::_sortByTagOccurrence()
+void ImplicitTagRawRulesDeriver::_sortByTagOccurrence()
 {
   LOG_INFO("Sorting output by tag occurrence count...");
   LOG_VART(_sortParallelCount);
@@ -415,7 +426,7 @@ void PoiImplicitTagRawRulesDeriver::_sortByTagOccurrence()
     " lines to sorted file.");
 }
 
-void PoiImplicitTagRawRulesDeriver::_removeDuplicatedKeyTypes()
+void ImplicitTagRawRulesDeriver::_removeDuplicatedKeyTypes()
 {
   LOG_INFO("Removing duplicated tag key types from output...");
 
@@ -510,7 +521,7 @@ void PoiImplicitTagRawRulesDeriver::_removeDuplicatedKeyTypes()
   _dedupedCountFile->close();
 }
 
-void PoiImplicitTagRawRulesDeriver::_resolveCountTies()
+void ImplicitTagRawRulesDeriver::_resolveCountTies()
 {
   LOG_INFO(
     "Resolving word/tag key/count ties for " <<
@@ -602,7 +613,7 @@ void PoiImplicitTagRawRulesDeriver::_resolveCountTies()
   _tieResolvedCountFile->close();
 }
 
-void PoiImplicitTagRawRulesDeriver::_sortByWord(boost::shared_ptr<QTemporaryFile> input)
+void ImplicitTagRawRulesDeriver::_sortByWord(boost::shared_ptr<QTemporaryFile> input)
 {
   LOG_INFO("Sorting output by word...");
 

@@ -42,10 +42,10 @@ bool ImplicitTagEligiblePoiCriterion::isSatisfied(const boost::shared_ptr<const 
 {
   return
     element->getElementType() == ElementType::Node && element->getTags().getNames().size() > 0 &&
-    hasPoiKvp(element->getTags());
+    hasEligibleKvp(element->getTags());
 }
 
-QStringList ImplicitTagEligiblePoiCriterion::getPoiKvps(const Tags& tags)
+QStringList ImplicitTagEligiblePoiCriterion::getEligibleKvps(const Tags& tags) const
 {
   LOG_TRACE("Retrieving POI kvps...");
 
@@ -64,7 +64,7 @@ QStringList ImplicitTagEligiblePoiCriterion::getPoiKvps(const Tags& tags)
   return poiKvps;
 }
 
-bool ImplicitTagEligiblePoiCriterion::hasPoiKvp(const Tags& tags)
+bool ImplicitTagEligiblePoiCriterion::hasEligibleKvp(const Tags& tags) const
 {
   LOG_TRACE("Retrieving POI kvps...");
 
