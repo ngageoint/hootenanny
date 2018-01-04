@@ -31,7 +31,8 @@ app.get('/options', function(req, res) {
     res.json({
         Datasource: _.keys(config.datasources),
         Schema: _.keys(config.schemas),
-        Format: _.keys(config.formats)
+        Format: _.keys(config.formats),
+        SetTagOverrides: _.keys(config.tagOverrides)
     });
 });
 
@@ -48,8 +49,8 @@ app.get('/job/:hash', function(req, res) {
 });
 
 /* Post export */
-// export/Overpass/OSM/Shapefile
-app.post('/export/:datasource/:schema/:format', function(req, res) {
+// export/Overpass/OSM/Shapefile/overrideTags?
+app.post('/export/:datasource/:schema/:format/', function(req, res) {
 
     //Build a hash for the input params used in file name
     var params = (new Date()).getTime()
@@ -91,13 +92,16 @@ app.post('/export/:datasource/:schema/:format', function(req, res) {
 /* Get export */
 app.get('/export/:datasource/:schema/:format', function(req, res) {
 
+
     //Build a hash for the input params using base64
     var params = req.params.datasource
         + req.params.schema
         + req.params.format
+        + req.params.tagOverrides
         + req.query.bbox;
     var hash = crypto.createHash('sha1').update(params).digest('hex');
     var input = config.datasources[req.params.datasource].conn;
+    console.log(params);
     doExport(req, res, hash, input);
 
 });
