@@ -30,7 +30,7 @@
 // hoot
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/rnd/io/ImplicitTagRulesSqliteReader.h>
-#include <hoot/rnd/schema/ImplicitTagCustomRules.h>
+//#include <hoot/rnd/schema/ImplicitTagCustomRules.h>
 #include <hoot/core/util/Configurable.h>
 
 namespace hoot
@@ -38,6 +38,9 @@ namespace hoot
 
 /**
  * Adds tags implicitly derived from POI names to POIs
+ *
+ * Relevant configuration options are those beginning with implicit.tagger.* in
+ * conf/core/ConfigOptions.asciidoc.
  */
 class ImplicitTaggerBase : public ElementVisitor, public Configurable
 {
@@ -56,13 +59,13 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  void setCustomRuleFile(const QString file) { _customRules.setCustomRuleFile(file); }
-  void setTagIgnoreFile(const QString file) { _customRules.setTagIgnoreFile(file); }
-  void setWordIgnoreFile(const QString file) { _customRules.setWordIgnoreFile(file); }
+  //void setCustomRuleFile(const QString file) { _customRules.setCustomRuleFile(file); }
+  //void setTagIgnoreFile(const QString file) { _customRules.setTagIgnoreFile(file); }
+  //void setWordIgnoreFile(const QString file) { _customRules.setWordIgnoreFile(file); }
   void setTranslateAllNamesToEnglish(bool translate) { _translateAllNamesToEnglish = translate; }
   void setMatchEndOfNameSingleTokenFirst(bool match) { _matchEndOfNameSingleTokenFirst = match; }
   void setAllowTaggingSpecificPois(bool allow) { _allowTaggingSpecificPois = allow; }
-  void setMinWordLength(int length) { _minWordLength = length; }
+  //void setMinWordLength(int length) { _minWordLength = length; }
 
 protected:
 
@@ -71,22 +74,22 @@ protected:
   bool _allowTaggingSpecificPois;
   bool _elementIsASpecificPoi;
 
-private:
-
   boost::shared_ptr<ImplicitTagRulesSqliteReader> _ruleReader;
+
+private:
 
   long _numNodesModified;
   long _numTagsAdded;
   long _numNodesInvolvedInMultipleRules;
   long _numNodesParsed;
   long _statusUpdateInterval;
-  int _minWordLength;
+  //int _minWordLength;
   long _smallestNumberOfTagsAdded;
   long _largestNumberOfTagsAdded;
   bool _translateAllNamesToEnglish;
   bool _matchEndOfNameSingleTokenFirst;
 
-  ImplicitTagCustomRules _customRules;
+  //ImplicitTagCustomRules _customRules;
 
   QSet<QString> _getNameTokens(const QStringList names);
 

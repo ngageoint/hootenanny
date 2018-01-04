@@ -30,7 +30,6 @@
 // hoot
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/ConfigOptions.h>
 
 // Tgs
 #include <tgs/System/Time.h>
@@ -57,14 +56,6 @@ _allowWordsInvolvedInMultipleRules(false)
 ImplicitTagRulesSqliteReader::~ImplicitTagRulesSqliteReader()
 {
   close();
-}
-
-void ImplicitTagRulesSqliteReader::setConfiguration(const Settings& conf)
-{
-  const ConfigOptions confOptions(conf);
-  setAddTopTagOnly(confOptions.getPoiImplicitTagRulesAddTopTagOnly());
-  setAllowWordsInvolvedInMultipleRules(
-    confOptions.getPoiImplicitTagRulesAllowWordsInvolvedInMultipleRules());
 }
 
 void ImplicitTagRulesSqliteReader::open(const QString url)
@@ -326,7 +317,7 @@ Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,
     while (_tagsForWordIds.next())
     {
       const QString kvp = _tagsForWordIds.value(0).toString();
-      if (!_customRules.getTagIgnoreList().contains(kvp) &&
+      if (/*!_customRules.getTagIgnoreList().contains(kvp) &&*/
           (!_addTopTagOnly || (_addTopTagOnly && tags2.isEmpty())))
       {
         tags2.appendValue(kvp);

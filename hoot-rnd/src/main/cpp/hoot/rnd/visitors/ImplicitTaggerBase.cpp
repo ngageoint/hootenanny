@@ -49,17 +49,16 @@ _numTagsAdded(0),
 _numNodesInvolvedInMultipleRules(0),
 _numNodesParsed(0),
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
-_minWordLength(3),
+//_minWordLength(3),
 _smallestNumberOfTagsAdded(LONG_MAX),
 _largestNumberOfTagsAdded(0),
 _translateAllNamesToEnglish(true),
 _matchEndOfNameSingleTokenFirst(true)
 {
-  _ruleReader.reset(new ImplicitTagRulesSqliteReader());
-  _ruleReader->open(ConfigOptions().getPoiImplicitTagRulesDatabase());
+
 }
 
-ImplicitTaggerBase::ImplicitTaggerBase(const QString databasePath) :
+ImplicitTaggerBase::ImplicitTaggerBase(const QString /*databasePath*/) :
 _allowTaggingSpecificPois(true),
 _elementIsASpecificPoi(false),
 _numNodesModified(0),
@@ -67,14 +66,13 @@ _numTagsAdded(0),
 _numNodesInvolvedInMultipleRules(0),
 _numNodesParsed(0),
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
-_minWordLength(3),
+//_minWordLength(3),
 _smallestNumberOfTagsAdded(LONG_MAX),
 _largestNumberOfTagsAdded(0),
 _translateAllNamesToEnglish(true),
 _matchEndOfNameSingleTokenFirst(true)
 {
-  _ruleReader.reset(new ImplicitTagRulesSqliteReader());
-  _ruleReader->open(databasePath);
+
 }
 
 ImplicitTaggerBase::~ImplicitTaggerBase()
@@ -112,20 +110,23 @@ void ImplicitTaggerBase::setConfiguration(const Settings& conf)
 {
   const ConfigOptions confOptions(conf);
 
-  setTranslateAllNamesToEnglish(confOptions.getPoiImplicitTagRulesTranslateAllNamesToEnglish());
-  setMatchEndOfNameSingleTokenFirst(confOptions.getPoiImplicitTagRulesMatchEndOfNameSingleTokenFirst());
-  setAllowTaggingSpecificPois(confOptions.getPoiImplicitTagRulesAllowTaggingSpecificPois());
-  setMinWordLength(confOptions.getPoiImplicitTagRulesMinimumWordLength());
+  setTranslateAllNamesToEnglish(confOptions.getImplicitTaggingTranslateAllNamesToEnglish());
+  setMatchEndOfNameSingleTokenFirst(confOptions.getImplicitTaggerMatchEndOfNameSingleTokenFirst());
+  setAllowTaggingSpecificPois(confOptions.getImplicitTaggerAllowTaggingSpecificEntities());
+  //setMinWordLength(confOptions.getPoiImplicitTagRulesMinimumWordLength());
 
-  _customRules.setCustomRuleFile(confOptions.getPoiImplicitTagRulesCustomRuleFile());
-  _customRules.setTagIgnoreFile(confOptions.getPoiImplicitTagRulesTagIgnoreFile());
-  _customRules.setWordIgnoreFile(confOptions.getPoiImplicitTagRulesWordIgnoreFile());
+  //_customRules.setCustomRuleFile(confOptions.getPoiImplicitTagRulesCustomRuleFile());
+  //_customRules.setTagIgnoreFile(confOptions.getPoiImplicitTagRulesTagIgnoreFile());
+  //_customRules.setWordIgnoreFile(confOptions.getPoiImplicitTagRulesWordIgnoreFile());
 
-  _customRules.init();
-  LOG_VARD(_customRules.getWordIgnoreList());
-  LOG_VARD(_customRules.getCustomRulesList());
-  _ruleReader->setConfiguration(conf);
-  _ruleReader->setCustomRules(_customRules);
+  //_customRules.init();
+  //LOG_VARD(_customRules.getWordIgnoreList());
+  //LOG_VARD(_customRules.getCustomRulesList());
+  //_ruleReader->setConfiguration(conf);
+  //_ruleReader->setCustomRules(_customRules);
+  _ruleReader->setAddTopTagOnly(confOptions.getImplicitTaggerAddTopTagOnly());
+  _ruleReader->setAllowWordsInvolvedInMultipleRules(
+    confOptions.getImplicitTaggerAllowWordsInvolvedInMultipleRules());
 }
 
 bool caseInsensitiveLessThan(const QString s1, const QString s2)
@@ -211,11 +212,11 @@ void ImplicitTaggerBase::visit(const ElementPtr& e)
         name = "";
       }
 
-      if (name.length() >= _minWordLength &&
-          !_customRules.getWordIgnoreList().contains(name.toLower()))
-      {
+      //if (name.length() >= _minWordLength &&
+          //!_customRules.getWordIgnoreList().contains(name.toLower()))
+      //{
         filteredNames.append(name.toLower());
-      }
+      //}
     }
     LOG_VARD(filteredNames);
 
@@ -542,11 +543,11 @@ void ImplicitTaggerBase::visit(const ElementPtr& e)
           const QString implicitTagValue = tagItr.value();
           LOG_VARD(implicitTagValue);
           const QString tagStr = implicitTagKey % "=" % implicitTagValue;
-          if (_customRules.getTagIgnoreList().contains(tagStr))
+          /*if (_customRules.getTagIgnoreList().contains(tagStr))
           {
             LOG_DEBUG("Skipping tag on ignore list: " << tagStr);
           }
-          else if (e->getTags().contains(implicitTagKey))
+          else*/ if (e->getTags().contains(implicitTagKey))
           {
             //don't add a less specific tag if the element already has one with the same key; e.g. if
             //the element has amenity=public_hall, don't add amenity=hall

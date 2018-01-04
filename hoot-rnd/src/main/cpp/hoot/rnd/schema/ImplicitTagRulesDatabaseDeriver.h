@@ -73,7 +73,6 @@ public:
   void setTagIgnoreFile(const QString file) { _customRules.setTagIgnoreFile(file); }
   void setWordIgnoreFile(const QString file) { _customRules.setWordIgnoreFile(file); }
   void setUseSchemaTagValuesForWordsOnly(bool use) { _useSchemaTagValuesForWordsOnly = use; }
-  void setTranslateAllNamesToEnglish(bool translate) { _translateAllNamesToEnglish = translate; }
 
 private:
 
@@ -87,7 +86,6 @@ private:
   QSet<QString> _schemaTagValues;
   QSet<QString> _wordsNotInSchema;
   QSet<QString> _englishWords;
-  bool _translateAllNamesToEnglish;
 
   ImplicitTagCustomRules _customRules;
 

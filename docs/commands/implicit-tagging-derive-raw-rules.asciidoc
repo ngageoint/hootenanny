@@ -10,11 +10,7 @@ Given input features, creates a rules file which can be used to derive a POI imp
 * +translations+ - semicolon delimited list of translation scripts used to translate each input dataset
 * +output+       - a *.implicitTagRules tab delimited rules file
 
-The following additional configuration parameters apply to raw rule generation:
-
-* poi.implicit.tag.rules.skip.filtering - If set to true, assumes the input data has been pre-filtered and skips input filtering.
-* poi.implicit.tag.rules.sort.parallel.count - The number of concurrent threads used to sort output files.
-* poi.implicit.tag.rules.tokenize.names - If true, the POI implicit tags will be derived/added using tokenized names.
+Relevant configuration options are those beginning with implicit.tagging.raw.rules.deriver.* in conf/core/ConfigOptions.asciidoc.
 
 === Usage
 

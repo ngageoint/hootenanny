@@ -9,7 +9,7 @@ writing them to a database.  The database can then, for example, be used to add 
 * +input+  - a .implicitTagRules tab delimited rules for input
 * +output+ - a .sqlite database file for output
 
-See conf/core/ConfigOptions.asciidoc rules poi.implicit.tag.rules.* for relevant configuration options.
+Relevant configuration options are those beginning with implicit.tagging.database.deriver.* in conf/core/ConfigOptions.asciidoc.
 
 === Usage
 

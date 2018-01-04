@@ -54,7 +54,7 @@ public:
 
     if (args[0].trimmed().toUpper() != "POI")
     {
-      throw HootException("Only POI implicit tagging is supported.");
+      throw HootException("Only POI implicit tag raw rules generation is supported.");
     }
 
     PoiImplicitTagRawRulesDeriver rawRulesDeriver;

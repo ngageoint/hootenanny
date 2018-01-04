@@ -46,22 +46,18 @@ ImplicitTagRulesDatabaseDeriver::ImplicitTagRulesDatabaseDeriver() :
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
 _minTagOccurrencesPerWord(1),
 _minWordLength(1),
-_useSchemaTagValuesForWordsOnly(true),
-_translateAllNamesToEnglish(true)
+_useSchemaTagValuesForWordsOnly(true)
 {
 }
 
 void ImplicitTagRulesDatabaseDeriver::setConfiguration(const Settings& conf)
 {
   const ConfigOptions confOptions(conf);
-  _customRules.setCustomRuleFile(confOptions.getPoiImplicitTagRulesCustomRuleFile());
-  setMinTagOccurrencesPerWord(confOptions.getPoiImplicitTagRulesMinimumTagOccurrencesPerWord());
-  setMinWordLength(confOptions.getPoiImplicitTagRulesMinimumWordLength());
-  _customRules.setTagIgnoreFile(confOptions.getPoiImplicitTagRulesTagIgnoreFile());
-  _customRules.setWordIgnoreFile(confOptions.getPoiImplicitTagRulesWordIgnoreFile());
+  setMinTagOccurrencesPerWord(
+    confOptions.getImplicitTaggingDatabaseDeriverMinimumTagOccurrencesPerWord());
+  setMinWordLength(confOptions.getImplicitTaggingDatabaseDeriverMinimumWordLength());
   setUseSchemaTagValuesForWordsOnly(
-    confOptions.getPoiImplicitTagRulesUseSchemaTagValuesForWordsOnly());
-  setTranslateAllNamesToEnglish(confOptions.getPoiImplicitTagRulesTranslateAllNamesToEnglish());
+    confOptions.getImplicitTaggingDatabaseDeriverUseSchemaTagValuesForWordsOnly());
 }
 
 void ImplicitTagRulesDatabaseDeriver::deriveRulesDatabase(const QString input, const QString output)
@@ -209,14 +205,14 @@ void ImplicitTagRulesDatabaseDeriver::_removeKvpsBelowOccurrenceThreshold(const 
     new QTemporaryFile(
       ConfigOptions().getApidbBulkInserterTempFileDir() +
       "/poi-implicit-tag-rules-deriver-temp-XXXXXX"));
-  _thresholdedCountFile->setAutoRemove(!ConfigOptions().getPoiImplicitTagRulesKeepTempFiles());
+  _thresholdedCountFile->setAutoRemove(!ConfigOptions().getImplicitTaggingKeepTempFiles());
   if (!_thresholdedCountFile->open())
   {
     throw HootException(
       QObject::tr("Error opening %1 for writing.").arg(_thresholdedCountFile->fileName()));
   }
   LOG_DEBUG("Opened thresholded temp file: " << _thresholdedCountFile->fileName());
-  if (ConfigOptions().getPoiImplicitTagRulesKeepTempFiles())
+  if (ConfigOptions().getImplicitTaggingKeepTempFiles())
   {
     LOG_WARN("Keeping temp file: " << _thresholdedCountFile->fileName());
   }
@@ -242,14 +238,14 @@ void ImplicitTagRulesDatabaseDeriver::_applyFiltering(const QString input)
     new QTemporaryFile(
       ConfigOptions().getApidbBulkInserterTempFileDir() +
       "/poi-implicit-tag-rules-deriver-temp-XXXXXX"));
-  _filteredCountFile->setAutoRemove(!ConfigOptions().getPoiImplicitTagRulesKeepTempFiles());
+  _filteredCountFile->setAutoRemove(!ConfigOptions().getImplicitTaggingKeepTempFiles());
   if (!_filteredCountFile->open())
   {
     throw HootException(
       QObject::tr("Error opening %1 for writing.").arg(_filteredCountFile->fileName()));
   }
   LOG_DEBUG("Opened filtered temp file: " << _filteredCountFile->fileName());
-  if (ConfigOptions().getPoiImplicitTagRulesKeepTempFiles())
+  if (ConfigOptions().getImplicitTaggingKeepTempFiles())
   {
     LOG_WARN("Keeping temp file: " << _filteredCountFile->fileName());
   }

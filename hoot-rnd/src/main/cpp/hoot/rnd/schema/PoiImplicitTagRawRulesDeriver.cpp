@@ -60,17 +60,17 @@ _translateAllNamesToEnglish(true)
 void PoiImplicitTagRawRulesDeriver::setConfiguration(const Settings& conf)
 {
   ConfigOptions options = ConfigOptions(conf);
-  setSortParallelCount(options.getPoiImplicitTagRulesSortParallelCount());
+  setSortParallelCount(options.getImplicitTaggingRawRulesDeriverSortParallelCount());
   const int idealThreads = QThread::idealThreadCount();
   LOG_VART(idealThreads);
   if (_sortParallelCount < 1 || _sortParallelCount > idealThreads)
   {
     setSortParallelCount(idealThreads);
   }
-  setSkipFiltering(options.getPoiImplicitTagRulesSkipFiltering());
-  setKeepTempFiles(options.getPoiImplicitTagRulesKeepTempFiles());
+  setSkipFiltering(options.getImplicitTaggingRawRulesDeriverSkipFiltering());
+  setKeepTempFiles(options.getImplicitTaggingKeepTempFiles());
   setTempFileDir(options.getApidbBulkInserterTempFileDir());
-  setTranslateAllNamesToEnglish(options.getPoiImplicitTagRulesTranslateAllNamesToEnglish());
+  setTranslateAllNamesToEnglish(options.getImplicitTaggingTranslateAllNamesToEnglish());
 }
 
 void PoiImplicitTagRawRulesDeriver::_updateForNewWord(QString word, const QString kvp)
@@ -198,6 +198,7 @@ void PoiImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
     {
       ElementPtr element = inputStream->readNextElement();
 
+      //TODO: remove?
       if (element->getElementType() != ElementType::Node && inputIsPbf)
       {
         LOG_INFO("Reached end of PBF nodes for input: " << input << ".");
@@ -206,7 +207,6 @@ void PoiImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
 
       nodeCount++;
 
-      //TODO: _skipFiltering may go away
       if (_skipFiltering || _poiFilter.isSatisfied(element))
       {
         QStringList names = element->getTags().getNames();

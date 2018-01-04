@@ -35,6 +35,9 @@ namespace hoot
 
 /**
  * Adds tags implicitly derived from POI names to POIs
+ *
+ * Relevant configuration options are those beginning with implicit.tagger.poi.* in
+ * conf/core/ConfigOptions.asciidoc.
  */
 class ImplicitPoiTagger : public ImplicitTaggerBase
 {

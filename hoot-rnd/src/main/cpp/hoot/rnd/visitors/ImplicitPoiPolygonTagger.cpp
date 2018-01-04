@@ -29,6 +29,7 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
 {
@@ -38,11 +39,15 @@ HOOT_FACTORY_REGISTER(ElementVisitor, ImplicitPoiPolygonTagger)
 ImplicitPoiPolygonTagger::ImplicitPoiPolygonTagger() :
 ImplicitTaggerBase()
 {
+  _ruleReader.reset(new ImplicitTagRulesSqliteReader());
+  _ruleReader->open(ConfigOptions().getImplicitTaggerPoiRulesDatabase());
 }
 
 ImplicitPoiPolygonTagger::ImplicitPoiPolygonTagger(const QString databasePath) :
 ImplicitTaggerBase(databasePath)
 {
+  _ruleReader.reset(new ImplicitTagRulesSqliteReader());
+  _ruleReader->open(databasePath);
 }
 
 bool ImplicitPoiPolygonTagger::_visitElement(const ElementPtr& e)

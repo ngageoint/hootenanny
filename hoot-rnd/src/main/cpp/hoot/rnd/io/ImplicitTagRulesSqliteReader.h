@@ -30,8 +30,7 @@
 
 // Hoot
 #include <hoot/core/elements/Tags.h>
-#include <hoot/rnd/schema/ImplicitTagCustomRules.h>
-#include <hoot/core/util/Configurable.h>
+//#include <hoot/rnd/schema/ImplicitTagCustomRules.h>
 
 // Qt
 #include <QString>
@@ -45,7 +44,7 @@ namespace  hoot
 /**
  * Reads implicit tag rules from a Sqlite database
  */
-class ImplicitTagRulesSqliteReader : public Configurable
+class ImplicitTagRulesSqliteReader
 {
 public:
 
@@ -63,8 +62,6 @@ public:
    * Closes a Sqlite implicit tag rules database
    */
   void close();
-
-  virtual void setConfiguration(const Settings& conf);
 
   /**
    *
@@ -90,7 +87,7 @@ public:
   long getFirstRoundTagsCacheHits() const { return _firstRoundTagsCacheHits; }
   long getSecondRoundTagsCacheHits() const { return _secondRoundTagsCacheHits; }
 
-  void setCustomRules(const ImplicitTagCustomRules& rules) { _customRules = rules; }
+  //void setCustomRules(const ImplicitTagCustomRules& rules) { _customRules = rules; }
   void setAddTopTagOnly(bool add) { _addTopTagOnly = add; }
   void setAllowWordsInvolvedInMultipleRules(bool allow)
   { _allowWordsInvolvedInMultipleRules = allow; }
@@ -110,7 +107,7 @@ private:
   bool _addTopTagOnly;
   bool _allowWordsInvolvedInMultipleRules;
 
-  ImplicitTagCustomRules _customRules;
+  //ImplicitTagCustomRules _customRules;
 
   void _prepareQueries();
 };

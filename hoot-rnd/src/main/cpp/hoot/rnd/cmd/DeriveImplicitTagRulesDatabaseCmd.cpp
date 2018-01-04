@@ -28,6 +28,7 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/rnd/schema/ImplicitTagRulesDatabaseDeriver.h>
 
 namespace hoot
@@ -46,14 +47,26 @@ public:
 
   virtual int runSimple(QStringList args)
   {
-    if (args.size() != 2)
+    if (args.size() != 3)
     {
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes two parameters.").arg(getName()));
+      throw HootException(QString("%1 takes three parameters.").arg(getName()));
+    }
+
+    if (args[0].trimmed().toUpper() != "POI")
+    {
+      throw HootException("Only POI implicit tag rule database generation is supported.");
     }
 
     ImplicitTagRulesDatabaseDeriver rulesDatabaseDeriver;
     rulesDatabaseDeriver.setConfiguration(conf());
+    const ConfigOptions confOptions(conf());
+    rulesDatabaseDeriver.setCustomRuleFile(
+      confOptions.getImplicitTaggingDatabaseDeriverPoiCustomRuleFile());
+    rulesDatabaseDeriver.setTagIgnoreFile(
+      confOptions.getImplicitTaggingDatabaseDeriverPoiTagIgnoreFile());
+    rulesDatabaseDeriver.setWordIgnoreFile(
+      confOptions.getImplicitTaggingDatabaseDeriverPoiWordIgnoreFile());
     rulesDatabaseDeriver.deriveRulesDatabase(args[0].trimmed(), args[1].trimmed());
 
     return 0;

@@ -844,6 +844,122 @@ for default the first assigned id will be -1)
 Sets the default start ID for ways. The first value assigned is generator specific. (E.g. for
 default the first assigned id will be -1)
 
+=== implicit.tagging.database.deriver.minimum.tag.occurrences.per.word
+
+* Data Type: int
+* Default Value: `1000`
+
+The minimum number of times a tag must be associated with a word in order for an implicit tag rule
+to be created.
+
+=== implicit.tagging.database.deriver.minimum.word.length
+
+* Data Type: int
+* Default Value: `3`
+
+The minimum allowed word length when associating word tokens with OSM tags.
+
+=== implicit.tagging.database.deriver.poi.custom.rule.file
+
+* Data Type: string
+* Default Value: `${HOOT_HOME}/conf/core/poi-implicit-tag-rules/poiImplicitTagRulesCustomRuleList`
+
+Flat file containing tab separated word key/value pairs, one per line, to use as custom rules
+when deriving implicit tags from POI names.
+
+=== implicit.tagging.database.deriver.poi.tag.ignore.file
+
+* Data Type: string
+* Default Value: `${HOOT_HOME}/conf/core/poi-implicit-tag-rules/poiImplicitTagRulesTagIgnoreList`
+
+Flat file containing key/value pairs, one per line, to ignore when deriving implicit tags from POI
+names.  Use 'key=*' to ignore all tags for a given key.
+
+=== implicit.tagging.database.deriver.poi.word.ignore.file
+
+* Data Type: string
+* Default Value: `${HOOT_HOME}/conf/core/poi-implicit-tag-rules/poiImplicitTagRulesWordIgnoreList`
+
+Flat file containing words, one per line, to ignore when deriving implicit tags from POI names.
+
+=== implicit.tagging.database.deriver.use.schema.tag.values.for.words.only
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, the POI implicit tag raw rules generator will only consider words that correspond to a
+TagInfo tag value.
+
+=== implicit.tagging.keep.temp.files
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, the POI implicit tag generator/deriver will keep all temporary files.  For debugging only.
+
+=== implicit.tagging.raw.rules.deriver.skip.filtering
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, the POI implicit tag generator will keep node filtering.  Only set to true if the input
+data has been filtered with ImplicitTagEligiblePoiCriterion beforehand.
+
+=== implicit.tagging.raw.rules.deriver.sort.parallel.count
+
+* Data Type: int
+* Default Value: `-1`
+
+The number of parallel processes used when sorting output.  The default value of -1 uses a count
+equal to the number of processors on the machine.  Valid values are -1 or 1 through the number
+of available processors.
+
+=== implicit.tagging.translate.all.names.to.english
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, the POI implicit tag raw rules generator will translate all name words to English.
+
+=== implicit.tagger.add.top.tag.only
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, the POI implicit tagger will only add the tag to the node with the highest tag occurrence
+count.
+
+=== implicit.tagger.allow.tagging.specific.entities
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, the POI implicit tagger will attempt to add more specific tags to existing non-generic
+POIs.  If false, the POI implicit tagger will ignore all non-generic POIs during tagging.
+
+=== implicit.tagger.allow.words.involved.in.multiple.rules
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, the POI implicit tagger will use the rule with the highest tag occurrence count when a
+word is involved in more than one tagging rule.
+
+=== implicit.tagger.match.end.of.name.single.token.first
+
+* Data Type: bool
+* Default Value: `true`
+
+TODO
+
+=== implicit.tagger.poi.rules.database
+
+* Data Type: string
+* Default Value: `${HOOT_HOME}/conf/core/poi-implicit-tag-rules/allCountries-planet-11-2-17-minwordocc=1000-schemaonly=true.sqlite`
+
+Database used by the AddImplicitlyDerivedTagsPoiVisitor to derive POI type tags implicitly based
+on a POI's name.
+
 === javascript.translator.path
 
 * Data Type: list
@@ -1872,122 +1988,6 @@ current directory (CWD), $CWD/rules, $HOOT_HOME/rules.
 
 If true, POI conflation will ignore the types of the features being compared completely as long as
 those being compared have a populated name field.
-
-=== poi.implicit.tag.rules.add.top.tag.only
-
-* Data Type: bool
-* Default Value: `true`
-
-If true, the POI implicit tagger will only add the tag to the node with the highest tag occurrence
-count.
-
-=== poi.implicit.tag.rules.allow.tagging.specific.pois
-
-* Data Type: bool
-* Default Value: `true`
-
-If true, the POI implicit tagger will attempt to add more specific tags to existing non-generic
-POIs.  If false, the POI implicit tagger will ignore all non-generic POIs during tagging.
-
-=== poi.implicit.tag.rules.allow.words.involved.in.multiple.rules
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, the POI implicit tagger will use the rule with the highest tag occurrence count when a
-word is involved in more than one tagging rule.
-
-=== poi.implicit.tag.rules.custom.rule.file
-
-* Data Type: string
-* Default Value: `${HOOT_HOME}/conf/core/poi-implicit-tag-rules/poiImplicitTagRulesCustomRuleList`
-
-Flat file containing tab separated word key/value pairs, one per line, to use as custom rules
-when deriving implicit tags from POI names.
-
-=== poi.implicit.tag.rules.database
-
-* Data Type: string
-* Default Value: `${HOOT_HOME}/conf/core/poi-implicit-tag-rules/allCountries-planet-11-2-17-minwordocc=1000-schemaonly=true.sqlite`
-
-Database used by the AddImplicitlyDerivedTagsPoiVisitor to derive POI type tags implicitly based
-on a POI's name.
-
-=== poi.implicit.tag.rules.keep.temp.files
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, the POI implicit tag generator/deriver will keep all temporary files.  For debugging only.
-
-=== poi.implicit.tag.rules.match.end.of.name.single.token.first
-
-* Data Type: bool
-* Default Value: `true`
-
-TODO
-
-=== poi.implicit.tag.rules.minimum.tag.occurrences.per.word
-
-* Data Type: int
-* Default Value: `1000`
-
-The minimum number of times a tag must be associated with a word in order for an implicit tag rule
-to be created.
-
-=== poi.implicit.tag.rules.minimum.word.length
-
-* Data Type: int
-* Default Value: `3`
-
-The minimum allowed word length when associating word tokens with OSM tags.
-
-=== poi.implicit.tag.rules.skip.filtering
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, the POI implicit tag generator will keep node filtering.  Only set to true if the input
-data has been filtered with ImplicitTagEligiblePoiCriterion beforehand.
-
-=== poi.implicit.tag.rules.sort.parallel.count
-
-* Data Type: int
-* Default Value: `-1`
-
-The number of parallel processes used when sorting output.  The default value of -1 uses a count
-equal to the number of processors on the machine.  Valid values are -1 or 1 through the number
-of available processors.
-
-=== poi.implicit.tag.rules.tag.ignore.file
-
-* Data Type: string
-* Default Value: `${HOOT_HOME}/conf/core/poi-implicit-tag-rules/poiImplicitTagRulesTagIgnoreList`
-
-Flat file containing key/value pairs, one per line, to ignore when deriving implicit tags from POI
-names.  Use 'key=*' to ignore all tags for a given key.
-
-=== poi.implicit.tag.rules.translate.all.names.to.english
-
-* Data Type: bool
-* Default Value: `true`
-
-If true, the POI implicit tag raw rules generator will translate all name words to English.
-
-=== poi.implicit.tag.rules.use.schema.tag.values.for.words.only
-
-* Data Type: bool
-* Default Value: `true`
-
-If true, the POI implicit tag raw rules generator will only consider words that correspond to a
-TagInfo tag value.
-
-=== poi.implicit.tag.rules.word.ignore.file
-
-* Data Type: string
-* Default Value: `${HOOT_HOME}/conf/core/poi-implicit-tag-rules/poiImplicitTagRulesWordIgnoreList`
-
-Flat file containing words, one per line, to ignore when deriving implicit tags from POI names.
 
 === poi.match.threshold
 
