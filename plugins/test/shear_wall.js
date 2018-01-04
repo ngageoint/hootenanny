@@ -22,8 +22,8 @@ describe('TranslationServer', function () {
 
             xml2js.parseString(trans2tds40, function(err, result) {
                 if (err) console.log(err);
-                assert.equal(result.osm.way[0].tag[0].$.k, "F_CODE");
-                assert.equal(result.osm.way[0].tag[0].$.v, "AA011");
+                assert.equal(result.osm.way[0].tag[1].$.k, "F_CODE");
+                assert.equal(result.osm.way[0].tag[1].$.v, "AA011");
             });
         });
         // it('should handle OSM to TDSv61', function() {
