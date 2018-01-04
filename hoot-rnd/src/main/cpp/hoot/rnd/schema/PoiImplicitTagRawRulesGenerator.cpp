@@ -78,9 +78,6 @@ void PoiImplicitTagRawRulesGenerator::_updateForNewWord(QString word, const QStr
   word = word.simplified();
   LOG_TRACE("Updating word: " << word << " with kvp: " << kvp << "...");
 
-  //TODO: fix
-  //word = StringUtils::replaceNonAlphaNumericCharsWithSpace(word).trimmed();
-
   word =
     word.replace("(", "").replace(")", "").replace(".", "").replace("/", " ").replace("<", "")
         .replace(">", "").replace("[", "").replace("]", "").replace("@", "").replace("&", "and")
@@ -242,11 +239,6 @@ void PoiImplicitTagRawRulesGenerator::generateRules(const QStringList inputs,
               {
                 const QString englishName = Translator::getInstance().toEnglish(name);
                 LOG_VART(englishName);
-//                if (englishName.toLower() != name.toLower().replace("-", " ").replace("'", " "))
-//                {
-//                  LOG_TRACE(
-//                    "Successfully translated " << name << " to " << englishName << ".");
-//                }
                 filteredNames.append(englishName);
                 break;
               }
@@ -260,11 +252,6 @@ void PoiImplicitTagRawRulesGenerator::generateRules(const QStringList inputs,
               }
               LOG_VART(altName);
               const QString englishName = Translator::getInstance().toEnglish(altName);
-//              if (englishName.toLower() != altName.toLower().replace("-", " ").replace("'", " "))
-//              {
-//                LOG_TRACE(
-//                  "Successfully translated " << altName << " to " << englishName << ".");
-//              }
               LOG_VART(englishName);
               filteredNames.append(englishName);
             }
@@ -314,11 +301,6 @@ void PoiImplicitTagRawRulesGenerator::generateRules(const QStringList inputs,
             if (_translateAllNamesToEnglish)
             {
               const QString englishNameToken = Translator::getInstance().toEnglish(nameToken);
-//            if (englishNameToken.toLower() != nameToken.toLower().replace("-", " ").replace("'", " "))
-//            {
-//              LOG_TRACE(
-//                "Successfully translated " << nameToken << " to " << englishNameToken << ".");
-//            }
               nameToken = englishNameToken;
               LOG_VART(englishNameToken);
             }
@@ -341,11 +323,6 @@ void PoiImplicitTagRawRulesGenerator::generateRules(const QStringList inputs,
               if (_translateAllNamesToEnglish)
               {
                 const QString englishNameToken = Translator::getInstance().toEnglish(nameToken);
-//              if (englishNameToken.toLower() != nameToken.toLower().replace("-", " ").replace("'", " "))
-//              {
-//                LOG_TRACE(
-//                    "Successfully translated " << nameToken << " to " << englishNameToken << ".");
-//                }
                 nameToken = englishNameToken;
                 LOG_VART(englishNameToken);
               }

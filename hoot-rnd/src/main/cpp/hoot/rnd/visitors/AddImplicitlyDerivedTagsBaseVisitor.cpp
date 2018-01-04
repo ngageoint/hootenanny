@@ -137,13 +137,6 @@ void AddImplicitlyDerivedTagsBaseVisitor::visit(const ElementPtr& e)
 {
   if (_visitElement(e))
   {
-    //get names
-    //query for implicit tags for the names; pass in a ref wordsInvolvedInMultipleRules param
-    //if wordsInvolvedInMultipleRules is true, mark the feature
-    //else if tags size > 0, add the tags
-    //else get name tokens
-    //name token logic follows above
-
     bool foundDuplicateMatch = false;
     Tags tagsToAdd;
 
@@ -241,7 +234,7 @@ void AddImplicitlyDerivedTagsBaseVisitor::visit(const ElementPtr& e)
         //them first
         implicitlyDerivedTags =
           _ruleReader->getImplicitTags(
-            /*names*/filteredNames.toSet(), matchingWords, wordsInvolvedInMultipleRules);
+            filteredNames.toSet(), matchingWords, wordsInvolvedInMultipleRules);
       }
 
       LOG_VARD(implicitlyDerivedTags);
@@ -538,26 +531,6 @@ void AddImplicitlyDerivedTagsBaseVisitor::visit(const ElementPtr& e)
 
         //TODO: remove this
         Tags ruleFilteredTags = tagsToAdd;
-//        Tags ruleFilteredTags;
-//        QMap<QString, QString> rulesToIgnore = _customRules.getRulesIgnoreList();
-//        for (QSet<QString>::const_iterator wordItr = matchingWords.begin();
-//             wordItr != matchingWords.end(); ++wordItr)
-//        {
-//          const QString word = *wordItr;
-//          LOG_VART(word);
-//          for (Tags::const_iterator tagItr = tagsToAdd.begin(); tagItr != tagsToAdd.end(); ++tagItr)
-//          {
-//            const QString tagKey = tagItr.key();
-//            LOG_VART(tagKey);
-//            const QString tagValue = tagItr.value();
-//            LOG_VART(tagValue);
-//            if (!ruleFilteredTags.contains(tagKey) && rulesToIgnore[word] != tagKey % "=" % tagValue)
-//            {
-//              LOG_VART(tagKey % "=" % tagValue);
-//              ruleFilteredTags.appendValue(tagKey, tagValue);
-//            }
-//          }
-//        }
         LOG_VARD(ruleFilteredTags);
 
         Tags updatedTags;

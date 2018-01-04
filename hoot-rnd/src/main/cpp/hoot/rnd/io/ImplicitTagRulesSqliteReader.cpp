@@ -113,9 +113,6 @@ void ImplicitTagRulesSqliteReader::_prepareQueries()
   _tagsForWordIds = QSqlQuery(_db);
   if (_addTopTagOnly)
   {
-//    if (!_tagsForWordIds.prepare(
-//         QString("SELECT tags.kvp FROM tags JOIN rules ON rules.tag_id = tags.id ") +
-//         QString("WHERE rules.word_id = :wordId ORDER BY rules.tag_count DESC LIMIT 1")))
     if (!_tagsForWordIds.prepare(
          QString("SELECT tags.kvp FROM tags JOIN rules ON rules.tag_id = tags.id ") +
          QString("WHERE rules.word_id = :wordId ORDER BY rules.tag_count DESC")))

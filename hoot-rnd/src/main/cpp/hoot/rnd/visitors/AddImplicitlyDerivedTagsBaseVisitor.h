@@ -43,8 +43,6 @@ class AddImplicitlyDerivedTagsBaseVisitor : public ElementVisitor, public Config
 {
 public:
 
-  //static std::string className() { return "hoot::AddImplicitlyDerivedTagsPoiVisitor"; }
-
   AddImplicitlyDerivedTagsBaseVisitor();
   AddImplicitlyDerivedTagsBaseVisitor(const QString databasePath);
   ~AddImplicitlyDerivedTagsBaseVisitor();

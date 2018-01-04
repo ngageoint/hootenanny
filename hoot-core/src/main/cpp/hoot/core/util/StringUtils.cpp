@@ -35,7 +35,6 @@ namespace hoot
 
 QString StringUtils::secondsToDhms(const qint64 durationInMilliseconds)
 {
-  //TODO: move to utility class
   QString res;
   int duration = (int)(durationInMilliseconds / 1000);
   const int seconds = (int)(duration % 60);
@@ -76,13 +75,6 @@ bool StringUtils::hasAlphabeticCharacter(const QString input)
   }
   return false;
 }
-
-//QString StringUtils::replaceNonAlphaNumericChars(const QString input, const QChar replacement)
-//{
-//  std::string stdStrInput = input.toStdString();
-//  std::replace_if(stdStrInput.begin(), stdStrInput.end(), std::isalnum, replacement.toLatin1());
-//  return QString::fromStdString(stdStrInput);
-//}
 
 QString StringUtils::replaceNonAlphaNumericCharsWithSpace(const QString input)
 {

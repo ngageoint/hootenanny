@@ -67,13 +67,10 @@ public:
   static bool hasAlphabeticCharacter(const QString input);
 
   /**
-   * @brief replaceNonAlphaNumericChars
+   * @brief replaceNonAlphaNumericCharsWithSpace
    * @param input
-   * @param replacement
    * @return
    */
-  //static QString replaceNonAlphaNumericChars(const QString input, const QChar replacement);
-
   static QString replaceNonAlphaNumericCharsWithSpace(const QString input);
 };
 
