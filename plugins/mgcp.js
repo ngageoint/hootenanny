@@ -1957,11 +1957,12 @@ mgcp = {
 
                     returnData[i]['tableName'] = mgcp.layerNameLookup[gFcode.toUpperCase()];
                 }
-//                 else
-//                 {
-//                     // Debug
-//                     print('## Skipping: ' + gFcode);
-//                 }
+                else
+                {
+                    // Debug
+                    // print('## Skipping: ' + gFcode);
+                    returnData.splice(i,1);
+                }
 
             } // End returnData loop
 

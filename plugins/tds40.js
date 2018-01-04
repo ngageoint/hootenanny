@@ -2271,11 +2271,13 @@ tds = {
                         returnData[i]['tableName'] = tds.layerNameLookup[gFcode.toUpperCase()];
                     }
                 }
-//                 else
-//                 {
-//                     // Debug
-//                     print('## Skipping: ' + gFcode);
-//                 }
+                else
+                {
+                    // If the feature is not valid, just drop it
+                    // Debug
+                    // print('## Skipping: ' + gFcode);
+                    returnData.splice(i,1);
+                }
             } // End returnData loop
 
             // If we have unused tags, throw them into the "extra" layer

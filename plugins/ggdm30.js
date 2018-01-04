@@ -2136,27 +2136,37 @@ ggdm30 = {
             var gType = geometryType.toString().charAt(0);
             for (var i = 0, fLen = returnData.length; i < fLen; i++)
             {
-
-                // Validate attrs: remove all that are not supposed to be part of a feature
-                ggdm30.validateAttrs(geometryType,returnData[i]['attrs']);
-
-                // Now set the FCSubtype.
-                // NOTE: If we export to shapefile, GAIT _will_ complain about this
-                if (ggdm30.config.OgrEsriFcsubtype == 'true')
-                {
-                    returnData[i]['attrs']['FCSUBTYPE'] = ggdm30.rules.subtypeList[returnData[i]['attrs']['F_CODE']];
-                }
-
                 var gFcode = gType + returnData[i]['attrs']['F_CODE'];
-                // If we are using the Thematic structre, fill the rest of the unused attrs in the schema
-                if (ggdm30.config.OgrThematicStructure == 'true')
+                
+                if (ggdmAttrLookup[gFcode.toUpperCase()])
                 {
-                    returnData[i]['tableName'] = ggdm30.rules.thematicGroupList[gFcode];
-                    ggdm30.validateTDSAttrs(gFcode, returnData[i]['attrs']);
+                    // Validate attrs: remove all that are not supposed to be part of a feature
+                    ggdm30.validateAttrs(geometryType,returnData[i]['attrs']);
+
+                    // Now set the FCSubtype.
+                    // NOTE: If we export to shapefile, GAIT _will_ complain about this
+                    if (ggdm30.config.OgrEsriFcsubtype == 'true')
+                    {
+                        returnData[i]['attrs']['FCSUBTYPE'] = ggdm30.rules.subtypeList[returnData[i]['attrs']['F_CODE']];
+                    }
+
+                    // If we are using the Thematic structure, fill the rest of the unused attrs in the schema
+                    if (ggdm30.config.OgrThematicStructure == 'true')
+                    {
+                        returnData[i]['tableName'] = ggdm30.rules.thematicGroupList[gFcode];
+                        ggdm30.validateTDSAttrs(gFcode, returnData[i]['attrs']);
+                    }
+                    else
+                    {
+                        returnData[i]['tableName'] = layerNameLookup[gFcode.toUpperCase()];
+                    }
                 }
                 else
                 {
-                    returnData[i]['tableName'] = layerNameLookup[gFcode.toUpperCase()];
+                    // If the feature is not valid, just drop it
+                    // Debug
+                    // print('## Skipping: ' + gFcode);
+                    returnData.splice(i,1);                    
                 }
             } // End returnData loop
 
