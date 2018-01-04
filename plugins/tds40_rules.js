@@ -42,56 +42,58 @@ tds.rules = {
     // These are for finding an FCODE for export.
     // Note: These get swapped around before being used
     fcodeOne2oneOut : [
+     // ['F_CODE','EA010','landuse','farm'], // Alt version of "landuse=farmland"
+     // ['F_CODE','EC015','natural','wood'], // Alt version of Forest
      ['F_CODE','AA010','landuse','quarry'], // Extraction Mine
-     ['F_CODE','AK120','leisure','playground'], // Park
      ['F_CODE','AK120','landuse','recreation_ground'], // Park
      ['F_CODE','AK120','leisure','common'], // Park - close but not great
-     ['F_CODE','AL020','landuse','residential'], // From OSM - Map to BUA
+     ['F_CODE','AK120','leisure','playground'], // Park
      ['F_CODE','AL020','landuse','industrial'], // From OSM - Map to BUA
+     ['F_CODE','AL020','landuse','residential'], // From OSM - Map to BUA
      ['F_CODE','AL030','amenity','grave_yard'], // From OSM Data
      ['F_CODE','AL105','tourism','caravan_site'], // From OSM data, not a building so...
      ['F_CODE','AL130','historic','memorial'], // From OSM data, not great
      ['F_CODE','AL200','historic','ruins'], // Ruins
-     ['F_CODE','AL241','tower','communication'], 
-     ['F_CODE','AL241','tower','yes'], // OSM
      ['F_CODE','AL241','man_made','mast'], // OSM
+     ['F_CODE','AL241','tower','communication'],
+     ['F_CODE','AL241','tower','yes'], // OSM
      ['F_CODE','AM080','tower:type','water'],
      ['F_CODE','AN060','railway','yes'], // Rail yards
      ['F_CODE','AP030','highway','motorway'], // Limited Access Motorway
      ['F_CODE','AP030','highway','motorway_link'], // Limited Access Motorway
-     ['F_CODE','AP030','highway','trunk'], // Motorway
-     ['F_CODE','AP030','highway','trunk_link'], // Motorway
      ['F_CODE','AP030','highway','primary'],
      ['F_CODE','AP030','highway','primary_link'],
+     ['F_CODE','AP030','highway','residential'],
      ['F_CODE','AP030','highway','secondary'],
      ['F_CODE','AP030','highway','secondary_link'],
+     ['F_CODE','AP030','highway','service'],
      ['F_CODE','AP030','highway','tertiary'],
      ['F_CODE','AP030','highway','tertiary_link'],
-     ['F_CODE','AP030','highway','residential'],
+     ['F_CODE','AP030','highway','trunk'], // Motorway
+     ['F_CODE','AP030','highway','trunk_link'], // Motorway
      ['F_CODE','AP030','highway','unclassified'],
-     ['F_CODE','AP030','highway','service'],
      ['F_CODE','AP030','highway','yes'], // Just in case...
      ['F_CODE','AP040','barrier','lift_gate'], // Gate
      ['F_CODE','AP050','highway','footway'], // Trail
-     ['F_CODE','AQ125','railway','station'], // Railway Station
-     ['F_CODE','AQ125','highway','bus_stop'], // Transportaion Station
      ['F_CODE','AQ125','highway','bus_station'], // Transportaion Station
+     ['F_CODE','AQ125','highway','bus_stop'], // Transportaion Station
      ['F_CODE','AQ125','public_transport','stop_position'],
+     ['F_CODE','AQ125','railway','station'], // Railway Station
      ['F_CODE','AQ141','parking','multi-story'], // Parking Garage
      ['F_CODE','AT042','power','pole'], // OSM
      ['F_CODE','AT042','power','tower'], // OSM
+     ['F_CODE','BA010','natural','coastline'], // Land/Water Boundary - From OSM
      ['F_CODE','BA030','place','islet'], // Island - From OSM
      ['F_CODE','BH140','waterway','yes'], // Make unknown waterways into rivers
-     ['F_CODE','BH155','man_made','salt_pond'], // Due to the default translation changing
      ['F_CODE','BH145','natural','sinkhole'],
-     // ['F_CODE','EA010','landuse','farm'], // Alt version of "landuse=farmland"
-     // ['F_CODE','EC015','natural','wood'], // Alt version of Forest
+     ['F_CODE','BH155','man_made','salt_pond'], // Due to the default translation changing
      ['F_CODE','GB005','aeroway','sport_airport'], // Land Aerodrome
      ['F_CODE','ZB035','man_made','survey_point'], // Control Point - Superseded by ZB050
-     ['F_CODE','ZD040','natural','hill'], // From GeoNames
-     ['F_CODE','ZD040','natural','valley'], // From GeoNames
+     ['F_CODE','ZD040','natural','bay'], // From OSM
      ['F_CODE','ZD040','natural','cape'], // From OSM
+     ['F_CODE','ZD040','natural','hill'], // From GeoNames
      ['F_CODE','ZD040','natural','peak'], // From OSM
+     ['F_CODE','ZD040','natural','valley'], // From GeoNames
      ], // End fcodeOne2oneOut
 
     // One2one rules for Text Fields
@@ -2953,10 +2955,10 @@ tds.rules = {
 
      // SWT - Natural Pool Type
      // ['SWT','-999999',undefined,undefined], // No Information
-     ['SWT','4','natural','spring'], // Spring
-     ['SWT','6','natural','walled-in_spring'], // Walled-in Spring
-     ['SWT','7','natural','resurgence'], // Resurgence
-     ['SWT','999','natural','other_pool_type'], // Other -- Not great
+     ['SWT','4','spring:type','spring'], // Spring - Will remove this in post processing
+     ['SWT','6','spring:type','walled-in'], // Walled-in Spring
+     ['SWT','7','spring:type','resurgence'], // Resurgence
+     ['SWT','999','spring:type','other'], // Other -- Not great
 
      // TCS - Cross-sectional Profile
      // ['TCS','-999999',undefined,undefined], // No Information
@@ -4078,26 +4080,26 @@ tds.rules = {
 
      // AMB - Special Administrative Unit TDSv30
      // ['AMB','-999999',undefined,undefined], // No Information
-     ['AMB','1','raw:AMB','lease_area'], // Lease Area
-     ['AMB','2','raw:AMB','concession_area'], // Concession Area
-     ['AMB','3','raw:AMB','free_trade_zone'], // Free Trade Zone
-     ['AMB','4','raw:AMB','economic_region'], // Economic Region
-     ['AMB','5','raw:AMB','postal_district'], // Postal District
-     ['AMB','6','raw:AMB','census_district'], // Census District
-     ['AMB','7','raw:AMB','water_management_district'], // Water Management District
-     ['AMB','8','raw:AMB','congressional_district'], // Congressional District
-     ['AMB','9','raw:AMB','environmental_protection_agency_region'], // Environmental Protection Agency Region
-     ['AMB','10','raw:AMB','federal_emergency_management_agency_region'], // Federal Emergency Management Agency Region
-     ['AMB','11','raw:AMB','federal_energy_regulatory_commission_region'], // Federal Energy Regulatory Commission Region
-     ['AMB','12','raw:AMB','native_american_reservation'], // Native American Reservation
-     ['AMB','13','raw:AMB','radiological_assistance_program_region'], // Radiological Assistance Program Region
-     ['AMB','14','raw:AMB','federal_aviation_administration_region'], // Federal Aviation Administration Region
-     ['AMB','15','raw:AMB','army_corps_of_engineers_district'], // Army Corps of Engineers District
-     ['AMB','16','raw:AMB','army_corps_of_engineers_division'], // Army Corps of Engineers Division
-     ['AMB','17','raw:AMB','coast_guard_sector'], // Coast Guard Sector
-     ['AMB','18','raw:AMB','border_patrol_sector'], // Border Patrol Sector
-     ['AMB','19','raw:AMB','fbi_field_office_jurisdiction'], // FBI Field Office Jurisdiction
-     ['AMB','20','raw:AMB','fbi_resident_agency_district'], // FBI Resident Agency District
+     ['AMB','1','administrative_unit:type','lease_area'], // Lease Area
+     ['AMB','2','administrative_unit:type','concession_area'], // Concession Area
+     ['AMB','3','administrative_unit:type','free_trade_zone'], // Free Trade Zone
+     ['AMB','4','administrative_unit:type','economic_region'], // Economic Region
+     ['AMB','5','administrative_unit:type','postal_district'], // Postal District
+     ['AMB','6','administrative_unit:type','census_district'], // Census District
+     ['AMB','7','administrative_unit:type','water_management_district'], // Water Management District
+     ['AMB','8','administrative_unit:type','congressional_district'], // Congressional District
+     ['AMB','9','administrative_unit:type','environmental_protection_agency_region'], // Environmental Protection Agency Region
+     ['AMB','10','administrative_unit:type','federal_emergency_management_agency_region'], // Federal Emergency Management Agency Region
+     ['AMB','11','administrative_unit:type','federal_energy_regulatory_commission_region'], // Federal Energy Regulatory Commission Region
+     ['AMB','12','administrative_unit:type','native_american_reservation'], // Native American Reservation
+     ['AMB','13','administrative_unit:type','radiological_assistance_program_region'], // Radiological Assistance Program Region
+     ['AMB','14','administrative_unit:type','federal_aviation_administration_region'], // Federal Aviation Administration Region
+     ['AMB','15','administrative_unit:type','army_corps_of_engineers_district'], // Army Corps of Engineers District
+     ['AMB','16','administrative_unit:type','army_corps_of_engineers_division'], // Army Corps of Engineers Division
+     ['AMB','17','administrative_unit:type','coast_guard_sector'], // Coast Guard Sector
+     ['AMB','18','administrative_unit:type','border_patrol_sector'], // Border Patrol Sector
+     ['AMB','19','administrative_unit:type','fbi_field_office_jurisdiction'], // FBI Field Office Jurisdiction
+     ['AMB','20','administrative_unit:type','fbi_resident_agency_district'], // FBI Resident Agency District
 
      // BAL - BGN Administrative Level TDSv30
      // ['BAL','-999999',undefined,undefined], // No Information
@@ -4201,12 +4203,12 @@ tds.rules = {
 
      // RPC - Boundary Representation Policy TDSv30
      // ['RPC','-999999',undefined,undefined], // No Information
-     ['RPC','1','raw:RPC','show_no_line'], // Show No Line
-     ['RPC','2','raw:RPC','definite'], // Definite
-     ['RPC','3','raw:RPC','indefinite'], // Indefinite
-     ['RPC','4','raw:RPC','in_dispute'], // In Dispute
-     ['RPC','5','raw:RPC','administrative_as_international'], // Administrative as International
-     ['RPC','999','raw:RPC','other'], // Other
+     ['RPC','1','boundary_representation_policy','show_no_line'], // Show No Line
+     ['RPC','2','boundary_representation_policy','definite'], // Definite
+     ['RPC','3','boundary_representation_policy','indefinite'], // Indefinite
+     ['RPC','4','boundary_representation_policy','in_dispute'], // In Dispute
+     ['RPC','5','boundary_representation_policy','administrative_as_international'], // Administrative as International
+     ['RPC','999','boundary_representation_policy','other'], // Other
 
      // VDT - Vertical Datum
      // From MAAX data

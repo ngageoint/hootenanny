@@ -98,8 +98,8 @@ Histogram* AngleHistogramExtractor::_createHistogram(const OsmMap& map, const Co
 double AngleHistogramExtractor::extract(const OsmMap& map, const ConstElementPtr& target,
   const ConstElementPtr& candidate) const
 {
-  auto_ptr<Histogram> h1(_createHistogram(map, target));
-  auto_ptr<Histogram> h2(_createHistogram(map, candidate));
+  boost::shared_ptr<Histogram> h1(_createHistogram(map, target));
+  boost::shared_ptr<Histogram> h2(_createHistogram(map, candidate));
   if (_smoothing > 0.0)
   {
     h1->smooth(_smoothing);

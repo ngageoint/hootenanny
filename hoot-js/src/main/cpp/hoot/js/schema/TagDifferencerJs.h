@@ -56,7 +56,7 @@ private:
   static v8::Handle<v8::Value> New(const v8::Arguments& args);
 
   QString _className;
-  std::auto_ptr<TagDifferencer> _td;
+  boost::shared_ptr<TagDifferencer> _td;
 };
 
 }

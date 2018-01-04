@@ -8,7 +8,7 @@ set -e
 # isn't the correct location for HOOT_HOME        #
 ###################################################
 if [ -z "$HOOT_HOME" ]; then
-    HOOT_HOME="~/hoot"
+    HOOT_HOME=~/hoot
 fi
 echo HOOT_HOME: $HOOT_HOME
 #################################################
@@ -331,9 +331,6 @@ if [ -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf ]; then
     echo "Removing services local.conf..."
     rm -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf
 fi
-
-# Install Hadoop.
-$HOOT_HOME/scripts/hadoop/hadoop-install.sh
 
 echo "### Installing node-mapnik-server..."
 sudo cp $HOOT_HOME/node-mapnik-server/init.d/node-mapnik-server /etc/init.d

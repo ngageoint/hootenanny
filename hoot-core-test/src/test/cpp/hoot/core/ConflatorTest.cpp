@@ -47,6 +47,7 @@ using namespace boost;
 
 // Qt
 #include <QDebug>
+#include <QDir>
 
 class ConflatorTest : public CppUnit::TestFixture
 {
@@ -60,6 +61,8 @@ public:
 
   void runPbfTest()
   {
+    QDir().mkpath("test-output");
+
     OsmPbfReader reader(true);
 
     OsmMapPtr map(new OsmMap());
@@ -82,6 +85,8 @@ public:
 
   void runTest()
   {
+    QDir().mkpath("test-output");
+
     OsmXmlReader reader;
 
     OsmMapPtr map(new OsmMap());
@@ -108,6 +113,8 @@ public:
   //Now the river/building never get mergeed together.
   void runMergeTest()
   {
+    QDir().mkpath("test-output");
+
     OsmXmlReader reader;
 
     OsmMapPtr map(new OsmMap());

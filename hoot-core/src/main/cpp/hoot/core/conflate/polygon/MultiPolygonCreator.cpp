@@ -339,7 +339,7 @@ bool MultiPolygonCreator::_isValidInner(LinearRing* innerRing) const
 
   const GeometryFactory& gf = *GeometryFactory::getDefaultInstance();
   vector<Geometry*> noHoles;
-  auto_ptr<Polygon> p(gf.createPolygon(*innerRing, noHoles));
+  boost::shared_ptr<Polygon> p(gf.createPolygon(*innerRing, noHoles));
   if (p->getArea() <= 0.0)
   {
     return false;

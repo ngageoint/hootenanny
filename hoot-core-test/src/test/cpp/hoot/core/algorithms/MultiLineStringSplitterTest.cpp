@@ -74,7 +74,7 @@ public:
   {
     OsmMapPtr map(new OsmMap());
     OsmMap::resetCounters();
-    auto_ptr<OGREnvelope> env(GeometryUtils::toOGREnvelope(Envelope(0, 1, 0, 1)));
+    boost::shared_ptr<OGREnvelope> env(GeometryUtils::toOGREnvelope(Envelope(0, 1, 0, 1)));
     MapProjector::projectToPlanar(map, *env);
 
     return map;

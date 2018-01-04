@@ -101,7 +101,7 @@ vector<MergerCreator::Description> MergerFactory::getAllAvailableCreators() cons
   for (size_t i = 0; i < names.size(); i++)
   {
     // get all names known by this creator.
-    auto_ptr<MergerCreator> mc(Factory::getInstance().constructObject<MergerCreator>(names[i]));
+    boost::shared_ptr<MergerCreator> mc(Factory::getInstance().constructObject<MergerCreator>(names[i]));
 
     vector<MergerCreator::Description> d = mc->getAllCreators();
     result.insert(result.end(), d.begin(), d.end());

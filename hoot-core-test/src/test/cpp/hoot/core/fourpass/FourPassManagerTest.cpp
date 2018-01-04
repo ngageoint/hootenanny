@@ -75,7 +75,9 @@ public:
     OsmMap::resetCounters();
     Settings::getInstance().clear();
 
-    FileUtils::removeDir("test-output/conflate/TileConflatorTest.osm-cache");
+    FileUtils::removeDir("test-output/fourpass/FourPassManagerTest.osm-cache");
+
+    QDir().mkpath("test-output/fourpass");
 
     boost::shared_ptr<TileWorker2> worker(new LocalTileWorker2());
     FourPassManager uut(worker);

@@ -110,7 +110,7 @@ public:
     int stepsY = (height) / stepSize;
     double stepSizeX = (width) / (double)stepsX;
     double stepSizeY = (height) / (double)stepsY;
-    auto_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(env));
+    boost::shared_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(env));
 
     vector<double> errors;
     vector<double> deltaErrors;
@@ -337,7 +337,7 @@ public:
 //      env.MaxX = 1.0;
 //      env.MaxY = 81.0;
 
-//      auto_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(env));
+//      boost::shared_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(env));
 //      LOG_INFO("Envelope:" << e->toString())
 //      testRegion(env, "SmallNorth");
 //    }
@@ -348,7 +348,7 @@ public:
 //      env.MaxX = 180.0;
 //      env.MaxY = 89.5;
 
-//      auto_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(env));
+//      boost::shared_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(env));
 //      LOG_INFO("Envelope:" << e->toString())
 //      testRegion(env, "BigNorth");
 //    }
@@ -375,7 +375,7 @@ public:
 //      env.MaxX = 180.0;
 //      env.MaxY = 65.0;
 
-//      auto_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(env));
+//      boost::shared_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(env));
 //      LOG_INFO("Envelope:" << e->toString())
 //      testRegion(env, "ReasonableNorth");
 //    }
@@ -387,7 +387,7 @@ public:
 //      env.MaxX = 180.0;
 //      env.MaxY = 89.5;
 
-//      auto_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(env));
+//      boost::shared_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(env));
 //      LOG_INFO("Envelope:" << e->toString())
 //      testRegion(env, "AlmostGlobe");
 //    }
@@ -399,7 +399,7 @@ public:
 //      env.MaxX = 180.0;
 //      env.MaxY = 65;
 
-//      auto_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(env));
+//      boost::shared_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(env));
 //      LOG_INFO("Envelope:" << e->toString())
 //      testRegion(env, "ReasonableGlobe");
 //    }
@@ -411,7 +411,7 @@ public:
 //      env.MaxX = 1.0;
 //      env.MaxY = 1;
 
-//      auto_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(env));
+//      boost::shared_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(env));
 //      LOG_INFO("Envelope:" << e->toString())
 //      testRegion(env, "SmallMiddle");
 //    }
@@ -423,7 +423,7 @@ public:
 //      env.MaxX = 5.0;
 //      env.MaxY = 10;
 
-//      auto_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(env));
+//      boost::shared_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(env));
 //      LOG_INFO("Envelope:" << e->toString())
 //      testRegion(env, "MediumMiddle");
 //    }

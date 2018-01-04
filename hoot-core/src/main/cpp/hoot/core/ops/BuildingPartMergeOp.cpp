@@ -88,8 +88,8 @@ void BuildingPartMergeOp::_addContainedWaysToGroup(const Geometry& g,
       catch (const geos::util::TopologyException&)
       {
         boost::shared_ptr<Geometry> cg = ElementConverter(_map).convertToGeometry(candidate);
-        auto_ptr<Geometry> cleanCandidate(GeometryUtils::validateGeometry(cg.get()));
-        auto_ptr<Geometry> cleanG(GeometryUtils::validateGeometry(&g));
+        boost::shared_ptr<Geometry> cleanCandidate(GeometryUtils::validateGeometry(cg.get()));
+        boost::shared_ptr<Geometry> cleanG(GeometryUtils::validateGeometry(&g));
         contains = cleanG->contains(cleanCandidate.get());
       }
 

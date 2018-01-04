@@ -71,14 +71,14 @@ OGREnvelope CalculateMapBoundsVisitor::getBounds(const ConstOsmMapPtr& map)
 geos::geom::Envelope CalculateMapBoundsVisitor::getGeosBounds(const OsmMapPtr& map)
 {
   OGREnvelope envelope = getBounds(map);
-  auto_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(envelope));
+  boost::shared_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(envelope));
   return *e;
 }
 
 geos::geom::Envelope CalculateMapBoundsVisitor::getGeosBounds(const ConstOsmMapPtr& map)
 {
   OGREnvelope envelope = getBounds(map);
-  auto_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(envelope));
+  boost::shared_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(envelope));
   return *e;
 }
 

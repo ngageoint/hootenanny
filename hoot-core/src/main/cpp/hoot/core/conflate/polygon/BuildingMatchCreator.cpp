@@ -99,7 +99,7 @@ public:
 
   void checkForMatch(const boost::shared_ptr<const Element>& e)
   {
-    auto_ptr<Envelope> env(e->getEnvelope(_map));
+    boost::shared_ptr<Envelope> env(e->getEnvelope(_map));
     env->expandBy(e->getCircularError());
 
     // find other nearby candidates

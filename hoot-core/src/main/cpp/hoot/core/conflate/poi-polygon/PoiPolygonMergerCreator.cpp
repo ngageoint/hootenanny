@@ -189,7 +189,7 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Mat
     }
 
     // create POI/Polygon matches and check to see if it is a miss
-    auto_ptr<Match> ma(_createMatch(map, o1, o2));
+    boost::shared_ptr<Match> ma(_createMatch(map, o1, o2));
 
     // return conflict only if it is a miss, a review is ok.
     result = false;

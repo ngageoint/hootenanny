@@ -123,9 +123,10 @@ public:
 
   void runShpTest()
   {
+    FileUtils::removeDir("test-output/io/OgrWriterShpTest");
+    QDir().mkpath("test-output/io/");
     OgrWriter uut;
     uut.setScriptPath("test-files/io/SampleTranslation.js");
-    FileUtils::removeDir("test-output/io/OgrWriterShpTest");
     uut.open("test-output/io/OgrWriterShpTest.shp");
     uut.write(createTestMap());
     QStringList nameFilter;
@@ -138,9 +139,10 @@ public:
 
   void runGdbTest()
   {
+    FileUtils::removeDir("test-output/io/OgrWriterTest.gdb");
+    QDir().mkpath("test-output/io/");
     OgrWriter uut;
     uut.setScriptPath("test-files/io/SampleTranslation.js");
-    FileUtils::removeDir("test-output/io/OgrWriterTest.gdb");
     uut.open("test-output/io/OgrWriterTest.gdb");
     uut.write(createTestMap());
 
@@ -167,9 +169,10 @@ public:
 
     map->getRelation(1)->addElement("test", ElementId(ElementType::Relation, 2));
 
+    FileUtils::removeDir("test-output/io/OgrWriterRelationTest.gdb");
+    QDir().mkpath("test-output/io/");
     OgrWriter uut;
     uut.setScriptPath("test-files/io/SampleTranslation.js");
-    FileUtils::removeDir("test-output/io/OgrWriterRelationTest.gdb");
     uut.open("test-output/io/OgrWriterRelationTest.gdb");
     uut.write(map);
 

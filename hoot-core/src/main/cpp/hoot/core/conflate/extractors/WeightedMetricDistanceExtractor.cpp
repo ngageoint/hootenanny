@@ -93,7 +93,7 @@ double WeightedMetricDistanceExtractor::_extract(const OsmMap& map, const ConstW
   distances.reserve(v.size());
   for (size_t i = 0; i < v.size(); i++)
   {
-    auto_ptr<Point> point(GeometryFactory::getDefaultInstance()->createPoint(v[i]));
+    boost::shared_ptr<Point> point(GeometryFactory::getDefaultInstance()->createPoint(v[i]));
     double d = ls2->distance(point.get()) / sigma;
     distances.push_back(d);
   }
