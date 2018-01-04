@@ -27,9 +27,6 @@
 #ifndef IMPLICITTAGRULESSQLITERECORDWRITER_H
 #define IMPLICITTAGRULESSQLITERECORDWRITER_H
 
-// Hoot
-#include <hoot/rnd/io/ImplicitTagRuleWordPartWriter.h>
-
 // Qt
 #include <QString>
 #include <QMap>
@@ -44,12 +41,10 @@ namespace hoot
 /**
  * Writes implicit tag rules ot a Sqlite database
  */
-class ImplicitTagRulesSqliteRecordWriter : public ImplicitTagRuleWordPartWriter
+class ImplicitTagRulesSqliteRecordWriter
 {
 
 public:
-
-  static std::string className() { return "hoot::ImplicitTagRulesSqliteRecordWriter"; }
 
   ImplicitTagRulesSqliteRecordWriter();
   ~ImplicitTagRulesSqliteRecordWriter();
@@ -84,9 +79,9 @@ private:
   QSqlQuery _getLastWordIdQuery;
   QSqlQuery _getLastTagIdQuery;
 
-  /*QMap*/QHash<QString, long> _wordsToWordIds;
-  /*QMap*/QHash<QString, long> _tagsToTagIds;
-  QSet<QString> _words; //temp??
+  QHash<QString, long> _wordsToWordIds;
+  QHash<QString, long> _tagsToTagIds;
+  QSet<QString> _words;
 
   long _statusUpdateInterval;
 

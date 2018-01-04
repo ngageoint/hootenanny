@@ -6,33 +6,20 @@ Given a raw implicit tag rules file created by the 'generate-raw-poi-implicit-ta
 writing them to a database.  The database can then be used to add tags implicitly to POIs, given their names using the 
 'AddImplicitlyDerivedTagsPoiVisitor'.
 
-* +input+                  - a .implicitTagRules tab delimited rules file
-* +outputs+                - semicolon delimited list of output paths to supported tag rules output formats; supported
-                             formats include Sqlite database (.db), JSON (.json), and comma delimited (.tsv); NOTE: 
-                             Only the Sqlite database format can be used to apply implicit tag to input data.
+* +input+  - a .implicitTagRules tab delimited rules for input
+* +output+ - a .sqlite database file for output
 
-The following additional configuration parameters apply to rule derivation:
-
-* poi.implicit.tag.rules.custom.rule.file - used to inject custom rules into the database
-* poi.implicit.tag.rules.minimum.tag.occurrences.per.word - how many times must a tag be associated with a word before a rule is created
-* poi.implicit.tag.rules.minimum.word.length - minimum number of occurrences of a tag in order for a rule to be derived for the tag; specify
-'1' to consider all type tag occurrences
-* poi.implicit.tag.rules.tag.ignore.file - used to explicitly ignore tags
-* poi.implicit.tag.rules.word.ignore.file - used to explicitly ignore words
-
-See the configuration option descriptions in conf/ConfigOptions.asciidoc for more details.
+See conf/core/ConfigOptions.asciidoc rules poi.implicit.tag.rules.* for relevant configuration options.
 
 === Usage
 
 --------------------------------------
-derive-poi-implicit-tag-rules (input) (outputs)
+derive-poi-implicit-tag-rules (input) (output)
 --------------------------------------
 
 ==== Examples
 
 --------------------------------------
-hoot derive-poi-implicit-tag-rules myInput.implicitTagRules "rules.json;rules.sqlite;rules.tsv"
-
-derive-poi-implicit-tag-rules -D poi.implicit.tag.rules.custom.rule.file=myCustomRules -D poi.implicit.tag.rules.minimum.tag.occurrences.per.word=5 -D poi.implicit.tag.rules.minimum.word.length=3 -D poi.implicit.tag.rules.tag.ignore.file=myTagIgnoreList -D poi.implicit.tag.rules.tokenize.names=true -D poi.implicit.tag.rules.word.ignore.file=myWordIgnoreList myInput.implicitTagRules "rules.json;rules.sqlite;rules.tsv"
+hoot derive-poi-implicit-tag-rules myInput.implicitTagRules rules.sqlite
 --------------------------------------
 

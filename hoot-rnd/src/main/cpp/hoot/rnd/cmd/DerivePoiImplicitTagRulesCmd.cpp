@@ -54,7 +54,7 @@ public:
 
     PoiImplicitTagRulesDeriver rulesDeriver;
     rulesDeriver.setConfiguration(conf());
-    rulesDeriver.deriveRules(args[0].trimmed(), args[1].trimmed().split(";"));
+    rulesDeriver.deriveRules(args[0].trimmed(), args[1].trimmed());
 
     return 0;
   }

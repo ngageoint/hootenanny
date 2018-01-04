@@ -28,7 +28,6 @@
 #define POIIMPLICITTAGRULESDERIVER_H
 
 // Hoot
-#include <hoot/rnd/io/ImplicitTagRuleWordPartWriterFactory.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/rnd/schema/PoiImplicitTagCustomRules.h>
 
@@ -62,7 +61,7 @@ public:
    * specified by the inputs parameter
    * @param outputs a list of hoot supported implicit tag rule output formats
    */
-  void deriveRules(const QString input, const QStringList outputs);
+  void deriveRules(const QString input, const QString output);
 
   virtual void setConfiguration(const Settings& conf);
 
@@ -98,8 +97,7 @@ private:
   void _removeKvpsBelowOccurrenceThreshold(const QString input, const int minOccurrencesThreshold);
   void _applyFiltering(const QString input);
 
-  QString _getSqliteOutput(const QStringList outputs);
-  void _writeRules(const QStringList outputs, const QString sqliteOutputFile);
+  void _writeRules(const QString input, const QString output);
 };
 
 }

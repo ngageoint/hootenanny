@@ -33,6 +33,7 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/algorithms/string/StringTokenizer.h>
+#include <hoot/rnd/io/ImplicitTagRulesSqliteRecordWriter.h>
 
 // Qt
 #include <QStringBuilder>
@@ -63,19 +64,7 @@ void PoiImplicitTagRulesDeriver::setConfiguration(const Settings& conf)
   setTranslateAllNamesToEnglish(confOptions.getPoiImplicitTagRulesTranslateAllNamesToEnglish());
 }
 
-QString PoiImplicitTagRulesDeriver::_getSqliteOutput(const QStringList outputs)
-{
-  for (int i = 0; i < outputs.size(); i++)
-  {
-    if (outputs.at(i).endsWith(".sqlite"))
-    {
-      return outputs.at(i);
-    }
-  }
-  return "";
-}
-
-void PoiImplicitTagRulesDeriver::deriveRules(const QString input, const QStringList outputs)
+void PoiImplicitTagRulesDeriver::deriveRules(const QString input, const QString output)
 {
   if (input.isEmpty())
   {
@@ -88,19 +77,15 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QString input, const QStringL
       QString("Input specified: ") + input);
   }
 
-  if (outputs.isEmpty())
+  if (!output.endsWith(".sqlite"))
   {
-    throw HootException("No outputs were specified.");
-  }
-  const QString sqliteOutput = _getSqliteOutput(outputs);
-  if (sqliteOutput.isEmpty())
-  {
-    throw HootException("Outputs must contain at least one Sqlite database.");
+    throw HootException(
+      "Incorrect output specified: " + output + ".  Must be a .sqlite database file.");
   }
 
   LOG_INFO(
-    "Deriving POI implicit tag rules for input: " << input << ".  Writing to outputs: " <<
-    outputs << "...");
+    "Deriving POI implicit tag rules for input: " << input << ".  Writing to output: " <<
+    output << "...");
 
   LOG_VARD(_minTagOccurrencesPerWord);
   LOG_VARD(_minWordLength);
@@ -180,12 +165,12 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QString input, const QStringL
     if (_minTagOccurrencesPerWord >= 2)
     {
       _removeKvpsBelowOccurrenceThreshold(input, _minTagOccurrencesPerWord);
-      _writeRules(outputs, _thresholdedCountFile->fileName());
+      _writeRules(_thresholdedCountFile->fileName(), output);
     }
     else
     {
       LOG_INFO("Skipping count thresholding since threshold = 1...");
-      _writeRules(outputs, input);
+      _writeRules(input, output);
     }
   }
   else
@@ -201,23 +186,17 @@ void PoiImplicitTagRulesDeriver::deriveRules(const QString input, const QStringL
       _applyFiltering(input);
     }
 
-    _writeRules(outputs, _filteredCountFile->fileName());
+    _writeRules(_filteredCountFile->fileName(), output);
   }
 }
 
-void PoiImplicitTagRulesDeriver::_writeRules(const QStringList outputs,
-                                             const QString inputFile)
+void PoiImplicitTagRulesDeriver::_writeRules(const QString input, const QString output)
 {
-  for (int i = 0; i < outputs.size(); i++)
-  {
-    const QString output = outputs.at(i);
-    LOG_VART(output);
-    boost::shared_ptr<ImplicitTagRuleWordPartWriter> ruleWordPartWriter =
-      ImplicitTagRuleWordPartWriterFactory::getInstance().createWriter(output);
-    ruleWordPartWriter->open(output);
-    ruleWordPartWriter->write(inputFile);
-    ruleWordPartWriter->close();
-  }
+  LOG_VART(output);
+  ImplicitTagRulesSqliteRecordWriter ruleWordPartWriter;
+  ruleWordPartWriter.open(output);
+  ruleWordPartWriter.write(input);
+  ruleWordPartWriter.close();
 }
 
 void PoiImplicitTagRulesDeriver::_removeKvpsBelowOccurrenceThreshold(const QString input,

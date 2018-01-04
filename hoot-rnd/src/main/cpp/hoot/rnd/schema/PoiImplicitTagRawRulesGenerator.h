@@ -28,7 +28,6 @@
 #define POIIMPLICITTAGRAWRULESGENERATOR_H
 
 // Hoot
-#include <hoot/rnd/io/ImplicitTagRuleWordPartWriterFactory.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/rnd/filters/ImplicitTagEligiblePoiCriterion.h>
 

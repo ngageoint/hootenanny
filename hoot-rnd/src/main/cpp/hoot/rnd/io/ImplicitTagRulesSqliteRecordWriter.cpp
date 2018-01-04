@@ -30,7 +30,6 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/DbUtils.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 
@@ -41,8 +40,6 @@
 
 namespace hoot
 {
-
-HOOT_FACTORY_REGISTER(ImplicitTagRuleWordPartWriter, ImplicitTagRulesSqliteRecordWriter)
 
 ImplicitTagRulesSqliteRecordWriter::ImplicitTagRulesSqliteRecordWriter() :
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
@@ -176,25 +173,16 @@ void ImplicitTagRulesSqliteRecordWriter::write(const QString inputUrl)
     long wordId = _wordsToWordIds.value(word, -1);
     if (wordId == -1)
     {
-//      if (_words.contains(word))
-//      {
-//        LOG_ERROR("Found duplicate word: " << word);
-//        duplicatedWordCount++;
-//      }
-//      else
-//      {
-        //_words.insert(word);
-        wordId = _insertWord(word);
-        if (wordId == -1)
-        {
-          LOG_WARN("Unable to insert word: " << word);
-        }
-        else
-        {
-          _wordsToWordIds[word] = wordId;
-          LOG_TRACE("Created new word with ID: " << wordId);
-        }
-      //}
+      wordId = _insertWord(word);
+      if (wordId == -1)
+      {
+        LOG_WARN("Unable to insert word: " << word);
+      }
+      else
+      {
+        _wordsToWordIds[word] = wordId;
+        LOG_TRACE("Created new word with ID: " << wordId);
+      }
     }
     else
     {
@@ -247,7 +235,6 @@ void ImplicitTagRulesSqliteRecordWriter::write(const QString inputUrl)
 
   _wordsToWordIds.clear();
   _tagsToTagIds.clear();
-  //_words.clear();
 
   LOG_INFO("Creating database indexes...");
   LOG_DEBUG("Creating tags index...");

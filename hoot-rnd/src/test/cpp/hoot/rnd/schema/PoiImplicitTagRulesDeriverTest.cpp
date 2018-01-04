@@ -58,23 +58,15 @@ public:
     QDir().mkpath(outDir());
 
     const QString input = inDir() + "/PoiImplicitTagRulesDeriverTest-input.implicitTagRules";
-    const QString jsonOutputFile =
-      outDir() + "/PoiImplicitTagRulesDeriverTest-runBasicTest-out.json";
     const QString dbOutputFile =
       outDir() + "/PoiImplicitTagRulesDeriverTest-runBasicTest-out.sqlite";
-
-    QStringList outputs;
-    outputs.append(jsonOutputFile);
-    outputs.append(dbOutputFile);
 
     PoiImplicitTagRulesDeriver rulesDeriver;
     rulesDeriver.setConfiguration(conf());
     rulesDeriver.setCustomRuleFile("");
     rulesDeriver.setTagIgnoreFile("");
     rulesDeriver.setWordIgnoreFile("");
-    rulesDeriver.deriveRules(input, outputs);
-
-    HOOT_FILE_EQUALS(inDir() + "/PoiImplicitTagRulesDeriverTest-runBasicTest.json", jsonOutputFile);
+    rulesDeriver.deriveRules(input, dbOutputFile);
 
     ImplicitTagRulesSqliteReader dbReader;
     dbReader.open(dbOutputFile);
@@ -87,14 +79,8 @@ public:
     QDir().mkpath(outDir());
 
     const QString input = inDir() + "/PoiImplicitTagRulesDeriverTest-input.implicitTagRules";
-
-    const QString jsonOutputFile =
-      outDir() + "/PoiImplicitTagRulesDeriverTest-runMinTagOccurrencePerWordTest-out.json";
     const QString dbOutputFile =
-      outDir() + "/PoiImplicitTagRulesDeriverTest-runMinTagOccurrencePerWordTest-out.sqlite";
-    QStringList outputs;
-    outputs.append(jsonOutputFile);
-    outputs.append(dbOutputFile);
+      outDir() + "/PoiImplicitTagRulesDeriverTest-runMinTagOccurrencePerWordTest-out.sqlite";;
 
     PoiImplicitTagRulesDeriver rulesDeriver;
     rulesDeriver.setConfiguration(conf());
@@ -102,11 +88,7 @@ public:
     rulesDeriver.setCustomRuleFile("");
     rulesDeriver.setTagIgnoreFile("");
     rulesDeriver.setWordIgnoreFile("");
-    rulesDeriver.deriveRules(input, outputs);
-
-    HOOT_FILE_EQUALS(
-      inDir() + "/PoiImplicitTagRulesDeriverTest-runMinTagOccurrencePerWordTest.json",
-      jsonOutputFile);
+    rulesDeriver.deriveRules(input, dbOutputFile);
 
     ImplicitTagRulesSqliteReader dbReader;
     dbReader.open(dbOutputFile);
@@ -119,14 +101,8 @@ public:
     QDir().mkpath(outDir());
 
     const QString input = inDir() + "/PoiImplicitTagRulesDeriverTest-input.implicitTagRules";
-
-    const QString jsonOutputFile =
-      outDir() + "/PoiImplicitTagRulesDeriverTest-runMinWordLengthTest-out.json";
     const QString dbOutputFile =
       outDir() + "/PoiImplicitTagRulesDeriverTest-runMinWordLengthTest-out.sqlite";
-    QStringList outputs;
-    outputs.append(jsonOutputFile);
-    outputs.append(dbOutputFile);
 
     PoiImplicitTagRulesDeriver rulesDeriver;
     rulesDeriver.setConfiguration(conf());
@@ -134,10 +110,7 @@ public:
     rulesDeriver.setCustomRuleFile("");
     rulesDeriver.setTagIgnoreFile("");
     rulesDeriver.setWordIgnoreFile("");
-    rulesDeriver.deriveRules(input, outputs);
-
-    HOOT_FILE_EQUALS(
-      inDir() + "/PoiImplicitTagRulesDeriverTest-runMinWordLengthTest.json", jsonOutputFile);
+    rulesDeriver.deriveRules(input, dbOutputFile);
 
     ImplicitTagRulesSqliteReader dbReader;
     dbReader.open(dbOutputFile);
@@ -151,24 +124,15 @@ public:
     QDir().mkpath(outDir());
 
     const QString input = inDir() + "/PoiImplicitTagRulesDeriverTest-input.implicitTagRules";
-
-    const QString jsonOutputFile =
-      outDir() + "/PoiImplicitTagRulesDeriverTest-runTagIgnoreTest-out.json";
     const QString dbOutputFile =
       outDir() + "/PoiImplicitTagRulesDeriverTest-runTagIgnoreTest-out.sqlite";
-    QStringList outputs;
-    outputs.append(jsonOutputFile);
-    outputs.append(dbOutputFile);
 
     PoiImplicitTagRulesDeriver rulesDeriver;
     rulesDeriver.setConfiguration(conf());
     rulesDeriver.setTagIgnoreFile(inDir() + "/PoiImplicitTagRulesDeriverTest-tag-ignore-list");
     rulesDeriver.setCustomRuleFile("");
     rulesDeriver.setWordIgnoreFile("");
-    rulesDeriver.deriveRules(input, outputs);
-
-    HOOT_FILE_EQUALS(
-      inDir() + "/PoiImplicitTagRulesDeriverTest-runTagIgnoreTest.json", jsonOutputFile);
+    rulesDeriver.deriveRules(input, dbOutputFile);
 
     ImplicitTagRulesSqliteReader dbReader;
     dbReader.open(dbOutputFile);
@@ -182,24 +146,15 @@ public:
     QDir().mkpath(outDir());
 
     const QString input = inDir() + "/PoiImplicitTagRulesDeriverTest-input.implicitTagRules";
-
-    const QString jsonOutputFile =
-      outDir() + "/PoiImplicitTagRulesDeriverTest-runWordIgnoreTest-out.json";
     const QString dbOutputFile =
       outDir() + "/PoiImplicitTagRulesDeriverTest-runWordIgnoreTest-out.sqlite";
-    QStringList outputs;
-    outputs.append(jsonOutputFile);
-    outputs.append(dbOutputFile);
 
     PoiImplicitTagRulesDeriver rulesDeriver;
     rulesDeriver.setConfiguration(conf());
     rulesDeriver.setWordIgnoreFile(inDir() + "/PoiImplicitTagRulesDeriverTest-word-ignore-list");
     rulesDeriver.setCustomRuleFile("");
     rulesDeriver.setTagIgnoreFile("");
-    rulesDeriver.deriveRules(input, outputs);
-
-    HOOT_FILE_EQUALS(
-      inDir() + "/PoiImplicitTagRulesDeriverTest-runWordIgnoreTest.json", jsonOutputFile);
+    rulesDeriver.deriveRules(input, dbOutputFile);
 
     ImplicitTagRulesSqliteReader dbReader;
     dbReader.open(dbOutputFile);
