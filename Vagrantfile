@@ -115,9 +115,9 @@ Vagrant.configure(2) do |config|
     hoot.vm.synced_folder ".", "/home/vagrant/hoot"
     hoot.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvision.sh"
     hoot.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
-    #hoot.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo service tomcat8 restart", run: "always"
-    #hoot.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo service node-mapnik-server start", run: "always"
-    #hoot.vm.provision "hadoop", type: "shell", :privileged => false, :inline => "stop-all.sh && start-all.sh", run: "always"
+    hoot.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo service tomcat8 restart", run: "always"
+    hoot.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo service node-mapnik-server start", run: "always"
+    hoot.vm.provision "hadoop", type: "shell", :privileged => false, :inline => "stop-all.sh && start-all.sh", run: "always"
 
     aws_provider(hoot, 'Ubuntu1404')
   end
