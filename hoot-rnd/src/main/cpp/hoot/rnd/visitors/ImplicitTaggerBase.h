@@ -91,7 +91,7 @@ private:
 
   //ImplicitTagCustomRules _customRules;
 
-  QSet<QString> _getNameTokens(const QStringList names);
+  QStringList _getNameTokens(const QStringList names);
 
 };
 
