@@ -47,8 +47,8 @@ class ImplicitTagRawRulesDeriverTest : public CppUnit::TestFixture
   //TODO
   //CPPUNIT_TEST(runInputTranslationScriptSizeMismatchTest);
   //CPPUNIT_TEST(runEqualsInNameTest);
-  //CPPUNIT_TEST(runNoNameTokenizationTest);
   //CPPUNIT_TEST(runBadInputsTest);
+  //translate names
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -68,7 +68,6 @@ public:
     QStringList translationScripts;
     translationScripts.append("translations/OSM_Ingest.js");
     ImplicitTagRawRulesDeriver rawRulesDeriver;
-    rawRulesDeriver.setConfiguration(conf());
     rawRulesDeriver.setElementFilter("poi");
     rawRulesDeriver.setKeepTempFiles(false); //set true for debugging
     rawRulesDeriver.setSkipFiltering(false);
@@ -97,7 +96,6 @@ public:
       outDir() + "/ImplicitTagRawRulesDeriverTest-runMultipleInputsTest-out.implicitTagRules";
 
     ImplicitTagRawRulesDeriver rawRulesDeriver;
-    rawRulesDeriver.setConfiguration(conf());
     rawRulesDeriver.setElementFilter("poi");
     rawRulesDeriver.setKeepTempFiles(false); //set true for debugging
     rawRulesDeriver.setSkipFiltering(false);
@@ -138,7 +136,6 @@ public:
     sortedCountFile->open();
 
     ImplicitTagRawRulesDeriver rawRulesDeriver;
-    rawRulesDeriver.setConfiguration(conf());
     rawRulesDeriver.setElementFilter("poi");
     rawRulesDeriver.setTempFileDir(outDir());
     rawRulesDeriver.setKeepTempFiles(true);
@@ -173,7 +170,6 @@ public:
       outDir() + "/ImplicitTagRawRulesDeriverTest-runNameCaseTest-out.implicitTagRules";
 
     ImplicitTagRawRulesDeriver rawRulesDeriver;
-    rawRulesDeriver.setConfiguration(conf());
     rawRulesDeriver.setElementFilter("poi");
     rawRulesDeriver.setKeepTempFiles(false); //set true for debugging
     rawRulesDeriver.setSkipFiltering(false);

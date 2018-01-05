@@ -33,8 +33,6 @@
 
 // Qt
 #include <QString>
-#include <QMap>
-#include <QHash>
 #include <QTemporaryFile>
 #include <QSet>
 
@@ -68,11 +66,11 @@ public:
   void setMinTagOccurrencesPerWord(const int minOccurrences)
   { _minTagOccurrencesPerWord = minOccurrences; }
   void setMinWordLength(const int length) { _minWordLength = length; }
-
+  void setUseSchemaTagValuesForWordsOnly(bool use) { _useSchemaTagValuesForWordsOnly = use; }
+  void setElementType(const QString type);
   void setCustomRuleFile(const QString file) { _customRules.setCustomRuleFile(file); }
   void setTagIgnoreFile(const QString file) { _customRules.setTagIgnoreFile(file); }
   void setWordIgnoreFile(const QString file) { _customRules.setWordIgnoreFile(file); }
-  void setUseSchemaTagValuesForWordsOnly(bool use) { _useSchemaTagValuesForWordsOnly = use; }
 
 private:
 

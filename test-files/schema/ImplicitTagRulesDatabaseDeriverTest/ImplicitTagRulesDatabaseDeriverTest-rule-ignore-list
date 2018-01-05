@@ -1,4 +1,0 @@
-# filter out the following rules:
-Arts	amenity=arts_centre
-Handel	amenity=place_of_worship
-Ministry of Economy	place=locality

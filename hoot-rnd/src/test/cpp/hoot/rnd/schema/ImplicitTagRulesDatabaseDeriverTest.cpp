@@ -46,6 +46,7 @@ class ImplicitTagRulesDatabaseDeriverTest : public CppUnit::TestFixture
   //TODO
   //CPPUNIT_TEST(runBadInputsTest);
   //CPPUNIT_TEST(runCustomRuleFileTest);
+  //schema values only off
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -62,7 +63,9 @@ public:
       outDir() + "/ImplicitTagRulesDatabaseDeriverTest-runBasicTest-out.sqlite";
 
     ImplicitTagRulesDatabaseDeriver rulesDeriver;
-    rulesDeriver.setConfiguration(conf());
+    rulesDeriver.setMinTagOccurrencesPerWord(1);
+    rulesDeriver.setMinWordLength(1);
+    rulesDeriver.setUseSchemaTagValuesForWordsOnly(true);
     rulesDeriver.setCustomRuleFile("");
     rulesDeriver.setTagIgnoreFile("");
     rulesDeriver.setWordIgnoreFile("");
@@ -70,7 +73,7 @@ public:
 
     ImplicitTagRulesSqliteReader dbReader;
     dbReader.open(dbOutputFile);
-    CPPUNIT_ASSERT_EQUAL(438L, dbReader.getRuleWordPartCount());
+    CPPUNIT_ASSERT_EQUAL(86L, dbReader.getRuleWordPartCount());
     dbReader.close();
   }
 
@@ -80,11 +83,12 @@ public:
 
     const QString input = inDir() + "/ImplicitTagRulesDatabaseDeriverTest-input.implicitTagRules";
     const QString dbOutputFile =
-      outDir() + "/ImplicitTagRulesDatabaseDeriverTest-runMinTagOccurrencePerWordTest-out.sqlite";;
+      outDir() + "/ImplicitTagRulesDatabaseDeriverTest-runMinTagOccurrencePerWordTest-out.sqlite";
 
     ImplicitTagRulesDatabaseDeriver rulesDeriver;
-    rulesDeriver.setConfiguration(conf());
     rulesDeriver.setMinTagOccurrencesPerWord(4);
+    rulesDeriver.setMinWordLength(1);
+    rulesDeriver.setUseSchemaTagValuesForWordsOnly(true);
     rulesDeriver.setCustomRuleFile("");
     rulesDeriver.setTagIgnoreFile("");
     rulesDeriver.setWordIgnoreFile("");
@@ -92,7 +96,7 @@ public:
 
     ImplicitTagRulesSqliteReader dbReader;
     dbReader.open(dbOutputFile);
-    CPPUNIT_ASSERT_EQUAL(109L, dbReader.getRuleWordPartCount());
+    CPPUNIT_ASSERT_EQUAL(1L, dbReader.getRuleWordPartCount());
     dbReader.close();
   }
 
@@ -105,8 +109,9 @@ public:
       outDir() + "/ImplicitTagRulesDatabaseDeriverTest-runMinWordLengthTest-out.sqlite";
 
     ImplicitTagRulesDatabaseDeriver rulesDeriver;
-    rulesDeriver.setConfiguration(conf());
+    rulesDeriver.setMinTagOccurrencesPerWord(1);
     rulesDeriver.setMinWordLength(10);
+    rulesDeriver.setUseSchemaTagValuesForWordsOnly(true);
     rulesDeriver.setCustomRuleFile("");
     rulesDeriver.setTagIgnoreFile("");
     rulesDeriver.setWordIgnoreFile("");
@@ -114,11 +119,10 @@ public:
 
     ImplicitTagRulesSqliteReader dbReader;
     dbReader.open(dbOutputFile);
-    CPPUNIT_ASSERT_EQUAL(127L, dbReader.getRuleWordPartCount());
+    CPPUNIT_ASSERT_EQUAL(51L, dbReader.getRuleWordPartCount());
     dbReader.close();
   }
 
-  //TODO: test that ignore overrides explicit list
   void runTagIgnoreTest()
   {
     QDir().mkpath(outDir());
@@ -128,19 +132,20 @@ public:
       outDir() + "/ImplicitTagRulesDatabaseDeriverTest-runTagIgnoreTest-out.sqlite";
 
     ImplicitTagRulesDatabaseDeriver rulesDeriver;
-    rulesDeriver.setConfiguration(conf());
-    rulesDeriver.setTagIgnoreFile(inDir() + "/ImplicitTagRulesDatabaseDeriverTest-tag-ignore-list");
+    rulesDeriver.setMinTagOccurrencesPerWord(1);
+    rulesDeriver.setMinWordLength(1);
+    rulesDeriver.setUseSchemaTagValuesForWordsOnly(true);
     rulesDeriver.setCustomRuleFile("");
+    rulesDeriver.setTagIgnoreFile(inDir() + "/ImplicitTagRulesDatabaseDeriverTest-tag-ignore-list");
     rulesDeriver.setWordIgnoreFile("");
     rulesDeriver.deriveRulesDatabase(input, dbOutputFile);
 
     ImplicitTagRulesSqliteReader dbReader;
     dbReader.open(dbOutputFile);
-    CPPUNIT_ASSERT_EQUAL(314L, dbReader.getRuleWordPartCount()); //TODO: is this right?
+    CPPUNIT_ASSERT_EQUAL(57L, dbReader.getRuleWordPartCount());
     dbReader.close();
   }
 
-  //TODO: test that ignore overrides explicit list
   void runWordIgnoreTest()
   {
     QDir().mkpath(outDir());
@@ -150,15 +155,18 @@ public:
       outDir() + "/ImplicitTagRulesDatabaseDeriverTest-runWordIgnoreTest-out.sqlite";
 
     ImplicitTagRulesDatabaseDeriver rulesDeriver;
-    rulesDeriver.setConfiguration(conf());
-    rulesDeriver.setWordIgnoreFile(inDir() + "/ImplicitTagRulesDatabaseDeriverTest-word-ignore-list");
+    rulesDeriver.setMinTagOccurrencesPerWord(1);
+    rulesDeriver.setMinWordLength(1);
+    rulesDeriver.setUseSchemaTagValuesForWordsOnly(true);
     rulesDeriver.setCustomRuleFile("");
     rulesDeriver.setTagIgnoreFile("");
+    rulesDeriver.setCustomRuleFile("");
+    rulesDeriver.setWordIgnoreFile(inDir() + "/ImplicitTagRulesDatabaseDeriverTest-word-ignore-list");
     rulesDeriver.deriveRulesDatabase(input, dbOutputFile);
 
     ImplicitTagRulesSqliteReader dbReader;
     dbReader.open(dbOutputFile);
-    CPPUNIT_ASSERT_EQUAL(433L, dbReader.getRuleWordPartCount()); //TODO: is this right?
+    CPPUNIT_ASSERT_EQUAL(78L, dbReader.getRuleWordPartCount());
     dbReader.close();
   }
 };

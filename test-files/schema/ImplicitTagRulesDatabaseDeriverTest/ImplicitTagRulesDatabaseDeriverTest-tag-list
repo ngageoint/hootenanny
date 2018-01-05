@@ -1,5 +1,0 @@
-# only consider the tags with the keys listed below
-amenity=*
-tourism=*
-building=*
-shop=electronics

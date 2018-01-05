@@ -862,7 +862,7 @@ The minimum allowed word length when associating word tokens with OSM tags.
 === implicit.tagging.database.deriver.poi.custom.rule.file
 
 * Data Type: string
-* Default Value: `${HOOT_HOME}/conf/core/poi-implicit-tag-rules/poiImplicitTagRulesCustomRuleList`
+* Default Value: `${HOOT_HOME}/conf/core/implicit-tag-rules/poiImplicitTagRulesCustomRuleList`
 
 Flat file containing tab separated word key/value pairs, one per line, to use as custom rules
 when deriving implicit tags from POI names.
@@ -870,7 +870,7 @@ when deriving implicit tags from POI names.
 === implicit.tagging.database.deriver.poi.tag.ignore.file
 
 * Data Type: string
-* Default Value: `${HOOT_HOME}/conf/core/poi-implicit-tag-rules/poiImplicitTagRulesTagIgnoreList`
+* Default Value: `${HOOT_HOME}/conf/core/implicit-tag-rules/poiImplicitTagRulesTagIgnoreList`
 
 Flat file containing key/value pairs, one per line, to ignore when deriving implicit tags from POI
 names.  Use 'key=*' to ignore all tags for a given key.
@@ -878,7 +878,7 @@ names.  Use 'key=*' to ignore all tags for a given key.
 === implicit.tagging.database.deriver.poi.word.ignore.file
 
 * Data Type: string
-* Default Value: `${HOOT_HOME}/conf/core/poi-implicit-tag-rules/poiImplicitTagRulesWordIgnoreList`
+* Default Value: `${HOOT_HOME}/conf/core/implicit-tag-rules/poiImplicitTagRulesWordIgnoreList`
 
 Flat file containing words, one per line, to ignore when deriving implicit tags from POI names.
 
@@ -955,7 +955,7 @@ TODO
 === implicit.tagger.poi.rules.database
 
 * Data Type: string
-* Default Value: `${HOOT_HOME}/conf/core/poi-implicit-tag-rules/allCountries-planet-11-2-17-minwordocc=1000-schemaonly=true.sqlite`
+* Default Value: `${HOOT_HOME}/conf/core/implicit-tag-rules/poi-allCountries-planet-11-2-17-minwordocc=1000-schemaonly=true.sqlite`
 
 Database used by the AddImplicitlyDerivedTagsPoiVisitor to derive POI type tags implicitly based
 on a POI's name.

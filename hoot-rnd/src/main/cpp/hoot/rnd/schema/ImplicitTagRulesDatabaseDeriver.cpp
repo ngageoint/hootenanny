@@ -60,6 +60,19 @@ void ImplicitTagRulesDatabaseDeriver::setConfiguration(const Settings& conf)
     confOptions.getImplicitTaggingDatabaseDeriverUseSchemaTagValuesForWordsOnly());
 }
 
+void ImplicitTagRulesDatabaseDeriver::setElementType(const QString type)
+{
+  if (type.trimmed().toUpper() != "POI")
+  {
+    throw HootException("Only POI implicit tag rule database generation is supported.");
+  }
+
+  const ConfigOptions confOptions(conf());
+  setCustomRuleFile(confOptions.getImplicitTaggingDatabaseDeriverPoiCustomRuleFile());
+  setTagIgnoreFile(confOptions.getImplicitTaggingDatabaseDeriverPoiTagIgnoreFile());
+  setWordIgnoreFile(confOptions.getImplicitTaggingDatabaseDeriverPoiWordIgnoreFile());
+}
+
 void ImplicitTagRulesDatabaseDeriver::deriveRulesDatabase(const QString input, const QString output)
 {
   if (input.isEmpty())

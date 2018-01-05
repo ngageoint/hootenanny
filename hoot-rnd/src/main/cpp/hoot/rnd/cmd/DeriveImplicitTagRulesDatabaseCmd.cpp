@@ -53,24 +53,9 @@ public:
       throw HootException(QString("%1 takes three parameters.").arg(getName()));
     }
 
-    const QString type = args[0].trimmed().toUpper();
-    if (type != "POI")
-    {
-      throw HootException("Only POI implicit tag rule database generation is supported.");
-    }
-
     ImplicitTagRulesDatabaseDeriver rulesDatabaseDeriver;
     rulesDatabaseDeriver.setConfiguration(conf());
-    const ConfigOptions confOptions(conf());
-    if (type == "POI")
-    {
-      rulesDatabaseDeriver.setCustomRuleFile(
-        confOptions.getImplicitTaggingDatabaseDeriverPoiCustomRuleFile());
-      rulesDatabaseDeriver.setTagIgnoreFile(
-        confOptions.getImplicitTaggingDatabaseDeriverPoiTagIgnoreFile());
-      rulesDatabaseDeriver.setWordIgnoreFile(
-        confOptions.getImplicitTaggingDatabaseDeriverPoiWordIgnoreFile());
-    }
+    rulesDatabaseDeriver.setElementType(args[0]);
     rulesDatabaseDeriver.deriveRulesDatabase(args[1].trimmed(), args[2].trimmed());
 
     return 0;
