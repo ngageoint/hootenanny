@@ -1,0 +1,19 @@
+== implicit-tagging-rules-database-stats
+
+=== Description
+
+Prints a stats summary of the contents of an implicit tag rules database
+
+* +input+       - an implicit tag rules database (*.sqlite)
+
+=== Usage
+
+--------------------------------------
+implicit-tagging-rules-database-stats (input)
+--------------------------------------
+
+==== Examples
+
+--------------------------------------
+hoot implicit-tagging-rules-database-stats myRulesDb.sqlite
+--------------------------------------

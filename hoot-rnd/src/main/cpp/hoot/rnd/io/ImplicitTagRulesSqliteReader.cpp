@@ -101,6 +101,22 @@ void ImplicitTagRulesSqliteReader::_prepareQueries()
         .arg(_ruleWordPartCountQuery.lastError().text()));
   }
 
+  _tagCountQuery = QSqlQuery(_db);
+  if (!_tagCountQuery.prepare("SELECT COUNT(*) FROM tags"))
+  {
+    throw HootException(
+      QString("Error preparing _tagCountQuery: %1")
+        .arg(_tagCountQuery.lastError().text()));
+  }
+
+  _wordCountQuery = QSqlQuery(_db);
+  if (!_wordCountQuery.prepare("SELECT COUNT(*) FROM words"))
+  {
+    throw HootException(
+      QString("Error preparing _wordCountQuery: %1")
+        .arg(_wordCountQuery.lastError().text()));
+  }
+
   _tagsForWordIds = QSqlQuery(_db);
   if (_addTopTagOnly)
   {
@@ -423,6 +439,40 @@ long ImplicitTagRulesSqliteReader::getRuleWordPartCount()
 
   _ruleWordPartCountQuery.next();
   return _ruleWordPartCountQuery.value(0).toLongLong();
+}
+
+void ImplicitTagRulesSqliteReader::printStats()
+{
+  LOG_DEBUG("Printing stats...");
+
+  if (!_ruleWordPartCountQuery.exec())
+  {
+    throw HootException(
+      QString("Error executing query: %1").arg(_ruleWordPartCountQuery.lastError().text()));
+  }
+  _ruleWordPartCountQuery.next();
+  const long ruleCount = _ruleWordPartCountQuery.value(0).toLongLong();
+
+  if (!_tagCountQuery.exec())
+  {
+    throw HootException(
+      QString("Error executing query: %1").arg(_tagCountQuery.lastError().text()));
+  }
+  _tagCountQuery.next();
+  const long tagCount = _tagCountQuery.value(0).toLongLong();
+
+  if (!_wordCountQuery.exec())
+  {
+    throw HootException(
+      QString("Error executing query: %1").arg(_wordCountQuery.lastError().text()));
+  }
+  _wordCountQuery.next();
+  const long wordCount = _wordCountQuery.value(0).toLongLong();
+
+  std::cout << "Implicit tag rules database summary:" << std::endl;
+  std::cout << "\tWord count: " << wordCount << std::endl;
+  std::cout << "\tTag count: " << tagCount << std::endl;
+  std::cout << "\tRule count: " << ruleCount << std::endl;
 }
 
 }

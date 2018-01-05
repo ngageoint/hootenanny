@@ -76,6 +76,8 @@ public:
   Tags getImplicitTags(const QSet<QString>& words, QSet<QString>& matchingWords,
                        bool& wordsInvolvedInMultipleRules);
 
+  void printStats();
+
   /**
    * Retrieves total number of word/tag associations in the database
    *
@@ -98,6 +100,8 @@ private:
   QSqlDatabase _db;
 
   QSqlQuery _ruleWordPartCountQuery;
+  QSqlQuery _tagCountQuery;
+  QSqlQuery _wordCountQuery;
   QSqlQuery _tagsForWordIds;
   QSqlQuery _tagCountsForWordIds;
 
