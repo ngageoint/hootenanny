@@ -31,7 +31,6 @@
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 
-
 namespace hoot
 {
 
@@ -41,10 +40,6 @@ AreaMerger::AreaMerger()
 
 void AreaMerger::merge(OsmMapPtr map)
 {
-  //var newTags = hoot.TagMergerFactory.mergeTags(e1.getTags(), e2.getTags());
-  //e1.setTags(newTags);
-  //new hoot.RecursiveElementRemover(e2).apply(map);
-
   //there should be exactly two area polygons
 
   int areaCount = map->getElementCount();

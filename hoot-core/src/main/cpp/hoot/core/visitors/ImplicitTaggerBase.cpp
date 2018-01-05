@@ -33,6 +33,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/algorithms/Translator.h>
+#include <hoot/core/schema/ImplicitTagUtils.h>
 
 // Qt
 #include <QSet>
@@ -49,7 +50,6 @@ _numTagsAdded(0),
 _numNodesInvolvedInMultipleRules(0),
 _numNodesParsed(0),
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
-//_minWordLength(3),
 _smallestNumberOfTagsAdded(LONG_MAX),
 _largestNumberOfTagsAdded(0),
 _translateAllNamesToEnglish(true),
@@ -66,7 +66,6 @@ _numTagsAdded(0),
 _numNodesInvolvedInMultipleRules(0),
 _numNodesParsed(0),
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
-//_minWordLength(3),
 _smallestNumberOfTagsAdded(LONG_MAX),
 _largestNumberOfTagsAdded(0),
 _translateAllNamesToEnglish(true),
@@ -113,17 +112,7 @@ void ImplicitTaggerBase::setConfiguration(const Settings& conf)
   setTranslateAllNamesToEnglish(confOptions.getImplicitTaggingTranslateAllNamesToEnglish());
   setMatchEndOfNameSingleTokenFirst(confOptions.getImplicitTaggerMatchEndOfNameSingleTokenFirst());
   setAllowTaggingSpecificPois(confOptions.getImplicitTaggerAllowTaggingSpecificEntities());
-  //setMinWordLength(confOptions.getPoiImplicitTagRulesMinimumWordLength());
 
-  //_customRules.setCustomRuleFile(confOptions.getPoiImplicitTagRulesCustomRuleFile());
-  //_customRules.setTagIgnoreFile(confOptions.getPoiImplicitTagRulesTagIgnoreFile());
-  //_customRules.setWordIgnoreFile(confOptions.getPoiImplicitTagRulesWordIgnoreFile());
-
-  //_customRules.init();
-  //LOG_VARD(_customRules.getWordIgnoreList());
-  //LOG_VARD(_customRules.getCustomRulesList());
-  //_ruleReader->setConfiguration(conf);
-  //_ruleReader->setCustomRules(_customRules);
   _ruleReader->setAddTopTagOnly(confOptions.getImplicitTaggerAddTopTagOnly());
   _ruleReader->setAllowWordsInvolvedInMultipleRules(
     confOptions.getImplicitTaggerAllowWordsInvolvedInMultipleRules());
@@ -191,32 +180,12 @@ void ImplicitTaggerBase::visit(const ElementPtr& e)
     {
       QString name = names.at(i);
 
-      //TODO: move to common class
-      name =
-        name.replace("(", "").replace(")", "").replace(".", "").replace("/", " ").replace("<", "")
-            .replace(">", "").replace("[", "").replace("]", "").replace("@", "").replace("&", "and");
-      if (name.startsWith("-"))
-      {
-        name = name.replace(0, 1, "");
-      }
-      if (name.startsWith("_"))
-      {
-        name = name.replace(0, 1, "");
-      }
-      //TOOD: expand this
-      if (name.at(0).isDigit() &&
-          (name.endsWith("th") || name.endsWith("nd") || name.endsWith("rd") || name.endsWith("st") ||
-           name.endsWith("ave") || name.endsWith("avenue") || name.endsWith("st") ||
-           name.endsWith("street") || name.endsWith("pl") || name.endsWith("plaza")))
-      {
-        name = "";
-      }
+      ImplicitTagUtils::cleanName(name);
 
-      //if (name.length() >= _minWordLength &&
-          //!_customRules.getWordIgnoreList().contains(name.toLower()))
-      //{
+      if (!name.isEmpty())
+      {
         filteredNames.append(name.toLower());
-      //}
+      }
     }
     LOG_VARD(filteredNames);
 
@@ -527,27 +496,18 @@ void ImplicitTaggerBase::visit(const ElementPtr& e)
         assert(!matchingWords.isEmpty());
         LOG_VART(matchingWords);
 
-        //TODO: remove this
-        Tags ruleFilteredTags = tagsToAdd;
-        LOG_VARD(ruleFilteredTags);
-
         Tags updatedTags;
         bool tagsAdded = false;
-        //TODO: check tag include list
         LOG_VARD(_elementIsASpecificPoi);
-        for (Tags::const_iterator tagItr = ruleFilteredTags.begin();
-             tagItr != ruleFilteredTags.end(); ++tagItr)
+        for (Tags::const_iterator tagItr = tagsToAdd.begin();
+             tagItr != tagsToAdd.end(); ++tagItr)
         {
           const QString implicitTagKey = tagItr.key();
           LOG_VARD(implicitTagKey);
           const QString implicitTagValue = tagItr.value();
           LOG_VARD(implicitTagValue);
-          const QString tagStr = implicitTagKey % "=" % implicitTagValue;
-          /*if (_customRules.getTagIgnoreList().contains(tagStr))
-          {
-            LOG_DEBUG("Skipping tag on ignore list: " << tagStr);
-          }
-          else*/ if (e->getTags().contains(implicitTagKey))
+         // const QString tagStr = implicitTagKey % "=" % implicitTagValue;
+          if (e->getTags().contains(implicitTagKey))
           {
             //don't add a less specific tag if the element already has one with the same key; e.g. if
             //the element has amenity=public_hall, don't add amenity=hall
@@ -557,7 +517,8 @@ void ImplicitTaggerBase::visit(const ElementPtr& e)
             const QString elementTagKey = implicitTagKey;
             const QString elementTagValue = e->getTags()[implicitTagKey];
             //only use the implicit tag if it is more specific than the one the element already has;
-            //if neither is more specific than the other, we'll arbitrarily keep the one we already had
+            //if neither is more specific than the other, we'll arbitrarily keep the one we already
+            //had
             LOG_VARD(OsmSchema::getInstance().isAncestor(implicitTagKey % "=" % implicitTagValue,
                                                          elementTagKey % "=" % elementTagValue));
             if (OsmSchema::getInstance().isAncestor(implicitTagKey % "=" % implicitTagValue,

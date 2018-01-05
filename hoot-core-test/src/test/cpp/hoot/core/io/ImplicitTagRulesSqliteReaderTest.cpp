@@ -45,6 +45,7 @@ class ImplicitTagRulesSqliteReaderTest : public CppUnit::TestFixture
   //CPPUNIT_TEST(runQuoteInNameTest);
   //separate tests for top tag only false/true
   //separate tests for allow involved in multiple rules false/true
+  //semicolons in words?
   CPPUNIT_TEST_SUITE_END();
 
 public:

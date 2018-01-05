@@ -90,7 +90,6 @@ public:
     QStringList translationScripts;
     translationScripts.append("translations/OSM_Ingest.js");
     translationScripts.append("translations/OSM_Ingest.js");
-    //TODO: add geonames translated input
 
     const QString outputFile =
       outDir() + "/ImplicitTagRawRulesDeriverTest-runMultipleInputsTest-out.implicitTagRules";
@@ -112,7 +111,6 @@ public:
   {
     DisableLog dl;
     QDir().mkpath(outDir());
-    //TODO: remove output temp file by wildcard here
 
     boost::shared_ptr<QTemporaryFile> sortedCountFile(
       new QTemporaryFile(

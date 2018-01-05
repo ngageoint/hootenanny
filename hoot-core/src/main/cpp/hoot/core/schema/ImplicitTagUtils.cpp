@@ -24,43 +24,36 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-
-// Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/schema/ImplicitTagRulesDatabaseDeriver.h>
+#include "ImplicitTagUtils.h"
 
 namespace hoot
 {
 
-/**
- * Derives implicit tag rules for POIs and writes the output in various formats
- */
-class DeriveImplicitTagRulesDatabaseCmd : public BaseCommand
+void ImplicitTagUtils::cleanName(QString& name)
 {
-public:
-
-  static std::string className() { return "hoot::DeriveImplicitTagRulesDatabaseCmd"; }
-
-  virtual QString getName() const { return "implicit-tagging-derive-rules-database"; }
-
-  virtual int runSimple(QStringList args)
+  name =
+    name.replace("(", "").replace(")", "").replace(".", "").replace("/", " ").replace("<", "")
+        .replace(">", "").replace("[", "").replace("]", "").replace("@", "").replace("&", "and")
+        .replace("(historical)", "");
+  if (name.startsWith("-"))
   {
-    if (args.size() != 3)
-    {
-      std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes three parameters.").arg(getName()));
-    }
-
-    ImplicitTagRulesDatabaseDeriver rulesDatabaseDeriver;
-    rulesDatabaseDeriver.setConfiguration(conf());
-    rulesDatabaseDeriver.setElementType(args[0]);
-    rulesDatabaseDeriver.deriveRulesDatabase(args[1].trimmed(), args[2].trimmed());
-
-    return 0;
+    name = name.replace(0, 1, "");
   }
-};
+  if (name.startsWith("_"))
+  {
+    name = name.replace(0, 1, "");
+  }
 
-HOOT_FACTORY_REGISTER(Command, DeriveImplicitTagRulesDatabaseCmd)
+  //another possibility here might be to replace name multiple spaces with one
+
+  //This needs to be expanded.
+  if (name.at(0).isDigit() &&
+      (name.endsWith("th") || name.endsWith("nd") || name.endsWith("rd") || name.endsWith("st") ||
+       name.endsWith("ave") || name.endsWith("avenue") || name.endsWith("st") ||
+       name.endsWith("street") || name.endsWith("pl") || name.endsWith("plaza")))
+  {
+    name = "";
+  }
+}
 
 }

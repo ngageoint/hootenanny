@@ -39,6 +39,7 @@
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/algorithms/Translator.h>
 #include <hoot/core/filters/ImplicitTagEligiblePoiCriterion.h>
+#include <hoot/core/schema/ImplicitTagUtils.h>
 
 // Qt
 #include <QStringBuilder>
@@ -89,45 +90,29 @@ void ImplicitTagRawRulesDeriver::_updateForNewWord(QString word, const QString k
   word = word.simplified();
   LOG_TRACE("Updating word: " << word << " with kvp: " << kvp << "...");
 
-  word =
-    word.replace("(", "").replace(")", "").replace(".", "").replace("/", " ").replace("<", "")
-        .replace(">", "").replace("[", "").replace("]", "").replace("@", "").replace("&", "and")
-        .replace("(historical)", "");
-  if (word.startsWith("-"))
-  {
-    word = word.replace(0, 1, "");
-  }
-  if (word.startsWith("_"))
-  {
-    word = word.replace(0, 1, "");
-  }
-  //TODO: expand this
-  if (word.at(0).isDigit() &&
-      (word.endsWith("th") || word.endsWith("nd") || word.endsWith("rd") || word.endsWith("st") ||
-       word.endsWith("ave") || word.endsWith("avenue") || word.endsWith("st") ||
-       word.endsWith("street") || word.endsWith("pl") || word.endsWith("plaza")))
-  {
-    word = "";
-  }
+  ImplicitTagUtils::cleanName(word);
 
-  bool wordIsNumber = false;
-  word.toLong(&wordIsNumber);
-  if (wordIsNumber)
+  if (!word.isEmpty())
   {
-    LOG_TRACE("Skipping word: " << word << ", which is a number.");
-    return;
-  }
+    bool wordIsNumber = false;
+    word.toLong(&wordIsNumber);
+    if (wordIsNumber)
+    {
+      LOG_TRACE("Skipping word: " << word << ", which is a number.");
+      return;
+    }
 
-  const bool hasAlphaChar = StringUtils::hasAlphabeticCharacter(word);
-  if (!hasAlphaChar)
-  {
-    LOG_TRACE("Skipping word: " << word << ", which has no alphabetic characters.");
-    return;
-  }
+    const bool hasAlphaChar = StringUtils::hasAlphabeticCharacter(word);
+    if (!hasAlphaChar)
+    {
+      LOG_TRACE("Skipping word: " << word << ", which has no alphabetic characters.");
+      return;
+    }
 
-  const QString line = word.toLower() % QString("\t") % kvp % QString("\n");
-  _countFile->write(line.toUtf8());
-  _countFileLineCtr++;
+    const QString line = word.toLower() % QString("\t") % kvp % QString("\n");
+    _countFile->write(line.toUtf8());
+    _countFileLineCtr++;
+  }
 }
 
 void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
@@ -197,7 +182,6 @@ void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
   {
     const QString input = inputs.at(i);
     LOG_INFO("Parsing: " << input << "...");
-    //const bool inputIsPbf = input.endsWith(".pbf");
 
     boost::shared_ptr<PartialOsmMapReader> inputReader =
       boost::dynamic_pointer_cast<PartialOsmMapReader>(
@@ -219,13 +203,6 @@ void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
     {
       ElementPtr element = inputStream->readNextElement();
       LOG_VART(element);
-
-      //TODO: remove?
-//      if (element->getElementType() != ElementType::Node && inputIsPbf)
-//      {
-//        LOG_INFO("Reached end of PBF nodes for input: " << input << ".");
-//        break;
-//      }
 
       nodeCount++;
 
@@ -298,7 +275,6 @@ void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
         {
           QString name = names.at(i);
           LOG_VART(name);
-          //TODO: replace name multiple spaces with one?
 
           //'=' is used in the map key for kvps, so it needs to be escaped in the word
           if (name.contains("="))
@@ -318,9 +294,9 @@ void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
           for (int j = 0; j < nameTokens.size(); j++)
           {
             QString nameToken = nameTokens.at(j);
-            //TODO: may need to replace more punctuation chars here - replace all non-alphanumeric?
-            //esp ()/
-              nameToken = nameToken.replace(",", "");
+            //may eventually need to replace more punctuation chars here; need a more extensible way;
+            //also, if done, move into ImplicitTagUtils::cleanName
+            nameToken = nameToken.replace(",", "");
             LOG_VART(nameToken);
 
             if (_translateAllNamesToEnglish)
@@ -341,7 +317,7 @@ void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
             for (int j = 0; j < nameTokens.size() - 1; j++)
             {
               QString nameToken = nameTokens.at(j) + " " + nameTokens.at(j + 1);
-              //TODO: may need to replace more punctuation chars here
+              //see comment above
               nameToken = nameToken.replace(",", "");
               LOG_VART(nameToken);
 

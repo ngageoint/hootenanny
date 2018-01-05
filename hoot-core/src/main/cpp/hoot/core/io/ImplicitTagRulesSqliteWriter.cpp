@@ -157,7 +157,6 @@ void ImplicitTagRulesSqliteWriter::write(const QString inputUrl)
     throw HootException(QObject::tr("Error opening %1 for reading.").arg(inputUrl));
   }
 
-  //TODO: batch this write?
   long ruleWordPartCtr = 0;
   while (!inputFile.atEnd())
   {

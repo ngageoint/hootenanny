@@ -82,7 +82,6 @@ bool ImplicitPoiPolygonTagger::_visitElement(const ElementPtr& e)
   LOG_VART(elementIsAPoly);
   const bool elementIsASpecificPoly =
     inABuildingOrPoiCategory && e->getTags().get("building") != QLatin1String("yes");
-  //TODO: hack
   _elementIsASpecificPoi = elementIsASpecificPoly;
   LOG_VART(_elementIsASpecificPoi);
   const bool elementIsAGenericPoly = !elementIsASpecificPoly;

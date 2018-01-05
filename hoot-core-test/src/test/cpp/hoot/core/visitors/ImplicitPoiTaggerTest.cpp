@@ -55,7 +55,6 @@ class ImplicitPoiTaggerTest : public CppUnit::TestFixture
 
 public:
 
-  //TODO: use these throughout test
   static QString inDir() { return "test-files/visitors/ImplicitPoiTaggerTest"; }
   static QString outDir() { return "test-output/visitors/ImplicitPoiTaggerTest"; }
 
@@ -68,16 +67,13 @@ public:
   {
     QDir().mkpath(outDir());
 
-    //TODO: don't regen this database every time
-    //use this to regenerate the db file
+    //regenerate the db file
     const QString databaseOutFile =
       outDir() + "/ImplicitPoiTaggerTest-runBasicTest-rules.sqlite";
     ImplicitTagRulesSqliteWriter writer;
     writer.open(databaseOutFile);
-    writer.write(
-      "test-files/visitors/ImplicitPoiTaggerTest/runBasicTest-ruleWordParts");
+    writer.write("test-files/visitors/ImplicitPoiTaggerTest/runBasicTest-ruleWordParts");
     writer.close();
-//    return;
 
     QString testJsonStr = QString::fromUtf8(
       "{                                      \n"
@@ -107,14 +103,7 @@ public:
     // the JSON parser doesn't handle exotic characters
     map->getNode(-5)->getTags()["alt_name"] = QString::fromUtf8("Şiḩḩī");
 
-    //const QString databaseInFile =
-      //"test-files/io/ImplicitPoiTaggerTest-runBasicTest-rules.sqlite";
-    ImplicitPoiTagger uut(/*databaseInFile*/databaseOutFile);
-//    Settings conf;
-//    conf.set("poi.implicit.tag.rules.tag.ignore.file", "");
-//    conf.set("poi.implicit.tag.rules.word.ignore.file", "");
-//    conf.set("poi.implicit.tag.rules.custom.rule.file", "");
-//    uut.setConfiguration(conf);
+    ImplicitPoiTagger uut(databaseOutFile);
     uut.setAddTopTagOnly(false);
     uut.setAllowWordsInvolvedInMultipleRules(false);
     uut.setAllowTaggingSpecificPois(true);
@@ -167,16 +156,13 @@ public:
   {
     QDir().mkpath(outDir());
 
-    //TODO: don't regen this database every time
-    //use this to regenerate the db file
+    //regenerate the db file
     const QString databaseOutFile =
       outDir() + "/ImplicitPoiTaggerTest-runDuplicateTagKeyTest-rules.sqlite";
     ImplicitTagRulesSqliteWriter writer;
     writer.open(databaseOutFile);
-    writer.write(
-      "test-files/visitors/ImplicitPoiTaggerTest/runDuplicateTagKeyTest-ruleWordParts");
+    writer.write("test-files/visitors/ImplicitPoiTaggerTest/runDuplicateTagKeyTest-ruleWordParts");
     writer.close();
-  //    return;
 
     OsmMapPtr map(new OsmMap());
     NodePtr node(new Node(Status::Unknown1, 1, geos::geom::Coordinate(1, 1), 15.0));
@@ -187,14 +173,7 @@ public:
     node->getTags()["amenity"] = "bank";
     map->addNode(node);
 
-    //const QString databaseInFile =
-      //"test-files/io/ImplicitPoiTaggerTest-runBasicTest-rules.sqlite";
-    ImplicitPoiTagger uut(/*databaseInFile*/databaseOutFile);
-//    Settings conf;
-//    conf.set("poi.implicit.tag.rules.tag.ignore.file", "");
-//    conf.set("poi.implicit.tag.rules.word.ignore.file", "");
-//    conf.set("poi.implicit.tag.rules.custom.rule.file", "");
-//    uut.setConfiguration(conf);
+    ImplicitPoiTagger uut(databaseOutFile);
     uut.setAddTopTagOnly(false);
     uut.setAllowWordsInvolvedInMultipleRules(false);
     uut.setAllowTaggingSpecificPois(true);
@@ -214,16 +193,13 @@ public:
   {
     QDir().mkpath(outDir());
 
-    //TODO: don't regen this database every time
-    //use this to regenerate the db file
+    //regenerate the db file
     const QString databaseOutFile =
       outDir() + "/ImplicitPoiTaggerTest-runLessSpecificImplicitTagTest-rules.sqlite";
     ImplicitTagRulesSqliteWriter writer;
     writer.open(databaseOutFile);
-    writer.write(
-      "test-files/visitors/ImplicitPoiTaggerTest/runLessSpecificImplicitTagTest-ruleWordParts");
+    writer.write("test-files/visitors/ImplicitPoiTaggerTest/runLessSpecificImplicitTagTest-ruleWordParts");
     writer.close();
-  //    return;
 
     OsmMapPtr map(new OsmMap());
     NodePtr node(new Node(Status::Unknown1, 1, geos::geom::Coordinate(1, 1), 15.0));
@@ -233,14 +209,7 @@ public:
     node->getTags()["amenity"] = "public_hall";
     map->addNode(node);
 
-    //const QString databaseInFile =
-      //"test-files/io/ImplicitPoiTaggerTest-runLessSpecificImplicitTagTest-rules.sqlite";
-    ImplicitPoiTagger uut(/*databaseInFile*/databaseOutFile);
-//    Settings conf;
-//    conf.set("poi.implicit.tag.rules.tag.ignore.file", "");
-//    conf.set("poi.implicit.tag.rules.word.ignore.file", "");
-//    conf.set("poi.implicit.tag.rules.custom.rule.file", "");
-    //uut.setConfiguration(conf);
+    ImplicitPoiTagger uut(databaseOutFile);
     uut.setAddTopTagOnly(false);
     uut.setAllowWordsInvolvedInMultipleRules(false);
     uut.setAllowTaggingSpecificPois(true);
@@ -260,8 +229,7 @@ public:
   {
     QDir().mkpath(outDir());
 
-    //TODO: don't regen this database every time
-    //use this to regenerate the db file
+    //regenerate the db file
     const QString databaseOutFile =
       outDir() + "/ImplicitPoiTaggerTest-runMoreSpecificImplicitTagTest-rules.sqlite";
     ImplicitTagRulesSqliteWriter writer;
@@ -269,7 +237,6 @@ public:
     writer.write(
       "test-files/visitors/ImplicitPoiTaggerTest/runMoreSpecificImplicitTagTest-ruleWordParts");
     writer.close();
-  //    return;
 
     OsmMapPtr map(new OsmMap());
     NodePtr node(new Node(Status::Unknown1, 1, geos::geom::Coordinate(1, 1), 15.0));
@@ -279,15 +246,7 @@ public:
     node->getTags()["amenity"] = "hall";
     map->addNode(node);
 
-    //const QString databaseInFile =
-      //"test-files/io/ImplicitPoiTaggerTest-runMoreSpecificImplicitTagTest-rules.sqlite";
-    ImplicitPoiTagger uut(/*databaseInFile*/databaseOutFile);
-//    Settings conf;
-//    conf.set("poi.implicit.tag.rules.rule.ignore.file", "");
-//    conf.set("poi.implicit.tag.rules.tag.ignore.file", "");
-//    conf.set("poi.implicit.tag.rules.word.ignore.file", "");
-//    conf.set("poi.implicit.tag.rules.custom.rule.file", "");
-//    uut.setConfiguration(conf);
+    ImplicitPoiTagger uut(databaseOutFile);
     uut.setAddTopTagOnly(false);
     uut.setAllowWordsInvolvedInMultipleRules(false);
     uut.setAllowTaggingSpecificPois(true);

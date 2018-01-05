@@ -129,6 +129,7 @@ void ImplicitTagRulesDatabaseDeriver::deriveRulesDatabase(const QString input, c
         if (!_customRules.getWordIgnoreList().contains(tagVal, Qt::CaseInsensitive))
         {
           _schemaTagValues.insert(tagVal);
+          //dealing with the uk english spellings...this should be expanded and made more extensible
           if (tagVal == "theatre")
           {
             _schemaTagValues.insert("theater");
@@ -137,7 +138,6 @@ void ImplicitTagRulesDatabaseDeriver::deriveRulesDatabase(const QString input, c
           {
             _schemaTagValues.insert("center");
           }
-          //TODO: add aliases?
           LOG_TRACE("Appended " << tagVal << " to schema tag values.");
         }
         QStringList vals = tokenizer.tokenize(tagVal);

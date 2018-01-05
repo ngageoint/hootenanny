@@ -44,8 +44,9 @@ namespace hoot
 
 ImplicitTagRulesSqliteReader::ImplicitTagRulesSqliteReader() :
 //since we're inserting all objects with cost=1, the cost passed into the constructor
-//of QCache behaves as a max size
-_tagsCache(100000),    //arbitrary max size; actually haven't seen anything close to this in practice yet
+//of QCache behaves as a max size; arbitrary max size; actually haven't seen anything close to
+//this in practice yet...may need tuning
+_tagsCache(100000),
 _firstRoundTagsCacheHits(0),
 _secondRoundTagsCacheHits(0),
 _addTopTagOnly(true),
@@ -175,7 +176,6 @@ Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,
   //The cache needs to check against a key composed of all of the words, due to possible multiple
   //rule conflicts that can occur when combinations of full names and tokenized names are passed in.
   //Its possible that the exact set of words passed in is in the cache, so check.
-  //TODO: handle ';' in words
   wordsList = words.toList();
   wordsKey = wordsList.join(";");
   cachedTags = _tagsCache[wordsKey];

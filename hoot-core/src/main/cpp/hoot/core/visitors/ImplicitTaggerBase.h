@@ -30,7 +30,6 @@
 // hoot
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/io/ImplicitTagRulesSqliteReader.h>
-//#include <hoot/core/schema/ImplicitTagCustomRules.h>
 #include <hoot/core/util/Configurable.h>
 
 namespace hoot
@@ -82,13 +81,10 @@ private:
   long _numNodesInvolvedInMultipleRules;
   long _numNodesParsed;
   long _statusUpdateInterval;
-  //int _minWordLength;
   long _smallestNumberOfTagsAdded;
   long _largestNumberOfTagsAdded;
   bool _translateAllNamesToEnglish;
   bool _matchEndOfNameSingleTokenFirst;
-
-  //ImplicitTagCustomRules _customRules;
 
   QStringList _getNameTokens(const QStringList names);
 

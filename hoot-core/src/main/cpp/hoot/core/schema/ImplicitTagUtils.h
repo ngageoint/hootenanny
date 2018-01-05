@@ -24,43 +24,28 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
+#ifndef IMPLICITTAGUTILS_H
+#define IMPLICITTAGUTILS_H
 
-// Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/schema/ImplicitTagRulesDatabaseDeriver.h>
+// Qt
+#include <QStringList>
+#include <QMap>
 
 namespace hoot
 {
 
 /**
- * Derives implicit tag rules for POIs and writes the output in various formats
+ *
  */
-class DeriveImplicitTagRulesDatabaseCmd : public BaseCommand
+class ImplicitTagUtils
 {
+
 public:
 
-  static std::string className() { return "hoot::DeriveImplicitTagRulesDatabaseCmd"; }
+  static void cleanName(QString& name);
 
-  virtual QString getName() const { return "implicit-tagging-derive-rules-database"; }
-
-  virtual int runSimple(QStringList args)
-  {
-    if (args.size() != 3)
-    {
-      std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes three parameters.").arg(getName()));
-    }
-
-    ImplicitTagRulesDatabaseDeriver rulesDatabaseDeriver;
-    rulesDatabaseDeriver.setConfiguration(conf());
-    rulesDatabaseDeriver.setElementType(args[0]);
-    rulesDatabaseDeriver.deriveRulesDatabase(args[1].trimmed(), args[2].trimmed());
-
-    return 0;
-  }
 };
 
-HOOT_FACTORY_REGISTER(Command, DeriveImplicitTagRulesDatabaseCmd)
-
 }
+
+#endif // IMPLICITTAGUTILS_H
