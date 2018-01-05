@@ -32,7 +32,7 @@ app.get('/options', function(req, res) {
         Datasource: _.keys(config.datasources),
         Schema: _.keys(config.schemas),
         Format: _.keys(config.formats),
-        SetTagOverrides: _.keys(config.tagOverrides)
+        SetTagOverrides: JSON.stringify(config.tagOverrides)
     });
 });
 
@@ -92,13 +92,12 @@ app.post('/export/:datasource/:schema/:format/', function(req, res) {
 /* Get export */
 app.get('/export/:datasource/:schema/:format', function(req, res) {
 
-
     //Build a hash for the input params using base64
     var params = req.params.datasource
         + req.params.schema
         + req.params.format
-        // + req.params.overrideTags
-        + req.query.bbox;
+        + req.query.bbox
+        + req.query.overrideTags;
     var hash = crypto.createHash('sha1').update(params).digest('hex');
     var input = config.datasources[req.params.datasource].conn;
     doExport(req, res, hash, input);
@@ -237,7 +236,6 @@ function doExport(req, res, hash, input) {
 
         var command = '';
         var overrideTags = JSON.stringify(config.tagOverrides);
-        console.log(overrideTags);
         //if conn is url, write that response to a file
         //handle different flavors of bbox param
         var bbox_param = 'convert.bounding.box';
@@ -261,12 +259,14 @@ function doExport(req, res, hash, input) {
         if (isFile) {
             command += ' convert';
             if (bbox) command += ' -D ' + bbox_param + '=' + bbox;
+            if (req.query.overrideTags) command += ' -D tags.override=' + overrideTags;
             if (req.params.schema !== 'OSM' && config.schemas[req.params.schema] !== '') {
                 command += ' -D convert.ops=hoot::TranslationOp -D translation.script=' + config.schemas[req.params.schema] + ' -D translation.direction=toogr';
             }
         } else {
             command += ' osm2ogr';
-            if (req.params.schema === 'OSM') command += ' -D writer.include.debug.tags=true tags.override='+ overrideTags;
+            if (req.params.schema === 'OSM') command += ' -D writer.include.debug.tags=true';
+            if (req.query.overrideTags) command +=  ' -D tags.override=' + overrideTags;
             if (bbox) command += ' -D ' + bbox_param + '=' + bbox;
             command += ' ' + config.schemas[req.params.schema];
         }
