@@ -106,7 +106,7 @@ public:
 
     MapProjector::projectToWgs84(after);
 
-    QDir().mkdir("test-output");
+    QDir().mkpath("test-output");
     OsmXmlWriter writer;
     writer.write(after, "test-output/DividedHighwayManipulationTest.osm");
   }

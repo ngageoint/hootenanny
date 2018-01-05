@@ -78,9 +78,10 @@ public:
 
   void runTest()
   {
-    OsmXmlReader reader;
-
+    QDir().mkpath("test-output/conflate");
     OsmMap::resetCounters();
+
+    OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/algorithms/LongestCommonNodeStringTest.osm", map);
@@ -103,8 +104,9 @@ public:
    */
   void runStrictTagMatchingOnTest()
   {
-    QDir().mkdir("test-output/conflate");
+    QDir().mkpath("test-output/conflate");
     OsmMap::resetCounters();
+
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, "test-files/DcTigerRoads.osm", true, Status::Unknown1);
 
@@ -134,8 +136,9 @@ public:
    */
   void runStrictTagMatchingOffTest()
   {
-    QDir().mkdir("test-output/conflate");
+    QDir().mkpath("test-output/conflate");
     OsmMap::resetCounters();
+
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, "test-files/DcTigerRoads.osm", true, Status::Unknown1);
 

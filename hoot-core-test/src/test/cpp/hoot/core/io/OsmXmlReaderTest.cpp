@@ -64,9 +64,6 @@ public:
 
         CPPUNIT_ASSERT_EQUAL(36, (int)map->getNodes().size());
         CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
-
-        OsmXmlWriter writer;
-        writer.write(map, "output.osm");
     }
 
     void runUseIdTest()
@@ -99,9 +96,6 @@ public:
         CPPUNIT_ASSERT(map->containsWay(-1669799));
         CPPUNIT_ASSERT(map->containsWay(-1669797));
         CPPUNIT_ASSERT(map->containsWay(-1669795));
-
-        OsmXmlWriter writer;
-        writer.write(map, "output.osm");
     }
 
     void runUseStatusTest()
@@ -134,14 +128,11 @@ public:
         HOOT_STR_EQUALS("Unknown2", map->getWay(-51)->getStatus().toString());
         HOOT_STR_EQUALS("Input003", map->getWay(-14)->getStatus().toString());
         HOOT_STR_EQUALS("Input004", map->getWay(-15)->getStatus().toString());
-
-        OsmXmlWriter writer;
-        writer.write(map, "output.osm");
     }
 
     void runUncompressTest()
     {
-      const std::string cmd("gzip -c test-files/ToyTestA.osm > test-files/ToyTestA_compressed.osm.gz");
+      const std::string cmd("gzip -c test-files/ToyTestA.osm > test-output/ToyTestA_compressed.osm.gz");
       LOG_DEBUG("Running compress command: " << cmd);
 
       int retVal;
@@ -158,18 +149,18 @@ public:
       uut.setUseDataSourceIds(true);
 
       // Excercise the code
-      uut.read("test-files/ToyTestA_compressed.osm.gz", map);
+      uut.read("test-output/ToyTestA_compressed.osm.gz", map);
 
       // Checka a few things
       CPPUNIT_ASSERT_EQUAL(36,(int)map->getNodes().size());
       CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
 
-      QFile f("test-files/ToyTestA_compressed.osm.gz");
+      QFile f("test-output/ToyTestA_compressed.osm.gz");
       CPPUNIT_ASSERT(f.exists());
       CPPUNIT_ASSERT(f.remove());
     }
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(OsmXmlReaderTest);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmXmlReaderTest, "quick");
 
 }
