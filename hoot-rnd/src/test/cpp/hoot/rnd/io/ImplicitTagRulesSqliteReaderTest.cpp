@@ -43,6 +43,8 @@ class ImplicitTagRulesSqliteReaderTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runMultipleRulesTest);
   //TODO
   //CPPUNIT_TEST(runQuoteInNameTest);
+  //separate tests for top tag only false/true
+  //separate tests for allow involved in multiple rules false/true
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -50,6 +52,8 @@ public:
   void runTagsTest()
   {
     ImplicitTagRulesSqliteReader reader;
+    reader.setAddTopTagOnly(false);
+    reader.setAllowWordsInvolvedInMultipleRules(false);
     reader.open("test-files/io/ImplicitTagRulesSqliteReaderTest/rules.sqlite");
 
     QSet<QString> words;
@@ -158,6 +162,8 @@ public:
   void runMultipleRulesTest()
   {
     ImplicitTagRulesSqliteReader reader;
+    reader.setAddTopTagOnly(false);
+    reader.setAllowWordsInvolvedInMultipleRules(false);
     reader.open("test-files/io/ImplicitTagRulesSqliteReaderTest/rules.sqlite");
 
     QSet<QString> words;
