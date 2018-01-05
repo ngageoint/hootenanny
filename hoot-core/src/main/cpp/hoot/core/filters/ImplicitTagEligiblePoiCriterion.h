@@ -24,31 +24,33 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef IMPLICIT_TAG_ELIGIBLE_CRITERION_H
-#define IMPLICIT_TAG_ELIGIBLE_CRITERION_H
+#ifndef IMPLICIT_TAG_ELIGIBLE_POI_CRITERION_H
+#define IMPLICIT_TAG_ELIGIBLE_POI_CRITERION_H
 
 // hoot
-#include <hoot/core/filters/ElementCriterion.h>
-#include <hoot/core/elements/Tags.h>
-
-// Qt
-#include <QStringList>
-
+#include <hoot/core/filters/ImplicitTagEligibleCriterion.h>
 
 namespace hoot
 {
 
 /**
- *
+ * A criterion that is only satisified with POIs.
  */
-class ImplicitTagEligibleCriterion : public ElementCriterion
+class ImplicitTagEligiblePoiCriterion : public ImplicitTagEligibleCriterion
 {
 public:
 
-  //static std::string className() { return "hoot::ImplicitTagEligiblePoiCriterion"; }
+  static std::string className() { return "hoot::ImplicitTagEligiblePoiCriterion"; }
 
-  virtual QStringList getEligibleKvps(const Tags& tags) const = 0;
-  virtual bool hasEligibleKvp(const Tags& tags) const = 0;
+  ImplicitTagEligiblePoiCriterion() {}
+
+  virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
+
+  virtual boost::shared_ptr<ElementCriterion> clone()
+  { return  boost::shared_ptr<ElementCriterion>(new ImplicitTagEligiblePoiCriterion()); }
+
+  virtual QStringList getEligibleKvps(const Tags& tags) const;
+  virtual bool hasEligibleKvp(const Tags& tags) const;
 
 };
 

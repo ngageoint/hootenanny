@@ -29,7 +29,7 @@
 
 // Hoot
 #include <hoot/core/util/Configurable.h>
-#include <hoot/rnd/filters/ImplicitTagEligibleCriterion.h>
+#include <hoot/core/filters/ImplicitTagEligibleCriterion.h>
 
 // Qt
 #include <QString>

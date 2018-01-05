@@ -25,8 +25,8 @@
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 // Hoot
-#include <hoot/core/TestUtils.h>
-#include <hoot/rnd/io/ImplicitTagRulesSqliteWriter.h>
+#include "../TestUtils.h"
+#include <hoot/core/io/ImplicitTagRulesSqliteWriter.h>
 
 // Qt
 #include <QDir>

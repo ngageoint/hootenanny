@@ -29,8 +29,8 @@
 
 // hoot
 #include <hoot/core/elements/ElementVisitor.h>
-#include <hoot/rnd/io/ImplicitTagRulesSqliteReader.h>
-//#include <hoot/rnd/schema/ImplicitTagCustomRules.h>
+#include <hoot/core/io/ImplicitTagRulesSqliteReader.h>
+//#include <hoot/core/schema/ImplicitTagCustomRules.h>
 #include <hoot/core/util/Configurable.h>
 
 namespace hoot

@@ -28,39 +28,40 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/rnd/io/ImplicitTagRulesSqliteReader.h>
+#include <hoot/core/schema/ImplicitTagRawRulesDeriver.h>
 
 namespace hoot
 {
 
 /**
- *
+ * Derives implicit tag rules for POIs and writes the output in various formats
  */
-class ImplicitTagRulesDatabaseStatsCmd : public BaseCommand
+class DeriveRawImplicitTagRulesCmd : public BaseCommand
 {
 public:
 
-  static std::string className() { return "hoot::ImplicitTagRulesDatabaseStatsCmd"; }
+  static std::string className() { return "hoot::DeriveRawImplicitTagRulesCmd"; }
 
-  virtual QString getName() const { return "implicit-tagging-rules-database-stats"; }
+  virtual QString getName() const { return "implicit-tagging-derive-raw-rules"; }
 
   virtual int runSimple(QStringList args)
   {
-    if (args.size() != 1)
+    if (args.size() != 4)
     {
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes one parameters.").arg(getName()));
+      throw HootException(QString("%1 takes four parameters.").arg(getName()));
     }
 
-    ImplicitTagRulesSqliteReader dbReader;
-    dbReader.open(args[0].trimmed());
-    dbReader.printStats();
-    dbReader.close();
+    ImplicitTagRawRulesDeriver rawRulesDeriver;
+    rawRulesDeriver.setConfiguration(conf());
+    rawRulesDeriver.setElementFilter(args[0].trimmed());
+    rawRulesDeriver.deriveRawRules(
+      args[1].trimmed().split(";"), args[2].trimmed().split(";"), args[3].trimmed());
 
     return 0;
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, ImplicitTagRulesDatabaseStatsCmd)
+HOOT_FACTORY_REGISTER(Command, DeriveRawImplicitTagRulesCmd)
 
 }

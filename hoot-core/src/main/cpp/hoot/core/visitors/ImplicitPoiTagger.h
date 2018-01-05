@@ -24,44 +24,36 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
+#ifndef IMPLICITPOITAGGER_H
+#define IMPLICITPOITAGGER_H
 
-// Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/rnd/schema/ImplicitTagRawRulesDeriver.h>
+// hoot
+#include <hoot/core/visitors/ImplicitTaggerBase.h>
 
 namespace hoot
 {
 
 /**
- * Derives implicit tag rules for POIs and writes the output in various formats
+ * Adds tags implicitly derived from POI names to POIs
+ *
+ * Relevant configuration options are those beginning with implicit.tagger.poi.* in
+ * conf/core/ConfigOptions.asciidoc.
  */
-class DeriveRawImplicitTagRulesCmd : public BaseCommand
+class ImplicitPoiTagger : public ImplicitTaggerBase
 {
 public:
 
-  static std::string className() { return "hoot::DeriveRawImplicitTagRulesCmd"; }
+  static std::string className() { return "hoot::ImplicitPoiTagger"; }
 
-  virtual QString getName() const { return "implicit-tagging-derive-raw-rules"; }
+  ImplicitPoiTagger();
+  ImplicitPoiTagger(const QString databasePath);
 
-  virtual int runSimple(QStringList args)
-  {
-    if (args.size() != 4)
-    {
-      std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes four parameters.").arg(getName()));
-    }
+protected:
 
-    ImplicitTagRawRulesDeriver rawRulesDeriver;
-    rawRulesDeriver.setConfiguration(conf());
-    rawRulesDeriver.setElementFilter(args[0].trimmed());
-    rawRulesDeriver.deriveRawRules(
-      args[1].trimmed().split(";"), args[2].trimmed().split(";"), args[3].trimmed());
+  virtual bool _visitElement(const ElementPtr& e);
 
-    return 0;
-  }
 };
 
-HOOT_FACTORY_REGISTER(Command, DeriveRawImplicitTagRulesCmd)
-
 }
+
+#endif // IMPLICITPOITAGGER_H

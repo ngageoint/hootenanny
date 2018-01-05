@@ -25,9 +25,9 @@
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 // Hoot
-#include <hoot/core/TestUtils.h>
-#include <hoot/rnd/schema/ImplicitTagRawRulesDeriver.h>
-#include <hoot/rnd/io/ImplicitTagRulesSqliteReader.h>
+#include "../TestUtils.h"
+#include <hoot/core/schema/ImplicitTagRawRulesDeriver.h>
+#include <hoot/core/io/ImplicitTagRulesSqliteReader.h>
 
 // Qt
 #include <QDir>

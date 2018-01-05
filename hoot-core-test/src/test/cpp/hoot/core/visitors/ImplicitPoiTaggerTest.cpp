@@ -26,11 +26,11 @@
  */
 
 // Hoot
-#include <hoot/core/TestUtils.h>
+#include "../TestUtils.h"
 #include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/rnd/visitors/ImplicitPoiTagger.h>
-#include <hoot/rnd/io/ImplicitTagRulesSqliteWriter.h>
+#include <hoot/core/visitors/ImplicitPoiTagger.h>
+#include <hoot/core/io/ImplicitTagRulesSqliteWriter.h>
 
 // Qt
 #include <QDir>

@@ -29,7 +29,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/rnd/schema/ImplicitTagRulesDatabaseDeriver.h>
+#include <hoot/core/schema/ImplicitTagRulesDatabaseDeriver.h>
 
 namespace hoot
 {

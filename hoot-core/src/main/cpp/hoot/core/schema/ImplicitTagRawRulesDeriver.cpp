@@ -38,7 +38,7 @@
 #include <hoot/core/visitors/TranslationVisitor.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/algorithms/Translator.h>
-#include <hoot/rnd/filters/ImplicitTagEligiblePoiCriterion.h>
+#include <hoot/core/filters/ImplicitTagEligiblePoiCriterion.h>
 
 // Qt
 #include <QStringBuilder>

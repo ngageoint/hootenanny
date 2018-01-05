@@ -30,7 +30,7 @@
 
 // Hoot
 #include <hoot/core/elements/Tags.h>
-//#include <hoot/rnd/schema/ImplicitTagCustomRules.h>
+//#include <hoot/core/schema/ImplicitTagCustomRules.h>
 
 // Qt
 #include <QString>

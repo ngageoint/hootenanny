@@ -110,7 +110,7 @@ public:
   }
 
   //This test shows the fix for ticket #249.
-  //Now the river/building never get mergeed together.
+  //Now the river/building never get merged together.
   void runMergeTest()
   {
     QDir().mkpath("test-output");

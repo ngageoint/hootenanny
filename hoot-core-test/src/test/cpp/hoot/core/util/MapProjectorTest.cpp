@@ -48,7 +48,7 @@ using namespace hoot;
 // Tbs
 #include <tbs/stats/SampleStats.h>
 
-#include "TestUtils.h"
+#include "../TestUtils.h"
 
 using namespace geos::geom;
 using namespace std;
