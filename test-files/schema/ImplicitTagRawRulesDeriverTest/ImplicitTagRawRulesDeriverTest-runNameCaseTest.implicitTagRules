@@ -1,4 +1,5 @@
 1	great	amenity=place_of_worship
+1	great mosque	amenity=place_of_worship
 1	handel	amenity=place_of_worship
 1	handel	building=mosque
 1	handel mosque	amenity=place_of_worship
@@ -6,4 +7,5 @@
 2	mosque	amenity=place_of_worship
 1	mosque	building=mosque
 1	old	amenity=place_of_worship
+1	old great	amenity=place_of_worship
 1	old great mosque	amenity=place_of_worship

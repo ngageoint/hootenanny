@@ -39,7 +39,7 @@ namespace hoot
 class ImplicitTagRulesSqliteReaderTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ImplicitTagRulesSqliteReaderTest);
-  //CPPUNIT_TEST(runTagsTest);
+  CPPUNIT_TEST(runTagsTest);
   CPPUNIT_TEST(runMultipleRulesTest);
   //TODO
   //CPPUNIT_TEST(runQuoteInNameTest);

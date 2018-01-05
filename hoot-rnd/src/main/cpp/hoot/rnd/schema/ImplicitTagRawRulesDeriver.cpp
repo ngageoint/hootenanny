@@ -134,6 +134,15 @@ void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
                                                 const QStringList translationScripts,
                                                 const QString output)
 {
+  LOG_VARD(inputs);
+  LOG_VARD(translationScripts);
+  LOG_VARD(output);
+
+  if (!_elementFilter.get())
+  {
+    throw HootException("No element type was specified.");
+  }
+
   if (inputs.isEmpty())
   {
     throw HootException("No inputs were specified.");
@@ -188,7 +197,7 @@ void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
   {
     const QString input = inputs.at(i);
     LOG_INFO("Parsing: " << input << "...");
-    const bool inputIsPbf = input.endsWith(".pbf");
+    //const bool inputIsPbf = input.endsWith(".pbf");
 
     boost::shared_ptr<PartialOsmMapReader> inputReader =
       boost::dynamic_pointer_cast<PartialOsmMapReader>(
@@ -197,6 +206,7 @@ void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
     boost::shared_ptr<ElementInputStream> inputStream =
       boost::dynamic_pointer_cast<ElementInputStream>(inputReader);
     const QString translationScript = translationScripts.at(i);
+    LOG_VARD(translationScript);
     if (translationScript.toLower() != "none")
     {
       boost::shared_ptr<TranslationVisitor> translationVisitor(new TranslationVisitor());
@@ -208,20 +218,24 @@ void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
     while (inputStream->hasMoreElements())
     {
       ElementPtr element = inputStream->readNextElement();
+      LOG_VART(element);
 
       //TODO: remove?
-      if (element->getElementType() != ElementType::Node && inputIsPbf)
-      {
-        LOG_INFO("Reached end of PBF nodes for input: " << input << ".");
-        break;
-      }
+//      if (element->getElementType() != ElementType::Node && inputIsPbf)
+//      {
+//        LOG_INFO("Reached end of PBF nodes for input: " << input << ".");
+//        break;
+//      }
 
       nodeCount++;
 
+      assert(_elementFilter.get());
       if (_skipFiltering || _elementFilter->isSatisfied(element))
       {
+        LOG_TRACE("test7");
         QStringList names = element->getTags().getNames();
         assert(!names.isEmpty());
+        LOG_TRACE("test8");
 
         if (names.removeAll("old_name") > 0)
         {
@@ -468,7 +482,8 @@ void ImplicitTagRawRulesDeriver::_removeDuplicatedKeyTypes()
     LOG_VART(tagKey);
     const QString wordTagKey = word.trimmed() % ";" % tagKey.trimmed();
     LOG_VART(wordTagKey);
-    const QString wordTagKeyCount = word.trimmed() % ";" % tagKey.trimmed() % ";" % countStr.trimmed();
+    const QString wordTagKeyCount =
+      word.trimmed() % ";" % tagKey.trimmed() % ";" % countStr.trimmed();
     LOG_VART(wordTagKeyCount);
     const QString tagValue = kvpParts[1];
     LOG_VART(tagValue);
@@ -606,6 +621,7 @@ void ImplicitTagRawRulesDeriver::_resolveCountTies()
         " lines from input for duplicated tag key count ties.");
     }
   }
+  LOG_VARD(lineCount);
   LOG_INFO(
     "Resolved " << StringUtils::formatLargeNumber(duplicateResolutions) <<
     " word/tag key/count ties.");
@@ -626,6 +642,7 @@ void ImplicitTagRawRulesDeriver::_sortByWord(boost::shared_ptr<QTemporaryFile> i
     throw HootException("Unable to sort input file.");
   }
 
+  LOG_VARD(_output->fileName());
   LOG_INFO(
     "Wrote " <<
     StringUtils::formatLargeNumber(
