@@ -49,7 +49,7 @@ app.get('/job/:hash', function(req, res) {
 });
 
 /* Post export */
-// export/Overpass/OSM/Shapefile/overrideTags?
+// export/Overpass/OSM/Shapefile
 app.post('/export/:datasource/:schema/:format/', function(req, res) {
 
     //Build a hash for the input params used in file name
@@ -97,11 +97,10 @@ app.get('/export/:datasource/:schema/:format', function(req, res) {
     var params = req.params.datasource
         + req.params.schema
         + req.params.format
-        + req.params.tagOverrides
+        // + req.params.overrideTags
         + req.query.bbox;
     var hash = crypto.createHash('sha1').update(params).digest('hex');
     var input = config.datasources[req.params.datasource].conn;
-    console.log(params);
     doExport(req, res, hash, input);
 
 });
@@ -237,6 +236,8 @@ function doExport(req, res, hash, input) {
             + '.zip';
 
         var command = '';
+        var overrideTags = JSON.stringify(config.tagOverrides);
+        console.log(overrideTags);
         //if conn is url, write that response to a file
         //handle different flavors of bbox param
         var bbox_param = 'convert.bounding.box';
@@ -265,7 +266,7 @@ function doExport(req, res, hash, input) {
             }
         } else {
             command += ' osm2ogr';
-            if (req.params.schema === 'OSM') command += ' -D writer.include.debug.tags=true';
+            if (req.params.schema === 'OSM') command += ' -D writer.include.debug.tags=true tags.override='+ overrideTags;
             if (bbox) command += ' -D ' + bbox_param + '=' + bbox;
             command += ' ' + config.schemas[req.params.schema];
         }
