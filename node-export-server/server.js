@@ -50,7 +50,7 @@ app.get('/job/:hash', function(req, res) {
 
 /* Post export */
 // export/Overpass/OSM/Shapefile
-app.post('/export/:datasource/:schema/:format/', function(req, res) {
+app.post('/export/:datasource/:schema/:format', function(req, res) {
 
     //Build a hash for the input params used in file name
     var params = (new Date()).getTime()
