@@ -59,13 +59,12 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  //void setCustomRuleFile(const QString file) { _customRules.setCustomRuleFile(file); }
-  //void setTagIgnoreFile(const QString file) { _customRules.setTagIgnoreFile(file); }
-  //void setWordIgnoreFile(const QString file) { _customRules.setWordIgnoreFile(file); }
   void setTranslateAllNamesToEnglish(bool translate) { _translateAllNamesToEnglish = translate; }
   void setMatchEndOfNameSingleTokenFirst(bool match) { _matchEndOfNameSingleTokenFirst = match; }
   void setAllowTaggingSpecificPois(bool allow) { _allowTaggingSpecificPois = allow; }
-  //void setMinWordLength(int length) { _minWordLength = length; }
+  void setAddTopTagOnly(bool add) { _ruleReader->setAddTopTagOnly(add); }
+  void setAllowWordsInvolvedInMultipleRules(bool allow)
+  { _ruleReader->setAllowWordsInvolvedInMultipleRules(allow); }
 
 protected:
 
