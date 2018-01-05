@@ -94,6 +94,10 @@ private:
   void _applyFiltering(const QString input);
 
   void _writeRules(const QString input, const QString output);
+  void _validateInputs(const QString input, const QString output);
+  void _populateSchemaTagValues();
+  bool _wordIsNotASchemaTagValue(const QString word);
+  void _writeCustomRules(long& linesWrittenCount);
 };
 
 }
