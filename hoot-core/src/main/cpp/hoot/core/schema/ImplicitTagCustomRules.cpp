@@ -55,10 +55,8 @@ void ImplicitTagCustomRules::_clear()
   _customRulesList.clear();
 }
 
-void ImplicitTagCustomRules::_readAllowLists()
+void ImplicitTagCustomRules::_readCustomRuleFile()
 {
-  LOG_DEBUG("Reading allow lists...");
-
   LOG_VARD(_customRuleFile);
   if (!_customRuleFile.trimmed().isEmpty())
   {
@@ -80,57 +78,45 @@ void ImplicitTagCustomRules::_readAllowLists()
     }
     customRulesFile.close();
   }
-  LOG_VARD(_customRulesList);
+  LOG_VART(_customRulesList);
+}
+
+void ImplicitTagCustomRules::_readIgnoreList(const QString inputPath, QStringList& outputList)
+{
+  LOG_VARD(inputPath);
+  if (!inputPath.trimmed().isEmpty())
+  {
+    QFile inputFile(inputPath);
+    if (!inputFile.open(QIODevice::ReadOnly))
+    {
+      throw HootException(
+        QObject::tr("Error opening %1 for writing.").arg(inputFile.fileName()));
+    }
+    outputList.clear();
+    while (!inputFile.atEnd())
+    {
+      const QString line = QString::fromUtf8(inputFile.readLine().constData()).trimmed();
+      if (!line.trimmed().isEmpty() && !line.startsWith("#"))
+      {
+        outputList.append(line);
+      }
+    }
+    inputFile.close();
+  }
+  LOG_VART(outputList);
+}
+
+void ImplicitTagCustomRules::_readAllowLists()
+{
+  LOG_DEBUG("Reading allow lists...");
+  _readCustomRuleFile();
 }
 
 void ImplicitTagCustomRules::_readIgnoreLists()
 {
   LOG_DEBUG("Reading ignore lists...");
-
-  LOG_VARD(_tagIgnoreFile);
-  if (!_tagIgnoreFile.trimmed().isEmpty())
-  {
-    QFile tagIgnoreFile(_tagIgnoreFile);
-    if (!tagIgnoreFile.open(QIODevice::ReadOnly))
-    {
-      throw HootException(
-        QObject::tr("Error opening %1 for writing.").arg(tagIgnoreFile.fileName()));
-    }
-    _tagIgnoreList.clear();
-    while (!tagIgnoreFile.atEnd())
-    {
-      const QString line = QString::fromUtf8(tagIgnoreFile.readLine().constData()).trimmed();
-      if (!line.trimmed().isEmpty() && !line.startsWith("#"))
-      {
-        _tagIgnoreList.append(line);
-      }
-    }
-    tagIgnoreFile.close();
-  }
-  LOG_VARD(_tagIgnoreList);
-
-  LOG_VARD(_wordIgnoreFile);
-  if (!_wordIgnoreFile.trimmed().isEmpty())
-  {
-    QFile wordIgnoreFile(_wordIgnoreFile);
-    if (!wordIgnoreFile.open(QIODevice::ReadOnly))
-    {
-      throw HootException(
-        QObject::tr("Error opening %1 for writing.").arg(wordIgnoreFile.fileName()));
-    }
-    _wordIgnoreList.clear();
-    while (!wordIgnoreFile.atEnd())
-    {
-      const QString line = QString::fromUtf8(wordIgnoreFile.readLine().constData()).trimmed();
-      if (!line.trimmed().isEmpty() && !line.startsWith("#"))
-      {
-        LOG_VART(line);
-        _wordIgnoreList.append(line);
-      }
-    }
-    wordIgnoreFile.close();
-  }
-  LOG_VARD(_wordIgnoreList);
+  _readIgnoreList(_tagIgnoreFile, _tagIgnoreList);
+  _readIgnoreList(_wordIgnoreFile, _wordIgnoreList);
 }
 
 }

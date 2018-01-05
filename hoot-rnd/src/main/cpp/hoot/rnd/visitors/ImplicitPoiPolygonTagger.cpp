@@ -52,11 +52,27 @@ ImplicitTaggerBase(databasePath)
 
 bool ImplicitPoiPolygonTagger::_visitElement(const ElementPtr& e)
 {
-  const bool elementIsANode = e->getElementType() == ElementType::Node;
-  LOG_VART(elementIsANode);
-  const bool inABuildingOrPoiCategory =
+  _inABuildingOrPoiCategory =
     OsmSchema::getInstance().getCategories(e->getTags()).intersects(
       OsmSchemaCategory::building() | OsmSchemaCategory::poi());
+
+  if (_elementIsATaggablePoi(e))
+  {
+    return true;
+  }
+
+  if (_elementIsATaggablePolygon(e))
+  {
+    return true;
+  }
+
+  return false;
+}
+
+bool ImplicitPoiPolygonTagger::_elementIsATaggablePoi(const ElementPtr& e)
+{
+  const bool elementIsANode = e->getElementType() == ElementType::Node;
+  LOG_VART(elementIsANode);
   _elementIsASpecificPoi =
     OsmSchema::getInstance().hasCategory(e->getTags(), "poi") &&
     !e->getTags().contains("poi") && e->getTags().get("building") != QLatin1String("yes");
@@ -76,12 +92,17 @@ bool ImplicitPoiPolygonTagger::_visitElement(const ElementPtr& e)
     return true;
   }
 
+  return false;
+}
+
+bool ImplicitPoiPolygonTagger::_elementIsATaggablePolygon(const ElementPtr& e)
+{
   const bool elementIsAWay = e->getElementType() == ElementType::Way;
   LOG_VART(elementIsAWay);
   const bool elementIsAPoly = _polyFilter.isSatisfied(e);
   LOG_VART(elementIsAPoly);
   const bool elementIsASpecificPoly =
-    inABuildingOrPoiCategory && e->getTags().get("building") != QLatin1String("yes");
+    _inABuildingOrPoiCategory && e->getTags().get("building") != QLatin1String("yes");
   _elementIsASpecificPoi = elementIsASpecificPoly;
   LOG_VART(_elementIsASpecificPoi);
   const bool elementIsAGenericPoly = !elementIsASpecificPoly;

@@ -30,6 +30,9 @@
 // Hoot
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/filters/ImplicitTagEligibleCriterion.h>
+#include <hoot/core/io/ElementInputStream.h>
+#include <hoot/core/io/PartialOsmMapReader.h>
+#include <hoot/core/algorithms/string/StringTokenizer.h>
 
 // Qt
 #include <QString>
@@ -78,6 +81,8 @@ private:
 
   long _statusUpdateInterval;
   boost::shared_ptr<QFile> _output;
+  boost::shared_ptr<PartialOsmMapReader> _inputReader;
+  StringTokenizer _tokenizer;
 
   boost::shared_ptr<QTemporaryFile> _countFile;
   boost::shared_ptr<QTemporaryFile> _sortedCountFile;
@@ -103,6 +108,14 @@ private:
   void _removeDuplicatedKeyTypes();
   void _resolveCountTies();
   void _sortByWord(boost::shared_ptr<QTemporaryFile> input);
+  void _validateInputs(const QStringList inputs, const QStringList translationScripts,
+                       const QString output);
+  void _init();
+  boost::shared_ptr<ElementInputStream> _getInputStream(const QString input,
+                                                        const QString translationScript);
+  QStringList _translateNamesToEnglish(const QStringList names, const Tags& tags);
+  void _parseNames(const QStringList names, const QStringList kvps);
+  void _parseNameToken(QString& nameToken, const QStringList kvps);
 };
 
 }

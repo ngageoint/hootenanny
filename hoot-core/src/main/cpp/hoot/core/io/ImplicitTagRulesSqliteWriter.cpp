@@ -235,6 +235,13 @@ void ImplicitTagRulesSqliteWriter::write(const QString inputUrl)
   _wordsToWordIds.clear();
   _tagsToTagIds.clear();
 
+  _createIndexes();
+
+  DbUtils::execNoPrepare(_db, "COMMIT");
+}
+
+void ImplicitTagRulesSqliteWriter::_createIndexes()
+{
   LOG_INFO("Creating database indexes...");
   LOG_DEBUG("Creating tags index...");
   DbUtils::execNoPrepare(_db, "CREATE UNIQUE INDEX tag_idx ON tags (kvp)");
@@ -247,8 +254,6 @@ void ImplicitTagRulesSqliteWriter::write(const QString inputUrl)
   DbUtils::execNoPrepare(_db, "CREATE INDEX tag_count_idx ON rules (tag_count)");
   LOG_DEBUG("Creating words index...");
   DbUtils::execNoPrepare(_db, "CREATE UNIQUE INDEX word_idx ON words (word)");
-
-  DbUtils::execNoPrepare(_db, "COMMIT");
 }
 
 long ImplicitTagRulesSqliteWriter::_insertWord(const QString word)

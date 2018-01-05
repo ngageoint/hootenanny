@@ -91,6 +91,7 @@ private:
   long _insertWord(const QString word);
   long _insertTag(const QString kvp);
   void _insertRuleWordPart(const long wordId, const long tagId, const long tagOccurrenceCount);
+  void _createIndexes();
 };
 
 }

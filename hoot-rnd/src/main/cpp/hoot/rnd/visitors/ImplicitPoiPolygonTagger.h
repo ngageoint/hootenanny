@@ -55,6 +55,10 @@ private:
 
   PoiPolygonPoiCriterion _poiFilter;
   PoiPolygonPolyCriterion _polyFilter;
+  bool _inABuildingOrPoiCategory;
+
+  bool _elementIsATaggablePoi(const ElementPtr& e);
+  bool _elementIsATaggablePolygon(const ElementPtr& e);
 
 };
 

@@ -29,7 +29,6 @@
 // hoot
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
-#include <hoot/core/algorithms/string/StringTokenizer.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/util/StringUtils.h>
@@ -81,7 +80,6 @@ void ImplicitTagRawRulesDeriver::setElementFilter(const QString type)
   {
     throw HootException("Only POI implicit tag raw rules generation is supported.");
   }
-
   _elementFilter.reset(new ImplicitTagEligiblePoiCriterion());
 }
 
@@ -115,9 +113,9 @@ void ImplicitTagRawRulesDeriver::_updateForNewWord(QString word, const QString k
   }
 }
 
-void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
-                                                const QStringList translationScripts,
-                                                const QString output)
+void ImplicitTagRawRulesDeriver::_validateInputs(const QStringList inputs,
+                                                 const QStringList translationScripts,
+                                                 const QString output)
 {
   LOG_VARD(inputs);
   LOG_VARD(translationScripts);
@@ -127,7 +125,6 @@ void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
   {
     throw HootException("No element type was specified.");
   }
-
   if (inputs.isEmpty())
   {
     throw HootException("No inputs were specified.");
@@ -150,15 +147,10 @@ void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
     throw HootException(QObject::tr("Error removing existing %1 for writing.").arg(output));
   }
   _output->close();
+}
 
-  LOG_INFO(
-    "Generating POI implicit tag rules raw file for inputs: " << inputs <<
-    ", translation scripts: " << translationScripts << ".  Writing to output: " << output << "...");
-  LOG_VARD(_sortParallelCount);
-  LOG_VARD(_skipFiltering);
-  LOG_VARD(_sortParallelCount);
-  LOG_VARD(_translateAllNamesToEnglish);
-
+void ImplicitTagRawRulesDeriver::_init()
+{
   _wordKeysToCountsValues.clear();
   _duplicatedWordTagKeyCountsToValues.clear();
   _countFileLineCtr = 0;
@@ -175,30 +167,93 @@ void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
   {
     LOG_WARN("Keeping temp file: " << _countFile->fileName());
   }
+}
+
+boost::shared_ptr<ElementInputStream> ImplicitTagRawRulesDeriver::_getInputStream(const QString input,
+                                                                    const QString translationScript)
+{
+  LOG_INFO("Parsing: " << input << "...");
+
+  _inputReader =
+    boost::dynamic_pointer_cast<PartialOsmMapReader>(
+      OsmMapReaderFactory::getInstance().createReader(input));
+  _inputReader->open(input);
+  boost::shared_ptr<ElementInputStream> inputStream =
+    boost::dynamic_pointer_cast<ElementInputStream>(_inputReader);
+  LOG_VARD(translationScript);
+  if (translationScript.toLower() != "none")
+  {
+    boost::shared_ptr<TranslationVisitor> translationVisitor(new TranslationVisitor());
+    translationVisitor->setPath(translationScript);
+    inputStream.reset(new ElementVisitorInputStream(_inputReader, translationVisitor));
+  }
+  return inputStream;
+}
+
+QStringList ImplicitTagRawRulesDeriver::_translateNamesToEnglish(const QStringList names,
+                                                                 const Tags& tags)
+{
+  QStringList filteredNames;
+  if (tags.contains("name:en"))
+  {
+    filteredNames.append(tags.get("name:en"));
+  }
+  else
+  {
+    for (int i = 0; i < names.size(); i++)
+    {
+      const QString name = names.at(i);
+      LOG_VART(name);
+      if (name != tags.get("alt_name"))
+      {
+        const QString englishName = Translator::getInstance().toEnglish(name);
+        LOG_VART(englishName);
+        filteredNames.append(englishName);
+        break;
+      }
+    }
+    if (filteredNames.isEmpty() && tags.contains("alt_name"))
+    {
+      QString altName = tags.get("alt_name");
+      if (altName.contains(";"))
+      {
+        altName = altName.split(";")[0];
+      }
+      LOG_VART(altName);
+      const QString englishName = Translator::getInstance().toEnglish(altName);
+      LOG_VART(englishName);
+      filteredNames.append(englishName);
+    }
+  }
+  LOG_VART(filteredNames);
+  assert(!filteredNames.isEmpty());
+
+  return filteredNames;
+}
+
+void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
+                                                const QStringList translationScripts,
+                                                const QString output)
+{
+  _validateInputs(inputs, translationScripts, output);
+
+  LOG_INFO(
+    "Generating POI implicit tag rules raw file for inputs: " << inputs <<
+    ", translation scripts: " << translationScripts << ".  Writing to output: " << output << "...");
+  LOG_VARD(_sortParallelCount);
+  LOG_VARD(_skipFiltering);
+  LOG_VARD(_sortParallelCount);
+  LOG_VARD(_translateAllNamesToEnglish);
+
+  _init();
 
   long poiCount = 0;
   long nodeCount = 0;
   for (int i = 0; i < inputs.size(); i++)
   {
-    const QString input = inputs.at(i);
-    LOG_INFO("Parsing: " << input << "...");
-
-    boost::shared_ptr<PartialOsmMapReader> inputReader =
-      boost::dynamic_pointer_cast<PartialOsmMapReader>(
-        OsmMapReaderFactory::getInstance().createReader(input));
-    inputReader->open(inputs.at(i));
     boost::shared_ptr<ElementInputStream> inputStream =
-      boost::dynamic_pointer_cast<ElementInputStream>(inputReader);
-    const QString translationScript = translationScripts.at(i);
-    LOG_VARD(translationScript);
-    if (translationScript.toLower() != "none")
-    {
-      boost::shared_ptr<TranslationVisitor> translationVisitor(new TranslationVisitor());
-      translationVisitor->setPath(translationScript);
-      inputStream.reset(new ElementVisitorInputStream(inputReader, translationVisitor));
-    }
+      _getInputStream(inputs.at(i), translationScripts.at(i));
 
-    StringTokenizer tokenizer;
     while (inputStream->hasMoreElements())
     {
       ElementPtr element = inputStream->readNextElement();
@@ -209,58 +264,18 @@ void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
       assert(_elementFilter.get());
       if (_skipFiltering || _elementFilter->isSatisfied(element))
       {
-        LOG_TRACE("test7");
         QStringList names = element->getTags().getNames();
         assert(!names.isEmpty());
-        LOG_TRACE("test8");
 
         if (names.removeAll("old_name") > 0)
         {
           LOG_VARD("Removed old name tag.");
         }
-
-        if (names.isEmpty())
-        {
-          throw HootException("Names empty.");
-        }
+        assert(!names.isEmpty());
 
         if (_translateAllNamesToEnglish)
         {
-          QStringList filteredNames;
-          if (element->getTags().contains("name:en"))
-          {
-            filteredNames.append(element->getTags().get("name:en"));
-          }
-          else
-          {
-            for (int i = 0; i < names.size(); i++)
-            {
-              const QString name = names.at(i);
-              LOG_VART(name);
-              if (name != element->getTags().get("alt_name"))
-              {
-                const QString englishName = Translator::getInstance().toEnglish(name);
-                LOG_VART(englishName);
-                filteredNames.append(englishName);
-                break;
-              }
-            }
-            if (filteredNames.isEmpty() && element->getTags().contains("alt_name"))
-            {
-              QString altName = element->getTags().get("alt_name");
-              if (altName.contains(";"))
-              {
-                altName = altName.split(";")[0];
-              }
-              LOG_VART(altName);
-              const QString englishName = Translator::getInstance().toEnglish(altName);
-              LOG_VART(englishName);
-              filteredNames.append(englishName);
-            }
-          }
-          LOG_VART(filteredNames);
-          assert(!filteredNames.isEmpty());
-          names = filteredNames;
+          names = _translateNamesToEnglish(names, element->getTags());
         }
         LOG_VART(names);
 
@@ -271,70 +286,7 @@ void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
           throw HootException("POI kvps empty.");
         }
 
-        for (int i = 0; i < names.size(); i++)
-        {
-          QString name = names.at(i);
-          LOG_VART(name);
-
-          //'=' is used in the map key for kvps, so it needs to be escaped in the word
-          if (name.contains("="))
-          {
-            name = name.replace("=", "%3D");
-          }
-          for (int j = 0; j < kvps.size(); j++)
-          {
-            _updateForNewWord(name, kvps.at(j));
-          }
-
-          QStringList nameTokens = tokenizer.tokenize(name);
-          LOG_VART(nameTokens.size());
-
-          //tokenization - we'll just do 1, 2, 3 for now
-
-          for (int j = 0; j < nameTokens.size(); j++)
-          {
-            QString nameToken = nameTokens.at(j);
-            //may eventually need to replace more punctuation chars here; need a more extensible way;
-            //also, if done, move into ImplicitTagUtils::cleanName
-            nameToken = nameToken.replace(",", "");
-            LOG_VART(nameToken);
-
-            if (_translateAllNamesToEnglish)
-            {
-              const QString englishNameToken = Translator::getInstance().toEnglish(nameToken);
-              nameToken = englishNameToken;
-              LOG_VART(englishNameToken);
-            }
-
-            for (int k = 0; k < kvps.size(); k++)
-            {
-              _updateForNewWord(nameToken, kvps.at(k));
-            }
-          }
-
-          if (nameTokens.size() > 2)
-          {
-            for (int j = 0; j < nameTokens.size() - 1; j++)
-            {
-              QString nameToken = nameTokens.at(j) + " " + nameTokens.at(j + 1);
-              //see comment above
-              nameToken = nameToken.replace(",", "");
-              LOG_VART(nameToken);
-
-              if (_translateAllNamesToEnglish)
-              {
-                const QString englishNameToken = Translator::getInstance().toEnglish(nameToken);
-                nameToken = englishNameToken;
-                LOG_VART(englishNameToken);
-              }
-
-              for (int k = 0; k < kvps.size(); k++)
-              {
-                _updateForNewWord(nameToken, kvps.at(k));
-              }
-            }
-          }
-        }
+        _parseNames(names, kvps);
 
         poiCount++;
 
@@ -346,7 +298,7 @@ void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
         }
       }
     }
-    inputReader->finalizePartial();
+    _inputReader->finalizePartial();
   }
   _countFile->close();
 
@@ -375,6 +327,65 @@ void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
   else
   {
     _sortByWord(_dedupedCountFile);
+  }
+}
+
+void ImplicitTagRawRulesDeriver::_parseNames(const QStringList names, const QStringList kvps)
+{
+  for (int i = 0; i < names.size(); i++)
+  {
+    QString name = names.at(i);
+    LOG_VART(name);
+
+    //'=' is used in the map key for kvps, so it needs to be escaped in the word
+    if (name.contains("="))
+    {
+      name = name.replace("=", "%3D");
+    }
+    for (int j = 0; j < kvps.size(); j++)
+    {
+      _updateForNewWord(name, kvps.at(j));
+    }
+
+    QStringList nameTokens = _tokenizer.tokenize(name);
+    LOG_VART(nameTokens.size());
+
+    //tokenization
+
+    for (int j = 0; j < nameTokens.size(); j++)
+    {
+      QString nameToken = nameTokens.at(j);
+      _parseNameToken(nameToken, kvps);
+    }
+
+    if (nameTokens.size() > 2)
+    {
+      for (int j = 0; j < nameTokens.size() - 1; j++)
+      {
+        QString nameToken = nameTokens.at(j) + " " + nameTokens.at(j + 1);
+        _parseNameToken(nameToken, kvps);
+      }
+    }
+  }
+}
+
+void ImplicitTagRawRulesDeriver::_parseNameToken(QString& nameToken, const QStringList kvps)
+{
+  //may eventually need to replace more punctuation chars here; need a more extensible way;
+  //also, if done, move into ImplicitTagUtils::cleanName
+  nameToken = nameToken.replace(",", "");
+  LOG_VART(nameToken);
+
+  if (_translateAllNamesToEnglish)
+  {
+    const QString englishNameToken = Translator::getInstance().toEnglish(nameToken);
+    nameToken = englishNameToken;
+    LOG_VART(englishNameToken);
+  }
+
+  for (int k = 0; k < kvps.size(); k++)
+  {
+    _updateForNewWord(nameToken, kvps.at(k));
   }
 }
 

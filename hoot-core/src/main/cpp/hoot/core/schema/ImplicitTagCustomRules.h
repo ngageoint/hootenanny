@@ -70,6 +70,8 @@ private:
   void _readIgnoreLists();
   void _readAllowLists();
   void _clear();
+  void _readCustomRuleFile();
+  void _readIgnoreList(const QString inputPath, QStringList& outputList);
 };
 
 }
