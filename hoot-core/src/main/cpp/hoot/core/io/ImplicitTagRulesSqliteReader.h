@@ -30,7 +30,6 @@
 
 // Hoot
 #include <hoot/core/elements/Tags.h>
-//#include <hoot/core/schema/ImplicitTagCustomRules.h>
 
 // Qt
 #include <QString>
@@ -89,7 +88,6 @@ public:
   long getFirstRoundTagsCacheHits() const { return _firstRoundTagsCacheHits; }
   long getSecondRoundTagsCacheHits() const { return _secondRoundTagsCacheHits; }
 
-  //void setCustomRules(const ImplicitTagCustomRules& rules) { _customRules = rules; }
   void setAddTopTagOnly(bool add) { _addTopTagOnly = add; }
   void setAllowWordsInvolvedInMultipleRules(bool allow)
   { _allowWordsInvolvedInMultipleRules = allow; }
@@ -111,9 +109,17 @@ private:
   bool _addTopTagOnly;
   bool _allowWordsInvolvedInMultipleRules;
 
-  //ImplicitTagCustomRules _customRules;
-
   void _prepareQueries();
+  Tags _checkCachedTags(const QSet<QString>& words, QSet<QString>& matchingWords,
+                        bool& wordsInvolvedInMultipleRules);
+  void _queryWords(const QSet<QString>& words, QSet<long>& queriedWordIds,
+                   QSet<QString>& queriedWords);
+  void _cacheTags(const QSet<QString>& words, const Tags& tags);
+  void _removeTagsWithDuplicatedValues(Tags& tags);
+  Tags _getTagsForWords(const QSet<long>& queriedWordIds, const QSet<QString>& queriedWords,
+                        const QSet<QString>& inputWords, QSet<QString>& matchingWords,
+                        bool& wordsInvolvedInMultipleRules);
+  void _modifyWordIdsForMultipleRules(QSet<long>& queriedWordIds);
 };
 
 }
