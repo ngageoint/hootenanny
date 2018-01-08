@@ -34,7 +34,10 @@ namespace hoot
 {
 
 /**
- * Derives implicit tag rules for POIs and writes the output in various formats
+ * Command used to derive an implicit tag rules database
+ *
+ * See note in ImplicitTagRawRulesDeriver as to why this logic is separated from that in
+ * DeriveRawImplicitTagRulesCmd.
  */
 class DeriveImplicitTagRulesDatabaseCmd : public BaseCommand
 {

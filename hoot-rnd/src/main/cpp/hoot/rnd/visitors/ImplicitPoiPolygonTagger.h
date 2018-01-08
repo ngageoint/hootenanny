@@ -36,7 +36,7 @@ namespace hoot
 {
 
 /**
- * Adds tags implicitly derived from POI names to POIs
+ * Adds tags implicitly derived from POI names to POIs and polygons
  */
 class ImplicitPoiPolygonTagger : public ImplicitTaggerBase
 {

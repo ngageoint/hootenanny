@@ -43,14 +43,14 @@ namespace hoot
 {
 
 ImplicitTagRulesSqliteReader::ImplicitTagRulesSqliteReader() :
-//since we're inserting all objects with cost=1, the cost passed into the constructor
-//of QCache behaves as a max size; arbitrary max size; actually haven't seen anything close to
-//this in practice yet...may need tuning
-_tagsCache(100000),
 _firstRoundTagsCacheHits(0),
 _secondRoundTagsCacheHits(0),
 _addTopTagOnly(true),
-_allowWordsInvolvedInMultipleRules(false)
+_allowWordsInvolvedInMultipleRules(false),
+//Since we're inserting all objects with cost = 1, the cost passed into the constructor
+//of QCache behaves as a max size.  Assigning an arbitrary max size here...actually haven't seen
+//anything close to this in practice yet, so this may eventually need some tuning.
+_tagsCache(100000)
 {
 }
 
@@ -92,14 +92,161 @@ void ImplicitTagRulesSqliteReader::close()
   }
 }
 
-void ImplicitTagRulesSqliteReader::_prepareQueries()
+Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,
+                                                   QSet<QString>& matchingWords,
+                                                   bool& wordsInvolvedInMultipleRules)
 {
-  _ruleWordPartCountQuery = QSqlQuery(_db);
-  if (!_ruleWordPartCountQuery.prepare("SELECT COUNT(*) FROM rules"))
+  //This method can probably be sped up by combining some queries, but the sizes of the databases
+  //being used so far have been small enough that performance has not yet been an issue.
+
+  if (words.size() == 0)
+  {
+    LOG_TRACE("No words specified.");
+    return Tags();
+  }
+
+  LOG_TRACE("Retrieving implicit tags for words: " << words << "...");
+
+  matchingWords.clear();
+  wordsInvolvedInMultipleRules = false;
+  Tags cachedTags;
+
+  //The cache needs to check against a key composed of all of the words, due to possible multiple
+  //rule conflicts that can occur when combinations of full names and tokenized names are passed in.
+  //Its possible that the exact set of words passed in is in the cache, so check for that now.
+  cachedTags = _checkCachedTags(words, matchingWords, wordsInvolvedInMultipleRules);
+  if (!cachedTags.isEmpty())
+  {
+    _firstRoundTagsCacheHits++;
+    return cachedTags;
+  }
+
+  //get ids for only the input words that actually exist in the database
+  QSet<long> queriedWordIds;
+  QSet<QString> queriedWords;
+  _queryWords(words, queriedWordIds, queriedWords);
+  if (queriedWordIds.size() == 0)
+  {
+    //cache empty set of tags
+    _cacheTags(words, Tags());
+    return Tags();
+  }
+
+  //The words passed in may not have been in the cache previously, if some words were passed in
+  //that didn't exist in the db.  Now that those words have been filtered out of the input, let's
+  //check the cache again.
+  cachedTags = _checkCachedTags(queriedWords, matchingWords, wordsInvolvedInMultipleRules);
+  if (!cachedTags.isEmpty())
+  {
+    _secondRoundTagsCacheHits++;
+    return cachedTags;
+  }
+
+  if (_allowWordsInvolvedInMultipleRules)
+  {
+    //special log if we're allowing tags to be returned when input words are involved in multiple
+    //implicit tag rules
+    _modifyWordIdsForMultipleRules(queriedWordIds);
+    if (queriedWordIds.isEmpty())
+    {
+      //cache empty set of tags
+      _cacheTags(words, Tags());
+      return Tags();
+    }
+  }
+
+  //get all the tags associated with the words
+  Tags tags =
+    _getTagsForWords(queriedWordIds, queriedWords, words, matchingWords,
+                     wordsInvolvedInMultipleRules);
+  if (tags.size() == 0)
+  {
+    return tags;
+  }
+  //Don't return more than one tag that have the same value.  Arbitrarily pick the first one.
+  //e.g. amenity=hospital and building=hospital.  This behavior could be captured in the rules
+  //deriver instead, as well as improved overall.
+  _removeTagsWithDuplicatedValues(tags);
+  if (tags.size() == 0)
+  {
+    //cache empty set of tags
+    _cacheTags(matchingWords, Tags());
+    if (matchingWords != words)
+    {
+      //also cache the originally passed in words
+      _cacheTags(words, Tags());
+    }
+    return Tags();
+  }
+
+  //record the actual words involved in the rule to be returned to the caller
+  matchingWords = queriedWords;
+  _cacheTags(matchingWords, tags);
+  if (matchingWords != words)
+  {
+    //also cache the originally passed in words
+    _cacheTags(words, tags);
+  }
+  LOG_TRACE("Returning tags: " << tags << " for words: " << matchingWords);
+  return tags;
+}
+
+long ImplicitTagRulesSqliteReader::getRuleCount()
+{
+  LOG_TRACE("Retrieving rule count...");
+
+  if (!_ruleCountQuery.exec())
   {
     throw HootException(
-      QString("Error preparing _ruleWordPartCountQuery: %1")
-        .arg(_ruleWordPartCountQuery.lastError().text()));
+      QString("Error executing query: %1").arg(_ruleCountQuery.lastError().text()));
+  }
+
+  _ruleCountQuery.next();
+  return _ruleCountQuery.value(0).toLongLong();
+}
+
+void ImplicitTagRulesSqliteReader::printStats()
+{
+  LOG_DEBUG("Printing stats...");
+
+  if (!_ruleCountQuery.exec())
+  {
+    throw HootException(
+      QString("Error executing query: %1").arg(_ruleCountQuery.lastError().text()));
+  }
+  _ruleCountQuery.next();
+  const long ruleCount = _ruleCountQuery.value(0).toLongLong();
+
+  if (!_tagCountQuery.exec())
+  {
+    throw HootException(
+      QString("Error executing query: %1").arg(_tagCountQuery.lastError().text()));
+  }
+  _tagCountQuery.next();
+  const long tagCount = _tagCountQuery.value(0).toLongLong();
+
+  if (!_wordCountQuery.exec())
+  {
+    throw HootException(
+      QString("Error executing query: %1").arg(_wordCountQuery.lastError().text()));
+  }
+  _wordCountQuery.next();
+  const long wordCount = _wordCountQuery.value(0).toLongLong();
+
+  std::cout << "Implicit tag rules database summary:" << std::endl;
+  std::cout << "\tWord count: " << wordCount << std::endl;
+  std::cout << "\tTag count: " << tagCount << std::endl;
+  std::cout << "\tRule count: " << ruleCount << std::endl;
+}
+
+void ImplicitTagRulesSqliteReader::_prepareQueries()
+{
+  _ruleCountQuery = QSqlQuery(_db);
+  if (!_ruleCountQuery.prepare("SELECT COUNT(*) FROM rules"))
+  {
+    throw HootException(
+      QString("Error preparing _ruleCountQuery: %1")
+        .arg(_ruleCountQuery.lastError().text()));
   }
 
   _tagCountQuery = QSqlQuery(_db);
@@ -118,39 +265,39 @@ void ImplicitTagRulesSqliteReader::_prepareQueries()
         .arg(_wordCountQuery.lastError().text()));
   }
 
-  _tagsForWordIds = QSqlQuery(_db);
+  _tagsForWordIdsQuery = QSqlQuery(_db);
   if (_addTopTagOnly)
   {
-    if (!_tagsForWordIds.prepare(
+    if (!_tagsForWordIdsQuery.prepare(
          QString("SELECT tags.kvp FROM tags JOIN rules ON rules.tag_id = tags.id ") +
          QString("WHERE rules.word_id = :wordId ORDER BY rules.tag_count DESC")))
     {
       throw HootException(
-        QString("Error preparing _topTagForWordIds: %1")
-          .arg(_tagsForWordIds.lastError().text()));
+        QString("Error preparing _topTagForWordIdsQuery: %1")
+          .arg(_tagsForWordIdsQuery.lastError().text()));
     }
   }
   else
   {
-    if (!_tagsForWordIds.prepare(
+    if (!_tagsForWordIdsQuery.prepare(
          QString("SELECT tags.kvp FROM tags JOIN rules ON rules.tag_id = tags.id ") +
          QString("WHERE rules.word_id = :wordId")))
     {
       throw HootException(
-        QString("Error preparing _tagsForWordIds: %1")
-          .arg(_tagsForWordIds.lastError().text()));
+        QString("Error preparing _tagsForWordIdQuerys: %1")
+          .arg(_tagsForWordIdsQuery.lastError().text()));
     }
   }
 
-  _tagCountsForWordIds = QSqlQuery(_db);
-  if (!_tagCountsForWordIds.prepare(
+  _tagCountsForWordIdsQuery = QSqlQuery(_db);
+  if (!_tagCountsForWordIdsQuery.prepare(
        QString("SELECT rules.tag_count FROM rules JOIN tags on rules.tag_id = tags.id ") +
        QString("WHERE rules.word_id = :wordId ") +
        QString("ORDER BY rules.tag_count DESC LIMIT 1")))
   {
     throw HootException(
-      QString("Error preparing _tagCountsForWordIds: %1")
-        .arg(_tagCountsForWordIds.lastError().text()));
+      QString("Error preparing _tagCountsForWordIdsQuery: %1")
+        .arg(_tagCountsForWordIdsQuery.lastError().text()));
   }
 }
 
@@ -187,9 +334,10 @@ void ImplicitTagRulesSqliteReader::_queryWords(const QSet<QString>& words,
                                                QSet<long>& queriedWordIds,
                                                QSet<QString>& queriedWords)
 {
-  //can't prepare this query due to variable inputs
+  //can't prepare this query due to the variable inputs
   QSqlQuery selectWordIdsForWords(_db);
-  //the WHERE IN clause is case sensitive, so OR'ing them together instead
+  //the WHERE IN clause is case sensitive, so OR'ing the words together with LIKE instead
+  //(no wildcards)
   QString queryStr = "SELECT id, word FROM words WHERE ";
   for (QSet<QString>::const_iterator wordItr = words.begin(); wordItr != words.end(); ++wordItr)
   {
@@ -197,6 +345,7 @@ void ImplicitTagRulesSqliteReader::_queryWords(const QSet<QString>& words,
     //for comparisons won't work for unicode chars in SQLite w/o quite a bit of additional setup
     //to link in special unicode libs (I think)
     QString word = *wordItr;
+    //escape '
     word = word.replace("'", "''");
     queryStr += "word LIKE '" + word + "' OR ";
   }
@@ -226,119 +375,29 @@ void ImplicitTagRulesSqliteReader::_cacheTags(const QSet<QString>& words, const 
   _tagsCache.insert(wordsList.join(";"), tagsToCache);
 }
 
-Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,
-                                                   QSet<QString>& matchingWords,
-                                                   bool& wordsInvolvedInMultipleRules)
-{
-  if (words.size() == 0)
-  {
-    LOG_TRACE("No words specified.");
-    return Tags();
-  }
-
-  LOG_TRACE("Retrieving implicit tags for words: " << words << "...");
-
-  matchingWords.clear();
-  wordsInvolvedInMultipleRules = false;
-
-  QStringList wordsList;
-  Tags cachedTags;
-  
-  //The cache needs to check against a key composed of all of the words, due to possible multiple
-  //rule conflicts that can occur when combinations of full names and tokenized names are passed in.
-  //Its possible that the exact set of words passed in is in the cache, so check.
-  cachedTags = _checkCachedTags(words, matchingWords, wordsInvolvedInMultipleRules);
-  if (!cachedTags.isEmpty())
-  {
-    _firstRoundTagsCacheHits++;
-    return cachedTags;
-  }
-
-  QSet<long> queriedWordIds;
-  QSet<QString> queriedWords;
-  _queryWords(words, queriedWordIds, queriedWords);
-  if (queriedWordIds.size() == 0)
-  {
-    //cache empty set of tags
-    _cacheTags(words, Tags());
-    return Tags();
-  }
-
-  //The words passed in may not have been in the cache previously, if some words were passed in
-  //that didn't exist in the db.  Now that those words have been filtered out of the input, let's
-  //check the cache again.
-  cachedTags = _checkCachedTags(queriedWords, matchingWords, wordsInvolvedInMultipleRules);
-  if (!cachedTags.isEmpty())
-  {
-    _secondRoundTagsCacheHits++;
-    return cachedTags;
-  }
-
-  if (_allowWordsInvolvedInMultipleRules)
-  {
-    _modifyWordIdsForMultipleRules(queriedWordIds);
-    if (queriedWordIds.isEmpty())
-    {
-      //cache empty set of tags
-      _cacheTags(words, Tags());
-      return Tags();
-    }
-  }
-
-  Tags tags =
-    _getTagsForWords(queriedWordIds, queriedWords, words, matchingWords,
-                     wordsInvolvedInMultipleRules);
-  if (tags.size() == 0)
-  {
-    return tags;
-  }
-  //don't return more than one tag that have the same value; arbitrarily pick the first one;
-  //e.g. amenity=hospital and building=hospital; this behavior could be captured in the rules
-  //deriver instead
-  _removeTagsWithDuplicatedValues(tags);
-  if (tags.size() == 0)
-  {
-    //cache empty set of tags
-    _cacheTags(matchingWords, Tags());
-    if (matchingWords != words)
-    {
-      //also cache the originally passed in words
-      _cacheTags(words, Tags());
-    }
-    return Tags();
-  }
-
-  matchingWords = queriedWords;
-  _cacheTags(matchingWords, tags);
-  if (matchingWords != words)
-  {
-    //also cache the originally passed in words
-    _cacheTags(words, tags);
-  }
-  LOG_TRACE("Returning tags: " << tags << " for words: " << matchingWords);
-  return tags;
-}
-
 void ImplicitTagRulesSqliteReader::_modifyWordIdsForMultipleRules(QSet<long>& queriedWordIds)
 {
+  //TODO: I'm not sure this is doing what's intended.  Since we're not allowing multiple rule
+  //involvement by default, its not a problem for now.
+
   long wordIdWithHighestTagOccurrenceCount = -1;
   long highestTagOccurrenceCount = -1;
   for (QSet<long>::const_iterator wordIdItr = queriedWordIds.begin();
        wordIdItr != queriedWordIds.end(); ++wordIdItr)
   {
     const long wordId = *wordIdItr;
-    _tagCountsForWordIds.bindValue(":wordId", (qlonglong)wordId);
-    LOG_VART(_tagCountsForWordIds.lastQuery());
-    if (!_tagCountsForWordIds.exec())
+    _tagCountsForWordIdsQuery.bindValue(":wordId", (qlonglong)wordId);
+    LOG_VART(_tagCountsForWordIdsQuery.lastQuery());
+    if (!_tagCountsForWordIdsQuery.exec())
     {
       throw HootException(
         QString("Error executing query: %1; Error: %2")
-          .arg(_tagCountsForWordIds.lastQuery())
-          .arg(_tagCountsForWordIds.lastError().text()));
+          .arg(_tagCountsForWordIdsQuery.lastQuery())
+          .arg(_tagCountsForWordIdsQuery.lastError().text()));
     }
-    while (_tagCountsForWordIds.next()) //only one record should be returned
+    while (_tagCountsForWordIdsQuery.next()) //only one record should be returned
     {
-      const long tagCount = _tagCountsForWordIds.value(0).toLongLong();
+      const long tagCount = _tagCountsForWordIdsQuery.value(0).toLongLong();
       if (tagCount > highestTagOccurrenceCount)
       {
         highestTagOccurrenceCount = tagCount;
@@ -367,19 +426,21 @@ Tags ImplicitTagRulesSqliteReader::_getTagsForWords(const QSet<long>& queriedWor
   for (QSet<long>::const_iterator wordIdItr = queriedWordIds.begin();
        wordIdItr != queriedWordIds.end(); ++wordIdItr)
   {
-    _tagsForWordIds.bindValue(":wordId", (qlonglong)*wordIdItr);
-    LOG_VART(_tagsForWordIds.lastQuery());
-    if (!_tagsForWordIds.exec())
+    _tagsForWordIdsQuery.bindValue(":wordId", (qlonglong)*wordIdItr);
+    LOG_VART(_tagsForWordIdsQuery.lastQuery());
+    if (!_tagsForWordIdsQuery.exec())
     {
       throw HootException(
         QString("Error executing query: %1; Error: %2")
-          .arg(_tagsForWordIds.lastQuery())
-          .arg(_tagsForWordIds.lastError().text()));
+          .arg(_tagsForWordIdsQuery.lastQuery())
+          .arg(_tagsForWordIdsQuery.lastError().text()));
     }
+
+    //TODO: need to explain this logic better
     Tags tags2;
-    while (_tagsForWordIds.next())
+    while (_tagsForWordIdsQuery.next())
     {
-      const QString kvp = _tagsForWordIds.value(0).toString();
+      const QString kvp = _tagsForWordIdsQuery.value(0).toString();
       if ((!_addTopTagOnly || (_addTopTagOnly && tags2.isEmpty())))
       {
         tags2.appendValue(kvp);
@@ -387,6 +448,7 @@ Tags ImplicitTagRulesSqliteReader::_getTagsForWords(const QSet<long>& queriedWor
     }
     LOG_VART(tags);
     LOG_VART(tags2);
+
     if (tags.isEmpty())
     {
       tags = tags2;
@@ -420,6 +482,8 @@ Tags ImplicitTagRulesSqliteReader::_getTagsForWords(const QSet<long>& queriedWor
 
 void ImplicitTagRulesSqliteReader::_removeTagsWithDuplicatedValues(Tags& tags)
 {
+  //TODO: need to explain this logic better
+
   QStringList tagValues;
   QStringList tagKeysWithDuplicatedValues;
   for (Tags::const_iterator tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
@@ -441,54 +505,6 @@ void ImplicitTagRulesSqliteReader::_removeTagsWithDuplicatedValues(Tags& tags)
     tags.remove(tagKey);
     LOG_TRACE("Removed tag key: " << tagKey << " due to value duplication.");
   }
-}
-
-long ImplicitTagRulesSqliteReader::getRuleWordPartCount()
-{
-  LOG_TRACE("Retrieving rule count...");
-
-  if (!_ruleWordPartCountQuery.exec())
-  {
-    throw HootException(
-      QString("Error executing query: %1").arg(_ruleWordPartCountQuery.lastError().text()));
-  }
-
-  _ruleWordPartCountQuery.next();
-  return _ruleWordPartCountQuery.value(0).toLongLong();
-}
-
-void ImplicitTagRulesSqliteReader::printStats()
-{
-  LOG_DEBUG("Printing stats...");
-
-  if (!_ruleWordPartCountQuery.exec())
-  {
-    throw HootException(
-      QString("Error executing query: %1").arg(_ruleWordPartCountQuery.lastError().text()));
-  }
-  _ruleWordPartCountQuery.next();
-  const long ruleCount = _ruleWordPartCountQuery.value(0).toLongLong();
-
-  if (!_tagCountQuery.exec())
-  {
-    throw HootException(
-      QString("Error executing query: %1").arg(_tagCountQuery.lastError().text()));
-  }
-  _tagCountQuery.next();
-  const long tagCount = _tagCountQuery.value(0).toLongLong();
-
-  if (!_wordCountQuery.exec())
-  {
-    throw HootException(
-      QString("Error executing query: %1").arg(_wordCountQuery.lastError().text()));
-  }
-  _wordCountQuery.next();
-  const long wordCount = _wordCountQuery.value(0).toLongLong();
-
-  std::cout << "Implicit tag rules database summary:" << std::endl;
-  std::cout << "\tWord count: " << wordCount << std::endl;
-  std::cout << "\tTag count: " << tagCount << std::endl;
-  std::cout << "\tRule count: " << ruleCount << std::endl;
 }
 
 }

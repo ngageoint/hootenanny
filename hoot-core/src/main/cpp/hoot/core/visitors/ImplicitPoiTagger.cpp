@@ -59,10 +59,12 @@ bool ImplicitPoiTagger::_visitElement(const ElementPtr& e)
      e->getTags().get("office") != QLatin1String("yes");
   const bool elementIsAGenericPoi = !_elementIsASpecificPoi;
 
+  //always allow generic elements
   if (elementIsAGenericPoi)
   {
     return true;
   }
+  //allowing specific elements is configurable
   else if (_elementIsASpecificPoi && _allowTaggingSpecificPois)
   {
     return true;

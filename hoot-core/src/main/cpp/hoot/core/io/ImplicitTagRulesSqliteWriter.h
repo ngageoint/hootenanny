@@ -39,7 +39,7 @@ namespace hoot
 {
 
 /**
- * Writes implicit tag rules ot a Sqlite database
+ * Writes implicit tag rules to a Sqlite implicit tag rules database
  */
 class ImplicitTagRulesSqliteWriter
 {
@@ -50,24 +50,31 @@ public:
   ~ImplicitTagRulesSqliteWriter();
 
   /**
-   * @see ImplicitTagRuleWordPartWriter
+   * Determines if the output location is a writable format
+   *
+   * @param outputUrl output database location
+   * @return true if the output location is supported; false otherwise
    */
-  virtual bool isSupported(const QString outputUrl);
+  bool isSupported(const QString outputUrl);
 
   /**
-   * @see ImplicitTagRuleWordPartWriter
+   * Opens the output rules database
+   *
+   * @param outputUrl output rules database
    */
-  virtual void open(const QString outputUrl);
+  void open(const QString outputUrl);
 
   /**
-   * @see ImplicitTagRuleWordPartWriter
+   * Writes rules from the input file to the output database
+   *
+   * @param inputUrl raw implicit tag rules input file
    */
-  virtual void write(const QString inputUrl);
+  void write(const QString inputUrl);
 
   /**
-   * @see ImplicitTagRuleWordPartWriter
+   * Close the writer
    */
-  virtual void close();
+  void close();
 
 private:
 
@@ -76,10 +83,14 @@ private:
   QSqlQuery _insertRuleQuery;
   QSqlQuery _insertWordQuery;
   QSqlQuery _insertTagQuery;
+  //returns the ID of the last word inserted
   QSqlQuery _getLastWordIdQuery;
+  //returns the ID of the last tag inserted
   QSqlQuery _getLastTagIdQuery;
 
+  //cache word strings to their database ids
   QHash<QString, long> _wordsToWordIds;
+  //cache tag key=value strings to their database ids
   QHash<QString, long> _tagsToTagIds;
   QSet<QString> _words;
 
@@ -90,7 +101,7 @@ private:
 
   long _insertWord(const QString word);
   long _insertTag(const QString kvp);
-  void _insertRuleWordPart(const long wordId, const long tagId, const long tagOccurrenceCount);
+  void _insertRule(const long wordId, const long tagId, const long tagOccurrenceCount);
   void _createIndexes();
 };
 

@@ -123,6 +123,137 @@ bool caseInsensitiveLessThan(const QString s1, const QString s2)
   return s1.toLower() < s2.toLower();
 }
 
+void ImplicitTaggerBase::visit(const ElementPtr& e)
+{
+  if (_visitElement(e))
+  {
+    bool foundDuplicateMatch = false;
+    Tags tagsToAdd;
+
+    QStringList filteredNames = _cleanNames(e->getTags());
+
+    if (filteredNames.size() > 0)
+    {
+      Tags implicitlyDerivedTags;
+      QSet<QString> matchingWords;
+      bool wordsInvolvedInMultipleRules = false;
+
+      if (implicitlyDerivedTags.size() == 0)
+      {
+        //the complete name phrases take precendence over the tokenized names, so look for tags
+        //associated with them first
+        implicitlyDerivedTags =
+          _ruleReader->getImplicitTags(
+            filteredNames.toSet(), matchingWords, wordsInvolvedInMultipleRules);
+      }
+      LOG_VARD(implicitlyDerivedTags);
+      LOG_VARD(matchingWords);
+      LOG_VARD(wordsInvolvedInMultipleRules);
+
+      bool namesContainBuilding = false;
+      bool namesContainOffice = false;
+
+      if (wordsInvolvedInMultipleRules)
+      {
+        LOG_DEBUG(
+          "Found duplicate match for names: " << filteredNames << " with matching words: " <<
+          matchingWords);
+        foundDuplicateMatch = true;
+      }
+      else if (implicitlyDerivedTags.size() > 0)
+      {
+        LOG_DEBUG(
+          "Derived implicit tags for names: " << filteredNames << " with matching words: " <<
+          matchingWords);
+        tagsToAdd = implicitlyDerivedTags;
+      }
+      else
+      {
+        //we didn't find any tags for the whole names, so let's look for them with the tokenized
+        //name parts
+        QStringList nameTokensList = _getNameTokens(filteredNames);
+
+        LOG_VARD(nameTokensList);
+        LOG_VARD(implicitlyDerivedTags.size());
+        LOG_VARD(nameTokensList.size());
+
+        //only going up to token group size = 2, as larger sizes weren't found experimentally to
+        //yield any better results
+        if (implicitlyDerivedTags.size() == 0 && nameTokensList.size() > 2)
+        {
+          _getImplicitlyDerivedTagsFromMultipleNameTokens(
+            filteredNames, nameTokensList, e->getTags(), implicitlyDerivedTags, matchingWords,
+            wordsInvolvedInMultipleRules);
+        }
+
+        if (implicitlyDerivedTags.size() == 0)
+        {
+          //didn't find any matches with the token groups, so let's try with single tokens
+          _getImplicitlyDerivedTagsFromSingleNameTokens(
+            filteredNames, nameTokensList, e->getTags(), implicitlyDerivedTags, matchingWords,
+            wordsInvolvedInMultipleRules, namesContainBuilding, namesContainOffice);
+        }
+        LOG_VARD(implicitlyDerivedTags);
+        LOG_VARD(matchingWords);
+        LOG_VARD(wordsInvolvedInMultipleRules);
+
+        if (wordsInvolvedInMultipleRules)
+        {
+          LOG_DEBUG(
+            "Found duplicate match for name tokens: " << nameTokensList << " with matching words: " <<
+            matchingWords);
+          foundDuplicateMatch = true;
+        }
+        else if (implicitlyDerivedTags.size() > 0)
+        {
+          LOG_DEBUG(
+            "Derived implicit tags for name tokens: " << nameTokensList << " with matching words: " <<
+            matchingWords);
+          tagsToAdd = implicitlyDerivedTags;
+        }
+      }
+      LOG_VARD(tagsToAdd);
+
+      LOG_VARD(foundDuplicateMatch);
+      if (foundDuplicateMatch)
+      {
+        _updateElementForDuplicateMatch(e, matchingWords);
+      }
+      else if (!tagsToAdd.isEmpty())
+      {
+        assert(!matchingWords.isEmpty());
+        LOG_VART(matchingWords);
+
+        _ensureCorrectTagSpecificity(e, tagsToAdd);
+
+        //This is a little kludgy, but we'll leave it for now since it helps.
+        if (tagsToAdd.isEmpty() && !_elementIsASpecificPoi && namesContainOffice)
+        {
+          tagsToAdd.appendValue("building", "office");
+          matchingWords.insert("office");
+        }
+        else if (tagsToAdd.isEmpty() && !_elementIsASpecificPoi && namesContainBuilding)
+        {
+          tagsToAdd.appendValue("building", "yes");
+          matchingWords.insert("building");
+        }
+
+        if (!tagsToAdd.isEmpty())
+        {
+          _addImplicitTags(e, tagsToAdd, matchingWords);
+        }
+      }
+    }
+
+    _numNodesParsed++;
+    if (_numNodesParsed % 1000 == 0)
+    {
+      PROGRESS_INFO(
+        "Parsed " << StringUtils::formatLargeNumber(_numNodesParsed) << " nodes from input.");
+    }
+  }
+}
+
 QStringList ImplicitTaggerBase::_cleanNames(const Tags& tags)
 {
   QStringList names = tags.getNames();
@@ -149,7 +280,8 @@ QStringList ImplicitTaggerBase::_cleanNames(const Tags& tags)
   return filteredNames;
 }
 
-QString ImplicitTaggerBase::_getEndOfNameToken(const QString name, const QStringList nameTokensList)
+QString ImplicitTaggerBase::_getEndOfNameToken(const QString name,
+                                               const QStringList nameTokensList) const
 {
   for (int i = 0; i < nameTokensList.size(); i++)
   {
@@ -187,6 +319,8 @@ void ImplicitTaggerBase::_getImplicitlyDerivedTagsFromMultipleNameTokens(
 
   if (_matchEndOfNameSingleTokenFirst)
   {
+    //match the end of the name with an implicit tag rule before matching anything else in the name
+
     QString endOfNameToken =
       _getEndOfNameToken(elementTags.get("name:en"), nameTokensListGroupSizeTwo);
     if (endOfNameToken.isEmpty())
@@ -204,7 +338,6 @@ void ImplicitTaggerBase::_getImplicitlyDerivedTagsFromMultipleNameTokens(
         }
       }
     }
-
     if (!endOfNameToken.isEmpty())
     {
       QStringList tempTokenList;
@@ -214,6 +347,7 @@ void ImplicitTaggerBase::_getImplicitlyDerivedTagsFromMultipleNameTokens(
           tempTokenList.toSet(), matchingWords, wordsInvolvedInMultipleRules);
       if (implicitlyDerivedTags.size() == 0)
       {
+        //end of name token didn't match; do token matching
         implicitlyDerivedTags =
           _ruleReader->getImplicitTags(
             nameTokensListGroupSizeTwo.toSet(), matchingWords, wordsInvolvedInMultipleRules);
@@ -221,6 +355,7 @@ void ImplicitTaggerBase::_getImplicitlyDerivedTagsFromMultipleNameTokens(
     }
     else
     {
+      //end of name token invalid
       implicitlyDerivedTags =
         _ruleReader->getImplicitTags(
           nameTokensListGroupSizeTwo.toSet(), matchingWords, wordsInvolvedInMultipleRules);
@@ -228,6 +363,7 @@ void ImplicitTaggerBase::_getImplicitlyDerivedTagsFromMultipleNameTokens(
   }
   else
   {
+    //skip end of name token matching
     implicitlyDerivedTags =
       _ruleReader->getImplicitTags(
         nameTokensListGroupSizeTwo.toSet(), matchingWords, wordsInvolvedInMultipleRules);
@@ -261,6 +397,8 @@ void ImplicitTaggerBase::_getImplicitlyDerivedTagsFromSingleNameTokens(
   }
   LOG_VARD(nameTokensList);
 
+  //This logic is kind of one-off but did help a little bit with reducing false positives with
+  //offices and buildings...probably need something cleaner and more extensible.
   namesContainBuilding = false;
   if (nameTokensList.contains("building") || nameTokensList.contains("buildings"))
   {
@@ -280,6 +418,8 @@ void ImplicitTaggerBase::_getImplicitlyDerivedTagsFromSingleNameTokens(
   {
     if (_matchEndOfNameSingleTokenFirst)
     {
+      //match the end of the name with an implicit tag rule before matching anything else in the name
+
       QString endOfNameToken =
         _getEndOfNameToken(elementTags.get("name:en"), nameTokensList);
       if (endOfNameToken.isEmpty())
@@ -297,7 +437,6 @@ void ImplicitTaggerBase::_getImplicitlyDerivedTagsFromSingleNameTokens(
           }
         }
       }
-
       if (!endOfNameToken.isEmpty())
       {
         QStringList tempTokenList;
@@ -307,6 +446,7 @@ void ImplicitTaggerBase::_getImplicitlyDerivedTagsFromSingleNameTokens(
             tempTokenList.toSet(), matchingWords, wordsInvolvedInMultipleRules);
         if (implicitlyDerivedTags.size() == 0)
         {
+          //end of name token didn't match; do token matching
           implicitlyDerivedTags =
             _ruleReader->getImplicitTags(
               nameTokensList.toSet(), matchingWords, wordsInvolvedInMultipleRules);
@@ -314,6 +454,7 @@ void ImplicitTaggerBase::_getImplicitlyDerivedTagsFromSingleNameTokens(
       }
       else
       {
+        //end of name token invalid
         implicitlyDerivedTags =
           _ruleReader->getImplicitTags(
             nameTokensList.toSet(), matchingWords, wordsInvolvedInMultipleRules);
@@ -321,138 +462,10 @@ void ImplicitTaggerBase::_getImplicitlyDerivedTagsFromSingleNameTokens(
     }
     else
     {
+      //skip end of name token matching
       implicitlyDerivedTags =
         _ruleReader->getImplicitTags(
           nameTokensList.toSet(), matchingWords, wordsInvolvedInMultipleRules);
-    }
-  }
-}
-
-void ImplicitTaggerBase::visit(const ElementPtr& e)
-{
-  if (_visitElement(e))
-  {
-    bool foundDuplicateMatch = false;
-    Tags tagsToAdd;
-
-    QStringList filteredNames = _cleanNames(e->getTags());
-
-    if (filteredNames.size() > 0)
-    {
-      Tags implicitlyDerivedTags;
-      QSet<QString> matchingWords;
-      bool wordsInvolvedInMultipleRules = false;
-
-      //get tags
-      if (implicitlyDerivedTags.size() == 0)
-      {
-        //the name phrases take precendence over the tokenized names, so look for tags associated
-        //with them first
-        implicitlyDerivedTags =
-          _ruleReader->getImplicitTags(
-            filteredNames.toSet(), matchingWords, wordsInvolvedInMultipleRules);
-      }
-      LOG_VARD(implicitlyDerivedTags);
-      LOG_VARD(matchingWords);
-      LOG_VARD(wordsInvolvedInMultipleRules);
-
-      bool namesContainBuilding = false;
-      bool namesContainOffice = false;
-
-      if (wordsInvolvedInMultipleRules)
-      {
-        LOG_DEBUG(
-          "Found duplicate match for names: " << filteredNames << " with matching words: " <<
-          matchingWords);
-        foundDuplicateMatch = true;
-      }
-      else if (implicitlyDerivedTags.size() > 0)
-      {
-        LOG_DEBUG(
-          "Derived implicit tags for names: " << filteredNames << " with matching words: " <<
-          matchingWords);
-        tagsToAdd = implicitlyDerivedTags;
-      }
-      else
-      {      
-        //we didn't find any tags for the whole names, so let's look for them with the tokenized
-        //name parts
-        QStringList nameTokensList = _getNameTokens(filteredNames);
-
-        LOG_VARD(nameTokensList);
-        LOG_VARD(implicitlyDerivedTags.size());
-        LOG_VARD(nameTokensList.size());
-
-        if (implicitlyDerivedTags.size() == 0 && nameTokensList.size() > 2)
-        {
-          _getImplicitlyDerivedTagsFromMultipleNameTokens(
-            filteredNames, nameTokensList, e->getTags(), implicitlyDerivedTags, matchingWords,
-            wordsInvolvedInMultipleRules);
-        }
-
-        if (implicitlyDerivedTags.size() == 0)
-        {
-          _getImplicitlyDerivedTagsFromSingleNameTokens(
-            filteredNames, nameTokensList, e->getTags(), implicitlyDerivedTags, matchingWords,
-            wordsInvolvedInMultipleRules, namesContainBuilding, namesContainOffice);
-        }
-
-        LOG_VARD(implicitlyDerivedTags);
-        LOG_VARD(matchingWords);
-        LOG_VARD(wordsInvolvedInMultipleRules);
-
-        if (wordsInvolvedInMultipleRules)
-        {
-          LOG_DEBUG(
-            "Found duplicate match for name tokens: " << nameTokensList << " with matching words: " <<
-            matchingWords);
-          foundDuplicateMatch = true;
-        }
-        else if (implicitlyDerivedTags.size() > 0)
-        {
-          LOG_DEBUG(
-            "Derived implicit tags for name tokens: " << nameTokensList << " with matching words: " <<
-            matchingWords);
-          tagsToAdd = implicitlyDerivedTags;
-        }
-      }
-      LOG_VARD(tagsToAdd);
-
-      LOG_VARD(foundDuplicateMatch);
-      if (foundDuplicateMatch)
-      {
-        _updateElementForDuplicateMatch(e, matchingWords);
-      }
-      else if (!tagsToAdd.isEmpty())
-      {  
-        assert(!matchingWords.isEmpty());
-        LOG_VART(matchingWords);
-
-        _ensureCorrectTagSpecificity(e, tagsToAdd);
-
-        if (tagsToAdd.isEmpty() && !_elementIsASpecificPoi && namesContainOffice)
-        {
-          tagsToAdd.appendValue("building", "office");
-          matchingWords.insert("office");
-        }
-        else if (tagsToAdd.isEmpty() && !_elementIsASpecificPoi && namesContainBuilding)
-        {
-          tagsToAdd.appendValue("building", "yes");
-          matchingWords.insert("building");
-        }
-
-        if (!tagsToAdd.isEmpty())
-        {
-          _addImplicitTags(e, tagsToAdd, matchingWords);
-        }
-      }
-    }
-
-    _numNodesParsed++;
-    if (_numNodesParsed % 1000 == 0)
-    {
-      PROGRESS_INFO(
-        "Parsed " << StringUtils::formatLargeNumber(_numNodesParsed) << " nodes from input.");
     }
   }
 }
@@ -471,15 +484,11 @@ void ImplicitTaggerBase::_ensureCorrectTagSpecificity(const ElementPtr& e, Tags&
     if (e->getTags().contains(implicitTagKey))
     {
       //don't add a less specific tag if the element already has one with the same key; e.g. if
-      //the element has amenity=public_hall, don't add amenity=hall
-      //for ties keep the one we already have; e.g. if the element has amenity=bank, don't add
-      //amenity=school
+      //the element has amenity=public_hall, don't add amenity=hall; for ties, keep the one we
+      //already have; e.g. if the element has amenity=bank, don't add amenity=school
 
       const QString elementTagKey = implicitTagKey;
       const QString elementTagValue = e->getTags()[implicitTagKey];
-      //only use the implicit tag if it is more specific than the one the element already has;
-      //if neither is more specific than the other, we'll arbitrarily keep the one we already
-      //had
       LOG_VARD(OsmSchema::getInstance().isAncestor(implicitTagKey % "=" % implicitTagValue,
                                                    elementTagKey % "=" % elementTagValue));
       if (OsmSchema::getInstance().isAncestor(implicitTagKey % "=" % implicitTagValue,
@@ -541,6 +550,7 @@ void ImplicitTaggerBase::_updateElementForDuplicateMatch(const ElementPtr& e,
 void ImplicitTaggerBase::_addImplicitTags(const ElementPtr& e, const Tags& tagsToAdd,
                                           const QSet<QString>& matchingWords)
 {
+  //add implicit tags and associated metadata tags
   e->getTags().addTags(tagsToAdd);
   assert(matchingWords.size() != 0);
   QStringList matchingWordsList = matchingWords.toList();
@@ -551,6 +561,8 @@ void ImplicitTaggerBase::_addImplicitTags(const ElementPtr& e, const Tags& tagsT
   tagValue += "; tags added: " + tagsToAdd.toString().trimmed().replace("\n", ", ");
   LOG_VARD(tagValue);
   e->getTags().appendValue("hoot:implicitTags:tagsAdded", tagValue);
+
+  //remove generic tags
   if (e->getTags().get("poi") == "yes")
   {
     e->getTags().remove("poi");
@@ -559,6 +571,7 @@ void ImplicitTaggerBase::_addImplicitTags(const ElementPtr& e, const Tags& tagsT
   {
     e->getTags().remove("building");
   }
+
   _numNodesModified++;
   _numTagsAdded += tagsToAdd.size();
   if (_numTagsAdded < _smallestNumberOfTagsAdded)
@@ -577,35 +590,26 @@ void ImplicitTaggerBase::_addImplicitTags(const ElementPtr& e, const Tags& tagsT
   }
 }
 
-QStringList ImplicitTaggerBase::_getNameTokens(const QStringList names)
+QStringList ImplicitTaggerBase::_getNameTokens(const QStringList names) const
 {
-  QStringList result;
-
   if (_translateAllNamesToEnglish)
   {
     assert(names.size() == 1);
   }
 
   StringTokenizer tokenizer;
+  QStringList nameTokens;
   foreach (const QString& n, names)
   {
     QStringList words = tokenizer.tokenize(n);
     foreach (const QString& w, words)
     {
       LOG_TRACE("Inserting token: " << w);
-      result.append(w.toLower());
+      nameTokens.append(w.toLower());
     }
   }
 
-  QStringList filteredNames;
-  for (int i = 0; i < result.size(); i++)
-  {
-    const QString name = result.at(i);
-    filteredNames.append(name);
-  }
-  LOG_VART(filteredNames);
-
-  return filteredNames;
+  return nameTokens;
 }
 
 }

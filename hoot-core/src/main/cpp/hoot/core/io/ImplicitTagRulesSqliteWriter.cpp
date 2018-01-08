@@ -89,6 +89,115 @@ void ImplicitTagRulesSqliteWriter::open(const QString outputUrl)
   _prepareQueries();
 }
 
+void ImplicitTagRulesSqliteWriter::close()
+{
+  if (_db.open())
+  {
+    _db.close();
+  }
+}
+
+void ImplicitTagRulesSqliteWriter::write(const QString inputUrl)
+{
+  LOG_INFO("Writing implicit tag rules to: " << _db.databaseName() << "...");
+
+  long duplicatedWordCount = 0;
+
+  DbUtils::execNoPrepare(_db, "BEGIN");
+
+  //The input is assumed sorted by word, then by kvp.
+  QFile inputFile(inputUrl);
+  if (!inputFile.open(QIODevice::ReadOnly))
+  {
+    throw HootException(QObject::tr("Error opening %1 for reading.").arg(inputUrl));
+  }
+
+  long ruleWordPartCtr = 0;
+  while (!inputFile.atEnd())
+  {
+    const QString line = QString::fromUtf8(inputFile.readLine().constData());
+    const QStringList lineParts = line.split("\t");
+    const long tagOccurrenceCount = lineParts[0].trimmed().toLong();
+    LOG_VART(tagOccurrenceCount);
+    const QString word = lineParts[1].trimmed();
+    LOG_VART(word);
+    const QString kvp = lineParts[2].trimmed();
+    LOG_VART(kvp);
+
+    //only insert a word record if it already hasn't been inserted
+    long wordId = _wordsToWordIds.value(word, -1);
+    if (wordId == -1)
+    {
+      wordId = _insertWord(word);
+      if (wordId == -1)
+      {
+        LOG_WARN("Unable to insert word: " << word);
+      }
+      else
+      {
+        _wordsToWordIds[word] = wordId;
+        LOG_TRACE("Created new word with ID: " << wordId);
+      }
+    }
+    else
+    {
+      LOG_TRACE("Found existing word with ID: " << wordId);
+    }
+
+    //only insert a tag record if it already hasn't been inserted
+    long tagId = _tagsToTagIds.value(kvp, -1);
+    if (tagId == -1)
+    {
+      tagId = _insertTag(kvp);
+      _tagsToTagIds[kvp] = tagId;
+      LOG_TRACE("Created new tag with ID: " << tagId);
+    }
+    else
+    {
+      LOG_TRACE("Found existing tag with ID: " << tagId);
+    }
+
+    if (wordId != -1)
+    {
+      _insertRule(wordId, tagId, tagOccurrenceCount);
+      ruleWordPartCtr++;
+    }
+    else
+    {
+      //This covers a strange situation encountered.  See comments in _insertWord.
+      LOG_WARN(
+        "Skipping inserting rule word part for word: " << word << " and tag: " << kvp << "...");
+    }
+
+    if (ruleWordPartCtr % _statusUpdateInterval == 0)
+    {
+      PROGRESS_INFO(
+        "Sqlite implicit tag rules writer has parsed " <<
+        StringUtils::formatLargeNumber(ruleWordPartCtr) << " input file lines.");
+    }
+
+    LOG_VART("************************************")
+  }
+  inputFile.close();
+
+  LOG_INFO(
+    "Wrote " << StringUtils::formatLargeNumber(_wordsToWordIds.size()) << " words, " <<
+    StringUtils::formatLargeNumber(_tagsToTagIds.size()) << " tags, and " <<
+    StringUtils::formatLargeNumber(ruleWordPartCtr) <<
+    " word/tag associations to implicit tag rules database: " << _db.databaseName());
+  if (duplicatedWordCount > 0)
+  {
+    LOG_WARN("Found " << duplicatedWordCount << " duplicated words.");
+  }
+
+  _wordsToWordIds.clear();
+  _tagsToTagIds.clear();
+
+  _createIndexes();
+
+  DbUtils::execNoPrepare(_db, "COMMIT");
+}
+
 void ImplicitTagRulesSqliteWriter::_createTables()
 {
   DbUtils::execNoPrepare(
@@ -142,118 +251,60 @@ void ImplicitTagRulesSqliteWriter::_prepareQueries()
   }
 }
 
-void ImplicitTagRulesSqliteWriter::write(const QString inputUrl)
+long ImplicitTagRulesSqliteWriter::_insertTag(const QString kvp)
 {
-  LOG_INFO("Writing implicit tag rules to: " << _db.databaseName() << "...");
+  LOG_TRACE("Inserting tag: " << kvp << "...");
 
-  long duplicatedWordCount = 0;
-
-  DbUtils::execNoPrepare(_db, "BEGIN");
-
-  //The input is assumed sorted by word, then by kvp.
-  QFile inputFile(inputUrl);
-  if (!inputFile.open(QIODevice::ReadOnly))
+  _insertTagQuery.bindValue(":kvp", kvp);
+  if (!_insertTagQuery.exec())
   {
-    throw HootException(QObject::tr("Error opening %1 for reading.").arg(inputUrl));
+    QString err = QString("Error executing query: %1 (%2)").arg(_insertTagQuery.executedQuery()).
+        arg(_insertTagQuery.lastError().text());
+    throw HootException(err);
   }
 
-  long ruleWordPartCtr = 0;
-  while (!inputFile.atEnd())
+  if (!_getLastTagIdQuery.exec())
   {
-    const QString line = QString::fromUtf8(inputFile.readLine().constData());
-    const QStringList lineParts = line.split("\t");
-    const long tagOccurrenceCount = lineParts[0].trimmed().toLong();
-    LOG_VART(tagOccurrenceCount);
-    const QString word = lineParts[1].trimmed();
-    LOG_VART(word);
-    const QString kvp = lineParts[2].trimmed();
-    LOG_VART(kvp);
-
-    long wordId = _wordsToWordIds.value(word, -1);
-    if (wordId == -1)
-    {
-      wordId = _insertWord(word);
-      if (wordId == -1)
-      {
-        LOG_WARN("Unable to insert word: " << word);
-      }
-      else
-      {
-        _wordsToWordIds[word] = wordId;
-        LOG_TRACE("Created new word with ID: " << wordId);
-      }
-    }
-    else
-    {
-      LOG_TRACE("Found existing word with ID: " << wordId);
-    }
-
-    long tagId = _tagsToTagIds.value(kvp, -1);
-    if (tagId == -1)
-    {
-      tagId = _insertTag(kvp);
-      _tagsToTagIds[kvp] = tagId;
-      LOG_TRACE("Created new tag with ID: " << tagId);
-    }
-    else
-    {
-      LOG_TRACE("Found existing tag with ID: " << tagId);
-    }
-
-    if (wordId != -1)
-    {
-      _insertRuleWordPart(wordId, tagId, tagOccurrenceCount);
-      ruleWordPartCtr++;
-    }
-    else
-    {
-      LOG_WARN(
-        "Skipping inserting rule word part for word: " << word << " and tag: " << kvp << "...");
-    }
-
-    if (ruleWordPartCtr % _statusUpdateInterval == 0)
-    {
-      PROGRESS_INFO(
-        "Sqlite implicit tag rules writer has parsed " <<
-        StringUtils::formatLargeNumber(ruleWordPartCtr) << " input file lines.");
-    }
-
-    LOG_VART("************************************")
-  }
-  inputFile.close();
-
-  LOG_INFO(
-    "Wrote " << StringUtils::formatLargeNumber(_wordsToWordIds.size()) << " words, " <<
-    StringUtils::formatLargeNumber(_tagsToTagIds.size()) << " tags, and " <<
-    StringUtils::formatLargeNumber(ruleWordPartCtr) <<
-    " word/tag associations to implicit tag rules database: " << _db.databaseName());
-  if (duplicatedWordCount > 0)
-  {
-    LOG_WARN("Found " << duplicatedWordCount << " duplicated words.");
+    QString err =
+      QString("Error executing query: %1 (%2)").arg(_getLastTagIdQuery.executedQuery()).
+        arg(_getLastTagIdQuery.lastError().text());
+    throw HootException(err);
   }
 
-  _wordsToWordIds.clear();
-  _tagsToTagIds.clear();
+  bool ok = false;
+  long id = -1;
+  //get the id of the tag just inserted
+  if (_getLastTagIdQuery.next())
+  {
+    id = _getLastTagIdQuery.value(0).toLongLong(&ok);
+  }
+  if (!ok || id == -1)
+  {
+    throw HootException(
+      "Error retrieving new ID " + _getLastTagIdQuery.lastError().text() + " Query: " +
+      _getLastTagIdQuery.executedQuery());
+  }
 
-  _createIndexes();
-
-  DbUtils::execNoPrepare(_db, "COMMIT");
+  LOG_TRACE("Tag: " << kvp << " inserted with ID: " << id);
+  return id;
 }
 
-void ImplicitTagRulesSqliteWriter::_createIndexes()
+void ImplicitTagRulesSqliteWriter::_insertRule(const long wordId, const long tagId,
+                                               const long tagOccurrenceCount)
 {
-  LOG_INFO("Creating database indexes...");
-  LOG_DEBUG("Creating tags index...");
-  DbUtils::execNoPrepare(_db, "CREATE UNIQUE INDEX tag_idx ON tags (kvp)");
-  //oddly, making the id indexes unique changes test results
-  LOG_DEBUG("Creating word id index...");
-  DbUtils::execNoPrepare(_db, "CREATE INDEX word_id_idx ON rules (word_id)");
-  LOG_DEBUG("Creating tag id index...");
-  DbUtils::execNoPrepare(_db, "CREATE INDEX tag_id_idx ON rules (tag_id)");
-  LOG_DEBUG("Creating tag count index...");
-  DbUtils::execNoPrepare(_db, "CREATE INDEX tag_count_idx ON rules (tag_count)");
-  LOG_DEBUG("Creating words index...");
-  DbUtils::execNoPrepare(_db, "CREATE UNIQUE INDEX word_idx ON words (word)");
+  LOG_TRACE(
+    "Inserting rule record for: word ID: " << wordId << " tag ID: " <<
+    tagId << " and tag count: " << tagOccurrenceCount << "...");
+
+  _insertRuleQuery.bindValue(":wordId", qlonglong(wordId));
+  _insertRuleQuery.bindValue(":tagId", qlonglong(tagId));
+  _insertRuleQuery.bindValue(":tagCount", qlonglong(tagOccurrenceCount));
+  if (!_insertRuleQuery.exec())
+  {
+    QString err = QString("Error executing query: %1 (%2)").arg(_insertRuleQuery.executedQuery()).
+        arg(_insertRuleQuery.lastError().text());
+    throw HootException(err);
+  }
 }
 
 long ImplicitTagRulesSqliteWriter::_insertWord(const QString word)
@@ -285,6 +336,7 @@ long ImplicitTagRulesSqliteWriter::_insertWord(const QString word)
 
   bool ok = false;
   long id = -1;
+  //get the id of the word just inserted
   if (_getLastWordIdQuery.next())
   {
     id = _getLastWordIdQuery.value(0).toLongLong(&ok);
@@ -300,67 +352,20 @@ long ImplicitTagRulesSqliteWriter::_insertWord(const QString word)
   return id;
 }
 
-long ImplicitTagRulesSqliteWriter::_insertTag(const QString kvp)
+void ImplicitTagRulesSqliteWriter::_createIndexes()
 {
-  LOG_TRACE("Inserting tag: " << kvp << "...");
-
-  _insertTagQuery.bindValue(":kvp", kvp);
-  if (!_insertTagQuery.exec())
-  {
-    QString err = QString("Error executing query: %1 (%2)").arg(_insertTagQuery.executedQuery()).
-        arg(_insertTagQuery.lastError().text());
-    throw HootException(err);
-  }
-
-  if (!_getLastTagIdQuery.exec())
-  {
-    QString err =
-      QString("Error executing query: %1 (%2)").arg(_getLastTagIdQuery.executedQuery()).
-        arg(_getLastTagIdQuery.lastError().text());
-    throw HootException(err);
-  }
-
-  bool ok = false;
-  long id = -1;
-  if (_getLastTagIdQuery.next())
-  {
-    id = _getLastTagIdQuery.value(0).toLongLong(&ok);
-  }
-  if (!ok || id == -1)
-  {
-    throw HootException(
-      "Error retrieving new ID " + _getLastTagIdQuery.lastError().text() + " Query: " +
-      _getLastTagIdQuery.executedQuery());
-  }
-
-  LOG_TRACE("Tag: " << kvp << " inserted with ID: " << id);
-  return id;
-}
-
-void ImplicitTagRulesSqliteWriter::_insertRuleWordPart(const long wordId, const long tagId,
-                                                       const long tagOccurrenceCount)
-{
-  LOG_TRACE(
-    "Inserting rule record for: word ID: " << wordId << " tag ID: " <<
-    tagId << " and tag count: " << tagOccurrenceCount << "...");
-
-  _insertRuleQuery.bindValue(":wordId", qlonglong(wordId));
-  _insertRuleQuery.bindValue(":tagId", qlonglong(tagId));
-  _insertRuleQuery.bindValue(":tagCount", qlonglong(tagOccurrenceCount));
-  if (!_insertRuleQuery.exec())
-  {
-    QString err = QString("Error executing query: %1 (%2)").arg(_insertRuleQuery.executedQuery()).
-        arg(_insertRuleQuery.lastError().text());
-    throw HootException(err);
-  }
-}
-
-void ImplicitTagRulesSqliteWriter::close()
-{
-  if (_db.open())
-  {
-    _db.close();
-  }
+  LOG_INFO("Creating database indexes...");
+  LOG_DEBUG("Creating tags index...");
+  DbUtils::execNoPrepare(_db, "CREATE UNIQUE INDEX tag_idx ON tags (kvp)");
+  //oddly, making the id indexes unique changes test results...
+  LOG_DEBUG("Creating word id index...");
+  DbUtils::execNoPrepare(_db, "CREATE INDEX word_id_idx ON rules (word_id)");
+  LOG_DEBUG("Creating tag id index...");
+  DbUtils::execNoPrepare(_db, "CREATE INDEX tag_id_idx ON rules (tag_id)");
+  LOG_DEBUG("Creating tag count index...");
+  DbUtils::execNoPrepare(_db, "CREATE INDEX tag_count_idx ON rules (tag_count)");
+  LOG_DEBUG("Creating words index...");
+  DbUtils::execNoPrepare(_db, "CREATE UNIQUE INDEX word_idx ON words (word)");
 }
 
 }

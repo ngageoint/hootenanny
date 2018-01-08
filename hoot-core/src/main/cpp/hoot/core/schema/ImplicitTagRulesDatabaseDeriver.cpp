@@ -73,81 +73,6 @@ void ImplicitTagRulesDatabaseDeriver::setElementType(const QString type)
   setWordIgnoreFile(confOptions.getImplicitTaggingDatabaseDeriverPoiWordIgnoreFile());
 }
 
-void ImplicitTagRulesDatabaseDeriver::_validateInputs(const QString input, const QString output)
-{
-  if (input.isEmpty())
-  {
-    throw HootException("No input was specified.");
-  }
-  if (!input.endsWith(".implicitTagRules"))
-  {
-    throw IllegalArgumentException(
-      QString("A *.implicitTagRules file must be the input to implicit tag rules derivation.  ") +
-      QString("Input specified: ") + input);
-  }
-
-  if (!output.endsWith(".sqlite"))
-  {
-    throw HootException(
-      "Incorrect output specified: " + output + ".  Must be a .sqlite database file.");
-  }
-}
-
-void ImplicitTagRulesDatabaseDeriver::_populateSchemaTagValues()
-{
-  _schemaTagValues.clear();
-  _wordsNotInSchema.clear();
-
-  const std::vector<SchemaVertex> tags =
-    OsmSchema::getInstance().getTagByCategory(OsmSchemaCategory::poi());
-  StringTokenizer tokenizer;
-  for (std::vector<SchemaVertex>::const_iterator tagItr = tags.begin();
-       tagItr != tags.end(); ++tagItr)
-  {
-    SchemaVertex tag = *tagItr;
-    const QString tagVal = tag.value.toLower().replace("_", " ");
-    if (!tagVal.contains("*"))
-    {
-      if (!_customRules.getWordIgnoreList().contains(tagVal, Qt::CaseInsensitive))
-      {
-        _schemaTagValues.insert(tagVal);
-        //dealing with the uk english spellings...this should be expanded and made more extensible
-        if (tagVal == "theatre")
-        {
-          _schemaTagValues.insert("theater");
-        }
-        if (tagVal == "centre")
-        {
-          _schemaTagValues.insert("center");
-        }
-        LOG_TRACE("Appended " << tagVal << " to schema tag values.");
-      }
-      QStringList vals = tokenizer.tokenize(tagVal);
-      for (int i = 0; i < vals.size(); i++)
-      {
-        const QString val = vals.at(i);
-        if (!_customRules.getWordIgnoreList().contains(val, Qt::CaseInsensitive))
-        {
-          _schemaTagValues.insert(val);
-          if (val == "theatre")
-          {
-            _schemaTagValues.insert("theater");
-          }
-          if (val == "centre")
-          {
-            _schemaTagValues.insert("center");
-          }
-          LOG_TRACE("Appended " << val << " to schema tag values.");
-        }
-      }
-    }
-  }
-  LOG_VARD(_schemaTagValues.size());
-  QStringList schemaTagValuesList = _schemaTagValues.toList();
-  qSort(schemaTagValuesList.begin(), schemaTagValuesList.end());
-  LOG_VART(schemaTagValuesList);
-}
-
 void ImplicitTagRulesDatabaseDeriver::deriveRulesDatabase(const QString input, const QString output)
 {
   _validateInputs(input, output);
@@ -176,7 +101,7 @@ void ImplicitTagRulesDatabaseDeriver::deriveRulesDatabase(const QString input, c
       _customRules.getWordIgnoreList().size() == 0 && _customRules.getTagIgnoreList().size() == 0 &&
       _customRules.getCustomRulesList().size() == 0 && !_useSchemaTagValuesForWordsOnly)
   {
-    LOG_INFO("Skipping filtering as no filtering criteria were specified...");
+    LOG_INFO("Skipping filtering, as no filtering criteria were specified...");
     if (_minTagOccurrencesPerWord >= 2)
     {
       _removeKvpsBelowOccurrenceThreshold(input, _minTagOccurrencesPerWord);
@@ -202,7 +127,7 @@ void ImplicitTagRulesDatabaseDeriver::deriveRulesDatabase(const QString input, c
     }
     else
     {
-      LOG_INFO("Skipping count thresholding since threshold = 1...");
+      LOG_INFO("Skipping count thresholding since min occurrence threshold = 1...");
       _applyFiltering(input);
     }
 
@@ -241,8 +166,8 @@ void ImplicitTagRulesDatabaseDeriver::_removeKvpsBelowOccurrenceThreshold(const 
     LOG_WARN("Keeping temp file: " << _thresholdedCountFile->fileName());
   }
 
-  //This removes lines with occurrence counts below the specified threshold - not sure why 1 needs
-  //to be subtracted from the min occurrences here, though...
+  //This removes lines with occurrence counts below the specified threshold; not exactly sure why
+  //one needs to be subtracted from the min occurrences here, though, for the result to be correct
   const QString cmd =
     "cat " + input + " | awk -v limit=" + QString::number(minOccurrencesThreshold - 1) +
     " '$1 > limit{print}' > " + _thresholdedCountFile->fileName();
@@ -256,6 +181,10 @@ void ImplicitTagRulesDatabaseDeriver::_removeKvpsBelowOccurrenceThreshold(const 
 
 bool ImplicitTagRulesDatabaseDeriver::_wordIsNotASchemaTagValue(const QString word)
 {
+  //If _useSchemaTagValuesForWordsOnly is activated, the word is not on the ignore list, and any
+  //token in the name matches a OSM tag value parsed from the hoot schema, then the whole word is
+  //eligible for implicit tag extraction.
+
   StringTokenizer tokenizer;
   bool wordNotASchemaTagValue = false;
   if (_useSchemaTagValuesForWordsOnly && !word.trimmed().isEmpty() &&
@@ -275,6 +204,83 @@ bool ImplicitTagRulesDatabaseDeriver::_wordIsNotASchemaTagValue(const QString wo
     }
   }
   return wordNotASchemaTagValue;
+}
+
+void ImplicitTagRulesDatabaseDeriver::_validateInputs(const QString input, const QString output)
+{
+  if (input.isEmpty())
+  {
+    throw HootException("No input was specified.");
+  }
+  if (!input.endsWith(".implicitTagRules"))
+  {
+    throw IllegalArgumentException(
+      QString("A *.implicitTagRules file must be the input to implicit tag rules derivation.  ") +
+      QString("Input specified: ") + input);
+  }
+
+  if (!output.endsWith(".sqlite"))
+  {
+    throw HootException(
+      "Incorrect output specified: " + output + ".  Must be a .sqlite database file.");
+  }
+}
+
+void ImplicitTagRulesDatabaseDeriver::_populateSchemaTagValues()
+{
+  _schemaTagValues.clear();
+  _wordsNotInSchema.clear();
+
+  const std::vector<SchemaVertex> tags =
+    OsmSchema::getInstance().getTagByCategory(OsmSchemaCategory::poi());
+  StringTokenizer tokenizer;
+  for (std::vector<SchemaVertex>::const_iterator tagItr = tags.begin();
+       tagItr != tags.end(); ++tagItr)
+  {
+    SchemaVertex tag = *tagItr;
+    const QString tagVal = tag.value.toLower().replace("_", " ");
+    if (!tagVal.contains("*"))  //skip wildcards
+    {
+      if (!_customRules.getWordIgnoreList().contains(tagVal, Qt::CaseInsensitive))
+      {
+        _schemaTagValues.insert(tagVal);
+        //dealing with the uk english spellings on an as seen basis; this should be expanded and
+        //made more extensible
+        if (tagVal == "theatre")
+        {
+          _schemaTagValues.insert("theater");
+        }
+        if (tagVal == "centre")
+        {
+          _schemaTagValues.insert("center");
+        }
+        LOG_TRACE("Appended " << tagVal << " to schema tag values.");
+      }
+      QStringList vals = tokenizer.tokenize(tagVal);
+      for (int i = 0; i < vals.size(); i++)
+      {
+        const QString val = vals.at(i);
+        if (!_customRules.getWordIgnoreList().contains(val, Qt::CaseInsensitive))
+        {
+          _schemaTagValues.insert(val);
+          //see comment above
+          if (val == "theatre")
+          {
+            _schemaTagValues.insert("theater");
+          }
+          if (val == "centre")
+          {
+            _schemaTagValues.insert("center");
+          }
+          LOG_TRACE("Appended " << val << " to schema tag values.");
+        }
+      }
+    }
+  }
+  LOG_VARD(_schemaTagValues.size());
+  QStringList schemaTagValuesList = _schemaTagValues.toList();
+  qSort(schemaTagValuesList.begin(), schemaTagValuesList.end()); //sort for viewing only
+  LOG_VART(schemaTagValuesList);
 }
 
 void ImplicitTagRulesDatabaseDeriver::_applyFiltering(const QString input)
@@ -320,9 +326,13 @@ void ImplicitTagRulesDatabaseDeriver::_applyFiltering(const QString input)
     QString word = lineParts[1].trimmed();
     LOG_VART(word);
 
+    //this won't come back true unless _useSchemaTagValuesForWordsOnly = true.
     const bool wordNotASchemaTagValue = _wordIsNotASchemaTagValue(word);
+
     const bool wordTooSmall = word.length() < _minWordLength;
 
+    //Skip the word if we already have a custom rule that is associated with it (they're applied
+    //to the database after this filtering).
     if (!wordTooSmall && !_customRules.getWordIgnoreList().contains(word, Qt::CaseInsensitive) &&
         !wordNotASchemaTagValue)
     {
@@ -351,6 +361,7 @@ void ImplicitTagRulesDatabaseDeriver::_applyFiltering(const QString input)
         }
         else
         {
+          //write the valid count line
           const long count = lineParts[0].trimmed().toLong();
           LOG_VART(count);
           const QString line = QString::number(count) % "\t" % word % "\t" % kvp % "\n";
@@ -426,7 +437,7 @@ void ImplicitTagRulesDatabaseDeriver::_applyFiltering(const QString input)
     LOG_VART(wordsNotInSchemaList);
   }
 
-  //technically this could be done outside of filtering...
+  //technically this could be done outside of this filtering...
   _writeCustomRules(linesWrittenCount);
 
   LOG_INFO(
@@ -448,7 +459,7 @@ void ImplicitTagRulesDatabaseDeriver::_writeCustomRules(long& linesWrittenCount)
          customRulesItr != customRulesList.end(); ++customRulesItr)
     {
       const QString line =
-        QString::number(999999) % "\t" % customRulesItr.key().trimmed() % "\t" %
+        QString::number(INT_MAX) % "\t" % customRulesItr.key().trimmed() % "\t" %
         customRulesItr.value().trimmed() % "\n";
       LOG_VART(line);
       _filteredCountFile->write(line.toUtf8());

@@ -38,23 +38,21 @@ namespace hoot
 class OsmMap;
 
 /**
- * TODO: How much, if any, does this need to be genericized to handle areas (non-building polys)?
+ * Merges two non-building areas
+ *
+ * Adapted from PoiPolygonMerger; may need some additional work
  */
 class AreaMerger
 {
 
 public:
 
-  /**
-   *
-   */
   AreaMerger();
 
   /**
-   * TODO: Merges a single POI with a single polygon, both as defined by PoiPolygonMerger
+   * Merges to non-building areas
    *
-   * @param map an OSM map containing a single node POI and a single polygon area or building, which
-   * can be a way or a relation (multipolygon)
+   * @param map an OSM map containing two non-building areas
    */
   static void merge(OsmMapPtr map);
 

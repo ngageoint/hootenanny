@@ -76,11 +76,4 @@ bool StringUtils::hasAlphabeticCharacter(const QString input)
   return false;
 }
 
-QString StringUtils::replaceNonAlphaNumericCharsWithSpace(const QString input)
-{
-  std::string stdStrInput = input.toStdString();
-  std::replace_if(stdStrInput.begin(), stdStrInput.end(), ::iswpunct, ' ');
-  return QString::fromStdString(stdStrInput);
-}
-
 }

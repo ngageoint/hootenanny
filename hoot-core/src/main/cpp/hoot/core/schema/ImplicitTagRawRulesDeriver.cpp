@@ -83,33 +83,126 @@ void ImplicitTagRawRulesDeriver::setElementFilter(const QString type)
   _elementFilter.reset(new ImplicitTagEligiblePoiCriterion());
 }
 
-void ImplicitTagRawRulesDeriver::_updateForNewWord(QString word, const QString kvp)
+void ImplicitTagRawRulesDeriver::_init()
 {
-  word = word.simplified();
-  LOG_TRACE("Updating word: " << word << " with kvp: " << kvp << "...");
+  _wordKeysToCountsValues.clear();
+  _duplicatedWordTagKeyCountsToValues.clear();
+  _countFileLineCtr = 0;
 
-  ImplicitTagUtils::cleanName(word);
-
-  if (!word.isEmpty())
+  _countFile.reset(
+    new QTemporaryFile(_tempFileDir + "/poi-implicit-tag-raw-rules-generator-temp-XXXXXX"));
+  _countFile->setAutoRemove(!_keepTempFiles);
+  if (!_countFile->open())
   {
-    bool wordIsNumber = false;
-    word.toLong(&wordIsNumber);
-    if (wordIsNumber)
-    {
-      LOG_TRACE("Skipping word: " << word << ", which is a number.");
-      return;
-    }
+    throw HootException(QObject::tr("Error opening %1 for writing.").arg(_countFile->fileName()));
+  }
+  LOG_DEBUG("Opened temp file: " << _countFile->fileName());
+  if (_keepTempFiles)
+  {
+    LOG_WARN("Keeping temp file: " << _countFile->fileName());
+  }
+}
 
-    const bool hasAlphaChar = StringUtils::hasAlphabeticCharacter(word);
-    if (!hasAlphaChar)
-    {
-      LOG_TRACE("Skipping word: " << word << ", which has no alphabetic characters.");
-      return;
-    }
+void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
+                                                const QStringList translationScripts,
+                                                const QString output)
+{
+  _validateInputs(inputs, translationScripts, output);
 
-    const QString line = word.toLower() % QString("\t") % kvp % QString("\n");
-    _countFile->write(line.toUtf8());
-    _countFileLineCtr++;
+  LOG_INFO(
+    "Generating POI implicit tag rules raw file for inputs: " << inputs <<
+    ", translation scripts: " << translationScripts << ".  Writing to output: " << output << "...");
+  LOG_VARD(_sortParallelCount);
+  LOG_VARD(_skipFiltering);
+  LOG_VARD(_sortParallelCount);
+  LOG_VARD(_translateAllNamesToEnglish);
+
+  _init();
+
+  long poiCount = 0;
+  long nodeCount = 0;
+  for (int i = 0; i < inputs.size(); i++)
+  {
+    boost::shared_ptr<ElementInputStream> inputStream =
+      _getInputStream(inputs.at(i), translationScripts.at(i));
+    while (inputStream->hasMoreElements())
+    {
+      ElementPtr element = inputStream->readNextElement();
+      LOG_VART(element);
+
+      nodeCount++;
+
+      assert(_elementFilter.get());
+      if (_skipFiltering || _elementFilter->isSatisfied(element))
+      {
+        QStringList names = element->getTags().getNames();
+        assert(!names.isEmpty());
+
+        //old_name generally indicates that an element formerly went by the name, so not really
+        //useful here.
+        if (names.removeAll("old_name") > 0)
+        {
+          LOG_VARD("Removed old name tag.");
+        }
+        assert(!names.isEmpty());
+
+        if (_translateAllNamesToEnglish)
+        {
+          names = ImplicitTagUtils::translateNamesToEnglish(names, element->getTags());
+        }
+        LOG_VART(names);
+
+        //get back only the tags that we'd be interested in applying to future elements implicitly
+        //based on name
+        const QStringList kvps = _elementFilter->getEligibleKvps(element->getTags());
+        assert(!kvps.isEmpty());
+        if (kvps.isEmpty())
+        {
+          throw HootException("POI kvps empty.");
+        }
+
+        //parse whole names and token groups
+        _parseNames(names, kvps);
+
+        poiCount++;
+
+        if (poiCount % _statusUpdateInterval == 0)
+        {
+          PROGRESS_INFO(
+            "Parsed " << StringUtils::formatLargeNumber(poiCount) << " eligible POIs / " <<
+            StringUtils::formatLargeNumber(nodeCount) << " nodes.");
+        }
+      }
+    }
+    _inputReader->finalizePartial();
+  }
+  _countFile->close();
+
+  LOG_INFO(
+    "Parsed " << StringUtils::formatLargeNumber(poiCount) << " POIs from " <<
+    StringUtils::formatLargeNumber(nodeCount) << " nodes.");
+  LOG_INFO(
+    "Wrote " << StringUtils::formatLargeNumber(_countFileLineCtr) << " lines to count file.");
+
+  _sortByTagOccurrence();   //sort in descending count order
+  _removeDuplicatedKeyTypes();
+  bool tieCountsNeededResolved = false;
+  if (_duplicatedWordTagKeyCountsToValues.size() > 0)
+  {
+    _resolveCountTies();
+    tieCountsNeededResolved = true;
+  }
+  LOG_INFO(
+    "Extracted "  << StringUtils::formatLargeNumber(_wordKeysToCountsValues.size()) <<
+    " word/tag associations.");
+  _wordKeysToCountsValues.clear();
+  if (tieCountsNeededResolved)
+  {
+    _sortByWord(_tieResolvedCountFile);
+  }
+  else
+  {
+    _sortByWord(_dedupedCountFile);
   }
 }
 
@@ -149,28 +242,38 @@ void ImplicitTagRawRulesDeriver::_validateInputs(const QStringList inputs,
   _output->close();
 }
 
-void ImplicitTagRawRulesDeriver::_init()
+void ImplicitTagRawRulesDeriver::_updateForNewWord(QString word, const QString kvp)
 {
-  _wordKeysToCountsValues.clear();
-  _duplicatedWordTagKeyCountsToValues.clear();
-  _countFileLineCtr = 0;
+  word = word.simplified();
+  LOG_TRACE("Updating word: " << word << " with kvp: " << kvp << "...");
 
-  _countFile.reset(
-    new QTemporaryFile(_tempFileDir + "/poi-implicit-tag-raw-rules-generator-temp-XXXXXX"));
-  _countFile->setAutoRemove(!_keepTempFiles);
-  if (!_countFile->open())
+  ImplicitTagUtils::cleanName(word);
+
+  if (!word.isEmpty())
   {
-    throw HootException(QObject::tr("Error opening %1 for writing.").arg(_countFile->fileName()));
-  }
-  LOG_DEBUG("Opened temp file: " << _countFile->fileName());
-  if (_keepTempFiles)
-  {
-    LOG_WARN("Keeping temp file: " << _countFile->fileName());
+    bool wordIsNumber = false;
+    word.toLong(&wordIsNumber);
+    if (wordIsNumber)
+    {
+      LOG_TRACE("Skipping word: " << word << ", which is a number.");
+      return;
+    }
+
+    const bool hasAlphaChar = StringUtils::hasAlphabeticCharacter(word);
+    if (!hasAlphaChar)
+    {
+      LOG_TRACE("Skipping word: " << word << ", which has no alphabetic characters.");
+      return;
+    }
+
+    const QString line = word.toLower() % QString("\t") % kvp % QString("\n");
+    _countFile->write(line.toUtf8());
+    _countFileLineCtr++;
   }
 }
 
-boost::shared_ptr<ElementInputStream> ImplicitTagRawRulesDeriver::_getInputStream(const QString input,
-                                                                    const QString translationScript)
+boost::shared_ptr<ElementInputStream> ImplicitTagRawRulesDeriver::_getInputStream(
+  const QString input, const QString translationScript)
 {
   LOG_INFO("Parsing: " << input << "...");
 
@@ -181,6 +284,7 @@ boost::shared_ptr<ElementInputStream> ImplicitTagRawRulesDeriver::_getInputStrea
   boost::shared_ptr<ElementInputStream> inputStream =
     boost::dynamic_pointer_cast<ElementInputStream>(_inputReader);
   LOG_VARD(translationScript);
+  //"none" allows for bypassing translation for an input; e.g. OSM data
   if (translationScript.toLower() != "none")
   {
     boost::shared_ptr<TranslationVisitor> translationVisitor(new TranslationVisitor());
@@ -188,105 +292,6 @@ boost::shared_ptr<ElementInputStream> ImplicitTagRawRulesDeriver::_getInputStrea
     inputStream.reset(new ElementVisitorInputStream(_inputReader, translationVisitor));
   }
   return inputStream;
-}
-
-void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
-                                                const QStringList translationScripts,
-                                                const QString output)
-{
-  _validateInputs(inputs, translationScripts, output);
-
-  LOG_INFO(
-    "Generating POI implicit tag rules raw file for inputs: " << inputs <<
-    ", translation scripts: " << translationScripts << ".  Writing to output: " << output << "...");
-  LOG_VARD(_sortParallelCount);
-  LOG_VARD(_skipFiltering);
-  LOG_VARD(_sortParallelCount);
-  LOG_VARD(_translateAllNamesToEnglish);
-
-  _init();
-
-  long poiCount = 0;
-  long nodeCount = 0;
-  for (int i = 0; i < inputs.size(); i++)
-  {
-    boost::shared_ptr<ElementInputStream> inputStream =
-      _getInputStream(inputs.at(i), translationScripts.at(i));
-
-    while (inputStream->hasMoreElements())
-    {
-      ElementPtr element = inputStream->readNextElement();
-      LOG_VART(element);
-
-      nodeCount++;
-
-      assert(_elementFilter.get());
-      if (_skipFiltering || _elementFilter->isSatisfied(element))
-      {
-        QStringList names = element->getTags().getNames();
-        assert(!names.isEmpty());
-
-        if (names.removeAll("old_name") > 0)
-        {
-          LOG_VARD("Removed old name tag.");
-        }
-        assert(!names.isEmpty());
-
-        if (_translateAllNamesToEnglish)
-        {
-          names = ImplicitTagUtils::translateNamesToEnglish(names, element->getTags());
-        }
-        LOG_VART(names);
-
-        const QStringList kvps = _elementFilter->getEligibleKvps(element->getTags());
-        assert(!kvps.isEmpty());
-        if (kvps.isEmpty())
-        {
-          throw HootException("POI kvps empty.");
-        }
-
-        _parseNames(names, kvps);
-
-        poiCount++;
-
-        if (poiCount % _statusUpdateInterval == 0)
-        {
-          PROGRESS_INFO(
-            "Parsed " << StringUtils::formatLargeNumber(poiCount) << " eligible POIs / " <<
-            StringUtils::formatLargeNumber(nodeCount) << " nodes.");
-        }
-      }
-    }
-    _inputReader->finalizePartial();
-  }
-  _countFile->close();
-
-  LOG_INFO(
-    "Parsed " << StringUtils::formatLargeNumber(poiCount) << " POIs from " <<
-    StringUtils::formatLargeNumber(nodeCount) << " nodes.");
-  LOG_INFO(
-    "Wrote " << StringUtils::formatLargeNumber(_countFileLineCtr) << " lines to count file.");
-
-  _sortByTagOccurrence();
-  _removeDuplicatedKeyTypes();
-  bool tieCountsNeededResolved = false;
-  if (_duplicatedWordTagKeyCountsToValues.size() > 0)
-  {
-    _resolveCountTies();
-    tieCountsNeededResolved = true;
-  }
-  LOG_INFO(
-    "Extracted "  << StringUtils::formatLargeNumber(_wordKeysToCountsValues.size()) <<
-    " word/tag associations.");
-  _wordKeysToCountsValues.clear();
-  if (tieCountsNeededResolved)
-  {
-    _sortByWord(_tieResolvedCountFile);
-  }
-  else
-  {
-    _sortByWord(_dedupedCountFile);
-  }
 }
 
 void ImplicitTagRawRulesDeriver::_parseNames(const QStringList names, const QStringList kvps)
@@ -317,6 +322,8 @@ void ImplicitTagRawRulesDeriver::_parseNames(const QStringList names, const QStr
       _parseNameToken(nameToken, kvps);
     }
 
+    //going up to a token group size of two; tested up to group size three, but three didn't seem to
+    //yield any better tagging results
     if (nameTokens.size() > 2)
     {
       for (int j = 0; j < nameTokens.size() - 1; j++)
@@ -330,8 +337,8 @@ void ImplicitTagRawRulesDeriver::_parseNames(const QStringList names, const QStr
 
 void ImplicitTagRawRulesDeriver::_parseNameToken(QString& nameToken, const QStringList kvps)
 {
-  //may eventually need to replace more punctuation chars here; need a more extensible way;
-  //also, if done, move into ImplicitTagUtils::cleanName
+  //may eventually need to replace more punctuation chars here, but this is fine for now...need a
+  //more extensible way to do it; also, that logic could moved into ImplicitTagUtils::cleanName
   nameToken = nameToken.replace(",", "");
   LOG_VART(nameToken);
 
@@ -434,9 +441,10 @@ void ImplicitTagRawRulesDeriver::_removeDuplicatedKeyTypes()
     const QString tagValue = kvpParts[1];
     LOG_VART(tagValue);
 
-    //The lines are sorted by occurrence count.  So the first time we see one word-key combo, we
-    //know it had the highest occurrence count, and we can ignore all subsequent instances since
-    //any one feature can't have more than one tag applied to it with the same key.
+    //The lines are sorted in reverse by occurrence count.  So the first time we see one word/key
+    //combo, we know it had the highest occurrence count, and we can ignore all subsequent
+    //instances of it since any one feature can't have more than one tag applied to it with the
+    //same key.
 
     const QString queriedCountAndValue = _wordKeysToCountsValues.value(wordTagKey, "");
     if (queriedCountAndValue.isEmpty())
@@ -484,6 +492,9 @@ void ImplicitTagRawRulesDeriver::_removeDuplicatedKeyTypes()
 
 void ImplicitTagRawRulesDeriver::_resolveCountTies()
 {
+  //Any time more than one word/key combo has the same occurrence count, we need to pick just one
+  //of them.
+
   LOG_INFO(
     "Resolving word/tag key/count ties for " <<
     StringUtils::formatLargeNumber(_duplicatedWordTagKeyCountsToValues.size()) <<
@@ -529,7 +540,8 @@ void ImplicitTagRawRulesDeriver::_resolveCountTies()
     LOG_VART(tagKey);
     const QString wordTagKey = word.trimmed() % ";" % tagKey.trimmed();
     LOG_VART(wordTagKey);
-    const QString wordTagKeyCount = word.trimmed() % ";" % tagKey.trimmed() % ";" % countStr.trimmed();
+    const QString wordTagKeyCount =
+      word.trimmed() % ";" % tagKey.trimmed() % ";" % countStr.trimmed();
     LOG_VART(wordTagKeyCount);
     const QString tagValue = kvpParts[1];
     LOG_VART(tagValue);
@@ -538,6 +550,11 @@ void ImplicitTagRawRulesDeriver::_resolveCountTies()
     {
       LOG_TRACE("Resolving duplicated word/tag key/count for " << wordTagKeyCount << "...");
 
+      //To resolve the tie, we're going to pick the most specific kvp.  e.g. amenity=public_hall
+      //wins out of amenity=hall.  This is not really dealing with same hierarchy level tags
+      //(e.g. amenity=school and amenity=hall) and will just arbitrarily pick in that situation.
+      //Duplicates do seem to be fairly rare, but there could be some perfomance gains by coming
+      //up with a better way to handle this situation.
       QString lineWithMostSpecificKvp = line % "\n";
       const QStringList tagValues = _duplicatedWordTagKeyCountsToValues[wordTagKeyCount];
       for (int i = 0; i < tagValues.size(); i++)

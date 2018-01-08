@@ -35,7 +35,7 @@ namespace hoot
 {
 
 /**
- *
+ * Custom rules to invoke when creating an implicit tag rules database
  */
 class ImplicitTagCustomRules
 {
@@ -48,19 +48,25 @@ public:
 
   QString getCustomRuleFile() const { return _customRuleFile; }
   void setCustomRuleFile(const QString file) { _customRuleFile = file; }
+
   QString getTagIgnoreFile() const { return _tagIgnoreFile; }
   void setTagIgnoreFile(const QString file) { _tagIgnoreFile = file; }
+
   QString getWordIgnoreFile() const { return _wordIgnoreFile; }
   void setWordIgnoreFile(const QString file) { _wordIgnoreFile = file; }
 
   QStringList getTagIgnoreList() const { return _tagIgnoreList; }
   QStringList getWordIgnoreList() const { return _wordIgnoreList; }
+
   QMap<QString, QString> getCustomRulesList() const { return _customRulesList; }
 
 private:
 
+  //file which contains tag rules to be applied manually to the rules database
   QString _customRuleFile;
+  //file which contains tags that are to be ignored when building the rules database
   QString _tagIgnoreFile;
+  //file which contains words (name tokens) that are to be ignored when building the rules database
   QString _wordIgnoreFile;
 
   QStringList _tagIgnoreList;

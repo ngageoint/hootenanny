@@ -75,10 +75,10 @@ public:
   static void writeFully(const QString path, const QString text);
 
   /**
+   * Returns the number of lines in a file
    *
-   *
-   * @param file
-   * @return
+   * @param file file to examine
+   * @return a line count
    */
   static long getNumberOfLinesInFile(const QString file);
 };

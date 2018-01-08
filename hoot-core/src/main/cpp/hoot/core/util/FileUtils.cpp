@@ -40,8 +40,6 @@
 
 // Std
 #include <fstream>
-//#include <iostream>
-//#include <iterator>
 #include <algorithm>
 
 namespace hoot

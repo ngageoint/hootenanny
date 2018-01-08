@@ -34,7 +34,7 @@ namespace hoot
 {
 
 /**
- * A criterion that is only satisified with POIs.
+ * Any POI whose name can be harvested to feed the POI implicit tagger will pass this filter
  */
 class ImplicitTagEligiblePoiCriterion : public ImplicitTagEligibleCriterion
 {
@@ -46,10 +46,28 @@ public:
 
   virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
 
+<<<<<<< HEAD
   virtual boost::shared_ptr<ElementCriterion> clone()
   { return  boost::shared_ptr<ElementCriterion>(new ImplicitTagEligiblePoiCriterion()); }
+=======
+  virtual ElementCriterion* clone() { return  new ImplicitTagEligiblePoiCriterion(); }
+>>>>>>> 7663664... add comments
 
+  /**
+   * Returns all tag key/value pairs which could be applied implicitly by an implicit POI tagger
+   *
+   * @param tags tags to examine
+   * @return a list of key/value pairs (key=value)
+   */
   virtual QStringList getEligibleKvps(const Tags& tags) const;
+
+  /**
+   * Returns true if the input tags contain at least one key/value pair which could be applied
+   * implicitly by an implicit POI tagger
+   *
+   * @param tags tags to examine
+   * @return true if any eligible tags are present; false otherwise
+   */
   virtual bool hasEligibleKvp(const Tags& tags) const;
 
 };

@@ -41,7 +41,7 @@ namespace  hoot
 {
 
 /**
- * Reads implicit tag rules from a Sqlite database
+ * Reads implicit tag rules from a Sqlite implicit tag rules database
  */
 class ImplicitTagRulesSqliteReader
 {
@@ -63,26 +63,36 @@ public:
   void close();
 
   /**
+   * Given a set of input words, returns a set of implicitly derived tags associated with those
+   * words
    *
+   * It also populates the words that matched (matchingWords) and determines if the
+   * input words were involved in multiple tag rules (wordsInvolvedInMultipleRule).  Words involved
+   * in multiple tag rules will result in an empty tag set being returned if
+   * _allowWordsInvolvedInMultipleRules is set to true.
    *
    * @param words a collection of words for which to retrieve implicitly derived tags
-   * @param matchingWords a collection of words found in the implicit tag database
+   * @param matchingWords a collection of words found in the implicit tag database; populated by
+   * this method
    * @param wordsInvolvedInMultipleRules true if the collection of words are associated with more
-   * than one set of tags
-   * @return a set of implicitly derived tags if they exists for given inputs and the input words
-   * are not associated with more than one set of tags; an empty tag set otherwise
+   * than one set of tags; populated by this method
+   * @return a set of implicitly derived tags, if they exist, for the given input words; an empty
+   * tag set otherwise
    */
   Tags getImplicitTags(const QSet<QString>& words, QSet<QString>& matchingWords,
                        bool& wordsInvolvedInMultipleRules);
 
+  /**
+   * Print out relevant info about the rule database
+   */
   void printStats();
 
   /**
-   * Retrieves total number of word/tag associations in the database
+   * Retrieves the total number implicit tag rules (word/tag associations) in the database
    *
-   * @return a rule word part count
+   * @return a rule count
    */
-  long getRuleWordPartCount();
+  long getRuleCount();
 
   int getTagsCacheSize() const { return _tagsCache.size(); }
   long getFirstRoundTagsCacheHits() const { return _firstRoundTagsCacheHits; }
@@ -94,31 +104,54 @@ public:
 
 private:
 
-  QString _path;
+  //implicit tag rules db
   QSqlDatabase _db;
 
-  QSqlQuery _ruleWordPartCountQuery;
+  QSqlQuery _ruleCountQuery;
   QSqlQuery _tagCountQuery;
   QSqlQuery _wordCountQuery;
-  QSqlQuery _tagsForWordIds;
-  QSqlQuery _tagCountsForWordIds;
+  //query to return all tags associated with the specified word ids
+  QSqlQuery _tagsForWordIdsQuery;
+  //query to return the tag occurrence associated with the specified word ids
+  QSqlQuery _tagCountsForWordIdsQuery;
 
-  QCache<QString, Tags> _tagsCache;
+  //number of times tags were found in the first tag cache query
   long _firstRoundTagsCacheHits;
+  //number of times tags were found in the second tag cache query
   long _secondRoundTagsCacheHits;
+
+  //If true, only the tag with the highest word/tag occurrence count will be returned
+  //(default = true).  Setting this to true may avoids some false positive type tags from being
+  //applied.  More experimentation may need to be done to see if disabling this setting can yield
+  //better overall tagging results.
   bool _addTopTagOnly;
+  //If true, any input words associated with multiple rules in the database will result in all
+  //associated tags being returned (default = false).  If false, no type tags will be returned in
+  //this situation and only a single tag indicating the multiple rule involvement will be applied.
+  //More experimentation may need to be done to see if disabling this setting can yield better
+  //overall tagging results.
   bool _allowWordsInvolvedInMultipleRules;
 
-  void _prepareQueries();
+  //keep a simple cache associating words with implicit tags to speed things up a bit
+  QCache<QString, Tags> _tagsCache;
+
+  void _cacheTags(const QSet<QString>& words, const Tags& tags);
   Tags _checkCachedTags(const QSet<QString>& words, QSet<QString>& matchingWords,
                         bool& wordsInvolvedInMultipleRules);
+
+  void _prepareQueries();
+  /*
+   * Check to see which input words exist
+   */
   void _queryWords(const QSet<QString>& words, QSet<long>& queriedWordIds,
                    QSet<QString>& queriedWords);
-  void _cacheTags(const QSet<QString>& words, const Tags& tags);
-  void _removeTagsWithDuplicatedValues(Tags& tags);
+  /*
+   * Gets tags associated with only the inputs words that actually exist
+   */
   Tags _getTagsForWords(const QSet<long>& queriedWordIds, const QSet<QString>& queriedWords,
                         const QSet<QString>& inputWords, QSet<QString>& matchingWords,
                         bool& wordsInvolvedInMultipleRules);
+  void _removeTagsWithDuplicatedValues(Tags& tags);
   void _modifyWordIdsForMultipleRules(QSet<long>& queriedWordIds);
 };
 

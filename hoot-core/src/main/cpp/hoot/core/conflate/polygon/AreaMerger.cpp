@@ -52,6 +52,7 @@ void AreaMerger::merge(OsmMapPtr map)
   ElementPtr element2;
   int parsedElementCount = 0;
 
+  //find the area(s) as ways
   const WayMap& ways = map->getWays();
   for (WayMap::const_iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
   {
@@ -72,6 +73,7 @@ void AreaMerger::merge(OsmMapPtr map)
 
   if (parsedElementCount < 2)
   {
+    //find the area(s) as relations
     const RelationMap& relations = map->getRelations();
     for (RelationMap::const_iterator relItr = relations.begin(); relItr != map->getRelations().end(); ++relItr)
     {

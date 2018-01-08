@@ -56,16 +56,10 @@ bool ImplicitPoiPolygonTagger::_visitElement(const ElementPtr& e)
     OsmSchema::getInstance().getCategories(e->getTags()).intersects(
       OsmSchemaCategory::building() | OsmSchemaCategory::poi());
 
-  if (_elementIsATaggablePoi(e))
+  if (_elementIsATaggablePoi(e) || _elementIsATaggablePolygon(e))
   {
     return true;
   }
-
-  if (_elementIsATaggablePolygon(e))
-  {
-    return true;
-  }
-
   return false;
 }
 
@@ -79,10 +73,12 @@ bool ImplicitPoiPolygonTagger::_elementIsATaggablePoi(const ElementPtr& e)
   LOG_VART(_elementIsASpecificPoi);
   const bool elementIsAGenericPoi = !_elementIsASpecificPoi;
 
+  //always allow generic elements
   if (elementIsAGenericPoi)
   {
     return true;
   }
+  //allowing specific elements is configurable
   else if (_elementIsASpecificPoi && _allowTaggingSpecificPois)
   {
     return true;
@@ -107,10 +103,12 @@ bool ImplicitPoiPolygonTagger::_elementIsATaggablePolygon(const ElementPtr& e)
   LOG_VART(_elementIsASpecificPoi);
   const bool elementIsAGenericPoly = !elementIsASpecificPoly;
 
+  //always allow generic elements
   if (elementIsAGenericPoly)
   {
     return true;
   }
+  //allowing specific elements is configurable
   else if (elementIsASpecificPoly && _allowTaggingSpecificPois)
   {
     return true;

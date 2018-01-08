@@ -55,6 +55,7 @@ QStringList ImplicitTagEligiblePoiCriterion::getEligibleKvps(const Tags& tags) c
     const QString kvp = tagItr.key() % "=" % tagItr.value();
     LOG_VART(kvp);
     LOG_VART(OsmSchema::getInstance().getCategories(kvp).intersects(OsmSchemaCategory::poi()));
+    //if the tag is not generic and has anything to do with pois, we'll use it
     if (kvp != QLatin1String("poi=yes") &&
         OsmSchema::getInstance().getCategories(kvp).intersects(OsmSchemaCategory::poi()))
     {
@@ -73,6 +74,7 @@ bool ImplicitTagEligiblePoiCriterion::hasEligibleKvp(const Tags& tags) const
     const QString kvp = tagItr.key() % "=" % tagItr.value();
     LOG_VART(kvp);
     LOG_VART(OsmSchema::getInstance().getCategories(kvp).intersects(OsmSchemaCategory::poi()));
+    //if the tag is not generic and has anything to do with pois, we'll use it
     if (kvp != QLatin1String("poi=yes") &&
         OsmSchema::getInstance().getCategories(kvp).intersects(OsmSchemaCategory::poi()))
     {
