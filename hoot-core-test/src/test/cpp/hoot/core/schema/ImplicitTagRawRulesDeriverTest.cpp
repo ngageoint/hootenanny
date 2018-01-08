@@ -39,16 +39,14 @@ namespace hoot
 class ImplicitTagRawRulesDeriverTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ImplicitTagRawRulesDeriverTest);
-  //TODO: fix - keeps showing up as diff output even though its identical
+
+  //TODO: fix these - keep showing up as diff output even though its identical
   //CPPUNIT_TEST(runBasicPoiTest);
+  //CPPUNIT_TEST(runTranslateNamesFalsePoiTest);
+
   CPPUNIT_TEST(runMultipleInputsPoiTest);
   CPPUNIT_TEST(runDuplicateWordKeyCountPoiTest);
-  CPPUNIT_TEST(runNameCasePoiTest);
-  //TODO
-  //CPPUNIT_TEST(runInputTranslationScriptSizeMismatchTest);
-  //CPPUNIT_TEST(runEqualsInNameTest);
-  //CPPUNIT_TEST(runBadInputsTest);
-  //translate names
+  CPPUNIT_TEST(runNameCasePoiTest); 
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -177,6 +175,113 @@ public:
 
     HOOT_FILE_EQUALS(
       inDir() + "/ImplicitTagRawRulesDeriverTest-runNameCaseTest.implicitTagRules", outputFile);
+  }
+
+  void runTranslateNamesFalsePoiTest()
+  {
+    QDir().mkpath(outDir());
+
+    QStringList inputs;
+    inputs.append(inDir() + "/yemen-crop-2.osm.pbf");
+    const QString outputFile =
+      outDir() + "/ImplicitTagRawRulesDeriverTest-runTranslateNamesFalsePoiTest-out.implicitTagRules";
+
+    QStringList translationScripts;
+    translationScripts.append("translations/OSM_Ingest.js");
+    ImplicitTagRawRulesDeriver rawRulesDeriver;
+    rawRulesDeriver.setElementFilter("poi");
+    rawRulesDeriver.setKeepTempFiles(false); //set true for debugging
+    rawRulesDeriver.setSkipFiltering(false);
+    rawRulesDeriver.setSortParallelCount(1);
+    rawRulesDeriver.setTranslateAllNamesToEnglish(false);
+    rawRulesDeriver.deriveRawRules(inputs, translationScripts, outputFile);
+
+    HOOT_FILE_EQUALS(
+      inDir() + "/ImplicitTagRawRulesGeneratorTest-runTranslateNamesFalsePoiTest.implicitTagRules",
+      outputFile);
+  }
+
+  void runBadInputsTest()
+  {
+    QDir().mkpath(outDir());
+
+    QString exceptionMsg("");
+    QStringList inputs;
+    QStringList translationScripts;
+    ImplicitTagRawRulesDeriver rawRulesDeriver;
+
+    rawRulesDeriver.setKeepTempFiles(false); //set true for debugging
+    rawRulesDeriver.setSkipFiltering(false);
+    rawRulesDeriver.setSortParallelCount(1);
+    rawRulesDeriver.setTranslateAllNamesToEnglish(true);
+    inputs.clear();
+    inputs.append(inDir() + "/yemen-crop-2.osm.pbf");
+    translationScripts.clear();
+    translationScripts.append("translations/OSM_Ingest.js");
+    translationScripts.append("translations/OSM_Ingest.js");
+    try
+    {
+      rawRulesDeriver.deriveRawRules(
+        inputs, translationScripts,
+        outDir() + "/ImplicitTagRawRulesDeriverTest-runBadInputsTest-out.implicitTagRules");
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.contains("No element type was specified"));
+
+    rawRulesDeriver.setElementFilter("poi");
+    inputs.clear();
+    inputs.append(inDir() + "/yemen-crop-2.osm.pbf");
+    translationScripts.clear();
+    translationScripts.append("translations/OSM_Ingest.js");
+    translationScripts.append("translations/OSM_Ingest.js");
+    try
+    {
+      rawRulesDeriver.deriveRawRules(
+        inputs, translationScripts,
+        outDir() + "/ImplicitTagRawRulesDeriverTest-runBadInputsTest-out.implicitTagRules");
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(
+      exceptionMsg.contains(
+        "The size of the input datasets list must equal the size of the list of translation scripts"));
+
+    inputs.clear();
+    translationScripts.clear();
+    translationScripts.append("translations/OSM_Ingest.js");
+    translationScripts.append("translations/OSM_Ingest.js");
+    try
+    {
+      rawRulesDeriver.deriveRawRules(
+        inputs, translationScripts,
+        outDir() + "/ImplicitTagRawRulesDeriverTest-runBadInputsTest-out.implicitTagRules");
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.contains("No inputs were specified"));
+
+    inputs.clear();
+    inputs.append(inDir() + "/yemen-crop-2.osm.pbf");
+    inputs.append(inDir() + "/philippines-1.osm.pbf");
+    translationScripts.clear();
+    translationScripts.append("translations/OSM_Ingest.js");
+    translationScripts.append("translations/OSM_Ingest.js");
+    try
+    {
+      rawRulesDeriver.deriveRawRules(inputs, translationScripts, "");
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.contains("No output was specified"));
   }
 };
 

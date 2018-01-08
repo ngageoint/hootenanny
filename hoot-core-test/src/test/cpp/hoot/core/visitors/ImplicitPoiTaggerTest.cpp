@@ -45,12 +45,6 @@ class ImplicitPoiTaggerTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runDuplicateTagKeyTest);
   CPPUNIT_TEST(runLessSpecificImplicitTagTest);
   CPPUNIT_TEST(runMoreSpecificImplicitTagTest);
-  //TODO:
-  //translate
-  //top tag
-  //multiple rules
-  //end of name
-  //specific pois
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -118,6 +112,11 @@ public:
                     "name = Alshy Clinic\n"
                     "amenity = clinic\n",
                     map->getNode(-2)->getTags());
+    HOOT_STR_EQUALS("hoot:implicitTags:tagsAdded = Added 2 implicitly derived tag(s) based on: masjid; tags added: religion = muslim, amenity = place_of_worship\n"
+                    "religion = muslim\n"
+                    "name = masjid\n"
+                    "amenity = place_of_worship\n",
+                    map->getNode(-3)->getTags());
     HOOT_STR_EQUALS("hoot:implicitTags:tagsAdded = Added 2 implicitly derived tag(s) based on: masjid; tags added: religion = muslim, amenity = place_of_worship\n"
                     "religion = muslim\n"
                     "name = masjid\n"
