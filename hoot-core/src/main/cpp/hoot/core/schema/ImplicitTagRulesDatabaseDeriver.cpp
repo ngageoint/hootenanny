@@ -208,10 +208,6 @@ bool ImplicitTagRulesDatabaseDeriver::_wordIsNotASchemaTagValue(const QString wo
 
 void ImplicitTagRulesDatabaseDeriver::_validateInputs(const QString input, const QString output)
 {
-  if (input.isEmpty())
-  {
-    throw HootException("No input was specified.");
-  }
   if (!input.endsWith(".implicitTagRules"))
   {
     throw IllegalArgumentException(
