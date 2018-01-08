@@ -914,7 +914,7 @@ data has been filtered with ImplicitTagEligiblePoiCriterion beforehand.
 
 The number of parallel processes used when sorting output by the implicit tag raw rules deriver.
 The default value of -1 uses a count equal to the number of processors on the machine.  Valid values
-are -1 or 1..the number of available processors.
+are -1 or 1 up to the number of available processors.
 
 === implicit.tagging.translate.all.names.to.english
 

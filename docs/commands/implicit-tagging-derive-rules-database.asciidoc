@@ -2,25 +2,27 @@
 
 === Description
 
-Given a raw implicit tag rules file created by the 'implicit-tagging-derive-raw-rules' command, allows for filtering the rules and 
-writing them to a database.  The database can then, for example, be used to add tags implicitly to POIs, given their names using the 
-'ImplicitPoiTagger'.
+Given a raw implicit tag rules file created by the implicit-tagging-derive-raw-rules command, allows for filtering the implicit tag rules and 
+writing them to a database.  Currently, only POI database generation is supported.  The generated database can then, for example, be used to add 
+tags implicitly to POIs based on their names using an implicit tagger.  See the "Implicit Element Type Tagging Based On Name" section in the 
+Hootenanny User Guide for more information.
 
-* +type+   - currently the only type supported is "poi"
-* +input+  - a .implicitTagRules tab delimited rules for input
-* +output+ - a .sqlite database file for output
+* +featureType+ - currently the only type supported is "poi"
+* +input+       - an .implicitTagRules tab delimited rules for input
+* +output+      - a .sqlite database file for output
 
-Relevant configuration options are those beginning with implicit.tagging.database.deriver.* in conf/core/ConfigOptions.asciidoc.
+Relevant configuration options are those beginning with implicit.tagging.database.deriver.* and in some cases those beginning with 
+implicit.tagging.*, in conf/core/ConfigOptions.asciidoc.
 
 === Usage
 
 --------------------------------------
-implicit-tagging-derive-rules-database (type) (input) (output)
+implicit-tagging-derive-rules-database (featureType) (input) (output)
 --------------------------------------
 
 ==== Examples
 
 --------------------------------------
-hoot implicit-tagging-derive-rules-database poi myInput.implicitTagRules rules.sqlite
+hoot implicit-tagging-derive-rules-database poi myInput.implicitTagRules implicitTagRules.sqlite
 --------------------------------------
 

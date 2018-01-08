@@ -18,5 +18,6 @@ include::developer/HootenannyConflatingANewFeatureTypeWithGenericConflation.asci
 include::developer/HootenannyOsmApiDatabaseConflationNotes.asciidoc[]
 include::developer/HootenannyManualConflation.asciidoc[]
 include::developer/HootenannyManualMultiaryConflation.asciidoc[]
+include::developer/HootenannyImplicitTagDatabaseGeneration.asciidoc[]
 
 

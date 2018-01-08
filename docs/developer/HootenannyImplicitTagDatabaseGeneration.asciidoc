@@ -1,0 +1,86 @@
+
+== Implicit Tag Rules Database Generation
+
+Hootenanny has the capability to derive type tag information automatically for elements based soley on the contents of their name tags.  
+Currently, implicit tagging is only supported for POI data.  To do this tagging Hootenanny first parses global data, currently OSM and GeoNames, 
+and generates a tag rules database.  For POI data, the configured database is set with the implicit.tagger.poi.rules.database configuration 
+option.  Periodically, the rules database may be re-generated with the goal of improving the tagging performance.  This document outlines 
+the steps to regenerate the database.  See the associated implicit tagging command line documentation for additional details.  Furthermore, 
+familiarize yourself with the implicit tagging configuration options by reading their descriptions (configuration options beginning with 
+implicit.tagging.* and implicit.tagger.*).
+
+=== Acquire Input Data
+
+Download the latest OSM Planet (.osm.pbf) and GeoNames allCountries (.geonames) files.  Additional datasets can be also be used as inputs, if desired.
+
+=== Input Pre-filtering (optional)
+
+If you will be repeatedly generating implicit tag raw rules files as part of raw rules generation code changes, you should pre-filter your input datasets to 
+data that is eligible to have implicit tags derived from it to save future processing time.  The pre-filtered input datasets must be translated if
+in a format other than OSM.  A pre-filtering example:
+
+---------------------------
+hoot convert -D convert.ops="hoot::TranslationVisitor;hoot::ImplicitTagEligiblePoiCriterion" -D translation.script="translations/GeoNames.js" allCountries.geonames allCountries-filtered.osm.pbf
+
+hoot convert -D convert.ops="hoot::ImplicitTagEligiblePoiCriterion" planet.osm.pbf planet-filtered.osm.pbf
+----------------------------
+
+=== Raw Rules Derivation
+
+Next, you need to generate a raw rules flat file from the input data.  Here is an example:
+
+---------------------------
+hoot implicit-tagging-derive-raw-rules poi "planet.osm.pbf;allCountries.geonames" "none;translations/GeoNames.js" osm-geonames.implicitTagRules
+----------------------------
+
+If you performed the optional pre-filtering, you can use this example to save processing time:
+
+---------------------------
+hoot implicit-tagging-derive-raw-rules -D implicit.tagging.raw.rules.deriver.skip.filtering=true poi "planet-filtered.osm.pbf;allCountries-filtered.geonames" "none;translations/GeoNames.js" osm-geonames-poi.implicitTagRules
+----------------------------
+
+=== Rules Database Derivation
+
+Finally, you need to generate the implicit tag rules database.  An example:
+
+---------------------------
+hoot implicit-tagging-derive-rules-database poi osm-geonames-poi.implicitTagRules osm-geonames-poi-rules.sqlite
+---------------------------------
+
+You can check the results with:
+
+-------------------------
+hoot implicit-tagging-rules-database-stats osm-geonames-poi-rules.sqlite
+------------------------
+
+Also, you can examine the output rules database in a Sqlite database viewer, such as DB Browser for SQLite. 
+
+Database derivation is fairly quick, so you can tweak configuration parameters and regenerate databases many times with ease over the course of 
+trying to improve a set of implicit tag rules.
+
+=== Custom Rule Filtering
+
+The following configuration options point to files which may be used to add customization to the behavior of the POI implicit tag rules:
+
+- implicit.tagging.database.deriver.poi.tag.ignore.file - allows for ignore tags
+- implicit.tagging.database.deriver.poi.word.ignore.file - allows for ignore words (name tokens)
+- implicit.tagging.database.deriver.poi.custom.rule.file - allows for adding/overriding tag rules
+
+You may need to modify the aforementioned files and then regenerate the rules database in order to achieve the desired tagging performance.
+
+=== Tagger Influence on Conflation Performance
+
+The only tests currently set up to measure POI implicit tagger performance are those part of the Global POI conflation multiary regression tests, 
+which can be found in the global-pois branch of the hoot-tests repository (hoot-tests/unifying-tests.child/model-training.child/train-multiary-poi.child).
+Additional tests may be added in the future.
+
+To implicitly tag other data, see the "Implicit Element Type Tagging Based On Name" section of the Hootenanny User Guide.
+
+
+
+
+
+
+
+
+
