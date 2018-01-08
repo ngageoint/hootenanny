@@ -190,47 +190,6 @@ boost::shared_ptr<ElementInputStream> ImplicitTagRawRulesDeriver::_getInputStrea
   return inputStream;
 }
 
-QStringList ImplicitTagRawRulesDeriver::_translateNamesToEnglish(const QStringList names,
-                                                                 const Tags& tags)
-{
-  QStringList filteredNames;
-  if (tags.contains("name:en"))
-  {
-    filteredNames.append(tags.get("name:en"));
-  }
-  else
-  {
-    for (int i = 0; i < names.size(); i++)
-    {
-      const QString name = names.at(i);
-      LOG_VART(name);
-      if (name != tags.get("alt_name"))
-      {
-        const QString englishName = Translator::getInstance().toEnglish(name);
-        LOG_VART(englishName);
-        filteredNames.append(englishName);
-        break;
-      }
-    }
-    if (filteredNames.isEmpty() && tags.contains("alt_name"))
-    {
-      QString altName = tags.get("alt_name");
-      if (altName.contains(";"))
-      {
-        altName = altName.split(";")[0];
-      }
-      LOG_VART(altName);
-      const QString englishName = Translator::getInstance().toEnglish(altName);
-      LOG_VART(englishName);
-      filteredNames.append(englishName);
-    }
-  }
-  LOG_VART(filteredNames);
-  assert(!filteredNames.isEmpty());
-
-  return filteredNames;
-}
-
 void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
                                                 const QStringList translationScripts,
                                                 const QString output)
@@ -275,7 +234,7 @@ void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
 
         if (_translateAllNamesToEnglish)
         {
-          names = _translateNamesToEnglish(names, element->getTags());
+          names = ImplicitTagUtils::translateNamesToEnglish(names, element->getTags());
         }
         LOG_VART(names);
 

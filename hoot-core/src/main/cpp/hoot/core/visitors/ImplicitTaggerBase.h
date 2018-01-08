@@ -87,6 +87,7 @@ private:
   bool _matchEndOfNameSingleTokenFirst;
 
   QStringList _getNameTokens(const QStringList names);
+  QStringList _getTranslatedNames(const QStringList names, const Tags& tags);
 
 };
 
