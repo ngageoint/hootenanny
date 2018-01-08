@@ -123,6 +123,211 @@ bool caseInsensitiveLessThan(const QString s1, const QString s2)
   return s1.toLower() < s2.toLower();
 }
 
+QStringList ImplicitTaggerBase::_cleanNames(const Tags& tags)
+{
+  QStringList names = tags.getNames();
+  if (names.removeAll("old_name") > 0)
+  {
+    LOG_VARD("Removed old name tag.");
+  }
+  if (_translateAllNamesToEnglish)
+  {
+    names = ImplicitTagUtils::translateNamesToEnglish(names, tags);
+  }
+  LOG_VARD(names);
+  QStringList filteredNames;
+  for (int i = 0; i < names.size(); i++)
+  {
+    QString name = names.at(i);
+    ImplicitTagUtils::cleanName(name);
+    if (!name.isEmpty())
+    {
+      filteredNames.append(name.toLower());
+    }
+  }
+  LOG_VARD(filteredNames);
+  return filteredNames;
+}
+
+QString ImplicitTaggerBase::_getEndOfNameToken(const QString name, const QStringList nameTokensList)
+{
+  for (int i = 0; i < nameTokensList.size(); i++)
+  {
+    const QString nameToken = nameTokensList.at(i);
+    if (name.endsWith(nameToken))
+    {
+      return nameToken;
+    }
+  }
+  return "";
+}
+
+void ImplicitTaggerBase::_getImplicitlyDerivedTagsFromMultipleNameTokens(
+  const QStringList names, const QStringList nameTokensList, const Tags& elementTags,
+  Tags& implicitlyDerivedTags, QSet<QString>& matchingWords, bool& wordsInvolvedInMultipleRules)
+{
+  //TODO: this method needs cleanup
+
+  LOG_DEBUG("Attempting match with token group size of 2...");
+
+  QStringList nameTokensListGroupSizeTwo;
+  for (int i = 0; i < nameTokensList.size() - 1; i++)
+  {
+    QString nameToken = nameTokensList.at(i) + " " + nameTokensList.at(i + 1);
+    if (_translateAllNamesToEnglish)
+    {
+      //TODO: can this be combined with the ImplicitTagUtils translate method?
+      const QString englishNameToken = Translator::getInstance().toEnglish(nameToken);
+      nameToken = englishNameToken;
+      LOG_VART(englishNameToken);
+    }
+    nameTokensListGroupSizeTwo.append(nameToken);
+  }
+  LOG_VARD(nameTokensListGroupSizeTwo);
+
+  if (_matchEndOfNameSingleTokenFirst)
+  {
+    QString endOfNameToken =
+      _getEndOfNameToken(elementTags.get("name:en"), nameTokensListGroupSizeTwo);
+    if (endOfNameToken.isEmpty())
+    {
+      endOfNameToken = _getEndOfNameToken(elementTags.get("name"), nameTokensListGroupSizeTwo);
+    }
+    if (endOfNameToken.isEmpty())
+    {
+      for (int i = 0; i < names.size(); i++)
+      {
+        endOfNameToken = _getEndOfNameToken(names.at(i), nameTokensListGroupSizeTwo);
+        if (!endOfNameToken.isEmpty())
+        {
+          break;
+        }
+      }
+    }
+
+    if (!endOfNameToken.isEmpty())
+    {
+      QStringList tempTokenList;
+      tempTokenList.append(endOfNameToken);
+      implicitlyDerivedTags =
+        _ruleReader->getImplicitTags(
+          tempTokenList.toSet(), matchingWords, wordsInvolvedInMultipleRules);
+      if (implicitlyDerivedTags.size() == 0)
+      {
+        implicitlyDerivedTags =
+          _ruleReader->getImplicitTags(
+            nameTokensListGroupSizeTwo.toSet(), matchingWords, wordsInvolvedInMultipleRules);
+      }
+    }
+    else
+    {
+      implicitlyDerivedTags =
+        _ruleReader->getImplicitTags(
+          nameTokensListGroupSizeTwo.toSet(), matchingWords, wordsInvolvedInMultipleRules);
+    }
+  }
+  else
+  {
+    implicitlyDerivedTags =
+      _ruleReader->getImplicitTags(
+        nameTokensListGroupSizeTwo.toSet(), matchingWords, wordsInvolvedInMultipleRules);
+  }
+
+  LOG_VARD(implicitlyDerivedTags);
+  LOG_VARD(matchingWords);
+  LOG_VARD(wordsInvolvedInMultipleRules);
+}
+
+void ImplicitTaggerBase::_getImplicitlyDerivedTagsFromSingleNameTokens(
+  const QStringList names, QStringList& nameTokensList, const Tags& elementTags,
+  Tags& implicitlyDerivedTags, QSet<QString>& matchingWords, bool& wordsInvolvedInMultipleRules,
+  bool& namesContainBuilding, bool& namesContainOffice)
+{
+  //TODO: should be possible to combine this with _getImplicitlyDerivedTagsFromMultipleNameTokens
+
+  LOG_DEBUG("Attempting match with token group size of 1...");
+
+  if (_translateAllNamesToEnglish)
+  {
+    QStringList translatedNameTokens;
+    for (int i = 0; i < nameTokensList.size(); i++)
+    {
+      const QString word = nameTokensList.at(i);
+      //TODO: can this be combined with the ImplicitTagUtils translate method?
+      const QString englishNameToken = Translator::getInstance().toEnglish(word);
+      translatedNameTokens.append(englishNameToken);
+    }
+    nameTokensList = translatedNameTokens;
+  }
+  LOG_VARD(nameTokensList);
+
+  namesContainBuilding = false;
+  if (nameTokensList.contains("building") || nameTokensList.contains("buildings"))
+  {
+    namesContainBuilding = true;
+    nameTokensList.removeAll("building");
+    nameTokensList.removeAll("buildings");
+  }
+  namesContainOffice = false;
+  if (nameTokensList.contains("office") || nameTokensList.contains("offices"))
+  {
+    namesContainOffice = true;
+    nameTokensList.removeAll("office");
+    nameTokensList.removeAll("offices");
+  }
+
+  if (implicitlyDerivedTags.size() == 0 && nameTokensList.size() > 0)
+  {
+    if (_matchEndOfNameSingleTokenFirst)
+    {
+      QString endOfNameToken =
+        _getEndOfNameToken(elementTags.get("name:en"), nameTokensList);
+      if (endOfNameToken.isEmpty())
+      {
+        _getEndOfNameToken(elementTags.get("name"), nameTokensList);
+      }
+      if (endOfNameToken.isEmpty())
+      {
+        for (int i = 0; i < names.size(); i++)
+        {
+          _getEndOfNameToken(names.at(i), nameTokensList);
+          if (!endOfNameToken.isEmpty())
+          {
+            break;
+          }
+        }
+      }
+
+      if (!endOfNameToken.isEmpty())
+      {
+        QStringList tempTokenList;
+        tempTokenList.append(endOfNameToken);
+        implicitlyDerivedTags =
+          _ruleReader->getImplicitTags(
+            tempTokenList.toSet(), matchingWords, wordsInvolvedInMultipleRules);
+        if (implicitlyDerivedTags.size() == 0)
+        {
+          implicitlyDerivedTags =
+            _ruleReader->getImplicitTags(
+              nameTokensList.toSet(), matchingWords, wordsInvolvedInMultipleRules);
+        }
+      }
+      else
+      {
+        implicitlyDerivedTags =
+          _ruleReader->getImplicitTags(
+            nameTokensList.toSet(), matchingWords, wordsInvolvedInMultipleRules);
+      }
+    }
+    else
+    {
+      implicitlyDerivedTags =
+        _ruleReader->getImplicitTags(
+          nameTokensList.toSet(), matchingWords, wordsInvolvedInMultipleRules);
+    }
+  }
+}
+
 void ImplicitTaggerBase::visit(const ElementPtr& e)
 {
   if (_visitElement(e))
@@ -130,31 +335,7 @@ void ImplicitTaggerBase::visit(const ElementPtr& e)
     bool foundDuplicateMatch = false;
     Tags tagsToAdd;
 
-    QStringList names = e->getTags().getNames();
-
-    if (names.removeAll("old_name") > 0)
-    {
-      LOG_VARD("Removed old name tag.");
-    }
-
-    if (_translateAllNamesToEnglish)
-    {
-      names = ImplicitTagUtils::translateNamesToEnglish(names, e->getTags());
-    }
-    LOG_VARD(names);
-
-    QStringList filteredNames;
-    for (int i = 0; i < names.size(); i++)
-    {
-      QString name = names.at(i);
-
-      ImplicitTagUtils::cleanName(name);
-      if (!name.isEmpty())
-      {
-        filteredNames.append(name.toLower());
-      }
-    }
-    LOG_VARD(filteredNames);
+    QStringList filteredNames = _cleanNames(e->getTags());
 
     if (filteredNames.size() > 0)
     {
@@ -162,6 +343,7 @@ void ImplicitTaggerBase::visit(const ElementPtr& e)
       QSet<QString> matchingWords;
       bool wordsInvolvedInMultipleRules = false;
 
+      //get tags
       if (implicitlyDerivedTags.size() == 0)
       {
         //the name phrases take precendence over the tokenized names, so look for tags associated
@@ -170,13 +352,13 @@ void ImplicitTaggerBase::visit(const ElementPtr& e)
           _ruleReader->getImplicitTags(
             filteredNames.toSet(), matchingWords, wordsInvolvedInMultipleRules);
       }
-
       LOG_VARD(implicitlyDerivedTags);
       LOG_VARD(matchingWords);
       LOG_VARD(wordsInvolvedInMultipleRules);
 
       bool namesContainBuilding = false;
       bool namesContainOffice = false;
+
       if (wordsInvolvedInMultipleRules)
       {
         LOG_DEBUG(
@@ -191,9 +373,8 @@ void ImplicitTaggerBase::visit(const ElementPtr& e)
           matchingWords);
         tagsToAdd = implicitlyDerivedTags;
       }
-      //TODO: break up into smaller methods
       else
-      {
+      {      
         //we didn't find any tags for the whole names, so let's look for them with the tokenized
         //name parts
         QStringList nameTokensList = _getNameTokens(filteredNames);
@@ -202,225 +383,18 @@ void ImplicitTaggerBase::visit(const ElementPtr& e)
         LOG_VARD(implicitlyDerivedTags.size());
         LOG_VARD(nameTokensList.size());
 
-        //check custom rules first, then db for each group size in descending group size order
-
         if (implicitlyDerivedTags.size() == 0 && nameTokensList.size() > 2)
         {
-          LOG_DEBUG("Attempting match with token group size of 2...");
-
-          QStringList nameTokensListGroupSizeTwo;
-          for (int i = 0; i < nameTokensList.size() - 1; i++)
-          {
-            QString nameToken = nameTokensList.at(i) + " " + nameTokensList.at(i + 1);
-            if (_translateAllNamesToEnglish)
-            {
-              //TODO: can this be combined with the ImplicitTagUtils translate method?
-              const QString englishNameToken = Translator::getInstance().toEnglish(nameToken);
-              nameToken = englishNameToken;
-              LOG_VART(englishNameToken);
-            }
-            nameTokensListGroupSizeTwo.append(nameToken);
-          }
-          LOG_VARD(nameTokensListGroupSizeTwo);
-
-          //TODO: break up into smaller methods
-          if (_matchEndOfNameSingleTokenFirst)
-          {
-            QString endOfNameToken;
-
-            QString name = e->getTags().get("name:en");
-            for (int i = 0; i < nameTokensListGroupSizeTwo.size(); i++)
-            {
-              const QString nameToken = nameTokensListGroupSizeTwo.at(i);
-              if (name.endsWith(nameToken))
-              {
-                endOfNameToken = nameToken;
-                break;
-              }
-            }
-
-            if (endOfNameToken.isEmpty())
-            {
-              QString name = e->getTags().get("name");
-              for (int i = 0; i < nameTokensListGroupSizeTwo.size(); i++)
-              {
-                const QString nameToken = nameTokensListGroupSizeTwo.at(i);
-                if (name.endsWith(nameToken))
-                {
-                  endOfNameToken = nameToken;
-                  break;
-                }
-              }
-            }
-
-            if (endOfNameToken.isEmpty())
-            {
-              for (int i = 0; i < filteredNames.size(); i++)
-              {
-                const QString filteredName = filteredNames.at(i);
-                for (int j = 0; j < nameTokensListGroupSizeTwo.size(); j++)
-                {
-                  const QString nameToken = nameTokensListGroupSizeTwo.at(j);
-                  if (filteredName.endsWith(nameToken))
-                  {
-                    endOfNameToken = nameToken;
-                    break;
-                  }
-                }
-
-                if (!endOfNameToken.isEmpty())
-                {
-                  break;
-                }
-              }
-            }
-
-            if (!endOfNameToken.isEmpty())
-            {
-              QStringList tempTokenList;
-              tempTokenList.append(endOfNameToken);
-              implicitlyDerivedTags =
-                _ruleReader->getImplicitTags(
-                  tempTokenList.toSet(), matchingWords, wordsInvolvedInMultipleRules);
-              if (implicitlyDerivedTags.size() == 0)
-              {
-                implicitlyDerivedTags =
-                  _ruleReader->getImplicitTags(
-                    nameTokensListGroupSizeTwo.toSet(), matchingWords, wordsInvolvedInMultipleRules);
-              }
-            }
-            else
-            {
-              implicitlyDerivedTags =
-                _ruleReader->getImplicitTags(
-                  nameTokensListGroupSizeTwo.toSet(), matchingWords, wordsInvolvedInMultipleRules);
-            }
-          }
-          else
-          {
-            implicitlyDerivedTags =
-              _ruleReader->getImplicitTags(
-                nameTokensListGroupSizeTwo.toSet(), matchingWords, wordsInvolvedInMultipleRules);
-          }
-
-          LOG_VARD(implicitlyDerivedTags);
-          LOG_VARD(matchingWords);
-          LOG_VARD(wordsInvolvedInMultipleRules);
+          _getImplicitlyDerivedTagsFromMultipleNameTokens(
+            filteredNames, nameTokensList, e->getTags(), implicitlyDerivedTags, matchingWords,
+            wordsInvolvedInMultipleRules);
         }
 
         if (implicitlyDerivedTags.size() == 0)
         {
-          LOG_DEBUG("Attempting match with token group size of 1...");
-
-          if (_translateAllNamesToEnglish)
-          {
-            QStringList translatedNameTokens;
-            for (int i = 0; i < nameTokensList.size(); i++)
-            {
-              const QString word = nameTokensList.at(i);
-              //TODO: can this be combined with the ImplicitTagUtils translate method?
-              const QString englishNameToken = Translator::getInstance().toEnglish(word);
-              translatedNameTokens.append(englishNameToken);
-            }
-            nameTokensList = translatedNameTokens;
-          }
-          LOG_VARD(nameTokensList);
-
-          if (nameTokensList.contains("building") || nameTokensList.contains("buildings"))
-          {
-            namesContainBuilding = true;
-            nameTokensList.removeAll("building");
-            nameTokensList.removeAll("buildings");
-          }
-          if (nameTokensList.contains("office") || nameTokensList.contains("offices"))
-          {
-            namesContainOffice = true;
-            nameTokensList.removeAll("office");
-            nameTokensList.removeAll("offices");
-          }
-
-          if (implicitlyDerivedTags.size() == 0 && nameTokensList.size() > 0)
-          {
-            //TODO: break up into smaller methods
-            if (_matchEndOfNameSingleTokenFirst)
-            {
-              QString endOfNameToken;
-
-              QString name = e->getTags().get("name:en");
-              for (int i = 0; i < nameTokensList.size(); i++)
-              {
-                const QString nameToken = nameTokensList.at(i);
-                if (name.endsWith(nameToken))
-                {
-                  endOfNameToken = nameToken;
-                  break;
-                }
-              }
-
-              if (endOfNameToken.isEmpty())
-              {
-                QString name = e->getTags().get("name");
-                for (int i = 0; i < nameTokensList.size(); i++)
-                {
-                  const QString nameToken = nameTokensList.at(i);
-                  if (name.endsWith(nameToken))
-                  {
-                    endOfNameToken = nameToken;
-                    break;
-                  }
-                }
-              }
-
-              if (endOfNameToken.isEmpty())
-              {
-                for (int i = 0; i < filteredNames.size(); i++)
-                {
-                  const QString filteredName = filteredNames.at(i);
-                  for (int j = 0; j < nameTokensList.size(); j++)
-                  {
-                    const QString nameToken = nameTokensList.at(j);
-                    if (filteredName.endsWith(nameToken))
-                    {
-                      endOfNameToken = nameToken;
-                      break;
-                    }
-                  }
-
-                  if (!endOfNameToken.isEmpty())
-                  {
-                    break;
-                  }
-                }
-              }
-
-              if (!endOfNameToken.isEmpty())
-              {
-                QStringList tempTokenList;
-                tempTokenList.append(endOfNameToken);
-                implicitlyDerivedTags =
-                  _ruleReader->getImplicitTags(
-                    tempTokenList.toSet(), matchingWords, wordsInvolvedInMultipleRules);
-                if (implicitlyDerivedTags.size() == 0)
-                {
-                  implicitlyDerivedTags =
-                    _ruleReader->getImplicitTags(
-                      nameTokensList.toSet(), matchingWords, wordsInvolvedInMultipleRules);
-                }
-              }
-              else
-              {
-                implicitlyDerivedTags =
-                  _ruleReader->getImplicitTags(
-                    nameTokensList.toSet(), matchingWords, wordsInvolvedInMultipleRules);
-              }
-            }
-            else
-            {
-              implicitlyDerivedTags =
-                _ruleReader->getImplicitTags(
-                  nameTokensList.toSet(), matchingWords, wordsInvolvedInMultipleRules);
-            }
-          }
+          _getImplicitlyDerivedTagsFromSingleNameTokens(
+            filteredNames, nameTokensList, e->getTags(), implicitlyDerivedTags, matchingWords,
+            wordsInvolvedInMultipleRules, namesContainBuilding, namesContainOffice);
         }
 
         LOG_VARD(implicitlyDerivedTags);
@@ -447,85 +421,14 @@ void ImplicitTaggerBase::visit(const ElementPtr& e)
       LOG_VARD(foundDuplicateMatch);
       if (foundDuplicateMatch)
       {
-        QStringList matchingWordsList = matchingWords.toList();
-        qSort(matchingWordsList.begin(), matchingWordsList.end(), caseInsensitiveLessThan);
-        const QString tagValue =
-          "No implicit tags added due to finding multiple possible matches for implicit tags: " +
-          matchingWordsList.join(", ");
-        LOG_VART(tagValue);
-        e->getTags().appendValue("hoot:implicitTags:multipleRules", tagValue);
-        _numNodesInvolvedInMultipleRules++;
-        if (_numNodesInvolvedInMultipleRules % 10 == 0)
-        {
-          PROGRESS_INFO(
-            StringUtils::formatLargeNumber(_numNodesInvolvedInMultipleRules) << " nodes have been " <<
-            "involved in multiple rules.");
-        }
+        _updateElementForDuplicateMatch(e, matchingWords);
       }
       else if (!tagsToAdd.isEmpty())
       {  
         assert(!matchingWords.isEmpty());
         LOG_VART(matchingWords);
 
-        Tags updatedTags;
-        bool tagsAdded = false;
-        LOG_VARD(_elementIsASpecificPoi);
-        for (Tags::const_iterator tagItr = tagsToAdd.begin();
-             tagItr != tagsToAdd.end(); ++tagItr)
-        {
-          const QString implicitTagKey = tagItr.key();
-          LOG_VARD(implicitTagKey);
-          const QString implicitTagValue = tagItr.value();
-          LOG_VARD(implicitTagValue);
-          if (e->getTags().contains(implicitTagKey))
-          {
-            //don't add a less specific tag if the element already has one with the same key; e.g. if
-            //the element has amenity=public_hall, don't add amenity=hall
-            //for ties keep the one we already have; e.g. if the element has amenity=bank, don't add
-            //amenity=school
-
-            const QString elementTagKey = implicitTagKey;
-            const QString elementTagValue = e->getTags()[implicitTagKey];
-            //only use the implicit tag if it is more specific than the one the element already has;
-            //if neither is more specific than the other, we'll arbitrarily keep the one we already
-            //had
-            LOG_VARD(OsmSchema::getInstance().isAncestor(implicitTagKey % "=" % implicitTagValue,
-                                                         elementTagKey % "=" % elementTagValue));
-            if (OsmSchema::getInstance().isAncestor(implicitTagKey % "=" % implicitTagValue,
-                                                    elementTagKey % "=" % elementTagValue))
-            {
-              LOG_DEBUG(
-                implicitTagKey % "=" % implicitTagValue << " is more specific than " <<
-                elementTagKey % "=" % elementTagValue << " on the input feature.  Replacing with " <<
-                "the more specific tag.")
-              updatedTags.appendValue(implicitTagKey, implicitTagValue);
-              tagsAdded = true;
-            }
-            else
-            {
-              updatedTags.appendValue(elementTagKey, elementTagValue);
-            }
-          }
-          else if (!_elementIsASpecificPoi)
-          {
-            LOG_DEBUG(
-              "Input feature does not contain tag: " <<
-              implicitTagKey % "=" % implicitTagValue << ", so adding it...");
-            updatedTags.appendValue(implicitTagKey, implicitTagValue);
-            tagsAdded = true;
-          }
-        }
-        LOG_VARD(updatedTags);
-        LOG_VARD(tagsAdded);
-        if (tagsAdded)
-        {
-          tagsToAdd = updatedTags;
-        }
-        else
-        {
-          tagsToAdd.clear();
-        }
-        LOG_VARD(tagsToAdd);
+        _ensureCorrectTagSpecificity(e, tagsToAdd);
 
         if (tagsToAdd.isEmpty() && !_elementIsASpecificPoi && namesContainOffice)
         {
@@ -540,40 +443,7 @@ void ImplicitTaggerBase::visit(const ElementPtr& e)
 
         if (!tagsToAdd.isEmpty())
         {
-          e->getTags().addTags(tagsToAdd);
-          assert(matchingWords.size() != 0);
-          QStringList matchingWordsList = matchingWords.toList();
-          qSort(matchingWordsList.begin(), matchingWordsList.end(), caseInsensitiveLessThan);
-          QString tagValue =
-            "Added " + QString::number(tagsToAdd.size()) + " implicitly derived tag(s) based on: " +
-            matchingWordsList.join(", ");
-          tagValue += "; tags added: " + tagsToAdd.toString().trimmed().replace("\n", ", ");
-          LOG_VARD(tagValue);
-          e->getTags().appendValue("hoot:implicitTags:tagsAdded", tagValue);
-          if (e->getTags().get("poi") == "yes")
-          {
-            e->getTags().remove("poi");
-          }
-          if (tagsToAdd.get("building") != "yes" && e->getTags().get("building") == "yes")
-          {
-            e->getTags().remove("building");
-          }
-          _numNodesModified++;
-          _numTagsAdded += tagsToAdd.size();
-          if (_numTagsAdded < _smallestNumberOfTagsAdded)
-          {
-            _smallestNumberOfTagsAdded = _numTagsAdded;
-          }
-          if (tagsToAdd.size() > _largestNumberOfTagsAdded)
-          {
-            _largestNumberOfTagsAdded = tagsToAdd.size();
-          }
-          if (_numNodesModified % 100 == 0)
-          {
-            PROGRESS_INFO(
-              "Added " << StringUtils::formatLargeNumber(_numTagsAdded) << " tags total to " <<
-              StringUtils::formatLargeNumber(_numNodesModified) << " nodes.");
-          }
+          _addImplicitTags(e, tagsToAdd, matchingWords);
         }
       }
     }
@@ -584,6 +454,126 @@ void ImplicitTaggerBase::visit(const ElementPtr& e)
       PROGRESS_INFO(
         "Parsed " << StringUtils::formatLargeNumber(_numNodesParsed) << " nodes from input.");
     }
+  }
+}
+
+void ImplicitTaggerBase::_ensureCorrectTagSpecificity(const ElementPtr& e, Tags& tagsToAdd)
+{
+  Tags updatedTags;
+  bool tagsAdded = false;
+  LOG_VARD(_elementIsASpecificPoi);
+  for (Tags::const_iterator tagItr = tagsToAdd.begin(); tagItr != tagsToAdd.end(); ++tagItr)
+  {
+    const QString implicitTagKey = tagItr.key();
+    LOG_VARD(implicitTagKey);
+    const QString implicitTagValue = tagItr.value();
+    LOG_VARD(implicitTagValue);
+    if (e->getTags().contains(implicitTagKey))
+    {
+      //don't add a less specific tag if the element already has one with the same key; e.g. if
+      //the element has amenity=public_hall, don't add amenity=hall
+      //for ties keep the one we already have; e.g. if the element has amenity=bank, don't add
+      //amenity=school
+
+      const QString elementTagKey = implicitTagKey;
+      const QString elementTagValue = e->getTags()[implicitTagKey];
+      //only use the implicit tag if it is more specific than the one the element already has;
+      //if neither is more specific than the other, we'll arbitrarily keep the one we already
+      //had
+      LOG_VARD(OsmSchema::getInstance().isAncestor(implicitTagKey % "=" % implicitTagValue,
+                                                   elementTagKey % "=" % elementTagValue));
+      if (OsmSchema::getInstance().isAncestor(implicitTagKey % "=" % implicitTagValue,
+                                              elementTagKey % "=" % elementTagValue))
+      {
+        LOG_DEBUG(
+          implicitTagKey % "=" % implicitTagValue << " is more specific than " <<
+          elementTagKey % "=" % elementTagValue << " on the input feature.  Replacing with " <<
+          "the more specific tag.")
+        updatedTags.appendValue(implicitTagKey, implicitTagValue);
+        tagsAdded = true;
+      }
+      else
+      {
+        updatedTags.appendValue(elementTagKey, elementTagValue);
+      }
+    }
+    else if (!_elementIsASpecificPoi)
+    {
+      LOG_DEBUG(
+        "Input feature does not contain tag: " <<
+        implicitTagKey % "=" % implicitTagValue << ", so adding it...");
+      updatedTags.appendValue(implicitTagKey, implicitTagValue);
+      tagsAdded = true;
+    }
+  }
+  LOG_VARD(updatedTags);
+  LOG_VARD(tagsAdded);
+  if (tagsAdded)
+  {
+    tagsToAdd = updatedTags;
+  }
+  else
+  {
+    tagsToAdd.clear();
+  }
+  LOG_VARD(tagsToAdd);
+}
+
+void ImplicitTaggerBase::_updateElementForDuplicateMatch(const ElementPtr& e,
+                                                         const QSet<QString>& matchingWords)
+{
+  QStringList matchingWordsList = matchingWords.toList();
+  qSort(matchingWordsList.begin(), matchingWordsList.end(), caseInsensitiveLessThan);
+  const QString tagValue =
+    "No implicit tags added due to finding multiple possible matches for implicit tags: " +
+    matchingWordsList.join(", ");
+  LOG_VART(tagValue);
+  e->getTags().appendValue("hoot:implicitTags:multipleRules", tagValue);
+  _numNodesInvolvedInMultipleRules++;
+  if (_numNodesInvolvedInMultipleRules % 10 == 0)
+  {
+    PROGRESS_INFO(
+      StringUtils::formatLargeNumber(_numNodesInvolvedInMultipleRules) << " nodes have been " <<
+      "involved in multiple rules.");
+  }
+}
+
+void ImplicitTaggerBase::_addImplicitTags(const ElementPtr& e, const Tags& tagsToAdd,
+                                          const QSet<QString>& matchingWords)
+{
+  e->getTags().addTags(tagsToAdd);
+  assert(matchingWords.size() != 0);
+  QStringList matchingWordsList = matchingWords.toList();
+  qSort(matchingWordsList.begin(), matchingWordsList.end(), caseInsensitiveLessThan);
+  QString tagValue =
+    "Added " + QString::number(tagsToAdd.size()) + " implicitly derived tag(s) based on: " +
+    matchingWordsList.join(", ");
+  tagValue += "; tags added: " + tagsToAdd.toString().trimmed().replace("\n", ", ");
+  LOG_VARD(tagValue);
+  e->getTags().appendValue("hoot:implicitTags:tagsAdded", tagValue);
+  if (e->getTags().get("poi") == "yes")
+  {
+    e->getTags().remove("poi");
+  }
+  if (tagsToAdd.get("building") != "yes" && e->getTags().get("building") == "yes")
+  {
+    e->getTags().remove("building");
+  }
+  _numNodesModified++;
+  _numTagsAdded += tagsToAdd.size();
+  if (_numTagsAdded < _smallestNumberOfTagsAdded)
+  {
+    _smallestNumberOfTagsAdded = _numTagsAdded;
+  }
+  if (tagsToAdd.size() > _largestNumberOfTagsAdded)
+  {
+    _largestNumberOfTagsAdded = tagsToAdd.size();
+  }
+  if (_numNodesModified % 100 == 0)
+  {
+    PROGRESS_INFO(
+      "Added " << StringUtils::formatLargeNumber(_numTagsAdded) << " tags total to " <<
+      StringUtils::formatLargeNumber(_numNodesModified) << " nodes.");
   }
 }
 

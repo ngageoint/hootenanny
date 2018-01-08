@@ -26,6 +26,10 @@
  */
 #include "ImplicitTagUtils.h"
 
+// Hoot
+#include <hoot/core/elements/Tags.h>
+#include <hoot/core/algorithms/Translator.h>
+
 namespace hoot
 {
 
@@ -54,6 +58,46 @@ void ImplicitTagUtils::cleanName(QString& name)
   {
     name = "";
   }
+}
+
+QStringList ImplicitTagUtils::translateNamesToEnglish(const QStringList names, const Tags& tags)
+{
+  QStringList filteredNames;
+  if (tags.contains("name:en"))
+  {
+    filteredNames.append(tags.get("name:en"));
+  }
+  else
+  {
+    QString altName = tags.get("alt_name");
+    for (int i = 0; i < names.size(); i++)
+    {
+      const QString name = names.at(i);
+      LOG_VART(name);
+      if (name != altName)
+      {
+        const QString englishName = Translator::getInstance().toEnglish(name);
+        LOG_VART(englishName);
+        filteredNames.append(englishName);
+        break;
+      }
+    }
+    if (filteredNames.isEmpty() && !altName.isEmpty())
+    {
+      if (altName.contains(";"))
+      {
+        altName = altName.split(";")[0];
+      }
+      LOG_VART(altName);
+      const QString englishName = Translator::getInstance().toEnglish(altName);
+      LOG_VART(englishName);
+      filteredNames.append(englishName);
+    }
+  }
+  LOG_VART(filteredNames);
+  assert(!filteredNames.isEmpty());
+
+  return filteredNames;
 }
 
 }

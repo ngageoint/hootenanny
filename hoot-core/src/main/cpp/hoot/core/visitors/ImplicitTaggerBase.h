@@ -88,6 +88,19 @@ private:
 
   QStringList _getNameTokens(const QStringList names);
   QStringList _getTranslatedNames(const QStringList names, const Tags& tags);
+  QStringList _cleanNames(const Tags& tags);
+  void _addImplicitTags(const ElementPtr& e, const Tags& tagsToAdd,
+                        const QSet<QString>& matchingWords);
+  void _updateElementForDuplicateMatch(const ElementPtr& e, const QSet<QString>& matchingWords);
+  void _ensureCorrectTagSpecificity(const ElementPtr& e, Tags& tagsToAdd);
+  QString _getEndOfNameToken(const QString name, const QStringList nameTokensList);
+  void _getImplicitlyDerivedTagsFromMultipleNameTokens(
+    const QStringList names, const QStringList nameTokensList, const Tags& elementTags,
+    Tags& implicitlyDerivedTags, QSet<QString>& matchingWords, bool& wordsInvolvedInMultipleRules);
+  void _getImplicitlyDerivedTagsFromSingleNameTokens(const QStringList names,
+    QStringList& nameTokensList, const Tags& elementTags, Tags& implicitlyDerivedTags,
+    QSet<QString>& matchingWords, bool& wordsInvolvedInMultipleRules, bool& namesContainBuilding,
+    bool& namesContainOffice);
 
 };
 

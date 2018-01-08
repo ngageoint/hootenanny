@@ -29,10 +29,11 @@
 
 // Qt
 #include <QStringList>
-#include <QMap>
 
 namespace hoot
 {
+
+class Tags;
 
 /**
  *
@@ -43,6 +44,8 @@ class ImplicitTagUtils
 public:
 
   static void cleanName(QString& name);
+
+  static QStringList translateNamesToEnglish(const QStringList names, const Tags& tags);
 
 };
 
