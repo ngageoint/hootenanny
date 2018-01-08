@@ -46,12 +46,8 @@ public:
 
   virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
 
-<<<<<<< HEAD
-  virtual boost::shared_ptr<ElementCriterion> clone()
-  { return  boost::shared_ptr<ElementCriterion>(new ImplicitTagEligiblePoiCriterion()); }
-=======
-  virtual ElementCriterion* clone() { return  new ImplicitTagEligiblePoiCriterion(); }
->>>>>>> 7663664... add comments
+  virtual ElementCriterionPtr clone()
+  { return ElementCriterionPtr(new ImplicitTagEligiblePoiCriterion()); }
 
   /**
    * Returns all tag key/value pairs which could be applied implicitly by an implicit POI tagger
