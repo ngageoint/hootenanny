@@ -1,0 +1,3769 @@
+<?xml version="1.0"?>
+<presets>
+  <chunk id="ACC">
+    <combo key="ACC" text="Horizontal Accuracy Category" values_searchable="true">
+      <list_entry value="1" display_value="1 - Accurate"/>
+      <list_entry value="2" display_value="2 - Approximate"/>
+    </combo>
+  </chunk>
+  <chunk id="CCN">
+    <text key="CCN" text="Commercial Copyright Notice" length="254"/>
+  </chunk>
+  <chunk id="FCODE">
+    <text key="FCODE" text="Feature Code" length="5"/>
+  </chunk>
+  <chunk id="FUN">
+    <combo key="FUN" text="Condition of Facility" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1" display_value="1 - Under Construction"/>
+      <list_entry value="2" display_value="2 - Abandoned"/>
+      <list_entry value="3" display_value="3 - Destroyed"/>
+      <list_entry value="4" display_value="4 - Dismantled"/>
+      <list_entry value="6" display_value="6 - Fully Functional"/>
+      <list_entry value="13" display_value="13 - Damaged"/>
+    </combo>
+  </chunk>
+  <chunk id="MZN">
+    <combo key="MZN" text="Extraction Mine Type" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="3" display_value="3 - Opencast"/>
+      <list_entry value="4" display_value="4 - Placer"/>
+      <list_entry value="5" display_value="5 - Prospect"/>
+      <list_entry value="6" display_value="6 - Area Strip-mine"/>
+      <list_entry value="8" display_value="8 - Peatery"/>
+      <list_entry value="9" display_value="9 - Below Surface"/>
+    </combo>
+  </chunk>
+  <chunk id="NAM">
+    <text key="NAM" text="Name" length="80"/>
+  </chunk>
+  <chunk id="NFI">
+    <text key="NFI" text="Named Feature Identifier" length="18"/>
+  </chunk>
+  <chunk id="NFN">
+    <text key="NFN" text="Name Identifier" length="18"/>
+  </chunk>
+  <chunk id="PPO">
+    <combo key="PPO" text="Product" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="9" display_value="9 - Bauxite"/>
+      <list_entry value="18" display_value="18 - Coal"/>
+      <list_entry value="26" display_value="26 - Copper"/>
+      <list_entry value="33" display_value="33 - Diamond"/>
+      <list_entry value="48" display_value="48 - Gold"/>
+      <list_entry value="58" display_value="58 - Iron"/>
+      <list_entry value="59" display_value="59 - Lead"/>
+      <list_entry value="65" display_value="65 - Manganese"/>
+      <list_entry value="89" display_value="89 - Quartz"/>
+      <list_entry value="95" display_value="95 - Salt"/>
+      <list_entry value="105" display_value="105 - Silver"/>
+      <list_entry value="120" display_value="120 - Uranium"/>
+      <list_entry value="126" display_value="126 - Zinc"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="SDP">
+    <text key="SDP" text="Source Description" length="254"/>
+  </chunk>
+  <chunk id="SDV">
+    <text key="SDV" text="Source Date and Time" length="20"/>
+  </chunk>
+  <chunk id="SRT">
+    <combo key="SRT" text="Source Type" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1" display_value="1 - ADRG"/>
+      <list_entry value="2" display_value="2 - AAFIF"/>
+      <list_entry value="3" display_value="3 - CHUM"/>
+      <list_entry value="4" display_value="4 - City Graphic"/>
+      <list_entry value="5" display_value="5 - Combat Chart"/>
+      <list_entry value="6" display_value="6 - CADRG"/>
+      <list_entry value="7" display_value="7 - CIB1"/>
+      <list_entry value="8" display_value="8 - CIB5"/>
+      <list_entry value="10" display_value="10 - DNC"/>
+      <list_entry value="11" display_value="11 - DPF"/>
+      <list_entry value="16" display_value="16 - DTOP 1"/>
+      <list_entry value="17" display_value="17 - DTOP 2"/>
+      <list_entry value="18" display_value="18 - DTOP 3"/>
+      <list_entry value="19" display_value="19 - DTOP 4"/>
+      <list_entry value="20" display_value="20 - DTOP 5"/>
+      <list_entry value="21" display_value="21 - DVOF"/>
+      <list_entry value="22" display_value="22 - FFD"/>
+      <list_entry value="24" display_value="24 - Land Cover"/>
+      <list_entry value="25" display_value="25 - GeoNames"/>
+      <list_entry value="26" display_value="26 - GPS"/>
+      <list_entry value="27" display_value="27 - ICM"/>
+      <list_entry value="29" display_value="29 - NTM Imagery"/>
+      <list_entry value="30" display_value="30 - Imagery"/>
+      <list_entry value="31" display_value="31 - ITD"/>
+      <list_entry value="32" display_value="32 - IVD"/>
+      <list_entry value="33" display_value="33 - International Boundaries"/>
+      <list_entry value="34" display_value="34 - JOG"/>
+      <list_entry value="36" display_value="36 - LWD"/>
+      <list_entry value="37" display_value="37 - MC&amp;G"/>
+      <list_entry value="38" display_value="38 - MSD 1"/>
+      <list_entry value="39" display_value="39 - MSD 2"/>
+      <list_entry value="40" display_value="40 - MSD 3"/>
+      <list_entry value="41" display_value="41 - MSD 4"/>
+      <list_entry value="42" display_value="42 - MSD 5"/>
+      <list_entry value="43" display_value="43 - MIDB"/>
+      <list_entry value="44" display_value="44 - Native Data"/>
+      <list_entry value="45" display_value="45 - Native Map"/>
+      <list_entry value="46" display_value="46 - Medical Facilities"/>
+      <list_entry value="47" display_value="47 - NATE"/>
+      <list_entry value="48" display_value="48 - Planning Graphic"/>
+      <list_entry value="50" display_value="50 - SRTM"/>
+      <list_entry value="51" display_value="51 - Site Map"/>
+      <list_entry value="52" display_value="52 - TOD 0"/>
+      <list_entry value="53" display_value="53 - TOD 1"/>
+      <list_entry value="54" display_value="54 - TOD 2"/>
+      <list_entry value="55" display_value="55 - TOD 3"/>
+      <list_entry value="56" display_value="56 - TOD 4"/>
+      <list_entry value="57" display_value="57 - TOD 5"/>
+      <list_entry value="59" display_value="59 - UN Data"/>
+      <list_entry value="60" display_value="60 - UVMap"/>
+      <list_entry value="61" display_value="61 - VITD"/>
+      <list_entry value="62" display_value="62 - VMap 0"/>
+      <list_entry value="63" display_value="63 - VMap 1"/>
+      <list_entry value="64" display_value="64 - VMap 2"/>
+      <list_entry value="65" display_value="65 - WVS Plus"/>
+      <list_entry value="85" display_value="85 - SPOT HRG Digital Terrain Model"/>
+      <list_entry value="92" display_value="92 - Vector Data"/>
+      <list_entry value="93" display_value="93 - 1:25k Vector Data"/>
+      <list_entry value="94" display_value="94 - 1:50k Vector Data"/>
+      <list_entry value="95" display_value="95 - 1:100k Vector Data"/>
+      <list_entry value="110" display_value="110 - Very High Resolution Commercial Monoscopic Imagery"/>
+      <list_entry value="111" display_value="111 - Very High Resolution Commercial Stereoscopic Imagery"/>
+      <list_entry value="112" display_value="112 - High Resolution Commercial Monoscopic Imagery"/>
+      <list_entry value="113" display_value="113 - High Resolution Commercial Stereoscopic Imagery"/>
+      <list_entry value="114" display_value="114 - Medium Resolution Commercial Monoscopic Imagery"/>
+      <list_entry value="115" display_value="115 - Medium Resolution Commercial Stereoscopic Imagery"/>
+      <list_entry value="116" display_value="116 - Low Resolution Commercial Monoscopic Imagery"/>
+      <list_entry value="117" display_value="117 - Low Resolution Commercial Stereoscopic Imagery"/>
+      <list_entry value="118" display_value="118 - Map 1:25k"/>
+      <list_entry value="119" display_value="119 - Map 1:50k"/>
+      <list_entry value="120" display_value="120 - Map 1:100k"/>
+      <list_entry value="121" display_value="121 - Routing Data"/>
+      <list_entry value="996" display_value="996 - Multiple"/>
+      <list_entry value="997" display_value="997 - Unpopulated"/>
+      <list_entry value="998" display_value="998 - Not Applicable"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="TXT">
+    <text key="TXT" text="Associated Text" length="254"/>
+  </chunk>
+  <chunk id="UID">
+    <text key="UID" text="MGCP Feature universally unique identifier" length="36"/>
+  </chunk>
+  <chunk id="HGT">
+    <text key="HGT" text="Height Above Surface Level"/>
+  </chunk>
+  <chunk id="PBY">
+    <combo key="PBY" text="By-product" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="8" display_value="8 - Refuse"/>
+      <list_entry value="15" display_value="15 - Slag"/>
+      <list_entry value="17" display_value="17 - Spoil"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="VOI">
+    <text key="VOI" text="Vertical Obstruction Identifier" length="36"/>
+  </chunk>
+  <chunk id="PPC">
+    <combo key="PPC" text="Power Station Type" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1" display_value="1 - Hydro-electric"/>
+      <list_entry value="2" display_value="2 - Nuclear"/>
+      <list_entry value="3" display_value="3 - Solar"/>
+      <list_entry value="4" display_value="4 - Geothermal"/>
+      <list_entry value="5" display_value="5 - Wind"/>
+      <list_entry value="6" display_value="6 - Tidal"/>
+      <list_entry value="7" display_value="7 - Thermal"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="MCC">
+    <combo key="MCC" text="Structural Material Type" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="5" display_value="5 - Asphalt"/>
+      <list_entry value="9" display_value="9 - Brick"/>
+      <list_entry value="16" display_value="16 - Clay"/>
+      <list_entry value="20" display_value="20 - Composition"/>
+      <list_entry value="21" display_value="21 - Concrete"/>
+      <list_entry value="22" display_value="22 - Conglomerate"/>
+      <list_entry value="46" display_value="46 - Gravel"/>
+      <list_entry value="57" display_value="57 - Macadam"/>
+      <list_entry value="62" display_value="62 - Masonry"/>
+      <list_entry value="64" display_value="64 - Metal"/>
+      <list_entry value="72" display_value="72 - Part Metal"/>
+      <list_entry value="73" display_value="73 - Pebbles"/>
+      <list_entry value="77" display_value="77 - Prestressed Concrete"/>
+      <list_entry value="83" display_value="83 - Reinforced Concrete"/>
+      <list_entry value="84" display_value="84 - Rock"/>
+      <list_entry value="86" display_value="86 - Rubble"/>
+      <list_entry value="88" display_value="88 - Sand"/>
+      <list_entry value="104" display_value="104 - Soil"/>
+      <list_entry value="108" display_value="108 - Stone"/>
+      <list_entry value="117" display_value="117 - Wood"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="SMC">
+    <combo key="SMC" text="Surface Material Type" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="5" display_value="5 - Asphalt"/>
+      <list_entry value="14" display_value="14 - Cinders"/>
+      <list_entry value="16" display_value="16 - Clay"/>
+      <list_entry value="21" display_value="21 - Concrete"/>
+      <list_entry value="85" display_value="85 - Rubber"/>
+      <list_entry value="88" display_value="88 - Sand"/>
+      <list_entry value="104" display_value="104 - Soil"/>
+      <list_entry value="274" display_value="274 - Sod"/>
+      <list_entry value="998" display_value="998 - Not Applicable"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="CCT">
+    <combo key="CCT" text="Cover Closure Type" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1" display_value="1 - Open"/>
+      <list_entry value="2" display_value="2 - Partial"/>
+      <list_entry value="3" display_value="3 - Moveable"/>
+      <list_entry value="4" display_value="4 - Complete"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="FFN">
+    <combo key="FFN" text="Feature Function" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="2" display_value="2 - Agriculture"/>
+      <list_entry value="440" display_value="440 - Commerce"/>
+      <list_entry value="610" display_value="610 - Telecommunications"/>
+      <list_entry value="825" display_value="825 - Diplomacy"/>
+      <list_entry value="850" display_value="850 - Education"/>
+      <list_entry value="811" display_value="811 - Government"/>
+      <list_entry value="99" display_value="99 - Manufacturing"/>
+      <list_entry value="860" display_value="860 - Human Health Activities"/>
+      <list_entry value="835" display_value="835 - Defence Activities"/>
+      <list_entry value="930" display_value="930 - Religious Activities"/>
+      <list_entry value="907" display_value="907 - Botanical and/or Zoological Reserve Activities"/>
+      <list_entry value="563" display_value="563 - Residence"/>
+      <list_entry value="480" display_value="480 - Transport"/>
+      <list_entry value="350" display_value="350 - Utilities"/>
+      <list_entry value="550" display_value="550 - Accommodation"/>
+      <list_entry value="810" display_value="810 - Administration"/>
+      <list_entry value="843" display_value="843 - Imprisonment"/>
+      <list_entry value="912" display_value="912 - Sports Centre"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="HWT">
+    <combo key="HWT" text="House of Worship Type" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="2" display_value="2 - Cathedral"/>
+      <list_entry value="3" display_value="3 - Chapel"/>
+      <list_entry value="4" display_value="4 - Church"/>
+      <list_entry value="5" display_value="5 - Marabout"/>
+      <list_entry value="6" display_value="6 - Minaret"/>
+      <list_entry value="7" display_value="7 - Religious Community"/>
+      <list_entry value="9" display_value="9 - Mosque"/>
+      <list_entry value="11" display_value="11 - Pagoda"/>
+      <list_entry value="14" display_value="14 - Shrine"/>
+      <list_entry value="15" display_value="15 - Tabernacle"/>
+      <list_entry value="16" display_value="16 - Temple"/>
+      <list_entry value="20" display_value="20 - Synagogue"/>
+      <list_entry value="21" display_value="21 - Stupa"/>
+      <list_entry value="998" display_value="998 - Not Applicable"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="BAC">
+    <combo key="BAC" text="Built-up Area Density Category" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1" display_value="1 - Sparse"/>
+      <list_entry value="2" display_value="2 - Dense"/>
+    </combo>
+  </chunk>
+  <chunk id="FUC">
+    <combo key="FUC" text="Functional Use" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1" display_value="1 - Industrial"/>
+      <list_entry value="2" display_value="2 - Commercial"/>
+      <list_entry value="4" display_value="4 - Residential"/>
+      <list_entry value="19" display_value="19 - Urbanized Multi-functional"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="ORD">
+    <combo key="ORD" text="Relative Importance" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1" display_value="1 - First"/>
+      <list_entry value="2" display_value="2 - Second"/>
+      <list_entry value="3" display_value="3 - Third"/>
+      <list_entry value="4" display_value="4 - Fourth"/>
+      <list_entry value="5" display_value="5 - Fifth"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="REL">
+    <combo key="REL" text="Religious Designation" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1" display_value="1 - Buddhism"/>
+      <list_entry value="2" display_value="2 - Islam"/>
+      <list_entry value="4" display_value="4 - Christian"/>
+      <list_entry value="5" display_value="5 - Judaism"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="WID">
+    <text key="WID" text="Width"/>
+  </chunk>
+  <chunk id="LOC">
+    <combo key="LOC" text="Vertical Relative Location" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="40" display_value="40 - Below Ground Surface"/>
+      <list_entry value="44" display_value="44 - On Surface"/>
+    </combo>
+  </chunk>
+  <chunk id="SSC">
+    <combo key="SSC" text="Structure Shape" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="2" display_value="2 - Horizontal Capped Cylindrical"/>
+      <list_entry value="4" display_value="4 - Vertical Capped Cylindrical"/>
+      <list_entry value="12" display_value="12 - Pyramidal"/>
+      <list_entry value="17" display_value="17 - Spherical"/>
+      <list_entry value="59" display_value="59 - Cylindrical with Framework"/>
+      <list_entry value="65" display_value="65 - Cylindrical with Flat Top"/>
+      <list_entry value="88" display_value="88 - Spherical on Column"/>
+      <list_entry value="109" display_value="109 - Obelisk"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="BOT">
+    <combo key="BOT" text="Bridge Opening Type" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="4" display_value="4 - Bascule"/>
+      <list_entry value="10" display_value="10 - Swing-bridge"/>
+      <list_entry value="11" display_value="11 - Lift-bridge"/>
+      <list_entry value="12" display_value="12 - Retractable"/>
+      <list_entry value="17" display_value="17 - Fixed"/>
+      <list_entry value="998" display_value="998 - Not Applicable"/>
+    </combo>
+  </chunk>
+  <chunk id="BSC">
+    <combo key="BSC" text="Bridge Structure Type" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1" display_value="1 - Open Spandrel Arch"/>
+      <list_entry value="2" display_value="2 - Cantilever"/>
+      <list_entry value="3" display_value="3 - Deck"/>
+      <list_entry value="5" display_value="5 - Floating"/>
+      <list_entry value="6" display_value="6 - Girder"/>
+      <list_entry value="7" display_value="7 - Tower Suspension"/>
+      <list_entry value="8" display_value="8 - Truss"/>
+      <list_entry value="9" display_value="9 - Suspension"/>
+      <list_entry value="12" display_value="12 - Transporter"/>
+      <list_entry value="15" display_value="15 - Slab"/>
+      <list_entry value="16" display_value="16 - Stringer Beam"/>
+      <list_entry value="19" display_value="19 - Bowstring-bridge"/>
+      <list_entry value="26" display_value="26 - Closed Spandrel Arch"/>
+      <list_entry value="27" display_value="27 - Cable Stayed"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="NOS">
+    <text key="NOS" text="Span Count"/>
+  </chunk>
+  <chunk id="OHB">
+    <text key="OHB" text="Overall Bridge Height"/>
+  </chunk>
+  <chunk id="TRS">
+    <combo key="TRS" text="Transportation System Type" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1" display_value="1 - Aeronautical"/>
+      <list_entry value="2" display_value="2 - Aqueduct"/>
+      <list_entry value="4" display_value="4 - Bus"/>
+      <list_entry value="5" display_value="5 - Canal"/>
+      <list_entry value="7" display_value="7 - Maritime"/>
+      <list_entry value="9" display_value="9 - Pedestrian"/>
+      <list_entry value="10" display_value="10 - Pipeline"/>
+      <list_entry value="12" display_value="12 - Railway"/>
+      <list_entry value="13" display_value="13 - Road"/>
+      <list_entry value="998" display_value="998 - Not Applicable"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="TUC">
+    <combo key="TUC" text="Transportation Use" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="25" display_value="25 - Cargo"/>
+      <list_entry value="26" display_value="26 - Passenger"/>
+      <list_entry value="45" display_value="45 - General"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="RST">
+    <combo key="RST" text="Load-bearing Surface Type" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1" display_value="1 - Hard/Paved"/>
+      <list_entry value="2" display_value="2 - Loose/Unpaved"/>
+    </combo>
+  </chunk>
+  <chunk id="NST">
+    <combo key="NST" text="Navigation System Type" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="12" display_value="12 - Radio"/>
+      <list_entry value="13" display_value="13 - Radio Telephone"/>
+      <list_entry value="15" display_value="15 - Television (TV)"/>
+      <list_entry value="16" display_value="16 - Microwave"/>
+      <list_entry value="33" display_value="33 - Radio-telegraph"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="NA2">
+    <text key="NA2" text="Touristic Name" length="80"/>
+  </chunk>
+  <chunk id="FHC">
+    <combo key="FHC" text="Harbour Facility Function" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="3" display_value="3 - Ferry Terminal"/>
+      <list_entry value="4" display_value="4 - Fishing Harbour"/>
+      <list_entry value="5" display_value="5 - Marina"/>
+      <list_entry value="6" display_value="6 - Naval Base"/>
+      <list_entry value="7" display_value="7 - Tanker Terminal"/>
+      <list_entry value="10" display_value="10 - Container Terminal"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="WLE">
+    <combo key="WLE" text="Water Level Effect" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1" display_value="1 - Partly Submerged"/>
+      <list_entry value="2" display_value="2 - Always Dry"/>
+      <list_entry value="3" display_value="3 - Always Submerged"/>
+      <list_entry value="4" display_value="4 - Covers and Uncovers"/>
+      <list_entry value="8" display_value="8 - Floating"/>
+      <list_entry value="998" display_value="998 - Not Applicable"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="FAC">
+    <combo key="FAC" text="Solid Maritime Construction" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1000" display_value="1000 - Open"/>
+      <list_entry value="1001" display_value="1001 - Solid Face"/>
+    </combo>
+  </chunk>
+  <chunk id="PWC">
+    <combo key="PWC" text="Shoreline Construction Type" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1" display_value="1 - Pier"/>
+      <list_entry value="2" display_value="2 - Wharf"/>
+      <list_entry value="3" display_value="3 - Quay"/>
+    </combo>
+  </chunk>
+  <chunk id="COD">
+    <combo key="COD" text="Delineation Known" values_searchable="true">
+      <list_entry value="1000" display_value="1000 - Limits and Information Unknown"/>
+      <list_entry value="1001" display_value="1001 - Limits and Information Known"/>
+    </combo>
+  </chunk>
+  <chunk id="CDA">
+    <combo key="CDA" text="Covered Drain" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1000" display_value="1000 - Uncovered"/>
+      <list_entry value="1001" display_value="1001 - Covered"/>
+    </combo>
+  </chunk>
+  <chunk id="BOC">
+    <combo key="BOC" text="Bog Type" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="7" display_value="7 - Cranberry Bog"/>
+      <list_entry value="14" display_value="14 - Peat Bog"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="HYP">
+    <combo key="HYP" text="Hydrologic Persistence" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1" display_value="1 - Perennial"/>
+      <list_entry value="2" display_value="2 - Intermittent"/>
+      <list_entry value="4" display_value="4 - Dry"/>
+    </combo>
+  </chunk>
+  <chunk id="SCC">
+    <combo key="SCC" text="Water Type" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="10" display_value="10 - Salty"/>
+      <list_entry value="11" display_value="11 - Fresh"/>
+      <list_entry value="12" display_value="12 - Brackish"/>
+    </combo>
+  </chunk>
+  <chunk id="AZC">
+    <combo key="AZC" text="Man-made" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1000" display_value="1000 - Natural"/>
+      <list_entry value="1001" display_value="1001 - Man-made"/>
+    </combo>
+  </chunk>
+  <chunk id="CNS">
+    <combo key="CNS" text="Controlled" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1000" display_value="1000 - Uncontrolled"/>
+      <list_entry value="1001" display_value="1001 - Controlled"/>
+    </combo>
+  </chunk>
+  <chunk id="FFP">
+    <combo key="FFP" text="Farming Pattern" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="3" display_value="3 - Terraced"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="TID">
+    <combo key="TID" text="Tide Influenced" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1000" display_value="1000 - Non-Tidal"/>
+      <list_entry value="1001" display_value="1001 - Tidal/Tidal Fluctuating"/>
+    </combo>
+  </chunk>
+  <chunk id="WCC">
+    <combo key="WCC" text="Watercourse Channel Type" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1" display_value="1 - Channelized Stream"/>
+      <list_entry value="2" display_value="2 - Braided Stream"/>
+      <list_entry value="3" display_value="3 - Gorge"/>
+      <list_entry value="4" display_value="4 - Wadi"/>
+      <list_entry value="7" display_value="7 - Normal Channel"/>
+    </combo>
+  </chunk>
+  <chunk id="WST">
+    <combo key="WST" text="Watercourse Sink Type" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1" display_value="1 - Dissipating"/>
+      <list_entry value="2" display_value="2 - Disappearing"/>
+      <list_entry value="998" display_value="998 - Not Applicable"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="FIC">
+    <combo key="FIC" text="Embankment Type" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1" display_value="1 - Mound"/>
+      <list_entry value="2" display_value="2 - Fill"/>
+      <list_entry value="3" display_value="3 - Dyke"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="RKF">
+    <combo key="RKF" text="Rock Formation Structure" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1" display_value="1 - Columnar"/>
+      <list_entry value="3" display_value="3 - Pinnacle"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="SDO">
+    <text key="SDO" text="Sand Dune Orientation"/>
+  </chunk>
+  <chunk id="SDT">
+    <combo key="SDT" text="Sand Dune Type" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1" display_value="1 - Crescent"/>
+      <list_entry value="2" display_value="2 - Dome"/>
+      <list_entry value="3" display_value="3 - Transverse"/>
+      <list_entry value="4" display_value="4 - Linear"/>
+      <list_entry value="5" display_value="5 - Parabolic"/>
+      <list_entry value="6" display_value="6 - Ripple"/>
+      <list_entry value="7" display_value="7 - Star"/>
+      <list_entry value="8" display_value="8 - Dome and Transverse"/>
+    </combo>
+  </chunk>
+  <chunk id="VGT">
+    <combo key="VGT" text="Volcano Shape" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1" display_value="1 - Cone"/>
+      <list_entry value="2" display_value="2 - Cinder Cone"/>
+      <list_entry value="3" display_value="3 - Shield"/>
+      <list_entry value="4" display_value="4 - Caldera"/>
+      <list_entry value="5" display_value="5 - Composite"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="CSP">
+    <combo key="CSP" text="Crop Species" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="13" display_value="13 - Dry Crop"/>
+      <list_entry value="34" display_value="34 - Tea"/>
+      <list_entry value="37" display_value="37 - Vegetable Crop"/>
+      <list_entry value="45" display_value="45 - Cotton"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="DMT">
+    <text key="DMT" text="Canopy Cover" length="100"/>
+  </chunk>
+  <chunk id="FMM">
+    <combo key="FMM" text="Farming Method" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1" display_value="1 - Fallow"/>
+      <list_entry value="3" display_value="3 - Permanent"/>
+      <list_entry value="5" display_value="5 - Permanent Irrigation"/>
+      <list_entry value="4" display_value="4 - Slash and Burn"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="VEG">
+    <combo key="VEG" text="Vegetation Characteristic" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="8" display_value="8 - Grassland"/>
+      <list_entry value="9" display_value="9 - Grassland with Trees"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="DMB">
+    <text key="DMB" text="Undergrowth Density" length="100"/>
+  </chunk>
+  <chunk id="TRE">
+    <combo key="TRE" text="Foliage Type" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1" display_value="1 - Deciduous"/>
+      <list_entry value="2" display_value="2 - Evergreen"/>
+      <list_entry value="3" display_value="3 - Mixed"/>
+    </combo>
+  </chunk>
+  <chunk id="VSP">
+    <combo key="VSP" text="Vegetation Species" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="4" display_value="4 - Casuarina"/>
+      <list_entry value="6" display_value="6 - Conifer"/>
+      <list_entry value="8" display_value="8 - Cypress"/>
+      <list_entry value="10" display_value="10 - Eucalyptus"/>
+      <list_entry value="11" display_value="11 - Filao"/>
+      <list_entry value="25" display_value="25 - Palm"/>
+      <list_entry value="50" display_value="50 - Umbrella Thorn"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="FRT">
+    <combo key="FRT" text="Weapons Range Type" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1" display_value="1 - Small Arms"/>
+      <list_entry value="2" display_value="2 - Tank"/>
+      <list_entry value="3" display_value="3 - Field Artillery"/>
+      <list_entry value="4" display_value="4 - Grenade"/>
+      <list_entry value="5" display_value="5 - Demolition Area"/>
+      <list_entry value="6" display_value="6 - Impact Area"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="CAA">
+    <combo key="CAA" text="Controlling Authority" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="3" display_value="3 - Private"/>
+      <list_entry value="5" display_value="5 - Military"/>
+      <list_entry value="7" display_value="7 - Joint Military and Civilian"/>
+      <list_entry value="16" display_value="16 - Civilian"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="FPT">
+    <combo key="FPT" text="Airfield Type" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1" display_value="1 - Major"/>
+      <list_entry value="2" display_value="2 - Minor and Hard"/>
+      <list_entry value="3" display_value="3 - Minor and Soft"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="IKO">
+    <text key="IKO" text="ICAO Location Indicator" length="254"/>
+  </chunk>
+  <chunk id="ZVA">
+    <text key="ZVA" text="Aerodrome Elevation"/>
+  </chunk>
+  <chunk id="SFS">
+    <combo key="SFS" text="Aerodrome Pavement Functional Status" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1" display_value="1 - Fair"/>
+      <list_entry value="3" display_value="3 - Good"/>
+      <list_entry value="5" display_value="5 - Poor"/>
+      <list_entry value="998" display_value="998 - Not Applicable"/>
+    </combo>
+  </chunk>
+  <chunk id="AOO">
+    <text key="AOO" text="Angle of Orientation"/>
+  </chunk>
+  <chunk id="LEN">
+    <text key="LEN" text="Length"/>
+  </chunk>
+  <chunk id="PRM">
+    <combo key="PRM" text="Permanent" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1000" display_value="1000 - Temporary"/>
+      <list_entry value="1001" display_value="1001 - Permanent"/>
+    </combo>
+  </chunk>
+  <chunk id="EET">
+    <combo key="EET" text="Engineered Earthwork Type" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1" display_value="1 - Battery"/>
+      <list_entry value="2" display_value="2 - Military Parapet"/>
+      <list_entry value="3" display_value="3 - Military Trench"/>
+      <list_entry value="4" display_value="4 - Rampart"/>
+      <list_entry value="5" display_value="5 - Redoubt"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="RAY">
+    <combo key="RAY" text="Racing Type" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1" display_value="1 - Bicycle"/>
+      <list_entry value="2" display_value="2 - Camel"/>
+      <list_entry value="3" display_value="3 - Greyhound"/>
+      <list_entry value="4" display_value="4 - Harness"/>
+      <list_entry value="5" display_value="5 - Horse"/>
+      <list_entry value="6" display_value="6 - Ice Skate"/>
+      <list_entry value="7" display_value="7 - Motor Vehicle"/>
+      <list_entry value="8" display_value="8 - Roller Skate"/>
+      <list_entry value="9" display_value="9 - Track and Field"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="GAW">
+    <text key="GAW" text="Railway Gauge"/>
+  </chunk>
+  <chunk id="LTN">
+    <text key="LTN" text="Track or Lane Count"/>
+  </chunk>
+  <chunk id="RGC">
+    <combo key="RGC" text="Railway Gauge Classification" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1" display_value="1 - Broad"/>
+      <list_entry value="2" display_value="2 - Narrow"/>
+      <list_entry value="3" display_value="3 - Standard"/>
+      <list_entry value="6" display_value="6 - Monorail"/>
+    </combo>
+  </chunk>
+  <chunk id="RIR">
+    <combo key="RIR" text="Railway in Road" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1000" display_value="1000 - Separated from road"/>
+      <list_entry value="1001" display_value="1001 - In road"/>
+    </combo>
+  </chunk>
+  <chunk id="RRA">
+    <combo key="RRA" text="Railway Power Method" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1" display_value="1 - Electrified Track"/>
+      <list_entry value="3" display_value="3 - Overhead Electrified"/>
+      <list_entry value="4" display_value="4 - Non-electrified"/>
+    </combo>
+  </chunk>
+  <chunk id="RRC">
+    <combo key="RRC" text="Railway Use" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="2" display_value="2 - Carline"/>
+      <list_entry value="6" display_value="6 - Underground Railway"/>
+      <list_entry value="8" display_value="8 - Logging"/>
+      <list_entry value="14" display_value="14 - Tramway"/>
+      <list_entry value="15" display_value="15 - Funicular"/>
+      <list_entry value="32" display_value="32 - Automated Transit System"/>
+      <list_entry value="33" display_value="33 - Long-haul"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="RTA">
+    <combo key="RTA" text="Linear Feature Arrangement" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1" display_value="1 - Single Arrangement"/>
+      <list_entry value="2" display_value="2 - Double Arrangement"/>
+      <list_entry value="3" display_value="3 - Multiple Arrangements"/>
+      <list_entry value="4" display_value="4 - Juxtaposition"/>
+    </combo>
+  </chunk>
+  <chunk id="RWC">
+    <combo key="RWC" text="Railway Class" values_searchable="true">
+      <list_entry value="1" display_value="1 - High Speed Rail"/>
+      <list_entry value="2" display_value="2 - Main Line"/>
+      <list_entry value="3" display_value="3 - Branch-line"/>
+    </combo>
+  </chunk>
+  <chunk id="RSA">
+    <combo key="RSA" text="Branch Railway Type" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1" display_value="1 - Spur"/>
+      <list_entry value="2" display_value="2 - Siding"/>
+      <list_entry value="3" display_value="3 - Passing"/>
+    </combo>
+  </chunk>
+  <chunk id="WD1">
+    <text key="WD1" text="Route Minimum Travelled Way Width"/>
+  </chunk>
+  <chunk id="WTC">
+    <combo key="WTC" text="Road Weather Restriction" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1" display_value="1 - All-weather"/>
+      <list_entry value="2" display_value="2 - Fair-weather"/>
+      <list_entry value="3" display_value="3 - Winter Only"/>
+    </combo>
+  </chunk>
+  <chunk id="CON">
+    <combo key="CON" text="Route Width Constriction Type" values_searchable="true">
+      <list_entry value="35" display_value="35 - Road Interchange"/>
+      <list_entry value="998" display_value="998 - Not Applicable"/>
+    </combo>
+  </chunk>
+  <chunk id="HCT">
+    <combo key="HCT" text="Thoroughfare Class" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1" display_value="1 - Primary Route"/>
+      <list_entry value="2" display_value="2 - Secondary Route"/>
+      <list_entry value="3" display_value="3 - National Motorway"/>
+      <list_entry value="4" display_value="4 - Local Route"/>
+    </combo>
+  </chunk>
+  <chunk id="MES">
+    <combo key="MES" text="Median Present" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1000" display_value="1000 - Without Median"/>
+      <list_entry value="1001" display_value="1001 - With Median"/>
+    </combo>
+  </chunk>
+  <chunk id="SEP">
+    <combo key="SEP" text="Divided" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1000" display_value="1000 - Absent"/>
+      <list_entry value="1001" display_value="1001 - Present"/>
+    </combo>
+  </chunk>
+  <chunk id="CAT">
+    <combo key="CAT" text="Cableway Type" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="2" display_value="2 - Chair-lift"/>
+      <list_entry value="5" display_value="5 - Aerial Tramway"/>
+      <list_entry value="6" display_value="6 - Gondola Lift"/>
+      <list_entry value="8" display_value="8 - Industrial Ropeway"/>
+      <list_entry value="9" display_value="9 - Material Tramway"/>
+      <list_entry value="998" display_value="998 - Not Applicable"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="SLT">
+    <combo key="SLT" text="Shoreline Type" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="6" display_value="6 - Mangrove"/>
+      <list_entry value="8" display_value="8 - Marshy"/>
+      <list_entry value="10" display_value="10 - Stony"/>
+      <list_entry value="11" display_value="11 - Building Rubble"/>
+      <list_entry value="13" display_value="13 - Sandy"/>
+      <list_entry value="14" display_value="14 - Shingly"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="GNC">
+    <combo key="GNC" text="Water Gate Type" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="2" display_value="2 - Flood Barrage Gate"/>
+      <list_entry value="4" display_value="4 - Lock Gate"/>
+      <list_entry value="5" display_value="5 - Dyke Gate"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="WFT">
+    <combo key="WFT" text="Well Type" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="2" display_value="2 - Walled-in"/>
+      <list_entry value="3" display_value="3 - Artesian"/>
+      <list_entry value="6" display_value="6 - Dug"/>
+      <list_entry value="7" display_value="7 - Drilled"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="CRA">
+    <combo key="CRA" text="Crane Type" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="2" display_value="2 - Bridge Crane"/>
+      <list_entry value="3" display_value="3 - Rotating Crane"/>
+      <list_entry value="7" display_value="7 - Tower Crane"/>
+      <list_entry value="99" display_value="99 - Container Crane"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="CRM">
+    <combo key="CRM" text="Crane Mobility Type" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1" display_value="1 - Fixed"/>
+      <list_entry value="2" display_value="2 - Travelling"/>
+      <list_entry value="3" display_value="3 - Floating"/>
+    </combo>
+  </chunk>
+  <chunk id="SUC">
+    <combo key="SUC" text="Shed Type" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1" display_value="1 - Snow Shed"/>
+      <list_entry value="2" display_value="2 - Rock Shed"/>
+      <list_entry value="4" display_value="4 - Rock and Snow Shed"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="TTC">
+    <combo key="TTC" text="Tower Type" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1" display_value="1 - Bridge Tower"/>
+      <list_entry value="2" display_value="2 - Observation Tower"/>
+      <list_entry value="5" display_value="5 - Light Tower"/>
+      <list_entry value="6" display_value="6 - Water Tower"/>
+      <list_entry value="8" display_value="8 - Cooling Tower"/>
+      <list_entry value="10" display_value="10 - Lookout Tower"/>
+      <list_entry value="12" display_value="12 - Fire Tower"/>
+      <list_entry value="16" display_value="16 - Control Tower"/>
+      <list_entry value="18" display_value="18 - Communication Tower"/>
+      <list_entry value="19" display_value="19 - Cell Tower"/>
+      <list_entry value="21" display_value="21 - Guard Tower"/>
+      <list_entry value="22" display_value="22 - Industrial Tower"/>
+      <list_entry value="23" display_value="23 - Drop Tower"/>
+      <list_entry value="26" display_value="26 - Mine Shaft Superstructure"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="CAB">
+    <combo key="CAB" text="Cable Type" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="2" display_value="2 - Power Line"/>
+      <list_entry value="6" display_value="6 - Transmission Line"/>
+      <list_entry value="8" display_value="8 - Communication Line"/>
+      <list_entry value="998" display_value="998 - Not Applicable"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="TOS">
+    <combo key="TOS" text="Tower Shape" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1" display_value="1 - 'A' Frame"/>
+      <list_entry value="2" display_value="2 - 'H' Frame"/>
+      <list_entry value="3" display_value="3 - 'I' Frame"/>
+      <list_entry value="4" display_value="4 - 'T' Frame"/>
+      <list_entry value="5" display_value="5 - 'Y' Frame"/>
+      <list_entry value="6" display_value="6 - Mast"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="RAC">
+    <combo key="RAC" text="Radar Antenna Configuration" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1" display_value="1 - Dome Enclosed"/>
+      <list_entry value="2" display_value="2 - Mast Mounted"/>
+      <list_entry value="4" display_value="4 - Radome on Tower"/>
+      <list_entry value="5" display_value="5 - Scanner"/>
+      <list_entry value="6" display_value="6 - Tower Mounted"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="STA">
+    <combo key="STA" text="Maritime Station Type" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1" display_value="1 - Coast Guard Station"/>
+      <list_entry value="2" display_value="2 - Fireboat Station"/>
+      <list_entry value="3" display_value="3 - Water-police Station"/>
+      <list_entry value="4" display_value="4 - Ice Signal Station"/>
+      <list_entry value="5" display_value="5 - Rescue Station"/>
+      <list_entry value="6" display_value="6 - Port Control Station"/>
+      <list_entry value="11" display_value="11 - Pilot Station"/>
+      <list_entry value="13" display_value="13 - Signal Station"/>
+      <list_entry value="15" display_value="15 - Storm Signal Station"/>
+      <list_entry value="17" display_value="17 - Tide Station"/>
+      <list_entry value="19" display_value="19 - Time Signal Station"/>
+      <list_entry value="21" display_value="21 - Weather Signal Station"/>
+      <list_entry value="27" display_value="27 - Tidal Stream Station"/>
+      <list_entry value="28" display_value="28 - Traffic Signal Station"/>
+      <list_entry value="29" display_value="29 - Bridge Signal Station"/>
+      <list_entry value="30" display_value="30 - Lock Signal Station"/>
+      <list_entry value="32" display_value="32 - International Port Signals Station"/>
+      <list_entry value="33" display_value="33 - Military Practice Signal Station"/>
+      <list_entry value="35" display_value="35 - Warning Signal Station"/>
+      <list_entry value="36" display_value="36 - Radar Surveillance Station"/>
+      <list_entry value="37" display_value="37 - Pilot Lookout Station"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="AFA">
+    <combo key="AFA" text="Available Vessel Service" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="19" display_value="19 - Helipad"/>
+      <list_entry value="41" display_value="41 - None Available"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="OPC">
+    <combo key="OPC" text="Offshore Platform Type" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="2" display_value="2 - Production Platform"/>
+      <list_entry value="3" display_value="3 - Observation Platform"/>
+      <list_entry value="4" display_value="4 - Articulated Loading Platform (ALP)"/>
+      <list_entry value="9" display_value="9 - Accommodation Platform"/>
+      <list_entry value="10" display_value="10 - Navigation Aid Support"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="ATC">
+    <combo key="ATC" text="Aqueduct Type" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1" display_value="1 - Qanat Shaft"/>
+    </combo>
+  </chunk>
+  <chunk id="SWT">
+    <combo key="SWT" text="Natural Pool Type" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="4" display_value="4 - Spring"/>
+      <list_entry value="5" display_value="5 - Water-hole"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="HAF">
+    <combo key="HAF" text="Helipad Associated Facility" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="1" display_value="1 - Heliport"/>
+      <list_entry value="2" display_value="2 - Land Aerodrome"/>
+      <list_entry value="3" display_value="3 - Hospital"/>
+      <list_entry value="4" display_value="4 - Non-hospital Building"/>
+      <list_entry value="9" display_value="9 - Offshore Construction"/>
+      <list_entry value="6" display_value="6 - Rig"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <chunk id="LFA">
+    <combo key="LFA" text="Aeronautical Light Function" values_searchable="true">
+      <list_entry value="0" display_value="0 - Unknown"/>
+      <list_entry value="15" display_value="15 - ALSF-I"/>
+      <list_entry value="16" display_value="16 - ALSF-II"/>
+      <list_entry value="17" display_value="17 - SSALF"/>
+      <list_entry value="18" display_value="18 - SSALR"/>
+      <list_entry value="19" display_value="19 - MALSF"/>
+      <list_entry value="20" display_value="20 - MALSR"/>
+      <list_entry value="999" display_value="999 - Other"/>
+    </combo>
+  </chunk>
+  <group name="MGCP" icon="presets/misc/MGCP_logo.png">
+    <group name="Culture" icon="presets/sightseeing/museum.svg">
+      <group name="Extraction" icon="presets/landmark/mine.svg">
+        <item name="Extraction Mine" type="closedway,multipolygon,node" preset_name_label="true">
+          <key key="FCODE" value="AA010"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="MZN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="PPO"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Quarry" type="closedway,multipolygon,node" preset_name_label="true">
+          <key key="FCODE" value="AA012"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="PPO"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Hydrocarbons Field" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="AA052"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Rig" type="node" preset_name_label="true">
+          <key key="FCODE" value="AA040"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="HGT"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="PPO"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="VOI"/>
+        </item>
+        <item name="Well" type="node" preset_name_label="true">
+          <key key="FCODE" value="AA050"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="HYP"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="PPO"/>
+          <reference ref="SCC"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="WFT"/>
+        </item>
+      </group>
+      <group name="Disposal" icon="presets/landuse/landfill.svg">
+        <item name="Disposal Site" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="AB000"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="HGT"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="PBY"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="VOI"/>
+        </item>
+        <item name="Recycling Site" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="AB010"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+      </group>
+      <group name="Processing Industry" icon="presets/landmark/chimney.svg">
+        <item name="Processing Facility" type="closedway,multipolygon,node" preset_name_label="true">
+          <key key="FCODE" value="AC000"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="HGT"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="PPO"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="VOI"/>
+        </item>
+        <item name="Settling Pond" type="closedway,multipolygon,node" preset_name_label="true">
+          <key key="FCODE" value="AC030"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="PPO"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Catalytic Cracker" type="node" preset_name_label="true">
+          <key key="FCODE" value="AC020"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="HGT"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="VOI"/>
+        </item>
+      </group>
+      <group name="Power Generation" icon="presets/power/power.svg">
+        <item name="Electric Power Station" type="closedway,multipolygon,node" preset_name_label="true">
+          <key key="FCODE" value="AD010"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="HGT"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="PPC"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="VOI"/>
+        </item>
+        <item name="Power Substation" type="closedway,multipolygon,node" preset_name_label="true">
+          <key key="FCODE" value="AD030"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Heating Facility" type="closedway,multipolygon,node" preset_name_label="true">
+          <key key="FCODE" value="AD050"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Solar Panel" type="node" preset_name_label="true">
+          <key key="FCODE" value="AD020"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+      </group>
+      <group name="Associated Industrial Structures" icon="presets/landmark/crane.svg">
+        <item name="Conveyor" type="way,closedway" preset_name_label="true">
+          <key key="FCODE" value="AF020"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="HGT"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="VOI"/>
+        </item>
+        <item name="Smokestack" type="node" preset_name_label="true">
+          <key key="FCODE" value="AF010"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="HGT"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="VOI"/>
+        </item>
+        <item name="Crane" type="node" preset_name_label="true">
+          <key key="FCODE" value="AF040"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="CRA"/>
+          <reference ref="CRM"/>
+          <reference ref="FUN"/>
+          <reference ref="HGT"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="VOI"/>
+        </item>
+        <item name="Flare Pipe" type="node" preset_name_label="true">
+          <key key="FCODE" value="AF070"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="HGT"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="VOI"/>
+        </item>
+      </group>
+      <group name="Institutional/Governmental" icon="presets/office/government.svg">
+        <item name="Fortification" type="closedway,multipolygon,node" preset_name_label="true">
+          <key key="FCODE" value="AH050"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="HGT"/>
+          <reference ref="MCC"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="VOI"/>
+        </item>
+        <item name="Engineered Earthwork" type="way,closedway" preset_name_label="true">
+          <key key="FCODE" value="AH025"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="EET"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="WID"/>
+        </item>
+        <item name="Checkpoint" type="node" preset_name_label="true">
+          <key key="FCODE" value="AH070"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+      </group>
+      <group name="Residential" icon="presets/landmark/building.svg">
+        <item name="Camp" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="AI030"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+      </group>
+      <group name="Agriculture" icon="presets/landuse/farmyard.svg">
+        <item name="Circular Irrigation System" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="AJ010"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Holding Pen" type="closedway,multipolygon,node" preset_name_label="true">
+          <key key="FCODE" value="AJ030"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Greenhouse" type="closedway,multipolygon,node" preset_name_label="true">
+          <key key="FCODE" value="AJ110"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Windmill" type="node" preset_name_label="true">
+          <key key="FCODE" value="AJ050"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="HGT"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="VOI"/>
+        </item>
+        <item name="Wind Turbine" type="node" preset_name_label="true">
+          <key key="FCODE" value="AJ051"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="HGT"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="VOI"/>
+        </item>
+      </group>
+      <group name="Recreational" icon="presets/leisure/picnic.svg">
+        <item name="Amusement Park" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="AK030"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Sports Ground" type="closedway,multipolygon,node" preset_name_label="true">
+          <key key="FCODE" value="AK040"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SMC"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Camp-site" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="AK060"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Fairground" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="AK090"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Golf Course" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="AK100"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Park" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="AK120"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Stadium" type="closedway,multipolygon,node" preset_name_label="true">
+          <key key="FCODE" value="AK160"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="CCT"/>
+          <reference ref="FUN"/>
+          <reference ref="HGT"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="VOI"/>
+        </item>
+        <item name="Swimming Pool" type="closedway,multipolygon,node" preset_name_label="true">
+          <key key="FCODE" value="AK170"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Zoo" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="AK180"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Recreational Pier" type="closedway,multipolygon,way" preset_name_label="true">
+          <key key="FCODE" value="AK190"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="MCC"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Racetrack" type="way,closedway" preset_name_label="true">
+          <key key="FCODE" value="AK130"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="RAY"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Ski-jump" type="way,closedway,node" preset_name_label="true">
+          <key key="FCODE" value="AK150"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="HGT"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="VOI"/>
+          <reference ref="WID"/>
+        </item>
+      </group>
+      <group name="Miscellaneous Features" icon="presets/misc/information/information.svg">
+        <item name="Facility" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="AL010"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FFN"/>
+          <reference ref="FUN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Archeological Site" type="closedway,multipolygon,node" preset_name_label="true">
+          <key key="FCODE" value="AL012"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="General Building" type="closedway,multipolygon,node" preset_name_label="true">
+          <key key="FCODE" value="AL015"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FFN"/>
+          <reference ref="FUN"/>
+          <reference ref="HGT"/>
+          <reference ref="HWT"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="VOI"/>
+        </item>
+        <item name="Shed" type="closedway,multipolygon,node" preset_name_label="true">
+          <key key="FCODE" value="AL019"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Built-Up Area" type="closedway,multipolygon,node" preset_name_label="true">
+          <key key="FCODE" value="AL020"/>
+          <reference ref="ACC"/>
+          <reference ref="BAC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUC"/>
+          <reference ref="FUN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="ORD"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Cemetery" type="closedway,multipolygon,node" preset_name_label="true">
+          <key key="FCODE" value="AL030"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="REL"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Dragon's Teeth" type="closedway,multipolygon,way" preset_name_label="true">
+          <key key="FCODE" value="AL060"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="WID"/>
+        </item>
+        <item name="Settlement" type="closedway,multipolygon,node" preset_name_label="true">
+          <key key="FCODE" value="AL105"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUC"/>
+          <reference ref="FUN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Particle Accelerator" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="AL140"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Public Square" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="AL170"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Ruins" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="AL200"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Shanty Town" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="AL208"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Fence" type="way,closedway" preset_name_label="true">
+          <key key="FCODE" value="AL070"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Protection Shed" type="way,closedway,node" preset_name_label="true">
+          <key key="FCODE" value="AL210"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="WID"/>
+        </item>
+        <item name="Wall" type="way,closedway" preset_name_label="true">
+          <key key="FCODE" value="AL260"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="MCC"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="WID"/>
+        </item>
+        <item name="Cairn" type="node" preset_name_label="true">
+          <key key="FCODE" value="AL025"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Hut" type="node" preset_name_label="true">
+          <key key="FCODE" value="AL099"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Memorial Monument" type="node" preset_name_label="true">
+          <key key="FCODE" value="AL130"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="HGT"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="SSC"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="VOI"/>
+        </item>
+        <item name="Tower" type="node" preset_name_label="true">
+          <key key="FCODE" value="AL241"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="HGT"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TTC"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="VOI"/>
+        </item>
+      </group>
+      <group name="Storage" icon="presets/landmark/storage_tank.svg">
+        <item name="Storage Depot" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="AM010"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="LOC"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="PPO"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Grain Storage Structure" type="closedway,multipolygon,node" preset_name_label="true">
+          <key key="FCODE" value="AM020"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="HGT"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="VOI"/>
+        </item>
+        <item name="Grain Elevator" type="closedway,multipolygon,node" preset_name_label="true">
+          <key key="FCODE" value="AM030"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="HGT"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="VOI"/>
+        </item>
+        <item name="Mineral Pile" type="closedway,multipolygon,node" preset_name_label="true">
+          <key key="FCODE" value="AM040"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="HGT"/>
+          <reference ref="PPO"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="VOI"/>
+        </item>
+        <item name="Surface Bunker" type="closedway,multipolygon,node" preset_name_label="true">
+          <key key="FCODE" value="AM060"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="PPO"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Storage Tank" type="closedway,multipolygon,node" preset_name_label="true">
+          <key key="FCODE" value="AM070"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="HGT"/>
+          <reference ref="LOC"/>
+          <reference ref="PPO"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="SSC"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="VOI"/>
+        </item>
+      </group>
+      <group name="Transportation — Railroad" icon="presets/transport/railway/rail.svg">
+        <item name="Railway Yard" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="AN060"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Roundhouse" type="closedway,multipolygon,node" preset_name_label="true">
+          <key key="FCODE" value="AN076"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Railway" type="way,closedway" preset_name_label="true">
+          <key key="FCODE" value="AN010"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="GAW"/>
+          <reference ref="LOC"/>
+          <reference ref="LTN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="RGC"/>
+          <reference ref="RIR"/>
+          <reference ref="RRA"/>
+          <reference ref="RRC"/>
+          <reference ref="RTA"/>
+          <reference ref="RWC"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Railway Sidetrack" type="way,closedway" preset_name_label="true">
+          <key key="FCODE" value="AN050"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="GAW"/>
+          <reference ref="RGC"/>
+          <reference ref="RRA"/>
+          <reference ref="RSA"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Railway Turntable" type="node" preset_name_label="true">
+          <key key="FCODE" value="AN075"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+      </group>
+      <group name="Transportation — Road" icon="presets/transport/way/way_unclassified.svg">
+        <item name="Cart Track" type="way,closedway" preset_name_label="true">
+          <key key="FCODE" value="AP010"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="WD1"/>
+          <reference ref="WTC"/>
+        </item>
+        <item name="Road" type="way,closedway" preset_name_label="true">
+          <key key="FCODE" value="AP030"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="CON"/>
+          <reference ref="FUN"/>
+          <reference ref="HCT"/>
+          <reference ref="LOC"/>
+          <reference ref="LTN"/>
+          <reference ref="MES"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="RST"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SEP"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="WD1"/>
+          <reference ref="WTC"/>
+        </item>
+        <item name="Trail" type="way,closedway" preset_name_label="true">
+          <key key="FCODE" value="AP050"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="WTC"/>
+        </item>
+      </group>
+      <group name="Associated Transportation" icon="presets/transport/bridge/bridge.svg">
+        <item name="Bridge" type="closedway,multipolygon,way" preset_name_label="true">
+          <key key="FCODE" value="AQ040"/>
+          <reference ref="ACC"/>
+          <reference ref="BOT"/>
+          <reference ref="BSC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="MCC"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="NOS"/>
+          <reference ref="OHB"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TRS"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="VOI"/>
+        </item>
+        <item name="Pumping Station" type="closedway,multipolygon,node" preset_name_label="true">
+          <key key="FCODE" value="AQ116"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="PPO"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Transportation Station" type="closedway,multipolygon,node" preset_name_label="true">
+          <key key="FCODE" value="AQ125"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TRS"/>
+          <reference ref="TUC"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Tunnel" type="closedway,multipolygon,way" preset_name_label="true">
+          <key key="FCODE" value="AQ130"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TRS"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Roadside Rest Area" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="AQ135"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="RST"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Vehicle Lot" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="AQ140"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="RST"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Causeway Structure" type="way,closedway" preset_name_label="true">
+          <key key="FCODE" value="AQ063"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="MCC"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TRS"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="WLE"/>
+        </item>
+        <item name="Ferry Crossing" type="way,closedway,node" preset_name_label="true">
+          <key key="FCODE" value="AQ070"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TRS"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Ice Route" type="way,closedway" preset_name_label="true">
+          <key key="FCODE" value="AQ075"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Pipeline" type="way,closedway" preset_name_label="true">
+          <key key="FCODE" value="AQ113"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="LOC"/>
+          <reference ref="PPO"/>
+          <reference ref="RTA"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Culvert" type="node" preset_name_label="true">
+          <key key="FCODE" value="AQ065"/>
+          <reference ref="ACC"/>
+          <reference ref="AOO"/>
+          <reference ref="CCN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="WID"/>
+        </item>
+        <item name="Entrance and/or Exit" type="node" preset_name_label="true">
+          <key key="FCODE" value="AQ090"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Mooring Mast" type="node" preset_name_label="true">
+          <key key="FCODE" value="AQ110"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="HGT"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="VOI"/>
+        </item>
+      </group>
+      <group name="Communication/Transmission" icon="presets/power/line.svg">
+        <item name="Communication Station" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="AT050"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="HGT"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="NST"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="VOI"/>
+        </item>
+        <item name="Power Line" type="way,closedway" preset_name_label="true">
+          <key key="FCODE" value="AT030"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="HGT"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="VOI"/>
+        </item>
+        <item name="Cableway" type="way,closedway" preset_name_label="true">
+          <key key="FCODE" value="AT041"/>
+          <reference ref="ACC"/>
+          <reference ref="CAT"/>
+          <reference ref="CCN"/>
+          <reference ref="FUC"/>
+          <reference ref="HGT"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="VOI"/>
+        </item>
+        <item name="Communication Line" type="way,closedway" preset_name_label="true">
+          <key key="FCODE" value="AT060"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="HGT"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="VOI"/>
+        </item>
+        <item name="Dish Aerial" type="node" preset_name_label="true">
+          <key key="FCODE" value="AT010"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="HGT"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="VOI"/>
+        </item>
+        <item name="Pylon" type="node" preset_name_label="true">
+          <key key="FCODE" value="AT042"/>
+          <reference ref="ACC"/>
+          <reference ref="CAB"/>
+          <reference ref="CCN"/>
+          <reference ref="HGT"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TOS"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="VOI"/>
+        </item>
+        <item name="Radar Station" type="node" preset_name_label="true">
+          <key key="FCODE" value="AT045"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="RAC"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+      </group>
+    </group>
+    <group name="Hydrography" icon="presets/nautical/waterway_river.svg">
+      <group name="Coastal Hydrography" icon="presets/nautical/coast_line.svg">
+        <item name="Island" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="BA030"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Tidal Water" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="BA040"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NA2"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Beach" type="closedway,multipolygon,node" preset_name_label="true">
+          <key key="FCODE" value="BA050"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SMC"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Land Water Boundary" type="way,closedway" preset_name_label="true">
+          <key key="FCODE" value="BA010"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SLT"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+      </group>
+      <group name="Ports and Harbors" icon="presets/nautical/marina.svg">
+        <item name="Harbour" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="BB005"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FHC"/>
+          <reference ref="FUN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Breakwater" type="closedway,multipolygon,way" preset_name_label="true">
+          <key key="FCODE" value="BB041"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="MCC"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="WLE"/>
+        </item>
+        <item name="Groin" type="closedway,multipolygon,way" preset_name_label="true">
+          <key key="FCODE" value="BB043"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="MCC"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="WLE"/>
+        </item>
+        <item name="Dry Dock" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="BB090"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="MCC"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Training Wall" type="closedway,multipolygon,way" preset_name_label="true">
+          <key key="FCODE" value="BB140"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="MCC"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Berthing Structure" type="closedway,multipolygon,way" preset_name_label="true">
+          <key key="FCODE" value="BB190"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FAC"/>
+          <reference ref="FUN"/>
+          <reference ref="MCC"/>
+          <reference ref="PWC"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="WLE"/>
+        </item>
+        <item name="Slipway" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="BB240"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="WLE"/>
+        </item>
+        <item name="Seawall" type="way,closedway" preset_name_label="true">
+          <key key="FCODE" value="BB230"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="MCC"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="WID"/>
+        </item>
+        <item name="Maritime Signal Station" type="node" preset_name_label="true">
+          <key key="FCODE" value="BB155"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="STA"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+      </group>
+      <group name="Dangers/Hazards" icon="presets/misc/danger.svg">
+        <item name="Structural Pile" type="closedway,multipolygon,node" preset_name_label="true">
+          <key key="FCODE" value="BD100"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Reef" type="closedway,multipolygon,way" preset_name_label="true">
+          <key key="FCODE" value="BD120"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="COD"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="WLE"/>
+        </item>
+        <item name="Offshore Platform" type="node" preset_name_label="true">
+          <key key="FCODE" value="BD110"/>
+          <reference ref="ACC"/>
+          <reference ref="AFA"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="HGT"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="OPC"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="VOI"/>
+        </item>
+        <item name="Hazardous Rock" type="node" preset_name_label="true">
+          <key key="FCODE" value="BD130"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="WLE"/>
+        </item>
+        <item name="Wreck" type="node" preset_name_label="true">
+          <key key="FCODE" value="BD180"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+      </group>
+      <group name="Inland Water" icon="presets/nautical/water.svg">
+        <item name="Aqueduct" type="closedway,multipolygon,way,node" preset_name_label="true">
+          <key key="FCODE" value="BH010"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="CDA"/>
+          <reference ref="FUN"/>
+          <reference ref="LOC"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Bog" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="BH015"/>
+          <reference ref="ACC"/>
+          <reference ref="BOC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Canal" type="closedway,multipolygon,way" preset_name_label="true">
+          <key key="FCODE" value="BH020"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="CDA"/>
+          <reference ref="FUN"/>
+          <reference ref="HYP"/>
+          <reference ref="LOC"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Ditch" type="closedway,multipolygon,way" preset_name_label="true">
+          <key key="FCODE" value="BH030"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="CDA"/>
+          <reference ref="FUN"/>
+          <reference ref="HYP"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Water Treatment Bed" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="BH040"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Mariculture Site" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="BH050"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Fish Farm Facility" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="BH051"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Lake" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="BH080"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="HYP"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SCC"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Land Subject to Inundation" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="BH090"/>
+          <reference ref="ACC"/>
+          <reference ref="AZC"/>
+          <reference ref="CCN"/>
+          <reference ref="CNS"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Rapids" type="closedway,multipolygon,way,node" preset_name_label="true">
+          <key key="FCODE" value="BH120"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Reservoir" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="BH130"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="HYP"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Rice Field" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="BH135"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FFP"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="River" type="closedway,multipolygon,way" preset_name_label="true">
+          <key key="FCODE" value="BH140"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="CDA"/>
+          <reference ref="HYP"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TID"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="WCC"/>
+          <reference ref="WST"/>
+        </item>
+        <item name="Salt Flat" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="BH150"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Salt Evaporator" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="BH155"/>
+          <reference ref="ACC"/>
+          <reference ref="AZC"/>
+          <reference ref="CCN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Sabkha" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="BH160"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Spillway" type="closedway,multipolygon,way" preset_name_label="true">
+          <key key="FCODE" value="BH165"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Flume" type="way,closedway" preset_name_label="true">
+          <key key="FCODE" value="BH060"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="LOC"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Ford" type="way,closedway,node" preset_name_label="true">
+          <key key="FCODE" value="BH070"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="RST"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Penstock" type="way,closedway" preset_name_label="true">
+          <key key="FCODE" value="BH110"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="LOC"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Waterfall" type="way,closedway,node" preset_name_label="true">
+          <key key="FCODE" value="BH180"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Vanishing Point" type="node" preset_name_label="true">
+          <key key="FCODE" value="BH145"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="WST"/>
+        </item>
+        <item name="Natural Pool" type="node" preset_name_label="true">
+          <key key="FCODE" value="BH170"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="HYP"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="SWT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+      </group>
+      <group name="Miscellaneous Inland Water" icon="presets/nautical/water.svg">
+        <item name="Dam" type="closedway,multipolygon,way,node" preset_name_label="true">
+          <key key="FCODE" value="BI020"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="HGT"/>
+          <reference ref="MCC"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TRS"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="VOI"/>
+        </item>
+        <item name="Lock" type="closedway,multipolygon,way,node" preset_name_label="true">
+          <key key="FCODE" value="BI030"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Sluice Gate" type="way,closedway,node" preset_name_label="true">
+          <key key="FCODE" value="BI040"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="WID"/>
+        </item>
+        <item name="Water Gate" type="way,closedway,node" preset_name_label="true">
+          <key key="FCODE" value="BI041"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="GNC"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="WID"/>
+        </item>
+        <item name="Cistern" type="node" preset_name_label="true">
+          <key key="FCODE" value="BI010"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Water Intake Tower" type="node" preset_name_label="true">
+          <key key="FCODE" value="BI050"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="HGT"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="VOI"/>
+        </item>
+      </group>
+      <group name="Snow/Ice" icon="presets/landmark/glacier.svg">
+        <item name="Moraine" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="BJ020"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Glacier" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="BJ030"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Crevasse" type="closedway,multipolygon,way" preset_name_label="true">
+          <key key="FCODE" value="BJ031"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Snow Field and/or Ice-field" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="BJ100"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Tundra" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="BJ110"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Ice Cliff" type="way,closedway" preset_name_label="true">
+          <key key="FCODE" value="BJ040"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Ice Peak" type="node" preset_name_label="true">
+          <key key="FCODE" value="BJ060"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+      </group>
+    </group>
+    <group name="Physiography" icon="presets/landmark/mountain_pass.svg">
+      <group name="Exposed Surface Material" icon="presets/landmark/adit.svg">
+        <item name="Soil Surface Region" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="DA010"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SMC"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+      </group>
+      <group name="Landforms" icon="presets/misc/cliff.svg">
+        <item name="Crevice" type="closedway,multipolygon,way" preset_name_label="true">
+          <key key="FCODE" value="DB061"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Embankment" type="closedway,multipolygon,way" preset_name_label="true">
+          <key key="FCODE" value="DB090"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FIC"/>
+          <reference ref="MCC"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TRS"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Geothermal Outlet" type="closedway,multipolygon,node" preset_name_label="true">
+          <key key="FCODE" value="DB115"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Rock Formation" type="closedway,multipolygon,way,node" preset_name_label="true">
+          <key key="FCODE" value="DB160"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="RKF"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Sand Dunes" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="DB170"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDO"/>
+          <reference ref="SDP"/>
+          <reference ref="SDT"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Volcano" type="closedway,multipolygon,node" preset_name_label="true">
+          <key key="FCODE" value="DB180"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="VGT"/>
+        </item>
+        <item name="Gully" type="closedway,multipolygon,way" preset_name_label="true">
+          <key key="FCODE" value="DB200"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Steep Terrain Face" type="way,closedway" preset_name_label="true">
+          <key key="FCODE" value="DB010"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Cut" type="way,closedway" preset_name_label="true">
+          <key key="FCODE" value="DB070"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SMC"/>
+          <reference ref="SRT"/>
+          <reference ref="TRS"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="WID"/>
+        </item>
+        <item name="Cut Line" type="way,closedway" preset_name_label="true">
+          <key key="FCODE" value="DB071"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Esker" type="way,closedway" preset_name_label="true">
+          <key key="FCODE" value="DB100"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Geologic Fault" type="way,closedway" preset_name_label="true">
+          <key key="FCODE" value="DB110"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="WID"/>
+        </item>
+        <item name="Cave Mouth" type="node" preset_name_label="true">
+          <key key="FCODE" value="DB029"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Mountain Pass" type="node" preset_name_label="true">
+          <key key="FCODE" value="DB150"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+      </group>
+    </group>
+    <group name="Vegetation" icon="presets/landmark/trees.svg">
+      <group name="Cropland" icon="presets/landuse/farmland.svg">
+        <item name="Crop Land" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="EA010"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="CSP"/>
+          <reference ref="DMT"/>
+          <reference ref="FFP"/>
+          <reference ref="FMM"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Orchard" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="EA040"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="CSP"/>
+          <reference ref="DMT"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Vineyard" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="EA050"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Hop Field" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="EA055"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Hedgerow" type="way,closedway" preset_name_label="true">
+          <key key="FCODE" value="EA020"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+      </group>
+      <group name="Rangeland" icon="presets/landuse/meadow.svg">
+        <item name="Grassland" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="EB010"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="VEG"/>
+        </item>
+        <item name="Thicket" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="EB020"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="DMB"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+      </group>
+      <group name="Woodland" icon="presets/landmark/forest.svg">
+        <item name="Cane" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="EC010"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Oasis" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="EC020"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Wood" type="closedway,multipolygon,way,node" preset_name_label="true">
+          <key key="FCODE" value="EC030"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="DMT"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TRE"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="VSP"/>
+        </item>
+        <item name="Cleared Way" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="EC040"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Forest Clearing" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="EC060"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+      </group>
+      <group name="Wetlands" icon="presets/landuse/wetland.svg">
+        <item name="Marsh" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="ED010"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TID"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Swamp" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="ED020"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="DMT"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TID"/>
+          <reference ref="TRE"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="VEG"/>
+          <reference ref="VSP"/>
+        </item>
+        <item name="Mangrove Swamp" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="ED030"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="DMT"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TID"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+      </group>
+    </group>
+    <group name="Demarcation" icon="presets/barrier/lift_gate.svg">
+      <group name="Boundaries/Limits/Zones (Topographic)" icon="presets/place/village.svg">
+        <item name="Firing Range" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="FA015"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FRT"/>
+          <reference ref="FUN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Test Site" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="FA100"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Geophysical Prospecting Grid" type="way,closedway" preset_name_label="true">
+          <key key="FCODE" value="FA090"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+      </group>
+    </group>
+    <group name="Aeronautical Information" icon="presets/transport/airport.svg">
+      <group name="Air Route" icon="presets/transport/airport/windsock.svg">
+        <item name="Aeronautical Radio Navigation Service" type="node" preset_name_label="true">
+          <key key="FCODE" value="GA034"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NST"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+      </group>
+      <group name="Aerodrome" icon="presets/transport/airport.svg">
+        <item name="Land Aerodrome" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="GB005"/>
+          <reference ref="ACC"/>
+          <reference ref="CAA"/>
+          <reference ref="CCN"/>
+          <reference ref="COD"/>
+          <reference ref="FPT"/>
+          <reference ref="FUN"/>
+          <reference ref="IKO"/>
+          <reference ref="NAM"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="ZVA"/>
+        </item>
+        <item name="Apron" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="GB015"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="RST"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SFS"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Heliport" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="GB035"/>
+          <reference ref="ACC"/>
+          <reference ref="CAA"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="IKO"/>
+          <reference ref="NAM"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="ZVA"/>
+        </item>
+        <item name="Stopway" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="GB045"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="RST"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SFS"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Runway" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="GB055"/>
+          <reference ref="ACC"/>
+          <reference ref="AOO"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="LEN"/>
+          <reference ref="NAM"/>
+          <reference ref="PRM"/>
+          <reference ref="RST"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SFS"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="ZVA"/>
+        </item>
+        <item name="Water Aerodrome" type="closedway,multipolygon,node" preset_name_label="true">
+          <key key="FCODE" value="GB065"/>
+          <reference ref="ACC"/>
+          <reference ref="CAA"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="IKO"/>
+          <reference ref="NAM"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="ZVA"/>
+        </item>
+        <item name="Taxiway" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="GB075"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="RST"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SFS"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Aircraft Hangar" type="closedway,multipolygon,node" preset_name_label="true">
+          <key key="FCODE" value="GB230"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Aircraft Revetment" type="way,closedway,node" preset_name_label="true">
+          <key key="FCODE" value="GB050"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Helipad" type="node" preset_name_label="true">
+          <key key="FCODE" value="GB030"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="HAF"/>
+          <reference ref="RST"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="ZVA"/>
+        </item>
+        <item name="Launch Pad" type="node" preset_name_label="true">
+          <key key="FCODE" value="GB040"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Aeronautical Obstacle" type="node" preset_name_label="true">
+          <key key="FCODE" value="GB220"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="HGT"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+          <reference ref="VOI"/>
+        </item>
+        <item name="Approach Lighting System" type="node" preset_name_label="true">
+          <key key="FCODE" value="GB485"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="LFA"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+      </group>
+    </group>
+    <group name="Special Use (Dataset-specific)" icon="presets/sightseeing/attraction.svg">
+      <group name="Dataset Development" icon="presets/misc/construction.svg">
+        <item name="Military Installation" type="closedway,multipolygon,node" preset_name_label="true">
+          <key key="FCODE" value="SU001"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="FUN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+      </group>
+    </group>
+    <group name="General" icon="presets/place/locality.svg">
+      <group name="Miscellaneous" icon="presets/misc/name.svg">
+        <item name="Void Collection Area" type="closedway,multipolygon" preset_name_label="true">
+          <key key="FCODE" value="ZD020"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+        <item name="Named Location" type="node" preset_name_label="true">
+          <key key="FCODE" value="ZD040"/>
+          <reference ref="ACC"/>
+          <reference ref="CCN"/>
+          <reference ref="NAM"/>
+          <reference ref="NFI"/>
+          <reference ref="NFN"/>
+          <reference ref="SDP"/>
+          <reference ref="SDV"/>
+          <reference ref="SRT"/>
+          <reference ref="TXT"/>
+          <reference ref="UID"/>
+        </item>
+      </group>
+    </group>
+  </group>
+</presets>
