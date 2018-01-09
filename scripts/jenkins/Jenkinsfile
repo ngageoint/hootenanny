@@ -4,14 +4,14 @@ pipeline {
         // Set nightly triggers
         cron((BRANCH_NAME == "master" || BRANCH_NAME == "develop") ? "H H(21-22) * * 1-5" : "")
     }
-    // Checkbox parameters for users to skip steps and control pipeline behavior
+    // Configurable parameters for users to skip steps and control pipeline behavior
     parameters {
-        // TODO: Need logic to reuse VM.  Current logic destroys it every run
         booleanParam(name: 'Destroy_VM', defaultValue: true)
         booleanParam(name: 'Static_analysis', defaultValue: true)
         booleanParam(name: 'License_headers', defaultValue: true)
         booleanParam(name: 'Configure_Tests', defaultValue: false)
         booleanParam(name: 'Hoot_provision', defaultValue: true)
+        booleanParam(name: 'Build', defaultValue: true)
         booleanParam(name: 'Core_tests', defaultValue: true)
         booleanParam(name: 'Services_tests', defaultValue: true)
         booleanParam(name: 'UI_tests', defaultValue: true)
@@ -48,9 +48,7 @@ pipeline {
             }
         }
         stage("License Header") {
-            when {
-                expression { return params.License_headers }
-            }
+            when { expression { return params.License_headers } }
             steps {
                 script { 
                     sh '''
@@ -82,7 +80,8 @@ pipeline {
                 sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; ./scripts/TestConfigure.sh &> Hoot_Config_Test || { cat Hoot_Config_Test; false; }'"
             }
         }
-        stage("Vagrant Provision") {
+        stage("Build") {
+            when { expression { return params.Destroy_VM } }
             steps {
                 // NOTE: Ubuntu only, may need more complex logic if other OS are included in pipeline
                 sh '''
@@ -97,17 +96,13 @@ pipeline {
             }       
         }
         stage("Core Tests") {
-            when {
-                expression { return params.Core_tests }
-            }
+            when { expression { return params.Core_tests } }
             steps {
                 sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot --version --debug; bin/HootTest --diff --glacial --parallel \$(nproc)'"
             }
         }
         stage("Services Tests") {
-            when {
-                expression { return params.Services_tests }
-            }
+            when { expression { return params.Services_tests } }
             steps {
                 sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` pp-test'"
                 sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` plugins-test'"
@@ -115,9 +110,7 @@ pipeline {
             }
         }
         stage("UI Tests") {
-            when {
-                expression { return params.UI_tests }
-            }
+            when { expression { return params.UI_tests } }
             steps {
                 sh "vagrant ssh ${params.Box} -c 'cd hoot; make -s ui-test'"
             }
@@ -131,21 +124,14 @@ pipeline {
         }
         failure {
             script {
-                // Check to see if we failed last time
-                if (currentBuild.previousBuild.result == 'FAILURE') {
-                    // Copy over any UI failure screenshots
-                    sh "vagrant scp ${params.Box}:~/hoot/test-files/ui/screenshot_*.png ./test-files/ui/"
-                    emailext (
-                        to: '$DEFAULT_RECIPIENTS',
-                        subject: "Still Failing: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                        mimeType: 'text/html',
-                        attachmentsPattern: 'test-files/ui/screenshot_*.png',
-                        body: """<p>Failure: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-                            <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
-                            recipientProviders: [
-                                [$class: 'DevelopersRecipientProvider'],
-                                [$class: 'CulpritsRecipientProvider'],
-                                [$class: 'RequesterRecipientProvider']]
+                // Copy over any UI failure screenshots
+                sh "vagrant scp ${params.Box}:~/hoot/test-files/ui/screenshot_*.png ./test-files/ui/"
+                emailext (
+                    subject: "Failure: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                    attachmentsPattern: 'test-files/ui/screenshot_*.png',
+                    body: """<p>Failure: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+                    <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
+                    recipientProviders: [[$class: 'DevelopersRecipientProvider']]
                     )
                 }
             }
@@ -155,31 +141,10 @@ pipeline {
                 // Job has been fixed
                 if (currentBuild.currentResult == 'SUCCESS') {
                     emailext (
-                        to: '$DEFAULT_RECIPIENTS',
                         subject: "Back to normal: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                        mimeType: 'text/html',
-                        attachmentsPattern: 'test-files/ui/screenshot_*.png',
                         body: """<p>Fixed: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
                             <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
-                            recipientProviders: [
-                                [$class: 'DevelopersRecipientProvider'],
-                                [$class: 'CulpritsRecipientProvider'],
-                                [$class: 'RequesterRecipientProvider']]
-                        )
-                } else  if (currentBuild.currentResult == 'FAILURE') {
-                    // Copy over any UI failure screenshots
-                    sh "vagrant scp ${params.Box}:~/hoot/test-files/ui/screenshot_*.png ./test-files/ui/"
-                    emailext (
-                        to: '$DEFAULT_RECIPIENTS',
-                        subject: "Failed: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                        mimeType: 'text/html',
-                        attachmentsPattern: 'test-files/ui/screenshot_*.png',
-                        body: """<p>Fixed: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-                        <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
-                            recipientProviders: [
-                                [$class: 'DevelopersRecipientProvider'],
-                                [$class: 'CulpritsRecipientProvider'],
-                                [$class: 'RequesterRecipientProvider']]
+                            recipientProviders: [[$class: 'DevelopersRecipientProvider']]
                     )
                 }
             }
