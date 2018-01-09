@@ -380,18 +380,6 @@ QStringList Tags::getMatchingKeys(const QStringList& k)
   return result;
 }
 
-bool Tags::hasAnyKey(const QStringList keys) const
-{
-  for (int i = 0; i < keys.size(); i++)
-  {
-    if (contains(keys[i]))
-    {
-      return true;
-    }
-  }
-  return false;
-}
-
 QStringList Tags::getNames() const
 {
   QStringList result;

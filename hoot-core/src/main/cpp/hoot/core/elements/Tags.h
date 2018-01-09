@@ -121,15 +121,6 @@ public:
    */
   QStringList getMatchingKeys(const QStringList& k);
 
-  //TODO: get rid of this
-  /**
-   *
-   *
-   * @param keys
-   * @return
-   */
-  bool hasAnyKey(const QStringList keys) const;
-
   /**
    * Return all the keys that are used in names.
    */
