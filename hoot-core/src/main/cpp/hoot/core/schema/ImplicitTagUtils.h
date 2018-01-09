@@ -37,15 +37,29 @@ namespace hoot
 class Tags;
 
 /**
- *
+ * Miscellaneous functionality used by multiple implicit tagging classes
  */
 class ImplicitTagUtils
 {
 
 public:
 
+  /**
+   * Cleans unwanted parts from a feature name string before implicit tag processing
+   *
+   * @param name name to clean
+   */
   static void cleanName(QString& name);
 
+  /**
+   * Translates all input names to English
+   *
+   * The hoot translator doesn't seem to perform as well as it should, though.
+   *
+   * @param names names to translate
+   * @param tags tags to retrieve additional names from
+   * @return a collection of translated name strings
+   */
   static QStringList translateNamesToEnglish(const QStringList names, const Tags& tags);
 
 };
