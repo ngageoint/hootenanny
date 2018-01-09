@@ -7,21 +7,27 @@ pipeline {
     // Checkbox parameters for users to skip steps and control pipeline behavior
     parameters {
         // TODO: Need logic to reuse VM.  Current logic destroys it every run
-        //booleanParam(name: 'Destroy_VM (Coming Soon)',
-        //    defaultValue: true)
+        booleanParam(name: 'Destroy_VM', defaultValue: true)
         booleanParam(name: 'Static_analysis', defaultValue: true)
         booleanParam(name: 'License_headers', defaultValue: true)
         booleanParam(name: 'Configure_Tests', defaultValue: false)
+        booleanParam(name: 'Hoot_provision', defaultValue: true)
         booleanParam(name: 'Core_tests', defaultValue: true)
         booleanParam(name: 'Services_tests', defaultValue: true)
         booleanParam(name: 'UI_tests', defaultValue: true)
         string(name: 'Box', defaultValue: 'hoot_centos7', description: 'Vagrant Box')
     }
     stages {
-        stage("Setup") {
+        stage("Destroy VM") {
+            when { expression { return params.Destroy_VM } }
             steps {
                 // Attempt to destroy exiting VM but don't stop job if not there
                 sh "vagrant destroy -f ${params.Box} || true"
+            }
+        }
+        stage("Setup") {
+            steps {
+                
                 // Make sure we have the tags info because figuring out the version is required in the build process
                 sh '''
                     git fetch --tags
@@ -54,7 +60,8 @@ pipeline {
                 }
             }
         }
-        stage("Vagrant Up") {
+        stage("Hoot Provision") {
+            when { expression { return params.Hoot_provision } }
             steps {
                 // NOTE: Only installs hoot build dependencies
                 sh "vagrant up ${params.Box} --provision-with software,hoot --provider aws"
