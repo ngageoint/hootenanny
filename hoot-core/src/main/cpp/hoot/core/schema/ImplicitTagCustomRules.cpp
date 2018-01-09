@@ -23,6 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ImplicitTagCustomRules.h"
 
