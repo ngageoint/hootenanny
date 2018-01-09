@@ -76,6 +76,10 @@ PluginContext::PluginContext()
 
 PluginContext::~PluginContext()
 {
+  // Get our context & exit
+  Isolate* current = v8Engine::getIsolate();
+  Handle<Context> context = _context.Get(current);
+  context->Exit();
 }
 
 Local<Value> PluginContext::call(Handle<Object> obj, QString name, QList<QVariant> args)
