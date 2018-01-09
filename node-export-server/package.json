@@ -8,8 +8,7 @@
     "express": "4.13.1",
     "lodash": "3.10.0",
     "node-uuid": "1.4.3",
-    "rimraf": "2.4.2",
-    "escape-json-node": "1.0.6"
+    "rimraf": "2.4.2"
   },
   "devDependencies": {
     "mocha": "2.2.5",
