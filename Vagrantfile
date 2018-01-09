@@ -26,13 +26,13 @@ Vagrant.configure(2) do |config|
   disableForwarding = ENV['DISABLE_VAGRANT_FORWARDING']
   if disableForwarding.nil?
     # tomcat service
-    #config.vm.network "forwarded_port", guest: 8080, host: tomcatPort
+    config.vm.network "forwarded_port", guest: 8080, host: tomcatPort
     # translation nodejs service
-    #config.vm.network "forwarded_port", guest: 8094, host: transPort
+    config.vm.network "forwarded_port", guest: 8094, host: transPort
     # merge nodejs service
-    #config.vm.network "forwarded_port", guest: 8096, host: mergePort
+    config.vm.network "forwarded_port", guest: 8096, host: mergePort
     # node-mapnik-server nodejs service
-    #config.vm.network "forwarded_port", guest: 8000, host: mapnikPort
+    config.vm.network "forwarded_port", guest: 8000, host: mapnikPort
   end
 
   def aws_provider(config, os)
