@@ -9,6 +9,7 @@ var config = require('configure');
 var _ = require('lodash');
 var rmdir = require('rimraf');
 var crypto = require('crypto');
+var escapeJSON = require('escape-json-node');
 var done = false;
 var dir;
 var jobs = {};
@@ -31,8 +32,7 @@ app.get('/options', function(req, res) {
     res.json({
         Datasource: _.keys(config.datasources),
         Schema: _.keys(config.schemas),
-        Format: _.keys(config.formats),
-        SetTagOverrides: JSON.stringify(config.tagOverrides)
+        Format: _.keys(config.formats)
     });
 });
 
@@ -235,7 +235,7 @@ function doExport(req, res, hash, input) {
             + '.zip';
 
         var command = '';
-        var overrideTags = JSON.stringify(config.tagOverrides);
+        var overrideTags = escapeJSON(JSON.stringify(config.tagOverrides));
         //if conn is url, write that response to a file
         //handle different flavors of bbox param
         var bbox_param = 'convert.bounding.box';
@@ -259,14 +259,14 @@ function doExport(req, res, hash, input) {
         if (isFile) {
             command += ' convert';
             if (bbox) command += ' -D ' + bbox_param + '=' + bbox;
-            if (req.query.overrideTags) command += ' -D tags.override=' + overrideTags;
+            if (req.query.overrideTags) command += ' -D translation.override=' + overrideTags;
             if (req.params.schema !== 'OSM' && config.schemas[req.params.schema] !== '') {
                 command += ' -D convert.ops=hoot::TranslationOp -D translation.script=' + config.schemas[req.params.schema] + ' -D translation.direction=toogr';
             }
         } else {
             command += ' osm2ogr';
             if (req.params.schema === 'OSM') command += ' -D writer.include.debug.tags=true';
-            if (req.query.overrideTags) command +=  ' -D tags.override=' + overrideTags;
+            if (req.query.overrideTags) command +=  ' -D translation.override=' + overrideTags;
             if (bbox) command += ' -D ' + bbox_param + '=' + bbox;
             command += ' ' + config.schemas[req.params.schema];
         }
