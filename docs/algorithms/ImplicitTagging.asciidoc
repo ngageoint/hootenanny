@@ -2,7 +2,7 @@
 [[implicit-tagging]]
 == Implicit Tagging Based On Name
 
-Hootenanny has the capability to derive type tag information automatically for POIs based soley on the contents of their name tags.  This feature can be used simply to add better tags to poorly typed data or to add tags with the goal of improving conflated output between datasets.  Specifics on how to use this feature are described in the "Implicit Element Type Tagging Based On Name" section of the Hootenanny User Guide.  Specifics on how to generate a new implicit tag rules database are described in the "Hootenanny Implicit Tag Rules Database Generation" section of the Hootenanny Developer Guide.  This section gives an overview of 
+Hootenanny has the capability to derive type tag information automatically for POIs based soley on the contents of a POIs name tags.  This feature can be used simply to add better tags to poorly typed data or to improve conflated output between datasets.  Specifics on how to use this feature are described in the "Implicit Element Type Tagging Based On Name" section of the Hootenanny User Guide.  Specifics on how to generate a new implicit tag rules database are described in the "Hootenanny Implicit Tag Rules Database Generation" section of the Hootenanny Developer Guide.  This section gives an overview of 
 how the implicit tagging works and its current performance results.
 
 === Approach
