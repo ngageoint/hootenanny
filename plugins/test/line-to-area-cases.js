@@ -22,171 +22,171 @@ describe('TranslationServer', function () {
 
             xml2js.parseString(trans2tds40, function(err, result) {
                 if (err) console.log(err);
-                assert.equal(result.osm.way[0].tag[0].$.k, "F_CODE");
-                assert.equal(result.osm.way[0].tag[0].$.v, "AA011");
+                assert.equal(result.osm.way[0].tag[1].$.k, "F_CODE");
+                assert.equal(result.osm.way[0].tag[1].$.v, "AA011");
             });
         });
-        // it('should handle OSM to TDSv61', function() {
-        //     var trans2tds61 = server.handleInputs({
-        //         osm: "<osm version='0.6' generator='JOSM'><way id='-39158' visible='true'><nd ref='-39156' /><nd ref='-39157' /><tag k='natural' v='shear_wall' /></way></osm>",
-        //         method: 'POST',
-        //         translation: 'TDSv61',
-        //         path: '/translateTo'
-        //     });
+        it('should handle OSM to TDSv61', function() {
+            var trans2tds61 = server.handleInputs({
+                osm: "<osm version='0.6' generator='JOSM'><way id='-39158' visible='true'><nd ref='-39156' /><nd ref='-39157' /><tag k='natural' v='shear_wall' /></way></osm>",
+                method: 'POST',
+                translation: 'TDSv61',
+                path: '/translateTo'
+            });
 
-        //     xml2js.parseString(trans2tds61, function(err, result) {
-        //         if (err) console.log(err);
-        //         assert.equal(result.osm.way[0].tag[0].$.k, "F_CODE");
-        //         assert.equal(result.osm.way[0].tag[0].$.v, "AA011");
-        //     });
-        // });
-        // it('should handle OSM to MGCP', function() {
-        //     var trans2mgcp = server.handleInputs({
-        //         osm: "<osm version='0.6' generator='JOSM'><way id='-39158' visible='true'><nd ref='-39156' /><nd ref='-39157' /><tag k='natural' v='shear_wall' /></way></osm>",
-        //         method: 'POST',
-        //         translation: 'TDSv61',
-        //         path: '/translateTo'
-        //     });
+            xml2js.parseString(trans2tds61, function(err, result) {
+                if (err) console.log(err);
+                assert.equal(result.osm.way[0].tag[1].$.k, "F_CODE");
+                assert.equal(result.osm.way[0].tag[1].$.v, "AA011");
+            });
+        });
+        it('should not find OSM to MGCP translation', function() {
+            var trans2mgcp = server.handleInputs({
+                osm: "<osm version='0.6' generator='JOSM'><way id='-39158' visible='true'><nd ref='-39156' /><nd ref='-39157' /><tag k='natural' v='shear_wall' /></way></osm>",
+                method: 'POST',
+                translation: 'MGCP',
+                path: '/translateTo'
+            });
 
-        //     xml2js.parseString(trans2mgcp, function(err, result) {
-        //         if (err) console.log(err);
-        //         assert.equal(result.osm.way[0].tag[0].$.k, "FCODE");
-        //         assert.equal(result.osm.way[0].tag[0].$.v, "AA011");
-        //     });
-        // });
-        // it('should handle OSM to GGDMv30', function() {
-        //     var trans2ggdmv30 = server.handleInputs({
-        //         osm: "<osm version='0.6' generator='JOSM'><way id='-39158' visible='true'><nd ref='-39156' /><nd ref='-39157' /><tag k='natural' v='shear_wall' /></way></osm>",
-        //         method: 'POST',
-        //         translation: 'TDSv61',
-        //         path: '/translateTo'
-        //     });
+            xml2js.parseString(trans2mgcp, function(err, result) {
+                if (err) console.log(err);
+                assert.equal(result.osm.way[0].tag[0].$.k, "error");
+                assert.equal(result.osm.way[0].tag[0].$.v, "Line geometry is not valid for AA011 in MGCP TRD4");
+            });
+        });
+        it('should handle OSM to GGDMv30', function() {
+            var trans2ggdmv30 = server.handleInputs({
+                osm: "<osm version='0.6' generator='JOSM'><way id='-39158' visible='true'><nd ref='-39156' /><nd ref='-39157' /><tag k='natural' v='shear_wall' /></way></osm>",
+                method: 'POST',
+                translation: 'GGDMv30',
+                path: '/translateTo'
+            });
 
-        //     xml2js.parseString(trans2ggdmv30, function(err, result) {
-        //       if (err) console.log(err);
-        //       assert.equal(result.osm.way[0].tag[0].$.k, "F_CODE");
-        //       assert.equal(result.osm.way[0].tag[0].$.v, "AA011")
-        //     })
-        // })
+            xml2js.parseString(trans2ggdmv30, function(err, result) {
+              if (err) console.log(err);
+              assert.equal(result.osm.way[0].tag[1].$.k, "F_CODE");
+              assert.equal(result.osm.way[0].tag[1].$.v, "AA011")
+            })
+        })
     });
 
-    describe('excavating machine (AF050) OSM to ORG tranlsations', function() {
-        it('should handle OSM to TDSv40', function() {
-            var trans2tds40 = server.handleInputs({
-                osm: "<osm version='0.6' generator='JOSM'> <way id='-39012' visible='true'><nd ref='-39010' /><nd ref='-39011' /><tag k='ele:max' v='324' /><tag k='man_made' v='excavating_machine' /><tag k='uuid' v='{9c1b7b24-c3c9-4ef1-aaf0-1d279f4f232d}' /></way></osm>",
-                method: 'POST',
-                translation: 'TDSv40',
-                path: '/translateTo'
-            });  
+    // describe('excavating machine (AF050) OSM to ORG tranlsations', function() {
+    //     it('should handle OSM to TDSv40', function() {
+    //         var trans2tds40 = server.handleInputs({
+    //             osm: "<osm version='0.6' generator='JOSM'> <way id='-39012' visible='true'><nd ref='-39010' /><nd ref='-39011' /><tag k='ele:max' v='324' /><tag k='man_made' v='excavating_machine' /><tag k='uuid' v='{9c1b7b24-c3c9-4ef1-aaf0-1d279f4f232d}' /></way></osm>",
+    //             method: 'POST',
+    //             translation: 'TDSv40',
+    //             path: '/translateTo'
+    //         });  
 
-            xml2js.parseString(trans2tds40, function(err, result) {
-                if (err) console.log(err);
-                assert.equal(result.osm.way[0].tag[0].$.k, "F_CODE");
-                assert.equal(result.osm.way[0].tag[0].$.v, "AD030");
-            });
-        });
+    //         xml2js.parseString(trans2tds40, function(err, result) {
+    //             if (err) console.log(err);
+    //             assert.equal(result.osm.way[0].tag[1].$.k, "F_CODE");
+    //             assert.equal(result.osm.way[0].tag[1].$.v, "AD030");
+    //         });
+    //     });
 
-        it('should handle OSM to TDSv61', function() {
-            var trans2tds61 = server.handleInputs({
-                osm: "<osm version='0.6' generator='JOSM'> <way id='-39012' visible='true'><nd ref='-39010' /><nd ref='-39011' /><tag k='ele:max' v='324' /><tag k='man_made' v='excavating_machine' /><tag k='uuid' v='{9c1b7b24-c3c9-4ef1-aaf0-1d279f4f232d}' /></way></osm>",
-                method: 'POST',
-                translation: 'TDSv61',
-                path: '/translateTo'
-            });
+    //     it('should handle OSM to TDSv61', function() {
+    //         var trans2tds61 = server.handleInputs({
+    //             osm: "<osm version='0.6' generator='JOSM'> <way id='-39012' visible='true'><nd ref='-39010' /><nd ref='-39011' /><tag k='ele:max' v='324' /><tag k='man_made' v='excavating_machine' /><tag k='uuid' v='{9c1b7b24-c3c9-4ef1-aaf0-1d279f4f232d}' /></way></osm>",
+    //             method: 'POST',
+    //             translation: 'TDSv61',
+    //             path: '/translateTo'
+    //         });
 
-            xml2js.parseString(trans2tds61, function(err, result) {
-                if (err) console.log(err);
-                assert.equal(result.osm.way[0].tag[0].$.k, "F_CODE");
-                assert.equal(result.osm.way[0].tag[0].$.v, "AD030");
-            });
-        });
-        it('should handle OSM to MGCP', function() {
-            var trans2mgcp = server.handleInputs({
-                osm: "<osm version='0.6' generator='JOSM'> <way id='-39012' visible='true'><nd ref='-39010' /><nd ref='-39011' /><tag k='ele:max' v='324' /><tag k='man_made' v='excavating_machine' /><tag k='uuid' v='{9c1b7b24-c3c9-4ef1-aaf0-1d279f4f232d}' /></way></osm>",
-                method: 'POST',
-                translation: 'TDSv61',
-                path: '/translateTo'
-            });
+    //         xml2js.parseString(trans2tds61, function(err, result) {
+    //             if (err) console.log(err);
+    //             assert.equal(result.osm.way[0].tag[1].$.k, "F_CODE");
+    //             assert.equal(result.osm.way[0].tag[1].$.v, "AD030");
+    //         });
+    //     });
+    //     it('should handle OSM to MGCP', function() {
+    //         var trans2mgcp = server.handleInputs({
+    //             osm: "<osm version='0.6' generator='JOSM'> <way id='-39012' visible='true'><nd ref='-39010' /><nd ref='-39011' /><tag k='ele:max' v='324' /><tag k='man_made' v='excavating_machine' /><tag k='uuid' v='{9c1b7b24-c3c9-4ef1-aaf0-1d279f4f232d}' /></way></osm>",
+    //             method: 'POST',
+    //             translation: 'TDSv61',
+    //             path: '/translateTo'
+    //         });
 
-            xml2js.parseString(trans2mgcp, function(err, result) {
-                if (err) console.log(err);
-                assert.equal(result.osm.way[0].tag[0].$.k, "FCODE");
-                assert.equal(result.osm.way[0].tag[0].$.v, "AD030");
-            });
-        });
-        it('should handle OSM to GGDMv30', function() {
-            var trans2ggdmv30 = server.handleInputs({
-                osm: "<osm version='0.6' generator='JOSM'> <way id='-39012' visible='true'><nd ref='-39010' /><nd ref='-39011' /><tag k='ele:max' v='324' /><tag k='man_made' v='excavating_machine' /><tag k='uuid' v='{9c1b7b24-c3c9-4ef1-aaf0-1d279f4f232d}' /></way></osm>",
-                method: 'POST',
-                translation: 'TDSv61',
-                path: '/translateTo'
-            });
+    //         xml2js.parseString(trans2mgcp, function(err, result) {
+    //             if (err) console.log(err);
+    //             assert.equal(result.osm.way[0].tag[1].$.k, "FCODE");
+    //             assert.equal(result.osm.way[0].tag[1].$.v, "AD030");
+    //         });
+    //     });
+    //     it('should handle OSM to GGDMv30', function() {
+    //         var trans2ggdmv30 = server.handleInputs({
+    //             osm: "<osm version='0.6' generator='JOSM'> <way id='-39012' visible='true'><nd ref='-39010' /><nd ref='-39011' /><tag k='ele:max' v='324' /><tag k='man_made' v='excavating_machine' /><tag k='uuid' v='{9c1b7b24-c3c9-4ef1-aaf0-1d279f4f232d}' /></way></osm>",
+    //             method: 'POST',
+    //             translation: 'TDSv61',
+    //             path: '/translateTo'
+    //         });
 
-            xml2js.parseString(trans2ggdmv30, function(err, result) {
-              if (err) console.log(err);
-              assert.equal(result.osm.way[0].tag[0].$.k, "F_CODE");
-              assert.equal(result.osm.way[0].tag[0].$.v, "AD030")
-            })
-        })
-    })
-    describe('excavating machine (AQ111) OSM to ORG tranlsations', function() { 
-        it('should handle OSM to TDSv40', function() {
-            var trans2tds40 = server.handleInputs({
-                osm: "<osm version='0.6' generator='JOSM'><way id='-39104' visible='true'><nd ref='-39102' /><nd ref='-39103' /><nd ref='-39105' /><tag k='man_made' v='watercourse_crossing' /><tag k='uuid' v='{10ffeed9-b866-412d-8d77-2378d2147a03}' /></way></osm>",
-                method: 'POST',
-                translation: 'TDSv40',
-                path: '/translateTo'
-            });  
+    //         xml2js.parseString(trans2ggdmv30, function(err, result) {
+    //           if (err) console.log(err);
+    //           assert.equal(result.osm.way[0].tag[1].$.k, "F_CODE");
+    //           assert.equal(result.osm.way[0].tag[1].$.v, "AD030")
+    //         })
+    //     })
+    // })
+    // describe('excavating machine (AQ111) OSM to ORG tranlsations', function() { 
+    //     it('should handle OSM to TDSv40', function() {
+    //         var trans2tds40 = server.handleInputs({
+    //             osm: "<osm version='0.6' generator='JOSM'><way id='-39104' visible='true'><nd ref='-39102' /><nd ref='-39103' /><nd ref='-39105' /><tag k='man_made' v='watercourse_crossing' /><tag k='uuid' v='{10ffeed9-b866-412d-8d77-2378d2147a03}' /></way></osm>",
+    //             method: 'POST',
+    //             translation: 'TDSv40',
+    //             path: '/translateTo'
+    //         });  
 
-            xml2js.parseString(trans2tds40, function(err, result) {
-                if (err) console.log(err);
-                assert.equal(result.osm.way[0].tag[0].$.k, "F_CODE");
-                assert.equal(result.osm.way[0].tag[0].$.v, "AD030");
-            });
-        });
+    //         xml2js.parseString(trans2tds40, function(err, result) {
+    //             if (err) console.log(err);
+    //             assert.equal(result.osm.way[0].tag[1].$.k, "F_CODE");
+    //             assert.equal(result.osm.way[0].tag[1].$.v, "AD030");
+    //         });
+    //     });
 
-        it('should handle OSM to TDSv61', function() {
-            var trans2tds61 = server.handleInputs({
-                osm: "<osm version='0.6' generator='JOSM'><way id='-39104' visible='true'><nd ref='-39102' /><nd ref='-39103' /><nd ref='-39105' /><tag k='man_made' v='watercourse_crossing' /><tag k='uuid' v='{10ffeed9-b866-412d-8d77-2378d2147a03}' /></way></osm>",
-                method: 'POST',
-                translation: 'TDSv61',
-                path: '/translateTo'
-            });
+    //     it('should handle OSM to TDSv61', function() {
+    //         var trans2tds61 = server.handleInputs({
+    //             osm: "<osm version='0.6' generator='JOSM'><way id='-39104' visible='true'><nd ref='-39102' /><nd ref='-39103' /><nd ref='-39105' /><tag k='man_made' v='watercourse_crossing' /><tag k='uuid' v='{10ffeed9-b866-412d-8d77-2378d2147a03}' /></way></osm>",
+    //             method: 'POST',
+    //             translation: 'TDSv61',
+    //             path: '/translateTo'
+    //         });
 
-            xml2js.parseString(trans2tds61, function(err, result) {
-                if (err) console.log(err);
-                assert.equal(result.osm.way[0].tag[0].$.k, "F_CODE");
-                assert.equal(result.osm.way[0].tag[0].$.v, "AD030");
-            });
-        });
-        it('should handle OSM to MGCP', function() {
-            var trans2mgcp = server.handleInputs({
-                osm: "<osm version='0.6' generator='JOSM'><way id='-39104' visible='true'><nd ref='-39102' /><nd ref='-39103' /><nd ref='-39105' /><tag k='man_made' v='watercourse_crossing' /><tag k='uuid' v='{10ffeed9-b866-412d-8d77-2378d2147a03}' /></way></osm>",
-                method: 'POST',
-                translation: 'TDSv61',
-                path: '/translateTo'
-            });
+    //         xml2js.parseString(trans2tds61, function(err, result) {
+    //             if (err) console.log(err);
+    //             assert.equal(result.osm.way[0].tag[1].$.k, "F_CODE");
+    //             assert.equal(result.osm.way[0].tag[1].$.v, "AD030");
+    //         });
+    //     });
+    //     it('should handle OSM to MGCP', function() {
+    //         var trans2mgcp = server.handleInputs({
+    //             osm: "<osm version='0.6' generator='JOSM'><way id='-39104' visible='true'><nd ref='-39102' /><nd ref='-39103' /><nd ref='-39105' /><tag k='man_made' v='watercourse_crossing' /><tag k='uuid' v='{10ffeed9-b866-412d-8d77-2378d2147a03}' /></way></osm>",
+    //             method: 'POST',
+    //             translation: 'TDSv61',
+    //             path: '/translateTo'
+    //         });
 
-            xml2js.parseString(trans2mgcp, function(err, result) {
-                if (err) console.log(err);
-                assert.equal(result.osm.way[0].tag[0].$.k, "FCODE");
-                assert.equal(result.osm.way[0].tag[0].$.v, "AD030");
-            });
-        });
-        it('should handle OSM to GGDMv30', function() {
-            var trans2ggdmv30 = server.handleInputs({
-                osm: "<osm version='0.6' generator='JOSM'><way id='-39104' visible='true'><nd ref='-39102' /><nd ref='-39103' /><nd ref='-39105' /><tag k='man_made' v='watercourse_crossing' /><tag k='uuid' v='{10ffeed9-b866-412d-8d77-2378d2147a03}' /></way></osm>",
-                method: 'POST',
-                translation: 'TDSv61',
-                path: '/translateTo'
-            });
+    //         xml2js.parseString(trans2mgcp, function(err, result) {
+    //             if (err) console.log(err);
+    //             assert.equal(result.osm.way[0].tag[1].$.k, "FCODE");
+    //             assert.equal(result.osm.way[0].tag[1].$.v, "AD030");
+    //         });
+    //     });
+    //     it('should handle OSM to GGDMv30', function() {
+    //         var trans2ggdmv30 = server.handleInputs({
+    //             osm: "<osm version='0.6' generator='JOSM'><way id='-39104' visible='true'><nd ref='-39102' /><nd ref='-39103' /><nd ref='-39105' /><tag k='man_made' v='watercourse_crossing' /><tag k='uuid' v='{10ffeed9-b866-412d-8d77-2378d2147a03}' /></way></osm>",
+    //             method: 'POST',
+    //             translation: 'TDSv61',
+    //             path: '/translateTo'
+    //         });
 
-            xml2js.parseString(trans2ggdmv30, function(err, result) {
-              if (err) console.log(err);
-              assert.equal(result.osm.way[0].tag[0].$.k, "F_CODE");
-              assert.equal(result.osm.way[0].tag[0].$.v, "AD030")
-            })
-        })
-    })
+    //         xml2js.parseString(trans2ggdmv30, function(err, result) {
+    //           if (err) console.log(err);
+    //           assert.equal(result.osm.way[0].tag[1].$.k, "F_CODE");
+    //           assert.equal(result.osm.way[0].tag[1].$.v, "AD030")
+    //         })
+    //     })
+    // })
 });
 
