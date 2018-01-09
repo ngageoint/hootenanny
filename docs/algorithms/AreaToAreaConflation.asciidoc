@@ -1,0 +1,21 @@
+
+[[AreaToAreaConflation]]
+=== Area to Area Conflation
+ 
+Area to Area Conflation is based on a Weka derived model and is controlled by the file rules/Area.js.
+
+[[AreaToAreaTestResults]]
+=== Test Results
+
+Currently, Area to Area Conflation has only been tested against a very small amount of input data.  More inputs will be tested against 
+in the future.  The results so far:
+
+Correct Matches: 80%
+Unnecessary Reivews: 14%
+Incorrect Matches: 6% 
+
+[[AreaToAreaFutureWork]]
+=== Future Work
+
+* obtain more area datasets, manually match them, and further test Area to Area Conflation
+
