@@ -9,8 +9,8 @@ pipeline {
         booleanParam(name: 'Destroy_VM', defaultValue: true)
         booleanParam(name: 'Static_analysis', defaultValue: true)
         booleanParam(name: 'License_headers', defaultValue: true)
-        booleanParam(name: 'Configure_Tests', defaultValue: false)
         booleanParam(name: 'Hoot_provision', defaultValue: true)
+        booleanParam(name: 'Configure_Tests', defaultValue: false)
         booleanParam(name: 'Build', defaultValue: true)
         booleanParam(name: 'Core_tests', defaultValue: true)
         booleanParam(name: 'Services_tests', defaultValue: true)
@@ -81,7 +81,7 @@ pipeline {
             }
         }
         stage("Build") {
-            when { expression { return params.Destroy_VM } }
+            when { expression { return params.Build } }
             steps {
                 // NOTE: Ubuntu only, may need more complex logic if other OS are included in pipeline
                 sh '''
