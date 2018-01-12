@@ -57,7 +57,7 @@ pipeline {
         stage("Vagrant Up") {
             steps {
                 // NOTE: Only installs hoot build dependencies
-                sh "vagrant up ${params.Box} --provision-with software,hoot --provider aws"
+                sh "vagrant up ${params.Box} --provision-with software --provider aws"
             }       
         }
         stage("Test Configure") {
