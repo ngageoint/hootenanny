@@ -109,6 +109,11 @@ private:
   void _parseGeoJson();
 
   /**
+   * @brief _parseGeoJsonFeature Parse a feature and add it to a map
+   */
+  void _parseGeoJsonFeature(const boost::property_tree::ptree &feature);
+
+  /**
    * @brief _parseGeoJsonNode Reads node info out of the property tree and
    *        builds a Node object. Adds the node to the map.
    * @param id Element ID string
