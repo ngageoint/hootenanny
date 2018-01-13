@@ -19,24 +19,12 @@ if [ ! -x $PRETTY_PIPES_HOME/bin/PrettyPipes ]; then
     fi
 fi
 
-# If has hadoop. If not, we avoid an unsightly, but harmless error
-#echo "Hadoop home: "  $HADOOP_HOME
-if [ -d "$HADOOP_HOME" ]; then
-	export HADOOP_CLASSPATH=""
-  export CLASSPATH=$HADOOP_HOME/conf:$HADOOP_HOME/lib/*:$HADOOP_HOME/*:$JAVA_HOME/lib/tools.jar
-  export CLASSPATH=$CLASSPATH:`ls $HADOOP_HOME/hadoop-*-core.jar`:`ls $HADOOP_HOME/lib/commons-logging-api-*.jar`
-  export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HADOOP_HOME/c++/Linux-amd64-64/lib/:$JAVA_HOME/jre/lib/amd64/:$JAVA_HOME/jre/lib/amd64/server
-fi
-
 # Determine the library path for GDAL
 export GDAL_LIB_DIR=`gdal-config --libs | sed -e "s/-L//g" | sed -e "s/ *-lgdal.*//g"`
 export GDAL_DATA=`gdal-config --datadir`
 
 export LD_LIBRARY_PATH=$GDAL_LIB_DIR:$HOOT_HOME/lib:$PRETTY_PIPES_HOME/lib/:$LD_LIBRARY_PATH
 export PATH=$HOOT_HOME/bin/:$PATH
-if [ -d "$HADOOP_HOME" ]; then
-  export PATH=$HADOOP_HOME/bin/:$PATH
-fi
 export QT_SELECT=4
 
 # If the user provided an argument then run as a command.

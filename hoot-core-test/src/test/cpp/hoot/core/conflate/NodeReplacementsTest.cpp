@@ -39,6 +39,7 @@ using namespace hoot;
 
 // Qt
 #include <QDebug>
+#include <QDir>
 
 class NodeReplacementsTest : public CppUnit::TestFixture
 {
@@ -51,6 +52,7 @@ public:
 
   void runIoTest()
   {
+    QDir().mkpath("test-output/conflate");
     NodeReplacements uut;
 
     HashMap<long, long>& m = uut.getReplacements();

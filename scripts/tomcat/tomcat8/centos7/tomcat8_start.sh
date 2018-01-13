@@ -2,7 +2,6 @@
 
 # Wrapper script to start tomcat8
 export HOOT_HOME=/home/vagrant/hoot
-export HADOOP_HOME=/home/vagrant/hadoop
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:$HOOT_HOME/lib:$HOOT_HOME/pretty-pipes/lib
 
 # Take into account different locations when GDAL installed from source

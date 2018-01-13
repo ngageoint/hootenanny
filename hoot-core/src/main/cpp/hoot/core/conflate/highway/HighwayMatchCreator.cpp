@@ -104,7 +104,7 @@ public:
 
   void checkForMatch(const boost::shared_ptr<const Element>& e)
   {
-    auto_ptr<Envelope> env(e->getEnvelope(_map));
+    boost::shared_ptr<Envelope> env(e->getEnvelope(_map));
     env->expandBy(getSearchRadius(e));
 
     // find other nearby candidates

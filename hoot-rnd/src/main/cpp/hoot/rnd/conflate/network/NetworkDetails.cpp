@@ -694,10 +694,10 @@ double NetworkDetails::getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeS
 
 Envelope NetworkDetails::getEnvelope(ConstNetworkEdgePtr e) const
 {
-  auto_ptr<Envelope> env(e->getMembers()[0]->getEnvelope(_map));
+  boost::shared_ptr<Envelope> env(e->getMembers()[0]->getEnvelope(_map));
   for (int i = 1; i < e->getMembers().size(); ++i)
   {
-    auto_ptr<Envelope> env2(e->getMembers()[i]->getEnvelope(_map));
+    boost::shared_ptr<Envelope> env2(e->getMembers()[i]->getEnvelope(_map));
     env->expandToInclude(env2.get());
   }
   return *env;
@@ -705,7 +705,7 @@ Envelope NetworkDetails::getEnvelope(ConstNetworkEdgePtr e) const
 
 Envelope NetworkDetails::getEnvelope(ConstNetworkVertexPtr v) const
 {
-  auto_ptr<Envelope> env(v->getElement()->getEnvelope(_map));
+  boost::shared_ptr<Envelope> env(v->getElement()->getEnvelope(_map));
   return *env;
 }
 

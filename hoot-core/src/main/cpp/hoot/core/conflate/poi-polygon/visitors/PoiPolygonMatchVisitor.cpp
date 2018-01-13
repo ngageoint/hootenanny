@@ -72,7 +72,7 @@ PoiPolygonMatchVisitor::~PoiPolygonMatchVisitor()
 
 void PoiPolygonMatchVisitor::_checkForMatch(const boost::shared_ptr<const Element>& e)
 {
-  std::auto_ptr<geos::geom::Envelope> env(e->getEnvelope(_map));
+  boost::shared_ptr<geos::geom::Envelope> env(e->getEnvelope(_map));
   env->expandBy(_getSearchRadius(e));
 
   // find other nearby candidates
@@ -121,7 +121,7 @@ void PoiPolygonMatchVisitor::_checkForMatch(const boost::shared_ptr<const Elemen
 void PoiPolygonMatchVisitor::_collectSurroundingPolyIds(const boost::shared_ptr<const Element>& e)
 {
   _surroundingPolyIds.clear();
-  std::auto_ptr<geos::geom::Envelope> env(e->getEnvelope(_map));
+  boost::shared_ptr<geos::geom::Envelope> env(e->getEnvelope(_map));
   env->expandBy(_getSearchRadius(e));
 
   // find other nearby candidates
@@ -148,7 +148,7 @@ void PoiPolygonMatchVisitor::_collectSurroundingPolyIds(const boost::shared_ptr<
 void PoiPolygonMatchVisitor::_collectSurroundingPoiIds(const boost::shared_ptr<const Element>& e)
 {
   _surroundingPoiIds.clear();
-  std::auto_ptr<geos::geom::Envelope> env(e->getEnvelope(_map));
+  boost::shared_ptr<geos::geom::Envelope> env(e->getEnvelope(_map));
   env->expandBy(_getSearchRadius(e));
 
   // find other nearby candidates

@@ -54,7 +54,7 @@ public:
   {
     QString printScript(ConfigOptions().getTagPrintingScript());
 
-    auto_ptr<ScriptTranslator> translator;
+    boost::shared_ptr<ScriptTranslator> translator;
 
     if (args.size() == 1)
     {

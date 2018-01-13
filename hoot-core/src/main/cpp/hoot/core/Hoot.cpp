@@ -46,6 +46,9 @@
 #include <QLibrary>
 #include <QString>
 
+// Boost
+#include <boost/shared_ptr.hpp>
+
 // System
 #include <sys/resource.h>
 
@@ -60,7 +63,7 @@ using namespace std;
 namespace hoot
 {
 
-auto_ptr<Hoot> Hoot::_theInstance;
+boost::shared_ptr<Hoot> Hoot::_theInstance;
 
 Hoot::Hoot()
 {
@@ -119,6 +122,12 @@ void Hoot::_init()
 # endif
 # ifdef HOOT_HAVE_RND
   loadLibrary("HootRnd");
+# endif
+
+# ifdef HOOT_HAVE_NODEJS
+  // sometimes HootJs is loaded by node.js before we get to init.
+  if (Factory::getInstance().hasClass(QString("hoot::HootJsLoaded")) == false)
+    loadLibrary("HootJs");
 # endif
 
   Log::getInstance().setLevel(Log::Info);

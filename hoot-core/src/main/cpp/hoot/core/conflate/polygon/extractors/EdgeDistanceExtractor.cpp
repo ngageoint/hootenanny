@@ -141,7 +141,7 @@ double EdgeDistanceExtractor::_oneDistance(const OsmMap& map, const boost::share
 
   for (size_t i = 0; i < points.size(); i++)
   {
-    auto_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(points[i]));
+    boost::shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(points[i]));
     distances.push_back(g->distance(p.get()));
   }
 

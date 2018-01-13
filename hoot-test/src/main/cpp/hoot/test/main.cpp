@@ -155,43 +155,41 @@ private:
   double _slowTest;
 };
 
-void filterPattern(CppUnit::Test* from, std::vector<CppUnit::Test*> &to, QString pattern,
-  bool includeOnMatch)
+void getTestVector(CppUnit::Test* from, vector<CppUnit::Test*>& to)
 {
-  QRegExp regex(pattern);
-
   for (int i = 0; i < from->getChildTestCount(); i++)
   {
     CppUnit::Test* child = from->getChildTestAt(i);
-    QString name = QString::fromStdString(child->getName());
     if (dynamic_cast<CppUnit::TestComposite*>(child))
-    {
-      filterPattern(child, to, pattern, includeOnMatch);
-    }
-    else if (regex.exactMatch(name) == includeOnMatch)
-    {
+      getTestVector(child, to);
+    else
       to.push_back(child);
-    }
   }
 }
 
-void filterPattern(const std::vector<TestPtr> &from, std::vector<CppUnit::Test*> &to, QString pattern,
-  bool includeOnMatch)
+void getTestVector(const vector<TestPtr>& from, vector<CppUnit::Test*>& to)
+{
+  for (vector<TestPtr>::size_type i = 0; i < from.size(); ++i)
+  {
+    CppUnit::Test* child = from[i].get();
+    if (dynamic_cast<CppUnit::TestComposite*>(child))
+      getTestVector(child, to);
+    else
+      to.push_back(child);
+  }
+}
+
+void filterPattern(const std::vector<CppUnit::Test*> &from, std::vector<CppUnit::Test*> &to,
+                   QString pattern, bool includeOnMatch)
 {
   QRegExp regex(pattern);
 
   for (size_t i = 0; i < from.size(); i++)
   {
-    CppUnit::Test* child = from[i].get();
+    CppUnit::Test* child = from[i];
     QString name = QString::fromStdString(child->getName());
-    if (dynamic_cast<CppUnit::TestComposite*>(child))
-    {
-      filterPattern(child, to, pattern, includeOnMatch);
-    }
-    else if (regex.exactMatch(name) == includeOnMatch)
-    {
+    if (regex.exactMatch(name) == includeOnMatch)
       to.push_back(child);
-    }
   }
 }
 
@@ -363,7 +361,7 @@ void populateTests(_TestType t, std::vector<TestPtr> &vTests, bool printDiff, bo
     vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/quick/", printDiff, QUICK_WAIT, hideDisableTests)));
     vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/slow/", printDiff, SLOW_WAIT, hideDisableTests)));
     vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/slow/serial/", printDiff, SLOW_WAIT, hideDisableTests)));
-    vTests.push_back(TestPtr(new ConflateCaseTestSuite("test-files/cases")));
+    vTests.push_back(TestPtr(new ConflateCaseTestSuite("test-files/cases", hideDisableTests)));
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest()));
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest()));
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest()));
@@ -372,7 +370,7 @@ void populateTests(_TestType t, std::vector<TestPtr> &vTests, bool printDiff, bo
   case SLOW_ONLY:
     vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/slow/", printDiff, SLOW_WAIT, hideDisableTests)));
     vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/slow/serial/", printDiff, SLOW_WAIT, hideDisableTests)));
-    vTests.push_back(TestPtr(new ConflateCaseTestSuite("test-files/cases")));
+    vTests.push_back(TestPtr(new ConflateCaseTestSuite("test-files/cases", hideDisableTests)));
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("slow").makeTest()));
     break;
   case GLACIAL:
@@ -384,7 +382,7 @@ void populateTests(_TestType t, std::vector<TestPtr> &vTests, bool printDiff, bo
     vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/slow/serial/", printDiff, SLOW_WAIT, hideDisableTests)));
     vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/glacial/", printDiff, GLACIAL_WAIT, hideDisableTests)));
     vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/glacial/serial/", printDiff, GLACIAL_WAIT, hideDisableTests)));
-    vTests.push_back(TestPtr(new ConflateCaseTestSuite("test-files/cases")));
+    vTests.push_back(TestPtr(new ConflateCaseTestSuite("test-files/cases", hideDisableTests)));
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest()));
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest()));
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest()));
@@ -564,15 +562,24 @@ int main(int argc, char *argv[])
         populateTests(GLACIAL_ONLY, vAllTests, printDiff);
       }
 
+      vector<CppUnit::Test*> vTests;
+      getTestVector(vAllTests, vTests);
       bool filtered = false;
+
       for (int i = 0; i < args.size(); i++)
       {
         if (args[i].startsWith("--exclude="))
         {
+          if (vTestsToRun.size() > 0)
+          {
+            //  On the second (or more) time around exclude from the excluded list
+            vTests.swap(vTestsToRun);
+            vTestsToRun.clear();
+          }
           int equalsPos = args[i].indexOf('=');
           QString regex = args[i].mid(equalsPos + 1);
           LOG_WARN("Excluding pattern: " << regex);
-          filterPattern(vAllTests, vTestsToRun, regex, false);
+          filterPattern(vTests, vTestsToRun, regex, false);
           filtered = true;
         }
         else if (args[i].startsWith("--include="))
@@ -580,15 +587,13 @@ int main(int argc, char *argv[])
           int equalsPos = args[i].indexOf('=');
           QString regex = args[i].mid(equalsPos + 1);
           LOG_WARN("Including only tests that match: " << regex);
-          filterPattern(vAllTests, vTestsToRun, regex, true);
+          filterPattern(vTests, vTestsToRun, regex, true);
           filtered = true;
         }
       }
 
       if (!filtered) // Do all tests
-      {
-        filterPattern(vAllTests, vTestsToRun, ".*", true);
-      }
+        vTestsToRun.swap(vTests);
       cout << "Running core tests.  Test count: " << vTestsToRun.size() << endl;
     }
 
@@ -607,7 +612,9 @@ int main(int argc, char *argv[])
       {
         throw HootException("Expected integer after --parallel");
       }
-      ProcessPool pool(nproc, listener->getSlowTest(), (bool)args.contains("--names"));
+      ProcessPool pool(nproc, listener->getSlowTest(),
+                       (bool)args.contains("--names"),
+                       (bool)args.contains("--diff"));
 
       //  Get the names of all of the tests to run
       vector<string> allNames;

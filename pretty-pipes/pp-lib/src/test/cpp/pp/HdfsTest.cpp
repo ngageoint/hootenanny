@@ -35,6 +35,9 @@
 #include <pp/Hdfs.h>
 using namespace pp;
 
+// Boost
+#include <boost/shared_ptr.hpp>
+
 // Standard
 #include <iostream>
 #include <stdlib.h>
@@ -59,7 +62,7 @@ public:
     if (hdfs.exists(filename))
       hdfs.remove(filename);
 
-    auto_ptr<ostream> osPtr(hdfs.create(filename));
+    boost::shared_ptr<ostream> osPtr(hdfs.create(filename));
     ostream& os = *osPtr;
 
     char buf[12];
@@ -79,7 +82,7 @@ public:
     createFile(filename);
     CPPUNIT_ASSERT_EQUAL(true, hdfs.exists(filename));
 
-    auto_ptr<istream> isPtr(hdfs.open(filename));
+    boost::shared_ptr<istream> isPtr(hdfs.open(filename));
     istream& is = *isPtr;
 
     string bufIn, bufExpected;
@@ -111,7 +114,7 @@ public:
     createFile(filename);
     CPPUNIT_ASSERT_EQUAL(true, hdfs.exists(filename));
 
-    auto_ptr<istream> isPtr(hdfs.open(filename));
+    boost::shared_ptr<istream> isPtr(hdfs.open(filename));
     istream& is = *isPtr;
 
     is.seekg(0, ios_base::end);

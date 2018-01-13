@@ -478,8 +478,6 @@ public:
   {
     OsmMapPtr map(new OsmMap());
     OsmPbfReader(true).read("test-files/index/hybrid/TinyGeoNamesOrg.osm.pbf", map);
-//    OsmPbfReader(true).read("/scratch/gis-data/geonames.org/tmp/GeoNamesOrgAfghanistan.osm.pbf",
-//                             map);
 
     MapProjector::projectToPlanar(map);
 

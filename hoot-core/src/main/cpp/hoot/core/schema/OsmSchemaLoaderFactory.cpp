@@ -36,7 +36,7 @@ using namespace std;
 namespace hoot
 {
 
-auto_ptr<OsmSchemaLoaderFactory> OsmSchemaLoaderFactory::_theInstance;
+boost::shared_ptr<OsmSchemaLoaderFactory> OsmSchemaLoaderFactory::_theInstance;
 
 OsmSchemaLoaderFactory& OsmSchemaLoaderFactory::getInstance()
 {

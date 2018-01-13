@@ -79,7 +79,7 @@ protected:
 
   double _threshold;
   NodeToWayMap* _n2w;
-  std::auto_ptr<TagDifferencer> _diff;
+  boost::shared_ptr<TagDifferencer> _diff;
 
   bool _preserveUnknown1ElementIdWhenModifyingFeatures;
 

@@ -40,7 +40,7 @@ class ConflateCaseTestSuite : public AbstractTestSuite
 
 public:
 
-  ConflateCaseTestSuite(QString dir);
+  ConflateCaseTestSuite(QString dir, bool hideDisableTests = false);
 
   /**
    * Attempts to load a conflate case test given a directory
@@ -49,6 +49,10 @@ public:
    * @param confs hoot configuration files to pass to the test
    */
   virtual void loadDir(QString dir, QStringList confs);
+
+private:
+
+  bool _hideDisableTests;
 };
 
 }
