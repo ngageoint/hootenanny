@@ -238,7 +238,17 @@ function doExport(req, res, hash, input) {
             + '.zip';
 
         var command = '';
-        var overrideTags = "'" + JSON.stringify(config.tagOverrides) + "'";
+        var overrideTags = null;
+        //if there is a override tags query param
+        if (req.query.overrideTags) {
+            if (req.query.overrideTags === 'true') { //if it's true
+                //use the default overrides from config
+                overrideTags = "'" + JSON.stringify(config.tagOverrides) + "'";
+            } else { //assume it's json
+                //use user submitted overrides
+                overrideTags = "'" + JSON.stringify(JSON.parse(req.query.overrideTags)) + "'";
+            }
+        }
         //if conn is url, write that response to a file
         //handle different flavors of bbox param
         var bbox_param = 'convert.bounding.box';
@@ -262,7 +272,7 @@ function doExport(req, res, hash, input) {
         if (isFile) {
             command += ' convert';
             if (bbox) command += ' -D ' + bbox_param + '=' + bbox;
-            if (req.query.overrideTags) {
+            if (overrideTags) {
                 if (req.params.schema === 'OSM') {
                     command += ' -D convert.ops=hoot::TranslationOp';
                     command += ' -D translation.script=translations/OSM_Ingest.js';
@@ -277,7 +287,7 @@ function doExport(req, res, hash, input) {
         } else {
             command += ' osm2ogr';
             if (req.params.schema === 'OSM') command += ' -D writer.include.debug.tags=true';
-            if (req.query.overrideTags) command +=  ' -D translation.override=' + overrideTags;
+            if (overrideTags) command +=  ' -D translation.override=' + overrideTags;
             if (bbox) command += ' -D ' + bbox_param + '=' + bbox;
             command += ' ' + config.schemas[req.params.schema];
         }
