@@ -11,6 +11,18 @@
         "objectType": "tag"
     },
     {
+        "geometries": ["linestring"],
+        "isA": "man_made",
+        "name": "man_made=excavating_machine",
+        "objectType": "tag"
+    },
+    {
+        "geometries": ["linestring"],
+        "isA": "man_made",
+        "name": "man_made=watercourse_crossing",
+        "objectType": "tag"
+    },
+    {
         "isA": "man_made",
         "name": "man_made=*",
         "objectType": "tag"
