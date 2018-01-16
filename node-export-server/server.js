@@ -35,6 +35,10 @@ app.get('/options', function(req, res) {
     });
 });
 
+app.get('/tagoverrides', function(req, res) {
+    res.json(config.tagOverrides);
+});
+
 /* Get job status*/
 app.get('/job/:hash', function(req, res) {
     var hash = req.params.hash;
