@@ -77,6 +77,13 @@ Conflation statistics for POI to Polygon Conflation are available from the comma
 different definition than those conflatable with other POIs, which is less strict.  Therefore, POIs conflatable with polygons are a superset of POIs conflatable with other POIs.  Likewise, polygons are a superset of buildings and also include features such as parks, parking lots, etc.  See the Feature Definitions section 
 <<hootalgo, Hootenanny - Algorithms>> for POI and polygon definition details.
 
+[[AreaToAreaConflation]]
+== Area to Area Conflation
+
+Hootenanny makes Area to Area Conflation available, which is turned on by default when using command line conflation.  Hootenanny 
+defines an area as a non-building polygon that possesses the OSM "area=yes" tag or equivalent.  Examples: parks, parking lots.  
+To read more information on Area to Area Conflation, see the "Area to Area Conflation" section in the Hootenanny Algorithm Guide.
+
 [[River-Conflation]]
 === River Conflation
 
