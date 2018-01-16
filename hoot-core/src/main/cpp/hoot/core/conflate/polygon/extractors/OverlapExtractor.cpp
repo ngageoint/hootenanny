@@ -61,7 +61,7 @@ double OverlapExtractor::extract(const OsmMap& map, const ConstElementPtr& targe
     return nullValue();
   }
 
-  auto_ptr<Geometry> overlap;
+  boost::shared_ptr<Geometry> overlap;
   try
   {
     overlap.reset(g1->intersection(g2.get()));

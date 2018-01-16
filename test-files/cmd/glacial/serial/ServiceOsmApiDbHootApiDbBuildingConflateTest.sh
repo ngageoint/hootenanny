@@ -8,4 +8,7 @@
 # the secondary building ID is kept by default.  This test activates preserve.unknown1.element.id.when.modifying.features,
 # which will force the ref ID to be preserved.
 
-scripts/core/ServiceOsmApiDbHootApiDbConflate.sh test-files/cmd/glacial/ServiceOsmApiDbHootApiDbBuildingConflateTest/BostonSubsetRoadBuilding_FromShp-cropped-4.osm test-files/cmd/glacial/ServiceOsmApiDbHootApiDbBuildingConflateTest/BostonSubsetRoadBuilding_FromOsm-cropped-4.osm -71.4771,42.4835,-71.4758,42.4841 unifying ServiceOsmApiDbHootApiDbBuildingConflateTest glacial false -1
+scripts/core/ServiceOsmApiDbHootApiDbConflate.sh \
+  test-files/cmd/glacial/ServiceOsmApiDbHootApiDbBuildingConflateTest/BostonSubsetRoadBuilding_FromShp-cropped-4.osm \
+  test-files/cmd/glacial/ServiceOsmApiDbHootApiDbBuildingConflateTest/BostonSubsetRoadBuilding_FromOsm-cropped-4.osm \
+  -71.4771,42.4835,-71.4758,42.4841 unifying ServiceOsmApiDbHootApiDbBuildingConflateTest glacial false -1

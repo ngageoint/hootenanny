@@ -91,7 +91,7 @@ public:
 
 private:
   geos::geom::Envelope _bounds;
-  std::auto_ptr<boost::minstd_rand> _rngAuto;
+  boost::shared_ptr<boost::minstd_rand> _rngAuto;
   boost::minstd_rand* _rng;
   Meters _sigma;
   Meters _maxDistance;

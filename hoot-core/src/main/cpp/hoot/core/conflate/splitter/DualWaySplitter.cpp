@@ -114,7 +114,7 @@ boost::shared_ptr<Way> DualWaySplitter::_createOneWay(boost::shared_ptr<const Wa
                       bufferSize * 2);
 
   BufferBuilder bb(bp);
-  auto_ptr<Geometry> g(bb.bufferLineSingleSided(ls.get(), bufferSize, left));
+  boost::shared_ptr<Geometry> g(bb.bufferLineSingleSided(ls.get(), bufferSize, left));
   const LineString* newLs = dynamic_cast<const LineString*>(g.get());
 
   boost::shared_ptr<Way> result(new Way(w->getStatus(), _result->createNextWayId(),
@@ -136,10 +136,10 @@ boost::shared_ptr<Way> DualWaySplitter::_createOneWay(boost::shared_ptr<const Wa
     }
     logWarnCount++;
 
-    auto_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(ls->getCoordinateN(0)));
-    auto_ptr<Geometry> unioned(ls->Union(p.get()));
-    auto_ptr<Geometry> cleaned(GeometryUtils::validateGeometry(ls.get()));
-    auto_ptr<Geometry> buffered(ls->buffer(0));
+    boost::shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(ls->getCoordinateN(0)));
+    boost::shared_ptr<Geometry> unioned(ls->Union(p.get()));
+    boost::shared_ptr<Geometry> cleaned(GeometryUtils::validateGeometry(ls.get()));
+    boost::shared_ptr<Geometry> buffered(ls->buffer(0));
     LOG_TRACE("input geometry: " << ls->toString());
     LOG_TRACE("unioned geometry: " << unioned->toString());
     LOG_TRACE("cleaned geometry: " << cleaned->toString());

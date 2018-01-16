@@ -257,14 +257,14 @@ void ConflateMapper::_replaceNodes(OsmMapPtr& m)
       if (QString::fromStdString(status[i].getPath()).endsWith(".replacement") &&
         status[i].isFile())
       {
-        auto_ptr<istream> is(fs.open(status[i].getPath()));
+        boost::shared_ptr<istream> is(fs.open(status[i].getPath()));
         _replaceNodes(m, *is);
       }
     }
   }
   else
   {
-    auto_ptr<istream> is(fs.open(_replacmentsPath));
+    boost::shared_ptr<istream> is(fs.open(_replacmentsPath));
     _replaceNodes(m, *is);
   }
 }

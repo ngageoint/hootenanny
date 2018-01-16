@@ -22,38 +22,43 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef REMOVEEMPTYAREASVISITOR_H
-#define REMOVEEMPTYAREASVISITOR_H
+#ifndef AREAMERGER_H
+#define AREAMERGER_H
 
-// Standard
-#include <memory>
 
-#include "ElementOsmMapVisitor.h"
+// hoot
+#include <hoot/core/OsmMap.h>
+
 
 namespace hoot
 {
-class ElementConverter;
+
+class OsmMap;
 
 /**
- * Removes all "area" elements that have an area of zero.
+ * Merges two non-building areas
+ *
+ * Adapted from PoiPolygonMerger; may need some additional work
  */
-class RemoveEmptyAreasVisitor : public ElementOsmMapVisitor
+class AreaMerger
 {
+
 public:
 
-  static std::string className() { return "hoot::RemoveEmptyAreasVisitor"; }
+  AreaMerger();
 
-  RemoveEmptyAreasVisitor();
+  /**
+   * Merges to non-building areas
+   *
+   * @param map an OSM map containing two non-building areas
+   */
+  static void merge(OsmMapPtr map);
 
-  virtual void visit(const ConstElementPtr& e);
-
-  virtual void visit(const boost::shared_ptr<Element>& e);
-private:
-  boost::shared_ptr<ElementConverter> _ec;
 };
 
 }
 
-#endif // REMOVEEMPTYAREASVISITOR_H
+#endif // AREAMERGER_H

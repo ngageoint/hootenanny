@@ -70,7 +70,7 @@ public:
 protected:
   double _p;
   double _stopDelta;
-  mutable std::auto_ptr<HilbertRTree> _index;
+  mutable boost::shared_ptr<HilbertRTree> _index;
 
   virtual void _buildModel();
 

@@ -21,7 +21,7 @@ rm -rf $outputfolder
 
 # Delete any previous WFS data store tables
 SQL=$( psql -h $DB_HOST -t -A -d $WFS_DB_NAME -U $DB_USER -p $DB_PORT -c "SELECT 'DROP TABLE \"' || tablename || '\";' FROM pg_tables WHERE tablename like 'service_export_test\_%';" )
-echo $SQL | psql -h localhost -d $WFS_DB_NAME -U $DB_USER -p $DB_PORT > /dev/null
+echo $SQL | psql -h $DB_HOST -d $WFS_DB_NAME -U $DB_USER -p $DB_PORT > /dev/null
 
 # Test osm with no translation
 export translation=""

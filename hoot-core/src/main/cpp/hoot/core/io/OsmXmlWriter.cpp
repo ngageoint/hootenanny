@@ -157,7 +157,7 @@ QString OsmXmlWriter::toString(const ConstOsmMapPtr& map, const bool formatXml)
 {
   OsmXmlWriter writer;
   writer.setFormatXml(formatXml);
-  // this will be deleted by the _fp auto_ptr
+  // this will be deleted by the _fp boost::shared_ptr
   QBuffer* buf = new QBuffer();
   writer._fp.reset(buf);
   if (!writer._fp->open(QIODevice::WriteOnly | QIODevice::Text))

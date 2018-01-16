@@ -102,7 +102,7 @@ public:
       map->addNode(n);
     }
 
-    QDir().mkdir("test-output/algorithms/");
+    QDir().mkpath("test-output/algorithms/");
     OsmXmlWriter writer;
     writer.write(map, "test-output/algorithms/AlphaDonut.osm");
 
@@ -132,7 +132,7 @@ public:
 
     uut.insert(points);
 
-    QDir().mkdir("test-output/algorithms/");
+    QDir().mkpath("test-output/algorithms/");
     OsmXmlWriter writer;
     writer.write(uut.toOsmMap(), "test-output/algorithms/AlphaMap.osm");
 

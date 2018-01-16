@@ -78,7 +78,7 @@ double BufferedOverlapExtractor::extract(const OsmMap& map, const ConstElementPt
 
   double buffer = sqrt(max(a1, a2)) * _bufferPortion;
 
-  auto_ptr<Geometry> overlap;
+  boost::shared_ptr<Geometry> overlap;
   try
   {
     g1.reset(g1->buffer(buffer));
