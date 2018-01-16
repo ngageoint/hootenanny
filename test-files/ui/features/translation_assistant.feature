@@ -95,6 +95,7 @@ Feature: Translation Assistant
         Then I accept the alert
 
     Scenario: Delete Dataset
+        And I scroll "Datasets" into view
         When I click on the "Datasets" option in the "settingsSidebar"
         Then I click the "cali_shp_Cucumber" Dataset
         And I context click the "cali_shp_Cucumber" Dataset
