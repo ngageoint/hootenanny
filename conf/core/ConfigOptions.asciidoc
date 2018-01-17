@@ -1166,7 +1166,7 @@ A list of map operations to be applied to a map for cleaning purposes, in order.
 === match.creators
 
 * Data Type: string
-* Default Value: `hoot::BuildingMatchCreator;hoot::ScriptMatchCreator,PoiGeneric.js;hoot::HighwayMatchCreator;hoot::ScriptMatchCreator,LinearWaterway.js;hoot::PoiPolygonMatchCreator`
+* Default Value: `hoot::BuildingMatchCreator;hoot::ScriptMatchCreator,PoiGeneric.js;hoot::HighwayMatchCreator;hoot::ScriptMatchCreator,LinearWaterway.js;hoot::PoiPolygonMatchCreator;hoot::ScriptMatchCreator,Area.js`
 
 List of match creators to use during conflation. This can modify what features will be conflated
 (e.g. buildings, roads, etc.).  The ordering must match that in merger.creators.
@@ -1176,6 +1176,7 @@ Some of the possible options include:
 * `hoot::BuildingMatchCreator` - Matches building polygons.
 * `hoot::HighwayMatchCreator` - Matches linear highway features using the Unify algorithm.
 * `hoot::PoiPolygonMatchCreator` - Matches POIs with buildings or areas.
+* `hoot::ScriptMatchCreator,Area.js` - Matches areas (non-building polygons marked as areas; e.g. parks, parking lots, etc.).
 * `hoot::ScriptMatchCreator,PoiGeneric.js` - Matches POIs using the Unify algorithm.
 * `hoot::ScriptMatchCreator,LinearWaterway.js` - Matches linear rivers and streams.
 * `hoot::ScriptMatchCreator,<yourscript.js>` - Uses a custom match script. The script should be
@@ -1231,7 +1232,7 @@ are identical. Units in meters and defaults to 1.0m.
 === merger.creators
 
 * Data Type: string
-* Default Value: `hoot::BuildingMergerCreator;hoot::ScriptMergerCreator;hoot::HighwaySnapMergerCreator;hoot::PoiPolygonMergerCreator`
+* Default Value: `hoot::BuildingMergerCreator;hoot::ScriptMergerCreator;hoot::HighwaySnapMergerCreator;hoot::PoiPolygonMergerCreator;hoot::ScriptMergerCreator`
 
 List of merger creators to use during conflation. This can modify what features will be conflated
 (e.g. buildings, roads, etc.).  The ordering must match that in match.creators.
