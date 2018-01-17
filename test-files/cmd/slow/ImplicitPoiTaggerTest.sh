@@ -13,4 +13,4 @@ diff $REF_DIR/ImplicitPoiTaggerTest.implicitTagRules $OUTPUT_DIR/ImplicitPoiTagg
 
 hoot implicit-tagging-derive-rules-database --warn poi $OUTPUT_DIR/ImplicitPoiTaggerTest-out.implicitTagRules "$OUTPUT_DIR/ImplicitPoiTaggerTest-out.sqlite"
 
-hoot implicit-tagging-rules-database-stats "$OUTPUT_DIR/ImplicitPoiTaggerTest-out.sqlite"
+hoot implicit-tagging-derive-rules-database "$OUTPUT_DIR/ImplicitPoiTaggerTest-out.sqlite" --stats

@@ -247,7 +247,7 @@ void ImplicitTaggerBase::visit(const ElementPtr& e)
     }
 
     _numNodesParsed++;
-    if (_numNodesParsed % 1000 == 0)
+    if (_numNodesParsed % (_statusUpdateInterval % 10) == 0)
     {
       PROGRESS_INFO(
         "Parsed " << StringUtils::formatLargeNumber(_numNodesParsed) << " nodes from input.");

@@ -94,7 +94,7 @@ public:
     {
       rulesDeriver.deriveRulesDatabase(
         inDir() + "/ImplicitTagRulesDatabaseDeriverTest-input.txt",
-        outDir() + "/ImplicitTagRulesDatabaseDeriverTest-runBasicTest-out.sqlite");
+        outDir() + "/ImplicitTagRulesDatabaseDeriverTest-runBadInputsTest1-out.sqlite");
     }
     catch (const HootException& e)
     {
@@ -108,7 +108,7 @@ public:
     {
       rulesDeriver.deriveRulesDatabase(
         inDir() + "/ImplicitTagRulesDatabaseDeriverTest-input.implicitTagRules",
-        outDir() + "/ImplicitTagRulesDatabaseDeriverTest-runBasicTest-out.txt");
+        outDir() + "/ImplicitTagRulesDatabaseDeriverTest-runBadInputsTest2-out.txt");
     }
     catch (const HootException& e)
     {

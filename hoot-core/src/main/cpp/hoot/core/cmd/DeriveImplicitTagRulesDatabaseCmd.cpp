@@ -22,7 +22,6 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
@@ -30,6 +29,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/schema/ImplicitTagRulesDatabaseDeriver.h>
+#include <hoot/core/io/ImplicitTagRulesSqliteReader.h>
 
 namespace hoot
 {
@@ -50,16 +50,40 @@ public:
 
   virtual int runSimple(QStringList args)
   {
-    if (args.size() != 3)
+    if (args.size() != 2 && args.size() != 3)
     {
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes three parameters.").arg(getName()));
+      throw HootException(QString("%1 takes two or three parameters.").arg(getName()));
+    }
+    if (args.size() == 2 && args[1].toLower() != "--stats")
+    {
+      std::cout << getHelp() << std::endl << std::endl;
+      throw HootException(
+        QString("When using two input parameters with %1, the last input parameter must be '--stats'.")
+        .arg(getName()));
+    }
+    if (args.size() == 3 && args[2].toLower() == "--stats")
+    {
+      std::cout << getHelp() << std::endl << std::endl;
+      throw HootException(
+        QString("When using three input parameters with %1, the '--stats' input parameter is invalid.")
+        .arg(getName()));
     }
 
-    ImplicitTagRulesDatabaseDeriver rulesDatabaseDeriver;
-    rulesDatabaseDeriver.setConfiguration(conf());
-    rulesDatabaseDeriver.setElementType(args[0]);
-    rulesDatabaseDeriver.deriveRulesDatabase(args[1].trimmed(), args[2].trimmed());
+    if (args.size() == 3)
+    {
+      ImplicitTagRulesDatabaseDeriver rulesDatabaseDeriver;
+      rulesDatabaseDeriver.setConfiguration(conf());
+      rulesDatabaseDeriver.setElementType(args[0]);
+      rulesDatabaseDeriver.deriveRulesDatabase(args[1].trimmed(), args[2].trimmed());
+    }
+    else
+    {
+      ImplicitTagRulesSqliteReader dbReader;
+      dbReader.open(args[0].trimmed());
+      dbReader.printStats();
+      dbReader.close();
+    }
 
     return 0;
   }
