@@ -50,7 +50,7 @@ hoot implicit-tagging-derive-rules-database poi osm-geonames-poi.implicitTagRule
 You can check the results with:
 
 -------------------------
-hoot implicit-tagging-rules-database-stats osm-geonames-poi-rules.sqlite
+hoot implicit-tagging-derive-rules-database osm-geonames-poi.implicitTagRules --stats
 ------------------------
 
 Also, you can examine the output rules database in a Sqlite database viewer, such as DB Browser for SQLite. 
