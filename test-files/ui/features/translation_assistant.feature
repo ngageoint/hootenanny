@@ -94,14 +94,15 @@ Feature: Translation Assistant
         Then I delete the "cali-Cucumber" translation
         Then I accept the alert
 
-    Scenario: Delete Dataset
-        And I scroll "Datasets" into view
-        When I click on the "Datasets" option in the "settingsSidebar"
-        Then I click the "cali_shp_Cucumber" Dataset
-        And I context click the "cali_shp_Cucumber" Dataset
-        And I click the "Delete" context menu item
-        And I accept the alert
-        Then I wait 30 "seconds" to not see "cali_shp_Cucumber"
+    # This test has a high failure rate on the Jenkins build stack, commenting out until we can make it pass more
+    #Scenario: Delete Dataset
+    #    And I scroll "Datasets" into view
+    #    When I click on the "Datasets" option in the "settingsSidebar"
+    #    Then I click the "cali_shp_Cucumber" Dataset
+    #    And I context click the "cali_shp_Cucumber" Dataset
+    #    And I click the "Delete" context menu item
+    #    And I accept the alert
+    #    Then I wait 30 "seconds" to not see "cali_shp_Cucumber"
 
     Scenario: Build an TDS translation mapping for gdb
         Then I click on the "Translation Assistant" option in the "settingsSidebar"
