@@ -47,6 +47,8 @@ using namespace std;
 namespace hoot
 {
 
+unsigned int BuildingMerger::logWarnCount = 0;
+
 class DeletableBuildingPart : public BaseFilter
 {
 public:
@@ -107,7 +109,7 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Element
     boost::shared_ptr<Element> e1 = _buildBuilding1(map);
     LOG_VART(e1.get());
     //in #2034, encountering a situation where the second building is empty;
-    //didn't think that was possible here...added checks for both
+    //didn't think that was possible here...added checks here for both
     if (e1.get())
     {
       LOG_VART(e1);
@@ -128,26 +130,35 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Element
     LOG_VART(nodeCount1);
     LOG_VART(nodeCount2);
 
-    //don't think this will actually occur...
+    //don't think this should be occurring...needs more investigation
     if (nodeCount1 == 0 || nodeCount2 == 0)
     {
-      LOG_WARN("One or more of the buildings to merge are empty.");
-      if (e1.get())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
-        LOG_VART(e1->getElementId());
+        LOG_WARN("One or more of the buildings to merge are empty.");
+        if (e1.get())
+        {
+          LOG_VART(e1->getElementId());
+        }
+        else
+        {
+          LOG_TRACE("Building one null.");
+        }
+        if (e2.get())
+        {
+          LOG_VART(e2->getElementId());
+        }
+        else
+        {
+          LOG_TRACE("Building two null.");
+        }
       }
-      else
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
-        LOG_TRACE("Building one null.");
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }
-      if (e2.get())
-      {
-        LOG_VART(e2->getElementId());
-      }
-      else
-      {
-        LOG_TRACE("Building two null.");
-      }
+      logWarnCount++;
+
       return;
     }
 
