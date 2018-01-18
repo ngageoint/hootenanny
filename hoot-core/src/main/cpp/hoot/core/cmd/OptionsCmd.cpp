@@ -105,15 +105,16 @@ public:
         if (line.startsWith("=== " + optionName))
         {
           foundOption = true;
-          output += line + "\n";
+          output += line;
         }
-        else if (foundOption)
-        {
-          output += line + "\n";
-        }
-        else
+        else if (line.startsWith("=== "))
         {
           foundOption = false;
+        }
+
+        if (foundOption)
+        {
+          output += line ;
         }
       }
 
