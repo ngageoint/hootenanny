@@ -40,6 +40,8 @@ class BuildingMerger : public MergerBase
 {
 public:
 
+  static unsigned int logWarnCount;
+
   /**
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
    * and Unknown2 as second.

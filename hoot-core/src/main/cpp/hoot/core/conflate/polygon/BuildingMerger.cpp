@@ -47,8 +47,6 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int BuildingMerger::logWarnCount = 0;
-
 class DeletableBuildingPart : public BaseFilter
 {
 public:
@@ -77,6 +75,8 @@ public:
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new DeletableBuildingPart()); }
 
 };
+
+unsigned int BuildingMerger::logWarnCount = 0;
 
 BuildingMerger::BuildingMerger(const set< pair<ElementId, ElementId> >& pairs) :
   _pairs(pairs)
