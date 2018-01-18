@@ -28,9 +28,11 @@
 // Hoot
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/util/Settings.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/FileUtils.h>
+
+// Qt
+#include <QFile>
 
 using namespace std;
 
@@ -72,20 +74,52 @@ public:
       }
       else
       {
-        cmd = "cat " + configOptionsFile + " | grep '^=== " + args[0].toLower() + "' | sed 's/=== //g'";
+        cmd =
+          "cat " + configOptionsFile + " | grep '^=== " + args[0].toLower().trimmed() +
+          "' | sed 's/=== //g'";
       }
     }
     else    //size = 2
     {
-      if (args[0].toLower() == "--detail")
+      if (args[0].toLower() == "--detail" || args[1].toLower() != "--detail")
       {
         cout << getHelp() << endl << endl;
         throw HootException(QString("%1 requires --detail specifier at end of command.").arg(getName()));
       }
-      //TODO:
 
+      //TODO: replace this w/ some fancy lookahead regex called by grep...doing it by brute force for now
+      //const QString configFileContents = FileUtils::readFully(configOptionsFile);
+      QFile file(configOptionsFile);
+      if (!file.open(QFile::ReadOnly))
+      {
+        throw HootException("Error opening file for reading: " + configOptionsFile);
+      }
+
+      QString output;
+      const QString optionName = args[0].toLower().trimmed();
+      bool foundOption = false;
+      while (!file.atEnd())
+      {
+        const QString line = QString::fromUtf8(file.readLine().constData());
+
+        if (line.startsWith("=== " + optionName))
+        {
+          foundOption = true;
+          output += line + "\n";
+        }
+        else if (foundOption)
+        {
+          output += line + "\n";
+        }
+        else
+        {
+          foundOption = false;
+        }
+      }
+
+      std::cout << output;
     }
-    if (std::system(cmd.toStdString().c_str()) != 0)
+    if (!cmd.isEmpty() && std::system(cmd.toStdString().c_str()) != 0)
     {
       throw HootException("Unable to list configuration options.");
     }
