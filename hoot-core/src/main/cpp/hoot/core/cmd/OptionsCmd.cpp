@@ -124,7 +124,7 @@ public:
       }
       file.close();
 
-      std::cout << output.trimmed();
+      std::cout << output.trimmed() << std::endl;
     }
     if (!cmd.isEmpty() && std::system(cmd.toStdString().c_str()) != 0)
     {
