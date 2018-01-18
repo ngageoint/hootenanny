@@ -45,11 +45,11 @@ namespace hoot
 class NamedOp : public OsmMapOperation, public Configurable
 {
 public:
+
   static std::string className() { return "hoot::NamedOp"; }
 
   NamedOp();
-
-  NamedOp(QStringList namedOps) { _namedOps = namedOps; _conf = 0; }
+  NamedOp(QStringList namedOps);
 
   virtual ~NamedOp() {}
 

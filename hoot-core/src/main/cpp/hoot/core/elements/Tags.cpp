@@ -22,7 +22,8 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Tags.h"
@@ -56,6 +57,21 @@ void Tags::addTags(const Tags& t)
 void Tags::addNote(QString note)
 {
   appendValue("note", note);
+}
+
+void Tags::appendValue(const QString kvp)
+{
+  const QString errorMsg = "KVP: " + kvp + " should be of the format: key=value";
+  if (!kvp.contains("="))
+  {
+    throw HootException(errorMsg);
+  }
+  const QStringList kvpParts = kvp.split("=");
+  if (kvpParts.size() != 2)
+  {
+    throw HootException(errorMsg);
+  }
+  appendValue(kvpParts[0].trimmed(), kvpParts[1].trimmed());
 }
 
 void Tags::appendValue(QString k, QString v)
@@ -319,11 +335,11 @@ int Tags::getInformationCount() const
   for (Tags::const_iterator it = constBegin(); it != constEnd(); ++it)
   {
     QString key = it.key();
-    LOG_VART(key);
+    //LOG_VART(key);
     if (OsmSchema::getInstance().isMetaData(key, it.value()) == false &&
         it.value() != "")
     {
-      LOG_TRACE(key << " has info";)
+      //LOG_TRACE(key << " has info";)
       count++;
     }
   }
@@ -390,11 +406,11 @@ const QStringList& Tags::getNameKeys()
   if (_nameKeys.size() == 0)
   {
     const vector<SchemaVertex>& tags =
-        OsmSchema::getInstance().getTagByCategory(OsmSchemaCategory::name());
+      OsmSchema::getInstance().getTagByCategory(OsmSchemaCategory::name());
 
     for (size_t i = 0; i < tags.size(); i++)
     {
-      LOG_TRACE("key : " << (tags[i].key.toStdString()));
+      //LOG_TRACE("key : " << (tags[i].key.toStdString()));
       _nameKeys.append(tags[i].key);
     }
   }

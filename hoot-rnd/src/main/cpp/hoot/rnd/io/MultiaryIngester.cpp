@@ -54,7 +54,7 @@ namespace hoot
 {
 
 MultiaryIngester::MultiaryIngester() :
-_logUpdateInterval(ConfigOptions().getApidbBulkInserterFileOutputStatusUpdateInterval())
+_logUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
   //in order for the sorting to work, all original POI ids must be retained...no new ones
   //assigned; we're assuming no duplicate ids in the input

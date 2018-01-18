@@ -23,45 +23,33 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef DERIVEIMPLICITTAGSVISITOR_H
-#define DERIVEIMPLICITTAGSVISITOR_H
+#ifndef IMPLICIT_TAG_ELIGIBLE_CRITERION_H
+#define IMPLICIT_TAG_ELIGIBLE_CRITERION_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/filters/ElementCriterion.h>
+#include <hoot/core/elements/Tags.h>
+
+// Qt
+#include <QStringList>
+
 
 namespace hoot
 {
-class ImplicitRule;
 
 /**
- * Derive tags based on the names.
+ *
  */
-class DeriveImplicitTagsVisitor : public ElementVisitor
+class ImplicitTagEligibleCriterion : public ElementCriterion
 {
 public:
 
-  static std::string className() { return "hoot::DeriveImplicitTagsVisitor"; }
+  virtual QStringList getEligibleKvps(const Tags& tags) const = 0;
+  virtual bool hasEligibleKvp(const Tags& tags) const = 0;
 
-  DeriveImplicitTagsVisitor();
-
-  virtual void visit(const ElementPtr& e);
-
-public:
-
-  QList< boost::shared_ptr<ImplicitRule> > _rules;
-
-  /**
-   * Ensure all rules are in lower case.
-   */
-  void _rulesToLower();
-
-  /**
-   * Extract the names from tags and then tokenize the names into a set of words.
-   */
-  QSet<QString> _extractNameWords(const Tags& t);
 };
 
 }
-
-#endif // DERIVEIMPLICITTAGSVISITOR_H
+#endif

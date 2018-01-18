@@ -1,0 +1,10 @@
+6	alwhdt	amenity=clinic
+3	Eid Prayer Ground	amenity=place_of_worship
+7	Eid Prayer Ground 2	amenity=place_of_worship
+3	Masjid	amenity=place_of_worship
+8	Masjid	tourism=hotel
+5	Mosque	amenity=place_of_worship
+4	Mosque	leisure=park
+6	Mustashfa	amenity=hospital
+8	Mustashfa alwhdt	amenity=hospital
+4	Sidi Muhammad	amenity=grave_yard

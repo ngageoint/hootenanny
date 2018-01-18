@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,44 +22,47 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef AREAMERGER_H
-#define AREAMERGER_H
-
+#ifndef IMPLICIT_POI_POLYGON_TAGGER_H
+#define IMPLICIT_POI_POLYGON_TAGGER_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
-
+#include <hoot/core/visitors/ImplicitTaggerBase.h>
+#include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPoiCriterion.h>
+#include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPolyCriterion.h>
 
 namespace hoot
 {
 
-class OsmMap;
-
 /**
- * TODO: How much, if any, does this need to be genericized to handle areas (non-building polys)?
+ * Adds tags implicitly derived from POI names to POIs and polygons
  */
-class AreaMerger
+class ImplicitPoiPolygonTagger : public ImplicitTaggerBase
 {
-
 public:
 
-  /**
-   *
-   */
-  AreaMerger();
+  static std::string className() { return "hoot::ImplicitPoiPolygonTagger"; }
 
-  /**
-   * TODO: Merges a single POI with a single polygon, both as defined by PoiPolygonMerger
-   *
-   * @param map an OSM map containing a single node POI and a single polygon area or building, which
-   * can be a way or a relation (multipolygon)
-   */
-  static void merge(OsmMapPtr map);
+  ImplicitPoiPolygonTagger();
+  ImplicitPoiPolygonTagger(const QString databasePath);
+
+protected:
+
+  virtual bool _visitElement(const ElementPtr& e);
+
+private:
+
+  PoiPolygonPoiCriterion _poiFilter;
+  PoiPolygonPolyCriterion _polyFilter;
+  bool _inABuildingOrPoiCategory;
+
+  bool _elementIsATaggablePoi(const ElementPtr& e);
+  bool _elementIsATaggablePolygon(const ElementPtr& e);
 
 };
 
 }
 
-#endif // AREAMERGER_H
+#endif // IMPLICIT_POI_POLYGON_TAGGER_H

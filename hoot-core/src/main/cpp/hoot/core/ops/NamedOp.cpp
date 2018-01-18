@@ -39,9 +39,15 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, NamedOp)
 
-NamedOp::NamedOp()
+NamedOp::NamedOp() :
+_conf(&conf())
 {
-  _conf = 0;
+}
+
+NamedOp::NamedOp(QStringList namedOps)  :
+_conf(&conf()),
+_namedOps(namedOps)
+{
 }
 
 void NamedOp::apply(boost::shared_ptr<OsmMap> &map)
@@ -103,6 +109,8 @@ void NamedOp::apply(boost::shared_ptr<OsmMap> &map)
         constructObject<ElementVisitor>(s));
 
       Configurable* c = dynamic_cast<Configurable*>(t.get());
+      LOG_VARD(c == 0);
+      LOG_VARD(_conf == 0);
       if (_conf != 0 && c != 0)
       {
         c->setConfiguration(*_conf);
