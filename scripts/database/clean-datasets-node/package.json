@@ -1,0 +1,15 @@
+{
+  "name": "rm-old-hoot-data",
+  "version": "1.0.0",
+  "description": "Delete stale datasets from hoot based on their last accessed date, retrieved as an hstore tag",
+  "main": "DeleteOldData.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "author": "Rebecca Rice (@rmrice)",
+  "license": "ISC",
+  "dependencies": {
+    "pg": "4.4.3",
+    "moment": "~2.20.1"
+  }
+}
