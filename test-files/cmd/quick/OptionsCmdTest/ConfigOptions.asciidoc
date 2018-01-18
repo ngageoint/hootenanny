@@ -263,13 +263,6 @@ purposes.
 Set the circular error tag on features to this value, in meters, by default if the tag isn't already
 populated.
 
-=== config.options.file
-
-* Data Type: string
-* Default Value: `conf/core/ConfigOptions.asciidoc`
-
-Path to this file.  Only modified during testing the Hootenanny options command.
-
 === conflate.enable.old.roads
 
 * Data Type: bool

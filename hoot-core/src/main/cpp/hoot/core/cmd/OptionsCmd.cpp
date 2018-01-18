@@ -30,6 +30,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 using namespace std;
 
@@ -57,11 +58,11 @@ public:
       throw HootException(QString("%1 takes zero to two parameters.").arg(getName()));
     }
 
-    QString configOptionsFile = "conf/core/ConfigOptions.asciidoc";
+    const QString configOptionsFile = ConfigOptions(conf()).getConfigOptionsFile();
     QString cmd;
     if (args.size() == 0)
     {
-      cmd = "cat " + configOptionsFile + " | grep '==='";
+      cmd = "cat " + configOptionsFile + " | grep '^===' | sed 's/=== //g'";
     }
     else if (args.size() == 1)
     {
@@ -71,7 +72,7 @@ public:
       }
       else
       {
-        cmd = "cat " + configOptionsFile + " | grep '=== " + args[0].toLower() + "'";
+        cmd = "cat " + configOptionsFile + " | grep '^=== " + args[0].toLower() + "' | sed 's/=== //g'";
       }
     }
     else    //size = 2
