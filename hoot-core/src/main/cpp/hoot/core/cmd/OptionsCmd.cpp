@@ -68,7 +68,7 @@ public:
     {
       if (args[0].toLower() == "--detail")
       {
-        cmd = "cat " + configOptionsFile;
+        cmd = "cat " + configOptionsFile + " | grep -v '//'";
       }
       else
       {
