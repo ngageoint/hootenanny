@@ -48,7 +48,7 @@ public:
 
   static string className() { return "hoot::OptionsCmd"; }
 
-  OptionsCmd() { }
+  OptionsCmd() {}
 
   virtual QString getName() const { return "options"; }
 
@@ -87,38 +87,44 @@ public:
         throw HootException(QString("%1 requires --detail specifier at end of command.").arg(getName()));
       }
 
-      //TODO: replace this w/ some fancy lookahead regex called by grep...doing it by brute force for now
-      //const QString configFileContents = FileUtils::readFully(configOptionsFile);
       QFile file(configOptionsFile);
       if (!file.open(QFile::ReadOnly))
       {
         throw HootException("Error opening file for reading: " + configOptionsFile);
       }
 
+      //TODO: replace this w/ some fancy lookahead regex called by grep...doing it by brute force for now
       QString output;
-      const QString optionName = args[0].toLower().trimmed();
-      bool foundOption = false;
-      while (!file.atEnd())
+      try
       {
-        const QString line = QString::fromUtf8(file.readLine().constData());
+        const QString optionName = args[0].toLower().trimmed();
+        bool foundOption = false;
+        while (!file.atEnd())
+        {
+          const QString line = QString::fromUtf8(file.readLine().constData());
 
-        if (line.startsWith("=== " + optionName))
-        {
-          foundOption = true;
-          output += line;
-        }
-        else if (line.startsWith("=== "))
-        {
-          foundOption = false;
-        }
+          if (line.startsWith("=== " + optionName))
+          {
+            foundOption = true;
+          }
+          else if (line.startsWith("=== "))
+          {
+            foundOption = false;
+          }
 
-        if (foundOption)
-        {
-          output += line ;
+          if (foundOption)
+          {
+            output += line ;
+          }
         }
       }
+      catch (...)
+      {
+        file.close();
+      }
+      file.close();
 
-      std::cout << output;
+      std::cout << output.trimmed();
     }
     if (!cmd.isEmpty() && std::system(cmd.toStdString().c_str()) != 0)
     {
