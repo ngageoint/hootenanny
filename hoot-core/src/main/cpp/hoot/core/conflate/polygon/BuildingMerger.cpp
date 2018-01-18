@@ -103,19 +103,43 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Element
   else
   {
     // use node count as a surrogate for complexity of the geometry.
+    int nodeCount1 = 0;
     boost::shared_ptr<Element> e1 = _buildBuilding1(map);
-    LOG_VARD(e1.get());
-    LOG_VARD(e1);
-    const int nodeCount1 =
-      (int)FilteredVisitor::getStat(
-        new ElementTypeCriterion(ElementType::Node), new ElementCountVisitor(), map, e1);
+    LOG_VART(e1.get());
+    //in #2034, encountering a situation where the second building is empty;
+    //didn't think that was possible here...added checks for both
+    if (e1.get())
+    {
+      LOG_VART(e1);
+      nodeCount1 =
+        (int)FilteredVisitor::getStat(
+          new ElementTypeCriterion(ElementType::Node), new ElementCountVisitor(), map, e1);
+    }
 
+    int nodeCount2 = 0;
     boost::shared_ptr<Element> e2 = _buildBuilding2(map);
-    LOG_VARD(e2.get());
-    LOG_VARD(e2);
-    const int nodeCount2 =
-      (int)FilteredVisitor::getStat(
-        new ElementTypeCriterion(ElementType::Node), new ElementCountVisitor(), map, e2);
+    LOG_VART(e2.get());
+    if (e2.get())
+    {
+      nodeCount2 =
+        (int)FilteredVisitor::getStat(
+          new ElementTypeCriterion(ElementType::Node), new ElementCountVisitor(), map, e2);
+    }
+
+    //don't think this will actually occur...
+    if (nodeCount1 == 0 && nodeCount2 == 0)
+    {
+      LOG_WARN("Both buildings to merge are empty.");
+      if (e1.get())
+      {
+        LOG_VART(e1->getElementId());
+      }
+      if (e2.get())
+      {
+        LOG_VART(e2->getElementId());
+      }
+      return;
+    }
 
     boost::shared_ptr<Element> keeper;
     boost::shared_ptr<Element> scrap;
