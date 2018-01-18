@@ -327,12 +327,12 @@ vector<WaySublineMatch> MaximalSubline::findAllMatches(const ConstOsmMapPtr &map
   // match.
   if (rawSublines.size() == 1 && snapIntersections)
   {
-    LOG_DEBUG("Snapping intersections.");
+    LOG_TRACE("Snapping intersections.");
     result = _snapIntersections(map, w1, w2, rawSublines);
   }
   else
   {
-    LOG_DEBUG("Not snapping intersections.");
+    LOG_TRACE("Not snapping intersections.");
     result = rawSublines;
   }
 

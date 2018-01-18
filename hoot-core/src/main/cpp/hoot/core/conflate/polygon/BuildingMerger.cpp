@@ -104,11 +104,15 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Element
   {
     // use node count as a surrogate for complexity of the geometry.
     boost::shared_ptr<Element> e1 = _buildBuilding1(map);
+    LOG_VARD(e1.get());
+    LOG_VARD(e1);
     const int nodeCount1 =
       (int)FilteredVisitor::getStat(
         new ElementTypeCriterion(ElementType::Node), new ElementCountVisitor(), map, e1);
 
     boost::shared_ptr<Element> e2 = _buildBuilding2(map);
+    LOG_VARD(e2.get());
+    LOG_VARD(e2);
     const int nodeCount2 =
       (int)FilteredVisitor::getStat(
         new ElementTypeCriterion(ElementType::Node), new ElementCountVisitor(), map, e2);
