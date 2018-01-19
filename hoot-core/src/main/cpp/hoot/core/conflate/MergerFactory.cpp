@@ -89,8 +89,17 @@ void MergerFactory::createMergers(const OsmMapPtr& map, const MatchSet& matches,
   //ultimately causes the exception below to be thrown.  For now, attempting to bypass and only
   //log a warning.  This also required additional error handling in ScriptMerger (see
   //ScriptMerger::_applyMergePair).
-  LOG_WARN("Unable to create merger for the provided set of matches: " << matches);
-  LOG_DEBUG("Creators: " << _creators);
+  if (logWarnCount < Log::getWarnMessageLimit())
+  {
+    LOG_WARN("Unable to create merger for the provided set of matches: " << matches);
+    LOG_DEBUG("Creators: " << _creators);
+  }
+  else if (logWarnCount == Log::getWarnMessageLimit())
+  {
+    LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+  }
+  logWarnCount++;
+
   //throw HootException("Error creating a merger for the provided set of matches.");
 }
 
