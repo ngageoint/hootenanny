@@ -79,38 +79,24 @@ class HootGbdxTask(GbdxTaskInterface):
 
 
     def processGeoJsonFiles(self,inputDir,outputDir):
-        print('\nThe geojson Files')
-
         fList = self.findFiles(inputDir,['geojson'])
         for inputFile in fList['geojson']:
-            print('Full Path: %s') % (inputFile)
-            
             fName = os.path.basename(inputFile)
-            print('File Name: %s') % (fName)
-            
             outputFile = self.checkFile(os.path.join(outputDir,fName))
-            print('Output Name: %s') % (outputFile)
-
             returnText = self.convertFile(inputFile,outputFile)
+
             if returnText is not None:
                 self.status = 'failed'
                 self.reason = returnText
-                print('ReturnText: %s') % (returnText)
-            print('')
         # End processGeoJsonFiles
 
 
     def processJsonFiles(self,inputDir,outputDir):
-        print('\nThe json Files')
         tmpInName = self.checkFile(os.path.join(inputDir,'hootIn%s.geojson' % os.getpid()))
         tmpOutName = self.checkFile(os.path.join(outputDir,'hootOut%s.geojson' % os.getpid()))
-        print('Tmp In Path: %s') % (tmpInName)
-        print('Tmp Out Path: %s') % (tmpOutName)
-
         fList = self.findFiles(inputDir,['json'])
-        for inputFile in fList['json']:
-            print('Full Path: %s') % (inputFile)
 
+        for inputFile in fList['json']:
             # Make sure that we don't have anything from a previous run
             if os.path.isfile(tmpInName):
                 os.remove(tmpInName)
@@ -126,31 +112,23 @@ class HootGbdxTask(GbdxTaskInterface):
             if returnText is not None:
                 self.status = 'failed'
                 self.reason = returnText
-                print('ReturnText: %s') % (returnText)
             
             # Make sure that we got some output before trying to do anything with it.
             if os.path.isfile(tmpOutName):
                 fName = os.path.basename(inputFile)
-                print('File Name: %s') % (fName)
-                
                 outputFile = self.checkFile(os.path.join(outputDir,fName))
-                print('Output Name: %s') % (outputFile)
                 os.rename(tmpOutName,outputFile)
         
             # Clean up. Move the input file back to what it was
             os.rename(tmpInName,inputFile)
-            print('')        # End processJsonFiles
+            # End processJsonFiles
 
 
     def processZipFiles(self,inputDir,outputDir):
-        print('The zip Files')
         tmpDirName = self.checkFile(os.path.join(inputDir,'hoot%s' % os.getpid()))
-        print('Tmp Dir Path: %s') % (tmpDirName)
-        
         fList = self.findFiles(inputDir,['zip'])
-        for inputFile in fList['zip']:
-            print('Full Path: %s') % (inputFile)
 
+        for inputFile in fList['zip']:
             # Defensive cleaning 
             if os.path.isfile(tmpDirName):
                 os.remove(tmpDirName)
@@ -169,6 +147,14 @@ class HootGbdxTask(GbdxTaskInterface):
                 shutil.rmtree(tmpDirName)
                 continue
 
+            # Make sure that we have files to work with
+            tList = self.findFiles(tmpDirName,['geojson','json','zip'])
+            if tList['geojson'] == [] and tList['json'] == [] and tList['zip'] == []:
+                open(os.path.join(outputDir,'.empty'),'a').close()
+                shutil.rmtree(tmpDirName)
+                return
+
+
             # Now process the unpacked files
             self.processGeoJsonFiles(tmpDirName,outputDir)
             self.processJsonFiles(tmpDirName,outputDir)
@@ -176,9 +162,8 @@ class HootGbdxTask(GbdxTaskInterface):
             # Now get recursive :-)  We may have zip files of zip files
             # This is very defensive
             self.processZipFiles(tmpDirName,outputDir)
-
-            print('')
-            #shutil.rmtree(tmpDirName)
+            
+            shutil.rmtree(tmpDirName)
         # End processZipFiles
 
 
@@ -189,52 +174,19 @@ class HootGbdxTask(GbdxTaskInterface):
         if not os.path.exists(outputDir):
             os.makedirs(outputDir)
 
+        # Check if we have something to work with
+        tList = self.findFiles(inputDir,['geojson','json','zip'])
+        if tList['geojson'] == [] and tList['json'] == [] and tList['zip'] == []:
+            open(os.path.join(outputDir,'.empty'),'a').close()
+            return
+
+
+
         # Now go looking for files to convert
         self.processGeoJsonFiles(inputDir,outputDir)
         self.processJsonFiles(inputDir,outputDir)
         self.processZipFiles(inputDir,outputDir)
-
-
-            # fName = os.path.basename(inputFile)
-            # print('File Name: %s') % (fName)
-            
-            # outputFile = self.checkFile(os.path.join(outputDir,fName))
-            # print('Output Name: %s') % (outputFile)
-
-            # returnText = self.convertFile(inputFile,outputFile)
-            # if returnText is not None:
-            #     self.status = 'failed'
-            #     self.reason = returnText
-            #     print('ReturnText: %s') % (returnText)
-                       
-
-            # # Skip anything that isn't something we can work with.
-            # if not (file.endswith('.geojson') or file.endswith('.json')):
-            #     continue
-
-            # # Hootenanny uses .geojson, not .json
-            # if file.endswith('.json'):
-            #     tFile = file.replace('.json','.geojson')
-            #     os.rename(os.path.join(inputDir,file),os.path.join(inputDir,tFile))
-            # else:
-            #     tFile = file
-
-            # inputFile = os.path.join(inputDir,tFile)
-            # outputFile = os.path.join(outputDir,tFile)
-
-
-            # # Rename the output back to .json if that is what we got as an input
-            # # Also rename the input back as well
-            # if file != tFile:
-            #     newOutputFile = outputFile.replace('.geojson','.json')
-            #     os.rename(outputFile,newOutputFile)
-            #     os.rename(os.path.join(inputDir,tFile),os.path.join(inputDir,file))
-
-            # # with "--error" the Hoot command shoud not have any output. If it does then
-            # # it is an error.
-            # if len(hootOut) > 0:
-            #     self.status = 'failed'
-            #     self.reason = hootOut
+        # End of invoke
 
 
 if __name__ == "__main__":
