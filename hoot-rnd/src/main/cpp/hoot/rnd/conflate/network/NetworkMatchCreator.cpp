@@ -113,16 +113,14 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
 
   NetworkDetailsPtr details(new NetworkDetails(map, n1, n2));
 
-  LOG_INFO("Optimizing network...");
-
   const size_t numIterations = ConfigOptions().getNetworkOptimizationIterations();
-  LOG_VARD(numIterations);
   if (numIterations < 1)
   {
     throw HootException(
       "Invalid value: " + QString::number(numIterations) + " for setting " +
       ConfigOptions::getNetworkOptimizationIterationsKey());
   }
+  LOG_INFO("Optimizing network over " << numIterations << "iterations...");
   for (size_t i = 0; i < numIterations; ++i)
   {
     matcher->iterate();
