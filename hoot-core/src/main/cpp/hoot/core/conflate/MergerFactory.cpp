@@ -85,7 +85,7 @@ void MergerFactory::createMergers(const OsmMapPtr& map, const MatchSet& matches,
     }
   }
 
-  //TODO: In #2059, a ScriptMatch and a NetworkMatch are being grouped together, which
+  //TODO: In #2069, a ScriptMatch and a NetworkMatch are being grouped together, which
   //ultimately causes the exception below to be thrown.  For now, attempting to bypass and only
   //log a warning.  This also required additional error handling in ScriptMerger (see
   //ScriptMerger::_applyMergePair).
