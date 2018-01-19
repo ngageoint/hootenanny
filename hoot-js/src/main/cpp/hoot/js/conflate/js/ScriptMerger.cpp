@@ -82,18 +82,22 @@ void ScriptMerger::_applyMergePair(const OsmMapPtr& map,
   LOG_VART(_eid2);
   LOG_VART(_pairs.size());
 
-  if (_pairs.size() != 1)
-  {
-    throw HootException("A set of elements was specified, but only mergePairs is implemented. "
-                        "See the _Supplemental User Documentation_, _Conflating Sets_ for "
-                        "details.");
-  }
-
   if (!map->containsElement(_eid1) || !map->containsElement(_eid2))
   {
     LOG_WARN(
       "Attempting to merge one or more elements that do not exist: " << _eid1 << " " << _eid2);
     return;
+  }
+  else if (_pairs.size() == 0)
+  {
+    LOG_WARN("Attempting to merge empty pairs.");
+    return;
+  }
+  else if (_pairs.size() > 1)
+  {
+    throw HootException("A set of elements was specified, but only mergePairs is implemented. "
+                        "See the _Supplemental User Documentation_, _Conflating Sets_ for "
+                        "details.");
   }
 
   HandleScope handleScope;
