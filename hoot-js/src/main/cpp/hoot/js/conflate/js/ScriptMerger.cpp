@@ -88,6 +88,13 @@ void ScriptMerger::_applyMergePair(const OsmMapPtr& map,
                         "details.");
   }
 
+  if (!map->containsElement(_eid1) || !map->containsElement(_eid2))
+  {
+    LOG_WARN(
+      "Attempting to merge one or more elements that do not exist: " << _eid1 << " " << _eid2);
+    return;
+  }
+
   HandleScope handleScope;
   Context::Scope context_scope(_script->getContext());
   Handle<Value> v = _callMergePair(map);
@@ -124,14 +131,10 @@ void ScriptMerger::_applyMergeSets(const OsmMapPtr& map,
 
 Handle<Value> ScriptMerger::_callMergePair(const OsmMapPtr& map) const
 {
-  LOG_TRACE("1");
-
   HandleScope handleScope;
   Handle<Object> plugin =
     Handle<Object>::Cast(_script->getContext()->Global()->Get(String::New("plugin")));
   Handle<Value> value = plugin->Get(String::New("mergePair"));
-
-  LOG_TRACE("2");
 
   if (value.IsEmpty() || value->IsFunction() == false)
   {
@@ -148,13 +151,9 @@ Handle<Value> ScriptMerger::_callMergePair(const OsmMapPtr& map) const
   jsArgs[argc++] = ElementJs::New(map->getElement(_eid1));
   jsArgs[argc++] = ElementJs::New(map->getElement(_eid2));
 
-  LOG_TRACE("3");
-
   TryCatch trycatch;
   Handle<Value> result = func->Call(_plugin, argc, jsArgs);
   HootExceptionJs::checkV8Exception(result, trycatch);
-
-  LOG_TRACE("4");
 
   if (result.IsEmpty() || result == Undefined())
   {
