@@ -85,10 +85,10 @@ void MergerFactory::createMergers(const OsmMapPtr& map, const MatchSet& matches,
     }
   }
 
+  //TODO: In #2059, a ScriptMatch and a NetworkMatch are being grouped together, which
+  //ultimately causes the exception below to be thrown.
   LOG_WARN("Unable to create merger for the provided set of matches: " << matches);
   LOG_DEBUG("Creators: " << _creators);
-  //TODO: In #2059, a ScriptMatch and a NetworkMatch are being grouped together, which
-  //ultimately causes this to be thrown.
   //throw HootException("Error creating a merger for the provided set of matches.");
 }
 

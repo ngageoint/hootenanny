@@ -46,6 +46,8 @@ using namespace v8;
 namespace hoot
 {
 
+unsigned int ScriptMerger::logWarnCount = 0;
+
 ScriptMerger::ScriptMerger(boost::shared_ptr<PluginContext> script, Persistent<Object> plugin,
                            const set<pair<ElementId, ElementId> > &pairs) :
   _pairs(pairs),
@@ -82,15 +84,44 @@ void ScriptMerger::_applyMergePair(const OsmMapPtr& map,
   LOG_VART(_eid2);
   LOG_VART(_pairs.size());
 
-  if (!map->containsElement(_eid1) || !map->containsElement(_eid2))
+  const bool mapContainsElement1 = map->containsElement(_eid1);
+  const bool mapContainsElement2 = map->containsElement(_eid2);
+  //This contains check was put in place as the result of changing MergerFactory not throw an
+  //exception when a merger cannot be found for a set of match pairs.
+  if (!mapContainsElement1 || !mapContainsElement2)
   {
-    LOG_WARN(
-      "Attempting to merge one or more elements that do not exist: " << _eid1 << " " << _eid2);
+    if (logWarnCount < Log::getWarnMessageLimit())
+    {
+      LOG_WARN("Attempting to merge one or more elements that do not exist: ");
+      if (!mapContainsElement1)
+      {
+        LOG_WARN(_eid1);
+      }
+      if (!mapContainsElement2)
+      {
+        LOG_WARN(_eid2);
+      }
+    }
+    else if (logWarnCount == Log::getWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
     return;
   }
+  //This pair size check was put in place as the result of changing MergerFactory not throw an
+  //exception when a merger cannot be found for a set of match pairs.
   else if (_pairs.size() == 0)
   {
-    LOG_WARN("Attempting to merge empty pairs.");
+    if (logWarnCount < Log::getWarnMessageLimit())
+    {
+      LOG_WARN("Attempting to merge empty element pairs.");
+    }
+    else if (logWarnCount == Log::getWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
     return;
   }
   else if (_pairs.size() > 1)

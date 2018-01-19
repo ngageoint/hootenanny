@@ -31,6 +31,7 @@
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
@@ -47,7 +48,8 @@ public:
 
   static std::string className() { return "hoot::ReportMissingElementsVisitor"; }
 
-  ReportMissingElementsVisitor(bool removeMissing = false, int maxReport = 10);
+  ReportMissingElementsVisitor(bool removeMissing = false,
+                               int maxReport = Log::getWarnMessageLimit());
 
   virtual ~ReportMissingElementsVisitor() {}
 
