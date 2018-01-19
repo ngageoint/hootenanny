@@ -102,7 +102,6 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
         set< pair<ElementId, ElementId> > p = nm->getMatchPairs();
         pairs.insert(p.begin(), p.end());
       }
-
       mergers.push_back(new PartialNetworkMerger(pairs, edgeMatches, m->getNetworkDetails()));
     }
     else
@@ -122,12 +121,10 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
       else
       {
         double overlapPercent = _getOverlapPercent(matches);
-
         if (overlapPercent > 80.0) // Go ahead and merge largest match
         {
-          //LOG_TRACE("Returning largest match");
           const NetworkMatch* largest = _getLargest(matches);
-          LOG_TRACE("Largest Match: " << largest->getEdgeMatch()->getUid());
+          LOG_TRACE("Merging largest Match: " << largest->getEdgeMatch()->getUid());
           mergers.push_back(
             new PartialNetworkMerger(
               largest->getMatchPairs(),
@@ -167,6 +164,7 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
   {
     LOG_TRACE("Match invalid; skipping merge: " << (*matches.begin())->toString());
   }
+  LOG_VART(result);
 
   return result;
 }
