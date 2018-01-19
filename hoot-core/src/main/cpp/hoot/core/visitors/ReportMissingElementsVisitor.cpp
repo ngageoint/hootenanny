@@ -30,7 +30,6 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Relation.h>
-#include <hoot/core/util/Log.h>
 
 using namespace std;
 
