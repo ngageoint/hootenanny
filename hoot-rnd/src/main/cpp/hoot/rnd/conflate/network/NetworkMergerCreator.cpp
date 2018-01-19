@@ -56,7 +56,7 @@ NetworkMergerCreator::NetworkMergerCreator()
 bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merger*>& mergers) const
 {
   LOG_TRACE("Creating mergers with " << className() << "...");
-  LOG_TRACE("Creating mergers for match set: ");
+  LOG_TRACE("Creating mergers for match set: " << matchesIn);
 
   QString matchesList = "";
   if (hoot::Log::Trace == hoot::Log::getInstance().getLevel())
