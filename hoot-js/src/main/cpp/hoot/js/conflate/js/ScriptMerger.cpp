@@ -78,6 +78,9 @@ void ScriptMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId
 void ScriptMerger::_applyMergePair(const OsmMapPtr& map,
   vector< pair<ElementId, ElementId> >& replaced) const
 {
+  LOG_VART(_eid1);
+  LOG_VART(_eid2);
+
   if (_pairs.size() != 1)
   {
     throw HootException("A set of elements was specified, but only mergePairs is implemented. "
@@ -98,10 +101,12 @@ void ScriptMerger::_applyMergePair(const OsmMapPtr& map,
     throw InternalErrorException("The merging script must add new elements to the map.");
   }
 
+  LOG_VART(map->containsElement(_eid1));
   if (map->containsElement(_eid1) == false)
   {
     replaced.push_back(pair<ElementId, ElementId>(_eid1, newElement->getElementId()));
   }
+  LOG_VART(map->containsElement(_eid2));
   if (map->containsElement(_eid2) == false)
   {
     replaced.push_back(pair<ElementId, ElementId>(_eid2, newElement->getElementId()));
@@ -119,10 +124,14 @@ void ScriptMerger::_applyMergeSets(const OsmMapPtr& map,
 
 Handle<Value> ScriptMerger::_callMergePair(const OsmMapPtr& map) const
 {
+  LOG_TRACE("1");
+
   HandleScope handleScope;
   Handle<Object> plugin =
     Handle<Object>::Cast(_script->getContext()->Global()->Get(String::New("plugin")));
   Handle<Value> value = plugin->Get(String::New("mergePair"));
+
+  LOG_TRACE("2");
 
   if (value.IsEmpty() || value->IsFunction() == false)
   {
@@ -132,14 +141,20 @@ Handle<Value> ScriptMerger::_callMergePair(const OsmMapPtr& map) const
   Handle<Function> func = Handle<Function>::Cast(value);
   Handle<Value> jsArgs[3];
 
+  LOG_VART(map->getElement(_eid1));
+  LOG_VART(map->getElement(_eid2));
   int argc = 0;
   jsArgs[argc++] = OsmMapJs::create(map);
   jsArgs[argc++] = ElementJs::New(map->getElement(_eid1));
   jsArgs[argc++] = ElementJs::New(map->getElement(_eid2));
 
+  LOG_TRACE("3");
+
   TryCatch trycatch;
   Handle<Value> result = func->Call(_plugin, argc, jsArgs);
   HootExceptionJs::checkV8Exception(result, trycatch);
+
+  LOG_TRACE("4");
 
   if (result.IsEmpty() || result == Undefined())
   {
