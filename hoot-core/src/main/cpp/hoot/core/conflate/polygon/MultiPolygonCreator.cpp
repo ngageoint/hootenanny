@@ -131,8 +131,8 @@ Geometry* MultiPolygonCreator::_addHoles(vector<LinearRing*> &outers,
       {
         if (logWarnCount < Log::getWarnMessageLimit())
         {
-          LOG_WARN("Could not find a polygon that fully contains a hole. inner[" << i << "] " <<
-            _r->toString());
+          LOG_WARN("Could not find a polygon that fully contains a hole.");
+          LOG_DEBUG("inner[" << i << "] " <<_r->toString());
         }
         else if (logWarnCount == Log::getWarnMessageLimit())
         {
