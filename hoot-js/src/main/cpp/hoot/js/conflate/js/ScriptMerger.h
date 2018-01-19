@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SCRIPTMERGER_H
 #define SCRIPTMERGER_H
@@ -35,11 +35,16 @@ namespace hoot
 {
 
 /**
- * @sa ScriptMatch
+ *
  */
 class ScriptMerger : public MergerBase
 {
 public:
+
+  static std::string className() { return "hoot::ScriptMerger"; }
+
+  static unsigned int logWarnCount;
+
   ScriptMerger(boost::shared_ptr<PluginContext> script, v8::Persistent<v8::Object> plugin,
     const std::set<std::pair<ElementId, ElementId> > &pairs);
 
@@ -53,6 +58,7 @@ public:
   virtual QString toString() const { return QString("ScriptMerger"); }
 
 protected:
+
   PairsSet _pairs;
   v8::Persistent<v8::Object> _plugin;
   boost::shared_ptr<PluginContext> _script;
@@ -61,16 +67,17 @@ protected:
   /**
    * Calls mergePair in the JS.
    */
-  virtual void _applyMergePair(const OsmMapPtr& map, std::vector< std::pair<ElementId, ElementId> >& replaced)
-    const;
+  virtual void _applyMergePair(
+    const OsmMapPtr& map, std::vector< std::pair<ElementId, ElementId> >& replaced) const;
   /**
    * Calls mergeSet in the JS.
    */
-  virtual void _applyMergeSets(const OsmMapPtr& map, std::vector< std::pair<ElementId, ElementId> >& replaced)
-    const;
+  virtual void _applyMergeSets(
+    const OsmMapPtr& map, std::vector< std::pair<ElementId, ElementId> >& replaced) const;
 
   v8::Handle<v8::Value> _callMergePair(const OsmMapPtr& map) const;
-  void _callMergeSets(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId> > &replaced) const;
+  void _callMergeSets(const OsmMapPtr& map,
+                      std::vector<std::pair<ElementId, ElementId> > &replaced) const;
   virtual PairsSet& getPairs() { return _pairs; }
   virtual const PairsSet& getPairs() const { return _pairs; }
 
