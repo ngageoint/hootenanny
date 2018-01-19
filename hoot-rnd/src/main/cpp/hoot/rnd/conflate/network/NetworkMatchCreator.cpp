@@ -120,7 +120,7 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
       "Invalid value: " + QString::number(numIterations) + " for setting " +
       ConfigOptions::getNetworkOptimizationIterationsKey());
   }
-  LOG_INFO("Optimizing network over " << numIterations << "iterations...");
+  LOG_INFO("Optimizing network over " << numIterations << " iterations...");
   for (size_t i = 0; i < numIterations; ++i)
   {
     matcher->iterate();
