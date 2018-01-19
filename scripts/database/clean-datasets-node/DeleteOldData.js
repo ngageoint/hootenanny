@@ -41,7 +41,7 @@ pgclient.connect(function(err){
       } else {
         // create new array with data id , last access date, and whether or not it's stale
         var data = rows.map(function(row){
-          var stale = moment().diff(moment(row.value), 'seconds') > 1;
+          var stale = moment().diff(moment(row.value), 'days') > 60;
           return {
             id: row.id,
             name: row.display_name,
@@ -53,6 +53,18 @@ pgclient.connect(function(err){
         data.forEach(function(d){
           if (d.stale) {
             pgclient.query("delete from maps where id=" + d.id);
+            // not sure if these are necessary
+            // pgclient.query("delete from folder_map_mappings where map_id=" + d.id);
+            // pgclient.query("drop table current_nodes_" + d.id + " cascade");
+            // pgclient.query("drop sequence changesets_" + d.id + "_id_seq");
+            // pgclient.query("drop table current_nodes_" + d.id + "cascade");
+            // pgclient.query("drop sequence current_nodes_" + d.id + "_id_seq");
+            // pgclient.query("drop table current_relation_members_" + d.id + "cascade");
+            // pgclient.query("drop sequence current_relations_" + d.id + "_id_seq");
+            // pgclient.query("drop table current_relations_" + d.id + "cascade");
+            // pgclient.query("drop table current_way_nodes_" + d.id + "cascade");
+            // pgclient.query("drop table current_ways_" + d.id + "cascade");
+            // pgclient.query("drop sequence current_ways_" + d.id + "_id_seq");
             console.log("deleted dataset " + d.name);
           }
         });
