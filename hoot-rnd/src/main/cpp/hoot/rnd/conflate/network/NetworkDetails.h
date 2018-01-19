@@ -179,6 +179,7 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
 private:
+
   boost::shared_ptr<HighwayClassifier> _classifier;
   ConstOsmMapPtr _map;
   ConstOsmNetworkPtr _n1, _n2;
@@ -188,9 +189,15 @@ private:
 
   class SublineCache
   {
-  public:
-    double p;
-    WaySublineMatchStringPtr matches;
+    public:
+
+      QString toString() const
+      {
+        return  "p: " + QString::number(p) + " " + matches->toString();
+      }
+
+      double p;
+      WaySublineMatchStringPtr matches;
   };
 
   QHash< ElementId, QHash<ElementId, SublineCache> > _sublineCache;

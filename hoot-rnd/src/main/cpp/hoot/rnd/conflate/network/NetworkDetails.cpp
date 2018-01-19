@@ -375,6 +375,7 @@ NetworkDetails::SublineCache NetworkDetails::_calculateSublineScore(ConstOsmMapP
   result.p = c.getMatchP();
   result.matches = WaySublineMatchStringPtr(new WaySublineMatchString(sublineMatch));
 
+  LOG_VART(result);
   return result;
 }
 
@@ -711,6 +712,8 @@ Envelope NetworkDetails::getEnvelope(ConstNetworkVertexPtr v) const
 
 double NetworkDetails::getPartialEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2)
 {
+  LOG_VART(e1->getMembers().size());
+  LOG_VART(e2->getMembers().size());
   assert(e1->getMembers().size() == 1);
   assert(e2->getMembers().size() == 1);
   double result;
@@ -755,6 +758,8 @@ double NetworkDetails::getPartialEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNet
 
     ConstWayPtr w1 = boost::dynamic_pointer_cast<const Way>(e1->getMembers()[0]);
     ConstWayPtr w2 = boost::dynamic_pointer_cast<const Way>(e2->getMembers()[0]);
+    LOG_VART(w1.get());
+    LOG_VART(w2.get());
 
     const SublineCache& sc = _getSublineCache(w1, w2);
     LOG_VART(sc.p);
@@ -852,6 +857,10 @@ const NetworkDetails::SublineCache& NetworkDetails::_getSublineCache(ConstWayPtr
 {
   ElementId e1 = w1->getElementId();
   ElementId e2 = w2->getElementId();
+  LOG_VART(e1);
+  LOG_VART(e2);
+  LOG_VART(_sublineCache[e1]);
+  LOG_VART(_sublineCache[e1].contains(e2));
   if (_sublineCache[e1].contains(e2))
   {
     return _sublineCache[e1][e2];
