@@ -126,7 +126,7 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
   for (size_t i = 0; i < numIterations; ++i)
   {
     matcher->iterate();
-    LOG_INFO("Optimization iteration: " << i + 1 << "/" << numIterations << " complete.");
+    PROGRESS_INFO("Optimization iteration: " << i + 1 << "/" << numIterations << " complete.");
 
     if (ConfigOptions().getNetworkMatchWriteDebugMaps())
     {
