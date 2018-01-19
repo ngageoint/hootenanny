@@ -56,16 +56,6 @@ Prefix to apply to REF1 values.
 The REF1 values are typically used when training a model. See the Developer Documentation for
 details.
 
-=== apidb.bulk.inserter.file.output.status.update.interval
-
-* Data Type: long
-* Default Value: `10000`
-
-Count at which the parse status of each element type should be logged when writing to them to
-files by an OSM/Hootenanny API database bulk inserter.  e.g. With a value of 100, you will see a
-load status update message logged for every 100 elements parsed or file lines written.  This
-setting can have a negative impact on performance if set to a very low value.
-
 === apidb.bulk.inserter.output.files.copy.location
 
 * Data Type: string
@@ -272,6 +262,13 @@ purposes.
 
 Set the circular error tag on features to this value, in meters, by default if the tag isn't already
 populated.
+
+=== config.options.file
+
+* Data Type: string
+* Default Value: `conf/core/ConfigOptions.asciidoc`
+
+Path to this file.  Only modified during testing the Hootenanny options command.
 
 === conflate.enable.old.roads
 
@@ -854,6 +851,132 @@ for default the first assigned id will be -1)
 Sets the default start ID for ways. The first value assigned is generator specific. (E.g. for
 default the first assigned id will be -1)
 
+=== implicit.tagging.database.deriver.minimum.tag.occurrences.per.word
+
+* Data Type: int
+* Default Value: `1000`
+
+The minimum number of times a tag must be associated with a word in order for an implicit tag rule
+to be created that is associated with it.
+
+=== implicit.tagging.database.deriver.minimum.word.length
+
+* Data Type: int
+* Default Value: `3`
+
+The minimum allowed word length when associating word tokens with tags.
+
+=== implicit.tagging.database.deriver.poi.custom.rule.file
+
+* Data Type: string
+* Default Value: `${HOOT_HOME}/conf/core/implicit-tag-rules/poiImplicitTagRulesCustomRuleList`
+
+Flat file containing tab separated word key/value pairs, one per line, to use as custom rules
+when deriving an implicit tags database from POI names.
+
+=== implicit.tagging.database.deriver.poi.tag.ignore.file
+
+* Data Type: string
+* Default Value: `${HOOT_HOME}/conf/core/implicit-tag-rules/poiImplicitTagRulesTagIgnoreList`
+
+Flat file containing key/value pairs, one per line, to ignore when deriving an implicit tags
+database from POI names.  Use 'key=*' to ignore all tags for a given key.
+
+=== implicit.tagging.database.deriver.poi.word.ignore.file
+
+* Data Type: string
+* Default Value: `${HOOT_HOME}/conf/core/implicit-tag-rules/poiImplicitTagRulesWordIgnoreList`
+
+Flat file containing words, one per line, to ignore when deriving an implicit tags database from
+POI names.
+
+=== implicit.tagging.database.deriver.use.schema.tag.values.for.words.only
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, the implicit tag raw rules generator will only consider words that correspond to a OSM tag
+value in the Hootenanny schema.
+
+=== implicit.tagging.keep.temp.files
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, the implicit tag raw rules/database derivers will keep all temporary file output.  For
+debugging only.
+
+=== implicit.tagging.raw.rules.deriver.skip.filtering
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, the implicit tag raw rules deriver will skip node filtering.  Only set to true if the input
+data has been filtered with ImplicitTagEligiblePoiCriterion beforehand.
+
+=== implicit.tagging.raw.rules.deriver.sort.parallel.count
+
+* Data Type: int
+* Default Value: `-1`
+
+The number of parallel processes used when sorting output by the implicit tag raw rules deriver.
+The default value of -1 uses a count equal to the number of processors on the machine.  Valid values
+are -1 or 1 up to the number of available processors.
+
+=== implicit.tagging.translate.all.names.to.english
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, the implicit tag raw rules deriver will translate name words to English as implicit tag
+rules are derived.  Also, all implicit taggers will translate element name words to English before
+querying the corresponding implicit tag rules database.  The value of this setting should be set the
+same way when deriving raw implicit tag rules as it is when tagging elements with an implicit tagger.
+
+=== implicit.tagger.add.top.tag.only
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, implicit taggers will only add the implicit tag to the element with the highest tag
+occurrence count for a given set of inputs name tokens.  Setting to true may be useful in reducing
+false positive applied tags to elements.
+
+=== implicit.tagger.allow.tagging.specific.entities
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, implicit taggers will attempt to add more specific tags to existing non-generic elements
+(dependent on the element type filter; e.g. for POIs, elements with a tag more specific than
+"poi=yes").  If false, implicit taggers will ignore all non-generic elements during implicit tagging.
+
+=== implicit.tagger.allow.words.involved.in.multiple.rules
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, implicit taggers will allow for returning tags for a name when that name is involved in
+more than one tagging rule.  Setting to false may be useful in reducing false positive applied tags
+to elements.
+
+=== implicit.tagger.match.end.of.name.single.token.first
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, implicit taggers will attempt to match the last token in a name to an implicit tag rule
+first before attempting to match other parts of the name.  Setting to true can be useful in getting
+better tagging performance for names that would otherwise be involved in multiple implicit tag
+rules.
+
+=== implicit.tagger.poi.rules.database
+
+* Data Type: string
+* Default Value: `${HOOT_HOME}/conf/core/implicit-tag-rules/poi-allCountries-planet-11-2-17-minwordocc=1000-schemaonly=true.sqlite`
+
+Database used by the POI implicit tagger to derive POI type tags implicitly based on a POI's name.
+
 === javascript.translator.path
 
 * Data Type: list
@@ -1119,7 +1242,7 @@ are identical. Units in meters and defaults to 1.0m.
 * Default Value: `hoot::BuildingMergerCreator;hoot::ScriptMergerCreator;hoot::HighwaySnapMergerCreator;hoot::PoiPolygonMergerCreator;hoot::ScriptMergerCreator`
 
 List of merger creators to use during conflation. This can modify what features will be conflated
-(e.g. buildings, roads, etc.).
+(e.g. buildings, roads, etc.).  The ordering must match that in match.creators.
 
 Possible values include:
 
@@ -1511,18 +1634,18 @@ Operations that should be applied to ingested OGR data before saving the data.
 * Data Type: bool
 * Default Value: `false`
 
-When the OSM API database bulk inserter is writing directly to a database, if true, the inserter
-drops the database constraints before writing the data and re-enables them after the writing is
-complete.  This can only be used with databases that have been taken offline from other users.
+If true, the OSM API database writer drops the database constraints before writing the data and
+re-enables them after the writing is complete.  This can only be used with databases that have been
+taken offline from other users.
 
 === osmapidb.bulk.inserter.disable.database.indexes.during.write
 
 * Data Type: bool
 * Default Value: `false`
 
-When the OSM API database bulk inserter is writing directly to a database, if true, the inserter
-drops the database indexes before writing the data and re-enables them after the writing is
-complete.  This can only be used with databases that have been taken offline from other users.
+If true, the OSM API database writer drops the database indexes before writing the data and
+re-enables them after the writing is complete.  This can only be used with databases that have been
+taken offline from other users.
 
 === osmapidb.bulk.inserter.reserve.record.ids.before.writing.data
 
@@ -2449,6 +2572,14 @@ renaming existing tag keys on all elements in a map.
 
 The key to be replaced by the TagRenameKeyVisitor.  TagRenameKeyVisitor allows for
 renaming existing tag keys on all elements in a map.
+
+=== task.status.update.interval
+
+* Data Type: long
+* Default Value: `10000`
+
+For commands supporting it, the iteration count at which a status message should be logged. This
+setting may have a negative impact on performance if set to a very low value.
 
 === test.case.cmd
 

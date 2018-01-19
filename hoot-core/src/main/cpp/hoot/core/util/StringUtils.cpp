@@ -22,7 +22,8 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "StringUtils.h"
@@ -35,7 +36,6 @@ namespace hoot
 
 QString StringUtils::secondsToDhms(const qint64 durationInMilliseconds)
 {
-  //TODO: move to utility class
   QString res;
   int duration = (int)(durationInMilliseconds / 1000);
   const int seconds = (int)(duration % 60);
@@ -63,6 +63,18 @@ QString StringUtils::formatLargeNumber(const unsigned long number)
   QString ss = cLocale.toString((qulonglong)number);
   ss.replace(cLocale.groupSeparator(), ',');
   return ss;
+}
+
+bool StringUtils::hasAlphabeticCharacter(const QString input)
+{
+  for (int i = 0; i < input.length(); i++)
+  {
+    if (input.at(i).isLetter())
+    {
+      return true;
+    }
+  }
+  return false;
 }
 
 }

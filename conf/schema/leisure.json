@@ -203,5 +203,18 @@
                 "weight": 0.9
             }
         ]
+    },
+    {
+        "geometries": [
+            "node",
+            "area"
+        ],
+        "categories": [
+            "use",
+            "poi"
+        ],
+        "isA": "leisure",
+        "name": "leisure=garden",
+        "objectType": "tag"
     }
 ]
