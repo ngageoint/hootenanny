@@ -64,7 +64,10 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
     for (MatchSet::const_iterator it = matchesIn.begin(); it != matchesIn.end(); ++it)
     {
       const NetworkMatch* nmi = dynamic_cast<const NetworkMatch*>(*it);
-      matchesList += nmi->getEdgeMatch()->getUid() + " ";
+      if (nmi)
+      {
+        matchesList += nmi->getEdgeMatch()->getUid() + " ";
+      }
     }
   }
   LOG_TRACE(matchesList);
