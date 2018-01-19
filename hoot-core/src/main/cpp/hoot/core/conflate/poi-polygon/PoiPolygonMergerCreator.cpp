@@ -87,6 +87,8 @@ bool PoiPolygonMergerCreator::createMergers(const MatchSet& matches, vector<Merg
       matchTypes.append(m->getMatchName());
     }
   }
+  LOG_VART(foundAPoi);
+  LOG_VART(foundAPolygon);
 
   // if there is at least one POI and at least one polygon, then we need to merge things in a
   // special way.

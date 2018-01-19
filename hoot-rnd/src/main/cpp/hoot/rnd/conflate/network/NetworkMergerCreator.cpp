@@ -68,8 +68,13 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
       {
         matchesList += nmi->getEdgeMatch()->getUid() + " ";
       }
+      else
+      {
+        return false;
+      }
     }
   }
+  LOG_TRACE(matchesList.size());
   LOG_TRACE(matchesList);
 
   MatchSet matches = matchesIn;
