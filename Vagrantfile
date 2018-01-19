@@ -176,7 +176,7 @@ Vagrant.configure(2) do |config|
     #hoot_ubuntu1604.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo service node-mapnik-server start", run: "always"
   end
 
-  # Centos7 box
+  # Centos7 box - minimal
   config.vm.define "hoot_centos7", autostart: false do |hoot_centos7|
     hoot_centos7.vm.box = "hoot/centos7-minimal"
     hoot_centos7.vm.hostname = "hoot-centos"
@@ -189,6 +189,21 @@ Vagrant.configure(2) do |config|
     hoot_centos7.vm.provision "export", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-export", run: "always"
 
     aws_provider(hoot_centos7, 'CentOS7')
+  end
+
+  # Centos7 box - Preprovisioned for compiling hootenanny
+  config.vm.define "hoot_centos7_prov", autostart: false do |hoot_centos7_prov|
+    hoot_centos7_prov.vm.box = "hoot/centos7-hoot"
+    hoot_centos7_prov.vm.hostname = "centos7-hoot"
+    hoot_centos7_prov.vm.synced_folder ".", "/home/vagrant/hoot"
+
+    hoot_centos7_prov.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvisionCentOS7.sh"
+    hoot_centos7_prov.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
+    hoot_centos7_prov.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo systemctl restart tomcat8", run: "always"
+    hoot_centos7_prov.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-mapnik", run: "always"
+    hoot_centos7_prov.vm.provision "export", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-export", run: "always"
+
+    aws_provider(hoot_centos7_prov, 'CentOS7')
   end
 
   # Centos7 - Hoot core ONLY. No UI

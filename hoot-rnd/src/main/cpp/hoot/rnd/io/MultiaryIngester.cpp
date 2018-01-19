@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MultiaryIngester.h"
 
@@ -54,7 +54,7 @@ namespace hoot
 {
 
 MultiaryIngester::MultiaryIngester() :
-_logUpdateInterval(ConfigOptions().getApidbBulkInserterFileOutputStatusUpdateInterval())
+_logUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
   //in order for the sorting to work, all original POI ids must be retained...no new ones
   //assigned; we're assuming no duplicate ids in the input
