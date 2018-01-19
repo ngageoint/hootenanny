@@ -89,6 +89,10 @@ bool PoiPolygonMergerCreator::createMergers(const MatchSet& matches, vector<Merg
   }
   LOG_VART(foundAPoi);
   LOG_VART(foundAPolygon);
+  if (!foundAPoi || !foundAPolygon)
+  {
+    LOG_TRACE("Match invalid; skipping merge.");
+  }
 
   // if there is at least one POI and at least one polygon, then we need to merge things in a
   // special way.

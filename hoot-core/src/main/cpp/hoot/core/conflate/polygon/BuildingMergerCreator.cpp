@@ -59,11 +59,11 @@ bool BuildingMergerCreator::createMergers(const MatchSet& matches, vector<Merger
     const Match* m = *it;
     LOG_VART(m->toString());
     const BuildingMatch* bm = dynamic_cast<const BuildingMatch*>(m);
-    LOG_VART(bm == 0);
     // check to make sure all the input matches are building matches.
     if (bm == 0)
     {
       // return an empty result
+      LOG_TRACE("Match invalid; skipping merge: " << m->toString());
       return false;
     }
     // add all the element to element pairs to a set

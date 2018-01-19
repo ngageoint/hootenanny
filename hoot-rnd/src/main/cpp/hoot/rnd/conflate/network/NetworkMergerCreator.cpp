@@ -163,6 +163,10 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
 
     result = true;
   }
+  else
+  {
+    LOG_TRACE("Match invalid; skipping merge: " << (*matches.begin())->toString());
+  }
 
   return result;
 }
