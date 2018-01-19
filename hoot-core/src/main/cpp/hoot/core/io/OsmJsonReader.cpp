@@ -62,20 +62,20 @@ unsigned int OsmJsonReader::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapReader, OsmJsonReader)
 
-namespace // anonymous
-{
-  // Used for debug
-  void writeString(QString fileName, QString str)
-  {
-    QFile file(fileName);
-    if (file.open(QIODevice::WriteOnly | QIODevice::Truncate))
-    {
-        QTextStream stream(&file);
-        stream << str;
-        file.close();
-    }
-  }
-}
+//namespace // anonymous
+//{
+//  // Used for debug
+//  void writeString(QString fileName, QString str)
+//  {
+//    QFile file(fileName);
+//    if (file.open(QIODevice::WriteOnly | QIODevice::Truncate))
+//    {
+//        QTextStream stream(&file);
+//        stream << str;
+//        file.close();
+//    }
+//  }
+//}
 
 // Default constructor
 OsmJsonReader::OsmJsonReader():
