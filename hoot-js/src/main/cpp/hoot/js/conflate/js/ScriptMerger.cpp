@@ -80,6 +80,7 @@ void ScriptMerger::_applyMergePair(const OsmMapPtr& map,
 {
   LOG_VART(_eid1);
   LOG_VART(_eid2);
+  LOG_VART(_pairs.size());
 
   if (_pairs.size() != 1)
   {
