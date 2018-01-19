@@ -22,8 +22,9 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
+
 #ifndef REMOVEREF2VISITORMULTIPLECRITERION_H
 #define REMOVEREF2VISITORMULTIPLECRITERION_H
 
@@ -33,7 +34,7 @@ namespace hoot
 {
 
 /**
- * If one specified criterion meets for REF1 and another for REF2 elements, then the REF2 tag is
+ * If one specified criterion meets for REF1 and another also for REF2 elements, then the REF2 tag is
  * removed.
  *
  * This class is re-entrant, but not thread safe.

@@ -22,8 +22,9 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
+
 #include "RemoveRef2VisitorMultipleCriterion.h"
 
 // hoot
@@ -50,26 +51,14 @@ void RemoveRef2VisitorMultipleCriterion::addCriterion(const ElementCriterionPtr&
   boost::shared_ptr<const ChainCriterion> chainCrit =
     boost::dynamic_pointer_cast<const ChainCriterion>(e);
   LOG_VARD(chainCrit->_filters.size());
-  if (!chainCrit.get() && !chainCrit->_filters.size() == 2)
+  if (!chainCrit.get() && chainCrit->_filters.size() != 2)
   {
     throw HootException(
       QString("RemoveRef2VisitorDifferentElementTypes expects a chain criterion passed to it ") +
       QString("the first filter as the REF1 filter and the second as the REF2 filter."));
   }
   _ref1Criterion = chainCrit->_filters[0];
-  /*shared_ptr<const PoiCriterion> ref1Crit =
-    dynamic_pointer_cast<const PoiCriterion>(_ref1Criterion);
-  if (!ref1Crit.get())
-  {
-    throw HootException("ref1 bad");
-  }*/
   _ref2Criterion = chainCrit->_filters[1];
-  /*shared_ptr<const BuildingCriterion> ref2Crit =
-    dynamic_pointer_cast<const BuildingCriterion>(_ref1Criterion);
-  if (!ref2Crit.get())
-  {
-    throw HootException("ref2 bad");
-  }*/
 }
 
 void RemoveRef2VisitorMultipleCriterion::visit(const ConstElementPtr& e)

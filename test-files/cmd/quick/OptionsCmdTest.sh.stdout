@@ -1,43 +1,322 @@
-//
-// The ConfigOptions.asciidoc is a specially formatted file that is parsed
-// during the build process to generate the ConfigOptions.h header file and
-// user documentation. Changing the default values in this file will change
-// the way Hootenanny runs so be careful, this isn't just documentation.
-//
-// This file is also parsed by asciidoc to generate the user documentation. Look
-// at that; our docs and code are in lock step! Nice. Please keep this in mind
-// when writing documentation. This isn't just comments, this is user
-// documentation. Try to include the following information in the description:
-//
-// * What does this configuration change?
-// * If relevant, what are the units of the config option (e.g. meters)?
-// * Where can the user go to get more information? Please reference the
-//   appropriate document. E.g. "See `ogr2osm` in the _Command Line
-//   Reference_ for more information."
-// * What other options may be of interest? E.g. "See also
-//   `big.perty.op.sigma`"
-// * Please keep the list in Alphabetical order.
-//
-// The format is as follows:
-//
-// The section name is all lowercase and separated by periods. This shouldn't
-// contain any special characters.
-// === key.name
-//
-// * Data Type: <string, double, list, bool>
-// * Default Value: <value>
-//
-// If the default value is for a list then the default value should be followed
-// by a number of sub items in the list. E.g.
-// * Default Value:
-// ** `<Value 1>`
-// ** `<Value 2>`
-// The left ticks provide proper formatting in the documentation.
-//
-// Finally the section that contains the documentation. This is free-form
-// asciidoc just make sure you don't start any lines with "=== ".
-// http://www.methods.co.nz/asciidoc/
-//
+Listing all option names...
+
+add.ref.visitor.information.only
+add.ref1.visitor.prefix
+apidb.bulk.inserter.output.files.copy.location
+apidb.bulk.inserter.starting.node.id
+apidb.bulk.inserter.starting.way.id
+apidb.bulk.inserter.starting.relation.id
+apidb.bulk.inserter.stxxl.map.min.size
+apidb.bulk.inserter.temp.file.dir
+apidb.bulk.inserter.validate.data
+api.db.email
+attribute.count.values
+attribute.score.extractor.use.weight
+big.convert.exec.sql.with.mapreduce
+big.convert.num.reduce.tasks
+big.perty.op.max.distance
+big.perty.op.sigma
+building.match.threshold
+building.miss.threshold
+building.review.threshold
+changeset.buffer
+changeset.allow.deleting.reference.features
+changeset.max.size
+changeset.user.id
+changeset.xml.writer.add.timestamp
+circular.error.default.value
+conflate.enable.old.roads
+conflate.match.building.model
+conflate.match.highway.classifier
+conflate.match.highway.model
+conflate.match.poi.model
+conflate.match.threshold.default
+conflate.miss.threshold.default
+conflate.post.ops
+conflate.pre.ops
+conflate.review.threshold.default
+conflate.stats.types
+conflator.manipulators
+conflator.min.valid.score
+convert.bounding.box
+convert.bounding.box.hoot.api.database
+convert.bounding.box.osm.api.database
+convert.ops
+cookie.cutter.alpha
+cookie.cutter.alpha.shape.buffer
+cookie.cutter.output.crop
+create.bogus.review.tags
+crop.bounds
+debug.map.filename
+dual.way.splitter.driving.side
+dual.way.splitter.split.size
+duplicate.name.case.sensitive
+duplicate.way.remover.strict.tag.matching
+edge.distance.extractor.spacing
+element.cache.size.node
+element.cache.size.relation
+element.cache.size.way
+english.words.files
+generic.line.match.threshold
+generic.line.matcher.max.angle
+generic.line.miss.threshold
+generic.line.review.threshold
+generic.line.subline.matcher
+generic.polygon.match.threshold
+generic.polygon.miss.threshold
+generic.polygon.review.threshold
+highway.match.threshold
+highway.matcher.heading.delta
+highway.matcher.max.angle
+highway.max.enum.diff
+highway.miss.threshold
+highway.review.threshold
+highway.subline.matcher
+highway.subline.string.matcher
+hoot.hadoop.file.deps
+hoot.hadoop.libpath
+hoot.hadoop.maxNodeCount
+hoot.hadoop.pixelSize
+hootapi.db.writer.create.user
+hootapi.db.writer.copy.bulk.insert
+hootapi.db.writer.output.id.mappings
+hootapi.db.writer.remap.ids
+hootapi.db.writer.overwrite.map
+id.generator
+id.generator.node.start
+id.generator.relation.start
+id.generator.way.start
+implicit.tagging.database.deriver.minimum.tag.occurrences.per.word
+implicit.tagging.database.deriver.minimum.word.length
+implicit.tagging.database.deriver.poi.custom.rule.file
+implicit.tagging.database.deriver.poi.tag.ignore.file
+implicit.tagging.database.deriver.poi.word.ignore.file
+implicit.tagging.database.deriver.use.schema.tag.values.for.words.only
+implicit.tagging.keep.temp.files
+implicit.tagging.raw.rules.deriver.skip.filtering
+implicit.tagging.raw.rules.deriver.sort.parallel.count
+implicit.tagging.translate.all.names.to.english
+implicit.tagger.add.top.tag.only
+implicit.tagger.allow.tagging.specific.entities
+implicit.tagger.allow.words.involved.in.multiple.rules
+implicit.tagger.match.end.of.name.single.token.first
+implicit.tagger.poi.rules.database
+javascript.translator.path
+json.add.bbox
+json.format.hootenanny
+json.perserve.empty.tags
+json.pretty.print
+keep.tags.visitor.keys
+levenshtein.distance.alpha
+log.format
+log.warn.message.limit
+map.cleaner.transforms
+match.creators
+match.parallel.exponent
+max.elements.per.partial.map
+max.memory.usage
+merge.nearby.nodes.distance
+merger.creators
+network.conflicts.aggression
+network.conflicts.outbound.weighting
+network.conflicts.partial.handicap
+network.conflicts.stub.handicap
+network.conflicts.stub.through.weighting
+network.conflicts.weight.influence
+network.match.threshold
+network.match.write.debug.maps
+network.matcher
+network.max.stub.length
+network.miss.threshold
+network.optimization.iterations
+network.review.threshold
+node.comparison.coordinate.sensitivity
+node.comparison.circular.error.sensitivity
+node.matcher.strictness
+ogr.append.data
+ogr.debug.addfcode
+ogr.debug.dumptags
+ogr.debug.lookupclash
+ogr.debug.lookupcolumn
+ogr.debug.dumpvalidate
+ogr.esri.fcsubtype
+ogr.esri.fdname
+ogr.import.filter
+ogr.note.extra
+ogr.reader.bounding.box
+ogr.reader.bounding.box.latlng
+ogr.reader.epsg.override
+ogr.reader.node.id.field.name
+ogr.split.o2s
+ogr.strict.checking
+ogr.tds.add.etds
+ogr.tds.extra
+ogr.thematic.structure
+ogr.throw.error
+ogr.writer.create.all.layers
+ogr.writer.pre.layer.name
+ogr.writer.script
+ogr2osm.ops
+osmapidb.bulk.inserter.disable.database.constraints.during.write
+osmapidb.bulk.inserter.disable.database.indexes.during.write
+osmapidb.bulk.inserter.reserve.record.ids.before.writing.data
+osmapidb.bulk.inserter.write.sql.file.id.sequence.updates
+osmapidb.id.aware.url
+osm.map.reader.factory.reader
+osm.map.writer.factory.writer
+osm.map.writer.format.xml
+osm.map.writer.schema
+osm2ogr.ops
+perty.apply.rubber.sheet
+perty.csm.D
+perty.duplicate.poi.duplicate.sigma
+perty.duplicate.poi.move.multiplier
+perty.duplicate.poi.probability
+perty.grid.spacing
+perty.name.change.probability
+perty.name.probability
+perty.ops
+perty.random.error.x
+perty.random.error.y
+perty.remove.random.probability
+perty.remove.tag.probability
+perty.remove.tag.visitor.exempt.tag.keys
+perty.remove.tag.visitor.substitution.keys
+perty.remove.tag.visitor.substitution.values
+perty.search.distance
+perty.seed
+perty.systematic.error.x
+perty.systematic.error.y
+perty.test.allowed.score.variance
+perty.test.dynamic.variable.increment
+perty.test.dynamic.variable.start.value
+perty.test.dynamic.variables
+perty.test.expected.scores
+perty.test.fail.on.better.score
+perty.test.generate.map.stats
+perty.test.num.runs
+perty.test.num.simulations
+perty.way.generalize.epsilon
+perty.way.generalize.probability
+perty.way.split.min.node.spacing
+perty.way.split.probability
+plugin.context.includes
+poi.ignore.type.if.name.present
+poi.match.threshold
+poi.miss.threshold
+poi.polygon.enable.advanced.matching
+poi.polygon.enable.review.reduction
+poi.polygon.match.evidence.threshold
+poi.polygon.match.threshold
+poi.polygon.miss.threshold
+poi.polygon.match.distance.threshold
+poi.polygon.name.score.threshold
+poi.polygon.print.match.distance.truth
+poi.polygon.promote.points.with.addresses.to.pois
+poi.polygon.review.distance.threshold
+poi.polygon.review.evidence.threshold
+poi.polygon.review.if.matched.types
+poi.polygon.review.threshold
+poi.polygon.type.score.threshold
+poi.review.threshold
+preserve.unknown1.element.id.when.modifying.features
+progress.reporting.format
+reader.add.source.datetime
+reader.conflate.use.data.source.ids.1
+reader.conflate.use.data.source.ids.2
+reader.keep.file.status
+reader.preserve.all.tags
+reader.set.default.status
+reader.use.data.source.ids
+reader.use.file.status
+remove.attribute.visitor.types
+remove.duplicate.areas.diff
+remove.elements.visitor.filter
+remove.elements.visitor.recursive
+remove.tag.visitor.keys
+rubber.sheet.debug
+rubber.sheet.minimum.ties
+rubber.sheet.ref
+score.graph.debug.images
+score.matches.remove.nodes
+search.radius.default
+search.radius.generic.line
+search.radius.generic.polygon
+search.radius.highway
+search.radius.waterway
+script.test.max.exec.time
+set.tag.visitor.append.to.existing.value
+set.tag.visitor.key
+set.tag.visitor.element.type
+set.tag.visitor.value
+small.way.merger.diff
+small.way.merger.threshold
+spark.changeset.writer.element.payload.format
+status.criterion.status
+stats.format
+stats.output
+stats.script
+stats.translate.script
+tag.ancestor.differencer.name
+tag.category.differencer.name
+tag.criterion.kvp
+tag.merger.default
+tag.printing.format
+tag.printing.script
+tag.rename.visitor.new.key
+tag.rename.visitor.old.key
+task.status.update.interval
+test.case.cmd
+test.force.orthographic.projection
+token.keep.non.words
+token.min.size
+token.separator
+translate.string.distance.tokenize
+translated.tag.differencer.ignore.list
+translated.tag.differencer.script
+translation.direction
+translation.script
+translation.override
+unify.enable.optimal.constrained.matches
+unify.optimizer.time.limit
+unify.post.ops
+unify.pre.ops
+network.pre.ops
+uuid.helper.repeatable
+waterway.angle.sample.distance
+waterway.auto.calc.search.radius
+waterway.match.threshold
+waterway.matcher.heading.delta
+waterway.matcher.max.angle
+waterway.miss.threshold
+waterway.review.threshold
+waterway.rubber.sheet.minimum.ties
+waterway.rubber.sheet.ref
+waterway.subline.matcher
+way.angle.sample.distance
+way.matcher.heading.delta
+way.matcher.max.angle
+way.max.nodes.per.way
+way.merger.min.split.size
+way.splitter.max.length
+way.subline.matcher
+way.subline.string.matcher
+weighted.metric.distance.extractor.point.aggregator
+weighted.metric.distance.extractor.search.radius
+weighted.word.distance.abridged.dictionary
+weighted.word.distance.dictionary
+weighted.word.distance.probability
+writer.include.circular.error.tags
+writer.include.conflate.review.detail.tags
+writer.include.conflate.score.tags
+writer.include.debug.tags
+writer.clean.review.tags
+writer.precision
+writer.text.status
+writer.xml.sort.by.id
+
+Listing all option names and descriptions...
+
 === add.ref.visitor.information.only
 
 * Data Type: bool
@@ -262,13 +541,6 @@ purposes.
 
 Set the circular error tag on features to this value, in meters, by default if the tag isn't already
 populated.
-
-=== config.options.file
-
-* Data Type: string
-* Default Value: `conf/core/ConfigOptions.asciidoc`
-
-Path to this file.  Only modified during testing the Hootenanny options command.
 
 === conflate.enable.old.roads
 
@@ -1112,7 +1384,6 @@ details.  The "best" value varies depending on the input data as well as how the
 * Default Value: `%d{HH:mm:ss.SSS} %-5p ...%.30F(%4L) %m%n`
 
 If available, uses the formatting as defined in
-https://svn.apache.org/repos/asf/logging/site/trunk/docs/log4cxx/apidocs/classlog4cxx_1_1_pattern_layout.html[log4cxx]
 to set the log format. If log4cxx isn't available then this has no effect.
 
 Some example format strings and the associated output are below:
@@ -2637,7 +2908,6 @@ The token separator defined as a regular expression. This is used in some method
 names. The default value matches multiple whitespace characters.
 
 Another useful option is `[\s-,';]+`. This will split on white space, or several forms of
-punctuation. See http://doc.qt.io/qt-4.8/QRegExp.html for a useful list of regular expression
 options.
 
 === translate.string.distance.tokenize
@@ -2946,7 +3216,6 @@ Location of the word frequency dictionary. If the absolute file path isn't found
 the local `conf` and `$HOOT_HOME/conf` directories will be searched.
 
 This file is typically downloaded from:
-https://s3.amazonaws.com/hoot-rpms/support-files/words1.sqlite.bz2
 
 === weighted.word.distance.probability
 
@@ -3023,3 +3292,155 @@ If true, OSM elements written to XML file output (.osm) are sorted by ID.  Setti
 will require reading the entire source dataset into memory.  Setting it to false may result in
 using smaller amounts of memory during writing if the data source being written is also a streamable
 format (see the "Supported Data Formats" section in README.md).
+
+Listing all option names containing 'poi.polygon'...
+
+poi.polygon.enable.advanced.matching
+poi.polygon.enable.review.reduction
+poi.polygon.match.evidence.threshold
+poi.polygon.match.threshold
+poi.polygon.miss.threshold
+poi.polygon.match.distance.threshold
+poi.polygon.name.score.threshold
+poi.polygon.print.match.distance.truth
+poi.polygon.promote.points.with.addresses.to.pois
+poi.polygon.review.distance.threshold
+poi.polygon.review.evidence.threshold
+poi.polygon.review.if.matched.types
+poi.polygon.review.threshold
+poi.polygon.type.score.threshold
+
+Listing all option names containing 'poi.polygon' and their descriptions...
+
+=== poi.polygon.enable.advanced.matching
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, POI to polygon conflation will perform additional checks against surrounding features
+for match evidence.  This setting allows for detailed conflation customization but can be runtime
+expensive when enabled.
+
+=== poi.polygon.enable.review.reduction
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, POI to polygon conflation will attempt to reduce unnecessary reviews without increasing
+incorrect matches.  This setting is somewhat experimental and can be runtime expensive when
+enabled.
+
+=== poi.polygon.match.evidence.threshold
+
+* Data Type: int
+* Default Value: `3`
+
+The minimum evidence score at which a POI will be matched to a polygon.  Valid values are 1 to 4.
+If an evidence score for a feature pair falls below this value, the relationship between the
+features will be classified as a review or miss, depending on the value of
+'poi.polygon.review.evidence.threshold'.  Generally, this setting should not be changed except
+when working with specific POI/Polygon conflation use cases that require it.
+
+=== poi.polygon.match.threshold
+
+* Data Type: double
+* Default Value: `${conflate.match.threshold.default}`
+
+The threshold at which a match is called a match when comparing POIs to polygons.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== poi.polygon.miss.threshold
+
+* Data Type: double
+* Default Value: `${conflate.miss.threshold.default}`
+
+The threshold at which a miss is called a miss when comparing POIs to polygons.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== poi.polygon.match.distance.threshold
+
+* Data Type: double
+* Default Value: `5.0`
+
+The maximum distance, in meters, between a POI and a polygon where they can still be considered
+a match based on distance criteria only.
+
+=== poi.polygon.name.score.threshold
+
+* Data Type: double
+* Default Value: `0.8`
+
+The minimum similarity the name scores of two features can have and be considered a name
+match, with 0.0 being the least similar and 1.0 being the most similar (-1.0 if there are no names
+present (null).
+
+=== poi.polygon.print.match.distance.truth
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, debug match distance output will be obtained from manually matched source data and printed
+if running 'hoot score-matches' with POI to polygon conflation.
+
+=== poi.polygon.promote.points.with.addresses.to.pois
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, POI to polygon conflation will classify all points with OSM address tags as POIs even if
+they do not have specific type tags.
+
+=== poi.polygon.review.distance.threshold
+
+* Data Type: double
+* Default Value: `125.0`
+
+The maximum distance, in meters, between a POI and a polygon where they can still be considered
+for review based on distance criteria only (value is added to the circular error of the compared
+features).
+
+=== poi.polygon.review.evidence.threshold
+
+* Data Type: int
+* Default Value: `1`
+
+The minimum evidence score at which a POI will be reviewed against a polygon, if the evidence score
+does not meet the threshold defined by 'poi.polygon.match.evidence.threshold'.  Valid values are
+0 to 3.  If an evidence score for a feature pair falls below this value, the relationship between
+the features will be classified as a miss.  If the value is set to 0, all feature pairs which did
+not match will be reviewed.  If the value is set greater than or equal to
+'poi.polygon.match.evidence.threshold', an error will occur.  Generally, this setting
+should not be changed except when working with specific POI/Polygon conflation use cases that
+require it.
+
+=== poi.polygon.review.if.matched.types
+
+* Data Type: list
+* Default Value:
+** ``
+
+List of key value pairs (key=value) for features to always review if marked as matches with POI to
+polygon conflation.  When specifying the list from the command line, delimit the types with ';'
+and surround the entire value string in double quotes.
+
+=== poi.polygon.review.threshold
+
+* Data Type: double
+* Default Value: `${conflate.review.threshold.default}`
+
+The threshold at which a review is called a review for PoiPolygon. See
+`conflate.review.threshold.default`.
+
+=== poi.polygon.type.score.threshold
+
+* Data Type: double
+* Default Value: `0.7`
+
+The minimum similarity the type scores a POI and polygon can have and be considered a type
+match, with 0.0 being the least similar and 1.0 being the most similar.
