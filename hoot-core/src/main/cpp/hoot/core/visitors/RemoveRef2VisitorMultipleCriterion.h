@@ -33,7 +33,7 @@ namespace hoot
 {
 
 /**
- * If one specified criterion meets for REF1 and another for REF2 elements, then the REF2 tag is
+ * If one specified criterion meets for REF1 and another also for REF2 elements, then the REF2 tag is
  * removed.
  *
  * This class is re-entrant, but not thread safe.
