@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
-    <bounds minlat="37.7622798" minlon="-122.4244" maxlat="37.7651" maxlon="-122.4201197"/>
+    <bounds minlat="37.7622887" minlon="-122.4244" maxlat="37.7651" maxlon="-122.4201279"/>
     <node visible="true" id="2" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="37.7650999999999968" lon="-122.4244000000000057">
         <tag k="hoot:status" v="0"/>
         <tag k="hoot:id" v="2"/>
@@ -340,7 +340,7 @@
     <node visible="true" id="262" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="37.7637211999999991" lon="-122.4215832999999947">
         <tag k="REF1" v="002fbd"/>
         <tag k="cuisine" v="vietnamese"/>
-        <tag k="addr:street" v=" Valencia St"/>
+        <tag k="addr:street" v="Valencia St"/>
         <tag k="addr:city" v="San Francisco"/>
         <tag k="hoot:status" v="0"/>
         <tag k="building" v="yes"/>
@@ -1050,66 +1050,6 @@
         <tag k="hoot:status" v="0"/>
         <tag k="hoot:id" v="505"/>
     </node>
-    <node visible="true" id="508" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="37.7622798000000017" lon="-122.4229160999999948">
-        <tag k="hoot:id" v="508"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="508"/>
-    </node>
-    <node visible="true" id="509" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="37.7624550000000028" lon="-122.4229329000000064">
-        <tag k="hoot:id" v="509"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="509"/>
-    </node>
-    <node visible="true" id="510" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="37.7624769000000029" lon="-122.4225706999999943">
-        <tag k="hoot:id" v="510"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="510"/>
-    </node>
-    <node visible="true" id="511" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="37.7623016000000007" lon="-122.4225538999999969">
-        <tag k="hoot:id" v="511"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="511"/>
-    </node>
-    <node visible="true" id="512" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="37.7639810000000011" lon="-122.4204098999999957">
-        <tag k="hoot:id" v="512"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="512"/>
-    </node>
-    <node visible="true" id="513" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="37.7643100000000018" lon="-122.4204399000000052">
-        <tag k="hoot:id" v="513"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="513"/>
-    </node>
-    <node visible="true" id="514" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="37.7639986000000007" lon="-122.4201197000000008">
-        <tag k="hoot:id" v="514"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="514"/>
-    </node>
-    <node visible="true" id="515" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="37.7643276000000014" lon="-122.4201496999999961">
-        <tag k="hoot:id" v="515"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="515"/>
-    </node>
-    <node visible="true" id="516" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="37.7642535000000024" lon="-122.4201429000000019">
-        <tag k="hoot:id" v="516"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="516"/>
-    </node>
-    <node visible="true" id="517" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="37.7641891000000030" lon="-122.4201371000000051">
-        <tag k="hoot:id" v="517"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="517"/>
-    </node>
-    <node visible="true" id="518" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="37.7641247999999976" lon="-122.4201312000000001">
-        <tag k="hoot:id" v="518"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="518"/>
-    </node>
-    <node visible="true" id="519" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="37.7640603999999982" lon="-122.4201252999999951">
-        <tag k="hoot:id" v="519"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="519"/>
-    </node>
     <way visible="true" id="2" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
         <nd ref="4"/>
         <nd ref="246"/>
@@ -1147,16 +1087,19 @@
         <tag k="source" v="Bing"/>
         <tag k="hoot:id" v="13"/>
     </way>
-    <way visible="true" id="16" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
+    <way visible="true" id="16" timestamp="1970-01-01T00:00:00Z" version="2" changeset="3">
         <nd ref="38"/>
         <nd ref="39"/>
         <nd ref="40"/>
         <nd ref="41"/>
         <nd ref="38"/>
         <tag k="REF1" v="009232"/>
+        <tag k="REF2" v="none"/>
         <tag k="created_by" v="Potlatch 0.9c"/>
+        <tag k="hoot:id" v="16"/>
         <tag k="leisure" v="park"/>
-        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="alt_name" v="Kidpower Park"/>
         <tag k="area" v="yes"/>
         <tag k="name" v="Kids Power Park"/>
         <tag k="hoot:id" v="16"/>
@@ -1178,15 +1121,19 @@
         <tag k="amenity" v="parking"/>
         <tag k="hoot:id" v="17"/>
     </way>
-    <way visible="true" id="18" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
+    <way visible="true" id="18" timestamp="1970-01-01T00:00:00Z" version="2" changeset="3">
         <nd ref="50"/>
         <nd ref="51"/>
         <nd ref="52"/>
         <nd ref="53"/>
         <nd ref="50"/>
         <tag k="REF1" v="00439d"/>
+        <tag k="REF2" v="none"/>
+        <tag k="hoot:id" v="18"/>
         <tag k="leisure" v="garden"/>
-        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="area" v="yes"/>
+        <tag k="name" v="Dearborn Community Garden"/>
         <tag k="hoot:id" v="18"/>
     </way>
     <way visible="true" id="34" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
@@ -1778,35 +1725,5 @@
         <tag k="addr:housenumber" v="524"/>
         <tag k="addr:postcode" v="94110"/>
         <tag k="hoot:id" v="101"/>
-    </way>
-    <way visible="true" id="102" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
-        <nd ref="514"/>
-        <nd ref="512"/>
-        <nd ref="513"/>
-        <nd ref="515"/>
-        <nd ref="516"/>
-        <nd ref="517"/>
-        <nd ref="518"/>
-        <nd ref="519"/>
-        <nd ref="514"/>
-        <tag k="REF2" v="none"/>
-        <tag k="hoot:id" v="102"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="area" v="yes"/>
-        <tag k="name" v="Kidpower Park"/>
-        <tag k="hoot:id" v="102"/>
-    </way>
-    <way visible="true" id="103" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
-        <nd ref="508"/>
-        <nd ref="509"/>
-        <nd ref="510"/>
-        <nd ref="511"/>
-        <nd ref="508"/>
-        <tag k="REF2" v="none"/>
-        <tag k="hoot:id" v="103"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="area" v="yes"/>
-        <tag k="name" v="Dearborn Community Garden"/>
-        <tag k="hoot:id" v="103"/>
     </way>
 </osm>

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "WayMatchStringMerger.h"
 
@@ -247,8 +247,8 @@ void WayMatchStringMerger::mergeNode(ElementId scrapNode)
 {
   LOG_TRACE("Merging node...");
 
-  LOG_VAR(scrapNode);
-  LOG_VAR(_map->getNode(scrapNode));
+  LOG_VART(scrapNode);
+  LOG_VART(_map->getNode(scrapNode));
   // find the first instance of scrapNode in way 2
   WayLocation wl2 = _findNodeLocation2(_mapping->getWayString2(), scrapNode);
 

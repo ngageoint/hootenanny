@@ -22,7 +22,8 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef FILEUTILS_H
@@ -73,6 +74,14 @@ public:
    * @param text text to be written
    */
   static void writeFully(const QString path, const QString text);
+
+  /**
+   * Returns the number of lines in a file
+   *
+   * @param file file to examine
+   * @return a line count
+   */
+  static long getNumberOfLinesInFile(const QString file);
 };
 
 }

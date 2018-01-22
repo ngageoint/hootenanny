@@ -22,10 +22,15 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "FileUtils.h"
+
+// Hoot
+#include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QDir>
@@ -34,9 +39,9 @@
 #include <QFileInfoList>
 #include <QTextStream>
 
-// Hoot
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
+// Std
+#include <fstream>
+#include <algorithm>
 
 namespace hoot
 {
@@ -128,6 +133,14 @@ void FileUtils::writeFully(const QString path, const QString text)
   out << text;
   out.flush();
   outFile.close();
+}
+
+long FileUtils::getNumberOfLinesInFile(const QString file)
+{
+  std::ifstream inFile(file.toStdString().c_str());
+  size_t lineCount =
+    std::count(std::istreambuf_iterator<char>(inFile), std::istreambuf_iterator<char>(), '\n');
+  return lineCount;
 }
 
 }

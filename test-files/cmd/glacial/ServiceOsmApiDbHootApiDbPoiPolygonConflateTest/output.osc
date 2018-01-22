@@ -1012,58 +1012,6 @@
         <node id="489" version="1" lat="37.7636559999999974" lon="-122.4200440000000043">
             <tag k="hoot:status" v="0"/>
         </node>
-    </delete>
-    <create>
-        <node id="-1" version="0" lat="37.7622797535588006" lon="-122.4229162302350034">
-            <tag k="hoot:id" v="508"/>
-            <tag k="hoot:status" v="2"/>
-        </node>
-        <node id="-2" version="0" lat="37.7624550132548009" lon="-122.4229330181379964">
-            <tag k="hoot:id" v="509"/>
-            <tag k="hoot:status" v="2"/>
-        </node>
-        <node id="-3" version="0" lat="37.7624769003288989" lon="-122.4225708318499954">
-            <tag k="hoot:id" v="510"/>
-            <tag k="hoot:status" v="2"/>
-        </node>
-        <node id="-4" version="0" lat="37.7623016395462017" lon="-122.4225540447690008">
-            <tag k="hoot:id" v="511"/>
-            <tag k="hoot:status" v="2"/>
-        </node>
-        <node id="-5" version="0" lat="37.7639810463469985" lon="-122.4204099912620052">
-            <tag k="hoot:id" v="512"/>
-            <tag k="hoot:status" v="2"/>
-        </node>
-        <node id="-6" version="0" lat="37.7643100314679998" lon="-122.4204399893390018">
-            <tag k="hoot:id" v="513"/>
-            <tag k="hoot:status" v="2"/>
-        </node>
-        <node id="-7" version="0" lat="37.7639985776829974" lon="-122.4201198017580055">
-            <tag k="hoot:id" v="514"/>
-            <tag k="hoot:status" v="2"/>
-        </node>
-        <node id="-8" version="0" lat="37.7643275639126017" lon="-122.4201497985850011">
-            <tag k="hoot:id" v="515"/>
-            <tag k="hoot:status" v="2"/>
-        </node>
-        <node id="-9" version="0" lat="37.7642535098409979" lon="-122.4201430443319936">
-            <tag k="hoot:id" v="516"/>
-            <tag k="hoot:status" v="2"/>
-        </node>
-        <node id="-10" version="0" lat="37.7641891414519009" lon="-122.4201371787439996">
-            <tag k="hoot:id" v="517"/>
-            <tag k="hoot:status" v="2"/>
-        </node>
-        <node id="-11" version="0" lat="37.7641247721535009" lon="-122.4201313053119975">
-            <tag k="hoot:id" v="518"/>
-            <tag k="hoot:status" v="2"/>
-        </node>
-        <node id="-12" version="0" lat="37.7640603965117023" lon="-122.4201254395569975">
-            <tag k="hoot:id" v="519"/>
-            <tag k="hoot:status" v="2"/>
-        </node>
-    </create>
-    <delete>
         <way id="3" version="1">
             <nd ref="202"/>
             <nd ref="203"/>
@@ -1207,6 +1155,23 @@
         </way>
     </delete>
     <modify>
+        <way id="16" version="1">
+            <nd ref="38"/>
+            <nd ref="39"/>
+            <nd ref="40"/>
+            <nd ref="41"/>
+            <nd ref="38"/>
+            <tag k="REF1" v="009232"/>
+            <tag k="REF2" v="none"/>
+            <tag k="created_by" v="Potlatch 0.9c"/>
+            <tag k="hoot:id" v="16"/>
+            <tag k="leisure" v="park"/>
+            <tag k="hoot:status" v="1"/>
+            <tag k="alt_name" v="Kidpower Park"/>
+            <tag k="area" v="yes"/>
+            <tag k="name" v="Kids Power Park"/>
+            <tag k="error:circular" v="15"/>
+        </way>
         <way id="17" version="1">
             <nd ref="42"/>
             <nd ref="43"/>
@@ -1222,6 +1187,21 @@
             <tag k="alt_name" v="16TH &amp; HOFF ST. PARKING GARAGE"/>
             <tag k="name" v="Hoff Street Garage"/>
             <tag k="amenity" v="parking"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+        <way id="18" version="1">
+            <nd ref="50"/>
+            <nd ref="51"/>
+            <nd ref="52"/>
+            <nd ref="53"/>
+            <nd ref="50"/>
+            <tag k="REF1" v="00439d"/>
+            <tag k="REF2" v="none"/>
+            <tag k="hoot:id" v="18"/>
+            <tag k="leisure" v="garden"/>
+            <tag k="hoot:status" v="1"/>
+            <tag k="area" v="yes"/>
+            <tag k="name" v="Dearborn Community Garden"/>
             <tag k="error:circular" v="15"/>
         </way>
     </modify>
@@ -1833,36 +1813,4 @@
             <tag k="error:circular" v="15"/>
         </way>
     </delete>
-    <create>
-        <way id="-1" version="0">
-            <nd ref="-7"/>
-            <nd ref="-5"/>
-            <nd ref="-6"/>
-            <nd ref="-8"/>
-            <nd ref="-9"/>
-            <nd ref="-10"/>
-            <nd ref="-11"/>
-            <nd ref="-12"/>
-            <nd ref="-7"/>
-            <tag k="REF2" v="none"/>
-            <tag k="hoot:id" v="102"/>
-            <tag k="hoot:status" v="2"/>
-            <tag k="area" v="yes"/>
-            <tag k="name" v="Kidpower Park"/>
-            <tag k="error:circular" v="15"/>
-        </way>
-        <way id="-2" version="0">
-            <nd ref="-1"/>
-            <nd ref="-2"/>
-            <nd ref="-3"/>
-            <nd ref="-4"/>
-            <nd ref="-1"/>
-            <tag k="REF2" v="none"/>
-            <tag k="hoot:id" v="103"/>
-            <tag k="hoot:status" v="2"/>
-            <tag k="area" v="yes"/>
-            <tag k="name" v="Dearborn Community Garden"/>
-            <tag k="error:circular" v="15"/>
-        </way>
-    </create>
 </osmChange>
