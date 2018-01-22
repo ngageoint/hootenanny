@@ -51,6 +51,8 @@ using namespace std;
 namespace hoot
 {
 
+unsigned int NetworkDetails::logWarnCount = 0;
+
 static double min(double a, double b, double c) { return std::min(a, std::min(b, c)); }
 
 NetworkDetails::NetworkDetails(ConstOsmMapPtr map, ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2) :
@@ -760,6 +762,30 @@ double NetworkDetails::getPartialEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNet
     ConstWayPtr w2 = boost::dynamic_pointer_cast<const Way>(e2->getMembers()[0]);
     LOG_VART(w1.get());
     LOG_VART(w2.get());
+
+    //Not sure why this is happening.  Opened #2071 to look further into it.
+    if (!w1.get() || !w2.get())
+    {
+      if (logWarnCount < Log::getWarnMessageLimit())
+      {
+        LOG_WARN("Unable to retieve partial match score.  One or more ways is null.");
+        if (!w1.get())
+        {
+          LOG_DEBUG("Way 1 is null.");
+        }
+        if (!w2.get())
+        {
+          LOG_DEBUG("Way 2 is null.");
+        }
+      }
+      else if (logWarnCount == Log::getWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
+
+      return 0.0;
+    }
 
     const SublineCache& sc = _getSublineCache(w1, w2);
     LOG_VART(sc.p);
