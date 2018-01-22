@@ -159,7 +159,7 @@ Feature: Translation Assistant
     #    Then I accept the alert
     #    Then I close the modal
 
-    Scenario: Test an invalid dataset
-        Then I click on the "Translation Assistant" option in the "settingsSidebar"
-        Then I upload an invalid dataset
-        Then I wait 30 "seconds" to see "Job failed"
+    #Scenario: Test an invalid dataset
+    #    Then I click on the "Translation Assistant" option in the "settingsSidebar"
+    #    Then I upload an invalid dataset
+    #    Then I wait 30 "seconds" to see "Job failed"
