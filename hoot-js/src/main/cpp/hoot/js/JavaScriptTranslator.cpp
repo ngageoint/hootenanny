@@ -74,9 +74,9 @@ unsigned int JavaScriptTranslator::logWarnCount = 0;
 HOOT_FACTORY_REGISTER(ScriptTranslator, JavaScriptTranslator)
 
 // Return the current time
-Handle<Value> jsGetTimeNow(const Arguments& /*args*/)
+void jsGetTimeNow(const FunctionCallbackInfo<Value>& args)
 {
-  return toV8(Tgs::Time::getTime());
+  args.GetReturnValue().Set(toV8(Tgs::Time::getTime()));
 }
 
 JavaScriptTranslator::JavaScriptTranslator()
@@ -190,12 +190,13 @@ void JavaScriptTranslator::_finalize()
   if (!_error)
   {
     // run the user's finalize function if it exists.
-    HandleScope handleScope;
-    Context::Scope context_scope(_gContext->getContext());
+    Isolate* current = v8::Isolate::GetCurrent();
+    HandleScope handleScope(current);
+    Context::Scope context_scope(_gContext->getContext(current));
 
-    Handle<Object> tObj = _gContext->getContext()->Global();
+    Handle<Object> tObj = _gContext->getContext(current)->Global();
 
-    if (tObj->Has(String::NewSymbol("finalize")))
+    if (tObj->Has(String::NewFromUtf8(current, "finalize")))
     {
       TryCatch trycatch;
       Handle<Value> final = _gContext->call(tObj,"finalize");
@@ -232,8 +233,9 @@ void JavaScriptTranslator::_init()
 
   _error = false;
   _gContext.reset(new PluginContext());
-  HandleScope handleScope;
-  Context::Scope context_scope(_gContext->getContext());
+  Isolate* current = v8::Isolate::GetCurrent();
+  HandleScope handleScope(current);
+  Context::Scope context_scope(_gContext->getContext(current));
 
   if (_scriptPath.isEmpty())
   {
@@ -251,15 +253,14 @@ void JavaScriptTranslator::_init()
     _gContext->loadScript(_scriptPath);
   }
 
-  // Less typeing
-  Handle<Object> tObj = _gContext->getContext()->Global();
+  // Less typing
+  Handle<Object> tObj = _gContext->getContext(current)->Global();
 
   // Set up a small function
-  tObj->Set(String::NewSymbol("timeNow"), FunctionTemplate::New(jsGetTimeNow)->GetFunction());
+  tObj->Set(String::NewFromUtf8(current, "timeNow"), FunctionTemplate::New(current, jsGetTimeNow)->GetFunction());
 
-
-  // Run Initiallise, if it exists
-  if (tObj->Has(String::NewSymbol("initialize")))
+  // Run Initialize, if it exists
+  if (tObj->Has(String::NewFromUtf8(current, "initialize")))
   {
     TryCatch trycatch;
     Handle<Value> initial = _gContext->call(tObj,"initialize");
@@ -267,11 +268,11 @@ void JavaScriptTranslator::_init()
   }
 
   // Sort out what the toOsm function is called
-  if (tObj->Has(String::NewSymbol("translateToOsm")))
+  if (tObj->Has(String::NewFromUtf8(current, "translateToOsm")))
   {
     _toOsmFunctionName = "translateToOsm";
   }
-  else if (tObj->Has(String::NewSymbol("translateAttributes")))
+  else if (tObj->Has(String::NewFromUtf8(current, "translateAttributes")))
   {
     _toOsmFunctionName = "translateAttributes";
   }
@@ -307,12 +308,13 @@ const QString JavaScriptTranslator::getLayerNameFilter()
     _init();
   }
 
-  HandleScope handleScope;
-  Context::Scope context_scope(_gContext->getContext());
+  Isolate* current = v8::Isolate::GetCurrent();
+  HandleScope handleScope(current);
+  Context::Scope context_scope(_gContext->getContext(current));
 
-  Handle<Object> tObj = _gContext->getContext()->Global();
+  Handle<Object> tObj = _gContext->getContext(current)->Global();
 
-  if (tObj->Has(String::NewSymbol("layerNameFilter")))
+  if (tObj->Has(String::NewFromUtf8(current, "layerNameFilter")))
   {
     return toCpp<QString>(_gContext->call(tObj,"layerNameFilter"));
   }
@@ -381,12 +383,13 @@ boost::shared_ptr<const Schema> JavaScriptTranslator::getOgrOutputSchema()
       _init();
     }
 
-    HandleScope handleScope;
-    Context::Scope context_scope(_gContext->getContext());
+    Isolate* current = v8::Isolate::GetCurrent();
+    HandleScope handleScope(current);
+    Context::Scope context_scope(_gContext->getContext(current));
 
-    Handle<Object> tObj = _gContext->getContext()->Global();
+    Handle<Object> tObj = _gContext->getContext(current)->Global();
 
-    if (!tObj->Has(String::NewSymbol("getDbSchema")))
+    if (!tObj->Has(String::NewFromUtf8(current, "getDbSchema")))
     {
       throw HootException("This translation file does not support converting to OGR. "
                           "(Missing schema)");
@@ -810,8 +813,9 @@ vector<Tags> JavaScriptTranslator::translateToOgrTags(Tags& tags, ElementType el
   vector<Tags> result;
   QVariantList l = _translateToOgrVariants(tags, elementType, geometryType);
 
-  HandleScope handleScope;
-  Context::Scope context_scope(_gContext->getContext());
+  Isolate* current = v8::Isolate::GetCurrent();
+  HandleScope handleScope(current);
+  Context::Scope context_scope(_gContext->getContext(current));
 
   result.resize(l.size());
   for (int i = 0; i < l.size(); i++)
@@ -847,10 +851,11 @@ QVariantList JavaScriptTranslator::_translateToOgrVariants(Tags& tags,
 {
   _tags = &tags;
 
-  HandleScope handleScope;
-  Context::Scope context_scope(_gContext->getContext());
+  Isolate* current = v8::Isolate::GetCurrent();
+  HandleScope handleScope(current);
+  Context::Scope context_scope(_gContext->getContext(current));
 
-  Handle<Object> v8tags = Object::New();
+  Handle<Object> v8tags = Object::New(current);
   for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
   {
     v8tags->Set(toV8(it.key()), toV8(it.value()));
@@ -866,18 +871,18 @@ QVariantList JavaScriptTranslator::_translateToOgrVariants(Tags& tags,
   {
   case GEOS_POINT:
   case GEOS_MULTIPOINT:
-    args[2] = String::New("Point");
+    args[2] = String::NewFromUtf8(current, "Point");
     break;
   case GEOS_LINESTRING:
   case GEOS_MULTILINESTRING:
-    args[2] = String::New("Line");
+    args[2] = String::NewFromUtf8(current, "Line");
     break;
   case GEOS_POLYGON:
   case GEOS_MULTIPOLYGON:
-    args[2] = String::New("Area");
+    args[2] = String::NewFromUtf8(current, "Area");
     break;
   case GEOS_GEOMETRYCOLLECTION:
-    args[2] = String::New("Collection");
+    args[2] = String::NewFromUtf8(current, "Collection");
     break;
   default:
     throw InternalErrorException("Unexpected geometry type.");
@@ -890,10 +895,10 @@ QVariantList JavaScriptTranslator::_translateToOgrVariants(Tags& tags,
   }
 
 //  QScriptValue translated = _translateToOgrFunction->call(QScriptValue(), args);
-  Handle<Object> tObj = _gContext->getContext()->Global();
+  Handle<Object> tObj = _gContext->getContext(current)->Global();
 
   // We assume this exists. we checked during Init.
-  Handle<v8::Function> tFunc = Handle<v8::Function>::Cast(tObj->Get(String::NewSymbol("translateToOgr")));
+  Handle<Function> tFunc = Handle<Function>::Cast(tObj->Get(String::NewFromUtf8(current, "translateToOgr")));
 
   // Make sure we have a translation function. No easy way to do this earlier than now
   if (tFunc->IsUndefined())
@@ -942,10 +947,11 @@ void JavaScriptTranslator::_translateToOsm(Tags& t, const char *layerName, const
 {
   _tags = &t;
 
-  HandleScope handleScope;
-  Context::Scope context_scope(_gContext->getContext());
+  Isolate* current = v8::Isolate::GetCurrent();
+  HandleScope handleScope(current);
+  Context::Scope context_scope(_gContext->getContext(current));
 
-  Handle<Object> tags = Object::New();
+  Handle<Object> tags = Object::New(current);
   for (Tags::const_iterator it = t.begin(); it != t.end(); ++it)
   {
     tags->Set(toV8(it.key()), toV8(it.value()));
@@ -956,10 +962,10 @@ void JavaScriptTranslator::_translateToOsm(Tags& t, const char *layerName, const
   args[1] = toV8(layerName);
   args[2] = toV8(geomType);
 
-  Handle<Object> tObj = _gContext->getContext()->Global();
+  Handle<Object> tObj = _gContext->getContext(current)->Global();
 
   // This has a variable since we don't know if it will be "translateToOsm" or "translateAttributes"
-  Handle<v8::Function> tFunc = Handle<v8::Function>::Cast(tObj->Get(toV8(_toOsmFunctionName)));
+  Handle<Function> tFunc = Handle<Function>::Cast(tObj->Get(toV8(_toOsmFunctionName)));
   TryCatch trycatch;
 
   // NOTE: the "3" here is the number of arguments
@@ -997,7 +1003,7 @@ void JavaScriptTranslator::_translateToOsm(Tags& t, const char *layerName, const
       Local<Value> v(obj->Get(arr->Get(i)));
 
       // Need to make sure the "Value" is not undefined or else "Bad Things Happen"
-      if (v != Undefined())
+      if (v != Undefined(current))
       {
         t.insert(toCpp<QString>(arr->Get(i)), toCpp<QString>(v));
       }

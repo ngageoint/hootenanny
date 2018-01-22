@@ -31,7 +31,7 @@
 #include <hoot/core/schema/OsmSchemaLoader.h>
 
 // v8
-#include <v8.h>
+#include <hoot/js/HootJsStable.h>
 
 namespace hoot
 {

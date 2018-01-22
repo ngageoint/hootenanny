@@ -45,17 +45,19 @@ MatchFactoryJs::~MatchFactoryJs() {}
 
 void MatchFactoryJs::Init(Handle<Object> exports)
 {
-  Handle<Object> schema = Object::New();
-  exports->Set(String::NewSymbol("MatchFactory"), schema);
-  schema->Set(String::NewSymbol("getAllAvailableCreators"),
-    FunctionTemplate::New(getAllAvailableCreators)->GetFunction());
+  Isolate* current = exports->GetIsolate();
+  HandleScope scope(current);
+  Handle<Object> schema = Object::New(current);
+  exports->Set(String::NewFromUtf8(current, "MatchFactory"), schema);
+  schema->Set(String::NewFromUtf8(current, "getAllAvailableCreators"),
+    FunctionTemplate::New(current, getAllAvailableCreators)->GetFunction());
 }
 
-Handle<Value> MatchFactoryJs::getAllAvailableCreators(const Arguments& /*args*/)
+void MatchFactoryJs::getAllAvailableCreators(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  HandleScope scope(args.GetIsolate());
 
-  return scope.Close(toV8(MatchFactory::getInstance().getAllAvailableCreators()));
+  args.GetReturnValue().Set(toV8(MatchFactory::getInstance().getAllAvailableCreators()));
 }
 
 }

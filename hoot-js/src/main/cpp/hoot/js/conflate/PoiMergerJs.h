@@ -27,8 +27,8 @@
 #ifndef POIMERGERJS_H
 #define POIMERGERJS_H
 
+#include <hoot/js/HootJsStable.h>
 #include <hoot/js/SystemNodeJs.h>
-#include <v8.h>
 
 namespace hoot
 {
@@ -42,7 +42,7 @@ private:
   PoiMergerJs();
   ~PoiMergerJs();
 
-  static v8::Handle<v8::Value> jsPoiMerge(const v8::Arguments& args);
+  static void jsPoiMerge(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
 }

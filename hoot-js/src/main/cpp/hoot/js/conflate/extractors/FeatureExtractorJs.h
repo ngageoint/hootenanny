@@ -56,9 +56,9 @@ private:
   FeatureExtractorJs(FeatureExtractorPtr fe);
   ~FeatureExtractorJs();
 
-  static v8::Handle<v8::Value> extract(const v8::Arguments& args);
-  static v8::Handle<v8::Value> New(const v8::Arguments& args);
-  static v8::Handle<v8::Value> getName(const v8::Arguments& args);
+  static void extract(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void getName(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   QString _className;
   FeatureExtractorPtr _fe;

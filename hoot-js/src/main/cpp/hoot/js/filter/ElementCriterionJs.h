@@ -55,9 +55,9 @@ private:
   ElementCriterionJs(ElementCriterion* c);
   ~ElementCriterionJs();
 
-  static v8::Handle<v8::Value> addCriterion(const v8::Arguments& args);
-  static v8::Handle<v8::Value> isSatisfied(const v8::Arguments& args);
-  static v8::Handle<v8::Value> New(const v8::Arguments& args);
+  static void addCriterion(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isSatisfied(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   QString _className;
   ElementCriterionPtr _c;

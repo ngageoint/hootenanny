@@ -48,17 +48,20 @@ HootExceptionJs::HootExceptionJs()
 
 Handle<Object> HootExceptionJs::create(boost::shared_ptr<HootException> e)
 {
-  HandleScope scope;
+  Isolate* current = v8::Isolate::GetCurrent();
+  EscapableHandleScope scope(current);
 
-  Handle<Object> result = _constructor->NewInstance();
+  Handle<Object> result = ToLocal(&_constructor)->NewInstance();
   HootExceptionJs* from = ObjectWrap::Unwrap<HootExceptionJs>(result);
   from->_e = e;
 
-  return scope.Close(result);
+  return scope.Escape(result);
 }
 
 void HootExceptionJs::Init(Handle<Object> target)
 {
+  Isolate* current = target->GetIsolate();
+  HandleScope scope(current);
   vector<string> opNames =
     Factory::getInstance().getObjectNamesByBase(HootException::className());
 
@@ -67,19 +70,19 @@ void HootExceptionJs::Init(Handle<Object> target)
     QString noNamespace = QString::fromStdString(opNames[i]).replace("hoot::", "");
 
     // Prepare constructor template
-    Local<FunctionTemplate> tpl = FunctionTemplate::New(New);
+    Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
     tpl->SetClassName(Handle<String>::Cast(toV8(opNames[i])));
     tpl->InstanceTemplate()->SetInternalFieldCount(2);
     // Prototype
-    tpl->PrototypeTemplate()->Set(String::NewSymbol("toString"),
-        FunctionTemplate::New(toString)->GetFunction());
-    tpl->PrototypeTemplate()->Set(String::NewSymbol("toJSON"),
-        FunctionTemplate::New(toJSON)->GetFunction());
+    tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "toString"),
+        FunctionTemplate::New(current, toString));
+    tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "toJSON"),
+        FunctionTemplate::New(current, toJSON));
     tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
                                   toV8(HootException::className()));
 
-    _constructor = Persistent<Function>::New(tpl->GetFunction());
-    target->Set(toV8(noNamespace), _constructor);
+    _constructor.Reset(current, tpl->GetFunction());
+    target->Set(toV8(noNamespace), ToLocal(&_constructor));
   }
 }
 
@@ -89,7 +92,7 @@ bool HootExceptionJs::isHootException(Handle<Value> v)
 
   if (v->IsObject())
   {
-    v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
+    Handle<Object> obj = Handle<Object>::Cast(v);
     HootExceptionJs* e = 0;
     if (obj->InternalFieldCount() >= 1)
     {
@@ -104,14 +107,15 @@ bool HootExceptionJs::isHootException(Handle<Value> v)
   return result;
 }
 
-v8::Handle<v8::Value> HootExceptionJs::New(const v8::Arguments& args)
+void HootExceptionJs::New(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   HootExceptionJs* obj = new HootExceptionJs();
   obj->Wrap(args.This());
 
-  return args.This();
+  args.GetReturnValue().Set(args.This());
 }
 
 void HootExceptionJs::checkV8Exception(Handle<Value> result, TryCatch& tc)
@@ -174,9 +178,10 @@ void HootExceptionJs::throwAsHootException(TryCatch& tc)
   }
 }
 
-v8::Handle<v8::Value> HootExceptionJs::toJSON(const v8::Arguments& args)
+void HootExceptionJs::toJSON(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   boost::shared_ptr<HootException> e = ObjectWrap::Unwrap<HootExceptionJs>(args.This())->getException();
 
@@ -184,16 +189,17 @@ v8::Handle<v8::Value> HootExceptionJs::toJSON(const v8::Arguments& args)
   m["message"] = e->getWhat();
   m["classname"] = QString::fromStdString(e->getClassName());
 
-  return scope.Close(toV8(m));
+  args.GetReturnValue().Set(toV8(m));
 }
 
-v8::Handle<v8::Value> HootExceptionJs::toString(const v8::Arguments& args)
+void HootExceptionJs::toString(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   boost::shared_ptr<HootException> e = ObjectWrap::Unwrap<HootExceptionJs>(args.This())->getException();
 
-  return scope.Close(toV8(e->getWhat()));
+  args.GetReturnValue().Set(toV8(e->getWhat()));
 }
 
 }

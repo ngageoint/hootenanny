@@ -37,7 +37,7 @@
 #include <tgs/SharedPtr.h>
 
 // v8
-#include <v8.h>
+#include "HootJsStable.h"
 
 namespace hoot
 {
@@ -64,8 +64,7 @@ public:
 
   v8::Local<v8::Value> eval(QString e);
 
-  v8::Persistent<v8::Context> getContext() { return _context; }
-
+  v8::Local<v8::Context> getContext(v8::Isolate* isolate);
 
   bool hasFunction(QString name);
 
@@ -76,7 +75,6 @@ public:
 
   v8::Local<v8::Object> loadScript(QString filename, QString loadInto = "");
 
-  // Will refacter this later to get rid of duplication
   v8::Local<v8::Object> loadText(QString text, QString loadInto = "", QString scriptName = "<Unknown>");
 
   /**

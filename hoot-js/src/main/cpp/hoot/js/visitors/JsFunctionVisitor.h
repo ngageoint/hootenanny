@@ -48,7 +48,7 @@ public:
 
   JsFunctionVisitor() : _map(0) {}
 
-  virtual void addFunction(v8::Persistent<v8::Function> func) { _func = v8::Persistent<v8::Function>(func); }
+  virtual void addFunction(v8::Isolate* isolate, v8::Local<v8::Function>& func) { _func.Reset(isolate, func); }
 
   virtual void setOsmMap(OsmMap* map) { _map = map; }
 

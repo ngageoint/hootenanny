@@ -28,8 +28,8 @@
 #define ELEMENTCONVERTERJS_H
 
 // node.js
+#include <hoot/js/HootJsStable.h>
 #include <hoot/js/SystemNodeJs.h>
-#include <v8.h>
 
 namespace hoot
 {
@@ -43,7 +43,7 @@ private:
   ElementConverterJs();
   ~ElementConverterJs();
 
-  static v8::Handle<v8::Value> calculateLength(const v8::Arguments& args);
+  static void calculateLength(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
 }

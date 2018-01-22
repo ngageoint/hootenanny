@@ -38,6 +38,7 @@
 # else
 #  ifdef HOOT_HAVE_NODE_NODE_H
 #    include <node/node.h>
+#    include <node/node_object_wrap.h>
 #  else
 #    error "Expected an NodeJS header file to be defined."
 #  endif

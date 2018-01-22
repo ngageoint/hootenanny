@@ -57,12 +57,11 @@ private:
   MostEnglishNameJs(MostEnglishNamePtr sd) { _sd = sd; }
   ~MostEnglishNameJs();
 
-  static v8::Handle<v8::Value> New(const v8::Arguments& args);
+  static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void getMostEnglishName(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   MostEnglishNamePtr _sd;
   static v8::Persistent<v8::Function> _constructor;
-
-  static v8::Handle<v8::Value> getMostEnglishName(const v8::Arguments& args);
 };
 
 inline void toCpp(v8::Handle<v8::Value> v, MostEnglishNamePtr& p)

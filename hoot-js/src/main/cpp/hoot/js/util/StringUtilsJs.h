@@ -28,7 +28,7 @@
 #define STRINGUTILSJS_H
 
 // v8
-#include <v8.h>
+#include <hoot/js/HootJsStable.h>
 
 namespace hoot
 {

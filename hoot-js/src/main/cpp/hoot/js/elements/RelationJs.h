@@ -63,8 +63,8 @@ private:
   RelationJs();
   ~RelationJs();
 
-  static v8::Handle<v8::Value> New(const v8::Arguments& args);
-  static v8::Handle<v8::Value> replaceElement(const v8::Arguments& args);
+  static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void replaceElement(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   QString _className;
   ConstRelationPtr _constRelation;

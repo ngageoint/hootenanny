@@ -47,22 +47,36 @@ SettingsJs::~SettingsJs() {}
 
 void SettingsJs::Init(Handle<Object> exports)
 {
-  Handle<Object> settings = Object::New();
-  exports->Set(String::NewSymbol("Settings"), settings);
-  exports->Set(String::NewSymbol("get"), FunctionTemplate::New(get)->GetFunction());
-  settings->Set(String::NewSymbol("get"), FunctionTemplate::New(get)->GetFunction());
-  exports->Set(String::NewSymbol("getAll"), FunctionTemplate::New(getAll)->GetFunction());
-  settings->Set(String::NewSymbol("getAll"), FunctionTemplate::New(getAll)->GetFunction());
-  exports->Set(String::NewSymbol("getValue"), FunctionTemplate::New(getValue)->GetFunction());
-  settings->Set(String::NewSymbol("getValue"), FunctionTemplate::New(getValue)->GetFunction());
-  exports->Set(String::NewSymbol("set"), FunctionTemplate::New(set)->GetFunction());
-  settings->Set(String::NewSymbol("set"), FunctionTemplate::New(set)->GetFunction());
-  exports->Set(String::NewSymbol("loadJson"), FunctionTemplate::New(loadJson)->GetFunction());
-  settings->Set(String::NewSymbol("loadJson"), FunctionTemplate::New(loadJson)->GetFunction());
+  Isolate* current = exports->GetIsolate();
+  HandleScope scope(current);
+  Handle<Object> settings = Object::New(current);
+  exports->Set(String::NewFromUtf8(current, "Settings"), settings);
+  exports->Set(String::NewFromUtf8(current, "get"),
+               FunctionTemplate::New(current, get)->GetFunction());
+  settings->Set(String::NewFromUtf8(current, "get"),
+                FunctionTemplate::New(current, get)->GetFunction());
+  exports->Set(String::NewFromUtf8(current, "getAll"),
+               FunctionTemplate::New(current, getAll)->GetFunction());
+  settings->Set(String::NewFromUtf8(current, "getAll"),
+                FunctionTemplate::New(current, getAll)->GetFunction());
+  exports->Set(String::NewFromUtf8(current, "getValue"),
+               FunctionTemplate::New(current, getValue)->GetFunction());
+  settings->Set(String::NewFromUtf8(current, "getValue"),
+                FunctionTemplate::New(current, getValue)->GetFunction());
+  exports->Set(String::NewFromUtf8(current, "set"),
+               FunctionTemplate::New(current, set)->GetFunction());
+  settings->Set(String::NewFromUtf8(current, "set"),
+                FunctionTemplate::New(current, set)->GetFunction());
+  exports->Set(String::NewFromUtf8(current, "loadJson"),
+               FunctionTemplate::New(current, loadJson)->GetFunction());
+  settings->Set(String::NewFromUtf8(current, "loadJson"),
+                FunctionTemplate::New(current, loadJson)->GetFunction());
 }
 
-Handle<Value> SettingsJs::get(const Arguments& args) {
-  HandleScope scope;
+void SettingsJs::get(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   Settings* settings = &conf();
 
@@ -70,44 +84,49 @@ Handle<Value> SettingsJs::get(const Arguments& args) {
   if (settings->hasKey(key))
   {
     QString value = settings->getString(key);
-    return scope.Close(String::New(value.toUtf8().data()));
+    args.GetReturnValue().Set(String::NewFromUtf8(current, value.toUtf8().data()));
   }
   else
   {
-    return scope.Close(Undefined());
+    args.GetReturnValue().SetUndefined();
   }
 }
 
-Handle<Value> SettingsJs::getAll(const Arguments&) {
-  HandleScope scope;
+void SettingsJs::getAll(const FunctionCallbackInfo<Value>& args)
+{
+  HandleScope scope(args.GetIsolate());
 
   Settings* settings = &conf();
 
-  return scope.Close(toV8(settings->getAll()));
+  args.GetReturnValue().Set(toV8(settings->getAll()));
 }
 
-Handle<Value> SettingsJs::getValue(const Arguments& args) {
-  HandleScope scope;
+void SettingsJs::getValue(const FunctionCallbackInfo<Value>& args)
+{
+  HandleScope scope(args.GetIsolate());
 
   Settings* settings = &conf();
 
   QString value = toCpp<QString>(args[0]);
-  return scope.Close(toV8(settings->getValue(value)));
+  args.GetReturnValue().Set(toV8(settings->getValue(value)));
 }
 
-Handle<Value> SettingsJs::loadJson(const Arguments& args) {
-  HandleScope scope;
+void SettingsJs::loadJson(const FunctionCallbackInfo<Value>& args)
+{
+  HandleScope scope(args.GetIsolate());
 
   Settings* settings = &conf();
 
   QString url = str(args[0]->ToString());
   settings->loadJson(url);
 
-  return scope.Close(Undefined());
+  args.GetReturnValue().SetUndefined();
 }
 
-Handle<Value> SettingsJs::set(const Arguments& args) {
-  HandleScope scope;
+void SettingsJs::set(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   Settings* settings = &conf();
 
@@ -120,14 +139,13 @@ Handle<Value> SettingsJs::set(const Arguments& args) {
       Local<String> v = args[0]->ToObject()->Get(k)->ToString();
       settings->set(str(k), str(v));
     }
+    args.GetReturnValue().SetUndefined();
   }
   else
   {
-    ThrowException(Exception::TypeError(String::New("Expected a dict of settings")));
-    return scope.Close(Undefined());
+    args.GetReturnValue().Set(current->ThrowException(
+      Exception::TypeError(String::NewFromUtf8(current, "Expected a dict of settings"))));
   }
-
-  return scope.Close(Undefined());
 }
 
 }

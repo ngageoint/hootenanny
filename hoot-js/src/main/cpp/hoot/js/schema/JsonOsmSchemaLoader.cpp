@@ -27,11 +27,11 @@
 #include "JsonOsmSchemaLoader.h"
 
 // hoot
+#include <hoot/core/schema/SchemaChecker.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/js/util/DataConvertJs.h>
 #include <hoot/js/util/StreamUtilsJs.h>
-#include <hoot/core/schema/SchemaChecker.h>
-#include <hoot/core/util/ConfigOptions.h>
 
 // Qt
 #include <QByteArray>
@@ -49,7 +49,8 @@ HOOT_FACTORY_REGISTER(OsmSchemaLoader, JsonOsmSchemaLoader)
 
 JsonOsmSchemaLoader::JsonOsmSchemaLoader()
 {
-  _context = Context::New();
+  Isolate* current = v8::Isolate::GetCurrent();
+  _context.Reset(current, Context::New(current));
 }
 
 void JsonOsmSchemaLoader::load(QString path, OsmSchema& s)
@@ -65,11 +66,12 @@ void JsonOsmSchemaLoader::load(QString path, OsmSchema& s)
   _deps.insert(path);
   QByteArray ba = fp.readAll();
 
-  HandleScope handleScope;
-  Context::Scope context_scope(_context);
+  Isolate* current = v8::Isolate::GetCurrent();
+  HandleScope handleScope(current);
+  Context::Scope context_scope(ToLocal(&_context));
 
   // If needed, this will throw an exception with user readable(ish) error message.
-  v8::Handle<v8::Value> result = fromJson(QString::fromUtf8(ba.data(), ba.size()), path);
+  Handle<Value> result = fromJson(QString::fromUtf8(ba.data(), ba.size()), path);
 
   QVariantList l = toCpp<QVariantList>(result);
 

@@ -52,7 +52,7 @@ private:
   ReviewMarkerJs();
   ~ReviewMarkerJs();
 
-  static v8::Handle<v8::Value> mark(const v8::Arguments& args);
+  static void mark(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
 }

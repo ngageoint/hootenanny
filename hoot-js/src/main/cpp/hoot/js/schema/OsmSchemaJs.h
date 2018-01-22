@@ -45,48 +45,49 @@ private:
   OsmSchemaJs();
   ~OsmSchemaJs();
 
-  static v8::Handle<v8::Value> getAllTags(const v8::Arguments&);
-  static v8::Handle<v8::Value> getCategories(const v8::Arguments& args);
-  static v8::Handle<v8::Value> getChildTags(const v8::Arguments& args);
-  static v8::Handle<v8::Value> getSimilarTags(const v8::Arguments& args);
-  static v8::Handle<v8::Value> getTagByCategory(const v8::Arguments& args);
-  static v8::Handle<v8::Value> getTagVertex(const v8::Arguments& args);
-  static v8::Handle<v8::Value> isAncestor(const v8::Arguments& args);
-  static v8::Handle<v8::Value> isArea(const v8::Arguments& args);
-  static v8::Handle<v8::Value> isBuilding(const v8::Arguments& args);
-  static v8::Handle<v8::Value> isHgisPoi(const v8::Arguments& args);
-  static v8::Handle<v8::Value> isLinear(const v8::Arguments& args);
-  static v8::Handle<v8::Value> isLinearWaterway(const v8::Arguments& args);
-  static v8::Handle<v8::Value> isMetaData(const v8::Arguments& args);
-  static v8::Handle<v8::Value> isPoi(const v8::Arguments& args);
-  static v8::Handle<v8::Value> isLinearHighway(const v8::Arguments& args);
-  static v8::Handle<v8::Value> score(const v8::Arguments& args);
-  static v8::Handle<v8::Value> scoreOneWay(const v8::Arguments& args);
-  static v8::Handle<v8::Value> hasName(const v8::Arguments& args);
+  static void getAllTags(const v8::FunctionCallbackInfo<v8::Value>& agrs);
+  static void getCategories(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void getChildTags(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void getSimilarTags(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void getTagByCategory(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void getTagVertex(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isAncestor(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isArea(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isBuilding(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isHgisPoi(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isLinear(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isLinearWaterway(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isMetaData(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isPoi(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isLinearHighway(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void score(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void scoreOneWay(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void hasName(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
 inline v8::Handle<v8::Value> toV8(const SchemaVertex& tv)
 {
-  v8::Handle<v8::Object> result = v8::Object::New();
+  v8::Isolate* current = v8::Isolate::GetCurrent();
+  v8::Handle<v8::Object> result = v8::Object::New(current);
 
   if (tv.isEmpty())
   {
-    return v8::Undefined();
+    return v8::Undefined(current);
   }
   else
   {
-    result->Set(toV8("name"), toV8(tv.name), v8::None);
-    result->Set(toV8("description"), toV8(tv.description), v8::None);
-    result->Set(toV8("key"), toV8(tv.key), v8::None);
-    result->Set(toV8("value"), toV8(tv.value), v8::None);
-    result->Set(toV8("influence"), toV8(tv.influence), v8::None);
-    result->Set(toV8("childWeight"), toV8(tv.childWeight), v8::None);
-    result->Set(toV8("mismatchScore"), toV8(tv.mismatchScore), v8::None);
+    result->Set(toV8("name"), toV8(tv.name));
+    result->Set(toV8("description"), toV8(tv.description));
+    result->Set(toV8("key"), toV8(tv.key));
+    result->Set(toV8("value"), toV8(tv.value));
+    result->Set(toV8("influence"), toV8(tv.influence));
+    result->Set(toV8("childWeight"), toV8(tv.childWeight));
+    result->Set(toV8("mismatchScore"), toV8(tv.mismatchScore));
     // need to create a string conversion for this if we want to use it. Unused for now.
     //result->Set(toV8("valueType"), toV8(tv.valueType), None);
-    result->Set(toV8("aliases"), toV8(tv.aliases), v8::None);
-    result->Set(toV8("categories"), toV8(tv.categories), v8::None);
-    result->Set(toV8("geometries"), toV8(tv.geometries), v8::None);
+    result->Set(toV8("aliases"), toV8(tv.aliases));
+    result->Set(toV8("categories"), toV8(tv.categories));
+    result->Set(toV8("geometries"), toV8(tv.geometries));
   }
 
   return result;

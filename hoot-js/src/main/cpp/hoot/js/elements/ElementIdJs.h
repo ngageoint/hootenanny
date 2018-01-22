@@ -62,18 +62,19 @@ private:
   ElementIdJs();
   ~ElementIdJs();
 
-  static v8::Handle<v8::Value> New(const v8::Arguments& args);
+  static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   ElementId _eid;
   static v8::Persistent<v8::Function> _constructor;
 
-  static v8::Handle<v8::Value> getType(const v8::Arguments& args);
-  static v8::Handle<v8::Value> toJSON(const v8::Arguments& args);
-  static v8::Handle<v8::Value> toString(const v8::Arguments& args);
+  static void getType(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void toJSON(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void toString(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
 inline void toCpp(v8::Handle<v8::Value> v, ElementId& eid)
 {
+  v8::Isolate* current = v8::Isolate::GetCurrent();
   if (v.IsEmpty() || !v->IsObject())
   {
     throw IllegalArgumentException("Expected an object, got: (" + toString(v) + ")");
@@ -92,12 +93,12 @@ inline void toCpp(v8::Handle<v8::Value> v, ElementId& eid)
   {
     eid = eidj->getElementId();
   }
-  else if (obj->Has(v8::String::NewSymbol("id")) && obj->Has(v8::String::NewSymbol("type")))
+  else if (obj->Has(v8::String::NewFromUtf8(current, "id")) && obj->Has(v8::String::NewFromUtf8(current, "type")))
   {
     long id;
     QString type;
-    toCpp(obj->Get(v8::String::NewSymbol("id")), id);
-    toCpp(obj->Get(v8::String::NewSymbol("type")), type);
+    toCpp(obj->Get(v8::String::NewFromUtf8(current, "id")), id);
+    toCpp(obj->Get(v8::String::NewFromUtf8(current, "type")), type);
     eid = ElementId(ElementType::fromString(type), id);
   }
   else

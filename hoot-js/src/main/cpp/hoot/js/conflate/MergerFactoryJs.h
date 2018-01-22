@@ -45,12 +45,12 @@ private:
   MergerFactoryJs();
   ~MergerFactoryJs();
 
-  static v8::Handle<v8::Value> getAllAvailableCreators(const v8::Arguments& args);
+  static void getAllAvailableCreators(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
 inline v8::Handle<v8::Value> toV8(const MergerCreator::Description& d)
 {
-  v8::Handle<v8::Object> result = v8::Object::New();
+  v8::Handle<v8::Object> result = v8::Object::New(v8::Isolate::GetCurrent());
   result->Set(toV8("className"), toV8(d.className));
   result->Set(toV8("description"), toV8(d.description));
   result->Set(toV8("experimental"), toV8(d.experimental));

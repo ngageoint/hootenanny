@@ -66,54 +66,60 @@ RelationJs::~RelationJs()
 
 void RelationJs::Init(Handle<Object> target)
 {
+  Isolate* current = target->GetIsolate();
+  HandleScope scope(current);
   // Prepare constructor template
-  Local<FunctionTemplate> tpl = FunctionTemplate::New(New);
-  tpl->SetClassName(String::NewSymbol(Relation::className().data()));
+  Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
+  tpl->SetClassName(String::NewFromUtf8(current, Relation::className().data()));
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
   // Prototype
   ElementJs::_addBaseFunctions(tpl);
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("replaceElement"),
-      FunctionTemplate::New(replaceElement)->GetFunction());
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "replaceElement"),
+      FunctionTemplate::New(current, replaceElement));
 
-  _constructor = Persistent<Function>::New(tpl->GetFunction());
-  target->Set(String::NewSymbol("Relation"), _constructor);
+  _constructor.Reset(current, tpl->GetFunction());
+  target->Set(String::NewFromUtf8(current, "Relation"), ToLocal(&_constructor));
 }
 
 Handle<Object> RelationJs::New(ConstRelationPtr relation)
 {
-  HandleScope scope;
+  Isolate* current = v8::Isolate::GetCurrent();
+  EscapableHandleScope scope(current);
 
-  Handle<Object> result = _constructor->NewInstance();
+  Handle<Object> result = ToLocal(&_constructor)->NewInstance();
   RelationJs* from = ObjectWrap::Unwrap<RelationJs>(result);
   from->_setRelation(relation);
 
-  return scope.Close(result);
+  return scope.Escape(result);
 }
 
 Handle<Object> RelationJs::New(RelationPtr relation)
 {
-  HandleScope scope;
+  Isolate* current = v8::Isolate::GetCurrent();
+  EscapableHandleScope scope(current);
 
-  Handle<Object> result = _constructor->NewInstance();
+  Handle<Object> result = ToLocal(&_constructor)->NewInstance();
   RelationJs* from = ObjectWrap::Unwrap<RelationJs>(result);
   from->_setRelation(relation);
 
-  return scope.Close(result);
+  return scope.Escape(result);
 }
 
-Handle<Value> RelationJs::New(const Arguments& args)
+void RelationJs::New(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   RelationJs* obj = new RelationJs();
   obj->Wrap(args.This());
 
-  return args.This();
+  args.GetReturnValue().Set(args.This());
 }
 
-v8::Handle<v8::Value> RelationJs::replaceElement(const v8::Arguments& args)
+void RelationJs::replaceElement(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   try
   {
@@ -124,11 +130,11 @@ v8::Handle<v8::Value> RelationJs::replaceElement(const v8::Arguments& args)
 
     obj->getRelation()->replaceElement(e1, e2);
 
-    return scope.Close(Undefined());
+    args.GetReturnValue().SetUndefined();
   }
   catch (const HootException& e)
   {
-    return v8::ThrowException(HootExceptionJs::create(e));
+    args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(e)));
   }
 }
 

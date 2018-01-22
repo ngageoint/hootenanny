@@ -31,13 +31,13 @@
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/js/HootJsStable.h>
 #include <hoot/js/conflate/js/ScriptMatch.h>
 #include <hoot/js/conflate/js/ScriptMatchCreator.h>
 
 // Qt
 #include <QVariant>
 
-#include <v8.h>
 #include <iostream>
 #include <string>
 

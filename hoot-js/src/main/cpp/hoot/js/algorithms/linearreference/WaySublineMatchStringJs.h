@@ -61,12 +61,12 @@ private:
   WaySublineMatchStringJs();
   ~WaySublineMatchStringJs();
 
-  static v8::Handle<v8::Value> New(const v8::Arguments& args);
+  static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void toString(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   WaySublineMatchStringPtr _sm;
   static v8::Persistent<v8::Function> _constructor;
 
-  static v8::Handle<v8::Value> toString(const v8::Arguments& args);
 };
 
 }

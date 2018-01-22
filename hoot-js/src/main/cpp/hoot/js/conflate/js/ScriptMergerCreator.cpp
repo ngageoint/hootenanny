@@ -77,10 +77,11 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<Merger*>
     {
       script = sm->getScript();
 
-      HandleScope handleScope;
-      Context::Scope context_scope(script->getContext());
+      Isolate* current = v8::Isolate::GetCurrent();
+      HandleScope handleScope(current);
+      Context::Scope context_scope(script->getContext(current));
 
-      plugin = sm->getPlugin();
+      plugin.Reset(current, sm->getPlugin());
       set< pair<ElementId, ElementId> > s = sm->getMatchPairs();
       eids.insert(s.begin(), s.end());
       if (matchType.contains(sm->getMatchName()) == false)

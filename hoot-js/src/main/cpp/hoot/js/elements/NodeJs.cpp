@@ -63,69 +63,78 @@ NodeJs::~NodeJs()
 {
 }
 
-Handle<Value> NodeJs::getX(const Arguments& args) {
-  HandleScope scope;
+void NodeJs::getX(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   ConstNodePtr n = ObjectWrap::Unwrap<NodeJs>(args.This())->getConstNode();
 
-  return scope.Close(Number::New(n->getX()));
+  args.GetReturnValue().Set(Number::New(current, n->getX()));
 }
 
-Handle<Value> NodeJs::getY(const Arguments& args) {
-  HandleScope scope;
+void NodeJs::getY(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   ConstNodePtr n = ObjectWrap::Unwrap<NodeJs>(args.This())->getConstNode();
 
-  return scope.Close(Number::New(n->getY()));
+  args.GetReturnValue().Set(Number::New(current, n->getY()));
 }
 
 void NodeJs::Init(Handle<Object> target)
 {
+  Isolate* current = target->GetIsolate();
+  HandleScope scope(current);
   // Prepare constructor template
-  Local<FunctionTemplate> tpl = FunctionTemplate::New(New);
-  tpl->SetClassName(String::NewSymbol(Node::className().data()));
+  Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
+  tpl->SetClassName(String::NewFromUtf8(current, Node::className().data()));
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
   // Prototype
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("getX"),
-      FunctionTemplate::New(getX)->GetFunction());
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("getY"),
-      FunctionTemplate::New(getY)->GetFunction());
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getX"),
+      FunctionTemplate::New(current, getX));
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getY"),
+      FunctionTemplate::New(current, getY));
   ElementJs::_addBaseFunctions(tpl);
 
-  _constructor = Persistent<Function>::New(tpl->GetFunction());
-  target->Set(String::NewSymbol("Node"), _constructor);
+  _constructor.Reset(current, tpl->GetFunction());
+  target->Set(String::NewFromUtf8(current, "Node"), ToLocal(&_constructor));
 }
 
 Handle<Object> NodeJs::New(ConstNodePtr node)
 {
-  HandleScope scope;
+  Isolate* current = v8::Isolate::GetCurrent();
+  EscapableHandleScope scope(current);
 
-  Handle<Object> result = _constructor->NewInstance();
+  Handle<Object> result = ToLocal(&_constructor)->NewInstance();
   NodeJs* from = ObjectWrap::Unwrap<NodeJs>(result);
   from->_setNode(node);
 
-  return scope.Close(result);
+  return scope.Escape(result);
 }
 
 Handle<Object> NodeJs::New(NodePtr node)
 {
-  HandleScope scope;
+  Isolate* current = v8::Isolate::GetCurrent();
+  EscapableHandleScope scope(current);
 
-  Handle<Object> result = _constructor->NewInstance();
+  Handle<Object> result = ToLocal(&_constructor)->NewInstance();
   NodeJs* from = ObjectWrap::Unwrap<NodeJs>(result);
   from->_setNode(node);
 
-  return scope.Close(result);
+  return scope.Escape(result);
 }
 
-Handle<Value> NodeJs::New(const Arguments& args)
+void NodeJs::New(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   NodeJs* obj = new NodeJs();
   obj->Wrap(args.This());
 
-  return args.This();
+  args.GetReturnValue().Set(args.This());
 }
 
 }

@@ -48,25 +48,31 @@ UuidHelperJs::UuidHelperJs()
 
 UuidHelperJs::~UuidHelperJs() {}
 
-void UuidHelperJs::Init(Handle<Object> exports) {
-  Handle<Object> helpUuid = Object::New();
-  exports->Set(String::NewSymbol("UuidHelper"), helpUuid);
-  helpUuid->Set(String::NewSymbol("createUuid"), FunctionTemplate::New(createUuid)->GetFunction());
-  helpUuid->Set(String::NewSymbol("createUuid5"), FunctionTemplate::New(createUuid5)->GetFunction());
+void UuidHelperJs::Init(Handle<Object> exports)
+{
+  Isolate* current = exports->GetIsolate();
+  HandleScope scope(current);
+  Handle<Object> helpUuid = Object::New(current);
+  exports->Set(String::NewFromUtf8(current, "UuidHelper"), helpUuid);
+  helpUuid->Set(String::NewFromUtf8(current, "createUuid"),
+                FunctionTemplate::New(current, createUuid)->GetFunction());
+  helpUuid->Set(String::NewFromUtf8(current, "createUuid5"),
+                FunctionTemplate::New(current, createUuid5)->GetFunction());
 }
 
-
-Handle<Value> UuidHelperJs::createUuid(const Arguments& /*args*/) {
-  HandleScope scope;
+void UuidHelperJs::createUuid(const FunctionCallbackInfo<Value>& args)
+{
+  HandleScope scope(args.GetIsolate());
 
   QString result = UuidHelper::createUuid().toString();
 
-  return scope.Close(toV8(result));
+  args.GetReturnValue().Set(toV8(result));
 }
 
 
-Handle<Value> UuidHelperJs::createUuid5(const Arguments& args) {
-  HandleScope scope;
+void UuidHelperJs::createUuid5(const FunctionCallbackInfo<Value>& args)
+{
+  HandleScope scope(args.GetIsolate());
 
   QString result;
 
@@ -80,7 +86,7 @@ Handle<Value> UuidHelperJs::createUuid5(const Arguments& args) {
                                      QUuid(toCpp<QString>(args[1]))).toString();
   }
 
-  return scope.Close(toV8(result));
+  args.GetReturnValue().Set(toV8(result));
 }
 
 

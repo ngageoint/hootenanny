@@ -58,6 +58,8 @@ ValueAggregatorJs::~ValueAggregatorJs()
 
 void ValueAggregatorJs::Init(Handle<Object> target)
 {
+  Isolate* current = target->GetIsolate();
+  HandleScope scope(current);
   vector<string> opNames =
     Factory::getInstance().getObjectNamesByBase(ValueAggregator::className());
 
@@ -67,22 +69,24 @@ void ValueAggregatorJs::Init(Handle<Object> target)
     const char* n = utf8.data();
 
     // Prepare constructor template
-    Local<FunctionTemplate> tpl = FunctionTemplate::New(New);
-    tpl->SetClassName(String::NewSymbol(opNames[i].data()));
+    Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
+    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].data()));
     tpl->InstanceTemplate()->SetInternalFieldCount(2);
     // Prototype
-    tpl->PrototypeTemplate()->Set(String::NewSymbol("toString"),
-        FunctionTemplate::New(toString)->GetFunction());
+    tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "toString"),
+        FunctionTemplate::New(current, toString));
     tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
-                                  String::New(ValueAggregator::className().data()));
+                                  String::NewFromUtf8(current, ValueAggregator::className().data()));
 
-    Persistent<Function> constructor = Persistent<Function>::New(tpl->GetFunction());
-    target->Set(String::NewSymbol(n), constructor);
+    Persistent<Function> constructor(current, tpl->GetFunction());
+    target->Set(String::NewFromUtf8(current, n), ToLocal(&constructor));
   }
 }
 
-Handle<Value> ValueAggregatorJs::New(const Arguments& args) {
-  HandleScope scope;
+void ValueAggregatorJs::New(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   QString className = str(args.This()->GetConstructorName());
 
@@ -92,16 +96,17 @@ Handle<Value> ValueAggregatorJs::New(const Arguments& args) {
 
   PopulateConsumersJs::populateConsumers<ValueAggregator>(c, args);
 
-  return args.This();
+  args.GetReturnValue().Set(args.This());
 }
 
-Handle<Value> ValueAggregatorJs::toString(const Arguments& args)
+void ValueAggregatorJs::toString(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   ValueAggregatorPtr sd = toCpp<ValueAggregatorPtr>(args.This());
 
-  return scope.Close(toV8(sd->toString()));
+  args.GetReturnValue().Set(toV8(sd->toString()));
 }
 
 }

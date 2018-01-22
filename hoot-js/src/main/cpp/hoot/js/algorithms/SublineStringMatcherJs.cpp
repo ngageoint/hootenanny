@@ -68,9 +68,10 @@ SublineStringMatcherJs::~SublineStringMatcherJs()
 {
 }
 
-Handle<Value> SublineStringMatcherJs::extractMatchingSublines(const Arguments& args)
+void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   SublineStringMatcherJs* smJs = ObjectWrap::Unwrap<SublineStringMatcherJs>(args.This());
   SublineStringMatcherPtr sm = smJs->getSublineStringMatcher();
@@ -90,7 +91,8 @@ Handle<Value> SublineStringMatcherJs::extractMatchingSublines(const Arguments& a
 
     if (match.isEmpty())
     {
-      return Undefined();
+      args.GetReturnValue().SetUndefined();
+      return;
     }
 
     // convert match into elements in a new map.
@@ -125,28 +127,27 @@ Handle<Value> SublineStringMatcherJs::extractMatchingSublines(const Arguments& a
 
     if (!match1 || !match2)
     {
-      result = Undefined();
+      result = Undefined(current);
     }
     else
     {
-      Handle<Object> obj = Object::New();
-      obj->Set(String::NewSymbol("map"), OsmMapJs::create(copiedMap));
-      obj->Set(String::NewSymbol("match1"), ElementJs::New(match1));
-      obj->Set(String::NewSymbol("match2"), ElementJs::New(match2));
+      Handle<Object> obj = Object::New(current);
+      obj->Set(String::NewFromUtf8(current, "map"), OsmMapJs::create(copiedMap));
+      obj->Set(String::NewFromUtf8(current, "match1"), ElementJs::New(match1));
+      obj->Set(String::NewFromUtf8(current, "match2"), ElementJs::New(match2));
       result = obj;
     }
+    args.GetReturnValue().Set(result);
   }
   catch (const HootException& e)
   {
-    return v8::ThrowException(HootExceptionJs::create(e));
+    args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(e)));
   }
-
-  return scope.Close(result);
 }
 
-Handle<Value> SublineStringMatcherJs::findMatch(const Arguments& args)
+void SublineStringMatcherJs::findMatch(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  HandleScope scope(args.GetIsolate());
 
   SublineStringMatcherJs* smJs = ObjectWrap::Unwrap<SublineStringMatcherJs>(args.This());
 
@@ -166,11 +167,13 @@ Handle<Value> SublineStringMatcherJs::findMatch(const Arguments& args)
 
   WaySublineMatchStringPtr result(new WaySublineMatchString(match));
 
-  return scope.Close(WaySublineMatchStringJs::New(result));
+  args.GetReturnValue().Set(WaySublineMatchStringJs::New(result));
 }
 
 void SublineStringMatcherJs::Init(Handle<Object> target)
 {
+  Isolate* current = target->GetIsolate();
+  HandleScope scope(current);
   vector<string> opNames =
     Factory::getInstance().getObjectNamesByBase(SublineStringMatcher::className());
 
@@ -180,22 +183,23 @@ void SublineStringMatcherJs::Init(Handle<Object> target)
     const char* n = utf8.data();
 
     // Prepare constructor template
-    Local<FunctionTemplate> tpl = FunctionTemplate::New(New);
-    tpl->SetClassName(String::NewSymbol(opNames[i].data()));
+    Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
+    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].data()));
     tpl->InstanceTemplate()->SetInternalFieldCount(1);
     // Prototype
-    tpl->PrototypeTemplate()->Set(String::NewSymbol("extractMatchingSublines"),
-        FunctionTemplate::New(extractMatchingSublines)->GetFunction());
-    tpl->PrototypeTemplate()->Set(String::NewSymbol("findMatch"),
-        FunctionTemplate::New(findMatch)->GetFunction());
+    tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "extractMatchingSublines"),
+        FunctionTemplate::New(current, extractMatchingSublines));
+    tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "findMatch"),
+        FunctionTemplate::New(current, findMatch));
 
-    Persistent<Function> constructor = Persistent<Function>::New(tpl->GetFunction());
-    target->Set(String::NewSymbol(n), constructor);
+    Persistent<Function> constructor(current, tpl->GetFunction());
+    target->Set(String::NewFromUtf8(current, n), ToLocal(&constructor));
   }
 }
 
-Handle<Value> SublineStringMatcherJs::New(const Arguments& args) {
-  HandleScope scope;
+void SublineStringMatcherJs::New(const FunctionCallbackInfo<Value>& args)
+{
+  HandleScope scope(args.GetIsolate());
 
   QString className = str(args.This()->GetConstructorName());
 
@@ -205,7 +209,7 @@ Handle<Value> SublineStringMatcherJs::New(const Arguments& args) {
   PopulateConsumersJs::populateConsumers(sm.get(), args);
   obj->Wrap(args.This());
 
-  return args.This();
+  args.GetReturnValue().Set(args.This());
 }
 
 }

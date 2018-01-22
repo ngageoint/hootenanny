@@ -28,10 +28,10 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 
+#include <hoot/js/HootJsStable.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/PluginContext.h>
 
-#include <v8.h>
 #include <iostream>
 #include <string>
 
@@ -50,16 +50,17 @@ public:
 
   void basicTest()
   {
+    Isolate* current = v8::Isolate::GetCurrent();
     boost::shared_ptr<PluginContext> _pc(new PluginContext());
-    HandleScope handleScope;
-    Context::Scope context_scope(_pc->getContext());
+    HandleScope handleScope(current);
+    Context::Scope context_scope(_pc->getContext(current));
 
     Handle<Object> exports = _pc->loadScript("rules/PolygonBuilding.js");
 
     Handle<Value> result = _pc->call(exports, "isWholeGroup");
     HOOT_STR_EQUALS("true", result);
 
-    result = _pc->call(_pc->getContext()->Global(), "testAdd",
+    result = _pc->call(_pc->getContext(current)->Global(), "testAdd",
       QList<QVariant>() << 1 << 2);
     HOOT_STR_EQUALS(3, result);
   }

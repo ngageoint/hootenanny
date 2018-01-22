@@ -62,8 +62,10 @@ OsmMapOperationJs::~OsmMapOperationJs()
 {
 }
 
-Handle<Value> OsmMapOperationJs::apply(const Arguments& args) {
-  HandleScope scope;
+void OsmMapOperationJs::apply(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   OsmMapOperationJs* op = ObjectWrap::Unwrap<OsmMapOperationJs>(args.This());
 
@@ -71,12 +73,13 @@ Handle<Value> OsmMapOperationJs::apply(const Arguments& args) {
 
   op->getMapOp()->apply(map);
 
-  return scope.Close(Undefined());
+  args.GetReturnValue().SetUndefined();
 }
 
-Handle<Value> OsmMapOperationJs::applyAndGetResult(const Arguments& args)
+void OsmMapOperationJs::applyAndGetResult(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   OsmMapOperationJs* op = ObjectWrap::Unwrap<OsmMapOperationJs>(args.This());
   OsmMapPtr& map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject())->getMap();
@@ -87,15 +90,15 @@ Handle<Value> OsmMapOperationJs::applyAndGetResult(const Arguments& args)
   /// returned types here.
   if (result.type() == typeid(double))
   {
-    return scope.Close(Number::New(any_cast<double>(result)));
+    args.GetReturnValue().Set(Number::New(current, any_cast<double>(result)));
   }
   else if (result.type() == typeid(int))
   {
-    return scope.Close(Number::New(any_cast<int>(result)));
+    args.GetReturnValue().Set(Number::New(current, any_cast<int>(result)));
   }
   else if (result.type() == typeid(QString))
   {
-    return scope.Close(String::NewSymbol(any_cast<QString>(result).toAscii().data()));
+    args.GetReturnValue().Set(String::NewFromUtf8(current, any_cast<QString>(result).toAscii().data()));
   }
   else
   {
@@ -105,6 +108,8 @@ Handle<Value> OsmMapOperationJs::applyAndGetResult(const Arguments& args)
 
 void OsmMapOperationJs::Init(Handle<Object> target)
 {
+  Isolate* current = target->GetIsolate();
+  HandleScope scope(current);
   vector<string> opNames =
     Factory::getInstance().getObjectNamesByBase(OsmMapOperation::className());
 
@@ -113,30 +118,32 @@ void OsmMapOperationJs::Init(Handle<Object> target)
     QByteArray utf8 = QString::fromStdString(opNames[i]).replace("hoot::", "").toUtf8();
     const char* n = utf8.data();
     // Prepare constructor template
-    Local<FunctionTemplate> tpl = FunctionTemplate::New(New);
-    tpl->SetClassName(String::NewSymbol(opNames[i].data()));
+    Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
+    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].data()));
     tpl->InstanceTemplate()->SetInternalFieldCount(2);
     // Prototype
-    tpl->PrototypeTemplate()->Set(String::NewSymbol("apply"),
-        FunctionTemplate::New(apply)->GetFunction());
-    tpl->PrototypeTemplate()->Set(String::NewSymbol("applyAndGetResult"),
-        FunctionTemplate::New(applyAndGetResult)->GetFunction());
+    tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "apply"),
+        FunctionTemplate::New(current, apply));
+    tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "applyAndGetResult"),
+        FunctionTemplate::New(current, applyAndGetResult));
     tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
-                                  String::New(OsmMapOperation::className().data()));
+                                  String::NewFromUtf8(current, OsmMapOperation::className().data()));
 
-    Persistent<Function> constructor = Persistent<Function>::New(tpl->GetFunction());
-    target->Set(String::NewSymbol(n), constructor);
+    Persistent<Function> constructor(current, tpl->GetFunction());
+    target->Set(String::NewFromUtf8(current, n), ToLocal(&constructor));
   }
 }
 
-Handle<Value> OsmMapOperationJs::New(const Arguments& args) {
-  HandleScope scope;
+void OsmMapOperationJs::New(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   QString className = str(args.This()->GetConstructorName());
   if (className == "Object")
   {
-    return v8::ThrowException(HootExceptionJs::create(IllegalArgumentException(
-      "Invalid OsmMapOperation. Did you forget 'new'?")));
+    args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(IllegalArgumentException(
+      "Invalid OsmMapOperation. Did you forget 'new'?"))));
   }
   OsmMapOperation* op = Factory::getInstance().constructObject<OsmMapOperation>(className);
   OsmMapOperationJs* obj = new OsmMapOperationJs(op);
@@ -144,7 +151,7 @@ Handle<Value> OsmMapOperationJs::New(const Arguments& args) {
 
   PopulateConsumersJs::populateConsumers<OsmMapOperation>(op, args);
 
-  return args.This();
+  args.GetReturnValue().Set(args.This());
 }
 
 }

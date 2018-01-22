@@ -47,178 +47,224 @@ OsmSchemaJs::~OsmSchemaJs() {}
 
 void OsmSchemaJs::Init(Handle<Object> exports)
 {
-  Handle<Object> schema = Object::New();
-  exports->Set(String::NewSymbol("OsmSchema"), schema);
-  schema->Set(String::NewSymbol("getAllTags"), FunctionTemplate::New(getAllTags)->GetFunction());
-  schema->Set(String::NewSymbol("getCategories"), FunctionTemplate::New(getCategories)->GetFunction());
-  schema->Set(String::NewSymbol("getChildTags"), FunctionTemplate::New(getChildTags)->GetFunction());
-  schema->Set(String::NewSymbol("getSimilarTags"),
-    FunctionTemplate::New(getSimilarTags)->GetFunction());
-  schema->Set(String::NewSymbol("getTagByCategory"),
-    FunctionTemplate::New(getTagByCategory)->GetFunction());
-  schema->Set(String::NewSymbol("getTagVertex"),
-    FunctionTemplate::New(getTagVertex)->GetFunction());
-  schema->Set(String::NewSymbol("isAncestor"), FunctionTemplate::New(isAncestor)->GetFunction());
-  schema->Set(String::NewSymbol("isArea"), FunctionTemplate::New(isArea)->GetFunction());
-  schema->Set(String::NewSymbol("isBuilding"), FunctionTemplate::New(isBuilding)->GetFunction());
-  schema->Set(String::NewSymbol("isHgisPoi"), FunctionTemplate::New(isHgisPoi)->GetFunction());
-  schema->Set(String::NewSymbol("isLinear"), FunctionTemplate::New(isLinear)->GetFunction());
-  schema->Set(String::NewSymbol("isLinearWaterway"), FunctionTemplate::New(isLinearWaterway)->GetFunction());
-  schema->Set(String::NewSymbol("isMetaData"), FunctionTemplate::New(isMetaData)->GetFunction());
-  schema->Set(String::NewSymbol("isPoi"), FunctionTemplate::New(isPoi)->GetFunction());
-  schema->Set(String::NewSymbol("isLinearHighway"), FunctionTemplate::New(isLinearHighway)->GetFunction());
-  schema->Set(String::NewSymbol("score"), FunctionTemplate::New(score)->GetFunction());
-  schema->Set(String::NewSymbol("scoreOneWay"), FunctionTemplate::New(scoreOneWay)->GetFunction());
-  schema->Set(String::NewSymbol("hasName"), FunctionTemplate::New(hasName)->GetFunction());
+  Isolate* current = exports->GetIsolate();
+  HandleScope scope(current);
+  Handle<Object> schema = Object::New(current);
+  exports->Set(String::NewFromUtf8(current, "OsmSchema"), schema);
+  schema->Set(String::NewFromUtf8(current, "getAllTags"),
+              FunctionTemplate::New(current, getAllTags)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "getCategories"),
+              FunctionTemplate::New(current, getCategories)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "getChildTags"),
+              FunctionTemplate::New(current, getChildTags)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "getSimilarTags"),
+              FunctionTemplate::New(current, getSimilarTags)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "getTagByCategory"),
+              FunctionTemplate::New(current, getTagByCategory)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "getTagVertex"),
+              FunctionTemplate::New(current, getTagVertex)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "isAncestor"),
+              FunctionTemplate::New(current, isAncestor)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "isArea"),
+              FunctionTemplate::New(current, isArea)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "isBuilding"),
+              FunctionTemplate::New(current, isBuilding)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "isHgisPoi"),
+              FunctionTemplate::New(current, isHgisPoi)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "isLinear"),
+              FunctionTemplate::New(current, isLinear)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "isLinearWaterway"),
+              FunctionTemplate::New(current, isLinearWaterway)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "isMetaData"),
+              FunctionTemplate::New(current, isMetaData)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "isPoi"),
+              FunctionTemplate::New(current, isPoi)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "isLinearHighway"),
+              FunctionTemplate::New(current, isLinearHighway)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "score"),
+              FunctionTemplate::New(current, score)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "scoreOneWay"),
+              FunctionTemplate::New(current, scoreOneWay)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "hasName"),
+              FunctionTemplate::New(current, hasName)->GetFunction());
 }
 
-Handle<Value> OsmSchemaJs::getAllTags(const Arguments& /*args*/) {
-  HandleScope scope;
+void OsmSchemaJs::getAllTags(const FunctionCallbackInfo<Value>& args)
+{
+  HandleScope scope(args.GetIsolate());
 
-  Handle<Value> result = toV8(OsmSchema::getInstance().getAllTags());
-  return scope.Close(result);
+  args.GetReturnValue().Set(toV8(OsmSchema::getInstance().getAllTags()));
 }
 
-Handle<Value> OsmSchemaJs::getCategories(const Arguments& args) {
-  HandleScope scope;
+void OsmSchemaJs::getCategories(const FunctionCallbackInfo<Value>& args)
+{
+  HandleScope scope(args.GetIsolate());
 
   QString kvp = toCpp<QString>(args[0]);
 
-  return scope.Close(toV8(OsmSchema::getInstance().getCategories(kvp).toStringList()));
+  args.GetReturnValue().Set(toV8(OsmSchema::getInstance().getCategories(kvp).toStringList()));
 }
 
-Handle<Value> OsmSchemaJs::getChildTags(const Arguments& args) {
-  HandleScope scope;
+void OsmSchemaJs::getChildTags(const FunctionCallbackInfo<Value>& args)
+{
+  HandleScope scope(args.GetIsolate());
 
   QString kvp = toCpp<QString>(args[0]);
 
-  return scope.Close(toV8(OsmSchema::getInstance().getChildTags(kvp)));
+  args.GetReturnValue().Set(toV8(OsmSchema::getInstance().getChildTags(kvp)));
 }
 
-Handle<Value> OsmSchemaJs::getSimilarTags(const Arguments& args) {
-  HandleScope scope;
+void OsmSchemaJs::getSimilarTags(const FunctionCallbackInfo<Value>& args)
+{
+  HandleScope scope(args.GetIsolate());
 
   QString kvp = toCpp<QString>(args[0]);
   double minimumScore = toCpp<double>(args[1]);
 
-  return scope.Close(toV8(OsmSchema::getInstance().getSimilarTags(kvp, minimumScore)));
+  args.GetReturnValue().Set(toV8(OsmSchema::getInstance().getSimilarTags(kvp, minimumScore)));
 }
 
-Handle<Value> OsmSchemaJs::getTagByCategory(const Arguments& args) {
-  HandleScope scope;
+void OsmSchemaJs::getTagByCategory(const FunctionCallbackInfo<Value>& args)
+{
+  HandleScope scope(args.GetIsolate());
 
   QString category = toCpp<QString>(args[0]);
   OsmSchemaCategory c = OsmSchemaCategory::fromString(category);
 
-  return scope.Close(toV8(OsmSchema::getInstance().getTagByCategory(c)));
+  args.GetReturnValue().Set(toV8(OsmSchema::getInstance().getTagByCategory(c)));
 }
 
-Handle<Value> OsmSchemaJs::getTagVertex(const Arguments& args) {
-  HandleScope scope;
+void OsmSchemaJs::getTagVertex(const FunctionCallbackInfo<Value>& args)
+{
+  HandleScope scope(args.GetIsolate());
 
   QString kvp = toCpp<QString>(args[0]);
 
-  return scope.Close(toV8(OsmSchema::getInstance().getTagVertex(kvp)));
+  args.GetReturnValue().Set(toV8(OsmSchema::getInstance().getTagVertex(kvp)));
 }
 
-Handle<Value> OsmSchemaJs::isAncestor(const Arguments& args) {
-  HandleScope scope;
+void OsmSchemaJs::isAncestor(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   QString childKvp = toCpp<QString>(args[0]);
   QString parentKvp = toCpp<QString>(args[1]);
 
-  return scope.Close(Boolean::New(OsmSchema::getInstance().isAncestor(childKvp, parentKvp)));
+  args.GetReturnValue().Set(Boolean::New(current, OsmSchema::getInstance().isAncestor(childKvp, parentKvp)));
 }
 
-Handle<Value> OsmSchemaJs::isArea(const Arguments& args) {
-  HandleScope scope;
+void OsmSchemaJs::isArea(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
-  return scope.Close(Boolean::New(OsmSchema::getInstance().isArea(e)));
+  args.GetReturnValue().Set(Boolean::New(current, OsmSchema::getInstance().isArea(e)));
 }
 
-Handle<Value> OsmSchemaJs::isLinear(const Arguments& args) {
-  HandleScope scope;
+void OsmSchemaJs::isLinear(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
-  return scope.Close(Boolean::New(OsmSchema::getInstance().isLinear(*e)));
+  args.GetReturnValue().Set(Boolean::New(current, OsmSchema::getInstance().isLinear(*e)));
 }
 
-Handle<Value> OsmSchemaJs::isBuilding(const Arguments& args) {
-  HandleScope scope;
+void OsmSchemaJs::isBuilding(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
-  return scope.Close(Boolean::New(OsmSchema::getInstance().isBuilding(e)));
+  args.GetReturnValue().Set(Boolean::New(current, OsmSchema::getInstance().isBuilding(e)));
 }
 
-Handle<Value> OsmSchemaJs::isHgisPoi(const Arguments& args) {
-  HandleScope scope;
+void OsmSchemaJs::isHgisPoi(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
-  return scope.Close(Boolean::New(OsmSchema::getInstance().isHgisPoi(*e)));
+  args.GetReturnValue().Set(Boolean::New(current, OsmSchema::getInstance().isHgisPoi(*e)));
 }
 
-Handle<Value> OsmSchemaJs::isLinearWaterway(const Arguments& args) {
-  HandleScope scope;
+void OsmSchemaJs::isLinearWaterway(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
-  return scope.Close(Boolean::New(OsmSchema::getInstance().isLinearWaterway(*e)));
+  args.GetReturnValue().Set(Boolean::New(current, OsmSchema::getInstance().isLinearWaterway(*e)));
 }
 
-Handle<Value> OsmSchemaJs::isMetaData(const Arguments& args) {
-  HandleScope scope;
+void OsmSchemaJs::isMetaData(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   QString key = toCpp<QString>(args[0]);
   QString value = toCpp<QString>(args[1]);
 
-  return scope.Close(Boolean::New(OsmSchema::getInstance().isMetaData(key, value)));
+  args.GetReturnValue().Set(Boolean::New(current, OsmSchema::getInstance().isMetaData(key, value)));
 }
 
-Handle<Value> OsmSchemaJs::isPoi(const Arguments& args) {
-  HandleScope scope;
+void OsmSchemaJs::isPoi(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
-  return scope.Close(Boolean::New(OsmSchema::getInstance().isPoi(*e)));
+  args.GetReturnValue().Set(Boolean::New(current, OsmSchema::getInstance().isPoi(*e)));
 }
 
-Handle<Value> OsmSchemaJs::hasName(const Arguments& args) {
-  HandleScope scope;
+void OsmSchemaJs::hasName(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
-  return scope.Close(Boolean::New(OsmSchema::getInstance().hasName(*e)));
+  args.GetReturnValue().Set(Boolean::New(current, OsmSchema::getInstance().hasName(*e)));
 }
 
-Handle<Value> OsmSchemaJs::isLinearHighway(const Arguments& args) {
-  HandleScope scope;
+void OsmSchemaJs::isLinearHighway(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
-  return scope.Close(Boolean::New(OsmSchema::getInstance().isLinearHighway(e->getTags(), e->getElementType())));
+  args.GetReturnValue().Set(Boolean::New(current, OsmSchema::getInstance().isLinearHighway(e->getTags(), e->getElementType())));
 }
 
-Handle<Value> OsmSchemaJs::score(const Arguments& args) {
-  HandleScope scope;
+void OsmSchemaJs::score(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   QString kvp1 = toCpp<QString>(args[0]);
   QString kvp2 = toCpp<QString>(args[1]);
 
-  return scope.Close(Number::New(OsmSchema::getInstance().score(kvp1, kvp2)));
+  args.GetReturnValue().Set(Number::New(current, OsmSchema::getInstance().score(kvp1, kvp2)));
 }
 
-Handle<Value> OsmSchemaJs::scoreOneWay(const Arguments& args) {
-  HandleScope scope;
+void OsmSchemaJs::scoreOneWay(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   QString kvp1 = toCpp<QString>(args[0]);
   QString kvp2 = toCpp<QString>(args[1]);
 
-  return scope.Close(Number::New(OsmSchema::getInstance().scoreOneWay(kvp1, kvp2)));
+  args.GetReturnValue().Set(Number::New(current, OsmSchema::getInstance().scoreOneWay(kvp1, kvp2)));
 }
 
 }

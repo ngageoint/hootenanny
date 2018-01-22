@@ -38,6 +38,7 @@ using namespace geos::geom;
 #include <hoot/core/HootConfig.h>
 #include <hoot/core/cmd/Command.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/js/v8Engine.h>
 using namespace hoot;
 
 // Qt
@@ -53,6 +54,9 @@ using namespace std;
 int main(int argc, char *argv[])
 {
   Hoot::getInstance().init();
+
+  v8Engine::setPlatformInit();
+  v8Engine::getInstance().init();
 
   QCoreApplication app(argc, argv);
 

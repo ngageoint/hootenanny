@@ -27,6 +27,7 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
+#include <hoot/js/HootJsStable.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/PluginContext.h>
 #include <hoot/js/util/DataConvertJs.h>
@@ -35,7 +36,6 @@
 // Qt
 #include <QVariant>
 
-#include <v8.h>
 #include <iostream>
 #include <string>
 
@@ -60,10 +60,12 @@ public:
 
   void qvariantTest()
   {
-    HandleScope handleScope;
+    Isolate* current = v8::Isolate::GetCurrent();
+    HandleScope handleScope(current);
 
     // Create a new context.
-    Persistent<Context> context = Context::New();
+//    Persistent<Context> context(current, Context::New(current));
+    Local<Context> context = Context::New(current);
 
     // Enter the created context for compiling and
     // running the hello world script.
