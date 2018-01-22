@@ -55,6 +55,11 @@ class HighwayClassifier;
 class NetworkDetails : public SearchRadiusProvider, public Configurable
 {
 public:
+
+  static std::string className() { return "hoot::NetworkDetails"; }
+
+  static unsigned int logWarnCount;
+
   NetworkDetails(ConstOsmMapPtr map, ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2);
 
   Meters calculateDistance(ConstEdgeLocationPtr el) const;
