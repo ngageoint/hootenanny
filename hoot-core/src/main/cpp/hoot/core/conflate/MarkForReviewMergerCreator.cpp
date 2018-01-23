@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MarkForReviewMergerCreator.h"
 
@@ -87,9 +87,13 @@ bool MarkForReviewMergerCreator::createMergers(const MatchSet& matches,
   // only add the mark for review merger if there are elements to merge.
   if (eids.size() > 0)
   {
-    mergers.push_back(new MarkForReviewMerger(eids, matchStrings.join(","), reviewType.join(";"),
-      score));
+    mergers.push_back(
+      new MarkForReviewMerger(eids, matchStrings.join(","), reviewType.join(";"), score));
     result = true;
+  }
+  else
+  {
+    LOG_TRACE("No elements to merge.");
   }
 
   return result;
