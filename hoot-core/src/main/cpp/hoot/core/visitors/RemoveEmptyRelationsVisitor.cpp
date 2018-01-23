@@ -55,7 +55,7 @@ void RemoveEmptyRelationsVisitor::visit(const boost::shared_ptr<Element>& e)
     }
     else
     {
-      LOG_TRACE("Relation not empty: " << r->getId());
+      LOG_TRACE("Relation not empty: " << r->getId() << " child count: " << r->getMembers().size());
     }
   }
 }
