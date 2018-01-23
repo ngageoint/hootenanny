@@ -61,7 +61,7 @@ void RemoveEmptyRelationsOp::_removeLeafRelationIfEmpty(OsmMapPtr& map, Relation
     const std::vector<RelationData::Entry> members = relation->getMembers();
     for (size_t i = 0; i < members.size(); i++)
     {
-      ElementPtr member = map.getElement(relationMembers[i].getElementId());
+      ElementPtr member = map->getElement(members[i].getElementId());
       if (member->getElementType() == ElementType::Relation)
       {
         _removeLeafRelationIfEmpty(map, map->getRelation(member->getId()));
