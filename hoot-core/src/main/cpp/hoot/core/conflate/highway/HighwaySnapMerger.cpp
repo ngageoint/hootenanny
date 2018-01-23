@@ -254,7 +254,7 @@ void HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
 
   if (!match.isValid())
   {
-    LOG_DEBUG("Complex conflict causes an empty match");
+    LOG_TRACE("Complex conflict causes an empty match");
     _markNeedsReview(result, e1, e2, "Complex conflict causes an empty match",
                      HighwayMatch::getHighwayMatchName());
     return;
