@@ -24,28 +24,40 @@
  *
  * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef REMOVEEMPTYRELATIONSVISITOR_H
-#define REMOVEEMPTYRELATIONSVISITOR_H
+#ifndef __REMOVE_EMPTY_RELATIONS_OP_H__
+#define __REMOVE_EMPTY_RELATIONS_OP_H__
 
-#include "ElementOsmMapVisitor.h"
+// Hoot
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/ops/OsmMapOperation.h>
 
 namespace hoot
 {
 
 /**
- * Removes all relations that have no members.
+ * Removes all relations that have no members.  This needs to be an op so that we can recursively
+ * delete relations that are children of other relations.
  */
-class RemoveEmptyRelationsVisitor : public ElementOsmMapVisitor
+class RemoveEmptyRelationsOp : public OsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::RemoveEmptyRelationsVisitor"; }
+  static std::string className() { return "hoot::RemoveEmptyRelationsOp"; }
 
-  RemoveEmptyRelationsVisitor();
+  RemoveEmptyRelationsOp();
 
-  virtual void visit(const boost::shared_ptr<Element>& e);
+  virtual void apply(OsmMapPtr& map);
+
+  virtual std::string getClassName() const { return className(); }
+
+private:
+
+  OsmMapPtr& _map;
+
+  void _removeLeafRelationIfEmpty(RelationPtr relation);
+
 };
 
 }
 
-#endif // REMOVEEMPTYRELATIONSVISITOR_H
+#endif // __REMOVE_EMPTY_RELATIONS_OP_H__

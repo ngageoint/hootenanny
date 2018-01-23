@@ -27,7 +27,6 @@
 #include "MarkForReviewMerger.h"
 
 // hoot
-#include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/util/Log.h>
 
