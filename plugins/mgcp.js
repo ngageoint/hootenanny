@@ -1237,6 +1237,22 @@ mgcp = {
                 delete tags.place;
                 break;
 
+            case 'island':
+            case 'islet':
+                if (tags.natural == 'coastline')
+                    if (geometryType == 'Area')
+                    {
+                        attrs.F_CODE = 'BA030'; // Island - Polygon
+                        delete tags.natural;
+                        break;
+                    }
+                    else
+                    {
+                        attrs.F_CODE = 'BA010'; // Land/Water Boundary - Line
+                        delete tags.place;
+                        break;                        
+                    }
+
         } // End switch
 
         // Capitals are important
