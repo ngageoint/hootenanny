@@ -44,35 +44,34 @@ RemoveEmptyRelationsOp::RemoveEmptyRelationsOp()
 void RemoveEmptyRelationsOp::apply(OsmMapPtr& map)
 {
   //MapProjector::projectToPlanar(map);
-  _map = map;
-  const RelationMap& relations = _map->getRelations();
+  const RelationMap& relations = map->getRelations();
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
-    _removeLeafRelationIfEmpty(it->second);
+    _removeLeafRelationIfEmpty(map, it->second);
   }
 }
 
-void RemoveEmptyRelationsOp::_removeLeafRelationIfEmpty(RelationPtr relation)
+void RemoveEmptyRelationsOp::_removeLeafRelationIfEmpty(OsmMapPtr& map, RelationPtr relation)
 {
   if (relation->getMembers().size() > 0)
   {
     LOG_TRACE(
       "Relation not empty: " << relation->getId() << " child count: " <<
-      relation->getMembers().size() << " children: " << r->getMembers());
+      relation->getMembers().size() << " children: " << relation->getMembers());
     const std::vector<RelationData::Entry> members = relation->getMembers();
     for (size_t i = 0; i < members.size(); i++)
     {
-      ElementPtr member = _map.getElement(relationMembers[i].getElementId());
+      ElementPtr member = map.getElement(relationMembers[i].getElementId());
       if (member->getElementType() == ElementType::Relation)
       {
-        _removeLeafRelationIfEmpty(_map->getRelation(member->getElementId()));
+        _removeLeafRelationIfEmpty(map, map->getRelation(member->getId()));
       }
     }
   }
   else
   {
     LOG_TRACE("Removing empty relation: " << relation->getId());
-    RemoveRelationOp::removeRelation(_map/*->shared_from_this()*/, relation->getId());
+    RemoveRelationOp::removeRelation(map/*->shared_from_this()*/, relation->getId());
   }
 }
 

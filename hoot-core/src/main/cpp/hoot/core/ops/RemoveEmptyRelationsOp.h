@@ -52,9 +52,7 @@ public:
 
 private:
 
-  OsmMapPtr& _map;
-
-  void _removeLeafRelationIfEmpty(RelationPtr relation);
+  void _removeLeafRelationIfEmpty(OsmMapPtr& map, RelationPtr relation);
 
 };
 
