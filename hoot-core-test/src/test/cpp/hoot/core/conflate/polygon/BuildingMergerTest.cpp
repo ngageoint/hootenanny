@@ -234,10 +234,10 @@ public:
 
     //remove all of the ref2 Target buildings; will cause empty refs to be passed into the
     //BuildingMerger, which it should ignore
-    for (size_t i = 0; i < wids2.size(); i++)
-    {
-      RecursiveElementRemover(ElementId::way(wids2[i])).apply(map);
-    }
+    //for (size_t i = 0; i < wids2.size(); i++)
+    //{
+      RecursiveElementRemover(ElementId::way(wids2[0])).apply(map);
+    //}
 
     vector< pair<ElementId, ElementId> > replaced;
     BuildingMerger bm(pairs);
