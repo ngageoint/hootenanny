@@ -1242,6 +1242,7 @@ mgcp = {
                 // If we have a coastline around an Island, decide if we are going make an Island
                 // or a Coastline
                 if (tags.natural == 'coastline')
+                {
                     if (geometryType == 'Line')
                     {
                         attrs.F_CODE = 'BA010'; // Land/Water Boundary - Line
@@ -1253,6 +1254,7 @@ mgcp = {
                         attrs.F_CODE = 'BA030'; // Island - Polygon
                         delete tags.natural;
                     }
+                }
                 break;
 
         } // End switch

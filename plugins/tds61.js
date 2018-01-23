@@ -1515,6 +1515,7 @@ tds61 = {
                     // If we have a coastline around an Island, decide if we are going make an Island
                     // or a Coastline
                     if (tags.natural == 'coastline')
+                    {
                         if (geometryType == 'Line')
                         {
                             attrs.F_CODE = 'BA010'; // Land/Water Boundary - Line
@@ -1526,6 +1527,7 @@ tds61 = {
                             attrs.F_CODE = 'BA030'; // Island
                             delete tags.natural;
                         }
+                    }
                     break;
             } // End switch
         }
