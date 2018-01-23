@@ -50,18 +50,21 @@ sudo yum -q -y upgrade >> CentOS_upgrade.txt 2>&1
 # Make sure that we are in ~ before trying to wget & install stuff
 cd ~
 
-echo "### Installing the repo for an ancient version of NodeJS"
-curl --silent --location https://rpm.nodesource.com/setup | sudo bash -
-
 echo "### Installing an ancient version of NodeJS"
+sudo yum install -y wget
+wget -q https://rpm.nodesource.com/pub_0.10/el/7/x86_64/nodejs-0.10.48-1nodesource.el7.centos.x86_64.rpm
+wget -q https://rpm.nodesource.com/pub_0.10/el/7/x86_64/nodejs-devel-0.10.48-1nodesource.el7.centos.x86_64.rpm
+
 sudo yum install -y \
-  nodejs-0.10.46 \
-  nodejs-devel-0.10.46 \
+  nodejs-0.10.48-1nodesource.el7.centos.x86_64.rpm \
+  nodejs-devel-0.10.48-1nodesource.el7.centos.x86_64.rpm
+
+echo "### Locking version of NodeJS"
+sudo yum install -y \
   yum-plugin-versionlock
 
 # Now try to lock NodeJS so that the next yum update doesn't remove it.
 sudo yum versionlock nodejs*
-
 
 # install useful and needed packages for working with hootenanny
 echo "### Installing dependencies from repos..."
