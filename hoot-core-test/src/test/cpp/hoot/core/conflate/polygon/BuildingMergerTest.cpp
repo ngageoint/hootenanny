@@ -82,6 +82,7 @@ class BuildingMergerTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE(BuildingMergerTest);
   CPPUNIT_TEST(runMatchTest);
   CPPUNIT_TEST(runTagTest);
+  CPPUNIT_TEST(runEmptyBuildingTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -124,7 +125,7 @@ public:
 
     QDir(".").mkpath("test-output/conflate/polygon");
     OsmXmlWriter writer;
-    writer.write(map, "test-output/conflate/polygon/BuildingMergerTest.osm");
+    writer.write(map, "test-output/conflate/polygon/BuildingMergerTest-runMatchTest.osm");
 
     HOOT_STR_EQUALS("[3]{(Way:-15, Way:-7), (Way:-14, Way:-7), (Way:-13, Way:-7)}", replaced);
   }
@@ -205,6 +206,50 @@ public:
                     "{\"type\":\"way\",\"ref\":-25,\"role\":\"part\"}],\"tags\":{\"" + MetadataTags::Ref1() + "\":\"Panera\",\"" + MetadataTags::Ref2() + "\":\"Panera\",\"" + MetadataTags::HootBuildingMatch() + "\":\"true\",\"alt_name\":\"Maid-Rite;Maid-Rite Diner\",\"building\":\"yes\",\"name\":\"Panera Bread\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}]\n"
                     "}\n",
                     OsmJsonWriter(8).toString(map));
+  }
+
+  void runEmptyBuildingTest()
+  {
+    //see #2034; Finishing #2058 may make this test obsolete.
+
+    OsmXmlReader reader;
+
+    OsmMap::resetCounters();
+    OsmMapPtr map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read("test-files/ToyBuildingsTestA.osm", map);
+    reader.setDefaultStatus(Status::Unknown2);
+    reader.read("test-files/ToyBuildingsTestB.osm", map);
+
+    MapProjector::projectToPlanar(map);
+
+    vector<long> wids1 = FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref1(), "Target");
+    vector<long> wids2 = FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref2(), "Target");
+    set< pair<ElementId, ElementId> > pairs;
+
+    for (size_t i = 0; i < wids2.size(); i++)
+    {
+      pairs.insert(pair<ElementId, ElementId>(ElementId::way(wids1[0]), ElementId::way(wids2[i])));
+    }
+
+    //remove all of the ref2 Target buildings; will cause empty refs to be passed into the
+    //BuildingMerger, which it should ignore
+    for (size_t i = 0; i < wids2.size(); i++)
+    {
+      RecursiveElementRemover(ElementId::way(wids2[i])).apply(map);
+    }
+
+    vector< pair<ElementId, ElementId> > replaced;
+    BuildingMerger bm(pairs);
+    bm.apply(map, replaced);
+
+    MapProjector::projectToWgs84(map);
+
+    QDir(".").mkpath("test-output/conflate/polygon");
+    OsmXmlWriter writer;
+    writer.write(map, "test-output/conflate/polygon/BuildingMergerTest-runEmptyBuildingTest.osm");
+
+    HOOT_STR_EQUALS("[3]{(Way:-15, Way:-7), (Way:-14, Way:-7), (Way:-13, Way:-7)}", replaced);
   }
 };
 
