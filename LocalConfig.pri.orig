@@ -33,6 +33,9 @@ system( g++ --version | grep -q -e " 4.[0-7]" ) {
   QMAKE_CXXFLAGS+=-Wmaybe-uninitialized
 }
 
+# Enable the gold linker for faster build times
+QMAKE_LFLAGS=-fuse-ld=gold
+
 # Set all uninitialized variables to their default values                                                      
 #QMAKE_CXXFLAGS+=-fno-common 
 

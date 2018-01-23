@@ -1,5 +1,5 @@
 
-== Hootenanny Manual Multiary Conflation
+== Manual Multiary Conflation
 
 To train a conflation model for a particular data type when using Hootenanny, it often relies on data manually matched by a human. The manual matching process for multiary conflation varies from the typical pairwise conflation. This section describes the manual multiary conflation process to generate training data.
 

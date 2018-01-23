@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BuildingMerger.h"
 
@@ -76,6 +76,8 @@ public:
 
 };
 
+unsigned int BuildingMerger::logWarnCount = 0;
+
 BuildingMerger::BuildingMerger(const set< pair<ElementId, ElementId> >& pairs) :
   _pairs(pairs)
 {
@@ -103,15 +105,62 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Element
   else
   {
     // use node count as a surrogate for complexity of the geometry.
+    int nodeCount1 = 0;
     boost::shared_ptr<Element> e1 = _buildBuilding1(map);
-    const int nodeCount1 =
-      (int)FilteredVisitor::getStat(
-        new ElementTypeCriterion(ElementType::Node), new ElementCountVisitor(), map, e1);
+    LOG_VART(e1.get());
+    //in #2034, encountering a situation where the second building is empty;
+    //didn't think that was possible here...added checks here for both
+    if (e1.get())
+    {
+      LOG_VART(e1);
+      nodeCount1 =
+        (int)FilteredVisitor::getStat(
+          new ElementTypeCriterion(ElementType::Node), new ElementCountVisitor(), map, e1);
+    }
 
+    int nodeCount2 = 0;
     boost::shared_ptr<Element> e2 = _buildBuilding2(map);
-    const int nodeCount2 =
-      (int)FilteredVisitor::getStat(
-        new ElementTypeCriterion(ElementType::Node), new ElementCountVisitor(), map, e2);
+    LOG_VART(e2.get());
+    if (e2.get())
+    {
+      nodeCount2 =
+        (int)FilteredVisitor::getStat(
+          new ElementTypeCriterion(ElementType::Node), new ElementCountVisitor(), map, e2);
+    }
+    LOG_VART(nodeCount1);
+    LOG_VART(nodeCount2);
+
+    //don't think this should be occurring...needs more investigation
+    if (nodeCount1 == 0 || nodeCount2 == 0)
+    {
+      if (logWarnCount < Log::getWarnMessageLimit())
+      {
+        LOG_WARN("One or more of the buildings to merge are empty.");
+        if (e1.get())
+        {
+          LOG_VARD(e1->getElementId());
+        }
+        else
+        {
+          LOG_DEBUG("Building one null.");
+        }
+        if (e2.get())
+        {
+          LOG_VARD(e2->getElementId());
+        }
+        else
+        {
+          LOG_DEBUG("Building two null.");
+        }
+      }
+      else if (logWarnCount == Log::getWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
+
+      return;
+    }
 
     boost::shared_ptr<Element> keeper;
     boost::shared_ptr<Element> scrap;

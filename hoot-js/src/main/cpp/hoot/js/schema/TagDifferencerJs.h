@@ -56,7 +56,7 @@ private:
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   QString _className;
-  std::auto_ptr<TagDifferencer> _td;
+  boost::shared_ptr<TagDifferencer> _td;
 };
 
 }

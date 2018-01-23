@@ -404,7 +404,7 @@ private:
     return s;
   }
 
-  std::auto_ptr<Function> _function;
+  boost::shared_ptr<Function> _function;
   size_t dimension;
   double alpha, gamma, rho, sigma;
   double termination_distance;

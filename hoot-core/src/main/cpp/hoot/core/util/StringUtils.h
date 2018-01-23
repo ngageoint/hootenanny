@@ -22,7 +22,8 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef STRINGUTILS_H
@@ -57,6 +58,14 @@ public:
    * @return a formatted number string
    */
   static QString formatLargeNumber(const unsigned long number);
+
+  /**
+   * Determines whether a string contains an alphabetic character
+   *
+   * @param input string to examine
+   * @return true if the input has at least one alphabetic character; false otherwise
+   */
+  static bool hasAlphabeticCharacter(const QString input);
 };
 
 }

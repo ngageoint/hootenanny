@@ -33,9 +33,12 @@ sudo yum -y install epel-release >> CentOS_upgrade.txt 2>&1
 echo "### Add Hoot repo ###" >> CentOS_upgrade.txt
 $HOOT_HOME/scripts/hoot-repo/yum-configure.sh
 
-# add the Postgres repo
-echo "### Add Postgres repo ###" >> CentOS_upgrade.txt
-sudo rpm -Uvh https://download.postgresql.org/pub/repos/yum/9.5/redhat/rhel-7-x86_64/pgdg-centos95-9.5-3.noarch.rpm  >> CentOS_upgrade.txt 2>&1
+# check to see if postgres is already installed
+if ! rpm -qa | grep -q pgdg-centos95-9.5-3 ; then
+  # add the Postgres repo
+  echo "### Add Postgres repo ###" >> CentOS_upgrade.txt
+  sudo rpm -Uvh https://download.postgresql.org/pub/repos/yum/9.5/redhat/rhel-7-x86_64/pgdg-centos95-9.5-3.noarch.rpm  >> CentOS_upgrade.txt 2>&1
+fi
 
 echo "Updating OS..."
 echo "### Update ###" >> CentOS_upgrade.txt
@@ -242,7 +245,10 @@ fi
 echo "### Configuring Postgres..."
 cd /tmp # Stop postgres "could not change directory to" warnings
 
-sudo PGSETUP_INITDB_OPTIONS="-E 'UTF-8' --lc-collate='en_US.UTF-8' --lc-ctype='en_US.UTF-8'" /usr/pgsql-$PG_VERSION/bin/postgresql95-setup initdb
+# Test to see if postgres cluster already created
+if ! sudo -u postgres test -f /var/lib/pgsql/$PG_VERSION/data/PG_VERSION; then
+  sudo PGSETUP_INITDB_OPTIONS="-E 'UTF-8' --lc-collate='en_US.UTF-8' --lc-ctype='en_US.UTF-8'" /usr/pgsql-$PG_VERSION/bin/postgresql95-setup initdb
+fi
 sudo systemctl start postgresql-$PG_VERSION
 sudo systemctl enable postgresql-$PG_VERSION
 
@@ -264,7 +270,6 @@ if ! sudo -u postgres psql -c "\du" | grep -iw --quiet $DB_USER_OSMAPI; then
     sudo -u postgres createuser --superuser $DB_USER_OSMAPI
     sudo -u postgres psql -c "alter user $DB_USER_OSMAPI with password '$DB_PASSWORD_OSMAPI';"
 fi
-
 
 # Check for a hoot Db
 if ! sudo -u postgres psql -lqt | grep -iw --quiet $DB_NAME; then
@@ -304,9 +309,6 @@ fi
 
 echo "Restarting postgres"
 sudo systemctl restart postgresql-$PG_VERSION
-
-# Install Hadoop.
-$HOOT_HOME/scripts/hadoop/hadoop-install.sh
 
 # Get ready to build Hoot
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ScriptMerger.h"
 
@@ -47,7 +47,9 @@ using namespace v8;
 namespace hoot
 {
 
-ScriptMerger::ScriptMerger(boost::shared_ptr<PluginContext> script, Persistent<Object>& plugin,
+unsigned int ScriptMerger::logWarnCount = 0;
+
+ScriptMerger::ScriptMerger(boost::shared_ptr<PluginContext> script, Persistent<Object> plugin,
                            const set<pair<ElementId, ElementId> > &pairs) :
   _pairs(pairs),
   _script(script)
@@ -81,7 +83,51 @@ void ScriptMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId
 void ScriptMerger::_applyMergePair(const OsmMapPtr& map,
   vector< pair<ElementId, ElementId> >& replaced) const
 {
-  if (_pairs.size() != 1)
+  LOG_VART(_eid1);
+  LOG_VART(_eid2);
+  LOG_VART(_pairs.size());
+
+  const bool mapContainsElement1 = map->containsElement(_eid1);
+  const bool mapContainsElement2 = map->containsElement(_eid2);
+  //This contains check was put in place as the result of changing MergerFactory not throw an
+  //exception when a merger cannot be found for a set of match pairs.
+  if (!mapContainsElement1 || !mapContainsElement2)
+  {
+    if (logWarnCount < Log::getWarnMessageLimit())
+    {
+      LOG_WARN("Attempting to merge one or more elements that do not exist: ");
+      if (!mapContainsElement1)
+      {
+        LOG_WARN(_eid1);
+      }
+      if (!mapContainsElement2)
+      {
+        LOG_WARN(_eid2);
+      }
+    }
+    else if (logWarnCount == Log::getWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
+    return;
+  }
+  //This pair size check was put in place as the result of changing MergerFactory not throw an
+  //exception when a merger cannot be found for a set of match pairs.
+  else if (_pairs.size() == 0)
+  {
+    if (logWarnCount < Log::getWarnMessageLimit())
+    {
+      LOG_WARN("Attempting to merge empty element pairs.");
+    }
+    else if (logWarnCount == Log::getWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
+    return;
+  }
+  else if (_pairs.size() > 1)
   {
     throw HootException("A set of elements was specified, but only mergePairs is implemented. "
                         "See the _Supplemental User Documentation_, _Conflating Sets_ for "
@@ -101,10 +147,12 @@ void ScriptMerger::_applyMergePair(const OsmMapPtr& map,
     throw InternalErrorException("The merging script must add new elements to the map.");
   }
 
+  LOG_VART(map->containsElement(_eid1));
   if (map->containsElement(_eid1) == false)
   {
     replaced.push_back(pair<ElementId, ElementId>(_eid1, newElement->getElementId()));
   }
+  LOG_VART(map->containsElement(_eid2));
   if (map->containsElement(_eid2) == false)
   {
     replaced.push_back(pair<ElementId, ElementId>(_eid2, newElement->getElementId()));
@@ -136,6 +184,8 @@ Handle<Value> ScriptMerger::_callMergePair(const OsmMapPtr& map) const
   Handle<Function> func = Handle<Function>::Cast(value);
   Handle<Value> jsArgs[3];
 
+  LOG_VART(map->getElement(_eid1));
+  LOG_VART(map->getElement(_eid2));
   int argc = 0;
   jsArgs[argc++] = OsmMapJs::create(map);
   jsArgs[argc++] = ElementJs::New(map->getElement(_eid1));

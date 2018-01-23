@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OsmGeoJsonReader.h"
@@ -160,20 +160,36 @@ OsmMapPtr OsmGeoJsonReader::loadFromFile(QString path)
   return _map;
 }
 
+
 void OsmGeoJsonReader::_parseGeoJson()
 {
-  _generator = QString::fromStdString(_propTree.get("generator", string("")));
-  QString type = QString::fromStdString(_propTree.get("type", string("")));
-  if (_propTree.not_found() != _propTree.find("bbox"))
-  {
-    Envelope env = _parseBbox(_propTree.get_child("bbox"));
-  }
+    _generator = QString::fromStdString(_propTree.get("generator", string("")));
+    QString type = QString::fromStdString(_propTree.get("type", string("")));
+    if (_propTree.not_found() != _propTree.find("bbox"))
+    {
+        Envelope env = _parseBbox(_propTree.get_child("bbox"));
+    }
 
-  //  Make a map, and iterate through all of our features, adding them
-  pt::ptree features = _propTree.get_child("features");
-  for (pt::ptree::const_iterator featureIt = features.begin(); featureIt != features.end(); ++featureIt)
-  {
-    const pt::ptree& feature = featureIt->second;
+    // If we don't have a "features" child then we should just have a single feature
+    if (_propTree.not_found() != _propTree.find("features"))
+    {
+        // Iterate through all of our features, adding them to the map
+        pt::ptree features = _propTree.get_child("features");
+        for (pt::ptree::const_iterator featureIt = features.begin(); featureIt != features.end(); ++featureIt)
+        {
+            _parseGeoJsonFeature(featureIt->second);
+        }
+    }
+    else
+    {
+        // Single Feature
+        _parseGeoJsonFeature(_propTree);
+    }
+}
+
+
+void OsmGeoJsonReader::_parseGeoJsonFeature(const boost::property_tree::ptree& feature)
+{
     string id = feature.get("id", string(""));
     //  Some IDs may be strings that start with "node/" or "way/", remove that
     size_t pos = id.find("/");
@@ -238,8 +254,8 @@ void OsmGeoJsonReader::_parseGeoJson()
         }
       }
     }
-  }
 }
+
 
 geos::geom::Envelope OsmGeoJsonReader::_parseBbox(const boost::property_tree::ptree& bbox)
 {
@@ -311,7 +327,7 @@ void OsmGeoJsonReader::_parseGeoJsonWay(const string& id, const pt::ptree& prope
 
   if (_addBboxTag)
   {
-    const Envelope& bounds = *(way->getEnvelope(_map));
+    const Envelope& bounds = way->getEnvelopeInternal(_map);
     way->setTag("hoot:bbox",QString("%1,%2,%3,%4").arg(QString::number(bounds.getMinX(), 'g', 10))
                 .arg(QString::number(bounds.getMinY(), 'g', 10))
                 .arg(QString::number(bounds.getMaxX(), 'g', 10))
@@ -433,7 +449,7 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
 
   if (_addBboxTag)
   {
-    const Envelope& bounds = *(relation->getEnvelope(_map));
+    const Envelope& bounds = relation->getEnvelopeInternal(_map);
     relation->setTag("hoot:bbox",QString("%1,%2,%3,%4").arg(QString::number(bounds.getMinX(), 'g', 10))
                      .arg(QString::number(bounds.getMinY(), 'g', 10))
                      .arg(QString::number(bounds.getMaxX(), 'g', 10))

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MaximalSubline.h"
 
@@ -327,12 +327,12 @@ vector<WaySublineMatch> MaximalSubline::findAllMatches(const ConstOsmMapPtr &map
   // match.
   if (rawSublines.size() == 1 && snapIntersections)
   {
-    LOG_DEBUG("Snapping intersections.");
+    LOG_TRACE("Snapping intersections.");
     result = _snapIntersections(map, w1, w2, rawSublines);
   }
   else
   {
-    LOG_DEBUG("Not snapping intersections.");
+    LOG_TRACE("Not snapping intersections.");
     result = rawSublines;
   }
 

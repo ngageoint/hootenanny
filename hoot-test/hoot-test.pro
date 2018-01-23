@@ -36,3 +36,6 @@ LIBS += \
 SOURCES += $$files(src/main/cpp/hoot/test/*.cpp, true)
 HEADERS += $$files(src/main/cpp/hoot/test/*.h, true)
 
+OTHER_FILES = \
+    $$files(../test-files/cmd/*.sh, true) \
+    $$files(../scripts/core/*.sh, true) \

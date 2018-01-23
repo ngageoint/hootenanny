@@ -66,11 +66,11 @@ public:
   bool geosIntersect(const LineSegment& ls1, Meters buffer, const LineSegment& ls2,
                      LineSegment& result)
   {
-    auto_ptr<Geometry> g1(ls1.toGeometry(*GeometryFactory::getDefaultInstance())->clone());
-    auto_ptr<Geometry> g2(ls2.toGeometry(*GeometryFactory::getDefaultInstance())->clone());
-    auto_ptr<Geometry> g(g1->buffer(buffer, 40));
+    boost::shared_ptr<Geometry> g1(ls1.toGeometry(*GeometryFactory::getDefaultInstance())->clone());
+    boost::shared_ptr<Geometry> g2(ls2.toGeometry(*GeometryFactory::getDefaultInstance())->clone());
+    boost::shared_ptr<Geometry> g(g1->buffer(buffer, 40));
 
-    auto_ptr<Geometry> i(g->intersection(g2.get()));
+    boost::shared_ptr<Geometry> i(g->intersection(g2.get()));
 
     if (i->isEmpty())
     {

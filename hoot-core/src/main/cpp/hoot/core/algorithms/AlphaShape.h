@@ -87,7 +87,7 @@ private:
 
   double _alpha;
 
-  std::auto_ptr<Tgs::DelaunayTriangulation> _dt;
+  boost::shared_ptr<Tgs::DelaunayTriangulation> _dt;
   std::set< std::pair<double, double> > _outsidePoint;
 
   boost::shared_ptr<hoot::Way> _addFaceAsWay(const Tgs::Face *face, boost::shared_ptr<OsmMap> map);

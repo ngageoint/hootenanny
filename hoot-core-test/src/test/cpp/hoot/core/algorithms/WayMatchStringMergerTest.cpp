@@ -129,7 +129,7 @@ public:
     vector< pair<ElementId, ElementId> > replaced;
     WayMatchStringMerger uut(map, mapping, replaced);
 
-    QDir().mkdir("test-output/algorithms/");
+    QDir().mkpath("test-output/algorithms/");
 
     WayMatchStringSplitter().applySplits(map, replaced, uut.getAllSublineMappings());
     uut.updateSublineMapping();
@@ -162,7 +162,7 @@ public:
     vector< pair<ElementId, ElementId> > replaced;
     WayMatchStringMerger uut(map, mapping, replaced);
 
-    QDir().mkdir("test-output/algorithms/");
+    QDir().mkpath("test-output/algorithms/");
 
     WayMatchStringSplitter().applySplits(map, replaced, uut.getAllSublineMappings());
     uut.updateSublineMapping();
@@ -193,7 +193,7 @@ public:
     WayMatchStringMerger uut(map, mapping, replaced);
     WayMatchStringSplitter().applySplits(map, replaced, uut.getAllSublineMappings());
 
-    QDir().mkdir("test-output/algorithms/");
+    QDir().mkpath("test-output/algorithms/");
 
     MapProjector::projectToWgs84(map);
     OsmMapWriterFactory::getInstance().write(map,

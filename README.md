@@ -25,8 +25,9 @@ Conflation occurs at the dataset level, where the user’s workflow determines t
 
 # Supported Geodata Types
 **Hootenanny can conflate:**
-* Points of Interest (POIs)
+* Area polygons (parks, parking lots, etc.)
 * Building polygons
+* Points of Interest (POIs)
 * Transportation polylines
 * Waterway polylines
 
@@ -72,6 +73,8 @@ Hootenanny leverages the OSM key value pair tag concept and PostgreSQL database 
 Additional translations are also provided.
 
 For custom translations, a specific mapping can be defined based on an uploaded dataset using a semi-automated Translation Assistant.  More detailed background on the translation capabilities of Hootenanny can be found in Hootenanny User Guide as well as specific examples from the UI in the Hootenanny User Interface Guide. These documents can accessed in your local Hootenanny instance in hoot/docs or on the [releases](https://github.com/ngageoint/hootenanny/releases) under each version e.g. hootenanny-0.2.22.tar.gz/docs. 
+
+Hootenanny can add tags to data implicitly based on a feature's name.  See the Hootenanny User Guide for more details.
 
 # Installation
 Instructions to launch an Ubuntu Hootenanny virtual machine using [Vagrant](https://www.vagrantup.com/) may

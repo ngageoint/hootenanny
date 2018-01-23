@@ -63,7 +63,7 @@ fi
 
 REF_DIR=test-files/cmd/$TEST_CATEGORY/$TEST_NAME
 OUTPUT_DIR=test-output/cmd/$TEST_CATEGORY/$TEST_NAME
-rm -rf $OUTPUT_DIR
+rm -rf $OUTPUT_DIR/*
 mkdir -p $OUTPUT_DIR
 
 if [ "$SELECT_RANDOM_AOI" == "true" ]; then

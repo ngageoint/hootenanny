@@ -43,7 +43,7 @@ PbfInputFormat::~PbfInputFormat()
 void PbfInputFormat::_addSplit(const string& path)
 {
   Hdfs hdfs("default", 0);
-  auto_ptr<istream> strm(hdfs.open(path));
+  boost::shared_ptr<istream> strm(hdfs.open(path));
 
   FileStatus status = hdfs.getFileStatus(path);
   long blockSize = status.getBlockSize();

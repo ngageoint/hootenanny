@@ -57,7 +57,7 @@ private:
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   QString _className;
-  std::auto_ptr<OsmMapOperation> _op;
+  boost::shared_ptr<OsmMapOperation> _op;
 };
 
 }

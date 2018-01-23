@@ -44,6 +44,7 @@ using namespace boost;
 
 // Qt
 #include <QDebug>
+#include <QDir>
 
 #include "../TestUtils.h"
 
@@ -118,6 +119,7 @@ public:
       }
     }
 
+    QDir().mkpath("test-output/conflate");
     OsmXmlWriter writer;
     writer.write(bounds, "test-output/conflate/TileBounds.osm");
 

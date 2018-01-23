@@ -97,6 +97,8 @@ public:
 
   virtual geos::geom::Envelope* getEnvelope(const boost::shared_ptr<const ElementProvider>& ep) const;
 
+  geos::geom::Envelope getEnvelopeInternal(const boost::shared_ptr<const ElementProvider>& ep) const;
+
   virtual ElementType getElementType() const { return ElementType::Relation; }
 
   QString getType() const { return _relationData->getType(); }

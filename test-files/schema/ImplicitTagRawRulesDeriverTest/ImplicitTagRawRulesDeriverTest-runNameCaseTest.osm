@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+ <node id="261726496" visible="true" version="7" changeset="4603989" timestamp="2010-05-04T12:50:46Z" user="Metehyi" uid="11567" lat="15.3531625" lon="44.2148981">
+  <tag k="amenity" v="place_of_worship"/>
+  <tag k="name:en" v="Old Great Mosque"/>
+  <tag k="religion" v="muslim"/>
+ </node>
+ <node id="4418252196" visible="true" version="2" changeset="46413178" timestamp="2017-02-26T11:19:12Z" lat="15.3528379" lon="44.1993539">
+  <tag k="amenity" v="place_of_worship"/>
+  <tag k="building" v="mosque"/>
+  <tag k="name:en" v="Handel mosque"/>
+  <tag k="religion" v="muslim"/>
+ </node>
+</osm>

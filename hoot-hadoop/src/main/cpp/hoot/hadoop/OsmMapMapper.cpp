@@ -82,7 +82,7 @@ void OsmMapMapper::_loadMap(OsmMapPtr& m)
   reader.setUseFileStatus(true);
 
   pp::Hdfs fs("default", 0);
-  auto_ptr<istream> is(fs.open(_path));
+  boost::shared_ptr<istream> is(fs.open(_path));
 
   // parse blob only needs the start location.
   OsmPbfReader::BlobLocation bl;

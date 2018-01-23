@@ -138,7 +138,7 @@ public:
     ConstOsmMapPtr map = getMap();
 
     // create an envlope around the e plus the search radius.
-    auto_ptr<Envelope> env(e->getEnvelope(map));
+    boost::shared_ptr<Envelope> env(e->getEnvelope(map));
     Meters searchRadius = getSearchRadius(e);
     env->expandBy(searchRadius);
 

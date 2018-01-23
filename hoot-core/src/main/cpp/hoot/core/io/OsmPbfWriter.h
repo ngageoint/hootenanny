@@ -209,7 +209,7 @@ private:
   long _wayIdDelta;
   long _nodeIdDelta;
   long _relationIdDelta;
-  std::auto_ptr<std::fstream> _openStream;
+  boost::shared_ptr<std::fstream> _openStream;
 
   void _addTag(boost::shared_ptr<Element> n, QString k, QString v);
 

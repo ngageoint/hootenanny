@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NetworkMatchCreator.h"
 
@@ -113,20 +113,18 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
 
   NetworkDetailsPtr details(new NetworkDetails(map, n1, n2));
 
-  LOG_INFO("Optimizing network...");
-
   const size_t numIterations = ConfigOptions().getNetworkOptimizationIterations();
-  LOG_VARD(numIterations);
   if (numIterations < 1)
   {
     throw HootException(
       "Invalid value: " + QString::number(numIterations) + " for setting " +
       ConfigOptions::getNetworkOptimizationIterationsKey());
   }
+  LOG_INFO("Optimizing network over " << numIterations << " iterations...");
   for (size_t i = 0; i < numIterations; ++i)
   {
     matcher->iterate();
-    LOG_INFO("Optimization iteration: " << i + 1 << "/" << numIterations << " complete.");
+    PROGRESS_INFO("Optimization iteration: " << i + 1 << "/" << numIterations << " complete.");
 
     if (ConfigOptions().getNetworkMatchWriteDebugMaps())
     {

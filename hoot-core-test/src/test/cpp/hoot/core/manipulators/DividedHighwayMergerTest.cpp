@@ -82,7 +82,7 @@ public:
     OsmMapPtr after(new OsmMap(conflator.getBestMap()));
     MapProjector::projectToWgs84(after);
 
-    QDir().mkdir("test-output");
+    QDir().mkpath("test-output");
     OsmXmlWriter writer;
     writer.write(after, "test-output/DividedHighwayMergerTest.osm");
     writer.write(map, "test-output/DividedHighwayMergerTestPre.osm");
@@ -108,7 +108,7 @@ public:
     OsmMapPtr after(new OsmMap(conflator.getBestMap()));
     MapProjector::projectToWgs84(after);
 
-    QDir().mkdir("test-output");
+    QDir().mkpath("test-output");
     OsmXmlWriter writer;
     writer.setIncludeIds(true);
     writer.write(after, "test-output/DividedHighwayMergerPreSplitTest.osm");

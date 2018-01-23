@@ -288,7 +288,7 @@ bool ScriptMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sha
     eid22 = sharedEid;
   }
 
-  auto_ptr<ScriptMatch> m1(new ScriptMatch(_script, _plugin, copiedMap, copiedMapJs, eid11, eid12,
+  boost::shared_ptr<ScriptMatch> m1(new ScriptMatch(_script, _plugin, copiedMap, copiedMapJs, eid11, eid12,
     _threshold));
   MatchSet ms;
   ms.insert(m1.get());

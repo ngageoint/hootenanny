@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NAMEDOP_H
 #define NAMEDOP_H
@@ -45,11 +45,11 @@ namespace hoot
 class NamedOp : public OsmMapOperation, public Configurable
 {
 public:
+
   static std::string className() { return "hoot::NamedOp"; }
 
   NamedOp();
-
-  NamedOp(QStringList namedOps) { _namedOps = namedOps; _conf = 0; }
+  NamedOp(QStringList namedOps);
 
   virtual ~NamedOp() {}
 

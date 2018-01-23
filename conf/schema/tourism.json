@@ -94,5 +94,14 @@
                 "weight": 0.8
             }
         ]
+    },
+    {
+        "categories": [
+            "use",
+            "poi"
+        ],
+        "isA": "tourism",
+        "name": "tourism=picnic_area",
+        "objectType": "tag"
     }
 ]

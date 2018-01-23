@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CHAINCRITERION_H
 #define CHAINCRITERION_H
@@ -59,6 +59,10 @@ protected:
   ChainCriterion(std::vector< boost::shared_ptr<ElementCriterion> > filters);
 
   std::vector< boost::shared_ptr<ElementCriterion> > _filters;
+
+private:
+
+  friend class RemoveRef2VisitorMultipleCriterion;
 
 };
 
