@@ -50,7 +50,12 @@ void RemoveEmptyRelationsVisitor::visit(const boost::shared_ptr<Element>& e)
 
     if (r->getMembers().size() == 0)
     {
+      LOG_TRACE("Removing empty relation: " << r->getId());
       RemoveRelationOp::removeRelation(_map->shared_from_this(), r->getId());
+    }
+    else
+    {
+      LOG_TRACE("Relation not empty: " << r->getId());
     }
   }
 }
