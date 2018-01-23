@@ -56,21 +56,28 @@ void RemoveRelationOp::apply(OsmMapPtr& map)
     // make a copy of the rids in case the index gets changed.
     const set<long> rids = map->_index->getElementToRelationMap()->
       getRelationByElement(ElementId::relation(_rIdToRemove));
+    LOG_VART(rids);
 
     // remove this relation from all other parent relations.
     for (set<long>::const_iterator it = rids.begin(); it != rids.end(); ++it)
     {
-      map->getRelation(*it)->removeElement(ElementId::relation(_rIdToRemove));
+      const long parentRelationId = *it;
+      LOG_TRACE("Removing relation: " << _rIdToRemove << "from relation: " << parentRelationId);
+      map->getRelation(parentRelationId)->removeElement(ElementId::relation(_rIdToRemove));
     }
 
+    LOG_TRACE("1");
     map->_index->removeRelation(map->getRelation(_rIdToRemove));
+    LOG_TRACE("2");
     map->_relations.erase(_rIdToRemove);
+    LOG_TRACE("3");
     VALIDATE(map->validate());
   }
 }
 
 void RemoveRelationOp::removeRelation(OsmMapPtr map, long rId)
 {
+  LOG_VART(rId);
   RemoveRelationOp relationRemover(rId);
   relationRemover.apply(map);
 }
