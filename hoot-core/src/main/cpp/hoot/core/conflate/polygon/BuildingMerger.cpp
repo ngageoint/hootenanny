@@ -138,19 +138,19 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Element
         LOG_WARN("One or more of the buildings to merge are empty.");
         if (e1.get())
         {
-          LOG_VART(e1->getElementId());
+          LOG_VARD(e1->getElementId());
         }
         else
         {
-          LOG_TRACE("Building one null.");
+          LOG_DEBUG("Building one null.");
         }
         if (e2.get())
         {
-          LOG_VART(e2->getElementId());
+          LOG_VARD(e2->getElementId());
         }
         else
         {
-          LOG_TRACE("Building two null.");
+          LOG_DEBUG("Building two null.");
         }
       }
       else if (logWarnCount == Log::getWarnMessageLimit())
