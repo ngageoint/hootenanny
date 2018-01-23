@@ -31,6 +31,8 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/ops/RemoveRelationOp.h>
+#include <hoot/core/ops/RecursiveElementRemover.h>
+
 
 namespace hoot
 {
@@ -79,7 +81,8 @@ void RemoveEmptyRelationsOp::_removeLeafRelationIfEmpty(OsmMapPtr& map, Relation
     if (map->containsRelation(relation->getId()))
     {
       LOG_TRACE("Removing empty relation: " << relation->getId());
-      RemoveRelationOp::removeRelation(map/*->shared_from_this()*/, relation->getId());
+      //RemoveRelationOp::removeRelation(map/*->shared_from_this()*/, relation->getId());
+      RecursiveElementRemover(relation->getElementId()).apply(map);
     }
   }
 }

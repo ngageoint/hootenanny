@@ -73,7 +73,7 @@ void RemoveRelationOp::apply(OsmMapPtr& map)
     map->_relations.erase(_rIdToRemove);
     LOG_TRACE("3");
     VALIDATE(map->validate());
-    LOG_TRACE("3");
+    LOG_TRACE("4");
   }
 }
 
