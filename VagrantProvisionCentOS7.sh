@@ -34,6 +34,10 @@ sudo yum -y install epel-release >> CentOS_upgrade.txt 2>&1
 echo "### Add Hoot repo ###" >> CentOS_upgrade.txt
 $HOOT_HOME/scripts/hoot-repo/yum-configure.sh
 
+# add nodesource repo for NodeJS dependencies.
+echo "### Add nodesource repo ###" >> CentOS_upgrade.txt
+sudo $HOOT_HOME/scripts/node/nodesource-repo.sh $NODE_VERSION
+
 # check to see if postgres is already installed
 if ! rpm -qa | grep -q pgdg-centos95-9.5-3 ; then
   # add the Postgres repo
@@ -51,18 +55,12 @@ sudo yum -q -y upgrade >> CentOS_upgrade.txt 2>&1
 cd ~
 
 echo "### Installing an ancient version of NodeJS"
-sudo yum install -y wget
-wget -q https://rpm.nodesource.com/pub_0.10/el/7/x86_64/nodejs-0.10.48-1nodesource.el7.centos.x86_64.rpm
-wget -q https://rpm.nodesource.com/pub_0.10/el/7/x86_64/nodejs-devel-0.10.48-1nodesource.el7.centos.x86_64.rpm
-
 sudo yum install -y \
-  nodejs-0.10.48-1nodesource.el7.centos.x86_64.rpm \
-  nodejs-devel-0.10.48-1nodesource.el7.centos.x86_64.rpm
-
-echo "### Locking version of NodeJS"
-sudo yum install -y \
+  nodejs-$NODE_VERSION \
+  nodejs-devel-$NODE_VERSION \
   yum-plugin-versionlock
 
+echo "### Locking version of NodeJS"
 # Now try to lock NodeJS so that the next yum update doesn't remove it.
 sudo yum versionlock nodejs*
 
