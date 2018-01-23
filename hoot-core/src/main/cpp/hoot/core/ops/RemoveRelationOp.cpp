@@ -50,6 +50,7 @@ RemoveRelationOp::RemoveRelationOp(long rId):
 
 void RemoveRelationOp::apply(OsmMapPtr& map)
 {
+  LOG_VART(_rIdToRemove);
   if (map->_relations.find(_rIdToRemove) != map->_relations.end())
   {
     // determine if this relation is a part of any other relations
@@ -72,6 +73,7 @@ void RemoveRelationOp::apply(OsmMapPtr& map)
     map->_relations.erase(_rIdToRemove);
     LOG_TRACE("3");
     VALIDATE(map->validate());
+    LOG_TRACE("3");
   }
 }
 

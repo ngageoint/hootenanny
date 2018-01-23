@@ -53,6 +53,9 @@ void RemoveEmptyRelationsOp::apply(OsmMapPtr& map)
 
 void RemoveEmptyRelationsOp::_removeLeafRelationIfEmpty(OsmMapPtr& map, RelationPtr relation)
 {
+  LOG_VART(relation.get());
+  LOG_VART(relation->getId());
+  LOG_VART(relation->getMembers().size());
   if (relation->getMembers().size() > 0)
   {
     LOG_TRACE(
@@ -62,6 +65,9 @@ void RemoveEmptyRelationsOp::_removeLeafRelationIfEmpty(OsmMapPtr& map, Relation
     for (size_t i = 0; i < members.size(); i++)
     {
       ElementPtr member = map->getElement(members[i].getElementId());
+      LOG_VART(member.get());
+      LOG_VART(member->getId());
+      LOG_VART(member->getElementType());
       if (member->getElementType() == ElementType::Relation)
       {
         _removeLeafRelationIfEmpty(map, map->getRelation(member->getId()));
