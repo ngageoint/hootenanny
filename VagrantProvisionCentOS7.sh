@@ -55,14 +55,20 @@ sudo yum -q -y upgrade >> CentOS_upgrade.txt 2>&1
 cd ~
 
 echo "### Installing an ancient version of NodeJS"
-sudo yum install -y \
-  nodejs-$NODE_VERSION \
-  nodejs-devel-$NODE_VERSION \
-  yum-plugin-versionlock
+
+if ! rpm -qa | grep -q ^yum-plugin-versionlock ; then
+    # Install the versionlock plugin version first.
+    sudo yum install -y yum-plugin-versionlock
+else
+    # Remove any NodeJS version locks to allow upgrading to $NODE_VERSION.
+    sudo yum versionlock delete nodejs-*
+fi
+
+# Install NodeJS at the desired version.
+sudo yum install -y nodejs-$NODE_VERSION nodejs-devel-$NODE_VERSION
 
 echo "### Locking version of NodeJS"
-# Now try to lock NodeJS so that the next yum update doesn't remove it.
-sudo yum versionlock nodejs*
+sudo yum versionlock add nodejs-$NODE_VERSION nodejs-devel-$NODE_VERSION
 
 # install useful and needed packages for working with hootenanny
 echo "### Installing dependencies from repos..."
