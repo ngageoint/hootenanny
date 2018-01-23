@@ -53,7 +53,8 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Validate.h>
-#include <hoot/core/visitors/RemoveEmptyRelationsVisitor.h>
+//#include <hoot/core/visitors/RemoveEmptyRelationsVisitor.h>
+#include <hoot/core/ops/RemoveEmptyRelationsOp.h>
 
 // Standard
 #include <limits>
@@ -215,8 +216,9 @@ void MapCropper::apply(OsmMapPtr& map)
   }
   LOG_DEBUG("Nodes removed: " + QString::number(nodesRemoved));
 
-  RemoveEmptyRelationsVisitor v;
-  map->visitRw(v);
+  //RemoveEmptyRelationsVisitor v;
+  //map->visitRw(v);
+  RemoveEmptyRelationsOp().apply(map);
 }
 
 void MapCropper::crop(OsmMapPtr map, const Envelope& envelope)
