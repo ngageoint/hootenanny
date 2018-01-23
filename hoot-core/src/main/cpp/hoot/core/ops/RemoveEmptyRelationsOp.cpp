@@ -71,7 +71,7 @@ void RemoveEmptyRelationsOp::_removeLeafRelationIfEmpty(OsmMapPtr& map, Relation
   else
   {
     LOG_TRACE("Removing empty relation: " << relation->getId());
-    RemoveRelationOp::removeRelation(map/*->shared_from_this()*/, relation->getId());
+    RemoveRelationOp::removeRelation(map->shared_from_this(), relation->getId());
   }
 }
 
