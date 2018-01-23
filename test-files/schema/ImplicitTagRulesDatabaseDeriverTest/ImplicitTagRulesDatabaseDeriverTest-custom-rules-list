@@ -1,0 +1,8 @@
+# A list of custom implicit tagging rules based on name.  These rules override any rules associated with the same word in the rules database.
+# Use this list to fine tune tagging rules behavior based on the auto-generated rules database.
+# tab separated: word	key=value 
+# keep list alphabetized and in lower case
+
+wine and liquors	shop=liquor
+youth center	amenity=community_centre
+zoo	tourism=zoo

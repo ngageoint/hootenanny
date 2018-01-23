@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonMergerCreator.h"
 
@@ -86,6 +86,12 @@ bool PoiPolygonMergerCreator::createMergers(const MatchSet& matches, vector<Merg
     {
       matchTypes.append(m->getMatchName());
     }
+  }
+  LOG_VART(foundAPoi);
+  LOG_VART(foundAPolygon);
+  if (!foundAPoi || !foundAPolygon)
+  {
+    LOG_TRACE("Match invalid; skipping merge.");
   }
 
   // if there is at least one POI and at least one polygon, then we need to merge things in a

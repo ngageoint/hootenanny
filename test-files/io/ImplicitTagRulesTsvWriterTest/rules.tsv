@@ -1,0 +1,8 @@
+Eid Prayer Ground	amenity=place_of_worship
+	18
+Masjid	amenity=place_of_worship	tourism=hotel
+	2672	9
+Mosque	amenity=place_of_worship	leisure=park
+	1246	2
+Sidi Muhammad	amenity=grave_yard
+	21
