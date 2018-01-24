@@ -28,10 +28,12 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/ops/RemoveRelationOp.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/ops/RemoveRelationOp.h>
+
+// Qt
+#include <QList>
 
 namespace hoot
 {
@@ -44,52 +46,50 @@ RemoveEmptyRelationsOp::RemoveEmptyRelationsOp()
 
 void RemoveEmptyRelationsOp::apply(OsmMapPtr& map)
 {
-  //MapProjector::projectToPlanar(map);
+  //Deleting twice in opposite directions catches child relations that are encountered after their
+  //parent on the first pass.  This only works for child relations nested one deep.  At this point,
+  //further relation nesting hasn't been encountered.  If it is, this will need to be reworked to
+  //delete recursively without breaking the map.
+  _deleteEmptyRelations(map, false);
+  _deleteEmptyRelations(map, true);
+}
+
+void RemoveEmptyRelationsOp::_deleteEmptyRelations(OsmMapPtr& map, const bool reverseOrder)
+{
   const RelationMap& relations = map->getRelations();
+
+  QList<long> relationIds;
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     RelationPtr relation = it->second;
-    LOG_VART(relation->getId());
-    LOG_VART(map->containsRelation(relation->getId()));
-    if (map->containsRelation(relation->getId()))
+    const long relationId = relation->getId();
+    const long membersSize = relation->getMembers().size();
+    if (membersSize == 0)
     {
-      _removeLeafRelationIfEmpty(map, relation);
+      LOG_TRACE("Removing empty relation: " << relationId);
+      relationIds.append(relationId);
+    }
+    else
+    {
+      LOG_TRACE(
+        "Relation " << relation->getElementId() << " has " << membersSize <<
+        " members.  Members: " << relation->getMembers());
     }
   }
-}
-
-void RemoveEmptyRelationsOp::_removeLeafRelationIfEmpty(OsmMapPtr& map, RelationPtr relation)
-{
-  LOG_VART(relation.get());
-  LOG_VART(relation->getId());
-  LOG_VART(relation->getMembers().size());
-  if (relation->getMembers().size() > 0)
+  if (!reverseOrder)
   {
-    LOG_TRACE(
-      "Relation not empty: " << relation->getId() << " child count: " <<
-      relation->getMembers().size() << " children: " << relation->getMembers());
-    const std::vector<RelationData::Entry> members = relation->getMembers();
-    for (size_t i = 0; i < members.size(); i++)
-    {
-      ElementPtr member = map->getElement(members[i].getElementId());
-      LOG_VART(member.get());
-      LOG_VART(member->getId());
-      LOG_VART(member->getElementType());
-      if (member->getElementType() == ElementType::Relation)
-      {
-        _removeLeafRelationIfEmpty(map, map->getRelation(member->getId()));
-      }
-    }
+    qSort(relationIds);
   }
   else
   {
-    if (map->containsRelation(relation->getId()))
-    {
-      LOG_TRACE("Removing empty relation: " << relation->getId());
-      //RemoveRelationOp::removeRelation(map/*->shared_from_this()*/, relation->getId());
-      RecursiveElementRemover(relation->getElementId()).apply(map);
-      LOG_TRACE("5");
-    }
+    qSort(relationIds.end(), relationIds.begin());
+  }
+  LOG_VART(relationIds);
+
+  for (QList<long>::const_iterator it = relationIds.begin(); it != relationIds.end(); ++it)
+  {
+    //RecursiveElementRemover(ElementId(ElementType::Relation, *it)).apply(map);
+    RemoveRelationOp::removeRelation(map, *it);
   }
 }
 

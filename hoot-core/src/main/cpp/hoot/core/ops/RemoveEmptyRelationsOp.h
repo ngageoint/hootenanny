@@ -35,8 +35,8 @@ namespace hoot
 {
 
 /**
- * Removes all relations that have no members.  This needs to be an op so that we can recursively
- * delete relations that are children of other relations.
+ * Removes all relations that have no members.  This needs to be an op, rather than a visitor, so
+ * that we can delete relations that are children of other relations.
  */
 class RemoveEmptyRelationsOp : public OsmMapOperation
 {
@@ -52,7 +52,7 @@ public:
 
 private:
 
-  void _removeLeafRelationIfEmpty(OsmMapPtr& map, RelationPtr relation);
+  void _deleteEmptyRelations(OsmMapPtr& map, const bool reverseOrder);
 
 };
 
