@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BuildingMergerCreator.h"
 
@@ -59,11 +59,11 @@ bool BuildingMergerCreator::createMergers(const MatchSet& matches, vector<Merger
     const Match* m = *it;
     LOG_VART(m->toString());
     const BuildingMatch* bm = dynamic_cast<const BuildingMatch*>(m);
-    LOG_VART(bm == 0);
     // check to make sure all the input matches are building matches.
     if (bm == 0)
     {
       // return an empty result
+      LOG_TRACE("Match invalid; skipping merge: " << m->toString());
       return false;
     }
     // add all the element to element pairs to a set

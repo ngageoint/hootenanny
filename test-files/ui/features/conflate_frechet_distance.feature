@@ -21,7 +21,7 @@
     And I scroll "Apply" element into view and press it
     And I scroll element into view and press "conflate2"
     Then I wait 30 "seconds" to see "Conflating …"
-    Then I wait 3 "minutes" to see "DcRoadsFrechetCucumber"
+    Then I wait 4 "minutes" to see "DcRoadsFrechetCucumber"
     Then I click the "trash" button
     And I accept the alert
     And I wait 5 "seconds" to not see "DcRoadsFrechetCucumber"

@@ -1503,17 +1503,36 @@ tds = {
                     // or a Coastline
                     if (tags.natural == 'coastline')
                     {
-                        if (geometryType == 'Area') // Islands are Areas
+                        if (geometryType == 'Line')
                         {
-                            delete tags.natural;
-                        }
-                        else if (geometryType =='Line') // Coastlines are lines
-                        {
+                            attrs.F_CODE = 'BA010'; // Land/Water Boundary - Line
                             delete tags.place;
+                        }
+                        else
+                        {
+                            // NOTE: Islands can be Points or Areas
+                            attrs.F_CODE = 'BA030'; // Island
+                            delete tags.natural;
                         }
                     }
                     break;
 
+            case 'island':
+            case 'islet':
+                if (tags.natural == 'coastline')
+                    if (geometryType == 'Line')
+                    {
+                        attrs.F_CODE = 'BA010'; // Land/Water Boundary - Line
+                        delete tags.place;
+                        break;                        
+                    }
+                    else
+                    {
+                        // NOTE: Islands can be Points or Areas
+                        attrs.F_CODE = 'BA030'; // Island - Polygon
+                        delete tags.natural;
+                        break;
+                    }
             } // End switch
         }
 

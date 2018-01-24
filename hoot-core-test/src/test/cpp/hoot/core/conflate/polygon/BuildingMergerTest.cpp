@@ -124,7 +124,7 @@ public:
 
     QDir(".").mkpath("test-output/conflate/polygon");
     OsmXmlWriter writer;
-    writer.write(map, "test-output/conflate/polygon/BuildingMergerTest.osm");
+    writer.write(map, "test-output/conflate/polygon/BuildingMergerTest-runMatchTest.osm");
 
     HOOT_STR_EQUALS("[3]{(Way:-15, Way:-7), (Way:-14, Way:-7), (Way:-13, Way:-7)}", replaced);
   }
