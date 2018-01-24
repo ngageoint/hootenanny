@@ -50,6 +50,7 @@ HOOT_FACTORY_REGISTER(OsmSchemaLoader, JsonOsmSchemaLoader)
 JsonOsmSchemaLoader::JsonOsmSchemaLoader()
 {
   Isolate* current = v8::Isolate::GetCurrent();
+  HandleScope handleScope(current);
   _context.Reset(current, Context::New(current));
 }
 

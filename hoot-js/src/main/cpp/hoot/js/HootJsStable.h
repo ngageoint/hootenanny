@@ -36,7 +36,7 @@
 
 // v8
 #include <v8.h>
-//#include <libplatform/libplatform.h>
+#include <libplatform/libplatform.h>
 
 #pragma GCC diagnostic pop
 

@@ -50,19 +50,6 @@ sudo yum -q -y upgrade >> CentOS_upgrade.txt 2>&1
 # Make sure that we are in ~ before trying to wget & install stuff
 cd ~
 
-#echo "### Installing the repo for an ancient version of NodeJS"
-#curl --silent --location https://rpm.nodesource.com/setup | sudo bash -
-
-#echo "### Installing an ancient version of NodeJS"
-#sudo yum install -y \
-#  nodejs-0.10.46 \
-#  nodejs-devel-0.10.46 \
-#  yum-plugin-versionlock
-
-# Now try to lock NodeJS so that the next yum update doesn't remove it.
-#sudo yum versionlock nodejs*
-
-
 # install useful and needed packages for working with hootenanny
 echo "### Installing dependencies from repos..."
 sudo yum -y install \
@@ -132,7 +119,6 @@ sudo yum -y install \
     texlive-collection-fontsrecommended \
     texlive-collection-langcyrillic \
     unzip \
-    v8-devel \
     vim \
     wamerican-insane \
     w3m \
@@ -143,7 +129,7 @@ sudo yum -y install \
 
 # Node
 echo "##### NodeJs #####"
-NODE_VERSION=4.8.7
+NODE_VERSION=8.9.3
 # Install the binary version of NodeJs for some uses (including npm)
 cd ~
 wget --quiet https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz
@@ -164,8 +150,7 @@ sed -i 's/Local<Object> json_object/Local<Value> json_object/g' deps/v8/src/api.
 ./configure --shared --prefix=/usr >> ~/centos_install.txt
 make -j$(nproc) >> ~/centos_install.txt
 sudo make install >> ~/centos_install.txt
-sudo ln -s /usr/lib/libnode.so.46 /usr/lib/libnode.so
-
+sudo ln -s /usr/lib/libnode.so.57 /usr/lib/libnode.so
 
 # Fix missing qmake
 if ! hash qmake >/dev/null 2>&1 ; then

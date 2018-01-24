@@ -36,29 +36,19 @@ auto_ptr<v8Engine> v8Engine::_theInstance;
 
 bool v8Engine::_needPlatform = false;
 
-class ArrayBufferAllocator : public v8::ArrayBuffer::Allocator {
- public:
-  virtual void* Allocate(size_t length) {
-    void* data = AllocateUninitialized(length);
-    return data == NULL ? data : memset(data, 0, length);
-  }
-  virtual void* AllocateUninitialized(size_t length) { return malloc(length); }
-  virtual void Free(void* data, size_t) { free(data); }
-};
-
 v8Engine::v8Engine()
 {
   //  Setup and initialize the platform
   if (v8Engine::_needPlatform)
   {
-//    V8::InitializeICUDefaultLocation(NULL);
+    V8::InitializeICUDefaultLocation(NULL);
     V8::InitializeExternalStartupData(NULL);
-//    _platform.reset(platform::CreateDefaultPlatform());
-//    V8::InitializePlatform(_platform.get());
+    _platform.reset(platform::CreateDefaultPlatform());
+    V8::InitializePlatform(_platform.get());
     //  Initialize v8
     V8::Initialize();
     //  Create the main isolate
-    _allocator.reset(new ArrayBufferAllocator());
+    _allocator.reset(ArrayBuffer::Allocator::NewDefaultAllocator());
     Isolate::CreateParams params;
     params.array_buffer_allocator = _allocator.get();
     _isolate = Isolate::New(params);
