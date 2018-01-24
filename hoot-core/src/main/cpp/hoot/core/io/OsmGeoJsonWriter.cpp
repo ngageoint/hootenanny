@@ -101,10 +101,10 @@ void OsmGeoJsonWriter::write(ConstOsmMapPtr map)
 QString OsmGeoJsonWriter::_getBbox()
 {
   Envelope bounds = CalculateMapBoundsVisitor::getGeosBounds(_map);
-  return QString("[%1, %2, %3, %4]").arg(QString::number(bounds.getMinX(), 'g', 7))
-                                    .arg(QString::number(bounds.getMinY(), 'g', 7))
-                                    .arg(QString::number(bounds.getMaxX(), 'g', 7))
-                                    .arg(QString::number(bounds.getMaxY(), 'g', 7));
+  return QString("[%1, %2, %3, %4]").arg(QString::number(bounds.getMinX(), 'g', 5))
+                                    .arg(QString::number(bounds.getMinY(), 'g', 5))
+                                    .arg(QString::number(bounds.getMaxX(), 'g', 5))
+                                    .arg(QString::number(bounds.getMaxY(), 'g', 5));
 }
 
 void OsmGeoJsonWriter::_writeMeta(ConstElementPtr e)
