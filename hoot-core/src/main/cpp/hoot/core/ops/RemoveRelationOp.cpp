@@ -63,17 +63,13 @@ void RemoveRelationOp::apply(OsmMapPtr& map)
     for (set<long>::const_iterator it = rids.begin(); it != rids.end(); ++it)
     {
       const long parentRelationId = *it;
-      LOG_TRACE("Removing relation: " << _rIdToRemove << "from relation: " << parentRelationId);
+      LOG_TRACE("Removing relation: " << _rIdToRemove << " from relation: " << parentRelationId);
       map->getRelation(parentRelationId)->removeElement(ElementId::relation(_rIdToRemove));
     }
 
-    LOG_TRACE("1");
     map->_index->removeRelation(map->getRelation(_rIdToRemove));
-    LOG_TRACE("2");
     map->_relations.erase(_rIdToRemove);
-    LOG_TRACE("3");
     VALIDATE(map->validate());
-    LOG_TRACE("4");
   }
 }
 

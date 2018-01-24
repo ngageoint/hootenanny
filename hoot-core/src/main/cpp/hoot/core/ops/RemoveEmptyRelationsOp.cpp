@@ -29,7 +29,6 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/RemoveRelationOp.h>
 
 // Qt
@@ -40,7 +39,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, RemoveEmptyRelationsOp)
 
-RemoveEmptyRelationsOp::RemoveEmptyRelationsOp()
+RemoveEmptyRelationsOp::RemoveEmptyRelationsOp() :
+_numRemoved(0)
 {
 }
 
@@ -48,8 +48,9 @@ void RemoveEmptyRelationsOp::apply(OsmMapPtr& map)
 {
   //Deleting twice in opposite directions catches child relations that are encountered after their
   //parent on the first pass.  This only works for child relations nested one deep.  At this point,
-  //further relation nesting hasn't been encountered.  If it is, this will need to be reworked to
-  //delete recursively without breaking the map.
+  //further empty relation nesting then one level hasn't been encountered.  If it is encountered,
+  //then this will need to be reworked to delete empty relations recursively without breaking the
+  //map.
   _deleteEmptyRelations(map, false);
   _deleteEmptyRelations(map, true);
 }
@@ -67,6 +68,10 @@ void RemoveEmptyRelationsOp::_deleteEmptyRelations(OsmMapPtr& map, const bool re
     if (membersSize == 0)
     {
       LOG_TRACE("Removing empty relation: " << relationId);
+      if (relation->getTags().contains("name"))
+      {
+        LOG_TRACE("Empty relation name: " << relation->getTags().get("name"));
+      }
       relationIds.append(relationId);
     }
     else
@@ -88,8 +93,8 @@ void RemoveEmptyRelationsOp::_deleteEmptyRelations(OsmMapPtr& map, const bool re
 
   for (QList<long>::const_iterator it = relationIds.begin(); it != relationIds.end(); ++it)
   {
-    //RecursiveElementRemover(ElementId(ElementType::Relation, *it)).apply(map);
     RemoveRelationOp::removeRelation(map, *it);
+    _numRemoved++;
   }
 }
 

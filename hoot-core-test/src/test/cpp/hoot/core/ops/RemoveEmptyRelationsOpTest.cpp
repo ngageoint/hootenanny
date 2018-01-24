@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,44 +22,44 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef __REMOVE_EMPTY_RELATIONS_OP_H__
-#define __REMOVE_EMPTY_RELATIONS_OP_H__
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/ops/RemoveEmptyRelationsOp.h>
+#include "../TestUtils.h"
 
 namespace hoot
 {
 
-/**
- * Removes all relations that have no members.  This needs to be an op, rather than a visitor, so
- * that we can delete relations that are children of other relations.
- */
-class RemoveEmptyRelationsOp : public OsmMapOperation
+class RemoveEmptyRelationsOpTest : public CppUnit::TestFixture
 {
+  CPPUNIT_TEST_SUITE(RemoveEmptyRelationsOpTest);
+  CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST_SUITE_END();
+
 public:
 
-  static std::string className() { return "hoot::RemoveEmptyRelationsOp"; }
+  void runBasicTest()
+  {
+    OsmXmlReader reader;
+    OsmMapPtr map(new OsmMap());
+    OsmMap::resetCounters();
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read("test-files/ops/RemoveEmptyRelationsOp/input.osm", map);
 
-  RemoveEmptyRelationsOp();
+    RemoveEmptyRelationsOp uut;
+    uut.apply(map);
 
-  virtual void apply(OsmMapPtr& map);
-
-  virtual std::string getClassName() const { return className(); }
-
-  long getNumRemoved() const { return _numRemoved; }
-
-private:
-
-  long _numRemoved;
-
-  void _deleteEmptyRelations(OsmMapPtr& map, const bool reverseOrder);
+    CPPUNIT_ASSERT_EQUAL(4L, uut.getNumRemoved());
+  }
 
 };
 
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RemoveEmptyRelationsOpTest, "quick");
+
 }
 
-#endif // __REMOVE_EMPTY_RELATIONS_OP_H__
+
