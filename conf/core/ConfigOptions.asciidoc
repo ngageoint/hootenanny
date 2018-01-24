@@ -1182,6 +1182,7 @@ Some of the possible options include:
 
 * `hoot::BuildingMatchCreator` - Matches building polygons.
 * `hoot::HighwayMatchCreator` - Matches linear highway features using the Unify algorithm.
+* `hoot::NetworkMatchCreator` - Matches linear highway features using the Network algorithm.
 * `hoot::PoiPolygonMatchCreator` - Matches POIs with buildings or areas.
 * `hoot::ScriptMatchCreator,Area.js` - Matches areas (non-building polygons marked as areas; e.g. parks, parking lots, etc.).
 * `hoot::ScriptMatchCreator,PoiGeneric.js` - Matches POIs using the Unify algorithm.
@@ -1250,6 +1251,8 @@ Possible values include:
   specified in `match.creators`.
 * `hoot::HighwaySnapMergerCreator` - Required if `hoot::HighwayMatchCreator`
   is specified in `match.creators`.
+* `hoot::NetworkMergerCreator` - Required if `hoot::NetworkMatchCreator`
+is specified in `match.creators`.
 * `hoot::PoiPolygonMergerCreator` - Required if `hoot::PoiPolygonMatchCreator`
   is specified in `match.creators`.
 * `hoot::ScriptMergerCreator` - Required if one or more instances of
