@@ -85,7 +85,7 @@ public class ConflateCommandTest {
 
         assertTrue(conflateCommand.getSubstitutionMap().containsKey("HOOT_OPTIONS"));
         assertEquals("[-D, osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor, " +
-                              "-D, writer.include.conflate.score.tags=true, " +
+                              "-D, writer.include.conflate.score.tags=false, " +
                               "-D, hootapi.db.writer.overwrite.map=true, " +
                               "-D, hootapi.db.writer.create.user=true, " +
                               "-D, writer.text.status=true, " +
