@@ -56,13 +56,9 @@ v8Engine::v8Engine()
     //  Create the main context
     _locker.reset(new Locker(_isolate));
     HandleScope handleScope(_isolate);
-    Local<Context> context = Context::New(_isolate);
+    _context.reset(new Persistent<Context>(_isolate, Context::New(_isolate)));
+    Local<Context> context = ToLocal(_context.get());
     context->Enter();
-    _context.reset(new Persistent<Context>());
-    _context->Reset(_isolate, context);
-//    _context.reset(new Persistent<Context>(_isolate, Context::New(_isolate)));
-//    Local<Context> context = ToLocal(&_context);
-//    context->Enter();
   }
   else
   {
@@ -97,12 +93,7 @@ Isolate* v8Engine::getIsolate()
 {
   return getInstance()._isolate;
 }
-/*
-Local<Context> v8Engine::getContext()
-{
-  return ToLocal(getInstance()._context.get());
-}
-*/
+
 void v8Engine::setPlatformInit(bool needsPlatform)
 {
   _needPlatform = needsPlatform;

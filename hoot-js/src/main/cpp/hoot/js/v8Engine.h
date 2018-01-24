@@ -55,8 +55,6 @@ public:
 
   static v8::Isolate* getIsolate();
 
-  static v8::Local<v8::Context> getContext();
-
   static void setPlatformInit(bool needsPlatform = true);
 
 private:

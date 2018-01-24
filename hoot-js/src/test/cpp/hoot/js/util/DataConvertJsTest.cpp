@@ -64,7 +64,6 @@ public:
     HandleScope handleScope(current);
 
     // Create a new context.
-//    Persistent<Context> context(current, Context::New(current));
     Local<Context> context = Context::New(current);
 
     // Enter the created context for compiling and
