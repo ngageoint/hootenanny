@@ -52,6 +52,7 @@ class HootGbdxTask(GbdxTaskInterface):
 
     def convertFile(self,inputFile,outputFile):
         hootCmd = ['hoot','convert','--error',
+                '-D','json.add.bbox=true',
                 '-D','convert.ops=hoot::TranslationOp',
                 '-D','translation.script=/var/lib/hootenanny/translations/GBDX.js']
 
@@ -80,7 +81,14 @@ class HootGbdxTask(GbdxTaskInterface):
 
     def processGeoJsonFiles(self,inputDir,outputDir):
         fList = self.findFiles(inputDir,['geojson'])
+
+        #print 'Processing GeoJSON: Start'
+        #print 'GeoJSON List: {}\n'.format(fList)
+
         for inputFile in fList['geojson']:
+
+            #print 'Processing: {}'.format(inputFile)
+
             fName = os.path.basename(inputFile)
             outputFile = self.checkFile(os.path.join(outputDir,fName))
             returnText = self.convertFile(inputFile,outputFile)
@@ -88,6 +96,8 @@ class HootGbdxTask(GbdxTaskInterface):
             if returnText is not None:
                 self.status = 'failed'
                 self.reason = returnText
+
+        #print 'Processing GeoJSON: End'
         # End processGeoJsonFiles
 
 
@@ -96,7 +106,13 @@ class HootGbdxTask(GbdxTaskInterface):
         tmpOutName = self.checkFile(os.path.join(outputDir,'hootOut%s.geojson' % os.getpid()))
         fList = self.findFiles(inputDir,['json'])
 
+        # print 'Processing JSON: Start'
+        # print('JSON List: %s\n' % fList)
+
         for inputFile in fList['json']:
+
+            #print 'Processing: {}'.format(inputFile)
+
             # Make sure that we don't have anything from a previous run
             if os.path.isfile(tmpInName):
                 os.remove(tmpInName)
@@ -121,21 +137,30 @@ class HootGbdxTask(GbdxTaskInterface):
         
             # Clean up. Move the input file back to what it was
             os.rename(tmpInName,inputFile)
-            # End processJsonFiles
+
+        # print 'Processing JSON: End'
+        # End processJsonFiles
 
 
     def processZipFiles(self,inputDir,outputDir):
         tmpDirName = self.checkFile(os.path.join(inputDir,'hoot%s' % os.getpid()))
         fList = self.findFiles(inputDir,['zip'])
+        # print '\nProcessing Zip: Start'
+        # print '  Zip inputDir: {}'.format(inputDir)
+        # print '  Zip TmpDir: {}'.format(tmpDirName)
+        # print '  Zip List: {}\n'.format(fList)
 
         for inputFile in fList['zip']:
-            # Defensive cleaning 
+            # print 'Processing Zip File: {}'.format(inputFile)
+
+            # Defensive cleaning
             if os.path.isfile(tmpDirName):
                 os.remove(tmpDirName)
 
             if os.path.isdir(tmpDirName):
                 shutil.rmtree(tmpDirName)
 
+            # print '    About to Create: {}'.format(tmpDirName)
             os.makedirs(tmpDirName)
 
             try:
@@ -149,11 +174,15 @@ class HootGbdxTask(GbdxTaskInterface):
 
             # Make sure that we have files to work with
             tList = self.findFiles(tmpDirName,['geojson','json','zip'])
-            if tList['geojson'] == [] and tList['json'] == [] and tList['zip'] == []:
-                open(os.path.join(outputDir,'.empty'),'a').close()
-                shutil.rmtree(tmpDirName)
-                return
 
+            #print 'Unpacked Zip: {}  Files: {}\n'.format(inputFile,tList)
+
+            # Check if the zip file has anything we can process
+            if tList['geojson'] == [] and tList['json'] == [] and tList['zip'] == []:
+                # print 'Empty Zip Directory'
+                # print 'About to Remove: {}\n'.format(tmpDirName)
+                shutil.rmtree(tmpDirName)
+                continue
 
             # Now process the unpacked files
             self.processGeoJsonFiles(tmpDirName,outputDir)
@@ -161,33 +190,57 @@ class HootGbdxTask(GbdxTaskInterface):
 
             # Now get recursive :-)  We may have zip files of zip files
             # This is very defensive
+            # print '## About to Process Zip Files'
             self.processZipFiles(tmpDirName,outputDir)
-            
+            # print '## Back from Process Zip Files'
+
+            # Cleanup before returning
+            # print '    About to Remove: {}\n'.format(tmpDirName)
             shutil.rmtree(tmpDirName)
+
+        # print 'Processing Zip: End'
         # End processZipFiles
 
 
     def invoke(self):
         inputDir = self.get_input_data_port('geojson')
-        outputDir = self.get_output_data_port('data_out')
 
+        outputDir = os.path.join(self.get_output_data_port('data_out'),'results')
         if not os.path.exists(outputDir):
             os.makedirs(outputDir)
+        else:
+            shutil.rmtree(outputDir)
+            os.makedirs(outputDir)
+
+        # Working Directory. We zip this and make the output.
+        workDir = self.checkFile(os.path.join('/tmp','hoot%s' % os.getpid()))
+        # print 'workDir: {}\n'.format(workDir)
+        if not os.path.exists(workDir):
+            os.makedirs(workDir)
+        else:
+            shutil.rmtree(workDir)
+            os.makedirs(workDir)
 
         # Check if we have something to work with
         tList = self.findFiles(inputDir,['geojson','json','zip'])
-        if tList['geojson'] == [] and tList['json'] == [] and tList['zip'] == []:
-            open(os.path.join(outputDir,'.empty'),'a').close()
-            return
-
-
 
         # Now go looking for files to convert
-        self.processGeoJsonFiles(inputDir,outputDir)
-        self.processJsonFiles(inputDir,outputDir)
-        self.processZipFiles(inputDir,outputDir)
-        # End of invoke
+        self.processGeoJsonFiles(inputDir,workDir)
+        self.processJsonFiles(inputDir,workDir)
+        self.processZipFiles(inputDir,workDir)
 
+        tCwd = os.getcwd()
+
+        # Zip up what we translated
+        outZip = zipfile.ZipFile(os.path.join(outputDir,'results.zip'),'w')
+        os.chdir(workDir)
+        for fName in os.listdir(workDir):
+            outZip.write(fName)
+
+        os.chdir(tCwd)
+
+        # cleanup
+        shutil.rmtree(workDir)
 
 if __name__ == "__main__":
     with HootGbdxTask() as task:
