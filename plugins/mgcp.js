@@ -1237,6 +1237,26 @@ mgcp = {
                 delete tags.place;
                 break;
 
+            case 'island':
+            case 'islet':
+                // If we have a coastline around an Island, decide if we are going make an Island
+                // or a Coastline
+                if (tags.natural == 'coastline')
+                {
+                    if (geometryType == 'Line')
+                    {
+                        attrs.F_CODE = 'BA010'; // Land/Water Boundary - Line
+                        delete tags.place;
+                    }
+                    else
+                    {
+                        // NOTE: If we have a Point, this will goto the O2S layer
+                        attrs.F_CODE = 'BA030'; // Island - Polygon
+                        delete tags.natural;
+                    }
+                }
+                break;
+
         } // End switch
 
         // Capitals are important
