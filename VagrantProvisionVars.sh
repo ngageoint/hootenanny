@@ -2,10 +2,10 @@
 
 export CHROMEDRIVER_VERSION=2.33
 
-export JDK_VERSION=1.8.0_152
-export JDK_URL=http://download.oracle.com/otn-pub/java/jdk/8u152-b16/aa0333dd3019491ca4f6ddbe78cdb6d0/jdk-8u152-linux-x64.tar.gz
-export JDK_TAR=jdk-8u152-linux-x64.tar.gz
-export JDK_MD5=20dddd28ced3179685a5f58d3fcbecd8
+export JDK_VERSION=1.8.0_161
+export JDK_URL=http://download.oracle.com/otn-pub/java/jdk/8u161-b12/2f38c3b165be4555a1fa6e98c45e0808/jdk-8u161-linux-x64.tar.gz
+export JDK_TAR=jdk-8u161-linux-x64.tar.gz
+export JDK_MD5=99051574a0d90871ed24a91a5d321ed2
 
 export GDAL_VERSION=2.1.4
 
