@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="38.8845" minlon="-77.0551" maxlat="38.90310000000001" maxlon="-77.02809999999999"/>
     <node visible="true" id="-3163" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8917679999999422" lon="-77.0536259999999800">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-3163"/>
@@ -21213,16 +21214,6 @@
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="5"/>
         <tag k="hoot:id" v="-7695"/>
-    </way>
-    <way visible="true" id="-7693" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-2550"/>
-        <nd ref="-2550"/>
-        <tag k="alt_name" v="15th St NW"/>
-        <tag k="name" v="Raoul Wallenberg Pl SW"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-7693"/>
     </way>
     <way visible="true" id="-7691" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2550"/>
