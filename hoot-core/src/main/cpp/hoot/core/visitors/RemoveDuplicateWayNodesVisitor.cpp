@@ -21,6 +21,8 @@ void RemoveDuplicateWayNodesVisitor::visit(const ElementPtr& e)
 {
   if (e->getElementType() == ElementType::Way)
   {
+    LOG_TRACE("Looking for duplicate way nodes...");
+
     WayPtr way = boost::dynamic_pointer_cast<Way>(e);
     assert(way.get());
     const std::vector<long>& wayNodeIds = way->getNodeIds();
@@ -44,6 +46,7 @@ void RemoveDuplicateWayNodesVisitor::visit(const ElementPtr& e)
         //this node ID is duplicated, but its the end node duplicating the start node, which is ok
         //(closed way)
         LOG_TRACE("End node matches start node: " << nodeId);
+        parsedNodeIds.append(nodeId);
       }
       else
       {
