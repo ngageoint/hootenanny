@@ -35,7 +35,8 @@ namespace hoot
 {
 
 /**
- * Removes all any way nodes that are duplicates, with the exception of start/end node duplicates.
+ * Removes all way nodes that are duplicates, with the exception of start/end node duplicates
+ * (closed ways).
  *
  * This is kind of a bandaid for the issue discovered in #2066.  The source creating the
  * duplicated nodes appears to be in the conflation routines somewhere and should be found and
