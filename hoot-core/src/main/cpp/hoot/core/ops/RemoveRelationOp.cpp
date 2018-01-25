@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RemoveRelationOp.h"
 
@@ -50,17 +50,21 @@ RemoveRelationOp::RemoveRelationOp(long rId):
 
 void RemoveRelationOp::apply(OsmMapPtr& map)
 {
+  LOG_VART(_rIdToRemove);
   if (map->_relations.find(_rIdToRemove) != map->_relations.end())
   {
     // determine if this relation is a part of any other relations
     // make a copy of the rids in case the index gets changed.
     const set<long> rids = map->_index->getElementToRelationMap()->
       getRelationByElement(ElementId::relation(_rIdToRemove));
+    LOG_VART(rids);
 
     // remove this relation from all other parent relations.
     for (set<long>::const_iterator it = rids.begin(); it != rids.end(); ++it)
     {
-      map->getRelation(*it)->removeElement(ElementId::relation(_rIdToRemove));
+      const long parentRelationId = *it;
+      LOG_TRACE("Removing relation: " << _rIdToRemove << " from relation: " << parentRelationId);
+      map->getRelation(parentRelationId)->removeElement(ElementId::relation(_rIdToRemove));
     }
 
     map->_index->removeRelation(map->getRelation(_rIdToRemove));
@@ -71,6 +75,7 @@ void RemoveRelationOp::apply(OsmMapPtr& map)
 
 void RemoveRelationOp::removeRelation(OsmMapPtr map, long rId)
 {
+  LOG_VART(rId);
   RemoveRelationOp relationRemover(rId);
   relationRemover.apply(map);
 }

@@ -341,6 +341,7 @@ See also:
 * Data Type: list
 * Default Value:
 ** `hoot::RemoveMissingElementsVisitor` - Removes non-existent element references from relations or ways with negative IDs.
+** `hoot::RemoveEmptyRelationsOp` - Removes empty relations.
 ** `hoot::RemoveInvalidReviewRelationsVisitor` - Removes review relations whose members no longer exist after conflation.
 ** `hoot::RemoveDuplicateReviewsOp` - Removes any duplicate reviews
 ** `hoot::BuildingOutlineUpdateOp` - Updates any multi-part building outlines that may have changed during conflation.
