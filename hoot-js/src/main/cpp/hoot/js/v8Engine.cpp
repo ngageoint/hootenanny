@@ -59,6 +59,7 @@ v8Engine::v8Engine()
     _context.reset(new Persistent<Context>(_isolate, Context::New(_isolate)));
     Local<Context> context = ToLocal(_context.get());
     context->Enter();
+//    _scopeContext.reset(new Context::Scope(context));
   }
   else
   {
@@ -70,6 +71,7 @@ v8Engine::~v8Engine()
 {
   if (v8Engine::_needPlatform)
   {
+//    _scopeContext.reset();
     _locker.reset();
     _isolateScope.reset();
     //  Dispose of the v8 subsystem

@@ -80,6 +80,7 @@ private:
   boost::shared_ptr<v8::Locker> _locker;
   /** Main context */
   boost::shared_ptr<v8::Persistent<v8::Context> > _context;
+  boost::shared_ptr<v8::Context::Scope> _scopeContext;
 
 };
 
