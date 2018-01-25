@@ -34,6 +34,10 @@ sudo yum -y install epel-release >> CentOS_upgrade.txt 2>&1
 echo "### Add Hoot repo ###" >> CentOS_upgrade.txt
 $HOOT_HOME/scripts/hoot-repo/yum-configure.sh
 
+# add nodesource repo for NodeJS dependencies.
+echo "### Add nodesource repo ###" >> CentOS_upgrade.txt
+sudo $HOOT_HOME/scripts/node/nodesource-repo.sh $NODE_VERSION
+
 # check to see if postgres is already installed
 if ! rpm -qa | grep -q pgdg-centos95-9.5-3 ; then
   # add the Postgres repo
@@ -50,18 +54,21 @@ sudo yum -q -y upgrade >> CentOS_upgrade.txt 2>&1
 # Make sure that we are in ~ before trying to wget & install stuff
 cd ~
 
-echo "### Installing the repo for an ancient version of NodeJS"
-curl --silent --location https://rpm.nodesource.com/setup | sudo bash -
-
 echo "### Installing an ancient version of NodeJS"
-sudo yum install -y \
-  nodejs-0.10.46 \
-  nodejs-devel-0.10.46 \
-  yum-plugin-versionlock
 
-# Now try to lock NodeJS so that the next yum update doesn't remove it.
-sudo yum versionlock nodejs*
+if ! rpm -qa | grep -q ^yum-plugin-versionlock ; then
+    # Install the versionlock plugin version first.
+    sudo yum install -y yum-plugin-versionlock
+else
+    # Remove any NodeJS version locks to allow upgrading to $NODE_VERSION.
+    sudo yum versionlock delete nodejs-*
+fi
 
+# Install NodeJS at the desired version.
+sudo yum install -y nodejs-$NODE_VERSION nodejs-devel-$NODE_VERSION
+
+echo "### Locking version of NodeJS"
+sudo yum versionlock add nodejs-$NODE_VERSION nodejs-devel-$NODE_VERSION
 
 # install useful and needed packages for working with hootenanny
 echo "### Installing dependencies from repos..."
