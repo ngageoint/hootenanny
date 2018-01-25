@@ -16907,14 +16907,6 @@
         <tag k="building:levels:underground" v="1"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-130" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-816"/>
-        <nd ref="-759"/>
-        <nd ref="-807"/>
-        <nd ref="-766"/>
-        <nd ref="-816"/>
-        <tag k="error:circular" v="15"/>
-    </way>
     <way visible="true" id="-129" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-779"/>
         <nd ref="-1958"/>

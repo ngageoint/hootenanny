@@ -24876,15 +24876,6 @@
         <tag k="error:circular" v="5"/>
         <tag k="hoot:id" v="-1431"/>
     </way>
-    <way visible="true" id="-1426" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1302"/>
-        <nd ref="-1302"/>
-        <tag k="name" v="I- 66"/>
-        <tag k="highway" v="primary"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-1426"/>
-    </way>
     <way visible="true" id="-1420" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2770"/>
         <nd ref="-2301"/>
