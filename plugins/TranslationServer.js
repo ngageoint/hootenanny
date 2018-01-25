@@ -17,7 +17,7 @@ if (typeof hoot === 'undefined') {
     hoot = require(HOOT_HOME + '/lib/HootJs');
 }
 
-//Getting schema for fcode, geom type
+// //Getting schema for fcode, geom type
 var schemaMap = {
     TDSv40: require(HOOT_HOME + '/plugins/tds40_full_schema.js'),
     TDSv61: require(HOOT_HOME + '/plugins/tds61_full_schema.js'),
@@ -523,20 +523,26 @@ var searchSchema = function(options) {
     var limitResult = options.limitResult || 1000;
     var maxLevDistance = options.maxLevDistance || 20;
     var schema = schemaMap[translation].getDbSchema();
+    var leinSearch = getLein(searchStr);
 
     //Treat vertex geom type as point
     if (geomType.toLowerCase() === 'vertex') geomType = 'point';
 
+    // get desc and fcode matching results
+    var schemaMatches = schema
+        .filter(function(d) {
+            return d.geom.toLowerCase().indexOf(geomType.toLowerCase()) !== -1  &&
+                (  d.desc.toLowerCase().indexOf(searchStr.toLowerCase()) !== -1 ||
+                   d.fcode.toLowerCase().indexOf(searchStr.toLowerCase()) !== -1 
+                );
+        });
+
     var result = [];
     if (searchStr.length > 0) {
-
-        //Check for search string in the description or fcode
-        var exactMatches = schema
-            .filter(function(d) {
-                return d.geom.toLowerCase().indexOf(geomType.toLowerCase()) !== -1 &&
-                ( d.desc.toLowerCase().indexOf(searchStr.toLowerCase()) !== -1 ||
-                    d.fcode.toLowerCase().indexOf(searchStr.toLowerCase()) !== -1 )
-                ;
+        // find exact fcode matches and sort.
+        var fcodeMatches = schemaMatches
+            .filter(function(d) { 
+                return d.fcode.toLowerCase().indexOf(searchStr.toLowerCase()) !== -1;
             })
             .map(function(d) {
                 return {
@@ -544,47 +550,81 @@ var searchSchema = function(options) {
                     fcode: d.fcode,
                     desc: d.desc,
                     geom: d.geom,
-                    idx: Math.min( d.desc.toLowerCase().indexOf(searchStr.toLowerCase()),
-                        d.fcode.toLowerCase().indexOf(searchStr.toLowerCase()) )
+                    idx: Number(d.fcode.toLowerCase().replace(searchStr, ''))
                 }
             })
-            .sort(function(a, b) {
-                return a.idx - b.idx;
-            })
+            .sort(function(a, b) { return a.idx - b.idx })
             .slice(0, limitResult);
 
-        result = result.concat(exactMatches);
+        result = result.concat(fcodeMatches);
+       
+        // if fcode matches below result limit,
+        // add desc matches to results.
+        if (fcodeMatches.length < limitResult) {
 
-        //If more results are needed to reach the limit, calculate fuzzy levenshtein matches
-        if (exactMatches.length < limitResult) {
+            var limitLeft = limitResult - fcodeMatches.length;
+                descMatches = schemaMatches
+                    .filter(function(d) { 
+                        return d.desc.toLowerCase().indexOf(searchStr.toLowerCase()) !== -1 &&
+                               d.fcode.toLowerCase().indexOf(searchStr.toLowerCase()) === -1;
+                    })
+                    .filter(function(d) {
+                        return {
+                            name: d.name,
+                            fcode: d.fcode,
+                            desc: d.desc,
+                            geom: d.geom,
+                            idx: d.desc.toLowerCase().indexOf(searchStr.toLowerCase())
+                        } 
+                    })
+                    .sort(function(a, b) { return a.idx - b.idx })
+                    .slice(0, limitLeft);
 
-            var fuzzyMatches = schema
-                .filter(function(d) {
-                    return (! exactMatches.some(function(e) { //filter out exact matches
-                        return e.desc === d.desc;
-                    }) ) &&
-                    d.geom.toLowerCase().indexOf(geomType.toLowerCase()) !== -1 &&
-                    ( getLevenshteinDistance(searchStr.toLowerCase(), d.desc.toLowerCase()) <= maxLevDistance ||
-                        getLevenshteinDistance(searchStr.toLowerCase(), d.fcode.toLowerCase()) <= maxLevDistance )
-                    ;
-                })
-                .map(function(d) {
-                    return {
-                        name: d.name,
-                        fcode: d.fcode,
-                        desc: d.desc,
-                        geom: d.geom,
-                        idx: Math.min( getLevenshteinDistance(searchStr.toLowerCase(), d.desc.toLowerCase()),
-                            getLevenshteinDistance(searchStr.toLowerCase(), d.fcode.toLowerCase()) )
-                    }
-                })
-                .sort(function(a, b) {
-                    return a.idx - b.idx;
-                })
-                .slice(0, limitResult);
+            result = result.concat(descMatches);
 
-            result = result.concat(fuzzyMatches)
-                .slice(0, limitResult);
+            // if limit result still unmet,
+            // add in fuzzy matches tags
+            if ((descMatches.length + fcodeMatches.length) < limitLeft) {
+                limitLeft = limitResult - (descMatches.length + fcodeMatches.length);
+
+                // make sure only matching on those 
+                // - valid geometry
+                // - not a match in desc or fcode
+                var fuzzyMatches = schema
+                        .filter(function(d) {
+                            var validGeom = d.geom.toLowerCase().indexOf(geomType.toLowerCase()) !== -1,
+                                notMatch = (
+                                    d.fcode.toLowerCase().indexOf(searchStr.toLowerCase()) === -1  &&
+                                    d.desc.toLowerCase().indexOf(searchStr.toLowerCase()) === -1
+                                );
+
+                            return validGeom && notMatch;
+                        }).map(function(d) {
+                            var minDescDistance = Math.min.apply(
+                                null, d.desc.toLowerCase().split(/\s+/).map(function(word) {
+                                    var leinWord = getLein(word);
+                                    return leinWord[0] !== leinSearch[0] ? Infinity : Math.abs(
+                                        Number(leinSearch.substr(1, leinSearch.length)) -
+                                        Number(leinWord.substr(1, leinWord.legth))
+                                    );
+                                })
+                            )
+
+                            return {
+                                name: d.name,
+                                fcode: d.fcode,
+                                desc: d.desc,
+                                geom: d.geom,
+                                idx: minDescDistance
+                            }
+                        })
+                        .sort(function(a, b) { return a.idx - b.idx })
+                        .slice(0, limitLeft)
+
+                result = result.concat(fuzzyMatches)
+                    .slice(0, limitResult)
+            }
+
         }
 
     } else {
@@ -606,49 +646,80 @@ var searchSchema = function(options) {
     return result;
 }
 
-
-//https://en.wikipedia.org/wiki/Levenshtein_distance#cite_note-5
-//http://www.codeproject.com/Articles/13525/Fast-memory-efficient-Levenshtein-algorithm
-var getLevenshteinDistance = function(s, t) {
-    if(s === t){
-        return 0;
+// src: talisam
+// https://github.com/Yomguithereal/talisman/blob/master/src/phonetics/lein.js
+var getLein = function(name) {
+    if (typeof name !== 'string') {
+        throw Error('talisman/phonetics/lein: the given name is not a string.');
     }
 
-    if(s.length === 0) {
-        return t.length;
-    }
-
-    if(t.length === 0) {
-        return s.length;
-    }
-
-    var v0 = [];
-    var v1 = [];
-
-    var v0Len = t.length + 1;
-
-    for(var i=0; i<v0Len; i++) {
-        v0[i] = i;
-    }
-
-    for(var i=0; i<s.length; i++) {
-        v1[0] = i + 1;
-
-        for(var j=0; j<t.length; j++) {
-            var cost = 1;
-            if(s.charAt(j) === t.charAt(j)) {
-                cost = 0;
+    // helpers start //
+    var pad = function(code) {
+        return (code + '0000').slice(0, 4);
+    };
+    var seq = function(target) {
+        return typeof target === 'string' ? target.split('') : target;
+    };
+    var squeeze = function (target) {
+        var isString = typeof target === 'string',
+            sequence = seq(target), 
+            squeezed = [sequence[0]];
+        
+        for (var i = 1, l = sequence.length; i < l; i++) {
+            if (sequence[i] !== sequence[i - 1]) {
+                squeezed.push(sequence[i]);
             }
-
-            v1[j+1] = Math.min(Math.min(v1[j] + 1, v0[j + 1] + 1), v0[j] + cost);
         }
+        
+        return isString ? squeezed.join('') : squeezed;
+    }
+    var translation = function(first, second) {
+        var index = {};
+        
+        first = first.split(''),
+        second = second.split('');
+      
+        if (first.length !== second.length)
+          throw Error('talisman/helpers#translation: given strings don\'t have the same length.');
+      
+        for (var i = 0, l = first.length; i < l; i++)
+          index[first[i]] = second[i];
+      
+        return index;
+    }
+    // helpers end //
+      
+    // constants start //
+    var DROPPED = /[AEIOUYWH]/g;
+    var TRANSLATION = translation('DTMNLRBFPVCJKGQSXZ', '112233444455555555');
+    // constants end //
 
-        for(var j=0; j<v0.length; j++) {
-            v0[j] = v1[j];
-        }
+    if (typeof name !== 'string') {
+        throw Error('talisman/phonetics/lein: the given name is not a string.');
+    }
+    var code = name
+        .toUpperCase()
+        .replace(/[^A-Z\s]/g, '');
+
+    // 1-- Keeping the first letter
+    var first = code[0];
+    code = code.slice(1);
+
+    // 2-- Dropping vowels and Y, W & H
+    code = code.replace(DROPPED, '');
+
+    // 3-- Dropping consecutive duplicates and truncating to 4 characters
+    code = squeeze(code).slice(0, 4);
+
+    // 4-- Translations
+    var backup = code;
+    code = '';
+
+    for (var i = 0, l = backup.length; i < l; i++) {
+        code += TRANSLATION[backup[i]] || backup[i];
     }
 
-    return v1[t.length];
+    return pad(first + code); 
 }
 
 var schemaError = function(params) {
@@ -662,4 +733,5 @@ if (typeof exports !== 'undefined') {
     exports.searchSchema = searchSchema;
     exports.handleInputs = handleInputs;
     exports.TranslationServer = TranslationServer;
+    exports.getLein = getLein;
 }
