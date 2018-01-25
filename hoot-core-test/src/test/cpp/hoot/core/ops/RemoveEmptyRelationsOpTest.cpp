@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,30 +22,44 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef REMOVEEMPTYRELATIONSVISITOR_H
-#define REMOVEEMPTYRELATIONSVISITOR_H
 
-#include "ElementOsmMapVisitor.h"
+// Hoot
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/ops/RemoveEmptyRelationsOp.h>
+#include "../TestUtils.h"
 
 namespace hoot
 {
 
-/**
- * Removes all relations that have no members.
- */
-class RemoveEmptyRelationsVisitor : public ElementOsmMapVisitor
+class RemoveEmptyRelationsOpTest : public CppUnit::TestFixture
 {
+  CPPUNIT_TEST_SUITE(RemoveEmptyRelationsOpTest);
+  CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST_SUITE_END();
+
 public:
 
-  static std::string className() { return "hoot::RemoveEmptyRelationsVisitor"; }
+  void runBasicTest()
+  {
+    OsmXmlReader reader;
+    OsmMapPtr map(new OsmMap());
+    OsmMap::resetCounters();
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read("test-files/ops/RemoveEmptyRelationsOp/input.osm", map);
 
-  RemoveEmptyRelationsVisitor();
+    RemoveEmptyRelationsOp uut;
+    uut.apply(map);
 
-  virtual void visit(const boost::shared_ptr<Element>& e);
+    CPPUNIT_ASSERT_EQUAL(4L, uut.getNumRemoved());
+  }
+
 };
+
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RemoveEmptyRelationsOpTest, "quick");
 
 }
 
-#endif // REMOVEEMPTYRELATIONSVISITOR_H
+

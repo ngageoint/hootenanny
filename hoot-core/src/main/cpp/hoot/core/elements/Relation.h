@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef RELATION_H
 #define RELATION_H
@@ -114,11 +114,7 @@ public:
    */
   bool isReview() const { return _relationData->getType() == MetadataTags::RelationReview(); }
 
-  /**
-   *
-   */
   bool isRestriction() const { return _relationData->getType() == MetadataTags::RelationRestriction(); }
-
 
   /**
    * Remove all members that meet the speicified criteria. If no members meet the criteria then
