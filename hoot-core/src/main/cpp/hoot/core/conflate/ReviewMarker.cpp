@@ -175,7 +175,7 @@ void ReviewMarker::mark(const OsmMapPtr &map, const ElementPtr& e1, const Elemen
   r->getTags().appendValueIfUnique(MetadataTags::HootReviewType(), reviewType);
   if (ConfigOptions().getWriterIncludeConflateReviewDetailTags())
   {
-    r->getTags().appendValueIfUnique(MetadataTags::HootReviewNote(), note);
+    r->getTags().appendValueIfUnique(MetadataTags::HootReviewNote(), note.simplified());
     r->getTags().set(MetadataTags::HootReviewScore(), score);
   }
   r->addElement(MetadataTags::RoleReviewee(), e1->getElementId());
@@ -210,7 +210,7 @@ void ReviewMarker::mark(const OsmMapPtr &map, set<ElementId> ids, const QString&
   r->getTags().appendValueIfUnique(MetadataTags::HootReviewType(), reviewType);
   if (ConfigOptions().getWriterIncludeConflateReviewDetailTags())
   {
-    r->getTags().appendValueIfUnique(MetadataTags::HootReviewNote(), note);
+    r->getTags().appendValueIfUnique(MetadataTags::HootReviewNote(), note.simplified());
     r->getTags().set(MetadataTags::HootReviewScore(), score);
   }
   for (set<ElementId>::iterator it = ids.begin(); it != ids.end(); ++it)
@@ -248,7 +248,7 @@ void ReviewMarker::mark(const OsmMapPtr& map, const ElementPtr& e, const QString
   r->getTags().appendValueIfUnique(MetadataTags::HootReviewType(), reviewType);
   if (ConfigOptions().getWriterIncludeConflateReviewDetailTags())
   {
-    r->getTags().appendValueIfUnique(MetadataTags::HootReviewNote(), note);
+    r->getTags().appendValueIfUnique(MetadataTags::HootReviewNote(), note.simplified());
     r->getTags().set(MetadataTags::HootReviewScore(), score);
   }
   r->addElement(MetadataTags::RoleReviewee(), e->getElementId());
