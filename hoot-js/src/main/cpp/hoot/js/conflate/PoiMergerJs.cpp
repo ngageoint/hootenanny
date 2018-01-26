@@ -128,7 +128,8 @@ void PoiMergerJs::jsPoiMerge(const FunctionCallbackInfo<Value>& args)
     LOG_TRACE("First ID: " << firstId.getId());
     for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
     {
-      if (it->second->getId() != elementId) {
+      if (it->second->getId() != elementId)
+      {
         const ConstNodePtr& n = it->second;
 
         std::set< std::pair< ElementId, ElementId> > matches;

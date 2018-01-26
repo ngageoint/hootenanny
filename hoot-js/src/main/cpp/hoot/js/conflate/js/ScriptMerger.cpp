@@ -49,7 +49,7 @@ namespace hoot
 
 unsigned int ScriptMerger::logWarnCount = 0;
 
-ScriptMerger::ScriptMerger(boost::shared_ptr<PluginContext> script, Persistent<Object> plugin,
+ScriptMerger::ScriptMerger(boost::shared_ptr<PluginContext> script, Persistent<Object> &plugin,
                            const set<pair<ElementId, ElementId> > &pairs) :
   _pairs(pairs),
   _script(script)
