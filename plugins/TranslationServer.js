@@ -503,7 +503,7 @@ var getFilteredSchema = function(params) {
         var geomType = params.geometry;
         var searchStr = params.searchstr;
         var translation = params.translation;
-        var maxLevDistance = 1*params.maxlevdst;
+        var maxLeinDistance = 1*params.maxleindst;
         var limitResult = 1*params.limit;
 
         return searchSchema({
@@ -511,7 +511,7 @@ var getFilteredSchema = function(params) {
             geomType: geomType,
             searchStr: searchStr,
             limitResult: limitResult,
-            maxLevDistance: maxLevDistance
+            maxLeinDistance: maxLeinDistance
         });
     }
 }
@@ -521,206 +521,209 @@ var searchSchema = function(options) {
     var geomType = options.geomType || '';
     var searchStr = options.searchStr || '';
     var limitResult = options.limitResult || 1000;
-    var maxLevDistance = options.maxLevDistance || 20;
+    var maxLeinDistance = options.maxLeinDistance || 20;
     var schema = schemaMap[translation].getDbSchema();
-    var leinSearch = getLein(searchStr);
-
-    //Treat vertex geom type as point
-    if (geomType.toLowerCase() === 'vertex') geomType = 'point';
-
-    // get desc and fcode matching results
-    var schemaMatches = schema
-        .filter(function(d) {
-            return d.geom.toLowerCase().indexOf(geomType.toLowerCase()) !== -1  &&
-                (  d.desc.toLowerCase().indexOf(searchStr.toLowerCase()) !== -1 ||
-                   d.fcode.toLowerCase().indexOf(searchStr.toLowerCase()) !== -1 
-                );
-        });
-
-    var result = [];
-    if (searchStr.length > 0) {
-        // find exact fcode matches and sort.
-        var fcodeMatches = schemaMatches
-            .filter(function(d) { 
-                return d.fcode.toLowerCase().indexOf(searchStr.toLowerCase()) !== -1;
-            })
-            .map(function(d) {
-                return {
-                    name: d.name,
-                    fcode: d.fcode,
-                    desc: d.desc,
-                    geom: d.geom,
-                    idx: Number(d.fcode.toLowerCase().replace(searchStr, ''))
-                }
-            })
-            .sort(function(a, b) { return a.idx - b.idx })
-            .slice(0, limitResult);
-
-        result = result.concat(fcodeMatches);
+    var leinSearch = getLein(searchStr).toLocaleLowerCase();
+ //Treat vertex geom type as point
+ if (geomType.toLowerCase() === 'vertex') geomType = 'point';
+ 
+   // get desc and fcode matching results
+   var schemaMatches = schema
+       .filter(function(d) {
+           return d.geom.toLowerCase().indexOf(geomType.toLowerCase()) !== -1  &&
+               (  d.desc.toLowerCase().indexOf(searchStr.toLowerCase()) !== -1 ||
+                  d.fcode.toLowerCase().indexOf(searchStr.toLowerCase()) !== -1 
+               );
+       });
+ 
+   var result = [];
+   if (searchStr.length > 0) {
+       // find exact fcode matches and sort.
+       var fcodeMatches = schemaMatches
+           .filter(function(d) { 
+               return d.fcode.toLowerCase().indexOf(searchStr.toLowerCase()) !== -1;
+           })
+           .map(function(d) {
+               return {
+                   name: d.name,
+                   fcode: d.fcode,
+                   desc: d.desc,
+                   geom: d.geom,
+                   idx: Number(d.fcode.toLowerCase().replace(searchStr.toLowerCase(), ''))
+               }
+           })
+           .sort(function(a, b) { return a.idx - b.idx })
+           .slice(0, limitResult);
+ 
+       result = result.concat(fcodeMatches);
+      
+       // if fcode matches below result limit,
+       // add desc matches to results.
+       if (fcodeMatches.length < limitResult) {
+ 
+           var limitLeft = limitResult - fcodeMatches.length;
+               descMatches = schemaMatches
+                   .filter(function(d) { 
+                       return d.desc.toLowerCase().indexOf(searchStr.toLowerCase()) !== -1 &&
+                              d.fcode.toLowerCase().indexOf(searchStr.toLowerCase()) === -1;
+                   })
+                   .filter(function(d) {
+                       return {
+                           name: d.name,
+                           fcode: d.fcode,
+                           desc: d.desc,
+                           geom: d.geom,
+                           idx: d.desc.toLowerCase().indexOf(searchStr.toLowerCase())
+                       } 
+                   })
+                   .sort(function(a, b) { return a.idx - b.idx })
+                   .slice(0, limitLeft);
+ 
+           result = result.concat(descMatches);
+ 
+           // if limit result still unmet,
+           // add in fuzzy matches tags
+           if ((descMatches.length + fcodeMatches.length) < limitLeft) {
+               limitLeft = limitResult - (descMatches.length + fcodeMatches.length);
+               // make sure only matching on those 
+               // - valid geometry
+               // - not a match in desc or fcode
+               var fuzzyMatches = schema
+                       .filter(function(d) {
+                           var validGeom = d.geom.toLowerCase().indexOf(geomType.toLowerCase()) !== -1,
+                               notMatch = (
+                                   d.fcode.toLowerCase().indexOf(searchStr.toLowerCase()) === -1  &&
+                                   d.desc.toLowerCase().indexOf(searchStr.toLowerCase()) === -1
+                               );
+ 
+                           return validGeom && notMatch;
+                       }).map(function(d) {
+                           var minDescDistance = Math.min.apply(
+                               null, d.desc.toLowerCase().split(/\s+/).map(function(word) {
+                                   var leinWord = getLein(word).toLocaleLowerCase();
+                                   return leinWord[0] !== leinSearch[0] ? Infinity : Math.abs(
+                                       Number(leinSearch.substr(1, leinSearch.length)) -
+                                       Number(leinWord.substr(1, leinWord.legth))
+                                   );
+                               })
+                           )
+ 
+                           return {
+                               name: d.name,
+                               fcode: d.fcode,
+                               desc: d.desc,
+                               geom: d.geom,
+                               idx: minDescDistance
+                           }
+                       })
+                       .filter(function(d) { return d.idx <= maxLeinDistance })
+                       .sort(function(a, b) { return a.idx - b.idx })
+                       .slice(0, limitLeft)
+ 
+               result = result.concat(fuzzyMatches)
+                   .slice(0, limitResult)
+               
+               if (fuzzyMatches.length + descMatches.length + fcodeMatches.length < limitLeft) {
+                 // do addition fuzzy searching...
+               }
+           }
+ 
+       }
+ 
+   } else {
+       // Return the first N elements of the schema
+       result = schema.filter(function(d) {
+               return d.geom.toLowerCase().indexOf(geomType.toLowerCase()) !== -1
+           })
+           .slice(0, limitResult)
+           .map(function(d) {
+               return {
+                   name: d.name,
+                   fcode: d.fcode,
+                   desc: d.desc,
+                   geom: d.geom
+               }
+           });
+   }
+ 
+   return result;
+ }
+ 
+ // src: talisam
+ // https://github.com/Yomguithereal/talisman/blob/master/src/phonetics/lein.js
+ var getLein = function(name) {
+   if (typeof name !== 'string') {
+       throw Error('talisman/phonetics/lein: the given name is not a string.');
+   }
+ 
+   // helpers start //
+   var pad = function(code) {
+       return (code + '0000').slice(0, 4);
+   };
+   var seq = function(target) {
+       return typeof target === 'string' ? target.split('') : target;
+   };
+   var squeeze = function (target) {
+       var isString = typeof target === 'string',
+           sequence = seq(target), 
+           squeezed = [sequence[0]];
        
-        // if fcode matches below result limit,
-        // add desc matches to results.
-        if (fcodeMatches.length < limitResult) {
-
-            var limitLeft = limitResult - fcodeMatches.length;
-                descMatches = schemaMatches
-                    .filter(function(d) { 
-                        return d.desc.toLowerCase().indexOf(searchStr.toLowerCase()) !== -1 &&
-                               d.fcode.toLowerCase().indexOf(searchStr.toLowerCase()) === -1;
-                    })
-                    .filter(function(d) {
-                        return {
-                            name: d.name,
-                            fcode: d.fcode,
-                            desc: d.desc,
-                            geom: d.geom,
-                            idx: d.desc.toLowerCase().indexOf(searchStr.toLowerCase())
-                        } 
-                    })
-                    .sort(function(a, b) { return a.idx - b.idx })
-                    .slice(0, limitLeft);
-
-            result = result.concat(descMatches);
-
-            // if limit result still unmet,
-            // add in fuzzy matches tags
-            if ((descMatches.length + fcodeMatches.length) < limitLeft) {
-                limitLeft = limitResult - (descMatches.length + fcodeMatches.length);
-
-                // make sure only matching on those 
-                // - valid geometry
-                // - not a match in desc or fcode
-                var fuzzyMatches = schema
-                        .filter(function(d) {
-                            var validGeom = d.geom.toLowerCase().indexOf(geomType.toLowerCase()) !== -1,
-                                notMatch = (
-                                    d.fcode.toLowerCase().indexOf(searchStr.toLowerCase()) === -1  &&
-                                    d.desc.toLowerCase().indexOf(searchStr.toLowerCase()) === -1
-                                );
-
-                            return validGeom && notMatch;
-                        }).map(function(d) {
-                            var minDescDistance = Math.min.apply(
-                                null, d.desc.toLowerCase().split(/\s+/).map(function(word) {
-                                    var leinWord = getLein(word);
-                                    return leinWord[0] !== leinSearch[0] ? Infinity : Math.abs(
-                                        Number(leinSearch.substr(1, leinSearch.length)) -
-                                        Number(leinWord.substr(1, leinWord.legth))
-                                    );
-                                })
-                            )
-
-                            return {
-                                name: d.name,
-                                fcode: d.fcode,
-                                desc: d.desc,
-                                geom: d.geom,
-                                idx: minDescDistance
-                            }
-                        })
-                        .sort(function(a, b) { return a.idx - b.idx })
-                        .slice(0, limitLeft)
-
-                result = result.concat(fuzzyMatches)
-                    .slice(0, limitResult)
-            }
-
-        }
-
-    } else {
-        // Return the first N elements of the schema
-        result = schema.filter(function(d) {
-                return d.geom.toLowerCase().indexOf(geomType.toLowerCase()) !== -1
-            })
-            .slice(0, limitResult)
-            .map(function(d) {
-                return {
-                    name: d.name,
-                    fcode: d.fcode,
-                    desc: d.desc,
-                    geom: d.geom
-                }
-            });
-    }
-
-    return result;
-}
-
-// src: talisam
-// https://github.com/Yomguithereal/talisman/blob/master/src/phonetics/lein.js
-var getLein = function(name) {
-    if (typeof name !== 'string') {
-        throw Error('talisman/phonetics/lein: the given name is not a string.');
-    }
-
-    // helpers start //
-    var pad = function(code) {
-        return (code + '0000').slice(0, 4);
-    };
-    var seq = function(target) {
-        return typeof target === 'string' ? target.split('') : target;
-    };
-    var squeeze = function (target) {
-        var isString = typeof target === 'string',
-            sequence = seq(target), 
-            squeezed = [sequence[0]];
-        
-        for (var i = 1, l = sequence.length; i < l; i++) {
-            if (sequence[i] !== sequence[i - 1]) {
-                squeezed.push(sequence[i]);
-            }
-        }
-        
-        return isString ? squeezed.join('') : squeezed;
-    }
-    var translation = function(first, second) {
-        var index = {};
-        
-        first = first.split(''),
-        second = second.split('');
-      
-        if (first.length !== second.length)
-          throw Error('talisman/helpers#translation: given strings don\'t have the same length.');
-      
-        for (var i = 0, l = first.length; i < l; i++)
-          index[first[i]] = second[i];
-      
-        return index;
-    }
-    // helpers end //
-      
-    // constants start //
-    var DROPPED = /[AEIOUYWH]/g;
-    var TRANSLATION = translation('DTMNLRBFPVCJKGQSXZ', '112233444455555555');
-    // constants end //
-
-    if (typeof name !== 'string') {
-        throw Error('talisman/phonetics/lein: the given name is not a string.');
-    }
-    var code = name
-        .toUpperCase()
-        .replace(/[^A-Z\s]/g, '');
-
-    // 1-- Keeping the first letter
-    var first = code[0];
-    code = code.slice(1);
-
-    // 2-- Dropping vowels and Y, W & H
-    code = code.replace(DROPPED, '');
-
-    // 3-- Dropping consecutive duplicates and truncating to 4 characters
-    code = squeeze(code).slice(0, 4);
-
-    // 4-- Translations
-    var backup = code;
-    code = '';
-
-    for (var i = 0, l = backup.length; i < l; i++) {
-        code += TRANSLATION[backup[i]] || backup[i];
-    }
-
-    return pad(first + code); 
-}
+       for (var i = 1, l = sequence.length; i < l; i++) {
+           if (sequence[i] !== sequence[i - 1]) {
+               squeezed.push(sequence[i]);
+           }
+       }
+       
+       return isString ? squeezed.join('') : squeezed;
+   }
+   var translation = function(first, second) {
+       var index = {};
+       
+       first = first.split(''),
+       second = second.split('');
+     
+       if (first.length !== second.length)
+         throw Error('talisman/helpers#translation: given strings don\'t have the same length.');
+     
+       for (var i = 0, l = first.length; i < l; i++)
+         index[first[i]] = second[i];
+     
+       return index;
+   }
+   // helpers end //
+     
+   // constants start //
+   var DROPPED = /[AEIOUYWH]/g;
+   var TRANSLATION = translation('DTMNLRBFPVCJKGQSXZ', '112233444455555555');
+   // constants end //
+ 
+   if (typeof name !== 'string') {
+       throw Error('talisman/phonetics/lein: the given name is not a string.');
+   }
+   var code = name
+       .toUpperCase()
+       .replace(/[^A-Z\s]/g, '');
+ 
+   // 1-- Keeping the first letter
+   var first = code[0];
+   code = code.slice(1);
+ 
+   // 2-- Dropping vowels and Y, W & H
+   code = code.replace(DROPPED, '');
+ 
+   // 3-- Dropping consecutive duplicates and truncating to 4 characters
+   code = squeeze(code).slice(0, 4);
+ 
+   // 4-- Translations
+   var backup = code;
+   code = '';
+ 
+   for (var i = 0, l = backup.length; i < l; i++) {
+       code += TRANSLATION[backup[i]] || backup[i];
+   }
+ 
+   return pad(first + code); 
+ }    
 
 var schemaError = function(params) {
     var msg = params.translation + ' for ' + params.geom + ' with ' + params.idelem + '=' + params.idval + ' not found';
