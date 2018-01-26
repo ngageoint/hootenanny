@@ -521,7 +521,7 @@ var searchSchema = function(options) {
     var geomType = options.geomType || '';
     var searchStr = options.searchStr || '';
     var limitResult = options.limitResult || 1000;
-    var maxLeinDistance = options.maxLeinDistance || 20;
+    var maxLeinDistance = options.maxLeinDistance || 200;
     var schema = schemaMap[translation].getDbSchema();
     var leinSearch = getLein(searchStr).toLocaleLowerCase();
  //Treat vertex geom type as point
@@ -724,6 +724,48 @@ var searchSchema = function(options) {
  
    return pad(first + code); 
  }    
+
+var getIntendedKeys = function(key) {
+    var keyboard = {
+        'q': ['a', 'w'],
+        'w': ['q', 'e'],
+        'e': ['w', 'r'],
+        'r': ['e', 't'],
+        't': ['r', 't'],
+        'y': ['t', 'u'],
+        'u': ['y', 'i'],
+        'i': ['u', 'o'],
+        'o': ['i', 'p'],
+        'p': ['o', 'l'],'[': ['p'], '{': ['p'],
+        'a': ['s', 'z'],
+        's': ['a', 'd'],
+        'd': ['s', 'f'],
+        'f': ['d', 'g'],
+        'g': ['f', 'h'],
+        'h': ['g', 'j'],
+        'j': ['h', 'k'],
+        'l': ['k', 'o'], ';': ['p', 'l'], ':': ['p', 'l'],
+        'z': ['a', 'x', 's'],
+        'x': ['z', 'c', 's', 'd'],
+        'c': ['x', 'd', 'f', 'v'],
+        'v': ['c', 'f', 'g', 'b'],
+        'b': ['v', 'g', 'h', 'n'],
+        'n': ['b', 'h', 'j', 'm'],
+        'm': ['k', 'n'],
+        ',': ['m', 'k', 'l'], '<': ['m', 'k', 'l'],
+        '.': ['l'], '>': ['l']
+    }
+
+    return keyboard[key.toLowerCase()];
+}
+
+var getFuzzyStrings = function(searchStr) {
+    var tail = searchStr.substr(1, searchStr.length);
+    return getIntendedKeys(searchStr[0])
+        .map(function(key) {
+            return key + tail
+        });
+}
 
 var schemaError = function(params) {
     var msg = params.translation + ' for ' + params.geom + ' with ' + params.idelem + '=' + params.idval + ' not found';
