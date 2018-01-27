@@ -31,7 +31,7 @@ else:OBJECTS_DIR = tmp/debug
 DESTDIR = ../bin/
 
 LIBS += \
-    -L../lib/ -lHootCore -lHootCoreTest -lHootJs -lTgs -ltbs \
+    -L../lib/ -lHootCore -lHootCoreTest -lHootJs -lTgs -ltbs -lnode \
 
 HEADERS += \
     src/main/cpp/hoot/test/ScriptTestSuite.h \

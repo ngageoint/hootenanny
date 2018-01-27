@@ -24,7 +24,7 @@ CONFIG += rtti \
 
 include(../Configure.pri)
 
-LIBS += -L../tgs/ -lTgs -L../lib/ -lHootCore -lHootJs -ltbs
+LIBS += -L../tgs/ -lTgs -L../lib/ -lHootCore -lHootJs -ltbs -lnode
 
 hadoop {
   LIBS += -lHootHadoop -lhadooppipes -lhadooputils

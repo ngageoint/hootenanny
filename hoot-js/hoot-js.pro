@@ -41,7 +41,7 @@ QMAKE_CXXFLAGS = -I/usr/include/node $$QMAKE_CXXFLAGS
 
 QMAKE_POST_LINK = cp -l ../lib/libHootJs.so.1.0.0 ../lib/HootJs.node 2>/dev/null || cp ../lib/libHootJs.so.1.0.0 ../lib/HootJs.node
 
-LIBS += -L../lib/ -lTgs -ltbs -lHootCore -lnode
+LIBS += -L../lib/ -lTgs -ltbs -lHootCore 
 LIBS -= -lhdfs
 
 UI_DIR = tmp/ui
