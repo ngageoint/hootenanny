@@ -522,6 +522,147 @@ describe('TranslationServer', function () {
             assert.equal(tags["UID"], "4632d15b-7c44-4ba1-a0c4-8cfbb30e39d4");
         });
 
+        it ('translates multiple features in an OSM dataset', function() {
+            var osm2trans = server.handleInputs({
+                osm: '<osm version="0.6" generator="JOSM"><node id="-41300" action="modify" lat="39.28775629713" lon="-74.55540463462"/><node id="-41301" action="modify" lat="39.28766391666" lon="-74.55532148615"/><node id="-41302" action="modify" lat="39.28770588277" lon="-74.55524365216"/><node id="-41303" action="modify" lat="39.28779826318" lon="-74.55532680064"/><node id="-41306" action="modify" lat="39.28768156238" lon="-74.55568894878"/><node id="-41307" action="modify" lat="39.28766910658" lon="-74.5555467917"/><node id="-41308" action="modify" lat="39.28757547786" lon="-74.55556048652"/><node id="-41309" action="modify" lat="39.28758793368" lon="-74.5557026436"/><node id="-41312" action="modify" lat="39.28771270187" lon="-74.55567687884"/><node id="-41313" action="modify" lat="39.28771581582" lon="-74.55556824937"/><node id="-41314" action="modify" lat="39.28779720499" lon="-74.55557214409"/><node id="-41315" action="modify" lat="39.28779409104" lon="-74.55568077355"/><node id="-41318" action="modify" lat="39.28815176719" lon="-74.55595985189"/><node id="-41319" action="modify" lat="39.28800541239" lon="-74.55586195126"/><node id="-41321" action="modify" lat="39.28771477783" lon="-74.55583378807"/><node id="-41323" action="modify" lat="39.28744490181" lon="-74.5558740212"/><node id="-41325" action="modify" lat="39.28738677453" lon="-74.5556956543"/><node id="-41327" action="modify" lat="39.28747085147" lon="-74.55527320638"/><node id="-41329" action="modify" lat="39.28775837309" lon="-74.55493256584"/><node id="-41331" action="modify" lat="39.28811647599" lon="-74.55479040876"/><node id="-41347" action="modify" lat="39.28804589353" lon="-74.55582037702"/><node id="-41348" action="modify" lat="39.28798659571" lon="-74.55573682457"/><node id="-41350" action="modify" lat="39.28800356093" lon="-74.55572434074"/><node id="-41351" action="modify" lat="39.2880230383" lon="-74.55572260378"/><node id="-41352" action="modify" lat="39.2880411701" lon="-74.55573195772"/><node id="-41353" action="modify" lat="39.2880543651" lon="-74.55575054989"/><node id="-41354" action="modify" lat="39.28806000988" lon="-74.55577469788"/><node id="-41355" action="modify" lat="39.28805698641" lon="-74.5557996189"/><node id="-41356" action="modify" lat="39.28802892832" lon="-74.55583286085"/><node id="-41357" action="modify" lat="39.28800945095" lon="-74.55583459781"/><node id="-41358" action="modify" lat="39.28799131914" lon="-74.55582524388"/><node id="-41359" action="modify" lat="39.28797812413" lon="-74.55580665171"/><node id="-41360" action="modify" lat="39.28797247935" lon="-74.55578250371"/><node id="-41361" action="modify" lat="39.28797550282" lon="-74.5557575827"/><way id="-41304" action="modify"><nd ref="-41300"/><nd ref="-41303"/><nd ref="-41302"/><nd ref="-41301"/><nd ref="-41300"/><tag k="building" v="yes"/></way><way id="-41310" action="modify"><nd ref="-41306"/><nd ref="-41307"/><nd ref="-41308"/><nd ref="-41309"/><nd ref="-41306"/><tag k="building" v="yes"/></way><way id="-41316" action="modify"><nd ref="-41312"/><nd ref="-41315"/><nd ref="-41314"/><nd ref="-41313"/><nd ref="-41312"/><tag k="building" v="yes"/></way><way id="-41320" action="modify"><nd ref="-41318"/><nd ref="-41319"/><nd ref="-41321"/><nd ref="-41323"/><nd ref="-41325"/><nd ref="-41327"/><nd ref="-41329"/><nd ref="-41331"/><tag k="highway" v="tertiary"/></way></osm>',
+                method: 'POST',
+                translation: 'TDSv61',
+                path: '/osmtotds'
+            });
+            
+            xml2js.parseString(osm2trans, function(err, result) {
+                if (err) console.log(err)
+                // road
+                assert.equal(result.osm.way[0].tag[0].$.k, 'Feature Code')
+                assert.equal(result.osm.way[0].tag[0].$.v, 'AP030:Road')
+                assert.equal(result.osm.way[0].tag[1].$.k, 'Roadway Type')
+                assert.equal(result.osm.way[0].tag[1].$.v, 'Road')
+                assert.equal(result.osm.way[0].tag[3].$.k, 'Route Pavement Information : Road Weather Restriction')
+                assert.equal(result.osm.way[0].tag[3].$.v, 'All-weather')
+                assert.equal(result.osm.way[0].tag[4].$.k, 'Route Identification <route designation type>')
+                assert.equal(result.osm.way[0].tag[4].$.v, 'Local')
+                // buildings
+                assert.equal(result.osm.way[1].tag[0].$.k, 'Feature Code')
+                assert.equal(result.osm.way[1].tag[0].$.v, 'AL013:Building')
+                assert.equal(result.osm.way[2].tag[0].$.k, 'Feature Code')
+                assert.equal(result.osm.way[2].tag[0].$.v, 'AL013:Building')
+                assert.equal(result.osm.way[3].tag[0].$.k, 'Feature Code')
+                assert.equal(result.osm.way[3].tag[0].$.v, 'AL013:Building')
+            });
+        });
+
+        it('include a non-translated feature if feature cannot be translated from OSM to TDSv61', function() {
+            var osm2trans = server.handleInputs({
+                osm: '<osm version="0.6" generator="JOSM"><node id="-41300" action="modify" lat="39.28775629713" lon="-74.55540463462"/><node id="-41301" action="modify" lat="39.28766391666" lon="-74.55532148615"/><node id="-41302" action="modify" lat="39.28770588277" lon="-74.55524365216"/><node id="-41303" action="modify" lat="39.28779826318" lon="-74.55532680064"/><node id="-41306" action="modify" lat="39.28768156238" lon="-74.55568894878"/><node id="-41307" action="modify" lat="39.28766910658" lon="-74.5555467917"/><node id="-41308" action="modify" lat="39.28757547786" lon="-74.55556048652"/><node id="-41309" action="modify" lat="39.28758793368" lon="-74.5557026436"/><node id="-41312" action="modify" lat="39.28771270187" lon="-74.55567687884"/><node id="-41313" action="modify" lat="39.28771581582" lon="-74.55556824937"/><node id="-41314" action="modify" lat="39.28779720499" lon="-74.55557214409"/><node id="-41315" action="modify" lat="39.28779409104" lon="-74.55568077355"/><node id="-41318" action="modify" lat="39.28815176719" lon="-74.55595985189"/><node id="-41319" action="modify" lat="39.28800541239" lon="-74.55586195126"/><node id="-41321" action="modify" lat="39.28771477783" lon="-74.55583378807"/><node id="-41323" action="modify" lat="39.28744490181" lon="-74.5558740212"/><node id="-41325" action="modify" lat="39.28738677453" lon="-74.5556956543"/><node id="-41327" action="modify" lat="39.28747085147" lon="-74.55527320638"/><node id="-41329" action="modify" lat="39.28775837309" lon="-74.55493256584"/><node id="-41331" action="modify" lat="39.28811647599" lon="-74.55479040876"/><node id="-41347" action="modify" lat="39.28804589353" lon="-74.55582037702"/><node id="-41348" action="modify" lat="39.28798659571" lon="-74.55573682457"/><node id="-41350" action="modify" lat="39.28800356093" lon="-74.55572434074"/><node id="-41351" action="modify" lat="39.2880230383" lon="-74.55572260378"/><node id="-41352" action="modify" lat="39.2880411701" lon="-74.55573195772"/><node id="-41353" action="modify" lat="39.2880543651" lon="-74.55575054989"/><node id="-41354" action="modify" lat="39.28806000988" lon="-74.55577469788"/><node id="-41355" action="modify" lat="39.28805698641" lon="-74.5557996189"/><node id="-41356" action="modify" lat="39.28802892832" lon="-74.55583286085"/><node id="-41357" action="modify" lat="39.28800945095" lon="-74.55583459781"/><node id="-41358" action="modify" lat="39.28799131914" lon="-74.55582524388"/><node id="-41359" action="modify" lat="39.28797812413" lon="-74.55580665171"/><node id="-41360" action="modify" lat="39.28797247935" lon="-74.55578250371"/><node id="-41361" action="modify" lat="39.28797550282" lon="-74.5557575827"/><way id="-41304" action="modify"><nd ref="-41300"/><nd ref="-41303"/><nd ref="-41302"/><nd ref="-41301"/><nd ref="-41300"/><tag k="building" v="yes"/></way><way id="-41310" action="modify"><nd ref="-41306"/><nd ref="-41307"/><nd ref="-41308"/><nd ref="-41309"/><nd ref="-41306"/><tag k="building" v="yes"/></way><way id="-41316" action="modify"><nd ref="-41312"/><nd ref="-41315"/><nd ref="-41314"/><nd ref="-41313"/><nd ref="-41312"/><tag k="building" v="yes"/></way><way id="-41320" action="modify"><nd ref="-41318"/><nd ref="-41319"/><nd ref="-41321"/><nd ref="-41323"/><nd ref="-41325"/><nd ref="-41327"/><nd ref="-41329"/><nd ref="-41331"/><tag k="highway" v="tertiary"/></way><way id="-38983" visible="true"><nd ref="-38979" /><nd ref="-38982" /><nd ref="-38986" /><nd ref="-38979" /><tag k="natural" v="tree" /><tag k="security:classification" v="UNCLASSIFIED" /><tag k="source" v="Unknown" /></way></osm>',
+                method: 'POST',
+                translation: 'TDSv61',
+                path: '/osmtotds'
+            });
+    
+            xml2js.parseString(osm2trans, function(err, result) {
+              if (err) console.log(err)
+              // tree that cannot be translated...
+              assert.equal(result.osm.way[4].tag[0].$.k, 'Feature Code')
+              assert.equal(result.osm.way[4].tag[0].$.v, 'Not found')
+            })
+        });
+
+        it ('translates 5 features from OSM to TDSv61 in under 0.02 seconds', function() {
+            var t0 = Date.now()
+                osm2trans = server.handleInputs({
+                    osm: '<osm version="0.6" generator="JOSM"><node id="-41300" action="modify" lat="39.28775629713" lon="-74.55540463462"/><node id="-41301" action="modify" lat="39.28766391666" lon="-74.55532148615"/><node id="-41302" action="modify" lat="39.28770588277" lon="-74.55524365216"/><node id="-41303" action="modify" lat="39.28779826318" lon="-74.55532680064"/><node id="-41306" action="modify" lat="39.28768156238" lon="-74.55568894878"/><node id="-41307" action="modify" lat="39.28766910658" lon="-74.5555467917"/><node id="-41308" action="modify" lat="39.28757547786" lon="-74.55556048652"/><node id="-41309" action="modify" lat="39.28758793368" lon="-74.5557026436"/><node id="-41312" action="modify" lat="39.28771270187" lon="-74.55567687884"/><node id="-41313" action="modify" lat="39.28771581582" lon="-74.55556824937"/><node id="-41314" action="modify" lat="39.28779720499" lon="-74.55557214409"/><node id="-41315" action="modify" lat="39.28779409104" lon="-74.55568077355"/><node id="-41318" action="modify" lat="39.28815176719" lon="-74.55595985189"/><node id="-41319" action="modify" lat="39.28800541239" lon="-74.55586195126"/><node id="-41321" action="modify" lat="39.28771477783" lon="-74.55583378807"/><node id="-41323" action="modify" lat="39.28744490181" lon="-74.5558740212"/><node id="-41325" action="modify" lat="39.28738677453" lon="-74.5556956543"/><node id="-41327" action="modify" lat="39.28747085147" lon="-74.55527320638"/><node id="-41329" action="modify" lat="39.28775837309" lon="-74.55493256584"/><node id="-41331" action="modify" lat="39.28811647599" lon="-74.55479040876"/><node id="-41347" action="modify" lat="39.28804589353" lon="-74.55582037702"/><node id="-41348" action="modify" lat="39.28798659571" lon="-74.55573682457"/><node id="-41350" action="modify" lat="39.28800356093" lon="-74.55572434074"/><node id="-41351" action="modify" lat="39.2880230383" lon="-74.55572260378"/><node id="-41352" action="modify" lat="39.2880411701" lon="-74.55573195772"/><node id="-41353" action="modify" lat="39.2880543651" lon="-74.55575054989"/><node id="-41354" action="modify" lat="39.28806000988" lon="-74.55577469788"/><node id="-41355" action="modify" lat="39.28805698641" lon="-74.5557996189"/><node id="-41356" action="modify" lat="39.28802892832" lon="-74.55583286085"/><node id="-41357" action="modify" lat="39.28800945095" lon="-74.55583459781"/><node id="-41358" action="modify" lat="39.28799131914" lon="-74.55582524388"/><node id="-41359" action="modify" lat="39.28797812413" lon="-74.55580665171"/><node id="-41360" action="modify" lat="39.28797247935" lon="-74.55578250371"/><node id="-41361" action="modify" lat="39.28797550282" lon="-74.5557575827"/><way id="-41304" action="modify"><nd ref="-41300"/><nd ref="-41303"/><nd ref="-41302"/><nd ref="-41301"/><nd ref="-41300"/><tag k="building" v="yes"/></way><way id="-41310" action="modify"><nd ref="-41306"/><nd ref="-41307"/><nd ref="-41308"/><nd ref="-41309"/><nd ref="-41306"/><tag k="building" v="yes"/></way><way id="-41316" action="modify"><nd ref="-41312"/><nd ref="-41315"/><nd ref="-41314"/><nd ref="-41313"/><nd ref="-41312"/><tag k="building" v="yes"/></way><way id="-41320" action="modify"><nd ref="-41318"/><nd ref="-41319"/><nd ref="-41321"/><nd ref="-41323"/><nd ref="-41325"/><nd ref="-41327"/><nd ref="-41329"/><nd ref="-41331"/><tag k="highway" v="tertiary"/></way></osm>',
+                    method: 'POST',
+                    translation: 'TDSv61',
+                    path: '/osmtotds'
+                });
+    
+            xml2js.parseString(osm2trans, function(err, result) {
+              if (err) console.log(err)
+    
+              var t1 = Date.now(),
+                  under2HundrethOfASecond = ((t1 - t0) / 1000) < 0.02;
+    
+              assert.equal(under2HundrethOfASecond, true);
+            })
+        });
+
+        it('translates 10 features from OSM to TDSv61 in under 0.03 seconds', function() {
+    
+            var t0 = Date.now()
+                osm2trans = server.handleInputs({
+                    osm: '<osm version="0.6" generator="JOSM"><node id="-39001" action="modify" lat="39.28775629713" lon="-74.55540463462"/><node id="-39003" action="modify" lat="39.28766391666" lon="-74.55532148615"/><node id="-39005" action="modify" lat="39.28770588277" lon="-74.55524365216"/><node id="-39007" action="modify" lat="39.28779826318" lon="-74.55532680064"/><node id="-39009" action="modify" lat="39.28768156238" lon="-74.55568894878"/><node id="-39011" action="modify" lat="39.28766910658" lon="-74.5555467917"/><node id="-39013" action="modify" lat="39.28757547786" lon="-74.55556048652"/><node id="-39015" action="modify" lat="39.28758793368" lon="-74.5557026436"/><node id="-39017" action="modify" lat="39.28771270187" lon="-74.55567687884"/><node id="-39019" action="modify" lat="39.28771581582" lon="-74.55556824937"/><node id="-39021" action="modify" lat="39.28779720499" lon="-74.55557214409"/><node id="-39023" action="modify" lat="39.28779409104" lon="-74.55568077355"/><node id="-39025" action="modify" lat="39.28815176719" lon="-74.55595985189"/><node id="-39027" action="modify" lat="39.28800541239" lon="-74.55586195126"/><node id="-39029" action="modify" lat="39.28771477783" lon="-74.55583378807"/><node id="-39031" action="modify" lat="39.28744490181" lon="-74.5558740212"/><node id="-39033" action="modify" lat="39.28738677453" lon="-74.5556956543"/><node id="-39035" action="modify" lat="39.28747085147" lon="-74.55527320638"/><node id="-39037" action="modify" lat="39.28775837309" lon="-74.55493256584"/><node id="-39039" action="modify" lat="39.28811647599" lon="-74.55479040876"/><node id="-39041" action="modify" lat="39.28804589353" lon="-74.55582037702"/><node id="-39043" action="modify" lat="39.28798659571" lon="-74.55573682457"/><node id="-39045" action="modify" lat="39.28800356093" lon="-74.55572434074"/><node id="-39047" action="modify" lat="39.2880230383" lon="-74.55572260378"/><node id="-39049" action="modify" lat="39.2880411701" lon="-74.55573195772"/><node id="-39051" action="modify" lat="39.2880543651" lon="-74.55575054989"/><node id="-39053" action="modify" lat="39.28806000988" lon="-74.55577469788"/><node id="-39055" action="modify" lat="39.28805698641" lon="-74.5557996189"/><node id="-39057" action="modify" lat="39.28802892832" lon="-74.55583286085"/><node id="-39059" action="modify" lat="39.28800945095" lon="-74.55583459781"/><node id="-39061" action="modify" lat="39.28799131914" lon="-74.55582524388"/><node id="-39063" action="modify" lat="39.28797812413" lon="-74.55580665171"/><node id="-39065" action="modify" lat="39.28797247935" lon="-74.55578250371"/><node id="-39067" action="modify" lat="39.28797550282" lon="-74.5557575827"/><node id="-39118" action="modify" lat="39.28829708475" lon="-74.55735326082"/><node id="-39119" action="modify" lat="39.28823273032" lon="-74.55662906438"/><node id="-39121" action="modify" lat="39.28818290751" lon="-74.55617577106"/><node id="-39136" action="modify" lat="39.28773865247" lon="-74.55642253429"/><node id="-39137" action="modify" lat="39.28772412071" lon="-74.55632329255"/><node id="-39138" action="modify" lat="39.28755571114" lon="-74.55636445822"/><node id="-39139" action="modify" lat="39.28757024292" lon="-74.55646369995"/><node id="-39142" action="modify" lat="39.28795040055" lon="-74.55661565334"/><node id="-39143" action="modify" lat="39.28794209671" lon="-74.55655932695"/><node id="-39144" action="modify" lat="39.28806982938" lon="-74.55652789169"/><node id="-39145" action="modify" lat="39.2880781332" lon="-74.55658421808"/><node id="-39148" action="modify" lat="39.28773242457" lon="-74.55674171716"/><node id="-39149" action="modify" lat="39.28773242457" lon="-74.55662906438"/><node id="-39150" action="modify" lat="39.28764730996" lon="-74.55662906438"/><node id="-39151" action="modify" lat="39.28764730996" lon="-74.55674171716"/><node id="-39154" action="modify" lat="39.28762862625" lon="-74.5570501712"/><node id="-39155" action="modify" lat="39.28760786657" lon="-74.55693483621"/><node id="-39156" action="modify" lat="39.28778365157" lon="-74.55688201775"/><node id="-39157" action="modify" lat="39.2878044112" lon="-74.55699735273"/><way id="-39069" action="modify"><nd ref="-39001"/><nd ref="-39007"/><nd ref="-39005"/><nd ref="-39003"/><nd ref="-39001"/><tag k="building" v="yes"/></way><way id="-39071" action="modify"><nd ref="-39009"/><nd ref="-39011"/><nd ref="-39013"/><nd ref="-39015"/><nd ref="-39009"/><tag k="building" v="yes"/></way><way id="-39073" action="modify"><nd ref="-39017"/><nd ref="-39023"/><nd ref="-39021"/><nd ref="-39019"/><nd ref="-39017"/><tag k="building" v="yes"/></way><way id="-39075" action="modify"><nd ref="-39025"/><nd ref="-39027"/><nd ref="-39029"/><nd ref="-39031"/><nd ref="-39033"/><nd ref="-39035"/><nd ref="-39037"/><nd ref="-39039"/><tag k="highway" v="tertiary"/></way><way id="-39077" action="modify"><nd ref="-39043"/><nd ref="-39045"/><nd ref="-39047"/><nd ref="-39049"/><nd ref="-39051"/><nd ref="-39053"/><nd ref="-39055"/><nd ref="-39041"/><nd ref="-39057"/><nd ref="-39059"/><nd ref="-39061"/><nd ref="-39063"/><nd ref="-39065"/><nd ref="-39067"/><nd ref="-39043"/><tag k="natural" v="tree"/></way><way id="-39120" action="modify"><nd ref="-39118"/><nd ref="-39119"/><nd ref="-39121"/><tag k="highway" v="secondary"/></way><way id="-39140" action="modify"><nd ref="-39136"/><nd ref="-39137"/><nd ref="-39138"/><nd ref="-39139"/><nd ref="-39136"/><tag k="building" v="yes"/></way><way id="-39146" action="modify"><nd ref="-39142"/><nd ref="-39145"/><nd ref="-39144"/><nd ref="-39143"/><nd ref="-39142"/><tag k="building" v="yes"/></way><way id="-39152" action="modify"><nd ref="-39148"/><nd ref="-39149"/><nd ref="-39150"/><nd ref="-39151"/><nd ref="-39148"/><tag k="building" v="yes"/></way><way id="-39158" action="modify"><nd ref="-39154"/><nd ref="-39157"/><nd ref="-39156"/><nd ref="-39155"/><nd ref="-39154"/><tag k="building" v="yes"/></way></osm>',
+                    method: 'POST',
+                    translation: 'TDSv61',
+                    path: '/osmtotds'
+                });
+    
+            xml2js.parseString(osm2trans, function(err, result) {
+                if (err) console.log(err)
+    
+                var t1 = Date.now(),
+                    under3HundrethsOfASecond = ((t1 - t0) / 1000) < 0.03;
+    
+                assert.equal(under3HundrethsOfASecond, true);
+            })
+    
+        });
+
+        it('translates 100 features from OSM to TDSv61 in under 1.2 second', function() {
+            var t0 = Date.now(),
+                osm2trans = server.handleInputs({
+                    osm: fs.readFileSync('./test/osm-bulk-100.osm').toString(),
+                    method: 'POST',
+                    translation: 'TDSv61',
+                    path: '/osmtotds'
+                });
+    
+            xml2js.parseString(osm2trans, function(err, result) {
+                if (err) console.log(err)
+                
+                var t1 = Date.now(),
+                    underOnePntTwoSecond = ((t1 - t0) / 1000) < 1.2;
+
+                assert.equal(underOnePntTwoSecond, true);
+            })
+        });
+
+        it('translates 1000 features from OSM to TDSv61 in under 1.2 second', function() {
+            var t0 = Date.now(),
+                osm2trans = server.handleInputs({
+                    osm: fs.readFileSync('./test/osm-bulk-1000.osm').toString(),
+                    method: 'POST',
+                    translation: 'TDSv61',
+                    path: '/osmtotds'
+                });
+    
+            xml2js.parseString(osm2trans, function(err, result) {
+                if (err) console.log(err)
+                
+                var t1 = Date.now(),
+                    underOnePntTwoSecond = ((t1 - t0) / 1000) < 1.2;
+    
+                assert.equal(underOnePntTwoSecond, true);
+            })
+        });
+
+        it('translates 2000 features from OSM to TDSv61 in under 2 seconds', function() {
+            var t0 = Date.now(),
+                osm2trans = server.handleInputs({
+                    osm: fs.readFileSync('./test/osm-bulk-2000.osm').toString(),
+                    method: 'POST',
+                    translation: 'TDSv61',
+                    path: '/osmtotds'
+                });
+    
+            xml2js.parseString(osm2trans, function(err, result) {
+                if (err) console.log(err)
+                
+                var t1 = Date.now(),
+                    underTwoSeconds = ((t1 - t0) / 1000) < 2;
+                assert.equal(underTwoSeconds, true);
+            })
+        })
+
         it('should translate OTH from tdsv61 -> osm -> tdsv61', function() {
 
             var data = '<osm version="0.6" upload="true" generator="hootenanny"><node id="-19" lon="9.304397440128325" lat="41.65083522130027" version="0"><tag k="FCSUBTYPE" v="100080"/><tag k="ZI001_SDP" v="DigitalGlobe"/><tag k="UFI" v="0d8b2563-81cf-44d4-8ef7-52c0e862651f"/><tag k="F_CODE" v="AL010"/><tag k="ZI006_MEM" v="&lt;OSM&gt;{&quot;source:imagery:datetime&quot;:&quot;2017-11-11 10:45:15&quot;,&quot;source:imagery:sensor&quot;:&quot;WV02&quot;,&quot;source:imagery:id&quot;:&quot;756b80e1f695fb591caca8e7ce0f9ef5&quot;}&lt;/OSM&gt;"/><tag k="ZSAX_RS0" v="U"/><tag k="OTH" v="(FFN:foo)"/></node></osm>';
