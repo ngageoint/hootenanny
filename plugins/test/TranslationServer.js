@@ -1087,6 +1087,41 @@ describe('TranslationServer', function () {
         )
     })
 
+    describe('getIntendedKeys', function() {
+        it('should return ["a", "x", "s"] when provided "z"', function() {
+            var intendedKeys = server.getIntendedKeys('z');
+    
+            assert.equal(intendedKeys[0], 'a')
+            assert.equal(intendedKeys[1], 'x')
+            assert.equal(intendedKeys[2], 's')
+        });
+        it('should return same result when passed "{" or "["', function() {
+            var leftSqiglyKeys = server.getIntendedKeys('{'),
+                leftStraigthKeys = server.getIntendedKeys('[');
+    
+            assert.equal(leftSqiglyKeys[0], leftStraigthKeys[0]);
+        });
+    });
+    
+    describe('getFuzzyString', function() {
+        it('should return ["cuilding", "fuilding", "guilding", building"] when passed "vuilding', 
+            function() {
+                var fuzzyStrings = server.getFuzzyStrings('vuilding');
+    
+                assert.equal(fuzzyStrings[0], 'cuilding')
+                assert.equal(fuzzyStrings[1], 'fuilding')
+                assert.equal(fuzzyStrings[2], 'guilding')
+                assert.equal(fuzzyStrings[3], 'building')
+            }
+        )
+        it('should return surf and furf when passed durf', function() {
+            var fuzzyStrings = server.getFuzzyStrings('durf');
+    
+            assert.equal(fuzzyStrings[0], 'surf')
+            assert.equal(fuzzyStrings[1], 'furf');
+        })
+    })
+
     describe('searchSchema', function() {
         describe('fcodeMatches', function() {
             it('includes items matching "AL" first and in order', function() {
@@ -1103,7 +1138,6 @@ describe('TranslationServer', function () {
                 assert.equal(alResults[1].fcode, 'AL011');
             });
         });
-
         describe('descMatches', function() {
             it('includes words including "mine"', function() {
                 var options = {
@@ -1193,6 +1227,44 @@ describe('TranslationServer', function () {
                 }
             )
         });
+        describe('fuzzyKeyMatching', function() {
+            it('searching "toad" should include "road" in results', function() {
+                var options = {
+                    searchStr: 'toad',
+                    translation: 'TDSv61',
+                    maxLeinDistance: 200,
+                    geomType: 'Area'
+                }
+
+                var includesRoad = server.searchSchema(options).filter(function(d) {
+                    return d.desc.toLowerCase().indexOf('road') !== -1;
+                }).length > 0;
+
+                assert.equal(includesRoad, true);
+            })
+
+            it('searching "vilding" or "vuilding" should both include "building" in results', function() {
+                var options = {
+                    translation: 'TDSv61',
+                    maxLeinDistance: 200,
+                    geomType: 'Area'
+                }
+
+                var bothIncludeBuilding = [
+                    'vuilding',
+                    'vilding'
+                ].filter(function(misTyped) {
+                    options.searchStr = misTyped;
+
+                    return server.searchSchema(options)
+                        .filter(function(d) {
+                            return d.desc.toLowerCase().indexOf('building')
+                    }).length > 0;
+                }).length > 0;
+
+                assert.equal(bothIncludeBuilding, true);
+            })
+        })
     });
 });
 

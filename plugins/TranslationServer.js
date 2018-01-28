@@ -520,134 +520,224 @@ var searchSchema = function(options) {
     var translation = options.translation || 'TDSv61';
     var geomType = options.geomType || '';
     var searchStr = options.searchStr || '';
-    var limitResult = options.limitResult || 1000;
+    var limitResult = options.limitResult || 20;
     var maxLeinDistance = options.maxLeinDistance || 200;
     var schema = schemaMap[translation].getDbSchema();
     var leinSearch = getLein(searchStr).toLocaleLowerCase();
- //Treat vertex geom type as point
- if (geomType.toLowerCase() === 'vertex') geomType = 'point';
+  
+    //Treat vertex geom type as point
+    if (geomType.toLowerCase() === 'vertex') geomType = 'point';
+  
+    // get desc and fcode matching results
+    var schemaMatches = schema
+        .filter(function(d) {
+            return d.geom.toLowerCase().indexOf(geomType.toLowerCase()) !== -1  &&
+                (  d.desc.toLowerCase().indexOf(searchStr.toLowerCase()) !== -1 ||
+                   d.fcode.toLowerCase().indexOf(searchStr.toLowerCase()) !== -1 
+                );
+        });
  
-   // get desc and fcode matching results
-   var schemaMatches = schema
-       .filter(function(d) {
-           return d.geom.toLowerCase().indexOf(geomType.toLowerCase()) !== -1  &&
-               (  d.desc.toLowerCase().indexOf(searchStr.toLowerCase()) !== -1 ||
-                  d.fcode.toLowerCase().indexOf(searchStr.toLowerCase()) !== -1 
-               );
-       });
+    var result = [];
+    if (searchStr.length > 0) {
+        // find exact fcode matches and sort.
+        var fcodeMatches = schemaMatches
+            .filter(function(d) { 
+                return d.fcode.toLowerCase().indexOf(searchStr.toLowerCase()) !== -1;
+            })
+            .map(function(d) {
+                return {
+                    name: d.name,
+                    fcode: d.fcode,
+                    desc: d.desc,
+                    geom: d.geom,
+                    idx: Number(d.fcode.toLowerCase().replace(searchStr.toLowerCase(), ''))
+                }
+            })
+            .sort(function(a, b) { return a.idx - b.idx })
+            .slice(0, limitResult);
  
-   var result = [];
-   if (searchStr.length > 0) {
-       // find exact fcode matches and sort.
-       var fcodeMatches = schemaMatches
-           .filter(function(d) { 
-               return d.fcode.toLowerCase().indexOf(searchStr.toLowerCase()) !== -1;
-           })
-           .map(function(d) {
-               return {
-                   name: d.name,
-                   fcode: d.fcode,
-                   desc: d.desc,
-                   geom: d.geom,
-                   idx: Number(d.fcode.toLowerCase().replace(searchStr.toLowerCase(), ''))
-               }
-           })
-           .sort(function(a, b) { return a.idx - b.idx })
-           .slice(0, limitResult);
- 
-       result = result.concat(fcodeMatches);
+        result = result.concat(fcodeMatches);
       
-       // if fcode matches below result limit,
-       // add desc matches to results.
-       if (fcodeMatches.length < limitResult) {
+        // if fcode matches below result limit,
+        // add desc matches to results.
+        if (fcodeMatches.length < limitResult) {
  
-           var limitLeft = limitResult - fcodeMatches.length;
-               descMatches = schemaMatches
-                   .filter(function(d) { 
-                       return d.desc.toLowerCase().indexOf(searchStr.toLowerCase()) !== -1 &&
-                              d.fcode.toLowerCase().indexOf(searchStr.toLowerCase()) === -1;
-                   })
-                   .filter(function(d) {
-                       return {
-                           name: d.name,
-                           fcode: d.fcode,
-                           desc: d.desc,
-                           geom: d.geom,
-                           idx: d.desc.toLowerCase().indexOf(searchStr.toLowerCase())
-                       } 
-                   })
-                   .sort(function(a, b) { return a.idx - b.idx })
-                   .slice(0, limitLeft);
+            var limitLeft = limitResult - fcodeMatches.length;
+                descMatches = schemaMatches
+                    .filter(function(d) { 
+                        return d.desc.toLowerCase().indexOf(searchStr.toLowerCase()) !== -1 &&
+                               d.fcode.toLowerCase().indexOf(searchStr.toLowerCase()) === -1;
+                    })
+                    .filter(function(d) {
+                        return {
+                            name: d.name,
+                            fcode: d.fcode,
+                            desc: d.desc,
+                            geom: d.geom,
+                            idx: d.desc.toLowerCase().indexOf(searchStr.toLowerCase())
+                        } 
+                    })
+                    .sort(function(a, b) { return a.idx - b.idx })
+                    .slice(0, limitLeft);
  
-           result = result.concat(descMatches);
+            result = result.concat(descMatches);
+  
+            // if limit result still unmet,
+            // add in fuzzy matches tags
+            if ((descMatches.length + fcodeMatches.length) < limitLeft) {
+                limitLeft = limitResult - (descMatches.length + fcodeMatches.length);
+                // make sure only matching on those 
+                // - valid geometry
+                // - not a match in desc or fcode
+                var fuzzyMatches = schema
+                        .filter(function(d) {
+                            var validGeom = d.geom.toLowerCase().indexOf(geomType.toLowerCase()) !== -1,
+                                notMatch = (
+                                    d.fcode.toLowerCase().indexOf(searchStr.toLowerCase()) === -1  &&
+                                    d.desc.toLowerCase().indexOf(searchStr.toLowerCase()) === -1
+                                );
  
-           // if limit result still unmet,
-           // add in fuzzy matches tags
-           if ((descMatches.length + fcodeMatches.length) < limitLeft) {
-               limitLeft = limitResult - (descMatches.length + fcodeMatches.length);
-               // make sure only matching on those 
-               // - valid geometry
-               // - not a match in desc or fcode
-               var fuzzyMatches = schema
-                       .filter(function(d) {
-                           var validGeom = d.geom.toLowerCase().indexOf(geomType.toLowerCase()) !== -1,
-                               notMatch = (
-                                   d.fcode.toLowerCase().indexOf(searchStr.toLowerCase()) === -1  &&
-                                   d.desc.toLowerCase().indexOf(searchStr.toLowerCase()) === -1
-                               );
+                            return validGeom && notMatch;
+                        })
+                        .map(function(d) {
+                            var minDescDistance = Math.min.apply(
+                                null, d.desc.toLowerCase().split(/\s+/).map(function(word) {
+                                    var leinWord = getLein(word).toLocaleLowerCase();
+                                    return leinWord[0] !== leinSearch[0] ? Infinity : Math.abs(
+                                        Number(leinSearch.substr(1, leinSearch.length)) -
+                                        Number(leinWord.substr(1, leinWord.legth))
+                                    );
+                                })
+                            )
  
-                           return validGeom && notMatch;
-                       }).map(function(d) {
-                           var minDescDistance = Math.min.apply(
-                               null, d.desc.toLowerCase().split(/\s+/).map(function(word) {
-                                   var leinWord = getLein(word).toLocaleLowerCase();
-                                   return leinWord[0] !== leinSearch[0] ? Infinity : Math.abs(
-                                       Number(leinSearch.substr(1, leinSearch.length)) -
-                                       Number(leinWord.substr(1, leinWord.legth))
-                                   );
-                               })
-                           )
+                            return {
+                                name: d.name,
+                                fcode: d.fcode,
+                                desc: d.desc,
+                                geom: d.geom,
+                                idx: minDescDistance
+                            }
+                        })
+                        .filter(function(d) { return d.idx <= maxLeinDistance })
+                        .sort(function(a, b) { return a.idx - b.idx })
+                        .slice(0, limitLeft)
  
-                           return {
-                               name: d.name,
-                               fcode: d.fcode,
-                               desc: d.desc,
-                               geom: d.geom,
-                               idx: minDescDistance
-                           }
-                       })
-                       .filter(function(d) { return d.idx <= maxLeinDistance })
-                       .sort(function(a, b) { return a.idx - b.idx })
-                       .slice(0, limitLeft)
- 
-               result = result.concat(fuzzyMatches)
-                   .slice(0, limitResult)
+                result = result.concat(fuzzyMatches)
                
-               if (fuzzyMatches.length + descMatches.length + fcodeMatches.length < limitLeft) {
-                 // do addition fuzzy searching...
-               }
-           }
+                // when traditional fuzzy matches still do not return anything, try to
+                // use 'near by keys' as the lead character in string to find matches
+                // motivation here is to catch things like 'vuilding' instead of building
+                if (fuzzyMatches.length + descMatches.length + fcodeMatches.length < limitLeft) {
+                    limitLeft = limitResult - (descMatches.length + fcodeMatches.length + fuzzyMatches.length);
+                    var searchStrings = getFuzzyStrings(searchStr);
+                    keyDescMatches = searchStrings.map(function(str) {
+                        return schema
+                            .filter(function(d) {
+                                return d.geom.toLowerCase().indexOf(geomType.toLowerCase()) !== -1  &&
+                                       d.desc.toLowerCase().indexOf(str.toLowerCase()) !== -1;
+                            })
+                            .map(function(d) {
+                                return {
+                                    name: d.name,
+                                    fcode: d.fcode,
+                                    desc: d.desc,
+                                    geom: d.geom,
+                                    idx: d.desc.toLowerCase().indexOf(str.toLowerCase())
+                                }
+                            })
+                            .sort(function(a, b) { return a.idx - b.idx })
+
+                    });
+
+                    // flatten, then concat keyDescMatches
+                    keyDescMatches = [].concat.apply([], keyDescMatches)
+                        .slice(0, limitLeft);
+                    
+                    result = result.concat(keyDescMatches);
+                    
+                    limitLeft = limitResult - (
+                        fcodeMatches.length + descMatches.length + 
+                        fuzzyMatches.length + keyDescMatches.length
+                    )
+
+                    if (keyDescMatches.length + fuzzyMatches.length + descMatches.length + fcodeMatches.length < limitLeft) {
+                        var fuzzyKeyMatches = searchStrings.map(function(str) {
+                            var leinStr = getLein(str);
+                            
+                            return schema
+                                .filter(function(d) {
+                                    var validGeom = d.geom.toLowerCase().indexOf(geomType.toLowerCase()) !== -1,
+                                        notMatch = (
+                                            d.fcode.toLowerCase().indexOf(str.toLowerCase()) === -1,
+                                            d.desc.toLowerCase().indexOf(str.toLowerCase()) === -1
+                                        )
+                                    
+                                    return validGeom && notMatch;
+                                }).
+                                map(function(d) {
+                                    var minDescDistance = Math.min.apply(
+                                        null, d.desc.split(/\+s/g).map(function(word) {
+                                            var leinWord = getLein(word);
+
+                                            return leinWord[0] !== leinStr[0] ? Infinity : Math.abs(
+                                                Number(leinStr.substr(1, leinStr.length)) - 
+                                                Number(leinWord.substr(1, leinWord.length))
+                                            )
+                                        })
+                                    );
+                                  
+                                    return {
+                                        name: d.name,
+                                        fcode: d.fcode,
+                                        desc: d.desc,
+                                        geom: d.geom,
+                                        idx: minDescDistance
+                                    }
+                                })
+                                .filter(function(d) { return d.idx <= maxLeinDistance; })
+                                .sort(function(a, b) { return a.idx - b.idx; })
+                                .slice(0, 5)
+
+                        });
+
+                        // make sure best fuzzy match goes first before flattening them...
+                        fuzzyKeyMatches = fuzzyKeyMatches.sort(function(a, b) {
+                            var aMinLein = Math.min.apply(null, a.map(function(d) { return d.idx })),
+                                bMinLein = Math.min.apply(null, a.map(function(d) { return d.idx }));
+
+                            return aMinLein - bMinLein;
+                        });
+                        
+                        fuzzyKeyMatches = []
+                            .concat.apply([], fuzzyKeyMatches)
+                            .slice(0, limitLeft);
+
+                        result = result.concat(fuzzyKeyMatches);
+                    }
+                }
+
+            }
  
-       }
+        }
  
-   } else {
-       // Return the first N elements of the schema
-       result = schema.filter(function(d) {
-               return d.geom.toLowerCase().indexOf(geomType.toLowerCase()) !== -1
-           })
-           .slice(0, limitResult)
-           .map(function(d) {
-               return {
-                   name: d.name,
-                   fcode: d.fcode,
-                   desc: d.desc,
-                   geom: d.geom
-               }
-           });
-   }
+    } else {
+        // Return the first N elements of the schema
+        result = schema.filter(function(d) {
+                return d.geom.toLowerCase().indexOf(geomType.toLowerCase()) !== -1
+            })
+            .slice(0, limitResult)
+            .map(function(d) {
+                return {
+                    name: d.name,
+                    fcode: d.fcode,
+                    desc: d.desc,
+                    geom: d.geom
+                }
+            });
+    }
  
-   return result;
- }
+    return result;
+}
  
  // src: talisam
  // https://github.com/Yomguithereal/talisman/blob/master/src/phonetics/lein.js
@@ -761,6 +851,7 @@ var getIntendedKeys = function(key) {
 
 var getFuzzyStrings = function(searchStr) {
     var tail = searchStr.substr(1, searchStr.length);
+
     return getIntendedKeys(searchStr[0])
         .map(function(key) {
             return key + tail
@@ -779,4 +870,6 @@ if (typeof exports !== 'undefined') {
     exports.handleInputs = handleInputs;
     exports.TranslationServer = TranslationServer;
     exports.getLein = getLein;
+    exports.getIntendedKeys = getIntendedKeys;
+    exports.getFuzzyStrings = getFuzzyStrings;
 }
