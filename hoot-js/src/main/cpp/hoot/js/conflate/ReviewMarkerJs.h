@@ -27,7 +27,6 @@
 #ifndef REVIEWMARKERJS_H
 #define REVIEWMARKERJS_H
 
-// #include <nodejs/node.h>
 #include <hoot/js/SystemNodeJs.h>
 
 // hoot

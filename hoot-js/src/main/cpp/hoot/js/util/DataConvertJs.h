@@ -36,7 +36,7 @@
 #include <QStringList>
 
 // v8
-#include <v8.h>
+#include <hoot/js/HootJsStable.h>
 
 #include "StreamUtilsJs.h"
 

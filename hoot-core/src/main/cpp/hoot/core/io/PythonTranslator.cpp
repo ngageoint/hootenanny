@@ -26,6 +26,14 @@
  */
 
 // Python
+// Python redefines these two macros from /usr/include/features.h
+// undefine them in this source file to remove warnings
+#ifdef _POSIX_C_SOURCE
+#undef _POSIX_C_SOURCE
+#endif
+#ifdef _XOPEN_SOURCE
+#undef _XOPEN_SOURCE
+#endif
 // Python requires that it be included before other files. Ugh.
 // See http://docs.python.org/c-api/intro.html#includes
 #include <Python.h>

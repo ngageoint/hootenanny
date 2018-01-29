@@ -37,7 +37,6 @@
 #include <hoot/js/util/StringUtilsJs.h>
 
 // node.js
-// #include <nodejs/node.h>
 #include <hoot/js/SystemNodeJs.h>
 
 // Qt
