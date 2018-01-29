@@ -567,8 +567,8 @@ describe('TranslationServer', function () {
             })
         });
 
-        it ('translates 5 features from OSM to TDSv61 in under 0.02 seconds', function() {
-            var t0 = Date.now()
+        it('translates 5 features from OSM to TDSv61 in under 0.02 seconds', function() {
+            var t0 = Date.now(),
                 osm2trans = server.handleInputs({
                     osm: '<osm version="0.6" generator="JOSM"><node id="-41300" action="modify" lat="39.28775629713" lon="-74.55540463462"/><node id="-41301" action="modify" lat="39.28766391666" lon="-74.55532148615"/><node id="-41302" action="modify" lat="39.28770588277" lon="-74.55524365216"/><node id="-41303" action="modify" lat="39.28779826318" lon="-74.55532680064"/><node id="-41306" action="modify" lat="39.28768156238" lon="-74.55568894878"/><node id="-41307" action="modify" lat="39.28766910658" lon="-74.5555467917"/><node id="-41308" action="modify" lat="39.28757547786" lon="-74.55556048652"/><node id="-41309" action="modify" lat="39.28758793368" lon="-74.5557026436"/><node id="-41312" action="modify" lat="39.28771270187" lon="-74.55567687884"/><node id="-41313" action="modify" lat="39.28771581582" lon="-74.55556824937"/><node id="-41314" action="modify" lat="39.28779720499" lon="-74.55557214409"/><node id="-41315" action="modify" lat="39.28779409104" lon="-74.55568077355"/><node id="-41318" action="modify" lat="39.28815176719" lon="-74.55595985189"/><node id="-41319" action="modify" lat="39.28800541239" lon="-74.55586195126"/><node id="-41321" action="modify" lat="39.28771477783" lon="-74.55583378807"/><node id="-41323" action="modify" lat="39.28744490181" lon="-74.5558740212"/><node id="-41325" action="modify" lat="39.28738677453" lon="-74.5556956543"/><node id="-41327" action="modify" lat="39.28747085147" lon="-74.55527320638"/><node id="-41329" action="modify" lat="39.28775837309" lon="-74.55493256584"/><node id="-41331" action="modify" lat="39.28811647599" lon="-74.55479040876"/><node id="-41347" action="modify" lat="39.28804589353" lon="-74.55582037702"/><node id="-41348" action="modify" lat="39.28798659571" lon="-74.55573682457"/><node id="-41350" action="modify" lat="39.28800356093" lon="-74.55572434074"/><node id="-41351" action="modify" lat="39.2880230383" lon="-74.55572260378"/><node id="-41352" action="modify" lat="39.2880411701" lon="-74.55573195772"/><node id="-41353" action="modify" lat="39.2880543651" lon="-74.55575054989"/><node id="-41354" action="modify" lat="39.28806000988" lon="-74.55577469788"/><node id="-41355" action="modify" lat="39.28805698641" lon="-74.5557996189"/><node id="-41356" action="modify" lat="39.28802892832" lon="-74.55583286085"/><node id="-41357" action="modify" lat="39.28800945095" lon="-74.55583459781"/><node id="-41358" action="modify" lat="39.28799131914" lon="-74.55582524388"/><node id="-41359" action="modify" lat="39.28797812413" lon="-74.55580665171"/><node id="-41360" action="modify" lat="39.28797247935" lon="-74.55578250371"/><node id="-41361" action="modify" lat="39.28797550282" lon="-74.5557575827"/><way id="-41304" action="modify"><nd ref="-41300"/><nd ref="-41303"/><nd ref="-41302"/><nd ref="-41301"/><nd ref="-41300"/><tag k="building" v="yes"/></way><way id="-41310" action="modify"><nd ref="-41306"/><nd ref="-41307"/><nd ref="-41308"/><nd ref="-41309"/><nd ref="-41306"/><tag k="building" v="yes"/></way><way id="-41316" action="modify"><nd ref="-41312"/><nd ref="-41315"/><nd ref="-41314"/><nd ref="-41313"/><nd ref="-41312"/><tag k="building" v="yes"/></way><way id="-41320" action="modify"><nd ref="-41318"/><nd ref="-41319"/><nd ref="-41321"/><nd ref="-41323"/><nd ref="-41325"/><nd ref="-41327"/><nd ref="-41329"/><nd ref="-41331"/><tag k="highway" v="tertiary"/></way></osm>',
                     method: 'POST',
@@ -585,6 +585,7 @@ describe('TranslationServer', function () {
               assert.equal(under2HundrethOfASecond, true);
             })
         });
+
 
         it('translates 10 features from OSM to TDSv61 in under 0.03 seconds', function() {
     
@@ -607,7 +608,7 @@ describe('TranslationServer', function () {
     
         });
 
-        it('translates 100 features from OSM to TDSv61 in under 1.2 second', function() {
+        it('translates 100 features from OSM to TDSv61 in under 1.5 second', function() {
             var t0 = Date.now(),
                 osm2trans = server.handleInputs({
                     osm: fs.readFileSync('./test/osm-bulk-100.osm').toString(),
@@ -620,13 +621,13 @@ describe('TranslationServer', function () {
                 if (err) console.log(err)
                 
                 var t1 = Date.now(),
-                    underOnePntTwoSecond = ((t1 - t0) / 1000) < 1.2;
+                    underOnePntTwoSecond = ((t1 - t0) / 1000) < 1.5;
 
                 assert.equal(underOnePntTwoSecond, true);
             })
         });
 
-        it('translates 1000 features from OSM to TDSv61 in under 1.2 second', function() {
+        it('translates 1000 features from OSM to TDSv61 in under 1.5 second', function() {
             var t0 = Date.now(),
                 osm2trans = server.handleInputs({
                     osm: fs.readFileSync('./test/osm-bulk-1000.osm').toString(),
@@ -639,7 +640,7 @@ describe('TranslationServer', function () {
                 if (err) console.log(err)
                 
                 var t1 = Date.now(),
-                    underOnePntTwoSecond = ((t1 - t0) / 1000) < 1.2;
+                    underOnePntTwoSecond = ((t1 - t0) / 1000) < 1.5;
     
                 assert.equal(underOnePntTwoSecond, true);
             })
@@ -659,8 +660,156 @@ describe('TranslationServer', function () {
                 
                 var t1 = Date.now(),
                     underTwoSeconds = ((t1 - t0) / 1000) < 2;
+                    
                 assert.equal(underTwoSeconds, true);
             })
+        })
+
+
+        it('translates 5 features from TDSv61 to OSM to MGCP under 1 seconds', function() {
+            osm2tds = server.handleInputs({
+                osm: fs.readFileSync('./test/TDSv61-bulk-5.osm').toString(),
+                method: 'POST',
+                translation: 'TDSv61',
+                path: '/translateTo'
+            }),
+            t0 = Date.now(),
+            tds2osm = server.handleInputs({
+                osm: osm2tds,
+                method: 'POST',
+                translation: 'TDSv61',
+                path: '/translateFrom'
+            }),
+            osm2mgcp = server.handleInputs({
+                osm: tds2osm,
+                method: 'POST',
+                translation: 'MGCP',
+                path: '/translateTo'
+            }),
+            xml2js.parseString(osm2mgcp, function(err, result) {
+                if (err) console.log(err)
+                var t1 = Date.now(),
+                    delta = ((t1-t0) / 1000);
+
+                assert.equal(delta < 1, true)
+            })
+            
+        })
+        it('translates 10 features from TDSv61 to OSM to MGCP under 0.05 seconds', function() {
+                osm2tds = server.handleInputs({
+                    osm: fs.readFileSync('./test/TDSv61-bulk-10.osm').toString(),
+                    method: 'POST',
+                    translation: 'TDSv61',
+                    path: '/translateTo'
+                }),
+                t0 = Date.now(),
+                tds2osm = server.handleInputs({
+                    osm: osm2tds,
+                    method: 'POST',
+                    translation: 'TDSv61',
+                    path: '/translateFrom'
+                }),
+                osm2mgcp = server.handleInputs({
+                    osm: tds2osm,
+                    method: 'POST',
+                    translation: 'MGCP',
+                    path: '/translateTo'
+                }),
+                xml2js.parseString(osm2mgcp, function(err, result) {
+                    if (err) console.log(err)
+                    var t1 = Date.now(),
+                        delta = ((t1-t0) / 1000);
+
+                    assert.equal(delta < 0.05, true)
+                })
+                
+        })
+        it('translates 100 features from TDSv61 to OSM to MGCP under 1 seconds', function() {
+                osm2tds = server.handleInputs({
+                    osm: fs.readFileSync('./test/TDSv61-bulk-100.osm').toString(),
+                    method: 'POST',
+                    translation: 'TDSv61',
+                    path: '/translateTo'
+                }),
+                t0 = Date.now(),
+                tds2osm = server.handleInputs({
+                    osm: osm2tds,
+                    method: 'POST',
+                    translation: 'TDSv61',
+                    path: '/translateFrom'
+                }),
+                osm2mgcp = server.handleInputs({
+                    osm: tds2osm,
+                    method: 'POST',
+                    translation: 'MGCP',
+                    path: '/translateTo'
+                }),
+                xml2js.parseString(osm2mgcp, function(err, result) {
+                    if (err) console.log(err)
+                    var t1 = Date.now(),
+                        delta = ((t1-t0) / 1000);
+                    assert.equal(delta < 1, true)
+                })
+                
+        })
+
+        it('translates 1000 features from TDSv61 to OSM to MGCP under 1 seconds', function() {
+                osm2tds = server.handleInputs({
+                    osm: fs.readFileSync('./test/TDSv61-bulk-1000.osm').toString(),
+                    method: 'POST',
+                    translation: 'TDSv61',
+                    path: '/translateTo'
+                }),
+                t0 = Date.now(),
+                tds2osm = server.handleInputs({
+                    osm: osm2tds,
+                    method: 'POST',
+                    translation: 'TDSv61',
+                    path: '/translateFrom'
+                }),
+                osm2mgcp = server.handleInputs({
+                    osm: tds2osm,
+                    method: 'POST',
+                    translation: 'MGCP',
+                    path: '/translateTo'
+                }),
+                xml2js.parseString(osm2mgcp, function(err, result) {
+                    if (err) console.log(err)
+                    var t1 = Date.now(),
+                        delta = ((t1-t0) / 1000);
+
+                    assert.equal(delta < 1, true)
+                })
+                
+        })
+        it('translates 2000 features from TDSv61 to OSM to MGCP under 2.5 seconds', function() {
+                osm2tds = server.handleInputs({
+                    osm: fs.readFileSync('./test/TDSv61-bulk-2000.osm').toString(),
+                    method: 'POST',
+                    translation: 'TDSv61',
+                    path: '/translateTo'
+                }),
+                t0 = Date.now(),
+                tds2osm = server.handleInputs({
+                    osm: osm2tds,
+                    method: 'POST',
+                    translation: 'TDSv61',
+                    path: '/translateFrom'
+                }),
+                osm2mgcp = server.handleInputs({
+                    osm: tds2osm,
+                    method: 'POST',
+                    translation: 'MGCP',
+                    path: '/translateTo'
+                }),
+                xml2js.parseString(osm2mgcp, function(err, result) {
+                    if (err) console.log(err)
+                    var t1 = Date.now(),
+                        delta = ((t1-t0) / 1000);
+
+                    assert.equal(delta < 2.5, true)
+                })
+                
         })
 
         it('should translate OTH from tdsv61 -> osm -> tdsv61', function() {

@@ -1,0 +1,131 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <node id='-40153' action='modify' lat='39.30706529422' lon='-74.59807456076' />
+  <node id='-40155' action='modify' lat='39.30805317368' lon='-74.59867537558' />
+  <node id='-40157' action='modify' lat='39.30858861513' lon='-74.59901869833' />
+  <node id='-40159' action='modify' lat='39.30877124538' lon='-74.59901333392' />
+  <node id='-40161' action='modify' lat='39.30885425898' lon='-74.59867001116' />
+  <node id='-40163' action='modify' lat='39.3090659432' lon='-74.59849834979' />
+  <node id='-40165' action='modify' lat='39.30934818783' lon='-74.59816575587' />
+  <node id='-40167' action='modify' lat='39.30974249827' lon='-74.59809601843' />
+  <node id='-40169' action='modify' lat='39.30998323408' lon='-74.59792972147' />
+  <node id='-40171' action='modify' lat='39.30901613313' lon='-74.59772587091' />
+  <node id='-40173' action='modify' lat='39.3089372704' lon='-74.59749251872' />
+  <node id='-40175' action='modify' lat='39.30904626795' lon='-74.59743098891' />
+  <node id='-40177' action='modify' lat='39.30912513055' lon='-74.5976643411' />
+  <node id='-40179' action='modify' lat='39.30876655255' lon='-74.59823809233' />
+  <node id='-40181' action='modify' lat='39.30887555036' lon='-74.59817656252' />
+  <node id='-40183' action='modify' lat='39.30879668747' lon='-74.59794321034' />
+  <node id='-40185' action='modify' lat='39.30868768954' lon='-74.59800474015' />
+  <node id='-40216' action='modify' lat='39.30956195833' lon='-74.60377150965' />
+  <node id='-40217' action='modify' lat='39.30977364041' lon='-74.60359984828' />
+  <node id='-40218' action='modify' lat='39.31005588218' lon='-74.60326725436' />
+  <node id='-40219' action='modify' lat='39.31045018863' lon='-74.60319751692' />
+  <node id='-40220' action='modify' lat='39.31069092201' lon='-74.60303121996' />
+  <node id='-40221' action='modify' lat='39.30972383084' lon='-74.6028273694' />
+  <node id='-40222' action='modify' lat='39.30964496891' lon='-74.60259401721' />
+  <node id='-40223' action='modify' lat='39.30975396535' lon='-74.6025324874' />
+  <node id='-40224' action='modify' lat='39.30983282716' lon='-74.60276583959' />
+  <node id='-40225' action='modify' lat='39.30947425278' lon='-74.60333959082' />
+  <node id='-40226' action='modify' lat='39.30958324949' lon='-74.60327806101' />
+  <node id='-40227' action='modify' lat='39.3095043874' lon='-74.60304470883' />
+  <node id='-40228' action='modify' lat='39.30777301166' lon='-74.60317605925' />
+  <node id='-40229' action='modify' lat='39.30939539057' lon='-74.60310623864' />
+  <node id='-40230' action='modify' lat='39.30876088113' lon='-74.60377687407' />
+  <node id='-40232' action='modify' lat='39.30929631716' lon='-74.60412019682' />
+  <node id='-40234' action='modify' lat='39.30947894557' lon='-74.60411483241' />
+  <way id='-40187' action='modify'>
+    <nd ref='-40153' />
+    <nd ref='-40155' />
+    <nd ref='-40157' />
+    <nd ref='-40159' />
+    <nd ref='-40161' />
+    <nd ref='-40163' />
+    <nd ref='-40165' />
+    <nd ref='-40167' />
+    <nd ref='-40169' />
+    <tag k='highway' v='motorway' />
+    <tag k='ref:road:class' v='local' />
+    <tag k='ref:road:type' v='motorway' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='source' v='DigitalGlobe' />
+    <tag k='source:imagery:datetime' v='2017-11-25 16:13:35' />
+    <tag k='source:imagery:id' v='20889399bbb0ac2c74f26457f82577dc' />
+    <tag k='source:imagery:sensor' v='WV03_VNIR' />
+    <tag k='surface' v='cobblestone' />
+    <tag k='uuid' v='{099b34a7-b7be-4c04-9172-2cb69c54cdec}' />
+  </way>
+  <way id='-40189' action='modify'>
+    <nd ref='-40171' />
+    <nd ref='-40177' />
+    <nd ref='-40175' />
+    <nd ref='-40173' />
+    <nd ref='-40171' />
+    <tag k='building' v='yes' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='source' v='DigitalGlobe' />
+    <tag k='source:imagery:datetime' v='2017-11-25 16:13:35' />
+    <tag k='source:imagery:id' v='20889399bbb0ac2c74f26457f82577dc' />
+    <tag k='source:imagery:sensor' v='WV03_VNIR' />
+  </way>
+  <way id='-40191' action='modify'>
+    <nd ref='-40179' />
+    <nd ref='-40181' />
+    <nd ref='-40183' />
+    <nd ref='-40185' />
+    <nd ref='-40179' />
+    <tag k='building' v='yes' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='source' v='DigitalGlobe' />
+    <tag k='source:imagery:datetime' v='2017-11-25 16:13:35' />
+    <tag k='source:imagery:id' v='20889399bbb0ac2c74f26457f82577dc' />
+    <tag k='source:imagery:sensor' v='WV03_VNIR' />
+  </way>
+  <way id='-40231' action='modify'>
+    <nd ref='-40228' />
+    <nd ref='-40230' />
+    <nd ref='-40232' />
+    <nd ref='-40234' />
+    <nd ref='-40216' />
+    <nd ref='-40217' />
+    <nd ref='-40218' />
+    <nd ref='-40219' />
+    <nd ref='-40220' />
+    <tag k='highway' v='motorway' />
+    <tag k='ref:road:class' v='local' />
+    <tag k='ref:road:type' v='motorway' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='source' v='DigitalGlobe' />
+    <tag k='source:imagery:datetime' v='2017-11-25 16:13:35' />
+    <tag k='source:imagery:id' v='20889399bbb0ac2c74f26457f82577dc' />
+    <tag k='source:imagery:sensor' v='WV03_VNIR' />
+    <tag k='surface' v='cobblestone' />
+    <tag k='uuid' v='{099b34a7-b7be-4c04-9172-2cb69c54cdec}' />
+  </way>
+  <way id='-40233' action='modify'>
+    <nd ref='-40221' />
+    <nd ref='-40224' />
+    <nd ref='-40223' />
+    <nd ref='-40222' />
+    <nd ref='-40221' />
+    <tag k='building' v='yes' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='source' v='DigitalGlobe' />
+    <tag k='source:imagery:datetime' v='2017-11-25 16:13:35' />
+    <tag k='source:imagery:id' v='20889399bbb0ac2c74f26457f82577dc' />
+    <tag k='source:imagery:sensor' v='WV03_VNIR' />
+  </way>
+  <way id='-40235' action='modify'>
+    <nd ref='-40225' />
+    <nd ref='-40226' />
+    <nd ref='-40227' />
+    <nd ref='-40229' />
+    <nd ref='-40225' />
+    <tag k='building' v='yes' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='source' v='DigitalGlobe' />
+    <tag k='source:imagery:datetime' v='2017-11-25 16:13:35' />
+    <tag k='source:imagery:id' v='20889399bbb0ac2c74f26457f82577dc' />
+    <tag k='source:imagery:sensor' v='WV03_VNIR' />
+  </way>
+</osm>
