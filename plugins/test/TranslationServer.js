@@ -798,7 +798,7 @@ describe('TranslationServer', function () {
                 path: '/schema'
             });
 
-            assert.equal(schm.length, 11);
+            assert.equal(schm.length, 22);
         });
 
         it('should handle /schema GET', function() {
@@ -1139,7 +1139,7 @@ describe('TranslationServer', function () {
             });
         });
         describe('descMatches', function() {
-            it('includes words including "mine"', function() {
+            it('includes words including "mine" at reasonable index', function() {
                 var options = {
                         geomType: 'Area',
                         translation: 'TDSv61',
@@ -1148,8 +1148,8 @@ describe('TranslationServer', function () {
                         maxLeinDistance: 100
                     },
                 alResults = server.searchSchema(options),
-                includesMine = alResults.filter(function(d) {
-                    return /mine/.test(d.desc.toLowerCase());
+                includesMine = alResults.filter(function(d, index) {
+                    return /mine/.test(d.desc.toLowerCase()) && index < 99;
                 }).length > 0;
 
                 assert.equal(includesMine, true)
@@ -1184,7 +1184,7 @@ describe('TranslationServer', function () {
                 );
             });
 
-            it('includes items with installation in description when searchStr is intall, isnall, or insralkl', 
+            it('includes items with installation in description when searchStr is intall, isnall, or insralkl at reasonable index', 
                 function() {
                     var options = {
                         geomType: 'Area',
@@ -1197,15 +1197,15 @@ describe('TranslationServer', function () {
                         options.searchStr = misType;
 
                         var misTypeResults = server.searchSchema(options),
-                            includesInstallation = misTypeResults.filter(function(d) {
-                                return /installation/.test(d.desc.toLowerCase());
+                            includesInstallation = misTypeResults.filter(function(d, index) {
+                                return /installation/.test(d.desc.toLowerCase()) && index < 99;
                             }).length > 0;
                             
                         assert.equal(includesInstallation, true);
                     })
                 }
             );
-            it('includes items with building in description when searchStr is bugidln, bidng, or buldng',
+            it('includes items with building in description when searchStr is bugidln, bidng, or buldng at reasonable index',
                 function() {
                     var options = {
                         geomType: 'Area',
@@ -1218,8 +1218,8 @@ describe('TranslationServer', function () {
                         options.searchStr = misType;
 
                         var misTypeResults = server.searchSchema(options),
-                            includesBuilding = misTypeResults.filter(function(d) {
-                                return /building/.test(d.desc.toLowerCase());
+                            includesBuilding = misTypeResults.filter(function(d, index) {
+                                return /building/.test(d.desc.toLowerCase()) && index < 99;
                             }).length > 0;
 
                         assert.equal(includesBuilding, true);
@@ -1228,7 +1228,7 @@ describe('TranslationServer', function () {
             )
         });
         describe('fuzzyKeyMatching', function() {
-            it('searching "toad" should include "road" in results', function() {
+            it('searching "toad" should include "road" in results at reasonable index', function() {
                 var options = {
                     searchStr: 'toad',
                     translation: 'TDSv61',
@@ -1236,14 +1236,14 @@ describe('TranslationServer', function () {
                     geomType: 'Area'
                 }
 
-                var includesRoad = server.searchSchema(options).filter(function(d) {
-                    return d.desc.toLowerCase().indexOf('road') !== -1;
+                var includesRoad = server.searchSchema(options).filter(function(d, index) {
+                    return d.desc.toLowerCase().indexOf('road') !== -1 && index < 99;
                 }).length > 0;
 
                 assert.equal(includesRoad, true);
             })
 
-            it('searching "vilding" or "vuilding" should both include "building" in results', function() {
+            it('searching "vilding" or "vuilding" should both include "building" in results at reasonable index', function() {
                 var options = {
                     translation: 'TDSv61',
                     maxLeinDistance: 200,
@@ -1257,8 +1257,8 @@ describe('TranslationServer', function () {
                     options.searchStr = misTyped;
 
                     return server.searchSchema(options)
-                        .filter(function(d) {
-                            return d.desc.toLowerCase().indexOf('building')
+                        .filter(function(d, index) {
+                            return d.desc.toLowerCase().indexOf('building') && index < 49;
                     }).length > 0;
                 }).length > 0;
 
