@@ -40,7 +40,7 @@ pipeline {
         // and publish results
         stage ("Static checks") {
             parallel {
-                stage("cpp check") {
+                stage("Static Analysis") {
                     when { 
                         expression { return params.Static_analysis }
                         not { branch 'PR-*' }
