@@ -668,7 +668,7 @@ describe('TranslationServer', function () {
 
         it('translates 5 features from TDSv61 to OSM to MGCP under 1 seconds', function() {
             osm2tds = server.handleInputs({
-                osm: fs.readFileSync('./test/TDSv61-bulk-5.osm').toString(),
+                osm: fs.readFileSync('./test/bulk-5.osm').toString(),
                 method: 'POST',
                 translation: 'TDSv61',
                 path: '/translateTo'
@@ -697,7 +697,7 @@ describe('TranslationServer', function () {
         })
         it('translates 10 features from TDSv61 to OSM to MGCP under 0.05 seconds', function() {
                 osm2tds = server.handleInputs({
-                    osm: fs.readFileSync('./test/TDSv61-bulk-10.osm').toString(),
+                    osm: fs.readFileSync('./test/bulk-10.osm').toString(),
                     method: 'POST',
                     translation: 'TDSv61',
                     path: '/translateTo'
@@ -726,7 +726,7 @@ describe('TranslationServer', function () {
         })
         it('translates 100 features from TDSv61 to OSM to MGCP under 1 seconds', function() {
                 osm2tds = server.handleInputs({
-                    osm: fs.readFileSync('./test/TDSv61-bulk-100.osm').toString(),
+                    osm: fs.readFileSync('./test/bulk-100.osm').toString(),
                     method: 'POST',
                     translation: 'TDSv61',
                     path: '/translateTo'
@@ -755,7 +755,7 @@ describe('TranslationServer', function () {
 
         it('translates 1000 features from TDSv61 to OSM to MGCP under 1 seconds', function() {
                 osm2tds = server.handleInputs({
-                    osm: fs.readFileSync('./test/TDSv61-bulk-1000.osm').toString(),
+                    osm: fs.readFileSync('./test/bulk-1000.osm').toString(),
                     method: 'POST',
                     translation: 'TDSv61',
                     path: '/translateTo'
@@ -784,7 +784,7 @@ describe('TranslationServer', function () {
         })
         it('translates 2000 features from TDSv61 to OSM to MGCP under 2.5 seconds', function() {
                 osm2tds = server.handleInputs({
-                    osm: fs.readFileSync('./test/TDSv61-bulk-2000.osm').toString(),
+                    osm: fs.readFileSync('./test/bulk-2000.osm').toString(),
                     method: 'POST',
                     translation: 'TDSv61',
                     path: '/translateTo'
@@ -825,7 +825,7 @@ describe('TranslationServer', function () {
             //console.log(osm_xml);
 
             var xml = parser.parseFromString(osm_xml);
-            var gj = osmtogeojson(xml);
+            var gj = osmtogeojson(xml);2
 
             assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), "OSM");
 
