@@ -83,6 +83,8 @@ sudo yum -y install \
     m4 \
     maven \
     mlocate \
+    nodejs-$NODE_VERSION \
+    nodejs-devel-$NODE_VERSION \
     opencv \
     opencv-core \
     opencv-devel \
@@ -126,31 +128,6 @@ sudo yum -y install \
     words \
     xorg-x11-server-Xvfb \
     zip \
-
-# Node
-echo "##### NodeJs #####"
-NODE_VERSION=8.9.3
-# Install the binary version of NodeJs for some uses (including npm)
-cd ~
-wget --quiet https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz
-tar xf node-v${NODE_VERSION}-linux-x64.tar.xz
-cd node-v${NODE_VERSION}-linux-x64
-sudo cp -r bin /usr/
-sudo cp -r include /usr/
-sudo cp -r lib /usr/
-sudo cp -r share /usr/
-# Build the shared library version of NodeJs for hootenanny
-cd ~
-wget --quiet https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}.tar.gz
-tar xf node-v${NODE_VERSION}.tar.gz
-cd node-v${NODE_VERSION}
-# Fix an error that screws up our codebase
-sed -i 's/Local<Object> json_object/Local<Value> json_object/g' deps/v8/include/v8.h
-sed -i 's/Local<Object> json_object/Local<Value> json_object/g' deps/v8/src/api.cc
-./configure --shared --prefix=/usr >> ~/centos_install.txt
-make -j$(nproc) >> ~/centos_install.txt
-sudo make install >> ~/centos_install.txt
-sudo ln -s /usr/lib/libnode.so.57 /usr/lib/libnode.so
 
 # Fix missing qmake
 if ! hash qmake >/dev/null 2>&1 ; then
