@@ -50,6 +50,20 @@ sudo yum -q -y upgrade >> CentOS_upgrade.txt 2>&1
 # Make sure that we are in ~ before trying to wget & install stuff
 cd ~
 
+if ! rpm -qa | grep -q ^yum-plugin-versionlock ; then
+    # Install the versionlock plugin version first.
+    sudo yum install -y yum-plugin-versionlock
+else
+    # Remove any NodeJS version locks to allow upgrading to $NODE_VERSION.
+    sudo yum versionlock delete nodejs nodejs-devel
+fi
+
+echo "### Installing NodeJS ${NODE_VERSION}"
+sudo yum install -y nodejs-$NODE_VERSION nodejs-devel-$NODE_VERSION
+
+echo "### Locking version of NodeJS"
+sudo yum versionlock add nodejs-$NODE_VERSION nodejs-devel-$NODE_VERSION
+
 # install useful and needed packages for working with hootenanny
 echo "### Installing dependencies from repos..."
 sudo yum -y install \
@@ -83,8 +97,6 @@ sudo yum -y install \
     m4 \
     maven \
     mlocate \
-    nodejs-$NODE_VERSION \
-    nodejs-devel-$NODE_VERSION \
     opencv \
     opencv-core \
     opencv-devel \
