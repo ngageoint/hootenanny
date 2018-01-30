@@ -17,7 +17,7 @@ Feature: Toggle/hide map features of conflated layer in review mode
     And I fill "saveAs" input with "HideMapFeaturesCucumber"
     And I scroll element into view and press "conflate2"
     Then I wait 30 "seconds" to see "Conflating …"
-    Then I wait 3 "minutes" to see "HideMapFeaturesCucumber"
+    Then I wait 5 "minutes" to see "HideMapFeaturesCucumber"
     Then I wait 30 "seconds" to see "Complete Review"
     Then I context click "HideMapFeaturesCucumber"
     And I click the "div" with text "Zoom to Layer"
