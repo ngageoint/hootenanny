@@ -19,6 +19,7 @@ config:
       fields:
         - "osmTrans"
         - "osmBody"
+  # processor: './bulkOsm.js'
   phases:
     - duration: 120
       arrivalRate: 5
@@ -59,9 +60,10 @@ scenarios:
     flow:
       - post:
           url: '/translateTo?translation={{osmTrans}}'
+          # beforeRequest: "loadBulkOsm"
           headers:
             Content-Type: "text/xml"
-          body: "{{bulkFile}}"
+          body: "{{osmBody}}"
           
             
 
