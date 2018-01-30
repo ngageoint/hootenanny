@@ -540,30 +540,31 @@ var searchSchema = function(options) {
     var result = [];
     if (searchStr.length > 0) {
         // find exact fcode matches and sort.
-        var fcodeMatches = schemaMatches
-            .filter(function(d) { 
-                return d.fcode.toLowerCase().indexOf(searchStr.toLowerCase()) !== -1;
-            })
-            .map(function(d) {
-                return {
-                    name: d.name,
-                    fcode: d.fcode,
-                    desc: d.desc,
-                    geom: d.geom,
-                    idx: Number(d.fcode.toLowerCase().replace(searchStr.toLowerCase(), ''))
-                }
-            })
-            .sort(function(a, b) { return a.idx - b.idx })
-            .slice(0, limitResult);
+        var limitLeft = limitResult; 
+            fcodeMatches = schemaMatches
+                .filter(function(d) { 
+                    return d.fcode.toLowerCase().indexOf(searchStr.toLowerCase()) !== -1;
+                })
+                .map(function(d) {
+                    return {
+                        name: d.name,
+                        fcode: d.fcode,
+                        desc: d.desc,
+                        geom: d.geom,
+                        idx: Number(d.fcode.toLowerCase().replace(searchStr.toLowerCase(), ''))
+                    }
+                })
+                .sort(function(a, b) { return a.idx - b.idx })
+                .slice(0, limitResult);
  
         result = result.concat(fcodeMatches);
-      
+        limitLeft = limitResult - fcodeMatches.length;
+        
         // if fcode matches below result limit,
         // add desc matches to results.
-        if (fcodeMatches.length < limitResult) {
+        if (limitLeft > 0) {
  
-            var limitLeft = limitResult - fcodeMatches.length;
-                descMatches = schemaMatches
+            var descMatches = schemaMatches
                     .filter(function(d) { 
                         return d.desc.toLowerCase().indexOf(searchStr.toLowerCase()) !== -1 &&
                                d.fcode.toLowerCase().indexOf(searchStr.toLowerCase()) === -1;
@@ -581,11 +582,11 @@ var searchSchema = function(options) {
                     .slice(0, limitLeft);
  
             result = result.concat(descMatches);
+            limitLeft = limitLeft - descMatches.length; 
   
             // if limit result still unmet,
             // add in fuzzy matches tags
-            if ((descMatches.length + fcodeMatches.length) < limitLeft) {
-                limitLeft = limitResult - (descMatches.length + fcodeMatches.length);
+            if (limitLeft > 0) {
                 // make sure only matching on those 
                 // - valid geometry
                 // - not a match in desc or fcode
@@ -623,44 +624,41 @@ var searchSchema = function(options) {
                         .slice(0, limitLeft)
  
                 result = result.concat(fuzzyMatches)
+                limitLeft = limitLeft - fuzzyMatches.length;
                
                 // when traditional fuzzy matches still do not return anything, try to
                 // use 'near by keys' as the lead character in string to find matches
                 // motivation here is to catch things like 'vuilding' instead of building
-                if (fuzzyMatches.length + descMatches.length + fcodeMatches.length < limitLeft) {
-                    limitLeft = limitResult - (descMatches.length + fcodeMatches.length + fuzzyMatches.length);
-                    var searchStrings = getFuzzyStrings(searchStr);
-                    keyDescMatches = searchStrings.map(function(str) {
-                        return schema
-                            .filter(function(d) {
-                                return d.geom.toLowerCase().indexOf(geomType.toLowerCase()) !== -1  &&
-                                       d.desc.toLowerCase().indexOf(str.toLowerCase()) !== -1;
-                            })
-                            .map(function(d) {
-                                return {
-                                    name: d.name,
-                                    fcode: d.fcode,
-                                    desc: d.desc,
-                                    geom: d.geom,
-                                    idx: d.desc.toLowerCase().indexOf(str.toLowerCase())
-                                }
-                            })
-                            .sort(function(a, b) { return a.idx - b.idx })
+                if (limitLeft > 0) {
 
-                    });
+                    var searchStrings = getFuzzyStrings(searchStr),
+                        keyDescMatches = searchStrings.map(function(str) {
+                            return schema
+                                .filter(function(d) {
+                                    return d.geom.toLowerCase().indexOf(geomType.toLowerCase()) !== -1  &&
+                                        d.desc.toLowerCase().indexOf(str.toLowerCase()) !== -1;
+                                })
+                                .map(function(d) {
+                                    return {
+                                        name: d.name,
+                                        fcode: d.fcode,
+                                        desc: d.desc,
+                                        geom: d.geom,
+                                        idx: d.desc.toLowerCase().indexOf(str.toLowerCase())
+                                    }
+                                })
+                                .sort(function(a, b) { return a.idx - b.idx })
+
+                        });
 
                     // flatten, then concat keyDescMatches
                     keyDescMatches = [].concat.apply([], keyDescMatches)
                         .slice(0, limitLeft);
                     
                     result = result.concat(keyDescMatches);
-                    
-                    limitLeft = limitResult - (
-                        fcodeMatches.length + descMatches.length + 
-                        fuzzyMatches.length + keyDescMatches.length
-                    )
+                    limitLeft = limitResult - keyDescMatches.length 
 
-                    if (keyDescMatches.length + fuzzyMatches.length + descMatches.length + fcodeMatches.length < limitLeft) {
+                    if (limitLeft > 0) {
                         var fuzzyKeyMatches = searchStrings.map(function(str) {
                             var leinStr = getLein(str);
                             
