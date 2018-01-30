@@ -57,12 +57,13 @@ public:
 
   void unregisterHandler(unsigned int sig);
 
+  static void print_stacktrace(FILE *out = stderr, unsigned int max_frames = 63);
+
 private:
 
   SignalCatcher();
 
   static void default_handler(int sig);
-  static void print_stacktrace(FILE *out = stderr, unsigned int max_frames = 63);
   static void terminateHandler();
 
   static boost::shared_ptr<SignalCatcher> _instance;

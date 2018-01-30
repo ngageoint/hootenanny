@@ -232,7 +232,7 @@ void OsmXmlReader::_createWay(const QXmlAttributes &attributes)
 
 bool OsmXmlReader::fatalError(const QXmlParseException &exception)
 {
-  _errorString = QObject::tr("Parse error at line %1, column %2:\n%3")
+  _errorString = QObject::tr("OsmXmlReader: Parse error at line %1, column %2:\n%3")
       .arg(exception.lineNumber())
       .arg(exception.columnNumber())
       .arg(exception.message());

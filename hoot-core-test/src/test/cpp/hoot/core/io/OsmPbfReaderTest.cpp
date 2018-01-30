@@ -300,10 +300,10 @@ public:
 
     OsmXmlWriter writer;
     writer.setIncludeHootInfo(false);
-    writer.write(map, "test-output/io/OsmPbfReaderTest.osm");
+    writer.write(map, "test-output/io/OsmPbfReaderTest_1.osm");
 
     HOOT_FILE_EQUALS("test-files/io/OsmPbfReaderTest.osm",
-                     "test-output/io/OsmPbfReaderTest.osm");
+                     "test-output/io/OsmPbfReaderTest_1.osm");
   }
 
   void runToyRelationTest()
@@ -409,10 +409,10 @@ public:
     QDir().mkpath("test-output/io/");
     OsmXmlWriter writer;
     writer.setIncludeHootInfo(false);
-    writer.write(map, "test-output/io/OsmPbfReaderTest.osm");
+    writer.write(map, "test-output/io/OsmPbfReaderTest_2.osm");
 
     HOOT_FILE_EQUALS("test-files/io/OsmPbfReaderTest.osm",
-                     "test-output/io/OsmPbfReaderTest.osm");
+                     "test-output/io/OsmPbfReaderTest_2.osm");
   }
 
   void runFactoryReadMapTest()
@@ -425,10 +425,10 @@ public:
     QDir().mkpath("test-output/io/");
     OsmXmlWriter writer;
     writer.setIncludeHootInfo(false);
-    writer.write(map, "test-output/io/OsmPbfReaderTest.osm");
+    writer.write(map, "test-output/io/OsmPbfReaderTest_3.osm");
 
     HOOT_FILE_EQUALS("test-files/io/OsmPbfReaderTest.osm",
-                     "test-output/io/OsmPbfReaderTest.osm");
+                     "test-output/io/OsmPbfReaderTest_3.osm");
   }
 
   void runReadMapPartialTest()
