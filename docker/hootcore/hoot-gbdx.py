@@ -52,8 +52,8 @@ class HootGbdxTask(GbdxTaskInterface):
 
     def convertFile(self,inputFile,outputFile):
         hootCmd = ['hoot','convert','--error',
-                '-D','json.add.bbox=true',
                 '-D','convert.ops=hoot::TranslationOp',
+                '-D','json.add.bbox=true',
                 '-D','translation.script=/var/lib/hootenanny/translations/GBDX.js']
 
         hootCmd.append(inputFile)
@@ -90,8 +90,9 @@ class HootGbdxTask(GbdxTaskInterface):
             #print 'Processing: {}'.format(inputFile)
 
             fName = os.path.basename(inputFile)
-            outputFile = self.checkFile(os.path.join(outputDir,fName))
-            returnText = self.convertFile(inputFile,outputFile)
+            # outputFile = self.checkFile(os.path.join(outputDir,fName))
+            # returnText = self.convertFile(inputFile,outputFile)
+            returnText = self.convertFile(inputFile,outputDir)
 
             if returnText is not None:
                 self.status = 'failed'
@@ -103,6 +104,7 @@ class HootGbdxTask(GbdxTaskInterface):
 
     def processJsonFiles(self,inputDir,outputDir):
         tmpInName = self.checkFile(os.path.join(inputDir,'hootIn%s.geojson' % os.getpid()))
+        # tmpOutName = self.checkFile(os.path.join(outputDir,'hootOut%s.geojson' % os.getpid()))
         tmpOutName = self.checkFile(os.path.join(outputDir,'hootOut%s.geojson' % os.getpid()))
         fList = self.findFiles(inputDir,['json'])
 
@@ -117,23 +119,24 @@ class HootGbdxTask(GbdxTaskInterface):
             if os.path.isfile(tmpInName):
                 os.remove(tmpInName)
 
-            if os.path.isfile(tmpOutName):
-                os.remove(tmpOutName)
+            # if os.path.isfile(tmpOutName):
+            #     os.remove(tmpOutName)
 
             # Now rename the input to the tmp Input geojson name
             os.rename(inputFile,tmpInName)
 
             # Process the file and output it to the tmp Output geojson name
-            returnText = self.convertFile(tmpInName,tmpOutName)
+            # returnText = self.convertFile(tmpInName,tmpOutName)
+            returnText = self.convertFile(tmpInName,outputDir)
             if returnText is not None:
                 self.status = 'failed'
                 self.reason = returnText
             
             # Make sure that we got some output before trying to do anything with it.
-            if os.path.isfile(tmpOutName):
-                fName = os.path.basename(inputFile)
-                outputFile = self.checkFile(os.path.join(outputDir,fName))
-                os.rename(tmpOutName,outputFile)
+            # if os.path.isfile(tmpOutName):
+            #     fName = os.path.basename(inputFile)
+            #     outputFile = self.checkFile(os.path.join(outputDir,fName))
+            #     os.rename(tmpOutName,outputFile)
         
             # Clean up. Move the input file back to what it was
             os.rename(tmpInName,inputFile)
@@ -152,8 +155,8 @@ class HootGbdxTask(GbdxTaskInterface):
 
         for inputFile in fList['zip']:
             # print 'Processing Zip File: {}'.format(inputFile)
-
-            # Defensive cleaning
+    
+            # Defensive cleaning 
             if os.path.isfile(tmpDirName):
                 os.remove(tmpDirName)
 
@@ -193,7 +196,7 @@ class HootGbdxTask(GbdxTaskInterface):
             # print '## About to Process Zip Files'
             self.processZipFiles(tmpDirName,outputDir)
             # print '## Back from Process Zip Files'
-
+        
             # Cleanup before returning
             # print '    About to Remove: {}\n'.format(tmpDirName)
             shutil.rmtree(tmpDirName)
@@ -205,7 +208,9 @@ class HootGbdxTask(GbdxTaskInterface):
     def invoke(self):
         inputDir = self.get_input_data_port('geojson')
 
-        outputDir = os.path.join(self.get_output_data_port('data_out'),'results')
+        # outputDir = os.path.join(self.get_output_data_port('data_out'),'results')
+        outputDir = self.get_output_data_port('data_out')
+
         if not os.path.exists(outputDir):
             os.makedirs(outputDir)
         else:
@@ -214,6 +219,7 @@ class HootGbdxTask(GbdxTaskInterface):
 
         # Working Directory. We zip this and make the output.
         workDir = self.checkFile(os.path.join('/tmp','hoot%s' % os.getpid()))
+        
         # print 'workDir: {}\n'.format(workDir)
         if not os.path.exists(workDir):
             os.makedirs(workDir)
@@ -221,13 +227,18 @@ class HootGbdxTask(GbdxTaskInterface):
             shutil.rmtree(workDir)
             os.makedirs(workDir)
 
+        # We tell Hoot that the output is /xxx/xxx/yyy.gbdx
+        # Hoot will try to mkdir /xxx/xxx/yyy and write a stack of GeoJSON files into
+        # it.   
+        hootWorkDir = workDir + '.gbdx'
+
         # Check if we have something to work with
         tList = self.findFiles(inputDir,['geojson','json','zip'])
 
         # Now go looking for files to convert
-        self.processGeoJsonFiles(inputDir,workDir)
-        self.processJsonFiles(inputDir,workDir)
-        self.processZipFiles(inputDir,workDir)
+        self.processGeoJsonFiles(inputDir,hootWorkDir)
+        self.processJsonFiles(inputDir,hootWorkDir)
+        self.processZipFiles(inputDir,hootWorkDir)
 
         tCwd = os.getcwd()
 

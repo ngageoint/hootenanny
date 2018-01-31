@@ -8,6 +8,8 @@ set -e
 #
 # MattJ
 
+echo "Removeing Packages"
+
 yum remove -q -y \
   autoconf \
   automake \
@@ -34,9 +36,11 @@ yum remove -q -y \
   v8-devel \
   vim
 
+echo "Autoremove Packages"
 yum -y autoremove
 
 # Now put some stuff back that got whacked by autoremove
+echo "Re-install some packages"
 yum install -q -y \
   boost-iostreams \
   boost-system \
@@ -44,6 +48,10 @@ yum install -q -y \
   qt-x11 \
   v8
 
+echo "Yum clean and remove test files"
 yum clean all
 rm -rf /var/cache/yum
+
+# We don't need the test files anymore
+rm -rf /var/lib/hootenanny/test-files/*
 ##########################################

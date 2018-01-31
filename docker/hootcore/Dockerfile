@@ -25,7 +25,7 @@ RUN chown root:root /etc/yum.repos.d/hoot.repo \
 
 # Install the NodeSource repo and an ancient version of NodeJS
 RUN curl --silent --location https://rpm.nodesource.com/setup | bash -
-RUN yum install -q -y nodejs-0.10.46 nodejs-devel-0.10.46 yum-plugin-versionlock \
+RUN yum install -q -y nodejs-0.10.48 nodejs-devel-0.10.48 yum-plugin-versionlock \
  && yum versionlock nodejs*
 
 

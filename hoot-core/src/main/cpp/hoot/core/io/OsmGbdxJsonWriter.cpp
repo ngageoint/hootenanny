@@ -96,7 +96,7 @@ void OsmGbdxJsonWriter::_openFile()
     _fp.close();
   }
 
-  QString url = _outputDir.filePath(UuidHelper::createUuid().toString().replace("{", "").replace("}", ""));
+  QString url = _outputDir.filePath(UuidHelper::createUuid().toString().replace("{", "").replace("}", "") + ".json");
 
   _fp.setFileName(url);
 
