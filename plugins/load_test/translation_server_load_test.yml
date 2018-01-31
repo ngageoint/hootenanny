@@ -48,7 +48,7 @@ scenarios:
         url: "/translateFrom?translation={{trans}}"
         headers:
           Content-Type: "text/xml"
-        body: "{{osmBody}}"
+        body: "{{body}}"
   - name: "getSchema"
     weight: "20"
     flow:
