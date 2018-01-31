@@ -6,7 +6,8 @@ module.exports = {
 }
 
 function loadBulkOsm(requestParams, context, ee, next) {
-  context.vars.bulkFile = fs.readFileSync('./' + context.vars.bulkFile).toString();
+  context.vars.osmBody = '"' + fs.readFileSync('./' + context.vars.osmBody).toString() + '"';
+  console.log(contex.vars.osmBody)
   return next();
 }
 
