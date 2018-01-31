@@ -482,7 +482,7 @@ void OsmPbfReader::_loadDenseNodes(const DenseNodes& dn)
         {
           // QT 4.6 does not have fromMSecsSinceEpoch
           //QDateTime dt = QDateTime::fromMSecsSinceEpoch(timestamp).toTimeSpec(Qt::UTC);
-    // same time, but friendly to earlier Qt version
+          // same time, but friendly to earlier Qt version
           QDateTime dt = QDateTime::fromTime_t(0).addMSecs(timestamp).toUTC();
           QString dts = dt.toString("yyyy-MM-ddThh:mm:ss.zzzZ");
           _denseNodeTmp[i]->setTag(MetadataTags::SourceDateTime(), dts);

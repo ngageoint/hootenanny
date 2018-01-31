@@ -54,9 +54,25 @@ public:
   static QString inDir() { return "test-files/schema/ImplicitTagRawRulesDeriverTest"; }
   static QString outDir() { return "test-output/schema/ImplicitTagRawRulesDeriverTest"; }
 
+  // With parallel testing, these tests were all trying to create this same directory at once,
+  // failing occaisionally. This seems to help.
+  static void makeOutDir()
+  {
+    // Try twice, then die
+    if (!QDir().mkpath(outDir()))
+    {
+      sleep(100);
+      if (!QDir().mkpath(outDir()))
+      {
+        QString message = QString("Couldn't create output directory:") + outDir();
+        CPPUNIT_FAIL(message.toStdString());
+      }
+    }
+  }
+
   void runBasicPoiTest()
   {
-    QDir().mkpath(outDir());
+    makeOutDir();
 
     QStringList inputs;
     inputs.append(inDir() + "/yemen-crop-2.osm.pbf");
@@ -79,7 +95,7 @@ public:
 
   void runMultipleInputsPoiTest()
   {
-    QDir().mkpath(outDir());
+    makeOutDir();
 
     QStringList inputs;
     inputs.append(inDir() + "/yemen-crop-2.osm.pbf");
@@ -108,7 +124,7 @@ public:
   void runDuplicateWordKeyCountPoiTest()
   {
     DisableLog dl;
-    QDir().mkpath(outDir());
+    makeOutDir();
 
     boost::shared_ptr<QTemporaryFile> sortedCountFile(
       new QTemporaryFile(
@@ -117,6 +133,7 @@ public:
     sortedCountFile->setAutoRemove(false);
     if (!sortedCountFile->open())
     {
+      // Note: QTemporaryFile returns empty string for ->fileName() if it can't be opened
       throw HootException(
         QObject::tr("Error opening %1 for writing.").arg(sortedCountFile->fileName()));
     }
@@ -154,7 +171,7 @@ public:
     //Case is actually already handled correctly in runBasicTest, but this smaller input dataset
     //will make debugging case problems easier, if needed.
 
-    QDir().mkpath(outDir());
+    makeOutDir();
 
     QStringList inputs;
     inputs.append(inDir() + "/ImplicitTagRawRulesDeriverTest-runNameCaseTest.osm");
@@ -179,7 +196,7 @@ public:
 
   void runTranslateNamesFalsePoiTest()
   {
-    QDir().mkpath(outDir());
+    makeOutDir();
 
     QStringList inputs;
     inputs.append(inDir() + "/yemen-crop-2.osm.pbf");
@@ -203,7 +220,7 @@ public:
 
   void runBadInputsTest()
   {
-    QDir().mkpath(outDir());
+    makeOutDir();
 
     QString exceptionMsg("");
     QStringList inputs;
