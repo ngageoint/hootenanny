@@ -2,30 +2,38 @@
 
 === Description
 
-Prints out Hootenanny configuration options
+Prints out Hootenanny configuration options.  
 
-* +name+     - lists only configuration options with the input name (optional)
-* +--detail+ - lists configuration options descriptions in addition to their names (optional)
+One of the following input parameters must be specified.
+
+* +name+             - name or partial name of a configuration option to list and/or print a description for
+* +--option-names+   - if no name is specified, lists all configuration option names; if a name is specified, lists only 
+               configuration option names that have a full or partial match with the input name
+* +--option-details+ - if no name is specified, lists all configuration option names and descriptions; if a name is specified, 
+                      lists only configuration option names and descriptions that have a full or partial match with the input name
 
 === Usage
 
 --------------------------------------
-options [name] [--detail]
+options (--option-names)
+options (--option-details)
+options (name) [--option-names]
+options (name) [--option-details]
 --------------------------------------
 
 ==== Examples
 
 --------------------------------------
 # list all config option names
-hoot options
+hoot options --option-names
 
 # list all config option names and their descriptions
-hoot options --detail
+hoot options --option-details
 
 # list all config option names where the name contains the given string
-hoot options poi.polygon
+hoot options poi.polygon --option-names
 
 # list all config option names and their descriptions where the name contains the given string
-hoot options poi.polygon --detail
+hoot options poi.polygon --option-details
 --------------------------------------
 
