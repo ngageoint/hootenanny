@@ -24,18 +24,17 @@ cd ~/hoot
 # Install Hootenanny in /var/lib/hootenanny
 ./docker/hootcore/HootCore_02_Install.sh
 
-# Cleanup the image and remove not needed packages
-./docker/hootcore/HootCore_03_Cleanup.sh
-
-
 * Check that Hoot was installed and the tests run cleanly.
 # NOTE: There is a failure with one of the print tests. I can't figure out
 # what the difference in the test output is but Hoot complains.
 cd /var/lib/hootenanny
 HootTest --slow --diff
 
-NOTE: Clean up (remove) the test files after it runs cleanly. We don't need them
-	in the final image
+
+# Cleanup the image and remove packages that we don't need
+# NOTE: This also removes the Hoot test-files and test-output
+./docker/hootcore/HootCore_03_Cleanup.sh
+
 
 
 * Then ctrl-p ctrl-q to get out

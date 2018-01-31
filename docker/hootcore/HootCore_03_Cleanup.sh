@@ -54,4 +54,5 @@ rm -rf /var/cache/yum
 
 # We don't need the test files anymore
 rm -rf /var/lib/hootenanny/test-files/*
+rm -rf /var/lib/hootenanny/test-output
 ##########################################
