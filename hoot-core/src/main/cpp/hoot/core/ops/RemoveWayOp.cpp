@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RemoveWayOp.h"
 
@@ -54,6 +54,7 @@ void RemoveWayOp::_removeWay(OsmMapPtr &map, long wId)
 {
   if (map->_ways.find(wId) != map->_ways.end())
   {
+    LOG_TRACE("Removing way: " << ElementId::way(wId) << "...");
     map->_index->removeWay(map->getWay(wId));
     map->_ways.erase(wId);
   }
@@ -67,7 +68,9 @@ void RemoveWayOp::_removeWayFully(OsmMapPtr &map, long wId)
 
   for (set<long>::const_iterator it = rid.begin(); it != rid.end(); ++it)
   {
-    map->getRelation(*it)->removeElement(ElementId::way(wId));
+    const long relationId = *it;
+    LOG_TRACE("Removing way: " << ElementId::way(wId) << " from relation: " << relationId << "...");
+    map->getRelation(relationId)->removeElement(ElementId::way(wId));
   }
   _removeWay(map, wId);
   VALIDATE(map->validate());

@@ -38,23 +38,27 @@ pipeline {
         }
         // Need to expand this step to more robust static analysis scanning with SonarQube
         // and publish results
-        stage("Static Analysis") {
-            when { 
-                expression { return params.Static_analysis }
-                not { branch 'PR-*' }
-            }
-            steps {
-                sh 'cppcheck --enable=all --inconclusive --xml-version=2 --verbose --check-config . 2> cppcheck.xml'
-            }
-        }
-        stage("License Header") {
-            when { expression { return params.License_headers } }
-            steps {
-                script { 
-                    sh '''
-                        export HOOT_HOME=`pwd`
-                        ./scripts/copyright/UpdateAllCopyrightHeaders.sh
-                    '''
+        stage ("Static checks") {
+            parallel {
+                stage("Static Analysis") {
+                    when { 
+                        expression { return params.Static_analysis }
+                        not { branch 'PR-*' }
+                    }
+                    steps {
+                        sh 'cppcheck --enable=all --inconclusive --xml-version=2 --verbose --check-config . 2> cppcheck.xml'
+                    }
+                }
+                stage("License Header") {
+                    when { expression { return params.License_headers } }
+                    steps {
+                        script { 
+                            sh '''
+                                export HOOT_HOME=`pwd`
+                                ./scripts/copyright/UpdateAllCopyrightHeaders.sh
+                            '''
+                        }
+                    }
                 }
             }
         }
