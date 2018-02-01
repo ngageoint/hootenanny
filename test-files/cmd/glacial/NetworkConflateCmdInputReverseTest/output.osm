@@ -3328,13 +3328,6 @@
         <tag k="highway" v="unclassified"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-20162" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-18246"/>
-        <nd ref="-18246"/>
-        <tag k="name" v="14TH ST NW"/>
-        <tag k="highway" v="road"/>
-        <tag k="error:circular" v="5"/>
-    </way>
     <way visible="true" id="-20159" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-18246"/>
         <nd ref="-1656"/>
@@ -4867,13 +4860,6 @@
         <nd ref="-2336"/>
         <nd ref="-2518"/>
         <tag k="alt_name" v="OHIO DR SW"/>
-        <tag k="name" v="Independence Ave SW"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-1587" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-2990"/>
-        <nd ref="-2990"/>
         <tag k="name" v="Independence Ave SW"/>
         <tag k="highway" v="unclassified"/>
         <tag k="error:circular" v="5"/>

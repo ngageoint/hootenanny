@@ -9153,29 +9153,6 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-155"/>
     </way>
-    <way visible="true" id="-151" timestamp="2017-06-07T15:18:19Z" version="1" changeset="118">
-        <nd ref="-227"/>
-        <nd ref="-227"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.142Z"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="condition" v="functional"/>
-        <tag k="width:minimum_traveled_way" v="5"/>
-        <tag k="location" v="overground"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="median" v="no"/>
-        <tag k="source" v="mgcp"/>
-        <tag k="uuid" v="{{b027a453-7fe5-4884-bc4f-d003ff4a69aa}}"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="source:datetime" v="2010-01-13"/>
-        <tag k="highway" v="road"/>
-        <tag k="lanes" v="2"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-151"/>
-    </way>
     <way visible="true" id="-135" timestamp="2017-06-07T15:18:19Z" version="1" changeset="118">
         <nd ref="-667"/>
         <nd ref="-676"/>

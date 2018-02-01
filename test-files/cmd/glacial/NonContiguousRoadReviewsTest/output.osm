@@ -10300,7 +10300,6 @@
     </way>
     <way visible="true" id="-7450" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1666"/>
-        <nd ref="-1666"/>
         <nd ref="-12538"/>
         <tag k="width:minimum_traveled_way" v="3"/>
         <tag k="source" v="mgcp"/>
@@ -11858,7 +11857,6 @@
         <nd ref="-1149"/>
         <nd ref="-1148"/>
         <nd ref="-1147"/>
-        <nd ref="-1146"/>
         <nd ref="-1146"/>
         <tag k="width:minimum_traveled_way" v="3"/>
         <tag k="source" v="mgcp"/>
@@ -21377,54 +21375,6 @@
         <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
         <tag k="highway" v="secondary"/>
         <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-1274" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-451"/>
-        <nd ref="-451"/>
-        <tag k="width:minimum_traveled_way" v="3"/>
-        <tag k="source" v="mgcp"/>
-        <tag k="source:accuracy:horizontal" v="25"/>
-        <tag k="condition" v="functional"/>
-        <tag k="lanes" v="1"/>
-        <tag k="seasonal" v="fair"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="surface" v="unpaved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
-        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
-        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.884Z"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="highway" v="road"/>
-        <tag k="source:datetime" v="2010-01-01T00:00:00Z"/>
-        <tag k="uuid" v="{5E4FEAA0-56F0-41FD-8C02-D7D9F708125E}"/>
-        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
-        <tag k="location" v="surface"/>
-        <tag k="error:circular" v="28.65"/>
-    </way>
-    <way visible="true" id="-1273" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-451"/>
-        <nd ref="-451"/>
-        <tag k="width:minimum_traveled_way" v="3"/>
-        <tag k="source" v="mgcp"/>
-        <tag k="source:accuracy:horizontal" v="25"/>
-        <tag k="condition" v="functional"/>
-        <tag k="lanes" v="1"/>
-        <tag k="seasonal" v="fair"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="surface" v="unpaved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
-        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
-        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.884Z"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="highway" v="road"/>
-        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
-        <tag k="uuid" v="{5E4FEAA0-56F0-41FD-8C02-D7D9F708125E}"/>
-        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
-        <tag k="location" v="surface"/>
-        <tag k="error:circular" v="28.65"/>
     </way>
     <way visible="true" id="-1269" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-49"/>

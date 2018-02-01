@@ -22,6 +22,17 @@
     "MGCP": "translations/MGCP_TRD4.js",
     "GGDMv30": "translations/GGDMv30.js"
   },
+  "tagOverrides": {
+    "attribution":"",
+    "security:resource_owner":"",
+    "security:classification":"",
+    "security:dissemination:control:ic":"",
+    "security:dissemination:control:non_ic":"",
+    "security:releasability":"",
+    "source":"",
+    "source:non_spatial_source:type":"",
+    "source:copywrite":""
+  },
   "settings": {
     "cleanupDelay": 30000,
     "port": 8101
