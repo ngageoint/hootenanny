@@ -54,6 +54,7 @@ class HootGbdxTask(GbdxTaskInterface):
         hootCmd = ['hoot','convert','--error',
                 '-D','convert.ops=hoot::TranslationOp',
                 '-D','json.add.bbox=true',
+                '-D','osm.map.writer.skip.empty.map=true',
                 '-D','translation.script=/var/lib/hootenanny/translations/GBDX.js']
 
         hootCmd.append(inputFile)
