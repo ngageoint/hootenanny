@@ -216,11 +216,17 @@ if dpkg -l | grep --quiet glpk; then
     sudo apt-get -q -y remove libglpk-dev
     sudo apt-get autoremove -y
 fi
+cd $HOOT_HOME
+# need to source this to run glpsol
+source ./SetupEnv.sh
+cd ..
 # check to see if a version previously compiled from source different than the one 
 # we're trying to install needs to first be removed
 if glpsol | grep --quiet v; then
-    INSTALLED_GLPK_VERSION=`glpsol | grep v | awk '{print $5}'` | sed 's/v//g'
-    if "$INSTALLED_GLPK_VERSION" != "$GLPK_VERSION"; then
+    INSTALLED_GLPK_VERSION=`glpsol | grep v | awk '{print $5}' | sed 's/v//g'`
+    #echo "INSTALLED_GLPK_VERSION: " $INSTALLED_GLPK_VERSION
+    #echo "GLPK_VERSION: " $GLPK_VERSION
+    if [ $INSTALLED_GLPK_VERSION != $GLPK_VERSION ]; then
         if [ -d glpk-${INSTALLED_GLPK_VERSION} ]; then
           echo "### Removing GLPK $INSTALLED_GLPK_VERSION ..."
           cd glpk-${INSTALLED_GLPK_VERSION}
