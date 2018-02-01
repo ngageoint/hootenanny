@@ -26,3 +26,5 @@ export RVM_BINARIES_URL="${RUBY_BASE_URL}/binaries"
 export RVM_HOME="${RVM_HOME:-${HOME}/.rvm}"
 export RVM_VERSION=1.29.3
 export WITH_RVM="${WITH_RVM:-yes}"
+
+export GLPK_VERSION=4.64

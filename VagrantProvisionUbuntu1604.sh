@@ -106,7 +106,6 @@ sudo apt-get -q -y install \
  libcppunit-dev \
  libcv-dev \
  libgeos++-dev \
- libglpk-dev \
  libicu-dev \
  liblog4cxx10-dev \
  libnewmat10-dev \
@@ -159,7 +158,6 @@ sudo apt-get -q -y install \
 #  texlive-lang-hebrew \
 #  nodejs-dev \
 #  nodejs-legacy \
-
 
 if ! dpkg -l | grep --quiet dictionaries-common; then
     # See /usr/share/doc/dictionaries-common/README.problems for details
@@ -272,6 +270,43 @@ if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --formats | grep --quiet FileGDB
       echo "export GDAL_DATA=`gdal-config --datadir`" >> ~/.profile
       source ~/.profile
     fi
+fi
+
+# we need a newer version of glpk than what's in the repos
+if dpkg -l | grep --quiet glpk; then
+    echo "### Removing repo version of GLPK..."
+    sudo apt-get -q -y remove libglpk-dev
+    sudo apt-get autoremove -y
+fi
+# check to see if a version previously compiled from source different than the one 
+# we're trying to install needs to first be removed
+if glpsol | grep --quiet v; then
+    INSTALLED_GLPK_VERSION=`glpsol | grep v | awk '{print $5}'` | sed 's/v//g'
+    if "$INSTALLED_GLPK_VERSION" != "$GLPK_VERSION"; then
+        if [ -d glpk-${GLPK_VERSION} ]; then
+          echo "### Removing GLPK $INSTALLED_GLPK_VERSION ..."
+          cd glpk-${INSTALLED_GLPK_VERSION}
+          sudo make -s uninstall >> GLPK_Build.txt 2>&1
+          cd ..
+        fi
+    fi
+fi
+# download and install the specified version
+if [ ! -f glpk-${GLPK_VERSION}.tar.gz ]; then
+    echo "### Downloading GLPK $GLPK_VERSION source..."
+    wget --quiet http://ftp.gnu.org/gnu/glpk/glpk-${GLPK_VERSION}.tar.gz
+fi
+if ! glpsol | grep --quiet $GLPK_VERSION; then
+    echo "### Extracting GLPK $GLPK_VERSION source..."
+    tar zxfp glpk-${GLPK_VERSION}.tar.gz
+    echo "### Building GLPK $GLPK_VERSION..."
+    cd glpk-${GLPK_VERSION}
+    echo "GLPK: configure"
+    ./configure --quiet
+    echo "GLPK: make"
+    sudo make -sj$(nproc) > GLPK_Build.txt 2>&1
+    echo "GLPK: install"
+    sudo make -s install >> GLPK_Build.txt 2>&1
 fi
 
 if ! mocha --version &>/dev/null; then
