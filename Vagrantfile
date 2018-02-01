@@ -79,22 +79,22 @@ Vagrant.configure(2) do |config|
       if os == 'Ubuntu1404'
         override.vm.provision 'hoot', type: 'shell', :privileged => false, :path => 'VagrantProvision.sh'
         tomcat_script = 'sudo service tomcat8 restart'
-        mapnik_script = 'sudo service node-mapnik-server start'
+#        mapnik_script = 'sudo service node-mapnik-server start'
       elsif os == 'Ubuntu1604'
         override.vm.provision 'hoot', type: 'shell', :privileged => false, :path => 'VagrantProvision1604.sh'
         # TODO: Doesn't 16.04 use systemd too?
         tomcat_script = 'sudo service tomcat8 restart'
-        mapnik_script = 'sudo service node-mapnik-server start'
+#        mapnik_script = 'sudo service node-mapnik-server start'
       elsif os == 'CentOS7'
         override.vm.provision 'hoot', type: 'shell', :privileged => false, :path => 'VagrantProvisionCentOS7.sh'
         tomcat_script = 'sudo systemctl restart tomcat8'
-        mapnik_script = 'sudo systemctl restart node-mapnik'
+#        mapnik_script = 'sudo systemctl restart node-mapnik'
       end
 
       override.vm.provision 'build', type: 'shell', :privileged => false, :path => 'VagrantBuild.sh'
       override.vm.provision 'EGD', type: 'shell', :privileged => false, :inline  => '([ -f ~/ActivateEGDplugin.sh ] && sudo -u tomcat8 ~/ActivateEGDplugin.sh /var/lib/tomcat8) || true'
       override.vm.provision 'tomcat', type: 'shell', :privileged => false, :inline => tomcat_script, run: 'always'
-      override.vm.provision 'mapnik', type: 'shell', :privileged => false, :inline => mapnik_script, run: 'always'
+#      override.vm.provision 'mapnik', type: 'shell', :privileged => false, :inline => mapnik_script, run: 'always'
 
       # TODO: Why is node-export only on CentOS?
       if os.start_with?('CentOS')
@@ -114,7 +114,7 @@ Vagrant.configure(2) do |config|
     hoot.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvision.sh"
     hoot.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
     hoot.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo service tomcat8 restart", run: "always"
-    hoot.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo service node-mapnik-server start", run: "always"
+#    hoot.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo service node-mapnik-server start", run: "always"
 
     aws_provider(hoot, 'Ubuntu1404')
   end
@@ -133,7 +133,7 @@ Vagrant.configure(2) do |config|
     dock1404.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvision.sh"
     dock1404.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
     dock1404.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo service tomcat8 restart", run: "always"
-    dock1404.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo service node-mapnik-server start", run: "always"
+#    dock1404.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo service node-mapnik-server start", run: "always"
   end
 
   config.vm.define "dockercentos7.2", autostart: false do |dockcentos72|
@@ -153,7 +153,7 @@ Vagrant.configure(2) do |config|
     dockcentos72.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
 
     dockcentos72.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo systemctl restart tomcat8", run: "always"
-    dockcentos72.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-mapnik", run: "always"
+#    dockcentos72.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-mapnik", run: "always"
     dockcentos72.vm.provision "export", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-export", run: "always"
   end
 
@@ -200,7 +200,7 @@ Vagrant.configure(2) do |config|
     hoot_centos7_prov.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvisionCentOS7.sh"
     hoot_centos7_prov.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
     hoot_centos7_prov.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo systemctl restart tomcat8", run: "always"
-    hoot_centos7_prov.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-mapnik", run: "always"
+#    hoot_centos7_prov.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-mapnik", run: "always"
     hoot_centos7_prov.vm.provision "export", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-export", run: "always"
 
     aws_provider(hoot_centos7_prov, 'CentOS7')
