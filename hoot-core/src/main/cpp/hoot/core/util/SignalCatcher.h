@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef SIGNALCATCHER_H
@@ -57,12 +57,13 @@ public:
 
   void unregisterHandler(unsigned int sig);
 
+  static void print_stacktrace(FILE *out = stderr, unsigned int max_frames = 63);
+
 private:
 
   SignalCatcher();
 
   static void default_handler(int sig);
-  static void print_stacktrace(FILE *out = stderr, unsigned int max_frames = 63);
   static void terminateHandler();
 
   static boost::shared_ptr<SignalCatcher> _instance;

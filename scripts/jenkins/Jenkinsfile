@@ -77,7 +77,6 @@ pipeline {
                     // once this https://issues.jenkins-ci.org/browse/JENKINS-41272 is implemented
                     expression { return Calendar.instance.get(Calendar.HOUR_OF_DAY) in 21..23 }
                 }
-                not { branch 'PR-*' }
             }
             steps {
                 // Run configuration tests

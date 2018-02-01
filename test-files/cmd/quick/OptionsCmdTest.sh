@@ -6,19 +6,19 @@ CONFIG_FILE=test-files/cmd/quick/OptionsCmdTest/ConfigOptions.asciidoc
 
 echo "Listing all option names..."
 echo ""
-hoot options -D config.options.file=$CONFIG_FILE
+hoot options -D config.options.file=$CONFIG_FILE --option-names
 echo ""
 
 echo "Listing all option names and descriptions..."
 echo ""
-hoot options -D config.options.file=$CONFIG_FILE --detail
+hoot options -D config.options.file=$CONFIG_FILE --option-details
 echo ""
 
 echo "Listing all option names containing 'poi.polygon'..."
 echo ""
-hoot options -D config.options.file=$CONFIG_FILE poi.polygon
+hoot options -D config.options.file=$CONFIG_FILE poi.polygon --option-names
 echo ""
 
 echo "Listing all option names containing 'poi.polygon' and their descriptions..."
 echo ""
-hoot options -D config.options.file=$CONFIG_FILE poi.polygon --detail
+hoot options -D config.options.file=$CONFIG_FILE poi.polygon --option-details
