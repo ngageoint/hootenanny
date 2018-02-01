@@ -221,7 +221,7 @@ fi
 if glpsol | grep --quiet v; then
     INSTALLED_GLPK_VERSION=`glpsol | grep v | awk '{print $5}'` | sed 's/v//g'
     if "$INSTALLED_GLPK_VERSION" != "$GLPK_VERSION"; then
-        if [ -d glpk-${GLPK_VERSION} ]; then
+        if [ -d glpk-${INSTALLED_GLPK_VERSION} ]; then
           echo "### Removing GLPK $INSTALLED_GLPK_VERSION ..."
           cd glpk-${INSTALLED_GLPK_VERSION}
           sudo make -s uninstall >> GLPK_Build.txt 2>&1
