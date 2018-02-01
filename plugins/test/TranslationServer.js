@@ -825,7 +825,7 @@ describe('TranslationServer', function () {
             //console.log(osm_xml);
 
             var xml = parser.parseFromString(osm_xml);
-            var gj = osmtogeojson(xml);2
+            var gj = osmtogeojson(xml);
 
             assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), "OSM");
 
