@@ -2049,22 +2049,23 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
-=== poi.polygon.disable.same.source.conflate
+=== poi.polygon.disable.same.source.conflation
 
 * Data Type: bool
 * Default Value: `false`
 
 If true, POI to polygon conflation will not attempt to conflate two features with the same source
-tag value.  e.g. both have 'source=osm' tag  This is useful when you have a data layer where data
-has been collected as both POIs and polygons for the same source and you never want the two
-source to be conflated together.
+tag value.  e.g. both have 'source=osm' tag  The source tag key is specified by
+poi.polygon.source.tag.key.  This setting is useful when you have a data layer where data has been
+collected as both POIs and polygons for the same source and you never want the two source to be
+conflated together.
 
-=== poi.polygon.disable.same.source.conflate.match.tag.key.prefix.only
+=== poi.polygon.disable.same.source.conflation.match.tag.key.prefix.only
 
 * Data Type: bool
 * Default Value: `true`
 
-If false and poi.polygon.disable.same.source.conflate is set to true, POI to polygon conflation
+If false and poi.polygon.disable.same.source.conflation is set to true, POI to polygon conflation
 will disable conflation only between features who have the exact same source tag value.
 e.g. both have 'source=osm' tag  If set to false, then the tag matcher is less strict and will
 attempt to match the prefix of the source tag value when delimited by a colon.
@@ -2195,6 +2196,13 @@ and surround the entire value string in double quotes.
 
 The threshold at which a review is called a review for PoiPolygon. See
 `conflate.review.threshold.default`.
+
+=== poi.polygon.source.tag.key
+
+* Data Type: string
+* Default Value: `source`
+
+The source tag key to be used with poi.polygon.disable.same.source.conflation.
 
 === poi.polygon.type.score.threshold
 

@@ -125,6 +125,10 @@ public:
   void setEnableReviewReduction(const bool enabled) { _enableReviewReduction = enabled; }
   void setMatchEvidenceThreshold(const int threshold) { _matchEvidenceThreshold = threshold; }
   void setReviewEvidenceThreshold(const int threshold) { _reviewEvidenceThreshold = threshold; }
+  void setDisableSameSourceConflation(const bool disabled)
+  { _disableSameSourceConflation = disabled; }
+  void setDisableSameSourceConflationMatchTagKeyPrefixOnly(const bool disabled)
+  { _disableSameSourceConflationMatchTagKeyPrefixOnly = disabled; }
 
 private:
 
@@ -173,6 +177,9 @@ private:
 
   bool _enableAdvancedMatching;
   bool _enableReviewReduction;
+
+  bool _disableSameSourceConflation;
+  bool _disableSameSourceConflationMatchTagKeyPrefixOnly;
 
   boost::shared_ptr<const PoiPolygonRfClassifier> _rf;
 

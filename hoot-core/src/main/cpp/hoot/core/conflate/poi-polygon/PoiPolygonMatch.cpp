@@ -137,13 +137,21 @@ void PoiPolygonMatch::setReviewIfMatchedTypes(const QStringList& types)
 void PoiPolygonMatch::setConfiguration(const Settings& conf)
 {
   ConfigOptions config = ConfigOptions(conf);
+
   setMatchDistanceThreshold(config.getPoiPolygonMatchDistanceThreshold());
   setReviewDistanceThreshold(config.getPoiPolygonReviewDistanceThreshold());
   setNameScoreThreshold(config.getPoiPolygonNameScoreThreshold());
   setTypeScoreThreshold(config.getPoiPolygonTypeScoreThreshold());
+
   setReviewIfMatchedTypes(config.getPoiPolygonReviewIfMatchedTypes());
+  setDisableSameSourceConflation(config.getPoiPolygonDisableSameSourceConflation());
+  setDisableSameSourceConflationMatchTagKeyPrefixOnly(
+    config.getPoiPolygonisableSameSourceConflationMatchTagKeyPrefixOnly());
+  setSourceTagKey(config.getPoiPolygonSourceTagKey());
+
   setEnableAdvancedMatching(config.getPoiPolygonEnableAdvancedMatching());
   setEnableReviewReduction(config.getPoiPolygonEnableReviewReduction());
+
   const int matchEvidenceThreshold = config.getPoiPolygonMatchEvidenceThreshold();
   if (matchEvidenceThreshold < 1 || matchEvidenceThreshold > 4)
   {
@@ -338,9 +346,50 @@ bool PoiPolygonMatch::_featureHasReviewIfMatchedType(ConstElementPtr element) co
   return false;
 }
 
+bool PoiPolygonMatch::_inputFeaturesHaveSameSource(const ElementId& eid1,
+                                                   const ElementId& eid2) const
+{
+  const QString e1SourceVal = _map->getElement(eid1).getTags().get(_sourceTagKey).trimmed();
+  const QString e2SourceVal = _map->getElement(eid2).getTags().get(_sourceTagKey).trimmed();
+
+  if (e1SourceVal.isEmpty() || e2SourceVal.isEmpty())
+  {
+    return false;
+  }
+  else if (_disableSameSourceConflationMatchTagKeyPrefixOnly)
+  {
+    //using ':' as a hardcoded source prefix val delimiter since it seems to be a common OSM
+    //convention
+    if (!e1SourceVal.contains(":") || !e2SourceVal.contains(":"))
+    {
+      return false;
+    }
+    else
+    {
+      const QString e1SourceValPrefix = e1SourceVal.split(":")[0].trimmed();
+      const QString e2SourceValPrefix = e1SourceVal.split(":")[0].trimmed();
+      if (e1SourceValPrefix.toLower() == e2SourceValPrefix.toLower())
+      {
+        return true;
+      }
+    }
+  }
+  else if (e1SourceVal.toLower() == e2SourceVal.toLower())
+  {
+    return true;
+  }
+
+  return false;
+}
+
 void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid2)
 {  
   _class.setMiss();
+
+  if (_disableSameSourceConflation && _inputFeaturesHaveSameSource(eid1, eid2))
+  {
+    return;
+  }
 
   _categorizeElementsByGeometryType(eid1, eid2);
 
