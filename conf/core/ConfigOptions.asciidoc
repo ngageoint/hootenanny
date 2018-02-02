@@ -2024,8 +2024,8 @@ current directory (CWD), $CWD/rules, $HOOT_HOME/rules.
 * Data Type: bool
 * Default Value: `false`
 
-If true, POI conflation will ignore the types of the features being compared completely as long as
-those being compared have a populated name field.
+If true, POI to POI conflation will ignore the types of the features being compared completely as
+long as those being compared have a populated name field.
 
 === poi.match.threshold
 
