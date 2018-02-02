@@ -106,12 +106,12 @@ pipeline {
                     steps {
                         sleep 15
                         sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot --version --debug; bin/HootTest --diff --glacial --parallel \$(nproc)'"
-                    }
-                }
-                stage("Services Tests") {
-                    when { expression { return params.Services_tests } }
-                    steps {
-                        sleep 30
+                    //}
+                //}
+                //stage("Services Tests") {
+                //    when { expression { return params.Services_tests } }
+                //    steps {
+                //        sleep 30
                         sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` pp-test'"
                         sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` plugins-test'"
                         sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` services-test'"
