@@ -129,6 +129,7 @@ public:
   { _disableSameSourceConflation = disabled; }
   void setDisableSameSourceConflationMatchTagKeyPrefixOnly(const bool disabled)
   { _disableSameSourceConflationMatchTagKeyPrefixOnly = disabled; }
+  void setSourceTagKey(const QString key) { _sourceTagKey = key; }
 
 private:
 
@@ -180,10 +181,13 @@ private:
 
   bool _disableSameSourceConflation;
   bool _disableSameSourceConflationMatchTagKeyPrefixOnly;
+  QString _sourceTagKey;
 
   boost::shared_ptr<const PoiPolygonRfClassifier> _rf;
 
   void _categorizeElementsByGeometryType(const ElementId& eid1, const ElementId& eid2);
+
+  bool _inputFeaturesHaveSameSource(const ElementId& eid1, const ElementId& eid2) const;
 
   unsigned int _calculateEvidence(ConstElementPtr poi, ConstElementPtr poly);
   unsigned int _getDistanceEvidence(ConstElementPtr poi, ConstElementPtr poly);

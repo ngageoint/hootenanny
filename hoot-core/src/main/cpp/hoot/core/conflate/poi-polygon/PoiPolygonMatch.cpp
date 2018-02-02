@@ -146,7 +146,7 @@ void PoiPolygonMatch::setConfiguration(const Settings& conf)
   setReviewIfMatchedTypes(config.getPoiPolygonReviewIfMatchedTypes());
   setDisableSameSourceConflation(config.getPoiPolygonDisableSameSourceConflation());
   setDisableSameSourceConflationMatchTagKeyPrefixOnly(
-    config.getPoiPolygonisableSameSourceConflationMatchTagKeyPrefixOnly());
+    config.getPoiPolygonDisableSameSourceConflationMatchTagKeyPrefixOnly());
   setSourceTagKey(config.getPoiPolygonSourceTagKey());
 
   setEnableAdvancedMatching(config.getPoiPolygonEnableAdvancedMatching());
@@ -349,11 +349,16 @@ bool PoiPolygonMatch::_featureHasReviewIfMatchedType(ConstElementPtr element) co
 bool PoiPolygonMatch::_inputFeaturesHaveSameSource(const ElementId& eid1,
                                                    const ElementId& eid2) const
 {
-  const QString e1SourceVal = _map->getElement(eid1).getTags().get(_sourceTagKey).trimmed();
-  const QString e2SourceVal = _map->getElement(eid2).getTags().get(_sourceTagKey).trimmed();
+  LOG_VART(_disableSameSourceConflationMatchTagKeyPrefixOnly)
+
+  const QString e1SourceVal = _map->getElement(eid1)->getTags().get(_sourceTagKey).trimmed();
+  const QString e2SourceVal = _map->getElement(eid2)->getTags().get(_sourceTagKey).trimmed();
+  LOG_VART(e1SourceVal);
+  LOG_VART(e2SourceVal);
 
   if (e1SourceVal.isEmpty() || e2SourceVal.isEmpty())
   {
+    LOG_TRACE("Both sources empty.  No feature source match.");
     return false;
   }
   else if (_disableSameSourceConflationMatchTagKeyPrefixOnly)
@@ -362,23 +367,30 @@ bool PoiPolygonMatch::_inputFeaturesHaveSameSource(const ElementId& eid1,
     //convention
     if (!e1SourceVal.contains(":") || !e2SourceVal.contains(":"))
     {
+      LOG_TRACE(
+        "Source prefix match enabled and at least one feature has no source prefix.  No feature source match.");
       return false;
     }
     else
     {
       const QString e1SourceValPrefix = e1SourceVal.split(":")[0].trimmed();
-      const QString e2SourceValPrefix = e1SourceVal.split(":")[0].trimmed();
+      const QString e2SourceValPrefix = e2SourceVal.split(":")[0].trimmed();
+      LOG_VART(e1SourceValPrefix);
+      LOG_VART(e2SourceValPrefix);
       if (e1SourceValPrefix.toLower() == e2SourceValPrefix.toLower())
       {
+        LOG_TRACE("Feature source prefixes match.");
         return true;
       }
     }
   }
   else if (e1SourceVal.toLower() == e2SourceVal.toLower())
   {
+    LOG_TRACE("Feature sources have an exact match.");
     return true;
   }
 
+  LOG_TRACE("No feature source match.");
   return false;
 }
 
