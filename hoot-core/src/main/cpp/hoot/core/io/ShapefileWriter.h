@@ -65,9 +65,6 @@ public:
 
   virtual void open(QString url);
 
-  // To keep the compiler happy.
-  virtual void close() {}
-
   QStringList getColumns(ConstOsmMapPtr map, ElementType type) const;
 
   void setColumns(QStringList columns) { _columns = columns; }

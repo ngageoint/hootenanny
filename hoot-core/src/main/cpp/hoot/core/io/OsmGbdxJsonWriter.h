@@ -76,9 +76,9 @@ protected:
   QDir _outputDir;
 
   /**
-   * @brief Closes the current output file and opens a new unique file for output
+   * @brief Open a unique file for output
    */
-  void _newOutputFile();
+  void _openFile();
 
   /**
    * @brief _writeNodes Iterates all nodes that aren't part of another element and writes

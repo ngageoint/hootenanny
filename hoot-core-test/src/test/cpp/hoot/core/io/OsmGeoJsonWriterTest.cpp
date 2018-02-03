@@ -110,7 +110,6 @@ public:
       writer.setConfiguration(*settings);
 
     writer.write(map);
-    writer.close();
     HOOT_FILE_EQUALS(QString("test-files/io/GeoJson/%1").arg(output),
                      QString("test-output/io/GeoJson/%1").arg(output));
   }
