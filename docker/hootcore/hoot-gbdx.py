@@ -24,7 +24,7 @@ class HootGbdxTask(GbdxTaskInterface):
         while candidate in ls:
             candidate = "{}_{}{}".format(fname,index,ext)
             index    += 1
-        
+
         return os.path.join(dir,candidate)
         # End checkFile
 
@@ -40,7 +40,7 @@ class HootGbdxTask(GbdxTaskInterface):
             for name in files:
                 # Split the name by '.' & get the last element
                 ext = name.lower().rsplit('.', 1)[-1]
-         
+
                 # Save the full name if ext matches
                 if ext in extens:
                     found[ext].append(os.path.join(dirpath, name))
