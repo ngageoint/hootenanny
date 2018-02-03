@@ -95,7 +95,6 @@ void OsmGeoJsonWriter::write(ConstOsmMapPtr map)
   _writeRelations();
   _writeLn("]");
   _writeLn("}");
-  _fp.close();
 }
 
 QString OsmGeoJsonWriter::_getBbox()

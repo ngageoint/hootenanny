@@ -61,6 +61,11 @@ public:
    */
   virtual void write(ConstOsmMapPtr map) = 0;
 
+  /**
+   * Closes what was opened.
+   */
+  virtual void close() = 0;
+
 };
 
 }

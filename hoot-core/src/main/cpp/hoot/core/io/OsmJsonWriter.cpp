@@ -121,6 +121,7 @@ void OsmJsonWriter::write(ConstOsmMapPtr map, const QString& path)
 {
   open(path);
   write(map);
+  close();
 }
 
 void OsmJsonWriter::write(ConstOsmMapPtr map)
@@ -141,8 +142,6 @@ void OsmJsonWriter::write(ConstOsmMapPtr map)
   _writeRelations();
   _writeLn("]");
   _writeLn("}");
-
-  _fp.close();
 }
 
 void OsmJsonWriter::_writeKvp(const QString& key, const QString& value)
