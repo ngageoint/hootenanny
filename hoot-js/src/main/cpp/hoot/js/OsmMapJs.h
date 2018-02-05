@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMMAPJS_H
 #define OSMMAPJS_H
@@ -55,14 +55,14 @@ private:
   OsmMapJs(OsmMapPtr map);
   ~OsmMapJs();
 
-  static v8::Handle<v8::Value> clone(const v8::Arguments& args);
-  static v8::Handle<v8::Value> New(const v8::Arguments& args);
-  static v8::Handle<v8::Value> getElement(const v8::Arguments& args);
-  static v8::Handle<v8::Value> getElementCount(const v8::Arguments& args);
-  static v8::Handle<v8::Value> getParents(const v8::Arguments& args);
-  static v8::Handle<v8::Value> removeElement(const v8::Arguments& args);
-  static v8::Handle<v8::Value> setIdGenerator(const v8::Arguments& args);
-  static v8::Handle<v8::Value> visit(const v8::Arguments& args);
+  static void clone(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void getElement(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void getElementCount(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void getParents(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void removeElement(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void setIdGenerator(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void visit(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   OsmMapPtr _map;
   ConstOsmMapPtr _constMap;
