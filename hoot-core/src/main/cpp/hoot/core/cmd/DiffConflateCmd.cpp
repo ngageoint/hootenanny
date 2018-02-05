@@ -33,11 +33,15 @@
 #include <hoot/core/conflate/StatsComposer.h>
 #include <hoot/core/conflate/DiffConflator.h>
 #include <hoot/core/filters/StatusCriterion.h>
+#include <hoot/core/filters/BuildingCriterion.h>
+#include <hoot/core/filters/PoiCriterion.h>
 #include <hoot/core/ops/BuildingOutlineUpdateOp.h>
 #include <hoot/core/ops/CalculateStatsOp.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/ops/stats/IoSingleStat.h>
 #include <hoot/core/visitors/AddRef1Visitor.h>
+#include <hoot/core/visitors/CriterionCountVisitor.h>
+#include <hoot/core/visitors/LengthOfWaysVisitor.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmXmlWriter.h>
@@ -214,6 +218,27 @@ public:
     stats.append(IoSingleStat(IoSingleStat::WriteBytes));
     stats.append(IoSingleStat(IoSingleStat::CancelledWriteBytes));
     stats.append(SingleStat("(Dubious) Bytes Processed per Second", inputBytes / totalElapsed));
+
+    // Differential specific stats - get some numbers for our output
+    // Number of new points
+    // Number of new buildings
+    // km of new roads
+
+    ElementCriterionPtr pPoiCrit(new PoiCriterion());
+    CriterionCountVisitor poiCounter;
+    poiCounter.addCriterion(pPoiCrit);
+    result->visitRo(poiCounter);
+    stats.append((SingleStat("Count of New POIs", poiCounter.getCount())));
+
+    ElementCriterionPtr pBuildingCrit(new BuildingCriterion(result));
+    CriterionCountVisitor buildingCounter;
+    buildingCounter.addCriterion(pBuildingCrit);
+    result->visitRo(buildingCounter);
+    stats.append((SingleStat("Count of New Buildings", buildingCounter.getCount())));
+
+    LengthOfWaysVisitor lengthVisitor;
+    result->visitRo(lengthVisitor);
+    stats.append((SingleStat("Km of New Road", lengthVisitor.getStat()/1000.0)));
 
     if (displayStats)
     {
