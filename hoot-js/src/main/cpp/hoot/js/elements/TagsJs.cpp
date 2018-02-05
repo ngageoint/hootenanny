@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "TagsJs.h"
 
@@ -57,75 +57,78 @@ TagsJs::~TagsJs()
 {
 }
 
-Handle<Value> TagsJs::contains(const Arguments& args)
+void TagsJs::contains(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  HandleScope scope(args.GetIsolate());
 
   Tags& t = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
 
   QString key = toCpp<QString>(args[0]);
 
-  return scope.Close(toV8(t.contains(key)));
+  args.GetReturnValue().Set(toV8(t.contains(key)));
 }
 
 void TagsJs::Init(Handle<Object> target)
 {
+  Isolate* current = v8::Isolate::GetCurrent();
+  HandleScope scope(current);
   // Prepare constructor template
-  Local<FunctionTemplate> tpl = FunctionTemplate::New(New);
-  tpl->SetClassName(String::NewSymbol(Tags::className().data()));
+  Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
+  tpl->SetClassName(String::NewFromUtf8(current, Tags::className().data()));
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
   // Prototype
   tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
-    String::New(Tags::className().data()));
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("contains"),
-      FunctionTemplate::New(contains)->GetFunction());
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("get"),
-      FunctionTemplate::New(get)->GetFunction());
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("getCreateUuid"),
-      FunctionTemplate::New(getCreateUuid)->GetFunction());
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("getInformationCount"),
-      FunctionTemplate::New(getInformationCount)->GetFunction());
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("getLengthInMeters"),
-      FunctionTemplate::New(getLengthInMeters)->GetFunction());
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("getNames"),
-      FunctionTemplate::New(getNames)->GetFunction());
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("getVelocityInMeters"),
-      FunctionTemplate::New(getVelocityInMeters)->GetFunction());
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("set"),
-      FunctionTemplate::New(set)->GetFunction());
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("toDict"),
-      FunctionTemplate::New(toDict)->GetFunction());
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("toString"),
-      FunctionTemplate::New(toString)->GetFunction());
+    String::NewFromUtf8(current, Tags::className().data()));
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "contains"),
+      FunctionTemplate::New(current, contains));
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "get"),
+      FunctionTemplate::New(current, get));
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getCreateUuid"),
+      FunctionTemplate::New(current, getCreateUuid));
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getInformationCount"),
+      FunctionTemplate::New(current, getInformationCount));
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getLengthInMeters"),
+      FunctionTemplate::New(current, getLengthInMeters));
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getNames"),
+      FunctionTemplate::New(current, getNames));
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getVelocityInMeters"),
+      FunctionTemplate::New(current, getVelocityInMeters));
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "set"),
+      FunctionTemplate::New(current, set));
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "toDict"),
+      FunctionTemplate::New(current, toDict));
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "toString"),
+      FunctionTemplate::New(current, toString));
 
-  _constructor = Persistent<Function>::New(tpl->GetFunction());
-  target->Set(String::NewSymbol("Tags"), _constructor);
+  _constructor.Reset(current, tpl->GetFunction());
+  target->Set(String::NewFromUtf8(current, "Tags"), ToLocal(&_constructor));
 }
 
 Handle<Object> TagsJs::New(const Tags& t)
 {
-  HandleScope scope;
+  EscapableHandleScope scope(v8::Isolate::GetCurrent());
 
-  Handle<Object> result = _constructor->NewInstance();
+  Handle<Object> result = ToLocal(&_constructor)->NewInstance();
   TagsJs* from = ObjectWrap::Unwrap<TagsJs>(result);
   from->_setTags(t);
 
-  return scope.Close(result);
+  return scope.Escape(result);
 }
 
-Handle<Value> TagsJs::New(const Arguments& args)
+void TagsJs::New(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  HandleScope scope(args.GetIsolate());
 
   TagsJs* obj = new TagsJs();
   obj->Wrap(args.This());
 
-  return args.This();
+  args.GetReturnValue().Set(args.This());
 }
 
-Handle<Value> TagsJs::get(const Arguments& args)
+void TagsJs::get(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   Tags& t = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
 
@@ -133,66 +136,66 @@ Handle<Value> TagsJs::get(const Arguments& args)
   if (t.contains(key))
   {
     QString value = t.get(key);
-    return scope.Close(String::New(value.toUtf8().data()));
+    args.GetReturnValue().Set(String::NewFromUtf8(current, value.toUtf8().data()));
   }
   else
   {
-    return scope.Close(Undefined());
+    args.GetReturnValue().SetUndefined();
   }
 }
 
-Handle<Value> TagsJs::getCreateUuid(const Arguments& args)
+void TagsJs::getCreateUuid(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  HandleScope scope(args.GetIsolate());
 
   Tags& t = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
 
-  return scope.Close(toV8(t.getCreateUuid()));
+  args.GetReturnValue().Set(toV8(t.getCreateUuid()));
 }
 
-Handle<Value> TagsJs::getLengthInMeters(const Arguments& args)
+void TagsJs::getLengthInMeters(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
-
-  Tags& t = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
-
-  QString key = str(args[0]->ToString());
-
-  return scope.Close(toV8(t.getLength(key).value()));
-}
-
-Handle<Value> TagsJs::getVelocityInMeters(const Arguments& args)
-{
-  HandleScope scope;
+  HandleScope scope(args.GetIsolate());
 
   Tags& t = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
 
   QString key = str(args[0]->ToString());
 
-  return scope.Close(toV8(t.getVelocity(key).value()));
+  args.GetReturnValue().Set(toV8(t.getLength(key).value()));
 }
 
-Handle<Value> TagsJs::getInformationCount(const Arguments& args)
+void TagsJs::getVelocityInMeters(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  HandleScope scope(args.GetIsolate());
 
   Tags& t = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
 
-  return scope.Close(toV8(t.getInformationCount()));
+  QString key = str(args[0]->ToString());
+
+  args.GetReturnValue().Set(toV8(t.getVelocity(key).value()));
 }
 
-Handle<Value> TagsJs::getNames(const Arguments& args)
+void TagsJs::getInformationCount(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  HandleScope scope(args.GetIsolate());
 
   Tags& t = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
 
-  return scope.Close(toV8(t.getNames()));
+  args.GetReturnValue().Set(toV8(t.getInformationCount()));
 }
 
-Handle<Value> TagsJs::set(const Arguments& args)
+void TagsJs::getNames(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  HandleScope scope(args.GetIsolate());
+
+  Tags& t = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
+
+  args.GetReturnValue().Set(toV8(t.getNames()));
+}
+
+void TagsJs::set(const FunctionCallbackInfo<Value>& args)
+{
+  HandleScope scope(args.GetIsolate());
 
   Tags& t = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
 
@@ -200,26 +203,26 @@ Handle<Value> TagsJs::set(const Arguments& args)
   QString value = toCpp<QString>(args[1]);
   t.set(key, value);
 
-  return scope.Close(Undefined());
+  args.GetReturnValue().SetUndefined();
 }
 
-Handle<Value> TagsJs::toDict(const Arguments& args)
+void TagsJs::toDict(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  HandleScope scope(args.GetIsolate());
 
   Tags& t = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
 
-  return scope.Close(toV8(t));
+  args.GetReturnValue().Set(toV8(t));
 }
 
 
-Handle<Value> TagsJs::toString(const Arguments& args)
+void TagsJs::toString(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  HandleScope scope(args.GetIsolate());
 
   Tags& t = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
 
-  return scope.Close(toV8(t.toString()));
+  args.GetReturnValue().Set(toV8(t.toString()));
 }
 
 }
