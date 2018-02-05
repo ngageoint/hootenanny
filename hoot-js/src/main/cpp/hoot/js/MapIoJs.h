@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,15 +22,29 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MAPIOJS_H
 #define MAPIOJS_H
+
+// node.js
+#include <hoot/js/SystemNodeJs.h>
+
+namespace hoot
+{
 
 class MapIoJs
 {
 public:
   MapIoJs();
+
+  static void Init(v8::Handle<v8::Object> exports);
+
+  static void loadMap(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void loadMapFromString(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void saveMap(const v8::FunctionCallbackInfo<v8::Value>& args);
+
 };
 
+}
 #endif // MAPIOJS_H

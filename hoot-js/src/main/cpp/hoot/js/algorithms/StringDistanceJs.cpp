@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "StringDistanceJs.h"
 
@@ -58,6 +58,8 @@ StringDistanceJs::~StringDistanceJs()
 
 void StringDistanceJs::Init(Handle<Object> target)
 {
+  Isolate* current = target->GetIsolate();
+  HandleScope scope(current);
   vector<string> opNames =
     Factory::getInstance().getObjectNamesByBase(StringDistance::className());
 
@@ -67,22 +69,23 @@ void StringDistanceJs::Init(Handle<Object> target)
     const char* n = utf8.data();
 
     // Prepare constructor template
-    Local<FunctionTemplate> tpl = FunctionTemplate::New(New);
-    tpl->SetClassName(String::NewSymbol(opNames[i].data()));
+    Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
+    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].data()));
     tpl->InstanceTemplate()->SetInternalFieldCount(2);
     // Prototype
-    tpl->PrototypeTemplate()->Set(String::NewSymbol("toString"),
-        FunctionTemplate::New(toString)->GetFunction());
+    tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "toString"),
+        FunctionTemplate::New(current, toString));
     tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
-                                  String::New(StringDistance::className().data()));
+                                  String::NewFromUtf8(current, StringDistance::className().data()));
 
-    Persistent<Function> constructor = Persistent<Function>::New(tpl->GetFunction());
-    target->Set(String::NewSymbol(n), constructor);
+    Persistent<Function> constructor(current, tpl->GetFunction());
+    target->Set(String::NewFromUtf8(current, n), ToLocal(&constructor));
   }
 }
 
-Handle<Value> StringDistanceJs::New(const Arguments& args) {
-  HandleScope scope;
+void StringDistanceJs::New(const FunctionCallbackInfo<Value>& args)
+{
+  HandleScope scope(args.GetIsolate());
 
   QString className = str(args.This()->GetConstructorName());
 
@@ -92,16 +95,16 @@ Handle<Value> StringDistanceJs::New(const Arguments& args) {
 
   PopulateConsumersJs::populateConsumers<StringDistance>(c, args);
 
-  return args.This();
+  args.GetReturnValue().Set(args.This());
 }
 
-Handle<Value> StringDistanceJs::toString(const Arguments& args)
+void StringDistanceJs::toString(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  HandleScope scope(args.GetIsolate());
 
   StringDistancePtr sd = toCpp<StringDistancePtr>(args.This());
 
-  return scope.Close(toV8(sd->toString()));
+  args.GetReturnValue().Set(toV8(sd->toString()));
 }
 
 }

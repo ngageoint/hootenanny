@@ -75,6 +75,8 @@ public:
 
   virtual void open(QString url);
 
+  virtual void close() { if (_fp.isOpen()) { _fp.close(); } }
+
   void setIncludeHootInfo(bool includeInfo) { _includeDebug = includeInfo; }
 
   void setPrecision(int p) { _precision = p; }

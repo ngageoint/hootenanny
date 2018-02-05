@@ -88,12 +88,12 @@ void OsmGbdxJsonWriter::open(QString path)
   }
 }
 
-void OsmGbdxJsonWriter::_openFile()
+void OsmGbdxJsonWriter::_newOutputFile()
 {
   // Close the old file and open a new one
   if (_fp.isOpen())
   {
-    _fp.close();
+    close();
   }
 
   QString url = _outputDir.filePath(UuidHelper::createUuid().toString().replace("{", "").replace("}", "") + ".json");
@@ -102,7 +102,7 @@ void OsmGbdxJsonWriter::_openFile()
 
   if (!_fp.open(QIODevice::WriteOnly | QIODevice::Text))
   {
-    throw Exception(QObject::tr("Error opening %1 for writing").arg(url));
+    throw HootException(QObject::tr("Error opening %1 for writing").arg(url));
   }
 
   _out = &_fp;
@@ -118,8 +118,8 @@ void OsmGbdxJsonWriter::write(ConstOsmMapPtr map)
 
   _writeRelations();
 
-  // Close the last file.
-  _fp.close();
+  // This will move out of here eventually.
+  close();
 }
 
 void OsmGbdxJsonWriter::_writeGeometry(ConstNodePtr n)
@@ -140,7 +140,10 @@ void OsmGbdxJsonWriter::_writeGeometry(ConstWayPtr w)
 void OsmGbdxJsonWriter::_writeGeometry(ConstRelationPtr r)
 {
   vector<RelationData::Entry> members = r->getMembers();
-  _writeKvp("type", "GeometryCollection"); _write(",");
+  // NOTE: _write DOES NOT add a carriage return unless "true" is the second argument
+  // See OsmJsonWriter.cpp, lines 189-194
+  _writeKvp("type", "GeometryCollection");
+  _write(",");
   _write("\"geometries\": [");
   bool first = true;
   for (vector<RelationData::Entry>::iterator it = members.begin(); it != members.end(); ++it)
@@ -248,7 +251,7 @@ void OsmGbdxJsonWriter::_writeNodes()
   qSort(nids.begin(), nids.end(), qGreater<long>());
   for (int i = 0; i < nids.size(); i++)
   {
-    _openFile();
+    _newOutputFile();
     _writeNode(_map->getNode(nids[i]));
   }
 }
@@ -298,7 +301,7 @@ void OsmGbdxJsonWriter::_writeWays()
     //  Write out the way in Gbdxjson if valid
     if (valid)
     {
-      _openFile();
+      _newOutputFile();
       _writeWay(w);
     }
     else
@@ -308,7 +311,7 @@ void OsmGbdxJsonWriter::_writeWays()
         ConstNodePtr node = _map->getNode(*nodeIt);
         if (node.get() != NULL)
         {
-          _openFile();
+          _newOutputFile();
           _writeNode(node);
         }
       }
@@ -339,7 +342,7 @@ void OsmGbdxJsonWriter::_writeRelations()
   {
     ConstRelationPtr r = it->second;
     //  Write out the relation (and all children) in geojson
-    _openFile();
+    _newOutputFile();
     _write("{");
     _writeFeature(r);
     _write(",");

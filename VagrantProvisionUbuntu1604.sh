@@ -76,14 +76,6 @@ if [ ! -f /etc/apt/sources.list.d/pgdg.list ]; then
     sudo apt-get -q -y upgrade >> Ubuntu_upgrade.txt 2>&1
 fi
 
-# Install an ancient version of NodeJS
-echo "### Installing the PPA for an ancient version of NodeJS"
-curl -sL https://deb.nodesource.com/setup_0.10 | sudo -E bash -
-
-echo "### Installing an ancient version of NodeJS"
-sudo apt-get -q -y --allow-downgrades install nodejs=0.10.48-1nodesource1~xenial1
-
-
 echo "### Installing dependencies from repos..."
 sudo apt-get -q -y install \
  asciidoc \
@@ -101,6 +93,7 @@ sudo apt-get -q -y install \
  graphviz \
  htop \
  lcov \
+ libappindicator1 \
  libboost-all-dev \
  libboost-dev \
  libcppunit-dev \
@@ -157,9 +150,34 @@ sudo apt-get -q -y install \
 #  texlive-lang-arabic \
 #  texlive-lang-cyrillic \
 #  texlive-lang-hebrew \
-#  nodejs-dev \
-#  nodejs-legacy \
 
+echo "##### NodeJs #####"
+NODE_VERSION=8.9.3
+# Install the binary version of NodeJs for some uses (including npm)
+cd ~
+wget --quiet https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz
+tar xf node-v${NODE_VERSION}-linux-x64.tar.xz
+cd node-v${NODE_VERSION}-linux-x64
+sudo cp -r bin /usr/
+sudo cp -r include /usr/
+sudo cp -r lib /usr/
+sudo cp -r share /usr/
+# Build the shared library version of NodeJs for hootenanny
+cd ~
+wget --quiet https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}.tar.gz
+tar xf node-v${NODE_VERSION}.tar.gz
+cd node-v${NODE_VERSION}
+# Fix an error that screws up our codebase
+sed -i 's/Local<Object> json_object/Local<Value> json_object/g' deps/v8/include/v8.h
+sed -i 's/Local<Object> json_object/Local<Value> json_object/g' deps/v8/src/api.cc
+./configure --shared --prefix=/usr >> ~/centos_install.txt
+make -j$(nproc) >> ~/centos_install.txt
+sudo make install >> ~/centos_install.txt
+if [ -f /usr/lib/libnode.so.?? ]; then
+  sudo ln -s /usr/lib/libnode.so.?? /usr/lib/libnode.so
+else
+  sudo ln -s /usr/bin/libnode.so.?? /usr/lib/libnode.so
+fi
 
 if ! dpkg -l | grep --quiet dictionaries-common; then
     # See /usr/share/doc/dictionaries-common/README.problems for details
@@ -394,12 +412,12 @@ cd ~
 # NOTE: Hadoop install has been removed
 #
 
-echo "### Installing node-mapnik-server..."
-sudo cp $HOOT_HOME/node-mapnik-server/init.d/node-mapnik-server /etc/init.d
-sudo chmod a+x /etc/init.d/node-mapnik-server
+#echo "### Installing node-mapnik-server..."
+#sudo cp $HOOT_HOME/node-mapnik-server/init.d/node-mapnik-server /etc/init.d
+#sudo chmod a+x /etc/init.d/node-mapnik-server
 # Make sure all npm modules are installed
-cd $HOOT_HOME/node-mapnik-server
-npm install --silent
+#cd $HOOT_HOME/node-mapnik-server
+#npm install --silent
 # Clean up after the npm install
 rm -rf ~/tmp/*
 

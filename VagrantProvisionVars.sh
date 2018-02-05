@@ -14,7 +14,7 @@ export GDAL_VERSION=2.1.4
 export FGDB_VERSION=1.5.1
 export FGDB_URL=https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_${FGDB_VERSION}/
 
-export NODE_VERSION=0.10.48
+export NODE_VERSION=8.9.3
 
 # Ruby versions and locations.
 export RUBY_BASE_URL=https://s3.amazonaws.com/hoot-ruby
