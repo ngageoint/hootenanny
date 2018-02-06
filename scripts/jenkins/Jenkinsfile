@@ -98,24 +98,24 @@ pipeline {
                 sh "vagrant provision ${params.Box} --provision-with build,EGD,tomcat,mapnik,hadoop"
             }       
         }
-        stage("Core Tests") {
-            when { expression { return params.Core_tests } }
-            steps {
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot --version --debug; bin/HootTest --diff --glacial --parallel \$(nproc)'"
-            }
-        }
-        stage("Services Tests") {
-            when { expression { return params.Services_tests } }
-            steps {
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` pp-test'"
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` plugins-test'"
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` services-test'"
-            }
-        }
-        stage("UI Tests") {
-            when { expression { return params.UI_tests } }
-            steps {
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; make -s ui-test'"
+        stage ("Hootenanny Tests") {
+            parallel {
+                stage("Core Tests") {
+                    when { expression { return params.Core_tests } }
+                    steps {
+                        sleep 15
+                        sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot --version --debug; bin/HootTest --diff --glacial --parallel \$(nproc)'"
+                        sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` pp-test'"
+                        sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` plugins-test'"
+                        sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` services-test'"
+                    }
+                }
+                stage("UI Tests") {
+                    when { expression { return params.UI_tests } }
+                    steps {
+                        sh "vagrant ssh ${params.Box} -c 'cd hoot; make -s ui-test'"
+                    }
+                }
             }
         }
     }
@@ -131,10 +131,14 @@ pipeline {
                 sh "vagrant scp ${params.Box}:~/hoot/test-files/ui/screenshot_*.png ./test-files/ui/"
                 emailext (
                     subject: "Failure: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                    mimeType: 'text/html',
                     attachmentsPattern: 'test-files/ui/screenshot_*.png',
                     body: """<p>Failure: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
                     <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
-                    recipientProviders: [[$class: 'DevelopersRecipientProvider']]
+                    recipientProviders: [
+                        [$class: 'DevelopersRecipientProvider'],
+                        [$class: 'CulpritsRecipientProvider'],
+                        [$class: 'RequesterRecipientProvider']]
                 )
             }
         }
@@ -144,9 +148,13 @@ pipeline {
                 if (currentBuild.currentResult == 'SUCCESS') {
                     emailext (
                         subject: "Back to normal: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                        mimeType: 'text/html',
                         body: """<p>Fixed: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-                            <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
-                            recipientProviders: [[$class: 'DevelopersRecipientProvider']]
+                        <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
+                        recipientProviders: [
+                            [$class: 'DevelopersRecipientProvider'],
+                            [$class: 'CulpritsRecipientProvider'],
+                            [$class: 'RequesterRecipientProvider']]
                     )
                 }
             }
