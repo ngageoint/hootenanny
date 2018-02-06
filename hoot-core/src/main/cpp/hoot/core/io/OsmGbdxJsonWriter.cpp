@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "OsmGeoJsonWriter.h"
+#include "OsmGbdxJsonWriter.h"
 
 // Boost
 using namespace boost;
@@ -45,6 +45,7 @@ using namespace boost;
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/util/OsmUtils.h>
+#include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 // Qt
@@ -60,70 +61,75 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(OsmMapWriter, OsmGeoJsonWriter)
+HOOT_FACTORY_REGISTER(OsmMapWriter, OsmGbdxJsonWriter)
 
-OsmGeoJsonWriter::OsmGeoJsonWriter(int precision)
+OsmGbdxJsonWriter::OsmGbdxJsonWriter(int precision)
   : OsmJsonWriter(precision)
 {
-  _writeHootFormat = ConfigOptions().getJsonFormatHootenanny();
+  _writeHootFormat = false;
 }
 
-void OsmGeoJsonWriter::setConfiguration(const Settings& conf)
+void OsmGbdxJsonWriter::open(QString path)
 {
-  _includeDebug = ConfigOptions(conf).getWriterIncludeDebugTags();
-  _pretty = ConfigOptions(conf).getJsonPrettyPrint();
-  _writeEmptyTags = ConfigOptions(conf).getJsonPerserveEmptyTags();
-  _writeHootFormat = ConfigOptions(conf).getJsonFormatHootenanny();
-}
-
-void OsmGeoJsonWriter::write(ConstOsmMapPtr map)
-{
-  _map = map;
-  if (_out->isWritable() == false)
+  if (path.toLower().endsWith(".gbdx"))
   {
-    throw HootException("Please open the file before attempting to write.");
+    path.remove(path.size() - 5, path.size());
   }
 
-  _write("{");
-  _writeKvp("generator", "Hootenanny"); _write(",");
-  _writeKvp("type", "FeatureCollection"); _write(",");
-  _write("\"bbox\": "); _write(_getBbox()); _write(",");
-  _write("\"features\": [", true);
-  _firstElement = true;
+  _outputDir = QDir(path);
+  _outputDir.makeAbsolute();
+
+  if (_outputDir.exists() == false)
+  {
+    if (QDir().mkpath(_outputDir.path()) == false)
+    {
+      throw HootException("Error creating directory for writing.");
+    }
+  }
+}
+
+void OsmGbdxJsonWriter::_newOutputFile()
+{
+  // Close the old file and open a new one
+  if (_fp.isOpen())
+  {
+    close();
+  }
+
+  QString url = _outputDir.filePath(UuidHelper::createUuid().toString().replace("{", "").replace("}", "") + ".json");
+
+  _fp.setFileName(url);
+
+  if (!_fp.open(QIODevice::WriteOnly | QIODevice::Text))
+  {
+    throw HootException(QObject::tr("Error opening %1 for writing").arg(url));
+  }
+
+  _out = &_fp;
+}
+
+void OsmGbdxJsonWriter::write(ConstOsmMapPtr map)
+{
+  _map = map;
+
   _writeNodes();
+
   _writeWays();
+
   _writeRelations();
-  _writeLn("]");
-  _writeLn("}");
+
+  // This will move out of here eventually.
   close();
 }
 
-QString OsmGeoJsonWriter::_getBbox()
-{
-  Envelope bounds = CalculateMapBoundsVisitor::getGeosBounds(_map);
-  return QString("[%1, %2, %3, %4]").arg(QString::number(bounds.getMinX(), 'g', 5))
-                                    .arg(QString::number(bounds.getMinY(), 'g', 5))
-                                    .arg(QString::number(bounds.getMaxX(), 'g', 5))
-                                    .arg(QString::number(bounds.getMaxY(), 'g', 5));
-}
-
-void OsmGeoJsonWriter::_writeMeta(ConstElementPtr e)
-{
-  _write("\"meta\": {");
-  _writeKvp("timestamp", OsmUtils::toTimeString(e->getTimestamp())); _write(",");
-  _writeKvp("version", e->getVersion()); _write(",");
-  _writeKvp("visible", (e->getVisible() ? "true" : "false"));
-  _write("}");
-}
-
-void OsmGeoJsonWriter::_writeGeometry(ConstNodePtr n)
+void OsmGbdxJsonWriter::_writeGeometry(ConstNodePtr n)
 {
   vector<long> node;
   node.push_back(n->getId());
   _writeGeometry(node, "Point");
 }
 
-void OsmGeoJsonWriter::_writeGeometry(ConstWayPtr w)
+void OsmGbdxJsonWriter::_writeGeometry(ConstWayPtr w)
 {
   const vector<long>& nodes = w->getNodeIds();
   bool isPolygon = OsmSchema::getInstance().isArea(w) ||
@@ -131,10 +137,13 @@ void OsmGeoJsonWriter::_writeGeometry(ConstWayPtr w)
   _writeGeometry(nodes, (isPolygon) ? "Polygon" : "LineString");
 }
 
-void OsmGeoJsonWriter::_writeGeometry(ConstRelationPtr r)
+void OsmGbdxJsonWriter::_writeGeometry(ConstRelationPtr r)
 {
   vector<RelationData::Entry> members = r->getMembers();
-  _writeKvp("type", "GeometryCollection"); _write(",");
+  // NOTE: _write DOES NOT add a carriage return unless "true" is the second argument
+  // See OsmJsonWriter.cpp, lines 189-194
+  _writeKvp("type", "GeometryCollection");
+  _write(",");
   _write("\"geometries\": [");
   bool first = true;
   for (vector<RelationData::Entry>::iterator it = members.begin(); it != members.end(); ++it)
@@ -153,7 +162,7 @@ void OsmGeoJsonWriter::_writeGeometry(ConstRelationPtr r)
   _write("]");
 }
 
-void OsmGeoJsonWriter::_writeGeometry(ConstElementPtr e)
+void OsmGbdxJsonWriter::_writeGeometry(ConstElementPtr e)
 {
   switch(e->getElementType().getEnum())
   {
@@ -171,7 +180,7 @@ void OsmGeoJsonWriter::_writeGeometry(ConstElementPtr e)
   }
 }
 
-void OsmGeoJsonWriter::_writeGeometry(const vector<long> &nodes, string type)
+void OsmGbdxJsonWriter::_writeGeometry(const vector<long> &nodes, string type)
 {
   //  Build a temporary vector of valid nodes
   vector<long> temp_nodes;
@@ -211,16 +220,9 @@ void OsmGeoJsonWriter::_writeGeometry(const vector<long> &nodes, string type)
     _write("]");
 }
 
-void OsmGeoJsonWriter::_writeFeature(ConstElementPtr e)
+void OsmGbdxJsonWriter::_writeFeature(ConstElementPtr e)
 {
   _writeKvp("type", "Feature");
-  if (_writeHootFormat)
-  {
-    _write(",");
-    _writeKvp("id", QString::number(e->getId()));
-    _write(",");
-    _writeKvp("type", _typeName(e->getElementType()));
-  }
   if (_hasTags(e))
   {
     _write(",");
@@ -233,29 +235,28 @@ void OsmGeoJsonWriter::_writeFeature(ConstElementPtr e)
   }
 }
 
-void OsmGeoJsonWriter::_writeNodes()
+void OsmGbdxJsonWriter::_writeNodes()
 {
   NoInformationCriterion filter;
   QList<long> nids;
   const NodeMap& nodes = _map->getNodes();
+
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
     if (filter.isNotSatisfied(_map->getNode(it->first)))
       nids.append(it->first);
   }
+
   // sort the values to give consistent results.
   qSort(nids.begin(), nids.end(), qGreater<long>());
   for (int i = 0; i < nids.size(); i++)
   {
-    if (_firstElement)
-      _firstElement = false;
-    else
-      _write(",", true);
+    _newOutputFile();
     _writeNode(_map->getNode(nids[i]));
   }
 }
 
-void OsmGeoJsonWriter::_writeNode(ConstNodePtr node)
+void OsmGbdxJsonWriter::_writeNode(ConstNodePtr node)
 {
   if (node.get() == NULL)
     return;
@@ -268,9 +269,10 @@ void OsmGeoJsonWriter::_writeNode(ConstNodePtr node)
   _write("}", false);
 }
 
-void OsmGeoJsonWriter::_writeWays()
+void OsmGbdxJsonWriter::_writeWays()
 {
   const WayMap& ways = _map->getWays();
+
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     ConstWayPtr w = it->second;
@@ -280,10 +282,7 @@ void OsmGeoJsonWriter::_writeWays()
       continue;
     if (w.get() == NULL)
       continue;
-    if (_firstElement)
-      _firstElement = false;
-    else
-      _write(",", true);
+
     //  Make sure that building ways are "complete"
     const vector<long>& nodes = w->getNodeIds();
     bool valid = true;
@@ -299,9 +298,12 @@ void OsmGeoJsonWriter::_writeWays()
         }
       }
     }
-    //  Write out the way in geojson if valid
+    //  Write out the way in Gbdxjson if valid
     if (valid)
+    {
+      _newOutputFile();
       _writeWay(w);
+    }
     else
     {
       for (vector<long>::const_iterator nodeIt = nodes.begin(); nodeIt != nodes.end(); ++nodeIt)
@@ -309,10 +311,7 @@ void OsmGeoJsonWriter::_writeWays()
         ConstNodePtr node = _map->getNode(*nodeIt);
         if (node.get() != NULL)
         {
-          if (_firstElement)
-            _firstElement = false;
-          else
-            _write(",", true);
+          _newOutputFile();
           _writeNode(node);
         }
       }
@@ -320,7 +319,7 @@ void OsmGeoJsonWriter::_writeWays()
   }
 }
 
-void OsmGeoJsonWriter::_writeWay(ConstWayPtr way)
+void OsmGbdxJsonWriter::_writeWay(ConstWayPtr way)
 {
   if (way.get() == NULL)
     return;
@@ -335,17 +334,15 @@ void OsmGeoJsonWriter::_writeWay(ConstWayPtr way)
 
 }
 
-void OsmGeoJsonWriter::_writeRelations()
+void OsmGbdxJsonWriter::_writeRelations()
 {
   const RelationMap& relations = _map->getRelations();
+
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
-    if (_firstElement)
-      _firstElement = false;
-    else
-      _write(",", true);
     ConstRelationPtr r = it->second;
     //  Write out the relation (and all children) in geojson
+    _newOutputFile();
     _write("{");
     _writeFeature(r);
     _write(",");
@@ -356,20 +353,20 @@ void OsmGeoJsonWriter::_writeRelations()
   }
 }
 
-void OsmGeoJsonWriter::_writeRelationInfo(ConstRelationPtr r)
+void OsmGbdxJsonWriter::_writeRelationInfo(ConstRelationPtr r)
 {
   _writeKvp("relation-type", r->getType()); _write(",");
   QString roles = _buildRoles(r).c_str();
   _writeKvp("roles", roles);
 }
 
-string OsmGeoJsonWriter::_buildRoles(ConstRelationPtr r)
+string OsmGbdxJsonWriter::_buildRoles(ConstRelationPtr r)
 {
   bool first = true;
   return _buildRoles(r, first);
 }
 
-string OsmGeoJsonWriter::_buildRoles(ConstRelationPtr r, bool& first)
+string OsmGbdxJsonWriter::_buildRoles(ConstRelationPtr r, bool& first)
 {
   stringstream ss;
   const vector<RelationData::Entry>& members = r->getMembers();

@@ -1691,6 +1691,14 @@ sequencing of element ID's.
 Specifies the reader that the OsmMapReaderFactory will use. This overrides any information derived
 from the URL.
 
+=== osm.map.writer.skip.empty.map
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, the OSM map writer will NOT write a file if the map is empty.
+The default is to write a file even if the map is empty.
+
 === osm.map.writer.factory.writer
 
 * Data Type: string
