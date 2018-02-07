@@ -1990,6 +1990,29 @@ tds61 = {
             }
         } // End for GE4 loop
 
+        // Fix ZI001_SDV
+        // NOTE: We are going to override the normal source:datetime with what we get from JOSM
+        if (tags['source:imagery:datetime'])
+        {
+            attrs.ZI001_SDV = tags['source:imagery:datetime'];
+            delete notUsedTags['source:imagery:datetime'];
+        }
+        
+        // Now try using tags from Taginfo
+        if (! attrs.ZI001_SDV)
+        {
+            if (tags['source:date']) 
+            {
+                attrs.ZI001_SDV = tags['source:date'];
+                delete notUsedTags['source:date'];
+            }
+            else if (tags['source:geometry:date'])
+            {
+                attrs.ZI001_SDV = tags['source:geometry:date'];
+                delete notUsedTags['source:geometry:date'];
+            }
+        }
+ 
     }, // End applyToTdsPostProcessing
 
 // #####################################################################################################
