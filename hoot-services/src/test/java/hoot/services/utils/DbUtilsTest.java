@@ -28,6 +28,7 @@ package hoot.services.utils;
 
 import static hoot.services.utils.MapUtils.insertMap;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
@@ -66,6 +67,21 @@ public class DbUtilsTest {
     @Before
     public void setAppContext() {
         new ApplicationContextUtils().setApplicationContext(applicationContext);
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    @Transactional
+    public void testDeleteTables() throws Exception {
+        long userId = MapUtils.insertUser();
+        long mapId = insertMap(userId);
+        System.out.println(mapId);
+
+        assertTrue(DbUtils.mapExists(String.valueOf(mapId)));
+        DbUtils.deleteMapRelatedTablesByMapId(mapId);
+        assertFalse(DbUtils.mapExists(String.valueOf(mapId)));
+
+
     }
 
     @Test
