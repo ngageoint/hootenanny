@@ -34,10 +34,6 @@ sudo yum -y install epel-release >> CentOS_upgrade.txt 2>&1
 echo "### Add Hoot repo ###" >> CentOS_upgrade.txt
 $HOOT_HOME/scripts/hoot-repo/yum-configure.sh
 
-# add nodesource repo for NodeJS dependencies.
-echo "### Add nodesource repo ###" >> CentOS_upgrade.txt
-sudo $HOOT_HOME/scripts/node/nodesource-repo.sh $NODE_VERSION
-
 # check to see if postgres is already installed
 if ! rpm -qa | grep -q pgdg-centos95-9.5-3 ; then
   # add the Postgres repo
@@ -54,17 +50,15 @@ sudo yum -q -y upgrade >> CentOS_upgrade.txt 2>&1
 # Make sure that we are in ~ before trying to wget & install stuff
 cd ~
 
-echo "### Installing an ancient version of NodeJS"
-
 if ! rpm -qa | grep -q ^yum-plugin-versionlock ; then
     # Install the versionlock plugin version first.
     sudo yum install -y yum-plugin-versionlock
 else
     # Remove any NodeJS version locks to allow upgrading to $NODE_VERSION.
-    sudo yum versionlock delete nodejs-*
+    sudo yum versionlock delete nodejs nodejs-devel
 fi
 
-# Install NodeJS at the desired version.
+echo "### Installing NodeJS ${NODE_VERSION}"
 sudo yum install -y nodejs-$NODE_VERSION nodejs-devel-$NODE_VERSION
 
 echo "### Locking version of NodeJS"
@@ -139,7 +133,6 @@ sudo yum -y install \
     texlive-collection-fontsrecommended \
     texlive-collection-langcyrillic \
     unzip \
-    v8-devel \
     vim \
     wamerican-insane \
     w3m \
@@ -337,7 +330,8 @@ sudo sed -i "s|SERVICE_USER|$VMUSER|g" /etc/systemd/system/node-mapnik.service
 sudo sed -i "s|HOOT_HOME|$HOOT_HOME|g" /etc/systemd/system/node-mapnik.service
 # Make sure all npm modules are installed
 cd $HOOT_HOME/node-mapnik-server
-npm install --silent
+#NOTE: Re-enable once installation works
+#npm install --silent
 # Clean up after the npm install
 rm -rf ~/tmp
 

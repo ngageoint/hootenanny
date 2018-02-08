@@ -76,7 +76,7 @@ echo "### Installing dependencies from repos..."
 sudo apt-get -q -y install texinfo g++ libicu-dev libqt4-dev libqtwebkit-dev git-core libboost-dev libcppunit-dev \
  libcv-dev libopencv-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev \
  automake protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov maven \
- libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc curl npm libxerces-c28 \
+ libstxxl-dev doxygen xsltproc asciidoc curl npm libxerces-c28 \
  libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew \
  w3m texlive-lang-cyrillic graphviz python-setuptools python python-pip git ccache distcc libogdi3.2-dev \
  gnuplot python-matplotlib libqt4-sql-sqlite ruby ruby-dev xvfb zlib1g-dev patch x11vnc openssh-server \
@@ -97,6 +97,34 @@ if ! dpkg -l | grep --quiet dictionaries-common; then
 fi
 
 sudo apt-get -y autoremove
+
+echo "##### NodeJs #####"
+NODE_VERSION=8.9.3
+# Install the binary version of NodeJs for some uses (including npm)
+cd ~
+wget --quiet https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz
+tar xf node-v${NODE_VERSION}-linux-x64.tar.xz
+cd node-v${NODE_VERSION}-linux-x64
+sudo cp -r bin /usr/
+sudo cp -r include /usr/
+sudo cp -r lib /usr/
+sudo cp -r share /usr/
+# Build the shared library version of NodeJs for hootenanny
+cd ~
+wget --quiet https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}.tar.gz
+tar xf node-v${NODE_VERSION}.tar.gz
+cd node-v${NODE_VERSION}
+# Fix an error that screws up our codebase
+sed -i 's/Local<Object> json_object/Local<Value> json_object/g' deps/v8/include/v8.h
+sed -i 's/Local<Object> json_object/Local<Value> json_object/g' deps/v8/src/api.cc
+./configure --shared --prefix=/usr >> ~/centos_install.txt
+make -j$(nproc) >> ~/centos_install.txt
+sudo make install >> ~/centos_install.txt
+if [ -f /usr/lib/libnode.so.?? ]; then
+  sudo ln -s /usr/lib/libnode.so.?? /usr/lib/libnode.so
+else
+  sudo ln -s /usr/bin/libnode.so.?? /usr/lib/libnode.so
+fi
 
 echo "### Configuring environment..."
 

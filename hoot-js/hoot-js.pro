@@ -22,7 +22,7 @@ DEPENDPATH += \
 
 INCLUDEPATH += \
   $${DEPENDPATH} \
-  /usr/include/nodejs \
+  /usr/include/node \
   ../local/include/ \
 
 PRECOMPILED_HEADER = src/main/cpp/hoot/js/HootJsStable.h
@@ -37,11 +37,11 @@ OTHER_FILES += \
 
 include(../Configure.pri)
 
-QMAKE_CXXFLAGS = -I/usr/include/nodejs $$QMAKE_CXXFLAGS
+QMAKE_CXXFLAGS = -I/usr/include/node $$QMAKE_CXXFLAGS
 
 QMAKE_POST_LINK = cp -l ../lib/libHootJs.so.1.0.0 ../lib/HootJs.node 2>/dev/null || cp ../lib/libHootJs.so.1.0.0 ../lib/HootJs.node
 
-LIBS += -L../lib/ -lTgs -ltbs -lHootCore -lv8
+LIBS += -L../lib/ -lTgs -ltbs -lHootCore 
 LIBS -= -lhdfs
 
 UI_DIR = tmp/ui
@@ -57,4 +57,6 @@ HEADERS += $$files(src/main/*.h, true)
 cppunit {
 SOURCES += $$files(src/test/*.cpp, true)
 SOURCES += $$files(src/test/*.h, true)
+
+LIBS += -lHootCoreTest
 }

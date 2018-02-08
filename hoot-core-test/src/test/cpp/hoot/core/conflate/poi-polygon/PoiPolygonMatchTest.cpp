@@ -48,6 +48,10 @@ class PoiPolygonMatchTest : public CppUnit::TestFixture
   CPPUNIT_TEST(badNameScoreThresholdInputsTest);
   CPPUNIT_TEST(badTypeScoreThresholdInputsTest);
   CPPUNIT_TEST(badReviewIfMatchedTypesInputsTest);
+  CPPUNIT_TEST(exactSourceMatchDisableConflationTest);
+  CPPUNIT_TEST(sourceMatchTagKeyPrefixOnlyDisableConflationTest);
+  CPPUNIT_TEST(sourceTagKeyMismatchDisableConflationTest);
+  CPPUNIT_TEST(missingSourceTagTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -506,6 +510,235 @@ public:
     CPPUNIT_ASSERT(
       exceptionMsg4.contains(
         "Invalid POI/Polygon review if matched type configuration option value"));
+  }
+
+  void exactSourceMatchDisableConflationTest()
+  {
+    OsmMap::resetCounters();
+
+    OsmMapPtr map(new OsmMap());
+
+    Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
+                        Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
+                        Coordinate(0.0, 0.0),
+                        Coordinate::getNull() };
+    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+    w1->getTags().set("area", true);
+    w1->getTags().set("poi", true);
+    w1->getTags()["name"] = "United Kingdoms";
+    NodePtr n1(new Node(Status::Unknown1, 1, 10, 10, 5));
+    n1->getTags().set("poi", true);
+    n1->getTags()["name"] = "United Kingdom";
+    map->addNode(n1);
+
+    {
+      w1->getTags()["source"] = "mySource:a";
+      n1->getTags()["source"] = "mySource:a";
+
+      PoiPolygonMatch uut(
+        map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+      uut.setEnableAdvancedMatching(false);
+      uut.setEnableReviewReduction(true);
+      uut.setMatchDistanceThreshold(0.0);
+      uut.setReviewDistanceThreshold(0.0);
+      uut.setNameScoreThreshold(0.8);
+      uut.setTypeScoreThreshold(0.8);
+      uut.setMatchEvidenceThreshold(3);
+      uut.setReviewEvidenceThreshold(1);
+      uut.setDisableSameSourceConflation(true);
+      uut.setDisableSameSourceConflationMatchTagKeyPrefixOnly(false);
+      uut.setSourceTagKey("source");
+      uut.calculateMatch(w1->getElementId(), n1->getElementId());
+
+      HOOT_STR_EQUALS("match: 0 miss: 1 review: 0", uut.getClassification());
+    }
+
+    {
+      w1->getTags()["source"] = "mySource:a";
+      n1->getTags()["source"] = "mySource:b";
+
+      PoiPolygonMatch uut(
+        map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+      uut.setEnableAdvancedMatching(false);
+      uut.setEnableReviewReduction(true);
+      uut.setMatchDistanceThreshold(0.0);
+      uut.setReviewDistanceThreshold(0.0);
+      uut.setNameScoreThreshold(0.8);
+      uut.setTypeScoreThreshold(0.8);
+      uut.setMatchEvidenceThreshold(3);
+      uut.setReviewEvidenceThreshold(1);
+      uut.setDisableSameSourceConflation(true);
+      uut.setDisableSameSourceConflationMatchTagKeyPrefixOnly(false);
+      uut.setSourceTagKey("source");
+      uut.calculateMatch(w1->getElementId(), n1->getElementId());
+
+      HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
+    }
+  }
+
+  void sourceMatchTagKeyPrefixOnlyDisableConflationTest()
+  {
+    OsmMap::resetCounters();
+
+    OsmMapPtr map(new OsmMap());
+
+    Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
+                        Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
+                        Coordinate(0.0, 0.0),
+                        Coordinate::getNull() };
+    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+    w1->getTags().set("area", true);
+    w1->getTags().set("poi", true);
+    w1->getTags()["name"] = "United Kingdoms";
+    NodePtr n1(new Node(Status::Unknown1, 1, 10, 10, 5));
+    n1->getTags().set("poi", true);
+    n1->getTags()["name"] = "United Kingdom";
+    map->addNode(n1);
+
+    {
+      w1->getTags()["source"] = "mySource:a";
+      n1->getTags()["source"] = "mySource:b";
+
+      PoiPolygonMatch uut(
+        map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+      uut.setEnableAdvancedMatching(false);
+      uut.setEnableReviewReduction(true);
+      uut.setMatchDistanceThreshold(0.0);
+      uut.setReviewDistanceThreshold(0.0);
+      uut.setNameScoreThreshold(0.8);
+      uut.setTypeScoreThreshold(0.8);
+      uut.setMatchEvidenceThreshold(3);
+      uut.setReviewEvidenceThreshold(1);
+      uut.setDisableSameSourceConflation(true);
+      uut.setDisableSameSourceConflationMatchTagKeyPrefixOnly(true);
+      uut.setSourceTagKey("source");
+      uut.calculateMatch(w1->getElementId(), n1->getElementId());
+
+      HOOT_STR_EQUALS("match: 0 miss: 1 review: 0", uut.getClassification());
+    }
+
+    {
+      w1->getTags()["source"] = "mySource:a";
+      n1->getTags()["source"] = "mySource1:a";
+
+      PoiPolygonMatch uut(
+        map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+      uut.setEnableAdvancedMatching(false);
+      uut.setEnableReviewReduction(true);
+      uut.setMatchDistanceThreshold(0.0);
+      uut.setReviewDistanceThreshold(0.0);
+      uut.setNameScoreThreshold(0.8);
+      uut.setTypeScoreThreshold(0.8);
+      uut.setMatchEvidenceThreshold(3);
+      uut.setReviewEvidenceThreshold(1);
+      uut.setDisableSameSourceConflation(true);
+      uut.setDisableSameSourceConflationMatchTagKeyPrefixOnly(true);
+      uut.setSourceTagKey("source");
+      uut.calculateMatch(w1->getElementId(), n1->getElementId());
+
+      HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
+    }
+  }
+
+  void sourceTagKeyMismatchDisableConflationTest()
+  {
+    OsmMap::resetCounters();
+
+    OsmMapPtr map(new OsmMap());
+
+    Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
+                        Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
+                        Coordinate(0.0, 0.0),
+                        Coordinate::getNull() };
+    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+    w1->getTags().set("area", true);
+    w1->getTags().set("poi", true);
+    w1->getTags()["name"] = "United Kingdoms";
+    NodePtr n1(new Node(Status::Unknown1, 1, 10, 10, 5));
+    n1->getTags().set("poi", true);
+    n1->getTags()["name"] = "United Kingdom";
+    map->addNode(n1);
+
+    {
+      w1->getTags()["source"] = "mySource:a";
+      n1->getTags()["source"] = "mySource:a";
+
+      PoiPolygonMatch uut(
+        map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+      uut.setEnableAdvancedMatching(false);
+      uut.setEnableReviewReduction(true);
+      uut.setMatchDistanceThreshold(0.0);
+      uut.setReviewDistanceThreshold(0.0);
+      uut.setNameScoreThreshold(0.8);
+      uut.setTypeScoreThreshold(0.8);
+      uut.setMatchEvidenceThreshold(3);
+      uut.setReviewEvidenceThreshold(1);
+      uut.setDisableSameSourceConflation(true);
+      uut.setDisableSameSourceConflationMatchTagKeyPrefixOnly(false);
+      uut.setSourceTagKey("source1");
+      uut.calculateMatch(w1->getElementId(), n1->getElementId());
+
+      HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
+    }
+  }
+
+  void missingSourceTagTest()
+  {
+    OsmMap::resetCounters();
+
+    OsmMapPtr map(new OsmMap());
+
+    Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
+                        Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
+                        Coordinate(0.0, 0.0),
+                        Coordinate::getNull() };
+    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+    w1->getTags().set("area", true);
+    w1->getTags().set("poi", true);
+    w1->getTags()["name"] = "United Kingdoms";
+    NodePtr n1(new Node(Status::Unknown1, 1, 10, 10, 5));
+    n1->getTags().set("poi", true);
+    n1->getTags()["name"] = "United Kingdom";
+    n1->getTags()["source"] = "mySource:a";
+    map->addNode(n1);
+
+    {
+      PoiPolygonMatch uut(
+        map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+      uut.setEnableAdvancedMatching(false);
+      uut.setEnableReviewReduction(true);
+      uut.setMatchDistanceThreshold(0.0);
+      uut.setReviewDistanceThreshold(0.0);
+      uut.setNameScoreThreshold(0.8);
+      uut.setTypeScoreThreshold(0.8);
+      uut.setMatchEvidenceThreshold(3);
+      uut.setReviewEvidenceThreshold(1);
+      uut.setDisableSameSourceConflation(true);
+      uut.setDisableSameSourceConflationMatchTagKeyPrefixOnly(false);
+      uut.setSourceTagKey("source");
+      uut.calculateMatch(w1->getElementId(), n1->getElementId());
+
+      HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
+    }
+
+    {
+      PoiPolygonMatch uut(
+        map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+      uut.setEnableAdvancedMatching(false);
+      uut.setEnableReviewReduction(true);
+      uut.setMatchDistanceThreshold(0.0);
+      uut.setReviewDistanceThreshold(0.0);
+      uut.setNameScoreThreshold(0.8);
+      uut.setTypeScoreThreshold(0.8);
+      uut.setMatchEvidenceThreshold(3);
+      uut.setReviewEvidenceThreshold(1);
+      uut.setDisableSameSourceConflation(true);
+      uut.setDisableSameSourceConflationMatchTagKeyPrefixOnly(true);
+      uut.setSourceTagKey("source");
+      uut.calculateMatch(w1->getElementId(), n1->getElementId());
+
+      HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
+    }
   }
 };
 

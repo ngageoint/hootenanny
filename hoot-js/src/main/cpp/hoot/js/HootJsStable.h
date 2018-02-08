@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HOOTJSSTABLE_H
 #define HOOTJSSTABLE_H
@@ -30,7 +30,29 @@
 // hoot
 #include <hoot/core/HootCoreStable.h>
 
+//  Remove unused-parameter warnings from v8
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+
 // v8
 #include <v8.h>
+#include <libplatform/libplatform.h>
+
+#pragma GCC diagnostic pop
+
+namespace hoot
+{
+
+//  v8::Persistent is no longer derived from v8::Local requiring these conversion functions
+template<class T>
+inline v8::Local<T> ToLocal(v8::Persistent<T>* p) { return *reinterpret_cast<v8::Local<T>*>(p); }
+template<class T>
+inline v8::Local<T> ToLocal(const v8::Persistent<T>* p) { return *reinterpret_cast<v8::Local<T>*>(const_cast<v8::Persistent<T>*>(p)); }
+template<class T>
+inline v8::Persistent<T> ToPersistent(v8::Local<T>* l) { return *reinterpret_cast<v8::Persistent<T>*>(l); }
+template<class T>
+inline v8::Persistent<T> ToPersistent(const v8::Local<T>* l) { return *reinterpret_cast<v8::Persistent<T>*>(const_cast<v8::Local<T>*>(l)); }
+
+}
 
 #endif // HOOTJSSTABLE_H

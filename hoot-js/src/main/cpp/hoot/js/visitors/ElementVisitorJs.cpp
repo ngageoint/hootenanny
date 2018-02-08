@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ElementVisitorJs.h"
 
@@ -52,6 +52,8 @@ HOOT_JS_REGISTER(ElementVisitorJs)
 
 void ElementVisitorJs::Init(Handle<Object> target)
 {
+  Isolate* current = target->GetIsolate();
+  HandleScope scope(current);
   vector<string> opNames =
     Factory::getInstance().getObjectNamesByBase(ConstElementVisitor::className());
 
@@ -61,20 +63,22 @@ void ElementVisitorJs::Init(Handle<Object> target)
     const char* n = utf8.data();
 
     // Prepare constructor template
-    Local<FunctionTemplate> tpl = FunctionTemplate::New(New);
-    tpl->SetClassName(String::NewSymbol(opNames[i].data()));
+    Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
+    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].data()));
     tpl->InstanceTemplate()->SetInternalFieldCount(1);
     // Prototype
     tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
-                                  String::New(ConstElementVisitor::className().data()));
+                                  String::NewFromUtf8(current, ConstElementVisitor::className().data()));
 
-    Persistent<Function> constructor = Persistent<Function>::New(tpl->GetFunction());
-    target->Set(String::NewSymbol(n), constructor);
+    Persistent<Function> constructor(current, tpl->GetFunction());
+    target->Set(String::NewFromUtf8(current, n), ToLocal(&constructor));
   }
 }
 
-Handle<Value> ElementVisitorJs::New(const Arguments& args) {
-  HandleScope scope;
+void ElementVisitorJs::New(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   QString className = str(args.This()->GetConstructorName());
 
@@ -84,7 +88,7 @@ Handle<Value> ElementVisitorJs::New(const Arguments& args) {
 
   PopulateConsumersJs::populateConsumers<ConstElementVisitor>(c, args);
 
-  return args.This();
+  args.GetReturnValue().Set(args.This());
 }
 
 }
