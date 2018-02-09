@@ -33,7 +33,6 @@
         <httpcore.version>4.3</httpcore.version>
         <httpcore-nio.version>4.3</httpcore-nio.version>
         <httpasyncclient.version>4.0</httpasyncclient.version>
-        <smiley-http-proxy-servlet.version>1.6</smiley-http-proxy-servlet.version>
         <apache.commons.lang3.version>3.1</apache.commons.lang3.version>
         <apache.commons.io.version>2.5</apache.commons.io.version>
         <apache.commons.exec.version>1.3</apache.commons.exec.version>
@@ -399,14 +398,6 @@
             <artifactId>httpasyncclient</artifactId>
             <version>${httpasyncclient.version}</version>
         </dependency>
-
-        <!-- proxy -->
-        <dependency>
-            <groupId>org.mitre.dsmiley.httpproxy</groupId>
-            <artifactId>smiley-http-proxy-servlet</artifactId>
-            <version>${smiley-http-proxy-servlet.version}</version>
-        </dependency>
-
         <!-- logging -->
         <dependency>
             <groupId>org.slf4j</groupId>
