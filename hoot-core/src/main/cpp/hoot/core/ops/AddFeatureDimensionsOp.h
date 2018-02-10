@@ -22,53 +22,42 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef CALCULATEAREAVISITOR_H
-#define CALCULATEAREAVISITOR_H
+
+#ifndef ADDFEATUREDIMENSIONSOP_H
+#define ADDFEATUREDIMENSIONSOP_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
-
-#include "SingleStatistic.h"
+#include <hoot/core/io/Serializable.h>
+#include <hoot/core/ops/OsmMapOperation.h>
 
 namespace hoot
 {
 
 /**
- * Sums the length of all the ways. The map projection is used so to get meters the map must be
- * first reprojected into meters.
+ * This class adds  area and length tags to elements
+ * The input map can be in either a planar or geographic projection.
  */
-class CalculateAreaVisitor : public ConstElementVisitor, public ConstOsmMapConsumer, public SingleStatistic
+//class AddFeatureDimensionsOp : public OsmMapOperation
+class AddFeatureDimensionsOp : public OsmMapOperation, public Serializable
 {
 public:
 
-  static std::string className() { return "hoot::CalculateAreaVisitor"; }
+  static std::string className() { return "hoot::AddFeatureDimensionsOp"; }
 
-  CalculateAreaVisitor() : _total(0) {}
+  AddFeatureDimensionsOp();
 
-  virtual ~CalculateAreaVisitor() {}
+  virtual void apply(boost::shared_ptr<OsmMap>& map);
 
-  /**
-   * Returns the area in meters squared.
-   */
-  static double getArea(const OsmMapPtr& map, ElementPtr e);
+  virtual std::string getClassName() const { return className(); }
 
-  double getArea() const { return _total; }
+  virtual void readObject(QDataStream& is);
 
-  double getStat() const { return getArea(); }
+  virtual void writeObject(QDataStream& os) const;
 
-  virtual void setOsmMap(const OsmMap* map) { _map = map; }
-
-  virtual void visit(const ConstElementPtr& e);
-
-private:
-  const OsmMap* _map;
-  Meters _total;
 };
 
 }
 
-#endif // ADDREFVISITOR_H
+#endif // ADDFEATUREDIMENSIONSOP_H

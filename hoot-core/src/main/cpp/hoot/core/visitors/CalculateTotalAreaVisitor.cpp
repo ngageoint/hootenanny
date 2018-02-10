@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "CalculateAreaVisitor.h"
+#include "CalculateTotalAreaVisitor.h"
 
 // geos
 #include <geos/geom/LineString.h>
@@ -39,17 +39,17 @@ using namespace geos::geom;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, CalculateAreaVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, CalculateTotalAreaVisitor)
 
-Meters CalculateAreaVisitor::getArea(const OsmMapPtr& map, ElementPtr e)
+Meters CalculateTotalAreaVisitor::getArea(const OsmMapPtr& map, ElementPtr e)
 {
-  CalculateAreaVisitor v;
+  CalculateTotalAreaVisitor v;
   v.setOsmMap(map.get());
   e->visitRo(*map, v);
   return v.getArea();
 }
 
-void CalculateAreaVisitor::visit(const ConstElementPtr& e)
+void CalculateTotalAreaVisitor::visit(const ConstElementPtr& e)
 {
   boost::shared_ptr<Geometry> g = ElementConverter(_map->shared_from_this()).convertToGeometry(e);
   _total += g->getArea();

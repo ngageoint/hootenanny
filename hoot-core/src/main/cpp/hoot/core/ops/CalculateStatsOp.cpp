@@ -42,8 +42,7 @@
 #include <hoot/core/filters/TagCriterion.h>
 #include <hoot/core/filters/WaterwayCriterion.h>
 #include <hoot/core/io/ScriptTranslatorFactory.h>
-#include <hoot/core/visitors/CalculateAreaVisitor.h>
-#include <hoot/core/visitors/CalculateAreaForStatsVisitor.h>
+#include <hoot/core/visitors/CalculateTotalAreaVisitor.h>
 #include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/visitors/FeatureCountVisitor.h>
@@ -175,13 +174,13 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     _stats.append(SingleStat("Meters of Linear Features",
       _applyVisitor(constMap, FilteredVisitor(LinearFilter(keep), ConstElementVisitorPtr(new LengthOfWaysVisitor())))));
     _stats.append(SingleStat("Meters Squared of Area Features",
-      _applyVisitor(constMap, FilteredVisitor(StatsAreaFilter(keep), ConstElementVisitorPtr(new CalculateAreaForStatsVisitor())))));
+      _applyVisitor(constMap, FilteredVisitor(StatsAreaFilter(keep), ConstElementVisitorPtr(new CalculateTotalAreaVisitor())))));
     _stats.append(SingleStat("Meters of Highway",
       _applyVisitor(constMap, FilteredVisitor(HighwayFilter(keep), ConstElementVisitorPtr(new LengthOfWaysVisitor())))));
     _stats.append(SingleStat("Highway Unique Name Count",
       _applyVisitor(constMap, FilteredVisitor(HighwayFilter(keep), ConstElementVisitorPtr(new UniqueNamesVisitor())))));
     _stats.append(SingleStat("Meters Squared of Buildings",
-      _applyVisitor(constMap, FilteredVisitor(BuildingCriterion(map), ConstElementVisitorPtr(new CalculateAreaVisitor())))));
+      _applyVisitor(constMap, FilteredVisitor(BuildingCriterion(map), ConstElementVisitorPtr(new CalculateTotalAreaVisitor())))));
     _stats.append(SingleStat("Building Unique Name Count",
       _applyVisitor(constMap, FilteredVisitor(BuildingCriterion(map), ConstElementVisitorPtr(new UniqueNamesVisitor())))));
 
@@ -619,7 +618,7 @@ void CalculateStatsOp::_generateFeatureStats(boost::shared_ptr<const OsmMap>& ma
   {
     _stats.append(SingleStat(QString("Meters Squared of %1s Processed by Conflation").arg(description),
       _applyVisitor(map, FilteredVisitor(ChainCriterion(ElementCriterionPtr(new StatusCriterion(Status::Conflated)),
-        criterion->clone()), ConstElementVisitorPtr(new CalculateAreaVisitor())))));
+        criterion->clone()), ConstElementVisitorPtr(new CalculateTotalAreaVisitor())))));
   }
 
   double percentageOfTotalFeaturesConflated = 0.0;
