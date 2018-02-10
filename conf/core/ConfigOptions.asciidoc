@@ -1726,7 +1726,7 @@ written if the value is not empty.
 
 * Data Type: list
 * Default Value:
-** ``
+** `hoot:AddFeatureDimensionsOp` - Add length and area tags to features
 
 User specified operations for converting OSM files to OGR compatible file types.
 

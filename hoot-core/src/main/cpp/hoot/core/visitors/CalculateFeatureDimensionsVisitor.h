@@ -22,54 +22,45 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef CALCULATEAREAFORSTATSVISITOR_H
-#define CALCULATEAREAFORSTATSVISITOR_H
+#ifndef CALCULATEFEATUREDIMENSIONSVISITOR_H
+#define CALCULATEFEATUREDIMENSIONSVISITOR_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
 #include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
-
-#include "SingleStatistic.h"
 
 namespace hoot
 {
 
 /**
- * Sums the length of all the ways. The map projection is used so to get meters the map must be
- * first reprojected into meters.
+ * Finds the Area of polygons and the length of ways and adds them as tags to features.
+ * The map projection is used so to get meters the map must be first reprojected into meters.
  */
-class CalculateAreaForStatsVisitor : public ConstElementVisitor, public ConstOsmMapConsumer,
-  public SingleStatistic
+class CalculateFeatureDimensionsVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
 {
 public:
 
-  static std::string className() { return "hoot::CalculateAreaForStatsVisitor"; }
+  static std::string className() { return "hoot::CalculateFeatureDimensionsVisitor"; }
 
-  CalculateAreaForStatsVisitor() : _total(0) {}
+  CalculateFeatureDimensionsVisitor() {}
 
-  virtual ~CalculateAreaForStatsVisitor() {}
+  virtual ~CalculateFeatureDimensionsVisitor() {}
+
+  virtual void setOsmMap(OsmMap* map) { _map = map; }
 
   /**
-   * Returns the area in meters squared.
+   * The visitor requires a read/write map.
    */
-  static double getArea(const OsmMapPtr& map, ElementPtr e);
-
-  double getArea() const { return _total; }
-
-  double getStat() const { return getArea(); }
-
-  virtual void setOsmMap(const OsmMap* map) { _map = map; }
+  virtual void setOsmMap(const OsmMap* /*map*/) { assert(false); }
 
   virtual void visit(const ConstElementPtr& e);
 
 private:
-  const OsmMap* _map;
-  Meters _total;
+  OsmMap* _map;
 };
 
 }
 
-#endif // ADDREFVISITOR_H
+#endif // CALCULATEFEATUREDIMENSIONSVISITOR_H
