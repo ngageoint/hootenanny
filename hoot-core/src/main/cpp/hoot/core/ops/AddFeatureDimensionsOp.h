@@ -35,6 +35,8 @@
 namespace hoot
 {
 
+class OsmMap;
+
 /**
  * This class adds  area and length tags to elements
  * The input map can be in either a planar or geographic projection.

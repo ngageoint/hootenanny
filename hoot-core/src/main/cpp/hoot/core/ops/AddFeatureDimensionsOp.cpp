@@ -29,6 +29,8 @@
 
 // geos
 #include <geos/geom/LineString.h>
+#include <geos/geom/MultiLineString.h>
+#include <geos/geom/Polygon.h>
 
 // Hoot
 #include <hoot/core/OsmMap.h>
@@ -64,25 +66,16 @@ void AddFeatureDimensionsOp::apply(boost::shared_ptr<OsmMap> &map)
     planar = map;
   }
 
-  //find the area(s) as ways
-  const WayMap& ways = map->getWays();
+  // find the area(s) as ways
+  const WayMap& ways = planar->getWays();
   for (WayMap::const_iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
   {
     const int wayId = wayItr->first;
 
     ElementPtr pElement = planar->getElement(ElementType::Way, wayId);
-    ElementPtr tElement;
 
-    // We find the measurement using the projected map and transfer the result to
-    // the main map via the element id.
-    if (planar == map)
-    {
-      tElement = pElement;
-    }
-    else
-    {
-      tElement = map->getElement(pElement->getElementId());
-    }
+    // NOTE: pElement and tElement may be identical
+    ElementPtr tElement = map->getElement(pElement->getElementId());
 
     boost::shared_ptr<Geometry> g = ElementConverter(planar).convertToGeometry(pElement, true, true);
 
@@ -92,43 +85,24 @@ void AddFeatureDimensionsOp::apply(boost::shared_ptr<OsmMap> &map)
       {
         tElement->getTags()["feature_area"] = QString::number(g->getArea(),'f',2);
       }
-//      else
-//      {
-//        LOG_INFO("Has Area Tag: " + tElement->getTags()["feature_area"]);
-//      }
+      continue;
     }
-    else // We assume that it is linear
+
+    // Not an Area, must be Linear
+    if (pElement->getTags().get("length").isEmpty())
     {
-      if (pElement->getTags().get("length").isEmpty())
-      {
-        tElement->getTags()["length"] = QString::number(g->getLength(),'f',2);
-      }
-//      else
-//      {
-//        LOG_INFO("Has Length Tag: " + tElement->getTags()["length"]);
-//      }
+      tElement->getTags()["length"] = QString::number(g->getLength(),'f',2);
     }
   }
 
-  //find the area(s) as Relations
-  const RelationMap& rels = map->getRelations();
+  // find the area(s) as Relations
+  const RelationMap& rels = planar->getRelations();
   for (RelationMap::const_iterator relItr = rels.begin(); relItr != rels.end(); ++relItr)
   {
     const int relId = relItr->first;
 
     ElementPtr pElement = planar->getElement(ElementType::Relation, relId);
-    ElementPtr tElement;
-
-    // We find the measurement using the projected map and transfer the result to
-    // the main map via the element id.
-    if (planar == map)
-    {
-      tElement = pElement;
-    }
-    else
-    {
-      tElement = map->getElement(pElement->getElementId());
-    }
+    ElementPtr tElement = map->getElement(pElement->getElementId());
 
     boost::shared_ptr<Geometry> g = ElementConverter(planar).convertToGeometry(pElement, true, true);
 
@@ -138,10 +112,17 @@ void AddFeatureDimensionsOp::apply(boost::shared_ptr<OsmMap> &map)
       {
         tElement->getTags()["feature_area"] = QString::number(g->getArea(),'f',2);
       }
-//      else
-//      {
-//        LOG_INFO("Has Area Tag: " + tElement->getTags()["feature_area"]);
-//      }
+      continue;
+    }
+
+    // Just making sure....
+    if (OsmSchema::getInstance().isLinear(*pElement))
+    {
+      if (pElement->getTags().get("length").isEmpty())
+      {
+        tElement->getTags()["length"] = QString::number(g->getLength(),'f',2);
+      }
+      continue;
     }
   }
 
