@@ -1627,7 +1627,7 @@ mgcp = {
         if (tags['source:imagery:datetime'])
         {
             attrs.SDV = tags['source:imagery:datetime'];
-            delete notUsedTags['source:imagery:datetime'];
+            //delete notUsedTags['source:imagery:datetime'];
         }
 
         // Now try using tags from Taginfo
@@ -1636,12 +1636,12 @@ mgcp = {
             if (tags['source:date']) 
             {
                 attrs.SDV = tags['source:date'];
-                delete notUsedTags['source:date'];
+                //delete notUsedTags['source:date'];
             }
             else if (tags['source:geometry:date'])
             {
                 attrs.SDV = tags['source:geometry:date'];
-                delete notUsedTags['source:geometry:date'];
+                //delete notUsedTags['source:geometry:date'];
             }
         }
         // Chop the milliseconds off the "source:datetime"

@@ -1995,7 +1995,7 @@ tds61 = {
         if (tags['source:imagery:datetime'])
         {
             attrs.ZI001_SDV = tags['source:imagery:datetime'];
-            delete notUsedTags['source:imagery:datetime'];
+            // delete notUsedTags['source:imagery:datetime'];
         }
         
         // Now try using tags from Taginfo
@@ -2004,12 +2004,12 @@ tds61 = {
             if (tags['source:date']) 
             {
                 attrs.ZI001_SDV = tags['source:date'];
-                delete notUsedTags['source:date'];
+                // delete notUsedTags['source:date'];
             }
             else if (tags['source:geometry:date'])
             {
                 attrs.ZI001_SDV = tags['source:geometry:date'];
-                delete notUsedTags['source:geometry:date'];
+                // delete notUsedTags['source:geometry:date'];
             }
         }
  
