@@ -276,7 +276,7 @@
                     {
                         "id":"poipolygon_review_if_matched_types",
                         "elem_type":"string",
-                        "description":"A list of key=value pairs, added as a semi-colon delimited list (poi.polygon.review.if.matched.types='key1=value1;key2=value2;'",
+                        "description":"See User Guide",
                         "name":"POI Polygon Review If Matched Types",
                         "defaultvalue":"",
                         "hoot_key":"poi.polygon.review.if.matched.types",
@@ -286,9 +286,34 @@
                         "id":"poi_ignore_type_if_name_present",
                         "elem_type":"bool",
                         "defaultvalue":"false",
-                        "description":"POI Ignore Type If Name Present",
+                        "description":"See User Guide",
                         "name":"POI Ignore Type If Name Present",
                         "hoot_key":"poi.ignore.type.if.name.present"
+                    },
+                    {
+                        "id":"poipolygon_disable_same_source_conflation",
+                        "elem_type":"bool",
+                        "defaultvalue":"false",
+                        "description":"See User Guide",
+                        "name":"POI Polygon Disable Same Source Conflation",
+                        "hoot_key":"poi.polygon.disable.same.source.conflation"
+                    },
+                    {
+                        "id":"poipolygon_disable_same_source_conflation_match_tag_key_prefix_only",
+                        "elem_type":"bool",
+                        "defaultvalue":"true",
+                        "description":"See User Guide",
+                        "name":"POI Polygon Disable Same Source Conflation Match Tag Key Prefix Only",
+                        "hoot_key":"poi.polygon.disable.same.source.conflation.match.tag.key.prefix.only"
+                    },
+                    {
+                        "id":"poipolygon_source_tag_key",
+                        "elem_type":"string",
+                        "description":"Tag key that POI/Polygon Conflation recognizes as a source tag",
+                        "name":"POI Polygon Source Tag Key",
+                        "defaultvalue":"source",
+                        "hoot_key":"poi.polygon.source.tag.key",
+                        "onchange":"true"
                     }
                 ]
             },
