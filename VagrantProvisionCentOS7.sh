@@ -345,6 +345,9 @@ npm install --silent
 # Clean up after the npm install
 rm -rf ~/tmp
 
+# Notify systemd that unit files have changed.
+sudo systemctl daemon-reload
+
 cd $HOOT_HOME
 
 # Update marker file date now that dependency and config stuff has run
