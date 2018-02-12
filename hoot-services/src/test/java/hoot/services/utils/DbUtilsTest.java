@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.utils;
 
@@ -77,43 +77,37 @@ public class DbUtilsTest {
     public void testDeleteTables() throws Exception {
         long userId = MapUtils.insertUser();
         long mapId = insertMap(userId);
-        System.out.println(mapId);
         DbUtils.createQuery().getConnection().commit();
-        
+
         assertTrue(DbUtils.mapExists(String.valueOf(mapId)));
         assertTrue(checkForTables(mapId));
-        
+
         MapUtils.deleteOSMRecord(mapId);
         DbUtils.createQuery().getConnection().commit();
-        
-        try {
-           assertFalse(DbUtils.mapExists(String.valueOf(mapId)));
-        }catch(IllegalArgumentException e) {
-        	System.out.println("Expected error."); 
-        }
+
+        assertFalse(DbUtils.mapExists(String.valueOf(mapId)));
         assertFalse(checkForTables(mapId));
 
 
     }
-    
-    public boolean checkForTables(long mapId) throws SQLException {
-		List<String> tables = DbUtils.getTablesList("current");
 
-		//if it contains ANY of them this is "true"  because something "lived"
-		if (tables.contains("current_way_nodes_" + mapId) ||
-		tables.contains("current_relation_members_" + mapId) ||
-		tables.contains("current_nodes_" + mapId) ||
-		tables.contains("current_ways_" + mapId) ||
-		tables.contains("current_relations_" + mapId) ||
-		tables.contains("changesets_" + mapId) )
-			return true;
-		else
-			return false;
+    public boolean checkForTables(long mapId) throws SQLException {
+    List<String> tables = DbUtils.getTablesList("current");
+
+    //if it contains ANY of them this is "true"  because something "lived"
+    if (tables.contains("current_way_nodes_" + mapId) ||
+    tables.contains("current_relation_members_" + mapId) ||
+    tables.contains("current_nodes_" + mapId) ||
+    tables.contains("current_ways_" + mapId) ||
+    tables.contains("current_relations_" + mapId) ||
+    tables.contains("changesets_" + mapId) )
+    	return true;
+    else
+        return false;
     }
 
-   
 
-	@Test
+    @Test
     @Category(UnitTest.class)
     @Transactional
     public void testUpdateMapsTableTags() throws Exception {

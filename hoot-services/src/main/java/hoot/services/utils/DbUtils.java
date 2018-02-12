@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.utils;
 
@@ -216,11 +216,11 @@ public final class DbUtils {
                 try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                     stmt.execute();
                     stmt.close();
-                    
+
                 }
-                conn.commit();    
             }
-            
+            conn.commit();
+
         }
     }
 
@@ -262,7 +262,12 @@ public final class DbUtils {
      * @return returns true when exists else false
      */
     public static boolean mapExists(String mapName) {
-        long id = getRecordIdForInputString(mapName, maps, maps.id, maps.displayName);
+        long id;
+        try {
+            id = getRecordIdForInputString(mapName, maps, maps.id, maps.displayName);
+        } catch (IllegalArgumentException ex) {
+            id = -1;
+        }
         return (id > -1);
     }
 
@@ -337,7 +342,7 @@ public final class DbUtils {
                         + " in '" + table + "' table.  Please specify a single, valid record.");
             }
         }
-        
+
         return -1;
     }
 }
