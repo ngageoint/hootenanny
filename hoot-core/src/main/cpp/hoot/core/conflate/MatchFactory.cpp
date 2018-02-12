@@ -150,6 +150,19 @@ void MatchFactory::_setMatchCreators(QStringList matchCreatorsList)
 
 MatchFactory& MatchFactory::getInstance()
 {
+  const QStringList matchCreators = ConfigOptions(conf()).getMatchCreators().split(";");
+  LOG_VARD(matchCreators);
+  const QStringList mergerCreators = ConfigOptions(conf()).getMergerCreators().split(";");
+  LOG_VARD(mergerCreators);
+
+  if (matchCreators.size() != mergerCreators.size())
+  {
+    throw HootException(
+      "The number of configured match creators (" + QString::number(matchCreators.size()) +
+      ") does not equal the number of configured merger creators (" +
+      QString::number(mergerCreators.size()) + ")");
+  }
+
   if (!_theInstance.get())
   {
     _theInstance.reset(new MatchFactory());
@@ -158,7 +171,7 @@ MatchFactory& MatchFactory::getInstance()
   if (_theInstance->_creators.size() == 0)
   {
     //only get the match creators that are specified in the config
-    _setMatchCreators(ConfigOptions(conf()).getMatchCreators().split(";"));
+    _setMatchCreators(matchCreators);
   }
   return *_theInstance;
 }

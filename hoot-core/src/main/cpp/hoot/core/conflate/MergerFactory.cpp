@@ -155,18 +155,17 @@ bool MergerFactory::isConflicting(const ConstOsmMapPtr& map, const Match* m1, co
 }
 
 void MergerFactory::registerDefaultCreators()
-{
-  QStringList creators = ConfigOptions().getMergerCreators().split(";");
-  LOG_DEBUG("MergeFactory creators: " << creators);
-
-  for (int i = 0; i < creators.size(); i++)
+{  
+  const QStringList mergerCreators = ConfigOptions(conf()).getMergerCreators().split(";");
+  LOG_VARD(mergerCreators);
+  for (int i = 0; i < mergerCreators.size(); i++)
   {
-    QString c = creators[i];
+    QString c = mergerCreators[i];
     QStringList args = c.split(",");
     QString className = args[0];
     args.removeFirst();
-    MergerCreator* mc = Factory::getInstance().constructObject<MergerCreator>(
-      className);
+    MergerCreator* mc =
+      Factory::getInstance().constructObject<MergerCreator>(className);
     registerCreator(mc);
 
     if (args.size() > 0)
