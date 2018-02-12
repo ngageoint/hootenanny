@@ -1243,7 +1243,7 @@ are identical. Units in meters and defaults to 1.0m.
 === merger.creators
 
 * Data Type: string
-* Default Value: `hoot::BuildingMergerCreator;hoot::ScriptMergerCreator;hoot::HighwaySnapMergerCreator;hoot::PoiPolygonMergerCreator;hoot::ScriptMergerCreator`
+* Default Value: `hoot::BuildingMergerCreator;hoot::ScriptMergerCreator;hoot::HighwaySnapMergerCreator;hoot::ScriptMergerCreator;hoot::PoiPolygonMergerCreator;hoot::ScriptMergerCreator`
 
 List of merger creators to use during conflation. This can modify what features will be conflated
 (e.g. buildings, roads, etc.).  The ordering must match that in match.creators.
