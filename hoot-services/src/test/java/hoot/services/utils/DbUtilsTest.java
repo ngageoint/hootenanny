@@ -92,18 +92,18 @@ public class DbUtilsTest {
     }
 
     public boolean checkForTables(long mapId) throws SQLException {
-    List<String> tables = DbUtils.getTablesList("current");
+        List<String> tables = DbUtils.getTablesList("current");
 
-    //if it contains ANY of them this is "true"  because something "lived"
-    if (tables.contains("current_way_nodes_" + mapId) ||
-    tables.contains("current_relation_members_" + mapId) ||
-    tables.contains("current_nodes_" + mapId) ||
-    tables.contains("current_ways_" + mapId) ||
-    tables.contains("current_relations_" + mapId) ||
-    tables.contains("changesets_" + mapId) )
-    	return true;
-    else
-        return false;
+        //if it contains ANY of them this is "true"  because something "lived"
+        if (tables.contains("current_way_nodes_" + mapId) ||
+            tables.contains("current_relation_members_" + mapId) ||
+            tables.contains("current_nodes_" + mapId) ||
+            tables.contains("current_ways_" + mapId) ||
+            tables.contains("current_relations_" + mapId) ||
+            tables.contains("changesets_" + mapId) )
+            return true;
+        else
+            return false;
     }
 
 
