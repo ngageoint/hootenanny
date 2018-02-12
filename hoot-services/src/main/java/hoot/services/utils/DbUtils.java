@@ -215,8 +215,12 @@ public final class DbUtils {
                 String sql = "DROP TABLE IF EXISTS \"" + table + "\"";
                 try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                     stmt.execute();
+                    stmt.close();
+                    
                 }
+                conn.commit();    
             }
+            
         }
     }
 
@@ -333,7 +337,7 @@ public final class DbUtils {
                         + " in '" + table + "' table.  Please specify a single, valid record.");
             }
         }
-
+        
         return -1;
     }
 }

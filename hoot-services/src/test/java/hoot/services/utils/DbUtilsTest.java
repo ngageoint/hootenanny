@@ -31,7 +31,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
@@ -76,15 +78,42 @@ public class DbUtilsTest {
         long userId = MapUtils.insertUser();
         long mapId = insertMap(userId);
         System.out.println(mapId);
-
+        DbUtils.createQuery().getConnection().commit();
+        
         assertTrue(DbUtils.mapExists(String.valueOf(mapId)));
-        DbUtils.deleteMapRelatedTablesByMapId(mapId);
-        assertFalse(DbUtils.mapExists(String.valueOf(mapId)));
+        assertTrue(checkForTables(mapId));
+        
+        MapUtils.deleteOSMRecord(mapId);
+        DbUtils.createQuery().getConnection().commit();
+        
+        try {
+           assertFalse(DbUtils.mapExists(String.valueOf(mapId)));
+        }catch(IllegalArgumentException e) {
+        	System.out.println("Expected error."); 
+        }
+        assertFalse(checkForTables(mapId));
 
 
     }
+    
+    public boolean checkForTables(long mapId) throws SQLException {
+		List<String> tables = DbUtils.getTablesList("current");
 
-    @Test
+		//if it contains ANY of them this is "true"  because something "lived"
+		if (tables.contains("current_way_nodes_" + mapId) ||
+		tables.contains("current_relation_members_" + mapId) ||
+		tables.contains("current_nodes_" + mapId) ||
+		tables.contains("current_ways_" + mapId) ||
+		tables.contains("current_relations_" + mapId) ||
+		tables.contains("changesets_" + mapId) )
+			return true;
+		else
+			return false;
+    }
+
+   
+
+	@Test
     @Category(UnitTest.class)
     @Transactional
     public void testUpdateMapsTableTags() throws Exception {
