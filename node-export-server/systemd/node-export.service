@@ -5,7 +5,8 @@ After=syslog.target network.target
 [Service]
 Type=simple
 User=SERVICE_USER
-WorkingDirectory=HOOT_HOME/node-export-server
+Environment='HOOT_HOME=HOOTENANNY_HOME'
+WorkingDirectory=HOOTENANNY_HOME/node-export-server
 ExecStart=/usr/bin/npm start
 ExecStop=/usr/bin/kill -HUP $MAINPID
 Restart=on-abort
