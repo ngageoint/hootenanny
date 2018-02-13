@@ -26,15 +26,15 @@ Feature: Advanced Conflation Options
         Then I click on "#hoot_cleaning_options_label"
         And I should see checkbox "Enabled" checked
         And I should see checkbox "Select All" unchecked
-        And I should see checkbox "Remove Duplicate Way" checked
-        And I should see checkbox "Remove Superfluous Way" checked
-        And I should see checkbox "DualWay Splitter" checked
-        And I should see checkbox "Implied Divided Marker" checked
-        And I should see checkbox "Small Way Merger" checked
+        And I should see checkbox "Remove Duplicate Ways" checked
+        And I should see checkbox "Remove Superfluous Ways" checked
+        And I should see checkbox "Split Dual Ways" checked
+        And I should see checkbox "Divided Road Marker Implied" checked
+        And I should see checkbox "Merge Small Ways" checked
         And I should see element "#small_way_merger_threshold" with no value and placeholder "15"
         And I should see checkbox "Remove Empty Areas" checked
-        And I should see checkbox "Remove Duplicate Area" checked
-        And I should see checkbox "Remove No Information Element" checked
+        And I should see checkbox "Remove Duplicate Areas" checked
+        And I should see checkbox "Remove Elements With No Information" checked
         Then I click on "#hoot_cleaning_options_label"
         And I should see "General Conflation Options"
         Then I click on "#hoot_general_conflation_options_label"
@@ -51,11 +51,16 @@ Feature: Advanced Conflation Options
         Then I click on "#hoot_road_options_label"
         And I should see checkbox "Enabled" checked
         And I should see element "#hoot_road_opt_engine" with no value and placeholder "Network"
-        # And I should see element "#search_radius_highway" with no value and placeholder "-1"
+        And I should see element "#search_radius_highway" with no value and placeholder "-1"
+	And I should see element "#way_merger_min_split_size" with no value and placeholder "5"
+        #TODO: test Unifying options
         # And I should see element "#highway_matcher_heading_delta" with no value and placeholder "5.0"
         # And I should see element "#highway_matcher_max_angle" with no value and placeholder "60"
-        # And I should see element "#way_merger_min_split_size" with no value and placeholder "5"
         Then I click on "#hoot_road_options_label"
+        And I should see "Area Options"
+        And I click on "#hoot_area_options_label"
+        And I should see checkbox "Enabled" checked
+        And I click on "#hoot_area_options_label"
         And I should see "Building Options"
         And I click on "#hoot_building_options_label"
         And I should see checkbox "Enabled" checked
@@ -64,6 +69,10 @@ Feature: Advanced Conflation Options
         And I click on "#hoot_poi_options_label"
         And I should see checkbox "Enabled" checked
         And I click on "#hoot_poi_options_label"
+        And I should see "POI to Polygon Options"
+        And I click on "#hoot_poi_poly_options_label"
+        And I should see checkbox "Enabled" checked
+        And I click on "#hoot_poi_poly_options_label"
         And I should see "Waterway Options"
         And I click on "#hoot_waterway_options_label"
         And I should see checkbox "Enabled" checked
@@ -91,8 +100,10 @@ Feature: Advanced Conflation Options
         And I should see checkbox "Enabled" checked
         And I should see element "#hoot_road_opt_engine" with no value and placeholder "Network"
         Then I click on "#hoot_road_options_label"
+        And I should see "Area Options"
         And I should see "Building Options"
         And I should see "POI Options"
+        And I should see "POI to Polygon Options"
         And I should see "Waterway Options"
         And I should see "Cookie Cutter & Horizontal Options"
         Then I click on "#horizontal_conflation_options_label"
