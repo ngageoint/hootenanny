@@ -522,49 +522,6 @@
                         ]
                     },
                     {
-                        "id":"hoot_road_opt_engine_network",
-                        "description":"R&D: Work in progress - Network Conflation",
-                        "name":"Network",
-                        "members":[
-                            {
-                                "id":"network_match_creator",
-                                "elem_type":"string",
-                                "description":"List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
-                                "name":"Match Creator",
-                                "required":"true",
-                                "defaultvalue":"hoot::NetworkMatchCreator",
-                                "override":{
-                                    "defaultvalue":"hoot::NetworkMatchCreator"
-                                },
-                                "hoot_key":"match.creators"
-                            },
-                            {
-                                "id":"network_merger_creator",
-                                "elem_type":"string",
-                                "description":"List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
-                                "name":"Merger Creator",
-                                "required":"true",
-                                "defaultvalue":"hoot::NetworkMergerCreator",
-                                "override":{
-                                    "defaultvalue":"hoot::NetworkMergerCreator"
-                                },
-                                "hoot_key":"merger.creators"
-                            },
-                            {
-                                "id":"network_matcher",
-                                "elem_type":"string",
-                                "description":"The network matcher to use during conflation. This option represents different algorithms used for scoring matches.",
-                                "name":"Network Matcher",
-                                "required":"true",
-                                "defaultvalue":"hoot::ConflictsNetworkMatcher",
-                                "override":{
-                                    "defaultvalue":"hoot::ConflictsNetworkMatcher"
-                                },
-                                "hoot_key":"network.matcher"
-                            }
-                        ]
-                    },
-                    {
                         "id":"hoot_road_opt_engine_greedy",
                         "description":"Greedy options",
                         "name":"Greedy"
