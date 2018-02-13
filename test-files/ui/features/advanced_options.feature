@@ -36,12 +36,6 @@ Feature: Advanced Conflation Options
         And I should see checkbox "Remove Duplicate Area" checked
         And I should see checkbox "Remove No Information Element" checked
         Then I click on "#hoot_cleaning_options_label"
-        And I should see "Rubber Sheeting Options"
-        Then I click on "#hoot_rubber_sheeting_options_label"
-        And I should see checkbox "Enabled" unchecked
-        And I should see checkbox "Rubber Sheet Ref" unchecked
-        And I should see element "#rubber_sheet_minimum_ties" with no value and placeholder "10"
-        Then I click on "#hoot_rubber_sheeting_options_label"
         And I should see "General Conflation Options"
         Then I click on "#hoot_general_conflation_options_label"
         And I should see element "#unify_optimizer_time_limit" with no value and placeholder "60"
@@ -92,7 +86,6 @@ Feature: Advanced Conflation Options
         Then I click the "►" link
         Then I should see "Advanced Conflation Options"
         And I should see "Cleaning Options"
-        And I should see "Rubber Sheeting Options"
         And I should see "General Conflation Options"
         And I should see "Road Options"
         Then I click on "#hoot_road_options_label"
@@ -139,16 +132,6 @@ Feature: Advanced Conflation Options
     #    Then I check the "Small Way Merger" checkbox
     #    And I wait 2 "seconds" to see "Small Way Merger Threshold"
     #    Then I click on "#hoot_cleaning_options_label"
-    #    Then I should see "Rubber Sheeting Options"
-    #    And I click on "#hoot_rubber_sheeting_options_label"
-    #    And I should see checkbox "Enabled" unchecked
-    #    And I should see "Rubber Sheet Ref" not enabled
-    #    And I should see "Rubber Sheet Minimum Ties" not enabled
-    #    And I check the "Enabled" checkbox
-    #    And I should see "Rubber Sheet Ref" enabled
-    #    And I should see "Rubber Sheet Minimum Ties" enabled
-    #    And I uncheck the "Enabled" checkbox
-    #    Then I click on "#hoot_rubber_sheeting_options_label"
     #    And I should see "General Conflation Options"
     #    And I should see "Road Options"
     #    Then I click on "#hoot_road_options_label"
