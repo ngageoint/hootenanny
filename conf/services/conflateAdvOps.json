@@ -258,7 +258,25 @@
                         "defaultvalue":"source",
                         "hoot_key":"poi.polygon.source.tag.key",
                         "onchange":"true"
-                    }
+                    },
+                    {
+        		"id":"poipolygon_promote_points_with_addresses_to_pois",
+        		"elem_type":"bool",
+        		"defaultvalue":"false",
+        		"description":"If true, POI to polygon conflation will classify all points with OSM address tags as POIs even if they do not have specific type tags.",
+        		"name":"Promote Points With Addresses to POIs",
+        		"hoot_key":"poi.polygon.promote.points.with.addresses.to.pois"
+    	            },
+            	    {
+        		"id":"poipolygon_review_evidence_threshold",
+        		"elem_type":"int",
+        		"description":"The minimum evidence score at which a POI will be reviewed against a polygon, if the evidence score does not meet the threshold defined by 'poi.polygon.match.evidence.threshold'. Valid values are 0 to 3. If an evidence score for a feature pair falls below this value, the relationship between the features will be classified as a miss. If the value is set to 0, all feature pairs which did not match will be reviewed. If the value is set greater than or equal to 'poi.polygon.match.evidence.threshold', an error will occur. Generally, this setting should not be changed except when working with specific POI/Polygon conflation use cases that require it.",
+        		"name":"Review Evidence Threshold",
+        		"defaultvalue":"1",
+        		"minvalue":"0",
+        		"maxvalue":"3",
+        		"hoot_key":"poi.polygon.review.evidence.threshold"
+    	    	    }
                 ]
             },
             {
