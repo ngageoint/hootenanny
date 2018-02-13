@@ -568,6 +568,48 @@
         ]
     },
     {
+        "id":"hoot_area_options",
+        "elem_type":"group",
+        "description":"Hootenanny area options",
+        "name":"Area",
+        "members":[
+            {
+                "id":"hoot_enable_area_options",
+                "elem_type":"checkbox",
+                "description":"Enable area options",
+                "name":"Enabled",
+                "defaultvalue":"true",
+                "onchange":"true"
+            },
+            {
+                "id":"area_match_creator",
+                "elem_type":"string",
+                "description":"",
+                "name":"Match Creator",
+                "required":"true",
+                "defaultvalue":"hoot::ScriptMatchCreator,Area.js",
+                "override":{
+                    "defaultvalue":"hoot::ScriptMatchCreator,Area.js"
+                },
+                "hoot_key":"match.creators",
+                "required":"true"
+            },
+            {
+                "id":"area_merger_creator",
+                "elem_type":"string",
+                "description":"",
+                "name":"Merger Creator",
+                "required":"true",
+                "defaultvalue":"hoot::ScriptMergerCreator",
+                "override":{
+                    "defaultvalue":"hoot::ScriptMergerCreator"
+                },
+                "hoot_key":"merger.creators",
+                "required":"true"
+            }
+        ]
+    },
+    {
         "id":"hoot_building_options",
         "elem_type":"group",
         "description":"Hootenanny building options",
