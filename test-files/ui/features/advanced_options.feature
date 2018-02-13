@@ -70,7 +70,7 @@ Feature: Advanced Conflation Options
         And I should see "POI Options"
         And I click on "#hoot_poi_options_label"
         And I should see checkbox "Enabled" checked
-        And I should see checkbox "Ignore Type If Name Present" checked
+        And I should see checkbox "Ignore Type If Name Present" unchecked
         And I click on "#hoot_poi_options_label"
         And I should see "POI to Polygon Options"
         And I click on "#hoot_poi_poly_options_label"
