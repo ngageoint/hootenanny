@@ -28,6 +28,7 @@ Feature: Advanced Conflation Options
         And I should see checkbox "Select All" unchecked
         And I should see checkbox "Remove Duplicate Ways" checked
         And I should see checkbox "Remove Superfluous Ways" checked
+        And I should see checkbox "Remove Unlikely Intersections" checked
         And I should see checkbox "Split Dual Ways" checked
         And I should see checkbox "Divided Road Marker Implied" checked
         And I should see checkbox "Merge Small Ways" checked
@@ -38,6 +39,7 @@ Feature: Advanced Conflation Options
         Then I click on "#hoot_cleaning_options_label"
         And I should see "General Conflation Options"
         Then I click on "#hoot_general_conflation_options_label"
+        And I should see checkbox "Frechet Distance Subline Matcher" unchecked
         And I should see element "#unify_optimizer_time_limit" with no value and placeholder "60"
         And I should see checkbox "OGR Split O2S" unchecked
         And I should see checkbox "OGR Esri FCSubtype" checked
@@ -53,7 +55,7 @@ Feature: Advanced Conflation Options
         And I should see element "#hoot_road_opt_engine" with no value and placeholder "Network"
         And I should see element "#search_radius_highway" with no value and placeholder "-1"
 	And I should see element "#way_merger_min_split_size" with no value and placeholder "5"
-        #TODO: test Unifying options
+        #TODO: test Unifying engine specific options
         # And I should see element "#highway_matcher_heading_delta" with no value and placeholder "5.0"
         # And I should see element "#highway_matcher_max_angle" with no value and placeholder "60"
         Then I click on "#hoot_road_options_label"
@@ -68,10 +70,21 @@ Feature: Advanced Conflation Options
         And I should see "POI Options"
         And I click on "#hoot_poi_options_label"
         And I should see checkbox "Enabled" checked
+        And I should see checkbox "Ignore Type If Name Present" checked
         And I click on "#hoot_poi_options_label"
         And I should see "POI to Polygon Options"
         And I click on "#hoot_poi_poly_options_label"
         And I should see checkbox "Enabled" checked
+        And I should see element "#poipolygon_name_score_threshold" with no value and placeholder "0.8"
+        And I should see element "#poipolygon_type_score_threshold" with no value and placeholder "0.7"
+        And I should see element "#poipolygon_match_distance_threshold" with no value and placeholder "5.0"
+        And I should see element "#poipolygon_review_distance_threshold" with no value and placeholder "125.0"
+        And I should see element "#poipolygon_review_if_matched_types" with no value and placeholder ""
+        And I should see checkbox "Disable Same Source Conflation" unchecked
+        And I should see checkbox "Disable Same Source Conflation Match Tag Key Prefix Only" checked
+        And I should see element "#poipolygon_source_tag_key" with no value and placeholder "source"
+        And I should see checkbox "Promote Points With Addresses to POIs" unchecked
+        And I should see element "#poipolygon_review_evidence_threshold" with no value and placeholder "1"
         And I click on "#hoot_poi_poly_options_label"
         And I should see "Waterway Options"
         And I click on "#hoot_waterway_options_label"
