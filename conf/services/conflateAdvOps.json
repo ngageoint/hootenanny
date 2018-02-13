@@ -398,8 +398,8 @@
                     },
                     {
                     "id": "hoot_road_opt_engine_differential",
-                    "description": "Differential Conflation using the Network road conflation algorithm",
-                    "name": "Differential (with Network Roads)",
+                    "description": "Differential Conflation (with the Network roads conflation algorithm)",
+                    "name": "Differential",
                     "members": [
                           {
                             "id": "network_match_creator",
