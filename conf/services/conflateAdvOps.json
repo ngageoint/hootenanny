@@ -466,11 +466,6 @@
                         ]
                     },
                     {
-                        "id":"hoot_road_opt_engine_greedy",
-                        "description":"Greedy options",
-                        "name":"Greedy"
-                    },
-                    {
                         "id":"hoot_road_opt_engine_network",
                         "description":"Network Conflation Options",
                         "name":"Network",

@@ -135,7 +135,6 @@ Feature: Advanced Conflation Options
     #    And I should see "General Conflation Options"
     #    And I should see "Road Options"
     #    Then I click on "#hoot_road_options_label"
-    #    And I should see element "#hoot_road_opt_engine" with no value and placeholder "Greedy"
     #    And I should not see "Search Radius Highway"
     #    Then I select the "Unify" option labelled "Engines"
     #    And I should see checkbox "Enabled" checked

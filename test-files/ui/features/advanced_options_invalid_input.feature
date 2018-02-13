@@ -118,7 +118,7 @@ Feature: Advanced Conflation Options
 		# 		| Unify | hoot_road_options_label | highway_matcher_max_angle | 60 | should |
 		# 		| Unify | hoot_road_options_label | way_merger_min_split_size | 5 | should |
 
-				#need to also add examples for Greedy & Differential
+				#need to also add examples for Differential
 				
 
 		# now test cookie cutter options
