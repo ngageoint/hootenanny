@@ -83,7 +83,7 @@ void AddFeatureDimensionsOp::apply(boost::shared_ptr<OsmMap> &map)
     {
       if (pElement->getTags().get("feature_area").isEmpty())
       {
-        tElement->getTags()["feature_area"] = QString::number(g->getArea(),'f',2);
+        tElement->getTags().set("feature_area",QString::number(g->getArea(),'f',2));
       }
       continue;
     }
@@ -91,7 +91,7 @@ void AddFeatureDimensionsOp::apply(boost::shared_ptr<OsmMap> &map)
     // Not an Area, must be Linear
     if (pElement->getTags().get("length").isEmpty())
     {
-      tElement->getTags()["length"] = QString::number(g->getLength(),'f',2);
+      tElement->getTags().set("length",QString::number(g->getLength(),'f',2));
     }
   }
 
@@ -110,7 +110,7 @@ void AddFeatureDimensionsOp::apply(boost::shared_ptr<OsmMap> &map)
     {
       if (pElement->getTags().get("feature_area").isEmpty())
       {
-        tElement->getTags()["feature_area"] = QString::number(g->getArea(),'f',2);
+        tElement->getTags().set("feature_area",QString::number(g->getArea(),'f',2));
       }
       continue;
     }
@@ -120,9 +120,8 @@ void AddFeatureDimensionsOp::apply(boost::shared_ptr<OsmMap> &map)
     {
       if (pElement->getTags().get("length").isEmpty())
       {
-        tElement->getTags()["length"] = QString::number(g->getLength(),'f',2);
+        tElement->getTags().set("length",QString::number(g->getLength(),'f',2));
       }
-      continue;
     }
   }
 
