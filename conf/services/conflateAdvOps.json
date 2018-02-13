@@ -263,6 +263,29 @@
                 "onchange":"true"
             },
             {
+            	"id":"search_radius_highway",
+                "minvalue":"-1",
+                "elem_type":"double",
+                "description":"The search radius to use when conflating highways. If two features are within the search radius then they will be considered for conflation. If the value is -1 then the circular error will be used to calculate an appropriate search radius.",
+                "maxvalue":"",
+                "name":"Road Search Radius",
+                "defaultvalue":"-1",
+                "override":{
+                	"defaultvalue":"-1"
+                },
+                "hoot_key":"search.radius.highway"
+            },
+            {
+            	"id":"way_merger_min_split_size",
+                "minvalue":"0.01",
+                "elem_type":"double",
+                "description":"The minimum size that a way should be split into for merging. Units in meters.",
+                "maxvalue":"",
+                "name":"Way Merger Minimum Split Size",
+                "defaultvalue":"5",
+                "hoot_key":"way.merger.min.split.size"
+            },
+            {
                 "id":"hoot_road_opt_engine",
                 "elem_type":"list",
                 "description":"A list of road engines",
@@ -309,19 +332,6 @@
                                 "hoot_key":"merger.creators"
                             },
                             {
-                                "id":"search_radius_highway",
-                                "minvalue":"-1",
-                                "elem_type":"double",
-                                "description":"The search radius to use when conflating highways. If two features are within the search radius then they will be considered for conflation. If the value is -1 then the circular error will be used to calculate an appropriate search radius.",
-                                "maxvalue":"",
-                                "name":"Search Radius Highway",
-                                "defaultvalue":"-1",
-                                "override":{
-                                    "defaultvalue":"-1"
-                                },
-                                "hoot_key":"search.radius.highway"
-                            },
-                            {
                                 "id":"highway_matcher_heading_delta",
                                 "minvalue":"0",
                                 "elem_type":"double",
@@ -340,16 +350,6 @@
                                 "name":"Highway Matcher Max Angle",
                                 "defaultvalue":"60",
                                 "hoot_key":"highway.matcher.max.angle"
-                            },
-                            {
-                                "id":"way_merger_min_split_size",
-                                "minvalue":"0",
-                                "elem_type":"double",
-                                "description":"The minimum size that a way should be split into for merging. Units in meters.",
-                                "maxvalue":"",
-                                "name":"Way Merger Min Split Size",
-                                "defaultvalue":"5",
-                                "hoot_key":"way.merger.min.split.size"
                             }
                         ]
                     },
