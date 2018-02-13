@@ -542,7 +542,7 @@
     {
         "id":"hoot_poi_options",
         "elem_type":"group",
-        "description":"Hootenanny POI options",
+        "description":"Hootenanny POI conflation options",
         "name":"POI Options",
         "members":[
             {
@@ -554,52 +554,36 @@
                 "onchange":"true"
             },
             {
-                "id":"hoot_poi_options_list",
-                "elem_type":"list",
-                "description":"A list of poi options",
-                "name":"POI Options",
-                "defaultvalue":"Unifying",
-                "members":[
-                    {
-                        "id":"hoot_poi_opt_unifying",
-                        "description":"Unifying options",
-                        "name":"Unifying",
-                        "members":[
-                            {
-                                "id":"poi_match_creator_unifying",
-                                "elem_type":"string",
-                                "description":"List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
-                                "name":"POI Unifying Match Creator",
-                                "required":"true",
-                                "defaultvalue":"hoot::ScriptMatchCreator,PoiGeneric.js",
-                                "override":{
-                                    "defaultvalue":"hoot::ScriptMatchCreator,PoiGeneric.js"
-                                },
-                                "hoot_key":"match.creators"
-                            },
-                            {
-                                "id":"poi_merger_creator_unifying",
-                                "elem_type":"string",
-                                "description":"List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
-                                "name":"POI Unifying Merger Creator",
-                                "required":"true",
-                                "defaultvalue":"hoot::ScriptMergerCreator",
-                                "override":{
-                                    "defaultvalue":"hoot::ScriptMergerCreator"
-                                },
-                                "hoot_key":"merger.creators"
-                            },
-                            {
-                        	"id":"poi_ignore_type_if_name_present",
-                        	"elem_type":"bool",
-                        	"defaultvalue":"false",
-                        	"description":"See User Guide",
-                        	"name":"POI Ignore Type If Name Present",
-                        	"hoot_key":"poi.ignore.type.if.name.present"
-                            }
-                        ]
-                    }
-                ]
+            	"id":"poi_match_creator_unifying",
+                "elem_type":"string",
+                "description":"",
+                "name":"Match Creator",
+                "required":"true",
+                "defaultvalue":"hoot::ScriptMatchCreator,PoiGeneric.js",
+                "override":{
+                	"defaultvalue":"hoot::ScriptMatchCreator,PoiGeneric.js"
+                },
+            	"hoot_key":"match.creators"
+            },
+            {
+            	"id":"poi_merger_creator_unifying",
+                "elem_type":"string",
+                "description":"",
+                "name":"Merger Creator",
+                "required":"true",
+                "defaultvalue":"hoot::ScriptMergerCreator",
+                "override":{
+                	"defaultvalue":"hoot::ScriptMergerCreator"
+                },
+                "hoot_key":"merger.creators"
+            },
+            {
+            	"id":"poi_ignore_type_if_name_present",
+                "elem_type":"bool",
+                "defaultvalue":"false",
+                "description":"If true, POI to POI conflation will ignore the types of the features being compared completely as long as those being compared have a populated name field.",
+                "name":"Ignore Type If Name Present",
+                "hoot_key":"poi.ignore.type.if.name.present"
             }
         ]
     },

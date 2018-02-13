@@ -63,7 +63,6 @@ Feature: Advanced Conflation Options
         And I should see "POI Options"
         And I click on "#hoot_poi_options_label"
         And I should see checkbox "Enabled" checked
-        And I should see element "#hoot_poi_options_list" with no value and placeholder "Unifying"
         And I click on "#hoot_poi_options_label"
         And I should see "Waterway Options"
         And I click on "#hoot_waterway_options_label"
@@ -220,5 +219,4 @@ Feature: Advanced Conflation Options
     #    And I should see "Advanced Conflation Options"
     #    And I click on "#hoot_poi_options_label"
     #    And I should see checkbox "Enabled" checked
-    #    And I should see element "#hoot_poi_options_list" with value "Unifying"
     #    And I click on "#hoot_poi_options_label"
