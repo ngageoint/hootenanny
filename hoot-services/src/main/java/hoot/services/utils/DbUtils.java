@@ -180,6 +180,20 @@ public final class DbUtils {
         catch (SQLException e) {
             throw new RuntimeException("Error deleting map related tables by map id.  mapId = " + mapId, e);
         }
+
+        List<String> sequences = new ArrayList<>();
+
+        sequences.add("current_nodes_" + mapId + "_id_seq");
+        sequences.add("current_ways_" + mapId + "_id_seq");
+        sequences.add("current_relations_" + mapId + "_id_seq");
+        sequences.add("changesets_" + mapId + "_id_seq");
+
+        try {
+            deleteSequences(sequences);
+        }
+        catch (SQLException e) {
+            throw new RuntimeException("Error deleting map related sequences by map id.  mapId = " + mapId, e);
+        }
     }
 
     public static long getTestUserId() {
@@ -216,11 +230,23 @@ public final class DbUtils {
                 try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                     stmt.execute();
                     stmt.close();
-
                 }
             }
             conn.commit();
+        }
+    }
 
+    public static void deleteSequences(List<String> sequences) throws SQLException {
+        try (Connection conn = getConnection()) {
+            for (String seq : sequences) {
+                // DDL Statement. No support in QueryDSL anymore. Have to do it the old-fashioned way.
+                String sql = "DROP SEQUENCE IF EXISTS \"" + seq + "\"";
+                try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                    stmt.execute();
+                    stmt.close();
+                }
+            }
+            conn.commit();
         }
     }
 
@@ -244,6 +270,44 @@ public final class DbUtils {
 
         return tables;
     }
+
+    /**
+     * Returns the count of tables and sequences
+     * this map depends on
+     */
+    public static long getMapTableSeqCount(long mapId) throws SQLException {
+        long count = 0;
+
+        try (Connection conn = getConnection()) {
+            String sql = "SELECT count(*) " +
+                    "FROM information_schema.tables " +
+                    "WHERE table_schema='public' AND table_name LIKE " + "'%_" + mapId + "'";
+
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next())
+                        count += rs.getLong(1);
+                    stmt.close();
+                }
+            }
+
+
+            sql = "SELECT count(*) " +
+                    "FROM information_schema.sequences " +
+                    "WHERE sequence_schema='public' AND sequence_name LIKE " + "'%_" + mapId + "_id_seq'";
+
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next())
+                        count += rs.getLong(1);
+                    stmt.close();
+                }
+            }
+        }
+
+        return count;
+    }
+
 
     /**
      * Returns table size in bytes
