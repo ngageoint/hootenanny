@@ -193,4 +193,8 @@ echo ""
 echo "MULTIARY INGEST - COMPARING SHP DELETE CHANGESET OUTPUT..."
 echo ""
 diff $GOLD_DELETE_CHANGESET $CHANGESET_DELETE_OUTPUT
+echo ""
+echo "MULTIARY INGEST - DELETING REFERENCE LAYER..."
+echo ""
+hoot delete-map $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer"
 
