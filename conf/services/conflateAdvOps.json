@@ -589,7 +589,7 @@
         "id":"hoot_area_options",
         "elem_type":"group",
         "description":"Hootenanny area options",
-        "name":"Area",
+        "name":"Area Options",
         "members":[
             {
                 "id":"hoot_enable_area_options",
