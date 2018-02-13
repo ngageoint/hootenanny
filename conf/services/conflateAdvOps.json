@@ -283,14 +283,6 @@
                         "onchange":"true"
                     },
                     {
-                        "id":"poi_ignore_type_if_name_present",
-                        "elem_type":"bool",
-                        "defaultvalue":"false",
-                        "description":"See User Guide",
-                        "name":"POI Ignore Type If Name Present",
-                        "hoot_key":"poi.ignore.type.if.name.present"
-                    },
-                    {
                         "id":"poipolygon_disable_same_source_conflation",
                         "elem_type":"bool",
                         "defaultvalue":"false",
@@ -746,6 +738,14 @@
                                     "defaultvalue":"hoot::ScriptMergerCreator"
                                 },
                                 "hoot_key":"merger.creators"
+                            },
+                            {
+                        	"id":"poi_ignore_type_if_name_present",
+                        	"elem_type":"bool",
+                        	"defaultvalue":"false",
+                        	"description":"See User Guide",
+                        	"name":"POI Ignore Type If Name Present",
+                        	"hoot_key":"poi.ignore.type.if.name.present"
                             }
                         ]
                     }
