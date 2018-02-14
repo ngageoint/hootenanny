@@ -180,6 +180,20 @@ big.perty.op.sigma to avoid endless or near endless loops.
 Sigma of the distance in meters. This is used in the gaussian distribution used to determine the
 distance.
 
+=== building.date.format
+
+* Data Type: string
+* Default Value: `yyyy-MM-dd HH:mm:ss.zzz`
+
+Date format string used by the building date tag value.
+
+=== building.date.tag.key
+
+* Data Type: string
+* Default Value: `source:date`
+
+Tag key used by the building.review.if.secondary.newer configuration option.
+
 === building.match.threshold
 
 * Data Type: double
@@ -201,6 +215,15 @@ The threshold at which a miss is called a miss for buildings.
 See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== building.review.if.secondary.newer
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, any buildings in the secondary layer will be automatically reviewed against potentially
+matching features in the reference layer if they are marked with a more recent date than that of the
+reference feature.
 
 === building.review.threshold
 

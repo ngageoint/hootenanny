@@ -54,9 +54,9 @@ class BuildingRfClassifier;
 class BuildingMatch : public Match, public MatchDetails
 {
 public:
+
   BuildingMatch(const ConstOsmMapPtr& map, boost::shared_ptr<const BuildingRfClassifier> rf,
-                const ElementId& eid1, const ElementId& eid2,
-                ConstMatchThresholdPtr mt);
+                const ElementId& eid1, const ElementId& eid2, ConstMatchThresholdPtr mt);
 
   virtual const MatchClassification& getClassification() const { return _p; }
 
@@ -84,13 +84,24 @@ public:
 
 private:
 
+  friend class BuildingMatchCreatorTest;
+
   ElementId _eid1, _eid2;
   static QString _matchName;
   MatchClassification _p;
   boost::shared_ptr<const BuildingRfClassifier> _rf;
   QString _explainText;
 
+  bool _reviewIfSecondaryFeatureNewer;
+  QString _dateTagKey;
+
   void _calculateClassification(const ConstOsmMapPtr& map);
+  QStringList _getMatchDescription(const MatchType& type, ConstElementPtr element1,
+                                   ConstElementPtr element2);
+  QStringList _createReviewIfSecondaryFeatureNewer(ConstElementPtr element1,
+                                                   ConstElementPtr element2,
+                                                   const QString buildingDateTagKey,
+                                                   const QString buildingDateFormat);
 };
 
 }

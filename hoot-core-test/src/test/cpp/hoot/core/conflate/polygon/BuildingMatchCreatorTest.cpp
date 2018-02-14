@@ -63,8 +63,9 @@ namespace hoot
 class BuildingMatchCreatorTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(BuildingMatchCreatorTest);
-  CPPUNIT_TEST(runMatchTest);
-  CPPUNIT_TEST(runIsCandidateTest);
+  //CPPUNIT_TEST(runMatchTest);
+  //CPPUNIT_TEST(runIsCandidateTest);
+  CPPUNIT_TEST(runReviewIfSecondaryNewerTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -153,6 +154,41 @@ public:
     MapProjector::projectToPlanar(map);
 
     CPPUNIT_ASSERT(!uut.isMatchCandidate(map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "1")[0]), map));
+  }
+
+  void runReviewIfSecondaryNewerTest()
+  {
+    OsmXmlReader reader;
+
+    OsmMap::resetCounters();
+    OsmMapPtr map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read("test-files/ToyBuildingsTestA.osm", map);
+    reader.setDefaultStatus(Status::Unknown2);
+    reader.read("test-files/ToyBuildingsTestB.osm", map);
+
+    MapProjector::projectToPlanar(map);
+
+    WayMap wm = map->getWays();
+    for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
+    {
+      const ConstWayPtr& w = it->second;
+      const Tags& t = w->getTags();
+//      if (t[MetadataTags::Ref1()] != "Target" && t[MetadataTags::Ref2()] != "Target")
+//      {
+//        RemoveWayOp::removeWay(map, it->first);
+//      }
+    }
+    BuildingMatchCreator uut;
+    vector<const Match*> matches;
+    boost::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
+    uut.createMatches(map, matches, threshold);
+    LOG_VARD(matches);
+
+//    CPPUNIT_ASSERT_EQUAL(3, int(matches.size()));
+//    CPPUNIT_ASSERT_EQUAL(true, contains(matches, ElementId::way(-7), ElementId::way(-15)));
+//    CPPUNIT_ASSERT_EQUAL(true, contains(matches, ElementId::way(-7), ElementId::way(-14)));
+//    CPPUNIT_ASSERT_EQUAL(true, contains(matches, ElementId::way(-7), ElementId::way(-13)));
   }
 };
 

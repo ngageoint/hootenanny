@@ -208,6 +208,7 @@ public:
   ConstOsmMapPtr getMap() { return _map; }
 
 private:
+
   const ConstOsmMapPtr& _map;
   vector<const Match*>& _result;
   set<ElementId> _empty;
