@@ -870,7 +870,6 @@ ElementPtr OsmXmlReader::readNextElement()
 
   //we're parsed the entire node/way/relation, so return it
   //LOG_TRACE("Parsing end xml element: " << _streamReader.name().toString());
-  assert(_element.get());
   LOG_VART(_element);
   return _element;
 }
