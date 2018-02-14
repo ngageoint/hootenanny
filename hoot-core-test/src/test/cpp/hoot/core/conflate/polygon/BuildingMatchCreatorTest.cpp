@@ -63,9 +63,12 @@ namespace hoot
 class BuildingMatchCreatorTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(BuildingMatchCreatorTest);
-  //CPPUNIT_TEST(runMatchTest);
-  //CPPUNIT_TEST(runIsCandidateTest);
+  CPPUNIT_TEST(runMatchTest);
+  CPPUNIT_TEST(runIsCandidateTest);
   CPPUNIT_TEST(runReviewIfSecondaryNewerTest);
+  CPPUNIT_TEST(runReviewIfSecondaryNewer2Test);
+  CPPUNIT_TEST(runReviewIfSecondaryNewerMismatchingDateKeyTest);
+  CPPUNIT_TEST(runReviewIfSecondaryNewerBadDateFormatTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -98,19 +101,18 @@ public:
     return result;
   }
 
-  void runMatchTest()
+  OsmMapPtr getTestMap()
   {
     OsmXmlReader reader;
-
     OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyBuildingsTestA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
     reader.read("test-files/ToyBuildingsTestB.osm", map);
-
     MapProjector::projectToPlanar(map);
 
+    //remove some ways we don't need for these tests
     WayMap wm = map->getWays();
     for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
     {
@@ -121,6 +123,14 @@ public:
         RemoveWayOp::removeWay(map, it->first);
       }
     }
+
+    return map;
+  }
+
+  void runMatchTest()
+  {
+    OsmMapPtr map = getTestMap();
+
     BuildingMatchCreator uut;
     vector<const Match*> matches;
 
@@ -158,37 +168,156 @@ public:
 
   void runReviewIfSecondaryNewerTest()
   {
-    OsmXmlReader reader;
+    OsmMapPtr map = getTestMap();
 
-    OsmMap::resetCounters();
-    OsmMapPtr map(new OsmMap());
-    reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/ToyBuildingsTestA.osm", map);
-    reader.setDefaultStatus(Status::Unknown2);
-    reader.read("test-files/ToyBuildingsTestB.osm", map);
+    //set date tags on a primary and ref feature that will match, making the date on the secondary
+    //feature newer - should trigger a review
+    //ref feature
+    TestUtils::getElementWithTag(map, "name", "Target")->getTags()
+      .appendValue("source:date", "2018-02-14 10:55");
+    //secondary feature
+    TestUtils::getElementWithTag(map, "name", "Target Pharmacy")->getTags()
+      .appendValue("source:date", "2018-02-14 10:56");
 
-    MapProjector::projectToPlanar(map);
+    conf().set("building.date.format", "yyyy-MM-dd HH:mm");
+    conf().set("building.date.tag.key", "source:date");
+    conf().set("building.review.if.secondary.newer", "true");
 
-    WayMap wm = map->getWays();
-    for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
-    {
-      const ConstWayPtr& w = it->second;
-      const Tags& t = w->getTags();
-//      if (t[MetadataTags::Ref1()] != "Target" && t[MetadataTags::Ref2()] != "Target")
-//      {
-//        RemoveWayOp::removeWay(map, it->first);
-//      }
-    }
     BuildingMatchCreator uut;
     vector<const Match*> matches;
     boost::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
     uut.createMatches(map, matches, threshold);
     LOG_VARD(matches);
 
-//    CPPUNIT_ASSERT_EQUAL(3, int(matches.size()));
-//    CPPUNIT_ASSERT_EQUAL(true, contains(matches, ElementId::way(-7), ElementId::way(-15)));
-//    CPPUNIT_ASSERT_EQUAL(true, contains(matches, ElementId::way(-7), ElementId::way(-14)));
-//    CPPUNIT_ASSERT_EQUAL(true, contains(matches, ElementId::way(-7), ElementId::way(-13)));
+    /*
+     * matches: [3]{
+     * BuildingMatch: Way:-7, Way:-15 p: match: 0.9 miss: 0.1 review: 0,
+     * BuildingMatch: Way:-7, Way:-14 p: match: 0.925 miss: 0.075 review: 0,
+     * BuildingMatch: Way:-7, Way:-13 p: match: 0.825 miss: 0.15 review: 0.025}
+     *
+     * map->getElement(ElementId::way(-7))->getTags().get("name"): Target
+       map->getElement(ElementId::way(-15))->getTags().get("name"): Target Pharmacy
+       map->getElement(ElementId::way(-14))->getTags().get("name"): Target - Aurora South
+       map->getElement(ElementId::way(-13))->getTags().get("name"): Target Grocery
+     */
+
+    CPPUNIT_ASSERT_EQUAL(3, int(matches.size()));
+    for (vector<const Match*>::const_iterator it = matches.begin(); it != matches.end(); ++it)
+    {
+      const Match* match = *it;
+      std::set< std::pair<ElementId, ElementId> > matchPairs = match->getMatchPairs();
+      LOG_VART(matchPairs.size());
+      assert(matchPairs.size() == 1);
+      ElementId refId = matchPairs.begin()->first;
+      ElementId secId = matchPairs.begin()->second;
+      LOG_VART(refId);
+      LOG_VART(secId);
+      assert(refId.getId() == -7);
+      if (secId.getId() == -15)
+      {
+        CPPUNIT_ASSERT_EQUAL(0.0, match->getClassification().getMatchP());
+        CPPUNIT_ASSERT_EQUAL(0.0, match->getClassification().getMissP());
+        CPPUNIT_ASSERT_EQUAL(1.0, match->getClassification().getReviewP());
+      }
+      else if (secId.getId() == -14 || secId.getId() == -13)
+      {
+        CPPUNIT_ASSERT(match->getClassification().getReviewP() != 1.0);
+      }
+    }
+
+    TestUtils::resetEnvironment();
+  }
+
+  void runReviewIfSecondaryNewer2Test()
+  {
+    OsmMapPtr map = getTestMap();
+
+    //set date tags on a primary and ref feature that will match, making the date on the ref
+    //feature newer - should not trigger a review
+    //ref feature
+    TestUtils::getElementWithTag(map, "name", "Target")->getTags()
+      .appendValue("source:date", "2018-02-14 10:56");
+    //secondary feature
+    TestUtils::getElementWithTag(map, "name", "Target Pharmacy")->getTags()
+      .appendValue("source:date", "2018-02-14 10:55");
+
+    conf().set("building.date.format", "yyyy-MM-dd HH:mm");
+    conf().set("building.date.tag.key", "source:date");
+    conf().set("building.review.if.secondary.newer", "true");
+
+    BuildingMatchCreator uut;
+    vector<const Match*> matches;
+    boost::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
+    uut.createMatches(map, matches, threshold);
+
+    CPPUNIT_ASSERT_EQUAL(3, int(matches.size()));
+    CPPUNIT_ASSERT_EQUAL(true, contains(matches, ElementId::way(-7), ElementId::way(-15)));
+    CPPUNIT_ASSERT_EQUAL(true, contains(matches, ElementId::way(-7), ElementId::way(-14)));
+    CPPUNIT_ASSERT_EQUAL(true, contains(matches, ElementId::way(-7), ElementId::way(-13)));
+
+    TestUtils::resetEnvironment();
+  }
+
+  void runReviewIfSecondaryNewerMismatchingDateKeyTest()
+  {
+    OsmMapPtr map = getTestMap();
+
+    //make the date tag added to one of the features have a different key than what is expected -
+    //should not trigger a review
+    //ref feature
+    TestUtils::getElementWithTag(map, "name", "Target")->getTags()
+      .appendValue("source:date", "2018-02-14 10:56");
+    //secondary feature
+    TestUtils::getElementWithTag(map, "name", "Target Pharmacy")->getTags()
+      .appendValue("date", "2018-02-14 10:55");
+
+    conf().set("building.date.format", "yyyy-MM-dd HH:mm");
+    conf().set("building.date.tag.key", "source:date");
+    conf().set("building.review.if.secondary.newer", "true");
+
+    BuildingMatchCreator uut;
+    vector<const Match*> matches;
+    boost::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
+    uut.createMatches(map, matches, threshold);
+
+    CPPUNIT_ASSERT_EQUAL(3, int(matches.size()));
+    CPPUNIT_ASSERT_EQUAL(true, contains(matches, ElementId::way(-7), ElementId::way(-15)));
+    CPPUNIT_ASSERT_EQUAL(true, contains(matches, ElementId::way(-7), ElementId::way(-14)));
+    CPPUNIT_ASSERT_EQUAL(true, contains(matches, ElementId::way(-7), ElementId::way(-13)));
+
+    TestUtils::resetEnvironment();
+  }
+
+  void runReviewIfSecondaryNewerBadDateFormatTest()
+  {
+    OsmMapPtr map = getTestMap();
+
+    //make the date tag added to one of the features have a date format that is unexpected
+    //ref feature
+    TestUtils::getElementWithTag(map, "name", "Target")->getTags()
+      .appendValue("source:date", "2018-02-14 10:56:00");
+    //secondary feature
+    TestUtils::getElementWithTag(map, "name", "Target Pharmacy")->getTags()
+      .appendValue("source:date", "2018-02-14 10:55");
+
+    conf().set("building.date.format", "yyyy-MM-dd HH:mm");
+    conf().set("building.date.tag.key", "source:date");
+    conf().set("building.review.if.secondary.newer", "true");
+
+    BuildingMatchCreator uut;
+    vector<const Match*> matches;
+    boost::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
+
+    QString exceptionMsg("");
+    try
+    {
+      uut.createMatches(map, matches, threshold);
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.contains("Invalid configured building date format"));
   }
 };
 

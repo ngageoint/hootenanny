@@ -49,15 +49,17 @@ QString BuildingMatch::_matchName = "Building";
 BuildingMatch::BuildingMatch(const ConstOsmMapPtr& map,
                              boost::shared_ptr<const BuildingRfClassifier> rf,
                              const ElementId& eid1, const ElementId& eid2,
-                             ConstMatchThresholdPtr mt) :
-  Match(mt),
-  _eid1(eid1),
-  _eid2(eid2),
-  _rf(rf),
-  _explainText("")
+                             ConstMatchThresholdPtr mt, bool reviewIfSecondaryFeatureNewer,
+                             QString dateTagKey, QString dateFormat) :
+Match(mt),
+_eid1(eid1),
+_eid2(eid2),
+_rf(rf),
+_explainText(""),
+_reviewIfSecondaryFeatureNewer(reviewIfSecondaryFeatureNewer),
+_dateTagKey(dateTagKey),
+_dateFormat(dateFormat)
 {  
-  ConfigOptions opts = ConfigOptions();
-
   _p = _rf->classify(map, _eid1, _eid2);
 
   ConstElementPtr element1 = map->getElement(eid1);
@@ -68,13 +70,11 @@ BuildingMatch::BuildingMatch(const ConstOsmMapPtr& map,
 
   if (type != MatchType::Match)
   { 
-    description = _getMatchDescription(type, element1, element2);
+    description = _getMatchDescription(map, type, element1, element2);
   }
-  else if (opts.getBuildingReviewIfSecondaryNewer())
+  else if (_reviewIfSecondaryFeatureNewer)
   {
-    description =
-      _createReviewIfSecondaryFeatureNewer(
-        element1, element2, opts.getBuildingDateTagKey(), opts.getBuildingDateFormat());
+    description = _createReviewIfSecondaryFeatureNewer(element1, element2);
   }
 
   //  Join the string descriptions together or generate the default
@@ -86,16 +86,14 @@ BuildingMatch::BuildingMatch(const ConstOsmMapPtr& map,
 }
 
 QStringList BuildingMatch::_createReviewIfSecondaryFeatureNewer(ConstElementPtr element1,
-                                                                ConstElementPtr element2,
-                                                                const QString buildingDateTagKey,
-                                                                const QString buildingDateFormat)
+                                                                ConstElementPtr element2)
 {
-  LOG_VART(buildingDateTagKey);
-  LOG_VART(buildingDateFormat);
+  LOG_VART(_dateTagKey);
+  LOG_VART(_dateFormat);
 
   QStringList description;
 
-  if (!buildingDateTagKey.isEmpty() && !buildingDateFormat.isEmpty())
+  if (!_dateTagKey.isEmpty() && !_dateFormat.isEmpty())
   {
     ConstElementPtr refBuilding;
     ConstElementPtr secondaryBuilding;
@@ -103,41 +101,48 @@ QStringList BuildingMatch::_createReviewIfSecondaryFeatureNewer(ConstElementPtr 
     LOG_VART(element2->getStatus().getEnum());
     if (element1->getStatus().getEnum() == Status::Unknown2)
     {
-      secondaryBuilding.reset(element1.get());
-      refBuilding.reset(element2.get());
+      secondaryBuilding = element1;
+      refBuilding = element2;
     }
     else
     {
       assert(element2->getStatus().getEnum() == Status::Unknown2);
-      secondaryBuilding.reset(element2.get());
-      refBuilding.reset(element1.get());
+      secondaryBuilding = element2;
+      refBuilding = element1;
     }
     LOG_VART(refBuilding->getId());
     LOG_VART(secondaryBuilding->getId());
 
-    const QString secondaryBuildingDateStrVal = secondaryBuilding->getTags().get(buildingDateTagKey);
+    const QString secondaryBuildingDateStrVal =
+      secondaryBuilding->getTags().get(_dateTagKey).trimmed();
+    const QString refBuildingDateStrVal =
+      refBuilding->getTags().get(_dateTagKey).trimmed();
+    if (secondaryBuildingDateStrVal.isEmpty() || refBuildingDateStrVal.isEmpty())
+    {
+      LOG_TRACE("Date tags not found on both buildings.");
+      return description;
+    }
+
     const QDateTime secondaryBuildingDate =
-      QDateTime::fromString(secondaryBuildingDateStrVal, buildingDateFormat);
+      QDateTime::fromString(secondaryBuildingDateStrVal, _dateFormat);
     LOG_VART(secondaryBuildingDate);
     if (!secondaryBuildingDate.isValid())
     {
       throw HootException(
         "Invalid configured building date format: " + secondaryBuildingDate.toString() +
-        ".  Expected the form " + buildingDateFormat);
+        ".  Expected the form: " + _dateFormat);
     }
-
-    const QString refBuildingDateStrVal = refBuilding->getTags().get(buildingDateTagKey);
     const QDateTime refBuildingDate =
-      QDateTime::fromString(refBuildingDateStrVal, buildingDateFormat);
+      QDateTime::fromString(refBuildingDateStrVal, _dateFormat);
     LOG_VART(refBuildingDate);
     if (!refBuildingDate.isValid())
     {
       throw HootException(
         "Invalid configured building date format: " + refBuildingDate.toString() +
-        ".  Expected the form " + buildingDateFormat);
+        ".  Expected the form: " + _dateFormat);
     }
 
-    if (secondaryBuildingDate >= refBuildingDate)
+    if (secondaryBuildingDate > refBuildingDate)
     {
       _p.clear();
       _p.setReviewP(1.0);
@@ -152,8 +157,8 @@ QStringList BuildingMatch::_createReviewIfSecondaryFeatureNewer(ConstElementPtr 
   return description;
 }
 
-QStringList BuildingMatch::_getMatchDescription(const MatchType& type, ConstElementPtr element1,
-                                                ConstElementPtr element2)
+QStringList BuildingMatch::_getMatchDescription(const ConstOsmMapPtr& map, const MatchType& type,
+                                                ConstElementPtr element1, ConstElementPtr element2)
 {
   QStringList description;
 

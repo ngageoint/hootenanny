@@ -183,9 +183,9 @@ distance.
 === building.date.format
 
 * Data Type: string
-* Default Value: `yyyy-MM-dd HH:mm:ss.zzz`
+* Default Value: `yyyy-MM-dd HH:mm`
 
-Date format string used by the building date tag value.
+Date format string used by the building date tag value.  See QDateTime::fromString for more details.
 
 === building.date.tag.key
 
