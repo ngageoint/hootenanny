@@ -77,12 +77,14 @@ public:
    */
   BuildingMatchVisitor(const ConstOsmMapPtr& map,
     std::vector<const Match*>& result, boost::shared_ptr<BuildingRfClassifier> rf,
-    ConstMatchThresholdPtr threshold, Status matchStatus = Status::Invalid) :
+    ConstMatchThresholdPtr threshold, Status matchStatus = Status::Invalid,
+    bool reviewMatchesOtherThanOneToOne = false) :
     _map(map),
     _result(result),
     _rf(rf),
     _mt(threshold),
-    _matchStatus(matchStatus)
+    _matchStatus(matchStatus),
+    _reviewMatchesOtherThanOneToOne(reviewMatchesOtherThanOneToOne)
   {
     _neighborCountMax = -1;
     _neighborCountSum = 0;
@@ -111,6 +113,7 @@ public:
     _elementsEvaluated++;
     int neighborCount = 0;
 
+    std::vector<Match*> tempMatches;
     for (std::set<ElementId>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
     {
       if (from != *it)
@@ -127,11 +130,27 @@ public:
           }
           else
           {
-            _result.push_back(m);
+            tempMatches.push_back(m);
             neighborCount++;
           }
         }
       }
+    }
+
+    if (_reviewMatchesOtherThanOneToOne && neighborCount > 1)
+    {
+      for (std::vector<Match*>::iterator it = tempMatches.begin(); it != tempMatches.end(); ++it)
+      {
+        Match* match = *it;
+        match->getClassification().setReview();
+        match->getClassification().setExplainText(
+          "Match involved in multiple building relationships.");
+      }
+    }
+
+    for (std::vector<Match*>::const_iterator it = tempMatches.begin(); it != tempMatches.end(); ++it)
+    {
+      _result.push_back(*it);
     }
 
     _neighborCountSum += neighborCount;
@@ -218,6 +237,7 @@ private:
   boost::shared_ptr<BuildingRfClassifier> _rf;
   ConstMatchThresholdPtr _mt;
   Status _matchStatus;
+  bool _reviewMatchesOtherThanOneToOne;
   int _neighborCountMax;
   int _neighborCountSum;
   int _elementsEvaluated;
@@ -262,76 +282,10 @@ void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map, std::vector<
 {
   LOG_INFO("Creating matches with: " << className() << "...");
   LOG_VARD(*threshold);
-  BuildingMatchVisitor v(map, matches, _getRf(), threshold, Status::Unknown1);
+  BuildingMatchVisitor v(
+    map, matches, _getRf(), threshold, Status::Unknown1,
+    ConfigOptions().getBuildingReviewMatchesOtherThanOneToOne());
   map->visitRo(v);
-
-  if (ConfigOptions(conf()).getBuildingReviewMatchesOtherThanOneToOne())
-  {
-    //find all many to one or many to many matches and mark them for review
-    _markNonOneToOneMatchesForReview(matches);
-  }
-}
-
-void BuildingMatchCreator::_markNonOneToOneMatchesForReview(std::vector<const Match*>& matches)
-{
-  //Go through all the matches and record how many matches each building is involved in.
-  QMap<QString, long> elementIdToNumInvolvedMatches;
-  for (std::vector<const Match*>::const_iterator it = matches.begin(); it != matches.end(); ++it)
-  {
-    const Match* match = *it;
-    std::set< std::pair<ElementId, ElementId> > matchPairs = match->getMatchPairs();
-    LOG_VART(matchPairs.size());
-    assert(matchPairs.size() == 1);
-    const QString refIdStr = matchPairs.begin()->first.toString();
-    const QString secIdStr = matchPairs.begin()->second.toString();
-    LOG_VART(refIdStr);
-    LOG_VART(secIdStr);
-
-    if (!elementIdToNumInvolvedMatches.contains(refIdStr))
-    {
-      elementIdToNumInvolvedMatches[refIdStr] = 1;
-    }
-    else
-    {
-      elementIdToNumInvolvedMatches[refIdStr]++;
-    }
-    if (!elementIdToNumInvolvedMatches.contains(secIdStr))
-    {
-      elementIdToNumInvolvedMatches[secIdStr] = 1;
-    }
-    else
-    {
-      elementIdToNumInvolvedMatches[secIdStr]++;
-    }
-  }
-
-  //Go back through all the non-reviews/misses. If those matches involves any feature for which
-  //we recorded more than one match, mark them as a review instead.
-  for (std::vector<const Match*>::const_iterator it = matches.begin(); it != matches.end(); ++it)
-  {
-    const Match* match = *it;
-    if (match->getClassification().getMatchP() >= _matchThreshold->getMatchThreshold())
-    {
-      std::set< std::pair<ElementId, ElementId> > matchPairs = match->getMatchPairs();
-      LOG_VART(matchPairs.size());
-      assert(matchPairs.size() == 1);
-      const QString refIdStr = matchPairs.begin()->first.toString();
-      const QString secIdStr = matchPairs.begin()->second.toString();
-      LOG_VART(refIdStr);
-      LOG_VART(secIdStr);
-
-      if (elementIdToNumInvolvedMatches.contains(refIdStr) &&
-          elementIdToNumInvolvedMatches[refIdStr] > 1)
-      {
-        //match->getClassification().setReview();
-      }
-      else if (elementIdToNumInvolvedMatches.contains(secIdStr) &&
-          elementIdToNumInvolvedMatches[secIdStr] > 1)
-      {
-        //match->getClassification().setReview();
-      }
-    }
-  }
 }
 
 std::vector<MatchCreator::Description> BuildingMatchCreator::getAllCreators() const

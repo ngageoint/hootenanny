@@ -55,6 +55,7 @@ public:
   virtual ~Match();
 
   virtual QString explain() const;
+  virtual void setExplain(const QString explainText) = 0;
 
   /**
    * Classifies the match and returns a classification object.
