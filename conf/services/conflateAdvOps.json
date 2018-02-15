@@ -177,7 +177,7 @@
             {
                 "id":"unify_optimizer_time_limit",
                 "minvalue":"-1",
-                "elem_type":"double",
+                "elem_type":"int",
                 "description":"The maximum amount of time in seconds to wait for the optimizer to complete. A value of -1 makes the time limit unlimited. If this value is set to something other than -1 your conflation results may change between multiple runs. Especially if the machine Hoot is running on is under heavy load. If the \"CM Score:\" value is changing between runs and GLPK isn't finding an optimal solution then this is likely causing different output. Just because the output is changing doesn't mean it is wrong, but this can be problematic if you're doing testing or expecting repeatable output for other",
                 "maxvalue":"",
                 "name":"Unify Optimizer Time Limit",
@@ -245,6 +245,82 @@
                 "maxvalue":"",
                 "defaultvalue":"200000",
                 "hoot_key":"element.cache.size.relation"
+            },
+            {
+            	"id":"edge_distance_extractor_spacing",
+                "minvalue":"0.01",
+                "elem_type":"double",
+                "description":"The spacing used by the EdgeDistanceExtractor.  Units in meters.",
+                "maxvalue":"",
+                "name":"Edge Distance Extractor Spacing",
+                "defaultvalue":"5.0",
+                "hoot_key":"edge.distance.extractor.spacing"
+            },
+            {
+            	"id":"levenshtein_distance_alpha",
+                "minvalue":"0.01",
+                "elem_type":"double",
+                "description":"Raise the Levenshtein score to this power before returning this result. If alpha is greater than 1 then this makes low scores even lower. Valid values are greater than 0.",
+                "maxvalue":"",
+                "name":"Levenshtein Distance Alpha",
+                "defaultvalue":"1.15",
+                "hoot_key":"levenshtein.distance.alpha"
+            },
+            {
+            	"id":"merge_nearby_nodes_distance",
+                "minvalue":"0.01",
+                "elem_type":"double",
+                "description":"When merging nodes during ogr2osm, determines what tolerance should be used for deciding two nodes are identical. Units in meters and defaults to 1.0m.",
+                "maxvalue":"",
+                "name":"Merge Nearby Nodes Distance",
+                "defaultvalue":"1.0",
+                "hoot_key":"merge.nearby.nodes.distance"
+            },
+	    {
+            	"id":"node_matcher_strictness",
+                "minvalue":"0.0",
+                "elem_type":"double",
+                "description":"Determines how strictly the angle should be considered when calculating intersection tie points for rubber sheeting. A value of 0 will ignore angle entirely. Large will make the angle comparison more strict.",
+                "maxvalue":"",
+                "name":"Node Matcher Strictness",
+                "defaultvalue":"2.0",
+                "hoot_key":"node.matcher.strictness"
+            },
+            {
+            	"id":"token_keep_non_words",
+                "elem_type":"bool",
+                "defaultvalue":"false",
+                "description":"This does a rudimentary check to see if the string contains any letters/numbers. If the string doesn't contain any letters or numbers then it will be dropped.",
+                "name":"Keep Non Word Tokens",
+                "hoot_key":"token.keep.non.words"
+            },
+            {
+            	"id":"token_min_size",
+                "minvalue":"0.0",
+                "elem_type":"double",
+                "description":"This is the minimum string size that the string tokenizer should accept as a token. If the string length is less than this value, then it will not be accepted. Set the value to 0 if you want to accept all strings.  This setting primarily applies to string comparison functions and will eliminate comparing very short strings.",
+                "maxvalue":"",
+                "name":"Minimum Token Size",
+                "defaultvalue":"3.0",
+                "hoot_key":"token.min.size"
+            },
+            {
+            	"id":"translate_string_distance_tokenize",
+                "elem_type":"bool",
+                "defaultvalue":"true",
+                "description":"Set to true if the strings should be tokenized (split into words) before translating the values.",
+                "name":"Tokenize When Translating",
+                "hoot_key":"translate.string.distance.tokenize"
+            },
+	    {
+            	"id":"weighted_metric_distance_extractor_search_radius",
+                "minvalue":"-1.0",
+                "elem_type":"double",
+                "description":"The search radius used by the WeightedMetricDistanceExtractor.  Units in meters.  Defaults to a value computed from the circular error for each way being examined.",
+                "maxvalue":"",
+                "name":"Weighted Metric Distance Extractor Search Radius",
+                "defaultvalue":"-1.0",
+                "hoot_key":"weighted.metric.distance.extractor.search.radius"
             }
         ]
     },
@@ -350,7 +426,17 @@
                                 "name":"Highway Matcher Max Angle",
                                 "defaultvalue":"60",
                                 "hoot_key":"highway.matcher.max.angle"
-                            }
+                            },
+                            {
+                		"id":"highway_max_enum_diff",
+                		"minvalue":"0.01",
+                		"elem_type":"double",
+                		"description":"If two highways have significantly different enumerated types then they will not be considered for match. For example: highway=primary vs highway=secondary has a diff of 0.2.  highway=primary vs highway=footway has a diff of 0.67.",
+                		"maxvalue":"1.0",
+                		"name":"Highway Max Enum Diff",
+                		"defaultvalue":"0.6",
+                		"hoot_key":"highway.max.enum.diff"
+           		    }
                         ]
                     },
                     {
