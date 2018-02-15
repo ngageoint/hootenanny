@@ -142,9 +142,10 @@ public:
       for (std::vector<Match*>::iterator it = tempMatches.begin(); it != tempMatches.end(); ++it)
       {
         Match* match = *it;
-        match->getClassification().setReview();
-        match->getClassification().setExplainText(
-          "Match involved in multiple building relationships.");
+        MatchClassification& matchClass =
+          const_cast<MatchClassification&>(match->getClassification());
+        matchClass.setReview();
+        match->setExplain("Match involved in multiple building relationships.");
       }
     }
 
@@ -159,7 +160,7 @@ public:
 
   BuildingMatch* createMatch(ElementId eid1, ElementId eid2)
   {
-    ConfigOptions opts = ConfigOptions(conf());
+    ConfigOptions opts = ConfigOptions();
     return new
       BuildingMatch(
         _map, _rf, eid1, eid2, _mt, opts.getBuildingReviewIfSecondaryNewer(),
