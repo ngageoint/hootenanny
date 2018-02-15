@@ -31,9 +31,6 @@
 //#include <hoot/core/io/GeoNamesReader.h>
 //#include <hoot/rnd/io/MultiaryIngestChangesetReader.h>
 
-// Qt
-#include <QDir>
-
 namespace hoot
 {
 
@@ -50,6 +47,11 @@ class MultiaryIngestChangesetWriterTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
+
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/io/MultiaryIngestChangesetWriterTest/");
+  }
 
   void writeNodes(const QString output, const QString format)
   {
@@ -81,9 +83,7 @@ public:
   {
     DisableLog dl;
 
-    const QString outputDir = "test-output/io/MultiaryIngestChangesetWriterTest";
-    QDir().mkpath(outputDir);
-    const QString changesetOutput = outputDir + "/changeset-1.spark.1";
+    const QString changesetOutput = "test-output/io/MultiaryIngestChangesetWriterTest/changeset-1.spark.1";
 
     writeNodes(changesetOutput, "json");
 
@@ -95,9 +95,7 @@ public:
   {
     DisableLog dl;
 
-    const QString outputDir = "test-output/io/MultiaryIngestChangesetWriterTest";
-    QDir().mkpath(outputDir);
-    const QString changesetOutput = outputDir + "/changeset-2.spark.1";
+    const QString changesetOutput = "test-output/io/MultiaryIngestChangesetWriterTest/changeset-2.spark.1";
 
     writeNodes(changesetOutput, "xml");
 
@@ -109,9 +107,7 @@ public:
   {
     DisableLog dl;
 
-    const QString outputDir = "test-output/io/MultiaryIngestChangesetWriterTest";
-    QDir().mkpath(outputDir);
-    const QString changesetOutput = outputDir + "/changeset-3.spark.1";
+    const QString changesetOutput = "test-output/io/MultiaryIngestChangesetWriterTest/changeset-3.spark.1";
 
     MultiaryIngestChangesetWriter changesetFileWriter;
     changesetFileWriter.open(changesetOutput);
@@ -135,9 +131,7 @@ public:
   {
     DisableLog dl;
 
-    const QString outputDir = "test-output/io/MultiaryIngestChangesetWriterTest";
-    QDir().mkpath(outputDir);
-    const QString changesetOutput = outputDir + "/changeset-4.spark.1";
+    const QString changesetOutput = "test-output/io/MultiaryIngestChangesetWriterTest/changeset-4.spark.1";
 
     MultiaryIngestChangesetWriter changesetFileWriter;
     changesetFileWriter.open(changesetOutput);
@@ -163,9 +157,7 @@ public:
   {
     DisableLog dl;
 
-    const QString outputDir = "test-output/io/MultiaryIngestChangesetWriterTest";
-    QDir().mkpath(outputDir);
-    const QString changesetOutput = outputDir + "/changeset-5.spark.1";
+    const QString changesetOutput = "test-output/io/MultiaryIngestChangesetWriterTest/changeset-5.spark.1";
 
     MultiaryIngestChangesetWriter changesetFileWriter;
     changesetFileWriter.open(changesetOutput);

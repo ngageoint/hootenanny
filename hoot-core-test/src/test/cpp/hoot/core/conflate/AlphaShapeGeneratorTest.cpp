@@ -51,13 +51,18 @@ namespace hoot
 
 class AlphaShapeGeneratorTest : public CppUnit::TestFixture
 {
-    CPPUNIT_TEST_SUITE(AlphaShapeGeneratorTest);
-    CPPUNIT_TEST(runBasicTest);
-    CPPUNIT_TEST(runBufferTest);
-    CPPUNIT_TEST(runNegativeBufferTest);
-    CPPUNIT_TEST_SUITE_END();
+  CPPUNIT_TEST_SUITE(AlphaShapeGeneratorTest);
+  CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST(runBufferTest);
+  CPPUNIT_TEST(runNegativeBufferTest);
+  CPPUNIT_TEST_SUITE_END();
 
 public:
+
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/conflate/");
+  }
 
   void runBasicTest()
   {
@@ -73,7 +78,6 @@ public:
 
     MapProjector::projectToWgs84(cutShapeMap);
 
-    QDir().mkpath("test-output/conflate");
     OsmXmlWriter writer;
     writer.write(cutShapeMap, "test-output/conflate/AlphaShapeGeneratorBasicTest.osm");
 
@@ -95,7 +99,6 @@ public:
 
     MapProjector::projectToWgs84(cutShapeMap);
 
-    QDir().mkpath("test-output/conflate");
     OsmXmlWriter writer;
     writer.write(cutShapeMap, "test-output/conflate/AlphaShapeGeneratorBufferTest.osm");
 
@@ -117,7 +120,6 @@ public:
 
     MapProjector::projectToWgs84(cutShapeMap);
 
-    QDir().mkpath("test-output/conflate");
     OsmXmlWriter writer;
     writer.write(cutShapeMap, "test-output/conflate/AlphaShapeGeneratorNegativeBufferTest.osm");
 

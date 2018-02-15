@@ -75,7 +75,7 @@ public:
 
     LOG_VAR(TestUtils::toQuotedString(OsmJsonWriter(5).toString(map)));
 
-    QDir().mkpath("test-output/ops/RefRemoveOp/");
+    TestUtils::mkpath("test-output/ops/RefRemoveOp/");
     OsmXmlWriter writer;
     writer.write(map, "test-output/ops/RefRemoveOp/Toy.osm");
     HOOT_FILE_EQUALS("test-files/ops/RefRemoveOp/ToyOutput.osm",

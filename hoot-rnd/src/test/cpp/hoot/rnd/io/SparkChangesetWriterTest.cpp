@@ -50,6 +50,11 @@ class SparkChangesetWriterTest : public CppUnit::TestFixture
 
 public:
 
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/io/SparkChangesetWriterTest/");
+  }
+
   void writeNodes(const QString output, const QString format)
   {
     SparkChangesetWriter changesetFileWriter;
@@ -81,7 +86,6 @@ public:
     DisableLog dl;
 
     const QString outputDir = "test-output/io/SparkChangesetWriterTest";
-    QDir().mkpath(outputDir);
     const QString changesetOutput = outputDir + "/changeset-1.spark.1";
 
     writeNodes(changesetOutput, "json");
@@ -98,9 +102,7 @@ public:
   {
     DisableLog dl;
 
-    const QString outputDir = "test-output/io/SparkChangesetWriterTest";
-    QDir().mkpath(outputDir);
-    const QString changesetOutput = outputDir + "/changeset-3.spark.1";
+    const QString changesetOutput = "test-output/io/SparkChangesetWriterTest/changeset-3.spark.1";
 
     SparkChangesetWriter changesetFileWriter;
     changesetFileWriter.open(changesetOutput);
@@ -124,9 +126,7 @@ public:
   {
     DisableLog dl;
 
-    const QString outputDir = "test-output/io/SparkChangesetWriterTest";
-    QDir().mkpath(outputDir);
-    const QString changesetOutput = outputDir + "/changeset-4.spark.1";
+    const QString changesetOutput = "test-output/io/SparkChangesetWriterTest/changeset-4.spark.1";
 
     SparkChangesetWriter changesetFileWriter;
     changesetFileWriter.open(changesetOutput);
@@ -152,9 +152,7 @@ public:
   {
     DisableLog dl;
 
-    const QString outputDir = "test-output/io/SparkChangesetWriterTest";
-    QDir().mkpath(outputDir);
-    const QString changesetOutput = outputDir + "/changeset-5.spark.1";
+    const QString changesetOutput = "test-output/io/SparkChangesetWriterTest/changeset-5.spark.1";
 
     SparkChangesetWriter changesetFileWriter;
     changesetFileWriter.open(changesetOutput);

@@ -56,7 +56,7 @@ public:
 
   void setUp()
   {
-    QDir().mkpath("test-output/perty/PertyMatchScorerTest");
+    TestUtils::mkpath("test-output/perty/PertyMatchScorerTest");
   }
 
   void runLoadReferenceMapTest()

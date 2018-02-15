@@ -65,6 +65,11 @@ class TileConflatorTest : public CppUnit::TestFixture
 
 public:
 
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/conflate");
+  }
+
   void runToyTest()
   {
     srand(0);
@@ -74,8 +79,6 @@ public:
     conf().set(ConfigOptions().getUnifyOptimizerTimeLimitKey(), -1);
 
     FileUtils::removeDir("test-output/conflate/TileConflatorTest.osm-cache");
-
-    QDir().mkpath("test-output/conflate");
 
     boost::shared_ptr<TileWorker> worker(new LocalTileWorker());
     TileConflator uut(worker);

@@ -31,11 +31,6 @@
 #include <hoot/core/conflate/splitter/CornerSplitter.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-using namespace hoot;
-
-
-// Boost
-using namespace boost;
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -49,18 +44,24 @@ using namespace boost;
 
 #include "../../TestUtils.h"
 
+namespace hoot
+{
+
 class CornerSplitterTest : public CppUnit::TestFixture
 {
-    CPPUNIT_TEST_SUITE(CornerSplitterTest);
-    CPPUNIT_TEST(runTest);
-    CPPUNIT_TEST_SUITE_END();
+  CPPUNIT_TEST_SUITE(CornerSplitterTest);
+  CPPUNIT_TEST(runTest);
+  CPPUNIT_TEST_SUITE_END();
 
 public:
 
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/conflate/splitter");
+  }
+
   void runTest()
   {
-    QDir().mkpath("test-output/conflate/splitter");
-
     OsmXmlReader reader;
 
     OsmMap::resetCounters();
@@ -86,3 +87,4 @@ public:
 
 CPPUNIT_TEST_SUITE_REGISTRATION(CornerSplitterTest);
 
+}

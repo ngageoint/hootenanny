@@ -42,11 +42,14 @@ class ImplicitTagRulesSqliteWriterTest : public CppUnit::TestFixture
 
 public:
 
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/io/ImplicitTagRulesSqliteWriterTest");
+  }
+
   void runWriteTest()
   {
-    const QString outputDir = "test-output/io/ImplicitTagRulesSqliteWriterTest";
-    const QString outputFile = outputDir + "/rules-out.sqlite";
-    QDir().mkpath(outputDir);
+    const QString outputFile = "test-output/io/ImplicitTagRulesSqliteWriterTest/rules-out.sqlite";
 
     ImplicitTagRulesSqliteWriter writer;
     writer.open(outputFile);

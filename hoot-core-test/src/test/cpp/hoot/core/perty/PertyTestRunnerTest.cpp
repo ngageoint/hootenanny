@@ -61,9 +61,9 @@ public:
 
   void setUp()
   {
-    QDir().mkpath("test-output/perty/PertyTestRunnerTest/Dynamic");
-    QDir().mkpath("test-output/perty/PertyTestRunnerTest/Static");
-    QDir().mkpath("test-output/perty/PertyTestRunnerTest/Variance");
+    TestUtils::mkpath("test-output/perty/PertyTestRunnerTest/Dynamic");
+    TestUtils::mkpath("test-output/perty/PertyTestRunnerTest/Static");
+    TestUtils::mkpath("test-output/perty/PertyTestRunnerTest/Variance");
   }
 
   void runDynamicVariablesTest()

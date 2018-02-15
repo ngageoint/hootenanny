@@ -139,7 +139,7 @@ public:
 
   QString writeMap(OsmMapPtr map, const QString outDir, const QString outFileName)
   {
-    QDir().mkpath(outDir);
+    TestUtils::mkpath(outDir);
     OsmXmlWriter writer;
     writer.setIncludeHootInfo(true);
     const QString outFile = outDir + "/" + outFileName;

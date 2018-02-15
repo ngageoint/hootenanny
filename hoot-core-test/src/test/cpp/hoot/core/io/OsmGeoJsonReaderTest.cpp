@@ -59,6 +59,11 @@ class OsmGeoJsonReaderTest : public CppUnit::TestFixture
 
 public:
 
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/io/GeoJson");
+  }
+
   void runAllDataTypesTest()
   {
     runTest("test-files/io/GeoJson/AllDataTypes.geojson", "AllDataTypes.osm");
@@ -94,7 +99,6 @@ public:
     reader.open(input);
     reader.read(map);
 
-    QDir().mkpath("test-output/io/GeoJson/");
     OsmXmlWriter writer;
     writer.open(QString("test-output/io/GeoJson/%1").arg(output));
     writer.write(map);

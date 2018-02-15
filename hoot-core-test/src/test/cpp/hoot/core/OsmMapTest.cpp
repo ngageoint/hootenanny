@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -174,7 +174,7 @@ public:
 
   void runAppendTest()
   {
-    QDir().mkpath("test-output");
+    TestUtils::mkpath("test-output");
 
     OsmXmlReader reader;
     reader.setUseDataSourceIds(true);

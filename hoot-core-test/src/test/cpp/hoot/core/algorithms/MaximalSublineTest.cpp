@@ -184,7 +184,7 @@ public:
     vector<WaySublineMatch> m = uut.findAllMatches(map, w1, w2, score);
     addEndNodes(map, m);
 
-    QDir().mkpath("test-output/algorithms/");
+    TestUtils::mkpath("test-output/algorithms/");
     MapProjector::projectToWgs84(map);
     OsmXmlWriter().write(map, "test-output/algorithms/MaximalSublineJoinTestOut.osm");
   }

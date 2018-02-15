@@ -47,6 +47,7 @@
 #include <tgs/Statistics/Random.h>
 
 // Qt
+#include <QDir>
 #include <QFile>
 
 using namespace geos::geom;
@@ -264,6 +265,26 @@ void TestUtils::verifyStdMatchesOutputIgnoreDate(const QString stdFilePath,
   {
     HOOT_STR_EQUALS(stdTokens.at(i), outputTokens.at(i));
   }
+}
+
+bool TestUtils::mkpath(const QString& path)
+{
+  //  Don't make it if it exists
+  if (QDir().exists(path))
+    return true;
+  //  Try to make the path 'retry' times waiting 'duration' microseconds in between tries
+  const int retry = 3;
+  //  100 msec should be enough to wait between tries
+  const unsigned int duration = 100000;
+  for (int i = 0; i < retry; i++)
+  {
+    if (QDir().mkpath(path))
+      return true;
+    usleep(duration);
+  }
+  //  Report failure
+  CPPUNIT_FAIL(QString("Couldn't create output directory: %1").arg(path).toStdString());
+  return false;
 }
 
 }

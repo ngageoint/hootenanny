@@ -59,33 +59,37 @@ namespace hoot
 
 class MapCleanerTest : public CppUnit::TestFixture
 {
-    CPPUNIT_TEST_SUITE(MapCleanerTest);
-    CPPUNIT_TEST(runBasicTest);
-    CPPUNIT_TEST_SUITE_END();
+  CPPUNIT_TEST_SUITE(MapCleanerTest);
+  CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST_SUITE_END();
 
 public:
 
-    void runBasicTest()
-    {
-      Settings::getInstance().clear();
-      OsmXmlReader reader;
-      OsmMap::resetCounters();
-      OsmSchema::getInstance().loadDefault();
-      OsmMapPtr map(new OsmMap());
-      reader.setDefaultStatus(Status::Unknown1);
-      reader.read("test-files/DcTigerRoads.osm", map);
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/conflate");
+  }
 
-      MapCleaner().apply(map);
+  void runBasicTest()
+  {
+    Settings::getInstance().clear();
+    OsmXmlReader reader;
+    OsmMap::resetCounters();
+    OsmSchema::getInstance().loadDefault();
+    OsmMapPtr map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read("test-files/DcTigerRoads.osm", map);
 
-      MapProjector::projectToWgs84(map);
+    MapCleaner().apply(map);
 
-      QDir().mkpath("test-output/conflate");
-      OsmXmlWriter writer;
-      writer.write(map, "test-output/conflate/MapCleaner.osm");
+    MapProjector::projectToWgs84(map);
 
-      HOOT_FILE_EQUALS("test-files/conflate/MapCleaner.osm",
-                       "test-output/conflate/MapCleaner.osm");
-    }
+    OsmXmlWriter writer;
+    writer.write(map, "test-output/conflate/MapCleaner.osm");
+
+    HOOT_FILE_EQUALS("test-files/conflate/MapCleaner.osm",
+                     "test-output/conflate/MapCleaner.osm");
+  }
 
 };
 

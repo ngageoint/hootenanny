@@ -86,6 +86,10 @@ class OsmPbfReaderTest : public CppUnit::TestFixture
 
 public:
 
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/io");
+  }
 
   void runOffsetsTest()
   {
@@ -296,8 +300,6 @@ public:
     OsmMapPtr map(new OsmMap());
     uut.parse(&input, map);
 
-    QDir().mkpath("test-output/io/");
-
     OsmXmlWriter writer;
     writer.setIncludeHootInfo(false);
     writer.write(map, "test-output/io/OsmPbfReaderTest_1.osm");
@@ -406,7 +408,6 @@ public:
     reader.read(map);
     reader.close();
 
-    QDir().mkpath("test-output/io/");
     OsmXmlWriter writer;
     writer.setIncludeHootInfo(false);
     writer.write(map, "test-output/io/OsmPbfReaderTest_2.osm");
@@ -422,7 +423,6 @@ public:
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm.pbf", false, Status::Unknown1);
 
-    QDir().mkpath("test-output/io/");
     OsmXmlWriter writer;
     writer.setIncludeHootInfo(false);
     writer.write(map, "test-output/io/OsmPbfReaderTest_3.osm");
@@ -441,7 +441,6 @@ public:
     reader.open("test-files/ToyTestA.osm.pbf");
     reader.initializePartial();
 
-    QDir().mkpath("test-output/io/");
     OsmXmlWriter writer;
     writer.setIncludeHootInfo(false);
 
@@ -485,7 +484,6 @@ public:
     reader.open("test-files/ToyTestCombined.pbf");
     reader.initializePartial();
 
-    QDir().mkpath("test-output/io/");
     OsmXmlWriter writer;
     writer.setIncludeHootInfo(false);
 

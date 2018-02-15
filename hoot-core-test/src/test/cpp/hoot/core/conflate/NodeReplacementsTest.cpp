@@ -41,6 +41,11 @@ using namespace hoot;
 #include <QDebug>
 #include <QDir>
 
+#include "../TestUtils.h"
+
+namespace hoot
+{
+
 class NodeReplacementsTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(NodeReplacementsTest);
@@ -50,9 +55,13 @@ class NodeReplacementsTest : public CppUnit::TestFixture
 
 public:
 
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/conflate");
+  }
+
   void runIoTest()
   {
-    QDir().mkpath("test-output/conflate");
     NodeReplacements uut;
 
     HashMap<long, long>& m = uut.getReplacements();
@@ -90,3 +99,4 @@ public:
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(NodeReplacementsTest, "quick");
 
+}

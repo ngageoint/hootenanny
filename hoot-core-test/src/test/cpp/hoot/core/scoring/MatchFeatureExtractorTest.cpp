@@ -96,7 +96,7 @@ public:
 
     LOG_TRACE(uut.getResults().toStdString());
 
-    QDir().mkpath("test-output/conflate/extractor/MatchFeatureExtractorTest/");
+    TestUtils::mkpath("test-output/conflate/extractor/MatchFeatureExtractorTest/");
     QFile fp("test-output/conflate/extractor/MatchFeatureExtractorTest/Buildings.arff");
     CPPUNIT_ASSERT(fp.open(QIODevice::WriteOnly | QIODevice::Text));
     QByteArray arr = uut.getResults().toUtf8();

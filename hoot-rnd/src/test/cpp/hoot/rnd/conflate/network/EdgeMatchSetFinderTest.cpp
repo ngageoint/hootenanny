@@ -57,7 +57,7 @@ public:
 
   void writeDebugMap(OsmMapPtr map)
   {
-    QDir().mkpath("tmp");
+    TestUtils::mkpath("tmp");
     OsmMapPtr copy(new OsmMap(map));
 
     MapProjector::projectToWgs84(copy);

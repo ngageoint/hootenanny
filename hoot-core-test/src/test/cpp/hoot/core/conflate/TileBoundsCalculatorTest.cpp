@@ -30,11 +30,6 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/Log.h>
-using namespace hoot;
-
-
-// Boost
-using namespace boost;
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -61,6 +56,11 @@ class TileBoundsCalculatorTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
+
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/conflate");
+  }
 
   void addEnvelope(OsmMapPtr map, Envelope& e, int tx, int ty)
   {
@@ -119,7 +119,6 @@ public:
       }
     }
 
-    QDir().mkpath("test-output/conflate");
     OsmXmlWriter writer;
     writer.write(bounds, "test-output/conflate/TileBounds.osm");
 
@@ -129,8 +128,7 @@ public:
   }
 };
 
-}
-
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(TileBoundsCalculatorTest, "quick");
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(TileBoundsCalculatorTest, "current");
 
+}

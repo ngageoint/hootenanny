@@ -55,6 +55,11 @@ class OgrWriterTest : public CppUnit::TestFixture
 
 public:
 
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/io");
+  }
+
   OsmMapPtr _map;
 
   NodePtr createNode(double x, double y)
@@ -124,7 +129,6 @@ public:
   void runShpTest()
   {
     FileUtils::removeDir("test-output/io/OgrWriterShpTest");
-    QDir().mkpath("test-output/io/");
     OgrWriter uut;
     uut.setScriptPath("test-files/io/SampleTranslation.js");
     uut.open("test-output/io/OgrWriterShpTest.shp");
@@ -140,13 +144,12 @@ public:
   void runGdbTest()
   {
     FileUtils::removeDir("test-output/io/OgrWriterTest.gdb");
-    QDir().mkpath("test-output/io/");
     OgrWriter uut;
     uut.setScriptPath("test-files/io/SampleTranslation.js");
     uut.open("test-output/io/OgrWriterTest.gdb");
     uut.write(createTestMap());
 
-    QDir().mkpath("tmp");
+    TestUtils::mkpath("tmp");
     OsmMapWriterFactory::write(createTestMap(), "tmp/TestMap.osm");
 
     // make sure it created a bunch of files. We aren't testing for correct output.
@@ -170,7 +173,6 @@ public:
     map->getRelation(1)->addElement("test", ElementId(ElementType::Relation, 2));
 
     FileUtils::removeDir("test-output/io/OgrWriterRelationTest.gdb");
-    QDir().mkpath("test-output/io/");
     OgrWriter uut;
     uut.setScriptPath("test-files/io/SampleTranslation.js");
     uut.open("test-output/io/OgrWriterRelationTest.gdb");

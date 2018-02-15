@@ -59,7 +59,7 @@ public:
 
   void runBasicTest()
   {
-    QDir().mkpath(outDir());
+    TestUtils::mkpath(outDir());
 
     //regenerate the db file
     const QString databaseOutFile =
@@ -153,7 +153,7 @@ public:
 
   void runDuplicateTagKeyTest()
   {
-    QDir().mkpath(outDir());
+    TestUtils::mkpath(outDir());
 
     //regenerate the db file
     const QString databaseOutFile =
@@ -190,7 +190,7 @@ public:
 
   void runLessSpecificImplicitTagTest()
   {
-    QDir().mkpath(outDir());
+    TestUtils::mkpath(outDir());
 
     //regenerate the db file
     const QString databaseOutFile =
@@ -226,7 +226,7 @@ public:
 
   void runMoreSpecificImplicitTagTest()
   {
-    QDir().mkpath(outDir());
+    TestUtils::mkpath(outDir());
 
     //regenerate the db file
     const QString databaseOutFile =

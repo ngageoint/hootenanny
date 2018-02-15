@@ -44,6 +44,11 @@ class CumulativeConflatorTest : public CppUnit::TestFixture
 
 public:
 
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/conflate/");
+  }
+
   void basicTest()
   {
     TestUtils::resetEnvironment();
@@ -57,7 +62,6 @@ public:
     inputs.append("test-files/conflate/CumulativeConflatorTest/Restaurants_RioSource2.osm");
     inputs.append("test-files/conflate/CumulativeConflatorTest/Restaurants_RioSource3.osm");
 
-    QDir().mkpath("test-output/conflate/");
     CumulativeConflator::conflate(inputs, "test-output/conflate/CumulativeConflatorTest.osm");
 
     HOOT_FILE_EQUALS(

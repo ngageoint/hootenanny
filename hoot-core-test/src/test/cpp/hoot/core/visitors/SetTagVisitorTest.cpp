@@ -68,7 +68,7 @@ public:
     SetTagVisitor visitor("key3", "value3");
     map->visitRw(visitor);
 
-    QDir().mkpath("test-output/visitors");
+    TestUtils::mkpath("test-output/visitors");
     OsmMapWriterFactory::getInstance().write(map,
       "test-output/visitors/SetTagVisitorTest-runAddNewTest.osm");
 
@@ -87,7 +87,7 @@ public:
     SetTagVisitor visitor("key2", "value2");
     map->visitRw(visitor);
 
-    QDir().mkpath("test-output/visitors");
+    TestUtils::mkpath("test-output/visitors");
     OsmMapWriterFactory::getInstance().write(map,
       "test-output/visitors/SetTagVisitorTest-runOverwriteExistingTest.osm");
 
@@ -106,7 +106,7 @@ public:
     SetTagVisitor visitor("key1", "value1b", true);
     map->visitRw(visitor);
 
-    QDir().mkpath("test-output/visitors");
+    TestUtils::mkpath("test-output/visitors");
     OsmMapWriterFactory::getInstance().write(map,
       "test-output/visitors/SetTagVisitorTest-runAppendValueTest.osm");
 
@@ -125,7 +125,7 @@ public:
     SetTagVisitor visitor("key3", "value3", false, ElementType::fromString("node"));
     map->visitRw(visitor);
 
-    QDir().mkpath("test-output/visitors");
+    TestUtils::mkpath("test-output/visitors");
     OsmMapWriterFactory::getInstance().write(map,
       "test-output/visitors/SetTagVisitorTest-runElementFilterTest.osm");
 

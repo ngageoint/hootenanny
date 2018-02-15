@@ -86,6 +86,8 @@ public:
     database.open(ServicesDbTestUtils::getDbModifyUrl());
     database.getOrCreateUser(userEmail(), "ServiceHootApiDbReaderTest");
     database.close();
+
+    TestUtils::mkpath("test-output/io/ServiceHootApiDbReaderTest");
   }
 
   void tearDown()
@@ -651,7 +653,6 @@ public:
 
     MapProjector::projectToWgs84(map);
 
-    QDir().mkpath("test-output/io/ServiceHootApiDbReaderTest");
     OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
     writer.write(

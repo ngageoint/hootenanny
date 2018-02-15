@@ -55,7 +55,7 @@ public:
 
   void runBasicTest()
   {
-    QDir().mkpath(outDir());
+    TestUtils::mkpath(outDir());
 
     const QString input = inDir() + "/ImplicitTagRulesDatabaseDeriverTest-input.implicitTagRules";
     const QString dbOutputFile =
@@ -78,7 +78,7 @@ public:
 
   void runBadInputsTest()
   {
-    QDir().mkpath(outDir());
+    TestUtils::mkpath(outDir());
 
     ImplicitTagRulesDatabaseDeriver rulesDeriver;
     rulesDeriver.setMinTagOccurrencesPerWord(1);
@@ -119,7 +119,7 @@ public:
 
   void runMinTagOccurrencePerWordTest()
   {
-    QDir().mkpath(outDir());
+    TestUtils::mkpath(outDir());
 
     const QString input = inDir() + "/ImplicitTagRulesDatabaseDeriverTest-input.implicitTagRules";
     const QString dbOutputFile =
@@ -142,7 +142,7 @@ public:
 
   void runMinWordLengthTest()
   {
-    QDir().mkpath(outDir());
+    TestUtils::mkpath(outDir());
 
     const QString input = inDir() + "/ImplicitTagRulesDatabaseDeriverTest-input.implicitTagRules";
     const QString dbOutputFile =
@@ -165,7 +165,7 @@ public:
 
   void runTagIgnoreTest()
   {
-    QDir().mkpath(outDir());
+    TestUtils::mkpath(outDir());
 
     const QString input = inDir() + "/ImplicitTagRulesDatabaseDeriverTest-input.implicitTagRules";
     const QString dbOutputFile =
@@ -188,7 +188,7 @@ public:
 
   void runWordIgnoreTest()
   {
-    QDir().mkpath(outDir());
+    TestUtils::mkpath(outDir());
 
     const QString input = inDir() + "/ImplicitTagRulesDatabaseDeriverTest-input.implicitTagRules";
     const QString dbOutputFile =
@@ -213,7 +213,7 @@ public:
 
   void runCustomRuleTest()
   {
-    QDir().mkpath(outDir());
+    TestUtils::mkpath(outDir());
 
     const QString input = inDir() + "/ImplicitTagRulesDatabaseDeriverTest-input.implicitTagRules";
     const QString dbOutputFile =
@@ -238,7 +238,7 @@ public:
 
   void runSchemaValuesOnlyOffTest()
   {
-    QDir().mkpath(outDir());
+    TestUtils::mkpath(outDir());
 
     const QString input = inDir() + "/ImplicitTagRulesDatabaseDeriverTest-input.implicitTagRules";
     const QString dbOutputFile =

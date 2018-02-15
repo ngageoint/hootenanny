@@ -232,7 +232,7 @@ public:
     //members that are out of bounds.
     CPPUNIT_ASSERT_EQUAL(5, (int)map->getRelations().size());
 
-    QDir().mkpath("test-output/io/ServiceOsmApiDbReaderTest");
+    TestUtils::mkpath("test-output/io/ServiceOsmApiDbReaderTest");
     MapProjector::projectToWgs84(map);
     OsmMapWriterFactory::getInstance().write(map,
       "test-output/io/ServiceOsmApiDbReaderTest/runReadByBoundsTest.osm");

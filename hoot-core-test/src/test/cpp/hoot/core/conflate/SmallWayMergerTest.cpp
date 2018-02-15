@@ -32,11 +32,6 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/Log.h>
-using namespace hoot;
-
-
-// Boost
-using namespace boost;
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -48,33 +43,43 @@ using namespace boost;
 #include <QDebug>
 #include <QDir>
 
+#include "../TestUtils.h"
+
+namespace hoot
+{
+
 class SmallWayMergerTest : public CppUnit::TestFixture
 {
-    CPPUNIT_TEST_SUITE(SmallWayMergerTest);
-    CPPUNIT_TEST(runBasicTest);
-    CPPUNIT_TEST_SUITE_END();
+  CPPUNIT_TEST_SUITE(SmallWayMergerTest);
+  CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST_SUITE_END();
 
 public:
 
-    void runBasicTest()
-    {
-      OsmXmlReader reader;
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/conflate");
+  }
 
-      OsmMapPtr map(new OsmMap());
-      reader.setDefaultStatus(Status::Unknown1);
-      reader.read("test-files/conflate/SmallWayMergerInput1.osm", map);
+  void runBasicTest()
+  {
+    OsmXmlReader reader;
 
-      MapProjector::projectToPlanar(map);
-      SmallWayMerger::mergeWays(map, 15.0);
-      MapProjector::projectToWgs84(map);
+    OsmMapPtr map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read("test-files/conflate/SmallWayMergerInput1.osm", map);
 
-      QDir().mkpath("test-output/conflate/");
-      OsmXmlWriter writer;
-      writer.write(map, "test-output/conflate/SmallWayMergerOutput1.osm");
+    MapProjector::projectToPlanar(map);
+    SmallWayMerger::mergeWays(map, 15.0);
+    MapProjector::projectToWgs84(map);
 
-    }
+    OsmXmlWriter writer;
+    writer.write(map, "test-output/conflate/SmallWayMergerOutput1.osm");
+
+  }
 
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SmallWayMergerTest, "quick");
 
+}

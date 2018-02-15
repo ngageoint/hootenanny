@@ -54,7 +54,7 @@ public:
 
   void writeDebugMap(OsmMapPtr map, VagabondNetworkMatcher& uut, int index)
   {
-    QDir().mkpath("tmp");
+    TestUtils::mkpath("tmp");
     OsmMapPtr copy(new OsmMap(map));
     DebugNetworkMapCreator().addDebugElements(copy, uut.getAllEdgeScores(),
       uut.getAllVertexScores());

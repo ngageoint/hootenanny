@@ -78,7 +78,7 @@ public:
 
     MapProjector::projectToWgs84(map);
 
-    QDir().mkpath("test-output/ops/BuildingOutlineRemoveOp/");
+    TestUtils::mkpath("test-output/ops/BuildingOutlineRemoveOp/");
     OsmXmlWriter writer;
     writer.write(map, "test-output/ops/BuildingOutlineRemoveOp/SelfIntersectingRelationsOut.osm");
     HOOT_FILE_EQUALS("test-files/ops/BuildingOutlineRemoveOp/SelfIntersectingRelationsOut.osm",

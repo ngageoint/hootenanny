@@ -160,6 +160,13 @@ public:
 
   static void verifyStdMatchesOutputIgnoreDate(const QString stdFilePath, const QString outFilePath);
 
+  /**
+   * Creates a folder path using QDir::mkpath in a more thread-safe way
+   * @param path relative or absolute path to create (think `mkdir -p`)
+   * @return true if successful
+   */
+  static bool mkpath(const QString& path);
+
 private:
   QList<RegisteredReset*> _resets;
 

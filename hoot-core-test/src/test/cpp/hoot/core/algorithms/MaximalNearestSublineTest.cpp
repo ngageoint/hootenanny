@@ -63,55 +63,60 @@ using namespace std;
 
 class MaximalNearestSublineTest : public CppUnit::TestFixture
 {
-    CPPUNIT_TEST_SUITE(MaximalNearestSublineTest);
-    CPPUNIT_TEST(runTest);
-    CPPUNIT_TEST(funnyCurveTest);
-    CPPUNIT_TEST(oneShortTest);
-    CPPUNIT_TEST_SUITE_END();
+  CPPUNIT_TEST_SUITE(MaximalNearestSublineTest);
+  CPPUNIT_TEST(runTest);
+  CPPUNIT_TEST(funnyCurveTest);
+  CPPUNIT_TEST(oneShortTest);
+  CPPUNIT_TEST_SUITE_END();
 
 public:
 
-    void runTest()
-    {
-      OsmXmlReader reader;
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/algorithms/");
+  }
 
-      OsmMapPtr map(new OsmMap());
-      reader.setDefaultStatus(Status::Unknown1);
-      reader.setUseDataSourceIds(true);
-      reader.read("test-files/MaximalNearestSubline.osm", map);
+  void runTest()
+  {
+    OsmXmlReader reader;
 
-      OsmMapPtr map2(new OsmMap(map->getProjection()));
+    OsmMapPtr map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.setUseDataSourceIds(true);
+    reader.read("test-files/MaximalNearestSubline.osm", map);
 
-      boost::shared_ptr<OGRSpatialReference> srs =
-          MapProjector::createAeacProjection(CalculateMapBoundsVisitor::getBounds(map));
-      MapProjector::project(map, srs);
+    OsmMapPtr map2(new OsmMap(map->getProjection()));
 
-      stringstream ss;
+    boost::shared_ptr<OGRSpatialReference> srs =
+        MapProjector::createAeacProjection(CalculateMapBoundsVisitor::getBounds(map));
+    MapProjector::project(map, srs);
 
-      WayPtr w;
-      w = MaximalNearestSubline::getMaximalNearestSubline(map, map->getWay(-353),
-                                                          map->getWay(-313),
-        10.0, 10.0);
-      w->setStatus(Status::Conflated);
-      ss << ElementConverter(map).convertToLineString(w)->toString() << endl;
+    stringstream ss;
 
-      w = MaximalNearestSubline::getMaximalNearestSubline(map, map->getWay(-313),
-                                                          map->getWay(-353),
-                                                          10.0, 10.0);
-      w->setStatus(Status::Conflated);
-      ss << ElementConverter(map).convertToLineString(w)->toString() << endl;
+    WayPtr w;
+    w = MaximalNearestSubline::getMaximalNearestSubline(map, map->getWay(-353),
+                                                        map->getWay(-313),
+      10.0, 10.0);
+    w->setStatus(Status::Conflated);
+    ss << ElementConverter(map).convertToLineString(w)->toString() << endl;
 
-      w = MaximalNearestSubline::getMaximalNearestSubline(map, map->getWay(-260),
-                                                          map->getWay(-247),
-                                                          10.0, 10.0);
-      w->setStatus(Status::Conflated);
-      ss << ElementConverter(map).convertToLineString(w)->toString() << endl;
+    w = MaximalNearestSubline::getMaximalNearestSubline(map, map->getWay(-313),
+                                                        map->getWay(-353),
+                                                        10.0, 10.0);
+    w->setStatus(Status::Conflated);
+    ss << ElementConverter(map).convertToLineString(w)->toString() << endl;
 
-      w = MaximalNearestSubline::getMaximalNearestSubline(map, map->getWay(-247),
-                                                          map->getWay(-260),
-                                                          10.0, 10.0);
-      w->setStatus(Status::Conflated);
-      ss << ElementConverter(map).convertToLineString(w)->toString() << endl;
+    w = MaximalNearestSubline::getMaximalNearestSubline(map, map->getWay(-260),
+                                                        map->getWay(-247),
+                                                        10.0, 10.0);
+    w->setStatus(Status::Conflated);
+    ss << ElementConverter(map).convertToLineString(w)->toString() << endl;
+
+    w = MaximalNearestSubline::getMaximalNearestSubline(map, map->getWay(-247),
+                                                        map->getWay(-260),
+                                                        10.0, 10.0);
+    w->setStatus(Status::Conflated);
+    ss << ElementConverter(map).convertToLineString(w)->toString() << endl;
 
 //      {
 //        OsmMapPtr wgs84(new OsmMap(map2));
@@ -121,131 +126,128 @@ public:
 //        writer.write(wgs84, fn);
 //      }
 
-      QFile fp("test-files/algorithms/MaximalNearestSublineTest.txt");
-      fp.open(QIODevice::ReadOnly);
-      QString s = fp.readAll();
-      CPPUNIT_ASSERT_EQUAL(s.toStdString(), ss.str());
+    QFile fp("test-files/algorithms/MaximalNearestSublineTest.txt");
+    fp.open(QIODevice::ReadOnly);
+    QString s = fp.readAll();
+    CPPUNIT_ASSERT_EQUAL(s.toStdString(), ss.str());
 
-    }
+  }
 
-    void funnyCurveTest()
+  void funnyCurveTest()
+  {
+    TestUtils::resetEnvironment();
+
+    OsmXmlReader reader;
+
+    OsmMapPtr map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read("test-files/MaximalNearestSubline2.osm", map);
+
+    MapProjector::projectToPlanar(map);
+
+    long n1 = FindWaysVisitor::findWaysByTag(map, "note", "1")[0];
+    long n2 = FindWaysVisitor::findWaysByTag(map, "note", "2")[0];
+    WayPtr left = MaximalNearestSubline::getMaximalNearestSubline(map,
+          map->getWay(n1),
+          map->getWay(n2),
+          10.0, 10.0);
+    left->setStatus(Status::Conflated);
+    left->setTag("name", "left");
+    map->addWay(left);
+    //cout << ElementConverter(map).convertToLineString(left)->toString() << endl;
+
+    WayPtr right = MaximalNearestSubline::getMaximalNearestSubline(map,
+          map->getWay(n2),
+          map->getWay(n1),
+          10.0, 10.0);
+    right->setStatus(Status::Conflated);
+    left->setTag("name", "right");
+    map->addWay(right);
+    //cout << ElementConverter(map).convertToLineString(right)->toString() << endl;
+
+    WayPtr w = WayAverager::average(map, right, left);
+    w->setStatus(Status::Conflated);
+    w->setTag("name", "average");
+    map->addWay(w);
+    //map->removeWay(n1);
+    //map->removeWay(n2);
+
     {
-      TestUtils::resetEnvironment();
-
-      OsmXmlReader reader;
-
-      OsmMapPtr map(new OsmMap());
-      reader.setDefaultStatus(Status::Unknown1);
-      reader.read("test-files/MaximalNearestSubline2.osm", map);
-
-      MapProjector::projectToPlanar(map);
-
-      long n1 = FindWaysVisitor::findWaysByTag(map, "note", "1")[0];
-      long n2 = FindWaysVisitor::findWaysByTag(map, "note", "2")[0];
-      WayPtr left = MaximalNearestSubline::getMaximalNearestSubline(map,
-            map->getWay(n1),
-            map->getWay(n2),
-            10.0, 10.0);
-      left->setStatus(Status::Conflated);
-      left->setTag("name", "left");
-      map->addWay(left);
-      //cout << ElementConverter(map).convertToLineString(left)->toString() << endl;
-
-      WayPtr right = MaximalNearestSubline::getMaximalNearestSubline(map,
-            map->getWay(n2),
-            map->getWay(n1),
-            10.0, 10.0);
-      right->setStatus(Status::Conflated);
-      left->setTag("name", "right");
-      map->addWay(right);
-      //cout << ElementConverter(map).convertToLineString(right)->toString() << endl;
-
-      WayPtr w = WayAverager::average(map, right, left);
-      w->setStatus(Status::Conflated);
-      w->setTag("name", "average");
-      map->addWay(w);
-      //map->removeWay(n1);
-      //map->removeWay(n2);
-      QDir().mkpath("test-output/algorithms/");
-
-      {
-        OsmMapPtr wgs84(new OsmMap(map));
-        MapProjector::projectToWgs84(wgs84);
-        OsmXmlWriter writer;
-        writer.setIncludeCompatibilityTags(false);
-        writer.setIncludeHootInfo(false);
-        writer.setIncludeIds(false);
-        QString fn = QString("test-output/algorithms/MaximalNearestSubline2TestOutput.osm");
-        writer.write(wgs84, fn);
-      }
-
-      HOOT_FILE_EQUALS("test-files/algorithms/MaximalNearestSubline2TestOutput.osm",
-                       "test-output/algorithms/MaximalNearestSubline2TestOutput.osm");
+      OsmMapPtr wgs84(new OsmMap(map));
+      MapProjector::projectToWgs84(wgs84);
+      OsmXmlWriter writer;
+      writer.setIncludeCompatibilityTags(false);
+      writer.setIncludeHootInfo(false);
+      writer.setIncludeIds(false);
+      QString fn = QString("test-output/algorithms/MaximalNearestSubline2TestOutput.osm");
+      writer.write(wgs84, fn);
     }
 
+    HOOT_FILE_EQUALS("test-files/algorithms/MaximalNearestSubline2TestOutput.osm",
+                     "test-output/algorithms/MaximalNearestSubline2TestOutput.osm");
+  }
 
-    void oneShortTest()
+
+  void oneShortTest()
+  {
+    OsmXmlReader reader;
+
+    OsmMap::resetCounters();
+
+    OsmMapPtr map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read("test-files/MaximalNearestSubline2.osm", map);
+
+    MapProjector::projectToPlanar(map);
+
+    long n3 = FindWaysVisitor::findWaysByTag(map, "note", "3")[0];
+    long n4 = FindWaysVisitor::findWaysByTag(map, "note", "4")[0];
+    WayPtr left = MaximalNearestSubline::getMaximalNearestSubline(
+          map,
+          map->getWay(n3),
+          map->getWay(n4),
+          10.0, 10.0);
+    left->setStatus(Status::Conflated);
+    left->setTag("name", "left");
+    map->addWay(left);
+    //cout << ElementConverter(map).convertToLineString(left)->toString() << endl;
+
+    WayPtr right = MaximalNearestSubline::getMaximalNearestSubline(
+          map,
+          map->getWay(n4),
+          map->getWay(n3),
+          10.0, 10.0);
+    right->setStatus(Status::Conflated);
+    right->setTag("name", "right");
+    map->addWay(right);
+    //cout << ElementConverter(map).convertToLineString(right)->toString() << endl;
+
+    WayPtr w = WayAverager::average(map, right, left);
+    w->setStatus(Status::Conflated);
+    w->setTag("name", "average");
+    map->addWay(w);
+    //map->removeWay(n1);
+    //map->removeWay(n2);
+
     {
-      OsmXmlReader reader;
-
-      OsmMap::resetCounters();
-
-      OsmMapPtr map(new OsmMap());
-      reader.setDefaultStatus(Status::Unknown1);
-      reader.read("test-files/MaximalNearestSubline2.osm", map);
-
-      MapProjector::projectToPlanar(map);
-
-      long n3 = FindWaysVisitor::findWaysByTag(map, "note", "3")[0];
-      long n4 = FindWaysVisitor::findWaysByTag(map, "note", "4")[0];
-      WayPtr left = MaximalNearestSubline::getMaximalNearestSubline(
-            map,
-            map->getWay(n3),
-            map->getWay(n4),
-            10.0, 10.0);
-      left->setStatus(Status::Conflated);
-      left->setTag("name", "left");
-      map->addWay(left);
-      //cout << ElementConverter(map).convertToLineString(left)->toString() << endl;
-
-      WayPtr right = MaximalNearestSubline::getMaximalNearestSubline(
-            map,
-            map->getWay(n4),
-            map->getWay(n3),
-            10.0, 10.0);
-      right->setStatus(Status::Conflated);
-      right->setTag("name", "right");
-      map->addWay(right);
-      //cout << ElementConverter(map).convertToLineString(right)->toString() << endl;
-
-      WayPtr w = WayAverager::average(map, right, left);
-      w->setStatus(Status::Conflated);
-      w->setTag("name", "average");
-      map->addWay(w);
-      //map->removeWay(n1);
-      //map->removeWay(n2);
-
-      QDir().mkpath("test-output/algorithms/");
-
-      {
-        OsmMapPtr wgs84(new OsmMap(map));
-        MapProjector::projectToWgs84(wgs84);
-        OsmXmlWriter writer;
-        QString fn = QString("test-output/algorithms/MaximalNearestSublineOneShortTestOutput.osm");
-        writer.write(wgs84, fn);
-      }
-
-//      QFile fp("test-files/algorithms/MaximalNearestSublineOneShortTestOutput.osm");
-//      fp.open(QIODevice::ReadOnly);
-//      QString s1 = fp.readAll();
-
-//      QFile fp2("test-output/algorithms/MaximalNearestSublineOneShortTestOutput.osm");
-//      fp2.open(QIODevice::ReadOnly);
-//      QString s2 = fp2.readAll();
-
-//      CPPUNIT_ASSERT_EQUAL(s1.toStdString(), s2.toStdString());
-
+      OsmMapPtr wgs84(new OsmMap(map));
+      MapProjector::projectToWgs84(wgs84);
+      OsmXmlWriter writer;
+      QString fn = QString("test-output/algorithms/MaximalNearestSublineOneShortTestOutput.osm");
+      writer.write(wgs84, fn);
     }
+
+//    QFile fp("test-files/algorithms/MaximalNearestSublineOneShortTestOutput.osm");
+//    fp.open(QIODevice::ReadOnly);
+//    QString s1 = fp.readAll();
+
+//    QFile fp2("test-output/algorithms/MaximalNearestSublineOneShortTestOutput.osm");
+//    fp2.open(QIODevice::ReadOnly);
+//    QString s2 = fp2.readAll();
+
+//    CPPUNIT_ASSERT_EQUAL(s1.toStdString(), s2.toStdString());
+
+  }
 };
 
 

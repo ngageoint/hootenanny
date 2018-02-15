@@ -72,6 +72,8 @@ public:
     database.open(ServicesDbTestUtils::getDbModifyUrl());
     database.getOrCreateUser(userEmail(), "ServiceHootApiDbBulkInserterTest");
     database.close();
+
+    TestUtils::mkpath("test-output/io/ServiceHootApiDbBulkInserterTest");
   }
 
   void tearDown()
@@ -91,7 +93,6 @@ public:
   {
     OsmMap::resetCounters();
     const QString outputDir = "test-output/io/ServiceHootApiDbBulkInserterTest";
-    QDir().mkpath(outputDir);
 
     HootApiDbBulkInserter writer;
     const QString outFile = outputDir + "/psql-offline-out.sql";
