@@ -82,6 +82,7 @@ public:
   virtual QString toString() const;
 
   virtual QString explain() const { return _explainText; }
+  virtual void setExplain(const QString explainText) { _explainText = explainText; }
 
 private:
 

@@ -69,6 +69,8 @@ class BuildingMatchCreatorTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runReviewIfSecondaryNewer2Test);
   CPPUNIT_TEST(runReviewIfSecondaryNewerMismatchingDateKeyTest);
   CPPUNIT_TEST(runReviewIfSecondaryNewerBadDateFormatTest);
+  CPPUNIT_TEST(runReviewNonOneToOneMatchesTest);
+  CPPUNIT_TEST(runReviewNonOneToOneMatches2Test);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -318,6 +320,52 @@ public:
       exceptionMsg = e.what();
     }
     CPPUNIT_ASSERT(exceptionMsg.contains("Invalid configured building date format"));
+  }
+
+  void runReviewNonOneToOneMatchesTest()
+  {
+    OsmMapPtr map = getTestMap();
+
+    conf().set("building.review.matches.other.than.one.to.one", "true");
+
+    BuildingMatchCreator uut;
+    vector<const Match*> matches;
+    boost::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
+    uut.createMatches(map, matches, threshold);
+    LOG_VARD(matches);
+
+    CPPUNIT_ASSERT_EQUAL(3, int(matches.size()));
+    for (vector<const Match*>::const_iterator it = matches.begin(); it != matches.end(); ++it)
+    {
+      const Match* match = *it;
+      CPPUNIT_ASSERT_EQUAL(1.0, match->getClassification().getReviewP());
+    }
+
+    TestUtils::resetEnvironment();
+  }
+
+  void runReviewNonOneToOneMatches2Test()
+  {
+    //TODO: need test where we prove 1:1 matches are preserved
+
+    /*OsmMapPtr map = getTestMap();
+
+    conf().set("building.review.matches.other.than.one.to.one", "true");
+
+    BuildingMatchCreator uut;
+    vector<const Match*> matches;
+    boost::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
+    uut.createMatches(map, matches, threshold);
+    LOG_VARD(matches);
+
+    CPPUNIT_ASSERT_EQUAL(3, int(matches.size()));
+    for (vector<const Match*>::const_iterator it = matches.begin(); it != matches.end(); ++it)
+    {
+      const Match* match = *it;
+      CPPUNIT_ASSERT_EQUAL(1.0, match->getClassification().getReviewP());
+    }
+
+    TestUtils::resetEnvironment()*/;
   }
 };
 

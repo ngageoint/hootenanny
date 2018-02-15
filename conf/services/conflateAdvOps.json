@@ -648,7 +648,15 @@
         	"defaultvalue":"source:date",
         	"hoot_key":"building.date.tag.key",
         	"onchange":"true"
-    	    }
+    	    },
+            {
+            	"id":"building_review_matches_other_than_one_to_one",
+                "elem_type":"bool",
+                "defaultvalue":"false",
+                "description":"If true, any building matches other than 1:1 matches are automatically marked for review.",
+                "name":"Review Non 1:1 Building Matches",
+                "hoot_key":"building.review.matches.other.than.one.to.one"
+            }
         ]
     },
     {
