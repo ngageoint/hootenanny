@@ -48,6 +48,14 @@ Feature: Advanced Conflation Options
         And I should see element "#element_cache_size_node" with no value and placeholder "2000000"
         And I should see element "#element_cache_size_relation" with no value and placeholder "200000"
         And I should see element "#element_cache_size_way" with no value and placeholder "200000"
+	And I should see element "#edge_distance_extractor_spacing" with no value and placeholder "5.0"
+	And I should see element "#levenshtein_distance_alpha" with no value and placeholder "1.15"
+	And I should see element "#merge_nearby_nodes_distance" with no value and placeholder "1.0"
+	And I should see element "#node_matcher_strictness" with no value and placeholder "2"
+	And I should see checkbox "Keep Non Word Tokens" unchecked
+	And I should see element "#token_min_size" with no value and placeholder "3"
+	And I should see checkbox "Tokenize When Translating" checked
+	And I should see element "#weighted_metric_distance_extractor_search_radius" with no value and placeholder "-1.0"
         Then I click on "#hoot_general_conflation_options_label"
         And I should see "Road Options"
         Then I click on "#hoot_road_options_label"
