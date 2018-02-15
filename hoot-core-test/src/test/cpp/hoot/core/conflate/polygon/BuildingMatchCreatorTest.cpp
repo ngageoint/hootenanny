@@ -174,12 +174,12 @@ public:
     //feature newer - should trigger a review
     //ref feature
     TestUtils::getElementWithTag(map, "name", "Target")->getTags()
-      .appendValue("source:date", "2018-02-14 10:55");
+      .appendValue("source:date", "2018-02-14T10:55");
     //secondary feature
     TestUtils::getElementWithTag(map, "name", "Target Pharmacy")->getTags()
-      .appendValue("source:date", "2018-02-14 10:56");
+      .appendValue("source:date", "2018-02-14T10:56");
 
-    conf().set("building.date.format", "yyyy-MM-dd HH:mm");
+    conf().set("building.date.format", "yyyy-MM-ddTHH:mm");
     conf().set("building.date.tag.key", "source:date");
     conf().set("building.review.if.secondary.newer", "true");
 
@@ -236,12 +236,12 @@ public:
     //feature newer - should not trigger a review
     //ref feature
     TestUtils::getElementWithTag(map, "name", "Target")->getTags()
-      .appendValue("source:date", "2018-02-14 10:56");
+      .appendValue("source:date", "2018-02-14T10:56");
     //secondary feature
     TestUtils::getElementWithTag(map, "name", "Target Pharmacy")->getTags()
-      .appendValue("source:date", "2018-02-14 10:55");
+      .appendValue("source:date", "2018-02-14T10:55");
 
-    conf().set("building.date.format", "yyyy-MM-dd HH:mm");
+    conf().set("building.date.format", "yyyy-MM-ddTHH:mm");
     conf().set("building.date.tag.key", "source:date");
     conf().set("building.review.if.secondary.newer", "true");
 
@@ -266,12 +266,12 @@ public:
     //should not trigger a review
     //ref feature
     TestUtils::getElementWithTag(map, "name", "Target")->getTags()
-      .appendValue("source:date", "2018-02-14 10:56");
+      .appendValue("source:date", "2018-02-14T10:56");
     //secondary feature
     TestUtils::getElementWithTag(map, "name", "Target Pharmacy")->getTags()
-      .appendValue("date", "2018-02-14 10:55");
+      .appendValue("date", "2018-02-14T10:55");
 
-    conf().set("building.date.format", "yyyy-MM-dd HH:mm");
+    conf().set("building.date.format", "yyyy-MM-ddTHH:mm");
     conf().set("building.date.tag.key", "source:date");
     conf().set("building.review.if.secondary.newer", "true");
 
@@ -295,12 +295,12 @@ public:
     //make the date tag added to one of the features have a date format that is unexpected
     //ref feature
     TestUtils::getElementWithTag(map, "name", "Target")->getTags()
-      .appendValue("source:date", "2018-02-14 10:56:00");
+      .appendValue("source:date", "2018-02-14T10:56:00");
     //secondary feature
     TestUtils::getElementWithTag(map, "name", "Target Pharmacy")->getTags()
-      .appendValue("source:date", "2018-02-14 10:55");
+      .appendValue("source:date", "2018-02-14T10:55");
 
-    conf().set("building.date.format", "yyyy-MM-dd HH:mm");
+    conf().set("building.date.format", "yyyy-MM-ddTHH:mm");
     conf().set("building.date.tag.key", "source:date");
     conf().set("building.review.if.secondary.newer", "true");
 
