@@ -624,6 +624,32 @@
                 "required":"true"
             },
             {
+            	"id":"building_review_if_secondary_newer",
+                "elem_type":"bool",
+                "defaultvalue":"false",
+                "description":"If true, any buildings in the secondary layer will be automatically reviewed against matching buildings in the reference layer if they are marked with a more recent date than that of the reference building.",
+                "name":"Always Review If Secondary Feature Newer",
+                "hoot_key":"building.review.if.secondary.newer"
+            },
+            {
+        	"id":"building_date_format",
+        	"elem_type":"string",
+        	"description":"Date format string used by the building date tag value.  See QDateTime::fromString for more details.",
+        	"name":"Date Format",
+        	"defaultvalue":"yyyy-MM-ddTHH:mm",
+        	"hoot_key":"building.date.format",
+        	"onchange":"true"
+    	    },
+            {
+        	"id":"building_date_tag_key",
+        	"elem_type":"string",
+        	"description":"Tag key used by the building.review.if.secondary.newer configuration option.",
+        	"name":"Date Tag Key",
+        	"defaultvalue":"source:date",
+        	"hoot_key":"building.date.tag.key",
+        	"onchange":"true"
+    	    },
+            {
             	"id":"building_review_matches_other_than_one_to_one",
                 "elem_type":"bool",
                 "defaultvalue":"false",
