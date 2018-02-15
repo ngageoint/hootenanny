@@ -2,7 +2,6 @@
 Hootenanny Javascript Interfaces
 ================================
 DigitalGlobe, Inc.
-:Email: Hootenanny@digitalglobe.com
 
 include::JavascriptOverview.asciidoc[]
 include::tmp/RulesLib.asciidoc[]

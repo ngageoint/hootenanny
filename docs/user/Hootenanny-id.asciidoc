@@ -388,7 +388,7 @@ Clicking on any of the highlighted fields in the review table (I) selects the fe
 
 ==== Review Text
 
-When features are flagged as needing review, a number of different review notes may appear to provide some guidance to the user.  The review notes are general and don't provide the specific reasons why a pair of features are being reviewed against one another but do provide some context for understanding why a review may have occurred.  For example, the Review Note: The feature pair with a review score of 0.375 met the review threshold of 0.25 provides the review score and the threshold value which could be compared against other features with similar score and threshold values. Often when conflating POI data, review notes such as _Somewhat similar (200m) - very similar names and generic type, very close together, generic type to place match_ or _Somewhat similar (26m) - very close together, similar POI type_ will appear.  Those provide an indication of the reasons for being flagged and the distance between the POIs in the particular review.  Any specific questions regarding the reviews and required action can be addressed to Hootenanny.Help@digitalglobe.com.
+When features are flagged as needing review, a number of different review notes may appear to provide some guidance to the user.  The review notes are general and don't provide the specific reasons why a pair of features are being reviewed against one another but do provide some context for understanding why a review may have occurred.  For example, the Review Note: The feature pair with a review score of 0.375 met the review threshold of 0.25 provides the review score and the threshold value which could be compared against other features with similar score and threshold values. Often when conflating POI data, review notes such as _Somewhat similar (200m) - very similar names and generic type, very close together, generic type to place match_ or _Somewhat similar (26m) - very close together, similar POI type_ will appear.  Those provide an indication of the reasons for being flagged and the distance between the POIs in the particular review.  Any specific questions regarding the reviews and required action can be created as a issue at www.github.com/ngageoint/hootenanny/issues.
 
 [[ReviewRelations]]
 ==== Show Review Relations
@@ -604,7 +604,7 @@ Users can select which translation schema (MGCP, LTDS 4.0, LTDS 6.1) they would 
 
 ===== Export Format
 
-There are currently four options for exporting data from Hootenanny: File Geodatabase (FGDB), Shapefile, OSM and Web Feature Service (WFS). Note that FGDB, Shapefile, and OSM formats are exported as a zip file containing all of the relevant associated files, while WFS is exported as WFS Get Capabilities service URL that can be added into an OGC-enabled third party application (see <<HootiD_WFSExport,WFS Export>>).  There is an additional option when exporting TDS data as a FGDB to append to existing FGDB template if users would like to utilize the MILSPEC symbology available from the ESRI ArcGIS Defense Mapping extension for ArcGIS 10.2. More information regarding this capability can be obtained by emailing Hootenanny.Help@digitalglobe.com.
+There are currently four options for exporting data from Hootenanny: File Geodatabase (FGDB), Shapefile, OSM and Web Feature Service (WFS). Note that FGDB, Shapefile, and OSM formats are exported as a zip file containing all of the relevant associated files, while WFS is exported as WFS Get Capabilities service URL that can be added into an OGC-enabled third party application (see <<HootiD_WFSExport,WFS Export>>).  There is an additional option when exporting TDS data as a FGDB to append to existing FGDB template if users would like to utilize the MILSPEC symbology available from the ESRI ArcGIS Defense Mapping extension for ArcGIS 10.2. 
 
 ===== Export File Output Name
 
@@ -726,7 +726,7 @@ NOTE: Panning the map during Validation causes the highlighted POI to become uns
 
 *_Filter Non-HGIS POIs_*
 
-The Filter Non-HGIS POI capabilities is provided for users working with the Human Geography Information Service (HGIS) version 2.0.  It provides a simple means to take any layer and filter anything that is not a HGIS POI (e.g. road and/or building) based on the HGIS v2.0 definitions for POI.  Note that this capability is very specific to the HGIS group at DigitalGlobe/NGA and should only be used in conjunction with those efforts.  Please contact hootenanny.help@digitalglobe.com for any questions regarding this.  To create a new filtered layer simply right-click and select the option, then provide an output layer name.
+The Filter Non-HGIS POI capabilities is provided for users working with the Human Geography Information Service (HGIS) version 2.0.  It provides a simple means to take any layer and filter anything that is not a HGIS POI (e.g. road and/or building) based on the HGIS v2.0 definitions for POI.  Note that this capability is very specific to the HGIS group at DigitalGlobe/NGA and should only be used in conjunction with those efforts.  To create a new filtered layer simply right-click and select the option, then provide an output layer name.
 
 [[TranslationAssistant]]
 ==== Translation Assistant
@@ -856,8 +856,6 @@ The Log settings provides both the Application and UI log for users to troublesh
 
 .Hootenanny Error and UI Log File.
 image::user/images/id/hoot_log_tab.png[]
-
-Any additional questions can be emailed to hootenanny.help@digitalglobe.com.
 
 NOTE: Those familiar with Chrome's developer console (hitting F-12 key will open it in a separate tab or browser window) can use that for additional debugging capability. This tool is used frequently by our developers for debugging client side code and greatly enhance the ability to diagnose issues.
 

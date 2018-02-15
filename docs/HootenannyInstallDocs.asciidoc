@@ -1,7 +1,6 @@
 
 = Hootenanny - Installation Instructions
 DigitalGlobe, Inc.
-:Email: hootenanny.help@digitalglobe.com
 
 include::install/HootenannyInstall.asciidoc[]
 include::install/Tuning.asciidoc[]

@@ -22,15 +22,19 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.utils;
 
+import static hoot.services.utils.DbUtils.createQuery;
 import static hoot.services.utils.MapUtils.insertMap;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
@@ -47,6 +51,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.querydsl.core.types.dsl.Expressions;
 
 import hoot.services.ApplicationContextUtils;
 import hoot.services.UnitTest;
@@ -66,6 +72,38 @@ public class DbUtilsTest {
     @Before
     public void setAppContext() {
         new ApplicationContextUtils().setApplicationContext(applicationContext);
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    @Transactional
+    public void testDeleteTables() throws Exception {
+        long userId = MapUtils.insertUser();
+        long mapId = insertMap(userId);
+
+        //burn a sequence to see if this makes them persist
+        //after table delete
+        Long burner = DbUtils.createQuery()
+                .select(Expressions.numberTemplate(Long.class, "nextval('changesets_" + mapId + "_id_seq')"))
+                .from()
+                .fetchOne();
+
+        DbUtils.createQuery().getConnection().commit();
+
+        assertTrue(DbUtils.mapExists(String.valueOf(mapId)));
+        assertTrue(checkForDependents(mapId));
+
+        MapUtils.deleteOSMRecord(mapId);
+        DbUtils.createQuery().getConnection().commit();
+
+        assertFalse(DbUtils.mapExists(String.valueOf(mapId)));
+        assertFalse(checkForDependents(mapId));
+
+    }
+
+
+    public boolean checkForDependents(long mapId) throws SQLException {
+        return DbUtils.getMapTableSeqCount(mapId) > 0;
     }
 
     @Test
