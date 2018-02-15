@@ -58,7 +58,6 @@
 #include <QFile>
 
 using namespace geos::geom;
-using namespace std;
 
 namespace hoot
 {
@@ -77,7 +76,7 @@ public:
    * @param matchStatus If the element's status matches this status then it is checked for a match.
    */
   BuildingMatchVisitor(const ConstOsmMapPtr& map,
-    vector<const Match*>& result, boost::shared_ptr<BuildingRfClassifier> rf,
+    std::vector<const Match*>& result, boost::shared_ptr<BuildingRfClassifier> rf,
     ConstMatchThresholdPtr threshold, Status matchStatus = Status::Invalid) :
     _map(map),
     _result(result),
@@ -103,16 +102,16 @@ public:
     env->expandBy(e->getCircularError());
 
     // find other nearby candidates
-    set<ElementId> neighbors = IndexElementsVisitor::findNeighbors(*env,
-                                                                   getIndex(),
-                                                                   _indexToEid,
-                                                                   getMap());
+    std::set<ElementId> neighbors = IndexElementsVisitor::findNeighbors(*env,
+                                                                        getIndex(),
+                                                                        _indexToEid,
+                                                                        getMap());
     ElementId from(e->getElementType(), e->getId());
 
     _elementsEvaluated++;
     int neighborCount = 0;
 
-    for (set<ElementId>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
+    for (std::set<ElementId>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
     {
       if (from != *it)
       {
@@ -209,8 +208,8 @@ public:
 
 private:
   const ConstOsmMapPtr& _map;
-  vector<const Match*>& _result;
-  set<ElementId> _empty;
+  std::vector<const Match*>& _result;
+  std::set<ElementId> _empty;
   boost::shared_ptr<BuildingRfClassifier> _rf;
   ConstMatchThresholdPtr _mt;
   Status _matchStatus;
@@ -223,7 +222,7 @@ private:
 
   // Used for finding neighbors
   boost::shared_ptr<HilbertRTree> _index;
-  deque<ElementId> _indexToEid;
+  std::deque<ElementId> _indexToEid;
 };
 
 BuildingMatchCreator::BuildingMatchCreator() :
@@ -250,18 +249,86 @@ Match* BuildingMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId ei
   return result;
 }
 
-void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
+void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map, std::vector<const Match*>& matches,
   ConstMatchThresholdPtr threshold)
 {
   LOG_INFO("Creating matches with: " << className() << "...");
   LOG_VARD(*threshold);
   BuildingMatchVisitor v(map, matches, _getRf(), threshold, Status::Unknown1);
   map->visitRo(v);
+
+  if (ConfigOptions(conf()).getBuildingReviewMatchesOtherThanOneToOne())
+  {
+    //find all many to one or many to many matches and mark them for review
+    _markNonOneToOneMatchesForReview(matches);
+  }
 }
 
-vector<MatchCreator::Description> BuildingMatchCreator::getAllCreators() const
+void BuildingMatchCreator::_markNonOneToOneMatchesForReview(std::vector<const Match*>& matches)
 {
-  vector<Description> result;
+  //Go through all the matches and record how many matches each building is involved in.
+  QMap<QString, long> elementIdToNumInvolvedMatches;
+  for (std::vector<const Match*>::const_iterator it = matches.begin(); it != matches.end(); ++it)
+  {
+    const Match* match = *it;
+    std::set< std::pair<ElementId, ElementId> > matchPairs = match->getMatchPairs();
+    LOG_VART(matchPairs.size());
+    assert(matchPairs.size() == 1);
+    const QString refIdStr = matchPairs.begin()->first.toString();
+    const QString secIdStr = matchPairs.begin()->second.toString();
+    LOG_VART(refIdStr);
+    LOG_VART(secIdStr);
+
+    if (!elementIdToNumInvolvedMatches.contains(refIdStr))
+    {
+      elementIdToNumInvolvedMatches[refIdStr] = 1;
+    }
+    else
+    {
+      elementIdToNumInvolvedMatches[refIdStr]++;
+    }
+    if (!elementIdToNumInvolvedMatches.contains(secIdStr))
+    {
+      elementIdToNumInvolvedMatches[secIdStr] = 1;
+    }
+    else
+    {
+      elementIdToNumInvolvedMatches[secIdStr]++;
+    }
+  }
+
+  //Go back through all the non-reviews/misses. If those matches involves any feature for which
+  //we recorded more than one match, mark them as a review instead.
+  for (std::vector<const Match*>::const_iterator it = matches.begin(); it != matches.end(); ++it)
+  {
+    const Match* match = *it;
+    if (match->getClassification().getMatchP() >= _matchThreshold->getMatchThreshold())
+    {
+      std::set< std::pair<ElementId, ElementId> > matchPairs = match->getMatchPairs();
+      LOG_VART(matchPairs.size());
+      assert(matchPairs.size() == 1);
+      const QString refIdStr = matchPairs.begin()->first.toString();
+      const QString secIdStr = matchPairs.begin()->second.toString();
+      LOG_VART(refIdStr);
+      LOG_VART(secIdStr);
+
+      if (elementIdToNumInvolvedMatches.contains(refIdStr) &&
+          elementIdToNumInvolvedMatches[refIdStr] > 1)
+      {
+        //match->getClassification().setReview();
+      }
+      else if (elementIdToNumInvolvedMatches.contains(secIdStr) &&
+          elementIdToNumInvolvedMatches[secIdStr] > 1)
+      {
+        //match->getClassification().setReview();
+      }
+    }
+  }
+}
+
+std::vector<MatchCreator::Description> BuildingMatchCreator::getAllCreators() const
+{
+  std::vector<Description> result;
   result.push_back(
     Description(className(), "Building Match Creator", MatchCreator::Building, false));
   return result;

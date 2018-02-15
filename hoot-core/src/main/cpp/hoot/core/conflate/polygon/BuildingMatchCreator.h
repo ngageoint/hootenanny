@@ -78,6 +78,8 @@ private:
    * The building model can be slow to load, this provides a lazy load.
    */
   boost::shared_ptr<BuildingRfClassifier> _getRf();
+
+  void _markNonOneToOneMatchesForReview(std::vector<const Match*>& matches);
 };
 
 }

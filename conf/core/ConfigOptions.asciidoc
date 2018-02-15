@@ -214,6 +214,13 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== building.review.matches.other.than.one.to.one
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, any building matches other than 1:1 matches are automatically marked for review.
+
 === changeset.buffer
 
 * Data Type: double
