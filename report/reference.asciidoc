@@ -1,6 +1,6 @@
 
 = Hootenanny Conflation Statistics Reference Manual 
-Digital Globe hootenanny.help@digitalglobe.com
+https://github.com/ngageoint/hootenanny
 
 == Introduction
 

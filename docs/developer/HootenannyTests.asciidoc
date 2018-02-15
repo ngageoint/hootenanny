@@ -504,10 +504,9 @@ location).
 The Regression Tests run Hootenanny command line operations against specific datasets to measure
 Hootenanny performance against particular scenarios.  The tests are run against non-public data and,
 therefore, are kept in a private DigitalGlobe repository and run on a nightly basis only.  For
-more information about the tests, contact hootenanny.help@digitalglobe.com
+more information about the tests, create an issue at https://github.com/ngageoint/hootenanny.
 
-If you have access to the regression test repository and wish to run them locally, contact
-hootenanny.help@digitalglobe.com for further instructions.
+If you have access to the regression test repository and wish to run them locally, create an issue at https://github.com/ngageoint/hootenanny.
 
 Many of the regression tests score Hootenanny's conflation accuracy on a dataset and mark the test
 as passing or failing based on an allowable score range.  See

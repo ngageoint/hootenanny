@@ -1,7 +1,6 @@
 
 = Hootenanny Developer Guide
 DigitalGlobe, Inc.
-:Email: hootenanny@digitalglobe.com
 
 include::developer/HootenannyDevelopmentEnvironmentSetupInstructions.asciidoc[]
 include::developer/HootenannyBuild.asciidoc[]
