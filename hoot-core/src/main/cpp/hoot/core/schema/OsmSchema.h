@@ -377,8 +377,14 @@ public:
   bool isLinear(const Element& e);
 
   /**
+   * Returns true if the specified element is a linear waterway.
    */
   bool isLinearWaterway(const Element &e);
+
+  /**
+   * Returns true if the specified element is a multi-use building.
+   */
+  bool isMultiUseBuilding(const Element &e);
 
   /**
    * Returns true if this is a list of values. Right now this just looks for a semicolon in value,

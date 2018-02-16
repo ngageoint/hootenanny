@@ -2197,6 +2197,14 @@ List of key value pairs (key=value) for features to always review if marked as m
 polygon conflation.  When specifying the list from the command line, delimit the types with ';'
 and surround the entire value string in double quotes.
 
+=== poi.polygon.review.multiuse.buildings
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, POI to polygon conflation always mark matches between POIs and polygons where multi-use
+buildings are present.  See the user documentation for how a multi-use building is defined.
+
 === poi.polygon.review.threshold
 
 * Data Type: double

@@ -31,7 +31,6 @@
 
 // hoot
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
 
@@ -149,6 +148,8 @@ void PoiPolygonMatch::setConfiguration(const Settings& conf)
     config.getPoiPolygonDisableSameSourceConflationMatchTagKeyPrefixOnly());
   setSourceTagKey(config.getPoiPolygonSourceTagKey());
 
+  setReviewMultiUseBuildings(config.getPoiPolygonReviewMultiuseBuildings());
+
   setEnableAdvancedMatching(config.getPoiPolygonEnableAdvancedMatching());
   setEnableReviewReduction(config.getPoiPolygonEnableReviewReduction());
 
@@ -219,7 +220,7 @@ bool PoiPolygonMatch::isPoi(const Element& e)
       (inABuildingOrPoiCategory || tags.getNames().size() > 0);
 
   if (!isPoi && e.getElementType() == ElementType::Node &&
-      ConfigOptions().getPoiPolygonPromotePointsWithAddressesToPois() &&
+      _opts.getPoiPolygonPromotePointsWithAddressesToPois() &&
       PoiPolygonAddressScoreExtractor::hasAddress(e))
   {
     isPoi = true;
@@ -314,7 +315,7 @@ void PoiPolygonMatch::calculateMatchWeka(const ElementId& /*eid1*/, const Elemen
 //  }
 //  catch (const geos::util::TopologyException& e)
 //  {
-//    //if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
+//    //if (_badGeomCount <= _opts.getOgrLogLimit())
 //    //{
 //      LOG_WARN(
 //        "Feature(s) passed to PoiPolygonMatchCreator caused topology exception on conversion "
@@ -405,6 +406,12 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
 
   _categorizeElementsByGeometryType(eid1, eid2);
 
+  if (_reviewMultiUseBuildings && OsmSchema::getInstance().isMultiUseBuilding(_poly))
+  {
+    _class.setReview();
+    return;
+  }
+
   //allow for auto marking features with certain types for review if they get matched
   const bool foundReviewIfMatchedType =
     _featureHasReviewIfMatchedType(_poi) || _featureHasReviewIfMatchedType(_poly);
@@ -457,7 +464,7 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
   //search radius taken from PoiPolygonMatchCreator
   PoiPolygonDistance distanceCalc(
     _matchDistanceThreshold, _reviewDistanceThreshold, poly->getTags(),
-    poi->getCircularError() + ConfigOptions().getPoiPolygonReviewDistanceThreshold());
+    poi->getCircularError() + _opts.getPoiPolygonReviewDistanceThreshold());
   //type based match distance changes didn't have any positive effect experimentally; leaving it
   //commented out here in case there is need for further examination
 //  _matchDistanceThreshold =

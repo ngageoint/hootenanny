@@ -1689,6 +1689,15 @@ bool OsmSchema::isBuildingPart(const ConstElementPtr& e) const
   return isBuildingPart(e->getTags(), e->getElementType());
 }
 
+bool OsmSchema::isMultiUseBuilding(const Element& e)
+{
+  return
+    (isBuilding(e) ||
+      (hasCategory(t, "amenity") &&
+         e.getElementType() == ElementType::Way || e.getElementType() == ElementType::Relation)) &&
+    (e.getTags().get("building:use") == "multipurpose" || e.getTags().get("shop") == "mall");
+}
+
 bool OsmSchema::isCollection(const Element& e) const
 {
   bool result = false;

@@ -52,6 +52,7 @@ class PoiPolygonMatchTest : public CppUnit::TestFixture
   CPPUNIT_TEST(sourceMatchTagKeyPrefixOnlyDisableConflationTest);
   CPPUNIT_TEST(sourceTagKeyMismatchDisableConflationTest);
   CPPUNIT_TEST(missingSourceTagTest);
+  CPPUNIT_TEST(multiUseBuildingTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -739,6 +740,11 @@ public:
 
       HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
     }
+  }
+
+  void multiUseBuildingTest()
+  {
+
   }
 };
 
