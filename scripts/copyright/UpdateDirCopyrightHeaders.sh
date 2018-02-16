@@ -10,7 +10,6 @@ else
     echo "Error: LicenseTemplate.txt not found"
     exit 1
 fi
-echo $LICENSE_TEMPLATE
 
 if [ $# -eq 0 ]; then
     # Need at least one arg which would be the log filename.

@@ -1908,6 +1908,32 @@ tds = {
             delete attrs.ZI005_FNA2;
         }
 
+        // Fix ZI001_SSD
+        if (attrs.F_CODE == 'ZI040') // Spatial Metadata Entity Collection
+        {
+            // NOTE: We are going to override the normal source:datetime with what we get from JOSM
+            if (tags['source:imagery:datetime'])
+            {
+                attrs.ZI001_SSD = tags['source:imagery:datetime'];
+                delete notUsedTags['source:imagery:datetime'];
+            }
+
+            // Now try using tags from Taginfo
+            if (! attrs.ZI001_SSD)
+            {
+                if (tags['source:date']) 
+                {
+                    attrs.ZI001_SSD = tags['source:date'];
+                    delete notUsedTags['source:date'];
+                }
+                else if (tags['source:geometry:date'])
+                {
+                    attrs.ZI001_SSD = tags['source:geometry:date'];
+                    delete notUsedTags['source:geometry:date'];
+                }
+            }
+        }
+
     }, // End applyToTdsPostProcessing
 
     // ##### End of the xxToTdsxx Block #####

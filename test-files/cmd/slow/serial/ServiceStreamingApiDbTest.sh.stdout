@@ -41,7 +41,7 @@ osm api db bounds --> xml
 
 hoot api db bounds --> ogr
 
-16:36:17.042 WARN  ...?(  -1) CPL Error #: 6 Normalized/laundered field name: 'mountain_pass' to 'mountain_p'
+14:11:06.178 WARN  ...?(  -1) CPL Error #: 6 Normalized/laundered field name: 'mountain_pass' to 'mountain_p'
 osm api db bounds --> ogr
 
  setval 
@@ -49,4 +49,11 @@ osm api db bounds --> ogr
       1
 (1 row)
 
-16:36:19.984 WARN  ...?(  -1) CPL Error #: 6 Normalized/laundered field name: 'mountain_pass' to 'mountain_p'
+14:11:08.529 WARN  ...?(  -1) CPL Error #: 6 Normalized/laundered field name: 'mountain_pass' to 'mountain_p'
+14:11:09.266 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 217
+14:11:09.598 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 219
+ setval 
+--------
+      1
+(1 row)
+

@@ -19,7 +19,7 @@ Feature: Conflation using Frechet distance and network conflation
     And I click the "label" with text "Road Options"
     And I select the "Network" option in the "Network" combobox
     And I click the "label" with text "General Conflation Options"
-    And I check the "Frechet Distance" checkbox
+    And I check the "Frechet Distance Subline Matcher" checkbox
     And I scroll "Apply" element into view and press it
     And I scroll element into view and press "conflate2"
     Then I wait 30 "seconds" to see "Conflating …"

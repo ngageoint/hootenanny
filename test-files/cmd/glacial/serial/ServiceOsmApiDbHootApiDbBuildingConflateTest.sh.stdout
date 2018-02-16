@@ -49,3 +49,9 @@ Relation(s) Deleted: 0
 
 STEP 14: Reading the entire contents of the osm api db, for the SQL changeset workflow, writing it into a file, and verifying the data...
 
+
+STEP 15: Cleaning up database...
+
+16:55:10.701 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 15
+16:55:10.933 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 16
+16:55:11.166 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 17

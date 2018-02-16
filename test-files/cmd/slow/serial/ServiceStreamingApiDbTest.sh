@@ -85,3 +85,7 @@ hoot osm2ogr $HOOT_OPTS -D convert.bounding.box=$BOUNDS translations/Poi.js $OSM
 hoot convert $HOOT_OPTS $OUTPUT_DIR/Poi1-cropped-osmapidb/poi.shp $OUTPUT_DIR/Poi1-cropped-osmapidb-ogr.osm
 hoot is-match $HOOT_OPTS $GOLD_DIR/Poi1-cropped-2.osm $OUTPUT_DIR/Poi1-cropped-osmapidb-ogr.osm
 
+# Cleanup the database
+hoot delete-map -D api.db.email=ServiceStreamingApiDbTest@test.com "$HOOT_DB_URL/ToyTestA"
+hoot delete-map -D api.db.email=ServiceStreamingApiDbTest@test.com "$HOOT_DB_URL/Poi1"
+scripts/database/CleanAndInitializeOsmApiDb.sh
