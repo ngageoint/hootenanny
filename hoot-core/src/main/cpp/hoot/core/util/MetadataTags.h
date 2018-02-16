@@ -129,6 +129,7 @@ public:
   inline static const QString RelationInner()           { return "inner"; }
   inline static const QString RelationMultilineString() { return "multilinestring"; }
   inline static const QString RelationMultiPolygon()    { return "multipolygon"; }
+  inline static const QString RelationMultiPoint()      { return "multipoint"; }
   inline static const QString RelationNetwork()         { return "network"; }
   inline static const QString RelationOuter()           { return "outer"; }
   inline static const QString RelationRestriction()     { return "restriction"; }

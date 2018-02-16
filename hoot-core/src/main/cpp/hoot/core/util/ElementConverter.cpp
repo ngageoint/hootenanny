@@ -318,6 +318,9 @@ geos::geom::GeometryTypeId ElementConverter::getGeometryType(const ConstElementP
         // If we have a review, send back a collection. This gets converted into an empty geometry.
         else if (r->isReview())
           return GEOS_GEOMETRYCOLLECTION;
+        // MultiPoint comes from GeoJSON
+        else if (r->getType() == "multipoint")
+          return GEOS_MULTIPOINT;
       }
 
       // We are going to throw an error so we save the type of relation

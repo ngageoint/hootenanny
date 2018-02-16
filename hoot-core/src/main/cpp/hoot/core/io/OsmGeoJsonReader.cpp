@@ -347,9 +347,13 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
   pt::ptree empty;
   //  Construct Relation
   RelationPtr relation(new Relation(_defaultStatus, relation_id, _defaultCircErr));
+
   //  Add the relation type and parse the roles
+  // NOTE: This may be empty which will cause errors later. If it is empty, we add a type
+  // later when we sort out what the geometry is - MultiPolygon etc
   string relation_type = properties.get("relation-type", "");
   relation->setType(relation_type.c_str());
+
   if (_roles.size() == 0)
   {
     //  Get the roles and tokenize them by semicolon
@@ -433,11 +437,29 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
     }
   }
   else if (geo_type == "MultiPoint")
-    _parseMultiPointGeometry(geometry, relation);
+  {
+      if (relation->getType() == "")
+      {
+          relation->setType(MetadataTags::RelationMultiPoint());
+      }
+      _parseMultiPointGeometry(geometry, relation);
+  }
   else if(geo_type == "MultiLineString")
+  {
+      if (relation->getType() == "")
+      {
+          relation->setType(MetadataTags::RelationMultilineString());
+      }
     _parseMultiLineGeometry(geometry, relation);
+  }
   else if (geo_type == "MultiPolygon")
-    _parseMultiPolygonGeometry(geometry, relation);
+  {
+      if (relation->getType() == "")
+      {
+          relation->setType(MetadataTags::RelationMultiPolygon());
+      }
+      _parseMultiPolygonGeometry(geometry, relation);
+  }
   else
   {
     LOG_WARN("Unsupported JSON geometry type (" << geo_type << ") when parsing GeoJSON");
