@@ -6,6 +6,7 @@ After=syslog.target network.target
 Type=simple
 User=SERVICE_USER
 Environment='HOOT_HOME=HOOTENANNY_HOME'
+Environment='PATH=HOOTENANNY_HOME/bin:/usr/bin:/bin'
 WorkingDirectory=HOOTENANNY_HOME/node-export-server
 ExecStart=/usr/bin/npm start
 ExecStop=/usr/bin/kill -HUP $MAINPID
