@@ -103,7 +103,7 @@ public:
     return result;
   }
 
-  OsmMapPtr getTestMap()
+  OsmMapPtr getTestMap(const bool targetWaysOnly = true)
   {
     OsmXmlReader reader;
     OsmMap::resetCounters();
@@ -114,15 +114,19 @@ public:
     reader.read("test-files/ToyBuildingsTestB.osm", map);
     MapProjector::projectToPlanar(map);
 
-    //remove some ways we don't need for these tests
-    WayMap wm = map->getWays();
-    for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
+    LOG_VARD(targetWaysOnly);
+    if (targetWaysOnly)
     {
-      const ConstWayPtr& w = it->second;
-      const Tags& t = w->getTags();
-      if (t[MetadataTags::Ref1()] != "Target" && t[MetadataTags::Ref2()] != "Target")
+      //remove some ways we don't need for some of these tests
+      WayMap wm = map->getWays();
+      for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
       {
-        RemoveWayOp::removeWay(map, it->first);
+        const ConstWayPtr& w = it->second;
+        const Tags& t = w->getTags();
+        if (t[MetadataTags::Ref1()] != "Target" && t[MetadataTags::Ref2()] != "Target")
+        {
+          RemoveWayOp::removeWay(map, it->first);
+        }
       }
     }
 
@@ -346,9 +350,10 @@ public:
 
   void runReviewNonOneToOneMatches2Test()
   {
-    //TODO: need test where we prove 1:1 matches are preserved
+    //test to prove that 1:1 matches are preserved when
+    //building.review.matches.other.than.one.to.one is enabled
 
-    /*OsmMapPtr map = getTestMap();
+    OsmMapPtr map = getTestMap(false);
 
     conf().set("building.review.matches.other.than.one.to.one", "true");
 
@@ -358,14 +363,44 @@ public:
     uut.createMatches(map, matches, threshold);
     LOG_VARD(matches);
 
-    CPPUNIT_ASSERT_EQUAL(3, int(matches.size()));
+    /*
+     * with setting disabled:
+     *
+     * {
+        BuildingMatch: Way:-10, Way:-11 p: match: 0.775 miss: 0.125 review: 0.1,
+        BuildingMatch: Way:-9, Way:-12 p: match: 0.8 miss: 0.2 review: 0,
+        BuildingMatch: Way:-7, Way:-15 p: match: 0.9 miss: 0.1 review: 0,
+        BuildingMatch: Way:-7, Way:-14 p: match: 0.925 miss: 0.075 review: 0,
+        BuildingMatch: Way:-7, Way:-13 p: match: 0.825 miss: 0.15 review: 0.025,
+        BuildingMatch: Way:-1, Way:-18 p: match: 0.825 miss: 0.175 review: 0,
+        BuildingMatch: Way:-1, Way:-17 p: match: 0.95 miss: 0.025 review: 0.025}
+     */
+
+    CPPUNIT_ASSERT_EQUAL(7, int(matches.size()));
     for (vector<const Match*>::const_iterator it = matches.begin(); it != matches.end(); ++it)
     {
       const Match* match = *it;
-      CPPUNIT_ASSERT_EQUAL(1.0, match->getClassification().getReviewP());
+      std::set< std::pair<ElementId, ElementId> > matchPairs = match->getMatchPairs();
+      LOG_VART(matchPairs.size());
+      assert(matchPairs.size() == 1);
+      ElementId refId = matchPairs.begin()->first;
+      LOG_VART(refId);
+      //these were involved in non 1:1 matches
+      if (refId.getId() == -7 || refId.getId() == -1)
+      {
+        CPPUNIT_ASSERT_EQUAL(0.0, match->getClassification().getMatchP());
+        CPPUNIT_ASSERT_EQUAL(0.0, match->getClassification().getMissP());
+        CPPUNIT_ASSERT_EQUAL(1.0, match->getClassification().getReviewP());
+      }
+      //everything else was only involved in 1:1 matches
+      else
+      {
+        CPPUNIT_ASSERT(match->getClassification().getMatchP() >=
+                       uut.getMatchThreshold()->getMatchThreshold());
+      }
     }
 
-    TestUtils::resetEnvironment()*/;
+    TestUtils::resetEnvironment();
   }
 };
 

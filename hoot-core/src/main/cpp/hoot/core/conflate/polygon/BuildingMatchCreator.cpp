@@ -142,6 +142,8 @@ public:
       for (std::vector<Match*>::iterator it = tempMatches.begin(); it != tempMatches.end(); ++it)
       {
         Match* match = *it;
+        //Not proud of this, but not sure what else to do at this point w/o having to change the
+        //Match interface.
         MatchClassification& matchClass =
           const_cast<MatchClassification&>(match->getClassification());
         matchClass.setReview();
