@@ -98,24 +98,24 @@ pipeline {
                 sh "vagrant provision ${params.Box} --provision-with build,EGD,tomcat,mapnik,hadoop"
             }       
         }
-        stage ("Hootenanny Tests") {
-            parallel {
-                stage("Core Tests") {
-                    when { expression { return params.Core_tests } }
-                    steps {
-                        sleep 15
-                        sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot --version --debug; bin/HootTest --diff --glacial --parallel \$(nproc)'"
-                        sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` pp-test'"
-                        sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` plugins-test'"
-                        sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` services-test'"
-                    }
-                }
-                stage("UI Tests") {
-                    when { expression { return params.UI_tests } }
-                    steps {
-                        sh "vagrant ssh ${params.Box} -c 'cd hoot; make -s ui-test'"
-                    }
-                }
+        stage("Core Tests") {
+            when { expression { return params.Core_tests } }
+            steps {
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot --version --debug; bin/HootTest --diff --glacial --parallel \$(nproc)'"
+            }
+        }
+        stage("Services Tests") {
+            when { expression { return params.Services_tests } }
+            steps {
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` pp-test'"
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` plugins-test'"
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` services-test'"
+            }
+        }
+        stage("UI Tests") {
+            when { expression { return params.UI_tests } }
+            steps {
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; make -s ui-test'"
             }
         }
     }

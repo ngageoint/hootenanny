@@ -19,3 +19,5 @@ hoot convert --warn -D hootapi.db.writer.overwrite.map=true -D hootapi.db.writer
 hoot calculate-tiles --warn -D api.db.email=test@test.com -D convert.bounding.box="-77.04856,38.8855,-77.0292,38.899" $OSM_API_DB_URL";"$HOOT_DB_URL"/DcTigerRoads" $OUTPUT_DIR/output-cropped.geojson 1000 0.001
 diff $GOLD_FILES_DIR/output-cropped.geojson $OUTPUT_DIR/output-cropped.geojson
 
+# Clean up the map from the database
+hoot delete-map -D api.db.email=test@test.com $HOOT_DB_URL"/DcTigerRoads"

@@ -88,5 +88,5 @@ When you type @make@ for the first time all the @.qmake@ makefiles will be gener
 
 === Pretty Pipes
 
-Pretty Pipes is a bit of an outlier in that it uses Maven for building the @pp-lib@ Java code and qmake/swig for building the .cpp code. If you need detailed information on this build process please contact hootenanny.help@digitalglobe.com.
+Pretty Pipes is a bit of an outlier in that it uses Maven for building the @pp-lib@ Java code and qmake/swig for building the .cpp code. If you need detailed information on this build process please create an issue at https://github.com/ngageoint/hootenanny.
 

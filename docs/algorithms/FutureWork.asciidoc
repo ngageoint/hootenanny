@@ -4,7 +4,7 @@
 
 NOTE: The list of tasks being worked within Hootenanny is constantly in flux.
 Please contact us with any specific questions about current or
-planned work. (Hootenanny.Team@digitalglobe.com)
+planned work.
 
 [[ExplNameComparison]]
 === Name Comparison
