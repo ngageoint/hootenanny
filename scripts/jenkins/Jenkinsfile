@@ -125,7 +125,7 @@ pipeline {
     post {
         always {
             // Send build notification
-            notifySlack(currentBuild.result, "#builds_hootenanny")
+            notifySlack(currentBuild.result, "#builds_hoot")
         }
         success {
             
