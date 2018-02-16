@@ -144,6 +144,54 @@
         ]
     },
     {
+        "id":"hoot_rubber_sheeting_options",
+        "elem_type":"group",
+        "dependencies":[
+            {
+                "id":"map_cleaner_transforms",
+                "append":{
+                    "id":"hoot::RubberSheet",
+                    "isDefault":"true",
+                    "description":"Enable rubber sheet",
+                    "dependent":"hoot_enable_rubber_sheeting",
+                    "name":"Rubber Sheet",
+                    "hoot_val":"hoot::RubberSheet",
+                    "hoot_key":"map.cleaner.transforms"
+                }
+            }
+        ],
+        "description":"Hootenanny rubber sheeting options",
+        "name":"Rubber Sheeting Options",
+        "members":[
+            {
+                "id":"hoot_enable_rubber_sheeting_options",
+                "elem_type":"checkbox",
+                "description":"Enable rubber sheeting options",
+                "name":"Enabled",
+                "defaultvalue":"false",
+                "onchange":"true"
+            },
+            {
+                "id":"rubber_sheet_ref",
+                "elem_type":"checkbox",
+                "description":"If this configuration setting is set to true then the first layer is treated as the reference layer and will not be moved. If set to false the two layers will be moved towards each other. The weighting is determined based on the circular error.",
+                "name":"Rubber Sheet Ref",
+                "defaultvalue":"false",
+                "hoot_key":"rubber.sheet.ref"
+            },
+            {
+                "id":"rubber_sheet_minimum_ties",
+                "minvalue":"0",
+                "elem_type":"int",
+                "description":"Sets the minimum number of tie points that will be used when calculating a rubber sheeting solution.",
+                "maxvalue":"",
+                "name":"Rubber Sheet Minimum Ties",
+                "defaultvalue":"10",
+                "hoot_key":"rubber.sheet.minimum.ties"
+            }
+        ]
+    },
+    {
         "id":"hoot_general_conflation_options",
         "elem_type":"group",
         "description":"Hootenanny general conflation options",

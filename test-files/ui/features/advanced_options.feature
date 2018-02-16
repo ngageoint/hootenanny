@@ -37,6 +37,12 @@ Feature: Advanced Conflation Options
         And I should see checkbox "Remove Duplicate Areas" checked
         And I should see checkbox "Remove Elements With No Information" checked
         Then I click on "#hoot_cleaning_options_label"
+        And I should see "Rubber Sheeting Options"
+        Then I click on "#hoot_rubber_sheeting_options_label"
+        And I should see checkbox "Enabled" unchecked
+        And I should see checkbox "Rubber Sheet Ref" unchecked
+        And I should see element "#rubber_sheet_minimum_ties" with no value and placeholder "10"
+        Then I click on "#hoot_rubber_sheeting_options_label"
         And I should see "General Conflation Options"
         Then I click on "#hoot_general_conflation_options_label"
         And I should see checkbox "Frechet Distance Subline Matcher" unchecked
@@ -115,6 +121,7 @@ Feature: Advanced Conflation Options
         Then I click the "►" link
         Then I should see "Advanced Conflation Options"
         And I should see "Cleaning Options"
+        And I should see "Rubber Sheeting Options"
         And I should see "General Conflation Options"
         And I should see "Road Options"
         Then I click on "#hoot_road_options_label"
