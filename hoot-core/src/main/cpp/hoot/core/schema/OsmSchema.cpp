@@ -1691,11 +1691,17 @@ bool OsmSchema::isBuildingPart(const ConstElementPtr& e) const
 
 bool OsmSchema::isMultiUseBuilding(const Element& e)
 {
+//  return
+//    (isBuilding(e) ||
+//      (hasCategory(t, "amenity") &&
+//         e.getElementType() == ElementType::Way || e.getElementType() == ElementType::Relation)) &&
+//    (e.getTags().get("building:use") == "multipurpose" || e.getTags().get("shop") == "mall");
   return
-    (isBuilding(e) ||
+    (OsmSchema::getInstance().getCategories(e.getTags()).intersects(OsmSchemaCategory::building()) ||
       (hasCategory(t, "amenity") &&
          e.getElementType() == ElementType::Way || e.getElementType() == ElementType::Relation)) &&
-    (e.getTags().get("building:use") == "multipurpose" || e.getTags().get("shop") == "mall");
+    (e.getTags().get("building:use") == "multipurpose" ||
+     OsmSchema::getInstance().getCategories(e.getTags()).intersects(OsmSchemaCategory::multiUse());
 }
 
 bool OsmSchema::isCollection(const Element& e) const

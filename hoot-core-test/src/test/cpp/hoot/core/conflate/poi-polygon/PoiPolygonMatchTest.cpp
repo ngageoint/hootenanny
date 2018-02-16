@@ -744,7 +744,116 @@ public:
 
   void multiUseBuildingTest()
   {
+    OsmMap::resetCounters();
 
+    OsmMapPtr map(new OsmMap());
+
+    Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
+                        Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
+                        Coordinate(0.0, 0.0),
+                        Coordinate::getNull() };
+
+    NodePtr n1(new Node(Status::Unknown1, 1, 10, 10, 5));
+    n1->getTags().set("poi", true);
+    n1->getTags()["name"] = "poi";
+    map->addNode(n1);
+
+    PoiPolygonMatch uut(
+      map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+    uut.setEnableAdvancedMatching(false);
+    uut.setEnableReviewReduction(true);
+    uut.setMatchDistanceThreshold(0.0);
+    uut.setReviewDistanceThreshold(0.0);
+    uut.setNameScoreThreshold(0.8);
+    uut.setTypeScoreThreshold(0.8);
+    uut.setMatchEvidenceThreshold(3);
+    uut.setReviewEvidenceThreshold(1);
+
+    uut.setReviewMultiUseBuildings(true);
+
+    {
+      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+      w1->getTags()["name"] = "poly";
+      w1->getTags().set("building", "yes");
+      w1->getTags().set("building:use", "multipurpose");
+
+      uut.calculateMatch(w1->getElementId(), n1->getElementId());
+
+      HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());
+    }
+
+    {
+      WayPtr w2 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w2");
+      w2->getTags()["name"] = "poly";
+      w2->getTags().set("amenity", "school");
+      w2->getTags().set("building:use", "multipurpose");
+
+      uut.calculateMatch(w2->getElementId(), n1->getElementId());
+
+      HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());
+    }
+
+    {
+      WayPtr w3 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w3");
+      w3->getTags()["name"] = "poly";
+      w3->getTags().set("building", "yes");
+      w3->getTags().set("shop", "mall");
+
+      uut.calculateMatch(w3->getElementId(), n1->getElementId());
+
+      HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());
+    }
+
+    {
+      WayPtr w4 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w4");
+      w4->getTags()["name"] = "poly";
+      w4->getTags().set("amenity", "school");
+      w4->getTags().set("building:use", "multipurpose");
+
+      uut.calculateMatch(w4->getElementId(), n1->getElementId());
+
+      HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());
+    }
+
+    {
+      WayPtr w5 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w5");
+      w5->getTags()["name"] = "poly";
+      w5->getTags().set("building", "yes");
+
+      uut.calculateMatch(w5->getElementId(), n1->getElementId());
+
+      HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
+    }
+
+    {
+      WayPtr w6 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w6");
+      w6->getTags()["name"] = "poly";
+      w6->getTags().set("amenity", "school");
+
+      uut.calculateMatch(w6->getElementId(), n1->getElementId());
+
+      HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
+    }
+
+    {
+      WayPtr w7 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w7");
+      w7->getTags()["name"] = "poly";
+      w7->getTags().set("building:use", "multipurpose");
+
+      uut.calculateMatch(w7->getElementId(), n1->getElementId());
+
+      HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
+    }
+
+    {
+      WayPtr w8 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w8");
+      w8->getTags()["name"] = "poly";
+      w8->getTags().set("shop", "mall");
+
+      uut.calculateMatch(w8->getElementId(), n1->getElementId());
+
+      HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
+    }
   }
 };
 
