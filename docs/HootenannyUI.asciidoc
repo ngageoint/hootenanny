@@ -1,5 +1,4 @@
 
 = Hootenanny - User Interface Guide
-DigitalGlobe <hootenanny.help@digitalglobe.com>
 
 include::user/Hootenanny-id.asciidoc[]
