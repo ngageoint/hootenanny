@@ -78,9 +78,9 @@ Feature: Advanced Conflation Options
 
 				Examples:
 				| element | placeholder | invalid argument |
-				| rubber_sheet_minimum_ties | 4 | "abcdef" |
-				| rubber_sheet_minimum_ties | 4 | "-10000" |
-				| rubber_sheet_minimum_ties | 4 | "&*^@(!" |
+				| rubber_sheet_minimum_ties | 10 | "abcdef" |
+				| rubber_sheet_minimum_ties | 10 | "-10000" |
+				| rubber_sheet_minimum_ties | 10 | "&*^@(!" |
 				| search_radius_waterway | "-1" | "abcdef" |
 				| search_radius_waterway | "-1" | "-10000" |
 				| search_radius_waterway | "-1" | "&*^@(!" |

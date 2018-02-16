@@ -41,7 +41,7 @@ Feature: Advanced Conflation Options
         Then I click on "#hoot_rubber_sheeting_options_label"
         And I should see checkbox "Enabled" unchecked
         And I should see checkbox "Rubber Sheet Ref" unchecked
-        And I should see element "#rubber_sheet_minimum_ties" with no value and placeholder "4"
+        And I should see element "#rubber_sheet_minimum_ties" with no value and placeholder "10"
         Then I click on "#hoot_rubber_sheeting_options_label"
         And I should see "General Conflation Options"
         Then I click on "#hoot_general_conflation_options_label"
