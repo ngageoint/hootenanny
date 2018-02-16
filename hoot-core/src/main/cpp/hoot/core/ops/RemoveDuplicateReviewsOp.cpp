@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RemoveDuplicateReviewsOp.h"
 
@@ -64,6 +64,7 @@ void RemoveDuplicateReviewsOp::apply(boost::shared_ptr<OsmMap>& map)
   LOG_VART(membersToReview);
 
   //loop through duplicate reviews
+  ReviewMarker reviewMarker;
   QMap< set<ElementId>, QList<ReviewMarker::ReviewUid> >::iterator it = membersToReview.begin();
   while (it != membersToReview.end())
   {
@@ -107,7 +108,7 @@ void RemoveDuplicateReviewsOp::apply(boost::shared_ptr<OsmMap>& map)
             explain = "Multiple overlapping high confidence reviews: " + explain;
           }
         }
-        ReviewMarker().mark(map, map->getElement(beid), map->getElement(eeid),
+        reviewMarker.mark(map, map->getElement(beid), map->getElement(eeid),
           explain, match->getMatchName(), match->getClassification().getReviewP());
       }
     }

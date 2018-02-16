@@ -29,6 +29,7 @@
 
 // hoot
 #include <hoot/core/conflate/Merger.h>
+#include "ReviewMarker.h"
 
 namespace hoot
 {
@@ -74,6 +75,7 @@ private:
   QString _note;
   QString _reviewType;
   double _score;
+  ReviewMarker _reviewMarker;
 
 };
 

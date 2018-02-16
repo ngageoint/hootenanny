@@ -28,7 +28,6 @@
 
 // Hoot
 #include <hoot/core/elements/Element.h>
-#include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/util/Factory.h>
 
 namespace hoot
@@ -38,7 +37,7 @@ HOOT_FACTORY_REGISTER(ElementCriterion, NeedsReviewCriterion)
 
 bool NeedsReviewCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
 {
-  bool review = ReviewMarker().isNeedsReview(_map, e);
+  bool review = _reviewMarker.isNeedsReview(_map, e);
   return review;
 }
 

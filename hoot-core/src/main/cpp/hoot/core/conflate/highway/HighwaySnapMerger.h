@@ -27,15 +27,19 @@
 #ifndef HIGHWAYSNAPMERGER_H
 #define HIGHWAYSNAPMERGER_H
 
+// Hoot
 #include <hoot/core/conflate/MergerBase.h>
+#include <hoot/core/conflate/ReviewMarker.h>
 
 namespace hoot
 {
+
 class SublineStringMatcher;
 class WaySublineCollection;
 
 class HighwaySnapMerger : public MergerBase
 {
+
 public:
 
   static std::string className() { return "hoot::HighwaySnapMerger"; }
@@ -63,6 +67,8 @@ private:
 
   bool _preserveUnknown1ElementIdWhenModifyingFeatures;
 
+  ReviewMarker _reviewMarker;
+
   /**
    * Returns true if the way directly connects the left and right ways. There is some tolerance
    * for "directly". See ticket #951 for details.
@@ -70,7 +76,7 @@ private:
   bool _directConnect(const ConstOsmMapPtr &map, WayPtr w) const;
 
   void _markNeedsReview(const OsmMapPtr& map, ElementPtr e1, ElementPtr e2, QString note,
-                        QString reviewType) const;
+                        QString reviewType);
 
   void _mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
                   std::vector< std::pair<ElementId, ElementId> >& replaced);

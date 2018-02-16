@@ -31,6 +31,7 @@
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/elements/Relation.h>
+#include <hoot/core/conflate/ReviewMarker.h>
 
 // Standard
 #include <set>
@@ -64,6 +65,7 @@ public:
 private:
 
   boost::shared_ptr<OsmMap> _map;
+  ReviewMarker _reviewMarker;
 
   void _createOutline(const RelationPtr& building);
 

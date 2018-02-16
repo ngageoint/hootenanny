@@ -30,7 +30,6 @@
 #include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/conflate/MarkForReviewMerger.h>
 #include <hoot/core/conflate/MatchType.h>
-#include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/filters/ChainCriterion.h>
 #include <hoot/core/filters/ElementTypeCriterion.h>
 #include <hoot/core/filters/TagKeyCriterion.h>
@@ -630,8 +629,8 @@ bool MatchComparator::_isNeedsReview(QString uuid1, QString uuid2, const ConstOs
         return false;
       }
 
-      if (ReviewMarker().isNeedsReview(conflated, conflated->getElement(eid1),
-        conflated->getElement(eid2)))
+      if (_reviewMarker.isNeedsReview(conflated, conflated->getElement(eid1),
+                                      conflated->getElement(eid2)))
       {
         result = true;
       }

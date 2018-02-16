@@ -47,10 +47,11 @@ void HighwayReviewCleanerOp::apply(OsmMapPtr& map)
 {
   RelationMap relations = map->getRelations();
 
+  ReviewMarker reviewMarker;
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     ElementId r = ElementId::relation(it->first);
-    if (ReviewMarker().isReviewUid(map, r))
+    if (reviewMarker.isReviewUid(map, r))
     {
       LOG_TRACE("Looking at review");
       if (_isBadHighwayReview(map, r) == true)

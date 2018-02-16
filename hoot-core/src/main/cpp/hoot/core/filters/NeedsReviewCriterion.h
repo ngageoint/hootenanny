@@ -27,10 +27,11 @@
 #ifndef NEEDSREVIEWCRITERION_H
 #define NEEDSREVIEWCRITERION_H
 
+// Hoot
 #include "ElementCriterion.h"
-
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/core/conflate/ReviewMarker.h>
 
 namespace hoot
 {
@@ -58,6 +59,8 @@ public:
 private:
 
   ConstOsmMapPtr _map;
+  ReviewMarker _reviewMarker;
+
 };
 
 }

@@ -46,6 +46,7 @@ class OsmMap;
 class CountUniqueReviewsVisitor : public ConstElementVisitor, public ConstOsmMapConsumer,
   public SingleStatistic
 {
+
 public:
 
   static std::string className() { return "hoot::CountUniqueReviewsVisitor"; }
@@ -64,6 +65,8 @@ private:
 
   const OsmMap* _map;
   std::set<ReviewMarker::ReviewUid> _reviews;
+  ReviewMarker _reviewMarker;
+
 };
 
 }
