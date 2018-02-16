@@ -64,46 +64,45 @@ class ServiceHootApiDbWriterTest : public CppUnit::TestFixture
 
 public:
 
-  static QString userEmail() { return "ServiceHootApiDbWriterTest@hoottestcpp.org"; }
+  QString userEmail() { return QString("%1.ServiceHootApiDbWriterTest@hoottestcpp.org").arg(testName); }
+  QString userName()  { return QString("%1.ServiceHootApiDbWriterTest").arg(testName); }
 
-  void compareRecords(QString sql, QString expected, QVariant v1 = QVariant())
+  long mapId;
+  QString testName;
+
+  void setUpTest(const QString& test_name)
   {
-    HootApiDb db;
-    db.open(ServicesDbTestUtils::getDbModifyUrl());
-    QString result = db.execToString(sql, v1);
-    if (expected == "")
+    mapId = -1;
+    testName = test_name;
+    ServicesDbTestUtils::deleteUser(userEmail());
+    HootApiDb database;
+
+    database.open(ServicesDbTestUtils::getDbModifyUrl());
+    database.getOrCreateUser(userEmail(), userName());
+    database.close();
+  }
+
+  void tearDown()
+  {
+    ServicesDbTestUtils::deleteUser(userEmail());
+
+    if (mapId != -1)
     {
-      QStringList rows = result.split("\n");
-      for (int i = 0; i < rows.size(); ++i)
-      {
-        cout << "\"" << rows[i];
-        if (i == rows.size() - 1)
-        {
-          cout << "\"" << endl;
-        }
-        else
-        {
-          cout << "\\n\"" << endl;
-        }
-      }
-    }
-    else
-    {
-      if (expected != result)
-      {
-        LOG_INFO(TestUtils::toQuotedString(result));
-      }
-      CPPUNIT_ASSERT_EQUAL(expected.toStdString(), result.toStdString());
+      HootApiDb database;
+      database.open(ServicesDbTestUtils::getDbModifyUrl());
+      database.deleteMap(mapId);
+      database.close();
     }
   }
 
   void runEscapeTest()
   {
+    setUpTest("runEscapeTest");
     // populate the database.
     HootApiDbWriter writer;
     writer.setUserEmail(userEmail());
     writer.setIncludeDebug(true);
-    writer.open(ServicesDbTestUtils::getDbModifyUrl().toString());
+    writer.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
 
     OsmMapPtr map(new OsmMap());
 
@@ -119,7 +118,7 @@ public:
 
     writer.write(map);
 
-    long mapId = writer.getMapId();
+    mapId = writer.getMapId();
 
     compareRecords("SELECT tags FROM " + HootApiDb::getCurrentNodesTableName(mapId) +
                    " ORDER BY longitude",
@@ -131,12 +130,13 @@ public:
 
   void runInsertTest()
   {
+    setUpTest("runInsertTest");
     // populate the database.
     HootApiDbWriter writer;
     writer.setRemap(false);
     writer.setUserEmail(userEmail());
     writer.setIncludeDebug(true);
-    writer.open(ServicesDbTestUtils::getDbModifyUrl().toString());
+    writer.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
 
     OsmMapPtr map(new OsmMap());
 
@@ -169,11 +169,11 @@ public:
 
     writer.write(map);
 
-    long mapId = writer.getMapId();
+    mapId = writer.getMapId();
 
     compareRecords("SELECT email, display_name FROM " + ApiDb::getUsersTableName() +
                    " WHERE email LIKE :email",
-                   "ServiceHootApiDbWriterTest@hoottestcpp.org;ServiceHootApiDbWriterTest",
+                   QString("%1;%2").arg(userEmail()).arg(userName()),
                    userEmail());
 
     compareRecords("SELECT latitude, longitude, visible, tile, version, tags FROM " +
@@ -214,7 +214,7 @@ public:
                    (qlonglong)mapId);
 
     HootApiDb db;
-    db.open(ServicesDbTestUtils::getDbModifyUrl());
+    db.open(ServicesDbTestUtils::getDbModifyUrl(testName));
 
     QStringList tableNames;
     tableNames.append(HootApiDb::getCurrentNodesTableName(mapId));
@@ -237,11 +237,12 @@ public:
 
   void runRemapInsertTest()
   {
+    setUpTest("runRemapInsertTest");
     // populate the database.
     HootApiDbWriter writer;
     writer.setUserEmail(userEmail());
     writer.setIncludeDebug(true);
-    writer.open(ServicesDbTestUtils::getDbModifyUrl().toString());
+    writer.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
 
     OsmMapPtr map(new OsmMap());
 
@@ -278,11 +279,11 @@ public:
     map->addRelation(r2);
 
     writer.write(map);
-    long mapId = writer.getMapId();
+    mapId = writer.getMapId();
 
     compareRecords("SELECT email, display_name FROM " + ApiDb::getUsersTableName() +
                    " WHERE email LIKE :email",
-                   "ServiceHootApiDbWriterTest@hoottestcpp.org;ServiceHootApiDbWriterTest",
+                   QString("%1;%2").arg(userEmail()).arg(userName()),
                    userEmail());
 
     compareRecords("SELECT latitude, longitude, visible, tile, version, tags FROM " +
@@ -336,22 +337,40 @@ public:
     static long max_value() { return std::numeric_limits<long>::max(); }
   };
 
-  void setUp()
+  void compareRecords(QString sql, QString expected, QVariant v1 = QVariant())
   {
-    ServicesDbTestUtils::deleteUser(userEmail());
     HootApiDb db;
-    db.open(ServicesDbTestUtils::getDbModifyUrl());
-    db.getOrCreateUser(userEmail(), "ServiceHootApiDbWriterTest");
-  }
-
-  void tearDown()
-  {
-    ServicesDbTestUtils::deleteUser(userEmail());
+    db.open(ServicesDbTestUtils::getDbModifyUrl(testName));
+    QString result = db.execToString(sql, v1);
+    if (expected == "")
+    {
+      QStringList rows = result.split("\n");
+      for (int i = 0; i < rows.size(); ++i)
+      {
+        cout << "\"" << rows[i];
+        if (i == rows.size() - 1)
+        {
+          cout << "\"" << endl;
+        }
+        else
+        {
+          cout << "\\n\"" << endl;
+        }
+      }
+    }
+    else
+    {
+      if (expected != result)
+      {
+        LOG_INFO(TestUtils::toQuotedString(result));
+      }
+      CPPUNIT_ASSERT_EQUAL(expected.toStdString(), result.toStdString());
+    }
   }
 
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceHootApiDbWriterTest, "slow");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceHootApiDbWriterTest, "serial");
+//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceHootApiDbWriterTest, "serial");
 
 }
