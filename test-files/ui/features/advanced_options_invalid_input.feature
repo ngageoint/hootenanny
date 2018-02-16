@@ -85,14 +85,15 @@ Feature: Advanced Conflation Options
 				| search_radius_waterway | "-1" | "-10000" |
 				| search_radius_waterway | "-1" | "&*^@(!" |
 
-	Scenario: Test Cookie Cutter Options that are different than Reference or Average Options
-		Then I press "big.loud-red" span with text "Cancel"
-		Then I click the "►" link
-		And I should see "Advanced Conflation Options"
-		And I should see "Road Options"
-		And I click on "#hoot_road_options_label"
-		And I should see checkbox "Enabled" enabled
-		And I should see element "#hoot_road_opt_engine" with no value and placeholder "Network"
+        #TODO: this test needs to be re-enabled; it was already mostly disabled, so I disabled the rest of it completely
+	#Scenario: Test Cookie Cutter Options that are different than Reference or Average Options
+		#Then I press "big.loud-red" span with text "Cancel"
+		#Then I click the "►" link
+		#And I should see "Advanced Conflation Options"
+		#And I should see "Road Options"
+		#And I click on "#hoot_road_options_label"
+		#And I should see checkbox "Enabled" enabled
+		#And I should see element "#hoot_road_opt_engine" with no value and placeholder "Network"
 
 		# Scenario Outline:
 		# 	When I select the "<conflation option>" in the "div.contain.combobox-caret"
