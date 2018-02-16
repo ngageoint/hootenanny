@@ -52,6 +52,10 @@ public:
   static QString inDir() { return "test-files/visitors/ImplicitPoiTaggerTest"; }
   static QString outDir() { return "test-output/visitors/ImplicitPoiTaggerTest"; }
 
+  void setUp()
+  {
+    TestUtils::mkpath(outDir());
+  }
   void tearDown()
   {
     TestUtils::resetEnvironment();
@@ -59,8 +63,6 @@ public:
 
   void runBasicTest()
   {
-    TestUtils::mkpath(outDir());
-
     //regenerate the db file
     const QString databaseOutFile =
       outDir() + "/ImplicitPoiTaggerTest-runBasicTest-rules.sqlite";
@@ -153,8 +155,6 @@ public:
 
   void runDuplicateTagKeyTest()
   {
-    TestUtils::mkpath(outDir());
-
     //regenerate the db file
     const QString databaseOutFile =
       outDir() + "/ImplicitPoiTaggerTest-runDuplicateTagKeyTest-rules.sqlite";
@@ -190,8 +190,6 @@ public:
 
   void runLessSpecificImplicitTagTest()
   {
-    TestUtils::mkpath(outDir());
-
     //regenerate the db file
     const QString databaseOutFile =
       outDir() + "/ImplicitPoiTaggerTest-runLessSpecificImplicitTagTest-rules.sqlite";
@@ -226,8 +224,6 @@ public:
 
   void runMoreSpecificImplicitTagTest()
   {
-    TestUtils::mkpath(outDir());
-
     //regenerate the db file
     const QString databaseOutFile =
       outDir() + "/ImplicitPoiTaggerTest-runMoreSpecificImplicitTagTest-rules.sqlite";
