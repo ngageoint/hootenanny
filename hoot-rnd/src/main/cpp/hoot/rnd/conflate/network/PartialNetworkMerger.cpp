@@ -245,7 +245,7 @@ void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
       }
     }
 
-    ReviewMarker::mark(map, reviews, e.getWhat(), HighwayMatch::getHighwayMatchName());
+    ReviewMarker().mark(map, reviews, e.getWhat(), HighwayMatch::getHighwayMatchName());
   }
 }
 

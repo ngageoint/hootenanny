@@ -100,7 +100,7 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Element
   {
     QString note =
       "Merging multiple buildings from each data source is error prone and requires a human eye.";
-    ReviewMarker::mark(map, combined, note, "Building", 1);
+    ReviewMarker().mark(map, combined, note, "Building", 1);
   }
   else
   {

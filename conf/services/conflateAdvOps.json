@@ -175,6 +175,14 @@
                 ]
             },
             {
+            	"id":"add_review_tags_to_features",
+                "elem_type":"bool",
+                "defaultvalue":"false",
+                "description":"If true, not only will review relations receive the hoot:review:needs tag, the features involved in the review will receive them as well.",
+                "name":"Add Review Tags To Individual Features",
+                "hoot_key":"add.review.tags.to.features"
+            },
+            {
                 "id":"unify_optimizer_time_limit",
                 "minvalue":"-1",
                 "elem_type":"int",

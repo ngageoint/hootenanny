@@ -107,7 +107,7 @@ void RemoveDuplicateReviewsOp::apply(boost::shared_ptr<OsmMap>& map)
             explain = "Multiple overlapping high confidence reviews: " + explain;
           }
         }
-        ReviewMarker::mark(map, map->getElement(beid), map->getElement(eeid),
+        ReviewMarker().mark(map, map->getElement(beid), map->getElement(eeid),
           explain, match->getMatchName(), match->getClassification().getReviewP());
       }
     }

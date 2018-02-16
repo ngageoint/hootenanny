@@ -44,7 +44,9 @@ namespace hoot
  */
 class ReviewMarker
 {
+
 public:
+
   /// This definition may change over time.
   typedef ElementId ReviewUid;
 
@@ -96,27 +98,28 @@ public:
    * @param reviewType A human readable review type. Typically this is a one word description of
    *  the feature being reviewed. E.g. "Highway" or "Building".
    */
-  static void mark(const OsmMapPtr &map, const ElementPtr& e1, const ElementPtr& e2,
-    const QString& note, const QString& reviewType, double score = -1,
-    std::vector<QString> choices = std::vector<QString>() );
+  void mark(const OsmMapPtr &map, const ElementPtr& e1, const ElementPtr& e2, const QString& note,
+            const QString& reviewType, double score = -1,
+            std::vector<QString> choices = std::vector<QString>());
 
   /**
-   * Marks a set of elements as needing review and sets them to reference each other. If the score is
-   * negative then the score is omitted.
+   * Marks a set of elements as needing review and sets them to reference each other. If the score
+   * is negative then the score is omitted.
    *
    * @param note A human readable note describing the review.
    * @param reviewType A human readable review type. Typically this is a one word description of
    *  the feature being reviewed. E.g. "Highway" or "Building".
    */
-  static void mark(const OsmMapPtr &map, std::set<ElementId> ids,
-    const QString& note, const QString& reviewType, double score = -1,
-    std::vector<QString> choices = std::vector<QString>() );
+  void mark(const OsmMapPtr &map, std::set<ElementId> ids, const QString& note,
+            const QString& reviewType, double score = -1,
+            std::vector<QString> choices = std::vector<QString>());
 
   /**
    * Marks a single element as needing review.
    */
-  static void mark(const OsmMapPtr &map, const ElementPtr& e, const QString& note,
-    const QString& reviewType, double score = -1, std::vector<QString> choices = std::vector<QString>());
+  void mark(const OsmMapPtr &map, const ElementPtr& e, const QString& note,
+            const QString& reviewType, double score = -1,
+            std::vector<QString> choices = std::vector<QString>());
 
   /**
    * Removes a single element.
@@ -124,8 +127,12 @@ public:
   static void removeElement(const OsmMapPtr& map, ElementId eid);
 
 private:
+
   // don't use these keys directly, instead call the helper functions above.
   static QString _complexGeometryType;
+
+  //also marks features contained by a review relation
+  bool _addReviewTagsToFeatures;
 
   /**
    * Returns a hilbert value that represents the center of the bounds that covers e1 and e2.

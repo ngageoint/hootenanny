@@ -100,7 +100,7 @@ void MultiaryPoiMerger::_createReviews(const OsmMapPtr& map,
     // we aren't using the review score in the review mark b/c the review score is almost always
     // 0. We may be able to fudge a value based on the match/miss thresholds, but I'm not sure
     // the score is every really used so I'll just leave it the default value for now.
-    ReviewMarker::mark(map,
+    ReviewMarker().mark(map,
       map->getElement(link->a->mergedElement->getElementId()),
       map->getElement(link->b->mergedElement->getElementId()),
       link->explainText,
