@@ -33,7 +33,6 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
-
 #include "extractors/PoiPolygonTypeScoreExtractor.h"
 #include "extractors/PoiPolygonNameScoreExtractor.h"
 #include "PoiPolygonDistance.h"
@@ -65,7 +64,8 @@ _nameScore(-1.0),
 _addressScore(-1.0),
 _polyNeighborIds(polyNeighborIds),
 _poiNeighborIds(poiNeighborIds),
-_rf(rf)
+_rf(rf),
+_opts(ConfigOptions())
 {
 }
 
@@ -220,7 +220,7 @@ bool PoiPolygonMatch::isPoi(const Element& e)
       (inABuildingOrPoiCategory || tags.getNames().size() > 0);
 
   if (!isPoi && e.getElementType() == ElementType::Node &&
-      _opts.getPoiPolygonPromotePointsWithAddressesToPois() &&
+      ConfigOptions().getPoiPolygonPromotePointsWithAddressesToPois() &&
       PoiPolygonAddressScoreExtractor::hasAddress(e))
   {
     isPoi = true;
@@ -406,7 +406,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
 
   _categorizeElementsByGeometryType(eid1, eid2);
 
-  if (_reviewMultiUseBuildings && OsmSchema::getInstance().isMultiUseBuilding(_poly))
+  if (_reviewMultiUseBuildings && OsmSchema::getInstance().isMultiUseBuilding(*_poly))
   {
     _class.setReview();
     return;

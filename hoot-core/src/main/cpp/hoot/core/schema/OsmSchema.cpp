@@ -1698,10 +1698,10 @@ bool OsmSchema::isMultiUseBuilding(const Element& e)
 //    (e.getTags().get("building:use") == "multipurpose" || e.getTags().get("shop") == "mall");
   return
     (OsmSchema::getInstance().getCategories(e.getTags()).intersects(OsmSchemaCategory::building()) ||
-      (hasCategory(t, "amenity") &&
+      (hasCategory(e.getTags(), "amenity") &&
          e.getElementType() == ElementType::Way || e.getElementType() == ElementType::Relation)) &&
     (e.getTags().get("building:use") == "multipurpose" ||
-     OsmSchema::getInstance().getCategories(e.getTags()).intersects(OsmSchemaCategory::multiUse());
+     OsmSchema::getInstance().getCategories(e.getTags()).intersects(OsmSchemaCategory::multiUse()));
 }
 
 bool OsmSchema::isCollection(const Element& e) const
