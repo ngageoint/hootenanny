@@ -46,6 +46,7 @@ Feature: Advanced Conflation Options
         And I should see "General Conflation Options"
         Then I click on "#hoot_general_conflation_options_label"
         And I should see checkbox "Frechet Distance Subline Matcher" unchecked
+	And I should see checkbox "Add Review Tags To Individual Features" unchecked
         And I should see element "#unify_optimizer_time_limit" with no value and placeholder "60"
         And I should see checkbox "OGR Split O2S" unchecked
         And I should see checkbox "OGR Esri FCSubtype" checked
@@ -80,6 +81,10 @@ Feature: Advanced Conflation Options
         And I should see "Building Options"
         And I click on "#hoot_building_options_label"
         And I should see checkbox "Enabled" checked
+        And I should see checkbox "Always Review If Secondary Feature Newer" unchecked
+        And I should see element "#building_date_format" with no value and placeholder "yyyy-MM-ddTHH:mm"
+        And I should see element "#building_date_tag_key" with no value and placeholder "source:date"
+	And I should see checkbox "Review Non 1:1 Building Matches" unchecked
         And I click on "#hoot_building_options_label"
         And I should see "POI Options"
         And I click on "#hoot_poi_options_label"

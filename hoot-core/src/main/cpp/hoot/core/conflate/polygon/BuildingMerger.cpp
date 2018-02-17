@@ -89,6 +89,7 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Element
   set<ElementId> firstPairs;
   set<ElementId> secondPairs;
   set<ElementId> combined;
+  ReviewMarker reviewMarker;
   for (set< pair<ElementId, ElementId> >::iterator sit = _pairs.begin(); sit != _pairs.end(); ++sit)
   {
     firstPairs.insert(sit->first);
@@ -100,7 +101,7 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Element
   {
     QString note =
       "Merging multiple buildings from each data source is error prone and requires a human eye.";
-    ReviewMarker::mark(map, combined, note, "Building", 1);
+    reviewMarker.mark(map, combined, note, "Building", 1);
   }
   else
   {

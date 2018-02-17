@@ -56,6 +56,14 @@ Prefix to apply to REF1 values.
 The REF1 values are typically used when training a model. See the Developer Documentation for
 details.
 
+=== add.review.tags.to.features
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, not only will review relations receive the hoot:review:needs tag, the features involved in
+the review will receive them as well.
+
 === apidb.bulk.inserter.output.files.copy.location
 
 * Data Type: string
@@ -180,6 +188,20 @@ big.perty.op.sigma to avoid endless or near endless loops.
 Sigma of the distance in meters. This is used in the gaussian distribution used to determine the
 distance.
 
+=== building.date.format
+
+* Data Type: string
+* Default Value: `yyyy-MM-ddTHH:mm`
+
+Date format string used by the building date tag value.  See QDateTime::fromString for more details.
+
+=== building.date.tag.key
+
+* Data Type: string
+* Default Value: `source:date`
+
+Tag key used by the building.review.if.secondary.newer configuration option.
+
 === building.match.threshold
 
 * Data Type: double
@@ -202,6 +224,15 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== building.review.if.secondary.newer
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, any buildings in the secondary layer will be automatically reviewed against potentially
+matching features in the reference layer if they are marked with a more recent date than that of the
+reference feature.
+
 === building.review.threshold
 
 * Data Type: double
@@ -213,6 +244,13 @@ The threshold at which a review is called a review for buildings.  See
 See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== building.review.matches.other.than.one.to.one
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, any building matches other than 1:1 matches are automatically marked for review.
 
 === changeset.buffer
 

@@ -22,42 +22,22 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BuildingMatch.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/algorithms/aggregator/MeanAggregator.h>
-#include <hoot/core/algorithms/aggregator/RmseAggregator.h>
 #include <hoot/core/algorithms/aggregator/QuantileAggregator.h>
-#include <hoot/core/algorithms/ExactStringDistance.h>
-#include <hoot/core/algorithms/MaxWordSetDistance.h>
-#include <hoot/core/algorithms/MeanWordSetDistance.h>
-#include <hoot/core/algorithms/LevenshteinDistance.h>
-#include <hoot/core/algorithms/Soundex.h>
 #include <hoot/core/conflate/MatchType.h>
-#include <hoot/core/conflate/polygon/extractors/CentroidDistanceExtractor.h>
-#include <hoot/core/conflate/polygon/extractors/CompactnessExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/EdgeDistanceExtractor.h>
-#include <hoot/core/conflate/polygon/extractors/NameExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/OverlapExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/AngleHistogramExtractor.h>
-#include <hoot/core/schema/TranslateStringDistance.h>
 #include <hoot/core/conflate/MatchThreshold.h>
-#include <hoot/core/conflate/ReviewMarker.h>
-#include <hoot/core/index/ElementToRelationMap.h>
-#include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/conflate/MatchClassification.h>
 #include <hoot/core/util/Log.h>
-
-// Standard
-#include <sstream>
-
-// tgs
-#include <tgs/RandomForest/RandomForest.h>
-
 #include "BuildingRfClassifier.h"
+
+// Qt
+#include <QDateTime>
 
 using namespace std;
 
@@ -66,59 +46,156 @@ namespace hoot
 
 QString BuildingMatch::_matchName = "Building";
 
-BuildingMatch::BuildingMatch(const ConstOsmMapPtr& map, boost::shared_ptr<const BuildingRfClassifier> rf,
-  const ElementId& eid1, const ElementId& eid2, ConstMatchThresholdPtr mt) :
-  Match(mt),
-  _eid1(eid1),
-  _eid2(eid2),
-  _rf(rf),
-  _explainText("")
-{
+BuildingMatch::BuildingMatch(const ConstOsmMapPtr& map,
+                             boost::shared_ptr<const BuildingRfClassifier> rf,
+                             const ElementId& eid1, const ElementId& eid2,
+                             ConstMatchThresholdPtr mt, bool reviewIfSecondaryFeatureNewer,
+                             QString dateTagKey, QString dateFormat) :
+Match(mt),
+_eid1(eid1),
+_eid2(eid2),
+_rf(rf),
+_explainText(""),
+_reviewIfSecondaryFeatureNewer(reviewIfSecondaryFeatureNewer),
+_dateTagKey(dateTagKey),
+_dateFormat(dateFormat)
+{  
   _p = _rf->classify(map, _eid1, _eid2);
+
+  ConstElementPtr element1 = map->getElement(eid1);
+  ConstElementPtr element2 = map->getElement(eid2);
 
   MatchType type = getType();
   QStringList description;
-  if (type != MatchType::Match)
-  {
-    ConstElementPtr element1 = map->getElement(eid1);
-    ConstElementPtr element2 = map->getElement(eid2);
-    //  Get the overlap
-    double overlap = OverlapExtractor().extract(*map, element1, element2);
 
-    //If the buildings aren't matched and they overlap at all, then make them be reviewed.
-    if (getType() == MatchType::Miss && overlap > 0.0)
-    {
-      _p.clear();
-      _p.setReviewP(1.0);
-      description.append("Unmatched buildings are overlapping.");
-    }
-    //  Add extra explanation text to reviews
-    else if (getType() == MatchType::Review)
-    {
-      //  Deal with the overlap first
-      if (overlap >= 0.75)        description.append("Large building overlap.");
-      else if (overlap >= 0.5)    description.append("Medium building overlap.");
-      else if (overlap >= 0.25)   description.append("Small building overlap.");
-      else                        description.append("Very little building overlap.");
-      //  Next check the Angle Histogram
-      double angle = AngleHistogramExtractor(0.0).extract(*map, element1, element2);
-      if (angle >= 0.75)          description.append("Very similar building orientation.");
-      else if (angle >= 0.5)      description.append("Similar building orientation.");
-      else if (angle >= 0.25)     description.append("Semi-similar building orientation.");
-      else                        description.append("Building orientation not similar.");
-      //  Finally the edge distance
-      double edge = EdgeDistanceExtractor(ValueAggregatorPtr(new QuantileAggregator(0.4))).extract(*map, element1, element2);
-      if (edge >= 90)             description.append("Building edges very close to each other.");
-      else if (edge >= 70)        description.append("Building edges somewhat close to each other.");
-      else                        description.append("Building edges not very close to each other.");
-    }
+  if (type != MatchType::Match)
+  { 
+    description = _getMatchDescription(map, type, element1, element2);
   }
+  else if (_reviewIfSecondaryFeatureNewer)
+  {
+    description = _createReviewIfSecondaryFeatureNewer(element1, element2);
+  }
+
   //  Join the string descriptions together or generate the default
   if (description.length() > 0)
     _explainText = description.join(" ");
   else
     _explainText = mt->getTypeDetail(_p);
   LOG_VART(toString());
+}
+
+QStringList BuildingMatch::_createReviewIfSecondaryFeatureNewer(ConstElementPtr element1,
+                                                                ConstElementPtr element2)
+{
+  LOG_VART(_dateTagKey);
+  LOG_VART(_dateFormat);
+
+  QStringList description;
+
+  if (!_dateTagKey.isEmpty() && !_dateFormat.isEmpty())
+  {
+    ConstElementPtr refBuilding;
+    ConstElementPtr secondaryBuilding;
+    LOG_VART(element1->getStatus().getEnum());
+    LOG_VART(element2->getStatus().getEnum());
+    if (element1->getStatus().getEnum() == Status::Unknown2)
+    {
+      secondaryBuilding = element1;
+      refBuilding = element2;
+    }
+    else
+    {
+      assert(element2->getStatus().getEnum() == Status::Unknown2);
+      secondaryBuilding = element2;
+      refBuilding = element1;
+    }
+    LOG_VART(refBuilding->getId());
+    LOG_VART(secondaryBuilding->getId());
+
+    const QString secondaryBuildingDateStrVal =
+      secondaryBuilding->getTags().get(_dateTagKey).trimmed();
+    const QString refBuildingDateStrVal =
+      refBuilding->getTags().get(_dateTagKey).trimmed();
+    if (secondaryBuildingDateStrVal.isEmpty() || refBuildingDateStrVal.isEmpty())
+    {
+      LOG_TRACE("Date tags not found on both buildings.");
+      return description;
+    }
+
+    const QDateTime secondaryBuildingDate =
+      QDateTime::fromString(secondaryBuildingDateStrVal, _dateFormat);
+    LOG_VART(secondaryBuildingDate);
+    if (!secondaryBuildingDate.isValid())
+    {
+      throw HootException(
+        "Invalid configured building date format: " + secondaryBuildingDate.toString() +
+        ".  Expected the form: " + _dateFormat);
+    }
+    const QDateTime refBuildingDate =
+      QDateTime::fromString(refBuildingDateStrVal, _dateFormat);
+    LOG_VART(refBuildingDate);
+    if (!refBuildingDate.isValid())
+    {
+      throw HootException(
+        "Invalid configured building date format: " + refBuildingDate.toString() +
+        ".  Expected the form: " + _dateFormat);
+    }
+
+    if (secondaryBuildingDate > refBuildingDate)
+    {
+      _p.clear();
+      _p.setReviewP(1.0);
+      const QString msg =
+        "Secondary building with timestamp: " + secondaryBuildingDate.toString() +
+        " is newer than reference building with timestamp: " + refBuildingDate.toString();
+      LOG_TRACE(msg);
+      description.append(msg);
+    }
+  }
+
+  return description;
+}
+
+QStringList BuildingMatch::_getMatchDescription(const ConstOsmMapPtr& map, const MatchType& type,
+                                                ConstElementPtr element1, ConstElementPtr element2)
+{
+  QStringList description;
+
+  //  Get the overlap
+  const double overlap = OverlapExtractor().extract(*map, element1, element2);
+
+  //If the buildings aren't matched and they overlap at all, then make them be reviewed.
+  if (type == MatchType::Miss && overlap > 0.0)
+  {
+    _p.clear();
+    _p.setReviewP(1.0);
+    description.append("Unmatched buildings are overlapping.");
+  }
+  //  Add extra explanation text to reviews
+  else if (type == MatchType::Review)
+  {
+    //  Deal with the overlap first
+    if (overlap >= 0.75)        description.append("Large building overlap.");
+    else if (overlap >= 0.5)    description.append("Medium building overlap.");
+    else if (overlap >= 0.25)   description.append("Small building overlap.");
+    else                        description.append("Very little building overlap.");
+    //  Next check the Angle Histogram
+    const double angle = AngleHistogramExtractor(0.0).extract(*map, element1, element2);
+    if (angle >= 0.75)          description.append("Very similar building orientation.");
+    else if (angle >= 0.5)      description.append("Similar building orientation.");
+    else if (angle >= 0.25)     description.append("Semi-similar building orientation.");
+    else                        description.append("Building orientation not similar.");
+    //  Finally the edge distance
+    const double edge =
+      EdgeDistanceExtractor(
+        ValueAggregatorPtr(new QuantileAggregator(0.4))).extract(*map, element1, element2);
+    if (edge >= 90)             description.append("Building edges very close to each other.");
+    else if (edge >= 70)        description.append("Building edges somewhat close to each other.");
+    else                        description.append("Building edges not very close to each other.");
+  }
+
+  return description;
 }
 
 map<QString, double> BuildingMatch::getFeatures(const ConstOsmMapPtr& m) const
