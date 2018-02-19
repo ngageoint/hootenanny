@@ -32,7 +32,7 @@ pipeline {
             steps {
                 
                 // Make sure we have the tags info because figuring out the version is required in the build process
-                // Remove any screenshots from previos runs
+                // Remove any screenshots from previous runs
                 sh '''
                     git fetch --tags
                     git submodule update --init
