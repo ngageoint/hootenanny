@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include <hoot/core/HootConfig.h>
@@ -1700,12 +1700,11 @@ bool OsmSchema::isMultiUseBuilding(const Element& e)
   LOG_VART(tags.contains("amenity"));
   LOG_VART(osmSchema.getCategories(tags).intersects(OsmSchemaCategory::multiUse()));
 
-  //(element is in a building category OR is a way/relation amenity) AND
+  //(element is in a building category OR is an amenity) AND
   //(element has a multi-purpose building tag OR is in a multi-use category)
   return
     (osmSchema.getCategories(e.getTags()).intersects(OsmSchemaCategory::building()) ||
-      (tags.contains("amenity") &&
-         (elementType == ElementType::Way || elementType == ElementType::Relation))) &&
+      tags.contains("amenity")) &&
     (tags.get("building:use") == "multipurpose" ||
      osmSchema.getCategories(tags).intersects(OsmSchemaCategory::multiUse()));
 }

@@ -1474,9 +1474,6 @@
         "#": "Count in tag info is 30943 on 2015-09-01",
         "description": "A group of stores, typically associated jth a single building structure.",
 	"categories": [
-            "use",
-            "poi",
-            "building",
             "multiuse"
         ],
         "isA": "shop",

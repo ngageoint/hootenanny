@@ -409,6 +409,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
 
   LOG_VART(_reviewMultiUseBuildings);
   LOG_VART(OsmSchema::getInstance().isMultiUseBuilding(*_poly));
+  //only do the multi-use check on the poly
   if (_reviewMultiUseBuildings && OsmSchema::getInstance().isMultiUseBuilding(*_poly))
   {
     _class.setReview();
