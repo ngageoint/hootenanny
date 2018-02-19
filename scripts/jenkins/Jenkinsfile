@@ -136,7 +136,7 @@ pipeline {
         failure {
             // Copy over any UI failure screenshots and send to slack
             sh "vagrant scp ${params.Box}:~/hoot/test-files/ui/screenshot_*.png ./test-files/ui/"
-            postSlack("./test-files/ui/", "screenshot_*.png", "${env.JENKINS_BOT_TOKEN}", "#builds_hoot")
+            postSlack("${env.WORKSPACE}/test-files/ui/", "screenshot_*.png", "${env.JENKINS_BOT_TOKEN}", "#builds_hoot")
         }
     }
 }
