@@ -1705,7 +1705,7 @@ bool OsmSchema::isMultiUseBuilding(const Element& e)
   return
     (osmSchema.getCategories(e.getTags()).intersects(OsmSchemaCategory::building()) ||
       (tags.contains("amenity") &&
-         elementType == ElementType::Way || elementType == ElementType::Relation)) &&
+         (elementType == ElementType::Way || elementType == ElementType::Relation))) &&
     (tags.get("building:use") == "multipurpose" ||
      osmSchema.getCategories(tags).intersects(OsmSchemaCategory::multiUse()));
 }

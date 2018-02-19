@@ -117,7 +117,7 @@ public:
    */
   static void resetMatchDistanceInfo();
 
-  virtual QString explain() const { return _explainText; }
+  virtual QString explain() const;
 
   void setMatchDistanceThreshold(const double distance);
   void setReviewDistanceThreshold(const double distance);

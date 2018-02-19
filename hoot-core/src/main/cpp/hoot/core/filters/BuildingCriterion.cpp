@@ -70,9 +70,12 @@ bool BuildingCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) c
     throw HootException("You must set the map before calling BuildingCriterion");
   }
 
+  LOG_VARD(e->getTags());
+  LOG_VARD(OsmSchema::getInstance().isBuilding(e->getTags(), e->getElementType()));
   // if it is a building
   if (OsmSchema::getInstance().isBuilding(e->getTags(), e->getElementType()))
   {
+    LOG_VARD(isParentABuilding(e->getElementId()));
     // see ticket #5952. If the building has a parent relation that is also a building then this
     // is really a building part, not a building.
     if (isParentABuilding(e->getElementId()) == false)

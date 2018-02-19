@@ -661,10 +661,6 @@ map<QString, double> PoiPolygonMatch::getFeatures(const ConstOsmMapPtr& m) const
 
 QString PoiPolygonMatch::toString() const
 {
-  if (!_explainText.isEmpty())
-  {
-    return _explainText;
-  }
   return
     QString("PoiPolygonMatch %1 %2 P: %3, distance: %4, close match: %5, type score: %6, name score: %7, address score: %8")
       .arg(_poi->getElementId().toString())
@@ -675,6 +671,15 @@ QString PoiPolygonMatch::toString() const
       .arg(_typeScore)
       .arg(_nameScore)
       .arg(_addressScore);
+}
+
+QString PoiPolygonMatch::explain() const
+{
+  if (!_explainText.isEmpty())
+  {
+    return _explainText;
+  }
+  return toString();
 }
 
 }

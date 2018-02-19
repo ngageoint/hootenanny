@@ -780,7 +780,7 @@ public:
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
 
       HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());
-      CPPUNIT_ASSERT(uut.toString().contains("Match involves a multi-use building"));
+      CPPUNIT_ASSERT(uut.explain().contains("Match involves a multi-use building"));
 
       RecursiveElementRemover(w1->getElementId()).apply(map);
     }
@@ -796,7 +796,7 @@ public:
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
 
       HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());
-      CPPUNIT_ASSERT(uut.toString().contains("Match involves a multi-use building"));
+      CPPUNIT_ASSERT(uut.explain().contains("Match involves a multi-use building"));
 
       RecursiveElementRemover(w1->getElementId()).apply(map);
     }
@@ -812,7 +812,7 @@ public:
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
 
       HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());
-      CPPUNIT_ASSERT(uut.toString().contains("Match involves a multi-use building"));
+      CPPUNIT_ASSERT(uut.explain().contains("Match involves a multi-use building"));
 
       RecursiveElementRemover(w1->getElementId()).apply(map);
     }
@@ -828,7 +828,7 @@ public:
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
 
       HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());
-      CPPUNIT_ASSERT(uut.toString().contains("Match involves a multi-use building"));
+      CPPUNIT_ASSERT(uut.explain().contains("Match involves a multi-use building"));
 
       RecursiveElementRemover(w1->getElementId()).apply(map);
     }
@@ -843,7 +843,7 @@ public:
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
 
       HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
-      CPPUNIT_ASSERT(!uut.toString().contains("Match involves a multi-use building"));
+      CPPUNIT_ASSERT(!uut.explain().contains("Match involves a multi-use building"));
 
       RecursiveElementRemover(w1->getElementId()).apply(map);
     }
@@ -858,7 +858,7 @@ public:
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
 
       HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
-      CPPUNIT_ASSERT(!uut.toString().contains("Match involves a multi-use building"));
+      CPPUNIT_ASSERT(!uut.explain().contains("Match involves a multi-use building"));
 
       RecursiveElementRemover(w1->getElementId()).apply(map);
     }
@@ -874,7 +874,7 @@ public:
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
 
       HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
-      CPPUNIT_ASSERT(!uut.toString().contains("Match involves a multi-use building"));
+      CPPUNIT_ASSERT(!uut.explain().contains("Match involves a multi-use building"));
 
       RecursiveElementRemover(w1->getElementId()).apply(map);
     }
@@ -889,7 +889,7 @@ public:
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
 
       HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());
-      CPPUNIT_ASSERT(uut.toString().contains("Match involves a multi-use building"));
+      CPPUNIT_ASSERT(uut.explain().contains("Match involves a multi-use building"));
 
       RecursiveElementRemover(w1->getElementId()).apply(map);
     }
