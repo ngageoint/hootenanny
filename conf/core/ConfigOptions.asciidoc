@@ -2202,8 +2202,9 @@ and surround the entire value string in double quotes.
 * Data Type: bool
 * Default Value: `false`
 
-If true, POI to polygon conflation always mark matches between POIs and polygons where multi-use
-buildings are present.  See the user documentation for how a multi-use building is defined.
+If true, POI to polygon conflation always marks matches between POIs and polygons where multi-use
+building polygons are present as needing review.  The definition of multi-use buildings is
+controlled by the Hootenanny schema.
 
 === poi.polygon.review.threshold
 
