@@ -117,6 +117,8 @@ public:
    */
   static void resetMatchDistanceInfo();
 
+  virtual QString explain() const { return _explainText; }
+
   void setMatchDistanceThreshold(const double distance);
   void setReviewDistanceThreshold(const double distance);
   void setNameScoreThreshold(const double threshold);
@@ -190,6 +192,8 @@ private:
   boost::shared_ptr<const PoiPolygonRfClassifier> _rf;
 
   ConfigOptions _opts;
+
+  QString _explainText;
 
   void _categorizeElementsByGeometryType(const ElementId& eid1, const ElementId& eid2);
 

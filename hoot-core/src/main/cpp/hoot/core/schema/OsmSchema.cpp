@@ -1691,17 +1691,23 @@ bool OsmSchema::isBuildingPart(const ConstElementPtr& e) const
 
 bool OsmSchema::isMultiUseBuilding(const Element& e)
 {
-//  return
-//    (isBuilding(e) ||
-//      (hasCategory(t, "amenity") &&
-//         e.getElementType() == ElementType::Way || e.getElementType() == ElementType::Relation)) &&
-//    (e.getTags().get("building:use") == "multipurpose" || e.getTags().get("shop") == "mall");
+  const OsmSchema& osmSchema = OsmSchema::getInstance();
+  const ElementType elementType = e.getElementType();
+  LOG_VART(elementType);
+  const Tags& tags = e.getTags();
+  LOG_VART(tags);
+  LOG_VART(osmSchema.getCategories(e.getTags()).intersects(OsmSchemaCategory::building()));
+  LOG_VART(tags.contains("amenity"));
+  LOG_VART(osmSchema.getCategories(tags).intersects(OsmSchemaCategory::multiUse()));
+
+  //(element is in a building category OR is a way/relation amenity) AND
+  //(element has a multi-purpose building tag OR is in a multi-use category)
   return
-    (OsmSchema::getInstance().getCategories(e.getTags()).intersects(OsmSchemaCategory::building()) ||
-      (hasCategory(e.getTags(), "amenity") &&
-         e.getElementType() == ElementType::Way || e.getElementType() == ElementType::Relation)) &&
-    (e.getTags().get("building:use") == "multipurpose" ||
-     OsmSchema::getInstance().getCategories(e.getTags()).intersects(OsmSchemaCategory::multiUse()));
+    (osmSchema.getCategories(e.getTags()).intersects(OsmSchemaCategory::building()) ||
+      (tags.contains("amenity") &&
+         elementType == ElementType::Way || elementType == ElementType::Relation)) &&
+    (tags.get("building:use") == "multipurpose" ||
+     osmSchema.getCategories(tags).intersects(OsmSchemaCategory::multiUse()));
 }
 
 bool OsmSchema::isCollection(const Element& e) const

@@ -397,6 +397,7 @@ bool PoiPolygonMatch::_inputFeaturesHaveSameSource(const ElementId& eid1,
 
 void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid2)
 {  
+  _explainText = "";
   _class.setMiss();
 
   if (_disableSameSourceConflation && _inputFeaturesHaveSameSource(eid1, eid2))
@@ -406,9 +407,12 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
 
   _categorizeElementsByGeometryType(eid1, eid2);
 
+  LOG_VART(_reviewMultiUseBuildings);
+  LOG_VART(OsmSchema::getInstance().isMultiUseBuilding(*_poly));
   if (_reviewMultiUseBuildings && OsmSchema::getInstance().isMultiUseBuilding(*_poly))
   {
     _class.setReview();
+    _explainText = "Match involves a multi-use building.";
     return;
   }
 
@@ -441,6 +445,8 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
     else
     {
       _class.setReview();
+      _explainText =
+        "Feature contains tag specified for review from list: " + _reviewIfMatchedTypes.join(";");
     }
   }
   else if (evidence >= _reviewEvidenceThreshold)
@@ -655,6 +661,10 @@ map<QString, double> PoiPolygonMatch::getFeatures(const ConstOsmMapPtr& m) const
 
 QString PoiPolygonMatch::toString() const
 {
+  if (!_explainText.isEmpty())
+  {
+    return _explainText;
+  }
   return
     QString("PoiPolygonMatch %1 %2 P: %3, distance: %4, close match: %5, type score: %6, name score: %7, address score: %8")
       .arg(_poi->getElementId().toString())

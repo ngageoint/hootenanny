@@ -28,6 +28,7 @@
 // Hoot
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/ops/RecursiveElementRemover.h>
 
 #include "../../TestUtils.h"
 
@@ -42,7 +43,7 @@ class PoiPolygonMatchTest : public CppUnit::TestFixture
   CPPUNIT_TEST(matchTest);
   CPPUNIT_TEST(missTest);
   CPPUNIT_TEST(reviewTest);
-  CPPUNIT_TEST(reviewIfMatchedTest);
+  CPPUNIT_TEST(reviewIfMatchedTypedTest);
   CPPUNIT_TEST(badMatchDistanceInputsTest);
   CPPUNIT_TEST(badReviewDistanceInputsTest);
   CPPUNIT_TEST(badNameScoreThresholdInputsTest);
@@ -237,7 +238,7 @@ public:
     }
   }
 
-  void reviewIfMatchedTest()
+  void reviewIfMatchedTypedTest()
   {
     //we let the user specify a custom list of types that always force a review if a match was found
 
@@ -745,9 +746,7 @@ public:
   void multiUseBuildingTest()
   {
     OsmMap::resetCounters();
-
     OsmMapPtr map(new OsmMap());
-
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
                         Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
                         Coordinate(0.0, 0.0),
@@ -755,7 +754,6 @@ public:
 
     NodePtr n1(new Node(Status::Unknown1, 1, 10, 10, 5));
     n1->getTags().set("poi", true);
-    n1->getTags()["name"] = "poi";
     map->addNode(n1);
 
     PoiPolygonMatch uut(
@@ -772,87 +770,128 @@ public:
     uut.setReviewMultiUseBuildings(true);
 
     {
+      n1->getTags()["name"] = "Staunton Elementary";
+
       WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
-      w1->getTags()["name"] = "poly";
+      w1->getTags()["name"] = "Staunton Elementary";
       w1->getTags().set("building", "yes");
       w1->getTags().set("building:use", "multipurpose");
 
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
 
       HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());
+      CPPUNIT_ASSERT(uut.toString().contains("Match involves a multi-use building"));
+
+      RecursiveElementRemover(w1->getElementId()).apply(map);
     }
 
     {
-      WayPtr w2 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w2");
-      w2->getTags()["name"] = "poly";
-      w2->getTags().set("amenity", "school");
-      w2->getTags().set("building:use", "multipurpose");
+      n1->getTags()["name"] = "Staunton Elementary";
 
-      uut.calculateMatch(w2->getElementId(), n1->getElementId());
+      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+      w1->getTags()["name"] = "Staunton Elementary";
+      w1->getTags().set("amenity", "school");
+      w1->getTags().set("building:use", "multipurpose");
+
+      uut.calculateMatch(w1->getElementId(), n1->getElementId());
 
       HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());
+      CPPUNIT_ASSERT(uut.toString().contains("Match involves a multi-use building"));
+
+      RecursiveElementRemover(w1->getElementId()).apply(map);
     }
 
     {
-      WayPtr w3 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w3");
-      w3->getTags()["name"] = "poly";
-      w3->getTags().set("building", "yes");
-      w3->getTags().set("shop", "mall");
+      n1->getTags()["name"] = "Honey Creek Mall";
 
-      uut.calculateMatch(w3->getElementId(), n1->getElementId());
+      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+      w1->getTags()["name"] = "Honey Creek Mall";
+      w1->getTags().set("building", "yes");
+      w1->getTags().set("shop", "mall");
+
+      uut.calculateMatch(w1->getElementId(), n1->getElementId());
 
       HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());
+      CPPUNIT_ASSERT(uut.toString().contains("Match involves a multi-use building"));
+
+      RecursiveElementRemover(w1->getElementId()).apply(map);
     }
 
     {
-      WayPtr w4 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w4");
-      w4->getTags()["name"] = "poly";
-      w4->getTags().set("amenity", "school");
-      w4->getTags().set("building:use", "multipurpose");
+      n1->getTags()["name"] = "Staunton Elementary";
 
-      uut.calculateMatch(w4->getElementId(), n1->getElementId());
+      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+      w1->getTags()["name"] = "Staunton Elementary";
+      w1->getTags().set("amenity", "school");
+      w1->getTags().set("building:use", "multipurpose");
+
+      uut.calculateMatch(w1->getElementId(), n1->getElementId());
 
       HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());
+      CPPUNIT_ASSERT(uut.toString().contains("Match involves a multi-use building"));
+
+      RecursiveElementRemover(w1->getElementId()).apply(map);
     }
 
     {
-      WayPtr w5 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w5");
-      w5->getTags()["name"] = "poly";
-      w5->getTags().set("building", "yes");
+      n1->getTags()["name"] = "Staunton Elementary";
 
-      uut.calculateMatch(w5->getElementId(), n1->getElementId());
+      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+      w1->getTags()["name"] = "Staunton Elementary";
+      w1->getTags().set("building", "yes");
+
+      uut.calculateMatch(w1->getElementId(), n1->getElementId());
 
       HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
+      CPPUNIT_ASSERT(!uut.toString().contains("Match involves a multi-use building"));
+
+      RecursiveElementRemover(w1->getElementId()).apply(map);
     }
 
     {
-      WayPtr w6 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w6");
-      w6->getTags()["name"] = "poly";
-      w6->getTags().set("amenity", "school");
+      n1->getTags()["name"] = "Staunton Elementary";
 
-      uut.calculateMatch(w6->getElementId(), n1->getElementId());
+      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+      w1->getTags()["name"] = "Staunton Elementary";
+      w1->getTags().set("amenity", "school");
+
+      uut.calculateMatch(w1->getElementId(), n1->getElementId());
 
       HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
+      CPPUNIT_ASSERT(!uut.toString().contains("Match involves a multi-use building"));
+
+      RecursiveElementRemover(w1->getElementId()).apply(map);
     }
 
     {
-      WayPtr w7 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w7");
-      w7->getTags()["name"] = "poly";
-      w7->getTags().set("building:use", "multipurpose");
+      n1->getTags()["name"] = "Staunton Elementary";
 
-      uut.calculateMatch(w7->getElementId(), n1->getElementId());
+      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+      w1->getTags()["name"] = "Staunton Elementary";
+      w1->getTags().set("area", "yes");
+      w1->getTags().set("building:use", "multipurpose");
+
+      uut.calculateMatch(w1->getElementId(), n1->getElementId());
 
       HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
+      CPPUNIT_ASSERT(!uut.toString().contains("Match involves a multi-use building"));
+
+      RecursiveElementRemover(w1->getElementId()).apply(map);
     }
 
     {
-      WayPtr w8 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w8");
-      w8->getTags()["name"] = "poly";
-      w8->getTags().set("shop", "mall");
+      n1->getTags()["name"] = "Honey Creek Mall";
 
-      uut.calculateMatch(w8->getElementId(), n1->getElementId());
+      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+      w1->getTags()["name"] = "Honey Creek Mall";
+      w1->getTags().set("shop", "mall");
 
-      HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
+      uut.calculateMatch(w1->getElementId(), n1->getElementId());
+
+      HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());
+      CPPUNIT_ASSERT(uut.toString().contains("Match involves a multi-use building"));
+
+      RecursiveElementRemover(w1->getElementId()).apply(map);
     }
   }
 };
