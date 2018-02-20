@@ -1,0 +1,102 @@
+{
+    "features": [
+        {
+            "geometry": {
+               "coordinates": [
+                        [100.0,3.0],
+                        [100.0,4.0]
+                ],
+                "type": "MultiPoint"
+            },
+            "properties": {
+                "id": "1",
+                "name": "Test01"
+            },
+            "type": "Feature"
+        },
+
+        {
+            "geometry": {
+                "coordinates": [
+                            [101.0,0.0], [101.0, 1.0],
+                            [102.0,1.0], [103.0, 3.0] 
+   
+                ],
+                "type": "MultiLineString"
+            },
+            "properties": {
+                "id": "2",
+                "name": "Test02"
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    [
+                        [
+                            [104.0, 2.0], 
+                            [105.0, 2.0], 
+                            [105.0, 3.0], 
+                            [104.0, 3.0], 
+                            [104.0, 2.0]
+                        ]
+                    ],
+                    [
+                        [
+                            [104.0, 4.0],
+                            [105.0, 4.0],
+                            [105.0, 5.0],
+                            [104.0, 5.0],
+                            [104.0, 4.0]
+                        ]
+                    ],
+                    [
+                        [
+                            [105.0, 2.0], 
+                            [106.0, 2.0], 
+                            [106.0, 3.0], 
+                            [105.0, 3.0], 
+                            [105.0, 2.0]
+                        ]
+                    ]
+                ],
+                "type": "MultiPolygon"
+            },
+            "properties": {
+                "id": "3",
+                "name": "Test03"
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "geometries": [
+                    {
+                        "coordinates": [100.0,5.0],
+                        "type": "Point"
+                    },
+                    {
+                        "coordinates": [
+                            [
+                                [101.0, 5.0], 
+                                [102.0, 5.0], 
+                                [102.0, 6.0], 
+                                [101.0, 6.0], 
+                                [101.0, 5.0]
+                            ]
+                        ],
+                        "type": "Polygon"
+                    }
+                ],
+                "type": "GeometryCollection"
+            },
+            "properties": {
+                "id": "4",
+                "name": "Test04"
+            },
+            "type": "Feature"
+        }
+    ],
+    "type": "FeatureCollection"
+}

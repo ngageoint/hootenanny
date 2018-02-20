@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HootApiDb.h"
 
@@ -297,6 +297,14 @@ void HootApiDb::deleteMap(long mapId)
   // Drop related renderDB First
   dropDatabase(_getRenderDBName(mapId));
 
+  // Drop related sequences
+  dropSequence(getCurrentRelationMembersSequenceName(mapId));
+  dropSequence(getCurrentRelationsSequenceName(mapId));
+  dropSequence(getCurrentWayNodesSequenceName(mapId));
+  dropSequence(getCurrentWaysSequenceName(mapId));
+  dropSequence(getCurrentNodesSequenceName(mapId));
+  dropSequence(getChangesetsSequenceName(mapId));
+
   // Drop related tables
   dropTable(getCurrentRelationMembersTableName(mapId));
   dropTable(getCurrentRelationsTableName(mapId));
@@ -304,14 +312,6 @@ void HootApiDb::deleteMap(long mapId)
   dropTable(getCurrentWaysTableName(mapId));
   dropTable(getCurrentNodesTableName(mapId));
   dropTable(getChangesetsTableName(mapId));
-
-  // Drop related sequences
-  DbUtils::execNoPrepare(
-    _db, "DROP SEQUENCE IF EXISTS " + getCurrentNodesSequenceName(mapId) + " CASCADE");
-  DbUtils::execNoPrepare(
-    _db, "DROP SEQUENCE IF EXISTS " + getCurrentWaysSequenceName(mapId) + " CASCADE");
-  DbUtils::execNoPrepare(
-    _db, "DROP SEQUENCE IF EXISTS " + getCurrentRelationsSequenceName(mapId) + " CASCADE");
 
   // Delete map last
   _exec("DELETE FROM " + ApiDb::getMapsTableName() + " WHERE id=:id", (qlonglong)mapId);
@@ -353,7 +353,24 @@ void HootApiDb::dropTable(const QString& tableName)
 
   // inserting strings in this fashion is safe b/c it is private and we closely control the table
   // names.
-  QString sql = QString("DROP TABLE IF EXISTS %1").arg(tableName);
+  QString sql = QString("DROP TABLE IF EXISTS %1 CASCADE;").arg(tableName);
+  QSqlQuery q(_db);
+
+  if (q.exec(sql) == false)
+  {
+    QString error = QString("Error executing query: %1 (%2)").arg(q.lastError().text()).
+        arg(sql);
+    throw HootException(error);
+  }
+}
+
+void HootApiDb::dropSequence(const QString& sequenceName)
+{
+  LOG_TRACE("Dropping sequence: " << sequenceName << "...");
+
+  // inserting strings in this fashion is safe b/c it is private and we closely control the sequence
+  // names.
+  QString sql = QString("DROP SEQUENCE IF EXISTS %1 CASCADE;").arg(sequenceName);
   QSqlQuery q(_db);
 
   if (q.exec(sql) == false)

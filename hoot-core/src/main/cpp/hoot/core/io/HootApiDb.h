@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HOOTAPIDB_H
 #define HOOTAPIDB_H
@@ -264,6 +264,16 @@ public:
    * Check if the database has table.
    */
   bool hasTable(const QString& tableName);
+
+  /**
+   * Drops the specified sequences and cascades. No warning or error will be given
+   * if the sequence does not exist.
+   *
+   * No validation is done on the sequence name. In other words, don't pass in user provided strings.
+   *
+   * @param sequenceName
+   */
+  void dropSequence(const QString& sequenceName);
 
   /**
    * Returns a map ID string suitable for using in table names. E.g. _1

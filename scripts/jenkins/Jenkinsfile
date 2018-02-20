@@ -1,3 +1,6 @@
+// Load shared libraries
+@Library('radiant-pipeline-library')_
+
 pipeline {
     agent any
     triggers {
@@ -29,10 +32,12 @@ pipeline {
             steps {
                 
                 // Make sure we have the tags info because figuring out the version is required in the build process
+                // Remove any screenshots from previous runs
                 sh '''
                     git fetch --tags
                     git submodule update --init
                     cp -R ../software.ubuntu1404 software
+                    rm -rf ./test-files/ui/screenshot_*.png
                 '''
             }
         }
@@ -120,36 +125,20 @@ pipeline {
         }
     }
     post {
+        always {
+            // Send build notification
+            notifySlack(currentBuild.result, "#builds_hoot")
+        }
         success {
+            
             // If all tests passed, clean everything up
             sh "vagrant destroy -f ${params.Box}"
             cleanWs()
         }
         failure {
-            script {
-                // Copy over any UI failure screenshots
-                sh "vagrant scp ${params.Box}:~/hoot/test-files/ui/screenshot_*.png ./test-files/ui/"
-                emailext (
-                    subject: "Failure: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                    attachmentsPattern: 'test-files/ui/screenshot_*.png',
-                    body: """<p>Failure: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-                    <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
-                    recipientProviders: [[$class: 'DevelopersRecipientProvider']]
-                )
-            }
-        }
-        changed {
-            script {
-                // Job has been fixed
-                if (currentBuild.currentResult == 'SUCCESS') {
-                    emailext (
-                        subject: "Back to normal: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                        body: """<p>Fixed: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-                            <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
-                            recipientProviders: [[$class: 'DevelopersRecipientProvider']]
-                    )
-                }
-            }
+            // Copy over any UI failure screenshots and send to slack
+            sh "vagrant scp ${params.Box}:~/hoot/test-files/ui/screenshot_*.png ./test-files/ui/"
+            postSlack("${env.WORKSPACE}/test-files/ui/", "screenshot_*.png", "${env.JENKINS_BOT_TOKEN}", "#builds_hoot")
         }
     }
 }

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef METADATA_TAGS_H
@@ -129,6 +129,7 @@ public:
   inline static const QString RelationInner()           { return "inner"; }
   inline static const QString RelationMultilineString() { return "multilinestring"; }
   inline static const QString RelationMultiPolygon()    { return "multipolygon"; }
+  inline static const QString RelationMultiPoint()      { return "multipoint"; }
   inline static const QString RelationNetwork()         { return "network"; }
   inline static const QString RelationOuter()           { return "outer"; }
   inline static const QString RelationRestriction()     { return "restriction"; }

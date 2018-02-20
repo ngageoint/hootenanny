@@ -107,7 +107,7 @@ h2a = {
 }
 
 console.log('= ICE Phase II - Requirements Status');
-console.log('DigitalGlobe <hootenanny.help@digitalglobe.com>');
+console.log('https://github.com/ngageoint/hootenanny');
 var d = new Date();
 console.log((d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear());
 console.log();

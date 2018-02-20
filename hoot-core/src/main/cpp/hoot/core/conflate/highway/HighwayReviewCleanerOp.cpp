@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HighwayReviewCleanerOp.h"
 
@@ -47,10 +47,11 @@ void HighwayReviewCleanerOp::apply(OsmMapPtr& map)
 {
   RelationMap relations = map->getRelations();
 
+  ReviewMarker reviewMarker;
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     ElementId r = ElementId::relation(it->first);
-    if (ReviewMarker().isReviewUid(map, r))
+    if (reviewMarker.isReviewUid(map, r))
     {
       LOG_TRACE("Looking at review");
       if (_isBadHighwayReview(map, r) == true)

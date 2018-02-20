@@ -1,6 +1,5 @@
 
 = Hootenanny - User Guide
-DigitalGlobe <hootenanny.help@digitalglobe.com>
 
 include::user/History.asciidoc[]
 include::user/Introduction.asciidoc[]

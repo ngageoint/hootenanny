@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HighwayRfClassifier.h"
 
@@ -264,7 +264,7 @@ map<QString, double> HighwayRfClassifier::getFeatures(const ConstOsmMapPtr& m,
     throw NeedsReviewException("Internal Error: Found a situation where the match after copy is "
                                "invalid. Marking as needs review.  Expected a matching subline, "
                                "but got an empty match. Please report this to "
-                               "hootenanny.help@digitalglobe.com.");
+                               " https://github.com/ngageoint/hootenanny.");
   }
   else
   {

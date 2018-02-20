@@ -221,6 +221,11 @@ void WayMatchStringMerger::mergeIntersection(ElementId scrapNodeId)
     {
       //TODO: Possibly change this back to an exception as part of the work to be done in #1311.
       //throw IllegalArgumentException("scrapNode should line up with the beginning or end of a way.");
+
+      //Note: this situation appears to arise when there is a failure to
+      // split a way at a t-intersection, or when previous mergers produce
+      // an intersection that is not split.
+
       LOG_WARN("scrapNode should line up with the beginning or end of a way.");
       LOG_VART(_mapping->getWayString1());
       LOG_VART(_mapping->getWayString2());

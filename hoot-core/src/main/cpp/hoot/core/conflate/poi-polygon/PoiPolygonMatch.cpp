@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonMatch.h"
 
@@ -137,13 +137,21 @@ void PoiPolygonMatch::setReviewIfMatchedTypes(const QStringList& types)
 void PoiPolygonMatch::setConfiguration(const Settings& conf)
 {
   ConfigOptions config = ConfigOptions(conf);
+
   setMatchDistanceThreshold(config.getPoiPolygonMatchDistanceThreshold());
   setReviewDistanceThreshold(config.getPoiPolygonReviewDistanceThreshold());
   setNameScoreThreshold(config.getPoiPolygonNameScoreThreshold());
   setTypeScoreThreshold(config.getPoiPolygonTypeScoreThreshold());
+
   setReviewIfMatchedTypes(config.getPoiPolygonReviewIfMatchedTypes());
+  setDisableSameSourceConflation(config.getPoiPolygonDisableSameSourceConflation());
+  setDisableSameSourceConflationMatchTagKeyPrefixOnly(
+    config.getPoiPolygonDisableSameSourceConflationMatchTagKeyPrefixOnly());
+  setSourceTagKey(config.getPoiPolygonSourceTagKey());
+
   setEnableAdvancedMatching(config.getPoiPolygonEnableAdvancedMatching());
   setEnableReviewReduction(config.getPoiPolygonEnableReviewReduction());
+
   const int matchEvidenceThreshold = config.getPoiPolygonMatchEvidenceThreshold();
   if (matchEvidenceThreshold < 1 || matchEvidenceThreshold > 4)
   {
@@ -338,9 +346,62 @@ bool PoiPolygonMatch::_featureHasReviewIfMatchedType(ConstElementPtr element) co
   return false;
 }
 
+bool PoiPolygonMatch::_inputFeaturesHaveSameSource(const ElementId& eid1,
+                                                   const ElementId& eid2) const
+{
+  LOG_VART(_disableSameSourceConflationMatchTagKeyPrefixOnly)
+
+  const QString e1SourceVal = _map->getElement(eid1)->getTags().get(_sourceTagKey).trimmed();
+  const QString e2SourceVal = _map->getElement(eid2)->getTags().get(_sourceTagKey).trimmed();
+  LOG_VART(e1SourceVal);
+  LOG_VART(e2SourceVal);
+
+  if (e1SourceVal.isEmpty() || e2SourceVal.isEmpty())
+  {
+    LOG_TRACE("Both sources empty.  No feature source match.");
+    return false;
+  }
+  else if (_disableSameSourceConflationMatchTagKeyPrefixOnly)
+  {
+    //using ':' as a hardcoded source prefix val delimiter since it seems to be a common OSM
+    //convention
+    if (!e1SourceVal.contains(":") || !e2SourceVal.contains(":"))
+    {
+      LOG_TRACE(
+        "Source prefix match enabled and at least one feature has no source prefix.  No feature source match.");
+      return false;
+    }
+    else
+    {
+      const QString e1SourceValPrefix = e1SourceVal.split(":")[0].trimmed();
+      const QString e2SourceValPrefix = e2SourceVal.split(":")[0].trimmed();
+      LOG_VART(e1SourceValPrefix);
+      LOG_VART(e2SourceValPrefix);
+      if (e1SourceValPrefix.toLower() == e2SourceValPrefix.toLower())
+      {
+        LOG_TRACE("Feature source prefixes match.");
+        return true;
+      }
+    }
+  }
+  else if (e1SourceVal.toLower() == e2SourceVal.toLower())
+  {
+    LOG_TRACE("Feature sources have an exact match.");
+    return true;
+  }
+
+  LOG_TRACE("No feature source match.");
+  return false;
+}
+
 void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid2)
 {  
   _class.setMiss();
+
+  if (_disableSameSourceConflation && _inputFeaturesHaveSameSource(eid1, eid2))
+  {
+    return;
+  }
 
   _categorizeElementsByGeometryType(eid1, eid2);
 

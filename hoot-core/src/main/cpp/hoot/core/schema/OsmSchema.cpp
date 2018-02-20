@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include <hoot/core/HootConfig.h>
@@ -1729,13 +1729,22 @@ bool OsmSchema::isLinearHighway(const Tags& t, ElementType type)
   bool result = false;
   Tags::const_iterator it = t.find("highway");
 
+  // Is it a legit highway?
   if ((type == ElementType::Way || type == ElementType::Relation) &&
       it != t.end() && it.value() != "")
   {
     result = true;
   }
 
-  // make sure this isn't an area highway section.
+  // Maybe it's a way with nothing but a time tag...
+  it = t.find("source:datetime");
+  if (type == ElementType::Way && t.keys().size() < 2 && it != t.end())
+  {
+    // We can treat it like a highway
+    result = true;
+  }
+
+  // Make sure this isn't an area highway section!
   if (result)
   {
     result = !isArea(t, type);

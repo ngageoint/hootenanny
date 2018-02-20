@@ -18,3 +18,6 @@ export MAP_ID=`psql -A -t -h $DB_HOST -p $DB_PORT -d $DB_NAME -U $DB_USER -c "SE
 export TB_COUNT=`psql -A -t -h $DB_HOST -p $DB_PORT -d $DB_NAME -U $DB_USER -c "SELECT COUNT(*) FROM current_ways_$MAP_ID WHERE tags?'bridge' OR tags?'tunnel'"`
 
 echo "Tunnel or bridge count (should be zero): " $TB_COUNT
+
+# Clean up the map from the database
+hoot delete-map -D api.db.email=ApiDbTest@hoottestcpp.org $DB_URL/HootApiDbEmptyTagTest

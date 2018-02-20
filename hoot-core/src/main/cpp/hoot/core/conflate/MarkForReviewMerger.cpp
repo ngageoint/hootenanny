@@ -30,8 +30,6 @@
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/util/Log.h>
 
-#include "ReviewMarker.h"
-
 using namespace std;
 
 namespace hoot
@@ -62,7 +60,7 @@ void MarkForReviewMerger::apply(const OsmMapPtr& map,
 
   if (_eids.size() >= 1)
   {
-    ReviewMarker().mark(map, _eids, _note, _reviewType, _score);
+    _reviewMarker.mark(map, _eids, _note, _reviewType, _score);
   }
   else
   {
@@ -77,7 +75,7 @@ void MarkForReviewMerger::apply(const OsmMapPtr& map,
 
       if (e1.get() && e2.get())
       {
-        ReviewMarker().mark(map, e1, e2, _note, _reviewType, _score);
+        _reviewMarker.mark(map, e1, e2, _note, _reviewType, _score);
       }
     }
   }

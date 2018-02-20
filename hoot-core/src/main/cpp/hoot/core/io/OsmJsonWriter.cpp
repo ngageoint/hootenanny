@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmJsonWriter.h"
 
@@ -142,7 +142,7 @@ void OsmJsonWriter::write(ConstOsmMapPtr map)
   _writeLn("]");
   _writeLn("}");
 
-  _fp.close();
+  close();
 }
 
 void OsmJsonWriter::_writeKvp(const QString& key, const QString& value)
