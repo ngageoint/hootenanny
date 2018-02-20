@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef COUNTUNIQUEREVIEWSVISITOR_H
 #define COUNTUNIQUEREVIEWSVISITOR_H
@@ -46,6 +46,7 @@ class OsmMap;
 class CountUniqueReviewsVisitor : public ConstElementVisitor, public ConstOsmMapConsumer,
   public SingleStatistic
 {
+
 public:
 
   static std::string className() { return "hoot::CountUniqueReviewsVisitor"; }
@@ -64,6 +65,8 @@ private:
 
   const OsmMap* _map;
   std::set<ReviewMarker::ReviewUid> _reviews;
+  ReviewMarker _reviewMarker;
+
 };
 
 }

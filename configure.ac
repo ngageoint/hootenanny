@@ -3,7 +3,7 @@
 
 AC_PREREQ([2.65])
 m4_include([m4/version.m4])
-AC_INIT([hootenanny], [VERSION_NUMBER], [hootenanny.team@digitalglobe.com])
+AC_INIT([hootenanny], [VERSION_NUMBER], [https://github.com/ngageoint/hootenanny])
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([hoot-core/src])
 

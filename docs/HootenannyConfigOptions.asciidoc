@@ -7,7 +7,7 @@ a configuration file (+$HOOT_HOME/conf/hoot.json+), environment variables or
 specified on the command line. Most of the configuration values are documented
 in more detail in the following sections.
 
-These configuration options are advanced manipulations of the Hootenanny engine and may result in unexpected results. Please contact the developers hootenanny.help@digitalglobe.com if you have specific questions.
+These configuration options are advanced manipulations of the Hootenanny engine and may result in unexpected results. Please create an issue at https://github.com/ngageoint/hootenanny if you have specific questions.
 
 === Specifying Configuration Options
 

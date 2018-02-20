@@ -1,7 +1,6 @@
 
 = Hootenanny Algorithms
 DigitalGlobe, Inc.
-:Email: hootenanny@digitalglobe.com
 
 include::algorithms/Introduction.asciidoc[]
 include::algorithms/ExistingTechnology.asciidoc[]

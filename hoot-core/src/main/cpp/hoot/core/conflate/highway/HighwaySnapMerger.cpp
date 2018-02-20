@@ -37,7 +37,6 @@
 #include <hoot/core/algorithms/SublineStringMatcher.h>
 #include <hoot/core/algorithms/MultiLineStringSplitter.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
-#include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
@@ -171,7 +170,7 @@ bool HighwaySnapMerger::_doesWayConnect(long node1, long node2, const ConstWayPt
 }
 
 void HighwaySnapMerger::_markNeedsReview(const OsmMapPtr &map, ElementPtr e1, ElementPtr e2,
-  QString note, QString reviewType) const
+  QString note, QString reviewType)
 {
   if (!e1 && !e2)
   {
@@ -187,15 +186,15 @@ void HighwaySnapMerger::_markNeedsReview(const OsmMapPtr &map, ElementPtr e1, El
   }
   else if (e1 && e2)
   {
-    ReviewMarker().mark(map, e1, e2, note, reviewType);
+    _reviewMarker.mark(map, e1, e2, note, reviewType);
   }
   else if (e1)
   {
-    ReviewMarker().mark(map, e1, note, reviewType);
+    _reviewMarker.mark(map, e1, note, reviewType);
   }
   else if (e2)
   {
-    ReviewMarker().mark(map, e2, note, reviewType);
+    _reviewMarker.mark(map, e2, note, reviewType);
   }
 }
 

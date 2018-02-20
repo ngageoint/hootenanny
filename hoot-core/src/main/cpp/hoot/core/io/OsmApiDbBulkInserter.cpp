@@ -944,8 +944,17 @@ void OsmApiDbBulkInserter::setConfiguration(const Settings& conf)
   setStartingNodeId(confOptions.getApidbBulkInserterStartingNodeId());
   setStartingWayId(confOptions.getApidbBulkInserterStartingWayId());
   setStartingRelationId(confOptions.getApidbBulkInserterStartingRelationId());
-  setStxxlMapMinSize(confOptions.getApidbBulkInserterStxxlMapMinSize());
-  setValidateData(confOptions.getApidbBulkInserterValidateData());
+  //apidb.bulk.inserter.run.validation.in.memory
+  if (confOptions.getApidbBulkInserterRunValidationInMemory())
+  {
+    setStxxlMapMinSize(LONG_MAX);
+    setValidateData(true);
+  }
+  else
+  {
+    setStxxlMapMinSize(confOptions.getApidbBulkInserterStxxlMapMinSize());
+    setValidateData(confOptions.getApidbBulkInserterValidateData());
+  }
   setDisableDatabaseConstraintsDuringWrite(
     confOptions.getOsmapidbBulkInserterDisableDatabaseConstraintsDuringWrite());
   setTempDir(confOptions.getApidbBulkInserterTempFileDir());
