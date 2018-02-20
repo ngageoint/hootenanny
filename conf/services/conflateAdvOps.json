@@ -892,6 +892,14 @@
         	"minvalue":"0",
         	"maxvalue":"3",
         	"hoot_key":"poi.polygon.review.evidence.threshold"
+    	    },
+            {
+        	"id":"poipolygon_review_multiuse_buildings",
+        	"elem_type":"bool",
+        	"defaultvalue":"false",
+        	"description":"If true, POI to polygon conflation always mark matches between POIs and polygons where multi-use buildings are present.  See the user documentation for how a multi-use building is defined.",
+		"name":"Review Multi-Use Buildings",
+        	"hoot_key":"poi.polygon.review.multiuse.buildings"
     	    }
         ]
     },
