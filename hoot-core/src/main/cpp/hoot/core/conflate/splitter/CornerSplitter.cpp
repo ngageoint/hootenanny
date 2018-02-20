@@ -85,7 +85,7 @@ void CornerSplitter::splitCorners()
     // If the way has just two nodes, there are no corners
     if (nodeCount > 2)
     {
-      for (size_t nodeIdx = 1; nodeIdx < nodeCount-1; nodeIdx++)
+      for (size_t nodeIdx = nodeCount - 1; nodeIdx > 0; nodeIdx--)
       {
         WayLocation prev(_map, pWay, nodeIdx-1, 0.0);
         WayLocation current(_map, pWay, nodeIdx, 0.0);

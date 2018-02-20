@@ -121,7 +121,15 @@ public:
    * Create a new way that represents this subline and return it. This way will not be added to a
    * map.
    */
-  WayPtr toWay(const OsmMapPtr& map, GeometryConverter::NodeFactory* nf = 0) const;
+  /**
+   * @brief toWay - Create a new way that represents this subline and return it. This way will not
+   *  be added to a map.
+   * @param map - pointer to OsmMap object
+   * @param nf - pointer (if available) to NodeFactory object
+   * @param reuse - flag for reusing way id or getting a new one from the map
+   * @return
+   */
+  WayPtr toWay(const OsmMapPtr& map, GeometryConverter::NodeFactory* nf = 0, bool reuse = false) const;
 
   /**
    * Returns true if the two sublines have any points in common.

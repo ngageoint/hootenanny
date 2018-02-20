@@ -148,8 +148,8 @@ vector< WayPtr > WaySplitter::split(WayLocation& splitPoint)
     WayLocation first(_map, _a, 0, 0.0);
     WayLocation last(_map, _a, _a->getNodeCount() - 1, 0.0);
 
-    result.push_back(WaySubline(first, splitPoint).toWay(_map, _nf.get()));
-    result.push_back(WaySubline(splitPoint, last).toWay(_map, _nf.get()));
+    result.push_back(WaySubline(first, splitPoint).toWay(_map, _nf.get(), true));
+    result.push_back(WaySubline(splitPoint, last).toWay(_map, _nf.get(), false));
 
     RemoveWayOp::removeWay(_map, _a->getId());
     _map->addWay(result[0]);

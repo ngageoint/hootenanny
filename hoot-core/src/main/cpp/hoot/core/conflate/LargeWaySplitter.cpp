@@ -82,7 +82,7 @@ void LargeWaySplitter::_divideWay(boost::shared_ptr<Way> way, int numPieces)
 
   // iteratively carve off pieceLength sized ways from the beginning
   boost::shared_ptr<Way> tmp = way;
-  for (int i = 0; i < numPieces; i++)
+  for (int i = 0; i < numPieces - 1; i++)
   {
     WayLocation wl(_map, tmp, pieceLength);
     if (wl.getSegmentIndex() == 0 && wl.getSegmentFraction() == 0.0)
@@ -101,17 +101,8 @@ void LargeWaySplitter::_divideWay(boost::shared_ptr<Way> way, int numPieces)
     else
     {
       vector< boost::shared_ptr<Way> > pieces = WaySplitter::split(_map, tmp, wl);
-      assert(pieces.size() == 1 || pieces.size() == 2);
-      pieces[0]->setTags(tmp->getTags());
-      if (pieces.size() > 1)
-      {
-        pieces[1]->setTags(tmp->getTags());
-        tmp = pieces[1];
-      }
-      else
-      {
-        tmp = pieces[0];
-      }
+      assert(pieces.size() == 2);
+      tmp = pieces[1];
     }
   }
 }
