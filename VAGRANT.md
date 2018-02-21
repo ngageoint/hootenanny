@@ -20,7 +20,7 @@ Once Vagrant has been installed, you can start an environment by checking out th
     cd hoot
     git submodule init
     git submodule update
-    vagrant up
+    vagrant up hoot_centos7 # use: vagrant up hoot_ubuntu1604 to run on Ubuntu
 
 # Other Virtualization Providers
 
@@ -48,11 +48,11 @@ The initialization of the vagrant vm will take about an hour to download require
 
 You should be able to log into the running VM by typing:
 
-    vagrant ssh
+    vagrant ssh hoot_centos7
 
 Within this login shell, you can build the code, run the server or the tests. For example, to run the tests:
 
-    vagrant ssh
+    vagrant ssh hoot_centos7 # use: vagrant ssh hoot_ubuntu1604 for Ubuntu
     cd hoot
     source ./SetupEnv.sh
     scripts/tomcat/CopyWebAppsToTomcat.sh
@@ -64,14 +64,14 @@ To access the web pages you access the site in your [local Chrome browser](http:
 
 To run hoot from commandline
 
-    vagrant ssh
+    vagrant ssh hoot_centos7 # use: vagrant ssh hoot_ubuntu1604 for Ubuntu
     cd hoot
     source ./SetupEnv.sh
     hoot help
 
 If you've updated the code, you must connect to the vm via ssh to build and redeploy to Tomcat:
 
-    vagrant ssh
+    vagrant ssh hoot_centos7 # use: vagrant ssh hoot_ubuntu1604 for Ubuntu
     cd hoot
     source ./SetupEnv.sh
     make -sj$(nproc)

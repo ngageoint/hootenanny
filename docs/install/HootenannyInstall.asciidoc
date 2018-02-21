@@ -1,21 +1,24 @@
 == Overview
 
-This document describes how to install Hootenanny.
+This document describes how to install Hootenanny.  Hootenanny is supported on both CentOS 7 and Ubuntu 16.04, however, the CentOS version
+receives the most thorough daily testing.  For CentOS 7, RPMs are available to install as well as a virtual matchine.  For Ubuntu 16.04, 
+only a virtual machine is available and no Debian packages are available.  Manual bare metal installation to Ubuntu 16.04 is possible 
+but is not supported.
 
-=== Environment
+== Environment
 
 * Hardware specs may vary. Hootenanny has been successfully installed on VMs. Some suggested specifications:
 	** At least 8GB of RAM, but you can certainly run small datasets on far less.	
 	** Quad core or greater Intel x86 64bit compatible processor
-* An installation of CentOS/RHEL 6.x 64bit with a working yum repository or access to downloadable installable RPM's.
+* An installation of CentOS/RHEL 7 64bit with a working yum repository or access to downloadable installable RPM's.
 * A client machine with the Chrome (or Chromium) browser installed. Hootenanny is only supported in Chrome.
 
-== Ubuntu Install Instructions
+== Virtual Machine Instructions
 
-See the README.md Installation section.
+See VAGRANT.md
 
 [[fullinstall]]
-== CentOS/RHEL Install Instructions
+== CentOS/RHEL RPM Install Instructions
 
 The recommended and easiest installation method is to install from RPMs.  This can be accomplished by performing the following steps:
 

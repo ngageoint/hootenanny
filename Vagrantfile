@@ -45,11 +45,11 @@ Vagrant.configure(2) do |config|
       # By default we assume that we're using the AWS "dummy" box and manually
       # specify an Ubuntu AMI.  These assumptions will be removed when we migrate
       # to boxes that have native AWS providers that use the standard Vagrant key.
-      if os == 'Ubuntu1404'
-        override.vm.box = 'dummmy'
-        override.ssh.private_key_path = ENV['AWS_PRIVATE_KEY_PATH']
-        aws.ami = ENV['AWS_AMI_UBUNTU1404']
-      end
+      #if os == 'Ubuntu1404'
+        #override.vm.box = 'dummmy'
+        #override.ssh.private_key_path = ENV['AWS_PRIVATE_KEY_PATH']
+        #aws.ami = ENV['AWS_AMI_UBUNTU1404']
+      #end
 
       if ENV.key?('AWS_KEYPAIR_NAME')
         aws.keypair_name = ENV['AWS_KEYPAIR_NAME']
@@ -76,11 +76,7 @@ Vagrant.configure(2) do |config|
       override.vm.provision 'software', type: 'shell', run: 'always', :inline => '( [ -d /home/vagrant/hoot/software ] && cp /home/vagrant/hoot/software/* /home/vagrant ) || true'
 
       # Setting up provisioners for AWS, in the correct order, depending on the OS platform.
-      if os == 'Ubuntu1404'
-        override.vm.provision 'hoot', type: 'shell', :privileged => false, :path => 'VagrantProvision.sh'
-        tomcat_script = 'sudo service tomcat8 restart'
-#        mapnik_script = 'sudo service node-mapnik-server start'
-      elsif os == 'Ubuntu1604'
+      if os == 'Ubuntu1604'
         override.vm.provision 'hoot', type: 'shell', :privileged => false, :path => 'VagrantProvision1604.sh'
         # TODO: Doesn't 16.04 use systemd too?
         tomcat_script = 'sudo service tomcat8 restart'
@@ -103,38 +99,22 @@ Vagrant.configure(2) do |config|
     end
   end
 
-  # Global settings - default for Ubuntu1404
+  #config.vm.define "docker14.04", autostart: false do |dock1404|
+    #dock1404.vm.box = "tknerr/baseimage-ubuntu-14.04"
+    #dock1404.vm.box_version = "1.0.0"
+    ##dock1404.vm.box_url = "https://atlas.hashicorp.com/ubuntu/boxes/trusty64"
+    #dock1404.vm.synced_folder ".", "/home/vagrant/hoot"
 
-  # Ubuntu1404 Box
-  # This is the standard, working box
-  config.vm.define "default", primary: true do |hoot|
-    hoot.vm.box = "ubuntu/trusty64"
-    hoot.vm.box_url = "https://atlas.hashicorp.com/ubuntu/boxes/trusty64"
-    hoot.vm.synced_folder ".", "/home/vagrant/hoot"
-    hoot.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvision.sh"
-    hoot.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
-    hoot.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo service tomcat8 restart", run: "always"
-#    hoot.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo service node-mapnik-server start", run: "always"
+    #dock1404.vm.provider "docker" do |docker|
+      ##docker.create_args = ['--security-opt', 'seccomp=./chrome.json']
+      #docker.create_args = ['--privileged','--shm-size', '1g']
+    #end
 
-    aws_provider(hoot, 'Ubuntu1404')
-  end
-
-  config.vm.define "docker14.04", autostart: false do |dock1404|
-    dock1404.vm.box = "tknerr/baseimage-ubuntu-14.04"
-    dock1404.vm.box_version = "1.0.0"
-    #dock1404.vm.box_url = "https://atlas.hashicorp.com/ubuntu/boxes/trusty64"
-    dock1404.vm.synced_folder ".", "/home/vagrant/hoot"
-
-    dock1404.vm.provider "docker" do |docker|
-      #docker.create_args = ['--security-opt', 'seccomp=./chrome.json']
-      docker.create_args = ['--privileged','--shm-size', '1g']
-    end
-
-    dock1404.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvision.sh"
-    dock1404.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
-    dock1404.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo service tomcat8 restart", run: "always"
-#    dock1404.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo service node-mapnik-server start", run: "always"
-  end
+    #dock1404.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvision.sh"
+    #dock1404.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
+    #dock1404.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo service tomcat8 restart", run: "always"
+##    dock1404.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo service node-mapnik-server start", run: "always"
+  #end
 
   config.vm.define "dockercentos7.2", autostart: false do |dockcentos72|
     dockcentos72.ssh.insert_key = false
@@ -158,10 +138,7 @@ Vagrant.configure(2) do |config|
   end
 
   # Ubuntu1604 Box
-  # For testing before we upgrade from Ubuntu1404
   config.vm.define "hoot_ubuntu1604", autostart: false do |hoot_ubuntu1604|
-    #hoot_ubuntu1604.vm.box = "ubuntu/xenial64"
-    #hoot_ubuntu1604.vm.box_url = "https://atlas.hashicorp.com/ubuntu/boxes/xenial64"
 
     # Why does this box have an ubuntu user, not a vagrant user?   Why?????
 
@@ -172,7 +149,7 @@ Vagrant.configure(2) do |config|
 
     hoot_ubuntu1604.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvisionUbuntu1604.sh"
     hoot_ubuntu1604.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
-    #hoot_ubuntu1604.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo service tomcat8 restart", run: "always"
+    hoot_ubuntu1604.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo service tomcat8 restart", run: "always"
     #hoot_ubuntu1604.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo service node-mapnik-server start", run: "always"
   end
 
@@ -244,7 +221,6 @@ Vagrant.configure(2) do |config|
     #vb.gui = true
 
   # Customize the amount of memory on the VM:
-    #vb.memory = 8192
     vb.memory = 10240
     vb.cpus = 4
   end
@@ -289,9 +265,6 @@ Vagrant.configure(2) do |config|
   config.vm.provider "parallels" do |para, override|
     para.memory = 8192
     para.cpus = 4
-    override.hoot.vm.box = "parallels/ubuntu-14.04"
-    override.hoot.vm.box_url = "https://atlas.hashicorp.com/parallels/boxes/ubuntu-14.04"
-
     override.hoot_ubuntu1604.vm.box = "parallels/ubuntu-16.04"
     override.hoot_ubuntu1604.vm.box_url = "https://atlas.hashicorp.com/parallels/boxes/ubuntu-16.04"
     override.hoot_centos7.vm.box = "parallels/centos-7.3"
@@ -304,9 +277,6 @@ Vagrant.configure(2) do |config|
   config.vm.provider "vmware_workstation" do |vw, override|
     vw.memory = 8192
     vw.cpus = 4
-    override.hoot.vm.box = "puphpet/ubuntu1404-x64"
-    override.hoot.vm.box_url = "https://atlas.hashicorp.com/puphpet/boxes/ubuntu1404-x64"
-
     override.hoot_ubuntu1604.vm.box = "puphpet/ubuntu1604-x64"
     override.hoot_ubuntu1604.vm.box_url = "https://atlas.hashicorp.com/puphpet/boxes/ubuntu1604-x64"
   end
