@@ -53,6 +53,11 @@ class RemoveElementsVisitorTest : public CppUnit::TestFixture
 
 public:
 
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/visitors");
+  }
+
   void runTest()
   {
     OsmMapPtr map(new OsmMap());
@@ -65,7 +70,6 @@ public:
     map->visitRw(removeElementsVisitor);
 
     MapProjector::projectToWgs84(map);
-    QDir().mkpath("test-output/visitors");
     OsmXmlWriter writer;
     writer.write(map, "test-output/visitors/RemoveElementsVisitorOutput.osm");
     HOOT_FILE_EQUALS("test-files/visitors/RemoveElementsVisitorOutput.osm",
@@ -84,7 +88,6 @@ public:
     map->visitRw(removeElementsVisitor);
 
     MapProjector::projectToWgs84(map);
-    QDir().mkpath("test-output/visitors");
     OsmXmlWriter writer;
     writer.write(map, "test-output/visitors/RemoveElementsVisitorRecursiveOutput.osm");
     HOOT_FILE_EQUALS("test-files/visitors/RemoveElementsVisitorRecursiveOutput.osm",

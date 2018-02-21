@@ -21,3 +21,4 @@ diff $GOLD_FILES_DIR/output-cropped.geojson $OUTPUT_DIR/output-cropped.geojson
 
 # Clean up the map from the database
 hoot delete-map -D api.db.email=test@test.com $HOOT_DB_URL"/DcTigerRoads"
+scripts/database/CleanAndInitializeOsmApiDb.sh

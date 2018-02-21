@@ -52,15 +52,20 @@ namespace hoot
 
 class CookieCutterTest : public CppUnit::TestFixture
 {
-    CPPUNIT_TEST_SUITE(CookieCutterTest);
-    CPPUNIT_TEST(runTest);
-    CPPUNIT_TEST(runCropTest);
-    CPPUNIT_TEST(runBufferTest);
-    CPPUNIT_TEST(runNegativeBufferTest);
-    CPPUNIT_TEST(runCropAndBufferTest);
-    CPPUNIT_TEST_SUITE_END();
+  CPPUNIT_TEST_SUITE(CookieCutterTest);
+  CPPUNIT_TEST(runTest);
+  CPPUNIT_TEST(runCropTest);
+  CPPUNIT_TEST(runBufferTest);
+  CPPUNIT_TEST(runNegativeBufferTest);
+  CPPUNIT_TEST(runCropAndBufferTest);
+  CPPUNIT_TEST_SUITE_END();
 
 public:
+
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/conflate");
+  }
 
   void runTest()
   {
@@ -79,7 +84,6 @@ public:
 
     MapProjector::projectToWgs84(cookieCutMap);
 
-    QDir().mkpath("test-output/conflate");
     OsmXmlWriter writer;
     writer.write(cookieCutMap, "test-output/conflate/CookieCutterTest.osm");
 
@@ -104,7 +108,6 @@ public:
 
     MapProjector::projectToWgs84(cookieCutMap);
 
-    QDir().mkpath("test-output/conflate");
     OsmXmlWriter writer;
     writer.write(cookieCutMap, "test-output/conflate/CookieCutterCropTest.osm");
 
@@ -129,7 +132,6 @@ public:
 
     MapProjector::projectToWgs84(cookieCutMap);
 
-    QDir().mkpath("test-output/conflate");
     OsmXmlWriter writer;
     writer.write(cookieCutMap, "test-output/conflate/CookieCutterBufferTest.osm");
 
@@ -154,7 +156,6 @@ public:
 
     MapProjector::projectToWgs84(cookieCutMap);
 
-    QDir().mkpath("test-output/conflate");
     OsmXmlWriter writer;
     writer.write(cookieCutMap, "test-output/conflate/CookieCutterNegativeBufferTest.osm");
 
@@ -179,7 +180,6 @@ public:
 
     MapProjector::projectToWgs84(cookieCutMap);
 
-    QDir().mkpath("test-output/conflate");
     OsmXmlWriter writer;
     writer.write(cookieCutMap, "test-output/conflate/CookieCutterCropAndBufferTest.osm");
 

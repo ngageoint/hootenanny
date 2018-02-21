@@ -47,6 +47,8 @@
 #include <QDir>
 #include <QSet>
 
+#include "../TestUtils.h"
+
 using namespace std;
 
 namespace hoot
@@ -177,7 +179,7 @@ public:
     }
 
     OsmXmlWriter writer;
-    QDir().mkpath("test-output/perty");
+    TestUtils::mkpath("test-output/perty");
 
     OsmMapPtr original(new OsmMap(map));
     MapProjector::projectToWgs84(original);

@@ -56,7 +56,7 @@ public:
   /**
    * Retrieves a URL used to modify services database data
    */
-  static QUrl getDbModifyUrl();
+  static QUrl getDbModifyUrl(const QString& mapName = "testMap");
 
   /**
    * Retrieves a URL used to read services database data
@@ -87,6 +87,8 @@ public:
   static void verifyTestDatabaseEmpty();
 
   static boost::shared_ptr<OsmMap> createTestMap1();
+
+  static OsmMapPtr createServiceTestMap();
 
 private:
 

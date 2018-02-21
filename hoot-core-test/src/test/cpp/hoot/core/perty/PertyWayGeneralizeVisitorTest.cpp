@@ -120,7 +120,7 @@ public:
     LOG_VARD(numWaysRemoved);
 
     QFileInfo outputFileInfo(outputFile);
-    QDir().mkpath(outputFileInfo.absolutePath());
+    TestUtils::mkpath(outputFileInfo.absolutePath());
     OsmXmlWriter writer;
     writer.setIncludeHootInfo(true);
     writer.write(map, outputFile);

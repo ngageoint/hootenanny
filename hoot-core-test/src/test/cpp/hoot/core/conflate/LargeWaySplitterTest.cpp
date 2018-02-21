@@ -33,11 +33,6 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
-using namespace hoot;
-
-
-// Boost
-using namespace boost;
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -51,6 +46,9 @@ using namespace boost;
 
 #include "../TestUtils.h"
 
+namespace hoot
+{
+
 class LargeWaySplitterTest : public CppUnit::TestFixture
 {
     CPPUNIT_TEST_SUITE(LargeWaySplitterTest);
@@ -62,6 +60,7 @@ public:
   void setUp()
   {
     TestUtils::resetEnvironment();
+    TestUtils::mkpath("test-output/conflate");
   }
 
   void runToyTest()
@@ -76,7 +75,6 @@ public:
     LargeWaySplitter::splitWays(map, 20.0);
     MapProjector::projectToWgs84(map);
 
-    QDir().mkpath("test-output/conflate/");
     OsmXmlWriter writer;
     writer.write(map, "test-output/conflate/LargeWaySplitterOutput1.osm");
 
@@ -88,3 +86,4 @@ public:
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(LargeWaySplitterTest, "quick");
 
+}
