@@ -48,6 +48,11 @@ class ArffWriterTest : public CppUnit::TestFixture
 
 public:
 
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/io/ArffWriterTest/");
+  }
+
   void runBasicTest()
   {
     vector<ArffWriter::Sample> samples;
@@ -67,7 +72,6 @@ public:
     s["b"] = 3.2;
     samples.push_back(s);
 
-    QDir().mkpath("test-output/io/ArffWriterTest/");
     ArffWriter uut("test-output/io/ArffWriterTest/runBasic.arff", true);
     uut.write(samples);
 

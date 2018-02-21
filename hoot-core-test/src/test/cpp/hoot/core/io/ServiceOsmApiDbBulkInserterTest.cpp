@@ -71,6 +71,11 @@ class ServiceOsmApiDbBulkInserterTest : public CppUnit::TestFixture
 
 public:
 
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/io/ServiceOsmApiDbBulkInserterTest/");
+  }
+
   void verifyDatabaseOutputOffline()
   {
     OsmApiDbReader reader;
@@ -412,8 +417,6 @@ public:
 
   void runPsqlDbOfflineTest()
   {
-    QDir().mkpath("test-output/io/ServiceOsmApiDbBulkInserterTest/");
-
     //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
     const QString scriptDir = "test-files/servicesdb";
@@ -443,7 +446,6 @@ public:
 
   void runPsqlDbOfflineValidateOffTest()
   {
-    QDir().mkpath("test-output/io/ServiceOsmApiDbBulkInserterTest/");
     OsmMap::resetCounters();
 
     //init db
@@ -478,8 +480,6 @@ public:
 
   void runPsqlDbOfflineStxxlTest()
   {
-    QDir().mkpath("test-output/io/ServiceOsmApiDbBulkInserterTest/");
-
     //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
     const QString scriptDir = "test-files/servicesdb";
@@ -510,8 +510,6 @@ public:
 
   void runPsqlDbOnlineTest()
   {
-    QDir().mkpath("test-output/io/ServiceOsmApiDbBulkInserterTest/");
-
     //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
     const QString scriptDir = "test-files/servicesdb";
@@ -551,8 +549,6 @@ public:
 
   void runPsqlCustomStartingIdsDbOfflineTest()
   {
-    QDir().mkpath("test-output/io/ServiceOsmApiDbBulkInserterTest/");
-
     //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
     const QString scriptDir = "test-files/servicesdb";
@@ -587,8 +583,6 @@ public:
 
   void runPsqlLargeCustomStartingIdsDbOfflineTest()
   {
-    QDir().mkpath("test-output/io/ServiceOsmApiDbBulkInserterTest/");
-
     //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
     const QString scriptDir = "test-files/servicesdb";
@@ -626,8 +620,6 @@ public:
 
   void runSqlFileOutputTest()
   {
-    QDir().mkpath("test-output/io/ServiceOsmApiDbBulkInserterTest/");
-
     //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
     const QString scriptDir = "test-files/servicesdb";

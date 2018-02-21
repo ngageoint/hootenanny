@@ -48,6 +48,8 @@
 // Tgs
 #include <tgs/Statistics/Random.h>
 
+#include "../TestUtils.h"
+
 using namespace geos::geom;
 using namespace hoot;
 using namespace std;
@@ -60,6 +62,11 @@ class AlphaShapeTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
+
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/algorithms");
+  }
 
   void createDonut(vector< pair<double, double> >& p, double innerRadius, double outerRadius,
                    double centerX, double centerY, int count)
@@ -102,7 +109,6 @@ public:
       map->addNode(n);
     }
 
-    QDir().mkpath("test-output/algorithms/");
     OsmXmlWriter writer;
     writer.write(map, "test-output/algorithms/AlphaDonut.osm");
 
@@ -132,7 +138,6 @@ public:
 
     uut.insert(points);
 
-    QDir().mkpath("test-output/algorithms/");
     OsmXmlWriter writer;
     writer.write(uut.toOsmMap(), "test-output/algorithms/AlphaMap.osm");
 

@@ -73,19 +73,23 @@ class ServiceHootApiDbReaderTest : public CppUnit::TestFixture
 
 public:
 
-  static QString userEmail() { return "ServiceHootApiDbReaderTest@hoottestcpp.org"; }
+  QString userEmail() { return QString("%1.ServiceHootApiDbReaderTest@hoottestcpp.org").arg(testName); }
 
   long mapId;
+  QString testName;
 
-  void setUp()
+  void setUpTest(const QString& test_name)
   {
     mapId = -1;
+    testName = test_name;
     ServicesDbTestUtils::deleteUser(userEmail());
     HootApiDb database;
 
     database.open(ServicesDbTestUtils::getDbModifyUrl());
-    database.getOrCreateUser(userEmail(), "ServiceHootApiDbReaderTest");
+    database.getOrCreateUser(userEmail(), QString("%1.ServiceHootApiDbReaderTest").arg(testName));
     database.close();
+
+    TestUtils::mkpath("test-output/io/ServiceHootApiDbReaderTest");
   }
 
   void tearDown()
@@ -101,53 +105,15 @@ public:
     }
   }
 
-  //TODO: this is redundant with code in ServiceOsmApiDbReaderTest; move to test utils class
   long populateMap()
   {
-    OsmMapPtr map(new OsmMap());
-
-    NodePtr n1(new Node(Status::Unknown1, 1, 0.0, 0.0, 10.0));
-    map->addNode(n1);
-    NodePtr n2(new Node(Status::Unknown2, 2, 0.1, 0.0, 11.0));
-    n2->setTag("noteb", "n2b");
-    map->addNode(n2);
-    NodePtr n3(new Node(Status::Conflated, 3, 0.2, 0.0, 12.0));
-    n3->setTag("note", "n3");
-    map->addNode(n3);
-    NodePtr n4(new Node(Status::Conflated, 4, 0.3, 0.0, 13.0));
-    n4->setTag("note", "n4");
-    map->addNode(n4);
-    NodePtr n5(new Node(Status::Invalid, 5, 0.4, 0.0, 14.0));
-    map->addNode(n5);
-
-    WayPtr w1(new Way(Status::Unknown1, 1, 15.0));
-    w1->addNode(1);
-    w1->addNode(2);
-    w1->setTag("noteb", "w1b");
-    map->addWay(w1);
-    WayPtr w2(new Way(Status::Unknown2, 2, 16.0));
-    w2->addNode(2);
-    w2->addNode(3);
-    w2->setTag("note", "w2");
-    map->addWay(w2);
-    WayPtr w3(new Way(Status::Unknown2, 3, 17.0));
-    w3->addNode(2);
-    map->addWay(w3);
-
-    RelationPtr r1(new Relation(Status::Unknown1, 1, 18.1, MetadataTags::RelationCollection()));
-    r1->addElement("n1", n1->getElementId());
-    r1->addElement("w1", w1->getElementId());
-    r1->setTag("note", "r1");
-    map->addRelation(r1);
-    RelationPtr r2(new Relation(Status::Unknown1, 2, -1.0));
-    r2->addElement("n2", n2->getElementId());
-    map->addRelation(r2);
+    OsmMapPtr map = ServicesDbTestUtils::createServiceTestMap();
 
     HootApiDbWriter writer;
     writer.setUserEmail(userEmail());
     writer.setRemap(false);
     writer.setIncludeDebug(true);
-    writer.open(ServicesDbTestUtils::getDbModifyUrl().toString());
+    writer.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
     writer.write(map);
     writer.close();
     return writer.getMapId();
@@ -163,7 +129,7 @@ public:
     HootApiDbWriter writer;
     writer.setUserEmail(userEmail());
     writer.setRemap(true);
-    writer.open(ServicesDbTestUtils::getDbModifyUrl().toString());
+    writer.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
     writer.write(map);
     writer.close();
     return writer.getMapId();
@@ -182,6 +148,7 @@ public:
 
   void runCalculateBoundsTest()
   {
+    setUpTest("runCalculateBoundsTest");
     mapId = populateMap();
 
     HootApiDbReader reader;
@@ -192,6 +159,7 @@ public:
 
   void runElementIdTest()
   {
+    setUpTest("runElementIdTest");
     mapId = populateMap();
 
     HootApiDbReader reader;
@@ -218,6 +186,7 @@ public:
 
   void runUrlMissingMapIdTest()
   {
+    setUpTest("runUrlMissingMapIdTest");
     // temporarily disable logging to avoid isValid warning
     DisableLog dl;
 
@@ -240,6 +209,7 @@ public:
 
   void runUrlInvalidMapIdTest()
   {
+    setUpTest("runUrlInvalidMapIdTest");
     HootApiDbReader reader;
     QString exceptionMsg("");
     const long invalidMapId = mapId + 1;
@@ -419,6 +389,7 @@ public:
 
   void runReadTest()
   {
+    setUpTest("runReadTest");
     mapId = populateMap();
 
     HootApiDbReader reader;
@@ -431,6 +402,7 @@ public:
 
   void runReadWithElemTest()
   {
+    setUpTest("runReadWithElemTest");
     mapId = populateMap();
 
     HootApiDbReader reader;
@@ -443,6 +415,7 @@ public:
 
   void runFactoryReadTest()
   {
+    setUpTest("runFactoryReadTest");
     mapId = populateMap();
 
     OsmMapPtr map(new OsmMap());
@@ -452,6 +425,7 @@ public:
 
   void runPartialReadTest()
   {
+    setUpTest("runPartialReadTest");
     mapId = populateMap();
 
     HootApiDbReader reader;
@@ -622,6 +596,7 @@ public:
 
   void runReadByBoundsTest()
   {
+    setUpTest("runReadByBoundsTest");
     mapId = insertDataForBoundTest();
 
     HootApiDbReader reader;
@@ -651,7 +626,6 @@ public:
 
     MapProjector::projectToWgs84(map);
 
-    QDir().mkpath("test-output/io/ServiceHootApiDbReaderTest");
     OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
     writer.write(
@@ -676,6 +650,5 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceHootApiDbReaderTest, "slow");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceHootApiDbReaderTest, "serial");
 
 }
