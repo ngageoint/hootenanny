@@ -77,7 +77,7 @@ sudo apt-get -q -y install texinfo g++ libicu-dev libqt4-dev libqtwebkit-dev git
  libcv-dev libopencv-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev \
  automake protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov maven \
  libstxxl-dev doxygen xsltproc asciidoc curl npm libxerces-c28 \
- libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew \
+ libglpk-dev libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew \
  w3m texlive-lang-cyrillic graphviz python-setuptools python python-pip git ccache distcc libogdi3.2-dev \
  gnuplot python-matplotlib libqt4-sql-sqlite ruby ruby-dev xvfb zlib1g-dev patch x11vnc openssh-server \
  htop unzip postgresql-9.5 postgresql-client-9.5 postgresql-contrib-9.5 postgresql-9.5-postgis-scripts postgresql-9.5-postgis-2.3 \
@@ -238,55 +238,13 @@ if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --version | grep -q $GDAL_VERSIO
     fi
 fi
 
-# we need a newer version of glpk than what's in the repos
-if dpkg -l | grep --quiet glpk; then
-    echo "### Removing repo version of GLPK..."
-    sudo apt-get -q -y remove libglpk-dev
-    sudo apt-get autoremove -y
-fi
-cd $HOOT_HOME
-# need to source this to run glpsol
-source ./SetupEnv.sh
-cd ..
-# check to see if a version previously compiled from source different than the one 
-# we're trying to install needs to first be removed
-if glpsol | grep --quiet v; then
-    INSTALLED_GLPK_VERSION=`glpsol | grep v | awk '{print $5}' | sed 's/v//g'`
-    #echo "INSTALLED_GLPK_VERSION: " $INSTALLED_GLPK_VERSION
-    #echo "GLPK_VERSION: " $GLPK_VERSION
-    if [ $INSTALLED_GLPK_VERSION != $GLPK_VERSION ]; then
-        if [ -d glpk-${INSTALLED_GLPK_VERSION} ]; then
-          echo "### Removing GLPK $INSTALLED_GLPK_VERSION ..."
-          cd glpk-${INSTALLED_GLPK_VERSION}
-          sudo make -s uninstall >> GLPK_Build.txt 2>&1
-          cd ..
-        fi
-    fi
-fi
-# download and install the specified version
-if [ ! -f glpk-${GLPK_VERSION}.tar.gz ]; then
-    echo "### Downloading GLPK $GLPK_VERSION source..."
-    wget --quiet http://ftp.gnu.org/gnu/glpk/glpk-${GLPK_VERSION}.tar.gz
-fi
-if ! glpsol | grep --quiet $GLPK_VERSION; then
-    echo "### Extracting GLPK $GLPK_VERSION source..."
-    tar zxfp glpk-${GLPK_VERSION}.tar.gz
-    echo "### Building GLPK $GLPK_VERSION..."
-    cd glpk-${GLPK_VERSION}
-    echo "GLPK: configure"
-    ./configure --quiet
-    echo "GLPK: make"
-    sudo make -sj$(nproc) > GLPK_Build.txt 2>&1
-    echo "GLPK: install"
-    sudo make -s install >> GLPK_Build.txt 2>&1
-fi
-
 if ! mocha --version &>/dev/null; then
     echo "### Installing mocha for plugins test..."
-    sudo npm install --silent -g mocha
+    sudo npm install --silent -g mocha@3.5.3
     # Clean up after the npm install
-    sudo rm -rf ~/tmp/*
+    sudo rm -rf ~/tmp
 fi
+
 
 # Get the configuration for the Database
 source $HOOT_HOME/conf/database/DatabaseConfig.sh
