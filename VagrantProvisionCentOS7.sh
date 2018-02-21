@@ -338,12 +338,15 @@ rm -rf ~/tmp
 echo "### Installing node-export-server..."
 sudo cp $HOOT_HOME/node-export-server/systemd/node-export.service /etc/systemd/system/node-export.service
 sudo sed -i "s|SERVICE_USER|$VMUSER|g" /etc/systemd/system/node-export.service
-sudo sed -i "s|HOOT_HOME|$HOOT_HOME|g" /etc/systemd/system/node-export.service
+sudo sed -i "s|HOOTENANNY_HOME|$HOOT_HOME|g" /etc/systemd/system/node-export.service
 # Make sure all npm modules are installed
 cd $HOOT_HOME/node-export-server
 npm install --silent
 # Clean up after the npm install
 rm -rf ~/tmp
+
+# Notify systemd that unit files have changed.
+sudo systemctl daemon-reload
 
 cd $HOOT_HOME
 

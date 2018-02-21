@@ -77,7 +77,7 @@ void ReviewMarkerJs::mark(const FunctionCallbackInfo<Value>& args)
 
   vector<QString> choices = toCpp< vector<QString> >(args[5]);
 
-  ReviewMarker::mark(osmMap, e, note, reviewType, score, choices);
+  ReviewMarker().mark(osmMap, e, note, reviewType, score, choices);
 
   args.GetReturnValue().SetUndefined();
 }

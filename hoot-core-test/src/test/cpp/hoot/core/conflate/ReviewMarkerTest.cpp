@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -45,6 +45,7 @@ class ReviewMarkerTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runNeedsReviewTest);
   CPPUNIT_TEST(runSimpleTest);
   CPPUNIT_TEST(runMultipleScoresTest);
+  CPPUNIT_TEST(runAddReviewTagsToFeaturesTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -61,7 +62,7 @@ public:
     // set the uuids so they don't change with each test
     n1->getTags().set("uuid", "n1");
     n2->getTags().set("uuid", "n2");
-    n3->getTags().set("uuid", "n2");
+    n3->getTags().set("uuid", "n3");
     map->addElement(n1);
     map->addElement(n2);
     map->addElement(n3);
@@ -77,6 +78,10 @@ public:
     HOOT_STR_EQUALS(true, uut.isNeedsReview(map, n2, n1));
     HOOT_STR_EQUALS(false, uut.isNeedsReview(map, n2, n3));
     HOOT_STR_EQUALS(false, uut.isNeedsReview(map, n3, n1));
+
+    CPPUNIT_ASSERT(!n1->getTags().contains(MetadataTags::HootReviewNeeds()));
+    CPPUNIT_ASSERT(!n2->getTags().contains(MetadataTags::HootReviewNeeds()));
+    CPPUNIT_ASSERT(!n3->getTags().contains(MetadataTags::HootReviewNeeds()));
   }
 
   void runSimpleTest()
@@ -142,6 +147,44 @@ public:
       "{\"type\":\"node\",\"ref\":2,\"role\":\"reviewee\"}],\"tags\":{\"" + MetadataTags::HootReviewNeeds() + "\":\"yes\",\"" + MetadataTags::HootReviewType() + "\":\"test\",\"" + MetadataTags::HootReviewMembers() + "\":\"2\",\"" + MetadataTags::HootReviewScore() + "\":\"0.15\",\"" + MetadataTags::HootReviewNote() + "\":\"a note\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}]\n"
       "}\n",
       OsmJsonWriter().toString(map));
+  }
+
+  void runAddReviewTagsToFeaturesTest()
+  {
+    TestUtils::resetEnvironment();
+
+    OsmMapPtr map(new OsmMap());
+    ElementPtr n1(new Node(Status::Unknown1, 1, 0, 0, 0));
+    ElementPtr n2(new Node(Status::Unknown2, 2, 0, 0, 0));
+    ElementPtr n3(new Node(Status::Unknown2, 3, 0, 0, 0));
+
+    // set the uuids so they don't change with each test
+    n1->getTags().set("uuid", "n1");
+    n2->getTags().set("uuid", "n2");
+    n3->getTags().set("uuid", "n3");
+    map->addElement(n1);
+    map->addElement(n2);
+    map->addElement(n3);
+
+    conf().set("add.review.tags.to.features", "true");
+
+    ReviewMarker uut;
+
+    uut.mark(map, n1, n2, "a note", "test");
+    LOG_VAR(uut.isNeedsReview(map, n1, n2));
+    LOG_VAR(uut.isNeedsReview(map, n2, n3));
+    LOG_VAR(uut.isNeedsReview(map, n3, n1));
+
+    HOOT_STR_EQUALS(true, uut.isNeedsReview(map, n1, n2));
+    HOOT_STR_EQUALS(true, uut.isNeedsReview(map, n2, n1));
+    HOOT_STR_EQUALS(false, uut.isNeedsReview(map, n2, n3));
+    HOOT_STR_EQUALS(false, uut.isNeedsReview(map, n3, n1));
+
+    CPPUNIT_ASSERT(n1->getTags().get(MetadataTags::HootReviewNeeds()) == "yes");
+    CPPUNIT_ASSERT(n2->getTags().get(MetadataTags::HootReviewNeeds()) == "yes");
+    CPPUNIT_ASSERT(!n3->getTags().contains(MetadataTags::HootReviewNeeds()));
+
+    TestUtils::resetEnvironment();
   }
 
 };
