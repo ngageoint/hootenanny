@@ -86,7 +86,7 @@ Vagrant.configure(2) do |config|
   end
 
   # Centos7 box - Preprovisioned for compiling hootenanny
-  config.vm.define "default", autostart: false do |hoot_centos7_prov|
+  config.vm.define "hoot_centos7_prov", autostart: false do |hoot_centos7_prov|
     hoot_centos7_prov.vm.box = "hoot/centos7-hoot"
     hoot_centos7_prov.vm.hostname = "centos7-hoot"
     hoot_centos7_prov.vm.synced_folder ".", "/home/vagrant/hoot"
