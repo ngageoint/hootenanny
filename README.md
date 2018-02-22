@@ -36,6 +36,10 @@ Hootenanny is built upon the open source [Mapbox iD Editor](https://github.com/o
 # Documentation
 User and technical documentation may be found locally after installation in 'hoot/docs' or [included with each release](https://github.com/ngageoint/hootenanny/releases). 
 
+[FAQ](https://github.com/ngageoint/hootenanny/wiki/Frequently-Asked-Questions)
+
+If you have any support questions please create an issue in this repository.
+
 # Supported Geodata Types
 **Hootenanny can conflate:**
 * Area polygons
@@ -88,10 +92,6 @@ Users are also able to define their own custom translations.  For custom transla
 
 # Data Cleaning
 Hootenanny supports a variety of geometric and tag based data cleaning operations.  Hootenanny can also add missing tags to POI data implicitly based on a feature's name.  See the documentation for more details.
-
-[FAQ](https://github.com/ngageoint/hootenanny/wiki/Frequently-Asked-Questions)
-
-If you have any support questions please create an issue in this repository.
 
 # Contributing
 Please read the Hootenanny Developer's Guide for details on setting up an environment, coding standards, and development process.  Hootenanny developers use a customization of the [Gitflow workflow](https://www.atlassian.com/git/tutorials/comparing-workflows#gitflow-workflow).
