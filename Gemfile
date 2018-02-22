@@ -1,7 +1,8 @@
-# A sample Gemfile
+
+# Gems source
 source "https://rubygems.org"
 
-# gem "rails"
+# List of required gems with strict versioning
 gem 'capybara-screenshot', '1.0.18'
 gem 'capybara-webkit', '1.15.0'
 gem 'cucumber', '3.1.0'
