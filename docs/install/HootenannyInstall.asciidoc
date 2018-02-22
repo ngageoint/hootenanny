@@ -1,9 +1,7 @@
 == Overview
 
-This document describes how to install Hootenanny.  Hootenanny is supported on both CentOS 7 and Ubuntu 16.04, however, the CentOS version
-receives the most thorough daily testing.  For CentOS 7, RPMs are available to install as well as a virtual matchine.  For Ubuntu 16.04, 
-only a virtual machine is available and no Debian packages are available.  Manual bare metal installation to Ubuntu 16.04 is possible 
-but is not supported.
+This document describes how to install Hootenanny.  Hootenanny is supported on CentOS 7.x.  Both an RPM package and a virtual machine
+are provided.
 
 == Environment
 
