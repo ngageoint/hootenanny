@@ -217,9 +217,11 @@ if ! grep --quiet "PATH=" ~/.profile; then
     source ~/.profile
 fi
 
-# Use RVM to install the desired Ruby version, then install the gems.
+# Use RVM to install the desired Ruby version
 $HOOT_HOME/scripts/ruby/rvm-install.sh
-$HOOT_HOME/scripts/ruby/gem-install.sh
+# Install gems with bundler and strict versioning (see Gemfile)
+gem install bundler
+bundle install
 
 # Make sure that we are in ~ before trying to wget & install stuff
 cd ~
