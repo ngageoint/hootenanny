@@ -23,7 +23,7 @@ Once the prerequisites have been installed, you can set up the Hootenanny enviro
     git submodule update
     vagrant up
 
-The initialization of the virtual machine will take up to an hour or so. ~~Once it is complete, uncomment the `#, group: "tomcat8"` portion of the in Vagrantfile to allow the webapp to write to shared folders.~~  The previous workaround step is no longer needed as the provision script adds vagrant and tomcat8 users to each others group.
+~~Once initialization is complete, uncomment the `#, group: "tomcat8"` portion of the in Vagrantfile to allow the webapp to write to shared folders.~~  The previous workaround step is no longer needed as the provision script adds vagrant and tomcat8 users to each others group.
 
 Log into the Hootenanny virtual machine:
 
