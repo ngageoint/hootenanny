@@ -21,13 +21,13 @@ Once the prerequisites have been installed, you can set up the Hootenanny enviro
     cd hoot
     git submodule init
     git submodule update
-    vagrant up hoot_centos7_prov
+    vagrant up
 
 ~~Once initialization is complete, uncomment the `#, group: "tomcat8"` portion of the in Vagrantfile to allow the webapp to write to shared folders.~~  The previous workaround step is no longer needed as the provision script adds vagrant and tomcat8 users to each others group.
 
 Log into the Hootenanny virtual machine:
 
-    vagrant ssh hoot_centos7_prov
+    vagrant ssh
 
 # Using Hootenanny
 
@@ -35,7 +35,7 @@ To access the iD Editor web user interface: [local Chrome browser](http://localh
 
 To run Hootenanny from the command line:
 
-    vagrant ssh hoot_centos7_prov
+    vagrant ssh
     cd hoot
     source ./SetupEnv.sh
     hoot help
@@ -44,7 +44,7 @@ To run Hootenanny from the command line:
 
 To run the Hootenanny tests:
 
-    vagrant ssh hoot_centos7_prov
+    vagrant ssh
     cd hoot
     source ./SetupEnv.sh
     make -sj$(nproc) test-all
@@ -53,7 +53,7 @@ To run the Hootenanny tests:
 
 If you've updated the Hootenanny code, perform the following steps to redeploy it:
 
-    vagrant ssh hoot_centos7_prov
+    vagrant ssh
     cd hoot
     source ./SetupEnv.sh
     make -sj$(nproc)
