@@ -1,8 +1,8 @@
 stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)
-Node Count	338	176	411	
-Way Count	14	15	110	
+Node Count	338	176	428	
+Way Count	14	15	108	
 Relation Count	0	0	8	
-Total Feature Count	14	15	118	
+Total Feature Count	14	15	115	
 Total Conflatable Features	14	15	0	
 Percentage of Total Features Conflatable	100	100	0	
 Untagged Feature Count	0	0	0	
@@ -10,13 +10,13 @@ Total Unconflatable Features	0	0	0
 Percentage of Total Features Unconflatable	0	0	0	
 Number of Match Creators	1	1	1	
 Features Conflatable by: hoot::ScriptMatchCreator,LinearWaterway.js	14	15	0	
-Total Conflated Features	0	0	23	
-Percentage of Total Features Conflated	0	0	19.49152542372881	
-Total Features Marked for Review	0	0	0	
-Percentage of Total Features Marked for Review	0	0	0	
-Total Number of Reviews to be Made	0	0	0	
-Total Unmatched Features	14	15	95	
-Percentage of Total Features Unmatched	100	100	80.50847457627118	
+Total Conflated Features	0	0	22	
+Percentage of Total Features Conflated	0	0	19.1304347826087	
+Total Features Marked for Review	0	0	3	
+Percentage of Total Features Marked for Review	0	0	2.608695652173913	
+Total Number of Reviews to be Made	0	0	1	
+Total Unmatched Features	14	15	93	
+Percentage of Total Features Unmatched	100	100	80.8695652173913	
 POI Count	0	0	0	
 Conflatable POIs	0	0	0	
 Conflated POIs	0	0	0	
@@ -44,16 +44,16 @@ Unmatched Buildings	0	0	0
 Percentage of Buildings Conflated	0	0	0	
 Percentage of Buildings Marked for Review	0	0	0	
 Percentage of Unmatched Buildings	0	0	0	
-Waterway Count	14	15	118	
+Waterway Count	14	15	115	
 Conflatable Waterways	14	15	0	
-Conflated Waterways	0	0	23	
-Waterways Marked for Review	0	0	0	
-Number of Waterway Reviews to be Made	0	0	0	
-Unmatched Waterways	14	15	95	
-Meters of Waterway Processed by Conflation	0	0	7465.399051485988	
-Percentage of Waterways Conflated	0	0	19.49152542372881	
-Percentage of Waterways Marked for Review	0	0	0	
-Percentage of Unmatched Waterways	100	100	80.50847457627118	
+Conflated Waterways	0	0	22	
+Waterways Marked for Review	0	0	3	
+Number of Waterway Reviews to be Made	0	0	1	
+Unmatched Waterways	14	15	93	
+Meters of Waterway Processed by Conflation	0	0	7488.768691260051	
+Percentage of Waterways Conflated	0	0	19.1304347826087	
+Percentage of Waterways Marked for Review	0	0	2.608695652173913	
+Percentage of Unmatched Waterways	100	100	80.8695652173913	
 Polygon Conflatable POI Count	0	0	0	
 Conflatable Polygon Conflatable POIs	0	0	0	
 Conflated Polygon Conflatable POIs	0	0	0	
@@ -72,7 +72,7 @@ Unmatched Polygons	0	0	0
 Percentage of Polygons Conflated	0	0	0	
 Percentage of Polygons Marked for Review	0	0	0	
 Percentage of Unmatched Polygons	0	0	0	
-Difference Between Total Features in Output and Total Features in Inputs			89	
-Percentage Difference Between Total Features in Output and Total Features in Inputs			306.896551724138	
+Difference Between Total Features in Output and Total Features in Inputs			86	
+Percentage Difference Between Total Features in Output and Total Features in Inputs			296.551724137931	
 
-11:26:11.947 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 252) Conflation job completed.
+12:59:56.664 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 252) Conflation job completed.

@@ -84,7 +84,7 @@ public:
 
     MapProjector::projectToWgs84(map);
 
-    QDir().mkpath("test-output/ops/BuildingPartMergeOp/");
+    TestUtils::mkpath("test-output/ops/BuildingPartMergeOp/");
     OsmXmlWriter writer;
     writer.write(map, "test-output/ops/BuildingPartMergeOp/ToyBuildings.osm");
     HOOT_FILE_EQUALS("test-files/ops/BuildingPartMergeOp/ToyBuildingsOutput.osm",

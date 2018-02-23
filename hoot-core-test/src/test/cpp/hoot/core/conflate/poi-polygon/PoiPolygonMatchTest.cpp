@@ -28,6 +28,7 @@
 // Hoot
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/ops/RecursiveElementRemover.h>
 
 #include "../../TestUtils.h"
 
@@ -42,7 +43,7 @@ class PoiPolygonMatchTest : public CppUnit::TestFixture
   CPPUNIT_TEST(matchTest);
   CPPUNIT_TEST(missTest);
   CPPUNIT_TEST(reviewTest);
-  CPPUNIT_TEST(reviewIfMatchedTest);
+  CPPUNIT_TEST(reviewIfMatchedTypedTest);
   CPPUNIT_TEST(badMatchDistanceInputsTest);
   CPPUNIT_TEST(badReviewDistanceInputsTest);
   CPPUNIT_TEST(badNameScoreThresholdInputsTest);
@@ -52,6 +53,7 @@ class PoiPolygonMatchTest : public CppUnit::TestFixture
   CPPUNIT_TEST(sourceMatchTagKeyPrefixOnlyDisableConflationTest);
   CPPUNIT_TEST(sourceTagKeyMismatchDisableConflationTest);
   CPPUNIT_TEST(missingSourceTagTest);
+  CPPUNIT_TEST(multiUseBuildingTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -236,7 +238,7 @@ public:
     }
   }
 
-  void reviewIfMatchedTest()
+  void reviewIfMatchedTypedTest()
   {
     //we let the user specify a custom list of types that always force a review if a match was found
 
@@ -738,6 +740,158 @@ public:
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
 
       HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
+    }
+  }
+
+  void multiUseBuildingTest()
+  {
+    OsmMap::resetCounters();
+    OsmMapPtr map(new OsmMap());
+    Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
+                        Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
+                        Coordinate(0.0, 0.0),
+                        Coordinate::getNull() };
+
+    NodePtr n1(new Node(Status::Unknown1, 1, 10, 10, 5));
+    n1->getTags().set("poi", true);
+    map->addNode(n1);
+
+    PoiPolygonMatch uut(
+      map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+    uut.setEnableAdvancedMatching(false);
+    uut.setEnableReviewReduction(true);
+    uut.setMatchDistanceThreshold(0.0);
+    uut.setReviewDistanceThreshold(0.0);
+    uut.setNameScoreThreshold(0.8);
+    uut.setTypeScoreThreshold(0.8);
+    uut.setMatchEvidenceThreshold(3);
+    uut.setReviewEvidenceThreshold(1);
+
+    uut.setReviewMultiUseBuildings(true);
+
+    {
+      n1->getTags()["name"] = "Staunton Elementary";
+
+      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+      w1->getTags()["name"] = "Staunton Elementary";
+      w1->getTags().set("building", "yes");
+      w1->getTags().set("building:use", "multipurpose");
+
+      uut.calculateMatch(w1->getElementId(), n1->getElementId());
+
+      HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());
+      CPPUNIT_ASSERT(uut.explain().contains("Match involves a multi-use building"));
+
+      RecursiveElementRemover(w1->getElementId()).apply(map);
+    }
+
+    {
+      n1->getTags()["name"] = "Staunton Elementary";
+
+      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+      w1->getTags()["name"] = "Staunton Elementary";
+      w1->getTags().set("amenity", "school");
+      w1->getTags().set("building:use", "multipurpose");
+
+      uut.calculateMatch(w1->getElementId(), n1->getElementId());
+
+      HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());
+      CPPUNIT_ASSERT(uut.explain().contains("Match involves a multi-use building"));
+
+      RecursiveElementRemover(w1->getElementId()).apply(map);
+    }
+
+    {
+      n1->getTags()["name"] = "Honey Creek Mall";
+
+      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+      w1->getTags()["name"] = "Honey Creek Mall";
+      w1->getTags().set("building", "yes");
+      w1->getTags().set("shop", "mall");
+
+      uut.calculateMatch(w1->getElementId(), n1->getElementId());
+
+      HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());
+      CPPUNIT_ASSERT(uut.explain().contains("Match involves a multi-use building"));
+
+      RecursiveElementRemover(w1->getElementId()).apply(map);
+    }
+
+    {
+      n1->getTags()["name"] = "Staunton Elementary";
+
+      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+      w1->getTags()["name"] = "Staunton Elementary";
+      w1->getTags().set("amenity", "school");
+      w1->getTags().set("building:use", "multipurpose");
+
+      uut.calculateMatch(w1->getElementId(), n1->getElementId());
+
+      HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());
+      CPPUNIT_ASSERT(uut.explain().contains("Match involves a multi-use building"));
+
+      RecursiveElementRemover(w1->getElementId()).apply(map);
+    }
+
+    {
+      n1->getTags()["name"] = "Staunton Elementary";
+
+      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+      w1->getTags()["name"] = "Staunton Elementary";
+      w1->getTags().set("building", "yes");
+
+      uut.calculateMatch(w1->getElementId(), n1->getElementId());
+
+      HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
+      CPPUNIT_ASSERT(!uut.explain().contains("Match involves a multi-use building"));
+
+      RecursiveElementRemover(w1->getElementId()).apply(map);
+    }
+
+    {
+      n1->getTags()["name"] = "Staunton Elementary";
+
+      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+      w1->getTags()["name"] = "Staunton Elementary";
+      w1->getTags().set("amenity", "school");
+
+      uut.calculateMatch(w1->getElementId(), n1->getElementId());
+
+      HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
+      CPPUNIT_ASSERT(!uut.explain().contains("Match involves a multi-use building"));
+
+      RecursiveElementRemover(w1->getElementId()).apply(map);
+    }
+
+    {
+      n1->getTags()["name"] = "Staunton Elementary";
+
+      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+      w1->getTags()["name"] = "Staunton Elementary";
+      w1->getTags().set("area", "yes");
+      w1->getTags().set("building:use", "multipurpose");
+
+      uut.calculateMatch(w1->getElementId(), n1->getElementId());
+
+      HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
+      CPPUNIT_ASSERT(!uut.explain().contains("Match involves a multi-use building"));
+
+      RecursiveElementRemover(w1->getElementId()).apply(map);
+    }
+
+    {
+      n1->getTags()["name"] = "Honey Creek Mall";
+
+      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+      w1->getTags()["name"] = "Honey Creek Mall";
+      w1->getTags().set("shop", "mall");
+
+      uut.calculateMatch(w1->getElementId(), n1->getElementId());
+
+      HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
+      CPPUNIT_ASSERT(!uut.explain().contains("Match involves a multi-use building"));
+
+      RecursiveElementRemover(w1->getElementId()).apply(map);
     }
   }
 };

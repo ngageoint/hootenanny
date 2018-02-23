@@ -35,6 +35,7 @@
 #include <hoot/core/conflate/MatchDetails.h>
 #include <hoot/core/conflate/MatchClassification.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 #include "PoiPolygonRfClassifier.h"
 
@@ -116,6 +117,8 @@ public:
    */
   static void resetMatchDistanceInfo();
 
+  virtual QString explain() const;
+
   void setMatchDistanceThreshold(const double distance);
   void setReviewDistanceThreshold(const double distance);
   void setNameScoreThreshold(const double threshold);
@@ -130,6 +133,7 @@ public:
   void setDisableSameSourceConflationMatchTagKeyPrefixOnly(const bool disabled)
   { _disableSameSourceConflationMatchTagKeyPrefixOnly = disabled; }
   void setSourceTagKey(const QString key) { _sourceTagKey = key; }
+  void setReviewMultiUseBuildings(const bool review) { _reviewMultiUseBuildings = review; }
 
 private:
 
@@ -183,7 +187,13 @@ private:
   bool _disableSameSourceConflationMatchTagKeyPrefixOnly;
   QString _sourceTagKey;
 
+  bool _reviewMultiUseBuildings;
+
   boost::shared_ptr<const PoiPolygonRfClassifier> _rf;
+
+  ConfigOptions _opts;
+
+  QString _explainText;
 
   void _categorizeElementsByGeometryType(const ElementId& eid1, const ElementId& eid2);
 

@@ -72,6 +72,8 @@ public:
     database.open(ServicesDbTestUtils::getDbModifyUrl());
     database.getOrCreateUser(userEmail(), "ServiceHootApiDbBulkInserterTest");
     database.close();
+
+    TestUtils::mkpath("test-output/io/ServiceHootApiDbBulkInserterTest");
   }
 
   void tearDown()
@@ -89,9 +91,9 @@ public:
 
   void runPsqlDbOfflineTest()
   {
+    QString testName = "runPsqlDbOfflineTest";
     OsmMap::resetCounters();
     const QString outputDir = "test-output/io/ServiceHootApiDbBulkInserterTest";
-    QDir().mkpath(outputDir);
 
     HootApiDbBulkInserter writer;
     const QString outFile = outputDir + "/psql-offline-out.sql";
@@ -106,7 +108,7 @@ public:
     writer.setUserEmail(userEmail());
     writer.setCopyBulkInsertActivated(true);
 
-    writer.open(ServicesDbTestUtils::getDbModifyUrl().toString());
+    writer.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
     writer.write(ServicesDbTestUtils::createTestMap1());
     writer.close();
     mapId = writer.getMapId();
@@ -115,7 +117,7 @@ public:
     HootApiDbReader reader;
     OsmMapPtr actualMap(new OsmMap());
     reader.setUserEmail(userEmail());
-    reader.open(ServicesDbTestUtils::getDbModifyUrl().toString());
+    reader.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
     reader.read(actualMap);
     reader.close();
     const QString actualOutputFile = outputDir + "/psqlOffline-out.osm";
@@ -130,6 +132,5 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceHootApiDbBulkInserterTest, "slow");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceHootApiDbBulkInserterTest, "serial");
 
 }

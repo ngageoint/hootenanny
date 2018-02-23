@@ -64,6 +64,13 @@ details.
 If true, not only will review relations receive the hoot:review:needs tag, the features involved in
 the review will receive them as well.
 
+=== api.db.email
+
+* Data Type: string
+* Default Value: ``
+
+Email address of the API database user.  Can be set here for debugging and testing.
+
 === apidb.bulk.inserter.output.files.copy.location
 
 * Data Type: string
@@ -75,6 +82,17 @@ applied/written to an OSM API database at a later time.  If this option is popul
 files generated as a result of executing the hoot convert command with an OSM API database target
 are copied to the specified location.  This option should be set to a full file path to a SQL
 file (.sql).
+
+=== apidb.bulk.inserter.run.validation.in.memory
+
+* Data Type: bool
+* Default Value: `false`
+
+When set to true, this bypasses STXXL disk writing completely when performing data validation, is
+equivalent to apidb.bulk.inserter.validate.data=true and
+apidb.bulk.inserter.stxxl.map.min.size=<infinity>, and overrides values passed in for those
+settings.  If the system does not have enough memory to support in memory validation of the loaded
+features, an out of memory error will occur.
 
 === apidb.bulk.inserter.starting.node.id
 
@@ -133,13 +151,6 @@ references.  Only duplicate element IDs and invalid way node references will cau
 Invalid relation members will cause a warning to be logged.  You should enable this setting if you
 are loading data that has not been previously validated in another OSM API database.  Enabling this
 setting may cause writing to an OSM API database to occur more slowly.
-
-=== api.db.email
-
-* Data Type: string
-* Default Value: ``
-
-Email address of the API database user.  Can be set here for debugging and testing.
 
 === attribute.count.values
 
@@ -233,6 +244,13 @@ If true, any buildings in the secondary layer will be automatically reviewed aga
 matching features in the reference layer if they are marked with a more recent date than that of the
 reference feature.
 
+=== building.review.matches.other.than.one.to.one
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, any building matches other than 1:1 matches are automatically marked for review.
+
 === building.review.threshold
 
 * Data Type: double
@@ -245,12 +263,14 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
-=== building.review.matches.other.than.one.to.one
+=== changeset.allow.deleting.reference.features
 
 * Data Type: bool
-* Default Value: `false`
+* Default Value: `true`
 
-If true, any building matches other than 1:1 matches are automatically marked for review.
+If true, changesets derived can issue delete statements for the reference dataset (first dataset
+passed to the changeset deriver).  If false, no delete statements will be issued for the reference
+dataset.
 
 === changeset.buffer
 
@@ -260,15 +280,6 @@ If true, any building matches other than 1:1 matches are automatically marked fo
 Value in degrees by which the specified AOI (convert.bounding.box) will be expanded when calculating
 changesets.  Setting this too large with some datasets may greatly increase the changeset
 derivation time.
-
-=== changeset.allow.deleting.reference.features
-
-* Data Type: bool
-* Default Value: `true`
-
-If true, changesets derived can issue delete statements for the reference dataset (first dataset
-passed to the changeset deriver).  If false, no delete statements will be issued for the reference
-dataset.
 
 === changeset.max.size
 
@@ -805,14 +816,6 @@ details.
 
 The size of a pixel when calculating node density. See User Manual for details.
 
-=== hootapi.db.writer.create.user
-
-* Data Type: bool
-* Default Value: `false`
-
-Should the hootapi services DB writer automatically create the specified user if it doesn't exist.
-This is most useful when debugging and testing.
-
 === hootapi.db.writer.copy.bulk.insert
 
 * Data Type: bool
@@ -823,6 +826,14 @@ statements, which may increase performance when writing large datasets.  This se
 be activated when writing new records and will not work when existing records need to be modified
 or deleted.  It also requires writing out temporary files, so extra disk space is needed.
 
+=== hootapi.db.writer.create.user
+
+* Data Type: bool
+* Default Value: `false`
+
+Should the hootapi services DB writer automatically create the specified user if it doesn't exist.
+This is most useful when debugging and testing.
+
 === hootapi.db.writer.output.id.mappings
 
 * Data Type: string
@@ -832,6 +843,14 @@ If this value is set to a non-empty string, the system will attempt to open a fi
 specified name and output all the ID mappings (source to destination) used for nodes, ways, and
 relations that were written to the database.
 
+=== hootapi.db.writer.overwrite.map
+
+* Data Type: bool
+* Default Value: `false`
+
+If set to true then if there is already a map with the specified name then it will be removed before
+a new map is written.
+
 === hootapi.db.writer.remap.ids
 
 * Data Type: bool
@@ -840,14 +859,6 @@ relations that were written to the database.
 If this value is set to true, then all incoming element IDs are remapped into new IDs as the
 elements are written to a Hootenanny API database. Setting it to true is appropriate if any of the
 incoming IDs are non-positive.
-
-=== hootapi.db.writer.overwrite.map
-
-* Data Type: bool
-* Default Value: `false`
-
-If set to true then if there is already a map with the specified name then it will be removed before
-a new map is written.
 
 === id.generator
 
@@ -891,6 +902,50 @@ for default the first assigned id will be -1)
 
 Sets the default start ID for ways. The first value assigned is generator specific. (E.g. for
 default the first assigned id will be -1)
+
+=== implicit.tagger.add.top.tag.only
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, implicit taggers will only add the implicit tag to the element with the highest tag
+occurrence count for a given set of inputs name tokens.  Setting to true may be useful in reducing
+false positive applied tags to elements.
+
+=== implicit.tagger.allow.tagging.specific.entities
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, implicit taggers will attempt to add more specific tags to existing non-generic elements
+(dependent on the element type filter; e.g. for POIs, elements with a tag more specific than
+"poi=yes").  If false, implicit taggers will ignore all non-generic elements during implicit tagging.
+
+=== implicit.tagger.allow.words.involved.in.multiple.rules
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, implicit taggers will allow for returning tags for a name when that name is involved in
+more than one tagging rule.  Setting to false may be useful in reducing false positive applied tags
+to elements.
+
+=== implicit.tagger.match.end.of.name.single.token.first
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, implicit taggers will attempt to match the last token in a name to an implicit tag rule
+first before attempting to match other parts of the name.  Setting to true can be useful in getting
+better tagging performance for names that would otherwise be involved in multiple implicit tag
+rules.
+
+=== implicit.tagger.poi.rules.database
+
+* Data Type: string
+* Default Value: `${HOOT_HOME}/conf/core/implicit-tag-rules/poi-allCountries-planet-11-2-17-minwordocc=1000-schemaonly=true.sqlite`
+
+Database used by the POI implicit tagger to derive POI type tags implicitly based on a POI's name.
 
 === implicit.tagging.database.deriver.minimum.tag.occurrences.per.word
 
@@ -973,50 +1028,6 @@ If true, the implicit tag raw rules deriver will translate name words to English
 rules are derived.  Also, all implicit taggers will translate element name words to English before
 querying the corresponding implicit tag rules database.  The value of this setting should be set the
 same way when deriving raw implicit tag rules as it is when tagging elements with an implicit tagger.
-
-=== implicit.tagger.add.top.tag.only
-
-* Data Type: bool
-* Default Value: `true`
-
-If true, implicit taggers will only add the implicit tag to the element with the highest tag
-occurrence count for a given set of inputs name tokens.  Setting to true may be useful in reducing
-false positive applied tags to elements.
-
-=== implicit.tagger.allow.tagging.specific.entities
-
-* Data Type: bool
-* Default Value: `true`
-
-If true, implicit taggers will attempt to add more specific tags to existing non-generic elements
-(dependent on the element type filter; e.g. for POIs, elements with a tag more specific than
-"poi=yes").  If false, implicit taggers will ignore all non-generic elements during implicit tagging.
-
-=== implicit.tagger.allow.words.involved.in.multiple.rules
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, implicit taggers will allow for returning tags for a name when that name is involved in
-more than one tagging rule.  Setting to false may be useful in reducing false positive applied tags
-to elements.
-
-=== implicit.tagger.match.end.of.name.single.token.first
-
-* Data Type: bool
-* Default Value: `true`
-
-If true, implicit taggers will attempt to match the last token in a name to an implicit tag rule
-first before attempting to match other parts of the name.  Setting to true can be useful in getting
-better tagging performance for names that would otherwise be involved in multiple implicit tag
-rules.
-
-=== implicit.tagger.poi.rules.database
-
-* Data Type: string
-* Default Value: `${HOOT_HOME}/conf/core/implicit-tag-rules/poi-allCountries-planet-11-2-17-minwordocc=1000-schemaonly=true.sqlite`
-
-Database used by the POI implicit tagger to derive POI type tags implicitly based on a POI's name.
 
 === javascript.translator.path
 
@@ -1407,6 +1418,16 @@ See also:
 The number of optimization iterations the network match creator will run when performing network
 conflation.
 
+=== network.pre.ops
+
+* Data Type: list
+* Default Value:
+** `hoot::CornerSplitter`
+** `hoot::RubberSheet`
+
+List of operations to apply immediately before conflating when using Network Conflation only.  Runs
+after the operations in `conflate.pre.ops`.
+
 === network.review.threshold
 
 * Data Type: double
@@ -1419,14 +1440,6 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
-=== node.comparison.coordinate.sensitivity
-
-* Data Type: int
-* Default Value: `7`
-
-The number of decimal places taken into account when comparing node coordinates.  Used by node
-hash calculation.
-
 === node.comparison.circular.error.sensitivity
 
 * Data Type: int
@@ -1434,6 +1447,14 @@ hash calculation.
 
 The number of decimal places taken into account when comparing node circular error values.  Used by
 node hash calculation.
+
+=== node.comparison.coordinate.sensitivity
+
+* Data Type: int
+* Default Value: `7`
+
+The number of decimal places taken into account when comparing node coordinates.  Used by node
+hash calculation.
 
 === node.matcher.strictness
 
@@ -1467,6 +1488,13 @@ Debugging: Add the FCODE as the OSM source:fcode tag during translation.
 Debugging: Print out Attributes and OSM Tag values during translation. For each feature, this will
 show what keys and values go into the translation and what the translated output is.
 
+=== ogr.debug.dumpvalidate
+
+* Data Type: bool
+* Default Value: `false`
+
+Debugging: Print out which attributes are dropped during export validation.
+
 === ogr.debug.lookupclash
 
 * Data Type: bool
@@ -1481,13 +1509,6 @@ Debugging: When building internal lookup tables, print values that clash.
 
 Debugging: Print the columns that are not matched during one2one translation. This will show all
 Attribute columns and values that do not match a one2one rule.
-
-=== ogr.debug.dumpvalidate
-
-* Data Type: bool
-* Default Value: `false`
-
-Debugging: Print out which attributes are dropped during export validation.
 
 === ogr.esri.fcsubtype
 
@@ -1729,14 +1750,6 @@ sequencing of element ID's.
 Specifies the reader that the OsmMapReaderFactory will use. This overrides any information derived
 from the URL.
 
-=== osm.map.writer.skip.empty.map
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, the OSM map writer will NOT write a file if the map is empty.
-The default is to write a file even if the map is empty.
-
 === osm.map.writer.factory.writer
 
 * Data Type: string
@@ -1759,6 +1772,14 @@ Turns on autoformatting (line breaks, indentation etc) for XML output.
 
 Sets the value for a "schema" attribute when writeing a map to OSM XML.  NOTE: this will only be
 written if the value is not empty.
+
+=== osm.map.writer.skip.empty.map
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, the OSM map writer will NOT write a file if the map is empty.
+The default is to write a file even if the map is empty.
 
 === osm2ogr.ops
 
@@ -2136,6 +2157,14 @@ If true, POI to polygon conflation will attempt to reduce unnecessary reviews wi
 incorrect matches.  This setting is somewhat experimental and can be runtime expensive when
 enabled.
 
+=== poi.polygon.match.distance.threshold
+
+* Data Type: double
+* Default Value: `5.0`
+
+The maximum distance, in meters, between a POI and a polygon where they can still be considered
+a match based on distance criteria only.
+
 === poi.polygon.match.evidence.threshold
 
 * Data Type: int
@@ -2168,14 +2197,6 @@ The threshold at which a miss is called a miss when comparing POIs to polygons.
 See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
-
-=== poi.polygon.match.distance.threshold
-
-* Data Type: double
-* Default Value: `5.0`
-
-The maximum distance, in meters, between a POI and a polygon where they can still be considered
-a match based on distance criteria only.
 
 === poi.polygon.name.score.threshold
 
@@ -2234,6 +2255,15 @@ require it.
 List of key value pairs (key=value) for features to always review if marked as matches with POI to
 polygon conflation.  When specifying the list from the command line, delimit the types with ';'
 and surround the entire value string in double quotes.
+
+=== poi.polygon.review.multiuse.buildings
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, POI to polygon conflation always marks matches between POIs and polygons where multi-use
+building polygons are present as needing review.  The definition of multi-use buildings is
+controlled by the Hootenanny schema.
 
 === poi.polygon.review.threshold
 
@@ -2436,6 +2466,16 @@ command).
 
 Remove REF tags from nodes before match scoring when using the score-matches command.
 
+=== script.test.max.exec.time
+
+* Data Type: int
+* Default Value: `-1`
+
+For script test debugging only.  Sets a maximum allowed time, in seconds, for a script test to run.
+If the script runs longer than the specified time, then it is forcefully stopped by the system.  If
+the value is set to -1, then there is no time limit for script tests.  This is useful when
+debugging tests which may hang on a remote build server.
+
 === search.radius.default
 
 * Data Type: double
@@ -2475,16 +2515,6 @@ The search radius to use when conflating highways.  See `search.radius.default`.
 The search radius to use when conflating waterways.  Not used if
 waterway.auto.calc.search.radius = true.  See `search.radius.default`.
 
-=== script.test.max.exec.time
-
-* Data Type: int
-* Default Value: `-1`
-
-For script test debugging only.  Sets a maximum allowed time, in seconds, for a script test to run.
-If the script runs longer than the specified time, then it is forcefully stopped by the system.  If
-the value is set to -1, then there is no time limit for script tests.  This is useful when
-debugging tests which may hang on a remote build server.
-
 === set.tag.visitor.append.to.existing.value
 
 * Data Type: bool
@@ -2492,6 +2522,14 @@ debugging tests which may hang on a remote build server.
 
 If true, any element with a value populated for the key defined by the set.tag.visitor.key option
 will have the value specified in the set.tag.visitor.value option appended to it.
+
+=== set.tag.visitor.element.type
+
+* Data Type: string
+* Default Value: ``
+
+An optional element type filter for the SetTagVisitor.  Valid values are: 'node', 'way', or
+'relation'.  If left empty, all elements will receive tag additions.
 
 === set.tag.visitor.key
 
@@ -2501,14 +2539,6 @@ will have the value specified in the set.tag.visitor.value option appended to it
 Set the key member in the SetTagVisitor class.  SetTagVisitor allows for adding/modifying a
 particular tag on all elements in a map. The number of keys in `set.tag.visitor.key` should match
 the number of keys in `set.tag.visitor.value`.
-
-=== set.tag.visitor.element.type
-
-* Data Type: string
-* Default Value: ``
-
-An optional element type filter for the SetTagVisitor.  Valid values are: 'node', 'way', or
-'relation'.  If left empty, all elements will receive tag additions.
 
 === set.tag.visitor.value
 
@@ -2542,14 +2572,6 @@ a single way.
 The format used to write the element payload portion of the Spark changeset file.  Valid options are
 'json' or 'xml'.
 
-=== status.criterion.status
-
-* Data Type: string
-* Default Value: `Invalid`
-
-The default status to match with a status criterion.  Used by various element visitors and map
-operations.
-
 === stats.format
 
 * Data Type: string
@@ -2579,6 +2601,14 @@ Path to the statistics generator rules in javascript format.
 
 Path to the translation script to use when translating tags for stats. If the path is empty, then
 all translation stats are disabled.
+
+=== status.criterion.status
+
+* Data Type: string
+* Default Value: `Invalid`
+
+The default status to match with a status criterion.  Used by various element visitors and map
+operations.
 
 === tag.ancestor.differencer.name
 
@@ -2762,13 +2792,6 @@ This differencer can be used with:
 The direction that the translation script should translate. `toogr` will translate from OSM to OGR.
 `toosm` will translate from OSM to OGR. This is useful with the hoot::TranslationOp.
 
-=== translation.script
-
-* Data Type: string
-* Default Value: ``
-
-The script to use for translation.
-
 === translation.override
 
 * Data Type: string
@@ -2782,6 +2805,13 @@ after the translation. E.g.
 * Before OSM+ tags are translated to attributes on Export
 
 NOTE: This assumes that you know exactly what tags you want to modify/delete
+
+=== translation.script
+
+* Data Type: string
+* Default Value: ``
+
+The script to use for translation.
 
 === unify.enable.optimal.constrained.matches
 
@@ -2824,16 +2854,6 @@ before the operations in `conflate.post.ops`.
 
 
 List of operations to apply immediately before conflating when using Unifying Conflation only.  Runs
-after the operations in `conflate.pre.ops`.
-
-=== network.pre.ops
-
-* Data Type: list
-* Default Value:
-** `hoot::CornerSplitter`
-** `hoot::RubberSheet`
-
-List of operations to apply immediately before conflating when using Network Conflation only.  Runs
 after the operations in `conflate.pre.ops`.
 
 === uuid.helper.repeatable
@@ -3038,6 +3058,14 @@ https://s3.amazonaws.com/hoot-rpms/support-files/words1.sqlite.bz2
 The weight used will be `1.0 / (w ^ p)` where w is the frequency. Valid values are >= 0, but
 generally it should be `1 >= p >= 0`.
 
+=== writer.clean.review.tags
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, Hootenanny review tags are treated as metadata tags and will be removed by the
+NoInformationElementRemover cleaning operation.
+
 === writer.include.circular.error.tags
 
 * Data Type: bool
@@ -3073,14 +3101,6 @@ useful for debugging.
 
 When true, writers will include debug information (hoot:* tags; e.g. status). Not honored by all
 writers.
-
-=== writer.clean.review.tags
-
-* Data Type: bool
-* Default Value: `true`
-
-If true, Hootenanny review tags are treated as metadata tags and will be removed by the
-NoInformationElementRemover cleaning operation.
 
 === writer.precision
 

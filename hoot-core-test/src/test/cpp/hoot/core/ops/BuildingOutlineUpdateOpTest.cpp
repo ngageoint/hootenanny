@@ -63,6 +63,11 @@ class BuildingOutlineUpdateOpTest : public CppUnit::TestFixture
 
 public:
 
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/ops/BuildingOutlineUpdateOp/");
+  }
+
   void runSelfIntersectingRelationTest()
   {
     DisableLog dl;
@@ -81,7 +86,6 @@ public:
 
     // This output includes two reviews instead of the expected 1 review. See ticket #7043 for
     // an idea to clean this up.
-    QDir().mkpath("test-output/ops/BuildingOutlineUpdateOp/");
     OsmXmlWriter writer;
     writer.write(map, "test-output/ops/BuildingOutlineUpdateOp/SelfIntersectingRelationsOut.osm");
     HOOT_FILE_EQUALS("test-files/ops/BuildingOutlineUpdateOp/SelfIntersectingRelationsOut.osm",
@@ -109,7 +113,6 @@ public:
 
     MapProjector::projectToWgs84(map);
 
-    QDir().mkpath("test-output/ops/BuildingOutlineUpdateOp/");
     OsmXmlWriter writer;
     writer.write(map, "test-output/ops/BuildingOutlineUpdateOp/UncleanableTopologiesOut.osm");
     HOOT_FILE_EQUALS("test-files/ops/BuildingOutlineUpdateOp/UncleanableTopologiesOut.osm",

@@ -23,9 +23,26 @@ Conflation occurs at the dataset level, where the user’s workflow determines t
 * Maintain geometry and attribute provenance for combined features
 * Create up-to-date routable transportation networks from multiple sources
 
+# Specifications
+Hootenanny is developed under the open source General Public License (GPL) and maintained on the National Geospatial-Intelligence Agency’s (NGA) GitHub [site](https://github.com/ngageoint/hootenanny).
+
+Hootenanny is built upon the open source [Mapbox iD Editor](https://github.com/openstreetmap/iD), which provides an intuitive and user-friendly conflation experience. 
+
+# Installation
+[Instructions](https://github.com/ngageoint/hootenanny/blob/master/VAGRANT.md) to launch a Hootenanny virtual machine
+
+[Instructions](https://github.com/ngageoint/hootenanny/blob/master/docs/install/HootenannyInstall.asciidoc) for an RPM based installation to CentOS 7.x.
+
+# Documentation
+User and technical documentation may be found locally after installation in 'hoot/docs' or [included with each release](https://github.com/ngageoint/hootenanny/releases). 
+
+[FAQ](https://github.com/ngageoint/hootenanny/wiki/Frequently-Asked-Questions)
+
+If you have any support questions please create an issue in this repository.
+
 # Supported Geodata Types
 **Hootenanny can conflate:**
-* Area polygons (parks, parking lots, etc.)
+* Area polygons
 * Building polygons
 * Points of Interest (POIs)
 * Transportation polylines
@@ -58,48 +75,30 @@ Conflation occurs at the dataset level, where the user’s workflow determines t
 * OpenStreetMap XML changeset file (.osc) (M)
 * OpenStreetMap SQL changeset file (.osc.sql) (M)
 
+Notes:
 * (M) = format requires reading entire dataset into memory during processing
 * (*) = format requires reading entire dataset into memory during processing only if element ID output is sorted
 * All data read with a specified bounding box filter requires reading the entire dataset into memory during processing.
 
 # Tag Schemas
-Hootenanny leverages the OSM key value pair tag concept and PostgreSQL database structure to support translation between various data schemas.  By default, Hootenanny supports automated schema conversion between: 
+Hootenanny leverages the OSM key value pair tag concept to support translation between various data schemas.  By default, Hootenanny supports automated schema conversion between: 
 * Topographic Data Store (TDS) v6.1/v4.0 
 * Multi-National Geospatial Co-Production Program (MGCP)
 * Geonames
-* OSM
-* user defined "custom" translations 
+* OSM 
+* others (see "translations" folder)
 
-Additional translations are also provided.
+Users are also able to define their own custom translations.  For custom translations, a specific mapping can be defined based on an uploaded dataset using a semi-automated Translation Assistant.  More details on the translation capabilities of Hootenanny can be found in Hootenanny User Guide, as well as the Hootenanny User Interface Guide.
 
-For custom translations, a specific mapping can be defined based on an uploaded dataset using a semi-automated Translation Assistant.  More detailed background on the translation capabilities of Hootenanny can be found in Hootenanny User Guide as well as specific examples from the UI in the Hootenanny User Interface Guide. These documents can accessed in your local Hootenanny instance in hoot/docs or on the [releases](https://github.com/ngageoint/hootenanny/releases) under each version e.g. hootenanny-0.2.22.tar.gz/docs. 
-
-Hootenanny can add tags to data implicitly based on a feature's name.  See the Hootenanny User Guide for more details.
-
-# Installation
-Instructions to launch an Ubuntu Hootenanny virtual machine using [Vagrant](https://www.vagrantup.com/) may
-be found [here](https://github.com/ngageoint/hootenanny/blob/master/VAGRANT.md).
-
-An RPM based installation is also available for CentOS 6.x.  If you simply want to install and run Hootenanny, this is the recommended and easiest method.  The instructions for installing from RPM can be found [here](https://github.com/ngageoint/hootenanny/blob/master/docs/install/HootenannyInstall.asciidoc). 
-
-# Documentation
-Please read the documentation included with the latest release for details on installing and using Hootenanny, as well as the algorithmic concepts behind the software.
+# Data Cleaning
+Hootenanny supports a variety of geometric and tag based data cleaning operations.  Hootenanny can also add missing tags to POI data implicitly based on a feature's name.  See the documentation for more details.
 
 # Contributing
-Please read the Hootenanny Developer's Guide for details on setting up an environment, coding standards, and development process.  Hootenanny developers use the [Gitflow workflow](https://www.atlassian.com/git/tutorials/comparing-workflows#gitflow-workflow).  
+Please read the Hootenanny Developer's Guide for details on setting up an environment, coding standards, and development process.  Hootenanny developers use a customization of the [Gitflow workflow](https://www.atlassian.com/git/tutorials/comparing-workflows#gitflow-workflow).
 ## Workflow Summary
 * Open a repository issue for the new feature to be worked on.
-* Perform work for the feature on a new git feature branch named with the number of the issue opened.
+* Perform work for the feature on a new git feature branch named as the number of the issue opened.
 * Open a pull request and assign at least one reviewer to merge the feature branch into the "develop" branch mainline when the feature is complete.
-
-# Specifications
-Hootenanny is developed under the open source General Public License (GPL) and maintained on the National Geospatial-Intelligence Agency’s (NGA) GitHub [site](https://github.com/ngageoint/hootenanny).
-
-Hootenanny is built upon the open source [Mapbox iD Editor](https://github.com/openstreetmap/iD), which provides an intuitive and user-friendly conflation experience without the extra overhead of thick desktop GIS clients.  The application is primarily supported in either the Chrome or Chromium browser with more limited supported in Firefox.   
-
-A REST API is in place to connect the web browser based User Interface (UI) with the core conflation algorithms and database.  The translation and conflation operations are also exposed through web service endpoints. 
-
-We actively maintain and update our [Frequently Asked Questions page](https://github.com/ngageoint/hootenanny/wiki/Frequently-Asked-Questions), so please refer to that page for any questions about general Hootenanny capabilities.  If you have any support questions please create an issue in this repo.
 
 # Redistribution
 Hootenanny was developed at the National Geospatial-Intelligence Agency (NGA) in collaboration with DigitalGlobe.  The government has "unlimited rights" and is releasing this software to increase the impact of government instruments by providing developers with the opportunity to take things in new directions. The software use, modification, and distribution rights are stipulated within the GNU General Public License. The GPL license is available in LICENSE.txt

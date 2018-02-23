@@ -45,7 +45,6 @@
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
-using namespace hoot;
 
 // Tgs
 #include <tgs/Statistics/Random.h>
@@ -69,6 +68,11 @@ class FourPassManagerTest : public CppUnit::TestFixture
 
 public:
 
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/fourpass");
+  }
+
   void runToyTest()
   {
     Tgs::Random::instance()->seed(0);
@@ -76,8 +80,6 @@ public:
     Settings::getInstance().clear();
 
     FileUtils::removeDir("test-output/fourpass/FourPassManagerTest.osm-cache");
-
-    QDir().mkpath("test-output/fourpass");
 
     boost::shared_ptr<TileWorker2> worker(new LocalTileWorker2());
     FourPassManager uut(worker);
@@ -101,8 +103,7 @@ public:
 
 };
 
-}
-
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(FourPassManagerTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(FourPassManagerTest, "glacial");
 
+}
