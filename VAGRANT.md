@@ -49,7 +49,7 @@ To run the Hootenanny tests:
     source ./SetupEnv.sh
     make -sj$(nproc) test-all
 
-# Updating Hootenanny
+# Modifying Hootenanny Code
 
 If you've updated the Hootenanny code, perform the following steps to redeploy it:
 
