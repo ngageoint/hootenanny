@@ -172,6 +172,22 @@ MatchFactory& MatchFactory::getInstance()
       QString::number(mergerCreators.size()) + ")");
   }
 
+  for (int i = 0; i < matchCreators.size(); i++)
+  {
+    const QString matchCreator = matchCreators.at(i);
+    const QString mergerCreator = mergerCreators.at(i);
+    //Currently, there is only one kind of ScriptMergerCreator, so this check is useful for finding
+    //misuses of the generic conflation engine.  If we add any more script merger creators, we'll
+    //need a better check.
+    if (matchCreator.startsWith("hoot::ScriptMatchCreator") &&
+        mergerCreator != "hoot::ScriptMergerCreator")
+    {
+      throw HootException(
+        "Attempted to use a ScriptMatchCreator without a ScriptMergerCreator.  Match creator: " +
+        matchCreator + QString(" Merger creator: ")  + mergerCreator);
+    }
+  }
+
   if (!_theInstance.get())
   {
     _theInstance.reset(new MatchFactory());
