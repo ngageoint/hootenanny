@@ -1902,35 +1902,6 @@
         <tag k="hoot:id" v="-8870"/>
     </way>
     <way visible="true" id="-219" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-49"/>
-        <nd ref="-48"/>
-        <nd ref="-123"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="Google 2010-01-17;osm;osm"/>
-        <tag k="uuid" v="{00ed8137-6cbd-4f6b-b1a8-feaf1adea020}"/>
-        <tag k="name" v="Impasse Malebranche"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-219"/>
-    </way>
-    <way visible="true" id="-217" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-81"/>
-        <nd ref="-80"/>
-        <tag k="access" v="private"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="Bing; Google, 2010-01-17;osm;osm"/>
-        <tag k="uuid" v="{16691048-5a85-4146-9401-dc48324a0eee}"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="service"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-217"/>
-    </way>
-    <way visible="true" id="-216" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-80"/>
         <nd ref="-79"/>
         <nd ref="-78"/>
@@ -1946,9 +1917,54 @@
         <tag k="highway" v="service"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-219"/>
+    </way>
+    <way visible="true" id="-218" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-81"/>
+        <nd ref="-80"/>
+        <tag k="access" v="private"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="source" v="Bing; Google, 2010-01-17;osm;osm"/>
+        <tag k="uuid" v="{16691048-5a85-4146-9401-dc48324a0eee}"/>
+        <tag k="attribution" v="osm;osm"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-218"/>
+    </way>
+    <way visible="true" id="-217" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-98"/>
+        <nd ref="-97"/>
+        <nd ref="-96"/>
+        <tag k="access" v="private"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="service" v="parking_aisle"/>
+        <tag k="source" v="survey;osm;osm"/>
+        <tag k="uuid" v="{7db4e7bf-210b-47d4-af8d-fc911c1bbc7b}"/>
+        <tag k="attribution" v="osm;osm"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-217"/>
+    </way>
+    <way visible="true" id="-216" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-49"/>
+        <nd ref="-48"/>
+        <nd ref="-123"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="source" v="Google 2010-01-17;osm;osm"/>
+        <tag k="uuid" v="{00ed8137-6cbd-4f6b-b1a8-feaf1adea020}"/>
+        <tag k="name" v="Impasse Malebranche"/>
+        <tag k="attribution" v="osm;osm"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-216"/>
     </way>
-    <way visible="true" id="-215" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-214" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-87"/>
         <nd ref="-86"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
@@ -1960,27 +1976,11 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-215"/>
-    </way>
-    <way visible="true" id="-214" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-99"/>
-        <nd ref="-98"/>
-        <tag k="access" v="private"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="service" v="parking_aisle"/>
-        <tag k="source" v="survey;osm;osm"/>
-        <tag k="uuid" v="{7db4e7bf-210b-47d4-af8d-fc911c1bbc7b}"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="service"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-214"/>
     </way>
     <way visible="true" id="-213" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-99"/>
         <nd ref="-98"/>
-        <nd ref="-97"/>
-        <nd ref="-96"/>
         <tag k="access" v="private"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="service" v="parking_aisle"/>
