@@ -113,7 +113,6 @@ void CornerSplitter::splitCorners()
           LOG_DEBUG("splitting way with delta: " << delta);
           _splitWay(pWay->getId(), nodeIdx, pWay->getNodeId(nodeIdx));
           split = true;
-          LOG_INFO("SPLITTING!!!")
         }
       }
     }
