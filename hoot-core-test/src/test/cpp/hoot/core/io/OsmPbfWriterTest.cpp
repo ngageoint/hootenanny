@@ -66,14 +66,17 @@ class OsmPbfWriterTest : public CppUnit::TestFixture
 
 public:
 
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/io");
+  }
+
   void runToyTest()
   {
     OsmXmlReader reader;
 
     OsmMapPtr map(new OsmMap());
     reader.read("test-files/ToyTestA.osm", map);
-
-    QDir().mkpath("test-output/io/");
 
     OsmPbfWriter writer;
     writer.write(map, "test-output/io/OsmPbfWriterTest.pbf");

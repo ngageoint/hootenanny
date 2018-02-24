@@ -321,7 +321,7 @@ public:
 
     QString json = OsmJsonWriter().toString(map);
 
-    QDir().mkpath("tmp");
+    TestUtils::mkpath("tmp");
     MapProjector::projectToWgs84(map);
     OsmMapWriterFactory::write(map, "tmp/dum.osm");
 

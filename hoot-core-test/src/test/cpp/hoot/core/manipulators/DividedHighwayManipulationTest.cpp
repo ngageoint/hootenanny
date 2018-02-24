@@ -25,7 +25,6 @@
  * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
@@ -39,7 +38,6 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/manipulators/DividedHighwayManipulation.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
-using namespace hoot;
 
 // Qt
 #include <QDebug>
@@ -47,6 +45,8 @@ using namespace hoot;
 
 // TGS
 #include <tgs/StreamUtils.h>
+
+#include "../TestUtils.h"
 
 using namespace std;
 using namespace Tgs;
@@ -56,9 +56,9 @@ namespace hoot
 
 class DividedHighwayManipulationTest : public CppUnit::TestFixture
 {
-    CPPUNIT_TEST_SUITE(DividedHighwayManipulationTest);
-    CPPUNIT_TEST(individualManipulationsTest);
-    CPPUNIT_TEST_SUITE_END();
+  CPPUNIT_TEST_SUITE(DividedHighwayManipulationTest);
+  CPPUNIT_TEST(individualManipulationsTest);
+  CPPUNIT_TEST_SUITE_END();
 
 public:
 
@@ -106,7 +106,7 @@ public:
 
     MapProjector::projectToWgs84(after);
 
-    QDir().mkpath("test-output");
+    TestUtils::mkpath("test-output");
     OsmXmlWriter writer;
     writer.write(after, "test-output/DividedHighwayManipulationTest.osm");
   }

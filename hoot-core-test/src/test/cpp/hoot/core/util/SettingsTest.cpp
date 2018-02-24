@@ -98,7 +98,7 @@ public:
     uut.set("osm.map.writer.factory.writer", "1");
     uut.set("osm.map.reader.factory.reader", "${perty.csm.D}");
 
-    QDir().mkpath("test-output/utils");
+    TestUtils::mkpath("test-output/utils");
     uut.storeJson("test-output/utils/SettingsTest.json");
 
     Settings uut2;

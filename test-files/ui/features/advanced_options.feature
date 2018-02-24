@@ -104,6 +104,7 @@ Feature: Advanced Conflation Options
         And I should see element "#poipolygon_source_tag_key" with no value and placeholder "source"
         And I should see checkbox "Promote Points With Addresses to POIs" unchecked
         And I should see element "#poipolygon_review_evidence_threshold" with no value and placeholder "1"
+	And I should see checkbox "Review Multi-Use Buildings" unchecked
         And I click on "#hoot_poi_poly_options_label"
         And I should see "Waterway Options"
         And I click on "#hoot_waterway_options_label"
