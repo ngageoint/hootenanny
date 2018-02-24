@@ -407,16 +407,6 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
 
   _categorizeElementsByGeometryType(eid1, eid2);
 
-  LOG_VART(_reviewMultiUseBuildings);
-  LOG_VART(OsmSchema::getInstance().isMultiUseBuilding(*_poly));
-  //only do the multi-use check on the poly
-  if (_reviewMultiUseBuildings && OsmSchema::getInstance().isMultiUseBuilding(*_poly))
-  {
-    _class.setReview();
-    _explainText = "Match involves a multi-use building.";
-    return;
-  }
-
   //allow for auto marking features with certain types for review if they get matched
   const bool foundReviewIfMatchedType =
     _featureHasReviewIfMatchedType(_poi) || _featureHasReviewIfMatchedType(_poly);
@@ -441,7 +431,18 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
   {
     if (!foundReviewIfMatchedType)
     {
-      _class.setMatch();
+      LOG_VART(_reviewMultiUseBuildings);
+      LOG_VART(OsmSchema::getInstance().isMultiUseBuilding(*_poly));
+      //only do the multi-use check on the poly
+      if (_reviewMultiUseBuildings && OsmSchema::getInstance().isMultiUseBuilding(*_poly))
+      {
+        _class.setReview();
+        _explainText = "Match involves a multi-use building.";
+      }
+      else
+      {
+        _class.setMatch();
+      }
     }
     else
     {

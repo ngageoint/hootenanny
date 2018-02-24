@@ -85,7 +85,9 @@ void CornerSplitter::splitCorners()
     // If the way has just two nodes, there are no corners
     if (nodeCount > 2)
     {
-      for (size_t nodeIdx = nodeCount - 1; nodeIdx > 0; nodeIdx--)
+      // Look until we find a split, or get to the end
+      bool split = false;
+      for (size_t nodeIdx = 1; nodeIdx < nodeCount-1 && !split; nodeIdx++)
       {
         WayLocation prev(_map, pWay, nodeIdx-1, 0.0);
         WayLocation current(_map, pWay, nodeIdx, 0.0);
@@ -110,6 +112,7 @@ void CornerSplitter::splitCorners()
         {
           LOG_DEBUG("splitting way with delta: " << delta);
           _splitWay(pWay->getId(), nodeIdx, pWay->getNodeId(nodeIdx));
+          split = true;
         }
       }
     }
@@ -141,16 +144,17 @@ void CornerSplitter::_splitWay(long wayId, long nodeIdx, long nodeId)
 
     const ElementId splitWayId = pWay->getElementId();
 
-    QList<ElementPtr> newWays;
-    foreach (const boost::shared_ptr<Way>& w, splits)
-    {
-      newWays.append(w);
-      _todoWays.push_back(w->getId());
-    }
-
     // Make sure any ways that are part of relations continue to be part of those relations after
     // they're split.
+    QList<ElementPtr> newWays;
+    foreach (const boost::shared_ptr<Way>& w, splits)
+      newWays.append(w);
+
     _map->replace(pWay, newWays);
+
+    // Need to process the "right-hand-side" of the split, looking for more
+    // corners
+    _todoWays.push_back(splits[1]->getId());
 
     if (ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures() &&
         pWay->getStatus() == Status::Unknown1)
