@@ -116,7 +116,7 @@ Feature: Advanced Conflation Options
         And I should see element "#search_radius_waterway" with no value and placeholder "-1"
         And I should see "Search Radius Waterway" not enabled
         And I should see element "#waterway_rubber_sheet_minimum_ties" with no value and placeholder "5"
-        And I should see checkbox "Waterway Rubber Sheet Ref" checked
+        And I should see checkbox "Waterway Auto-Search Radius Calculation Rubber Sheet Ref" checked
         And I click on "#hoot_waterway_options_label"
         Then I click the "x" icon
         And I accept the alert

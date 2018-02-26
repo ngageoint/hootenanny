@@ -1019,17 +1019,17 @@
                 "id":"waterway_rubber_sheet_minimum_ties",
                 "minvalue":"0",
                 "elem_type":"int",
-                "description":"Sets the minimum number of tie points that will be used when calculating a rubber sheeting solution.",
+                "description":"Sets the minimum number of rubber sheet tie points that will be used when auto-calculating a search radius.  This is separate from the global Rubber Sheeting Minimum Ties option.",
                 "maxvalue":"",
-                "name":"Waterway Rubber Sheet Minimum Ties",
+                "name":"Waterway Auto-Search Radius Calculation Minimum Ties",
                 "defaultvalue":"5",
                 "hoot_key":"waterway.rubber.sheet.minimum.ties"
             },
             {
                 "id":"waterway_rubber_sheet_ref",
                 "elem_type":"bool",
-                "description":"If this configuration setting is set to true then the first layer is treated as the reference layer and will not be moved. If set to false the two layers will be moved towards each other. The weighting is determined based on the circular error.",
-                "name":"Waterway Rubber Sheet Ref",
+                "description":"When auto-calculating a search radius, if this configuration setting is set to true then the first layer is treated as the reference layer and will not be moved. If set to false, the two layers will be moved towards each other. The weighting is determined based on the circular error.  This is separate from the global Rubber Sheeting Ref option.",
+                "name":"Waterway Auto-Search Radius Calculation Rubber Sheet Ref",
                 "defaultvalue":"true",
                 "hoot_key":"waterway.rubber.sheet.ref"
             }
