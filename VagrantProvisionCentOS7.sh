@@ -127,7 +127,6 @@ sudo yum -y install \
     redhat-lsb-core \
     ruby \
     ruby-devel \
-    rubygem-bundler \
     stxxl \
     stxxl-devel \
     swig \
@@ -190,6 +189,7 @@ if ! grep --quiet GDAL_DATA ~/.bash_profile; then
 fi
 
 # Install gems with bundler and strict versioning (see Gemfile)
+gem install bundler
 bundle install
 
 # Make sure that we are in ~ before trying to wget & install stuff
