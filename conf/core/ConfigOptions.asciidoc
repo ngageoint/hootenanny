@@ -2429,14 +2429,14 @@ be used during serious conflation.
 === rubber.sheet.minimum.ties
 
 * Data Type: int
-* Default Value: `10`
+* Default Value: `4`
 
 Sets the minimum number of tie points that will be used when calculating a rubbersheeting solution.
 
 === rubber.sheet.ref
 
 * Data Type: bool
-* Default Value: `false`
+* Default Value: `true`
 
 If this configuration setting is set to true, then the first layer is treated as the reference
 layer and will not be moved. If set to false the two layers will be moved towards each other. The
