@@ -54,14 +54,6 @@ cppunit:SOURCES += \
 
 }
 
-stxxl:SOURCES += \
-    src/main/cpp/tgs/BigContainers/Stxxl.cpp
-
-stxxl:HEADERS += \
-    src/main/cpp/tgs/BigContainers/Stxxl.h \
-    src/main/cpp/tgs/BigContainers/BigMapStxxl.h \
-
-
 HEADERS += \
     src/main/cpp/tgs/HashMap.h \
     src/main/cpp/tgs/LruCache.h \
@@ -72,9 +64,10 @@ HEADERS += \
     src/main/cpp/tgs/TgsException.h \
     src/main/cpp/tgs/TgsExport.h \
     src/main/cpp/tgs/Version.h \
-    src/main/cpp/tgs/BigContainers/BigMap.h \
-    src/main/cpp/tgs/BigContainers/BigMapHybrid.h \
     src/main/cpp/tgs/BigContainers/BasicBloomFilter.h \
+    src/main/cpp/tgs/BigContainers/BigMap.h \
+    src/main/cpp/tgs/BigContainers/BigMapStxxl.h \
+    src/main/cpp/tgs/BigContainers/Stxxl.h \
     src/main/cpp/tgs/CostSensitiveLearning/CostSensitiveLearningTrainer.h \
     src/main/cpp/tgs/CostSensitiveLearning/CslOptions.h \
     src/main/cpp/tgs/CostSensitiveLearning/CslUtilities.h \
@@ -177,6 +170,7 @@ SOURCES += \
     src/main/cpp/tgs/Version.cpp \
     src/main/cpp/tgs/BigContainers/BigMap.cpp \
     src/main/cpp/tgs/BigContainers/BasicBloomFilter.cpp \
+    src/main/cpp/tgs/BigContainers/Stxxl.cpp \
     src/main/cpp/tgs/CostSensitiveLearning/CostSensitiveLearningTrainer.cpp \
     src/main/cpp/tgs/CostSensitiveLearning/CslOptions.cpp \
     src/main/cpp/tgs/CostSensitiveLearning/CslUtilities.cpp \
