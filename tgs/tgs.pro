@@ -149,7 +149,6 @@ HEADERS += src/main/cpp/tgs/HashMap.h \
     src/main/cpp/tgs/Io/StdIoDevice.h \
     src/main/cpp/tgs/Interpolation/DelaunayInterpolator.h \
     src/main/cpp/tgs/BigContainers/BigMap.h \
-    src/main/cpp/tgs/BigContainers/BigMapStl.h \
     src/main/cpp/tgs/BigContainers/BasicBloomFilter.h \
     src/main/cpp/tgs/System/DisableCout.h \
     src/main/cpp/tgs/System/Timer.h \
