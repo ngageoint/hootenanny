@@ -1,6 +1,6 @@
 
 [[HootenannyManualConflation]]
-== Hootenanny Manual Conflation
+== Manual Conflation
 
 To train a conflation model for a particular data type when using Hootenanny, it often relies on data manually matched by a human.  This
 section describes that process.

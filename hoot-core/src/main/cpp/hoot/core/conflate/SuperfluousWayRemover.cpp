@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "SuperfluousWayRemover.h"
@@ -59,6 +59,8 @@ void SuperfluousWayRemover::removeWays(boost::shared_ptr<OsmMap> map)
 
 void SuperfluousWayRemover::removeWays()
 {
+  LOG_DEBUG("Removing superfluous ways...");
+
   boost::shared_ptr<ElementToRelationMap> e2r = _inputMap->getIndex().getElementToRelationMap();
 
   // make a copy of the ways to avoid issues when removing.
@@ -66,13 +68,14 @@ void SuperfluousWayRemover::removeWays()
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     const ConstWayPtr& w = it->second;
+    LOG_VART(w->getElementId());
 
     bool same = true;
     const vector<long>& nodeIds = w->getNodeIds();
+    LOG_VART(nodeIds);
     if (nodeIds.size() > 0)
     {
       long firstId = nodeIds[0];
-
       for (size_t i = 1; i < nodeIds.size(); i++)
       {
         if (nodeIds[i] != firstId)
@@ -81,12 +84,16 @@ void SuperfluousWayRemover::removeWays()
         }
       }
     }
+    LOG_VART(same);
 
-    bool inRelation = e2r->getRelationByElement(w).size() > 0;
+    const bool inRelation = e2r->getRelationByElement(w).size() > 0;
+    LOG_VART(inRelation);
+    LOG_VART(w->getTags().size());
 
     // if all the nodes in a way are the same or there are zero nodes
     if ((same || w->getTags().size() == 0) && !inRelation)
-    {
+    {  
+      LOG_TRACE("Removing superflous way: " << w->getElementId() << "...");
       RemoveWayOp::removeWayFully(_inputMap, w->getId());
     }
   }

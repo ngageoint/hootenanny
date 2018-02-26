@@ -3,7 +3,7 @@
 
 AC_PREREQ([2.65])
 m4_include([m4/version.m4])
-AC_INIT([hootenanny], [VERSION_NUMBER], [hootenanny.team@digitalglobe.com])
+AC_INIT([hootenanny], [VERSION_NUMBER], [https://github.com/ngageoint/hootenanny])
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([hoot-core/src])
 
@@ -52,8 +52,8 @@ fi
 if test "${GEOS_VERSION}" = "3.3.2" ; then
   AC_MSG_WARN([There is a serious bug in GEOS v3.3.2 distance calculations. GEOS v3.2.2 is known to work.]);
 fi
-if test "${GEOS_VERSION}" != "3.5.0" ; then
-  AC_MSG_WARN([Most development occurs with GEOS v3.5.0, using v$GEOS_VERSION. Please run all tests after build (make test).]);
+if test "${GEOS_VERSION}" != "3.6.2" ; then
+  AC_MSG_WARN([Most development occurs with GEOS v3.6.2, using v$GEOS_VERSION. Please run all tests after build (make test).]);
 fi
 
 # Python

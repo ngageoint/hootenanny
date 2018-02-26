@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -72,6 +72,8 @@ public:
     database.open(ServicesDbTestUtils::getDbModifyUrl());
     database.getOrCreateUser(userEmail(), "ServiceHootApiDbBulkInserterTest");
     database.close();
+
+    TestUtils::mkpath("test-output/io/ServiceHootApiDbBulkInserterTest");
   }
 
   void tearDown()
@@ -89,12 +91,12 @@ public:
 
   void runPsqlDbOfflineTest()
   {
+    QString testName = "runPsqlDbOfflineTest";
     OsmMap::resetCounters();
     const QString outputDir = "test-output/io/ServiceHootApiDbBulkInserterTest";
-    QDir().mkpath(outputDir);
 
     HootApiDbBulkInserter writer;
-    const QString outFile = "test-output/io/ServiceHootApiDbBulkInserterTest/psql-offline-out.sql";
+    const QString outFile = outputDir + "/psql-offline-out.sql";
     writer.setOutputFilesCopyLocation(outFile);
     writer.setStatusUpdateInterval(1);
     writer.setChangesetUserId(1);
@@ -106,7 +108,7 @@ public:
     writer.setUserEmail(userEmail());
     writer.setCopyBulkInsertActivated(true);
 
-    writer.open(ServicesDbTestUtils::getDbModifyUrl().toString());
+    writer.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
     writer.write(ServicesDbTestUtils::createTestMap1());
     writer.close();
     mapId = writer.getMapId();
@@ -115,7 +117,7 @@ public:
     HootApiDbReader reader;
     OsmMapPtr actualMap(new OsmMap());
     reader.setUserEmail(userEmail());
-    reader.open(ServicesDbTestUtils::getDbModifyUrl().toString());
+    reader.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
     reader.read(actualMap);
     reader.close();
     const QString actualOutputFile = outputDir + "/psqlOffline-out.osm";
@@ -124,12 +126,11 @@ public:
     actualMapWriter->open(actualOutputFile);
     actualMapWriter->write(actualMap);
 
-     HOOT_FILE_EQUALS(
-       "test-files/io/ServiceHootApiDbBulkInserterTest/psqlOffline.osm", actualOutputFile);
+    HOOT_FILE_EQUALS(
+      "test-files/io/ServiceHootApiDbBulkInserterTest/psqlOffline.osm", actualOutputFile);
   }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceHootApiDbBulkInserterTest, "slow");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceHootApiDbBulkInserterTest, "serial");
 
 }

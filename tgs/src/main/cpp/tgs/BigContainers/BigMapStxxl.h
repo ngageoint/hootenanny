@@ -38,6 +38,10 @@
 #include <stxxl/map>
 #include <stxxl/vector>
 
+// boost
+#include <boost/shared_ptr.hpp>
+
+// TGS
 #include <tgs/TgsConfig.h>
 #include <tgs/System/DisableCout.h>
 #include <tgs/TgsException.h>
@@ -137,8 +141,8 @@ private:
       boost::bloom_filters::boost_hash<size_t, 0x5BD062C2515F007C>,
       boost::bloom_filters::boost_hash<size_t, 0x4DB127F812200854> > > BloomFilter;
 
-  std::auto_ptr<MapType> _map;
-  std::auto_ptr<BloomFilter> _bloom;
+  boost::shared_ptr<MapType> _map;
+  boost::shared_ptr<BloomFilter> _bloom;
 };
 
 }

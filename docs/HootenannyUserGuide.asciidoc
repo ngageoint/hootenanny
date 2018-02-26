@@ -1,6 +1,5 @@
 
 = Hootenanny - User Guide
-DigitalGlobe <hootenanny.help@digitalglobe.com>
 
 include::user/History.asciidoc[]
 include::user/Introduction.asciidoc[]
@@ -14,10 +13,11 @@ include::tmp/RulesTemplate.asciidoc[]
 :leveloffset: 0
 include::user/HootAPIexamples.asciidoc[]
 include::user/SchemaFiles.asciidoc[]
+include::user/ConflationStatsReport.asciidoc[]
+include::user/OsmApiDb.asciidoc[]
+include::user/ImplicitTagging.asciidoc[]
 include::HootenannyConfigOptions.asciidoc[]
 :leveloffset: 0
 include::commands/HootCommandLineReference.asciidoc[]
-include::user/ConflationStatsReport.asciidoc[]
-include::user/OsmApiDb.asciidoc[]
 include::References.asciidoc[]
 

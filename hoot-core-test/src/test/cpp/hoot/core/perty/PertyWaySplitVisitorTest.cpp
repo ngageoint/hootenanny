@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -64,6 +64,7 @@ public:
   void setUp()
   {
     TestUtils::resetEnvironment();
+    TestUtils::mkpath("test-output/perty/PertyWaySplitVisitorTest/");
   }
 
   void runWaySplitTest()
@@ -96,11 +97,9 @@ public:
     const int numNewWaysCreatedBySpliting = map->getWays().size() - numWaysBeforeSplitting;
     LOG_VARD(numNewWaysCreatedBySpliting);
 
-    const QString outDir = "test-output/perty/PertyWaySplitVisitorTest/";
-    QDir().mkpath(outDir);
     OsmXmlWriter writer;
     writer.setIncludeHootInfo(true);
-    const QString outFile = outDir + "/PertyWaySplitVisitorTest-out-1.osm";
+    const QString outFile = "test-output/perty/PertyWaySplitVisitorTest/PertyWaySplitVisitorTest-out-1.osm";
     writer.write(map, outFile);
 
     HOOT_FILE_EQUALS(
@@ -139,11 +138,9 @@ public:
     const int numNewWaysCreatedBySplitting = map->getWays().size() - numWaysBeforeSplitting;
     LOG_VARD(numNewWaysCreatedBySplitting);
 
-    const QString outDir = "test-output/perty/PertyWaySplitVisitorTest/";
-    QDir().mkpath(outDir);
     OsmXmlWriter writer;
     writer.setIncludeHootInfo(true);
-    const QString outFile = outDir + "/PertyWaySplitVisitorTest-out-2.osm";
+    const QString outFile = "test-output/perty/PertyWaySplitVisitorTest/PertyWaySplitVisitorTest-out-2.osm";
     writer.write(map, outFile);
 
     HOOT_FILE_EQUALS(

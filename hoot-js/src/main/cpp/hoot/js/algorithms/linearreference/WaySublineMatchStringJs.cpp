@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "WaySublineMatchStringJs.h"
 
@@ -57,49 +57,54 @@ WaySublineMatchStringJs::~WaySublineMatchStringJs()
 
 void WaySublineMatchStringJs::Init(Handle<Object> target)
 {
+  Isolate* current = target->GetIsolate();
+  HandleScope scope(current);
   // Prepare constructor template
-  Local<FunctionTemplate> tpl = FunctionTemplate::New(New);
-  tpl->SetClassName(String::NewSymbol(WaySublineMatchString::className().data()));
+  Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
+  tpl->SetClassName(String::NewFromUtf8(current, WaySublineMatchString::className().data()));
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
   // Prototype
   tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
-    String::New(WaySublineMatchString::className().data()));
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("toString"),
-      FunctionTemplate::New(toString)->GetFunction());
+    String::NewFromUtf8(current, WaySublineMatchString::className().data()));
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "toString"),
+      FunctionTemplate::New(current, toString));
 
-  _constructor = Persistent<Function>::New(tpl->GetFunction());
-  target->Set(String::NewSymbol("WaySublineMatchString"), _constructor);
+  _constructor.Reset(current, tpl->GetFunction());
+  target->Set(String::NewFromUtf8(current, "WaySublineMatchString"), ToLocal(&_constructor));
 }
 
-Handle<Value> WaySublineMatchStringJs::New(const Arguments& args)
+void WaySublineMatchStringJs::New(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   WaySublineMatchStringJs* obj = new WaySublineMatchStringJs();
   obj->Wrap(args.This());
 
-  return args.This();
+  args.GetReturnValue().Set(args.This());
 }
 
 Handle<Object> WaySublineMatchStringJs::New(WaySublineMatchStringPtr sm)
 {
-  HandleScope scope;
+  Isolate* current = v8::Isolate::GetCurrent();
+  EscapableHandleScope scope(current);
 
-  Handle<Object> result = _constructor->NewInstance();
+  Handle<Object> result = ToLocal(&_constructor)->NewInstance();
   WaySublineMatchStringJs* from = ObjectWrap::Unwrap<WaySublineMatchStringJs>(result);
   from->_sm = sm;
 
-  return scope.Close(result);
+  return scope.Escape(result);
 }
 
-Handle<Value> WaySublineMatchStringJs::toString(const Arguments& args)
+void WaySublineMatchStringJs::toString(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   WaySublineMatchStringPtr sm =
     ObjectWrap::Unwrap<WaySublineMatchStringJs>(args.This())->getWaySublineMatchString();
 
-  return scope.Close(String::New(sm->toString().toUtf8().data()));
+  args.GetReturnValue().Set(String::NewFromUtf8(current, sm->toString().toUtf8().data()));
 }
 
 }

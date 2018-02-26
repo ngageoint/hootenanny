@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -31,13 +31,13 @@
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/js/HootJsStable.h>
 #include <hoot/js/conflate/js/ScriptMatch.h>
 #include <hoot/js/conflate/js/ScriptMatchCreator.h>
 
 // Qt
 #include <QVariant>
 
-#include <v8.h>
 #include <iostream>
 #include <string>
 

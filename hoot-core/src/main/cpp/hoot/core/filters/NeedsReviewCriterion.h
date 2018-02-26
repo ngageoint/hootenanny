@@ -22,15 +22,16 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NEEDSREVIEWCRITERION_H
 #define NEEDSREVIEWCRITERION_H
 
+// Hoot
 #include "ElementCriterion.h"
-
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/core/conflate/ReviewMarker.h>
 
 namespace hoot
 {
@@ -58,6 +59,8 @@ public:
 private:
 
   ConstOsmMapPtr _map;
+  ReviewMarker _reviewMarker;
+
 };
 
 }

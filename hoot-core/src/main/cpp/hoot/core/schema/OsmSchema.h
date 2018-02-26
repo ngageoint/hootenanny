@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OSMSCHEMA_H
@@ -67,7 +67,8 @@ struct OsmSchemaCategory {
     PseudoName = 32,
     // Human Geography POI. See ticket #6853 for a definition of a "HGIS POI"
     HgisPoi = 64,
-    All = Poi | Building | Transportation | Use | Name | HgisPoi
+    Multiuse = 128,
+    All = Poi | Building | Transportation | Use | Name | HgisPoi | Multiuse
   } Type;
 
   OsmSchemaCategory() : _type(Empty) {}
@@ -80,6 +81,7 @@ struct OsmSchemaCategory {
   static OsmSchemaCategory use() { return OsmSchemaCategory(Use); }
   static OsmSchemaCategory name() { return OsmSchemaCategory(Name); }
   static OsmSchemaCategory pseudoName() { return OsmSchemaCategory(PseudoName); }
+  static OsmSchemaCategory multiUse() { return OsmSchemaCategory(Multiuse); }
 
   bool operator==(OsmSchemaCategory t) const { return t._type == _type; }
   bool operator!=(OsmSchemaCategory t) const { return t._type != _type; }
@@ -115,6 +117,10 @@ struct OsmSchemaCategory {
     else if (s == "hgispoi")
     {
       return HgisPoi;
+    }
+    else if (s == "multiuse")
+    {
+      return Multiuse;
     }
     else if (s == "")
     {
@@ -179,6 +185,10 @@ struct OsmSchemaCategory {
     if (_type & HgisPoi)
     {
       result << "hgispoi";
+    }
+    if (_type & Multiuse)
+    {
+      result << "multiuse";
     }
 
     return result;
@@ -377,8 +387,14 @@ public:
   bool isLinear(const Element& e);
 
   /**
+   * Returns true if the specified element is a linear waterway.
    */
   bool isLinearWaterway(const Element &e);
+
+  /**
+   * Returns true if the specified element is a multi-use building.
+   */
+  bool isMultiUseBuilding(const Element &e);
 
   /**
    * Returns true if this is a list of values. Right now this just looks for a semicolon in value,

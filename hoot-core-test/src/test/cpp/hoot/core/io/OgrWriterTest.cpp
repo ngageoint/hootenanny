@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -54,6 +54,11 @@ class OgrWriterTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
+
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/io");
+  }
 
   OsmMapPtr _map;
 
@@ -123,9 +128,9 @@ public:
 
   void runShpTest()
   {
+    FileUtils::removeDir("test-output/io/OgrWriterShpTest");
     OgrWriter uut;
     uut.setScriptPath("test-files/io/SampleTranslation.js");
-    FileUtils::removeDir("test-output/io/OgrWriterShpTest");
     uut.open("test-output/io/OgrWriterShpTest.shp");
     uut.write(createTestMap());
     QStringList nameFilter;
@@ -138,13 +143,13 @@ public:
 
   void runGdbTest()
   {
+    FileUtils::removeDir("test-output/io/OgrWriterTest.gdb");
     OgrWriter uut;
     uut.setScriptPath("test-files/io/SampleTranslation.js");
-    FileUtils::removeDir("test-output/io/OgrWriterTest.gdb");
     uut.open("test-output/io/OgrWriterTest.gdb");
     uut.write(createTestMap());
 
-    QDir().mkpath("tmp");
+    TestUtils::mkpath("tmp");
     OsmMapWriterFactory::write(createTestMap(), "tmp/TestMap.osm");
 
     // make sure it created a bunch of files. We aren't testing for correct output.
@@ -167,9 +172,9 @@ public:
 
     map->getRelation(1)->addElement("test", ElementId(ElementType::Relation, 2));
 
+    FileUtils::removeDir("test-output/io/OgrWriterRelationTest.gdb");
     OgrWriter uut;
     uut.setScriptPath("test-files/io/SampleTranslation.js");
-    FileUtils::removeDir("test-output/io/OgrWriterRelationTest.gdb");
     uut.open("test-output/io/OgrWriterRelationTest.gdb");
     uut.write(map);
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OsmApiDbBulkInserter.h"
@@ -937,15 +937,24 @@ void OsmApiDbBulkInserter::setConfiguration(const Settings& conf)
   setOutputFilesCopyLocation(confOptions.getApidbBulkInserterOutputFilesCopyLocation().trimmed());
   _changesetData.changesetUserId = confOptions.getChangesetUserId();
   setFileOutputElementBufferSize(confOptions.getMaxElementsPerPartialMap());
-  setStatusUpdateInterval(confOptions.getApidbBulkInserterFileOutputStatusUpdateInterval());
+  setStatusUpdateInterval(confOptions.getTaskStatusUpdateInterval());
   setMaxChangesetSize(confOptions.getChangesetMaxSize());
   setReserveRecordIdsBeforeWritingData(
     confOptions.getOsmapidbBulkInserterReserveRecordIdsBeforeWritingData());
   setStartingNodeId(confOptions.getApidbBulkInserterStartingNodeId());
   setStartingWayId(confOptions.getApidbBulkInserterStartingWayId());
   setStartingRelationId(confOptions.getApidbBulkInserterStartingRelationId());
-  setStxxlMapMinSize(confOptions.getApidbBulkInserterStxxlMapMinSize());
-  setValidateData(confOptions.getApidbBulkInserterValidateData());
+  //apidb.bulk.inserter.run.validation.in.memory
+  if (confOptions.getApidbBulkInserterRunValidationInMemory())
+  {
+    setStxxlMapMinSize(LONG_MAX);
+    setValidateData(true);
+  }
+  else
+  {
+    setStxxlMapMinSize(confOptions.getApidbBulkInserterStxxlMapMinSize());
+    setValidateData(confOptions.getApidbBulkInserterValidateData());
+  }
   setDisableDatabaseConstraintsDuringWrite(
     confOptions.getOsmapidbBulkInserterDisableDatabaseConstraintsDuringWrite());
   setTempDir(confOptions.getApidbBulkInserterTempFileDir());

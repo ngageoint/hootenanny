@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -58,6 +58,11 @@ class SetTagVisitorTest : public CppUnit::TestFixture
 
 public:
 
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/visitors");
+  }
+
   void runAddNewTest()
   {
     OsmMapPtr map(new OsmMap());
@@ -68,7 +73,6 @@ public:
     SetTagVisitor visitor("key3", "value3");
     map->visitRw(visitor);
 
-    QDir().mkpath("test-output/visitors");
     OsmMapWriterFactory::getInstance().write(map,
       "test-output/visitors/SetTagVisitorTest-runAddNewTest.osm");
 
@@ -87,7 +91,6 @@ public:
     SetTagVisitor visitor("key2", "value2");
     map->visitRw(visitor);
 
-    QDir().mkpath("test-output/visitors");
     OsmMapWriterFactory::getInstance().write(map,
       "test-output/visitors/SetTagVisitorTest-runOverwriteExistingTest.osm");
 
@@ -106,7 +109,6 @@ public:
     SetTagVisitor visitor("key1", "value1b", true);
     map->visitRw(visitor);
 
-    QDir().mkpath("test-output/visitors");
     OsmMapWriterFactory::getInstance().write(map,
       "test-output/visitors/SetTagVisitorTest-runAppendValueTest.osm");
 
@@ -125,7 +127,6 @@ public:
     SetTagVisitor visitor("key3", "value3", false, ElementType::fromString("node"));
     map->visitRw(visitor);
 
-    QDir().mkpath("test-output/visitors");
     OsmMapWriterFactory::getInstance().write(map,
       "test-output/visitors/SetTagVisitorTest-runElementFilterTest.osm");
 

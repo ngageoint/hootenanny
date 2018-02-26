@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SCRIPTMATCH_H
 #define SCRIPTMATCH_H
@@ -55,7 +55,7 @@ public:
    * @param mapObj This could be derived from the map, but destructing an OsmMapJs object is quite
    *  expensive due to the amount of memory cleanup we must do in the general case.
    */
-  ScriptMatch(boost::shared_ptr<PluginContext> script, v8::Persistent<v8::Object> plugin,
+  ScriptMatch(boost::shared_ptr<PluginContext> script, const v8::Persistent<v8::Object>& plugin,
               const ConstOsmMapPtr& map, v8::Handle<v8::Object> mapObj,
               const ElementId& eid1, const ElementId& eid2, ConstMatchThresholdPtr mt);
 
@@ -79,7 +79,8 @@ public:
    */
   virtual std::set< std::pair<ElementId, ElementId> > getMatchPairs() const;
 
-  v8::Persistent<v8::Object> getPlugin() const { return _plugin; }
+  v8::Local<v8::Object> getPlugin() const { return ToLocal(&_plugin); }
+//  v8::Persistent<v8::Object> getPlugin() const { return _plugin; }
 
   boost::shared_ptr<PluginContext> getScript() const { return _script; }
 

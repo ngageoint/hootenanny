@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -46,6 +46,8 @@
 // Qt
 #include <QDir>
 #include <QSet>
+
+#include "../TestUtils.h"
 
 using namespace std;
 
@@ -177,7 +179,7 @@ public:
     }
 
     OsmXmlWriter writer;
-    QDir().mkpath("test-output/perty");
+    TestUtils::mkpath("test-output/perty");
 
     OsmMapPtr original(new OsmMap(map));
     MapProjector::projectToWgs84(original);

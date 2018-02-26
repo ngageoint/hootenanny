@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "WayJs.h"
 
@@ -65,47 +65,52 @@ WayJs::~WayJs()
 
 void WayJs::Init(Handle<Object> target)
 {
+  Isolate* current = target->GetIsolate();
+  HandleScope scope(current);
   // Prepare constructor template
-  Local<FunctionTemplate> tpl = FunctionTemplate::New(New);
-  tpl->SetClassName(String::NewSymbol(Way::className().data()));
+  Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
+  tpl->SetClassName(String::NewFromUtf8(current, Way::className().data()));
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
   // Prototype
   ElementJs::_addBaseFunctions(tpl);
 
-  _constructor = Persistent<Function>::New(tpl->GetFunction());
-  target->Set(String::NewSymbol("Way"), _constructor);
+  _constructor.Reset(current, tpl->GetFunction());
+  target->Set(String::NewFromUtf8(current, "Way"), ToLocal(&_constructor));
 }
 
 Handle<Object> WayJs::New(ConstWayPtr way)
 {
-  HandleScope scope;
+  Isolate* current = v8::Isolate::GetCurrent();
+  EscapableHandleScope scope(current);
 
-  Handle<Object> result = _constructor->NewInstance();
+  Handle<Object> result = ToLocal(&_constructor)->NewInstance();
   WayJs* from = ObjectWrap::Unwrap<WayJs>(result);
   from->_setWay(way);
 
-  return scope.Close(result);
+  return scope.Escape(result);
 }
 
 Handle<Object> WayJs::New(WayPtr way)
 {
-  HandleScope scope;
+  Isolate* current = v8::Isolate::GetCurrent();
+  EscapableHandleScope scope(current);
 
-  Handle<Object> result = _constructor->NewInstance();
+  Handle<Object> result = ToLocal(&_constructor)->NewInstance();
   WayJs* from = ObjectWrap::Unwrap<WayJs>(result);
   from->_setWay(way);
 
-  return scope.Close(result);
+  return scope.Escape(result);
 }
 
-Handle<Value> WayJs::New(const Arguments& args)
+void WayJs::New(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   WayJs* obj = new WayJs();
   obj->Wrap(args.This());
 
-  return args.This();
+  args.GetReturnValue().Set(args.This());
 }
 
 }

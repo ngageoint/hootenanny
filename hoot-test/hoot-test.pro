@@ -16,6 +16,7 @@ DEPENDPATH += \
   ../hoot-core/src/main/cpp/ \
   ../hoot-core-test/src/test/cpp/ \
   ../hoot-hadoop/src/main/cpp/ \
+  ../hoot-js/src/main/cpp/ \
   ../hoot-test/src/main/cpp/hoot/test \
   ../pretty-pipes/pp-lib/src/main/cpp/ \
   ../pretty-pipes/example/src/main/cpp/ \
@@ -30,7 +31,7 @@ else:OBJECTS_DIR = tmp/debug
 DESTDIR = ../bin/
 
 LIBS += \
-    -L../lib/ -lHootCore -lHootCoreTest -lTgs -ltbs \
+    -L../lib/ -lHootCore -lHootCoreTest -lHootJs -lTgs -ltbs -lnode \
 
 HEADERS += \
     src/main/cpp/hoot/test/ScriptTestSuite.h \
@@ -42,3 +43,6 @@ SOURCES += src/main/cpp/hoot/test/main.cpp \
     src/main/cpp/hoot/test/ScriptTest.cpp \
     src/main/cpp/hoot/test/ProcessPool.cpp
 
+OTHER_FILES = \
+    $$files(../test-files/cmd/*.sh, true) \
+    $$files(../scripts/core/*.sh, true) \

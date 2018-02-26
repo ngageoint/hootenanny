@@ -58,7 +58,7 @@ public:
 
   virtual void filter_ro(const Coordinate* c)
   {
-    auto_ptr<Point> pt(GeometryFactory::getDefaultInstance()->createPoint(*c));
+    boost::shared_ptr<Point> pt(GeometryFactory::getDefaultInstance()->createPoint(*c));
     double d = _g.distance(pt.get());
 
     if (d < 0)
@@ -98,7 +98,7 @@ VertexHausdorffDistance::VertexHausdorffDistance(const Geometry& g1, const Geome
 
 void VertexHausdorffDistance::compute(const Geometry& g1, const Geometry& g2)
 {
-  auto_ptr<Geometry> g(GeometryUtils::validateGeometry(&g1));
+  boost::shared_ptr<Geometry> g(GeometryUtils::validateGeometry(&g1));
   VertexHausdorffFilter filter(*g);
   g2.apply_ro(&filter);
   _distance = filter.getDistance();

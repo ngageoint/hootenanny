@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // geos
@@ -58,6 +58,11 @@ class OsmGeoJsonWriterTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
+
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/io/GeoJson");
+  }
 
   void runAllDataTypesTest()
   {
@@ -102,7 +107,6 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(input, map);
 
-    QDir().mkpath("test-output/io/GeoJson/");
     OsmGeoJsonWriter writer;
     writer.open(QString("test-output/io/GeoJson/%1").arg(output));
 

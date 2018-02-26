@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OSM_GEOJSON_READER_H
@@ -107,6 +107,11 @@ private:
    *        elements to the map
    */
   void _parseGeoJson();
+
+  /**
+   * @brief _parseGeoJsonFeature Parse a feature and add it to a map
+   */
+  void _parseGeoJsonFeature(const boost::property_tree::ptree &feature);
 
   /**
    * @brief _parseGeoJsonNode Reads node info out of the property tree and

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MultiPolygonCreator.h"
 
@@ -131,8 +131,8 @@ Geometry* MultiPolygonCreator::_addHoles(vector<LinearRing*> &outers,
       {
         if (logWarnCount < Log::getWarnMessageLimit())
         {
-          LOG_WARN("Could not find a polygon that fully contains a hole. inner[" << i << "] " <<
-            _r->toString());
+          LOG_WARN("Could not find a polygon that fully contains a hole.");
+          LOG_DEBUG("inner[" << i << "] " <<_r->toString());
         }
         else if (logWarnCount == Log::getWarnMessageLimit())
         {
@@ -339,7 +339,7 @@ bool MultiPolygonCreator::_isValidInner(LinearRing* innerRing) const
 
   const GeometryFactory& gf = *GeometryFactory::getDefaultInstance();
   vector<Geometry*> noHoles;
-  auto_ptr<Polygon> p(gf.createPolygon(*innerRing, noHoles));
+  boost::shared_ptr<Polygon> p(gf.createPolygon(*innerRing, noHoles));
   if (p->getArea() <= 0.0)
   {
     return false;

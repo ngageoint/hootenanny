@@ -99,7 +99,7 @@ public:
   {
     Hdfs fs;
 
-    auto_ptr<ostream> out(fs.create("tmp/dum.csq"));
+    boost::shared_ptr<ostream> out(fs.create("tmp/dum.csq"));
 
     CppSeqFile::Writer writer(*out);
 
@@ -115,7 +115,7 @@ public:
     writer.close();
     out.reset();
 
-    auto_ptr<istream> in(fs.open("tmp/dum.csq"));
+    boost::shared_ptr<istream> in(fs.open("tmp/dum.csq"));
     CppSeqFile::Reader reader(*in);
 
     int d = 0;

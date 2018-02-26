@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NetworkMergerCreator.h"
 
@@ -56,7 +56,7 @@ NetworkMergerCreator::NetworkMergerCreator()
 bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merger*>& mergers) const
 {
   LOG_TRACE("Creating mergers with " << className() << "...");
-  LOG_TRACE("Creating mergers for match set: ");
+  LOG_TRACE("Creating mergers for match set: " << matchesIn);
 
   QString matchesList = "";
   if (hoot::Log::Trace == hoot::Log::getInstance().getLevel())
@@ -64,9 +64,13 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
     for (MatchSet::const_iterator it = matchesIn.begin(); it != matchesIn.end(); ++it)
     {
       const NetworkMatch* nmi = dynamic_cast<const NetworkMatch*>(*it);
-      matchesList += nmi->getEdgeMatch()->getUid() + " ";
+      if (nmi)
+      {
+        matchesList += nmi->getEdgeMatch()->getUid() + " ";
+      }
     }
   }
+  LOG_TRACE(matchesList.size());
   LOG_TRACE(matchesList);
 
   MatchSet matches = matchesIn;
@@ -94,7 +98,6 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
         set< pair<ElementId, ElementId> > p = nm->getMatchPairs();
         pairs.insert(p.begin(), p.end());
       }
-
       mergers.push_back(new PartialNetworkMerger(pairs, edgeMatches, m->getNetworkDetails()));
     }
     else
@@ -114,12 +117,10 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
       else
       {
         double overlapPercent = _getOverlapPercent(matches);
-
         if (overlapPercent > 80.0) // Go ahead and merge largest match
         {
-          //LOG_TRACE("Returning largest match");
           const NetworkMatch* largest = _getLargest(matches);
-          LOG_TRACE("Largest Match: " << largest->getEdgeMatch()->getUid());
+          LOG_TRACE("Merging largest Match: " << largest->getEdgeMatch()->getUid());
           mergers.push_back(
             new PartialNetworkMerger(
               largest->getMatchPairs(),
@@ -155,6 +156,11 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
 
     result = true;
   }
+  else
+  {
+    LOG_TRACE("Match invalid; skipping merge: " << (*matches.begin())->toString());
+  }
+  LOG_VART(result);
 
   return result;
 }

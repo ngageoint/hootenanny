@@ -744,6 +744,7 @@ mgcp = {
             ["(t.landuse == 'built_up_area' || t.place == 'settlement') && t.building","t['settlement:type'] = t.building; delete t.building"],
             ["t.leisure == 'stadium'","t.building = 'yes'"],
             ["t['monitoring:weather'] == 'yes'","t.man_made = 'monitoring_station'"],
+            ["t.natural =='spring' && t['spring:type'] == 'spring'","delete t['spring:type']"],
             ["t.public_transport == 'station'","t.bus = 'yes'"],
             ["t.pylon =='yes' && t['cable:type'] == 'power'"," t.power = 'tower'"],
             ["t['social_facility:for'] == 'senior'","t.amenity = 'social_facility'; t.social_facility = 'group_home'"],
@@ -882,6 +883,10 @@ mgcp = {
                 if (geometryType == 'Line' && !tags.highway) tags.highway = 'road';
                 break;
 
+            case 'GB485': // Approach Lighting System
+                tags.navigationaid = 'als';
+                break;
+
         } // End switch FCODE
 
         // Sort out TRS (Transport Type)
@@ -1008,6 +1013,7 @@ mgcp = {
             // See ToOsmPostProcessing for more details about rulesList.
             var rulesList = [
             ["t.amenity == 'marketplace'","t.facility = 'yes'"],
+            ["t.aeroway == 'navigationaid' && t.navigationaid","delete t.navigationaid"],
             ["t.barrier == 'tank_trap' && t.tank_trap == 'dragons_teeth'","t.barrier = 'dragons_teeth'; delete t.tank_trap"],
             ["t.construction && t.railway","t.railway = t.construction; t.condition = 'construction'; delete t.construction"],
             ["t.construction && t.highway","t.highway = t.construction; t.condition = 'construction'; delete t.construction"],
@@ -1017,6 +1023,7 @@ mgcp = {
             ["t.man_made == 'water_tower'","a.F_CODE = 'AL241'"],
             ["t.natural == 'sinkhole'","a.F_CODE = 'BH145'; t['water:sink:type'] = 'disappearing'; delete t.natural"],
             ["t.natural == 'scrub'","t.natural = 'grassland'; t['grassland:type'] = 'grassland_with_trees'"],
+            ["t.natural == 'spring' && !(t['spring:type'])","t['spring:type'] = 'spring'"],
             ["t.natural == 'wood'","t.landuse = 'forest'"],
             ["t.power == 'generator'","a.F_CODE = 'AL015'; t.use = 'power_generation'"],
             //["t.power == 'line'","t['cable:type'] = 'power'; t.cable = 'yes'"],
@@ -1228,6 +1235,26 @@ mgcp = {
             case 'unknown':
                 attrs.F_CODE = 'ZD040'; // Named Location
                 delete tags.place;
+                break;
+
+            case 'island':
+            case 'islet':
+                // If we have a coastline around an Island, decide if we are going make an Island
+                // or a Coastline
+                if (tags.natural == 'coastline')
+                {
+                    if (geometryType == 'Line')
+                    {
+                        attrs.F_CODE = 'BA010'; // Land/Water Boundary - Line
+                        delete tags.place;
+                    }
+                    else
+                    {
+                        // NOTE: If we have a Point, this will goto the O2S layer
+                        attrs.F_CODE = 'BA030'; // Island - Polygon
+                        delete tags.natural;
+                    }
+                }
                 break;
 
         } // End switch
@@ -1595,6 +1622,28 @@ mgcp = {
 
         if (attrs.SRT in srtFix) attrs.SRT = srtFix[attrs.SRT];
 
+       // Fix SDV
+        // NOTE: We are going to override the normal source:datetime with what we get from JOSM
+        if (tags['source:imagery:datetime'])
+        {
+            attrs.SDV = tags['source:imagery:datetime'];
+            //delete notUsedTags['source:imagery:datetime'];
+        }
+
+        // Now try using tags from Taginfo
+        if (! attrs.SDV)
+        {
+            if (tags['source:date']) 
+            {
+                attrs.SDV = tags['source:date'];
+                //delete notUsedTags['source:date'];
+            }
+            else if (tags['source:geometry:date'])
+            {
+                attrs.SDV = tags['source:geometry:date'];
+                //delete notUsedTags['source:geometry:date'];
+            }
+        }
         // Chop the milliseconds off the "source:datetime"
         if (attrs.SDV)
         {
@@ -1950,11 +1999,12 @@ mgcp = {
 
                     returnData[i]['tableName'] = mgcp.layerNameLookup[gFcode.toUpperCase()];
                 }
-//                 else
-//                 {
-//                     // Debug
-//                     print('## Skipping: ' + gFcode);
-//                 }
+                else
+                {
+                    // Debug
+                    // print('## Skipping: ' + gFcode);
+                    returnData.splice(i,1);
+                }
 
             } // End returnData loop
 

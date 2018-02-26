@@ -22,3 +22,4 @@ hoot derive-changeset --debug -D changeset.user.id=1 test-files/cmd/quick/Derive
 diff test-output/cmd/ServiceDeriveChangesetCmdSqlTest/changeset-3.osc.sql test-files/cmd/slow/ServiceDeriveChangesetCmdSqlTest/changeset-3.osc.sql
 diff test-output/cmd/ServiceDeriveChangesetCmdSqlTest/changeset-3.osc test-files/cmd/slow/ServiceDeriveChangesetCmdSqlTest/changeset-3.osc
 
+scripts/database/CleanAndInitializeOsmApiDb.sh

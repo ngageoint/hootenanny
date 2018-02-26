@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 /*
@@ -54,6 +54,7 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
+#include <hoot/js/HootJsStable.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/PluginContext.h>
 #include <hoot/js/util/DataConvertJs.h>
@@ -63,7 +64,6 @@
 // Qt
 #include <QVariant>
 
-#include <v8.h>
 #include <iostream>
 #include <string>
 
@@ -91,8 +91,9 @@ public:
   void uuidHashTest()
   {
     boost::shared_ptr<PluginContext> _pc(new PluginContext());
-    HandleScope handleScope;
-    Context::Scope context_scope(_pc->getContext());
+    Isolate* current = v8::Isolate::GetCurrent();
+    HandleScope handleScope(current);
+    Context::Scope context_scope(_pc->getContext(current));
 
     // From the standard Uuid Test
     // QUuid r = UuidHelper::createUuid5("foo", QUuid("{6ba7b812-9dad-11d1-80b4-00c04fd430c8}"));

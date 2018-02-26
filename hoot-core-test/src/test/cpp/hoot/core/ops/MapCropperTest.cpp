@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -108,7 +108,7 @@ public:
     for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
     {
       Coordinate c = it->second->toCoordinate();
-      auto_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(c));
+      boost::shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(c));
       if (g->intersects(p.get()))
       {
         insideCount++;
@@ -148,7 +148,7 @@ public:
 
     stringstream ss2(ss.str());
     ObjectInputStream ois(ss2);
-    auto_ptr<OsmMapOperation> post(ois.readObject<OsmMapOperation>());
+    boost::shared_ptr<OsmMapOperation> post(ois.readObject<OsmMapOperation>());
     OsmMapPtr mapPost = genPoints(0);
     post->apply(mapPost);
 

@@ -169,7 +169,7 @@ public:
 
 private:
 
-  std::auto_ptr<MatchCriteria> _criteria;
+  boost::shared_ptr<MatchCriteria> _criteria;
   Meters _spacing;
   Meters _minSplitSize;
 

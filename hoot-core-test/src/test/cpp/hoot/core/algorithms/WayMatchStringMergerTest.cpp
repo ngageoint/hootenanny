@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "../TestUtils.h"
@@ -57,6 +57,11 @@ class WayMatchStringMergerTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
+
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/algorithms/");
+  }
 
   WayStringPtr createWayString1(OsmMapPtr map)
   {
@@ -129,8 +134,6 @@ public:
     vector< pair<ElementId, ElementId> > replaced;
     WayMatchStringMerger uut(map, mapping, replaced);
 
-    QDir().mkdir("test-output/algorithms/");
-
     WayMatchStringSplitter().applySplits(map, replaced, uut.getAllSublineMappings());
     uut.updateSublineMapping();
 
@@ -162,8 +165,6 @@ public:
     vector< pair<ElementId, ElementId> > replaced;
     WayMatchStringMerger uut(map, mapping, replaced);
 
-    QDir().mkdir("test-output/algorithms/");
-
     WayMatchStringSplitter().applySplits(map, replaced, uut.getAllSublineMappings());
     uut.updateSublineMapping();
 
@@ -192,8 +193,6 @@ public:
     vector< pair<ElementId, ElementId> > replaced;
     WayMatchStringMerger uut(map, mapping, replaced);
     WayMatchStringSplitter().applySplits(map, replaced, uut.getAllSublineMappings());
-
-    QDir().mkdir("test-output/algorithms/");
 
     MapProjector::projectToWgs84(map);
     OsmMapWriterFactory::getInstance().write(map,

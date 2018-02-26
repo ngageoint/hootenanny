@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -321,7 +321,7 @@ public:
 
     QString json = OsmJsonWriter().toString(map);
 
-    QDir().mkpath("tmp");
+    TestUtils::mkpath("tmp");
     MapProjector::projectToWgs84(map);
     OsmMapWriterFactory::write(map, "tmp/dum.osm");
 

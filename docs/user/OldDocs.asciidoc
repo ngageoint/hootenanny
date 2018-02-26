@@ -3,7 +3,7 @@
 
 Hootenanny can be accessed from both command line and via a simple web user interface (Hootenanny-iD) built on top of the link:$$https://www.openstreetmap.org/edit?editor=id$$[OpenStreetMap iD] Editor.  At its core, Hootenanny  provides a set of tools for manipulating and conflating vector data as well as translating data between various out of the box supported reference tag schemas such as OSM, TDS, UTP, MGCP.  As an extension to the existing translation capabilities within Hootenanny, the Hootenanny-iD web interface provides a simple translation tool known as the _Translation Assistant_ that will walk users through a custom translation of any customer data format into a supported tag schema.  Additional background on the Hootenanny-iD interface and Translation Assistant can be found in the Hootenanny User Interface Guide. 
 
-This document provides background on how to use Hootenanny in a number of common use cases and work flows with a strong emphasis on the command line interface. Note that there are a number of undocumented features in Hootenanny that are referenced from the command line help. If you need more detailed information on that functionality please contact the developers. ( mailto:hootenanny.help@digitalglobe.com[hootenanny.help@digitalglobe.com] )
+This document provides background on how to use Hootenanny in a number of common use cases and work flows with a strong emphasis on the command line interface. Note that there are a number of undocumented features in Hootenanny that are referenced from the command line help. If you need more detailed information on that functionality please contact the developers at https://github.com/ngageoint/hootenanny.
 
 [[Installation]]
 == Installation
@@ -76,6 +76,13 @@ See the User Guide Command Line Documentation section for all configuration opti
 Conflation statistics for POI to Polygon Conflation are available from the command line with the --stats option as well as in the User Interface, the same as with all other types of conflation.  Note that POIs conflatable with polygons have a
 different definition than those conflatable with other POIs, which is less strict.  Therefore, POIs conflatable with polygons are a superset of POIs conflatable with other POIs.  Likewise, polygons are a superset of buildings and also include features such as parks, parking lots, etc.  See the Feature Definitions section 
 <<hootalgo, Hootenanny - Algorithms>> for POI and polygon definition details.
+
+[[AreaToAreaConflation]]
+== Area to Area Conflation
+
+Hootenanny makes Area to Area Conflation available, which is turned on by default when using command line conflation.  Hootenanny 
+defines an area as a non-building polygon that possesses the OSM "area=yes" tag or equivalent.  Examples: parks, parking lots.  
+To read more information on Area to Area Conflation, see the "Area to Area Conflation" section in the Hootenanny Algorithm Guide.
 
 [[River-Conflation]]
 === River Conflation

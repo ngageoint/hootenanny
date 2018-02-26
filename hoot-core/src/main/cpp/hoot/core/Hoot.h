@@ -32,6 +32,12 @@
 
 class QString;
 
+namespace boost
+{
+  template<class T>
+  class shared_ptr;
+}
+
 namespace hoot
 {
 
@@ -61,7 +67,7 @@ public:
   void reinit();
 
 private:
-  static std::auto_ptr<Hoot> _theInstance;
+  static boost::shared_ptr<Hoot> _theInstance;
 
   Hoot();
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef STRINGDISTANCEJS_H
@@ -57,12 +57,11 @@ private:
   StringDistanceJs(StringDistancePtr sd) { _sd = sd; }
   ~StringDistanceJs();
 
-  static v8::Handle<v8::Value> New(const v8::Arguments& args);
+  static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void toString(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   StringDistancePtr _sd;
   static v8::Persistent<v8::Function> _constructor;
-
-  static v8::Handle<v8::Value> toString(const v8::Arguments& args);
 };
 
 inline void toCpp(v8::Handle<v8::Value> v, StringDistancePtr& p)

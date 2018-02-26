@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MATCHCOMPARATOR_H
 #define MATCHCOMPARATOR_H
@@ -32,6 +32,7 @@
 
 // tgs
 #include <tgs/DisjointSet/DisjointSetMap.h>
+#include <hoot/core/conflate/ReviewMarker.h>
 
 namespace hoot
 {
@@ -115,6 +116,7 @@ public:
   double getPertyScore() const;
 
 private:
+
   typedef std::pair<QString, QString> UuidPair;
 
   std::set<UuidPair> _actual;
@@ -142,6 +144,8 @@ private:
   bool _tagErrors;
 
   QMap<ElementType::Type, long> _elementWrongCounts;
+
+  ReviewMarker _reviewMarker;
 
   void _addWrong(const Tags& t1, const Tags& t2);
 

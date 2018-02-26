@@ -802,6 +802,7 @@ ggdm30 = {
             ["t.leisure == 'stadium'","t.building = 'yes'"],
             ["t['material:vertical']","t.material = t['material:vertical']; delete t['material:vertical']"],
             ["t['monitoring:weather'] == 'yes'","t.man_made = 'monitoring_station'"],
+            ["t.natural =='spring' && t['spring:type'] == 'spring'","delete t['spring:type']"],
             //["t.on_bridge == 'yes' && !(t.bridge)","t.bridge = 'yes'; delete t.on_bridge"],
             ["t.product && t.man_made == 'storage_tank'","t.content = t.product; delete t.product"],
             ["t.public_transport == 'station' && t['transport:type'] == 'railway'","t.railway = 'station'"],
@@ -1084,6 +1085,7 @@ ggdm30 = {
         {
         // See ToOsmPostProcessing for more details about rulesList.
             var rulesList = [
+            ["t.aeroway == 'navigationaid' && t.navigationaid","delete t.navigationaid"],
             ["t.amenity == 'bus_station'","t.public_transport = 'station'; t['transport:type'] = 'bus'"],
             ["t.amenity == 'marketplace'","t.facility = 'yes'"],
             ["t.barrier == 'tank_trap' && t.tank_trap == 'dragons_teeth'","t.barrier = 'dragons_teeth'; delete t.tank_trap"],
@@ -1112,15 +1114,16 @@ ggdm30 = {
             ["t.landuse == 'reservoir'","t.water = 'reservoir'; delete t.landuse"],
             ["t.landuse == 'retail'","t.landuse = 'built_up_area'; t.use = 'commercial'"],
             ["t.landuse == 'scrub'","t.natural = 'scrub'; delete t.landuse"],
-            // ["t.landuse == 'grass'","a.F_CODE = 'EB010'; t['grassland:type'] = 'grassland';"],
-            // ["t.landuse == 'meadow'","a.F_CODE = 'EB010'; t['grassland:type'] = 'meadow';"],
+            ["t.launch_pad","delete t.launch_pad; t.aeroway='launchpad'"],
             ["t.leisure == 'sports_centre'","t.facility = 'yes'; t.use = 'recreation'; delete t.leisure"],
             ["t.leisure == 'stadium' && t.building","delete t.building"],
             ["t.man_made && t.building == 'yes'","delete t.building"],
             ["t.man_made == 'embankment'","t.embankment = 'yes'; delete t.man_made"],
+            ["t.man_made == 'launch_pad'","delete t.man_made; t.aeroway='launchpad'"],
             ["t.median == 'yes'","t.is_divided = 'yes'"],
             ["t.natural == 'desert' && t.surface","t.desert_surface = t.surface; delete t.surface"],
             ["t.natural == 'sinkhole'","a.F_CODE = 'BH145'; t['water:sink:type'] = 'sinkhole'; delete t.natural"],
+            ["t.natural == 'spring' && !(t['spring:type'])","t['spring:type'] = 'spring'"],
             ["t.natural == 'wood'","t.landuse = 'forest'; delete t.natural"],
             ["t.power == 'pole'","t['cable:type'] = 'power'; t['tower:shape'] = 'pole'"],
             ["t.power == 'tower'","t['cable:type'] = 'power'"],
@@ -1298,6 +1301,26 @@ ggdm30 = {
                         tags.memo = 'annotation:' + tags.place;
                     }
                     delete tags.place;
+                    break;
+
+                case 'island':
+                case 'islet':
+                    // If we have a coastline around an Island, decide if we are going make an Island
+                    // or a Coastline
+                    if (tags.natural == 'coastline')
+                    {
+                        if (geometryType == 'Line')
+                        {
+                            attrs.F_CODE = 'BA010'; // Land/Water Boundary - Line
+                            delete tags.place;
+                        }
+                        else
+                        {
+                            // NOTE: Islands can be Points or Areas
+                            attrs.F_CODE = 'BA030'; // Island
+                            delete tags.natural;
+                        }
+                    }
                     break;
 
             } // End switch
@@ -1746,6 +1769,28 @@ ggdm30 = {
             }
         } // End for GE4 loop
 
+       // Fix ZI001_SDV
+        // NOTE: We are going to override the normal source:datetime with what we get from JOSM
+        if (tags['source:imagery:datetime'])
+        {
+            attrs.ZI001_SDV = tags['source:imagery:datetime'];
+            // delete notUsedTags['source:imagery:datetime'];
+        }
+
+        // Now try using tags from Taginfo
+        if (! attrs.ZI001_SDV)
+        {
+            if (tags['source:date']) 
+            {
+                attrs.ZI001_SDV = tags['source:date'];
+                // delete notUsedTags['source:date'];
+            }
+            else if (tags['source:geometry:date'])
+            {
+                attrs.ZI001_SDV = tags['source:geometry:date'];
+                // delete notUsedTags['source:geometry:date'];
+            }
+        }
     }, // End applyToOgrPostProcessing
 
 // #####################################################################################################
@@ -2116,27 +2161,37 @@ ggdm30 = {
             var gType = geometryType.toString().charAt(0);
             for (var i = 0, fLen = returnData.length; i < fLen; i++)
             {
-
-                // Validate attrs: remove all that are not supposed to be part of a feature
-                ggdm30.validateAttrs(geometryType,returnData[i]['attrs']);
-
-                // Now set the FCSubtype.
-                // NOTE: If we export to shapefile, GAIT _will_ complain about this
-                if (ggdm30.config.OgrEsriFcsubtype == 'true')
-                {
-                    returnData[i]['attrs']['FCSUBTYPE'] = ggdm30.rules.subtypeList[returnData[i]['attrs']['F_CODE']];
-                }
-
                 var gFcode = gType + returnData[i]['attrs']['F_CODE'];
-                // If we are using the Thematic structre, fill the rest of the unused attrs in the schema
-                if (ggdm30.config.OgrThematicStructure == 'true')
+                
+                if (ggdmAttrLookup[gFcode.toUpperCase()])
                 {
-                    returnData[i]['tableName'] = ggdm30.rules.thematicGroupList[gFcode];
-                    ggdm30.validateTDSAttrs(gFcode, returnData[i]['attrs']);
+                    // Validate attrs: remove all that are not supposed to be part of a feature
+                    ggdm30.validateAttrs(geometryType,returnData[i]['attrs']);
+
+                    // Now set the FCSubtype.
+                    // NOTE: If we export to shapefile, GAIT _will_ complain about this
+                    if (ggdm30.config.OgrEsriFcsubtype == 'true')
+                    {
+                        returnData[i]['attrs']['FCSUBTYPE'] = ggdm30.rules.subtypeList[returnData[i]['attrs']['F_CODE']];
+                    }
+
+                    // If we are using the Thematic structure, fill the rest of the unused attrs in the schema
+                    if (ggdm30.config.OgrThematicStructure == 'true')
+                    {
+                        returnData[i]['tableName'] = ggdm30.rules.thematicGroupList[gFcode];
+                        ggdm30.validateTDSAttrs(gFcode, returnData[i]['attrs']);
+                    }
+                    else
+                    {
+                        returnData[i]['tableName'] = layerNameLookup[gFcode.toUpperCase()];
+                    }
                 }
                 else
                 {
-                    returnData[i]['tableName'] = layerNameLookup[gFcode.toUpperCase()];
+                    // If the feature is not valid, just drop it
+                    // Debug
+                    // print('## Skipping: ' + gFcode);
+                    returnData.splice(i,1);                    
                 }
             } // End returnData loop
 

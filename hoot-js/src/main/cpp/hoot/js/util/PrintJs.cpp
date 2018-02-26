@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PrintJs.h"
 
@@ -48,12 +48,17 @@ PrintJs::~PrintJs() {}
 
 void PrintJs::Init(Handle<Object> exports)
 {
-  exports->Set(String::NewSymbol("print"), FunctionTemplate::New(jsPrint)->GetFunction());
+  Isolate* current = exports->GetIsolate();
+  HandleScope scope(current);
+  exports->Set(String::NewFromUtf8(current, "print"),
+               FunctionTemplate::New(current, jsPrint)->GetFunction());
 }
 
-Handle<Value> PrintJs::jsPrint(const Arguments& args) {
-  HandleScope scope;
-//  Context::Scope context_scope(Context::GetCurrent());
+void PrintJs::jsPrint(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+//  Context::Scope context_scope(current->GetCurrentContext());
 
   QString result;
 
@@ -69,7 +74,7 @@ Handle<Value> PrintJs::jsPrint(const Arguments& args) {
 
   cout << result.toUtf8().data() << endl;
 
-  return scope.Close(Undefined());
+  args.GetReturnValue().SetUndefined();
 }
 
 }

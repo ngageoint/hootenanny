@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -64,6 +64,11 @@ class TileConflatorTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
+
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/conflate");
+  }
 
   void runToyTest()
   {

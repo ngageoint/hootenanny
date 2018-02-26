@@ -1,0 +1,20 @@
+[
+  {
+    "word": "Eid Prayer Ground",
+    "amenity=place_of_worship": 18
+  },
+  {
+    "word": "Masjid",
+    "amenity=place_of_worship": 2672,
+    "tourism=hotel": 9
+  },
+  {
+    "word": "Mosque",
+    "amenity=place_of_worship": 1246,
+    "leisure=park": 2
+  },
+  {
+    "word": "Sidi Muhammad",
+    "amenity=grave_yard": 21
+  }
+]

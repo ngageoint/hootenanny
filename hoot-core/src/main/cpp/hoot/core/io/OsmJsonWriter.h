@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMJSONWRITER_H
 #define OSMJSONWRITER_H
@@ -74,6 +74,8 @@ public:
   static QString markupString(const QString& str);
 
   virtual void open(QString url);
+
+  virtual void close() { if (_fp.isOpen()) { _fp.close(); } }
 
   void setIncludeHootInfo(bool includeInfo) { _includeDebug = includeInfo; }
 

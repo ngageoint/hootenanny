@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NetworkMerger.h"
 
@@ -56,7 +56,7 @@ NetworkMerger::NetworkMerger(const set< pair<ElementId, ElementId> >& pairs,
 
 void NetworkMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced)
 {
-  LOG_INFO("Applying network merger...");
+  LOG_INFO("Applying NetworkMerger...");
 
   // put the matched edges into a format where we can map any point on one edge to the
   // corresponding point on the other edge.

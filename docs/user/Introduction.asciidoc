@@ -129,7 +129,7 @@ Programmatically there is no difference between Vertical and Horizontal conflati
 .Unsupported Horizontal Conflation due to the complete lack of overlap between the two data sets.
 image::user/images/NotHorizontalConflation.png[]
 
-As demonstrated in <<UnsupportedHorizontalConflation>> two vector layers that don't quite touch are not conflated. If this is of interest please contact hootenanny.help@digitalglobe.com. 
+As demonstrated in <<UnsupportedHorizontalConflation>> two vector layers that don't quite touch are not conflated. If this is of interest please create an issue at https://github.com/ngageoint/hootenanny.
 
 See also:
 

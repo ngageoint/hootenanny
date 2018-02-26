@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ElementConverterJs.h"
 
@@ -52,31 +52,33 @@ ElementConverterJs::~ElementConverterJs() {}
 
 void ElementConverterJs::Init(Handle<Object> exports)
 {
-  Handle<Object> thisObj = Object::New();
-  exports->Set(String::NewSymbol("ElementConverter"), thisObj);
-  thisObj->Set(String::NewSymbol("calculateLength"), FunctionTemplate::New(calculateLength)->
-               GetFunction());
+  Isolate* current = exports->GetIsolate();
+  HandleScope scope(current);
+  Handle<Object> thisObj = Object::New(current);
+  exports->Set(String::NewFromUtf8(current, "ElementConverter"), thisObj);
+  thisObj->Set(String::NewFromUtf8(current, "calculateLength"),
+               FunctionTemplate::New(current, calculateLength)->GetFunction());
 }
 
-Handle<Value> ElementConverterJs::calculateLength(const Arguments& args) {
-  HandleScope scope;
+void ElementConverterJs::calculateLength(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
  
   try
   {
-    Context::Scope context_scope(Context::GetCurrent());
+    Context::Scope context_scope(current->GetCurrentContext());
 
-  	ConstOsmMapPtr m = toCpp<ConstOsmMapPtr>(args[0]);
-  	ConstElementPtr e = toCpp<ConstElementPtr>(args[1]);
+    ConstOsmMapPtr m = toCpp<ConstOsmMapPtr>(args[0]);
+    ConstElementPtr e = toCpp<ConstElementPtr>(args[1]);
 
-    return scope.Close(toV8(ElementConverter(m).calculateLength(e)));
+    args.GetReturnValue().Set(toV8(ElementConverter(m).calculateLength(e)));
   }
   catch ( const HootException& err )
   {
     LOG_VAR(err.getWhat());
-    return v8::ThrowException(HootExceptionJs::create(err));
+    args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(err)));
   }
-
-  return scope.Close(Undefined());
 }
 
 }

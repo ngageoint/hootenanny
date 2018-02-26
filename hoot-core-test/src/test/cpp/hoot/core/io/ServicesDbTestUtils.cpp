@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ServicesDbTestUtils.h"
@@ -89,9 +89,9 @@ void ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase()
   database.close();
 }
 
-QUrl ServicesDbTestUtils::getDbModifyUrl()
+QUrl ServicesDbTestUtils::getDbModifyUrl(const QString& mapName)
 {
-  return QUrl(HootApiDb::getBaseUrl().toString() + "/testMap");
+  return QUrl(HootApiDb::getBaseUrl().toString() + "/" + mapName);
 }
 
 QUrl ServicesDbTestUtils::getDbReadUrl(const long mapId)
@@ -273,6 +273,50 @@ boost::shared_ptr<OsmMap> ServicesDbTestUtils::createTestMap1()
   r1->addElement("outer", w4->getElementId());
   r1->addElement("inner", w5->getElementId());
   map->addRelation(r1);
+
+  return map;
+}
+
+OsmMapPtr ServicesDbTestUtils::createServiceTestMap()
+{
+  OsmMapPtr map(new OsmMap());
+
+  NodePtr n1(new Node(Status::Unknown1, 1, 0.0, 0.0, 10.0));
+  map->addNode(n1);
+  NodePtr n2(new Node(Status::Unknown2, 2, 0.1, 0.0, 11.0));
+  n2->setTag("noteb", "n2b");
+  map->addNode(n2);
+  NodePtr n3(new Node(Status::Conflated, 3, 0.2, 0.0, 12.0));
+  n3->setTag("note", "n3");
+  map->addNode(n3);
+  NodePtr n4(new Node(Status::Conflated, 4, 0.3, 0.0, 13.0));
+  n4->setTag("note", "n4");
+  map->addNode(n4);
+  NodePtr n5(new Node(Status::Invalid, 5, 0.4, 0.0, 14.0));
+  map->addNode(n5);
+
+  WayPtr w1(new Way(Status::Unknown1, 1, 15.0));
+  w1->addNode(1);
+  w1->addNode(2);
+  w1->setTag("noteb", "w1b");
+  map->addWay(w1);
+  WayPtr w2(new Way(Status::Unknown2, 2, 16.0));
+  w2->addNode(2);
+  w2->addNode(3);
+  w2->setTag("note", "w2");
+  map->addWay(w2);
+  WayPtr w3(new Way(Status::Unknown2, 3, 17.0));
+  w3->addNode(2);
+  map->addWay(w3);
+
+  RelationPtr r1(new Relation(Status::Unknown1, 1, 18.1, MetadataTags::RelationCollection()));
+  r1->addElement("n1", n1->getElementId());
+  r1->addElement("w1", w1->getElementId());
+  r1->setTag("note", "r1");
+  map->addRelation(r1);
+  RelationPtr r2(new Relation(Status::Unknown1, 2, -1.0));
+  r2->addElement("n2", n2->getElementId());
+  map->addRelation(r2);
 
   return map;
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MergerFactoryJs.h"
 
@@ -45,17 +45,19 @@ MergerFactoryJs::~MergerFactoryJs() {}
 
 void MergerFactoryJs::Init(Handle<Object> exports)
 {
-  Handle<Object> schema = Object::New();
-  exports->Set(String::NewSymbol("MergerFactory"), schema);
-  schema->Set(String::NewSymbol("getAllAvailableCreators"),
-    FunctionTemplate::New(getAllAvailableCreators)->GetFunction());
+  Isolate* current = exports->GetIsolate();
+  HandleScope scope(current);
+  Handle<Object> schema = Object::New(current);
+  exports->Set(String::NewFromUtf8(current, "MergerFactory"), schema);
+  schema->Set(String::NewFromUtf8(current, "getAllAvailableCreators"),
+    FunctionTemplate::New(current, getAllAvailableCreators)->GetFunction());
 }
 
-Handle<Value> MergerFactoryJs::getAllAvailableCreators(const Arguments& /*args*/)
+void MergerFactoryJs::getAllAvailableCreators(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  HandleScope scope(args.GetIsolate());
 
-  return scope.Close(toV8(MergerFactory::getInstance().getAllAvailableCreators()));
+  args.GetReturnValue().Set(toV8(MergerFactory::getInstance().getAllAvailableCreators()));
 }
 
 }

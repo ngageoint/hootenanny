@@ -4,7 +4,7 @@ The following sections describe using Hootenanny with large data sets, Big Data.
 
 === Hadoop
 
-Hootenanny supports conflation using multiple processors using the Hadoop framework. This is very much experimental and requires some tuning and tweaking. While the documentation here will give you a feel for how Hootenanny works with Hadoop it is very much in flux and expect some significant errors and omissions as the code is changing rapidly and receives very little testing. If you're considering using this for any significant work load then please contact the developers (Hootenanny.Team@digitalglobe.com).
+Hootenanny supports conflation using multiple processors using the Hadoop framework. This is very much experimental and requires some tuning and tweaking. While the documentation here will give you a feel for how Hootenanny works with Hadoop it is very much in flux and expect some significant errors and omissions as the code is changing rapidly and receives very little testing. If you're considering using this for any significant work load then please contact the developers at https://github.com/ngageoint/hootenanny.
 
 ==== Background
 

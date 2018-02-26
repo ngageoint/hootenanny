@@ -306,7 +306,7 @@ bool MaximalNearestSubline::_isInBounds(const WayLocation& wl, const boost::shar
 
   if (result && _maxRelevantAngle >= 0)
   {
-    auto_ptr<CoordinateSequence> cs(dop.nearestPoints());
+    boost::shared_ptr<CoordinateSequence> cs(dop.nearestPoints());
 
     LocationOfPoint loc(_map, _b);
     WayLocation wl2 = loc.locate(cs->getAt(1));
@@ -355,7 +355,7 @@ vector< WayPtr > MaximalNearestSubline::splitWay(OsmMapPtr map, int& mnsIndex)
   // c. ----x---x
   // d. x-------x
 
-  auto_ptr<FindNodesInWayFactory> nf(new FindNodesInWayFactory(_a));
+  boost::shared_ptr<FindNodesInWayFactory> nf(new FindNodesInWayFactory(_a));
 
   // if this is b or c
   if (start.getSegmentIndex() != 0 || start.getSegmentFraction() > 0.0)

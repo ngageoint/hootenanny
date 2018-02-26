@@ -163,7 +163,7 @@ void PaintNodesDriver::_loadOutputDir(const QString& output)
 void PaintNodesDriver::_loadPartFile(const QString& partPath)
 {
   Hdfs fs;
-  auto_ptr<istream> is(fs.open(partPath.toStdString()));
+  boost::shared_ptr<istream> is(fs.open(partPath.toStdString()));
   CppSeqFile::Reader reader(*is);
 
   string s;

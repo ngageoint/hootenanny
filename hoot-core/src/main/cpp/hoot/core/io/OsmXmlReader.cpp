@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OsmXmlReader.h"
@@ -232,7 +232,7 @@ void OsmXmlReader::_createWay(const QXmlAttributes &attributes)
 
 bool OsmXmlReader::fatalError(const QXmlParseException &exception)
 {
-  _errorString = QObject::tr("Parse error at line %1, column %2:\n%3")
+  _errorString = QObject::tr("OsmXmlReader: Parse error at line %1, column %2:\n%3")
       .arg(exception.lineNumber())
       .arg(exception.columnNumber())
       .arg(exception.message());
@@ -870,7 +870,6 @@ ElementPtr OsmXmlReader::readNextElement()
 
   //we're parsed the entire node/way/relation, so return it
   //LOG_TRACE("Parsing end xml element: " << _streamReader.name().toString());
-  assert(_element.get());
   LOG_VART(_element);
   return _element;
 }
