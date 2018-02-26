@@ -77,6 +77,14 @@
                 "defaultvalue":"true"
             },
             {
+                "id":"corner_splitter",
+                "elem_type":"checkbox",
+                "description":"Split roads at sharp corners..",
+                "name":"Split Sharp Road Corners",
+                "hoot_val":"hoot::CornerSplitter",
+                "defaultvalue":"true"
+            },
+            {
                 "id":"implied_divided_marker",
                 "elem_type":"checkbox",
                 "description":"If two roads implicitly should be marked as divided based on the surrounding roads, mark it as such. This is primarily caused by the FACC+ spec which does not allow bridges to be marked as divided.",
@@ -168,7 +176,7 @@
                 "elem_type":"checkbox",
                 "description":"Enable rubber sheeting options",
                 "name":"Enabled",
-                "defaultvalue":"false",
+                "defaultvalue":"true",
                 "onchange":"true"
             },
             {
@@ -176,7 +184,7 @@
                 "elem_type":"checkbox",
                 "description":"If this configuration setting is set to true then the first layer is treated as the reference layer and will not be moved. If set to false the two layers will be moved towards each other. The weighting is determined based on the circular error.",
                 "name":"Rubber Sheet Ref",
-                "defaultvalue":"false",
+                "defaultvalue":"true",
                 "hoot_key":"rubber.sheet.ref"
             },
             {
@@ -186,7 +194,7 @@
                 "description":"Sets the minimum number of tie points that will be used when calculating a rubber sheeting solution.",
                 "maxvalue":"",
                 "name":"Rubber Sheet Minimum Ties",
-                "defaultvalue":"10",
+                "defaultvalue":"4",
                 "hoot_key":"rubber.sheet.minimum.ties"
             }
         ]
@@ -854,7 +862,7 @@
         	"id":"poipolygon_disable_same_source_conflation",
         	"elem_type":"bool",
         	"defaultvalue":"false",
-        	"description":"If true, POI to polygon conflation will not attempt to conflate two features with the same source tag value. e.g. both have 'source=osm' tag The source tag key is specified by poi.polygon.source.tag.key. This setting is useful when you have a data layer where data has been collected as both POIs and polygons for the same source and you never want the two source to be conflated together.",
+        	"description":"If true, POI to polygon conflation will not attempt to conflate two features with the same source tag value.  e.g. both have 'source=osm' tag  The source tag key is specified by poi.polygon.source.tag.key.  How strictly the source tag key must be matched is controlled by poi.polygon.disable.same.source.conflation.match.tag.key.prefix.only.  This setting is useful when you have a data layer where data has been collected as both POIs and polygons for the same source and you never want the two source to be conflated together.",
         	"name":"Disable Same Source Conflation",
         	"hoot_key":"poi.polygon.disable.same.source.conflation"
     	    },
@@ -862,14 +870,14 @@
         	"id":"poipolygon_disable_same_source_conflation_match_tag_key_prefix_only",
         	"elem_type":"bool",
         	"defaultvalue":"true",
-        	"description":"If false and poi.polygon.disable.same.source.conflation is set to true, POI to polygon conflation will disable conflation only between features who have the exact same source tag value. e.g. both have 'source=osm' tag If set to false, then the tag matcher is less strict and will attempt to match the prefix of the source tag value when delimited by a colon. e.g. 'source=mgcp:buildp_clip;osm' will match 'source=mgcp:builda_clip;osm' since both tag values begin with 'mgcp:'.",
+        	"description":"If set to false and poi.polygon.disable.same.source.conflation is set to true, POI to polygon conflation will disable conflation only between features who have the exact same source tag value.  e.g. both have 'source=osm' tag  If set to true and poi.polygon.disable.same.source.conflation is set to true, then the tag matcher is less strict and will attempt to match the prefix of the source tag value when delimited by a colon.  e.g. 'source=mgcp:buildp_clip;osm' will match 'source=mgcp:builda_clip;osm' since both tag values begin with 'mgcp:'.",
         	"name":"Disable Same Source Conflation Match Tag Key Prefix Only",
         	"hoot_key":"poi.polygon.disable.same.source.conflation.match.tag.key.prefix.only"
     	    },
    	    {
         	"id":"poipolygon_source_tag_key",
         	"elem_type":"string",
-        	"description":"The source tag key to be used with poi.polygon.disable.same.source.conflation.",
+        	"description":"The source tag key to be used in conjunction with poi.polygon.disable.same.source.conflation.",
         	"name":"Source Tag Key",
         	"defaultvalue":"source",
         	"hoot_key":"poi.polygon.source.tag.key",
@@ -1011,17 +1019,17 @@
                 "id":"waterway_rubber_sheet_minimum_ties",
                 "minvalue":"0",
                 "elem_type":"int",
-                "description":"Sets the minimum number of tie points that will be used when calculating a rubber sheeting solution.",
+                "description":"Sets the minimum number of rubber sheet tie points that will be used when auto-calculating a search radius.  This is separate from the global Rubber Sheeting Minimum Ties option.",
                 "maxvalue":"",
-                "name":"Waterway Rubber Sheet Minimum Ties",
+                "name":"Waterway Auto-Search Radius Calculation Minimum Ties",
                 "defaultvalue":"5",
                 "hoot_key":"waterway.rubber.sheet.minimum.ties"
             },
             {
                 "id":"waterway_rubber_sheet_ref",
                 "elem_type":"bool",
-                "description":"If this configuration setting is set to true then the first layer is treated as the reference layer and will not be moved. If set to false the two layers will be moved towards each other. The weighting is determined based on the circular error.",
-                "name":"Waterway Rubber Sheet Ref",
+                "description":"When auto-calculating a search radius, if this configuration setting is set to true then the first layer is treated as the reference layer and will not be moved. If set to false, the two layers will be moved towards each other. The weighting is determined based on the circular error.  This is separate from the global Rubber Sheeting Ref option.",
+                "name":"Waterway Auto-Search Radius Calculation Rubber Sheet Ref",
                 "defaultvalue":"true",
                 "hoot_key":"waterway.rubber.sheet.ref"
             }

@@ -1418,16 +1418,6 @@ See also:
 The number of optimization iterations the network match creator will run when performing network
 conflation.
 
-=== network.pre.ops
-
-* Data Type: list
-* Default Value:
-** `hoot::CornerSplitter`
-** `hoot::RubberSheet`
-
-List of operations to apply immediately before conflating when using Network Conflation only.  Runs
-after the operations in `conflate.pre.ops`.
-
 === network.review.threshold
 
 * Data Type: double
@@ -2123,21 +2113,22 @@ See also:
 
 If true, POI to polygon conflation will not attempt to conflate two features with the same source
 tag value.  e.g. both have 'source=osm' tag  The source tag key is specified by
-poi.polygon.source.tag.key.  This setting is useful when you have a data layer where data has been
-collected as both POIs and polygons for the same source and you never want the two source to be
-conflated together.
+poi.polygon.source.tag.key.  How strictly the source tag key must be matched is controlled by
+poi.polygon.disable.same.source.conflation.match.tag.key.prefix.only.  This setting is useful when
+you have a data layer where data has been collected as both POIs and polygons for the same source
+and you never want the two source to be conflated together.
 
 === poi.polygon.disable.same.source.conflation.match.tag.key.prefix.only
 
 * Data Type: bool
 * Default Value: `true`
 
-If false and poi.polygon.disable.same.source.conflation is set to true, POI to polygon conflation
-will disable conflation only between features who have the exact same source tag value.
-e.g. both have 'source=osm' tag  If set to false, then the tag matcher is less strict and will
-attempt to match the prefix of the source tag value when delimited by a colon.
-e.g. 'source=mgcp:buildp_clip;osm' will match 'source=mgcp:builda_clip;osm' since both tag values
-begin with 'mgcp:'.
+If set to false and poi.polygon.disable.same.source.conflation is set to true, POI to polygon
+conflation will disable conflation only between features who have the exact same source tag value.
+e.g. both have 'source=osm' tag  If set to true and poi.polygon.disable.same.source.conflation is
+set to true, then the tag matcher is less strict and will attempt to match the prefix of the source
+tag value when delimited by a colon.  e.g. 'source=mgcp:buildp_clip;osm' will match
+'source=mgcp:builda_clip;osm' since both tag values begin with 'mgcp:'.
 
 === poi.polygon.enable.advanced.matching
 
@@ -2278,7 +2269,7 @@ The threshold at which a review is called a review for PoiPolygon. See
 * Data Type: string
 * Default Value: `source`
 
-The source tag key to be used with poi.polygon.disable.same.source.conflation.
+The source tag key to be used in conjunction with poi.polygon.disable.same.source.conflation.
 
 === poi.polygon.type.score.threshold
 
