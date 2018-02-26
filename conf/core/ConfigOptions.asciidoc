@@ -1418,16 +1418,6 @@ See also:
 The number of optimization iterations the network match creator will run when performing network
 conflation.
 
-=== network.pre.ops
-
-* Data Type: list
-* Default Value:
-** `hoot::CornerSplitter`
-** `hoot::RubberSheet`
-
-List of operations to apply immediately before conflating when using Network Conflation only.  Runs
-after the operations in `conflate.pre.ops`.
-
 === network.review.threshold
 
 * Data Type: double
