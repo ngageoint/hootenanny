@@ -77,14 +77,6 @@
                 "defaultvalue":"true"
             },
             {
-                "id":"corner_splitter",
-                "elem_type":"checkbox",
-                "description":"Split roads at sharp corners..",
-                "name":"Split Sharp Road Corners",
-                "hoot_val":"hoot::CornerSplitter",
-                "defaultvalue":"true"
-            },
-            {
                 "id":"implied_divided_marker",
                 "elem_type":"checkbox",
                 "description":"If two roads implicitly should be marked as divided based on the surrounding roads, mark it as such. This is primarily caused by the FACC+ spec which does not allow bridges to be marked as divided.",
@@ -147,6 +139,14 @@
                 "description":"Remove any elements that don't have any tags with information. (E.g. only contains UUID and source, but not FCODE equivalent or other informative tags).",
                 "name":"Remove Elements With No Information",
                 "hoot_val":"hoot::NoInformationElementRemover",
+                "defaultvalue":"true"
+            },
+            {
+                "id":"corner_splitter",
+                "elem_type":"checkbox",
+                "description":"Split roads at sharp corners..",
+                "name":"Split Sharp Road Corners",
+                "hoot_val":"hoot::CornerSplitter",
                 "defaultvalue":"true"
             }
         ]

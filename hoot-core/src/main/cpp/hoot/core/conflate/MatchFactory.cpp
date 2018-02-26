@@ -148,23 +148,112 @@ void MatchFactory::_setMatchCreators(QStringList matchCreatorsList)
   }
 }
 
+void MatchFactory::_tempFixDefaults()
+{
+  QStringList matchCreators = ConfigOptions().getMatchCreators().split(";");
+  QStringList mergerCreators = ConfigOptions().getMergerCreators().split(";");
+  LOG_VARD(matchCreators);
+  LOG_VARD(mergerCreators);
+
+  //fix matchers/mergers
+  if (matchCreators.size() != mergerCreators.size())
+  {
+    //going to make the mergers match whatever the matchers are
+    QStringList fixedMergerCreators;
+    for (int i = 0; i < matchCreators.size(); i++)
+    {
+      const QString matchCreator = matchCreators.at(i);
+      if (matchCreator == "hoot::BuildingMatchCreator")
+      {
+        fixedMergerCreators.append("hoot::BuildingMergerCreator");
+      }
+      else if (matchCreator.contains("hoot::ScriptMatchCreator"))
+      {
+        fixedMergerCreators.append("hoot::ScriptMergerCreator");
+      }
+      else if (matchCreator == "hoot::HighwayMatchCreator")
+      {
+        fixedMergerCreators.append("hoot::HighwaySnapMergerCreator");
+      }
+      else if (matchCreator == "hoot::PoiPolygonMatchCreator")
+      {
+        fixedMergerCreators.append("hoot::PoiPolygonMergerCreator");
+      }
+    }
+    conf().set("merger.creators", fixedMergerCreators.join(";"));
+  }
+  LOG_VARD(mergerCreators);
+
+  //fix way subline matcher options
+  if (matchCreators.contains("hoot::NetworkMatchCreator") &&
+      ConfigOptions().getWaySublineMatcher() != "hoot::FrechetSublineMatcher")
+  {
+    conf().set("way.subline.matcher", "hoot::MaximalSublineMatcher");
+  }
+  else if (matchCreators.contains("hoot::HighwaySnapMatchCreator") &&
+           ConfigOptions().getWaySublineMatcher() != "hoot::FrechetSublineMatcher")
+  {
+    conf().set("way.subline.matcher", "hoot::MaximalNearestSublineMatcher");
+  }
+  LOG_VARD(ConfigOptions().getWaySublineMatcher());
+
+  //fix highway classifier
+  if (matchCreators.contains("hoot::NetworkMatchCreator"))
+  {
+    conf().set("conflate.match.highway.classifier", "hoot::HighwayExpertClassifier");
+  }
+  else if (matchCreators.contains("hoot::HighwaySnapMatchCreator") &&
+           ConfigOptions().getWaySublineMatcher() != "hoot::FrechetSublineMatcher")
+  {
+    conf().set("conflate.match.highway.classifier", "hoot::HighwayRfClassifier ");
+  }
+  LOG_VARD(ConfigOptions().getConflateMatchHighwayClassifier());
+
+  //fix use of rubber sheeting and corner splitter - default value coming in from UI with network
+  //will be correct, so just fix for unifying
+  if (matchCreators.contains("hoot::HighwayMatchCreator"))
+  {
+    QStringList mapCleanerTransforms = ConfigOptions().getMapCleanerTransforms();
+    if (mapCleanerTransforms.contains("hoot::RubberSheet"))
+    {
+      mapCleanerTransforms.removeAll("hoot::RubberSheet");
+    }
+    if (mapCleanerTransforms.contains("hoot::CornerSplitter"))
+    {
+      mapCleanerTransforms.removeAll("hoot::CornerSplitter");
+    }
+    conf().set("map.cleaner.transforms", mapCleanerTransforms.join(";"));
+  }
+  LOG_VARD(ConfigOptions().getMapCleanerTransforms());
+}
+
 MatchFactory& MatchFactory::getInstance()
 {
+  /* TODO: remove this hack after the following UI issues are fixed:
+   *
+   * https://github.com/ngageoint/hootenanny-ui/issues/969
+   * https://github.com/ngageoint/hootenanny-ui/issues/970
+   * https://github.com/ngageoint/hootenanny-ui/issues/971
+   * https://github.com/ngageoint/hootenanny-ui/issues/972
+   * */
+  _tempFixDefaults();
+
   const QStringList matchCreators = ConfigOptions().getMatchCreators().split(";");
-  LOG_VARD(matchCreators);
   const QStringList mergerCreators = ConfigOptions().getMergerCreators().split(";");
+  LOG_VARD(matchCreators);
   LOG_VARD(mergerCreators);
 
   //ConflateAverageTest is configured with old roads and specifies empty strings for both matchers
   //and mergers.  I don't completely understand why it explicitly needs to specify an empty config
-  //strings for those, though.  The old roads option will be removed in #2133 - BDW
+  //strings for those, though.  The old roads option will be removed in #2133.
   if ((matchCreators.size() == 0 || mergerCreators.size() == 0) &&
       !ConfigOptions().getConflateEnableOldRoads())
   {
     throw HootException(
       "Empty match/merger creators only allowed when conflate.enable.old.roads is enabled.");
   }
-  else if (matchCreators.size() != mergerCreators.size())
+
+  if (matchCreators.size() != mergerCreators.size())
   {
     throw HootException(
       "The number of configured match creators (" + QString::number(matchCreators.size()) +

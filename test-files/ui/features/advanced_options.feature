@@ -30,13 +30,13 @@ Feature: Advanced Conflation Options
         And I should see checkbox "Remove Superfluous Ways" checked
         And I should see checkbox "Remove Unlikely Intersections" checked
         And I should see checkbox "Split Dual Ways" checked
-	And I should see checkbox "Split Sharp Road Corners" checked
         And I should see checkbox "Divided Road Marker Implied" checked
         And I should see checkbox "Merge Small Ways" checked
         And I should see element "#small_way_merger_threshold" with no value and placeholder "15"
         And I should see checkbox "Remove Empty Areas" checked
         And I should see checkbox "Remove Duplicate Areas" checked
         And I should see checkbox "Remove Elements With No Information" checked
+	And I should see checkbox "Split Sharp Road Corners" checked
         Then I click on "#hoot_cleaning_options_label"
         And I should see "Rubber Sheeting Options"
         Then I click on "#hoot_rubber_sheeting_options_label"
