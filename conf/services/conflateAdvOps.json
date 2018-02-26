@@ -77,6 +77,14 @@
                 "defaultvalue":"true"
             },
             {
+                "id":"corner_splitter",
+                "elem_type":"checkbox",
+                "description":"Split roads at sharp corners..",
+                "name":"Split Sharp Road Corners",
+                "hoot_val":"hoot::CornerSplitter",
+                "defaultvalue":"true"
+            },
+            {
                 "id":"implied_divided_marker",
                 "elem_type":"checkbox",
                 "description":"If two roads implicitly should be marked as divided based on the surrounding roads, mark it as such. This is primarily caused by the FACC+ spec which does not allow bridges to be marked as divided.",
@@ -168,7 +176,7 @@
                 "elem_type":"checkbox",
                 "description":"Enable rubber sheeting options",
                 "name":"Enabled",
-                "defaultvalue":"false",
+                "defaultvalue":"true",
                 "onchange":"true"
             },
             {
@@ -176,7 +184,7 @@
                 "elem_type":"checkbox",
                 "description":"If this configuration setting is set to true then the first layer is treated as the reference layer and will not be moved. If set to false the two layers will be moved towards each other. The weighting is determined based on the circular error.",
                 "name":"Rubber Sheet Ref",
-                "defaultvalue":"false",
+                "defaultvalue":"true",
                 "hoot_key":"rubber.sheet.ref"
             },
             {
@@ -186,7 +194,7 @@
                 "description":"Sets the minimum number of tie points that will be used when calculating a rubber sheeting solution.",
                 "maxvalue":"",
                 "name":"Rubber Sheet Minimum Ties",
-                "defaultvalue":"10",
+                "defaultvalue":"4",
                 "hoot_key":"rubber.sheet.minimum.ties"
             }
         ]

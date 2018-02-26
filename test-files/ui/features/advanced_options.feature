@@ -30,6 +30,7 @@ Feature: Advanced Conflation Options
         And I should see checkbox "Remove Superfluous Ways" checked
         And I should see checkbox "Remove Unlikely Intersections" checked
         And I should see checkbox "Split Dual Ways" checked
+	And I should see checkbox "Split Sharp Road Corners" checked
         And I should see checkbox "Divided Road Marker Implied" checked
         And I should see checkbox "Merge Small Ways" checked
         And I should see element "#small_way_merger_threshold" with no value and placeholder "15"
@@ -39,9 +40,9 @@ Feature: Advanced Conflation Options
         Then I click on "#hoot_cleaning_options_label"
         And I should see "Rubber Sheeting Options"
         Then I click on "#hoot_rubber_sheeting_options_label"
-        And I should see checkbox "Enabled" unchecked
-        And I should see checkbox "Rubber Sheet Ref" unchecked
-        And I should see element "#rubber_sheet_minimum_ties" with no value and placeholder "10"
+        And I should see checkbox "Enabled" checked
+        And I should see checkbox "Rubber Sheet Ref" checked
+        And I should see element "#rubber_sheet_minimum_ties" with no value and placeholder "4"
         Then I click on "#hoot_rubber_sheeting_options_label"
         And I should see "General Conflation Options"
         Then I click on "#hoot_general_conflation_options_label"
