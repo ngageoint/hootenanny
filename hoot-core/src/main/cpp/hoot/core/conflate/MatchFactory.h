@@ -106,7 +106,7 @@ private:
                                    const geos::geom::Envelope& bounds) const;
   static void _setMatchCreators(QStringList matchCreatorsList);
 
-  void _tempFixDefaults();
+  static void _tempFixDefaults();
 
   static boost::shared_ptr<MatchFactory> _theInstance;
 

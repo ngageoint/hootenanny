@@ -156,7 +156,7 @@ bool MergerFactory::isConflicting(const ConstOsmMapPtr& map, const Match* m1, co
 
 void MergerFactory::registerDefaultCreators()
 {  
-  const QStringList mergerCreators = ConfigOptions(conf()).getMergerCreators().split(";");
+  const QStringList mergerCreators = ConfigOptions().getMergerCreators().split(";");
   LOG_VARD(mergerCreators);
   for (int i = 0; i < mergerCreators.size(); i++)
   {
