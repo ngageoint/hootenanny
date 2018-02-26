@@ -67,7 +67,7 @@ public:
     l.removeAll(QString::fromStdString(RubberSheet::className()));
     conf().set(MapCleaner::opsKey(), l);
     MapCleaner().apply(map);
-    RubberSheet(true).apply(map);
+    RubberSheet().apply(map);
 
     MapProjector::projectToWgs84(map);
 

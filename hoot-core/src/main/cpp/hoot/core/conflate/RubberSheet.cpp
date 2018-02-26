@@ -67,11 +67,11 @@ bool compareMatches(const RubberSheet::Match& m1, const RubberSheet::Match& m2)
   return m1.p > m2.p;
 }
 
-RubberSheet::RubberSheet(bool logNotEnoughTiePointsAsWarning) :
+RubberSheet::RubberSheet() :
 _ref(ConfigOptions().getRubberSheetRef()),
 _debug(ConfigOptions().getRubberSheetDebug()),
 _minimumTies(ConfigOptions().getRubberSheetMinimumTies()),
-_logNotEnoughTiePointsAsWarning(logNotEnoughTiePointsAsWarning)
+_failWhenMinTiePointsNotFound(ConfigOptions().getRubberSheetFailWhenMinimumTiePointsNotFound())
 {
   _emptyMatch.score = 0.0;
   _emptyMatch.p = 0.0;
@@ -146,13 +146,11 @@ void RubberSheet::applyTransform(boost::shared_ptr<OsmMap>& map)
 
   if (!_interpolator2to1)
   {
-    if (logWarnCount < Log::getWarnMessageLimit()
-        && _logNotEnoughTiePointsAsWarning)
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       LOG_WARN("No appropriate interpolator was specified, skipping rubber sheet transform.");
     }
-    else if (logWarnCount == Log::getWarnMessageLimit()
-             && _logNotEnoughTiePointsAsWarning)
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }
@@ -402,17 +400,21 @@ void RubberSheet::_findTies()
   }
   else
   {
-    const QString msg =
-      QString("Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is %1 and %2 tie points were found.")
-        .arg(QString::number(_minimumTies))
-        .arg(QString::number(_ties.size()));
-    if (_logNotEnoughTiePointsAsWarning)
+    if (_failWhenMinTiePointsNotFound)
     {
-      LOG_WARN(msg);
+      throw HootException(
+        QString("Error rubbersheeting due to not finding enough tie points.  ") +
+        QString("The minimum allowable tie points configured is %1 and %2 tie points were found.")
+          .arg(QString::number(_minimumTies))
+          .arg(QString::number(_ties.size())));
     }
     else
     {
-      LOG_INFO(msg);
+      LOG_WARN(
+        QString("Skipping rubbersheeting due to not finding enough tie points.  ") +
+        QString("The minimum allowable tie points configured is %1 and %2 tie points were found.")
+          .arg(QString::number(_minimumTies))
+          .arg(QString::number(_ties.size())));
     }
 
     _interpolator1to2.reset();

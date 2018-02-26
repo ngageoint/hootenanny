@@ -162,7 +162,7 @@ void MatchFactory::_tempFixDefaults()
       "Empty match/merger creators only allowed when conflate.enable.old.roads is enabled.");
   }
 
-  //fix matchers/mergers
+  //fix matchers/mergers - https://github.com/ngageoint/hootenanny-ui/issues/972
   if (matchCreators.size() != mergerCreators.size())
   {
     //going to make the mergers match whatever the matchers are
@@ -192,7 +192,7 @@ void MatchFactory::_tempFixDefaults()
   }
   LOG_VARD(mergerCreators);
 
-  //fix way subline matcher options
+  //fix way subline matcher options - https://github.com/ngageoint/hootenanny-ui/issues/970
   if (matchCreators.contains("hoot::NetworkMatchCreator") &&
       ConfigOptions().getWaySublineMatcher() != "hoot::FrechetSublineMatcher" &&
       ConfigOptions().getWaySublineMatcher() != "hoot::MaximalSublineMatcher")
@@ -209,7 +209,7 @@ void MatchFactory::_tempFixDefaults()
   }
   LOG_VARD(ConfigOptions().getWaySublineMatcher());
 
-  //fix highway classifier
+  //fix highway classifier - https://github.com/ngageoint/hootenanny-ui/issues/971
   if (matchCreators.contains("hoot::NetworkMatchCreator") &&
       ConfigOptions().getConflateMatchHighwayClassifier() != "hoot::HighwayExpertClassifier")
   {
@@ -225,7 +225,7 @@ void MatchFactory::_tempFixDefaults()
   LOG_VARD(ConfigOptions().getConflateMatchHighwayClassifier());
 
   //fix use of rubber sheeting and corner splitter - default value coming in from UI with network
-  //will be correct, so just fix for unifying
+  //will be correct, so just fix for unifying - https://github.com/ngageoint/hootenanny-ui/issues/969
   QStringList mapCleanerTransforms = ConfigOptions().getMapCleanerTransforms();
   if (matchCreators.contains("hoot::HighwayMatchCreator") &&
       (mapCleanerTransforms.contains("hoot::CornerSplitter") ||

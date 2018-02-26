@@ -55,11 +55,19 @@ namespace hoot
 {
 
 PertyMatchScorer::PertyMatchScorer() :
-  _settings(conf())
+_settings(conf())
 {
   ConfigOptions configOptions;
   setSearchDistance(configOptions.getPertySearchDistance());
-  setApplyRubberSheet(configOptions.getPertyApplyRubberSheet());
+  if (ConfigOptions().getConflatePreOps().contains("hoot::RubberSheet") ||
+      ConfigOptions().getUnifyPreOps().contains("hoot::RubberSheet"))
+  {
+    setApplyRubberSheet(false);
+  }
+  else
+  {
+    setApplyRubberSheet(configOptions.getPertyApplyRubberSheet());
+  }
 }
 
 QString PertyMatchScorer::toString()

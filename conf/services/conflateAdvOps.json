@@ -196,6 +196,14 @@
                 "name":"Rubber Sheet Minimum Ties",
                 "defaultvalue":"4",
                 "hoot_key":"rubber.sheet.minimum.ties"
+            },
+            {
+                "id":"rubber_sheet_fail_when_min_tie_points_not_found",
+                "elem_type":"checkbox",
+                "description":"If set to true, rubber sheeting will return an error if less than rubber.sheet.minimum.ties tie points are found.  Otherwise, a warning will be logged and rubber sheeting will be skipped.",
+                "name":"Fail When Minimum Tie Points Are Not Found",
+                "defaultvalue":"false",
+                "hoot_key":"rubber.sheet.fail.when.minimum.tie.points.not.found"
             }
         ]
     },

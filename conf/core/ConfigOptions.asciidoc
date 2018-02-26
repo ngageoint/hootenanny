@@ -2426,6 +2426,14 @@ If set to true, then debug symbols will be added to nodes and additional tags wi
 matched nodes. This is a destructive operation that is only useful when debugging and should not
 be used during serious conflation.
 
+=== rubber.sheet.fail.when.minimum.tie.points.not.found
+
+* Data Type: bool
+* Default Value: `false`
+
+If set to true, rubber sheeting will return an error if less than rubber.sheet.minimum.ties tie
+points are found.  Otherwise, a warning will be logged and rubber sheeting will be skipped.
+
 === rubber.sheet.minimum.ties
 
 * Data Type: int

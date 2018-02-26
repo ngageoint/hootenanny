@@ -43,6 +43,7 @@ Feature: Advanced Conflation Options
         And I should see checkbox "Enabled" checked
         And I should see checkbox "Rubber Sheet Ref" checked
         And I should see element "#rubber_sheet_minimum_ties" with no value and placeholder "4"
+	And I should see checkbox "Fail When Minimum Tie Points Are Not Found" unchecked
         Then I click on "#hoot_rubber_sheeting_options_label"
         And I should see "General Conflation Options"
         Then I click on "#hoot_general_conflation_options_label"
