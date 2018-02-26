@@ -377,8 +377,16 @@ public:
   bool isLinear(const Element& e);
 
   /**
+   * Returns true if the element is a linear waterway type object (e.g. river, etc.)
    */
   bool isLinearWaterway(const Element &e);
+
+  /**
+   * Returns true if the element is a roundabout
+   *
+   * This is not an exhaustive check, feel free to add more criteria
+   */
+  bool isRoundabout(const Tags& tags, ElementType type);
 
   /**
    * Returns true if this is a list of values. Right now this just looks for a semicolon in value,
