@@ -91,6 +91,7 @@ public:
       MapCleaner().apply(map);
       RubberSheet uut;
       uut.setReference(false);
+      uut.setMinimumTies(10);
       uut.calculateTransform(map);
 
       QBuffer buf1(&arr1);
@@ -116,6 +117,8 @@ public:
 
       MapCleaner().apply(map);
       RubberSheet uut;
+      uut.setReference(false);
+      uut.setMinimumTies(10);
 
       QBuffer buf1(&arr1);
       QBuffer buf2(&arr2);
