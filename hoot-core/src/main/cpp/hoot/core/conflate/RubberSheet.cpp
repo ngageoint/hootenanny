@@ -75,6 +75,10 @@ _failWhenMinTiePointsNotFound(ConfigOptions().getRubberSheetFailWhenMinimumTiePo
 {
   _emptyMatch.score = 0.0;
   _emptyMatch.p = 0.0;
+
+  LOG_VARD(_ref);
+  LOG_VARD(_minimumTies);
+  LOG_VARD(_failWhenMinTiePointsNotFound);
 }
 
 void RubberSheet::_addIntersection(long nid, const set<long>& /*wids*/)
@@ -380,6 +384,8 @@ void RubberSheet::_findTies()
     }
   }
 
+  LOG_VARD(_ties.size());
+  LOG_VARD(_minimumTies);
   if ((long)_ties.size() >= _minimumTies)
   {
     LOG_DEBUG(
@@ -400,6 +406,7 @@ void RubberSheet::_findTies()
   }
   else
   {
+    LOG_VARD(_failWhenMinTiePointsNotFound);
     if (_failWhenMinTiePointsNotFound)
     {
       throw HootException(
