@@ -2434,6 +2434,16 @@ be used during serious conflation.
 If set to true, rubber sheeting will return an error if less than rubber.sheet.minimum.ties tie
 points are found.  Otherwise, a warning will be logged and rubber sheeting will be skipped.
 
+=== rubber.sheet.log.missing.requirements.as.warning
+
+* Data Type: bool
+* Default Value: `true`
+
+If set to true, rubber sheeting will log a warning if any requirement for rubber sheeting is not
+met.  e.g less than rubber.sheet.minimum.ties tie points are found.  Otherwise, an info level log
+statement will be logged instead.  This setting is completely ignored if
+rubber.sheet.fail.when.minimum.tie.points.not.found is set to true.
+
 === rubber.sheet.minimum.ties
 
 * Data Type: int
@@ -2811,6 +2821,14 @@ NOTE: This assumes that you know exactly what tags you want to modify/delete
 * Default Value: ``
 
 The script to use for translation.
+
+=== ui.autocorrect.options
+
+* Data Type: bool
+* Default Value: `false`
+
+Temporary setting that addresses some Hootenanny iD Editor UI bugs.  See
+MatchFactory::_tempFixDefaults() for more info.
 
 === unify.enable.optimal.constrained.matches
 

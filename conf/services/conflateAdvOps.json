@@ -148,7 +148,19 @@
                 "name":"Split Sharp Road Corners",
                 "hoot_val":"hoot::CornerSplitter",
                 "defaultvalue":"true"
-            }
+            },
+            {
+                "id":"auto_correct_options",
+                "elem_type":"string",
+                "description":"Temp setting to workaround adv opts bugs",
+                "name":"Auto Correct Options",
+                "required":"true",
+                "defaultvalue":"true",
+                "override":{
+                  "defaultvalue":"true"
+                },
+                "hoot_key":"ui.autocorrect.options"
+           }
         ]
     },
     {

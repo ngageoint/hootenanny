@@ -131,6 +131,9 @@ public:
 
    void setFailWhenMinimumTiePointsNotFound(bool fail) { _failWhenMinTiePointsNotFound = fail; }
 
+   void setLogWarningWhenRequirementsNotFound(bool logWarning)
+   { _logWarningWhenRequirementsNotFound = logWarning; }
+
 private:
 
   typedef std::map<long, std::list<Match> > MatchList;
@@ -168,6 +171,7 @@ private:
   NodeMatcher _nm;
 
   bool _failWhenMinTiePointsNotFound;
+  bool _logWarningWhenRequirementsNotFound;
 
   Match _emptyMatch;
 

@@ -254,7 +254,10 @@ MatchFactory& MatchFactory::getInstance()
    * https://github.com/ngageoint/hootenanny-ui/issues/971
    * https://github.com/ngageoint/hootenanny-ui/issues/972
    * */
-  MatchFactory::_tempFixDefaults();
+  if (ConfigOptions().getUiAutocorrectOptions())
+  {
+    MatchFactory::_tempFixDefaults();
+  }
 
   const QStringList matchCreators = ConfigOptions().getMatchCreators().split(";");
   const QStringList mergerCreators = ConfigOptions().getMergerCreators().split(";");

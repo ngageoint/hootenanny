@@ -71,7 +71,8 @@ RubberSheet::RubberSheet() :
 _ref(ConfigOptions().getRubberSheetRef()),
 _debug(ConfigOptions().getRubberSheetDebug()),
 _minimumTies(ConfigOptions().getRubberSheetMinimumTies()),
-_failWhenMinTiePointsNotFound(ConfigOptions().getRubberSheetFailWhenMinimumTiePointsNotFound())
+_failWhenMinTiePointsNotFound(ConfigOptions().getRubberSheetFailWhenMinimumTiePointsNotFound()),
+_logWarningWhenRequirementsNotFound(ConfigOptions().getRubberSheetLogMissingRequirementsAsWarning())
 {
   _emptyMatch.score = 0.0;
   _emptyMatch.p = 0.0;
@@ -79,6 +80,7 @@ _failWhenMinTiePointsNotFound(ConfigOptions().getRubberSheetFailWhenMinimumTiePo
   LOG_VARD(_ref);
   LOG_VARD(_minimumTies);
   LOG_VARD(_failWhenMinTiePointsNotFound);
+  LOG_VARD(_logWarningWhenRequirementsNotFound);
 }
 
 void RubberSheet::_addIntersection(long nid, const set<long>& /*wids*/)
@@ -150,15 +152,16 @@ void RubberSheet::applyTransform(boost::shared_ptr<OsmMap>& map)
 
   if (!_interpolator2to1)
   {
-    if (logWarnCount < Log::getWarnMessageLimit())
+    const QString msg =
+      "No appropriate interpolator was specified, skipping rubber sheet transform.";
+    if (_logWarningWhenRequirementsNotFound)
     {
-      LOG_WARN("No appropriate interpolator was specified, skipping rubber sheet transform.");
+      LOG_WARN(msg);
     }
-    else if (logWarnCount == Log::getWarnMessageLimit())
+    else
     {
-      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      LOG_INFO(msg);
     }
-    logWarnCount++;
     return;
   }
 
@@ -417,11 +420,19 @@ void RubberSheet::_findTies()
     }
     else
     {
-      LOG_WARN(
+      const QString msg =
         QString("Skipping rubbersheeting due to not finding enough tie points.  ") +
         QString("The minimum allowable tie points configured is %1 and %2 tie points were found.")
           .arg(QString::number(_minimumTies))
-          .arg(QString::number(_ties.size())));
+          .arg(QString::number(_ties.size()));
+      if (_logWarningWhenRequirementsNotFound)
+      {
+        LOG_WARN(msg);
+      }
+      else
+      {
+        LOG_INFO(msg);
+      }
     }
 
     _interpolator1to2.reset();

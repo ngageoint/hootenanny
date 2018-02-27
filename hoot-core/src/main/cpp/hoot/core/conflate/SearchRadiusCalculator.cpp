@@ -99,6 +99,7 @@ void SearchRadiusCalculator::apply(boost::shared_ptr<OsmMap> &map)
   rubberSheet->setReference(_rubberSheetRef);
   rubberSheet->setMinimumTies(_minTies);
   rubberSheet->setFailWhenMinimumTiePointsNotFound(false);
+  rubberSheet->setLogWarningWhenRequirementsNotFound(false);
   try
   {
     rubberSheet->calculateTransform(mapWithOnlyUnknown1And2);
@@ -118,6 +119,7 @@ void SearchRadiusCalculator::apply(boost::shared_ptr<OsmMap> &map)
       rubberSheet->setReference(_rubberSheetRef);
       rubberSheet->setMinimumTies(_minTies);
       rubberSheet->setFailWhenMinimumTiePointsNotFound(false);
+      rubberSheet->setLogWarningWhenRequirementsNotFound(false);
       rubberSheet->calculateTransform(mapWithOnlyUnknown1And2);
     }
     catch (const HootException& e)
