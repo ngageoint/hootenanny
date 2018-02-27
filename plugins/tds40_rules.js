@@ -78,6 +78,7 @@ tds.rules = {
     ['F_CODE','AP030','highway','trunk'], // Motorway
     ['F_CODE','AP030','highway','trunk_link'], // Motorway
     ['F_CODE','AP030','highway','unclassified'],
+    ['F_CODE','AP030','highway','construction'],
     ['F_CODE','AP030','highway','yes'], // Just in case...
     ['F_CODE','AP040','barrier','lift_gate'], // Gate
     ['F_CODE','AP050','highway','footway'], // Trail

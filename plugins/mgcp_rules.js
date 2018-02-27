@@ -105,6 +105,21 @@ mgcp.rules = {
     ['F_CODE','AP050','highway','footway'],
     ['F_CODE','AP050','highway','bridleway'],
     ['F_CODE','AP050','highway','cycleway'],
+    ['F_CODE','AP030','highway','motorway'], // Limited Access Motorway
+    ['F_CODE','AP030','highway','motorway_link'], // Limited Access Motorway
+    ['F_CODE','AP030','highway','primary'],
+    ['F_CODE','AP030','highway','primary_link'],
+    ['F_CODE','AP030','highway','residential'],
+    ['F_CODE','AP030','highway','secondary'],
+    ['F_CODE','AP030','highway','secondary_link'],
+    ['F_CODE','AP030','highway','service'],
+    ['F_CODE','AP030','highway','tertiary'],
+    ['F_CODE','AP030','highway','tertiary_link'],
+    ['F_CODE','AP030','highway','trunk'], // Motorway
+    ['F_CODE','AP030','highway','trunk_link'], // Motorway
+    ['F_CODE','AP030','highway','unclassified'],
+    ['F_CODE','AP030','highway','construction'], // Lifecycle
+    ['F_CODE','AP030','highway','yes'], // Just in case...
     ['F_CODE','AT050','landuse','facility'],
     ['F_CODE','BA010','natural','coastline'], // Land/Water Boundary - From OSM
     ['F_CODE','BA030','place','islet'], // From OSM
