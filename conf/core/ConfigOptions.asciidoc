@@ -1785,7 +1785,7 @@ The default is to write a file even if the map is empty.
 
 * Data Type: list
 * Default Value:
-** ``
+** `hoot::AddFeatureDimensionsOp` - Add length and area tags to features
 
 User specified operations for converting OSM files to OGR compatible file types.
 

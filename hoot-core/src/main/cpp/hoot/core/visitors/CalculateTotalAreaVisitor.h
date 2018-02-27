@@ -22,10 +22,10 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef CALCULATEAREAVISITOR_H
-#define CALCULATEAREAVISITOR_H
+#ifndef CALCULATETOTALAREAVISITOR_H
+#define CALCULATETOTALAREAVISITOR_H
 
 // hoot
 #include <hoot/core/OsmMap.h>
@@ -41,15 +41,15 @@ namespace hoot
  * Sums the length of all the ways. The map projection is used so to get meters the map must be
  * first reprojected into meters.
  */
-class CalculateAreaVisitor : public ConstElementVisitor, public ConstOsmMapConsumer, public SingleStatistic
+class CalculateTotalAreaVisitor : public ConstElementVisitor, public ConstOsmMapConsumer, public SingleStatistic
 {
 public:
 
-  static std::string className() { return "hoot::CalculateAreaVisitor"; }
+  static std::string className() { return "hoot::CalculateTotalAreaVisitor"; }
 
-  CalculateAreaVisitor() : _total(0) {}
+  CalculateTotalAreaVisitor() : _total(0) {}
 
-  virtual ~CalculateAreaVisitor() {}
+  virtual ~CalculateTotalAreaVisitor() {}
 
   /**
    * Returns the area in meters squared.
@@ -71,4 +71,4 @@ private:
 
 }
 
-#endif // ADDREFVISITOR_H
+#endif // CALCULATETOTALAREAVISITOR_H

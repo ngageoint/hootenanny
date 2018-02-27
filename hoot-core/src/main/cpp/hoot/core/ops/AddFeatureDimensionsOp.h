@@ -22,37 +22,44 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "CalculateAreaVisitor.h"
 
-// geos
-#include <geos/geom/LineString.h>
+#ifndef ADDFEATUREDIMENSIONSOP_H
+#define ADDFEATUREDIMENSIONSOP_H
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/util/ElementConverter.h>
-
-using namespace geos::geom;
+#include <hoot/core/io/Serializable.h>
+#include <hoot/core/ops/OsmMapOperation.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, CalculateAreaVisitor)
+class OsmMap;
 
-Meters CalculateAreaVisitor::getArea(const OsmMapPtr& map, ElementPtr e)
+/**
+ * This class adds  area and length tags to elements
+ * The input map can be in either a planar or geographic projection.
+ */
+//class AddFeatureDimensionsOp : public OsmMapOperation
+class AddFeatureDimensionsOp : public OsmMapOperation, public Serializable
 {
-  CalculateAreaVisitor v;
-  v.setOsmMap(map.get());
-  e->visitRo(*map, v);
-  return v.getArea();
+public:
+
+  static std::string className() { return "hoot::AddFeatureDimensionsOp"; }
+
+  AddFeatureDimensionsOp();
+
+  virtual void apply(boost::shared_ptr<OsmMap>& map);
+
+  virtual std::string getClassName() const { return className(); }
+
+  virtual void readObject(QDataStream& is);
+
+  virtual void writeObject(QDataStream& os) const;
+
+};
+
 }
 
-void CalculateAreaVisitor::visit(const ConstElementPtr& e)
-{
-  boost::shared_ptr<Geometry> g = ElementConverter(_map->shared_from_this()).convertToGeometry(e);
-  _total += g->getArea();
-}
-
-}
+#endif // ADDFEATUREDIMENSIONSOP_H

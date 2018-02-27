@@ -595,7 +595,7 @@ void MapProjector::project(boost::shared_ptr<OsmMap> map, boost::shared_ptr<OGRS
     }
     count++;
   }
-  if (Log::getInstance().isInfoEnabled())
+  if (Log::getInstance().isInfoEnabled() && count > 1000)
   {
     cout << endl;
   }
