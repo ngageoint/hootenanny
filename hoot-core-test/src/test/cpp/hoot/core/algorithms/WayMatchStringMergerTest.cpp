@@ -60,7 +60,7 @@ public:
 
   void setUp()
   {
-    TestUtils::mkpath("test-ouput/algorithms/");
+    TestUtils::mkpath("test-output/algorithms/");
   }
 
   WayStringPtr createWayString1(OsmMapPtr map)
