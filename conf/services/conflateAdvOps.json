@@ -156,11 +156,8 @@
                 "name":"Auto Correct Options",
                 "required":"true",
                 "defaultvalue":"true",
-                "override":{
-                  "defaultvalue":"true"
-                },
                 "hoot_key":"ui.autocorrect.options"
-           }
+            }
         ]
     },
     {
@@ -216,6 +213,15 @@
                 "name":"Fail When Minimum Tie Points Are Not Found",
                 "defaultvalue":"false",
                 "hoot_key":"rubber.sheet.fail.when.minimum.tie.points.not.found"
+            },
+            {
+                "id":"rubber_sheet_log_missing_requirements_as_warning",
+                "elem_type":"string",
+                "description":"From the UI we always want to log this as warning.  e.g. min tie points not found",
+                "name":"Log Missing Requirements As Warning",
+                "required":"true",
+                "defaultvalue":"true",
+                "hoot_key":"rubber.sheet.log.missing.requirements.as.warning"
             }
         ]
     },
