@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NetworkDetails.h"
 
@@ -51,12 +51,15 @@ using namespace std;
 namespace hoot
 {
 
+unsigned int NetworkDetails::logWarnCount = 0;
+
 static double min(double a, double b, double c) { return std::min(a, std::min(b, c)); }
 
 NetworkDetails::NetworkDetails(ConstOsmMapPtr map, ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2) :
   _map(map),
   _n1(n1),
-  _n2(n2)
+  _n2(n2),
+  _maxStubLength(ConfigOptions().getNetworkMaxStubLength())
 {
   setConfiguration(conf());
 }
@@ -374,6 +377,7 @@ NetworkDetails::SublineCache NetworkDetails::_calculateSublineScore(ConstOsmMapP
   result.p = c.getMatchP();
   result.matches = WaySublineMatchStringPtr(new WaySublineMatchString(sublineMatch));
 
+  LOG_VART(result);
   return result;
 }
 
@@ -605,7 +609,7 @@ double NetworkDetails::getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeS
 
     bool candidate = true;
 
-    if (notStub->calculateLength(_map) > ConfigOptions().getNetworkMaxStubLength())
+    if (notStub->calculateLength(_map) > _maxStubLength)
     {
       candidate = false;
     }
@@ -693,10 +697,10 @@ double NetworkDetails::getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeS
 
 Envelope NetworkDetails::getEnvelope(ConstNetworkEdgePtr e) const
 {
-  auto_ptr<Envelope> env(e->getMembers()[0]->getEnvelope(_map));
+  boost::shared_ptr<Envelope> env(e->getMembers()[0]->getEnvelope(_map));
   for (int i = 1; i < e->getMembers().size(); ++i)
   {
-    auto_ptr<Envelope> env2(e->getMembers()[i]->getEnvelope(_map));
+    boost::shared_ptr<Envelope> env2(e->getMembers()[i]->getEnvelope(_map));
     env->expandToInclude(env2.get());
   }
   return *env;
@@ -704,12 +708,14 @@ Envelope NetworkDetails::getEnvelope(ConstNetworkEdgePtr e) const
 
 Envelope NetworkDetails::getEnvelope(ConstNetworkVertexPtr v) const
 {
-  auto_ptr<Envelope> env(v->getElement()->getEnvelope(_map));
+  boost::shared_ptr<Envelope> env(v->getElement()->getEnvelope(_map));
   return *env;
 }
 
 double NetworkDetails::getPartialEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2)
 {
+  LOG_VART(e1->getMembers().size());
+  LOG_VART(e2->getMembers().size());
   assert(e1->getMembers().size() == 1);
   assert(e2->getMembers().size() == 1);
   double result;
@@ -754,6 +760,32 @@ double NetworkDetails::getPartialEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNet
 
     ConstWayPtr w1 = boost::dynamic_pointer_cast<const Way>(e1->getMembers()[0]);
     ConstWayPtr w2 = boost::dynamic_pointer_cast<const Way>(e2->getMembers()[0]);
+    LOG_VART(w1.get());
+    LOG_VART(w2.get());
+
+    //Not sure why this is happening.  Opened #2071 to look further into it.
+    if (!w1.get() || !w2.get())
+    {
+      if (logWarnCount < Log::getWarnMessageLimit())
+      {
+        LOG_WARN("Unable to retieve partial match score.  One or more ways is null.");
+        if (!w1.get())
+        {
+          LOG_DEBUG("Way 1 is null.");
+        }
+        if (!w2.get())
+        {
+          LOG_DEBUG("Way 2 is null.");
+        }
+      }
+      else if (logWarnCount == Log::getWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
+
+      return 0.0;
+    }
 
     const SublineCache& sc = _getSublineCache(w1, w2);
     LOG_VART(sc.p);
@@ -851,6 +883,10 @@ const NetworkDetails::SublineCache& NetworkDetails::_getSublineCache(ConstWayPtr
 {
   ElementId e1 = w1->getElementId();
   ElementId e2 = w2->getElementId();
+  LOG_VART(e1);
+  LOG_VART(e2);
+  LOG_VART(_sublineCache[e1]);
+  LOG_VART(_sublineCache[e1].contains(e2));
   if (_sublineCache[e1].contains(e2))
   {
     return _sublineCache[e1][e2];

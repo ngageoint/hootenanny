@@ -72,6 +72,7 @@ void TranslationVisitor::setConfiguration(const Settings& conf)
   {
     throw HootException("Expected a translation.direction of 'toogr' or 'toosm'.");
   }
+  LOG_VART(_toOgr);
   if (conf.hasKey(c.getTranslationScriptKey()) && c.getTranslationScript() != "")
   {
     setPath(c.getTranslationScript());
@@ -108,7 +109,6 @@ void TranslationVisitor::visit(const ElementPtr& e)
 
     if (_toOgr)
     {
-
       vector<Tags> allTags = _togr->translateToOgrTags(tags, e->getElementType(), gtype);
 
       if (allTags.size() > 0)
@@ -123,6 +123,8 @@ void TranslationVisitor::visit(const ElementPtr& e)
     }
     else
     {
+      LOG_TRACE("Tags before: " << tags);
+
       QByteArray layerName;
       if (tags.contains(MetadataTags::HootLayername()))
       {
@@ -166,6 +168,8 @@ void TranslationVisitor::visit(const ElementPtr& e)
         tags.remove(MetadataTags::ErrorCircular());
         tags.remove(MetadataTags::Accuracy());
       }
+
+      LOG_TRACE("Tags after: " << tags);
     }
   }
 }

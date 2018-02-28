@@ -66,18 +66,18 @@ import hoot.services.utils.PostgresUtils;
 
 /**
  * Represents the model for an Hootenanny OSM map
- * 
+ *
  * When modifying the node query by bounds, make sure it is using the index on
  * the tile id. The index scan only seems to trigger if the number of rows
  * returned by the query is <= 1% of the total rows. The execution plan can be
  * checked in postgres with EXPLAIN ANALYZE. Possibly, after query changes you
  * may have to force it to use the tile index by doing something like:
- * 
+ *
  * SELECT * FROM (SELECT ... tile_id stuff) WHERE lat <= BLAH AND lat >= BLAH
  * and lon <= ...
- * 
+ *
  * ...although I haven't had to do that yet.
- * 
+ *
  * //TODO: This class needs to conduct its queries within a read-only
  * transaction so that it doesn't read invalid information while writers are
  * writing elements at the same time it queries elements out.
@@ -578,9 +578,9 @@ public class Map extends Maps {
 
     /**
      * Executes a geospatial query for elements against the services database
-     * 
+     *
      * Bounds calculation:
-     * 
+     *
      * - All nodes that are inside a given bounding box and any relations that
      * reference them. - All ways that reference at least one node that is
      * inside a given bounding box, any relations that reference them [the
@@ -589,7 +589,7 @@ public class Map extends Maps {
      * relations included due to the above rules. (Does not apply recursively;
      * e.g. don't return every node and way the relations themselves
      * reference...only the ones in the query bounds).
-     * 
+     *
      * @param bounds
      *            geospatial bounds the returned nodes should fall within
      * @return a collection of elements mapped to their IDs, grouped by element type
@@ -613,7 +613,7 @@ public class Map extends Maps {
     /**
      * Converts a set of map layer database records into an object returnable by
      * a web service
-     * 
+     *
      * @param mapLayerRecords
      *            set of map layer records
      * @return map layers web service object
@@ -627,7 +627,9 @@ public class Map extends Maps {
             MapLayer mapLayer = new MapLayer();
             mapLayer.setId(-1); // using id = -1 to identify the OSM API db source layer in the ui
             mapLayer.setName("OSM_API_DB_" + replaceSensitiveData(OSMAPI_DB_NAME));
-            mapLayer.setDate(new Timestamp(System.currentTimeMillis()));
+            Timestamp ts = new Timestamp(System.currentTimeMillis());
+            mapLayer.setDate(ts);
+            mapLayer.setLastAccessed(MapLayer.format.format(ts));
             mapLayerList.add(mapLayer);
         }
 
@@ -636,9 +638,13 @@ public class Map extends Maps {
             mapLayer.setId(mapLayerRecord.getId());
             mapLayer.setName(mapLayerRecord.getDisplayName());
             mapLayer.setDate(mapLayerRecord.getCreatedAt());
-
+            java.util.Map<String, String> tags = PostgresUtils.postgresObjToHStore(mapLayerRecord.getTags());
+            if (tags.containsKey("lastAccessed")) {
+                mapLayer.setLastAccessed(tags.get("lastAccessed"));
+            } else {
+                mapLayer.setLastAccessed(MapLayer.format.format(mapLayerRecord.getCreatedAt()));
+            }
             if (OSM_API_DB_ENABLED) {
-                java.util.Map<String, String> tags = PostgresUtils.postgresObjToHStore(mapLayerRecord.getTags());
                 //This tag, set during conflation, is what indicates whether a conflated dataset
                 //had any osm api db source data in it.  That is the requirement to export back
                 //into an osm api db.
@@ -648,8 +654,8 @@ public class Map extends Maps {
             }
 
             mapLayerList.add(mapLayer);
-        } 
-        
+        }
+
         mapLayers.setLayers(mapLayerList.toArray(new MapLayer[mapLayerList.size()]));
 
         return mapLayers;
@@ -657,7 +663,7 @@ public class Map extends Maps {
 
     /**
      * Return the map's bounds
-     * 
+     *
      * @return a bounding box
      */
     public BoundingBox getBounds() {

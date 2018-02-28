@@ -133,7 +133,7 @@ public:
       long featureCountTotal = 0;
       int undefinedCounts = 0;
       vector<float> progressWeights;
-      for(int i=0; i<layers.size(); i++)
+      for (int i=0; i<layers.size(); i++)
       {
         // simply open the file, get the meta feature count value, and close
         int featuresPerLayer = reader.getFeatureCount(input, layers[i]);
@@ -146,25 +146,25 @@ public:
       int definedCounts = layers.size() - undefinedCounts;
 
       // determine weights for 3 possible cases
-      if(undefinedCounts == layers.size())
+      if (undefinedCounts == layers.size())
       {
-        for(int i=0;i<layers.size();i++) progressWeights[i]=1./(float)layers.size();
+        for (int i=0;i<layers.size();i++) progressWeights[i]=1./(float)layers.size();
       }
       else if(definedCounts == layers.size())
       {
-        for(int i=0;i<layers.size();i++) progressWeights[i] /= (float)featureCountTotal;
+        for (int i=0;i<layers.size();i++) progressWeights[i] /= (float)featureCountTotal;
       }
       else
       {
-        for(int i=0;i<layers.size();i++)
+        for (int i=0;i<layers.size();i++)
           if(progressWeights[i] == -1)
           {
             progressWeights[i] = (1./(float)definedCounts) * featureCountTotal;
           }
         // reset featurecount total and recalculate
         featureCountTotal = 0;
-        for(int i=0;i<layers.size();i++) featureCountTotal += progressWeights[i];
-        for(int i=0;i<layers.size();i++) progressWeights[i] /= (float)featureCountTotal;
+        for (int i=0;i<layers.size();i++) featureCountTotal += progressWeights[i];
+        for (int i=0;i<layers.size();i++) progressWeights[i] /= (float)featureCountTotal;
       }
 
       // read each layer's data

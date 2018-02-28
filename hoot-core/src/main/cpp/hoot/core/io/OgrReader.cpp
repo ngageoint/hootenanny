@@ -149,10 +149,12 @@ protected:
   QString _path;
   QString _layerName;
   OGRCoordinateTransformation* _transform;
-  auto_ptr<OGRSpatialReference> _wgs84;
-  auto_ptr<ScriptTranslator> _translator;
+  boost::shared_ptr<OGRSpatialReference> _wgs84;
+  boost::shared_ptr<ScriptTranslator> _translator;
   long _streamFeatureCount;
   QStringList _pendingLayers;
+  bool _addSourceDateTime;
+  QString _nodeIdFieldName;
 
   //partial read iterators
   NodeMap::const_iterator _nodesItr;
@@ -502,6 +504,8 @@ OgrReaderInternal::OgrReaderInternal()
   _limit = -1;
   _featureCount = 0;
   _streamFeatureCount = 0;
+  _addSourceDateTime = ConfigOptions().getReaderAddSourceDatetime();
+  _nodeIdFieldName = ConfigOptions().getOgrReaderNodeIdFieldName();
 }
 
 OgrReaderInternal::~OgrReaderInternal()
@@ -572,11 +576,11 @@ void OgrReaderInternal::_addFeature(OGRFeature* f)
 
     if (f->GetDefnRef()->GetFieldDefn(i)->GetType() == OFTReal)
     {
-        value = QString::number(f->GetFieldAsDouble(i), 'g', 17);
+      value = QString::number(f->GetFieldAsDouble(i), 'g', 17);
     }
     else
     {
-        value = QString::fromUtf8(f->GetFieldAsString(i));
+      value = QString::fromUtf8(f->GetFieldAsString(i));
     }
 
     // Ticket 5833: make sure tag is only added if value is non-null
@@ -593,9 +597,12 @@ void OgrReaderInternal::_addFeature(OGRFeature* f)
 
   _translate(t);
 
-  // Add an ingest datetime tag
-  t.appendValue("source:ingest:datetime",
-                QDateTime::currentDateTime().toUTC().toString("yyyy-MM-ddThh:mm:ss.zzzZ"));
+  if (_addSourceDateTime)
+  {
+    // Add an ingest datetime tag
+    t.appendValue("source:ingest:datetime",
+                  QDateTime::currentDateTime().toUTC().toString("yyyy-MM-ddThh:mm:ss.zzzZ"));
+  }
 
   if (t.size() != 0)
   {
@@ -664,7 +671,7 @@ void OgrReaderInternal::_addLineString(OGRLineString* ls, Tags& t)
     double x = ls->getX(i);
     double y = ls->getY(i);
     _reproject(x, y);
-    NodePtr n(new Node(_status, _map->createNextNodeId(), x, y, circularError));
+    NodePtr n(Node::newSp(_status, _map->createNextNodeId(), x, y, circularError));
     _map->addNode(n);
     way->addNode(n->getId());
   }
@@ -702,8 +709,21 @@ void OgrReaderInternal::_addPoint(OGRPoint* p, Tags& t)
   double x = p->getX();
   double y = p->getY();
   _reproject(x, y);
-  NodePtr node(new Node(_status, _map->createNextNodeId(), x, y,
-    circularError));
+  long id;
+  if (_nodeIdFieldName.isEmpty())
+  {
+    id = _map->createNextNodeId();
+  }
+  else
+  {
+    bool ok = false;
+    id = t.get(_nodeIdFieldName).toLong(&ok);
+    if (!ok)
+    {
+      throw HootException("Unable to parse node ID from field: " + _nodeIdFieldName);
+    }
+  }
+  NodePtr node(Node::newSp(_status, id, x, y, circularError));
 
   node->setTags(t);
   _map->addNode(node);
@@ -782,7 +802,7 @@ WayPtr OgrReaderInternal::_createWay(OGRLinearRing* lr, Meters circularError)
     double x = lr->getX(i);
     double y = lr->getY(i);
     _reproject(x, y);
-    NodePtr n(new Node(_status, _map->createNextNodeId(), x, y, circularError));
+    NodePtr n(Node::newSp(_status, _map->createNextNodeId(), x, y, circularError));
     _map->addNode(n);
     way->addNode(n->getId());
   }
@@ -859,7 +879,7 @@ boost::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(const Se
 
     result.reset(new Envelope());
     boost::shared_ptr<OGRSpatialReference> wgs84 = MapProjector::getInstance().createWgs84Projection();
-    auto_ptr<OGRCoordinateTransformation> transform(
+    boost::shared_ptr<OGRCoordinateTransformation> transform(
       OGRCreateCoordinateTransformation(wgs84.get(), srs));
     const int steps = 8;
     for (int xi = 0; xi <= steps; xi++)
@@ -1187,7 +1207,6 @@ void OgrReaderInternal::initializePartial()
   _relationsItr = _map->getRelations().begin();
 
   _useFileId = false;
-
 }
 
 void OgrReaderInternal::setUseDataSourceIds(bool useIds)
@@ -1232,12 +1251,12 @@ ElementPtr OgrReaderInternal::readNextElement()
   }
 
   ElementPtr returnElement;
-  if ( _nodesItr != _map->getNodes().end() )
+  if (_nodesItr != _map->getNodes().end())
   {
-    returnElement.reset(new Node(*_nodesItr->second.get()));
+    returnElement = _nodesItr->second->cloneSp();
     ++_nodesItr;
   }
-  else if ( _waysItr != _map->getWays().end() )
+  else if (_waysItr != _map->getWays().end())
   {
     returnElement.reset(new Way(*_waysItr->second.get()));
     ++_waysItr;

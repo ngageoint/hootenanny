@@ -22,13 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMJSONWRITER_H
 #define OSMJSONWRITER_H
 
 // hoot
 #include <hoot/core/io/OsmMapWriter.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 // Boost
 #include <boost/shared_ptr.hpp>
@@ -63,7 +64,7 @@ class OsmJsonWriter : public QXmlDefaultHandler, public OsmMapWriter
 public:
   static std::string className() { return "hoot::OsmJsonWriter"; }
 
-  OsmJsonWriter(int precision = 16);
+  OsmJsonWriter(int precision = ConfigOptions().getWriterPrecision());
 
   virtual bool isSupported(QString url) { return url.toLower().endsWith(".json"); }
 
@@ -73,6 +74,8 @@ public:
   static QString markupString(const QString& str);
 
   virtual void open(QString url);
+
+  virtual void close() { if (_fp.isOpen()) { _fp.close(); } }
 
   void setIncludeHootInfo(bool includeInfo) { _includeDebug = includeInfo; }
 
@@ -90,6 +93,11 @@ public:
    */
   QString toString(ConstOsmMapPtr map);
 
+  /**
+   * Allow the writer to write empty tags to JSON
+   */
+  void SetWriteEmptyTags(bool writeEmpty) { _writeEmptyTags = writeEmpty; }
+
 protected:
   ConstOsmMapPtr _map;
   bool _includeDebug;
@@ -98,6 +106,8 @@ protected:
   QIODevice* _out;
   bool _pretty;
   bool _firstElement;
+  bool _writeEmptyTags;
+  bool _writeHootFormat;
 
   static QString _typeName(ElementType e);
 

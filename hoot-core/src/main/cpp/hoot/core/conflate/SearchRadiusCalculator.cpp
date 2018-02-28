@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "SearchRadiusCalculator.h"
@@ -63,6 +63,7 @@ void SearchRadiusCalculator::setConfiguration(const Settings& conf)
   setCircularError(config.getCircularErrorDefaultValue());
   setRubberSheetRef(config.getRubberSheetRef());
   setRubberSheetMinTies(config.getRubberSheetMinimumTies());
+  setPrecision(config.getWriterPrecision());
 }
 
 void SearchRadiusCalculator::apply(boost::shared_ptr<OsmMap> &map)
@@ -153,7 +154,7 @@ void SearchRadiusCalculator::_calculateSearchRadius(const vector<double>& tiePoi
   else
   {
     _result = 2 * _calculateStandardDeviation(tiePointDistances);
-    LOG_INFO("Calculated search radius = " + QString::number(_result, 'g', 16));
+    LOG_INFO("Calculated search radius = " + QString::number(_result, 'g', 2));
   }
 }
 

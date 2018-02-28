@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmGeoJsonWriter.h"
 
@@ -57,12 +57,23 @@ using namespace boost;
 using namespace geos::geom;
 using namespace std;
 
-namespace hoot {
+namespace hoot
+{
 
 HOOT_FACTORY_REGISTER(OsmMapWriter, OsmGeoJsonWriter)
 
-OsmGeoJsonWriter::OsmGeoJsonWriter(int precision) : OsmJsonWriter(precision)
+OsmGeoJsonWriter::OsmGeoJsonWriter(int precision)
+  : OsmJsonWriter(precision)
 {
+  _writeHootFormat = ConfigOptions().getJsonFormatHootenanny();
+}
+
+void OsmGeoJsonWriter::setConfiguration(const Settings& conf)
+{
+  _includeDebug = ConfigOptions(conf).getWriterIncludeDebugTags();
+  _pretty = ConfigOptions(conf).getJsonPrettyPrint();
+  _writeEmptyTags = ConfigOptions(conf).getJsonPerserveEmptyTags();
+  _writeHootFormat = ConfigOptions(conf).getJsonFormatHootenanny();
 }
 
 void OsmGeoJsonWriter::write(ConstOsmMapPtr map)
@@ -84,16 +95,16 @@ void OsmGeoJsonWriter::write(ConstOsmMapPtr map)
   _writeRelations();
   _writeLn("]");
   _writeLn("}");
-  _fp.close();
+  close();
 }
 
 QString OsmGeoJsonWriter::_getBbox()
 {
   Envelope bounds = CalculateMapBoundsVisitor::getGeosBounds(_map);
-  return QString("[%1, %2, %3, %4]").arg(QString::number(bounds.getMinX(), 'g', _precision))
-                                    .arg(QString::number(bounds.getMinY(), 'g', _precision))
-                                    .arg(QString::number(bounds.getMaxX(), 'g', _precision))
-                                    .arg(QString::number(bounds.getMaxY(), 'g', _precision));
+  return QString("[%1, %2, %3, %4]").arg(QString::number(bounds.getMinX(), 'g', 5))
+                                    .arg(QString::number(bounds.getMinY(), 'g', 5))
+                                    .arg(QString::number(bounds.getMaxX(), 'g', 5))
+                                    .arg(QString::number(bounds.getMaxY(), 'g', 5));
 }
 
 void OsmGeoJsonWriter::_writeMeta(ConstElementPtr e)
@@ -202,10 +213,14 @@ void OsmGeoJsonWriter::_writeGeometry(const vector<long> &nodes, string type)
 
 void OsmGeoJsonWriter::_writeFeature(ConstElementPtr e)
 {
-  _writeKvp("type", "Feature"); _write(",");
-  _writeKvp("id", QString::number(e->getId())); _write(",");
-  _write("\"properties\": {");
-  _writeKvp("type", _typeName(e->getElementType()));
+  _writeKvp("type", "Feature");
+  if (_writeHootFormat)
+  {
+    _write(",");
+    _writeKvp("id", QString::number(e->getId()));
+    _write(",");
+    _writeKvp("type", _typeName(e->getElementType()));
+  }
   if (_hasTags(e))
   {
     _write(",");
@@ -216,7 +231,6 @@ void OsmGeoJsonWriter::_writeFeature(ConstElementPtr e)
     _write(",");
     _writeRelationInfo(boost::dynamic_pointer_cast<const Relation>(e));
   }
-  _write("}");
 }
 
 void OsmGeoJsonWriter::_writeNodes()

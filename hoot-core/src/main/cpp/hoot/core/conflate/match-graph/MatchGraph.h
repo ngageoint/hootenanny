@@ -89,7 +89,7 @@ private:
    * An internal data structure to prevent users of the class from recompiling the boost graph
    * craziness.
    */
-  std::auto_ptr<MatchGraphInternal> _d;
+  boost::shared_ptr<MatchGraphInternal> _d;
 
   /**
    * Invalidates the current graph.

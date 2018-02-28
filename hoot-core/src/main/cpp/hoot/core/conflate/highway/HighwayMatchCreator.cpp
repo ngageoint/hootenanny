@@ -104,7 +104,7 @@ public:
 
   void checkForMatch(const boost::shared_ptr<const Element>& e)
   {
-    auto_ptr<Envelope> env(e->getEnvelope(_map));
+    boost::shared_ptr<Envelope> env(e->getEnvelope(_map));
     env->expandBy(getSearchRadius(e));
 
     // find other nearby candidates
@@ -240,6 +240,7 @@ private:
   Meters _searchRadius;
   ConstMatchThresholdPtr _threshold;
   boost::shared_ptr<TagAncestorDifferencer> _tagAncestorDiff;
+  double _highwayMaxEnumDiff;
 
   // Used for finding neighbors
   boost::shared_ptr<HilbertRTree> _index;

@@ -135,7 +135,13 @@ bool Relation::contains(ElementId eid) const
 
 Envelope* Relation::getEnvelope(const boost::shared_ptr<const ElementProvider> &ep) const
 {
-  Envelope* result = new Envelope();
+  return new Envelope(getEnvelopeInternal(ep));
+}
+
+Envelope Relation::getEnvelopeInternal(const boost::shared_ptr<const ElementProvider> &ep) const
+{
+  Envelope result;
+  result.init();
   const vector<RelationData::Entry>& members = getMembers();
 
   for (size_t i = 0; i < members.size(); i++)
@@ -144,19 +150,19 @@ Envelope* Relation::getEnvelope(const boost::shared_ptr<const ElementProvider> &
     // if any of the elements don't exist then return an empty envelope.
     if (ep->containsElement(m.getElementId()) == false)
     {
-      result->setToNull();
+      result.setToNull();
       return result;
     }
     const boost::shared_ptr<const Element> e = ep->getElement(m.getElementId());
-    auto_ptr<Envelope> childEnvelope(e->getEnvelope(ep));
+    boost::shared_ptr<Envelope> childEnvelope(e->getEnvelope(ep));
 
     if (childEnvelope->isNull())
     {
-      result->setToNull();
+      result.setToNull();
       return result;
     }
 
-    result->expandToInclude(childEnvelope.get());
+    result.expandToInclude(childEnvelope.get());
   }
 
   return result;
@@ -259,11 +265,11 @@ void Relation::_visitRo(const ElementProvider& map, ConstElementVisitor& filter,
 {
   if (visitedRelations.contains(getId()))
   {
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       LOG_WARN("Invalid data. This relation contains a circular reference. " + toString());
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }
@@ -315,11 +321,11 @@ void Relation::_visitRw(ElementProvider& map, ConstElementVisitor& filter,
 {
   if (visitedRelations.contains(getId()))
   {
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       LOG_WARN("Invalid data. This relation contains a circular reference. " + toString());
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }

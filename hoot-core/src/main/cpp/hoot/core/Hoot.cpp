@@ -46,6 +46,9 @@
 #include <QLibrary>
 #include <QString>
 
+// Boost
+#include <boost/shared_ptr.hpp>
+
 // System
 #include <sys/resource.h>
 
@@ -60,7 +63,7 @@ using namespace std;
 namespace hoot
 {
 
-auto_ptr<Hoot> Hoot::_theInstance;
+boost::shared_ptr<Hoot> Hoot::_theInstance;
 
 Hoot::Hoot()
 {
@@ -120,8 +123,7 @@ void Hoot::_init()
 # ifdef HOOT_HAVE_RND
   loadLibrary("HootRnd");
 # endif
-  //TODO: I don't think hoot can operate at all now without nodejs due to the schema loader, so
-  //this should be reworked.
+
 # ifdef HOOT_HAVE_NODEJS
   // sometimes HootJs is loaded by node.js before we get to init.
   if (Factory::getInstance().hasClass(QString("hoot::HootJsLoaded")) == false)

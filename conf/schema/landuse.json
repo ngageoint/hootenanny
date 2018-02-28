@@ -21,7 +21,11 @@
         ],
         "isA": "landuse",
         "name": "landuse=cemetery",
-        "objectType": "tag"
+        "objectType": "tag",
+        "similarTo": {
+                "name": "cemetery",
+                "weight": 0.8
+         }
     },
     {
         "isA": "landuse",

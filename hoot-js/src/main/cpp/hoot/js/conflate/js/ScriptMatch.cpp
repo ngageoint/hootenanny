@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ScriptMatch.h"
 
@@ -69,7 +69,7 @@ namespace hoot
 
 unsigned int ScriptMatch::logWarnCount = 0;
 
-ScriptMatch::ScriptMatch(boost::shared_ptr<PluginContext> script, Persistent<Object> plugin,
+ScriptMatch::ScriptMatch(boost::shared_ptr<PluginContext> script, const Persistent<Object>& plugin,
   const ConstOsmMapPtr& map, Handle<Object> mapObj, const ElementId& eid1,
   const ElementId& eid2, ConstMatchThresholdPtr mt) :
   Match(mt),
@@ -77,31 +77,32 @@ ScriptMatch::ScriptMatch(boost::shared_ptr<PluginContext> script, Persistent<Obj
   _eid2(eid2),
   _isWholeGroup(false),
   _neverCausesConflict(false),
-  _plugin(plugin),
   _script(script)
 {
-  _calculateClassification(map, mapObj, plugin);
+  _plugin.Reset(v8::Isolate::GetCurrent(), plugin);
+  _calculateClassification(map, mapObj, ToLocal(&plugin));
 }
 
 void ScriptMatch::_calculateClassification(const ConstOsmMapPtr& map, Handle<Object> mapObj,
   Handle<Object> plugin)
 {
-  Context::Scope context_scope(_script->getContext());
-  HandleScope handleScope;
+  Isolate* current = v8::Isolate::GetCurrent();
+  HandleScope handleScope(current);
+  Context::Scope context_scope(_script->getContext(current));
 
   // removing these two lines causes a crash when checking for conflicts. WTF?
-  Handle<Object> global = _script->getContext()->Global();
-  global->Get(String::NewSymbol("plugin"));
+  Handle<Object> global = _script->getContext(current)->Global();
+  global->Get(String::NewFromUtf8(current, "plugin"));
 
-  if (_plugin->Has(String::NewSymbol("isWholeGroup")))
+  if (ToLocal(&_plugin)->Has(String::NewFromUtf8(current, "isWholeGroup")))
   {
-    Handle<Value> v = _script->call(_plugin, "isWholeGroup");
+    Handle<Value> v = _script->call(ToLocal(&_plugin), "isWholeGroup");
     _isWholeGroup = v->BooleanValue();
   }
 
-  if (_plugin->Has(String::NewSymbol("neverCausesConflict")))
+  if (ToLocal(&_plugin)->Has(String::NewFromUtf8(current, "neverCausesConflict")))
   {
-    Handle<Value> v = _script->call(_plugin, "neverCausesConflict");
+    Handle<Value> v = _script->call(ToLocal(&_plugin), "neverCausesConflict");
     _neverCausesConflict = v->BooleanValue();
   }
 
@@ -253,8 +254,9 @@ bool ScriptMatch::isConflicting(const Match& other, const ConstOsmMapPtr& map) c
 bool ScriptMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sharedEid,
   ElementId other1, ElementId other2) const
 {
-  Context::Scope context_scope(_script->getContext());
-  HandleScope handleScope;
+  Isolate* current = v8::Isolate::GetCurrent();
+  HandleScope handleScope(current);
+  Context::Scope context_scope(_script->getContext(current));
 
   set<ElementId> eids;
   eids.insert(sharedEid);
@@ -283,7 +285,7 @@ bool ScriptMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sha
     eid22 = sharedEid;
   }
 
-  auto_ptr<ScriptMatch> m1(new ScriptMatch(_script, _plugin, copiedMap, copiedMapJs, eid11, eid12,
+  boost::shared_ptr<ScriptMatch> m1(new ScriptMatch(_script, _plugin, copiedMap, copiedMapJs, eid11, eid12,
     _threshold));
   MatchSet ms;
   ms.insert(m1.get());
@@ -328,16 +330,17 @@ bool ScriptMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sha
   return conflicting;
 }
 
-Handle<Value> ScriptMatch::_call(const ConstOsmMapPtr& map, v8::Handle<v8::Object> mapObj,
+Handle<Value> ScriptMatch::_call(const ConstOsmMapPtr& map, Handle<Object> mapObj,
   Handle<Object> plugin)
 {
-  HandleScope handleScope;
-  Context::Scope context_scope(_script->getContext());
+  Isolate* current = v8::Isolate::GetCurrent();
+  EscapableHandleScope handleScope(current);
+  Context::Scope context_scope(_script->getContext(current));
 
   plugin =
-    Handle<Object>::Cast(_script->getContext()->Global()->Get(String::New("plugin")));
-  Handle<v8::Value> value = plugin->Get(String::New("matchScore"));
-  Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(value);
+    Handle<Object>::Cast(_script->getContext(current)->Global()->Get(String::NewFromUtf8(current, "plugin")));
+  Handle<Value> value = plugin->Get(String::NewFromUtf8(current, "matchScore"));
+  Handle<Function> func = Handle<Function>::Cast(value);
   Handle<Value> jsArgs[3];
 
   if (func.IsEmpty() || func->IsFunction() == false)
@@ -354,18 +357,19 @@ Handle<Value> ScriptMatch::_call(const ConstOsmMapPtr& map, v8::Handle<v8::Objec
   Handle<Value> result = func->Call(plugin, argc, jsArgs);
   HootExceptionJs::checkV8Exception(result, trycatch);
 
-  return handleScope.Close(result);
+  return handleScope.Escape(result);
 }
 
 Handle<Value> ScriptMatch::_callGetMatchFeatureDetails(const ConstOsmMapPtr& map) const
 {
-  HandleScope handleScope;
-  Context::Scope context_scope(_script->getContext());
+  Isolate* current = v8::Isolate::GetCurrent();
+  EscapableHandleScope handleScope(current);
+  Context::Scope context_scope(_script->getContext(current));
 
   Handle<Object> plugin =
-    Handle<Object>::Cast(_script->getContext()->Global()->Get(String::New("plugin")));
-  Handle<v8::Value> value = plugin->Get(String::New("getMatchFeatureDetails"));
-  Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(value);
+    Handle<Object>::Cast(_script->getContext(current)->Global()->Get(String::NewFromUtf8(current, "plugin")));
+  Handle<Value> value = plugin->Get(String::NewFromUtf8(current, "getMatchFeatureDetails"));
+  Handle<Function> func = Handle<Function>::Cast(value);
   Handle<Value> jsArgs[3];
 
   if (func.IsEmpty() || func->IsFunction() == false)
@@ -384,17 +388,18 @@ Handle<Value> ScriptMatch::_callGetMatchFeatureDetails(const ConstOsmMapPtr& map
   Handle<Value> result = func->Call(plugin, argc, jsArgs);
   HootExceptionJs::checkV8Exception(result, trycatch);
 
-  return handleScope.Close(result);
+  return handleScope.Escape(result);
 }
 
 std::map<QString, double> ScriptMatch::getFeatures(const ConstOsmMapPtr& map) const
 {
-  Context::Scope context_scope(_script->getContext());
-  HandleScope handleScope;
+  Isolate* current = v8::Isolate::GetCurrent();
+  HandleScope handleScope(current);
+  Context::Scope context_scope(_script->getContext(current));
 
   // removing these two lines causes a crash when checking for conflicts. WTF?
-  Handle<Object> global = _script->getContext()->Global();
-  global->Get(String::NewSymbol("plugin"));
+  Handle<Object> global = _script->getContext(current)->Global();
+  global->Get(String::NewFromUtf8(current, "plugin"));
 
   std::map<QString, double> result;
   Handle<Value> v = _callGetMatchFeatureDetails(map);
@@ -414,11 +419,11 @@ std::map<QString, double> ScriptMatch::getFeatures(const ConstOsmMapPtr& map) co
       result[it.key()] = d;
       if (::qIsNaN(result[it.key()]))
       {
-        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        if (logWarnCount < Log::getWarnMessageLimit())
         {
           LOG_WARN("found NaN feature value for: " << it.key());
         }
-        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        else if (logWarnCount == Log::getWarnMessageLimit())
         {
           LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }

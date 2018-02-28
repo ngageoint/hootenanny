@@ -78,7 +78,7 @@ void IndexElementsVisitor::visit(const ConstElementPtr& e)
 
     Box b(2);
     Meters searchRadius = _getSearchRadius(e);
-    auto_ptr<Envelope> env(e->getEnvelope(_pMap));
+    boost::shared_ptr<Envelope> env(e->getEnvelope(_pMap));
     env->expandBy(searchRadius);
     b.setBounds(0, env->getMinX(), env->getMaxX());
     b.setBounds(1, env->getMinY(), env->getMaxY());

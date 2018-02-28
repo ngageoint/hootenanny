@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ServicesDbTestUtils.h"
@@ -40,7 +40,6 @@
 #include <hoot/core/util/Log.h>
 
 // Qt
-#include <QFile>
 #include <QStringList>
 
 // Tgs
@@ -90,18 +89,9 @@ void ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase()
   database.close();
 }
 
-QUrl ServicesDbTestUtils::getDbModifyUrl()
+QUrl ServicesDbTestUtils::getDbModifyUrl(const QString& mapName)
 {
-  // read the DB values from the DB config file.
-  Settings s = _readDbConfig();
-  QUrl result;
-  result.setScheme("hootapidb");
-  result.setHost(s.get("DB_HOST").toString());
-  result.setPort(s.get("DB_PORT").toInt());
-  result.setUserName(s.get("DB_USER").toString());
-  result.setPassword(s.get("DB_PASSWORD").toString());
-  result.setPath("/" + s.get("DB_NAME").toString() + "/testMap");
-  return result;
+  return QUrl(HootApiDb::getBaseUrl().toString() + "/" + mapName);
 }
 
 QUrl ServicesDbTestUtils::getDbReadUrl(const long mapId)
@@ -136,7 +126,7 @@ QUrl ServicesDbTestUtils::getDbReadUrl(const long mapId, const long elemId, cons
 QUrl ServicesDbTestUtils::getOsmApiDbUrl()
 {
   // read the DB values from the DB config file.
-  Settings s = _readDbConfig();
+  Settings s = ApiDb::readDbConfig();
   QUrl result;
   result.setScheme("osmapidb");
   result.setHost(s.get("DB_HOST_OSMAPI").toString());
@@ -168,43 +158,6 @@ int ServicesDbTestUtils::findIndex(const QList<QString>& keys, const QString& ke
 
   // didn't find a match so return -1
   return -1;
-}
-
-Settings ServicesDbTestUtils::_readDbConfig()
-{
-  Settings result;
-  //  Read in the default values
-  QString defaults = ConfPath::getHootHome() + "/conf/database/DatabaseConfigDefault.sh";
-  _readDbConfig(result, defaults);
-  //  Read in the local values if the file exists
-  QString local = ConfPath::getHootHome() + "/conf/database/DatabaseConfigLocal.sh";
-  if (QFile::exists(local))
-  {
-    _readDbConfig(result, local);
-  }
-  return result;
-}
-
-void ServicesDbTestUtils::_readDbConfig(Settings& settings, QString config_path)
-{
-  QFile fp(config_path);
-  if (fp.open(QIODevice::ReadOnly) == false)
-  {
-    throw HootException("Error opening: " + fp.fileName());
-  }
-  QString s = QString::fromUtf8(fp.readAll());
-
-  QStringList sl = s.split('\n', QString::SkipEmptyParts);
-
-  foreach (QString s, sl)
-  {
-    QString key = s.section("=", 0, 0).remove("export ").trimmed();
-    QString value = s.section("=", 1).trimmed();
-    if (!key.startsWith("#") && key.length() > 0)
-    {
-      settings.set(key, value);
-    }
-  }
 }
 
 void ServicesDbTestUtils::verifyTestDatabaseEmpty()
@@ -273,7 +226,8 @@ boost::shared_ptr<OsmMap> ServicesDbTestUtils::createTestMap1()
 
   boost::shared_ptr<Node> n1 = _createNode(-77.0, 38.0, map);
   n1->setTag("building", "yes");
-  n1->setTag("name", "n1");
+  //put a space in this tag value, since hstore dies on those if they are not esacaped properly
+  n1->setTag("name", "n1 - n2");
 
   boost::shared_ptr<Way> w1(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
   w1->setTag("area", "yes");
@@ -319,6 +273,50 @@ boost::shared_ptr<OsmMap> ServicesDbTestUtils::createTestMap1()
   r1->addElement("outer", w4->getElementId());
   r1->addElement("inner", w5->getElementId());
   map->addRelation(r1);
+
+  return map;
+}
+
+OsmMapPtr ServicesDbTestUtils::createServiceTestMap()
+{
+  OsmMapPtr map(new OsmMap());
+
+  NodePtr n1(new Node(Status::Unknown1, 1, 0.0, 0.0, 10.0));
+  map->addNode(n1);
+  NodePtr n2(new Node(Status::Unknown2, 2, 0.1, 0.0, 11.0));
+  n2->setTag("noteb", "n2b");
+  map->addNode(n2);
+  NodePtr n3(new Node(Status::Conflated, 3, 0.2, 0.0, 12.0));
+  n3->setTag("note", "n3");
+  map->addNode(n3);
+  NodePtr n4(new Node(Status::Conflated, 4, 0.3, 0.0, 13.0));
+  n4->setTag("note", "n4");
+  map->addNode(n4);
+  NodePtr n5(new Node(Status::Invalid, 5, 0.4, 0.0, 14.0));
+  map->addNode(n5);
+
+  WayPtr w1(new Way(Status::Unknown1, 1, 15.0));
+  w1->addNode(1);
+  w1->addNode(2);
+  w1->setTag("noteb", "w1b");
+  map->addWay(w1);
+  WayPtr w2(new Way(Status::Unknown2, 2, 16.0));
+  w2->addNode(2);
+  w2->addNode(3);
+  w2->setTag("note", "w2");
+  map->addWay(w2);
+  WayPtr w3(new Way(Status::Unknown2, 3, 17.0));
+  w3->addNode(2);
+  map->addWay(w3);
+
+  RelationPtr r1(new Relation(Status::Unknown1, 1, 18.1, MetadataTags::RelationCollection()));
+  r1->addElement("n1", n1->getElementId());
+  r1->addElement("w1", w1->getElementId());
+  r1->setTag("note", "r1");
+  map->addRelation(r1);
+  RelationPtr r2(new Relation(Status::Unknown1, 2, -1.0));
+  r2->addElement("n2", n2->getElementId());
+  map->addRelation(r2);
 
   return map;
 }

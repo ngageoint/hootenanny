@@ -3,16 +3,20 @@
 set -e
 
 # Set this for use later
-export OS_NAME=$(awk -F= '/^NAME/{print $2}' /etc/os-release)
+export OS_NAME="$(lsb_release -i -s)"
 
-if [ "$OS_NAME" == \"Ubuntu\" ]; then
+if [ "$OS_NAME" == "Ubuntu" ]; then
   source ~/.profile
 else # Centos
   source ~/.bash_profile
 fi
 
-#cd $HOOT_HOME
-cd hoot
+if [ -z "$HOOT_HOME" ]; then
+    HOOT_HOME=~/hoot
+fi
+echo HOOT_HOME: $HOOT_HOME
+
+cd $HOOT_HOME
 source ./SetupEnv.sh
 
 echo "### Configuring Hoot..."
@@ -23,6 +27,7 @@ if [ -f missing ]; then
   rm -f missing
 fi
 
+# Taking out ui-tests until we get Tomcat8 etc installed
 aclocal && autoconf && autoheader && automake --add-missing --copy && ./configure --quiet --with-rnd --with-services --with-uitests
 
 if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
@@ -33,11 +38,11 @@ if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
 fi
 
 echo "Building Hoot... "
-echo "Will take several extra minutes to build the training data the initial time Hootenanny is installed only."
 make -s clean && make -sj$(nproc)
 
 # vagrant will auto start the tomcat service for us, so just copy the web app files w/o manipulating the server
-sudo -u tomcat8 scripts/tomcat/CopyWebAppsToTomcat.sh #&> /dev/null
+# Copy the web apps, no need to use sudo
+./scripts/tomcat/CopyWebAppsToTomcat.sh
 
 # docs build is always failing the first time during the npm install portion for an unknown reason, but then
 # always passes the second time its run...needs fixed, but this is the workaround for now

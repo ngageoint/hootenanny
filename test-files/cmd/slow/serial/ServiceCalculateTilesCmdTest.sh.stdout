@@ -1,0 +1,11 @@
+ setval 
+--------
+      1
+(1 row)
+
+13:28:38.196 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 357
+ setval 
+--------
+      1
+(1 row)
+

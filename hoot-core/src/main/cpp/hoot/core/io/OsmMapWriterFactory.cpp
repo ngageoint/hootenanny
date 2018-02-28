@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmMapWriterFactory.h"
 
@@ -115,7 +115,8 @@ bool OsmMapWriterFactory::hasElementOutputStream(QString url)
 {
   bool result = false;
   boost::shared_ptr<OsmMapWriter> writer = createWriter(url);
-  boost::shared_ptr<ElementOutputStream> streamWriter = boost::dynamic_pointer_cast<ElementOutputStream>(writer);
+  boost::shared_ptr<ElementOutputStream> streamWriter =
+    boost::dynamic_pointer_cast<ElementOutputStream>(writer);
   if (streamWriter)
   {
     result = true;
@@ -126,10 +127,17 @@ bool OsmMapWriterFactory::hasElementOutputStream(QString url)
 
 void OsmMapWriterFactory::write(const boost::shared_ptr<const OsmMap> &map, QString url)
 {
-  LOG_INFO("Writing map to " << url << "...");
-  boost::shared_ptr<OsmMapWriter> writer = getInstance().createWriter(url);
-  writer->open(url);
-  writer->write(map);
+  if (map->isEmpty() && ConfigOptions().getOsmMapWriterSkipEmptyMap())
+  {
+    LOG_INFO("Map is empty. Not writing to " << url << "...");
+  }
+  else
+  {
+    LOG_INFO("Writing map to " << url << "...");
+    boost::shared_ptr<OsmMapWriter> writer = getInstance().createWriter(url);
+    writer->open(url);
+    writer->write(map);
+  }
 }
 
 }

@@ -135,6 +135,7 @@ public:
    * PrimitiveBlock from the stream specified into the provided map.
    */
   void parseElements(std::istream* strm, const OsmMapPtr& map);
+  void parseElements(QByteArray bytes, const OsmMapPtr& map);
 
   /**
    * Allows loading of data that isn't complete such as unknown node IDs in a way.
@@ -164,6 +165,14 @@ public:
   virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
 
   bool getSortedTypeThenId() { return _typeThenId; }
+
+  /**
+   * Checks to see if an input is sorted
+   *
+   * @param file input file to examine
+   * @return true if the specified file is sorted by element type, then element ID; false otherwise
+   */
+  bool isSorted(const QString file);
 
 private:
 

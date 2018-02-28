@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // GDAL
@@ -42,10 +42,11 @@ using namespace geos::geom;
 #include <cppunit/TextTestResult.h>
 #include <cppunit/XmlOutputter.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/ui/text/TestRunner.h>
+#include <cppunit/ui/text/TextTestRunner.h>
 
 // Hoot
 #include <hoot/core/Hoot.h>
+#include <hoot/core/HootConfig.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/test/ConflateCaseTestSuite.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -53,35 +54,40 @@ using namespace geos::geom;
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/SignalCatcher.h>
 #include <hoot/core/util/Settings.h>
+#include <hoot/js/v8Engine.h>
 using namespace hoot;
 
 // Qt
 #include <QtGui/QApplication>
+#include <QDateTime>
 #include <QString>
 #include <QStringList>
-#include <QDateTime>
 
 // Standard
 #include <iostream>
+#include <vector>
 using namespace std;
 
 // Tgs
 #include <tgs/System/Time.h>
 
 #include "ScriptTestSuite.h"
-#include <hoot/core/HootConfig.h>
+#include "ProcessPool.h"
+
+typedef boost::shared_ptr<CppUnit::Test> TestPtr;
 
 class HootTestListener : public CppUnit::TestListener
 {
 public:
 
-  HootTestListener(bool showTestName, double slowTest = 2.0)
+  HootTestListener(bool showTestName, double slowTest = 2.0, bool showElapsed = true)
+    : _success(true),
+      _showTestName(showTestName),
+      _showElapsed(showElapsed),
+      _start(Tgs::Time::getTime()),
+      _allStart(_start),
+      _slowTest(slowTest)
   {
-    _showTestName = showTestName;
-    _slowTest = slowTest;
-    _start = Tgs::Time::getTime();
-    _allStart = _start;
-    _success = true;
   }
 
   virtual void addFailure(const CppUnit::TestFailure& failure)
@@ -131,42 +137,66 @@ public:
 
   virtual void endTestRun(CppUnit::Test* /*test*/, CppUnit::TestResult* /*eventManager*/ )
   {
-    cout << endl;
-    cout << "Elapsed: " << Tgs::Time::getTime() - _allStart << endl;
+    if (_showElapsed)
+    {
+      cout << endl;
+      cout << "Elapsed: " << Tgs::Time::getTime() - _allStart << endl;
+    }
   }
+
+  double getSlowTest() { return _slowTest; }
 
 private:
   bool _success;
   bool _showTestName;
+  bool _showElapsed;
 
   double _start;
   double _allStart;
   double _slowTest;
 };
 
-void filterPattern(CppUnit::Test* from, CppUnit::TestSuite* to, QString pattern,
-  bool includeOnMatch)
+void getTestVector(CppUnit::Test* from, vector<CppUnit::Test*>& to)
 {
-  QRegExp regex(pattern);
-
   for (int i = 0; i < from->getChildTestCount(); i++)
   {
     CppUnit::Test* child = from->getChildTestAt(i);
-    QString name = QString::fromStdString(child->getName());
     if (dynamic_cast<CppUnit::TestComposite*>(child))
-    {
-      filterPattern(child, to, pattern, includeOnMatch);
-    }
-    else if (regex.exactMatch(name) == includeOnMatch)
-    {
-      to->addTest(child);
-    }
+      getTestVector(child, to);
+    else
+      to.push_back(child);
   }
 }
 
-CppUnit::Test* findTest(CppUnit::Test* t, QString name)
+void getTestVector(const vector<TestPtr>& from, vector<CppUnit::Test*>& to)
 {
-  if (QString::fromStdString(t->getName()) == name)
+  for (vector<TestPtr>::size_type i = 0; i < from.size(); ++i)
+  {
+    CppUnit::Test* child = from[i].get();
+    if (dynamic_cast<CppUnit::TestComposite*>(child))
+      getTestVector(child, to);
+    else
+      to.push_back(child);
+  }
+}
+
+void filterPattern(const std::vector<CppUnit::Test*> &from, std::vector<CppUnit::Test*> &to,
+                   QString pattern, bool includeOnMatch)
+{
+  QRegExp regex(pattern);
+
+  for (size_t i = 0; i < from.size(); i++)
+  {
+    CppUnit::Test* child = from[i];
+    QString name = QString::fromStdString(child->getName());
+    if (regex.exactMatch(name) == includeOnMatch)
+      to.push_back(child);
+  }
+}
+
+CppUnit::Test* findTest(CppUnit::Test* t, std::string name)
+{
+  if (name == t->getName())
   {
     return t;
   }
@@ -185,10 +215,38 @@ CppUnit::Test* findTest(CppUnit::Test* t, QString name)
     }
   }
 
-  return 0;
+  return NULL;
 }
 
-void printNames(CppUnit::Test* t)
+CppUnit::Test* findTest(std::vector<TestPtr> vTests, std::string name)
+{
+  for (size_t i = 0; i < vTests.size(); i++)
+  {
+    if (name == vTests[i]->getName())
+    {
+      return vTests[i].get();
+    }
+
+    // Check to see if it's a suite of tests...
+    CppUnit::TestSuite* suite = dynamic_cast<CppUnit::TestSuite*>(vTests[i].get());
+    if (suite != 0)
+    {
+      vector<CppUnit::Test*> children = suite->getTests();
+      for (size_t j = 0; j < children.size(); ++j)
+      {
+        CppUnit::Test* result = findTest(children[j], name);
+        if (result != 0)
+        {
+          return result;
+        }
+      }
+    }
+  }
+
+  return NULL;
+}
+
+void getNames(vector<string>& names, CppUnit::Test* t)
 {
   CppUnit::TestSuite* suite = dynamic_cast<CppUnit::TestSuite*>(t);
   if (suite != 0)
@@ -196,13 +254,48 @@ void printNames(CppUnit::Test* t)
     vector<CppUnit::Test*> children = suite->getTests();
     for (size_t i = 0; i < children.size(); ++i)
     {
-      printNames(children[i]);
+      getNames(names, children[i]);
     }
   }
   else
   {
-    cout << t->getName() << endl;
+    names.push_back(t->getName());
   }
+}
+
+void getNames(vector<string>& names, const std::vector<TestPtr> &vTests)
+{
+  for (size_t i = 0; i < vTests.size(); i++)
+  {
+    // See if our test is really a suite
+    CppUnit::TestSuite* suite = dynamic_cast<CppUnit::TestSuite*>(vTests[i].get());
+    if (suite != 0)
+    {
+      vector<CppUnit::Test*> children = suite->getTests();
+      for (size_t j = 0; j < children.size(); ++j)
+      {
+        getNames(names, children[j]);
+      }
+    }
+    else
+    {
+      names.push_back(vTests[i]->getName());
+    }
+  }
+}
+
+void getNames(std::vector<string>& names, const std::vector<CppUnit::Test*> &vTests)
+{
+  for (size_t i = 0; i < vTests.size(); i++)
+    names.push_back(vTests[i]->getName());
+}
+
+void printNames(const std::vector<TestPtr> &vTests)
+{
+  vector<string> names;
+  getNames(names, vTests);
+  for (vector<string>::iterator it = names.begin(); it != names.end(); ++it)
+    cout << *it << endl;
 }
 
 enum _TestType
@@ -214,97 +307,104 @@ enum _TestType
   SLOW_ONLY,
   GLACIAL,
   GLACIAL_ONLY,
+  SERIAL,
   ALL
 };
 
-void populateTests(_TestType t, CppUnit::TestSuite *suite, bool printDiff)
+enum _TimeOutValue
+{
+  QUICK_WAIT    = 2,
+  SLOW_WAIT     = 30,
+  GLACIAL_WAIT  = 900
+};
+
+void runSingleTest(CppUnit::Test * pTest, QStringList &args, CppUnit::TextTestResult * pResult)
+{
+  // clear all user configuration so we have consistent tests.
+  conf().clear();
+  ConfigOptions::populateDefaults(conf());
+  conf().set("HOOT_HOME", getenv("HOOT_HOME"));
+  Settings::parseCommonArguments(args);
+  pTest->run(pResult);
+}
+
+void populateTests(_TestType t, std::vector<TestPtr> &vTests, bool printDiff, bool hideDisableTests = false)
 {
   /** This section is a bit verbose but ordering is very important as the order must go as follows:
    *  Default Registry
    *  Script Tests
-   *  Named Registries (current, quick, etc.
+   *  Named Registries (current, quick, etc.)
    */
   switch(t)
   {
   default:
   case CURRENT:
-    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest());
-    suite->addTest(new ScriptTestSuite("test-files/cmd/current/", printDiff));
+    vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/current/", printDiff, QUICK_WAIT, hideDisableTests)));
+    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest()));
     break;
   case QUICK:
-    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
-    suite->addTest(new ScriptTestSuite("test-files/cmd/current/", printDiff));
-    suite->addTest(new ScriptTestSuite("test-files/cmd/quick/", printDiff));
-    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest());
-    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest());
-    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest());
+    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry().makeTest()));
+    vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/current/", printDiff, QUICK_WAIT, hideDisableTests)));
+    vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/quick/", printDiff, QUICK_WAIT, hideDisableTests)));
+    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest()));
+    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest()));
+    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest()));
     break;
   case QUICK_ONLY:
-    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
-    suite->addTest(new ScriptTestSuite("test-files/cmd/quick/", printDiff));
-    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest());
-    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest());
+    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry().makeTest()));
+    vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/quick/", printDiff, QUICK_WAIT, hideDisableTests)));
+    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest()));
+    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest()));
     break;
   case SLOW:
-    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
-    suite->addTest(new ScriptTestSuite("test-files/cmd/current/", printDiff));
-    suite->addTest(new ScriptTestSuite("test-files/cmd/quick/", printDiff));
-    suite->addTest(new ScriptTestSuite("test-files/cmd/slow/", printDiff));
-    suite->addTest(new ConflateCaseTestSuite("test-files/cases"));
-    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest());
-    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest());
-    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest());
-    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("slow").makeTest());
+    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry().makeTest()));
+    vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/current/", printDiff, QUICK_WAIT, hideDisableTests)));
+    vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/quick/", printDiff, QUICK_WAIT, hideDisableTests)));
+    vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/slow/", printDiff, SLOW_WAIT, hideDisableTests)));
+    vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/slow/serial/", printDiff, SLOW_WAIT, hideDisableTests)));
+    vTests.push_back(TestPtr(new ConflateCaseTestSuite("test-files/cases", hideDisableTests)));
+    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest()));
+    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest()));
+    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest()));
+    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("slow").makeTest()));
     break;
   case SLOW_ONLY:
-    suite->addTest(new ScriptTestSuite("test-files/cmd/slow/", printDiff));
-    suite->addTest(new ConflateCaseTestSuite("test-files/cases"));
-    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("slow").makeTest());
+    vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/slow/", printDiff, SLOW_WAIT, hideDisableTests)));
+    vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/slow/serial/", printDiff, SLOW_WAIT, hideDisableTests)));
+    vTests.push_back(TestPtr(new ConflateCaseTestSuite("test-files/cases", hideDisableTests)));
+    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("slow").makeTest()));
     break;
   case GLACIAL:
   case ALL:
-    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
-    suite->addTest(new ScriptTestSuite("test-files/cmd/current/", printDiff));
-    suite->addTest(new ScriptTestSuite("test-files/cmd/quick/", printDiff));
-    suite->addTest(new ScriptTestSuite("test-files/cmd/slow/", printDiff));
-    suite->addTest(new ScriptTestSuite("test-files/cmd/glacial/", printDiff));
-    suite->addTest(new ConflateCaseTestSuite("test-files/cases"));
-    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest());
-    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest());
-    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest());
-    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("slow").makeTest());
-    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("glacial").makeTest());
+    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry().makeTest()));
+    vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/current/", printDiff, QUICK_WAIT, hideDisableTests)));
+    vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/quick/", printDiff, QUICK_WAIT, hideDisableTests)));
+    vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/slow/", printDiff, SLOW_WAIT, hideDisableTests)));
+    vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/slow/serial/", printDiff, SLOW_WAIT, hideDisableTests)));
+    vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/glacial/", printDiff, GLACIAL_WAIT, hideDisableTests)));
+    vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/glacial/serial/", printDiff, GLACIAL_WAIT, hideDisableTests)));
+    vTests.push_back(TestPtr(new ConflateCaseTestSuite("test-files/cases", hideDisableTests)));
+    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest()));
+    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest()));
+    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest()));
+    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("slow").makeTest()));
+    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("glacial").makeTest()));
     break;
   case GLACIAL_ONLY:
-    suite->addTest(new ScriptTestSuite("test-files/cmd/glacial/", printDiff));
-    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("glacial").makeTest());
+    vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/glacial/", printDiff, GLACIAL_WAIT, hideDisableTests)));
+    vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/glacial/serial/", printDiff, GLACIAL_WAIT, hideDisableTests)));
+    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("glacial").makeTest()));
+    break;
+  case SERIAL:
+    vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/glacial/serial/", printDiff, GLACIAL_WAIT, hideDisableTests)));
+    vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/slow/serial/", printDiff, SLOW_WAIT, hideDisableTests)));
+    vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("serial").makeTest()));
     break;
   }
 }
 
 int main(int argc, char *argv[])
 {
-  Hoot::getInstance().init();
-
-  QCoreApplication app(argc, argv);
-
-  QStringList args;
-  for (int i = 1; i < argc; i++)
-  {
-    args << argv[i];
-  }
-
-  Log::getInstance().setLevel(Log::Warn);
-  CppUnit::TextUi::TestRunner runner;
-  CppUnit::TestSuite *rootSuite = new CppUnit::TestSuite( "All tests" );
-
-# if HOOT_HAVE_HADOOP
-    Hoot::getInstance().loadLibrary("PrettyPipesExample");
-# endif
-
-  // initialize OSM Schema so the time expense doesn't print in other tests.
-  OsmSchema::getInstance();
-
   if (argc == 1)
   {
     cout << argv[0] << " Usage:\n"
@@ -327,134 +427,254 @@ int main(int argc, char *argv[])
             "--diff - Print diff when a script test fails.\n"
             "--include=[regex] - Include only tests that match the specified regex.\n"
             "--exclude=[regex] - Exclude tests that match the specified regex.\n"
+            "--parallel [process count] - Run the specified tests in parallel.\n"
             "\n"
             "See the Hootenanny Developer Guide for more information.\n"
             ;
   }
   else
   {
-    HootTestListener* listener;
+    Hoot::getInstance().init();
+
+    v8Engine::setPlatformInit();
+    v8Engine::getInstance().init();
+
+    QCoreApplication app(argc, argv);
+
+    QStringList args;
+    for (int i = 1; i < argc; i++)
+    {
+      args << argv[i];
+    }
+
+    Log::getInstance().setLevel(Log::Warn);
+    std::vector<TestPtr> vAllTests;
+    std::vector<CppUnit::Test*> vTestsToRun;
+    CppUnit::TextTestResult result;
+
+# if HOOT_HAVE_HADOOP
+    Hoot::getInstance().loadLibrary("PrettyPipesExample");
+# endif
+
+    // initialize OSM Schema so the time expense doesn't print in other tests.
+    OsmSchema::getInstance();
+
+    boost::shared_ptr<HootTestListener> listener;
 
     bool printDiff = args.contains("--diff");
 
-    CppUnit::TestSuite *searchSuite = new CppUnit::TestSuite( "Search Tests" );
+    // Print all names & exit without running anything
     if (args.contains("--all-names"))
     {
-      populateTests(ALL, searchSuite, printDiff);
-      printNames(searchSuite);
-      delete searchSuite;
+      populateTests(ALL, vAllTests, printDiff);
+      printNames(vAllTests);
       return 0;
     }
-    else if (args.contains("--single"))
+
+    // Run a single test
+    if (args.contains("--single"))
     {
       int i = args.indexOf("--single") + 1;
       if (i >= args.size())
       {
-        delete searchSuite;
         throw HootException("Expected a test name after --single.");
       }
       QString testName = args[i];
 
-      listener = new HootTestListener(false, -1);
+      listener.reset(new HootTestListener(false, -1));
+      result.addListener(listener.get());
       Log::getInstance().setLevel(Log::Info);
-      CppUnit::TestSuite *searchSuite = new CppUnit::TestSuite( "Search Tests" );
-      populateTests(ALL, searchSuite, printDiff);
-
-      CppUnit::Test* t = findTest(searchSuite, testName);
-      if (t == 0)
+      populateTests(ALL, vAllTests, printDiff);
+      CppUnit::Test* t = findTest(vAllTests, testName.toStdString());
+      if (t == NULL)
       {
-        delete searchSuite;
-        delete listener;
-        throw HootException("Could not find the specified test: " + testName);
+        cout << "Could not find the specified test: " << testName.toStdString() << endl;
+        return -1;
       }
 
-      runner.addTest(t);
+      runSingleTest(t, args, &result);
+      return result.failures().size() > 0 ? -1 : 0;
+    }
+    else if (args.contains("--listen"))
+    {
+      double slowTest = -1;
+      int i = args.indexOf("--listen") + 1;
+      if (i < args.size())
+        slowTest = args[i].toDouble();
+
+      listener.reset(new HootTestListener(false, slowTest, false));
+      if (args.contains("--names"))
+        listener->showTestNames(true);
+      result.addListener(listener.get());
+
+      string testName;
+      cin >> testName;
+      while (testName != HOOT_TEST_FINISHED)
+      {
+        populateTests(ALL, vAllTests, printDiff, true);
+        CppUnit::Test* t = findTest(vAllTests, testName);
+        if (t != 0)
+        {
+          runSingleTest(t, args, &result);
+          cout << endl << HOOT_TEST_FINISHED << endl;
+        }
+        else
+        {
+          cerr << "Could not find the specified test: " <<  testName << endl;
+          cout << HOOT_TEST_FINISHED << endl;
+        }
+        cin >> testName;
+      }
+      return result.failures().size() > 0 ? -1 : 0;
     }
     else
     {
       if (args.contains("--current"))
       {
-        listener = new HootTestListener(true);
+        listener.reset(new HootTestListener(true));
         Log::getInstance().setLevel(Log::Info);
-        populateTests(CURRENT, rootSuite, printDiff);
+        populateTests(CURRENT, vAllTests, printDiff);
       }
       else if (args.contains("--quick"))
       {
-        listener = new HootTestListener(false, 1.0);
-        populateTests(QUICK, rootSuite, printDiff);
+        listener.reset(new HootTestListener(false, QUICK_WAIT));
+        populateTests(QUICK, vAllTests, printDiff);
       }
       else if (args.contains("--quick-only"))
       {
-        listener = new HootTestListener(false, 1.0);
-        populateTests(QUICK_ONLY, rootSuite, printDiff);
+        listener.reset(new HootTestListener(false, QUICK_WAIT));
+        populateTests(QUICK_ONLY, vAllTests, printDiff);
       }
       else if (args.contains("--slow"))
       {
-        listener = new HootTestListener(false, 30.0);
-        populateTests(SLOW, rootSuite, printDiff);
+        listener.reset(new HootTestListener(false, SLOW_WAIT));
+        populateTests(SLOW, vAllTests, printDiff);
       }
       else if (args.contains("--slow-only"))
       {
-        listener = new HootTestListener(false, 30.0);
-        populateTests(SLOW_ONLY, rootSuite, printDiff);
+        listener.reset(new HootTestListener(false, SLOW_WAIT));
+        populateTests(SLOW_ONLY, vAllTests, printDiff);
       }
       else if (args.contains("--all") || args.contains("--glacial"))
       {
-        listener = new HootTestListener(false, 900.0);
-        populateTests(GLACIAL, rootSuite, printDiff);
+        listener.reset(new HootTestListener(false, GLACIAL_WAIT));
+        populateTests(GLACIAL, vAllTests, printDiff);
       }
       else if (args.contains("--glacial-only"))
       {
-        listener = new HootTestListener(false, 900.0);
-        populateTests(GLACIAL_ONLY, rootSuite, printDiff);
+        listener.reset(new HootTestListener(false, GLACIAL_WAIT));
+        populateTests(GLACIAL_ONLY, vAllTests, printDiff);
       }
+
+      vector<CppUnit::Test*> vTests;
+      getTestVector(vAllTests, vTests);
+      bool filtered = false;
 
       for (int i = 0; i < args.size(); i++)
       {
         if (args[i].startsWith("--exclude="))
         {
-          CppUnit::TestSuite *newSuite = new CppUnit::TestSuite( "All tests" );
+          if (vTestsToRun.size() > 0)
+          {
+            //  On the second (or more) time around exclude from the excluded list
+            vTests.swap(vTestsToRun);
+            vTestsToRun.clear();
+          }
           int equalsPos = args[i].indexOf('=');
           QString regex = args[i].mid(equalsPos + 1);
           LOG_WARN("Excluding pattern: " << regex);
-          filterPattern(rootSuite, newSuite, regex, false);
-          rootSuite = newSuite;
+          filterPattern(vTests, vTestsToRun, regex, false);
+          filtered = true;
         }
         else if (args[i].startsWith("--include="))
         {
-          CppUnit::TestSuite *newSuite = new CppUnit::TestSuite( "All tests" );
           int equalsPos = args[i].indexOf('=');
           QString regex = args[i].mid(equalsPos + 1);
           LOG_WARN("Including only tests that match: " << regex);
-          filterPattern(rootSuite, newSuite, regex, true);
-          rootSuite = newSuite;
+          filterPattern(vTests, vTestsToRun, regex, true);
+          filtered = true;
         }
       }
 
-      runner.addTest(rootSuite);
-      cout << "Running core tests.  Test count: " << rootSuite->countTestCases() << endl;
+      if (!filtered) // Do all tests
+        vTestsToRun.swap(vTests);
+      cout << "Running core tests.  Test count: " << vTestsToRun.size() << endl;
     }
 
-    CppUnit::TextTestResult result;
-
-    if (args.contains("--names"))
+    if (args.contains("--parallel"))
     {
-      listener->showTestNames(true);
+      double start = Tgs::Time::getTime();
+
+      int i = args.indexOf("--parallel") + 1;
+      if (i >= args.size())
+      {
+        throw HootException("Expected integer after --parallel.");
+      }
+      bool ok = false;
+      int nproc = args[i].toInt(&ok);
+      if (!ok || nproc < 1)
+      {
+        throw HootException("Expected integer after --parallel");
+      }
+      ProcessPool pool(nproc, listener->getSlowTest(),
+                       (bool)args.contains("--names"),
+                       (bool)args.contains("--diff"));
+
+      //  Get the names of all of the tests to run
+      vector<string> allNames;
+      getNames(allNames, vTestsToRun);
+      set<string> nameCheck;
+      for (vector<string>::iterator it = allNames.begin(); it != allNames.end(); ++it)
+        nameCheck.insert(*it);
+
+      //  Add all of the jobs that must be done serially and are a part of the selected tests
+      vector<TestPtr> serialTests;
+      populateTests(SERIAL, serialTests, printDiff, true);
+      vector<string> serialNames;
+      getNames(serialNames, serialTests);
+      for (vector<string>::iterator it = serialNames.begin(); it != serialNames.end(); ++it)
+      {
+        if (nameCheck.find(*it) != nameCheck.end())
+          pool.addJob(QString(it->c_str()), false);
+      }
+
+      //  Add all of the remaining jobs in the test suite
+      for (vector<string>::iterator it = allNames.begin(); it != allNames.end(); ++it)
+        pool.addJob(QString(it->c_str()));
+
+      pool.startProcessing();
+      pool.wait();
+
+      cout << endl;
+      cout << "Elapsed: " << Tgs::Time::getTime() - start << endl;
+      return pool.getFailures() > 0 ? -1 : 0;
     }
+    else
+    {
+      double start = Tgs::Time::getTime();
 
-    // clear all user configuration so we have consistent tests.
-    conf().clear();
-    ConfigOptions::populateDefaults(conf());
-    LOG_DEBUG("HOOT_HOME: " + QString(getenv("HOOT_HOME")))
-    conf().set("HOOT_HOME", getenv("HOOT_HOME"));
+      if (args.contains("--names"))
+        listener->showTestNames(true);
 
-    //allows us to pass config options through HootTest
-    Settings::parseCommonArguments(args);
+      // clear all user configuration so we have consistent tests.
+      conf().clear();
+      ConfigOptions::populateDefaults(conf());
+      LOG_DEBUG("HOOT_HOME: " + QString(getenv("HOOT_HOME")))
+      conf().set("HOOT_HOME", getenv("HOOT_HOME"));
 
-    result.addListener(listener);
-    runner.run(result);
-    delete searchSuite;
-    delete listener;
-    return result.failures().size() > 0 ? -1 : 0;
+      // allows us to pass config options through HootTest
+      Settings::parseCommonArguments(args);
+
+      // set up listener
+      result.addListener(listener.get());
+
+      // run all tests
+      for (size_t i = 0; i < vTestsToRun.size(); i++)
+        vTestsToRun[i]->run(&result);
+
+      cout << endl;
+      cout << "Elapsed: " << Tgs::Time::getTime() - start << endl;
+      return result.failures().size() > 0 ? -1 : 0;
+    }
   }
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MultiPolygonCreator.h"
 
@@ -68,8 +68,8 @@ Geometry* MultiPolygonCreator::_addHoles(vector<LinearRing*> &outers,
 {
   const GeometryFactory& gf = *GeometryFactory::getDefaultInstance();
 
-  vector<Geometry*>* polygons = new vector<Geometry*>();
-  vector<Geometry*>& tmpPolygons = *polygons;
+  vector<Geometry*> polygons;
+  vector<Geometry*>& tmpPolygons = polygons;
   tmpPolygons.reserve(outers.size());
 
   vector<double> outerArea;
@@ -110,7 +110,7 @@ Geometry* MultiPolygonCreator::_addHoles(vector<LinearRing*> &outers,
       // containing polygon we've found so far.
       else if (polygonIndex == -1 || (outerArea[j] < outerArea[polygonIndex]))
       {
-        auto_ptr<IntersectionMatrix> im(tmpPolygons[j]->relate(inners[i]));
+        boost::shared_ptr<IntersectionMatrix> im(tmpPolygons[j]->relate(inners[i]));
         if (im->isContains())
         {
           contained = true;
@@ -129,12 +129,12 @@ Geometry* MultiPolygonCreator::_addHoles(vector<LinearRing*> &outers,
       // if it isn't a valid inner ring then who cares.
       if (_isValidInner(inners[i]))
       {
-        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        if (logWarnCount < Log::getWarnMessageLimit())
         {
-          LOG_WARN("Could not find a polygon that fully contains a hole. inner[" << i << "] " <<
-            _r->toString());
+          LOG_WARN("Could not find a polygon that fully contains a hole.");
+          LOG_DEBUG("inner[" << i << "] " <<_r->toString());
         }
-        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        else if (logWarnCount == Log::getWarnMessageLimit())
         {
           LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }
@@ -200,8 +200,8 @@ boost::shared_ptr<Geometry> MultiPolygonCreator::createMultipolygon() const
         (e.role == MetadataTags::RoleOuter() || e.role == MetadataTags::RolePart()))
     {
       ConstRelationPtr r = _provider->getRelation(e.getElementId().getId());
-      if (r->isMultiPolygon() ||
-        OsmSchema::getInstance().isArea(r->getTags(), ElementType::Relation))
+      if (r && (r->isMultiPolygon() ||
+        OsmSchema::getInstance().isArea(r->getTags(), ElementType::Relation)))
       {
         boost::shared_ptr<Geometry> child(MultiPolygonCreator(_provider, r).createMultipolygon());
         try
@@ -314,11 +314,11 @@ void MultiPolygonCreator::_createSingleRing(const vector<ConstWayPtr>& partials,
 
   if (cs->getSize() <= 3)
   {
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       LOG_WARN("Unable to create ring -- fewer than 4 points.");
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }
@@ -339,7 +339,7 @@ bool MultiPolygonCreator::_isValidInner(LinearRing* innerRing) const
 
   const GeometryFactory& gf = *GeometryFactory::getDefaultInstance();
   vector<Geometry*> noHoles;
-  auto_ptr<Polygon> p(gf.createPolygon(*innerRing, noHoles));
+  boost::shared_ptr<Polygon> p(gf.createPolygon(*innerRing, noHoles));
   if (p->getArea() <= 0.0)
   {
     return false;
@@ -377,19 +377,23 @@ deque<ConstWayPtr> MultiPolygonCreator::_orderWaysForRing(const vector<ConstWayP
     if (w->getNodeId(0) == lastId)
     {
       result.push_back(w);
+      //  Update the last id with the new last id
+      lastId = w->getLastNodeId();
     }
     else if (w->getLastNodeId() == firstId)
     {
       result.push_front(w);
+      //  Update the first id with the new first id
+      firstId = w->getNodeId(0);
     }
     else
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN("Unable to connect all ways in an outer ring. This may give unexpected results. " <<
                  partials[i]->getElementId());
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }

@@ -38,6 +38,18 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, AttributeDistanceExtractor)
 
+AttributeDistanceExtractor::AttributeDistanceExtractor(ValueAggregatorPtr wayAgg, QString key):
+  WayFeatureExtractor(wayAgg),
+  _key(key)
+{
+}
+
+AttributeDistanceExtractor::AttributeDistanceExtractor(QString key):
+  WayFeatureExtractor(),
+  _key(key)
+{
+}
+
 double AttributeDistanceExtractor::_extract(const OsmMap& /*map*/, const ConstWayPtr& w1,
                                             const ConstWayPtr& w2) const
 {

@@ -22,11 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
 #include <hoot/core/io/ElementComparer.h>
+#include <hoot/core/visitors/CalculateHashVisitor2.h>
 
 #include "../TestUtils.h"
 
@@ -38,24 +39,16 @@ namespace hoot
 
 class ElementComparerTest : public CppUnit::TestFixture
 {
-    //disabled the status tests here; see comments in ElementComparer::isSame; I don't believe
-    //we need them anymore, but will keep around for the time being until more testing can be
-    //done.
     CPPUNIT_TEST_SUITE(ElementComparerTest);
     CPPUNIT_TEST(runNodeWithinDistanceThresholdTest1);
-    CPPUNIT_TEST(runNodeWithinDistanceThresholdTest2);
     CPPUNIT_TEST(runNodeOutsideOfDistanceThresholdTest);
-    CPPUNIT_TEST(runNodeDifferentIdsTest);
     CPPUNIT_TEST(runNodeDifferentTagsTest);
-    //CPPUNIT_TEST(runNodeDifferentStatusTest);
     CPPUNIT_TEST(runNodeDifferentCircularErrorTest);
-    CPPUNIT_TEST(runNodeDifferentVersionsTest);
     CPPUNIT_TEST(runWaySameTest);
     CPPUNIT_TEST(runWayDifferentIdsTest);
     CPPUNIT_TEST(runWayDifferentNodesTest);
     CPPUNIT_TEST(runWayDifferentNodeOrderTest);
     CPPUNIT_TEST(runWayDifferentTagsTest);
-    //CPPUNIT_TEST(runWayDifferentStatusTest);
     CPPUNIT_TEST(runWayDifferentCircularErrorTest);
     CPPUNIT_TEST(runWayDifferentVersionsTest);
     CPPUNIT_TEST(runRelationSameTest);
@@ -64,7 +57,6 @@ class ElementComparerTest : public CppUnit::TestFixture
     CPPUNIT_TEST(runRelationDifferentMembersTest);
     CPPUNIT_TEST(runRelationDifferentMemberRolesTest);
     CPPUNIT_TEST(runRelationDifferentTagsTest);
-    //CPPUNIT_TEST(runRelationDifferentStatusTest);
     CPPUNIT_TEST(runRelationDifferentCircularErrorTest);
     CPPUNIT_TEST(runRelationDifferentVersionsTest);
     CPPUNIT_TEST_SUITE_END();
@@ -75,42 +67,24 @@ public:
   {
     NodePtr node1(new Node(Status::Unknown1, 1, 0.0, 0.0, 15.0));
     node1->setTag("key1", "value1");
+    CalculateHashVisitor2().visit(node1);
 
-    NodePtr node2(new Node(Status::Unknown1, 1, 0.0, 0.0000001, 15.0));
+    NodePtr node2(new Node(Status::Unknown1, 1, 0.0, 0.00000001, 15.0));
     node2->setTag("key1", "value1");
+    CalculateHashVisitor2().visit(node2);
 
     CPPUNIT_ASSERT(ElementComparer().isSame(node1, node2));
-  }
-
-  void runNodeWithinDistanceThresholdTest2()
-  {
-    NodePtr node1(new Node(Status::Unknown1, 1, 0.0, 0.0, 15.0));
-    node1->setTag("key1", "value1");
-
-    NodePtr node2(new Node(Status::Unknown1, 1, 0.0, 0.01, 15.0));
-    node2->setTag("key1", "value1");
-
-    CPPUNIT_ASSERT(ElementComparer(10000).isSame(node1, node2));
   }
 
   void runNodeOutsideOfDistanceThresholdTest()
   {
     NodePtr node1(new Node(Status::Unknown1, 1, 0.0, 0.0, 15.0));
     node1->setTag("key1", "value1");
+    CalculateHashVisitor2().visit(node1);
 
     NodePtr node2(new Node(Status::Unknown1, 1, 0.0, 0.01, 15.0));
     node2->setTag("key1", "value1");
-
-    CPPUNIT_ASSERT(!ElementComparer().isSame(node1, node2));
-  }
-
-  void runNodeDifferentIdsTest()
-  {
-    NodePtr node1(new Node(Status::Unknown1, 1, 0.0, 0.0, 15.0));
-    node1->setTag("key1", "value1");
-
-    NodePtr node2(new Node(Status::Unknown1, 2, 0.0, 0.0000001, 15.0));
-    node2->setTag("key1", "value1");
+    CalculateHashVisitor2().visit(node2);
 
     CPPUNIT_ASSERT(!ElementComparer().isSame(node1, node2));
   }
@@ -119,9 +93,11 @@ public:
   {
     NodePtr node1(new Node(Status::Unknown1, 1, 0.0, 0.0, 15.0));
     node1->setTag("key1", "value1");
+    CalculateHashVisitor2().visit(node1);
 
-    NodePtr node2(new Node(Status::Unknown1, 1, 0.0, 0.0000001, 15.0));
+    NodePtr node2(new Node(Status::Unknown1, 1, 0.0, 0.00000001, 15.0));
     node2->setTag("key1", "value2");
+    CalculateHashVisitor2().visit(node2);
 
     CPPUNIT_ASSERT(!ElementComparer().isSame(node1, node2));
   }
@@ -130,9 +106,11 @@ public:
   {
     NodePtr node1(new Node(Status::Unknown1, 1, 0.0, 0.0, 15.0));
     node1->setTag("key1", "value1");
+    CalculateHashVisitor2().visit(node1);
 
-    NodePtr node2(new Node(Status::Unknown2, 1, 0.0, 0.0000001, 15.0));
+    NodePtr node2(new Node(Status::Unknown2, 1, 0.0, 0.00000001, 15.0));
     node2->setTag("key1", "value1");
+    CalculateHashVisitor2().visit(node2);
 
     CPPUNIT_ASSERT(!ElementComparer().isSame(node1, node2));
   }
@@ -141,22 +119,11 @@ public:
   {
     NodePtr node1(new Node(Status::Unknown1, 1, 0.0, 0.0, 15.0));
     node1->setTag("key1", "value1");
+    CalculateHashVisitor2().visit(node1);
 
-    NodePtr node2(new Node(Status::Unknown1, 1, 0.0, 0.0000001, 16.0));
+    NodePtr node2(new Node(Status::Unknown1, 1, 0.0, 0.00000001, 16.0));
     node2->setTag("key1", "value1");
-
-    CPPUNIT_ASSERT(!ElementComparer().isSame(node1, node2));
-  }
-
-  void runNodeDifferentVersionsTest()
-  {
-    NodePtr node1(
-      new Node(Status::Unknown1, 1, 0.0, 0.0, 15.0, ElementData::CHANGESET_EMPTY, 1));
-    node1->setTag("key1", "value1");
-
-    NodePtr node2(
-      new Node(Status::Unknown1, 1, 0.0, 0.0000001, 15.0, ElementData::CHANGESET_EMPTY, 2));
-    node2->setTag("key1", "value1");
+    CalculateHashVisitor2().visit(node2);
 
     CPPUNIT_ASSERT(!ElementComparer().isSame(node1, node2));
   }

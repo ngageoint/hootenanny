@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef STREAMUTILSJS_H
 #define STREAMUTILSJS_H
@@ -32,7 +32,7 @@
 #include <hoot/core/util/Log.h>
 
 // v8
-#include <v8.h>
+#include <hoot/js/HootJsStable.h>
 
 namespace hoot
 {
@@ -45,15 +45,16 @@ namespace hoot
  */
 inline v8::Handle<v8::Value> fromJson(QString qstr, QString fileName="")
 {
-  v8::HandleScope scope;
-  v8::Handle<v8::Context> context = v8::Context::GetCurrent();
+  v8::Isolate* current = v8::Isolate::GetCurrent();
+  v8::EscapableHandleScope scope(current);
+  v8::Handle<v8::Context> context = current->GetCurrentContext();
   v8::Handle<v8::Object> global = context->Global();
 
   QByteArray utf8 = qstr.toUtf8();
-  v8::Handle<v8::Value> str = v8::String::New(utf8.data(), utf8.length());
+  v8::Handle<v8::Value> str = v8::String::NewFromUtf8(current, utf8.data(), v8::NewStringType::kNormal, utf8.length()).ToLocalChecked();
 
-  v8::Handle<v8::Object> JSON = global->Get(v8::String::New("JSON"))->ToObject();
-  v8::Handle<v8::Function> JSON_parse = v8::Handle<v8::Function>::Cast(JSON->Get(v8::String::New("parse")));
+  v8::Handle<v8::Object> JSON = global->Get(v8::String::NewFromUtf8(current, "JSON"))->ToObject();
+  v8::Handle<v8::Function> JSON_parse = v8::Handle<v8::Function>::Cast(JSON->Get(v8::String::NewFromUtf8(current, "parse")));
 
   v8::Handle<v8::Value> args[1];
   args[0] = str;
@@ -85,46 +86,47 @@ inline v8::Handle<v8::Value> fromJson(QString qstr, QString fileName="")
       arg(blank + wave));
   }
 
-  return scope.Close(result);
+  return scope.Escape(result);
 }
 
 /**
  * @todo strangely this class can sometimes cause objects to go wonky.
  */
 template <class T>
-QString toJson(const v8::Handle<T> object)
+QString toJson(const v8::Local<T> object)
 {
-  v8::HandleScope scope;
-
-  v8::Local<v8::Context> context = v8::Context::GetCurrent();
-  v8::Local<v8::Object> global = context->Global();
-
-  v8::Local<v8::Object> JSON = global->Get(v8::String::New("JSON"))->ToObject();
-  v8::Handle<v8::Function> JSON_stringify = v8::Handle<v8::Function>::Cast(JSON->Get(v8::String::New("stringify")));
-
-  v8::Handle<v8::Value> args[1];
-  args[0] = object;
-
   QString result;
-  if (args[0].IsEmpty())
+  if (object.IsEmpty())
   {
     result = "";
   }
-  else if (args[0]->IsNull())
+  else if (object->IsNull())
   {
     result = "null";
   }
-  else if (args[0]->IsUndefined())
+  else if (object->IsUndefined())
   {
     result = "undefined";
   }
   else
   {
+    v8::Isolate* current = v8::Isolate::GetCurrent();
+    v8::HandleScope scope(current);
+
+    v8::Local<v8::Context> context = current->GetCurrentContext();
+    v8::Local<v8::Object> global = context->Global();
+
+    v8::Local<v8::Object> JSON = global->Get(v8::String::NewFromUtf8(current, "JSON"))->ToObject();
+    v8::Handle<v8::Function> JSON_stringify = v8::Handle<v8::Function>::Cast(JSON->Get(v8::String::NewFromUtf8(current, "stringify")));
+
+    v8::Handle<v8::Value> args[1];
+    args[0] = object;
+
     v8::Handle<v8::Value> resultValue = JSON_stringify->Call(JSON, 1, args);
     v8::Handle<v8::String> s = v8::Handle<v8::String>::Cast(resultValue);
 
     size_t utf8Length = s->Utf8Length() + 1;
-    std::auto_ptr<char> buffer(new char[utf8Length]);
+    boost::shared_ptr<char> buffer(new char[utf8Length]);
     s->WriteUtf8(buffer.get(), utf8Length);
 
     result = QString::fromUtf8(buffer.get());

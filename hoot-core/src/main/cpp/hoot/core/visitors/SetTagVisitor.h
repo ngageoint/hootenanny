@@ -29,6 +29,7 @@
 
 // hoot
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/elements/ElementType.h>
 
 #include "ElementOsmMapVisitor.h"
 
@@ -45,15 +46,23 @@ public:
   static std::string className() { return "hoot::SetTagVisitor"; }
 
   SetTagVisitor();
-  SetTagVisitor(QString key, QString value, bool appendToExistingValue = false);
+  SetTagVisitor(QString key, QString value, bool appendToExistingValue = false,
+                //using Unknown as the default empty value for element type
+                ElementType elementType = ElementType::Unknown);
 
   virtual void setConfiguration(const Settings& conf);
 
   virtual void visit(const boost::shared_ptr<Element>& e);
 
 private:
-  QString _k, _v;
+
+  QStringList _k, _v;
+  //if true; will not overwrite existing keys and will append values to them
   bool _appendToExistingValue;
+  //an element type filter
+  ElementType _elementType;
+
+  void _setTag(const ElementPtr& e, QString k, QString v);
 };
 
 }

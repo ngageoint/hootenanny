@@ -1,6 +1,6 @@
 Feature: Command detail modal window
 
-  Scenario: I can conflate the AllDataTypes data
+  Scenario: I can conflate the DC Roads data
     Given I am on Hootenanny
     And I resize the window
     And I click Get Started
@@ -16,9 +16,9 @@ Feature: Command detail modal window
     And I press "Conflate"
     And I scroll element into view and press "conflate2"
     Then I wait 30 "seconds" to see "Conflating …"
-    Then I wait 3 "minutes" to see "Merged_RoadsCucumber"
+    Then I wait 5 "minutes" to see "Merged_RoadsCucumber"
     Then I see the UI alert
-    And I click on ".alertDiv"
+    And I click on ".alertDiv.green"
     And I click on ".detailLink"
     Then I should see a paragraph with text "commandDetail"
     And I close the modal window

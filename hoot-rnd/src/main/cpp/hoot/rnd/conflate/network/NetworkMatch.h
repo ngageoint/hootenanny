@@ -104,6 +104,8 @@ public:
 
   bool isVerySimilarTo(const NetworkMatch* other) const;
 
+  bool contains(const NetworkMatch* other) const;
+
 protected:
   void _discoverWayPairs(ConstOsmMapPtr map, ConstEdgeMatchPtr edgeMatch);
 

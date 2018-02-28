@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -94,19 +94,19 @@ public:
     ConstWayPtr w1 = map->getWay(r1[0]);
     ConstWayPtr w2 = map->getWay(r2[0]);
 
-    EdgeDistanceExtractor uut(new MeanAggregator(), 5.0);
+    EdgeDistanceExtractor uut(ValueAggregatorPtr(new MeanAggregator()), 5.0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(9.9833, uut.distance(*map, w1, w2), 0.01);
 
-    EdgeDistanceExtractor uut2(new RmseAggregator(), 5.0);
+    EdgeDistanceExtractor uut2(ValueAggregatorPtr(new RmseAggregator()), 5.0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(15.5733, uut2.distance(*map, w1, w2), 0.01);
 
-    EdgeDistanceExtractor uut3(new MinAggregator(), 5.0);
+    EdgeDistanceExtractor uut3(ValueAggregatorPtr(new MinAggregator()), 5.0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0227, uut3.distance(*map, w1, w2), 0.01);
 
-    EdgeDistanceExtractor uut4(new QuantileAggregator(0.5), 5.0);
+    EdgeDistanceExtractor uut4(ValueAggregatorPtr(new QuantileAggregator(0.5)), 5.0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(5.5029, uut4.distance(*map, w1, w2), 0.01);
 
-    EdgeDistanceExtractor uut5(new QuantileAggregator(0.1), 5.0);
+    EdgeDistanceExtractor uut5(ValueAggregatorPtr(new QuantileAggregator(0.1)), 5.0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.3982, uut5.distance(*map, w1, w2), 0.01);
   }
 
@@ -123,7 +123,7 @@ public:
 
     MapProjector::projectToPlanar(map);
 
-    EdgeDistanceExtractor uut2(new RmseAggregator());
+    EdgeDistanceExtractor uut2(ValueAggregatorPtr(new RmseAggregator()));
 
     vector<long> r1 = FindWaysVisitor::findWaysByTag(map, "note", "1");
     vector<long> r2 = FindWaysVisitor::findWaysByTag(map, "note", "b");

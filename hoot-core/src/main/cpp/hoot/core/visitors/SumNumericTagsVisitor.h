@@ -46,7 +46,7 @@ class SumNumericTagsVisitor : public ConstElementVisitor, public SingleStatistic
 
     static unsigned int logWarnCount;
 
-    SumNumericTagsVisitor() {}
+    SumNumericTagsVisitor();
     SumNumericTagsVisitor(const QString key);
 
     virtual ~SumNumericTagsVisitor() {}

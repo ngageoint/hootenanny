@@ -91,8 +91,12 @@ public:
   /**
    * Write the map out to a string and return it. This is handy for debugging, but has obvious
    * memory limitations with real data.
+   *
+   * @param map the map to write out as a string
+   * @param formatXml if true, formats the xml with indentations and new lines
+   * @return an OSM XML string
    */
-  static QString toString(const ConstOsmMapPtr& map);
+  static QString toString(const ConstOsmMapPtr& map, const bool formatXml = true);
 
   /**
    * Provided for backwards compatibility. Better to just use OsmMapWriterFactory::write()
@@ -111,6 +115,9 @@ public:
    */
   QString removeInvalidCharacters(const QString& s);
 
+  bool getFormatXml() const { return _formatXml; }
+  void setFormatXml(const bool format) { _formatXml = format; }
+
 private:
 
   bool _formatXml;
@@ -122,10 +129,11 @@ private:
   QString _osmSchema;
   QString _timestamp;
   int _precision;
-  std::auto_ptr<QIODevice> _fp;
+  boost::shared_ptr<QIODevice> _fp;
   int _encodingErrorCount;
   boost::shared_ptr<QXmlStreamWriter> _writer;
   geos::geom::Envelope _bounds;
+  bool _includeCircularErrorTags;
 
   static QString _typeName(ElementType e);
 

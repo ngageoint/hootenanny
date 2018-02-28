@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // GEOS
@@ -76,11 +76,16 @@ class DuplicateWayRemoverTest : public CppUnit::TestFixture
 
 public:
 
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/conflate");
+  }
+
   void runTest()
   {
-    OsmXmlReader reader;
-
     OsmMap::resetCounters();
+
+    OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/algorithms/LongestCommonNodeStringTest.osm", map);
@@ -103,8 +108,8 @@ public:
    */
   void runStrictTagMatchingOnTest()
   {
-    QDir().mkdir("test-output/conflate");
     OsmMap::resetCounters();
+
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, "test-files/DcTigerRoads.osm", true, Status::Unknown1);
 
@@ -134,8 +139,8 @@ public:
    */
   void runStrictTagMatchingOffTest()
   {
-    QDir().mkdir("test-output/conflate");
     OsmMap::resetCounters();
+
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, "test-files/DcTigerRoads.osm", true, Status::Unknown1);
 

@@ -77,7 +77,11 @@ translate = {
     // In the future this might sort the list of values
     appendValue : function(oldValue,newValue,sepValue)
     {
-        if (oldValue == undefined)
+        if (sepValue === undefined) {
+            sepValue = ";";
+        }
+
+        if (oldValue === undefined || oldValue === null || oldValue === "")
         {
             return newValue;
         }
@@ -410,6 +414,7 @@ translate = {
         } // End for inAttrs
     }, // End fix23Attr
 
+
     // Translate XXX:2, XXX:3 etc tags and populate the OTH when appropriate
     // NOTE: We also handle XXX2, XXX3 etc since we need to be backwards compatible
     fix23Tags: function (inTags, outAttrs, lookup)
@@ -476,6 +481,55 @@ translate = {
         } // End for inTags
 
     }, // End fix23Tags
+
+
+    // Parse o2s_X tags
+    parseO2S : function(attrs)
+    {
+        var outTags = {};
+
+        // Check if the tags got split
+        var tTags = attrs.tag1
+        if (attrs.tag2) tTags = tTags + attrs.tag2
+        if (attrs.tag3) tTags = tTags + attrs.tag3
+        if (attrs.tag4) tTags = tTags + attrs.tag4
+
+        // If the JSON looks complete then parse it
+        if (tTags.charAt(0) == '{' && tTags.charAt(tTags.length-1) == '}')
+        {
+            outTags = JSON.parse(tTags);
+        }
+        else
+        {
+            // Bad o2s_X. Usual cause is writeing > 254 char to a shapefile attribute
+            // We are expecting something that got chopped like this:
+            //  {"source":"Tdh","building":"yes","statu
+
+            // Wipe out JSON fragments
+            if (tTags.charAt(0) == '{') tTags = tTags.slice(1);
+            // Just in case...
+            if (tTags.charAt(tTags.length-1) == '}') tTags = tTags.slice(-1);
+
+            // Now get rid of begining and/or ending '"' to make the next string split cleaner
+            if (tTags.charAt(0) == '"') tTags = tTags.slice(1);
+            if (tTags.charAt(tTags.length-1) == '"') tTags = tTags.slice(-1);
+
+            var tArray = tTags.split('","');
+
+            for (var i in tArray)
+            {
+                // Now split each key:value pair and only keep complete pairs
+                // Each pair should look like: building":"yes
+                var j = tArray[i].split('":"');
+                if (j[1])
+                {
+                    outTags[j[0]] = j[1];
+                }
+            }
+        } // End else Bad o2s
+
+        return outTags;
+    },
 
     // Parse the note:extra tag and return an associative array of key/value pairs
     parseNoteExtra : function(rawNote)
@@ -1416,6 +1470,27 @@ translate = {
 
             print(''); // just to get one blank line
         } // End for i
-    } // End dumpSchema
+    }, // End dumpSchema
 
+    // overrideValues - Add, modify or delete tags/attributes based on a JSON string
+    overrideValues: function(values,changeString)
+    {
+        if (changeString == '') return;
+
+        var override = JSON.parse(changeString);
+
+        for (var i in override)
+        {
+            if (override[i] == '')
+            {
+                delete values[i];
+            }
+            else
+            {
+                values[i] = override[i];
+            }
+        }
+
+        return values;
+    } // End overrideValues
 } // End of translate

@@ -35,8 +35,13 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, WeightedShapeDistanceExtractor)
 
-WeightedShapeDistanceExtractor::WeightedShapeDistanceExtractor(ValueAggregator* agg) :
-WayFeatureExtractor(agg)
+WeightedShapeDistanceExtractor::WeightedShapeDistanceExtractor(ValueAggregatorPtr agg):
+  WayFeatureExtractor(agg)
+{
+}
+
+WeightedShapeDistanceExtractor::WeightedShapeDistanceExtractor():
+  WayFeatureExtractor()
 {
 }
 

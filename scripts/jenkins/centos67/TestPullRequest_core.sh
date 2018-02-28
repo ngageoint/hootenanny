@@ -15,4 +15,8 @@ HootTest --exclude=.*ConflateAverageTest.sh \
          --exclude=.*HaitiDrConflateTest.sh \
          --exclude=.*DbDcStreetsNetworkConflateTest.sh \
          --exclude=.*NetworkConflateCmd.* \
-         --glacial
+         --exclude=.*OsmApiDbHootApiDb.* \
+         --exclude=.*MultiaryIngestCmd.* \
+         --glacial \
+         --parallel $(nproc) \
+         --diff

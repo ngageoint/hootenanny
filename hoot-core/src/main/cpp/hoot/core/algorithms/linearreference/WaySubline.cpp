@@ -150,7 +150,7 @@ WayPtr WaySubline::toWay(const OsmMapPtr& map, GeometryConverter::NodeFactory* n
 {
   ConstWayPtr way = _start.getWay();
 
-  auto_ptr<GeometryConverter::NodeFactory> nfPtr;
+  boost::shared_ptr<GeometryConverter::NodeFactory> nfPtr;
   if (nf == 0)
   {
     nf = new FindNodesInWayFactory(way);

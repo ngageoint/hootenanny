@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -74,7 +74,7 @@ public:
   {
     OsmMapPtr map(new OsmMap());
     OsmMap::resetCounters();
-    auto_ptr<OGREnvelope> env(GeometryUtils::toOGREnvelope(Envelope(0, 1, 0, 1)));
+    boost::shared_ptr<OGREnvelope> env(GeometryUtils::toOGREnvelope(Envelope(0, 1, 0, 1)));
     MapProjector::projectToPlanar(map, *env);
 
     return map;

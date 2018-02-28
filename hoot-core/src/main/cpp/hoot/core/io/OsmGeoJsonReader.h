@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OSM_GEOJSON_READER_H
@@ -41,6 +41,7 @@
 #include <boost/property_tree/ptree.hpp>
 
 // Hoot
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OsmJsonReader.h>
 
@@ -106,6 +107,11 @@ private:
    *        elements to the map
    */
   void _parseGeoJson();
+
+  /**
+   * @brief _parseGeoJsonFeature Parse a feature and add it to a map
+   */
+  void _parseGeoJsonFeature(const boost::property_tree::ptree &feature);
 
   /**
    * @brief _parseGeoJsonNode Reads node info out of the property tree and
@@ -180,10 +186,21 @@ private:
   void _addTags(const boost::property_tree::ptree &item, ElementPtr element);
 
   /**
+   * @brief _parseSubTags Reads tags that are objects or arrays into a JSON string
+   * @param item Property Tree (subtree)
+   * @return JSON string of sub-tags
+   */
+  std::string _parseSubTags(const boost::property_tree::ptree &item);
+
+  /**
    * @brief _roles List of roles for the current relation, saved for recursive relations
    */
   std::queue<std::string> _roles;
 
+  /**
+   * @brief Add the bounding box of an element as a tag
+   */
+  bool _addBboxTag;
 };
 
 } // end namespace hoot

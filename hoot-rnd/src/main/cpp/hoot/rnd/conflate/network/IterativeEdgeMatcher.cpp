@@ -127,9 +127,9 @@ void IterativeEdgeMatcher::iterate()
 
   // create a more refined estimate of edge match based on the typical similarity scores and
   // the neighboring node scores (product of neighboring scores?)
-  LOG_INFO("1 to 2");
+  LOG_DEBUG("1 to 2");
   _updateEdgeScores(_edge12Scores, _vertex12Scores);
-  LOG_INFO("2 to 1");
+  LOG_DEBUG("2 to 1");
   _updateEdgeScores(_edge21Scores, _vertex21Scores);
   _normalizeAllScores();
 }
@@ -345,22 +345,8 @@ void IterativeEdgeMatcher::_updateEdgeScores(EdgeScoreMap &em, const VertexScore
 
       if (!reversed)
       {
-        if (e1->getMembers()[0]->getId() == -1803179 || e2->getMembers()[0]->getId() == -1803179)
-        {
-          LOG_INFO(from1 << " => " << from2);
-          LOG_INFO(to1 << " => " << to2);
-        }
         v = _calculateEdgeVertexScore(vm, from1, from2, to1, to2);
         e = _scoreEdges(e1, e2);
-        if (e1->getMembers()[0]->getId() == -1803179 || e2->getMembers()[0]->getId() == -1803179)
-        {
-          LOG_INFO(from1 << " => " << from2);
-          LOG_INFO(to1 << " => " << to2);
-          LOG_VAR(e1);
-          LOG_VAR(e2);
-          LOG_VAR(v);
-          LOG_VAR(e);
-        }
       }
       else
       {

@@ -88,8 +88,8 @@ void BuildingPartMergeOp::_addContainedWaysToGroup(const Geometry& g,
       catch (const geos::util::TopologyException&)
       {
         boost::shared_ptr<Geometry> cg = ElementConverter(_map).convertToGeometry(candidate);
-        auto_ptr<Geometry> cleanCandidate(GeometryUtils::validateGeometry(cg.get()));
-        auto_ptr<Geometry> cleanG(GeometryUtils::validateGeometry(&g));
+        boost::shared_ptr<Geometry> cleanCandidate(GeometryUtils::validateGeometry(cg.get()));
+        boost::shared_ptr<Geometry> cleanG(GeometryUtils::validateGeometry(&g));
         contains = cleanG->contains(cleanCandidate.get());
       }
 
@@ -138,11 +138,11 @@ void BuildingPartMergeOp::_addNeighborsToGroup(const RelationPtr& r)
     }
     if (members[i].getElementId().getType() == ElementType::Relation)
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN("Not expecting relations of relations: " << r->toString());
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }

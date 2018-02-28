@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -50,6 +50,7 @@ class OsmXmlReaderTest : public CppUnit::TestFixture
     CPPUNIT_TEST(runTest);
     CPPUNIT_TEST(runUseIdTest);
     CPPUNIT_TEST(runUseStatusTest);
+    CPPUNIT_TEST(runUncompressTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -63,9 +64,6 @@ public:
 
         CPPUNIT_ASSERT_EQUAL(36, (int)map->getNodes().size());
         CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
-
-        OsmXmlWriter writer;
-        writer.write(map, "output.osm");
     }
 
     void runUseIdTest()
@@ -98,9 +96,6 @@ public:
         CPPUNIT_ASSERT(map->containsWay(-1669799));
         CPPUNIT_ASSERT(map->containsWay(-1669797));
         CPPUNIT_ASSERT(map->containsWay(-1669795));
-
-        OsmXmlWriter writer;
-        writer.write(map, "output.osm");
     }
 
     void runUseStatusTest()
@@ -133,12 +128,39 @@ public:
         HOOT_STR_EQUALS("Unknown2", map->getWay(-51)->getStatus().toString());
         HOOT_STR_EQUALS("Input003", map->getWay(-14)->getStatus().toString());
         HOOT_STR_EQUALS("Input004", map->getWay(-15)->getStatus().toString());
+    }
 
-        OsmXmlWriter writer;
-        writer.write(map, "output.osm");
+    void runUncompressTest()
+    {
+      const std::string cmd("gzip -c test-files/ToyTestA.osm > test-output/ToyTestA_compressed.osm.gz");
+      LOG_DEBUG("Running compress command: " << cmd);
+
+      int retVal;
+      if ((retVal = std::system(cmd.c_str())) != 0)
+      {
+        QString error = QString("Error %1 returned from compress command: %2").arg(retVal).
+          arg(QString::fromStdString(cmd));
+        throw HootException(error);
+      }
+
+      OsmXmlReader uut;
+      OsmMap::resetCounters();
+      OsmMapPtr map(new OsmMap());
+      uut.setUseDataSourceIds(true);
+
+      // Excercise the code
+      uut.read("test-output/ToyTestA_compressed.osm.gz", map);
+
+      // Checka a few things
+      CPPUNIT_ASSERT_EQUAL(36,(int)map->getNodes().size());
+      CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
+
+      QFile f("test-output/ToyTestA_compressed.osm.gz");
+      CPPUNIT_ASSERT(f.exists());
+      CPPUNIT_ASSERT(f.remove());
     }
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(OsmXmlReaderTest);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmXmlReaderTest, "quick");
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ElementJs.h"
 
@@ -64,83 +64,91 @@ ElementJs::~ElementJs()
 
 void ElementJs::_addBaseFunctions(Local<FunctionTemplate> tpl)
 {
+  Isolate* current = v8::Isolate::GetCurrent();
+  HandleScope scope(current);
   tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
-      String::New(Element::className().data()));
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("getCircularError"),
-      FunctionTemplate::New(getCircularError)->GetFunction());
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("getElementId"),
-      FunctionTemplate::New(getElementId)->GetFunction());
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("getId"),
-      FunctionTemplate::New(getId)->GetFunction());
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("getStatusInput"),
-      FunctionTemplate::New(getStatusString)->GetFunction());
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("getStatusString"),
-      FunctionTemplate::New(getStatusString)->GetFunction());
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("getTags"),
-      FunctionTemplate::New(getTags)->GetFunction());
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("setStatusString"),
-      FunctionTemplate::New(setStatusString)->GetFunction());
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("setTags"),
-      FunctionTemplate::New(setTags)->GetFunction());
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("toJSON"),
-      FunctionTemplate::New(toString)->GetFunction());
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("toString"),
-      FunctionTemplate::New(toString)->GetFunction());
+      String::NewFromUtf8(current, Element::className().data()));
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getCircularError"),
+      FunctionTemplate::New(current, getCircularError));
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getElementId"),
+      FunctionTemplate::New(current, getElementId));
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getId"),
+      FunctionTemplate::New(current, getId));
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getStatusInput"),
+      FunctionTemplate::New(current, getStatusString));
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getStatusString"),
+      FunctionTemplate::New(current, getStatusString));
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getTags"),
+      FunctionTemplate::New(current, getTags));
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "setStatusString"),
+      FunctionTemplate::New(current, setStatusString));
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "setTags"),
+      FunctionTemplate::New(current, setTags));
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "toJSON"),
+      FunctionTemplate::New(current, toString));
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "toString"),
+      FunctionTemplate::New(current, toString));
 }
 
-Handle<Value> ElementJs::getCircularError(const Arguments& args) {
-  HandleScope scope;
-
-  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args.This())->getConstElement();
-
-  return scope.Close(toV8(e->getCircularError()));
-}
-
-Handle<Value> ElementJs::getElementId(const Arguments& args) {
-  HandleScope scope;
-
-  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args.This())->getConstElement();
-
-  return scope.Close(ElementIdJs::New(e->getElementId()));
-}
-
-Handle<Value> ElementJs::getId(const Arguments& args) {
-  HandleScope scope;
-
-  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args.This())->getConstElement();
-
-  return scope.Close(v8::Integer::New(e->getId()));
-}
-
-Handle<Value> ElementJs::getStatusInput(const Arguments& args)
+void ElementJs::getCircularError(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  HandleScope scope(args.GetIsolate());
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args.This())->getConstElement();
 
-  return scope.Close(toV8(e->getStatus().getInput()));
+  args.GetReturnValue().Set(toV8(e->getCircularError()));
 }
 
-Handle<Value> ElementJs::getStatusString(const Arguments& args)
+void ElementJs::getElementId(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  HandleScope scope(args.GetIsolate());
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args.This())->getConstElement();
 
-  return scope.Close(toV8(e->getStatusString()));
+  args.GetReturnValue().Set(ElementIdJs::New(e->getElementId()));
 }
 
-Handle<Value> ElementJs::getTags(const Arguments& args) {
-  HandleScope scope;
+void ElementJs::getId(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args.This())->getConstElement();
 
-  return scope.Close(TagsJs::New(e->getTags()));
+  args.GetReturnValue().Set(Integer::New(current, e->getId()));
+}
+
+void ElementJs::getStatusInput(const FunctionCallbackInfo<Value>& args)
+{
+  HandleScope scope(args.GetIsolate());
+
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args.This())->getConstElement();
+
+  args.GetReturnValue().Set(toV8(e->getStatus().getInput()));
+}
+
+void ElementJs::getStatusString(const FunctionCallbackInfo<Value>& args)
+{
+  HandleScope scope(args.GetIsolate());
+
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args.This())->getConstElement();
+
+  args.GetReturnValue().Set(toV8(e->getStatusString()));
+}
+
+void ElementJs::getTags(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args.This())->getConstElement();
+
+  args.GetReturnValue().Set(TagsJs::New(e->getTags()));
 }
 
 Handle<Object> ElementJs::New(ConstElementPtr e)
 {
-  HandleScope scope;
+  EscapableHandleScope scope(v8::Isolate::GetCurrent());
 
   Handle<Object> result;
 
@@ -168,12 +176,12 @@ Handle<Object> ElementJs::New(ConstElementPtr e)
     throw IllegalArgumentException("Unexpected element type.");
   }
 
-  return scope.Close(result);
+  return scope.Escape(result);
 }
 
 Handle<Object> ElementJs::New(ElementPtr e)
 {
-  HandleScope scope;
+  EscapableHandleScope scope(v8::Isolate::GetCurrent());
 
   Handle<Object> result;
 
@@ -201,12 +209,13 @@ Handle<Object> ElementJs::New(ElementPtr e)
     throw IllegalArgumentException("Unexpected element type.");
   }
 
-  return scope.Close(result);
+  return scope.Escape(result);
 }
 
-Handle<Value> ElementJs::setStatusString(const Arguments& args)
+void ElementJs::setStatusString(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   try
   {
@@ -217,40 +226,44 @@ Handle<Value> ElementJs::setStatusString(const Arguments& args)
     ElementPtr e = ObjectWrap::Unwrap<ElementJs>(args.This())->getElement();
 
     e->setStatus(s);
+
+    args.GetReturnValue().SetUndefined();
   }
   catch ( const HootException& e )
   {
-    return v8::ThrowException(HootExceptionJs::create(e));
+    args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(e)));
   }
 
-  return scope.Close(Undefined());
 }
 
-Handle<Value> ElementJs::setTags(const Arguments& args)
+void ElementJs::setTags(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   ElementPtr e = ObjectWrap::Unwrap<ElementJs>(args.This())->getElement();
 
   if (!e)
   {
-    return v8::ThrowException(HootExceptionJs::create(IllegalArgumentException(
-      "Unable to set tags on a const Element.")));
+    args.GetReturnValue().Set(
+      current->ThrowException(HootExceptionJs::create(IllegalArgumentException("Unable to set tags on a const Element."))));
   }
-
-  Tags& tags = ObjectWrap::Unwrap<TagsJs>(args[0]->ToObject())->getTags();
-  e->setTags(tags);
-
-  return scope.Close(Undefined());
+  else
+  {
+    Tags& tags = ObjectWrap::Unwrap<TagsJs>(args[0]->ToObject())->getTags();
+    e->setTags(tags);
+    args.GetReturnValue().SetUndefined();
+  }
 }
 
-Handle<Value> ElementJs::toString(const Arguments& args)
+void ElementJs::toString(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args.This())->getConstElement();
 
-  return scope.Close(String::New(e->toString().toUtf8().data()));
+  args.GetReturnValue().Set(String::NewFromUtf8(current, e->toString().toUtf8().data()));
 }
 
 }

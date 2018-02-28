@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PartialNetworkMerger.h"
 
@@ -90,7 +90,7 @@ void PartialNetworkMerger::apply(const OsmMapPtr& map,
 
 void PartialNetworkMerger::_applyMerger(const OsmMapPtr& map, WayMatchStringMergerPtr merger) const
 {
-  LOG_DEBUG("Applying merger...");
+  LOG_INFO("Applying PartialNetworkMerger...");
 
   // we changed the sublines so we must update the indices.
   merger->updateSublineMapping();
@@ -245,7 +245,7 @@ void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
       }
     }
 
-    ReviewMarker::mark(map, reviews, e.getWhat(), HighwayMatch::getHighwayMatchName());
+    ReviewMarker().mark(map, reviews, e.getWhat(), HighwayMatch::getHighwayMatchName());
   }
 }
 

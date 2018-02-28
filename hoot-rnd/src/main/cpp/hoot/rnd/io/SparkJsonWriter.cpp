@@ -38,6 +38,7 @@ using namespace geos::geom;
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/visitors/CalculateHashVisitor.h>
 
 // Qt
 #include <QStringBuilder>
@@ -93,7 +94,7 @@ void SparkJsonWriter::open(QString fileName)
 
 void SparkJsonWriter::writePartial(const ConstNodePtr& n)
 {
-  NodePtr copy(dynamic_cast<Node*>(n->clone()));
+  NodePtr copy = n->cloneSp();
   _addExportTagsVisitor.visit(copy);
   Envelope e = _bounds->calculateSearchBounds(OsmMapPtr(), copy);
 
@@ -107,7 +108,7 @@ void SparkJsonWriter::writePartial(const ConstNodePtr& n)
   result += QString::number(e.getMaxX(), 'g', 16) % "\t";
   result += QString::number(e.getMaxY(), 'g', 16) % "\t";
   /// @todo Update after https://github.com/ngageoint/hootenanny/issues/1663
-  result += "<hash>\t";
+  result += CalculateHashVisitor::toHashString(n) % "\t";
   result += "{\"element\":{\"type\":\"node\"";
   result += ",\"id\":" % QString::number(copy->getId(), 'g', 16);
   result += ",\"lat\":" % QString::number(copy->getY(), 'g', 16);

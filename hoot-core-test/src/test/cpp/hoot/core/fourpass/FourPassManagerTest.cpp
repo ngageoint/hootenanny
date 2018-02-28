@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -45,7 +45,6 @@
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
-using namespace hoot;
 
 // Tgs
 #include <tgs/Statistics/Random.h>
@@ -69,13 +68,18 @@ class FourPassManagerTest : public CppUnit::TestFixture
 
 public:
 
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/fourpass");
+  }
+
   void runToyTest()
   {
     Tgs::Random::instance()->seed(0);
     OsmMap::resetCounters();
     Settings::getInstance().clear();
 
-    FileUtils::removeDir("test-output/conflate/TileConflatorTest.osm-cache");
+    FileUtils::removeDir("test-output/fourpass/FourPassManagerTest.osm-cache");
 
     boost::shared_ptr<TileWorker2> worker(new LocalTileWorker2());
     FourPassManager uut(worker);
@@ -99,8 +103,7 @@ public:
 
 };
 
-}
-
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(FourPassManagerTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(FourPassManagerTest, "glacial");
 
+}

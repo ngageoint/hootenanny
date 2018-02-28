@@ -159,6 +159,11 @@ bool NetworkMatch::isVerySimilarTo(const NetworkMatch* other) const
   return getEdgeMatch()->isVerySimilarTo(other->getEdgeMatch());
 }
 
+bool NetworkMatch::contains(const NetworkMatch* other) const
+{
+  return getEdgeMatch()->contains(other->getEdgeMatch());
+}
+
 ConstElementPtr NetworkMatch::_toElement(ConstNetworkEdgePtr edge) const
 {
   QList<ConstElementPtr> members = edge->getMembers();

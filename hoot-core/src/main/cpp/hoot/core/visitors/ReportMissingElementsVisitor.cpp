@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ReportMissingElementsVisitor.h"
 
@@ -30,7 +30,6 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Relation.h>
-#include <hoot/core/util/Log.h>
 
 using namespace std;
 
@@ -57,17 +56,17 @@ void ReportMissingElementsVisitor::_reportMissing(ElementId referer, ElementId m
   {
     if (_removeMissing)
     {
-      LOG_WARN("Removing missing " << missing.toString() << " in " << referer.toString() << ".");
+      LOG_INFO("Removing missing " << missing.toString() << " in " << referer.toString() << ".");
     }
     else
     {
-      LOG_WARN("Missing " << missing.toString() << " in " << referer.toString() << ".");
+      LOG_INFO("Missing " << missing.toString() << " in " << referer.toString() << ".");
     }
   }
   _missingCount++;
   if (_missingCount == _maxReport)
   {
-    LOG_WARN("Reached maximum number of missing reports. No longer reporting.");
+    LOG_INFO("Reached maximum number of missing reports. No longer reporting.");
   }
 }
 

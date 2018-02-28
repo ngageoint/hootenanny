@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // hoot
@@ -52,7 +52,7 @@ public:
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
       map,
-      "test-files/cmd/slow/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm",
+      "test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm",
       false,
       Status::Unknown2);
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ReviewMarker.h"
 
@@ -40,7 +40,8 @@ namespace hoot
 
 QString ReviewMarker::_complexGeometryType = "Bad Geometry";
 
-ReviewMarker::ReviewMarker()
+ReviewMarker::ReviewMarker() :
+_addReviewTagsToFeatures(ConfigOptions().getAddReviewTagsToFeatures())
 {
 }
 
@@ -138,21 +139,24 @@ bool ReviewMarker::isNeedsReview(const ConstOsmMapPtr &map, ConstElementPtr e1, 
   return intersection.size() >= 1;
 }
 
-bool ReviewMarker::isReviewUid(const ConstOsmMapPtr &map, ReviewUid uid)
+bool ReviewMarker::isReview(ConstElementPtr e)
 {
   bool result = false;
 
-  if (uid.getType() == ElementType::Relation)
+  if (e->getElementType() == ElementType::Relation)
   {
-    ConstRelationPtr r = map->getRelation(uid.getId());
-
-    if (r->getTags().isTrue(MetadataTags::HootReviewNeeds()))
+    if (e->getTags().isTrue(MetadataTags::HootReviewNeeds()))
     {
       result = true;
     }
   }
 
   return result;
+}
+
+bool ReviewMarker::isReviewUid(const ConstOsmMapPtr &map, ReviewUid uid)
+{
+  return isReview(map->getElement(uid));
 }
 
 void ReviewMarker::mark(const OsmMapPtr &map, const ElementPtr& e1, const ElementPtr& e2,
@@ -167,12 +171,19 @@ void ReviewMarker::mark(const OsmMapPtr &map, const ElementPtr& e1, const Elemen
     throw IllegalArgumentException("You must specify a review note.");
   }
 
-  RelationPtr r(new Relation(Status::Conflated, map->createNextRelationId(), 0, MetadataTags::RelationReview()));
+  RelationPtr r(
+    new Relation(
+      Status::Conflated, map->createNextRelationId(), 0, MetadataTags::RelationReview()));
   r->getTags().set(MetadataTags::HootReviewNeeds(), true);
+  if (_addReviewTagsToFeatures)
+  {
+    e1->getTags().set(MetadataTags::HootReviewNeeds(), true);
+    e2->getTags().set(MetadataTags::HootReviewNeeds(), true);
+  }
   r->getTags().appendValueIfUnique(MetadataTags::HootReviewType(), reviewType);
   if (ConfigOptions().getWriterIncludeConflateReviewDetailTags())
   {
-    r->getTags().appendValueIfUnique(MetadataTags::HootReviewNote(), note);
+    r->getTags().appendValueIfUnique(MetadataTags::HootReviewNote(), note.simplified());
     r->getTags().set(MetadataTags::HootReviewScore(), score);
   }
   r->addElement(MetadataTags::RoleReviewee(), e1->getElementId());
@@ -202,12 +213,21 @@ void ReviewMarker::mark(const OsmMapPtr &map, set<ElementId> ids, const QString&
     throw IllegalArgumentException("You must specify a review note.");
   }
 
-  RelationPtr r(new Relation(Status::Conflated, map->createNextRelationId(), 0, MetadataTags::RelationReview()));
+  RelationPtr r(
+    new Relation(
+      Status::Conflated, map->createNextRelationId(), 0, MetadataTags::RelationReview()));
   r->getTags().set(MetadataTags::HootReviewNeeds(), true);
+  if (_addReviewTagsToFeatures)
+  {
+    for (set<ElementId>::iterator itr = ids.begin(); itr != ids.end(); ++itr)
+    {
+      map->getElement(*itr)->getTags().set(MetadataTags::HootReviewNeeds(), true);
+    }
+  }
   r->getTags().appendValueIfUnique(MetadataTags::HootReviewType(), reviewType);
   if (ConfigOptions().getWriterIncludeConflateReviewDetailTags())
   {
-    r->getTags().appendValueIfUnique(MetadataTags::HootReviewNote(), note);
+    r->getTags().appendValueIfUnique(MetadataTags::HootReviewNote(), note.simplified());
     r->getTags().set(MetadataTags::HootReviewScore(), score);
   }
   for (set<ElementId>::iterator it = ids.begin(); it != ids.end(); ++it)
@@ -240,12 +260,18 @@ void ReviewMarker::mark(const OsmMapPtr& map, const ElementPtr& e, const QString
     throw IllegalArgumentException("You must specify a review note.");
   }
 
-  RelationPtr r(new Relation(Status::Conflated, map->createNextRelationId(), 0, MetadataTags::RelationReview()));
+  RelationPtr r(
+    new Relation(
+      Status::Conflated, map->createNextRelationId(), 0, MetadataTags::RelationReview()));
   r->getTags().set(MetadataTags::HootReviewNeeds(), true);
+  if (_addReviewTagsToFeatures)
+  {
+    e->getTags().set(MetadataTags::HootReviewNeeds(), true);
+  }
   r->getTags().appendValueIfUnique(MetadataTags::HootReviewType(), reviewType);
   if (ConfigOptions().getWriterIncludeConflateReviewDetailTags())
   {
-    r->getTags().appendValueIfUnique(MetadataTags::HootReviewNote(), note);
+    r->getTags().appendValueIfUnique(MetadataTags::HootReviewNote(), note.simplified());
     r->getTags().set(MetadataTags::HootReviewScore(), score);
   }
   r->addElement(MetadataTags::RoleReviewee(), e->getElementId());

@@ -31,6 +31,7 @@
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/MetadataTags.h>
 
 namespace hoot
 {
@@ -43,7 +44,7 @@ _threshold(threshold)
 void ElementComparer::_removeTagsNotImportantForComparison(Tags& tags) const
 {
   tags.remove(MetadataTags::HootStatus());
-  //TODO: not sure where "status" is coming from...should be "hoot:status"
+  //TODO: not sure where "status" is coming from...should be "hoot:status"...bug somewhere?
   tags.remove("status");
   //this is ok b/c we have the actual id to compare to, but it should still probably be fixed to
   //carry along the hoot:id tag for consistency's sake when that is desired
@@ -56,47 +57,49 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
   LOG_VART(e1->getElementId());
   LOG_VART(e2->getElementId());
 
-  //create modified copies of the tags for comparing, as we don't care if some tags are identical
-  Tags tags1 = e1->getTags();
-  _removeTagsNotImportantForComparison(tags1);
-  Tags tags2 = e2->getTags();
-  _removeTagsNotImportantForComparison(tags2);
+  assert(e1->getElementType() == e2->getElementType());
 
-  if (e1->getElementId() != e2->getElementId() ||
-      !(tags1 == tags2) ||
-      //if only the status changed on the element and no other tags or geometries, there's no point
-      //in detecting a change
-      //e1->getStatus() != e2->getStatus() ||
-      (e1->getVersion() != e2->getVersion()) ||
-      fabs(e1->getCircularError() - e2->getCircularError()) > _threshold)
+  //only nodes have been converted over to use hash comparisons so far
+  if (e1->getElementType() != ElementType::Node)
   {
-    if (Log::getInstance().getLevel() == Log::Trace)
+    //create modified copies of the tags for comparing, as we don't care if some tags are identical
+    Tags tags1 = e1->getTags();
+    _removeTagsNotImportantForComparison(tags1);
+    Tags tags2 = e2->getTags();
+    _removeTagsNotImportantForComparison(tags2);
+
+    // not checking status here b/c if only the status changed on the element and no other tags or
+    // geometries, there's no point in detecting a change
+    if (e1->getElementId() != e2->getElementId() ||
+        !(tags1 == tags2) ||
+        (e1->getVersion() != e2->getVersion()) ||
+        fabs(e1->getCircularError() - e2->getCircularError()) > _threshold)
     {
-      if (!(tags1 == tags2))
+      if (Log::getInstance().getLevel() == Log::Trace)
       {
-        LOG_TRACE("compare failed on tags");
-      }
-//      else if (e1->getStatus() != e2->getStatus())
-//      {
-//        LOG_TRACE("compare failed on status");
-//      }
-      else if (e1->getVersion() != e2->getVersion())
-      {
-        LOG_TRACE("compare failed on version");
-      }
-      else if (fabs(e1->getCircularError() - e2->getCircularError()) > _threshold)
-      {
-        LOG_TRACE("compare failed on circular error:");
-        LOG_VART(fabs(e1->getCircularError() - e2->getCircularError()));
-        LOG_VART(_threshold);
+        if (!(tags1 == tags2))
+        {
+          LOG_TRACE("compare failed on tags");
+        }
+        else if (e1->getVersion() != e2->getVersion())
+        {
+          LOG_TRACE("compare failed on version");
+        }
+        else if (fabs(e1->getCircularError() - e2->getCircularError()) > _threshold)
+        {
+          LOG_TRACE("compare failed on circular error:");
+          LOG_VART(fabs(e1->getCircularError() - e2->getCircularError()));
+          LOG_VART(_threshold);
+        }
+
+        LOG_VART(tags1);
+        LOG_VART(tags2);
       }
 
-      LOG_VART(tags1);
-      LOG_VART(tags2);
+      return false;
     }
-
-    return false;
   }
+
   switch (e1->getElementType().getEnum())
   {
     case ElementType::Node:
@@ -113,11 +116,33 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
 bool ElementComparer::_compareNode(const boost::shared_ptr<const Element>& re,
                                    const boost::shared_ptr<const Element>& e) const
 {
-  ConstNodePtr rn = boost::dynamic_pointer_cast<const Node>(re);
-  ConstNodePtr n = boost::dynamic_pointer_cast<const Node>(e);
+  if (!re->getTags().contains(MetadataTags::HootHash()) ||
+      !e->getTags().contains(MetadataTags::HootHash()))
+  {
+    throw HootException(
+      "ElementComparer requires the " + MetadataTags::HootHash() +
+      " tag be set for node comparison.");
+  }
 
-  LOG_VART(GeometryUtils::haversine(rn->toCoordinate(), n->toCoordinate()));
-  return (GeometryUtils::haversine(rn->toCoordinate(), n->toCoordinate()) <= _threshold);
+  if (re->getElementId().getId() == DEBUG_ID || e->getElementId().getId() == DEBUG_ID)
+  {
+    LOG_VARD(re);
+    LOG_VARD(e);
+  }
+
+  bool same = false;
+  if (re->getTags()[MetadataTags::HootHash()] == e->getTags()[MetadataTags::HootHash()])
+  {
+    same = true;
+  }
+  else
+  {
+    LOG_TRACE("Compare failed:");
+    LOG_VART(re);
+    LOG_VART(e);
+  }
+
+  return same;
 }
 
 bool ElementComparer::_compareWay(const boost::shared_ptr<const Element>& re,

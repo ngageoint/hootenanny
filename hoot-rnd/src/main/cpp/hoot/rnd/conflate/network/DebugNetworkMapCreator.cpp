@@ -67,7 +67,7 @@ void DebugNetworkMapCreator::_addEdgeLink(OsmMapPtr map, NetworkEdgeScorePtr edg
     tags.set(MetadataTags::HootEdgeScore12(), edgeScore->getScore12());
     tags.set(MetadataTags::HootEdgeScore21(), edgeScore->getScore21());
     tags.set(MetadataTags::HootEdgeScore(), edgeScore->getScore());
-    tags.set(MetadataTags::HootEdgeId(), edgeScore->getUid());
+    tags.set(MetadataTags::HootEdgeId(), edgeScore->getEdgeMatch()->getUid());
     tags.set(MetadataTags::HootEdge(), edgeScore->toString());
 
     RelationPtr r(new Relation(Status::Invalid, map->createNextRelationId(), -1, "match"));

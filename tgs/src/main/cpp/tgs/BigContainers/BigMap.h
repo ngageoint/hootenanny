@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,22 +22,118 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef BIGMAP_H
-#define BIGMAP_H
+#ifndef BIGMAPHYBRID_H
+#define BIGMAPHYBRID_H
 
-#include <tgs/TgsConfig.h>
+// hackish, I know.
+#define BigMap BigMapStxxl
+#include "BigMapStxxl.h"
+#undef BigMap
 
-/*
- * The STXXL version of this data structure is not thread safe or re-entrant so it should be assumed
- * that none of the data structures are thread safe/re-entrant.
+// Standard
+#include <stdlib.h>
+#include <map>
+
+namespace Tgs
+{
+
+/**
+ * Uses a STL map while the data size is small. When it gets above a threshold it switches over
+ * entirely to a BigMapStxxl.
  */
+template <typename K, typename V>
+class BigMap
+{
 
-#ifdef TGS_HAVE_LIBSTXXL
-#include "BigMapHybrid.h"
-#else
-#include "BigMapStl.h"
-#endif
+public:
 
-#endif // BIGMAP_H
+  BigMap(size_t maxEntriesInRam = 10000000)
+  {
+    _inMemory = true;
+    _maxEntriesInRam = maxEntriesInRam;
+  }
+
+  const V& at(const K& k) const
+  {
+    if (_inMemory)
+    {
+      return _smallMap.at(k);
+    }
+    else
+    {
+      return _bigMap->at(k);
+    }
+  }
+
+  bool contains(const K& k) const { return count(k) > 0; }
+
+  size_t count(const K& k) const
+  {
+    if (_inMemory)
+    {
+      return _smallMap.count(k);
+    }
+    else
+    {
+      return _bigMap->count(k);
+    }
+  }
+
+  void insert(const K& k, const V& v) { operator[](k) = v; }
+
+  V& operator[](const K& k)
+  {
+    _checkSize();
+    if (_inMemory)
+    {
+      return _smallMap[k];
+    }
+    else
+    {
+      return (*_bigMap)[k];
+    }
+  }
+
+  void clear()
+  {
+    if (_inMemory)
+    {
+      return _smallMap.clear();
+    }
+    else
+    {
+      return _bigMap->clear();
+    }
+  }
+
+private:
+
+  bool _inMemory;
+  std::map<K,V> _smallMap;
+  boost::shared_ptr< BigMapStxxl<K,V> > _bigMap;
+  size_t _maxEntriesInRam;
+
+  void _checkSize()
+  {
+    if (_inMemory && _smallMap.size() > _maxEntriesInRam)
+    {
+      //std::cerr << "Creating stxxl" << std::endl;
+      _bigMap.reset(new BigMapStxxl<K,V>());
+      for (typename std::map<K, V>::const_iterator it = _smallMap.begin(); it != _smallMap.end();
+           ++it)
+      {
+        _bigMap->insert(it->first, it->second);
+      }
+      //std::cerr << "Created stxxl" << std::endl;
+      _smallMap.clear();
+      _inMemory = false;
+    }
+  }
+};
+
+}
+
+
+#endif // BIGMAPHYBRID_H

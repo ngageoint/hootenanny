@@ -7,7 +7,7 @@
       "conn": "http://192.168.33.12:3000/api/0.6/map"
     },
     "APIDB": {
-      "conn": "osmapidb://vagrant:lqlrtktnabwx5gfI@192.168.33.12:5432/openstreetmap"
+      "conn": "osmapidb://vagrant:vagrant!@192.168.33.12:5432/openstreetmap"
     }
   },
   "formats": {
@@ -21,6 +21,17 @@
     "TDSv61": "translations/TDSv61.js",
     "MGCP": "translations/MGCP_TRD4.js",
     "GGDMv30": "translations/GGDMv30.js"
+  },
+  "tagOverrides": {
+    "attribution":"",
+    "security:resource_owner":"",
+    "security:classification":"",
+    "security:dissemination:control:ic":"",
+    "security:dissemination:control:non_ic":"",
+    "security:releasability":"",
+    "source":"",
+    "source:non_spatial_source:type":"",
+    "source:copywrite":""
   },
   "settings": {
     "cleanupDelay": 30000,

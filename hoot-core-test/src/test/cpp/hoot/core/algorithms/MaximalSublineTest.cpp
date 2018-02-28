@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -112,7 +112,7 @@ public:
   {
     OsmMapPtr map(new OsmMap());
     OsmMap::resetCounters();
-    auto_ptr<OGREnvelope> env(GeometryUtils::toOGREnvelope(Envelope(0, 1, 0, 1)));
+    boost::shared_ptr<OGREnvelope> env(GeometryUtils::toOGREnvelope(Envelope(0, 1, 0, 1)));
     MapProjector::projectToPlanar(map, *env);
 
     return map;
@@ -184,7 +184,7 @@ public:
     vector<WaySublineMatch> m = uut.findAllMatches(map, w1, w2, score);
     addEndNodes(map, m);
 
-    QDir().mkpath("test-output/algorithms/");
+    TestUtils::mkpath("test-output/algorithms/");
     MapProjector::projectToWgs84(map);
     OsmXmlWriter().write(map, "test-output/algorithms/MaximalSublineJoinTestOut.osm");
   }

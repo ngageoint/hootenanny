@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OsmGeoJsonReader.h"
@@ -63,10 +63,11 @@ using namespace geos::geom;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(OsmJsonReader, OsmGeoJsonReader)
+HOOT_FACTORY_REGISTER(OsmMapReader, OsmGeoJsonReader)
 
 OsmGeoJsonReader::OsmGeoJsonReader() : OsmJsonReader()
 {
+  _addBboxTag = ConfigOptions().getJsonAddBbox();
 }
 
 OsmGeoJsonReader::~OsmGeoJsonReader()
@@ -159,21 +160,41 @@ OsmMapPtr OsmGeoJsonReader::loadFromFile(QString path)
   return _map;
 }
 
+
 void OsmGeoJsonReader::_parseGeoJson()
 {
-  _generator = QString::fromStdString(_propTree.get("generator", string("")));
-  QString type = QString::fromStdString(_propTree.get("type", string("")));
-  if (_propTree.not_found() != _propTree.find("bbox"))
-  {
-    Envelope env = _parseBbox(_propTree.get_child("bbox"));
-  }
+    _generator = QString::fromStdString(_propTree.get("generator", string("")));
+    QString type = QString::fromStdString(_propTree.get("type", string("")));
+    if (_propTree.not_found() != _propTree.find("bbox"))
+    {
+        Envelope env = _parseBbox(_propTree.get_child("bbox"));
+    }
 
-  //  Make a map, and iterate through all of our features, adding them
-  pt::ptree features = _propTree.get_child("features");
-  for (pt::ptree::const_iterator featureIt = features.begin(); featureIt != features.end(); ++featureIt)
-  {
-    const pt::ptree& feature = featureIt->second;
+    // If we don't have a "features" child then we should just have a single feature
+    if (_propTree.not_found() != _propTree.find("features"))
+    {
+        // Iterate through all of our features, adding them to the map
+        pt::ptree features = _propTree.get_child("features");
+        for (pt::ptree::const_iterator featureIt = features.begin(); featureIt != features.end(); ++featureIt)
+        {
+            _parseGeoJsonFeature(featureIt->second);
+        }
+    }
+    else
+    {
+        // Single Feature
+        _parseGeoJsonFeature(_propTree);
+    }
+}
+
+
+void OsmGeoJsonReader::_parseGeoJsonFeature(const boost::property_tree::ptree& feature)
+{
     string id = feature.get("id", string(""));
+    //  Some IDs may be strings that start with "node/" or "way/", remove that
+    size_t pos = id.find("/");
+    if (pos != string::npos)
+      id = id.erase(0, pos + 1);
     if (feature.not_found() != feature.find("properties"))
     {
       pt::ptree properties = feature.get_child("properties");
@@ -221,11 +242,11 @@ void OsmGeoJsonReader::_parseGeoJson()
         }
         else
         {
-          if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+          if (logWarnCount < Log::getWarnMessageLimit())
           {
             LOG_WARN("Unknown JSON elment type (" << typeStr << ") when parsing GeoJSON");
           }
-          else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+          else if (logWarnCount == Log::getWarnMessageLimit())
           {
             LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
           }
@@ -233,8 +254,8 @@ void OsmGeoJsonReader::_parseGeoJson()
         }
       }
     }
-  }
 }
+
 
 geos::geom::Envelope OsmGeoJsonReader::_parseBbox(const boost::property_tree::ptree& bbox)
 {
@@ -303,6 +324,15 @@ void OsmGeoJsonReader::_parseGeoJsonWay(const string& id, const pt::ptree& prope
   _addTags(properties, way);
   //  Add way to map
   _map->addWay(way);
+
+  if (_addBboxTag)
+  {
+    const Envelope& bounds = way->getEnvelopeInternal(_map);
+    way->setTag("hoot:bbox",QString("%1,%2,%3,%4").arg(QString::number(bounds.getMinX(), 'g', 10))
+                .arg(QString::number(bounds.getMinY(), 'g', 10))
+                .arg(QString::number(bounds.getMaxX(), 'g', 10))
+                .arg(QString::number(bounds.getMaxY(), 'g', 10)));
+  }
 }
 
 void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& properties, const pt::ptree& geometry)
@@ -317,9 +347,13 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
   pt::ptree empty;
   //  Construct Relation
   RelationPtr relation(new Relation(_defaultStatus, relation_id, _defaultCircErr));
+
   //  Add the relation type and parse the roles
+  // NOTE: This may be empty which will cause errors later. If it is empty, we add a type
+  // later when we sort out what the geometry is - MultiPolygon etc
   string relation_type = properties.get("relation-type", "");
   relation->setType(relation_type.c_str());
+
   if (_roles.size() == 0)
   {
     //  Get the roles and tokenize them by semicolon
@@ -403,11 +437,29 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
     }
   }
   else if (geo_type == "MultiPoint")
-    _parseMultiPointGeometry(geometry, relation);
+  {
+      if (relation->getType() == "")
+      {
+          relation->setType(MetadataTags::RelationMultiPoint());
+      }
+      _parseMultiPointGeometry(geometry, relation);
+  }
   else if(geo_type == "MultiLineString")
+  {
+      if (relation->getType() == "")
+      {
+          relation->setType(MetadataTags::RelationMultilineString());
+      }
     _parseMultiLineGeometry(geometry, relation);
+  }
   else if (geo_type == "MultiPolygon")
-    _parseMultiPolygonGeometry(geometry, relation);
+  {
+      if (relation->getType() == "")
+      {
+          relation->setType(MetadataTags::RelationMultiPolygon());
+      }
+      _parseMultiPolygonGeometry(geometry, relation);
+  }
   else
   {
     LOG_WARN("Unsupported JSON geometry type (" << geo_type << ") when parsing GeoJSON");
@@ -416,6 +468,15 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
   _addTags(properties, relation);
   //  Add relation to map
   _map->addRelation(relation);
+
+  if (_addBboxTag)
+  {
+    const Envelope& bounds = relation->getEnvelopeInternal(_map);
+    relation->setTag("hoot:bbox",QString("%1,%2,%3,%4").arg(QString::number(bounds.getMinX(), 'g', 10))
+                     .arg(QString::number(bounds.getMinY(), 'g', 10))
+                     .arg(QString::number(bounds.getMaxX(), 'g', 10))
+                     .arg(QString::number(bounds.getMaxY(), 'g', 10)));
+  }
 }
 
 void OsmGeoJsonReader::_parseMultiPointGeometry(const boost::property_tree::ptree& geometry, const RelationPtr& relation)
@@ -618,11 +679,44 @@ void OsmGeoJsonReader::_addTags(const pt::ptree &item, ElementPtr element)
   {
     for (pt::ptree::const_iterator tagIt = item.begin(); tagIt != item.end(); ++tagIt)
     {
-      QString k = QString::fromStdString(tagIt->first);
-      QString v = QString::fromStdString(tagIt->second.get_value<string>());
-      element->setTag(k, v);
+      QString key = QString::fromStdString(tagIt->first).trimmed();
+      QString value;
+      if (tagIt->second.begin() != tagIt->second.end())
+        value = QString::fromStdString(_parseSubTags(tagIt->second)).trimmed();
+      else
+        value = QString::fromStdString(tagIt->second.get_value<string>()).trimmed();
+      element->setTag(key, value);
     }
   }
+}
+
+string OsmGeoJsonReader::_parseSubTags(const pt::ptree &item)
+{
+  stringstream ss;
+  bool isObject = false;
+  bool isArray = true;
+  for (pt::ptree::const_iterator it = item.begin(); it != item.end(); ++it)
+  {
+    if (it != item.begin())
+      ss << ",";
+    else if (it->first != "")
+    {
+      isObject = true;
+      isArray = false;
+    }
+    if (!isArray)
+      ss << "\"" << it->first << "\":";
+    if (it->second.get_value<string>() != "")
+      ss << "\"" << it->second.get_value<string>() << "\"";
+    else
+      ss << _parseSubTags(it->second);
+  }
+  if (isObject)
+    return "{" + ss.str() + "}";
+  else if (isArray)
+    return "[" + ss.str() + "]";
+  else
+    return ss.str();
 }
 
 } //  namespace hoot

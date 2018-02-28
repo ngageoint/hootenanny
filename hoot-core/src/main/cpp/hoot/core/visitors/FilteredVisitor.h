@@ -58,7 +58,12 @@ public:
    * Similar to above but this is convenient if you want to pass in a temporary visitor. In this
    * case FilteredVisitor will take ownership of the visitor and delete it when destructed.
    */
-  FilteredVisitor(const ElementCriterion& criterion, ConstElementVisitor* visitor);
+  FilteredVisitor(const ElementCriterion& criterion, ConstElementVisitorPtr visitor);
+
+  /**
+   * Similar to the first, but takes smart pointer params.
+   */
+  FilteredVisitor(ElementCriterionPtr criterion, ConstElementVisitorPtr visitor);
 
   /**
    * Similar to above but this is convenient if you want to pass in a temporary criterion and
@@ -78,7 +83,7 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
-  static double getStat(ElementCriterion* criterion, ConstElementVisitor* visitor,
+  static double getStat(ElementCriterionPtr criterion, ConstElementVisitorPtr visitor,
                         const ConstOsmMapPtr& map);
   static double getStat(ElementCriterion* criterion, ConstElementVisitor* visitor,
                         const ConstOsmMapPtr& map, const ElementPtr& element);

@@ -30,14 +30,16 @@ AOI=$3 # leave blank to select a random AOI
 #'unifying' or 'network'
 CONFLATION_TYPE=$4
 TEST_NAME=$5
-SELECT_RANDOM_AOI=$6
-RANDOM_SEED=$7
+TEST_CATEGORY=$6
+SELECT_RANDOM_AOI=$7
+RANDOM_SEED=$8
 
 echo "reference dataset: " $REF_DATASET
 echo "secondary dataset: " $SEC_DATASET
 echo "AOI: " $AOI
 echo "CONFLATION TYPE: " $CONFLATION_TYPE
 echo "TEST_NAME: " $TEST_NAME
+echo "TEST_CATEGORY: " $TEST_CATEGORY
 echo "SELECT_RANDOM_AOI: " $SELECT_RANDOM_AOI
 echo "RANDOM_SEED: " $RANDOM_SEED
 
@@ -47,6 +49,7 @@ RUN_DEBUG_STEPS=false
 LOAD_REF_DATA=true
 LOAD_SEC_DATA=true
 CONFLATE_DATA=true
+HOOT_EMAIL=OsmApiDbHootApiDbConflate@hoottestcpp.org
 
 source conf/database/DatabaseConfig.sh
 export OSM_API_DB_URL="osmapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME_OSMAPI"
@@ -56,11 +59,12 @@ HOOT_DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
 # generic debugging options applicable to multiple commands
 HOOT_OPTS="--warn -D uuid.helper.repeatable=true -D writer.include.debug.tags=true"
 if [ "$CONFLATION_TYPE" == "network" ]; then
-  HOOT_OPTS=$HOOT_OPTS" -D match.creators=hoot::NetworkMatchCreator -D merger.creators=hoot::NetworkMergerCreator -D network.matcher=hoot::ConflictsNetworkMatcher -D conflate.match.highway.classifier=hoot::HighwayExpertClassifier -D way.subline.matcher=hoot::MaximalSublineMatcher"
+  HOOT_OPTS=$HOOT_OPTS" -D match.creators=hoot::NetworkMatchCreator -D merger.creators=hoot::NetworkMergerCreator -D network.matcher=hoot::ConflictsNetworkMatcher -D conflate.match.highway.classifier=hoot::HighwayExpertClassifier -D way.subline.matcher=hoot::MaximalSublineMatcher -D rubber.sheet.minimum.ties=4 -D rubber.sheet.ref=true"
 fi
 
-OUTPUT_DIR=test-output/cmd/slow/$TEST_NAME
-rm -rf $OUTPUT_DIR
+REF_DIR=test-files/cmd/$TEST_CATEGORY/$TEST_NAME
+OUTPUT_DIR=test-output/cmd/$TEST_CATEGORY/$TEST_NAME
+rm -rf $OUTPUT_DIR/*
 mkdir -p $OUTPUT_DIR
 
 if [ "$SELECT_RANDOM_AOI" == "true" ]; then
@@ -87,7 +91,7 @@ if [ "$LOAD_REF_DATA" == "true" ]; then
   else
     cp $REF_DATASET $OUTPUT_DIR/2-ref-raw-complete.osm
   fi 
-  hoot convert $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D changeset.user.id=1 -D osmapidb.bulk.writer.reserve.record.ids.before.writing.data=true -D osmapidb.bulk.writer.output.files.copy.location=$OUTPUT_DIR/2-ref-raw-complete.sql $OUTPUT_DIR/2-ref-raw-complete.osm $OSM_API_DB_URL
+  hoot convert $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D api.db.email=$HOOT_EMAIL -D changeset.user.id=1 -D apidb.bulk.inserter.validate.data=true -D osmapidb.bulk.inserter.reserve.record.ids.before.writing.data=true -D apidb.bulk.inserter.output.files.copy.location=$OUTPUT_DIR/2-ref-raw-complete.sql $OUTPUT_DIR/2-ref-raw-complete.osm $OSM_API_DB_URL
 fi
 
 if [ "$RUN_DEBUG_STEPS" == "true" ]; then
@@ -114,21 +118,21 @@ if [ "$LOAD_SEC_DATA" == "true" ]; then
   else
     cp $SEC_DATASET $OUTPUT_DIR/5-secondary-raw-complete.osm
   fi
-  hoot convert $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true $OUTPUT_DIR/5-secondary-raw-complete.osm "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME"
+  hoot convert $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D api.db.email=$HOOT_EMAIL -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true $OUTPUT_DIR/5-secondary-raw-complete.osm "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME"
 fi
 
 if [ "$RUN_DEBUG_STEPS" == "true" ]; then
   echo ""
   echo "STEP 6: Reading the complete secondary dataset out of the hoot api db and writing it into a file (debug)..."
   echo ""
-  hoot convert $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME" $OUTPUT_DIR/6-secondary-complete-PulledFromHootApiDb.osm
+  hoot convert $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D api.db.email=$HOOT_EMAIL -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME" $OUTPUT_DIR/6-secondary-complete-PulledFromHootApiDb.osm
 fi
 
 if [ "$RUN_DEBUG_STEPS" == "true" ]; then
   echo ""
   echo "STEP 7: Reading the subset AOI secondary dataset out of the hoot api db and writing it into a file (debug)..."
   echo ""
-  hoot convert $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D convert.bounding.box=$AOI "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME" $OUTPUT_DIR/7-secondary-subset-PulledFromHootApiDb.osm
+  hoot convert $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D api.db.email=$HOOT_EMAIL -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D convert.bounding.box=$AOI "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME" $OUTPUT_DIR/7-secondary-subset-PulledFromHootApiDb.osm
 fi
 
 if [ "$CONFLATE_DATA" == "true" ]; then
@@ -138,49 +142,49 @@ if [ "$CONFLATE_DATA" == "true" ]; then
   echo ""
   echo "STEP 8a: Conflating the two datasets over the specified AOI with the SQL changeset workflow..."
   echo ""
-  hoot conflate $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D convert.bounding.box=$AOI -D reader.conflate.use.data.source.ids.1=true -D reader.conflate.use.data.source.ids.2=true -D preserve.unknown1.element.id.when.modifying.features=true -D osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader -D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter -D osmapidb.id.aware.url=$OSM_API_DB_URL $OSM_API_DB_URL "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME" "$HOOT_DB_URL/8a-conflated-$TEST_NAME"
+  hoot conflate $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D api.db.email=$HOOT_EMAIL -D convert.bounding.box=$AOI -D reader.conflate.use.data.source.ids.1=true -D reader.conflate.use.data.source.ids.2=true -D preserve.unknown1.element.id.when.modifying.features=true -D osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader -D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter -D osmapidb.id.aware.url=$OSM_API_DB_URL $OSM_API_DB_URL "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME" "$HOOT_DB_URL/8a-conflated-$TEST_NAME"
 
   echo ""
   echo "STEP 8b: Conflating the two datasets over the specified AOI with the XML changeset workflow..."
   echo ""
-  hoot conflate $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D convert.bounding.box=$AOI -D reader.conflate.use.data.source.ids.1=true -D reader.conflate.use.data.source.ids.2=false -D id.generator=hoot::PositiveIdGenerator -D osm.map.writer.factory.writer=hoot::NonIdRemappingHootApiDbWriter -D preserve.unknown1.element.id.when.modifying.features=true $OSM_API_DB_URL "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME" "$HOOT_DB_URL/8b-conflated-$TEST_NAME"
+  hoot conflate $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D api.db.email=$HOOT_EMAIL -D convert.bounding.box=$AOI -D reader.conflate.use.data.source.ids.1=true -D reader.conflate.use.data.source.ids.2=false -D id.generator=hoot::PositiveIdGenerator -D osm.map.writer.factory.writer=hoot::NonIdRemappingHootApiDbWriter -D preserve.unknown1.element.id.when.modifying.features=true $OSM_API_DB_URL "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME" "$HOOT_DB_URL/8b-conflated-$TEST_NAME"
 fi
 
 if [ "$RUN_DEBUG_STEPS" == "true" ]; then
   echo ""
   echo "STEP 9a: Reading the complete conflated dataset with the SQL changeset workflow out of the hoot api db and writing it into a file (debug)..."
   echo ""
-  hoot convert $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D reader.use.file.status=true -D reader.keep.file.status=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D writer.include.circular.error.tags=false "$HOOT_DB_URL/8a-conflated-$TEST_NAME" $OUTPUT_DIR/9a-conflated-complete-PulledFromHootApiDb.osm
+  hoot convert $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D reader.use.file.status=true -D reader.keep.file.status=true -D api.db.email=$HOOT_EMAIL -D writer.include.circular.error.tags=false "$HOOT_DB_URL/8a-conflated-$TEST_NAME" $OUTPUT_DIR/9a-conflated-complete-PulledFromHootApiDb.osm
 
   echo ""
   echo "STEP 9b: Reading the complete conflated dataset with the XML changeset workflow out of the hoot api db and writing it into a file (debug)..."
   echo ""
-  hoot convert $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D reader.use.file.status=true -D reader.keep.file.status=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D writer.include.circular.error.tags=false "$HOOT_DB_URL/8b-conflated-$TEST_NAME" $OUTPUT_DIR/9b-conflated-complete-PulledFromHootApiDb.osm
+  hoot convert $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D reader.use.file.status=true -D reader.keep.file.status=true -D api.db.email=$HOOT_EMAIL -D writer.include.circular.error.tags=false "$HOOT_DB_URL/8b-conflated-$TEST_NAME" $OUTPUT_DIR/9b-conflated-complete-PulledFromHootApiDb.osm
 fi
 
 if [ "$RUN_DEBUG_STEPS" == "true" ]; then
   echo ""
   echo "STEP 10a: Reading the subset AOI conflated dataset with the SQL changeset workflow out of the hoot api db and writing it into a file (debug)..."
   echo ""
-  hoot convert $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D reader.use.file.status=true -D reader.keep.file.status=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D writer.include.circular.error.tags=false "$HOOT_DB_URL/8a-conflated-$TEST_NAME" $OUTPUT_DIR/10a-conflated-subset-PulledFromHootApiDb.osm
+  hoot convert $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D reader.use.file.status=true -D reader.keep.file.status=true -D api.db.email=$HOOT_EMAIL -D writer.include.circular.error.tags=false "$HOOT_DB_URL/8a-conflated-$TEST_NAME" $OUTPUT_DIR/10a-conflated-subset-PulledFromHootApiDb.osm
 
   echo ""
   echo "STEP 10b: Reading the subset AOI conflated dataset with the XML changeset workflow out of the hoot api db and writing it into a file (debug)..."
   echo ""
-  hoot convert $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D reader.use.file.status=true -D reader.keep.file.status=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D writer.include.circular.error.tags=false "$HOOT_DB_URL/8b-conflated-$TEST_NAME" $OUTPUT_DIR/10b-conflated-subset-PulledFromHootApiDb.osm
+  hoot convert $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D reader.use.file.status=true -D reader.keep.file.status=true -D api.db.email=$HOOT_EMAIL -D writer.include.circular.error.tags=false "$HOOT_DB_URL/8b-conflated-$TEST_NAME" $OUTPUT_DIR/10b-conflated-subset-PulledFromHootApiDb.osm
 fi
 
 echo ""
 echo "STEP 11a: Writing a SQL changeset file that is the difference between the cropped reference input dataset specified AOI and the conflated output specified AOI..."
 echo ""
-hoot derive-changeset $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D reader.use.file.status=true -D reader.keep.file.status=true -D changeset.user.id=1 -D convert.bounding.box=$AOI -D changeset.buffer=0.001 -D changeset.allow.deleting.reference.features=false $OSM_API_DB_URL "$HOOT_DB_URL/8a-conflated-$TEST_NAME" $OUTPUT_DIR/11a-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql $OSM_API_DB_URL
+hoot derive-changeset $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D api.db.email=$HOOT_EMAIL -D reader.use.file.status=true -D reader.keep.file.status=true -D changeset.user.id=1 -D convert.bounding.box=$AOI -D changeset.buffer=0.001 -D changeset.allow.deleting.reference.features=false $OSM_API_DB_URL "$HOOT_DB_URL/8a-conflated-$TEST_NAME" $OUTPUT_DIR/11a-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql $OSM_API_DB_URL
 
 echo ""
 echo "STEP 11b: Writing a XML changeset file that is the difference between the cropped reference input dataset specified AOI and the conflated output specified AOI..."
 echo ""
 # changeset.xml.writer.add.timestamp should only be set false for this test's purposes; leave it set to the default value of
 # true for production purposes
-hoot derive-changeset $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D reader.use.file.status=true -D reader.keep.file.status=true -D changeset.user.id=1 -D convert.bounding.box=$AOI -D changeset.buffer=0.001 -D changeset.allow.deleting.reference.features=false -D changeset.xml.writer.add.timestamp=false $OSM_API_DB_URL "$HOOT_DB_URL/8b-conflated-$TEST_NAME" $OUTPUT_DIR/11b-conflated-changeset-ToBeAppliedToOsmApiDb.osc
+hoot derive-changeset $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D api.db.email=$HOOT_EMAIL -D reader.use.file.status=true -D reader.keep.file.status=true -D changeset.user.id=1 -D convert.bounding.box=$AOI -D changeset.buffer=0.001 -D changeset.allow.deleting.reference.features=false -D changeset.xml.writer.add.timestamp=false $OSM_API_DB_URL "$HOOT_DB_URL/8b-conflated-$TEST_NAME" $OUTPUT_DIR/11b-conflated-changeset-ToBeAppliedToOsmApiDb.osc
 
 echo ""
 echo "STEP 12: Executing the SQL changeset on the osm api db..."
@@ -200,7 +204,7 @@ echo ""
 echo "STEP 14: Reading the entire contents of the osm api db, for the SQL changeset workflow, writing it into a file, and verifying the data..."
 echo ""
 hoot convert $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D reader.use.file.status=true -D reader.keep.file.status=true -D writer.include.circular.error.tags=false $OSM_API_DB_URL $OUTPUT_DIR/14-complete-output-PulledFromOsmApiDb.osm
-hoot is-match $HOOT_OPTS test-files/cmd/slow/$TEST_NAME/output.osm $OUTPUT_DIR/14-complete-output-PulledFromOsmApiDb.osm
+hoot is-match $HOOT_OPTS $REF_DIR/output.osm $OUTPUT_DIR/14-complete-output-PulledFromOsmApiDb.osm
 
 # The map comparison, step 14, should be enough to check the state of the changeset write.  Due to node coordinate
 # precision differences between Ubuntu and CentOS, we'd need the equivalent of the is-match command for changesets
@@ -209,11 +213,22 @@ hoot is-match $HOOT_OPTS test-files/cmd/slow/$TEST_NAME/output.osm $OUTPUT_DIR/1
 #echo ""
 #echo "STEP 15a: Verifying the SQL changeset..."
 #echo ""
-#diff test-files/cmd/slow/$TEST_NAME/output.osc.sql $OUTPUT_DIR/11a-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql
+#diff $REF_DIR/output.osc.sql $OUTPUT_DIR/11a-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql
 
 #echo ""
 #echo "STEP 15b: Verifying the XML changeset..."
 #echo ""
-#diff test-files/cmd/slow/$TEST_NAME/output.osc $OUTPUT_DIR/11b-conflated-changeset-ToBeAppliedToOsmApiDb.osc
+#diff $REF_DIR/output.osc $OUTPUT_DIR/11b-conflated-changeset-ToBeAppliedToOsmApiDb.osc
 
+#
+echo ""
+echo "STEP 15: Cleaning up database..."
+echo ""
+if [ "$LOAD_SEC_DATA" == "true" ]; then
+  hoot delete-map -D api.db.email=$HOOT_EMAIL "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME"
+fi
 
+if [ "$CONFLATE_DATA" == "true" ]; then
+  hoot delete-map -D api.db.email=$HOOT_EMAIL "$HOOT_DB_URL/8a-conflated-$TEST_NAME"
+  hoot delete-map -D api.db.email=$HOOT_EMAIL "$HOOT_DB_URL/8b-conflated-$TEST_NAME"
+fi

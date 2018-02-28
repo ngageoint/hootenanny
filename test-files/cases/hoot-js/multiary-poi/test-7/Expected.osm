@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="15.3695864331" minlon="44.20592013051" maxlat="15.37132633308" maxlon="44.20595163051"/>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3695864331000003" lon="44.2059201305100018">
+        <tag k="cuisine" v="sandwich;friture"/>
+        <tag k="hoot:hash" v="sha1sum:5279fcfe4ec674beee0e03efc3380880d86c2fb8"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="REVIEW" v="none"/>
+        <tag k="ID" v="1-00268"/>
+        <tag k="source" v="osm"/>
+        <tag k="uuid" v="{6b20eaa4-7207-4d06-9215-4ecee875ac1a}"/>
+        <tag k="name" v="بوفية"/>
+        <tag k="amenity" v="fast_food"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2016-06-14T11:01:03.000Z"/>
+        <tag k="MATCH" v="none"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3713263330800007" lon="44.2059516305100004">
+        <tag k="cuisine" v="chicken;fish;beef_bowl;arab"/>
+        <tag k="addr:street" v="الحصبة"/>
+        <tag k="hoot:hash" v="sha1sum:8840d083e577b9fa8dd330e91ec44cad88999df7"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="opening_hours" v="Mo-Su 08:00-19:00"/>
+        <tag k="REVIEW" v="1-00258;3-00326"/>
+        <tag k="ID" v="1-00258"/>
+        <tag k="source" v="osm"/>
+        <tag k="uuid" v="{2818e063-83bf-4544-8ddc-7dbb2327b763}"/>
+        <tag k="name" v="مطعم الشلال"/>
+        <tag k="amenity" v="restaurant"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2016-06-10T02:20:10.000Z"/>
+        <tag k="MATCH" v="none"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-2" role="reviewee"/>
+        <member type="node" ref="-1" role="reviewee"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:type" v="POI"/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:score" v="-1"/>
+        <tag k="hoot:review:note" v="Somewhat similar (190m) - similar cuisine, similar POI type"/>
+        <tag k="hoot:review:sort_order" v="0"/>
+        <tag k="type" v="review"/>
+    </relation>
+</osm>

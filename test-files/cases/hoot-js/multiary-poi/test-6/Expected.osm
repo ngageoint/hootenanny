@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="15.36969255691" minlon="44.21476013367" maxlat="15.36969255691" maxlon="44.21476013367"/>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3696925569099978" lon="44.2147601336699978">
+        <tag k="is_in:city" v="امانة العاصمة"/>
+        <tag k="source" v="osm;wikimapia"/>
+        <tag k="is_in:country" v="Yemen"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="name" v="مقبرة الصياح الشرقيه"/>
+        <tag k="is_in:state" v="Amanah al-Asmah"/>
+        <tag k="alt_name" v="مقبرة الصياح"/>
+        <tag k="ID" v="1-00113"/>
+        <tag k="source:url" v="http://wikimapia.org/2046316/ar/%D9%85%D9%82%D8%A8%D8%B1%D8%A9-%D8%A7%D9%84%D8%B5%D9%8A%D8%A7%D8%AD;http://wikimapia.org/26553960/ar/%D9%85%D9%82%D8%A8%D8%B1%D8%A9-%D8%A7%D9%84%D8%B5%D9%8A%D8%A7%D8%AD"/>
+        <tag k="is_in:place" v="Sana"/>
+        <tag k="MATCH" v="1-00112"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="landuse" v="cemetery"/>
+        <tag k="REVIEW" v="none"/>
+        <tag k="hoot:hash" v="sha1sum:b17fc2c73b6c8c3e9978df5848f1255adabb54a7"/>
+        <tag k="cemetery" v="grave"/>
+        <tag k="addr:street" v="Shu'ob street"/>
+        <tag k="name:en" v="Graveyard of Sayah"/>
+        <tag k="source:datetime" v="2016-10-11T05:20:03.000Z;2016-10-11T05:18:02.000Z"/>
+        <tag k="uuid" v="{b10ffdde-c5c6-443d-b3ba-b15714c83097};{70e64f51-c2c7-4c4c-933e-07256f43cae9};wikimapia:2046316;wikimapia:26553960"/>
+        <tag k="source:hash" v="sha1sum:2bf9bad7d5397b87cafc3d4af0996551e2b215a7;sha1sum:4d6c8efc2d6ab6686f2c86a89fc3eb6b7a95e93d;sha1sum:9026828b391034306dd4fa0b00d384a52f2d4808;sha1sum:eb88fccae8840d4c7b9f14daeb989ad4ce292c58"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+</osm>

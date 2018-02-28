@@ -22,10 +22,18 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Python
+// Python redefines these two macros from /usr/include/features.h
+// undefine them in this source file to remove warnings
+#ifdef _POSIX_C_SOURCE
+#undef _POSIX_C_SOURCE
+#endif
+#ifdef _XOPEN_SOURCE
+#undef _XOPEN_SOURCE
+#endif
 // Python requires that it be included before other files. Ugh.
 // See http://docs.python.org/c-api/intro.html#includes
 #include <Python.h>
@@ -72,6 +80,7 @@ void PythonTranslator::_init()
   QStringList pythonPath;
   QString moduleName;
 
+  LOG_VART(_scriptPath);
   if (_scriptPath.endsWith(".py"))
   {
     QFileInfo info(_scriptPath);

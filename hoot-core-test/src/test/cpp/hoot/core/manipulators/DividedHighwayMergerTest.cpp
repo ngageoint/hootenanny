@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 
@@ -41,27 +41,34 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/manipulators/DividedHighwayManipulation.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
-using namespace hoot;
 
 // Qt
 #include <QDebug>
+#include <QDir>
 
 // TGS
 #include <tgs/StreamUtils.h>
 using namespace Tgs;
+
+#include "../TestUtils.h"
 
 namespace hoot
 {
 
 class DividedHighwayMergerTest : public CppUnit::TestFixture
 {
-    CPPUNIT_TEST_SUITE(DividedHighwayMergerTest);
-    //CPPUNIT_TEST(allManipulationsTest);
-    CPPUNIT_TEST(preSplitTest);
-    CPPUNIT_TEST(parallelFilterTest);
-    CPPUNIT_TEST_SUITE_END();
+  CPPUNIT_TEST_SUITE(DividedHighwayMergerTest);
+  //CPPUNIT_TEST(allManipulationsTest); //TODO: re-enable or remove?
+  CPPUNIT_TEST(preSplitTest);
+  CPPUNIT_TEST(parallelFilterTest);
+  CPPUNIT_TEST_SUITE_END();
 
 public:
+
+  void setUp()
+  {
+    TestUtils::mkpath("test-output");
+  }
 
   void allManipulationsTest()
   {

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MaximalSubline.h"
 
@@ -327,12 +327,12 @@ vector<WaySublineMatch> MaximalSubline::findAllMatches(const ConstOsmMapPtr &map
   // match.
   if (rawSublines.size() == 1 && snapIntersections)
   {
-    LOG_DEBUG("Snapping intersections.");
+    LOG_TRACE("Snapping intersections.");
     result = _snapIntersections(map, w1, w2, rawSublines);
   }
   else
   {
-    LOG_DEBUG("Not snapping intersections.");
+    LOG_TRACE("Not snapping intersections.");
     result = rawSublines;
   }
 
@@ -810,12 +810,12 @@ vector<WaySublineMatch> MaximalSubline::_snapIntersections(const ConstOsmMapPtr&
   // there isn't much we can do.
   if (!_checkForSortedSecondSubline(rawSublineMatches))
   {
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       LOG_WARN("Way matches sublines out of order. This is unusual and may give a sub-optimal "
         "result.");
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }
@@ -855,11 +855,11 @@ vector<WaySublineMatch> MaximalSubline::_snapIntersections(const ConstOsmMapPtr&
   }
   catch (const HootException& e)
   {
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       LOG_WARN(e.getWhat());
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }

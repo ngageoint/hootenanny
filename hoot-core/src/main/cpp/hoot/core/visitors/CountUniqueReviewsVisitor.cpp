@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "CountUniqueReviewsVisitor.h"
 
@@ -40,7 +40,7 @@ HOOT_FACTORY_REGISTER(ConstElementVisitor, CountUniqueReviewsVisitor)
 void CountUniqueReviewsVisitor::visit(const ConstElementPtr& e)
 {
   set<ReviewMarker::ReviewUid> reviews =
-    ReviewMarker().getReviewUids(_map->shared_from_this(), e);
+    _reviewMarker.getReviewUids(_map->shared_from_this(), e);
 
   _reviews.insert(reviews.begin(), reviews.end());
 }

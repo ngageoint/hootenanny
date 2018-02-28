@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REVIEWMARKER_H
 #define REVIEWMARKER_H
@@ -44,7 +44,9 @@ namespace hoot
  */
 class ReviewMarker
 {
+
 public:
+
   /// This definition may change over time.
   typedef ElementId ReviewUid;
 
@@ -75,6 +77,15 @@ public:
   static bool isNeedsReview(const ConstOsmMapPtr &map, ConstElementPtr e1, ConstElementPtr e2);
 
   /**
+   * Returns true if this element is a review record (not an element that needs to be reviewed, but
+   * the relation that describes the review).
+   *
+   * isReviewUid is preferred over this method. If we change the review mechanism in the future
+   * this method may be broken. (unlikely)
+   */
+  static bool isReview(const ConstElementPtr e);
+
+  /**
    * Returns true if the specified UID is a review tag.
    */
   static bool isReviewUid(const ConstOsmMapPtr &map, ReviewUid uid);
@@ -87,27 +98,28 @@ public:
    * @param reviewType A human readable review type. Typically this is a one word description of
    *  the feature being reviewed. E.g. "Highway" or "Building".
    */
-  static void mark(const OsmMapPtr &map, const ElementPtr& e1, const ElementPtr& e2,
-    const QString& note, const QString& reviewType, double score = -1,
-    std::vector<QString> choices = std::vector<QString>() );
+  void mark(const OsmMapPtr &map, const ElementPtr& e1, const ElementPtr& e2, const QString& note,
+            const QString& reviewType, double score = -1,
+            std::vector<QString> choices = std::vector<QString>());
 
   /**
-   * Marks a set of elements as needing review and sets them to reference each other. If the score is
-   * negative then the score is omitted.
+   * Marks a set of elements as needing review and sets them to reference each other. If the score
+   * is negative then the score is omitted.
    *
    * @param note A human readable note describing the review.
    * @param reviewType A human readable review type. Typically this is a one word description of
    *  the feature being reviewed. E.g. "Highway" or "Building".
    */
-  static void mark(const OsmMapPtr &map, std::set<ElementId> ids,
-    const QString& note, const QString& reviewType, double score = -1,
-    std::vector<QString> choices = std::vector<QString>() );
+  void mark(const OsmMapPtr &map, std::set<ElementId> ids, const QString& note,
+            const QString& reviewType, double score = -1,
+            std::vector<QString> choices = std::vector<QString>());
 
   /**
    * Marks a single element as needing review.
    */
-  static void mark(const OsmMapPtr &map, const ElementPtr& e, const QString& note,
-    const QString& reviewType, double score = -1, std::vector<QString> choices = std::vector<QString>());
+  void mark(const OsmMapPtr &map, const ElementPtr& e, const QString& note,
+            const QString& reviewType, double score = -1,
+            std::vector<QString> choices = std::vector<QString>());
 
   /**
    * Removes a single element.
@@ -115,8 +127,12 @@ public:
   static void removeElement(const OsmMapPtr& map, ElementId eid);
 
 private:
+
   // don't use these keys directly, instead call the helper functions above.
   static QString _complexGeometryType;
+
+  //also marks features contained by a review relation
+  bool _addReviewTagsToFeatures;
 
   /**
    * Returns a hilbert value that represents the center of the bounds that covers e1 and e2.

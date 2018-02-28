@@ -865,12 +865,14 @@ tds61 = {
             // Rules format:  ["test expression","output result"];
             // Note: t = tags, a = attrs and attrs can only be on the RHS
             var rulesList = [
+            ["t.barrier == 'dragons_teeth' && !(t.tank_trap)","t.barrier = 'tank_trap'; t.tank_trap = 'dragons_teeth'"],
             ["t['bridge:movable'] && t['bridge:movable'] !== 'no' && t['bridge:movable'] !== 'unknown'","t.bridge = 'movable'"],
             ["t.navigationaid && !(t.aeroway)","t.aeroway = 'navigationaid'"],
             ["t.amenity == 'stop' && t['transport:type'] == 'bus'","t.highway = 'bus_stop'"],
             ["t.diplomatic && !(t.amenity)","t.amenity = 'embassy'"],
             ["t.boundary == 'protected_area' && !(t.protect_class)","t.protect_class = '4'"],
             ["t.bunker_type && !(t.military)","t.military = 'bunker'"],
+            ["t.cable =='yes' && t['cable:type'] == 'power'"," t.power = 'line'; delete t.cable; delete t['cable:type']"],
             ["t.control_tower == 'yes' && t.use == 'air_traffic_control'","t['tower:type'] = 'observation'"],
             ["t.crossing == 'tank'","t.highway = 'crossing'"],
             ["t.desert_surface","t.surface = t.desert_surface; delete t.desert_surface"],
@@ -885,6 +887,7 @@ tds61 = {
             ["t.leisure == 'stadium'","t.building = 'yes'"],
             ["t['material:vertical']","t.material = t['material:vertical']; delete t['material:vertical']"],
             ["t['monitoring:weather'] == 'yes'","t.man_made = 'monitoring_station'"],
+            ["t.natural =='spring' && t['spring:type'] == 'spring'","delete t['spring:type']"],
             //["t.on_bridge == 'yes' && !(t.bridge)","t.bridge = 'yes'; delete t.on_bridge"],
             ["t.public_transport == 'station' && t['transport:type'] == 'railway'","t.railway = 'station'"],
             ["t.public_transport == 'station' && t['transport:type'] == 'bus'","t.bus = 'yes'"],
@@ -1215,6 +1218,7 @@ tds61 = {
             var rulesList = [
             ["t.amenity == 'bus_station'","t.public_transport = 'station'; t['transport:type'] = 'bus'"],
             ["t.amenity == 'marketplace'","t.facility = 'yes'"],
+            ["t.barrier == 'tank_trap' && t.tank_trap == 'dragons_teeth'","t.barrier = 'dragons_teeth'; delete t.tank_trap"],
             ["t.content && !(t.product)","t.product = t.content; delete t.content"],
             ["t.control_tower && t.man_made == 'tower'","delete t.man_made"],
             ["t.crossing == 'tank' && t.highway == 'crossing'","delete t.highway"],
@@ -1233,15 +1237,18 @@ tds61 = {
             ["t.leisure == 'recreation_ground'","t.landuse = 'recreation_ground'; delete t.leisure"],
             ["t.leisure == 'sports_centre'","t.facility = 'yes'; t.use = 'recreation'; delete t.leisure"],
             ["t.leisure == 'stadium' && t.building","delete t.building"],
+            ["t.launch_pad","delete t.launch_pad; t.aeroway='launchpad'"],
             ["t.man_made && t.building == 'yes'","delete t.building"],
             ["t.man_made == 'embankment'","t.embankment = 'yes'; delete t.man_made"],
+            ["t.man_made == 'launch_pad'","delete t.man_made; t.aeroway='launchpad'"],
             ["t.median == 'yes'","t.is_divided = 'yes'"],
             ["t.natural == 'desert' && t.surface","t.desert_surface = t.surface; delete t.surface"],
             ["t.natural == 'sinkhole'","a.F_CODE = 'BH145'; t['water:sink:type'] = 'sinkhole'; delete t.natural"],
+            ["t.natural == 'spring' && !(t['spring:type'])","t['spring:type'] = 'spring'"],
             ["t.natural == 'wood'","t.landuse = 'forest'; delete t.natural"],
             ["t.power == 'pole'","t['cable:type'] = 'power'; t['tower:shape'] = 'pole'"],
             ["t.power == 'tower'","t['cable:type'] = 'power'; t.pylon = 'yes'; delete t.power"],
-            ["t.power == 'line'","t['cable:type'] = 'power'; t.cable = 'yes'"],
+            ["t.power == 'line'","t['cable:type'] = 'power'; t.cable = 'yes'; delete t.power"],
             ["t.power == 'generator'","t.use = 'power_generation'; a.F_CODE = 'AL013'"],
             ["t.rapids == 'yes'","t.waterway = 'rapids'; delete t.rapids"],
             ["t.railway == 'station'","t.public_transport = 'station';  t['transport:type'] = 'railway'"],
@@ -1503,6 +1510,25 @@ tds61 = {
                     delete tags.place;
                     break;
 
+                case 'island':
+                case 'islet':
+                    // If we have a coastline around an Island, decide if we are going make an Island
+                    // or a Coastline
+                    if (tags.natural == 'coastline')
+                    {
+                        if (geometryType == 'Line')
+                        {
+                            attrs.F_CODE = 'BA010'; // Land/Water Boundary - Line
+                            delete tags.place;
+                        }
+                        else
+                        {
+                            // NOTE: Islands can be Points or Areas
+                            attrs.F_CODE = 'BA030'; // Island
+                            delete tags.natural;
+                        }
+                    }
+                    break;
             } // End switch
         }
 
@@ -1700,6 +1726,13 @@ tds61 = {
 
        // Debug
        // for (var i in tags) print('End PreProc Tags: ' + i + ': :' + tags[i] + ':');
+       // Tag changed
+
+       if (tags.vertical_obstruction_identifier)
+       {
+           tags['aeroway:obstruction'] = tags.vertical_obstruction_identifier;
+           delete tags.vertical_obstruction_identifier;
+       }
 
     }, // End applyToTdsPreProcessing
 
@@ -1957,6 +1990,29 @@ tds61 = {
             }
         } // End for GE4 loop
 
+        // Fix ZI001_SDV
+        // NOTE: We are going to override the normal source:datetime with what we get from JOSM
+        if (tags['source:imagery:datetime'])
+        {
+            attrs.ZI001_SDV = tags['source:imagery:datetime'];
+            // delete notUsedTags['source:imagery:datetime'];
+        }
+        
+        // Now try using tags from Taginfo
+        if (! attrs.ZI001_SDV)
+        {
+            if (tags['source:date']) 
+            {
+                attrs.ZI001_SDV = tags['source:date'];
+                // delete notUsedTags['source:date'];
+            }
+            else if (tags['source:geometry:date'])
+            {
+                attrs.ZI001_SDV = tags['source:geometry:date'];
+                // delete notUsedTags['source:geometry:date'];
+            }
+        }
+ 
     }, // End applyToTdsPostProcessing
 
 // #####################################################################################################
@@ -1976,6 +2032,9 @@ tds61 = {
             tds61.configIn = {};
             tds61.configIn.OgrDebugAddfcode = config.getOgrDebugAddfcode();
             tds61.configIn.OgrDebugDumptags = config.getOgrDebugDumptags();
+
+            // Get any changes
+            tds61.toChange = hoot.Settings.get("translation.override");
         }
 
         // Debug:
@@ -1985,6 +2044,26 @@ tds61 = {
             var kList = Object.keys(attrs).sort()
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
         }
+
+        // See if we have an o2s_X layer and try to unpack it.
+        if (layerName.indexOf('o2s_') > -1)
+        {
+            tags = translate.parseO2S(attrs);
+
+            // Add some metadata
+            if (! tags.uuid) tags.uuid = createUuid();
+            if (! tags.source) tags.source = 'tdsv61:' + layerName.toLowerCase();
+
+            // Debug:
+            if (tds61.configIn.OgrDebugDumptags == 'true')
+            {
+                var kList = Object.keys(tags).sort()
+                for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
+                print('');
+            }
+
+            return tags;
+        } // End layername = o2s_X
 
         // Set up the fcode translation rules. We need this due to clashes between the one2one and
         // the fcode one2one rules
@@ -2082,6 +2161,9 @@ tds61 = {
             print('');
         }
 
+        // Override tag values if appropriate
+        translate.overrideValues(tags,tds61.toChange);
+
         return tags;
     }, // End of toOsm
 
@@ -2108,6 +2190,10 @@ tds61 = {
             tds61.configOut.OgrSplitO2s = config.getOgrSplitO2s();
             tds61.configOut.OgrThematicStructure = config.getOgrThematicStructure();
             tds61.configOut.OgrThrowError = config.getOgrThrowError();
+
+            // Get any changes to OSM tags
+            // NOTE: the rest of the config variables will change to this style of assignment soon
+            tds61.toChange = hoot.Settings.get("translation.override");
         }
 
         // Check if we have a schema. This is a quick way to workout if various lookup tables have been built
@@ -2175,6 +2261,9 @@ tds61 = {
 //                 }
 //             }
         } // End tds61.lookup Undefined
+
+        // Override values if appropriate
+        translate.overrideValues(tags,tds61.toChange);
 
         // Pre Processing
         tds61.applyToTdsPreProcessing(tags, attrs, geometryType);
@@ -2260,6 +2349,7 @@ tds61 = {
                 for (var i = 0, fLen = kList.length; i < fLen; i++) print('Converted Attrs:' + kList[i] + ': :' + attrs[kList[i]] + ':');
             }
 
+            // We want to keep the hoot:id if present
             if (tags['hoot:id'])
             {
                 tags.raw_id = tags['hoot:id'];
@@ -2333,11 +2423,13 @@ tds61 = {
                         returnData[i]['tableName'] = tds61.layerNameLookup[gFcode.toUpperCase()];
                     }
                 }
-//                 else
-//                 {
-//                     // Debug
-//                     print('## Skipping: ' + gFcode);
-//                 }
+                else
+                {
+                    // If the feature is not valid, just drop it
+                    // Debug
+                    // print('## Skipping: ' + gFcode);
+                    returnData.splice(i,1);
+                }
             } // End returnData loop
 
             // If we have unused tags, throw them into the "extra" layer

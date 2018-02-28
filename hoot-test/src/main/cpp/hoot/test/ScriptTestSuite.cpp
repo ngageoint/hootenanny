@@ -37,7 +37,8 @@
 namespace hoot
 {
 
-ScriptTestSuite::ScriptTestSuite(QString dir, bool printDiff) : TestSuite(dir.toStdString())
+ScriptTestSuite::ScriptTestSuite(QString dir, bool printDiff, double waitTimeSec, bool hideDisableTests)
+  : TestSuite(dir.toStdString())
 {
   QDir d(dir);
   QStringList files = d.entryList(QDir::Files);
@@ -70,7 +71,10 @@ ScriptTestSuite::ScriptTestSuite(QString dir, bool printDiff) : TestSuite(dir.to
       {
         if (fi.baseName().startsWith(ignorePrefix[j]))
         {
-          LOG_WARN("Disabling: " << fi.filePath());
+          if (!hideDisableTests)
+          {
+            LOG_WARN("Disabling: " << fi.filePath());
+          }
           ignore = true;
         }
       }
@@ -78,7 +82,7 @@ ScriptTestSuite::ScriptTestSuite(QString dir, bool printDiff) : TestSuite(dir.to
       if (!ignore)
       {
         QString path = d.absoluteFilePath(files[i]);
-        addTest(new ScriptTest(path, printDiff));
+        addTest(new ScriptTest(path, printDiff, waitTimeSec * 1000));
       }
     }
   }

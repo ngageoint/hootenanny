@@ -90,13 +90,18 @@ private:
   vector<Geometry*>& _lines;
 };
 
-EdgeDistanceExtractor::EdgeDistanceExtractor(ValueAggregator* a, Meters spacing)
+EdgeDistanceExtractor::EdgeDistanceExtractor(ValueAggregatorPtr a, Meters spacing):
+  _aggregator(a)
 {
-  if (a == 0)
-  {
-    a = new MeanAggregator();
-  }
-  _aggregator.reset(a);
+  if (!_aggregator)
+    _aggregator.reset(new MeanAggregator());
+
+  setSpacing(spacing);
+}
+
+EdgeDistanceExtractor::EdgeDistanceExtractor(Meters spacing)
+{
+  _aggregator.reset(new MeanAggregator());
   setSpacing(spacing);
 }
 
@@ -136,7 +141,7 @@ double EdgeDistanceExtractor::_oneDistance(const OsmMap& map, const boost::share
 
   for (size_t i = 0; i < points.size(); i++)
   {
-    auto_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(points[i]));
+    boost::shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(points[i]));
     distances.push_back(g->distance(p.get()));
   }
 

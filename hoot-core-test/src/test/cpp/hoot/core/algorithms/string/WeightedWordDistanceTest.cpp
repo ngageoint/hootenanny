@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -75,7 +75,7 @@ public:
     LOG_INFO("* " << s1 << " (" << normalize(s1) << ")  vs. " << s2 << " (" <<
       normalize(s2) << ")");
 
-    MeanWordSetDistance mwsd(new LevenshteinDistance(1.5));
+    MeanWordSetDistance mwsd(StringDistancePtr(new LevenshteinDistance(1.5)));
 
     LevenshteinDistance ld(1.5);
 

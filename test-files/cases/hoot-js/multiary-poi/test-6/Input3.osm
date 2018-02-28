@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <node id='-50750' action='modify' lat='15.36897610319' lon='44.21498996225'>
+    <tag k='ID' v='3-00303' />
+    <tag k='MATCH' v='1-00112' />
+    <tag k='REVIEW' v='none' />
+    <tag k='cemetery' v='grave' />
+    <tag k='hoot:hash' v='sha1sum:6d71f11a25403f748be5cf65c6781dd9d9b87937' />
+    <tag k='is_in:city' v='امانة العاصمة' />
+    <tag k='is_in:country' v='Yemen' />
+    <tag k='is_in:place' v='Sana' />
+    <tag k='is_in:state' v='Amanah al-Asmah' />
+    <tag k='name' v='مقبرة الصياح' />
+    <tag k='name:en' v='Graveyard of Sayah' />
+    <tag k='source' v='wikimapia' />
+    <tag k='source:url' v='http://wikimapia.org/2046316/ar/%D9%85%D9%82%D8%A8%D8%B1%D8%A9-%D8%A7%D9%84%D8%B5%D9%8A%D8%A7%D8%AD' />
+    <tag k='uuid' v='wikimapia:2046316' />
+  </node>
+  <node id='-50751' action='modify' lat='15.36913650319' lon='44.21393316225'>
+    <tag k='ID' v='3-00000' />
+    <tag k='MATCH' v='1-00112' />
+    <tag k='REVIEW' v='none' />
+    <tag k='cemetery' v='grave' />
+    <tag k='hoot:hash' v='sha1sum:b9e1457cf5fc5c60909548455ec62d4d7241fea4' />
+    <tag k='is_in:city' v='امانة العاصمة' />
+    <tag k='is_in:country' v='Yemen' />
+    <tag k='is_in:place' v='Sana' />
+    <tag k='is_in:state' v='Amanah al-Asmah' />
+    <tag k='name' v='مقبرة الصياح' />
+    <tag k='name:en' v='Graveyard of Sayah' />
+    <tag k='source' v='wikimapia' />
+    <tag k='source:url' v='http://wikimapia.org/26553960/ar/%D9%85%D9%82%D8%A8%D8%B1%D8%A9-%D8%A7%D9%84%D8%B5%D9%8A%D8%A7%D8%AD' />
+    <tag k='uuid' v='wikimapia:26553960' />
+  </node>
+</osm>

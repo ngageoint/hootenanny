@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -68,6 +68,11 @@ class PoiPolygonMergerTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
+
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/conflate/poi-polygon");
+  }
 
   void basicTest()
   {
@@ -463,7 +468,6 @@ public:
     CPPUNIT_ASSERT_EQUAL((long)-1, polyId.getId());
     CPPUNIT_ASSERT_EQUAL(ElementType::Way, polyId.getType().getEnum());
 
-    QDir().mkpath("test-output/conflate/poi-polygon");
     MapProjector::projectToWgs84(map);
     OsmMapWriterFactory::getInstance().write(map,
       "test-output/conflate/poi-polygon/poi-poly-way-poly-out.osm");
@@ -486,7 +490,6 @@ public:
     CPPUNIT_ASSERT_EQUAL((long)-1, polyId.getId());
     CPPUNIT_ASSERT_EQUAL(ElementType::Relation, polyId.getType().getEnum());
 
-    QDir().mkpath("test-output/conflate/poi-polygon");
     MapProjector::projectToWgs84(map);
     OsmMapWriterFactory::getInstance().write(map,
       "test-output/conflate/poi-polygon/poi-poly-relation-poly-out.osm");

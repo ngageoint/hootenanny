@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -89,7 +89,7 @@ public:
     w3->addNode(createNode(-104.899, 38.8549)->getId());
     _map->addWay(w3);
 
-    WeightedMetricDistanceExtractor uut(0, 0, 0.1);
+    WeightedMetricDistanceExtractor uut(0.1);
     const OsmMap* constMap = const_cast<const OsmMap*>(_map.get());
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.00384111,

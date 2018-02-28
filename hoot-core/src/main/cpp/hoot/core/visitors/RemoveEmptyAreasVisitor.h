@@ -51,7 +51,7 @@ public:
 
   virtual void visit(const boost::shared_ptr<Element>& e);
 private:
-  std::auto_ptr<ElementConverter> _ec;
+  boost::shared_ptr<ElementConverter> _ec;
 };
 
 }

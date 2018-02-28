@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "WayMatchStringMerger.h"
 
@@ -217,10 +217,15 @@ void WayMatchStringMerger::mergeIntersection(ElementId scrapNodeId)
 
   if (wl1.isExtreme(WayLocation::SLOPPY_EPSILON) == false)
   {
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       //TODO: Possibly change this back to an exception as part of the work to be done in #1311.
       //throw IllegalArgumentException("scrapNode should line up with the beginning or end of a way.");
+
+      //Note: this situation appears to arise when there is a failure to
+      // split a way at a t-intersection, or when previous mergers produce
+      // an intersection that is not split.
+
       LOG_WARN("scrapNode should line up with the beginning or end of a way.");
       LOG_VART(_mapping->getWayString1());
       LOG_VART(_mapping->getWayString2());
@@ -229,7 +234,7 @@ void WayMatchStringMerger::mergeIntersection(ElementId scrapNodeId)
       LOG_VART(wl1.getWay());
       LOG_VART(wl1);
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }
@@ -247,8 +252,8 @@ void WayMatchStringMerger::mergeNode(ElementId scrapNode)
 {
   LOG_TRACE("Merging node...");
 
-  LOG_VAR(scrapNode);
-  LOG_VAR(_map->getNode(scrapNode));
+  LOG_VART(scrapNode);
+  LOG_VART(_map->getNode(scrapNode));
   // find the first instance of scrapNode in way 2
   WayLocation wl2 = _findNodeLocation2(_mapping->getWayString2(), scrapNode);
 

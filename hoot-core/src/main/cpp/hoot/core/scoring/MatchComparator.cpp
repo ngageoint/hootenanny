@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MatchComparator.h"
 
@@ -30,7 +30,6 @@
 #include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/conflate/MarkForReviewMerger.h>
 #include <hoot/core/conflate/MatchType.h>
-#include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/filters/ChainCriterion.h>
 #include <hoot/core/filters/ElementTypeCriterion.h>
 #include <hoot/core/filters/TagKeyCriterion.h>
@@ -437,11 +436,11 @@ void MatchComparator::_findActualMatches(const ConstOsmMapPtr& in, const ConstOs
       ConstElementPtr element = conflated->getElement(p);
       if (!element.get())
       {
-        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        if (logWarnCount < Log::getWarnMessageLimit())
         {
           LOG_WARN("Missing element for " + p.toString());
         }
-        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        else if (logWarnCount == Log::getWarnMessageLimit())
         {
           LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }
@@ -451,11 +450,11 @@ void MatchComparator::_findActualMatches(const ConstOsmMapPtr& in, const ConstOs
       QString uuidStr = element->getTags()["uuid"];
       if (uuidStr.isEmpty())
       {
-        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        if (logWarnCount < Log::getWarnMessageLimit())
         {
           LOG_WARN("Missing uuid for " + p.toString());
         }
-        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        else if (logWarnCount == Log::getWarnMessageLimit())
         {
           LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }
@@ -630,8 +629,8 @@ bool MatchComparator::_isNeedsReview(QString uuid1, QString uuid2, const ConstOs
         return false;
       }
 
-      if (ReviewMarker().isNeedsReview(conflated, conflated->getElement(eid1),
-        conflated->getElement(eid2)))
+      if (_reviewMarker.isNeedsReview(conflated, conflated->getElement(eid1),
+                                      conflated->getElement(eid2)))
       {
         result = true;
       }
@@ -696,10 +695,10 @@ void MatchComparator::_setElementWrongCount(const ConstOsmMapPtr& map,
 {
   _elementWrongCounts[elementType] =
     (int)FilteredVisitor::getStat(
-      new ChainCriterion(
-        new ElementTypeCriterion(elementType),
-        new TagKeyCriterion(MetadataTags::HootWrong())),
-      new ElementCountVisitor(),
+      ElementCriterionPtr(new ChainCriterion(
+      ElementCriterionPtr(new ElementTypeCriterion(elementType)),
+      ElementCriterionPtr(new TagKeyCriterion(MetadataTags::HootWrong())))),
+      ConstElementVisitorPtr(new ElementCountVisitor()),
       map);
 }
 

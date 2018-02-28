@@ -113,7 +113,7 @@ bool PoiPolygonAdvancedMatcher::triggersRule(ConstElementPtr poi, ConstElementPt
       }
       catch (const geos::util::TopologyException& e)
       {
-        if (_badGeomCount <= ConfigOptions().getLogWarnMessageLimit())
+        if (_badGeomCount <= Log::getWarnMessageLimit())
         {
           LOG_TRACE(
             "Feature passed to PoiPolygonMatchCreator caused topology exception on conversion to a " <<

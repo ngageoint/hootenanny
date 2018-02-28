@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HighwayReviewCleanerOp.h"
 
@@ -47,10 +47,11 @@ void HighwayReviewCleanerOp::apply(OsmMapPtr& map)
 {
   RelationMap relations = map->getRelations();
 
+  ReviewMarker reviewMarker;
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     ElementId r = ElementId::relation(it->first);
-    if (ReviewMarker().isReviewUid(map, r))
+    if (reviewMarker.isReviewUid(map, r))
     {
       LOG_TRACE("Looking at review");
       if (_isBadHighwayReview(map, r) == true)
@@ -80,7 +81,7 @@ bool HighwayReviewCleanerOp::_isBadHighwayReview(OsmMapPtr& map,
 
       // By using the match factory instead of explicity calling the highway match we're more
       // robust to changes in the factory configuration that may occur at runtime.
-      auto_ptr<Match> m(MatchFactory::getInstance().createMatch(map, eid1, eid2));
+      boost::shared_ptr<Match> m(MatchFactory::getInstance().createMatch(map, eid1, eid2));
       // if we failed to find a match of any kind
       if (!m.get())
       {

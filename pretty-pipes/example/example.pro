@@ -31,12 +31,12 @@ UI_DIR = tmp/ui
 MOC_DIR = tmp/moc
 release:OBJECTS_DIR = tmp/release
 else:OBJECTS_DIR = tmp/debug
-DESTDIR = ../lib/
+DESTDIR = ../../lib/
 
 DEFINES += QT_NO_EMIT
 
 LIBS += -L${HADOOP_HOME}/c++/Linux-amd64-64/lib -lhadooppipes \
-    -L../lib/ -lPrettyPipes \
+    -L../../lib/ -lPrettyPipes \
     -L${JAVA_HOME}/jre/lib/amd64/server/ -ljvm \
 
 HEADERS += \

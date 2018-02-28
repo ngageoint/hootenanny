@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NetworkMatchCreator.h"
 
@@ -90,15 +90,17 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
 
   // use another class to extract graph nodes and graph edges.
   OsmNetworkExtractor e1;
-  ElementCriterionPtr c1(new ChainCriterion(new StatusCriterion(Status::Unknown1),
-    _userCriterion));
+  ElementCriterionPtr c1(new ChainCriterion(
+                         ElementCriterionPtr(new StatusCriterion(Status::Unknown1)),
+                         _userCriterion));
   e1.setCriterion(c1);
   OsmNetworkPtr n1 = e1.extractNetwork(map);
   LOG_TRACE("Extracted Network 1: " << n1->toString());
 
   OsmNetworkExtractor e2;
-  ElementCriterionPtr c2(new ChainCriterion(new StatusCriterion(Status::Unknown2),
-    _userCriterion));
+  ElementCriterionPtr c2(new ChainCriterion(
+                         ElementCriterionPtr(new StatusCriterion(Status::Unknown2)),
+                         _userCriterion));
   e2.setCriterion(c2);
   OsmNetworkPtr n2 = e2.extractNetwork(map);
   LOG_TRACE("Extracted Network 2: " << n2->toString());
@@ -111,18 +113,19 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
 
   NetworkDetailsPtr details(new NetworkDetails(map, n1, n2));
 
-  LOG_INFO("Optimizing network...");
-
   const size_t numIterations = ConfigOptions().getNetworkOptimizationIterations();
-  LOG_VARD(numIterations);
   if (numIterations < 1)
   {
     throw HootException(
       "Invalid value: " + QString::number(numIterations) + " for setting " +
       ConfigOptions::getNetworkOptimizationIterationsKey());
   }
+  LOG_INFO("Optimizing network over " << numIterations << " iterations...");
   for (size_t i = 0; i < numIterations; ++i)
   {
+    matcher->iterate();
+    PROGRESS_INFO("Optimization iteration: " << i + 1 << "/" << numIterations << " complete.");
+
     if (ConfigOptions().getNetworkMatchWriteDebugMaps())
     {
       OsmMapPtr copy(new OsmMap(map));
@@ -135,15 +138,27 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
       LOG_INFO("Writing debug map: " << name);
       OsmMapWriterFactory::getInstance().write(copy, name);
     }
+  }
 
-    matcher->iterate();
+  // Finalize
+  matcher->finalize();
 
-    LOG_INFO("Optimization iteration: " << i + 1 << "/" << numIterations << " complete.");
+  // Write final debug map
+  if (ConfigOptions().getNetworkMatchWriteDebugMaps())
+  {
+    OsmMapPtr copy(new OsmMap(map));
+    DebugNetworkMapCreator(matcher->getMatchThreshold()).addDebugElements(copy,
+      matcher->getAllEdgeScores(), matcher->getAllVertexScores());
+
+    MapProjector::projectToWgs84(copy);
+    conf().set(ConfigOptions().getWriterIncludeDebugTagsKey(), true);
+    QString name = QString("tmp/debug-final.osm");
+    LOG_INFO("Writing debug map: " << name);
+    OsmMapWriterFactory::getInstance().write(copy, name);
   }
 
   LOG_DEBUG("Retrieving edge scores...");
-
-  // convert graph edge matches into NetworkMatch objects.
+  // Convert graph edge matches into NetworkMatch objects.
   QList<NetworkEdgeScorePtr> edgeMatch = matcher->getAllEdgeScores();
 
   LOG_VART(matcher->getMatchThreshold());
@@ -153,10 +168,10 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
     LOG_VART(edgeMatch[i]->getScore());
     LOG_VART(edgeMatch[i]->getEdgeMatch());
 
-    /// @todo tunable parameter
     if (edgeMatch[i]->getScore() > matcher->getMatchThreshold())
     {
       LOG_TRACE("is match");
+      LOG_VART(edgeMatch[i]->getEdgeMatch()->getUid());
       matches.push_back(_createMatch(details, edgeMatch[i], threshold));
     }
   }

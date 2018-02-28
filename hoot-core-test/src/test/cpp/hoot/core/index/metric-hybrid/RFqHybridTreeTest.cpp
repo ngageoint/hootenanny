@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -478,8 +478,6 @@ public:
   {
     OsmMapPtr map(new OsmMap());
     OsmPbfReader(true).read("test-files/index/hybrid/TinyGeoNamesOrg.osm.pbf", map);
-//    OsmPbfReader(true).read("/scratch/gis-data/geonames.org/tmp/GeoNamesOrgAfghanistan.osm.pbf",
-//                             map);
 
     MapProjector::projectToPlanar(map);
 

@@ -74,18 +74,17 @@ public:
   /**
    * see class description
    */
-  GeometryConverter() { _logCount = 0; }
+  GeometryConverter();
 
   /**
    * see class description
    */
-  GeometryConverter(const OsmMapPtr& map) : _constMap(map), _map(map)
-  { _logCount = 0; assert(map.get()); }
+  GeometryConverter(const OsmMapPtr& map);
 
   /**
    * see class description
    */
-  GeometryConverter(const ConstOsmMapPtr& map) : _constMap(map) { assert(map.get()); }
+  GeometryConverter(const ConstOsmMapPtr& map);
 
   class NodeFactory
   {
@@ -158,7 +157,7 @@ protected:
   boost::shared_ptr<NodeFactory> _nf;
   ConstOsmMapPtr _constMap;
   OsmMapPtr _map;
-  int _logCount;
+
 };
 
 }

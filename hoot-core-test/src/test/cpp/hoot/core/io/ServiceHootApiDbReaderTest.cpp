@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -73,19 +73,23 @@ class ServiceHootApiDbReaderTest : public CppUnit::TestFixture
 
 public:
 
-  static QString userEmail() { return "ServiceHootApiDbReaderTest@hoottestcpp.org"; }
+  QString userEmail() { return QString("%1.ServiceHootApiDbReaderTest@hoottestcpp.org").arg(testName); }
 
   long mapId;
+  QString testName;
 
-  void setUp()
+  void setUpTest(const QString& test_name)
   {
     mapId = -1;
+    testName = test_name;
     ServicesDbTestUtils::deleteUser(userEmail());
     HootApiDb database;
 
     database.open(ServicesDbTestUtils::getDbModifyUrl());
-    database.getOrCreateUser(userEmail(), "ServiceHootApiDbReaderTest");
+    database.getOrCreateUser(userEmail(), QString("%1.ServiceHootApiDbReaderTest").arg(testName));
     database.close();
+
+    TestUtils::mkpath("test-output/io/ServiceHootApiDbReaderTest");
   }
 
   void tearDown()
@@ -103,50 +107,13 @@ public:
 
   long populateMap()
   {
-    OsmMapPtr map(new OsmMap());
-
-    NodePtr n1(new Node(Status::Unknown1, 1, 0.0, 0.0, 10.0));
-    map->addNode(n1);
-    NodePtr n2(new Node(Status::Unknown2, 2, 0.1, 0.0, 11.0));
-    n2->setTag("noteb", "n2b");
-    map->addNode(n2);
-    NodePtr n3(new Node(Status::Conflated, 3, 0.2, 0.0, 12.0));
-    n3->setTag("note", "n3");
-    map->addNode(n3);
-    NodePtr n4(new Node(Status::Conflated, 4, 0.3, 0.0, 13.0));
-    n4->setTag("note", "n4");
-    map->addNode(n4);
-    NodePtr n5(new Node(Status::Invalid, 5, 0.4, 0.0, 14.0));
-    map->addNode(n5);
-
-    WayPtr w1(new Way(Status::Unknown1, 1, 15.0));
-    w1->addNode(1);
-    w1->addNode(2);
-    w1->setTag("noteb", "w1b");
-    map->addWay(w1);
-    WayPtr w2(new Way(Status::Unknown2, 2, 16.0));
-    w2->addNode(2);
-    w2->addNode(3);
-    w2->setTag("note", "w2");
-    map->addWay(w2);
-    WayPtr w3(new Way(Status::Unknown2, 3, 17.0));
-    w3->addNode(2);
-    map->addWay(w3);
-
-    RelationPtr r1(new Relation(Status::Unknown1, 1, 18.1, MetadataTags::RelationCollection()));
-    r1->addElement("n1", n1->getElementId());
-    r1->addElement("w1", w1->getElementId());
-    r1->setTag("note", "r1");
-    map->addRelation(r1);
-    RelationPtr r2(new Relation(Status::Unknown1, 2, -1.0));
-    r2->addElement("n2", n2->getElementId());
-    map->addRelation(r2);
+    OsmMapPtr map = ServicesDbTestUtils::createServiceTestMap();
 
     HootApiDbWriter writer;
     writer.setUserEmail(userEmail());
     writer.setRemap(false);
     writer.setIncludeDebug(true);
-    writer.open(ServicesDbTestUtils::getDbModifyUrl().toString());
+    writer.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
     writer.write(map);
     writer.close();
     return writer.getMapId();
@@ -162,7 +129,7 @@ public:
     HootApiDbWriter writer;
     writer.setUserEmail(userEmail());
     writer.setRemap(true);
-    writer.open(ServicesDbTestUtils::getDbModifyUrl().toString());
+    writer.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
     writer.write(map);
     writer.close();
     return writer.getMapId();
@@ -181,6 +148,7 @@ public:
 
   void runCalculateBoundsTest()
   {
+    setUpTest("runCalculateBoundsTest");
     mapId = populateMap();
 
     HootApiDbReader reader;
@@ -191,6 +159,7 @@ public:
 
   void runElementIdTest()
   {
+    setUpTest("runElementIdTest");
     mapId = populateMap();
 
     HootApiDbReader reader;
@@ -217,6 +186,7 @@ public:
 
   void runUrlMissingMapIdTest()
   {
+    setUpTest("runUrlMissingMapIdTest");
     // temporarily disable logging to avoid isValid warning
     DisableLog dl;
 
@@ -239,6 +209,7 @@ public:
 
   void runUrlInvalidMapIdTest()
   {
+    setUpTest("runUrlInvalidMapIdTest");
     HootApiDbReader reader;
     QString exceptionMsg("");
     const long invalidMapId = mapId + 1;
@@ -377,7 +348,7 @@ public:
     member = relationMembers.at(1);
     HOOT_STR_EQUALS("w1", member.role);
     CPPUNIT_ASSERT_EQUAL((long)1, member.getElementId().getId());
-    CPPUNIT_ASSERT_EQUAL(3, relation->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(2, relation->getTags().size());
     HOOT_STR_EQUALS("r1", relation->getTags().get("note"));
     CPPUNIT_ASSERT_EQUAL((long)1, relation->getVersion());
     CPPUNIT_ASSERT(relation->getTimestamp() != ElementData::TIMESTAMP_EMPTY);
@@ -418,6 +389,7 @@ public:
 
   void runReadTest()
   {
+    setUpTest("runReadTest");
     mapId = populateMap();
 
     HootApiDbReader reader;
@@ -430,6 +402,7 @@ public:
 
   void runReadWithElemTest()
   {
+    setUpTest("runReadWithElemTest");
     mapId = populateMap();
 
     HootApiDbReader reader;
@@ -442,6 +415,7 @@ public:
 
   void runFactoryReadTest()
   {
+    setUpTest("runFactoryReadTest");
     mapId = populateMap();
 
     OsmMapPtr map(new OsmMap());
@@ -451,6 +425,7 @@ public:
 
   void runPartialReadTest()
   {
+    setUpTest("runPartialReadTest");
     mapId = populateMap();
 
     HootApiDbReader reader;
@@ -467,9 +442,6 @@ public:
     CPPUNIT_ASSERT(reader.hasMoreElements());
     reader.readPartial(map);
 
-    CPPUNIT_ASSERT_EQUAL(
-      chunkSize,
-      (int)(map->getNodes().size() + map->getWays().size() + map->getRelations().size()));
     CPPUNIT_ASSERT_EQUAL(3, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
@@ -510,9 +482,6 @@ public:
     map.reset(new OsmMap());
     CPPUNIT_ASSERT(reader.hasMoreElements());
     reader.readPartial(map);
-    CPPUNIT_ASSERT_EQUAL(
-      chunkSize,
-      (int)(map->getNodes().size() + map->getWays().size() + map->getRelations().size()));
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getWays().size());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
@@ -553,9 +522,6 @@ public:
     map.reset(new OsmMap());
     CPPUNIT_ASSERT(reader.hasMoreElements());
     reader.readPartial(map);
-    CPPUNIT_ASSERT_EQUAL(
-      chunkSize,
-      (int)(map->getNodes().size() + map->getWays().size() + map->getRelations().size()));
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getWays().size());
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelations().size());
@@ -592,7 +558,7 @@ public:
     member = relation->getMembers().at(1);
     HOOT_STR_EQUALS("w1", member.role);
     CPPUNIT_ASSERT_EQUAL((long)1, member.getElementId().getId());
-    CPPUNIT_ASSERT_EQUAL(3, relation->getTags().size());
+    CPPUNIT_ASSERT_EQUAL(2, relation->getTags().size());
     HOOT_STR_EQUALS("r1", relation->getTags().get("note"));
     HOOT_STR_EQUALS("1", relation->getTags().get(MetadataTags::HootId()));
 
@@ -603,9 +569,6 @@ public:
     map.reset(new OsmMap());
     CPPUNIT_ASSERT(reader.hasMoreElements());
     reader.readPartial(map);
-    CPPUNIT_ASSERT_EQUAL(
-      1,
-      (int)(map->getNodes().size() + map->getWays().size() + map->getRelations().size()));
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelations().size());
@@ -633,6 +596,7 @@ public:
 
   void runReadByBoundsTest()
   {
+    setUpTest("runReadByBoundsTest");
     mapId = insertDataForBoundTest();
 
     HootApiDbReader reader;
@@ -662,7 +626,6 @@ public:
 
     MapProjector::projectToWgs84(map);
 
-    QDir().mkpath("test-output/io/ServiceHootApiDbReaderTest");
     OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
     writer.write(

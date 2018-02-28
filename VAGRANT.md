@@ -1,19 +1,20 @@
-# Installing Vagrant
+# Prerequisites
 
-To download Vagrant for supported platforms, see [here](https://www.vagrantup.com/downloads.html)
+[Vagrant](https://www.vagrantup.com/downloads.html)
 
-# Installing VirtualBox
+[VirtualBox](https://www.virtualbox.org/wiki/Downloads)
 
-If choosing VirtualBox as your virtualization provider, see [here](https://www.virtualbox.org/wiki/Downloads).
+[git](https://git-scm.com/) 
 
-You may have to enable hardware virtualization extensions in your BIOS before using it.
+In some cases, you may have to install a newer version of Vagrant or VirtualBox than what is available in the public repositories for your host operating system in order to launch the virtual machine.
 
-If running on Ubuntu, you may have to install a newer version of VirtualBox than what is available in the public repositories in order for it to work correctly with Vagrant.
+You may also need to enable hardware virtualization extensions in your BIOS.
 
-# Setting up Hootennany with Vagrant & VirtualBox
-Make sure the the umask of the terminal used to start the vagrant vm is set to `002` (see [#1332](https://github.com/ngageoint/hootenanny/issues/1382))
+# Setting Up Hootenanny
 
-Once Vagrant has been installed, you can start an environment by checking out the hoot code, then changing to the directory which contains the Vagrantfile by typing:
+Hootenanny is thoroughly tested against the Virtualbox provider.  You are welcome to try other providers, and they can be configured in Vagrantfile.  Make sure the the umask of the terminal used to start the vagrant vm is set to `002` (see [#1332](https://github.com/ngageoint/hootenanny/issues/1382))
+
+Once the prerequisites have been installed, you can set up the Hootenanny environment:
 
     # Windows users will need to uncomment the line ending configuration option.
     git clone git@github.com:ngageoint/hootenanny.git hoot #--config core.autocrlf=input
@@ -22,58 +23,47 @@ Once Vagrant has been installed, you can start an environment by checking out th
     git submodule update
     vagrant up
 
-# Other Virtualization Providers
+~~Once initialization is complete, uncomment the `#, group: "tomcat8"` portion of the in Vagrantfile to allow the webapp to write to shared folders.~~  The previous workaround step is no longer needed as the provision script adds vagrant and tomcat8 users to each others group.
 
-If you would like to use Parallels instead of VirtualBox, please run the following command:
-```
-vagrant up --provider=parallels
-```
-Please note that this requires the Parallels Vagrant plugin, which can be installed:
-```
-vagrant plugin install vagrant-parallels
-```
-
-Similarly, if you would like to use VMware Workstation instead of VirtualBox, please run the following command:
-```
-vagrant up --provider vmware_workstation
-```
-Please note that this requires the VMware Vagrant plugin, which can be installed:
-```
-vagrant plugin install vagrant-vmware-workstation
-```
-
-# Vagrant Provisioning
-
-The initialization of the vagrant vm will take about an hour to download required software from the internet and set it up as a running system. ~~Once it is complete, uncomment the `#, group: "tomcat8"` portion of the in Vagrantfile to allow the webapp to write to shared folders.~~  The previous workaround step is no longer needed as the provision script adds vagrant and tomcat8 users to each others group.
-
-You should be able to log into the running VM by typing:
+Log into the Hootenanny virtual machine:
 
     vagrant ssh
-
-Within this login shell, you can build the code, run the server or the tests. For example, to run the tests:
-
-    vagrant ssh
-    cd hoot
-    source ./SetupEnv.sh
-    scripts/tomcat/CopyWebAppsToTomcat.sh
-    make -sj$(nproc) test-all
 
 # Using Hootenanny
 
-To access the web pages you access the site in your [local Chrome browser](http://localhost:8888/hootenanny-id).
+To access the iD Editor web user interface: [local Chrome browser](http://localhost:8888/hootenanny-id).
 
-To run hoot from commandline
+To run Hootenanny from the command line:
 
     vagrant ssh
     cd hoot
     source ./SetupEnv.sh
     hoot help
 
-If you've updated the code, you must connect to the vm via ssh to build and redeploy to Tomcat:
+# Running Hootenanny Tests
+
+To run the Hootenanny tests:
+
+    vagrant ssh
+    cd hoot
+    source ./SetupEnv.sh
+    make -sj$(nproc) test-all
+
+# Modifying Hootenanny Code
+
+If you've updated the Hootenanny code, perform the following steps to redeploy it:
 
     vagrant ssh
     cd hoot
     source ./SetupEnv.sh
     make -sj$(nproc)
-    sudo -u tomcat8 scripts/tomcat/CopyWebAppsToTomcat.sh
+    ~~sudo -u tomcat8~~ scripts/tomcat/CopyWebAppsToTomcat.sh
 
+If you typically use hoot-server for development, make sure that the UI on localhost:8080 matches localhost:8888. See [here](https://github.com/ngageoint/hootenanny/blob/develop/test-files/ui/README.md) for further instructions on how to run tests.
+
+If you run into permission errors running the Tomcat deployment script, remove files that may be owned by Tomcat and then re-run the script:
+ 
+    sudo rm -rf /usr/share/tomcat8/webapps/hootenannyid
+    sudo rm -rf /usr/share/tomcat8/webapps/hoot-services.war
+    sudo rm -rf /usr/share/tomcat8/webapps/hoot-services
+    scripts/tomcat/CopyWebAppsToTomcat.sh

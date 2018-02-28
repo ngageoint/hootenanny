@@ -85,7 +85,7 @@ public:
              ElementPtr& match) const;
 
 private:
-  std::auto_ptr<FindNodesInWayFactory> _createNodeFactory(const WaySublineCollection& string) const;
+  boost::shared_ptr<FindNodesInWayFactory> _createNodeFactory(const WaySublineCollection& string) const;
 };
 
 }

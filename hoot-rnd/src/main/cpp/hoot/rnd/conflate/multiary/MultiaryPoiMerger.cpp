@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MultiaryPoiMerger.h"
 
@@ -95,12 +95,13 @@ void MultiaryPoiMerger::apply(const OsmMapPtr& map,
 void MultiaryPoiMerger::_createReviews(const OsmMapPtr& map,
   QList<MultiaryClusterAlgorithm::ClusterLinkPtr> reviews)
 {
+  ReviewMarker reviewMarker;
   foreach (MultiaryClusterAlgorithm::ClusterLinkPtr link, reviews)
   {
     // we aren't using the review score in the review mark b/c the review score is almost always
     // 0. We may be able to fudge a value based on the match/miss thresholds, but I'm not sure
     // the score is every really used so I'll just leave it the default value for now.
-    ReviewMarker::mark(map,
+    reviewMarker.mark(map,
       map->getElement(link->a->mergedElement->getElementId()),
       map->getElement(link->b->mergedElement->getElementId()),
       link->explainText,

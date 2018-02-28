@@ -163,14 +163,14 @@ void PaintNodesDriver::_loadOutputDir(const QString& output)
 void PaintNodesDriver::_loadPartFile(const QString& partPath)
 {
   Hdfs fs;
-  auto_ptr<istream> is(fs.open(partPath.toStdString()));
+  boost::shared_ptr<istream> is(fs.open(partPath.toStdString()));
   CppSeqFile::Reader reader(*is);
 
   string s;
   s.resize(1024);
   PaintNodesReducer::Pixel pixel;
   int32_t sum;
-  while (reader.nextFixed<PaintNodesReducer::Pixel, int>(pixel, sum))
+  while (reader.nextFixed<PaintNodesReducer::Pixel, int32_t>(pixel, sum))
   {
     assert(pixel.x < _width);
     assert(pixel.y < _height);

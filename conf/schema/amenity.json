@@ -351,7 +351,17 @@
         ],
         "isA": "amenity",
         "name": "amenity=cemetery",
-        "objectType": "tag"
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "cemetery",
+                "weight": 0.9
+            },
+            {
+                "name": "amenity=chapel",
+                "weight": 0.6
+            }
+	]
     },
     {
         "isA": "amenity=place_of_worship",
@@ -577,7 +587,11 @@
         ],
         "isA": "amenity",
         "name": "amenity=courthouse",
-        "objectType": "tag"
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=police",
+            "weight": 0.6
+        }
     },
     {
         "isA": "amenity",

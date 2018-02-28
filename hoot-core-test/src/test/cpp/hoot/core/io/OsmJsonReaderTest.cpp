@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -93,7 +93,7 @@ public:
      "   'lon': -3.0,                        \n"
      "   'tags': {                           \n"
      "     'highway': 'bus_stop',            \n"
-     "     'name': 'Micah\\'s Street'        \n"
+     "     'name': 'Mike\\'s Street'         \n"
      "   }                                   \n"
      " }                                     \n"
      "]                                      \n"
@@ -110,7 +110,7 @@ public:
       "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
       "<osm version=\"0.6\">\n"
       "    <node visible=\"true\" id=\"-3\" timestamp=\"1970-01-01T00:00:00Z\" version=\"1\" lat=\"4.0\" lon=\"-3.0\">\n"
-      "        <tag k=\"name\" v=\"Micah's Street\"/>\n"
+      "        <tag k=\"name\" v=\"Mike's Street\"/>\n"
       "        <tag k=\"highway\" v=\"bus_stop\"/>\n"
       "        <tag k=\"" + MetadataTags::ErrorCircular() + "\" v=\"15\"/>\n"
       "    </node>\n"

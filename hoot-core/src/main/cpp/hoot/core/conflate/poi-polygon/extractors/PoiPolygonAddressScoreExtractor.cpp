@@ -55,12 +55,6 @@ PoiPolygonAddressScoreExtractor::PoiPolygonAddressScoreExtractor()
 {
 }
 
-//void PoiPolygonAddressScoreExtractor::setConfiguration(const Settings& conf)
-//{
-//  ConfigOptions config = ConfigOptions(conf);
-//  setAddressScoreThreshold(config.getPoiPolygonAddressScoreThreshold());
-//}
-
 double PoiPolygonAddressScoreExtractor::extract(const OsmMap& map, const ConstElementPtr& poi,
                                                 const ConstElementPtr& poly) const
 {
@@ -70,20 +64,21 @@ double PoiPolygonAddressScoreExtractor::extract(const OsmMap& map, const ConstEl
   QSet<QString> polyAddresses;
 
   //see if the poly has any address
-  _collectAddressesFromElement(poly, polyAddresses);
+  _collectAddressesFromElement(*poly, polyAddresses);
 
   if (polyAddresses.size() == 0)
   {
     //if not, try to find the address from a poly way node instead
     if (poly->getElementType() == ElementType::Way)
     {
-      _collectAddressesFromWayNodes(boost::dynamic_pointer_cast<const Way>(poly), polyAddresses, map);
+      ConstWayPtr wayPoly = boost::dynamic_pointer_cast<const Way>(poly);
+      _collectAddressesFromWayNodes(*wayPoly, polyAddresses, map);
     }
     //if still no luck, try to find the address from a poly way node that is a relation member
     else if (poly->getElementType() == ElementType::Relation)
     {
-      _collectAddressesFromRelationMembers(
-        boost::dynamic_pointer_cast<const Relation>(poly), polyAddresses, map);
+      ConstRelationPtr relationPoly = boost::dynamic_pointer_cast<const Relation>(poly);
+      _collectAddressesFromRelationMembers(*relationPoly, polyAddresses, map);
     }
   }
   if (polyAddresses.size() == 0)
@@ -94,7 +89,7 @@ double PoiPolygonAddressScoreExtractor::extract(const OsmMap& map, const ConstEl
 
   //see if the poi has an address
   QSet<QString> poiAddresses;
-  _collectAddressesFromElement(poi, poiAddresses);
+  _collectAddressesFromElement(*poi, poiAddresses);
   if (poiAddresses.size() == 0)
   {
     LOG_TRACE("No POI addresses.");
@@ -270,14 +265,22 @@ bool PoiPolygonAddressScoreExtractor::_addressesMatchesOnSubLetter(const QString
   return false;
 }
 
-void PoiPolygonAddressScoreExtractor::_collectAddressesFromElement(ConstElementPtr element,
+bool PoiPolygonAddressScoreExtractor::hasAddress(const Element& element)
+{
+  PoiPolygonAddressScoreExtractor extractor;
+  QSet<QString> addresses;
+  extractor._collectAddressesFromElement(element, addresses);
+  return addresses.size() > 0;
+}
+
+void PoiPolygonAddressScoreExtractor::_collectAddressesFromElement(const Element& element,
                                                                    QSet<QString>& addresses) const
 {
   //We're parsing multiple types of address tags here, b/c its possible that the same feature
   //could have multiple types of address tags with only one of them being accurate.  Parsing just
   //one type does same on run time, but can be less accurate for the aforementioned reason.
 
-  const Tags tags = element->getTags();
+  const Tags tags = element.getTags();
 
   //address parts in separate tags (most common situation)
   QString houseNum = tags.get(HOUSE_NUMBER_TAG_NAME).trimmed();
@@ -316,32 +319,33 @@ void PoiPolygonAddressScoreExtractor::_collectAddressesFromElement(ConstElementP
   _parseAddressesInAltFormat(tags, addresses);
 }
 
-void PoiPolygonAddressScoreExtractor::_collectAddressesFromWayNodes(ConstWayPtr way,
+void PoiPolygonAddressScoreExtractor::_collectAddressesFromWayNodes(const Way& way,
                                                                     QSet<QString>& addresses,
                                                                     const OsmMap& map) const
 {
-  const vector<long> wayNodeIds = way->getNodeIds();
+  const vector<long> wayNodeIds = way.getNodeIds();
   for (size_t i = 0; i < wayNodeIds.size(); i++)
   {
-    _collectAddressesFromElement(map.getElement(ElementType::Node, wayNodeIds.at(i)), addresses);
+    _collectAddressesFromElement(*(map.getElement(ElementType::Node, wayNodeIds.at(i))), addresses);
   }
 }
 
-void PoiPolygonAddressScoreExtractor::_collectAddressesFromRelationMembers(ConstRelationPtr relation,
+void PoiPolygonAddressScoreExtractor::_collectAddressesFromRelationMembers(const Relation& relation,
                                                                            QSet<QString>& addresses,
                                                                            const OsmMap& map) const
 {
-  const vector<RelationData::Entry> relationMembers = relation->getMembers();
+  const vector<RelationData::Entry> relationMembers = relation.getMembers();
   for (size_t i = 0; i < relationMembers.size(); i++)
   {
     ConstElementPtr member = map.getElement(relationMembers[i].getElementId());
     if (member->getElementType() == ElementType::Node)
     {
-      _collectAddressesFromElement(member, addresses);
+      _collectAddressesFromElement(*member, addresses);
     }
     else if (member->getElementType() == ElementType::Way)
     {
-      _collectAddressesFromWayNodes(boost::dynamic_pointer_cast<const Way>(member), addresses, map);
+      ConstWayPtr wayMember = boost::dynamic_pointer_cast<const Way>(member);
+      _collectAddressesFromWayNodes(*wayMember, addresses, map);
     }
   }
 }

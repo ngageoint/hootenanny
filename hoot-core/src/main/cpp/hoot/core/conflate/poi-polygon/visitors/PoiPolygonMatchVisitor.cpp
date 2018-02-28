@@ -59,6 +59,11 @@ _rf(rf)
   _neighborCountMax = -1;
   _neighborCountSum = 0;
   _elementsEvaluated = 0;
+
+  ConfigOptions opts = ConfigOptions();
+  _enableAdvancedMatching = opts.getPoiPolygonEnableAdvancedMatching();
+  _enableReviewReduction = opts.getPoiPolygonEnableReviewReduction();
+  _reviewDistanceThreshold = opts.getPoiPolygonReviewDistanceThreshold();
 }
 
 PoiPolygonMatchVisitor::~PoiPolygonMatchVisitor()
@@ -67,7 +72,7 @@ PoiPolygonMatchVisitor::~PoiPolygonMatchVisitor()
 
 void PoiPolygonMatchVisitor::_checkForMatch(const boost::shared_ptr<const Element>& e)
 {
-  std::auto_ptr<geos::geom::Envelope> env(e->getEnvelope(_map));
+  boost::shared_ptr<geos::geom::Envelope> env(e->getEnvelope(_map));
   env->expandBy(_getSearchRadius(e));
 
   // find other nearby candidates
@@ -116,7 +121,7 @@ void PoiPolygonMatchVisitor::_checkForMatch(const boost::shared_ptr<const Elemen
 void PoiPolygonMatchVisitor::_collectSurroundingPolyIds(const boost::shared_ptr<const Element>& e)
 {
   _surroundingPolyIds.clear();
-  std::auto_ptr<geos::geom::Envelope> env(e->getEnvelope(_map));
+  boost::shared_ptr<geos::geom::Envelope> env(e->getEnvelope(_map));
   env->expandBy(_getSearchRadius(e));
 
   // find other nearby candidates
@@ -143,7 +148,7 @@ void PoiPolygonMatchVisitor::_collectSurroundingPolyIds(const boost::shared_ptr<
 void PoiPolygonMatchVisitor::_collectSurroundingPoiIds(const boost::shared_ptr<const Element>& e)
 {
   _surroundingPoiIds.clear();
-  std::auto_ptr<geos::geom::Envelope> env(e->getEnvelope(_map));
+  boost::shared_ptr<geos::geom::Envelope> env(e->getEnvelope(_map));
   env->expandBy(_getSearchRadius(e));
 
   // find other nearby candidates
@@ -169,8 +174,7 @@ void PoiPolygonMatchVisitor::_collectSurroundingPoiIds(const boost::shared_ptr<c
 
 Meters PoiPolygonMatchVisitor::_getSearchRadius(const boost::shared_ptr<const Element>& e) const
 {
-  const Meters searchRadius =
-    e->getCircularError() + ConfigOptions().getPoiPolygonReviewDistanceThreshold();
+  const Meters searchRadius = e->getCircularError() + _reviewDistanceThreshold;
   LOG_VART(searchRadius);
   return searchRadius;
 }
@@ -181,8 +185,7 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
   {
     //Technically, the density based density matches depends on this data too, but since that
     //code has been disabled, this check is good enough.
-    if (ConfigOptions().getPoiPolygonEnableAdvancedMatching() ||
-        ConfigOptions().getPoiPolygonEnableReviewReduction())
+    if (_enableAdvancedMatching || _enableReviewReduction)
     {
       _collectSurroundingPolyIds(e);
       _collectSurroundingPoiIds(e);

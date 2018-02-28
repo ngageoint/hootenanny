@@ -81,7 +81,7 @@ public:
     Tgs::Random::instance()->seed(0);
     LOG_INFO("Building Random Forest...");
     RandomForest rf;
-    auto_ptr<DisableCout> dc;
+    boost::shared_ptr<DisableCout> dc;
     if (Log::getInstance().getLevel() >= Log::Warn)
     {
       // disable the printing of "Trained Tree ..."

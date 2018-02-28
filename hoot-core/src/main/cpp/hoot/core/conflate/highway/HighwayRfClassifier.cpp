@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HighwayRfClassifier.h"
 
@@ -142,20 +142,22 @@ void HighwayRfClassifier::_createAllExtractors() const
 
   // These are all the factors that seem reasonable. Many of the other factors will overtrain due
   // to distance values and such.
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new AngleHistogramExtractor()));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new AttributeScoreExtractor(NULL, false)));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new AttributeScoreExtractor(NULL, true)));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new WeightedShapeDistanceExtractor()));
+  _extractors.push_back(FeatureExtractorPtr(new AngleHistogramExtractor()));
+  _extractors.push_back(FeatureExtractorPtr(new AttributeScoreExtractor(false)));
+  _extractors.push_back(FeatureExtractorPtr(new WeightedShapeDistanceExtractor()));
+  _extractors.push_back(FeatureExtractorPtr(new AttributeScoreExtractor(true)));
 
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new WeightedMetricDistanceExtractor(
-    new MeanAggregator(), new SigmaAggregator())));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new WeightedMetricDistanceExtractor(
-    new MeanAggregator(), new RmseAggregator())));
+  _extractors.push_back(FeatureExtractorPtr(new WeightedMetricDistanceExtractor(
+                        ValueAggregatorPtr(new MeanAggregator()),
+                        ValueAggregatorPtr(new SigmaAggregator()))));
+  _extractors.push_back(FeatureExtractorPtr(new WeightedMetricDistanceExtractor(
+                        ValueAggregatorPtr(new MeanAggregator()),
+                        ValueAggregatorPtr(new RmseAggregator()))));
 
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(
-    new EdgeDistanceExtractor(new RmseAggregator())));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(
-    new EdgeDistanceExtractor(new SigmaAggregator())));
+  _extractors.push_back(FeatureExtractorPtr(new EdgeDistanceExtractor(
+                        ValueAggregatorPtr(new RmseAggregator()))));
+  _extractors.push_back(FeatureExtractorPtr(new EdgeDistanceExtractor(
+                        ValueAggregatorPtr(new SigmaAggregator()))));
 
   // at some point names will make sense, but for now there isn't enough name data.
 //  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
@@ -210,19 +212,21 @@ void HighwayRfClassifier::_createTestExtractors() const
 {
   _extractors.clear();
 
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(
-    new EdgeDistanceExtractor(new RmseAggregator())));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(
-    new EdgeDistanceExtractor(new SigmaAggregator())));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new AngleHistogramExtractor()));
+  _extractors.push_back(FeatureExtractorPtr(new EdgeDistanceExtractor(
+                        ValueAggregatorPtr(new RmseAggregator()))));
+  _extractors.push_back(FeatureExtractorPtr(new EdgeDistanceExtractor(
+                        ValueAggregatorPtr(new SigmaAggregator()))));
+  _extractors.push_back(FeatureExtractorPtr(new AngleHistogramExtractor()));
 //  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new AttributeScoreExtractor(false)));
 //  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new AttributeScoreExtractor(true)));
 //  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new WeightedShapeDistanceExtractor()));
 
 //  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new WeightedMetricDistanceExtractor(
 //    new MeanAggregator(), new SigmaAggregator())));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new WeightedMetricDistanceExtractor(
-    new MeanAggregator(), new RmseAggregator(), ConfigOptions().getSearchRadiusHighway())));
+  _extractors.push_back(FeatureExtractorPtr(new WeightedMetricDistanceExtractor(
+                        ValueAggregatorPtr(new MeanAggregator()),
+                        ValueAggregatorPtr(new RmseAggregator()),
+                        ConfigOptions().getSearchRadiusHighway())));
 
 }
 
@@ -260,7 +264,7 @@ map<QString, double> HighwayRfClassifier::getFeatures(const ConstOsmMapPtr& m,
     throw NeedsReviewException("Internal Error: Found a situation where the match after copy is "
                                "invalid. Marking as needs review.  Expected a matching subline, "
                                "but got an empty match. Please report this to "
-                               "hootenanny.help@digitalglobe.com.");
+                               " https://github.com/ngageoint/hootenanny.");
   }
   else
   {
@@ -333,7 +337,7 @@ void HighwayRfClassifier::_init() const
 
     if (missingExtractors.size() > 0)
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN(
           "An extractor used by the model is not being calculated. We will still try, but this " <<
@@ -341,7 +345,7 @@ void HighwayRfClassifier::_init() const
         LOG_TRACE("Missing extractors: " << missingExtractors);
         LOG_TRACE("Available extractors: " << extractorNames);
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }

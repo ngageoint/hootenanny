@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTJS_H
 #define ELEMENTJS_H
@@ -64,19 +64,19 @@ protected:
   virtual ~ElementJs();
   static void _addBaseFunctions(v8::Local<v8::FunctionTemplate> tpl);
 
-  static v8::Handle<v8::Value> getCircularError(const v8::Arguments& args);
-  static v8::Handle<v8::Value> getElementId(const v8::Arguments& args);
-  static v8::Handle<v8::Value> getId(const v8::Arguments& args);
+  static void getCircularError(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void getElementId(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void getId(const v8::FunctionCallbackInfo<v8::Value>& args);
   /**
    * Return the zero-based input number associated with this element. If this is not an input, throw
    * an exception.
    */
-  static v8::Handle<v8::Value> getStatusInput(const v8::Arguments& args);
-  static v8::Handle<v8::Value> getStatusString(const v8::Arguments& args);
-  static v8::Handle<v8::Value> getTags(const v8::Arguments& args);
-  static v8::Handle<v8::Value> setStatusString(const v8::Arguments& args);
-  static v8::Handle<v8::Value> setTags(const v8::Arguments& args);
-  static v8::Handle<v8::Value> toString(const v8::Arguments& args);
+  static void getStatusInput(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void getStatusString(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void getTags(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void setStatusString(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void setTags(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void toString(const v8::FunctionCallbackInfo<v8::Value>& args);
 
 private:
   QString _className;

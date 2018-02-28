@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include <ogr_spatialref.h>
@@ -278,7 +278,9 @@ geos::geom::GeometryTypeId ElementConverter::getGeometryType(const ConstElementP
           return GEOS_POLYGON;
         else
           return GEOS_LINESTRING;
-      } else {
+      }
+      else
+      {
         if (w->isValidPolygon() && OsmSchema::getInstance().isArea(w->getTags(), ElementType::Way))
           return GEOS_POLYGON;
         else
@@ -299,22 +301,26 @@ geos::geom::GeometryTypeId ElementConverter::getGeometryType(const ConstElementP
           return GEOS_MULTIPOLYGON;
         else if (OsmSchema::getInstance().isLinear(*r))
           return GEOS_MULTILINESTRING;
-      } else {
+      }
+      else
+      {
         if (r->isMultiPolygon() || OsmSchema::getInstance().isArea(r->getTags(), ElementType::Relation))
           return GEOS_MULTIPOLYGON;
-        else if (OsmSchema::getInstance().isLinear(*r)) {
+        else if (OsmSchema::getInstance().isLinear(*r))
           return GEOS_MULTILINESTRING;
-        }
-        else if (r->getMembers().size() == 0 ||
-                 OsmSchema::getInstance().isCollection(*r)) {
-          // an empty geometry, pass back a collection
+        // an empty geometry, pass back a collection
+        else if (r->getMembers().size() == 0 || OsmSchema::getInstance().isCollection(*r))
           return GEOS_GEOMETRYCOLLECTION;
-        }
+        // Restriction relations are empty geometry
+        else if (r->isRestriction())
+          return GEOS_GEOMETRYCOLLECTION;
         // Need to find a better way of doing this.
         // If we have a review, send back a collection. This gets converted into an empty geometry.
-        else if (r->isReview()) {
+        else if (r->isReview())
           return GEOS_GEOMETRYCOLLECTION;
-        }
+        // MultiPoint comes from GeoJSON
+        else if (r->getType() == "multipoint")
+          return GEOS_MULTIPOINT;
       }
 
       // We are going to throw an error so we save the type of relation

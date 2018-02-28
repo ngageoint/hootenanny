@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-30744' visible='true' lat='15.3680266' lon='44.2290349'>
+    <tag k='ID' v='1-00135' />
+    <tag k='MATCH' v='1-00067' />
+    <tag k='REVIEW' v='none' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='hoot:hash' v='sha1sum:2dd21d23df65451b6d698199c18f059699ef406d' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='name' v='شيراتون' />
+    <tag k='name:ar' v='شيراتون' />
+    <tag k='source' v='osm' />
+    <tag k='source:datetime' v='2017-03-02T18:45:43.000Z' />
+    <tag k='tourism' v='hotel' />
+    <tag k='uuid' v='{4ad35a88-dbd2-403a-943d-eb4de8541068}' />
+  </node>
+  <node id='-30745' visible='true' lat='15.3679419' lon='44.229498'>
+    <tag k='ID' v='1-00067' />
+    <tag k='MATCH' v='1-00067' />
+    <tag k='REVIEW' v='none' />
+    <tag k='attribution' v='osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='hoot:hash' v='sha1sum:6abe543e82c575cc499e06e3512056911351d5ae' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='name' v='Sheraton Sana&apos;a Hotel' />
+    <tag k='source' v='osm' />
+    <tag k='source:datetime' v='2016-07-12T10:47:05.000Z' />
+    <tag k='uuid' v='{1fa9a869-b0e0-4024-bbb6-2ccfca9d7cc9}' />
+  </node>
+</osm>

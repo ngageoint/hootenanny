@@ -136,9 +136,9 @@ void GmlWriter::writePoints(boost::shared_ptr<const OsmMap> map, const QString& 
       }
 
       // convert the geometry.
-      OGRGeometry* geom = new OGRPoint(node->getX(), node->getY());
+      boost::shared_ptr<OGRGeometry> geom(new OGRPoint(node->getX(), node->getY()));
 
-      if (poFeature->SetGeometryDirectly(geom) != OGRERR_NONE)
+      if (poFeature->SetGeometry(geom.get()) != OGRERR_NONE)
       {
         throw HootException(QString("Error setting geometry"));
       }

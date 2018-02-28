@@ -68,8 +68,9 @@ _includeCompatibilityTags(true),
 _textStatus(ConfigOptions().getWriterTextStatus()),
 _osmSchema(ConfigOptions().getOsmMapWriterSchema()),
 _timestamp("1970-01-01T00:00:00Z"),
-_precision(round(ConfigOptions().getWriterPrecision())),
-_encodingErrorCount(0)
+_precision(ConfigOptions().getWriterPrecision()),
+_encodingErrorCount(0),
+_includeCircularErrorTags(ConfigOptions().getWriterIncludeCircularErrorTags())
 {
 }
 
@@ -81,8 +82,6 @@ OsmXmlWriter::~OsmXmlWriter()
 QString OsmXmlWriter::removeInvalidCharacters(const QString& s)
 {
   // See #3553 for an explanation.
-
-  //TODO: refactor this
 
   QString result;
   result.reserve(s.size());
@@ -105,12 +104,12 @@ QString OsmXmlWriter::removeInvalidCharacters(const QString& s)
   if (foundError)
   {
     _encodingErrorCount++;
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       LOG_WARN("Found an invalid character in string: '" << s << "'");
       LOG_WARN("  UCS-4 version of the string: " << s.toUcs4());
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }
@@ -154,10 +153,11 @@ void OsmXmlWriter::setIncludeCompatibilityTags(bool includeCompatibility)
   _includeCompatibilityTags = includeCompatibility;
 }
 
-QString OsmXmlWriter::toString(const ConstOsmMapPtr& map)
+QString OsmXmlWriter::toString(const ConstOsmMapPtr& map, const bool formatXml)
 {
   OsmXmlWriter writer;
-  // this will be deleted by the _fp auto_ptr
+  writer.setFormatXml(formatXml);
+  // this will be deleted by the _fp boost::shared_ptr
   QBuffer* buf = new QBuffer();
   writer._fp.reset(buf);
   if (!writer._fp->open(QIODevice::WriteOnly | QIODevice::Text))
@@ -253,10 +253,6 @@ void OsmXmlWriter::write(ConstOsmMapPtr map)
 
 void OsmXmlWriter::_writeMetadata(const Element *e)
 {
-  LOG_VART(e->getElementId());
-  LOG_VART(e->getVersion());
-  LOG_VART(e->getStatus());
-
   if (_includeCompatibilityTags)
   {
     _writer->writeAttribute("timestamp", OsmUtils::toTimeString(e->getTimestamp()));
@@ -303,11 +299,13 @@ void OsmXmlWriter::_writeTags(const ConstElementPtr& element)
 
   for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
   {
-    if (it.key().isEmpty() == false && it.value().isEmpty() == false)
+    const QString key = it.key();
+    const QString val = it.value().trimmed();
+    if (val.isEmpty() == false)
     {
       _writer->writeStartElement("tag");
-      _writer->writeAttribute("k", removeInvalidCharacters(it.key()));
-      if (it.key() == MetadataTags::HootStatus() &&
+      _writer->writeAttribute("k", removeInvalidCharacters(key));
+      if (key == MetadataTags::HootStatus() &&
           //status check here only for nodes/ways; should relation have this check too?
           (type == ElementType::Relation ||
            (type != ElementType::Relation && element->getStatus() != Status::Invalid)))
@@ -323,7 +321,7 @@ void OsmXmlWriter::_writeTags(const ConstElementPtr& element)
       }
       else
       {
-        _writer->writeAttribute("v", removeInvalidCharacters(it.value()));
+        _writer->writeAttribute("v", removeInvalidCharacters(val));
       }
       _writer->writeEndElement();
     }
@@ -371,7 +369,7 @@ void OsmXmlWriter::_writeTags(const ConstElementPtr& element)
     }
   }
 
-  if (element->hasCircularError() && ConfigOptions().getWriterIncludeCircularErrorTags() &&
+  if (element->hasCircularError() && _includeCircularErrorTags &&
       //non debug count check for nodes only
       (type != ElementType::Node ||
        (type == ElementType::Node && tags.getNonDebugCount() > 0)))
@@ -421,7 +419,7 @@ void OsmXmlWriter::_writeWays(ConstOsmMapPtr map)
   qSort(wids.begin(), wids.end(), qLess<long>());
   for (int i = 0; i < wids.size(); i++)
   {
-    //I'm not really sure how to reconcile the duplicated code between these two version of
+    //I'm not really sure how to reconcile the duplicated code between these two versions of
     //partial way writing.
     if (_includePointInWays)
     {
@@ -463,6 +461,8 @@ void OsmXmlWriter::_writeBounds(const Envelope& bounds)
 
 void OsmXmlWriter::writePartial(const ConstNodePtr& n)
 {
+  LOG_VART(n);
+
   _writer->writeStartElement("node");
 
   _writer->writeAttribute("visible", "true");
@@ -482,6 +482,8 @@ void OsmXmlWriter::writePartial(const ConstNodePtr& n)
 
 void OsmXmlWriter::_writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapPtr map)
 {
+  LOG_VART(w);
+
   _writer->writeStartElement("way");
   _writer->writeAttribute("visible", "true");
   _writer->writeAttribute("id", QString::number(w->getId()));
@@ -506,12 +508,14 @@ void OsmXmlWriter::_writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapP
 
   for (Tags::const_iterator tit = tags.constBegin(); tit != tags.constEnd(); ++tit)
   {
-    if (tit.key().isEmpty() == false && tit.value().isEmpty() == false)
+    const QString key = tit.key();
+    const QString val = tit.value().trimmed();
+    if (val.isEmpty() == false)
     {
       _writer->writeStartElement("tag");
-      _writer->writeAttribute("k", removeInvalidCharacters(tit.key()));
+      _writer->writeAttribute("k", removeInvalidCharacters(key));
 
-      if (tit.key() == MetadataTags::HootStatus() && w->getStatus() != Status::Invalid)
+      if (key == MetadataTags::HootStatus() && w->getStatus() != Status::Invalid)
       {
         if (_textStatus)
         {
@@ -524,7 +528,7 @@ void OsmXmlWriter::_writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapP
       }
       else
       {
-        _writer->writeAttribute("v", removeInvalidCharacters(tit.value()));
+        _writer->writeAttribute("v", removeInvalidCharacters(val));
       }
       _writer->writeEndElement();
     }
@@ -550,7 +554,7 @@ void OsmXmlWriter::_writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapP
     }
   }
 
-  if (w->hasCircularError() && ConfigOptions().getWriterIncludeCircularErrorTags())
+  if (w->hasCircularError() && _includeCircularErrorTags)
   {
     _writer->writeStartElement("tag");
     _writer->writeAttribute("k", MetadataTags::ErrorCircular());
@@ -571,6 +575,8 @@ void OsmXmlWriter::_writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapP
 
 void OsmXmlWriter::writePartial(const ConstWayPtr& w)
 {
+  LOG_VART(w);
+
   if (_includePointInWays)
   {
     throw HootException("Adding points to way output is not supported in streaming output.");
@@ -596,6 +602,8 @@ void OsmXmlWriter::writePartial(const ConstWayPtr& w)
 
 void OsmXmlWriter::writePartial(const ConstRelationPtr& r)
 {
+  LOG_VART(r);
+
   _writer->writeStartElement("relation");
   _writer->writeAttribute("visible", "true");
   _writer->writeAttribute("id", QString::number(r->getId()));

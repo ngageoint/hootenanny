@@ -57,6 +57,23 @@ namespace hoot
 
 unsigned int GeometryConverter::logWarnCount = 0;
 
+GeometryConverter::GeometryConverter()
+{
+}
+
+GeometryConverter::GeometryConverter(const OsmMapPtr& map) :
+_constMap(map),
+_map(map)
+{
+  assert(map.get());
+}
+
+GeometryConverter::GeometryConverter(const ConstOsmMapPtr& map) :
+_constMap(map)
+{
+  assert(map.get());
+}
+
 boost::shared_ptr<Element> GeometryConverter::convertGeometryCollection(const GeometryCollection* gc,
   Status s, double circularError)
 {
@@ -104,11 +121,11 @@ boost::shared_ptr<Element> GeometryConverter::convertGeometryToElement(const Geo
     return convertGeometryCollection(dynamic_cast<const GeometryCollection*>(g), s,
       circularError);
   default:
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       LOG_WARN("Unsupported geometry type. Element will be removed from the map. " + g->toString());
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }

@@ -30,6 +30,7 @@
 
 // Boost
 #include <boost/any.hpp>
+#include <boost/shared_ptr.hpp>
 
 // Qt
 #include <QMutex>
@@ -161,7 +162,7 @@ public:
     }
   }
 
-  void registerCreator(ObjectCreator* oc);
+  void registerCreator(boost::shared_ptr<ObjectCreator> oc);
 
 private:
   Factory();
@@ -169,7 +170,7 @@ private:
   static Factory* _theInstance;
   QMutex _m;
 
-  std::map<std::string, ObjectCreator*> _creators;
+  std::map<std::string, boost::shared_ptr<ObjectCreator> > _creators;
 };
 
 template<class Base, class T>
@@ -180,7 +181,7 @@ public:
    */
   AutoRegister(std::string baseName, std::string name)
   {
-    Factory::getInstance().registerCreator(new ObjectCreatorTemplate<Base, T>(baseName, name));
+    Factory::getInstance().registerCreator(boost::shared_ptr<ObjectCreator>(new ObjectCreatorTemplate<Base, T>(baseName, name)));
   }
 };
 

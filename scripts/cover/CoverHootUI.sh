@@ -10,8 +10,8 @@ npm run cover
 sudo service tomcat8 stop
 sudo -u tomcat8 rm -rf $TOMCAT8_HOME/webapps/hootenanny-id/
 sudo -u tomcat8 cp -R $HOOT_HOME/hoot-ui $TOMCAT8_HOME/webapps/hootenanny-id
-sudo -u tomcat8 HOOT_HOME=$HOOT_HOME cp -R $HOOT_HOME/hoot-ui/istanbul/hoot /$TOMCAT8_HOME/webapps/hootenanny-id/js/hoot
-sudo -u tomcat8 HOOT_HOME=$HOOT_HOME cp -R $HOOT_HOME/hoot-ui/istanbul/id $TOMCAT8_HOME/webapps/hootenanny-id/js/id
+sudo -u tomcat8 HOOT_HOME=$HOOT_HOME cp -R $HOOT_HOME/hoot-ui/istanbul/hoot $TOMCAT8_HOME/webapps/hootenanny-id/js
+sudo -u tomcat8 HOOT_HOME=$HOOT_HOME cp -R $HOOT_HOME/hoot-ui/istanbul/id $TOMCAT8_HOME/webapps/hootenanny-id/js
 # activate EGD plugin so it's available for cucumber tests
 [ -f ~/ActivateEGDplugin.sh ] && sudo -u tomcat8 ~/ActivateEGDplugin.sh $TOMCAT8_HOME
 

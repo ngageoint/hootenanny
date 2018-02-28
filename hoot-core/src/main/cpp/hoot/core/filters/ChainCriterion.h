@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CHAINCRITERION_H
 #define CHAINCRITERION_H
@@ -43,7 +43,7 @@ public:
   static std::string className() { return "hoot::ChainCriterion"; }
 
   ChainCriterion() {}
-  ChainCriterion(boost::shared_ptr<ElementCriterion> child1, boost::shared_ptr<ElementCriterion> child2);
+  ChainCriterion(ElementCriterionPtr child1, ElementCriterionPtr child2);
   ChainCriterion(ElementCriterion* child1, ElementCriterion* child2);
   ChainCriterion(ElementCriterion* child1, ElementCriterionPtr child2);
   ChainCriterion(ElementCriterion* child1, ElementCriterion* child2, ElementCriterion* child3);
@@ -52,13 +52,17 @@ public:
 
   virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
 
-  virtual ElementCriterion* clone() { return new ChainCriterion(_filters); }
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new ChainCriterion(_filters)); }
 
 protected:
 
   ChainCriterion(std::vector< boost::shared_ptr<ElementCriterion> > filters);
 
   std::vector< boost::shared_ptr<ElementCriterion> > _filters;
+
+private:
+
+  friend class RemoveRef2VisitorMultipleCriterion;
 
 };
 

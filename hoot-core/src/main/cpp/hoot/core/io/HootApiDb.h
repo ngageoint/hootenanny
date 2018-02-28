@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HOOTAPIDB_H
 #define HOOTAPIDB_H
@@ -30,10 +30,15 @@
 #include <hoot/core/io/ApiDb.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/io/BulkDelete.h>
 
 namespace hoot
 {
 
+/**
+ * Used for interaction with an Hootenanny API database (Hootenanny's internal customized version
+ * of the OSM API database).
+ */
 class HootApiDb : public ApiDb
 {
 public:
@@ -62,19 +67,12 @@ public:
 
   virtual void open(const QUrl& url);
 
-  virtual void transaction();
-
-  virtual void rollback();
-
   virtual void commit();
 
-  //reading
-
   /**
-   * Returns a results iterator to all OSM elements for a given map and element type in the services
-   * database.
+   * @see ApiDb::elementTypeToElementTableName
    */
-  virtual boost::shared_ptr<QSqlQuery> selectElements(const ElementType& elementType);
+  virtual QString elementTypeToElementTableName(const ElementType& elementType) const;
 
   /**
    * Returns a vector with all the OSM node ID's for a given way
@@ -97,19 +95,29 @@ public:
   bool mapExists(const long id);
 
   /**
+   * Returns true if any map with the specified name exists in the services database
+   */
+  bool mapExists(const QString name);
+
+  /**
    * Returns true if the changeset with the specified ID exists in the services database
    */
   bool changesetExists(const long id);
 
   /**
-   * Returns the number of OSM elements of a given type for a particular map in the services
-   * database
+   * Closes an existing changeset
    */
-  long numElements(const ElementType& elementType);
-
-  //writing
-
   void endChangeset();
+
+  /**
+   * Inserts and closes a changeset
+   *
+   * @param bounds bounds to associate with the changeset
+   * @param tags tags to associate with the changeset
+   * @param numChanges the number of changes in the changeset
+   * @return the ID of the inserted changeset
+   */
+  long insertChangeset(const geos::geom::Envelope& bounds, const Tags& tags, const long numChanges);
 
   /**
    * Creates necessary indexes and constraints on all maps that don't have indexes/constraints
@@ -180,6 +188,8 @@ public:
 
   bool insertNode(const long id, const double lat, const double lon, const Tags &tags);
 
+  bool insertNode(ConstNodePtr node);
+
   bool insertWay(const Tags& tags, long& assignedId);
 
   bool insertWay( const long wayId, const Tags& tags);
@@ -208,6 +218,10 @@ public:
 
   void updateNode(const long id, const double lat, const double lon, const long version,
                   const Tags& tags);
+
+  void updateNode(ConstNodePtr node);
+
+  void deleteNode(ConstNodePtr node);
 
   void updateRelation(const long id, const long version, const Tags& tags);
 
@@ -252,24 +266,46 @@ public:
   bool hasTable(const QString& tableName);
 
   /**
+   * Drops the specified sequences and cascades. No warning or error will be given
+   * if the sequence does not exist.
+   *
+   * No validation is done on the sequence name. In other words, don't pass in user provided strings.
+   *
+   * @param sequenceName
+   */
+  void dropSequence(const QString& sequenceName);
+
+  /**
    * Returns a map ID string suitable for using in table names. E.g. _1
    */
   inline static QString getMapIdString(long id) { return QString("_%1").arg(id); }
 
   // Services DB table strings
-  inline static QString getChangesetsTableName(long mapId)                { return ApiDb::getChangesetsTableName() + getMapIdString(mapId); }
-  inline static QString getCurrentNodesTableName(long mapId)              { return ApiDb::getCurrentNodesTableName() + getMapIdString(mapId); }
-  inline static QString getCurrentRelationMembersTableName(long mapId)    { return ApiDb::getCurrentRelationMembersTableName() + getMapIdString(mapId); }
-  inline static QString getCurrentRelationsTableName(long mapId)          { return ApiDb::getCurrentRelationsTableName() + getMapIdString(mapId); }
-  inline static QString getCurrentWayNodesTableName(long mapId)           { return ApiDb::getCurrentWayNodesTableName() + getMapIdString(mapId); }
-  inline static QString getCurrentWaysTableName(long mapId)               { return ApiDb::getCurrentWaysTableName() + getMapIdString(mapId); }
+  inline static QString getChangesetsTableName(long mapId)
+  { return ApiDb::getChangesetsTableName() + getMapIdString(mapId); }
+  inline static QString getCurrentNodesTableName(long mapId)
+  { return ApiDb::getCurrentNodesTableName() + getMapIdString(mapId); }
+  inline static QString getCurrentRelationMembersTableName(long mapId)
+  { return ApiDb::getCurrentRelationMembersTableName() + getMapIdString(mapId); }
+  inline static QString getCurrentRelationsTableName(long mapId)
+  { return ApiDb::getCurrentRelationsTableName() + getMapIdString(mapId); }
+  inline static QString getCurrentWayNodesTableName(long mapId)
+  { return ApiDb::getCurrentWayNodesTableName() + getMapIdString(mapId); }
+  inline static QString getCurrentWaysTableName(long mapId)
+  { return ApiDb::getCurrentWaysTableName() + getMapIdString(mapId); }
 
-  inline static QString getChangesetsSequenceName(long mapId)             { return ApiDb::getChangesetsTableName() + getMapIdString(mapId) + ApiDb::getSequenceId(); }
-  inline static QString getCurrentNodesSequenceName(long mapId)           { return ApiDb::getCurrentNodesTableName() + getMapIdString(mapId) + ApiDb::getSequenceId(); }
-  inline static QString getCurrentRelationMembersSequenceName(long mapId) { return ApiDb::getCurrentRelationMembersTableName() + getMapIdString(mapId) + ApiDb::getSequenceId(); }
-  inline static QString getCurrentRelationsSequenceName(long mapId)       { return ApiDb::getCurrentRelationsTableName() + getMapIdString(mapId) + ApiDb::getSequenceId(); }
-  inline static QString getCurrentWayNodesSequenceName(long mapId)        { return ApiDb::getCurrentWayNodesTableName() + getMapIdString(mapId) + ApiDb::getSequenceId(); }
-  inline static QString getCurrentWaysSequenceName(long mapId)            { return ApiDb::getCurrentWaysTableName() + getMapIdString(mapId) + ApiDb::getSequenceId(); }
+  inline static QString getChangesetsSequenceName(long mapId)
+  { return ApiDb::getChangesetsTableName() + getMapIdString(mapId) + ApiDb::getSequenceId(); }
+  inline static QString getCurrentNodesSequenceName(long mapId)
+  { return ApiDb::getCurrentNodesTableName() + getMapIdString(mapId) + ApiDb::getSequenceId(); }
+  inline static QString getCurrentRelationMembersSequenceName(long mapId)
+  { return ApiDb::getCurrentRelationMembersTableName() + getMapIdString(mapId) + ApiDb::getSequenceId(); }
+  inline static QString getCurrentRelationsSequenceName(long mapId)
+  { return ApiDb::getCurrentRelationsTableName() + getMapIdString(mapId) + ApiDb::getSequenceId(); }
+  inline static QString getCurrentWayNodesSequenceName(long mapId)
+  { return ApiDb::getCurrentWayNodesTableName() + getMapIdString(mapId) + ApiDb::getSequenceId(); }
+  inline static QString getCurrentWaysSequenceName(long mapId)
+  { return ApiDb::getCurrentWaysTableName() + getMapIdString(mapId) + ApiDb::getSequenceId(); }
 
   inline static QString getJobStatusTableName() { return "job_status"; }
 
@@ -283,13 +319,30 @@ public:
 
   virtual long getNextId(const ElementType& elementType);
 
+  static QUrl getBaseUrl();
+
+  /**
+   * Given a map name, returns its ID; assumes only one map with the given name
+   *
+   * @param name name of the map to retrieve
+   * @return a map ID
+   */
+  long getMapIdByName(const QString name);
+
+  /**
+   * Removes the layer name from a Hooteanny API database URL
+   *
+   * @param url input URL
+   * @return a URL with the layer name removed
+   */
+  static QString removeLayerName(const QString url);
+
 protected:
 
   virtual void _resetQueries();
 
 private:
 
-  bool _inTransaction;
   boost::shared_ptr<QSqlQuery> _closeChangeSet;
   boost::shared_ptr<QSqlQuery> _insertChangeSet;
   boost::shared_ptr<QSqlQuery> _insertChangeSetTag;
@@ -297,11 +350,9 @@ private:
   boost::shared_ptr<QSqlQuery> _insertRelationMembers;
   boost::shared_ptr<QSqlQuery> _insertWayNodes;
   boost::shared_ptr<QSqlQuery> _selectHootDbVersion;
-  boost::shared_ptr<QSqlQuery> _mapExists;
+  boost::shared_ptr<QSqlQuery> _mapExistsById;
   boost::shared_ptr<QSqlQuery> _changesetExists;
-  boost::shared_ptr<QSqlQuery> _numTypeElementsForMap;
   boost::shared_ptr<QSqlQuery> _selectReserveNodeIds;
-  boost::shared_ptr<QSqlQuery> _selectElementsForMap;
   boost::shared_ptr<QSqlQuery> _selectMapIds;
   boost::shared_ptr<QSqlQuery> _selectMembersForRelation;
   boost::shared_ptr<QSqlQuery> _updateNode;
@@ -310,10 +361,16 @@ private:
   boost::shared_ptr<QSqlQuery> _updateJobStatus;
   boost::shared_ptr<QSqlQuery> _insertJobStatus;
   boost::shared_ptr<QSqlQuery> _jobStatusExists;
+  boost::shared_ptr<QSqlQuery> _mapExistsByName;
+  boost::shared_ptr<QSqlQuery> _getMapIdByName;
+  boost::shared_ptr<QSqlQuery> _insertChangeSet2;
 
   boost::shared_ptr<BulkInsert> _nodeBulkInsert;
   long _nodesPerBulkInsert;
   double _nodesInsertElapsed;
+  boost::shared_ptr<BulkDelete> _nodeBulkDelete;
+  long _nodesPerBulkDelete;
+  double _nodesDeleteElapsed;
   boost::shared_ptr<InternalIdReserver> _nodeIdReserver;
 
   boost::shared_ptr<BulkInsert> _wayBulkInsert;
@@ -342,6 +399,8 @@ private:
 
   unsigned long _nodesAddedToCache;
   unsigned long _nodesFlushedFromCache;
+
+  int _precision;
 
   /**
    * There are some statements that cannot be executed within a transaction
@@ -372,9 +431,8 @@ private:
    */
   void _copyTableStructure(QString from, QString to);
 
-  QString _escapeTags(const Tags& tags) const;
-
   void _flushBulkInserts();
+  void _flushBulkDeletes();
   long _getNextNodeId();
   long _getNextRelationId();
   long _getNextWayId();
@@ -406,6 +464,8 @@ private:
    * @return should be <dbname>_renderdb_<map_id>
    */
   QString _getRenderDBName(long mapId);
+
+  static QString _escapeTags(const Tags& tags);
 };
 
 }

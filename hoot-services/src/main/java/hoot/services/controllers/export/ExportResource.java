@@ -62,8 +62,10 @@ import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.common.ZIPDirectoryContentsCommand;
 import hoot.services.command.common.ZIPFileCommand;
+import hoot.services.controllers.osm.map.MapResource;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
+import hoot.services.utils.DbUtils;
 import hoot.services.utils.XmlDocumentBuilder;
 
 
@@ -191,6 +193,12 @@ public class ExportResource {
 
         JSONObject json = new JSONObject();
         json.put("jobid", jobId);
+
+        //Update last accessed timestamp for db datasets on export
+        if (params.getInputType().equalsIgnoreCase("db")) {
+            Long mapid = DbUtils.getMapIdByName(params.getInput());
+            MapResource.updateLastAccessed(mapid);
+        }
 
         return Response.ok(json.toJSONString()).build();
     }

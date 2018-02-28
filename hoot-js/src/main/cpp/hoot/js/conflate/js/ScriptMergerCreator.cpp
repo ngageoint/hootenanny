@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ScriptMergerCreator.h"
 
@@ -66,10 +66,10 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<Merger*>
     LOG_VART(m->toString());
     const ScriptMatch* sm = dynamic_cast<const ScriptMatch*>(m);
     // check to make sure all the input matches are script matches.
-    LOG_VART(sm == 0);
     if (sm == 0)
     {
       // return an empty result
+      LOG_TRACE("Match invalid; skipping merge: " << m->toString());
       return false;
     }
     // add all the element to element pairs to a set
@@ -77,10 +77,11 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<Merger*>
     {
       script = sm->getScript();
 
-      HandleScope handleScope;
-      Context::Scope context_scope(script->getContext());
+      Isolate* current = v8::Isolate::GetCurrent();
+      HandleScope handleScope(current);
+      Context::Scope context_scope(script->getContext(current));
 
-      plugin = sm->getPlugin();
+      plugin.Reset(current, sm->getPlugin());
       set< pair<ElementId, ElementId> > s = sm->getMatchPairs();
       eids.insert(s.begin(), s.end());
       if (matchType.contains(sm->getMatchName()) == false)

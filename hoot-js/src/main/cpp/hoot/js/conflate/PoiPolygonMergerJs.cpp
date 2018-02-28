@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "PoiPolygonMergerJs.h"
@@ -52,24 +52,25 @@ PoiPolygonMergerJs::~PoiPolygonMergerJs()
 {
 }
 
-void PoiPolygonMergerJs::Init(v8::Handle<v8::Object> exports)
+void PoiPolygonMergerJs::Init(Handle<Object> exports)
 {
-  exports->Set(
-    v8::String::NewSymbol("poiPolyMerge"),
-    v8::FunctionTemplate::New(jsPoiPolyMerge)->GetFunction());
+  Isolate* current = exports->GetIsolate();
+  HandleScope scope(current);
+  exports->Set(String::NewFromUtf8(current, "poiPolyMerge"),
+               FunctionTemplate::New(current, jsPoiPolyMerge)->GetFunction());
 }
 
-v8::Handle<v8::Value> PoiPolygonMergerJs::jsPoiPolyMerge(const v8::Arguments& args)
+void PoiPolygonMergerJs::jsPoiPolyMerge(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
   try
   {
     if (args.Length() != 1)
     {
-      return
-        v8::ThrowException(
-          HootExceptionJs::create(
-            IllegalArgumentException("Expected one argument for 'poiPolyMerge'.")));
+      args.GetReturnValue().Set(current->ThrowException(
+            HootExceptionJs::create(IllegalArgumentException("Expected one argument for 'poiPolyMerge'."))));
+      return;
     }
 
     OsmMapJs* mapJs = node::ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
@@ -85,12 +86,11 @@ v8::Handle<v8::Value> PoiPolygonMergerJs::jsPoiPolyMerge(const v8::Arguments& ar
     polyElement->setStatus(Status(Status::Conflated));
     polyElement->getTags()[MetadataTags::HootStatus()] = "3";
 
-    v8::Handle<v8::Object> returnMap = OsmMapJs::create(map);
-    return scope.Close(returnMap);
+    args.GetReturnValue().Set(OsmMapJs::create(map));
   }
   catch (const HootException& e)
   {
-    return v8::ThrowException(HootExceptionJs::create(e));
+    args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(e)));
   }
 }
 

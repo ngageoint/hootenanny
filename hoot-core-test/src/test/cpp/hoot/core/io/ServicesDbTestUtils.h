@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SERVICESDBTESTUTILS_H
 #define SERVICESDBTESTUTILS_H
@@ -56,7 +56,7 @@ public:
   /**
    * Retrieves a URL used to modify services database data
    */
-  static QUrl getDbModifyUrl();
+  static QUrl getDbModifyUrl(const QString& mapName = "testMap");
 
   /**
    * Retrieves a URL used to read services database data
@@ -88,10 +88,9 @@ public:
 
   static boost::shared_ptr<OsmMap> createTestMap1();
 
-private:
+  static OsmMapPtr createServiceTestMap();
 
-  static Settings _readDbConfig();
-  static void _readDbConfig(Settings& settings, QString config_path);
+private:
 
   static boost::shared_ptr<Node> _createNode(double x, double y, OsmMapPtr map);
 };

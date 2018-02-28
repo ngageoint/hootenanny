@@ -82,7 +82,7 @@ public:
    */
   static FeatureCalcType getFeatureCalcType(BaseFeatureType t);
 
-  static ElementCriterion* getElementCriterion(BaseFeatureType t, ConstOsmMapPtr map);
+  static boost::shared_ptr<ElementCriterion> getElementCriterion(BaseFeatureType t, ConstOsmMapPtr map);
 
   class Description
   {
@@ -156,6 +156,9 @@ protected:
   QString _description;
 
 };
+
+typedef boost::shared_ptr<MatchCreator> MatchCreatorPtr;
+typedef boost::shared_ptr<const MatchCreator> ConstMatchCreatorPtr;
 
 }
 

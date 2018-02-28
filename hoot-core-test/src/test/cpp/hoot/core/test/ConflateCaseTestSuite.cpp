@@ -40,8 +40,9 @@
 namespace hoot
 {
 
-ConflateCaseTestSuite::ConflateCaseTestSuite(QString dir) :
-AbstractTestSuite(dir)
+ConflateCaseTestSuite::ConflateCaseTestSuite(QString dir, bool hideDisableTests)
+  : AbstractTestSuite(dir),
+    _hideDisableTests(hideDisableTests)
 {
   QStringList confs;
   loadDir(dir, confs);
@@ -66,13 +67,13 @@ void ConflateCaseTestSuite::loadDir(QString dir, QStringList confs)
   QStringList ignoreList;
 
 # ifndef HOOT_HAVE_RND
-    ignoreList << "hoot-rnd";
+  ignoreList << "hoot-rnd";
 # endif
 # ifndef HOOT_HAVE_SERVICES
-    ignoreList << "hoot-services";
+  ignoreList << "hoot-services";
 # endif
 # ifndef HOOT_HAVE_NODEJS
-    ignoreList << "hoot-js";
+  ignoreList << "hoot-js";
 # endif
 
   QStringList dirs = d.entryList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name);
@@ -92,7 +93,8 @@ void ConflateCaseTestSuite::loadDir(QString dir, QStringList confs)
 
     if (ignore)
     {
-      LOG_WARN("Disabling: " + path);
+      if (!_hideDisableTests)
+        LOG_WARN("Disabling: " + path);
     }
     else
     {

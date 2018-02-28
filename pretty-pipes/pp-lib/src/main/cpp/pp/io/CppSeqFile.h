@@ -204,8 +204,8 @@ bool CppSeqFile::Reader::nextFixed(KeyClass& key, ValueClass& value)
     {
       throw Exception("Value data size does not match value class size.");
     }
-    _dis.read((char*)&key, sizeof(key));
-    _dis.read((char*)&value, sizeof(value));
+    _dis.read(key);
+    _dis.read(value);
 
     return true;
   }

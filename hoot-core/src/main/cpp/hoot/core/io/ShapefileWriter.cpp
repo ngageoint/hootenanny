@@ -344,7 +344,7 @@ void ShapefileWriter::writePoints(ConstOsmMapPtr map, const QString& path)
 
     if (node->getTags().getNonDebugCount() > 0)
     {
-      OGRFeature* poFeature = OGRFeature::CreateFeature( poLayer->GetLayerDefn() );
+      OGRFeature* poFeature = OGRFeature::CreateFeature(poLayer->GetLayerDefn());
       // set all the column values.
       for (int i = 0; i < columns.size(); i++)
       {
@@ -362,9 +362,9 @@ void ShapefileWriter::writePoints(ConstOsmMapPtr map, const QString& path)
       }
 
       // convert the geometry.
-      OGRGeometry* geom = new OGRPoint(node->getX(), node->getY());
+      boost::shared_ptr<OGRGeometry> geom(new OGRPoint(node->getX(), node->getY()));
 
-      if (poFeature->SetGeometryDirectly(geom) != OGRERR_NONE)
+      if (poFeature->SetGeometry(geom.get()) != OGRERR_NONE)
       {
         throw HootException(QString("Error setting geometry"));
       }

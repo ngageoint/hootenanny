@@ -29,6 +29,8 @@
 
 // hoot
 #include <hoot/core/io/OsmJsonWriter.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Configurable.h>
 
 // Boost
 #include <boost/shared_ptr.hpp>
@@ -45,12 +47,12 @@ namespace hoot
  *
  *
  */
-class OsmGeoJsonWriter : public OsmJsonWriter
+class OsmGeoJsonWriter : public OsmJsonWriter, public Configurable
 {
 public:
   static std::string className() { return "hoot::OsmGeoJsonWriter"; }
 
-  OsmGeoJsonWriter(int precision = 16);
+  OsmGeoJsonWriter(int precision = ConfigOptions().getWriterPrecision());
 
   /**
    * @brief write Write the OsmMap out to a file in GeoJSON format, writer must be "open"
@@ -64,6 +66,12 @@ public:
    * @return
    */
   virtual bool isSupported(QString url) { return url.toLower().endsWith(".geojson"); }
+
+  /**
+   * @brief setConfiguration allows configuration settings to override the defaults
+   * @param conf Configuration settings object
+   */
+  virtual void setConfiguration(const Settings& conf);
 
 protected:
 

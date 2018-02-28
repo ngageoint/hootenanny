@@ -39,6 +39,7 @@
 #include <hoot/core/util/Units.h>
 #include <hoot/core/util/Float.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 // Qt
 #include <QString>
@@ -170,11 +171,12 @@ OGREnvelope* GeometryUtils::toOGREnvelope(const geos::geom::Envelope& e)
 
 QString GeometryUtils::toString(const Envelope& e)
 {
+  const int precision = ConfigOptions().getWriterPrecision();
   return QString("%1,%2,%3,%4").
-      arg(e.getMinX(), 0, 'g', 15).
-      arg(e.getMaxX(), 0, 'g', 15).
-      arg(e.getMinY(), 0, 'g', 15).
-      arg(e.getMaxY(), 0, 'g', 15);
+      arg(e.getMinX(), 0, 'g', precision).
+      arg(e.getMaxX(), 0, 'g', precision).
+      arg(e.getMinY(), 0, 'g', precision).
+      arg(e.getMaxY(), 0, 'g', precision);
 }
 
 Geometry* GeometryUtils::validateGeometry(const Geometry* g)
@@ -193,11 +195,12 @@ Geometry* GeometryUtils::validateGeometry(const Geometry* g)
   case GEOS_POLYGON:
     return validatePolygon(dynamic_cast<const Polygon*>(g));
   default:
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    const unsigned int logWarnMessageLimit = ConfigOptions().getLogWarnMessageLimit();
+    if (logWarnCount < logWarnMessageLimit)
     {
       LOG_WARN("Got an unrecognized geometry. " << g->getGeometryTypeId());
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == logWarnMessageLimit)
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }
@@ -232,7 +235,7 @@ Geometry* GeometryUtils::validateGeometryCollection(
 Geometry* GeometryUtils::validateLineString(const LineString* ls)
 {
   // See JTS Secrets for details: http://2007.foss4g.org/presentations/view.php?abstract_id=115
-  auto_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(ls->getCoordinateN(0)));
+  boost::shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(ls->getCoordinateN(0)));
   return ls->Union(p.get());
 }
 
@@ -248,8 +251,8 @@ Geometry* GeometryUtils::validatePolygon(const Polygon* p)
   // if the input polygon isn't valid.
   if (p->isValid() == false)
   {
-    auto_ptr<Geometry> tmp;
-    // buffer it by zero to attempt to fix topology errors and store the result in an auto_ptr
+    boost::shared_ptr<Geometry> tmp;
+    // buffer it by zero to attempt to fix topology errors and store the result in an boost::shared_ptr
     // that will self delete.
     tmp.reset(p->buffer(0));
     // run the new geometry through the whole routine again just in case the type changed.
@@ -262,7 +265,7 @@ Geometry* GeometryUtils::validatePolygon(const Polygon* p)
   else
   {
     const LineString* oldShell = p->getExteriorRing();
-    auto_ptr<LinearRing> oldLinearRing(GeometryFactory::getDefaultInstance()->createLinearRing(
+    boost::shared_ptr<LinearRing> oldLinearRing(GeometryFactory::getDefaultInstance()->createLinearRing(
       *oldShell->getCoordinates()));
     LinearRing* shell = validateLinearRing(oldLinearRing.get());
     std::vector<Geometry*>* holes = new vector<Geometry*>();

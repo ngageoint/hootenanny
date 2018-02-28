@@ -1,0 +1,128 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>hoot</groupId>
+  <name>HootSwig</name>
+  <artifactId>HootSwig</artifactId>
+	<version>0.0.1</version>
+	<packaging>jar</packaging>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+	<build>
+    <directory>target</directory>
+    <sourceDirectory>src/main/java</sourceDirectory>
+    <testSourceDirectory>src/test/java</testSourceDirectory>
+    <plugins>
+      <!-- Use java 1.8 -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.5.1</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+      <plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.1</version>
+				<executions>
+					<execution>
+
+						<id>BuildMakefile</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>qmake-qt4</executable>
+						</configuration>
+					</execution>
+					<execution>
+
+						<id>BuildLib</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>make</executable>
+							<arguments>
+								<argument>-f</argument>
+								<argument>Makefile.qmake</argument>
+							</arguments>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>2.6</version>
+        <executions>
+          <execution>
+            <id>copy-resources</id>
+            <!-- here the phase you need -->
+            <phase>package</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${basedir}/../lib/</outputDirectory>
+              <resources>          
+                <resource>
+                  <directory>${basedir}/target/</directory>
+                  <includes>
+                    <include>*.jar</include>
+                  </includes>
+                </resource>
+              </resources>              
+            </configuration>            
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>build-helper-maven-plugin</artifactId>
+          <version>3.0.0</version>
+          <executions>
+              <execution>
+                  <phase>generate-sources</phase>
+                  <goals>
+                      <goal>add-source</goal>
+                  </goals>
+                  <configuration>
+                      <sources>
+                          <!-- java-swig contains generated java code. -->
+                          <source>src/main/java-swig</source>
+                      </sources>
+                  </configuration>
+              </execution>
+          </executions>
+      </plugin>
+		</plugins>
+	</build>
+
+
+
+	<dependencies>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.hadoop</groupId>
+			<artifactId>hadoop-core</artifactId>
+			<version>0.20.2</version>
+      <!-- version>0.20.2-cdh3u4</version -->
+		</dependency>
+
+
+	</dependencies>
+
+</project>

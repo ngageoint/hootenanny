@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OsmJsonReader.h"
@@ -62,20 +62,20 @@ unsigned int OsmJsonReader::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapReader, OsmJsonReader)
 
-namespace // anonymous
-{
-  // Used for debug
-  void writeString(QString fileName, QString str)
-  {
-    QFile file(fileName);
-    if (file.open(QIODevice::WriteOnly | QIODevice::Truncate))
-    {
-        QTextStream stream(&file);
-        stream << str;
-        file.close();
-    }
-  }
-}
+//namespace // anonymous
+//{
+//  // Used for debug
+//  void writeString(QString fileName, QString str)
+//  {
+//    QFile file(fileName);
+//    if (file.open(QIODevice::WriteOnly | QIODevice::Truncate))
+//    {
+//        QTextStream stream(&file);
+//        stream << str;
+//        file.close();
+//    }
+//  }
+//}
 
 // Default constructor
 OsmJsonReader::OsmJsonReader():
@@ -303,11 +303,11 @@ void OsmJsonReader::_parseOverpassJson()
     }
     else
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN("Unknown JSON elment type (" << typeStr << ") when parsing json osm");
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }
@@ -415,18 +415,20 @@ void OsmJsonReader::_addTags(const boost::property_tree::ptree &item, hoot::Elem
     pt::ptree tags = item.get_child("tags");
     for (pt::ptree::const_iterator tagIt = tags.begin(); tagIt != tags.end(); ++tagIt)
     {
-      QString k = QString::fromStdString(tagIt->first);
-      QString v = QString::fromStdString(tagIt->second.get_value<string>());
+      const QString key = QString::fromStdString(tagIt->first).trimmed();
+      //LOG_VART(key);
+      const QString value = QString::fromStdString(tagIt->second.get_value<string>()).trimmed();
+      //LOG_VART(value);
 
       // If we are "error:circular", need to set it on the element object,
       // rather than add it as a tag
-      if (k == MetadataTags::ErrorCircular())
+      if (key == MetadataTags::ErrorCircular())
       {
-        pElement->setCircularError(Meters(v.toInt()));
+        pElement->setCircularError(Meters(value.toInt()));
       }
-      else
+      else if (!value.isEmpty())
       {
-        pElement->setTag(k, v);
+        pElement->setTag(key, value);
       }
     }
   }
@@ -438,7 +440,7 @@ void OsmJsonReader::scrubQuotes(QString &jsonStr)
   // test strings into c++. Single quotes within string literals
   // should be escaped as \'
   // Detect if they are using single quotes or doubles
-  if (jsonStr.indexOf("\"node\"", Qt::CaseInsensitive) > -1)
+  if (jsonStr.indexOf("\"features\"", Qt::CaseInsensitive) > -1)
     return; // No need to scrub
   else
   {
@@ -463,5 +465,5 @@ void OsmJsonReader::scrubBigInts(QString &jsonStr)
   jsonStr.replace(rx2, "\\1\"\\2\"\\3");
 }
 
-} // namespace hoot
+}
 

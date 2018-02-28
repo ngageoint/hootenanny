@@ -51,7 +51,7 @@ public:
    */
   virtual geos::geom::Envelope calculateEnvelope() const;
 
-  virtual void setConfiguration(const Settings &conf);
+  virtual void setConfiguration(const Settings& conf);
 
   virtual void open(QString urlStr);
 
@@ -64,6 +64,9 @@ protected:
   virtual boost::shared_ptr<ApiDb> _getDatabase() const { return _database; }
 
 private:
+
+  //for white box testing
+  friend class ServiceHootApiDbBulkInserterTest;
 
   boost::shared_ptr<HootApiDb> _database;
 };

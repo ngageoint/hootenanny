@@ -735,6 +735,7 @@ mgcp = {
             // Rules format:  ["test expression","output result"];
             // Note: t = tags, a = attrs and attrs can only be on the RHS
             var rulesList = [
+            ["t.barrier == 'dragons_teeth' && !(t.tank_trap)","t.barrier = 'tank_trap'; t.tank_trap = 'dragons_teeth'"],
             ["t['bridge:movable'] && t['bridge:movable'] !== 'no' && t['bridge:movable'] !== 'unknown'","t.bridge = 'movable'"],
             ["t['building:religious'] == 'other'","t.amenity = 'religion'"],
             ["t['cable:type'] && !(t.cable)","t.cable = 'yes'"],
@@ -743,6 +744,7 @@ mgcp = {
             ["(t.landuse == 'built_up_area' || t.place == 'settlement') && t.building","t['settlement:type'] = t.building; delete t.building"],
             ["t.leisure == 'stadium'","t.building = 'yes'"],
             ["t['monitoring:weather'] == 'yes'","t.man_made = 'monitoring_station'"],
+            ["t.natural =='spring' && t['spring:type'] == 'spring'","delete t['spring:type']"],
             ["t.public_transport == 'station'","t.bus = 'yes'"],
             ["t.pylon =='yes' && t['cable:type'] == 'power'"," t.power = 'tower'"],
             ["t['social_facility:for'] == 'senior'","t.amenity = 'social_facility'; t.social_facility = 'group_home'"],
@@ -881,6 +883,10 @@ mgcp = {
                 if (geometryType == 'Line' && !tags.highway) tags.highway = 'road';
                 break;
 
+            case 'GB485': // Approach Lighting System
+                tags.navigationaid = 'als';
+                break;
+
         } // End switch FCODE
 
         // Sort out TRS (Transport Type)
@@ -1007,6 +1013,8 @@ mgcp = {
             // See ToOsmPostProcessing for more details about rulesList.
             var rulesList = [
             ["t.amenity == 'marketplace'","t.facility = 'yes'"],
+            ["t.aeroway == 'navigationaid' && t.navigationaid","delete t.navigationaid"],
+            ["t.barrier == 'tank_trap' && t.tank_trap == 'dragons_teeth'","t.barrier = 'dragons_teeth'; delete t.tank_trap"],
             ["t.construction && t.railway","t.railway = t.construction; t.condition = 'construction'; delete t.construction"],
             ["t.construction && t.highway","t.highway = t.construction; t.condition = 'construction'; delete t.construction"],
             ["t.content && !(t.product)","t.product = t.content; delete t.content"],
@@ -1015,9 +1023,10 @@ mgcp = {
             ["t.man_made == 'water_tower'","a.F_CODE = 'AL241'"],
             ["t.natural == 'sinkhole'","a.F_CODE = 'BH145'; t['water:sink:type'] = 'disappearing'; delete t.natural"],
             ["t.natural == 'scrub'","t.natural = 'grassland'; t['grassland:type'] = 'grassland_with_trees'"],
+            ["t.natural == 'spring' && !(t['spring:type'])","t['spring:type'] = 'spring'"],
             ["t.natural == 'wood'","t.landuse = 'forest'"],
             ["t.power == 'generator'","a.F_CODE = 'AL015'; t.use = 'power_generation'"],
-            ["t.power == 'line'","t['cable:type'] = 'power'; t.cable = 'yes'"],
+            //["t.power == 'line'","t['cable:type'] = 'power'; t.cable = 'yes'"],
             ["t.power == 'tower'","t['cable:type'] = 'power'; t.pylon = 'yes'; delete t.power"],
             ["t.rapids == 'yes'","t.waterway = 'rapids'"],
             ["t.resource","t.product = t.resource; delete t.resource"],
@@ -1228,6 +1237,26 @@ mgcp = {
                 delete tags.place;
                 break;
 
+            case 'island':
+            case 'islet':
+                // If we have a coastline around an Island, decide if we are going make an Island
+                // or a Coastline
+                if (tags.natural == 'coastline')
+                {
+                    if (geometryType == 'Line')
+                    {
+                        attrs.F_CODE = 'BA010'; // Land/Water Boundary - Line
+                        delete tags.place;
+                    }
+                    else
+                    {
+                        // NOTE: If we have a Point, this will goto the O2S layer
+                        attrs.F_CODE = 'BA030'; // Island - Polygon
+                        delete tags.natural;
+                    }
+                }
+                break;
+
         } // End switch
 
         // Capitals are important
@@ -1285,6 +1314,13 @@ mgcp = {
 
         // The FCODE for Buildings changed...
         if (attrs.F_CODE == 'AL013') attrs.F_CODE = 'AL015';
+
+        // Tag changed
+        if (tags.vertical_obstruction_identifier)
+        {
+            tags['aeroway:obstruction'] = tags.vertical_obstruction_identifier;
+            delete tags.vertical_obstruction_identifier;
+        }
 
     }, // End applyToMgcpPreProcessing
 
@@ -1586,6 +1622,28 @@ mgcp = {
 
         if (attrs.SRT in srtFix) attrs.SRT = srtFix[attrs.SRT];
 
+       // Fix SDV
+        // NOTE: We are going to override the normal source:datetime with what we get from JOSM
+        if (tags['source:imagery:datetime'])
+        {
+            attrs.SDV = tags['source:imagery:datetime'];
+            //delete notUsedTags['source:imagery:datetime'];
+        }
+
+        // Now try using tags from Taginfo
+        if (! attrs.SDV)
+        {
+            if (tags['source:date']) 
+            {
+                attrs.SDV = tags['source:date'];
+                //delete notUsedTags['source:date'];
+            }
+            else if (tags['source:geometry:date'])
+            {
+                attrs.SDV = tags['source:geometry:date'];
+                //delete notUsedTags['source:geometry:date'];
+            }
+        }
         // Chop the milliseconds off the "source:datetime"
         if (attrs.SDV)
         {
@@ -1608,6 +1666,9 @@ mgcp = {
             mgcp.configIn = {};
             mgcp.configIn.OgrDebugAddfcode = config.getOgrDebugAddfcode();
             mgcp.configIn.OgrDebugDumptags = config.getOgrDebugDumptags();
+
+            // Get any changes
+            mgcp.toChange = hoot.Settings.get("translation.override");
         }
 
         // Debug:
@@ -1617,6 +1678,26 @@ mgcp = {
             var kList = Object.keys(attrs).sort()
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
         }
+
+        // See if we have an o2s_X layer and try to unpack it.
+        if (layerName.indexOf('o2s_') > -1)
+        {
+            tags = translate.parseO2S(attrs);
+
+            // Add some metadata
+            if (! tags.uuid) tags.uuid = createUuid();
+            if (! tags.source) tags.source = 'mgcp:' + layerName.toLowerCase();
+
+            // Debug:
+            if (mgcp.configIn.OgrDebugDumptags == 'true')
+            {
+                var kList = Object.keys(tags).sort()
+                for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
+                print('');
+            }
+
+            return tags;
+        } // End layername = o2s_X
 
         // Set up the fcode translation rules
         if (mgcp.fcodeLookup == undefined)
@@ -1706,6 +1787,9 @@ mgcp = {
             print('');
         }
 
+        // Override tag values if appropriate
+        translate.overrideValues(tags,mgcp.toChange);
+
         return tags;
     }, // End of ToOsm
 
@@ -1728,6 +1812,10 @@ mgcp = {
             mgcp.configOut.OgrNoteExtra = config.getOgrNoteExtra();
             mgcp.configOut.OgrSplitO2s = config.getOgrSplitO2s();
             mgcp.configOut.OgrThrowError = config.getOgrThrowError();
+
+            // Get any changes to OSM tags
+            // NOTE: the rest of the config variables will change to this style of assignment soon
+            mgcp.toChange = hoot.Settings.get("translation.override");
         }
 
         // Check if we have a schema. This is a quick way to workout if various lookup tables have been built
@@ -1774,6 +1862,9 @@ mgcp = {
             // translate.dumpOne2OneLookup(mgcp.lookup);
         }
 
+        // Override values if appropriate
+        translate.overrideValues(tags,mgcp.toChange);
+
         // pre processing
         mgcp.applyToMgcpPreProcessing(tags,attrs, geometryType);
 
@@ -1791,7 +1882,7 @@ mgcp = {
         translate.applySimpleTxtBiased(attrs, notUsedTags,  mgcp.rules.txtBiased,'backward');
 
         // one 2 one
-        translate.applyOne2One(notUsedTags, attrs, mgcp.lookup, mgcp.fcodeLookup, mgcp.ignoreList);
+        translate.applyOne2One(notUsedTags, attrs, mgcp.lookup, mgcp.fcodeLookup);
 
         // post processing
         // mgcp.applyToMgcpPostProcessing(attrs, tableName, geometryType);
@@ -1908,11 +1999,12 @@ mgcp = {
 
                     returnData[i]['tableName'] = mgcp.layerNameLookup[gFcode.toUpperCase()];
                 }
-//                 else
-//                 {
-//                     // Debug
-//                     print('## Skipping: ' + gFcode);
-//                 }
+                else
+                {
+                    // Debug
+                    // print('## Skipping: ' + gFcode);
+                    returnData.splice(i,1);
+                }
 
             } // End returnData loop
 

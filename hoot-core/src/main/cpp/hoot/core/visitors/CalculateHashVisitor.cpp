@@ -38,7 +38,12 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, CalculateHashVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, CalculateHashVisitor)
+
+CalculateHashVisitor::CalculateHashVisitor()
+{
+
+}
 
 CalculateHashVisitor::~CalculateHashVisitor()
 {
@@ -67,9 +72,12 @@ QString CalculateHashVisitor::toJsonString(const ConstElementPtr& e)
     }
   }
 
+  const int circularErrorComparisonSensitivity =
+    ConfigOptions().getNodeComparisonCircularErrorSensitivity();
   if (n->getRawCircularError() >= 0)
   {
-    infoTags["error:circular"] = QString::number(n->getRawCircularError(), 'g', 6);
+    infoTags["error:circular"] =
+      QString::number(n->getRawCircularError(), 'g', circularErrorComparisonSensitivity);
   }
 
   bool first = true;
@@ -83,10 +91,12 @@ QString CalculateHashVisitor::toJsonString(const ConstElementPtr& e)
     first = false;
   }
 
+  const int coordinateComparisonSensitivity =
+    ConfigOptions().getNodeComparisonCoordinateSensitivity();
   result += "}},\"geometry\":{\"type\":\"Point\",\"coordinates\":[";
-  result += QString::number(n->getX(), 'f', 7);
+  result += QString::number(n->getX(), 'f', coordinateComparisonSensitivity);
   result += ",";
-  result += QString::number(n->getY(), 'f', 7);
+  result += QString::number(n->getY(), 'f', coordinateComparisonSensitivity);
   result += "]}}";
 
   return result;
@@ -101,15 +111,17 @@ QByteArray CalculateHashVisitor::toHash(const ConstElementPtr& e)
   return hash.result();
 }
 
-void CalculateHashVisitor::visit(const ConstElementPtr& e)
+QString CalculateHashVisitor::toHashString(const ConstElementPtr& e)
+{
+  return "sha1sum:" + QString::fromUtf8(toHash(e).toHex());
+}
+
+void CalculateHashVisitor::visit(const ElementPtr& e)
 {
   // don't calculate hashes on review relations.
-  if (ReviewMarker::isReviewUid(_map->shared_from_this(), e->getElementId()) == false)
+  if (ReviewMarker::isReview(e) == false)
   {
-    QByteArray hash = toHash(e);
-
-    ElementPtr we = _map->getElement(e->getElementId());
-    we->getTags()[MetadataTags::HootHash()] = "sha1sum:" + QString::fromUtf8(hash.toHex());
+    e->getTags()[MetadataTags::HootHash()] = toHashString(e);
   }
 }
 

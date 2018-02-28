@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -86,6 +86,10 @@ class OsmPbfReaderTest : public CppUnit::TestFixture
 
 public:
 
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/io");
+  }
 
   void runOffsetsTest()
   {
@@ -296,14 +300,12 @@ public:
     OsmMapPtr map(new OsmMap());
     uut.parse(&input, map);
 
-    QDir().mkpath("test-output/io/");
-
     OsmXmlWriter writer;
     writer.setIncludeHootInfo(false);
-    writer.write(map, "test-output/io/OsmPbfReaderTest.osm");
+    writer.write(map, "test-output/io/OsmPbfReaderTest_1.osm");
 
     HOOT_FILE_EQUALS("test-files/io/OsmPbfReaderTest.osm",
-                     "test-output/io/OsmPbfReaderTest.osm");
+                     "test-output/io/OsmPbfReaderTest_1.osm");
   }
 
   void runToyRelationTest()
@@ -406,13 +408,12 @@ public:
     reader.read(map);
     reader.close();
 
-    QDir().mkpath("test-output/io/");
     OsmXmlWriter writer;
     writer.setIncludeHootInfo(false);
-    writer.write(map, "test-output/io/OsmPbfReaderTest.osm");
+    writer.write(map, "test-output/io/OsmPbfReaderTest_2.osm");
 
     HOOT_FILE_EQUALS("test-files/io/OsmPbfReaderTest.osm",
-                     "test-output/io/OsmPbfReaderTest.osm");
+                     "test-output/io/OsmPbfReaderTest_2.osm");
   }
 
   void runFactoryReadMapTest()
@@ -422,13 +423,12 @@ public:
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm.pbf", false, Status::Unknown1);
 
-    QDir().mkpath("test-output/io/");
     OsmXmlWriter writer;
     writer.setIncludeHootInfo(false);
-    writer.write(map, "test-output/io/OsmPbfReaderTest.osm");
+    writer.write(map, "test-output/io/OsmPbfReaderTest_3.osm");
 
     HOOT_FILE_EQUALS("test-files/io/OsmPbfReaderTest.osm",
-                     "test-output/io/OsmPbfReaderTest.osm");
+                     "test-output/io/OsmPbfReaderTest_3.osm");
   }
 
   void runReadMapPartialTest()
@@ -441,7 +441,6 @@ public:
     reader.open("test-files/ToyTestA.osm.pbf");
     reader.initializePartial();
 
-    QDir().mkpath("test-output/io/");
     OsmXmlWriter writer;
     writer.setIncludeHootInfo(false);
 
@@ -485,7 +484,6 @@ public:
     reader.open("test-files/ToyTestCombined.pbf");
     reader.initializePartial();
 
-    QDir().mkpath("test-output/io/");
     OsmXmlWriter writer;
     writer.setIncludeHootInfo(false);
 

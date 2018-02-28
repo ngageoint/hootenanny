@@ -44,7 +44,7 @@ GetExitCodeText(){
             echo "    Error: Too many arguments"
             ;;
         "8")
-            echo "    Warning: There are files that need their copyright headers updated"
+            echo "    Warning: There are files that need their copyright headers updated. (Please run UpdateAllCopyrightHeaders.sh --update)"
             ;;
         "9")
             echo "    Error: Unrecognized updateMode"
@@ -72,7 +72,7 @@ echo "logFile: " $logFile
 #exit 0
 
 # Updates all the copyright headers in all source directories.
-for i in $HOOT_HOME/hoot-core/ $HOOT_HOME/hoot-cmd/ $HOOT_HOME/hoot-test $HOOT_HOME/hoot-js $HOOT_HOME/hoot-rnd $HOOT_HOME/hoot-services $HOOT_HOME/tgs $HOOT_HOME/pretty-pipes $HOOT_HOME/tbs
+for i in $HOOT_HOME/hoot-cmd $HOOT_HOME/hoot-core $HOOT_HOME/hoot-core-test $HOOT_HOME/hoot-js $HOOT_HOME/hoot-rnd $HOOT_HOME/hoot-services $HOOT_HOME/hoot-test $HOOT_HOME/pretty-pipes $HOOT_HOME/tbs $HOOT_HOME/tgs
 do
     #echo $i
     cd $i

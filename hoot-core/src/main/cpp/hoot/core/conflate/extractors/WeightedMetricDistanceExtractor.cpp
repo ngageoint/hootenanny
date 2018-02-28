@@ -46,16 +46,24 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, WeightedMetricDistanceExtractor)
 
-WeightedMetricDistanceExtractor::WeightedMetricDistanceExtractor(ValueAggregator* wayAgg,
-  ValueAggregator* pointAgg, Meters searchRadius) :
+WeightedMetricDistanceExtractor::WeightedMetricDistanceExtractor(ValueAggregatorPtr wayAgg,
+  ValueAggregatorPtr pointAgg, Meters searchRadius) :
   WayFeatureExtractor(wayAgg),
   _pointAgg(pointAgg),
   _searchRadius(searchRadius)
 {
-  if (_pointAgg.get() == 0)
+  if (searchRadius == -1)
   {
-    setPointAggregator(ConfigOptions().getWeightedMetricDistanceExtractorPointAggregator());
+    setSearchRadius(ConfigOptions().getWeightedMetricDistanceExtractorSearchRadius());
   }
+}
+
+WeightedMetricDistanceExtractor::WeightedMetricDistanceExtractor(Meters searchRadius):
+  WayFeatureExtractor(),
+  _pointAgg(),
+  _searchRadius(searchRadius)
+{
+  setPointAggregator(ConfigOptions().getWeightedMetricDistanceExtractorPointAggregator());
   if (searchRadius == -1)
   {
     setSearchRadius(ConfigOptions().getWeightedMetricDistanceExtractorSearchRadius());
@@ -85,7 +93,7 @@ double WeightedMetricDistanceExtractor::_extract(const OsmMap& map, const ConstW
   distances.reserve(v.size());
   for (size_t i = 0; i < v.size(); i++)
   {
-    auto_ptr<Point> point(GeometryFactory::getDefaultInstance()->createPoint(v[i]));
+    boost::shared_ptr<Point> point(GeometryFactory::getDefaultInstance()->createPoint(v[i]));
     double d = ls2->distance(point.get()) / sigma;
     distances.push_back(d);
   }

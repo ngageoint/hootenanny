@@ -73,9 +73,13 @@ public:
   double getNameScoreThreshold() { return _nameScoreThreshold; }
   void setNameScoreThreshold(double threshold) { _nameScoreThreshold = threshold; }
 
+  double getLevDist() { return _levDist; }
+  void setLevDist(double dist) { _levDist = dist; }
+
 private:
 
   double _nameScoreThreshold;
+  double _levDist;
 
 };
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGMERGERFACTORYJS_H
 #define TAGMERGERFACTORYJS_H
@@ -42,7 +42,7 @@ private:
   TagMergerFactoryJs();
   ~TagMergerFactoryJs();
 
-  static v8::Handle<v8::Value> mergeTags(const v8::Arguments& args);
+  static void mergeTags(const v8::FunctionCallbackInfo<v8::Value>& args);
 
 };
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.conflation;
 
@@ -77,7 +77,7 @@ public class ConflateCommandTest {
         assertNotNull(conflateCommand.getWorkDir());
         assertNotNull(conflateCommand.getCommand());
 
-        String expectedCommand = "hoot conflate --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${STATS}";
+        String expectedCommand = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${STATS}";
         assertEquals(expectedCommand, conflateCommand.getCommand());
 
         assertTrue(conflateCommand.getSubstitutionMap().containsKey("DEBUG_LEVEL"));
@@ -85,7 +85,7 @@ public class ConflateCommandTest {
 
         assertTrue(conflateCommand.getSubstitutionMap().containsKey("HOOT_OPTIONS"));
         assertEquals("[-D, osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor, " +
-                              "-D, writer.include.conflate.score.tags=true, " +
+                              "-D, writer.include.conflate.score.tags=false, " +
                               "-D, hootapi.db.writer.overwrite.map=true, " +
                               "-D, hootapi.db.writer.create.user=true, " +
                               "-D, writer.text.status=true, " +

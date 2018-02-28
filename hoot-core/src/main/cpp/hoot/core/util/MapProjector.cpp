@@ -95,7 +95,8 @@ void ReprojectCoordinateFilter::project(Coordinate* c) const
   {
     QString err = QString("Error projecting point. Is the point outside of the projection's "
                           "bounds?");
-    if (MapProjector::logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    const unsigned int logWarnMessageLimit = ConfigOptions().getLogWarnMessageLimit();
+    if (MapProjector::logWarnCount < logWarnMessageLimit)
     {
       LOG_WARN(err);
       LOG_TRACE("Source Point, x:" << inx << " y: " << iny);
@@ -104,7 +105,7 @@ void ReprojectCoordinateFilter::project(Coordinate* c) const
       LOG_TRACE("Target SRS: " << MapProjector::toWkt(_transform->GetTargetCS()));
       MapProjector::logWarnCount++;
     }
-    else if (MapProjector::logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (MapProjector::logWarnCount == logWarnMessageLimit)
     {
       LOG_WARN(MapProjector::className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }
@@ -419,7 +420,7 @@ bool MapProjector::_evaluateProjection(const OGREnvelope& env,
   DisableCplErrors disableErrors;
   boost::shared_ptr<OGRSpatialReference> wgs84 = MapProjector::createWgs84Projection();
 
-  auto_ptr<OGRCoordinateTransformation> t(OGRCreateCoordinateTransformation(wgs84.get(),
+  boost::shared_ptr<OGRCoordinateTransformation> t(OGRCreateCoordinateTransformation(wgs84.get(),
                                                                             srs.get()));
   if (t.get() == 0)
   {
@@ -438,7 +439,7 @@ bool MapProjector::_evaluateProjection(const OGREnvelope& env,
   int stepsY = (height) / stepSize;
   double stepSizeX = (width) / (double)stepsX;
   double stepSizeY = (height) / (double)stepsY;
-  auto_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(env));
+  boost::shared_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(env));
 
   bool success = true;
 
@@ -572,11 +573,12 @@ void MapProjector::project(boost::shared_ptr<OsmMap> map, boost::shared_ptr<OGRS
     }
     catch(const IllegalArgumentException&)
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      const unsigned int logWarnMessageLimit = ConfigOptions().getLogWarnMessageLimit();
+      if (logWarnCount < logWarnMessageLimit)
       {
         LOG_WARN("Failure projecting node: " << n->toString());
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == logWarnMessageLimit)
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }

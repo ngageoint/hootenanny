@@ -1,22 +1,45 @@
 #!/usr/bin/env bash
 
-HOOT_HOME=~/hoot
-echo HOOT_HOME: $HOOT_HOME
-cd ~
-source ~/.bash_profile
+set -e
 
-# Keep VagrantBuild.sh happy
-#ln -s ~/.bash_profile ~/.profile
+###################################################
+# VERY IMPORTANT: Set the $HOOT_HOME environment  #
+# variable prior to running this script if ~/hoot #
+# isn't the correct location for HOOT_HOME        #
+###################################################
+if [ -z "$HOOT_HOME" ]; then
+    HOOT_HOME=~/hoot
+fi
+echo HOOT_HOME: $HOOT_HOME
+#################################################
+
+# Common set of file versions
+source $HOOT_HOME/VagrantProvisionVars.sh
 
 VMUSER=`id -u -n`
+echo USER: $VMUSER
+VMGROUP=`groups | grep -o $VMUSER`
+echo GROUP: $VMGROUP
+
+export LANG=en_US.UTF-8
+
+cd ~
+source ~/.bash_profile
 
 # add EPEL repo for extra packages
 echo "### Add epel repo ###" > CentOS_upgrade.txt
 sudo yum -y install epel-release >> CentOS_upgrade.txt 2>&1
 
-# add the Postgres repo
-echo "### Add Postgres repo ###" > CentOS_upgrade.txt
-sudo rpm -Uvh http://yum.postgresql.org/9.5/redhat/rhel-7-x86_64/pgdg-centos95-9.5-3.noarch.rpm >> CentOS_upgrade.txt 2>&1
+# add Hoot repo for our pre-built dependencies.
+echo "### Add Hoot repo ###" >> CentOS_upgrade.txt
+sudo $HOOT_HOME/scripts/hoot-repo/yum-configure.sh
+
+# check to see if postgres is already installed
+if ! rpm -qa | grep -q pgdg-centos95-9.5-3 ; then
+  # add the Postgres repo
+  echo "### Add Postgres repo ###" >> CentOS_upgrade.txt
+  sudo rpm -Uvh https://download.postgresql.org/pub/repos/yum/9.5/redhat/rhel-7-x86_64/pgdg-centos95-9.5-3.noarch.rpm  >> CentOS_upgrade.txt 2>&1
+fi
 
 echo "Updating OS..."
 echo "### Update ###" >> CentOS_upgrade.txt
@@ -24,103 +47,99 @@ sudo yum -q -y update >> CentOS_upgrade.txt 2>&1
 echo "### Upgrade ###" >> CentOS_upgrade.txt
 sudo yum -q -y upgrade >> CentOS_upgrade.txt 2>&1
 
-echo "### Setup NTP..."
-sudo yum -q -y install ntp
-sudo chkconfig ntpd on
-#TODO: Better way to do this?
-sudo systemctl stop ntpd
-sudo ntpd -gq
-sudo systemctl start ntpd
-
-
-# Install Java8
 # Make sure that we are in ~ before trying to wget & install stuff
 cd ~
-if  ! rpm -qa | grep jdk-8u111-linux; then
-    echo "### Installing Java8..."
-    if [ ! -f jdk-8u111-linux-x64.rpm ]; then
-      JDKURL=http://download.oracle.com/otn-pub/java/jdk/8u111-b14/jdk-8u111-linux-x64.rpm
-      wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" $JDKURL
-    fi
-    sudo yum -y install ./jdk-8u111-linux-x64.rpm
+
+if ! rpm -qa | grep -q ^yum-plugin-versionlock ; then
+    # Install the versionlock plugin version first.
+    sudo yum install -y yum-plugin-versionlock
+else
+    # Remove any NodeJS version locks to allow upgrading to $NODE_VERSION.
+    sudo yum versionlock delete nodejs nodejs-devel
 fi
 
-echo "### Installing the repo for an ancient version of NodeJS"
-curl --silent --location https://rpm.nodesource.com/setup | sudo bash -
+echo "### Installing NodeJS ${NODE_VERSION}"
+sudo yum install -y nodejs-$NODE_VERSION nodejs-devel-$NODE_VERSION
 
-echo "### Installing an ancient version of NodeJS"
-sudo yum install -y \
-  nodejs-0.10.46 \
-  nodejs-devel-0.10.46
+echo "### Locking version of NodeJS"
+sudo yum versionlock add nodejs-$NODE_VERSION nodejs-devel-$NODE_VERSION
 
 # install useful and needed packages for working with hootenanny
 echo "### Installing dependencies from repos..."
 sudo yum -y install \
-    automake \
+    asciidoc \
     autoconf \
+    automake \
     bc \
     boost-devel \
+    bzip2 \
     ccache \
+    cmake \
+    cppunit-devel \
+    dblatex \
+    doxygen \
     gcc \
     gcc-c++ \
-    cppunit-devel \
     gdb \
+    geos \
+    geos-devel \
     git \
     git-core \
-    geos-devel \
+    glpk \
+    glpk-devel \
+    gnuplot \
+    hoot-gdal \
+    hoot-gdal-devel \
+    hoot-gdal-python \
+    libicu-devel \
+    libpng-devel \
     libtool \
     m4 \
-    qt \
-    qt-common \
-    qt-devel \
-    qtwebkit \
-    qtwebkit-devel \
-    postgis2_95 \
+    maven \
+    mlocate \
+    opencv \
+    opencv-core \
+    opencv-devel \
+    opencv-python \
+    osmosis \
+    java-1.8.0-openjdk \
+    perl-XML-LibXML \
+    hoot-postgis23_95 \
     postgresql95 \
     postgresql95-contrib \
     postgresql95-devel \
     postgresql95-server \
     proj \
     proj-devel \
-    stxxl \
-    stxxl-devel \
+    protobuf \
+    protobuf-compiler \
+    protobuf-devel \
     python  \
     python-devel \
     python-matplotlib \
     python-pip  \
     python-setuptools \
-    opencv \
-    opencv-core \
-    opencv-devel \
-    opencv-python \
-    protobuf \
-    protobuf-compiler \
-    protobuf-devel \
-    libicu-devel \
-    maven \
-    glpk \
-    glpk-devel \
+    qt \
+    qt-devel \
+    qt-postgresql \
+    qtwebkit \
+    qtwebkit-devel \
+    redhat-lsb-core \
+    stxxl \
+    stxxl-devel \
+    swig \
+    tex-fonts-hebrew \
+    texlive \
+    texlive-collection-fontsrecommended \
+    texlive-collection-langcyrillic \
     unzip \
-    v8 \
-    v8-devel \
-    words \
-    tex* \
+    vim \
+    wamerican-insane \
     w3m \
-    doxygen \
-
-
-
-#     asciidoc \
-#     texlive \
-#     dblatex \
-#     texlive-cyrillic \
-cd ~
-
-echo "##### Temp installs #####"
-# sudo yum -y install \
-#     gdal \
-#     gdal-devel \
-#     gdal-python \
+    wget \
+    words \
+    xorg-x11-server-Xvfb \
+    zip \
 
 # Fix missing qmake
 if ! hash qmake >/dev/null 2>&1 ; then
@@ -132,219 +151,77 @@ if ! hash qmake >/dev/null 2>&1 ; then
 fi
 
 #####
-# Temp changes until we get the C++11 support into develop
+# Temp change until we get the C++11 support into develop
+cd $HOOT_HOME
 cp LocalConfig.pri.orig LocalConfig.pri
 echo "QMAKE_CXXFLAGS += -std=c++11" >> LocalConfig.pri
-sed -i s/"QMAKE_CXX=g++"/"#QMAKE_CXX=g++"/g LocalConfig.pri
-sed -i s/"#QMAKE_CXX=ccache g++"/"QMAKE_CXX=ccache g++"/g LocalConfig.pri
 #####
-
 
 echo "### Configuring environment..."
 
-# Configure https alternative mirror for maven isntall, this can likely be removed once
+# Configure https alternative mirror for maven install, this can likely be removed once
 # we are using maven 3.2.3 or higher
 sudo /usr/bin/perl $HOOT_HOME/scripts/maven/SetMavenHttps.pl
 
 if ! grep --quiet "export HOOT_HOME" ~/.bash_profile; then
     echo "Adding hoot home to profile..."
-    echo "export HOOT_HOME=~/hoot" >> ~/.bash_profile
+    echo "export HOOT_HOME=$HOOT_HOME" >> ~/.bash_profile
     echo "export PATH=\$PATH:\$HOOT_HOME/bin" >> ~/.bash_profile
     source ~/.bash_profile
 fi
 
 if ! grep --quiet "export JAVA_HOME" ~/.bash_profile; then
     echo "Adding Java home to profile..."
-    echo "export JAVA_HOME=/usr/java/jdk1.8.0_111" >> ~/.bash_profile
+    echo "export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk" >> ~/.bash_profile
     echo "export PATH=\$PATH:\$JAVA_HOME/bin" >> ~/.bash_profile
     source ~/.bash_profile
 else
-    sed -i '/^export JAVA_HOME=.*/c\export JAVA_HOME=\/usr\/java\/jdk1.8.0_111' ~/.bash_profile
+    sed -i '/^export JAVA_HOME=.*/c\export JAVA_HOME=\/usr\/lib\/jvm\/java-1.8.0-openjdk' ~/.bash_profile
 fi
 
-if ! grep --quiet "export HADOOP_HOME" ~/.bash_profile; then
-    echo "Adding Hadoop home to profile..."
-    echo "export HADOOP_HOME=~/hadoop" >> ~/.bash_profile
-    echo "export PATH=\$PATH:\$HADOOP_HOME/bin" >> ~/.bash_profile
+# Update the GDAL_DATA folder in ~/.bash_profile
+if ! grep --quiet GDAL_DATA ~/.bash_profile; then
+    echo "Adding GDAL data path to profile..."
+    echo "export GDAL_DATA=$(gdal-config --datadir)" >> ~/.bash_profile
     source ~/.bash_profile
 fi
 
-if ! ruby -v | grep --quiet 2.3.0; then
-    # Ruby via rvm - from rvm.io
-    gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 2>&1
-
-    curl -sSL https://raw.githubusercontent.com/rvm/rvm/master/binscripts/rvm-installer | bash -s stable
-
-#     source /home/$VMUSER/.rvm/scripts/rvm
-    source ~/.rvm/scripts/rvm
-
-    stdbuf -o L -e L rvm install ruby-2.3
-    rvm --default use 2.3
-
-# Don't install documentation for gems
-cat > ~/.gemrc <<EOT
-  install: --no-document
-  update: --no-document
-EOT
-fi
-
-# gem installs are *very* slow, hence all the checks in place here to facilitate debugging
-gem list --local | grep -q mime-types
-if [ $? -eq 1 ]; then
-   #sudo gem install mime-types -v 2.6.2
-   gem install mime-types
-fi
-gem list --local | grep -q cucumber
-if [ $? -eq 1 ]; then
-   #sudo gem install cucumber
-   gem install cucumber
-fi
-gem list --local | grep -q capybara-webkit
-if [ $? -eq 1 ]; then
-   #sudo gem install capybara-webkit
-   gem install capybara-webkit
-fi
-gem list --local | grep -q selenium-webdriver
-if [ $? -eq 1 ]; then
-   #sudo gem install selenium-webdriver
-   gem install selenium-webdriver
-fi
-gem list --local | grep -q rspec
-if [ $? -eq 1 ]; then
-   #sudo gem install rspec
-   gem install rspec
-fi
-gem list --local | grep -q capybara-screenshot
-if [ $? -eq 1 ]; then
-   #sudo gem install capybara-screenshot
-   gem install capybara-screenshot
-fi
-gem list --local | grep -q selenium-cucumber
-if [ $? -eq 1 ]; then
-   #sudo gem install selenium-cucumber
-   gem install selenium-cucumber
-fi
+# Use RVM to install the desired Ruby version, then install the gems.
+$HOOT_HOME/scripts/ruby/rvm-install.sh
+$HOOT_HOME/scripts/ruby/gem-install.sh
 
 # Make sure that we are in ~ before trying to wget & install stuff
 cd ~
 
-# This is commented out since it tries to install qt3. Once we get the core building, this will get
-# re-added
-# if  ! rpm -qa | grep google-chrome-stable; then
-#     echo "### Installing Chrome..."
-#     if [ ! -f google-chrome-stable_current_x86_64.rpm ]; then
-#       wget --quiet https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
-#     fi
-#     sudo yum -y install ./google-chrome-stable_current_*.rpm
-# fi
-
-if [ ! -f bin/chromedriver ]; then
-    echo "### Installing Chromedriver..."
-    mkdir -p ~/bin
-    if [ ! -f chromedriver_linux64.zip ]; then
-      LATEST_RELEASE="`wget --quiet -O- http://chromedriver.storage.googleapis.com/LATEST_RELEASE`"
-      wget --quiet http://chromedriver.storage.googleapis.com/$LATEST_RELEASE/chromedriver_linux64.zip
-    fi
-    unzip -d ~/bin chromedriver_linux64.zip
-else
-  LATEST_RELEASE="`wget --quiet -O- http://chromedriver.storage.googleapis.com/LATEST_RELEASE`"
-  if [[ "$(chromedriver --version)" != "ChromeDriver $LATEST_RELEASE."* ]]; then
-    echo "### Updating Chromedriver"
-    rm ~/bin/chromedriver
-    rm ~/chromedriver_linux64.zip
-    wget --quiet http://chromedriver.storage.googleapis.com/$LATEST_RELEASE/chromedriver_linux64.zip
-    unzip -o -d ~/bin chromedriver_linux64.zip
-  fi
-fi
-
-if [ ! -f bin/osmosis ]; then
-    echo "### Installing Osmosis"
-    mkdir -p ~/bin
-    if [ ! -f osmosis-latest.tgz ]; then
-      wget --quiet http://bretth.dev.openstreetmap.org/osmosis-build/osmosis-latest.tgz
-    fi
-    mkdir -p ~/bin/osmosis_src
-    tar -zxf osmosis-latest.tgz -C ~/bin/osmosis_src
-    ln -s ~/bin/osmosis_src/bin/osmosis ~/bin/osmosis
-fi
+# Install Google Chrome and ChromeDriver.
+$HOOT_HOME/scripts/chrome/chrome-install.sh
+$HOOT_HOME/scripts/chrome/driver-install.sh
 
 # Need to figure out a way to do this automagically
-#PG_VERSION=$(sudo -u postgres psql -c 'SHOW SERVER_VERSION;' | egrep -o '[0-9]{1,}\.[0-9]{1,}'); do
-PG_VERSION=9.5
+#PG_VERSION=$(sudo -u postgres psql -c 'SHOW SERVER_VERSION;' | egrep -o '[0-9]{1,}\.[0-9]{1,}')
+#PG_VERSION=9.5
+PG_VERSION=$(psql --version | egrep -o '[0-9]{1,}\.[0-9]{1,}')
 
 if ! grep --quiet "psql-" ~/.bash_profile; then
     echo "Adding PostGres path vars to profile..."
-    echo "export PATH=\$PATH:/usr/pgsql-$PG_VERSION/bin"
+    echo "export PATH=\$PATH:/usr/pgsql-$PG_VERSION/bin" >> ~/.bash_profile
     source ~/.bash_profile
-fi
-
-if [ ! -f /etc/ld.so.conf.d/postgres$PG_VERSION.conf ]; then
-    sudo sh -c "echo '/usr/pgsql-$PG_VERSION/lib' > /etc/ld.so.conf.d/postgres$PG_VERSION.conf"
-    sudo ldconfig
-fi
-
-
-sudo /usr/pgsql-$PG_VERSION/bin/postgresql95-setup initdb
-
-
-# For convenience, set the version of GDAL to download and install
-GDAL_VERSION=2.1.3
-
-if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --formats | grep --quiet FileGDB ); then
-    if [ ! -f gdal-$GDAL_VERSION.tar.gz ]; then
-        echo "### Downloading GDAL $GDAL_VERSION source..."
-        wget --quiet http://download.osgeo.org/gdal/$GDAL_VERSION/gdal-$GDAL_VERSION.tar.gz
-    fi
-    if [ ! -d gdal-$GDAL_VERSION ]; then
-        echo "### Extracting GDAL $GDAL_VERSION source..."
-        tar zxfp gdal-$GDAL_VERSION.tar.gz
-    fi
-
-    if [ ! -f FileGDB_API_1_5_64.tar.gz ]; then
-        echo "### Downloading FileGDB API source..."
-        wget --quiet https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_1.5/FileGDB_API_1_5_64.tar.gz
-    fi
-
-    if [ ! -d /usr/local/FileGDB_API ]; then
-        echo "### Extracting FileGDB API source & installing lib..."
-        sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp FileGDB_API_1_5_64.tar.gz --directory /usr/local/FileGDB_API --strip-components 1
-        sudo sh -c "echo '/usr/local/FileGDB_API/lib' > /etc/ld.so.conf.d/filegdb.conf"
-    fi
-
-    echo "### Building GDAL $GDAL_VERSION w/ FileGDB..."
-    export PATH=/usr/local/lib:/usr/local/bin:$PATH
-    cd gdal-$GDAL_VERSION
-    touch config.rpath
-    echo "GDAL: configure"
-    sudo ./configure --quiet --with-fgdb=/usr/local/FileGDB_API --with-pg=/usr/pgsql-$PG_VERSION/bin/pg_config --with-python CFLAGS='-std=c11' CXXFLAGS='-std=c++11'
-    echo "GDAL: make"
-    sudo make -sj$(nproc) > GDAL_Build.txt 2>&1
-    echo "GDAL: install"
-    sudo make -s install >> GDAL_Build.txt 2>&1
-    cd swig/python
-    echo "GDAL: python build"
-    python setup.py build >> GDAL_Build.txt 2>&1
-    echo "GDAL: python install"
-    sudo python setup.py install >> GDAL_Build.txt 2>&1
-    sudo ldconfig
-    cd ~
 fi
 
 if ! mocha --version &>/dev/null; then
     echo "### Installing mocha for plugins test..."
-    sudo npm install --silent -g mocha
+    sudo npm install --silent -g mocha@3.5.3
     # Clean up after the npm install
     sudo rm -rf ~/tmp
 fi
 
-
-echo "### Configureing Postgres..."
-
+echo "### Configuring Postgres..."
 cd /tmp # Stop postgres "could not change directory to" warnings
 
-# NOTE: These have been changed to pg9.5
-# Postgresql startup
-sudo /usr/pgsql-$PG_VERSION/bin/postgresql95-setup initdb
+# Test to see if postgres cluster already created
+if ! sudo -u postgres test -f /var/lib/pgsql/$PG_VERSION/data/PG_VERSION; then
+  sudo PGSETUP_INITDB_OPTIONS="-E 'UTF-8' --lc-collate='en_US.UTF-8' --lc-ctype='en_US.UTF-8'" /usr/pgsql-$PG_VERSION/bin/postgresql95-setup initdb
+fi
 sudo systemctl start postgresql-$PG_VERSION
 sudo systemctl enable postgresql-$PG_VERSION
 
@@ -366,7 +243,6 @@ if ! sudo -u postgres psql -c "\du" | grep -iw --quiet $DB_USER_OSMAPI; then
     sudo -u postgres createuser --superuser $DB_USER_OSMAPI
     sudo -u postgres psql -c "alter user $DB_USER_OSMAPI with password '$DB_PASSWORD_OSMAPI';"
 fi
-
 
 # Check for a hoot Db
 if ! sudo -u postgres psql -lqt | grep -iw --quiet $DB_NAME; then
@@ -404,24 +280,15 @@ autovacuum = off
 EOT
 fi
 
-# configure kernel parameters
-SYSCTL_CONF=/etc/sysctl.conf
-if ! grep --quiet 1173741824 $SYSCTL_CONF; then
-    sudo cp $SYSCTL_CONF $SYSCTL_CONF.orig
-    echo "Setting kernel.shmmax"
-    sudo sysctl -w kernel.shmmax=1173741824
-    sudo sh -c "echo 'kernel.shmmax=1173741824' >> $SYSCTL_CONF"
-    #                 kernel.shmmax=68719476736
-fi
-if ! grep --quiet 2097152 $SYSCTL_CONF; then
-    echo "Setting kernel.shmall"
-    sudo sysctl -w kernel.shmall=2097152
-    sudo sh -c "echo 'kernel.shmall=2097152' >> $SYSCTL_CONF"
-    #                 kernel.shmall=4294967296
-fi
+echo "Restarting postgres"
 sudo systemctl restart postgresql-$PG_VERSION
 
+# Get ready to build Hoot
+
+echo "SetupEnv.sh"
 cd $HOOT_HOME
+echo "$HOOT_HOME"
+echo `pwd`
 source ./SetupEnv.sh
 
 if [ ! "$(ls -A hoot-ui)" ]; then
@@ -430,100 +297,16 @@ if [ ! "$(ls -A hoot-ui)" ]; then
     git submodule init && git submodule update
 fi
 
-# if dpkg -l | grep --quiet tomcat6; then
-#     echo "Disabling Tomcat 6 service"
-#
-#     # Shut down tomcat6 service
-#     sudo service tomcat6 stop
-#
-#     # Deregister tomcat6 service from autostart
-#     sudo update-rc.d -f tomcat6 remove
-#
-#     #uninstall Tomcat
-#     sudo apt-get -y purge tomcat6
-#     sudo apt-get -y autoremove
-#     sudo rm -f /etc/default/tomcat6*
-#     sudo rm -rf /etc/tomcat6
-#     sudo rm -rf /usr/share/tomcat6
-#     sudo sed -i '/^export TOMCAT6_HOME/d' ~/.profile
-# fi
-
-exit
-
 echo "### Installing Tomcat8..."
-# NOTE: We could pull the RPM from the Hoot repo and install it instead of doing all of the manual steps.
-#sudo bash -c "cat >> /etc/yum.repos.d/hoot.repo" <<EOT
-# [hoot]
-# name=hoot
-# baseurl=https://s3.amazonaws.com/hoot-rpms/snapshot/el6/
-# gpgcheck=0
-#EOT
+TOMCAT_HOME=/usr/share/tomcat8
 
-# Or
-# wget https://s3.amazonaws.com/hoot-rpms/snapshot/el6/tomcat8-8.5.8-1.noarch.rpm
-# rpm -ivh tomcat8-8.5.8-1.noarch.rpm
-
-
-# Manual Install
-sudo groupadd tomcat8
-sudo useradd -M -s /bin/nologin -g tomcat8 -d /var/lib/tomcat8 tomcat8
-
-# NOTE: This is UGLY.
-TOMCAT_VERSION=8.5.14
-
-if [ ! -f apache-tomcat-$TOMCAT_VERSION.tar.gz ]; then
-#     wget http://apache.mirrors.ionfish.org/tomcat/tomcat-8/v8.5.9/bin/apache-tomcat-8.5.9.tar.gz
-    #wget http://apache.mirrors.ionfish.org/tomcat/tomcat-8/v8.5.14/bin/apache-tomcat-8.5.14.tar.gz
-    wget http://www-us.apache.org/dist/tomcat/tomcat-8/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz
-    fi
-
-sudo mkdir /var/lib/tomcat8
-sudo tar xvf apache-tomcat-8*tar.gz -C /var/lib/tomcat8 --strip-components=1
-cd /var/lib/tomcat8
-sudo chgrp -R tomcat8 /var/lib/tomcat8
-sudo chmod -R g+r conf
-sudo chmod g+x conf
-sudo chown -R tomcat8 webapps/ work/ temp/ logs/
-
-sudo bash -c "cat >> /etc/systemd/system/tomcat8.service" <<EOT
-# Systemd unit file for tomcat8
-[Unit]
-Description=Apache Tomcat Web Application Container
-After=syslog.target network.target
-
-[Service]
-Type=forking
-
-Environment=JAVA_HOME=/usr/java/jdk1.8.0_111
-Environment=CATALINA_PID=/var/lib/tomcat8/temp/tomcat8.pid
-Environment=CATALINA_HOME=/var/lib/tomcat8
-Environment=CATALINA_BASE=/var/lib/tomcat8
-Environment='CATALINA_OPTS=-Xms512M -Xmx2048M -server -XX:+UseParallelGC'
-Environment='JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom'
-
-ExecStart=/var/lib/tomcat8/bin/startup.sh
-ExecStop=/bin/kill -15 $MAINPID
-
-User=tomcat8
-Group=tomcat8
-UMask=0007
-RestartSec=10
-Restart=always
-
-[Install]
-WantedBy=multi-user.target
-EOT
-
-# Start Tomcat8
-sudo systemctl daemon-reload
-sudo systemctl start tomcat8
-sudo systemctl enable tomcat8
-
+# Install Tomcat 8
+$HOOT_HOME/scripts/tomcat/tomcat8/centos7/tomcat8_install.sh
 
 # Configure Tomcat for the user
 if ! grep --quiet TOMCAT8_HOME ~/.bash_profile; then
     echo "### Adding Tomcat to profile..."
-    echo "export TOMCAT8_HOME=/var/lib/tomcat8" >> ~/.bash_profile
+    echo "export TOMCAT8_HOME=$TOMCAT_HOME" >> ~/.bash_profile
     source ~/.bash_profile
 fi
 
@@ -537,303 +320,81 @@ if [ -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf ]; then
     rm -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf
 fi
 
+# Making sure we know where we are
 cd ~
 
+##### These two are next to do.
 echo "### Installing node-mapnik-server..."
-sudo cp $HOOT_HOME/node-mapnik-server/init.d/node-mapnik-server /etc/init.d
-sudo chmod a+x /etc/init.d/node-mapnik-server
+sudo cp $HOOT_HOME/node-mapnik-server/systemd/node-mapnik.service /etc/systemd/system/node-mapnik.service
+sudo sed -i "s|SERVICE_USER|$VMUSER|g" /etc/systemd/system/node-mapnik.service
+sudo sed -i "s|HOOT_HOME|$HOOT_HOME|g" /etc/systemd/system/node-mapnik.service
 # Make sure all npm modules are installed
 cd $HOOT_HOME/node-mapnik-server
-npm install --silent
+#NOTE: Re-enable once installation works
+#npm install --silent
 # Clean up after the npm install
 rm -rf ~/tmp
 
 echo "### Installing node-export-server..."
-sudo cp $HOOT_HOME/node-export-server/init.d/node-export-server /etc/init.d
-sudo chmod a+x /etc/init.d/node-export-server
+sudo cp $HOOT_HOME/node-export-server/systemd/node-export.service /etc/systemd/system/node-export.service
+sudo sed -i "s|SERVICE_USER|$VMUSER|g" /etc/systemd/system/node-export.service
+sudo sed -i "s|HOOTENANNY_HOME|$HOOT_HOME|g" /etc/systemd/system/node-export.service
 # Make sure all npm modules are installed
 cd $HOOT_HOME/node-export-server
 npm install --silent
 # Clean up after the npm install
 rm -rf ~/tmp
 
+# Notify systemd that unit files have changed.
+sudo systemctl daemon-reload
+
 cd $HOOT_HOME
-
-rm -rf $HOOT_HOME/ingest
-mkdir -p $HOOT_HOME/ingest/processed
-
-rm -rf $HOOT_HOME/upload
-mkdir -p $HOOT_HOME/upload
 
 # Update marker file date now that dependency and config stuff has run
 # The make command will exit and provide a warning to run 'vagrant provision'
 # if the marker file is older than this file (VagrantProvision.sh)
 touch Vagrant.marker
-# Now we are ready to build Hoot.  The VagrantBuild.sh script will build Hoot.
 
-# switch to auto mode and use the highest priority installed alternatives for Java.
-sudo update-alternatives --auto java
-sudo update-alternatives --auto javac
+# Setup and clean out the directories that the UI uses
+if [ ! -d "$HOOT_HOME/userfiles/ingest/processed" ]; then
+    mkdir -p $HOOT_HOME/userfiles/ingest/processed
+fi
 
-exit
+# wipe out all dirs. tmp and upload now reside under $HOOT_HOME/userfiles/
+rm -rf $HOOT_HOME/upload
+rm -rf $HOOT_HOME/tmp
 
-####################################################
-# From RPM Job
-    apache-maven \
-      CharLS-devel \
-      ImageMagick \
-      ant \
-      apr-devel \
-      apr-util-devel \
-      armadillo-devel \
-      bison \
-      cairo-devel \
-      cfitsio-devel \
-      chrpath \
-      cppunit-devel \
-      createrepo \
-      ctags \
-      curl-devel \
-      doxygen \
-      emacs \
-      emacs \
-      emacs-el \
-      erlang \
-      erlang \
-      expat-devel \
-      flex \
-      fontconfig-devel \
-      freexl-devel \
-      g2clib-static \
-      gd-devel \
-      geos-devel \
-      giflib-devel \
-      giflib-devel \
-      graphviz \
-      hdf-devel \
-      hdf-static \
-      hdf5-devel \
-      help2man \
-      info \
-      libX11-devel \
-      libXrandr-devel \
-      libXrender-devel \
-      libXt-devel \
-      libdap-devel \
-      libdrm-devel \
-      libgta-devel \
-      libicu-devel \
-      libjpeg-turbo-devel \
-      libotf \
-      libpng-devel \
-      librx-devel \
-      libspatialite-devel \
-      libtool \
-      libxslt \
-      libxslt \
-      lua-devel \
-      m17n-lib* \
-      m4 \
-      mysql-devel \
-      netcdf-devel \
-      numpy \
-      pango-devel \
-      pcre-devel \
-      php-devel \
-      poppler-devel \
-      proj-devel \
-      pygtk2 \
-      python-argparse \
-      python-devel \
-      python-devel \
-      readline-devel \
-      rpm-build \
-      rpm-build \
-      ruby \
-      ruby-devel \
-      sqlite-devel \
-      swig \
-      tetex-tex4ht \
-      tex* \
-      transfig \
-      unixODBC-devel \
-      w3m \
-      wget \
-      words \
-      xerces-c-devel \
-      xz-devel \
-      zlib-devel \
+if [ -d "$HOOT_HOME/data/reports" ]; then
+    echo "Moving contents of $HOOT_HOME/data/reports to $HOOT_HOME/userfiles/"
+    cp -R $HOOT_HOME/data/reports $HOOT_HOME/userfiles/
+    rm -rf $HOOT_HOME/data/reports
+fi
 
-# install useful and needed packages for working with hootenanny
-echo "### Installing dependencies from repos..."
-sudo yum -y install \
- asciidoc  \
- automake  \
- boost-devel  \
- ccache  \
- cppunit-devel  \
- curl  \
- dblatex \
- doxygen  \
- fontconfig-devel  \
- freetype-devel  \
- gcc-c++  \
- gdal-devel \
- gdb  \
- geos-devel  \
- gettext  \
- git  \
- git-core  \
- glpk-devel  \
- gnuplot  \
- graphviz  \
- htop  \
- java  \
- lcov  \
- libX11-devel \
- libpng-devel \
- libtool  \
- libxslt  \
- liquibase  \
- log4cxx-devel \
- maven  \
- nodejs-devel \
- npm  \
- ogdi-devel  \
- opencv-devel  \
- openssh-server  \
- patch  \
- pgadmin3  \
- poppler  \
- postgis2_95 \
- postgresql95 \
- postgresql95-contrib \
- postgresql95-devel \
- postgresql95-server \
- proj-devel  \
- protobuf-compiler  \
- protobuf-devel  \
- python  \
- python-devel \
- python-matplotlib \
- python-pip  \
- python-setuptools \
- qt-devel  \
- ruby  \
- ruby-devel  \
- source-highlight  \
- swig  \
- texinfo-tex  \
- texlive-arabxetex  \
- texlive-collection-langcyrillic  \
- unzip  \
- w3m  \
- wget  \
- words  \
- x11vnc  \
- xerces-c  \
- xorg-x11-server-Xvfb  \
- zlib-devel  \
- >> CentOS_upgrade.txt 2>&1
+if [ -d "$HOOT_HOME/customscript" ]; then
+    echo "Moving contents of $HOOT_HOME/customscript to $HOOT_HOME/userfiles/"
+    cp -R $HOOT_HOME/customscript $HOOT_HOME/userfiles/
+    rm -rf $HOOT_HOME/customscript
+fi
+
+if [ -d "$HOOT_HOME/ingest" ]; then
+    echo "Moving contents of $HOOT_HOME/ingest to $HOOT_HOME/userfiles/"
+    cp -R $HOOT_HOME/ingest $HOOT_HOME/userfiles/
+    rm -rf $HOOT_HOME/ingest
+fi
+
+# Always start with a clean $HOOT_HOME/userfiles/tmp
+rm -rf $HOOT_HOME/userfiles/tmp
+
+# This is defensive!
+# We do this so that Tomcat doesnt. If it does, it screws the permissions up
+mkdir -p $HOOT_HOME/userfiles/tmp
+
+# OK, this is seriously UGLY but it fixes an NFS problem
+#chmod -R 777 $HOOT_HOME/userfiles
+
+# This is very ugly.
+# If we don't have access to the directory where HOOT_HOME is, Tomcat chokes
+#chmod go+rx ~
 
 
-# Orig List
-#  asciidoc  \
-#  automake  \
-#  boost-devel  \
-#  ccache  \
-#  cppunit-devel  \
-#  curl  \
-#  dblatex \
-#  doxygen  \
-#  fontconfig-devel  \
-#  freetype-devel  \
-#  gcc-c++  \
-#  gdal-devel \
-#  gdb  \
-#  gettext  \
-#  git  \
-#  git-core  \
-#  glpk-devel  \
-#  gnuplot  \
-#  graphviz  \
-#  htop  \
-#  java-1.8.0-openjdk  \
-#  java-1.8.0-openjdk-debug  \
-#  lcov  \
-#  libX11-devel \
-#  libicu-devel  \
-#  libpng  \
-#  libpng-devel \
-#  libtool  \
-#  libxslt  \
-#  liquibase  \
-#  log4cxx-devel \
-#  maven  \
-#  nodejs-devel \
-#  npm  \
-#  ogdi-devel  \
-#  opencv-devel  \
-#  openssh-server  \
-#  patch  \
-#  pgadmin3  \
-#  poppler  \
-#  postgis  \
-#  postgresql \
-#  postgresql-contrib \
-#  postgresql-devel  \
-#  postgresql-libs  \
-#  postgresql-server  \
-#  proj-devel  \
-#  protobuf-compiler  \
-#  protobuf-devel  \
-#  python  \
-#  python-devel \
-#  python-matplotlib \
-#  python-pip  \
-#  python-setuptools \
-#  qt-devel  \
-#  qt5-qtwebkit-devel  \
-#  ruby  \
-#  ruby-devel  \
-#  source-highlight  \
-#  swig  \
-#  texinfo-tex  \
-#  texlive-arabxetex  \
-#  texlive-collection-langcyrillic  \
-#  tomcat  \
-#  unzip  \
-#  w3m  \
-#  wget  \
-#  words  \
-#  x11vnc  \
-#  xerces-c  \
-#  xorg-x11-server-Xvfb  \
-#  zlib-devel  \
-
-# TODO: Investigate these packages from the Ubuntu14.04 provisioning
-#libcv
-#newmat
-#libproj-dev
-#libqt4-sql-psql
-#libjson-spirit-dev
-#libstxll-dev
-#nodejs-legacy
-#geos-devel
-#libboost-all-dev
-#texlive-lang-hebrew
-#libqt4-sql-sqlite
-#postgresql-client-9.5
-#postgresql-9.5-postgis-scripts
-#postgresql-client-9.5
-#gdal-devel \
-#stxxl-devel \
-
-# TODO: Investigate the necessity of these
-#texlive-arabxetex \
-#texlive-collection-langcyrillic \
-
-
-
-
-
+##########################################

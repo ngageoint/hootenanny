@@ -40,13 +40,16 @@ HOOT_FACTORY_REGISTER(ConstElementVisitor, SetTagVisitor)
 
 SetTagVisitor::SetTagVisitor()
 {
+  setConfiguration(conf());
 }
 
-SetTagVisitor::SetTagVisitor(QString key, QString value, bool appendToExistingValue) :
-_k(key),
-_v(value),
-_appendToExistingValue(appendToExistingValue)
+SetTagVisitor::SetTagVisitor(QString key, QString value, bool appendToExistingValue,
+                             ElementType elementType) :
+_appendToExistingValue(appendToExistingValue),
+_elementType(elementType)
 {
+  _k.append(key);
+  _v.append(value);
 }
 
 void SetTagVisitor::setConfiguration(const Settings& conf)
@@ -54,38 +57,59 @@ void SetTagVisitor::setConfiguration(const Settings& conf)
   ConfigOptions configOptions(conf);
   _k = configOptions.getSetTagVisitorKey();
   _v = configOptions.getSetTagVisitorValue();
+  if (_k.size() != _v.size())
+  {
+    throw IllegalArgumentException("set.tag.visitor key and value must be the same length.");
+  }
   _appendToExistingValue = configOptions.getSetTagVisitorAppendToExistingValue();
+  if (!configOptions.getSetTagVisitorElementType().trimmed().isEmpty())
+  {
+    _elementType = ElementType::fromString(configOptions.getSetTagVisitorElementType());
+  }
 }
 
-void SetTagVisitor::visit(const boost::shared_ptr<Element>& e)
+void SetTagVisitor::_setTag(const ElementPtr& e, QString k, QString v)
 {
-  if (_k.isEmpty())
+  if (_elementType != ElementType::Unknown && e->getElementType() != _elementType)
+  {
+    return;
+  }
+
+  if (k.isEmpty())
   {
     throw IllegalArgumentException("You must set the key in the SetTagVisitor class.");
   }
-  if (_k == MetadataTags::ErrorCircular())
+  if (k == MetadataTags::ErrorCircular())
   {
     bool ok;
-    double v = _v.toDouble(&ok);
+    double vDouble = v.toDouble(&ok);
     if (!ok)
     {
       throw IllegalArgumentException(MetadataTags::ErrorCircular() + " expects a double value.");
     }
-    e->setCircularError(v);
+    e->setCircularError(vDouble);
   }
   else
   {
-    if (_appendToExistingValue && e->getTags().keys().contains(_k))
+    if (_appendToExistingValue)
     {
-      e->getTags()[_k] = e->getTags()[_k] + "," + _v;
+      e->getTags().appendValue(k, v);
     }
     else
     {
-      e->getTags()[_k] = _v;
+      e->getTags()[k] = v;
     }
-    LOG_VART(_k);
-    LOG_VART(_v);
-    LOG_VART(e->getTags()[_k]);
+    LOG_VART(k);
+    LOG_VART(v);
+    LOG_VART(e->getTags()[k]);
+  }
+}
+
+void SetTagVisitor::visit(const boost::shared_ptr<Element>& e)
+{
+  for (int i = 0; i < _k.size(); i++)
+  {
+    _setTag(e, _k[i], _v[i]);
   }
 }
 

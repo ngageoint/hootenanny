@@ -42,6 +42,9 @@ SearchBoundsCalculator::SearchBoundsCalculator(SearchRadiusProviderPtr radiusPro
 Envelope SearchBoundsCalculator::calculateSearchBounds(const ConstOsmMapPtr& map,
   const ConstNodePtr& n) const
 {
+  LOG_VART(map->getElementCount());
+  LOG_VART(n->getElementId());
+
   double radius = _radiusProvider->calculateSearchRadius(map, n);
 
   Coordinate right = GeometryUtils::calculateDestination(n->toCoordinate(), 90, radius);

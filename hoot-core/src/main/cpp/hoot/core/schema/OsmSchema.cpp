@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include <hoot/core/HootConfig.h>
@@ -52,11 +52,13 @@ using namespace boost;
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/schema/OsmSchemaLoader.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/FileUtils.h>
 
 // Qt
 #include <QDomDocument>
 #include <QHash>
 #include <QSet>
+#include <QDir>
 
 // Standard
 #include <iostream>
@@ -868,11 +870,11 @@ public:
     const SchemaVertex& v = _graph[vid];
     if (v.isValid())
     {
-      if (_logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (_logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN(tv.name << " was specified multiple times in the schema file.");
       }
-      else if (_logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (_logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(typeid(this).name() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }
@@ -1295,11 +1297,11 @@ private:
     {
       if (childTv.influence == -1.0)
       {
-        if (_logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        if (_logWarnCount < Log::getWarnMessageLimit())
         {
           LOG_WARN("Influence for " << childTv.name << " has not been specified.");
         }
-        else if (_logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        else if (_logWarnCount == Log::getWarnMessageLimit())
         {
           LOG_WARN(typeid(this).name() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }
@@ -1308,11 +1310,11 @@ private:
       }
       if (childTv.valueType == Unknown)
       {
-        if (_logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        if (_logWarnCount < Log::getWarnMessageLimit())
         {
           LOG_WARN("Value type for " << childTv.name << " has not been specified.");
         }
-        else if (_logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        else if (_logWarnCount == Log::getWarnMessageLimit())
         {
           LOG_WARN(typeid(this).name() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }
@@ -1480,7 +1482,29 @@ OsmSchema& OsmSchema::getInstance()
   {
     _theInstance = new OsmSchema();
     _theInstance->loadDefault();
-    LOG_TRACE(_theInstance->toGraphvizString());
+
+    //write this out to a temp file instead of to the log due to its size
+    if (Log::getInstance().getLevel() == Log::Trace)
+    {
+      const QString graphvizPath = "tmp/schema-graphviz";
+      const QString errorMsg = "Unable to write schema graphviz file to " + graphvizPath;
+      try
+      {
+        if (QDir().mkpath("tmp"))
+        {
+          FileUtils::writeFully(graphvizPath, _theInstance->toGraphvizString());
+          LOG_TRACE("Wrote schema graph viz file to: " << graphvizPath);
+        }
+        else
+        {
+          LOG_TRACE(errorMsg);
+        }
+      }
+      catch (const HootException&)
+      {
+        LOG_TRACE(errorMsg);
+      }
+    }
   }
   return *_theInstance;
 }
@@ -1561,8 +1585,7 @@ bool OsmSchema::isArea(const Tags& t, ElementType type) const
     return false;
   }
 
-  // Print out tags
-  LOG_TRACE("Tags: " << t.toString() );
+  //LOG_VART(t.toString());
 
   result |= isBuilding(t, type);
   result |= t.isTrue("building:part");
@@ -1666,6 +1689,26 @@ bool OsmSchema::isBuildingPart(const ConstElementPtr& e) const
   return isBuildingPart(e->getTags(), e->getElementType());
 }
 
+bool OsmSchema::isMultiUseBuilding(const Element& e)
+{
+  const OsmSchema& osmSchema = OsmSchema::getInstance();
+  const ElementType elementType = e.getElementType();
+  LOG_VART(elementType);
+  const Tags& tags = e.getTags();
+  LOG_VART(tags);
+  LOG_VART(osmSchema.getCategories(e.getTags()).intersects(OsmSchemaCategory::building()));
+  LOG_VART(tags.contains("amenity"));
+  LOG_VART(osmSchema.getCategories(tags).intersects(OsmSchemaCategory::multiUse()));
+
+  //(element is in a building category OR is an amenity) AND
+  //(element has a multi-purpose building tag OR is in a multi-use category)
+  return
+    (osmSchema.getCategories(e.getTags()).intersects(OsmSchemaCategory::building()) ||
+      tags.contains("amenity")) &&
+    (tags.get("building:use") == "multipurpose" ||
+     osmSchema.getCategories(tags).intersects(OsmSchemaCategory::multiUse()));
+}
+
 bool OsmSchema::isCollection(const Element& e) const
 {
   bool result = false;
@@ -1706,13 +1749,22 @@ bool OsmSchema::isLinearHighway(const Tags& t, ElementType type)
   bool result = false;
   Tags::const_iterator it = t.find("highway");
 
+  // Is it a legit highway?
   if ((type == ElementType::Way || type == ElementType::Relation) &&
       it != t.end() && it.value() != "")
   {
     result = true;
   }
 
-  // make sure this isn't an area highway section.
+  // Maybe it's a way with nothing but a time tag...
+  it = t.find("source:datetime");
+  if (type == ElementType::Way && t.keys().size() < 2 && it != t.end())
+  {
+    // We can treat it like a highway
+    result = true;
+  }
+
+  // Make sure this isn't an area highway section!
   if (result)
   {
     result = !isArea(t, type);
@@ -1742,6 +1794,7 @@ bool OsmSchema::isLinear(const Element &e)
     const Relation& r = dynamic_cast<const Relation&>(e);
     result |= r.getType() == MetadataTags::RelationMultilineString();
     result |= r.getType() == MetadataTags::RelationRoute();
+    result |= r.getType() == MetadataTags::RelationBoundary();
   }
 
   for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)
@@ -1864,7 +1917,7 @@ void OsmSchema::loadDefault()
   delete d;
   d = new OsmSchemaData();
 
-  LOG_INFO("Loading translation files...");
+  LOG_DEBUG("Loading translation files...");
   OsmSchemaLoaderFactory::getInstance().createLoader(path)->load(path, *this);
 }
 

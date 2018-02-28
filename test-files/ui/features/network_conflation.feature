@@ -17,11 +17,11 @@
     And I fill "saveAs" input with "DcRoadsNetworkCucumber"
     And I press "confAdvOptsLnk"
     And I click the "label" with text "Road Options"
-    And I select the "Network" option in the "Unify" combobox
+    And I select the "Network" option in the "Network" combobox
     And I scroll "Apply" element into view and press it
     And I scroll element into view and press "conflate2"
     Then I wait 30 "seconds" to see "Conflating …"
-    Then I wait 3 "minutes" to see "DcRoadsNetworkCucumber"
+    Then I wait 5 "minutes" to see "DcRoadsNetworkCucumber"
     Then I click the "trash" button
     And I accept the alert
     And I wait 5 "seconds" to not see "DcRoadsNetworkCucumber"

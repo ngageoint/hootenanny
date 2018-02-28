@@ -1,7 +1,244 @@
 [
     {
+        "dataType": "enumeration",
+        "influence": 1,
+        "name": "aeroway",
         "isA": "hgispoi",
-        "name": "aeroway=*",
         "objectType": "tag"
+    },
+    {
+        "geometries": [
+            "node",
+            "area"
+        ],
+        "aliases": [
+            "aeroway=airport"
+        ],
+        "isA": "aeroway",
+        "name": "aeroway=aerodrome",
+        "objectType": "tag",
+        "tagInfoCount": 40385,
+        "tagInfoDescription": "An airport"
+    },
+    {
+        "geometries": [
+            "node",
+            "linestring",
+            "area"
+        ],
+        "isA": "aeroway",
+        "name": "aeroway=airstrip",
+        "objectType": "tag",
+        "tagInfoCount": 3586,
+        "tagInfoDescription": "A field or area where light aircraft can land and take off from."
+    },
+    {
+        "geometries": [
+            "node"
+        ],
+        "isA": "aeroway",
+        "name": "aeroway=navigationaid",
+        "objectType": "tag",
+        "tagInfoCount": 3650,
+        "tagInfoDescription": "A facility that supports visual navigation for aircraft"
+    },
+    {
+        "isA": "aeroway=navigationaid",
+        "name": "aeroway=approach_light",
+        "objectType": "tag",
+        "tagInfoCount": 286
+    },
+    {
+        "geometries": [
+            "area"
+        ],
+        "isA": "aeroway",
+        "name": "aeroway=apron",
+        "objectType": "tag",
+        "tagInfoCount": 26763,
+        "tagInfoDescription": "An area of an airport where planes are parked, unloaded or loaded, refueled, or boarded"
+    },
+    {
+        "geometries": [
+            "node",
+            "area"
+        ],
+        "isA": "aeroway",
+        "name": "aeroway=fuel",
+        "objectType": "tag",
+        "tagInfoCount": 75,
+        "tagInfoDescription": "An aviation fuel station."
+    },
+    {
+        "geometries": [
+            "node"
+        ],
+        "isA": "aeroway",
+        "name": "aeroway=gate",
+        "objectType": "tag",
+        "tagInfoCount": 13274,
+        "tagInfoDescription": "A gate number at an airport where passengers wait before boarding their flight"
+    },
+    {
+        "geometries": [
+            "area"
+        ],
+        "isA": "aeroway",
+        "name": "aeroway=hangar",
+        "objectType": "tag",
+        "tagInfoCount": 21688,
+        "tagInfoDescription": "A large airport building with extensive floor areas for housing aircraft or spacecraft"
+    },
+    {
+        "geometries": [
+            "node",
+            "area"
+        ],
+        "isA": "aeroway",
+        "name": "aeroway=helipad",
+        "objectType": "tag",
+        "tagInfoCount": 36469,
+        "tagInfoDescription": "A landing area or platform for helicopters"
+    },
+    {
+        "geometries": [
+            "node",
+            "area"
+        ],
+        "isA": "aeroway",
+        "name": "aeroway=heliport",
+        "objectType": "tag",
+        "tagInfoCount": 123,
+        "tagInfoDescription": "A special aerodrome built for helicopters"
+    },
+    {
+        "geometries": [
+            "node"
+        ],
+        "isA": "aeroway",
+        "name": "aeroway=holding_position",
+        "objectType": "tag",
+        "tagInfoCount": 5733,
+        "tagInfoDescription": "A point behind which aircraft are considered clear of a crossing way"
+    },
+    {
+        "isA": "aeroway=navigationaid",
+        "name": "aeroway=landing_light",
+        "objectType": "tag",
+        "tagInfoCount": 1394
+    },
+    {
+        "geometries": [
+            "node",
+            "way"
+        ],
+        "isA": "aeroway",
+        "name": "aeroway=launchpad",
+        "objectType": "tag",
+        "tagInfoCount": 31
+    },
+    {
+        "isA": "aeroway",
+        "name": "aeroway=marking",
+        "objectType": "tag",
+        "tagInfoCount": 760
+    },
+    {
+        "isA": "aeroway=navigationaid",
+        "name": "aeroway=papi",
+        "objectType": "tag",
+        "tagInfoCount": 504
+    },
+    {
+        "geometries": [
+            "node",
+            "linestring"
+        ],
+        "isA": "aeroway",
+        "name": "aeroway=parking_position",
+        "objectType": "tag",
+        "tagInfoCount": 24186,
+        "tagInfoDescription": "A location where an airplane can park"
+    },
+    {
+        "geometries": [
+            "linestring",
+            "area"
+        ],
+        "isA": "aeroway",
+        "name": "aeroway=runway",
+        "objectType": "tag",
+        "tagInfoCount": 46300,
+        "tagInfoDescription": "Runway of an airfield"
+    },
+    {
+        "geometries": [
+            "node",
+            "area"
+        ],
+        "isA": "aeroway",
+        "name": "aeroway=spaceport",
+        "objectType": "tag",
+        "tagInfoCount": 20,
+        "tagInfoDescription": "A spaceport (other than airport / heliport)"
+    },
+    {
+        "geometries": [
+            "linestring"
+        ],
+        "isA": "aeroway",
+        "name": "aeroway=taxilane",
+        "objectType": "tag",
+        "tagInfoCount": 402,
+        "tagInfoDescription": "A path in an airport that is part of the aircraft parking area or apron"
+    },
+    {
+        "geometries": [
+            "linestring"
+        ],
+        "isA": "aeroway",
+        "name": "aeroway=taxiway",
+        "objectType": "tag",
+        "tagInfoCount": 143021,
+        "tagInfoDescription": "Taxiway of an airfield"
+    },
+    {
+        "geometries": [
+            "node",
+            "area"
+        ],
+        "isA": "aeroway",
+        "name": "aeroway=terminal",
+        "objectType": "tag",
+        "tagInfoCount": 7276,
+        "tagInfoDescription": "An airport passenger building"
+    },
+    {
+        "isA": "aeroway",
+        "name": "aeroway=threshold",
+        "objectType": "tag",
+        "tagInfoCount": 290
+    },
+    {
+        "isA": "aeroway",
+        "name": "aeroway=tower",
+        "objectType": "tag",
+        "tagInfoCount": 219
+    },
+    {
+        "isA": "aeroway",
+        "name": "aeroway=waypoint",
+        "objectType": "tag",
+        "tagInfoCount": 625
+    },
+    {
+        "geometries": [
+            "node"
+        ],
+        "isA": "aeroway",
+        "name": "aeroway=windsock",
+        "objectType": "tag",
+        "tagInfoCount": 2868,
+        "tagInfoDescription": "An object that shows pilots wind direction and speed."
     }
 ]
