@@ -406,6 +406,7 @@
                 "id":"auto_correct_options",
                 "elem_type":"bool",
                 "defaultvalue":"true",
+                "required":"true",
                 "description":"Temporary setting that addresses some Hootenanny iD Editor UI bugs.  See MatchFactory::_tempFixDefaults() for more info.",
                 "name":"Auto Correct Options",
                 "hoot_key":"autocorrect.options"
