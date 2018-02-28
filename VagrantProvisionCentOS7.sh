@@ -301,7 +301,7 @@ echo "### Installing Tomcat8..."
 TOMCAT_HOME=/usr/share/tomcat8
 
 # Install Tomcat 8
-$HOOT_HOME/scripts/tomcat/tomcat8/centos7/tomcat8_install.sh
+$HOOT_HOME/scripts/tomcat/centos7/tomcat8_install.sh
 
 # Configure Tomcat for the user
 if ! grep --quiet TOMCAT8_HOME ~/.bash_profile; then
