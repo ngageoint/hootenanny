@@ -1,5 +1,5 @@
 #!/bin/bash
-set -euxo pipefail
+set -euo pipefail
 
 # Set HOOT_HOME to another location prior to running this script
 # if ~/hoot isn't the correct location

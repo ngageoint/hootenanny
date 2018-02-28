@@ -27,7 +27,6 @@ TOMCAT_LOGS_HOME_PERMISSIONS=755
 TOMCAT_CACHE_HOME_PERMISSIONS=775
 
 TOMCAT_VERSION='8.5.28'
-
 TOMCAT_TAR_FILE=/var/cache/apache-tomcat-${TOMCAT_VERSION}.tar.gz
 if ! test -f $TOMCAT_TAR_FILE; then
     wget -q -O /tmp/apache-tomcat-$TOMCAT_VERSION.tar.gz https://www.apache.org/dist/tomcat/tomcat-8/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz
