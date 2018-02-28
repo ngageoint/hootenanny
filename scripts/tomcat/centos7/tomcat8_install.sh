@@ -7,14 +7,10 @@ if [ -z "$HOOT_HOME" ]; then
     HOOT_HOME=~/hoot
 fi
 TOMCAT_NAME=tomcat8
-TOMCAT_HOME=/usr/share/tomcat8 # for binaries and other static files
-TOMCAT_USER_HOME=/var/lib/tomcat8 # web applications go here
-TOMCAT_CACHE=/var/cache/tomcat8 # temp and work folders go here
 TOMCAT_LEGACY_SYSTEMD=/etc/systemd/system/${TOMCAT_NAME}.service
 TOMCAT_SYSTEMD=/usr/lib/systemd/system/${TOMCAT_NAME}.service
 TOMCAT_LOGS=/var/log/tomcat8 # logs go here
 TOMCAT_CONFIG=/etc/tomcat8 # config files go here
-SCRIPT_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 echo "######## Begin ${TOMCAT_NAME} installation ########"
 
@@ -28,9 +24,9 @@ if test -f $TOMCAT_LEGACY_SYSTEMD; then
     sudo systemctl daemon-reload
 
     # Clean up all manually-installed folders.
-    sudo rm -fr $TOMCAT_HOME
-    sudo rm -fr $TOMCAT_USER_HOME
-    sudo rm -fr $TOMCAT_CACHE
+    sudo rm -fr /usr/share/tomcat8
+    sudo rm -fr /var/lib/tomcat8
+    sudo rm -fr /var/cache/tomcat8
     sudo rm -fr $TOMCAT_LOGS
     sudo rm -fr $TOMCAT_CONFIG
 fi
