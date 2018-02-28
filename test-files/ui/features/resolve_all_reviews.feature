@@ -48,7 +48,7 @@ Feature: Resolve all reviews feature
     And I press "Conflate"
     And I scroll element into view and press "conflate2"
     Then I wait 30 "seconds" to see "Conflating …"
-    Then I wait 3 "minutes" to see "Merged_RoadsCucumber"
+    Then I wait 10 "minutes" to see "Merged_RoadsCucumber"
     Then I should see "Complete Review"
     Then I wait 30 "seconds" to see "Reviews remaining:"
     Then I should see "Hide Table"
