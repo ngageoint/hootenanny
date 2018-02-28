@@ -62,7 +62,7 @@ public:
       throw HootException(QString("%1 takes one to two parameters.").arg(getName()));
     }
 
-    const QString configOptionsFile = ConfigOptions(conf()).getConfigOptionsFile();
+    const QString configOptionsFile = ConfigOptions().getConfigOptionsFile();
     QString cmd;
     if (args.size() == 1)
     {

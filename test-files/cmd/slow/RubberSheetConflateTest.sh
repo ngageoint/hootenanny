@@ -13,7 +13,7 @@ hoot conflate -C core/RemoveReview2Pre.conf -D uuid.helper.repeatable=true -D os
  -D "ogr.thematic.structure=true" -D "conflate.enable.old.roads=true" -D "conflate.match.highway.classifier=hoot::HighwayExpertClassifier" -D "way.subline.matcher=hoot::MaximalSublineMatcher" \
  -D "match.creators=hoot::BuildingMatchCreator;hoot::BuildingMatchCreator;hoot::ScriptMatchCreator,PoiGeneric.js" \
  -D "merger.creators=hoot::BuildingMergerCreator;hoot::BuildingMergerCreator;hoot::ScriptMergerCreator" -D "search.radius.highway=-1" -D "way.matcher.heading.delta=5.0" -D "way.matcher.max.angle=60" \
- -D "way.merger.min.split.size=5" -D "way.angle.sample.distance=10.0" -D "poi.polygon.name.score.threshold=0.8" -D "poi.polygon.review.distance.threshold=0" \
+ -D "way.merger.min.split.size=5" -D "way.angle.sample.distance=10.0" -D "poi.polygon.name.score.threshold=0.8" -D "poi.polygon.review.distance.threshold=0" -D "autocorrect.options=false" \
  test-files/DcGisRoads.osm test-files/DcTigerRoads.osm test-output/cmd/RubberSheetConflateTest/output.osm
 
 hoot --is-match test-output/cmd/RubberSheetConflateTest/output.osm test-files/cmd/slow/RubberSheetConflateTest/output.osm ||
