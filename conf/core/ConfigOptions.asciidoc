@@ -166,6 +166,14 @@ The maximum number of values returned for each attribute by the attribute-count 
 
 Determines whether the AttributeScoreExtractor uses weighting when extracting scores.
 
+=== autocorrect.options
+
+* Data Type: bool
+* Default Value: `true`
+
+Temporary setting that addresses some Hootenanny iD Editor UI bugs.  See
+MatchFactory::_tempFixDefaults() for more info.
+
 === big.convert.exec.sql.with.mapreduce
 
 * Data Type: bool
@@ -2821,14 +2829,6 @@ NOTE: This assumes that you know exactly what tags you want to modify/delete
 * Default Value: ``
 
 The script to use for translation.
-
-=== ui.autocorrect.options
-
-* Data Type: bool
-* Default Value: `false`
-
-Temporary setting that addresses some Hootenanny iD Editor UI bugs.  See
-MatchFactory::_tempFixDefaults() for more info.
 
 === unify.enable.optimal.constrained.matches
 

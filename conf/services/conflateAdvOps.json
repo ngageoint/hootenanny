@@ -54,10 +54,9 @@
             {
                 "id":"intersection_splitter",
                 "elem_type":"checkbox",
-                "description":"Split all highway type ways that intersect.",
+                "description":"Split all roads that intersect.  Disabling this setting may have an extreme impact on conflation performance.",
                 "name":"Split Intersections",
                 "hoot_val":"hoot::IntersectionSplitter",
-                "required":"true",
                 "defaultvalue":"true"
             },
             {
@@ -148,15 +147,6 @@
                 "name":"Split Sharp Road Corners",
                 "hoot_val":"hoot::CornerSplitter",
                 "defaultvalue":"true"
-            },
-            {
-                "id":"auto_correct_options",
-                "elem_type":"string",
-                "description":"Temp setting to workaround adv opts bugs",
-                "name":"Auto Correct Options",
-                "required":"true",
-                "defaultvalue":"true",
-                "hoot_key":"ui.autocorrect.options"
             }
         ]
     },
@@ -216,7 +206,7 @@
             },
             {
                 "id":"rubber_sheet_log_missing_requirements_as_warning",
-                "elem_type":"string",
+                "elem_type":"checkbox",
                 "description":"From the UI we always want to log this as warning.  e.g. min tie points not found",
                 "name":"Log Missing Requirements As Warning",
                 "required":"true",
@@ -411,6 +401,14 @@
                 "name":"Weighted Metric Distance Extractor Search Radius",
                 "defaultvalue":"-1.0",
                 "hoot_key":"weighted.metric.distance.extractor.search.radius"
+            },
+            {
+                "id":"auto_correct_options",
+                "elem_type":"bool",
+                "defaultvalue":"true",
+                "description":"Temporary setting that addresses some Hootenanny iD Editor UI bugs.  See MatchFactory::_tempFixDefaults() for more info.",
+                "name":"Auto Correct Options",
+                "hoot_key":"autocorrect.options"
             }
         ]
     },

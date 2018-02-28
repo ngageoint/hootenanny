@@ -182,6 +182,10 @@ void MatchFactory::_tempFixDefaults()
       {
         fixedMergerCreators.append("hoot::HighwaySnapMergerCreator");
       }
+      else if (matchCreator == "hoot::NetworkMatchCreator")
+      {
+        fixedMergerCreators.append("hoot::NetworkMergerCreator");
+      }
       else if (matchCreator == "hoot::PoiPolygonMatchCreator")
       {
         fixedMergerCreators.append("hoot::PoiPolygonMergerCreator");
@@ -254,7 +258,7 @@ MatchFactory& MatchFactory::getInstance()
    * https://github.com/ngageoint/hootenanny-ui/issues/971
    * https://github.com/ngageoint/hootenanny-ui/issues/972
    * */
-  if (ConfigOptions().getUiAutocorrectOptions())
+  if (ConfigOptions().getAutocorrectOptions())
   {
     MatchFactory::_tempFixDefaults();
   }
