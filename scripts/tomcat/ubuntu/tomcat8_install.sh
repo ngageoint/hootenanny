@@ -30,7 +30,7 @@ TOMCAT_VERSION='8.5.28'
 
 TOMCAT_TAR_FILE=/var/cache/apache-tomcat-${TOMCAT_VERSION}.tar.gz
 if ! test -f $TOMCAT_TAR_FILE; then
-    wget -O /tmp/apache-tomcat-$TOMCAT_VERSION.tar.gz https://www.apache.org/dist/tomcat/tomcat-8/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz
+    wget -q -O /tmp/apache-tomcat-$TOMCAT_VERSION.tar.gz https://www.apache.org/dist/tomcat/tomcat-8/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz
     sudo mv /tmp/apache-tomcat-$TOMCAT_VERSION.tar.gz $TOMCAT_TAR_FILE
 fi
 

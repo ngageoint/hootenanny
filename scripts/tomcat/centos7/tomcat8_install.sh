@@ -33,7 +33,7 @@ TOMCAT_CACHE_HOME_PERMISSIONS=775
 TOMCAT_VERSION='8.5.28'
 TOMCAT_TAR_FILE=/var/cache/apache-tomcat-${TOMCAT_VERSION}.tar.gz
 if ! test -f $TOMCAT_TAR_FILE; then
-    curl -o /tmp/apache-tomcat-$TOMCAT_VERSION.tar.gz https://www.apache.org/dist/tomcat/tomcat-8/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz
+    curl -sSL -o /tmp/apache-tomcat-$TOMCAT_VERSION.tar.gz https://www.apache.org/dist/tomcat/tomcat-8/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz
     sudo mv /tmp/apache-tomcat-$TOMCAT_VERSION.tar.gz $TOMCAT_TAR_FILE
 fi
 
