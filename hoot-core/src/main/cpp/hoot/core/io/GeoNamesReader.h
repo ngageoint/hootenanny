@@ -39,6 +39,7 @@ namespace hoot
 class GeoNamesReader : public PartialOsmMapReader
 {
 public:
+
   static std::string className() { return "hoot::GeoNamesReader"; }
 
   GeoNamesReader();
@@ -66,6 +67,7 @@ public:
   virtual void setUseDataSourceIds(bool useDataSourceIds) { _useDataSourceIds = useDataSourceIds; }
 
 private:
+
   Meters _circularError;
   QStringList _columns;
   QList<int> _convertColumns;

@@ -37,17 +37,24 @@
 
 // Qt
 #include <QDir>
+#include <QThread>
 
 namespace hoot
 {
 
 void OsmFileSorter::sort(const QString input, const QString output)
 {
+  //I believe Osmosis handles parallelization automatically, so this is to be passed to the Unix
+  //sort command used by the GeoNames format only.
+  const int sortParallelCount = QThread::idealThreadCount();
+
   if (GeoNamesReader().isSupported(input))
   {
     //sort the input by node id (first field) using the unix sort command
     if (std::system(
-         QString("sort -n " + input + " --output=" + output).toStdString().c_str()) != 0)
+         QString(
+           "sort --parallel=" + QString::number(sortParallelCount) + " -n " + input +
+           " --output=" + output).toStdString().c_str()) != 0)
     {
       throw HootException("Unable to sort input file.");
     }
