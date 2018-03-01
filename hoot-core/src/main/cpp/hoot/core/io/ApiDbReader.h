@@ -170,6 +170,16 @@ private:
   //last element ID read
   long _lastId;
 
+  long _statusUpdateInterval;
+
+  long _totalNumMapNodes;
+  long _totalNumMapWays;
+  long _totalNumMapRelations;
+
+  long _numNodesRead;
+  long _numWaysRead;
+  long _numRelationsRead;
+
   void _read(OsmMapPtr map, const ElementType& elementType);
 
   /**

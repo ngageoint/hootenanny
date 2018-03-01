@@ -33,6 +33,9 @@
 namespace hoot
 {
 
+/**
+ * Reads from an OSM API database.
+ */
 class OsmApiDbReader : public ApiDbReader
 {
 public:

@@ -35,6 +35,9 @@
 namespace hoot
 {
 
+/**
+ * Reads from a Hootenanny customized version of the OSM API database.
+ */
 class HootApiDbReader : public ApiDbReader
 {
 public:
