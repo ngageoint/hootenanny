@@ -877,7 +877,7 @@
     	    {
         	"id":"poipolygon_review_if_matched_types",
         	"elem_type":"string",
-        	"description":"List of key value pairs (key=value) for features to always review if marked as matches with POI to polygon conflation. When specifying the list from the command line, delimit the types with ';' and surround the entire value string in double quotes.",
+        	"description":"List of key value pairs in the format 'key=value' or  'key,value' (UI only) for features to always review if marked as matches with POI to polygon conflation.  Delimit the individual types with ';'.  e.g. 'amenity=school;shop=mall' or 'amenity,school;shop,mall'  Also, when specifying the list from the command line, surround the entire value string in double quotes.",
         	"name":"Review If Matched Types",
         	"defaultvalue":"",
         	"hoot_key":"poi.polygon.review.if.matched.types",
