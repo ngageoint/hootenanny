@@ -36,8 +36,8 @@ STEP 11b: Writing a XML changeset file that is the difference between the croppe
 STEP 12: Executing the SQL changeset on the osm api db...
 
 Changeset(s) Created: 1
-Changeset Details: min_lat=38.8920931, max_lat=38.902523, min_lon=-77.0501589, max_lon=-77.0336319, num_changes=152
-Node(s) Created: 107
+Changeset Details: min_lat=38.8920931, max_lat=38.902523, min_lon=-77.0501589, max_lon=-77.0336319, num_changes=153
+Node(s) Created: 108
 Node(s) Modified: 0
 Node(s) Deleted: 0
 Way(s) Created: 20
@@ -52,6 +52,6 @@ STEP 14: Reading the entire contents of the osm api db, for the SQL changeset wo
 
 STEP 15: Cleaning up database...
 
-17:45:01.361 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 137
-17:45:01.728 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 138
-17:45:02.070 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 139
+16:32:09.061 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 765
+16:32:09.293 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 766
+16:32:09.524 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 767
