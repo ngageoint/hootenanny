@@ -2251,9 +2251,10 @@ require it.
 * Default Value:
 ** ``
 
-List of key value pairs (key=value) for features to always review if marked as matches with POI to
-polygon conflation.  When specifying the list from the command line, delimit the types with ';'
-and surround the entire value string in double quotes.
+List of key value pairs in the format 'key=value' or  'key,value' (UI only) for features to always
+review if marked as matches with POI to polygon conflation.  Delimit the individual types with ';'.
+e.g. 'amenity=school;shop=mall' or 'amenity,school;shop,mall'  Also, when specifying the list from
+the command line, surround the entire value string in double quotes.
 
 === poi.polygon.review.multiuse.buildings
 
