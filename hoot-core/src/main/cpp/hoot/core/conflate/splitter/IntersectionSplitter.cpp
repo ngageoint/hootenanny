@@ -264,13 +264,16 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
         // see comments for similar functionality in HighwaySnapMerger::_mergePair
         if (_preserveUnknown1ElementIdWhenModifyingFeatures && way->getStatus() == Status::Unknown1)
         {
-          LOG_TRACE(
-            "Setting unknown1 " << way->getElementId().getId() << " on " <<
-            splits[0]->getElementId() << "...");
-          ElementPtr newWaySegment(_map->getElement(splits[0]->getElementId())->clone());
-          newWaySegment->setId(way->getElementId().getId());
-          _map->replace(_map->getElement(splits[0]->getElementId()), newWaySegment);
-          _wayReplacements[splits[0]->getElementId().getId()] = way->getElementId().getId();
+          if (way->getElementId().getId() != splits[0]->getElementId().getId())
+          {
+            LOG_TRACE(
+              "Setting unknown1 " << way->getElementId().getId() << " on " <<
+              splits[0]->getElementId() << "...");
+            ElementPtr newWaySegment(_map->getElement(splits[0]->getElementId())->clone());
+            newWaySegment->setId(way->getElementId().getId());
+            _map->replace(_map->getElement(splits[0]->getElementId()), newWaySegment);
+            _wayReplacements[splits[0]->getElementId().getId()] = way->getElementId().getId();
+          }
         }
 
         _removeWayFromMap(way);
