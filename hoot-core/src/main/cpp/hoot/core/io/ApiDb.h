@@ -196,6 +196,14 @@ public:
   virtual long getUserId(const QString email, bool throwWhenMissing);
 
   /**
+   * Determines whether a user with the given ID exists in the database
+   *
+   * @param id the ID for which to query
+   * @return true if a user with the specified ID exists; false otherwise
+   */
+  bool userExists(const long id);
+
+  /**
    * Inserts a user.
    */
   virtual long insertUser(const QString email, const QString displayName);
@@ -449,6 +457,7 @@ private:
   boost::shared_ptr<QSqlQuery> _selectWayNodeIdsByWayIds;
   boost::shared_ptr<QSqlQuery> _selectRelationIdsByMemberIds;
   boost::shared_ptr<QSqlQuery> _selectChangesetsCreatedAfterTime;
+  boost::shared_ptr<QSqlQuery> _userExists;
 
   QHash<QString, boost::shared_ptr<QSqlQuery> > _maxIdQueries;
   QHash<QString, boost::shared_ptr<QSqlQuery> > _numElementsQueries;

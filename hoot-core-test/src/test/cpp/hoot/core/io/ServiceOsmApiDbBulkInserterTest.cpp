@@ -66,7 +66,8 @@ class ServiceOsmApiDbBulkInserterTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runPsqlCustomStartingIdsDbOfflineTest);
   CPPUNIT_TEST(runPsqlLargeCustomStartingIdsDbOfflineTest);
   CPPUNIT_TEST(runSqlFileOutputTest);
-  //CPPUNIT_TEST(maxDataTypeSizeTest);
+  CPPUNIT_TEST(runUserDoesntExistTest);
+  //CPPUNIT_TEST(maxDataTypeSizeTest);  //just for debugging
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -642,6 +643,27 @@ public:
     TestUtils::verifyStdMatchesOutputIgnoreDate(
       "test-files/io/ServiceOsmApiDbBulkInserterTest/psql-offline.sql", outFile);
     ServicesDbTestUtils::verifyTestDatabaseEmpty();
+  }
+
+  void runUserDoesntExistTest()
+  {
+    ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
+    const QString scriptDir = "test-files/servicesdb";
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
+
+    OsmApiDbBulkInserter writer;
+    writer.setChangesetUserId(-1);
+    QString exceptionMsg("");
+    try
+    {
+      writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+
+    CPPUNIT_ASSERT(exceptionMsg.contains("Invalid changeset user ID"));
   }
 
   void maxDataTypeSizeTest()

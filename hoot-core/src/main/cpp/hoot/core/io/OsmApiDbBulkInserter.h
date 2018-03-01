@@ -284,6 +284,7 @@ private:
 
   void _verifyOutputCopySettings();
   void _verifyFileOutputs();
+  void _verifyChangesetUserId();
 
   void _incrementAndGetLatestIdsFromDb();
   void _updateRecordLineWithIdOffset(const QString tableName, QString& recordLine);
