@@ -217,7 +217,7 @@ void OsmPbfWriter::initializePartial()
   _initBlob();
 }
 
-void OsmPbfWriter::open(QString url)
+void OsmPbfWriter::_open(QString url)
 {
   _openStream.reset(new fstream(url.toUtf8().constData(), ios::out | ios::binary));
   if (_openStream->good() == false)
@@ -225,7 +225,11 @@ void OsmPbfWriter::open(QString url)
     throw HootException(QString("Error opening for writing: %1").arg(url));
   }
   _out = _openStream.get();
+}
 
+void OsmPbfWriter::open(QString url)
+{
+  _open(url);
   initializePartial();
 }
 
@@ -237,6 +241,15 @@ void OsmPbfWriter::close()
   }
   delete _d;
 }
+
+//this doesn't work yet - #2207
+//void OsmPbfWriter::updateSorted(const QString url, const bool sorted)
+//{
+//  OsmPbfWriter writer;
+//  writer._open(url);
+//  writer._writeOsmHeader(true, sorted);
+//  writer.close();
+//}
 
 void OsmPbfWriter::setIdDelta(long nodeIdDelta, long wayIdDelta, long relationIdDelta)
 {
@@ -575,9 +588,9 @@ void OsmPbfWriter::_writeOsmHeader(bool includeBounds, bool sorted)
   _d->headerBlock.Clear();
 
   LOG_VARD(includeBounds);
+  LOG_VARD(_map.get());
   if (includeBounds && _map.get())
   {
-    LOG_VARD(_map.get());
     const OGREnvelope& env = CalculateMapBoundsVisitor::getBounds(_map);
     _d->headerBlock.mutable_bbox()->set_bottom(env.MinY);
     _d->headerBlock.mutable_bbox()->set_left(env.MinX);
@@ -592,10 +605,12 @@ void OsmPbfWriter::_writeOsmHeader(bool includeBounds, bool sorted)
   _d->headerBlock.mutable_required_features()->Add()->assign(PBF_OSM_SCHEMA_V06);
   _d->headerBlock.mutable_required_features()->Add()->assign(PBF_DENSE_NODES);
 
+  LOG_VARD(sorted);
   if (sorted)
   {
     _d->headerBlock.mutable_optional_features()->Add()->assign(PBF_SORT_TYPE_THEN_ID);
   }
+  LOG_VARD(_includeVersion);
   if (_includeVersion)
   {
     _d->headerBlock.mutable_writingprogram()->assign(HOOT_FULL_VERSION);
@@ -606,8 +621,10 @@ void OsmPbfWriter::_writeOsmHeader(bool includeBounds, bool sorted)
   }
 
   int size = _d->headerBlock.ByteSize();
+  LOG_VARD(size);
   _d->headerBlock.SerializePartialToArray(_getBuffer(size), size);
   _writeBlob(_buffer.data(), size, PBF_OSM_HEADER);
+  LOG_DEBUG("test1");
 }
 
 void OsmPbfWriter::writePartial(const ConstOsmMapPtr& map)

@@ -123,6 +123,9 @@ void OsmFileSorter::_sortPbf(const QString input, const QString output)
   {
     throw HootException("Unable to sort OSM PBF file.");
   }
+
+  //this isn't working...can't update the sorted header yet - #2207
+  //OsmPbfWriter::updateSorted(output, true);
 }
 
 boost::shared_ptr<QTemporaryFile> OsmFileSorter::_ogrToPbfTemp(const QString input)
