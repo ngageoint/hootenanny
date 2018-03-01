@@ -34,9 +34,9 @@ fi
 # Install Tomcat from our package in Hootenanny's dependency repo.
 sudo yum install -y tomcat8
 
-# Modify the vagrant user to be a part of the tomcat group, so it
+# Modify the invoking user to be a part of the tomcat group, so it
 # can write same directories as the tomcat service user.
-sudo usermod -a -G tomcat vagrant
+sudo usermod -a -G tomcat $USER
 
 # Add local configuration file that sets up environment variables
 # for Hootenanny development.
@@ -48,9 +48,9 @@ export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/lib:${HOOT_HOME}/lib
 export PATH=${HOOT_HOME}/bin:${PATH}
 EOF
 
-# Have the service run as the vagrant user and group.
-sudo sed -i "s/User=tomcat/User=vagrant/g" $TOMCAT_SYSTEMD
-sudo sed -i "s/Group=tomcat/Group=vagrant/g" $TOMCAT_SYSTEMD
+# Have the service run as the development user and group.
+sudo sed -i "s/User=tomcat/User=${USER}/g" $TOMCAT_SYSTEMD
+sudo sed -i "s/Group=tomcat/Group=${USER}/g" $TOMCAT_SYSTEMD
 
 sudo systemctl daemon-reload
 sudo systemctl enable $TOMCAT_NAME
@@ -73,6 +73,6 @@ Please login to the host to view the logs:
 
    sudo journalctl -u tomcat8
 EOF
-sudo chown vagrant:vagrant ${TOMCAT_LOGS}/catalina.out
+sudo chown $USER:$USER ${TOMCAT_LOGS}/catalina.out
 
 echo "######## End ${TOMCAT_NAME} installation ########"
