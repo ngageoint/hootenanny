@@ -54,10 +54,9 @@
             {
                 "id":"intersection_splitter",
                 "elem_type":"checkbox",
-                "description":"Split all highway type ways that intersect.",
+                "description":"Split all roads that intersect.  Disabling this setting may have an extreme impact on conflation performance.",
                 "name":"Split Intersections",
                 "hoot_val":"hoot::IntersectionSplitter",
-                "required":"true",
                 "defaultvalue":"true"
             },
             {
@@ -140,6 +139,14 @@
                 "name":"Remove Elements With No Information",
                 "hoot_val":"hoot::NoInformationElementRemover",
                 "defaultvalue":"true"
+            },
+            {
+                "id":"corner_splitter",
+                "elem_type":"checkbox",
+                "description":"Split roads at sharp corners..",
+                "name":"Split Sharp Road Corners",
+                "hoot_val":"hoot::CornerSplitter",
+                "defaultvalue":"true"
             }
         ]
     },
@@ -168,7 +175,7 @@
                 "elem_type":"checkbox",
                 "description":"Enable rubber sheeting options",
                 "name":"Enabled",
-                "defaultvalue":"false",
+                "defaultvalue":"true",
                 "onchange":"true"
             },
             {
@@ -176,7 +183,7 @@
                 "elem_type":"checkbox",
                 "description":"If this configuration setting is set to true then the first layer is treated as the reference layer and will not be moved. If set to false the two layers will be moved towards each other. The weighting is determined based on the circular error.",
                 "name":"Rubber Sheet Ref",
-                "defaultvalue":"false",
+                "defaultvalue":"true",
                 "hoot_key":"rubber.sheet.ref"
             },
             {
@@ -186,8 +193,25 @@
                 "description":"Sets the minimum number of tie points that will be used when calculating a rubber sheeting solution.",
                 "maxvalue":"",
                 "name":"Rubber Sheet Minimum Ties",
-                "defaultvalue":"10",
+                "defaultvalue":"4",
                 "hoot_key":"rubber.sheet.minimum.ties"
+            },
+            {
+                "id":"rubber_sheet_fail_when_min_tie_points_not_found",
+                "elem_type":"checkbox",
+                "description":"If set to true, rubber sheeting will return an error if less than rubber.sheet.minimum.ties tie points are found.  Otherwise, a warning will be logged and rubber sheeting will be skipped.",
+                "name":"Fail When Minimum Tie Points Are Not Found",
+                "defaultvalue":"false",
+                "hoot_key":"rubber.sheet.fail.when.minimum.tie.points.not.found"
+            },
+            {
+                "id":"rubber_sheet_log_missing_requirements_as_warning",
+                "elem_type":"checkbox",
+                "description":"From the UI we always want to log this as warning.  e.g. min tie points not found",
+                "name":"Log Missing Requirements As Warning",
+                "required":"true",
+                "defaultvalue":"true",
+                "hoot_key":"rubber.sheet.log.missing.requirements.as.warning"
             }
         ]
     },
@@ -377,6 +401,15 @@
                 "name":"Weighted Metric Distance Extractor Search Radius",
                 "defaultvalue":"-1.0",
                 "hoot_key":"weighted.metric.distance.extractor.search.radius"
+            },
+            {
+                "id":"auto_correct_options",
+                "elem_type":"bool",
+                "defaultvalue":"true",
+                "required":"true",
+                "description":"Temporary setting that addresses some Hootenanny iD Editor UI bugs.  See MatchFactory::_tempFixDefaults() for more info.",
+                "name":"Auto Correct Options",
+                "hoot_key":"autocorrect.options"
             }
         ]
     },
@@ -844,7 +877,7 @@
     	    {
         	"id":"poipolygon_review_if_matched_types",
         	"elem_type":"string",
-        	"description":"List of key value pairs (key=value) for features to always review if marked as matches with POI to polygon conflation. When specifying the list from the command line, delimit the types with ';' and surround the entire value string in double quotes.",
+        	"description":"List of key value pairs in the format 'key=value' or  'key,value' (UI only) for features to always review if marked as matches with POI to polygon conflation.  Delimit the individual types with ';'.  e.g. 'amenity=school;shop=mall' or 'amenity,school;shop,mall'  Also, when specifying the list from the command line, surround the entire value string in double quotes.",
         	"name":"Review If Matched Types",
         	"defaultvalue":"",
         	"hoot_key":"poi.polygon.review.if.matched.types",
@@ -1011,17 +1044,17 @@
                 "id":"waterway_rubber_sheet_minimum_ties",
                 "minvalue":"0",
                 "elem_type":"int",
-                "description":"Sets the minimum number of tie points that will be used when calculating a rubber sheeting solution.",
+                "description":"Sets the minimum number of rubber sheet tie points that will be used when auto-calculating a search radius.  This is separate from the global Rubber Sheeting Minimum Ties option.",
                 "maxvalue":"",
-                "name":"Waterway Rubber Sheet Minimum Ties",
+                "name":"Waterway Auto-Search Radius Calculation Minimum Ties",
                 "defaultvalue":"5",
                 "hoot_key":"waterway.rubber.sheet.minimum.ties"
             },
             {
                 "id":"waterway_rubber_sheet_ref",
                 "elem_type":"bool",
-                "description":"If this configuration setting is set to true then the first layer is treated as the reference layer and will not be moved. If set to false the two layers will be moved towards each other. The weighting is determined based on the circular error.",
-                "name":"Waterway Rubber Sheet Ref",
+                "description":"When auto-calculating a search radius, if this configuration setting is set to true then the first layer is treated as the reference layer and will not be moved. If set to false, the two layers will be moved towards each other. The weighting is determined based on the circular error.  This is separate from the global Rubber Sheeting Ref option.",
+                "name":"Waterway Auto-Search Radius Calculation Rubber Sheet Ref",
                 "defaultvalue":"true",
                 "hoot_key":"waterway.rubber.sheet.ref"
             }

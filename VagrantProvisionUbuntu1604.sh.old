@@ -429,7 +429,7 @@ fi
 TOMCAT_HOME=/usr/share/tomcat8
 
 # Install Tomcat 8
-$HOOT_HOME/scripts/tomcat/tomcat8/ubuntu/tomcat8_install.sh
+$HOOT_HOME/scripts/tomcat/ubuntu/tomcat8_install.sh
 
 # Configure Tomcat
 if ! grep --quiet TOMCAT8_HOME ~/.profile; then

@@ -126,19 +126,26 @@ pipeline {
     }
     post {
         always {
-            // Send build notification
-            notifySlack(currentBuild.result, "#builds_hoot")
+            script {
+                if (!env.BRANCH_NAME.startsWith("PR-")) {
+                    // Send build notification
+                    notifySlack(currentBuild.result, "#builds_hoot")
+                }
+            }
         }
         success {
-            
             // If all tests passed, clean everything up
             sh "vagrant destroy -f ${params.Box}"
             cleanWs()
         }
         failure {
-            // Copy over any UI failure screenshots and send to slack
-            sh "vagrant scp ${params.Box}:~/hoot/test-files/ui/screenshot_*.png ./test-files/ui/"
-            postSlack("${env.WORKSPACE}/test-files/ui/", "screenshot_*.png", "${env.JENKINS_BOT_TOKEN}", "#builds_hoot")
+            script {
+                if (!env.BRANCH_NAME.startsWith("PR-")) {
+                    // Copy over any UI failure screenshots and send to slack
+                    sh "vagrant scp ${params.Box}:~/hoot/test-files/ui/screenshot_*.png ./test-files/ui/"
+                    postSlack("${env.WORKSPACE}/test-files/ui/", "screenshot_*.png", "${env.JENKINS_BOT_TOKEN}", "#builds_hoot")
+                }
+            }
         }
     }
 }

@@ -1,0 +1,2 @@
+test-files/cmd/slow/SortCmdTest/input.osm.pbf is not sorted.
+test-output/cmd/slow/SortCmdTest/output.osm.pbf is not sorted.
