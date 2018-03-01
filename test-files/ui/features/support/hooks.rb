@@ -26,12 +26,12 @@ end
 
 #Tagged hooks
 
-Before('@Ex_tag1, @Ex_tag2') do
+Before('@Ex_tag1 or @Ex_tag2') do
   # This will only run before scenarios tagged
   # with @cucumis OR @sativus.
 end
 
-AfterStep('@Ex_tag1, @Ex_tag2') do
+AfterStep('@Ex_tag1 or @Ex_tag2') do
   # This will only run after steps within scenarios tagged
   # with @cucumis AND @sativus.
 end
