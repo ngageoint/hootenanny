@@ -67,8 +67,7 @@ fi
 sudo systemctl stop $TOMCAT_NAME
 sudo rm -f ${TOMCAT_LOGS}/catalina.out
 
-# TODO: Recreate catalina.out as it's needed by the application, else
-#       error popup occurs.
+# Recreate catalina.out to prevent error pop-up.
 sudo bash -c "cat >> ${TOMCAT_LOGS}/catalina.out" <<EOF
 Please login to the host to view the logs:
 
