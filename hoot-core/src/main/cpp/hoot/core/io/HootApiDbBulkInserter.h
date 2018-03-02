@@ -40,6 +40,10 @@ class HootApiDbSqlStatementFormatter;
  * creating new elements in a new database only.  See OsmApiDbBulkInserter.  This class implements
  * the offline workflow only and does not allow for writing to a SQL file.
  *
+ * Note: The constraint and index disable settings have no effect on this class since Hoot API
+ * database writing creates a brand new database for every layer that has no constraints to start
+ * with.
+ *
  * TODO: Having this class inheriting from OsmApiDbBulkInserter is not the cleanest approach but
  * allowed for reducing a lot of redundant code up front without involving a massive amount of
  * refactoring work.  The better long term approach is probably to create a ApiDbBulkinserter base
