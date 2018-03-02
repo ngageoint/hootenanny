@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef APIDB_H
 #define APIDB_H
@@ -194,6 +194,14 @@ public:
    * if the user doesn't exist.
    */
   virtual long getUserId(const QString email, bool throwWhenMissing);
+
+  /**
+   * Determines whether a user with the given ID exists in the database
+   *
+   * @param id the ID for which to query
+   * @return true if a user with the specified ID exists; false otherwise
+   */
+  bool userExists(const long id);
 
   /**
    * Inserts a user.
@@ -449,6 +457,7 @@ private:
   boost::shared_ptr<QSqlQuery> _selectWayNodeIdsByWayIds;
   boost::shared_ptr<QSqlQuery> _selectRelationIdsByMemberIds;
   boost::shared_ptr<QSqlQuery> _selectChangesetsCreatedAfterTime;
+  boost::shared_ptr<QSqlQuery> _userExists;
 
   QHash<QString, boost::shared_ptr<QSqlQuery> > _maxIdQueries;
   QHash<QString, boost::shared_ptr<QSqlQuery> > _numElementsQueries;
