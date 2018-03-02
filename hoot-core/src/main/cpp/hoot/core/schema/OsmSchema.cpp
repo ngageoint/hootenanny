@@ -1748,12 +1748,14 @@ bool OsmSchema::isLinearHighway(const Tags& t, ElementType type)
 {
   bool result = false;
   Tags::const_iterator it = t.find("highway");
+  QString key;
 
   // Is it a legit highway?
   if ((type == ElementType::Way || type == ElementType::Relation) &&
       it != t.end() && it.value() != "")
   {
     result = true;
+    key = it.key();
   }
 
   // Maybe it's a way with nothing but a time tag...
@@ -1762,6 +1764,7 @@ bool OsmSchema::isLinearHighway(const Tags& t, ElementType type)
   {
     // We can treat it like a highway
     result = true;
+    key = it.key();
   }
 
   // Make sure this isn't an area highway section!
@@ -1772,7 +1775,7 @@ bool OsmSchema::isLinearHighway(const Tags& t, ElementType type)
 
   if (result)
   {
-    LOG_TRACE("isLinearHighway; key: " << it.key());
+    LOG_TRACE("isLinearHighway; key: " << key);
   }
 
   return result;
