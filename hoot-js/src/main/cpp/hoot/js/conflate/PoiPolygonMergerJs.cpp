@@ -27,10 +27,8 @@
 
 #include "PoiPolygonMergerJs.h"
 
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMerger.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/OsmMapJs.h>
@@ -68,8 +66,10 @@ void PoiPolygonMergerJs::jsPoiPolyMerge(const FunctionCallbackInfo<Value>& args)
   {
     if (args.Length() != 1)
     {
-      args.GetReturnValue().Set(current->ThrowException(
-            HootExceptionJs::create(IllegalArgumentException("Expected one argument for 'poiPolyMerge'."))));
+      args.GetReturnValue().Set(
+        current->ThrowException(
+            HootExceptionJs::create(
+              IllegalArgumentException("Expected one argument for 'poiPolyMerge'."))));
       return;
     }
 

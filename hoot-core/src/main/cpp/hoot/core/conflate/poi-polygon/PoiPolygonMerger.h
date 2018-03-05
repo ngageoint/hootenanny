@@ -34,7 +34,7 @@ namespace hoot
 {
 
 /**
- * TODO: How much, if any, does this need to be genericized to handle areas (non-building polys)?
+ * Merges POIs with polygons
  */
 class PoiPolygonMerger : public MergerBase
 {

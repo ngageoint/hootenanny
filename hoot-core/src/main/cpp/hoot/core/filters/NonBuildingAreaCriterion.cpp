@@ -41,7 +41,7 @@ NonBuildingAreaCriterion::NonBuildingAreaCriterion()
 
 bool NonBuildingAreaCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
 {
-  return OsmSchema::getInstance().isArea(e) && !OsmSchema::getInstance().isBuilding(e);
+  return OsmSchema::getInstance().isNonBuildingArea(e);
 }
 
 }

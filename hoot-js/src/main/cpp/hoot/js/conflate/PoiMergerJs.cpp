@@ -91,7 +91,7 @@ void PoiMergerJs::jsPoiMerge(const FunctionCallbackInfo<Value>& args)
     OsmMapJs* mapJs = node::ObjectWrap::Unwrap<OsmMapJs>(args[1]->ToObject());
 
     // Pull out internal POI map
-    OsmMapPtr map( mapJs->getMap() );
+    OsmMapPtr map(mapJs->getMap());
 
     // Instantiate script merger
     boost::shared_ptr<PluginContext> script(new PluginContext());
@@ -130,19 +130,21 @@ void PoiMergerJs::jsPoiMerge(const FunctionCallbackInfo<Value>& args)
     LOG_TRACE("First ID: " << firstId.getId());
     for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
     {
-      if (it->second->getId() != elementId) {
+      if (it->second->getId() != elementId)
+      {
         const ConstNodePtr& n = it->second;
 
         std::set< std::pair< ElementId, ElementId> > matches;
         matches.insert(std::pair<ElementId,ElementId>(firstId, ElementId::node(n->getId())));
 
-        // Now create scriptmerger, and invoke apply method which will apply apply merge transformation, reducing the POIs down to one
+        // Now create scriptmerger, and invoke apply method which will apply apply merge
+        //transformation, reducing the POIs down to one
         ScriptMerger merger(script, plugin, matches);
         OsmMapPtr mergedMap(map);
         std::vector< std::pair< ElementId, ElementId > > replacedNodes;
-        merger.apply(mergedMap, replacedNodes );
+        merger.apply(mergedMap, replacedNodes);
 
-        if ( replacedNodes.size() == 1 )
+        if (replacedNodes.size() == 1)
         {
           LOG_TRACE("POI merge: replacing node #" << replacedNodes[0].first.getId() <<
                     " with updated version of node #" << replacedNodes[0].second.getId() );
@@ -155,7 +157,7 @@ void PoiMergerJs::jsPoiMerge(const FunctionCallbackInfo<Value>& args)
     Handle<Object> returnMap = OsmMapJs::create(mergedMap);
     args.GetReturnValue().Set(returnMap);
   }
-  catch ( const HootException& e )
+  catch (const HootException& e)
   {
     args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(e)));
   }

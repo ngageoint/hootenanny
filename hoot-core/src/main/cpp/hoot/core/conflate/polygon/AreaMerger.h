@@ -28,10 +28,8 @@
 #ifndef AREAMERGER_H
 #define AREAMERGER_H
 
-
 // hoot
 #include <hoot/core/OsmMap.h>
-
 
 namespace hoot
 {
@@ -39,9 +37,7 @@ namespace hoot
 class OsmMap;
 
 /**
- * Merges two non-building areas
- *
- * Adapted from PoiPolygonMerger; may need some additional work
+ * Merges two non-building areas by keeping the reference feature.
  */
 class AreaMerger
 {
@@ -51,11 +47,12 @@ public:
   AreaMerger();
 
   /**
-   * Merges to non-building areas
+   * Merges two non-building areas
    *
    * @param map an OSM map containing two non-building areas
+   * @return the element ID of the retained element
    */
-  static void merge(OsmMapPtr map);
+  static ElementId merge(OsmMapPtr map);
 
 };
 

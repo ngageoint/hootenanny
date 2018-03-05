@@ -265,7 +265,7 @@ ElementId PoiPolygonMerger::merge(OsmMapPtr map)
     if (PoiPolygonMatch::isPoi(*node))
     {
       //If the POI has no status, arbitrarily make the POI unknown1 and the poly unknown2.  Make
-      //both input poi and poly have different input statuses.
+      //sure both input poi and poly have different input statuses.
       if (node->getStatus() != Status::Unknown1 && node->getStatus() != Status::Unknown2)
       {
         node->setStatus(Status::Unknown1);

@@ -351,6 +351,8 @@ public:
   bool isAreaForStats(const Tags& t, ElementType type) const;
   bool isAreaForStats(const ConstElementPtr& e) const;
 
+  bool isNonBuildingArea(const ConstElementPtr& e) const;
+
   bool isBuilding(const Tags& t, ElementType type) const;
   bool isBuilding(const ConstElementPtr& e) const;
 

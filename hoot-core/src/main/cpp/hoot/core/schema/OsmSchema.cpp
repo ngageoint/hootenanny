@@ -1612,6 +1612,11 @@ bool OsmSchema::isArea(const ConstElementPtr& e) const
   return isArea(e->getTags(), e->getElementType());
 }
 
+bool OsmSchema::isNonBuildingArea(const ConstElementPtr& e) const
+{
+  return isArea(e) && !isBuilding(e);
+}
+
 bool OsmSchema::isAreaForStats(const Tags& t, ElementType type) const
 {
   bool result = false;

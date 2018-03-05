@@ -28,7 +28,7 @@
 #include "AreaMerger.h"
 
 // hoot
-#include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
+#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 
@@ -39,26 +39,29 @@ AreaMerger::AreaMerger()
 {
 }
 
-void AreaMerger::merge(OsmMapPtr map)
+ElementId AreaMerger::merge(OsmMapPtr map)
 {
   //there should be exactly two area polygons
+  LOG_INFO("Merging two areas...");
 
-  int areaCount = map->getElementCount();
-  if (areaCount != 2)
+  const int featureCount = map->getElementCount();
+  if (featureCount != 2)
   {
-    throw IllegalArgumentException("Two areas were not passed to the area merger.");
+    throw IllegalArgumentException("Two features were not passed to the area merger.");
   }
 
   ElementPtr element1;
   ElementPtr element2;
-  int parsedElementCount = 0;
+  int parsedAreaCount = 0;
 
   //find the area(s) as ways
   const WayMap& ways = map->getWays();
   for (WayMap::const_iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
   {
     const int wayId = wayItr->first;
-    if (PoiPolygonMatch::isArea(*map->getWay(wayId)))
+    //Buildings are also defined as areas, and we want this to work independently of the building
+    //conflation process.
+    if (OsmSchema::getInstance().isNonBuildingArea(map->getWay(wayId)))
     {
       if (!element1.get())
       {
@@ -68,18 +71,19 @@ void AreaMerger::merge(OsmMapPtr map)
       {
         element2 = map->getElement(ElementType::Way, wayId);
       }
-      parsedElementCount++;
+      parsedAreaCount++;
     }
   }
 
-  if (parsedElementCount < 2)
+  if (parsedAreaCount < 2)
   {
     //find the area(s) as relations
     const RelationMap& relations = map->getRelations();
-    for (RelationMap::const_iterator relItr = relations.begin(); relItr != map->getRelations().end(); ++relItr)
+    for (RelationMap::const_iterator relItr = relations.begin(); relItr != map->getRelations().end();
+         ++relItr)
     {
       const int relationId = relItr->first;
-      if (PoiPolygonMatch::isArea(*map->getRelation(relationId)))
+      if (OsmSchema::getInstance().isNonBuildingArea(map->getRelation(relationId)))
       {
         if (!element1.get())
         {
@@ -89,15 +93,26 @@ void AreaMerger::merge(OsmMapPtr map)
         {
           element2 = map->getElement(ElementType::Relation, relationId);
         }
-        parsedElementCount++;
+        parsedAreaCount++;
       }
     }
   }
 
-  Tags mergedTags =
+  if (parsedAreaCount != 2)
+  {
+    throw IllegalArgumentException("Two areas were not passed to the area merger.");
+  }
+
+  LOG_VART(element1);
+  LOG_VART(element2);
+
+  const Tags mergedTags =
     TagMergerFactory::mergeTags(element1->getTags(), element2->getTags(), ElementType::Unknown);
   element1->setTags(mergedTags);
   RecursiveElementRemover(element2->getElementId()).apply(map);
+
+  //TODO: should determine ref from passed in element statuses instead
+  return element1->getElementId();
 }
 
 }

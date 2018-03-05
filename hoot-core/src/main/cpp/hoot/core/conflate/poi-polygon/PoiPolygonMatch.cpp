@@ -237,11 +237,6 @@ bool PoiPolygonMatch::isPoi(const Element& e)
   return isPoi;
 }
 
-bool PoiPolygonMatch::isArea(const Element& e)
-{
-  return isPoly(e) && !OsmSchema::getInstance().isBuilding(e.getTags(), e.getElementType());
-}
-
 void PoiPolygonMatch::_categorizeElementsByGeometryType(const ElementId& eid1,
                                                         const ElementId& eid2)
 {
