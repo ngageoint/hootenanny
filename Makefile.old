@@ -138,7 +138,7 @@ ifneq ($(HADOOP_HOME),)
 	cd pretty-pipes/pp-lib/ ; $(MAKE) -f Makefile.mvn test
 endif
 
-plugins-test:
+plugins-test: build
 ifneq ($(shell which mocha),)
 	cd plugins; npm install && npm test
 else
