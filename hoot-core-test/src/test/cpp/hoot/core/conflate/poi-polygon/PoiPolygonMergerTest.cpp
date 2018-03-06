@@ -71,7 +71,7 @@ public:
 
   void setUp()
   {
-    TestUtils::mkpath("test-output/conflate/poi-polygon");
+    TestUtils::mkpath("test-output/conflate/poi-polygon/PoiPolygonMergerTest");
   }
 
   void basicTest()
@@ -462,7 +462,8 @@ public:
     //read everything in as unknown1; the merger will make sure the poi and poly have separate
     //input types
     OsmMapReaderFactory::read(
-      map, "test-files/conflate/poi-polygon/poi-poly-way-poly-in.osm", false, Status::Unknown1);
+      map, "test-files/conflate/poi-polygon/PoiPolygonMergerTest/poi-poly-way-poly-in.osm", false,
+      Status::Unknown1);
 
     const ElementId polyId = PoiPolygonMerger::merge(map);
     CPPUNIT_ASSERT_EQUAL((long)-1, polyId.getId());
@@ -473,8 +474,8 @@ public:
       "test-output/conflate/poi-polygon/poi-poly-way-poly-out.osm");
 
     HOOT_FILE_EQUALS(
-      "test-files/conflate/poi-polygon/poi-poly-way-poly-out.osm",
-      "test-output/conflate/poi-polygon/poi-poly-way-poly-out.osm");
+      "test-files/conflate/poi-polygon/PoiPolygonMergerTest/poi-poly-way-poly-out.osm",
+      "test-output/conflate/poi-polygon/PoiPolygonMergerTest/poi-poly-way-poly-out.osm");
   }
 
   void mergeRelationAsPolyTest()
@@ -483,8 +484,8 @@ public:
     OsmMapPtr map(new OsmMap());
     //see comments in mergeWayAsPolyTest
     OsmMapReaderFactory::read(
-      map, "test-files/conflate/poi-polygon/poi-poly-relation-poly-in.osm", false,
-      Status::Unknown1);
+      map, "test-files/conflate/poi-polygon/PoiPolygonMergerTest/poi-poly-relation-poly-in.osm",
+      false, Status::Unknown1);
 
     const ElementId polyId = PoiPolygonMerger::merge(map);
     CPPUNIT_ASSERT_EQUAL((long)-1, polyId.getId());
@@ -492,11 +493,11 @@ public:
 
     MapProjector::projectToWgs84(map);
     OsmMapWriterFactory::getInstance().write(map,
-      "test-output/conflate/poi-polygon/poi-poly-relation-poly-out.osm");
+      "test-output/conflate/poi-polygon/PoiPolygonMergerTest/poi-poly-relation-poly-out.osm");
 
     HOOT_FILE_EQUALS(
-      "test-files/conflate/poi-polygon/poi-poly-relation-poly-out.osm",
-      "test-output/conflate/poi-polygon/poi-poly-relation-poly-out.osm");
+      "test-files/conflate/poi-polygon/PoiPolygonMergerTest/poi-poly-relation-poly-out.osm",
+      "test-output/conflate/poi-polygon/PoiPolygonMergerTest/poi-poly-relation-poly-out.osm");
   }
 
   void mergeMissingPoiInputTest()
@@ -506,8 +507,8 @@ public:
     {
       OsmMapPtr map(new OsmMap());
       OsmMapReaderFactory::read(
-        map, "test-files/conflate/poi-polygon/poi-poly-missing-poi-in.osm", false,
-        Status::Unknown1);
+        map, "test-files/conflate/poi-polygon/PoiPolygonMergerTest/poi-poly-missing-poi-in.osm",
+        false, Status::Unknown1);
 
       PoiPolygonMerger::merge(map);
     }
@@ -525,8 +526,8 @@ public:
     {
       OsmMapPtr map(new OsmMap());
       OsmMapReaderFactory::read(
-        map, "test-files/conflate/poi-polygon/poi-poly-missing-poly-in.osm", false,
-        Status::Unknown1);
+        map, "test-files/conflate/poi-polygon/PoiPolygonMergerTest/poi-poly-missing-poly-in.osm",
+        false, Status::Unknown1);
 
       PoiPolygonMerger::merge(map);
     }
@@ -544,8 +545,8 @@ public:
     {
       OsmMapPtr map(new OsmMap());
       OsmMapReaderFactory::read(
-        map, "test-files/conflate/poi-polygon/poi-poly-more-than-one-poi-in.osm", false,
-        Status::Unknown1);
+        map, "test-files/conflate/poi-polygon/PoiPolygonMergerTest/poi-poly-more-than-one-poi-in.osm",
+        false, Status::Unknown1);
 
       PoiPolygonMerger::merge(map);
     }
@@ -564,7 +565,9 @@ public:
     {
       OsmMapPtr map(new OsmMap());
       OsmMapReaderFactory::read(
-        map, "test-files/conflate/poi-polygon/poi-poly-more-than-one-poly-in.osm", false,
+        map,
+        "test-files/conflate/poi-polygon/PoiPolygonMergerTest/poi-poly-more-than-one-poly-in.osm",
+        false,
         Status::Unknown1);
 
       PoiPolygonMerger::merge(map);

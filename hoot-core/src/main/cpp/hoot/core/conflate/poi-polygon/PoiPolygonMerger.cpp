@@ -264,6 +264,9 @@ ElementId PoiPolygonMerger::merge(OsmMapPtr map)
     NodePtr node = map->getNode(nodeId);
     if (PoiPolygonMatch::isPoi(*node))
     {
+      //TODO: Arbitrarily setting the status doesn't seem right.  Should be able to assume that
+      //that the incoming features always have a status, as is done with AreaMerger.
+
       //If the POI has no status, arbitrarily make the POI unknown1 and the poly unknown2.  Make
       //sure both input poi and poly have different input statuses.
       if (node->getStatus() != Status::Unknown1 && node->getStatus() != Status::Unknown2)

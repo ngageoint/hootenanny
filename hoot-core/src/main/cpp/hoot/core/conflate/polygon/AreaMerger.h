@@ -37,7 +37,7 @@ namespace hoot
 class OsmMap;
 
 /**
- * Merges two non-building areas by keeping the reference feature.
+ * Merges two non-building areas
  */
 class AreaMerger
 {

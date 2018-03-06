@@ -41,79 +41,111 @@ AreaMerger::AreaMerger()
 
 ElementId AreaMerger::merge(OsmMapPtr map)
 {
-  //there should be exactly two area polygons
+  //there should be exactly two area polygons passed in, one ref and one secondary
+
   LOG_INFO("Merging two areas...");
 
   const int featureCount = map->getElementCount();
   if (featureCount != 2)
   {
-    throw IllegalArgumentException("Two features were not passed to the area merger.");
+    throw IllegalArgumentException(
+      "The Area Merger expects two areas passed to it.  Number passed: " +
+      QString::number(featureCount));
   }
 
-  ElementPtr element1;
-  ElementPtr element2;
-  int parsedAreaCount = 0;
+  ElementPtr refArea;
+  ElementPtr secArea;
 
-  //find the area(s) as ways
+  //find the areas as ways
   const WayMap& ways = map->getWays();
   for (WayMap::const_iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
   {
-    const int wayId = wayItr->first;
+    const long wayId = wayItr->first;
+    const ConstWayPtr way = map->getWay(wayId);
     //Buildings are also defined as areas, and we want this to work independently of the building
-    //conflation process.
-    if (OsmSchema::getInstance().isNonBuildingArea(map->getWay(wayId)))
+    //conflation process.  So, use isNonBuildingArea instead of isArea here.
+    if (way.get() && OsmSchema::getInstance().isNonBuildingArea(way))
     {
-      if (!element1.get())
+      if (way->getStatus() == Status::Unknown1)
       {
-        element1 = map->getElement(ElementType::Way, wayId);
+        if (!refArea.get())
+        {
+          refArea.reset(new Way(*way));
+        }
+      }
+      else if (way->getStatus() == Status::Unknown2)
+      {
+        if (!secArea.get())
+        {
+          secArea.reset(new Way(*way));
+        }
       }
       else
       {
-        element2 = map->getElement(ElementType::Way, wayId);
+        throw IllegalArgumentException(
+          "Passed a way with an invalid status to the Area Merger: " + way->getStatus().toString());
       }
-      parsedAreaCount++;
     }
   }
 
-  if (parsedAreaCount < 2)
+  if (!refElement.get() || !secElement.get())
   {
-    //find the area(s) as relations
+    //find the areas as relations
     const RelationMap& relations = map->getRelations();
     for (RelationMap::const_iterator relItr = relations.begin(); relItr != map->getRelations().end();
          ++relItr)
     {
-      const int relationId = relItr->first;
-      if (OsmSchema::getInstance().isNonBuildingArea(map->getRelation(relationId)))
+      const long relationId = relItr->first;
+      const ConstRelationPtr relation = map->getRelation(relationId);
+      //see comment above regarding use of isNonBuildingArea here
+      if (relation.get() && OsmSchema::getInstance().isNonBuildingArea(relation))
       {
-        if (!element1.get())
+        if (relation->getStatus() == Status::Unknown1)
         {
-          element1 = map->getElement(ElementType::Relation, relationId);
+          if (!refArea.get())
+          {
+            refArea.reset(new Relation(*relation));
+          }
+        }
+        else if (relation->getStatus() == Status::Unknown2)
+        {
+          if (!secArea.get())
+          {
+            secArea.reset(new Relation(*relation));
+          }
         }
         else
         {
-          element2 = map->getElement(ElementType::Relation, relationId);
+          throw IllegalArgumentException(
+            "Passed a relation with an invalid status to the Area Merger: " +
+            relation->getStatus().toString());
         }
-        parsedAreaCount++;
       }
     }
   }
 
-  if (parsedAreaCount != 2)
+  if (!refArea.get())
   {
-    throw IllegalArgumentException("Two areas were not passed to the area merger.");
+    throw IllegalArgumentException("No reference area was passed to the Area Merger.");
+  }
+  if (!secArea.get())
+  {
+    throw IllegalArgumentException("No secondary area was passed to the Area Merger.");
   }
 
-  LOG_VART(element1);
-  LOG_VART(element2);
+  assert(refElement.get() && secElement.get());
+  LOG_VART(refElement);
+  LOG_VART(secElement);
 
-  //simply keeping the ref geometry and tags; may need something more robust eventually
+  //simply keeping the ref geometry and tags right now; may need a more robust way to merge
+  //eventually
   const Tags mergedTags =
-    TagMergerFactory::mergeTags(element1->getTags(), element2->getTags(), ElementType::Unknown);
-  element1->setTags(mergedTags);
-  RecursiveElementRemover(element2->getElementId()).apply(map);
+    TagMergerFactory::mergeTags(refElement->getTags(), secElement->getTags(), ElementType::Unknown);
+  refElement->setTags(mergedTags);
+  RecursiveElementRemover(secElement->getElementId()).apply(map);
+  LOG_VART(map->getElementCount());
 
-  //TODO: should determine ref from passed in element statuses instead
-  return element1->getElementId();
+  return refElement->getElementId();
 }
 
 }
