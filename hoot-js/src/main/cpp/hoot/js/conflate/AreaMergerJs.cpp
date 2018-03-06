@@ -54,8 +54,8 @@ void AreaMergerJs::jsAreaMerge(const FunctionCallbackInfo<Value>& args)
     LOG_VARD(refId);
     LOG_VARD(map->getElementCount());
 
-    //Set the ref area to have a conflated status, since its geometry and tags were all that was
-    //kep by the merger.
+    //Set the ref area to have a conflated status, since its geometry, and tags were all that was
+    //kept by the merger.
     ElementPtr refElement = map->getElement(refId);
     refElement->setStatus(Status(Status::Conflated));
     refElement->getTags()[MetadataTags::HootStatus()] = "3";

@@ -106,6 +106,7 @@ ElementId AreaMerger::merge(OsmMapPtr map)
   LOG_VART(element1);
   LOG_VART(element2);
 
+  //simply keeping the ref geometry and tags; may need something more robust eventually
   const Tags mergedTags =
     TagMergerFactory::mergeTags(element1->getTags(), element2->getTags(), ElementType::Unknown);
   element1->setTags(mergedTags);
