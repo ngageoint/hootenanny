@@ -88,7 +88,7 @@ ElementId AreaMerger::merge(OsmMapPtr map)
     }
   }
 
-  if (!refElement.get() || !secElement.get())
+  if (!refArea.get() || !secArea.get())
   {
     //find the areas as relations
     const RelationMap& relations = map->getRelations();
@@ -133,19 +133,19 @@ ElementId AreaMerger::merge(OsmMapPtr map)
     throw IllegalArgumentException("No secondary area was passed to the Area Merger.");
   }
 
-  assert(refElement.get() && secElement.get());
-  LOG_VART(refElement);
-  LOG_VART(secElement);
+  assert(refArea.get() && secArea.get());
+  LOG_VART(refArea);
+  LOG_VART(secArea);
 
   //simply keeping the ref geometry and tags right now; may need a more robust way to merge
   //eventually
   const Tags mergedTags =
-    TagMergerFactory::mergeTags(refElement->getTags(), secElement->getTags(), ElementType::Unknown);
-  refElement->setTags(mergedTags);
-  RecursiveElementRemover(secElement->getElementId()).apply(map);
+    TagMergerFactory::mergeTags(refArea->getTags(), secArea->getTags(), ElementType::Unknown);
+  refArea->setTags(mergedTags);
+  RecursiveElementRemover(secArea->getElementId()).apply(map);
   LOG_VART(map->getElementCount());
 
-  return refElement->getElementId();
+  return refArea->getElementId();
 }
 
 }
