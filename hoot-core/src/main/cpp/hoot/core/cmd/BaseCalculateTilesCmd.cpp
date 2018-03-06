@@ -121,7 +121,7 @@ void BaseCalculateTilesCmd::_writeOutputAsGeoJson(
 {
   //write out to temp osm and then use ogr2ogr to convert to geojson
 
-  QTemporaryFile osmTempFile("calculate-tiles-temp-XXXXXX.osm");
+  QTemporaryFile osmTempFile("tmp/calculate-tiles-temp-XXXXXX.osm");
   if (!osmTempFile.open())
   {
     throw HootException(
