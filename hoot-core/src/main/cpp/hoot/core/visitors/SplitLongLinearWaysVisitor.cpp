@@ -148,8 +148,10 @@ void SplitLongLinearWaysVisitor::visit(const boost::shared_ptr<Element>& element
     }
 
     // Create a new way
-    WayPtr newWay( new Way(Status::Unknown1, _map->createNextWayId(),
-      way->getRawCircularError() ) );
+    long way_id = way->getId();
+    if (masterNodeIndex > 0)
+      way_id = _map->createNextWayId();
+    WayPtr newWay( new Way(Status::Unknown1, way_id, way->getRawCircularError() ) );
     LOG_TRACE("Created new way w/ ID " << newWay->getId() << " that is going to hold " << nodesThisTime << " nodes");
     for ( unsigned int i = 0; i < nodesThisTime; ++i )
     {
@@ -183,7 +185,7 @@ void SplitLongLinearWaysVisitor::visit(const boost::shared_ptr<Element>& element
   }
 
   // Remove original way from the map now that all the "child" ways are added
-  RemoveWayOp::removeWay(_map->shared_from_this(), way->getId());
+//  RemoveWayOp::removeWay(_map->shared_from_this(), way->getId());
 }
 
 
