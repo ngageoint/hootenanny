@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "SplitLongLinearWaysVisitor.h"
 
@@ -183,9 +183,6 @@ void SplitLongLinearWaysVisitor::visit(const boost::shared_ptr<Element>& element
       masterNodeIndex += (nodesThisTime - 1);
     }
   }
-
-  // Remove original way from the map now that all the "child" ways are added
-//  RemoveWayOp::removeWay(_map->shared_from_this(), way->getId());
 }
 
 
