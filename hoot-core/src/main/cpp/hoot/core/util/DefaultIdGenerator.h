@@ -36,6 +36,7 @@ namespace hoot
 class DefaultIdGenerator : public IdGenerator
 {
 public:
+
   static std::string className() { return "hoot::DefaultIdGenerator"; }
 
   DefaultIdGenerator() { reset(); }
@@ -59,6 +60,7 @@ public:
   void reset();
 
 private:
+
   long _nodeId;
   long _relationId;
   long _wayId;

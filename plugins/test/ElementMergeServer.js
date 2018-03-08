@@ -65,6 +65,8 @@ var poiToPolyRelationInput = "<?xml version='1.0' encoding='UTF-8'?>\
     </relation>\
 </osm>";
 
+//TODO: add area test
+
 describe('ElementMergeServer', function () {
     it('responds with HTTP 404 if url not found', function() {
         var request  = httpMocks.createRequest({

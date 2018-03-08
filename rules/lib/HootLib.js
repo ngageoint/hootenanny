@@ -352,7 +352,7 @@ function calculateSearchRadiusUsingRubberSheeting(map, rubberSheetRef, rubberShe
  *
  * @return Map that contains the single merged POI node
  */
-function poiMerge(map)
+/*function poiMerge(map)
 {
   return new hoot.poiMerge('PoiGeneric.js', map);
-}
+}*/

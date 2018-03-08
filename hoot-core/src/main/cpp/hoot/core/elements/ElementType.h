@@ -33,11 +33,13 @@
 // Qt
 #include <QString>
 
-namespace hoot {
+namespace hoot
+{
 
 class ElementType
 {
 public:
+
   typedef enum Type
   {
     Node = 0,
@@ -102,6 +104,7 @@ public:
   }
 
 private:
+
   ElementType::Type _type;
 };
 

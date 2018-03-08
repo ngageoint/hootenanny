@@ -80,7 +80,7 @@ public:
 unsigned int BuildingMerger::logWarnCount = 0;
 
 BuildingMerger::BuildingMerger(const set< pair<ElementId, ElementId> >& pairs) :
-  _pairs(pairs)
+_pairs(pairs)
 {
 }
 
@@ -352,6 +352,68 @@ QString BuildingMerger::toString() const
 {
   QString s = hoot::toString(getPairs());
   return QString("BuildingMerger %1").arg(s);
+}
+
+ElementId BuildingMerger::merge(OsmMapPtr map)
+{
+  LOG_INFO("Merging two buildings...");
+
+  //This logic will work whether constituent way nodes/relation members are passed in or not.  See
+  //additional notes in the method description.
+
+  //TODO: fix
+
+  LOG_VART(map->getElementCount());
+
+  int polyCount = 0;
+  ElementId polyElementId;
+  const WayMap& ways = map->getWays();
+  for (WayMap::const_iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
+  {
+    const int wayId = wayItr->first;
+    WayPtr way = map->getWay(wayId);
+    if (PoiPolygonMatch::isPoly(*way))
+    {
+      LOG_VART(way);
+      polyElementId = ElementId::way(wayId);
+      polyCount++;
+    }
+  }
+  if (polyElementId.isNull())
+  {
+    const RelationMap& relations = map->getRelations();
+    for (RelationMap::const_iterator relItr = relations.begin(); relItr != relations.end(); ++relItr)
+    {
+      const int relationId = relItr->first;
+      RelationPtr relation = map->getRelation(relationId);
+      if (PoiPolygonMatch::isPoly(*relation))
+      {
+        LOG_VART(relation);
+        polyElementId = ElementId::relation(relationId);
+        polyCount++;
+      }
+    }
+  }
+  if (polyCount == 0)
+  {
+    throw IllegalArgumentException("No polygon passed to POI/Polygon merger.");
+  }
+  if (polyCount > 1)
+  {
+    throw IllegalArgumentException("More than one polygon passed to POI/Polygon merger.");
+  }
+
+  LOG_VART(poiElementId);
+  LOG_VART(polyElementId);
+
+  std::set<std::pair<ElementId, ElementId> > pairs;
+  pairs.insert(std::pair<ElementId, ElementId>(poiElementId, polyElementId));
+  BuildingMerger merger(pairs);
+  LOG_VART(pairs.size());
+  std::vector<std::pair<ElementId, ElementId> > replacedElements;
+  merger.apply(map, replacedElements);
+
+  return polyElementId;
 }
 
 }

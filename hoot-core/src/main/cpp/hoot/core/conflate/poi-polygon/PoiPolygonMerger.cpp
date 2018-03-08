@@ -264,14 +264,6 @@ ElementId PoiPolygonMerger::merge(OsmMapPtr map)
   //This logic will work whether constituent way nodes/relation members are passed in or not.  See
   //additional notes in the method description.
 
-//  const int featureCount = map->getElementCount();
-//  if (featureCount != 2)
-//  {
-//    throw IllegalArgumentException(
-//      "The POI/Polygon Merger expects two features passed to it.  Number passed: " +
-//      QString::number(featureCount));
-//  }
-
   LOG_VART(map->getElementCount());
 
   int poiCount = 0;

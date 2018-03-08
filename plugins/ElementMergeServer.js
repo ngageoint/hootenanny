@@ -132,19 +132,7 @@ var postHandler = function(data)
     map.setIdGenerator(new hoot.DefaultIdGenerator());
     hoot.loadMapFromString(map, data);
 
-    //Using a simple check here to determine whether the POI/POI merge service or
-    //the POI/Poly merge service should be used (only two that currently exist).  Possibly as
-    //more types of element merging are provided by this service, this check will need to become 
-    //more robust.
-    var mergedMap;
-    if (data.indexOf('<way') === -1 && data.indexOf('<relation') === -1) {
-      var script = 'PoiGeneric.js';
-      mergedMap = hoot.poiMerge(script, map, -1);
-    } else {
-      //Unlike the hoot POI/POI merger which allows for merging more than two elements, the POI/poly 
-      //merger always expects exactly two elements.
-      mergedMap = hoot.poiPolyMerge(map);
-    }
+    var mergedMap = hoot.elementMerge(map);
 
     var xml = hoot.OsmWriter.toString(mergedMap);
 
