@@ -698,7 +698,7 @@ void MultiaryMatchComparator::_setElementWrongCounts(const ConstOsmMapPtr& map)
 }
 
 void MultiaryMatchComparator::_setElementWrongCount(const ConstOsmMapPtr& map,
-                                            const ElementType::Type& elementType)
+                                                    const ElementType::Type& elementType)
 {
   _elementWrongCounts[elementType] =
     (int)FilteredVisitor::getStat(

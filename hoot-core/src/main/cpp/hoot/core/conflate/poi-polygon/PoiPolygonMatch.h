@@ -80,24 +80,6 @@ public:
   virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& m) const;
 
   /**
-   * Determines criteria for a feature to be considered a polygon for matching by
-   * PoiPolygonMatch
-   *
-   * @param element to be evaluated
-   * @return true if the element meets the criteria; false otherwise
-   */
-  static bool isPoly(const Element& e);
-
-  /**
-   * @Determines criteria for a feature to be considered a POI for matching by
-   * PoiPolygonMatch
-   *
-   * @param element to be evaluated
-   * @return true if the element meets the criteria; false otherwise
-   */
-  static bool isPoi(const Element& e);
-
-  /**
    * Pass through to the same method in PoiPolygonDistanceTruthRecorder
    */
   static void printMatchDistanceInfo();

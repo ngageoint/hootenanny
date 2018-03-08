@@ -180,63 +180,6 @@ void PoiPolygonMatch::setConfiguration(const Settings& conf)
   LOG_VART(_reviewEvidenceThreshold);
 }
 
-bool PoiPolygonMatch::isPoly(const Element& e)
-{
-  const Tags& tags = e.getTags();
-  //types we don't care about at all - see #1172 as to why this can't be handled in the schema
-  //files
-  if (tags.get("barrier").toLower() == "fence"
-      || tags.get("landuse").toLower() == "grass"
-      || tags.get("natural").toLower() == "tree_row"
-      || tags.get("natural").toLower() == "scrub"
-      || tags.get("highway").toLower() == "residential")
-  {
-    return false;
-  }
-  const bool inABuildingOrPoiCategory =
-    OsmSchema::getInstance().getCategories(tags).intersects(
-      OsmSchemaCategory::building() | OsmSchemaCategory::poi());
-  //isArea includes building too
-  const bool isPoly =
-    OsmSchema::getInstance().isArea(tags, e.getElementType()) &&
-      (inABuildingOrPoiCategory || tags.getNames().size() > 0);
-  LOG_VART(e);
-  LOG_VART(isPoly);
-  return isPoly;
-}
-
-bool PoiPolygonMatch::isPoi(const Element& e)
-{
-  const Tags& tags = e.getTags();
-  //types we don't care about at all - see #1172 as to why this can't be handled in the schema
-  //files
-  if (tags.get("natural").toLower() == "tree"
-      || tags.get("amenity").toLower() == "drinking_water"
-      || tags.get("amenity").toLower() == "bench"
-      || tags.contains("traffic_sign")
-      || tags.get("amenity").toLower() == "recycling")
-  {
-    return false;
-  }
-  const bool inABuildingOrPoiCategory =
-    OsmSchema::getInstance().getCategories(tags).intersects(
-      OsmSchemaCategory::building() | OsmSchemaCategory::poi());
-  bool isPoi =
-    e.getElementType() == ElementType::Node &&
-      (inABuildingOrPoiCategory || tags.getNames().size() > 0);
-
-  if (!isPoi && e.getElementType() == ElementType::Node &&
-      ConfigOptions().getPoiPolygonPromotePointsWithAddressesToPois() &&
-      PoiPolygonAddressScoreExtractor::hasAddress(e))
-  {
-    isPoi = true;
-  }
-
-  LOG_VART(e);
-  LOG_VART(isPoi);
-  return isPoi;
-}
-
 void PoiPolygonMatch::_categorizeElementsByGeometryType(const ElementId& eid1,
                                                         const ElementId& eid2)
 {
@@ -251,13 +194,15 @@ void PoiPolygonMatch::_categorizeElementsByGeometryType(const ElementId& eid1,
   LOG_VART(e2->getTags());
 
   _e1IsPoi = false;
-  if (isPoi(*e1) && isPoly(*e2))
+  if (OsmSchema::getInstance().isPoiPolygonPoi(e1) &&
+      OsmSchema::getInstance().isPoiPolygonPoly(e2))
   {
     _poi = e1;
     _poly = e2;
     _e1IsPoi = true;
   }
-  else if (isPoi(*e2) && isPoly(*e1))
+  else if (OsmSchema::getInstance().isPoiPolygonPoi(e2) &&
+           OsmSchema::getInstance().isPoiPolygonPoly(e1))
   {
     _poi = e2;
     _poly = e1;

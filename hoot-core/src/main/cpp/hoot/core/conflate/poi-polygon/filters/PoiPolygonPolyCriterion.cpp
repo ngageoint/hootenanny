@@ -27,7 +27,7 @@
 #include "PoiPolygonPolyCriterion.h"
 
 // hoot
-#include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
+#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>
 
 namespace hoot
@@ -41,7 +41,7 @@ PoiPolygonPolyCriterion::PoiPolygonPolyCriterion()
 
 bool PoiPolygonPolyCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
 {
-  return PoiPolygonMatch::isPoly(*e);
+  return OsmSchema::getInstance().isPoiPolygonPoly(e);
 }
 
 }

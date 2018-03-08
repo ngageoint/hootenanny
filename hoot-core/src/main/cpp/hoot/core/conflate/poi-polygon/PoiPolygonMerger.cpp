@@ -32,8 +32,7 @@
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
-
-#include "PoiPolygonMatch.h"
+#include <hoot/core/schema/OsmSchema.h>
 
 using namespace std;
 
@@ -274,7 +273,7 @@ ElementId PoiPolygonMerger::merge(OsmMapPtr map)
   {
     const int nodeId = nodeItr->first;
     NodePtr node = map->getNode(nodeId);
-    if (PoiPolygonMatch::isPoi(*node))
+    if (OsmSchema::getInstance().isPoiPolygonPoi(node))
     {
       //TODO: Arbitrarily setting the status doesn't seem right.  Should be able to assume that
       //that the incoming features always have a status, as is done with AreaMerger.
@@ -307,7 +306,7 @@ ElementId PoiPolygonMerger::merge(OsmMapPtr map)
   {
     const int wayId = wayItr->first;
     WayPtr way = map->getWay(wayId);
-    if (PoiPolygonMatch::isPoly(*way))
+    if (OsmSchema::getInstance().isPoiPolygonPoly(way))
     {
       //see comment in node loop above
 //      if (way->getStatus() != Status::Unknown1 && way->getStatus() != Status::Unknown2)
@@ -333,7 +332,7 @@ ElementId PoiPolygonMerger::merge(OsmMapPtr map)
     {
       const int relationId = relItr->first;
       RelationPtr relation = map->getRelation(relationId);
-      if (PoiPolygonMatch::isPoly(*relation))
+      if (OsmSchema::getInstance().isPoiPolygonPoly(relation))
       {
         //see comment in node loop above
 //        if (relation->getStatus() != Status::Unknown1 && relation->getStatus() != Status::Unknown2)

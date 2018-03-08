@@ -32,6 +32,7 @@
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/schema/OsmSchema.h>
 
 #include "PoiPolygonMatch.h"
 #include "visitors/PoiPolygonMatchVisitor.h"
@@ -55,8 +56,12 @@ Match* PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId 
   {
     ConstElementPtr e1 = map->getElement(eid1);
     ConstElementPtr e2 = map->getElement(eid2);
-    const bool foundPoi = PoiPolygonMatch::isPoi(*e1) || PoiPolygonMatch::isPoi(*e2);
-    const bool foundPoly = PoiPolygonMatch::isPoly(*e1) || PoiPolygonMatch::isPoly(*e2);
+    const bool foundPoi =
+      OsmSchema::getInstance().isPoiPolygonPoi(e1) ||
+      OsmSchema::getInstance().isPoiPolygonPoi(e2);
+    const bool foundPoly =
+      OsmSchema::getInstance().isPoiPolygonPoly(e1) ||
+      OsmSchema::getInstance().isPoiPolygonPoly(e2);
 
     if (foundPoi && foundPoly)
     {
@@ -106,7 +111,8 @@ bool PoiPolygonMatchCreator::isMatchCandidate(ConstElementPtr element,
                                               const ConstOsmMapPtr& /*map*/)
 {
   return element->isUnknown() &&
-    (PoiPolygonMatch::isPoi(*element) || PoiPolygonMatch::isPoly(*element));
+    (OsmSchema::getInstance().isPoiPolygonPoi(element) ||
+     OsmSchema::getInstance().isPoiPolygonPoly(element));
 }
 
 boost::shared_ptr<MatchThreshold> PoiPolygonMatchCreator::getMatchThreshold()

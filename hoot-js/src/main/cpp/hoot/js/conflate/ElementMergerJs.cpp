@@ -17,6 +17,16 @@
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
+//#include <hoot/core/filters/StatusCriterion.h>
+#include <hoot/core/filters/TagKeyCriterion.h>
+#include <hoot/core/filters/ChainCriterion.h>
+//#include <hoot/core/visitors/FilteredVisitor.h>
+#include <hoot/core/visitors/ElementCountVisitor.h>
+#include <hoot/core/filters/PoiCriterion.h>
+#include <hoot/core/filters/BuildingCriterion.h>
+#include <hoot/core/filters/NonBuildingAreaCriterion.h>
+#include <hoot/core/filters/PoiPolygonPoiCriterion.h>
+#include <hoot/core/filters/PoiPolygonPolyCriterion.h>
 
 // Qt
 #include <QString>
@@ -67,6 +77,8 @@ void ElementMergerJs::_jsElementMerge(const FunctionCallbackInfo<Value>& args)
     QString scriptPath;
     const MergeType mergeType = _determineMergeType(map, scriptPath);
 
+    _validateMergeTargetElement(map, mergeType);
+
     if (!scriptPath.isEmpty)
     {
       // Instantiate script merger
@@ -93,7 +105,7 @@ void ElementMergerJs::_jsElementMerge(const FunctionCallbackInfo<Value>& args)
       }
     }
 
-    OsmMapPtr mergedMap = _mergeElements(map, plugin);
+    OsmMapPtr mergedMap = _mergeElements(map, mergeType, plugin);
 
     Handle<Object> returnMap = OsmMapJs::create(mergedMap);
     args.GetReturnValue().Set(returnMap);
@@ -104,7 +116,8 @@ void ElementMergerJs::_jsElementMerge(const FunctionCallbackInfo<Value>& args)
   }
 }
 
-OsmMapPtr ElementMergerJs::_mergeElements(OsmMapPtr map, Persistent<Object> plugin)
+OsmMapPtr ElementMergerJs::_mergeElements(OsmMapPtr map, const MergeType& mergeType,
+                                          Persistent<Object> plugin)
 {
   OsmMapPtr mergedMap(map);
 
@@ -118,7 +131,8 @@ OsmMapPtr ElementMergerJs::_mergeElements(OsmMapPtr map, Persistent<Object> plug
       break;
 
     case MergeType::BuildingToBuilding:
-      //TODO: remove the returning of the merged id
+      //TODO: need to force merge target here
+      //const ElementId mergeTargetId = _getMergeTargetFeatureId(map);
       mergedId = BuildingMerger::merge(map);
       break;
 
@@ -128,7 +142,8 @@ OsmMapPtr ElementMergerJs::_mergeElements(OsmMapPtr map, Persistent<Object> plug
       break;
 
     case MergeType::PoiToPolygon:
-      //TODO: remove the returning of the merged id
+      //TODO: need to force merge target here
+      //const ElementId mergeTargetId = _getMergeTargetFeatureId(map);
       mergedId = PoiPolygonMerger::merge(map);
       break;
 
@@ -153,11 +168,49 @@ OsmMapPtr ElementMergerJs::_mergeElements(OsmMapPtr map, Persistent<Object> plug
   return mergedMap;
 }
 
+ElementId ElementMergerJs::_getMergeTargetFeatureId(ConstOsmMapPtr /*map*/)
+{
+  //TODO: finish
+  return ElementId();
+}
+
+void ElementMergerJs::_validateMergeTargetElement(ConstOsmMapPtr map, const MergeType& mergeType)
+{
+  long numMergeTargets;
+  if (mergeType == MergeType::PoiToPolygon)
+  {
+    //For POI to polygon conflation we always merge the POI into the polygon, so the poly must
+    //be the specified target element.
+    numMergeTargets =
+      (long)FilteredVisitor::getStat(
+        ElementCriterionPtr(
+          new ChainCriterion(
+            ElementCriterionPtr(new PoiPolygonPolyCriterion()),
+            ElementCriterionPtr(new TagKeyCriterion(MetadataTags::HootMergeTarget())))),
+        ConstElementVisitorPtr(new ElementCountVisitor()),
+        map);
+  }
+  else
+  {
+    numMergeTargets =
+      (long)FilteredVisitor::getStat(
+        ElementCriterionPtr(new TagKeyCriterion(MetadataTags::HootMergeTarget())),
+        ConstElementVisitorPtr(new ElementCountVisitor()),
+        map);
+  }
+  if (numMergeTargets != 1)
+  {
+    throw IllegalArgumentException(
+      "Input map must have one feature marked with a " + MetadataTags::HootMergeTarget() +
+      " tag.");
+  }
+}
+
 ElementMergerJs::MergeType ElementMergerJs::_determineMergeType(ConstOsmMapPtr map,
                                                                 QString& scriptPath)
 {
   MergeType mergeType;
-  if (_containsOnlyPois(map))
+  if (_containsOnlyTwoOrMorePois(map))
   {
     mergeType = MergeType::PoiToPoi;
     scriptPath = ConfPath::search(toCpp<QString>("PoiGeneric.js"), "rules");
@@ -185,145 +238,49 @@ ElementMergerJs::MergeType ElementMergerJs::_determineMergeType(ConstOsmMapPtr m
   return mergeType;
 }
 
-bool ElementMergerJs::_containsOnlyPois(ConstOsmMapPtr map)
+bool ElementMergerJs::_containsOnlyTwoOrMorePois(ConstOsmMapPtr map)
 {
-  if (map->getWayCount() > 0 || map->getRelationCount() > 0)
-  {
-    return false;
-  }
-
-  int poiCount = 0;
-  NodeMap::const_iterator it = map->getNodes().begin();
-  while (it != map->getNodes().end() && poiCount < 2)
-  {
-    const ConstNodePtr& node = it->second;
-    if (OsmSchema::isPoi(node))
-    {
-      poiCount++;
-    }
-    ++it;
-  }
-  return poiCount >= 2;
+  const long poiCount =
+    (long)FilteredVisitor::getStat(
+      ElementCriterionPtr(new PoiCriterion()),
+      ConstElementVisitorPtr(new ElementCountVisitor()),
+      map);
+  return poiCount >= 2 && map->getWayCount() == 0 && map->getRelationCount() == 0;
 }
 
 bool ElementMergerJs::_containsTwoBuildings(ConstOsmMapPtr map)
 {
-  int buildingCount = 0;
-
-  WayMap::const_iterator it = map->getWays().begin();
-  while (it != map->getWays().end() && buildingCount < 3)
-  {
-    const ConstWayPtr& way = it->second;
-    if (OsmSchema::isBuilding(way))
-    {
-      buildingCount++;
-    }
-    ++it;
-  }
-  if (buildingCount > 2)
-  {
-    return false;
-  }
-
-  RelationMap::const_iterator it = map->getRelations().begin();
-  while (it != map->getRelations().end() && buildingCount < 3)
-  {
-    const ConstRelationPtr& relation = it->second;
-    if (OsmSchema::isBuilding(relation))
-    {
-      buildingCount++;
-    }
-    ++it;
-  }
-
+  const long buildingCount =
+    (long)FilteredVisitor::getStat(
+      ElementCriterionPtr(new BuildingCriterion()),
+      ConstElementVisitorPtr(new ElementCountVisitor()),
+      map);
   return buildingCount == 2;
 }
 
 bool ElementMergerJs::_containsTwoOrMoreAreas(ConstOsmMapPtr map)
 {
-  int areaCount = 0;
-
-  WayMap::const_iterator it = map->getWays().begin();
-  while (it != map->getWays().end() && areaCount < 2)
-  {
-    const ConstWayPtr& way = it->second;
-    if (OsmSchema::isBuilding(way))
-    {
-      areaCount++;
-    }
-    ++it;
-  }
-  if (areaCount == 2)
-  {
-    return true;
-  }
-
-  RelationMap::const_iterator it = map->getRelations().begin();
-  while (it != map->getRelations().end() && areaCount < 2)
-  {
-    const ConstRelationPtr& relation = it->second;
-    if (OsmSchema::isBuilding(relation))
-    {
-      areaCount++;
-    }
-    ++it;
-  }
-
+  const long areaCount =
+    (long)FilteredVisitor::getStat(
+      ElementCriterionPtr(new NonBuildingAreaCriterion()),
+      ConstElementVisitorPtr(new ElementCountVisitor()),
+      map);
   return areaCount >= 2;
 }
 
 bool ElementMergerJs::_containsOnePolygonAndOneOrMorePois(ConstOsmMapPtr map)
 {
-  if (map->getWayCount() == 0 && map->getRelationCount() == 0)
-  {
-    return false;
-  }
-
-  int poiCount = 0;
-  NodeMap::const_iterator it = map->getNodes().begin();
-  while (it != map->getNodes().end() && poiCount < 1)
-  {
-    const ConstNodePtr& node = it->second;
-    if (PoiPolygonMatch::isPoi(node))
-    {
-      poiCount++;
-    }
-    ++it;
-  }
-  if (poiCount < 1)
-  {
-    return false;
-  }
-
-  int polyCount = 0;
-
-  WayMap::const_iterator it = map->getWays().begin();
-  while (it != map->getWays().end() && polyCount < 2)
-  {
-    const ConstWayPtr& way = it->second;
-    if (PoiPolygonMatch::isPoly(way))
-    {
-      polyCount++;
-    }
-    ++it;
-  }
-  if (polyCount > 1)
-  {
-    return false;
-  }
-
-  RelationMap::const_iterator it = map->getRelations().begin();
-  while (it != map->getRelations().end() && polyCount < 2)
-  {
-    const ConstRelationPtr& relation = it->second;
-    if (PoiPolygonMatch::isPoly(relation))
-    {
-      polyCount++;
-    }
-    ++it;
-  }
-
-  return polyCount == 1;
+  const long poiCount =
+    (long)FilteredVisitor::getStat(
+      ElementCriterionPtr(new PoiPolygonPoiCriterion()),
+      ConstElementVisitorPtr(new ElementCountVisitor()),
+      map);
+  const long polyCount =
+    (long)FilteredVisitor::getStat(
+      ElementCriterionPtr(new PoiPolygonPolyCriterion()),
+      ConstElementVisitorPtr(new ElementCountVisitor()),
+      map);
+  return poiCount >= 1 && polyCount == 1;
 }
 
 OsmMapPtr ElementMergerJs::_mergeAreas(OsmMapPtr /*map*/, Persistent<Object> /*plugin*/)
@@ -342,16 +299,16 @@ OsmMapPtr ElementMergerJs::_mergePois(OsmMapPtr map, Persistent<Object> plugin)
   NodeMap nodes = map->getNodes();
   OsmMapPtr mergedMap(map);
 
-  const ElementId firstId = ElementId::node(/*elementId*/-1); //TODO: fix
-  LOG_TRACE("First ID: " << firstId.getId());
+  const ElementId mergeTargetId = _getMergeTargetFeatureId(map);
+  LOG_TRACE("Merge target ID: " << mergeTargetId);
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
-    if (it->second->getId() != elementId)
+    if (it->second->getId() != mergeTargetId)
     {
       const ConstNodePtr& n = it->second;
 
       std::set< std::pair< ElementId, ElementId> > matches;
-      matches.insert(std::pair<ElementId,ElementId>(firstId, ElementId::node(n->getId())));
+      matches.insert(std::pair<ElementId,ElementId>(mergeTargetId, ElementId::node(n->getId())));
 
       // Now create scriptmerger, and invoke apply method which will apply merge
       // transformation, reducing the POIs down to one.

@@ -365,55 +365,56 @@ ElementId BuildingMerger::merge(OsmMapPtr map)
 
   LOG_VART(map->getElementCount());
 
-  int polyCount = 0;
-  ElementId polyElementId;
-  const WayMap& ways = map->getWays();
-  for (WayMap::const_iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
-  {
-    const int wayId = wayItr->first;
-    WayPtr way = map->getWay(wayId);
-    if (PoiPolygonMatch::isPoly(*way))
-    {
-      LOG_VART(way);
-      polyElementId = ElementId::way(wayId);
-      polyCount++;
-    }
-  }
-  if (polyElementId.isNull())
-  {
-    const RelationMap& relations = map->getRelations();
-    for (RelationMap::const_iterator relItr = relations.begin(); relItr != relations.end(); ++relItr)
-    {
-      const int relationId = relItr->first;
-      RelationPtr relation = map->getRelation(relationId);
-      if (PoiPolygonMatch::isPoly(*relation))
-      {
-        LOG_VART(relation);
-        polyElementId = ElementId::relation(relationId);
-        polyCount++;
-      }
-    }
-  }
-  if (polyCount == 0)
-  {
-    throw IllegalArgumentException("No polygon passed to POI/Polygon merger.");
-  }
-  if (polyCount > 1)
-  {
-    throw IllegalArgumentException("More than one polygon passed to POI/Polygon merger.");
-  }
+//  int polyCount = 0;
+//  ElementId polyElementId;
+//  const WayMap& ways = map->getWays();
+//  for (WayMap::const_iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
+//  {
+//    const int wayId = wayItr->first;
+//    WayPtr way = map->getWay(wayId);
+//    if (OsmSchema::getInstance().isBuilding(way))
+//    {
+//      LOG_VART(way);
+//      polyElementId = ElementId::way(wayId);
+//      polyCount++;
+//    }
+//  }
+//  if (polyElementId.isNull())
+//  {
+//    const RelationMap& relations = map->getRelations();
+//    for (RelationMap::const_iterator relItr = relations.begin(); relItr != relations.end(); ++relItr)
+//    {
+//      const int relationId = relItr->first;
+//      RelationPtr relation = map->getRelation(relationId);
+//      if (OsmSchema::getInstance().isBuilding(relation))
+//      {
+//        LOG_VART(relation);
+//        polyElementId = ElementId::relation(relationId);
+//        polyCount++;
+//      }
+//    }
+//  }
+//  if (polyCount == 0)
+//  {
+//    throw IllegalArgumentException("No polygon passed to POI/Polygon merger.");
+//  }
+//  if (polyCount > 1)
+//  {
+//    throw IllegalArgumentException("More than one polygon passed to POI/Polygon merger.");
+//  }
 
-  LOG_VART(poiElementId);
-  LOG_VART(polyElementId);
+//  LOG_VART(polyElementId);
 
-  std::set<std::pair<ElementId, ElementId> > pairs;
-  pairs.insert(std::pair<ElementId, ElementId>(poiElementId, polyElementId));
-  BuildingMerger merger(pairs);
-  LOG_VART(pairs.size());
-  std::vector<std::pair<ElementId, ElementId> > replacedElements;
-  merger.apply(map, replacedElements);
+//  std::set<std::pair<ElementId, ElementId> > pairs;
+//  pairs.insert(std::pair<ElementId, ElementId>(poiElementId, polyElementId));
+//  BuildingMerger merger(pairs);
+//  LOG_VART(pairs.size());
+//  std::vector<std::pair<ElementId, ElementId> > replacedElements;
+//  merger.apply(map, replacedElements);
 
-  return polyElementId;
+//  return polyElementId;
+
+  return ElementId();
 }
 
 }

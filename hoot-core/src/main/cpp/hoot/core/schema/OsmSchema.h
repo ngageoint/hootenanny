@@ -363,6 +363,22 @@ public:
   bool isBuildingPart(const ConstElementPtr& e) const;
 
   /**
+   *
+   *
+   * @param e
+   * @return
+   */
+  bool isPoiPolygonPoly(const ConstElementPtr& e);
+
+  /**
+   *
+   *
+   * @param e
+   * @return
+   */
+  bool isPoiPolygonPoi(const ConstElementPtr& e);
+
+  /**
    * Returns true if this is a geometry collection.
    */
   bool isCollection(const Element& e) const;
