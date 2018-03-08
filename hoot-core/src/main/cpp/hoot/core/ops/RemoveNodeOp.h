@@ -67,8 +67,10 @@ public:
    * @param doCheck check to make sure node doesn't belong to a way
    * @param removeFully makes sure node is removed from all ways, relations in the map
    *                    Using removeFully 'overrides' the use of doCheck.
+   * @param removeOnlyUnused only removes nodes that aren't a part of a way
+   *                         doCheck must be true and removeFully false
    */
-  RemoveNodeOp(long nId, bool doCheck = true, bool removeFully = false);
+  RemoveNodeOp(long nId, bool doCheck = true, bool removeFully = false, bool removeOnlyUnused = false);
 
   /**
    * @brief apply Peform the op on the given map
@@ -87,8 +89,9 @@ public:
    *                   way, a HootException is thrown.
    * @param map Map to operate on
    * @param nId ID of node to remove
+   * @param removeOnlyUnused remove only nodes that aren't a part of a way
    */
-  static void removeNode(OsmMapPtr map, long nId);
+  static void removeNode(OsmMapPtr map, long nId, bool removeOnlyUnused = false);
 
   /**
    * @brief removeNode Simply removes the node from the map (from index, from nodes
@@ -109,6 +112,7 @@ private:
   long _nodeIdToRemove;
   bool _doCheck;
   bool _removeFully;
+  bool _removeOnlyUnused;
 
   void _removeNodeNoCheck(OsmMapPtr& map, long nId);
   void _removeNode(OsmMapPtr& map, long nId);

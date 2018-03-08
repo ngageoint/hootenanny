@@ -39,16 +39,18 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, RemoveNodeOp)
 
-RemoveNodeOp::RemoveNodeOp(bool doCheck, bool removeFully):
-  _doCheck(doCheck),
-  _removeFully(removeFully)
+RemoveNodeOp::RemoveNodeOp(bool doCheck, bool removeFully)
+  : _doCheck(doCheck),
+    _removeFully(removeFully),
+    _removeOnlyUnused(false)
 {
 }
 
-RemoveNodeOp::RemoveNodeOp(long nId, bool doCheck, bool removeFully):
-  _nodeIdToRemove(nId),
-  _doCheck(doCheck),
-  _removeFully(removeFully)
+RemoveNodeOp::RemoveNodeOp(long nId, bool doCheck, bool removeFully, bool removeOnlyUnused)
+  : _nodeIdToRemove(nId),
+    _doCheck(doCheck),
+    _removeFully(removeFully),
+    _removeOnlyUnused(removeOnlyUnused)
 {
 }
 
@@ -64,7 +66,10 @@ void RemoveNodeOp::_removeNode(OsmMapPtr& map, long nId)
   const set<long>& ways = n2w->getWaysByNode(nId);
   if (ways.size() > 0)
   {
-    throw HootException("Removing a node, but it is still part of one or more ways.");
+    if (_removeOnlyUnused)
+      return;
+    else
+      throw HootException("Removing a node, but it is still part of one or more ways.");
   }
   _removeNodeNoCheck(map, nId);
 }
@@ -103,9 +108,9 @@ void RemoveNodeOp::apply(OsmMapPtr& map)
     _removeNode(map, _nodeIdToRemove);
 }
 
-void RemoveNodeOp::removeNode(OsmMapPtr map, long nId)
+void RemoveNodeOp::removeNode(OsmMapPtr map, long nId, bool removeOnlyUnused)
 {
-  RemoveNodeOp nodeRemover(nId);
+  RemoveNodeOp nodeRemover(nId, true, false, removeOnlyUnused);
   nodeRemover.apply(map);
 }
 

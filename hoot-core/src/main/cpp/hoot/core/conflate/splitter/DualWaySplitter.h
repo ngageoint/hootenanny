@@ -38,6 +38,8 @@
 // Tgs
 #include <tgs/SharedPtr.h>
 
+#include <unordered_set>
+
 namespace hoot
 {
 
@@ -78,6 +80,7 @@ private:
   DrivingSide _drivingSide;
   boost::shared_ptr<const OsmMap> _map;
   boost::shared_ptr<OsmMap> _result;
+  std::unordered_set<long> _nodes;
 
   // temporary variables for convenience
   boost::shared_ptr<Way> _left, _right;
