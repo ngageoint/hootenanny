@@ -281,6 +281,8 @@ set<long> BuildingPartMergeOp::_calculateNeighbors(const WayPtr& w, const Tags& 
 RelationPtr BuildingPartMergeOp::combineParts(const OsmMapPtr& map,
   const vector< boost::shared_ptr<Element> >& parts)
 {
+  LOG_TRACE("Combining building parts...");
+
   LOG_VART(parts.size());
   assert(parts.size() > 0);
 

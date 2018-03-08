@@ -19,16 +19,11 @@ var poiToPoiInput = "<?xml version='1.0' encoding='UTF-8'?>\
     </node>\
     </osm>";
 
-//The poi to poly inputs are the same as used in the core's PoiPolygonMergerTest.
+//The poi to poly inputs used here are the same as are used in the core's PoiPolygonMergerTest.
 
+//The service doesn't require the way nodes to be passed in.
 var poiToPolyWayInput = "<?xml version='1.0' encoding='UTF-8'?>\
     <osm version='0.6' upload='true' generator='hootenanny'>\
-    <node visible='true' id='-270' lat='-0.3636403619999555' lon='42.5439798030000702'/>\
-    <node visible='true' id='-269' lat='-0.3636266159999764' lon='42.5440572520000586'/>\
-    <node visible='true' id='-268' lat='-0.3643189609999239' lon='42.5441789570000424'/>\
-    <node visible='true' id='-267' lat='-0.3643228169999588' lon='42.5441571640000689'/>\
-    <node visible='true' id='-266' lat='-0.3644458629999577' lon='42.5441787890000569'/>\
-    <node visible='true' id='-265' lat='-0.3644557539999482' lon='42.5441231330000278'/>\
     <node visible='true' id='-530' lat='-0.3635327329999427' lon='42.5442892910000410'>\
         <tag k='building' v='yes'/>\
         <tag k='amenity' v='prison'/>\
@@ -50,74 +45,15 @@ var poiToPolyWayInput = "<?xml version='1.0' encoding='UTF-8'?>\
     </way>\
 </osm>";
 
+// The service doesn't require the way relation members to be passed in.
 var poiToPolyRelationInput = "<?xml version='1.0' encoding='UTF-8'?>\
     <osm version='0.6' generator='hootenanny'>\
-    <node visible='true' id='-1298' lat='-0.3638353250415207' lon='42.5533100346383151'/>\
-    <node visible='true' id='-1297' lat='-0.3637964330107479' lon='42.5535070093631305'/>\
-    <node visible='true' id='-1296' lat='-0.3638644940646003' lon='42.5535202527701415'/>\
-    <node visible='true' id='-1295' lat='-0.3638772345574353' lon='42.5534558797536917'/>\
-    <node visible='true' id='-1294' lat='-0.3638358279557110' lon='42.5534480007647176'/>\
-    <node visible='true' id='-1293' lat='-0.3638438745827697' lon='42.5534067618010496'/>\
-    <node visible='true' id='-1292' lat='-0.3638852811844940' lon='42.5534148084281014'/>\
-    <node visible='true' id='-1291' lat='-0.3639662503692447' lon='42.5534303987680218'/>\
-    <node visible='true' id='-1290' lat='-0.3639774821195090' lon='42.5534684526084845'/>\
-    <node visible='true' id='-1289' lat='-0.3640286117289264' lon='42.5534783432542270'/>\
-    <node visible='true' id='-1288' lat='-0.3640549309049276' lon='42.5534476654885836'/>\
-    <node visible='true' id='-1287' lat='-0.3641353971754882' lon='42.5534632558285182'/>\
-    <node visible='true' id='-1286' lat='-0.3641843474900811' lon='42.5534726435600703'/>\
-    <node visible='true' id='-1285' lat='-0.3641761332249587' lon='42.5535140501617875'/>\
-    <node visible='true' id='-1284' lat='-0.3641273505484294' lon='42.5535044947921790'/>\
-    <node visible='true' id='-1283' lat='-0.3641074016188525' lon='42.5536052452684430'/>\
-    <node visible='true' id='-1282' lat='-0.3641960821545354' lon='42.5536225119889764'/>\
-    <node visible='true' id='-1281' lat='-0.3642160310841121' lon='42.5535217615127124'/>\
-    <node visible='true' id='-1280' lat='-0.3642242453492344' lon='42.5534803549109881'/>\
-    <node visible='true' id='-1279' lat='-0.3642421826220356' lon='42.5533889921663047'/>\
-    <node visible='true' id='-1278' lat='-0.3640695154164604' lon='42.5533554645535546'/>\
-    <node visible='true' id='-1277' lat='-0.3639853611085045' lon='42.5533392036613805'/>\
-    <node visible='true' id='-1276' lat='-0.3639821759852993' lon='42.5533552969154982'/>\
-    <node visible='true' id='-1275' lat='-0.3640663302932551' lon='42.5533715578076723'/>\
-    <node visible='true' id='-1274' lat='-0.3640547632668641' lon='42.5534314045964095'/>\
-    <node visible='true' id='-1273' lat='-0.3639704413208449' lon='42.5534151437042283'/>\
     <node visible='true' id='-532' lat='-0.3635327329999427' lon='42.5442892910000410'>\
         <tag k='note' v='poi1'/>\
         <tag k='building' v='yes'/>\
         <tag k='amenity' v='prison'/>\
         <tag k='error:circular' v='100'/>\
     </node>\
-    <way visible='true' id='-103'>\
-        <nd ref='-1276'/>\
-        <nd ref='-1275'/>\
-        <nd ref='-1274'/>\
-        <nd ref='-1273'/>\
-        <nd ref='-1276'/>\
-        <tag k='error:circular' v='15'/>\
-    </way>\
-    <way visible='true' id='-102'>\
-        <nd ref='-1298'/>\
-        <nd ref='-1297'/>\
-        <nd ref='-1296'/>\
-        <nd ref='-1295'/>\
-        <nd ref='-1294'/>\
-        <nd ref='-1293'/>\
-        <nd ref='-1292'/>\
-        <nd ref='-1291'/>\
-        <nd ref='-1290'/>\
-        <nd ref='-1289'/>\
-        <nd ref='-1288'/>\
-        <nd ref='-1287'/>\
-        <nd ref='-1286'/>\
-        <nd ref='-1285'/>\
-        <nd ref='-1284'/>\
-        <nd ref='-1283'/>\
-        <nd ref='-1282'/>\
-        <nd ref='-1281'/>\
-        <nd ref='-1280'/>\
-        <nd ref='-1279'/>\
-        <nd ref='-1278'/>\
-        <nd ref='-1277'/>\
-        <nd ref='-1298'/>\
-        <tag k='error:circular' v='15'/>\
-    </way>\
    <relation visible='true' id='-1'>\
         <member type='way' ref='-102' role='outer'/>\
         <member type='way' ref='-103' role='inner'/>\

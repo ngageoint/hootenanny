@@ -74,10 +74,11 @@ void PoiMergerJs::jsPoiMerge(const FunctionCallbackInfo<Value>& args)
   try
   {
     HandleScope scope(current);
-    if (args.Length() > 3)
+    if (args.Length() < 2 || args.Length() > 3)
     {
-      args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(IllegalArgumentException(
-        "Expected two or three arguments to 'poiMerge'."))));
+      args.GetReturnValue().Set(
+        current->ThrowException(HootExceptionJs::create(IllegalArgumentException(
+          "Expected two or three arguments to 'poiMerge'."))));
       return;
     }
 
@@ -103,8 +104,9 @@ void PoiMergerJs::jsPoiMerge(const FunctionCallbackInfo<Value>& args)
 
     if (global->Has(String::NewFromUtf8(current, "plugin")) == false)
     {
-      args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(IllegalArgumentException(
-        "Expected the script to have exports."))));
+      args.GetReturnValue().Set(
+        current->ThrowException(HootExceptionJs::create(IllegalArgumentException(
+          "Expected the script to have exports."))));
       return;
     }
 
@@ -112,8 +114,9 @@ void PoiMergerJs::jsPoiMerge(const FunctionCallbackInfo<Value>& args)
     Persistent<Object> plugin(current, Handle<Object>::Cast(pluginValue));
     if (plugin.IsEmpty() || ToLocal(&plugin)->IsObject() == false)
     {
-      args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(IllegalArgumentException(
-        "Expected plugin to be a valid object."))));
+      args.GetReturnValue().Set(
+        current->ThrowException(HootExceptionJs::create(IllegalArgumentException(
+          "Expected plugin to be a valid object."))));
       return;
     }
 
@@ -137,8 +140,8 @@ void PoiMergerJs::jsPoiMerge(const FunctionCallbackInfo<Value>& args)
         std::set< std::pair< ElementId, ElementId> > matches;
         matches.insert(std::pair<ElementId,ElementId>(firstId, ElementId::node(n->getId())));
 
-        // Now create scriptmerger, and invoke apply method which will apply apply merge
-        //transformation, reducing the POIs down to one
+        // Now create scriptmerger, and invoke apply method which will apply merge
+        // transformation, reducing the POIs down to one.
         ScriptMerger merger(script, plugin, matches);
         OsmMapPtr mergedMap(map);
         std::vector< std::pair< ElementId, ElementId > > replacedNodes;
@@ -147,7 +150,7 @@ void PoiMergerJs::jsPoiMerge(const FunctionCallbackInfo<Value>& args)
         if (replacedNodes.size() == 1)
         {
           LOG_TRACE("POI merge: replacing node #" << replacedNodes[0].first.getId() <<
-                    " with updated version of node #" << replacedNodes[0].second.getId() );
+                    " with updated version of node #" << replacedNodes[0].second.getId());
           mergedMap->replaceNode(replacedNodes[0].first.getId(), replacedNodes[0].second.getId());
         }
       }

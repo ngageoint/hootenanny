@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <bounds minlat='37.7362' minlon='-122.4774' maxlat='37.7410974' maxlon='-122.4753883' origin='hootenanny' />
+  <node id='-691752' version='1' lat='37.73752283117' lon='-122.4762551493'>
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-691754' version='1' lat='37.73917309333' lon='-122.47637093564'>
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-691756' version='1' lat='37.73920937555' lon='-122.47554625706'>
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-691758' version='1' lat='37.73755905999' lon='-122.47543158625'>
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-691810' version='1' lat='37.7391814' lon='-122.4763896'>
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-691812' version='1' lat='37.7392135' lon='-122.4755627'>
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-691814' version='1' lat='37.737545' lon='-122.4754593'>
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-691816' version='1' lat='37.737513' lon='-122.4762862'>
+    <tag k='hoot:status' v='1' />
+  </node>
+  <way id='-691826' version='1'>
+    <nd ref='-691752' />
+    <nd ref='-691754' />
+    <nd ref='-691756' />
+    <nd ref='-691758' />
+    <nd ref='-691752' />
+    <tag k='error:circular' v='15' />
+    <tag k='hoot:status' v='2' />
+  </way>
+  <way id='-691836' version='1'>
+    <nd ref='-691816' />
+    <nd ref='-691814' />
+    <nd ref='-691812' />
+    <nd ref='-691810' />
+    <nd ref='-691816' />
+    <tag k='error:circular' v='15' />
+    <tag k='hoot:status' v='1' />
+    <tag k='leisure' v='park' />
+    <tag k='uuid' v='{387e979e-7929-5877-a75e-7541d1c51227}' />
+  </way>
+  <relation id='-691842' action='modify'>
+    <member type='way' ref='-691826' role='outer' />
+    <tag k='area' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='hoot:status' v='2' />
+    <tag k='name' v='Carl Larsen Park' />
+    <tag k='type' v='multipolygon' />
+    <tag k='uuid' v='{990d38c5-9c24-538d-99f0-2ed6ef302c31}' />
+  </relation>
+</osm>

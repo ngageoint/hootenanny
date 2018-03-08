@@ -59,7 +59,6 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
   void calculateMatch(const ElementId& eid1, const ElementId& eid2);
-  void calculateMatchWeka(const ElementId& eid1, const ElementId& eid2);
 
   virtual const MatchClassification& getClassification() const { return _class; }
 

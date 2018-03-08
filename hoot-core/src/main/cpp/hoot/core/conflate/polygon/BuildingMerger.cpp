@@ -49,7 +49,9 @@ namespace hoot
 
 class DeletableBuildingPart : public BaseFilter
 {
+
 public:
+
   DeletableBuildingPart() : BaseFilter(Filter::FilterMatches) {}
 
   bool isMatch(const Element &e) const
@@ -73,7 +75,6 @@ public:
   }
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new DeletableBuildingPart()); }
-
 };
 
 unsigned int BuildingMerger::logWarnCount = 0;
@@ -176,6 +177,7 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Element
       keeper = e2;
       scrap = e1;
     }
+    LOG_TRACE("Keeping the more complex building geometry: " << keeper << "...");
 
     // use the default tag merging mechanism
     Tags newTags = TagMergerFactory::mergeTags(e1->getTags(), e2->getTags(), ElementType::Way);
@@ -245,6 +247,9 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Element
 boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
                                                          const set<ElementId>& eid)
 {
+  LOG_TRACE("Build the building...");
+  LOG_VART(eid);
+
   assert(eid.size() > 0);
 
   if (eid.size() == 1)
@@ -265,6 +270,7 @@ boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
         RelationPtr r = boost::dynamic_pointer_cast<Relation>(e);
         if (r->getType() == MetadataTags::RelationBuilding())
         {
+          LOG_VART(r);
           isBuilding = true;
 
           // This is odd. Originally I had a const reference to the result, but that was causing
@@ -295,6 +301,7 @@ boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
     }
 
     boost::shared_ptr<Element> result = BuildingPartMergeOp().combineParts(map, parts);
+    LOG_VART(result);
 
     DeletableBuildingPart filter;
 

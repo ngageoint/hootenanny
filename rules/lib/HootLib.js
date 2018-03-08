@@ -291,7 +291,8 @@ function calculatePercentOverlap(map, e1, e2)
  * discarded. If element 2 is part of another element (e.g. in a way or
  * relation) element 1 will take its place in that element.
  */
-function mergeElements(map, e1, e2) {
+function mergeElements(map, e1, e2) 
+{
     // merge tags from e2 into e1 using default tag merging
     var newTags = mergeTags(e1, e2);
     e1.setTags(newTags);

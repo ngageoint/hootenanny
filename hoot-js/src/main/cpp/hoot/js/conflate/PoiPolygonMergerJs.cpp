@@ -75,16 +75,17 @@ void PoiPolygonMergerJs::jsPoiPolyMerge(const FunctionCallbackInfo<Value>& args)
 
     OsmMapJs* mapJs = node::ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
     OsmMapPtr map(mapJs->getMap());
-    LOG_VARD(map->getElementCount());
+    LOG_VART(map->getElementCount());
 
     const ElementId polyId = PoiPolygonMerger::merge(map);
-    LOG_VARD(map->getElementCount());
+    LOG_VART(map->getElementCount());
 
     //set the poly to have a conflated status (what the poi was merged into); status expected by
     //the client
     ElementPtr polyElement = map->getElement(polyId);
     polyElement->setStatus(Status(Status::Conflated));
     polyElement->getTags()[MetadataTags::HootStatus()] = "3";
+    LOG_VART(polyElement);
 
     args.GetReturnValue().Set(OsmMapJs::create(map));
   }

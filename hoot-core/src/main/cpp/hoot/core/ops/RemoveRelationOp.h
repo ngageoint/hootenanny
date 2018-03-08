@@ -79,6 +79,7 @@ public:
   static void removeRelation(OsmMapPtr map, long rId);
 
 private:
+
   long _rIdToRemove;
 
 };

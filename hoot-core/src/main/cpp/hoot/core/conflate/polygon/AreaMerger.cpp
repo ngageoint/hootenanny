@@ -31,6 +31,7 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/ops/RemoveElementOp.h>
 
 namespace hoot
 {
@@ -142,7 +143,14 @@ ElementId AreaMerger::merge(OsmMapPtr map)
   const Tags mergedTags =
     TagMergerFactory::mergeTags(refArea->getTags(), secArea->getTags(), ElementType::Unknown);
   refArea->setTags(mergedTags);
-  RecursiveElementRemover(secArea->getElementId()).apply(map);
+  if (secArea->getElementType() == ElementType::Way) //TODO: fix
+  {
+    RecursiveElementRemover(secArea->getElementId()).apply(map);
+  }
+  else
+  {
+    RemoveRelationOp::removeRelation(map, secArea->getElementId().getId());
+  }
   LOG_VART(map->getElementCount());
 
   return refArea->getElementId();

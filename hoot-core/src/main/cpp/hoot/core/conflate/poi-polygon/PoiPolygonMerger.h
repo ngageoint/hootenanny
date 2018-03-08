@@ -56,8 +56,13 @@ public:
   /**
    * Merges a single POI with a single polygon, both as defined by PoiPolygonMerger
    *
-   * @param map an OSM map containing a single node POI and a single polygon area or building, which
-   * can be a way or a relation (multipolygon)
+   * Way polys do not have to have their way nodes passed in, and relations do not have to have
+   * their relation members passed in.  The resulting invalid map does not affect the merger.  If
+   * constituents of the input features are not passed in, the caller is responsible for deleting
+   * the constituent way nodes/relation members.
+   *
+   * @param map an OSM map containing a single node POI and a single polygon that fits
+   * PoiPolygonMatch's definition of a polygon
    * @return the polygon element ID
    */
   static ElementId merge(OsmMapPtr map);

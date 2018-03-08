@@ -36,6 +36,7 @@ namespace hoot
 class Status
 {
 public:
+
   typedef enum TypeEnum
   {
     Invalid = 0,
@@ -102,6 +103,7 @@ public:
   static Type fromString(QString typeString);
 
 private:
+
   Status::Type _type;
 };
 

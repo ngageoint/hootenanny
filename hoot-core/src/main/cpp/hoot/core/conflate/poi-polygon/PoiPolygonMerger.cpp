@@ -134,6 +134,7 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Eleme
       poisMerged++;
     }
   }
+  LOG_VART(poisMerged);
 
   if (poisMerged > 0)
   {
@@ -142,10 +143,13 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Eleme
   }
 
   finalBuilding->setTags(finalBuildingTags);
+  LOG_VART(finalBuilding);
 }
 
 Tags PoiPolygonMerger::_mergePoiTags(const OsmMapPtr& map, Status s) const
 {
+  LOG_TRACE("Merging POI tags for status: " << s << "...");
+
   Tags result;
 
   for (set< pair<ElementId, ElementId> >::const_iterator it = _pairs.begin(); it != _pairs.end();
@@ -166,11 +170,14 @@ Tags PoiPolygonMerger::_mergePoiTags(const OsmMapPtr& map, Status s) const
     }
   }
 
+  LOG_VART(result);
   return result;
 }
 
 vector<ElementId> PoiPolygonMerger::_getBuildingParts(const OsmMapPtr& map, Status s) const
 {
+  LOG_TRACE("Getting building parts for status: " << s << "...");
+
   vector<ElementId> result;
 
   for (set< pair<ElementId, ElementId> >::const_iterator it = _pairs.begin(); it != _pairs.end();
@@ -189,6 +196,7 @@ vector<ElementId> PoiPolygonMerger::_getBuildingParts(const OsmMapPtr& map, Stat
     }
   }
 
+  LOG_VART(result);
   return result;
 }
 
@@ -196,6 +204,8 @@ ElementId PoiPolygonMerger::_mergeBuildings(const OsmMapPtr& map,
   vector<ElementId>& buildings1, vector<ElementId>& buildings2,
   vector< pair<ElementId, ElementId> >& replaced) const
 {
+  LOG_TRACE("Merging buildings...");
+
   LOG_VART(buildings1.size());
   LOG_VART(buildings2.size());
   LOG_VART(replaced.size());
@@ -251,12 +261,22 @@ ElementId PoiPolygonMerger::merge(OsmMapPtr map)
 {
   LOG_INFO("Merging a POI and a polygon...");
 
-  //there should be one poi node and one building/area poly, which is either a way or a relation
-  //in the input map
+  //This logic will work whether constituent way nodes/relation members are passed in or not.  See
+  //additional notes in the method description.
+
+//  const int featureCount = map->getElementCount();
+//  if (featureCount != 2)
+//  {
+//    throw IllegalArgumentException(
+//      "The POI/Polygon Merger expects two features passed to it.  Number passed: " +
+//      QString::number(featureCount));
+//  }
+
+  LOG_VART(map->getElementCount());
 
   int poiCount = 0;
   ElementId poiElementId;
-  Status poiStatus;
+  //Status poiStatus;
   const NodeMap& nodes = map->getNodes();
   for (NodeMap::const_iterator nodeItr = nodes.begin(); nodeItr != nodes.end(); ++nodeItr)
   {
@@ -269,11 +289,12 @@ ElementId PoiPolygonMerger::merge(OsmMapPtr map)
 
       //If the POI has no status, arbitrarily make the POI unknown1 and the poly unknown2.  Make
       //sure both input poi and poly have different input statuses.
-      if (node->getStatus() != Status::Unknown1 && node->getStatus() != Status::Unknown2)
-      {
-        node->setStatus(Status::Unknown1);
-      }
-      poiStatus = node->getStatus();
+//      if (node->getStatus() != Status::Unknown1 && node->getStatus() != Status::Unknown2)
+//      {
+//        node->setStatus(Status::Unknown1);
+//      }
+      LOG_VART(node);
+      //poiStatus = node->getStatus();
       poiElementId = ElementId::node(nodeId);
       poiCount++;
     }
@@ -297,17 +318,18 @@ ElementId PoiPolygonMerger::merge(OsmMapPtr map)
     if (PoiPolygonMatch::isPoly(*way))
     {
       //see comment in node loop above
-      if (way->getStatus() != Status::Unknown1 && way->getStatus() != Status::Unknown2)
-      {
-        if (poiStatus == Status::Unknown1)
-        {
-          way->setStatus(Status::Unknown2);
-        }
-        else
-        {
-          way->setStatus(Status::Unknown1);
-        }
-      }
+//      if (way->getStatus() != Status::Unknown1 && way->getStatus() != Status::Unknown2)
+//      {
+//        if (poiStatus == Status::Unknown1)
+//        {
+//          way->setStatus(Status::Unknown2);
+//        }
+//        else
+//        {
+//          way->setStatus(Status::Unknown1);
+//        }
+//      }
+      LOG_VART(way);
       polyElementId = ElementId::way(wayId);
       polyCount++;
     }
@@ -322,17 +344,18 @@ ElementId PoiPolygonMerger::merge(OsmMapPtr map)
       if (PoiPolygonMatch::isPoly(*relation))
       {
         //see comment in node loop above
-        if (relation->getStatus() != Status::Unknown1 && relation->getStatus() != Status::Unknown2)
-        {
-          if (poiStatus == Status::Unknown1)
-          {
-            relation->setStatus(Status::Unknown2);
-          }
-          else
-          {
-            relation->setStatus(Status::Unknown1);
-          }
-        }
+//        if (relation->getStatus() != Status::Unknown1 && relation->getStatus() != Status::Unknown2)
+//        {
+//          if (poiStatus == Status::Unknown1)
+//          {
+//            relation->setStatus(Status::Unknown2);
+//          }
+//          else
+//          {
+//            relation->setStatus(Status::Unknown1);
+//          }
+//        }
+        LOG_VART(relation);
         polyElementId = ElementId::relation(relationId);
         polyCount++;
       }
@@ -346,6 +369,9 @@ ElementId PoiPolygonMerger::merge(OsmMapPtr map)
   {
     throw IllegalArgumentException("More than one polygon passed to POI/Polygon merger.");
   }
+
+  LOG_VART(poiElementId);
+  LOG_VART(polyElementId);
 
   std::set<std::pair<ElementId, ElementId> > pairs;
   pairs.insert(std::pair<ElementId, ElementId>(poiElementId, polyElementId));

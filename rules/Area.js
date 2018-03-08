@@ -27,7 +27,7 @@ nodes and polygons or a school polygon which encloses school buildings on the ca
  */
 exports.isMatchCandidate = function(map, e)
 {
-    return isArea(e) && !isBuilding(e);
+  return isArea(e) && !isBuilding(e);
 };
 
 /**
@@ -40,7 +40,7 @@ exports.isMatchCandidate = function(map, e)
  */
 exports.isWholeGroup = function()
 {
-    return true;
+  return true;
 };
 
 /**
@@ -56,7 +56,8 @@ exports.matchScore = function(map, e1, e2)
 {
   var result = { match: 0.0, miss: 1.0, review: 0.0 };
 
-  if (e1.getStatusString() == e2.getStatusString()) {
+  if (e1.getStatusString() == e2.getStatusString())
+  {
     return result;
   }
 
@@ -66,7 +67,7 @@ exports.matchScore = function(map, e1, e2)
   var edgeDist = new hoot.EdgeDistanceExtractor().extract(map, e1, e2);
   var angleHist = new hoot.AngleHistogramExtractor().extract(map, e1, e2);
 
-  //REP - This was derived against only one dataset, so obviously needs more refinement.
+  //This was derived against only one dataset, so obviously needs more refinement.
   if (bufferedOverlap < 0.57)
   {
     if (overlap >= 0.18 && edgeDist >= 0.99)
@@ -103,19 +104,13 @@ exports.matchScore = function(map, e1, e2)
   return result;
 };
 
-/**
- * Simpler version of the mergeSets function. Maybe only support this at first.
- * It only supports merging two elements and the replaced list is determined
- * implicitly based on the result.
- */
 exports.mergePair = function(map, e1, e2)
 {
-    var newTags = mergeTags(e1, e2);
-    e1.setTags(newTags);
+  // replace instances of e2 with e1 and merge tags
+  mergeElements(map, e1, e2);
+  e1.setStatusString("conflated");
 
-    removeElement(map, e2);
-
-    return e1;
+  return e1;
 };
 
 exports.getMatchFeatureDetails = function(map, e1, e2)

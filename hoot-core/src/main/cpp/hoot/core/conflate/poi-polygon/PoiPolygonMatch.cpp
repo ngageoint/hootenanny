@@ -271,65 +271,6 @@ void PoiPolygonMatch::_categorizeElementsByGeometryType(const ElementId& eid1,
   }
 }
 
-//Weka didn't help any with improving this matching.  Leaving this method here in case anyone
-//wants to explore in weka with this again.
-void PoiPolygonMatch::calculateMatchWeka(const ElementId& /*eid1*/, const ElementId& /*eid2*/)
-{
-//  _class.setMiss();
-
-//  _categorizeElementsByGeometryType(eid1, eid2);
-
-//  try
-//  {
-//    const double distance = PoiPolygonDistanceExtractor().extract(*_map, _poi, _poly);
-//    //const double convexPolydistance =
-//      //PoiPolygonAlphaShapeDistanceExtractor().extract(*_map, _poi, _poly);
-//    const double nameScore = PoiPolygonNameScoreExtractor().extract(*_map, _poi, _poly);
-//    const double typeScore = PoiPolygonTypeScoreExtractor().extract(*_map, _poi, _poly);
-//    PoiPolygonAddressScoreExtractor addressScoreExtractor;
-//    addressScoreExtractor.setExactAddressMatching(false);
-//    const double addressScore = addressScoreExtractor.extract(*_map, _poi, _poly);
-
-//    /*if (distance <= 10.698997)
-//    {
-//      if (typeScore > 0.576)
-//      {
-//        if (nameScore > 0.782878)
-//        {
-//          if (typeScore <= 0.8)
-//          {
-//            if (typeScore <= 0.64)
-//            {
-//              _class.setMatch();
-//            }
-//          }
-//          else
-//          {
-//            if (distance <= 0.000371)
-//            {
-//              _class.setMatch();
-//            }
-//          }
-//        }
-//      }
-//    }*/
-//  }
-//  catch (const geos::util::TopologyException& e)
-//  {
-//    //if (_badGeomCount <= _opts.getOgrLogLimit())
-//    //{
-//      LOG_WARN(
-//        "Feature(s) passed to PoiPolygonMatchCreator caused topology exception on conversion "
-//        "to a geometry: " << _poly->toString() << "\n" << _poi->toString() << "\n" << e.what());
-//      //_badGeomCount++;
-//    //}
-//    return;
-//  }
-
-//  LOG_VART(_class);
-//  LOG_TRACE("**************************");
-}
-
 bool PoiPolygonMatch::_featureHasReviewIfMatchedType(ConstElementPtr element) const
 {
   if (_reviewIfMatchedTypes.isEmpty())
@@ -400,6 +341,13 @@ bool PoiPolygonMatch::_inputFeaturesHaveSameSource(const ElementId& eid1,
 
 void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid2)
 {  
+  //for testing only
+//  ConstElementPtr e1 = _map->getElement(eid1);
+//  ConstElementPtr e2 = _map->getElement(eid2);
+//  const bool oneElementIsRelation =
+//    e1->getElementType() == ElementType::Relation ||
+//    e2->getElementType() == ElementType::Relation;
+
   _explainText = "";
   _class.setMiss();
 
@@ -449,7 +397,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
         _class.setMatch();
       }
     }
-    else
+    else// if (oneElementIsRelation) //for testing only
     {
       _class.setReview();
       _explainText =
@@ -457,6 +405,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
     }
   }
   else if (evidence >= _reviewEvidenceThreshold)
+           //&& oneElementIsRelation) //for testing only
   {
     _class.setReview();
   }
@@ -478,24 +427,13 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
   PoiPolygonDistance distanceCalc(
     _matchDistanceThreshold, _reviewDistanceThreshold, poly->getTags(),
     poi->getCircularError() + _opts.getPoiPolygonReviewDistanceThreshold());
-  //type based match distance changes didn't have any positive effect experimentally; leaving it
-  //commented out here in case there is need for further examination
-//  _matchDistanceThreshold =
-//    max(
-//      distanceCalc.getMatchDistanceForType(_t1BestKvp),
-//      distanceCalc.getMatchDistanceForType(_t2BestKvp));
   _reviewDistanceThreshold =
     max(
       distanceCalc.getReviewDistanceForType(_poi->getTags()),
       distanceCalc.getReviewDistanceForType(_poly->getTags()));
-  //density based distance changes didn't have any positive effect experimentally; leaving it
-  //commented out here in case there is need for further examination
-  /*if (poi->getTags().get("station") != "light_rail" &&
-      poi->getTags().get("amenity") != "fuel")
-  {
-    distanceCalc.modifyMatchDistanceForPolyDensity(_matchDistanceThreshold);
-    distanceCalc.modifyReviewDistanceForPolyDensity(_reviewDistanceThreshold);
-  }*/
+
+  //Tried type and density based match distance changes here too, but they didn't have any positive
+  //effect experimentally;
 
   // calculate the 2 sigma for the distance between the two objects
   const double poiSigma = poi->getCircularError() / 2.0;
