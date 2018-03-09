@@ -131,11 +131,8 @@ var postHandler = function(data)
     var map = new hoot.OsmMap();
     map.setIdGenerator(new hoot.DefaultIdGenerator());
     hoot.loadMapFromString(map, data);
-
     var mergedMap = hoot.elementMerge(map);
-
     var xml = hoot.OsmWriter.toString(mergedMap);
-
     return xml;
 }
 

@@ -35,6 +35,8 @@ namespace hoot
 
 /**
  * A filter that will either keep or remove matches.
+ *
+ * TODO: This is redundant with HighwayCriterion and should be removed.
  */
 class HighwayFilter : public BaseFilter
 {

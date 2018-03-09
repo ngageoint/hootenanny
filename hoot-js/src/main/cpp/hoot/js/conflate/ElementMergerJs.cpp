@@ -1,7 +1,6 @@
 #include "ElementMergerJs.h"
 
 // Hoot
-//#include <hoot/core/elements/ElementId.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/js/HootJsStable.h>
@@ -9,14 +8,13 @@
 #include <hoot/js/OsmMapJs.h>
 #include <hoot/js/SystemNodeJs.h>
 #include <hoot/js/conflate/js/ScriptMerger.h>
-#include <hoot/js/util/DataConvertJs.h>
+//#include <hoot/js/util/DataConvertJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMerger.h>
 #include <hoot/core/conflate/polygon/BuildingMerger.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
-//#include <hoot/core/filters/StatusCriterion.h>
 #include <hoot/core/filters/TagKeyCriterion.h>
 #include <hoot/core/filters/ChainCriterion.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
@@ -26,6 +24,7 @@
 #include <hoot/core/filters/NonBuildingAreaCriterion.h>
 #include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPoiCriterion.h>
 #include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPolyCriterion.h>
+#include <hoot/core/visitors/ElementIdSetVisitor.h>
 
 // Qt
 #include <QString>
@@ -92,18 +91,17 @@ void ElementMergerJs::_mergeElements(OsmMapPtr map, const MergeType& mergeType, 
 
   ElementId mergedId;
   bool scriptMerge = false;
+  const ElementId mergeTargetId = _getMergeTargetFeatureId(map);
+  LOG_VART(mergeTargetId);
   switch (mergeType)
   {
     case MergeType::BuildingToBuilding:
-      //TODO: need to force merge target feature here
-      //const ElementId mergeTargetId = _getMergeTargetFeatureId(map);
-      mergedId = BuildingMerger::merge(map);
+      _mergeBuildings(map, mergeTargetId);
       break;
 
     case MergeType::PoiToPolygon:
-      //TODO: need to force merge target feature here
-      //const ElementId mergeTargetId = _getMergeTargetFeatureId(map);
-      mergedId = PoiPolygonMerger::merge(map);
+      //poi/poly can only merge into the poly, so no need to send in the target id
+      _mergePoiAndPolygon(map);
       break;
 
     case MergeType::PoiToPoi:
@@ -120,25 +118,34 @@ void ElementMergerJs::_mergeElements(OsmMapPtr map, const MergeType& mergeType, 
       throw HootException("Invalid merge type.");
   }
 
+  LOG_VART(map->getElementCount());
+  ElementPtr mergedElement = map->getElement(mergeTargetId);
+  LOG_VART(mergedElement);
+
   //We only need to set the resulting merged element's status to conflated when the ScriptMerger
   //wasn't used, as it does so automatically.
   if (!scriptMerge)
   {
     LOG_VART(mergedId)
-    LOG_VART(map->getElementCount());
-    ElementPtr mergedElement = map->getElement(mergedId);
     mergedElement->setStatus(Status(Status::Conflated));
     mergedElement->getTags()[MetadataTags::HootStatus()] = "3";
-    LOG_VART(mergedElement);
   }
 
-  //TODO: remove merge target tag
+  mergedElement->getTags()[MetadataTags::HootMergeTarget()] = "";
+  mergedElement->getTags().removeEmptyTags();
+
+  LOG_VART(mergedElement);
 }
 
-ElementId ElementMergerJs::_getMergeTargetFeatureId(ConstOsmMapPtr /*map*/)
+ElementId ElementMergerJs::_getMergeTargetFeatureId(ConstOsmMapPtr map)
 {
-  //TODO: finish
-  return ElementId();
+  TagKeyCriterion mergeTagFilter(MetadataTags::HootMergeTarget());
+  ElementIdSetVisitor idSetVis;
+  FilteredVisitor filteredVis(mergeTagFilter, idSetVis);
+  map->visitRo(filteredVis);
+  const std::set<ElementId>& mergeTargetIds = idSetVis.getElementSet();
+  assert(mergeTargetIds.size() == 1);
+  return *mergeTargetIds.begin();
 }
 
 void ElementMergerJs::_validateMergeTargetElement(ConstOsmMapPtr map, const MergeType& mergeType)
@@ -247,7 +254,187 @@ bool ElementMergerJs::_containsOnePolygonAndOneOrMorePois(ConstOsmMapPtr map)
   return poiCount >= 1 && polyCount == 1;
 }
 
-void ElementMergerJs::_mergeAreas(OsmMapPtr /*map*/, Isolate* current)
+void ElementMergerJs::_mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetId)
+{
+  LOG_INFO("Merging two buildings...");
+
+  //This logic will work whether constituent way nodes/relation members are passed in or not.  See
+  //additional notes in the method description.
+
+  LOG_VART(mergeTargetId);
+  LOG_VART(map->getElementCount());
+
+  int buildingCount = 0;
+  ElementId buildingElementId;
+  const WayMap& ways = map->getWays();
+  for (WayMap::const_iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
+  {
+    const int wayId = wayItr->first;
+    WayPtr way = map->getWay(wayId);
+    if (OsmSchema::getInstance().isBuilding(way))
+    {
+      if (way->getElementId() != mergeTargetId)
+      {
+        LOG_VART(way);
+        buildingElementId = ElementId::way(wayId);
+      }
+      buildingCount++;
+    }
+  }
+  if (buildingElementId.isNull())
+  {
+    const RelationMap& relations = map->getRelations();
+    for (RelationMap::const_iterator relItr = relations.begin(); relItr != relations.end(); ++relItr)
+    {
+      const int relationId = relItr->first;
+      RelationPtr relation = map->getRelation(relationId);
+      if (OsmSchema::getInstance().isBuilding(relation))
+      {
+        if (relation->getElementId() != mergeTargetId)
+        {
+          LOG_VART(relation);
+          buildingElementId = ElementId::relation(relationId);
+        }
+      }
+      buildingCount++;
+    }
+  }
+  if (buildingCount == 0)
+  {
+    throw IllegalArgumentException("No buildings passed to building merger.");
+  }
+  if (buildingCount > 2)
+  {
+    throw IllegalArgumentException("More than two buildings passed to building merger.");
+  }
+
+  LOG_VART(buildingElementId);
+
+  std::set<std::pair<ElementId, ElementId> > pairs;
+  pairs.insert(std::pair<ElementId, ElementId>(mergeTargetId, buildingElementId));
+  BuildingMerger merger(pairs);
+  LOG_VART(pairs.size());
+  std::vector<std::pair<ElementId, ElementId> > replacedElements;
+  merger.apply(map, replacedElements);
+}
+
+void ElementMergerJs::_mergePoiAndPolygon(OsmMapPtr map)
+{
+  LOG_INFO("Merging a POI and a polygon...");
+
+  //This logic will work whether constituent way nodes/relation members are passed in or not.  See
+  //additional notes in the method description.
+
+  LOG_VART(map->getElementCount());
+
+  int poiCount = 0;
+  ElementId poiElementId;
+  //Status poiStatus;
+  const NodeMap& nodes = map->getNodes();
+  for (NodeMap::const_iterator nodeItr = nodes.begin(); nodeItr != nodes.end(); ++nodeItr)
+  {
+    const int nodeId = nodeItr->first;
+    NodePtr node = map->getNode(nodeId);
+    if (OsmSchema::getInstance().isPoiPolygonPoi(node))
+    {
+      //TODO: Arbitrarily setting the status doesn't seem right.  Should be able to assume that
+      //that the incoming features always have a status, as is done with AreaMerger.
+
+      //If the POI has no status, arbitrarily make the POI unknown1 and the poly unknown2.  Make
+      //sure both input poi and poly have different input statuses.
+//      if (node->getStatus() != Status::Unknown1 && node->getStatus() != Status::Unknown2)
+//      {
+//        node->setStatus(Status::Unknown1);
+//      }
+      LOG_VART(node);
+      //poiStatus = node->getStatus();
+      poiElementId = ElementId::node(nodeId);
+      poiCount++;
+    }
+  }
+  if (poiCount == 0)
+  {
+    throw IllegalArgumentException("No POI passed to POI/Polygon merger.");
+  }
+  if (poiCount > 1)
+  {
+    throw IllegalArgumentException("More than one POI passed to POI/Polygon merger.");
+  }
+
+  int polyCount = 0;
+  ElementId polyElementId;
+  const WayMap& ways = map->getWays();
+  for (WayMap::const_iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
+  {
+    const int wayId = wayItr->first;
+    WayPtr way = map->getWay(wayId);
+    if (OsmSchema::getInstance().isPoiPolygonPoly(way))
+    {
+      //see comment in node loop above
+//      if (way->getStatus() != Status::Unknown1 && way->getStatus() != Status::Unknown2)
+//      {
+//        if (poiStatus == Status::Unknown1)
+//        {
+//          way->setStatus(Status::Unknown2);
+//        }
+//        else
+//        {
+//          way->setStatus(Status::Unknown1);
+//        }
+//      }
+      LOG_VART(way);
+      polyElementId = ElementId::way(wayId);
+      polyCount++;
+    }
+  }
+  if (polyElementId.isNull())
+  {
+    const RelationMap& relations = map->getRelations();
+    for (RelationMap::const_iterator relItr = relations.begin(); relItr != relations.end(); ++relItr)
+    {
+      const int relationId = relItr->first;
+      RelationPtr relation = map->getRelation(relationId);
+      if (OsmSchema::getInstance().isPoiPolygonPoly(relation))
+      {
+        //see comment in node loop above
+//        if (relation->getStatus() != Status::Unknown1 && relation->getStatus() != Status::Unknown2)
+//        {
+//          if (poiStatus == Status::Unknown1)
+//          {
+//            relation->setStatus(Status::Unknown2);
+//          }
+//          else
+//          {
+//            relation->setStatus(Status::Unknown1);
+//          }
+//        }
+        LOG_VART(relation);
+        polyElementId = ElementId::relation(relationId);
+        polyCount++;
+      }
+    }
+  }
+  if (polyCount == 0)
+  {
+    throw IllegalArgumentException("No polygon passed to POI/Polygon merger.");
+  }
+  if (polyCount > 1)
+  {
+    throw IllegalArgumentException("More than one polygon passed to POI/Polygon merger.");
+  }
+
+  LOG_VART(poiElementId);
+  LOG_VART(polyElementId);
+
+  std::set<std::pair<ElementId, ElementId> > pairs;
+  pairs.insert(std::pair<ElementId, ElementId>(poiElementId, polyElementId));
+  PoiPolygonMerger merger(pairs);
+  LOG_VART(pairs.size());
+  std::vector<std::pair<ElementId, ElementId> > replacedElements;
+  merger.apply(map, replacedElements);
+}
+
+void ElementMergerJs::_mergeAreas(OsmMapPtr map, Isolate* current)
 {
   // Instantiate script merger
   boost::shared_ptr<PluginContext> script(new PluginContext());
@@ -266,7 +453,62 @@ void ElementMergerJs::_mergeAreas(OsmMapPtr /*map*/, Isolate* current)
     throw IllegalArgumentException("Expected plugin to be a valid object.");
   }
 
-  //TODO: finish
+  const ElementId mergeTargetId = _getMergeTargetFeatureId(map);
+  LOG_TRACE("Merge target ID: " << mergeTargetId);
+
+  for (WayMap::const_iterator it = map->getWays().begin(); it != map->getWays().end(); ++it)
+  {
+    if (it->second->getId() != mergeTargetId.getId())
+    {
+      const ConstWayPtr& way = it->second;
+
+      std::set< std::pair< ElementId, ElementId> > matches;
+      matches.insert(std::pair<ElementId,ElementId>(mergeTargetId, ElementId::way(way->getId())));
+
+      // Now create scriptmerger, and invoke apply method which will apply merge
+      // transformation, reducing the areas down to one.
+      ScriptMerger merger(script, plugin, matches);
+      std::vector< std::pair< ElementId, ElementId > > replacedWays;
+      merger.apply(map, replacedWays);
+
+      if (replacedWays.size() == 1)
+      {
+        LOG_TRACE(
+          "Area merge: replacing way #" << replacedWays[0].first.getId() <<
+          " with updated version of way #" << replacedWays[0].second.getId());
+        map->replace(
+          map->getElement(replacedWays[0].first), map->getElement(replacedWays[0].second));
+      }
+    }
+  }
+
+  for (RelationMap::const_iterator it = map->getRelations().begin();
+       it != map->getRelations().end(); ++it)
+  {
+    if (it->second->getId() != mergeTargetId.getId())
+    {
+      const ConstRelationPtr& relation = it->second;
+
+      std::set< std::pair< ElementId, ElementId> > matches;
+      matches.insert(
+        std::pair<ElementId,ElementId>(mergeTargetId, ElementId::relation(relation->getId())));
+
+      // Now create scriptmerger, and invoke apply method which will apply merge
+      // transformation, reducing the areas down to one.
+      ScriptMerger merger(script, plugin, matches);
+      std::vector< std::pair< ElementId, ElementId > > replacedRelations;
+      merger.apply(map, replacedRelations);
+
+      if (replacedRelations.size() == 1)
+      {
+        LOG_TRACE(
+          "Area merge: replacing relation #" << replacedRelations[0].first.getId() <<
+          " with updated version of relation #" << replacedRelations[0].second.getId());
+        map->replace(
+          map->getElement(replacedRelations[0].first), map->getElement(replacedRelations[0].second));
+      }
+    }
+  }
 }
 
 void ElementMergerJs::_mergePois(OsmMapPtr map, Isolate* current)
@@ -297,11 +539,9 @@ void ElementMergerJs::_mergePois(OsmMapPtr map, Isolate* current)
   //   A->B, A->C, A->D, A->E
   //
   // ...then pass those pairs one at a time through the merger, since it only merges pairs
-  NodeMap nodes = map->getNodes();
-
   const ElementId mergeTargetId = _getMergeTargetFeatureId(map);
   LOG_TRACE("Merge target ID: " << mergeTargetId);
-  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
+  for (NodeMap::const_iterator it = map->getNodes().begin(); it != map->getNodes().end(); ++it)
   {
     if (it->second->getId() != mergeTargetId.getId())
     {

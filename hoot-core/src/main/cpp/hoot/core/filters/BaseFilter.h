@@ -38,9 +38,11 @@ namespace hoot
 class BaseFilter : public BaseElementFilter
 {
 public:
+
   BaseFilter(FilterType type);
 
 protected:
+
   virtual bool isFiltered(const Element& e) const;
 
   /**

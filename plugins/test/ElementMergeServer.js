@@ -4,6 +4,10 @@ var assert = require('assert'),
 var httpMocks = require('node-mocks-http');
 var server = require('../ElementMergeServer.js');
 
+//For elements with constituents (way nodes for ways, relation members for relations), the service does not require that
+//the constituent elements are passed in.  If the constituent elements are not passed in, the caller is responsible for
+//deleting them manually after merging.
+
 var poiToPoiInput = "<?xml version='1.0' encoding='UTF-8'?>\
     <osm version='0.6' upload='true' generator='hootenanny'>\
     <node id='-3200079' visible='true' lat='48.0479399' lon='11.7012814'>\
@@ -19,9 +23,6 @@ var poiToPoiInput = "<?xml version='1.0' encoding='UTF-8'?>\
     </node>\
     </osm>";
 
-//The poi to poly inputs used here are the same as are used in the core's PoiPolygonMergerTest.
-
-//The service doesn't require the way nodes to be passed in.
 var poiToPolyWayInput = "<?xml version='1.0' encoding='UTF-8'?>\
     <osm version='0.6' upload='true' generator='hootenanny'>\
     <node visible='true' id='-530' lat='-0.3635327329999427' lon='42.5442892910000410'>\
@@ -45,7 +46,6 @@ var poiToPolyWayInput = "<?xml version='1.0' encoding='UTF-8'?>\
     </way>\
 </osm>";
 
-// The service doesn't require the way relation members to be passed in.
 var poiToPolyRelationInput = "<?xml version='1.0' encoding='UTF-8'?>\
     <osm version='0.6' generator='hootenanny'>\
     <node visible='true' id='-532' lat='-0.3635327329999427' lon='42.5442892910000410'>\
@@ -65,7 +65,15 @@ var poiToPolyRelationInput = "<?xml version='1.0' encoding='UTF-8'?>\
     </relation>\
 </osm>";
 
-//TODO: add area test
+//TODO: finish tests for these
+var areaToAreaTwoWaysInput = "";
+var areaToAreaWayRelationInput = "";
+var areaToAreaTwoRelationsInput = "";
+var buildingToBuildingTwoWaysInput = "";
+var buildingToBuildingWayRelationInput = "";
+var buildingToBuildingTwoRelationsInput = "";
+
+//TODO: add error tests
 
 describe('ElementMergeServer', function () {
     it('responds with HTTP 404 if url not found', function() {
@@ -158,8 +166,6 @@ describe('ElementMergeServer', function () {
                 assert.equal(result.osm.way[0].tag[4].$.v, "prison");
             });
         });
-
-        //For poi/poly tests, not testing invalid inputs as that's handled fairly extensively in PoiPolygonMergerTest.
 
         it('merges an osm poi and a relation polygon', function() {
             var merged = server.handleInputs({

@@ -55,14 +55,6 @@ public:
 
   virtual QString toString() const;
 
-  /**
-   *
-   *
-   * @param map
-   * @return
-   */
-  static ElementId merge(OsmMapPtr map);
-
 protected:
 
   virtual PairsSet& getPairs() { return _pairs; }
