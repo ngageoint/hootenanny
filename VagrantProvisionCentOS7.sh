@@ -67,7 +67,7 @@ sudo yum versionlock add nodejs-$NODE_VERSION nodejs-devel-$NODE_VERSION
 # Uninstall RVM and remove from profile.
 if test -d ~/.rvm; then
     echo "### Removing RVM"
-    ~/rvm/bin/rvm implode --force
+    ~/.rvm/bin/rvm implode --force
     sed -i -e '/rvm/Id' ~/.bashrc ~/.profile
 fi
 
