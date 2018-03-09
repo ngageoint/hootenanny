@@ -31,7 +31,7 @@ makedirs:
 	mkdir -p $$HOOT_HOME/userfiles/reports
 	mkdir -p $$HOOT_HOME/userfiles/tmp/upload
 
-clean: Makefile.qmake services-clean clean-coverage
+clean: Makefile.qmake ui-clean services-clean clean-coverage
 	$(MAKE) -f Makefile.qmake clean 2>&1 \
 	  | grep -v -e ".*WARNING: Failure to find: tmp/swig/HootSwig.cxx.*" \
 	  || true \
@@ -138,7 +138,7 @@ ifneq ($(HADOOP_HOME),)
 	cd pretty-pipes/pp-lib/ ; $(MAKE) -f Makefile.mvn test
 endif
 
-plugins-test:
+plugins-test: build
 ifneq ($(shell which mocha),)
 	cd plugins; npm install && npm test
 else
@@ -340,6 +340,11 @@ endif
 ui-build: HOOT_VERSION_FILE
 ifeq ($(BUILD_SERVICES),services)
 	cd hoot-ui && $(MAKE) -f Makefile clean && $(MAKE) -f Makefile all
+endif
+
+ui-clean:
+ifeq ($(BUILD_UI_TESTS),uitests)
+	cd test-files/ui && $(MAKE) -f Makefile clean
 endif
 
 ui-test: services-build build

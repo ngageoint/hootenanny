@@ -147,7 +147,7 @@ fcodeCommon = {
       ['F_CODE','AL175','man_made','courtyard'], // Courtyard
       ['F_CODE','AL180','shop','kiosk'], // Retail Stand
       ['F_CODE','AL195','ramp','yes'], // Ramp
-      ['F_CODE','AL200','ruins','yes'], // Ruins
+      ['F_CODE','AL200','historic','ruins'], // Ruins
       ['F_CODE','AL201','tourism','attraction'], // Interest Site
       ['F_CODE','AL208','place','shanty_town'], // Shanty Town
       ['F_CODE','AL211','route:protection','yes'], // Transportation Route Protection Structure
@@ -299,7 +299,6 @@ fcodeCommon = {
       ['F_CODE','BH077','natural','hummock'], // Hummock
       ['F_CODE','BH082','water','lake'], // Inland Waterbody
       ['F_CODE','BH090','water','intermittent'], // Land Subject to Inundation
-      ['F_CODE','BH095','natural','wetland'], // Wetland - In NFDD & NAS but not TDS
       ['F_CODE','BH100','water','moat'], // Moat
       ['F_CODE','BH110','pipeline:type','penstock'], // Penstock
       ['F_CODE','BH116','natural','aquifer'], // Aquifer

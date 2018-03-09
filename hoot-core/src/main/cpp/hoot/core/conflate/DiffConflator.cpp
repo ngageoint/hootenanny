@@ -89,12 +89,6 @@ void DiffConflator::apply(OsmMapPtr& map)
   LOG_INFO("Applying pre diff-conflation operations...");
   NamedOp(ConfigOptions().getUnifyPreOps()).apply(map);
 
-  if (ConfigOptions().getMatchCreators().contains("NetworkMatchCreator"))
-  {
-    LOG_INFO("Applying pre-network conflation operations...");
-    NamedOp(ConfigOptions().getNetworkPreOps()).apply(map);
-  }
-
   _stats.append(SingleStat("Apply Pre Ops Time (sec)", timer.getElapsedAndRestart()));
 
   // will reproject if necessary.

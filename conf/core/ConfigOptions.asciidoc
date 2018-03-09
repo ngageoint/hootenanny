@@ -166,6 +166,14 @@ The maximum number of values returned for each attribute by the attribute-count 
 
 Determines whether the AttributeScoreExtractor uses weighting when extracting scores.
 
+=== autocorrect.options
+
+* Data Type: bool
+* Default Value: `true`
+
+Temporary setting that addresses some Hootenanny iD Editor UI bugs.  See
+MatchFactory::_tempFixDefaults() for more info.
+
 === big.convert.exec.sql.with.mapreduce
 
 * Data Type: bool
@@ -1292,7 +1300,7 @@ are identical. Units in meters and defaults to 1.0m.
 === merger.creators
 
 * Data Type: string
-* Default Value: `hoot::BuildingMergerCreator;hoot::ScriptMergerCreator;hoot::HighwaySnapMergerCreator;hoot::PoiPolygonMergerCreator;hoot::ScriptMergerCreator`
+* Default Value: `hoot::BuildingMergerCreator;hoot::ScriptMergerCreator;hoot::HighwaySnapMergerCreator;hoot::ScriptMergerCreator;hoot::PoiPolygonMergerCreator;hoot::ScriptMergerCreator`
 
 List of merger creators to use during conflation. This can modify what features will be conflated
 (e.g. buildings, roads, etc.).  The ordering must match that in match.creators.
@@ -1417,16 +1425,6 @@ See also:
 
 The number of optimization iterations the network match creator will run when performing network
 conflation.
-
-=== network.pre.ops
-
-* Data Type: list
-* Default Value:
-** `hoot::CornerSplitter`
-** `hoot::RubberSheet`
-
-List of operations to apply immediately before conflating when using Network Conflation only.  Runs
-after the operations in `conflate.pre.ops`.
 
 === network.review.threshold
 
@@ -2123,21 +2121,22 @@ See also:
 
 If true, POI to polygon conflation will not attempt to conflate two features with the same source
 tag value.  e.g. both have 'source=osm' tag  The source tag key is specified by
-poi.polygon.source.tag.key.  This setting is useful when you have a data layer where data has been
-collected as both POIs and polygons for the same source and you never want the two source to be
-conflated together.
+poi.polygon.source.tag.key.  How strictly the source tag key must be matched is controlled by
+poi.polygon.disable.same.source.conflation.match.tag.key.prefix.only.  This setting is useful when
+you have a data layer where data has been collected as both POIs and polygons for the same source
+and you never want the two source to be conflated together.
 
 === poi.polygon.disable.same.source.conflation.match.tag.key.prefix.only
 
 * Data Type: bool
 * Default Value: `true`
 
-If false and poi.polygon.disable.same.source.conflation is set to true, POI to polygon conflation
-will disable conflation only between features who have the exact same source tag value.
-e.g. both have 'source=osm' tag  If set to false, then the tag matcher is less strict and will
-attempt to match the prefix of the source tag value when delimited by a colon.
-e.g. 'source=mgcp:buildp_clip;osm' will match 'source=mgcp:builda_clip;osm' since both tag values
-begin with 'mgcp:'.
+If set to false and poi.polygon.disable.same.source.conflation is set to true, POI to polygon
+conflation will disable conflation only between features who have the exact same source tag value.
+e.g. both have 'source=osm' tag  If set to true and poi.polygon.disable.same.source.conflation is
+set to true, then the tag matcher is less strict and will attempt to match the prefix of the source
+tag value when delimited by a colon.  e.g. 'source=mgcp:buildp_clip;osm' will match
+'source=mgcp:builda_clip;osm' since both tag values begin with 'mgcp:'.
 
 === poi.polygon.enable.advanced.matching
 
@@ -2252,9 +2251,10 @@ require it.
 * Default Value:
 ** ``
 
-List of key value pairs (key=value) for features to always review if marked as matches with POI to
-polygon conflation.  When specifying the list from the command line, delimit the types with ';'
-and surround the entire value string in double quotes.
+List of key value pairs in the format 'key=value' or  'key,value' (UI only) for features to always
+review if marked as matches with POI to polygon conflation.  Delimit the individual types with ';'.
+e.g. 'amenity=school;shop=mall' or 'amenity,school;shop,mall'  Also, when specifying the list from
+the command line, surround the entire value string in double quotes.
 
 === poi.polygon.review.multiuse.buildings
 
@@ -2278,7 +2278,7 @@ The threshold at which a review is called a review for PoiPolygon. See
 * Data Type: string
 * Default Value: `source`
 
-The source tag key to be used with poi.polygon.disable.same.source.conflation.
+The source tag key to be used in conjunction with poi.polygon.disable.same.source.conflation.
 
 === poi.polygon.type.score.threshold
 
@@ -2435,17 +2435,35 @@ If set to true, then debug symbols will be added to nodes and additional tags wi
 matched nodes. This is a destructive operation that is only useful when debugging and should not
 be used during serious conflation.
 
+=== rubber.sheet.fail.when.minimum.tie.points.not.found
+
+* Data Type: bool
+* Default Value: `false`
+
+If set to true, rubber sheeting will return an error if less than rubber.sheet.minimum.ties tie
+points are found.  Otherwise, a warning will be logged and rubber sheeting will be skipped.
+
+=== rubber.sheet.log.missing.requirements.as.warning
+
+* Data Type: bool
+* Default Value: `true`
+
+If set to true, rubber sheeting will log a warning if any requirement for rubber sheeting is not
+met.  e.g less than rubber.sheet.minimum.ties tie points are found.  Otherwise, an info level log
+statement will be logged instead.  This setting is completely ignored if
+rubber.sheet.fail.when.minimum.tie.points.not.found is set to true.
+
 === rubber.sheet.minimum.ties
 
 * Data Type: int
-* Default Value: `10`
+* Default Value: `4`
 
 Sets the minimum number of tie points that will be used when calculating a rubbersheeting solution.
 
 === rubber.sheet.ref
 
 * Data Type: bool
-* Default Value: `false`
+* Default Value: `true`
 
 If this configuration setting is set to true, then the first layer is treated as the reference
 layer and will not be moved. If set to false the two layers will be moved towards each other. The

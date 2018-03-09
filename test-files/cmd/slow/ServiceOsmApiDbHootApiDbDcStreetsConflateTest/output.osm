@@ -25532,20 +25532,67 @@
         <tag k="highway" v="unclassified"/>
         <tag k="hoot:id" v="392"/>
     </way>
+    <way visible="true" id="396" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+        <nd ref="4694"/>
+        <nd ref="4390"/>
+        <nd ref="4389"/>
+        <nd ref="4388"/>
+        <nd ref="4387"/>
+        <nd ref="4386"/>
+        <nd ref="4700"/>
+        <tag k="accuracy" v="5"/>
+        <tag k="hoot:id" v="396"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="name" v="South Pl NW"/>
+        <tag k="foot" v="designated"/>
+        <tag k="highway" v="path"/>
+        <tag k="hoot:id" v="396"/>
+    </way>
     <way visible="true" id="400" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+        <nd ref="4591"/>
+        <nd ref="4592"/>
+        <nd ref="4593"/>
+        <nd ref="4594"/>
+        <nd ref="4595"/>
+        <nd ref="4596"/>
+        <nd ref="4597"/>
+        <nd ref="4598"/>
+        <nd ref="4599"/>
+        <nd ref="4600"/>
+        <nd ref="54"/>
+        <tag k="accuracy" v="5"/>
+        <tag k="hoot:id" v="400"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="alt_name" v="Constitution Ave NW"/>
+        <tag k="name" v="US Hwy 50"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="hoot:id" v="400"/>
+    </way>
+    <way visible="true" id="401" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+        <nd ref="4691"/>
+        <nd ref="3713"/>
+        <tag k="accuracy" v="5"/>
+        <tag k="hoot:id" v="401"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="alt_name" v="Constitution Ave NW;US Hwy 50"/>
+        <tag k="name" v="CONSTITUTION AVE NW"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="401"/>
+    </way>
+    <way visible="true" id="403" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <nd ref="1053"/>
         <nd ref="27"/>
         <nd ref="29"/>
         <nd ref="4692"/>
         <tag k="accuracy" v="5"/>
-        <tag k="hoot:id" v="400"/>
+        <tag k="hoot:id" v="403"/>
         <tag k="hoot:status" v="3"/>
         <tag k="alt_name" v="Constitution Ave NW;US Hwy 50"/>
         <tag k="name" v="CONSTITUTION AVE NW"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="400"/>
+        <tag k="hoot:id" v="403"/>
     </way>
-    <way visible="true" id="403" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+    <way visible="true" id="406" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <nd ref="2250"/>
         <nd ref="4550"/>
         <nd ref="4551"/>
@@ -25565,61 +25612,16 @@
         <nd ref="4565"/>
         <nd ref="4566"/>
         <tag k="accuracy" v="5"/>
-        <tag k="hoot:id" v="403"/>
+        <tag k="hoot:id" v="406"/>
         <tag k="hoot:status" v="2"/>
         <tag k="name" v="15th St NW"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:id" v="403"/>
+        <tag k="hoot:id" v="406"/>
     </way>
-    <way visible="true" id="405" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
-        <nd ref="4694"/>
-        <nd ref="4390"/>
-        <nd ref="4389"/>
-        <nd ref="4388"/>
-        <nd ref="4387"/>
-        <nd ref="4386"/>
-        <nd ref="4700"/>
-        <tag k="accuracy" v="5"/>
-        <tag k="hoot:id" v="405"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="name" v="South Pl NW"/>
-        <tag k="foot" v="designated"/>
-        <tag k="highway" v="path"/>
-        <tag k="hoot:id" v="405"/>
-    </way>
-    <way visible="true" id="406" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+    <way visible="true" id="408" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <nd ref="4693"/>
         <nd ref="888"/>
         <nd ref="3469"/>
-        <tag k="accuracy" v="5"/>
-        <tag k="hoot:id" v="406"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="alt_name" v="E St NW"/>
-        <tag k="name" v="E ST NW"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="406"/>
-    </way>
-    <way visible="true" id="407" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
-        <nd ref="549"/>
-        <nd ref="878"/>
-        <nd ref="879"/>
-        <nd ref="880"/>
-        <nd ref="881"/>
-        <nd ref="882"/>
-        <nd ref="883"/>
-        <nd ref="4694"/>
-        <tag k="accuracy" v="5"/>
-        <tag k="hoot:id" v="407"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="alt_name" v="E St NW"/>
-        <tag k="name" v="E ST NW"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="407"/>
-    </way>
-    <way visible="true" id="408" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
-        <nd ref="1073"/>
-        <nd ref="869"/>
-        <nd ref="4695"/>
         <tag k="accuracy" v="5"/>
         <tag k="hoot:id" v="408"/>
         <tag k="hoot:status" v="3"/>
@@ -25629,6 +25631,47 @@
         <tag k="hoot:id" v="408"/>
     </way>
     <way visible="true" id="409" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+        <nd ref="549"/>
+        <nd ref="878"/>
+        <nd ref="879"/>
+        <nd ref="880"/>
+        <nd ref="881"/>
+        <nd ref="882"/>
+        <nd ref="883"/>
+        <nd ref="4694"/>
+        <tag k="accuracy" v="5"/>
+        <tag k="hoot:id" v="409"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="alt_name" v="E St NW"/>
+        <tag k="name" v="E ST NW"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="409"/>
+    </way>
+    <way visible="true" id="410" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+        <nd ref="2559"/>
+        <nd ref="4616"/>
+        <nd ref="4617"/>
+        <nd ref="4618"/>
+        <tag k="accuracy" v="5"/>
+        <tag k="hoot:id" v="410"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="name" v="E Executive Ave NW"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="hoot:id" v="410"/>
+    </way>
+    <way visible="true" id="412" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+        <nd ref="1073"/>
+        <nd ref="869"/>
+        <nd ref="4695"/>
+        <tag k="accuracy" v="5"/>
+        <tag k="hoot:id" v="412"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="alt_name" v="E St NW"/>
+        <tag k="name" v="E ST NW"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="412"/>
+    </way>
+    <way visible="true" id="413" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <nd ref="3843"/>
         <nd ref="4208"/>
         <nd ref="4209"/>
@@ -25654,14 +25697,14 @@
         <nd ref="4239"/>
         <nd ref="4697"/>
         <tag k="accuracy" v="5"/>
-        <tag k="hoot:id" v="409"/>
+        <tag k="hoot:id" v="413"/>
         <tag k="hoot:status" v="3"/>
         <tag k="alt_name" v="Ellipse Rd NW"/>
         <tag k="name" v="ELLIPSE RD NW"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="409"/>
+        <tag k="hoot:id" v="413"/>
     </way>
-    <way visible="true" id="410" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+    <way visible="true" id="414" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <nd ref="4696"/>
         <nd ref="4254"/>
         <nd ref="4256"/>
@@ -25676,26 +25719,14 @@
         <nd ref="4274"/>
         <nd ref="4276"/>
         <tag k="accuracy" v="5"/>
-        <tag k="hoot:id" v="410"/>
+        <tag k="hoot:id" v="414"/>
         <tag k="hoot:status" v="3"/>
         <tag k="alt_name" v="Ellipse Rd NW"/>
         <tag k="name" v="ELLIPSE RD NW"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="410"/>
+        <tag k="hoot:id" v="414"/>
     </way>
-    <way visible="true" id="411" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
-        <nd ref="2559"/>
-        <nd ref="4616"/>
-        <nd ref="4617"/>
-        <nd ref="4618"/>
-        <tag k="accuracy" v="5"/>
-        <tag k="hoot:id" v="411"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="name" v="E Executive Ave NW"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="hoot:id" v="411"/>
-    </way>
-    <way visible="true" id="413" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+    <way visible="true" id="415" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <nd ref="4698"/>
         <nd ref="593"/>
         <nd ref="594"/>
@@ -25715,14 +25746,14 @@
         <nd ref="608"/>
         <nd ref="3843"/>
         <tag k="accuracy" v="5"/>
-        <tag k="hoot:id" v="413"/>
+        <tag k="hoot:id" v="415"/>
         <tag k="hoot:status" v="3"/>
         <tag k="alt_name" v="Ellipse Rd NW"/>
         <tag k="name" v="ELLIPSE RD NW"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="413"/>
+        <tag k="hoot:id" v="415"/>
     </way>
-    <way visible="true" id="414" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+    <way visible="true" id="416" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <nd ref="549"/>
         <nd ref="552"/>
         <nd ref="554"/>
@@ -25735,14 +25766,14 @@
         <nd ref="568"/>
         <nd ref="4699"/>
         <tag k="accuracy" v="5"/>
-        <tag k="hoot:id" v="414"/>
+        <tag k="hoot:id" v="416"/>
         <tag k="hoot:status" v="3"/>
         <tag k="alt_name" v="Ellipse Rd NW"/>
         <tag k="name" v="ELLIPSE RD NW"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="414"/>
+        <tag k="hoot:id" v="416"/>
     </way>
-    <way visible="true" id="415" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+    <way visible="true" id="417" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <nd ref="3475"/>
         <nd ref="4623"/>
         <nd ref="4624"/>
@@ -25770,13 +25801,13 @@
         <nd ref="4646"/>
         <nd ref="4647"/>
         <tag k="accuracy" v="5"/>
-        <tag k="hoot:id" v="415"/>
+        <tag k="hoot:id" v="417"/>
         <tag k="hoot:status" v="2"/>
         <tag k="name" v="17th St NW"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:id" v="415"/>
+        <tag k="hoot:id" v="417"/>
     </way>
-    <way visible="true" id="416" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+    <way visible="true" id="418" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <nd ref="4700"/>
         <nd ref="2588"/>
         <nd ref="2589"/>
@@ -25784,15 +25815,15 @@
         <nd ref="2591"/>
         <nd ref="2592"/>
         <tag k="accuracy" v="5"/>
-        <tag k="hoot:id" v="416"/>
+        <tag k="hoot:id" v="418"/>
         <tag k="hoot:status" v="3"/>
         <tag k="alt_name" v="South Pl NW"/>
         <tag k="name" v="SOUTH EXECUTIVE AVE NW"/>
         <tag k="foot" v="designated"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="416"/>
+        <tag k="hoot:id" v="418"/>
     </way>
-    <way visible="true" id="417" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+    <way visible="true" id="419" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <nd ref="2559"/>
         <nd ref="2560"/>
         <nd ref="2561"/>
@@ -25801,41 +25832,10 @@
         <nd ref="2564"/>
         <nd ref="4701"/>
         <tag k="accuracy" v="5"/>
-        <tag k="hoot:id" v="417"/>
+        <tag k="hoot:id" v="419"/>
         <tag k="hoot:status" v="3"/>
         <tag k="alt_name" v="Executive Ave NW;South Pl NW"/>
         <tag k="name" v="SOUTH EXECUTIVE AVE NW"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="417"/>
-    </way>
-    <way visible="true" id="418" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
-        <nd ref="4591"/>
-        <nd ref="4592"/>
-        <nd ref="4593"/>
-        <nd ref="4594"/>
-        <nd ref="4595"/>
-        <nd ref="4596"/>
-        <nd ref="4597"/>
-        <nd ref="4598"/>
-        <nd ref="4599"/>
-        <nd ref="4600"/>
-        <nd ref="54"/>
-        <tag k="accuracy" v="5"/>
-        <tag k="hoot:id" v="418"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="alt_name" v="Constitution Ave NW"/>
-        <tag k="name" v="US Hwy 50"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="hoot:id" v="418"/>
-    </way>
-    <way visible="true" id="419" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
-        <nd ref="4691"/>
-        <nd ref="3713"/>
-        <tag k="accuracy" v="5"/>
-        <tag k="hoot:id" v="419"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="alt_name" v="Constitution Ave NW;US Hwy 50"/>
-        <tag k="name" v="CONSTITUTION AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:id" v="419"/>
     </way>

@@ -105,6 +105,13 @@ public:
   bool changesetExists(const long id);
 
   /**
+   * Returns the number of changesets for the given map in the database;
+   *
+   * @return the number of changesets for the map
+   */
+  long numChangesets();
+
+  /**
    * Closes an existing changeset
    */
   void endChangeset();
@@ -337,6 +344,9 @@ public:
    */
   static QString removeLayerName(const QString url);
 
+  void setCreateIndexesOnClose(bool create) { _createIndexesOnClose = create; }
+  void setFlushOnClose(bool flush) { _flushOnClose = flush; }
+
 protected:
 
   virtual void _resetQueries();
@@ -364,6 +374,7 @@ private:
   boost::shared_ptr<QSqlQuery> _mapExistsByName;
   boost::shared_ptr<QSqlQuery> _getMapIdByName;
   boost::shared_ptr<QSqlQuery> _insertChangeSet2;
+  boost::shared_ptr<QSqlQuery> _numChangesets;
 
   boost::shared_ptr<BulkInsert> _nodeBulkInsert;
   long _nodesPerBulkInsert;
@@ -410,6 +421,9 @@ private:
    * be executed.
    */
   QVector<QString> _postTransactionStatements;
+
+  bool _createIndexesOnClose;
+  bool _flushOnClose;
 
   /**
    * This is here to improve query caching. In most cases users open a single ServiceDb and then
