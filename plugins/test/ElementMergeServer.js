@@ -23,7 +23,9 @@ var poiToPoiInput = "<?xml version='1.0' encoding='UTF-8'?>\
     </node>\
     </osm>";
 
-var poiToPolyWayInput = "<?xml version='1.0' encoding='UTF-8'?>\
+//Relations can also be passed in for polys, buildings, and areas, but we're testing that enough in ElementMergerJsTest
+
+var poiToPolyInput = "<?xml version='1.0' encoding='UTF-8'?>\
     <osm version='0.6' upload='true' generator='hootenanny'>\
     <node visible='true' id='-530' lat='-0.3635327329999427' lon='42.5442892910000410'>\
         <tag k='building' v='yes'/>\
@@ -46,34 +48,9 @@ var poiToPolyWayInput = "<?xml version='1.0' encoding='UTF-8'?>\
     </way>\
 </osm>";
 
-var poiToPolyRelationInput = "<?xml version='1.0' encoding='UTF-8'?>\
-    <osm version='0.6' generator='hootenanny'>\
-    <node visible='true' id='-532' lat='-0.3635327329999427' lon='42.5442892910000410'>\
-        <tag k='note' v='poi1'/>\
-        <tag k='building' v='yes'/>\
-        <tag k='amenity' v='prison'/>\
-        <tag k='error:circular' v='100'/>\
-    </node>\
-   <relation visible='true' id='-1'>\
-        <member type='way' ref='-102' role='outer'/>\
-        <member type='way' ref='-103' role='inner'/>\
-        <tag k='note' v='building1'/>\
-        <tag k='building' v='yes'/>\
-        <tag k='amenity' v='government_administration_building'/>\
-        <tag k='type' v='multipolygon'/>\
-        <tag k='error:circular' v='15'/>\
-    </relation>\
-</osm>";
-
-//TODO: finish tests for these
-var areaToAreaTwoWaysInput = "";
-var areaToAreaWayRelationInput = "";
-var areaToAreaTwoRelationsInput = "";
-var buildingToBuildingTwoWaysInput = "";
-var buildingToBuildingWayRelationInput = "";
-var buildingToBuildingTwoRelationsInput = "";
-
-//TODO: add error tests
+//TODO: finish
+var areaToAreaInput = "";
+var buildingToBuildingInput = "";
 
 describe('ElementMergeServer', function () {
     it('responds with HTTP 404 if url not found', function() {
@@ -145,7 +122,7 @@ describe('ElementMergeServer', function () {
             });
         });
 
-        it('merges an osm poi and a way polygon', function() {
+        it('merges an osm poi and a polygon', function() {
             var merged = server.handleInputs({
                 path: '/elementmerge',
                 method: 'POST',
@@ -164,30 +141,6 @@ describe('ElementMergeServer', function () {
                 assert.equal(result.osm.way[0].tag[3].$.v, "yes");
                 assert.equal(result.osm.way[0].tag[4].$.k, "amenity");
                 assert.equal(result.osm.way[0].tag[4].$.v, "prison");
-            });
-        });
-
-        it('merges an osm poi and a relation polygon', function() {
-            var merged = server.handleInputs({
-                path: '/elementmerge',
-                method: 'POST',
-                osm: poiToPolyRelationInput
-            });
-
-            xml2js.parseString(merged, function(err, result) {
-                if (err) console.error(err);
-                assert.equal(result.osm.relation[0].tag[0].$.k, "note");
-                assert.equal(result.osm.relation[0].tag[0].$.v, "poi1;building1");
-                assert.equal(result.osm.relation[0].tag[1].$.k, "hoot:poipolygon:poismerged");
-                assert.equal(result.osm.relation[0].tag[1].$.v, "1");
-                assert.equal(result.osm.relation[0].tag[2].$.k, "hoot:status");
-                assert.equal(result.osm.relation[0].tag[2].$.v, "3");
-                assert.equal(result.osm.relation[0].tag[3].$.k, "building");
-                assert.equal(result.osm.relation[0].tag[3].$.v, "yes");
-                assert.equal(result.osm.relation[0].tag[4].$.k, "amenity");
-                assert.equal(result.osm.relation[0].tag[4].$.v, "prison");
-                assert.equal(result.osm.relation[0].tag[5].$.k, "type");
-                assert.equal(result.osm.relation[0].tag[5].$.v, "multipolygon");
             });
         });
 

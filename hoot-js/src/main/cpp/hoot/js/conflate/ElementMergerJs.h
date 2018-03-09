@@ -13,6 +13,9 @@ using namespace v8;
 namespace hoot
 {
 
+/**
+ * Merges two or more elements based on their feature type
+ */
 class ElementMergerJs : public node::ObjectWrap
 {
 
@@ -30,18 +33,21 @@ public:
 
 private:
 
+ friend class ElementMergerJsTest;
+
   ElementMergerJs();
   ~ElementMergerJs();
 
   /**
-   * @brief _jsElementMerge
+   *
+   *
    * @param args
    */
   static void _jsElementMerge(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   static MergeType _determineMergeType(ConstOsmMapPtr map);
 
-  static void _mergeElements(OsmMapPtr map, const MergeType& mergeType, Isolate* current);
+  static void _mergeElements(OsmMapPtr map, Isolate* current);
   static void _mergePois(OsmMapPtr map, Isolate* current);
   static void _mergeAreas(OsmMapPtr map, Isolate* current);
   static void _mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetId);
@@ -64,6 +70,8 @@ private:
   static bool _containsTwoOrMoreAreas(ConstOsmMapPtr map);
   static bool _containsOnePolygonAndOneOrMorePois(ConstOsmMapPtr map);
   static void _validateMergeTargetElement(ConstOsmMapPtr map, const MergeType& mergeType);
+
+  static QString _mergeTypeToString(const MergeType& mergeType);
 };
 
 }

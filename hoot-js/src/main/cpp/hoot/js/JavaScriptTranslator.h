@@ -108,6 +108,7 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
 protected:
+
   boost::shared_ptr<PluginContext> _gContext;
   QString _toOsmFunctionName;
 
