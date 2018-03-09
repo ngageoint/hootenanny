@@ -197,7 +197,7 @@ if ! grep --quiet GDAL_DATA ~/.bash_profile; then
 fi
 
 # Install gems with bundler and strict versioning (see Gemfile)
-bundle install
+bundler install
 
 # Make sure that we are in ~ before trying to wget & install stuff
 cd ~
