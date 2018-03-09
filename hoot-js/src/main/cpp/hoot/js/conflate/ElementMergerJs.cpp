@@ -7,7 +7,6 @@
 #include <hoot/js/HootJsStable.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/OsmMapJs.h>
-#include <hoot/js/PluginContext.h>
 #include <hoot/js/SystemNodeJs.h>
 #include <hoot/js/conflate/js/ScriptMerger.h>
 #include <hoot/js/util/DataConvertJs.h>
@@ -20,13 +19,13 @@
 //#include <hoot/core/filters/StatusCriterion.h>
 #include <hoot/core/filters/TagKeyCriterion.h>
 #include <hoot/core/filters/ChainCriterion.h>
-//#include <hoot/core/visitors/FilteredVisitor.h>
+#include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/filters/PoiCriterion.h>
 #include <hoot/core/filters/BuildingCriterion.h>
 #include <hoot/core/filters/NonBuildingAreaCriterion.h>
-#include <hoot/core/filters/PoiPolygonPoiCriterion.h>
-#include <hoot/core/filters/PoiPolygonPolyCriterion.h>
+#include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPoiCriterion.h>
+#include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPolyCriterion.h>
 
 // Qt
 #include <QString>
@@ -73,41 +72,11 @@ void ElementMergerJs::_jsElementMerge(const FunctionCallbackInfo<Value>& args)
     }
 
     OsmMapPtr map(node::ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject())->getMap());
-
-    QString scriptPath;
-    const MergeType mergeType = _determineMergeType(map, scriptPath);
-
+    const MergeType mergeType = _determineMergeType(map);
     _validateMergeTargetElement(map, mergeType);
+    _mergeElements(map, mergeType, current);
 
-    if (!scriptPath.isEmpty)
-    {
-      // Instantiate script merger
-      boost::shared_ptr<PluginContext> script(new PluginContext());
-      v8::HandleScope handleScope(current);
-      v8::Context::Scope context_scope(script->getContext(current));
-      script->loadScript(scriptPath, "plugin");
-      v8::Handle<v8::Object> global = script->getContext(current)->Global();
-      if (global->Has(String::NewFromUtf8(current, "plugin")) == false)
-      {
-        args.GetReturnValue().Set(
-          current->ThrowException(HootExceptionJs::create(IllegalArgumentException(
-            "Expected the script to have exports."))));
-        return;
-      }
-      Handle<Value> pluginValue = global->Get(String::NewFromUtf8(current, "plugin"));
-      Persistent<Object> plugin(current, Handle<Object>::Cast(pluginValue));
-      if (plugin.IsEmpty() || ToLocal(&plugin)->IsObject() == false)
-      {
-        args.GetReturnValue().Set(
-          current->ThrowException(HootExceptionJs::create(IllegalArgumentException(
-            "Expected plugin to be a valid object."))));
-        return;
-      }
-    }
-
-    OsmMapPtr mergedMap = _mergeElements(map, mergeType, plugin);
-
-    Handle<Object> returnMap = OsmMapJs::create(mergedMap);
+    Handle<Object> returnMap = OsmMapJs::create(map);
     args.GetReturnValue().Set(returnMap);
   }
   catch (const HootException& e)
@@ -116,35 +85,35 @@ void ElementMergerJs::_jsElementMerge(const FunctionCallbackInfo<Value>& args)
   }
 }
 
-OsmMapPtr ElementMergerJs::_mergeElements(OsmMapPtr map, const MergeType& mergeType,
-                                          Persistent<Object> plugin)
+void ElementMergerJs::_mergeElements(OsmMapPtr map, const MergeType& mergeType, Isolate* current)
 {
-  OsmMapPtr mergedMap(map);
+  //We're using a mix of generic conflation scripts and custom built classes to merge features
+  //here, depending on the feature type.
 
   ElementId mergedId;
   bool scriptMerge = false;
   switch (mergeType)
   {
-    case MergeType::PoiToPoi:
-      mergedMap = _mergePois(map, plugin);
-      scriptMerge = true;
-      break;
-
     case MergeType::BuildingToBuilding:
-      //TODO: need to force merge target here
+      //TODO: need to force merge target feature here
       //const ElementId mergeTargetId = _getMergeTargetFeatureId(map);
       mergedId = BuildingMerger::merge(map);
       break;
 
-    case MergeType::AreaToArea:
-      mergedMap = _mergeAreas(map, plugin);
+    case MergeType::PoiToPolygon:
+      //TODO: need to force merge target feature here
+      //const ElementId mergeTargetId = _getMergeTargetFeatureId(map);
+      mergedId = PoiPolygonMerger::merge(map);
+      break;
+
+    case MergeType::PoiToPoi:
+      _mergePois(map, current);
       scriptMerge = true;
       break;
 
-    case MergeType::PoiToPolygon:
-      //TODO: need to force merge target here
-      //const ElementId mergeTargetId = _getMergeTargetFeatureId(map);
-      mergedId = PoiPolygonMerger::merge(map);
+    case MergeType::AreaToArea:
+      _mergeAreas(map, current);
+      scriptMerge = true;
       break;
 
     default:
@@ -155,17 +124,15 @@ OsmMapPtr ElementMergerJs::_mergeElements(OsmMapPtr map, const MergeType& mergeT
   //wasn't used, as it does so automatically.
   if (!scriptMerge)
   {
-    LOG_VART(mergeId)
+    LOG_VART(mergedId)
     LOG_VART(map->getElementCount());
-
     ElementPtr mergedElement = map->getElement(mergedId);
     mergedElement->setStatus(Status(Status::Conflated));
     mergedElement->getTags()[MetadataTags::HootStatus()] = "3";
     LOG_VART(mergedElement);
   }
 
-  mergedMap = map;
-  return mergedMap;
+  //TODO: remove merge target tag
 }
 
 ElementId ElementMergerJs::_getMergeTargetFeatureId(ConstOsmMapPtr /*map*/)
@@ -206,14 +173,12 @@ void ElementMergerJs::_validateMergeTargetElement(ConstOsmMapPtr map, const Merg
   }
 }
 
-ElementMergerJs::MergeType ElementMergerJs::_determineMergeType(ConstOsmMapPtr map,
-                                                                QString& scriptPath)
+ElementMergerJs::MergeType ElementMergerJs::_determineMergeType(ConstOsmMapPtr map)
 {
   MergeType mergeType;
   if (_containsOnlyTwoOrMorePois(map))
   {
     mergeType = MergeType::PoiToPoi;
-    scriptPath = ConfPath::search(toCpp<QString>("PoiGeneric.js"), "rules");
   }
   else if (_containsTwoBuildings(map))
   {
@@ -222,7 +187,6 @@ ElementMergerJs::MergeType ElementMergerJs::_determineMergeType(ConstOsmMapPtr m
   else if (_containsTwoOrMoreAreas(map))
   {
     mergeType = MergeType::AreaToArea;
-    scriptPath = ConfPath::search(toCpp<QString>("Area.js"), "rules");
   }
   else if (_containsOnePolygonAndOneOrMorePois(map))
   {
@@ -231,9 +195,9 @@ ElementMergerJs::MergeType ElementMergerJs::_determineMergeType(ConstOsmMapPtr m
   else
   {
     throw IllegalArgumentException(
-      "Invalid inputs to element merger.  Inputs must be one of the following:" +
-      "1) two or more POIs, 2) two buildings, 3) two or more areas, or " +
-      "4) one or more POIs and one polygon.");
+      QString("Invalid inputs to element merger.  Inputs must be one of the following:") +
+      QString("1) two or more POIs, 2) exactly two buildings, 3) two or more areas, or ") +
+      QString("4) one or more POIs and exactly one polygon."));
   }
   return mergeType;
 }
@@ -283,13 +247,50 @@ bool ElementMergerJs::_containsOnePolygonAndOneOrMorePois(ConstOsmMapPtr map)
   return poiCount >= 1 && polyCount == 1;
 }
 
-OsmMapPtr ElementMergerJs::_mergeAreas(OsmMapPtr /*map*/, Persistent<Object> /*plugin*/)
+void ElementMergerJs::_mergeAreas(OsmMapPtr /*map*/, Isolate* current)
 {
+  // Instantiate script merger
+  boost::shared_ptr<PluginContext> script(new PluginContext());
+  v8::HandleScope handleScope(current);
+  v8::Context::Scope context_scope(script->getContext(current));
+  script->loadScript(ConfPath::search("Area.js", "rules"), "plugin");
+  v8::Handle<v8::Object> global = script->getContext(current)->Global();
+  if (global->Has(String::NewFromUtf8(current, "plugin")) == false)
+  {
+    throw IllegalArgumentException("Expected the script to have exports.");
+  }
+  Handle<Value> pluginValue = global->Get(String::NewFromUtf8(current, "plugin"));
+  Persistent<Object> plugin(current, Handle<Object>::Cast(pluginValue));
+  if (plugin.IsEmpty() || ToLocal(&plugin)->IsObject() == false)
+  {
+    throw IllegalArgumentException("Expected plugin to be a valid object.");
+  }
+
   //TODO: finish
 }
 
-OsmMapPtr ElementMergerJs::_mergePois(OsmMapPtr map, Persistent<Object> plugin)
+void ElementMergerJs::_mergePois(OsmMapPtr map, Isolate* current)
 {
+  // Instantiate script merger
+  boost::shared_ptr<PluginContext> script(new PluginContext());
+  v8::HandleScope handleScope(current);
+  v8::Context::Scope context_scope(script->getContext(current));
+  script->loadScript(ConfPath::search("PoiGeneric.js", "rules"), "plugin");
+  v8::Handle<v8::Object> global = script->getContext(current)->Global();
+  if (global->Has(String::NewFromUtf8(current, "plugin")) == false)
+  {
+    throw IllegalArgumentException("Expected the script to have exports.");
+  }
+  Handle<Value> pluginValue = global->Get(String::NewFromUtf8(current, "plugin"));
+  Persistent<Object> plugin(current, Handle<Object>::Cast(pluginValue));
+  if (plugin.IsEmpty() || ToLocal(&plugin)->IsObject() == false)
+  {
+    throw IllegalArgumentException("Expected plugin to be a valid object.");
+  }
+
+  //We actually never call this with anything other than two POIs, but might as well leave the
+  //functionality in for now even though its inconsistent with the other merging workflows.
+
   // Got in Map with POIs A, B, C, D, E
   //
   // Make a set of pairs to indicate all are same object:
@@ -297,13 +298,12 @@ OsmMapPtr ElementMergerJs::_mergePois(OsmMapPtr map, Persistent<Object> plugin)
   //
   // ...then pass those pairs one at a time through the merger, since it only merges pairs
   NodeMap nodes = map->getNodes();
-  OsmMapPtr mergedMap(map);
 
   const ElementId mergeTargetId = _getMergeTargetFeatureId(map);
   LOG_TRACE("Merge target ID: " << mergeTargetId);
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
-    if (it->second->getId() != mergeTargetId)
+    if (it->second->getId() != mergeTargetId.getId())
     {
       const ConstNodePtr& n = it->second;
 
@@ -313,20 +313,18 @@ OsmMapPtr ElementMergerJs::_mergePois(OsmMapPtr map, Persistent<Object> plugin)
       // Now create scriptmerger, and invoke apply method which will apply merge
       // transformation, reducing the POIs down to one.
       ScriptMerger merger(script, plugin, matches);
-      OsmMapPtr mergedMap(map);
       std::vector< std::pair< ElementId, ElementId > > replacedNodes;
-      merger.apply(mergedMap, replacedNodes);
+      merger.apply(map, replacedNodes);
 
       if (replacedNodes.size() == 1)
       {
         LOG_TRACE(
           "POI merge: replacing node #" << replacedNodes[0].first.getId() <<
           " with updated version of node #" << replacedNodes[0].second.getId());
-        mergedMap->replaceNode(replacedNodes[0].first.getId(), replacedNodes[0].second.getId());
+        map->replaceNode(replacedNodes[0].first.getId(), replacedNodes[0].second.getId());
       }
     }
   }
-  return mergedMap;
 }
 
 }

@@ -2,9 +2,13 @@
 #ifndef ELEMENTMERGERJS_H
 #define ELEMENTMERGERJS_H
 
+// Hoot
 #include <hoot/js/HootJsStable.h>
 #include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/PluginContext.h>
 #include <hoot/core/OsmMap.h>
+
+using namespace v8;
 
 namespace hoot
 {
@@ -31,12 +35,11 @@ private:
 
   static void _jsElementMerge(const v8::FunctionCallbackInfo<v8::Value>& args);
 
-  static MergeType _determineMergeType(ConstOsmMapPtr map, QString& scriptPath);
+  static MergeType _determineMergeType(ConstOsmMapPtr map);
 
-  static OsmMapPtr _mergeElements(OsmMapPtr map, const MergeType& mergeType,
-                                  Persistent<Object> plugin);
-  static OsmMapPtr _mergePois(OsmMapPtr map, Persistent<Object> plugin);
-  static OsmMapPtr _mergeAreas(OsmMapPtr map, Persistent<Object> plugin);
+  static void _mergeElements(OsmMapPtr map, const MergeType& mergeType, Isolate* current);
+  static void _mergePois(OsmMapPtr map, Isolate* current);
+  static void _mergeAreas(OsmMapPtr map, Isolate* current);
   static ElementId _getMergeTargetFeatureId(ConstOsmMapPtr map);
 
   static bool _containsOnlyTwoOrMorePois(ConstOsmMapPtr map);
