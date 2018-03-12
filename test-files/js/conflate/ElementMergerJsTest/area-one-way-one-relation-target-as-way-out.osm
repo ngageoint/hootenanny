@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="37.7368794" minlon="-122.4587068" maxlat="37.740832" maxlon="-122.4531188"/>
+    <node visible="true" id="-412" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7368793999999994" lon="-122.4535051000000010"/>
+    <node visible="true" id="-411" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7375921000000005" lon="-122.4531187999999986"/>
+    <node visible="true" id="-410" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7387664000000029" lon="-122.4532647000000054"/>
+    <node visible="true" id="-409" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7408319999999975" lon="-122.4532190000000043"/>
+    <node visible="true" id="-408" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7406805000000034" lon="-122.4557367000000028"/>
+    <node visible="true" id="-407" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7399338000000029" lon="-122.4576078000000052"/>
+    <node visible="true" id="-406" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7386727000000022" lon="-122.4575106000000062"/>
+    <node visible="true" id="-405" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7385627999999969" lon="-122.4570927999999981"/>
+    <node visible="true" id="-404" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7376396000000014" lon="-122.4560113000000001"/>
+    <node visible="true" id="-403" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7373205999999968" lon="-122.4550500000000000"/>
+    <node visible="true" id="-402" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7371849000000026" lon="-122.4540372000000019"/>
+    <node visible="true" id="-401" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7403838999999977" lon="-122.4564950999999979"/>
+    <node visible="true" id="-400" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7407047000000020" lon="-122.4541846000000049"/>
+    <node visible="true" id="-399" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7402589000000006" lon="-122.4542825999999991"/>
+    <node visible="true" id="-398" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7401448000000030" lon="-122.4548015000000021"/>
+    <node visible="true" id="-397" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7391987999999969" lon="-122.4578216999999967"/>
+    <node visible="true" id="-396" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7389908999999975" lon="-122.4575695999999994"/>
+    <node visible="true" id="-395" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7387236000000001" lon="-122.4581864999999965"/>
+    <node visible="true" id="-394" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7387279000000007" lon="-122.4587068000000016"/>
+    <node visible="true" id="-393" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7385878999999989" lon="-122.4586209999999937"/>
+    <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-412"/>
+        <nd ref="-411"/>
+        <nd ref="-410"/>
+        <nd ref="-409"/>
+        <nd ref="-400"/>
+        <nd ref="-399"/>
+        <nd ref="-398"/>
+        <nd ref="-408"/>
+        <nd ref="-401"/>
+        <nd ref="-407"/>
+        <nd ref="-397"/>
+        <nd ref="-396"/>
+        <nd ref="-395"/>
+        <nd ref="-394"/>
+        <nd ref="-393"/>
+        <nd ref="-406"/>
+        <nd ref="-405"/>
+        <nd ref="-404"/>
+        <nd ref="-403"/>
+        <nd ref="-402"/>
+        <nd ref="-412"/>
+        <tag k="natural" v="wood"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="alt_name" v="Mt. Davidson Park"/>
+        <tag k="name" v="park"/>
+        <tag k="area" v="yes"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+</osm>

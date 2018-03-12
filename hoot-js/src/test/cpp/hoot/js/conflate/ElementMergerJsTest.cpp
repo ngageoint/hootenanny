@@ -44,62 +44,66 @@ namespace hoot
 /**
  * Tests merging two or more features
  *
- * The only thing we're not testing here is the conversion of the map arg from a js object to a
-   hoot object.  That gets tested by the mocha plugin test.
-
-   See notes in ElementMergerJs about features passed in without constituents.
+ * The only thing we're not testing here in the merging of features through the js bindings workflow
+ * is the conversion of the map arg from a js object to a hoot object.  That gets tested by the
+ * element merge service mocha plugin test.
+ *
+ *  See notes in ElementMergerJs about features passed in without constituents.
  */
 class ElementMergerJsTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ElementMergerJsTest);
-  CPPUNIT_TEST(poiPolyMergeWayAsPolyTest);
-  CPPUNIT_TEST(poiPolyMergeWayAsPolyNoConstituentsTest);
-  CPPUNIT_TEST(poiPolyMergeRelationAsPolyTest);
-  CPPUNIT_TEST(poiPolyMergeRelationAsPolyNoConstituentsTest);
-  CPPUNIT_TEST(poiPolyMergeMissingPoiInputTest);
-  CPPUNIT_TEST(poiPolyMergeMissingPolyInputTest);
-  CPPUNIT_TEST(poiPolyMergeMoreThanOnePolyInputTest);
-  CPPUNIT_TEST(poiPolyMergeMoreThanOnePoiInputTest);
-  CPPUNIT_TEST(poiPolyMergeMissingTargetTagTest);
-  CPPUNIT_TEST(poiPolyMergeDuplicateTargetTagTest);
-  CPPUNIT_TEST(poiPolyMergeExtraNonPolyWayTest);
-  CPPUNIT_TEST(poiPolyMergeExtraNonPolyRelationTest);
-  CPPUNIT_TEST(poiPolyMergeExtraNonPoiNodeTest);
-  CPPUNIT_TEST(mergeTwoPoisTest);
-  CPPUNIT_TEST(mergeMoreThanTwoPoisTest);
-  CPPUNIT_TEST(mergeTooFewPoisTest);
-  CPPUNIT_TEST(mergePoiMissingTargetTagTest);
-  CPPUNIT_TEST(mergePoiDuplicateTargetTagTest);
-  CPPUNIT_TEST(mergePoiExtraNonPoiNodeTest);
-//  CPPUNIT_TEST(mergeTwoWayAreasTest);
-//  CPPUNIT_TEST(mergeTwoWayAreasNoConstituentsTest);
-//  CPPUNIT_TEST(mergeTwoRelationAreasTest);
-//  CPPUNIT_TEST(mergeTwoRelationAreasNoConstituentsTest);
-//  CPPUNIT_TEST(mergeOneWayOneRelationTargetAsWayAreaTest);
-//  CPPUNIT_TEST(mergeOneWayOneRelationTargetAsWayAreaNoConstituentsTest);
-//  CPPUNIT_TEST(mergeOneWayOneRelationTargetAsRelationAreaTest);
-//  CPPUNIT_TEST(mergeOneWayOneRelationTargetAsRelationAreaNoConstituentsTest);
-//  CPPUNIT_TEST(mergeMoreThanTwoAreasTest);
-//  CPPUNIT_TEST(mergeMoreThanTwoAreasNoConstituentsTest);
-//  CPPUNIT_TEST(mergeTooFewAreasTest);
-//  CPPUNIT_TEST(mergeAreaMissingTargetTagTest);
-//  CPPUNIT_TEST(mergeAreaDuplicateTargetTagTest);
-//  CPPUNIT_TEST(mergeExtraNonAreaWayTest);
-//  CPPUNIT_TEST(mergeExtraNonAreaRelationTest);
-//  CPPUNIT_TEST(mergeTwoWayBuildingsNoConstituentsTest);
-//  CPPUNIT_TEST(mergeTwoWayBuildingsTest);
-//  CPPUNIT_TEST(mergeTwoRelationBuildingsTest);
-//  CPPUNIT_TEST(mergeTwoRelationBuildingsNoConstituentsTest);
-//  CPPUNIT_TEST(mergeOneWayOneRelationTargetAsWayBuildingTest);
-//  CPPUNIT_TEST(mergeOneWayOneRelationTargetAsWayBuildingNoConstituentsTest);
-//  CPPUNIT_TEST(mergeOneWayOneRelationTargetAsRelationBuildingTest);
-//  CPPUNIT_TEST(mergeOneWayOneRelationTargetAsRelationBuildingNoConstituentsTest);
-//  CPPUNIT_TEST(mergeMoreThanTwoBuildingsTest);
-//  CPPUNIT_TEST(mergeTooFewBuildingsTest);
-//  CPPUNIT_TEST(mergeBuildingMissingTargetTagTest);
-//  CPPUNIT_TEST(mergeBuildingDuplicateTargetTagTest);
-//  CPPUNIT_TEST(mergeExtraNonBuildingWayTest);
-//  CPPUNIT_TEST(mergeExtraNonBuildingRelationTest);
+  CPPUNIT_TEST(poiToPolyMergeWayAsPolyTest);
+  CPPUNIT_TEST(poiToPolyMergeWayAsPolyNoConstituentsTest);
+  CPPUNIT_TEST(poiToPolyMergeRelationAsPolyTest);
+  CPPUNIT_TEST(poiToPolyMergeRelationAsPolyNoConstituentsTest);
+  CPPUNIT_TEST(poiToPolyMergeMissingPoiInputTest);
+  CPPUNIT_TEST(poiToPolyMergeMissingPolyInputTest);
+  CPPUNIT_TEST(poiToPolyMergeMoreThanOnePolyInputTest);
+  CPPUNIT_TEST(poiToPolyMergeMoreThanOnePoiInputTest);
+  CPPUNIT_TEST(poiToPolyMergeMissingTargetTagTest);
+  CPPUNIT_TEST(poiToPolyMergeDuplicateTargetTagTest);
+  CPPUNIT_TEST(poiToPolyMergeExtraNonPolyWayTest);
+  CPPUNIT_TEST(poiToPolyMergeExtraNonPolyRelationTest);
+  CPPUNIT_TEST(poiToPolyMergeExtraNonPoiNodeTest);
+  CPPUNIT_TEST(poiToPoiMergeTwoPoisTest);
+  CPPUNIT_TEST(poiToPoiMergeMoreThanTwoPoisTest);
+  CPPUNIT_TEST(poiToPoiMergeTooFewPoisTest);
+  CPPUNIT_TEST(poiToPoiMergeMissingTargetTagTest);
+  CPPUNIT_TEST(poiToPoiMergeDuplicateTargetTagTest);
+  CPPUNIT_TEST(poiToPoiMergeExtraNonPoiNodeTest);
+  CPPUNIT_TEST(areaToAreaMergeTwoWaysTest);
+  CPPUNIT_TEST(areaToAreaMergeTwoWaysNoConstituentsTest);
+  ////CPPUNIT_TEST(areaToAreaMergeTwoRelationsTest); //??
+  ////CPPUNIT_TEST(areaToAreaMergeTwoRelationsNoConstituentsTest); //??
+  CPPUNIT_TEST(areaToAreaMergeOneWayOneRelationTargetAsWayTest);
+  //TODO: fix
+  //CPPUNIT_TEST(areaToAreaMergeOneWayOneRelationTargetAsWayNoConstituentsTest);
+  CPPUNIT_TEST(areaToAreaMergeOneWayOneRelationTargetAsRelationTest);
+  //TODO: fix
+  //CPPUNIT_TEST(areaToAreaMergeOneWayOneRelationTargetAsRelationNoConstituentsTest);
+  CPPUNIT_TEST(areaToAreaMergeMoreThanTwoAreasTest);
+  CPPUNIT_TEST(areaToAreaMergeMoreThanTwoAreasNoConstituentsTest);
+  CPPUNIT_TEST(areaToAreaMergeTooFewAreasTest);
+  CPPUNIT_TEST(areaToAreaMergeMissingTargetTagTest);
+  CPPUNIT_TEST(areaToAreaMergeDuplicateTargetTagTest);
+  CPPUNIT_TEST(areaToAreaMergeExtraNonAreaWayTest);
+  CPPUNIT_TEST(areaToAreaMergeExtraNonAreaRelationTest);
+//  CPPUNIT_TEST(buildingToBuildingMergeTwoWaysNoConstituentsTest);
+//  CPPUNIT_TEST(buildingToBuildingMergeTwoWaysTest);
+//  CPPUNIT_TEST(buildingToBuildingMergeTwoRelationsTest);
+//  CPPUNIT_TEST(buildingToBuildingMergeTwoRelationsNoConstituentsTest);
+//  CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsWayTest);
+//  CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsWayNoConstituentsTest);
+//  CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsRelationTest);
+//  CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsRelationNoConstituentsTest);
+//  CPPUNIT_TEST(buildingToBuildingMergeMoreThanTwoBuildingsTest);
+//  CPPUNIT_TEST(buildingToBuildingMergeTooFewBuildingsTest);
+//  CPPUNIT_TEST(buildingToBuildingMergeMissingTargetTagTest);
+//  CPPUNIT_TEST(buildingToBuildingMergeDuplicateTargetTagTest);
+//  CPPUNIT_TEST(buildingToBuildingMergeExtraNonBuildingWayTest);
+//  CPPUNIT_TEST(buildingToBuildingMergeExtraNonBuildingRelationTest);
+  //CPPUNIT_TEST(invalidFeatureCombinationTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -111,7 +115,7 @@ public:
 
   //POI TO POLYGON
 
-  void poiPolyMergeWayAsPolyTest()
+  void poiToPolyMergeWayAsPolyTest()
   {
     OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
@@ -132,7 +136,7 @@ public:
       "test-output/js/conflate/ElementMergerJsTest/poi-poly-way-poly-out.osm");
   }
 
-  void poiPolyMergeWayAsPolyNoConstituentsTest()
+  void poiToPolyMergeWayAsPolyNoConstituentsTest()
   {
     //Incomplete maps are being sent in, so this is needed to suppress the warnings in the test.
     DisableLog dl;
@@ -156,7 +160,7 @@ public:
       "test-output/js/conflate/ElementMergerJsTest/poi-poly-way-poly-no-constituents-out.osm");
   }
 
-  void poiPolyMergeRelationAsPolyTest()
+  void poiToPolyMergeRelationAsPolyTest()
   {
     OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
@@ -178,7 +182,7 @@ public:
       "test-output/js/conflate/ElementMergerJsTest/poi-poly-relation-poly-out.osm");
   }
 
-  void poiPolyMergeRelationAsPolyNoConstituentsTest()
+  void poiToPolyMergeRelationAsPolyNoConstituentsTest()
   {
     //Incomplete maps are being sent in, so this is needed to suppress the warnings in the test.
     DisableLog dl;
@@ -203,7 +207,7 @@ public:
       "test-output/js/conflate/ElementMergerJsTest/poi-poly-relation-poly-no-constituents-out.osm");
   }
 
-  void poiPolyMergeMissingPoiInputTest()
+  void poiToPolyMergeMissingPoiInputTest()
   {
     QString exceptionMsg("");
     try
@@ -224,7 +228,7 @@ public:
     CPPUNIT_ASSERT(exceptionMsg.contains("Invalid inputs to element merger"));
   }
 
-  void poiPolyMergeMissingPolyInputTest()
+  void poiToPolyMergeMissingPolyInputTest()
   {
     QString exceptionMsg("");
     try
@@ -245,7 +249,7 @@ public:
     CPPUNIT_ASSERT(exceptionMsg.contains("Invalid inputs to element merger"));
   }
 
-  void poiPolyMergeMoreThanOnePolyInputTest()
+  void poiToPolyMergeMoreThanOnePolyInputTest()
   {
     QString exceptionMsg("");
     try
@@ -266,7 +270,7 @@ public:
     CPPUNIT_ASSERT(exceptionMsg.contains("Invalid inputs to element merger"));
   }
 
-  void poiPolyMergeMoreThanOnePoiInputTest()
+  void poiToPolyMergeMoreThanOnePoiInputTest()
   {
     QString exceptionMsg("");
     try
@@ -287,7 +291,7 @@ public:
     CPPUNIT_ASSERT(exceptionMsg.contains("Invalid inputs to element merger"));
   }
 
-  void poiPolyMergeMissingTargetTagTest()
+  void poiToPolyMergeMissingTargetTagTest()
   {
     QString exceptionMsg("");
     try
@@ -310,7 +314,7 @@ public:
       exceptionMsg.toStdString());
   }
 
-  void poiPolyMergeDuplicateTargetTagTest()
+  void poiToPolyMergeDuplicateTargetTagTest()
   {
     QString exceptionMsg("");
     try
@@ -333,7 +337,7 @@ public:
       exceptionMsg.toStdString());
   }
 
-  void poiPolyMergeExtraNonPolyWayTest()
+  void poiToPolyMergeExtraNonPolyWayTest()
   {
     OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
@@ -354,7 +358,7 @@ public:
       "test-output/js/conflate/ElementMergerJsTest/poi-poly-extra-non-poly-way-out.osm");
   }
 
-  void poiPolyMergeExtraNonPolyRelationTest()
+  void poiToPolyMergeExtraNonPolyRelationTest()
   {
     OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
@@ -375,7 +379,7 @@ public:
       "test-output/js/conflate/ElementMergerJsTest/poi-poly-extra-non-poly-relation-out.osm");
   }
 
-  void poiPolyMergeExtraNonPoiNodeTest()
+  void poiToPolyMergeExtraNonPoiNodeTest()
   {
     OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
@@ -398,7 +402,7 @@ public:
 
   //POI TO POI
 
-  void mergeTwoPoisTest()
+  void poiToPoiMergeTwoPoisTest()
   {
     OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
@@ -419,7 +423,7 @@ public:
       "test-output/js/conflate/ElementMergerJsTest/poi-two-out.osm");
   }
 
-  void mergeMoreThanTwoPoisTest()
+  void poiToPoiMergeMoreThanTwoPoisTest()
   {
     OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
@@ -440,7 +444,7 @@ public:
       "test-output/js/conflate/ElementMergerJsTest/poi-more-than-two-out.osm");
   }
 
-  void mergeTooFewPoisTest()
+  void poiToPoiMergeTooFewPoisTest()
   {
     QString exceptionMsg("");
     try
@@ -461,7 +465,7 @@ public:
     CPPUNIT_ASSERT(exceptionMsg.contains("Invalid inputs to element merger"));
   }
 
-  void mergePoiMissingTargetTagTest()
+  void poiToPoiMergeMissingTargetTagTest()
   {
     QString exceptionMsg("");
     try
@@ -484,7 +488,7 @@ public:
       exceptionMsg.toStdString());
   }
 
-  void mergePoiDuplicateTargetTagTest()
+  void poiToPoiMergeDuplicateTargetTagTest()
   {
     QString exceptionMsg("");
     try
@@ -507,7 +511,7 @@ public:
       exceptionMsg.toStdString());
   }
 
-  void mergePoiExtraNonPoiNodeTest()
+  void poiToPoiMergeExtraNonPoiNodeTest()
   {
     OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
@@ -530,10 +534,385 @@ public:
 
   //AREA TO AREA
 
+  void areaToAreaMergeTwoWaysTest()
+  {
+    OsmMap::resetCounters();
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(
+      map,
+      "test-files/js/conflate/ElementMergerJsTest/area-two-ways-in.osm",
+      false,
+      Status::Unknown1);
 
+    ElementMergerJs::_mergeElements(map, v8::Isolate::GetCurrent());
+
+    MapProjector::projectToWgs84(map);
+    OsmMapWriterFactory::getInstance().write(map,
+      "test-output/js/conflate/ElementMergerJsTest/area-two-ways-out.osm");
+
+    HOOT_FILE_EQUALS(
+      "test-files/js/conflate/ElementMergerJsTest/area-two-ways-out.osm",
+      "test-output/js/conflate/ElementMergerJsTest/area-two-ways-out.osm");
+  }
+
+  void areaToAreaMergeTwoWaysNoConstituentsTest()
+  {
+    //Incomplete maps are being sent in, so this is needed to suppress the warnings in the test.
+    DisableLog dl;
+
+    OsmMap::resetCounters();
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(
+      map,
+      "test-files/js/conflate/ElementMergerJsTest/area-two-ways-no-constituents-in.osm",
+      false,
+      Status::Unknown1);
+
+    ElementMergerJs::_mergeElements(map, v8::Isolate::GetCurrent());
+
+    MapProjector::projectToWgs84(map);
+    OsmMapWriterFactory::getInstance().write(map,
+      "test-output/js/conflate/ElementMergerJsTest/area-two-ways-no-constituents-out.osm");
+
+    HOOT_FILE_EQUALS(
+      "test-files/js/conflate/ElementMergerJsTest/area-two-ways-no-constituents-out.osm",
+      "test-output/js/conflate/ElementMergerJsTest/area-two-ways-no-constituents-out.osm");
+  }
+
+//  void areaToAreaMergeTwoRelationsTest()
+//  {
+
+//  }
+
+//  void areaToAreaMergeTwoRelationsNoConstituentsTest()
+//  {
+
+//  }
+
+  void areaToAreaMergeOneWayOneRelationTargetAsWayTest()
+  {
+    OsmMap::resetCounters();
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(
+      map,
+      "test-files/js/conflate/ElementMergerJsTest/area-one-way-one-relation-target-as-way-in.osm",
+      false,
+      Status::Unknown1);
+
+    ElementMergerJs::_mergeElements(map, v8::Isolate::GetCurrent());
+
+    MapProjector::projectToWgs84(map);
+    OsmMapWriterFactory::getInstance().write(map,
+      "test-output/js/conflate/ElementMergerJsTest/area-one-way-one-relation-target-as-way-out.osm");
+
+    HOOT_FILE_EQUALS(
+      "test-files/js/conflate/ElementMergerJsTest/area-one-way-one-relation-target-as-way-out.osm",
+      "test-output/js/conflate/ElementMergerJsTest/area-one-way-one-relation-target-as-way-out.osm");
+  }
+
+  //X
+  void areaToAreaMergeOneWayOneRelationTargetAsWayNoConstituentsTest()
+  {
+    //Incomplete maps are being sent in, so this is needed to suppress the warnings in the test.
+    DisableLog dl;
+
+    OsmMap::resetCounters();
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(
+      map,
+      "test-files/js/conflate/ElementMergerJsTest/area-one-way-one-relation-target-as-way-no-constituents-in.osm",
+      false,
+      Status::Unknown1);
+
+    ElementMergerJs::_mergeElements(map, v8::Isolate::GetCurrent());
+
+    MapProjector::projectToWgs84(map);
+    OsmMapWriterFactory::getInstance().write(map,
+      "test-output/js/conflate/ElementMergerJsTest/area-one-way-one-relation-target-as-way-no-constituents-out.osm");
+
+    HOOT_FILE_EQUALS(
+      "test-files/js/conflate/ElementMergerJsTest/area-one-way-one-relation-target-as-way-no-constituents-out.osm",
+      "test-output/js/conflate/ElementMergerJsTest/area-one-way-one-relation-target-as-way-no-constituents-out.osm");
+  }
+
+  void areaToAreaMergeOneWayOneRelationTargetAsRelationTest()
+  {
+    OsmMap::resetCounters();
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(
+      map,
+      "test-files/js/conflate/ElementMergerJsTest/area-one-way-one-relation-target-as-relation-in.osm",
+      false,
+      Status::Unknown1);
+
+    ElementMergerJs::_mergeElements(map, v8::Isolate::GetCurrent());
+
+    MapProjector::projectToWgs84(map);
+    OsmMapWriterFactory::getInstance().write(map,
+      "test-output/js/conflate/ElementMergerJsTest/area-one-way-one-relation-target-as-relation-out.osm");
+
+    HOOT_FILE_EQUALS(
+      "test-files/js/conflate/ElementMergerJsTest/area-one-way-one-relation-target-as-relation-out.osm",
+      "test-output/js/conflate/ElementMergerJsTest/area-one-way-one-relation-target-as-relation-out.osm");
+  }
+
+  //X
+  void areaToAreaMergeOneWayOneRelationTargetAsRelationNoConstituentsTest()
+  {
+    //Incomplete maps are being sent in, so this is needed to suppress the warnings in the test.
+    DisableLog dl;
+
+    OsmMap::resetCounters();
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(
+      map,
+      "test-files/js/conflate/ElementMergerJsTest/area-one-way-one-relation-target-as-relation-no-constituents-in.osm",
+      false,
+      Status::Unknown1);
+
+    ElementMergerJs::_mergeElements(map, v8::Isolate::GetCurrent());
+
+    MapProjector::projectToWgs84(map);
+    OsmMapWriterFactory::getInstance().write(map,
+      "test-output/js/conflate/ElementMergerJsTest/area-one-way-one-relation-target-as-relation-no-constituents-out.osm");
+
+    HOOT_FILE_EQUALS(
+      "test-files/js/conflate/ElementMergerJsTest/area-one-way-one-relation-target-as-relation-no-constituents-out.osm",
+      "test-output/js/conflate/ElementMergerJsTest/area-one-way-one-relation-target-as-relation-no-constituents-out.osm");
+  }
+
+  void areaToAreaMergeMoreThanTwoAreasTest()
+  {
+      OsmMap::resetCounters();
+      OsmMapPtr map(new OsmMap());
+      OsmMapReaderFactory::read(
+        map,
+        "test-files/js/conflate/ElementMergerJsTest/area-more-than-two-in.osm",
+        false,
+        Status::Unknown1);
+
+      ElementMergerJs::_mergeElements(map, v8::Isolate::GetCurrent());
+
+      MapProjector::projectToWgs84(map);
+      OsmMapWriterFactory::getInstance().write(map,
+        "test-output/js/conflate/ElementMergerJsTest/area-more-than-two-out.osm");
+
+      HOOT_FILE_EQUALS(
+        "test-files/js/conflate/ElementMergerJsTest/area-more-than-two-out.osm",
+        "test-output/js/conflate/ElementMergerJsTest/area-more-than-two-out.osm");
+  }
+
+  void areaToAreaMergeMoreThanTwoAreasNoConstituentsTest()
+  {
+    //Incomplete maps are being sent in, so this is needed to suppress the warnings in the test.
+    DisableLog dl;
+
+    OsmMap::resetCounters();
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(
+      map,
+      "test-files/js/conflate/ElementMergerJsTest/area-more-than-two-no-constituents-in.osm",
+      false,
+      Status::Unknown1);
+
+    ElementMergerJs::_mergeElements(map, v8::Isolate::GetCurrent());
+
+    MapProjector::projectToWgs84(map);
+    OsmMapWriterFactory::getInstance().write(map,
+      "test-output/js/conflate/ElementMergerJsTest/area-more-than-two-no-constituents-out.osm");
+
+    HOOT_FILE_EQUALS(
+      "test-files/js/conflate/ElementMergerJsTest/area-more-than-two-no-constituents-out.osm",
+      "test-output/js/conflate/ElementMergerJsTest/area-more-than-two-no-constituents-out.osm");
+  }
+
+  void areaToAreaMergeTooFewAreasTest()
+  {
+    QString exceptionMsg("");
+    try
+    {
+      OsmMapPtr map(new OsmMap());
+      OsmMapReaderFactory::read(
+        map,
+        "test-files/js/conflate/ElementMergerJsTest/area-too-few-in.osm",
+        false,
+        Status::Unknown1);
+
+      ElementMergerJs::_mergeElements(map, v8::Isolate::GetCurrent());
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.contains("Invalid inputs to element merger"));
+  }
+
+  void areaToAreaMergeMissingTargetTagTest()
+  {
+    QString exceptionMsg("");
+    try
+    {
+      OsmMapPtr map(new OsmMap());
+      OsmMapReaderFactory::read(
+        map,
+        "test-files/js/conflate/ElementMergerJsTest/area-missing-target-tag-in.osm",
+        false,
+        Status::Unknown1);
+
+      ElementMergerJs::_mergeElements(map, v8::Isolate::GetCurrent());
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    HOOT_STR_EQUALS(
+      "Input map must have one feature marked with a hoot:merge:target tag.",
+      exceptionMsg.toStdString());
+  }
+
+  void areaToAreaMergeDuplicateTargetTagTest()
+  {
+    QString exceptionMsg("");
+    try
+    {
+      OsmMapPtr map(new OsmMap());
+      OsmMapReaderFactory::read(
+        map,
+        "test-files/js/conflate/ElementMergerJsTest/area-duplicate-target-tag-in.osm",
+        false,
+        Status::Unknown1);
+
+      ElementMergerJs::_mergeElements(map, v8::Isolate::GetCurrent());
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    HOOT_STR_EQUALS(
+      "Input map must have one feature marked with a hoot:merge:target tag.",
+      exceptionMsg.toStdString());
+  }
+
+  void areaToAreaMergeExtraNonAreaWayTest()
+  {
+    OsmMap::resetCounters();
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(
+      map,
+      "test-files/js/conflate/ElementMergerJsTest/area-extra-non-area-way-in.osm",
+      false,
+      Status::Unknown1);
+
+    ElementMergerJs::_mergeElements(map, v8::Isolate::GetCurrent());
+
+    MapProjector::projectToWgs84(map);
+    OsmMapWriterFactory::getInstance().write(map,
+      "test-output/js/conflate/ElementMergerJsTest/area-extra-non-area-way-out.osm");
+
+    HOOT_FILE_EQUALS(
+      "test-files/js/conflate/ElementMergerJsTest/area-extra-non-area-way-out.osm",
+      "test-output/js/conflate/ElementMergerJsTest/area-extra-non-area-way-out.osm");
+}
+
+  void areaToAreaMergeExtraNonAreaRelationTest()
+  {
+    OsmMap::resetCounters();
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(
+      map,
+      "test-files/js/conflate/ElementMergerJsTest/area-extra-non-area-relation-in.osm",
+      false,
+      Status::Unknown1);
+
+    ElementMergerJs::_mergeElements(map, v8::Isolate::GetCurrent());
+
+    MapProjector::projectToWgs84(map);
+    OsmMapWriterFactory::getInstance().write(map,
+      "test-output/js/conflate/ElementMergerJsTest/area-extra-non-area-relation-out.osm");
+
+    HOOT_FILE_EQUALS(
+      "test-files/js/conflate/ElementMergerJsTest/area-extra-non-area-relation-out.osm",
+      "test-output/js/conflate/ElementMergerJsTest/area-extra-non-area-relation-out.osm");
+  }
 
   //BUILDING TO BUILDING
 
+//  void buildingToBuildingMergeTwoWaysNoConstituentsTest()
+//  {
+
+//  }
+
+//  void buildingToBuildingMergeTwoWaysTest()
+//  {
+
+//  }
+
+//  void buildingToBuildingMergeTwoRelationsTest()
+//  {
+
+//  }
+
+//  void buildingToBuildingMergeTwoRelationsNoConstituentsTest()
+//  {
+
+//  }
+
+//  void buildingToBuildingMergeOneWayOneRelationTargetAsWayTest()
+//  {
+
+//  }
+
+//  void buildingToBuildingMergeOneWayOneRelationTargetAsWayNoConstituentsTest()
+//  {
+
+//  }
+
+//  void buildingToBuildingMergeOneWayOneRelationTargetAsRelationTest()
+//  {
+
+//  }
+
+//  void buildingToBuildingMergeOneWayOneRelationTargetAsRelationNoConstituentsTest()
+//  {
+
+//  }
+
+//  void buildingToBuildingMergeMoreThanTwoBuildingsTest()
+//  {
+
+//  }
+
+//  void buildingToBuildingMergeTooFewBuildingsTest()
+//  {
+
+//  }
+
+//  void buildingToBuildingMergeMissingTargetTagTest()
+//  {
+
+//  }
+
+//  void buildingToBuildingMergeDuplicateTargetTagTest()
+//  {
+
+//  }
+
+//  void buildingToBuildingMergeExtraNonBuildingWayTest()
+//  {
+
+//  }
+
+//  void buildingToBuildingMergeExtraNonBuildingRelationTest()
+//  {
+
+//  }
+
+  //COMBO
+
+//  void invalidFeatureCombinationTest()
+//  {
+
+//  }
 
 };
 

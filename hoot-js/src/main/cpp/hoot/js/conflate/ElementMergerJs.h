@@ -16,11 +16,17 @@ namespace hoot
 /**
  * Merges two or more elements based on their feature type
  *
- * The "NoConsitituents" tests in ElementMergerJsTest refer to the fact that the UI omits all way
- * nodes/relation members from its inputs.  Therefore, technically the maps loaded from input for
- * those tests are invalid.  That doesn't matter to these tests, though.  The UI sends the server
- * on the features that need merging and then handles removing any constituent features itself
- * after the merge with a call to the OSM services.
+ * This class will handle either the case where a valid map is passed in with all constituent
+ * elements (way nodes, relation members) or an invalid map is passed without the constituent
+ * elements and only the parent elements to be merged.  The invalid map input case is necessary b/c
+ * the UI sends the server only the features that need merging and then handles removing any
+ * constituent features itself afterward with a the merge with a call to the OSM services.
+ *
+ * This class has a mix of functionality where the merging is done strictly by hoot-js code or
+ * the merging is done by hoot-core code.  Arguably, you could do all the merging via hoot-core code
+ * and it might be more easily read, but in the case of generic conflation having this class
+ * merge using the hoot-js code keeps a single code path for auto-merging at conflate time and
+ * manual merge at review time.
  */
 class ElementMergerJs : public node::ObjectWrap
 {

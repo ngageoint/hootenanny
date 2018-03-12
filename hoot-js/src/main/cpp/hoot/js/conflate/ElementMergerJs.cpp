@@ -454,16 +454,7 @@ void ElementMergerJs::_mergeAreas(OsmMapPtr map, const ElementId& mergeTargetId,
       merger.apply(map, replacedWays);
       LOG_VART(replacedWays.size());
 
-      if (replacedWays.size() == 1)  //TODO: is this necessary?
-      {
-        LOG_TRACE(
-          "Area merge: replacing way #" << replacedWays[0].first.getId() <<
-          " with updated version of way #" << replacedWays[0].second.getId());
-        map->replace(
-          map->getElement(replacedWays[0].first),
-          map->getElement(replacedWays[0].second));
-        areasMerged++;
-      }
+      areasMerged++;
     }
   }
 
@@ -486,15 +477,6 @@ void ElementMergerJs::_mergeAreas(OsmMapPtr map, const ElementId& mergeTargetId,
       merger.apply(map, replacedRelations);
       LOG_VART(replacedRelations.size());
 
-      if (replacedRelations.size() == 1)  //TODO: is this necessary?
-      {
-        LOG_TRACE(
-          "Area merge: replacing relation #" << replacedRelations[0].first.getId() <<
-          " with updated version of relation #" << replacedRelations[0].second.getId());
-        map->replace(
-          map->getElement(replacedRelations[0].first),
-          map->getElement(replacedRelations[0].second));
-      }
       areasMerged++;
     }
   }
@@ -523,9 +505,6 @@ void ElementMergerJs::_mergePois(OsmMapPtr map, const ElementId& mergeTargetId, 
     throw IllegalArgumentException("Expected plugin to be a valid object.");
   }
 
-  //We actually never call this with anything other than two POIs, but might as well leave the
-  //functionality in for now even though its inconsistent with the other merging workflows.
-
   // Got in Map with POIs A, B, C, D, E
   //
   // Make a set of pairs to indicate all are same object:
@@ -550,14 +529,7 @@ void ElementMergerJs::_mergePois(OsmMapPtr map, const ElementId& mergeTargetId, 
       merger.apply(map, replacedNodes);
       LOG_VART(replacedNodes.size());
 
-      if (replacedNodes.size() == 1)  //TODO: is this necessary?
-      {
-        LOG_TRACE(
-          "POI merge: replacing node #" << replacedNodes[0].first.getId() <<
-          " with updated version of node #" << replacedNodes[0].second.getId());
-        map->replaceNode(replacedNodes[0].first.getId(), replacedNodes[0].second.getId());
-        poisMerged++;
-      }
+      poisMerged++;
     }
   }
   LOG_INFO("Merged " << poisMerged << " POIs.");
