@@ -278,6 +278,11 @@ set<long> BuildingPartMergeOp::_calculateNeighbors(const WayPtr& w, const Tags& 
   return neighborIds;
 }
 
+void BuildingPartMergeOp::_combineParts(const std::vector< boost::shared_ptr<Element> >& parts)
+{
+  combineParts(_map, parts);
+}
+
 RelationPtr BuildingPartMergeOp::combineParts(const OsmMapPtr& map,
   const vector< boost::shared_ptr<Element> >& parts)
 {

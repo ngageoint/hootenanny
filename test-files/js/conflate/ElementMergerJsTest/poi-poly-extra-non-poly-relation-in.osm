@@ -76,4 +76,10 @@
         <tag k="error:circular" v="15"/>
 	<tag k="hoot:merge:target" v="yes"/>
     </relation>
+    <relation visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-102" role="outer"/>
+        <member type="way" ref="-103" role="inner"/>
+        <tag k="note" v="empty"/>
+        <tag k="error:circular" v="15"/>
+    </relation>
 </osm>

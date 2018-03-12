@@ -111,7 +111,7 @@ private:
 
   std::set<long> _calculateNeighbors(const WayPtr& w, const Tags& tags);
 
-  void _combineParts(const std::vector< boost::shared_ptr<Element> >& parts) { combineParts(_map, parts); }
+  void _combineParts(const std::vector< boost::shared_ptr<Element> >& parts);
 
   /**
    * Compares the given tags and determines if the two building parts could be part of the same

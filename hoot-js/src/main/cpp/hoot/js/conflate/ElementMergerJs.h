@@ -48,28 +48,23 @@ private:
   static MergeType _determineMergeType(ConstOsmMapPtr map);
 
   static void _mergeElements(OsmMapPtr map, Isolate* current);
-  static void _mergePois(OsmMapPtr map, Isolate* current);
-  static void _mergeAreas(OsmMapPtr map, Isolate* current);
+  static void _mergePois(OsmMapPtr map, const ElementId& mergeTargetId, Isolate* current);
+  static void _mergeAreas(OsmMapPtr map, const ElementId& mergeTargetId, Isolate* current);
   static void _mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetId);
-  /*
-   * Merges a single POI with a single polygon, both as defined by PoiPolygonMerger
-   *
-   * Way polys do not have to have their way nodes passed in, and relations do not have to have
-   * their relation members passed in.  The resulting invalid map does not affect the merger.  If
-   * constituents of the input features are not passed in, the caller is responsible for deleting
-   * the constituent way nodes/relation members.
-   *
-   * @param map an OSM map containing a single node POI and a single polygon that fits
-   * PoiPolygonMatch's definition of a polygon
-   */
-  static void _mergePoiAndPolygon(OsmMapPtr map);
-  static ElementId _getMergeTargetFeatureId(ConstOsmMapPtr map);
+  static void _mergePoisAndPolygon(OsmMapPtr map, const ElementId& mergeTargetId);
 
-  static bool _containsOnlyTwoOrMorePois(ConstOsmMapPtr map);
-  static bool _containsTwoBuildings(ConstOsmMapPtr map);
+  static ElementId _getMergeTargetFeatureId(ConstOsmMapPtr map);
+  static void _validateMergeTargetElement(ConstOsmMapPtr map, const MergeType& mergeType);
+
+  static bool _containsTwoOrMorePois(ConstOsmMapPtr map);
+  static bool _containsTwoOrMoreBuildings(ConstOsmMapPtr map);
   static bool _containsTwoOrMoreAreas(ConstOsmMapPtr map);
   static bool _containsOnePolygonAndOneOrMorePois(ConstOsmMapPtr map);
-  static void _validateMergeTargetElement(ConstOsmMapPtr map, const MergeType& mergeType);
+  static bool _containsOnePolygonAndOnePoi(ConstOsmMapPtr map);
+  static bool _containsPolys(ConstOsmMapPtr map);
+  static bool _containsAreas(ConstOsmMapPtr map);
+  static bool _containsBuildings(ConstOsmMapPtr map);
+  static bool _containsPois(ConstOsmMapPtr map);
 
   static QString _mergeTypeToString(const MergeType& mergeType);
 };

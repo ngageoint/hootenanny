@@ -248,10 +248,9 @@ boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
                                                          const set<ElementId>& eid)
 {
   LOG_TRACE("Build the building...");
+
   LOG_VART(eid);
-
   assert(eid.size() > 0);
-
   if (eid.size() == 1)
   {
     return map->getElement(*eid.begin());
@@ -284,8 +283,8 @@ boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
             {
               boost::shared_ptr<Element> em = map->getElement(m[i].getElementId());
               // push any non-conflicing tags in the parent relation down into the building part.
-              em->setTags(OverwriteTagMerger().mergeTags(em->getTags(), r->getTags(),
-                em->getElementType()));
+              em->setTags(
+                OverwriteTagMerger().mergeTags(em->getTags(), r->getTags(), em->getElementType()));
               parts.push_back(em);
             }
           }
@@ -299,13 +298,14 @@ boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
         parts.push_back(e);
       }
     }
+    LOG_VART(parts.size());
+    LOG_VART(toRemove.size());
 
     boost::shared_ptr<Element> result = BuildingPartMergeOp().combineParts(map, parts);
     LOG_VART(result);
 
-    DeletableBuildingPart filter;
-
     // likely create a filter that only matches buildings and building parts and pass that to the
+    DeletableBuildingPart filter;
     for (size_t i = 0; i < toRemove.size(); i++)
     {
       if (map->containsElement(toRemove[i]))

@@ -44,31 +44,55 @@ namespace hoot
 class ElementMergerJsTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ElementMergerJsTest);
-  CPPUNIT_TEST(mergeWayAsPolyTest);
-//  CPPUNIT_TEST(mergeRelationAsPolyTest);
-//  CPPUNIT_TEST(mergeMissingPoiInputTest);
-//  CPPUNIT_TEST(mergeMissingPolyInputTest);
-//  CPPUNIT_TEST(mergeMoreThanOnePoiInputTest);
-//  CPPUNIT_TEST(mergeMoreThanOnePolyInputTest);
-//  CPPUNIT_TEST(mergePoiPolyMissingTargetTagTest);
+  CPPUNIT_TEST(poiPolyMergeWayAsPolyTest);
+  CPPUNIT_TEST(poiPolyMergeWayAsPolyNoConstituentsTest);
+  CPPUNIT_TEST(poiPolyMergeRelationAsPolyTest);
+  CPPUNIT_TEST(poiPolyMergeRelationAsPolyNoConstituentsTest);
+  ////CPPUNIT_TEST(poiPolyMergeMoreThanOnePoiInputTest);
+  CPPUNIT_TEST(poiPolyMergeMissingPoiInputTest);
+  CPPUNIT_TEST(poiPolyMergeMissingPolyInputTest);
+  CPPUNIT_TEST(poiPolyMergeMoreThanOnePolyInputTest);
+  CPPUNIT_TEST(poiPolyMergeMoreThanOnePoiInputTest);
+  CPPUNIT_TEST(poiPolyMergeMissingTargetTagTest);
+  CPPUNIT_TEST(poiPolyMergeDuplicateTargetTagTest);
+  CPPUNIT_TEST(poiPolyMergeExtraNonPolyWayTest);
+  CPPUNIT_TEST(poiPolyMergeExtraNonPolyRelationTest);
+  CPPUNIT_TEST(poiPolyMergeExtraNonPoiNodeTest);
 //  CPPUNIT_TEST(mergeTwoWayAreasTest);
+//  CPPUNIT_TEST(mergeTwoWayAreasNoConstituentsTest);
 //  CPPUNIT_TEST(mergeTwoRelationAreasTest);
+//  CPPUNIT_TEST(mergeTwoRelationAreasNoConstituentsTest);
 //  CPPUNIT_TEST(mergeOneWayOneRelationTargetAsWayAreaTest);
+//  CPPUNIT_TEST(mergeOneWayOneRelationTargetAsWayAreaNoConstituentsTest);
 //  CPPUNIT_TEST(mergeOneWayOneRelationTargetAsRelationAreaTest);
-//  CPPUNIT_TEST(mergeTooManyAreasTest);
+//  CPPUNIT_TEST(mergeOneWayOneRelationTargetAsRelationAreaNoConstituentsTest);
+//  CPPUNIT_TEST(mergeMoreThanTwoAreasTest);
+//  CPPUNIT_TEST(mergeMoreThanTwoAreasNoConstituentsTest);
 //  CPPUNIT_TEST(mergeTooFewAreasTest);
 //  CPPUNIT_TEST(mergeAreaMissingTargetTagTest);
+//  CPPUNIT_TEST(mergeAreaDuplicateTargetTagTest);
+//  CPPUNIT_TEST(mergeExtraNonAreaWayTest);
+//  CPPUNIT_TEST(mergeExtraNonAreaRelationTest);
+//  CPPUNIT_TEST(mergeTwoWayBuildingsNoConstituentsTest);
 //  CPPUNIT_TEST(mergeTwoWayBuildingsTest);
 //  CPPUNIT_TEST(mergeTwoRelationBuildingsTest);
+//  CPPUNIT_TEST(mergeTwoRelationBuildingsNoConstituentsTest);
 //  CPPUNIT_TEST(mergeOneWayOneRelationTargetAsWayBuildingTest);
+//  CPPUNIT_TEST(mergeOneWayOneRelationTargetAsWayBuildingNoConstituentsTest);
 //  CPPUNIT_TEST(mergeOneWayOneRelationTargetAsRelationBuildingTest);
-//  CPPUNIT_TEST(mergeTooManyBuildingsTest);
+//  CPPUNIT_TEST(mergeOneWayOneRelationTargetAsRelationBuildingNoConstituentsTest);
+//  CPPUNIT_TEST(mergeMoreThanTwoBuildingsTest);
 //  CPPUNIT_TEST(mergeTooFewBuildingsTest);
 //  CPPUNIT_TEST(mergeBuildingMissingTargetTagTest);
-//  CPPUNIT_TEST(mergePoisTest);
-//  CPPUNIT_TEST(mergeTooManyPoisTest);
+//  CPPUNIT_TEST(mergeBuildingDuplicateTargetTagTest);
+//  CPPUNIT_TEST(mergeExtraNonBuildingWayTest);
+//  CPPUNIT_TEST(mergeExtraNonBuildingRelationTest);
+//  CPPUNIT_TEST(mergeTwoPoisTest);
+//  CPPUNIT_TEST(mergeMoreThanTwoPoisTest);
 //  CPPUNIT_TEST(mergeTooFewPoisTest);
-//  CPPUNIT_TEST(mergeBuildingMissingTargetTagTest);
+//  CPPUNIT_TEST(mergePoiMissingTargetTagTest);
+//  CPPUNIT_TEST(mergePoiDuplicateTargetTagTest);
+//  CPPUNIT_TEST(mergePoiExtraNonPoiNodeTest);
 //  CPPUNIT_TEST(mergeInvalidFeatureInputsComboTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -82,13 +106,13 @@ public:
   //The only thing we're not testing here is the actual conversion of the map arg from js.  That
   //gets tested in the mocha plugin test.
 
-  void mergeWayAsPolyTest()
-  {
-    Isolate* current = v8::Isolate::GetCurrent();
-    //HandleScope handleScope(current);
-    //Local<Context> context = Context::New(current);
-    //Context::Scope context_scope(context);
+  //The "NoConsitituents" tests refer to the fact that the UI omits all way nodes/relation members
+  //from its inputs.  Therefore, technically the maps loaded from input for those tests are invalid.
+  //That doesn't matter to these tests, though.  The argument could be made that no tests are needed
+  //for the inputs with constituents, but have decided to leave those tests in for now.
 
+  void poiPolyMergeWayAsPolyTest()
+  {
     OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
@@ -97,7 +121,7 @@ public:
       false,
       Status::Unknown1);
 
-    ElementMergerJs::_mergeElements(map, current);
+    ElementMergerJs::_mergeElements(map, v8::Isolate::GetCurrent());
 
     MapProjector::projectToWgs84(map);
     OsmMapWriterFactory::getInstance().write(map,
@@ -108,105 +132,290 @@ public:
       "test-output/js/conflate/ElementMergerJsTest/poi-poly-way-poly-out.osm");
   }
 
-//  void mergeRelationAsPolyTest()
+  void poiPolyMergeWayAsPolyNoConstituentsTest()
+  {
+    //Incomplete maps are being sent in, so this is needed to suppress the warnings in the test.
+    DisableLog dl;
+
+    OsmMap::resetCounters();
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(
+      map,
+      "test-files/js/conflate/ElementMergerJsTest/poi-poly-way-poly-no-constituents-in.osm",
+      false,
+      Status::Unknown1);
+
+    ElementMergerJs::_mergeElements(map, v8::Isolate::GetCurrent());
+
+    MapProjector::projectToWgs84(map);
+    OsmMapWriterFactory::getInstance().write(map,
+      "test-output/js/conflate/ElementMergerJsTest/poi-poly-way-poly-no-constituents-out.osm");
+
+    HOOT_FILE_EQUALS(
+      "test-files/js/conflate/ElementMergerJsTest/poi-poly-way-poly-no-constituents-out.osm",
+      "test-output/js/conflate/ElementMergerJsTest/poi-poly-way-poly-no-constituents-out.osm");
+  }
+
+  void poiPolyMergeRelationAsPolyTest()
+  {
+    OsmMap::resetCounters();
+    OsmMapPtr map(new OsmMap());
+
+    OsmMapReaderFactory::read(
+      map,
+      "test-files/js/conflate/ElementMergerJsTest/poi-poly-relation-poly-in.osm",
+      false,
+      Status::Unknown1);
+
+    ElementMergerJs::_mergeElements(map, v8::Isolate::GetCurrent());
+
+    MapProjector::projectToWgs84(map);
+    OsmMapWriterFactory::getInstance().write(map,
+      "test-output/js/conflate/ElementMergerJsTest/poi-poly-relation-poly-out.osm");
+
+    HOOT_FILE_EQUALS(
+      "test-files/js/conflate/ElementMergerJsTest/poi-poly-relation-poly-out.osm",
+      "test-output/js/conflate/ElementMergerJsTest/poi-poly-relation-poly-out.osm");
+  }
+
+  void poiPolyMergeRelationAsPolyNoConstituentsTest()
+  {
+    //Incomplete maps are being sent in, so this is needed to suppress the warnings in the test.
+    DisableLog dl;
+
+    OsmMap::resetCounters();
+    OsmMapPtr map(new OsmMap());
+    //see comments in mergeWayAsPolyTest
+    OsmMapReaderFactory::read(
+      map,
+      "test-files/js/conflate/ElementMergerJsTest/poi-poly-relation-poly-no-constituents-in.osm",
+      false,
+      Status::Unknown1);
+
+    ElementMergerJs::_mergeElements(map, v8::Isolate::GetCurrent());
+
+    MapProjector::projectToWgs84(map);
+    OsmMapWriterFactory::getInstance().write(map,
+      "test-output/js/conflate/ElementMergerJsTest/poi-poly-relation-poly-no-constituents-out.osm");
+
+    HOOT_FILE_EQUALS(
+      "test-files/js/conflate/ElementMergerJsTest/poi-poly-relation-poly-no-constituents-out.osm",
+      "test-output/js/conflate/ElementMergerJsTest/poi-poly-relation-poly-no-constituents-out.osm");
+  }
+
+//  void poiPolyMergeMoreThanOnePoiInputTest()
 //  {
 //    OsmMap::resetCounters();
 //    OsmMapPtr map(new OsmMap());
-//    //see comments in mergeWayAsPolyTest
 //    OsmMapReaderFactory::read(
-//      map, "test-files/conflate/poi-polygon/poi-poly-relation-poly-in.osm", false,
+//      map,
+//      "test-files/js/conflate/ElementMergerJsTest/poi-poly-more-than-one-poi-in.osm",
+//      false,
 //      Status::Unknown1);
 
-//    const ElementId polyId = PoiPolygonMerger::merge(map);
-//    CPPUNIT_ASSERT_EQUAL((long)-1, polyId.getId());
-//    CPPUNIT_ASSERT_EQUAL(ElementType::Relation, polyId.getType().getEnum());
+//    ElementMergerJs::_mergeElements(map, v8::Isolate::GetCurrent());
 
 //    MapProjector::projectToWgs84(map);
 //    OsmMapWriterFactory::getInstance().write(map,
-//      "test-output/conflate/poi-polygon/poi-poly-relation-poly-out.osm");
+//      "test-output/js/conflate/ElementMergerJsTest/poi-poly-more-than-one-poi-out.osm");
 
 //    HOOT_FILE_EQUALS(
-//      "test-files/conflate/poi-polygon/poi-poly-relation-poly-out.osm",
-//      "test-output/conflate/poi-polygon/poi-poly-relation-poly-out.osm");
+//      "test-files/js/conflate/ElementMergerJsTest/poi-poly-more-than-one-poi-out.osm",
+//      "test-output/js/conflate/ElementMergerJsTest/poi-poly-more-than-one-poi-out.osm");
 //  }
 
-//  void mergeMissingPoiInputTest()
-//  {
-//    QString exceptionMsg("");
-//    try
-//    {
-//      OsmMapPtr map(new OsmMap());
-//      OsmMapReaderFactory::read(
-//        map, "test-files/conflate/poi-polygon/poi-poly-missing-poi-in.osm", false,
-//        Status::Unknown1);
+  void poiPolyMergeMissingPoiInputTest()
+  {
+    QString exceptionMsg("");
+    try
+    {
+      OsmMapPtr map(new OsmMap());
+      OsmMapReaderFactory::read(
+        map,
+        "test-files/js/conflate/ElementMergerJsTest/poi-poly-missing-poi-in.osm",
+        false,
+        Status::Unknown1);
 
-//      PoiPolygonMerger::merge(map);
-//    }
-//    catch (const HootException& e)
-//    {
-//      exceptionMsg = e.what();
-//    }
-//    HOOT_STR_EQUALS("No POI passed to POI/Polygon merger.", exceptionMsg.toStdString());
-//  }
+      ElementMergerJs::_mergeElements(map, v8::Isolate::GetCurrent());
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.contains("Invalid inputs to element merger"));
+  }
 
-//  void mergeMissingPolyInputTest()
-//  {
-//    QString exceptionMsg("");
-//    try
-//    {
-//      OsmMapPtr map(new OsmMap());
-//      OsmMapReaderFactory::read(
-//        map, "test-files/conflate/poi-polygon/poi-poly-missing-poly-in.osm", false,
-//        Status::Unknown1);
+  void poiPolyMergeMissingPolyInputTest()
+  {
+    QString exceptionMsg("");
+    try
+    {
+      OsmMapPtr map(new OsmMap());
+      OsmMapReaderFactory::read(
+        map,
+        "test-files/js/conflate/ElementMergerJsTest/poi-poly-missing-poly-in.osm",
+        false,
+        Status::Unknown1);
 
-//      PoiPolygonMerger::merge(map);
-//    }
-//    catch (const HootException& e)
-//    {
-//      exceptionMsg = e.what();
-//    }
-//    HOOT_STR_EQUALS("No polygon passed to POI/Polygon merger.", exceptionMsg.toStdString());
-//  }
+      ElementMergerJs::_mergeElements(map, v8::Isolate::GetCurrent());
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.contains("Invalid inputs to element merger"));
+  }
 
-//  void mergeMoreThanOnePoiInputTest()
-//  {
-//    QString exceptionMsg("");
-//    try
-//    {
-//      OsmMapPtr map(new OsmMap());
-//      OsmMapReaderFactory::read(
-//        map, "test-files/conflate/poi-polygon/poi-poly-more-than-one-poi-in.osm", false,
-//        Status::Unknown1);
+  void poiPolyMergeMoreThanOnePolyInputTest()
+  {
+    QString exceptionMsg("");
+    try
+    {
+      OsmMapPtr map(new OsmMap());
+      OsmMapReaderFactory::read(
+        map,
+        "test-files/js/conflate/ElementMergerJsTest/poi-poly-more-than-one-poly-in.osm",
+        false,
+        Status::Unknown1);
 
-//      PoiPolygonMerger::merge(map);
-//    }
-//    catch (const HootException& e)
-//    {
-//      exceptionMsg = e.what();
-//    }
-//    HOOT_STR_EQUALS(
-//      "More than one POI passed to POI/Polygon merger.", exceptionMsg.toStdString());
-//  }
+      ElementMergerJs::_mergeElements(map, v8::Isolate::GetCurrent());
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.contains("Invalid inputs to element merger"));
+  }
 
-//  void mergeMoreThanOnePolyInputTest()
-//  {
-//    QString exceptionMsg("");
-//    try
-//    {
-//      OsmMapPtr map(new OsmMap());
-//      OsmMapReaderFactory::read(
-//        map, "test-files/conflate/poi-polygon/poi-poly-more-than-one-poly-in.osm", false,
-//        Status::Unknown1);
+  void poiPolyMergeMoreThanOnePoiInputTest()
+  {
+    QString exceptionMsg("");
+    try
+    {
+      OsmMapPtr map(new OsmMap());
+      OsmMapReaderFactory::read(
+        map,
+        "test-files/js/conflate/ElementMergerJsTest/poi-poly-more-than-one-poi-in.osm",
+        false,
+        Status::Unknown1);
 
-//      PoiPolygonMerger::merge(map);
-//    }
-//    catch (const HootException& e)
-//    {
-//      exceptionMsg = e.what();
-//    }
-//    HOOT_STR_EQUALS(
-//      "More than one polygon passed to POI/Polygon merger.", exceptionMsg.toStdString());
-//  }
+      ElementMergerJs::_mergeElements(map, v8::Isolate::GetCurrent());
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.contains("Invalid inputs to element merger"));
+  }
+
+  void poiPolyMergeMissingTargetTagTest()
+  {
+    QString exceptionMsg("");
+    try
+    {
+      OsmMapPtr map(new OsmMap());
+      OsmMapReaderFactory::read(
+        map,
+        "test-files/js/conflate/ElementMergerJsTest/poi-poly-missing-target-tag-in.osm",
+        false,
+        Status::Unknown1);
+
+      ElementMergerJs::_mergeElements(map, v8::Isolate::GetCurrent());
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    HOOT_STR_EQUALS(
+      "Input map must have one feature marked with a hoot:merge:target tag.",
+      exceptionMsg.toStdString());
+  }
+
+  void poiPolyMergeDuplicateTargetTagTest()
+  {
+    QString exceptionMsg("");
+    try
+    {
+      OsmMapPtr map(new OsmMap());
+      OsmMapReaderFactory::read(
+        map,
+        "test-files/js/conflate/ElementMergerJsTest/poi-poly-duplicate-target-tag-in.osm",
+        false,
+        Status::Unknown1);
+
+      ElementMergerJs::_mergeElements(map, v8::Isolate::GetCurrent());
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    HOOT_STR_EQUALS(
+      "Input map must have one feature marked with a hoot:merge:target tag.",
+      exceptionMsg.toStdString());
+  }
+
+  void poiPolyMergeExtraNonPolyWayTest()
+  {
+    OsmMap::resetCounters();
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(
+      map,
+      "test-files/js/conflate/ElementMergerJsTest/poi-poly-extra-non-poly-way-in.osm",
+      false,
+      Status::Unknown1);
+
+    ElementMergerJs::_mergeElements(map, v8::Isolate::GetCurrent());
+
+    MapProjector::projectToWgs84(map);
+    OsmMapWriterFactory::getInstance().write(map,
+      "test-output/js/conflate/ElementMergerJsTest/poi-poly-extra-non-poly-way-out.osm");
+
+    HOOT_FILE_EQUALS(
+      "test-files/js/conflate/ElementMergerJsTest/poi-poly-extra-non-poly-way-out.osm",
+      "test-output/js/conflate/ElementMergerJsTest/poi-poly-extra-non-poly-way-out.osm");
+  }
+
+  void poiPolyMergeExtraNonPolyRelationTest()
+  {
+    OsmMap::resetCounters();
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(
+      map,
+      "test-files/js/conflate/ElementMergerJsTest/poi-poly-extra-non-poly-relation-in.osm",
+      false,
+      Status::Unknown1);
+
+    ElementMergerJs::_mergeElements(map, v8::Isolate::GetCurrent());
+
+    MapProjector::projectToWgs84(map);
+    OsmMapWriterFactory::getInstance().write(map,
+      "test-output/js/conflate/ElementMergerJsTest/poi-poly-extra-non-poly-relation-out.osm");
+
+    HOOT_FILE_EQUALS(
+      "test-files/js/conflate/ElementMergerJsTest/poi-poly-extra-non-poly-relation-out.osm",
+      "test-output/js/conflate/ElementMergerJsTest/poi-poly-extra-non-poly-relation-out.osm");
+  }
+
+  void poiPolyMergeExtraNonPoiNodeTest()
+  {
+    OsmMap::resetCounters();
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(
+      map,
+      "test-files/js/conflate/ElementMergerJsTest/poi-poly-extra-non-poi-node-in.osm",
+      false,
+      Status::Unknown1);
+
+    ElementMergerJs::_mergeElements(map, v8::Isolate::GetCurrent());
+
+    MapProjector::projectToWgs84(map);
+    OsmMapWriterFactory::getInstance().write(map,
+      "test-output/js/conflate/ElementMergerJsTest/poi-poly-extra-non-poi-node-out.osm");
+
+    HOOT_FILE_EQUALS(
+      "test-files/js/conflate/ElementMergerJsTest/poi-poly-extra-non-poi-node-out.osm",
+      "test-output/js/conflate/ElementMergerJsTest/poi-poly-extra-non-poi-node-out.osm");
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ElementMergerJsTest, "quick");
