@@ -68,7 +68,9 @@ sudo yum versionlock add nodejs-$NODE_VERSION nodejs-devel-$NODE_VERSION
 if test -d ~/.rvm; then
     echo "### Removing RVM"
     ~/.rvm/bin/rvm implode --force
-    sed -i -e '/rvm/Id' ~/.bashrc ~/.profile
+    unset GEM_HOME GEM_PATH IRBRC MY_RUBY_HOME \
+          __rvm_env_loaded rvm_bin_path rvm_path rvm_prefix rvm_version
+    sed -i -e '/rvm/Id' ~/.bash_profile ~/.bashrc ~/.profile
 fi
 
 # install useful and needed packages for working with hootenanny
