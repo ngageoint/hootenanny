@@ -278,23 +278,6 @@ bool ElementMergerJs::_containsTwoOrMoreAreas(ConstOsmMapPtr map)
   return areaCount >= 2;
 }
 
-//bool ElementMergerJs::_containsOnePolygonAndOneOrMorePois(ConstOsmMapPtr map)
-//{
-//  const long poiCount =
-//    (long)FilteredVisitor::getStat(
-//      ElementCriterionPtr(new PoiPolygonPoiCriterion()),
-//      ConstElementVisitorPtr(new ElementCountVisitor()),
-//      map);
-//  const long polyCount =
-//    (long)FilteredVisitor::getStat(
-//      ElementCriterionPtr(new PoiPolygonPolyCriterion()),
-//      ConstElementVisitorPtr(new ElementCountVisitor()),
-//      map);
-//  LOG_VART(poiCount);
-//  LOG_VART(polyCount);
-//  return poiCount >= 1 && polyCount == 1;
-//}
-
 bool ElementMergerJs::_containsOnePolygonAndOnePoi(ConstOsmMapPtr map)
 {
   const long poiCount =
@@ -364,7 +347,6 @@ void ElementMergerJs::_mergeBuildings(OsmMapPtr map, const ElementId& mergeTarge
   //TODO: Is it possible to just load up all the pairs and call apply once here?
 
   int buildingsMerged = 0;
-  //OsmMapPtr mergedMap(map);
 
   const WayMap ways = map->getWays();
   for (WayMap::const_iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
@@ -400,8 +382,6 @@ void ElementMergerJs::_mergeBuildings(OsmMapPtr map, const ElementId& mergeTarge
       buildingsMerged++;
     }
   }
-
-  //map = mergedMap;
 
   LOG_INFO("Merged " << buildingsMerged << " buildings.");
 }
@@ -456,7 +436,6 @@ void ElementMergerJs::_mergeAreas(OsmMapPtr map, const ElementId& mergeTargetId,
   }
 
   int areasMerged = 0;
-  //OsmMapPtr mergedMap(map);
 
   const WayMap ways = map->getWays();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
@@ -519,8 +498,6 @@ void ElementMergerJs::_mergeAreas(OsmMapPtr map, const ElementId& mergeTargetId,
       areasMerged++;
     }
   }
-
- // map = mergedMap;
 
   LOG_INFO("Merged " << areasMerged << " areas.");
 }

@@ -15,6 +15,12 @@ namespace hoot
 
 /**
  * Merges two or more elements based on their feature type
+ *
+ * The "NoConsitituents" tests in ElementMergerJsTest refer to the fact that the UI omits all way
+ * nodes/relation members from its inputs.  Therefore, technically the maps loaded from input for
+ * those tests are invalid.  That doesn't matter to these tests, though.  The UI sends the server
+ * on the features that need merging and then handles removing any constituent features itself
+ * after the merge with a call to the OSM services.
  */
 class ElementMergerJs : public node::ObjectWrap
 {
@@ -59,7 +65,6 @@ private:
   static bool _containsTwoOrMorePois(ConstOsmMapPtr map);
   static bool _containsTwoOrMoreBuildings(ConstOsmMapPtr map);
   static bool _containsTwoOrMoreAreas(ConstOsmMapPtr map);
-  //static bool _containsOnePolygonAndOneOrMorePois(ConstOsmMapPtr map);
   static bool _containsOnePolygonAndOnePoi(ConstOsmMapPtr map);
   static bool _containsPolys(ConstOsmMapPtr map);
   static bool _containsAreas(ConstOsmMapPtr map);
