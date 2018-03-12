@@ -126,7 +126,7 @@ void ElementMergerJs::_mergeElements(OsmMapPtr map, Isolate* current)
       break;
 
     case MergeType::PoiToPolygon:
-      _mergePoisAndPolygon(map, mergeTargetId);
+      _mergePoiAndPolygon(map, mergeTargetId);
       break;
 
     case MergeType::PoiToPoi:
@@ -278,22 +278,22 @@ bool ElementMergerJs::_containsTwoOrMoreAreas(ConstOsmMapPtr map)
   return areaCount >= 2;
 }
 
-bool ElementMergerJs::_containsOnePolygonAndOneOrMorePois(ConstOsmMapPtr map)
-{
-  const long poiCount =
-    (long)FilteredVisitor::getStat(
-      ElementCriterionPtr(new PoiPolygonPoiCriterion()),
-      ConstElementVisitorPtr(new ElementCountVisitor()),
-      map);
-  const long polyCount =
-    (long)FilteredVisitor::getStat(
-      ElementCriterionPtr(new PoiPolygonPolyCriterion()),
-      ConstElementVisitorPtr(new ElementCountVisitor()),
-      map);
-  LOG_VART(poiCount);
-  LOG_VART(polyCount);
-  return poiCount >= 1 && polyCount == 1;
-}
+//bool ElementMergerJs::_containsOnePolygonAndOneOrMorePois(ConstOsmMapPtr map)
+//{
+//  const long poiCount =
+//    (long)FilteredVisitor::getStat(
+//      ElementCriterionPtr(new PoiPolygonPoiCriterion()),
+//      ConstElementVisitorPtr(new ElementCountVisitor()),
+//      map);
+//  const long polyCount =
+//    (long)FilteredVisitor::getStat(
+//      ElementCriterionPtr(new PoiPolygonPolyCriterion()),
+//      ConstElementVisitorPtr(new ElementCountVisitor()),
+//      map);
+//  LOG_VART(poiCount);
+//  LOG_VART(polyCount);
+//  return poiCount >= 1 && polyCount == 1;
+//}
 
 bool ElementMergerJs::_containsOnePolygonAndOnePoi(ConstOsmMapPtr map)
 {
@@ -406,37 +406,32 @@ void ElementMergerJs::_mergeBuildings(OsmMapPtr map, const ElementId& mergeTarge
   LOG_INFO("Merged " << buildingsMerged << " buildings.");
 }
 
-void ElementMergerJs::_mergePoisAndPolygon(OsmMapPtr map, const ElementId& mergeTargetId)
+void ElementMergerJs::_mergePoiAndPolygon(OsmMapPtr map, const ElementId& mergeTargetId)
 {
-  LOG_INFO("Merging one or more POIs and a polygon...");
+  //Trying to merge more than one POI into the polygon has proven problematic due to the building
+  //merging logic.  Merging more than one POI isn't a requirement, so only doing 1:1 merging right
+  //now.
+  LOG_INFO("Merging one POI and one polygon...");
   LOG_VART(mergeTargetId);
   LOG_VART(map->getElementCount());
 
-  //TODO: Is it possible to just load up all the pairs and call apply once here?
+  PoiPolygonPoiCriterion poiFilter;
+  ElementIdSetVisitor idSetVis;
+  FilteredVisitor filteredVis(poiFilter, idSetVis);
+  map->visitRo(filteredVis);
+  const std::set<ElementId>& poiIds = idSetVis.getElementSet();
+  assert(poiIds.size() == 1);   //we've already validated this input
+  const ElementId poiId = *poiIds.begin();
+  LOG_VART(poiId);
 
-  int poisMerged = 0;
-  const NodeMap nodes = map->getNodes();
-  //OsmMapPtr mergedMap(map);
-  for (NodeMap::const_iterator nodeItr = nodes.begin(); nodeItr != nodes.end(); ++nodeItr)
-  {
-    const ConstNodePtr& node = nodeItr->second;
-    assert(node->getElementId() != mergeTargetId);
-    if (OsmSchema::getInstance().isPoiPolygonPoi(node))
-    {
-      LOG_VART(node);
-      std::set<std::pair<ElementId, ElementId> > pairs;
-      //Ordering doesn't matter here, since the poi is always merged into the poly.
-      pairs.insert(std::pair<ElementId, ElementId>(mergeTargetId, node->getElementId()));
-      PoiPolygonMerger merger(pairs);
-      LOG_VART(pairs.size());
-      std::vector<std::pair<ElementId, ElementId> > replacedElements;
-      merger.apply(map, replacedElements);
-      poisMerged++;
-    }
-  }
-  //map = mergedMap;
+  std::set<std::pair<ElementId, ElementId> > pairs;
+  //Ordering doesn't matter here, since the poi is always merged into the poly.
+  pairs.insert(std::pair<ElementId, ElementId>(mergeTargetId, poiId));
+  PoiPolygonMerger merger(pairs);
+  std::vector<std::pair<ElementId, ElementId> > replacedElements;
+  merger.apply(map, replacedElements);
 
-  LOG_INFO("Merged " << poisMerged << " POIs into the polygon.");
+  LOG_INFO("Merged POI into the polygon.");
 }
 
 void ElementMergerJs::_mergeAreas(OsmMapPtr map, const ElementId& mergeTargetId, Isolate* current)

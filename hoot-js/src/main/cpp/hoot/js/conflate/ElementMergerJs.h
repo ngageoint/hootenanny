@@ -51,7 +51,7 @@ private:
   static void _mergePois(OsmMapPtr map, const ElementId& mergeTargetId, Isolate* current);
   static void _mergeAreas(OsmMapPtr map, const ElementId& mergeTargetId, Isolate* current);
   static void _mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetId);
-  static void _mergePoisAndPolygon(OsmMapPtr map, const ElementId& mergeTargetId);
+  static void _mergePoiAndPolygon(OsmMapPtr map, const ElementId& mergeTargetId);
 
   static ElementId _getMergeTargetFeatureId(ConstOsmMapPtr map);
   static void _validateMergeTargetElement(ConstOsmMapPtr map, const MergeType& mergeType);
@@ -59,7 +59,7 @@ private:
   static bool _containsTwoOrMorePois(ConstOsmMapPtr map);
   static bool _containsTwoOrMoreBuildings(ConstOsmMapPtr map);
   static bool _containsTwoOrMoreAreas(ConstOsmMapPtr map);
-  static bool _containsOnePolygonAndOneOrMorePois(ConstOsmMapPtr map);
+  //static bool _containsOnePolygonAndOneOrMorePois(ConstOsmMapPtr map);
   static bool _containsOnePolygonAndOnePoi(ConstOsmMapPtr map);
   static bool _containsPolys(ConstOsmMapPtr map);
   static bool _containsAreas(ConstOsmMapPtr map);
