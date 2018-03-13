@@ -284,17 +284,16 @@ void ScriptTest::_runProcess()
 
   const int scriptTestTimeOutSeconds = ConfigOptions(conf()).getScriptTestMaxExecTime();
   bool scriptTimeOutSpecified = false;
-  int waitToFinishTime = 30000;
   if (scriptTestTimeOutSeconds != -1)
   {
-    waitToFinishTime = scriptTestTimeOutSeconds * 1000;
+    _waitToFinishTime = scriptTestTimeOutSeconds * 1000;
     scriptTimeOutSpecified = true;
   }
 
   bool first = true;
   QElapsedTimer timer;
   timer.start();
-  while (p.waitForFinished(waitToFinishTime) == false)
+  while (p.waitForFinished(_waitToFinishTime) == false)
   {
     if (first && !scriptTimeOutSpecified)
     {
