@@ -427,8 +427,6 @@ archive: js-make services-docs docs
 	cp plugins/ggdm30_full_schema.js $(HOOT_TARNAME)/plugins/ggdm30_full_schema.js
 	cp plugins/eggdm30_rules.js $(HOOT_TARNAME)/plugins/eggdm30_osm_rules.js
 	cp plugins/eggdm30_osm_rules.js $(HOOT_TARNAME)/plugins/eggdm30_osm_rules.js
-	# Copy the buildInfo.json file for hoot services
-	if [ "$(BUILD_SERVICES)" == "services" ]; then mkdir -p $(HOOT_TARNAME)/hoot-ui/data; cp hoot-ui/data/buildInfo.json $(HOOT_TARNAME)/hoot-ui/data; fi
 	# Don't include RF files at this time, to speed up archive
 	#mkdir -p $(HOOT_TARNAME)/conf/models/
 	#cp conf/models/BuildingModel.rf $(HOOT_TARNAME)/conf/models/BuildingModel.rf
