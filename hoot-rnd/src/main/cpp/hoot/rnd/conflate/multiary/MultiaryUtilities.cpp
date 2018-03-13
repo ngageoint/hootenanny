@@ -73,7 +73,6 @@ QByteArray MultiaryUtilities::convertElementToPbf(ConstNodePtr n)
   return result;
 }
 
-
 QList<MultiaryElement> MultiaryUtilities::conflateCluster(QList<QByteArray> pbfElements)
 {
   QList<MultiaryElement> result;
@@ -117,8 +116,6 @@ QList<MultiaryElement> MultiaryUtilities::conflateCluster(QList<QByteArray> pbfE
     me.setPayload(convertElementToPbf(n));
     result.append(me);
   }
-
-  return result;
 
   return result;
 }

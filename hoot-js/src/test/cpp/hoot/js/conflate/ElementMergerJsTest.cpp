@@ -88,20 +88,20 @@ class ElementMergerJsTest : public CppUnit::TestFixture
   CPPUNIT_TEST(areaToAreaMergeDuplicateTargetTagTest);
   CPPUNIT_TEST(areaToAreaMergeExtraNonAreaWayTest);
   CPPUNIT_TEST(areaToAreaMergeExtraNonAreaRelationTest);
-//  CPPUNIT_TEST(buildingToBuildingMergeTwoWaysNoConstituentsTest);
-//  CPPUNIT_TEST(buildingToBuildingMergeTwoWaysTest);
-//  CPPUNIT_TEST(buildingToBuildingMergeTwoRelationsTest);
-//  CPPUNIT_TEST(buildingToBuildingMergeTwoRelationsNoConstituentsTest);
-//  CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsWayTest);
-//  CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsWayNoConstituentsTest);
-//  CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsRelationTest);
-//  CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsRelationNoConstituentsTest);
-//  CPPUNIT_TEST(buildingToBuildingMergeMoreThanTwoBuildingsTest);
-//  CPPUNIT_TEST(buildingToBuildingMergeTooFewBuildingsTest);
-//  CPPUNIT_TEST(buildingToBuildingMergeMissingTargetTagTest);
-//  CPPUNIT_TEST(buildingToBuildingMergeDuplicateTargetTagTest);
-//  CPPUNIT_TEST(buildingToBuildingMergeExtraNonBuildingWayTest);
-//  CPPUNIT_TEST(buildingToBuildingMergeExtraNonBuildingRelationTest);
+  CPPUNIT_TEST(buildingToBuildingMergeTwoWaysTest); //toy buildings
+  CPPUNIT_TEST(buildingToBuildingMergeTwoWaysNoConstituentsTest); //"
+  CPPUNIT_TEST(buildingToBuildingMergeTwoRelationsTest); //uncleanable
+  CPPUNIT_TEST(buildingToBuildingMergeTwoRelationsNoConstituentsTest); //"
+  CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsWayTest);
+  CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsWayNoConstituentsTest);
+  CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsRelationTest);
+  CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsRelationNoConstituentsTest);
+  CPPUNIT_TEST(buildingToBuildingMergeMoreThanTwoBuildingsTest);
+  CPPUNIT_TEST(buildingToBuildingMergeTooFewBuildingsTest);
+  CPPUNIT_TEST(buildingToBuildingMergeMissingTargetTagTest);
+  CPPUNIT_TEST(buildingToBuildingMergeDuplicateTargetTagTest);
+  CPPUNIT_TEST(buildingToBuildingMergeExtraNonBuildingWayTest);
+  CPPUNIT_TEST(buildingToBuildingMergeExtraNonBuildingRelationTest);
   //CPPUNIT_TEST(invalidFeatureCombinationTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -367,77 +367,78 @@ public:
 
   //BUILDING TO BUILDING
 
-//  void buildingToBuildingMergeTwoWaysNoConstituentsTest()
-//  {
+  void buildingToBuildingMergeTwoWaysTest()
+  {
 
-//  }
+  }
 
-//  void buildingToBuildingMergeTwoWaysTest()
-//  {
+  void buildingToBuildingMergeTwoWaysNoConstituentsTest()
+  {
+    //DisableLog dl;
+    //testMerge("area-two-ways-no-constituents-in.osm", "area-two-ways-no-constituents-out.osm");
+  }
 
-//  }
+  void buildingToBuildingMergeTwoRelationsTest()
+  {
 
-//  void buildingToBuildingMergeTwoRelationsTest()
-//  {
+  }
 
-//  }
+  void buildingToBuildingMergeTwoRelationsNoConstituentsTest()
+  {
 
-//  void buildingToBuildingMergeTwoRelationsNoConstituentsTest()
-//  {
+  }
 
-//  }
+  void buildingToBuildingMergeOneWayOneRelationTargetAsWayTest()
+  {
 
-//  void buildingToBuildingMergeOneWayOneRelationTargetAsWayTest()
-//  {
+  }
 
-//  }
+  void buildingToBuildingMergeOneWayOneRelationTargetAsWayNoConstituentsTest()
+  {
 
-//  void buildingToBuildingMergeOneWayOneRelationTargetAsWayNoConstituentsTest()
-//  {
+  }
 
-//  }
+  void buildingToBuildingMergeOneWayOneRelationTargetAsRelationTest()
+  {
 
-//  void buildingToBuildingMergeOneWayOneRelationTargetAsRelationTest()
-//  {
+  }
 
-//  }
+  void buildingToBuildingMergeOneWayOneRelationTargetAsRelationNoConstituentsTest()
+  {
 
-//  void buildingToBuildingMergeOneWayOneRelationTargetAsRelationNoConstituentsTest()
-//  {
+  }
 
-//  }
+  void buildingToBuildingMergeMoreThanTwoBuildingsTest()
+  {
 
-//  void buildingToBuildingMergeMoreThanTwoBuildingsTest()
-//  {
+  }
 
-//  }
+  void buildingToBuildingMergeTooFewBuildingsTest()
+  {
 
-//  void buildingToBuildingMergeTooFewBuildingsTest()
-//  {
+  }
 
-//  }
+  void buildingToBuildingMergeMissingTargetTagTest()
+  {
 
-//  void buildingToBuildingMergeMissingTargetTagTest()
-//  {
+  }
 
-//  }
+  void buildingToBuildingMergeDuplicateTargetTagTest()
+  {
 
-//  void buildingToBuildingMergeDuplicateTargetTagTest()
-//  {
+  }
 
-//  }
+  void buildingToBuildingMergeExtraNonBuildingWayTest()
+  {
 
-//  void buildingToBuildingMergeExtraNonBuildingWayTest()
-//  {
+  }
 
-//  }
+  void buildingToBuildingMergeExtraNonBuildingRelationTest()
+  {
 
-//  void buildingToBuildingMergeExtraNonBuildingRelationTest()
-//  {
+  }
 
-//  }
-
-  //COMBO
+  //MISC
 
 //  void invalidFeatureCombinationTest()
 //  {

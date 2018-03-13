@@ -13,17 +13,14 @@
 #include <hoot/core/conflate/polygon/BuildingMerger.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
 #include <hoot/core/filters/TagKeyCriterion.h>
 #include <hoot/core/filters/ChainCriterion.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
-#include <hoot/core/filters/PoiCriterion.h>
-#include <hoot/core/filters/BuildingCriterion.h>
-#include <hoot/core/filters/NonBuildingAreaCriterion.h>
 #include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPoiCriterion.h>
 #include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPolyCriterion.h>
 #include <hoot/core/visitors/ElementIdSetVisitor.h>
+#include <hoot/core/util/MapUtils.h>
 
 // Qt
 #include <QString>
@@ -209,32 +206,29 @@ ElementMergerJs::MergeType ElementMergerJs::_determineMergeType(ConstOsmMapPtr m
   //Making sure maps don't come in mixed, so callers don't have the expectation that they can merge
   //multiple feature types within the same map.  Any features existing in the map outside of what
   //we know how to merge will just pass through.
-  const bool containsPolys = _containsPolys(map);   //this is the poi/poly definition of poly
-  const bool containsAreas = _containsAreas(map); //non-building areas
-  const bool containsBuildings = _containsBuildings(map);
-  const bool containsPois = _containsPois(map); //general poi definition
-  if (/*_containsOnePolygonAndOneOrMorePois*/_containsOnePolygonAndOnePoi(map))
+  const bool containsPolys = MapUtils::containsPolys(map);   //this is the poi/poly definition of poly
+  const bool containsAreas = MapUtils::containsAreas(map); //non-building areas
+  const bool containsBuildings = MapUtils::containsBuildings(map);
+  const bool containsPois = MapUtils::containsPois(map); //general poi definition
+  if (MapUtils::containsOnePolygonAndOnePoi(map))
   {
     mergeType = MergeType::PoiToPolygon;
   }
-  else if (_containsTwoOrMorePois(map) && !containsPolys && !containsAreas && !containsBuildings)
+  else if (MapUtils::containsTwoOrMorePois(map) && !containsPolys && !containsAreas &&
+           !containsBuildings)
   {
     mergeType = MergeType::PoiToPoi;
   }
-  else if (_containsTwoOrMoreBuildings(map) && !containsAreas && !containsPois)
+  else if (MapUtils::containsTwoOrMoreBuildings(map) && !containsAreas && !containsPois)
   {
     mergeType = MergeType::BuildingToBuilding;
   }
-  else if (_containsTwoOrMoreAreas(map) && !containsBuildings && !containsPois)
+  else if (MapUtils::containsTwoOrMoreAreas(map) && !containsBuildings && !containsPois)
   {
     mergeType = MergeType::AreaToArea;
   }
   else
   {
-//    throw IllegalArgumentException(
-//      QString("Invalid inputs to element merger.  Inputs must be one of the following:") +
-//      QString("1) two or more POIs, 2) two or more buildings, 3) two or more areas, or ") +
-//      QString("4) one or more POIs and exactly one polygon."));
     throw IllegalArgumentException(
       QString("Invalid inputs to element merger.  Inputs must be one of the following:") +
       QString("1) two or more POIs, 2) two or more buildings, 3) two or more areas, or ") +
@@ -243,101 +237,11 @@ ElementMergerJs::MergeType ElementMergerJs::_determineMergeType(ConstOsmMapPtr m
   return mergeType;
 }
 
-bool ElementMergerJs::_containsTwoOrMorePois(ConstOsmMapPtr map)
-{
-  const long poiCount =
-    (long)FilteredVisitor::getStat(
-      ElementCriterionPtr(new PoiCriterion()),
-      ConstElementVisitorPtr(new ElementCountVisitor()),
-      map);
-  LOG_VART(poiCount);
-  return poiCount >= 2;
-}
-
-bool ElementMergerJs::_containsTwoOrMoreBuildings(ConstOsmMapPtr map)
-{
-  const long buildingCount =
-    (long)FilteredVisitor::getStat(
-      ElementCriterionPtr(new BuildingCriterion(map)),
-      ConstElementVisitorPtr(new ElementCountVisitor()),
-      map);
-  LOG_VART(buildingCount);
-  return buildingCount >= 2;
-}
-
-bool ElementMergerJs::_containsTwoOrMoreAreas(ConstOsmMapPtr map)
-{
-  const long areaCount =
-    (long)FilteredVisitor::getStat(
-      ElementCriterionPtr(new NonBuildingAreaCriterion()),
-      ConstElementVisitorPtr(new ElementCountVisitor()),
-      map);
-  LOG_VART(areaCount);
-  return areaCount >= 2;
-}
-
-bool ElementMergerJs::_containsOnePolygonAndOnePoi(ConstOsmMapPtr map)
-{
-  const long poiCount =
-    (long)FilteredVisitor::getStat(
-      ElementCriterionPtr(new PoiPolygonPoiCriterion()),
-      ConstElementVisitorPtr(new ElementCountVisitor()),
-      map);
-  const long polyCount =
-    (long)FilteredVisitor::getStat(
-      ElementCriterionPtr(new PoiPolygonPolyCriterion()),
-      ConstElementVisitorPtr(new ElementCountVisitor()),
-      map);
-  LOG_VART(poiCount);
-  LOG_VART(polyCount);
-  return poiCount == 1 && polyCount == 1;
-}
-
-bool ElementMergerJs::_containsPolys(ConstOsmMapPtr map)
-{
-  const long polyCount =
-    (long)FilteredVisitor::getStat(
-      ElementCriterionPtr(new PoiPolygonPolyCriterion()),
-      ConstElementVisitorPtr(new ElementCountVisitor()),
-      map);
-  LOG_VART(polyCount);
-  return polyCount > 0;
-}
-
-bool ElementMergerJs::_containsAreas(ConstOsmMapPtr map)
-{
-  const long areaCount =
-    (long)FilteredVisitor::getStat(
-      ElementCriterionPtr(new NonBuildingAreaCriterion()),
-      ConstElementVisitorPtr(new ElementCountVisitor()),
-      map);
-  LOG_VART(areaCount);
-  return areaCount > 0;
-}
-
-bool ElementMergerJs::_containsBuildings(ConstOsmMapPtr map)
-{
-  const long buildingCount =
-    (long)FilteredVisitor::getStat(
-      ElementCriterionPtr(new BuildingCriterion(map)),
-      ConstElementVisitorPtr(new ElementCountVisitor()),
-      map);
-  LOG_VART(buildingCount);
-  return buildingCount > 0;
-}
-
-bool ElementMergerJs::_containsPois(ConstOsmMapPtr map)
-{
-  const long poiCount =
-    (long)FilteredVisitor::getStat(
-      ElementCriterionPtr(new PoiCriterion()),
-      ConstElementVisitorPtr(new ElementCountVisitor()),
-      map);
-  return poiCount > 0;
-}
-
 void ElementMergerJs::_mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetId)
 {
+  //TODO: BuildingMerger keeps the more complex geometry, I think.  Should we add in the
+  //configurableoption to keep the ref geometry?
+
   LOG_INFO("Merging buildings...");
   LOG_VART(mergeTargetId);
 
