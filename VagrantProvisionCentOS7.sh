@@ -64,15 +64,6 @@ sudo yum install -y nodejs-$NODE_VERSION nodejs-devel-$NODE_VERSION
 echo "### Locking version of NodeJS"
 sudo yum versionlock add nodejs-$NODE_VERSION nodejs-devel-$NODE_VERSION
 
-# Uninstall RVM and remove from profile.
-if test -d ~/.rvm; then
-    echo "### Removing RVM"
-    ~/.rvm/bin/rvm implode --force
-    unset GEM_HOME GEM_PATH IRBRC MY_RUBY_HOME \
-          __rvm_env_loaded rvm_bin_path rvm_path rvm_prefix rvm_version
-    sed -i -e '/rvm/Id' ~/.bash_profile ~/.bashrc ~/.profile
-fi
-
 # install useful and needed packages for working with hootenanny
 echo "### Installing dependencies from repos..."
 sudo yum -y install \
