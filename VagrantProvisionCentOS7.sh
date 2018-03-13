@@ -186,10 +186,12 @@ if ! grep --quiet GDAL_DATA ~/.bash_profile; then
     source ~/.bash_profile
 fi
 
-# Use RVM to install the desired Ruby version
+# Use RVM to install the desired Ruby version, and then install
+# the bundler at the desired version.
 $HOOT_HOME/scripts/ruby/rvm-install.sh
+$HOOT_HOME/scripts/ruby/bundler-install.sh
+
 # Install gems with bundler and strict versioning (see Gemfile)
-gem install bundler
 bundle install
 
 # Make sure that we are in ~ before trying to wget & install stuff
