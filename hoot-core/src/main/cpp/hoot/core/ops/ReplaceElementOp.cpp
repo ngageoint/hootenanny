@@ -128,6 +128,8 @@ void ReplaceElementOp::apply(const OsmMapPtr &map)
     from->getTags().clear();
     RecursiveElementRemover(_from).apply(map);
   }
+
+  LOG_VART(_to);
 }
 
 }

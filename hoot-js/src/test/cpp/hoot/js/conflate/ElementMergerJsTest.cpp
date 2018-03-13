@@ -78,10 +78,10 @@ class ElementMergerJsTest : public CppUnit::TestFixture
   ////CPPUNIT_TEST(areaToAreaMergeTwoRelationsNoConstituentsTest); //??
   CPPUNIT_TEST(areaToAreaMergeOneWayOneRelationTargetAsWayTest);
   //TODO: fix
-  //CPPUNIT_TEST(areaToAreaMergeOneWayOneRelationTargetAsWayNoConstituentsTest);
+  CPPUNIT_TEST(areaToAreaMergeOneWayOneRelationTargetAsWayNoConstituentsTest);
   CPPUNIT_TEST(areaToAreaMergeOneWayOneRelationTargetAsRelationTest);
   //TODO: fix
-  //CPPUNIT_TEST(areaToAreaMergeOneWayOneRelationTargetAsRelationNoConstituentsTest);
+  CPPUNIT_TEST(areaToAreaMergeOneWayOneRelationTargetAsRelationNoConstituentsTest);
   CPPUNIT_TEST(areaToAreaMergeMoreThanTwoAreasTest);
   CPPUNIT_TEST(areaToAreaMergeMoreThanTwoAreasNoConstituentsTest);
   CPPUNIT_TEST(areaToAreaMergeTooFewAreasTest);
@@ -614,7 +614,7 @@ public:
   void areaToAreaMergeOneWayOneRelationTargetAsWayNoConstituentsTest()
   {
     //Incomplete maps are being sent in, so this is needed to suppress the warnings in the test.
-    DisableLog dl;
+    //DisableLog dl;
 
     OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());

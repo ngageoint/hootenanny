@@ -142,18 +142,16 @@ void ElementMergerJs::_mergeElements(OsmMapPtr map, Isolate* current)
     default:
       throw HootException("Invalid merge type.");
   }
-  LOG_VART(map->getElementCount());
   LOG_VART(scriptMerge);
 
   ElementPtr mergedElement = map->getElement(mergeTargetId);
-  LOG_VART(mergedElement);
-  if (!scriptMerge)
-  {
+  //if (!scriptMerge)
+  //{
     //We only need to set the resulting merged element's status to conflated when the ScriptMerger
     //wasn't used, as it does so automatically.
     mergedElement->setStatus(Status(Status::Conflated));
     mergedElement->getTags()[MetadataTags::HootStatus()] = "3";
-  }
+  //}
   mergedElement->getTags().remove(MetadataTags::HootMergeTarget());
   LOG_VART(mergedElement);
 }
@@ -342,7 +340,6 @@ void ElementMergerJs::_mergeBuildings(OsmMapPtr map, const ElementId& mergeTarge
 {
   LOG_INFO("Merging buildings...");
   LOG_VART(mergeTargetId);
-  LOG_VART(map->getElementCount());
 
   //TODO: Is it possible to just load up all the pairs and call apply once here?
 
@@ -393,7 +390,6 @@ void ElementMergerJs::_mergePoiAndPolygon(OsmMapPtr map, const ElementId& mergeT
   //now.
   LOG_INFO("Merging one POI and one polygon...");
   LOG_VART(mergeTargetId);
-  LOG_VART(map->getElementCount());
 
   PoiPolygonPoiCriterion poiFilter;
   ElementIdSetVisitor idSetVis;
@@ -441,9 +437,11 @@ void ElementMergerJs::_mergeAreas(OsmMapPtr map, const ElementId& mergeTargetId,
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     const ConstWayPtr& way = it->second;
-    if (way->getId() != mergeTargetId.getId() && OsmSchema::getInstance().isNonBuildingArea(way))
+    LOG_VART(way->getId());
+    LOG_VART(OsmSchema::getInstance().isNonBuildingArea(way));
+    if (way->getElementId() != mergeTargetId && OsmSchema::getInstance().isNonBuildingArea(way))
     {
-      LOG_VART(way);
+      LOG_TRACE("Merging way area: " << way << " into " << mergeTargetId);
 
       std::set< std::pair< ElementId, ElementId> > matches;
       matches.insert(std::pair<ElementId,ElementId>(mergeTargetId, ElementId::way(way->getId())));
@@ -462,10 +460,12 @@ void ElementMergerJs::_mergeAreas(OsmMapPtr map, const ElementId& mergeTargetId,
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     const ConstRelationPtr& relation = it->second;
-    if (relation->getId() != mergeTargetId.getId() &&
+    LOG_VART(relation->getId());
+    LOG_VART(OsmSchema::getInstance().isNonBuildingArea(relation));
+    if (relation->getElementId() != mergeTargetId &&
         OsmSchema::getInstance().isNonBuildingArea(relation))
     {
-      LOG_VART(relation);
+      LOG_TRACE("Merging relation area: " << relation << " into " << mergeTargetId);
 
       std::set< std::pair< ElementId, ElementId> > matches;
       matches.insert(

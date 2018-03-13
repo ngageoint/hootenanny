@@ -1627,8 +1627,8 @@ bool OsmSchema::isPoiPolygonPoly(const ConstElementPtr& e)
   const bool isPoly =
     isArea(tags, e->getElementType()) && (inABuildingOrPoiCategory || tags.getNames().size() > 0);
 
-  LOG_VART(e);
-  LOG_VART(isPoly);
+  //LOG_VART(e);
+  //LOG_VART(isPoly);
   return isPoly;
 }
 
@@ -1658,8 +1658,8 @@ bool OsmSchema::isPoiPolygonPoi(const ConstElementPtr& e)
     isPoi = true;
   }
 
-  LOG_VART(e);
-  LOG_VART(isPoi);
+  //LOG_VART(e);
+  //LOG_VART(isPoi);
   return isPoi;
 }
 
