@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <way id='-279651' action='modify' visible='true'>
+    <nd ref='-279467' />
+    <nd ref='-279481' />
+    <nd ref='-279487' />
+    <nd ref='-279473' />
+    <nd ref='-279465' />
+    <nd ref='-279467' />
+    <tag k='name' v='building 1' />
+    <tag k='building' v='residential' />
+  </way>
+  <way id='-279653' action='modify' visible='true'>
+    <nd ref='-279469' />
+    <nd ref='-279483' />
+    <nd ref='-279475' />
+    <nd ref='-279471' />
+    <nd ref='-279469' />
+    <tag k='name' v='building 2' />
+    <tag k='building' v='commercial' />
+  </way>
+  <way id='-279655' action='modify' visible='true'>
+    <nd ref='-279479' />
+    <nd ref='-279485' />
+    <nd ref='-279477' />
+    <nd ref='-279469' />
+    <nd ref='-279471' />
+    <nd ref='-279479' />
+    <tag k='building' v='commercial' />
+    <tag k='name' v='building 3' />
+    <tag k="hoot:merge:target" v="yes"/>
+  </way>
+  <way id='-279657' action='modify' visible='true'>
+    <nd ref='-279487' />
+    <nd ref='-279479' />
+    <nd ref='-279471' />
+    <nd ref='-279473' />
+    <nd ref='-279487' />
+    <tag k='name' v='building 4' />
+    <tag k='building' v='commercial' />
+  </way>
+</osm>

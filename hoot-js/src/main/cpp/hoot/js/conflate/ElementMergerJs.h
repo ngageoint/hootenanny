@@ -20,7 +20,9 @@ namespace hoot
  * elements (way nodes, relation members) or an invalid map is passed without the constituent
  * elements and with only the parent elements to be merged.  The invalid map input case is necessary
  * b/c the UI sends the server only the features that need merging and then handles removing any
- * constituent features itself afterward with a call to the OSM services.
+ * constituent features itself afterward with a call to the OSM services.  Technically, we have
+ * no client code sending in valid maps with constituent features for merging yet, but since that
+ * could change, and its easy to support, we'll keep the functionality.
  *
  * This class has a mix of functionality where the merging is done by hoot-js calls into generic
  * scripts and merging that is done strictly by hoot-core code.  Arguably, you could do all the
@@ -65,14 +67,18 @@ private:
   static MergeType _determineMergeType(ConstOsmMapPtr map);
 
   static void _mergeElements(OsmMapPtr map, Isolate* current);
+  //an unlimited number of POIs may be merged
   static void _mergePois(OsmMapPtr map, const ElementId& mergeTargetId, Isolate* current);
+  //an unlimited number of areas may be merged
   static void _mergeAreas(OsmMapPtr map, const ElementId& mergeTargetId, Isolate* current);
+  //an unlimited number of buildings may be merged
   static void _mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetId);
+  //only a single POI and polygon may be merged (support for multiple POIs into a single or
+  //multiple polygons could be possible, if necessary)
   static void _mergePoiAndPolygon(OsmMapPtr map, const ElementId& mergeTargetId);
 
   static ElementId _getMergeTargetFeatureId(ConstOsmMapPtr map);
   static void _validateMergeTargetElement(ConstOsmMapPtr map, const MergeType& mergeType);
-
   static QString _mergeTypeToString(const MergeType& mergeType);
 };
 

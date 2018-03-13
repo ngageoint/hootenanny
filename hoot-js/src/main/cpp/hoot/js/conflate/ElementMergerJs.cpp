@@ -230,9 +230,9 @@ ElementMergerJs::MergeType ElementMergerJs::_determineMergeType(ConstOsmMapPtr m
   else
   {
     throw IllegalArgumentException(
-      QString("Invalid inputs to element merger.  Inputs must be one of the following:") +
-      QString("1) two or more POIs, 2) two or more buildings, 3) two or more areas, or ") +
-      QString("4) one POI and one polygon."));
+      QString("Invalid inputs passed to the element merger.  Inputs must contain only one ") +
+      QString("combination of the following:  1) two or more POIs, 2) two or more buildings, 3)") +
+      QString("two or more areas, or 4) one POI and one polygon."));
   }
   return mergeType;
 }
@@ -244,8 +244,6 @@ void ElementMergerJs::_mergeBuildings(OsmMapPtr map, const ElementId& mergeTarge
 
   LOG_INFO("Merging buildings...");
   LOG_VART(mergeTargetId);
-
-  //TODO: Is it possible to just load up all the pairs and call apply once here?
 
   int buildingsMerged = 0;
 

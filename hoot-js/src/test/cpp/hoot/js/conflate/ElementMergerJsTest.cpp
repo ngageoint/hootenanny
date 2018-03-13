@@ -44,12 +44,26 @@ namespace hoot
 /**
  * Tests merging two or more features
  *
- * The only thing we're not testing here in the merging of features through the js bindings workflow
- * is the conversion of the map arg from a js object to a hoot object.  That gets tested by the
- * element merge service mocha plugin test.
+ * Many, but not all, possible combinations of inputs are covered here.  The main functionality
+ * we're not testing here is the merging of features through the js bindings workflow is the
+ * conversion of the map arg from a js object to a hoot object.  That gets tested by the element
+ * merge service mocha plugin test.
  *
- * See notes in ElementMergerJs about features passed in without constituents.  For those tests,
- * we're setting the log at error so as not to see the missing element warnings.
+ * Types of tests:
+ *
+ * 1) standard - tests successful merging
+ * 2) w/o constituent - See notes in ElementMergerJs about features passed in without constituent
+ * elements.  For those tests, we're setting the log at error, so as not to see the missing element
+ * warnings.
+ * 3) missing feature inputs - all merging requires at least two features
+ * 4) extra unrelated features - any features that aren't mergeable should pass through to the
+ * output
+ * 5) more than two feature inputs - some merging can support more than two input features
+ * 6) duplicated/missing target tag - merging requires a particular tag to denote which feature
+ * gets other features merged into it
+ * 7) invalid feature combinations - merging doesn't allow input with more than one mergeable
+ * feature type associated with different types of conflation; e.g. an input with both buildings
+ * and POIs in it
  */
 class ElementMergerJsTest : public CppUnit::TestFixture
 {
@@ -88,15 +102,16 @@ class ElementMergerJsTest : public CppUnit::TestFixture
   CPPUNIT_TEST(areaToAreaMergeDuplicateTargetTagTest);
   CPPUNIT_TEST(areaToAreaMergeExtraNonAreaWayTest);
   CPPUNIT_TEST(areaToAreaMergeExtraNonAreaRelationTest);
-  CPPUNIT_TEST(buildingToBuildingMergeTwoWaysTest); //toy buildings
-  CPPUNIT_TEST(buildingToBuildingMergeTwoWaysNoConstituentsTest); //"
-  CPPUNIT_TEST(buildingToBuildingMergeTwoRelationsTest); //uncleanable
-  CPPUNIT_TEST(buildingToBuildingMergeTwoRelationsNoConstituentsTest); //"
-  CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsWayTest);
-  CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsWayNoConstituentsTest);
-  CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsRelationTest);
-  CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsRelationNoConstituentsTest);
+  CPPUNIT_TEST(buildingToBuildingMergeTwoWaysTest);
+  //CPPUNIT_TEST(buildingToBuildingMergeTwoWaysNoConstituentsTest); //X
+  CPPUNIT_TEST(buildingToBuildingMergeTwoRelationsTest);
+  CPPUNIT_TEST(buildingToBuildingMergeTwoRelationsNoConstituentsTest);
+//  CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsWayTest); //X
+//  CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsWayNoConstituentsTest); //X
+//  CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsRelationTest); //X
+//  CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsRelationNoConstituentsTest); //X
   CPPUNIT_TEST(buildingToBuildingMergeMoreThanTwoBuildingsTest);
+  //CPPUNIT_TEST(buildingToBuildingMergeMoreThanTwoBuildingsNoConstituentsTest); //X
   CPPUNIT_TEST(buildingToBuildingMergeTooFewBuildingsTest);
   CPPUNIT_TEST(buildingToBuildingMergeMissingTargetTagTest);
   CPPUNIT_TEST(buildingToBuildingMergeDuplicateTargetTagTest);
@@ -180,28 +195,28 @@ public:
   {
     testMerge(
       "poi-poly-missing-poi-in.osm", "poi-poly-missing-poi-out.osm",
-      "Invalid inputs to element merger");
+      "Invalid inputs passed to the element merger");
   }
 
   void poiToPolyMergeMissingPolyInputTest()
   {
     testMerge(
       "poi-poly-missing-poly-in.osm", "poi-poly-missing-poly-out.osm",
-      "Invalid inputs to element merger");
+      "Invalid inputs passed to the element merger");
   }
 
   void poiToPolyMergeMoreThanOnePolyInputTest()
   {
     testMerge(
       "poi-poly-more-than-one-poly-in.osm", "poi-poly-more-than-one-poly-out.osm",
-      "Invalid inputs to element merger");
+      "Invalid inputs passed to the element merger");
   }
 
   void poiToPolyMergeMoreThanOnePoiInputTest()
   {
     testMerge(
       "poi-poly-more-than-one-poi-in.osm", "poi-poly-more-than-one-poi-out.osm",
-      "Invalid inputs to element merger");
+      "Invalid inputs passed to the element merger");
   }
 
   void poiToPolyMergeMissingTargetTagTest()
@@ -247,7 +262,8 @@ public:
 
   void poiToPoiMergeTooFewPoisTest()
   {
-    testMerge("poi-too-few-in.osm", "poi-too-few-out.osm", "Invalid inputs to element merger");
+    testMerge(
+      "poi-too-few-in.osm", "poi-too-few-out.osm", "Invalid inputs passed to the element merger");
   }
 
   void poiToPoiMergeMissingTargetTagTest()
@@ -338,7 +354,8 @@ public:
 
   void areaToAreaMergeTooFewAreasTest()
   {
-    testMerge("area-too-few-in.osm", "area-too-few-out.osm", "Invalid inputs to element merger");
+    testMerge(
+      "area-too-few-in.osm", "area-too-few-out.osm", "Invalid inputs passed to the element merger");
   }
 
   void areaToAreaMergeMissingTargetTagTest()
@@ -369,73 +386,103 @@ public:
 
   void buildingToBuildingMergeTwoWaysTest()
   {
-
+    testMerge("building-two-ways-in.osm", "building-two-ways-out.osm");
   }
 
   void buildingToBuildingMergeTwoWaysNoConstituentsTest()
   {
-    //DisableLog dl;
-    //testMerge("area-two-ways-no-constituents-in.osm", "area-two-ways-no-constituents-out.osm");
+    DisableLog dl;
+    testMerge(
+      "building-two-ways-no-constituents-in.osm", "building-two-ways-no-constituents-out.osm");
   }
 
   void buildingToBuildingMergeTwoRelationsTest()
   {
-
+    testMerge("building-two-relations-in.osm", "building-two-relations-out.osm");
   }
 
   void buildingToBuildingMergeTwoRelationsNoConstituentsTest()
   {
-
+    DisableLog dl;
+    testMerge(
+      "building-two-relations-no-constituents-in.osm",
+      "building-two-relations-no-constituents-out.osm");
   }
 
   void buildingToBuildingMergeOneWayOneRelationTargetAsWayTest()
   {
-
+    testMerge(
+      "building-one-way-one-relation-target-as-way-in.osm",
+      "building-one-way-one-relation-target-as-way-out.osm");
   }
 
   void buildingToBuildingMergeOneWayOneRelationTargetAsWayNoConstituentsTest()
   {
-
+    DisableLog dl;
+    testMerge(
+      "building-one-way-one-relation-target-as-way-no-constituents-in.osm",
+      "building-one-way-one-relation-target-as-way-no-constituents-out.osm");
   }
 
   void buildingToBuildingMergeOneWayOneRelationTargetAsRelationTest()
   {
-
+    testMerge(
+      "building-one-way-one-relation-target-as-relation-in.osm",
+      "building-one-way-one-relation-target-as-relation-out.osm");
   }
 
   void buildingToBuildingMergeOneWayOneRelationTargetAsRelationNoConstituentsTest()
   {
-
+    DisableLog dl;
+    testMerge(
+      "building-one-way-one-relation-target-as-relation-no-constituents-in.osm",
+      "building-one-way-one-relation-target-as-relation-no-constituents-out.osm");
   }
 
   void buildingToBuildingMergeMoreThanTwoBuildingsTest()
   {
+    testMerge("building-more-than-two-in.osm", "building-more-than-two-out.osm");
+  }
 
+  void buildingToBuildingMergeMoreThanTwoBuildingsNoConstituentsTest()
+  {
+    DisableLog dl;
+    testMerge(
+      "building-more-than-two-no-constituents-in.osm",
+      "building-more-than-two-no-constituents-out.osm");
   }
 
   void buildingToBuildingMergeTooFewBuildingsTest()
   {
-
+    testMerge(
+      "building-too-few-in.osm", "building-too-few-out.osm",
+      "Invalid inputs passed to the element merger");
   }
 
   void buildingToBuildingMergeMissingTargetTagTest()
   {
-
+      testMerge(
+        "building-missing-target-tag-in.osm", "building-missing-target-tag-out.osm",
+        "Input map must have one feature marked with a hoot:merge:target tag");
   }
 
   void buildingToBuildingMergeDuplicateTargetTagTest()
   {
-
+      testMerge(
+        "building-missing-target-tag-in.osm", "building-missing-target-tag-out.osm",
+        "Input map must have one feature marked with a hoot:merge:target tag");
   }
 
   void buildingToBuildingMergeExtraNonBuildingWayTest()
   {
-
+    testMerge("building-extra-non-building-way-in.osm", "building-extra-non-building-way-out.osm");
   }
 
   void buildingToBuildingMergeExtraNonBuildingRelationTest()
   {
-
+    testMerge(
+      "building-extra-non-building-relation-in.osm",
+      "building-extra-non-building-relation-out.osm");
   }
 
   //MISC
