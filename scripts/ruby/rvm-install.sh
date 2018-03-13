@@ -7,11 +7,6 @@ RVM_TAR="rvm-${RVM_VERSION}.tar.gz"
 RVM_TAR_URL="${RVM_TAR_URL:-${RVM_BASE_URL}/archive/${RVM_VERSION}.tar.gz}"
 RVM_SIG_URL="${RVM_SIG_URL:-${RVM_BASE_URL}/releases/download/${RVM_VERSION}/${RVM_VERSION}.tar.gz.asc}"
 
-# Assume that Ruby is installed with packages instead.
-if [ "${WITH_RVM}" != "yes" ]; then
-    exit 0
-fi
-
 if [ ! -f $RVM_HOME/bin/rvm ] || ! $RVM_HOME/bin/rvm --version | grep -q "^rvm ${RVM_VERSION//\./\\.}"; then
     # RVM signing keys obtained via following command:
     #
