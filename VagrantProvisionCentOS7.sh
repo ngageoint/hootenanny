@@ -134,9 +134,6 @@ sudo yum -y install \
     qtwebkit \
     qtwebkit-devel \
     redhat-lsb-core \
-    ruby \
-    ruby-devel \
-    rubygem-bundler \
     stxxl \
     stxxl-devel \
     swig \
@@ -198,8 +195,11 @@ if ! grep --quiet GDAL_DATA ~/.bash_profile; then
     source ~/.bash_profile
 fi
 
+# Use RVM to install the desired Ruby version
+$HOOT_HOME/scripts/ruby/rvm-install.sh
 # Install gems with bundler and strict versioning (see Gemfile)
-bundler install
+gem install bundler
+bundle install
 
 # Make sure that we are in ~ before trying to wget & install stuff
 cd ~
