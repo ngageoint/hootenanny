@@ -74,8 +74,8 @@ class ElementMergerJsTest : public CppUnit::TestFixture
   CPPUNIT_TEST(poiToPoiMergeExtraNonPoiNodeTest);
   CPPUNIT_TEST(areaToAreaMergeTwoWaysTest);
   CPPUNIT_TEST(areaToAreaMergeTwoWaysNoConstituentsTest);
-  ////CPPUNIT_TEST(areaToAreaMergeTwoRelationsTest); //??
-  ////CPPUNIT_TEST(areaToAreaMergeTwoRelationsNoConstituentsTest); //??
+  CPPUNIT_TEST(areaToAreaMergeTwoRelationsTest);
+  CPPUNIT_TEST(areaToAreaMergeTwoRelationsNoConstituentsTest);
   CPPUNIT_TEST(areaToAreaMergeOneWayOneRelationTargetAsWayTest);
   //TODO: fix
   CPPUNIT_TEST(areaToAreaMergeOneWayOneRelationTargetAsWayNoConstituentsTest);
@@ -579,15 +579,47 @@ public:
       "test-output/js/conflate/ElementMergerJsTest/area-two-ways-no-constituents-out.osm");
   }
 
-//  void areaToAreaMergeTwoRelationsTest()
-//  {
+  void areaToAreaMergeTwoRelationsTest()
+  {
+    OsmMap::resetCounters();
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(
+      map,
+      "test-files/js/conflate/ElementMergerJsTest/area-two-relations-in.osm",
+      false,
+      Status::Unknown1);
 
-//  }
+    ElementMergerJs::_mergeElements(map, v8::Isolate::GetCurrent());
 
-//  void areaToAreaMergeTwoRelationsNoConstituentsTest()
-//  {
+    MapProjector::projectToWgs84(map);
+    OsmMapWriterFactory::getInstance().write(map,
+      "test-output/js/conflate/ElementMergerJsTest/area-two-relations-out.osm");
 
-//  }
+    HOOT_FILE_EQUALS(
+      "test-files/js/conflate/ElementMergerJsTest/area-two-relations-out.osm",
+      "test-output/js/conflate/ElementMergerJsTest/area-two-relations-out.osm");
+  }
+
+  void areaToAreaMergeTwoRelationsNoConstituentsTest()
+  {
+    OsmMap::resetCounters();
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(
+      map,
+      "test-files/js/conflate/ElementMergerJsTest/area-two-relations-no-constituents-in.osm",
+      false,
+      Status::Unknown1);
+
+    ElementMergerJs::_mergeElements(map, v8::Isolate::GetCurrent());
+
+    MapProjector::projectToWgs84(map);
+    OsmMapWriterFactory::getInstance().write(map,
+      "test-output/js/conflate/ElementMergerJsTest/area-two-relations-no-constituents-out.osm");
+
+    HOOT_FILE_EQUALS(
+      "test-files/js/conflate/ElementMergerJsTest/area-two-relations-no-constituents-out.osm",
+      "test-output/js/conflate/ElementMergerJsTest/area-two-relations-no-constituents-out.osm");
+  }
 
   void areaToAreaMergeOneWayOneRelationTargetAsWayTest()
   {

@@ -89,7 +89,7 @@ void OsmXmlReader::_parseTimeStamp(const QXmlAttributes &attributes)
 void OsmXmlReader::_createNode(const QXmlAttributes &attributes)
 {
   long id = _parseLong(attributes.value("id"));
-  LOG_VART(id);
+  //LOG_VART(id); //TODO: uncomment
   long newId;
   if (_useDataSourceId)
   {
@@ -99,7 +99,7 @@ void OsmXmlReader::_createNode(const QXmlAttributes &attributes)
   {
     newId = _map->createNextNodeId();
   }
-  LOG_VART(newId);
+  //LOG_VART(newId); //TODO: uncomment
   _nodeIdMap.insert(id, newId);
 
   double x = _parseDouble(attributes.value("lon"));
@@ -637,19 +637,19 @@ bool OsmXmlReader::endElement(const QString & /* namespaceURI */,
     {
       NodePtr n = boost::dynamic_pointer_cast<Node, Element>(_element);
       _map->addNode(n);
-      LOG_VART(n);
+      //LOG_VART(n); //TODO: uncomment
     }
     else if (qName == QLatin1String("way"))
     {
       WayPtr w = boost::dynamic_pointer_cast<Way, Element>(_element);
       _map->addWay(w);
-      LOG_VART(w);
+      //LOG_VART(w); //TODO: uncomment
     }
     else if (qName == QLatin1String("relation"))
     {
       RelationPtr r = boost::dynamic_pointer_cast<Relation, Element>(_element);
       _map->addRelation(r);
-      LOG_VART(r);
+      //LOG_VART(r); //TODO: uncomment
     }
   }
 

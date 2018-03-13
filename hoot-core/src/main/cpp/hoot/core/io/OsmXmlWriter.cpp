@@ -262,7 +262,7 @@ void OsmXmlWriter::_writeMetadata(const Element *e)
       version = 1;
     }
     _writer->writeAttribute("version", QString::number(version));
-    LOG_VART(version);
+    //LOG_VART(version); //TODO: uncomment
   }
   else
   {
@@ -461,7 +461,7 @@ void OsmXmlWriter::_writeBounds(const Envelope& bounds)
 
 void OsmXmlWriter::writePartial(const ConstNodePtr& n)
 {
-  LOG_VART(n);
+  //LOG_VART(n); //TODO: uncomment
 
   _writer->writeStartElement("node");
 
@@ -575,7 +575,7 @@ void OsmXmlWriter::_writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapP
 
 void OsmXmlWriter::writePartial(const ConstWayPtr& w)
 {
-  LOG_VART(w);
+  //LOG_VART(w); //TODO: uncomment
 
   if (_includePointInWays)
   {
@@ -602,7 +602,7 @@ void OsmXmlWriter::writePartial(const ConstWayPtr& w)
 
 void OsmXmlWriter::writePartial(const ConstRelationPtr& r)
 {
-  LOG_VART(r);
+  //LOG_VART(r); //TODO: uncomment
 
   _writer->writeStartElement("relation");
   _writer->writeAttribute("visible", "true");
