@@ -106,10 +106,7 @@ WayPtr WayAverager::average()
 
   Meters newAcc = 2.0 * sqrt(weight1 * weight1 * v1 + weight2 * weight2 * v2);
 
-  WayPtr result(new Way(_w1->getStatus(), _map.createNextWayId(),
-                                 newAcc));
-
-  _map.addWay(result);
+  WayPtr result(new Way(_w1->getStatus(), _w1->getId(), newAcc));
 
   result->addNode(_merge(_w1->getNodeIds()[0], weight1, _w2->getNodeIds()[0], weight2));
 
@@ -161,6 +158,8 @@ WayPtr WayAverager::average()
 
   RemoveWayOp::removeWay(_map.shared_from_this(), _w1->getId());
   RemoveWayOp::removeWay(_map.shared_from_this(), _w2->getId());
+
+  _map.addWay(result);
 
   _meanMovement1 = _sumMovement1 / (double)_moveCount1;
   _meanMovement2 = _sumMovement2 / (double)_moveCount2;
