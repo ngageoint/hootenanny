@@ -35,6 +35,7 @@
 #include <hoot/core/io/HootApiDbBulkInserter.h>
 #include <hoot/core/io/HootApiDbReader.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/util/FileUtils.h>
 
 // Qt
 #include <QDir>
@@ -72,6 +73,8 @@ public:
     database.open(ServicesDbTestUtils::getDbModifyUrl());
     database.getOrCreateUser(userEmail(), "ServiceHootApiDbBulkInserterTest");
     database.close();
+
+    TestUtils::mkpath("test-output/io/ServiceHootApiDbBulkInserterTest");
   }
 
   void tearDown()
@@ -89,9 +92,9 @@ public:
 
   void runPsqlDbOfflineTest()
   {
+    QString testName = "runPsqlDbOfflineTest";
     OsmMap::resetCounters();
     const QString outputDir = "test-output/io/ServiceHootApiDbBulkInserterTest";
-    QDir().mkpath(outputDir);
 
     HootApiDbBulkInserter writer;
     const QString outFile = outputDir + "/psql-offline-out.sql";
@@ -106,7 +109,7 @@ public:
     writer.setUserEmail(userEmail());
     writer.setCopyBulkInsertActivated(true);
 
-    writer.open(ServicesDbTestUtils::getDbModifyUrl().toString());
+    writer.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
     writer.write(ServicesDbTestUtils::createTestMap1());
     writer.close();
     mapId = writer.getMapId();
@@ -115,7 +118,7 @@ public:
     HootApiDbReader reader;
     OsmMapPtr actualMap(new OsmMap());
     reader.setUserEmail(userEmail());
-    reader.open(ServicesDbTestUtils::getDbModifyUrl().toString());
+    reader.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
     reader.read(actualMap);
     reader.close();
     const QString actualOutputFile = outputDir + "/psqlOffline-out.osm";
@@ -124,12 +127,26 @@ public:
     actualMapWriter->open(actualOutputFile);
     actualMapWriter->write(actualMap);
 
+    //Should be 4 changesets, but its 8.
+    HootApiDb database;
+    database.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
+    database.setMapId(mapId);
+    database.setCreateIndexesOnClose(false);
+    database.setFlushOnClose(false);
+    const long numChangesets = database.numChangesets();
+    LOG_VARD(numChangesets);
+    CPPUNIT_ASSERT_EQUAL(8L, numChangesets);
+
+    //TODO: This needs to be enabled (or some check similar to it), but doing so will require
+    //ignoring the map and changeset ID's in the file that will change with each test run.
+//    TestUtils::verifyStdMatchesOutputIgnoreDate(
+//      "test-files/io/ServiceHootApiDbBulkInserterTest/psql-offline.sql",
+//      outFile);
     HOOT_FILE_EQUALS(
       "test-files/io/ServiceHootApiDbBulkInserterTest/psqlOffline.osm", actualOutputFile);
   }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceHootApiDbBulkInserterTest, "slow");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceHootApiDbBulkInserterTest, "serial");
 
 }

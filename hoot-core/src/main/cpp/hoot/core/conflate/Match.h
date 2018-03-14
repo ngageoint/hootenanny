@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MATCH_H
 #define MATCH_H
@@ -55,6 +55,7 @@ public:
   virtual ~Match();
 
   virtual QString explain() const;
+  virtual void setExplain(const QString /*explainText*/){ }
 
   /**
    * Classifies the match and returns a classification object.

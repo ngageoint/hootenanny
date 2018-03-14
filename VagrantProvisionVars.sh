@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-export CHROMEDRIVER_VERSION=2.33
+export CHROMEDRIVER_VERSION=2.36
 
 export JDK_VERSION=1.8.0_161
 export JDK_URL=http://download.oracle.com/otn-pub/java/jdk/8u161-b12/2f38c3b165be4555a1fa6e98c45e0808/jdk-8u161-linux-x64.tar.gz
@@ -26,3 +26,5 @@ export RVM_BINARIES_URL="${RUBY_BASE_URL}/binaries"
 export RVM_HOME="${RVM_HOME:-${HOME}/.rvm}"
 export RVM_VERSION=1.29.3
 export WITH_RVM="${WITH_RVM:-yes}"
+
+export GLPK_VERSION=4.64

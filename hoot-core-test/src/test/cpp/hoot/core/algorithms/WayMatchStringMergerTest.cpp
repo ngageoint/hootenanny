@@ -58,6 +58,11 @@ class WayMatchStringMergerTest : public CppUnit::TestFixture
 
 public:
 
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/algorithms/");
+  }
+
   WayStringPtr createWayString1(OsmMapPtr map)
   {
     WayPtr w1a = getWay(map, "1a");
@@ -129,8 +134,6 @@ public:
     vector< pair<ElementId, ElementId> > replaced;
     WayMatchStringMerger uut(map, mapping, replaced);
 
-    QDir().mkpath("test-output/algorithms/");
-
     WayMatchStringSplitter().applySplits(map, replaced, uut.getAllSublineMappings());
     uut.updateSublineMapping();
 
@@ -162,8 +165,6 @@ public:
     vector< pair<ElementId, ElementId> > replaced;
     WayMatchStringMerger uut(map, mapping, replaced);
 
-    QDir().mkpath("test-output/algorithms/");
-
     WayMatchStringSplitter().applySplits(map, replaced, uut.getAllSublineMappings());
     uut.updateSublineMapping();
 
@@ -192,8 +193,6 @@ public:
     vector< pair<ElementId, ElementId> > replaced;
     WayMatchStringMerger uut(map, mapping, replaced);
     WayMatchStringSplitter().applySplits(map, replaced, uut.getAllSublineMappings());
-
-    QDir().mkpath("test-output/algorithms/");
 
     MapProjector::projectToWgs84(map);
     OsmMapWriterFactory::getInstance().write(map,

@@ -32,7 +32,7 @@ sudo yum -y install epel-release >> CentOS_upgrade.txt 2>&1
 
 # add Hoot repo for our pre-built dependencies.
 echo "### Add Hoot repo ###" >> CentOS_upgrade.txt
-$HOOT_HOME/scripts/hoot-repo/yum-configure.sh
+sudo $HOOT_HOME/scripts/hoot-repo/yum-configure.sh
 
 # check to see if postgres is already installed
 if ! rpm -qa | grep -q pgdg-centos95-9.5-3 ; then
@@ -301,7 +301,7 @@ echo "### Installing Tomcat8..."
 TOMCAT_HOME=/usr/share/tomcat8
 
 # Install Tomcat 8
-$HOOT_HOME/scripts/tomcat/tomcat8/centos7/tomcat8_install.sh
+$HOOT_HOME/scripts/tomcat/centos7/tomcat8_install.sh
 
 # Configure Tomcat for the user
 if ! grep --quiet TOMCAT8_HOME ~/.bash_profile; then

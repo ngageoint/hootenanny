@@ -31,10 +31,8 @@
 
 // hoot
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
-
 #include "extractors/PoiPolygonTypeScoreExtractor.h"
 #include "extractors/PoiPolygonNameScoreExtractor.h"
 #include "PoiPolygonDistance.h"
@@ -66,7 +64,8 @@ _nameScore(-1.0),
 _addressScore(-1.0),
 _polyNeighborIds(polyNeighborIds),
 _poiNeighborIds(poiNeighborIds),
-_rf(rf)
+_rf(rf),
+_opts(ConfigOptions())
 {
 }
 
@@ -115,10 +114,15 @@ void PoiPolygonMatch::setTypeScoreThreshold(double threshold)
 }
 
 void PoiPolygonMatch::setReviewIfMatchedTypes(const QStringList& types)
-{
+{ 
   for (int i = 0; i < types.size(); i++)
   {
-    const QString kvp = types[i];
+    QString kvp = types[i];
+
+    //As a UI workaround, we're allowing the format "key,value" to be used instead of "key=value".
+    kvp.replace(",", "=");
+
+    LOG_VART(kvp);
     if (kvp.trimmed().isEmpty() || !kvp.contains("="))
     {
       throw IllegalArgumentException(
@@ -130,8 +134,9 @@ void PoiPolygonMatch::setReviewIfMatchedTypes(const QStringList& types)
       throw IllegalArgumentException(
         QString("Invalid POI/Polygon review if matched type configuration option value: ") + kvp);
     }
+    _reviewIfMatchedTypes.append(kvp);
   }
-  _reviewIfMatchedTypes = types;
+  LOG_VART(_reviewIfMatchedTypes);
 }
 
 void PoiPolygonMatch::setConfiguration(const Settings& conf)
@@ -148,6 +153,8 @@ void PoiPolygonMatch::setConfiguration(const Settings& conf)
   setDisableSameSourceConflationMatchTagKeyPrefixOnly(
     config.getPoiPolygonDisableSameSourceConflationMatchTagKeyPrefixOnly());
   setSourceTagKey(config.getPoiPolygonSourceTagKey());
+
+  setReviewMultiUseBuildings(config.getPoiPolygonReviewMultiuseBuildings());
 
   setEnableAdvancedMatching(config.getPoiPolygonEnableAdvancedMatching());
   setEnableReviewReduction(config.getPoiPolygonEnableReviewReduction());
@@ -314,7 +321,7 @@ void PoiPolygonMatch::calculateMatchWeka(const ElementId& /*eid1*/, const Elemen
 //  }
 //  catch (const geos::util::TopologyException& e)
 //  {
-//    //if (_badGeomCount <= ConfigOptions().getOgrLogLimit())
+//    //if (_badGeomCount <= _opts.getOgrLogLimit())
 //    //{
 //      LOG_WARN(
 //        "Feature(s) passed to PoiPolygonMatchCreator caused topology exception on conversion "
@@ -338,8 +345,10 @@ bool PoiPolygonMatch::_featureHasReviewIfMatchedType(ConstElementPtr element) co
   const Tags& tags = element->getTags();
   for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
   {
-    if (_reviewIfMatchedTypes.contains(it.key() + "=" + it.value()))
+    const QString kvp = it.key() + "=" + it.value();
+    if (_reviewIfMatchedTypes.contains(kvp))
     {
+      LOG_TRACE("Matched type for review: " << kvp);
       return true;
     }
   }
@@ -396,6 +405,7 @@ bool PoiPolygonMatch::_inputFeaturesHaveSameSource(const ElementId& eid1,
 
 void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid2)
 {  
+  _explainText = "";
   _class.setMiss();
 
   if (_disableSameSourceConflation && _inputFeaturesHaveSameSource(eid1, eid2))
@@ -411,6 +421,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
   LOG_VART(foundReviewIfMatchedType);
 
   unsigned int evidence = _calculateEvidence(_poi, _poly);
+  LOG_VART(evidence);
 
   //no point in trying to reduce reviews if we're still at a miss here
   if (_enableReviewReduction && evidence >= _reviewEvidenceThreshold)
@@ -424,16 +435,30 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
       evidence = 0;
     }
   }
+  LOG_VART(evidence);
 
   if (evidence >= _matchEvidenceThreshold)
   {
     if (!foundReviewIfMatchedType)
     {
-      _class.setMatch();
+      LOG_VART(_reviewMultiUseBuildings);
+      LOG_VART(OsmSchema::getInstance().isMultiUseBuilding(*_poly));
+      //only do the multi-use check on the poly
+      if (_reviewMultiUseBuildings && OsmSchema::getInstance().isMultiUseBuilding(*_poly))
+      {
+        _class.setReview();
+        _explainText = "Match involves a multi-use building.";
+      }
+      else
+      {
+        _class.setMatch();
+      }
     }
     else
     {
       _class.setReview();
+      _explainText =
+        "Feature contains tag specified for review from list: " + _reviewIfMatchedTypes.join(";");
     }
   }
   else if (evidence >= _reviewEvidenceThreshold)
@@ -457,7 +482,7 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
   //search radius taken from PoiPolygonMatchCreator
   PoiPolygonDistance distanceCalc(
     _matchDistanceThreshold, _reviewDistanceThreshold, poly->getTags(),
-    poi->getCircularError() + ConfigOptions().getPoiPolygonReviewDistanceThreshold());
+    poi->getCircularError() + _opts.getPoiPolygonReviewDistanceThreshold());
   //type based match distance changes didn't have any positive effect experimentally; leaving it
   //commented out here in case there is need for further examination
 //  _matchDistanceThreshold =
@@ -658,6 +683,15 @@ QString PoiPolygonMatch::toString() const
       .arg(_typeScore)
       .arg(_nameScore)
       .arg(_addressScore);
+}
+
+QString PoiPolygonMatch::explain() const
+{
+  if (!_explainText.isEmpty())
+  {
+    return _explainText;
+  }
+  return toString();
 }
 
 }

@@ -76,9 +76,13 @@ class DuplicateWayRemoverTest : public CppUnit::TestFixture
 
 public:
 
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/conflate");
+  }
+
   void runTest()
   {
-    QDir().mkpath("test-output/conflate");
     OsmMap::resetCounters();
 
     OsmXmlReader reader;
@@ -104,7 +108,6 @@ public:
    */
   void runStrictTagMatchingOnTest()
   {
-    QDir().mkpath("test-output/conflate");
     OsmMap::resetCounters();
 
     OsmMapPtr map(new OsmMap());
@@ -136,7 +139,6 @@ public:
    */
   void runStrictTagMatchingOffTest()
   {
-    QDir().mkpath("test-output/conflate");
     OsmMap::resetCounters();
 
     OsmMapPtr map(new OsmMap());

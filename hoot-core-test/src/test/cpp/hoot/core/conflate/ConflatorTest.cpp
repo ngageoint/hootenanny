@@ -33,11 +33,6 @@
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-using namespace hoot;
-
-
-// Boost
-using namespace boost;
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -49,6 +44,11 @@ using namespace boost;
 #include <QDebug>
 #include <QDir>
 
+#include "../TestUtils.h"
+
+namespace hoot
+{
+
 class ConflatorTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ConflatorTest);
@@ -59,10 +59,13 @@ class ConflatorTest : public CppUnit::TestFixture
 
 public:
 
+  void setUp()
+  {
+    TestUtils::mkpath("test-output");
+  }
+
   void runPbfTest()
   {
-    QDir().mkpath("test-output");
-
     OsmPbfReader reader(true);
 
     OsmMapPtr map(new OsmMap());
@@ -85,8 +88,6 @@ public:
 
   void runTest()
   {
-    QDir().mkpath("test-output");
-
     OsmXmlReader reader;
 
     OsmMapPtr map(new OsmMap());
@@ -113,8 +114,6 @@ public:
   //Now the river/building never get merged together.
   void runMergeTest()
   {
-    QDir().mkpath("test-output");
-
     OsmXmlReader reader;
 
     OsmMapPtr map(new OsmMap());
@@ -142,3 +141,4 @@ public:
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ConflatorTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ConflatorTest, "quick");
 
+}

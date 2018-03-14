@@ -47,14 +47,19 @@ namespace hoot
 
 class ServiceOsmApiDbSqlChangesetFileWriterTest : public CppUnit::TestFixture
 {
-    CPPUNIT_TEST_SUITE(ServiceOsmApiDbSqlChangesetFileWriterTest);
-    CPPUNIT_TEST(runBasicTest);
-    CPPUNIT_TEST(runSplitTest);
-    CPPUNIT_TEST_SUITE_END();
+  CPPUNIT_TEST_SUITE(ServiceOsmApiDbSqlChangesetFileWriterTest);
+  CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST(runSplitTest);
+  CPPUNIT_TEST_SUITE_END();
 
 public:
 
   OsmApiDb database;
+
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/io/ServiceOsmApiDbSqlChangesetFileWriterTest");
+  }
 
   void tearDown()
   {
@@ -65,7 +70,6 @@ public:
 
   void runBasicTest()
   {
-    QDir().mkpath("test-output/io/ServiceOsmApiDbSqlChangesetFileWriterTest");
     boost::shared_ptr<ChangeSetProvider> changesetProvider(new TestOsmChangesetProvider(true));
 
     //clear out the db so we get consistent next id results
@@ -89,7 +93,6 @@ public:
 
   void runSplitTest()
   {
-    QDir().mkpath("test-output/io/ServiceOsmApiDbSqlChangesetFileWriterTest");
     boost::shared_ptr<ChangeSetProvider> changesetProvider(new TestOsmChangesetProvider(true));
 
     //clear out the db so we get consistent next id results

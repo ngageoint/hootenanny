@@ -174,7 +174,7 @@ public:
 
   void runAppendTest()
   {
-    QDir().mkpath("test-output");
+    TestUtils::mkpath("test-output");
 
     OsmXmlReader reader;
     reader.setUseDataSourceIds(true);

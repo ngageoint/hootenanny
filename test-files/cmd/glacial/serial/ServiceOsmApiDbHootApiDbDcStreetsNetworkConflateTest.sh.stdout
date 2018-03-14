@@ -52,6 +52,6 @@ STEP 14: Reading the entire contents of the osm api db, for the SQL changeset wo
 
 STEP 15: Cleaning up database...
 
-10:28:26.785 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 164
-10:28:27.031 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 165
-10:28:27.345 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 166
+16:32:09.061 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 765
+16:32:09.293 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 766
+16:32:09.524 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 767

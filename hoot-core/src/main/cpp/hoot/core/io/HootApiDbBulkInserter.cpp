@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "HootApiDbBulkInserter.h"
@@ -93,6 +93,8 @@ void HootApiDbBulkInserter::open(QString url)
       QString("a new one.  URL: ") + _outputUrl);
   }
   _database.open(_outputUrl);
+  _database.setCreateIndexesOnClose(false);
+  _database.setFlushOnClose(false);
 
   //not starting a transaction here, b/c the exec'd SQL file will declare one instead
   _getOrCreateMap();
@@ -226,7 +228,6 @@ void HootApiDbBulkInserter::_writeDataToDbPsql()
   LOG_VART(_outputUrl);
   LOG_VART(HootApiDb::removeLayerName(_outputUrl));
   ApiDb::execSqlFile(HootApiDb::removeLayerName(_outputUrl), _sqlOutputCombinedFile->fileName());
-  _database.close();
 
   LOG_INFO(
     "SQL execution complete.  Time elapsed: " << StringUtils::secondsToDhms(_timer->elapsed()));
@@ -234,13 +235,13 @@ void HootApiDbBulkInserter::_writeDataToDbPsql()
 
 void HootApiDbBulkInserter::_writeDataToDb()
 {
-  //indexes (and constraints?) are already being dropped in HootApiDb when the map is inserted,
-  //so don't worry about dropping them here
-
   _writeDataToDbPsql();
 
-  //this will re-create the previously dropped indexes
-  _database.close();
+  //hoot api db starts with no indexes at all, since a brand new databas is created for each layer,
+  //so let's create it now
+  //TODO: This causes SQL exceptions with certain datasets, so disabling index creation for now. -
+  //#2216
+  //_database.createPendingMapIndexes();
 }
 
 void HootApiDbBulkInserter::_writeCombinedSqlFile()
@@ -629,9 +630,9 @@ void HootApiDbBulkInserter::_writeRelation(const unsigned long relationDbId, con
 }
 
 void HootApiDbBulkInserter::_writeRelationMember(const unsigned long sourceRelationDbId,
-                                                const RelationData::Entry& member,
-                                                const unsigned long memberDbId,
-                                                const unsigned int memberSequenceIndex)
+                                                 const RelationData::Entry& member,
+                                                 const unsigned long memberDbId,
+                                                 const unsigned int memberSequenceIndex)
 {
   _outputSections[HootApiDb::getCurrentRelationMembersTableName(_database.getMapId())]->write(
     _sqlFormatter->relationMemberToSqlString(
@@ -641,10 +642,12 @@ void HootApiDbBulkInserter::_writeRelationMember(const unsigned long sourceRelat
 
 void HootApiDbBulkInserter::_incrementChangesInChangeset()
 {
-  //to stay in sync with how HootApiDb assigns changeset ID's we'll get the initial changeset ID
-  //if this is the first record being writen.  changeset ID's will be retrieved with each call to
-  //_writeChangeset
-  if (_changesetData.changesInChangeset == 0)
+  //To stay in sync with how HootApiDb assigns changeset ID's, we'll get the initial changeset ID
+  //if this is the first record being writen.  Changeset ID's will then be retrieved with each call
+  //to _writeChangeset.
+  //TODO: This seems to be writing double the amount of changesets needed with every other changeset
+  //being empty. - #2217
+  if (_changesetData.changesInChangeset ==/*>*/ 0)
   {
     _writeChangeset();
   }
@@ -672,12 +675,15 @@ void HootApiDbBulkInserter::_writeChangeset()
       "Invalid changeset user ID: " + QString::number(_changesetData.changesetUserId));
   }
 
-  //rather than write the changeset as a COPY statement out to file, just going to write it directly
-  //to the db.  this helps this class and HootApiDbWriter play nicely when the two are mixed together
+  //Rather than write the changeset as a COPY statement out to file, just going to write it directly
+  //to the db.  Rhis helps this class and HootApiDbWriter play nicely when the two are mixed together
   //in a data workflow.  A downside to this is that the changeset insert isn't part of the SQL
   //transaction used with the copy statements.
   _changesetData.currentChangesetId =
     _database.insertChangeset(_changesetData.changesetBounds, _changesetTags, _maxChangesetSize);
+  LOG_TRACE(
+    "Inserted changeset with ID: " << _changesetData.currentChangesetId << " and " <<
+    _changesetData.changesInChangeset << " changes.");
 }
 
 }

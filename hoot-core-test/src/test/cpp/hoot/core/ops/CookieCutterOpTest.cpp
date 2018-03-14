@@ -84,7 +84,7 @@ public:
 
     MapProjector::projectToWgs84(map);
 
-    QDir().mkpath("test-output/ops/CookieCutterOp");
+    TestUtils::mkpath("test-output/ops/CookieCutterOp");
     OsmXmlWriter writer;
     writer.write(map, "test-output/ops/CookieCutterOp/CookieCutterOpTest.osm");
     HOOT_FILE_EQUALS("test-files/ops/CookieCutterOp/CookieCutterOpTest.osm",

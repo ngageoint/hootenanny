@@ -66,10 +66,16 @@ class ServiceOsmApiDbBulkInserterTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runPsqlCustomStartingIdsDbOfflineTest);
   CPPUNIT_TEST(runPsqlLargeCustomStartingIdsDbOfflineTest);
   CPPUNIT_TEST(runSqlFileOutputTest);
-  //CPPUNIT_TEST(maxDataTypeSizeTest);
+  CPPUNIT_TEST(runUserDoesntExistTest);
+  //CPPUNIT_TEST(maxDataTypeSizeTest);  //just for debugging
   CPPUNIT_TEST_SUITE_END();
 
 public:
+
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/io/ServiceOsmApiDbBulkInserterTest/");
+  }
 
   void verifyDatabaseOutputOffline()
   {
@@ -412,8 +418,6 @@ public:
 
   void runPsqlDbOfflineTest()
   {
-    QDir().mkpath("test-output/io/ServiceOsmApiDbBulkInserterTest/");
-
     //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
     const QString scriptDir = "test-files/servicesdb";
@@ -443,7 +447,6 @@ public:
 
   void runPsqlDbOfflineValidateOffTest()
   {
-    QDir().mkpath("test-output/io/ServiceOsmApiDbBulkInserterTest/");
     OsmMap::resetCounters();
 
     //init db
@@ -478,8 +481,6 @@ public:
 
   void runPsqlDbOfflineStxxlTest()
   {
-    QDir().mkpath("test-output/io/ServiceOsmApiDbBulkInserterTest/");
-
     //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
     const QString scriptDir = "test-files/servicesdb";
@@ -510,8 +511,6 @@ public:
 
   void runPsqlDbOnlineTest()
   {
-    QDir().mkpath("test-output/io/ServiceOsmApiDbBulkInserterTest/");
-
     //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
     const QString scriptDir = "test-files/servicesdb";
@@ -551,8 +550,6 @@ public:
 
   void runPsqlCustomStartingIdsDbOfflineTest()
   {
-    QDir().mkpath("test-output/io/ServiceOsmApiDbBulkInserterTest/");
-
     //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
     const QString scriptDir = "test-files/servicesdb";
@@ -587,8 +584,6 @@ public:
 
   void runPsqlLargeCustomStartingIdsDbOfflineTest()
   {
-    QDir().mkpath("test-output/io/ServiceOsmApiDbBulkInserterTest/");
-
     //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
     const QString scriptDir = "test-files/servicesdb";
@@ -626,8 +621,6 @@ public:
 
   void runSqlFileOutputTest()
   {
-    QDir().mkpath("test-output/io/ServiceOsmApiDbBulkInserterTest/");
-
     //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
     const QString scriptDir = "test-files/servicesdb";
@@ -650,6 +643,27 @@ public:
     TestUtils::verifyStdMatchesOutputIgnoreDate(
       "test-files/io/ServiceOsmApiDbBulkInserterTest/psql-offline.sql", outFile);
     ServicesDbTestUtils::verifyTestDatabaseEmpty();
+  }
+
+  void runUserDoesntExistTest()
+  {
+    ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
+    const QString scriptDir = "test-files/servicesdb";
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
+
+    OsmApiDbBulkInserter writer;
+    writer.setChangesetUserId(-1);
+    QString exceptionMsg("");
+    try
+    {
+      writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+
+    CPPUNIT_ASSERT(exceptionMsg.contains("Invalid changeset user ID"));
   }
 
   void maxDataTypeSizeTest()

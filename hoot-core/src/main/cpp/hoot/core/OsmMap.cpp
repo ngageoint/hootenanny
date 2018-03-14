@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OsmMap.h"
@@ -455,8 +455,10 @@ void OsmMap::replace(const boost::shared_ptr<const Element>& from, const QList<E
   }
   else
   {
+    QList<long> elem;
     for (int i = 0; i < to.size(); ++i)
     {
+      elem.append(to[i]->getId());
       if (!containsElement(to[i]))
       {
         addElement(to[i]);
@@ -471,7 +473,9 @@ void OsmMap::replace(const boost::shared_ptr<const Element>& from, const QList<E
       r->replaceElement(from, to);
     }
 
-    RemoveElementOp::removeElementNoCheck(shared_from_this(), from->getElementId());
+    //  Don't remove the element if it is being replaced by itself
+    if (!elem.contains(from->getId()))
+      RemoveElementOp::removeElementNoCheck(shared_from_this(), from->getElementId());
   }
 }
 

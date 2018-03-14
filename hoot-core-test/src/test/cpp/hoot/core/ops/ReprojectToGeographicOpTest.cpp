@@ -76,7 +76,7 @@ public:
     ReprojectToGeographicOp myOp;
     myOp.apply(map);
 
-    QDir().mkpath(outputPath);
+    TestUtils::mkpath(outputPath);
     OsmXmlWriter writer;
     writer.write(map, outputPath + outputFile);
     HOOT_FILE_EQUALS(inputPath+outputFile,

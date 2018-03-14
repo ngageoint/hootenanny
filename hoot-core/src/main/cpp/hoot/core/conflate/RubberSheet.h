@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef RUBBERSHEET_H
@@ -76,7 +76,7 @@ public:
     double p;
   };
 
-  RubberSheet(bool logNotEnoughTiePointsAsWarning = false);
+  RubberSheet();
 
   void apply(boost::shared_ptr<OsmMap>& map);
 
@@ -129,6 +129,11 @@ public:
    */
    std::vector<double> calculateTiePointDistances();
 
+   void setFailWhenMinimumTiePointsNotFound(bool fail) { _failWhenMinTiePointsNotFound = fail; }
+
+   void setLogWarningWhenRequirementsNotFound(bool logWarning)
+   { _logWarningWhenRequirementsNotFound = logWarning; }
+
 private:
 
   typedef std::map<long, std::list<Match> > MatchList;
@@ -165,7 +170,8 @@ private:
 
   NodeMatcher _nm;
 
-  bool _logNotEnoughTiePointsAsWarning;
+  bool _failWhenMinTiePointsNotFound;
+  bool _logWarningWhenRequirementsNotFound;
 
   Match _emptyMatch;
 

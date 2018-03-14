@@ -59,9 +59,9 @@ namespace hoot
 
 class WayMergeManipulationTest : public CppUnit::TestFixture
 {
-    CPPUNIT_TEST_SUITE(WayMergeManipulationTest);
-    CPPUNIT_TEST(individualManipulationsTest);
-    CPPUNIT_TEST_SUITE_END();
+  CPPUNIT_TEST_SUITE(WayMergeManipulationTest);
+  CPPUNIT_TEST(individualManipulationsTest);
+  CPPUNIT_TEST_SUITE_END();
 
 public:
 
@@ -88,7 +88,7 @@ public:
 
     MapProjector::projectToWgs84(after);
 
-    QDir().mkpath("test-output/manipulators/");
+    TestUtils::mkpath("test-output/manipulators/");
 
     OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
