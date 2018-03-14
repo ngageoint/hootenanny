@@ -76,17 +76,37 @@ using namespace std;
 
 typedef boost::shared_ptr<CppUnit::Test> TestPtr;
 
+enum _TestType
+{
+  CURRENT,
+  QUICK,
+  QUICK_ONLY,
+  SLOW,
+  SLOW_ONLY,
+  GLACIAL,
+  GLACIAL_ONLY,
+  SERIAL,
+  ALL
+};
+
+enum _TimeOutValue
+{
+  QUICK_WAIT    = 3,
+  SLOW_WAIT     = 30,
+  GLACIAL_WAIT  = 900
+};
+
 class HootTestListener : public CppUnit::TestListener
 {
 public:
 
-  HootTestListener(bool showTestName, double slowTest = 2.0, bool showElapsed = true)
+  HootTestListener(bool showTestName, double testTimeout = QUICK_WAIT, bool showElapsed = true)
     : _success(true),
       _showTestName(showTestName),
       _showElapsed(showElapsed),
       _start(Tgs::Time::getTime()),
       _allStart(_start),
-      _slowTest(slowTest)
+      _testTimeout(testTimeout)
   {
   }
 
@@ -115,7 +135,7 @@ public:
     {
       cout << test->getName() << " - " << elapsed << endl;
     }
-    if (elapsed > _slowTest && _slowTest >= 0.0)
+    if (elapsed > _testTimeout && _testTimeout >= 0.0)
     {
       cout << "Test " << test->getName().data() << " ran longer than expected -- " << elapsed <<
               endl;
@@ -144,7 +164,7 @@ public:
     }
   }
 
-  double getSlowTest() { return _slowTest; }
+  double getTestTimeout() { return _testTimeout; }
 
 private:
   bool _success;
@@ -153,7 +173,7 @@ private:
 
   double _start;
   double _allStart;
-  double _slowTest;
+  double _testTimeout;
 };
 
 void getTestVector(CppUnit::Test* from, vector<CppUnit::Test*>& to)
@@ -297,26 +317,6 @@ void printNames(const std::vector<TestPtr> &vTests)
   for (vector<string>::iterator it = names.begin(); it != names.end(); ++it)
     cout << *it << endl;
 }
-
-enum _TestType
-{
-  CURRENT,
-  QUICK,
-  QUICK_ONLY,
-  SLOW,
-  SLOW_ONLY,
-  GLACIAL,
-  GLACIAL_ONLY,
-  SERIAL,
-  ALL
-};
-
-enum _TimeOutValue
-{
-  QUICK_WAIT    = 2,
-  SLOW_WAIT     = 30,
-  GLACIAL_WAIT  = 900
-};
 
 void runSingleTest(CppUnit::Test * pTest, QStringList &args, CppUnit::TextTestResult * pResult)
 {
@@ -616,7 +616,7 @@ int main(int argc, char *argv[])
       {
         throw HootException("Expected integer after --parallel");
       }
-      ProcessPool pool(nproc, listener->getSlowTest(),
+      ProcessPool pool(nproc, listener->getTestTimeout(),
                        (bool)args.contains("--names"),
                        (bool)args.contains("--diff"));
 
