@@ -57,7 +57,17 @@ if [ ! -f $RVM_HOME/bin/rvm ] || ! $RVM_HOME/bin/rvm --version | grep -q "^rvm $
 rvm_remote_server_url=${RVM_BINARIES_URL}
 EOF
 
-    # SHA-512 checksums for the binary releases.
+    echo 'Installed RVM!'
+fi
+
+# Setup environment to use RVM.
+source $RVM_HOME/scripts/rvm
+
+# Install desired Ruby version.
+if ! hash ruby >& /dev/null || ! ruby -v | grep -q "${RUBY_VERSION_HOOT//\./\\.}"; then
+
+    # SHA-512 checksums for the binary releases; always update when installing
+    # new rubies as it may have been updated.
     cat > $RVM_HOME/user/sha512 <<EOF
 ${RVM_BINARIES_URL}/centos/7/x86_64/ruby-2.3.4.tar.bz2=a84cf1788a35d0be80cee161cc91015052c8bc7b4a8c5883b5ec47c39902be42aedd907a52c11c5bb929b4b37ac14ea4ae26dcd9fb48f9606c85c8af2824bd4a
 ${RVM_BINARIES_URL}/centos/7/x86_64/ruby-2.3.6.tar.bz2=0292d05b72894266e7884e0d7513529cce66c49c889775252b2c949f3154a9701893d8fd2a46a53f33602e535705ba083b628bdbf39a8476745d0e943e50f03a
@@ -68,14 +78,7 @@ ${RVM_BINARIES_URL}/ubuntu/16.04/x86_64/ruby-2.3.6.tar.bz2=4b895e2c2e391266f0777
 ${RVM_BINARIES_URL}/ubuntu/16.04/x86_64/ruby-2.4.3.tar.bz2=abf8430d6405a6431d830516665880d350c76cc86e7b9c266a23de58e719e2240d4ce90616194fd58a2d2604b28792476e4a54794c7c0875853a8e5c11f10044
 ${RVM_BINARIES_URL}/ubuntu/16.04/x86_64/ruby-2.5.0.tar.bz2=9343d2a1e7b8786dfcf9335079dd444754dd51cd025357b754613cbc8337ce676d289cd1e10a11609186f29335ac8efa7fd47bf612d778a57773f038efe6a3e2
 EOF
-    echo 'Installed RVM!'
-fi
 
-# Setup environment to use RVM.
-source $RVM_HOME/scripts/rvm
-
-# Install desired Ruby version.
-if ! hash ruby >& /dev/null || ! ruby -v | grep -q "${RUBY_VERSION//\./\\.}"; then
-    rvm install ruby-$RUBY_VERSION --quiet-curl
-    rvm use $RUBY_VERSION --default
+    rvm install ruby-$RUBY_VERSION_HOOT --quiet-curl
+    rvm use $RUBY_VERSION_HOOT --default
 fi

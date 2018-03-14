@@ -9,7 +9,9 @@ update: --no-document
 EOT
 fi
 
+RVM_GEM="${RVM_HOME}/bin/rvm ${RUBY_VERSION_HOOT} do gem"
+
 # Install bundler.
-if ! gem list --silent --installed bundler --version $BUNDLER_VERSION; then
-    gem install --version $BUNDLER_VERSION bundler
+if ! $RVM_GEM list --silent --installed bundler --version $BUNDLER_VERSION; then
+    $RVM_GEM install --version $BUNDLER_VERSION bundler
 fi
