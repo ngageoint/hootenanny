@@ -57,7 +57,7 @@ void FindIntersectionsVisitor::visit(const ConstElementPtr& e)
   }
 
 
-  if (hwids.size() >= 3) // two or more roads intersting
+  if (hwids.size() >= 3) // two or more roads intersecting
   {
     // keep it
     _ids.push_back(id);

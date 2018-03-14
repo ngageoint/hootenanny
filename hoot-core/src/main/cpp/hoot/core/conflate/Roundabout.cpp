@@ -3,9 +3,19 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/ops/RemoveNodeOp.h>
+#include <hoot/core/util/ElementConverter.h>
+#include <geos/geom/Geometry.h>
+#include <geos/geom/CoordinateSequence.h>
 
 namespace hoot
 {
+
+typedef boost::shared_ptr<geos::geom::Geometry> GeomPtr;
+
+Roundabout::Roundabout()
+{
+  // Blank
+}
 
 NodePtr Roundabout::getCenter(OsmMapPtr pMap)
 {
@@ -24,27 +34,67 @@ NodePtr Roundabout::getCenter(OsmMapPtr pMap)
   lat = lat / count;
   lon = lon / count;
 
-  return NodePtr(new Node(Status::Unknown1,
-                          pMap->createNextNodeId(),
-                          lon, lat, 15));
+  NodePtr pNewNode(new Node(Status::Unknown1,
+                   pMap->createNextNodeId(),
+                   lon, lat, 15));
+  pNewNode->setTag("hoot", "RoundaboutCenter");
+
+  return pNewNode;
 }
 
-Roundabout Roundabout::makeRoundabout (const boost::shared_ptr<OsmMap> &pMap,
-                                              ConstWayPtr pWay)
+RoundaboutPtr Roundabout::makeRoundabout (const boost::shared_ptr<OsmMap> &pMap,
+                                          WayPtr pWay)
 {
-  Roundabout rnd;
+  RoundaboutPtr rnd(new Roundabout);
 
   // Add the way to the roundabout
-  rnd.setRoundaboutWay(pWay);
+  rnd->setRoundaboutWay(pWay);
 
   // Get all the nodes from the way
   const std::vector<long> nodeIds = pWay->getNodeIds();
   for (size_t i = 0; i < nodeIds.size(); i++)
   {
-    rnd.addRoundaboutNode(pMap->getNode(nodeIds[i]));
+    rnd->addRoundaboutNode(pMap->getNode(nodeIds[i]));
   }
 
   return rnd;
+}
+
+// FIND WAYS THAT CROSS THE ROUNDABOUT AND INJECT AN INTERSECTION
+void Roundabout::handleCrossingWays(boost::shared_ptr<OsmMap> pMap)
+{
+  // Get our envelope
+  geos::geom::Envelope env = _roundaboutWay->getEnvelopeInternal(pMap);
+
+  // Find intersecting ways
+  std::vector<long> intersectIds = pMap->getIndex().findWays(env);
+
+  // Find intersecting points
+  ElementConverter converter(pMap);
+  GeomPtr pRndGeo = converter.convertToGeometry(_roundaboutWay);
+  for (size_t i = 0; i < intersectIds.size(); i++)
+  {
+    WayPtr pWay = pMap->getWay(intersectIds[i]);
+    GeomPtr pWayGeo = converter.convertToGeometry(pWay);
+
+    if (pRndGeo->intersects(pWayGeo.get()))
+    {
+      geos::geom::Geometry * pIntersect = pRndGeo->intersection(pWayGeo.get());
+      geos::geom::CoordinateSequence *pCoords = pIntersect->getCoordinates();
+      for (size_t j = 0; j < pCoords->getSize(); j++)
+      {
+        geos::geom::Coordinate coord = pCoords->getAt(j);
+
+        // Make a node
+        NodePtr pNode(new Node(Status::Unknown1, pMap->createNextNodeId(), coord, 15));
+        pMap->addNode(pNode);
+
+        // Add to both ways
+        _roundaboutWay->addNode(pNode->getId());
+        pWay->addNode(pNode->getId());
+      }
+    }
+  }
 }
 
 /* Get all the nodes in the roundabout way.
@@ -59,6 +109,9 @@ Roundabout Roundabout::makeRoundabout (const boost::shared_ptr<OsmMap> &pMap,
  */
 void Roundabout::removeRoundabout(boost::shared_ptr<OsmMap> pMap)
 {
+  // First, take care of ways that may cross the roundabout, but not connect
+  handleCrossingWays(pMap);
+
   // Find our connecting nodes & extra nodes.
   std::vector<ConstNodePtr> connectingNodes;
   std::vector<ConstNodePtr> extraNodes;
@@ -82,7 +135,6 @@ void Roundabout::removeRoundabout(boost::shared_ptr<OsmMap> pMap)
   RemoveWayOp::removeWayFully(pMap, _roundaboutWay->getId());
   for (size_t i = 0; i < extraNodes.size(); i++)
   {
-    _roundaboutNodes.push_back(extraNodes[i]);
     RemoveNodeOp::removeNode(pMap, extraNodes[i]->getId());
   }
 
@@ -169,6 +221,15 @@ void Roundabout::replaceRoundabout(boost::shared_ptr<OsmMap> pMap)
   // Now need to somehow reconnect our ways
   // Find where we cross our roundabout way
   // Maybe just start with the ways we added (the temp ways)
+
+  // Delete temp ways we added
+  for (size_t i = 0; i < _tempWays.size(); i++)
+    RemoveWayOp::removeWayFully(pMap, _tempWays[i]->getId());
+
+  // Remove center node if no other ways are using it
+  // RemoveNodeOp::removeNode(pMap, extraNodes[i]->getId());
+  if (pMap->getIndex().getNodeToWayMap()->getWaysByNode(_pCenterNode->getId()).size() < 1)
+    RemoveNodeOp::removeNodeFully(pMap, _pCenterNode->getId());
 
 
 

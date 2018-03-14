@@ -47,6 +47,7 @@
 #include <hoot/core/elements/WayMap.h>
 #include <hoot/core/util/DefaultIdGenerator.h>
 #include <hoot/core/util/Units.h>
+
 namespace hoot
 {
     namespace elements
@@ -64,6 +65,7 @@ namespace hoot
 class OsmMapIndex;
 class OsmMapListener;
 class ElementId;
+class Roundabout;
 
 /**
  * The OsmMap contains all the information necessary to represent an OSM map. It holds the nodes,
@@ -289,6 +291,10 @@ public:
   long getWayCount() const { return _ways.size(); }
   long getRelationCount() const { return _relations.size(); }
 
+  // Helps us handle roundabouts
+  void setRoundabouts(std::vector< boost::shared_ptr<Roundabout> > rnd) { _roundabouts = rnd; }
+  std::vector< boost::shared_ptr<Roundabout> > getRoundabouts() const { return _roundabouts; }
+
 protected:
 
   mutable IdGenerator* _idGen;
@@ -314,6 +320,8 @@ protected:
   std::vector< boost::shared_ptr<OsmMapListener> > _listeners;
 
   std::vector< boost::shared_ptr<Element> > _replaceTmpArray;
+
+  std::vector< boost::shared_ptr<Roundabout> > _roundabouts;
 
   void _copy(boost::shared_ptr<const OsmMap> from);
 

@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "RoundaboutHandler.h"
+#include "ReplaceRoundabouts.h"
 
 // Hoot
 #include <hoot/core/util/Factory.h>
@@ -36,6 +36,7 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/util/MapProjector.h>
 
 // Qt
 #include <QDebug>
@@ -45,52 +46,35 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(OsmMapOperation, RoundaboutHandler)
+HOOT_FACTORY_REGISTER(OsmMapOperation, ReplaceRoundabouts)
 
-RoundaboutHandler::RoundaboutHandler()
+ReplaceRoundabouts::ReplaceRoundabouts()
 {
-
+  // blank
 }
 
-RoundaboutHandler::RoundaboutHandler(boost::shared_ptr<OsmMap> pMap)
+ReplaceRoundabouts::ReplaceRoundabouts(boost::shared_ptr<OsmMap> pMap)
 {
   _pMap = pMap;
 }
 
-void RoundaboutHandler::removeRoundabouts(boost::shared_ptr<OsmMap> pMap,
-                                          std::vector<Roundabout> &removed)
+void ReplaceRoundabouts::replaceRoundabouts(boost::shared_ptr<OsmMap> pMap)
 {
-  RoundaboutHandler rhandler(pMap);
-  rhandler.removeRoundabouts(removed);
-}
+  // Get a list of roundabouts from the map, go through & process them
+  std::vector<RoundaboutPtr> roundabouts = pMap->getRoundabouts();
 
-void RoundaboutHandler::removeRoundabouts(std::vector<Roundabout> &removed)
-{
-  // Get a list of ways (that look like roads) in the map
-  for (WayMap::const_iterator it = _pMap->getWays().begin(); it != _pMap->getWays().end(); ++it)
+  for (size_t i = 0; i < roundabouts.size(); i++)
   {
-    if (OsmSchema::getInstance().isRoundabout(it->second->getTags(),
-                                              it->second->getElementType()))
-    {
-      _todoWays.push_back(it->first);
-    }
-  }
-
-  // Make roundabout objects, and replace the roundabouts with intersections
-  for (size_t i = 0; i < _todoWays.size(); i++)
-  {
-    ConstWayPtr pWay = _pMap->getWay(_todoWays[i]);
-    Roundabout rnd = Roundabout::makeRoundabout(_pMap, pWay);
-    rnd.removeRoundabout(_pMap);
-    removed.push_back(rnd);
+    RoundaboutPtr pRoundabout = roundabouts[i];
+    pRoundabout->replaceRoundabout(pMap);
   }
 }
 
-void RoundaboutHandler::apply(boost::shared_ptr<OsmMap> &pMap)
+void ReplaceRoundabouts::apply(boost::shared_ptr<OsmMap> &pMap)
 {
-  _pMap = pMap;
-  std::vector<Roundabout> removed;
-  removeRoundabouts(removed);
+  //MapProjector::projectToWgs84(pMap);
+  MapProjector::projectToPlanar(pMap);
+  replaceRoundabouts(pMap);
 }
 
 }

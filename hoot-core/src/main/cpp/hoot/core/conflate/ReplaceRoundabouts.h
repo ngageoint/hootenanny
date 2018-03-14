@@ -25,8 +25,8 @@
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef ROUNDABOUTHANDLER_H
-#define ROUNDABOUTHANDLER_H
+#ifndef REPLACEROUNDABOUTS_H
+#define REPLACEROUNDABOUTS_H
 
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
@@ -49,35 +49,23 @@ class Way;
  * The initial approach is to remove roundabouts, and replace them with simple
  * intersections. Post conflation, if the roundabout is in the reference data,
  * it will be put back.
- *
  */
-class RoundaboutHandler : public OsmMapOperation
+class ReplaceRoundabouts : public OsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::RoundaboutHandler"; }
+  static std::string className() { return "hoot::ReplaceRoundabouts"; }
 
-  RoundaboutHandler();
+  ReplaceRoundabouts();
 
-  RoundaboutHandler(boost::shared_ptr<OsmMap> pMap);
+  ReplaceRoundabouts(boost::shared_ptr<OsmMap> pMap);
 
   void apply(boost::shared_ptr<OsmMap>& pMap);
 
-  // Convenience function
-  static void removeRoundabouts(boost::shared_ptr<OsmMap> pMap,
-                                std::vector<Roundabout> &removed);
-
-  static void addRoundabouts(boost::shared_ptr<OsmMap> pMap);
-
-  // Remove roundabouts, store them, replace them with simple intersections
-  void removeRoundabouts(std::vector<Roundabout> &removed);
-
-  // Go through our list of roundabouts and try to put them back.
-  void addRoundabouts();
+  void replaceRoundabouts(boost::shared_ptr<OsmMap> pMap);
 
 private:
   boost::shared_ptr<OsmMap> _pMap;
-  std::vector<long> _todoWays;
 };
 
 }

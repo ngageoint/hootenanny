@@ -28,7 +28,8 @@ namespace hoot
 class Roundabout
 {
 public:
-  void setRoundaboutWay (ConstWayPtr pWay)   { _roundaboutWay = pWay; }
+  Roundabout();
+  void setRoundaboutWay (WayPtr pWay)   { _roundaboutWay = pWay; }
   void addRoundaboutNode (ConstNodePtr pNode) { _roundaboutNodes.push_back(pNode); }
   ConstWayPtr getRoundaboutWay()   { return _roundaboutWay; }
   std::vector<ConstNodePtr> getRoundaboutNodes() { return _roundaboutNodes; }
@@ -36,8 +37,11 @@ public:
   // Gets a node with the coords of the center
   boost::shared_ptr<Node> getCenter(boost::shared_ptr<OsmMap> pMap);
 
-  static Roundabout makeRoundabout (const boost::shared_ptr<OsmMap> &pMap,
-                                    ConstWayPtr pWay);
+  static boost::shared_ptr<Roundabout> makeRoundabout (const boost::shared_ptr<OsmMap> &pMap,
+                                                       WayPtr pWay);
+
+  // TODO: put this somewhere
+  void handleCrossingWays(boost::shared_ptr<OsmMap> pMap);
 
   /**
    * @brief removeRoundabout - Removes this roundabout from the map, and
@@ -57,7 +61,7 @@ public:
 private:
 
   // The original roundabout way
-  ConstWayPtr  _roundaboutWay;
+  WayPtr  _roundaboutWay;
 
   // Has all the nodes that was in our original roundabout
   std::vector<ConstNodePtr> _roundaboutNodes;
@@ -69,6 +73,9 @@ private:
   std::vector<ConstWayPtr> _tempWays;
 
 }; // class Roundabout
+
+typedef boost::shared_ptr<Roundabout> RoundaboutPtr;
+typedef boost::shared_ptr<const Roundabout> ConstRoundaboutPtr;
 
 } // namespace hoot
 
