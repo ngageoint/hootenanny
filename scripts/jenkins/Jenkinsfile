@@ -100,7 +100,7 @@ pipeline {
                 '''
                 
                 // Perform remainder of provisioning
-                sh "vagrant provision ${params.Box} --provision-with build,EGD,tomcat,mapnik,hadoop"
+                sh "vagrant provision ${params.Box} --provision-with build,EGD,tomcat,mapnik"
             }       
         }
         stage("Core Tests") {
