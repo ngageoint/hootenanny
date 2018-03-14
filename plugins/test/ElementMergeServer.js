@@ -116,8 +116,8 @@ describe('ElementMergeServer', function () {
     });
 
     //Testing good inputs here only.  Bad inputs are thoroughly tested in the core.  Not checking 
-    //nodes in the polys here, but is ok since we're testing that in the core.
-    //TODO: need to check output element count
+    //nodes in the polys here or overall element count, but its ok since we're testing all of 
+    //that in the core.
 
     it('merges two pois', function() {
         var request  = httpMocks.createRequest({
