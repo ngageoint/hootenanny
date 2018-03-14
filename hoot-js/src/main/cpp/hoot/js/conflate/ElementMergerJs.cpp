@@ -78,6 +78,7 @@ void ElementMergerJs::_jsElementMerge(const FunctionCallbackInfo<Value>& args)
   }
   catch (const HootException& e)
   {
+    LOG_ERROR(e.getWhat());
     args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(e)));
   }
 }
@@ -191,9 +192,13 @@ ElementMergerJs::MergeType ElementMergerJs::_determineMergeType(ConstOsmMapPtr m
   //multiple feature types within the same map.  Any features existing in the map outside of what
   //we know how to merge will just pass through.
   const bool containsPolys = MapUtils::containsPolys(map);   //this is the poi/poly definition of poly
+  LOG_VART(containsPolys);
   const bool containsAreas = MapUtils::containsAreas(map); //non-building areas
+  LOG_VART(containsAreas);
   const bool containsBuildings = MapUtils::containsBuildings(map);
+  LOG_VART(containsBuildings);
   const bool containsPois = MapUtils::containsPois(map); //general poi definition
+  LOG_VART(containsPois);
   if (MapUtils::containsOnePolygonAndOnePoi(map))
   {
     mergeType = MergeType::PoiToPolygon;
@@ -213,10 +218,12 @@ ElementMergerJs::MergeType ElementMergerJs::_determineMergeType(ConstOsmMapPtr m
   }
   else
   {
-    throw IllegalArgumentException(
+    const QString errorMsg =
       QString("Invalid inputs passed to the element merger.  Inputs must contain only one ") +
       QString("combination of the following:  1) two or more POIs, 2) two or more buildings, 3)") +
-      QString("two or more areas, or 4) one POI and one polygon."));
+      QString("two or more areas, or 4) one POI and one polygon");
+    //LOG_ERROR(errorMsg);
+    throw IllegalArgumentException(errorMsg);
   }
   return mergeType;
 }

@@ -104,10 +104,10 @@ class ElementMergerJsTest : public CppUnit::TestFixture
   CPPUNIT_TEST(buildingToBuildingMergeTwoWaysNoConstituentsTest);
   CPPUNIT_TEST(buildingToBuildingMergeTwoRelationsTest);
   CPPUNIT_TEST(buildingToBuildingMergeTwoRelationsNoConstituentsTest);
-  //CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsWayTest); //X
-  //CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsWayNoConstituentsTest); //X
-  //CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsRelationTest); //X
-  //CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsRelationNoConstituentsTest); //X
+  CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsWayTest); //X
+  CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsWayNoConstituentsTest); //X
+  CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsRelationTest); //X
+  CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsRelationNoConstituentsTest); //X
   CPPUNIT_TEST(buildingToBuildingMergeMoreThanTwoBuildingsTest);
   CPPUNIT_TEST(buildingToBuildingMergeMoreThanTwoBuildingsNoConstituentsTest);
   CPPUNIT_TEST(buildingToBuildingMergeTooFewBuildingsTest);

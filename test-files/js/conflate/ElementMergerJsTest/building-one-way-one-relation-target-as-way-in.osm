@@ -28,6 +28,7 @@
   <relation id='-279268' action='modify'>
     <member type='way' ref='-222330' role='outer' />
     <tag k='building:part' v='yes' />
+    <tag k='building' v='yes' />
     <tag k='error:circular' v='15' />
     <tag k='type' v='multipolygon' />
     <tag k='name' v='building 2' />
