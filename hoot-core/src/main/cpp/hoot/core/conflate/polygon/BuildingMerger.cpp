@@ -106,78 +106,97 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Element
   }
   else
   {
-    // use node count as a surrogate for complexity of the geometry.
-    int nodeCount1 = 0;
     boost::shared_ptr<Element> e1 = _buildBuilding1(map);
     LOG_VART(e1.get());
-    //in #2034, encountering a situation where the second building is empty;
-    //didn't think that was possible here...added checks here for both
-    if (e1.get())
-    {
-      LOG_VART(e1);
-      nodeCount1 =
-        (int)FilteredVisitor::getStat(
-          new ElementTypeCriterion(ElementType::Node), new ElementCountVisitor(), map, e1);
-    }
-
-    int nodeCount2 = 0;
     boost::shared_ptr<Element> e2 = _buildBuilding2(map);
     LOG_VART(e2.get());
-    if (e2.get())
-    {
-      nodeCount2 =
-        (int)FilteredVisitor::getStat(
-          new ElementTypeCriterion(ElementType::Node), new ElementCountVisitor(), map, e2);
-    }
-    LOG_VART(nodeCount1);
-    LOG_VART(nodeCount2);
-
-    //don't think this should be occurring...needs more investigation
-    if (nodeCount1 == 0 || nodeCount2 == 0)
-    {
-      if (logWarnCount < Log::getWarnMessageLimit())
-      {
-        LOG_WARN("One or more of the buildings to merge are empty.");
-        if (e1.get())
-        {
-          LOG_VARD(e1->getElementId());
-        }
-        else
-        {
-          LOG_DEBUG("Building one null.");
-        }
-        if (e2.get())
-        {
-          LOG_VARD(e2->getElementId());
-        }
-        else
-        {
-          LOG_DEBUG("Building two null.");
-        }
-      }
-      else if (logWarnCount == Log::getWarnMessageLimit())
-      {
-        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-      }
-      logWarnCount++;
-
-      return;
-    }
 
     boost::shared_ptr<Element> keeper;
     boost::shared_ptr<Element> scrap;
-    // keep the more complex building geometry.
-    if (nodeCount1 >= nodeCount2)
+    LOG_VART(ConfigOptions().getBuildingKeepMoreComplexGeometryWhenAutoMerging());
+    if (ConfigOptions().getBuildingKeepMoreComplexGeometryWhenAutoMerging())
     {
-      keeper = e1;
-      scrap = e2;
+      // use node count as a surrogate for complexity of the geometry.
+      int nodeCount1 = 0;
+      if (e1.get())
+      {
+        LOG_VART(e1);
+        nodeCount1 =
+          (int)FilteredVisitor::getStat(
+            new ElementTypeCriterion(ElementType::Node), new ElementCountVisitor(), map, e1);
+      }
+      LOG_VART(nodeCount1);
+
+      int nodeCount2 = 0;
+      if (e2.get())
+      {
+        nodeCount2 =
+          (int)FilteredVisitor::getStat(
+            new ElementTypeCriterion(ElementType::Node), new ElementCountVisitor(), map, e2);
+      }
+      LOG_VART(nodeCount2);
+
+      //This will happen if a way/relation building is passed in with missing nodes.
+      if (nodeCount1 == 0 || nodeCount2 == 0)
+      {
+        if (logWarnCount < Log::getWarnMessageLimit())
+        {
+          LOG_WARN("One or more of the buildings to merge are empty.  Skipping merge...");
+          if (e1.get())
+          {
+            LOG_VARD(e1->getElementId());
+          }
+          else
+          {
+            LOG_DEBUG("Building one null.");
+          }
+          if (e2.get())
+          {
+            LOG_VARD(e2->getElementId());
+          }
+          else
+          {
+            LOG_DEBUG("Building two null.");
+          }
+        }
+        else if (logWarnCount == Log::getWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
+
+        return;
+      }
+
+      if (nodeCount1 == nodeCount2)
+      {
+        keeper = e1;
+        scrap = e2;
+        LOG_TRACE(
+          "Buildings have equally complex geometries.  Keeping the first building geometry: " <<
+          keeper << "...");
+      }
+      else
+      {
+        if (nodeCount1 > nodeCount2)
+        {
+          keeper = e1;
+          scrap = e2;
+        }
+        else
+        {
+          keeper = e2;
+          scrap = e1;
+        }
+        LOG_TRACE("Keeping the more complex building geometry: " << keeper << "...");
+      }
     }
     else
     {
-      keeper = e2;
-      scrap = e1;
+      keeper = e1;
+      scrap = e2;
+      LOG_TRACE("Keeping the first building geometry: " << keeper << "...");
     }
-    LOG_TRACE("Keeping the more complex building geometry: " << keeper << "...");
 
     // use the default tag merging mechanism
     Tags newTags = TagMergerFactory::mergeTags(e1->getTags(), e2->getTags(), ElementType::Way);

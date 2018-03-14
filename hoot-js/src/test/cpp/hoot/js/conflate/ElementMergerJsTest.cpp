@@ -44,11 +44,6 @@ namespace hoot
 /**
  * Tests merging two or more features
  *
- * Many, but not all, possible combinations of inputs are covered here.  The main functionality
- * we're not testing here is the merging of features through the js bindings workflow is the
- * conversion of the map arg from a js object to a hoot object.  That gets tested by the element
- * merge service mocha plugin test.
- *
  * Types of tests:
  *
  * 1) standard - tests successful merging
@@ -60,10 +55,15 @@ namespace hoot
  * output
  * 5) more than two feature inputs - some merging can support more than two input features
  * 6) duplicated/missing target tag - merging requires a particular tag to denote which feature
- * gets other features merged into it
+ * gets other features merged into it; this applies to all types of merging except poi/poly
  * 7) invalid feature combinations - merging doesn't allow input with more than one mergeable
  * feature type associated with different types of conflation; e.g. an input with both buildings
  * and POIs in it
+ *
+ * Many, but not all, possible combinations of inputs are covered here.  The main functionality
+ * we're not testing here in the merging of features through the js bindings workflow is the
+ * conversion of the map arg from a js object to a hoot object.  That gets tested by the element
+ * merge service mocha plugin test.
  */
 class ElementMergerJsTest : public CppUnit::TestFixture
 {
@@ -76,8 +76,6 @@ class ElementMergerJsTest : public CppUnit::TestFixture
   CPPUNIT_TEST(poiToPolyMergeMissingPolyInputTest);
   CPPUNIT_TEST(poiToPolyMergeMoreThanOnePolyInputTest);
   CPPUNIT_TEST(poiToPolyMergeMoreThanOnePoiInputTest);
-  CPPUNIT_TEST(poiToPolyMergeMissingTargetTagTest);
-  CPPUNIT_TEST(poiToPolyMergeDuplicateTargetTagTest);
   CPPUNIT_TEST(poiToPolyMergeExtraNonPolyWayTest);
   CPPUNIT_TEST(poiToPolyMergeExtraNonPolyRelationTest);
   CPPUNIT_TEST(poiToPolyMergeExtraNonPoiNodeTest);
@@ -103,15 +101,15 @@ class ElementMergerJsTest : public CppUnit::TestFixture
   CPPUNIT_TEST(areaToAreaMergeExtraNonAreaWayTest);
   CPPUNIT_TEST(areaToAreaMergeExtraNonAreaRelationTest);
   CPPUNIT_TEST(buildingToBuildingMergeTwoWaysTest);
-  //CPPUNIT_TEST(buildingToBuildingMergeTwoWaysNoConstituentsTest); //X
+  CPPUNIT_TEST(buildingToBuildingMergeTwoWaysNoConstituentsTest);
   CPPUNIT_TEST(buildingToBuildingMergeTwoRelationsTest);
   CPPUNIT_TEST(buildingToBuildingMergeTwoRelationsNoConstituentsTest);
-//  CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsWayTest); //X
-//  CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsWayNoConstituentsTest); //X
-//  CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsRelationTest); //X
-//  CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsRelationNoConstituentsTest); //X
+  //CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsWayTest); //X
+  //CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsWayNoConstituentsTest); //X
+  //CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsRelationTest); //X
+  //CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsRelationNoConstituentsTest); //X
   CPPUNIT_TEST(buildingToBuildingMergeMoreThanTwoBuildingsTest);
-  //CPPUNIT_TEST(buildingToBuildingMergeMoreThanTwoBuildingsNoConstituentsTest); //X
+  CPPUNIT_TEST(buildingToBuildingMergeMoreThanTwoBuildingsNoConstituentsTest);
   CPPUNIT_TEST(buildingToBuildingMergeTooFewBuildingsTest);
   CPPUNIT_TEST(buildingToBuildingMergeMissingTargetTagTest);
   CPPUNIT_TEST(buildingToBuildingMergeDuplicateTargetTagTest);
@@ -217,20 +215,6 @@ public:
     testMerge(
       "poi-poly-more-than-one-poi-in.osm", "poi-poly-more-than-one-poi-out.osm",
       "Invalid inputs passed to the element merger");
-  }
-
-  void poiToPolyMergeMissingTargetTagTest()
-  {
-    testMerge(
-      "poi-poly-missing-target-tag-in.osm", "poi-poly-missing-target-tag-out.osm",
-      "Input map must have one feature marked with a hoot:merge:target tag");
-  }
-
-  void poiToPolyMergeDuplicateTargetTagTest()
-  {
-    testMerge(
-      "poi-poly-duplicate-target-tag-in.osm", "poi-poly-duplicate-target-tag-out.osm",
-      "Input map must have one feature marked with a hoot:merge:target tag");
   }
 
   void poiToPolyMergeExtraNonPolyWayTest()
@@ -391,7 +375,7 @@ public:
 
   void buildingToBuildingMergeTwoWaysNoConstituentsTest()
   {
-    DisableLog dl;
+    //DisableLog dl;
     testMerge(
       "building-two-ways-no-constituents-in.osm", "building-two-ways-no-constituents-out.osm");
   }

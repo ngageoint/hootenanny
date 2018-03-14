@@ -14,6 +14,5 @@
         <tag k="amenity" v="government_administration_building"/>
         <tag k="type" v="multipolygon"/>
         <tag k="error:circular" v="15"/>
-	<tag k="hoot:merge:target" v="yes"/>
     </relation>
 </osm>

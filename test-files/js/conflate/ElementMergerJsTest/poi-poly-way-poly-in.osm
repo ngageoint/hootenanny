@@ -24,6 +24,5 @@
         <tag k="amenity" v="prison"/>
         <tag k="note" v="building1"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:merge:target" v="yes"/>
     </way>
 </osm>

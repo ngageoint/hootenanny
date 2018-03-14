@@ -28,7 +28,6 @@
         <tag k="building" v="yes"/>
         <tag k="amenity" v="prison"/>
         <tag k="error:circular" v="15"/>
-	<tag k="hoot:merge:target" v="yes"/>
     </way>
     <way visible="true" id="-57" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-264"/>
@@ -40,6 +39,5 @@
         <tag k="building" v="yes"/>
         <tag k="amenity" v="prison"/>
         <tag k="error:circular" v="15"/>
-	<tag k="hoot:merge:target" v="yes"/>
     </way>
 </osm>

@@ -113,9 +113,14 @@ void ElementMergerJs::_mergeElements(OsmMapPtr map, Isolate* current)
   //We're using a mix of generic conflation scripts and custom built classes to merge features
   //here, depending on the feature type.
 
+  ElementId mergeTargetId;
+  if (mergeType != MergeType::PoiToPolygon)
+  {
+    mergeTargetId = _getMergeTargetFeatureId(map);
+    LOG_VART(mergeTargetId);
+  }
+
   bool scriptMerge = false;
-  const ElementId mergeTargetId = _getMergeTargetFeatureId(map);
-  LOG_VART(mergeTargetId);
   switch (mergeType)
   {
     case MergeType::BuildingToBuilding:
@@ -123,7 +128,7 @@ void ElementMergerJs::_mergeElements(OsmMapPtr map, Isolate* current)
       break;
 
     case MergeType::PoiToPolygon:
-      _mergePoiAndPolygon(map, mergeTargetId);
+      mergeTargetId = _mergePoiAndPolygon(map);
       break;
 
     case MergeType::PoiToPoi:
@@ -142,13 +147,8 @@ void ElementMergerJs::_mergeElements(OsmMapPtr map, Isolate* current)
   LOG_VART(scriptMerge);
 
   ElementPtr mergedElement = map->getElement(mergeTargetId);
-  //if (!scriptMerge)
-  //{
-    //We only need to set the resulting merged element's status to conflated when the ScriptMerger
-    //wasn't used, as it does so automatically.
-    mergedElement->setStatus(Status(Status::Conflated));
-    mergedElement->getTags()[MetadataTags::HootStatus()] = "3";
-  //}
+  mergedElement->setStatus(Status(Status::Conflated));
+  mergedElement->getTags()[MetadataTags::HootStatus()] = "3";
   mergedElement->getTags().remove(MetadataTags::HootMergeTarget());
   LOG_VART(mergedElement);
 }
@@ -166,36 +166,20 @@ ElementId ElementMergerJs::_getMergeTargetFeatureId(ConstOsmMapPtr map)
 
 void ElementMergerJs::_validateMergeTargetElement(ConstOsmMapPtr map, const MergeType& mergeType)
 {
-  LOG_VART(_mergeTypeToString(mergeType));
-  const long numMergeTargets =
-    (long)FilteredVisitor::getStat(
-      ElementCriterionPtr(new TagKeyCriterion(MetadataTags::HootMergeTarget())),
-      ConstElementVisitorPtr(new ElementCountVisitor()),
-      map);
-  LOG_VART(numMergeTargets);
-  if (numMergeTargets != 1)
+  //For POI to polygon conflation we always merge the POI into the polygon, so we don't need the
+  //merge target ID and will ignore it if it is there.
+  if (mergeType != MergeType::PoiToPolygon)
   {
-    throw IllegalArgumentException(
-      "Input map must have one feature marked with a " + MetadataTags::HootMergeTarget() + " tag.");
-  }
-  else if (mergeType == MergeType::PoiToPolygon)
-  {
-    //For POI to polygon conflation we always merge the POI into the polygon, so the poly must
-    //be the specified target element.
-    const long numPolyMergeTargets =
+    const long numMergeTargets =
       (long)FilteredVisitor::getStat(
-        ElementCriterionPtr(
-          new ChainCriterion(
-            ElementCriterionPtr(new PoiPolygonPolyCriterion()),
-            ElementCriterionPtr(new TagKeyCriterion(MetadataTags::HootMergeTarget())))),
+        ElementCriterionPtr(new TagKeyCriterion(MetadataTags::HootMergeTarget())),
         ConstElementVisitorPtr(new ElementCountVisitor()),
         map);
-    LOG_VART(numPolyMergeTargets);
-    if (numPolyMergeTargets != 1)
+    LOG_VART(numMergeTargets);
+    if (numMergeTargets != 1)
     {
       throw IllegalArgumentException(
-        "Input map must have one polygon feature marked with a " + MetadataTags::HootMergeTarget() +
-        " tag.");
+        "Input map must have one feature marked with a " + MetadataTags::HootMergeTarget() + " tag.");
     }
   }
 }
@@ -239,11 +223,17 @@ ElementMergerJs::MergeType ElementMergerJs::_determineMergeType(ConstOsmMapPtr m
 
 void ElementMergerJs::_mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetId)
 {
-  //TODO: BuildingMerger keeps the more complex geometry, I think.  Should we add in the
-  //configurableoption to keep the ref geometry?
-
   LOG_INFO("Merging buildings...");
-  LOG_VART(mergeTargetId);
+
+  //The building merger by default uses geometric complexity (node count) to determine which
+  //building geometry to keep.  Since the UI at this point will never pass in buildings with their
+  //child nodes, we want to override the default behavior and make sure the building merger always
+  //arbitrarily keeps the geometry of the first building passed in.  This is ok, b/c the UI workflow
+  //lets the user select which building to keep and using complexity wouldn't make sense.
+  LOG_VART(ConfigOptions().getBuildingKeepMoreComplexGeometryWhenAutoMergingKey());
+  conf().set(
+    ConfigOptions().getBuildingKeepMoreComplexGeometryWhenAutoMergingKey(), "false");
+  LOG_VART(ConfigOptions().getBuildingKeepMoreComplexGeometryWhenAutoMerging());
 
   int buildingsMerged = 0;
 
@@ -272,8 +262,7 @@ void ElementMergerJs::_mergeBuildings(OsmMapPtr map, const ElementId& mergeTarge
     {
       LOG_VART(relation);
       std::set<std::pair<ElementId, ElementId> > pairs;
-      pairs.insert(std::pair<ElementId, ElementId>(
-        mergeTargetId, relation->getElementId()));
+      pairs.insert(std::pair<ElementId, ElementId>(mergeTargetId, relation->getElementId()));
       BuildingMerger merger(pairs);
       LOG_VART(pairs.size());
       std::vector<std::pair<ElementId, ElementId> > replacedElements;
@@ -285,31 +274,41 @@ void ElementMergerJs::_mergeBuildings(OsmMapPtr map, const ElementId& mergeTarge
   LOG_INFO("Merged " << buildingsMerged << " buildings.");
 }
 
-void ElementMergerJs::_mergePoiAndPolygon(OsmMapPtr map, const ElementId& mergeTargetId)
+ElementId ElementMergerJs::_mergePoiAndPolygon(OsmMapPtr map)
 {
   //Trying to merge more than one POI into the polygon has proven problematic due to the building
-  //merging logic.  Merging more than one POI isn't a requirement, so only doing 1:1 merging right
-  //now.
+  //merging logic.  Merging more than one POI isn't a requirement, so only supporting 1:1 merging
+  //at this time.
   LOG_INFO("Merging one POI and one polygon...");
-  LOG_VART(mergeTargetId);
 
   PoiPolygonPoiCriterion poiFilter;
-  ElementIdSetVisitor idSetVis;
-  FilteredVisitor filteredVis(poiFilter, idSetVis);
-  map->visitRo(filteredVis);
-  const std::set<ElementId>& poiIds = idSetVis.getElementSet();
+  ElementIdSetVisitor idSetVis1;
+  FilteredVisitor filteredVis1(poiFilter, idSetVis1);
+  map->visitRo(filteredVis1);
+  const std::set<ElementId>& poiIds = idSetVis1.getElementSet();
   assert(poiIds.size() == 1);   //we've already validated this input
   const ElementId poiId = *poiIds.begin();
   LOG_VART(poiId);
 
+  PoiPolygonPolyCriterion polyFilter;
+  ElementIdSetVisitor idSetVis2;
+  FilteredVisitor filteredVis2(polyFilter, idSetVis2);
+  map->visitRo(filteredVis2);
+  const std::set<ElementId>& polyIds = idSetVis2.getElementSet();
+  assert(polyIds.size() == 1);   //we've already validated this input
+  const ElementId polyId = *polyIds.begin();
+  LOG_VART(polyId);
+
   std::set<std::pair<ElementId, ElementId> > pairs;
   //Ordering doesn't matter here, since the poi is always merged into the poly.
-  pairs.insert(std::pair<ElementId, ElementId>(mergeTargetId, poiId));
+  pairs.insert(std::pair<ElementId, ElementId>(polyId, poiId));
   PoiPolygonMerger merger(pairs);
   std::vector<std::pair<ElementId, ElementId> > replacedElements;
   merger.apply(map, replacedElements);
 
   LOG_INFO("Merged POI into the polygon.");
+
+  return polyId;
 }
 
 void ElementMergerJs::_mergeAreas(OsmMapPtr map, const ElementId& mergeTargetId, Isolate* current)
