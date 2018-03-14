@@ -104,10 +104,10 @@ class ElementMergerJsTest : public CppUnit::TestFixture
   CPPUNIT_TEST(buildingToBuildingMergeTwoWaysNoConstituentsTest);
   CPPUNIT_TEST(buildingToBuildingMergeTwoRelationsTest);
   CPPUNIT_TEST(buildingToBuildingMergeTwoRelationsNoConstituentsTest);
-  CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsWayTest); //X
-  CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsWayNoConstituentsTest); //X
-  CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsRelationTest); //X
-  CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsRelationNoConstituentsTest); //X
+  CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsWayTest);
+  CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsWayNoConstituentsTest);
+  CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsRelationTest);
+  CPPUNIT_TEST(buildingToBuildingMergeOneWayOneRelationTargetAsRelationNoConstituentsTest);
   CPPUNIT_TEST(buildingToBuildingMergeMoreThanTwoBuildingsTest);
   CPPUNIT_TEST(buildingToBuildingMergeMoreThanTwoBuildingsNoConstituentsTest);
   CPPUNIT_TEST(buildingToBuildingMergeTooFewBuildingsTest);
@@ -115,7 +115,10 @@ class ElementMergerJsTest : public CppUnit::TestFixture
   CPPUNIT_TEST(buildingToBuildingMergeDuplicateTargetTagTest);
   CPPUNIT_TEST(buildingToBuildingMergeExtraNonBuildingWayTest);
   CPPUNIT_TEST(buildingToBuildingMergeExtraNonBuildingRelationTest);
-  //CPPUNIT_TEST(invalidFeatureCombinationTest);
+  CPPUNIT_TEST(invalidFeatureCombinationTest1);
+  CPPUNIT_TEST(invalidFeatureCombinationTest2);
+  CPPUNIT_TEST(invalidFeatureCombinationTest3);
+  CPPUNIT_TEST(invalidFeatureCombinationTest4);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -471,10 +474,33 @@ public:
 
   //MISC
 
-//  void invalidFeatureCombinationTest()
-//  {
+  void invalidFeatureCombinationTest1()
+  {
+    testMerge(
+      "building-too-few-in.osm", "building-too-few-out.osm",
+      "Invalid inputs passed to the element merger");
+  }
 
-//  }
+  void invalidFeatureCombinationTest2()
+  {
+    testMerge(
+      "building-too-few-in.osm", "building-too-few-out.osm",
+      "Invalid inputs passed to the element merger");
+  }
+
+  void invalidFeatureCombinationTest3()
+  {
+    testMerge(
+      "building-too-few-in.osm", "building-too-few-out.osm",
+      "Invalid inputs passed to the element merger");
+  }
+
+  void invalidFeatureCombinationTest4()
+  {
+    testMerge(
+      "building-too-few-in.osm", "building-too-few-out.osm",
+      "Invalid inputs passed to the element merger");
+  }
 
 };
 
