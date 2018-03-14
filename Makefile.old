@@ -31,7 +31,7 @@ makedirs:
 	mkdir -p $$HOOT_HOME/userfiles/reports
 	mkdir -p $$HOOT_HOME/userfiles/tmp/upload
 
-clean: Makefile.qmake services-clean clean-coverage
+clean: Makefile.qmake ui-clean services-clean clean-coverage
 	$(MAKE) -f Makefile.qmake clean 2>&1 \
 	  | grep -v -e ".*WARNING: Failure to find: tmp/swig/HootSwig.cxx.*" \
 	  || true \
@@ -342,6 +342,11 @@ ifeq ($(BUILD_SERVICES),services)
 	cd hoot-ui && $(MAKE) -f Makefile clean && $(MAKE) -f Makefile all
 endif
 
+ui-clean:
+ifeq ($(BUILD_UI_TESTS),uitests)
+	cd test-files/ui && $(MAKE) -f Makefile clean
+endif
+
 ui-test: services-build build
 ifeq ($(BUILD_UI_TESTS),uitests)
 ifeq ($(BUILD_SERVICES),services)
@@ -388,10 +393,9 @@ rebuild-db:
 HOOT_TARNAME=hootenanny-$(HOOT_VERSION)
 JAVADOC_TARBALL=docs/hootenanny-services-javadoc-$(HOOT_VERSION).tar.gz
 dist: archive
-archive: js-make services-build docs
+archive: js-make services-docs docs
 	mkdir -p $(HOOT_TARNAME)/docs/
 	if [ "$(BUILD_SERVICES)" == "services" ]; then \
-	  cp hoot-services/target/hoot-services-*.war hootenanny-services-$(HOOT_VERSION).war; \
 	  tar czf $(HOOT_TARNAME)/$(JAVADOC_TARBALL) hoot-services/target/site/apidocs; fi
 	rm -f $(HOOT_TARNAME).tar.gz
 	scripts/git/git-archive-all.sh --prefix $(HOOT_TARNAME)/ $(HOOT_TARNAME).tar
@@ -423,8 +427,6 @@ archive: js-make services-build docs
 	cp plugins/ggdm30_full_schema.js $(HOOT_TARNAME)/plugins/ggdm30_full_schema.js
 	cp plugins/eggdm30_rules.js $(HOOT_TARNAME)/plugins/eggdm30_osm_rules.js
 	cp plugins/eggdm30_osm_rules.js $(HOOT_TARNAME)/plugins/eggdm30_osm_rules.js
-	# Copy the buildInfo.json file for hoot services
-	if [ "$(BUILD_SERVICES)" == "services" ]; then mkdir -p $(HOOT_TARNAME)/hoot-ui/data; cp hoot-ui/data/buildInfo.json $(HOOT_TARNAME)/hoot-ui/data; fi
 	# Don't include RF files at this time, to speed up archive
 	#mkdir -p $(HOOT_TARNAME)/conf/models/
 	#cp conf/models/BuildingModel.rf $(HOOT_TARNAME)/conf/models/BuildingModel.rf
