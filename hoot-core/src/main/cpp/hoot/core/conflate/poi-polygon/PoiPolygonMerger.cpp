@@ -33,6 +33,10 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPoiCriterion.h>
+#include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPolyCriterion.h>
+#include <hoot/core/visitors/ElementIdSetVisitor.h>
+#include <hoot/core/visitors/FilteredVisitor.h>
 
 using namespace std;
 
@@ -254,6 +258,43 @@ ElementId PoiPolygonMerger::_mergeBuildings(const OsmMapPtr& map,
   assert(newElement.size() == 1);
 
   return *newElement.begin();
+}
+
+ElementId PoiPolygonMerger::mergePoiAndPolygon(OsmMapPtr map)
+{
+  //Trying to merge more than one POI into the polygon has proven problematic due to the building
+  //merging logic.  Merging more than one POI isn't a requirement, so only supporting 1:1 merging
+  //at this time.
+  LOG_INFO("Merging one POI and one polygon...");
+
+  PoiPolygonPoiCriterion poiFilter;
+  ElementIdSetVisitor idSetVis1;
+  FilteredVisitor filteredVis1(poiFilter, idSetVis1);
+  map->visitRo(filteredVis1);
+  const std::set<ElementId>& poiIds = idSetVis1.getElementSet();
+  assert(poiIds.size() == 1);   //we've already validated this input
+  const ElementId poiId = *poiIds.begin();
+  LOG_VART(poiId);
+
+  PoiPolygonPolyCriterion polyFilter;
+  ElementIdSetVisitor idSetVis2;
+  FilteredVisitor filteredVis2(polyFilter, idSetVis2);
+  map->visitRo(filteredVis2);
+  const std::set<ElementId>& polyIds = idSetVis2.getElementSet();
+  assert(polyIds.size() == 1);   //we've already validated this input
+  const ElementId polyId = *polyIds.begin();
+  LOG_VART(polyId);
+
+  std::set<std::pair<ElementId, ElementId> > pairs;
+  //Ordering doesn't matter here, since the poi is always merged into the poly.
+  pairs.insert(std::pair<ElementId, ElementId>(polyId, poiId));
+  PoiPolygonMerger merger(pairs);
+  std::vector<std::pair<ElementId, ElementId> > replacedElements;
+  merger.apply(map, replacedElements);
+
+  LOG_INFO("Merged the POI into the polygon.");
+
+  return polyId;
 }
 
 QString PoiPolygonMerger::toString() const

@@ -69,15 +69,6 @@ private:
   static MergeType _determineMergeType(ConstOsmMapPtr map);
 
   static void _mergeElements(OsmMapPtr map, Isolate* current);
-  //an unlimited number of POIs may be merged
-  static void _mergePois(OsmMapPtr map, const ElementId& mergeTargetId, Isolate* current);
-  //an unlimited number of areas may be merged
-  static void _mergeAreas(OsmMapPtr map, const ElementId& mergeTargetId, Isolate* current);
-  //an unlimited number of buildings may be merged
-  static void _mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetId);
-  //only a single POI and polygon may be merged (support for multiple POIs into a single or
-  //multiple polygons could be possible, if necessary); returns the merge target id
-  static ElementId _mergePoiAndPolygon(OsmMapPtr map);
 
   static ElementId _getMergeTargetFeatureId(ConstOsmMapPtr map);
   static void _validateMergeTargetElement(ConstOsmMapPtr map, const MergeType& mergeType);

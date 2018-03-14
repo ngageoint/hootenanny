@@ -63,7 +63,7 @@ namespace hoot
  * Many, but not all, possible combinations of inputs are covered here.  The main functionality
  * we're not testing here in the merging of features through the js bindings workflow is the
  * conversion of the map arg from a js object to a hoot object.  That gets tested by the element
- * merge service mocha plugin test.
+ * merge service mocha plugin test, plugins/test/ElementMergerServer.js.
  */
 class ElementMergerJsTest : public CppUnit::TestFixture
 {

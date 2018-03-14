@@ -7,20 +7,18 @@
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/OsmMapJs.h>
 #include <hoot/js/SystemNodeJs.h>
-#include <hoot/js/conflate/js/ScriptMerger.h>
 #include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMerger.h>
 #include <hoot/core/conflate/polygon/BuildingMerger.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/filters/TagKeyCriterion.h>
-#include <hoot/core/filters/ChainCriterion.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
-#include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPoiCriterion.h>
-#include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPolyCriterion.h>
 #include <hoot/core/visitors/ElementIdSetVisitor.h>
 #include <hoot/core/util/MapUtils.h>
+#include "PoiMergerJs.h"
+#include "AreaMergerJs.h"
 
 // Qt
 #include <QString>
@@ -125,20 +123,20 @@ void ElementMergerJs::_mergeElements(OsmMapPtr map, Isolate* current)
   switch (mergeType)
   {
     case MergeType::BuildingToBuilding:
-      _mergeBuildings(map, mergeTargetId);
+      BuildingMerger::mergeBuildings(map, mergeTargetId);
       break;
 
     case MergeType::PoiToPolygon:
-      mergeTargetId = _mergePoiAndPolygon(map);
+      mergeTargetId = PoiPolygonMerger::mergePoiAndPolygon(map);
       break;
 
     case MergeType::PoiToPoi:
-      _mergePois(map, mergeTargetId, current);
+      PoiMergerJs::mergePois(map, mergeTargetId, current);
       scriptMerge = true;
       break;
 
     case MergeType::AreaToArea:
-      _mergeAreas(map, mergeTargetId, current);
+      AreaMergerJs::mergeAreas(map, mergeTargetId, current);
       scriptMerge = true;
       break;
 
@@ -226,221 +224,6 @@ ElementMergerJs::MergeType ElementMergerJs::_determineMergeType(ConstOsmMapPtr m
     throw IllegalArgumentException(errorMsg);
   }
   return mergeType;
-}
-
-void ElementMergerJs::_mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetId)
-{
-  LOG_INFO("Merging buildings...");
-
-  //The building merger by default uses geometric complexity (node count) to determine which
-  //building geometry to keep.  Since the UI at this point will never pass in buildings with their
-  //child nodes, we want to override the default behavior and make sure the building merger always
-  //arbitrarily keeps the geometry of the first building passed in.  This is ok, b/c the UI workflow
-  //lets the user select which building to keep and using complexity wouldn't make sense.
-  LOG_VART(ConfigOptions().getBuildingKeepMoreComplexGeometryWhenAutoMergingKey());
-  conf().set(
-    ConfigOptions().getBuildingKeepMoreComplexGeometryWhenAutoMergingKey(), "false");
-  LOG_VART(ConfigOptions().getBuildingKeepMoreComplexGeometryWhenAutoMerging());
-
-  int buildingsMerged = 0;
-
-  const WayMap ways = map->getWays();
-  for (WayMap::const_iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
-  {
-    const ConstWayPtr& way = wayItr->second;
-    if (way->getElementId() != mergeTargetId && OsmSchema::getInstance().isBuilding(way))
-    {
-      LOG_VART(way);
-      std::set<std::pair<ElementId, ElementId> > pairs;
-      pairs.insert(std::pair<ElementId, ElementId>(mergeTargetId, way->getElementId()));
-      BuildingMerger merger(pairs);
-      LOG_VART(pairs.size());
-      std::vector<std::pair<ElementId, ElementId> > replacedElements;
-      merger.apply(map, replacedElements);
-      buildingsMerged++;
-    }
-  }
-
-  const RelationMap relations = map->getRelations();
-  for (RelationMap::const_iterator relItr = relations.begin(); relItr != relations.end(); ++relItr)
-  {
-    const ConstRelationPtr& relation = relItr->second;
-    if (relation->getElementId() != mergeTargetId && OsmSchema::getInstance().isBuilding(relation))
-    {
-      LOG_VART(relation);
-      std::set<std::pair<ElementId, ElementId> > pairs;
-      pairs.insert(std::pair<ElementId, ElementId>(mergeTargetId, relation->getElementId()));
-      BuildingMerger merger(pairs);
-      LOG_VART(pairs.size());
-      std::vector<std::pair<ElementId, ElementId> > replacedElements;
-      merger.apply(map, replacedElements);
-      buildingsMerged++;
-    }
-  }
-
-  LOG_INFO("Merged " << buildingsMerged << " buildings.");
-}
-
-ElementId ElementMergerJs::_mergePoiAndPolygon(OsmMapPtr map)
-{
-  //Trying to merge more than one POI into the polygon has proven problematic due to the building
-  //merging logic.  Merging more than one POI isn't a requirement, so only supporting 1:1 merging
-  //at this time.
-  LOG_INFO("Merging one POI and one polygon...");
-
-  PoiPolygonPoiCriterion poiFilter;
-  ElementIdSetVisitor idSetVis1;
-  FilteredVisitor filteredVis1(poiFilter, idSetVis1);
-  map->visitRo(filteredVis1);
-  const std::set<ElementId>& poiIds = idSetVis1.getElementSet();
-  assert(poiIds.size() == 1);   //we've already validated this input
-  const ElementId poiId = *poiIds.begin();
-  LOG_VART(poiId);
-
-  PoiPolygonPolyCriterion polyFilter;
-  ElementIdSetVisitor idSetVis2;
-  FilteredVisitor filteredVis2(polyFilter, idSetVis2);
-  map->visitRo(filteredVis2);
-  const std::set<ElementId>& polyIds = idSetVis2.getElementSet();
-  assert(polyIds.size() == 1);   //we've already validated this input
-  const ElementId polyId = *polyIds.begin();
-  LOG_VART(polyId);
-
-  std::set<std::pair<ElementId, ElementId> > pairs;
-  //Ordering doesn't matter here, since the poi is always merged into the poly.
-  pairs.insert(std::pair<ElementId, ElementId>(polyId, poiId));
-  PoiPolygonMerger merger(pairs);
-  std::vector<std::pair<ElementId, ElementId> > replacedElements;
-  merger.apply(map, replacedElements);
-
-  LOG_INFO("Merged POI into the polygon.");
-
-  return polyId;
-}
-
-void ElementMergerJs::_mergeAreas(OsmMapPtr map, const ElementId& mergeTargetId, Isolate* current)
-{
-  LOG_INFO("Merging areas...");
-
-  // Instantiate script merger
-  boost::shared_ptr<PluginContext> script(new PluginContext());
-  v8::HandleScope handleScope(current);
-  v8::Context::Scope context_scope(script->getContext(current));
-  script->loadScript(ConfPath::search("Area.js", "rules"), "plugin");
-  v8::Handle<v8::Object> global = script->getContext(current)->Global();
-  if (global->Has(String::NewFromUtf8(current, "plugin")) == false)
-  {
-    throw IllegalArgumentException("Expected the script to have exports.");
-  }
-  Handle<Value> pluginValue = global->Get(String::NewFromUtf8(current, "plugin"));
-  Persistent<Object> plugin(current, Handle<Object>::Cast(pluginValue));
-  if (plugin.IsEmpty() || ToLocal(&plugin)->IsObject() == false)
-  {
-    throw IllegalArgumentException("Expected plugin to be a valid object.");
-  }
-
-  int areasMerged = 0;
-
-  const WayMap ways = map->getWays();
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
-  {
-    const ConstWayPtr& way = it->second;
-    LOG_VART(way->getId());
-    LOG_VART(OsmSchema::getInstance().isNonBuildingArea(way));
-    if (way->getElementId() != mergeTargetId && OsmSchema::getInstance().isNonBuildingArea(way))
-    {
-      LOG_TRACE("Merging way area: " << way << " into " << mergeTargetId);
-
-      std::set< std::pair< ElementId, ElementId> > matches;
-      matches.insert(std::pair<ElementId,ElementId>(mergeTargetId, ElementId::way(way->getId())));
-      // Now create scriptmerger, and invoke apply method which will apply merge
-      // transformation, reducing the areas down to one.
-      ScriptMerger merger(script, plugin, matches);
-      std::vector< std::pair< ElementId, ElementId > > replacedWays;
-      merger.apply(map, replacedWays);
-      LOG_VART(replacedWays.size());
-
-      areasMerged++;
-    }
-  }
-
-  const RelationMap relations = map->getRelations();
-  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
-  {
-    const ConstRelationPtr& relation = it->second;
-    LOG_VART(relation->getId());
-    LOG_VART(OsmSchema::getInstance().isNonBuildingArea(relation));
-    if (relation->getElementId() != mergeTargetId &&
-        OsmSchema::getInstance().isNonBuildingArea(relation))
-    {
-      LOG_TRACE("Merging relation area: " << relation << " into " << mergeTargetId);
-
-      std::set< std::pair< ElementId, ElementId> > matches;
-      matches.insert(
-        std::pair<ElementId,ElementId>(mergeTargetId, ElementId::relation(relation->getId())));
-      // Now create scriptmerger, and invoke apply method which will apply merge
-      // transformation, reducing the areas down to one.
-      ScriptMerger merger(script, plugin, matches);
-      std::vector< std::pair< ElementId, ElementId > > replacedRelations;
-      merger.apply(map, replacedRelations);
-      LOG_VART(replacedRelations.size());
-
-      areasMerged++;
-    }
-  }
-
-  LOG_INFO("Merged " << areasMerged << " areas.");
-}
-
-void ElementMergerJs::_mergePois(OsmMapPtr map, const ElementId& mergeTargetId, Isolate* current)
-{
-  LOG_INFO("Merging POIs...");
-
-  // Instantiate script merger
-  boost::shared_ptr<PluginContext> script(new PluginContext());
-  v8::HandleScope handleScope(current);
-  v8::Context::Scope context_scope(script->getContext(current));
-  script->loadScript(ConfPath::search("PoiGeneric.js", "rules"), "plugin");
-  v8::Handle<v8::Object> global = script->getContext(current)->Global();
-  if (global->Has(String::NewFromUtf8(current, "plugin")) == false)
-  {
-    throw IllegalArgumentException("Expected the script to have exports.");
-  }
-  Handle<Value> pluginValue = global->Get(String::NewFromUtf8(current, "plugin"));
-  Persistent<Object> plugin(current, Handle<Object>::Cast(pluginValue));
-  if (plugin.IsEmpty() || ToLocal(&plugin)->IsObject() == false)
-  {
-    throw IllegalArgumentException("Expected plugin to be a valid object.");
-  }
-
-  // Got in Map with POIs A, B, C, D, E
-  //
-  // Make a set of pairs to indicate all are same object:
-  //   A->B, A->C, A->D, A->E
-  //
-  // ...then pass those pairs one at a time through the merger, since it only merges pairs
-  int poisMerged = 0;
-  const NodeMap nodes = map->getNodes();
-  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
-  {
-    const ConstNodePtr& node = it->second;
-    if (node->getId() != mergeTargetId.getId() && OsmSchema::getInstance().isPoi(*node))
-    {
-      LOG_VART(node);
-
-      std::set< std::pair< ElementId, ElementId> > matches;
-      matches.insert(std::pair<ElementId,ElementId>(mergeTargetId, node->getElementId()));
-      // Now create scriptmerger, and invoke apply method which will apply merge
-      // transformation, reducing the POIs down to one.
-      ScriptMerger merger(script, plugin, matches);
-      std::vector< std::pair< ElementId, ElementId > > replacedNodes;
-      merger.apply(map, replacedNodes);
-      LOG_VART(replacedNodes.size());
-
-      poisMerged++;
-    }
-  }
-  LOG_INFO("Merged " << poisMerged << " POIs.");
 }
 
 }

@@ -55,6 +55,15 @@ public:
 
   virtual QString toString() const;
 
+  /**
+   * only a single POI and polygon may be merged (support for multiple POIs into a single or
+     multiple polygons could be possible, if necessary); returns the merge target id
+
+   * @param map
+   * @return
+   */
+  static ElementId mergePoiAndPolygon(OsmMapPtr map);
+
 protected:
 
   virtual PairsSet& getPairs() { return _pairs; }

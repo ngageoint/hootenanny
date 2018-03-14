@@ -55,6 +55,14 @@ public:
 
   virtual QString toString() const;
 
+  /**
+   * an unlimited number of buildings may be merged
+   *
+   * @param map
+   * @param mergeTargetId
+   */
+  static void mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetId);
+
 protected:
 
   virtual PairsSet& getPairs() { return _pairs; }

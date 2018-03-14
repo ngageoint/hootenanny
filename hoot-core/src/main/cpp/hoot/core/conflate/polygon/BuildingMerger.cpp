@@ -367,6 +367,59 @@ boost::shared_ptr<Element> BuildingMerger::_buildBuilding2(const OsmMapPtr& map)
   return buildBuilding(map, e);
 }
 
+void BuildingMerger::mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetId)
+{
+  LOG_INFO("Merging buildings...");
+
+  //The building merger by default uses geometric complexity (node count) to determine which
+  //building geometry to keep.  Since the UI at this point will never pass in buildings with their
+  //child nodes, we want to override the default behavior and make sure the building merger always
+  //arbitrarily keeps the geometry of the first building passed in.  This is ok, b/c the UI workflow
+  //lets the user select which building to keep and using complexity wouldn't make sense.
+  LOG_VART(ConfigOptions().getBuildingKeepMoreComplexGeometryWhenAutoMergingKey());
+  conf().set(
+    ConfigOptions().getBuildingKeepMoreComplexGeometryWhenAutoMergingKey(), "false");
+  LOG_VART(ConfigOptions().getBuildingKeepMoreComplexGeometryWhenAutoMerging());
+
+  int buildingsMerged = 0;
+
+  const WayMap ways = map->getWays();
+  for (WayMap::const_iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
+  {
+    const ConstWayPtr& way = wayItr->second;
+    if (way->getElementId() != mergeTargetId && OsmSchema::getInstance().isBuilding(way))
+    {
+      LOG_VART(way);
+      std::set<std::pair<ElementId, ElementId> > pairs;
+      pairs.insert(std::pair<ElementId, ElementId>(mergeTargetId, way->getElementId()));
+      BuildingMerger merger(pairs);
+      LOG_VART(pairs.size());
+      std::vector<std::pair<ElementId, ElementId> > replacedElements;
+      merger.apply(map, replacedElements);
+      buildingsMerged++;
+    }
+  }
+
+  const RelationMap relations = map->getRelations();
+  for (RelationMap::const_iterator relItr = relations.begin(); relItr != relations.end(); ++relItr)
+  {
+    const ConstRelationPtr& relation = relItr->second;
+    if (relation->getElementId() != mergeTargetId && OsmSchema::getInstance().isBuilding(relation))
+    {
+      LOG_VART(relation);
+      std::set<std::pair<ElementId, ElementId> > pairs;
+      pairs.insert(std::pair<ElementId, ElementId>(mergeTargetId, relation->getElementId()));
+      BuildingMerger merger(pairs);
+      LOG_VART(pairs.size());
+      std::vector<std::pair<ElementId, ElementId> > replacedElements;
+      merger.apply(map, replacedElements);
+      buildingsMerged++;
+    }
+  }
+
+  LOG_INFO("Merged " << buildingsMerged << " buildings.");
+}
+
 QString BuildingMerger::toString() const
 {
   QString s = hoot::toString(getPairs());
