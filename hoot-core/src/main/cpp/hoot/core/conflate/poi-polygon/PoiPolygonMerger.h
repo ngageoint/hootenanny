@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POIPOLYGONMERGER_H
 #define POIPOLYGONMERGER_H
@@ -56,11 +56,12 @@ public:
   virtual QString toString() const;
 
   /**
-   * only a single POI and polygon may be merged (support for multiple POIs into a single or
-     multiple polygons could be possible, if necessary); returns the merge target id
+   * Utility method for merging a single POI with a single polygon
+   *
+   * The map passed may or may not contain constituent elements (way nodes, relation members).
 
-   * @param map
-   * @return
+   * @param map a map containing the two features to merge
+   * @return the ID of the element that was merged into
    */
   static ElementId mergePoiAndPolygon(OsmMapPtr map);
 

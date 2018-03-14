@@ -28,11 +28,13 @@
 #ifndef OSM_UTILS_H
 #define OSM_UTILS_H
 
+// Hoot
+#include <hoot/core/OsmMap.h>
+
 // Boost Includes
 #include <boost/shared_ptr.hpp>
 
 // GEOS
-
 #include <geos/geom/Coordinate.h>
 
 // Qt
@@ -47,9 +49,6 @@ class Status;
 
 /**
   Utilities for use with the OSM data model
-
-  Some of this functionality might already exist in other classes.  If so, it can be removed.  Over
-  time, we might find better homes for some of these methods.
   */
 class OsmUtils
 {
@@ -168,6 +167,74 @@ class OsmUtils
      * @return
      */
     static QString currentTimeAsString();
+
+    //TODO: These logic in these contains methods could probably be consolidated into fewer methods.
+
+    /**
+     * Determines whether a map contains two or more POIs
+     *
+     * @param map the map to examine
+     * @return true if the map meets the specified criteria; false otherwise
+     */
+    static bool containsTwoOrMorePois(ConstOsmMapPtr map);
+
+    /**
+     * Determines whether a map contains two or more buildings
+     *
+     * @param map the map to examine
+     * @return true if the map meets the specified criteria; false otherwise
+     */
+    static bool containsTwoOrMoreBuildings(ConstOsmMapPtr map);
+
+    /**
+     * Determines whether a map contains two or more areas
+     *
+     * @param map the map to examine
+     * @return true if the map meets the specified criteria; false otherwise
+     */
+    static bool containsTwoOrMoreAreas(ConstOsmMapPtr map);
+
+    /**
+     * Determines whether a map contains one polygon and one POI under the POI to Polygon conflation
+     * definition
+     *
+     * @param map the map to examine
+     * @return true if the map meets the specified criteria; false otherwise
+     */
+    static bool containsOnePolygonAndOnePoi(ConstOsmMapPtr map);
+
+    /**
+     * Determines whether a map contains any polygons under the POI to Polygon conflation
+     * definition
+     *
+     * @param map the map to examine
+     * @return true if the map meets the specified criteria; false otherwise
+     */
+    static bool containsPolys(ConstOsmMapPtr map);
+
+    /**
+     * Determines whether a map contains any areas
+     *
+     * @param map the map to examine
+     * @return ttrue if the map meets the specified criteria; false otherwise
+     */
+    static bool containsAreas(ConstOsmMapPtr map);
+
+    /**
+     * Determines whether a map contains any buildings
+     *
+     * @param map the map to examine
+     * @return true if the map meets the specified criteria; false otherwise
+     */
+    static bool containsBuildings(ConstOsmMapPtr map);
+
+    /**
+     * Determines whether a map contains any POIs
+     *
+     * @param map the map to examine
+     * @return true if the map meets the specified criteria; false otherwise
+     */
+    static bool containsPois(ConstOsmMapPtr map);
 };
 
 }

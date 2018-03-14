@@ -1,3 +1,29 @@
+/*
+ * This file is part of Hootenanny.
+ *
+ * Hootenanny is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * --------------------------------------------------------------------
+ *
+ * The following copyright notices are generated automatically. If you
+ * have a new notice to add, please use the format:
+ * " * @copyright Copyright ..."
+ * This will properly maintain the copyright information. DigitalGlobe
+ * copyrights will be updated automatically.
+ *
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ */
 #include "ElementMergerJs.h"
 
 // Hoot
@@ -16,7 +42,7 @@
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/visitors/ElementIdSetVisitor.h>
-#include <hoot/core/util/MapUtils.h>
+#include <hoot/core/util/OsmUtils.h>
 #include "PoiMergerJs.h"
 #include "AreaMergerJs.h"
 
@@ -61,8 +87,10 @@ void ElementMergerJs::_jsElementMerge(const FunctionCallbackInfo<Value>& args)
     if (args.Length() != 1)
     {
       args.GetReturnValue().Set(
-        current->ThrowException(HootExceptionJs::create(IllegalArgumentException(
-          "Expected one argument to 'elementMerge'."))));
+        current->ThrowException(
+          HootExceptionJs::create(
+            IllegalArgumentException(
+              "Expected one argument to 'elementMerge'."))));
       return;
     }
 
@@ -98,7 +126,7 @@ QString ElementMergerJs::_mergeTypeToString(const MergeType& mergeType)
       return "AreaToArea";
 
     default:
-      throw HootException("Invalid merge type.");
+      throw IllegalArgumentException("Invalid merge type.");
   }
   return "";
 }
@@ -107,18 +135,16 @@ void ElementMergerJs::_mergeElements(OsmMapPtr map, Isolate* current)
 {  
   const MergeType mergeType = _determineMergeType(map);
   LOG_VART(_mergeTypeToString(mergeType));
-  _validateMergeTargetElement(map, mergeType);
-
-  //We're using a mix of generic conflation scripts and custom built classes to merge features
-  //here, depending on the feature type.
-
   ElementId mergeTargetId;
+  //merge target id won't be passed in for poi/poly, as the merging itself picks the target element
   if (mergeType != MergeType::PoiToPolygon)
   {
     mergeTargetId = _getMergeTargetFeatureId(map);
     LOG_VART(mergeTargetId);
   }
 
+  //We're using a mix of generic conflation scripts and custom built classes to merge features
+  //here, depending on the feature type.
   bool scriptMerge = false;
   switch (mergeType)
   {
@@ -154,63 +180,58 @@ void ElementMergerJs::_mergeElements(OsmMapPtr map, Isolate* current)
 
 ElementId ElementMergerJs::_getMergeTargetFeatureId(ConstOsmMapPtr map)
 {
+  const long numMergeTargets =
+    (long)FilteredVisitor::getStat(
+      ElementCriterionPtr(new TagKeyCriterion(MetadataTags::HootMergeTarget())),
+      ConstElementVisitorPtr(new ElementCountVisitor()),
+      map);
+  LOG_VART(numMergeTargets);
+  if (numMergeTargets != 1)
+  {
+    throw IllegalArgumentException(
+      "Input map must have one feature marked with a " + MetadataTags::HootMergeTarget() + " tag.");
+  }
+
   TagKeyCriterion mergeTagFilter(MetadataTags::HootMergeTarget());
   ElementIdSetVisitor idSetVis;
   FilteredVisitor filteredVis(mergeTagFilter, idSetVis);
   map->visitRo(filteredVis);
   const std::set<ElementId>& mergeTargetIds = idSetVis.getElementSet();
   assert(mergeTargetIds.size() == 1);
-  return *mergeTargetIds.begin();
-}
 
-void ElementMergerJs::_validateMergeTargetElement(ConstOsmMapPtr map, const MergeType& mergeType)
-{
-  //For POI to polygon conflation we always merge the POI into the polygon, so we don't need the
-  //merge target ID and will ignore it if it is there.
-  if (mergeType != MergeType::PoiToPolygon)
-  {
-    const long numMergeTargets =
-      (long)FilteredVisitor::getStat(
-        ElementCriterionPtr(new TagKeyCriterion(MetadataTags::HootMergeTarget())),
-        ConstElementVisitorPtr(new ElementCountVisitor()),
-        map);
-    LOG_VART(numMergeTargets);
-    if (numMergeTargets != 1)
-    {
-      throw IllegalArgumentException(
-        "Input map must have one feature marked with a " + MetadataTags::HootMergeTarget() + " tag.");
-    }
-  }
+  return *mergeTargetIds.begin();
 }
 
 ElementMergerJs::MergeType ElementMergerJs::_determineMergeType(ConstOsmMapPtr map)
 {
-  MergeType mergeType;
   //Making sure maps don't come in mixed, so callers don't have the expectation that they can merge
-  //multiple feature types within the same map.  Any features existing in the map outside of what
+  //multiple feature types within the same map.  Any features in the map with types other than what
   //we know how to merge will just pass through.
-  const bool containsPolys = MapUtils::containsPolys(map);   //this is the poi/poly definition of poly
+
+  MergeType mergeType;
+
+  const bool containsPolys = OsmUtils::containsPolys(map); //this uses the poi/poly definition of poly
   LOG_VART(containsPolys);
-  const bool containsAreas = MapUtils::containsAreas(map); //non-building areas
+  const bool containsAreas = OsmUtils::containsAreas(map); //non-building areas
   LOG_VART(containsAreas);
-  const bool containsBuildings = MapUtils::containsBuildings(map);
+  const bool containsBuildings = OsmUtils::containsBuildings(map);
   LOG_VART(containsBuildings);
-  const bool containsPois = MapUtils::containsPois(map); //general poi definition
+  const bool containsPois = OsmUtils::containsPois(map); //general poi definition
   LOG_VART(containsPois);
-  if (MapUtils::containsOnePolygonAndOnePoi(map))
+  if (OsmUtils::containsOnePolygonAndOnePoi(map))
   {
     mergeType = MergeType::PoiToPolygon;
   }
-  else if (MapUtils::containsTwoOrMorePois(map) && !containsPolys && !containsAreas &&
+  else if (OsmUtils::containsTwoOrMorePois(map) && !containsPolys && !containsAreas &&
            !containsBuildings)
   {
     mergeType = MergeType::PoiToPoi;
   }
-  else if (MapUtils::containsTwoOrMoreBuildings(map) && !containsAreas && !containsPois)
+  else if (OsmUtils::containsTwoOrMoreBuildings(map) && !containsAreas && !containsPois)
   {
     mergeType = MergeType::BuildingToBuilding;
   }
-  else if (MapUtils::containsTwoOrMoreAreas(map) && !containsBuildings && !containsPois)
+  else if (OsmUtils::containsTwoOrMoreAreas(map) && !containsBuildings && !containsPois)
   {
     mergeType = MergeType::AreaToArea;
   }
@@ -223,6 +244,7 @@ ElementMergerJs::MergeType ElementMergerJs::_determineMergeType(ConstOsmMapPtr m
     //LOG_ERROR(errorMsg);
     throw IllegalArgumentException(errorMsg);
   }
+
   return mergeType;
 }
 

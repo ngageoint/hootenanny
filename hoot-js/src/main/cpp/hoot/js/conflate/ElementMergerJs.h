@@ -1,3 +1,29 @@
+/*
+ * This file is part of Hootenanny.
+ *
+ * Hootenanny is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * --------------------------------------------------------------------
+ *
+ * The following copyright notices are generated automatically. If you
+ * have a new notice to add, please use the format:
+ * " * @copyright Copyright ..."
+ * This will properly maintain the copyright information. DigitalGlobe
+ * copyrights will be updated automatically.
+ *
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ */
 
 #ifndef ELEMENTMERGERJS_H
 #define ELEMENTMERGERJS_H
@@ -14,7 +40,7 @@ namespace hoot
 {
 
 /**
- * Merges two or more elements based on their feature type
+ * Merges two or more elements based on their feature type, accepting a nodejs map as input
  *
  * This class will handle either the case where a valid map is passed in with all constituent
  * elements (way nodes, relation members) or an invalid map passed in without the constituent
@@ -59,19 +85,12 @@ private:
   ElementMergerJs();
   ~ElementMergerJs();
 
-  /**
-   *
-   *
-   * @param args
-   */
   static void _jsElementMerge(const v8::FunctionCallbackInfo<v8::Value>& args);
-
-  static MergeType _determineMergeType(ConstOsmMapPtr map);
-
   static void _mergeElements(OsmMapPtr map, Isolate* current);
 
+  static MergeType _determineMergeType(ConstOsmMapPtr map);
+  //feature being merged into must have a custom hoot tag for all merge types except poi/poly
   static ElementId _getMergeTargetFeatureId(ConstOsmMapPtr map);
-  static void _validateMergeTargetElement(ConstOsmMapPtr map, const MergeType& mergeType);
   static QString _mergeTypeToString(const MergeType& mergeType);
 };
 

@@ -36,6 +36,9 @@
 namespace hoot
 {
 
+/**
+ * Merged two buildings
+ */
 class BuildingMerger : public MergerBase
 {
 public:
@@ -56,10 +59,12 @@ public:
   virtual QString toString() const;
 
   /**
-   * an unlimited number of buildings may be merged
+   * Utility method that allows for merging an unlimited number of buildings
    *
-   * @param map
-   * @param mergeTargetId
+   * The map passed may or may not contain constituent elements (way nodes, relation members).
+   *
+   * @param map a map containing the buildings to be merged
+   * @param mergeTargetId the ID of the building which all other buildings should be merged into
    */
   static void mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetId);
 

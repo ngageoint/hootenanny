@@ -1,3 +1,29 @@
+/*
+ * This file is part of Hootenanny.
+ *
+ * Hootenanny is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * --------------------------------------------------------------------
+ *
+ * The following copyright notices are generated automatically. If you
+ * have a new notice to add, please use the format:
+ * " * @copyright Copyright ..."
+ * This will properly maintain the copyright information. DigitalGlobe
+ * copyrights will be updated automatically.
+ *
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ */
 #include "MapUtils.h"
 
 // Hoot
@@ -11,96 +37,5 @@
 
 namespace hoot
 {
-bool MapUtils::containsTwoOrMorePois(ConstOsmMapPtr map)
-{
-  const long poiCount =
-    (long)FilteredVisitor::getStat(
-      ElementCriterionPtr(new PoiCriterion()),
-      ConstElementVisitorPtr(new ElementCountVisitor()),
-      map);
-  LOG_VART(poiCount);
-  return poiCount >= 2;
-}
 
-bool MapUtils::containsTwoOrMoreBuildings(ConstOsmMapPtr map)
-{
-  const long buildingCount =
-    (long)FilteredVisitor::getStat(
-      ElementCriterionPtr(new BuildingCriterion(map)),
-      ConstElementVisitorPtr(new ElementCountVisitor()),
-      map);
-  LOG_VART(buildingCount);
-  return buildingCount >= 2;
-}
-
-bool MapUtils::containsTwoOrMoreAreas(ConstOsmMapPtr map)
-{
-  const long areaCount =
-    (long)FilteredVisitor::getStat(
-      ElementCriterionPtr(new NonBuildingAreaCriterion()),
-      ConstElementVisitorPtr(new ElementCountVisitor()),
-      map);
-  LOG_VART(areaCount);
-  return areaCount >= 2;
-}
-
-bool MapUtils::containsOnePolygonAndOnePoi(ConstOsmMapPtr map)
-{
-  const long poiCount =
-    (long)FilteredVisitor::getStat(
-      ElementCriterionPtr(new PoiPolygonPoiCriterion()),
-      ConstElementVisitorPtr(new ElementCountVisitor()),
-      map);
-  const long polyCount =
-    (long)FilteredVisitor::getStat(
-      ElementCriterionPtr(new PoiPolygonPolyCriterion()),
-      ConstElementVisitorPtr(new ElementCountVisitor()),
-      map);
-  LOG_VART(poiCount);
-  LOG_VART(polyCount);
-  return poiCount == 1 && polyCount == 1;
-}
-
-bool MapUtils::containsPolys(ConstOsmMapPtr map)
-{
-  const long polyCount =
-    (long)FilteredVisitor::getStat(
-      ElementCriterionPtr(new PoiPolygonPolyCriterion()),
-      ConstElementVisitorPtr(new ElementCountVisitor()),
-      map);
-  LOG_VART(polyCount);
-  return polyCount > 0;
-}
-
-bool MapUtils::containsAreas(ConstOsmMapPtr map)
-{
-  const long areaCount =
-    (long)FilteredVisitor::getStat(
-      ElementCriterionPtr(new NonBuildingAreaCriterion()),
-      ConstElementVisitorPtr(new ElementCountVisitor()),
-      map);
-  LOG_VART(areaCount);
-  return areaCount > 0;
-}
-
-bool MapUtils::containsBuildings(ConstOsmMapPtr map)
-{
-  const long buildingCount =
-    (long)FilteredVisitor::getStat(
-      ElementCriterionPtr(new BuildingCriterion(map)),
-      ConstElementVisitorPtr(new ElementCountVisitor()),
-      map);
-  LOG_VART(buildingCount);
-  return buildingCount > 0;
-}
-
-bool MapUtils::containsPois(ConstOsmMapPtr map)
-{
-  const long poiCount =
-    (long)FilteredVisitor::getStat(
-      ElementCriterionPtr(new PoiCriterion()),
-      ConstElementVisitorPtr(new ElementCountVisitor()),
-      map);
-  return poiCount > 0;
-}
 }

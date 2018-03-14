@@ -363,18 +363,20 @@ public:
   bool isBuildingPart(const ConstElementPtr& e) const;
 
   /**
+   * Determines whether the element passed in is a polygon under the POI to Polygon conflation
+   * definition
    *
-   *
-   * @param e
-   * @return
+   * @param e element to determine type of
+   * @return true if the element meets the specified criteria; false otherwise
    */
   bool isPoiPolygonPoly(const ConstElementPtr& e);
 
   /**
+   * Determines whether the element passed in is a POI under the POI to Polygon conflation
+   * definition
    *
-   *
-   * @param e
-   * @return
+   * @param e element to determine type of
+   * @return true if the element meets the specified criteria; false otherwise
    */
   bool isPoiPolygonPoi(const ConstElementPtr& e);
 
@@ -486,6 +488,7 @@ public:
   void updateOrCreateVertex(const SchemaVertex& tv);
 
 private:
+
   // the templates we're including take a crazy long time to include, so I'm isolating the
   // implementation.
   OsmSchemaData* d;
