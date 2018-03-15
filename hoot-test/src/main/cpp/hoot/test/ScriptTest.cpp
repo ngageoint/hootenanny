@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ScriptTest.h"
@@ -284,17 +284,16 @@ void ScriptTest::_runProcess()
 
   const int scriptTestTimeOutSeconds = ConfigOptions(conf()).getScriptTestMaxExecTime();
   bool scriptTimeOutSpecified = false;
-  int waitToFinishTime = 30000;
   if (scriptTestTimeOutSeconds != -1)
   {
-    waitToFinishTime = scriptTestTimeOutSeconds * 1000;
+    _waitToFinishTime = scriptTestTimeOutSeconds * 1000;
     scriptTimeOutSpecified = true;
   }
 
   bool first = true;
   QElapsedTimer timer;
   timer.start();
-  while (p.waitForFinished(waitToFinishTime) == false)
+  while (p.waitForFinished(_waitToFinishTime) == false)
   {
     if (first && !scriptTimeOutSpecified)
     {
