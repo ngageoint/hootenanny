@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REPLACETAGVISITOR_H
 #define REPLACETAGVISITOR_H
@@ -32,10 +32,6 @@
 
 namespace hoot
 {
-
-/**
- *
- */
 
 /**
  * @brief The ReplaceTagVisitor class replaces matching tags with the

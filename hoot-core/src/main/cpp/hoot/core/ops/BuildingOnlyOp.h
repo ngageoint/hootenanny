@@ -22,29 +22,17 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BUILDINGONLYOP_H
-#define BBUILDINGONLYOP_H
+#define BUILDINGONLYOP_H
 
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
 
-// Standard
-#include <set>
-
 namespace hoot
 {
 class OsmMap;
-
-/**
- * Goes through the map, making sure the only tag on the polygons is
- * building=yes
- *
- * Also removes relations that are "buildings"
- *
- * Done to support work on Kabul building outlines
- */
 
 /**
  * @brief The BuildingOnlyOp class operates is a custom op written to help
