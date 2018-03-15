@@ -123,12 +123,6 @@ protected:
   void _writeFeature(ConstElementPtr element);
 
   /**
-   * @brief _writeMeta Write node/way/relation metadata, i.e. timestamp, version, and visible
-   * @param element
-   */
-//  void _writeMeta(ConstElementPtr element);
-
-  /**
    * @brief _writeGeometry Write out the geometry in GeoJSON format based on the type
    * @param nodes Vector of node ids in OsmMap
    * @param type GeoJSON geometry type, i.e. Point, LineString, Polygon
