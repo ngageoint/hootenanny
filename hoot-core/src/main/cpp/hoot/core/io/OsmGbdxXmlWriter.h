@@ -51,7 +51,7 @@ namespace hoot
 {
 
 /**
- * Writes an OsmMap to a .osm (XML) file format.
+ * Writes an OsmMap to a GBDX XML format file.
  */
 class OsmGbdxXmlWriter : public QXmlDefaultHandler, public PartialOsmMapWriter
 {
@@ -69,17 +69,6 @@ public:
   virtual void open(QString url);
 
   void close();
-
-  void setIncludeIds(bool includeIds) { _includeIds = includeIds; }
-
-  void setIncludeHootInfo(bool includeInfo) { _includeDebug = includeInfo; }
-
-  /**
-   * Includes the x/y location of the node with the nd element. This is not standard for OSM
-   * and can cause inconsistencies if it isn't updated properly when the file is rewritten, however
-   * it can make the recreation of way geometries dramatically more efficient.
-   */
-  void setIncludePointsInWays(bool includePoints) { _includePointInWays = includePoints; }
 
   void setPrecision(int p) { _precision = p; }
 
@@ -116,14 +105,8 @@ public:
 private:
 
   bool _formatXml;
-  bool _includeIds;
-  bool _includeDebug;
-  bool _includePointInWays;
-  bool _textStatus;
-  QString _timestamp;
   int _precision;
   int _encodingErrorCount;
-  bool _includeCircularErrorTags;
 
   boost::shared_ptr<QIODevice> _fp;
   boost::shared_ptr<QXmlStreamWriter> _writer;
@@ -140,8 +123,8 @@ private:
 
   void _writeTags(const ConstElementPtr& element);
   void _writeNodes(ConstOsmMapPtr map);
-  void _writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapPtr map);
   void _writeWays(ConstOsmMapPtr map);
+  void _writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapPtr map);
   void _writeRelations(ConstOsmMapPtr map);
 
   /**

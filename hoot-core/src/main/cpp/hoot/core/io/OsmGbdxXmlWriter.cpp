@@ -64,14 +64,8 @@ HOOT_FACTORY_REGISTER(OsmMapWriter, OsmGbdxXmlWriter)
 
 OsmGbdxXmlWriter::OsmGbdxXmlWriter() :
 _formatXml(ConfigOptions().getOsmMapWriterFormatXml()),
-_includeIds(false),
-_includeDebug(ConfigOptions().getWriterIncludeDebugTags()),
-_includePointInWays(false),
-_textStatus(ConfigOptions().getWriterTextStatus()),
-_timestamp("1970-01-01T00:00:00Z"),
 _precision(ConfigOptions().getWriterPrecision()),
-_encodingErrorCount(0),
-_includeCircularErrorTags(ConfigOptions().getWriterIncludeCircularErrorTags())
+_encodingErrorCount(0)
 {
 }
 
@@ -122,22 +116,24 @@ QString OsmGbdxXmlWriter::removeInvalidCharacters(const QString& s)
 
 void OsmGbdxXmlWriter::open(QString url)
 {
-    LOG_INFO("Starting Open");
-    if (url.toLower().endsWith(".gxml"))
-    {
-      url.remove(url.size() - 5, url.size());
-    }
+  // NOTE: This function just tries to setup the output directory.
+  // _newOutputFile creates the output file.
 
-    _outputDir = QDir(url);
-    _outputDir.makeAbsolute();
+  if (url.toLower().endsWith(".gxml"))
+  {
+    url.remove(url.size() - 5, url.size());
+  }
 
-    if (_outputDir.exists() == false)
+  _outputDir = QDir(url);
+  _outputDir.makeAbsolute();
+
+  if (_outputDir.exists() == false)
+  {
+    if (QDir().mkpath(_outputDir.path()) == false)
     {
-      if (QDir().mkpath(_outputDir.path()) == false)
-      {
-        throw HootException("Error creating directory for writing.");
-      }
+      throw HootException("Error creating directory for writing.");
     }
+  }
   _bounds.init();
 }
 
@@ -146,7 +142,7 @@ void OsmGbdxXmlWriter::_newOutputFile()
   // Close the old file and open a new one
   if (_fp.get())
   {
-    // Calling this so that the XML gets closed
+    // Calling this so that the XML elements & document get closed
     close();
   }
 
@@ -156,7 +152,7 @@ void OsmGbdxXmlWriter::_newOutputFile()
   _fp.reset(f);
   f->setFileName(url);
 
-  LOG_VARI(url);
+  LOG_VARD(url);
 
   if (!_fp->open(QIODevice::WriteOnly | QIODevice::Text))
   {
@@ -309,20 +305,70 @@ void OsmGbdxXmlWriter::_writeTags(const ConstElementPtr& element)
   {
     const QString key = it.key();
     const QString val = it.value().trimmed();
-    if (val.isEmpty() == false)
+
+    // Skip the empty stuff
+    if (val.isEmpty()) continue;
+
+    // Skip the Detection ID. This goes in the geometery area
+    if (key == "Det_id") continue;
+
+    // Dump the raw GBDX attributes into a CDATA block
+    if (key == "raw_gbdx")
     {
       _writer->writeStartElement(removeInvalidCharacters(key));
-      _writer->writeCharacters(removeInvalidCharacters(val));
+      _writer->writeCDATA(removeInvalidCharacters(val));
       _writer->writeEndElement();
+      continue;
     }
-  }
+
+    // Image, Platform and Instrument can be a list
+    if (key == "Src_imgid" || key == "Pltfrm_id" || key == "Ins_Type")
+    {
+      QStringList l = val.split(";");
+      _writer->writeStartElement(key);
+      _writer->writeStartElement("t1");
+      _writer->writeCharacters(removeInvalidCharacters(l[0]));
+      _writer->writeEndElement();
+      _writer->writeStartElement("t2");
+      // Look for a second value
+      if (l.size() == 2)
+      {
+        _writer->writeCharacters(removeInvalidCharacters(l[1]));
+      }
+      else
+      {
+        _writer->writeCharacters("NULL");
+      }
+      _writer->writeEndElement(); // t2
+      _writer->writeEndElement(); // key
+      continue;
+    }
+
+    // Keywords can be a list
+    if (key == "Kywrd")
+    {
+      QStringList l = val.split(";");
+      for (int i = 0; i < l.size(); ++i)
+      {
+        _writer->writeStartElement(key);
+        _writer->writeCharacters(removeInvalidCharacters(l[i]));
+        _writer->writeEndElement();
+      }
+      continue;
+    }
+
+    // Write out the Tag
+    _writer->writeStartElement(removeInvalidCharacters(key));
+    _writer->writeCharacters(removeInvalidCharacters(val));
+    _writer->writeEndElement();
+  } // End tag loop
 
   if (type == ElementType::Relation)
   {
     ConstRelationPtr relation = boost::dynamic_pointer_cast<const Relation>(element);
     if (relation->getType() != "")
     {
-      _writer->writeStartElement("Relation");
+      _writer->writeStartElement("Got Relation");
       _writer->writeAttribute("k", "type");
       _writer->writeAttribute("v", removeInvalidCharacters(relation->getType()));
       _writer->writeEndElement();
@@ -481,11 +527,6 @@ void OsmGbdxXmlWriter::_writePartialIncludePoints(const ConstWayPtr& w, ConstOsm
 void OsmGbdxXmlWriter::writePartial(const ConstWayPtr& w)
 {
   LOG_VARI(w);
-
-  if (_includePointInWays)
-  {
-    throw HootException("Adding points to way output is not supported in streaming output.");
-  }
 
   _writer->writeStartElement("way");
   _writer->writeAttribute("visible", "true");
