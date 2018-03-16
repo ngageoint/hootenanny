@@ -42,6 +42,9 @@ namespace hoot
 /**
  * Merges two or more elements based on their feature type, accepting a nodejs map as input
  *
+ * This class should be used with a data reader that uses the element source IDs and uses a default
+ * status of Unknown1.
+ *
  * This class will handle either the case where a valid map is passed in with all constituent
  * elements (way nodes, relation members) or an invalid map passed in without the constituent
  * elements.  It can do this because only the parent elements are needed for actual merging.  The
@@ -85,13 +88,15 @@ private:
   ElementMergerJs();
   ~ElementMergerJs();
 
-  static void _jsElementMerge(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void mergeElements(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void _mergeElements(OsmMapPtr map, Isolate* current);
 
   static MergeType _determineMergeType(ConstOsmMapPtr map);
   //feature being merged into must have a custom hoot tag for all merge types except poi/poly
   static ElementId _getMergeTargetFeatureId(ConstOsmMapPtr map);
   static QString _mergeTypeToString(const MergeType& mergeType);
+
+  static void _addMissingStatusTags(OsmMapPtr map, const MergeType& mergeType);
 };
 
 }

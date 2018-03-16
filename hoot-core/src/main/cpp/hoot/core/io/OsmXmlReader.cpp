@@ -62,7 +62,7 @@ HOOT_FACTORY_REGISTER(OsmMapReader, OsmXmlReader)
 OsmXmlReader::OsmXmlReader() :
 _status(Status::Invalid),
 _circularError(-1),
-_keepFileStatus(ConfigOptions().getReaderKeepFileStatus()),
+_keepStatusTag(ConfigOptions().getReaderKeepStatusTag()),
 _useFileStatus(ConfigOptions().getReaderUseFileStatus()),
 _useDataSourceId(false),
 _addSourceDateTime(ConfigOptions().getReaderAddSourceDatetime()),
@@ -304,6 +304,12 @@ void OsmXmlReader::open(QString url)
 
 void OsmXmlReader::read(OsmMapPtr map)
 {
+  LOG_VART(_status);
+  LOG_VART(_useDataSourceId);
+  LOG_VART(_useFileStatus);
+  LOG_VART(_keepStatusTag);
+  LOG_VART(_preserveAllTags);
+
   finalizePartial();
   _map = map;
 
@@ -545,8 +551,9 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
         if (_useFileStatus && key == MetadataTags::HootStatus())
         {
           _element->setStatus(Status::fromString(value));
+          LOG_VART(_element->getStatus());
 
-          if (_keepFileStatus)  { _element->setTag(key, value); }
+          if (_keepStatusTag)  { _element->setTag(key, value); }
         }
         else if (key == QLatin1String("type") &&
                  _element->getElementType() == ElementType::Relation)

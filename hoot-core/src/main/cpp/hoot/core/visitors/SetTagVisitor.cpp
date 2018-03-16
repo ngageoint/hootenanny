@@ -44,9 +44,10 @@ SetTagVisitor::SetTagVisitor()
 }
 
 SetTagVisitor::SetTagVisitor(QString key, QString value, bool appendToExistingValue,
-                             ElementType elementType) :
+                             ElementType elementType, bool overwriteExistingTag) :
 _appendToExistingValue(appendToExistingValue),
-_elementType(elementType)
+_elementType(elementType),
+_overwriteExistingTag(overwriteExistingTag)
 {
   _k.append(key);
   _v.append(value);
@@ -66,19 +67,30 @@ void SetTagVisitor::setConfiguration(const Settings& conf)
   {
     _elementType = ElementType::fromString(configOptions.getSetTagVisitorElementType());
   }
+  _overwriteExistingTag = configOptions.getSetTagVisitorOverwrite();
 }
 
 void SetTagVisitor::_setTag(const ElementPtr& e, QString k, QString v)
 {
+  if (k.isEmpty())
+  {
+    throw IllegalArgumentException("You must set the key in the SetTagVisitor class.");
+  }
+  if (v.isEmpty())
+  {
+    throw IllegalArgumentException("You must set the value in the SetTagVisitor class.");
+  }
+
   if (_elementType != ElementType::Unknown && e->getElementType() != _elementType)
   {
     return;
   }
 
-  if (k.isEmpty())
+  if (!_overwriteExistingTag && e->getTags().contains(k))
   {
-    throw IllegalArgumentException("You must set the key in the SetTagVisitor class.");
+    return;
   }
+
   if (k == MetadataTags::ErrorCircular())
   {
     bool ok;

@@ -71,6 +71,13 @@ public:
    */
   virtual void setUseDataSourceIds(bool useDataSourceIds) = 0;
 
+  /**
+   *
+   *
+   * @param useFileStatus
+   */
+  virtual void setUseFileStatus(bool /*useFileStatus*/) { }
+
 };
 
 }

@@ -45,7 +45,6 @@
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/GetTagValuesVisitor.h>
-#include <hoot/core/visitors/SetTagVisitor.h>
 #include <hoot/core/visitors/ElementIdSetVisitor.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>

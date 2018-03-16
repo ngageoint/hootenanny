@@ -210,7 +210,7 @@ class OsmUtils
      * @param map the map to examine
      * @return true if the map meets the specified criteria; false otherwise
      */
-    static bool containsPolys(ConstOsmMapPtr map);
+    static bool containsPoiPolyPolys(ConstOsmMapPtr map);
 
     /**
      * Determines whether a map contains any areas

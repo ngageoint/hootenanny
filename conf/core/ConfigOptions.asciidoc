@@ -2356,13 +2356,13 @@ Determines whether the reader used by the conflate command to read the second in
 use the element ID's specified by the input datasets (true) or use internal ID management for the
 inputs (false).
 
-=== reader.keep.file.status
+=== reader.keep.status.tag
 
 * Data Type: bool
 * Default Value: `false`
 
 If reader.use.file.status is true, the default action is to drop the status tag from the file
-during reading.  Setting reader.keep.file.status to true preserves the status tag.  Not honored by
+during reading.  Setting this to true preserves the status tag on the element.  Not honored by
 all readers.
 
 === reader.preserve.all.tags
@@ -2567,6 +2567,14 @@ An optional element type filter for the SetTagVisitor.  Valid values are: 'node'
 Set the key member in the SetTagVisitor class.  SetTagVisitor allows for adding/modifying a
 particular tag on all elements in a map. The number of keys in `set.tag.visitor.key` should match
 the number of keys in `set.tag.visitor.value`.
+
+=== set.tag.visitor.overwrite
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, the SetTagVisitor class will overwrite any existing tag it finds with
+key=set.tag.visitor.key, otherwise it will skip updating the tag.
 
 === set.tag.visitor.value
 

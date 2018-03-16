@@ -42,12 +42,19 @@
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/visitors/ElementIdSetVisitor.h>
+#include <hoot/core/visitors/SetTagVisitor.h>
 #include <hoot/core/util/OsmUtils.h>
+#include <hoot/core/filters/BuildingCriterion.h>
+#include <hoot/core/filters/NonBuildingAreaCriterion.h>
+#include <hoot/core/filters/PoiCriterion.h>
+#include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPolyCriterion.h>
+#include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPoiCriterion.h>
 #include "PoiMergerJs.h"
 #include "AreaMergerJs.h"
 
 // Qt
 #include <QString>
+#include <QList>
 
 // std
 #include <set>
@@ -72,25 +79,25 @@ void ElementMergerJs::Init(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
-  exports->Set(String::NewFromUtf8(current, "elementMerge"),
-               FunctionTemplate::New(current, _jsElementMerge)->GetFunction());
+  exports->Set(String::NewFromUtf8(current, "mergeElements"),
+               FunctionTemplate::New(current, mergeElements)->GetFunction());
 }
 
-void ElementMergerJs::_jsElementMerge(const FunctionCallbackInfo<Value>& args)
+void ElementMergerJs::mergeElements(const FunctionCallbackInfo<Value>& args)
 {
   LOG_INFO("Merging elements...");
 
   Isolate* current = args.GetIsolate();
-  try
-  {
+  //try
+  //{
     HandleScope scope(current);
+    //Context::Scope context_scope(current->GetCallingContext());
     if (args.Length() != 1)
     {
       args.GetReturnValue().Set(
         current->ThrowException(
           HootExceptionJs::create(
-            IllegalArgumentException(
-              "Expected one argument to 'elementMerge'."))));
+            IllegalArgumentException("Expected one argument to 'mergeElements'."))));
       return;
     }
 
@@ -101,12 +108,15 @@ void ElementMergerJs::_jsElementMerge(const FunctionCallbackInfo<Value>& args)
 
     Handle<Object> returnMap = OsmMapJs::create(map);
     args.GetReturnValue().Set(returnMap);
-  }
-  catch (const HootException& e)
-  {
-    LOG_ERROR(e.getWhat());
-    args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(e)));
-  }
+//  }
+    //TODO: This error handling has been proven to not work in that it never seems to return the
+    //error message to the nodejs calling service....making debugging a nightmare...or I'm just
+    //doing something wrong here.  Either way, need to fix this.
+//  catch (const HootException& e)
+//  {
+//    LOG_ERROR(e.getWhat());
+//    args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(e)));
+//  }
 }
 
 QString ElementMergerJs::_mergeTypeToString(const MergeType& mergeType)
@@ -136,12 +146,15 @@ void ElementMergerJs::_mergeElements(OsmMapPtr map, Isolate* current)
   const MergeType mergeType = _determineMergeType(map);
   LOG_VART(_mergeTypeToString(mergeType));
   ElementId mergeTargetId;
-  //merge target id won't be passed in for poi/poly, as the merging itself picks the target element
+  //merge target id won't be passed in for poi/poly, as the poi/poly merging picks the target
+  //element itself
   if (mergeType != MergeType::PoiToPolygon)
   {
     mergeTargetId = _getMergeTargetFeatureId(map);
     LOG_VART(mergeTargetId);
   }
+
+  _addMissingStatusTags(map, mergeType);
 
   //We're using a mix of generic conflation scripts and custom built classes to merge features
   //here, depending on the feature type.
@@ -171,11 +184,56 @@ void ElementMergerJs::_mergeElements(OsmMapPtr map, Isolate* current)
   }
   LOG_VART(scriptMerge);
 
+  //By convention, we're setting the status of any element that gets merged with something to
+  //conflated, even if its yet to be reviewed against something else.
   ElementPtr mergedElement = map->getElement(mergeTargetId);
+  assert(mergedElement);
   mergedElement->setStatus(Status(Status::Conflated));
   mergedElement->getTags()[MetadataTags::HootStatus()] = "3";
   mergedElement->getTags().remove(MetadataTags::HootMergeTarget());
   LOG_VART(mergedElement);
+}
+
+void ElementMergerJs::_addMissingStatusTags(OsmMapPtr map, const MergeType& mergeType)
+{
+  //If the features involved in the merging don't have statuses, let's arbitrarily set them to
+  //Unknown1.  I *think( the only merging that requires statuses is poi/poly.  Setting them
+  //artificially *shouldn't* have a negative effect on the poi/poly merging, though.
+
+  QList< boost::shared_ptr<ElementCriterion> > typeFilters;
+  switch (mergeType)
+  {
+    case MergeType::BuildingToBuilding:
+      typeFilters.append(boost::shared_ptr<ElementCriterion>(new BuildingCriterion(map)));
+      break;
+
+    case MergeType::PoiToPolygon:
+      typeFilters.append(boost::shared_ptr<ElementCriterion>(new PoiPolygonPoiCriterion()));
+      typeFilters.append(boost::shared_ptr<ElementCriterion>(new PoiPolygonPolyCriterion()));
+      break;
+
+    case MergeType::PoiToPoi:
+      typeFilters.append(boost::shared_ptr<ElementCriterion>(new PoiCriterion()));
+      break;
+
+    case MergeType::AreaToArea:
+      typeFilters.append(boost::shared_ptr<ElementCriterion>(new NonBuildingAreaCriterion()));
+      break;
+
+    default:
+      throw HootException("Invalid merge type.");
+  }
+
+  for (QList< boost::shared_ptr<ElementCriterion> >::const_iterator it = typeFilters.begin();
+       it != typeFilters.end(); ++it)
+  {
+    boost::shared_ptr<SetTagVisitor> statusTagVisitor(
+      new SetTagVisitor(
+        MetadataTags::HootStatus(), Status(Status::Unknown1).toString(), false,
+        ElementType::Unknown, false));
+    FilteredVisitor filteredVis(*it, statusTagVisitor);
+    map->visitRw(filteredVis);
+  }
 }
 
 ElementId ElementMergerJs::_getMergeTargetFeatureId(ConstOsmMapPtr map)
@@ -210,7 +268,7 @@ ElementMergerJs::MergeType ElementMergerJs::_determineMergeType(ConstOsmMapPtr m
 
   MergeType mergeType;
 
-  const bool containsPolys = OsmUtils::containsPolys(map); //this uses the poi/poly definition of poly
+  const bool containsPolys = OsmUtils::containsPoiPolyPolys(map);
   LOG_VART(containsPolys);
   const bool containsAreas = OsmUtils::containsAreas(map); //non-building areas
   LOG_VART(containsAreas);

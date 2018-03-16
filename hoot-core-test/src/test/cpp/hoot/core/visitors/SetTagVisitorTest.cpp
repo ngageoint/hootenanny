@@ -54,6 +54,7 @@ class SetTagVisitorTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runAppendValueTest);
   CPPUNIT_TEST(runElementFilterTest);
   CPPUNIT_TEST(runBadElementTypeTest);
+  CPPUNIT_TEST(runOverwriteDisabledTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -148,6 +149,24 @@ public:
     }
 
     CPPUNIT_ASSERT(exceptionMsg.contains("Invalid element type string"));
+  }
+
+  void runOverwriteDisabledTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    OsmMap::resetCounters();
+    OsmMapReaderFactory::read(
+      map, "test-files/visitors/SetTagVisitorTest.osm", false, Status::Unknown1);
+
+    SetTagVisitor visitor("key2", "updatedValue", false, ElementType::Unknown, false);
+    map->visitRw(visitor);
+
+    OsmMapWriterFactory::getInstance().write(map,
+      "test-output/visitors/SetTagVisitorTest-runOverwriteDisabledTest.osm");
+
+    HOOT_FILE_EQUALS(
+      "test-files/visitors/SetTagVisitorTest-runOverwriteDisabledTest.osm",
+      "test-output/visitors/SetTagVisitorTest-runOverwriteDisabledTest.osm");
   }
 
 };

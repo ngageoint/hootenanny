@@ -43,6 +43,7 @@ class FilteredVisitor :
     public ElementCriterionConsumer,
     public ElementVisitorConsumer
 {
+
 public:
 
   static std::string className() { return "hoot::FilteredVisitor"; }

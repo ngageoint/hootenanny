@@ -127,7 +127,7 @@ public:
 
     // This keeps the status and the tags.
     conf().set(ConfigOptions().getReaderUseFileStatusKey(), true);
-    conf().set(ConfigOptions().getReaderKeepFileStatusKey(), true);
+    conf().set(ConfigOptions().getReaderKeepStatusTagKey(), true);
 
 //    QString readerName = ConfigOptions().getOsmMapReaderFactoryReader();
 //    if (readerName.trimmed().isEmpty())

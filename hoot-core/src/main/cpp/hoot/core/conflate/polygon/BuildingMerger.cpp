@@ -269,7 +269,10 @@ boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
   LOG_TRACE("Build the building...");
 
   LOG_VART(eid);
-  assert(eid.size() > 0);
+  if (eid.size() == 0)
+  {
+    throw IllegalArgumentException("No element ID passed to buildBuilding.");
+  }
   if (eid.size() == 1)
   {
     return map->getElement(*eid.begin());

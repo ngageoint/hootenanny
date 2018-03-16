@@ -33,6 +33,8 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/MapProjector.h>
 
+//#include <hoot/core/io/OsmXmlReader.h>
+
 // Std
 #include <string>
 
@@ -62,12 +64,14 @@ namespace hoot
  *
  * Many, but not all, possible combinations of inputs are covered here.  The main functionality
  * we're not testing here in the merging of features through the js bindings workflow is the
- * conversion of the map arg from a js object to a hoot object.  That gets tested by the element
+ * conversion of the map arg from a nodejs object to a hoot object.  That gets tested by the element
  * merge service mocha plugin test, plugins/test/ElementMergerServer.js.
  */
 class ElementMergerJsTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ElementMergerJsTest);
+  //CPPUNIT_TEST(poiToPolyGoodTest);
+  //CPPUNIT_TEST(poiToPolyBadTest);
   CPPUNIT_TEST(poiToPolyMergeWayAsPolyTest);
   CPPUNIT_TEST(poiToPolyMergeWayAsPolyNoConstituentsTest);
   CPPUNIT_TEST(poiToPolyMergeRelationAsPolyTest);
@@ -143,7 +147,7 @@ public:
     {
       OsmMap::resetCounters();
       OsmMapPtr map(new OsmMap());
-      OsmMapReaderFactory::read(map, inDir + "/" + inFileName, false, Status::Unknown1);
+      OsmMapReaderFactory::read(map, inDir + "/" + inFileName, true, true);
 
       ElementMergerJs::_mergeElements(map, v8::Isolate::GetCurrent());
 
@@ -164,6 +168,33 @@ public:
       CPPUNIT_ASSERT(exceptionMsg.contains(expectedExceptionMsgContains));
     }
   }
+
+//  void poiToPolyGoodTest()
+//  {
+//    OsmMapPtr map(new OsmMap());
+//    OsmMapReaderFactory::read(map, inDir + "/poi-poly-test.osm", true, true);
+//    ElementMergerJs::_mergeElements(map, v8::Isolate::GetCurrent());
+//    MapProjector::projectToWgs84(map);
+//    OsmMapWriterFactory::getInstance().write(map, outDir + "/poi-poly-good-test-out.osm");
+//  }
+
+//  void poiToPolyBadTest()
+//  {
+//    OsmMapPtr map(new OsmMap());
+//    OsmXmlReader reader;
+//    const QString mapXml =
+//      "<osm version='0.6' upload='true' generator='hootenanny'><node id=\"1699\" lon=\"-122.4193426\" lat=\"37.7604672\" version=\"1\"><tag k=\"REF1\" v=\"002f40\"/><tag k=\"amenity\" v=\"bicycle_parking\"/><tag k=\"bicycle_parking\" v=\"stands\"/><tag k=\"capacity\" v=\"4\"/><tag k=\"error:circular\" v=\"15\"/><tag k=\"hoot:status\" v=\"Input1\"/><tag k=\"hoot:merge:target\" v=\"yes\"/></node><way id=\"768\" version=\"1\"><nd ref=\"4348\"/><nd ref=\"1820\"/><nd ref=\"1823\"/><nd ref=\"1824\"/><nd ref=\"1825\"/><nd ref=\"4349\"/><nd ref=\"4348\"/><tag k=\"REF1\" v=\"007f68\"/><tag k=\"building\" v=\"yes\"/><tag k=\"error:circular\" v=\"15\"/><tag k=\"hoot:status\" v=\"Input1\"/></way></osm>";
+//    //reader.setDefaultStatus(Status::Unknown1);
+//    reader.setUseDataSourceIds(true);
+//    reader.setUseStatusFromFile(true);
+//    reader.readFromString(mapXml, map);
+//    //OsmMapPtr copy(map);
+//    //MapProjector::projectToWgs84(copy);
+//    //OsmMapWriterFactory::getInstance().write(copy, outDir + "/poi-poly-test-pre-out.osm");
+//    ElementMergerJs::_mergeElements(map, v8::Isolate::GetCurrent());
+//    MapProjector::projectToWgs84(map);
+//    OsmMapWriterFactory::getInstance().write(map, outDir + "/poi-poly-bad-test-out.osm");
+//  }
 
   //POI TO POLYGON
 

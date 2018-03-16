@@ -54,6 +54,8 @@ public:
   boost::shared_ptr<OsmMapReader> createReader(QString url, bool useFileId = true,
                                                Status defaultStatus = Status::Invalid);
 
+  boost::shared_ptr<OsmMapReader> createReader(QString url, bool useFileId, bool useFileStatus);
+
   static OsmMapReaderFactory& getInstance();
 
   /**
@@ -65,6 +67,8 @@ public:
 
   static void read(boost::shared_ptr<OsmMap> map, QString url, bool useFileId = true,
                    Status defaultStatus = Status::Invalid);
+
+  static void read(boost::shared_ptr<OsmMap> map, QString url, bool useFileId, bool useFileStatus);
 
   static QString getReaderName(const QString url);
 

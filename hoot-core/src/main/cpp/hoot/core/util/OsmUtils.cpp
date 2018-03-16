@@ -194,7 +194,7 @@ bool OsmUtils::containsOnePolygonAndOnePoi(ConstOsmMapPtr map)
   return poiCount == 1 && polyCount == 1;
 }
 
-bool OsmUtils::containsPolys(ConstOsmMapPtr map)
+bool OsmUtils::containsPoiPolyPolys(ConstOsmMapPtr map)
 {
   const long polyCount =
     (long)FilteredVisitor::getStat(

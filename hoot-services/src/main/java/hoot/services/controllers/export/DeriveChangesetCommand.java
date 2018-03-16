@@ -53,7 +53,7 @@ class DeriveChangesetCommand extends ExportCommand {
         options.add("convert.bounding.box=" + aoi);
         options.add("api.db.email=test@test.com");
         options.add("reader.use.file.status=true");
-        options.add("reader.keep.file.status=true");
+        options.add("reader.keep.status.tag=true");
         double changesetBufferSize = Double.parseDouble(CHANGESET_DERIVE_BUFFER); //in degrees
         options.add("changeset.buffer=" + String.valueOf(changesetBufferSize));
         options.add("changeset.allow.deleting.reference.features=false");

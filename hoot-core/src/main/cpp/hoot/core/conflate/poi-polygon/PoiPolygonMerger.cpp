@@ -54,7 +54,9 @@ _pairs(pairs)
 void PoiPolygonMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced)
 {
   ////
-  /// See "Hootenanny - POI to Building" powerpoint for more details.
+  /// See
+  /// https://github.com/ngageoint/hootenanny/files/607197/Hootenanny.-.POI.to.Polygon.2016-11-15.pptx
+  /// for more details.
   ////
 
   // merge all POI tags first, but keep Unknown1 and Unknown2 separate. It is implicitly assumed
@@ -161,15 +163,19 @@ Tags PoiPolygonMerger::_mergePoiTags(const OsmMapPtr& map, Status s) const
     const pair<ElementId, ElementId>& p = *it;
     ElementPtr e1 = map->getElement(p.first);
     ElementPtr e2 = map->getElement(p.second);
+    LOG_VART(e1->getStatus());
+    LOG_VART(e1->getElementType());
     if (e1->getStatus() == s && e1->getElementType() == ElementType::Node)
     {
-      result = TagMergerFactory::getInstance().mergeTags(result, e1->getTags(),
-        e1->getElementType());
+      result =
+        TagMergerFactory::getInstance().mergeTags(result, e1->getTags(), e1->getElementType());
     }
+    LOG_VART(e2->getStatus());
+    LOG_VART(e2->getElementType());
     if (e2->getStatus() == s && e2->getElementType() == ElementType::Node)
     {
-      result = TagMergerFactory::getInstance().mergeTags(result, e2->getTags(),
-        e2->getElementType());
+      result =
+        TagMergerFactory::getInstance().mergeTags(result, e2->getTags(), e2->getElementType());
     }
   }
 
@@ -216,10 +222,10 @@ ElementId PoiPolygonMerger::_mergeBuildings(const OsmMapPtr& map,
   set< pair<ElementId, ElementId> > pairs;
 
   assert(buildings1.size() != 0 || buildings2.size() != 0);
-  // if there is only one set of buildings then there is no need to merge.
+  // if there is only one set of buildings then there is no need to merge.  group all the building
+  //parts into a single building
   if (buildings1.size() == 0)
   {
-    // group all the building parts into a single building
     set<ElementId> eids;
     eids.insert(buildings2.begin(), buildings2.end());
     LOG_VART(eids.size());
@@ -227,7 +233,6 @@ ElementId PoiPolygonMerger::_mergeBuildings(const OsmMapPtr& map,
   }
   else if (buildings2.size() == 0)
   {
-    // group all the building parts into a single building
     set<ElementId> eids;
     eids.insert(buildings1.begin(), buildings1.end());
     LOG_VART(eids.size());
@@ -272,7 +277,11 @@ ElementId PoiPolygonMerger::mergePoiAndPolygon(OsmMapPtr map)
   FilteredVisitor filteredVis1(poiFilter, idSetVis1);
   map->visitRo(filteredVis1);
   const std::set<ElementId>& poiIds = idSetVis1.getElementSet();
-  assert(poiIds.size() == 1);   //we've already validated this input
+  if (poiIds.size() != 1)
+  {
+    throw IllegalArgumentException(
+      "Exactly one POI should be passed to PoiPolygonMerger::mergePoiAndPolygon.");
+  }
   const ElementId poiId = *poiIds.begin();
   LOG_VART(poiId);
 
@@ -281,7 +290,11 @@ ElementId PoiPolygonMerger::mergePoiAndPolygon(OsmMapPtr map)
   FilteredVisitor filteredVis2(polyFilter, idSetVis2);
   map->visitRo(filteredVis2);
   const std::set<ElementId>& polyIds = idSetVis2.getElementSet();
-  assert(polyIds.size() == 1);   //we've already validated this input
+  if (polyIds.size() != 1)
+  {
+    throw IllegalArgumentException(
+      "Exactly one polygon should be passed to PoiPolygonMerger::mergePoiAndPolygon.");
+  }
   const ElementId polyId = *polyIds.begin();
   LOG_VART(polyId);
 

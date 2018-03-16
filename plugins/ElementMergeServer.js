@@ -103,7 +103,7 @@ function ElementMergeserver(request, response) {
         if (err.message.indexOf('Not found') > -1)
             status = 404;
         response.writeHead(status, header);
-        response.end(JSON.stringify({error: err}));
+        response.end(JSON.stringify({error: err.message}));
     }
 }
 
@@ -125,15 +125,16 @@ var mergeElement = function(payload)
     }
 }
 
-// This is where all interesting things happen interfacing with hoot core lib directly
 var postHandler = function(data)
 {
-    var map = new hoot.OsmMap();
-    map.setIdGenerator(new hoot.DefaultIdGenerator());
-    hoot.loadMapFromString(map, data);
-    var mergedMap = hoot.elementMerge(map);
-    var xml = hoot.OsmWriter.toString(mergedMap);
-    return xml;
+  //can't seem to get this to work
+  //hoot.Log.setLogLevel('trace');
+ 
+  var map = new hoot.OsmMap();
+  hoot.loadMapFromStringPreserveIdAndStatus(map, data);
+  var mergedMap = hoot.mergeElements(map);
+  var xml = hoot.OsmWriter.toString(mergedMap);
+  return xml;
 }
 
 if (typeof exports !== 'undefined') {

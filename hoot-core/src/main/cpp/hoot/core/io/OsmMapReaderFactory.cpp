@@ -82,6 +82,8 @@ bool OsmMapReaderFactory::hasPartialReader(QString url)
   return result;
 }
 
+//TODO: consolidate code for createReader and create
+
 boost::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(QString url,
                                                                   bool useDataSourceIds,
                                                                   Status defaultStatus)
@@ -134,6 +136,58 @@ boost::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(QString url,
   return reader;
 }
 
+boost::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(QString url,
+                                                                  bool useDataSourceIds,
+                                                                  bool useFileStatus)
+{
+  LOG_VART(url);
+  LOG_VART(useDataSourceIds);
+  LOG_VART(useFileStatus);
+
+  QString readerOverride = ConfigOptions().getOsmMapReaderFactoryReader();
+
+  /// @todo hack - the OsmApiDbAwareHootApiDbReader should always be reading from hoot api
+  /// databases, but by using the factory override during conflation it won't - see #781 for
+  /// potential fix task
+  if (readerOverride == "hoot::OsmApiDbAwareHootApiDbReader" && url.startsWith("osmapidb"))
+  {
+    readerOverride = "";
+  }
+
+  boost::shared_ptr<OsmMapReader> reader;
+  if (readerOverride != "")
+  {
+    reader.reset(Factory::getInstance().constructObject<OsmMapReader>(readerOverride));
+    LOG_DEBUG("Using reader: " << readerOverride);
+  }
+
+  vector<std::string> names =
+    Factory::getInstance().getObjectNamesByBase(OsmMapReader::className());
+  for (size_t i = 0; i < names.size() && !reader; ++i)
+  {
+    LOG_TRACE("Checking input " << url << " with reader " << names[i]);
+    reader.reset(Factory::getInstance().constructObject<OsmMapReader>(names[i]));
+    if (reader->isSupported(url))
+    {
+      LOG_DEBUG("Using input reader: " << names[i]);
+    }
+    else
+    {
+      reader.reset();
+    }
+  }
+
+  if (!reader)
+  {
+    throw HootException("A valid reader could not be found for the URL: " + url);
+  }
+
+  reader->setUseDataSourceIds(useDataSourceIds);
+  reader->setUseFileStatus(useFileStatus);
+
+  return reader;
+}
+
 QString OsmMapReaderFactory::getReaderName(const QString url)
 {
   LOG_VARD(url);
@@ -160,6 +214,24 @@ void OsmMapReaderFactory::read(boost::shared_ptr<OsmMap> map, QString url, bool 
   LOG_INFO("Loading map from " << url << "...");
   boost::shared_ptr<OsmMapReader> reader =
     getInstance().createReader(url, useDataSourceIds, defaultStatus);
+  boost::shared_ptr<Boundable> boundable = boost::dynamic_pointer_cast<Boundable>(reader);
+  if (!ConfigOptions().getConvertBoundingBox().trimmed().isEmpty() && !boundable.get())
+  {
+    throw IllegalArgumentException(
+      ConfigOptions::getConvertBoundingBoxKey() +
+      " configuration option used with unsupported reader for data source: " + url);
+  }
+  reader->open(url);
+  reader->read(map);
+  VALIDATE(map->validate(true));
+}
+
+void OsmMapReaderFactory::read(boost::shared_ptr<OsmMap> map, QString url, bool useDataSourceIds,
+                               bool useFileStatus)
+{
+  LOG_INFO("Loading map from " << url << "...");
+  boost::shared_ptr<OsmMapReader> reader =
+    getInstance().createReader(url, useDataSourceIds, useFileStatus);
   boost::shared_ptr<Boundable> boundable = boost::dynamic_pointer_cast<Boundable>(reader);
   if (!ConfigOptions().getConvertBoundingBox().trimmed().isEmpty() && !boundable.get())
   {

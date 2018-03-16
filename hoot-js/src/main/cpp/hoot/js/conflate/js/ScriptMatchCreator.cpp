@@ -43,7 +43,6 @@
 #include <hoot/core/visitors/IndexElementsVisitor.h>
 #include <hoot/js/OsmMapJs.h>
 #include <hoot/js/elements/ElementJs.h>
-#include <hoot/js/util/SettingsJs.h>
 
 // Qt
 #include <QFileInfo>
