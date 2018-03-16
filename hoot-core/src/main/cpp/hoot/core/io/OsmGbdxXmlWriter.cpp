@@ -224,40 +224,6 @@ void OsmGbdxXmlWriter::write(ConstOsmMapPtr map, const QString& path)
 
 void OsmGbdxXmlWriter::write(ConstOsmMapPtr map)
 {
-  //Some code paths don't call the open method before invoking this write method, so make sure the
-  //writer has been initialized.
-//  if (!_writer.get())
-//  {
-//      LOG_INFO("No Writer. Calling _newOutputFile");
-//    _newOutputFile();
-//  }
-
-  //TODO: The coord sys and schema entries don't get written to streamed output b/c we don't have
-  //the map object to read the coord sys from.
-
-//  int epsg = map->getProjection()->GetEPSGGeogCS();
-//  if (epsg > -1)
-//  {
-//    _writer->writeAttribute("CRS", QString("%1").arg(epsg));
-//  }
-//  else
-//  {
-//    char *wkt;
-//    map->getProjection()->exportToWkt(&wkt);
-//    _writer->writeAttribute("CRS", wkt);
-//    free(wkt);
-//  }
-
-  // Thought: Grab a polygon/way, copy it to a map and then call get bounds
-//  const geos::geom::Envelope bounds = CalculateMapBoundsVisitor::getGeosBounds(map);
-//  _writeBounds(bounds);
-
-//  const Envelope& bounds = way->getEnvelopeInternal(_map);
-//  way->setTag("hoot:bbox",QString("%1,%2,%3,%4").arg(QString::number(bounds.getMinX(), 'g', 10))
-//              .arg(QString::number(bounds.getMinY(), 'g', 10))
-//              .arg(QString::number(bounds.getMaxX(), 'g', 10))
-//              .arg(QString::number(bounds.getMaxY(), 'g', 10)));
-
   _writeNodes(map);
   _writeWays(map);
   _writeRelations(map);
@@ -265,40 +231,15 @@ void OsmGbdxXmlWriter::write(ConstOsmMapPtr map)
   close();
 }
 
-//void OsmGbdxXmlWriter::_writeMetadata(const Element *e)
-//{
-//  //TODO: This comparison seems to be still unequal when I set an element's timestamp to
-//  //ElementData::TIMESTAMP_EMPTY.  See RemoveAttributeVisitor
-//  if (e->getTimestamp() != ElementData::TIMESTAMP_EMPTY)
-//  {
-//    _writer->writeAttribute("timestamp", OsmUtils::toTimeString(e->getTimestamp()));
-//  }
-//  if (e->getVersion() != ElementData::VERSION_EMPTY)
-//  {
-//    _writer->writeAttribute("version", QString::number(e->getVersion()));
-//  }
-//  if (e->getChangeset() != ElementData::CHANGESET_EMPTY)
-//  {
-//    _writer->writeAttribute("changeset", QString::number(e->getChangeset()));
-//  }
-//  if (e->getUser() != ElementData::USER_EMPTY)
-//  {
-//    _writer->writeAttribute("user", e->getUser());
-//  }
-//  if (e->getUid() != ElementData::UID_EMPTY)
-//  {
-//    _writer->writeAttribute("uid", QString::number(e->getUid()));
-//  }
-//}
-
 void OsmGbdxXmlWriter::_writeTags(const ConstElementPtr& element)
 {
 
   // GBDX XML format:
   //   <M_Lang>English</M_Lang>
 
-  const ElementType type = element->getElementType();
-  assert(type != ElementType::Unknown);
+  //  const ElementType type = element->getElementType();
+  //  assert(type != ElementType::Unknown);
+
   const Tags& tags = element->getTags();
 
   for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
@@ -363,17 +304,19 @@ void OsmGbdxXmlWriter::_writeTags(const ConstElementPtr& element)
     _writer->writeEndElement();
   } // End tag loop
 
-  if (type == ElementType::Relation)
-  {
-    ConstRelationPtr relation = boost::dynamic_pointer_cast<const Relation>(element);
-    if (relation->getType() != "")
-    {
-      _writer->writeStartElement("Got Relation");
-      _writer->writeAttribute("k", "type");
-      _writer->writeAttribute("v", removeInvalidCharacters(relation->getType()));
-      _writer->writeEndElement();
-    }
-  }
+
+//  // This is the next to fix.
+//  if (type == ElementType::Relation)
+//  {
+//    ConstRelationPtr relation = boost::dynamic_pointer_cast<const Relation>(element);
+//    if (relation->getType() != "")
+//    {
+//      _writer->writeStartElement("Got Relation");
+//      _writer->writeAttribute("k", "type");
+//      _writer->writeAttribute("v", removeInvalidCharacters(relation->getType()));
+//      _writer->writeEndElement();
+//    }
+//  }
 
 }
 
@@ -492,16 +435,39 @@ void OsmGbdxXmlWriter::_writePartialIncludePoints(const ConstWayPtr& w, ConstOsm
 {
   LOG_VART(w);
 
-  _writer->writeStartElement("Location");
+//  <Det_Val>
+//      <features>
+//        <geometry>
+//          <coordinates>62.7477649302</coordinates>
+//          <coordinates>29.2851062801</coordinates>
+//          <type>Point</type>
+//        </geometry>
+//        <id>0</id>
+//        <properties>
+//          <count>5</count>
+//          <mgrs>41RMN755396</mgrs>
+//        </properties>
+//        <type>Feature</type>
+//      </features>
+
+  _writer->writeStartElement("Det_Val");
+  _writer->writeStartElement("features");
+
+  _writer->writeStartElement("geometry");
+
+  _writer->writeStartElement("WKT");
+
+  QString featureGeometry;
 
   const vector<long>& nodes = w->getNodeIds();
-
   if (OsmSchema::getInstance().isArea(w) || nodes[0] == nodes[nodes.size() - 1])
   {
-    _writer->writeCharacters(QString("POLYGON ("));
+    featureGeometry = "Polygon";
+    _writer->writeCharacters(QString("POLYGON (("));
   }
   else
   {
+    featureGeometry = "Linestring";
     _writer->writeCharacters(QString("LINESTRING ("));
   }
 
@@ -518,8 +484,30 @@ void OsmGbdxXmlWriter::_writePartialIncludePoints(const ConstWayPtr& w, ConstOsm
     _writer->writeCharacters(QString("%1 %2").arg(QString::number(n->getX(), 'f', _precision)).arg(QString::number(n->getY(), 'f', _precision)));
   }
 
+  // Linestring has (, Polygon has ((
   _writer->writeCharacters(QString(")"));
+
+  if (featureGeometry == "Polygon") _writer->writeCharacters(QString(")"));
+
+  _writer->writeEndElement(); // WKT
+  _writer->writeStartElement("type");
+  _writer->writeCharacters(featureGeometry);
   _writer->writeEndElement();
+
+  _writer->writeEndElement(); // geometry
+
+
+  // Add the Det_id from the Tag
+  _writer->writeStartElement("id");
+  _writer->writeCharacters(w->getTags()["Det_id"]);
+  _writer->writeEndElement();
+
+  _writer->writeStartElement("type");
+  _writer->writeCharacters("Feature");
+  _writer->writeEndElement();
+
+  _writer->writeEndElement(); // features
+  _writer->writeEndElement(); // Det_Val
 
   _writeTags(w);
 }
@@ -528,7 +516,7 @@ void OsmGbdxXmlWriter::writePartial(const ConstWayPtr& w)
 {
   LOG_VARI(w);
 
-  _writer->writeStartElement("way");
+  _writer->writeStartElement("Partial way");
   _writer->writeAttribute("visible", "true");
   _writer->writeAttribute("id", QString::number(w->getId()));
 
@@ -548,9 +536,11 @@ void OsmGbdxXmlWriter::writePartial(const ConstRelationPtr& r)
 {
   LOG_VART(r);
 
-  _writer->writeStartElement("relation");
+  _writer->writeStartElement("XX relation");
   _writer->writeAttribute("visible", "true");
   _writer->writeAttribute("id", QString::number(r->getId()));
+
+  _writer->writeAttribute("Type", r->getType());
 
   const vector<RelationData::Entry>& members = r->getMembers();
   for (size_t j = 0; j < members.size(); j++)
