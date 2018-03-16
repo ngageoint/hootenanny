@@ -540,7 +540,7 @@ void OsmGbdxXmlWriter::writePartial(const ConstRelationPtr& r)
   _writer->writeAttribute("visible", "true");
   _writer->writeAttribute("id", QString::number(r->getId()));
 
-  _writer->writeAttribute("Type", r->getType());
+  _writer->writeAttribute("type", r->getType());
 
   const vector<RelationData::Entry>& members = r->getMembers();
   for (size_t j = 0; j < members.size(); j++)
