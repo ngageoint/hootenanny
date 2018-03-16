@@ -143,7 +143,7 @@ public:
     {
       OsmMap::resetCounters();
       OsmMapPtr map(new OsmMap());
-      OsmMapReaderFactory::read(map, inDir + "/" + inFileName, true, true);
+      OsmMapReaderFactory::read(map, true, true, inDir + "/" + inFileName);
 
       ElementMergerJs::_mergeElements(map, v8::Isolate::GetCurrent());
 

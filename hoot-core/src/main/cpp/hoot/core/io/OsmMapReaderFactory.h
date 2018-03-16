@@ -65,12 +65,12 @@ public:
   /**
    *
    *
-   * @param url
    * @param useFileId
    * @param useFileStatus
+   * @param url
    * @return
    */
-  boost::shared_ptr<OsmMapReader> createReader(QString url, bool useFileId, bool useFileStatus);
+  boost::shared_ptr<OsmMapReader> createReader(bool useFileId, bool useFileStatus, QString url);
 
   /**
    *
@@ -107,11 +107,11 @@ public:
    *
    *
    * @param map
-   * @param url
    * @param useFileId
    * @param useFileStatus
+   * @param url
    */
-  static void read(boost::shared_ptr<OsmMap> map, QString url, bool useFileId, bool useFileStatus);
+  static void read(boost::shared_ptr<OsmMap> map, bool useFileId, bool useFileStatus, QString url);
 
   /**
    *

@@ -47,6 +47,8 @@ StatusUpdateVisitor::StatusUpdateVisitor(Status status, bool onlyUpdateIfStatusI
 _status(status),
 _onlyUpdateIfStatusInvalid(onlyUpdateIfStatusInvalid)
 {
+  LOG_VART(_status);
+  LOG_VART(_onlyUpdateIfStatusInvalid);
 }
 
 void StatusUpdateVisitor::setConfiguration(const Settings& conf)
@@ -54,10 +56,14 @@ void StatusUpdateVisitor::setConfiguration(const Settings& conf)
   ConfigOptions configOptions(conf);
   _status = Status::fromString(configOptions.getStatusUpdateVisitorStatus());
   _onlyUpdateIfStatusInvalid = configOptions.getStatusUpdateVisitorOnlyUpdateInvalidStatus();
+
+  LOG_VART(_status);
+  LOG_VART(_onlyUpdateIfStatusInvalid);
 }
 
 void StatusUpdateVisitor::visit(const boost::shared_ptr<Element>& e)
 {
+  LOG_VART(e->getStatus());
   if (_onlyUpdateIfStatusInvalid && e->getStatus() != Status::Invalid)
   {
     return;

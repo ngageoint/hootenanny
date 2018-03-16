@@ -29,7 +29,6 @@
 
 // hoot
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/elements/ElementType.h>
 
 #include "ElementOsmMapVisitor.h"
 
@@ -54,6 +53,7 @@ public:
 
 private:
 
+  //status to apply to elements
   Status _status;
   //if true, will only update the status if it is already set to invalid
   bool _onlyUpdateIfStatusInvalid;
