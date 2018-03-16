@@ -158,6 +158,9 @@ public:
     OsmMapReaderFactory::read(
       map, "test-files/visitors/SetTagVisitorTest.osm", false, Status::Unknown1);
 
+    //We've disabled overwriting existing tags, so the tag with key="key2" should not be updated
+    //on any element that already has a tag with the key.  It should only be added to elements
+    //that don't have a tag with that key.
     SetTagVisitor visitor("key2", "updatedValue", false, ElementType::Unknown, false);
     map->visitRw(visitor);
 
