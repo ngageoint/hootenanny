@@ -91,6 +91,8 @@ void SetTagVisitor::_setTag(const ElementPtr& e, QString k, QString v)
     return;
   }
 
+  LOG_VART(e->getElementId());
+
   if (k == MetadataTags::ErrorCircular())
   {
     bool ok;

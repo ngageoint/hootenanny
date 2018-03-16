@@ -37,6 +37,7 @@
 #include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPolyCriterion.h>
 #include <hoot/core/visitors/ElementIdSetVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
+#include <hoot/core/visitors/StatusUpdateVisitor.h>
 
 using namespace std;
 
@@ -53,11 +54,9 @@ _pairs(pairs)
 
 void PoiPolygonMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced)
 {
-  ////
   /// See
   /// https://github.com/ngageoint/hootenanny/files/607197/Hootenanny.-.POI.to.Polygon.2016-11-15.pptx
   /// for more details.
-  ////
 
   // merge all POI tags first, but keep Unknown1 and Unknown2 separate. It is implicitly assumed
   // that since they're in a single group they all represent the same entity.
@@ -163,6 +162,7 @@ Tags PoiPolygonMerger::_mergePoiTags(const OsmMapPtr& map, Status s) const
     const pair<ElementId, ElementId>& p = *it;
     ElementPtr e1 = map->getElement(p.first);
     ElementPtr e2 = map->getElement(p.second);
+    LOG_VART(e1->getElementId());
     LOG_VART(e1->getStatus());
     LOG_VART(e1->getElementType());
     if (e1->getStatus() == s && e1->getElementType() == ElementType::Node)
@@ -170,6 +170,7 @@ Tags PoiPolygonMerger::_mergePoiTags(const OsmMapPtr& map, Status s) const
       result =
         TagMergerFactory::getInstance().mergeTags(result, e1->getTags(), e1->getElementType());
     }
+    LOG_VART(e2->getElementId());
     LOG_VART(e2->getStatus());
     LOG_VART(e2->getElementType());
     if (e2->getStatus() == s && e2->getElementType() == ElementType::Node)
@@ -270,12 +271,27 @@ ElementId PoiPolygonMerger::mergePoiAndPolygon(OsmMapPtr map)
   //Trying to merge more than one POI into the polygon has proven problematic due to the building
   //merging logic.  Merging more than one POI isn't a requirement, so only supporting 1:1 merging
   //at this time.
+
   LOG_INFO("Merging one POI and one polygon...");
 
+  StatusUpdateVisitor statusVisitor(Status::Unknown1, true);
   PoiPolygonPoiCriterion poiFilter;
+  PoiPolygonPolyCriterion polyFilter;
+
+  //If the features involved in the merging don't have statuses, let's arbitrarily set them to
+  //Unknown1, since poi/poly requires it.  Setting them artificially *shouldn't* have a negative
+  //effect on the poi/poly merging, though.
+
+  FilteredVisitor filteredVis1(poiFilter, statusVisitor);
+  map->visitRw(filteredVis1);
+
+  FilteredVisitor filteredVis2(polyFilter, statusVisitor);
+  map->visitRw(filteredVis2);
+
+  //get our poi id
   ElementIdSetVisitor idSetVis1;
-  FilteredVisitor filteredVis1(poiFilter, idSetVis1);
-  map->visitRo(filteredVis1);
+  FilteredVisitor filteredVis3(poiFilter, idSetVis1);
+  map->visitRo(filteredVis3);
   const std::set<ElementId>& poiIds = idSetVis1.getElementSet();
   if (poiIds.size() != 1)
   {
@@ -285,10 +301,10 @@ ElementId PoiPolygonMerger::mergePoiAndPolygon(OsmMapPtr map)
   const ElementId poiId = *poiIds.begin();
   LOG_VART(poiId);
 
-  PoiPolygonPolyCriterion polyFilter;
+  //get our poly id
   ElementIdSetVisitor idSetVis2;
-  FilteredVisitor filteredVis2(polyFilter, idSetVis2);
-  map->visitRo(filteredVis2);
+  FilteredVisitor filteredVis4(polyFilter, idSetVis2);
+  map->visitRo(filteredVis4);
   const std::set<ElementId>& polyIds = idSetVis2.getElementSet();
   if (polyIds.size() != 1)
   {

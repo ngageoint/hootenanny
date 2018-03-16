@@ -95,8 +95,6 @@ private:
   //feature being merged into must have a custom hoot tag for all merge types except poi/poly
   static ElementId _getMergeTargetFeatureId(ConstOsmMapPtr map);
   static QString _mergeTypeToString(const MergeType& mergeType);
-
-  static void _addMissingStatusTags(OsmMapPtr map, const MergeType& mergeType);
 };
 
 }

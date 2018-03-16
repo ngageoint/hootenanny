@@ -2646,6 +2646,22 @@ all translation stats are disabled.
 The default status to match with a status criterion.  Used by various element visitors and map
 operations.
 
+=== status.update.visitor.only.update.invalid.status
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, the SetTagVisitor class will only update statuses on elements when the existing status is
+'Invalid'.
+
+=== status.update.visitor.status
+
+* Data Type: string
+* Default Value: ``
+
+Adds the specified status to elements.  Valid values are: 'Unknown1', 'Unknown2', 'Conflated', or
+'Invalid'.  If left empty, all elements will receive tag additions.
+
 === tag.ancestor.differencer.name
 
 * Data Type: string

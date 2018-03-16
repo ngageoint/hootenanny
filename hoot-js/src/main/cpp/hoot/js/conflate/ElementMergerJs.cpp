@@ -42,7 +42,6 @@
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/visitors/ElementIdSetVisitor.h>
-#include <hoot/core/visitors/SetTagVisitor.h>
 #include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/filters/BuildingCriterion.h>
 #include <hoot/core/filters/NonBuildingAreaCriterion.h>
@@ -88,8 +87,8 @@ void ElementMergerJs::mergeElements(const FunctionCallbackInfo<Value>& args)
   LOG_INFO("Merging elements...");
 
   Isolate* current = args.GetIsolate();
-  //try
-  //{
+  try
+  {
     HandleScope scope(current);
     //Context::Scope context_scope(current->GetCallingContext());
     if (args.Length() != 1)
@@ -108,15 +107,15 @@ void ElementMergerJs::mergeElements(const FunctionCallbackInfo<Value>& args)
 
     Handle<Object> returnMap = OsmMapJs::create(map);
     args.GetReturnValue().Set(returnMap);
-//  }
-    //TODO: This error handling has been proven to not work in that it never seems to return the
-    //error message to the nodejs calling service....making debugging a nightmare...or I'm just
-    //doing something wrong here.  Either way, need to fix this.
-//  catch (const HootException& e)
-//  {
-//    LOG_ERROR(e.getWhat());
-//    args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(e)));
-//  }
+  }
+  //TODO: This error handling has been proven to not work in that it never seems to return the
+  //error message to the nodejs calling service....making debugging a nightmare...or I'm just
+  //doing something wrong here.  Either way, need to fix this.
+  catch (const HootException& e)
+  {
+    LOG_ERROR(e.getWhat());
+    args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(e)));
+  }
 }
 
 QString ElementMergerJs::_mergeTypeToString(const MergeType& mergeType)
@@ -154,8 +153,6 @@ void ElementMergerJs::_mergeElements(OsmMapPtr map, Isolate* current)
     LOG_VART(mergeTargetId);
   }
 
-  _addMissingStatusTags(map, mergeType);
-
   //We're using a mix of generic conflation scripts and custom built classes to merge features
   //here, depending on the feature type.
   bool scriptMerge = false;
@@ -192,48 +189,6 @@ void ElementMergerJs::_mergeElements(OsmMapPtr map, Isolate* current)
   mergedElement->getTags()[MetadataTags::HootStatus()] = "3";
   mergedElement->getTags().remove(MetadataTags::HootMergeTarget());
   LOG_VART(mergedElement);
-}
-
-void ElementMergerJs::_addMissingStatusTags(OsmMapPtr map, const MergeType& mergeType)
-{
-  //If the features involved in the merging don't have statuses, let's arbitrarily set them to
-  //Unknown1.  I *think( the only merging that requires statuses is poi/poly.  Setting them
-  //artificially *shouldn't* have a negative effect on the poi/poly merging, though.
-
-  QList< boost::shared_ptr<ElementCriterion> > typeFilters;
-  switch (mergeType)
-  {
-    case MergeType::BuildingToBuilding:
-      typeFilters.append(boost::shared_ptr<ElementCriterion>(new BuildingCriterion(map)));
-      break;
-
-    case MergeType::PoiToPolygon:
-      typeFilters.append(boost::shared_ptr<ElementCriterion>(new PoiPolygonPoiCriterion()));
-      typeFilters.append(boost::shared_ptr<ElementCriterion>(new PoiPolygonPolyCriterion()));
-      break;
-
-    case MergeType::PoiToPoi:
-      typeFilters.append(boost::shared_ptr<ElementCriterion>(new PoiCriterion()));
-      break;
-
-    case MergeType::AreaToArea:
-      typeFilters.append(boost::shared_ptr<ElementCriterion>(new NonBuildingAreaCriterion()));
-      break;
-
-    default:
-      throw HootException("Invalid merge type.");
-  }
-
-  for (QList< boost::shared_ptr<ElementCriterion> >::const_iterator it = typeFilters.begin();
-       it != typeFilters.end(); ++it)
-  {
-    boost::shared_ptr<SetTagVisitor> statusTagVisitor(
-      new SetTagVisitor(
-        MetadataTags::HootStatus(), Status(Status::Unknown1).toString(), false,
-        ElementType::Unknown, false));
-    FilteredVisitor filteredVis(*it, statusTagVisitor);
-    map->visitRw(filteredVis);
-  }
 }
 
 ElementId ElementMergerJs::_getMergeTargetFeatureId(ConstOsmMapPtr map)

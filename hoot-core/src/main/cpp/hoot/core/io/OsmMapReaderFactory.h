@@ -51,11 +51,32 @@ public:
 
   OsmMapReaderFactory();
 
+  /**
+   *
+   *
+   * @param url
+   * @param useFileId
+   * @param defaultStatus
+   * @return
+   */
   boost::shared_ptr<OsmMapReader> createReader(QString url, bool useFileId = true,
                                                Status defaultStatus = Status::Invalid);
 
+  /**
+   *
+   *
+   * @param url
+   * @param useFileId
+   * @param useFileStatus
+   * @return
+   */
   boost::shared_ptr<OsmMapReader> createReader(QString url, bool useFileId, bool useFileStatus);
 
+  /**
+   *
+   *
+   * @return
+   */
   static OsmMapReaderFactory& getInstance();
 
   /**
@@ -63,18 +84,51 @@ public:
    */
   bool hasPartialReader(QString url);
 
+  /**
+   *
+   *
+   * @param url
+   * @return
+   */
   bool hasElementInputStream(QString url);
 
+  /**
+   *
+   *
+   * @param map
+   * @param url
+   * @param useFileId
+   * @param defaultStatus
+   */
   static void read(boost::shared_ptr<OsmMap> map, QString url, bool useFileId = true,
                    Status defaultStatus = Status::Invalid);
 
+  /**
+   *
+   *
+   * @param map
+   * @param url
+   * @param useFileId
+   * @param useFileStatus
+   */
   static void read(boost::shared_ptr<OsmMap> map, QString url, bool useFileId, bool useFileStatus);
 
+  /**
+   *
+   *
+   * @param url
+   * @return
+   */
   static QString getReaderName(const QString url);
 
 private:
 
   static boost::shared_ptr<OsmMapReaderFactory> _theInstance;
+
+  static void _read(boost::shared_ptr<OsmMap> map, boost::shared_ptr<OsmMapReader> reader,
+             const QString url);
+
+  boost::shared_ptr<OsmMapReader> _createReader(const QString url);
 };
 
 }
