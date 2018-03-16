@@ -136,7 +136,6 @@ boost::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(QString url,
   boost::shared_ptr<OsmMapReader> reader = _createReader(url);
   reader->setUseDataSourceIds(useDataSourceIds);
   reader->setDefaultStatus(defaultStatus);
-
   return reader;
 }
 
@@ -150,7 +149,6 @@ boost::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(bool useDataSo
   boost::shared_ptr<OsmMapReader> reader = _createReader(url);
   reader->setUseDataSourceIds(useDataSourceIds);
   reader->setUseFileStatus(useFileStatus);
-
   return reader;
 }
 

@@ -344,15 +344,3 @@ function calculateSearchRadiusUsingRubberSheeting(map, rubberSheetRef, rubberShe
       { "rubber.sheet.minimum.ties" : rubberSheetMinTies })
       .applyAndGetResult(map);
 }
-
-/**
- * Merges a map that contains nothing but node objects that are POI objects that should be merged into one node
- *
- * @param map Map that contains the POIs that should be merged together
- *
- * @return Map that contains the single merged POI node
- */
-/*function poiMerge(map)
-{
-  return new hoot.poiMerge('PoiGeneric.js', map);
-}*/

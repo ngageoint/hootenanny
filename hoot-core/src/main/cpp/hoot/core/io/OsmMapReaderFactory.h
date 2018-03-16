@@ -51,32 +51,13 @@ public:
 
   OsmMapReaderFactory();
 
-  /**
-   *
-   *
-   * @param url
-   * @param useFileId
-   * @param defaultStatus
-   * @return
-   */
   boost::shared_ptr<OsmMapReader> createReader(QString url, bool useFileId = true,
                                                Status defaultStatus = Status::Invalid);
-
-  /**
-   *
-   *
-   * @param useFileId
-   * @param useFileStatus
-   * @param url
-   * @return
-   */
+  //Note the url as the last param here...was getting runtime overlap between these two where
+  //bools were being passed as status ints and vice versa.  May need to do some more refactoring
+  //here to make things cleaner.
   boost::shared_ptr<OsmMapReader> createReader(bool useFileId, bool useFileStatus, QString url);
 
-  /**
-   *
-   *
-   * @return
-   */
   static OsmMapReaderFactory& getInstance();
 
   /**
@@ -84,41 +65,13 @@ public:
    */
   bool hasPartialReader(QString url);
 
-  /**
-   *
-   *
-   * @param url
-   * @return
-   */
   bool hasElementInputStream(QString url);
 
-  /**
-   *
-   *
-   * @param map
-   * @param url
-   * @param useFileId
-   * @param defaultStatus
-   */
   static void read(boost::shared_ptr<OsmMap> map, QString url, bool useFileId = true,
                    Status defaultStatus = Status::Invalid);
-
-  /**
-   *
-   *
-   * @param map
-   * @param useFileId
-   * @param useFileStatus
-   * @param url
-   */
+  //see note for createReader
   static void read(boost::shared_ptr<OsmMap> map, bool useFileId, bool useFileStatus, QString url);
 
-  /**
-   *
-   *
-   * @param url
-   * @return
-   */
   static QString getReaderName(const QString url);
 
 private:
