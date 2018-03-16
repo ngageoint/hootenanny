@@ -237,8 +237,9 @@ void OsmGbdxXmlWriter::_writeTags(const ConstElementPtr& element)
   // GBDX XML format:
   //   <M_Lang>English</M_Lang>
 
-  const ElementType type = element->getElementType();
-  assert(type != ElementType::Unknown);
+  //  const ElementType type = element->getElementType();
+  //  assert(type != ElementType::Unknown);
+
   const Tags& tags = element->getTags();
 
   for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
@@ -287,13 +288,15 @@ void OsmGbdxXmlWriter::_writeTags(const ConstElementPtr& element)
     // Keywords can be a list
     if (key == "Kywrd")
     {
+      _writer->writeStartElement(key);
       QStringList l = val.split(";");
       for (int i = 0; i < l.size(); ++i)
       {
-        _writer->writeStartElement(key);
+        _writer->writeStartElement("value");
         _writer->writeCharacters(removeInvalidCharacters(l[i]));
         _writer->writeEndElement();
       }
+      _writer->writeEndElement();
       continue;
     }
 
@@ -303,19 +306,18 @@ void OsmGbdxXmlWriter::_writeTags(const ConstElementPtr& element)
     _writer->writeEndElement();
   } // End tag loop
 
-
-  // This is the next to fix.
-  if (type == ElementType::Relation)
-  {
-    ConstRelationPtr relation = boost::dynamic_pointer_cast<const Relation>(element);
-    if (relation->getType() != "")
-    {
-      _writer->writeStartElement("Got Relation");
-      _writer->writeAttribute("k", "type");
-      _writer->writeAttribute("v", removeInvalidCharacters(relation->getType()));
-      _writer->writeEndElement();
-    }
-  }
+//  // This is the next to fix.
+//  if (type == ElementType::Relation)
+//  {
+//    ConstRelationPtr relation = boost::dynamic_pointer_cast<const Relation>(element);
+//    if (relation->getType() != "")
+//    {
+//      _writer->writeStartElement("Got Relation");
+//      _writer->writeAttribute("k", "type");
+//      _writer->writeAttribute("v", removeInvalidCharacters(relation->getType()));
+//      _writer->writeEndElement();
+//    }
+//  }
 
 }
 
@@ -353,7 +355,7 @@ void OsmGbdxXmlWriter::_writeWays(ConstOsmMapPtr map)
     if (w.get() == NULL)
       continue;
 
-    //  Make sure that building ways are "complete"
+    // Make sure that building ways are "complete"
     const vector<long>& nodes = w->getNodeIds();
     bool valid = true;
     if (OsmSchema::getInstance().isArea(w))
@@ -372,7 +374,7 @@ void OsmGbdxXmlWriter::_writeWays(ConstOsmMapPtr map)
     if (valid)
     {
       _newOutputFile();
-      _writePartialIncludePoints(w,map);
+      _writeWayWithPoints(w,map);
     }
     else
     {
@@ -405,7 +407,7 @@ void OsmGbdxXmlWriter::_writeRelations(ConstOsmMapPtr map)
   for (int i = 0; i < rids.size(); i++)
   {
     _newOutputFile();
-    writePartial(map->getRelation(rids[i]));
+    _writeRelationWithPoints(map->getRelation(rids[i]),map);
   }
 }
 
@@ -423,6 +425,9 @@ void OsmGbdxXmlWriter::writePartial(const ConstNodePtr& n)
 {
   LOG_VART(n);
 
+  // WKT Format:
+  //  POINT (30 10)
+
   _writer->writeStartElement("Location");
   _writer->writeCharacters(QString("POINT (%1 %2)").arg(QString::number(n->getX(), 'f', _precision)).arg(QString::number(n->getY(), 'f', _precision)));
   _writer->writeEndElement();
@@ -430,10 +435,11 @@ void OsmGbdxXmlWriter::writePartial(const ConstNodePtr& n)
   _writeTags(n);
 }
 
-void OsmGbdxXmlWriter::_writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapPtr map)
+void OsmGbdxXmlWriter::_writeWayWithPoints(const ConstWayPtr& w, ConstOsmMapPtr map)
 {
   LOG_VART(w);
 
+// GBDX XML Format:
 //  <Det_Val>
 //      <features>
 //        <geometry>
@@ -450,15 +456,29 @@ void OsmGbdxXmlWriter::_writePartialIncludePoints(const ConstWayPtr& w, ConstOsm
 //      </features>
 
   _writer->writeStartElement("Det_Val");
+  _writer->writeStartElement("features");
+  _writer->writeStartElement("geometry");
+  _writer->writeStartElement("WKT");
+
+  // WKT Format:
+  // LINESTRING (30 10, 10 30, 40 40)
+  // POLYGON ((30 10, 40 40, 20 40, 10 20, 30 10))
+  // POLYGON ((35 10, 45 45, 15 40, 10 20, 35 10),(20 30, 35 35, 30 20, 20 30))
+
+  QString featureGeometry;
+  QString endBracket;
 
   const vector<long>& nodes = w->getNodeIds();
-
   if (OsmSchema::getInstance().isArea(w) || nodes[0] == nodes[nodes.size() - 1])
   {
-    _writer->writeCharacters(QString("POLYGON ("));
+    featureGeometry = "Polygon";
+    endBracket = "))";
+    _writer->writeCharacters(QString("POLYGON (("));
   }
   else
   {
+    featureGeometry = "Linestring";
+    endBracket = ")";
     _writer->writeCharacters(QString("LINESTRING ("));
   }
 
@@ -474,9 +494,28 @@ void OsmGbdxXmlWriter::_writePartialIncludePoints(const ConstWayPtr& w, ConstOsm
     ConstNodePtr n = map->getNode(nid);
     _writer->writeCharacters(QString("%1 %2").arg(QString::number(n->getX(), 'f', _precision)).arg(QString::number(n->getY(), 'f', _precision)));
   }
+  _writer->writeCharacters(endBracket);
 
-  _writer->writeCharacters(QString(")"));
+  _writer->writeEndElement(); // WKT
+
+//  _writer->writeStartElement("type");
+//  _writer->writeCharacters(featureGeometry);
+//  _writer->writeEndElement();
+
+  _writer->writeEndElement(); // geometry
+
+  // Add the Det_id from the Tag
+  _writer->writeStartElement("id");
+  _writer->writeCharacters(w->getTags()["Det_id"]);
   _writer->writeEndElement();
+
+//  _writer->writeStartElement("type");
+//  _writer->writeCharacters("Feature");
+//  _writer->writeEndElement();
+
+  _writer->writeEndElement(); // features
+
+  _writer->writeEndElement(); // Det_Val
 
   _writeTags(w);
 }
@@ -485,7 +524,7 @@ void OsmGbdxXmlWriter::writePartial(const ConstWayPtr& w)
 {
   LOG_VARI(w);
 
-  _writer->writeStartElement("way");
+  _writer->writeStartElement("Partial way");
   _writer->writeAttribute("visible", "true");
   _writer->writeAttribute("id", QString::number(w->getId()));
 
@@ -505,9 +544,10 @@ void OsmGbdxXmlWriter::writePartial(const ConstRelationPtr& r)
 {
   LOG_VART(r);
 
-  _writer->writeStartElement("relation");
+  _writer->writeStartElement("XX relation");
   _writer->writeAttribute("visible", "true");
   _writer->writeAttribute("id", QString::number(r->getId()));
+  _writer->writeAttribute("type", r->getType());
 
   const vector<RelationData::Entry>& members = r->getMembers();
   for (size_t j = 0; j < members.size(); j++)
@@ -519,6 +559,116 @@ void OsmGbdxXmlWriter::writePartial(const ConstRelationPtr& r)
     _writer->writeAttribute("role", removeInvalidCharacters(e.role));
     _writer->writeEndElement();
   }
+
+  _writeTags(r);
+
+  _writer->writeEndElement();
+}
+
+void OsmGbdxXmlWriter::_writeRelationWithPoints(const ConstRelationPtr& r,  ConstOsmMapPtr map)
+{
+  LOG_VART(r);
+
+  _writer->writeStartElement("Det_Val");
+
+  _writer->writeStartElement("features");
+  _writer->writeStartElement("geometry");
+  _writer->writeStartElement("WKT");
+
+  // The format is:
+  // MULTIPOINT (10 40, 40 30, 20 20, 30 10)
+  // MULTILINESTRING ((10 10, 20 20, 10 40),(40 40, 30 30, 40 20, 30 10))
+  // MULTIPOLYGON (((30 20, 45 40, 10 40, 30 20)),((15 5, 40 10, 10 20, 5 10, 15 5)))
+  // MULTIPOLYGON (((40 40, 20 45, 45 30, 40 40)),((20 35, 10 30, 10 10, 30 5, 45 20, 20 35),(30 20, 20 15, 20 25, 30 20)))
+
+
+  QString featureGeometry(r->getType());
+  QString startBracket;
+  QString endBracket;
+
+  if (featureGeometry == "multipolygon")
+  {
+    featureGeometry = "MultiPolygon";
+    startBracket = "((";
+    endBracket = "))";
+  }
+  else if (featureGeometry == "multilinestring")
+  {
+    featureGeometry = "MultiLineString";
+    startBracket = "(";
+    endBracket = ")";
+  }
+  else if (featureGeometry == "multipoint")
+  {
+    featureGeometry = "MultiPoint";
+    startBracket = "";
+    endBracket = "";
+  }
+
+  _writer->writeCharacters(featureGeometry.toUpper() + QString(" ("));
+  //    _writer->writeStartElement("member");
+  //    _writer->writeAttribute("type", _typeName(e.getElementId().getType()));
+  //    _writer->writeAttribute("ref", QString::number(e.getElementId().getId()));
+  //    _writer->writeAttribute("role", removeInvalidCharacters(e.role));
+  //    _writer->writeEndElement();
+
+  bool firstRel = true;
+  const vector<RelationData::Entry>& members = r->getMembers();
+  for (vector<RelationData::Entry>::const_iterator it = members.begin(); it != members.end(); ++it)
+  {
+    ConstElementPtr elm = map->getElement(it->getElementId());
+    if (elm.get() == NULL)
+      continue;
+
+    if (firstRel)
+      firstRel = false;
+    else
+      _writer->writeCharacters(QString(", "));
+
+    // Sort out ways first. Nodes later
+    if (elm->getElementType() == ElementType::Way)
+    {
+      ConstWayPtr w = map->getWay(elm->getElementId());
+
+      _writer->writeCharacters(startBracket);
+      bool firstWay = true;
+      for (size_t j = 0; j < w->getNodeCount(); j++)
+      {
+        if (firstWay)
+          firstWay = false;
+        else
+          _writer->writeCharacters(QString(", "));
+
+        const long nid = w->getNodeId(j);
+        ConstNodePtr n = map->getNode(nid);
+        _writer->writeCharacters(QString("%1 %2").arg(QString::number(n->getX(), 'f', _precision)).arg(QString::number(n->getY(), 'f', _precision)));
+      }
+      _writer->writeCharacters(endBracket);
+    } // End way
+
+  } // End relation member
+
+  _writer->writeCharacters(QString(")"));
+  _writer->writeEndElement(); // WKT
+
+//  _writer->writeStartElement("type");
+//  _writer->writeCharacters(featureGeometry);
+//  _writer->writeEndElement();
+
+  _writer->writeEndElement(); // geometry
+
+  // Add the Det_id from the Tag
+  _writer->writeStartElement("id");
+  _writer->writeCharacters(r->getTags()["Det_id"]);
+  _writer->writeEndElement();
+
+//  _writer->writeStartElement("type");
+//  _writer->writeCharacters("Feature");
+//  _writer->writeEndElement();
+
+  _writer->writeEndElement(); // features
+
+  _writer->writeEndElement(); // Det_Val
 
   _writeTags(r);
 

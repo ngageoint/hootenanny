@@ -122,10 +122,14 @@ private:
   QDir _outputDir;
 
   void _writeTags(const ConstElementPtr& element);
+
   void _writeNodes(ConstOsmMapPtr map);
+
   void _writeWays(ConstOsmMapPtr map);
-  void _writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapPtr map);
+  void _writeWayWithPoints(const ConstWayPtr& w, ConstOsmMapPtr map);
+
   void _writeRelations(ConstOsmMapPtr map);
+  void _writeRelationWithPoints(const ConstRelationPtr& r,  ConstOsmMapPtr map);
 
   /**
    * @brief _writeBounds Writes out the OSM <bounds> tag in the format:
