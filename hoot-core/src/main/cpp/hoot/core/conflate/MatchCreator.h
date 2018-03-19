@@ -57,7 +57,8 @@ public:
     Waterway = 3,
     PoiPolygonPOI = 4,  //this is a superset of POI specific to poi/poly conflation
     Polygon = 5,    //polygon is a superset of building
-    Unknown = 6 // Unknown must always be last
+    Area = 6,
+    Unknown = 7 // Unknown must always be last
   };
 
   enum FeatureCalcType
