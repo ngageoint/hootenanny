@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="GEOGCS[&quot;WGS 84&quot;,&#10;    DATUM[&quot;WGS_1984&quot;,&#10;        SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,&#10;            AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],&#10;    PRIMEM[&quot;Greenwich&quot;,0,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],&#10;    UNIT[&quot;degree&quot;,0.0174532925199433,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;9122&quot;]],&#10;    AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]">
+    <node visible="true" id="-17806" lat="30.51734000000000" lon="47.78616682872340"/>
+    <node visible="true" id="-7454" lat="30.51811570000000" lon="47.78836059999999"/>
+    <node visible="true" id="-17807" lat="30.51771924254545" lon="47.78579700000000"/>
+    <node visible="true" id="-7455" lat="30.51825439999999" lon="47.78847160000000"/>
+    <node visible="true" id="-17808" lat="30.51734000000000" lon="47.78724123946721"/>
+    <node visible="true" id="-17809" lat="30.51968000000000" lon="47.78858968894376"/>
+    <node visible="true" id="-7459" lat="30.51853140000000" lon="47.78849460000000"/>
+    <way visible="true" id="-4869">
+        <nd ref="-17808"/>
+        <nd ref="-7454"/>
+        <nd ref="-7455"/>
+        <nd ref="-7459"/>
+        <nd ref="-17809"/>
+    </way>
+    <way visible="true" id="-4868">
+        <nd ref="-17806"/>
+        <nd ref="-17807"/>
+    </way>
+</osm>

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SETTAGVISITOR_H
 #define SETTAGVISITOR_H
@@ -48,7 +48,7 @@ public:
   SetTagVisitor();
   SetTagVisitor(QString key, QString value, bool appendToExistingValue = false,
                 //using Unknown as the default empty value for element type
-                ElementType elementType = ElementType::Unknown);
+                ElementType elementType = ElementType::Unknown, bool overwriteExistingTag = true);
 
   virtual void setConfiguration(const Settings& conf);
 
@@ -61,6 +61,8 @@ private:
   bool _appendToExistingValue;
   //an element type filter
   ElementType _elementType;
+  //overwrites any tag with a matching key
+  bool _overwriteExistingTag;
 
   void _setTag(const ElementPtr& e, QString k, QString v);
 };

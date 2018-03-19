@@ -351,6 +351,8 @@ public:
   bool isAreaForStats(const Tags& t, ElementType type) const;
   bool isAreaForStats(const ConstElementPtr& e) const;
 
+  bool isNonBuildingArea(const ConstElementPtr& e) const;
+
   bool isBuilding(const Tags& t, ElementType type) const;
   bool isBuilding(const ConstElementPtr& e) const;
 
@@ -359,6 +361,24 @@ public:
    */
   bool isBuildingPart(const Tags& t, ElementType type) const;
   bool isBuildingPart(const ConstElementPtr& e) const;
+
+  /**
+   * Determines whether the element passed in is a polygon under the POI to Polygon conflation
+   * definition
+   *
+   * @param e element to determine type of
+   * @return true if the element meets the specified criteria; false otherwise
+   */
+  bool isPoiPolygonPoly(const ConstElementPtr& e);
+
+  /**
+   * Determines whether the element passed in is a POI under the POI to Polygon conflation
+   * definition
+   *
+   * @param e element to determine type of
+   * @return true if the element meets the specified criteria; false otherwise
+   */
+  bool isPoiPolygonPoi(const ConstElementPtr& e);
 
   /**
    * Returns true if this is a geometry collection.
@@ -468,6 +488,7 @@ public:
   void updateOrCreateVertex(const SchemaVertex& tv);
 
 private:
+
   // the templates we're including take a crazy long time to include, so I'm isolating the
   // implementation.
   OsmSchemaData* d;

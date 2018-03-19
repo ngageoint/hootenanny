@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HootApiDbReader.h"
 
@@ -142,7 +142,7 @@ NodePtr HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& 
 
   // We want the reader's status to always override any existing status
   // Unless, we really want to keep the status.
-  if (!_keepFileStatus && _status != Status::Invalid)
+  if (!_keepStatusTag && _status != Status::Invalid)
   {
     node->setStatus(_status);
   }
@@ -175,7 +175,7 @@ WayPtr HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& ma
   way->setTags(ApiDb::unescapeTags(resultIterator.value(ApiDb::WAYS_TAGS)));
   _updateMetadataOnElement(way);
   //we want the reader's status to always override any existing status
-  if (!_keepFileStatus && _status != Status::Invalid)
+  if (!_keepStatusTag && _status != Status::Invalid)
   {
     way->setStatus(_status);
   }
@@ -216,7 +216,7 @@ RelationPtr HootApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, 
   relation->setTags(ApiDb::unescapeTags(resultIterator.value(ApiDb::RELATIONS_TAGS)));
   _updateMetadataOnElement(relation);
   //we want the reader's status to always override any existing status
-  if (!_keepFileStatus && _status != Status::Invalid)
+  if (!_keepStatusTag && _status != Status::Invalid)
   {
     relation->setStatus(_status);
   }

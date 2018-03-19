@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGCONTAINSFILTER_H
 #define TAGCONTAINSFILTER_H
@@ -38,6 +38,7 @@ namespace hoot
 class TagContainsFilter : public BaseElementFilter
 {
 public:
+
   TagContainsFilter(FilterType type, QString key, QString valueSubstring);
   TagContainsFilter(FilterType type, QStringList keys, QStringList valueSubstrings);
 
@@ -47,9 +48,11 @@ public:
    */
   void addPair(QString key, QString valueSubstring);
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new TagContainsFilter(_type, _key, _valueSubstring)); }
+  virtual ElementCriterionPtr clone()
+  { return ElementCriterionPtr(new TagContainsFilter(_type, _key, _valueSubstring)); }
 
 protected:
+
   virtual bool isFiltered(const Element& e) const;
 
   QStringList _key, _valueSubstring;

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -116,7 +116,7 @@ private:
     const bool singleInput = input2.trimmed().isEmpty();
 
     //some in these datasets may have status=3 if you're loading conflated data, so use
-    //reader.use.file.status and reader.keep.file.status if you want to retain that value
+    //reader.use.file.status and reader.keep.status.tag if you want to retain that value
     OsmMapPtr map1(new OsmMap());
     OsmMapPtr map2(new OsmMap());
     if (!singleInput)

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="0" minlon="0" maxlat="0" maxlon="0"/>
+    <way visible="true" id="-279655" timestamp="1970-01-01T00:00:00Z" version="1">
+        <tag k="hoot:status" v="3"/>
+        <tag k="alt_name" v="building 1;building 2;building 4"/>
+        <tag k="building" v="commercial"/>
+        <tag k="name" v="building 3"/>
+    </way>
+</osm>

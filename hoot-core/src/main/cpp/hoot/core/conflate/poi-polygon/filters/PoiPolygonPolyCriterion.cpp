@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonPolyCriterion.h"
 
 // hoot
-#include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
+#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>
 
 namespace hoot
@@ -41,7 +41,7 @@ PoiPolygonPolyCriterion::PoiPolygonPolyCriterion()
 
 bool PoiPolygonPolyCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
 {
-  return PoiPolygonMatch::isPoly(*e);
+  return OsmSchema::getInstance().isPoiPolygonPoly(e);
 }
 
 }

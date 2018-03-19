@@ -24,40 +24,41 @@
  *
  * @copyright Copyright (C) 2016, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef POIPOLYGONMERGERJS_H
-#define POIPOLYGONMERGERJS_H
 
+#ifndef AREAMERGERJS_H
+#define AREAMERGERJS_H
+
+// Hoot
 #include <hoot/js/HootJsStable.h>
 #include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/PluginContext.h>
+#include <hoot/core/OsmMap.h>
+
+using namespace v8;
 
 namespace hoot
 {
 
 /**
- * Hoot JS wrapper around PoiPolygonMerger
+ * Merges areas
  */
-class PoiPolygonMergerJs : public node::ObjectWrap
+class AreaMergerJs
 {
 
 public:
 
- static void Init(v8::Handle<v8::Object> target);
-
-private:
-
-  PoiPolygonMergerJs();
-  ~PoiPolygonMergerJs();
-
   /**
-   * Merges a POI with a polygon
+   * Merges an unlimited number of areas together using a generic conflation script
    *
-   * @param args an OSM map containing a single node POI and a single poly, area or building, which
-   * can be a way or a relation (multipolygon)
-   * @return a map with the polygon and POI merged
+   * The map passed may or may not contain constituent elements (way nodes, relation members).
+   *
+   * @param map a map containing the buildings to be merged
+   * @param mergeTargetId the ID of the area which all other areas should be merged into
+   * @param current the context this method should run under
    */
-  static void jsPoiPolyMerge(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void mergeAreas(OsmMapPtr map, const ElementId& mergeTargetId, Isolate* current);
 };
 
 }
 
-#endif // POIPOLYGONMERGERJS_H
+#endif // AREAMERGERJS_H

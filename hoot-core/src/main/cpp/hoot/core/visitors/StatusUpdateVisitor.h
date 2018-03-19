@@ -22,43 +22,43 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
- * @copyright Copyright (C) 2016, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef AREAMERGER_H
-#define AREAMERGER_H
-
+#ifndef STATUSUPDATEVISITOR_H
+#define STATUSUPDATEVISITOR_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/util/Configurable.h>
 
+#include "ElementOsmMapVisitor.h"
 
 namespace hoot
 {
 
-class OsmMap;
-
 /**
- * Merges two non-building areas
- *
- * Adapted from PoiPolygonMerger; may need some additional work
+ * Sets the status on elements
  */
-class AreaMerger
+class StatusUpdateVisitor : public ElementOsmMapVisitor, public Configurable
 {
-
 public:
 
-  AreaMerger();
+  static std::string className() { return "hoot::StatusUpdateVisitor"; }
 
-  /**
-   * Merges to non-building areas
-   *
-   * @param map an OSM map containing two non-building areas
-   */
-  static void merge(OsmMapPtr map);
+  StatusUpdateVisitor();
+  StatusUpdateVisitor(Status status, bool onlyUpdateIfStatusInvalid = false);
 
+  virtual void setConfiguration(const Settings& conf);
+
+  virtual void visit(const boost::shared_ptr<Element>& e);
+
+private:
+
+  //status to apply to elements
+  Status _status;
+  //if true, will only update the status if it is already set to invalid
+  bool _onlyUpdateIfStatusInvalid;
 };
 
 }
 
-#endif // AREAMERGER_H
+#endif // STATUSUPDATEVISITOR_H
