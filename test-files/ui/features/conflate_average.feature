@@ -18,7 +18,7 @@ Feature: Average conflation
     And I select the "Average" option in "#containerofConfType"
     And I scroll element into view and press "conflate2"
     Then I wait 30 "seconds" to see "Conflating …"
-    Then I wait 4 "minutes" to see "DcRoadsAverageConflationCucumber"
+    Then I wait 5 "minutes" to see "DcRoadsAverageConflationCucumber"
     Then I click the "trash" button
     And I accept the alert
     And I wait 5 "seconds" to not see "DcRoadsAverageConflationCucumber"
