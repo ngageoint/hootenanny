@@ -18692,7 +18692,7 @@
         <member type="way" ref="-17" role="reviewee"/>
         <member type="way" ref="-797" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="POI to Polygon;"/>
+        <tag k="hoot:review:type" v="POI to Polygon;Area"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Conflicting information"/>
@@ -18703,7 +18703,7 @@
         <member type="node" ref="-4680" role="reviewee"/>
         <member type="way" ref="-65" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="POI to Polygon;"/>
+        <tag k="hoot:review:type" v="POI to Polygon;Area"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Conflicting information"/>
@@ -18714,7 +18714,7 @@
         <member type="node" ref="-4680" role="reviewee"/>
         <member type="way" ref="-797" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="POI to Polygon;"/>
+        <tag k="hoot:review:type" v="POI to Polygon;Area"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Conflicting information"/>
@@ -18725,7 +18725,7 @@
         <member type="way" ref="-12" role="reviewee"/>
         <member type="way" ref="-798" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="POI to Polygon;"/>
+        <tag k="hoot:review:type" v="POI to Polygon;Area"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Conflicting information"/>
@@ -18736,7 +18736,7 @@
         <member type="node" ref="-4676" role="reviewee"/>
         <member type="way" ref="-12" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="POI to Polygon;"/>
+        <tag k="hoot:review:type" v="POI to Polygon;Area"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Conflicting information"/>
@@ -18747,7 +18747,7 @@
         <member type="node" ref="-4686" role="reviewee"/>
         <member type="way" ref="-116" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="POI to Polygon;"/>
+        <tag k="hoot:review:type" v="POI to Polygon;Area"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Conflicting information"/>
@@ -18758,7 +18758,7 @@
         <member type="node" ref="-4686" role="reviewee"/>
         <member type="way" ref="-798" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="POI to Polygon;"/>
+        <tag k="hoot:review:type" v="POI to Polygon;Area"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Conflicting information"/>
@@ -18769,7 +18769,7 @@
         <member type="node" ref="-4687" role="reviewee"/>
         <member type="way" ref="-12" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="POI to Polygon;"/>
+        <tag k="hoot:review:type" v="POI to Polygon;Area"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Conflicting information"/>
@@ -18802,7 +18802,7 @@
         <member type="way" ref="-69" role="reviewee"/>
         <member type="way" ref="-799" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="POI to Polygon;"/>
+        <tag k="hoot:review:type" v="POI to Polygon;Area"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Conflicting information"/>
@@ -18813,7 +18813,7 @@
         <member type="node" ref="-4679" role="reviewee"/>
         <member type="way" ref="-69" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="POI to Polygon;"/>
+        <tag k="hoot:review:type" v="POI to Polygon;Area"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Conflicting information"/>
@@ -18824,7 +18824,7 @@
         <member type="node" ref="-4681" role="reviewee"/>
         <member type="way" ref="-69" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="POI to Polygon;"/>
+        <tag k="hoot:review:type" v="POI to Polygon;Area"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Conflicting information"/>
@@ -18835,7 +18835,7 @@
         <member type="node" ref="-4752" role="reviewee"/>
         <member type="way" ref="-799" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="POI to Polygon;"/>
+        <tag k="hoot:review:type" v="POI to Polygon;Area"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Conflicting information"/>
@@ -18846,7 +18846,7 @@
         <member type="way" ref="-72" role="reviewee"/>
         <member type="way" ref="-801" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="POI to Polygon;"/>
+        <tag k="hoot:review:type" v="POI to Polygon;Area"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Conflicting information"/>
@@ -18857,7 +18857,7 @@
         <member type="node" ref="-241" role="reviewee"/>
         <member type="way" ref="-72" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="POI to Polygon;"/>
+        <tag k="hoot:review:type" v="POI to Polygon;Area"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Conflicting information"/>
@@ -18868,7 +18868,7 @@
         <member type="node" ref="-242" role="reviewee"/>
         <member type="way" ref="-72" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="POI to Polygon;"/>
+        <tag k="hoot:review:type" v="POI to Polygon;Area"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Conflicting information"/>
@@ -18879,7 +18879,7 @@
         <member type="node" ref="-4678" role="reviewee"/>
         <member type="way" ref="-72" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="POI to Polygon;"/>
+        <tag k="hoot:review:type" v="POI to Polygon;Area"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Conflicting information"/>
@@ -18890,7 +18890,7 @@
         <member type="node" ref="-4683" role="reviewee"/>
         <member type="way" ref="-72" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="POI to Polygon;"/>
+        <tag k="hoot:review:type" v="POI to Polygon;Area"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Conflicting information"/>
@@ -18901,7 +18901,7 @@
         <member type="node" ref="-4685" role="reviewee"/>
         <member type="way" ref="-72" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="POI to Polygon;"/>
+        <tag k="hoot:review:type" v="POI to Polygon;Area"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Conflicting information"/>
