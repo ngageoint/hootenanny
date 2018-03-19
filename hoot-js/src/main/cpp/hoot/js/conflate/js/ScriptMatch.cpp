@@ -106,6 +106,13 @@ void ScriptMatch::_calculateClassification(const ConstOsmMapPtr& map, Handle<Obj
     _neverCausesConflict = v->BooleanValue();
   }
 
+  Handle<String> featureTypeStr = String::NewFromUtf8(current, "baseFeatureType");
+  if (ToLocal(&_plugin)->Has(featureTypeStr))
+  {
+    Handle<Value> value = ToLocal(&_plugin)->Get(featureTypeStr);
+    _matchName = toCpp<QString>(value);
+  }
+
   try
   {
     Handle<Value> v = _call(map, mapObj, plugin);
@@ -285,8 +292,8 @@ bool ScriptMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sha
     eid22 = sharedEid;
   }
 
-  boost::shared_ptr<ScriptMatch> m1(new ScriptMatch(_script, _plugin, copiedMap, copiedMapJs, eid11, eid12,
-    _threshold));
+  boost::shared_ptr<ScriptMatch> m1(
+    new ScriptMatch(_script, _plugin, copiedMap, copiedMapJs, eid11, eid12, _threshold));
   MatchSet ms;
   ms.insert(m1.get());
   vector<Merger*> mergers;
@@ -338,7 +345,8 @@ Handle<Value> ScriptMatch::_call(const ConstOsmMapPtr& map, Handle<Object> mapOb
   Context::Scope context_scope(_script->getContext(current));
 
   plugin =
-    Handle<Object>::Cast(_script->getContext(current)->Global()->Get(String::NewFromUtf8(current, "plugin")));
+    Handle<Object>::Cast(
+      _script->getContext(current)->Global()->Get(String::NewFromUtf8(current, "plugin")));
   Handle<Value> value = plugin->Get(String::NewFromUtf8(current, "matchScore"));
   Handle<Function> func = Handle<Function>::Cast(value);
   Handle<Value> jsArgs[3];
@@ -367,7 +375,8 @@ Handle<Value> ScriptMatch::_callGetMatchFeatureDetails(const ConstOsmMapPtr& map
   Context::Scope context_scope(_script->getContext(current));
 
   Handle<Object> plugin =
-    Handle<Object>::Cast(_script->getContext(current)->Global()->Get(String::NewFromUtf8(current, "plugin")));
+    Handle<Object>::Cast(
+      _script->getContext(current)->Global()->Get(String::NewFromUtf8(current, "plugin")));
   Handle<Value> value = plugin->Get(String::NewFromUtf8(current, "getMatchFeatureDetails"));
   Handle<Function> func = Handle<Function>::Cast(value);
   Handle<Value> jsArgs[3];
