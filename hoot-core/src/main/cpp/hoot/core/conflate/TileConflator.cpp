@@ -142,7 +142,7 @@ void TileConflator::conflate(QString outputPath)
     _worker->conflate(conflatedBits, _scratchIn, _scratchOut);
   }
 
-  _worker->clean(_scratchOut, outputPath);
+  _worker->cleanup(_scratchOut, outputPath);
   _worker->rmdir(_scratchIn);
   _worker->rmdir(_scratchOut);
 }

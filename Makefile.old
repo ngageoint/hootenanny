@@ -21,7 +21,7 @@ default: build
 all: build
 always:
 
-build: makedirs js-make qt-make pp-build services-build ui-build model-build conf/dictionary/words.sqlite \
+build: makedirs js-make qt-make pp-build services-build model-build conf/dictionary/words.sqlite \
 	conf/dictionary/WordsAbridged.sqlite osmapidb
 
 makedirs: 
@@ -287,7 +287,7 @@ conf/models/%.rf: conf/models/%.arff.bz2 qt-make always
 	   (test -e $(@:.rf=.sha1sum) && test "$$(sha1sum $@)" != "$$(cat $(@:.rf=.sha1sum))"); then \
 	     test -e $(@:.rf=.sha1sum) || echo "Please create a sha1sum for $@."; \
 	     ( test -e $(@:.rf=.sha1sum) && test -e $@ && test "$$(sha1sum $@)" != "$$(cat $(@:.rf=.sha1sum))" ) && echo "Rebuilding $@ due to mismatched sha1sum." ; \
-	     hoot build-rf $< $@ ; \
+	     hoot model-rf-build $< $@ ; \
 	     sha1sum $@ > $(@:.rf=.sha1sum); \
 	fi
 

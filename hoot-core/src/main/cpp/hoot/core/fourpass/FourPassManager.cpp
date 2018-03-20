@@ -134,7 +134,7 @@ void FourPassManager::apply(QString outputPath)
     _worker->applyOp(_op, appliedBits, _scratchIn, _scratchOut);
   }
 
-  _worker->clean(_scratchOut, outputPath);
+  _worker->cleanup(_scratchOut, outputPath);
   _worker->rmdir(_scratchIn);
   _worker->rmdir(_scratchOut);
 }
