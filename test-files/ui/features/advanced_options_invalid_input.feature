@@ -1,7 +1,7 @@
 Feature: Advanced Conflation Options
 
 	Scenario: I can add data
-		Given I am on Hootenanny
+            Given I am on Hootenanny
 	    And I resize the window
 	    And I click Get Started
 	    And I press "Add Reference Dataset"
