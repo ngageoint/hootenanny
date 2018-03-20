@@ -116,10 +116,6 @@ void Hoot::_init()
 
   reinit();
 
-  // force load hoot hadoop if it is available.
-# ifdef HOOT_HAVE_HADOOP
-  loadLibrary("HootHadoop");
-# endif
 # ifdef HOOT_HAVE_RND
   loadLibrary("HootRnd");
 # endif

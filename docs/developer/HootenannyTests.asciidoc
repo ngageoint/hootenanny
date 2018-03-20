@@ -317,18 +317,6 @@ make -sj($nproc) plugins-test
 
 They run by default in the slow test suite.
 
-==== Core Pretty Pipes Tests
-
-The Pretty Pipes Test test the pretty-pipes submodule.  They may be invoked in isolation with:
-
---------------
-# configure step required once per configuration only
-aclocal && autoconf && autoheader && automake && ./configure
-make -sj($nproc) pp-test
---------------
-
-They run by default in the quick test suite.
-
 === Web Services Tests
 
 The Web Services tests test the Hootenanny web services interface.  There are two types of
