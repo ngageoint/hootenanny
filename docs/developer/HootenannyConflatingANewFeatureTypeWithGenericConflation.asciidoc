@@ -32,11 +32,11 @@ TODO (also add pruning of existing irrelevant ref tags)
 If more than 200 matches were made in the data, you may want to crop your data down to a smaller size
 so that test runs complete in five minutes or less, if possible.  Since you will be running many 
 tests as you tweak the model, this will prevent testing from taking an unreasonable amount of time.  
-Use the `crop-map` command for this.
+Use the `crop` command for this.
 
 Example: 
 -------------------------------------- 
-crop-map (input.osm) (output.osm) (bounds)
+crop (input.osm) (output.osm) (bounds)
 --------------------------------------
 
 === Initial Setup
@@ -381,16 +381,16 @@ nohup java -Xmx1000M -jar /usr/local/weka-3-6-12/weka.jar &
 ==== Creating the Weka Model File Output
 
 After you have implemented the getMatchFeatureDetails method in your Javascript rules file, a Weka 
-model file can be output from Hootenanny using the build-model command.  An example:
+model file can be output from Hootenanny using the model-build command.  An example:
 ----------------
-hoot build-model -C conf/LinearWaterway.conf dataset-1.osm dataset-2.osm model-file
+hoot model-build -C conf/LinearWaterway.conf dataset-1.osm dataset-2.osm model-file
 ---------------
 
 ==== Examining the Model in Weka
 
 1. Launch the Weka Explorer application.
 2. From the Preprocess tab, select the Open File button and open the file you exported with the 
-build-model command.
+model-build command.
 
 ===== Visualizing Relationships
 

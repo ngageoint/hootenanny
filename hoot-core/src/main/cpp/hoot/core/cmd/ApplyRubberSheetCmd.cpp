@@ -51,7 +51,7 @@ public:
 
   ApplyRubberSheetCmd() { }
 
-  virtual QString getName() const { return "apply-rubber-sheet"; }
+  virtual QString getName() const { return "rubber-sheet-apply"; }
 
   virtual int runSimple(QStringList args)
   {

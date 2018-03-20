@@ -1,9 +1,9 @@
-== apply-rubber-sheet
+== rubber-sheet-apply
 
 === Description
 
-The +apply-rubber-sheet+ command uses a transform created with
-+derive-rubber-sheet+ to warp a +input+ and write to +output+.
+The +rubber-sheet-apply+ command uses a transform created with
++rubber-sheet-derive+ to warp a +input+ and write to +output+.
 
 * +transform.rs+ - Transform rubber sheet spec for moving the input.
 * +input+ - Input (e.g. .osm file).
@@ -12,12 +12,12 @@ The +apply-rubber-sheet+ command uses a transform created with
 === Usage
 
 --------------------------------------
-apply-rubber-sheet (transform.rs) (input) (output)
+rubber-sheet-apply (transform.rs) (input) (output)
 --------------------------------------
 
 ==== Example
 
 --------------------------------------
-hoot apply-rubber-sheet TigerToDcGis.rs TigerRoads.osm TigerRoadsWarped.osm
+hoot rubber-sheet-apply TigerToDcGis.rs TigerRoads.osm TigerRoadsWarped.osm
 --------------------------------------
 

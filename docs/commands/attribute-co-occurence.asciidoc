@@ -1,8 +1,8 @@
-== attr-co-occurence
+== attribute-co-occurrence
 
 === Description
 
-The +attr-co-occurence+ command reads from inputs and outputs a co-occurence
+The +attribute-co-occurrence+ command reads from inputs and outputs a co-occurence
 matrix based on attribute values
 
 * +--no-table+ - print the matrix as a list.  The default is to print out as a
@@ -13,6 +13,6 @@ matrix based on attribute values
 === Usage
 
 --------------------------------------
-attr-co-occurence [--no-table] (input1 input2)
+attribute-co-occurrence [--no-table] (input1 input2)
 --------------------------------------
 

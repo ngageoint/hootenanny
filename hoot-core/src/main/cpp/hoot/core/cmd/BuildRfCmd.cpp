@@ -60,7 +60,7 @@ public:
 
   BuildRfCmd() { }
 
-  virtual QString getName() const { return "build-rf"; }
+  virtual QString getName() const { return "model-rf-build"; }
 
   virtual int runSimple(QStringList args)
   {

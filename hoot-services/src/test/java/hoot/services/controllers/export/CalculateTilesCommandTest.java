@@ -85,7 +85,7 @@ public class CalculateTilesCommandTest {
         assertNotNull(command.getWorkDir());
         assertNotNull(command.getCommand());
 
-        String expectedCommand = "hoot calculate-tiles --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${OUTPUT} ${MAX_NODE_COUNT_PER_TILE} ${PIXEL_SIZE}";
+        String expectedCommand = "hoot tiles-calculate --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${OUTPUT} ${MAX_NODE_COUNT_PER_TILE} ${PIXEL_SIZE}";
         assertEquals(expectedCommand, command.getCommand());
 
         assertTrue(command.getSubstitutionMap().containsKey("DEBUG_LEVEL"));
@@ -143,7 +143,7 @@ public class CalculateTilesCommandTest {
         assertNotNull(command.getWorkDir());
         assertNotNull(command.getCommand());
 
-        String expectedCommand = "hoot calculate-tiles --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${OUTPUT}";
+        String expectedCommand = "hoot tiles-calculate --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${OUTPUT}";
         assertEquals(expectedCommand, command.getCommand());
 
         assertTrue(command.getSubstitutionMap().containsKey("DEBUG_LEVEL"));

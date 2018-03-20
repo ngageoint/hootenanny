@@ -145,7 +145,7 @@ The parameter +way.splitter.max.length+ can be used to specify this max length.
 Example usage:
 
 ------
-hoot cleanup -D map.cleaner.transforms=hoot::WaySplitterOp -D way.splitter.max.length=100 test-files/ToyTestA.osm tmp/dum.osm
+hoot clean -D map.cleaner.transforms=hoot::WaySplitterOp -D way.splitter.max.length=100 test-files/ToyTestA.osm tmp/dum.osm
 ------
 
 

@@ -41,7 +41,7 @@ class CalculateRandomTileCmd : public BaseCalculateTilesCmd
 
     CalculateRandomTileCmd() { }
 
-    virtual QString getName() const { return "calculate-random-tile"; }
+    virtual QString getName() const { return "tiles-calculate-random"; }
 
     virtual int runSimple(QStringList args)
     {

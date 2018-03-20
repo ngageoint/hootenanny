@@ -1,4 +1,4 @@
-== optimize-conflate-settings
+== optimize-network-conflation-options
 
 === Description
 
@@ -18,13 +18,13 @@ duration of the test run (optional)
 === Usage
 
 --------------------------------------
-optimize-conflate-settings (testsDir) (testType) (testSettings) (numIterations) (output) [customConfig]
+optimize-network-conflation-options (testsDir) (testType) (testSettings) (numIterations) (output) [customConfig]
 --------------------------------------
 
 ==== Example
 
 --------------------------------------
-hoot optimize-conflate-settings test-files/cases/hoot-rnd/network/conflicts case settings.json 50 output Config.conf
+hoot optimize-network-conflation-options test-files/cases/hoot-rnd/network/conflicts case settings.json 50 output Config.conf
 --------------------------------------
 
 NOTE: To use tests of type 'release' or 'perty' you must have access to the Hootenanny regression tests, which are

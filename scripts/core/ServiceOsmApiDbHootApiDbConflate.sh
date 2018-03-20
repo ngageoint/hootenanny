@@ -14,7 +14,7 @@ set -e
 #   - executes the changeset file SQL against the OSM API database
 #   - reads out the entire contents of the OSM API database and verifies it
 
-# If you pass "generate-random" in place of an actual AOI, then calculate-tiles will be used to randomly generate 
+# If you pass "generate-random" in place of an actual AOI, then tiles-calculate will be used to randomly generate 
 # usable AOI's, one of which will be selected.  If you pass "generate-random;<integer>" in place of an actual AOI, then 
 # the behavior is the same as previous described except the random AOI selection is seeded for reproducible results.  
 # This feature is useful in exploring potential issues using this workflow with various datasets.
@@ -71,8 +71,8 @@ if [ "$SELECT_RANDOM_AOI" == "true" ]; then
   echo ""
   echo "STEP 0: Calculating tiles and selecting one at random as the conflate AOI..."
   echo ""
-  hoot calculate-random-tile $HOOT_OPTS "$REF_DATASET;$SEC_DATASET" $OUTPUT_DIR/tile.geojson $RANDOM_SEED 10000 0.001
-  AOI=`hoot map-extent --error $OUTPUT_DIR/tile.geojson false`
+  hoot tiles-calculate-random $HOOT_OPTS "$REF_DATASET;$SEC_DATASET" $OUTPUT_DIR/tile.geojson $RANDOM_SEED 10000 0.001
+  AOI=`hoot extent --error $OUTPUT_DIR/tile.geojson false`
   echo "AOI: " $AOI
 fi
 
@@ -177,19 +177,19 @@ fi
 echo ""
 echo "STEP 11a: Writing a SQL changeset file that is the difference between the cropped reference input dataset specified AOI and the conflated output specified AOI..."
 echo ""
-hoot derive-changeset $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D api.db.email=$HOOT_EMAIL -D reader.use.file.status=true -D reader.keep.status.tag=true -D changeset.user.id=1 -D convert.bounding.box=$AOI -D changeset.buffer=0.001 -D changeset.allow.deleting.reference.features=false $OSM_API_DB_URL "$HOOT_DB_URL/8a-conflated-$TEST_NAME" $OUTPUT_DIR/11a-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql $OSM_API_DB_URL
+hoot changeset-derive $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D api.db.email=$HOOT_EMAIL -D reader.use.file.status=true -D reader.keep.status.tag=true -D changeset.user.id=1 -D convert.bounding.box=$AOI -D changeset.buffer=0.001 -D changeset.allow.deleting.reference.features=false $OSM_API_DB_URL "$HOOT_DB_URL/8a-conflated-$TEST_NAME" $OUTPUT_DIR/11a-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql $OSM_API_DB_URL
 
 echo ""
 echo "STEP 11b: Writing a XML changeset file that is the difference between the cropped reference input dataset specified AOI and the conflated output specified AOI..."
 echo ""
 # changeset.xml.writer.add.timestamp should only be set false for this test's purposes; leave it set to the default value of
 # true for production purposes
-hoot derive-changeset $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D api.db.email=$HOOT_EMAIL -D reader.use.file.status=true -D reader.keep.status.tag=true -D changeset.user.id=1 -D convert.bounding.box=$AOI -D changeset.buffer=0.001 -D changeset.allow.deleting.reference.features=false -D changeset.xml.writer.add.timestamp=false $OSM_API_DB_URL "$HOOT_DB_URL/8b-conflated-$TEST_NAME" $OUTPUT_DIR/11b-conflated-changeset-ToBeAppliedToOsmApiDb.osc
+hoot changeset-derive $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D api.db.email=$HOOT_EMAIL -D reader.use.file.status=true -D reader.keep.status.tag=true -D changeset.user.id=1 -D convert.bounding.box=$AOI -D changeset.buffer=0.001 -D changeset.allow.deleting.reference.features=false -D changeset.xml.writer.add.timestamp=false $OSM_API_DB_URL "$HOOT_DB_URL/8b-conflated-$TEST_NAME" $OUTPUT_DIR/11b-conflated-changeset-ToBeAppliedToOsmApiDb.osc
 
 echo ""
 echo "STEP 12: Executing the SQL changeset on the osm api db..."
 echo ""
-hoot apply-changeset $HOOT_OPTS $OUTPUT_DIR/11a-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql $OSM_API_DB_URL
+hoot changeset-apply $HOOT_OPTS $OUTPUT_DIR/11a-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql $OSM_API_DB_URL
 
 # we don't have any way in core of applying xml changesets yet
 

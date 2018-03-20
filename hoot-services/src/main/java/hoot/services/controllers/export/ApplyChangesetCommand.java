@@ -64,7 +64,7 @@ class ApplyChangesetCommand extends ExportCommand {
         substitutionMap.put("CONFLICT_AOI", conflictAOI);
         substitutionMap.put("CONFLICT_TIMESTAMP", conflictTimestamp);
 
-        String command = "hoot apply-changeset --${DEBUG_LEVEL} ${HOOT_OPTIONS} " +
+        String command = "hoot changeset-apply --${DEBUG_LEVEL} ${HOOT_OPTIONS} " +
                 "${SQL_CHANGESET_PATH} ${TARGET_DATABASE_URL} ${CONFLICT_AOI} ${CONFLICT_TIMESTAMP}";
 
         super.configureCommand(command, substitutionMap, caller);

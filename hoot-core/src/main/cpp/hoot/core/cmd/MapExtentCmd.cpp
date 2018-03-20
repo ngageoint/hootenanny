@@ -46,7 +46,7 @@ public:
 
   MapExtentCmd() {}
 
-  virtual QString getName() const { return "map-extent"; }
+  virtual QString getName() const { return "extent"; }
 
   int runSimple(QStringList args)
   {

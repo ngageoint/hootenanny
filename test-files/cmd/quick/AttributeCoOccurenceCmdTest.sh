@@ -5,5 +5,5 @@ set -e
 # for correctitude
 inputfile1=$HOOT_HOME/test-files/cmd/glacial/csr/csr.osm
 inputfile2=$HOOT_HOME/test-files/cmd/glacial/csr/csr.osm
-hoot attr-co-occurence $inputfile1 $inputfile2
+hoot attribute-co-occurrence $inputfile1 $inputfile2
 

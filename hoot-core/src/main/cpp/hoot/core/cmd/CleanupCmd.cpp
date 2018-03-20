@@ -44,10 +44,10 @@ namespace hoot
  * @ingroup cmd
  * @page CleanupCmd Cleanup Command
  * @code
---cleanup (input) (output)
+--clean (input) (output)
  * @endcode
  *
- * The cleanup command cleans common map problems.
+ * The clean command cleans common map problems.
  *
  * @param input The input file to be cleaned. Supports common geospatial file types.
  * @param output The cleaned output file. Supports common geospatial file types.
@@ -60,7 +60,7 @@ public:
 
   CleanupCmd() { }
 
-  virtual QString getName() const { return "cleanup"; }
+  virtual QString getName() const { return "clean"; }
 
   virtual int runSimple(QStringList args)
   {

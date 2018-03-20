@@ -92,7 +92,7 @@ public class ApplyChangesetCommandTest {
         assertNotNull(exportCommand.getWorkDir());
         assertNotNull(exportCommand.getCommand());
 
-        String expectedCommand = "hoot apply-changeset --${DEBUG_LEVEL} ${HOOT_OPTIONS} " +
+        String expectedCommand = "hoot changeset-apply --${DEBUG_LEVEL} ${HOOT_OPTIONS} " +
                         "${SQL_CHANGESET_PATH} ${TARGET_DATABASE_URL} ${CONFLICT_AOI} ${CONFLICT_TIMESTAMP}";
         assertEquals(expectedCommand, exportCommand.getCommand());
 

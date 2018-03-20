@@ -52,7 +52,7 @@ public:
 
   DeriveRubberSheetCmd() { }
 
-  virtual QString getName() const { return "derive-rubber-sheet"; }
+  virtual QString getName() const { return "rubber-sheet-derive"; }
 
   virtual int runSimple(QStringList args)
   {

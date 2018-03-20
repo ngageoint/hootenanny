@@ -67,7 +67,7 @@ class ClipDatasetCommand extends ExternalCommand {
         //Comma delimited bounds. minx,miny,maxx,maxy e.g.38,-105,39,-104
         substitutionMap.put("BOUNDS", params.getBounds());
 
-        String command = "hoot crop-map --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT} ${OUTPUT} ${BOUNDS}";
+        String command = "hoot crop --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT} ${OUTPUT} ${BOUNDS}";
 
         super.configureCommand(command, substitutionMap, caller);
     }

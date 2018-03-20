@@ -45,7 +45,7 @@ public:
 
   AddOsmPbfHeaderCmd() {}
 
-  virtual QString getName() const { return "add-pbf-header"; }
+  virtual QString getName() const { return "pbf-add-header"; }
 
   int runSimple(QStringList args)
   {

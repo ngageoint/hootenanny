@@ -41,7 +41,7 @@ class CalculateTilesCmd : public BaseCalculateTilesCmd
 
     CalculateTilesCmd() { }
 
-    virtual QString getName() const { return "calculate-tiles"; }
+    virtual QString getName() const { return "tiles-calculate"; }
 
     virtual int runSimple(QStringList args)
     {

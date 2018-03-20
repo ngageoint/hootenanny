@@ -76,7 +76,7 @@ public:
 
   CropMapCmd() {}
 
-  virtual QString getName() const { return "crop-map"; }
+  virtual QString getName() const { return "crop"; }
 
   int runSimple(QStringList args)
   {

@@ -60,7 +60,7 @@ public:
 
   BuildModelCmd() { }
 
-  virtual QString getName() const { return "build-model"; }
+  virtual QString getName() const { return "model-build"; }
 
   virtual int runSimple(QStringList args)
   {

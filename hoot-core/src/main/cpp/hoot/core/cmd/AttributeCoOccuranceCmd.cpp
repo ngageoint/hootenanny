@@ -70,7 +70,7 @@ public:
 
   AttributeCoOccurenceCmd() { }
 
-  virtual QString getName() const { return "attr-co-occurence"; }
+  virtual QString getName() const { return "attribute-co-occurrence"; }
 
   virtual int runSimple(QStringList args)
   {

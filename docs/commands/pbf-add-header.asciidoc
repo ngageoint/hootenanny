@@ -1,8 +1,8 @@
-== add-pbf-header 
+== pbf-add-header 
 
 === Description
 
-The add-pbf-header command reads in a .osm.pbf file, adds an OSM Block header
+The pbf-add-header command reads in a .osm.pbf file, adds an OSM Block header
 and writes the result to the output. This is primarily useful as a post
 processing step when using Hadoop to conflate data.
 
@@ -14,12 +14,12 @@ processing step when using Hadoop to conflate data.
 === Usage
 
 --------------------------------------
-add-pbf-header (input.osm.pbf) (output.osm.pbf)
+pbf-add-header (input.osm.pbf) (output.osm.pbf)
 --------------------------------------
 
 ==== Example
 
 --------------------------------------
-hoot add-pbf-header NoCapitalHeights.osm.pbf
+hoot pbf-add-header NoCapitalHeights.osm.pbf
 --------------------------------------
 

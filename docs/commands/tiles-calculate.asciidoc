@@ -1,8 +1,8 @@
-== calculate-tiles 
+== tiles-calculate 
 
 === Description
 
-+calculate-tiles+ calculates a collection of bounding boxes that contain roughly equal distributions of node data from 
++tiles-calculate+ calculates a collection of bounding boxes that contain roughly equal distributions of node data from 
 the specified input(s) and writes the output to a file.
 
 * +input+ - one or more OSM data inputs; specify multiple inputs by separating them with a semicolon
@@ -19,19 +19,19 @@ API database data sources.  If any other data source is used with the option, th
 === Usage
 
 --------------------------------------
-hoot calculate-tiles (input(s)) (output) [maxNodeCountPerTile] [pixelSize]
+hoot tiles-calculate (input(s)) (output) [maxNodeCountPerTile] [pixelSize]
 --------------------------------------
 
 === Examples
 
 --------------------------------------
-hoot calculate-tiles test-files/MyInputFile.osm MyOutputFile.geojson
+hoot tiles-calculate test-files/MyInputFile.osm MyOutputFile.geojson
 --------------------------------------
 
 --------------------------------------
-hoot calculate-tiles "test-files/MyInputFile1.osm;test-files/MyInputFile2.osm" MyOutputFile.geojson 1000 0.001
+hoot tiles-calculate "test-files/MyInputFile1.osm;test-files/MyInputFile2.osm" MyOutputFile.geojson 1000 0.001
 --------------------------------------
 
 --------------------------------------
-hoot calculate-tiles -D convert.bounding.box="34.04,31.17,34.05,31.18" hootapidb://hoot:hoottest@localhost:5432/hoot/MyInputDb MyOutputFile.geojson
+hoot tiles-calculate -D convert.bounding.box="34.04,31.17,34.05,31.18" hootapidb://hoot:hoottest@localhost:5432/hoot/MyInputDb MyOutputFile.geojson
 --------------------------------------

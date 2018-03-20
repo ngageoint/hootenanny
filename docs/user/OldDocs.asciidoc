@@ -843,8 +843,8 @@ hoot ogr2osm DcRoads tmp/dc-roads/dcgis.osm tmp/dc-roads/Streets4326.shp
 If you're just doing this for fun, then you probably want to crop your data down to something that runs quickly before conflating.
 
 ------
-hoot crop-map tmp/dc-roads/dcgis.osm tmp/dc-roads/dcgis-cropped.osm "-77.0551,38.8845,-77.0281,38.9031" 
-hoot crop-map tmp/dc-roads/tiger.osm tmp/dc-roads/tiger-cropped.osm "-77.0551,38.8845,-77.0281,38.9031" 
+hoot crop tmp/dc-roads/dcgis.osm tmp/dc-roads/dcgis-cropped.osm "-77.0551,38.8845,-77.0281,38.9031" 
+hoot crop tmp/dc-roads/tiger.osm tmp/dc-roads/tiger-cropped.osm "-77.0551,38.8845,-77.0281,38.9031" 
 ------
 
 All the hard work is done. Now we let the computer do the work. If you're using the whole DC data set, go get a cup of coffee.

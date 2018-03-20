@@ -113,7 +113,7 @@ Expect this to run for twenty minutes or so with a small input. I suggest trying
 The output is a directory filled with .pbf files. These files can simply be concatenated with a header to create the final output on the local disk. e.g.
 
 ------
-prompt$ hadoop fs -cat myoutput-dir.osm.pbf/*.pbf | hoot add-pbf-header - myoutput.osm.pbf
+prompt$ hadoop fs -cat myoutput-dir.osm.pbf/*.pbf | hoot pbf-add-header - myoutput.osm.pbf
 ------
 
 +osm2pgsql+ requires a sorted input to work properly. We'll use osmosis to sort our output.

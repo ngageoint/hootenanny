@@ -378,7 +378,7 @@ public class ExportResourceTest extends HootServicesJerseyTestAbstract {
                     "UTF-8");
 
             // write the contents of the dummy file to multiple new output
-            // files; mimic how ExportJobResource::process would write it and how derive-changeset would handle a
+            // files; mimic how ExportJobResource::process would write it and how changeset-derive would handle a
             // changeset larger than the max allowable size (move multiple changeset files to their
             // own new folder; see OsmChangesetXmlWriter)
             String jobId = UUID.randomUUID().toString();

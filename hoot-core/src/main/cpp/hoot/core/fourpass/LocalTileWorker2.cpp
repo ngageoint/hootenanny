@@ -174,7 +174,7 @@ void LocalTileWorker2::calculateNodeDensity(cv::Mat& r1, cv::Mat& r2)
   tbc.renderImage(map, r1, r2);
 }
 
-void LocalTileWorker2::cleanup(QString mapIn, QString mapOut)
+void LocalTileWorker2::clean(QString mapIn, QString mapOut)
 {
   boost::shared_ptr<OsmMap> map = _readAllParts(mapIn);
 

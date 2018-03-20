@@ -280,7 +280,7 @@ algorithm has road conflation enable then the results could get interesting.
 * Data Type: string
 * Default Value: `models/BuildingModel.rf`
 
-Path to the RF building model. A new model can be created with `build-model`. Searches local path
+Path to the RF building model. A new model can be created with `model-build`. Searches local path
 and then `$HOOT_HOME/conf/`.
 
 === conflate.match.highway.classifier
@@ -295,7 +295,7 @@ The highway match classifier to use. This should only be used for testing and de
 * Data Type: string
 * Default Value: `models/HighwayModel.rf`
 
-Path to the RF highway model. A new model can be created with `build-model`. Searches local path
+Path to the RF highway model. A new model can be created with `model-build`. Searches local path
 and then `$HOOT_HOME/conf/`. This is only relevant if the `conflate.match.highway.classifier` is
 set to `hoot::HighwayRfClassifier`.
 
@@ -304,7 +304,7 @@ set to `hoot::HighwayRfClassifier`.
 * Data Type: string
 * Default Value: `models/PoiModel.rf`
 
-Path to the POI match classifier model. A new model can be created with `build-model`. Searches
+Path to the POI match classifier model. A new model can be created with `model-build`. Searches
 local path and then `$HOOT_HOME/conf/`.
 
 === conflate.match.threshold.default
