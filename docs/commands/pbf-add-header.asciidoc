@@ -3,8 +3,7 @@
 === Description
 
 The pbf-add-header command reads in a .osm.pbf file, adds an OSM Block header
-and writes the result to the output. This is primarily useful as a post
-processing step when using Hadoop to conflate data.
+and writes the result to the output.
 
 * +input+ - The input .osm.pbf map path. If "-" is specified then it will be
   read from standard in.

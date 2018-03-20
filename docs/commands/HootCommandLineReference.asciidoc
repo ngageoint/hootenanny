@@ -77,5 +77,4 @@ include::sort.asciidoc[]
 include::stats.asciidoc[]
 include::union-polygons.asciidoc[]
 include::version.asciidoc[]
-include::way-bbox.asciidoc[]
 :leveloffset: 0

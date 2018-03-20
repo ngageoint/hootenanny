@@ -94,7 +94,6 @@ the command line aspects of the system. Examples include:
 
 * Complex command line options
 * Composite operations such as alpha shape, cookie cut, conflate
-* Hadoop operations that require moving multiple files to create the test scenario
 * Translation scripts
 
 Note that is is generally desirable to make the test do as little as possible to fully exercise

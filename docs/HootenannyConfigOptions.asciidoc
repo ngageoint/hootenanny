@@ -2,10 +2,10 @@
 == Configuration Options
 
 Configuration settings can dramatically change the operation of Hootenanny. The
-configuration options are carried through any Hadoop commands and can be set in
-a configuration file (+$HOOT_HOME/conf/hoot.json+), environment variables or
-specified on the command line. Most of the configuration values are documented
-in more detail in the following sections.
+configuration options can be set in a configuration file 
+(+$HOOT_HOME/conf/hoot.json+), environment variables or specified on the 
+command line. Most of the configuration values are documented in more 
+detail in the following sections.
 
 These configuration options are advanced manipulations of the Hootenanny engine and may result in unexpected results. Please create an issue at https://github.com/ngageoint/hootenanny if you have specific questions.
 
