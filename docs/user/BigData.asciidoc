@@ -1,0 +1,176 @@
+== Big Data
+
+NOTE: This documents Hootenanny conflation using Hadoop, which is no longer supported (supported up to v0.2.38), and has been 
+left here for references purposes only.
+
+The following sections describe using Hootenanny with large data sets, Big Data. In Hootenanny we simply define Big Data as anything we can't fit into RAM on a single machine. In some cases the big operations will utilize a cluster of computers, in others such as translation, it will run a simpler version of the algorithm.
+
+=== Hadoop
+
+Hootenanny supports conflation using multiple processors using the Hadoop framework. This is very much experimental and requires some tuning and tweaking. While the documentation here will give you a feel for how Hootenanny works with Hadoop it is very much in flux and expect some significant errors and omissions as the code is changing rapidly and receives very little testing. If you're considering using this for any significant work load then please contact the developers at https://github.com/ngageoint/hootenanny.
+
+==== Background
+
+The standard Hootenanny conflation process is both compute bound and memory bound. The conflation of a couple of moderately large input files can use multiple gigabytes of RAM and take several hours to complete on a single processor. While there is room to improve both the memory and CPU efficiency of Hootenanny it is limited. Even if we made Hootenanny ten times faster and ten times as memory efficient we would still have hard limitations. Utilizing a framework such as Hadoop enables us to increase the number of computers to increase our max file size. With the availability of cheap Amazon instances spawning 100 slaves to compute the conflation of the planet in a few hours becomes achievable for even a modest budget.
+
+==== Brief Technical Overview
+
+The basic ideas is that we break the map up into a checkered board of tiles with four colors where no two colors are adjacent. We can then conflate all the tiles of a given color at one time without overlapping data between any two jobs. In this fashion we can conflate our input data in four passes, one for each color. We call this four pass conflation.
+
+Great! I can run on a hundred computers! This has got to take my conflation run from 10min to 6 seconds, right!? Nope. There is a lot of overhead involved in four pass conflation. On top of that there is a lot of overhead in running a single Hadoop job. Generally as of Hadoop 0.20.2 running a job to calculate 1 + 1 takes about 30 seconds. Doing that with the overhead of additional libraries in Hootenanny it goes up to about 60 seconds. In order to conflate two data sources takes about 13 jobs run in series or at least 13min. For a more concrete example, running a 1KB job locally took 0.14sec and took ~20min using Hadoop on a 19 node cluster with 2010 hardware (152 mappers & 72 reducers). Hootenanny on Hadoop is designed for jobs that would take tens of hours or more on a single machine. As a rule of thumb, if you have a 500MB job or larger, you're likely to see substantial improvement in speed.
+
+==== Benchmarks
+
+As with all benchmarks your mileage may vary. Small configuration changes can sometimes make dramatic changes to benchmark results.
+
+.Hadoop Benchmarks
+[options="header"]
+|===========
+| Local Conflation | Hadoop Conflation | Input Size (compressed .osm.pbf) | Cluster                                         | Description
+| 220min           | 45min             | 46MB              | Pseudo-distributed 8 core (circa 2012 hardware) | Conflate roads w/ ~2012 Hootenanny
+| -                | 15hrs             | 19GB              | 20 node X 8 cores (circa 2010 hardware)         | Conflate roads w/ ~2012 Hootenanny
+| -                | 3hrs 54min        | 392MB             | Pseudo-distributed 8 core (circa 2012 hardware) | Conflate ~17 million POIs using Hoot v0.1.24
+| 52min            | 42min             | 5MB               | Pseudo-distributed 8 core (circa 2012 hardware) | Conflate ~95k POIs using Hoot v0.1.24
+|===========
+
+==== Hardware Requirements
+
+You can run this on a single node in pseudo-distributed mode. We have tested it on clusters as large as 20 slaves/160 cores. You may run into problems if you mix endian-ness on the slave nodes (e.g. Sun and Intel), but if problems arise they're probably easy to fix in the code. If you're doing a full planet conflate you need several hundred GB of free disk space on HDFS, though call it 1TB to be safe. I assume you have at least 2GB of RAM available for each task on the machine. The reduce and map tasks won't be running at the same time, so you can use this equation. If you're running other jobs on the cluster then you may need to modify the equation:
+
+------
+max(mapred.tasktracker.map.tasks.maximum, mapred.tasktracker.reduce.tasks.maximum) * 2GB + 2GB for system <= RAM on slave
+------
+
+==== Installation
+
+===== Install Hadoop
+
+Installing Hadoop is a complex process and well beyond the scope of this document. There are many good tutorials on the web. Be sure your Hadoop installation is up and running and HADOOP_HOME is set up appropriately. Hootenanny is currently supported in Hadoop 0.20.2. Other versions may work, but given the rapid development of Hadoop we highly recommend using that exact version. http://archive.apache.org/dist/hadoop/common/hadoop-0.20.2/
+
+During the Hadoop configuration add the following lines to your $HADOOP_HOME/conf/hadoop-env.sh on all nodes.  
+
+------
+export LD_LIBRARY_PATH=$JAVA_HOME/jre/lib/amd64/:$JAVA_HOME/jre/lib/amd64/server
+------
+
+===== Compile Hootenanny
+
+The compilation process is very similar to stand alone Hootenanny, but you need to make sure the Hadoop is recognized during the configure step. E.g.
+
+------
+prompt$ ./configure
+prompt$ grep CONFIG Configure.pri
+CONFIG +=   cppunit hadoop
+CONFIG += release
+CONFIG -= debug
+------
+
+If your +Configure.pri+ does not include +hadoop+ in the +CONFIG+ variable then Hadoop was not recognized and you'll need to sort through the +./configure+ output and +config.log+ file and figure out why.
+
+After the configure step, do make as usual:
+
+------
+make
+------
+
+If all went well you should see some hadoop specific commands. E.g.
+
+------
+prompt$ hoot | grep big
+--big-conflate (input1.pbf) (input2.pbf) (output.pbf) [pixelSize] [maxNodeCount] [--local]
+------
+
+===== Testing
+
+Start with a small test file and see if a very basic command works. Hootenanny on Hadoop only supports +.osm.pbf+ files as input. You can use the following command to convert your favorite moderately sized +.osm+ file to +.osm.pbf+. If you need to convert a very large file please check out http://wiki.openstreetmap.org/wiki/Osmosis[Osmosis].
+
+------
+prompt$ hoot --convert myfile.osm myfile.osm.pbf
+------
+
+All input files must live in a directory. This will let you group like files together (e.g. all the states in a single directory), but more importantly Hootenanny uses that directory to cache information about your files. Use the following commands to create a directory and put the file on your HDFS instance:
+
+------
+prompt$ hadoop fs -mkdir myfile-dir.osm.pbf
+prompt$ hadoop fs -put myfile.osm.pbf myfile-dir.osm.pbf
+------
+
+Now, lets paint the nodes in your file to a density map at a 1km resolution. This should take a few minutes for a small file, or about 30min for the planet on an 8 core desktop. For detailed information please look at the command line help.
+
+------
+prompt$ hoot --paint-nodes myfile-dir.osm.pbf 0.01 myfile-density.png
+------
+
+Congrats! You ran your first Hadoop job through Hootenanny.
+
+==== Conflate-O-Rama
+
+Hadoop conflation is very similar to standalone conflation.
+
+------
+prompt$ hoot --big-conflate myinput1-dir.osm.pbf myinput2-dir.osm.pbf myoutput-dir.osm.pbf
+------
+
+Expect this to run for twenty minutes or so with a small input. I suggest trying something small just in case. Nothing is more disappointing than getting two hours into a long run and getting a simple error message.
+
+The output is a directory filled with .pbf files. These files can simply be concatenated with a header to create the final output on the local disk. e.g.
+
+------
+prompt$ hadoop fs -cat myoutput-dir.osm.pbf/*.pbf | hoot --add-pbf-header - myoutput.osm.pbf
+------
+
++osm2pgsql+ requires a sorted input to work properly. We'll use osmosis to sort our output.
+
+------
+prompt$ osmosis --read-pbf myoutput.osm.pbf --sort --write-pbf omitmetadata=true myoutput-sorted.osm.pbf
+------
+
+This final output can then be read using the normal OSM tool chain (i.e. osm2pgsql & osmosis).
+
+------
+prompt$ osm2pgsql -c -d osm_gis -l --slim --cache 2000 -k -G myoutput-sorted.osm.pbf
+------
+
+Please see the _Command Line Documentation_ for applicable commands and the associated arguments. Most commands that start with +--big-+ are relevant to Hadoop operations.
+
+=== Pixel Size & Max Node Count
+
+Pixel Size (+pixelSize+) and Max Node Count (+maxNodeCount+) are two parameters that require tweaking to get Hootenanny to run on Hadoop. If the parameters are too far off the four pass operations will take a long time, if they're too far off in the other direction it may run out of RAM during the run or fail to find a valid tiling solution. The following paragraphs describe how these parameters are used and how to pick reasonable values.
+
+Four Pass operations can be broken into three steps:
+
+1. Determine the density of the data (+pixelSize+)
+2. Using the density to calculate tile boundaries (+maxNodeCount+)
+3. Run multiple jobs on the determined tiles
+
+==== Pixel Size
+
+Conceptually the data density is simply the number of nodes (points) that fall within a given pixel. The raster used to represent the data is a raster that stretches across the globe (-180, -90 to 180, 90). The pixel sizes are values in degrees. So a pixel size of 0.1 is nominally 10km square at the equator.
+
+To make the four pass algorithm perform properly features must be broken down into pieces less than one +pixelSize+ square. This means that features near the poles may be broken into smaller sizes than equivalent features at the equator. This also means that a +pixelSize+ of less than about 500m may start to show artifacts in the output.
+
+Using a large pixel size will generate a raster with a small number of rows & columns. Where a small pixel size will generate a large raster. There are two limiting factors:
+
+1. The amount of RAM available to load the raster
+2. Very small pixel values will cause very small features to get created.
+
+*What should my pixelSize be?*
+
+The value should be the largest value that will work. For context, conflating the OSM map vs a half dozen countries used a value of 0.01 for the pixel size and uses about 8GB of RAM on the node that launches the job, although the Hadoop TaskTrackers don't need anywhere near that much RAM. If you're conflating the OSM data then start there. I would be skeptical of using a value any lower than 0.005 due to artifacts that may appear from breaking features into units smaller than 500m. If you get out of memory errors during the "Determining tile bounds." phase, then make +pixelSize+ larger. 
+
+==== Max Node Count
+
+This is the maximum number of nodes that will be processed at one time by a TaskTracker. If your tasks are failing with out of memory errors then you'll need to either increase the amount of RAM on a task tracker, or reduce the +maxNodeCount+ value. If you make the +maxNodeCount+ value too small then you may run into an error that looks like this during the "Determining tile bounds." phase.
+
+------
+Could not find a solution. Try reducing the pixel size or increasing the max nodes per pixel value.
+------
+
+*What should my node count be?
+
+Start with the default, 5,000,000, and increase or decrease it as necessary. 5,000,000 nodes should use about 4GB of RAM if you're dealing primarily with roads. If it is primarily POIs, you may need to be closer to 500,000 nodes.
+
+==== Setting the Values
+
+When you find values that work they will likely work for most if not all four pass commands. For this reason it is best that you set the values in the +conf/hoot.json+ file rather than specify the values with each command.
+

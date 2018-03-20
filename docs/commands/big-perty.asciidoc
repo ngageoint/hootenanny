@@ -1,0 +1,22 @@
+== big-perty
+
+NOTE: This documents Hootenanny conflation using Hadoop, which is no longer supported (supported up to v0.2.38), and has been 
+left here for references purposes only.
+
+=== Description
+
+The +big-perty+ command reads in a OSM input file add random Gaussian noise and
+write to output.  For more details on non-Hadoop perty functionality see +perty+
+help.
+
+* +sigma+ - The sigma of the perturbation in meters.
+* input.osm.pbf - The input OSM data to perturb. This must reside on HDFS.
+* +output.osm.pbf+ - The output OSM data path. This must reside on HDFS.
+* +--local+ - Run in local mode.
+
+=== Usage
+
+--------------------------------------
+big-perty (sigma) (input.osm.pbf) (output.osm.pbf) [--local]
+--------------------------------------
+
