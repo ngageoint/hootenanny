@@ -6,9 +6,8 @@
         <tag k="hoot:id" v="-212"/>
     </node>
     <node visible="true" id="-58" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5465097082937653" lon="-72.3473205403519586">
-        <tag k="hoot" v="RoundaboutCenter"/>
+        <tag k="hoot:special" v="RoundaboutCenter"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-58"/>
     </node>
     <node visible="true" id="-57" timestamp="2017-06-07T15:16:55Z" version="1" changeset="116" lat="18.5490386387599955" lon="-72.3487705069999834">
