@@ -109,7 +109,7 @@ private:
     cout << "usage: hoot <command> [--trace] [--debug] [--warn] [-D name=value] [--conf <path>] "
       "[<args>]\n";
     cout << endl;
-    cout << "For detailed help on the following commands type: hoot --help (command name)\n"
+    cout << "For detailed help on the following commands type: hoot help (command name)\n"
             "\n";
     sort(cmds.begin(), cmds.end(), commandCompare);
     for (size_t i = 0; i < cmds.size(); i++)
