@@ -1,5 +1,1 @@
-These tests are all experiments to find an appropriate way to merge networks.
-Each subdirectory may vary depending on how far the experiments went before
-being set aside to pursue another direction. At some point in the far future
-it may make sense to cull some of these tests when we've settled on the best
-solution.
+These tests embody various scenarios for roundabout conflation. It's expected that the number of cases will grow, as different conflation scenarios arise in real-world data.

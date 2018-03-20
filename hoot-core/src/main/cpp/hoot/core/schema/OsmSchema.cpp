@@ -1848,8 +1848,6 @@ bool OsmSchema::isRoundabout(const Tags& tags, ElementType type)
     result = true;
   }
 
-  // Maybe check some other stuff? IDK...
-
   if (result)
   {
     LOG_TRACE("isRoundabout; key: " << tagIt.key());
