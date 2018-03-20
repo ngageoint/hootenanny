@@ -78,7 +78,6 @@ void RemoveRoundabouts::removeRoundabouts(std::vector<RoundaboutPtr> &removed)
 void RemoveRoundabouts::apply(OsmMapPtr &pMap)
 {
   _pMap = pMap;
-  //MapProjector::projectToWgs84(_pMap);
   MapProjector::projectToPlanar(_pMap);
   std::vector<RoundaboutPtr> removed;
   removeRoundabouts(removed);

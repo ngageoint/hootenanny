@@ -37,7 +37,7 @@ NodePtr Roundabout::getCenter(OsmMapPtr pMap)
   NodePtr pNewNode(new Node(Status::Unknown1,
                    pMap->createNextNodeId(),
                    lon, lat, 15));
-  pNewNode->setTag("hoot", "RoundaboutCenter");
+  pNewNode->setTag("hoot:special", "RoundaboutCenter");
 
   return pNewNode;
 }
@@ -60,9 +60,13 @@ RoundaboutPtr Roundabout::makeRoundabout (const boost::shared_ptr<OsmMap> &pMap,
   return rnd;
 }
 
-// FIND WAYS THAT CROSS THE ROUNDABOUT AND INJECT AN INTERSECTION
-void Roundabout::handleCrossingWays(boost::shared_ptr<OsmMap> pMap)
+void Roundabout::connectCrossingWays(boost::shared_ptr<OsmMap> pMap)
 {
+  // TODO: Finish implementing this. The new nodes need to be inserted into the
+  // proper location within their ways, and the chunk of way inside the
+  // roundabout needs to be removed.
+  return;
+
   // Get our envelope
   geos::geom::Envelope env = _roundaboutWay->getEnvelopeInternal(pMap);
 
@@ -101,16 +105,15 @@ void Roundabout::handleCrossingWays(boost::shared_ptr<OsmMap> pMap)
  * Iterate through them, and see if they belong to another way.
  * If they do, keep them.
  *
- * Delete the roundabout (way + leftover nodes)
+ * Remove the roundabout from the map (way + leftover nodes)
  *
  * Iterate through the nodes that were kept, and connect them to
  * the centerpoint with temp ways.
- *
  */
 void Roundabout::removeRoundabout(boost::shared_ptr<OsmMap> pMap)
 {
   // First, take care of ways that may cross the roundabout, but not connect
-  handleCrossingWays(pMap);
+  connectCrossingWays(pMap);
 
   // Find our connecting nodes & extra nodes.
   std::vector<ConstNodePtr> connectingNodes;
@@ -152,7 +155,7 @@ void Roundabout::removeRoundabout(boost::shared_ptr<OsmMap> pMap)
     pWay->setTag("highway", "unclassified");
 
     // Add special hoot tag
-    pWay->setTag("hoot", "roundabout_connector");
+    pWay->setTag("hoot:special", "roundabout_connector");
 
     pMap->addWay(pWay);
     _tempWays.push_back(pWay);
@@ -170,10 +173,8 @@ void Roundabout::removeRoundabout(boost::shared_ptr<OsmMap> pMap)
  * See if center node is still there, if so, use it to get the ways that need
  * to connect to the roundabout.
  *
- * If not - draw a circle, and find ways that intersect it?
- *
- * MAYBE TODO: our roundabout nodes might need to be copies, so they don't get moved around
- * during conflation & merging
+ * MAYBE: our roundabout nodes might need to be copies, so they don't get moved
+ * around during conflation & merging
  *
  */
 void Roundabout::replaceRoundabout(boost::shared_ptr<OsmMap> pMap)
@@ -218,21 +219,13 @@ void Roundabout::replaceRoundabout(boost::shared_ptr<OsmMap> pMap)
   pNewWay->setNodes(nodeIds);
   pMap->addWay(pNewWay);
 
-  // Now need to somehow reconnect our ways
-  // Find where we cross our roundabout way
-  // Maybe just start with the ways we added (the temp ways)
-
   // Delete temp ways we added
   for (size_t i = 0; i < _tempWays.size(); i++)
     RemoveWayOp::removeWayFully(pMap, _tempWays[i]->getId());
 
   // Remove center node if no other ways are using it
-  // RemoveNodeOp::removeNode(pMap, extraNodes[i]->getId());
   if (pMap->getIndex().getNodeToWayMap()->getWaysByNode(_pCenterNode->getId()).size() < 1)
     RemoveNodeOp::removeNodeFully(pMap, _pCenterNode->getId());
-
-
-
 }
 
-}
+} // namespace

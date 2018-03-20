@@ -397,6 +397,7 @@ See also:
 
 * Data Type: list
 * Default Value:
+** `hoot::ReplaceRoundabouts` - Replaces any roundabouts that were removed, pre-conflation.
 ** `hoot::RemoveMissingElementsVisitor` - Removes non-existent element references from relations or ways with negative IDs.
 ** `hoot::RemoveEmptyRelationsOp` - Removes empty relations.
 ** `hoot::RemoveInvalidReviewRelationsVisitor` - Removes review relations whose members no longer exist after conflation.

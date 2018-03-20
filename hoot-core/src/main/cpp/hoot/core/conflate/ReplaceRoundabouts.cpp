@@ -53,13 +53,11 @@ ReplaceRoundabouts::ReplaceRoundabouts()
   // blank
 }
 
-ReplaceRoundabouts::ReplaceRoundabouts(boost::shared_ptr<OsmMap> pMap)
-{
-  _pMap = pMap;
-}
-
 void ReplaceRoundabouts::replaceRoundabouts(boost::shared_ptr<OsmMap> pMap)
 {
+  // Make sure we are planar
+  MapProjector::projectToPlanar(pMap);
+
   // Get a list of roundabouts from the map, go through & process them
   std::vector<RoundaboutPtr> roundabouts = pMap->getRoundabouts();
 
@@ -72,8 +70,6 @@ void ReplaceRoundabouts::replaceRoundabouts(boost::shared_ptr<OsmMap> pMap)
 
 void ReplaceRoundabouts::apply(boost::shared_ptr<OsmMap> &pMap)
 {
-  //MapProjector::projectToWgs84(pMap);
-  MapProjector::projectToPlanar(pMap);
   replaceRoundabouts(pMap);
 }
 

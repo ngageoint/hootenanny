@@ -1,3 +1,3 @@
-The grid-type roads should conflate cleanly.
+Ideally, all the roads should conflate cleanly between these two datasets.
 
-This will be a good test for attacking the traffic-circle problem.
+For the roundabout, there is more work to be done - the roads going into it should be split (they have a median), and then they should conflate.

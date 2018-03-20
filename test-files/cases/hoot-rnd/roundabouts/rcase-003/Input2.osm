@@ -1,0 +1,223 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <node id='-42094' action='modify' lat='18.54643258014' lon='-72.34715932777' />
+  <node id='-42096' action='modify' lat='18.54420147883' lon='-72.3479358796' />
+  <node id='-42098' action='modify' lat='18.54458674546' lon='-72.34781897975' />
+  <node id='-42100' action='modify' lat='18.54497728883' lon='-72.34771877987' />
+  <node id='-42102' action='modify' lat='18.54527811217' lon='-72.34765197995' />
+  <node id='-42104' action='modify' lat='18.5457214298' lon='-72.34753508009' />
+  <node id='-42106' action='modify' lat='18.54602752941' lon='-72.34745714685' />
+  <node id='-42108' action='modify' lat='18.5462808528' lon='-72.3473875636' />
+  <node id='-42110' action='modify' lat='18.54669271208' lon='-72.34748173893' />
+  <node id='-42112' action='modify' lat='18.54705933703' lon='-72.34772374654' />
+  <node id='-42114' action='modify' lat='18.54738648449' lon='-72.34792704015' />
+  <node id='-42116' action='modify' lat='18.54772701973' lon='-72.34815266356' />
+  <node id='-42118' action='modify' lat='18.54812283342' lon='-72.34842256762' />
+  <node id='-42120' action='modify' lat='18.54848677165' lon='-72.3486589454' />
+  <node id='-42124' action='modify' lat='18.5488536622' lon='-72.34879257682' />
+  <node id='-42126' action='modify' lat='18.54902787906' lon='-72.34881198118' />
+  <node id='-42130' action='modify' lat='18.54678927496' lon='-72.34726139284' />
+  <node id='-42134' action='modify' lat='18.54660690294' lon='-72.34743161903' />
+  <node id='-42136' action='modify' lat='18.54664365124' lon='-72.34730122883' />
+  <node id='-42138' action='modify' lat='18.54661465461' lon='-72.34724004294' />
+  <node id='-42140' action='modify' lat='18.5465539627' lon='-72.34718159301' />
+  <node id='-42142' action='modify' lat='18.5464893126' lon='-72.34717880968' />
+  <node id='-42144' action='modify' lat='18.54640091344' lon='-72.34720942631' />
+  <node id='-42146' action='modify' lat='18.54635737354' lon='-72.34728596789' />
+  <node id='-42148' action='modify' lat='18.54638508075' lon='-72.34740286774' />
+  <node id='-42150' action='modify' lat='18.54642466248' lon='-72.34745157602' />
+  <node id='-42152' action='modify' lat='18.54652097796' lon='-72.34747801765' />
+  <node id='-42156' action='modify' lat='18.54636001232' lon='-72.34735415947' />
+  <node id='-42158' action='modify' lat='18.54644288736' lon='-72.34718696953' />
+  <node id='-42434' action='modify' lat='18.54664013272' lon='-72.34736488924' />
+  <node id='1' action='delete' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116' lat='18.54766916852' lon='-72.34376302387' />
+  <node id='2' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116' lat='18.54577015228' lon='-72.34423712309' />
+  <node id='3' action='delete' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116' lat='18.54560135903' lon='-72.3442792632' />
+  <node id='4' action='delete' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116' lat='18.54709446009' lon='-72.34121141825' />
+  <node id='5' action='delete' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116' lat='18.54641564815' lon='-72.34138254732' />
+  <node id='6' action='delete' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116' lat='18.54519179702' lon='-72.34167576165' />
+  <node id='7' action='delete' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116' lat='18.54449900266' lon='-72.34184174363' />
+  <node id='8' action='delete' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116' lat='18.54895406256' lon='-72.34879243568' />
+  <node id='9' action='delete' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116' lat='18.54873444693' lon='-72.34874680127' />
+  <node id='10' action='delete' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116' lat='18.54853479636' lon='-72.3486869061' />
+  <node id='11' action='delete' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116' lat='18.54831232858' lon='-72.34857567221' />
+  <node id='12' action='delete' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116' lat='18.54755650856' lon='-72.34809365868' />
+  <node id='13' action='delete' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116' lat='18.54647663293' lon='-72.34732859447' />
+  <node id='14' action='delete' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116' lat='18.54619032822' lon='-72.34739202953' />
+  <node id='15' action='delete' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116' lat='18.54456827626' lon='-72.34779495963' />
+  <node id='16' action='delete' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116' lat='18.54439917737' lon='-72.34783696509' />
+  <node id='17' action='delete' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116' lat='18.54438349054' lon='-72.34693889403' />
+  <node id='18' action='delete' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116' lat='18.54562132409' lon='-72.34355624292' />
+  <node id='19' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116' lat='18.54610618976' lon='-72.34580373793' />
+  <node id='20' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116' lat='18.54629157958' lon='-72.34672498271' />
+  <node id='21' action='delete' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116' lat='18.54715792045' lon='-72.34155688505' />
+  <node id='22' action='delete' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116' lat='18.54726915434' lon='-72.34208453299' />
+  <node id='23' action='delete' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116' lat='18.54740320544' lon='-72.34259221587' />
+  <node id='24' action='delete' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116' lat='18.54788236681' lon='-72.3447741114' />
+  <node id='25' action='delete' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116' lat='18.54791944478' lon='-72.34503936145' />
+  <node id='26' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116' lat='18.54833671156' lon='-72.3468681856' />
+  <node id='27' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116' lat='18.54776257647' lon='-72.34701019781' />
+  <node id='28' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116' lat='18.549036' lon='-72.34669521672' />
+  <node id='29' action='delete' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116' lat='18.547035756' lon='-72.340941' />
+  <node id='30' action='delete' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116' lat='18.54502219526' lon='-72.340941' />
+  <node id='31' action='delete' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116' lat='18.544216' lon='-72.34615910201' />
+  <node id='32' action='delete' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116' lat='18.544216' lon='-72.34190980756' />
+  <node id='33' action='delete' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116' lat='18.549036' lon='-72.3434316165' />
+  <node id='34' action='delete' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116' lat='18.544216' lon='-72.34461499602' />
+  <node id='35' action='delete' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116' lat='18.549036' lon='-72.34879555711' />
+  <node id='36' action='delete' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116' lat='18.544216' lon='-72.34789802421' />
+  <way id='-42196' action='modify'>
+    <nd ref='-42096' />
+    <nd ref='-42098' />
+    <nd ref='-42100' />
+    <nd ref='-42102' />
+    <nd ref='-42104' />
+    <nd ref='-42106' />
+    <nd ref='-42108' />
+    <nd ref='-42156' />
+    <tag k='highway' v='road' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='source' v='Unknown' />
+  </way>
+  <way id='-42198' action='modify'>
+    <nd ref='-42134' />
+    <nd ref='-42110' />
+    <nd ref='-42112' />
+    <nd ref='-42114' />
+    <nd ref='-42116' />
+    <nd ref='-42118' />
+    <nd ref='-42120' />
+    <nd ref='-42124' />
+    <nd ref='-42126' />
+    <tag k='highway' v='road' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='source' v='Unknown' />
+  </way>
+  <way id='-42200' action='modify'>
+    <nd ref='-42134' />
+    <nd ref='-42434' />
+    <nd ref='-42136' />
+    <nd ref='-42138' />
+    <nd ref='-42140' />
+    <nd ref='-42142' />
+    <nd ref='-42158' />
+    <nd ref='-42144' />
+    <nd ref='-42146' />
+    <nd ref='-42156' />
+    <nd ref='-42148' />
+    <nd ref='-42150' />
+    <nd ref='-42152' />
+    <nd ref='-42134' />
+    <tag k='highway' v='road' />
+    <tag k='junction' v='roundabout' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='source' v='Unknown' />
+  </way>
+  <way id='1' action='modify' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116'>
+    <nd ref='-42136' />
+    <nd ref='-42130' />
+    <nd ref='27' />
+    <nd ref='26' />
+    <nd ref='28' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='road' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='source' v='Unknown' />
+  </way>
+  <way id='2' action='delete' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116'>
+    <tag k='condition' v='functional' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='road' />
+    <tag k='lanes' v='2' />
+    <tag k='location' v='surface' />
+    <tag k='median' v='no' />
+    <tag k='seasonal' v='no' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='source' v='mgcp' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:copyright' v='© 2010. Her Majesty the Queen in Right of Canada.' />
+    <tag k='source:datetime' v='2010-01-13' />
+    <tag k='source:description' v='IKONOS Imagery' />
+    <tag k='source:ingest:datetime' v='2016-03-16T16:46:59.133Z' />
+    <tag k='source:name' v='very_high_resolution_commercial_monoscopic_imagery' />
+    <tag k='surface' v='paved' />
+    <tag k='uuid' v='{{6b828d43-7973-4098-a098-d10430882622}}' />
+    <tag k='width:minimum_traveled_way' v='8' />
+  </way>
+  <way id='3' action='modify' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116'>
+    <nd ref='-42158' />
+    <nd ref='-42094' />
+    <nd ref='20' />
+    <nd ref='19' />
+    <nd ref='2' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='road' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='source' v='Unknown' />
+  </way>
+  <way id='4' action='delete' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116'>
+    <tag k='condition' v='functional' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='road' />
+    <tag k='lanes' v='2' />
+    <tag k='location' v='surface' />
+    <tag k='median' v='no' />
+    <tag k='seasonal' v='no' />
+    <tag k='source' v='mgcp' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:copyright' v='© 2010. Her Majesty the Queen in Right of Canada.' />
+    <tag k='source:datetime' v='2010-01-13' />
+    <tag k='source:description' v='IKONOS Imagery' />
+    <tag k='source:ingest:datetime' v='2016-03-16T16:46:59.133Z' />
+    <tag k='source:name' v='very_high_resolution_commercial_monoscopic_imagery' />
+    <tag k='surface' v='paved' />
+    <tag k='uuid' v='{{5cfcb674-fbc6-4c61-ac3f-e29f68dd8bf9}}' />
+    <tag k='width:minimum_traveled_way' v='8' />
+  </way>
+  <way id='5' action='delete' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116'>
+    <tag k='condition' v='functional' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='road' />
+    <tag k='lanes' v='2' />
+    <tag k='location' v='surface' />
+    <tag k='median' v='no' />
+    <tag k='seasonal' v='no' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='source' v='mgcp' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:copyright' v='© 2010. Her Majesty the Queen in Right of Canada.' />
+    <tag k='source:datetime' v='2010-01-13' />
+    <tag k='source:description' v='IKONOS Imagery' />
+    <tag k='source:ingest:datetime' v='2016-03-16T16:46:59.137Z' />
+    <tag k='source:name' v='very_high_resolution_commercial_monoscopic_imagery' />
+    <tag k='surface' v='paved' />
+    <tag k='uuid' v='{{bf4e75b9-d448-4509-a41f-d254d704fef9}}' />
+    <tag k='width:minimum_traveled_way' v='8' />
+  </way>
+  <way id='6' action='delete' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116'>
+    <tag k='condition' v='functional' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='road' />
+    <tag k='lanes' v='4' />
+    <tag k='location' v='surface' />
+    <tag k='median' v='no' />
+    <tag k='seasonal' v='no' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='source' v='mgcp' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:copyright' v='© 2010. Her Majesty the Queen in Right of Canada.' />
+    <tag k='source:datetime' v='2010-01-13' />
+    <tag k='source:description' v='IKONOS Imagery' />
+    <tag k='source:ingest:datetime' v='2016-03-16T16:46:59.137Z' />
+    <tag k='source:name' v='very_high_resolution_commercial_monoscopic_imagery' />
+    <tag k='surface' v='paved' />
+    <tag k='uuid' v='{{57700a2f-b508-4758-bd8c-a156feade7b9}}' />
+    <tag k='width:minimum_traveled_way' v='10' />
+  </way>
+  <way id='7' action='delete' timestamp='2017-06-07T15:16:55Z' version='1' changeset='116'>
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='road' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='source' v='Unknown' />
+  </way>
+</osm>

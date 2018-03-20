@@ -45,23 +45,42 @@ class OsmMap;
 class Way;
 
 /**
- * This class is being developed to handle roundabouts during conflation.
- * The initial approach is to remove roundabouts, and replace them with simple
- * intersections. Post conflation, if the roundabout is in the reference data,
- * it will be put back.
+ *
+ */
+
+/**
+ * @brief The ReplaceRoundabouts class is being developed to handle roundabouts
+ * during conflation. The initial approach is to remove roundabouts, and
+ * replace them with simple intersections. Post conflation, if the roundabout
+ * is in the reference data, it will be put back.
  */
 class ReplaceRoundabouts : public OsmMapOperation
 {
 public:
 
+  /**
+   * @brief className - Get classname string
+   * @return "hoot::ReplaceRoundabouts"
+   */
   static std::string className() { return "hoot::ReplaceRoundabouts"; }
 
+  /**
+   * @brief ReplaceRoundabouts - default constructor
+   */
   ReplaceRoundabouts();
 
-  ReplaceRoundabouts(boost::shared_ptr<OsmMap> pMap);
-
+  /**
+   * @brief apply - Apply the ReplaceRoundabouts Op to the map.
+   * @param pMap - Map to operate on.
+   */
   void apply(boost::shared_ptr<OsmMap>& pMap);
 
+  /**
+   * @brief replaceRoundabouts - Loops through all the roundabouts stored
+   *                             in the map, and tries to put them back / merge
+   *                             them back.
+   * @param pMap - Map to operate on.
+   */
   void replaceRoundabouts(boost::shared_ptr<OsmMap> pMap);
 
 private:
