@@ -164,6 +164,9 @@ void ReviewMarker::mark(const OsmMapPtr &map, const ElementPtr& e1, const Elemen
 {
   LOG_TRACE("Marking review...");
 
+  LOG_VART(reviewType);
+  LOG_VART(note);
+
   if (note.isEmpty())
   {
     LOG_VART(e1->toString());
@@ -207,6 +210,9 @@ void ReviewMarker::mark(const OsmMapPtr &map, set<ElementId> ids, const QString&
    const QString& reviewType, double score, vector<QString> choices)
 {
   LOG_TRACE("Marking review...");
+
+  LOG_VART(reviewType);
+  LOG_VART(note);
 
   if (note.isEmpty())
   {
@@ -253,6 +259,9 @@ void ReviewMarker::mark(const OsmMapPtr& map, const ElementPtr& e, const QString
   const QString &reviewType, double score, vector<QString> choices)
 {
   LOG_TRACE("Marking review with note: " << note);
+
+  LOG_VART(reviewType);
+  LOG_VART(note);
 
   if (note.isEmpty())
   {
