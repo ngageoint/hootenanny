@@ -1400,7 +1400,7 @@ public class ChangesetResourceUploadModifyTest extends OSMResourceTestAbstract {
     @Category(UnitTest.class)
     public void testUploadModifyNegativeElementId() throws Exception {
         // We allow elements with a negative ID to exist, which allows for
-        // using the hootProps.hoot --convert command as a source of test data for the services.
+        // using the hootProps.hoot convert command as a source of test data for the services.
 
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
         BoundingBox updateBounds = OSMTestUtils.createAfterModifiedTestChangesetBounds();

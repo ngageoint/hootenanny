@@ -185,7 +185,7 @@ public class ChangesetDbWriter {
         // Formerly, we had a setting called
         // "hootCoreServicesDatabaseWriterCompatibility" that would
         // have to be turned on to allow nodes with negative ID's to be written,
-        // which was to accommodate the behavior of hoot --convert. If it wasn't turned on, a failure
+        // which was to accommodate the behavior of hoot convert. If it wasn't turned on, a failure
         // would occur here. Now, by default the writing nodes with negative ID's is always allowed.
         oldElementIds.add(oldElementId);
 

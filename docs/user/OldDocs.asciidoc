@@ -329,7 +329,7 @@ _Note_: The +translateToOsm+ was previously called +translateAttributes+ . Eithe
 This method will be called after the +initialize+ method is called when translating from an OGR format to a OSM schema. For instance if you call:
 
 ------
-hoot --ogr2osm tmp/SimpleExample.js myoutput.osm myinput1.shp myinput2.shp
+hoot ogr2osm tmp/SimpleExample.js myoutput.osm myinput1.shp myinput2.shp
 ------
 
 The functions will be called in the following order:
@@ -445,7 +445,7 @@ Returns:
 The methods will be called after the +initialize+ method is called when translating from an OGR format to a OSM schema. For instance if you call:
 
 ------
-hoot --osm2ogr tmp/SimpleExample.js myinput.osm myoutput.shp
+hoot osm2ogr tmp/SimpleExample.js myinput.osm myoutput.shp
 ------
 
 The functions will be called in the following order:
@@ -537,7 +537,7 @@ Below are a discussion of some special handling situations when reading and writ
 When writing shapefiles a new directory will be created with the basename of the specified path and the new layers will be created within that directory. For example:
 
 ------
-hoot --osm2ogr translations/MyTranslation.js input.osm output.shp
+hoot osm2ogr translations/MyTranslation.js input.osm output.shp
 ------
 
 The above command will create a new directory called +output+ and the layers specified in the +translations/MyTranslation.js+ schema will be created as +output/<your layer name>.shp+ .
@@ -552,7 +552,7 @@ CSV files are created using the OGR CSV driver and will contain an associated +.
 Creating a new CSV file:
 
 ------
-hoot --osm2ogr translations/Poi.js test-files/conflate/unified/AllDataTypesA.osm foo.csv
+hoot osm2ogr translations/Poi.js test-files/conflate/unified/AllDataTypesA.osm foo.csv
 ------
 
 This uses a simple translation script ( +Poi.js+ ) that exports POI data and its associated tags. If you would then like to read that data create a new +.vrt+ file named +foo.vrt+ that contains the following:
@@ -571,7 +571,7 @@ This uses a simple translation script ( +Poi.js+ ) that exports POI data and its
 Then to convert the file back into a .osm file run:
 
 ------
-hoot --ogr2osm translations/Poi.js ConvertedBack.osm foo.vrt
+hoot ogr2osm translations/Poi.js ConvertedBack.osm foo.vrt
 ------
 
 
@@ -792,7 +792,7 @@ def translateAttributes(attrs, layerName):
 To run the tiger translation put the above code in a file named +translations/TigerRoads.py+ and run the following:
 
 ------
-hoot --ogr2osm TigerRoads tmp/dc-roads/tiger.osm tmp/dc-roads/tl_2012_11001_roads.shp
+hoot ogr2osm TigerRoads tmp/dc-roads/tiger.osm tmp/dc-roads/tl_2012_11001_roads.shp
 ------
 
 The following translation will work OK with the DC data.
@@ -832,7 +832,7 @@ def translateAttributes(attrs, layerName):
 To run the DC GIS translation put the above code in a file named +translations/DcRoads.py+ and run the following:
 
 ------
-hoot --ogr2osm DcRoads tmp/dc-roads/dcgis.osm tmp/dc-roads/Streets4326.shp
+hoot ogr2osm DcRoads tmp/dc-roads/dcgis.osm tmp/dc-roads/Streets4326.shp
 ------
 
 
@@ -843,14 +843,14 @@ hoot --ogr2osm DcRoads tmp/dc-roads/dcgis.osm tmp/dc-roads/Streets4326.shp
 If you're just doing this for fun, then you probably want to crop your data down to something that runs quickly before conflating.
 
 ------
-hoot --crop-map tmp/dc-roads/dcgis.osm tmp/dc-roads/dcgis-cropped.osm "-77.0551,38.8845,-77.0281,38.9031" 
-hoot --crop-map tmp/dc-roads/tiger.osm tmp/dc-roads/tiger-cropped.osm "-77.0551,38.8845,-77.0281,38.9031" 
+hoot crop-map tmp/dc-roads/dcgis.osm tmp/dc-roads/dcgis-cropped.osm "-77.0551,38.8845,-77.0281,38.9031" 
+hoot crop-map tmp/dc-roads/tiger.osm tmp/dc-roads/tiger-cropped.osm "-77.0551,38.8845,-77.0281,38.9031" 
 ------
 
 All the hard work is done. Now we let the computer do the work. If you're using the whole DC data set, go get a cup of coffee.
 
 ------
-hoot --conflate tmp/dc-roads/dcgis-cropped.osm tmp/dc-roads/tiger-cropped.osm tmp/dc-roads/output.osm
+hoot conflate tmp/dc-roads/dcgis-cropped.osm tmp/dc-roads/tiger-cropped.osm tmp/dc-roads/output.osm
 ------
 
 
@@ -861,7 +861,7 @@ hoot --conflate tmp/dc-roads/dcgis-cropped.osm tmp/dc-roads/tiger-cropped.osm tm
 Now we can convert the final result back into a Shapefile.
 
 ------
-hoot --osm2shp "name,highway,surface,foot,horse,bicycle" tmp/dc-roads/output.osm tmp/dc-roads/output.shp
+hoot osm2shp "name,highway,surface,foot,horse,bicycle" tmp/dc-roads/output.osm tmp/dc-roads/output.shp
 ------
 
 
@@ -874,7 +874,7 @@ hoot --osm2shp "name,highway,surface,foot,horse,bicycle" tmp/dc-roads/output.osm
 . Convert your GPX file into an OSM file where each track is now a way.
 
 ------
-hoot --ogr2osm GpsTrack tmp/MyTracks.osm "$HOME/MyTracks.gpx;tracks" 
+hoot ogr2osm GpsTrack tmp/MyTracks.osm "$HOME/MyTracks.gpx;tracks" 
 ------
 +
 
