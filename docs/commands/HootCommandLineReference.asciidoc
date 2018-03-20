@@ -20,11 +20,6 @@ in the documentation when referring to each
 If at any time you need simple command line help just run +hoot+ without any
 arguments and a short help screen will be displayed.
 
-Commands that start with +big+ are commands for running against large data sets.
-In general these commands will take longer on small data sets, or come with some
-other caveat. If you aren't running into memory errors these should generally be
-avoided.
-
 :leveloffset: 1
 // be sure all included asciidocs end with a newline
 include::accuracy-dist.asciidoc[]
