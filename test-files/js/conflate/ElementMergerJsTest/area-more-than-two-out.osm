@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="37.780319" minlon="-122.427073" maxlat="37.7811248" maxlon="-122.4254833"/>
+    <node visible="true" id="-52322" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7807971000000009" lon="-122.4255504999999999"/>
+    <node visible="true" id="-52320" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7804955000000007" lon="-122.4254832999999962"/>
+    <node visible="true" id="-52318" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7803189999999987" lon="-122.4268751999999978"/>
+    <node visible="true" id="-52316" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7803439999999995" lon="-122.4269405000000006"/>
+    <node visible="true" id="-52314" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7810732000000016" lon="-122.4270729999999929"/>
+    <node visible="true" id="-52312" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7811248000000006" lon="-122.4266573999999963"/>
+    <node visible="true" id="-52310" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7807833999999971" lon="-122.4265919999999994"/>
+    <node visible="true" id="-52308" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7808405999999977" lon="-122.4261343999999951"/>
+    <node visible="true" id="-52306" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7807316999999969" lon="-122.4261087000000003"/>
+    <way visible="true" id="-92234" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-52322"/>
+        <nd ref="-52320"/>
+        <nd ref="-52318"/>
+        <nd ref="-52316"/>
+        <nd ref="-52314"/>
+        <nd ref="-52312"/>
+        <nd ref="-52310"/>
+        <nd ref="-52308"/>
+        <nd ref="-52306"/>
+        <nd ref="-52322"/>
+        <tag k="website" v="http://sfrecpark.org/destination/margaret-s-hayward-playground/"/>
+        <tag k="leisure" v="park"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="alt_name" v="Margaret S.Hayward Playground;baseball field"/>
+        <tag k="name" v="Margaret S. Hayward Playground"/>
+        <tag k="area" v="yes"/>
+        <tag k="sport" v="baseball"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+</osm>

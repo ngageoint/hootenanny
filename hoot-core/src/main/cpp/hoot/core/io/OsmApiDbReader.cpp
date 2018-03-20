@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmApiDbReader.h"
 
@@ -143,7 +143,7 @@ NodePtr OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& m
   _parseAndSetTagsOnElement(node);
   _updateMetadataOnElement(node);
   //we want the reader's status to always override any existing status
-  if (!_keepFileStatus && _status != Status::Invalid)
+  if (!_keepStatusTag && _status != Status::Invalid)
   {
     node->setStatus(_status);
   }
@@ -188,7 +188,7 @@ WayPtr OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& map
   _parseAndSetTagsOnElement(way);
   _updateMetadataOnElement(way);
   //we want the reader's status to always override any existing status
-  if (!_keepFileStatus && _status != Status::Invalid)
+  if (!_keepStatusTag && _status != Status::Invalid)
   {
     way->setStatus(_status);
   }
@@ -233,7 +233,7 @@ RelationPtr OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, c
   _parseAndSetTagsOnElement(relation);
   _updateMetadataOnElement(relation);
   //we want the reader's status to always override any existing status
-  if (!_keepFileStatus && _status != Status::Invalid)
+  if (!_keepStatusTag && _status != Status::Invalid)
   {
     relation->setStatus(_status);
   }

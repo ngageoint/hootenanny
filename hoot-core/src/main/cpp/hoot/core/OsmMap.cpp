@@ -502,7 +502,6 @@ void OsmMap::replaceNode(long oldId, long newId)
   {
     const WayPtr& w = getWay(*it);
 
-
 #   ifdef DEBUG
       if (w.get() == NULL)
       {

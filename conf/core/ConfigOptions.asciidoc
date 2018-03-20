@@ -221,6 +221,16 @@ Date format string used by the building date tag value.  See QDateTime::fromStri
 
 Tag key used by the building.review.if.secondary.newer configuration option.
 
+=== building.keep.more.complex.geometry.when.auto.merging
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, when buildings are auto-merged during conflation the geometry of the more complex building
+is the one that is kept.  If false or the buildings are equally complex, then the geometry of the
+first building in the pair passed to the Building Merger is the geometry kept.  This does not apply
+to feature merging done during the manual review process.
+
 === building.match.threshold
 
 * Data Type: double
@@ -2346,13 +2356,13 @@ Determines whether the reader used by the conflate command to read the second in
 use the element ID's specified by the input datasets (true) or use internal ID management for the
 inputs (false).
 
-=== reader.keep.file.status
+=== reader.keep.status.tag
 
 * Data Type: bool
 * Default Value: `false`
 
 If reader.use.file.status is true, the default action is to drop the status tag from the file
-during reading.  Setting reader.keep.file.status to true preserves the status tag.  Not honored by
+during reading.  Setting this to true preserves the status tag on the element.  Not honored by
 all readers.
 
 === reader.preserve.all.tags
@@ -2558,6 +2568,14 @@ Set the key member in the SetTagVisitor class.  SetTagVisitor allows for adding/
 particular tag on all elements in a map. The number of keys in `set.tag.visitor.key` should match
 the number of keys in `set.tag.visitor.value`.
 
+=== set.tag.visitor.overwrite
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, the SetTagVisitor class will overwrite any existing tag it finds with
+key=set.tag.visitor.key, otherwise it will skip updating the tag.
+
 === set.tag.visitor.value
 
 * Data Type: list
@@ -2627,6 +2645,22 @@ all translation stats are disabled.
 
 The default status to match with a status criterion.  Used by various element visitors and map
 operations.
+
+=== status.update.visitor.only.update.invalid.status
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, the SetTagVisitor class will only update statuses on elements when the existing status is
+'Invalid'.
+
+=== status.update.visitor.status
+
+* Data Type: string
+* Default Value: ``
+
+Adds the specified status to elements.  Valid values are: 'Unknown1', 'Unknown2', 'Conflated', or
+'Invalid'.  If left empty, all elements will receive tag additions.
 
 === tag.ancestor.differencer.name
 

@@ -95,7 +95,6 @@ Feature: Manage Tab
 
     Scenario: Add dataset into sub folder
         # Add dataset into sub folder
-        Then I expand the "TestFolder" folder
         Then I wait 5 "seconds" to see "tspan" element with text "TestSubFolder"
         And I click the "TestSubFolder" Dataset
         And I context click the "TestSubFolder" Dataset

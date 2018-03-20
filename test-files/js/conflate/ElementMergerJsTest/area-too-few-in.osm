@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <bounds minlat='37.7081' minlon='-122.5118886' maxlat='37.8106' maxlon='-122.376' origin='hootenanny' />
+  <node id='-86520' lat='37.7807117' lon='-122.4238471'/>
+  <node id='-86522' lat='37.7814281' lon='-122.4239915'/>
+  <node id='-86524' lat='37.7812438' lon='-122.425454'/>
+  <node id='-86526' lat='37.7805275' lon='-122.4253096'/>
+  <way id='-95122'>
+    <nd ref='-86526' />
+    <nd ref='-86524' />
+    <nd ref='-86522' />
+    <nd ref='-86520' />
+    <nd ref='-86526' />
+    <tag k='error:circular' v='15' />
+    <tag k='hoot:status' v='1' />
+    <tag k='leisure' v='pitch' />
+    <tag k='sport' v='baseball' />
+    <tag k="hoot:merge:target" v="yes"/>
+  </way>
+</osm>

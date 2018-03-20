@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MultiaryMatchComparator.h"
 
@@ -45,7 +45,6 @@
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/GetTagValuesVisitor.h>
-#include <hoot/core/visitors/SetTagVisitor.h>
 #include <hoot/core/visitors/ElementIdSetVisitor.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
@@ -698,7 +697,7 @@ void MultiaryMatchComparator::_setElementWrongCounts(const ConstOsmMapPtr& map)
 }
 
 void MultiaryMatchComparator::_setElementWrongCount(const ConstOsmMapPtr& map,
-                                            const ElementType::Type& elementType)
+                                                    const ElementType::Type& elementType)
 {
   _elementWrongCounts[elementType] =
     (int)FilteredVisitor::getStat(

@@ -40,6 +40,7 @@ namespace hoot
 class OsmMapJs : public node::ObjectWrap
 {
 public:
+
   static void Init(v8::Handle<v8::Object> target);
 
   static v8::Handle<v8::Object> create(ConstOsmMapPtr map);
@@ -51,6 +52,7 @@ public:
   bool isConst() const { return !_map.get() && _constMap.get(); }
 
 private:
+
   OsmMapJs();
   OsmMapJs(OsmMapPtr map);
   ~OsmMapJs();

@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-3200079' visible='true' lat='48.0479399' lon='11.7012814'>
+    <tag k='amenity' v='post_office' />
+    <tag k='error:circular' v='15' />
+    <tag k='hoot:status' v='1' />
+    <tag k="hoot:merge:target" v="yes"/>
+  </node>
+</osm>

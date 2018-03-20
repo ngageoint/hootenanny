@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MATCHCREATOR_H
 #define MATCHCREATOR_H
@@ -57,7 +57,8 @@ public:
     Waterway = 3,
     PoiPolygonPOI = 4,  //this is a superset of POI specific to poi/poly conflation
     Polygon = 5,    //polygon is a superset of building
-    Unknown = 6 // Unknown must always be last
+    Area = 6,
+    Unknown = 7 // Unknown must always be last
   };
 
   enum FeatureCalcType

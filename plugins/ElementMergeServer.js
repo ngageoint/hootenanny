@@ -103,7 +103,7 @@ function ElementMergeserver(request, response) {
         if (err.message.indexOf('Not found') > -1)
             status = 404;
         response.writeHead(status, header);
-        response.end(JSON.stringify({error: err}));
+        response.end(JSON.stringify({error: err.message}));
     }
 }
 
@@ -125,30 +125,16 @@ var mergeElement = function(payload)
     }
 }
 
-// This is where all interesting things happen interfacing with hoot core lib directly
 var postHandler = function(data)
 {
-    var map = new hoot.OsmMap();
-    map.setIdGenerator(new hoot.DefaultIdGenerator());
-    hoot.loadMapFromString(map, data);
-
-    //Using a simple check here to determine whether the POI/POI merge service or
-    //the POI/Poly merge service should be used (only two that currently exist).  Possibly as
-    //more types of element merging are provided by this service, this check will need to become 
-    //more robust.
-    var mergedMap;
-    if (data.indexOf('<way') === -1 && data.indexOf('<relation') === -1) {
-      var script = 'PoiGeneric.js';
-      mergedMap = hoot.poiMerge(script, map, -1);
-    } else {
-      //Unlike the hoot POI/POI merger which allows for merging more than two elements, the POI/poly 
-      //merger always expects exactly two elements.
-      mergedMap = hoot.poiPolyMerge(map);
-    }
-
-    var xml = hoot.OsmWriter.toString(mergedMap);
-
-    return xml;
+  //can't seem to get this to work
+  //hoot.Log.setLogLevel('trace');
+ 
+  var map = new hoot.OsmMap();
+  hoot.loadMapFromStringPreserveIdAndStatus(map, data);
+  var mergedMap = hoot.mergeElements(map);
+  var xml = hoot.OsmWriter.toString(mergedMap);
+  return xml;
 }
 
 if (typeof exports !== 'undefined') {

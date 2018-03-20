@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <relation id='-279268' action='modify'>
+    <member type='way' ref='-222330' role='outer' />
+    <tag k='building:part' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='type' v='multipolygon' />
+    <tag k='name' v='building 1' />
+  </relation>
+  <relation id='-279269' action='modify'>
+    <member type='way' ref='-222332' role='outer' />
+    <tag k='building:part' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='type' v='multipolygon' />
+    <tag k='name' v='building 2' />
+    <tag k="hoot:merge:target" v="yes"/>
+  </relation>
+</osm>
