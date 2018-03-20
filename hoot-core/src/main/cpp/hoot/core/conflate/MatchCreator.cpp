@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MatchCreator.h"
 
@@ -34,6 +34,7 @@
 #include <hoot/core/filters/HighwayFilter.h>
 #include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPoiCriterion.h>
 #include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPolyCriterion.h>
+#include <hoot/core/filters/NonBuildingAreaCriterion.h>
 
 namespace hoot
 {
@@ -54,6 +55,8 @@ QString MatchCreator::BaseFeatureTypeToString(BaseFeatureType t)
       return "Polygon Conflatable POI";
     case Polygon:
       return "Polygon";
+    case Area:
+      return "Area";
     case Unknown:
     default:
       return "Unknown";
@@ -75,6 +78,8 @@ MatchCreator::BaseFeatureType MatchCreator::StringToBaseFeatureType(QString s)
     return PoiPolygonPOI;
   else if (0 == s.compare("polygon"))
     return Polygon;
+  else if (0 == s.compare("area"))
+    return Area;
   else
     return Unknown;
 }
@@ -94,6 +99,8 @@ MatchCreator::FeatureCalcType MatchCreator::getFeatureCalcType (BaseFeatureType 
     case PoiPolygonPOI:
       return CalcTypeNone;
     case Polygon:
+      return CalcTypeArea;
+    case Area:
       return CalcTypeArea;
     case Unknown:
     default:
@@ -117,6 +124,8 @@ ElementCriterionPtr MatchCreator::getElementCriterion (BaseFeatureType t, ConstO
       return ElementCriterionPtr(new PoiPolygonPoiCriterion());
     case Polygon:
       return ElementCriterionPtr(new PoiPolygonPolyCriterion());
+    case Area:
+      return ElementCriterionPtr(new NonBuildingAreaCriterion());
     case Unknown:
     default:
       return ElementCriterionPtr();

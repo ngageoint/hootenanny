@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmMapReaderFactory.h"
 
@@ -82,14 +82,8 @@ bool OsmMapReaderFactory::hasPartialReader(QString url)
   return result;
 }
 
-boost::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(QString url,
-                                                                  bool useDataSourceIds,
-                                                                  Status defaultStatus)
+boost::shared_ptr<OsmMapReader> OsmMapReaderFactory::_createReader(const QString url)
 {
-  LOG_VART(url);
-  LOG_VART(useDataSourceIds);
-  LOG_VART(defaultStatus);
-
   QString readerOverride = ConfigOptions().getOsmMapReaderFactoryReader();
 
   /// @todo hack - the OsmApiDbAwareHootApiDbReader should always be reading from hoot api
@@ -128,9 +122,33 @@ boost::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(QString url,
     throw HootException("A valid reader could not be found for the URL: " + url);
   }
 
+  return reader;
+}
+
+boost::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(QString url,
+                                                                  bool useDataSourceIds,
+                                                                  Status defaultStatus)
+{
+  LOG_VART(url);
+  LOG_VART(useDataSourceIds);
+  LOG_VART(defaultStatus);
+
+  boost::shared_ptr<OsmMapReader> reader = _createReader(url);
   reader->setUseDataSourceIds(useDataSourceIds);
   reader->setDefaultStatus(defaultStatus);
+  return reader;
+}
 
+boost::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(bool useDataSourceIds,
+                                                                  bool useFileStatus, QString url)
+{
+  LOG_VART(url);
+  LOG_VART(useDataSourceIds);
+  LOG_VART(useFileStatus);
+
+  boost::shared_ptr<OsmMapReader> reader = _createReader(url);
+  reader->setUseDataSourceIds(useDataSourceIds);
+  reader->setUseFileStatus(useFileStatus);
   return reader;
 }
 
@@ -160,6 +178,21 @@ void OsmMapReaderFactory::read(boost::shared_ptr<OsmMap> map, QString url, bool 
   LOG_INFO("Loading map from " << url << "...");
   boost::shared_ptr<OsmMapReader> reader =
     getInstance().createReader(url, useDataSourceIds, defaultStatus);
+  _read(map, reader, url);
+}
+
+void OsmMapReaderFactory::read(boost::shared_ptr<OsmMap> map, bool useDataSourceIds,
+                               bool useFileStatus, QString url)
+{
+  LOG_INFO("Loading map from " << url << "...");
+  boost::shared_ptr<OsmMapReader> reader =
+    getInstance().createReader(url, useDataSourceIds, useFileStatus);
+  _read(map, reader, url);
+}
+
+void OsmMapReaderFactory::_read(boost::shared_ptr<OsmMap> map,
+                                boost::shared_ptr<OsmMapReader> reader, const QString url)
+{
   boost::shared_ptr<Boundable> boundable = boost::dynamic_pointer_cast<Boundable>(reader);
   if (!ConfigOptions().getConvertBoundingBox().trimmed().isEmpty() && !boundable.get())
   {

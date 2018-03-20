@@ -37,8 +37,6 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/conflate/splitter/DualWaySplitter.h>
-using namespace hoot;
-
 
 // Qt
 #include <QDebug>
@@ -47,16 +45,42 @@ using namespace hoot;
 #include <tgs/StreamUtils.h>
 using namespace Tgs;
 
+#include "../../TestUtils.h"
+
 namespace hoot
 {
 
 class DualWaySplitterTest : public CppUnit::TestFixture
 {
     CPPUNIT_TEST_SUITE(DualWaySplitterTest);
+    CPPUNIT_TEST(simpleTest);
     CPPUNIT_TEST(allTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
+
+  void simpleTest()
+  {
+    OsmXmlReader reader;
+
+    OsmMapPtr map(new OsmMap());
+    OsmMap::resetCounters();
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read("test-files/DualWaySplitterSimpleInput.osm", map);
+
+    MapProjector::projectToOrthographic(map);
+
+    OsmMapPtr after = DualWaySplitter::splitAll(map, DualWaySplitter::Right, 10.0);
+
+    MapProjector::projectToWgs84(after);
+
+    OsmXmlWriter writer;
+    writer.write(after, "test-output/DualWaySplitterSimpleOutput.osm");
+
+    HOOT_FILE_EQUALS(
+      "test-output/DualWaySplitterSimpleOutput.osm",
+      "test-files/DualWaySplitterSimpleExpected.osm");
+  }
 
   void allTest()
   {
@@ -75,6 +99,10 @@ public:
 
     OsmXmlWriter writer;
     writer.write(after, "test-output/DualWaySplitterTest.osm");
+
+    HOOT_FILE_EQUALS(
+      "test-output/DualWaySplitterTest.osm",
+      "test-files/DualWaySplitterTestExpected.osm");
   }
 };
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef DEFAULTIDGENERATOR_H
@@ -36,6 +36,7 @@ namespace hoot
 class DefaultIdGenerator : public IdGenerator
 {
 public:
+
   static std::string className() { return "hoot::DefaultIdGenerator"; }
 
   DefaultIdGenerator() { reset(); }
@@ -59,6 +60,7 @@ public:
   void reset();
 
 private:
+
   long _nodeId;
   long _relationId;
   long _wayId;

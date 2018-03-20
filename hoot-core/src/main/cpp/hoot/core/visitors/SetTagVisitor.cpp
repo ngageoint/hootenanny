@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "SetTagVisitor.h"
 
@@ -44,12 +44,19 @@ SetTagVisitor::SetTagVisitor()
 }
 
 SetTagVisitor::SetTagVisitor(QString key, QString value, bool appendToExistingValue,
-                             ElementType elementType) :
+                             ElementType elementType, bool overwriteExistingTag) :
 _appendToExistingValue(appendToExistingValue),
-_elementType(elementType)
+_elementType(elementType),
+_overwriteExistingTag(overwriteExistingTag)
 {
   _k.append(key);
   _v.append(value);
+
+  LOG_VART(_k);
+  LOG_VART(_v);
+  LOG_VART(_appendToExistingValue);
+  LOG_VART(_elementType);
+  LOG_VART(_overwriteExistingTag);
 }
 
 void SetTagVisitor::setConfiguration(const Settings& conf)
@@ -66,19 +73,40 @@ void SetTagVisitor::setConfiguration(const Settings& conf)
   {
     _elementType = ElementType::fromString(configOptions.getSetTagVisitorElementType());
   }
+  _overwriteExistingTag = configOptions.getSetTagVisitorOverwrite();
+
+  LOG_VART(_k);
+  LOG_VART(_v);
+  LOG_VART(_appendToExistingValue);
+  LOG_VART(_elementType);
+  LOG_VART(_overwriteExistingTag);
 }
 
 void SetTagVisitor::_setTag(const ElementPtr& e, QString k, QString v)
 {
+  if (k.isEmpty())
+  {
+    throw IllegalArgumentException("You must set the key in the SetTagVisitor class.");
+  }
+  if (v.isEmpty())
+  {
+    throw IllegalArgumentException("You must set the value in the SetTagVisitor class.");
+  }
+
+  LOG_VART(e->getElementId());
+
+  LOG_VART(e->getElementType());
   if (_elementType != ElementType::Unknown && e->getElementType() != _elementType)
   {
     return;
   }
 
-  if (k.isEmpty())
+  LOG_VART(e->getTags().contains(k));
+  if (!_overwriteExistingTag && e->getTags().contains(k))
   {
-    throw IllegalArgumentException("You must set the key in the SetTagVisitor class.");
+    return;
   }
+
   if (k == MetadataTags::ErrorCircular())
   {
     bool ok;

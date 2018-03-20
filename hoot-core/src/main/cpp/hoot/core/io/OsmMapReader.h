@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMMAPREADER_H
 #define OSMMAPREADER_H
@@ -70,6 +70,13 @@ public:
    * Determines whether the reader should use the element id's from the data being read
    */
   virtual void setUseDataSourceIds(bool useDataSourceIds) = 0;
+
+  /**
+   *
+   *
+   * @param useFileStatus
+   */
+  virtual void setUseFileStatus(bool /*useFileStatus*/) { }
 
 };
 

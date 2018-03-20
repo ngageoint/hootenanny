@@ -745,6 +745,14 @@
                 "description":"If true, any building matches other than 1:1 matches are automatically marked for review.",
                 "name":"Review Non 1:1 Building Matches",
                 "hoot_key":"building.review.matches.other.than.one.to.one"
+            },
+            {
+            	"id":"building_keep_more_complex_geometry_when_auto_merging",
+                "elem_type":"bool",
+                "defaultvalue":"true",
+                "description":"If true, when buildings are auto-merged during conflation the geometry of the more complex building is the one that is kept.  If false or the buildings are equally complex, then the geometry of the first building in the pair passed to the Building Merger is the geometry kept.  This does not apply to feature merging done during the manual review process.",
+                "name":"Keep More Complex Geometry When Auto Merging",
+                "hoot_key":"building.keep.more.complex.geometry.when.auto.merging"
             }
         ]
     },
