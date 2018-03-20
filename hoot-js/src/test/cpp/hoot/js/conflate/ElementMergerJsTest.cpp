@@ -378,7 +378,7 @@ public:
 
   void buildingToBuildingMergeTwoWaysNoConstituentsTest()
   {
-    //DisableLog dl;
+    DisableLog dl;
     testMerge(
       "building-two-ways-no-constituents-in.osm", "building-two-ways-no-constituents-out.osm");
   }
