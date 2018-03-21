@@ -120,8 +120,8 @@ double WeightedWordDistance::compare(const QString& s1, const QString& s2) const
   vector<double> w1 = _calculateWeights(sl1);
   vector<double> w2 = _calculateWeights(sl2);
 
-  ScoreMatrix scores(sl1.size() + 1, sl2.size() + 1);
-  ScoreMatrix weightedScores(sl1.size() + 1, sl2.size() + 1);
+  ScoreMatrix<double> scores(sl1.size() + 1, sl2.size() + 1);
+  ScoreMatrix<double> weightedScores(sl1.size() + 1, sl2.size() + 1);
 
   for (int i = 0; i < sl1.size(); i++)
   {

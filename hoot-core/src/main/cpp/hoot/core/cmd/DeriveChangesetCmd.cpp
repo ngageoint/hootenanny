@@ -60,8 +60,17 @@ public:
 
   virtual QString getName() const { return "derive-changeset"; }
 
+  bool _printStats = false;
+
   virtual int runSimple(QStringList args)
   {
+    //  Check if the --stats option is present
+    if (args.contains("--stats"))
+    {
+      _printStats = true;
+      args.removeAll("--stats");
+    }
+
     if (args.size() < 3 || args.size() > 4)
     {
       cout << getHelp() << endl << endl;
@@ -164,6 +173,7 @@ private:
     const QString osmApiDbUrl)
   {
     LOG_VARD(outputs.size());
+    QString stats;
     for (int i = 0; i < outputs.size(); i++)
     {
       const QString output = outputs[i];
@@ -175,13 +185,19 @@ private:
 
       if (output.endsWith(".osc"))
       {
-        OsmXmlChangesetFileWriter().write(output, _sortInputs(inputMaps));
+        OsmXmlChangesetFileWriter writer;
+        writer.write(output, _sortInputs(inputMaps));
+        stats = writer.getStatsTable();
       }
       else if (output.endsWith(".osc.sql"))
       {
         assert(!osmApiDbUrl.isEmpty());;
         OsmApiDbSqlChangesetFileWriter(QUrl(osmApiDbUrl)).write(output, _sortInputs(inputMaps));
       }
+    }
+    if (_printStats)
+    {
+      LOG_INFO("Changeset Stats:\n" << stats);
     }
   }
 
