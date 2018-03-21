@@ -143,6 +143,12 @@
   <node id='-39260' action='modify' lat='38.85257227198' lon='-104.90128555146' />
   <node id='-39262' action='modify' lat='38.85248057747' lon='-104.90129115831' />
   <node id='-39264' action='modify' lat='38.8523757836' lon='-104.90126873092' />
+  <node id='-39288' action='modify' lat='38.85285670889' lon='-104.90119022364' />
+  <node id='-39289' action='modify' lat='38.85279279399' lon='-104.90115642902' />
+  <node id='-39291' action='modify' lat='38.85268376257' lon='-104.90114194561' />
+  <node id='-39293' action='modify' lat='38.85257473099' lon='-104.90114677341' />
+  <node id='-39295' action='modify' lat='38.85247697839' lon='-104.90115160122' />
+  <node id='-39297' action='modify' lat='38.85239426454' lon='-104.90113229' />
   <way id='-39266' action='modify'>
     <nd ref='-38980' />
     <nd ref='-38982' />
@@ -331,6 +337,17 @@
     <nd ref='-39262' />
     <nd ref='-39264' />
     <tag k='highway' v='path' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='source' v='Unknown' />
+  </way>
+  <way id='-39290' action='modify'>
+    <nd ref='-39288' />
+    <nd ref='-39289' />
+    <nd ref='-39291' />
+    <nd ref='-39293' />
+    <nd ref='-39295' />
+    <nd ref='-39297' />
+    <tag k='highway' v='pedestrian' />
     <tag k='security:classification' v='UNCLASSIFIED' />
     <tag k='source' v='Unknown' />
   </way>
