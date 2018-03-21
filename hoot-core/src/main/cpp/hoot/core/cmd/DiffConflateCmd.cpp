@@ -73,7 +73,7 @@ public:
 
   DiffConflateCmd() { }
 
-  virtual QString getName() const { return "diff-conflate"; }
+  virtual QString getName() const { return "conflate-differential"; }
 
   // Convenience function used when deriving a changeset
   boost::shared_ptr<ChangesetDeriver> _sortInputs(QList<OsmMapPtr> inputMaps)
