@@ -1,8 +1,5 @@
 == big-ogr2osm
 
-NOTE: This documents Hootenanny conflation using Hadoop, which is no longer supported (supported up to v0.2.38), and has been 
-left here for references purposes only.
-
 === Description
 
 The +ogr2osm+  command reads data from one or more inputs and writes the result
@@ -61,11 +58,10 @@ hoot big-merge-nodes tiger-roads-translated.osm.pbf tiger-roads-merged.osm.pbf
 
 # Concatenate the files in our output directory and put them in a properly
 # formatted, but unsorted .osm.pbf.
-hadoop fs -cat tiger-roads-merged.osm.pbf/*.pbf | hoot --add-pbf-header - \
+hadoop fs -cat tiger-roads-merged.osm.pbf/*.pbf | hoot add-pbf-header - \
   TigerRoadsUnsorted.osm.pbf
 
 # Optionally, sort the .osm.pbf so it can be used by tools like osm2pgsql
 osmosis --read-pbf TigerRoadsUnsorted.osm.pbf --sort --write-pbf \
   omitmetadata=true TigerRoadsOutput.osm.pbf
 --------------------------------------
-
