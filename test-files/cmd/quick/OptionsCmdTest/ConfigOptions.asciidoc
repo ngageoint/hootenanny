@@ -1606,7 +1606,7 @@ TODO: description
 Set the script to use with OGR writer. For example:
 
 ----
-hoot --convert \
+hoot convert \
   -D ogr.writer.script=test-files/io/SampleTranslation.js \
   -D ogr.writer.pre.layer.name=bar \
   test-files/io/SampleTranslation.osm \

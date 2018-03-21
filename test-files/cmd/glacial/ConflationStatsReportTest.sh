@@ -10,7 +10,7 @@ hoot conflate -D writer.include.debug.tags=true -D stats.script=./report/csr-def
 # TEST 1: integrity check of the output osm file when enabling Report Generation and stats
 #  - will produce difference which will make different from baseline
 hoot conflate -D writer.include.debug.tags=true -D stats.script=./report/csr-default.js -D stats.format=html -D stats.output=test-output/cmd/csr/csr ./test-files/ToyTestA.osm ./test-files/ToyTestB.osm test-output/cmd/csr/csr2.osm --stats >& /dev/null
-hoot --is-match test-output/cmd/csr/csr.osm test-files/cmd/glacial/csr/csr.osm || diff test-output/cmd/csr/csr.osm test-files/cmd/glacial/csr/csr.osm 
+hoot is-match test-output/cmd/csr/csr.osm test-files/cmd/glacial/csr/csr.osm || diff test-output/cmd/csr/csr.osm test-files/cmd/glacial/csr/csr.osm
 echo "completed test 1"
 
 # TEST 2: simple file test to make sure asciidoc created

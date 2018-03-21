@@ -7,7 +7,7 @@ aclocal && autoconf && autoheader && automake --add-missing && ./configure -q &&
 function build_notest {
     make -s clean
     make -sj`nproc`
-    hoot --version
+    hoot version
     make -s clean
 }
 
