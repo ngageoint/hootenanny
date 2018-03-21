@@ -11,7 +11,7 @@ export DB_URL=hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME
 export HOOT_OPTS="-D hootapi.db.writer.create.user=true -D api.db.email=test@test.com -D hootapi.db.writer.overwrite.map=true -D writer.include.debug.tags=true --warn"
 
 # Ingest the data
-hoot --convert $HOOT_OPTS test-files/ExRenDb.osm "$DB_URL/$INPUT"
+hoot convert $HOOT_OPTS test-files/ExRenDb.osm "$DB_URL/$INPUT"
 
 export MAP_ID=$(psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d $DB_NAME -qt -c "select id from maps where display_name = '$INPUT';" | tr -d ' ')
 export RENDER_DB="$DB_NAME"_renderdb_"$MAP_ID"

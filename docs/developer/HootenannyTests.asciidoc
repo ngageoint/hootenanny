@@ -138,7 +138,7 @@ set -e
 mkdir -p test-output/cmd/example
 
 # perform the operation we're testing.
-hoot --convert test-files/jakarta_raya_coastline.shp test-output/cmd/example/jakarta.osm
+hoot convert test-files/jakarta_raya_coastline.shp test-output/cmd/example/jakarta.osm
 
 # Write the output to stdout. When this run in the future it'll compare the old output
 # to the new input to verify the test is consistent
