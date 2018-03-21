@@ -78,7 +78,7 @@ public class HootServletContext implements ServletContextListener {
     }
 
     private static void createFolders() {
-        String[] folders = { UPLOAD_FOLDER, BASEMAPS_TILES_FOLDER, RPT_STORE_PATH,
+        String[] folders = { UPLOAD_FOLDER, BASEMAPS_TILES_FOLDER,
                 BASEMAPS_FOLDER, SCRIPT_FOLDER, TEMP_OUTPUT_PATH };
 
         for (String folder : folders) {

@@ -176,7 +176,7 @@ class ConflateCommand extends ExternalCommand {
     public CommandResult execute() {
         CommandResult commandResult = super.execute();
 
-        if (conflateParams.getCollectStats()) {
+        /*if (conflateParams.getCollectStats()) {
             File statsFile = new File(RPT_STORE_PATH, conflateParams.getOutputName() + "-stats.csv");
             try {
                 FileUtils.write(statsFile, commandResult.getStdout(), Charset.defaultCharset());
@@ -184,7 +184,7 @@ class ConflateCommand extends ExternalCommand {
             catch (IOException ioe) {
                 throw new RuntimeException("Error writing to " + statsFile.getAbsolutePath(), ioe);
             }
-        }
+        }*/
 
         return commandResult;
     }

@@ -124,9 +124,3 @@ ElementMergeServerThreadCount=0
 
 # Element merge Server Script in scripts folder
 ElementMergeServerScript=/plugins/ElementMergeServer.js
-
-# HGIS review prepare for validation script name
-hgisPrepareForValidationScript=PrepareForValidation.js
-
-# HGIS filter script name
-hgisFilterScript=RemoveNonHgisPois.js

@@ -46,7 +46,8 @@ class MapStatsWriter
 
       @param stats input statistics
       */
-    void writeStats(QList< QList<SingleStat> >& stats, QStringList names);
+    //void writeStats(QList< QList<SingleStat> >& stats, QStringList names);
+
     /**
       Writes map stats to a file
 

@@ -56,7 +56,6 @@ public final class HootProperties {
     public static final String HORZ_OVERRIDE_PATH;
     public static final String AVE_OVERRIDE_PATH;
     public static final String DOC_NAME;
-    public static final String RPT_STORE_PATH;
     public static final String BASEMAPS_TILES_FOLDER;
     public static final String BASEMAPS_FOLDER;
     public static final String JS_HEADER_SCRIPT_PATH;
@@ -219,9 +218,6 @@ public final class HootProperties {
 
         // Files uploaded via HTTP for ingest
         UPLOAD_FOLDER = TEMP_OUTPUT_PATH + File.separator + "upload";
-
-        // Conflation stats and reports go here
-        RPT_STORE_PATH = USERFILES_FOLDER + File.separator + "reports";
 
         // Contains tiles of existing basemaps
         BASEMAPS_TILES_FOLDER = USERFILES_FOLDER + File.separator + "ingest" + File.separator + "processed" + File.separator + "BASEMAP";
