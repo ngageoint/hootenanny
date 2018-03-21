@@ -68,10 +68,6 @@ public class ConflateResource {
     @Autowired
     private ExportRenderDBCommandFactory exportRenderDBCommandFactory;
 
-    @Autowired
-    private UpdateTagsCommandFactory updateTagsCommandFactory;
-
-
     /**
      * Conflate service operates like a standard ETL service. The conflate
      * service specifies the input files, conflation type, match threshold, miss
@@ -118,10 +114,9 @@ public class ConflateResource {
 
         try {
             ExternalCommand conflateCommand = conflateCommandFactory.build(jobId, params, debugLevel, this.getClass());
-            InternalCommand updateTagsCommand = updateTagsCommandFactory.build(jobId, params, this.getClass());
             ExternalCommand exportRenderDBCommand = exportRenderDBCommandFactory.build(jobId, params.getOutputName(), this.getClass());
 
-            Command[] workflow = { conflateCommand, updateTagsCommand, exportRenderDBCommand };
+            Command[] workflow = { conflateCommand, exportRenderDBCommand };
 
             jobProcessor.submitAsync(new Job(jobId, workflow));
         }

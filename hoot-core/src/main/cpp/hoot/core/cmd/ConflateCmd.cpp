@@ -35,7 +35,6 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/conflate/ConflateStatsHelper.h>
-#include <hoot/core/conflate/StatsComposer.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/filters/StatusCriterion.h>
 #include <hoot/core/io/MapStatsWriter.h>

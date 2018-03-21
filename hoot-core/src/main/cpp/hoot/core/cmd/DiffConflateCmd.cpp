@@ -30,7 +30,6 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/conflate/ConflateStatsHelper.h>
-#include <hoot/core/conflate/StatsComposer.h>
 #include <hoot/core/conflate/DiffConflator.h>
 #include <hoot/core/filters/StatusCriterion.h>
 #include <hoot/core/filters/BuildingCriterion.h>
