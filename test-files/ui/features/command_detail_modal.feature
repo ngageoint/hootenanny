@@ -16,7 +16,7 @@ Feature: Command detail modal window
     And I press "Conflate"
     And I scroll element into view and press "conflate2"
     Then I wait 30 "seconds" to see "Conflating …"
-    Then I wait 5 "minutes" to see "Merged_RoadsCucumber"
+    Then I wait 5 "minutes" to see "Merged_Cucumber"
     Then I see the UI alert
     And I click on ".alertDiv.green"
     And I click on ".detailLink"

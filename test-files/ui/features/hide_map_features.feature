@@ -9,7 +9,7 @@ Feature: Toggle/hide map features of conflated layer in review mode
     And I press "Add Layer"
     Then I wait 30 "seconds" to see "span.strong" element with text "ToyTestACucumber"
     And I press "Add Secondary Dataset"
-    And I click the "ToyTestBCucumber" Dataset
+    And I click the "TTCauseReviewCucumber" Dataset
     And I press "Add Layer"
     Then I wait 30 "seconds" to see "span.strong" element with text "TTCauseReviewCucumber"
     Then I should see "Conflate"
