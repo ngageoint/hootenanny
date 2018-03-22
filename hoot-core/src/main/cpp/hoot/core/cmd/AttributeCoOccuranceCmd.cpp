@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 /*
@@ -70,7 +70,7 @@ public:
 
   AttributeCoOccurenceCmd() { }
 
-  virtual QString getName() const { return "attr-co-occurence"; }
+  virtual QString getName() const { return "attribute-co-occurrence"; }
 
   virtual int runSimple(QStringList args)
   {

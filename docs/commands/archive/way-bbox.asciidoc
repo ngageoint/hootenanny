@@ -1,0 +1,21 @@
+== way-bbox
+
+NOTE: This documents Hootenanny conflation using Hadoop, which is no longer supported (supported up to v0.2.38), and has been 
+left here for references purposes only.
+
+=== Description
+
+Reads the data from +input.pbf+, calculates the bounding box for each way and
+writes the result including the optional bbox value into +output.pbf+. This
+command uses Hadoop for distributed processing.
+
+* +input.pbf+ - Input .pbf directory -- must reside on HDFS.
+* +output.pbf+ - Output .pbf directory -- must reside on HDFS.
+* +maxWaySize+ - Max way size in degrees.
+
+=== Usage
+
+--------------------------------------
+way-bbox (input.pbf) (output.pbf) (maxWaySize)
+--------------------------------------
+

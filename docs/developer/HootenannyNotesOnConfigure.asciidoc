@@ -37,19 +37,19 @@ Now that we've created a magical configure script from some meaningless (to you)
 In our example above with @HAS_CPPUNIT@ you can see its effect in @Configure.pri.in@ in this line:
 
 --------
-CONFIG += @HAS_LOG4CXX@ @HAS_NEWMAT@ @HAS_CPPUNIT@ @HAS_HADOOP@
+CONFIG += @HAS_LOG4CXX@ @HAS_NEWMAT@ @HAS_CPPUNIT@
 --------
 
 During processing the line above is replaced with the following on my machine:
 
 --------
-CONFIG += log4cxx newmat cppunit hadoop
+CONFIG += log4cxx newmat cppunit
 --------
 
 If I didn't have CPPUnit installed it would be:
 
 --------
-CONFIG += log4cxx newmat hadoop
+CONFIG += log4cxx newmat
 --------
 
 If you poke around in the various @.pro@ files such as @hoot-core.pro@ you will notice that one of the early lines is:

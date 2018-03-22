@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <node id='-32291' action='modify' lat='39.74850988085' lon='-105.04792222023'>
+    <tag k='leisure' v='park' />
+    <tag k='name' v='Sloan&apos;s Lake Park' />
+  </node>
+</osm>

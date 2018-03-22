@@ -6,7 +6,7 @@
 The +alpha-shape+ command provides a way to generate a "concave hull" for a
 set of points. Specifically, it reads data from one input, calculates the alpha
 shape and writes the resulting multipolygon to output. This is most useful when
-seeding the +cookie-cutter+ or +big-cookie-cutter+ commands.  The degree of
+seeding the +cookie-cutter+ command.  The degree of
 the concaveness is determined by the alpha parameters. A small alpha parameter
 creates a shape with a large number of holes and concave sections. A large alpha
 value creates a shape closer to a convex hull. An alpha value equal to the

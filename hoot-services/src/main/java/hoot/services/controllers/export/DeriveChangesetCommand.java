@@ -79,12 +79,12 @@ class DeriveChangesetCommand extends ExportCommand {
         if (params.getOutputType().equalsIgnoreCase("osc")) {
             // Just derive without apply (Will return .osc file to the REST caller)
             substitutionMap.put("CHANGESET_OUTPUT_PATH", super.getOutputPath());
-            command = "hoot derive-changeset --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${OSMAPI_DB_URL} ${INPUT} ${CHANGESET_OUTPUT_PATH}";
+            command = "hoot changeset-derive --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${OSMAPI_DB_URL} ${INPUT} ${CHANGESET_OUTPUT_PATH}";
         }
         else {
             // Derive changeset here.  The actual apply command is issued via ApplyChangesetCommand from another class.
             substitutionMap.put("CHANGESET_OUTPUT_PATH", super.getSQLChangesetPath()); //"changeset-" + getJobId() + ".osc.sql"
-            command = "hoot derive-changeset --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${OSMAPI_DB_URL} ${INPUT} ${CHANGESET_OUTPUT_PATH} ${OSMAPI_DB_URL}";
+            command = "hoot changeset-derive --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${OSMAPI_DB_URL} ${INPUT} ${CHANGESET_OUTPUT_PATH} ${OSMAPI_DB_URL}";
         }
 
         super.configureCommand(command, substitutionMap, caller);

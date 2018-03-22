@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.clipping;
 
@@ -70,7 +70,7 @@ public class ClipDatasetCommandTest {
         assertNotNull(clipDatasetCommand.getWorkDir());
         assertNotNull(clipDatasetCommand.getCommand());
 
-        String expectedCommand = "hoot crop-map --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT} ${OUTPUT} ${BOUNDS}";
+        String expectedCommand = "hoot crop --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT} ${OUTPUT} ${BOUNDS}";
         assertEquals(expectedCommand, clipDatasetCommand.getCommand());
 
         assertTrue(clipDatasetCommand.getSubstitutionMap().containsKey("DEBUG_LEVEL"));
