@@ -763,6 +763,25 @@ void OsmMap::visitWaysRw(ConstElementVisitor& visitor)
   }
 }
 
+void OsmMap::visitRelationsRw(ConstElementVisitor& visitor)
+{
+  OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(&visitor);
+  if (consumer != 0)
+  {
+    consumer->setOsmMap(this);
+  }
+
+  // make a copy so we can iterate through even if there are changes.
+  const RelationMap allRs = getRelations();
+  for (RelationMap::const_iterator it = allRs.begin(); it != allRs.end(); ++it)
+  {
+    if (containsRelation(it->first))
+    {
+      visitor.visit(it->second);
+    }
+  }
+}
+
 void OsmMap::_replaceNodeInRelations(long oldId, long newId)
 {
   RelationMap allRelations = getRelations();

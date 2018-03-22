@@ -22,43 +22,26 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef ELEMENTOSMMAPVISITOR_H
-#define ELEMENTOSMMAPVISITOR_H
+#include "MultiVisitor.h"
 
-// hoot
-#include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/ConstOsmMapConsumer.h>
-
-// tgs
-#include <tgs/SharedPtr.h>
+#include <hoot/core/OsmMap.h>
 
 namespace hoot
 {
 
-/**
- * Base class to ease OsmMapConsumer usage.
- */
-class ElementOsmMapVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
+MultiVisitor::MultiVisitor()
 {
-public:
-
-  ElementOsmMapVisitor() {}
-
-  virtual ~ElementOsmMapVisitor() {}
-
-  virtual void setOsmMap(OsmMap* map) { _map = map; }
-  virtual void setOsmMap(const OsmMap* /*map*/) { throw NotImplementedException(); }
-
-  virtual void visit(const ConstElementPtr& e);
-  virtual void visit(const boost::shared_ptr<Element>& e) = 0;
-
-protected:
-  OsmMap* _map;
-};
-
-typedef boost::shared_ptr<ElementOsmMapVisitor> ElementOsmMapVisitorPtr;
+  // blank
 }
 
-#endif // ELEMENTOSMMAPVISITOR_H
+void MultiVisitor::visit(const boost::shared_ptr<Element>& e)
+{
+  for (size_t i = 0; i < _visitors.size(); i++)
+  {
+    _visitors[i]->visit(e);
+  }
+}
+
+} // namespace hoot
