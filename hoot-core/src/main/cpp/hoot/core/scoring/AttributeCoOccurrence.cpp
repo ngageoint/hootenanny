@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "AttributeCoOccurence.h"
+#include "AttributeCoOccurrence.h"
 
 // Hoot
 #include <hoot/core/ConstOsmMapConsumer.h>
@@ -54,6 +54,7 @@ namespace hoot
 class RefToEidVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
 {
 public:
+
   typedef map<QString, set<ElementId> > RefToEid;
 
   RefToEidVisitor(QString ref) : _ref(ref) {}
@@ -84,21 +85,23 @@ public:
   }
 
 private:
+
   const OsmMap* _map;
   QString _ref;
   RefToEid _ref2Eid;
 };
 
 /**
- * Traverses the OsmMap and build a hashmap of Attribute Co-Occurence values.
+ * Traverses the OsmMap and build a hashmap of Attribute Co-Occurrence values.
  */
-class CoOccurenceVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
+class CoOccurrenceVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
 {
 public:
-  // CoOccurenceVisitor(RefToEidVisitor::RefToEid refSet) : _refSet(refSet) {}
-  CoOccurenceVisitor(RefToEidVisitor::RefToEid refSet, AttributeCoOccurence::CoOccurenceHash& h) : _refSet(refSet), _coOccurence(h) {}
 
-  virtual ~CoOccurenceVisitor() {}
+  CoOccurrenceVisitor(RefToEidVisitor::RefToEid refSet, AttributeCoOccurrence::CoOccurrenceHash& h) :
+  _refSet(refSet), _coOccurrence(h) {}
+
+  virtual ~CoOccurrenceVisitor() {}
 
   virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
@@ -135,7 +138,7 @@ public:
                 QString kvp2 = OsmSchema::getInstance().toKvp(tag1.key(), _map->getElement(*eid)->getTags()[tag1.key()]);
 
                 // LOG_INFO("Got Tags:" + kvp1 + " " + kvp2);
-                _coOccurence[kvp1][kvp2]++;
+                _coOccurrence[kvp1][kvp2]++;
               }
             } // End for REF1 tag list
 
@@ -154,7 +157,7 @@ public:
                 QString kvp1 = OsmSchema::getInstance().toKvp(tag2.key(),"");
 
                 // LOG_INFO("Got Tags:" + kvp1 + " " + kvp2);
-                _coOccurence[kvp1][kvp2]++;
+                _coOccurrence[kvp1][kvp2]++;
               }
 
             } // End for REF2 tag list
@@ -171,16 +174,16 @@ public:
             {
               if (name2 == "")
               {
-                _coOccurence[kvpNull][kvpNull]++;
+                _coOccurrence[kvpNull][kvpNull]++;
               }
               else
               {
-                _coOccurence[kvpNull][kvpNonNull]++;
+                _coOccurrence[kvpNull][kvpNonNull]++;
               }
             }
             else if (name2 == "")
             {
-              _coOccurence[kvpNonNull][kvpNull]++;
+              _coOccurrence[kvpNonNull][kvpNull]++;
             }
             else
             {
@@ -190,11 +193,11 @@ public:
 
               if (nameMatch)
               {
-                _coOccurence[kvpSame][kvpSame]++;
+                _coOccurrence[kvpSame][kvpSame]++;
               }
               else
               {
-                _coOccurence[kvpNonNull][kvpNonNull]++;
+                _coOccurrence[kvpNonNull][kvpNonNull]++;
               }
             }
 
@@ -209,9 +212,10 @@ public:
   } // End Visit
 
 private:
+
   const OsmMap* _map;
   RefToEidVisitor::RefToEid _refSet;
-  AttributeCoOccurence::CoOccurenceHash& _coOccurence;
+  AttributeCoOccurrence::CoOccurrenceHash& _coOccurrence;
 
   double _calculateNameScore(ConstElementPtr e1, ConstElementPtr e2) const
   {
@@ -230,26 +234,26 @@ private:
 };
 
 
-AttributeCoOccurence::AttributeCoOccurence() {}
+AttributeCoOccurrence::AttributeCoOccurrence() {}
 
-void AttributeCoOccurence::addToMatrix(const ConstOsmMapPtr& in)
+void AttributeCoOccurrence::addToMatrix(const ConstOsmMapPtr& in)
 
 {
   RefToEidVisitor ref2(MetadataTags::Ref2());
 
   in->visitRo(ref2);
 
-  CoOccurenceVisitor coOccurenceResult(ref2.getRefToEid(), _resultMatrix);
+  CoOccurrenceVisitor coOccurrenceResult(ref2.getRefToEid(), _resultMatrix);
 
-  in->visitRo(coOccurenceResult);
+  in->visitRo(coOccurrenceResult);
 }
 
 
-QString AttributeCoOccurence::printTable()
+QString AttributeCoOccurrence::printTable()
 {
   TextTable::Data data;
 
-  for(CoOccurenceHash::const_iterator it = _resultMatrix.begin(); it != _resultMatrix.end(); ++it)
+  for(CoOccurrenceHash::const_iterator it = _resultMatrix.begin(); it != _resultMatrix.end(); ++it)
   {
     // Get the list of keys and build a reverse matrix
     for (HashMap<QString, int>::const_iterator jt = it->second.begin();
@@ -265,13 +269,13 @@ QString AttributeCoOccurence::printTable()
 }
 
 
-QString AttributeCoOccurence::printList()
+QString AttributeCoOccurrence::printList()
 {
   QStringList keyList;
   QString result;
 
   // Build a list of REF1 keys so we can sort the table
-  for(CoOccurenceHash::const_iterator it = _resultMatrix.begin(); it != _resultMatrix.end(); ++it)
+  for(CoOccurrenceHash::const_iterator it = _resultMatrix.begin(); it != _resultMatrix.end(); ++it)
   {
     keyList.append(it->first);
   }
@@ -283,7 +287,7 @@ QString AttributeCoOccurence::printList()
 
   for(int it=0; it < keyList.size(); it++)
   {
-    CoOccurenceHash::const_iterator jt = _resultMatrix.find(keyList[it]);
+    CoOccurrenceHash::const_iterator jt = _resultMatrix.find(keyList[it]);
 
     for (HashMap<QString, int>::const_iterator kt = jt->second.begin(); kt != jt->second.end(); ++kt)
     {

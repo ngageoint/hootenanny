@@ -22,69 +22,68 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/conflate/MapCleaner.h>
-#include <hoot/core/conflate/RubberSheet.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/util/Settings.h>
+#include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
+#include <hoot/core/util/GeometryUtils.h>
 
 using namespace std;
 
 namespace hoot
 {
 
-/**
- * @ingroup cmd
- * @page CleanupCmd Cleanup Command
- * @code
---clean (input) (output)
- * @endcode
- *
- * The clean command cleans common map problems.
- *
- * @param input The input file to be cleaned. Supports common geospatial file types.
- * @param output The cleaned output file. Supports common geospatial file types.
- */
-class CleanupCmd : public BaseCommand
+class ExtentCmd : public BaseCommand
 {
+
 public:
 
-  static string className() { return "hoot::CleanupCmd"; }
+  static string className() { return "hoot::ExtentCmd"; }
 
-  CleanupCmd() { }
+  ExtentCmd() {}
 
-  virtual QString getName() const { return "clean"; }
+  virtual QString getName() const { return "extent"; }
 
-  virtual int runSimple(QStringList args)
+  int runSimple(QStringList args)
   {
-    if (args.size() != 2)
+    if (args.size() < 1 || args.size() > 2)
     {
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes two parameters.").arg(getName()));
+      throw HootException(QString("%1 takes one or two parameters.").arg(getName()));
     }
 
+    bool verbose = true;
+    if (args.size() == 2 && args[1].toLower() == "false")
+    {
+      verbose = false;
+    }
+    LOG_VARD(verbose);
+
+    const QString input = args[0];
+    LOG_VARD(input);
     OsmMapPtr map(new OsmMap());
-    loadMap(map, args[0], true, Status::Unknown1);
+    loadMap(map, input, true, Status::Invalid);
 
-    MapCleaner().apply(map);
-
-    MapProjector::projectToWgs84(map);
-
-    saveMap(map, args[1]);
+    const QString bounds =
+      GeometryUtils::envelopeToConfigString(CalculateMapBoundsVisitor::getGeosBounds(map));
+    if (verbose)
+    {
+      cout << "Map extent (minx,miny,maxx,maxy): " << bounds << endl;
+    }
+    else
+    {
+      cout << bounds << endl;
+    }
 
     return 0;
   }
+
 };
 
-HOOT_FACTORY_REGISTER(Command, CleanupCmd)
-
+HOOT_FACTORY_REGISTER(Command, ExtentCmd)
 
 }
-

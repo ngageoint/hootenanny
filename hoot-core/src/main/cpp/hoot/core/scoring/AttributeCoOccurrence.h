@@ -25,8 +25,8 @@
  * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef ATTRIBUTECOOCCURENCE_H
-#define ATTRIBUTECOOCCURENCE_H
+#ifndef ATTRIBUTECOOCCURRENCE_H
+#define ATTRIBUTECOOCCURRENCE_H
 
 // hoot
 #include <hoot/core/OsmMap.h>
@@ -37,12 +37,13 @@
 namespace hoot
 {
 
-class AttributeCoOccurence
+class AttributeCoOccurrence
 {
 public:
-  typedef HashMap<QString, HashMap<QString, int> > CoOccurenceHash;
 
-  AttributeCoOccurence();
+  typedef HashMap<QString, HashMap<QString, int> > CoOccurrenceHash;
+
+  AttributeCoOccurrence();
 
   void addToMatrix(const ConstOsmMapPtr& in);
 
@@ -51,8 +52,9 @@ public:
   QString printList();
 
 private:
-  CoOccurenceHash _resultMatrix;
+
+  CoOccurrenceHash _resultMatrix;
 };
 
 }
-#endif // ATTRIBUTECOOCCURENCE_H
+#endif // ATTRIBUTECOOCCURRENCE_H

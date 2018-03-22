@@ -1,8 +1,8 @@
-== map-is-match
+== map-diff
 
 === Description
 
-+map-is-match+ checks to see if maps are essentially the same. Returns 0 if they're
++map-diff+ checks to see if maps are essentially the same. Returns 0 if they're
 the same or 1 if they differ significantly. If they differ significantly
 warnings will be printed with more information.
 
@@ -13,6 +13,6 @@ warnings will be printed with more information.
 === Usage
 
 --------------------------------------
-map-is-match [--ignore-uuid] (input1) (input2)
+map-diff [--ignore-uuid] (input1) (input2)
 --------------------------------------
 

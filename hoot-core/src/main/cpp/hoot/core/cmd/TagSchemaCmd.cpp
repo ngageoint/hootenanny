@@ -22,42 +22,61 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
+
+// Boost
+#include <boost/shared_ptr.hpp>
 
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/io/HootApiDbWriter.h>
+#include <hoot/core/io/ScriptTranslator.h>
+#include <hoot/core/io/ScriptTranslatorFactory.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 using namespace std;
 
 namespace hoot
 {
 
-class DeleteMapCmd : public BaseCommand
+class TagSchemaCmd : public BaseCommand
 {
 public:
-  static string className() { return "hoot::DeleteMapCmd"; }
 
-  DeleteMapCmd() {}
+  static string className() { return "hoot::TagSchemaCmd"; }
 
-  virtual QString getName() const { return "delete-db-map"; }
+  TagSchemaCmd() {}
 
-  int runSimple(QStringList args)
+  virtual QString getName() const { return "tag-schema"; }
+
+  virtual int runSimple(QStringList args)
   {
-    if (args.size() != 1)
+    QString printScript(ConfigOptions().getTagPrintingScript());
+
+    if (args.size() == 1)
+    {
+      printScript = args[0];
+    }
+    else if (args.size() > 1)
     {
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes one parameter.").arg(getName()));
+      throw HootException(QString("%1 takes one optional parameter.").arg(getName()));
     }
 
-    HootApiDbWriter().deleteMap(args[0]);
+    // Great bit of code taken from TranslatedTagDifferencer.cpp
+    boost::shared_ptr<ScriptTranslator> uut(
+      ScriptTranslatorFactory::getInstance().createTranslator(printScript));
+
+    if (!uut)
+    {
+      throw HootException("Unable to find a valid translation format for: " + printScript);
+    }
 
     return 0;
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, DeleteMapCmd)
+HOOT_FACTORY_REGISTER(Command, TagSchemaCmd)
 
 }

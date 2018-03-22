@@ -204,10 +204,10 @@ echo ""
 echo "STEP 14: Reading the entire contents of the osm api db, for the SQL changeset workflow, writing it into a file, and verifying the data..."
 echo ""
 hoot convert $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D reader.use.file.status=true -D reader.keep.status.tag=true -D writer.include.circular.error.tags=false $OSM_API_DB_URL $OUTPUT_DIR/14-complete-output-PulledFromOsmApiDb.osm
-hoot map-is-match $HOOT_OPTS $REF_DIR/output.osm $OUTPUT_DIR/14-complete-output-PulledFromOsmApiDb.osm
+hoot map-diff $HOOT_OPTS $REF_DIR/output.osm $OUTPUT_DIR/14-complete-output-PulledFromOsmApiDb.osm
 
 # The map comparison, step 14, should be enough to check the state of the changeset write.  Due to node coordinate
-# precision differences between Ubuntu and CentOS, we'd need the equivalent of the map-is-match command for changesets
+# precision differences between Ubuntu and CentOS, we'd need the equivalent of the map-diff command for changesets
 # to do a valid changeset comparison.
 
 #echo ""

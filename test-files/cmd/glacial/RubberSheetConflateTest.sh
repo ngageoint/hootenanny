@@ -16,7 +16,7 @@ hoot conflate -C core/RemoveReview2Pre.conf -D uuid.helper.repeatable=true -D os
  -D "way.merger.min.split.size=5" -D "way.angle.sample.distance=10.0" -D "poi.polygon.name.score.threshold=0.8" -D "poi.polygon.review.distance.threshold=0" -D "autocorrect.options=false" \
  test-files/DcGisRoads.osm test-files/DcTigerRoads.osm test-output/cmd/RubberSheetConflateTest/output.osm
 
-hoot map-is-match test-output/cmd/RubberSheetConflateTest/output.osm test-files/cmd/glacial/RubberSheetConflateTest/output.osm ||
+hoot map-diff test-output/cmd/RubberSheetConflateTest/output.osm test-files/cmd/glacial/RubberSheetConflateTest/output.osm ||
 (echo "You should run: diff test-output/cmd/RubberSheetConflateTest/output.osm test-files/cmd/glacial/RubberSheetConflateTest/output.osm" ;\
 echo "If it looks good then copy a new baseline: cp test-output/cmd/RubberSheetConflateTest/output.osm test-files/cmd/glacial/RubberSheetConflateTest/output.osm"; exit -1)
 

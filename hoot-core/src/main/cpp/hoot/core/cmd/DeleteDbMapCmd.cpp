@@ -22,78 +22,42 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/scoring/MapComparator.h>
-#include <hoot/core/util/Settings.h>
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/util/Log.h>
+#include <hoot/core/io/HootApiDbWriter.h>
 
 using namespace std;
 
 namespace hoot
 {
 
-class IsMatchCmd : public BaseCommand
+class DeleteDbMapCmd : public BaseCommand
 {
 public:
+  static string className() { return "hoot::DeleteDbMapCmd"; }
 
-  static string className() { return "hoot::IsMatchCmd"; }
+  DeleteDbMapCmd() {}
 
-  IsMatchCmd() { }
+  virtual QString getName() const { return "delete-db-map"; }
 
-  virtual QString getName() const { return "map-is-match"; }
-
-  virtual int runSimple(QStringList args)
+  int runSimple(QStringList args)
   {
-
-    MapComparator mapCompare;
-
-    if (args.contains("--ignore-uuid"))
-    {
-      args.removeAll("--ignore-uuid");
-      mapCompare.setIgnoreUUID();
-    }
-
-    if (args.contains("--use-datetime"))
-    {
-      args.removeAll("--use-datetime");
-      mapCompare.setUseDateTime();
-    }
-
-
-    if (args.size() != 2)
+    if (args.size() != 1)
     {
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes two parameters.").arg(getName()));
+      throw HootException(QString("%1 takes one parameter.").arg(getName()));
     }
 
-    OsmMapPtr map1(new OsmMap());
-    loadMap(map1, args[0], true, Status::Unknown1);
-    OsmMapPtr map2(new OsmMap());
-    loadMap(map2, args[1], true, Status::Unknown1);
+    HootApiDbWriter().deleteMap(args[0]);
 
-    int result;
-
-    if (mapCompare.isMatch(map1, map2))
-    {
-      result = 0;
-    }
-    else
-    {
-      result = 1;
-    }
-
-    return result;
+    return 0;
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, IsMatchCmd)
+HOOT_FACTORY_REGISTER(Command, DeleteDbMapCmd)
 
 }
-

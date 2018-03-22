@@ -46,13 +46,13 @@ using namespace std;
 namespace hoot
 {
 
-class ScoreCmd : public BaseCommand
+class ScoreMapCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::ScoreCmd"; }
+  static string className() { return "hoot::ScoreMapCmd"; }
 
-  ScoreCmd() { }
+  ScoreMapCmd() { }
 
   virtual QString getName() const { return "score-map"; }
 
@@ -213,7 +213,7 @@ public:
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, ScoreCmd)
+HOOT_FACTORY_REGISTER(Command, ScoreMapCmd)
 
 }
 

@@ -55,7 +55,7 @@ hoot convert $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer" $FINAL_OUTP
 echo ""
 echo "MULTIARY INGEST - COMPARING GEONAMES REFERENCE LAYER OUTPUT..."
 echo ""
-hoot map-is-match $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
+hoot map-diff $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
 echo ""
 echo "MULTIARY INGEST - COMPARING GEONAMES ADD CHANGESET OUTPUT..."
 echo ""
@@ -98,7 +98,7 @@ hoot convert $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer" $FINAL_OUTP
 echo ""
 echo "MULTIARY INGEST - COMPARING OSM PBF REFERENCE LAYER OUTPUT..."
 echo ""
-hoot map-is-match $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
+hoot map-diff $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
 echo ""
 echo "MULTIARY INGEST - COMPARING OSM PBF ADD CHANGESET OUTPUT..."
 echo ""
@@ -141,7 +141,7 @@ hoot convert $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer" $FINAL_OUTP
 echo ""
 echo "MULTIARY INGEST - COMPARING OSM XML REFERENCE LAYER OUTPUT..."
 echo ""
-hoot map-is-match $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
+hoot map-diff $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
 echo ""
 echo "MULTIARY INGEST - COMPARING OSM XML ADD CHANGESET OUTPUT..."
 echo ""
@@ -184,7 +184,7 @@ hoot convert $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer" $FINAL_OUTP
 echo ""
 echo "MULTIARY INGEST - COMPARING SHP REFERENCE LAYER OUTPUT..."
 echo ""
-hoot map-is-match $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
+hoot map-diff $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
 echo ""
 echo "MULTIARY INGEST - COMPARING SHP ADD CHANGESET OUTPUT..."
 echo ""

@@ -11,4 +11,4 @@ outputfile=$HOOT_HOME/test-output/cmd/quick/CleanupCmdTest/cleaned.osm
 hoot clean $inputfile $outputfile
 
 # Checking output
-hoot map-is-match $comparefile $outputfile || diff $comparefile $outputfile
+hoot map-diff $comparefile $outputfile || diff $comparefile $outputfile

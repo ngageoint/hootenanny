@@ -22,62 +22,69 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-// Boost
-#include <boost/shared_ptr.hpp>
-
 // Hoot
-#include <hoot/core/util/Factory.h>
+#include <hoot/core/OsmMap.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/io/ScriptTranslator.h>
-#include <hoot/core/io/ScriptTranslatorFactory.h>
-#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/conflate/MapCleaner.h>
+#include <hoot/core/conflate/RubberSheet.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/util/Settings.h>
 
 using namespace std;
 
 namespace hoot
 {
 
-class PrintOsmDocsCmd : public BaseCommand
+/**
+ * @ingroup cmd
+ * @page CleanCmd Clean Command
+ * @code
+--clean (input) (output)
+ * @endcode
+ *
+ * The clean command cleans common map problems.
+ *
+ * @param input The input file to be cleaned. Supports common geospatial file types.
+ * @param output The cleaned output file. Supports common geospatial file types.
+ */
+class CleanCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::PrintOsmDocsCmd"; }
+  static string className() { return "hoot::CleanCmd"; }
 
-  PrintOsmDocsCmd() {}
+  CleanCmd() { }
 
-  virtual QString getName() const { return "tag-schema"; }
+  virtual QString getName() const { return "clean"; }
 
   virtual int runSimple(QStringList args)
   {
-    QString printScript(ConfigOptions().getTagPrintingScript());
-
-    boost::shared_ptr<ScriptTranslator> translator;
-
-    if (args.size() == 1)
-    {
-      printScript = args[0];
-    }
-    else if (args.size() > 1)
+    if (args.size() != 2)
     {
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes one optional parameter.").arg(getName()));
+      throw HootException(QString("%1 takes two parameters.").arg(getName()));
     }
 
-    // Great bit of code taken from TranslatedTagDifferencer.cpp
-    boost::shared_ptr<ScriptTranslator> uut(ScriptTranslatorFactory::getInstance().createTranslator(printScript));
+    OsmMapPtr map(new OsmMap());
+    loadMap(map, args[0], true, Status::Unknown1);
 
-    if (!uut)
-    {
-      throw HootException("Unable to find a valid translation format for: " + printScript);
-    }
+    MapCleaner().apply(map);
+
+    MapProjector::projectToWgs84(map);
+
+    saveMap(map, args[1]);
 
     return 0;
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, PrintOsmDocsCmd)
+HOOT_FACTORY_REGISTER(Command, CleanCmd)
+
 
 }
+

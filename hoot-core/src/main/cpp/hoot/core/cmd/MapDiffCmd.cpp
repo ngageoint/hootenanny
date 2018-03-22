@@ -22,68 +22,78 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
-#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/scoring/MapComparator.h>
+#include <hoot/core/util/Settings.h>
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/util/Log.h>
 
 using namespace std;
 
 namespace hoot
 {
 
-class MapExtentCmd : public BaseCommand
+class MapDiffCmd : public BaseCommand
 {
-
 public:
 
-  static string className() { return "hoot::MapExtentCmd"; }
+  static string className() { return "hoot::MapDiffCmd"; }
 
-  MapExtentCmd() {}
+  MapDiffCmd() { }
 
-  virtual QString getName() const { return "extent"; }
+  virtual QString getName() const { return "map-diff"; }
 
-  int runSimple(QStringList args)
+  virtual int runSimple(QStringList args)
   {
-    if (args.size() < 1 || args.size() > 2)
+
+    MapComparator mapCompare;
+
+    if (args.contains("--ignore-uuid"))
+    {
+      args.removeAll("--ignore-uuid");
+      mapCompare.setIgnoreUUID();
+    }
+
+    if (args.contains("--use-datetime"))
+    {
+      args.removeAll("--use-datetime");
+      mapCompare.setUseDateTime();
+    }
+
+
+    if (args.size() != 2)
     {
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes one or two parameters.").arg(getName()));
+      throw HootException(QString("%1 takes two parameters.").arg(getName()));
     }
 
-    bool verbose = true;
-    if (args.size() == 2 && args[1].toLower() == "false")
-    {
-      verbose = false;
-    }
-    LOG_VARD(verbose);
+    OsmMapPtr map1(new OsmMap());
+    loadMap(map1, args[0], true, Status::Unknown1);
+    OsmMapPtr map2(new OsmMap());
+    loadMap(map2, args[1], true, Status::Unknown1);
 
-    const QString input = args[0];
-    LOG_VARD(input);
-    OsmMapPtr map(new OsmMap());
-    loadMap(map, input, true, Status::Invalid);
+    int result;
 
-    const QString bounds =
-      GeometryUtils::envelopeToConfigString(CalculateMapBoundsVisitor::getGeosBounds(map));
-    if (verbose)
+    if (mapCompare.isMatch(map1, map2))
     {
-      cout << "Map extent (minx,miny,maxx,maxy): " << bounds << endl;
+      result = 0;
     }
     else
     {
-      cout << bounds << endl;
+      result = 1;
     }
 
-    return 0;
+    return result;
   }
-
 };
 
-HOOT_FACTORY_REGISTER(Command, MapExtentCmd)
+HOOT_FACTORY_REGISTER(Command, MapDiffCmd)
 
 }
+

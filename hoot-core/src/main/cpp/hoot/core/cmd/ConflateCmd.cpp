@@ -236,7 +236,6 @@ int ConflateCmd::runSimple(QStringList args)
     if (outputStatsFile.isEmpty())
     {
       allStats.append(stats);
-      //MapStatsWriter().writeStats(allStats, args);
       QString statsMsg = MapStatsWriter().statsToString(allStats, "\t");
       cout << "stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)\n" <<
               statsMsg << endl;

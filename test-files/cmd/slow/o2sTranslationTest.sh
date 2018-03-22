@@ -33,7 +33,7 @@ hoot ogr2osm $HOOT_OPT $TRANS_TDS40 $outputDir/tds40.osm \
   $outputDir/tds40/ORCHARD_S.shp \
   $outputDir/tds40/RIVER_C.shp
 
-hoot map-is-match $outputDir/tds40.osm $tds40File || diff $outputDir/tds40.osm $tds40File
+hoot map-diff $outputDir/tds40.osm $tds40File || diff $outputDir/tds40.osm $tds40File
 
 echo
 echo "### TDSv61 ###"
@@ -44,7 +44,7 @@ hoot ogr2osm $HOOT_OPT $TRANS_TDS61 $outputDir/tds61.osm \
   $outputDir/tds61/ORCHARD_S.shp \
   $outputDir/tds61/RIVER_C.shp
 
-hoot map-is-match $outputDir/tds61.osm $inputFile || diff $outputDir/tds61.osm $inputFile
+hoot map-diff $outputDir/tds61.osm $inputFile || diff $outputDir/tds61.osm $inputFile
 
 echo
 echo "### MGCP ###"
@@ -55,7 +55,7 @@ hoot ogr2osm $HOOT_OPT $TRANS_MGCP $outputDir/mgcp.osm \
   $outputDir/mgcp/AEA040.shp \
   $outputDir/mgcp/LBH140.shp
 
-hoot map-is-match $outputDir/mgcp.osm $inputFile || diff $outputDir/mgcp.osm $inputFile
+hoot map-diff $outputDir/mgcp.osm $inputFile || diff $outputDir/mgcp.osm $inputFile
 
 echo
 echo "### GGDM ###"
@@ -66,4 +66,4 @@ hoot ogr2osm $HOOT_OPT $TRANS_GGDM $outputDir/ggdm.osm \
   $outputDir/ggdm/ORCHARD_S.shp \
   $outputDir/ggdm/RIVER_C.shp
 
-hoot map-is-match $outputDir/ggdm.osm $ggdmFile || diff $outputDir/ggdm.osm $ggdmFile
+hoot map-diff $outputDir/ggdm.osm $ggdmFile || diff $outputDir/ggdm.osm $ggdmFile

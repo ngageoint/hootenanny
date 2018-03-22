@@ -50,14 +50,16 @@ bool greaterThanWordCount(const WordCount& left, const WordCount& right)
   return left.count > right.count;
 }
 
-class PrintNamesCmd : public BaseCommand
+class NamesCmd : public BaseCommand
 {
 public:
-  static string className() { return "hoot::PrintNamesCmd"; }
+
+  static string className() { return "hoot::NamesCmd"; }
 
   class NameCountVisitor : public ConstElementVisitor
   {
   public:
+
     NameCountVisitor(std::map<QString, int>& counts) : _counts(counts)
     {
       _nonWord.setPattern("[^\\w]");
@@ -95,11 +97,12 @@ public:
     }
 
   private:
+
     map<QString, int>& _counts;
     QRegExp _nonWord;
   };
 
-  PrintNamesCmd() {}
+  NamesCmd() {}
 
   virtual QString getName() const { return "names"; }
 
@@ -185,6 +188,6 @@ public:
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, PrintNamesCmd)
+HOOT_FACTORY_REGISTER(Command, NamesCmd)
 
 }

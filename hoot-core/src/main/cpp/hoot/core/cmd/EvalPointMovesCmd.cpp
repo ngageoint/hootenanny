@@ -57,13 +57,13 @@ using namespace std;
 namespace hoot
 {
 
-class EvalMoveCmd : public BaseCommand
+class EvalPointMovesCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::EvalMoveCmd"; }
+  static string className() { return "hoot::EvalPointMovesCmd"; }
 
-  EvalMoveCmd() { }
+  EvalPointMovesCmd() { }
 
   virtual QString getName() const { return "evaluate-point-moves"; }
 
@@ -297,7 +297,7 @@ public:
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, EvalMoveCmd)
+HOOT_FACTORY_REGISTER(Command, EvalPointMovesCmd)
 
 }
 
