@@ -15,11 +15,8 @@ DEPENDPATH += \
   ../tgs/src/main/cpp/tgs/ \
   ../hoot-core/src/main/cpp/ \
   ../hoot-core-test/src/test/cpp/ \
-  ../hoot-hadoop/src/main/cpp/ \
   ../hoot-js/src/main/cpp/ \
   ../hoot-test/src/main/cpp/hoot/test \
-  ../pretty-pipes/pp-lib/src/main/cpp/ \
-  ../pretty-pipes/example/src/main/cpp/ \
 
 INCLUDEPATH += \
   $${DEPENDPATH}

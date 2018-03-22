@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.export;
 
@@ -378,7 +378,7 @@ public class ExportResourceTest extends HootServicesJerseyTestAbstract {
                     "UTF-8");
 
             // write the contents of the dummy file to multiple new output
-            // files; mimic how ExportJobResource::process would write it and how derive-changeset would handle a
+            // files; mimic how ExportJobResource::process would write it and how changeset-derive would handle a
             // changeset larger than the max allowable size (move multiple changeset files to their
             // own new folder; see OsmChangesetXmlWriter)
             String jobId = UUID.randomUUID().toString();

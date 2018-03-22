@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.export;
 
@@ -68,13 +68,13 @@ class CalculateTilesCommand extends ExportCommand {
         substitutionMap.put("OUTPUT", super.getOutputPath());
 
         // max node count per tile and pixel size are optional; core will use
-        // default params if both are missing; see the calculate-tiles command line documentation for more details
+        // default params if both are missing; see the tiles-calculate command line documentation for more details
         if ((params.getMaxNodeCountPerTile() != -1) && (params.getPixelSize() != -1.0)) {
             substitutionMap.put("MAX_NODE_COUNT_PER_TILE", String.valueOf(params.getMaxNodeCountPerTile()));
             substitutionMap.put("PIXEL_SIZE", String.valueOf(params.getPixelSize()));
         }
 
-        String command = "hoot calculate-tiles --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${OUTPUT}";
+        String command = "hoot tiles-calculate --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${OUTPUT}";
         if ((params.getMaxNodeCountPerTile() != -1) && (params.getPixelSize() != -1.0)) {
             command += " ${MAX_NODE_COUNT_PER_TILE} ${PIXEL_SIZE}";
         }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -46,7 +46,7 @@ public:
 
   ApplyChangesetCmd() { }
 
-  virtual QString getName() const { return "apply-changeset"; }
+  virtual QString getName() const { return "changeset-apply"; }
 
   virtual int runSimple(QStringList args)
   {
@@ -64,7 +64,7 @@ public:
     if (args[0].endsWith(".osc"))
     {
       throw HootException(
-        "XML changeset file writing is not currently supported by the apply-changeset command.");
+        "XML changeset file writing is not currently supported by the changeset-apply command.");
     }
     else if (args[0].endsWith(".osc.sql"))
     {

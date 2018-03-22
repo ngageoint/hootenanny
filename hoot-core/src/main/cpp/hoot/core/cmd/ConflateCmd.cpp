@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ConflateCmd.h"
@@ -35,7 +35,6 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/conflate/ConflateStatsHelper.h>
-#include <hoot/core/conflate/StatsComposer.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/filters/StatusCriterion.h>
 #include <hoot/core/io/MapStatsWriter.h>
@@ -237,15 +236,17 @@ int ConflateCmd::runSimple(QStringList args)
     if (outputStatsFile.isEmpty())
     {
       allStats.append(stats);
-      MapStatsWriter().writeStats(allStats, args);
-      QString statsMsg = MapStatsWriter().statsToString( allStats, "\t" );
-      cout << "stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)\n" << statsMsg << endl;
+      //MapStatsWriter().writeStats(allStats, args);
+      QString statsMsg = MapStatsWriter().statsToString(allStats, "\t");
+      cout << "stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)\n" <<
+              statsMsg << endl;
     }
     else
     {
       allStats.append(stats);
       MapStatsWriter().writeStatsToJson(allStats, outputStatsFile);
-      cout << "stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat) in file: " << outputStatsFile << endl;
+      cout << "stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat) in file: " <<
+              outputStatsFile << endl;
     }
   }
 

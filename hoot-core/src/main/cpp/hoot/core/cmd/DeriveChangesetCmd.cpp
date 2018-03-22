@@ -58,7 +58,7 @@ public:
 
   DeriveChangesetCmd() { }
 
-  virtual QString getName() const { return "derive-changeset"; }
+  virtual QString getName() const { return "changeset-derive"; }
 
   bool _printStats = false;
 
