@@ -48,7 +48,7 @@ public:
 
   AccuracyDistributionCmd() { }
 
-  virtual QString getName() const { return "accuracy-dist"; }
+  virtual QString getName() const { return "accuracy-distribution"; }
 
   virtual int runSimple(QStringList args)
   {

@@ -4,7 +4,7 @@
 
 +extent+ outputs the geospatial bounds of the input map data as an AOI string (minx,maxx,miny,maxy).
 
-* +input+ - an OSM input
+* +input+   - an OSM input
 * +verbose+ - if true, outputs a description of the output format (minx,maxx,miny,maxy); defaults to true; optional
 
 === Usage
@@ -13,3 +13,8 @@
 extent (input) [verbose]
 --------------------------------------
 
+=== Example Output
+
+--------------------
+Map extent (minx,miny,maxx,maxy): -104.902,38.8532,-104.896,38.855
+--------------------

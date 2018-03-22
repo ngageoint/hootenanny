@@ -2,10 +2,10 @@
 
 === Description
 
-Given a raw implicit tag rules file created by the implicit-tagging-derive-raw-rules command, allows for filtering the implicit tag rules and 
-writing them to a database.  Currently, only POI database generation is supported.  The generated database can then, for example, be used to add 
-tags implicitly to POIs based on their names using an implicit tagger.  See the "Implicit Element Type Tagging Based On Name" section in the 
-Hootenanny User Guide for more information.
+Given a raw implicit tag rules file created by the implicit-tagging-derive-raw-rules command, allows for filtering the implicit tag 
+rules and writing them to a database.  Currently, only POI database generation is supported.  The generated database can then, 
+for example, be used to add tags implicitly to POIs based on their names using an implicit tagger.  See the "Implicit Element 
+Type Tagging Based On Name" section in the Hootenanny User Guide for more information.
 
 * +featureType+ - currently the only feature type supported is "poi"
 * +input+       - an .implicitTagRules tab delimited rules for input

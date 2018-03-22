@@ -4,7 +4,7 @@ set -e
 mkdir -p test-output/translation/
 
 function compareFiles {
-    hoot is-match $1 $2 || diff $1 $2
+    hoot map-is-match $1 $2 || diff $1 $2
 }
 
 hoot osm2shp "LTN,WTC,HCT,UID" test-files/translation/MgcpTest.osm test-output/translation/MgcpTest.shp

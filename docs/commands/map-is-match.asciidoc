@@ -1,0 +1,18 @@
+== map-is-match
+
+=== Description
+
++map-is-match+ checks to see if maps are essentially the same. Returns 0 if they're
+the same or 1 if they differ significantly. If they differ significantly
+warnings will be printed with more information.
+
+* +--ignore-uuid+ - Ignore UUID's in the map comparison
+* +input1+        - Input 1 (e.g. .osm file).
+* intpu2          - Input 2 (e.g. .osm file).
+
+=== Usage
+
+--------------------------------------
+map-is-match [--ignore-uuid] (input1) (input2)
+--------------------------------------
+

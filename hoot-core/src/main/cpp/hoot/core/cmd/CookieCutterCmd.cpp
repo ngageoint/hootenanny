@@ -46,7 +46,7 @@ public:
 
   CookieCutterCmd() {}
 
-  virtual QString getName() const { return "cookie-cutter"; }
+  virtual QString getName() const { return "cookie-cut"; }
 
   int runSimple(QStringList args)
   {

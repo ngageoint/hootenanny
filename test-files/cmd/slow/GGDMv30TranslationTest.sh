@@ -39,7 +39,7 @@ hoot ogr2osm $HOOT_OPT $TRANS $outputDir/new_GGDMv30.osm $inputDir/*.shp # > tmp
 
 # Compare the new and old OSM files
 # NOTE: ZI031 DATASET_S does not have a UUID (UFI) but it gets one on import which screws up the test
-hoot is-match --ignore-uuid $outputDir/new_GGDMv30.osm $inputDir/GGDMv30.osm # || diff $outputDir/new_GGDMv30.osm $inputDir/GGDMv30.osm
+hoot map-is-match --ignore-uuid $outputDir/new_GGDMv30.osm $inputDir/GGDMv30.osm # || diff $outputDir/new_GGDMv30.osm $inputDir/GGDMv30.osm
 
 # Make shapefiles from the new OSM file
 # NOTE: This assumes that outputDir does not have any shapefiles in it!
@@ -72,10 +72,10 @@ hoot osm2ogr $HOOT_OPT $TRANS $outputDir/new_GGDMv30.osm $outputDir".shp" # > tm
 #
 # echo
 # echo "Compare the second with orig"
-# hoot is-match --ignore-uuid $outputDir/second_GGDMv30.osm $inputDir/GGDMv30.osm || diff $outputDir/second_GGDMv30.osm $inputDir/GGDMv30.osm
+# hoot map-is-match --ignore-uuid $outputDir/second_GGDMv30.osm $inputDir/GGDMv30.osm || diff $outputDir/second_GGDMv30.osm $inputDir/GGDMv30.osm
 # echo
 # echo "Compare the second with new"
-# hoot is-match --ignore-uuid $outputDir/second_GGDMv30.osm $outputDir/new_GGDMv30.osm || diff $outputDir/second_GGDMv30.osm $outputDir/new_GGDMv30.osm
+# hoot map-is-match --ignore-uuid $outputDir/second_GGDMv30.osm $outputDir/new_GGDMv30.osm || diff $outputDir/second_GGDMv30.osm $outputDir/new_GGDMv30.osm
 # echo
 # echo
 

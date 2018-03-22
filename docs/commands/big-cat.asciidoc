@@ -7,7 +7,7 @@ elements to avoid conflict and writes the result to +output.osm.pbf+.  This
 command does not require Hadoop.
 
 * +output.osm.pbf+ - Output file name.
-* +inputs+ - One or more .osm.pbf inputs.
+* +inputs+         - One or more .osm.pbf inputs.
 
 The command does two passes over the input data. The first pass it to determine
 the range of element IDs and the second pass is used to write out the new

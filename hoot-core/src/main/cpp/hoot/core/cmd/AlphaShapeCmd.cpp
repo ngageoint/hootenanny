@@ -47,7 +47,7 @@ public:
 
   AlphaShapeCmd() {}
 
-  virtual QString getName() const { return "alpha-shape"; }
+  virtual QString getName() const { return "generate-alpha-shape"; }
 
   int runSimple(QStringList args)
   {

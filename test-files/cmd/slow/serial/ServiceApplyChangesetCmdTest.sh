@@ -17,4 +17,4 @@ hoot changeset-apply --debug test-files/cmd/slow/ServiceApplyChangesetCmdTest/ch
 
 # read the contents back out
 hoot convert $DB_URL test-output/cmd/ServiceApplyChangesetCmdTest/output.osm
-hoot is-match test-files/cmd/slow/ServiceApplyChangesetCmdTest/output.osm test-output/cmd/ServiceApplyChangesetCmdTest/output.osm
+hoot map-is-match test-files/cmd/slow/ServiceApplyChangesetCmdTest/output.osm test-output/cmd/ServiceApplyChangesetCmdTest/output.osm

@@ -47,7 +47,7 @@ public:
 
   IsMatchCmd() { }
 
-  virtual QString getName() const { return "is-match"; }
+  virtual QString getName() const { return "map-is-match"; }
 
   virtual int runSimple(QStringList args)
   {

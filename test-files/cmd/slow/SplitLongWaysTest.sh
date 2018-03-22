@@ -18,4 +18,4 @@ hoot ogr2osm $HOOT_OPTS -D ogr2osm.ops+=$ADDITIONAL_VISITORS \
     $HOOT_HOME/translations/$TRANSLATION \
     $TEST_OUTPUT $INPUTS
 
-hoot is-match $HOOT_OPTS $KNOWN_GOOD_OUTPUT $TEST_OUTPUT && echo "Test Complete"
+hoot map-is-match $HOOT_OPTS $KNOWN_GOOD_OUTPUT $TEST_OUTPUT && echo "Test Complete"

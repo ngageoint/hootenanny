@@ -48,7 +48,7 @@ public:
 
   PrintOsmDocsCmd() {}
 
-  virtual QString getName() const { return "print-tags"; }
+  virtual QString getName() const { return "tag-schema"; }
 
   virtual int runSimple(QStringList args)
   {

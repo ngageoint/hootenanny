@@ -65,7 +65,7 @@ public:
 
   EvalMoveCmd() { }
 
-  virtual QString getName() const { return "eval-move"; }
+  virtual QString getName() const { return "evaluate-point-moves"; }
 
   struct Comparison
   {

@@ -8,12 +8,12 @@ passed, so that if the target database contains any changesets created after the
 represented by a timestamp that intersect with a specified AOI, the command will return
 an error.
 
-* +changeset+ - input SQL changeset (e.g. .osc.sql file).
+* +changeset+         - input SQL changeset (e.g. .osc.sql file).
 * +targetDatabaseUrl+ - database the changeset will be written to.
-* +conflictAoi+ - bounding box string of the form: minx,miny,maxx,maxy used to prevent writing conflicted 
-data (see description)
+* +conflictAoi+       - bounding box string of the form: minx,miny,maxx,maxy used to prevent writing conflicted 
+                        data (see description)
 * +conflictTimestamp+ - timestamp of the form: "yyyy-MM-dd hh:mm:ss.zzz" used to prevent writing conflicted 
-data (see description)
+                        data (see description)
 
 === Usage
 
@@ -28,4 +28,8 @@ hoot changeset-apply changeset.osc.sql osmapidb://username:password@localhost:54
 
 hoot changeset-apply changeset.osc.sql osmapidb://username:password@localhost:5432/databaseName -93.89258,40.96917,-93.60583,41.0425 "2016-05-04 10:15:37.000"-93.89258,40.96917,-93.60583,41.0425
 --------------------------------------
+
+=== See Also
+
+* `changeset.*` configuration options
 

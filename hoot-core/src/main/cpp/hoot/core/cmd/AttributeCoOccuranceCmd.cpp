@@ -86,7 +86,7 @@ public:
 
     if (args.size() != 2)
     {
-      LOG_VAR(args);
+      LOG_VARD(args);
       cout << getHelp() << endl << endl;
       throw HootException(QString("%1 takes two parameters.").
                           arg(getName()));

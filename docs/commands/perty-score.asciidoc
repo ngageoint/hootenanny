@@ -10,7 +10,7 @@ the paper, Evaluating conflation methods using uncertainty modeling, P.
 Doucette, et. al, 2012.
 
 * +reference-input-file+ - An input reference data path (e.g. .osm file).
-* +output-dir+ - The directory for all output files
+* +output-dir+           - The directory for all output files
 
 === Optional Defines
 

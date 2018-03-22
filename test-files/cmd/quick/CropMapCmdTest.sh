@@ -11,4 +11,4 @@ outputfile=$HOOT_HOME/test-output/cmd/quick/CropMapCmdTest/cropped.osm
 hoot crop $inputfile $outputfile -77.05,38.888,-77.03,38.90 
 
 # Checking output
-hoot is-match $comparefile $outputfile || diff $comparefile $outputfile
+hoot map-is-match $comparefile $outputfile || diff $comparefile $outputfile

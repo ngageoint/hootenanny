@@ -10,7 +10,7 @@ useful when trying to reduce the size of a stored model file. The `.arff` file
 is considerably smaller than the .rf output.
 
 * +input.arff+ - Input .arff file.
-* +output.rf+ - Output model name.
+* +output.rf+  - Output model name.
 
 === Usage
 

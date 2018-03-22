@@ -11,5 +11,5 @@ ogr2ogr -f FileGDB -mapFieldType Integer64=Integer $TA_OUT/caligdb.gdb $TA_IN/ca
 ogr2ogr -f FileGDB -mapFieldType Integer64=Integer -append $TA_OUT/caligdb.gdb $TA_IN/calizip/cali-fake-points.shp
 
 hoot ogr2osm $TA_IN/$TA_FILE-translation.js $TA_OUT/$TA_FILE.osm $TA_OUT/$TA_FILE.gdb
-hoot is-match --ignore-uuid $TA_OUT/$TA_FILE.osm $TA_IN/$TA_FILE.osm
+hoot map-is-match --ignore-uuid $TA_OUT/$TA_FILE.osm $TA_IN/$TA_FILE.osm
 

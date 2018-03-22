@@ -6,7 +6,7 @@ rm -rf $OUT
 mkdir -p $OUT
 hoot osm2shp "name,poi" test-files/OnePoint.osm $OUT/OnePoint.shp
 hoot ogr2osm translations/Identity.js $OUT/OnePointTranslated.osm $OUT/OnePointPoints.shp
-hoot is-match test-output/cmd/Ogr2OsmTranslation/OnePointTranslated.osm test-files/OnePoint.osm
+hoot map-is-match test-output/cmd/Ogr2OsmTranslation/OnePointTranslated.osm test-files/OnePoint.osm
 
 # Make sure we can read all layers from a shapefile
 rm -rf test-output/AllDataTypesA.shp test-output/AllDataTypesA.zip

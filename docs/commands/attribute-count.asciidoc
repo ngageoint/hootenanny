@@ -6,7 +6,7 @@ Prints out a JSON structure with the layer name, attribute name and up to 30
 attribute values.
 
 * +input+ - One or more OGR compatible inputs. If you're using a layer within a
-  data source then delimit it with a semicolon.
+            data source then delimit it with a semicolon.
 
 === Usage
 

@@ -250,4 +250,4 @@ QString ScriptStatsComposer::compose(QList< QList<SingleStat> >& stats, const QS
 }
 
 
-} // end hoot namespace
+} // end hoot feature-namespace

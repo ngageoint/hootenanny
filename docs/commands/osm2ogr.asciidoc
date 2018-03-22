@@ -10,24 +10,22 @@ translation process provides very fine grained control to the user and can be
 quite complex. If you just want to export to a Shapefile with some simple
 columns please look at +--osm2shp+ first.
 
-* +translation+ - JavaScript file name.
-* +input+ - Input file name. An OSM compatible input format
-            (e.g. .osm or .osm.pbf)
-            Input URL. An identifier for a PostGIS database. (e.g.,
-            PG:"dbname='databasename' host='addr' port='5432' user='x'
-            password='y'")
-* +output+ - Output file name. The format is determined by extension. FileGDB
-  (*.gdb) and Shapefile (*.shp) have been tested but other OGR compatible
-  formats will likely work.
-* +nodeCacheCapacity+ - OPTIONAL - number of cache entries for nodes.  If not specified, will use
-  default capacity value.  If a cache capacity is specified for one element type, it must also be
-  specified for all other element types.
-* +wayCacheCapacity+ - OPTIONAL - number of cache entries for ways.  If not specified, will use
-  default capacity value.  If a cache capacity is specified for one element type, it must also be
-  specified for all other element types.
+* +translation+           - JavaScript file name.
+* +input+                 - Input file name. An OSM compatible input format (e.g. .osm or .osm.pbf)
+                            Input URL. An identifier for a PostGIS database. (e.g.,
+                            PG:"dbname='databasename' host='addr' port='5432' user='x' password='y'")
+* +output+                - Output file name. The format is determined by extension. FileGDB
+                            (*.gdb) and Shapefile (*.shp) have been tested but other OGR compatible
+                            formats will likely work.
+* +nodeCacheCapacity+     - OPTIONAL - number of cache entries for nodes.  If not specified, will use
+                            default capacity value.  If a cache capacity is specified for one element type, it must also be
+                            specified for all other element types.
+* +wayCacheCapacity+      - OPTIONAL - number of cache entries for ways.  If not specified, will use
+                            default capacity value.  If a cache capacity is specified for one element type, it must also be
+                            specified for all other element types.
 * +relationCacheCapacity+ - OPTIONAL - number of cache entries for relations.  If not specified,
-  will use default capacity value.  If a cache capacity is specified for one element type, it must 
-  also be specified for all other element types.
+                            will use default capacity value.  If a cache capacity is specified for one element type, it must 
+                            also be specified for all other element types.
 
 === Usage
 

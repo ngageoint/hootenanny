@@ -22,7 +22,7 @@ want to bypass the "pass/fail" determination of the command, you can set the
 runs.  This effectively disables the score validation.
 
 * +reference-input-file+ - Input reference data path (e.g. .osm file).
-* +output-dir+ - Output directory.
+* +output-dir+           - Output directory.
 
 === Configuration Options
 

@@ -5,9 +5,9 @@
 
 Conflates two input sources into a single output.
 
-* +input1+ - First input.
-* +input2+ - Second input.
-* +output+ - The output path.
+* +input1+  - First input.
+* +input2+  - Second input.
+* +output+  - The output path.
 * +--stats+ - Hootenanny map statistics such as node and way count
 
 === Usage

@@ -4,11 +4,12 @@
 
 +tiles-calculate-random+ calculates a collection of bounding boxes that contain roughly equal distributions of node data from the specified input(s) and writes the output to a file.
 
-* +input+ - one or more OSM data inputs; specify multiple inputs by separating them with a semicolon
-* +output+ - output file to write the tile boundary to; valid formats are GeoJSON (*.geojson)
-* +random-seed+ - seeds the random number generator for consistent tile boundary selection; use -1 for no seeding; defaults to -1
+* +input+               - one or more OSM data inputs; specify multiple inputs by separating them with a semicolon
+* +output+              - output file to write the tile boundary to; valid formats are GeoJSON (*.geojson)
+* +random-seed+         - seeds the random number generator for consistent tile boundary selection; use -1 for no seeding; defaults to -1
 * +maxNodeCountPerTile+ - The maximum number of nodes in any tile.  The default is 1000; optional only if pixelSize is not specified
-* +pixelSize+ - The size of the pixels used in the calculation in degrees.  The default is 0.001; optional only if maxNodeCountPerTile is not specified
+* +pixelSize+           - The size of the pixels used in the calculation in degrees.  The default is 0.001; optional only if 
+                          maxNodeCountPerTile is not specified
 
 See additional notes in the tiles-calculate command documentation.
 

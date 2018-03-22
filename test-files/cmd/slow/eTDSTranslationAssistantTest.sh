@@ -16,7 +16,7 @@ do
     # Uncomment this line to update the input files when there is a schema change
     #cp $TA_OUT/$TA_FILE-$schema.osm $TA_IN/$TA_FILE-$schema.osm
 
-    hoot is-match --ignore-uuid $TA_OUT/$TA_FILE-$schema.osm $TA_IN/$TA_FILE-$schema.osm
+    hoot map-is-match --ignore-uuid $TA_OUT/$TA_FILE-$schema.osm $TA_IN/$TA_FILE-$schema.osm
 done
 
 #Test Feature Code mapping
@@ -25,6 +25,6 @@ hoot ogr2osm $TA_IN/cali-translation-tdsv61-fcode.js $TA_OUT/$TA_FILE-tdsv61-fco
 # Uncomment this line to update the input files when there is a schema change
 #cp $TA_OUT/$TA_FILE-tdsv61-fcode.osm $TA_IN/$TA_FILE-tdsv61.osm
 
-hoot is-match --ignore-uuid $TA_OUT/$TA_FILE-tdsv61-fcode.osm $TA_IN/$TA_FILE-tdsv61.osm
+hoot map-is-match --ignore-uuid $TA_OUT/$TA_FILE-tdsv61-fcode.osm $TA_IN/$TA_FILE-tdsv61.osm
 
 

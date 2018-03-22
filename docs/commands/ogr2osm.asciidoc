@@ -7,15 +7,15 @@ The +ogr2osm+ command converts and Translates a file from an OGR compatible
 format such as Shapefile or File Geodatabase into the
 http://wiki.openstreetmap.org/wiki/OSM_XML[.osm format]. 
 
-* +limit+ - 'n' specifies the maximum number of features to translate. This is
-  useful when debugging.
+* +limit+       - 'n' specifies the maximum number of features to translate. This is
+                  useful when debugging.
 * +translation+ - The base name of a Python translation file. Leave the +.py+
-  portion off of the python file name. The format of this file is described in
-  the following section. 
-* +output.osm+ - The name of the output file to create.
-* +inputs+ - One or more inputs are supported. Each input is made up of a file
-  name and optionally a layer name. Examples for shapefile, File Geodatabase and
-  zip files of shapefiles can be found in the _Example_ section.
+                  portion off of the python file name. The format of this file is described in
+                  the following section. 
+* +output.osm+  - The name of the output file to create.
+* +inputs+      - One or more inputs are supported. Each input is made up of a file
+                  name and optionally a layer name. Examples for shapefile, File Geodatabase and
+                  zip files of shapefiles can be found in the _Example_ section.
 
 ==== Input Formats
 

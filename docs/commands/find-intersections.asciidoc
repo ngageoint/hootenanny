@@ -5,7 +5,7 @@
 The +find-intersections+ command removes common erroneous data scenarios from
 input and writes to output.
 
-* +input+ - Input (e.g. .osm file).
+* +input+  - Input (e.g. .osm file).
 * +output+ - Output file (e.g. .osm file).
 
 === Usage

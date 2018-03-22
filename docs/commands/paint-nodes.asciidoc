@@ -4,18 +4,18 @@
 
 Create a density plot of the specified input.
 
-* +input+ - Input path.
-* +output-image+ - Output image name. Must always be a +.png+ file. A
-  corresponding +.pngw+ file will also be generated.
+* +input+         - Input path.
+* +output-image+  - Output image name. Must always be a +.png+ file. A
+                    corresponding +.pngw+ file will also be generated.
 * +max-dimension+ - Maximum size of the image on one side. The actual size will
-  be determined based on the envelope. If the envelope is wider than tall then
-  this will be the width of the image (and vice versa). The pixels in the output
-  image will always be square and the image may be slightly larger than the
-  envelope to accommodate this.
-* +base-colors+ - Base colors to use for each channel. These will be added to
-  each channel (R,G,B,A). Alpha of 255 is opaque.
-* +multiplier+ - Multiply the log count ratio by these values. 4 comma delimited
-  values (R,G,B,A).
+                    be determined based on the envelope. If the envelope is wider than tall then
+                    this will be the width of the image (and vice versa). The pixels in the output
+                    image will always be square and the image may be slightly larger than the
+                    envelope to accommodate this.
+* +base-colors+   - Base colors to use for each channel. These will be added to
+                    each channel (R,G,B,A). Alpha of 255 is opaque.
+* +multiplier+    - Multiply the log count ratio by these values. 4 comma delimited
+                    values (R,G,B,A).
 
 By default the colors of the image are black to white where black represents no
 data. The colors are always in log scale. You can manipulate the +base-color+

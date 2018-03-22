@@ -42,7 +42,7 @@ public:
 
   DeleteMapCmd() {}
 
-  virtual QString getName() const { return "delete-map"; }
+  virtual QString getName() const { return "delete-db-map"; }
 
   int runSimple(QStringList args)
   {
