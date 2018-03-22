@@ -724,10 +724,6 @@ image::user/images/id/hoot_validate_layer.png[scaledwidth="75%"]
 
 NOTE: Panning the map during Validation causes the highlighted POI to become unselected and removes the validation options. To resume validation, click the Select button at the bottom.
 
-*_Filter Non-HGIS POIs_*
-
-The Filter Non-HGIS POI capabilities is provided for users working with the Human Geography Information Service (HGIS) version 2.0.  It provides a simple means to take any layer and filter anything that is not a HGIS POI (e.g. road and/or building) based on the HGIS v2.0 definitions for POI.  Note that this capability is very specific to the HGIS group at DigitalGlobe/NGA and should only be used in conjunction with those efforts.  To create a new filtered layer simply right-click and select the option, then provide an output layer name.
-
 [[TranslationAssistant]]
 ==== Translation Assistant
 
@@ -857,17 +853,7 @@ The Log settings provides both the Application and UI log for users to troublesh
 .Hootenanny Error and UI Log File.
 image::user/images/id/hoot_log_tab.png[]
 
-NOTE: Those familiar with Chrome's developer console (hitting F-12 key will open it in a separate tab or browser window) can use that for additional debugging capability. This tool is used frequently by our developers for debugging client side code and greatly enhance the ability to diagnose issues.
-
-[[HootStatsReport]]
-===== Reports
-
-The Reports settings contains all of the generated reports for conflation jobs where _Generate Report = True_ has been specified. To download a report, click on the arrow and save the pdf file to your local desktop.
-
-.Hootenanny Conflation Statistic Reports
-image::user/images/id/hoot_csr_tab.png[]
-
-IMPORTANT: To enable report generation for a conflation, users must check the _Enable Test Mode_ check box on the About settings page.  This will add the option to the list of conflation parameters.  Note that report generation only works on Ubuntu based deployments.  
+NOTE: Those familiar with Chrome's developer console (hitting F-12 key will open it in a separate tab or browser window) can use that for additional debugging capability. This tool is used frequently by our developers for debugging client side code and greatly enhance the ability to diagnose issues. 
 
 ===== Review Bookmarks
 

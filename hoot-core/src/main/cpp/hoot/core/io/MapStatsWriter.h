@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MAP_STATS_WRITER
 #define MAP_STATS_WRITER
@@ -46,7 +46,8 @@ class MapStatsWriter
 
       @param stats input statistics
       */
-    void writeStats(QList< QList<SingleStat> >& stats, QStringList names);
+    //void writeStats(QList< QList<SingleStat> >& stats, QStringList names);
+
     /**
       Writes map stats to a file
 

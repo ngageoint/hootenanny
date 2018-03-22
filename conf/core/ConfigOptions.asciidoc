@@ -2541,28 +2541,6 @@ a single way.
 The format used to write the element payload portion of the Spark changeset file.  Valid options are
 'json' or 'xml'.
 
-=== stats.format
-
-* Data Type: string
-* Default Value: `pdf`
-
-Format type for the statistics generated from conflate.  Can be 'pdf', 'html' or 'asciidoc'.
-
-=== stats.output
-
-* Data Type: string
-* Default Value: ``
-
-Path to the output document for the statistics.  If left empty, it will not output to a file, only
-to screen.
-
-=== stats.script
-
-* Data Type: string
-* Default Value: `${HOOT_HOME}/report/csr-default.js`
-
-Path to the statistics generator rules in javascript format.
-
 === stats.translate.script
 
 * Data Type: string
