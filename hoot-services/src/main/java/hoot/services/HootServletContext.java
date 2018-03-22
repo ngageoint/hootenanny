@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services;
 
@@ -78,7 +78,7 @@ public class HootServletContext implements ServletContextListener {
     }
 
     private static void createFolders() {
-        String[] folders = { UPLOAD_FOLDER, BASEMAPS_TILES_FOLDER,
+        String[] folders = { UPLOAD_FOLDER, BASEMAPS_TILES_FOLDER, RPT_STORE_PATH,
                 BASEMAPS_FOLDER, SCRIPT_FOLDER, TEMP_OUTPUT_PATH };
 
         for (String folder : folders) {

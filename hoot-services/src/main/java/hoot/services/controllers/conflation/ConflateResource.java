@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.conflation;
 
@@ -67,6 +67,10 @@ public class ConflateResource {
 
     @Autowired
     private ExportRenderDBCommandFactory exportRenderDBCommandFactory;
+
+    @Autowired
+    private UpdateTagsCommandFactory updateTagsCommandFactory;
+
 
     /**
      * Conflate service operates like a standard ETL service. The conflate
@@ -114,9 +118,10 @@ public class ConflateResource {
 
         try {
             ExternalCommand conflateCommand = conflateCommandFactory.build(jobId, params, debugLevel, this.getClass());
+            InternalCommand updateTagsCommand = updateTagsCommandFactory.build(jobId, params, this.getClass());
             ExternalCommand exportRenderDBCommand = exportRenderDBCommandFactory.build(jobId, params.getOutputName(), this.getClass());
 
-            Command[] workflow = { conflateCommand, exportRenderDBCommand };
+            Command[] workflow = { conflateCommand, updateTagsCommand, exportRenderDBCommand };
 
             jobProcessor.submitAsync(new Job(jobId, workflow));
         }

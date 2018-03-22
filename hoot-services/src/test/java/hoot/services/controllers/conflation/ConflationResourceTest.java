@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.conflation;
 
@@ -202,6 +202,7 @@ public class ConflationResourceTest extends HootServicesJerseyTestAbstract {
 
         assertEquals(3, job.getCommands().length);
         assertEquals(ConflateCommand.class, job.getCommands()[0].getClass());
+        assertEquals(UpdateMapTagsCommand.class, job.getCommands()[1].getClass());
         assertEquals(ExportRenderDBCommand.class, job.getCommands()[2].getClass());
     }
 }
