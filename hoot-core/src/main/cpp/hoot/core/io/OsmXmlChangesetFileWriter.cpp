@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmXmlChangesetFileWriter.h"
 
@@ -43,13 +43,17 @@ using namespace std;
 namespace hoot
 {
 
-OsmXmlChangesetFileWriter::OsmXmlChangesetFileWriter() :
-_precision(ConfigOptions().getWriterPrecision()),
-_changesetMaxSize(ConfigOptions().getChangesetMaxSize()),
-_multipleChangesetsWritten(false),
-_addTimestamp(ConfigOptions().getChangesetXmlWriterAddTimestamp()),
-_includeDebugTags(ConfigOptions().getWriterIncludeDebugTags())
+OsmXmlChangesetFileWriter::OsmXmlChangesetFileWriter()
+  : _precision(ConfigOptions().getWriterPrecision()),
+    _changesetMaxSize(ConfigOptions().getChangesetMaxSize()),
+    _multipleChangesetsWritten(false),
+    _addTimestamp(ConfigOptions().getChangesetXmlWriterAddTimestamp()),
+    _includeDebugTags(ConfigOptions().getWriterIncludeDebugTags())
 {
+  _stats.resize(Change::Unknown, ElementType::Unknown);
+  vector<QString> rows( {"Create", "Modify", "Delete"} );
+  vector<QString> columns( {"Node", "Way", "Relation"} );
+  _stats.setLabels(rows, columns);
 }
 
 void OsmXmlChangesetFileWriter::_initIdCounters()
@@ -144,7 +148,8 @@ void OsmXmlChangesetFileWriter::write(QString path, ChangeSetProviderPtr cs)
 
       if (_change.getType() != Change::Unknown)
       {
-        switch (_change.getElement()->getElementType().getEnum())
+        ElementType::Type type = _change.getElement()->getElementType().getEnum();
+        switch (type)
         {
           case ElementType::Node:
             _writeNode(writer, boost::dynamic_pointer_cast<const Node>(_change.getElement()));
@@ -160,6 +165,8 @@ void OsmXmlChangesetFileWriter::write(QString path, ChangeSetProviderPtr cs)
             throw IllegalArgumentException("Unexpected element type.");
         }
         changesetProgress++;
+        //  Update the stats
+        _stats(last, type)++;
       }
     }
 
