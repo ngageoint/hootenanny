@@ -27,16 +27,16 @@ rm -rf $OUTPUT
 mkdir -p $OUTPUT
 
 echo "#### Shapefile Output ####"
-hoot --osm2ogr test-files/io/SampleTranslation.js test-files/io/SampleTranslation.osm $OUTPUT/output.shp
+hoot osm2ogr test-files/io/SampleTranslation.js test-files/io/SampleTranslation.osm $OUTPUT/output.shp
 printLayerInfo $OUTPUT/output/
 
 echo "#### FileGDB Output ####"
-hoot --osm2ogr test-files/io/SampleTranslation.js test-files/io/SampleTranslation.osm $OUTPUT/output.gdb
+hoot osm2ogr test-files/io/SampleTranslation.js test-files/io/SampleTranslation.osm $OUTPUT/output.gdb
 printLayerInfo $OUTPUT/output.gdb/
 
 echo "#### Test prepending layer names and lazy layer creation ####"
-hoot --osm2ogr -D ogr.writer.pre.layer.name=bar_ test-files/io/SampleTranslation.js test-files/io/SampleTranslation.osm $OUTPUT/options.shp
-hoot --osm2ogr -D ogr.writer.pre.layer.name=foo_ -D ogr.writer.create.all.layers=true test-files/io/SampleTranslation.js test-files/io/SampleTranslation.osm $OUTPUT/options.shp
+hoot osm2ogr -D ogr.writer.pre.layer.name=bar_ test-files/io/SampleTranslation.js test-files/io/SampleTranslation.osm $OUTPUT/options.shp
+hoot osm2ogr -D ogr.writer.pre.layer.name=foo_ -D ogr.writer.create.all.layers=true test-files/io/SampleTranslation.js test-files/io/SampleTranslation.osm $OUTPUT/options.shp
 printLayerInfo $OUTPUT/options/
 
 echo "#### Test to make sure all layers are read from a data source. ####"

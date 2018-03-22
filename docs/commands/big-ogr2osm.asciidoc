@@ -58,7 +58,7 @@ hoot big-merge-nodes tiger-roads-translated.osm.pbf tiger-roads-merged.osm.pbf
 
 # Concatenate the files in our output directory and put them in a properly
 # formatted, but unsorted .osm.pbf.
-hadoop fs -cat tiger-roads-merged.osm.pbf/*.pbf | hoot --add-pbf-header - \
+hadoop fs -cat tiger-roads-merged.osm.pbf/*.pbf | hoot add-pbf-header - \
   TigerRoadsUnsorted.osm.pbf
 
 # Optionally, sort the .osm.pbf so it can be used by tools like osm2pgsql

@@ -426,7 +426,7 @@ int Tags::getNonDebugCount() const
     QString key = it.key();
     if (!key.startsWith(MetadataTags::HootTagPrefix()) && key != "created_by" && it.value() != "")
     {
-      LOG_TRACE("non-debug key: " + key);
+      //LOG_TRACE("non-debug key: " + key);
       count++;
     }
   }

@@ -42,6 +42,7 @@ MarkForReviewMerger::MarkForReviewMerger(const set< pair<ElementId, ElementId> >
   _reviewType(reviewType),
   _score(score)
 {
+  LOG_VART(reviewType);
 }
 
 MarkForReviewMerger::MarkForReviewMerger(const set<ElementId>& eids, QString note,
@@ -51,6 +52,7 @@ MarkForReviewMerger::MarkForReviewMerger(const set<ElementId>& eids, QString not
   _reviewType(reviewType),
   _score(score)
 {
+  LOG_VART(reviewType);
 }
 
 void MarkForReviewMerger::apply(const OsmMapPtr& map,

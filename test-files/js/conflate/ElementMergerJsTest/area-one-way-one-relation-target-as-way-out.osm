@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="37.7368794" minlon="-122.4587068" maxlat="37.740832" maxlon="-122.4531188"/>
+    <node visible="true" id="-221434" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7368793999999994" lon="-122.4535051000000010"/>
+    <node visible="true" id="-221432" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7375921000000005" lon="-122.4531187999999986"/>
+    <node visible="true" id="-221430" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7387664000000029" lon="-122.4532647000000054"/>
+    <node visible="true" id="-221428" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7408319999999975" lon="-122.4532190000000043"/>
+    <node visible="true" id="-221426" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7406805000000034" lon="-122.4557367000000028"/>
+    <node visible="true" id="-221424" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7399338000000029" lon="-122.4576078000000052"/>
+    <node visible="true" id="-221422" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7386727000000022" lon="-122.4575106000000062"/>
+    <node visible="true" id="-221420" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7385627999999969" lon="-122.4570927999999981"/>
+    <node visible="true" id="-221418" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7376396000000014" lon="-122.4560113000000001"/>
+    <node visible="true" id="-221416" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7373205999999968" lon="-122.4550500000000000"/>
+    <node visible="true" id="-221414" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7371849000000026" lon="-122.4540372000000019"/>
+    <node visible="true" id="-221340" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7403838999999977" lon="-122.4564950999999979"/>
+    <node visible="true" id="-221328" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7407047000000020" lon="-122.4541846000000049"/>
+    <node visible="true" id="-221326" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7402589000000006" lon="-122.4542825999999991"/>
+    <node visible="true" id="-221324" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7401448000000030" lon="-122.4548015000000021"/>
+    <node visible="true" id="-221322" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7391987999999969" lon="-122.4578216999999967"/>
+    <node visible="true" id="-221320" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7389908999999975" lon="-122.4575695999999994"/>
+    <node visible="true" id="-221318" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7387236000000001" lon="-122.4581864999999965"/>
+    <node visible="true" id="-221316" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7387279000000007" lon="-122.4587068000000016"/>
+    <node visible="true" id="-221314" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7385878999999989" lon="-122.4586209999999937"/>
+    <way visible="true" id="-221442" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-221434"/>
+        <nd ref="-221432"/>
+        <nd ref="-221430"/>
+        <nd ref="-221428"/>
+        <nd ref="-221328"/>
+        <nd ref="-221326"/>
+        <nd ref="-221324"/>
+        <nd ref="-221426"/>
+        <nd ref="-221340"/>
+        <nd ref="-221424"/>
+        <nd ref="-221322"/>
+        <nd ref="-221320"/>
+        <nd ref="-221318"/>
+        <nd ref="-221316"/>
+        <nd ref="-221314"/>
+        <nd ref="-221422"/>
+        <nd ref="-221420"/>
+        <nd ref="-221418"/>
+        <nd ref="-221416"/>
+        <nd ref="-221414"/>
+        <nd ref="-221434"/>
+        <tag k="natural" v="wood"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="alt_name" v="Mt. Davidson Park"/>
+        <tag k="name" v="park"/>
+        <tag k="area" v="yes"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+</osm>

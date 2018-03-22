@@ -5,7 +5,7 @@ This is similar, but not identical to, the troubleshooting section in the Hooten
 
 === Core
 
-* *Don't think the correct version of Hootenanny core is installed?* --> You can check the version of the core by clicking on the "Hootenanny | Innovision| logo from within the UI.  Or as a sanity check, type 'hoot --version' from the command line.  The version displayed should match the version you installed.  Finally, the core version used by the services can be found by navigating to the following URLs:
+* *Don't think the correct version of Hootenanny core is installed?* --> You can check the version of the core by clicking on the "Hootenanny | Innovision| logo from within the UI.  Or as a sanity check, type 'hoot version' from the command line.  The version displayed should match the version you installed.  Finally, the core version used by the services can be found by navigating to the following URLs:
 	** +http://localhost/hoot-services/info/about/coreVersionInfo+
 	** +http://localhost/hoot-services/info/about/coreVersionDetail+
 

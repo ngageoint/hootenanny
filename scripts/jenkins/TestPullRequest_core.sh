@@ -6,7 +6,7 @@ set -e
 
 cd $HOOT_HOME
 
-hoot --version --debug
+hoot version --debug
 
 time -p make -j`nproc` test-all-core
 

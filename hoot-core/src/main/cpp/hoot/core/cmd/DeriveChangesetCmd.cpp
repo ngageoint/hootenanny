@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -60,8 +60,17 @@ public:
 
   virtual QString getName() const { return "derive-changeset"; }
 
+  bool _printStats = false;
+
   virtual int runSimple(QStringList args)
   {
+    //  Check if the --stats option is present
+    if (args.contains("--stats"))
+    {
+      _printStats = true;
+      args.removeAll("--stats");
+    }
+
     if (args.size() < 3 || args.size() > 4)
     {
       cout << getHelp() << endl << endl;
@@ -116,7 +125,7 @@ private:
     const bool singleInput = input2.trimmed().isEmpty();
 
     //some in these datasets may have status=3 if you're loading conflated data, so use
-    //reader.use.file.status and reader.keep.file.status if you want to retain that value
+    //reader.use.file.status and reader.keep.status.tag if you want to retain that value
     OsmMapPtr map1(new OsmMap());
     OsmMapPtr map2(new OsmMap());
     if (!singleInput)
@@ -164,6 +173,7 @@ private:
     const QString osmApiDbUrl)
   {
     LOG_VARD(outputs.size());
+    QString stats;
     for (int i = 0; i < outputs.size(); i++)
     {
       const QString output = outputs[i];
@@ -175,13 +185,19 @@ private:
 
       if (output.endsWith(".osc"))
       {
-        OsmXmlChangesetFileWriter().write(output, _sortInputs(inputMaps));
+        OsmXmlChangesetFileWriter writer;
+        writer.write(output, _sortInputs(inputMaps));
+        stats = writer.getStatsTable();
       }
       else if (output.endsWith(".osc.sql"))
       {
         assert(!osmApiDbUrl.isEmpty());;
         OsmApiDbSqlChangesetFileWriter(QUrl(osmApiDbUrl)).write(output, _sortInputs(inputMaps));
       }
+    }
+    if (_printStats)
+    {
+      LOG_INFO("Changeset Stats:\n" << stats);
     }
   }
 

@@ -71,7 +71,7 @@ public:
   {
     boost::shared_ptr<CalculateStatsOp> calcStatsOp =
       _calcStats("test-files/ops/CalculateStatsOp/all-data-types.osm");
-    CPPUNIT_ASSERT_EQUAL(109, calcStatsOp->getStats().size());
+    CPPUNIT_ASSERT_EQUAL(119, calcStatsOp->getStats().size());
   }
 
   void runStatsTest()
@@ -205,6 +205,18 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(41.67, calcStatsOp->getSingleStat("Percentage of Polygons Conflated"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Polygons Marked for Review"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(58.33, calcStatsOp->getSingleStat("Percentage of Unmatched Polygons"), 1e-1);
+
+    CPPUNIT_ASSERT_EQUAL(2.0, calcStatsOp->getSingleStat("Area Count"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable Areas"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflated Areas"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Areas Marked for Review"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Number of Area Reviews to be Made"));
+    CPPUNIT_ASSERT_EQUAL(2.0, calcStatsOp->getSingleStat("Unmatched Areas"));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+      0.0, calcStatsOp->getSingleStat("Meters Squared of Areas Processed by Conflation"), 1e-1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Areas Conflated"), 1e-1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Areas Marked for Review"), 1e-1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(100.0, calcStatsOp->getSingleStat("Percentage of Unmatched Areas"), 1e-1);
 
     CPPUNIT_ASSERT_EQUAL(52.0, calcStatsOp->getSingleStat("Longest Tag"));
 

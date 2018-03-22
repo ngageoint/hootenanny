@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMMAP_H
 #define OSMMAP_H
@@ -284,6 +284,7 @@ public:
   void visitRw(ElementVisitor& visitor);
   void visitRw(ConstElementVisitor& visitor);
   void visitWaysRw(ConstElementVisitor& visitor);
+  void visitRelationsRw(ConstElementVisitor& visitor);
 
   long getNodeCount() const { return _nodes.size(); }
   long getWayCount() const { return _ways.size(); }

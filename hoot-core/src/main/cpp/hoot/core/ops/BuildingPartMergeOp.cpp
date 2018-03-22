@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BuildingPartMergeOp.h"
 
@@ -278,11 +278,21 @@ set<long> BuildingPartMergeOp::_calculateNeighbors(const WayPtr& w, const Tags& 
   return neighborIds;
 }
 
+void BuildingPartMergeOp::_combineParts(const std::vector< boost::shared_ptr<Element> >& parts)
+{
+  combineParts(_map, parts);
+}
+
 RelationPtr BuildingPartMergeOp::combineParts(const OsmMapPtr& map,
   const vector< boost::shared_ptr<Element> >& parts)
 {
+  LOG_TRACE("Combining building parts...");
+
   LOG_VART(parts.size());
-  assert(parts.size() > 0);
+  if (parts.size() == 0)
+  {
+    throw IllegalArgumentException("No building parts passed to BuildingPartMergeOp::combineParts.");
+  }
 
   RelationPtr building(
     new Relation(

@@ -48,6 +48,7 @@ public:
   static void Init(v8::Handle<v8::Object> target);
 
 private:
+
   ReviewMarkerJs();
   ~ReviewMarkerJs();
 

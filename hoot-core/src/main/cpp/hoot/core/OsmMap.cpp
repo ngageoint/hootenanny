@@ -502,7 +502,6 @@ void OsmMap::replaceNode(long oldId, long newId)
   {
     const WayPtr& w = getWay(*it);
 
-
 #   ifdef DEBUG
       if (w.get() == NULL)
       {
@@ -758,6 +757,25 @@ void OsmMap::visitWaysRw(ConstElementVisitor& visitor)
   for (WayMap::const_iterator it = allWays.begin(); it != allWays.end(); ++it)
   {
     if (containsWay(it->first))
+    {
+      visitor.visit(it->second);
+    }
+  }
+}
+
+void OsmMap::visitRelationsRw(ConstElementVisitor& visitor)
+{
+  OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(&visitor);
+  if (consumer != 0)
+  {
+    consumer->setOsmMap(this);
+  }
+
+  // make a copy so we can iterate through even if there are changes.
+  const RelationMap allRs = getRelations();
+  for (RelationMap::const_iterator it = allRs.begin(); it != allRs.end(); ++it)
+  {
+    if (containsRelation(it->first))
     {
       visitor.visit(it->second);
     }

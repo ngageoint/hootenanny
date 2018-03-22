@@ -31,6 +31,8 @@
 
 #include "../TestUtils.h"
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -51,7 +53,7 @@ public:
      * California   | 0.8          | 0.0        | 0.98   | 1   | 0.99
      */
 
-    ScoreMatrix uut(5, 3);
+    ScoreMatrix<double> uut(5, 3);
 
     uut.set(0, 1, 1);
     uut.set(0, 2, 0.8);
@@ -73,6 +75,51 @@ public:
     uut.set(4, 2, .99);
 
     HOOT_STR_EQUALS(1.6, uut.minSumScore());
+
+    uut.resize(5, 3);
+
+    uut(0, 1) = 1;
+    uut(0, 2) = 0.8;
+
+    uut(1, 0) = .8;
+    uut(1, 1) = .98;
+    uut(1, 2) = 0.0;
+
+    uut(2, 0) = 1;
+    uut(2, 1) = .1;
+    uut(2, 2) = .98;
+
+    uut(3, 0) = .5;
+    uut(3, 1) = 1;
+    uut(3, 2) = 1;
+
+    uut(4, 0) = 1;
+    uut(4, 1) = .8;
+    uut(4, 2) = .99;
+
+    HOOT_STR_EQUALS(1.6, uut.minSumScore());
+
+    HOOT_STR_EQUALS("\n"
+      "|   | 0 | 1 | 2 | \n"
+      "| 0 |   0 |    1 |  0.8 | \n"
+      "| 1 | 0.8 | 0.98 |    0 | \n"
+      "| 2 |   1 |  0.1 | 0.98 | \n"
+      "| 3 | 0.5 |    1 |    1 | \n"
+      "| 4 |   1 |  0.8 | 0.99 | \n",
+      uut.toTableString());
+
+    vector<QString> rows( {"<unassigned>", "California", "Hostel", "in", "Hollywood"} );
+    vector<QString> columns( {"<unassigned>", "Hotel", "California"} );
+    uut.setLabels(rows, columns);
+
+    HOOT_STR_EQUALS("\n"
+      "|              | <unassigned> | California | Hotel | \n"
+      "| <unassigned> |            0 |        0.8 |     1 | \n"
+      "|   California |          0.8 |          0 |  0.98 | \n"
+      "|    Hollywood |            1 |       0.99 |   0.8 | \n"
+      "|       Hostel |            1 |       0.98 |   0.1 | \n"
+      "|           in |          0.5 |          1 |     1 | \n",
+      uut.toTableString());
   }
 };
 
