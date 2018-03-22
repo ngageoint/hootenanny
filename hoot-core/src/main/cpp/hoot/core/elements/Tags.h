@@ -22,7 +22,6 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGS_H
@@ -176,6 +175,8 @@ public:
   bool isTrue(const QString& key) const;
 
   bool operator==(const Tags& other) const;
+
+  bool dataOnlyEqual(const Tags& other) const;
 
   void readValues(const QString& k, QStringList& list) const;
 
