@@ -18,17 +18,21 @@ dataset and the second should be the newer dataset.
 * +osmApiDatabaseUrl+ - Target OSM API database the changeset is to be applied to.  Used to maintain 
                         element ID continuity with a particular database instance when generating SQL 
                         changesets only.  Required only if the changeset output format is .osc.sql.
+* +--stats+ - Stats flag, when turned on a table of create, modify, delete for each of the types
+              node, way, relation (only valid for .osc output files)
 
 === Usage
 
 --------------------------------------
-derive-changeset (input1) [input2] (output) [osmApiDatabaseUrl]
+derive-changeset (input1) [input2] (output) [osmApiDatabaseUrl] [--stats]
 --------------------------------------
 
 ==== Examples
 
 --------------------------------------
 hoot derive-changeset inputData1.osm inputData2.osm outputChangeset.osc
+
+hoot derive-changeset inputData1.osm inputData2.osm outputChangeset.osc --stats
 
 hoot derive-changeset inputData1.osm inputData2.osm outputChangeset.osc;outputChangeset.osc.sql osmapidb://username:password@localhost:5432/osmApiDatabaseName
 
