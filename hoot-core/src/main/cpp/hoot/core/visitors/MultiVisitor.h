@@ -44,7 +44,7 @@ public:
 
   virtual void visit(const boost::shared_ptr<Element>& e);
 
-  void addVisitor(boost::shared_ptr<ElementOsmMapVisitor> v) { _visitors.push_back(v); }
+  void addVisitor(ElementOsmMapVisitor *v) { _visitors.push_back(v); }
 
 protected:
 
@@ -52,7 +52,7 @@ protected:
 
 private:
 
-  std::vector<boost::shared_ptr<ElementOsmMapVisitor> > _visitors;
+  std::vector<ElementOsmMapVisitor *> _visitors;
 };
 
 }

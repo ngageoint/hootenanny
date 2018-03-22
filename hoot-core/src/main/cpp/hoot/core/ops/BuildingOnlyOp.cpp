@@ -56,30 +56,30 @@ void BuildingOnlyOp::apply(boost::shared_ptr<OsmMap>& map)
   _map = map;
 
   // Setup a visitor to remove superfluous tags
-  boost::shared_ptr<RemoveTagVisitor> pRemoveTagVtor(new RemoveTagVisitor());
-  pRemoveTagVtor->addKey("error:circular");
-  pRemoveTagVtor->addKey("OBJECTID");
-  pRemoveTagVtor->addKey("PAGENUMBER");
-  pRemoveTagVtor->addKey("SHAPE_AREA");
-  pRemoveTagVtor->addKey("SHAPE_LENG");
-  pRemoveTagVtor->addKey("hoot:layername");
+  RemoveTagVisitor removeTagVtor;
+  removeTagVtor.addKey("error:circular");
+  removeTagVtor.addKey("OBJECTID");
+  removeTagVtor.addKey("PAGENUMBER");
+  removeTagVtor.addKey("SHAPE_AREA");
+  removeTagVtor.addKey("SHAPE_LENG");
+  removeTagVtor.addKey("hoot:layername");
 
   // Setup a visitor to change uppercase "BUILDING" tag to lower
-  ElementOsmMapVisitorPtr pReplaceTagVtor(new ReplaceTagVisitor("BUILDING", "yes",
-                                                                "building", "yes"));
-  // Visit the map, execute both visitors on each element
-  MultiVisitor multiVtor;
-  multiVtor.addVisitor(pRemoveTagVtor);
-  multiVtor.addVisitor(pReplaceTagVtor);
-  map->visitRw(multiVtor);
+  ReplaceTagVisitor replaceTagVtor("BUILDING", "yes", "building", "yes");
 
-  // Remove unwanted relations
+
+
+  // Setup a visitor to remove unwanted relations
   boost::function<bool (ConstElementPtr e)> f = boost::bind(&BuildingOnlyOp::_isBuildingRelation, this, _1);
   boost::shared_ptr<ArbitraryCriterion> pBuildingCrit(new ArbitraryCriterion(f));
   RemoveElementsVisitor removeEVisitor(pBuildingCrit);
 
-  // Visit relations only
-  map->visitRelationsRw(removeEVisitor);
+  // Visit the map once, execute all visitors on each element
+  MultiVisitor multiVtor;
+  multiVtor.addVisitor(&removeTagVtor);
+  multiVtor.addVisitor(&replaceTagVtor);
+  multiVtor.addVisitor(reinterpret_cast<ElementOsmMapVisitor *>(&removeEVisitor));
+  map->visitRw(multiVtor);
 }
 
 bool BuildingOnlyOp::_isBuildingRelation(ConstElementPtr e)
