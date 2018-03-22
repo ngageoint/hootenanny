@@ -28,9 +28,7 @@
 #define REMOVETAGVISITOR_H
 
 // hoot
-#include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/util/Configurable.h>
-
 #include "ElementOsmMapVisitor.h"
 
 namespace hoot

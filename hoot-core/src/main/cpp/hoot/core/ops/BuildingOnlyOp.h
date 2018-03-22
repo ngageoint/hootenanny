@@ -29,6 +29,7 @@
 
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/elements/Element.h>
 
 namespace hoot
 {
@@ -80,6 +81,8 @@ public:
 
 private:
   boost::shared_ptr<OsmMap> _map;
+
+  bool _isBuildingRelation(ConstElementPtr e);
 
 };
 

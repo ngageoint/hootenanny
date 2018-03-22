@@ -27,12 +27,18 @@
 #include "BuildingOnlyOp.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/filters/ArbitraryCriterion.h>
 #include <hoot/core/ops/RemoveRelationOp.h>
+#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/visitors/MultiVisitor.h>
+#include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/visitors/RemoveTagVisitor.h>
 #include <hoot/core/visitors/ReplaceTagVisitor.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/OsmMap.h>
+
+// bost
+#include <boost/function.hpp>
 
 using namespace std;
 
@@ -49,35 +55,44 @@ void BuildingOnlyOp::apply(boost::shared_ptr<OsmMap>& map)
 {
   _map = map;
 
-  // Remove superfluous tags
-  RemoveTagVisitor removeVisitor("error:circular");
-  removeVisitor.addKey("OBJECTID");
-  removeVisitor.addKey("PAGENUMBER");
-  removeVisitor.addKey("SHAPE_AREA");
-  removeVisitor.addKey("SHAPE_LENG");
-  removeVisitor.addKey("hoot:layername");
-  map->visitRw(removeVisitor);
+  // Setup a visitor to remove superfluous tags
+  boost::shared_ptr<RemoveTagVisitor> pRemoveTagVtor(new RemoveTagVisitor());
+  pRemoveTagVtor->addKey("error:circular");
+  pRemoveTagVtor->addKey("OBJECTID");
+  pRemoveTagVtor->addKey("PAGENUMBER");
+  pRemoveTagVtor->addKey("SHAPE_AREA");
+  pRemoveTagVtor->addKey("SHAPE_LENG");
+  pRemoveTagVtor->addKey("hoot:layername");
 
-  // Change uppercase "BUILDING" tag to lower
-  ReplaceTagVisitor replaceVisitor("BUILDING", "yes",
-                                   "building", "yes");
-  map->visitRw(replaceVisitor);
+  // Setup a visitor to change uppercase "BUILDING" tag to lower
+  ElementOsmMapVisitorPtr pReplaceTagVtor(new ReplaceTagVisitor("BUILDING", "yes",
+                                                                "building", "yes"));
+  // Visit the map, execute both visitors on each element
+  MultiVisitor multiVtor;
+  multiVtor.addVisitor(pRemoveTagVtor);
+  multiVtor.addVisitor(pReplaceTagVtor);
+  map->visitRw(multiVtor);
 
-  // Go through all the relations, find which ones to remove
-  std::vector<long> rIdsToRemove;
-  const RelationMap& relations = map->getRelations();
-  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
+  // Remove unwanted relations
+  boost::function<bool (ConstElementPtr e)> f = boost::bind(&BuildingOnlyOp::_isBuildingRelation, this, _1);
+  boost::shared_ptr<ArbitraryCriterion> pBuildingCrit(new ArbitraryCriterion(f));
+  RemoveElementsVisitor removeEVisitor(pBuildingCrit);
+
+  // Visit relations only
+  map->visitRelationsRw(removeEVisitor);
+}
+
+bool BuildingOnlyOp::_isBuildingRelation(ConstElementPtr e)
+{
+  // Is it a building relation?
+  if (e->getElementType() == ElementType::Relation)
   {
-    const boost::shared_ptr<Relation>& r = it->second;
-
-    // Is it a building relation?
+    const Relation *r = dynamic_cast<const Relation*>(e.get());
     if (r->getType() == MetadataTags::RelationBuilding())
-      rIdsToRemove.push_back(r->getId());
+      return true;
   }
 
-  // Now do the removing
-  for (size_t i = 0; i < rIdsToRemove.size(); i++)
-    RemoveRelationOp::removeRelation(map, rIdsToRemove[i]);
+  return false;
 }
 
 } // namespace hoot
