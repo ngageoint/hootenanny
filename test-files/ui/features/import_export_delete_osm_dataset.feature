@@ -52,7 +52,7 @@ Feature: Import Export Delete OSM Dataset
         And I press "Add Folder"
         Then I type "CucumberOsm" in input ""
         And I press "big.loud" span with text "Add Folder"
-        And I wait 2 seconds
+        And I wait 5 seconds
 
     Scenario: Move Dataset
         When I scroll "dcpoi_clip_Cucumber" into view
@@ -61,7 +61,7 @@ Feature: Import Export Delete OSM Dataset
         And I click the "Move" context menu item
         And I select the "CucumberOsm" option in the "root" combobox
         And I press "big.loud" span with text "Update"
-        And I wait 2 seconds
+        And I wait 5 seconds
 
     Scenario: Move PBF Dataset
         When I scroll "ToyTestCombined_Cucumber" into view
@@ -70,7 +70,7 @@ Feature: Import Export Delete OSM Dataset
         And I click the "Move" context menu item
         And I select the "CucumberOsm" option in the "root" combobox
         And I press "big.loud" span with text "Update"
-        And I wait 2 seconds
+        And I wait 5 seconds
 
     Scenario: Rename Dataset
         When I scroll "CucumberOsm" into view
@@ -81,6 +81,7 @@ Feature: Import Export Delete OSM Dataset
         And I click the "Rename" context menu item
         Then I type "dcpoi_clip_Cucumber_rename" in input "dcpoi_clip_Cucumber"
         And I press "big.loud" span with text "Update"
+        And I wait 5 seconds
 
     Scenario: Delete Folder and Dataset
         When I scroll "CucumberOsm" into view
