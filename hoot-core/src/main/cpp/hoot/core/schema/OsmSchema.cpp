@@ -1892,6 +1892,31 @@ bool OsmSchema::isLinearWaterway(const Element& e)
   return false;
 }
 
+bool OsmSchema::isRoundabout(const Tags& tags, ElementType type)
+{
+  // If it's not a highway, it's not a roundabout
+  if (!isLinearHighway(tags, type))
+  {
+    return false;
+  }
+
+  // Now check some details...
+  bool result = false;
+  Tags::const_iterator tagIt = tags.find("junction");
+
+  if (tagIt != tags.end() && tagIt.value().toLower() == "roundabout")
+  {
+    result = true;
+  }
+
+  if (result)
+  {
+    LOG_TRACE("isRoundabout; key: " << tagIt.key());
+  }
+
+  return result;
+}
+
 bool OsmSchema::isList(const QString& /*key*/, const QString& value)
 {
   return value.contains(';');
