@@ -295,6 +295,7 @@ void OsmMap::_copy(ConstOsmMapPtr from)
   _idGenSp = from->_idGenSp;
   _index.reset(new OsmMapIndex(*this));
   _srs = from->getProjection();
+  _roundabouts = from->getRoundabouts();
 
   int i = 0;
   const RelationMap& allRelations = from->getRelations();

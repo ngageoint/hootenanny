@@ -51,6 +51,15 @@
                 "hoot_val":"hoot::SuperfluousWayRemover",
                 "defaultvalue":"true"
             },
+            // It's important to remove roundabouts before splitting intersections!
+            {
+                "id":"roundabout_handler",
+                "elem_type":"checkbox",
+                "description":"Remove / Replace roundabouts.",
+                "name":"Handle Roundabouts",
+                "hoot_val":"hoot::RemoveRoundabouts",
+                "defaultvalue":"false"
+            },
             {
                 "id":"intersection_splitter",
                 "elem_type":"checkbox",
@@ -143,7 +152,7 @@
             {
                 "id":"corner_splitter",
                 "elem_type":"checkbox",
-                "description":"Split roads at sharp corners..",
+                "description":"Split roads at sharp corners.",
                 "name":"Split Sharp Road Corners",
                 "hoot_val":"hoot::CornerSplitter",
                 "defaultvalue":"true"
