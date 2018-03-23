@@ -50,6 +50,8 @@ public:
 
   virtual QString getName() const { return "tag-schema"; }
 
+  virtual QString getShortDescription() const { return "Prints OSM tag documentation"; }
+
   virtual int runSimple(QStringList args)
   {
     QString printScript(ConfigOptions().getTagPrintingScript());

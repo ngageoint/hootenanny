@@ -55,6 +55,9 @@ public:
 
   virtual QString getName() const { return "convert-ogr2osm"; }
 
+  virtual QString getShortDescription() const
+  { return "Converts and translates map data from an OGR format to OSM"; }
+
   static QString opsKey() { return "ogr2osm.ops"; }
 
   virtual int runSimple(QStringList args)

@@ -2,11 +2,9 @@
 
 === Description
 
-The +changeset-apply+ command writes an OSM changeset SQL file that represents the difference
-between two OSM datasets to an OSM API database.  Optional conflict parameters may be 
-passed, so that if the target database contains any changesets created after the time
-represented by a timestamp that intersect with a specified AOI, the command will return
-an error.
+The +apply-changeset+ command writes an OSM changeset SQL file that represents the difference between two OSM datasets 
+to an OSM API database.  Optional conflict parameters may be passed, so that if the target database contains any changesets 
+created after the time represented by a timestamp that intersect with a specified AOI, the command will return an error.
 
 * +changeset+         - input SQL changeset (e.g. .osc.sql file).
 * +targetDatabaseUrl+ - database the changeset will be written to.

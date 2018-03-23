@@ -68,15 +68,23 @@ public:
   virtual QString getHelp() const = 0;
 
   /**
-   * Returns the name of the command. This should take a form similar to "--my-command".
+   * Returns the name of the command. This should take a form similar to "my-command" and ideally
+   * be 30 characters or less.
    */
   virtual QString getName() const = 0;
+
+  /**
+   * Returns a one sentence description for the command.
+   *
+   * Keep this as short as possible, capitalize the first letter, and check to see that it stays
+   * on one line when displayed.
+   */
+  virtual QString getShortDescription() const = 0;
 
   /**
    * @sa BaseCommand for an example implementation.
    */
   virtual int run(char* argv[], int argc) = 0;
-
 };
 
 typedef boost::shared_ptr<Command> CommandPtr;

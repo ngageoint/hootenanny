@@ -43,61 +43,64 @@ namespace hoot
 class PertyTestCmd : public BaseCommand
 {
 
-  public:
+public:
 
-    static string className() { return "hoot::PertyTestCmd"; }
+  static string className() { return "hoot::PertyTestCmd"; }
 
-    PertyTestCmd() { }
+  PertyTestCmd() { }
 
-    virtual QString getName() const { return "perty-test"; }
+  virtual QString getName() const { return "perty-test"; }
 
-    virtual int runSimple(QStringList args)
+  virtual QString getShortDescription() const
+  { return "Generates an averaged PERTY score for multiple conflation jobs"; }
+
+  virtual int runSimple(QStringList args)
+  {
+    if (args.size() != 2)
     {
-      if (args.size() != 2)
-      {
-        cout << getHelp() << endl << endl;
-        throw HootException(QString("%1 takes two parameters.").arg(getName()));
-      }
-
-      QList<boost::shared_ptr<const PertyTestRunResult> > results =
-        PertyTestRunner().runTest(args[0], args[1]);
-
-      LOG_INFO("\n\nPERTY Test Results");
-      LOG_INFO("\n\nNumber of Test Runs: " << results.size());
-      bool anyTestFailed = false;
-      bool anyTestRunPassedWithScoreOutsideOfAllowedVarianceAndHigherThanExpected = false;
-      for (QList<boost::shared_ptr<const PertyTestRunResult> >::const_iterator it = results.begin();
-           it != results.end(); ++it)
-      {
-        boost::shared_ptr<const PertyTestRunResult> result = *it;
-        LOG_INFO(result->toString());
-        anyTestFailed = !result->testPassed();
-        //just checking here for test run scores that were higher than expected but allowed to pass;
-        //still want to log a warning about it so that the expected scores can eventually be updated
-        //in regressions tests
-        if (!result->getFailOnBetterScore() && result->testPassed() &&
-            (result->getScoreVariance() > result->getAllowedScoreVariance()))
-        {
-          assert(result->getScore() > result->getExpectedScore());
-          anyTestRunPassedWithScoreOutsideOfAllowedVarianceAndHigherThanExpected = true;
-        }
-      }
-
-      if (anyTestRunPassedWithScoreOutsideOfAllowedVarianceAndHigherThanExpected)
-      {
-        LOG_WARN(
-          "At least one PERTY test run had a allowable passing score that was greater than the " <<
-          "expected score variance and higher than its expected score.")
-      }
-
-      if (anyTestFailed)
-      {
-        LOG_ERROR("At least one PERTY test run failed the score variance check.");
-        return -1;
-      }
-
-      return 0;
+      cout << getHelp() << endl << endl;
+      throw HootException(QString("%1 takes two parameters.").arg(getName()));
     }
+
+    QList<boost::shared_ptr<const PertyTestRunResult> > results =
+      PertyTestRunner().runTest(args[0], args[1]);
+
+    LOG_INFO("\n\nPERTY Test Results");
+    LOG_INFO("\n\nNumber of Test Runs: " << results.size());
+    bool anyTestFailed = false;
+    bool anyTestRunPassedWithScoreOutsideOfAllowedVarianceAndHigherThanExpected = false;
+    for (QList<boost::shared_ptr<const PertyTestRunResult> >::const_iterator it = results.begin();
+         it != results.end(); ++it)
+    {
+      boost::shared_ptr<const PertyTestRunResult> result = *it;
+      LOG_INFO(result->toString());
+      anyTestFailed = !result->testPassed();
+      //just checking here for test run scores that were higher than expected but allowed to pass;
+      //still want to log a warning about it so that the expected scores can eventually be updated
+      //in regressions tests
+      if (!result->getFailOnBetterScore() && result->testPassed() &&
+          (result->getScoreVariance() > result->getAllowedScoreVariance()))
+      {
+        assert(result->getScore() > result->getExpectedScore());
+        anyTestRunPassedWithScoreOutsideOfAllowedVarianceAndHigherThanExpected = true;
+      }
+    }
+
+    if (anyTestRunPassedWithScoreOutsideOfAllowedVarianceAndHigherThanExpected)
+    {
+      LOG_WARN(
+        "At least one PERTY test run had a allowable passing score that was greater than the " <<
+        "expected score variance and higher than its expected score.");
+    }
+
+    if (anyTestFailed)
+    {
+      LOG_ERROR("At least one PERTY test run failed the score variance check.");
+      return -1;
+    }
+
+    return 0;
+  }
 };
 
 HOOT_FACTORY_REGISTER(Command, PertyTestCmd)

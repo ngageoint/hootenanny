@@ -2,9 +2,8 @@
 
 === Description
 
-The +evaluate-point-moves+ command creates a series of files filled with a random set of
-points then calculates the error introduced by various operations. A pair of
-points is created and checked to make sure both points are moved together.  
+The +evaluate-point-moves+ command creates a series of files filled with a random set of points then calculates the error 
+introduced by various operations. A pair of points is created and checked to make sure both points are moved together.  
 
 * +point-count+ - Number of points.
 * +bounds+      - Comma delimited bounds minx,miny,maxx,maxy.

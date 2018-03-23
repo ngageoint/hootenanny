@@ -47,6 +47,7 @@ class OsmMap;
 class BaseCommand : public Command
 {
 public:
+
   BaseCommand();
 
   virtual ~BaseCommand() {}
@@ -54,7 +55,7 @@ public:
   virtual QString getHelp() const;
 
   void loadMap(boost::shared_ptr<OsmMap> map, QString path, bool useFileId,
-    Status defaultStatus = Status::Invalid);
+               Status defaultStatus = Status::Invalid);
 
   /**
    * Parses a comma delimited envelope in the form minx,miny,maxx,maxy.
@@ -77,6 +78,7 @@ public:
   QStringList toQStringList(char* argv[], int argc);
 
 protected:
+
   virtual QString _getHelpPath() const;
 
 };

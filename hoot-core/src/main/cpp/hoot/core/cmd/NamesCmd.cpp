@@ -106,6 +106,9 @@ public:
 
   virtual QString getName() const { return "names"; }
 
+  virtual QString getShortDescription() const
+  { return "Prints feature names ordered by frequency"; }
+
   int runSimple(QStringList args)
   {
     if (args.size() == 0)

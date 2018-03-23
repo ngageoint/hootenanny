@@ -60,6 +60,9 @@ public:
 
   virtual QString getName() const { return "changeset-derive"; }
 
+  virtual QString getShortDescription() const
+  { return "Creates an OSM changeset containing the difference between two OSM datasets"; }
+
   bool _printStats = false;
 
   virtual int runSimple(QStringList args)

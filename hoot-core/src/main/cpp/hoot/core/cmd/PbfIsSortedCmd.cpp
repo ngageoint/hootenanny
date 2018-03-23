@@ -74,6 +74,9 @@ public:
 
   virtual QString getName() const { return "pbf-is-sorted"; }
 
+  virtual QString getShortDescription() const
+  { return "Determines if an OSM PBF file has been sorted"; }
+
   int runSimple(QStringList args)
   {
     if (args.size() != 1)

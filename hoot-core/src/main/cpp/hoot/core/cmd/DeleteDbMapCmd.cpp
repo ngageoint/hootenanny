@@ -38,11 +38,15 @@ namespace hoot
 class DeleteDbMapCmd : public BaseCommand
 {
 public:
+
   static string className() { return "hoot::DeleteDbMapCmd"; }
 
   DeleteDbMapCmd() {}
 
   virtual QString getName() const { return "delete-db-map"; }
+
+  virtual QString getShortDescription() const
+  { return "Deletes a map from the Hootenanny database"; }
 
   int runSimple(QStringList args)
   {

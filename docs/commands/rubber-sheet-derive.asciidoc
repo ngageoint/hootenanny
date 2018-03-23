@@ -2,10 +2,9 @@
 
 === Description
 
-The +rubber-sheet-derive+ command creates a transform file for rubber sheeting
-inputs. If you just want to rubber sheet two data sets together before
-conflating see Map Operation Configuration, Rubber Sheeting for details. This is
-usually used as part of a larger more complicated work flow. 
+The +rubber-sheet-derive+ command creates a transform file for rubber sheeting inputs. If you just want to rubber sheet two datasets 
+together before conflating, see "Map Operation Configuration, Rubber Sheeting" for details. This is usually used as part of a larger 
+more complicated work flow. 
 
 * +--ref +           - If specified, treat input1 as a reference layer and only produce one
                        output transform.

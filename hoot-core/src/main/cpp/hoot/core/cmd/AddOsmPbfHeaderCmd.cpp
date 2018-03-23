@@ -41,11 +41,14 @@ using namespace std;
 class AddOsmPbfHeaderCmd : public BaseCommand
 {
 public:
+
   static string className() { return "hoot::AddOsmPbfHeaderCmd"; }
 
   AddOsmPbfHeaderCmd() {}
 
   virtual QString getName() const { return "pbf-add-header"; }
+
+  virtual QString getShortDescription() const { return "Adds a header to an OSM PBF file"; }
 
   int runSimple(QStringList args)
   {

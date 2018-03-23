@@ -1,7 +1,7 @@
 == delete-db-map
 
 === Description
-The +delete-db-map+ command deletes a map from the hoot database.
+The +delete-db-map+ command deletes a map from the Hootenanny database.
 
 * +Map Name+  - The name of the map.
 

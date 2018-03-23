@@ -3,12 +3,10 @@
 
 === Description
 
-This method provides conversion from .osm files or POSTGIS osm databases to
-either Shapefile or FileGDB. The OGR libraries are used on the back end so other
-formats such as PostGIS and SQLite will likely work, but are not tested. This
-translation process provides very fine grained control to the user and can be
-quite complex. If you just want to export to a Shapefile with some simple
-columns please look at +--convert-osm2shp+ first.
+The +convert-osm2ogr+ command provides conversion from .osm files or POSTGIS osm databases to either Shapefile or FileGDB. The OGR libraries 
+are used on the back end so other formats such as PostGIS and SQLite will likely work, but are not tested. This translation 
+process provides very fine grained control to the user and can be quite complex. If you just want to export to a Shapefile 
+with some simple columns please look at +convert-osm2shp+ first.
 
 * +translation+           - JavaScript file name.
 * +input+                 - Input file name. An OSM compatible input format (e.g. .osm or .osm.pbf)

@@ -2,8 +2,7 @@
 
 === Description
 
-The +model-build+ command reads the inputs, generates a model and writes the
-result to a .arff and .rf files.
+The +model-build+ command reads the inputs, generates a model, and writes the result to a .arff and .rf files.
 
 * +--export-arff-only+ - Exports only the .arff file and skips the building and exporting of the .rf file.
 * +ref1+               - Input with REF1 tags (e.g. .osm file).

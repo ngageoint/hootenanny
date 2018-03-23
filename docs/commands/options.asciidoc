@@ -2,13 +2,13 @@
 
 === Description
 
-Prints out Hootenanny configuration options.  
+The +options+ command prints out available Hootenanny configuration options.  
 
 One of the following input parameters must be specified.
 
 * +name+             - name or partial name of a configuration option to list and/or print a description for
 * +--option-names+   - if no name is specified, lists all configuration option names; if a name is specified, lists only 
-               configuration option names that have a full or partial match with the input name
+                       configuration option names that have a full or partial match with the input name
 * +--option-details+ - if no name is specified, lists all configuration option names and descriptions; if a name is specified, 
                       lists only configuration option names and descriptions that have a full or partial match with the input name
 

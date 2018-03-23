@@ -55,6 +55,8 @@ public:
 
   virtual QString getName() const { return "stats"; }
 
+  virtual QString getShortDescription() const { return "Prints map statistics"; }
+
   int runSimple(QStringList args)
   {
     if (args.size() < 1)

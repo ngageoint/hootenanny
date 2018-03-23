@@ -35,81 +35,84 @@ namespace hoot
 class CalculateTilesCmd : public BaseCalculateTilesCmd
 {
 
-  public:
+public:
 
-    static std::string className() { return "hoot::CalculateTilesCmd"; }
+  static std::string className() { return "hoot::CalculateTilesCmd"; }
 
-    CalculateTilesCmd() { }
+  CalculateTilesCmd() { }
 
-    virtual QString getName() const { return "tiles-calculate"; }
+  virtual QString getName() const { return "tiles-calculate"; }
 
-    virtual int runSimple(QStringList args)
+  virtual QString getShortDescription() const
+  { return "Calculates bounding boxes based on node density"; }
+
+  virtual int runSimple(QStringList args)
+  {
+    if (args.size() != 2 && args.size() != 4)
     {
-      if (args.size() != 2 && args.size() != 4)
-      {
-        std::cout << getHelp() << std::endl << std::endl;
-        throw HootException(
-          QString("%1 takes either two or four parameters.").arg(getName()));
-      }
-
-      QStringList inputs;
-      const QString input = args[0];
-      LOG_VARD(input);
-      if (!input.contains(";"))
-      {
-        inputs.append(input);
-      }
-      else
-      {
-        //multiple inputs
-        inputs = input.split(";");
-      }
-      LOG_VARD(inputs);
-
-      const QString output = args[1];
-      if (!output.toLower().endsWith(".geojson"))
-      {
-        throw HootException(
-          "Invalid output file format: " + output + ".  Only the GeoJSON output format is " +
-          "supported.");
-      }
-      LOG_VARD(output);
-
-      //if either of max nodes per tile or pixel size is specified, then both must be specified
-
-      long maxNodesPerTile = 1000;
-      if (args.size() > 2)
-      {
-        bool parseSuccess = false;
-        maxNodesPerTile = args[2].toLong(&parseSuccess);
-        if (!parseSuccess || maxNodesPerTile < 1)
-        {
-          throw HootException("Invalid maximum nodes per tile value: " + args[2]);
-        }
-      }
-      LOG_VARD(maxNodesPerTile);
-
-      double pixelSize = 0.001; //.1km?
-      if (args.size() > 2)
-      {
-        bool parseSuccess = false;
-        pixelSize = args[3].toDouble(&parseSuccess);
-        if (!parseSuccess || pixelSize <= 0.0)
-        {
-          throw HootException("Invalid pixel size value: " + args[3]);
-        }
-      }
-      LOG_VARD(pixelSize);
-
-      conf().set(ConfigOptions().getIdGeneratorKey(), "hoot::PositiveIdGenerator");
-
-      OsmMapPtr inputMap = _readInputs(inputs);
-      const std::vector< std::vector<geos::geom::Envelope> > tiles =
-        _calculateTiles(maxNodesPerTile, pixelSize, inputMap);
-      _writeOutputAsGeoJson(tiles, output);
-
-      return 0;
+      std::cout << getHelp() << std::endl << std::endl;
+      throw HootException(
+        QString("%1 takes either two or four parameters.").arg(getName()));
     }
+
+    QStringList inputs;
+    const QString input = args[0];
+    LOG_VARD(input);
+    if (!input.contains(";"))
+    {
+      inputs.append(input);
+    }
+    else
+    {
+      //multiple inputs
+      inputs = input.split(";");
+    }
+    LOG_VARD(inputs);
+
+    const QString output = args[1];
+    if (!output.toLower().endsWith(".geojson"))
+    {
+      throw HootException(
+        "Invalid output file format: " + output + ".  Only the GeoJSON output format is " +
+        "supported.");
+    }
+    LOG_VARD(output);
+
+    //if either of max nodes per tile or pixel size is specified, then both must be specified
+
+    long maxNodesPerTile = 1000;
+    if (args.size() > 2)
+    {
+      bool parseSuccess = false;
+      maxNodesPerTile = args[2].toLong(&parseSuccess);
+      if (!parseSuccess || maxNodesPerTile < 1)
+      {
+        throw HootException("Invalid maximum nodes per tile value: " + args[2]);
+      }
+    }
+    LOG_VARD(maxNodesPerTile);
+
+    double pixelSize = 0.001; //.1km?
+    if (args.size() > 2)
+    {
+      bool parseSuccess = false;
+      pixelSize = args[3].toDouble(&parseSuccess);
+      if (!parseSuccess || pixelSize <= 0.0)
+      {
+        throw HootException("Invalid pixel size value: " + args[3]);
+      }
+    }
+    LOG_VARD(pixelSize);
+
+    conf().set(ConfigOptions().getIdGeneratorKey(), "hoot::PositiveIdGenerator");
+
+    OsmMapPtr inputMap = _readInputs(inputs);
+    const std::vector< std::vector<geos::geom::Envelope> > tiles =
+      _calculateTiles(maxNodesPerTile, pixelSize, inputMap);
+    _writeOutputAsGeoJson(tiles, output);
+
+    return 0;
+  }
 };
 
 HOOT_FACTORY_REGISTER(Command, CalculateTilesCmd)

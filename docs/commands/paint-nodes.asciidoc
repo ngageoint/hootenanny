@@ -2,7 +2,7 @@
 
 === Description
 
-Create a density plot of the specified input.
+The +paint-nodes+ command creates a density plot of the specified input.
 
 * +input+         - Input path.
 * +output-image+  - Output image name. Must always be a +.png+ file. A

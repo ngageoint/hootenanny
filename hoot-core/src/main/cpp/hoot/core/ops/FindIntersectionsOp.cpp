@@ -112,7 +112,6 @@ void FindIntersectionsOp::apply(boost::shared_ptr<OsmMap> &map)
   boost::shared_ptr<IntersectionFilter> intersectionFilter(new IntersectionFilter(v->getIntersections()));
   VisitorOp(new RemoveElementsVisitor(intersectionFilter)).apply(map);
 
-
   // Apply any user specified operations.
   NamedOp(ConfigOptions().getMapCleanerTransforms()).apply(map);
 }

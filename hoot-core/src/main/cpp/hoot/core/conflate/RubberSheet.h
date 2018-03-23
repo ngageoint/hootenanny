@@ -49,8 +49,6 @@ class RubberSheetTest;
 class OsmMap;
 class Status;
 
-/**
- */
 class RubberSheet : public OsmMapOperation
 {
 public:

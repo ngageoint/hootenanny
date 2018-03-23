@@ -46,6 +46,9 @@ public:
 
   virtual QString getName() const { return "convert-osm2shp"; }
 
+  virtual QString getShortDescription() const
+  { return "Converts map data from OSM to a Shape file"; }
+
   virtual int runSimple(QStringList args)
   {
     if (args.size() < 2 || args.size() > 3)

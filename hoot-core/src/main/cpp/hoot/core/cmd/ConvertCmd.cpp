@@ -49,20 +49,6 @@ using namespace std;
 namespace hoot
 {
 
-/**
- * @ingroup cmd
- * @page ConvertCmd Convert Command
- * @code
---convert (input) (output)
- * @endcode
- *
- * The convert command converts from one format to another.
- *
- * @param input The input file to be cleaned. Supports common geospatial file types.
- * @param output The output file. Supports common geospatial file types.
- *
- * @sa @ref convert.ops
- */
 class ConvertCmd : public BaseCommand
 {
 public:
@@ -72,6 +58,9 @@ public:
   ConvertCmd() { }
 
   virtual QString getName() const { return "convert"; }
+
+  virtual QString getShortDescription() const
+  { return "Converts map data from one input format to another"; }
 
   /**
    * Return true if all the specified operations are valid streaming operations.

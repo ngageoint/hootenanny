@@ -72,11 +72,14 @@ namespace hoot
 class CropMapCmd : public BaseCommand
 {
 public:
+
   static string className() { return "hoot::CropMapCmd"; }
 
   CropMapCmd() {}
 
   virtual QString getName() const { return "crop"; }
+
+  virtual QString getShortDescription() const { return "Crops a map to the given bounds"; }
 
   int runSimple(QStringList args)
   {

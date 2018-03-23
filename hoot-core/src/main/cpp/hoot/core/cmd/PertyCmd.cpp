@@ -48,6 +48,8 @@ public:
 
   virtual QString getName() const { return "perty"; }
 
+  virtual QString getShortDescription() const { return "Perturbs map data using PERTY"; }
+
   virtual int runSimple(QStringList args)
   {
     if (args.size() != 2)

@@ -3,8 +3,7 @@
 
 === Description
 
-Conflate two or more input sources into a single output. Only POIs are
-supported at this time.
+The +multiary-conflate+ command conflates two or more POI map sources into a single map.
 
 * +inputs+ - 2 or more input files to be conflated.
 * +output+ - The output path.

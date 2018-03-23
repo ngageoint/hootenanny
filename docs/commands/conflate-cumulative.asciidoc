@@ -1,11 +1,9 @@
-[[cumulative-conflate]]
-== cumulative-conflate
+[[conflate-cumulative]]
+== conflate-cumulative
 
 === Description
 
-EXPERIMENTAL
-
-Conflates three or more input sources into a single output in a cumulative fashion.
+The +conflate-cumulative+ command conflates three or more maps into a single map in a cumulative fashion.
 
 This command must be run with the following configuration options:
 * writer.clean.review.tags=false
@@ -28,7 +26,7 @@ conflate-cumulative (input1) (input2) (input3) [inputN] (output)
 ==== Example
 
 --------------------------------------
-hoot cumulative-conflate -D review.tags.treat.as.metadata=false -D tag.merger.default=hoot::ProvenanceAwareOverwriteTagMerger input1.osm input2.osm input3.osm input4.osm output.osm
+hoot conflate-cumulative -D review.tags.treat.as.metadata=false -D tag.merger.default=hoot::ProvenanceAwareOverwriteTagMerger input1.osm input2.osm input3.osm input4.osm output.osm
 --------------------------------------
 
 ==== See Also

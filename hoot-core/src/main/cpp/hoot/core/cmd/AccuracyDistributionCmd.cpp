@@ -50,6 +50,9 @@ public:
 
   virtual QString getName() const { return "accuracy-distribution"; }
 
+  virtual QString getShortDescription() const
+  { return "Prints a distribution of accuracy values in the input data"; }
+
   virtual int runSimple(QStringList args)
   {
     if (args.size() != 1)

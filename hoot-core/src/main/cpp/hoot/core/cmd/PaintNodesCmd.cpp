@@ -63,6 +63,8 @@ class PaintNodesCmd : public BaseCommand
 
     virtual QString getName() const { return "paint-nodes"; }
 
+    virtual QString getShortDescription() const { return "Creates a density plot"; }
+
     Envelope getEnvelope(boost::shared_ptr<OsmMapReader> reader)
     {
       boost::shared_ptr<EnvelopeProvider> ep =

@@ -58,11 +58,6 @@ using namespace Tgs;
 namespace hoot
 {
 
-/**
- * @brief The MultiaryConflateCmd class
- *
- * Conflate 2 or more files into a third output file. At best this is experimental.
- */
 class MultiaryConflateCmd : public BaseCommand
 {
 public:
@@ -72,6 +67,9 @@ public:
   MultiaryConflateCmd() {}
 
   virtual QString getName() const { return "multiary-conflate"; }
+
+  virtual QString getShortDescription() const
+  { return "Conflates two or more POI map sources into a single map"; }
 
   int runSimple(QStringList args)
   {

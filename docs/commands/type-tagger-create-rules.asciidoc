@@ -1,11 +1,11 @@
-== implicit-tagging-derive-raw-rules
+== type-tagger-create-rules
 
 === Description
 
-Given input features, creates a rules file which can be used to derive an implicit tag rules database using the 
-implicit-tagging-derive-rules-database command.  The database can then be used to add tags implicitly to elements, given their names.  
-Currently, only POI rule generation is supported.  See the "Implicit Element Type Tagging Based On Name" section in the 
-Hootenanny User Guide for more information.
+The +type-tagger-create-rules+ command given input features, creates a rules file which can be used to derive an implicit tag 
+rules database using the +type-tagger-create-rules-db+ command.  The database can then be used to add tags implicitly 
+to elements, given their names.  Currently, only POI rule generation is supported.  See the "Implicit Element Type Tagging Based 
+On Name" section in the Hootenanny User Guide for more information.
 
 * +featureType+	 - currently the only type supported is "poi"
 * +inputs+       - semicolon delimited list of input paths to supported Hootenanny input data formats
@@ -17,11 +17,11 @@ Relevant configuration options are those beginning with implicit.tagging.raw.rul
 === Usage
 
 --------------------------------------
-implicit-tagging-derive-raw-rules (featureType) (inputs) (translations) (output)
+type-tagger-create-rules (featureType) (inputs) (translations) (output)
 --------------------------------------
 
 ==== Examples
 
 --------------------------------------
-hoot implicit-tagging-derive-raw-rules poi "myInput.osm.pbf;myInput.geonames" "translations/OSM_Ingest.js;translations/GeoNames.js" myRules.implicitTagRules
+hoot type-tagger-create-rules poi "myInput.osm.pbf;myInput.geonames" "translations/OSM_Ingest.js;translations/GeoNames.js" myRules.implicitTagRules
 --------------------------------------

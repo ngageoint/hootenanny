@@ -59,12 +59,6 @@ public:
 
   ScoreMatchesCmd() { }
 
-//  QString evaluateThreshold(vector<OsmMapPtr> maps, QString output, boost::shared_ptr<MatchThreshold> mt,
-//    bool showConfusion, double& score)
-//  {
-//    return evaluateThreshold(maps, output, mt, showConfusion, score, -1);
-//  }
-
   QString evaluateThreshold(vector<OsmMapPtr> maps, QString output, boost::shared_ptr<MatchThreshold> mt,
     bool showConfusion, double& score/*, long numManualMatches*/)
   {
@@ -117,6 +111,8 @@ public:
   }
 
   virtual QString getName() const { return "score-matches"; }
+
+  virtual QString getShortDescription() const { return "Scores conflation performance"; }
 
   class ScoreFunction : public Tgs::NelderMead::Function
   {

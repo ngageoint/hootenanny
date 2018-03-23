@@ -40,18 +40,6 @@ using namespace std;
 namespace hoot
 {
 
-/**
- * @ingroup cmd
- * @page CleanCmd Clean Command
- * @code
---clean (input) (output)
- * @endcode
- *
- * The clean command cleans common map problems.
- *
- * @param input The input file to be cleaned. Supports common geospatial file types.
- * @param output The cleaned output file. Supports common geospatial file types.
- */
 class CleanCmd : public BaseCommand
 {
 public:
@@ -61,6 +49,9 @@ public:
   CleanCmd() { }
 
   virtual QString getName() const { return "clean"; }
+
+  virtual QString getShortDescription() const
+  { return "Corrects common erroneous map data scenarios"; }
 
   virtual int runSimple(QStringList args)
   {

@@ -2,7 +2,8 @@
 
 === Description
 
-+tiles-calculate-random+ calculates a collection of bounding boxes that contain roughly equal distributions of node data from the specified input(s) and writes the output to a file.
+The +tiles-calculate-random+ command calculates a collection of bounding boxes that contain roughly equal distributions of node data 
+from the specified input(s), selects one of them at random, and writes the output to a file.
 
 * +input+               - one or more OSM data inputs; specify multiple inputs by separating them with a semicolon
 * +output+              - output file to write the tile boundary to; valid formats are GeoJSON (*.geojson)
@@ -11,7 +12,7 @@
 * +pixelSize+           - The size of the pixels used in the calculation in degrees.  The default is 0.001; optional only if 
                           maxNodeCountPerTile is not specified
 
-See additional notes in the tiles-calculate command documentation.
+See additional notes in the +tiles-calculate+ command documentation.
 
 === Usage
 

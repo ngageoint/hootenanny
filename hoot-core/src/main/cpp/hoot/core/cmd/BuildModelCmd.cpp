@@ -62,6 +62,9 @@ public:
 
   virtual QString getName() const { return "model-build"; }
 
+  virtual QString getShortDescription() const
+  { return "Creates a random forest model from manually matched map input data"; }
+
   virtual int runSimple(QStringList args)
   {
     bool exportArffOnly = false;

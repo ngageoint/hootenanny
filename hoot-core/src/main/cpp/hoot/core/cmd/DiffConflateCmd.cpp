@@ -74,6 +74,9 @@ public:
 
   virtual QString getName() const { return "conflate-differential"; }
 
+  virtual QString getShortDescription() const
+  { return "Conflates two maps into a single map based on the difference between the inputs"; }
+
   // Convenience function used when deriving a changeset
   boost::shared_ptr<ChangesetDeriver> _sortInputs(QList<OsmMapPtr> inputMaps)
   {

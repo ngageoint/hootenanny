@@ -34,19 +34,16 @@
 namespace hoot
 {
 
-/**
- * Command used to derive implicit tag raw rules for elements
- *
- * See note in ImplicitTagRawRulesDeriver as to why this logic is separated from that in
- * DeriveImplicitTagRulesDatabaseCmd.
- */
 class DeriveRawImplicitTagRulesCmd : public BaseCommand
 {
 public:
 
   static std::string className() { return "hoot::DeriveRawImplicitTagRulesCmd"; }
 
-  virtual QString getName() const { return "implicit-tagging-derive-raw-rules"; }
+  virtual QString getName() const { return "type-tagger-create-rules"; }
+
+  virtual QString getShortDescription() const
+  { return "Creates rules for adding type tags to POI data"; }
 
   virtual int runSimple(QStringList args)
   {

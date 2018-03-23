@@ -101,6 +101,9 @@ public:
 
   virtual QString getName() const { return "multiary-score-matches"; }
 
+  virtual QString getShortDescription() const
+  { return "Scores how well Multiary POI conflation performs"; }
+
   virtual int runSimple(QStringList args)
   {
     bool showConfusion = false;

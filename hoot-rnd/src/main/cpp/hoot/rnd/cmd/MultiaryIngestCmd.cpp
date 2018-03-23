@@ -33,9 +33,6 @@
 namespace hoot
 {
 
-/**
- * See MultiaryIngester
- */
 class MultiaryIngestCmd : public BaseCommand
 {
 public:
@@ -43,6 +40,9 @@ public:
   static std::string className() { return "hoot::MultiaryIngestCmd"; }
 
   virtual QString getName() const { return "multiary-ingest"; }
+
+  virtual QString getShortDescription() const
+  { return "Ingests POI data for use by the multiary-conflate command"; }
 
   virtual int runSimple(QStringList args)
   {

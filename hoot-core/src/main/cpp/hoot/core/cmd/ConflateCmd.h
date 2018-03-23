@@ -50,6 +50,9 @@ public:
 
   virtual QString getName() const { return "conflate"; }
 
+  virtual QString getShortDescription() const
+  { return "Conflates two maps into a single map"; }
+
   void printStats(const QList<SingleStat>& stats);
 
   virtual int runSimple(QStringList args);

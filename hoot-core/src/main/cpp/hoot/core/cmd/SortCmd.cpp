@@ -39,18 +39,6 @@
 namespace hoot
 {
 
-/**
- * @ingroup cmd
- * @page SortCmd Sort Command
- * @code
-sort (input) (output)
- * @endcode
- *
- * The sort command sorts a file first by element type, then by element ID.
- *
- * @param input The input file to be sorted.  See the user documentation for supported file types.
- * @param output The sorted output file.  See the user documentation for supported file types.
- */
 class SortCmd : public BaseCommand
 {
 public:
@@ -60,6 +48,8 @@ public:
   SortCmd() { }
 
   virtual QString getName() const { return "sort"; }
+
+  virtual QString getShortDescription() const { return "Sorts map data"; }
 
   virtual int runSimple(QStringList args)
   {

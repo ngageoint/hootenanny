@@ -3,9 +3,8 @@
 
 === Description
 
-The +convert-ogr2osm+ command converts and Translates a file from an OGR compatible
-format such as Shapefile or File Geodatabase into the
-http://wiki.openstreetmap.org/wiki/OSM_XML[.osm format]. 
+The +convert-ogr2osm+ command converts and translates map data from an OGR compatible format such as Shapefile or File Geodatabase 
+into the http://wiki.openstreetmap.org/wiki/OSM_XML[.osm format]. 
 
 * +limit+       - 'n' specifies the maximum number of features to translate. This is
                   useful when debugging.

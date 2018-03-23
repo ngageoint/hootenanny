@@ -54,6 +54,9 @@ public:
 
   virtual QString getName() const { return "rubber-sheet-derive"; }
 
+  virtual QString getShortDescription() const
+  { return "Creates a transform file for rubber sheeting map data"; }
+
   virtual int runSimple(QStringList args)
   {
     if (args.size() < 3 || args.size() > 5)

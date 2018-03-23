@@ -40,14 +40,18 @@ namespace hoot
 {
 using namespace std;
 
-class AlphaShapeCmd : public BaseCommand
+class GenerateAlphaShapeCmd : public BaseCommand
 {
 public:
-  static string className() { return "hoot::AlphaShapeCmd"; }
 
-  AlphaShapeCmd() {}
+  static string className() { return "hoot::GenerateAlphaShapeCmd"; }
+
+  GenerateAlphaShapeCmd() {}
 
   virtual QString getName() const { return "generate-alpha-shape"; }
+
+  virtual QString getShortDescription() const
+  { return "Generate a concave hull for a set of points"; }
 
   int runSimple(QStringList args)
   {
@@ -84,6 +88,6 @@ public:
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, AlphaShapeCmd)
+HOOT_FACTORY_REGISTER(Command, GenerateAlphaShapeCmd)
 
 }

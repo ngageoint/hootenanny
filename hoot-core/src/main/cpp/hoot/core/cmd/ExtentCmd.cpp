@@ -48,6 +48,9 @@ public:
 
   virtual QString getName() const { return "extent"; }
 
+  virtual QString getShortDescription() const
+  { return "Calculates the geospatial bounds of map data"; }
+
   int runSimple(QStringList args)
   {
     if (args.size() < 1 || args.size() > 2)

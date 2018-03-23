@@ -42,11 +42,15 @@ using namespace std;
 class CookieCutterCmd : public BaseCommand
 {
 public:
+
   static string className() { return "hoot::CookieCutterCmd"; }
 
   CookieCutterCmd() {}
 
   virtual QString getName() const { return "cookie-cut"; }
+
+  virtual QString getShortDescription() const
+  { return "Reads in a 'cutter' shape and removes it from the contents of a 'dough' input"; }
 
   int runSimple(QStringList args)
   {

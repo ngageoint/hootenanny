@@ -2,7 +2,8 @@
 
 === Description
 
-Prints out the distribution of accuracy (circular error) values, in meters, for all ways in the input data.
+The +accuracy-distribution+ command prints out the distribution of accuracy (circular error) values, in meters, for all ways in 
+the input data.
 
 * +input+ - Input (e.g. .osm file).
 

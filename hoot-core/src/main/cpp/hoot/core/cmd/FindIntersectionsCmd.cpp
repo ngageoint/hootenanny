@@ -51,6 +51,8 @@ public:
 
   virtual QString getName() const { return "find-intersections"; }
 
+  virtual QString getShortDescription() const { return "Detects road intersections"; }
+
   virtual int runSimple(QStringList args)
   {
     if (args.size() != 2)
@@ -62,7 +64,6 @@ public:
     OsmMapPtr map(new OsmMap());
     loadMap(map, args[0], false, Status::Unknown1);
 
-//    MapCleaner().apply(map);
     FindIntersectionsOp().apply(map);
 
     MapProjector::projectToWgs84(map);

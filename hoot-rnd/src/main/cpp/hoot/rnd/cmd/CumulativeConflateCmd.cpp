@@ -46,6 +46,9 @@ public:
 
   virtual QString getName() const { return "conflate-cumulative"; }
 
+  virtual QString getShortDescription() const
+  { return "Conflates three or more maps into a single map in a cumulative fashion"; }
+
   virtual int runSimple(QStringList args)
   {
     //TODO: make this work with stats

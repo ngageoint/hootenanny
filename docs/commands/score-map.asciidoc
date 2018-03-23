@@ -1,12 +1,11 @@
-== score
+== score-map
 
 === Description
 
-Compares a map (uut, Unit Under Test) to one or two test maps (base1 & base2)
-and prints out three score metrics. This operation is most commonly used to
-compare manually conflated data to the automatically conflated data. The scores
-provided give an idea of similarity between maps. A score of 1000 means they're
-exactly the same. A score of 0 means the maps are very different.
+The +score-map+ command compares a map (uut, Unit Under Test) to one or two test maps (base1 & base2) and prints out three 
+score metrics. This operation is most commonly used to compare manually conflated data to the automatically conflated data. 
+The scores provided give an idea of similarity between maps. A score of 1000 means they're exactly the same. A score of 
+0 means the maps are very different.
 
 * +base1+ - The first base file to compare against.
 * +base2+ - (optional) The second base file to compare against.
@@ -14,16 +13,14 @@ exactly the same. A score of 0 means the maps are very different.
 
 The following variables are provided in the score result:
 
-* Raster Score (AKA Location & Completeness) - A metric describing how complete
-  the data is and how close the features are together
-* Graph Score (AKA Routing) - A metric describing how close similar the maps
-  would be if used to perform routing analytics
-* Attribute Score - A metric describing how similar the attributes are between the two maps
+* Raster Score (AKA Location & Completeness) - A metric describing how complete the data is and how close the features are together
+* Graph Score (AKA Routing)                  - A metric describing how close similar the maps would be if used to perform routing analytics
+* Attribute Score                            - A metric describing how similar the attributes are between the two maps
 
 === Usage
 
 --------------------------------------
-score (base1) [base2] (uut)
+score-map (base1) [base2] (uut)
 --------------------------------------
 
 ==== Example

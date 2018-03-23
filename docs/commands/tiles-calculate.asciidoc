@@ -2,7 +2,7 @@
 
 === Description
 
-+tiles-calculate+ calculates a collection of bounding boxes that contain roughly equal distributions of node data from 
+The +tiles-calculate+ command calculates a collection of bounding boxes that contain roughly equal distributions of node data from 
 the specified input(s) and writes the output to a file.
 
 * +input+               - one or more OSM data inputs; specify multiple inputs by separating them with a semicolon

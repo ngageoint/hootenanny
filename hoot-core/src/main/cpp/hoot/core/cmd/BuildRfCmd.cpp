@@ -62,6 +62,9 @@ public:
 
   virtual QString getName() const { return "model-rf-build"; }
 
+  virtual QString getShortDescription() const
+  { return "Creates a random forest model from a .arff file"; }
+
   virtual int runSimple(QStringList args)
   {
     if (args.size() < 2)
