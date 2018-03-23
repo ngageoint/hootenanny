@@ -412,6 +412,7 @@ See also:
 ** `hoot::RemoveInvalidReviewRelationsVisitor` - Removes review relations whose members no longer exist after conflation.
 ** `hoot::RemoveDuplicateReviewsOp` - Removes any duplicate reviews
 ** `hoot::BuildingOutlineUpdateOp` - Updates any multi-part building outlines that may have changed during conflation.
+** `hoot::WayJoinerOp` - Join up any previously split ways that can be rejoined.
 ** `hoot::RemoveInvalidMultilineStringMembersVisitor` - Removes invalid multilinestring relations.
 ** `hoot::SuperfluousWayRemover` - Remove all ways that contain no nodes or all the nodes are exactly the same.
 ** `hoot::RemoveDuplicateWayNodesVisitor` - Remove all nodes that are unnecessarily duplicated in a way.

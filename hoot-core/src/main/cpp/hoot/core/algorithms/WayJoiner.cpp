@@ -29,6 +29,7 @@
 
 //  Hoot
 #include <hoot/core/ops/RemoveWayOp.h>
+#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 
 #include <vector>
@@ -78,6 +79,83 @@ void WayJoiner::join()
     WayPtr parent = ways[parent_id];
     joinWays(parent, way);
   }
+
+  // Get a list of ways that still have a parent
+  map<long, deque<long> > w;
+  ways = _map->getWays();
+  //  Find all ways that have a split parent id
+  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
+  {
+    WayPtr way = it->second;
+    Tags tags = way->getTags();
+    if (tags.contains(MetadataTags::HootSplitParentId()))
+    {
+      long parent_id = tags[MetadataTags::HootSplitParentId()].toLong();
+      w[parent_id].push_back(way->getId());
+    }
+  }
+  //  Rejoin any sibling ways where the parent id no longer exists
+  for (map<long, deque<long> >::iterator map_it = w.begin(); map_it != w.end(); ++map_it)
+  {
+    deque<long>& way_ids = map_it->second;
+    while (way_ids.size() > 1)
+      rejoinSiblings(way_ids);
+  }
+}
+
+void WayJoiner::rejoinSiblings(deque<long>& way_ids)
+{
+  WayMap ways = _map->getWays();
+  long start_id = 0,
+       end_id = 0;
+  size_t failure_count = 0;
+  deque<long> sorted;
+  while (!way_ids.empty() && failure_count < way_ids.size()) //  And some failsafe
+  {
+    long id = way_ids[0];
+    way_ids.pop_front();
+    WayPtr way = ways[id];
+    if (!way)
+      continue;
+    if (sorted.empty())
+    {
+      sorted.push_back(id);
+      start_id = way->getFirstNodeId();
+      end_id = way->getLastNodeId();
+    }
+    else
+    {
+      //  TODO: Check if one-way, if not check both ends
+      if (way->getFirstNodeId() == end_id)
+      {
+        sorted.push_back(id);
+        end_id = way->getLastNodeId();
+        failure_count = 0;
+      }
+      else if (way->getLastNodeId() == start_id)
+      {
+        sorted.push_front(id);
+        start_id = way->getFirstNodeId();
+        failure_count = 0;
+      }
+      else
+      {
+        way_ids.push_back(id);
+        failure_count++;
+      }
+    }
+  }
+  //  Iterate the sorted ways and merge them
+  if (sorted.size() > 1)
+  {
+    WayPtr parent = ways[sorted[0]];
+    for (size_t i = 1; i < sorted.size(); ++i)
+    {
+      joinWays(parent, ways[sorted[i]]);
+    }
+    ways[sorted[0]]->getTags().remove(MetadataTags::HootSplitParentId());
+  }
+//  ways[sorted[0]]->getTags().remove(MetadataTags::HootSplitParentId());
 }
 
 void WayJoiner::joinWays(const WayPtr &parent, const WayPtr &child)
@@ -102,15 +180,15 @@ void WayJoiner::joinWays(const WayPtr &parent, const WayPtr &child)
     parentFirst = false;
   else
     return;
-  //  Second check the tags to make sure that they are still compatible
-  if (pTags != cTags)
-  {
-    if (!pTags.dataOnlyEqual(cTags))
-    {
-      //  Tags aren't compatible, don't join
-      return;
-    }
-  }
+//  //  Second check the tags to make sure that they are still compatible
+//  if (pTags != cTags)
+//  {
+//    if (!pTags.dataOnlyEqual(cTags))
+//    {
+//      //  Tags aren't compatible, don't join
+//      return;
+//    }
+//  }
 
   Tags tags = TagMergerFactory::mergeTags(pTags, cTags, ElementType::Way);
 

@@ -51,6 +51,8 @@ private:
 
   void joinWays(const WayPtr& parent, const WayPtr& child);
 
+  void rejoinSiblings(std::deque<long>& way_ids);
+
   OsmMapPtr _map;
 };
 
