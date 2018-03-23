@@ -412,6 +412,13 @@ public:
   bool isLinearWaterway(const Element &e);
 
   /**
+   * Returns true if the element is a roundabout
+   *
+   * This is not an exhaustive check, feel free to add more criteria
+   */
+  bool isRoundabout(const Tags& tags, ElementType type);
+
+  /**
    * Returns true if the specified element is a multi-use building.
    */
   bool isMultiUseBuilding(const Element &e);
