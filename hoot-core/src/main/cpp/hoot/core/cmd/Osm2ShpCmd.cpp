@@ -44,7 +44,7 @@ public:
 
   Osm2ShpCmd() { }
 
-  virtual QString getName() const { return "osm2shp"; }
+  virtual QString getName() const { return "convert-osm2shp"; }
 
   virtual int runSimple(QStringList args)
   {

@@ -2,16 +2,16 @@
 
 === Description
 
-The +ogr2osm+  command reads data from one or more inputs and writes the result
+The +convert-ogr2osm+  command reads data from one or more inputs and writes the result
 to a _.osm.pbf_ file. For detailed information on the translation process please
-see the +ogr2osm+ command.  This is an alternative to the +ogr2osm+ command that
+see the +convert-ogr2osm+ command.  This is an alternative to the +convert-ogr2osm+ command that
 can handle arbitrarily large input files by performing the translation on a row
 by row basis. Unfortunately, this operation does not perform the node merge that
-+ogr2osm+ performs. For this step the +big-merge-nodes+ command is strongly
++convert-ogr2osm+ performs. For this step the +big-merge-nodes+ command is strongly
 recommended.
 
 * +translation+ - python script base name. This looks in the "translations"
-  directory and takes the same format translations file as ogr2osm.py. leave off
+  directory and takes the same format translations file as convert-ogr2osm.py. leave off
   the ".py" to use the files in PYTHONPATH or specify the relative or absolute
   path name with the ".py".
 * +output.osm+ - Output file name.

@@ -58,7 +58,7 @@ endif
 ###
 step1:
 ifeq ("$(outputtype)","wfs")
-	hoot osm2ogr $(REMOVE_REVIEW) -D ogr.writer.pre.layer.name=$(outputname)_ $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(INPUT_PATH)" $(OP_PG_URL)
+	hoot convert-osm2ogr $(REMOVE_REVIEW) -D ogr.writer.pre.layer.name=$(outputname)_ $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(INPUT_PATH)" $(OP_PG_URL)
 else ifeq ("$(outputtype)","osm")
 	mkdir -p "$(outputfolder)"
 	hoot convert $(OSM_OPTS) "$(INPUT_PATH)" "$(OP_OUTPUT)"
@@ -89,7 +89,7 @@ endif # Template Path
 endif # Translations TDSv40
 endif # Else
 endif # Append
-	hoot osm2ogr $(REMOVE_REVIEW) $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(INPUT_PATH)" "$(OP_OUTPUT)"
+	hoot convert-osm2ogr $(REMOVE_REVIEW) $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(INPUT_PATH)" "$(OP_OUTPUT)"
 	$(OP_ZIP)
 
 endif # Shape/FGDB

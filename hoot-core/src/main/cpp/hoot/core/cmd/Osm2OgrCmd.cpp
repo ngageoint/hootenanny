@@ -50,7 +50,7 @@ public:
 
   Osm2OgrCmd() { }
 
-  virtual QString getName() const { return "osm2ogr"; }
+  virtual QString getName() const { return "convert-osm2ogr"; }
 
   static QString opsKey() { return "osm2ogr.ops"; }
 

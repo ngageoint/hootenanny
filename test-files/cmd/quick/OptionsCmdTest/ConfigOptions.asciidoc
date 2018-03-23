@@ -12,7 +12,7 @@
 // * What does this configuration change?
 // * If relevant, what are the units of the config option (e.g. meters)?
 // * Where can the user go to get more information? Please reference the
-//   appropriate document. E.g. "See `ogr2osm` in the _Command Line
+//   appropriate document. E.g. "See `convert-ogr2osm` in the _Command Line
 //   Reference_ for more information."
 // * What other options may be of interest? E.g. "See also
 //   `big.perty.op.sigma`"
@@ -827,7 +827,7 @@ of assigning IDs within OSM.
 Example Usage:
 
 ----
-hoot ogr2osm -D id.generator=hoot::PositiveIdGenerator -D id.generator.node.start=100 -D id.generator.relation.start=200 -D id.generator.way.start=300 $HOOT_HOME/translations/Identity.js myoutput.osm myinput.osm
+hoot convert-ogr2osm -D id.generator=hoot::PositiveIdGenerator -D id.generator.node.start=100 -D id.generator.relation.start=200 -D id.generator.way.start=300 $HOOT_HOME/translations/Identity.js myoutput.osm myinput.osm
 ----
 
 === id.generator.node.start
@@ -1236,7 +1236,7 @@ RAM usage of applications in a shared server environment.
 * Data Type: double
 * Default Value: `1.0`
 
-When merging nodes during ogr2osm, determines what tolerance should be used for deciding two nodes
+When merging nodes during convert-ogr2osm, determines what tolerance should be used for deciding two nodes
 are identical. Units in meters and defaults to 1.0m.
 
 [[merger.creators]]
@@ -1509,7 +1509,7 @@ intelligently use indexes, others will simply filter features after reading from
 Example Usage:
 
 ----
-hoot ogr2osm -D ogr.reader.bounding.box=106.851,-6.160,107.052,-5.913 translations/Identity.js output.osm test-files/jakarta_raya_coastline.shp
+hoot convert-ogr2osm -D ogr.reader.bounding.box=106.851,-6.160,107.052,-5.913 translations/Identity.js output.osm test-files/jakarta_raya_coastline.shp
 ----
 
 === ogr.reader.bounding.box.latlng

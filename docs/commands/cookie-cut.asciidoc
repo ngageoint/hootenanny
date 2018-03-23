@@ -31,7 +31,7 @@ cookie-cut (cutter-shape) (dough) (output) [buffer] [--crop]
 
 --------------------------------------
 wget http://dcatlas.dcgis.dc.gov/catalog/download.asp?downloadID=88&downloadTYPE=ESRI
-hoot ogr2osm DcRoads DcBig.osm StreetSegmentLn.shp
+hoot convert-ogr2osm DcRoads DcBig.osm StreetSegmentLn.shp
 cp $HOOT_HOME/test-files/DcTigerRoads.osm DcSmall.osm
 # It is a good idea to manually verify the alpha shape for correctness after it
 # is generated. -15m works well for this square data, but will likely cause

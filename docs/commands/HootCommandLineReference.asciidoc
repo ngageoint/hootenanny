@@ -10,7 +10,7 @@ The base command line interface follows the following syntax:
 hoot (operation) [args...]
 -----
 
-Where +operation+ is an operation name such as +ogr2osm+ or +conflate+. The
+Where +operation+ is an operation name such as +convert-ogr2osm+ or +conflate+. The
 parenthesis around +operation+ show that the argument is required.
 
 +[args...]+ shows that there are zero or more arguments to the operation. The
@@ -49,11 +49,11 @@ include::model-rf-build.asciidoc[]
 include::multiary-conflate.asciidoc[]
 include::multiary-ingest.asciidoc[]
 include::names.asciidoc[]
-include::ogr2osm.asciidoc[]
+include::convert-ogr2osm.asciidoc[]
 include::optimize-network-conflation-options.asciidoc[]
 include::options.asciidoc[]
-include::osm2ogr.asciidoc[]
-include::osm2shp.asciidoc[]
+include::convert-osm2ogr.asciidoc[]
+include::convert-osm2shp.asciidoc[]
 include::paint-nodes.asciidoc[]
 include::pbf-add-header.asciidoc[]
 include::pbf-is-sorted.asciidoc[]

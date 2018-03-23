@@ -53,7 +53,7 @@ public:
   {
   }
 
-  virtual QString getName() const { return "ogr2osm"; }
+  virtual QString getName() const { return "convert-ogr2osm"; }
 
   static QString opsKey() { return "ogr2osm.ops"; }
 

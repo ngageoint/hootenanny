@@ -23,7 +23,7 @@ COMPARE_SHAPE=$HOOT_HOME/scripts/util/CompareShapefiles.py
 
 ##### Start Tests #####
 # Jam all of the shapefiles into one OSM file
-hoot ogr2osm $HOOT_OPT $TRANS $outputDir/new_TDSv61.osm $inputDir/*.shp # > tmp/TDSv61_to_OSM.txt
+hoot convert-ogr2osm $HOOT_OPT $TRANS $outputDir/new_TDSv61.osm $inputDir/*.shp # > tmp/TDSv61_to_OSM.txt
 
 # Uncomment this to update the OSM file if you edit the shapefiles or the translation file.
 #cp $outputDir/new_TDSv61.osm $inputDir/TDSv61.osm
@@ -33,18 +33,18 @@ hoot map-diff $outputDir/new_TDSv61.osm $inputDir/TDSv61.osm || diff $outputDir/
 
 # Make shapefiles
 # NOTE: These are 1 x FCODE / file and it assumes that the output dir doesn't have any shapefiles in it
-hoot osm2ogr $HOOT_OPT -D ogr.thematic.structure=false $TRANS $outputDir/new_TDSv61.osm $outputDir".shp" # > tmp/TDSv61_to_TDS.txt
+hoot convert-osm2ogr $HOOT_OPT -D ogr.thematic.structure=false $TRANS $outputDir/new_TDSv61.osm $outputDir".shp" # > tmp/TDSv61_to_TDS.txt
 
 
 # Make shapefiles - Thematic
-# hoot osm2ogr $HOOT_OPT $TRANS $outputDir/new_TDSv61.osm $outputDir/"new_files.shp" > tmp/TDSv61_to_TDS2.txt
-# hoot ogr2osm $HOOT_OPT $TRANS $outputDir/second_TDSv61.osm $outputDir/new_files/*.shp > tmp/TDSv61_second_to_OSM.txt
+# hoot convert-osm2ogr $HOOT_OPT $TRANS $outputDir/new_TDSv61.osm $outputDir/"new_files.shp" > tmp/TDSv61_to_TDS2.txt
+# hoot convert-ogr2osm $HOOT_OPT $TRANS $outputDir/second_TDSv61.osm $outputDir/new_files/*.shp > tmp/TDSv61_second_to_OSM.txt
 
 ##################
 # More testing required to get this section of tests to work. In particular, createing two features from one is a problem
 
 # Jam all of the new shapefiles into one OSM file
-# hoot ogr2osm $HOOT_OPT $TRANS $outputDir/second_TDSv61.osm $outputDir/*.shp > tmp/TDSv61_to_second_OSM.txt
+# hoot convert-ogr2osm $HOOT_OPT $TRANS $outputDir/second_TDSv61.osm $outputDir/*.shp > tmp/TDSv61_to_second_OSM.txt
 
 # echo
 # echo "Compare the second with orig"
