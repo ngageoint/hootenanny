@@ -1,6 +1,8 @@
 # Run a Hootenanny translation using the GbdxTaskInterface
 
 import os
+import csv
+import json
 import subprocess
 import shutil
 import zipfile
@@ -50,12 +52,16 @@ class HootGbdxTask(GbdxTaskInterface):
 
 
 
-    def convertFileJson(self,inputFile,outputFile):
+    def convertFileJson(self,envVars,inputFile,outputFile):
+        print('Skipping JSON')
+        return
+
         hootCmd = ['hoot','convert','--error',
                 '-D','convert.ops=hoot::TranslationOp',
                 '-D','json.add.bbox=true',
                 '-D','osm.map.writer.skip.empty.map=true',
-                '-D','translation.script=/var/lib/hootenanny/translations/GBDX.js']
+                '-D','translation.script=/home/matt/dg/gbdx/hoot/translations/GBDX.js']
+                # '-D','translation.script=/var/lib/hootenanny/translations/GBDX.js']
 
         hootCmd.append(inputFile)
         hootCmd.append(outputFile)
@@ -80,12 +86,17 @@ class HootGbdxTask(GbdxTaskInterface):
         # End convertFileJson
 
 
-    def convertFileXml(self,inputFile,outputFile):
+    def convertFileXml(self,envVars,inputFile,outputFile):
+        override = 'translation.override=' + json.dumps(envVars)
+
         hootCmd = ['hoot','convert','--error',
                 '-D','convert.ops=hoot::TranslationOp',
                 '-D','json.add.bbox=true',
                 '-D','osm.map.writer.skip.empty.map=true',
-                '-D','translation.script=/var/lib/hootenanny/translations/GBDX_XML.js']
+                '-D','ogr.debug.dumptags=true',
+                '-D',override,
+                '-D','translation.script=/home/matt/dg/gbdx/hoot/translations/GBDX_XML_Shape.js']
+                # '-D','translation.script=/var/lib/hootenanny/translations/GBDX_XML.js']
 
         hootCmd.append(inputFile)
         hootCmd.append(outputFile)
@@ -93,7 +104,7 @@ class HootGbdxTask(GbdxTaskInterface):
         hootOut = ''
 
         # Debug
-        # print('Hoot: %s') % (' '.join(hootCmd))
+        print('Hoot: %s') % (' '.join(hootCmd))
 
         # Very basic error checking
         try:
@@ -103,6 +114,7 @@ class HootGbdxTask(GbdxTaskInterface):
         except subprocess.CalledProcessError, e:
             return e.output
 
+        print('\nHootOut: {}'.format(hootOut))
         # with "--error" the Hoot command shoud not have any output. If it does then
         # it is an error.
         if len(hootOut) > 0:
@@ -110,43 +122,44 @@ class HootGbdxTask(GbdxTaskInterface):
         # End convertFileXml
 
 
-    def processGeoJsonFiles(self,inputDir,outputDirJson,outputDirXml):
-        fList = self.findFiles(inputDir,['geojson'])
+    def processGeoJsonFiles(self,inputDir,fList,envVars,outputDirJson,outputDirXml):
+        #fList = self.findFiles(inputDir,['geojson'])
 
         #print 'Processing GeoJSON: Start'
         #print 'GeoJSON List: {}\n'.format(fList)
 
-        for inputFile in fList['geojson']:
+        for inputFile in fList:
 
-            #print 'Processing: {}'.format(inputFile)
+            print 'Processing: {}'.format(inputFile)
 
             fName = os.path.basename(inputFile)
 
             # outputFile = self.checkFile(os.path.join(outputDir,fName))
             # returnText = self.convertFile(inputFile,outputFile)
-            returnTextJson = self.convertFileJson(inputFile,outputDirJson)
+            returnTextJson = self.convertFileJson(envVars,inputFile,outputDirJson)
             if returnTextJson is not None:
                 self.status = 'failed'
                 self.reason = returnTextJson
 
-            returnTextXml = self.convertFileXml(inputFile,outputDirXml)
+            returnTextXml = self.convertFileXml(envVars,inputFile,outputDirXml)
             if returnTextXml is not None:
                 self.status = 'failed'
-                self.reason = returnTextJson + ';' + returnTextXml
+                # self.reason = ';' + returnTextXml
+                self.reason = str(returnTextJson) + ';' + returnTextXml
         #print 'Processing GeoJSON: End'
         # End processGeoJsonFiles
 
 
-    def processJsonFiles(self,inputDir,outputDirJson,outputDirXml):
+    def processJsonFiles(self,inputDir,fList,envVars,outputDirJson,outputDirXml):
         tmpInName = self.checkFile(os.path.join(inputDir,'hootIn%s.geojson' % os.getpid()))
         # tmpOutName = self.checkFile(os.path.join(outputDir,'hootOut%s.geojson' % os.getpid()))
         #tmpOutName = self.checkFile(os.path.join(outputDir,'hootOut%s.geojson' % os.getpid()))
-        fList = self.findFiles(inputDir,['json'])
+        #fList = self.findFiles(inputDir,['json'])
 
         # print 'Processing JSON: Start'
         # print('JSON List: %s\n' % fList)
 
-        for inputFile in fList['json']:
+        for inputFile in fList:
 
             #print 'Processing: {}'.format(inputFile)
 
@@ -162,15 +175,15 @@ class HootGbdxTask(GbdxTaskInterface):
 
             # Process the file and output it to the tmp Output geojson name
             # returnText = self.convertFile(tmpInName,tmpOutName)
-            returnTextJson = self.convertFileJson(tmpInName,outputDirJson)
+            returnTextJson = self.convertFileJson(envVars,tmpInName,outputDirJson)
             if returnTextJson is not None:
                 self.status = 'failed'
                 self.reason = returnTextJson
 
-            returnTextXml = self.convertFileXml(tmpInName,outputDirXml)
+            returnTextXml = self.convertFileXml(envVars,tmpInName,outputDirXml)
             if returnTextXml is not None:
                 self.status = 'failed'
-                self.reason = returnTextJson + ';' + returnTextXml
+                self.reason = str(returnTextJson) + ';' + returnTextXml
 
             # Make sure that we got some output before trying to do anything with it.
             # if os.path.isfile(tmpOutName):
@@ -185,15 +198,15 @@ class HootGbdxTask(GbdxTaskInterface):
         # End processJsonFiles
 
 
-    def processZipFiles(self,inputDir,outputDirJson,outputDirXml):
+    def processZipFiles(self,fList,envVars,inputDir,outputDirJson,outputDirXml):
         tmpDirName = self.checkFile(os.path.join(inputDir,'hoot%s' % os.getpid()))
-        fList = self.findFiles(inputDir,['zip'])
+        #fList = self.findFiles(inputDir,['zip'])
         # print '\nProcessing Zip: Start'
         # print '  Zip inputDir: {}'.format(inputDir)
         # print '  Zip TmpDir: {}'.format(tmpDirName)
         # print '  Zip List: {}\n'.format(fList)
 
-        for inputFile in fList['zip']:
+        for inputFile in fList:
             # print 'Processing Zip File: {}'.format(inputFile)
     
             # Defensive cleaning 
@@ -245,6 +258,24 @@ class HootGbdxTask(GbdxTaskInterface):
         # End processZipFiles
 
 
+    def processProperties(self,filename):
+        reader = csv.reader(open(filename,'rb'), delimiter='=')
+        print('Mapping Properties: {}'.format(filename))
+
+        eVars = {}
+        for (rawKey,value) in reader:
+            key = rawKey.split('.')[1]
+            eVars[key] = value
+
+        # Now clean up the env vars
+#        if ()
+
+        return eVars
+
+
+    # End processPlist
+
+
     def invoke(self):
         inputDir = self.get_input_data_port('geojson')
 
@@ -283,13 +314,32 @@ class HootGbdxTask(GbdxTaskInterface):
         hootWorkDirXml = workDirXml + '.gxml'
 
         # Check if we have something to work with
-        tList = self.findFiles(inputDir,['geojson','json','zip'])
+        fileList = self.findFiles(inputDir,['geojson','json','shp','zip','properties'])
+
+        envVars = {}
+        if (fileList['properties']):
+            envVars = self.processProperties(fileList['properties'][0])
+            print(envVars)
+
 
         # Now go looking for files to convert
-        self.processGeoJsonFiles(inputDir,hootWorkDirJson,hootWorkDirXml)
-        self.processJsonFiles(inputDir,hootWorkDirJson,hootWorkDirXml)
-        self.processZipFiles(inputDir,hootWorkDirJson,hootWorkDirXml)
+        if (fileList['geojson']):
+            print('Processing: {}'.format(fileList['geojson']))
+            self.processGeoJsonFiles(inputDir,fileList['geojson'],envVars,hootWorkDirJson,hootWorkDirXml)
 
+        if (fileList['json']):
+            print('Processing: {}'.format(fileList['json']))
+            self.processJsonFiles(inputDir,fileList['json'],envVars,hootWorkDirJson,hootWorkDirXml)
+        
+        if (fileList['zip']):
+            print('Processing: {}'.format(fileList['zip']))
+            self.processZipFiles(inputDir,fileList['zip'],envVars,hootWorkDirJson,hootWorkDirXml)
+
+        if (fileList['shp']):
+            print('Processing: {}'.format(fileList['shp']))
+            self.processGeoJsonFiles(inputDir,fileList['shp'],envVars,hootWorkDirJson,hootWorkDirXml)
+
+        # Zip up the output.
         tCwd = os.getcwd()
 
         # Zip up what we translated
