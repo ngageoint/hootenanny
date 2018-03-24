@@ -104,7 +104,7 @@ class HootGbdxTask(GbdxTaskInterface):
         hootOut = ''
 
         # Debug
-        print('Hoot: %s') % (' '.join(hootCmd))
+        #print('Hoot: %s') % (' '.join(hootCmd))
 
         # Very basic error checking
         try:
@@ -115,6 +115,7 @@ class HootGbdxTask(GbdxTaskInterface):
             return e.output
 
         print('\nHootOut: {}'.format(hootOut))
+        
         # with "--error" the Hoot command shoud not have any output. If it does then
         # it is an error.
         if len(hootOut) > 0:
@@ -264,7 +265,11 @@ class HootGbdxTask(GbdxTaskInterface):
 
         eVars = {}
         for (rawKey,value) in reader:
-            key = rawKey.split('.')[1]
+            if (rawKey.find('.') > -1):
+                key = rawKey.split('.')[1]
+            else:
+                key = rawKey
+
             eVars[key] = value
 
         # Now clean up the env vars
@@ -319,8 +324,7 @@ class HootGbdxTask(GbdxTaskInterface):
         envVars = {}
         if (fileList['properties']):
             envVars = self.processProperties(fileList['properties'][0])
-            print(envVars)
-
+         
 
         # Now go looking for files to convert
         if (fileList['geojson']):
