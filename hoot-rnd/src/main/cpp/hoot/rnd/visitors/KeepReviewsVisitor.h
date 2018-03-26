@@ -61,7 +61,7 @@ public:
   virtual QString getName() const { return "Keep Reviews"; }
 
   virtual QString getDescription() const
-  { return " Remove all elements that are not review relations"; }
+  { return "Remove all elements that are not review relations"; }
 
 private:
 

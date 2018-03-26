@@ -49,7 +49,7 @@ public:
   virtual QString getName() const { return "Implicit POI Tagger"; }
 
   virtual QString getDescription() const
-  { return "Adds tags implicitly derived from POI names to POIs"; }
+  { return "Adds tags to POIs implicitly derived from their names"; }
 
 protected:
 

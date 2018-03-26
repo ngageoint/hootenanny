@@ -59,7 +59,7 @@ public:
   virtual QString getName() const { return "Remove Ref 2 Tag Multiple Criteria"; }
 
   virtual QString getDescription() const
-  { return "Removes REF2 tags when multiple criteria are met for for both the REF1 and REF2 elements"; }
+  { return "Removes REF2 tags when multiple criteria are met for both the REF1 and REF2 elements"; }
 
 private:
 

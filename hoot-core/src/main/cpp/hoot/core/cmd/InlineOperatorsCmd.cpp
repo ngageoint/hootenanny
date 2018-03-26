@@ -33,6 +33,7 @@
 #include <hoot/core/filters/ElementCriterion.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
@@ -72,24 +73,28 @@ public:
     return c1->getName() < c2->getName();
   }
 
-  static bool visitorCompare(const std::string& n1, const std::string& n2)
+  static bool visitorCompare1(const std::string& n1, const std::string& n2)
   {
     boost::shared_ptr<ElementVisitor> c1(
       Factory::getInstance().constructObject<ElementVisitor>(n1));
     boost::shared_ptr<ElementVisitor> c2(
       Factory::getInstance().constructObject<ElementVisitor>(n2));
-    if (c1.get() && c2.get())
-    {
-      return c1->getName() < c2->getName();
-    }
-    else
-    {
-      boost::shared_ptr<ConstElementVisitor> c1b(
-        Factory::getInstance().constructObject<ConstElementVisitor>(n1));
-      boost::shared_ptr<ConstElementVisitor> c2b(
-        Factory::getInstance().constructObject<ConstElementVisitor>(n2));
-      return c1b->getName() < c2b->getName();
-    }
+    return c1->getName() < c2->getName();
+  }
+
+  static bool visitorCompare2(const std::string& n1, const std::string& n2)
+  {
+    LOG_VARD(n1);
+    LOG_VARD(n2);
+    boost::shared_ptr<ConstElementVisitor> c1(
+      Factory::getInstance().constructObject<ConstElementVisitor>(n1));
+    boost::shared_ptr<ConstElementVisitor> c2(
+      Factory::getInstance().constructObject<ConstElementVisitor>(n2));
+    LOG_VARD(c1.get());
+    LOG_VARD(c2.get());
+    LOG_VARD(c1->getName());
+    LOG_VARD(c2->getName());
+    return c1->getName() < c2->getName();
   }
 
   virtual int runSimple(QStringList args)
@@ -119,8 +124,10 @@ public:
       parsedArgs.append("--criteria");
     }
 
+    DisableLog dl;
+
     //the size of the longest operator name plus a small buffer
-    const int indent = 35;
+    const int indent = 42;
     for (int i = 0; i < parsedArgs.size(); i++)
     {
       const QString arg = parsedArgs.at(i);
@@ -135,9 +142,10 @@ public:
             Factory::getInstance().constructObject<OsmMapOperation>(cmds[i]));
           if (!c->getName().isEmpty() && !c->getDescription().isEmpty())
           {
+            LOG_VARD(c->getName());
             const int spaceSize = indent - c->getName().size();
             const QString line =
-              "  " + c->getName() + QString(spaceSize, ' ') + "operation     " +
+              "  " + c->getName() + QString(spaceSize, ' ') + "operation         " +
               c->getDescription();
             std::cout << line << std::endl;
           }
@@ -148,37 +156,41 @@ public:
       {
         std::vector<std::string> cmds1 =
           Factory::getInstance().getObjectNamesByBase(ElementVisitor::className());
-        std::vector<std::string> cmds2 =
-          Factory::getInstance().getObjectNamesByBase(ConstElementVisitor::className());
-        cmds1.insert(cmds1.end(), cmds2.begin(), cmds2.end());
-        std::sort(cmds1.begin(), cmds1.end(), visitorCompare);
+        std::sort(cmds1.begin(), cmds1.end(), visitorCompare1);
         for (size_t i = 0; i < cmds1.size(); i++)
         {
           boost::shared_ptr<ElementVisitor> c(
             Factory::getInstance().constructObject<ElementVisitor>(cmds1[i]));
-          if (c.get())
+          if (!c->getName().isEmpty() && !c->getDescription().isEmpty())
           {
-            if (!c->getName().isEmpty() && !c->getDescription().isEmpty())
-            {
-              const int spaceSize = indent - c->getName().size();
-              const QString line =
-                "  " + c->getName() + QString(spaceSize, ' ') + "visitor     " +
-                c->getDescription();
-              std::cout << line << std::endl;
-            }
+            LOG_VARD(c->getName());
+            const int spaceSize = indent - c->getName().size();
+            const QString line =
+              "  " + c->getName() + QString(spaceSize, ' ') + "visitor           " +
+              c->getDescription();
+            std::cout << line << std::endl;
           }
-          else
+        }
+        std::cout << std::endl;
+
+        std::vector<std::string> cmds2 =
+          Factory::getInstance().getObjectNamesByBase(ConstElementVisitor::className());
+        LOG_VARD(cmds2);
+        std::sort(cmds2.begin(), cmds2.end(), visitorCompare2);
+        LOG_VARD(cmds2);
+        for (size_t i = 0; i < cmds2.size(); i++)
+        {
+          LOG_VARD(cmds2[i]);
+          boost::shared_ptr<ConstElementVisitor> c(
+            Factory::getInstance().constructObject<ConstElementVisitor>(cmds2[i]));
+          if (!c->getName().isEmpty() && !c->getDescription().isEmpty())
           {
-            boost::shared_ptr<ElementVisitor> c2(
-              Factory::getInstance().constructObject<ElementVisitor>(cmds1[i]));
-            if (!c2->getName().isEmpty() && !c2->getDescription().isEmpty())
-            {
-              const int spaceSize = indent - c->getName().size();
-              const QString line =
-                "  " + c2->getName() + QString(spaceSize, ' ') + "visitor     " +
-                c2->getDescription();
-              std::cout << line << std::endl;
-            }
+            LOG_VARD(c->getName());
+            const int spaceSize = indent - c->getName().size();
+            const QString line =
+              "  " + c->getName() + QString(spaceSize, ' ') + "visitor (const)   " +
+              c->getDescription();
+            std::cout << line << std::endl;
           }
         }
         std::cout << std::endl;
@@ -194,9 +206,10 @@ public:
             Factory::getInstance().constructObject<ElementCriterion>(cmds[i]));
           if (!c->getName().isEmpty() && !c->getDescription().isEmpty())
           {
+            LOG_VARD(c->getName());
             const int spaceSize = indent - c->getName().size();
             const QString line =
-              "  " + c->getName() + QString(spaceSize, ' ') + "criterion     " +
+              "  " + c->getName() + QString(spaceSize, ' ') + "criterion         " +
               c->getDescription();
             std::cout << line << std::endl;
           }

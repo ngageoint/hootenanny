@@ -54,9 +54,15 @@ _onlyUpdateIfStatusInvalid(onlyUpdateIfStatusInvalid)
 void StatusUpdateVisitor::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
-  _status = Status::fromString(configOptions.getStatusUpdateVisitorStatus());
   _onlyUpdateIfStatusInvalid = configOptions.getStatusUpdateVisitorOnlyUpdateInvalidStatus();
-
+  if (configOptions.getStatusUpdateVisitorStatus().trimmed().isEmpty())
+  {
+    _status = Status::Invalid;
+  }
+  else
+  {
+    _status = Status::fromString(configOptions.getStatusUpdateVisitorStatus());
+  }
   LOG_VART(_status);
   LOG_VART(_onlyUpdateIfStatusInvalid);
 }
