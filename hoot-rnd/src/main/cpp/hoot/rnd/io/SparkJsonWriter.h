@@ -90,7 +90,11 @@ public:
    */
   virtual void writePartial(const ConstRelationPtr&) { throw NotImplementedException(); }
 
+  //no point in showing this in the format list at this point, since its not actively maintained
+  virtual QString supportedFormats() { return ""; }
+
 private:
+
   boost::shared_ptr<QFile> _fp;
 
   SearchBoundsCalculatorPtr _bounds;

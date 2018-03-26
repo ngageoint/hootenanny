@@ -38,7 +38,7 @@ HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveMissingElementsVisitor)
 
 RemoveMissingElementsVisitor::RemoveMissingElementsVisitor()
 {
-  _v =boost::shared_ptr<ReportMissingElementsVisitor>(new ReportMissingElementsVisitor(true));
+  _v = boost::shared_ptr<ReportMissingElementsVisitor>(new ReportMissingElementsVisitor(true));
 }
 
 void RemoveMissingElementsVisitor::visit(const ConstElementPtr& e)

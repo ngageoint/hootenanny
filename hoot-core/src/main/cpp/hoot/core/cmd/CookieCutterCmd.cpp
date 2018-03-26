@@ -49,7 +49,7 @@ public:
 
   virtual QString getName() const { return "cookie-cut"; }
 
-  virtual QString getShortDescription() const
+  virtual QString getDescription() const
   { return "Removes a 'cutter' shape from the contents of a 'dough' input"; }
 
   int runSimple(QStringList args)

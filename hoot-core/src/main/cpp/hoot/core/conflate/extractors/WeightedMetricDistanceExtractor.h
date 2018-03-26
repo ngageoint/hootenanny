@@ -41,6 +41,7 @@ namespace hoot
 class WeightedMetricDistanceExtractor : public WayFeatureExtractor, public Configurable
 {
 public:
+
   static std::string className() { return "hoot::WeightedMetricDistanceExtractor"; }
 
   WeightedMetricDistanceExtractor(ValueAggregatorPtr wayAgg, ValueAggregatorPtr pointAgg,
@@ -59,7 +60,11 @@ public:
 
   void setSearchRadius(const double radius);
 
+  virtual QString getDescription() const
+  { return "Similar to Metric Distance as described in [1]. 1. Savary & Zeitouni, 2005"; }
+
 protected:
+
   double _extract(const OsmMap& /*map*/, const ConstWayPtr& w1, const ConstWayPtr& w2) const;
 
   boost::shared_ptr<ValueAggregator> _pointAgg;

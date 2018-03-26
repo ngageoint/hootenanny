@@ -32,8 +32,6 @@
 namespace hoot
 {
 
-/**
- */
 class EuclideanDistanceExtractor : public AbstractDistanceExtractor
 {
 public:
@@ -43,6 +41,9 @@ public:
     const boost::shared_ptr<const Element>& candidate) const;
 
   virtual std::string getClassName() const { return EuclideanDistanceExtractor::className(); }
+
+  virtual QString getDescription() const
+  { return "Calculates the Euclidean distance between two features"; }
 };
 
 }

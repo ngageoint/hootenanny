@@ -52,6 +52,11 @@ public:
   virtual void setOsmMap(const OsmMap* /*map*/) { assert(false); }
 
   std::vector<long>& getIntersections() { return _ids; }
+
+  virtual QString getName() const { return "Find Intersections"; }
+
+  virtual QString getDescription() const { return "Identifies intersections"; }
+
 private:
 
   OsmMap* _map;

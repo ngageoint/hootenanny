@@ -44,6 +44,7 @@ class TranslatedTagCountVisitor : public ConstElementVisitor, public ConstOsmMap
   public SingleStatistic
 {
 public:
+
   static std::string className() { return "hoot::TranslatedTagCountVisitor"; }
 
   TranslatedTagCountVisitor() {}
@@ -65,6 +66,11 @@ public:
   virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
   virtual void visit(const ConstElementPtr& e);
+
+  virtual QString getName() const { return "Count Translated Tags"; }
+
+  virtual QString getDescription() const
+  { return "Counts the number of tags that were able to be translated"; }
 
 private:
 

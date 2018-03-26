@@ -35,11 +35,16 @@ namespace hoot
 class AddGeometryTypeVisitor : public ElementOsmMapVisitor
 {
 public:
+
   static std::string className() { return "hoot::AddGeometryTypeVisitor"; }
 
   AddGeometryTypeVisitor();
 
   virtual void visit(const boost::shared_ptr<Element>& e);
+
+  virtual QString getName() const { return "Add Geometry Type"; }
+
+  virtual QString getDescription() const { return "Adds geometry types"; }
 
 };
 

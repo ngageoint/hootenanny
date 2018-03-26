@@ -39,9 +39,6 @@
 namespace hoot
 {
 
-/**
- *
- */
 class RemoveReviewsByEidOp : public ConstOsmMapOperation, public ConstElementConsumer
 {
 public:
@@ -67,7 +64,13 @@ public:
 
   virtual void apply(const OsmMapPtr& map);
 
+  virtual QString getName() const { return "Remove Reviews By Element ID"; }
+
+  virtual QString getDescription() const
+  { return "Removes reviews associated with specified element IDs"; }
+
 private:
+
   ElementId _eid;
   bool _clearAndRemove;
 };

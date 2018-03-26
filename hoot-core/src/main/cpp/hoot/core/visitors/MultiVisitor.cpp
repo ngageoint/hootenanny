@@ -33,7 +33,6 @@ namespace hoot
 
 MultiVisitor::MultiVisitor()
 {
-  // blank
 }
 
 void MultiVisitor::visit(const boost::shared_ptr<Element>& e)
@@ -44,4 +43,4 @@ void MultiVisitor::visit(const boost::shared_ptr<Element>& e)
   }
 }
 
-} // namespace hoot
+}

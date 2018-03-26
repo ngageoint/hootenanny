@@ -60,6 +60,8 @@ public:
   virtual double extract(const OsmMap& map, const ConstElementPtr& poi,
                          const ConstElementPtr& poly) const;
 
+  virtual QString getDescription() const
+  { return "Calculates the convex hull distance between a poi and a polygon"; }
 };
 
 }

@@ -79,9 +79,9 @@ ImplicitTaggerBase::~ImplicitTaggerBase()
 {
   if (_ruleReader)
   {
-    LOG_VAR(_ruleReader->getTagsCacheSize());
-    LOG_VAR(_ruleReader->getFirstRoundTagsCacheHits());
-    LOG_VAR(_ruleReader->getSecondRoundTagsCacheHits());
+    LOG_VARD(_ruleReader->getTagsCacheSize());
+    LOG_VARD(_ruleReader->getFirstRoundTagsCacheHits());
+    LOG_VARD(_ruleReader->getSecondRoundTagsCacheHits());
     _ruleReader->close();
   }
 

@@ -56,7 +56,7 @@ public:
 
   virtual QString getName() const { return "union-polygons"; }
 
-  virtual QString getShortDescription() const { return "Combines polygons"; }
+  virtual QString getDescription() const { return "Combines polygons"; }
 
   virtual int runSimple(QStringList args)
   {

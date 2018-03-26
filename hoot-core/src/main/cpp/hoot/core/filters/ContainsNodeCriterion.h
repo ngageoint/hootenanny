@@ -55,6 +55,11 @@ public:
   ElementCriterionPtr clone()
   { return ElementCriterionPtr(new ContainsNodeCriterion(_nodeId)); }
 
+  virtual QString getName() const { return "Contains Node"; }
+
+  virtual QString getDescription() const
+  { return "Determines if an element contains the given node ID"; }
+
 private:
 
   long _nodeId;

@@ -44,6 +44,7 @@ HOOT_FACTORY_REGISTER(ConstElementVisitor, KeepNodesVisitor)
 class FindAllNodesVisitor : public ConstElementVisitor
 {
 public:
+
   FindAllNodesVisitor(OsmMapPtr map) : _map(map) {}
 
   virtual void visit(const ConstElementPtr& e)
@@ -62,6 +63,7 @@ public:
   const set<ElementId>& getNodes() const { return _nodes; }
 
 private:
+
   OsmMapPtr _map;
 
   set<ElementId> _nodes;

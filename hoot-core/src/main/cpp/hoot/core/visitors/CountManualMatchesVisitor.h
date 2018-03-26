@@ -59,6 +59,10 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
+  virtual QString getName() const { return "Count Manual Matches"; }
+
+  virtual QString getDescription() const { return "Counts the number of manual matches"; }
+
 private:
 
   const OsmMap* _map;

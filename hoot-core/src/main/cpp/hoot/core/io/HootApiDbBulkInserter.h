@@ -78,6 +78,8 @@ public:
   void setOverwriteMap(bool overwriteMap) { _overwriteMap = overwriteMap; }
   void setCopyBulkInsertActivated(bool activated) { _copyBulkInsertActivated = activated; }
 
+  virtual QString supportedFormats() { return "hootapidb://"; }
+
 protected:
 
   virtual unsigned int _numberOfFileDataPasses() const;

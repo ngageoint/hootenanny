@@ -56,7 +56,7 @@ public:
 
   virtual QString getName() const { return "help"; }
 
-  virtual QString getShortDescription() const { return "Displays help documentation"; }
+  virtual QString getDescription() const { return "Displays help documentation"; }
 
   int runSimple(QStringList args)
   {
@@ -121,7 +121,7 @@ private:
       {
         //spacing here is roughly the size of the longest command name plus a small buffer
         const int spaceSize = 30 - c->getName().size();
-        const QString line = c->getName() + QString(spaceSize, ' ') + c->getShortDescription();
+        const QString line = c->getName() + QString(spaceSize, ' ') + c->getDescription();
         cout << "  " << line << endl;
       }
     }

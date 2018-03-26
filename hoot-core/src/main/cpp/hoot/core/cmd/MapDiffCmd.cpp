@@ -49,7 +49,7 @@ public:
 
   virtual QString getName() const { return "map-diff"; }
 
-  virtual QString getShortDescription() const
+  virtual QString getDescription() const
   { return "Calculates the difference between two maps"; }
 
   virtual int runSimple(QStringList args)

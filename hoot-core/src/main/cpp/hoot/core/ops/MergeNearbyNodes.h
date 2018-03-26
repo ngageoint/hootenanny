@@ -68,6 +68,10 @@ public:
 
   virtual void writeObject(QDataStream& os) const;
 
+  virtual QString getName() const { return "Merge Nearby Nodes"; }
+
+  virtual QString getDescription() const { return "Merges nearby nodes together"; }
+
 protected:
 
   boost::shared_ptr<OsmMap> _map;

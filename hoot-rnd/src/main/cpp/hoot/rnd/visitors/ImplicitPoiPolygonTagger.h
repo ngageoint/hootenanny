@@ -48,6 +48,11 @@ public:
   ImplicitPoiPolygonTagger();
   ImplicitPoiPolygonTagger(const QString databasePath);
 
+  virtual QString getName() const { return "Implicit POI/Polygon Tagger"; }
+
+  virtual QString getDescription() const
+  { return "Adds tags to POIs and polygons implicitly derived from their names"; }
+
 protected:
 
   virtual bool _visitElement(const ElementPtr& e);

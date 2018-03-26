@@ -49,6 +49,8 @@ public:
 
   virtual void open(QString urlStr);
 
+  virtual QString supportedFormats() { return "osmapidb://"; }
+
 protected:
 
   virtual ElementId _mapElementId(const OsmMap& map, ElementId oldId);

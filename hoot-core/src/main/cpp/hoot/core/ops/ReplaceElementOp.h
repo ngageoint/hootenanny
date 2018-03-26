@@ -56,6 +56,7 @@ namespace hoot
 class ReplaceElementOp : public ConstOsmMapOperation, public ConstElementConsumer
 {
 public:
+
   static std::string className() { return "hoot::ReplaceElementOp"; }
 
   /**
@@ -84,7 +85,12 @@ public:
 
   virtual void apply(const OsmMapPtr& map);
 
+  virtual QString getName() const { return "Replace Element"; }
+
+  virtual QString getDescription() const { return "Replaces one element with another"; }
+
 private:
+
   ElementId _from, _to;
   bool _clearAndRemove;
 };

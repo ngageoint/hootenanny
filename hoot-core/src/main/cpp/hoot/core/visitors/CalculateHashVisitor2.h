@@ -48,6 +48,10 @@ public:
   virtual void visit(const ElementPtr& e);
 
   virtual QString toString() { return "hoot::CalculateHashVisitor2"; }
+
+  virtual QString getName() const { return "Calculate Element Hash 2"; }
+
+  virtual QString getDescription() const { return "Calculates unique hash values for elements"; }
 };
 
 }

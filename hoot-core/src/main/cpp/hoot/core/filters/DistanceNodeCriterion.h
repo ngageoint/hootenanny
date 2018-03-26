@@ -41,8 +41,7 @@ namespace hoot
 class Element;
 
 /**
- * isSatisfied returns true if an element is
- * within the specified distance of the given center
+ * isSatisfied returns true if an element is within the specified distance of the given center
  */
 class DistanceNodeCriterion : public ElementCriterion
 {
@@ -57,6 +56,11 @@ public:
 
   ElementCriterionPtr clone()
   { return ElementCriterionPtr(new DistanceNodeCriterion(_center, _distance)); }
+
+  virtual QString getName() const { return "Node Distance"; }
+
+  virtual QString getDescription() const
+  { return "Returns true if an element is within the specified distance of the given center"; }
 
 private:
 

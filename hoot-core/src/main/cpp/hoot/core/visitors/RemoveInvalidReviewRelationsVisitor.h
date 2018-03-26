@@ -45,6 +45,9 @@ public:
 
   virtual void visit(const ElementPtr& e);
 
+  virtual QString getName() const { return "Remove Invalid Review Relations"; }
+
+  virtual QString getDescription() const { return "Removes empty review relations"; }
 };
 
 }

@@ -39,9 +39,6 @@
 namespace hoot
 {
 
-/**
- * Counts the number of elements.
- */
 class MaxIdVisitor : public ConstElementVisitor, public SingleStatistic
 {
 public:
@@ -55,6 +52,11 @@ public:
   double getStat() const { return _maxId; }
 
   virtual void visit(const ConstElementPtr& e);
+
+  virtual QString getName() const { return "Maximum Element ID"; }
+
+  virtual QString getDescription() const
+  { return "Returns the largest element ID value found"; }
 
 private:
 

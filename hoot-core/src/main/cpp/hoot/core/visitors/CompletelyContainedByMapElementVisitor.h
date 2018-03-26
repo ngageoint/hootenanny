@@ -55,6 +55,7 @@ class Way;
 class CompletelyContainedByMapElementVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
 {
 public:
+
   static std::string className() { return "hoot::CompletelyContainedByMapElementVisitor"; }
 
   CompletelyContainedByMapElementVisitor();
@@ -70,7 +71,13 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
+  virtual QString getName() const { return "Completely Contained By Map"; }
+
+  virtual QString getDescription() const
+  { return "Determines if a feature is completely contained within a map"; }
+
 protected:
+
   const OsmMap* _map;
   bool _complete;
 

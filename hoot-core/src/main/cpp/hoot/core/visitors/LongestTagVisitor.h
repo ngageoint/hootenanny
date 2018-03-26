@@ -36,10 +36,6 @@
 namespace hoot
 {
 
-/**
- * Sums the length of all the ways. The map projection is used so to get meters the map must be
- * first reprojected into meters.
- */
 class LongestTagVisitor : public ConstElementVisitor, public SingleStatistic
 {
 public:
@@ -55,6 +51,11 @@ public:
   QString getLongestTag() const { return _tag; }
 
   virtual void visit(const ConstElementPtr& e);
+
+  virtual QString getName() const { return "Longest Tag"; }
+
+  virtual QString getDescription() const
+  { return "Finds the tag with the longest value character size"; }
 
 private:
 

@@ -50,7 +50,7 @@ public:
 
   virtual QString getName() const { return "clean"; }
 
-  virtual QString getShortDescription() const
+  virtual QString getDescription() const
   { return "Corrects common erroneous map data scenarios"; }
 
   virtual int runSimple(QStringList args)

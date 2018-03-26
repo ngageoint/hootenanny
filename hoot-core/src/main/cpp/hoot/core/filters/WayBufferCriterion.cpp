@@ -95,7 +95,6 @@ bool WayBufferCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) 
 
     if (ls2->getEnvelopeInternal()->intersects(_boundsPlus))
     {
-
       boost::shared_ptr<Geometry> g(_baseBuffered->intersection(ls2.get()));
       double ls2Length = ls2->getLength();
       double ls2IntersectLength = g->getLength();

@@ -40,24 +40,28 @@ namespace hoot
  */
 class TagKeyCountVisitor : public ConstElementVisitor, public SingleStatistic
 {
-  public:
+public:
 
-    static std::string className() { return "hoot::TagKeyCountVisitor"; }
+  static std::string className() { return "hoot::TagKeyCountVisitor"; }
 
-    TagKeyCountVisitor() {}
-    TagKeyCountVisitor(const QString key);
+  TagKeyCountVisitor() {}
+  TagKeyCountVisitor(const QString key);
 
-    virtual ~TagKeyCountVisitor() {}
+  virtual ~TagKeyCountVisitor() {}
 
-    virtual void visit(const ConstElementPtr& e);
+  virtual void visit(const ConstElementPtr& e);
 
-    virtual double getStat() const { return _keyCount; }
+  virtual double getStat() const { return _keyCount; }
 
-  private:
+  virtual QString getName() const { return "Count Tag Keys"; }
 
-    QString _key;
-    long _keyCount;
+  virtual QString getDescription() const
+  { return "Counts the number of tags in all elements with the given key"; }
 
+private:
+
+  QString _key;
+  long _keyCount;
 };
 
 }

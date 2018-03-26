@@ -56,7 +56,13 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
+  virtual QString getName() const { return "Keep Nodes"; }
+
+  virtual QString getDescription() const
+  { return "Removes all elements that are not Nodes with meaningful tags"; }
+
 private:
+
   OsmMap* _map;
 };
 

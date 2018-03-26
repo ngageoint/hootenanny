@@ -59,7 +59,7 @@ public:
 
   virtual QString getName() const { return "convert"; }
 
-  virtual QString getShortDescription() const
+  virtual QString getDescription() const
   { return "Converts map data from one input format to another"; }
 
   /**

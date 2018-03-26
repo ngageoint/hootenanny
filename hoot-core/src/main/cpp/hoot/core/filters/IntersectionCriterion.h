@@ -44,6 +44,7 @@ namespace hoot
 class IntersectionCriterion : public ElementCriterion, public ConstOsmMapConsumer
 {
 public:
+
   static std::string className() { return "hoot::IntersectionCriterion"; }
 
   IntersectionCriterion() {}
@@ -59,7 +60,12 @@ public:
 
   virtual void setOsmMap(const OsmMap* map);
 
+  virtual QString getName() const { return "Intersection"; }
+
+  virtual QString getDescription() const { return "Identifies highway intersections"; }
+
 private:
+
   std::set<long> _highwayIds;
   ConstOsmMapPtr _map;
 };

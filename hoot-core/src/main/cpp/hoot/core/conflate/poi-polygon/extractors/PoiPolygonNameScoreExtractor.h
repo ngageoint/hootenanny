@@ -76,6 +76,9 @@ public:
   double getLevDist() { return _levDist; }
   void setLevDist(double dist) { _levDist = dist; }
 
+  virtual QString getDescription() const
+  { return "Scores element name similarity for POI/Polygon conflation"; }
+
 private:
 
   double _nameScoreThreshold;

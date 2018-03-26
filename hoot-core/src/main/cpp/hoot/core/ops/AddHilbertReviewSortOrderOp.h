@@ -34,10 +34,6 @@
 namespace hoot
 {
 
-/**
- * Splits the map into ref/source (unknown1/unknown2), cuts the ref's shape out of the source, then
- * combines the the entire ref map back with the source map with the hole cut in it.
- */
 class AddHilbertReviewSortOrderOp : public OsmMapOperation
 {
 public:
@@ -49,6 +45,11 @@ public:
   virtual void apply(OsmMapPtr& map);
 
   virtual std::string getClassName() const { return className(); }
+
+  virtual QString getName() const { return "Add Hilbert Review Sort Order"; }
+
+  virtual QString getDescription() const
+  { return "Sorts reviewable features geospatially"; }
 
 private:
 

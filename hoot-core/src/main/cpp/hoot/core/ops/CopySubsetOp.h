@@ -37,10 +37,13 @@ namespace hoot
 
 /**
  * Copies a subset of the map into a new map. The old map is unchanged.
+ *
+ * TODO: rename to CopyMapSubsetOp
  */
 class CopySubsetOp : public OsmMapOperation
 {
 public:
+
   CopySubsetOp(const ConstOsmMapPtr& from, const std::set<ElementId>& eids);
 
   CopySubsetOp(const ConstOsmMapPtr& from, const std::vector<long>& ids);
@@ -53,7 +56,12 @@ public:
    */
   virtual void apply(OsmMapPtr& map);
 
+  virtual QString getName() const { return "Copy Map Subset"; }
+
+  virtual QString getDescription() const { return "Copies a subset of the map into a new map"; }
+
 private:
+
   std::set<ElementId> _eids;
   const ConstOsmMapPtr& _from;
 };

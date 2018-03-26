@@ -61,8 +61,8 @@ bool TagContainsFilter::isFiltered(const Element& e) const
   {
     if (e.getTags().contains(_key[i]) && e.getTags()[_key[i]].contains(_valueSubstring[i]))
     {
-        matches = true;
-        break;  //  Only one match is required
+      matches = true;
+      break;  //  Only one match is required
     }
   }
 

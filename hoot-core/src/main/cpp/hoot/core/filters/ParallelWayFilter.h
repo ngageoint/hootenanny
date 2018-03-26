@@ -42,9 +42,13 @@ namespace hoot
 
 class Way;
 
+/*
+ * TODO: remove
+ */
 class ParallelWayFilter : public WayFilter
 {
 public:
+
   ParallelWayFilter(const ConstOsmMapPtr& map, ConstWayPtr baseWay,
     bool filterUnparallel = true);
 
@@ -56,7 +60,13 @@ public:
 
   virtual bool isFiltered(const ConstWayPtr& w) const;
 
+  virtual QString getName() const { return "Parallel Way Filter"; }
+
+  virtual QString getDescription() const
+  { return "Identifies ways that are parallel to each other"; }
+
 private:
+
   ConstWayPtr _baseWay;
   bool _filterUnparallel;
   // heading of baseWay at each coord

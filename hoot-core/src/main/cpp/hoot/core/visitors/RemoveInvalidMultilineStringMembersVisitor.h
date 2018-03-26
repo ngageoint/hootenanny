@@ -47,6 +47,10 @@ public:
 
   virtual void visit(const ElementPtr& e);
 
+  virtual QString getName() const { return "Remove Invalid Multiline String Members"; }
+
+  virtual QString getDescription() const
+  { return "Removes invalid multiline string relation members"; }
 };
 
 }

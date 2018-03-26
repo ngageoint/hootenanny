@@ -60,6 +60,10 @@ public:
   static QByteArray toHash(const ConstElementPtr& e);
 
   static QString toHashString(const ConstElementPtr& e);
+
+  virtual QString getName() const { return "Calculate Element Hash"; }
+
+  virtual QString getDescription() const { return "Calculates unique hash values for elements"; }
 };
 
 }

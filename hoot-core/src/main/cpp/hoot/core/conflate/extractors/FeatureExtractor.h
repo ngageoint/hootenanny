@@ -76,6 +76,14 @@ public:
 
   static bool isNull(double v) { return v == nullValue() || ::qIsNaN(v); }
 
+  /**
+   * Returns a one sentence description for the operation.
+   *
+   * Keep this as short as possible, capitalize the first letter, and check to see that it stays
+   * on one line when displayed with the 'feature-extractors' command.
+   */
+  virtual QString getDescription() const = 0;
+
 };
 
 typedef boost::shared_ptr<FeatureExtractor> FeatureExtractorPtr;

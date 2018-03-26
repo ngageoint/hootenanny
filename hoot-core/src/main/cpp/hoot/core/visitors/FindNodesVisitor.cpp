@@ -38,7 +38,6 @@ namespace hoot
 FindNodesVisitor::FindNodesVisitor (ElementCriterion* pCrit):
   _pCrit(pCrit)
 {
-  // This space intentionally left blank
 }
 
 void FindNodesVisitor::visit(const boost::shared_ptr<const Element>& e)
@@ -91,5 +90,5 @@ vector<long> FindNodesVisitor::findNodesByTag(const ConstOsmMapPtr& map,
   return v.getIds();
 }
 
-} // namespace hoot
+}
 

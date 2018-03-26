@@ -57,7 +57,12 @@ public:
 
   virtual void writeObject(QDataStream& /*os*/) const {}
 
+  virtual QString getName() const { return "Remove Duplicate Reviews"; }
+
+  virtual QString getDescription() const { return "Removes duplicate reviews"; }
+
 private:
+
   boost::shared_ptr<OsmMap> _map;
 };
 

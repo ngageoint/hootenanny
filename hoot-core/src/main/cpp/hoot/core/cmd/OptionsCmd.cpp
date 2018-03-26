@@ -50,7 +50,7 @@ public:
 
   virtual QString getName() const { return "options"; }
 
-  virtual QString getShortDescription() const
+  virtual QString getDescription() const
   { return "Prints configuration options"; }
 
   virtual int runSimple(QStringList args)

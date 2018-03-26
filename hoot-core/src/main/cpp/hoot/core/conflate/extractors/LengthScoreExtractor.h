@@ -47,6 +47,9 @@ public:
 
   virtual std::string getClassName() const { return className(); }
 
+  virtual QString getDescription() const
+  { return "TODO"; }
+
 protected:
 
   double _extract(const OsmMap& map, const ConstWayPtr& w1, const ConstWayPtr& w2) const;

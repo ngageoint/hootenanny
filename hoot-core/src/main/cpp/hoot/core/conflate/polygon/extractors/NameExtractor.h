@@ -66,6 +66,8 @@ public:
 
   virtual void setStringDistance(const StringDistancePtr &sd) { _d = sd; }
 
+  virtual QString getDescription() const { return "Extracts name tags from features"; }
+
 private:
   StringDistancePtr _d;
 };

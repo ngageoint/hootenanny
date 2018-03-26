@@ -48,7 +48,7 @@ public:
 
   virtual QString getName() const { return "pbf-add-header"; }
 
-  virtual QString getShortDescription() const { return "Adds a header to an OSM PBF file"; }
+  virtual QString getDescription() const { return "Adds a header to an OSM PBF file"; }
 
   int runSimple(QStringList args)
   {

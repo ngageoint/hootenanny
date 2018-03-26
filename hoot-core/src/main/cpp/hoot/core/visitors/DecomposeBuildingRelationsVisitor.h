@@ -59,6 +59,11 @@ public:
 
   virtual void setOsmMap(const OsmMap* /*map*/) { assert(false); }
 
+  virtual QString getName() const { return "Decompose Building Relations"; }
+
+  virtual QString getDescription() const
+  { return "Decomposes complex buildings into simpler elements"; }
+
 private:
 
   OsmMap* _map;

@@ -107,6 +107,8 @@ public:
   void setDefaultAccuracy(Meters circularError) { _circularError = circularError; } 
   void setAddSourceDateTime(bool add) { _addSourceDateTime = add; }
 
+  virtual QString supportedFormats() { return ".osm;.osm.bz2;.osm.gz"; }
+
 private:
 
   bool _osmFound;

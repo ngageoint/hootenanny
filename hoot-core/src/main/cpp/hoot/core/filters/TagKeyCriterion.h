@@ -56,6 +56,10 @@ public:
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new TagKeyCriterion(_keys)); }
 
+  virtual QString getName() const { return "Tag Key"; }
+
+  virtual QString getDescription() const { return "Filters elements based on tag keys"; }
+
 protected:
 
   TagKeyCriterion(QStringList keys);

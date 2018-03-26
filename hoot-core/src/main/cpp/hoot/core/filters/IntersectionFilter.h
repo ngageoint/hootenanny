@@ -35,6 +35,8 @@ namespace hoot
 {
 /**
  * Filters out all features except nodes with the provided ids
+ *
+ * TODO: remove
  */
 class IntersectionFilter : public BaseElementFilter
 {
@@ -46,12 +48,15 @@ public:
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new IntersectionFilter(_nids)); }
 
+  virtual QString getName() const { return "Intersection"; }
+
+  virtual QString getDescription() const { return "Identifies highway intersections"; }
+
 protected:
 
   IntersectionFilter(std::set<long> ids) : _nids(ids) { }
 
   std::set<long> _nids;
-
 };
 
 }

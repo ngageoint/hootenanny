@@ -47,6 +47,10 @@ public:
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new PoiCriterion()); }
 
+  virtual QString getName() const { return "POI"; }
+
+  virtual QString getDescription() const { return "Identifies POIs"; }
+
 };
 
 }

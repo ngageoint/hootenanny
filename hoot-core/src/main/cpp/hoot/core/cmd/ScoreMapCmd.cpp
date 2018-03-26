@@ -56,7 +56,7 @@ public:
 
   virtual QString getName() const { return "score-map"; }
 
-  virtual QString getShortDescription() const
+  virtual QString getDescription() const
   { return "Compares maps using score metrics"; }
 
   void attributeCompare(OsmMapPtr map1, OsmMapPtr map2, OsmMapPtr outMap,

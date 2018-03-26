@@ -56,6 +56,11 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
+  virtual QString getName() const { return "Minimum Element ID"; }
+
+  virtual QString getDescription() const
+  { return "Returns the smallest element ID value found"; }
+
 private:
 
   long _minId;

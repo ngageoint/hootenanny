@@ -67,6 +67,10 @@ public:
    */
   virtual bool hasEligibleKvp(const Tags& tags) const;
 
+  virtual QString getName() const { return "POI Implicit Tag Eligible"; }
+
+  virtual QString getDescription() const
+  { return "Returns true if a POI is eligible for type tag addition"; }
 };
 
 }

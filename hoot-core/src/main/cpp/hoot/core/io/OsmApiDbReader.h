@@ -49,6 +49,8 @@ public:
 
   virtual void setConfiguration(const Settings &conf);
 
+  virtual QString supportedFormats() { return "osmapidb://"; }
+
 protected:
 
   virtual NodePtr _resultToNode(const QSqlQuery& resultIterator, OsmMap& map);

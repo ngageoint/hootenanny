@@ -48,7 +48,7 @@ public:
 
   virtual QString getName() const { return "optimize-network-conf"; }
 
-  virtual QString getShortDescription() const
+  virtual QString getDescription() const
   { return "Determines optimal network conflation settings"; }
 
   virtual int runSimple(QStringList args)

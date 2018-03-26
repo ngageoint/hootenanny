@@ -62,8 +62,8 @@ public:
   virtual void setValueAggregator(const ValueAggregatorPtr& va) { _agg = va; }
 
 protected:
-  virtual double _extract(const OsmMap& map, const ConstWayPtr& w1, const ConstWayPtr& w2)
-    const = 0;
+
+  virtual double _extract(const OsmMap& map, const ConstWayPtr& w1, const ConstWayPtr& w2) const = 0;
 
   ValueAggregatorPtr _agg;
 };
