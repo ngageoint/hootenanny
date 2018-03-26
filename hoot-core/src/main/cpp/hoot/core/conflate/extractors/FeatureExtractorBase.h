@@ -39,6 +39,7 @@ namespace hoot
 class FeatureExtractorBase : public FeatureExtractor
 {
 public:
+
   static std::string className() { return "hoot::FeatureExtractorBase"; }
 
   FeatureExtractorBase() {}

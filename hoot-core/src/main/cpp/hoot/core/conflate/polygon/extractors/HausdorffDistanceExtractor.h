@@ -49,6 +49,9 @@ public:
     const boost::shared_ptr<const Element>& candidate) const;
 
   virtual std::string getClassName() const { return HausdorffDistanceExtractor::className(); }
+
+  virtual QString getDescription() const
+  { return "Calculates the Hausdorff distance between two features"; }
 };
 
 }

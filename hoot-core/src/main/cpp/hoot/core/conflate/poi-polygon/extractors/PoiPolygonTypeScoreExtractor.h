@@ -112,6 +112,9 @@ public:
   bool getPrintMatchDistanceTruth() { return _printMatchDistanceTruth; }
   void setPrintMatchDistanceTruth(bool print) { _printMatchDistanceTruth = print; }
 
+  virtual QString getDescription() const
+  { return "Scores element type similarity for POI/Polygon conflation"; }
+
 private:
 
   double _typeScoreThreshold;

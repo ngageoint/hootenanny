@@ -70,6 +70,8 @@ public:
   virtual double extract(const OsmMap& map, const boost::shared_ptr<const Element>& target,
     const boost::shared_ptr<const Element>& candidate) const;
 
+  virtual QString getDescription() const { return "TODO"; }
+
 private:
 
   double characteristic(geos::geom::Geometry* g) const;

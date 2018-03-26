@@ -36,8 +36,9 @@ namespace hoot
 {
 
 /**
- * Calculates the address similarity score of two features.  Only exact string matches yield a
- * positive score.  This translates addresses, but doesn't handle abbreviations.
+ * Calculates the address similarity score of two features involved in POI/Polygon conflation.
+ * Only exact string matches yield a positive score.  This translates addresses, but doesn't
+ * handle abbreviations.
  */
 class PoiPolygonAddressScoreExtractor : public FeatureExtractorBase
 {
@@ -75,6 +76,9 @@ public:
    * @return true if the element has an address; false otherwise
    */
   static bool hasAddress(const Element& element);
+
+  virtual QString getDescription() const
+  { return "Calculates the address similarity score of two features involved in POI/Polygon conflation"; }
 
 private:
 

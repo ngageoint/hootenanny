@@ -49,6 +49,9 @@ public:
     const boost::shared_ptr<const Element>& candidate) const;
 
   virtual std::string getClassName() const { return CentroidDistanceExtractor::className(); }
+
+  virtual QString getDescription() const
+  { return "TODO"; }
 };
 
 }

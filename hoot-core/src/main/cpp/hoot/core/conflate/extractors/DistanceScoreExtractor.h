@@ -48,6 +48,9 @@ public:
 
   virtual std::string getClassName() const { return className(); }
 
+  virtual QString getDescription() const
+  { return "Similar to Metric Distance as described in [1].  1. Savary & Zeitouni, 2005"; }
+
 protected:
 
   double _extract(const OsmMap& map, const ConstWayPtr& w1, const ConstWayPtr& w2) const;

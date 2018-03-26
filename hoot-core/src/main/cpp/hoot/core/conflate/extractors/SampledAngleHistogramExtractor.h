@@ -69,6 +69,9 @@ public:
 
   void setHeadingDelta(double headingDelta) { _headingDelta = headingDelta; }
 
+  virtual QString getDescription() const
+  { return "Similar to the AngleHistogramExtractor except the angle is sampled along the way"; }
+
 protected:
 
   virtual Histogram* _createHistogram(const OsmMap& map, const ConstElementPtr& e) const;

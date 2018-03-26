@@ -66,6 +66,9 @@ public:
 
   virtual double extract(const OsmMap& map, const boost::shared_ptr<const Element>& target,
     const boost::shared_ptr<const Element>& candidate) const;
+
+  virtual QString getDescription() const
+  { return "Exactly the same as the SymDiffMatcher (in JCS speak)"; }
 };
 
 }
