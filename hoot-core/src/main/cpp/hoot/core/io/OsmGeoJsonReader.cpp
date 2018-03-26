@@ -163,97 +163,95 @@ OsmMapPtr OsmGeoJsonReader::loadFromFile(QString path)
 
 void OsmGeoJsonReader::_parseGeoJson()
 {
-    _generator = QString::fromStdString(_propTree.get("generator", string("")));
-    QString type = QString::fromStdString(_propTree.get("type", string("")));
-    if (_propTree.not_found() != _propTree.find("bbox"))
-    {
-        Envelope env = _parseBbox(_propTree.get_child("bbox"));
-    }
+  _generator = QString::fromStdString(_propTree.get("generator", string("")));
+  QString type = QString::fromStdString(_propTree.get("type", string("")));
+  if (_propTree.not_found() != _propTree.find("bbox"))
+  {
+    Envelope env = _parseBbox(_propTree.get_child("bbox"));
+  }
 
-    // If we don't have a "features" child then we should just have a single feature
-    if (_propTree.not_found() != _propTree.find("features"))
-    {
-        // Iterate through all of our features, adding them to the map
-        pt::ptree features = _propTree.get_child("features");
-        for (pt::ptree::const_iterator featureIt = features.begin(); featureIt != features.end(); ++featureIt)
-        {
-            _parseGeoJsonFeature(featureIt->second);
-        }
-    }
-    else
-    {
-        // Single Feature
-        _parseGeoJsonFeature(_propTree);
-    }
+  // If we don't have a "features" child then we should just have a single feature
+  if (_propTree.not_found() != _propTree.find("features"))
+  {
+    // Iterate through all of our features, adding them to the map
+    pt::ptree features = _propTree.get_child("features");
+    for (pt::ptree::const_iterator featureIt = features.begin(); featureIt != features.end(); ++featureIt)
+        _parseGeoJsonFeature(featureIt->second);
+  }
+  else
+  {
+    // Single Feature
+    _parseGeoJsonFeature(_propTree);
+  }
 }
 
 
 void OsmGeoJsonReader::_parseGeoJsonFeature(const boost::property_tree::ptree& feature)
 {
-    string id = feature.get("id", string(""));
-    //  Some IDs may be strings that start with "node/" or "way/", remove that
-    size_t pos = id.find("/");
-    if (pos != string::npos)
-      id = id.erase(0, pos + 1);
-    if (feature.not_found() != feature.find("properties"))
+  string id = feature.get("id", string(""));
+  //  Some IDs may be strings that start with "node/" or "way/", remove that
+  size_t pos = id.find("/");
+  if (pos != string::npos)
+    id = id.erase(0, pos + 1);
+  if (feature.not_found() != feature.find("properties"))
+  {
+    pt::ptree properties = feature.get_child("properties");
+
+    if (feature.not_found() != feature.find("geometry"))
     {
-      pt::ptree properties = feature.get_child("properties");
+      pt::ptree geometry = feature.get_child("geometry");
 
-      if (feature.not_found() != feature.find("geometry"))
+      //  Type can be node, way, or relation
+      string typeStr = properties.get("type", string("--"));
+      string geoType = geometry.get("type", string("--"));
+      if ("node" == typeStr ||
+          "Point" == geoType)
       {
-        pt::ptree geometry = feature.get_child("geometry");
-
-        //  Type can be node, way, or relation
-        string typeStr = properties.get("type", string("--"));
-        string geoType = geometry.get("type", string("--"));
-        if ("node" == typeStr ||
-            "Point" == geoType)
+        bool useOld = _useDataSourceIds;
+        if (id == "")
+          _useDataSourceIds = false;
+        _parseGeoJsonNode(id, properties, geometry);
+        _useDataSourceIds = useOld;
+      }
+      else if ("way" == typeStr ||
+               "Polygon" == geoType ||
+               "LineString" == geoType)
+      {
+        bool useOld = _useDataSourceIds;
+        if (id == "")
+          _useDataSourceIds = false;
+        _parseGeoJsonWay(id, properties, geometry);
+        _useDataSourceIds = useOld;
+      }
+      else if ("relation" == typeStr ||
+               "GeometryCollection" == geoType ||
+               "MultiPoint" == geoType ||
+               "MultiLineString" == geoType ||
+               "MultiPolygon" == geoType)
+      {
+        bool useOld = _useDataSourceIds;
+        if (id == "")
+          _useDataSourceIds = false;
+        _parseGeoJsonRelation(id, properties, geometry);
+        _useDataSourceIds = useOld;
+        //  Empty the roles if necessary
+        while (!_roles.empty())
+          _roles.pop();
+      }
+      else
+      {
+        if (logWarnCount < Log::getWarnMessageLimit())
         {
-          bool useOld = _useDataSourceIds;
-          if (id == "")
-            _useDataSourceIds = false;
-          _parseGeoJsonNode(id, properties, geometry);
-          _useDataSourceIds = useOld;
+          LOG_WARN("Unknown JSON elment type (" << typeStr << ") when parsing GeoJSON");
         }
-        else if ("way" == typeStr ||
-                 "Polygon" == geoType ||
-                 "LineString" == geoType)
+        else if (logWarnCount == Log::getWarnMessageLimit())
         {
-          bool useOld = _useDataSourceIds;
-          if (id == "")
-            _useDataSourceIds = false;
-          _parseGeoJsonWay(id, properties, geometry);
-          _useDataSourceIds = useOld;
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }
-        else if ("relation" == typeStr ||
-                 "GeometryCollection" == geoType ||
-                 "MultiPoint" == geoType ||
-                 "MultiLineString" == geoType ||
-                 "MultiPolygon" == geoType)
-        {
-          bool useOld = _useDataSourceIds;
-          if (id == "")
-            _useDataSourceIds = false;
-          _parseGeoJsonRelation(id, properties, geometry);
-          _useDataSourceIds = useOld;
-          //  Empty the roles if necessary
-          while (!_roles.empty())
-            _roles.pop();
-        }
-        else
-        {
-          if (logWarnCount < Log::getWarnMessageLimit())
-          {
-            LOG_WARN("Unknown JSON elment type (" << typeStr << ") when parsing GeoJSON");
-          }
-          else if (logWarnCount == Log::getWarnMessageLimit())
-          {
-            LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-          }
-          logWarnCount++;
-        }
+        logWarnCount++;
       }
     }
+  }
 }
 
 
@@ -377,6 +375,10 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
       bool use_old = _useDataSourceIds;
       _useDataSourceIds = true;
       pt::ptree geometries = geometry.get_child("geometries");
+      long points = 0,
+           polys = 0,
+           linestrings = 0,
+           other = 0;
       for (pt::ptree::const_iterator it = geometries.begin(); it != geometries.end(); ++it)
       {
         pt::ptree geo = it->second;
@@ -393,6 +395,7 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
           string node = boost::lexical_cast<string>(node_id);
           _parseGeoJsonNode(node, empty, geo);
           relation->addElement(role, ElementType::Node, node_id);
+          points++;
         }
         else if (type == "Polygon" ||
                  type == "LineString")
@@ -402,6 +405,10 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
           string way = boost::lexical_cast<string>(way_id);
           _parseGeoJsonWay(way, empty, geo);
           relation->addElement(role, ElementType::Way, way_id);
+          if (type == "Polygon")
+            polys++;
+          else
+            linestrings++;
         }
         else if (type == "GeometryCollection")
         {
@@ -410,6 +417,7 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
           string rel = boost::lexical_cast<string>(relation_id);
           _parseGeoJsonRelation(rel, empty, geo);
           relation->addElement(role, ElementType::Relation, relation_id);
+          other++;
         }
         else if (type == "MultiPoint" ||
                  type == "MultiLineString" ||
@@ -427,38 +435,46 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
             _parseMultiPolygonGeometry(geo, r);
           _map->addRelation(r);
           relation->addElement(role, ElementType::Relation, rid);
+          other++;
         }
         else
         {
           LOG_WARN("Unsupported JSON geometry type (" << type << ") when parsing GeoJSON");
+          other++;
         }
       }
       _useDataSourceIds = use_old;
+      //  Update the relation type if needed
+      if (relation_type == "")
+      {
+        if (points > 0 && polys == 0 && linestrings == 0 && other == 0)
+          relation->setType(MetadataTags::RelationMultiPoint());
+        else if (points == 0 && polys > 0 && linestrings == 0 && other == 0)
+          relation->setType(MetadataTags::RelationMultiPolygon());
+        else if (points == 0 && polys == 0 && linestrings > 0 && other == 0)
+          relation->setType(MetadataTags::RelationMultilineString());
+        else
+          relation->setType(MetadataTags::RelationCollection());
+      }
     }
   }
   else if (geo_type == "MultiPoint")
   {
-      if (relation->getType() == "")
-      {
-          relation->setType(MetadataTags::RelationMultiPoint());
-      }
-      _parseMultiPointGeometry(geometry, relation);
+    if (relation->getType() == "")
+      relation->setType(MetadataTags::RelationMultiPoint());
+    _parseMultiPointGeometry(geometry, relation);
   }
   else if(geo_type == "MultiLineString")
   {
-      if (relation->getType() == "")
-      {
-          relation->setType(MetadataTags::RelationMultilineString());
-      }
+    if (relation->getType() == "")
+      relation->setType(MetadataTags::RelationMultilineString());
     _parseMultiLineGeometry(geometry, relation);
   }
   else if (geo_type == "MultiPolygon")
   {
-      if (relation->getType() == "")
-      {
-          relation->setType(MetadataTags::RelationMultiPolygon());
-      }
-      _parseMultiPolygonGeometry(geometry, relation);
+    if (relation->getType() == "")
+      relation->setType(MetadataTags::RelationMultiPolygon());
+    _parseMultiPolygonGeometry(geometry, relation);
   }
   else
   {
