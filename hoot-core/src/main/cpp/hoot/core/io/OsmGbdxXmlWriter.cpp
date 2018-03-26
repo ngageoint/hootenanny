@@ -263,30 +263,31 @@ void OsmGbdxXmlWriter::_writeTags(const ConstElementPtr& element)
     }
 
     // Image, Platform and Instrument can be a list
-    if (key == "Src_imgid" || key == "Pltfrm_id" || key == "Ins_Type")
-    {
-      QStringList l = val.split(";");
-      _writer->writeStartElement(key);
-      _writer->writeStartElement("t1");
-      _writer->writeCharacters(removeInvalidCharacters(l[0]));
-      _writer->writeEndElement();
-      _writer->writeStartElement("t2");
-      // Look for a second value
-      if (l.size() == 2)
-      {
-        _writer->writeCharacters(removeInvalidCharacters(l[1]));
-      }
-      else
-      {
-        _writer->writeCharacters("NULL");
-      }
-      _writer->writeEndElement(); // t2
-      _writer->writeEndElement(); // key
-      continue;
-    }
+//    if (key == "Src_imgid" || key == "Pltfrm_id" || key == "Ins_Type")
+//    {
+//      QStringList l = val.split(";");
+
+//      _writer->writeStartElement(key);
+//      _writer->writeStartElement("t1");
+//      _writer->writeCharacters(removeInvalidCharacters(l[0]));
+//      _writer->writeEndElement();
+//      _writer->writeStartElement("t2");
+//      // Look for a second value
+//      if (l.size() == 2)
+//      {
+//        _writer->writeCharacters(removeInvalidCharacters(l[1]));
+//      }
+//      else
+//      {
+//        _writer->writeCharacters("NULL");
+//      }
+//      _writer->writeEndElement(); // t2
+//      _writer->writeEndElement(); // key
+//      continue;
+//    }
 
     // Keywords can be a list
-    if (key == "Kywrd")
+    if (key == "Kywrd" || key == "Src_imgid" || key == "Pltfrm_id" || key == "Ins_Type")
     {
       _writer->writeStartElement(key);
       QStringList l = val.split(";");
