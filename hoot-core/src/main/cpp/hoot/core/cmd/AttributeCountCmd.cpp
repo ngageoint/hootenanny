@@ -50,7 +50,7 @@ public:
   virtual QString getName() const { return "attribute-count"; }
 
   virtual QString getShortDescription() const
-  { return "Prints out the layer name, attribute name, and up to 30 attribute values"; }
+  { return "Prints out the layer name, attribute name, and some attribute values"; }
 
   virtual int runSimple(QStringList args)
   {

@@ -102,7 +102,7 @@ public:
   virtual QString getName() const { return "multiary-score-matches"; }
 
   virtual QString getShortDescription() const
-  { return "Scores how well Multiary POI conflation performs"; }
+  { return "Scores how well multiary-conflate performs"; }
 
   virtual int runSimple(QStringList args)
   {

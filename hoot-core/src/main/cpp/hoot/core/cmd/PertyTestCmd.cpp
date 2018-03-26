@@ -52,7 +52,7 @@ public:
   virtual QString getName() const { return "perty-test"; }
 
   virtual QString getShortDescription() const
-  { return "Generates an averaged PERTY score for multiple conflation jobs"; }
+  { return "Generates an averaged PERTY score for multiple conflations of the same data"; }
 
   virtual int runSimple(QStringList args)
   {

@@ -43,7 +43,7 @@ public:
   virtual QString getName() const { return "type-tagger-create-rules"; }
 
   virtual QString getShortDescription() const
-  { return "Creates rules for adding type tags to POI data"; }
+  { return "Creates rules for adding missing type tags to map data"; }
 
   virtual int runSimple(QStringList args)
   {
