@@ -118,6 +118,8 @@ public:
   bool getFormatXml() const { return _formatXml; }
   void setFormatXml(const bool format) { _formatXml = format; }
 
+  virtual QString supportedFormats() { return ".osm"; }
+
 private:
 
   bool _formatXml;

@@ -132,6 +132,9 @@ public:
 
   virtual void writeElement(ElementPtr& element, bool debug);
 
+  //TODO: fix with ogrinfo
+  virtual QString supportedFormats() { return ""; }
+
 protected:
 
   bool _createAllLayers;

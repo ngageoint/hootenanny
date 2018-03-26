@@ -66,6 +66,8 @@ protected:
 
   virtual boost::shared_ptr<ApiDb> _getDatabase() const { return _database; }
 
+  virtual QString supportedFormats() { return "hootapidb://"; }
+
 private:
 
   //for white box testing

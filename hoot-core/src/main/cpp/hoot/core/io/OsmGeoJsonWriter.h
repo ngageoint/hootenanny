@@ -73,6 +73,8 @@ public:
    */
   virtual void setConfiguration(const Settings& conf);
 
+  virtual QString supportedFormats() { return ".geojson"; }
+
 protected:
 
   /**

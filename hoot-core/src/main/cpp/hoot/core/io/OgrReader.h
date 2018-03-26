@@ -133,6 +133,9 @@ public:
 
   virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
 
+  //TODO: use ogrinfo for this?
+  virtual QString supportedFormats() { return ""; }
+
 protected:
 
   OgrReaderInternal* _d;

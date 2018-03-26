@@ -69,6 +69,7 @@ class OsmPbfReaderData;
 class OsmPbfReader : public PartialOsmMapReader, public Configurable
 {
 public:
+
   class BlobLocation
   {
   public:
@@ -170,6 +171,8 @@ public:
    * @return true if the specified file is sorted by element type, then element ID; false otherwise
    */
   bool isSorted(const QString file);
+
+  virtual QString supportedFormats() { return ".osm.pbf"; }
 
 private:
 

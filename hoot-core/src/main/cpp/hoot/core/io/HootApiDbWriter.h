@@ -96,6 +96,8 @@ public:
 
   void setCopyBulkInsertActivated(bool activated) { _copyBulkInsertActivated = activated; }
 
+  virtual QString supportedFormats() { return "hootapidb://"; }
+
 protected:
 
   void _createElement(ConstElementPtr element);

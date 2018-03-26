@@ -220,7 +220,10 @@ public:
    */
   static void scrubBigInts(QString &jsonStr);
 
+  virtual QString supportedFormats() { return ".json"; }
+
 protected:
+
   // Items to conform to OsmMapReader ifc
   Status _defaultStatus;
   bool _useDataSourceIds;
