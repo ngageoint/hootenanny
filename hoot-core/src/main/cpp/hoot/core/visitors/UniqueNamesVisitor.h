@@ -39,7 +39,7 @@ namespace hoot
 {
 
 /**
- * Counts all the unique names.
+ * Counts all the unique names
  */
 class UniqueNamesVisitor : public ConstElementVisitor, public SingleStatistic
 {
@@ -56,6 +56,10 @@ public:
   double getStat() const { return _names.size(); }
 
   virtual void visit(const ConstElementPtr& e);
+
+  virtual QString getName() const { return "Unique Names Visitor"; }
+
+  virtual QString getDescription() const { return "Counts all the unique names"; }
 
 private:
 

@@ -65,7 +65,12 @@ public:
                                          const QString& key,
                                          const QString& value);
 
+  virtual QString getName() const { return "Find Ways Visitor"; }
+
+  virtual QString getDescription() const { return "Returns the way IDs visited"; }
+
 private:
+
   const OsmMap* _map;
   std::vector<long> _wayIds;
   ElementCriterion * _pCrit;

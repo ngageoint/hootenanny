@@ -58,6 +58,10 @@ public:
   void setAlphaShapeBuffer(double alphaShapeBuffer) { _alphaShapeBuffer = alphaShapeBuffer; }
   void setCrop(bool crop) { _crop = crop; }
 
+  virtual QString getName() const { return "Cookie Cut Operation"; }
+
+  virtual QString getDescription() const { return "Applies the cookie cut operation"; }
+
 private:
 
   double _alpha;

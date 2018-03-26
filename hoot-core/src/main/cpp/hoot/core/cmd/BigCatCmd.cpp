@@ -54,7 +54,7 @@ public:
 
   virtual QString getName() const { return "big-cat"; }
 
-  virtual QString getShortDescription() const { return "Renumbers element IDs to avoid conflicts"; }
+  virtual QString getDescription() const { return "Renumbers element IDs to avoid conflicts"; }
 
   virtual int runSimple(QStringList args)
   {

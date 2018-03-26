@@ -46,6 +46,10 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
+  virtual QString getName() const { return "Get Element IDs Visitor"; }
+
+  virtual QString getDescription() const { return "Puts all the visited elementIds into a bag"; }
+
 private:
 
   std::set<ElementId>& _bag;

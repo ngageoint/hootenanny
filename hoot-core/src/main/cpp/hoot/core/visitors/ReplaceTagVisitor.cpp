@@ -40,7 +40,6 @@ ReplaceTagVisitor::ReplaceTagVisitor():
   _replaceKey(""),
   _replaceValue("")
 {
-  // Empty
 }
 
 ReplaceTagVisitor::ReplaceTagVisitor(QString matchKey, QString matchValue,
@@ -50,7 +49,6 @@ ReplaceTagVisitor::ReplaceTagVisitor(QString matchKey, QString matchValue,
   _replaceKey(replaceKey),
   _replaceValue(replaceValue)
 {
-  // Empty
 }
 
 void ReplaceTagVisitor::setMatchTag(QString k, QString v)

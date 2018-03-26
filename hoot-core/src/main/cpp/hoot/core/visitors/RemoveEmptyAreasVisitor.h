@@ -50,7 +50,13 @@ public:
   virtual void visit(const ConstElementPtr& e);
 
   virtual void visit(const boost::shared_ptr<Element>& e);
+
+  virtual QString getName() const { return "Remove Empty Areas Visitor"; }
+
+  virtual QString getDescription() const { return "Removes empty areas"; }
+
 private:
+
   boost::shared_ptr<ElementConverter> _ec;
 };
 

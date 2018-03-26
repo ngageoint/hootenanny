@@ -46,7 +46,7 @@ public:
 
   virtual QString getName() const { return "perty-score"; }
 
-  virtual QString getShortDescription() const
+  virtual QString getDescription() const
   { return "Generates a PERTY score for a conflated map"; }
 
   virtual int runSimple(QStringList args)

@@ -46,6 +46,11 @@ public:
 
   void addVisitor(ElementOsmMapVisitor *v) { _visitors.push_back(v); }
 
+  virtual QString getName() const { return "Multi Visitor"; }
+
+  virtual QString getDescription() const
+  { return "Allows for applying multiple visitors to a map"; }
+
 protected:
 
   OsmMap* _map;

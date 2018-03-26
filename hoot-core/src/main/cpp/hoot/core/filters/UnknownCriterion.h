@@ -48,6 +48,12 @@ public:
   virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
   ElementCriterionPtr clone() { return ElementCriterionPtr(new UnknownCriterion()); }
+
+  virtual QString getName() const { return "Unknown Criterion"; }
+
+  virtual QString getDescription() const
+  { return "Identifies elements which have not been conflated"; }
+
 };
 
 }

@@ -62,6 +62,11 @@ public:
 
   unsigned int getMaxNumberOfNodes() const { return _maxNodesPerWay; }
 
+  virtual QString getName() const { return "Split Long Linear Ways Visitor"; }
+
+  virtual QString getDescription() const
+  { return "Splits ways containing more way nodes than OSM supports"; }
+
 private:
 
   unsigned int _maxNodesPerWay;

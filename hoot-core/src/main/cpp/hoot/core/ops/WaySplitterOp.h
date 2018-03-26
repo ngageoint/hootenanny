@@ -70,7 +70,12 @@ public:
 
   virtual void writeObject(QDataStream& os) const;
 
+  virtual QString getName() const { return "Way Splitter Operation"; }
+
+  virtual QString getDescription() const { return "Splits ways"; }
+
 private:
+
   Meters _maxLength;
 };
 

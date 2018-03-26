@@ -45,12 +45,20 @@ class OsmMap;
 class InWayNodeFilter : public NodeFilter
 {
 public:
+
   InWayNodeFilter(FilterType type, const OsmMap& map, const std::vector<long>& wids);
 
+  virtual QString getName() const { return "In Way Node Filter"; }
+
+  virtual QString getDescription() const
+  { return "Matches all nodes that are in at least one of the ways referenced by wids"; }
+
 protected:
+
   virtual bool isFiltered(const Node& n) const;
 
 private:
+
   std::set<long> _nids;
   FilterType _type;
 };

@@ -75,6 +75,18 @@ public:
     */
   virtual QString toString() { return ""; }
 
+  /**
+   * Returns the name of the operation. This should ideally be 30 characters or less.
+   */
+  virtual QString getName() const = 0;
+
+  /**
+   * Returns a one sentence description for the operation.
+   *
+   * Keep this as short as possible, capitalize the first letter, and check to see that it stays
+   * on one line when displayed with the 'inline-operators' command.
+   */
+  virtual QString getDescription() const = 0;
 };
 
 }

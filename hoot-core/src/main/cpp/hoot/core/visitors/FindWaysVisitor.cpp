@@ -39,7 +39,6 @@ namespace hoot
 FindWaysVisitor::FindWaysVisitor (ElementCriterion* pCrit):
   _pCrit(pCrit)
 {
-  // Nothing
 }
 
 void FindWaysVisitor::visit(const boost::shared_ptr<const Element>& e)
@@ -102,4 +101,4 @@ vector<long> FindWaysVisitor::findWaysByTag(const ConstOsmMapPtr& map,
   return v.getIds();
 }
 
-} // namespace hoot
+}

@@ -72,6 +72,19 @@ public:
    * Use the clone pattern for all classes based on the ElementCriterion class
    */
   virtual boost::shared_ptr<ElementCriterion> clone() = 0;
+
+  /**
+   * Returns the name of the criterion. This should ideally be 30 characters or less.
+   */
+  virtual QString getName() const = 0;
+
+  /**
+   * Returns a one sentence description for the criterion.
+   *
+   * Keep this as short as possible, capitalize the first letter, and check to see that it stays
+   * on one line when displayed with the 'inline-operators' command.
+   */
+  virtual QString getDescription() const = 0;
 };
 
 typedef boost::shared_ptr<ElementCriterion> ElementCriterionPtr;

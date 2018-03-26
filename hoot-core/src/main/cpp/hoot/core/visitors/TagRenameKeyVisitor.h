@@ -36,7 +36,7 @@ namespace hoot
 {
 
 /**
- * Renames all keys for all elements with the specified name to a new name
+ * Renames all keys for all elements with the specified key to a new key
  */
 class TagRenameKeyVisitor : public ElementOsmMapVisitor, public Configurable
 {
@@ -53,6 +53,11 @@ public:
   virtual void visit(const boost::shared_ptr<Element>& e);
 
   virtual void setConfiguration(const Settings& conf);
+
+  virtual QString getName() const { return "Tag Rename Key Visitor"; }
+
+  virtual QString getDescription() const
+  { return "Renames all keys for all elements with the specified key to a new key"; }
 
 private:
 

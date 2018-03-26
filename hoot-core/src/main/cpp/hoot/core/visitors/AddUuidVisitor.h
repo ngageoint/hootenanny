@@ -61,7 +61,12 @@ public:
    */
   virtual void visit(const ConstElementPtr& e);
 
+  virtual QString getName() const { return "Add UUID Visitor"; }
+
+  virtual QString getDescription() const { return "Adds UUID tags"; }
+
 private:
+
   OsmMap* _map;
   QString _key;
 };

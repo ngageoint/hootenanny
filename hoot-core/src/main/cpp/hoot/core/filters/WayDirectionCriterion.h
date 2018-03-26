@@ -40,6 +40,7 @@ class Way;
 class WayDirectionCriterion : public ElementCriterion
 {
 public:
+
   WayDirectionCriterion(const ConstOsmMapPtr& map,
                         ConstWayPtr baseWay,
                         bool similarDirection = true);
@@ -49,7 +50,12 @@ public:
   ElementCriterionPtr clone()
   { return ElementCriterionPtr(new WayDirectionCriterion(_map, _baseWay, _similarDirection)); }
 
+  virtual QString getName() const { return "Way Direction Criterion"; }
+
+  virtual QString getDescription() const { return "Identifies which direction a way is pointing"; }
+
 private:
+
   ConstOsmMapPtr _map;
   ConstWayPtr _baseWay;
   bool _similarDirection;

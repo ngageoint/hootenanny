@@ -1,0 +1,197 @@
+/*
+ * This file is part of Hootenanny.
+ *
+ * Hootenanny is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * --------------------------------------------------------------------
+ *
+ * The following copyright notices are generated automatically. If you
+ * have a new notice to add, please use the format:
+ * " * @copyright Copyright ..."
+ * This will properly maintain the copyright information. DigitalGlobe
+ * copyrights will be updated automatically.
+ *
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ */
+
+// Hoot
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/util/Settings.h>
+#include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/filters/ElementCriterion.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/elements/ElementVisitor.h>
+
+// Qt
+#include <QDebug>
+#include <QTime>
+
+using namespace std;
+
+namespace hoot
+{
+
+class InlineOperatorsCmd : public BaseCommand
+{
+public:
+
+  static string className() { return "hoot::InlineOperatorsCmd"; }
+
+  InlineOperatorsCmd() { }
+
+  virtual QString getName() const { return "inline-operators"; }
+
+  virtual QString getDescription() const
+  { return "Prints available inline operators on map data"; }
+
+  //TODO: clean this up with templated functions?
+
+  static bool operationCompare(const std::string& n1, const std::string& n2)
+  {
+    boost::shared_ptr<OsmMapOperation> c1(Factory::getInstance().constructObject<OsmMapOperation>(n1));
+    boost::shared_ptr<OsmMapOperation> c2(Factory::getInstance().constructObject<OsmMapOperation>(n2));
+
+    return c1->getName() < c2->getName();
+  }
+
+  static bool criterionCompare(const std::string& n1, const std::string& n2)
+  {
+    boost::shared_ptr<ElementCriterion> c1(Factory::getInstance().constructObject<ElementCriterion>(n1));
+    boost::shared_ptr<ElementCriterion> c2(Factory::getInstance().constructObject<ElementCriterion>(n2));
+
+    return c1->getName() < c2->getName();
+  }
+
+  static bool visitorCompare(const std::string& n1, const std::string& n2)
+  {
+    boost::shared_ptr<ElementVisitor> c1(Factory::getInstance().constructObject<ElementVisitor>(n1));
+    boost::shared_ptr<ElementVisitor> c2(Factory::getInstance().constructObject<ElementVisitor>(n2));
+    if (c1.get() && c2.get())
+    {
+      return c1->getName() < c2->getName();
+    }
+    else
+    {
+      boost::shared_ptr<ConstElementVisitor> c1b(
+        Factory::getInstance().constructObject<ConstElementVisitor>(n1));
+      boost::shared_ptr<ElementVisitor> c2b(
+        Factory::getInstance().constructObject<ConstElementVisitor>(n2));
+      return c1b->getName() < c2b->getName();
+    }
+  }
+
+  virtual int runSimple(QStringList args)
+  {
+    if (args.size() > 3)
+    {
+      cout << getHelp() << endl << endl;
+      throw HootException(QString("%1 takes zero to three parameters.").arg(getName()));
+    }
+
+    QStringList parsedArgs;
+    for (int i = 0; i < args.size(); i++)
+    {
+      const QString arg = args.at(i);
+      if (parsedArgs.contains(arg) ||
+          (arg != "--operations" && arg != "--visitors" && arg != "--criteria"))
+      {
+        throw IllegalArgumentException("Invalid parameter: " + arg + " passed to " + getName());
+      }
+      parsedArgs.append(arg);
+    }
+
+    if (parsedArgs.size() == 0)
+    {
+      parsedArgs.append("--operations");
+      parsedArgs.append("--visitors");
+      parsedArgs.append("--criteria");
+    }
+
+    //spacing here is roughly the size of the longest name plus a small buffer
+    const int indent = 30;
+    for (int i = 0; i < parsedArgs.size(); i++)
+    {
+      const QString arg = parsedArgs.at(i);
+      if (arg == "--operations")
+      {
+        vector<string> cmds =
+          Factory::getInstance().getObjectNamesByBase(OsmMapOperation::className());
+        sort(cmds.begin(), cmds.end(), operatorCompare);
+        for (size_t i = 0; i < cmds.size(); i++)
+        {
+          boost::shared_ptr<OsmMapOperation> c(
+            Factory::getInstance().constructObject<OsmMapOperation>(cmds[i]));
+
+          const int spaceSize = indent - c->getName().size();
+          const QString line = c->getName() + QString(spaceSize, ' ') + c->getDescription();
+          cout << "  " << line << endl;
+        }
+        cout << endl;
+      }
+      else if (arg == "--visitors")
+      {
+        vector<string> cmds1 =
+          Factory::getInstance().getObjectNamesByBase(ElementVisitor::className());
+        vector<string> cmds2 =
+          Factory::getInstance().getObjectNamesByBase(ConstElementVisitor::className());
+        cmds1.insert(cmds1.end(), cmds2.begin(), cmds2.end());
+        sort(cmds1.begin(), cmds1.end(), visitorCompare);
+        for (size_t i = 0; i < cmds1.size(); i++)
+        {
+          boost::shared_ptr<ElementVisitor> c(
+            Factory::getInstance().constructObject<ElementVisitor>(cmds[i]));
+          if (c.get())
+          {
+            const int spaceSize = indent - c->getName().size();
+            const QString line = c->getName() + QString(spaceSize, ' ') + c->getDescription();
+            cout << "  " << line << endl;
+          }
+          else
+          {
+            boost::shared_ptr<ElementVisitor> c2(
+              Factory::getInstance().constructObject<ElementVisitor>(cmds[i]));
+            const int spaceSize = indent - c2->getName().size();
+            const QString line = c2->getName() + QString(spaceSize, ' ') + c2->getDescription();
+            cout << "  " << line << endl;
+          }
+        }
+        cout << endl;
+      }
+      else if (arg == "--criteria")
+      {
+        vector<string> cmds =
+          Factory::getInstance().getObjectNamesByBase(ElementCriterion::className());
+        sort(cmds.begin(), cmds.end(), criterionCompare);
+        for (size_t i = 0; i < cmds.size(); i++)
+        {
+          boost::shared_ptr<ElementCriterion> c(
+            Factory::getInstance().constructObject<ElementCriterion>(cmds[i]));
+
+          const int spaceSize = indent - c->getName().size();
+          const QString line = c->getName() + QString(spaceSize, ' ') + c->getDescription();
+          cout << "  " << line << endl;
+        }
+        cout << endl;
+      }
+    }
+
+    return 0;
+  }
+};
+
+HOOT_FACTORY_REGISTER(Command, InlineOperatorsCmd)
+
+}
+

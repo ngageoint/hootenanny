@@ -69,7 +69,12 @@ public:
 
   virtual QString toString() { return "hoot::TranslationVisitor"; }
 
+  virtual QString getName() const { return "Translation Visitor"; }
+
+  virtual QString getDescription() const { return "Translates element tags"; }
+
 private:
+
   ScriptTranslatorPtr _t;
   ScriptToOgrTranslator* _togr;
   bool _toOgr;

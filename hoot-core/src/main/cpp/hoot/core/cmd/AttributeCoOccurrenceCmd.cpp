@@ -72,7 +72,7 @@ public:
 
   virtual QString getName() const { return "attribute-co-occurrence"; }
 
-  virtual QString getShortDescription() const
+  virtual QString getDescription() const
   { return "Prints a co-occurrence matrix based on attribute values"; }
 
   virtual int runSimple(QStringList args)

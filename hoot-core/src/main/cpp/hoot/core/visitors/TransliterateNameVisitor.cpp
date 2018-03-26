@@ -72,5 +72,4 @@ void TransliterateNameVisitor::visit(const boost::shared_ptr<Element>& e)
   }
 }
 
-
 }

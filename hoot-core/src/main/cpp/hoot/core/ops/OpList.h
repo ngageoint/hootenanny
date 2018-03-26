@@ -73,6 +73,10 @@ public:
 
   virtual void writeObject(QDataStream& os) const;
 
+  virtual QString getName() const { return "Operations List Operation"; }
+
+  virtual QString getDescription() const { return "Applies a list of map operations in order"; }
+
 private:
 
   std::vector< boost::shared_ptr<OsmMapOperation> > _ops;

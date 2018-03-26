@@ -45,7 +45,12 @@ public:
 
   virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new ElementTypeCriterion(_elementType)); }
+  virtual ElementCriterionPtr clone()
+  { return ElementCriterionPtr(new ElementTypeCriterion(_elementType)); }
+
+  virtual QString getName() const { return "Element Type Criterion"; }
+
+  virtual QString getDescription() const { return "Filters on element type"; }
 
 protected:
 

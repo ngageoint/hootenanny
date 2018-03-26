@@ -91,7 +91,12 @@ public:
 
   virtual void writeObject(QDataStream& os) const;
 
+  virtual QString getName() const { return "Crop Operation"; }
+
+  virtual QString getDescription() const { return "Crops a map"; }
+
 private:
+
   geos::geom::Envelope _envelope;
   boost::shared_ptr<const geos::geom::Geometry> _envelopeG;
   bool _invert;

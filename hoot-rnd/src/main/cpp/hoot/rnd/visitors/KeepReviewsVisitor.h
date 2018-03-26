@@ -58,7 +58,13 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
+  virtual QString getName() const { return "Keep Reviews Visitor"; }
+
+  virtual QString getDescription() const
+  { return " Remove all elements that are not review relations"; }
+
 private:
+
   OsmMap* _map;
 };
 

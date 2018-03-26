@@ -44,6 +44,7 @@ class Way;
 class WayBufferCriterion : public ElementCriterion
 {
 public:
+
   /**
    * Buffer is the buffer in meters to put around the way. The circular
    * error of the base way and the way being evaluated will automatically
@@ -71,7 +72,12 @@ public:
   ElementCriterionPtr clone()
   { return ElementCriterionPtr(new WayBufferCriterion(_map, _baseLs, _buffer, 0, _matchPercent)); }
 
+  virtual QString getName() const { return "Way Buffer Criterion"; }
+
+  virtual QString getDescription() const { return "Allows for operation on ways with buffers"; }
+
 private:
+
   Meters _buffer;
   mutable boost::shared_ptr<geos::geom::Geometry> _baseBuffered;
   boost::shared_ptr<geos::geom::LineString> _baseLs;

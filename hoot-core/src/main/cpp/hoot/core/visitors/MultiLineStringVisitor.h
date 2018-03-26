@@ -54,6 +54,7 @@ class Way;
 class MultiLineStringVisitor : public ConstElementVisitor
 {
 public:
+
   static std::string className() { return "hoot::MultiLineStringVisitor"; }
 
   MultiLineStringVisitor();
@@ -72,7 +73,13 @@ public:
 
   virtual void visit(const ConstWayPtr& w);
 
+  virtual QString getName() const { return "Multiline String Visitor"; }
+
+  virtual QString getDescription() const
+  { return "Creates a multi-linestring out of all ways that are visited"; }
+
 protected:
+
   ConstElementProviderPtr _provider;
   std::vector<geos::geom::Geometry*>* _ls;
 };

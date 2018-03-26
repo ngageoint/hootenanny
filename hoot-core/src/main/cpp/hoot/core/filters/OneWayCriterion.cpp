@@ -41,5 +41,4 @@ bool OneWayCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) con
   return OsmSchema::getInstance().isOneWay(*e) == _isOneWay;
 }
 
-
 }

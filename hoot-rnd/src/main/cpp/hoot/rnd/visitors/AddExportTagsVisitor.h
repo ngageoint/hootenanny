@@ -50,7 +50,12 @@ public:
 
   virtual void visit(const ElementPtr& e);
 
+  virtual QString getName() const { return "Add Export Tags Visitor"; }
+
+  virtual QString getDescription() const { return "Adds tags needed for exporting map data"; }
+
 private:
+
   bool _includeCircularError;
   bool _includeDebug;
 };

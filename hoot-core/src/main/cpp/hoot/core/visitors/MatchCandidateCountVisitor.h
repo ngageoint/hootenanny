@@ -56,6 +56,11 @@ public:
 
   boost::any getData() const { return _matchCandidateCountsByMatchCreator; }
 
+  virtual QString getName() const { return "Match Candidate Count Visitor"; }
+
+  virtual QString getDescription() const
+  { return "Counts all elements that are candidates for matches given a set of match creators"; }
+
 private:
 
   QMap<QString, boost::shared_ptr<MatchCreator> > _matchCreatorsByName;

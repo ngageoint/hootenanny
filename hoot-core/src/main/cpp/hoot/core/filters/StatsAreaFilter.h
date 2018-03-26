@@ -33,18 +33,19 @@
 namespace hoot
 {
 
-/**
- * A filter that will either keep or remove matches.
- */
 class StatsAreaFilter : public BaseFilter
 {
 public:
+
   StatsAreaFilter(FilterType type) : BaseFilter(type) {}
 
   virtual bool isMatch(const Element& e) const;
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new StatsAreaFilter(_type)); }
 
+  virtual QString getName() const { return "Stats Area Filter"; }
+
+  virtual QString getDescription() const { return "Calculates feature area for map statistics"; }
 };
 
 }

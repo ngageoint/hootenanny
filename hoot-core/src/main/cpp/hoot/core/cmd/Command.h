@@ -77,9 +77,9 @@ public:
    * Returns a one sentence description for the command.
    *
    * Keep this as short as possible, capitalize the first letter, and check to see that it stays
-   * on one line when displayed.
+   * on one line when displayed when typing 'hoot'.
    */
-  virtual QString getShortDescription() const = 0;
+  virtual QString getDescription() const = 0;
 
   /**
    * @sa BaseCommand for an example implementation.

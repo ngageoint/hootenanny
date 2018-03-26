@@ -57,6 +57,11 @@ public:
   virtual void readObject(QDataStream& is);
 
   virtual void writeObject(QDataStream& os) const;
+
+  virtual QString getName() const { return "Reproject to Planar Operation"; }
+
+  virtual QString getDescription() const
+  { return "Reprojects a map to a custom planar projection"; }
 };
 
 }

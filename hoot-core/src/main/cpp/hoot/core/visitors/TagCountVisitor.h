@@ -54,11 +54,14 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
+  virtual QString getName() const { return "Tag Count Visitor"; }
+
+  virtual QString getDescription() const { return "Counts element tags"; }
+
 private:
 
   long _totalCount;
   long _informationCount;
-
 };
 
 }

@@ -64,7 +64,12 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
+  virtual QString getName() const { return "Length of Ways Visitor"; }
+
+  virtual QString getDescription() const { return "Sums the length of all the ways"; }
+
 private:
+
   const OsmMap* _map;
   Meters _total;
 };

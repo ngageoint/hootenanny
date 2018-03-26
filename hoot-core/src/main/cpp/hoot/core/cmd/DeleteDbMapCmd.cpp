@@ -45,7 +45,7 @@ public:
 
   virtual QString getName() const { return "delete-db-map"; }
 
-  virtual QString getShortDescription() const
+  virtual QString getDescription() const
   { return "Deletes a map from the Hootenanny database"; }
 
   int runSimple(QStringList args)

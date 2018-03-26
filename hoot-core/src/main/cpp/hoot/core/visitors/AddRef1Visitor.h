@@ -64,7 +64,12 @@ public:
    */
   virtual void visit(const ConstElementPtr& e);
 
+  virtual QString getName() const { return "Add Ref 1 Visitor"; }
+
+  virtual QString getDescription() const { return "Adds REF1 tags"; }
+
 private:
+
   OsmMap* _map;
   int _count;
   QString _prefix;

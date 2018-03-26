@@ -50,7 +50,7 @@ public:
 
   virtual QString getName() const { return "generate-alpha-shape"; }
 
-  virtual QString getShortDescription() const
+  virtual QString getDescription() const
   { return "Generate a concave hull for a set of points"; }
 
   int runSimple(QStringList args)

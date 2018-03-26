@@ -65,7 +65,12 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
+  virtual QString getName() const { return "Calculate Area for Statistics Visitor"; }
+
+  virtual QString getDescription() const { return "Calculates feature areas for map statistics"; }
+
 private:
+
   const OsmMap* _map;
   Meters _total;
 };

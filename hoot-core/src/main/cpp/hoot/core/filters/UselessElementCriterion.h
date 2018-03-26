@@ -56,10 +56,13 @@ public:
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new UselessElementCriterion()); }
 
+  virtual QString getName() const { return "Useless Element Criterion"; }
+
+  virtual QString getDescription() const { return "Identifies useless elements"; }
+
 private:
 
   ConstOsmMapPtr _map;
-
 };
 
 }

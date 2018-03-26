@@ -48,6 +48,10 @@ public:
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new IsNodeFilter(_type)); }
 
+  virtual QString getName() const { return "Is Node Filter"; }
+
+  virtual QString getDescription() const { return "Identifies nodes"; }
+
 private:
 
   FilterType _type;

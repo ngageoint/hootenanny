@@ -43,7 +43,7 @@ public:
 
   virtual QString getName() const { return "tiles-calculate-random"; }
 
-  virtual QString getShortDescription() const
+  virtual QString getDescription() const
   { return "Calculates bounding boxes based on node density and selects one at random"; }
 
   virtual int runSimple(QStringList args)

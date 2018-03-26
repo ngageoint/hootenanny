@@ -56,6 +56,10 @@ public:
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new BuildingCriterion(_map)); }
 
+  virtual QString getName() const { return "Building Criterion"; }
+
+  virtual QString getDescription() const { return "Identifies buildings"; }
+
 private:
 
   ConstOsmMapPtr _map;

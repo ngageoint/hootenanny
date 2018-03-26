@@ -53,7 +53,7 @@ public:
 
   virtual QString getName() const { return "rubber-sheet-apply"; }
 
-  virtual QString getShortDescription() const
+  virtual QString getDescription() const
   { return "Uses a tranform created by rubber-sheet-derive to warp map data"; }
 
   virtual int runSimple(QStringList args)

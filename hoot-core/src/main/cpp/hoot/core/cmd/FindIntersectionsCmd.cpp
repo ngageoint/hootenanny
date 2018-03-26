@@ -51,7 +51,7 @@ public:
 
   virtual QString getName() const { return "find-intersections"; }
 
-  virtual QString getShortDescription() const { return "Detects road intersections"; }
+  virtual QString getDescription() const { return "Detects road intersections"; }
 
   virtual int runSimple(QStringList args)
   {

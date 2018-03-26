@@ -79,7 +79,7 @@ public:
 
   virtual QString getName() const { return "crop"; }
 
-  virtual QString getShortDescription() const { return "Crops a map to the given bounds"; }
+  virtual QString getDescription() const { return "Crops a map to the given bounds"; }
 
   int runSimple(QStringList args)
   {

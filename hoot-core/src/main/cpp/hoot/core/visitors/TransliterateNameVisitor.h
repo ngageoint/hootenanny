@@ -44,6 +44,9 @@ public:
 
   virtual void visit(const boost::shared_ptr<Element>& e);
 
+  virtual QString getName() const { return "Transliterate Name Visitor"; }
+
+  virtual QString getDescription() const { return "Transliterates element name tags"; }
 };
 
 }

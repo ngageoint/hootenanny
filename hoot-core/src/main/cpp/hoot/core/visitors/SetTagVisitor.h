@@ -38,6 +38,8 @@ namespace hoot
 
 /**
  * Sets any tags on any elements with the specified key to the specified value
+ *
+ * TODO: rename to SetTagValueVisitor for clarity
  */
 class SetTagVisitor : public ElementOsmMapVisitor, public Configurable
 {
@@ -53,6 +55,11 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
   virtual void visit(const boost::shared_ptr<Element>& e);
+
+  virtual QString getName() const { return "Set Tag Visitor"; }
+
+  virtual QString getDescription() const
+  { return "Sets tags with the specified key to the specified value"; }
 
 private:
 
