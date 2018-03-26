@@ -94,8 +94,8 @@ OgrUtilities::~OgrUtilities()
 {
   if (Log::getInstance().getLevel() <= Log::Debug)
   {
-    GDALDumpOpenDatasets( stderr );
-    CPLDumpSharedList( NULL );
+    GDALDumpOpenDatasets(stderr);
+    CPLDumpSharedList(NULL);
   }
 
   GDALDestroyDriverManager();
@@ -107,6 +107,19 @@ OgrUtilities& OgrUtilities::getInstance()
   if (!_theInstance.get())
       _theInstance.reset(new OgrUtilities());
   return *_theInstance;
+}
+
+QSet<QString> OgrUtilities::getSupportedFormats(const bool readOnly)
+{
+  QSet<QString> formats;
+  for (vector<OgrDriverInfo>::iterator it = _drivers.begin(); it != _drivers.end(); ++it)
+  {
+    if (readOnly || it->_is_rw)
+    {
+      formats.insert(QString::fromAscii(it->_indicator));
+    }
+  }
+  return formats;
 }
 
 OgrDriverInfo OgrUtilities::getDriverInfo(const QString& url, bool readonly)
@@ -121,7 +134,6 @@ OgrDriverInfo OgrUtilities::getDriverInfo(const QString& url, bool readonly)
   }
   return OgrDriverInfo();
 }
-
 
 boost::shared_ptr<GDALDataset> OgrUtilities::createDataSource(const QString& url)
 {

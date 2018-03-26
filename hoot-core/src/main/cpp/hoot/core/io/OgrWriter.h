@@ -132,7 +132,7 @@ public:
 
   virtual void writeElement(ElementPtr& element, bool debug);
 
-  //TODO: fix with ogrinfo
+  //leaving this empty for the time being
   virtual QString supportedFormats() { return ""; }
 
 protected:

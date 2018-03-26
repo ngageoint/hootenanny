@@ -28,10 +28,10 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/util/Settings.h>
 #include <hoot/core/io/OsmMapReader.h>
 #include <hoot/core/io/OsmMapWriter.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/io/OgrUtilities.h>
 
 // Qt
 #include <QSet>
@@ -92,6 +92,7 @@ public:
           }
         }
       }
+      formats += OgrUtilities::getInstance().getSupportedFormats(true);
       QStringList formatsList = formats.toList();
       formatsList.sort();
 
@@ -101,7 +102,8 @@ public:
       }
       std::cout << std::endl;
     }
-    else if (args.size() == 0 || args.contains("--output"))
+
+    if (args.size() == 0 || args.contains("--output"))
     {
       std::cout << "Output formats:" << std::endl << std::endl;
 
@@ -122,7 +124,11 @@ public:
           }
         }
       }
+      formats += OgrUtilities::getInstance().getSupportedFormats(false);
       QStringList formatsList = formats.toList();
+      //not any better way to add these right now
+      formatsList.append(".osc");
+      formatsList.append(".osc.sql");
       formatsList.sort();
 
       for (int i = 0; i < formatsList.size(); i++)
