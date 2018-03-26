@@ -72,7 +72,7 @@ public:
   ElementCriterionPtr clone()
   { return ElementCriterionPtr(new WayBufferCriterion(_map, _baseLs, _buffer, 0, _matchPercent)); }
 
-  virtual QString getName() const { return "Way Buffer Criterion"; }
+  virtual QString getName() const { return "Way Buffer"; }
 
   virtual QString getDescription() const { return "Allows for operation on ways with buffers"; }
 

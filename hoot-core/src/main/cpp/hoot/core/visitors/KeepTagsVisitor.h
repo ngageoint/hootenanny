@@ -53,7 +53,7 @@ public:
 
   virtual void visit(const boost::shared_ptr<Element>& e);
 
-  virtual QString getName() const { return "Keep Tags Visitor"; }
+  virtual QString getName() const { return "Keep Tags"; }
 
   virtual QString getDescription() const { return "Keeps any tags with matching keys"; }
 

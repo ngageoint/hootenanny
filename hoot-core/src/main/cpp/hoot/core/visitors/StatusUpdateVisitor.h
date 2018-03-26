@@ -51,7 +51,7 @@ public:
 
   virtual void visit(const boost::shared_ptr<Element>& e);
 
-  virtual QString getName() const { return "Status Update Visitor"; }
+  virtual QString getName() const { return "Update Element Statuses"; }
 
   virtual QString getDescription() const { return "Sets element statuses"; }
 

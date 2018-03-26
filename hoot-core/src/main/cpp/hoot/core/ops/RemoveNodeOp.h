@@ -108,7 +108,7 @@ public:
    */
   static void removeNodeFully(OsmMapPtr map, long nId);
 
-  virtual QString getName() const { return "Remove Node Operation"; }
+  virtual QString getName() const { return "Remove Nodes"; }
 
   virtual QString getDescription() const { return "Removes nodes from a map"; }
 

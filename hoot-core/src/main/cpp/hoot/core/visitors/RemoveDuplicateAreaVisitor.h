@@ -64,7 +64,7 @@ public:
 
   virtual void visit(const boost::shared_ptr<Element>& e1);
 
-  virtual QString getName() const { return "Remove Duplicate Areas Visitor"; }
+  virtual QString getName() const { return "Remove Duplicate Areas"; }
 
   virtual QString getDescription() const { return "Removes duplicate areas"; }
 

@@ -77,7 +77,7 @@ public:
 
   int getCount() { return _count; }
 
-  virtual QString getName() const { return "Remove Elements Visitor"; }
+  virtual QString getName() const { return "Remove Elements"; }
 
   virtual QString getDescription() const { return "Removes elements that satisfy a filter"; }
 

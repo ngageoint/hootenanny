@@ -57,10 +57,6 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  virtual QString getName() const { return "Named Operation"; }
-
-  virtual QString getDescription() const { return "Applies a list of named operations to a map"; }
-
 private:
 
   const Settings* _conf;

@@ -52,7 +52,7 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
-  virtual QString getName() const { return "Element Count Visitor"; }
+  virtual QString getName() const { return "Element Count"; }
 
   virtual QString getDescription() const { return "Counts the number of elements"; }
 

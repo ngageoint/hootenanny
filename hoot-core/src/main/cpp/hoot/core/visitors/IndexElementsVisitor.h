@@ -79,7 +79,7 @@ public:
                                            const std::deque<ElementId>& indexToEid,
                                            ConstOsmMapPtr pMap);
 
-  virtual QString getName() const { return "Index Elements Visitor"; }
+  virtual QString getName() const { return "Index Elements"; }
 
   virtual QString getDescription() const { return "Build an index of input elements"; }
 

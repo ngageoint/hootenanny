@@ -57,7 +57,7 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
-  virtual QString getName() const { return "Unique Names Visitor"; }
+  virtual QString getName() const { return "Count Unique Names"; }
 
   virtual QString getDescription() const { return "Counts all the unique names"; }
 

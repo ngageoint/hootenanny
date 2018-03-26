@@ -48,7 +48,7 @@ public:
 
   ConstNodePtr calculateMedianNode() const;
 
-  virtual QString getName() const { return "Median Node Visitor"; }
+  virtual QString getName() const { return "Median Node"; }
 
   virtual QString getDescription() const { return "Calculates the median node"; }
 

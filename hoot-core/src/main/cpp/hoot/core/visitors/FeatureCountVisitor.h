@@ -53,7 +53,7 @@ public:
 
   virtual void visit(const boost::shared_ptr<const Element>& e);
 
-  virtual QString getName() const { return "Feature Count Visitor"; }
+  virtual QString getName() const { return "Count Features"; }
 
   virtual QString getDescription() const
   { return "Counts the number of elements with an information tag count greater than zero"; }

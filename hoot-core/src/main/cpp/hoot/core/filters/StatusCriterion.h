@@ -54,7 +54,7 @@ public:
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new StatusCriterion(_status)); }
 
-  virtual QString getName() const { return "Status Criterion"; }
+  virtual QString getName() const { return "Status"; }
 
   virtual QString getDescription() const { return "Filters based on element status"; }
 

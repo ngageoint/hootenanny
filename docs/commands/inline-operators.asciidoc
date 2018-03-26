@@ -19,7 +19,7 @@ hoot inline-operators
 
 hoot inline-operators --operations
 
-hoot inline-operatorss --visitors
+hoot inline-operators --visitors
 
 hoot inline-operators --criteria
 --------------------------------------
@@ -27,7 +27,7 @@ hoot inline-operators --criteria
 === Inline Operator Example Usage
 
 -------------------------
-# This inline operator (SetTagVisitor) applies a tag to all elements in the input map.
+# This inline operator, SetTagVisitor, adds a tag to all elements in a map.
 hoot convert -D convert.ops=hoot::SetTagVisitor -D set.tag.visitor.key=poi -D set.tag.visitor.value=yes input.osm output.osm
 -------------------------
 

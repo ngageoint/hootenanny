@@ -91,7 +91,7 @@ public:
 
   virtual void writeObject(QDataStream& os) const;
 
-  virtual QString getName() const { return "Crop Operation"; }
+  virtual QString getName() const { return "Crop"; }
 
   virtual QString getDescription() const { return "Crops a map"; }
 

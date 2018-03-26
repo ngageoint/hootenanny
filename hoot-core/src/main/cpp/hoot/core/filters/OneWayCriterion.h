@@ -49,7 +49,7 @@ public:
 
   ElementCriterionPtr clone() { return ElementCriterionPtr(new OneWayCriterion()); }
 
-  virtual QString getName() const { return "One Way Criterion"; }
+  virtual QString getName() const { return "One Way"; }
 
   virtual QString getDescription() const { return "Identifies one way streets"; }
 

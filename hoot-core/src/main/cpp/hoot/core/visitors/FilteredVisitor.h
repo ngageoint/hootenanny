@@ -89,11 +89,6 @@ public:
   static double getStat(ElementCriterion* criterion, ConstElementVisitor* visitor,
                         const ConstOsmMapPtr& map, const ElementPtr& element);
 
-  virtual QString getName() const { return "Filtered Visitor"; }
-
-  virtual QString getDescription() const
-  { return "Allows for applying criterion (filters) in conjunction with a visitor"; }
-
 private:
 
   const ElementCriterion* _criterion;

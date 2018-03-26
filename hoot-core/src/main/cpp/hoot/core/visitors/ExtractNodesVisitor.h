@@ -45,7 +45,7 @@ public:
 
   virtual void visit(const boost::shared_ptr<const Element>& e);
 
-  virtual QString getName() const { return "Extract Nodes Visitor"; }
+  virtual QString getName() const { return "Extract Nodes"; }
 
   virtual QString getDescription() const { return "Returns the node IDs visited"; }
 

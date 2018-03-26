@@ -57,7 +57,7 @@ public:
   ElementCriterionPtr clone()
   { return ElementCriterionPtr(new DistanceNodeCriterion(_center, _distance)); }
 
-  virtual QString getName() const { return "Distance Node Criterion"; }
+  virtual QString getName() const { return "Node Distance"; }
 
   virtual QString getDescription() const
   { return "Returns true if an element is within the specified distance of the given center"; }

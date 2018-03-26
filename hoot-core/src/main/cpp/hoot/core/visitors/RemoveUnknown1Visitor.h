@@ -48,7 +48,7 @@ public:
 
   virtual void visit(const boost::shared_ptr<Element>& e);
 
-  virtual QString getName() const { return "Remove Unknown1 Visitor"; }
+  virtual QString getName() const { return "Remove Unknown1 Tag"; }
 
   virtual QString getDescription() const { return "Removes all elements with a status of Unknown1"; }
 };

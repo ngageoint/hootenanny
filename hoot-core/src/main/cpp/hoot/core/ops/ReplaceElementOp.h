@@ -85,7 +85,7 @@ public:
 
   virtual void apply(const OsmMapPtr& map);
 
-  virtual QString getName() const { return "Replace Element Operation"; }
+  virtual QString getName() const { return "Replace Element"; }
 
   virtual QString getDescription() const { return "Replaces one element with another"; }
 

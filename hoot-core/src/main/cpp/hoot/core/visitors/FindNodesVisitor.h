@@ -65,7 +65,7 @@ public:
                                           const QString& key,
                                           const QString& value);
 
-  virtual QString getName() const { return "Find Nodes Visitor"; }
+  virtual QString getName() const { return "Find Nodes"; }
 
   virtual QString getDescription() const { return "Returns the node IDs visited"; }
 

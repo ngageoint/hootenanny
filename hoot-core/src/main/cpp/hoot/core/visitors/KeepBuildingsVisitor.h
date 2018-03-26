@@ -57,7 +57,7 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
-  virtual QString getName() const { return "Keep Buildings Visitor"; }
+  virtual QString getName() const { return "Keep Buildings"; }
 
   virtual QString getDescription() const
   { return "Removes all ways and relations that are not part of a building"; }

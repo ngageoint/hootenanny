@@ -65,7 +65,7 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
-  virtual QString getName() const { return "Calculate Area for Statistics Visitor"; }
+  virtual QString getName() const { return "Calculate Area for Map Statistics"; }
 
   virtual QString getDescription() const { return "Calculates feature areas for map statistics"; }
 

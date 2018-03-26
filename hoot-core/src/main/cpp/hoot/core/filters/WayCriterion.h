@@ -48,7 +48,7 @@ public:
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new WayCriterion()); }
 
-  virtual QString getName() const { return "Way Criterion"; }
+  virtual QString getName() const { return "Way"; }
 
   virtual QString getDescription() const { return "Identifies ways"; }
 };

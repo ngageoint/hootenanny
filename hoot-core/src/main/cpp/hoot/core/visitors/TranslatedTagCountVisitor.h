@@ -67,7 +67,7 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
-  virtual QString getName() const { return "Translated Tag Count Visitor"; }
+  virtual QString getName() const { return "Count Translated Tags"; }
 
   virtual QString getDescription() const
   { return "Counts the number of tags that were able to be translated"; }

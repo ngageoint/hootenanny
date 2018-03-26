@@ -79,7 +79,7 @@ public:
    */
   virtual std::string getClassName() const { return className(); }
 
-  virtual QString getName() const { return "Building Only Operation"; }
+  virtual QString getName() const { return "Building Only"; }
 
   virtual QString getDescription() const
   { return "Custom operation for filtering parts out of buildings"; }

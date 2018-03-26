@@ -43,7 +43,7 @@ public:
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new LinearFilter(_type)); }
 
-  virtual QString getName() const { return "Linear Filter"; }
+  virtual QString getName() const { return "Linear"; }
 
   virtual QString getDescription() const { return "Identifies linear features"; }
 };

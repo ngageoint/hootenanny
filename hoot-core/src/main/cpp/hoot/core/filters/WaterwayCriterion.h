@@ -46,7 +46,7 @@ public:
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new WaterwayCriterion()); }
 
-  virtual QString getName() const { return "Waterway Criterion"; }
+  virtual QString getName() const { return "Waterway"; }
 
   virtual QString getDescription() const { return "Identifies waterways"; }
 

@@ -54,7 +54,7 @@ public:
 
   virtual void visit(const boost::shared_ptr<Element>& e);
 
-  virtual QString getName() const { return "Remove Tag Visitor"; }
+  virtual QString getName() const { return "Remove Tags"; }
 
   virtual QString getDescription() const { return "Removes any tags with matching keys"; }
 

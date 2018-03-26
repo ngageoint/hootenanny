@@ -52,7 +52,7 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
-  virtual QString getName() const { return "Remove Missing Elements Visitor"; }
+  virtual QString getName() const { return "Remove Missing Elements"; }
 
   virtual QString getDescription() const
   { return "Removes references to any elements that do not exist in a map"; }

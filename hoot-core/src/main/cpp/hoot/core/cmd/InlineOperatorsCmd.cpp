@@ -34,12 +34,6 @@
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/ElementVisitor.h>
 
-// Qt
-#include <QDebug>
-#include <QTime>
-
-using namespace std;
-
 namespace hoot
 {
 
@@ -47,7 +41,7 @@ class InlineOperatorsCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::InlineOperatorsCmd"; }
+  static std::string className() { return "hoot::InlineOperatorsCmd"; }
 
   InlineOperatorsCmd() { }
 
@@ -60,24 +54,30 @@ public:
 
   static bool operationCompare(const std::string& n1, const std::string& n2)
   {
-    boost::shared_ptr<OsmMapOperation> c1(Factory::getInstance().constructObject<OsmMapOperation>(n1));
-    boost::shared_ptr<OsmMapOperation> c2(Factory::getInstance().constructObject<OsmMapOperation>(n2));
+    boost::shared_ptr<OsmMapOperation> c1(
+      Factory::getInstance().constructObject<OsmMapOperation>(n1));
+    boost::shared_ptr<OsmMapOperation> c2(
+      Factory::getInstance().constructObject<OsmMapOperation>(n2));
 
     return c1->getName() < c2->getName();
   }
 
   static bool criterionCompare(const std::string& n1, const std::string& n2)
   {
-    boost::shared_ptr<ElementCriterion> c1(Factory::getInstance().constructObject<ElementCriterion>(n1));
-    boost::shared_ptr<ElementCriterion> c2(Factory::getInstance().constructObject<ElementCriterion>(n2));
+    boost::shared_ptr<ElementCriterion> c1(
+      Factory::getInstance().constructObject<ElementCriterion>(n1));
+    boost::shared_ptr<ElementCriterion> c2(
+      Factory::getInstance().constructObject<ElementCriterion>(n2));
 
     return c1->getName() < c2->getName();
   }
 
   static bool visitorCompare(const std::string& n1, const std::string& n2)
   {
-    boost::shared_ptr<ElementVisitor> c1(Factory::getInstance().constructObject<ElementVisitor>(n1));
-    boost::shared_ptr<ElementVisitor> c2(Factory::getInstance().constructObject<ElementVisitor>(n2));
+    boost::shared_ptr<ElementVisitor> c1(
+      Factory::getInstance().constructObject<ElementVisitor>(n1));
+    boost::shared_ptr<ElementVisitor> c2(
+      Factory::getInstance().constructObject<ElementVisitor>(n2));
     if (c1.get() && c2.get())
     {
       return c1->getName() < c2->getName();
@@ -86,7 +86,7 @@ public:
     {
       boost::shared_ptr<ConstElementVisitor> c1b(
         Factory::getInstance().constructObject<ConstElementVisitor>(n1));
-      boost::shared_ptr<ElementVisitor> c2b(
+      boost::shared_ptr<ConstElementVisitor> c2b(
         Factory::getInstance().constructObject<ConstElementVisitor>(n2));
       return c1b->getName() < c2b->getName();
     }
@@ -96,7 +96,7 @@ public:
   {
     if (args.size() > 3)
     {
-      cout << getHelp() << endl << endl;
+      std::cout << getHelp() << std::endl << std::endl;
       throw HootException(QString("%1 takes zero to three parameters.").arg(getName()));
     }
 
@@ -119,71 +119,89 @@ public:
       parsedArgs.append("--criteria");
     }
 
-    //spacing here is roughly the size of the longest name plus a small buffer
-    const int indent = 30;
+    //the size of the longest operator name plus a small buffer
+    const int indent = 35;
     for (int i = 0; i < parsedArgs.size(); i++)
     {
       const QString arg = parsedArgs.at(i);
       if (arg == "--operations")
       {
-        vector<string> cmds =
+        std::vector<std::string> cmds =
           Factory::getInstance().getObjectNamesByBase(OsmMapOperation::className());
-        sort(cmds.begin(), cmds.end(), operatorCompare);
+        std::sort(cmds.begin(), cmds.end(), operationCompare);
         for (size_t i = 0; i < cmds.size(); i++)
         {
           boost::shared_ptr<OsmMapOperation> c(
             Factory::getInstance().constructObject<OsmMapOperation>(cmds[i]));
-
-          const int spaceSize = indent - c->getName().size();
-          const QString line = c->getName() + QString(spaceSize, ' ') + c->getDescription();
-          cout << "  " << line << endl;
+          if (!c->getName().isEmpty() && !c->getDescription().isEmpty())
+          {
+            const int spaceSize = indent - c->getName().size();
+            const QString line =
+              "  " + c->getName() + QString(spaceSize, ' ') + "operation     " +
+              c->getDescription();
+            std::cout << line << std::endl;
+          }
         }
-        cout << endl;
+        std::cout << std::endl;
       }
       else if (arg == "--visitors")
       {
-        vector<string> cmds1 =
+        std::vector<std::string> cmds1 =
           Factory::getInstance().getObjectNamesByBase(ElementVisitor::className());
-        vector<string> cmds2 =
+        std::vector<std::string> cmds2 =
           Factory::getInstance().getObjectNamesByBase(ConstElementVisitor::className());
         cmds1.insert(cmds1.end(), cmds2.begin(), cmds2.end());
-        sort(cmds1.begin(), cmds1.end(), visitorCompare);
+        std::sort(cmds1.begin(), cmds1.end(), visitorCompare);
         for (size_t i = 0; i < cmds1.size(); i++)
         {
           boost::shared_ptr<ElementVisitor> c(
-            Factory::getInstance().constructObject<ElementVisitor>(cmds[i]));
+            Factory::getInstance().constructObject<ElementVisitor>(cmds1[i]));
           if (c.get())
           {
-            const int spaceSize = indent - c->getName().size();
-            const QString line = c->getName() + QString(spaceSize, ' ') + c->getDescription();
-            cout << "  " << line << endl;
+            if (!c->getName().isEmpty() && !c->getDescription().isEmpty())
+            {
+              const int spaceSize = indent - c->getName().size();
+              const QString line =
+                "  " + c->getName() + QString(spaceSize, ' ') + "visitor     " +
+                c->getDescription();
+              std::cout << line << std::endl;
+            }
           }
           else
           {
             boost::shared_ptr<ElementVisitor> c2(
-              Factory::getInstance().constructObject<ElementVisitor>(cmds[i]));
-            const int spaceSize = indent - c2->getName().size();
-            const QString line = c2->getName() + QString(spaceSize, ' ') + c2->getDescription();
-            cout << "  " << line << endl;
+              Factory::getInstance().constructObject<ElementVisitor>(cmds1[i]));
+            if (!c2->getName().isEmpty() && !c2->getDescription().isEmpty())
+            {
+              const int spaceSize = indent - c->getName().size();
+              const QString line =
+                "  " + c2->getName() + QString(spaceSize, ' ') + "visitor     " +
+                c2->getDescription();
+              std::cout << line << std::endl;
+            }
           }
         }
-        cout << endl;
+        std::cout << std::endl;
       }
       else if (arg == "--criteria")
       {
-        vector<string> cmds =
+        std::vector<std::string> cmds =
           Factory::getInstance().getObjectNamesByBase(ElementCriterion::className());
-        sort(cmds.begin(), cmds.end(), criterionCompare);
+        std::sort(cmds.begin(), cmds.end(), criterionCompare);
         for (size_t i = 0; i < cmds.size(); i++)
         {
           boost::shared_ptr<ElementCriterion> c(
             Factory::getInstance().constructObject<ElementCriterion>(cmds[i]));
-
-          const int spaceSize = indent - c->getName().size();
-          const QString line = c->getName() + QString(spaceSize, ' ') + c->getDescription();
-          cout << "  " << line << endl;
+          if (!c->getName().isEmpty() && !c->getDescription().isEmpty())
+          {
+            const int spaceSize = indent - c->getName().size();
+            const QString line =
+              "  " + c->getName() + QString(spaceSize, ' ') + "criterion     " +
+              c->getDescription();
+            std::cout << line << std::endl;
+          }
         }
-        cout << endl;
+        std::cout << std::endl;
       }
     }
 

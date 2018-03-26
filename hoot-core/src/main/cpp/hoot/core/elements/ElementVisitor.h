@@ -56,16 +56,22 @@ public:
 
   /**
    * Returns the name of the visitor. This should ideally be 30 characters or less.
+   *
+   * To prevent a visitor from being displayed by the inline-operators command, this may be
+   * left empty.
    */
-  virtual QString getName() const = 0;
+  virtual QString getName() const { return ""; }
 
   /**
    * Returns a one sentence description for the visitor.
    *
    * Keep this as short as possible, capitalize the first letter, and check to see that it stays
    * on one line when displayed with the 'inline-operators' command.
+   *
+   * To prevent a visitor from being displayed by the inline-operators command, this
+   * may be left empty.
    */
-  virtual QString getDescription() const = 0;
+  virtual QString getDescription() const { return ""; }
 };
 
 typedef boost::shared_ptr<ElementVisitor> ElementVisitorPtr;

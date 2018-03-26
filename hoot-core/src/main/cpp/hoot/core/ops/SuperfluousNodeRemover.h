@@ -77,7 +77,7 @@ public:
 
   virtual void writeObject(QDataStream& os) const;
 
-  virtual QString getName() const { return "Superfluous Node Operation"; }
+  virtual QString getName() const { return "Remove Superfluous Nodes"; }
 
   virtual QString getDescription() const { return "Removes superfluous nodes"; }
 

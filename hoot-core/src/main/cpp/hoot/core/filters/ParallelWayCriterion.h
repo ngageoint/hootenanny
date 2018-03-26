@@ -63,7 +63,7 @@ public:
   ElementCriterionPtr clone()
   { return ElementCriterionPtr(new ParallelWayCriterion(_map, _baseWay, _isParallel)); }
 
-  virtual QString getName() const { return "Parallel Way Criterion"; }
+  virtual QString getName() const { return "Parallel Way"; }
 
   virtual QString getDescription() const
   { return "Identifies ways that are parallel to each other"; }

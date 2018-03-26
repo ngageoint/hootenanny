@@ -48,7 +48,7 @@ public:
 
   virtual void visit(const boost::shared_ptr<Element>& e);
 
-  virtual QString getName() const { return "Split Name Visitor"; }
+  virtual QString getName() const { return "Split Element Names"; }
 
   virtual QString getDescription() const
   { return "Splits name tags over 255 characters"; }

@@ -45,7 +45,7 @@ public:
    */
   static std::vector<ConstWayPtr> extractWays(const ConstOsmMapPtr& map, const ConstElementPtr& e);
 
-  virtual QString getName() const { return "Extract Ways Visitor"; }
+  virtual QString getName() const { return "Extract Ways"; }
 
   virtual QString getDescription() const { return "Returns the way IDs visited"; }
 

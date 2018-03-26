@@ -61,7 +61,7 @@ public:
 
   virtual double getStat() const { return _sum; }
 
-  virtual QString getName() const { return "Sum Numeric Tags Visitor"; }
+  virtual QString getName() const { return "Sum Numeric Tags"; }
 
   virtual QString getDescription() const { return "Sums numeric tag values with a specified key"; }
 

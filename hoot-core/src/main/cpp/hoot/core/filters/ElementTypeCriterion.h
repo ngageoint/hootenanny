@@ -48,7 +48,7 @@ public:
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new ElementTypeCriterion(_elementType)); }
 
-  virtual QString getName() const { return "Element Type Criterion"; }
+  virtual QString getName() const { return "Element Type"; }
 
   virtual QString getDescription() const { return "Filters on element type"; }
 

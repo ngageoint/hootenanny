@@ -89,7 +89,7 @@ public:
    */
   virtual void visit(const boost::shared_ptr<Element>& e);
 
-  virtual QString getName() const { return "Replace Tag Visitor"; }
+  virtual QString getName() const { return "Replace Tag"; }
 
   virtual QString getDescription() const
   { return "Replaces matching tags with the specified replacement tag"; }

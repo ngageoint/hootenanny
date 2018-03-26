@@ -71,7 +71,7 @@ public:
   uint64_t getCount() const { return _count; }
   uint64_t getTotal() const { return _visited; }
 
-  virtual QString getName() const { return "Criterion Count Visitor"; }
+  virtual QString getName() const { return "Criterion Count"; }
 
   virtual QString getDescription() const
   { return "Counts the number of elements matching a criterion"; }

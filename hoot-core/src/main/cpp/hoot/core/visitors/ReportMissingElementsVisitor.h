@@ -63,7 +63,7 @@ public:
 
   void setMaxReport(int maxReport) { _maxReport = maxReport; }
 
-  virtual QString getName() const { return "Report Missing Elements Visitor"; }
+  virtual QString getName() const { return "Report Missing Elements"; }
 
   virtual QString getDescription() const
   { return "Reports references to missing elements in a map"; }

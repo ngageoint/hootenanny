@@ -56,7 +56,7 @@ public:
 
   virtual void visit(const boost::shared_ptr<Element>& e);
 
-  virtual QString getName() const { return "Set Tag Visitor"; }
+  virtual QString getName() const { return "Set Tag Value"; }
 
   virtual QString getDescription() const
   { return "Sets tags with the specified key to the specified value"; }

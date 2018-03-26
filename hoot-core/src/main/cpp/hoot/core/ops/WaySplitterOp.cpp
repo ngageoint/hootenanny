@@ -65,7 +65,7 @@ void WaySplitterOp::readObject(QDataStream& is)
 void WaySplitterOp::setConfiguration(const Settings& conf)
 {
   _maxLength = ConfigOptions(conf).getWaySplitterMaxLength();
-  LOG_INFO("default max length: " << _maxLength);
+  LOG_VARD(_maxLength);
 }
 
 void WaySplitterOp::writeObject(QDataStream& os) const

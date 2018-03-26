@@ -46,7 +46,7 @@ public:
 
   virtual std::string getClassName() const { return className(); }
 
-  virtual QString getName() const { return "Add Hilber Review Sort Order Operation"; }
+  virtual QString getName() const { return "Add Hilbert Review Sort Order"; }
 
   virtual QString getDescription() const
   { return "Sorts reviewable features geospatially"; }

@@ -55,7 +55,7 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
-  virtual QString getName() const { return "Get Tag Values Visitor"; }
+  virtual QString getName() const { return "Get Tag Values"; }
 
   virtual QString getDescription() const { return "Puts all values for the given key into a bag"; }
 

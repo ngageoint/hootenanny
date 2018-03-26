@@ -72,9 +72,7 @@ public:
   virtual void setUseDataSourceIds(bool useDataSourceIds) = 0;
 
   /**
-   *
-   *
-   * @param useFileStatus
+   * Uses the element status from the file
    */
   virtual void setUseFileStatus(bool /*useFileStatus*/) { }
 

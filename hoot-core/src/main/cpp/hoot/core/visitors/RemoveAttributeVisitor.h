@@ -57,7 +57,7 @@ public:
 
   void setTypes(const QStringList& types);
 
-  virtual QString getName() const { return "Remove Attributes Visitor"; }
+  virtual QString getName() const { return "Remove Attributes"; }
 
   virtual QString getDescription() const { return "Removes attributes from features"; }
 
