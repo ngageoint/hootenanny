@@ -60,8 +60,7 @@ class HootGbdxTask(GbdxTaskInterface):
                 '-D','convert.ops=hoot::TranslationOp',
                 '-D','json.add.bbox=true',
                 '-D','osm.map.writer.skip.empty.map=true',
-                '-D','translation.script=/home/matt/dg/gbdx/hoot/translations/GBDX.js']
-                # '-D','translation.script=/var/lib/hootenanny/translations/GBDX.js']
+                '-D','translation.script=/var/lib/hootenanny/translations/GBDX.js']
 
         hootCmd.append(inputFile)
         hootCmd.append(outputFile)
@@ -95,8 +94,7 @@ class HootGbdxTask(GbdxTaskInterface):
                 '-D','osm.map.writer.skip.empty.map=true',
 #                '-D','ogr.debug.dumptags=true',
                 '-D',override,
-                '-D','translation.script=/home/matt/dg/gbdx/hoot/translations/GBDX_XML_Shape.js']
-                # '-D','translation.script=/var/lib/hootenanny/translations/GBDX_XML.js']
+                '-D','translation.script=/var/lib/hootenanny/translations/GBDX_XML_Shape.js']
 
         hootCmd.append(inputFile)
         hootCmd.append(outputFile)
