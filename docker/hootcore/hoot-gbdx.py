@@ -53,13 +53,13 @@ class HootGbdxTask(GbdxTaskInterface):
 
 
     def convertFileJson(self,envVars,inputFile,outputFile):
-        #print('Skipping JSON')
-        return
-
+        override = 'translation.override=' + json.dumps(envVars)
         hootCmd = ['hoot','convert','--error',
                 '-D','convert.ops=hoot::TranslationOp',
                 '-D','json.add.bbox=true',
                 '-D','osm.map.writer.skip.empty.map=true',
+                '-D',override,
+                # '-D','ogr.debug.dumptags=true',
                 '-D','translation.script=/var/lib/hootenanny/translations/GBDX.js']
 
         hootCmd.append(inputFile)
@@ -78,6 +78,8 @@ class HootGbdxTask(GbdxTaskInterface):
         except subprocess.CalledProcessError, e:
             return e.output
 
+        # print('\nHootOut: {}'.format(hootOut))
+
         # with "--error" the Hoot command shoud not have any output. If it does then
         # it is an error.
         if len(hootOut) > 0:
@@ -92,7 +94,7 @@ class HootGbdxTask(GbdxTaskInterface):
                 '-D','convert.ops=hoot::TranslationOp',
                 '-D','json.add.bbox=true',
                 '-D','osm.map.writer.skip.empty.map=true',
-#                '-D','ogr.debug.dumptags=true',
+                #'-D','ogr.debug.dumptags=true',
                 '-D',override,
                 '-D','translation.script=/var/lib/hootenanny/translations/GBDX_XML_Shape.js']
 
@@ -112,7 +114,7 @@ class HootGbdxTask(GbdxTaskInterface):
         except subprocess.CalledProcessError, e:
             return e.output
 
-        #print('\nHootOut: {}'.format(hootOut))
+        # print('\nHootOut: {}'.format(hootOut))
         
         # with "--error" the Hoot command shoud not have any output. If it does then
         # it is an error.
