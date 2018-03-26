@@ -31,7 +31,7 @@
    This file "hijacks" either the "initialize" or the "translateToOsm" function 
    to print out documentation.
 
-   This is the default translation file for hoot --print-docs
+   This is the default translation file for hoot print-docs
 */
 
 // Set up stubs for the namespaces.

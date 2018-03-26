@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="-22.9130453" minlon="-43.20275" maxlat="-22.8970999" maxlon="-43.17461"/>
     <node visible="true" id="-58" timestamp="2017-01-16T21:29:30Z" version="1" changeset="6386" lat="-22.9019184943870968" lon="-43.1762847051900991">
         <tag k="source:ingest:datetime" v="2017-01-16T21:29:29.990Z"/>
         <tag k="hoot:source" v="3"/>
@@ -531,6 +532,7 @@
         <member type="node" ref="-37" role="reviewee"/>
         <member type="node" ref="-30" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:type" v="POI"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Somewhat similar (6.7m) - similar names and generic type"/>
@@ -541,6 +543,7 @@
         <member type="node" ref="-39" role="reviewee"/>
         <member type="node" ref="-13" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:type" v="POI"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Somewhat similar (6.9m) - similar names and generic type"/>
@@ -551,6 +554,7 @@
         <member type="node" ref="-42" role="reviewee"/>
         <member type="node" ref="-25" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:type" v="POI"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Somewhat similar (6.5m) - similar names and generic type"/>
@@ -561,6 +565,7 @@
         <member type="node" ref="-47" role="reviewee"/>
         <member type="node" ref="-26" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:type" v="POI"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Somewhat similar (9.1m) - similar names and generic type"/>
@@ -571,6 +576,7 @@
         <member type="node" ref="-15" role="reviewee"/>
         <member type="node" ref="-57" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:type" v="POI"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Somewhat similar (10m) - similar names and generic type"/>

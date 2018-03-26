@@ -6,15 +6,20 @@ require 'capybara/webkit'
 require 'capybara-screenshot/cucumber'
 require 'selenium-webdriver'
 
-# Chrome instance with timeout is set to 100 seconds
-Capybara.register_driver :selenium do |app|
-  client = Selenium::WebDriver::Remote::Http::Default.new
-  client.timeout = 150
-  Capybara::Selenium::Driver.new(app, :browser => :chrome, :http_client => client)
+# Chrome instance with timeout is set to 150 seconds
+Capybara.register_driver :selenium_chrome do |app|
+  Capybara::Selenium::Driver.new(
+    app,
+    browser: :chrome,
+    http_client: Selenium::WebDriver::Remote::Http::Default.new(
+      open_timeout: 150,
+      read_timeout: 150
+    )
+  )
 end
 
-Capybara.javascript_driver = :selenium
-Capybara.default_driver = :selenium
+Capybara.javascript_driver = :selenium_chrome
+Capybara.default_driver = :selenium_chrome
 
 Capybara.run_server = false
 Capybara.default_selector = :css

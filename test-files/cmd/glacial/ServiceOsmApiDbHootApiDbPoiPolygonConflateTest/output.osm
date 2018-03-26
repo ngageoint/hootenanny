@@ -1098,7 +1098,7 @@
         <tag k="created_by" v="Potlatch 0.9c"/>
         <tag k="hoot:id" v="16"/>
         <tag k="leisure" v="park"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="alt_name" v="Kidpower Park"/>
         <tag k="area" v="yes"/>
         <tag k="name" v="Kids Power Park"/>
@@ -1131,7 +1131,7 @@
         <tag k="REF2" v="none"/>
         <tag k="hoot:id" v="18"/>
         <tag k="leisure" v="garden"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="area" v="yes"/>
         <tag k="name" v="Dearborn Community Garden"/>
         <tag k="hoot:id" v="18"/>

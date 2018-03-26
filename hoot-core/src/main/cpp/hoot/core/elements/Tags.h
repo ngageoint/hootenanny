@@ -60,7 +60,6 @@ public:
   static std::string className() { return "hoot::Tags"; }
   static QString uuidKey() { return "uuid"; }
 
-
   void addNote(QString note);
 
   /**
@@ -241,6 +240,7 @@ public:
   QString toString() const;
 
 private:
+
   void _valueRegexParser(const QString& str, QString& num, QString& units) const;
 
   static QStringList _nameKeys;

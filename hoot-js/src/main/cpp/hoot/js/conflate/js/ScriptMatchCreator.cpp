@@ -43,7 +43,6 @@
 #include <hoot/core/visitors/IndexElementsVisitor.h>
 #include <hoot/js/OsmMapJs.h>
 #include <hoot/js/elements/ElementJs.h>
-#include <hoot/js/util/SettingsJs.h>
 
 // Qt
 #include <QFileInfo>
@@ -515,10 +514,7 @@ Match* ScriptMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1
     Handle<Object> mapJs = OsmMapJs::create(map);
     Persistent<Object> plugin(current, ScriptMatchVisitor::getPlugin(_script));
 
-    return
-      new ScriptMatch(
-        _script, plugin, map, mapJs, eid1, eid2,
-        getMatchThreshold());
+    return new ScriptMatch(_script, plugin, map, mapJs, eid1, eid2, getMatchThreshold());
   }
   return 0;
 }

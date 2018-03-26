@@ -14,7 +14,7 @@ export inputtype=db
 export HOOT_OPTS="-D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D api.db.email=test@test.com -D writer.include.debug.tags=true --warn"
 
 # Ingest the data
-hoot --convert $HOOT_OPTS test-files/$inputfile.osm $DB_URL/$input
+hoot convert $HOOT_OPTS test-files/$inputfile.osm $DB_URL/$input
 
 # Delete any previous output
 rm -rf $outputfolder

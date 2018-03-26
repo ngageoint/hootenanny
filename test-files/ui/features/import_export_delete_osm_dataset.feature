@@ -52,31 +52,40 @@ Feature: Import Export Delete OSM Dataset
         And I press "Add Folder"
         Then I type "CucumberOsm" in input ""
         And I press "big.loud" span with text "Add Folder"
+        And I wait 5 seconds
 
     Scenario: Move Dataset
-        When I click the "dcpoi_clip_Cucumber" Dataset
+        When I scroll "dcpoi_clip_Cucumber" into view
+        And I click the "dcpoi_clip_Cucumber" Dataset
         And I context click the "dcpoi_clip_Cucumber" Dataset
         And I click the "Move" context menu item
         And I select the "CucumberOsm" option in the "root" combobox
         And I press "big.loud" span with text "Update"
+        And I wait 5 seconds
 
     Scenario: Move PBF Dataset
-        When I click the "ToyTestCombined_Cucumber" Dataset
+        When I scroll "ToyTestCombined_Cucumber" into view
+        And I click the "ToyTestCombined_Cucumber" Dataset
         And I context click the "ToyTestCombined_Cucumber" Dataset
         And I click the "Move" context menu item
         And I select the "CucumberOsm" option in the "root" combobox
         And I press "big.loud" span with text "Update"
+        And I wait 5 seconds
 
     Scenario: Rename Dataset
-        When I click the "CucumberOsm" Dataset
+        When I scroll "CucumberOsm" into view
+        And I click the "CucumberOsm" Dataset
+        And I scroll "dcpoi_clip_Cucumber" into view
         And I click the "dcpoi_clip_Cucumber" Dataset
         And I context click the "dcpoi_clip_Cucumber" Dataset
         And I click the "Rename" context menu item
         Then I type "dcpoi_clip_Cucumber_rename" in input "dcpoi_clip_Cucumber"
         And I press "big.loud" span with text "Update"
+        And I wait 5 seconds
 
     Scenario: Delete Folder and Dataset
-        When I context click the "CucumberOsm" Dataset
+        When I scroll "CucumberOsm" into view
+        And I context click the "CucumberOsm" Dataset
         And I click the "Delete" context menu item
         And I accept the alert
         Then I wait 30 "seconds" to not see "CucumberOsm"

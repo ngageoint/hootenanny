@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MultiaryUtilities.h"
 
@@ -73,7 +73,6 @@ QByteArray MultiaryUtilities::convertElementToPbf(ConstNodePtr n)
   return result;
 }
 
-
 QList<MultiaryElement> MultiaryUtilities::conflateCluster(QList<QByteArray> pbfElements)
 {
   QList<MultiaryElement> result;
@@ -117,8 +116,6 @@ QList<MultiaryElement> MultiaryUtilities::conflateCluster(QList<QByteArray> pbfE
     me.setPayload(convertElementToPbf(n));
     result.append(me);
   }
-
-  return result;
 
   return result;
 }

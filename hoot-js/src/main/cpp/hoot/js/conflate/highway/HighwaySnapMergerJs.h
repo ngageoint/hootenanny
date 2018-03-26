@@ -51,6 +51,7 @@ class OsmMapOperation;
 class HighwaySnapMergerJs : public node::ObjectWrap
 {
 public:
+
   static void Init(v8::Handle<v8::Object> target);
 
   HighwaySnapMergerPtr getHighwaySnapMerger() { return _ptr; }
@@ -58,6 +59,7 @@ public:
   static v8::Handle<v8::Object> New(const HighwaySnapMergerPtr& ptr);
 
 private:
+
   HighwaySnapMergerJs();
   ~HighwaySnapMergerJs();
 
@@ -66,7 +68,6 @@ private:
 
   HighwaySnapMergerPtr _ptr;
   static v8::Persistent<v8::Function> _constructor;
-
 };
 
 inline void toCpp(v8::Handle<v8::Value> v, HighwaySnapMergerPtr& ptr)

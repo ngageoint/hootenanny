@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonMatchVisitor.h"
 
@@ -32,6 +32,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/visitors/IndexElementsVisitor.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/schema/OsmSchema.h>
 
 #include "../PoiPolygonMatch.h"
 #include "../filters/PoiPolygonPolyCriterion.h"
@@ -91,12 +92,11 @@ void PoiPolygonMatchVisitor::_checkForMatch(const boost::shared_ptr<const Elemen
     {
       const boost::shared_ptr<const Element>& n = _map->getElement(*it);
 
-      if (n->isUnknown() && PoiPolygonMatch::isPoly(*n))
+      if (n->isUnknown() && OsmSchema::getInstance().isPoiPolygonPoly(n))
       {
         // score each candidate and push it on the result vector
         PoiPolygonMatch* m =
-          new PoiPolygonMatch(
-            _map, /*from, *it,*/ _threshold, _rf, _surroundingPolyIds, _surroundingPoiIds);
+          new PoiPolygonMatch(_map, _threshold, _rf, _surroundingPolyIds, _surroundingPoiIds);
         m->setConfiguration(conf());
         m->calculateMatch(from, *it);
 
@@ -137,7 +137,7 @@ void PoiPolygonMatchVisitor::_collectSurroundingPolyIds(const boost::shared_ptr<
     {
       const boost::shared_ptr<const Element>& n = _map->getElement(*it);
 
-      if (n->isUnknown() && PoiPolygonMatch::isPoly(*n))
+      if (n->isUnknown() && OsmSchema::getInstance().isPoiPolygonPoly(n))
       {
         _surroundingPolyIds.insert(*it);
       }
@@ -164,7 +164,7 @@ void PoiPolygonMatchVisitor::_collectSurroundingPoiIds(const boost::shared_ptr<c
     {
       const boost::shared_ptr<const Element>& n = _map->getElement(*it);
 
-      if (n->isUnknown() && PoiPolygonMatch::isPoi(*n))
+      if (n->isUnknown() && OsmSchema::getInstance().isPoiPolygonPoi(n))
       {
         _surroundingPoiIds.insert(*it);
       }
@@ -200,7 +200,7 @@ bool PoiPolygonMatchVisitor::_isMatchCandidate(ConstElementPtr element)
   //POIs and their surrounding polys and polys and their surrounding POIs; note that this is
   //different than PoiPolygonMatchCreator::isMatchCandidate, which is looking at both to appease
   //the stats
-  return element->isUnknown() && PoiPolygonMatch::isPoi(*element);
+  return element->isUnknown() && OsmSchema::getInstance().isPoiPolygonPoi(element);
 }
 
 boost::shared_ptr<Tgs::HilbertRTree>& PoiPolygonMatchVisitor::_getPolyIndex()

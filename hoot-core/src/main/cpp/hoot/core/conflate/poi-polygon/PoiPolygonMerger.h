@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POIPOLYGONMERGER_H
 #define POIPOLYGONMERGER_H
@@ -34,7 +34,7 @@ namespace hoot
 {
 
 /**
- * TODO: How much, if any, does this need to be genericized to handle areas (non-building polys)?
+ * Merges POIs with polygons
  */
 class PoiPolygonMerger : public MergerBase
 {
@@ -53,16 +53,17 @@ public:
 
   virtual void apply(const OsmMapPtr& map, std::vector< std::pair<ElementId, ElementId> >& replaced);
 
-  /**
-   * Merges a single POI with a single polygon, both as defined by PoiPolygonMerger
-   *
-   * @param map an OSM map containing a single node POI and a single polygon area or building, which
-   * can be a way or a relation (multipolygon)
-   * @return the polygon element ID
-   */
-  static ElementId merge(OsmMapPtr map);
-
   virtual QString toString() const;
+
+  /**
+   * Utility method for merging a single POI with a single polygon
+   *
+   * The map passed may or may not contain constituent elements (way nodes, relation members).
+
+   * @param map a map containing the two features to merge
+   * @return the ID of the element that was merged into
+   */
+  static ElementId mergePoiAndPolygon(OsmMapPtr map);
 
 protected:
 

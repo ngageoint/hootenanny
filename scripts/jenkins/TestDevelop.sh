@@ -6,7 +6,7 @@ set -e
 
 cd $HOOT_HOME
 
-hoot --version --debug
+hoot version --debug
 
 export HOOT_TEST_DIFF=--diff
 # Run all of the tests - from the "test-all" target

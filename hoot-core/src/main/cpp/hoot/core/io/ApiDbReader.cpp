@@ -52,7 +52,7 @@ _useDataSourceIds(true),
 _status(Status::Invalid),
 _open(false),
 _returnNodesOnly(false),
-_keepFileStatus(ConfigOptions().getReaderKeepFileStatus()),
+_keepStatusTag(ConfigOptions().getReaderKeepStatusTag()),
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
 _totalNumMapNodes(0),
 _totalNumMapWays(0),
@@ -199,7 +199,7 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
     }
     //We don't need to carry this tag around once the value is set on the element...it will
     //be reinstated by some writers, though.
-    if (!_keepFileStatus) { tags.remove(MetadataTags::HootStatus()); }
+    if (!_keepStatusTag) { tags.remove(MetadataTags::HootStatus()); }
   }
 
   if (tags.contains("type"))

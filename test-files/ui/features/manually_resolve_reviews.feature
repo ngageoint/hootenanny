@@ -58,46 +58,57 @@ Feature: Manually resolve reviews feature
     Then I wait 30 "seconds" to see "Reviews remaining: 6 (Resolved: 2)"
     #Click the review item box
     And I hover over "#map"
+
     When I click the review item column in the tag table
     Then I should see "Edit feature: "
     And I click on "a.next"
     And I hover over "#map"
     Then I should not see "Edit feature: "
+
     When I click the review item column in the tag table
     Then I should see "Edit feature: "
     And I click on "a.next"
     And I hover over "#map"
     Then I should not see "Edit feature: "
+
+
     When I click the review item column in the tag table
     Then I should see "Edit feature: "
     And I click on "a.next"
     And I hover over "#map"
     Then I should not see "Edit feature: "
+
+
     When I click the review item column in the tag table
     Then I should see "Edit feature: "
     And I click on "a.next"
     And I hover over "#map"
     Then I should not see "Edit feature: "
+
     When I click the review item column in the tag table
     Then I should see "Edit feature: "
     And I click on "a.next"
     And I hover over "#map"
     Then I should not see "Edit feature: "
+
     When I click the review item column in the tag table
     Then I should see "Edit feature: "
     And I click on "a.next"
     And I hover over "#map"
     Then I should not see "Edit feature: "
+
     When I click the review item column in the tag table
     Then I should see "Edit feature: "
     And I click on "a.next"
     And I hover over "#map"
     Then I should not see "Edit feature: "
+
     When I click the review item column in the tag table
     Then I should see "Edit feature: "
     And I click on "a.next"
     And I hover over "#map"
     Then I should not see "Edit feature: "
+
     When I click the review item column in the tag table
     Then I should see "Edit feature: "
     And I click on "a.next"
