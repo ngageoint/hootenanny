@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<osm version="0.6" generator="hootenanny" srs="GEOGCS[&quot;WGS 84&quot;,&#10;    DATUM[&quot;WGS_1984&quot;,&#10;        SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,&#10;            AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],&#10;        TOWGS84[0,0,0,0,0,0,0],&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],&#10;    PRIMEM[&quot;Greenwich&quot;,0,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],&#10;    UNIT[&quot;degree&quot;,0.0174532925199433,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;9108&quot;]],&#10;    AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]">
-    <node visible="true" id="-2" lat="34.1008216273800002" lon="28.9408054873099978"/>
-    <node visible="true" id="-4" lat="34.1006233420100031" lon="28.9378842600699961"/>
-    <node visible="true" id="-5" lat="34.0999863913600052" lon="28.9389462382100007"/>
-    <node visible="true" id="-6" lat="34.1000008632899920" lon="28.9389179132099983"/>
-    <node visible="true" id="-7" lat="34.0999918384300003" lon="28.9389280600700012"/>
-    <node visible="true" id="-8" lat="34.0999813621999905" lon="28.9389557432099984"/>
-    <node visible="true" id="-9" lat="34.0999956888500009" lon="28.9389238288700028"/>
-    <node visible="true" id="-13" lat="34.0996324848859018" lon="28.9397413843331570"/>
-    <node visible="true" id="-14" lat="34.0995777719499955" lon="28.9396848469499979"/>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="34.09957777195" minlon="28.93788426007" maxlat="34.10082162738" maxlon="28.94080548731"/>
     <node visible="true" id="-15" lat="34.0996339248448024" lon="28.9397397033707477"/>
-    <way visible="true" id="-12">
+    <node visible="true" id="-14" lat="34.0995777719499955" lon="28.9396848469499979"/>
+    <node visible="true" id="-13" lat="34.0996324848859018" lon="28.9397413843331570"/>
+    <node visible="true" id="-9" lat="34.0999956888500009" lon="28.9389238288700028"/>
+    <node visible="true" id="-8" lat="34.0999813621999905" lon="28.9389557432099984"/>
+    <node visible="true" id="-7" lat="34.0999918384300003" lon="28.9389280600700012"/>
+    <node visible="true" id="-6" lat="34.1000008632899920" lon="28.9389179132099983"/>
+    <node visible="true" id="-5" lat="34.0999863913600052" lon="28.9389462382100007"/>
+    <node visible="true" id="-4" lat="34.1006233420100031" lon="28.9378842600699961"/>
+    <node visible="true" id="-2" lat="34.1008216273800002" lon="28.9408054873099978"/>
+    <way visible="true" id="-9">
         <nd ref="-14"/>
         <nd ref="-15"/>
         <tag k="width" v="5"/>

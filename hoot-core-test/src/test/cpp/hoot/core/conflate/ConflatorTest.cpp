@@ -79,11 +79,11 @@ public:
     OsmMapPtr out(new OsmMap(uut.getBestMap()));
     MapProjector::projectToWgs84(out);
 
-    CPPUNIT_ASSERT_EQUAL((size_t)15, out->getWays().size());
-
     OsmXmlWriter writer;
     writer.setIncludeIds(true);
     writer.write(out, "test-output/ConflatorPbfTest.osm");
+
+    CPPUNIT_ASSERT_EQUAL((size_t)15, out->getWays().size());
   }
 
   void runTest()
@@ -103,11 +103,11 @@ public:
     OsmMapPtr out(new OsmMap(uut.getBestMap()));
     MapProjector::projectToWgs84(out);
 
-    CPPUNIT_ASSERT_EQUAL((size_t)9, out->getWays().size());
-
     OsmXmlWriter writer;
     writer.setIncludeIds(true);
     writer.write(out, "test-output/ConflatorTest.osm");
+
+    CPPUNIT_ASSERT_EQUAL((size_t)9, out->getWays().size());
   }
 
   //This test shows the fix for ticket #249.
@@ -129,12 +129,12 @@ public:
     OsmMapPtr out(new OsmMap(uut.getBestMap()));
     MapProjector::projectToWgs84(out);
 
-    CPPUNIT_ASSERT_EQUAL((size_t)2, out->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL((size_t)0, out->getRelations().size());
-
     OsmXmlWriter writer;
     writer.setIncludeIds(true);
     writer.write(out, "test-output/RiverBuildingConflatorTest.osm");
+
+    CPPUNIT_ASSERT_EQUAL((size_t)2, out->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)0, out->getRelations().size());
   }
 };
 
