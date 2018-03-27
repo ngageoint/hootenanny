@@ -108,8 +108,14 @@ double PoiPolygonTypeScoreExtractor::extract(const OsmMap& /*map*/,
   const Tags& t1 = poi->getTags();
   const Tags& t2 = poly->getTags();
 
-  if (_failsCuisineMatch(t1, t2) || _failsSportMatch(t1, t2))
+  if (_failsCuisineMatch(t1, t2))
   {
+    _explainText = "Failed cuisine match requirement.";
+    return 0.0;
+  }
+  else if (_failsSportMatch(t1, t2))
+  {
+    _explainText = "Failed sport match requirement.";
     return 0.0;
   }
 

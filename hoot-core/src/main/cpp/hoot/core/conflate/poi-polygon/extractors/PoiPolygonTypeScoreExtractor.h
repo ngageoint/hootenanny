@@ -115,12 +115,15 @@ public:
   virtual QString getDescription() const
   { return "Scores element type similarity for POI/Polygon conflation"; }
 
+  QString getExplainText() const { return _explainText; }
+
 private:
 
   double _typeScoreThreshold;
   static QSet<QString> _allTagKeys;
   double _featureDistance;
   bool _printMatchDistanceTruth;
+  QString _explainText;
 
   double _getTagScore(ConstElementPtr poi, ConstElementPtr poly) const;
   QStringList _getRelatedTags(const Tags& tags) const;

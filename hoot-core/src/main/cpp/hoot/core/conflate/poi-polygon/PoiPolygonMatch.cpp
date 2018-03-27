@@ -321,6 +321,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
     if (reviewReducer.triggersRule(_poi, _poly))
     {
       evidence = 0;
+      _explainText = "Match score automatically dropped by review reduction.";
     }
   }
   LOG_VART(evidence);
@@ -353,6 +354,23 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
            //&& oneElementIsRelation) //for testing only
   {
     _class.setReview();
+    if (_explainText.isEmpty())
+    {
+      const QString typeMatchStr = "yes" ? typeScore >= 1.0 : "no";
+      const QString nameMatchStr = "yes" ? nameScore >= 1.0 : "no";
+      const QString addressMatchStr = "yes" ? addressScore >= 1.0 : "no";
+      _explainText =
+        QString("Features had an additive similarity threshold of %1, which was less than the required threshold of %2. Matches: type: %3, name: %4, address: %5.")
+          .arg(_reviewEvidenceThreshold)
+          .arg(_matchEvidenceThreshold)
+          .arg(typeMatchStr)
+          .arg(nameMatchStr)
+          .arg(addressMatchStr);
+    }
+  }
+  else
+  {
+    _explainText = "";
   }
 
   LOG_VART(_class);
@@ -365,6 +383,7 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
   if (_distance == -1.0)
   {
     _closeMatch = false;
+    _explainText = "Error calculating the distance between features.";
     return 0;
   }
 
@@ -429,6 +448,18 @@ unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElement
     //_typeScoreThreshold = 0.3; //this could be moved to a config
   //}
   const bool typeMatch = _typeScore >= _typeScoreThreshold;
+  const QString typeScorerExplainText = typeScorer.getExplainText();
+  if (!typeScorerExplainText.isEmpty())
+  {
+    if (_explainText.isEmpty())
+    {
+      _explainText = typeScorerExplainText;
+    }
+    else
+    {
+      _explainText += ";" + typeScorerExplainText;
+    }
+  }
   LOG_VART(typeMatch);
   LOG_VART(PoiPolygonTypeScoreExtractor::poiBestKvp);
   LOG_VART(PoiPolygonTypeScoreExtractor::polyBestKvp);
@@ -461,7 +492,8 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
   //see comment in _getDistanceEvidence
   if (!_closeMatch)
   {
-    return 0;
+    _explainText =
+      "The distance between the features is more than the configured review distance plus circular error.";
   }
 
   //The operations from here are on down are roughly ordered by increasing runtime complexity.
@@ -565,11 +597,7 @@ QString PoiPolygonMatch::toString() const
 
 QString PoiPolygonMatch::explain() const
 {
-  if (!_explainText.isEmpty())
-  {
-    return _explainText;
-  }
-  return toString();
+  return _explainText;
 }
 
 }
