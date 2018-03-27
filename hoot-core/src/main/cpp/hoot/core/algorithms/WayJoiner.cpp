@@ -32,6 +32,7 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 
+#include <unordered_set>
 #include <vector>
 
 using namespace std;
@@ -57,6 +58,18 @@ void WayJoiner::join(const OsmMapPtr &map)
 
 void WayJoiner::join()
 {
+  //  Join back any ways with parent ids
+  joinParentChild();
+  //  Join any siblings that have the same parent id but the parent isn't connected
+  joinSiblings();
+  //  Rejoin any ways that are now connected to their parents
+  joinParentChild();
+  //  Run one last join on ways that share a node and have a parent id
+  joinAtNode();
+}
+
+void WayJoiner::joinParentChild()
+{
   WayMap ways = _map->getWays();
   vector<long> ids;
   //  Find all ways that have a split parent id
@@ -77,12 +90,16 @@ void WayJoiner::join()
     WayPtr way = ways[*it];
     long parent_id = way->getTags().get(MetadataTags::HootSplitParentId()).toLong();
     WayPtr parent = ways[parent_id];
+    //  Join this way to the parent
     joinWays(parent, way);
   }
+}
 
+void WayJoiner::joinSiblings()
+{
+  WayMap ways = _map->getWays();
   // Get a list of ways that still have a parent
   map<long, deque<long> > w;
-  ways = _map->getWays();
   //  Find all ways that have a split parent id
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
@@ -103,14 +120,52 @@ void WayJoiner::join()
   }
 }
 
+void WayJoiner::joinAtNode()
+{
+  return;
+/*
+  WayMap ways = _map->getWays();
+  unordered_set<long> ids;
+  //  Find all ways that have a split parent id
+  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
+  {
+    WayPtr way = it->second;
+    if (way->getTags().contains(MetadataTags::HootSplitParentId()))
+      ids.insert(way->getId());
+  }
+
+  //  Iterate all of the nodes and check for compatible ways to join them to
+  for (unordered_set<long>::iterator it = ids.begin(); it != ids.end(); ++it)
+  {
+    WayPtr way = ways[*id];
+    long start_id = way->getFirstNodeId();
+    vector<long> way_ids = _map->
+
+    long end_id = way->getLastNodeId();
+
+
+
+    if (pTags != cTags)
+    {
+      if (!pTags.dataOnlyEqual(cTags))
+      {
+        //  Tags aren't compatible, don't join
+        return;
+      }
+    }
+  }
+*/
+}
+
 void WayJoiner::rejoinSiblings(deque<long>& way_ids)
 {
   WayMap ways = _map->getWays();
-  long start_id = 0,
-       end_id = 0;
+  WayPtr start;
+  WayPtr end;
   size_t failure_count = 0;
   deque<long> sorted;
-  while (!way_ids.empty() && failure_count < way_ids.size()) //  And some failsafe
+  //  Try sorting the ways into a connected way by adding other ways before or after
+  while (!way_ids.empty() && failure_count < way_ids.size())
   {
     long id = way_ids[0];
     way_ids.pop_front();
@@ -119,27 +174,57 @@ void WayJoiner::rejoinSiblings(deque<long>& way_ids)
       continue;
     if (sorted.empty())
     {
+      //  The first time through the loop, just use that way as the base
       sorted.push_back(id);
-      start_id = way->getFirstNodeId();
-      end_id = way->getLastNodeId();
+      start = way;
+      end = way;
     }
     else
     {
-      //  TODO: Check if one-way, if not check both ends
-      if (way->getFirstNodeId() == end_id)
+      //  Check if the road is contiguous with the sorted roads
+      if (end->getLastNodeId() == way->getFirstNodeId())
       {
+        //  Matching up end-to-start works for all roads (one-way and not)
         sorted.push_back(id);
-        end_id = way->getLastNodeId();
+        end = way;
         failure_count = 0;
       }
-      else if (way->getLastNodeId() == start_id)
+      else if (start->getFirstNodeId() == way->getLastNodeId())
       {
+        //  Matching up start-to-end works for all roads (one-way and not)
         sorted.push_front(id);
-        start_id = way->getFirstNodeId();
+        start = way;
         failure_count = 0;
+      }
+      else if (!OsmSchema::getInstance().isOneWay(*end) &&
+               !OsmSchema::getInstance().isOneWay(*start) &&
+               !OsmSchema::getInstance().isOneWay(*way))
+      {
+        //  Roads that aren't one way can be reversed but still be valid
+        if (start->getFirstNodeId() == way->getFirstNodeId())
+        {
+          way->reverseOrder();
+          sorted.push_front(id);
+          start = way;
+          failure_count = 0;
+        }
+        else if (end->getLastNodeId() == way->getLastNodeId())
+        {
+          way->reverseOrder();
+          sorted.push_back(id);
+          end = way;
+          failure_count = 0;
+        }
+        else
+        {
+          //  Requeue the way and up the failure count
+          way_ids.push_back(id);
+          failure_count++;
+        }
       }
       else
       {
+        //  Requeue the way and up the failure count
         way_ids.push_back(id);
         failure_count++;
       }
@@ -150,12 +235,10 @@ void WayJoiner::rejoinSiblings(deque<long>& way_ids)
   {
     WayPtr parent = ways[sorted[0]];
     for (size_t i = 1; i < sorted.size(); ++i)
-    {
       joinWays(parent, ways[sorted[i]]);
-    }
-    ways[sorted[0]]->getTags().remove(MetadataTags::HootSplitParentId());
+    //  Remove the parent id tag from both of the ways, joinWays() gets the child, do the parent here
+    parent->getTags().remove(MetadataTags::HootSplitParentId());
   }
-//  ways[sorted[0]]->getTags().remove(MetadataTags::HootSplitParentId());
 }
 
 void WayJoiner::joinWays(const WayPtr &parent, const WayPtr &child)
@@ -165,9 +248,6 @@ void WayJoiner::joinWays(const WayPtr &parent, const WayPtr &child)
 
   Tags pTags = parent->getTags();
   Tags cTags = child->getTags();
-
-  //  Remove the split split tag
-  cTags.remove(MetadataTags::HootSplitParentId());
 
   //  Check if the two ways are able to be joined back up
   //  First make sure that they begin or end at the same node
@@ -180,15 +260,9 @@ void WayJoiner::joinWays(const WayPtr &parent, const WayPtr &child)
     parentFirst = false;
   else
     return;
-//  //  Second check the tags to make sure that they are still compatible
-//  if (pTags != cTags)
-//  {
-//    if (!pTags.dataOnlyEqual(cTags))
-//    {
-//      //  Tags aren't compatible, don't join
-//      return;
-//    }
-//  }
+
+  //  Remove the split split tag
+  cTags.remove(MetadataTags::HootSplitParentId());
 
   Tags tags = TagMergerFactory::mergeTags(pTags, cTags, ElementType::Way);
 

@@ -49,6 +49,10 @@ public:
 
 private:
 
+  void joinParentChild();
+  void joinSiblings();
+  void joinAtNode();
+
   void joinWays(const WayPtr& parent, const WayPtr& child);
 
   void rejoinSiblings(std::deque<long>& way_ids);
