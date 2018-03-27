@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __WAY_SPLITTER_OP_H__
@@ -70,7 +70,12 @@ public:
 
   virtual void writeObject(QDataStream& os) const;
 
+  virtual QString getName() const { return "Way Splitter"; }
+
+  virtual QString getDescription() const { return "Splits ways"; }
+
 private:
+
   Meters _maxLength;
 };
 

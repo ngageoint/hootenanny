@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -58,11 +58,6 @@ using namespace Tgs;
 namespace hoot
 {
 
-/**
- * @brief The MultiaryConflateCmd class
- *
- * Conflate 2 or more files into a third output file. At best this is experimental.
- */
 class MultiaryConflateCmd : public BaseCommand
 {
 public:
@@ -72,6 +67,9 @@ public:
   MultiaryConflateCmd() {}
 
   virtual QString getName() const { return "multiary-conflate"; }
+
+  virtual QString getDescription() const
+  { return "Conflates two or more POI map sources into a single map"; }
 
   int runSimple(QStringList args)
   {

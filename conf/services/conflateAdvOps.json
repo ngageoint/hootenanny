@@ -51,7 +51,6 @@
                 "hoot_val":"hoot::SuperfluousWayRemover",
                 "defaultvalue":"true"
             },
-            // It's important to remove roundabouts before splitting intersections!
             {
                 "id":"roundabout_handler",
                 "elem_type":"checkbox",

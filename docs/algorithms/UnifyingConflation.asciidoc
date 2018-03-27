@@ -56,7 +56,7 @@ approach. For details on the cleaning operations please see <<hootuser>>.
 
 See also:
 
-* `cleanup` command, <<hootuser>>
+* `clean` command, <<hootuser>>
 * `map.cleaner.transforms` configuration option, <<hootuser>>
 
 [[EstimatePairwiseRelationships]]
@@ -185,7 +185,7 @@ See also:
 
 === Apply Merges
 
-While there may have been some cleanup operations that modified the map, up
+While there may have been some clean operations that modified the map, up
 until this point there have been no changes made to the map during conflation.
 
 After the optimization is complete a selection of identified matches is ready to

@@ -4,7 +4,7 @@ set -e
 mkdir -p $HOOT_HOME/test-output/cmd/slow/ApplyRubberSheetCmdTest
 
 # First we derive a rubber sheet
-hoot derive-rubber-sheet --error \
+hoot rubber-sheet-derive --error \
   --ref $HOOT_HOME/test-files/DcGisRoads.osm \
         $HOOT_HOME/test-files/DcTigerRoads.osm \
         $HOOT_HOME/test-output/cmd/slow/ApplyRubberSheetCmdTest/DcTigerToDcGis.rs 
@@ -22,11 +22,11 @@ testfile=$HOOT_HOME/test-output/cmd/slow/ApplyRubberSheetCmdTest/DcTigerToDcGis.
 #fi
 
 # Now we apply the rubber sheet
-hoot apply-rubber-sheet --error\
+hoot rubber-sheet-apply --error\
   $HOOT_HOME/test-output/cmd/slow/ApplyRubberSheetCmdTest/DcTigerToDcGis.rs \
   $HOOT_HOME/test-files/DcTigerRoads.osm \
   $HOOT_HOME/test-output/cmd/slow/ApplyRubberSheetCmdTest/DcTigerToDcGis.osm 
 
 goodfile=$HOOT_HOME/test-files/cmd/slow/ApplyRubberSheetCmdTest/DcTigerToDcGis.osm
 testfile=$HOOT_HOME/test-output/cmd/slow/ApplyRubberSheetCmdTest/DcTigerToDcGis.osm
-hoot is-match $goodfile $testfile || diff $goodfile $testfile
+hoot map-diff $goodfile $testfile || diff $goodfile $testfile

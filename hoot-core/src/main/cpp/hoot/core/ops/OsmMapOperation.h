@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OsmMapOperation_H
@@ -75,6 +75,24 @@ public:
     */
   virtual QString toString() { return ""; }
 
+  /**
+   * Returns the name of the operation. This should ideally be 30 characters or less.
+   *
+   * To prevent an operation from being displayed by the inline-operators command, this may be
+   * left empty.
+   */
+  virtual QString getName() const { return ""; }
+
+  /**
+   * Returns a one sentence description for the operation.
+   *
+   * Keep this as short as possible, capitalize the first letter, and check to see that it stays
+   * on one line when displayed with the 'inline-operators' command.
+   *
+   * To prevent an operation from being displayed by the inline-operators command, this may be
+   * left empty.
+   */
+  virtual QString getDescription() const { return ""; }
 };
 
 }

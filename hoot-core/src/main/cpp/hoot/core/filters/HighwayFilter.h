@@ -48,6 +48,9 @@ public:
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new HighwayFilter(_type)); }
 
+  virtual QString getName() const { return "Highway"; }
+
+  virtual QString getDescription() const { return "Identifies highways"; }
 };
 
 }

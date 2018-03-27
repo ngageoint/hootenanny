@@ -2,7 +2,6 @@
 = Hootenanny Developer Guide
 DigitalGlobe, Inc.
 
-include::developer/HootenannyDevelopmentEnvironmentSetupInstructions.asciidoc[]
 include::developer/HootenannyBuild.asciidoc[]
 include::developer/HootenannyDeveloperIDESetup.asciidoc[]
 include::developer/HootenannyTroubleshooting.asciidoc[]

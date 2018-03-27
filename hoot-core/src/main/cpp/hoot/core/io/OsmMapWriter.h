@@ -61,6 +61,14 @@ public:
    */
   virtual void write(ConstOsmMapPtr map) = 0;
 
+  /**
+   * Lists supported data format extensions
+   *
+   * If multiple are supported, delimit them with a semicolon.
+   *
+   * @return a formats string
+   */
+  virtual QString supportedFormats() = 0;
 };
 
 }

@@ -1,5 +1,8 @@
 == Big Data
 
+NOTE: This documents Hootenanny conflation using Hadoop, which is no longer supported (supported up to v0.2.38), and has been 
+left here for references purposes only.
+
 The following sections describe using Hootenanny with large data sets, Big Data. In Hootenanny we simply define Big Data as anything we can't fit into RAM on a single machine. In some cases the big operations will utilize a cluster of computers, in others such as translation, it will run a simpler version of the algorithm.
 
 === Hadoop

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OGRUTILITIES_H
 #define OGRUTILITIES_H
@@ -34,6 +34,7 @@ class GDALDataset;
 
 // Qt
 #include <QString>
+#include <QSet>
 
 // Tgs
 #include <tgs/SharedPtr.h>
@@ -103,7 +104,17 @@ public:
    */
   OgrDriverInfo getDriverInfo(const QString& url, bool readonly);
 
+  /**
+   * Returns a collection of supported OGR formats
+   *
+   * @param readOnly if true, returns supported read formats; otherwise returns supported write
+   * formats
+   * @return a list of data formats
+   */
+  QSet<QString> getSupportedFormats(const bool readOnly);
+
 private:
+
   /**
    * Use getInstance() instead of the constructor.
    */

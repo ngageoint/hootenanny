@@ -98,8 +98,8 @@ m4_include([m4/boost.m4])
 AX_LIB_BOOST()
 
 # Hadoop
-m4_include([m4/ax_lib_hadoop.m4])
-AX_LIB_HADOOP()
+#m4_include([m4/ax_lib_hadoop.m4])
+#AX_LIB_HADOOP()
 
 # Qt
 AC_CHECK_HEADERS([qt4/QtCore/QXmlStreamWriter])

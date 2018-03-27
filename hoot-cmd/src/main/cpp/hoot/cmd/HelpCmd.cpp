@@ -56,6 +56,8 @@ public:
 
   virtual QString getName() const { return "help"; }
 
+  virtual QString getDescription() const { return "Displays help documentation"; }
+
   int runSimple(QStringList args)
   {
     if (args.size() == 0 || args.size() > 1)
@@ -117,7 +119,10 @@ private:
       boost::shared_ptr<Command> c(Factory::getInstance().constructObject<Command>(cmds[i]));
       if (c->displayInHelp())
       {
-        cout << "  " << c->getName().toStdString() << endl;
+        //spacing here is roughly the size of the longest command name plus a small buffer
+        const int spaceSize = 30 - c->getName().size();
+        const QString line = c->getName() + QString(spaceSize, ' ') + c->getDescription();
+        cout << "  " << line << endl;
       }
     }
 

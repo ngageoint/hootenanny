@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "WaterwayCriterion.h"
 
@@ -37,7 +37,6 @@ HOOT_FACTORY_REGISTER(ElementCriterion, WaterwayCriterion)
 
 bool WaterwayCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
 {
-  // if it is a linear waterway
   return OsmSchema::getInstance().isLinearWaterway(*e.get());
 }
 

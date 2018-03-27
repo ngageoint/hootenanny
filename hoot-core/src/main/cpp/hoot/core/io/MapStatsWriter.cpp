@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MapStatsWriter.h"
 
@@ -35,7 +35,6 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/conflate/StatsComposer.h>
 
 //Qt
 #include <QFile>
@@ -63,102 +62,8 @@ void MapStatsWriter::_appendUnique(QList<SingleStat>& stats, QStringList& names)
   }
 }
 
-void MapStatsWriter::writeStats(QList< QList<SingleStat> >& stats, QStringList names)
-{
-  ConfigOptions configOptions;
-  QString statsFormat = configOptions.getStatsFormat();
-  QString statsOutput = configOptions.getStatsOutput();
-  //no point in making this class configurable unless there ends up being more than one
-  //implementation available
-  QString statsClassName = "hoot::ScriptStatsComposer";
-  QString statsScript = configOptions.getStatsScript();
-  LOG_DEBUG("stats format = " << statsFormat << std::endl);
-  LOG_DEBUG("stats outfile= " << statsOutput << std::endl);
-  LOG_DEBUG("stats className= " << statsClassName << std::endl);
-  LOG_DEBUG("stats script= " << statsScript << std::endl);
-
-  if(statsOutput=="") return; // just need to specify only output file, rest of args have default values
-
-  // create map for additional args
-  QVariantMap args;
-
-  // get the translation schema
-  std::string schemaPath = configOptions.getStatsTranslateScript().toStdString();
-  std::string baseSchema = schemaPath.substr(schemaPath.find_last_of("/\\") + 1);
-  args["Translation Schema"] = QString::fromUtf8(baseSchema.c_str());
-
-  // get the conflation types
-  args["Conflation Type"] = configOptions.getConflateStatsTypes().replace("\"","");
-
-  // get the conflation match thresholds
-  args["Building Match Threshold"] = configOptions.getBuildingMatchThreshold();
-  args["Highway Match Threshold"] = configOptions.getHighwayMatchThreshold();
-  args["POI Match Threshold"] = configOptions.getPoiMatchThreshold();
-
-  // get the conflation miss thresholds
-  args["Building Miss Threshold"] = configOptions.getBuildingMissThreshold();
-  args["Highway Miss Threshold"] = configOptions.getHighwayMissThreshold();
-  args["POI Miss Threshold"] = configOptions.getPoiMissThreshold();
-
-  // get the conflation review thresholds
-  args["Building Review Threshold"] = configOptions.getBuildingReviewThreshold();
-  args["Highway Review Threshold"] = configOptions.getHighwayReviewThreshold();
-  args["POI Review Threshold"] = configOptions.getPoiReviewThreshold();
-
-  // get the highway search radius
-  args["Highway Search Radius"] = configOptions.getSearchRadiusHighway();
-  args["All Other Search Radius"] = configOptions.getSearchRadiusDefault();
-
-  // initialize the plugin
-  StatsComposer* sc = Factory::getInstance().constructObject<StatsComposer>(statsClassName);
-  sc->initialize( statsScript, statsFormat, statsOutput, args);
-
-  // compose the stats object
-  QString asciidoc = sc->compose( stats, names );
-
-  // write the file out (it will always generate asciidoc because needed for pdf and html)
-  QFile outputFile(statsOutput+".asciidoc");
-  if (outputFile.exists())
-  {
-    outputFile.remove();
-  }
-  if (outputFile.open(QFile::WriteOnly | QFile::Text))
-  {
-    QTextStream out(&outputFile);
-    out << asciidoc;
-    outputFile.close();
-  }
-  else
-  {
-    LOG_ERROR("Unable to write to output file.");
-  }
-
-  // if PDF then convert asciidoc
-  if(statsFormat=="pdf") {
-    QString program = "/usr/bin/a2x";
-    QStringList arguments;
-    arguments << "-v" <<
-      "--dblatex-opts \"-P latex.output.revhistory=0 -P 'doc.layout=mainmatter' -P doc.publisher.show=0\"" <<
-      "-f pdf" << statsOutput+".asciidoc";
-    QString prog = program + QString(" ") + arguments.join(" ");
-
-    int result = system(prog.toStdString().c_str());
-    if(result != 0)
-    {
-      LOG_ERROR("The system command for generating PDF file created a return value of"+result);
-    }
-  }
-  else if(statsFormat=="html") {
-    QString program = "/usr/bin/asciidoc";
-    QStringList arguments;
-    arguments << "-a" << "data-uri" << "-a" << "icons" << statsOutput+".asciidoc";
-    QProcess myProcess;
-    myProcess.start(program, arguments);
-    myProcess.waitForFinished(-1);
-  }
-}
-
-void MapStatsWriter::writeStatsToJson(QList< QList<SingleStat> >& stats, const QString& statsOutputFilePath)
+void MapStatsWriter::writeStatsToJson(QList< QList<SingleStat> >& stats,
+                                      const QString& statsOutputFilePath)
 {
   try
   {
@@ -207,7 +112,8 @@ void MapStatsWriter::writeStatsToJson(QList< QList<SingleStat> >& stats, const Q
   }
 }
 
-void MapStatsWriter::writeStatsToText(QList<QList<SingleStat> > &stats, const QString &statsOutputFilePath)
+void MapStatsWriter::writeStatsToText(QList<QList<SingleStat> > &stats,
+                                      const QString &statsOutputFilePath)
 {
   LOG_INFO("Writing stats to file: " << statsOutputFilePath);
 
@@ -227,7 +133,6 @@ void MapStatsWriter::writeStatsToText(QList<QList<SingleStat> > &stats, const QS
   {
     LOG_ERROR("Unable to write to output file.");
   }
-
 }
 
 void MapStatsWriter::writeStats(const QString& mapInputPath, const QString& statsOutputFilePath,
@@ -306,4 +211,5 @@ QString MapStatsWriter::statsToString(QList< QList<SingleStat> >& stats, QString
 
   return result;
 }
+
 }

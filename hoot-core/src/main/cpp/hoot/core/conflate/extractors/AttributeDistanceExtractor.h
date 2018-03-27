@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ATTRIBUTEDISTANCEEXTRACTOR_H
 #define ATTRIBUTEDISTANCEEXTRACTOR_H
@@ -47,6 +47,9 @@ public:
   virtual std::string getClassName() const { return className(); }
 
   virtual std::string getName() const;
+
+  virtual QString getDescription() const
+  { return "TODO"; }
 
 protected:
 

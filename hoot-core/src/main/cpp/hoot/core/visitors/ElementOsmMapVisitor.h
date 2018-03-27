@@ -55,6 +55,7 @@ public:
   virtual void visit(const boost::shared_ptr<Element>& e) = 0;
 
 protected:
+
   OsmMap* _map;
 };
 

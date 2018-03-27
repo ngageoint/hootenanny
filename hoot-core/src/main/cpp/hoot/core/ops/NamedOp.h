@@ -58,6 +58,7 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
 private:
+
   const Settings* _conf;
   QStringList _namedOps;
 };

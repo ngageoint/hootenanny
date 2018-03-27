@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SMALLEROVERLAPEXTRACTOR_H
 #define SMALLEROVERLAPEXTRACTOR_H
@@ -68,6 +68,9 @@ public:
 
   virtual double extract(const OsmMap& map, const boost::shared_ptr<const Element>& target,
     const boost::shared_ptr<const Element>& candidate) const;
+
+  virtual QString getDescription() const
+  { return "Uses the building with more overlap to calculate the percentage overlap"; }
 };
 
 }

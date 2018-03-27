@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -48,7 +48,10 @@ public:
 
   AccuracyDistributionCmd() { }
 
-  virtual QString getName() const { return "accuracy-dist"; }
+  virtual QString getName() const { return "accuracy-distribution"; }
+
+  virtual QString getDescription() const
+  { return "Prints the distribution of accuracy values"; }
 
   virtual int runSimple(QStringList args)
   {

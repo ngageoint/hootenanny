@@ -12,7 +12,7 @@ hoot conflate -C core/Network.conf -D reader.conflate.use.data.source.ids.1=true
 
 
 # Derive the changeset for the Congo conflation
-hoot derive-changeset --stats \
+hoot changeset-derive --stats \
  test-files/Congo_MGCP_Roads_Bridges_subset.osm \
  test-output/NonDestructiveTest/output.osm \
  test-output/NonDestructiveTest/changeset.osc
