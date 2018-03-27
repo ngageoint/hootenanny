@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef FINDWAYSVISITOR_H
 #define FINDWAYSVISITOR_H
@@ -65,7 +65,12 @@ public:
                                          const QString& key,
                                          const QString& value);
 
+  virtual QString getName() const { return "Find Ways"; }
+
+  virtual QString getDescription() const { return "Returns the way IDs visited"; }
+
 private:
+
   const OsmMap* _map;
   std::vector<long> _wayIds;
   ElementCriterion * _pCrit;

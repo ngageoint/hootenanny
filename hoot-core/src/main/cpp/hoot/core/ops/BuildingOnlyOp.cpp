@@ -93,4 +93,4 @@ bool BuildingOnlyOp::_isBuildingRelation(ConstElementPtr e)
   return false;
 }
 
-} // namespace hoot
+}

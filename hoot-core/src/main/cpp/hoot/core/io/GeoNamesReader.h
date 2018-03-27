@@ -66,6 +66,8 @@ public:
 
   virtual void setUseDataSourceIds(bool useDataSourceIds) { _useDataSourceIds = useDataSourceIds; }
 
+  virtual QString supportedFormats() { return ".geonames"; }
+
 private:
 
   Meters _circularError;

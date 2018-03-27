@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef WEIGHTEDSHAPEDISTANCEEXTRACTOR_H
 #define WEIGHTEDSHAPEDISTANCEEXTRACTOR_H
@@ -39,6 +39,7 @@ namespace hoot
 class WeightedShapeDistanceExtractor : public WayFeatureExtractor
 {
 public:
+
   static std::string className() { return "hoot::WeightedShapeDistanceExtractor"; }
 
   WeightedShapeDistanceExtractor(ValueAggregatorPtr wayAgg);
@@ -47,7 +48,11 @@ public:
 
   virtual std::string getClassName() const { return className(); }
 
+  virtual QString getDescription() const
+  { return "Similar to Shape Distance as described in [1]. 1. Savary & Zeitouni, 2005"; }
+
 private:
+
   double _extract(const OsmMap& map, const ConstWayPtr& w1, const ConstWayPtr& w2) const;
 };
 

@@ -2,13 +2,12 @@
 
 === Description
 
-+stats+ reads input and write out hootenanny map statistics such as node and way
-count. More capabilities will likely be added in future implementations.
+The +stats+ command reads input and writes out map statistics such as node and way count.
 
-* +quick+ - Only calculate subset of statistics.
+* +quick+  - Only calculate subset of statistics.
 * +output+ - Write the stats to +path+ file.
-* +path+ - Output file path, supported file types are text and json.
-* +input+ - The input map path.
+* +path+   - Output file path, supported file types are text and json.
+* +input+  - The input map path.
 
 === Usage
 

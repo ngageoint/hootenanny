@@ -2,7 +2,8 @@
 == names
 
 === Description
-Reads input and write out a list of names ordered by frequency.
+
+The +names+ command reads input and write out a list of names ordered by frequency.
 
 * +input+ - One or more input map paths.
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -52,7 +52,10 @@ public:
 
   DeriveRubberSheetCmd() { }
 
-  virtual QString getName() const { return "derive-rubber-sheet"; }
+  virtual QString getName() const { return "rubber-sheet-derive"; }
+
+  virtual QString getDescription() const
+  { return "Creates a transform file for rubber sheeting map data"; }
 
   virtual int runSimple(QStringList args)
   {

@@ -49,8 +49,6 @@ class RubberSheetTest;
 class OsmMap;
 class Status;
 
-/**
- */
 class RubberSheet : public OsmMapOperation
 {
 public:
@@ -133,6 +131,10 @@ public:
 
    void setLogWarningWhenRequirementsNotFound(bool logWarning)
    { _logWarningWhenRequirementsNotFound = logWarning; }
+
+   virtual QString getName() const { return "Rubber Sheet"; }
+
+   virtual QString getDescription() const { return "Applies rubber sheeting to a map"; }
 
 private:
 

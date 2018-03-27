@@ -62,6 +62,11 @@ public:
 
   virtual void writeObject(QDataStream& /*os*/) const {}
 
+  virtual QString getName() const { return "Building Outline Update"; }
+
+  virtual QString getDescription() const
+  { return "Updates the outline of buildings by taking the union of all the parts"; }
+
 private:
 
   boost::shared_ptr<OsmMap> _map;

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // geos
@@ -55,6 +55,8 @@ public:
   UnionPolygonsCmd() { }
 
   virtual QString getName() const { return "union-polygons"; }
+
+  virtual QString getDescription() const { return "Combines polygons"; }
 
   virtual int runSimple(QStringList args)
   {

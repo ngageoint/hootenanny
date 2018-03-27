@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef EXTRACTNODESVISITOR_H
 #define EXTRACTNODESVISITOR_H
@@ -44,6 +44,10 @@ public:
   ExtractNodesVisitor(QList<ConstNodePtr>& n) : _n(n) {}
 
   virtual void visit(const boost::shared_ptr<const Element>& e);
+
+  virtual QString getName() const { return "Extract Nodes"; }
+
+  virtual QString getDescription() const { return "Returns the node IDs visited"; }
 
 private:
 

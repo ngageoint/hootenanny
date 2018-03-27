@@ -26,8 +26,8 @@ dropdb $AUTH $RENDER_DB &>/dev/null || true
 scripts/services/exportrenderdb.sh $MAP_ID $DB_URL # || true # Don't error out so test will continue to clean up
 
 # Clean up
-hoot delete-map $HOOT_OPTS "$DB_URL/$INPUT"
+hoot delete-db-map $HOOT_OPTS "$DB_URL/$INPUT"
 
 # Assert that hoot map and render db have been deleted
-psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d $DB_NAME -c "select display_name from maps;" | grep -qw "$INPUT" && echo "Error: delete-map did not remove $INPUT dataset"
-psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d $DB_NAME -lqt | cut -d \| -f 1 | grep -qw $RENDER_DB && echo "Error: delete-map did not remove $INPUT render db"
+psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d $DB_NAME -c "select display_name from maps;" | grep -qw "$INPUT" && echo "Error: delete-db-map did not remove $INPUT dataset"
+psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d $DB_NAME -lqt | cut -d \| -f 1 | grep -qw $RENDER_DB && echo "Error: delete-db-map did not remove $INPUT render db"

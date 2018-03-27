@@ -54,6 +54,11 @@ public:
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new ChainCriterion(_filters)); }
 
+  virtual QString getName() const { return "Chain"; }
+
+  virtual QString getDescription() const
+  { return "Allows for chaining together multiple criterion"; }
+
 protected:
 
   ChainCriterion(std::vector< boost::shared_ptr<ElementCriterion> > filters);

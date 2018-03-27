@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 /*
@@ -73,6 +73,9 @@ public:
   PbfIsSortedCmd() {}
 
   virtual QString getName() const { return "pbf-is-sorted"; }
+
+  virtual QString getDescription() const
+  { return "Determines if an OSM PBF file has been sorted"; }
 
   int runSimple(QStringList args)
   {

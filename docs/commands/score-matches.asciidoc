@@ -2,15 +2,14 @@
 
 === Description
 
-+score-matches+ reads from inputs, adds UUIDs, conflates using unify and scores
-the matches. The command will return an error if the first input file contains
-any REF2 tags or the second input file contains any REF1 tags.
+The +score-matches+ command scores how well conflation performs using manually matched data as a reference.  It reads from inputs, 
+adds UUIDs, conflates using unify, and scores the matches. The command will return  an error if the first input file contains any 
+REF2 tags or the second input file contains any REF1 tags.
 
 * +--confusion+ - print the confusion matrix
-* +input1+ - Input 1 (e.g. .osm file).
-* +input2+ - Input 2 (e.g. .osm file).
-* +output+ - Output file for debugging (e.g. .osm file). Only the first
-  conflation will be output.
+* +input1+      - Input 1 (e.g. .osm file).
+* +input2+      - Input 2 (e.g. .osm file).
+* +output+      - Output file for debugging (e.g. .osm file). Only the first conflation will be output.
 
 === Usage
 

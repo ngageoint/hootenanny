@@ -1,0 +1,355 @@
+[[convert-ogr2osm]]
+== convert-ogr2osm
+
+=== Description
+
+The +convert-ogr2osm+ command converts and translates map data from an OGR compatible format such as Shapefile or File Geodatabase 
+into the http://wiki.openstreetmap.org/wiki/OSM_XML[.osm format]. 
+
+* +limit+       - 'n' specifies the maximum number of features to translate. This is
+                  useful when debugging.
+* +translation+ - The base name of a Python translation file. Leave the +.py+
+                  portion off of the python file name. The format of this file is described in
+                  the following section. 
+* +output.osm+  - The name of the output file to create.
+* +inputs+      - One or more inputs are supported. Each input is made up of a file
+                  name and optionally a layer name. Examples for shapefile, File Geodatabase and
+                  zip files of shapefiles can be found in the _Example_ section.
+
+==== Input Formats
+
+File Geodatabase must be compiled into your version of GDAL to work. See
+http://trac.osgeo.org/gdal/wiki/FileGDB for details.
+
+==== Zip file notes:
+
+* The format for specifying the data is: "/vsizip/<path to Zip file>/<path to
+  the shape file INSIDE the Zip file>
+* The "/" are field separators. If you get errors using absolute paths, check
+  that you have the right number of "/" 
+
+* Example:
+
+** a Zip file located at /gis-data/test_data.zip
+** The path to the shapefile inside the Zip file: "dir/LAP010.shp
+* The input is: "/vsizip//gis-data/test_data.zip/dir/LAP010.shp"
+* If the Zip file is in the current directory, the input will be:
+  /vsizip/./test_data.zip/dir/LAP010.shp
+* If you do not specify a specific shapefile then it will read in all shapefiles
+  in the given directory
+
+=== Translation File
+
+The purpose of the translation file is to convert your custom Shapefile into the
+OSM schema (http://wiki.openstreetmap.org/wiki/Map_Features). The translation
+file is a Python script with a global function with the following definition:
+
+* +def translateAttributes(attrs, layerName):+
+** +attrs+ - A dictionary of attributes for a single feature to be translated.
+** +layerName+ - The name of the layer being translated. This is provided in
+   case multiple files are being translated at one time such as roads, bridges
+   and tunnels. Sometimes this provides additional context when translated a
+   feature.
+
+The function must return either a dictionary of OSM tags or None if the feature
+should be filtered from the data set. When +convert-ogr2osm+ is launched Hootenanny
+loads the specified Python file. The files in the +translations+ directory will
+be included in the Python path. The same Python instance will be used for the
+translations of all files in the _input_ list. This means that the script will
+only be intialized once and then +translateAttributes+ will be called once for
+each feature in all of the input files.
+
+==== Example Translation Work Flow
+
+Imagine you have a Shapefile named _MyRoads.shp_ for input with the following
+attributes:
+
+|==============================
+| _STNAME_ | _STTYPE_ | _FLOW_
+| Foo St.  | main     | 1
+| Bar Rd.  | res      | 2
+| Foo St.  | main     | 1
+|==============================
+
+In my notional example there are three columns with the following definitions:
+
+* +STNAME+ - The name of the street.
+* +STTYPE+ - The type of the street. 
+* +DIR+ - The flow of traffic, either 1 for one way traffic, or 2 for
+  bidirectional traffic.
+
+Hootenanny will call the translateAttributes method 3 times for this input. Each
+call will contain the attributes for a given row. In this case the parameters
+passed will be:
+
+|===================================================================
+| _attrs_                                           | _layerName_
+| {"STNAME":"Foo St.", "STTYPE":"main", "FLOW","1"} | "MyRoads.shp"
+| {"STNAME":"Bar Rd.", "STTYPE":"res", "FLOW","2"}  | "MyRoads.shp"
+| {"STNAME":"Foo St.", "STTYPE":"main", "FLOW","1"} | "MyRoads.shp"
+|===================================================================
+
+The syntax above for _attrs_ is the dictionary syntax in Python. For more
+details see the Python documentation
+(http://docs.python.org/2/library/stdtypes.html#mapping-types-dict). You may
+also have noticed that _layerName_ does not change during any of the calls. In
+this case since we're only passing one input file the value will stay the same,
+if we passed multiple files as input then the _layerName_ would change to
+reflect the current input.
+
+We must now write a translation file that will convert our input attributes into
+a set of appropriate OSM tags. Using the
+http://wiki.openstreetmap.org/wiki/Map_Features[Map Feature] reference on the
+OSM wiki you can determine what is appropriate for a given input, but in this
+notional example I'll give you the translations below:
+
+* +STNAME+ - Equivalent to the OSM +name+ tag.
+* +STTYPE+ - +main+ is equivalent to +highway=primary+ and +res+ is equivalent
+  to +highway=residential+
+* +DIR+ - 1 is equivalent to +oneway=yes+, 2 is equivalent to +oneway=no+.
+
+So the input/output mapping we want is below:
+
+*Inputs/Outputs Table*
+
+|===============================================================================================================================
+| _attrs_                                           | _layerName_   | _result_
+| {"STNAME":"Foo St.", "STTYPE":"main", "FLOW","1"} | "MyRoads.shp" | {"name":"Foo St.", "highway":"primary", "oneway":"yes"}
+| {"STNAME":"Bar Rd.", "STTYPE":"res", "FLOW","2"}  | "MyRoads.shp" | {"name":"Bar Rd.", "highway":"residential", "oneway":"no"}
+| {"STNAME":"Foo St.", "STTYPE":"main", "FLOW","1"} | "MyRoads.shp" | {"name":"Foo St.", "highway":"primary", "oneway":"yes"}
+|===============================================================================================================================
+
+To accomplish this we can use the following translation script:
+
+[source,python]
+----
+#!/bin/python
+
+def translateAttributes(attrs, layerName):
+    # Intialize our results object
+    tags = {}
+
+    # Is the STNAME attribute properly populated?
+    if 'STNAME' in attrs and attrs['STNAME'] != '':
+        tags['name'] = attrs['STNAME']
+    # Is the STTYPE attribute properly populated?
+    if 'STTYPE' in attrs and attrs['STTYPE'] != '':
+        if attrs['STTYPE'] == 'main':
+            tags['highway'] = 'primary'
+        if attrs['STTYPE'] == 'res':
+            tags['highway'] = 'residential'
+    # Is the FLOW attribute properly populated?
+    if 'FLOW' in attrs and attrs['FLOW'] != '':
+        if attrs['FLOW'] == '1':
+            tags['oneway'] = 'yes'
+        if attrs['FLOW'] == '2':
+            tags['oneway'] = 'no'
+
+    # Useful when debugging. You can see print statements on stdout when Hootenanny is running
+    #print "Input: " + str(attrs)
+    #print "Output: " + str(tags)
+
+    # Return our translated tags
+    return tags
+----
+
+The translation script can also be written in JavaScript.
+
+JavaScript notes:
+
+* "tags.highway" is the same as "tags['highway']"
+* OSM tags like "addr:street" MUST be specified using "tags['addr:street']" or
+  you will get errors.
+
+----
+function translateToOsm(attrs, layerName)
+{
+    tags = {};
+
+    // Names
+    if (attrs.STNAME) tags.name = attrs.STNAME;
+
+    // Highways
+    if (attrs.STTYPE == 'main') tags.highway = 'primary';
+    if (attrs.STTYPE == 'res') tags.highway = 'residential';
+
+    // Flow direction
+    if (attrs.FLOW == '1') tags.oneway = 'yes';
+    if (attrs.FLOW == '2') tags.oneway = 'no';
+
+    // Print the input attrs for debugging:
+    // This will print:
+    // Input:STNAME: :Foo St.:
+    // Input:STTYPE: :main:
+    // etc
+    // for (var i in attrs) print('Input:' + i + ': :' + attrs[i] + ':');
+
+    // Print the output tags for debugging. The format is the same as for the
+    // attrs
+    // for (var i in tags) print('Output:' + i + ': :' + tags[i] + ':');
+
+    return tags;
+}
+----
+
+The translation scripts above will give the values found in the _Inputs/Outputs
+Table_.
+
+==== Example Python Translation File 
+
+The following script provides a more thorough example for translating
+http://www.census.gov/geo/www/tiger/tgrshp2012/tgrshp2012.html[2010 Tiger road data]:
+
+[source,python]
+----
+#!/bin/python
+
+def translateAttributes(attrs, layerName):
+    if not attrs: return
+
+    tags = {}
+
+    if 'FULLNAME' in attrs:
+        name = attrs['FULLNAME']
+        if name != 'NULL' and name != '':
+            tags['name'] = name
+
+    if 'MTFCC' in attrs:
+        mtfcc = attrs['MTFCC']
+        if mtfcc == 'S1100':
+            tags['highway'] = 'primary'
+        if mtfcc == 'S1200':
+            tags['highway'] = 'secondary'
+        if mtfcc == 'S1400':
+            tags['highway'] = 'unclassified'
+        if mtfcc == 'S1500':
+            tags['highway'] = 'track'
+            tags['surface'] = 'unpaved'
+        if mtfcc == 'S1630':
+            tags['highway'] = 'road'
+        if mtfcc == 'S1640':
+            tags['highway'] = 'service'
+        if mtfcc == 'S1710':
+            tags['highway'] = 'path'
+            tags['foot'] = 'designated'
+        if mtfcc == 'S1720':
+            tags['highway'] = 'steps'
+        if mtfcc == 'S1730':
+            tags['highway'] = 'service'
+        if mtfcc == 'S1750':
+            tags['highway'] = 'road'
+        if mtfcc == 'S1780':
+            tags['highway'] = 'service'
+            tags['service'] = 'parking_aisle'
+        if mtfcc == 'S1820':
+            tags['highway'] = 'path'
+            tags['bicycle'] = 'designated'
+        if mtfcc == 'S1830':
+            tags['highway'] = 'path'
+            tags['horse'] = 'designated'
+
+    return tags
+----
+
+==== Example JavaScript Translation File
+
+----
+function translateToOsm(attrs, layerName)
+{
+    tags = {};
+
+    // Names
+    if (attrs.FULLNAME && attrs.FULLNAME !== 'NULL') tags.name = attrs.FULLNAME;
+
+    // Highways
+    if (attrs.MTFCC == 'S1100') tags.highway = 'primary';
+
+    if (attrs.MTFCC == 'S1200') tags.highway = 'secondary';
+
+    if (attrs.MTFCC == 'S1400') tags.highway = 'unclassified';
+
+    if (attrs.MTFCC == 'S1500') 
+    {
+        tags.highway = 'track';
+        tags.surface = 'unpaved';
+    }
+
+    if (attrs.MTFCC == 'S1600') tags.highway = 'road';
+
+    if (attrs.MTFCC == 'S1640') tags.highway = 'service';
+
+    if (attrs.MTFCC == 'S1710') 
+    {
+        tags.highway = 'path';
+        tags.foot = 'designated';
+    }
+
+    if (attrs.MTFCC == 'S1720') tags.highway = 'steps';
+
+    if (attrs.MTFCC == 'S1730') tags.highway = 'service';
+
+    if (attrs.MTFCC == 'S1750') tags.highway = 'road';
+
+    if (attrs.MTFCC == 'S1780') 
+    {
+        tags.highway = 'service';
+        tags.service = 'parking_aisle';
+    }
+
+    if (attrs.MTFCC == 'S1820') 
+    {
+        tags.highway = 'path';
+        tags.bicycle = 'designated';
+    }
+
+    if (attrs.MTFCC == 'S1830') 
+    {
+        tags.highway = 'path';
+        tags.horse = 'designated';
+    }
+
+
+    return tags;
+}
+----
+
+=== Usage
+
+--------------------------------------
+convert-ogr2osm [--limit n] (translation) (output.osm) (input1[;layer]) [input2[;layer]] ...
+--------------------------------------
+
+==== Example
+
+Convert multiple tiger road data sets using a tiger translation file found in
+_translations/TigerRoads.py_. By converting multiple files at one time
+Hootenanny will make sure that road end points that fall within 1 meter will be
+merged into intersections.
+
+--------------------------------------
+hoot convert-ogr2osm TigerRoads TigerRoadsOutput.osm til_2010_*_roads.shp
+--------------------------------------
+
+Convert roads, bridges, overpasses and tunnels from a File Geodatabase into a
+single .osm file using a translation file named
+_translations/MyGdbTranslation.py_.
+
+--------------------------------------
+hoot convert-ogr2osm MyGdbTranslation MyGdbOutput.osm MyGdb.gdb;ROAD_L \
+  MyGdb.gdb;BRIDGE_OVERPASS_L MyGdb.gdb;TUNNEL_L
+--------------------------------------
+
+Convert a road shapefile that is stored inside the +tds+ directory in a Zip file.
+
+--------------------------------------
+hoot convert-ogr2osm $HOOT_HOME/translations/TDSv40.js tds_roads.osm \
+  /vsizip//gis-data/test_data.zip/tds/LAP030.shp 
+--------------------------------------
+
+Convert all TDS shapefiles stored in the top level of a Zip file.
+
+--------------------------------------
+hoot convert-ogr2osm $HOOT_HOME/translations/TDSv40.js tds_roads.osm \
+  /vsizip//gis-data/test_data.zip/
+--------------------------------------
+

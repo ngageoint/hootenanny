@@ -12,13 +12,13 @@ psql --quiet $OSM_API_DB_AUTH -d $DB_NAME_OSMAPI -f test-files/servicesdb/users.
 rm -rf test-output/cmd/ServiceDeriveChangesetCmdSqlTest
 mkdir -p test-output/cmd/ServiceDeriveChangesetCmdSqlTest
 
-hoot derive-changeset -D changeset.user.id=1 test-files/cmd/quick/DeriveChangesetCmdTest/map1.osm test-files/cmd/quick/DeriveChangesetCmdTest/map2.osm test-output/cmd/ServiceDeriveChangesetCmdSqlTest/changeset-1.osc.sql $OSM_API_DB_URL
+hoot changeset-derive -D changeset.user.id=1 test-files/cmd/quick/DeriveChangesetCmdTest/map1.osm test-files/cmd/quick/DeriveChangesetCmdTest/map2.osm test-output/cmd/ServiceDeriveChangesetCmdSqlTest/changeset-1.osc.sql $OSM_API_DB_URL
 diff test-output/cmd/ServiceDeriveChangesetCmdSqlTest/changeset-1.osc.sql test-files/cmd/slow/ServiceDeriveChangesetCmdSqlTest/changeset-1.osc.sql
 
-hoot derive-changeset -D changeset.user.id=1 test-files/cmd/quick/DeriveChangesetCmdTest/map1.osm "" test-output/cmd/ServiceDeriveChangesetCmdSqlTest/changeset-2.osc.sql $OSM_API_DB_URL
+hoot changeset-derive -D changeset.user.id=1 test-files/cmd/quick/DeriveChangesetCmdTest/map1.osm "" test-output/cmd/ServiceDeriveChangesetCmdSqlTest/changeset-2.osc.sql $OSM_API_DB_URL
 diff test-output/cmd/ServiceDeriveChangesetCmdSqlTest/changeset-2.osc.sql test-files/cmd/slow/ServiceDeriveChangesetCmdSqlTest/changeset-2.osc.sql
 
-hoot derive-changeset --debug -D changeset.user.id=1 test-files/cmd/quick/DeriveChangesetCmdTest/map1.osm test-files/cmd/quick/DeriveChangesetCmdTest/map2.osm "test-output/cmd/ServiceDeriveChangesetCmdSqlTest/changeset-3.osc.sql;test-output/cmd/ServiceDeriveChangesetCmdSqlTest/changeset-3.osc" $OSM_API_DB_URL
+hoot changeset-derive --debug -D changeset.user.id=1 test-files/cmd/quick/DeriveChangesetCmdTest/map1.osm test-files/cmd/quick/DeriveChangesetCmdTest/map2.osm "test-output/cmd/ServiceDeriveChangesetCmdSqlTest/changeset-3.osc.sql;test-output/cmd/ServiceDeriveChangesetCmdSqlTest/changeset-3.osc" $OSM_API_DB_URL
 diff test-output/cmd/ServiceDeriveChangesetCmdSqlTest/changeset-3.osc.sql test-files/cmd/slow/ServiceDeriveChangesetCmdSqlTest/changeset-3.osc.sql
 diff test-output/cmd/ServiceDeriveChangesetCmdSqlTest/changeset-3.osc test-files/cmd/slow/ServiceDeriveChangesetCmdSqlTest/changeset-3.osc
 

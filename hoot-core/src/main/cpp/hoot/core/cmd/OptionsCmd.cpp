@@ -39,9 +39,6 @@ using namespace std;
 namespace hoot
 {
 
-/**
- * Lists Hootenanny config options
- */
 class OptionsCmd : public BaseCommand
 {
 
@@ -52,6 +49,9 @@ public:
   OptionsCmd() {}
 
   virtual QString getName() const { return "options"; }
+
+  virtual QString getDescription() const
+  { return "Prints configuration options"; }
 
   virtual int runSimple(QStringList args)
   {

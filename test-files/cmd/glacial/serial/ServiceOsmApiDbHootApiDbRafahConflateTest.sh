@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#hoot crop-map tmp/rafah.osm tmp/rafah-cropped.osm "34.046,31.178,34.057,31.184"
+#hoot crop tmp/rafah.osm tmp/rafah-cropped.osm "34.046,31.178,34.057,31.184"
 
 scripts/core/ServiceOsmApiDbHootApiDbConflate.sh \
   test-files/cmd/glacial/ServiceOsmApiDbHootApiDbRafahConflateTest/rafah-cropped.osm \

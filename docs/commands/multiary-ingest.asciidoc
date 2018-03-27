@@ -2,7 +2,8 @@
 
 === Description
 
-Ingests POI data for use by Multiary Conflation by calculating the difference between new and existing data
+The +multiary-ingest+ command ingests POI data for use by the +multiary-conflate+ command by calculating the difference between 
+new and existing data.
 
 * +newInput+          - path to a supported Hootenanny data format
 * +translationScript+ - path to a translation script used to translate the input data to OSM

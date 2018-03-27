@@ -1,0 +1,67 @@
+== big-ogr2osm
+
+=== Description
+
+The +convert-ogr2osm+  command reads data from one or more inputs and writes the result
+to a _.osm.pbf_ file. For detailed information on the translation process please
+see the +convert-ogr2osm+ command.  This is an alternative to the +convert-ogr2osm+ command that
+can handle arbitrarily large input files by performing the translation on a row
+by row basis. Unfortunately, this operation does not perform the node merge that
++convert-ogr2osm+ performs. For this step the +big-merge-nodes+ command is strongly
+recommended.
+
+* +translation+ - python script base name. This looks in the "translations"
+  directory and takes the same format translations file as convert-ogr2osm.py. leave off
+  the ".py" to use the files in PYTHONPATH or specify the relative or absolute
+  path name with the ".py".
+* +output.osm+ - Output file name.
+* +inputs+ - One or more OGR compatible inputs. If you're using a layer within a
+  data source then delimit it with a semicolon. E.g: myshapefile.shp
+  "myfgb.gdb;mylayer"
+
+
+=== Usage
+
+--------------------------------------
+big-ogr2osm (translation) (output.osm.pbf) (input1[;layer]) [input2[;layer]] ...
+--------------------------------------
+
+==== Example 1
+
+Simply translate a series of Shapefiles without performing a node merge. This by
+itself is probably not what you want. See the following examples for a more
+complete workflow.
+
+--------------------------------------
+hoot big-ogr2osm TigerRoads TigerRoadsOutput.osm.pbf til_2010_*_roads.shp
+--------------------------------------
+
+==== Example 2
+
+Translate a Shapefile, merge the nodes and put it on the desktop in the .osm.pbf
+format.
+
+--------------------------------------
+# Translate the shapefiles
+hoot big-ogr2osm TigerRoads TigerRoadsTranslated.osm.pbf til_2010_*_roads.shp
+
+# Create a directory on HDFS to store the translated file
+hadoop fs -mkdir tiger-roads-translated.osm.pbf
+
+# Put the translated file in the new directory.
+hadoop fs -put TigerRoadsTranslated.osm.pbf \
+  tiger-roads-translated.osm.pbf/Input.osm.pbf
+
+# Merge the nearby nodes and put the result in the `tiger-roads-merged.osm.pbf`
+# directory
+hoot big-merge-nodes tiger-roads-translated.osm.pbf tiger-roads-merged.osm.pbf
+
+# Concatenate the files in our output directory and put them in a properly
+# formatted, but unsorted .osm.pbf.
+hadoop fs -cat tiger-roads-merged.osm.pbf/*.pbf | hoot add-pbf-header - \
+  TigerRoadsUnsorted.osm.pbf
+
+# Optionally, sort the .osm.pbf so it can be used by tools like osm2pgsql
+osmosis --read-pbf TigerRoadsUnsorted.osm.pbf --sort --write-pbf \
+  omitmetadata=true TigerRoadsOutput.osm.pbf
+--------------------------------------

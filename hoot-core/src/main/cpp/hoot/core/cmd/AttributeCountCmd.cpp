@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -48,6 +48,9 @@ public:
   AttributeCountCmd() { }
 
   virtual QString getName() const { return "attribute-count"; }
+
+  virtual QString getDescription() const
+  { return "Prints out the layer name, attribute name, and some attribute values"; }
 
   virtual int runSimple(QStringList args)
   {

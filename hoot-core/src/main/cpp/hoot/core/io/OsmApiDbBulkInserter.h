@@ -193,6 +193,8 @@ public:
   void setWriteIdSequenceUpdates(bool write)
   { _writeIdSequenceUpdates = write; }
 
+  virtual QString supportedFormats() { return "osmapidb://"; }
+
 protected:
 
   ElementWriteStats _writeStats;

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGRENAMEKEYVISITOR_H
 #define TAGRENAMEKEYVISITOR_H
@@ -36,7 +36,7 @@ namespace hoot
 {
 
 /**
- * Renames all keys for all elements with the specified name to a new name
+ * Renames all keys for all elements with the specified key to a new key
  */
 class TagRenameKeyVisitor : public ElementOsmMapVisitor, public Configurable
 {
@@ -53,6 +53,11 @@ public:
   virtual void visit(const boost::shared_ptr<Element>& e);
 
   virtual void setConfiguration(const Settings& conf);
+
+  virtual QString getName() const { return "Rename Tag Keys"; }
+
+  virtual QString getDescription() const
+  { return "Renames all keys for all elements with the specified key to a new key"; }
 
 private:
 

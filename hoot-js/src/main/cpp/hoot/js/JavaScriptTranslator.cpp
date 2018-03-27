@@ -937,7 +937,7 @@ QVariantList JavaScriptTranslator::_translateToOgrVariants(Tags& tags,
   }
   else
   {
-    throw Exception("osm2ogr: Expected either a null or an object as the result.");
+    throw Exception("convert-osm2ogr: Expected either a null or an object as the result.");
   }
 
   return result;
@@ -1011,7 +1011,7 @@ void JavaScriptTranslator::_translateToOsm(Tags& t, const char *layerName, const
   }
   else
   {
-    throw Exception("ogr2osm: Expected either a null or an object as the result.");
+    throw Exception("convert-ogr2osm: Expected either a null or an object as the result.");
   }
 }
 

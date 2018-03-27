@@ -45,7 +45,7 @@ MAKEFLAGS= make -f $HOOT_HOME/test-files/cmd/glacial/osm2ogrscript > /dev/null
 
 
 # Remove ingested data
-hoot delete-map $HOOT_OPTS $DB_URL/$input
+hoot delete-db-map $HOOT_OPTS $DB_URL/$input
 
 # Remove WFS data store tables
 SQL=$( psql -h $DB_HOST -t -A -d $WFS_DB_NAME -U $DB_USER -p $DB_PORT -c "SELECT 'DROP TABLE \"' || tablename || '\";' FROM pg_tables WHERE tablename like 'service_export_test\_%';" )

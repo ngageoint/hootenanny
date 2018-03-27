@@ -2,8 +2,7 @@
 
 === Description
 
-Reads polygons from one or more inputs, unions them and writes the single
-polygon to output.
+The +union-polygons+ command reads polygons from one or more inputs, unions them together, and writes the single polygon to output.
 
 * +output+ - Output file name.
 * +inputs+ - One or more inputs.

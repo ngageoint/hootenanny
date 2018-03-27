@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef EXTRACTWAYSVISITOR_H
 #define EXTRACTWAYSVISITOR_H
@@ -44,6 +44,10 @@ public:
    * Convenience method.
    */
   static std::vector<ConstWayPtr> extractWays(const ConstOsmMapPtr& map, const ConstElementPtr& e);
+
+  virtual QString getName() const { return "Extract Ways"; }
+
+  virtual QString getDescription() const { return "Returns the way IDs visited"; }
 
 private:
 

@@ -19,16 +19,16 @@ This is a contrived example set of commands that perform all the data preparatio
 
 ----------------------------
 # translate (may be optional)
-hoot ogr2osm MyTranslation.py TranslatedOutput1.osm Input1.shp
-hoot ogr2osm MyTranslation.py TranslatedOutput2.osm Input2.shp
+hoot convert-ogr2osm MyTranslation.py TranslatedOutput1.osm Input1.shp
+hoot convert-ogr2osm MyTranslation.py TranslatedOutput2.osm Input2.shp
 
 # crop (optional)
-hoot crop-map TranslatedOutput1.osm CroppedOutput1.osm "-77.0551,38.8845,-77.0281,38.9031"
-hoot crop-map TranslatedOutput2.osm CroppedOutput2.osm "-77.0551,38.8845,-77.0281,38.9031"
+hoot crop TranslatedOutput1.osm CroppedOutput1.osm "-77.0551,38.8845,-77.0281,38.9031"
+hoot crop TranslatedOutput2.osm CroppedOutput2.osm "-77.0551,38.8845,-77.0281,38.9031"
 
 # clean (optional)
-hoot cleanup CroppedOutput1.osm CleanedOutput1.osm
-hoot cleanup CroppedOutput2.osm CleanedOutput2.osm
+hoot clean CroppedOutput1.osm CleanedOutput1.osm
+hoot clean CroppedOutput2.osm CleanedOutput2.osm
 
 # prune (optional)
 hoot convert -D "convert.ops=hoot::KeepBuildingsVisitor" CleanedOutput1.osm BuildingsOutput1.osm
@@ -49,32 +49,32 @@ Also, examine the geometries of the features with a backdrop of accurate satelli
 
 ==== Translating Test Data (may be optional)
 
-Once users have identified appropriate datasets to manually match, they will need to translate any non-OSM datasets into Hootenanny's OSM+ schema or create their own custom translation schema to do so.  If your input data is already OSM, you may skip this step.  If your input data already has name and type fields that correspond to the OSM standard, then you may also be able to skip this step.  See taginfo.openstreetmap.org for more information on the OSM tagging standard.  For detailed instructions on how to translate data, see the ogr2osm command documentation.
+Once users have identified appropriate datasets to manually match, they will need to translate any non-OSM datasets into Hootenanny's OSM+ schema or create their own custom translation schema to do so.  If your input data is already OSM, you may skip this step.  If your input data already has name and type fields that correspond to the OSM standard, then you may also be able to skip this step.  See taginfo.openstreetmap.org for more information on the OSM tagging standard.  For detailed instructions on how to translate data, see the convert-ogr2osm command documentation.
 
 An example:
 
 ----------------------
-hoot ogr2osm MyTranslation.py TranslatedOutput.osm Input.shp
+hoot convert-ogr2osm MyTranslation.py TranslatedOutput.osm Input.shp
 ----------------------------
 
 ==== Cropping Test Data (optional)
 
-If the AOI of either of your input datasets is larger than you need, then you may benefit from cropping the data down to a smaller AOI, as JOSM can be slow when dealing with very large datasets.  See the command line documenation on the crop-map command in the Hootenanny User Guide for more information on cropping data.
+If the AOI of either of your input datasets is larger than you need, then you may benefit from cropping the data down to a smaller AOI, as JOSM can be slow when dealing with very large datasets.  See the command line documenation on the crop command in the Hootenanny User Guide for more information on cropping data.
 
 An example:
 
 ----------------------
-hoot crop-map Input.osm CroppedOutput.osm "-77.0551,38.8845,-77.0281,38.9031"
+hoot crop Input.osm CroppedOutput.osm "-77.0551,38.8845,-77.0281,38.9031"
 ----------------------------
 
 ==== Cleaning the Test Data (optional)
 
-The Hootenanny cleanup command can be used to perform useful cleaning operations on the data beforehand.  This is an optional step at this point but is always executed by Hootenanny on all input data before conflation.  The advantage of doing cleaning before manual conflation is that it may result in more intutive input data to use during the process.  See the cleanup command documentation for more details.
+The Hootenanny clean command can be used to perform useful cleaning operations on the data beforehand.  This is an optional step at this point but is always executed by Hootenanny on all input data before conflation.  The advantage of doing cleaning before manual conflation is that it may result in more intutive input data to use during the process.  See the clean command documentation for more details.
 
 An example:
 
 -------------------------
-hoot cleanup Input.osm CleanedOutput.osm
+hoot clean Input.osm CleanedOutput.osm
 -------------------------
 
 ==== Pruning Irrelevant Test Data (optional)

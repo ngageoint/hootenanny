@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGKEYCOUNTVISITOR_H
 #define TAGKEYCOUNTVISITOR_H
@@ -40,24 +40,28 @@ namespace hoot
  */
 class TagKeyCountVisitor : public ConstElementVisitor, public SingleStatistic
 {
-  public:
+public:
 
-    static std::string className() { return "hoot::TagKeyCountVisitor"; }
+  static std::string className() { return "hoot::TagKeyCountVisitor"; }
 
-    TagKeyCountVisitor() {}
-    TagKeyCountVisitor(const QString key);
+  TagKeyCountVisitor() {}
+  TagKeyCountVisitor(const QString key);
 
-    virtual ~TagKeyCountVisitor() {}
+  virtual ~TagKeyCountVisitor() {}
 
-    virtual void visit(const ConstElementPtr& e);
+  virtual void visit(const ConstElementPtr& e);
 
-    virtual double getStat() const { return _keyCount; }
+  virtual double getStat() const { return _keyCount; }
 
-  private:
+  virtual QString getName() const { return "Count Tag Keys"; }
 
-    QString _key;
-    long _keyCount;
+  virtual QString getDescription() const
+  { return "Counts the number of tags in all elements with the given key"; }
 
+private:
+
+  QString _key;
+  long _keyCount;
 };
 
 }

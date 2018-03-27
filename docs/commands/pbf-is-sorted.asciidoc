@@ -2,7 +2,7 @@
 
 === Description
 
-Determines whether an OSM PBF file has been sorted by element type and ID
+The +pbf-is-sorted+ command determines whether an OSM PBF file has been sorted by element type and ID.
 
 * +input+ - path to a an OSM PBF file
 

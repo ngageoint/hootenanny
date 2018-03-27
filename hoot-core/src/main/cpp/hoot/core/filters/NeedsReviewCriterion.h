@@ -56,6 +56,10 @@ public:
 
   virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
 
+  virtual QString getName() const { return "Needs Review"; }
+
+  virtual QString getDescription() const { return "Identifies features that need to be reviewed"; }
+
 private:
 
   ConstOsmMapPtr _map;

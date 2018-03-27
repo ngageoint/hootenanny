@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVEUNKNOWN1_H
 #define REMOVEUNKNOWN1_H
@@ -47,6 +47,10 @@ public:
   virtual ~RemoveUnknown1Visitor() {}
 
   virtual void visit(const boost::shared_ptr<Element>& e);
+
+  virtual QString getName() const { return "Remove Unknown1 Tag"; }
+
+  virtual QString getDescription() const { return "Removes all elements with a status of Unknown1"; }
 };
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POIFILTER_H
 #define POIFILTER_H
@@ -46,6 +46,10 @@ public:
   virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new PoiCriterion()); }
+
+  virtual QString getName() const { return "POI"; }
+
+  virtual QString getDescription() const { return "Identifies POIs"; }
 
 };
 

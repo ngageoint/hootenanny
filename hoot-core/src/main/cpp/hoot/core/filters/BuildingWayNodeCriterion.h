@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BUILDINGWAYNODECRITERION_H
 #define BUILDINGWAYNODECRITERION_H
@@ -53,6 +53,10 @@ public:
   virtual void setOsmMap(const OsmMap* map);
 
   virtual ElementCriterionPtr clone();
+
+  virtual QString getName() const { return "Building Way Node"; }
+
+  virtual QString getDescription() const { return "Identifies way nodes in buildings"; }
 
 private:
 

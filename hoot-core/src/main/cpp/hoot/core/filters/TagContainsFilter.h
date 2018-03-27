@@ -51,6 +51,11 @@ public:
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new TagContainsFilter(_type, _key, _valueSubstring)); }
 
+  virtual QString getName() const { return "Tag Contains"; }
+
+  virtual QString getDescription() const
+  { return "Filters elements based on tag key and value substrings"; }
+
 protected:
 
   virtual bool isFiltered(const Element& e) const;
