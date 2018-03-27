@@ -51,51 +51,47 @@ public:
   virtual QString getDescription() const
   { return "Prints available inline operators on map data"; }
 
-  //TODO: clean this up with templated functions?
-
-  static bool operationCompare(const std::string& n1, const std::string& n2)
+  template<typename Operator>
+  class OperatorNameComparator
   {
-    boost::shared_ptr<OsmMapOperation> c1(
-      Factory::getInstance().constructObject<OsmMapOperation>(n1));
-    boost::shared_ptr<OsmMapOperation> c2(
-      Factory::getInstance().constructObject<OsmMapOperation>(n2));
+  public:
 
-    return c1->getName() < c2->getName();
-  }
+    OperatorNameComparator() {}
 
-  static bool criterionCompare(const std::string& n1, const std::string& n2)
-  {
-    boost::shared_ptr<ElementCriterion> c1(
-      Factory::getInstance().constructObject<ElementCriterion>(n1));
-    boost::shared_ptr<ElementCriterion> c2(
-      Factory::getInstance().constructObject<ElementCriterion>(n2));
+    bool operator()(const std::string& name1, const std::string& name2)
+    {
+        boost::shared_ptr<Operator> op1(
+          Factory::getInstance().constructObject<Operator>(name1));
+        boost::shared_ptr<Operator> op2(
+          Factory::getInstance().constructObject<Operator>(name2));
+        return op1->getName() < op2->getName();
+    }
+  };
 
-    return c1->getName() < c2->getName();
-  }
-
-  static bool visitorCompare1(const std::string& n1, const std::string& n2)
-  {
-    boost::shared_ptr<ElementVisitor> c1(
-      Factory::getInstance().constructObject<ElementVisitor>(n1));
-    boost::shared_ptr<ElementVisitor> c2(
-      Factory::getInstance().constructObject<ElementVisitor>(n2));
-    return c1->getName() < c2->getName();
-  }
-
-  static bool visitorCompare2(const std::string& n1, const std::string& n2)
-  {
-    LOG_VARD(n1);
-    LOG_VARD(n2);
-    boost::shared_ptr<ConstElementVisitor> c1(
-      Factory::getInstance().constructObject<ConstElementVisitor>(n1));
-    boost::shared_ptr<ConstElementVisitor> c2(
-      Factory::getInstance().constructObject<ConstElementVisitor>(n2));
-    LOG_VARD(c1.get());
-    LOG_VARD(c2.get());
-    LOG_VARD(c1->getName());
-    LOG_VARD(c2->getName());
-    return c1->getName() < c2->getName();
-  }
+//  template<typename Operator>
+//  void printOperators(const std::string& operatorClassName, const QString operatorType,
+//                      const int spacingSize)
+//  {
+//    const int indent = 42;
+//    std::vector<std::string> cmds =
+//      Factory::getInstance().getObjectNamesByBase(operatorClassName);
+//    std::sort(cmds.begin(), cmds.end(), /*compareOperatorNames<Operator>*/operationCompare);
+//    for (size_t i = 0; i < cmds.size(); i++)
+//    {
+//      boost::shared_ptr<Operator> c(
+//        Factory::getInstance().constructObject<Operator>(cmds[i]));
+//      if (!c->getName().isEmpty() && !c->getDescription().isEmpty())
+//      {
+//        LOG_VARD(c->getName());
+//        const int spaceSize = indent - c->getName().size();
+//        const QString line =
+//          "  " + c->getName() + QString(spaceSize, ' ') + operatorType + QString(" ", spacingSize) +
+//          c->getDescription();
+//        std::cout << line << std::endl;
+//      }
+//    }
+//    std::cout << std::endl;
+//  }
 
   virtual int runSimple(QStringList args)
   {
@@ -119,9 +115,9 @@ public:
 
     if (parsedArgs.size() == 0)
     {
+      parsedArgs.append("--criteria");
       parsedArgs.append("--operations");
       parsedArgs.append("--visitors");
-      parsedArgs.append("--criteria");
     }
 
     DisableLog dl;
@@ -135,7 +131,8 @@ public:
       {
         std::vector<std::string> cmds =
           Factory::getInstance().getObjectNamesByBase(OsmMapOperation::className());
-        std::sort(cmds.begin(), cmds.end(), operationCompare);
+        OperatorNameComparator<OsmMapOperation> onc;
+        std::sort(cmds.begin(), cmds.end(), onc);
         for (size_t i = 0; i < cmds.size(); i++)
         {
           boost::shared_ptr<OsmMapOperation> c(
@@ -151,12 +148,15 @@ public:
           }
         }
         std::cout << std::endl;
+
+        //printOperators<OsmMapOperation>(OsmMapOperation::className(), "operation", 10);
       }
       else if (arg == "--visitors")
       {
         std::vector<std::string> cmds1 =
           Factory::getInstance().getObjectNamesByBase(ElementVisitor::className());
-        std::sort(cmds1.begin(), cmds1.end(), visitorCompare1);
+        OperatorNameComparator<ElementVisitor> onc;
+        std::sort(cmds1.begin(), cmds1.end(), onc);
         for (size_t i = 0; i < cmds1.size(); i++)
         {
           boost::shared_ptr<ElementVisitor> c(
@@ -176,7 +176,8 @@ public:
         std::vector<std::string> cmds2 =
           Factory::getInstance().getObjectNamesByBase(ConstElementVisitor::className());
         LOG_VARD(cmds2);
-        std::sort(cmds2.begin(), cmds2.end(), visitorCompare2);
+        OperatorNameComparator<ConstElementVisitor> onc2;
+        std::sort(cmds2.begin(), cmds2.end(), onc2);
         LOG_VARD(cmds2);
         for (size_t i = 0; i < cmds2.size(); i++)
         {
@@ -199,7 +200,8 @@ public:
       {
         std::vector<std::string> cmds =
           Factory::getInstance().getObjectNamesByBase(ElementCriterion::className());
-        std::sort(cmds.begin(), cmds.end(), criterionCompare);
+        OperatorNameComparator<ElementCriterion> onc;
+        std::sort(cmds.begin(), cmds.end(), onc);
         for (size_t i = 0; i < cmds.size(); i++)
         {
           boost::shared_ptr<ElementCriterion> c(

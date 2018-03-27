@@ -55,33 +55,33 @@ public:
   template<typename IoClass>
   void printFormats(const std::string& className, const QStringList extraFormats = QStringList())
   {
-      std::vector<std::string> readerNames =
-        Factory::getInstance().getObjectNamesByBase(className);
-      QSet<QString> formats;
-      for (size_t i = 0; i < readerNames.size(); i++)
+    std::vector<std::string> readerNames =
+      Factory::getInstance().getObjectNamesByBase(className);
+    QSet<QString> formats;
+    for (size_t i = 0; i < readerNames.size(); i++)
+    {
+      boost::shared_ptr<IoClass> c(
+        Factory::getInstance().constructObject<IoClass>(readerNames[i]));
+      const QString supportedFormats = c->supportedFormats();
+      if (!supportedFormats.isEmpty())
       {
-        boost::shared_ptr<IoClass> c(
-          Factory::getInstance().constructObject<IoClass>(readerNames[i]));
-        const QString supportedFormats = c->supportedFormats();
-        if (!supportedFormats.isEmpty())
+        QStringList supportedFormatsList = supportedFormats.split(";");
+        for (int j = 0; j < supportedFormatsList.size(); j++)
         {
-          QStringList supportedFormatsList = supportedFormats.split(";");
-          for (int j = 0; j < supportedFormatsList.size(); j++)
-          {
-            formats.insert(supportedFormatsList.at(j));
-          }
+          formats.insert(supportedFormatsList.at(j));
         }
       }
-      formats += OgrUtilities::getInstance().getSupportedFormats(true);
-      QStringList formatsList = formats.toList();
-      formatsList.append(extraFormats);
-      formatsList.sort();
+    }
+    formats += OgrUtilities::getInstance().getSupportedFormats(true);
+    QStringList formatsList = formats.toList();
+    formatsList.append(extraFormats);
+    formatsList.sort();
 
-      for (int i = 0; i < formatsList.size(); i++)
-      {
-        std::cout << formatsList.at(i) << std::endl;
-      }
-      std::cout << std::endl;
+    for (int i = 0; i < formatsList.size(); i++)
+    {
+      std::cout << formatsList.at(i) << std::endl;
+    }
+    std::cout << std::endl;
   }
 
   virtual int runSimple(QStringList args)
