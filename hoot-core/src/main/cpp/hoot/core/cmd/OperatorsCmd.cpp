@@ -38,15 +38,15 @@
 namespace hoot
 {
 
-class InlineOperatorsCmd : public BaseCommand
+class OperatorsCmd : public BaseCommand
 {
 public:
 
-  static std::string className() { return "hoot::InlineOperatorsCmd"; }
+  static std::string className() { return "hoot::OperatorsCmd"; }
 
-  InlineOperatorsCmd() { }
+  OperatorsCmd() { }
 
-  virtual QString getName() const { return "inline-operators"; }
+  virtual QString getName() const { return "operators"; }
 
   virtual QString getDescription() const
   { return "Prints available inline operators on map data"; }
@@ -60,38 +60,39 @@ public:
 
     bool operator()(const std::string& name1, const std::string& name2)
     {
-        boost::shared_ptr<Operator> op1(
-          Factory::getInstance().constructObject<Operator>(name1));
-        boost::shared_ptr<Operator> op2(
-          Factory::getInstance().constructObject<Operator>(name2));
-        return op1->getName() < op2->getName();
+      boost::shared_ptr<Operator> op1(
+        Factory::getInstance().constructObject<Operator>(name1));
+      boost::shared_ptr<Operator> op2(
+        Factory::getInstance().constructObject<Operator>(name2));
+      return op1->getName() < op2->getName();
     }
   };
 
-//  template<typename Operator>
-//  void printOperators(const std::string& operatorClassName, const QString operatorType,
-//                      const int spacingSize)
-//  {
-//    const int indent = 42;
-//    std::vector<std::string> cmds =
-//      Factory::getInstance().getObjectNamesByBase(operatorClassName);
-//    std::sort(cmds.begin(), cmds.end(), /*compareOperatorNames<Operator>*/operationCompare);
-//    for (size_t i = 0; i < cmds.size(); i++)
-//    {
-//      boost::shared_ptr<Operator> c(
-//        Factory::getInstance().constructObject<Operator>(cmds[i]));
-//      if (!c->getName().isEmpty() && !c->getDescription().isEmpty())
-//      {
-//        LOG_VARD(c->getName());
-//        const int spaceSize = indent - c->getName().size();
-//        const QString line =
-//          "  " + c->getName() + QString(spaceSize, ' ') + operatorType + QString(" ", spacingSize) +
-//          c->getDescription();
-//        std::cout << line << std::endl;
-//      }
-//    }
-//    std::cout << std::endl;
-//  }
+  template<typename Operator>
+  void printOperators(const std::string& operatorClassName, const QString operatorType,
+                      const int indentAfterType)
+  {
+    const int indent = 42;
+    std::vector<std::string> cmds =
+      Factory::getInstance().getObjectNamesByBase(operatorClassName);
+    OperatorNameComparator<OsmMapOperation> operatorNameComparator;
+    std::sort(cmds.begin(), cmds.end(), operatorNameComparator);
+    for (size_t i = 0; i < cmds.size(); i++)
+    {
+      boost::shared_ptr<Operator> c(
+        Factory::getInstance().constructObject<Operator>(cmds[i]));
+      if (!c->getName().isEmpty() && !c->getDescription().isEmpty())
+      {
+        LOG_VARD(c->getName());
+        const int indentAfterName = indent - c->getName().size();
+        const QString line =
+          "  " + c->getName() + QString(indentAfterName, ' ') + operatorType +
+          QString(indentAfterType, ' ') + c->getDescription();
+        std::cout << line << std::endl;
+      }
+    }
+    std::cout << std::endl;
+  }
 
   virtual int runSimple(QStringList args)
   {
@@ -129,27 +130,27 @@ public:
       const QString arg = parsedArgs.at(i);
       if (arg == "--operations")
       {
-        std::vector<std::string> cmds =
-          Factory::getInstance().getObjectNamesByBase(OsmMapOperation::className());
-        OperatorNameComparator<OsmMapOperation> onc;
-        std::sort(cmds.begin(), cmds.end(), onc);
-        for (size_t i = 0; i < cmds.size(); i++)
-        {
-          boost::shared_ptr<OsmMapOperation> c(
-            Factory::getInstance().constructObject<OsmMapOperation>(cmds[i]));
-          if (!c->getName().isEmpty() && !c->getDescription().isEmpty())
-          {
-            LOG_VARD(c->getName());
-            const int spaceSize = indent - c->getName().size();
-            const QString line =
-              "  " + c->getName() + QString(spaceSize, ' ') + "operation         " +
-              c->getDescription();
-            std::cout << line << std::endl;
-          }
-        }
-        std::cout << std::endl;
+//        std::vector<std::string> cmds =
+//          Factory::getInstance().getObjectNamesByBase(OsmMapOperation::className());
+//        OperatorNameComparator<OsmMapOperation> onc;
+//        std::sort(cmds.begin(), cmds.end(), onc);
+//        for (size_t i = 0; i < cmds.size(); i++)
+//        {
+//          boost::shared_ptr<OsmMapOperation> c(
+//            Factory::getInstance().constructObject<OsmMapOperation>(cmds[i]));
+//          if (!c->getName().isEmpty() && !c->getDescription().isEmpty())
+//          {
+//            LOG_VARD(c->getName());
+//            const int spaceSize = indent - c->getName().size();
+//            const QString line =
+//              "  " + c->getName() + QString(spaceSize, ' ') + "operation         " +
+//              c->getDescription();
+//            std::cout << line << std::endl;
+//          }
+//        }
+//        std::cout << std::endl;
 
-        //printOperators<OsmMapOperation>(OsmMapOperation::className(), "operation", 10);
+        printOperators<OsmMapOperation>(OsmMapOperation::className(), "operation", 10);
       }
       else if (arg == "--visitors")
       {
@@ -224,7 +225,7 @@ public:
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, InlineOperatorsCmd)
+HOOT_FACTORY_REGISTER(Command, OperatorsCmd)
 
 }
 
