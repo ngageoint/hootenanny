@@ -356,9 +356,9 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
     _class.setReview();
     if (_explainText.isEmpty())
     {
-      const QString typeMatchStr = "yes" ? typeScore >= 1.0 : "no";
-      const QString nameMatchStr = "yes" ? nameScore >= 1.0 : "no";
-      const QString addressMatchStr = "yes" ? addressScore >= 1.0 : "no";
+      const QString typeMatchStr = _typeScore >= 1.0 ? "yes" : "no";
+      const QString nameMatchStr = _nameScore >= 1.0 ? "yes" : "no";
+      const QString addressMatchStr = _addressScore >= 1.0 ? "yes" : "no";
       _explainText =
         QString("Features had an additive similarity threshold of %1, which was less than the required threshold of %2. Matches: type: %3, name: %4, address: %5.")
           .arg(_reviewEvidenceThreshold)
