@@ -1,27 +1,27 @@
-== inline-operators
+== operators
 
 === Description
 
-The +inline-operators+ command prints out available inline operators for map data that can be applied to a Hootenanny command.  
+The +operators+ command prints out available inline operators for map data that can be applied to a Hootenanny command.  
 This includes map operations, map visitors, and map criteria (filters).
 
 === Usage
 
 --------------------------------------
-inline-operators [--operations] [--visitors] [--criteria]
+operators [--criteria] [--operations] [--visitors]
 --------------------------------------
 
 ==== Command Example Usage
 
 --------------------------------------
 # prints all
-hoot inline-operators
+hoot operators
 
-hoot inline-operators --operations
+hoot operators --criteria
 
-hoot inline-operators --visitors
+hoot operators --operations
 
-hoot inline-operators --criteria
+hoot operators --visitors
 --------------------------------------
 
 === Inline Operator Example Usage
