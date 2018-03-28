@@ -27,7 +27,7 @@
 #ifndef POIPOLYGONTYPESCOREEXTRACTOR_H
 #define POIPOLYGONTYPESCOREEXTRACTOR_H
 
-// hoot
+// Hoot
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/conflate/extractors/FeatureExtractorBase.h>
 #include <hoot/core/util/Configurable.h>
@@ -48,6 +48,8 @@ public:
   static QString poiBestKvp;
   //best type kvp match for the poly
   static QString polyBestKvp;
+  //custom type matching types that failed
+  static QStringList failedMatchRequirements;
 
   static std::string className() { return "hoot::PoiPolygonTypeScoreExtractor"; }
 

@@ -89,7 +89,7 @@ public:
    */
   static void resetMatchDistanceInfo();
 
-  virtual QString explain() const;
+  virtual QString explain() const { return _explainText; }
 
   void setMatchDistanceThreshold(const double distance);
   void setReviewDistanceThreshold(const double distance);
@@ -135,7 +135,7 @@ private:
   double _reviewDistanceThreshold;
   //true if the distance between the elements, given CE, is within the review distance; absolute
   //requirement for matching
-  bool _closeMatch;
+  bool _closeDistanceMatch;
 
   double _typeScore;
   double _typeScoreThreshold;
@@ -162,8 +162,6 @@ private:
   bool _reviewMultiUseBuildings;
 
   boost::shared_ptr<const PoiPolygonRfClassifier> _rf;
-
-  ConfigOptions _opts;
 
   QString _explainText;
 
