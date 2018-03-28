@@ -58,14 +58,26 @@ Match(threshold),
 _map(map),
 _matchEvidenceThreshold(3),
 _reviewEvidenceThreshold(1),
-_closeMatch(false),
+_distance(-1.0),
+_matchDistanceThreshold(-1.0),
+_reviewDistanceThreshold(-1.0),
+_closeDistanceMatch(false),
 _typeScore(-1.0),
+_typeScoreThreshold(-1.0),
+_reviewIfMatchedTypes(QStringList()),
 _nameScore(-1.0),
+_nameScoreThreshold(-1.0),
 _addressScore(-1.0),
 _polyNeighborIds(polyNeighborIds),
 _poiNeighborIds(poiNeighborIds),
+_enableAdvancedMatching(false),
+_enableReviewReduction(true),
+_disableSameSourceConflation(false),
+_disableSameSourceConflationMatchTagKeyPrefixOnly(true),
+_sourceTagKey(""),
+_reviewMultiUseBuildings(false),
 _rf(rf),
-_opts(ConfigOptions())
+_explainText("")
 {
 }
 
@@ -381,7 +393,7 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
   _distance = PoiPolygonDistanceExtractor().extract(*_map, poi, poly);
   if (_distance == -1.0)
   {
-    _closeMatch = false;
+    _closeDistanceMatch = false;
     _explainText = "Error calculating the distance between features.";
     return 0;
   }
@@ -389,7 +401,7 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
   //search radius taken from PoiPolygonMatchCreator
   PoiPolygonDistance distanceCalc(
     _matchDistanceThreshold, _reviewDistanceThreshold, poly->getTags(),
-    poi->getCircularError() + _opts.getPoiPolygonReviewDistanceThreshold());
+    poi->getCircularError() + _reviewDistanceThreshold);
   _reviewDistanceThreshold =
     max(
       distanceCalc.getReviewDistanceForType(_poi->getTags()),
@@ -404,9 +416,10 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
   const double sigma = sqrt(poiSigma * poiSigma + polySigma * polySigma);
   const double combinedCircularError2Sigma = sigma * 2;
   const double reviewDistancePlusCe = _reviewDistanceThreshold + combinedCircularError2Sigma;
-  _closeMatch = _distance <= reviewDistancePlusCe;
-  //close match is a requirement for any matching, regardless of the final total evidence count
-  if (!_closeMatch)
+  _closeDistanceMatch = _distance <= reviewDistancePlusCe;
+  //close distance match is a requirement for any matching, regardless of the final total evidence
+  //count
+  if (!_closeDistanceMatch)
   {
     _explainText =
       "The distance between the features is more than the configured review distance plus circular error.";
@@ -420,7 +433,7 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
   LOG_VART(reviewDistancePlusCe);
   LOG_VART(combinedCircularError2Sigma);
   LOG_VART(_distance);
-  LOG_VART(_closeMatch);
+  LOG_VART(_closeDistanceMatch);
 
   return _distance <= _matchDistanceThreshold ? 2u : 0u;
 }
@@ -453,7 +466,7 @@ unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElement
     }
     failedMatchTypes.chop(2);
 
-    QString explainBase = "Failed custom match requirements: ";
+    QString explainBase = "Failed custom match requirements for: ";
     if (_explainText.isEmpty())
     {
       _explainText = explainBase + failedMatchTypes;
@@ -495,9 +508,9 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
 
   evidence += _getDistanceEvidence(poi, poly);
   //see comment in _getDistanceEvidence
-  if (evidence == 0)
+  if (!_closeDistanceMatch)
   {
-    return evidence;
+    return 0;
   }
 
   //The operations from here are on down are roughly ordered by increasing runtime complexity.
@@ -583,7 +596,7 @@ QString PoiPolygonMatch::toString() const
       .arg(_poly->getElementId().toString())
       .arg(_class.toString())
       .arg(_distance)
-      .arg(_closeMatch)
+      .arg(_closeDistanceMatch)
       .arg(_typeScore)
       .arg(_nameScore)
       .arg(_addressScore);
