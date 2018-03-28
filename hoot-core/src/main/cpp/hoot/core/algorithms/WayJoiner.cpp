@@ -28,6 +28,8 @@
 #include "WayJoiner.h"
 
 //  Hoot
+#include <hoot/core/conflate/NodeToWayMap.h>
+#include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagMergerFactory.h>
@@ -66,6 +68,15 @@ void WayJoiner::join()
   joinParentChild();
   //  Run one last join on ways that share a node and have a parent id
   joinAtNode();
+  //  Finally remove the parent id tags
+  WayMap ways = _map->getWays();
+  //  Find all ways that have a split parent id
+  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
+  {
+    WayPtr way = it->second;
+    if (way->getTags().contains(MetadataTags::HootSplitParentId()))
+      way->getTags().remove(MetadataTags::HootSplitParentId());
+  }
 }
 
 void WayJoiner::joinParentChild()
@@ -122,8 +133,6 @@ void WayJoiner::joinSiblings()
 
 void WayJoiner::joinAtNode()
 {
-  return;
-/*
   WayMap ways = _map->getWays();
   unordered_set<long> ids;
   //  Find all ways that have a split parent id
@@ -134,27 +143,46 @@ void WayJoiner::joinAtNode()
       ids.insert(way->getId());
   }
 
+  boost::shared_ptr<NodeToWayMap> nodeToWayMap = _map->getIndex().getNodeToWayMap();
+
   //  Iterate all of the nodes and check for compatible ways to join them to
   for (unordered_set<long>::iterator it = ids.begin(); it != ids.end(); ++it)
   {
-    WayPtr way = ways[*id];
+    WayPtr way = ways[*it];
     long start_id = way->getFirstNodeId();
-    vector<long> way_ids = _map->
+    const set<long>& way_ids = nodeToWayMap->getWaysByNode(start_id);
+
+    Tags pTags = way->getTags();
+    for (set<long>::const_iterator ways = way_ids.begin(); ways != way_ids.end(); ++ways)
+    {
+      WayPtr child = _map->getWay(*ways);
+      if (child)
+      {
+        Tags cTags = child->getTags();
+        if (pTags == cTags || pTags.dataOnlyEqual(cTags))
+        {
+          joinWays(way, child);
+          break;
+        }
+      }
+    }
 
     long end_id = way->getLastNodeId();
-
-
-
-    if (pTags != cTags)
+    const set<long>& way_ids2 = nodeToWayMap->getWaysByNode(end_id);
+    for (set<long>::const_iterator ways = way_ids2.begin(); ways != way_ids2.end(); ++ways)
     {
-      if (!pTags.dataOnlyEqual(cTags))
+      WayPtr child = _map->getWay(*ways);
+      if (child)
       {
-        //  Tags aren't compatible, don't join
-        return;
+        Tags cTags = child->getTags();
+        if (pTags == cTags || pTags.dataOnlyEqual(cTags))
+        {
+          joinWays(way, child);
+          break;
+        }
       }
     }
   }
-*/
 }
 
 void WayJoiner::rejoinSiblings(deque<long>& way_ids)
