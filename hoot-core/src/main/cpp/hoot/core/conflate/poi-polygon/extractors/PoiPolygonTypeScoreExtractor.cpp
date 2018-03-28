@@ -106,17 +106,26 @@ double PoiPolygonTypeScoreExtractor::extract(const OsmMap& /*map*/,
                                              const ConstElementPtr& poi,
                                              const ConstElementPtr& poly) const
 {
+  failedMatchRequirements.clear();
+
   const Tags& t1 = poi->getTags();
   const Tags& t2 = poly->getTags();
 
+  //make this more extensible if it gets bigger
   if (_failsCuisineMatch(t1, t2))
   {
-    failedMatchRequirements.append("cusine");
+    if (!failedMatchRequirements.contains("cuisine"))
+    {
+      failedMatchRequirements.append("cusine");
+    }
     return 0.0;
   }
   else if (_failsSportMatch(t1, t2))
   {
-    failedMatchRequirements.append("sport");
+    if (!failedMatchRequirements.contains("sport"))
+    {
+      failedMatchRequirements.append("sport");
+    }
     return 0.0;
   }
 
