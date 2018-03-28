@@ -12,7 +12,7 @@ mkdir -p $outputDir
 rm -rf $outputDir/*
 
 # Normal Hoot options
-HOOT_OPT="--info"
+HOOT_OPT="--warn"
 
 # Hoot options for debugging the test input and output
 # NOTE: This will generate HEAPS of output.
@@ -33,8 +33,7 @@ hoot map-diff $outputDir/new_TDSv61.osm $inputDir/TDSv61.osm || diff $outputDir/
 
 # Make shapefiles
 # NOTE: These are 1 x FCODE / file and it assumes that the output dir doesn't have any shapefiles in it
-hoot convert-osm2ogr $HOOT_OPT -D ogr.thematic.structure=false $TRANS $outputDir/new_TDSv61.osm $outputDir".shp" # > tmp/TDSv61_to_TDS.txt
-
+hoot convert-osm2ogr --debug -D ogr.thematic.structure=false $TRANS $outputDir/new_TDSv61.osm $outputDir".shp" # > tmp/TDSv61_to_TDS.txt
 
 # Make shapefiles - Thematic
 # hoot convert-osm2ogr $HOOT_OPT $TRANS $outputDir/new_TDSv61.osm $outputDir/"new_files.shp" > tmp/TDSv61_to_TDS2.txt

@@ -84,7 +84,7 @@ void OsmApiDb::_init()
 
 void OsmApiDb::close()
 {
-  LOG_DEBUG("Closing database connection...");
+  LOG_TRACE("Closing database connection...");
 
   _resetQueries();
 
