@@ -48,6 +48,7 @@ HOOT_FACTORY_REGISTER(FeatureExtractor, PoiPolygonTypeScoreExtractor)
 QString PoiPolygonTypeScoreExtractor::poiBestKvp;
 QString PoiPolygonTypeScoreExtractor::polyBestKvp;
 QSet<QString> PoiPolygonTypeScoreExtractor::_allTagKeys;
+QStringList PoiPolygonTypeScoreExtractor::failedMatchRequirements;
 
 PoiPolygonTypeScoreExtractor::PoiPolygonTypeScoreExtractor()
 {
@@ -110,13 +111,12 @@ double PoiPolygonTypeScoreExtractor::extract(const OsmMap& /*map*/,
 
   if (_failsCuisineMatch(t1, t2))
   {
-    //TODO: fix
-    //_explainText = "Failed cuisine match requirement.";
+    failedMatchRequirements.append("cusine");
     return 0.0;
   }
   else if (_failsSportMatch(t1, t2))
   {
-    //_explainText = "Failed sport match requirement.";
+    failedMatchRequirements.append("sport");
     return 0.0;
   }
 

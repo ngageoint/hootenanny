@@ -27,7 +27,7 @@
 #ifndef POIPOLYGONTYPESCOREEXTRACTOR_H
 #define POIPOLYGONTYPESCOREEXTRACTOR_H
 
-// hoot
+// Hoot
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/conflate/extractors/FeatureExtractorBase.h>
 #include <hoot/core/util/Configurable.h>
@@ -48,6 +48,8 @@ public:
   static QString poiBestKvp;
   //best type kvp match for the poly
   static QString polyBestKvp;
+  //custom type matching types that failed
+  static QStringList failedMatchRequirements;
 
   static std::string className() { return "hoot::PoiPolygonTypeScoreExtractor"; }
 
@@ -115,15 +117,12 @@ public:
   virtual QString getDescription() const
   { return "Scores element type similarity for POI/Polygon conflation"; }
 
-  QString getExplainText() const { return _explainText; }
-
 private:
 
   double _typeScoreThreshold;
   static QSet<QString> _allTagKeys;
   double _featureDistance;
   bool _printMatchDistanceTruth;
-  QString _explainText;
 
   double _getTagScore(ConstElementPtr poi, ConstElementPtr poly) const;
   QStringList _getRelatedTags(const Tags& tags) const;
