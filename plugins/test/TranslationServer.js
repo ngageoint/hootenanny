@@ -244,7 +244,7 @@ describe('TranslationServer', function () {
         it('should translate Land Water Boundary (BA010) from tds61 -> osm -> tds61', function() {
         
             var data = '<osm version="0.6" generator="JOSM"><way id="-38983" visible="true"><nd ref="-38979" /><nd ref="-38982" /> <tag k="F_CODE" v="BA010" /></way></osm>'
-        
+
             var osm_xml = server.handleInputs({
                 osm: data,
                 method: 'POST',
@@ -259,18 +259,57 @@ describe('TranslationServer', function () {
 
             })
 
-            var tds_xml = server.handleInputs({
+            var tds61_xml = server.handleInputs({
                 osm: osm_xml,
                 method: 'POST',
                 translation: 'TDSv61',
                 path: '/translateTo'
             })
 
-            xml2js.parseString(tds_xml, function(err, result) {
-                if (err) console.log(err);
+            xml2js.parseString(tds61_xml, function(err, result) {
+                if (err) console.error(err);
                 assert.equal(result.osm.way[0].tag[1].$.k, "F_CODE")
                 assert.equal(result.osm.way[0].tag[1].$.v, "BA010")
             })            
+
+            var tds40_xml = server.handleInputs({
+                osm: osm_xml,
+                method: 'POST',
+                translation: 'TDSv40',
+                path: '/translateTo'
+            })
+
+            xml2js.parseString(tds40_xml, function(err, result) {
+                if (err) console.error(err);
+                assert.equal(result.osm.way[0].tag[1].$.k, "F_CODE")
+                assert.equal(result.osm.way[0].tag[1].$.v, "BA010")
+            })
+            
+            var mgcp_xml = server.handleInputs({
+                osm: osm_xml,
+                method: 'POST',
+                translation: 'MGCP',
+                path: '/translateTo'
+            })
+
+            xml2js.parseString(mgcp_xml, function(err, result) {
+                if (err) console.error(err);
+                assert.equal(result.osm.way[0].tag[1].$.k, "FCODE")
+                assert.equal(result.osm.way[0].tag[1].$.v, "BA010")
+            })
+            
+            var ggdmv30_xml = server.handleInputs({
+                osm: osm_xml,
+                method: 'POST',
+                translation: 'GGDMv30',
+                path: '/translateTo'
+            })
+
+            xml2js.parseString(ggdmv30_xml, function(err, result) {
+                if (err) console.error(err);
+                assert.equal(result.osm.way[0].tag[1].$.k, "F_CODE")
+                assert.equal(result.osm.way[0].tag[1].$.v, "BA010")
+            })
 
         })
 
