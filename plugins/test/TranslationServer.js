@@ -240,6 +240,40 @@ describe('TranslationServer', function () {
             });
         });
 
+
+        it('should translate Land Water Boundary (BA010) from tds61 -> osm -> tds61', function() {
+        
+            var data = '<osm version="0.6" generator="JOSM"><way id="-38983" visible="true"><nd ref="-38979" /><nd ref="-38982" /> <tag k="F_CODE" v="BA010" /></way></osm>'
+        
+            var osm_xml = server.handleInputs({
+                osm: data,
+                method: 'POST',
+                translation: 'TDSv61',
+                path: '/translateFrom'
+            });
+
+            xml2js.parseString(osm_xml, function(err, result) {
+                if (err) console.error(err);
+                assert.equal(result.osm.way[0].tag[0].$.k, "natural")
+                assert.equal(result.osm.way[0].tag[0].$.v, "land_water_boundary")
+
+            })
+
+            var tds_xml = server.handleInputs({
+                osm: osm_xml,
+                method: 'POST',
+                translation: 'TDSv61',
+                path: '/translateTo'
+            })
+
+            xml2js.parseString(tds_xml, function(err, result) {
+                if (err) console.log(err);
+                assert.equal(result.osm.way[0].tag[1].$.k, "F_CODE")
+                assert.equal(result.osm.way[0].tag[1].$.v, "BA010")
+            })            
+
+        })
+
         it('should handle OSM to MGCP POST of power line feature', function() {
             var osm2trans = server.handleInputs({
                 osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-1" version="0"><nd ref="-1"/><nd ref="-4"/><nd ref="-7"/><nd ref="-10"/><nd ref="-1"/><tag k="power" v="line"/><tag k="uuid" v="{d7cdbdfe-88c6-4d8a-979d-ad88cfc65ef1}"/></way></osm>',
