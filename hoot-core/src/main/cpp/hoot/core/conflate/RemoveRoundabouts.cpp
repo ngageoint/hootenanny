@@ -71,6 +71,7 @@ void RemoveRoundabouts::removeRoundabouts(std::vector<RoundaboutPtr> &removed)
     WayPtr pWay = _pMap->getWay(_todoWays[i]);
     RoundaboutPtr rnd = Roundabout::makeRoundabout(_pMap, pWay);
     rnd->removeRoundabout(_pMap);
+
     removed.push_back(rnd);
   }
 }

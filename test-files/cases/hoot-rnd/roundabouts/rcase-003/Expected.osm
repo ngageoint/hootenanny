@@ -13,57 +13,9 @@
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-76"/>
     </node>
-    <node visible="true" id="-75" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5466401327199968" lon="-72.3473648892399979">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-75"/>
-    </node>
     <node visible="true" id="-74" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5464428873600014" lon="-72.3471869695300001">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-74"/>
-    </node>
-    <node visible="true" id="-73" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5463600123199974" lon="-72.3473541594700009">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-73"/>
-    </node>
-    <node visible="true" id="-72" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5465209779600002" lon="-72.3474780176500047">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-72"/>
-    </node>
-    <node visible="true" id="-71" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5464246624800033" lon="-72.3474515760200063">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-71"/>
-    </node>
-    <node visible="true" id="-70" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5463850807499959" lon="-72.3474028677400014">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-70"/>
-    </node>
-    <node visible="true" id="-69" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5463573735399976" lon="-72.3472859678900022">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-69"/>
-    </node>
-    <node visible="true" id="-68" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5464009134399959" lon="-72.3472094263100018">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-68"/>
-    </node>
-    <node visible="true" id="-67" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5464893125999986" lon="-72.3471788096800026">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-67"/>
-    </node>
-    <node visible="true" id="-66" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5465539626999991" lon="-72.3471815930100064">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-66"/>
-    </node>
-    <node visible="true" id="-65" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5466146546099999" lon="-72.3472400429400011">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-65"/>
-    </node>
-    <node visible="true" id="-64" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5466436512399966" lon="-72.3473012288300055">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-64"/>
-    </node>
-    <node visible="true" id="-63" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5466069029399989" lon="-72.3474316190300044">
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-63"/>
     </node>
     <node visible="true" id="-46" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5464325801399958" lon="-72.3471593277700009">
         <tag k="hoot:status" v="2"/>
@@ -262,29 +214,6 @@
         <tag k="hoot:status" v="2"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-11"/>
-    </way>
-    <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-63"/>
-        <nd ref="-75"/>
-        <nd ref="-64"/>
-        <nd ref="-65"/>
-        <nd ref="-66"/>
-        <nd ref="-67"/>
-        <nd ref="-74"/>
-        <nd ref="-68"/>
-        <nd ref="-69"/>
-        <nd ref="-73"/>
-        <nd ref="-70"/>
-        <nd ref="-71"/>
-        <nd ref="-72"/>
-        <nd ref="-63"/>
-        <tag k="junction" v="roundabout"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source" v="Unknown"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-9"/>
     </way>
     <way visible="true" id="-6" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117">
         <nd ref="-44"/>
