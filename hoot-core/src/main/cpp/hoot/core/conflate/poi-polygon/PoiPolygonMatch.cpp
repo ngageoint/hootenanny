@@ -377,11 +377,10 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
       const QString typeMatchStr = _typeScore >= 1.0 ? "yes" : "no";
       const QString nameMatchStr = _nameScore >= 1.0 ? "yes" : "no";
       const QString addressMatchStr = _addressScore >= 1.0 ? "yes" : "no";
-      const QString distanceStr = QString::number(_distance, 'g', 2);
       _explainText =
         QString("Features had an additive similarity score less than the required score of %1. Distance: %2. Matches: distance: yes, type: %3, name: %4, address: %5.")
           .arg(_matchEvidenceThreshold)
-          .arg(distanceStr)
+          .arg(_distance)
           .arg(typeMatchStr)
           .arg(nameMatchStr)
           .arg(addressMatchStr);
