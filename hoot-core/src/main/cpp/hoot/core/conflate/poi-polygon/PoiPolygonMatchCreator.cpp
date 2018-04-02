@@ -36,7 +36,7 @@
 
 #include "PoiPolygonMatch.h"
 #include "visitors/PoiPolygonMatchVisitor.h"
-
+#include "PoiPolygonTagIgnoreListReader.h"
 
 namespace hoot
 {
@@ -56,12 +56,17 @@ Match* PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId 
   {
     ConstElementPtr e1 = map->getElement(eid1);
     ConstElementPtr e2 = map->getElement(eid2);
+    LOG_DEBUG("test5");
     const bool foundPoi =
-      OsmSchema::getInstance().isPoiPolygonPoi(e1) ||
-      OsmSchema::getInstance().isPoiPolygonPoi(e2);
+      OsmSchema::getInstance().isPoiPolygonPoi(
+        e1, PoiPolygonTagIgnoreListReader::getInstance().getPoiTagIgnoreList()) ||
+      OsmSchema::getInstance().isPoiPolygonPoi(
+        e2, PoiPolygonTagIgnoreListReader::getInstance().getPoiTagIgnoreList());
     const bool foundPoly =
-      OsmSchema::getInstance().isPoiPolygonPoly(e1) ||
-      OsmSchema::getInstance().isPoiPolygonPoly(e2);
+      OsmSchema::getInstance().isPoiPolygonPoly(
+        e1, PoiPolygonTagIgnoreListReader::getInstance().getPolyTagIgnoreList()) ||
+      OsmSchema::getInstance().isPoiPolygonPoly(
+        e2, PoiPolygonTagIgnoreListReader::getInstance().getPolyTagIgnoreList());
 
     if (foundPoi && foundPoly)
     {
@@ -110,9 +115,12 @@ std::vector<MatchCreator::Description> PoiPolygonMatchCreator::getAllCreators() 
 bool PoiPolygonMatchCreator::isMatchCandidate(ConstElementPtr element,
                                               const ConstOsmMapPtr& /*map*/)
 {
+  LOG_DEBUG("test6");
   return element->isUnknown() &&
-    (OsmSchema::getInstance().isPoiPolygonPoi(element) ||
-     OsmSchema::getInstance().isPoiPolygonPoly(element));
+    (OsmSchema::getInstance().isPoiPolygonPoi(
+       element, PoiPolygonTagIgnoreListReader::getInstance().getPoiTagIgnoreList()) ||
+     OsmSchema::getInstance().isPoiPolygonPoly(
+       element, PoiPolygonTagIgnoreListReader::getInstance().getPolyTagIgnoreList()));
 }
 
 boost::shared_ptr<MatchThreshold> PoiPolygonMatchCreator::getMatchThreshold()

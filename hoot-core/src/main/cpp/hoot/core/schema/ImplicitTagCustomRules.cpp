@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/schema/TagIgnoreListReader.h>
 
 // Qt
 #include <QFile>
@@ -82,31 +83,6 @@ void ImplicitTagCustomRules::_readCustomRuleFile()
   LOG_VART(_customRulesList);
 }
 
-void ImplicitTagCustomRules::_readIgnoreList(const QString inputPath, QStringList& outputList)
-{
-  LOG_VARD(inputPath);
-  if (!inputPath.trimmed().isEmpty())
-  {
-    QFile inputFile(inputPath);
-    if (!inputFile.open(QIODevice::ReadOnly))
-    {
-      throw HootException(
-        QObject::tr("Error opening %1 for writing.").arg(inputFile.fileName()));
-    }
-    outputList.clear();
-    while (!inputFile.atEnd())
-    {
-      const QString line = QString::fromUtf8(inputFile.readLine().constData()).trimmed();
-      if (!line.trimmed().isEmpty() && !line.startsWith("#"))
-      {
-        outputList.append(line);
-      }
-    }
-    inputFile.close();
-  }
-  LOG_VART(outputList);
-}
-
 void ImplicitTagCustomRules::_readAllowLists()
 {
   LOG_DEBUG("Reading allow lists...");
@@ -116,8 +92,8 @@ void ImplicitTagCustomRules::_readAllowLists()
 void ImplicitTagCustomRules::_readIgnoreLists()
 {
   LOG_DEBUG("Reading ignore lists...");
-  _readIgnoreList(_tagIgnoreFile, _tagIgnoreList);
-  _readIgnoreList(_wordIgnoreFile, _wordIgnoreList);
+  _tagIgnoreList = TagIgnoreListReader::readList(_tagIgnoreFile);
+  _wordIgnoreList = TagIgnoreListReader::readList(_wordIgnoreFile);
 }
 
 }

@@ -1,0 +1,8 @@
+# Any polygon features containing these tags will be skipped by POI/Polygon conflation.
+# key=value; supports value wildcards; e.g. amenity=*
+# keep list alphabetized and in lower case
+barrier=fence
+highway=residential
+landuse=grass
+natural=scrub
+natural=tree_row

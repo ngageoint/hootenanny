@@ -22,29 +22,29 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "PoiPolygonPoiCriterion.h"
+#ifndef TAGIGNORELISTREADER_H
+#define TAGIGNORELISTREADER_H
 
-// hoot
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/util/Factory.h>
-#include "../PoiPolygonTagIgnoreListReader.h"
+// Qt
+#include <QStringList>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementCriterion, PoiPolygonPoiCriterion)
-
-PoiPolygonPoiCriterion::PoiPolygonPoiCriterion()
+/**
+ * Reads tag ignore lists
+ */
+class TagIgnoreListReader
 {
-}
 
-bool PoiPolygonPoiCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
-{
-  return
-    OsmSchema::getInstance().isPoiPolygonPoi(
-      e, PoiPolygonTagIgnoreListReader::getInstance().getPoiTagIgnoreList());
-}
+public:
+
+  static QStringList readList(const QString inputPath);
+};
 
 }
+
+#endif // TAGIGNORELISTREADER_H

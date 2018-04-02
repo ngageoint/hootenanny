@@ -42,6 +42,7 @@
 #include "PoiPolygonDistanceTruthRecorder.h"
 #include "extractors/PoiPolygonDistanceExtractor.h"
 #include "extractors/PoiPolygonAlphaShapeDistanceExtractor.h"
+#include "PoiPolygonTagIgnoreListReader.h"
 
 using namespace std;
 
@@ -205,16 +206,21 @@ void PoiPolygonMatch::_categorizeElementsByGeometryType(const ElementId& eid1,
   LOG_VART(e2->getTags().get("uuid"));
   LOG_VART(e2->getTags());
 
+  LOG_DEBUG("test4");
   _e1IsPoi = false;
-  if (OsmSchema::getInstance().isPoiPolygonPoi(e1) &&
-      OsmSchema::getInstance().isPoiPolygonPoly(e2))
+  if (OsmSchema::getInstance().isPoiPolygonPoi(
+        e1, PoiPolygonTagIgnoreListReader::getInstance().getPoiTagIgnoreList()) &&
+      OsmSchema::getInstance().isPoiPolygonPoly(
+        e2, PoiPolygonTagIgnoreListReader::getInstance().getPolyTagIgnoreList()))
   {
     _poi = e1;
     _poly = e2;
     _e1IsPoi = true;
   }
-  else if (OsmSchema::getInstance().isPoiPolygonPoi(e2) &&
-           OsmSchema::getInstance().isPoiPolygonPoly(e1))
+  else if (OsmSchema::getInstance().isPoiPolygonPoi(
+             e2, PoiPolygonTagIgnoreListReader::getInstance().getPoiTagIgnoreList()) &&
+           OsmSchema::getInstance().isPoiPolygonPoly(
+             e1, PoiPolygonTagIgnoreListReader::getInstance().getPolyTagIgnoreList()))
   {
     _poi = e2;
     _poly = e1;
@@ -371,9 +377,11 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
       const QString typeMatchStr = _typeScore >= 1.0 ? "yes" : "no";
       const QString nameMatchStr = _nameScore >= 1.0 ? "yes" : "no";
       const QString addressMatchStr = _addressScore >= 1.0 ? "yes" : "no";
+      const QString distanceStr = QString::number(_distance, 'g', 2);
       _explainText =
-        QString("Features had an additive similarity score less than the required score of %1. Matches: distance: yes, type: %2, name: %3, address: %4.")
+        QString("Features had an additive similarity score less than the required score of %1. Distance: %2. Matches: distance: yes, type: %3, name: %4, address: %5.")
           .arg(_matchEvidenceThreshold)
+          .arg(distanceStr)
           .arg(typeMatchStr)
           .arg(nameMatchStr)
           .arg(addressMatchStr);

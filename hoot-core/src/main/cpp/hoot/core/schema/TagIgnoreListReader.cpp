@@ -22,29 +22,44 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "PoiPolygonPoiCriterion.h"
+#include "TagIgnoreListReader.h"
 
 // hoot
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/util/Factory.h>
-#include "../PoiPolygonTagIgnoreListReader.h"
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/HootException.h>
+
+// Qt
+#include <QFile>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementCriterion, PoiPolygonPoiCriterion)
-
-PoiPolygonPoiCriterion::PoiPolygonPoiCriterion()
-{
-}
-
-bool PoiPolygonPoiCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
-{
-  return
-    OsmSchema::getInstance().isPoiPolygonPoi(
-      e, PoiPolygonTagIgnoreListReader::getInstance().getPoiTagIgnoreList());
+QStringList TagIgnoreListReader::readList(const QString inputPath)
+{  
+  LOG_VARD(inputPath);
+  QStringList outputList;
+  if (!inputPath.trimmed().isEmpty())
+  {
+    QFile inputFile(inputPath);
+    if (!inputFile.open(QIODevice::ReadOnly))
+    {
+      throw HootException(QObject::tr("Error opening %1 for writing.").arg(inputFile.fileName()));
+    }
+    while (!inputFile.atEnd())
+    {
+      const QString line = QString::fromUtf8(inputFile.readLine().constData()).trimmed();
+      if (!line.trimmed().isEmpty() && !line.startsWith("#") && line.contains("="))
+      {
+        outputList.append(line.toLower());
+      }
+    }
+    inputFile.close();
+  }
+  LOG_VART(outputList);
+  return outputList;
 }
 
 }

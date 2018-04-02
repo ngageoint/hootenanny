@@ -195,6 +195,7 @@ struct OsmSchemaCategory {
   }
 
 private:
+
   OsmSchemaCategory::Type _type;
 };
 
@@ -367,18 +368,22 @@ public:
    * definition
    *
    * @param e element to determine type of
+   * @param tagIgnoreList if the input feature contains any of the tags in this list this method
+   * will always return false
    * @return true if the element meets the specified criteria; false otherwise
    */
-  bool isPoiPolygonPoly(const ConstElementPtr& e);
+  bool isPoiPolygonPoly(const ConstElementPtr& e, const QStringList tagIgnoreList = QStringList());
 
   /**
    * Determines whether the element passed in is a POI under the POI to Polygon conflation
    * definition
    *
    * @param e element to determine type of
+   * @param tagIgnoreList if the input feature contains any of the tags in this list this method
+   * will always return false
    * @return true if the element meets the specified criteria; false otherwise
    */
-  bool isPoiPolygonPoi(const ConstElementPtr& e);
+  bool isPoiPolygonPoi(const ConstElementPtr& e, const QStringList tagIgnoreList = QStringList());
 
   /**
    * Returns true if this is a geometry collection.
@@ -493,6 +498,19 @@ public:
   void update();
 
   void updateOrCreateVertex(const SchemaVertex& tv);
+
+  /**
+   * Determines tags are contained in a list of tags
+   *
+   * @param tags tags to examine
+   * @param tagList string tag list to check against
+   * @return true if any tag in a set of input tags is contained in a string list of tags; false
+   * otherwise
+   * @todo If we came up with a way to support key=* wildcards in the Tags class, then we could
+   * probably get rid of this method altogether and just check against the tags whereever this
+   * method is being called.
+   */
+  bool containsTagFromList(const Tags& tags, const QStringList tagList);
 
 private:
 

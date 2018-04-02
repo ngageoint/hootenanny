@@ -67,6 +67,7 @@ private:
   double _matchDistanceThreshold;
 
   QStringList _genericLandUseTagVals;
+  QStringList _genericResidentialLandUseTagVals;
 
   unsigned int _badGeomCount;
 

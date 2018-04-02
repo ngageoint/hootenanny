@@ -29,6 +29,7 @@
 // hoot
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>
+#include "../PoiPolygonTagIgnoreListReader.h"
 
 namespace hoot
 {
@@ -41,7 +42,9 @@ PoiPolygonPolyCriterion::PoiPolygonPolyCriterion()
 
 bool PoiPolygonPolyCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
 {
-  return OsmSchema::getInstance().isPoiPolygonPoly(e);
+  return
+    OsmSchema::getInstance().isPoiPolygonPoly(
+      e, PoiPolygonTagIgnoreListReader::getInstance().getPolyTagIgnoreList());
 }
 
 }

@@ -2150,6 +2150,22 @@ The minimum similarity the name scores of two features can have and be considere
 match, with 0.0 being the least similar and 1.0 being the most similar (-1.0 if there are no names
 present (null).
 
+=== poi.polygon.poi.ignore.tags.file
+
+* Data Type: string
+* Default Value: `${HOOT_HOME}/conf/core/poi-polygon/poiPolygonPoiTagIgnoreList`
+
+Path to a file containing a list of POI feature ignore tags.  Any POIs containing tags in the file
+will be skipped by POI/Polygon conflation.
+
+=== poi.polygon.poly.ignore.tags.file
+
+* Data Type: string
+* Default Value: `${HOOT_HOME}/conf/core/poi-polygon/poiPolygonPolyTagIgnoreList`
+
+Path to a file containing a list of polygon feature ignore tags.  Any polygons containing tags in
+the file will be skipped by POI/Polygon conflation.
+
 === poi.polygon.print.match.distance.truth
 
 * Data Type: bool
