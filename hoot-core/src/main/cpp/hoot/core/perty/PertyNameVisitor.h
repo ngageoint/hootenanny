@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PERTY_NAME_VISITOR_H
 #define PERTY_NAME_VISITOR_H
@@ -66,12 +66,15 @@ public:
 
   virtual void visit(const boost::shared_ptr<Element>& e);
 
+  virtual QString getDescription() const { return "Randomly changes feature names"; }
+
   /**
     @see ConstElementVisitor
     */
   QString toString();
 
 private:
+
   double _changeP;
   double _p;
   boost::minstd_rand* _rng;

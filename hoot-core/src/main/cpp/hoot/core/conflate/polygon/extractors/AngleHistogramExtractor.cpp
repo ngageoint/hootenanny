@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "AngleHistogramExtractor.h"
 
@@ -47,6 +47,7 @@ HOOT_FACTORY_REGISTER(FeatureExtractor, AngleHistogramExtractor)
 class HistogramVisitor : public ConstElementVisitor
 {
 public:
+
   static std::string className() { return "hoot::HistogramVisitor"; }
 
   HistogramVisitor(Histogram& h, const OsmMap& map) : _h(h), _map(map) {}
@@ -76,7 +77,10 @@ public:
     }
   }
 
+  virtual QString getDescription() const { return ""; }
+
 private:
+
   Histogram& _h;
   const OsmMap& _map;
 };

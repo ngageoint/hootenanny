@@ -84,6 +84,8 @@ public:
     }
   }
 
+  virtual QString getDescription() const { return ""; }
+
 private:
 
   const OsmMap* _map;
@@ -104,6 +106,8 @@ public:
   virtual ~CoOccurrenceVisitor() {}
 
   virtual void setOsmMap(const OsmMap* map) { _map = map; }
+
+  virtual QString getDescription() const { return ""; }
 
   virtual void visit(const ConstElementPtr& e)
   {

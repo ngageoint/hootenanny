@@ -61,8 +61,6 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
-  virtual QString getName() const { return "Count Unique Reviews"; }
-
   virtual QString getDescription() const { return "Counts the number of unique feature reviews"; }
 
 private:

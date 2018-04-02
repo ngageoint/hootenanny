@@ -74,6 +74,7 @@ HighwaySnapMerger::HighwaySnapMerger(Meters minSplitSize,
 class ShortestFirstComparator
 {
 public:
+
   bool operator()(const pair<ElementId, ElementId>& p1, const pair<ElementId, ElementId>& p2)
   {
     return min(getLength(p1.first), getLength(p1.second)) <
@@ -98,8 +99,12 @@ public:
     return result;
   }
 
+  virtual QString getDescription() const { return ""; }
+
   OsmMapPtr map;
+
 private:
+
   QHash<ElementId, Meters> _lengthMap;
 };
 
@@ -450,6 +455,8 @@ void HighwaySnapMerger::_snapEnds(const OsmMapPtr& map, ElementPtr snapee,  Elem
       }
       return result;
     }
+
+    virtual QString getDescription() const { return ""; }
 
     virtual void visit(const boost::shared_ptr<Element>& e)
     {

@@ -46,6 +46,8 @@ public:
 
   void addVisitor(ElementOsmMapVisitor *v) { _visitors.push_back(v); }
 
+  virtual QString getDescription() const { return "p"; }
+
 protected:
 
   OsmMap* _map;

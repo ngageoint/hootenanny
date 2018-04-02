@@ -41,11 +41,6 @@ using namespace std;
 namespace hoot
 {
 
-class NameSizesVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
-{
-
-};
-
 class StatsCmd : public BaseCommand
 {
 public:

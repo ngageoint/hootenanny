@@ -62,8 +62,6 @@ public:
    */
   void setPath(QString path) { _translator.setPath(path); }
 
-  virtual QString getName() const { return "Translate"; }
-
   virtual QString getDescription() const { return "Translates features in a map"; }
 
 private:

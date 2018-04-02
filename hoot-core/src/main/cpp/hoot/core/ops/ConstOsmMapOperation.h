@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CONSTOSMMAPOPERATION_H
 #define CONSTOSMMAPOPERATION_H
@@ -53,6 +53,7 @@ public:
    */
   virtual void apply(const boost::shared_ptr<OsmMap>& map) = 0;
 
+  virtual QString getDescription() const { return ""; }
 };
 
 }

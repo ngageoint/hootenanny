@@ -124,6 +124,8 @@ public:
   {
   }
 
+  virtual QString getDescription() const { return ""; }
+
   void checkForMatch(const boost::shared_ptr<const Element>& e)
   {
     Isolate* current = v8::Isolate::GetCurrent();

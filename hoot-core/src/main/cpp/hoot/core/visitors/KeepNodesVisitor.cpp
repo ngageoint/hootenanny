@@ -62,6 +62,8 @@ public:
 
   const set<ElementId>& getNodes() const { return _nodes; }
 
+  virtual QString getDescription() const { return ""; }
+
 private:
 
   OsmMapPtr _map;
