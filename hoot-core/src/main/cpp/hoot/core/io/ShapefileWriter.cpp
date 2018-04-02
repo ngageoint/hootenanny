@@ -63,6 +63,7 @@ HOOT_FACTORY_REGISTER(OsmMapWriter, ShapefileWriter)
 class ColumnVisitor : public ElementConstOsmMapVisitor
 {
 public:
+
   ColumnVisitor(ElementType type) : _type(type) {}
 
   virtual void visit(const boost::shared_ptr<const Element>& e)
@@ -89,7 +90,10 @@ public:
     return result;
   }
 
+  virtual QString getDescription() const { return ""; }
+
 private:
+
   ElementType _type;
   QHash<QString, int> _keys;
 };

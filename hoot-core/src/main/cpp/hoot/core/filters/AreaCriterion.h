@@ -48,8 +48,6 @@ public:
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new AreaCriterion()); }
 
-  virtual QString getName() const { return "Area"; }
-
   virtual QString getDescription() const { return "Identifies areas"; }
 };
 

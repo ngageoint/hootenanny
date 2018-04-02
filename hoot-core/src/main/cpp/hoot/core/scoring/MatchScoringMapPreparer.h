@@ -38,19 +38,17 @@ namespace hoot
  */
 class MatchScoringMapPreparer
 {
+public:
 
-  public:
+  MatchScoringMapPreparer();
 
-    MatchScoringMapPreparer();
+  /**
+    Prepares a map for match scoring
 
-    /**
-      Prepares a map for match scoring
-
-      @param map the map to prepare
-      @param removeNodes if true, removes all nodes from the map
-      */
-    void prepMap(OsmMapPtr map, const bool removeNodes);
-
+    @param map the map to prepare
+    @param removeNodes if true, removes all nodes from the map
+    */
+  void prepMap(OsmMapPtr map, const bool removeNodes);
 };
 
 }

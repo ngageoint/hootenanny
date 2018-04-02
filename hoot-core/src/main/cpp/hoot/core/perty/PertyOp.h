@@ -118,6 +118,8 @@ public:
     */
   QString toString();
 
+  virtual QString getDescription() const { return "Perturbs map data"; }
+
 private:
 
   Meters _D;

@@ -250,9 +250,19 @@ void MultiPolygonCreator::_createRings(const QString& role, vector<LinearRing *>
       }
       else
       {
-        LOG_TRACE("A multipolygon relation contains a way that is not a ring. While likely valid, "
-                 "this is currently unsupported by Hoot. Will attempt to deal with it. " <<
-                 e.getElementId());
+        if (logWarnCount < Log::getWarnMessageLimit())
+        {
+          LOG_VART(e.getElementId());
+          LOG_WARN("A multipolygon relation contains a way that is not a ring. While likely valid, "
+                   "this is currently unsupported by Hoot. Will attempt to deal with it. " <<
+                   e.getElementId());
+        }
+        else if (logWarnCount == Log::getWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
+
         partials.push_back(w);
       }
     }

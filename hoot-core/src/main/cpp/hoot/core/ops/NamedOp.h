@@ -57,6 +57,8 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
+  virtual QString getDescription() const { return ""; }
+
 private:
 
   const Settings* _conf;

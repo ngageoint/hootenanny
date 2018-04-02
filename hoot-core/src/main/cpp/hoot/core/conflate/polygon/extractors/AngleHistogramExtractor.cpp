@@ -47,6 +47,7 @@ HOOT_FACTORY_REGISTER(FeatureExtractor, AngleHistogramExtractor)
 class HistogramVisitor : public ConstElementVisitor
 {
 public:
+
   static std::string className() { return "hoot::HistogramVisitor"; }
 
   HistogramVisitor(Histogram& h, const OsmMap& map) : _h(h), _map(map) {}
@@ -76,7 +77,10 @@ public:
     }
   }
 
+  virtual QString getDescription() const { return ""; }
+
 private:
+
   Histogram& _h;
   const OsmMap& _map;
 };

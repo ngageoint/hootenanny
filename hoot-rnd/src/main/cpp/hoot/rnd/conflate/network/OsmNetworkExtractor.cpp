@@ -50,7 +50,10 @@ public:
     _parent._visit(e);
   }
 
+  virtual QString getDescription() const { return ""; }
+
 private:
+
   OsmNetworkExtractor& _parent;
 };
 

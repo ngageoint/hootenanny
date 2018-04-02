@@ -62,6 +62,8 @@ public:
    */
   virtual void visit(const ConstElementPtr& e);
 
+  virtual QString getDescription() const { return ""; }
+
 private:
 
   // white box testing

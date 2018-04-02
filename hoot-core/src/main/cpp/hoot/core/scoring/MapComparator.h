@@ -41,6 +41,7 @@ class OsmMap;
 class MapComparator
 {
 public:
+
   MapComparator();
 
   /**
@@ -54,6 +55,7 @@ public:
   void setUseDateTime() { _useDateTime = true; }
 
 private:
+
   bool _ignoreUUID;
   bool _useDateTime;
 };

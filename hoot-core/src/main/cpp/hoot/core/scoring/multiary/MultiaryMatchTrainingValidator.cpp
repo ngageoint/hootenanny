@@ -77,6 +77,7 @@ public:
     }
   }
 
+  virtual QString getDescription() const { return ""; }
 };
 
 

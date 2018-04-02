@@ -48,6 +48,8 @@ public:
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new PoiPolygonPoiCriterion()); }
 
+  virtual QString getDescription() const
+  { return "Identifies POIs as defined by POI/Polygon conflation"; }
 };
 
 }

@@ -62,6 +62,7 @@ class NodeToWayMap;
 class SmallWayMerger : public OsmMapOperation
 {
 public:
+
   static std::string className() { return "hoot::SmallWayMerger"; }
 
   SmallWayMerger(Meters threshold = -1);
@@ -72,6 +73,8 @@ public:
    * Remove parts of ways that are duplicates.
    */
   static void mergeWays(boost::shared_ptr<OsmMap> map, Meters threshold);
+
+  virtual QString getDescription() const { return "Merges small ways"; }
 
 protected:
 

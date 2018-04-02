@@ -68,6 +68,8 @@ public:
 
   virtual void apply(boost::shared_ptr<OsmMap>& map);
 
+  virtual QString getDescription() const { return ""; }
+
 private:
 
   boost::shared_ptr<ConstElementVisitor> _visitor;

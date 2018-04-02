@@ -64,6 +64,8 @@ void ElementToRelationMap::addRelation(const OsmMap& map, const boost::shared_pt
         _mapping[ElementId(e->getElementType(), e->getId())].insert(_rid);
       }
     }
+
+    virtual QString getDescription() const { return ""; }
   };
 
   AddMemberVisitor filter(_mapping, r->getId());
@@ -108,6 +110,8 @@ void ElementToRelationMap::removeRelation(const OsmMap& map, const boost::shared
       _rid = rid;
     }
 
+    virtual QString getDescription() const { return ""; }
+
     virtual void visit(const ConstElementPtr& e)
     {
       ElementId ep(e->getElementType(), e->getId());
@@ -136,6 +140,8 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
       _found = false;
     }
 
+    virtual QString getDescription() const { return ""; }
+
     virtual void visit(const ConstElementPtr& e)
     {
       if (e->getElementId() == _eid)
@@ -162,6 +168,8 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
     {
       _good = true;
     }
+
+    virtual QString getDescription() const { return ""; }
 
     bool containsRecursive(const ConstRelationPtr& r, ElementId eid)
     {

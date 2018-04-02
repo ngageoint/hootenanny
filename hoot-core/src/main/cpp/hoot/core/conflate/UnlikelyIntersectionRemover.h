@@ -64,6 +64,9 @@ public:
    */
   static void removeIntersections(boost::shared_ptr<OsmMap> map);
 
+  virtual QString getDescription() const
+  { return "Locates intersections that are likely mistakes and separates them"; }
+
 protected:
 
   boost::shared_ptr<OsmMap> _result;

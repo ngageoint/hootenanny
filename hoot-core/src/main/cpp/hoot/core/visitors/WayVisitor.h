@@ -54,8 +54,6 @@ public:
   virtual void visit(const ConstElementPtr& e);
   virtual void visit(const WayPtr& w) = 0;
 
-  virtual QString getName() const { return "Find Ways"; }
-
   virtual QString getDescription() const { return "Visits only ways"; }
 
 protected:

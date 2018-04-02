@@ -74,6 +74,8 @@ public:
     return result;
   }
 
+  virtual QString getDescription() const { return ""; }
+
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new DeletableBuildingPart()); }
 };
 

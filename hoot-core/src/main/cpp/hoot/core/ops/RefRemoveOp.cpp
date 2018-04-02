@@ -57,7 +57,10 @@ public:
     }
   }
 
+  virtual QString getDescription() const { return ""; }
+
 private:
+
   ElementCriterionPtr _criterion;
   set<QString> _refs;
 };
@@ -77,7 +80,10 @@ public:
     }
   }
 
+  virtual QString getDescription() const { return "Randomly removes elements from a map"; }
+
 private:
+
   ElementCriterionPtr _criterion;
 };
 
@@ -101,6 +107,8 @@ public:
     return result;
   }
 
+  virtual QString getDescription() const { return ""; }
+
   virtual void visit(const boost::shared_ptr<Element>& e)
   {
     if (e->getTags().contains(MetadataTags::Ref2()))
@@ -122,6 +130,7 @@ public:
   }
 
 private:
+
   const set<QString>& _refs;
 };
 
@@ -143,7 +152,6 @@ void RefRemoveOp::apply(boost::shared_ptr<OsmMap> &map)
   // you remove all buildings, but there are some POIs remaining that were matched to the buildings.
   UpdateRefVisitor urv(grv.getRefs());
   map->visitRw(urv);
-
 }
 
 }

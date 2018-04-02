@@ -98,6 +98,8 @@ public:
     }
   }
 
+  virtual QString getDescription() const { return ""; }
+
 private:
 
   Histogram& _angleHistogram;

@@ -55,11 +55,10 @@ public:
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new NotCriterion(_child->clone())); }
 
-  virtual QString getName() const { return "Not"; }
-
   virtual QString getDescription() const { return "Negates a criterion"; }
 
 private:
+
   ElementCriterionPtr _child;
 };
 

@@ -134,6 +134,8 @@ public:
     }
   }
 
+  virtual QString getDescription() const { return ""; }
+
 private:
   OsmMapPtr _map;
   GeometryPainter& _gp;

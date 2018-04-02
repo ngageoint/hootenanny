@@ -64,7 +64,10 @@ public:
 
   void splitCorners();
 
+  virtual QString getDescription() const { return "Splits sharp road corners"; }
+
 private:
+
   boost::shared_ptr<OsmMap> _map;
   std::vector<long> _todoWays;
 

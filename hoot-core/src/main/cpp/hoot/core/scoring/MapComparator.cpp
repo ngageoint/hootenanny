@@ -94,6 +94,8 @@ public:
 
   bool isMatch() { return _matches; }
 
+  virtual QString getDescription() const { return ""; }
+
   virtual void visit(const boost::shared_ptr<const Element>& e)
   {
     CHECK_MSG(_ref->containsElement(e->getElementId()), "Did not find element: " <<

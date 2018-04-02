@@ -95,6 +95,9 @@ public:
 
   virtual void writeObject(QDataStream& /*os*/) const {}
 
+  virtual QString getDescription() const
+  { return "Conflates two maps into a single map based on the difference between the inputs"; }
+
 private:
 
   geos::geom::Envelope _bounds;

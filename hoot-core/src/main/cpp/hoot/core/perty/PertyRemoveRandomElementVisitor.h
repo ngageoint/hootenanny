@@ -36,6 +36,9 @@
 namespace hoot
 {
 
+/**
+ * Randomly removes elements from a map
+ */
 class PertyRemoveRandomElementVisitor : public ElementOsmMapVisitor, public RngConsumer,
     public Configurable
 {
@@ -65,7 +68,10 @@ public:
     */
   QString toString();
 
+  virtual QString getDescription() const { return "Randomly removes elements from a map"; }
+
 private:
+
   boost::minstd_rand* _rng;
   boost::shared_ptr<boost::minstd_rand> _localRng;
   double _p;

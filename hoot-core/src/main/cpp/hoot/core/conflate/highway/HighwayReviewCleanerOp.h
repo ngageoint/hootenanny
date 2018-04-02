@@ -53,6 +53,9 @@ public:
 
   virtual QString toString() const { return QString::fromStdString(className()); }
 
+  virtual QString getDescription() const
+  { return "Finds highway reviews that are impossible due to a lack of string match"; }
+
 private:
 
   bool _isBadHighwayReview(OsmMapPtr& map, ReviewMarker::ReviewUid review);

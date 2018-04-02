@@ -43,6 +43,7 @@ namespace hoot
 class ArbitraryCriterion : public ElementCriterion
 {
 public:
+
   static std::string className() { return "hoot::ArbitraryCriterion"; }
 
   // Do something like:
@@ -64,7 +65,10 @@ public:
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new ArbitraryCriterion(_f)); }
 
+  virtual QString getDescription() const { return ""; }
+
 private:
+
   boost::function<bool (const boost::shared_ptr<const Element> &e)> _f;
 };
 

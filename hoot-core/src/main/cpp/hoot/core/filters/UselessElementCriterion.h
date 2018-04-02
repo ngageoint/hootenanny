@@ -56,8 +56,6 @@ public:
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new UselessElementCriterion()); }
 
-  virtual QString getName() const { return "Useless Element"; }
-
   virtual QString getDescription() const { return "Identifies useless elements"; }
 
 private:

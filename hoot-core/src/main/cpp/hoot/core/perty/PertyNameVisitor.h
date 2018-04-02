@@ -66,12 +66,15 @@ public:
 
   virtual void visit(const boost::shared_ptr<Element>& e);
 
+  virtual QString getDescription() const { return "Randomly changes feature names"; }
+
   /**
     @see ConstElementVisitor
     */
   QString toString();
 
 private:
+
   double _changeP;
   double _p;
   boost::minstd_rand* _rng;

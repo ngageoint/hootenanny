@@ -88,7 +88,11 @@ public:
     */
   QString toString();
 
+  virtual QString getDescription() const
+  { return "Duplicates a POI with some random error"; }
+
 private:
+
   double _moveMultiplier;
   double _p;
   double _duplicateSigma;

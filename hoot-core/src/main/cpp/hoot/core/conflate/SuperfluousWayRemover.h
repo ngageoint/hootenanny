@@ -67,6 +67,9 @@ public:
 
   void removeWays();
 
+  virtual QString getDescription() const
+  { return "Removes ways not in relations, contain zero nodes, or all nodes are identical"; }
+
 protected:
 
   boost::shared_ptr<OsmMap> _inputMap;

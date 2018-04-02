@@ -54,6 +54,7 @@ HOOT_FACTORY_REGISTER(FeatureExtractor, EdgeDistanceExtractor)
 class DiscretizeWaysVisitor : public ElementConstOsmMapVisitor
 {
 public:
+
   DiscretizeWaysVisitor(double spacing, vector<Coordinate>& v) : _spacing(spacing), _result(v) {}
 
   virtual void visit(const ConstElementPtr& e)
@@ -65,7 +66,10 @@ public:
     }
   }
 
+  virtual QString getDescription() const { return ""; }
+
 private:
+
   double _spacing;
   vector<Coordinate>& _result;
 };
@@ -73,6 +77,7 @@ private:
 class LinesWaysVisitor : public ElementConstOsmMapVisitor
 {
 public:
+
   LinesWaysVisitor(vector<Geometry*>& lines) : _lines(lines) {}
 
   virtual void visit(const boost::shared_ptr<const Element>& e)
@@ -86,7 +91,10 @@ public:
     }
   }
 
+  virtual QString getDescription() const { return ""; }
+
 private:
+
   vector<Geometry*>& _lines;
 };
 

@@ -60,11 +60,9 @@ public:
 
     bool operator()(const std::string& name1, const std::string& name2)
     {
-      boost::shared_ptr<Operator> op1(
-        Factory::getInstance().constructObject<Operator>(name1));
-      boost::shared_ptr<Operator> op2(
-        Factory::getInstance().constructObject<Operator>(name2));
-      return op1->getName() < op2->getName();
+      return
+        QString::fromStdString(name1).replace("hoot::", "") <
+        QString::fromStdString(name2).replace("hoot::", "");
     }
   };
 
@@ -72,7 +70,7 @@ public:
   void printOperators(const std::string& operatorClassName, const QString operatorType)
   {
     //the size of the longest operator/type names plus a 3 space buffer
-    const int maxNameSize = 42;
+    const int maxNameSize = 45;
     const int maxTypeSize = 18;
 
     std::vector<std::string> cmds =
@@ -83,13 +81,14 @@ public:
     {
       boost::shared_ptr<Operator> c(
         Factory::getInstance().constructObject<Operator>(cmds[i]));
-      if (!c->getName().isEmpty() && !c->getDescription().isEmpty())
+      if (!c->getDescription().isEmpty())
       {
-        LOG_VARD(c->getName());
-        const int indentAfterName = maxNameSize - c->getName().size();
+        LOG_VARD(cmds[i]);
+        const QString name = QString::fromStdString(cmds[i]).replace("hoot::", "");
+        const int indentAfterName = maxNameSize - name.size();
         const int indentAfterType = maxTypeSize - operatorType.size();
         const QString line =
-          "  " + c->getName() + QString(indentAfterName, ' ') + operatorType +
+          "  " + name + QString(indentAfterName, ' ') + operatorType +
           QString(indentAfterType, ' ') + c->getDescription();
         std::cout << line << std::endl;
       }
@@ -123,6 +122,8 @@ public:
       parsedArgs.append("--operations");
       parsedArgs.append("--visitors");
     }
+
+    std::cout << "Operators (prepend 'hoot::'):" << std::endl << std::endl;
 
     DisableLog dl;
     for (int i = 0; i < parsedArgs.size(); i++)

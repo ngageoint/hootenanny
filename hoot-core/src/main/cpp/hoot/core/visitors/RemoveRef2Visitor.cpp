@@ -66,6 +66,8 @@ public:
     }
   }
 
+  virtual QString getDescription() const { return ""; }
+
 private:
   const OsmMap* _map;
   RemoveRef2Visitor::Ref1ToEid _ref1ToEid;

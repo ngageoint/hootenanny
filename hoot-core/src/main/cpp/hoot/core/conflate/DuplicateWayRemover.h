@@ -72,6 +72,8 @@ public:
     _strictTagMatching = strictTagMatching;
   }
 
+  virtual QString getDescription() const { return "Removes duplicated way from a map"; }
+
 protected:
 
   OsmMapPtr _map;

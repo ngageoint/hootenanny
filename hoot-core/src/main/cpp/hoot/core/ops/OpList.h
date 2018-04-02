@@ -73,6 +73,8 @@ public:
 
   virtual void writeObject(QDataStream& os) const;
 
+  virtual QString getDescription() const { return ""; }
+
 private:
 
   std::vector< boost::shared_ptr<OsmMapOperation> > _ops;

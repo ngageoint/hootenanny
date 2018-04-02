@@ -63,8 +63,6 @@ public:
    */
   virtual void visit(const ConstElementPtr& e);
 
-  virtual QString getName() const { return "Add Ref 2 Tag"; }
-
   virtual QString getDescription() const { return "Adds REF2 tags"; }
 
 private:

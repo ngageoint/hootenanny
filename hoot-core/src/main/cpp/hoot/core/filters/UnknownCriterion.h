@@ -49,11 +49,8 @@ public:
 
   ElementCriterionPtr clone() { return ElementCriterionPtr(new UnknownCriterion()); }
 
-  virtual QString getName() const { return "Unknown Status"; }
-
   virtual QString getDescription() const
   { return "Identifies elements which have not been conflated"; }
-
 };
 
 }

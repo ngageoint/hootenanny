@@ -82,7 +82,10 @@ public:
    */
   void removeRoundabouts(std::vector<RoundaboutPtr> &removed);
 
+  virtual QString getDescription() const { return "Removes roundabouts from road data"; }
+
 private:
+
   boost::shared_ptr<OsmMap> _pMap;
   std::vector<long> _todoWays;
 };

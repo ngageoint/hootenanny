@@ -358,6 +358,8 @@ void MultiaryMatchComparator::_findActualMatches(const ConstOsmMapPtr& conflated
     {
     }
 
+    virtual QString getDescription() const { return ""; }
+
     virtual void visit(const ConstElementPtr& e)
     {
       QList<QString> ids = _getAllIds(e);
@@ -444,6 +446,8 @@ void MultiaryMatchComparator::_findExpectedMatches(const ConstOsmMapPtr& in)
     {
     }
 
+    virtual QString getDescription() const { return ""; }
+
     virtual void visit(const ConstElementPtr& e)
     {
       const Tags& t = e->getTags();
@@ -517,6 +521,8 @@ void MultiaryMatchComparator::_findExpectedReviews(const ConstOsmMapPtr& in)
       _index(index)
     {
     }
+
+    virtual QString getDescription() const { return ""; }
 
     virtual void visit(const ConstElementPtr& e)
     {

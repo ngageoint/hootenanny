@@ -70,6 +70,9 @@ public:
 
   boost::shared_ptr<OsmMap> markDivided();
 
+  virtual QString getDescription() const
+  { return "Locates sections that implicitly appear to be divided highways"; }
+
 protected:
 
   boost::shared_ptr<const OsmMap> _inputMap;

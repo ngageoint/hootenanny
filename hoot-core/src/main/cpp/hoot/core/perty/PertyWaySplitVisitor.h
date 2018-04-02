@@ -112,6 +112,8 @@ public:
     */
   virtual QString toString();
 
+  virtual QString getDescription() const { return "Randomly splits ways"; }
+
 private:
 
   boost::minstd_rand* _rng;

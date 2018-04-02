@@ -99,6 +99,8 @@ public:
     */
   virtual QString toString();
 
+  virtual QString getDescription() const { return "Randomly generalizes ways"; }
+
 private:
 
   boost::minstd_rand* _rng;

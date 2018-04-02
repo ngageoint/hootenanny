@@ -62,6 +62,7 @@ using namespace hybrid;
 class RFqHybridDummyData
 {
 public:
+
   RFqHybridDummyData() {}
   RFqHybridDummyData(const RFqHybridDummyData& dd) :
     _e(dd._e),
@@ -89,6 +90,7 @@ public:
   const QString& getMetricElement() const { return _name; }
 
 private:
+
   Envelope _e;
   ElementId _eid;
   QString _name;
@@ -323,9 +325,11 @@ public:
       }
     }
 
-  private:
-    vector<RFqHybridDummyData>& _keys;
+    virtual QString getDescription() const {return ""; }
 
+  private:
+
+    vector<RFqHybridDummyData>& _keys;
   };
 
   class OptimizeFunction : public Tgs::NelderMead::Function

@@ -79,6 +79,8 @@ public:
     }
   }
 
+virtual QString getDescription() const { return ""; }
+
   virtual void visit(const boost::shared_ptr<Element>&) {}
 
   /**

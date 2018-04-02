@@ -53,6 +53,7 @@ public:
    */
   virtual void apply(const boost::shared_ptr<OsmMap>& map) = 0;
 
+  virtual QString getDescription() const { return ""; }
 };
 
 }

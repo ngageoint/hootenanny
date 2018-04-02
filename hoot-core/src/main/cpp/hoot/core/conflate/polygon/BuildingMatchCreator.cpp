@@ -98,6 +98,8 @@ public:
              (double)_neighborCountSum / (double)_elementsEvaluated);
   }
 
+  virtual QString getDescription() const { return ""; }
+
   void checkForMatch(const boost::shared_ptr<const Element>& e)
   {
     boost::shared_ptr<Envelope> env(e->getEnvelope(_map));

@@ -62,6 +62,8 @@ public:
 
   void setCaseSensitive(bool caseSensitive) { _caseSensitive = caseSensitive; }
 
+  virtual QString getDescription() const { return "Removes duplicated names from a feature"; }
+
 protected:
 
   boost::shared_ptr<OsmMap> _map;

@@ -66,6 +66,9 @@ public:
 
   void setPrecision(int precision) { _precision = precision; }
 
+  virtual QString getDescription() const
+  { return "Calculates a search radius using tie points found by rubbersheeting"; }
+
 private:
 
   void _calculateSearchRadius(const std::vector<double>& tiePointDistances);

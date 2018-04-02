@@ -53,8 +53,6 @@ public:
 
   virtual double getStat() const { return _keyCount; }
 
-  virtual QString getName() const { return "Count Tag Keys"; }
-
   virtual QString getDescription() const
   { return "Counts the number of tags in all elements with the given key"; }
 

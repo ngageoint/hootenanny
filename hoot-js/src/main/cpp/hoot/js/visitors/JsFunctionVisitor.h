@@ -56,7 +56,10 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
+  virtual QString getDescription() const { return ""; }
+
 private:
+
   v8::Persistent<v8::Function> _func;
   OsmMap* _map;
 };

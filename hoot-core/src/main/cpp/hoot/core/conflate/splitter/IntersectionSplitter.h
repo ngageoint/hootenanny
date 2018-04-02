@@ -66,7 +66,11 @@ public:
 
   void splitIntersections();
 
+  virtual QString getDescription() const
+  { return "Makes all intersections contain only way end nodes"; }
+
 private:
+
   boost::shared_ptr<OsmMap> _map;
   QMultiHash<long, long> _nodeToWays;
   QSet<long> _todoNodes;

@@ -43,6 +43,7 @@ public:
    */
   virtual void apply(boost::shared_ptr<OsmMap>& map);
 
+  virtual QString getDescription() const { return "TODO"; }
 };
 
 }

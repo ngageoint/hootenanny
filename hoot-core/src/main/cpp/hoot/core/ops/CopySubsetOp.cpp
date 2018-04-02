@@ -71,6 +71,8 @@ public:
     }
   }
 
+  virtual QString getDescription() const { return ""; }
+
 private:
   ConstOsmMapPtr _from;
   OsmMapPtr _to;

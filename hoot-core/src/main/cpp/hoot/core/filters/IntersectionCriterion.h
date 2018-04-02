@@ -60,8 +60,6 @@ public:
 
   virtual void setOsmMap(const OsmMap* map);
 
-  virtual QString getName() const { return "Intersection"; }
-
   virtual QString getDescription() const { return "Identifies highway intersections"; }
 
 private:
