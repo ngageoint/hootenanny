@@ -214,6 +214,7 @@ public:
       uut.setTypeScoreThreshold(0.8);
       uut.setMatchEvidenceThreshold(3);
       uut.setReviewEvidenceThreshold(1);
+      uut.setDisableSameSourceConflation(false);
       uut.calculateMatch(n1->getElementId(), w1->getElementId());
 
       HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());

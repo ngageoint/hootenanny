@@ -1,3 +1,3 @@
 This case tackles the scenario where both ref & secondary datasets have roundabouts.
 
-The conflation looks pretty good, but we need to add some code to detect the second roundabout, and only put the ref back, not both roundabouts.
+The conflation output should have one roundabout, not two stacked on top of each other.

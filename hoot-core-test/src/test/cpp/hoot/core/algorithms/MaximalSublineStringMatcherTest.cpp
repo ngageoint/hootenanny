@@ -89,21 +89,6 @@ public:
     return map;
   }
 
-  WayPtr createWay(OsmMapPtr map, Status s, Coordinate c[], Meters ce, QString note)
-  {
-    WayPtr result(new Way(s, map->createNextWayId(), ce));
-    for (size_t i = 0; c[i].isNull() == false; i++)
-    {
-      NodePtr n(new Node(s, map->createNextNodeId(), c[i], ce));
-      map->addNode(n);
-      result->addNode(n->getId());
-    }
-
-    result->getTags().addNote(note);
-    map->addWay(result);
-    return result;
-  }
-
   OsmMapPtr createMatchTestMap()
   {
     OsmMapPtr map(new OsmMap());
@@ -122,68 +107,68 @@ public:
     // 2 ---------
     // 1 ---------
     Coordinate ca1[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
-    createWay(map, Status::Unknown1, ca1, 15.0, "a1");
+    TestUtils::createWay(map, Status::Unknown1, ca1, 15.0, "a1");
 
     Coordinate ca2[] = { Coordinate(0, 5), Coordinate(100, 5), Coordinate::getNull() };
-    createWay(map, Status::Unknown2, ca2, 15.0, "a2");
+    TestUtils::createWay(map, Status::Unknown2, ca2, 15.0, "a2");
 
     // Multiple Partial Matches
     //     +--+
     // 2 --+  +---
     // 1 ---------
     Coordinate cb1[] = { Coordinate(100, 0), Coordinate(100, 100), Coordinate::getNull() };
-    createWay(map, Status::Unknown1, cb1, 15.0, "b1");
+    TestUtils::createWay(map, Status::Unknown1, cb1, 15.0, "b1");
 
     Coordinate cb2[] = { Coordinate(105, 0), Coordinate(105, 40),
                          Coordinate(150, 40), Coordinate(150, 60),
                          Coordinate(105, 60), Coordinate(105, 100),
                          Coordinate::getNull() };
-    createWay(map, Status::Unknown2, cb2, 15.0, "b2");
+    TestUtils::createWay(map, Status::Unknown2, cb2, 15.0, "b2");
 
     // Offset Partial Match
     // 2     ---------
     // 1 ---------
     Coordinate cc1[] = { Coordinate(200, 0), Coordinate(200, 100), Coordinate::getNull() };
-    createWay(map, Status::Unknown1, cc1, 15.0, "c1");
+    TestUtils::createWay(map, Status::Unknown1, cc1, 15.0, "c1");
 
     Coordinate cc2[] = { Coordinate(200, 50), Coordinate(200, 150), Coordinate::getNull() };
-    createWay(map, Status::Unknown2, cc2, 15.0, "c2");
+    TestUtils::createWay(map, Status::Unknown2, cc2, 15.0, "c2");
 
     // Centered Partial Match
     // 2   ----
     // 1 ---------
     Coordinate cd1[] = { Coordinate(300, 0), Coordinate(300, 100), Coordinate::getNull() };
-    createWay(map, Status::Unknown1, cd1, 15.0, "d1");
+    TestUtils::createWay(map, Status::Unknown1, cd1, 15.0, "d1");
 
     Coordinate cd2[] = { Coordinate(300, 30), Coordinate(300, 70), Coordinate::getNull() };
-    createWay(map, Status::Unknown2, cd2, 15.0, "d2");
+    TestUtils::createWay(map, Status::Unknown2, cd2, 15.0, "d2");
 
     // Multiple Matches
     // 2 ------ ----
     // 1   ---- -------
     Coordinate ce1a[] = { Coordinate(400, 50), Coordinate(400, 100), Coordinate::getNull() };
-    createWay(map, Status::Unknown1, ce1a, 15.0, "e1");
+    TestUtils::createWay(map, Status::Unknown1, ce1a, 15.0, "e1");
 
     Coordinate ce1b[] = { Coordinate(400, 120), Coordinate(400, 200), Coordinate::getNull() };
-    createWay(map, Status::Unknown1, ce1b, 15.0, "e1");
+    TestUtils::createWay(map, Status::Unknown1, ce1b, 15.0, "e1");
 
     Coordinate ce2a[] = { Coordinate(400, 0), Coordinate(400, 100), Coordinate::getNull() };
-    createWay(map, Status::Unknown2, ce2a, 15.0, "e2");
+    TestUtils::createWay(map, Status::Unknown2, ce2a, 15.0, "e2");
 
     Coordinate ce2b[] = { Coordinate(400, 120), Coordinate(400, 150), Coordinate::getNull() };
-    createWay(map, Status::Unknown2, ce2b, 15.0, "e2");
+    TestUtils::createWay(map, Status::Unknown2, ce2b, 15.0, "e2");
 
     // Offset Partial Match - two parts
     // 2    ---x-------
     // 1 -----------
     Coordinate cf1[] = { Coordinate(500, 0), Coordinate(500, 100), Coordinate::getNull() };
-    createWay(map, Status::Unknown1, cf1, 15.0, "f1");
+    TestUtils::createWay(map, Status::Unknown1, cf1, 15.0, "f1");
 
     Coordinate cf2a[] = { Coordinate(500, 50), Coordinate(500, 70), Coordinate::getNull() };
-    createWay(map, Status::Unknown2, cf2a, 15.0, "f2");
+    TestUtils::createWay(map, Status::Unknown2, cf2a, 15.0, "f2");
 
     Coordinate cf2b[] = { Coordinate(500, 70), Coordinate(500, 150), Coordinate::getNull() };
-    createWay(map, Status::Unknown2, cf2b, 15.0, "f2");
+    TestUtils::createWay(map, Status::Unknown2, cf2b, 15.0, "f2");
 
     // U-Match - two parts
     // 2   -----------x
@@ -196,17 +181,17 @@ public:
     Coordinate cg1[] = { Coordinate(dx + 0, 0), Coordinate(dx + 100, 0),
                          Coordinate(dx + 100, 10), Coordinate(dx + 0, 10),
                          Coordinate::getNull() };
-    createWay(map, Status::Unknown1, cg1, 15.0, "g1");
+    TestUtils::createWay(map, Status::Unknown1, cg1, 15.0, "g1");
 
     double err = 0;
     Coordinate cg2a[] = { Coordinate(dx + 0 + err, 0 + err), Coordinate(dx + 100 + err, 0 + err),
                           Coordinate(dx + 100 + err, 10 + err), Coordinate::getNull() };
-    WayPtr wg2a = createWay(map, Status::Unknown2, cg2a, 15.0, "g2");
+    WayPtr wg2a = TestUtils::createWay(map, Status::Unknown2, cg2a, 15.0, "g2");
 
     Coordinate cg2b[] = { Coordinate(dx + 100 + err, 10 + err),
                           Coordinate(dx + 0 + err, 10 + err),
                           Coordinate::getNull() };
-    WayPtr wg2b = createWay(map, Status::Unknown2, cg2b, 15.0, "g2");
+    WayPtr wg2b = TestUtils::createWay(map, Status::Unknown2, cg2b, 15.0, "g2");
 
     RelationPtr r(new Relation(Status::Unknown1, map->createNextRelationId(), 5,
       MetadataTags::RelationMultilineString()));
@@ -227,17 +212,17 @@ public:
     Coordinate ch1[] = { Coordinate(dx + 0, 0), Coordinate(dx + 100, 0),
                          Coordinate(dx + 100, 10), Coordinate(dx + 0, 10),
                          Coordinate::getNull() };
-    createWay(map, Status::Unknown1, ch1, ce, "h1");
+    TestUtils::createWay(map, Status::Unknown1, ch1, ce, "h1");
 
     err = 0;
     Coordinate ch2a[] = { Coordinate(dx + 0 + err, 0 + err), Coordinate(dx + 100 + err, 0 + err),
                           Coordinate(dx + 100 + err, 10 + err), Coordinate::getNull() };
-    WayPtr wh2a = createWay(map, Status::Unknown2, ch2a, ce, "h2");
+    WayPtr wh2a = TestUtils::createWay(map, Status::Unknown2, ch2a, ce, "h2");
 
     Coordinate ch2b[] = { Coordinate(dx + 0 + err, 10 + err),
                           Coordinate(dx + 100 + err, 10 + err),
                           Coordinate::getNull() };
-    WayPtr wh2b = createWay(map, Status::Unknown2, ch2b, ce, "h2");
+    WayPtr wh2b = TestUtils::createWay(map, Status::Unknown2, ch2b, ce, "h2");
 
     RelationPtr rh2(new Relation(Status::Unknown1, map->createNextRelationId(), 3,
       MetadataTags::RelationMultilineString()));
@@ -258,17 +243,17 @@ public:
     Coordinate ci1[] = { Coordinate(dx + 0, 0), Coordinate(dx + 100, 0),
                          Coordinate(dx + 100, 10), Coordinate(dx + 0, 10),
                          Coordinate::getNull() };
-    createWay(map, Status::Unknown1, ci1, ce, "i1");
+    TestUtils::createWay(map, Status::Unknown1, ci1, ce, "i1");
 
     err = 0;
     Coordinate ci2a[] = { Coordinate(dx + 0 + err, 0 + err), Coordinate(dx + 100 + err, 0 + err),
                           Coordinate(dx + 100 + err, 10 + err), Coordinate::getNull() };
-    WayPtr wi2a = createWay(map, Status::Unknown2, ci2a, ce, "i2");
+    WayPtr wi2a = TestUtils::createWay(map, Status::Unknown2, ci2a, ce, "i2");
 
     Coordinate ci2b[] = { Coordinate(dx + -50 + err, 10 + err),
                           Coordinate(dx + 100 + err, 10 + err),
                           Coordinate::getNull() };
-    WayPtr wi2b = createWay(map, Status::Unknown2, ci2b, ce, "i2");
+    WayPtr wi2b = TestUtils::createWay(map, Status::Unknown2, ci2b, ce, "i2");
 
     RelationPtr ri2(new Relation(Status::Unknown1, map->createNextRelationId(), 3,
       MetadataTags::RelationMultilineString()));
@@ -285,10 +270,10 @@ public:
     OsmMapPtr map = createMap();
 
     Coordinate w1c[] = { Coordinate(50, 0), Coordinate(150, 0), Coordinate::getNull() };
-    WayPtr w1 = createWay(map, Status::Unknown1, w1c, 5, "w1");
+    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c, 5, "w1");
 
     Coordinate w2c[] = { Coordinate(100, 0), Coordinate(0, 0), Coordinate::getNull() };
-    WayPtr w2 = createWay(map, Status::Unknown1, w2c, 5, "w2");
+    WayPtr w2 = TestUtils::createWay(map, Status::Unknown1, w2c, 5, "w2");
 
     boost::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
@@ -316,11 +301,11 @@ public:
                          Coordinate(250, 0),
                          Coordinate(330, 0),
                          Coordinate::getNull() };
-    WayPtr w1 = createWay(map, Status::Unknown1, w1c, 5, "w1");
+    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c, 5, "w1");
 
     Coordinate w2c[] = { Coordinate(90, -5), Coordinate(85, -5), Coordinate(80, -5),
                          Coordinate::getNull() };
-    WayPtr w2 = createWay(map, Status::Unknown1, w2c, 5, "w2");
+    WayPtr w2 = TestUtils::createWay(map, Status::Unknown1, w2c, 5, "w2");
 
     boost::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
@@ -519,14 +504,14 @@ public:
                          Coordinate(50, 5),
                          Coordinate(100, 6),
                          Coordinate::getNull() };
-    WayPtr w1 = createWay(map, Status::Unknown1, w1c, 5, "w1");
+    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c, 5, "w1");
 
     Coordinate w2c[] = { Coordinate(0, 0),
                          Coordinate(30, 0),
                          Coordinate(80, 0),
                          Coordinate(101.23, 0),
                          Coordinate::getNull() };
-    WayPtr w2 = createWay(map, Status::Unknown1, w2c, 5, "w2");
+    WayPtr w2 = TestUtils::createWay(map, Status::Unknown1, w2c, 5, "w2");
 
     boost::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);

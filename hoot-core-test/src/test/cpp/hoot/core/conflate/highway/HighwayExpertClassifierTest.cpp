@@ -65,22 +65,6 @@ class HighwayExpertClassifierTest : public CppUnit::TestFixture
 
 public:
 
-  WayPtr createWay(OsmMapPtr map, Coordinate* c)
-  {
-    WayPtr result((new Way(Status::Unknown1, map->createNextWayId(), 15.0)));
-
-    for (int i = 0; c[i].isNull() == false; i++)
-    {
-      NodePtr n(new Node(Status::Unknown1, map->createNextNodeId(), c[i], 15.0));
-      map->addNode(n);
-      result->addNode(n->getId());
-    }
-
-    map->addWay(result);
-
-    return result;
-  }
-
   /**
    * Two identical ways that are perpendicular. All straight and 100m long.
    * x and o signifiy Unknown1 and Unknown2, respectively.
@@ -103,11 +87,10 @@ public:
     MapProjector::projectToOrthographic(map, env);
 
     Coordinate w1c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
-    WayPtr w1 = createWay(map, w1c);
+    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c);
 
     Coordinate w2c[] = { Coordinate(50, 50), Coordinate(50, -50), Coordinate::getNull() };
-    WayPtr w2 = createWay(map, w2c);
-    w2->setStatus(Status::Unknown2);
+    WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, w2c);
 
     boost::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
 
@@ -138,11 +121,10 @@ public:
     MapProjector::projectToOrthographic(map, env);
 
     Coordinate w1c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
-    WayPtr w1 = createWay(map, w1c);
+    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c);
 
     Coordinate w2c[] = { Coordinate(0, 5), Coordinate(100, 5), Coordinate::getNull() };
-    WayPtr w2 = createWay(map, w2c);
-    w2->setStatus(Status::Unknown2);
+    WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, w2c);
 
     boost::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
 
@@ -173,11 +155,10 @@ public:
     MapProjector::projectToOrthographic(map, env);
 
     Coordinate w1c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
-    WayPtr w1 = createWay(map, w1c);
+    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c);
 
     Coordinate w2c[] = { Coordinate(90, 5), Coordinate(190, 5), Coordinate::getNull() };
-    WayPtr w2 = createWay(map, w2c);
-    w2->setStatus(Status::Unknown2);
+    WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, w2c);
 
     boost::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
 
