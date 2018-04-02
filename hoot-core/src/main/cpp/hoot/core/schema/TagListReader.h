@@ -25,41 +25,34 @@
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "TagIgnoreListReader.h"
-
-// hoot
-#include <hoot/core/util/Log.h>
-#include <hoot/core/util/HootException.h>
+#ifndef TAGLISTREADER_H
+#define TAGLISTREADER_H
 
 // Qt
-#include <QFile>
+#include <QStringList>
 
 namespace hoot
 {
 
-QStringList TagIgnoreListReader::readList(const QString inputPath)
-{  
-  LOG_VARD(inputPath);
-  QStringList outputList;
-  if (!inputPath.trimmed().isEmpty())
-  {
-    QFile inputFile(inputPath);
-    if (!inputFile.open(QIODevice::ReadOnly))
-    {
-      throw HootException(QObject::tr("Error opening %1 for writing.").arg(inputFile.fileName()));
-    }
-    while (!inputFile.atEnd())
-    {
-      const QString line = QString::fromUtf8(inputFile.readLine().constData()).trimmed();
-      if (!line.trimmed().isEmpty() && !line.startsWith("#") && line.contains("="))
-      {
-        outputList.append(line.toLower());
-      }
-    }
-    inputFile.close();
-  }
-  LOG_VART(outputList);
-  return outputList;
-}
+/**
+ * Reads tag lists from a file
+ */
+class TagListReader
+{
+
+public:
+
+  /**
+   * Reads a list of tags from a newline delimited file
+   *
+   * @param inputPath path to the input file
+   * @param keysOnly if true; assumes line is made up of the tag key only and doesn't require a kvp
+   * with '=' per record
+   * @return a string list of tags
+   */
+  static QStringList readList(const QString inputPath, const bool keysOnly = false);
+};
 
 }
+
+#endif // TAGLISTREADER_H

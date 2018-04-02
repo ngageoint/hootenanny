@@ -43,7 +43,6 @@ class PoiPolygonTagIgnoreListReader
 public:
 
   PoiPolygonTagIgnoreListReader();
-  //virtual ~PoiPolygonTagIgnoreListReader();
 
   static PoiPolygonTagIgnoreListReader& getInstance();
 

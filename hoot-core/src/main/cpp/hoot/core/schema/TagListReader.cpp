@@ -25,26 +25,41 @@
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef TAGIGNORELISTREADER_H
-#define TAGIGNORELISTREADER_H
+#include "TagListReader.h"
+
+// hoot
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/HootException.h>
 
 // Qt
-#include <QStringList>
+#include <QFile>
 
 namespace hoot
 {
 
-/**
- * Reads tag ignore lists
- */
-class TagIgnoreListReader
-{
-
-public:
-
-  static QStringList readList(const QString inputPath);
-};
-
+QStringList TagListReader::readList(const QString inputPath, const bool keysOnly)
+{  
+  LOG_VARD(inputPath);
+  QStringList outputList;
+  if (!inputPath.trimmed().isEmpty())
+  {
+    QFile inputFile(inputPath);
+    if (!inputFile.open(QIODevice::ReadOnly))
+    {
+      throw HootException(QObject::tr("Error opening %1 for writing.").arg(inputFile.fileName()));
+    }
+    while (!inputFile.atEnd())
+    {
+      const QString line = QString::fromUtf8(inputFile.readLine().constData()).trimmed();
+      if (!line.trimmed().isEmpty() && !line.startsWith("#") && (keysOnly || line.contains("=")))
+      {
+        outputList.append(line.toLower());
+      }
+    }
+    inputFile.close();
+  }
+  LOG_VART(outputList);
+  return outputList;
 }
 
-#endif // TAGIGNORELISTREADER_H
+}

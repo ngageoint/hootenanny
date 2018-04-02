@@ -30,7 +30,7 @@
 // hoot
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/HootException.h>
-#include <hoot/core/schema/TagIgnoreListReader.h>
+#include <hoot/core/schema/TagListReader.h>
 
 // Qt
 #include <QFile>
@@ -92,8 +92,9 @@ void ImplicitTagCustomRules::_readAllowLists()
 void ImplicitTagCustomRules::_readIgnoreLists()
 {
   LOG_DEBUG("Reading ignore lists...");
-  _tagIgnoreList = TagIgnoreListReader::readList(_tagIgnoreFile);
-  _wordIgnoreList = TagIgnoreListReader::readList(_wordIgnoreFile);
+  _tagIgnoreList = TagListReader::readList(_tagIgnoreFile);
+  //Words really aren't tags, but the tag list reader works fine for this.
+  _wordIgnoreList = TagListReader::readList(_wordIgnoreFile, true);
 }
 
 }

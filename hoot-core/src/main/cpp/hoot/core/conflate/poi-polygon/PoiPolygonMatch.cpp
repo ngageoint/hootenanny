@@ -62,6 +62,7 @@ _reviewEvidenceThreshold(1),
 _distance(-1.0),
 _matchDistanceThreshold(-1.0),
 _reviewDistanceThreshold(-1.0),
+_reviewDistancePlusCe(-1.0),
 _closeDistanceMatch(false),
 _typeScore(-1.0),
 _typeScoreThreshold(-1.0),
@@ -378,12 +379,15 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
       const QString nameMatchStr = _nameScore >= 1.0 ? "yes" : "no";
       const QString addressMatchStr = _addressScore >= 1.0 ? "yes" : "no";
       _explainText =
-        QString("Features had an additive similarity score less than the required score of %1. Distance: %2. Matches: distance: yes, type: %3, name: %4, address: %5.")
+        QString("Features had an additive similarity score less than the required score of %1. Matches: distance: yes, type: %2, name: %3, address: %4. Distance: %5m, distance to match: %6m, distance to review: %7m.")
           .arg(_matchEvidenceThreshold)
-          .arg(_distance)
           .arg(typeMatchStr)
           .arg(nameMatchStr)
-          .arg(addressMatchStr);
+          .arg(addressMatchStr)
+          .arg(round(_distance))
+          .arg(round(_matchDistanceThreshold))
+          .arg(round(_reviewDistancePlusCe));
+
     }
   }
   else
@@ -422,8 +426,8 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
   const double polySigma = poly->getCircularError() / 2.0;
   const double sigma = sqrt(poiSigma * poiSigma + polySigma * polySigma);
   const double combinedCircularError2Sigma = sigma * 2;
-  const double reviewDistancePlusCe = _reviewDistanceThreshold + combinedCircularError2Sigma;
-  _closeDistanceMatch = _distance <= reviewDistancePlusCe;
+  _reviewDistancePlusCe = _reviewDistanceThreshold + combinedCircularError2Sigma;
+  _closeDistanceMatch = _distance <= _reviewDistancePlusCe;
   //close distance match is a requirement for any matching, regardless of the final total evidence
   //count
   if (!_closeDistanceMatch)
@@ -437,7 +441,7 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
   LOG_VART(_reviewDistanceThreshold);
   LOG_VART(poi->getCircularError());
   LOG_VART(poly->getCircularError());
-  LOG_VART(reviewDistancePlusCe);
+  LOG_VART(_reviewDistancePlusCe);
   LOG_VART(combinedCircularError2Sigma);
   LOG_VART(_distance);
   LOG_VART(_closeDistanceMatch);

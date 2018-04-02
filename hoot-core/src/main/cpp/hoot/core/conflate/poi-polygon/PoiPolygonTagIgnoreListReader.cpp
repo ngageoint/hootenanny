@@ -30,8 +30,7 @@
 // hoot
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/schema/TagIgnoreListReader.h>
-//#include <hoot/core/util/Factory.h>
+#include <hoot/core/schema/TagListReader.h>
 
 namespace hoot
 {
@@ -42,10 +41,10 @@ PoiPolygonTagIgnoreListReader::PoiPolygonTagIgnoreListReader()
 {
   LOG_DEBUG("Reading ignore lists...");
   _poiTagIgnoreList =
-    TagIgnoreListReader::readList(ConfigOptions().getPoiPolygonPoiIgnoreTagsFile());
+    TagListReader::readList(ConfigOptions().getPoiPolygonPoiIgnoreTagsFile());
   LOG_VARD(_poiTagIgnoreList.size());
   _polyTagIgnoreList =
-    TagIgnoreListReader::readList(ConfigOptions().getPoiPolygonPolyIgnoreTagsFile());
+    TagListReader::readList(ConfigOptions().getPoiPolygonPolyIgnoreTagsFile());
   LOG_VARD(_polyTagIgnoreList.size());
 }
 
