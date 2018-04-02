@@ -250,16 +250,18 @@ void MultiPolygonCreator::_createRings(const QString& role, vector<LinearRing *>
       }
       else
       {
+        //Leaving this one at trace level, since it is happening so much in poi/poly conflation.
+        //See #2287.
         if (logWarnCount < Log::getWarnMessageLimit())
         {
           LOG_VART(e.getElementId());
-          LOG_WARN("A multipolygon relation contains a way that is not a ring. While likely valid, "
+          LOG_TRACE("A multipolygon relation contains a way that is not a ring. While likely valid, "
                    "this is currently unsupported by Hoot. Will attempt to deal with it. " <<
                    e.getElementId());
         }
         else if (logWarnCount == Log::getWarnMessageLimit())
         {
-          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+          LOG_TRACE(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }
         logWarnCount++;
 
