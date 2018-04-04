@@ -72,7 +72,6 @@ private:
   bool _addressMatch;
 
   QStringList _genericLandUseTagVals;
-  QStringList _genericResidentialLandUseTagVals;
 
   unsigned int _badGeomCount;
 
