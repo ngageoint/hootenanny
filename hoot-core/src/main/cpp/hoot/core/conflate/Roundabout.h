@@ -55,10 +55,10 @@ public:
   Roundabout();
 
   /**
-   * @brief setRoundaboutWay -Set the roundabout way that this object represents
+   * @brief setRoundaboutWay - Set the roundabout way that this object represents
    * @param pWay - Pointer to the roundabout way
    */
-  void setRoundaboutWay (WayPtr pWay)   { _roundaboutWay = pWay; }
+  void setRoundaboutWay (WayPtr pWay);
 
   /**
    * @brief addRoundaboutNode - Add the node to our internal list of nodes that
@@ -128,6 +128,9 @@ private:
 
   // The original roundabout way
   WayPtr  _roundaboutWay;
+
+  // The original roundabout status
+  Status _status;
 
   // Has all the nodes that was in our original roundabout
   std::vector<ConstNodePtr> _roundaboutNodes;
