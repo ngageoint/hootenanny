@@ -203,7 +203,6 @@ double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi,
 QStringList PoiPolygonTypeScoreExtractor::_getRelatedTags(const Tags& tags) const
 {
   QStringList tagsList;
-
   for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
   {
     const QStringList values = it.value().split(";");
@@ -217,7 +216,6 @@ QStringList PoiPolygonTypeScoreExtractor::_getRelatedTags(const Tags& tags) cons
       }
     }
   }
-
   return tagsList;
 }
 

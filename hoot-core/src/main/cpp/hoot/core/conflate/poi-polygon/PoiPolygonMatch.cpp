@@ -388,13 +388,16 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
       {
         _addressScore = 0.0;
       }
-      const QString typeMatchStr = _typeScore >= 1.0 ? "yes" : "no";
-      const QString nameMatchStr = _nameScore >= 1.0 ? "yes" : "no";
+      const QString typeMatchStr = _typeScore >= _typeScoreThreshold ? "yes" : "no";
+      const QString nameMatchStr = _nameScore >= _nameScoreThreshold ? "yes" : "no";
       const QString addressMatchStr = _addressScore >= 1.0 ? "yes" : "no";
+      const QString distanceMatchStr = _distance <= _matchDistanceThreshold ? "yes" : "no";
+      //TODO: these score contributions are hardcoded
       _explainText =
-        QString("Features had an additive similarity score of %1, which is less than the required score of %2. Matches: distance: yes (%3m; score contribution: 2), type: %4 (score: %5; score contribution: 1), name: %6 (score: %7; score contribution: 1), address: %8 (score: %9; score contribution: 1). Max distance to match: %10m, max distance to review: %11m.")
+        QString("Features had an additive similarity score of %1, which is less than the required score of %2. Matches: distance: %3 (%4m; possible score contribution: 2), type: %5 (score: %6; possible score contribution: 1), name: %7 (score: %8; possible score contribution: 1), address: %9 (score: %10; possible score contribution: 1). Max distance to match: %11m, max distance to review: %12m.")
           .arg(evidence)
           .arg(_matchEvidenceThreshold)
+          .arg(distanceMatchStr)
           .arg(round(_distance))
           .arg(typeMatchStr)
           .arg(QString::number(_typeScore))
