@@ -89,8 +89,13 @@
             "node",
             "area"
         ],
+        "categories": [
+            "use",
+            "poi"
+        ],
         "aliases": [
-            "leisure=sports_complex"
+            "leisure=sports_complex",
+            "leisure=sport_centre"
         ],
         "isA": "leisure",
         "name": "leisure=sports_centre",
@@ -125,12 +130,12 @@
                 "weight": 0.8
             },
             {
-                "name": "sport=*",
-                "weight": 0.1
-            },
-            {
                 "name": "leisure=pitch",
                 "weight": 0.3
+            },
+            {
+                "name": "sport=*",
+                "weight": 0.1
             },
             {
                 "name": "sport=tennis",

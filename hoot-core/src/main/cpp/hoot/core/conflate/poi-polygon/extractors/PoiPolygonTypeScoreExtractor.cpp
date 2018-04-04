@@ -239,13 +239,13 @@ bool PoiPolygonTypeScoreExtractor::isParkish(ConstElementPtr element)
 
 bool PoiPolygonTypeScoreExtractor::isPlayground(ConstElementPtr element)
 {
-  const Tags& tags = element->getTags();
-  return tags.get("leisure") == "playground";
+  return element->getTags().get("leisure") == "playground";
 }
 
 bool PoiPolygonTypeScoreExtractor::isSport(ConstElementPtr element)
 {
-  return element->getTags().contains("sport") || element->getTags().get("leisure") == "sport";
+  const Tags& tags = element->getTags();
+  return tags.contains("sport") || tags.get("leisure").contains("sport");
 }
 
 bool PoiPolygonTypeScoreExtractor::isSchool(ConstElementPtr element)

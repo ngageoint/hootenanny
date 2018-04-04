@@ -710,12 +710,16 @@ public:
     double result = 0.0;
 
     QString kvpn1 = normalizeEnumeratedKvp(kvp1);
+    //LOG_VART(kvpn1);
     QString kvpn2 = normalizeEnumeratedKvp(kvp2);
+    //LOG_VART(kvpn2);
 
     if (kvpn1.isEmpty() == false && kvpn2.isEmpty() == false)
     {
       VertexId id1 = _name2Vertex[kvpn1];
+      //LOG_VART(id1);
       VertexId id2 = _name2Vertex[kvpn2];
+      //LOG_VART(id2);
 
       if (_processed.find(id1) == _processed.end())
       {
@@ -733,6 +737,7 @@ public:
       {
         result = 0.0;
       }
+      //LOG_VART(result);
 
       if (id1 == id2 && kvp1 != kvp2)
       {
@@ -748,6 +753,7 @@ public:
           result = 1.0;
         }
       }
+      //LOG_VART(result);
     }
 
     return result;

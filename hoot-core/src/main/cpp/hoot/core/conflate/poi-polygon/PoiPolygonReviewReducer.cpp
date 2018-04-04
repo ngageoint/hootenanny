@@ -55,9 +55,9 @@ PoiPolygonReviewReducer::PoiPolygonReviewReducer(const ConstOsmMapPtr& map,
                                                  const set<ElementId>& poiNeighborIds,
                                                  double distance, double nameScoreThreshold,
                                                  double nameScore, bool nameMatch,
-                                                 bool exactNameMatch, double typeScore,
-                                                 bool typeMatch, double matchDistanceThreshold,
-                                                 bool addressMatch) :
+                                                 bool exactNameMatch, double typeScoreThreshold,
+                                                 double typeScore, bool typeMatch,
+                                                 double matchDistanceThreshold, bool addressMatch) :
 _map(map),
 _polyNeighborIds(polyNeighborIds),
 _poiNeighborIds(poiNeighborIds),
@@ -66,6 +66,7 @@ _nameScoreThreshold(nameScoreThreshold),
 _nameScore(nameScore),
 _nameMatch(nameMatch),
 _exactNameMatch(exactNameMatch),
+_typeScoreThreshold(typeScoreThreshold),
 _typeScore(typeScore),
 _typeMatch(typeMatch),
 _matchDistanceThreshold(matchDistanceThreshold),
@@ -79,6 +80,7 @@ _badGeomCount(0)
   LOG_VART(_nameMatch);
   LOG_VART(_typeScore);
   LOG_VART(_exactNameMatch);
+  LOG_VART(_typeScoreThreshold);
   LOG_VART(_typeMatch);
   LOG_VART(_matchDistanceThreshold);
   LOG_VART(_addressMatch);
@@ -96,12 +98,6 @@ _badGeomCount(0)
   _genericLandUseTagVals.append("residential");
   _genericLandUseTagVals.append("retail");
   _genericLandUseTagVals.append("village_green");
-
-  _genericResidentialLandUseTagVals.append("commercial");
-  _genericResidentialLandUseTagVals.append("farm");
-  _genericResidentialLandUseTagVals.append("industrial");
-  _genericResidentialLandUseTagVals.append("residential");
-  _genericResidentialLandUseTagVals.append("village_green");
 }
 
 bool PoiPolygonReviewReducer::_nonDistanceSimilaritiesPresent() const
@@ -135,7 +131,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
     return true;
   }
 
-  //points sitting on islands need to have an island type or the match doesn't make any sense
+  //points sitting on islands need to have an island type, or the match doesn't make any sense
   if ((poi->getTags().get("place").toLower() == "island" ||
        poly->getTags().get("place").toLower() == "island") && !_typeMatch)
   {
@@ -154,19 +150,24 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //similar to above, but for sport fields
   const bool poiNameContainsField =
     PoiPolygonNameScoreExtractor::getElementName(poi).toLower().contains("field");
+  LOG_VART(poiNameContainsField);
   const bool polyIsSport = PoiPolygonTypeScoreExtractor::isSport(poly);
+  LOG_VART(polyIsSport);
   //we'll let this review pass if the poi has "field" in the name and is sitting on top of a sport
   //poly
   if (poiNameContainsField && polyIsSport)
   {
   }
   else if ((poi->getTags().get("leisure").toLower() == "pitch" ||
-       poly->getTags().get("leisure").toLower() == "pitch") && !_nonDistanceSimilaritiesPresent())
+            poly->getTags().get("leisure").toLower() == "pitch") &&
+           !_nonDistanceSimilaritiesPresent())
   {   
     LOG_TRACE("Returning miss per review reduction rule #4...");
     return true;
   }
 
+  //Landuse polys often wrap a bunch of other features and don't necessarily match to POI's, so
+  //be more strict with their reviews.
   if (_genericLandUseTagVals.contains(poly->getTags().get("landuse")) &&
       !_nonDistanceSimilaritiesPresent())
   {
@@ -175,7 +176,9 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   }
 
   const bool poiHasType = PoiPolygonTypeScoreExtractor::hasType(poi);
+  LOG_VART(poiHasType);
   const bool polyHasType = PoiPolygonTypeScoreExtractor::hasType(poly);
+  LOG_VART(polyHasType);
 
   //Be more strict reviewing natural features against building features.
   if (poiHasType && polyHasType && poly->getTags().contains("natural") &&
@@ -187,6 +190,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   }
 
   const bool polyIsPark = PoiPolygonTypeScoreExtractor::isPark(poly);
+  LOG_VART(polyIsPark);
   //prevent athletic POIs within a park poly from being reviewed against that park poly
   if (_distance == 0 && polyIsPark && poi->getTags().get("leisure") == "pitch")
   {
@@ -195,6 +199,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   }
 
   const bool poiIsPark = PoiPolygonTypeScoreExtractor::isPark(poi);
+  LOG_VART(poiIsPark);
 
   //Don't match a park poi to a sport poly.  Simpler version of some rules above.
   //may make some previous rules obsolete
@@ -218,6 +223,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //  }
 
   const bool polyIsBuilding = OsmSchema::getInstance().isBuilding(poly);
+  LOG_VART(polyIsBuilding);
 
   //Similar to previous, except more focused for restrooms.
   if (poiHasType && polyHasType && _typeScore != 1.0 &&
@@ -290,7 +296,9 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   }
 
   const bool polyHasMoreThanOneType = PoiPolygonTypeScoreExtractor::hasMoreThanOneType(poly);
+  LOG_VART(polyHasMoreThanOneType);
   const bool poiIsParkish = PoiPolygonTypeScoreExtractor::isParkish(poi);
+  LOG_VART(poiIsParkish);
 
   //This is a simple rule to prevent matching poi's not at all like a park with park polys.
   //this may render some of the previous rules obsolete.
@@ -309,13 +317,17 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   double poiToOtherParkPolyNodeDist = DBL_MAX;
   bool otherParkPolyHasName = false;
   bool poiContainedInAnotherParkPoly = false;
-  bool sportPoiOnOtherSportPolyWithExactTypeMatch = false;
+  bool sportPoiOnOtherSportPolyWithTypeMatch = false;
   bool poiOnBuilding = false;
   const bool poiIsSport = PoiPolygonTypeScoreExtractor::isSport(poi);
+  LOG_VART(poiIsSport);
   const bool poiContainedInParkPoly =
     poiContainedInAnotherParkPoly || (polyIsPark && _distance == 0);
+  LOG_VART(poiContainedInParkPoly);
   const bool polyIsPlayground = PoiPolygonTypeScoreExtractor::isPlayground(poly);
+  LOG_VART(polyIsPlayground);
   const bool poiIsBuilding = OsmSchema::getInstance().isBuilding(poi);
+  LOG_VART(poiIsBuilding);
 
   PoiPolygonTypeScoreExtractor typeScorer;
   PoiPolygonNameScoreExtractor nameScorer;
@@ -402,9 +414,9 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
             //this is a little loose, b/c there could be more than one type match set of tags...
             if (PoiPolygonTypeScoreExtractor::isSport(polyNeighbor) &&
                 polyNeighborGeom->contains(poiGeom.get()) &&
-                typeScorer.extract(*_map, poi, polyNeighbor) == 1.0)
+                typeScorer.extract(*_map, poi, polyNeighbor) >= _typeScoreThreshold)
             {
-              sportPoiOnOtherSportPolyWithExactTypeMatch = true;
+              sportPoiOnOtherSportPolyWithTypeMatch = true;
             }
           }
           else if (OsmSchema::getInstance().isBuilding(polyNeighbor))
@@ -415,6 +427,17 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
             }
           }
         }
+
+        LOG_VART(poiToOtherParkPolyNodeDist);
+        LOG_VART(polyVeryCloseToAnotherParkPoly);
+        LOG_VART(poiToPolyNodeDist);
+        LOG_VART(poiToOtherParkPolyNodeDist);
+        LOG_VART(otherParkPolyHasName);
+        LOG_VART(otherParkPolyNameMatch);
+        LOG_VART(otherParkPolyNameScore);
+        LOG_VART(poiContainedInAnotherParkPoly);
+        LOG_VART(sportPoiOnOtherSportPolyWithTypeMatch);
+        LOG_VART(poiOnBuilding);
 
         //If the POI is inside a poly that is very close to another park poly, declare miss if
         //the distance to the outer ring of the other park poly is shorter than the distance to the
@@ -445,9 +468,9 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
           return true;
         }
 
-        //If a sport poi is contained within an exact type match sport poi poly, don't let it be
+        //If a sport poi is contained within a type match sport poi poly, don't let it be
         //matched against anything else.
-        if (poiIsSport && poiContainedInParkPoly && sportPoiOnOtherSportPolyWithExactTypeMatch)
+        if (poiIsSport && poiContainedInParkPoly && sportPoiOnOtherSportPolyWithTypeMatch)
         {
           LOG_TRACE("Returning miss per review reduction rule #19...");
           return true;

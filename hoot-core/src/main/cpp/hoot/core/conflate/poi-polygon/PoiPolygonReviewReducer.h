@@ -44,11 +44,12 @@ class PoiPolygonReviewReducer
 
 public:
 
+  //TODO: encapsulate all these params in a class
   PoiPolygonReviewReducer(const ConstOsmMapPtr& map, const std::set<ElementId>& polyNeighborIds,
                           const std::set<ElementId>& poiNeighborIds, double distance,
                           double nameScoreThreshold, double nameScore, bool nameMatch,
-                          bool exactNameMatch, double typeScore, bool typeMatch,
-                          double matchDistanceThreshold, bool addressMatch);
+                          bool exactNameMatch, double typeScoreThreshold, double typeScore,
+                          bool typeMatch, double matchDistanceThreshold, bool addressMatch);
 
   bool triggersRule(ConstElementPtr poi, ConstElementPtr poly);
 
@@ -64,6 +65,7 @@ private:
   double _nameScore;
   bool _nameMatch;
   bool _exactNameMatch;
+  double _typeScoreThreshold;
   double _typeScore;
   bool _typeMatch;
   double _matchDistanceThreshold;
