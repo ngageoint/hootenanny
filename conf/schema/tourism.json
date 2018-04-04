@@ -70,6 +70,10 @@
             {
                 "name": "tourism=theme_park",
                 "weight": 0.8
+            },
+            {
+                "name": "leisure=garden",
+                "weight": 0.2
             }
         ]
     },

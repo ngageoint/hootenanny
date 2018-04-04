@@ -270,7 +270,7 @@ bool PoiPolygonTypeScoreExtractor::isPlayground(ConstElementPtr element)
 
 bool PoiPolygonTypeScoreExtractor::isSport(ConstElementPtr element)
 {
-  return element->getTags().contains("sport");
+  return element->getTags().contains("sport") || element->getTags().get("leisure") == "sport";
 }
 
 bool PoiPolygonTypeScoreExtractor::isSchool(ConstElementPtr element)

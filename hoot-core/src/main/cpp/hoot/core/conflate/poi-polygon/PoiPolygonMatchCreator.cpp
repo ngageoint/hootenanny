@@ -56,7 +56,7 @@ Match* PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId 
   {
     ConstElementPtr e1 = map->getElement(eid1);
     ConstElementPtr e2 = map->getElement(eid2);
-    LOG_DEBUG("test5");
+
     const bool foundPoi =
       OsmSchema::getInstance().isPoiPolygonPoi(
         e1, PoiPolygonTagIgnoreListReader::getInstance().getPoiTagIgnoreList()) ||
@@ -115,7 +115,6 @@ std::vector<MatchCreator::Description> PoiPolygonMatchCreator::getAllCreators() 
 bool PoiPolygonMatchCreator::isMatchCandidate(ConstElementPtr element,
                                               const ConstOsmMapPtr& /*map*/)
 {
-  LOG_DEBUG("test6");
   return element->isUnknown() &&
     (OsmSchema::getInstance().isPoiPolygonPoi(
        element, PoiPolygonTagIgnoreListReader::getInstance().getPoiTagIgnoreList()) ||

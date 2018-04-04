@@ -41,7 +41,6 @@
 
 #include "extractors/PoiPolygonTypeScoreExtractor.h"
 #include "extractors/PoiPolygonNameScoreExtractor.h"
-#include "extractors/PoiPolygonAddressScoreExtractor.h"
 
 #include <float.h>
 
@@ -55,27 +54,40 @@ PoiPolygonReviewReducer::PoiPolygonReviewReducer(const ConstOsmMapPtr& map,
                                                  const set<ElementId>& polyNeighborIds,
                                                  const set<ElementId>& poiNeighborIds,
                                                  double distance, double nameScoreThreshold,
-                                                 bool nameMatch,
-                                                 bool exactNameMatch,
-                                                 double typeScore,
-                                                 bool typeMatch,
-                                                 double matchDistanceThreshold) :
+                                                 double nameScore, bool nameMatch,
+                                                 bool exactNameMatch, double typeScore,
+                                                 bool typeMatch, double matchDistanceThreshold,
+                                                 bool addressMatch) :
 _map(map),
 _polyNeighborIds(polyNeighborIds),
 _poiNeighborIds(poiNeighborIds),
 _distance(distance),
 _nameScoreThreshold(nameScoreThreshold),
+_nameScore(nameScore),
 _nameMatch(nameMatch),
 _exactNameMatch(exactNameMatch),
 _typeScore(typeScore),
 _typeMatch(typeMatch),
 _matchDistanceThreshold(matchDistanceThreshold),
+_addressMatch(addressMatch),
 _badGeomCount(0)
 {
-  //TODO: can probably get rid of this list and make the logic work against all landuse
+  LOG_VART(_polyNeighborIds.size());
+  LOG_VART(_polyNeighborIds.size());
+  LOG_VART(_distance);
+  LOG_VART(_nameScoreThreshold);
+  LOG_VART(_nameMatch);
+  LOG_VART(_typeScore);
+  LOG_VART(_exactNameMatch);
+  LOG_VART(_typeMatch);
+  LOG_VART(_matchDistanceThreshold);
+  LOG_VART(_addressMatch);
+
+  //can these two land use lists be combined somehow?
+
   _genericLandUseTagVals.append("cemetery");
   _genericLandUseTagVals.append("commercial");
-  _genericLandUseTagVals.append("construction");
+  //_genericLandUseTagVals.append("construction");
   _genericLandUseTagVals.append("farm");
   _genericLandUseTagVals.append("forest");
   _genericLandUseTagVals.append("grass");
@@ -92,10 +104,17 @@ _badGeomCount(0)
   _genericResidentialLandUseTagVals.append("village_green");
 }
 
+bool PoiPolygonReviewReducer::_nonDistanceSimilaritiesPresent() const
+{
+  return _typeScore > 0.0 || _nameScore > 0.0 || _addressMatch;
+}
+
 bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr poly)
 {
+  LOG_DEBUG("Checking review reduction rules...");
+
   //to suppress the ElementConverter poly warnings...warnings worth looking into at some point
-  DisableLog dl(Log::Warn);
+  //DisableLog dl(Log::Warn);
 
   ElementConverter elementConverter(_map);
   boost::shared_ptr<Geometry> polyGeom = elementConverter.convertToGeometry(poly);
@@ -108,33 +127,51 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //The rules below are roughly ordered by increasing processing expense and by decreasing
   //likelihood of occurrence.
 
-  //Reduce reviews against some non-use type polys.
-  if (poly->getTags().get("natural").toLower() == "coastline" ||
-      poi->getTags().get("highway").toLower() == "traffic_signals" ||
-      poi->getTags().get("amenity").toLower() == "atm" ||
-      poi->getTags().get("man_made").toLower() == "surveillance")
+  //Be a little stricter on place related reviews.
+  if ((poi->getTags().get("place").toLower() == "neighbourhood" ||
+       poi->getTags().get("place").toLower() == "suburb") && !poly->getTags().contains("place"))
   {
     LOG_TRACE("Returning miss per review reduction rule #1...");
     return true;
   }
 
-  //Be a little stricter on place related reviews.
-  //TODO: genericize this; and probably can combine it with the next rule
-  if ((poi->getTags().get("place").toLower() == "neighbourhood" ||
-       poi->getTags().get("place").toLower() == "suburb") &&
-      !poly->getTags().contains("place"))
-  {
-    LOG_TRACE("Returning miss per review reduction rule #2...");
-    return true;
-  }
-
   //points sitting on islands need to have an island type or the match doesn't make any sense
   if ((poi->getTags().get("place").toLower() == "island" ||
-      poly->getTags().get("place").toLower() == "island") &&
-      !_typeMatch)
+       poly->getTags().get("place").toLower() == "island") && !_typeMatch)
+  {
+      LOG_TRACE("Returning miss per review reduction rule #2...");
+      return true;
+  }
+
+  //same as above, but for gardens
+  if ((poi->getTags().get("leisure").toLower() == "garden" ||
+       poly->getTags().get("leisure").toLower() == "garden") && !_nonDistanceSimilaritiesPresent())
   {
       LOG_TRACE("Returning miss per review reduction rule #3...");
       return true;
+  }
+
+  //similar to above, but for sport fields
+  const bool poiNameContainsField =
+    PoiPolygonNameScoreExtractor::getElementName(poi).toLower().contains("field");
+  const bool polyIsSport = PoiPolygonTypeScoreExtractor::isSport(poly);
+  //we'll let this review pass if the poi has "field" in the name and is sitting on top of a sport
+  //poly
+  if (poiNameContainsField && polyIsSport)
+  {
+  }
+  else if ((poi->getTags().get("leisure").toLower() == "pitch" ||
+       poly->getTags().get("leisure").toLower() == "pitch") && !_nonDistanceSimilaritiesPresent())
+  {   
+    LOG_TRACE("Returning miss per review reduction rule #4...");
+    return true;
+  }
+
+  if (_genericLandUseTagVals.contains(poly->getTags().get("landuse")) &&
+      !_nonDistanceSimilaritiesPresent())
+  {
+    LOG_TRACE("Returning miss per review reduction rule #5...");
+    return true;
   }
 
   const bool poiHasType = PoiPolygonTypeScoreExtractor::hasType(poi);
@@ -144,25 +181,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   if (poiHasType && polyHasType && poly->getTags().contains("natural") &&
       OsmSchema::getInstance().getCategories(
         poi->getTags()).intersects(OsmSchemaCategory::building()))
-  {
-    LOG_TRACE("Returning miss per review reduction rule #4...");
-    return true;
-  }
-
-  //Landuse polys often wrap a bunch of other features and don't necessarily match to POI's, so
-  //be more strict with their reviews.
-  if (_genericLandUseTagVals.contains(poly->getTags().get("landuse")) &&
-      _distance > _matchDistanceThreshold &&
-      (!(_typeMatch || _nameMatch) || (_nameMatch && _typeScore < 0.2)))
-  {
-    LOG_TRACE("Returning miss per review reduction rule #5...");
-    return true;
-  }
-
-  //Landuse polys often wrap a bunch of other features and don't necessarily match to POI's, so
-  //be more strict with their reviews.
-  if (_genericResidentialLandUseTagVals.contains(poly->getTags().get("landuse")) &&
-      _distance == 0 && (!(_typeMatch || _nameMatch)))
   {
     LOG_TRACE("Returning miss per review reduction rule #6...");
     return true;
@@ -177,7 +195,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   }
 
   const bool poiIsPark = PoiPolygonTypeScoreExtractor::isPark(poi);
-  const bool polyIsSport = PoiPolygonTypeScoreExtractor::isSport(poly);
 
   //Don't match a park poi to a sport poly.  Simpler version of some rules above.
   //may make some previous rules obsolete
@@ -374,8 +391,8 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
                   poiToOtherParkPolyNodeDist = polyNeighborLineStr->distance(poiGeom.get());
                 }
                 LOG_TRACE(
-                      "poly examined and found very close to a another park poly: " <<
-                      poly->toString());
+                  "poly examined and found very close to a another park poly: " <<
+                  poly->toString());
                 LOG_TRACE("park poly it is very close to: " << polyNeighbor->toString());
               }
             }

@@ -1,10 +1,16 @@
 # Any POI features containing these tags will be skipped by POI/Polygon conflation.
 # key=value; supports value wildcards; e.g. amenity=*
 # keep list alphabetized and in lower case
+amenity=atm
 amenity=bench
 amenity=drinking_water
 amenity=recycling
 barrier=obstacle
+emergency=fire_hydrant
+highway=street_lamp
+highway=traffic_signals
+man_made=surveillance
 natural=tree
+power=pole
 traffic_sign=*
 

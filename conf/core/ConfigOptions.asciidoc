@@ -2187,9 +2187,9 @@ they do not have specific type tags.
 * Data Type: double
 * Default Value: `125.0`
 
-The maximum distance, in meters, between a POI and a polygon where they can still be considered
-for review based on distance criteria only (value is added to the circular error of the compared
-features).
+The maximum distance, in meters, combined with the circular error of the features being compared,
+the total of which allows the features to still be considered a match based on distance criteria
+only.
 
 === poi.polygon.review.evidence.threshold
 

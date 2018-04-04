@@ -79,7 +79,7 @@ boost::shared_ptr<Element> GeometryConverter::convertGeometryCollection(const Ge
 {
   if (gc->getNumGeometries() > 1)
   {
-    LOG_INFO("Creating relation. convertGeometryCollection");
+    LOG_DEBUG("Creating relation. convertGeometryCollection");
     RelationPtr r(new Relation(s, _map->createNextRelationId(), circularError));
     int count = gc->getNumGeometries();
 

@@ -207,7 +207,6 @@ void PoiPolygonMatch::_categorizeElementsByGeometryType(const ElementId& eid1,
   LOG_VART(e2->getTags().get("uuid"));
   LOG_VART(e2->getTags());
 
-  LOG_DEBUG("test4");
   _e1IsPoi = false;
   if (OsmSchema::getInstance().isPoiPolygonPoi(
         e1, PoiPolygonTagIgnoreListReader::getInstance().getPoiTagIgnoreList()) &&
@@ -334,9 +333,9 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
   if (_enableReviewReduction && evidence >= _reviewEvidenceThreshold)
   {
     PoiPolygonReviewReducer reviewReducer(
-      _map, _polyNeighborIds, _poiNeighborIds, _distance, _nameScoreThreshold,
+      _map, _polyNeighborIds, _poiNeighborIds, _distance, _nameScoreThreshold, _nameScore,
       _nameScore >= _nameScoreThreshold, _nameScore == 1.0, _typeScore,
-      _typeScore >= _typeScoreThreshold, _matchDistanceThreshold);
+      _typeScore >= _typeScoreThreshold, _matchDistanceThreshold, _addressScore == 1.0);
     if (reviewReducer.triggersRule(_poi, _poly))
     {
       evidence = 0;
@@ -373,21 +372,38 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
            //&& oneElementIsRelation) //for testing only
   {
     _class.setReview();
+
     if (_explainText.isEmpty())
     {
+      //TODO: move this somewhere else?...or start values out at 0.0?
+      if (_typeScore < 0.0)
+      {
+        _typeScore = 0.0;
+      }
+      if (_nameScore < 0.0)
+      {
+        _nameScore = 0.0;
+      }
+      if (_addressScore < 0.0)
+      {
+        _addressScore = 0.0;
+      }
       const QString typeMatchStr = _typeScore >= 1.0 ? "yes" : "no";
       const QString nameMatchStr = _nameScore >= 1.0 ? "yes" : "no";
       const QString addressMatchStr = _addressScore >= 1.0 ? "yes" : "no";
       _explainText =
-        QString("Features had an additive similarity score less than the required score of %1. Matches: distance: yes, type: %2, name: %3, address: %4. Distance: %5m, distance to match: %6m, distance to review: %7m.")
+        QString("Features had an additive similarity score of %1, which is less than the required score of %2. Matches: distance: yes (%3m; score contribution: 2), type: %4 (score: %5; score contribution: 1), name: %6 (score: %7; score contribution: 1), address: %8 (score: %9; score contribution: 1). Max distance to match: %10m, max distance to review: %11m.")
+          .arg(evidence)
           .arg(_matchEvidenceThreshold)
-          .arg(typeMatchStr)
-          .arg(nameMatchStr)
-          .arg(addressMatchStr)
           .arg(round(_distance))
-          .arg(round(_matchDistanceThreshold))
-          .arg(round(_reviewDistancePlusCe));
-
+          .arg(typeMatchStr)
+          .arg(QString::number(_typeScore))
+          .arg(nameMatchStr)
+          .arg(QString::number(_nameScore))
+          .arg(addressMatchStr)
+          .arg(QString::number(_addressScore))
+          .arg(_matchDistanceThreshold)
+          .arg(_reviewDistancePlusCe);
     }
   }
   else
@@ -528,22 +544,22 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
 
   evidence += _getNameEvidence(poi, poly);
   //if we already have a match, no point in doing more calculations
-  if (_reviewIfMatchedTypes.isEmpty() && evidence >= _matchEvidenceThreshold)
-  {
-    return evidence;
-  }
+//  if (_reviewIfMatchedTypes.isEmpty() && evidence >= _matchEvidenceThreshold)
+//  {
+//    return evidence;
+//  }
 
   evidence += _getTypeEvidence(poi, poly);
-  if (evidence >= _matchEvidenceThreshold)
-  {
-    return evidence;
-  }
+//  if (evidence >= _matchEvidenceThreshold)
+//  {
+//    return evidence;
+//  }
 
   evidence += _getAddressEvidence(poi, poly);
-  if (evidence >= _matchEvidenceThreshold)
-  {
-    return evidence;
-  }
+//  if (evidence >= _matchEvidenceThreshold)
+//  {
+//    return evidence;
+//  }
 
   //We only want to run this if the previous match distance calculation was too large.
   //Tightening up the requirements for running the convex poly calculation here to improve
@@ -561,6 +577,18 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
       return evidence;
     }
   }
+
+//  if (evidence < _matchEvidenceThreshold)
+//  {
+//    //if poi has field in the name and on a sport field, then match...need a better place to put
+//    //this maybe
+//    if (PoiPolygonNameScoreExtractor::getElementName(poi).toLower().contains("field") &&
+//        PoiPolygonTypeScoreExtractor::isSport(poly))
+//    {
+//      LOG_TRACE("Matching on sport field name.");
+//      evidence = _matchEvidenceThreshold;
+//    }
+//  }
 
   //no point in trying to increase evidence if we're already at a match
   if (_enableAdvancedMatching && evidence < _matchEvidenceThreshold)

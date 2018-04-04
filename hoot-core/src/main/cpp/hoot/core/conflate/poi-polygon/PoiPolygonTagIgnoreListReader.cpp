@@ -50,13 +50,10 @@ PoiPolygonTagIgnoreListReader::PoiPolygonTagIgnoreListReader()
 
 PoiPolygonTagIgnoreListReader& PoiPolygonTagIgnoreListReader::getInstance()
 {
-  LOG_DEBUG("test1");
   if (!_theInstance.get())
   {
-    LOG_DEBUG("test2");
     _theInstance.reset(new PoiPolygonTagIgnoreListReader());
   }
-  LOG_VARD(_theInstance.get());
   return *_theInstance;
 }
 

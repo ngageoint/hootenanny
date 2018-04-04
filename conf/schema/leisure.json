@@ -43,6 +43,10 @@
             {
                 "name": "amenity=fountain",
                 "weight": 0.2
+            },
+            {
+                "name": "leisure=garden",
+                "weight": 0.3
             }
         ]
     },
@@ -123,6 +127,10 @@
             {
                 "name": "sport=*",
                 "weight": 0.1
+            },
+            {
+                "name": "leisure=pitch",
+                "weight": 0.3
             }
         ]
     },
@@ -215,6 +223,29 @@
         ],
         "isA": "leisure",
         "name": "leisure=garden",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "building=greenhouse",
+                "weight": 0.6
+            },
+            {
+                "name": "building=arboretum",
+                "weight": 0.4
+            }
+        ]
+    },
+    {
+        "geometries": [
+            "node",
+            "area"
+        ],
+        "categories": [
+            "use",
+            "poi"
+        ],
+        "isA": "leisure",
+        "name": "leisure=pitch",
         "objectType": "tag"
     }
 ]
