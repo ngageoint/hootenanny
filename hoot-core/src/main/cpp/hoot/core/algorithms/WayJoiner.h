@@ -43,20 +43,51 @@ class WayJoiner
 public:
   WayJoiner(const OsmMapPtr& map);
 
+  /**
+   * @brief join Runs all joining algorithms
+   */
   static void join(const OsmMapPtr& map);
-
   void join();
 
 private:
 
+  /**
+   * @brief joinParentChild Simplest joining algorithm that joins a way with a parent id to that parent
+   */
   void joinParentChild();
+
+  /**
+   * @brief joinSiblings Joining algorithm that searches for all ways that have the same parent id,
+   *    attempts to order them into adjoining way order, then joins them
+   */
   void joinSiblings();
+
+  /**
+   * @brief joinAtNode Joining algorithm that searches all ways that have a parent id and tries
+   *    to join them with adjacent ways that have the same tags
+   */
   void joinAtNode();
 
-  void joinWays(const WayPtr& parent, const WayPtr& child);
+  /**
+   * @brief resetParents Resets parent id for all ways after joining operation has completed
+   */
+  void resetParents();
 
+  /**
+   * @brief rejoinSiblings Function that rejoins ways that all have the same parent id
+   *    but that parent way doesn't exist
+   * @param way_ids Deque of sorted ways to join
+   */
   void rejoinSiblings(std::deque<long>& way_ids);
 
+  /**
+   * @brief joinWays Function to rejoin two ways
+   * @param parent Way that is modified to include the child way
+   * @param child Way that will be merged into the parent and then deleted
+   */
+  void joinWays(const WayPtr& parent, const WayPtr& child);
+
+  /** Pointer to the map to work on */
   OsmMapPtr _map;
 };
 

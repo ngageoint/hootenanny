@@ -226,6 +226,7 @@ void DividedHighwayManipulation::_createStub(OsmMapPtr map, WayPtr oneway,
 
   WayPtr stub(new Way(otherUnknown, map->createNextWayId(),
                                oneway->getRawCircularError()));
+  stub->setPid(oneway->getPid());
   stub->addNode(endNode->getId());
   stub->addNode(nodeId);
   stub->setTags(mid->getTags());

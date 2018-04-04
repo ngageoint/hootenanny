@@ -280,6 +280,7 @@ WayPtr DuplicateWayRemover::_getUpdatedWay(WayPtr way, const vector<long>& nodes
     WayPtr newWay;
     newWay.reset(new Way(way->getStatus(), _map->createNextWayId(), way->getRawCircularError()));
     newWay->addNodes(nodes);
+    newWay->setPid(way->getPid());
     newWay->setTags(way->getTags());
 
     // see comments for similar functionality in HighwaySnapMerger::_mergePair

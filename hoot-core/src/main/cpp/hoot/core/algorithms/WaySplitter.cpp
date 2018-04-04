@@ -151,8 +151,8 @@ vector< WayPtr > WaySplitter::split(WayLocation& splitPoint)
     result.push_back(WaySubline(first, splitPoint).toWay(_map, _nf.get(), true));
     result.push_back(WaySubline(splitPoint, last).toWay(_map, _nf.get(), false));
 
-    //  Add a tag used by the way joiner to try to stitch up ways so that this splitter is less destructive
-    result[1]->setTag(MetadataTags::HootSplitParentId(), QString::number(_a->getElementId().getId()));
+    //  Record the parent id for the way joiner
+    result[1]->setPid(_a->getId());
 
     RemoveWayOp::removeWay(_map, _a->getId());
     _map->addWay(result[0]);

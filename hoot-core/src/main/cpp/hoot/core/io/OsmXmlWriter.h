@@ -127,6 +127,7 @@ private:
   bool _includeDebug;
   bool _includePointInWays;
   bool _includeCompatibilityTags;
+  bool _includePid;
   bool _textStatus;
   QString _osmSchema;
   QString _timestamp;

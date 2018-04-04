@@ -136,15 +136,13 @@ public:
     UnifyingConflator conflator;
     conflator.apply(map);
 
-    QStringList options = ConfigOptions().getConflatePostOps();
-    options.append("hoot::WayJoinerOp");
-
-    NamedOp(options).apply(map);
+    NamedOp(ConfigOptions().getConflatePostOps()).apply(map);
 
     MapProjector::projectToWgs84(map);
 
     OsmXmlWriter writer;
-    writer.setIncludeCompatibilityTags(false);
+    writer.setIncludeCompatibilityTags(true);
+    writer.setIncludeHootInfo(true);
     writer.write(map, "test-output/algorithms/wayjoiner/WayJoinerConflateOutput.osm");
 
     HOOT_FILE_EQUALS("test-output/algorithms/wayjoiner/WayJoinerConflateOutput.osm",

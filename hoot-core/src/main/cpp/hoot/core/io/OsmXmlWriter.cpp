@@ -59,18 +59,19 @@ unsigned int OsmXmlWriter::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapWriter, OsmXmlWriter)
 
-OsmXmlWriter::OsmXmlWriter() :
-_formatXml(ConfigOptions().getOsmMapWriterFormatXml()),
-_includeIds(false),
-_includeDebug(ConfigOptions().getWriterIncludeDebugTags()),
-_includePointInWays(false),
-_includeCompatibilityTags(true),
-_textStatus(ConfigOptions().getWriterTextStatus()),
-_osmSchema(ConfigOptions().getOsmMapWriterSchema()),
-_timestamp("1970-01-01T00:00:00Z"),
-_precision(ConfigOptions().getWriterPrecision()),
-_encodingErrorCount(0),
-_includeCircularErrorTags(ConfigOptions().getWriterIncludeCircularErrorTags())
+OsmXmlWriter::OsmXmlWriter()
+  : _formatXml(ConfigOptions().getOsmMapWriterFormatXml()),
+    _includeIds(false),
+    _includeDebug(ConfigOptions().getWriterIncludeDebugTags()),
+    _includePointInWays(false),
+    _includeCompatibilityTags(true),
+    _includePid(false),
+    _textStatus(ConfigOptions().getWriterTextStatus()),
+    _osmSchema(ConfigOptions().getOsmMapWriterSchema()),
+    _timestamp("1970-01-01T00:00:00Z"),
+    _precision(ConfigOptions().getWriterPrecision()),
+    _encodingErrorCount(0),
+    _includeCircularErrorTags(ConfigOptions().getWriterIncludeCircularErrorTags())
 {
 }
 
@@ -386,6 +387,18 @@ void OsmXmlWriter::_writeTags(const ConstElementPtr& element)
     _writer->writeAttribute("k", MetadataTags::HootId());
     _writer->writeAttribute("v", QString("%1").arg(element->getId()));
     _writer->writeEndElement();
+  }
+
+  if (_includePid && type == ElementType::Way)
+  {
+    ConstWayPtr way = boost::dynamic_pointer_cast<const Way>(element);
+    if (way->hasPid())
+    {
+      _writer->writeStartElement("tag");
+      _writer->writeAttribute("k", MetadataTags::HootSplitParentId());
+      _writer->writeAttribute("v", QString("%1").arg(way->getPid()));
+      _writer->writeEndElement();
+    }
   }
 }
 

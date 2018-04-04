@@ -34,23 +34,33 @@ using namespace boost;
 namespace hoot
 {
 
+long WayData::PID_EMPTY = 0;
+
 WayData::WayData(long id, long changeset, long version, unsigned int timestamp, QString user,
-                 long uid, bool visible) :
-ElementData(id, Tags(), -1, changeset, version, timestamp, user, uid, visible)
+                 long uid, bool visible, long pid)
+  : ElementData(id, Tags(), -1, changeset, version, timestamp, user, uid, visible),
+    _pid(pid)
 {
 }
 
-WayData::WayData(const WayData& from) :
-ElementData(from.getId(), from.getTags(), from.getCircularError(), from.getChangeset(),
-            from.getVersion(), from.getTimestamp(), from.getUser(), from.getUid(),
-            from.getVisible()),
-_nodes(from._nodes)
+WayData::WayData(const WayData& from)
+  : ElementData(from.getId(), from.getTags(), from.getCircularError(), from.getChangeset(),
+                from.getVersion(), from.getTimestamp(), from.getUser(), from.getUid(),
+                from.getVisible()),
+    _nodes(from._nodes),
+    _pid(from._pid)
 {
-
 }
 
 WayData::~WayData()
 {
+}
+
+void WayData::clear()
+{
+  ElementData::clear();
+  _nodes.clear();
+  _pid = WayData::PID_EMPTY;
 }
 
 }

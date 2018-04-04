@@ -58,7 +58,7 @@ public:
       long version = ElementData::VERSION_EMPTY,
       unsigned int timestamp = ElementData::TIMESTAMP_EMPTY,
       QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY,
-      bool visible = ElementData::VISIBLE_EMPTY);
+      bool visible = ElementData::VISIBLE_EMPTY, long pid = WayData::PID_EMPTY);
 
   Way(const Way& way);
 
@@ -178,6 +178,12 @@ public:
   virtual void visitRo(const ElementProvider& map, ConstElementVisitor& filter) const;
 
   virtual void visitRw(ElementProvider& map, ConstElementVisitor& filter);
+
+  bool hasPid() const { return _wayData->getPid() != WayData::PID_EMPTY; }
+  long getPid() const { return _wayData->getPid(); }
+  void setPid(long pid) { _wayData->setPid(pid); }
+  void resetPid() { _wayData->setPid(WayData::PID_EMPTY); }
+  static long getPid(const boost::shared_ptr<const Way>& p, const boost::shared_ptr<const Way>& c);
 
 protected:
 
