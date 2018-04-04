@@ -77,12 +77,7 @@ public:
    */
   static bool isPark(ConstElementPtr element);
 
-  //static bool isRecCenter(/*ConstElementPtr element*/const QString elementName);
-
-  //static bool isBuildingIsh(ConstElementPtr element, const QString elementName);
-
   static bool isParkish(ConstElementPtr element);
-  //static bool isPlayArea(/*ConstElementPtr element*/const QString elementName);
   static bool isPlayground(ConstElementPtr element);
   static bool isSport(ConstElementPtr element);
   static bool isSchool(ConstElementPtr element);

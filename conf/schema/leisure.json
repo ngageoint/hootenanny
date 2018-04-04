@@ -131,6 +131,10 @@
             {
                 "name": "leisure=pitch",
                 "weight": 0.3
+            },
+            {
+                "name": "sport=tennis",
+                "weight": 0.8
             }
         ]
     },
