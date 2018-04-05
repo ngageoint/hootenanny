@@ -950,20 +950,6 @@
         <tag k="error:circular" v="5"/>
         <tag k="hoot:id" v="-662"/>
     </way>
-    <way visible="true" id="-660" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-681"/>
-        <nd ref="-326"/>
-        <nd ref="-325"/>
-        <nd ref="-324"/>
-        <nd ref="-323"/>
-        <nd ref="-322"/>
-        <nd ref="-684"/>
-        <tag k="name" v="Independence Ave SW"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-660"/>
-    </way>
     <way visible="true" id="-659" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-684"/>
         <nd ref="-204"/>
@@ -1035,7 +1021,27 @@
         <tag k="error:circular" v="5"/>
         <tag k="hoot:id" v="-656"/>
     </way>
-    <way visible="true" id="-655" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-654" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-79"/>
+        <nd ref="-78"/>
+        <nd ref="-77"/>
+        <nd ref="-76"/>
+        <nd ref="-75"/>
+        <nd ref="-74"/>
+        <nd ref="-73"/>
+        <nd ref="-72"/>
+        <nd ref="-71"/>
+        <nd ref="-70"/>
+        <nd ref="-69"/>
+        <nd ref="-677"/>
+        <tag k="alt_name" v="Maine Ave SW"/>
+        <tag k="name" v="MAINE AVE SW"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="hoot:id" v="-654"/>
+    </way>
+    <way visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-677"/>
         <nd ref="-68"/>
         <nd ref="-67"/>
@@ -1078,54 +1084,6 @@
         <nd ref="-30"/>
         <nd ref="-29"/>
         <nd ref="-28"/>
-        <nd ref="-152"/>
-        <tag k="alt_name" v="Maine Ave SW"/>
-        <tag k="name" v="MAINE AVE SW"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-655"/>
-    </way>
-    <way visible="true" id="-654" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-79"/>
-        <nd ref="-78"/>
-        <nd ref="-77"/>
-        <nd ref="-76"/>
-        <nd ref="-75"/>
-        <nd ref="-74"/>
-        <nd ref="-73"/>
-        <nd ref="-72"/>
-        <nd ref="-71"/>
-        <nd ref="-70"/>
-        <nd ref="-69"/>
-        <nd ref="-677"/>
-        <tag k="alt_name" v="Maine Ave SW"/>
-        <tag k="name" v="MAINE AVE SW"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-654"/>
-    </way>
-    <way visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-152"/>
-        <nd ref="-151"/>
-        <nd ref="-150"/>
-        <nd ref="-149"/>
-        <nd ref="-148"/>
-        <nd ref="-147"/>
-        <nd ref="-146"/>
-        <nd ref="-145"/>
-        <nd ref="-144"/>
-        <nd ref="-143"/>
-        <nd ref="-6"/>
-        <tag k="alt_name" v="Independence Ave SW"/>
-        <tag k="name" v="INDEPENDENCE AVE SW"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-27"/>
-    </way>
-    <way visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-152"/>
         <nd ref="-27"/>
         <nd ref="-26"/>
@@ -1172,6 +1130,12 @@
     <way visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-215"/>
         <nd ref="-681"/>
+        <nd ref="-326"/>
+        <nd ref="-325"/>
+        <nd ref="-324"/>
+        <nd ref="-323"/>
+        <nd ref="-322"/>
+        <nd ref="-684"/>
         <tag k="name" v="Independence Ave SW"/>
         <tag k="highway" v="unclassified"/>
         <tag k="hoot:status" v="2"/>
@@ -1239,6 +1203,16 @@
         <nd ref="-154"/>
         <nd ref="-153"/>
         <nd ref="-152"/>
+        <nd ref="-151"/>
+        <nd ref="-150"/>
+        <nd ref="-149"/>
+        <nd ref="-148"/>
+        <nd ref="-147"/>
+        <nd ref="-146"/>
+        <nd ref="-145"/>
+        <nd ref="-144"/>
+        <nd ref="-143"/>
+        <nd ref="-6"/>
         <tag k="alt_name" v="Independence Ave SW"/>
         <tag k="name" v="INDEPENDENCE AVE SW"/>
         <tag k="highway" v="road"/>
