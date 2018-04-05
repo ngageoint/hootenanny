@@ -58,14 +58,26 @@ Match(threshold),
 _map(map),
 _matchEvidenceThreshold(3),
 _reviewEvidenceThreshold(1),
-_closeMatch(false),
+_distance(-1.0),
+_matchDistanceThreshold(-1.0),
+_reviewDistanceThreshold(-1.0),
+_closeDistanceMatch(false),
 _typeScore(-1.0),
+_typeScoreThreshold(-1.0),
+_reviewIfMatchedTypes(QStringList()),
 _nameScore(-1.0),
+_nameScoreThreshold(-1.0),
 _addressScore(-1.0),
 _polyNeighborIds(polyNeighborIds),
 _poiNeighborIds(poiNeighborIds),
+_enableAdvancedMatching(false),
+_enableReviewReduction(true),
+_disableSameSourceConflation(false),
+_disableSameSourceConflationMatchTagKeyPrefixOnly(true),
+_sourceTagKey(""),
+_reviewMultiUseBuildings(false),
 _rf(rf),
-_opts(ConfigOptions())
+_explainText("")
 {
 }
 
@@ -321,6 +333,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
     if (reviewReducer.triggersRule(_poi, _poly))
     {
       evidence = 0;
+      _explainText = "Match score automatically dropped by review reduction.";
     }
   }
   LOG_VART(evidence);
@@ -353,6 +366,22 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
            //&& oneElementIsRelation) //for testing only
   {
     _class.setReview();
+    if (_explainText.isEmpty())
+    {
+      const QString typeMatchStr = _typeScore >= 1.0 ? "yes" : "no";
+      const QString nameMatchStr = _nameScore >= 1.0 ? "yes" : "no";
+      const QString addressMatchStr = _addressScore >= 1.0 ? "yes" : "no";
+      _explainText =
+        QString("Features had an additive similarity score less than the required score of %1. Matches: distance: yes, type: %2, name: %3, address: %4.")
+          .arg(_matchEvidenceThreshold)
+          .arg(typeMatchStr)
+          .arg(nameMatchStr)
+          .arg(addressMatchStr);
+    }
+  }
+  else
+  {
+    _explainText = "";
   }
 
   LOG_VART(_class);
@@ -364,14 +393,15 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
   _distance = PoiPolygonDistanceExtractor().extract(*_map, poi, poly);
   if (_distance == -1.0)
   {
-    _closeMatch = false;
+    _closeDistanceMatch = false;
+    _explainText = "Error calculating the distance between features.";
     return 0;
   }
 
   //search radius taken from PoiPolygonMatchCreator
   PoiPolygonDistance distanceCalc(
     _matchDistanceThreshold, _reviewDistanceThreshold, poly->getTags(),
-    poi->getCircularError() + _opts.getPoiPolygonReviewDistanceThreshold());
+    poi->getCircularError() + _reviewDistanceThreshold);
   _reviewDistanceThreshold =
     max(
       distanceCalc.getReviewDistanceForType(_poi->getTags()),
@@ -386,10 +416,13 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
   const double sigma = sqrt(poiSigma * poiSigma + polySigma * polySigma);
   const double combinedCircularError2Sigma = sigma * 2;
   const double reviewDistancePlusCe = _reviewDistanceThreshold + combinedCircularError2Sigma;
-  _closeMatch = _distance <= reviewDistancePlusCe;
-  //close match is a requirement for any matching, regardless of the final total evidence count
-  if (!_closeMatch)
+  _closeDistanceMatch = _distance <= reviewDistancePlusCe;
+  //close distance match is a requirement for any matching, regardless of the final total evidence
+  //count
+  if (!_closeDistanceMatch)
   {
+    _explainText =
+      "The distance between the features is more than the configured review distance plus circular error.";
     return 0;
   }
 
@@ -400,7 +433,7 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
   LOG_VART(reviewDistancePlusCe);
   LOG_VART(combinedCircularError2Sigma);
   LOG_VART(_distance);
-  LOG_VART(_closeMatch);
+  LOG_VART(_closeDistanceMatch);
 
   return _distance <= _matchDistanceThreshold ? 2u : 0u;
 }
@@ -422,16 +455,32 @@ unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElement
   typeScorer.setFeatureDistance(_distance);
   typeScorer.setTypeScoreThreshold(_typeScoreThreshold);
   _typeScore = typeScorer.extract(*_map, poi, poly);
-  //if (poi->getTags().get("historic") == "monument")
-  //{
-    //monuments can represent just about any poi type, so lowering this some to account for that
-//    _typeScoreThreshold = _typeScoreThreshold * 0.42; //determined experimentally
-    //_typeScoreThreshold = 0.3; //this could be moved to a config
-  //}
   const bool typeMatch = _typeScore >= _typeScoreThreshold;
+
+  if (typeScorer.failedMatchRequirements.size() > 0)
+  {
+    QString failedMatchTypes;
+    for (int i = 0; i < typeScorer.failedMatchRequirements.size(); i++)
+    {
+      failedMatchTypes += typeScorer.failedMatchRequirements.at(i) + ", ";
+    }
+    failedMatchTypes.chop(2);
+
+    QString explainBase = "Failed custom match requirements for: ";
+    if (_explainText.isEmpty())
+    {
+      _explainText = explainBase + failedMatchTypes;
+    }
+    else
+    {
+      _explainText += ";" + explainBase + failedMatchTypes;
+    }
+  }
+
   LOG_VART(typeMatch);
   LOG_VART(PoiPolygonTypeScoreExtractor::poiBestKvp);
   LOG_VART(PoiPolygonTypeScoreExtractor::polyBestKvp);
+
   return typeMatch ? 1u : 0u;
 }
 
@@ -459,7 +508,7 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
 
   evidence += _getDistanceEvidence(poi, poly);
   //see comment in _getDistanceEvidence
-  if (!_closeMatch)
+  if (!_closeDistanceMatch)
   {
     return 0;
   }
@@ -501,16 +550,6 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
       return evidence;
     }
   }
-
-  /*if (evidence == 0)
-  {
-    //This is kind of a consolation prize...if there was no match, but name and type score have
-    //moderately high values, then make it a match.
-    if (_nameScore >= 0.4 && _typeScore >= 0.6) //determined experimentally
-    {
-      evidence++;
-    }
-  }*/
 
   //no point in trying to increase evidence if we're already at a match
   if (_enableAdvancedMatching && evidence < _matchEvidenceThreshold)
@@ -557,19 +596,10 @@ QString PoiPolygonMatch::toString() const
       .arg(_poly->getElementId().toString())
       .arg(_class.toString())
       .arg(_distance)
-      .arg(_closeMatch)
+      .arg(_closeDistanceMatch)
       .arg(_typeScore)
       .arg(_nameScore)
       .arg(_addressScore);
-}
-
-QString PoiPolygonMatch::explain() const
-{
-  if (!_explainText.isEmpty())
-  {
-    return _explainText;
-  }
-  return toString();
 }
 
 }

@@ -100,8 +100,6 @@ public:
 
   virtual void writeObject(QDataStream& /*os*/) const {}
 
-  virtual QString getName() const { return "Unifying Conflator"; }
-
   virtual QString getDescription() const
   { return "Conflates two inputs maps into one with Unifying Conflation"; }
 

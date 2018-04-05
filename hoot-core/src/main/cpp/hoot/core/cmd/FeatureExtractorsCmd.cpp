@@ -63,6 +63,8 @@ public:
       throw HootException(QString("%1 takes zero parameters.").arg(getName()));
     }
 
+    std::cout << "Feature extractors (prepend 'hoot::'):" << std::endl << std::endl;
+
     DisableLog dl;
 
     //the size of the longest extractor name plus a small buffer

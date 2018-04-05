@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HIGHWAYREVIEWCLEANEROP_H
 #define HIGHWAYREVIEWCLEANEROP_H
@@ -52,6 +52,9 @@ public:
   virtual void apply(OsmMapPtr& map);
 
   virtual QString toString() const { return QString::fromStdString(className()); }
+
+  virtual QString getDescription() const
+  { return "Finds highway reviews that are impossible due to a lack of string match"; }
 
 private:
 

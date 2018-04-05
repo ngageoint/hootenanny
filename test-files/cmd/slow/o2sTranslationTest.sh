@@ -16,18 +16,17 @@ mkdir -p $outputDir
 rm -rf $outputDir/*
 
 # Normal Hoot options
-HOOT_OPT="--info"
+HOOT_OPT="--warn"
 
 # Hoot options for debugging the test input and output
 # NOTE: This will generate HEAPS of output.
 #HOOT_OPT="--info -D ogr.debug.dumptags=true -D ogr.debug.lookupcolumn=true -D ogr.debug.lookupclash=true -D ogr.debug.dumpvalidate=true"
 
-
 ##### Start Tests #####
 # Export files
 echo "### TDSv40 ###"
 hoot convert-osm2ogr $HOOT_OPT -D ogr.thematic.structure=false $TRANS_TDS40 $inputFile $outputDir/tds40.shp
-hoot convert-ogr2osm $HOOT_OPT $TRANS_TDS40 $outputDir/tds40.osm \
+hoot convert-ogr2osm --debug $TRANS_TDS40 $outputDir/tds40.osm \
   $outputDir/tds40/HUT_P.shp \
   $outputDir/tds40/o2s_*.shp \
   $outputDir/tds40/ORCHARD_S.shp \
@@ -38,7 +37,7 @@ hoot map-diff $outputDir/tds40.osm $tds40File || diff $outputDir/tds40.osm $tds4
 echo
 echo "### TDSv61 ###"
 hoot convert-osm2ogr $HOOT_OPT -D ogr.thematic.structure=false $TRANS_TDS61 $inputFile $outputDir/tds61.shp
-hoot convert-ogr2osm $HOOT_OPT $TRANS_TDS61 $outputDir/tds61.osm \
+hoot convert-ogr2osm --debug $TRANS_TDS61 $outputDir/tds61.osm \
   $outputDir/tds61/HUT_P.shp \
   $outputDir/tds61/o2s_*.shp \
   $outputDir/tds61/ORCHARD_S.shp \
@@ -49,7 +48,7 @@ hoot map-diff $outputDir/tds61.osm $inputFile || diff $outputDir/tds61.osm $inpu
 echo
 echo "### MGCP ###"
 hoot convert-osm2ogr $HOOT_OPT $TRANS_MGCP $inputFile $outputDir/mgcp.shp
-hoot convert-ogr2osm $HOOT_OPT $TRANS_MGCP $outputDir/mgcp.osm \
+hoot convert-ogr2osm --debug $TRANS_MGCP $outputDir/mgcp.osm \
   $outputDir/mgcp/PAL099.shp \
   $outputDir/mgcp/o2s_*.shp \
   $outputDir/mgcp/AEA040.shp \
@@ -60,7 +59,7 @@ hoot map-diff $outputDir/mgcp.osm $inputFile || diff $outputDir/mgcp.osm $inputF
 echo
 echo "### GGDM ###"
 hoot convert-osm2ogr $HOOT_OPT -D ogr.thematic.structure=false $TRANS_GGDM $inputFile $outputDir/ggdm.shp
-hoot convert-ogr2osm $HOOT_OPT $TRANS_GGDM $outputDir/ggdm.osm \
+hoot convert-ogr2osm --debug $TRANS_GGDM $outputDir/ggdm.osm \
   $outputDir/ggdm/HUT_P.shp \
   $outputDir/ggdm/o2s_*.shp \
   $outputDir/ggdm/ORCHARD_S.shp \

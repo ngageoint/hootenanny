@@ -53,8 +53,6 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
-  virtual QString getName() const { return "Maximum Element ID"; }
-
   virtual QString getDescription() const
   { return "Returns the largest element ID value found"; }
 

@@ -73,8 +73,6 @@ public:
   virtual bool ref1CriterionSatisfied(const ConstElementPtr& e) const;
   virtual bool ref2CriterionSatisfied(const ConstElementPtr& e) const;
 
-  virtual QString getName() const { return "Remove Ref 2 Tag Single Criterion"; }
-
   virtual QString getDescription() const
   { return "Removes REF2 tags when a criterion is met for for both the REF1 and REF2 elements"; }
 

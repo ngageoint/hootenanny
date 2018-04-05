@@ -141,7 +141,7 @@ protected:
   OgrReaderInternal* _d;
 };
 
-} // hoot
+}
 
 
 #endif // __OGR_READER_H__

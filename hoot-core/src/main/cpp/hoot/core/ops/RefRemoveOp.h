@@ -56,8 +56,6 @@ public:
    */
   virtual void apply(boost::shared_ptr<OsmMap>& map);
 
-  virtual QString getName() const { return "Ref Remove"; }
-
   virtual QString getDescription() const
   { return "Removes all elements that meet a specified criterion"; }
 

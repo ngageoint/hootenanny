@@ -50,8 +50,6 @@ public:
   ElementCriterionPtr clone()
   { return ElementCriterionPtr(new WayDirectionCriterion(_map, _baseWay, _similarDirection)); }
 
-  virtual QString getName() const { return "Way Direction"; }
-
   virtual QString getDescription() const { return "Identifies which direction a way is pointing"; }
 
 private:

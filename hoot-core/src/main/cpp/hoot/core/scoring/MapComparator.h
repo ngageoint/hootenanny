@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MAPCOMPARATOR_H
 #define MAPCOMPARATOR_H
@@ -41,6 +41,7 @@ class OsmMap;
 class MapComparator
 {
 public:
+
   MapComparator();
 
   /**
@@ -54,6 +55,7 @@ public:
   void setUseDateTime() { _useDateTime = true; }
 
 private:
+
   bool _ignoreUUID;
   bool _useDateTime;
 };

@@ -53,7 +53,10 @@ public:
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new JsFunctionCriterion(_func)); }
 
+  virtual QString getDescription() const { return ""; }
+
 private:
+
   JsFunctionCriterion(v8::Persistent<v8::Function>& func) { _func.Reset(v8::Isolate::GetCurrent(), func); }
 
   v8::Persistent<v8::Function> _func;

@@ -69,8 +69,6 @@ public:
 
   virtual QString toString() { return "hoot::TranslationVisitor"; }
 
-  virtual QString getName() const { return "Translate"; }
-
   virtual QString getDescription() const { return "Translates element tags"; }
 
 private:

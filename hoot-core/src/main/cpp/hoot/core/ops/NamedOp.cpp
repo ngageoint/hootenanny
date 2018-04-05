@@ -33,6 +33,10 @@
 #include <hoot/core/ops/VisitorOp.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/StringUtils.h>
+
+// Qt
+#include <QElapsedTimer>
 
 namespace hoot
 {
@@ -54,8 +58,10 @@ void NamedOp::apply(boost::shared_ptr<OsmMap> &map)
 {
   Factory& f = Factory::getInstance();
 
+  QElapsedTimer timer;
   foreach (QString s, _namedOps)
   {
+    timer.restart();
     if (s.isEmpty())
     {
       // pass
@@ -127,6 +133,8 @@ void NamedOp::apply(boost::shared_ptr<OsmMap> &map)
     {
       throw HootException("Unexpected named operation: " + s);
     }
+
+    LOG_DEBUG("Time elapsed: " << StringUtils::secondsToDhms(timer.elapsed()));
   }
 }
 

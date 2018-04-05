@@ -52,8 +52,6 @@ public:
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new NonBuildingAreaCriterion()); }
 
-  virtual QString getName() const { return "Non-Building Area"; }
-
   virtual QString getDescription() const
   { return "Identifies features that are areas but not buildings"; }
 

@@ -56,8 +56,6 @@ public:
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new BuildingCriterion(_map)); }
 
-  virtual QString getName() const { return "Building"; }
-
   virtual QString getDescription() const { return "Identifies buildings"; }
 
 private:

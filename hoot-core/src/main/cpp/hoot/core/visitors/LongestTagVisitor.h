@@ -52,8 +52,6 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
-  virtual QString getName() const { return "Longest Tag"; }
-
   virtual QString getDescription() const
   { return "Finds the tag with the longest value character size"; }
 

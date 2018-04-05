@@ -59,8 +59,6 @@ public:
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new NoInformationCriterion(_treatReviewTagsAsMetadata)); }
 
-  virtual QString getName() const { return "No Information"; }
-
   virtual QString getDescription() const { return "Identifies features with no useful information"; }
 
 private:
