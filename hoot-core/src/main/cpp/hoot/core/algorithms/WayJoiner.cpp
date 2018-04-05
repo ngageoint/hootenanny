@@ -274,8 +274,9 @@ void WayJoiner::joinWays(const WayPtr &parent, const WayPtr &child)
 {
   if (!parent || !child)
     return;
-  Tags pTags = parent->getTags();
-  Tags cTags = child->getTags();
+  //  Don't join area ways
+  if (OsmSchema::getInstance().isArea(parent) || OsmSchema::getInstance().isArea(child))
+    return;
   //  Check if the two ways are able to be joined back up
   vector<long> child_nodes = child->getNodeIds();
   vector<long> parent_nodes = parent->getNodeIds();
@@ -293,6 +294,8 @@ void WayJoiner::joinWays(const WayPtr &parent, const WayPtr &child)
   //  Remove the split parent id
   child->resetPid();
   //  Merge the tags
+  Tags pTags = parent->getTags();
+  Tags cTags = child->getTags();
   Tags tags = TagMergerFactory::mergeTags(pTags, cTags, ElementType::Way);
   parent->setTags(tags);
   //  Remove the duplicate node id of the overlap
