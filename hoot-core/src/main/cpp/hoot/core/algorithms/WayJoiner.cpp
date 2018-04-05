@@ -43,7 +43,8 @@ namespace hoot
 {
 
 WayJoiner::WayJoiner(const OsmMapPtr &map)
-  : _map(map)
+  : _map(map),
+    _leavePid(true)
 {
 }
 
@@ -69,6 +70,8 @@ void WayJoiner::join()
 
 void WayJoiner::resetParents()
 {
+  if (_leavePid)
+    return;
   WayMap ways = _map->getWays();
   //  Find all ways that have a split parent id and reset them
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)

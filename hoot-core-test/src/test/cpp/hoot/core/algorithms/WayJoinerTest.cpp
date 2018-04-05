@@ -125,6 +125,9 @@ public:
   void runConflateTest()
   {
     OsmXmlReader reader;
+
+    OsmMap::resetCounters();
+
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
@@ -137,12 +140,12 @@ public:
     conflator.apply(map);
 
     NamedOp(ConfigOptions().getConflatePostOps()).apply(map);
-
     MapProjector::projectToWgs84(map);
 
     OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(true);
     writer.setIncludeHootInfo(true);
+    writer.setIncludePid(true);
     writer.write(map, "test-output/algorithms/wayjoiner/WayJoinerConflateOutput.osm");
 
     HOOT_FILE_EQUALS("test-output/algorithms/wayjoiner/WayJoinerConflateOutput.osm",
@@ -151,6 +154,6 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(WayJoinerTest, "current");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(WayJoinerTest, "quick");
 
 }

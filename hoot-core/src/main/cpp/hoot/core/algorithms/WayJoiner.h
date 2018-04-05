@@ -89,6 +89,8 @@ private:
 
   /** Pointer to the map to work on */
   OsmMapPtr _map;
+  /** Debugging flag to leave parent IDs intact for output */
+  bool _leavePid;
 };
 
 }
