@@ -69,6 +69,12 @@ private:
   void joinAtNode();
 
   /**
+   * @brief areJoinable Check the status of the ways to see if they are compatible when joining at a node
+   *    essentially UNKNOWN1 and UNKNOWN2 ways aren't joinable together
+   */
+  bool areJoinable(const WayPtr& w1, const WayPtr& w2);
+
+  /**
    * @brief resetParents Resets parent id for all ways after joining operation has completed
    */
   void resetParents();

@@ -159,7 +159,7 @@ void WayJoiner::joinAtNode()
       for (set<long>::const_iterator ways = way_ids.begin(); ways != way_ids.end(); ++ways)
       {
         WayPtr child = _map->getWay(*ways);
-        if (child && way->getId() != child->getId())
+        if (child && way->getId() != child->getId() && areJoinable(way, child))
         {
           Tags cTags = child->getTags();
           //  Check for equivalent tags
@@ -172,6 +172,18 @@ void WayJoiner::joinAtNode()
       }
     }
   }
+}
+
+bool WayJoiner::areJoinable(const WayPtr& w1, const WayPtr& w2)
+{
+  return
+      //  Same status => Joinable
+      w1->getStatus() == w2->getStatus() ||
+      //  One (or both) are conflated => Joinable
+      (w1->getStatus() == Status::Conflated || w2->getStatus() == Status::Conflated) ||
+      //  Don't know if this is the case but one (or both) are invalid => Joinable
+      (w1->getStatus() == Status::Invalid || w2->getStatus() == Status::Invalid);
+      //  What isn't joinable is one is UNKNOWN1 and the other is UNKNOWN2 or vice-a-versa
 }
 
 void WayJoiner::rejoinSiblings(deque<long>& way_ids)
@@ -265,9 +277,12 @@ void WayJoiner::joinWays(const WayPtr &parent, const WayPtr &child)
   Tags pTags = parent->getTags();
   Tags cTags = child->getTags();
   //  Check if the two ways are able to be joined back up
-  //  First make sure that they begin or end at the same node
   vector<long> child_nodes = child->getNodeIds();
   vector<long> parent_nodes = parent->getNodeIds();
+  //  Make sure that there are nodes in the ways
+  if (parent_nodes.size() == 0 || child_nodes.size() == 0)
+    return;
+  //  First make sure that they begin or end at the same node
   bool parentFirst;
   if (child_nodes[0] == parent_nodes[parent_nodes.size() - 1])
     parentFirst = true;
