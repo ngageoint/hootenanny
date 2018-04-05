@@ -30,7 +30,8 @@
 //  Hoot
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/ops/RemoveWayOp.h>
+#include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 
@@ -293,8 +294,10 @@ void WayJoiner::joinWays(const WayPtr &parent, const WayPtr &child)
     parent->setNodes(child_nodes);
     parent->addNodes(parent_nodes);
   }
-  //  Remove the child
-  RemoveWayOp::removeWay(_map, child->getId());
+  //  Update any relations that contain the child to use the parent
+  ReplaceElementOp(child->getElementId(), parent->getElementId()).apply(_map);
+  child->getTags().clear();
+  RecursiveElementRemover(child->getElementId()).apply(_map);
 }
 
 }
