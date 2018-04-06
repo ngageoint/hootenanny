@@ -49,6 +49,12 @@ public:
   static void join(const OsmMapPtr& map);
   void join();
 
+  /**
+   * @brief get/set parent ID reset flag
+   */
+  void setLeavePid(bool leavePid) { _leavePid = leavePid; }
+  bool getLeavePid() { return _leavePid; }
+
 private:
 
   /**
@@ -76,6 +82,7 @@ private:
 
   /**
    * @brief resetParents Resets parent id for all ways after joining operation has completed
+   *    does nothing if _leavePid is true
    */
   void resetParents();
 

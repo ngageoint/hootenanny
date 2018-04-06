@@ -45,7 +45,7 @@ namespace hoot
 
 WayJoiner::WayJoiner(const OsmMapPtr &map)
   : _map(map),
-    _leavePid(true)
+    _leavePid(false)
 {
 }
 
@@ -94,8 +94,6 @@ void WayJoiner::joinParentChild()
     if (way->hasPid())
       ids.push_back(way->getId());
   }
-  if (ids.size() == 0)
-    return;
   //  Sort the ids so that the smallest is first (i.e. largest negative id is the last one allocated)
   sort(ids.begin(), ids.end());
   //  Iterate all of the ids
