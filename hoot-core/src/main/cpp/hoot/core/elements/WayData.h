@@ -68,7 +68,10 @@ public:
 
 protected:
 
+  /** List of node IDs in the way */
   std::vector<long> _nodes;
+
+  /** Parent ID, i.e. the ID of the way that this way was split from or created from */
   long _pid;
 
 };

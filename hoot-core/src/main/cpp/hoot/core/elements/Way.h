@@ -179,6 +179,10 @@ public:
 
   virtual void visitRw(ElementProvider& map, ConstElementVisitor& filter);
 
+  /**
+   * Functions for getting/setting/resetting the parent ID, i.e. the ID of the way
+   * that this way was split from
+   */
   bool hasPid() const { return _wayData->getPid() != WayData::PID_EMPTY; }
   long getPid() const { return _wayData->getPid(); }
   void setPid(long pid) { _wayData->setPid(pid); }

@@ -505,7 +505,7 @@ bool Tags::operator==(const Tags& other) const
   return true;
 }
 
-QStringList dataOnlyTags(const Tags& tags)
+QStringList Tags::dataOnlyTags(const Tags& tags) const
 {
   QStringList t;
   for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)

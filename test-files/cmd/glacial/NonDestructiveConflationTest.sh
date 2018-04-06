@@ -64,7 +64,7 @@ hoot changeset-derive --stats \
 # @ - WayJoiner join at node
 #
 # |        | Node | Relation | Way |
-# | Create |  859 |        0 | 311 |
+# | Create |  859 |        0 | 309 |
 # | Delete |    1 |        1 |  17 |
 # | Modify |    0 |        0 |   9 |
 

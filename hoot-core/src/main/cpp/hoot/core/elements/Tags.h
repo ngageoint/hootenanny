@@ -176,7 +176,15 @@ public:
 
   bool operator==(const Tags& other) const;
 
+  /**
+   * Similar to operator== but 'hoot::*' tags are ignored
+   */
   bool dataOnlyEqual(const Tags& other) const;
+
+  /**
+   * Get a list of all non-'hoot::*' tags
+   */
+  QStringList dataOnlyTags(const Tags& tags) const;
 
   void readValues(const QString& k, QStringList& list) const;
 

@@ -389,6 +389,7 @@ void OsmXmlWriter::_writeTags(const ConstElementPtr& element)
     _writer->writeEndElement();
   }
 
+  //  Output the PID as a tag if desired for debugging purposes
   if (_includePid && type == ElementType::Way)
   {
     ConstWayPtr way = boost::dynamic_pointer_cast<const Way>(element);
