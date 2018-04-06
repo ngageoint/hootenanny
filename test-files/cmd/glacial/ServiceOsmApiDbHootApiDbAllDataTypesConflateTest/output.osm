@@ -771,6 +771,10 @@
         <nd ref="14"/>
         <nd ref="35"/>
         <nd ref="21"/>
+        <nd ref="10"/>
+        <nd ref="5"/>
+        <nd ref="25"/>
+        <nd ref="193"/>
         <tag k="note" v="0"/>
         <tag k="hoot:id" v="21"/>
         <tag k="hoot:status" v="3"/>
@@ -812,17 +816,5 @@
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:id" v="23"/>
-    </way>
-    <way visible="true" id="24" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
-        <nd ref="21"/>
-        <nd ref="10"/>
-        <nd ref="5"/>
-        <nd ref="25"/>
-        <nd ref="193"/>
-        <tag k="note" v="0"/>
-        <tag k="hoot:id" v="24"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="24"/>
     </way>
 </osm>
