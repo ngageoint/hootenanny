@@ -66,18 +66,6 @@
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-18"/>
     </way>
-    <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-3"/>
-        <nd ref="-4"/>
-        <nd ref="-5"/>
-        <nd ref="-6"/>
-        <nd ref="-7"/>
-        <tag k="alt_name" v="input2c"/>
-        <tag k="name" v="input1"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-5"/>
-    </way>
     <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-3"/>
         <nd ref="-12"/>
@@ -91,7 +79,11 @@
         <nd ref="-1"/>
         <nd ref="-2"/>
         <nd ref="-3"/>
-        <tag k="alt_name" v="input2a"/>
+        <nd ref="-4"/>
+        <nd ref="-5"/>
+        <nd ref="-6"/>
+        <nd ref="-7"/>
+        <tag k="alt_name" v="input2a;input2c"/>
         <tag k="name" v="input1"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="3"/>

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __ELEMENT_WAY_DATA_H__
 #define __ELEMENT_WAY_DATA_H__
@@ -43,11 +43,13 @@ class WayData : public ElementData
 {
 public:
 
+  static long PID_EMPTY;
+
   WayData(long id, long changeset = ElementData::CHANGESET_EMPTY,
           long version = ElementData::VERSION_EMPTY,
           unsigned int timestamp = ElementData::TIMESTAMP_EMPTY,
           QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY,
-          bool visible = ElementData::VISIBLE_EMPTY);
+          bool visible = ElementData::VISIBLE_EMPTY, long pid = WayData::PID_EMPTY);
 
   WayData(const WayData& from);
 
@@ -55,15 +57,23 @@ public:
 
   void addNode(long id) { _nodes.push_back(id); }
 
-  void clear() { ElementData::clear(); _nodes.clear(); }
+  void clear();
 
   const std::vector<long>& getNodeIds() const { return _nodes; }
 
   std::vector<long>& getNodeIds() { return _nodes; }
 
+  long getPid() const { return _pid; }
+  void setPid(long pid) { _pid = pid; }
+
 protected:
 
+  /** List of node IDs in the way */
   std::vector<long> _nodes;
+
+  /** Parent ID, i.e. the ID of the way that this way was split from or created from */
+  long _pid;
+
 };
 
 }

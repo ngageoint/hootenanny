@@ -79,6 +79,8 @@ public:
 
   void setIncludeHootInfo(bool includeInfo) { _includeDebug = includeInfo; }
 
+  void setIncludePid(bool includePid) { _includePid = includePid; }
+
   /**
    * Includes the x/y location of the node with the nd element. This is not standard for OSM
    * and can cause inconsistencies if it isn't updated properly when the file is rewritten, however
@@ -127,6 +129,7 @@ private:
   bool _includeDebug;
   bool _includePointInWays;
   bool _includeCompatibilityTags;
+  bool _includePid;
   bool _textStatus;
   QString _osmSchema;
   QString _timestamp;

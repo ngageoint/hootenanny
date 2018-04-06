@@ -283,6 +283,20 @@ void HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   e1Match->setTags(newTags);
   e1Match->setStatus(Status::Conflated);
 
+  if (e1Match->getElementType() == ElementType::Way &&
+      e1->getElementType() == ElementType::Way &&
+      e2->getElementType() == ElementType::Way)
+  {
+    WayPtr w1 = boost::dynamic_pointer_cast<Way>(e1);
+    WayPtr w2 = boost::dynamic_pointer_cast<Way>(e2);
+    WayPtr wMatch = boost::dynamic_pointer_cast<Way>(e1Match);
+    wMatch->setPid(Way::getPid(w1, w2));
+    if (scraps1 && scraps1->getElementType() == ElementType::Way)
+      boost::dynamic_pointer_cast<Way>(scraps1)->setPid(w1->getPid());
+    if (scraps2 && scraps2->getElementType() == ElementType::Way)
+      boost::dynamic_pointer_cast<Way>(scraps2)->setPid(w2->getPid());
+  }
+
   LOG_VART(e1Match->getElementId());
   if (scraps1)
   {

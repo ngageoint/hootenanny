@@ -1577,6 +1577,9 @@
     <way visible="true" id="-66" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-178"/>
         <nd ref="-379"/>
+        <nd ref="-378"/>
+        <nd ref="-377"/>
+        <nd ref="-244"/>
         <tag k="name" v="14th St NW"/>
         <tag k="highway" v="unclassified"/>
         <tag k="hoot:status" v="2"/>
@@ -1591,32 +1594,6 @@
         <tag k="hoot:status" v="2"/>
         <tag k="error:circular" v="5"/>
         <tag k="hoot:id" v="-64"/>
-    </way>
-    <way visible="true" id="-61" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-379"/>
-        <nd ref="-336"/>
-        <nd ref="-335"/>
-        <nd ref="-334"/>
-        <nd ref="-333"/>
-        <nd ref="-332"/>
-        <nd ref="-331"/>
-        <nd ref="-409"/>
-        <tag k="name" v="Pennsylvania Ave NW"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-61"/>
-    </way>
-    <way visible="true" id="-60" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-379"/>
-        <nd ref="-378"/>
-        <nd ref="-377"/>
-        <nd ref="-244"/>
-        <tag k="name" v="14th St NW"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-60"/>
     </way>
     <way visible="true" id="-51" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-408"/>
@@ -1808,6 +1785,13 @@
         <nd ref="-245"/>
         <nd ref="-337"/>
         <nd ref="-379"/>
+        <nd ref="-336"/>
+        <nd ref="-335"/>
+        <nd ref="-334"/>
+        <nd ref="-333"/>
+        <nd ref="-332"/>
+        <nd ref="-331"/>
+        <nd ref="-409"/>
         <tag k="name" v="Pennsylvania Ave NW"/>
         <tag k="highway" v="unclassified"/>
         <tag k="hoot:status" v="2"/>
