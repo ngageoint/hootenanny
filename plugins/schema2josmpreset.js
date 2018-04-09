@@ -6,6 +6,9 @@ var tds40_schema = require('./tds40_full_schema.js').getDbSchema();
 var tds61_schema = require('./tds61_full_schema.js').getDbSchema();
 var fs = require('fs');
 var builder = require('xmlbuilder');
+//These fields in translated schemas are shared across FCODEs but
+//each has their own unique domain
+var uniqueSharedFields = ['FFN', 'FFN2', 'FFN3'];
 
 // <?xml version="1.0" encoding="UTF-8"?>
 // <presets xmlns="http://josm.openstreetmap.de/tagging-preset-1.0">
@@ -81,11 +84,15 @@ Object.keys(objs).forEach(s => {
 
         //Build de-duped map of columns
         i.columns.forEach(c => {
-            if (!chunks[c.name]) {
-                chunks[c.name] = c;
+            var id = c.name;
+            //unique shared fields with have fcode in chunk id
+            if (uniqueSharedFields.some(f => { return f === id; })) {
+                id = `${id}_${i.fcode}`;
+            }
+            if (!chunks[id]) {
+                chunks[id] = c;
             }
         });
-
     });
 
     Object.keys(chunks).forEach(c => {
@@ -95,7 +102,7 @@ Object.keys(objs).forEach(s => {
                 key: chunks[c].name, 
                 text: chunks[c].desc, 
                 values_searchable: true, 
-                default: chunks[c].defValue
+                // default: chunks[c].defValue
             };
 
             if (chunks[c].length) {
@@ -103,17 +110,36 @@ Object.keys(objs).forEach(s => {
 
             }
             let combo = chunk.ele('combo', attrs);
-            chunks[c].enumerations.forEach(e => {
+            chunks[c].enumerations.sort((a,b) => {
+                // numeric comparison
+                if (!isNaN(a.value) && !isNaN(b.value)) {
+                    return a.value - b.value;
+                }
+
+                // case-insensitive string comparison
+                var stringA = a.value.toUpperCase();
+                var stringB = b.value.toUpperCase();
+                if (stringA < stringB) {
+                    return -1;
+                }
+                if (stringA > stringB) {
+                    return 1;
+                }
+                return 0;
+
+            }).forEach(e => {
                 combo.ele('list_entry', 
-                    {value: e.value, 
-                        display_value: e.value + ' - ' + e.name
+                    {
+                        value: e.value,
+                        //Don't display name if equal to value
+                        display_value: (e.value === e.name) ? e.value : e.value + ' - ' + e.name
                     });
             })
         } else {
             let attrs = {
                 key: chunks[c].name, 
                 text: chunks[c].desc, 
-                default: chunks[c].defValue
+                // default: chunks[c].defValue
             };
             if (chunks[c].length) {
                 attrs.length = chunks[c].length;
@@ -149,8 +175,14 @@ Object.keys(objs).forEach(s => {
         it.ele('key', {key: (s === 'mgcp') ? 'FCODE' : 'F_CODE', value: items[i].fcode}); //MGCP uses 'FCODE' as key
 
         items[i].columns.forEach(col => {
-            if (col !== 'FCODE' && col !== 'F_CODE') //FCODE is set as a key above
-                it.ele('reference', {ref: col});
+            if (col !== 'FCODE' && col !== 'F_CODE') { //FCODE is set as a key above
+                var refval = col;
+                //unique shared fields with have fcode in chunk id
+                if (uniqueSharedFields.some(f => { return f === col; })) {
+                    refval = `${col}_${items[i].fcode}`;
+                }
+                it.ele('reference', {ref: refval});
+            }
         });
     });
 
