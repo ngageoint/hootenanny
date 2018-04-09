@@ -99,9 +99,9 @@ Object.keys(objs).forEach(s => {
         let chunk = presets.ele('chunk', {id: c});
         if (chunks[c].type === 'enumeration') {
             let attrs = {
-                key: chunks[c].name, 
-                text: chunks[c].desc, 
-                values_searchable: true, 
+                key: chunks[c].name,
+                text: chunks[c].desc,
+                values_searchable: true,
                 // default: chunks[c].defValue
             };
 
@@ -128,7 +128,7 @@ Object.keys(objs).forEach(s => {
                 return 0;
 
             }).forEach(e => {
-                combo.ele('list_entry', 
+                combo.ele('list_entry',
                     {
                         value: e.value,
                         //Don't display name if equal to value
@@ -137,8 +137,8 @@ Object.keys(objs).forEach(s => {
             })
         } else {
             let attrs = {
-                key: chunks[c].name, 
-                text: chunks[c].desc, 
+                key: chunks[c].name,
+                text: chunks[c].desc,
                 // default: chunks[c].defValue
             };
             if (chunks[c].length) {
