@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ConflictsNetworkMatcher.h"
 
@@ -197,7 +197,7 @@ Meters ConflictsNetworkMatcher::_getMatchSeparation(ConstEdgeMatchPtr pMatch)
     FrechetDistance distanceCalc(tempMap, pWay1, pWay2);
     Meters d = distanceCalc.distance();
 
-    LOG_DEBUG("Match (" << pMatch->getUid() << ") separation: " << d);
+    LOG_TRACE("Match (" << pMatch->getUid() << ") separation: " << d);
 
     return d;
   }
@@ -225,7 +225,7 @@ void ConflictsNetworkMatcher::_sanityCheckRelationships()
 
         if (myDistance > 5.0 && myDistance*2.5 < theirDistance)
         {
-          LOG_DEBUG("Removing insane match: " << r->getEdge()->getUid() << " - "
+          LOG_TRACE("Removing insane match: " << r->getEdge()->getUid() << " - "
                     << theirDistance << " keeping: " << em->getUid()
                     << " - " << myDistance);
 

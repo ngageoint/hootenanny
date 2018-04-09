@@ -92,6 +92,7 @@ public:
   inline static const QString HootPertied()             { return "hoot:pertied"; }
 
   inline static const QString HootPoiPolygonPoisMerged(){ return "hoot:poipolygon:poismerged"; }
+  inline static const QString HootMergeTarget()         { return "hoot:merge:target"; }
 
   inline static const QString HootReviewTagPrefix()     { return "hoot:review:"; }
   inline static const QString HootReviewChoices()       { return "hoot:review:choices"; }
@@ -112,6 +113,8 @@ public:
   inline static const QString& HootStatus()             { return HOOT_STATUS; }
 
   inline static const QString HootSource()              { return "hoot:source"; }
+
+  inline static const QString HootSplitParentId()       { return "hoot:split_parent_id"; }
 
   inline static const QString HootStub()                { return "hoot:stub"; }
 

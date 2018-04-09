@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -50,7 +50,10 @@ public:
 
   Osm2OgrCmd() { }
 
-  virtual QString getName() const { return "osm2ogr"; }
+  virtual QString getName() const { return "convert-osm2ogr"; }
+
+  virtual QString getDescription() const
+  { return "Converts and translates map data from OSM to an OGR format"; }
 
   static QString opsKey() { return "osm2ogr.ops"; }
 

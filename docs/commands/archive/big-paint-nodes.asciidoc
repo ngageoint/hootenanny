@@ -1,0 +1,27 @@
+== big-paint-nodes
+
+NOTE: This documents Hootenanny conflation using Hadoop, which is no longer supported (supported up to v0.2.38), and has been 
+left here for references purposes only.
+
+=== Description
+
+Reads from input and paints the node density into an image with the specified
+pixel size to a gray-scale image in log scale. Black is no nodes and white is
+the maximum number of nodes.
+
+* +input.pbf+ - Input +.pbf+ file -- must reside on HDFS.
+* +pixelSize+ - Pixel size in degrees (0.1 is reasonable for global data)
+* +output.png+ - Output +.png+ file -- must reside on local file system.
+
+=== Usage
+
+--------------------------------------
+big-paint-nodes (input.pbf) (pixelSize) (output.png)
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+hoot paint-nodes MyHdfsInput.osm.pbf 0.1 MyLocalOutput.png
+--------------------------------------
+

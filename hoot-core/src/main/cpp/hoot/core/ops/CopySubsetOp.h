@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef COPYSUBSETOP_H
 #define COPYSUBSETOP_H
@@ -37,10 +37,13 @@ namespace hoot
 
 /**
  * Copies a subset of the map into a new map. The old map is unchanged.
+ *
+ * TODO: rename to CopyMapSubsetOp
  */
 class CopySubsetOp : public OsmMapOperation
 {
 public:
+
   CopySubsetOp(const ConstOsmMapPtr& from, const std::set<ElementId>& eids);
 
   CopySubsetOp(const ConstOsmMapPtr& from, const std::vector<long>& ids);
@@ -53,7 +56,10 @@ public:
    */
   virtual void apply(OsmMapPtr& map);
 
+  virtual QString getDescription() const { return "Copies a subset of the map into a new map"; }
+
 private:
+
   std::set<ElementId> _eids;
   const ConstOsmMapPtr& _from;
 };

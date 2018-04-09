@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OVERLAPEXTRACTOR_H
 #define OVERLAPEXTRACTOR_H
@@ -66,6 +66,9 @@ public:
 
   virtual double extract(const OsmMap& map, const boost::shared_ptr<const Element>& target,
     const boost::shared_ptr<const Element>& candidate) const;
+
+  virtual QString getDescription() const
+  { return "Exactly the same as the SymDiffMatcher (in JCS speak)"; }
 };
 
 }

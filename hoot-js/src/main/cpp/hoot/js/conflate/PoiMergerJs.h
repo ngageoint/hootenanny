@@ -24,25 +24,38 @@
  *
  * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
+
 #ifndef POIMERGERJS_H
 #define POIMERGERJS_H
 
+// Hoot
 #include <hoot/js/HootJsStable.h>
 #include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/PluginContext.h>
+#include <hoot/core/OsmMap.h>
+
+using namespace v8;
 
 namespace hoot
 {
 
-class PoiMergerJs : public node::ObjectWrap
+/**
+ * Merges POIs
+ */
+class PoiMergerJs
 {
 
 public:
- static void Init(v8::Handle<v8::Object> target);
-private:
-  PoiMergerJs();
-  ~PoiMergerJs();
 
-  static void jsPoiMerge(const v8::FunctionCallbackInfo<v8::Value>& args);
+  /**
+   * Merges an unlimited number of POIs together using a generic conflation script
+   *
+   * @param map a map containing the POIs to be merged
+   * @param mergeTargetId the ID of the area which all other POIs should be merged into
+   * @param current the context this method should run under
+   */
+  static void mergePois(OsmMapPtr map, const ElementId& mergeTargetId, Isolate* current);
+
 };
 
 }

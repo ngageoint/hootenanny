@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "WaySplitter.h"
@@ -148,8 +148,11 @@ vector< WayPtr > WaySplitter::split(WayLocation& splitPoint)
     WayLocation first(_map, _a, 0, 0.0);
     WayLocation last(_map, _a, _a->getNodeCount() - 1, 0.0);
 
-    result.push_back(WaySubline(first, splitPoint).toWay(_map, _nf.get()));
-    result.push_back(WaySubline(splitPoint, last).toWay(_map, _nf.get()));
+    result.push_back(WaySubline(first, splitPoint).toWay(_map, _nf.get(), true));
+    result.push_back(WaySubline(splitPoint, last).toWay(_map, _nf.get(), false));
+
+    //  Record the parent id for the way joiner
+    result[1]->setPid(_a->getId());
 
     RemoveWayOp::removeWay(_map, _a->getId());
     _map->addWay(result[0]);

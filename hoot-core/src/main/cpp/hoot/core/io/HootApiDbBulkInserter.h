@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HOOTAPIDBBULKINSERTER_H
 #define HOOTAPIDBBULKINSERTER_H
@@ -39,6 +39,10 @@ class HootApiDbSqlStatementFormatter;
  * A Hooteanny API database writer that performs faster than HootApiDbWriter but for use when
  * creating new elements in a new database only.  See OsmApiDbBulkInserter.  This class implements
  * the offline workflow only and does not allow for writing to a SQL file.
+ *
+ * Note: The constraint and index disable settings have no effect on this class since Hoot API
+ * database writing creates a brand new database for every layer that has no constraints to start
+ * with.
  *
  * TODO: Having this class inheriting from OsmApiDbBulkInserter is not the cleanest approach but
  * allowed for reducing a lot of redundant code up front without involving a massive amount of
@@ -73,6 +77,8 @@ public:
   void setUserEmail(QString email) { _userEmail = email; }
   void setOverwriteMap(bool overwriteMap) { _overwriteMap = overwriteMap; }
   void setCopyBulkInsertActivated(bool activated) { _copyBulkInsertActivated = activated; }
+
+  virtual QString supportedFormats() { return "hootapidb://"; }
 
 protected:
 

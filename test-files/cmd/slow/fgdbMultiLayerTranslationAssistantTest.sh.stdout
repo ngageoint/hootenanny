@@ -1,17 +1,2 @@
-17:17:14.897 INFO  ...hoot/core/schema/OsmSchema.cpp(1851) Loading translation files...
-17:17:14.979 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-output/cmd/translation_assistant_ogr2osm/caligdb.gdb cali_fake_points
-Loading test-output/cmd/translation_assistant_ogr2osm/caligdb.gdb cali_fake_points 0 / 4   
-17:17:14.985 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-output/cmd/translation_assistant_ogr2osm/caligdb.gdb cali_test
-Loading test-output/cmd/translation_assistant_ogr2osm/caligdb.gdb cali_test 0 / 357   
-
-17:17:15.100 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::MergeNearbyNodes
-17:17:15.100 INFO  .../core/ops/MergeNearbyNodes.cpp(  75) MergeNearbyNodes start
-MergeNearbyNodes 0 0    MergeNearbyNodes 1000 720    MergeNearbyNodes 1420 elapsed: 12ms        
-17:17:15.113 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::BuildingPartMergeOp
-Ways: 0 / 357        Ways: 357 / 357        
-Relations: 0 / 0        
-Combining Parts: 0 / 0        
-
-17:17:15.117 INFO  ...ore/io/OsmMapWriterFactory.cpp( 108) Writing map to test-output/cmd/translation_assistant_ogr2osm/caligdb.osm...
-17:17:15.422 INFO  ...ore/io/OsmMapReaderFactory.cpp( 137) Loading map from test-output/cmd/translation_assistant_ogr2osm/caligdb.osm...
-17:17:15.457 INFO  ...ore/io/OsmMapReaderFactory.cpp( 137) Loading map from test-files/translation_assistant/caligdb.osm...
+20:54:52.748 INFO  ...ore/io/OsmMapReaderFactory.cpp( 178) Loading map from test-output/cmd/translation_assistant_ogr2osm/caligdb.osm...
+20:54:52.793 INFO  ...ore/io/OsmMapReaderFactory.cpp( 178) Loading map from test-files/translation_assistant/caligdb.osm...

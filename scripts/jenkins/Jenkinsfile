@@ -100,19 +100,18 @@ pipeline {
                 '''
                 
                 // Perform remainder of provisioning
-                sh "vagrant provision ${params.Box} --provision-with build,EGD,tomcat,mapnik,hadoop"
+                sh "vagrant provision ${params.Box} --provision-with build,EGD,tomcat,mapnik"
             }       
         }
         stage("Core Tests") {
             when { expression { return params.Core_tests } }
             steps {
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot --version --debug; bin/HootTest --diff --glacial --parallel \$(nproc)'"
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot version --debug; bin/HootTest --diff --glacial --parallel \$(nproc)'"
             }
         }
         stage("Services Tests") {
             when { expression { return params.Services_tests } }
             steps {
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` pp-test'"
                 sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` plugins-test'"
                 sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` services-test'"
             }
@@ -126,19 +125,26 @@ pipeline {
     }
     post {
         always {
-            // Send build notification
-            notifySlack(currentBuild.result, "#builds_hoot")
+            script {
+                if (!env.BRANCH_NAME.startsWith("PR-")) {
+                    // Send build notification
+                    notifySlack(currentBuild.result, "#builds_hoot")
+                }
+            }
         }
         success {
-            
             // If all tests passed, clean everything up
             sh "vagrant destroy -f ${params.Box}"
             cleanWs()
         }
         failure {
-            // Copy over any UI failure screenshots and send to slack
-            sh "vagrant scp ${params.Box}:~/hoot/test-files/ui/screenshot_*.png ./test-files/ui/"
-            postSlack("${env.WORKSPACE}/test-files/ui/", "screenshot_*.png", "${env.JENKINS_BOT_TOKEN}", "#builds_hoot")
+            script {
+                if (!env.BRANCH_NAME.startsWith("PR-")) {
+                    // Copy over any UI failure screenshots and send to slack
+                    sh "vagrant scp ${params.Box}:~/hoot/test-files/ui/screenshot_*.png ./test-files/ui/"
+                    postSlack("${env.WORKSPACE}/test-files/ui/", "screenshot_*.png", "${env.JENKINS_BOT_TOKEN}", "#builds_hoot")
+                }
+            }
         }
     }
 }

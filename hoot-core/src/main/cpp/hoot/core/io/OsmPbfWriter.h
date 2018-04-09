@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OSMPBFWRITER_H
@@ -173,6 +173,11 @@ public:
   void writePb(const ConstRelationPtr& r, std::ostream* strm);
   void writePb(const RelationPtr& r, std::ostream* strm) { writePb((const ConstRelationPtr)r, strm); }
 
+  //this doesn't work yet - #2207
+  //static void updateSorted(const QString url, const bool sorted);
+
+  virtual QString supportedFormats() { return ".osm.pbf"; }
+
 private:
 
   std::string _buffer;
@@ -248,6 +253,8 @@ private:
   void _writeRelation(const boost::shared_ptr<const hoot::Relation>& r);
 
   void _writeWay(const boost::shared_ptr<const hoot::Way>& w);
+
+  void _open(QString url);
 };
 
 }

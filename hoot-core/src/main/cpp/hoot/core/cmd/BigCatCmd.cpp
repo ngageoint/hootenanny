@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -53,6 +53,8 @@ public:
   BigCatCmd() { }
 
   virtual QString getName() const { return "big-cat"; }
+
+  virtual QString getDescription() const { return "Renumbers element IDs to avoid conflicts"; }
 
   virtual int runSimple(QStringList args)
   {

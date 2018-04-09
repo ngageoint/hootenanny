@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef STATUSCRITERION_H
 #define STATUSCRITERION_H
@@ -53,6 +53,8 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new StatusCriterion(_status)); }
+
+  virtual QString getDescription() const { return "Filters based on element status"; }
 
 private:
 

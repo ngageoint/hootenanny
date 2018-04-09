@@ -73,22 +73,6 @@ class HighwayMatchTest : public CppUnit::TestFixture
 
 public:
 
-  WayPtr createWay(OsmMapPtr map, Coordinate* c)
-  {
-    WayPtr result((new Way(Status::Unknown1, map->createNextWayId(), 15.0)));
-
-    for (int i = 0; c[i].isNull() == false; i++)
-    {
-      NodePtr n(new Node(Status::Unknown1, map->createNextNodeId(), c[i], 15.0));
-      map->addNode(n);
-      result->addNode(n->getId());
-    }
-
-    map->addWay(result);
-
-    return result;
-  }
-
   /**
    * Creates three ways like this:
    *
@@ -112,14 +96,13 @@ public:
     MapProjector::projectToOrthographic(map, env);
 
     Coordinate w1c[] = { Coordinate(0, 0), Coordinate(90, 0), Coordinate::getNull() };
-    WayPtr w1 = createWay(map, w1c);
+    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c);
 
     Coordinate w2c[] = { Coordinate(0, 5), Coordinate(100, 5), Coordinate::getNull() };
-    WayPtr w2 = createWay(map, w2c);
-    w2->setStatus(Status::Unknown2);
+    WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, w2c);
 
     Coordinate w3c[] = { Coordinate(10, 10), Coordinate(100, 10), Coordinate::getNull() };
-    WayPtr w3 = createWay(map, w3c);
+    WayPtr w3 = TestUtils::createWay(map, Status::Unknown1, w3c);
 
     ConstMatchThresholdPtr mt(new MatchThreshold(0.05, 0.6));
     boost::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
@@ -162,14 +145,14 @@ public:
     MapProjector::projectToOrthographic(map, env);
 
     Coordinate w1c[] = { Coordinate(0, 0), Coordinate(50, 0), Coordinate::getNull() };
-    WayPtr w1 = createWay(map, w1c);
+    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c);
 
     Coordinate w2c[] = { Coordinate(0, 5), Coordinate(100, 5), Coordinate::getNull() };
-    WayPtr w2 = createWay(map, w2c);
+    WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, w2c);
     w2->setStatus(Status::Unknown2);
 
     Coordinate w3c[] = { Coordinate(50, 10), Coordinate(100, 10), Coordinate::getNull() };
-    WayPtr w3 = createWay(map, w3c);
+    WayPtr w3 = TestUtils::createWay(map, Status::Unknown1, w3c);
 
     ConstMatchThresholdPtr mt(new MatchThreshold(0.05, 0.9));
 
@@ -213,14 +196,13 @@ public:
     MapProjector::projectToOrthographic(map, env);
 
     Coordinate w1c[] = { Coordinate(0, 0), Coordinate(60, 0), Coordinate::getNull() };
-    WayPtr w1 = createWay(map, w1c);
+    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c);
 
     Coordinate w2c[] = { Coordinate(0, 5), Coordinate(100, 5), Coordinate::getNull() };
-    WayPtr w2 = createWay(map, w2c);
-    w2->setStatus(Status::Unknown2);
+    WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, w2c);
 
     Coordinate w3c[] = { Coordinate(40, 10), Coordinate(100, 10), Coordinate::getNull() };
-    WayPtr w3 = createWay(map, w3c);
+    WayPtr w3 = TestUtils::createWay(map, Status::Unknown1, w3c);
 
     ConstMatchThresholdPtr mt(new MatchThreshold(0.05, 0.95));
     boost::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
@@ -261,14 +243,13 @@ public:
     MapProjector::projectToOrthographic(map, env);
 
     Coordinate w1c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
-    WayPtr w1 = createWay(map, w1c);
+    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c);
 
     Coordinate w2c[] = { Coordinate(0, 5), Coordinate(100, 5), Coordinate::getNull() };
-    WayPtr w2 = createWay(map, w2c);
-    w2->setStatus(Status::Unknown2);
+    WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, w2c);
 
     Coordinate w3c[] = { Coordinate(0, 10), Coordinate(100, 10), Coordinate::getNull() };
-    WayPtr w3 = createWay(map, w3c);
+    WayPtr w3 = TestUtils::createWay(map, Status::Unknown1, w3c);
 
     ConstMatchThresholdPtr mt(new MatchThreshold(0.1, 0.6));
     boost::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());

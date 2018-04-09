@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTVISITOR_H
 #define ELEMENTVISITOR_H
@@ -54,6 +54,16 @@ public:
     */
   virtual QString toString() { return ""; }
 
+  /**
+   * Returns a one sentence description for the visitor.
+   *
+   * Keep this as short as possible, capitalize the first letter, and check to see that it stays
+   * on one line when displayed with the 'operators' command.
+   *
+   * To prevent a visitor from being displayed by the 'operators' command, this
+   * may be implemented as returning an empty string.
+   */
+  virtual QString getDescription() const = 0;
 };
 
 typedef boost::shared_ptr<ElementVisitor> ElementVisitorPtr;

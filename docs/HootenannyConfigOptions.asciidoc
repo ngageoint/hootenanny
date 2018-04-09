@@ -2,10 +2,10 @@
 == Configuration Options
 
 Configuration settings can dramatically change the operation of Hootenanny. The
-configuration options are carried through any Hadoop commands and can be set in
-a configuration file (+$HOOT_HOME/conf/hoot.json+), environment variables or
-specified on the command line. Most of the configuration values are documented
-in more detail in the following sections.
+configuration options can be set in a configuration file 
+(+$HOOT_HOME/conf/hoot.json+), environment variables or specified on the 
+command line. Most of the configuration values are documented in more 
+detail in the following sections.
 
 These configuration options are advanced manipulations of the Hootenanny engine and may result in unexpected results. Please create an issue at https://github.com/ngageoint/hootenanny if you have specific questions.
 
@@ -19,7 +19,7 @@ There are two ways to specify configuration options on the command line interfac
 An example using +-D+ is below:
 
 ------
-hoot --convert \
+hoot convert \
   -D ogr.writer.script=test-files/io/SampleTranslation.js \
   -D ogr.writer.pre.layer.name=bar \
   test-files/io/SampleTranslation.osm \
@@ -50,7 +50,7 @@ within a JSON configuration file such as:
 If this file is placed in +$HOOT_HOME/conf/+ then it will be found with a relative path. E.g.
 
 ------
-hoot --convert \
+hoot convert \
   -C Example.json \
   test-files/io/SampleTranslation.osm \
   PG:"dbname='osm_gis2' host='localhost' port='5432' user='hoot' password='hoottest'" 
@@ -77,7 +77,7 @@ Configuration parameters:
 [[OGR-Writer]]
 ==== OGR Writer
 
-The OGR Writer supports advanced translation of OSM formatted files into well defined tabular formats such as Shapefile and FileGDB. See the +--osm2ogr+ documentation for specific examples of how to use the OGR Writer.
+The OGR Writer supports advanced translation of OSM formatted files into well defined tabular formats such as Shapefile and FileGDB. See the +--convert-osm2ogr+ documentation for specific examples of how to use the OGR Writer.
 
 Configuration Parameters:
 
@@ -95,14 +95,14 @@ Examples:
 ------
 # Convert example .osm file and write the resulting layers to a PostGIS database. 
 # The PostGIS database must be initialized first (using instructions found with the PostGIS documentation).
-hoot --convert \
+hoot convert \
   -D ogr.writer.script=test-files/io/SampleTranslation.js \
   -D ogr.writer.pre.layer.name=bar \
   test-files/io/SampleTranslation.osm \
   PG:"dbname='osm_gis2' host='localhost' port='5432' user='hoot' password='hoottest'" 
 
 # Same as above.
-hoot --osm2ogr \
+hoot convert-osm2ogr \
   -D ogr.writer.pre.layer.name=bar \
   test-files/io/SampleTranslation.js \
   test-files/io/SampleTranslation.osm \
@@ -110,7 +110,7 @@ hoot --osm2ogr \
 
 # Convert example .osm file and write the resulting layers to a directory full of Shapefiles.
 # The directory will be named tmp/MyShapefiles, not tmp/MyShapefiles.shp
-hoot --convert \
+hoot convert \
   -D ogr.writer.script=test-files/io/SampleTranslation.js \
   test-files/io/SampleTranslation.osm \
   tmp/MyShapefiles.shp
@@ -130,7 +130,7 @@ The +hoot::RubberSheet+ operation will find common high confidence intersection 
 Example usage:
 
 ------
-hoot --conflate -D map.cleaner.transforms=hoot::RubberSheet test-files/ToyTestA.osm test-files/ToyTestB.osm tmp/dum.osm
+hoot conflate -D map.cleaner.transforms=hoot::RubberSheet test-files/ToyTestA.osm test-files/ToyTestB.osm tmp/dum.osm
 ------
 
 
@@ -145,7 +145,7 @@ The parameter +way.splitter.max.length+ can be used to specify this max length.
 Example usage:
 
 ------
-hoot --cleanup -D map.cleaner.transforms=hoot::WaySplitterOp -D way.splitter.max.length=100 test-files/ToyTestA.osm tmp/dum.osm
+hoot clean -D map.cleaner.transforms=hoot::WaySplitterOp -D way.splitter.max.length=100 test-files/ToyTestA.osm tmp/dum.osm
 ------
 
 
@@ -169,7 +169,7 @@ Configuration parameters:
   
 
 ------
-hoot --perty -D perty.ops=hoot::PertyDuplicatePoiOp -D perty.duplicate.poi.p=0.5 TigerDc.osm Pertified.osm
+hoot perty -D perty.ops=hoot::PertyDuplicatePoiOp -D perty.duplicate.poi.p=0.5 TigerDc.osm Pertified.osm
 ------
 
 
@@ -199,7 +199,7 @@ Configuration parameters:
   
 
 ------
-hoot --perty -D perty.ops=hoot::PertyWaySplitVisitor -D perty.way.split.probability=0.5 TigerDc.osm Pertified.osm
+hoot perty -D perty.ops=hoot::PertyWaySplitVisitor -D perty.way.split.probability=0.5 TigerDc.osm Pertified.osm
 ------
 
 
@@ -222,7 +222,7 @@ Configuration parameters:
   
 
 ------
-hoot --perty -D perty.ops=hoot::PertyWayGeneralizeVisitor -D perty.way.generalize.probability=0.5 -D perty.way.generalize.epsilon=5.0 TigerDc.osm Pertified.osm
+hoot perty -D perty.ops=hoot::PertyWayGeneralizeVisitor -D perty.way.generalize.probability=0.5 -D perty.way.generalize.epsilon=5.0 TigerDc.osm Pertified.osm
 ------
 
 
@@ -244,7 +244,7 @@ Configuration parameters:
   
 
 ------
-hoot --perty -D perty.ops=hoot::PertyRemoveRandomElementVisitor -D perty.remove.random.p=0.5 TigerDc.osm Pertified.osm
+hoot perty -D perty.ops=hoot::PertyRemoveRandomElementVisitor -D perty.remove.random.p=0.5 TigerDc.osm Pertified.osm
 ------
 
 
@@ -269,7 +269,7 @@ Configuration parameters:
   
 
 ------
-hoot --perty -D perty.ops=hoot::PertyRemoveTagVisitor -D perty.remove.tag.p=0.5 -D perty.remove.tag.visitor.exempt.tag.keys="REF1;REF2" -D perty.remove.tag.visitor.substitution.keys=highway -D perty.remove.tag.visitor.substitution.values=road TigerDc.osm Pertified.osm
+hoot perty -D perty.ops=hoot::PertyRemoveTagVisitor -D perty.remove.tag.p=0.5 -D perty.remove.tag.visitor.exempt.tag.keys="REF1;REF2" -D perty.remove.tag.visitor.substitution.keys=highway -D perty.remove.tag.visitor.substitution.values=road TigerDc.osm Pertified.osm
 ------
 
 
@@ -294,7 +294,7 @@ Configuration parameters:
   
 
 ------
-hoot --perty -D perty.ops=hoot::PertyNameVisitor -D perty.name.change.p=0.5 TigerDc.osm Pertified.osm
+hoot perty -D perty.ops=hoot::PertyNameVisitor -D perty.name.change.p=0.5 TigerDc.osm Pertified.osm
 ------
 
 
@@ -312,7 +312,7 @@ When two features/elements are merged into a single feature/element the tags mus
 Use the value +hoot::OverwriteTag1Merger+ . For example:
 
 ------
-hoot --conflate -D tag.merger.default=hoot::OverwriteTag1Merger input1.osm input2.osm output.osm
+hoot conflate -D tag.merger.default=hoot::OverwriteTag1Merger input1.osm input2.osm output.osm
 ------
 
 Overwrite the values in the first input with the values in the second input. This will still keep all unique names, but all other tags will simply be overwritten. For example:
@@ -364,7 +364,7 @@ Overwrite the values in the first input with the values in the second input. Thi
 Use the value +hoot::OverwriteTag2Merger+ . For example:
 
 ------
-hoot --conflate -D tag.merger.default=hoot::OverwriteTag2Merger input1.osm input2.osm output.osm
+hoot conflate -D tag.merger.default=hoot::OverwriteTag2Merger input1.osm input2.osm output.osm
 ------
 
 Overwrite the values in the second input with the values in the first input. This will still keep all unique names, but all other tags will simply be overwritten. For example:
@@ -417,7 +417,7 @@ Use an internal method to average the tags between two features.
 Use the value +hoot::AverageTagMerger+ . For example:
 
 ------
-hoot --conflate -D tag.merger.default=hoot::AverageTagMerger input1.osm input2.osm output.osm
+hoot conflate -D tag.merger.default=hoot::AverageTagMerger input1.osm input2.osm output.osm
 ------
 
 
@@ -430,7 +430,7 @@ Use an internal method to generalize the tags between two features. For instance
 Use the value +hoot::GeneralizeTagMerger+ . For example:
 
 ------
-hoot --conflate -D tag.merger.default=hoot::GeneralizeTagMerger input1.osm input2.osm output.osm
+hoot conflate -D tag.merger.default=hoot::GeneralizeTagMerger input1.osm input2.osm output.osm
 ------
 
 [[Provenance-Aware-Overwrite-Tag-Merger]]
@@ -463,13 +463,13 @@ For road conflation only you can specify manipulators that determine how the con
 Matches and merges a partial or full way to a partial or full way. The result is a new, averaged, conflated way as well as one or more partial "left-overs". This is the default configuration option and can be run with:
 
 ------
-hoot --conflate input1.osm input2.osm output.osm
+hoot conflate input1.osm input2.osm output.osm
 ------
 
 or
 
 ------
-hoot --conflate -D conflator.manipulators=hoot::WayMerger input1.osm input2.osm output.osm
+hoot conflate -D conflator.manipulators=hoot::WayMerger input1.osm input2.osm output.osm
 ------
 
 
@@ -482,13 +482,13 @@ This is most useful if you have one input data set that clearly has superior geo
 Matches and merges a partial or full way to a partial or full way. The result is a new conflated way where the second input is snapped to the first input as well as one or more partial "left-overs". This can be run with:
 
 ------
-hoot --conflate -D conflator.manipulators=hoot::WaySnapMerger input1.osm input2.osm output.osm
+hoot conflate -D conflator.manipulators=hoot::WaySnapMerger input1.osm input2.osm output.osm
 ------
 
 There is also a convenience configuration file that enables both the Snap Way Manipulator( +conflator.manipulators=hoot::WaySnapMerger+ ) and the Overwrite Tag 2tag merging operation ( +tag.merger.default=hoot::OverwriteTag2Merger+ ). This is most useful if the first input is superior in terms of geometry and attribution and the second data set is just supplementing with missing attributes and geometries. This can be run with:
 
 ------
-hoot --conflate -C core/Snap.json input1.osm input2.osm output.osm
+hoot conflate -C core/Snap.json input1.osm input2.osm output.osm
 ------
 
 [[Hoot-ConfigOptions]]

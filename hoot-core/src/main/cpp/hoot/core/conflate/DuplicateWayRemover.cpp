@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "DuplicateWayRemover.h"
@@ -280,6 +280,7 @@ WayPtr DuplicateWayRemover::_getUpdatedWay(WayPtr way, const vector<long>& nodes
     WayPtr newWay;
     newWay.reset(new Way(way->getStatus(), _map->createNextWayId(), way->getRawCircularError()));
     newWay->addNodes(nodes);
+    newWay->setPid(way->getPid());
     newWay->setTags(way->getTags());
 
     // see comments for similar functionality in HighwaySnapMerger::_mergePair

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -62,6 +62,8 @@ class PaintNodesCmd : public BaseCommand
     PaintNodesCmd() { }
 
     virtual QString getName() const { return "paint-nodes"; }
+
+    virtual QString getDescription() const { return "Creates a density plot"; }
 
     Envelope getEnvelope(boost::shared_ptr<OsmMapReader> reader)
     {

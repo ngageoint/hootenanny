@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SPLITLONGLINEARWAYSVISITOR_H
 #define SPLITLONGLINEARWAYSVISITOR_H
@@ -61,6 +61,11 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
   unsigned int getMaxNumberOfNodes() const { return _maxNodesPerWay; }
+
+  virtual QString getName() const { return "Split Long Linear Ways"; }
+
+  virtual QString getDescription() const
+  { return "Splits ways containing more way nodes than OSM supports"; }
 
 private:
 

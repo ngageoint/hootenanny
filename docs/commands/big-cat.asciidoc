@@ -2,17 +2,15 @@
 
 === Description
 
-The +big-cat+ command reads data from the user specified inputs, renumbers the
-elements to avoid conflict and writes the result to +output.osm.pbf+.  This
-command does not require Hadoop.
+The +big-cat+ command reads data from the user specified inputs, renumbers the elements to avoid conflict and writes the result to 
++output.osm.pbf+.  This command does not require Hadoop.
 
 * +output.osm.pbf+ - Output file name.
-* +inputs+ - One or more .osm.pbf inputs.
+* +inputs+         - One or more .osm.pbf inputs.
 
-The command does two passes over the input data. The first pass it to determine
-the range of element IDs and the second pass is used to write out the new
-results. No attempt is made to conflate the data files so it is primarily useful
-when putting together two files that are in very different regions.
+The command does two passes over the input data. The first pass it to determine the range of element IDs and the second 
+pass is used to write out the new results. No attempt is made to conflate the data files so it is primarily useful when putting 
+together two files that are in very different regions.
 
 
 === Usage

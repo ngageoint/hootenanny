@@ -2,7 +2,7 @@
 == Cookie Cutter
 
 The _Cookie Cutter_ is a method of clipping a region out of a map before
-conflation. See `--cookie-cutter` in <<hootuser>> for more details. When one
+conflation. See `--cookie-cut` in <<hootuser>> for more details. When one
 data set is far superior to another this can improve the conflation quality and
 reduce amount of time reviewing.
 

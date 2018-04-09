@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef KEEPBUILDINGSVISITOR_H
 #define KEEPBUILDINGSVISITOR_H
@@ -57,7 +57,11 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
+  virtual QString getDescription() const
+  { return "Removes all ways and relations that are not part of a building"; }
+
 private:
+
   OsmMap* _map;
 };
 

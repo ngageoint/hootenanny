@@ -33,7 +33,6 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/visitors/SetTagVisitor.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
@@ -54,6 +53,7 @@ class SetTagVisitorTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runAppendValueTest);
   CPPUNIT_TEST(runElementFilterTest);
   CPPUNIT_TEST(runBadElementTypeTest);
+  CPPUNIT_TEST(runOverwriteDisabledTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -148,6 +148,27 @@ public:
     }
 
     CPPUNIT_ASSERT(exceptionMsg.contains("Invalid element type string"));
+  }
+
+  void runOverwriteDisabledTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    OsmMap::resetCounters();
+    OsmMapReaderFactory::read(
+      map, "test-files/visitors/SetTagVisitorTest.osm", false, Status::Unknown1);
+
+    //We've disabled overwriting existing tags, so the tag with key="key2" should not be updated
+    //on any element that already has a tag with the key.  It should only be added to elements
+    //that don't have a tag with that key.
+    SetTagVisitor visitor("key2", "updatedValue", false, ElementType::Unknown, false);
+    map->visitRw(visitor);
+
+    OsmMapWriterFactory::getInstance().write(map,
+      "test-output/visitors/SetTagVisitorTest-runOverwriteDisabledTest.osm");
+
+    HOOT_FILE_EQUALS(
+      "test-files/visitors/SetTagVisitorTest-runOverwriteDisabledTest.osm",
+      "test-output/visitors/SetTagVisitorTest-runOverwriteDisabledTest.osm");
   }
 
 };

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CALCULATEHASHVISITOR_H
 #define CALCULATEHASHVISITOR_H
@@ -60,6 +60,8 @@ public:
   static QByteArray toHash(const ConstElementPtr& e);
 
   static QString toHashString(const ConstElementPtr& e);
+
+  virtual QString getDescription() const { return "Calculates unique hash values for elements"; }
 };
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HIGHWAYFILTER_H
 #define HIGHWAYFILTER_H
@@ -35,6 +35,8 @@ namespace hoot
 
 /**
  * A filter that will either keep or remove matches.
+ *
+ * TODO: This is redundant with HighwayCriterion and should be removed.
  */
 class HighwayFilter : public BaseFilter
 {
@@ -46,6 +48,9 @@ public:
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new HighwayFilter(_type)); }
 
+  virtual QString getName() const { return "Highway"; }
+
+  virtual QString getDescription() const { return "Identifies highways"; }
 };
 
 }

@@ -173,7 +173,8 @@ Handle<Value> ScriptMerger::_callMergePair(const OsmMapPtr& map) const
   Isolate* current = v8::Isolate::GetCurrent();
   EscapableHandleScope handleScope(current);
   Handle<Object> plugin =
-    Handle<Object>::Cast(_script->getContext(current)->Global()->Get(String::NewFromUtf8(current, "plugin")));
+    Handle<Object>::Cast(
+      _script->getContext(current)->Global()->Get(String::NewFromUtf8(current, "plugin")));
   Handle<Value> value = plugin->Get(String::NewFromUtf8(current, "mergePair"));
 
   if (value.IsEmpty() || value->IsFunction() == false)
@@ -210,7 +211,8 @@ void ScriptMerger::_callMergeSets(const OsmMapPtr& map,
   HandleScope handleScope(current);
   Context::Scope context_scope(_script->getContext(current));
   Handle<Object> plugin =
-    Handle<Object>::Cast(_script->getContext(current)->Global()->Get(String::NewFromUtf8(current, "plugin")));
+    Handle<Object>::Cast(
+      _script->getContext(current)->Global()->Get(String::NewFromUtf8(current, "plugin")));
   Handle<Value> value = plugin->Get(String::NewFromUtf8(current, "mergeSets"));
 
   if (value.IsEmpty() || value->IsFunction() == false)

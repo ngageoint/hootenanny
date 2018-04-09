@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HOOTAPIDBREADER_H
 #define HOOTAPIDBREADER_H
@@ -35,6 +35,9 @@
 namespace hoot
 {
 
+/**
+ * Reads from a Hootenanny customized version of the OSM API database.
+ */
 class HootApiDbReader : public ApiDbReader
 {
 public:
@@ -62,6 +65,8 @@ protected:
   virtual RelationPtr _resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map);
 
   virtual boost::shared_ptr<ApiDb> _getDatabase() const { return _database; }
+
+  virtual QString supportedFormats() { return "hootapidb://"; }
 
 private:
 

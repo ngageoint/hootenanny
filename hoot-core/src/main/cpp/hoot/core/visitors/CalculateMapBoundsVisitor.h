@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef CALCULATEMAPBOUNDSVISITOR_H
@@ -42,6 +42,7 @@ namespace hoot
 class CalculateMapBoundsVisitor : public ElementConstOsmMapVisitor
 {
 public:
+
   static std::string className() { return "hoot::CalculateMapBoundsVisitor"; }
 
   CalculateMapBoundsVisitor();
@@ -58,6 +59,10 @@ public:
   static OGREnvelope getBounds(const ConstOsmMapPtr& map);
   static geos::geom::Envelope getGeosBounds(const OsmMapPtr& map);
   static geos::geom::Envelope getGeosBounds(const ConstOsmMapPtr& map);
+
+  virtual QString getName() const { return "Calculate Map Bounds"; }
+
+  virtual QString getDescription() const { return "Calculates the extent of a map"; }
 
 private:
 

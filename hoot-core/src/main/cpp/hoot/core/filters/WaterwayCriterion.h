@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef WATERWAYCRITERION_H
 #define WATERWAYCRITERION_H
@@ -38,6 +38,7 @@ namespace hoot
 class WaterwayCriterion : public ElementCriterion
 {
 public:
+
   static std::string className() { return "hoot::WaterwayCriterion"; }
 
   WaterwayCriterion() {}
@@ -46,6 +47,7 @@ public:
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new WaterwayCriterion()); }
 
+  virtual QString getDescription() const { return "Identifies waterways"; }
 };
 
 }

@@ -14,7 +14,7 @@ export inputtype=db
 export HOOT_OPTS="-D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D api.db.email=test@test.com -D writer.include.debug.tags=true --warn"
 
 # Ingest the data
-hoot --convert $HOOT_OPTS test-files/$inputfile.osm $DB_URL/$input
+hoot convert $HOOT_OPTS test-files/$inputfile.osm $DB_URL/$input
 
 # Delete any previous output
 rm -rf $outputfolder
@@ -45,7 +45,7 @@ MAKEFLAGS= make -f $HOOT_HOME/test-files/cmd/glacial/osm2ogrscript > /dev/null
 
 
 # Remove ingested data
-hoot delete-map $HOOT_OPTS $DB_URL/$input
+hoot delete-db-map $HOOT_OPTS $DB_URL/$input
 
 # Remove WFS data store tables
 SQL=$( psql -h $DB_HOST -t -A -d $WFS_DB_NAME -U $DB_USER -p $DB_PORT -c "SELECT 'DROP TABLE \"' || tablename || '\";' FROM pg_tables WHERE tablename like 'service_export_test\_%';" )

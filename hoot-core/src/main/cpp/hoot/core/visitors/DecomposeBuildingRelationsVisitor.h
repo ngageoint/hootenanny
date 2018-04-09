@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef DECOMPOSEBUILDINGRELATIONSVISITOR_H
 #define DECOMPOSEBUILDINGRELATIONSVISITOR_H
@@ -58,6 +58,9 @@ public:
   virtual void setOsmMap(OsmMap* map) { _map = map; }
 
   virtual void setOsmMap(const OsmMap* /*map*/) { assert(false); }
+
+  virtual QString getDescription() const
+  { return "Decomposes complex buildings into simpler elements"; }
 
 private:
 

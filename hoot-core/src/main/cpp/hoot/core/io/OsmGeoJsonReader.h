@@ -100,6 +100,8 @@ public:
    */
   OsmMapPtr loadFromFile(QString path);
 
+  virtual QString supportedFormats() { return ".geojson"; }
+
 private:
 
   /**

@@ -152,7 +152,7 @@ depending on their knowledge of Python/Javascript, create a custom translation v
 provides a mapping between the two schemas in a significantly shorter duration of time.  
 
 The following sections discuss high level issues associated with translating
-files. For a more nuts and bolts discussion see the +--ogr2osm+ section.
+files. For a more nuts and bolts discussion see the +convert-ogr2osm+ section.
 
 [[JavaScript-Translation]]
 === JavaScript Translation
@@ -196,19 +196,19 @@ There are several functions that may be called by Hootenanny:
 *  +finalize+ - An optional method that gets called after all other methods have
    been completed. This can be useful if you want to print out statistics on the
    translation.
-*  +translateToOgr+ - Required by the +--osm2ogr+ command to translate from OSM
+*  +translateToOgr+ - Required by the +convert-osm2ogr+ command to translate from OSM
    to a custom schema.
-*  +translateToOsm+ - Required by the +--ogr2osm+ command to translate from a
+*  +translateToOsm+ - Required by the +convert-ogr2osm+ command to translate from a
    custom schema to the OSM schema. For backwards compatibility reasons
    +translateAttributes+ is also supported, but +translateToOsm+ is preferred.
-*  +getDbSchema+ - Required by the +--osm2ogr+ command to get the custom schema
+*  +getDbSchema+ - Required by the +convert-osm2ogr+ command to get the custom schema
    that OSM data will be converted into.
 
 [[Simple-Example]]
 ===== Simple Example
   
 
-Below is about the simplest useful example that supports both +--ogr2osm+ and +--osm2ogr+ . The following sections go into details on how these function are used.
+Below is about the simplest useful example that supports both +convert-ogr2osm+ and +convert-osm2ogr+ . The following sections go into details on how these function are used.
 
 ------
 // an optional initialize function that gets called once before any 
@@ -329,7 +329,7 @@ _Note_: The +translateToOsm+ was previously called +translateAttributes+ . Eithe
 This method will be called after the +initialize+ method is called when translating from an OGR format to a OSM schema. For instance if you call:
 
 ------
-hoot --ogr2osm tmp/SimpleExample.js myoutput.osm myinput1.shp myinput2.shp
+hoot convert-ogr2osm tmp/SimpleExample.js myoutput.osm myinput1.shp myinput2.shp
 ------
 
 The functions will be called in the following order:
@@ -445,7 +445,7 @@ Returns:
 The methods will be called after the +initialize+ method is called when translating from an OGR format to a OSM schema. For instance if you call:
 
 ------
-hoot --osm2ogr tmp/SimpleExample.js myinput.osm myoutput.shp
+hoot convert-osm2ogr tmp/SimpleExample.js myinput.osm myoutput.shp
 ------
 
 The functions will be called in the following order:
@@ -458,7 +458,7 @@ The functions will be called in the following order:
 
 .  +finalize+ 
 
-This is most commonly accessed through the +--osm2ogr+ command.
+This is most commonly accessed through the +convert-osm2ogr+ command.
 
 
 [[DB-Schema]]
@@ -537,7 +537,7 @@ Below are a discussion of some special handling situations when reading and writ
 When writing shapefiles a new directory will be created with the basename of the specified path and the new layers will be created within that directory. For example:
 
 ------
-hoot --osm2ogr translations/MyTranslation.js input.osm output.shp
+hoot convert-osm2ogr translations/MyTranslation.js input.osm output.shp
 ------
 
 The above command will create a new directory called +output+ and the layers specified in the +translations/MyTranslation.js+ schema will be created as +output/<your layer name>.shp+ .
@@ -552,7 +552,7 @@ CSV files are created using the OGR CSV driver and will contain an associated +.
 Creating a new CSV file:
 
 ------
-hoot --osm2ogr translations/Poi.js test-files/conflate/unified/AllDataTypesA.osm foo.csv
+hoot convert-osm2ogr translations/Poi.js test-files/conflate/unified/AllDataTypesA.osm foo.csv
 ------
 
 This uses a simple translation script ( +Poi.js+ ) that exports POI data and its associated tags. If you would then like to read that data create a new +.vrt+ file named +foo.vrt+ that contains the following:
@@ -571,7 +571,7 @@ This uses a simple translation script ( +Poi.js+ ) that exports POI data and its
 Then to convert the file back into a .osm file run:
 
 ------
-hoot --ogr2osm translations/Poi.js ConvertedBack.osm foo.vrt
+hoot convert-ogr2osm translations/Poi.js ConvertedBack.osm foo.vrt
 ------
 
 
@@ -647,7 +647,7 @@ The astute reader may notice that a new way was created during this process. The
 By default the +ogr2osm.ops+ parameter is set to +hoot::MergeNearbyNodes;hoot::BuildingPartMergeOp+ . If you would like to disable the automatic construction of complex buildings from the individual parts then simply remove +hoot::BuildingPartMergeOp+ from the +ogr2osm.ops+ parameter. For example:
 
 ------
-hoot ogr2osm -D "ogr2osm.ops=hoot::MergeNearbyNodes" MyTranslation MyOutput.osm MyInput.shp
+hoot convert-ogr2osm -D "ogr2osm.ops=hoot::MergeNearbyNodes" MyTranslation MyOutput.osm MyInput.shp
 ------
 
 [[Common-Use-Cases]]
@@ -711,7 +711,7 @@ MTFCC: String (5.0)
 ==== Translate the Shapefiles
   
 
-Hootenanny provides a link:$$User_-_--ogr2osm.html$$[--ogr2osm] operation to translate and convert shapefiles into OSM files. If the projection is available for the Shapefile the input will be automatically reprojected to WGS84 during the process. If you do a good job of translating the input data into the OSM schema then Hootenanny will conflate the attributes on your features as well as the geometries. If you do not translate the data properly then you'll still get a result, but it may not be desirable.
+Hootenanny provides a link:$$User_-_convert-ogr2osm.html$$[convert-ogr2osm] operation to translate and convert shapefiles into OSM files. If the projection is available for the Shapefile the input will be automatically reprojected to WGS84 during the process. If you do a good job of translating the input data into the OSM schema then Hootenanny will conflate the attributes on your features as well as the geometries. If you do not translate the data properly then you'll still get a result, but it may not be desirable.
 
 
 [[Crummy-Translation]]
@@ -792,7 +792,7 @@ def translateAttributes(attrs, layerName):
 To run the tiger translation put the above code in a file named +translations/TigerRoads.py+ and run the following:
 
 ------
-hoot --ogr2osm TigerRoads tmp/dc-roads/tiger.osm tmp/dc-roads/tl_2012_11001_roads.shp
+hoot convert-ogr2osm TigerRoads tmp/dc-roads/tiger.osm tmp/dc-roads/tl_2012_11001_roads.shp
 ------
 
 The following translation will work OK with the DC data.
@@ -832,7 +832,7 @@ def translateAttributes(attrs, layerName):
 To run the DC GIS translation put the above code in a file named +translations/DcRoads.py+ and run the following:
 
 ------
-hoot --ogr2osm DcRoads tmp/dc-roads/dcgis.osm tmp/dc-roads/Streets4326.shp
+hoot convert-ogr2osm DcRoads tmp/dc-roads/dcgis.osm tmp/dc-roads/Streets4326.shp
 ------
 
 
@@ -843,14 +843,14 @@ hoot --ogr2osm DcRoads tmp/dc-roads/dcgis.osm tmp/dc-roads/Streets4326.shp
 If you're just doing this for fun, then you probably want to crop your data down to something that runs quickly before conflating.
 
 ------
-hoot --crop-map tmp/dc-roads/dcgis.osm tmp/dc-roads/dcgis-cropped.osm "-77.0551,38.8845,-77.0281,38.9031" 
-hoot --crop-map tmp/dc-roads/tiger.osm tmp/dc-roads/tiger-cropped.osm "-77.0551,38.8845,-77.0281,38.9031" 
+hoot crop tmp/dc-roads/dcgis.osm tmp/dc-roads/dcgis-cropped.osm "-77.0551,38.8845,-77.0281,38.9031" 
+hoot crop tmp/dc-roads/tiger.osm tmp/dc-roads/tiger-cropped.osm "-77.0551,38.8845,-77.0281,38.9031" 
 ------
 
 All the hard work is done. Now we let the computer do the work. If you're using the whole DC data set, go get a cup of coffee.
 
 ------
-hoot --conflate tmp/dc-roads/dcgis-cropped.osm tmp/dc-roads/tiger-cropped.osm tmp/dc-roads/output.osm
+hoot conflate tmp/dc-roads/dcgis-cropped.osm tmp/dc-roads/tiger-cropped.osm tmp/dc-roads/output.osm
 ------
 
 
@@ -861,7 +861,7 @@ hoot --conflate tmp/dc-roads/dcgis-cropped.osm tmp/dc-roads/tiger-cropped.osm tm
 Now we can convert the final result back into a Shapefile.
 
 ------
-hoot --osm2shp "name,highway,surface,foot,horse,bicycle" tmp/dc-roads/output.osm tmp/dc-roads/output.shp
+hoot convert-osm2shp "name,highway,surface,foot,horse,bicycle" tmp/dc-roads/output.osm tmp/dc-roads/output.shp
 ------
 
 
@@ -874,14 +874,14 @@ hoot --osm2shp "name,highway,surface,foot,horse,bicycle" tmp/dc-roads/output.osm
 . Convert your GPX file into an OSM file where each track is now a way.
 
 ------
-hoot --ogr2osm GpsTrack tmp/MyTracks.osm "$HOME/MyTracks.gpx;tracks" 
+hoot convert-ogr2osm GpsTrack tmp/MyTracks.osm "$HOME/MyTracks.gpx;tracks" 
 ------
 +
 
 . Use the special track snapping conflation manipulation to snap your tracks to an existing road network and convert to Shapefile.
 ------
 hoot conflate -D conflator.manipulators=hoot::WaySnapMerger HighQualityRoads.osm tmp/MyTracks.osm tmp/MySnappedTracks.osm
-hoot osm2shp "hoot:max:movement,hoot:mean:movement,hoot:score,name,foot" tmp/MySnappedTracks.osm tmp/MySnappedTracks.shp
+hoot convert-osm2shp "hoot:max:movement,hoot:mean:movement,hoot:score,name,foot" tmp/MySnappedTracks.osm tmp/MySnappedTracks.shp
 ------
 
 
@@ -898,7 +898,7 @@ If you have node attributes that you want to keep you can use the +hoot::PointsT
 The command used with a GPX input file is:
 
 ------
-hoot ogr2osm  -D "ogr2osm.ops=hoot::MergeNearbyNodes;hoot::PointsToTracksOp" GpsTrack tmp/MyTracks.osm "$HOME/MyTracks.gpx;track_points" 
+hoot convert-ogr2osm  -D "ogr2osm.ops=hoot::MergeNearbyNodes;hoot::PointsToTracksOp" GpsTrack tmp/MyTracks.osm "$HOME/MyTracks.gpx;track_points" 
 ------
 
 An example translation file is:
@@ -956,7 +956,7 @@ Run Hootenanny and add your data to the template File GeoDatabase::
 * Add the template File GeoDatabase to write to.
 +
 ----
-hoot osm2ogr -D ogr.append.data="true" $HOOT_HOME/translations/TDS.js your_data.osm LTDS_4_0.gdb
+hoot convert-osm2ogr -D ogr.append.data="true" $HOOT_HOME/translations/TDS.js your_data.osm LTDS_4_0.gdb
 ----
 
 Transfer the LTDS_4_0.gdb to the machine that has ESRI ArcGIS installed::

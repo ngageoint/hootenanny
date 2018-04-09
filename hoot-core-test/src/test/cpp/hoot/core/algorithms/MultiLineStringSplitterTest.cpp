@@ -80,22 +80,6 @@ public:
     return map;
   }
 
-  WayPtr createWay(OsmMapPtr map, Coordinate* c, Status s = Status::Unknown1)
-  {
-    WayPtr result((new Way(s, map->createNextWayId(), 15.0)));
-
-    for (int i = 0; c[i].isNull() == false; i++)
-    {
-      NodePtr n(new Node(s, map->createNextNodeId(), c[i], 15.0));
-      map->addNode(n);
-      result->addNode(n->getId());
-    }
-
-    map->addWay(result);
-
-    return result;
-  }
-
   /**
    * Creates two ways like this:
    *
@@ -110,7 +94,7 @@ public:
     OsmMapPtr map = createMap();
 
     Coordinate w1c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
-    WayPtr w1 = createWay(map, w1c, Status::Unknown1);
+    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c);
 
     WaySublineCollection string;
     string.addSubline(WaySubline(WayLocation(map, w1, 30), WayLocation(map, w1, 70)));
@@ -133,7 +117,7 @@ public:
     OsmMapPtr map = createMap();
 
     Coordinate w1c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
-    WayPtr way1 = createWay(map, w1c, Status::Unknown1);
+    WayPtr way1 = TestUtils::createWay(map, Status::Unknown1, w1c);
     //LOG_VAR(way1->getElementId());
     //LOG_VAR(way1->getNodeIds());
     RelationPtr relation(new Relation(way1->getStatus(), map->createNextRelationId(),

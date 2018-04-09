@@ -12,4 +12,4 @@ comparefile=$HOOT_HOME/test-files/cmd/quick/UnionPolygonCmdTest/union.osm
 hoot union-polygons $outputfile $inputfile1 $inputfile2
 
 # Checking output
-hoot is-match $comparefile $outputfile || diff $comparefile $outputfile
+hoot map-diff $comparefile $outputfile || diff $comparefile $outputfile

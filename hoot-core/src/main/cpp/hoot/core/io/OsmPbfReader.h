@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OSMPBFREADER_H
@@ -69,6 +69,7 @@ class OsmPbfReaderData;
 class OsmPbfReader : public PartialOsmMapReader, public Configurable
 {
 public:
+
   class BlobLocation
   {
   public:
@@ -113,10 +114,7 @@ public:
    */
   virtual void setUseDataSourceIds(bool useDataSourceIds) { _useFileId = useDataSourceIds; }
 
-  /**
-   * Determines whether the reader should use the element statuses from the file being read
-   */
-  void setUseFileStatus(bool useFileStatus) { _useFileStatus = useFileStatus; }
+  virtual void setUseFileStatus(bool useFileStatus) { _useFileStatus = useFileStatus; }
 
   /**
    * If the input is a directory then the underlying files are read in turn, otherwise readFile
@@ -173,6 +171,8 @@ public:
    * @return true if the specified file is sorted by element type, then element ID; false otherwise
    */
   bool isSorted(const QString file);
+
+  virtual QString supportedFormats() { return ".osm.pbf"; }
 
 private:
 

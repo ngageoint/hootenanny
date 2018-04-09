@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PertyMatchScorer.h"
 
@@ -55,11 +55,19 @@ namespace hoot
 {
 
 PertyMatchScorer::PertyMatchScorer() :
-  _settings(conf())
+_settings(conf())
 {
   ConfigOptions configOptions;
   setSearchDistance(configOptions.getPertySearchDistance());
-  setApplyRubberSheet(configOptions.getPertyApplyRubberSheet());
+  if (ConfigOptions().getConflatePreOps().contains("hoot::RubberSheet") ||
+      ConfigOptions().getUnifyPreOps().contains("hoot::RubberSheet"))
+  {
+    setApplyRubberSheet(false);
+  }
+  else
+  {
+    setApplyRubberSheet(configOptions.getPertyApplyRubberSheet());
+  }
 }
 
 QString PertyMatchScorer::toString()

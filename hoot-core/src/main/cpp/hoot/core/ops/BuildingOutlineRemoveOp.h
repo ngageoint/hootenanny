@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BUILDINGOUTLINEREMOVEOP_H
 #define BUILDINGOUTLINEREMOVEOP_H
@@ -59,7 +59,11 @@ public:
 
   virtual void writeObject(QDataStream& /*os*/) const {}
 
+  virtual QString getDescription() const
+  { return "Updates the outline of buildings by taking the union of all the parts"; }
+
 private:
+
   boost::shared_ptr<OsmMap> _map;
 
   void _removeOutline(const boost::shared_ptr<Relation>& building);

@@ -2,11 +2,10 @@
 
 === Description
 
-Prints detailed help for one command, a summary of all commands, or detailed
-help for all commands (verbose).  Note you can also simply type hoot and the
-command to get the help.
+The +help+ command prints detailed help for one command, a summary of all commands, or detailed help for all commands (verbose).  
+Note you can also simply type hoot and the command to get the help.
 
-* +command+ - Optionally specify a command
+* +command+   - Optionally specify a command
 * +--verbose+ - Print long help for all commands
 
 === Usage

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -51,6 +51,8 @@ public:
 
   virtual QString getName() const { return "find-intersections"; }
 
+  virtual QString getDescription() const { return "Detects road intersections"; }
+
   virtual int runSimple(QStringList args)
   {
     if (args.size() != 2)
@@ -62,7 +64,6 @@ public:
     OsmMapPtr map(new OsmMap());
     loadMap(map, args[0], false, Status::Unknown1);
 
-//    MapCleaner().apply(map);
     FindIntersectionsOp().apply(map);
 
     MapProjector::projectToWgs84(map);

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVEREVIEWSBYEIDOP_H
 #define REMOVEREVIEWSBYEIDOP_H
@@ -39,9 +39,6 @@
 namespace hoot
 {
 
-/**
- *
- */
 class RemoveReviewsByEidOp : public ConstOsmMapOperation, public ConstElementConsumer
 {
 public:
@@ -67,7 +64,13 @@ public:
 
   virtual void apply(const OsmMapPtr& map);
 
+  virtual QString getName() const { return "Remove Reviews By Element ID"; }
+
+  virtual QString getDescription() const
+  { return "Removes reviews associated with specified element IDs"; }
+
 private:
+
   ElementId _eid;
   bool _clearAndRemove;
 };

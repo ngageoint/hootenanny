@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HootApiDbWriter.h"
 
@@ -83,7 +83,7 @@ void HootApiDbWriter::_addElementTags(const boost::shared_ptr<const Element> &e,
 
 void HootApiDbWriter::close()
 {
-  LOG_DEBUG("Closing database writer...");
+  LOG_TRACE("Closing database writer...");
   finalizePartial();
   if ((_nodesWritten > 0) || (_waysWritten > 0) || (_relationsWritten > 0))
   {
@@ -101,7 +101,7 @@ void HootApiDbWriter::_countChange()
 
 void HootApiDbWriter::finalizePartial()
 {
-  LOG_DEBUG("Finalizing write operation...");
+  LOG_TRACE("Finalizing write operation...");
   if (_open)
   {
     _hootdb.endChangeset();

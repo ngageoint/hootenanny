@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef INDEXELEMENTVISITOR_H
 #define INDEXELEMENTVISITOR_H
@@ -41,16 +41,17 @@
 // Boost
 #include <boost/function.hpp>
 
-// This class was extracted from ScriptMatchCreator so that it could
-// be used by the other match creators (highway, building, etc). It is
-// used to build an index of input elements (which can be filterd by
-// various criteria, if need be). The envelope plus the search
-// radius is created as the index box for each element. This is more
-// efficient than using the OsmMapIndex index.
 
 namespace hoot
 {
 
+/**
+ * This class was extracted from ScriptMatchCreator so that it could be used by the other
+ * match creators (highway, building, etc). It is used to build an index of input elements
+ * (which can be filterd by various criteria, if need be). The envelope plus the search
+   radius is created as the index box for each element. This is more efficient than using
+   the OsmMapIndex index.
+ */
 class ElementCriterion;
 
 class IndexElementsVisitor :
@@ -77,6 +78,8 @@ public:
                                            const boost::shared_ptr<Tgs::HilbertRTree>& index,
                                            const std::deque<ElementId>& indexToEid,
                                            ConstOsmMapPtr pMap);
+
+  virtual QString getDescription() const { return "Build an index of input elements"; }
 
 private:
 

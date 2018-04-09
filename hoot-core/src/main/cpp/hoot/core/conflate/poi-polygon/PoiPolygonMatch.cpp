@@ -58,14 +58,26 @@ Match(threshold),
 _map(map),
 _matchEvidenceThreshold(3),
 _reviewEvidenceThreshold(1),
-_closeMatch(false),
+_distance(-1.0),
+_matchDistanceThreshold(-1.0),
+_reviewDistanceThreshold(-1.0),
+_closeDistanceMatch(false),
 _typeScore(-1.0),
+_typeScoreThreshold(-1.0),
+_reviewIfMatchedTypes(QStringList()),
 _nameScore(-1.0),
+_nameScoreThreshold(-1.0),
 _addressScore(-1.0),
 _polyNeighborIds(polyNeighborIds),
 _poiNeighborIds(poiNeighborIds),
+_enableAdvancedMatching(false),
+_enableReviewReduction(true),
+_disableSameSourceConflation(false),
+_disableSameSourceConflationMatchTagKeyPrefixOnly(true),
+_sourceTagKey(""),
+_reviewMultiUseBuildings(false),
 _rf(rf),
-_opts(ConfigOptions())
+_explainText("")
 {
 }
 
@@ -114,10 +126,15 @@ void PoiPolygonMatch::setTypeScoreThreshold(double threshold)
 }
 
 void PoiPolygonMatch::setReviewIfMatchedTypes(const QStringList& types)
-{
+{ 
   for (int i = 0; i < types.size(); i++)
   {
-    const QString kvp = types[i];
+    QString kvp = types[i];
+
+    //As a UI workaround, we're allowing the format "key,value" to be used instead of "key=value".
+    kvp.replace(",", "=");
+
+    LOG_VART(kvp);
     if (kvp.trimmed().isEmpty() || !kvp.contains("="))
     {
       throw IllegalArgumentException(
@@ -129,8 +146,9 @@ void PoiPolygonMatch::setReviewIfMatchedTypes(const QStringList& types)
       throw IllegalArgumentException(
         QString("Invalid POI/Polygon review if matched type configuration option value: ") + kvp);
     }
+    _reviewIfMatchedTypes.append(kvp);
   }
-  _reviewIfMatchedTypes = types;
+  LOG_VART(_reviewIfMatchedTypes);
 }
 
 void PoiPolygonMatch::setConfiguration(const Settings& conf)
@@ -174,68 +192,6 @@ void PoiPolygonMatch::setConfiguration(const Settings& conf)
   LOG_VART(_reviewEvidenceThreshold);
 }
 
-bool PoiPolygonMatch::isPoly(const Element& e)
-{
-  const Tags& tags = e.getTags();
-  //types we don't care about at all - see #1172 as to why this can't be handled in the schema
-  //files
-  if (tags.get("barrier").toLower() == "fence"
-      || tags.get("landuse").toLower() == "grass"
-      || tags.get("natural").toLower() == "tree_row"
-      || tags.get("natural").toLower() == "scrub"
-      || tags.get("highway").toLower() == "residential")
-  {
-    return false;
-  }
-  const bool inABuildingOrPoiCategory =
-    OsmSchema::getInstance().getCategories(tags).intersects(
-      OsmSchemaCategory::building() | OsmSchemaCategory::poi());
-  //isArea includes building too
-  const bool isPoly =
-    OsmSchema::getInstance().isArea(tags, e.getElementType()) &&
-      (inABuildingOrPoiCategory || tags.getNames().size() > 0);
-  LOG_VART(e);
-  LOG_VART(isPoly);
-  return isPoly;
-}
-
-bool PoiPolygonMatch::isPoi(const Element& e)
-{
-  const Tags& tags = e.getTags();
-  //types we don't care about at all - see #1172 as to why this can't be handled in the schema
-  //files
-  if (tags.get("natural").toLower() == "tree"
-      || tags.get("amenity").toLower() == "drinking_water"
-      || tags.get("amenity").toLower() == "bench"
-      || tags.contains("traffic_sign")
-      || tags.get("amenity").toLower() == "recycling")
-  {
-    return false;
-  }
-  const bool inABuildingOrPoiCategory =
-    OsmSchema::getInstance().getCategories(tags).intersects(
-      OsmSchemaCategory::building() | OsmSchemaCategory::poi());
-  bool isPoi =
-    e.getElementType() == ElementType::Node &&
-      (inABuildingOrPoiCategory || tags.getNames().size() > 0);
-
-  if (!isPoi && e.getElementType() == ElementType::Node &&
-      ConfigOptions().getPoiPolygonPromotePointsWithAddressesToPois() &&
-      PoiPolygonAddressScoreExtractor::hasAddress(e))
-  {
-    isPoi = true;
-  }
-
-  LOG_VART(e);
-  LOG_VART(isPoi);
-  return isPoi;
-}
-
-bool PoiPolygonMatch::isArea(const Element& e)
-{
-  return isPoly(e) && !OsmSchema::getInstance().isBuilding(e.getTags(), e.getElementType());
-}
-
 void PoiPolygonMatch::_categorizeElementsByGeometryType(const ElementId& eid1,
                                                         const ElementId& eid2)
 {
@@ -250,13 +206,15 @@ void PoiPolygonMatch::_categorizeElementsByGeometryType(const ElementId& eid1,
   LOG_VART(e2->getTags());
 
   _e1IsPoi = false;
-  if (isPoi(*e1) && isPoly(*e2))
+  if (OsmSchema::getInstance().isPoiPolygonPoi(e1) &&
+      OsmSchema::getInstance().isPoiPolygonPoly(e2))
   {
     _poi = e1;
     _poly = e2;
     _e1IsPoi = true;
   }
-  else if (isPoi(*e2) && isPoly(*e1))
+  else if (OsmSchema::getInstance().isPoiPolygonPoi(e2) &&
+           OsmSchema::getInstance().isPoiPolygonPoly(e1))
   {
     _poi = e2;
     _poly = e1;
@@ -270,65 +228,6 @@ void PoiPolygonMatch::_categorizeElementsByGeometryType(const ElementId& eid1,
   }
 }
 
-//Weka didn't help any with improving this matching.  Leaving this method here in case anyone
-//wants to explore in weka with this again.
-void PoiPolygonMatch::calculateMatchWeka(const ElementId& /*eid1*/, const ElementId& /*eid2*/)
-{
-//  _class.setMiss();
-
-//  _categorizeElementsByGeometryType(eid1, eid2);
-
-//  try
-//  {
-//    const double distance = PoiPolygonDistanceExtractor().extract(*_map, _poi, _poly);
-//    //const double convexPolydistance =
-//      //PoiPolygonAlphaShapeDistanceExtractor().extract(*_map, _poi, _poly);
-//    const double nameScore = PoiPolygonNameScoreExtractor().extract(*_map, _poi, _poly);
-//    const double typeScore = PoiPolygonTypeScoreExtractor().extract(*_map, _poi, _poly);
-//    PoiPolygonAddressScoreExtractor addressScoreExtractor;
-//    addressScoreExtractor.setExactAddressMatching(false);
-//    const double addressScore = addressScoreExtractor.extract(*_map, _poi, _poly);
-
-//    /*if (distance <= 10.698997)
-//    {
-//      if (typeScore > 0.576)
-//      {
-//        if (nameScore > 0.782878)
-//        {
-//          if (typeScore <= 0.8)
-//          {
-//            if (typeScore <= 0.64)
-//            {
-//              _class.setMatch();
-//            }
-//          }
-//          else
-//          {
-//            if (distance <= 0.000371)
-//            {
-//              _class.setMatch();
-//            }
-//          }
-//        }
-//      }
-//    }*/
-//  }
-//  catch (const geos::util::TopologyException& e)
-//  {
-//    //if (_badGeomCount <= _opts.getOgrLogLimit())
-//    //{
-//      LOG_WARN(
-//        "Feature(s) passed to PoiPolygonMatchCreator caused topology exception on conversion "
-//        "to a geometry: " << _poly->toString() << "\n" << _poi->toString() << "\n" << e.what());
-//      //_badGeomCount++;
-//    //}
-//    return;
-//  }
-
-//  LOG_VART(_class);
-//  LOG_TRACE("**************************");
-}
-
 bool PoiPolygonMatch::_featureHasReviewIfMatchedType(ConstElementPtr element) const
 {
   if (_reviewIfMatchedTypes.isEmpty())
@@ -339,8 +238,10 @@ bool PoiPolygonMatch::_featureHasReviewIfMatchedType(ConstElementPtr element) co
   const Tags& tags = element->getTags();
   for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
   {
-    if (_reviewIfMatchedTypes.contains(it.key() + "=" + it.value()))
+    const QString kvp = it.key() + "=" + it.value();
+    if (_reviewIfMatchedTypes.contains(kvp))
     {
+      LOG_TRACE("Matched type for review: " << kvp);
       return true;
     }
   }
@@ -397,6 +298,13 @@ bool PoiPolygonMatch::_inputFeaturesHaveSameSource(const ElementId& eid1,
 
 void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid2)
 {  
+  //for testing only
+//  ConstElementPtr e1 = _map->getElement(eid1);
+//  ConstElementPtr e2 = _map->getElement(eid2);
+//  const bool oneElementIsRelation =
+//    e1->getElementType() == ElementType::Relation ||
+//    e2->getElementType() == ElementType::Relation;
+
   _explainText = "";
   _class.setMiss();
 
@@ -413,6 +321,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
   LOG_VART(foundReviewIfMatchedType);
 
   unsigned int evidence = _calculateEvidence(_poi, _poly);
+  LOG_VART(evidence);
 
   //no point in trying to reduce reviews if we're still at a miss here
   if (_enableReviewReduction && evidence >= _reviewEvidenceThreshold)
@@ -424,8 +333,10 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
     if (reviewReducer.triggersRule(_poi, _poly))
     {
       evidence = 0;
+      _explainText = "Match score automatically dropped by review reduction.";
     }
   }
+  LOG_VART(evidence);
 
   if (evidence >= _matchEvidenceThreshold)
   {
@@ -444,7 +355,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
         _class.setMatch();
       }
     }
-    else
+    else// if (oneElementIsRelation) //for testing only
     {
       _class.setReview();
       _explainText =
@@ -452,8 +363,25 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
     }
   }
   else if (evidence >= _reviewEvidenceThreshold)
+           //&& oneElementIsRelation) //for testing only
   {
     _class.setReview();
+    if (_explainText.isEmpty())
+    {
+      const QString typeMatchStr = _typeScore >= 1.0 ? "yes" : "no";
+      const QString nameMatchStr = _nameScore >= 1.0 ? "yes" : "no";
+      const QString addressMatchStr = _addressScore >= 1.0 ? "yes" : "no";
+      _explainText =
+        QString("Features had an additive similarity score less than the required score of %1. Matches: distance: yes, type: %2, name: %3, address: %4.")
+          .arg(_matchEvidenceThreshold)
+          .arg(typeMatchStr)
+          .arg(nameMatchStr)
+          .arg(addressMatchStr);
+    }
+  }
+  else
+  {
+    _explainText = "";
   }
 
   LOG_VART(_class);
@@ -465,32 +393,22 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
   _distance = PoiPolygonDistanceExtractor().extract(*_map, poi, poly);
   if (_distance == -1.0)
   {
-    _closeMatch = false;
+    _closeDistanceMatch = false;
+    _explainText = "Error calculating the distance between features.";
     return 0;
   }
 
   //search radius taken from PoiPolygonMatchCreator
   PoiPolygonDistance distanceCalc(
     _matchDistanceThreshold, _reviewDistanceThreshold, poly->getTags(),
-    poi->getCircularError() + _opts.getPoiPolygonReviewDistanceThreshold());
-  //type based match distance changes didn't have any positive effect experimentally; leaving it
-  //commented out here in case there is need for further examination
-//  _matchDistanceThreshold =
-//    max(
-//      distanceCalc.getMatchDistanceForType(_t1BestKvp),
-//      distanceCalc.getMatchDistanceForType(_t2BestKvp));
+    poi->getCircularError() + _reviewDistanceThreshold);
   _reviewDistanceThreshold =
     max(
       distanceCalc.getReviewDistanceForType(_poi->getTags()),
       distanceCalc.getReviewDistanceForType(_poly->getTags()));
-  //density based distance changes didn't have any positive effect experimentally; leaving it
-  //commented out here in case there is need for further examination
-  /*if (poi->getTags().get("station") != "light_rail" &&
-      poi->getTags().get("amenity") != "fuel")
-  {
-    distanceCalc.modifyMatchDistanceForPolyDensity(_matchDistanceThreshold);
-    distanceCalc.modifyReviewDistanceForPolyDensity(_reviewDistanceThreshold);
-  }*/
+
+  //Tried type and density based match distance changes here too, but they didn't have any positive
+  //effect experimentally;
 
   // calculate the 2 sigma for the distance between the two objects
   const double poiSigma = poi->getCircularError() / 2.0;
@@ -498,10 +416,13 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
   const double sigma = sqrt(poiSigma * poiSigma + polySigma * polySigma);
   const double combinedCircularError2Sigma = sigma * 2;
   const double reviewDistancePlusCe = _reviewDistanceThreshold + combinedCircularError2Sigma;
-  _closeMatch = _distance <= reviewDistancePlusCe;
-  //close match is a requirement for any matching, regardless of the final total evidence count
-  if (!_closeMatch)
+  _closeDistanceMatch = _distance <= reviewDistancePlusCe;
+  //close distance match is a requirement for any matching, regardless of the final total evidence
+  //count
+  if (!_closeDistanceMatch)
   {
+    _explainText =
+      "The distance between the features is more than the configured review distance plus circular error.";
     return 0;
   }
 
@@ -512,7 +433,7 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
   LOG_VART(reviewDistancePlusCe);
   LOG_VART(combinedCircularError2Sigma);
   LOG_VART(_distance);
-  LOG_VART(_closeMatch);
+  LOG_VART(_closeDistanceMatch);
 
   return _distance <= _matchDistanceThreshold ? 2u : 0u;
 }
@@ -534,16 +455,32 @@ unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElement
   typeScorer.setFeatureDistance(_distance);
   typeScorer.setTypeScoreThreshold(_typeScoreThreshold);
   _typeScore = typeScorer.extract(*_map, poi, poly);
-  //if (poi->getTags().get("historic") == "monument")
-  //{
-    //monuments can represent just about any poi type, so lowering this some to account for that
-//    _typeScoreThreshold = _typeScoreThreshold * 0.42; //determined experimentally
-    //_typeScoreThreshold = 0.3; //this could be moved to a config
-  //}
   const bool typeMatch = _typeScore >= _typeScoreThreshold;
+
+  if (typeScorer.failedMatchRequirements.size() > 0)
+  {
+    QString failedMatchTypes;
+    for (int i = 0; i < typeScorer.failedMatchRequirements.size(); i++)
+    {
+      failedMatchTypes += typeScorer.failedMatchRequirements.at(i) + ", ";
+    }
+    failedMatchTypes.chop(2);
+
+    QString explainBase = "Failed custom match requirements for: ";
+    if (_explainText.isEmpty())
+    {
+      _explainText = explainBase + failedMatchTypes;
+    }
+    else
+    {
+      _explainText += ";" + explainBase + failedMatchTypes;
+    }
+  }
+
   LOG_VART(typeMatch);
   LOG_VART(PoiPolygonTypeScoreExtractor::poiBestKvp);
   LOG_VART(PoiPolygonTypeScoreExtractor::polyBestKvp);
+
   return typeMatch ? 1u : 0u;
 }
 
@@ -571,7 +508,7 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
 
   evidence += _getDistanceEvidence(poi, poly);
   //see comment in _getDistanceEvidence
-  if (!_closeMatch)
+  if (!_closeDistanceMatch)
   {
     return 0;
   }
@@ -613,16 +550,6 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
       return evidence;
     }
   }
-
-  /*if (evidence == 0)
-  {
-    //This is kind of a consolation prize...if there was no match, but name and type score have
-    //moderately high values, then make it a match.
-    if (_nameScore >= 0.4 && _typeScore >= 0.6) //determined experimentally
-    {
-      evidence++;
-    }
-  }*/
 
   //no point in trying to increase evidence if we're already at a match
   if (_enableAdvancedMatching && evidence < _matchEvidenceThreshold)
@@ -669,19 +596,10 @@ QString PoiPolygonMatch::toString() const
       .arg(_poly->getElementId().toString())
       .arg(_class.toString())
       .arg(_distance)
-      .arg(_closeMatch)
+      .arg(_closeDistanceMatch)
       .arg(_typeScore)
       .arg(_nameScore)
       .arg(_addressScore);
-}
-
-QString PoiPolygonMatch::explain() const
-{
-  if (!_explainText.isEmpty())
-  {
-    return _explainText;
-  }
-  return toString();
 }
 
 }

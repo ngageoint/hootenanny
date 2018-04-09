@@ -12,7 +12,7 @@
 // * What does this configuration change?
 // * If relevant, what are the units of the config option (e.g. meters)?
 // * Where can the user go to get more information? Please reference the
-//   appropriate document. E.g. "See `ogr2osm` in the _Command Line
+//   appropriate document. E.g. "See `convert-ogr2osm` in the _Command Line
 //   Reference_ for more information."
 // * What other options may be of interest? E.g. "See also
 //   `big.perty.op.sigma`"
@@ -166,38 +166,13 @@ The maximum number of values returned for each attribute by the attribute-count 
 
 Determines whether the AttributeScoreExtractor uses weighting when extracting scores.
 
-=== big.convert.exec.sql.with.mapreduce
+=== autocorrect.options
 
 * Data Type: bool
 * Default Value: `true`
 
-If set to true, when writing to an OSM API database from a PBF file using the big-convert command
-the writer will execute the OSM SQL statements using mapreduce.  If set to false, the writer will
-execute the OSM SQL statements in a single thread from a single Hootenanny instance.
-
-=== big.convert.num.reduce.tasks
-
-* Data Type: int
-* Default Value: `-1`
-
-Sets the number of reduce tasks spawned by big-convert command writer.  If set to -1, then Hadoop
-determines the number of tasks.  This setting is for testing purposes only.
-
-=== big.perty.op.max.distance
-
-* Data Type: double
-* Default Value: `-1`
-
-The maximum distance that the BigPertyOp should move a node. This must be larger than
-big.perty.op.sigma to avoid endless or near endless loops.
-
-=== big.perty.op.sigma
-
-* Data Type: double
-* Default Value: `100`
-
-Sigma of the distance in meters. This is used in the gaussian distribution used to determine the
-distance.
+Temporary setting that addresses some Hootenanny iD Editor UI bugs.  See
+MatchFactory::_tempFixDefaults() for more info.
 
 === building.date.format
 
@@ -212,6 +187,16 @@ Date format string used by the building date tag value.  See QDateTime::fromStri
 * Default Value: `source:date`
 
 Tag key used by the building.review.if.secondary.newer configuration option.
+
+=== building.keep.more.complex.geometry.when.auto.merging
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, when buildings are auto-merged during conflation the geometry of the more complex building
+is the one that is kept.  If false or the buildings are equally complex, then the geometry of the
+first building in the pair passed to the Building Merger is the geometry kept.  This does not apply
+to feature merging done during the manual review process.
 
 === building.match.threshold
 
@@ -336,7 +321,7 @@ algorithm has road conflation enable then the results could get interesting.
 * Data Type: string
 * Default Value: `models/BuildingModel.rf`
 
-Path to the RF building model. A new model can be created with `build-model`. Searches local path
+Path to the RF building model. A new model can be created with `model-build`. Searches local path
 and then `$HOOT_HOME/conf/`.
 
 === conflate.match.highway.classifier
@@ -351,7 +336,7 @@ The highway match classifier to use. This should only be used for testing and de
 * Data Type: string
 * Default Value: `models/HighwayModel.rf`
 
-Path to the RF highway model. A new model can be created with `build-model`. Searches local path
+Path to the RF highway model. A new model can be created with `model-build`. Searches local path
 and then `$HOOT_HOME/conf/`. This is only relevant if the `conflate.match.highway.classifier` is
 set to `hoot::HighwayRfClassifier`.
 
@@ -360,7 +345,7 @@ set to `hoot::HighwayRfClassifier`.
 * Data Type: string
 * Default Value: `models/PoiModel.rf`
 
-Path to the POI match classifier model. A new model can be created with `build-model`. Searches
+Path to the POI match classifier model. A new model can be created with `model-build`. Searches
 local path and then `$HOOT_HOME/conf/`.
 
 === conflate.match.threshold.default
@@ -389,11 +374,13 @@ See also:
 
 * Data Type: list
 * Default Value:
+** `hoot::ReplaceRoundabouts` - Replaces any roundabouts that were removed, pre-conflation.
 ** `hoot::RemoveMissingElementsVisitor` - Removes non-existent element references from relations or ways with negative IDs.
 ** `hoot::RemoveEmptyRelationsOp` - Removes empty relations.
 ** `hoot::RemoveInvalidReviewRelationsVisitor` - Removes review relations whose members no longer exist after conflation.
 ** `hoot::RemoveDuplicateReviewsOp` - Removes any duplicate reviews
 ** `hoot::BuildingOutlineUpdateOp` - Updates any multi-part building outlines that may have changed during conflation.
+** `hoot::WayJoinerOp` - Join up any previously split ways that can be rejoined.
 ** `hoot::RemoveInvalidMultilineStringMembersVisitor` - Removes invalid multilinestring relations.
 ** `hoot::SuperfluousWayRemover` - Remove all ways that contain no nodes or all the nodes are exactly the same.
 ** `hoot::RemoveDuplicateWayNodesVisitor` - Remove all nodes that are unnecessarily duplicated in a way.
@@ -782,40 +769,6 @@ The highway subline matcher to use when determining matching highway sublines.
 
 The way subline string matcher to use when determining matching sublines for highways.
 
-=== hoot.hadoop.file.deps
-
-* Data Type: list
-* Default Value:
-** `${HOOT_HOME}/conf/BuildingModel.rf`
-
-Used by the building matching hadoop code.
-
-=== hoot.hadoop.libpath
-
-* Data Type: list
-* Default Value:
-** `${HOOT_HOME}/lib/`
-** `${HOOT_HOME}/local/lib/`
-** `${HADOOP_HOME}/c++/Linux-amd64-64/lib/`
-** `${HOOT_HOME}/pretty-pipes/lib/`
-
-List of library paths to check for hadoop.
-
-=== hoot.hadoop.maxNodeCount
-
-* Data Type: int
-* Default Value: `5000000`
-
-The maximum number of nodes that can be processed by a single task tracker. See User Manual for
-details.
-
-=== hoot.hadoop.pixelSize
-
-* Data Type: double
-* Default Value: `0.01`
-
-The size of a pixel when calculating node density. See User Manual for details.
-
 === hootapi.db.writer.copy.bulk.insert
 
 * Data Type: bool
@@ -876,7 +829,7 @@ of assigning IDs within OSM.
 Example Usage:
 
 ----
-hoot ogr2osm -D id.generator=hoot::PositiveIdGenerator -D id.generator.node.start=100 -D id.generator.relation.start=200 -D id.generator.way.start=300 $HOOT_HOME/translations/Identity.js myoutput.osm myinput.osm
+hoot convert-ogr2osm -D id.generator=hoot::PositiveIdGenerator -D id.generator.node.start=100 -D id.generator.relation.start=200 -D id.generator.way.start=300 $HOOT_HOME/translations/Identity.js myoutput.osm myinput.osm
 ----
 
 === id.generator.node.start
@@ -1285,14 +1238,14 @@ RAM usage of applications in a shared server environment.
 * Data Type: double
 * Default Value: `1.0`
 
-When merging nodes during ogr2osm, determines what tolerance should be used for deciding two nodes
+When merging nodes during convert-ogr2osm, determines what tolerance should be used for deciding two nodes
 are identical. Units in meters and defaults to 1.0m.
 
 [[merger.creators]]
 === merger.creators
 
 * Data Type: string
-* Default Value: `hoot::BuildingMergerCreator;hoot::ScriptMergerCreator;hoot::HighwaySnapMergerCreator;hoot::PoiPolygonMergerCreator;hoot::ScriptMergerCreator`
+* Default Value: `hoot::BuildingMergerCreator;hoot::ScriptMergerCreator;hoot::HighwaySnapMergerCreator;hoot::ScriptMergerCreator;hoot::PoiPolygonMergerCreator;hoot::ScriptMergerCreator`
 
 List of merger creators to use during conflation. This can modify what features will be conflated
 (e.g. buildings, roads, etc.).  The ordering must match that in match.creators.
@@ -1417,16 +1370,6 @@ See also:
 
 The number of optimization iterations the network match creator will run when performing network
 conflation.
-
-=== network.pre.ops
-
-* Data Type: list
-* Default Value:
-** `hoot::CornerSplitter`
-** `hoot::RubberSheet`
-
-List of operations to apply immediately before conflating when using Network Conflation only.  Runs
-after the operations in `conflate.pre.ops`.
 
 === network.review.threshold
 
@@ -1568,7 +1511,7 @@ intelligently use indexes, others will simply filter features after reading from
 Example Usage:
 
 ----
-hoot ogr2osm -D ogr.reader.bounding.box=106.851,-6.160,107.052,-5.913 translations/Identity.js output.osm test-files/jakarta_raya_coastline.shp
+hoot convert-ogr2osm -D ogr.reader.bounding.box=106.851,-6.160,107.052,-5.913 translations/Identity.js output.osm test-files/jakarta_raya_coastline.shp
 ----
 
 === ogr.reader.bounding.box.latlng
@@ -1678,7 +1621,7 @@ TODO: description
 Set the script to use with OGR writer. For example:
 
 ----
-hoot --convert \
+hoot convert \
   -D ogr.writer.script=test-files/io/SampleTranslation.js \
   -D ogr.writer.pre.layer.name=bar \
   test-files/io/SampleTranslation.osm \
@@ -2253,9 +2196,10 @@ require it.
 * Default Value:
 ** ``
 
-List of key value pairs (key=value) for features to always review if marked as matches with POI to
-polygon conflation.  When specifying the list from the command line, delimit the types with ';'
-and surround the entire value string in double quotes.
+List of key value pairs in the format 'key=value' or  'key,value' (UI only) for features to always
+review if marked as matches with POI to polygon conflation.  Delimit the individual types with ';'.
+e.g. 'amenity=school;shop=mall' or 'amenity,school;shop,mall'  Also, when specifying the list from
+the command line, surround the entire value string in double quotes.
 
 === poi.polygon.review.multiuse.buildings
 
@@ -2347,13 +2291,13 @@ Determines whether the reader used by the conflate command to read the second in
 use the element ID's specified by the input datasets (true) or use internal ID management for the
 inputs (false).
 
-=== reader.keep.file.status
+=== reader.keep.status.tag
 
 * Data Type: bool
 * Default Value: `false`
 
 If reader.use.file.status is true, the default action is to drop the status tag from the file
-during reading.  Setting reader.keep.file.status to true preserves the status tag.  Not honored by
+during reading.  Setting this to true preserves the status tag on the element.  Not honored by
 all readers.
 
 === reader.preserve.all.tags
@@ -2436,17 +2380,35 @@ If set to true, then debug symbols will be added to nodes and additional tags wi
 matched nodes. This is a destructive operation that is only useful when debugging and should not
 be used during serious conflation.
 
+=== rubber.sheet.fail.when.minimum.tie.points.not.found
+
+* Data Type: bool
+* Default Value: `false`
+
+If set to true, rubber sheeting will return an error if less than rubber.sheet.minimum.ties tie
+points are found.  Otherwise, a warning will be logged and rubber sheeting will be skipped.
+
+=== rubber.sheet.log.missing.requirements.as.warning
+
+* Data Type: bool
+* Default Value: `true`
+
+If set to true, rubber sheeting will log a warning if any requirement for rubber sheeting is not
+met.  e.g less than rubber.sheet.minimum.ties tie points are found.  Otherwise, an info level log
+statement will be logged instead.  This setting is completely ignored if
+rubber.sheet.fail.when.minimum.tie.points.not.found is set to true.
+
 === rubber.sheet.minimum.ties
 
 * Data Type: int
-* Default Value: `10`
+* Default Value: `4`
 
 Sets the minimum number of tie points that will be used when calculating a rubbersheeting solution.
 
 === rubber.sheet.ref
 
 * Data Type: bool
-* Default Value: `false`
+* Default Value: `true`
 
 If this configuration setting is set to true, then the first layer is treated as the reference
 layer and will not be moved. If set to false the two layers will be moved towards each other. The
@@ -2541,6 +2503,14 @@ Set the key member in the SetTagVisitor class.  SetTagVisitor allows for adding/
 particular tag on all elements in a map. The number of keys in `set.tag.visitor.key` should match
 the number of keys in `set.tag.visitor.value`.
 
+=== set.tag.visitor.overwrite
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, the SetTagVisitor class will overwrite any existing tag it finds with
+key=set.tag.visitor.key, otherwise it will skip updating the tag.
+
 === set.tag.visitor.value
 
 * Data Type: list
@@ -2573,28 +2543,6 @@ a single way.
 The format used to write the element payload portion of the Spark changeset file.  Valid options are
 'json' or 'xml'.
 
-=== stats.format
-
-* Data Type: string
-* Default Value: `pdf`
-
-Format type for the statistics generated from conflate.  Can be 'pdf', 'html' or 'asciidoc'.
-
-=== stats.output
-
-* Data Type: string
-* Default Value: ``
-
-Path to the output document for the statistics.  If left empty, it will not output to a file, only
-to screen.
-
-=== stats.script
-
-* Data Type: string
-* Default Value: `${HOOT_HOME}/report/csr-default.js`
-
-Path to the statistics generator rules in javascript format.
-
 === stats.translate.script
 
 * Data Type: string
@@ -2610,6 +2558,22 @@ all translation stats are disabled.
 
 The default status to match with a status criterion.  Used by various element visitors and map
 operations.
+
+=== status.update.visitor.only.update.invalid.status
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, the SetTagVisitor class will only update statuses on elements when the existing status is
+'Invalid'.
+
+=== status.update.visitor.status
+
+* Data Type: string
+* Default Value: ``
+
+Adds the specified status to elements.  Valid values are: 'Unknown1', 'Unknown2', 'Conflated', or
+'Invalid'.  If left empty, all elements will receive tag additions.
 
 === tag.ancestor.differencer.name
 

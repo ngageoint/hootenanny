@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BUILDINGCRITERION_H
 #define BUILDINGCRITERION_H
@@ -55,6 +55,8 @@ public:
   virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new BuildingCriterion(_map)); }
+
+  virtual QString getDescription() const { return "Identifies buildings"; }
 
 private:
 

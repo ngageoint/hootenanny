@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NonBuildingAreaCriterion.h"
 
@@ -41,7 +41,7 @@ NonBuildingAreaCriterion::NonBuildingAreaCriterion()
 
 bool NonBuildingAreaCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
 {
-  return OsmSchema::getInstance().isArea(e) && !OsmSchema::getInstance().isBuilding(e);
+  return OsmSchema::getInstance().isNonBuildingArea(e);
 }
 
 }

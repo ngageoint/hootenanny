@@ -54,25 +54,28 @@ cppunit:SOURCES += \
 
 }
 
-stxxl:SOURCES += \
-    src/main/cpp/tgs/BigContainers/Stxxl.cpp
-
-stxxl:HEADERS += \
-    src/main/cpp/tgs/BigContainers/Stxxl.h \
-    src/main/cpp/tgs/BigContainers/BigMapStxxl.h \
-
-
-HEADERS += src/main/cpp/tgs/HashMap.h \
+HEADERS += \
+    src/main/cpp/tgs/HashMap.h \
+    src/main/cpp/tgs/LruCache.h \
     src/main/cpp/tgs/Progress.h \
     src/main/cpp/tgs/SharedPtr.h \
     src/main/cpp/tgs/StreamUtils.h \
+    src/main/cpp/tgs/StreamUtils.hh \
     src/main/cpp/tgs/TgsException.h \
     src/main/cpp/tgs/TgsExport.h \
     src/main/cpp/tgs/Version.h \
+    src/main/cpp/tgs/BigContainers/BasicBloomFilter.h \
+    src/main/cpp/tgs/BigContainers/BigMap.h \
+    src/main/cpp/tgs/BigContainers/BigMapStxxl.h \
+    src/main/cpp/tgs/BigContainers/Stxxl.h \
     src/main/cpp/tgs/CostSensitiveLearning/CostSensitiveLearningTrainer.h \
     src/main/cpp/tgs/CostSensitiveLearning/CslOptions.h \
     src/main/cpp/tgs/CostSensitiveLearning/CslUtilities.h \
     src/main/cpp/tgs/CostSensitiveLearning/MetaCostAlgorithm.h \
+    src/main/cpp/tgs/DelaunayTriangulation/geom2d.h \
+    src/main/cpp/tgs/DelaunayTriangulation/DelaunayTriangulation.h \
+    src/main/cpp/tgs/DisjointSet/DisjointSet.h \
+    src/main/cpp/tgs/DisjointSet/DisjointSetMap.h \
     src/main/cpp/tgs/FeatureExtraction/BasicMathCalculatorNode.h \
     src/main/cpp/tgs/FeatureExtraction/CalculatorGenome.h \
     src/main/cpp/tgs/FeatureExtraction/CalculatorGenomeNode.h \
@@ -98,6 +101,18 @@ HEADERS += src/main/cpp/tgs/HashMap.h \
     src/main/cpp/tgs/FeatureSelection/SearchMethod.h \
     src/main/cpp/tgs/FeatureSelection/SymmetricUncertaintyCalculator.h \
     src/main/cpp/tgs/Heap/JHeap.h \
+    src/main/cpp/tgs/Interpolation/BaseInterpolator.h \
+    src/main/cpp/tgs/Interpolation/DelaunayInterpolator.h \
+    src/main/cpp/tgs/Interpolation/IdwInterpolator.h \
+    src/main/cpp/tgs/Interpolation/Interpolator.h \
+    src/main/cpp/tgs/Interpolation/KernelEstimationInterpolator.h \
+    src/main/cpp/tgs/Io/StdIoDevice.h \
+    src/main/cpp/tgs/Optimization/FitnessFunction.h \
+    src/main/cpp/tgs/Optimization/NelderMead.h \
+    src/main/cpp/tgs/Optimization/SimulatedAnnealing.h \
+    src/main/cpp/tgs/Optimization/State.h \
+    src/main/cpp/tgs/Optimization/StateDescription.h \
+    src/main/cpp/tgs/Optimization/VariableDescription.h \
     src/main/cpp/tgs/ProbablePath/ProbablePathCalculator.h \
     src/main/cpp/tgs/RandomForest/DataFrame.h \
     src/main/cpp/tgs/RandomForest/InfoGainCalculator.h \
@@ -127,42 +142,21 @@ HEADERS += src/main/cpp/tgs/HashMap.h \
     src/main/cpp/tgs/RStarTree/Page.h \
     src/main/cpp/tgs/RStarTree/PageStore.h \
     src/main/cpp/tgs/RStarTree/RStarTree.h \
+    src/main/cpp/tgs/RStarTree/RStarTreePrinter.h \
     src/main/cpp/tgs/RStarTree/RStarTreeWrapper.h \
     src/main/cpp/tgs/RStarTree/RTreeNode.h \
     src/main/cpp/tgs/RStarTree/RTreeNodeStore.h \
+    src/main/cpp/tgs/Statistics/Normal.h \
     src/main/cpp/tgs/Statistics/Random.h \
+    src/main/cpp/tgs/System/DisableCerr.h \
+    src/main/cpp/tgs/System/DisableCout.h \
     src/main/cpp/tgs/System/SystemInfo.h \
     src/main/cpp/tgs/System/Time.h \
-    src/main/cpp/tgs/Xml/XmlHelper.h \
-    src/main/cpp/tgs/Statistics/Normal.h \
-    src/main/cpp/tgs/RStarTree/RStarTreePrinter.h \
-    src/main/cpp/tgs/StreamUtils.hh \
-    src/main/cpp/tgs/DelaunayTriangulation/geom2d.h \
-    src/main/cpp/tgs/DelaunayTriangulation/DelaunayTriangulation.h \
-    src/main/cpp/tgs/DisjointSet/DisjointSet.h \
-    src/main/cpp/tgs/DisjointSet/DisjointSetMap.h \
-    src/main/cpp/tgs/Interpolation/Interpolator.h \
-    src/main/cpp/tgs/Interpolation/BaseInterpolator.h \
-    src/main/cpp/tgs/Interpolation/KernelEstimationInterpolator.h \
-    src/main/cpp/tgs/Optimization/NelderMead.h \
-    src/main/cpp/tgs/Interpolation/IdwInterpolator.h \
-    src/main/cpp/tgs/Io/StdIoDevice.h \
-    src/main/cpp/tgs/Interpolation/DelaunayInterpolator.h \
-    src/main/cpp/tgs/BigContainers/BigMap.h \
-    src/main/cpp/tgs/BigContainers/BigMapStl.h \
-    src/main/cpp/tgs/BigContainers/BasicBloomFilter.h \
-    src/main/cpp/tgs/System/DisableCout.h \
     src/main/cpp/tgs/System/Timer.h \
-    src/main/cpp/tgs/BigContainers/BigMapHybrid.h \
-    src/main/cpp/tgs/System/DisableCerr.h \
-    src/main/cpp/tgs/LruCache.h \
-    src/main/cpp/tgs/Optimization/SimulatedAnnealing.h \
-    src/main/cpp/tgs/Optimization/StateDescription.h \
-    src/main/cpp/tgs/Optimization/VariableDescription.h \
-    src/main/cpp/tgs/Optimization/State.h \
-    src/main/cpp/tgs/Optimization/FitnessFunction.h
+    src/main/cpp/tgs/Xml/XmlHelper.h \
 
-win32:HEADERS += src/main/cpp/tgs/RStarTree/FilePageStore.h \
+win32:HEADERS += \
+    src/main/cpp/tgs/RStarTree/FilePageStore.h \
     src/main/cpp/tgs/SpinImage/GroundPlaneRemover.h \
     src/main/cpp/tgs/SpinImage/NormalEstimator.h \
     src/main/cpp/tgs/SpinImage/Points.h \
@@ -171,12 +165,18 @@ win32:HEADERS += src/main/cpp/tgs/RStarTree/FilePageStore.h \
     src/main/cpp/tgs/SpinImage/SpinImageStack.h \
     src/main/cpp/tgs/SpinImage/SurfaceMatcher.h
 
-SOURCES += src/main/cpp/tgs/StreamUtils.cpp \
+SOURCES += \
+    src/main/cpp/tgs/StreamUtils.cpp \
     src/main/cpp/tgs/Version.cpp \
+    src/main/cpp/tgs/BigContainers/BigMap.cpp \
+    src/main/cpp/tgs/BigContainers/BasicBloomFilter.cpp \
+    src/main/cpp/tgs/BigContainers/Stxxl.cpp \
     src/main/cpp/tgs/CostSensitiveLearning/CostSensitiveLearningTrainer.cpp \
     src/main/cpp/tgs/CostSensitiveLearning/CslOptions.cpp \
     src/main/cpp/tgs/CostSensitiveLearning/CslUtilities.cpp \
     src/main/cpp/tgs/CostSensitiveLearning/MetaCostAlgorithm.cpp \
+    src/main/cpp/tgs/DelaunayTriangulation/DelaunayTriangulation.cpp \
+    src/main/cpp/tgs/DisjointSet/DisjointSet.cpp \
     src/main/cpp/tgs/FeatureExtraction/BasicMathCalculatorNode.cpp \
     src/main/cpp/tgs/FeatureExtraction/CalculatorGenome.cpp \
     src/main/cpp/tgs/FeatureExtraction/CalculatorGenomeNode.cpp \
@@ -196,6 +196,16 @@ SOURCES += src/main/cpp/tgs/StreamUtils.cpp \
     src/main/cpp/tgs/FeatureSelection/GreedyStepwiseSearch.cpp \
     src/main/cpp/tgs/FeatureSelection/InformationGainCalculator.cpp \
     src/main/cpp/tgs/FeatureSelection/SymmetricUncertaintyCalculator.cpp \
+    src/main/cpp/tgs/Interpolation/BaseInterpolator.cpp \
+    src/main/cpp/tgs/Interpolation/DelaunayInterpolator.cpp \
+    src/main/cpp/tgs/Interpolation/IdwInterpolator.cpp \
+    src/main/cpp/tgs/Interpolation/KernelEstimationInterpolator.cpp \
+    src/main/cpp/tgs/Io/StdIoDevice.cpp \
+    src/main/cpp/tgs/Optimization/NelderMead.cpp \
+    src/main/cpp/tgs/Optimization/SimulatedAnnealing.cpp \
+    src/main/cpp/tgs/Optimization/State.cpp \
+    src/main/cpp/tgs/Optimization/StateDescription.cpp \
+    src/main/cpp/tgs/Optimization/VariableDescription.cpp \
     src/main/cpp/tgs/ProbablePath/ProbablePathCalculator.cpp \
     src/main/cpp/tgs/RandomForest/DataFrame.cpp \
     src/main/cpp/tgs/RandomForest/InfoGainCalculator.cpp \
@@ -220,39 +230,46 @@ SOURCES += src/main/cpp/tgs/StreamUtils.cpp \
     src/main/cpp/tgs/RStarTree/MemoryPageStore.cpp \
     src/main/cpp/tgs/RStarTree/Page.cpp \
     src/main/cpp/tgs/RStarTree/RStarTree.cpp \
+    src/main/cpp/tgs/RStarTree/RStarTreePrinter.cpp \
     src/main/cpp/tgs/RStarTree/RStarTreeWrapper.cpp \
     src/main/cpp/tgs/RStarTree/RTreeNode.cpp \
     src/main/cpp/tgs/RStarTree/RTreeNodeStore.cpp \
+    src/main/cpp/tgs/Statistics/Normal.cpp \
     src/main/cpp/tgs/Statistics/Random.cpp \
+    src/main/cpp/tgs/System/DisableCerr.cpp \
+    src/main/cpp/tgs/System/DisableCout.cpp \
     src/main/cpp/tgs/System/SystemInfo.cpp \
     src/main/cpp/tgs/System/Time.cpp \
     src/main/cpp/tgs/Xml/XmlHelper.cpp \
-    src/main/cpp/tgs/Statistics/Normal.cpp \
-    src/main/cpp/tgs/RStarTree/RStarTreePrinter.cpp \
-    src/main/cpp/tgs/DelaunayTriangulation/DelaunayTriangulation.cpp \
-    src/main/cpp/tgs/DisjointSet/DisjointSet.cpp \
-    src/main/cpp/tgs/Interpolation/BaseInterpolator.cpp \
-    src/main/cpp/tgs/Interpolation/KernelEstimationInterpolator.cpp \
-    src/main/cpp/tgs/Optimization/NelderMead.cpp \
-    src/main/cpp/tgs/Interpolation/IdwInterpolator.cpp \
-    src/main/cpp/tgs/Io/StdIoDevice.cpp \
-    src/main/cpp/tgs/Interpolation/DelaunayInterpolator.cpp \
-    src/main/cpp/tgs/BigContainers/BigMap.cpp \
-    src/main/cpp/tgs/BigContainers/BasicBloomFilter.cpp \
-    src/main/cpp/tgs/System/DisableCout.cpp \
-    src/main/cpp/tgs/System/DisableCerr.cpp \
-    src/main/cpp/tgs/Optimization/SimulatedAnnealing.cpp \
-    src/main/cpp/tgs/Optimization/StateDescription.cpp \
-    src/main/cpp/tgs/Optimization/VariableDescription.cpp \
-    src/main/cpp/tgs/Optimization/State.cpp \
+
 
 cppunit:SOURCES += \
-    src/test/cpp/tgs/ProbablePath/ProbablePathCalculatorTest.cpp \
+    src/test/cpp/tgs/LruCacheTest.cpp \
     src/test/cpp/tgs/PluginFactory.cpp \
+    src/test/cpp/tgs/BigContainers/BigMapTest.cpp \
+    src/test/cpp/tgs/BigContainers/BasicBloomFilterTest.cpp \
+    src/test/cpp/tgs/DelaunayTriangulation/DelaunayTriangulationTest.cpp \
+    src/test/cpp/tgs/DisjointSet/DisjointSetTest.cpp \
+    src/test/cpp/tgs/DisjointSet/DisjointSetMapTest.cpp \
     src/test/cpp/tgs/FeatureExtraction/CalculatorGenomeNodeTest.cpp \
     src/test/cpp/tgs/FeatureExtraction/CalculatorGenomeTest.cpp \
     src/test/cpp/tgs/FeatureExtraction/GeneticAlgorithmTest.cpp \
-    src/test/cpp/tgs/Xml/XmlHelperTest.cpp \
+    src/test/cpp/tgs/FeatureSelection/DataFrameDiscretizerTest.cpp \
+    src/test/cpp/tgs/FeatureSelection/ConsistencySubsetEvaluatorTest.cpp \
+    src/test/cpp/tgs/FeatureSelection/FayyadMdlDiscretizerTest.cpp \
+    src/test/cpp/tgs/FeatureSelection/CfsSubsetEvaluatorTest.cpp \
+    src/test/cpp/tgs/FeatureSelection/GreedyStepwiseSearchTest.cpp \
+    src/test/cpp/tgs/FeatureSelection/SymmetricUncertaintyCalculatorTest.cpp \
+    src/test/cpp/tgs/Interpolation/KernelEstimationInterpolatorTest.cpp \
+    src/test/cpp/tgs/Interpolation/DelaunayInterpolatorTest.cpp \
+    src/test/cpp/tgs/Io/StdIoDeviceTest.cpp \
+    src/test/cpp/tgs/Optimization/NelderMeadTest.cpp \
+    src/test/cpp/tgs/Optimization/SimulatedAnnealingTest.cpp \
+    src/test/cpp/tgs/ProbablePath/ProbablePathCalculatorTest.cpp \
+    src/test/cpp/tgs/RandomForest/RandomForestTest.cpp \
+    src/test/cpp/tgs/RandomForest/RfDataFrameTest.cpp \
+    src/test/cpp/tgs/RandomForest/InfoGainCalculatorTest.cpp \
+    src/test/cpp/tgs/RandomForest/RandomTreeTest.cpp \
     src/test/cpp/tgs/RStarTree/HilbertRTreeTest.cpp \
     src/test/cpp/tgs/RStarTree/RTreeNodeStoreTest.cpp \
     src/test/cpp/tgs/RStarTree/DistanceIteratorTest.cpp \
@@ -260,29 +277,9 @@ cppunit:SOURCES += \
     src/test/cpp/tgs/RStarTree/RStarTreeTest.cpp \
     src/test/cpp/tgs/RStarTree/BoxTest.cpp \
     src/test/cpp/tgs/RStarTree/HilbertCurveTest.cpp \
-    src/test/cpp/tgs/FeatureSelection/DataFrameDiscretizerTest.cpp \
-    src/test/cpp/tgs/FeatureSelection/ConsistencySubsetEvaluatorTest.cpp \
-    src/test/cpp/tgs/FeatureSelection/FayyadMdlDiscretizerTest.cpp \
-    src/test/cpp/tgs/FeatureSelection/CfsSubsetEvaluatorTest.cpp \
-    src/test/cpp/tgs/FeatureSelection/GreedyStepwiseSearchTest.cpp \
-    src/test/cpp/tgs/FeatureSelection/SymmetricUncertaintyCalculatorTest.cpp \
-    src/test/cpp/tgs/RandomForest/RandomForestTest.cpp \
-    src/test/cpp/tgs/RandomForest/RfDataFrameTest.cpp \
-    src/test/cpp/tgs/RandomForest/InfoGainCalculatorTest.cpp \
-    src/test/cpp/tgs/RandomForest/RandomTreeTest.cpp \
     src/test/cpp/tgs/RStarTree/KnnIteratorNdTest.cpp \
     src/test/cpp/tgs/System/SystemInfoTest.cpp \
-    src/test/cpp/tgs/DelaunayTriangulation/DelaunayTriangulationTest.cpp \
-    src/test/cpp/tgs/DisjointSet/DisjointSetTest.cpp \
-    src/test/cpp/tgs/DisjointSet/DisjointSetMapTest.cpp \
-    src/test/cpp/tgs/Interpolation/KernelEstimationInterpolatorTest.cpp \
-    src/test/cpp/tgs/Optimization/NelderMeadTest.cpp \
-    src/test/cpp/tgs/Interpolation/DelaunayInterpolatorTest.cpp \
-    src/test/cpp/tgs/Io/StdIoDeviceTest.cpp \
-    src/test/cpp/tgs/BigContainers/BigMapTest.cpp \
-    src/test/cpp/tgs/BigContainers/BasicBloomFilterTest.cpp \
-    src/test/cpp/tgs/LruCacheTest.cpp \
-    src/test/cpp/tgs/Optimization/SimulatedAnnealingTest.cpp
+    src/test/cpp/tgs/Xml/XmlHelperTest.cpp \
 
 win32:SOURCES += src/main/cpp/tgs/RStarTree/FilePageStore.cpp \
     src/main/cpp/tgs/SpinImage/GroundPlaneRemover.cpp \

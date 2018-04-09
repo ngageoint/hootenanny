@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MatchScoringMapPreparer.h"
 
@@ -40,31 +40,32 @@
 namespace hoot
 {
 
-  class ConvertUuidToRefVisitor : public ElementOsmMapVisitor
-  {
-    public:
+class ConvertUuidToRefVisitor : public ElementOsmMapVisitor
+{
+public:
 
-      virtual void visit(const boost::shared_ptr<Element>& e)
+  virtual void visit(const boost::shared_ptr<Element>& e)
+  {
+    if (!e->getTags().contains(MetadataTags::Ref1()) &&
+        !e->getTags().contains(MetadataTags::Ref2()) && e->getTags().contains("uuid"))
+    {
+      QString uuid = e->getTags()["uuid"];
+      if (e->getStatus() == Status::Unknown1)
       {
-        if (!e->getTags().contains(MetadataTags::Ref1()) && !e->getTags().contains(MetadataTags::Ref2()) &&
-            e->getTags().contains("uuid"))
-        {
-          QString uuid = e->getTags()["uuid"];
-          if (e->getStatus() == Status::Unknown1)
-          {
-            e->setTag(MetadataTags::Ref1(), uuid);
-          }
-          else if (e->getStatus() == Status::Unknown2)
-          {
-            e->setTag(MetadataTags::Ref2(), uuid);
-          }
-        }
+        e->setTag(MetadataTags::Ref1(), uuid);
       }
-  };
+      else if (e->getStatus() == Status::Unknown2)
+      {
+        e->setTag(MetadataTags::Ref2(), uuid);
+      }
+    }
+  }
+
+  virtual QString getDescription() const { return ""; }
+};
 
 MatchScoringMapPreparer::MatchScoringMapPreparer()
 {
-
 }
 
 void MatchScoringMapPreparer::prepMap(OsmMapPtr map, const bool removeNodes)

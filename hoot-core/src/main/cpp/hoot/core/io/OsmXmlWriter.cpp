@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmXmlWriter.h"
 
@@ -59,18 +59,19 @@ unsigned int OsmXmlWriter::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapWriter, OsmXmlWriter)
 
-OsmXmlWriter::OsmXmlWriter() :
-_formatXml(ConfigOptions().getOsmMapWriterFormatXml()),
-_includeIds(false),
-_includeDebug(ConfigOptions().getWriterIncludeDebugTags()),
-_includePointInWays(false),
-_includeCompatibilityTags(true),
-_textStatus(ConfigOptions().getWriterTextStatus()),
-_osmSchema(ConfigOptions().getOsmMapWriterSchema()),
-_timestamp("1970-01-01T00:00:00Z"),
-_precision(ConfigOptions().getWriterPrecision()),
-_encodingErrorCount(0),
-_includeCircularErrorTags(ConfigOptions().getWriterIncludeCircularErrorTags())
+OsmXmlWriter::OsmXmlWriter()
+  : _formatXml(ConfigOptions().getOsmMapWriterFormatXml()),
+    _includeIds(false),
+    _includeDebug(ConfigOptions().getWriterIncludeDebugTags()),
+    _includePointInWays(false),
+    _includeCompatibilityTags(true),
+    _includePid(false),
+    _textStatus(ConfigOptions().getWriterTextStatus()),
+    _osmSchema(ConfigOptions().getOsmMapWriterSchema()),
+    _timestamp("1970-01-01T00:00:00Z"),
+    _precision(ConfigOptions().getWriterPrecision()),
+    _encodingErrorCount(0),
+    _includeCircularErrorTags(ConfigOptions().getWriterIncludeCircularErrorTags())
 {
 }
 
@@ -262,7 +263,7 @@ void OsmXmlWriter::_writeMetadata(const Element *e)
       version = 1;
     }
     _writer->writeAttribute("version", QString::number(version));
-    LOG_VART(version);
+    //LOG_VART(version);=
   }
   else
   {
@@ -387,6 +388,19 @@ void OsmXmlWriter::_writeTags(const ConstElementPtr& element)
     _writer->writeAttribute("v", QString("%1").arg(element->getId()));
     _writer->writeEndElement();
   }
+
+  //  Output the PID as a tag if desired for debugging purposes
+  if (_includePid && type == ElementType::Way)
+  {
+    ConstWayPtr way = boost::dynamic_pointer_cast<const Way>(element);
+    if (way->hasPid())
+    {
+      _writer->writeStartElement("tag");
+      _writer->writeAttribute("k", MetadataTags::HootSplitParentId());
+      _writer->writeAttribute("v", QString("%1").arg(way->getPid()));
+      _writer->writeEndElement();
+    }
+  }
 }
 
 void OsmXmlWriter::_writeNodes(ConstOsmMapPtr map)
@@ -461,7 +475,7 @@ void OsmXmlWriter::_writeBounds(const Envelope& bounds)
 
 void OsmXmlWriter::writePartial(const ConstNodePtr& n)
 {
-  LOG_VART(n);
+  //LOG_VART(n);
 
   _writer->writeStartElement("node");
 
@@ -482,7 +496,7 @@ void OsmXmlWriter::writePartial(const ConstNodePtr& n)
 
 void OsmXmlWriter::_writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapPtr map)
 {
-  LOG_VART(w);
+  //LOG_VART(w);
 
   _writer->writeStartElement("way");
   _writer->writeAttribute("visible", "true");
@@ -575,7 +589,7 @@ void OsmXmlWriter::_writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapP
 
 void OsmXmlWriter::writePartial(const ConstWayPtr& w)
 {
-  LOG_VART(w);
+  //LOG_VART(w);
 
   if (_includePointInWays)
   {
@@ -602,7 +616,7 @@ void OsmXmlWriter::writePartial(const ConstWayPtr& w)
 
 void OsmXmlWriter::writePartial(const ConstRelationPtr& r)
 {
-  LOG_VART(r);
+  //LOG_VART(r);
 
   _writer->writeStartElement("relation");
   _writer->writeAttribute("visible", "true");

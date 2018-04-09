@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef MERGENEARBYNODES_H
@@ -67,6 +67,8 @@ public:
   virtual void setBounds(const geos::geom::Envelope& bounds) { _bounds = bounds; }
 
   virtual void writeObject(QDataStream& os) const;
+
+  virtual QString getDescription() const { return "Merges nearby nodes together"; }
 
 protected:
 

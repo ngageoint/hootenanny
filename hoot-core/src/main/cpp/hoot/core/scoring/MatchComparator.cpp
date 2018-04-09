@@ -28,7 +28,6 @@
 
 // hoot
 #include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/conflate/MarkForReviewMerger.h>
 #include <hoot/core/conflate/MatchType.h>
 #include <hoot/core/filters/ChainCriterion.h>
 #include <hoot/core/filters/ElementTypeCriterion.h>
@@ -70,6 +69,8 @@ public:
   const RefToUuid& getRefToUuid() const { return _ref2Uuid; }
 
   virtual void setOsmMap(const OsmMap* map) { _map = map; }
+
+  virtual QString getDescription() const { return ""; }
 
   virtual void visit(const ConstElementPtr& e)
   {
@@ -124,6 +125,8 @@ public:
   const MatchComparator::UuidToEid& getUuidToEid() const { return _uuidToEid; }
 
   virtual void setOsmMap(const OsmMap* map) { _map = map; }
+
+  virtual QString getDescription() const { return ""; }
 
   virtual void visit(const ConstElementPtr& e)
   {

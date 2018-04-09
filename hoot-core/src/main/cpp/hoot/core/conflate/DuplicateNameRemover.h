@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef DUPLICATENAMEREMOVER_H
@@ -61,6 +61,8 @@ public:
   static void removeDuplicates(boost::shared_ptr<OsmMap> map);
 
   void setCaseSensitive(bool caseSensitive) { _caseSensitive = caseSensitive; }
+
+  virtual QString getDescription() const { return "Removes duplicated names from a feature"; }
 
 protected:
 

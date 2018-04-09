@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ANGLE_HISTOGRAM_EXTRACTOR_H
 #define ANGLE_HISTOGRAM_EXTRACTOR_H
@@ -58,6 +58,7 @@ class Histogram;
 class AngleHistogramExtractor : public FeatureExtractor
 {
 public:
+
   AngleHistogramExtractor(Radians smoothing = 0.0, unsigned int bins = 16);
 
   static std::string className() { return "hoot::AngleHistogramExtractor"; }
@@ -78,7 +79,11 @@ public:
 
   void setSmoothing(Radians sigma) { _smoothing = sigma; }
 
+  virtual QString getDescription() const
+  { return "Calculates the angle of each line segment and adds it to a histogram"; }
+
 protected:
+
   virtual Histogram* _createHistogram(const OsmMap& map, const ConstElementPtr& e) const;
 
   Radians _smoothing;
