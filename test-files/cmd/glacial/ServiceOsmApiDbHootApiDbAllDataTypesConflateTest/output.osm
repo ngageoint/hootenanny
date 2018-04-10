@@ -575,14 +575,14 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="2"/>
     </way>
-    <way visible="true" id="3" timestamp="1970-01-01T00:00:00Z" version="2" changeset="3">
+    <way visible="true" id="3" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
         <nd ref="31"/>
         <nd ref="17"/>
         <nd ref="37"/>
+        <nd ref="21"/>
         <tag k="note" v="2"/>
-        <tag k="hoot:id" v="3"/>
-        <tag k="hoot:status" v="3"/>
         <tag k="highway" v="road"/>
+        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="3"/>
     </way>
     <way visible="true" id="4" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
@@ -600,6 +600,9 @@
         <nd ref="2"/>
         <nd ref="18"/>
         <nd ref="32"/>
+        <nd ref="14"/>
+        <nd ref="35"/>
+        <nd ref="21"/>
         <tag k="note" v="0"/>
         <tag k="hoot:id" v="5"/>
         <tag k="hoot:status" v="3"/>
@@ -759,29 +762,10 @@
         <tag k="hoot:id" v="15"/>
     </way>
     <way visible="true" id="20" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
-        <nd ref="32"/>
-        <nd ref="14"/>
-        <tag k="note" v="0"/>
-        <tag k="hoot:id" v="20"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="20"/>
-    </way>
-    <way visible="true" id="21" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
-        <nd ref="14"/>
-        <nd ref="35"/>
         <nd ref="21"/>
         <nd ref="10"/>
         <nd ref="5"/>
         <nd ref="25"/>
-        <nd ref="193"/>
-        <tag k="note" v="0"/>
-        <tag k="hoot:id" v="21"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="21"/>
-    </way>
-    <way visible="true" id="22" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <nd ref="193"/>
         <nd ref="9"/>
         <nd ref="30"/>
@@ -803,18 +787,9 @@
         <nd ref="15"/>
         <nd ref="36"/>
         <tag k="note" v="0"/>
-        <tag k="hoot:id" v="22"/>
+        <tag k="hoot:id" v="20"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="22"/>
-    </way>
-    <way visible="true" id="23" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
-        <nd ref="37"/>
-        <nd ref="21"/>
-        <tag k="note" v="2"/>
-        <tag k="hoot:id" v="23"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="23"/>
+        <tag k="hoot:id" v="20"/>
     </way>
 </osm>
