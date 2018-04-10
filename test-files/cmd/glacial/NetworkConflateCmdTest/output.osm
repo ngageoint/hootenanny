@@ -31368,12 +31368,11 @@
         <tag k="hoot:id" v="-1907"/>
     </relation>
     <relation visible="true" id="-1906" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-502" role="reviewee"/>
-        <member type="way" ref="-502" role="reviewee"/>
         <member type="way" ref="-233" role="reviewee"/>
+        <member type="way" ref="-502" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:members" v="3"/>
+        <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="0.40955"/>
         <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
         <tag k="hoot:review:sort_order" v="10"/>
@@ -31447,14 +31446,11 @@
         <tag k="hoot:id" v="-1901"/>
     </relation>
     <relation visible="true" id="-1900" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-636" role="reviewee"/>
         <member type="way" ref="-13" role="reviewee"/>
-        <member type="way" ref="-636" role="reviewee"/>
-        <member type="way" ref="-636" role="reviewee"/>
         <member type="way" ref="-636" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:members" v="5"/>
+        <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="0.663166"/>
         <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
         <tag k="hoot:review:sort_order" v="4"/>
@@ -31477,15 +31473,13 @@
     </relation>
     <relation visible="true" id="-1898" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-52" role="reviewee"/>
-        <member type="way" ref="-636" role="reviewee"/>
         <member type="way" ref="-13" role="reviewee"/>
-        <member type="way" ref="-636" role="reviewee"/>
         <member type="way" ref="-500" role="reviewee"/>
         <member type="way" ref="-633" role="reviewee"/>
         <member type="way" ref="-636" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:members" v="7"/>
+        <tag k="hoot:review:members" v="5"/>
         <tag k="hoot:review:score" v="0.537042"/>
         <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
         <tag k="hoot:review:sort_order" v="11"/>
@@ -31496,12 +31490,9 @@
     <relation visible="true" id="-1897" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-14" role="reviewee"/>
         <member type="way" ref="-633" role="reviewee"/>
-        <member type="way" ref="-633" role="reviewee"/>
-        <member type="way" ref="-633" role="reviewee"/>
-        <member type="way" ref="-633" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:members" v="5"/>
+        <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="0.651848"/>
         <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
         <tag k="hoot:review:sort_order" v="3"/>

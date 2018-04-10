@@ -25,10 +25,12 @@
  * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef REMOVEINVALIDMULTILINESTRINGVISITOR_H
-#define REMOVEINVALIDMULTILINESTRINGVISITOR_H
+#ifndef REMOVE_INVALID_RELATION_VISITOR_H
+#define REMOVE_INVALID_RELATION_VISITOR_H
 
-#include "ElementOsmMapVisitor.h"
+//  Hoot
+#include <hoot/core/elements/Relation.h>
+#include <hoot/core/visitors/ElementOsmMapVisitor.h>
 
 namespace hoot
 {
@@ -38,24 +40,28 @@ namespace hoot
  * and multilinestring relation that has less that two members thus
  * making them not "multi" linestrings.
  */
-class RemoveInvalidMultilineStringVisitor : public ElementOsmMapVisitor
+class RemoveInvalidRelationVisitor : public ElementOsmMapVisitor
 {
 public:
 
-  static std::string className() { return "hoot::RemoveInvalidMultilineStringVisitor"; }
+  static std::string className() { return "hoot::RemoveInvalidRelationVisitor"; }
 
-  RemoveInvalidMultilineStringVisitor();
+  RemoveInvalidRelationVisitor();
 
   virtual void visit(const ElementPtr& e);
 
-  virtual QString getName() const { return "Remove Invalid Multilinestring Relations"; }
+  virtual QString getName() const { return "Remove Invalid Relations"; }
 
   virtual QString getDescription() const
   {
-    return "Removes duplicate ways in multilinestring relations and invalid multilinestring relations";
+    return "Removes duplicate ways in relations and invalid relations";
   }
+
+private:
+
+  void _removeDuplicates(const RelationPtr& r);
 };
 
 }
 
-#endif // REMOVEINVALIDMULTILINESTRINGVISITOR_H
+#endif // REMOVE_INVALID_RELATION_VISITOR_H

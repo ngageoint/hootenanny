@@ -1556,10 +1556,9 @@
     <relation visible="true" id="-106" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-40" role="reviewee"/>
         <member type="way" ref="-36" role="reviewee"/>
-        <member type="way" ref="-36" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:members" v="3"/>
+        <tag k="hoot:review:members" v="2"/>
         <tag k="type" v="review"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-106"/>
@@ -1567,10 +1566,9 @@
     <relation visible="true" id="-105" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-40" role="reviewee"/>
         <member type="way" ref="-17" role="reviewee"/>
-        <member type="way" ref="-17" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:members" v="3"/>
+        <tag k="hoot:review:members" v="2"/>
         <tag k="type" v="review"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-105"/>
