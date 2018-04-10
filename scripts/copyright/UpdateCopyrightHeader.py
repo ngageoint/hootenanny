@@ -62,6 +62,7 @@ def run(args):
 
 def runcode(args):
     p = Popen(args, stderr=PIPE)
+    p.communicate()
     code = p.returncode
     return code
 
