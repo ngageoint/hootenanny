@@ -60,6 +60,11 @@ def run(args):
     output = p.stdout.read()
     return output
 
+def runcode(args):
+    p = Popen(args, stderr=PIPE)
+    code = p.returncode
+    return code
+
 #
 # Read in the command-line arguments
 #
@@ -176,6 +181,10 @@ else:
 # =========================
 
 try:
+    # Check if the file is even tracked in git
+    retcode = runcode(["git", "ls-files", "--error-unmatch", options.fileName])
+    if retcode != 0:
+        exit(0)
     # A) Read in the standard copyright header
     copyrightHeaderStr = open(options.copyrightHeader, 'r').read()
 
