@@ -37,8 +37,10 @@ if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
     sed -i s/"#QMAKE_CXX=ccache g++"/"QMAKE_CXX=ccache g++"/g LocalConfig.pri
 fi
 
-echo "Building Hoot... "
+echo "Building Hoot..."
 make -s clean && make -sj$(nproc)
+echo "Generating Eclipse project files..."
+make -s eclipse
 
 # vagrant will auto start the tomcat service for us, so just copy the web app files w/o manipulating the server
 # Copy the web apps, no need to use sudo
@@ -46,7 +48,7 @@ make -s clean && make -sj$(nproc)
 
 # docs build is always failing the first time during the npm install portion for an unknown reason, but then
 # always passes the second time its run...needs fixed, but this is the workaround for now
-echo "Building Hoot docs... "
+echo "Building Hoot docs..."
 make -sj$(nproc) docs &> /dev/null || true
 make -sj$(nproc) docs
 

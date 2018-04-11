@@ -62,6 +62,7 @@ namespace hoot
 class OsmJsonWriter : public QXmlDefaultHandler, public OsmMapWriter
 {
 public:
+
   static std::string className() { return "hoot::OsmJsonWriter"; }
 
   OsmJsonWriter(int precision = ConfigOptions().getWriterPrecision());
@@ -98,7 +99,10 @@ public:
    */
   void SetWriteEmptyTags(bool writeEmpty) { _writeEmptyTags = writeEmpty; }
 
+  virtual QString supportedFormats() { return ".json"; }
+
 protected:
+
   ConstOsmMapPtr _map;
   bool _includeDebug;
   int _precision;

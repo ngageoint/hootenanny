@@ -94,7 +94,6 @@ the command line aspects of the system. Examples include:
 
 * Complex command line options
 * Composite operations such as alpha shape, cookie cut, conflate
-* Hadoop operations that require moving multiple files to create the test scenario
 * Translation scripts
 
 Note that is is generally desirable to make the test do as little as possible to fully exercise
@@ -138,7 +137,7 @@ set -e
 mkdir -p test-output/cmd/example
 
 # perform the operation we're testing.
-hoot --convert test-files/jakarta_raya_coastline.shp test-output/cmd/example/jakarta.osm
+hoot convert test-files/jakarta_raya_coastline.shp test-output/cmd/example/jakarta.osm
 
 # Write the output to stdout. When this run in the future it'll compare the old output
 # to the new input to verify the test is consistent
@@ -317,18 +316,6 @@ make -sj($nproc) plugins-test
 --------------
 
 They run by default in the slow test suite.
-
-==== Core Pretty Pipes Tests
-
-The Pretty Pipes Test test the pretty-pipes submodule.  They may be invoked in isolation with:
-
---------------
-# configure step required once per configuration only
-aclocal && autoconf && autoheader && automake && ./configure
-make -sj($nproc) pp-test
---------------
-
-They run by default in the quick test suite.
 
 === Web Services Tests
 

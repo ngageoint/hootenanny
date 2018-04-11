@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef SEARCH_RADIUS_CALCULATOR_H
@@ -65,6 +65,9 @@ public:
   void setRubberSheetMinTies(int minTies) { _minTies = minTies; }
 
   void setPrecision(int precision) { _precision = precision; }
+
+  virtual QString getDescription() const
+  { return "Calculates a search radius using tie points found by rubbersheeting"; }
 
 private:
 

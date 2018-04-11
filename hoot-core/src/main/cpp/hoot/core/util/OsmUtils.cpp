@@ -22,13 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OsmUtils.h"
 
 // Hoot
-#include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/io/OgrReader.h>
@@ -38,6 +37,13 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/GeoNamesReader.h>
 #include <hoot/core/util/Progress.h>
+#include <hoot/core/visitors/FilteredVisitor.h>
+#include <hoot/core/visitors/ElementCountVisitor.h>
+#include <hoot/core/filters/PoiCriterion.h>
+#include <hoot/core/filters/BuildingCriterion.h>
+#include <hoot/core/filters/NonBuildingAreaCriterion.h>
+#include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPoiCriterion.h>
+#include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPolyCriterion.h>
 
 //Qt
 #include <QDateTime>
@@ -136,6 +142,99 @@ unsigned int OsmUtils::fromTimeString(QString timestamp)
 QString OsmUtils::currentTimeAsString()
 {
   return QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm:ssZ");
+}
+
+bool OsmUtils::containsTwoOrMorePois(ConstOsmMapPtr map)
+{
+  const long poiCount =
+    (long)FilteredVisitor::getStat(
+      ElementCriterionPtr(new PoiCriterion()),
+      ConstElementVisitorPtr(new ElementCountVisitor()),
+      map);
+  LOG_VART(poiCount);
+  return poiCount >= 2;
+}
+
+bool OsmUtils::containsTwoOrMoreBuildings(ConstOsmMapPtr map)
+{
+  const long buildingCount =
+    (long)FilteredVisitor::getStat(
+      ElementCriterionPtr(new BuildingCriterion(map)),
+      ConstElementVisitorPtr(new ElementCountVisitor()),
+      map);
+  LOG_VART(buildingCount);
+  return buildingCount >= 2;
+}
+
+bool OsmUtils::containsTwoOrMoreAreas(ConstOsmMapPtr map)
+{
+  const long areaCount =
+    (long)FilteredVisitor::getStat(
+      ElementCriterionPtr(new NonBuildingAreaCriterion()),
+      ConstElementVisitorPtr(new ElementCountVisitor()),
+      map);
+  LOG_VART(areaCount);
+  return areaCount >= 2;
+}
+
+bool OsmUtils::containsOnePolygonAndOnePoi(ConstOsmMapPtr map)
+{
+  const long poiCount =
+    (long)FilteredVisitor::getStat(
+      ElementCriterionPtr(new PoiPolygonPoiCriterion()),
+      ConstElementVisitorPtr(new ElementCountVisitor()),
+      map);
+  const long polyCount =
+    (long)FilteredVisitor::getStat(
+      ElementCriterionPtr(new PoiPolygonPolyCriterion()),
+      ConstElementVisitorPtr(new ElementCountVisitor()),
+      map);
+  LOG_VART(poiCount);
+  LOG_VART(polyCount);
+  return poiCount == 1 && polyCount == 1;
+}
+
+bool OsmUtils::containsPoiPolyPolys(ConstOsmMapPtr map)
+{
+  const long polyCount =
+    (long)FilteredVisitor::getStat(
+      ElementCriterionPtr(new PoiPolygonPolyCriterion()),
+      ConstElementVisitorPtr(new ElementCountVisitor()),
+      map);
+  LOG_VART(polyCount);
+  return polyCount > 0;
+}
+
+bool OsmUtils::containsAreas(ConstOsmMapPtr map)
+{
+  const long areaCount =
+    (long)FilteredVisitor::getStat(
+      ElementCriterionPtr(new NonBuildingAreaCriterion()),
+      ConstElementVisitorPtr(new ElementCountVisitor()),
+      map);
+  LOG_VART(areaCount);
+  return areaCount > 0;
+}
+
+bool OsmUtils::containsBuildings(ConstOsmMapPtr map)
+{
+  const long buildingCount =
+    (long)FilteredVisitor::getStat(
+      ElementCriterionPtr(new BuildingCriterion(map)),
+      ConstElementVisitorPtr(new ElementCountVisitor()),
+      map);
+  LOG_VART(buildingCount);
+  return buildingCount > 0;
+}
+
+bool OsmUtils::containsPois(ConstOsmMapPtr map)
+{
+  const long poiCount =
+    (long)FilteredVisitor::getStat(
+      ElementCriterionPtr(new PoiCriterion()),
+      ConstElementVisitorPtr(new ElementCountVisitor()),
+      map);
+  return poiCount > 0;
 }
 
 }

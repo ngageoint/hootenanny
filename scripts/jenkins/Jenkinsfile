@@ -100,19 +100,18 @@ pipeline {
                 '''
                 
                 // Perform remainder of provisioning
-                sh "vagrant provision ${params.Box} --provision-with build,EGD,tomcat,mapnik,hadoop"
+                sh "vagrant provision ${params.Box} --provision-with build,EGD,tomcat,mapnik"
             }       
         }
         stage("Core Tests") {
             when { expression { return params.Core_tests } }
             steps {
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot --version --debug; bin/HootTest --diff --glacial --parallel \$(nproc)'"
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot version --debug; bin/HootTest --diff --glacial --parallel \$(nproc)'"
             }
         }
         stage("Services Tests") {
             when { expression { return params.Services_tests } }
             steps {
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` pp-test'"
                 sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` plugins-test'"
                 sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` services-test'"
             }

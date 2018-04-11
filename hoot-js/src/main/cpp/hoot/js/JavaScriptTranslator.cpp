@@ -94,7 +94,7 @@ JavaScriptTranslator::~JavaScriptTranslator()
   if (_timing.size() != 0)
   {
     tbs::SampleStats stats(_timing);
-    LOG_DEBUG("Translation script run time (ms): " << stats.toString());
+    LOG_TRACE("Translation script run time (ms): " << stats.toString());
   }
   close();
 }
@@ -229,7 +229,7 @@ int JavaScriptTranslator::getLogCount(QString log)
 void JavaScriptTranslator::_init()
 {
   //This can be a costly operation, hence putting it at INFO.
-  LOG_INFO("Loading script: " << _scriptPath);
+  LOG_INFO("Loading translation script: " << _scriptPath);
 
   _error = false;
   _gContext.reset(new PluginContext());
@@ -257,7 +257,9 @@ void JavaScriptTranslator::_init()
   Handle<Object> tObj = _gContext->getContext(current)->Global();
 
   // Set up a small function
-  tObj->Set(String::NewFromUtf8(current, "timeNow"), FunctionTemplate::New(current, jsGetTimeNow)->GetFunction());
+  tObj->Set(
+    String::NewFromUtf8(current, "timeNow"),
+    FunctionTemplate::New(current, jsGetTimeNow)->GetFunction());
 
   // Run Initialize, if it exists
   if (tObj->Has(String::NewFromUtf8(current, "initialize")))
@@ -293,11 +295,9 @@ void JavaScriptTranslator::_init()
 //  cout << "End: JSTrans:" << endl;
 //  cout << endl;
 
-  LOG_DEBUG("Script loaded.");
+  LOG_DEBUG("Translation script loaded.");
   _initialized = true;
 }
-
-
 
 // Use the layerNameFilter function to get the filter string (regexp)
 const QString JavaScriptTranslator::getLayerNameFilter()
@@ -314,6 +314,7 @@ const QString JavaScriptTranslator::getLayerNameFilter()
 
   Handle<Object> tObj = _gContext->getContext(current)->Global();
 
+  LOG_TRACE("Getting layer name filter...");
   if (tObj->Has(String::NewFromUtf8(current, "layerNameFilter")))
   {
     return toCpp<QString>(_gContext->call(tObj,"layerNameFilter"));
@@ -937,7 +938,7 @@ QVariantList JavaScriptTranslator::_translateToOgrVariants(Tags& tags,
   }
   else
   {
-    throw Exception("osm2ogr: Expected either a null or an object as the result.");
+    throw Exception("convert-osm2ogr: Expected either a null or an object as the result.");
   }
 
   return result;
@@ -1011,7 +1012,7 @@ void JavaScriptTranslator::_translateToOsm(Tags& t, const char *layerName, const
   }
   else
   {
-    throw Exception("ogr2osm: Expected either a null or an object as the result.");
+    throw Exception("convert-ogr2osm: Expected either a null or an object as the result.");
   }
 }
 

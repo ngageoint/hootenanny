@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TRANSLATIONVISITOR_H
 #define TRANSLATIONVISITOR_H
@@ -69,7 +69,10 @@ public:
 
   virtual QString toString() { return "hoot::TranslationVisitor"; }
 
+  virtual QString getDescription() const { return "Translates element tags"; }
+
 private:
+
   ScriptTranslatorPtr _t;
   ScriptToOgrTranslator* _togr;
   bool _toOgr;

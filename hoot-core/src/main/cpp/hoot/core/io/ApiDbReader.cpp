@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ApiDbReader.h"
 
@@ -52,7 +52,14 @@ _useDataSourceIds(true),
 _status(Status::Invalid),
 _open(false),
 _returnNodesOnly(false),
-_keepFileStatus(ConfigOptions().getReaderKeepFileStatus())
+_keepStatusTag(ConfigOptions().getReaderKeepStatusTag()),
+_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
+_totalNumMapNodes(0),
+_totalNumMapWays(0),
+_totalNumMapRelations(0),
+_numNodesRead(0),
+_numWaysRead(0),
+_numRelationsRead(0)
 {
 }
 
@@ -192,7 +199,7 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
     }
     //We don't need to carry this tag around once the value is set on the element...it will
     //be reinstated by some writers, though.
-    if (!_keepFileStatus) { tags.remove(MetadataTags::HootStatus()); }
+    if (!_keepStatusTag) { tags.remove(MetadataTags::HootStatus()); }
   }
 
   if (tags.contains("type"))
@@ -435,6 +442,12 @@ void ApiDbReader::initializePartial()
   _maxNodeId = 0;
   _maxWayId = 0;
   _maxRelationId = 0;
+  _totalNumMapNodes = 0;
+  _totalNumMapWays = 0;
+  _totalNumMapRelations = 0;
+  _numNodesRead = 0;
+  _numWaysRead = 0;
+  _numRelationsRead = 0;
 }
 
 void ApiDbReader::read(OsmMapPtr map)
@@ -511,13 +524,13 @@ bool ApiDbReader::hasMoreElements()
     const double start = Tgs::Time::getTime();
     LOG_DEBUG("Retrieving element counts and max IDs...");
 
-    const long totalNumMapNodes = _getDatabase()->numEstimatedElements(ElementType::Node);
-    long totalNumMapWays = 0;
-    long totalNumMapRelations = 0;
+    _totalNumMapNodes = _getDatabase()->numEstimatedElements(ElementType::Node);
+    _totalNumMapWays = 0;
+    _totalNumMapRelations = 0;
     if (!_returnNodesOnly)
     {
-      totalNumMapWays = _getDatabase()->numEstimatedElements(ElementType::Way);
-      totalNumMapRelations = _getDatabase()->numEstimatedElements(ElementType::Relation);
+      _totalNumMapWays = _getDatabase()->numEstimatedElements(ElementType::Way);
+      _totalNumMapRelations = _getDatabase()->numEstimatedElements(ElementType::Relation);
     }
 
     _maxNodeId = _getDatabase()->maxId(ElementType::Node);
@@ -534,9 +547,9 @@ bool ApiDbReader::hasMoreElements()
 
     LOG_INFO(
       "Reading dataset with approximately " <<
-      StringUtils::formatLargeNumber(totalNumMapNodes) << " nodes, " <<
-      StringUtils::formatLargeNumber(totalNumMapWays) << " ways, and " <<
-      StringUtils::formatLargeNumber(totalNumMapRelations) << " relations...");
+      StringUtils::formatLargeNumber(_totalNumMapNodes) << " nodes, " <<
+      StringUtils::formatLargeNumber(_totalNumMapWays) << " ways, and " <<
+      StringUtils::formatLargeNumber(_totalNumMapRelations) << " relations...");
 
     _firstPartialReadCompleted = true;
   }
@@ -603,6 +616,34 @@ boost::shared_ptr<Element> ApiDbReader::readNextElement()
     _nextElement.reset();
     _elementsRead++;
     //LOG_VART(_elementsRead);
+
+    if (_selectElementType == ElementType::Node)
+    {
+      _numNodesRead++;
+    }
+    else if (_selectElementType == ElementType::Way)
+    {
+      _numWaysRead++;
+    }
+    if (_selectElementType == ElementType::Relation)
+    {
+      _numRelationsRead++;
+    }
+
+    if (_numNodesRead % _statusUpdateInterval == 0 && _selectElementType == ElementType::Node)
+    {
+      PROGRESS_INFO("Read " << StringUtils::formatLargeNumber(_numNodesRead) << " nodes.");
+    }
+    if (_numWaysRead % _statusUpdateInterval == 0 && _selectElementType == ElementType::Way)
+    {
+      PROGRESS_INFO("Read " << StringUtils::formatLargeNumber(_numWaysRead) << " ways.");
+    }
+    if (_numRelationsRead % _statusUpdateInterval == 0 &&
+        _selectElementType == ElementType::Relation)
+    {
+      PROGRESS_INFO("Read " << StringUtils::formatLargeNumber(_numRelationsRead) << " relations.");
+    }
+
     return result;
   }
   else
@@ -647,7 +688,7 @@ ElementType ApiDbReader::_getCurrentSelectElementType()
 
 void ApiDbReader::finalizePartial()
 {
-  LOG_DEBUG("Finalizing read operation...");
+  LOG_TRACE("Finalizing read operation...");
 
   _partialMap.reset();
 
@@ -668,11 +709,22 @@ void ApiDbReader::finalizePartial()
     _getDatabase()->close();
     _open = false;
   }
+
+  if (_numNodesRead > 0 || _numWaysRead > 0 || _numRelationsRead > 0)
+  {
+    LOG_INFO(
+      "Read " << StringUtils::formatLargeNumber(_numNodesRead) << " nodes, " <<
+      StringUtils::formatLargeNumber(_numWaysRead) << " ways, and " <<
+      StringUtils::formatLargeNumber(_numRelationsRead) << " relations.");
+    _numNodesRead = 0;
+    _numWaysRead = 0;
+    _numRelationsRead = 0;
+  }
 }
 
 void ApiDbReader::close()
 {
-  LOG_DEBUG("Closing database reader...");
+  LOG_TRACE("Closing database reader...");
   finalizePartial();
 }
 

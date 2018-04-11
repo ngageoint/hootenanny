@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef RECURSIVEELEMENTREMOVER_H
 #define RECURSIVEELEMENTREMOVER_H
@@ -62,6 +62,7 @@ class OsmMap;
 class RecursiveElementRemover : public ConstOsmMapOperation, public ConstElementConsumer
 {
 public:
+
   static std::string className() { return "hoot::RecursiveElementRemover"; }
 
   /**
@@ -85,7 +86,12 @@ public:
    */
   virtual void apply(const boost::shared_ptr<OsmMap>& map);
 
+  virtual QString getName() const { return "Recursive Element Remover"; }
+
+  virtual QString getDescription() const { return "Recursively removes elements from a map"; }
+
 private:
+
   ElementId _eid;
   const ElementCriterion* _filter;
 

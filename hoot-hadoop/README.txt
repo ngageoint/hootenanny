@@ -1,4 +1,6 @@
 
+NOTE: As of Hootenanny v0.2.39, this code is no longer compiled by default.
+
 Be sure to set LD_LIBRARY_PATH to include the hoot-hadoop directory. E.g.
 
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOOT_HOME/hoot-hadoop/

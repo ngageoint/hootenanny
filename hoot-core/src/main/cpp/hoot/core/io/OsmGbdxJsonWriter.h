@@ -49,6 +49,7 @@ namespace hoot
 class OsmGbdxJsonWriter : public OsmJsonWriter
 {
 public:
+
   static std::string className() { return "hoot::OsmGbdxJsonWriter"; }
 
   OsmGbdxJsonWriter(int precision = ConfigOptions().getWriterPrecision());
@@ -72,7 +73,10 @@ public:
    */
   virtual bool isSupported(QString url) { return url.toLower().endsWith(".gbdx"); }
 
+  virtual QString supportedFormats() { return ".gdbx"; }
+
 protected:
+
   QDir _outputDir;
 
   /**

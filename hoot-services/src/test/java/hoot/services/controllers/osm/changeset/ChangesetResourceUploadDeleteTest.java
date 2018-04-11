@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.osm.changeset;
 
@@ -1850,7 +1850,7 @@ public class ChangesetResourceUploadDeleteTest extends OSMResourceTestAbstract {
     @Category(UnitTest.class)
     public void testUploadDeleteNegativeElementId() throws Exception {
         // We allow elements with a negative ID to exist, which allows for
-        // using the hoot --convert command as a source of test data for the services.
+        // using the hoot convert command as a source of test data for the services.
 
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
         BoundingBox updateBounds = OSMTestUtils.createAfterModifiedTestChangesetBounds();

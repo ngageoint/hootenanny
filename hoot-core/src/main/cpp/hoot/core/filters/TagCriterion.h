@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGCRITERION_H
 #define TAGCRITERION_H
@@ -54,6 +54,8 @@ public:
   void setConfiguration(const Settings& s);
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new TagCriterion(_k, _v)); }
+
+  virtual QString getDescription() const { return "Filters elements based on tags"; }
 
 private:
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef DIFFCONFLATOR_H
 #define DIFFCONFLATOR_H
@@ -94,6 +94,9 @@ public:
   virtual void setConfiguration(const Settings &conf);
 
   virtual void writeObject(QDataStream& /*os*/) const {}
+
+  virtual QString getDescription() const
+  { return "Conflates two maps into a single map based on the difference between the inputs"; }
 
 private:
 

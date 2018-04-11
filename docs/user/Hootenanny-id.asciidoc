@@ -355,7 +355,7 @@ Cookie Cutter & Horizontal Conflation is intended for use cases where a lower qu
 .Example of alpha shape generated with a 1km buffer around a "contrived" urban area (not an actual physical location). The blue line represents the convex hull and the red the alpha shape with the applied -1 km buffer.
 image::user/images/id/hoot_convexhull_example.png[scaledwidth="40%"]
 
-NOTE: In the user interface there is no way to tune or modify the generated alpha-shape. You can however configure the alpha-value from the command line (see alpha-shape in User Guide). In either case, the generated alpha-shape will always approximate the bounds of the data regardless of shape of the urban area.
+NOTE: In the user interface there is no way to tune or modify the generated generate-alpha-shape. You can however configure the alpha-value from the command line (see generate-alpha-shape in User Guide). In either case, the generated generate-alpha-shape will always approximate the bounds of the data regardless of shape of the urban area.
 
 ==== Advanced Conflation 
 
@@ -543,7 +543,7 @@ Zooming in with relevant imagery displayed in the background, we can see that _S
 .Verifying data on imagery. Boulder, CO; Boulder city street centerline (gray), OSM highways (red); DigitalGlobe GlobalBasemap (GBM).
 image::user/images/id/hoot_boulder_streetcenterline.png[scaledwidth="30%"]
 
-When using this conflation type, the first layer (cookie-cutter) will contain the reference geometry and be used to perform the cookie-cutter operation. The second layer represents the dough from which the first layer is cut. The process is depicted below in <<Cookie-Cutter_conceptual_workflow>>. In the image labeled A, the input dough layer (Boulder OSM) is shown. In image B, an alpha shape is generated around the cookie-cut region defined by Layer 1, the Boulder City Road data, with a -1 km buffer applied. The process continues with the OSM dough layer "cut" using the alpha shape (image C). Finally the two layers are combined (image D).
+When using this conflation type, the first layer (cookie-cut) will contain the reference geometry and be used to perform the cookie-cut operation. The second layer represents the dough from which the first layer is cut. The process is depicted below in <<Cookie-Cutter_conceptual_workflow>>. In the image labeled A, the input dough layer (Boulder OSM) is shown. In image B, an alpha shape is generated around the cookie-cut region defined by Layer 1, the Boulder City Road data, with a -1 km buffer applied. The process continues with the OSM dough layer "cut" using the alpha shape (image C). Finally the two layers are combined (image D).
 
 [[Cookie-Cutter_conceptual_workflow]]
 .Cookie Cutter and Horizontal conceptual workflow using Boulder, CO streets.
@@ -562,7 +562,7 @@ image::user/images/id/hoot_boulder_preconflate.png[]
 
 The final conflated layer represents the merger of the Boulder streets layer and the OSM highways data with all duplicates removed and cookie-cut roads joined. Once the conflation process has completed, the resulting dataset can be exported as a shapefile, FGDB, or WFS from the UI following the steps outlined <<Hoot-iD_Datasets,here>>.
 
-.Boulder cookie-cutter and horizontal conflation output (green) displayed on DigitalGlobe GlobalBasemap (GBM).
+.Boulder cookie-cut and horizontal conflation output (green) displayed on DigitalGlobe GlobalBasemap (GBM).
 image::user/images/id/hoot_boulder_merged.png[]
 
 [[Poi2PoiConflation]]
@@ -724,10 +724,6 @@ image::user/images/id/hoot_validate_layer.png[scaledwidth="75%"]
 
 NOTE: Panning the map during Validation causes the highlighted POI to become unselected and removes the validation options. To resume validation, click the Select button at the bottom.
 
-*_Filter Non-HGIS POIs_*
-
-The Filter Non-HGIS POI capabilities is provided for users working with the Human Geography Information Service (HGIS) version 2.0.  It provides a simple means to take any layer and filter anything that is not a HGIS POI (e.g. road and/or building) based on the HGIS v2.0 definitions for POI.  Note that this capability is very specific to the HGIS group at DigitalGlobe/NGA and should only be used in conjunction with those efforts.  To create a new filtered layer simply right-click and select the option, then provide an output layer name.
-
 [[TranslationAssistant]]
 ==== Translation Assistant
 
@@ -857,17 +853,7 @@ The Log settings provides both the Application and UI log for users to troublesh
 .Hootenanny Error and UI Log File.
 image::user/images/id/hoot_log_tab.png[]
 
-NOTE: Those familiar with Chrome's developer console (hitting F-12 key will open it in a separate tab or browser window) can use that for additional debugging capability. This tool is used frequently by our developers for debugging client side code and greatly enhance the ability to diagnose issues.
-
-[[HootStatsReport]]
-===== Reports
-
-The Reports settings contains all of the generated reports for conflation jobs where _Generate Report = True_ has been specified. To download a report, click on the arrow and save the pdf file to your local desktop.
-
-.Hootenanny Conflation Statistic Reports
-image::user/images/id/hoot_csr_tab.png[]
-
-IMPORTANT: To enable report generation for a conflation, users must check the _Enable Test Mode_ check box on the About settings page.  This will add the option to the list of conflation parameters.  Note that report generation only works on Ubuntu based deployments.  
+NOTE: Those familiar with Chrome's developer console (hitting F-12 key will open it in a separate tab or browser window) can use that for additional debugging capability. This tool is used frequently by our developers for debugging client side code and greatly enhance the ability to diagnose issues. 
 
 ===== Review Bookmarks
 

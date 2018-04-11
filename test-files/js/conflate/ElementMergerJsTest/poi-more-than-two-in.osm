@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-320' visible='true' lat='12.34567' lon='23.45678'>
+    <tag k='poi' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='hoot:status' v='1' />
+  </node>
+  <node id='-9999' visible='true' lat='12.3456' lon='23.4567'>
+    <tag k='amenity' v='post_office' />
+    <tag k='error:circular' v='150' />
+    <tag k='name' v='Test post office' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-999' visible='true' lat='12.345678' lon='23.456789'>
+    <tag k='poi' v='yes' />
+    <tag k='error:circular' v='1' />
+    <tag k='name' v='Test post office - More Complete' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-9' visible='true' lat='12.3455' lon='23.4566'>
+    <tag k='amenity' v='post_office' />
+    <tag k='hoot:status' v='2' />
+  </node>
+  <node id='-9090' visible='true' lat='12.3456782' lon='23.4567891'>
+    <tag k='poi' v='yes' />
+    <tag k='error:circular' v='2' />
+    <tag k='hoot:status' v='1' />
+    <tag k="hoot:merge:target" v="yes"/>
+  </node>
+</osm>

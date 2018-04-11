@@ -34,19 +34,16 @@
 namespace hoot
 {
 
-/**
- * Command used to derive an implicit tag rules database
- *
- * See note in ImplicitTagRawRulesDeriver as to why this logic is separated from that in
- * DeriveRawImplicitTagRulesCmd.
- */
 class DeriveImplicitTagRulesDatabaseCmd : public BaseCommand
 {
 public:
 
   static std::string className() { return "hoot::DeriveImplicitTagRulesDatabaseCmd"; }
 
-  virtual QString getName() const { return "implicit-tagging-derive-rules-database"; }
+  virtual QString getName() const { return "type-tagger-create-rules-db"; }
+
+  virtual QString getDescription() const
+  { return "Creates a rules database for adding missing type tags to map data"; }
 
   virtual int runSimple(QStringList args)
   {

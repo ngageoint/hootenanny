@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NAMEEXTRACTOR_H
 #define NAMEEXTRACTOR_H
@@ -65,6 +65,8 @@ public:
     const ConstElementPtr& candidate) const;
 
   virtual void setStringDistance(const StringDistancePtr &sd) { _d = sd; }
+
+  virtual QString getDescription() const { return "Extracts name tags from features"; }
 
 private:
   StringDistancePtr _d;

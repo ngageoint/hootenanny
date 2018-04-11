@@ -56,6 +56,8 @@ void MapIoJs::Init(Handle<Object> exports)
                FunctionTemplate::New(current, loadMap)->GetFunction());
   exports->Set(String::NewFromUtf8(current, "loadMapFromString"),
                FunctionTemplate::New(current, loadMapFromString)->GetFunction());
+  exports->Set(String::NewFromUtf8(current, "loadMapFromStringPreserveIdAndStatus"),
+               FunctionTemplate::New(current, loadMapFromStringPreserveIdAndStatus)->GetFunction());
   exports->Set(String::NewFromUtf8(current, "saveMap"),
                FunctionTemplate::New(current, saveMap)->GetFunction());
 }
@@ -88,7 +90,7 @@ void MapIoJs::loadMap(const FunctionCallbackInfo<Value>& args)
 
     args.GetReturnValue().SetUndefined();
   }
-  catch ( const HootException& e )
+  catch (const HootException& e)
   {
     args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(e)));
   }
@@ -99,25 +101,36 @@ void MapIoJs::loadMapFromString(const FunctionCallbackInfo<Value>& args)
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
 
-  // Arguments: output_map map_xml bool:useIds int:Status
-
   OsmMapJs* map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
-
   QString mapXml = toCpp<QString>(args[1]);
 
   OsmXmlReader reader;
-
   if (args.Length() >= 3)
   {
     reader.setUseDataSourceIds(toCpp<bool>(args[2]));
   }
-
   Status status = Status::Invalid;
   if (args.Length() >= 4)
   {
     status = (Status::Type)args[3]->ToInteger()->Value();
+    reader.setDefaultStatus(status);
   }
+  reader.readFromString(mapXml, map->getMap());
 
+  args.GetReturnValue().SetUndefined();
+}
+
+void MapIoJs::loadMapFromStringPreserveIdAndStatus(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  OsmMapJs* map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
+  QString mapXml = toCpp<QString>(args[1]);
+
+  OsmXmlReader reader;
+  reader.setUseDataSourceIds(true);
+  reader.setUseStatusFromFile(true);
   reader.readFromString(mapXml, map->getMap());
 
   args.GetReturnValue().SetUndefined();

@@ -52,6 +52,8 @@ public:
 
   long getNumRemoved() const { return _numRemoved; }
 
+  virtual QString getDescription() const { return "Removes empty relations"; }
+
 private:
 
   long _numRemoved;

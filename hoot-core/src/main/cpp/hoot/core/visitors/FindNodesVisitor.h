@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef FINDNODESVISITOR_H
 #define FINDNODESVISITOR_H
@@ -65,7 +65,12 @@ public:
                                           const QString& key,
                                           const QString& value);
 
+  virtual QString getName() const { return "Find Nodes"; }
+
+  virtual QString getDescription() const { return "Returns the node IDs visited"; }
+
 private:
+
   const OsmMap* _map;
   std::vector<long> _nodeIds;
   ElementCriterion * _pCrit;

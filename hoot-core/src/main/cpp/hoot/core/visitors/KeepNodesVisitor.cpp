@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "KeepNodesVisitor.h"
 
@@ -44,6 +44,7 @@ HOOT_FACTORY_REGISTER(ConstElementVisitor, KeepNodesVisitor)
 class FindAllNodesVisitor : public ConstElementVisitor
 {
 public:
+
   FindAllNodesVisitor(OsmMapPtr map) : _map(map) {}
 
   virtual void visit(const ConstElementPtr& e)
@@ -61,7 +62,10 @@ public:
 
   const set<ElementId>& getNodes() const { return _nodes; }
 
+  virtual QString getDescription() const { return ""; }
+
 private:
+
   OsmMapPtr _map;
 
   set<ElementId> _nodes;

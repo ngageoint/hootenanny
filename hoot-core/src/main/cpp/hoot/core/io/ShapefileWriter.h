@@ -91,7 +91,10 @@ public:
 
   void writePolygons(ConstOsmMapPtr map, const QString& path);
 
+  virtual QString supportedFormats() { return ".shp"; }
+
 protected:
+
   QStringList _columns;
   bool _includeIds;
   bool _includeInfo;

@@ -1110,6 +1110,7 @@ ggdm30 = {
             ["t.landuse == 'grass'","t.natural = 'grassland'; t['grassland:type'] = 'grassland';"],
             ["t.landuse == 'meadow'","t.natural = 'grassland'; t['grassland:type'] = 'meadow';"],
             ["t.landuse == 'military'","t.military = 'installation'; delete t.landuse"],
+            ["t.landuse == 'railway' && t['railway:yard'] == 'marshalling_yard'","a.F_CODE = 'AN060'"],
             ["t.leisure == 'recreation_ground'","t.landuse = 'recreation_ground'; delete t.leisure"],
             ["t.landuse == 'reservoir'","t.water = 'reservoir'; delete t.landuse"],
             ["t.landuse == 'retail'","t.landuse = 'built_up_area'; t.use = 'commercial'"],
@@ -1209,6 +1210,24 @@ ggdm30 = {
                 // Debug
                 // print('PreDropped: amenity = ' + tags.amenity);
                 delete tags.amenity;
+            }
+        }
+
+        // Churches etc
+        if (tags.building && ! tags.amenity)
+        {
+            var how = [ 'church','chapel','cathedral','mosque','pagoda','shrine','temple',
+                        'synagogue','tabernacle','stupa']
+            if (how.indexOf(tags.building) > -1)
+            {
+                tags.amenity = 'place_of_worship';
+            }
+
+            var rc = [ 'mission','religious_community','seminary','convent','monastry',
+                       'noviciate','hermitage','retrest','marabout']
+            if (rc.indexOf(tags.building) > -1)
+            {
+                tags.use = 'religious_activities';
             }
         }
 
@@ -1523,6 +1542,43 @@ ggdm30 = {
             delete tags.vertical_obstruction_identifier;
         }
 
+        // Railway loading things
+        if (tags.railway == 'loading')
+        {
+            if (tags.facility == 'gantry_crane')
+            {
+                delete tags.railway;
+                delete tags.facility;
+                attrs.F_CODE = 'AF040'; // Crane
+                tags['crane:type'] = 'bridge';
+            }
+
+            if (tags.facility == 'container_terminal')
+            {
+                delete tags.railway;
+                delete tags.facility;
+                attrs.F_CODE = 'AL010'; // Facility
+                attrs.FFN = '480'; // Transportation
+            }
+        } // End loading
+
+        switch (tags.man_made)
+        {
+            case undefined: // Break early if no value
+                break;
+
+            case 'reservoir_covered':
+                delete tags.man_made;
+                attrs.F_CODE = 'AM070'; // Storage Tank
+                tags.product = 'water';
+                break;
+
+            case 'gasometer':
+                delete tags.man_made;
+                attrs.F_CODE = 'AM070'; // Storage Tank
+                tags.product = 'gas';
+                break;
+        }
     }, // End applyToOgrPreProcessing
 
 // #####################################################################################################
@@ -1791,6 +1847,7 @@ ggdm30 = {
                 // delete notUsedTags['source:geometry:date'];
             }
         }
+
     }, // End applyToOgrPostProcessing
 
 // #####################################################################################################
@@ -2231,7 +2288,8 @@ ggdm30 = {
                 print('TableName ' + i + ': ' + returnData[i]['tableName'] + '  FCode: ' + returnData[i]['attrs']['F_CODE'] + '  Geom: ' + geometryType);
                 //for (var j in returnData[i]['attrs']) print('Out Attrs:' + j + ': :' + returnData[i]['attrs'][j] + ':');
                 var kList = Object.keys(returnData[i]['attrs']).sort()
-                for (var j = 0, kLen = kList.length; j < kLen; j++) print('Out Attrs:' + kList[j] + ': :' + returnData[i]['attrs'][kList[j]] + ':');
+                for (var j = 0, kLen = kList.length; j < kLen; j++) 
+                    if (returnData[i]['attrs'][kList[j]]) print('Out Attrs:' + kList[j] + ': :' + returnData[i]['attrs'][kList[j]] + ':');
             }
             print('');
         }

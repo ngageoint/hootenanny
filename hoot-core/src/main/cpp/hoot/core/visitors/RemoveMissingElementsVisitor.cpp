@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "RemoveMissingElementsVisitor.h"
@@ -38,7 +38,7 @@ HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveMissingElementsVisitor)
 
 RemoveMissingElementsVisitor::RemoveMissingElementsVisitor()
 {
-  _v =boost::shared_ptr<ReportMissingElementsVisitor>(new ReportMissingElementsVisitor(true));
+  _v = boost::shared_ptr<ReportMissingElementsVisitor>(new ReportMissingElementsVisitor(true));
 }
 
 void RemoveMissingElementsVisitor::visit(const ConstElementPtr& e)

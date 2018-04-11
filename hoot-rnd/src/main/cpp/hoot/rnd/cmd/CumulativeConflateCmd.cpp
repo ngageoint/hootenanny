@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -45,6 +45,9 @@ public:
   ConflateCumulativeCmd() { }
 
   virtual QString getName() const { return "conflate-cumulative"; }
+
+  virtual QString getDescription() const
+  { return "(experimental) Conflates three or more maps into a single map in a cumulative fashion"; }
 
   virtual int runSimple(QStringList args)
   {

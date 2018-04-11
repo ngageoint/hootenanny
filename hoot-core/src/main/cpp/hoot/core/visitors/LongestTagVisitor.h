@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef LONGESTTAGVISITOR_H
 #define LONGESTTAGVISITOR_H
@@ -36,10 +36,6 @@
 namespace hoot
 {
 
-/**
- * Sums the length of all the ways. The map projection is used so to get meters the map must be
- * first reprojected into meters.
- */
 class LongestTagVisitor : public ConstElementVisitor, public SingleStatistic
 {
 public:
@@ -55,6 +51,9 @@ public:
   QString getLongestTag() const { return _tag; }
 
   virtual void visit(const ConstElementPtr& e);
+
+  virtual QString getDescription() const
+  { return "Finds the tag with the longest value character size"; }
 
 private:
 

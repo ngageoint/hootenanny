@@ -65,7 +65,7 @@ public:
     MapProjector::project(g, planar, wgs84);
   }
 
-  QString getName() const { return "big-cookie-cutter"; }
+  QString getName() const { return "big-cookie-cut"; }
 
   int runSimple(QStringList args)
   {

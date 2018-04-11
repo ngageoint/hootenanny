@@ -2,10 +2,9 @@
 
 === Description
 
-The +find-intersections+ command removes common erroneous data scenarios from
-input and writes to output.
+The +find-intersections+ command detects road intersections and writes them to output.
 
-* +input+ - Input (e.g. .osm file).
+* +input+  - Input (e.g. .osm file).
 * +output+ - Output file (e.g. .osm file).
 
 === Usage

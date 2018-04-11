@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMAPIDBREADER_H
 #define OSMAPIDBREADER_H
@@ -33,6 +33,9 @@
 namespace hoot
 {
 
+/**
+ * Reads from an OSM API database.
+ */
 class OsmApiDbReader : public ApiDbReader
 {
 public:
@@ -45,6 +48,8 @@ public:
   virtual void open(QString urlStr);
 
   virtual void setConfiguration(const Settings &conf);
+
+  virtual QString supportedFormats() { return "osmapidb://"; }
 
 protected:
 

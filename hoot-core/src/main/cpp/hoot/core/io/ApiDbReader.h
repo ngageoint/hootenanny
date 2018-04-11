@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef APIDBREADER_H
 #define APIDBREADER_H
@@ -133,7 +133,7 @@ protected:
 
   bool _returnNodesOnly;
 
-  bool _keepFileStatus;
+  bool _keepStatusTag;
 
   ElementType _selectElementType;
   boost::shared_ptr<QSqlQuery> _elementResultIterator;
@@ -169,6 +169,16 @@ private:
 
   //last element ID read
   long _lastId;
+
+  long _statusUpdateInterval;
+
+  long _totalNumMapNodes;
+  long _totalNumMapWays;
+  long _totalNumMapRelations;
+
+  long _numNodesRead;
+  long _numWaysRead;
+  long _numRelationsRead;
 
   void _read(OsmMapPtr map, const ElementType& elementType);
 

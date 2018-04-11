@@ -2,8 +2,8 @@
 
 === Description
 
-Prints the version of Hootenanny. Including the debug flag will also print
-some relevant library versions and statistics.
+The +version+ command prints the version of Hootenanny. Including the debug flag will also print some relevant library versions 
+and statistics.
 
 === Usage
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -55,6 +55,8 @@ public:
   }
 
   virtual QString getName() const { return "help"; }
+
+  virtual QString getDescription() const { return "Displays help documentation"; }
 
   int runSimple(QStringList args)
   {
@@ -109,7 +111,7 @@ private:
     cout << "usage: hoot <command> [--trace] [--debug] [--warn] [-D name=value] [--conf <path>] "
       "[<args>]\n";
     cout << endl;
-    cout << "For detailed help on the following commands type: hoot --help (command name)\n"
+    cout << "For detailed help on the following commands type: hoot help (command name)\n"
             "\n";
     sort(cmds.begin(), cmds.end(), commandCompare);
     for (size_t i = 0; i < cmds.size(); i++)
@@ -117,7 +119,10 @@ private:
       boost::shared_ptr<Command> c(Factory::getInstance().constructObject<Command>(cmds[i]));
       if (c->displayInHelp())
       {
-        cout << "  " << c->getName().toStdString() << endl;
+        //spacing here is roughly the size of the longest command name plus a small buffer
+        const int spaceSize = 30 - c->getName().size();
+        const QString line = c->getName() + QString(spaceSize, ' ') + c->getDescription();
+        cout << "  " << line << endl;
       }
     }
 

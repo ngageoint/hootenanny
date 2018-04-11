@@ -2,11 +2,10 @@
 
 === Description
 
-The +perty+ command permutes data.  It reads from input, permutes the data, and
-writes to output files. The +perty+ command is based on the paper, "Evaluating
-conflation methods using uncertainty modeling," P. Doucette, et. al, 2012. 
+The +perty+ command perturbs map data.  It reads from input, permutes the data, and writes to output files. The +perty+ command is 
+based on the paper, "Evaluating conflation methods using uncertainty modeling," P. Doucette, et. al, 2012. 
 
-* +input+ - Input (e.g. .osm file).
+* +input+  - Input (e.g. .osm file).
 * +output+ - Output file (e.g. .osm file).
 
 === Optional Defines

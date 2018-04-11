@@ -59,19 +59,13 @@ class PoiPolygonMergerTest : public CppUnit::TestFixture
   CPPUNIT_TEST(toyScenario4Test);
   CPPUNIT_TEST(toyScenario5Test);
   CPPUNIT_TEST(toyScenario6Test);
-  CPPUNIT_TEST(mergeWayAsPolyTest);
-  CPPUNIT_TEST(mergeRelationAsPolyTest);
-  CPPUNIT_TEST(mergeMissingPoiInputTest);
-  CPPUNIT_TEST(mergeMissingPolyInputTest);
-  CPPUNIT_TEST(mergeMoreThanOnePoiInputTest);
-  CPPUNIT_TEST(mergeMoreThanOnePolyInputTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
   void setUp()
   {
-    TestUtils::mkpath("test-output/conflate/poi-polygon");
+    TestUtils::mkpath("test-output/conflate/poi-polygon/PoiPolygonMergerTest");
   }
 
   void basicTest()
@@ -137,6 +131,7 @@ public:
   class AddPairsVisitor : public ConstElementVisitor
   {
   public:
+
     AddPairsVisitor(OsmMapPtr map, QString scenario) : _map(map), _scenario(scenario) {}
 
     set< pair<ElementId, ElementId> > getPairs() const
@@ -176,7 +171,10 @@ public:
       }
     }
 
+    virtual QString getDescription() const {return ""; }
+
   private:
+
     set< pair<ElementId, ElementId> > _pairs;
     vector<ElementId> _e1, _e2;
     OsmMapPtr _map;
@@ -454,129 +452,6 @@ public:
                     "}\n",
       OsmJsonWriter(4).toString(map));
   }
-
-  void mergeWayAsPolyTest()
-  {
-    OsmMap::resetCounters();
-    OsmMapPtr map(new OsmMap());
-    //read everything in as unknown1; the merger will make sure the poi and poly have separate
-    //input types
-    OsmMapReaderFactory::read(
-      map, "test-files/conflate/poi-polygon/poi-poly-way-poly-in.osm", false, Status::Unknown1);
-
-    const ElementId polyId = PoiPolygonMerger::merge(map);
-    CPPUNIT_ASSERT_EQUAL((long)-1, polyId.getId());
-    CPPUNIT_ASSERT_EQUAL(ElementType::Way, polyId.getType().getEnum());
-
-    MapProjector::projectToWgs84(map);
-    OsmMapWriterFactory::getInstance().write(map,
-      "test-output/conflate/poi-polygon/poi-poly-way-poly-out.osm");
-
-    HOOT_FILE_EQUALS(
-      "test-files/conflate/poi-polygon/poi-poly-way-poly-out.osm",
-      "test-output/conflate/poi-polygon/poi-poly-way-poly-out.osm");
-  }
-
-  void mergeRelationAsPolyTest()
-  {
-    OsmMap::resetCounters();
-    OsmMapPtr map(new OsmMap());
-    //see comments in mergeWayAsPolyTest
-    OsmMapReaderFactory::read(
-      map, "test-files/conflate/poi-polygon/poi-poly-relation-poly-in.osm", false,
-      Status::Unknown1);
-
-    const ElementId polyId = PoiPolygonMerger::merge(map);
-    CPPUNIT_ASSERT_EQUAL((long)-1, polyId.getId());
-    CPPUNIT_ASSERT_EQUAL(ElementType::Relation, polyId.getType().getEnum());
-
-    MapProjector::projectToWgs84(map);
-    OsmMapWriterFactory::getInstance().write(map,
-      "test-output/conflate/poi-polygon/poi-poly-relation-poly-out.osm");
-
-    HOOT_FILE_EQUALS(
-      "test-files/conflate/poi-polygon/poi-poly-relation-poly-out.osm",
-      "test-output/conflate/poi-polygon/poi-poly-relation-poly-out.osm");
-  }
-
-  void mergeMissingPoiInputTest()
-  {
-    QString exceptionMsg("");
-    try
-    {
-      OsmMapPtr map(new OsmMap());
-      OsmMapReaderFactory::read(
-        map, "test-files/conflate/poi-polygon/poi-poly-missing-poi-in.osm", false,
-        Status::Unknown1);
-
-      PoiPolygonMerger::merge(map);
-    }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-    }
-    HOOT_STR_EQUALS("No POI passed to POI/Polygon merger.", exceptionMsg.toStdString());
-  }
-
-  void mergeMissingPolyInputTest()
-  {
-    QString exceptionMsg("");
-    try
-    {
-      OsmMapPtr map(new OsmMap());
-      OsmMapReaderFactory::read(
-        map, "test-files/conflate/poi-polygon/poi-poly-missing-poly-in.osm", false,
-        Status::Unknown1);
-
-      PoiPolygonMerger::merge(map);
-    }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-    }
-    HOOT_STR_EQUALS("No polygon passed to POI/Polygon merger.", exceptionMsg.toStdString());
-  }
-
-  void mergeMoreThanOnePoiInputTest()
-  {
-    QString exceptionMsg("");
-    try
-    {
-      OsmMapPtr map(new OsmMap());
-      OsmMapReaderFactory::read(
-        map, "test-files/conflate/poi-polygon/poi-poly-more-than-one-poi-in.osm", false,
-        Status::Unknown1);
-
-      PoiPolygonMerger::merge(map);
-    }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-    }
-    HOOT_STR_EQUALS(
-      "More than one POI passed to POI/Polygon merger.", exceptionMsg.toStdString());
-  }
-
-  void mergeMoreThanOnePolyInputTest()
-  {
-    QString exceptionMsg("");
-    try
-    {
-      OsmMapPtr map(new OsmMap());
-      OsmMapReaderFactory::read(
-        map, "test-files/conflate/poi-polygon/poi-poly-more-than-one-poly-in.osm", false,
-        Status::Unknown1);
-
-      PoiPolygonMerger::merge(map);
-    }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-    }
-    HOOT_STR_EQUALS(
-      "More than one polygon passed to POI/Polygon merger.", exceptionMsg.toStdString());
-  }
-
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PoiPolygonMergerTest, "quick");

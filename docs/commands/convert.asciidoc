@@ -2,12 +2,11 @@
 
 === Description
 
-The +convert+ command converts from one input format to another. This does not
-perform any translation, only conversion.  The process may be memory bound, 
-depending upon the formats selected (see below). Please see ogr2osm and osm2shp 
+The +convert+ command converts map data from one input format to another. This does not perform any translation, only conversion.  
+The process may be memory bound, depending upon the formats selected (see below). Please see convert-ogr2osm and convert-osm2shp 
 for a description of conversions between tabular formats and OSM.  
 
-* +input+ - Input (e.g. .osm file).
+* +input+  - Input (e.g. .osm file).
 * +output+ - Output file (e.g. .osm file).
 
 If the `convert.ops` configuration option is specified then all the specified

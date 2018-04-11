@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
   {
     c.reset(Factory::getInstance().constructObject<Command>(cmds[i]));
     QString argName = c->getName();
-    if (QString(argv[1]) == argName || QString(argv[1]) == argName.prepend("--") /* this will be deprecated */ )
+    if (QString(argv[1]) == argName)
     {
       break;
     }
@@ -91,7 +91,7 @@ int main(int argc, char *argv[])
     }
   }
   // Yep, a juvenile easter egg. :)
-  else if (QString(argv[1]) == "--whoami" || QString(argv[1]) == "whoami")
+  else if (QString(argv[1]) == "whoami")
   {
     cout << "Papa Smurf" << endl;
     return 0;

@@ -14,8 +14,8 @@ export TEST_OUTPUT=$OUTPUT_DIR/SplitLongWaysTest.osm.pbf
 rm -rf $OUTPUT_DIR
 mkdir -p $OUTPUT_DIR
 
-hoot ogr2osm $HOOT_OPTS -D ogr2osm.ops+=$ADDITIONAL_VISITORS \
+hoot convert-ogr2osm $HOOT_OPTS -D ogr2osm.ops+=$ADDITIONAL_VISITORS \
     $HOOT_HOME/translations/$TRANSLATION \
     $TEST_OUTPUT $INPUTS
 
-hoot is-match $HOOT_OPTS $KNOWN_GOOD_OUTPUT $TEST_OUTPUT && echo "Test Complete"
+hoot map-diff $HOOT_OPTS $KNOWN_GOOD_OUTPUT $TEST_OUTPUT && echo "Test Complete"

@@ -63,7 +63,9 @@ namespace hoot
 unsigned int HootApiDb::logWarnCount = 0;
 
 HootApiDb::HootApiDb() :
-_precision(ConfigOptions().getWriterPrecision())
+_precision(ConfigOptions().getWriterPrecision()),
+_createIndexesOnClose(true),
+_flushOnClose(true)
 {
   _init();
 }
@@ -156,11 +158,17 @@ void HootApiDb::_checkLastMapId(long mapId)
 
 void HootApiDb::close()
 {
-  LOG_DEBUG("Closing database connection...");
+  LOG_TRACE("Closing database connection...");
 
-  createPendingMapIndexes();
-  _flushBulkInserts();
-  _flushBulkDeletes();
+  if (_createIndexesOnClose)
+  {
+    createPendingMapIndexes();
+  }
+  if (_flushOnClose)
+  {
+    _flushBulkInserts();
+    _flushBulkDeletes();
+  }
 
   _resetQueries();
 
@@ -231,7 +239,10 @@ void HootApiDb::_copyTableStructure(QString from, QString to)
 
 void HootApiDb::createPendingMapIndexes()
 {
-  LOG_TRACE("Creating map indexes...");
+  if (_pendingMapIndexes.size() > 0)
+  {
+    LOG_DEBUG("Creating " << _pendingMapIndexes.size() << " map indexes...");
+  }
 
   for (int i = 0; i < _pendingMapIndexes.size(); i++)
   {
@@ -460,18 +471,22 @@ void HootApiDb::_flushBulkInserts()
 
   if (_nodeBulkInsert != 0)
   {
+    LOG_VARD(_nodeBulkInsert->getPendingCount());
     _nodeBulkInsert->flush();
   }
   if (_wayBulkInsert != 0)
   {
+    LOG_VARD(_wayBulkInsert->getPendingCount());
     _wayBulkInsert->flush();
   }
   if (_wayNodeBulkInsert != 0)
   {
+    LOG_VARD(_wayNodeBulkInsert->getPendingCount());
     _wayNodeBulkInsert->flush();
   }
   if (_relationBulkInsert != 0)
   {
+    LOG_VARD(_relationBulkInsert->getPendingCount());
     _relationBulkInsert->flush();
   }
 }
@@ -482,6 +497,7 @@ void HootApiDb::_flushBulkDeletes()
 
   if (_nodeBulkDelete != 0)
   {
+    LOG_VARD(_nodeBulkDelete->getPendingCount());
     _nodeBulkDelete->flush();
   }
 }
@@ -1084,7 +1100,7 @@ void HootApiDb::open(const QUrl& url)
 
 void HootApiDb::_resetQueries()
 {
-  LOG_DEBUG("Resetting queries...");
+  LOG_TRACE("Resetting queries...");
 
   ApiDb::_resetQueries();
 
@@ -1111,6 +1127,7 @@ void HootApiDb::_resetQueries()
   _mapExistsByName.reset();
   _getMapIdByName.reset();
   _insertChangeSet2.reset();
+  _numChangesets.reset();
 
   // bulk insert objects.
   _nodeBulkInsert.reset();
@@ -1245,6 +1262,37 @@ long HootApiDb::getMapIdByName(const QString name)
     }
   }
   _getMapIdByName->finish();
+  return result;
+}
+
+long HootApiDb::numChangesets()
+{
+  if (!_numChangesets)
+  {
+    _numChangesets.reset(new QSqlQuery(_db));
+    _numChangesets->prepare("SELECT COUNT(*) FROM " + getChangesetsTableName(_currMapId));
+  }
+  LOG_VARD(_numChangesets->lastQuery());
+
+  if (!_numChangesets->exec())
+  {
+    LOG_ERROR(_numChangesets->executedQuery());
+    LOG_ERROR(_numChangesets->lastError().text());
+    throw HootException(_numChangesets->lastError().text());
+  }
+
+  long result = -1;
+  if (_numChangesets->next())
+  {
+    bool ok;
+    result = _numChangesets->value(0).toLongLong(&ok);
+    if (!ok)
+    {
+      throw HootException(
+        "Count not changeset count for map with ID: " + QString::number(_currMapId));
+    }
+  }
+  _numChangesets->finish();
   return result;
 }
 

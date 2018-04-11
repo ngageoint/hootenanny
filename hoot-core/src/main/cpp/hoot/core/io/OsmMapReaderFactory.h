@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMMAPREADERFACTORY_H
 #define OSMMAPREADERFACTORY_H
@@ -53,6 +53,10 @@ public:
 
   boost::shared_ptr<OsmMapReader> createReader(QString url, bool useFileId = true,
                                                Status defaultStatus = Status::Invalid);
+  //Note the url as the last param here...was getting runtime overlap between these two where
+  //bools were being passed as status ints and vice versa.  May need to do some more refactoring
+  //here to make things cleaner.
+  boost::shared_ptr<OsmMapReader> createReader(bool useFileId, bool useFileStatus, QString url);
 
   static OsmMapReaderFactory& getInstance();
 
@@ -65,12 +69,19 @@ public:
 
   static void read(boost::shared_ptr<OsmMap> map, QString url, bool useFileId = true,
                    Status defaultStatus = Status::Invalid);
+  //see note for createReader
+  static void read(boost::shared_ptr<OsmMap> map, bool useFileId, bool useFileStatus, QString url);
 
   static QString getReaderName(const QString url);
 
 private:
 
   static boost::shared_ptr<OsmMapReaderFactory> _theInstance;
+
+  static void _read(boost::shared_ptr<OsmMap> map, boost::shared_ptr<OsmMapReader> reader,
+             const QString url);
+
+  boost::shared_ptr<OsmMapReader> _createReader(const QString url);
 };
 
 }

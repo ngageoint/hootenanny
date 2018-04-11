@@ -1,5 +1,8 @@
 == Big Data
 
+NOTE: This documents Hootenanny conflation using Hadoop, which is no longer supported (supported up to v0.2.38), and has been 
+left here for references purposes only.
+
 The following sections describe using Hootenanny with large data sets, Big Data. In Hootenanny we simply define Big Data as anything we can't fit into RAM on a single machine. In some cases the big operations will utilize a cluster of computers, in others such as translation, it will run a simpler version of the algorithm.
 
 === Hadoop
@@ -82,7 +85,7 @@ prompt$ hoot | grep big
 Start with a small test file and see if a very basic command works. Hootenanny on Hadoop only supports +.osm.pbf+ files as input. You can use the following command to convert your favorite moderately sized +.osm+ file to +.osm.pbf+. If you need to convert a very large file please check out http://wiki.openstreetmap.org/wiki/Osmosis[Osmosis].
 
 ------
-prompt$ hoot --convert myfile.osm myfile.osm.pbf
+prompt$ hoot convert myfile.osm myfile.osm.pbf
 ------
 
 All input files must live in a directory. This will let you group like files together (e.g. all the states in a single directory), but more importantly Hootenanny uses that directory to cache information about your files. Use the following commands to create a directory and put the file on your HDFS instance:
@@ -95,7 +98,7 @@ prompt$ hadoop fs -put myfile.osm.pbf myfile-dir.osm.pbf
 Now, lets paint the nodes in your file to a density map at a 1km resolution. This should take a few minutes for a small file, or about 30min for the planet on an 8 core desktop. For detailed information please look at the command line help.
 
 ------
-prompt$ hoot --paint-nodes myfile-dir.osm.pbf 0.01 myfile-density.png
+prompt$ hoot paint-nodes myfile-dir.osm.pbf 0.01 myfile-density.png
 ------
 
 Congrats! You ran your first Hadoop job through Hootenanny.
@@ -105,7 +108,7 @@ Congrats! You ran your first Hadoop job through Hootenanny.
 Hadoop conflation is very similar to standalone conflation.
 
 ------
-prompt$ hoot --big-conflate myinput1-dir.osm.pbf myinput2-dir.osm.pbf myoutput-dir.osm.pbf
+prompt$ hoot big-conflate myinput1-dir.osm.pbf myinput2-dir.osm.pbf myoutput-dir.osm.pbf
 ------
 
 Expect this to run for twenty minutes or so with a small input. I suggest trying something small just in case. Nothing is more disappointing than getting two hours into a long run and getting a simple error message.
@@ -113,7 +116,7 @@ Expect this to run for twenty minutes or so with a small input. I suggest trying
 The output is a directory filled with .pbf files. These files can simply be concatenated with a header to create the final output on the local disk. e.g.
 
 ------
-prompt$ hadoop fs -cat myoutput-dir.osm.pbf/*.pbf | hoot --add-pbf-header - myoutput.osm.pbf
+prompt$ hadoop fs -cat myoutput-dir.osm.pbf/*.pbf | hoot add-pbf-header - myoutput.osm.pbf
 ------
 
 +osm2pgsql+ requires a sorted input to work properly. We'll use osmosis to sort our output.

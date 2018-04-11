@@ -1,0 +1,23 @@
+== formats
+
+=== Description
+
+The +formats+ command prints out supported data formats.  
+
+=== Usage
+
+--------------------------------------
+formats [--input] [--output]
+--------------------------------------
+
+==== Command Example Usage
+
+--------------------------------------
+# prints all
+hoot formats
+
+hoot formats --input
+
+hoot formats --output
+--------------------------------------
+

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMXMLWRITER_H
 #define OSMXMLWRITER_H
@@ -79,6 +79,8 @@ public:
 
   void setIncludeHootInfo(bool includeInfo) { _includeDebug = includeInfo; }
 
+  void setIncludePid(bool includePid) { _includePid = includePid; }
+
   /**
    * Includes the x/y location of the node with the nd element. This is not standard for OSM
    * and can cause inconsistencies if it isn't updated properly when the file is rewritten, however
@@ -118,6 +120,8 @@ public:
   bool getFormatXml() const { return _formatXml; }
   void setFormatXml(const bool format) { _formatXml = format; }
 
+  virtual QString supportedFormats() { return ".osm"; }
+
 private:
 
   bool _formatXml;
@@ -125,6 +129,7 @@ private:
   bool _includeDebug;
   bool _includePointInWays;
   bool _includeCompatibilityTags;
+  bool _includePid;
   bool _textStatus;
   QString _osmSchema;
   QString _timestamp;

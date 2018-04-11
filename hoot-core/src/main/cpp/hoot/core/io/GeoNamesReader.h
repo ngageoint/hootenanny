@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef GEONAMESREADER_H
 #define GEONAMESREADER_H
@@ -39,6 +39,7 @@ namespace hoot
 class GeoNamesReader : public PartialOsmMapReader
 {
 public:
+
   static std::string className() { return "hoot::GeoNamesReader"; }
 
   GeoNamesReader();
@@ -65,7 +66,10 @@ public:
 
   virtual void setUseDataSourceIds(bool useDataSourceIds) { _useDataSourceIds = useDataSourceIds; }
 
+  virtual QString supportedFormats() { return ".geonames"; }
+
 private:
+
   Meters _circularError;
   QStringList _columns;
   QList<int> _convertColumns;

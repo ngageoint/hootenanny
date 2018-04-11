@@ -106,8 +106,20 @@ void OsmApiDbBulkInserter::open(QString url)
   if (_destinationIsDatabase())
   {
     _database.open(_outputUrl);
+    _verifyChangesetUserId();
   }
   _verifyDependencies();
+}
+
+void OsmApiDbBulkInserter::_verifyChangesetUserId()
+{
+  LOG_VARD(_changesetData.changesetUserId);
+  const QString errorMsg =
+    "Invalid changeset user ID: " + QString::number(_changesetData.changesetUserId);
+  if (_changesetData.changesetUserId == -1 || !_database.userExists(_changesetData.changesetUserId))
+  {
+    throw HootException(errorMsg);
+  }
 }
 
 void OsmApiDbBulkInserter::_verifyFileOutputs()
@@ -196,7 +208,7 @@ void OsmApiDbBulkInserter::_verifyOutputCopySettings()
 
 void OsmApiDbBulkInserter::close()
 {
-  LOG_DEBUG("Closing writer...");
+  LOG_TRACE("Closing writer...");
 
   _closeOutputFiles();
   if (_destinationIsDatabase())
@@ -413,9 +425,7 @@ void OsmApiDbBulkInserter::finalizePartial()
 
 bool OsmApiDbBulkInserter::_destinationIsDatabase() const
 {
-  return
-    _outputUrl.toLower().startsWith("osmapidb://");// ||
-    //_outputUrl.toLower().startsWith("hootapidb://");
+  return _outputUrl.toLower().startsWith("osmapidb://");
 }
 
 void OsmApiDbBulkInserter::_writeDataToDbPsql()
@@ -935,7 +945,7 @@ void OsmApiDbBulkInserter::setConfiguration(const Settings& conf)
   const ConfigOptions confOptions(conf);
 
   setOutputFilesCopyLocation(confOptions.getApidbBulkInserterOutputFilesCopyLocation().trimmed());
-  _changesetData.changesetUserId = confOptions.getChangesetUserId();
+  setChangesetUserId(confOptions.getChangesetUserId());
   setFileOutputElementBufferSize(confOptions.getMaxElementsPerPartialMap());
   setStatusUpdateInterval(confOptions.getTaskStatusUpdateInterval());
   setMaxChangesetSize(confOptions.getChangesetMaxSize());
@@ -1376,12 +1386,6 @@ void OsmApiDbBulkInserter::_writeChangeset()
 {
   LOG_VART(_changesetData.changesetUserId);
   LOG_VART(_changesetData.currentChangesetId);
-
-  if (_changesetData.changesetUserId == -1)
-  {
-    throw HootException(
-      "Invalid changeset user ID: " + QString::number(_changesetData.changesetUserId));
-  }
 
   if (!_outputSections[ApiDb::getChangesetsTableName()])
   {

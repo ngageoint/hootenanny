@@ -25,7 +25,7 @@ echo "Select all from osm api db..."
 psql --quiet $AUTH -d $DB_NAME_OSMAPI -f test-files/ToyTestA.sql
 
 hoot convert --error $HOOT_OPTS "$DB_URL" $OUTPUT_DIR/output1.osm
-hoot is-match test-files/cmd/slow/ServiceOsmApiDbReaderTest/output1.osm $OUTPUT_DIR/output1.osm
+hoot map-diff test-files/cmd/slow/ServiceOsmApiDbReaderTest/output1.osm $OUTPUT_DIR/output1.osm
 
 echo "Bounding box selection from osm api db..."
 
@@ -38,6 +38,6 @@ scripts/database/CleanAndInitializeOsmApiDb.sh
 hoot convert --warn $HOOT_OPTS test-files/DcGisRoads.osm $DB_URL
 
 hoot convert --warn $HOOT_OPTS -D convert.bounding.box=-77.04,38.8916,-77.03324,38.8958 $OSM_API_DB_URL $OUTPUT_DIR/output2.osm
-hoot is-match test-files/cmd/slow/ServiceOsmApiDbReaderTest/output2.osm $OUTPUT_DIR/output2.osm
+hoot map-diff test-files/cmd/slow/ServiceOsmApiDbReaderTest/output2.osm $OUTPUT_DIR/output2.osm
 
 

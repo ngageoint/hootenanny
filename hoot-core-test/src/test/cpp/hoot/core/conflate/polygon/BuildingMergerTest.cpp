@@ -136,6 +136,7 @@ public:
   class RemoveMissVisitor : public ConstElementVisitor
   {
   public:
+
     RemoveMissVisitor(OsmMapPtr map, QString ref) : _map(map), _ref(ref) {}
 
     virtual void visit(const ConstElementPtr& e)
@@ -146,7 +147,10 @@ public:
       }
     }
 
+    virtual QString getDescription() const {return ""; }
+
   private:
+
     OsmMapPtr _map;
     QString _ref;
   };

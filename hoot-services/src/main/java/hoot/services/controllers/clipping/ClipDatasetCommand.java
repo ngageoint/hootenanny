@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.clipping;
 
@@ -67,7 +67,7 @@ class ClipDatasetCommand extends ExternalCommand {
         //Comma delimited bounds. minx,miny,maxx,maxy e.g.38,-105,39,-104
         substitutionMap.put("BOUNDS", params.getBounds());
 
-        String command = "hoot crop-map --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT} ${OUTPUT} ${BOUNDS}";
+        String command = "hoot crop --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT} ${OUTPUT} ${BOUNDS}";
 
         super.configureCommand(command, substitutionMap, caller);
     }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "FindNodesVisitor.h"
@@ -38,7 +38,6 @@ namespace hoot
 FindNodesVisitor::FindNodesVisitor (ElementCriterion* pCrit):
   _pCrit(pCrit)
 {
-  // This space intentionally left blank
 }
 
 void FindNodesVisitor::visit(const boost::shared_ptr<const Element>& e)
@@ -91,5 +90,5 @@ vector<long> FindNodesVisitor::findNodesByTag(const ConstOsmMapPtr& map,
   return v.getIds();
 }
 
-} // namespace hoot
+}
 

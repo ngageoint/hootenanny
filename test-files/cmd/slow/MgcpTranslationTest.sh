@@ -4,11 +4,11 @@ set -e
 mkdir -p test-output/translation/
 
 function compareFiles {
-    hoot --is-match $1 $2 || diff $1 $2
+    hoot map-diff $1 $2 || diff $1 $2
 }
 
-hoot --osm2shp "LTN,WTC,HCT,UID" test-files/translation/MgcpTest.osm test-output/translation/MgcpTest.shp
-hoot --ogr2osm translations/MgcpTest.js test-output/translation/MgcpTranslated.osm test-output/translation/MgcpTestLines.shp
+hoot convert-osm2shp "LTN,WTC,HCT,UID" test-files/translation/MgcpTest.osm test-output/translation/MgcpTest.shp
+hoot convert-ogr2osm --warn translations/MgcpTest.js test-output/translation/MgcpTranslated.osm test-output/translation/MgcpTestLines.shp
 
 # Un-comment this to update the OSM file
 #cp test-output/translation/MgcpTranslated.osm test-files/translation/MgcpTranslated.osm
@@ -23,7 +23,7 @@ compareFiles test-output/translation/MgcpTranslated.osm test-files/translation/M
 function checkMgcpV3 {
     OUT=test-output/translation/Mgcpv3_$1.osm
     IN=test-files/MGCPv3/$1.shp
-    hoot --ogr2osm translations/MgcpTest.js $OUT $IN
+    hoot convert-ogr2osm --warn translations/MgcpTest.js $OUT $IN
     #echo $IN  $OUT
     compareFiles $OUT test-files/MGCPv3/$1-output.osm
     # Uncomment this to update what we compare with.
@@ -31,7 +31,7 @@ function checkMgcpV3 {
     # Export as TRDv4
     OUT4=test-output/translation/$1
     rm -rf $OUT4
-    hoot --osm2ogr translations/MGCP_TRD4.js $OUT $OUT4.shp
+    hoot convert-osm2ogr --debug translations/MGCP_TRD4.js $OUT $OUT4.shp
 }
 
 # Building Areas

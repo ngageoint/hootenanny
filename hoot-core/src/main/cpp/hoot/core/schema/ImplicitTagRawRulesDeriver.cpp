@@ -114,8 +114,7 @@ void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
     "Generating POI implicit tag rules raw file for inputs: " << inputs <<
     ", translation scripts: " << translationScripts << ".  Writing to output: " << output << "...");
   LOG_VARD(_sortParallelCount);
-  LOG_VARD(_skipFiltering);
-  LOG_VARD(_sortParallelCount);
+  LOG_VARD(_skipFiltering);;
   LOG_VARD(_translateAllNamesToEnglish);
 
   _init();

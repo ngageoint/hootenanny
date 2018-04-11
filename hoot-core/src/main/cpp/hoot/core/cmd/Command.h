@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef COMMAND_H
@@ -68,15 +68,23 @@ public:
   virtual QString getHelp() const = 0;
 
   /**
-   * Returns the name of the command. This should take a form similar to "--my-command".
+   * Returns the name of the command. This should take a form similar to "my-command" and ideally
+   * be 30 characters or less.
    */
   virtual QString getName() const = 0;
+
+  /**
+   * Returns a one sentence description for the command.
+   *
+   * Keep this as short as possible, capitalize the first letter, and check to see that it stays
+   * on one line when displayed when typing 'hoot'.
+   */
+  virtual QString getDescription() const = 0;
 
   /**
    * @sa BaseCommand for an example implementation.
    */
   virtual int run(char* argv[], int argc) = 0;
-
 };
 
 typedef boost::shared_ptr<Command> CommandPtr;

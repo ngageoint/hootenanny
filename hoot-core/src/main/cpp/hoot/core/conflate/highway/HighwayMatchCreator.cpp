@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HighwayMatchCreator.h"
 
@@ -74,6 +74,7 @@ HOOT_FACTORY_REGISTER(MatchCreator, HighwayMatchCreator)
 class HighwayMatchVisitor : public ConstElementVisitor
 {
 public:
+
   /**
    * @param matchStatus If the element's status matches this status then it is checked for a match.
    */
@@ -101,6 +102,8 @@ public:
     LOG_DEBUG("neighbor counts, max: " << _neighborCountMax << " mean: " <<
              (double)_neighborCountSum / (double)_elementsEvaluated);
   }
+
+  virtual QString getDescription() const { return ""; }
 
   void checkForMatch(const boost::shared_ptr<const Element>& e)
   {

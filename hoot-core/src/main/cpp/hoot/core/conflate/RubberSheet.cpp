@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "RubberSheet.h"
@@ -67,14 +67,20 @@ bool compareMatches(const RubberSheet::Match& m1, const RubberSheet::Match& m2)
   return m1.p > m2.p;
 }
 
-RubberSheet::RubberSheet(bool logNotEnoughTiePointsAsWarning) :
+RubberSheet::RubberSheet() :
 _ref(ConfigOptions().getRubberSheetRef()),
 _debug(ConfigOptions().getRubberSheetDebug()),
 _minimumTies(ConfigOptions().getRubberSheetMinimumTies()),
-_logNotEnoughTiePointsAsWarning(logNotEnoughTiePointsAsWarning)
+_failWhenMinTiePointsNotFound(ConfigOptions().getRubberSheetFailWhenMinimumTiePointsNotFound()),
+_logWarningWhenRequirementsNotFound(ConfigOptions().getRubberSheetLogMissingRequirementsAsWarning())
 {
   _emptyMatch.score = 0.0;
   _emptyMatch.p = 0.0;
+
+  LOG_VARD(_ref);
+  LOG_VARD(_minimumTies);
+  LOG_VARD(_failWhenMinTiePointsNotFound);
+  LOG_VARD(_logWarningWhenRequirementsNotFound);
 }
 
 void RubberSheet::_addIntersection(long nid, const set<long>& /*wids*/)
@@ -146,17 +152,16 @@ void RubberSheet::applyTransform(boost::shared_ptr<OsmMap>& map)
 
   if (!_interpolator2to1)
   {
-    if (logWarnCount < Log::getWarnMessageLimit()
-        && _logNotEnoughTiePointsAsWarning)
+    const QString msg =
+      "No appropriate interpolator was specified, skipping rubber sheet transform.";
+    if (_logWarningWhenRequirementsNotFound)
     {
-      LOG_WARN("No appropriate interpolator was specified, skipping rubber sheet transform.");
+      LOG_WARN(msg);
     }
-    else if (logWarnCount == Log::getWarnMessageLimit()
-             && _logNotEnoughTiePointsAsWarning)
+    else
     {
-      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      LOG_INFO(msg);
     }
-    logWarnCount++;
     return;
   }
 
@@ -382,6 +387,8 @@ void RubberSheet::_findTies()
     }
   }
 
+  LOG_VARD(_ties.size());
+  LOG_VARD(_minimumTies);
   if ((long)_ties.size() >= _minimumTies)
   {
     LOG_DEBUG(
@@ -402,17 +409,30 @@ void RubberSheet::_findTies()
   }
   else
   {
-    const QString msg =
-      QString("Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is %1 and %2 tie points were found.")
-        .arg(QString::number(_minimumTies))
-        .arg(QString::number(_ties.size()));
-    if (_logNotEnoughTiePointsAsWarning)
+    LOG_VARD(_failWhenMinTiePointsNotFound);
+    if (_failWhenMinTiePointsNotFound)
     {
-      LOG_WARN(msg);
+      throw HootException(
+        QString("Error rubbersheeting due to not finding enough tie points.  ") +
+        QString("The minimum allowable tie points configured is %1 and %2 tie points were found.")
+          .arg(QString::number(_minimumTies))
+          .arg(QString::number(_ties.size())));
     }
     else
     {
-      LOG_INFO(msg);
+      const QString msg =
+        QString("Skipping rubbersheeting due to not finding enough tie points.  ") +
+        QString("The minimum allowable tie points configured is %1 and %2 tie points were found.")
+          .arg(QString::number(_minimumTies))
+          .arg(QString::number(_ties.size()));
+      if (_logWarningWhenRequirementsNotFound)
+      {
+        LOG_WARN(msg);
+      }
+      else
+      {
+        LOG_INFO(msg);
+      }
     }
 
     _interpolator1to2.reset();

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -33,9 +33,6 @@
 namespace hoot
 {
 
-/**
- * See MultiaryIngester
- */
 class MultiaryIngestCmd : public BaseCommand
 {
 public:
@@ -43,6 +40,9 @@ public:
   static std::string className() { return "hoot::MultiaryIngestCmd"; }
 
   virtual QString getName() const { return "multiary-ingest"; }
+
+  virtual QString getDescription() const
+  { return "(experimental) Ingests POI data for use by the multiary-conflate command"; }
 
   virtual int runSimple(QStringList args)
   {

@@ -35,6 +35,7 @@
 #include <hoot/core/io/HootApiDbBulkInserter.h>
 #include <hoot/core/io/HootApiDbReader.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/util/FileUtils.h>
 
 // Qt
 #include <QDir>
@@ -126,6 +127,21 @@ public:
     actualMapWriter->open(actualOutputFile);
     actualMapWriter->write(actualMap);
 
+    //Should be 4 changesets, but its 8.
+    HootApiDb database;
+    database.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
+    database.setMapId(mapId);
+    database.setCreateIndexesOnClose(false);
+    database.setFlushOnClose(false);
+    const long numChangesets = database.numChangesets();
+    LOG_VARD(numChangesets);
+    CPPUNIT_ASSERT_EQUAL(8L, numChangesets);
+
+    //TODO: This needs to be enabled (or some check similar to it), but doing so will require
+    //ignoring the map and changeset ID's in the file that will change with each test run.
+//    TestUtils::verifyStdMatchesOutputIgnoreDate(
+//      "test-files/io/ServiceHootApiDbBulkInserterTest/psql-offline.sql",
+//      outFile);
     HOOT_FILE_EQUALS(
       "test-files/io/ServiceHootApiDbBulkInserterTest/psqlOffline.osm", actualOutputFile);
   }

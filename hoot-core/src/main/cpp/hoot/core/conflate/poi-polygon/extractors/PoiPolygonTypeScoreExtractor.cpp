@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonTypeScoreExtractor.h"
 
@@ -48,6 +48,7 @@ HOOT_FACTORY_REGISTER(FeatureExtractor, PoiPolygonTypeScoreExtractor)
 QString PoiPolygonTypeScoreExtractor::poiBestKvp;
 QString PoiPolygonTypeScoreExtractor::polyBestKvp;
 QSet<QString> PoiPolygonTypeScoreExtractor::_allTagKeys;
+QStringList PoiPolygonTypeScoreExtractor::failedMatchRequirements;
 
 PoiPolygonTypeScoreExtractor::PoiPolygonTypeScoreExtractor()
 {
@@ -105,11 +106,26 @@ double PoiPolygonTypeScoreExtractor::extract(const OsmMap& /*map*/,
                                              const ConstElementPtr& poi,
                                              const ConstElementPtr& poly) const
 {
+  failedMatchRequirements.clear();
+
   const Tags& t1 = poi->getTags();
   const Tags& t2 = poly->getTags();
 
-  if (_failsCuisineMatch(t1, t2) || _failsSportMatch(t1, t2))
+  //make this more extensible if it gets bigger
+  if (_failsCuisineMatch(t1, t2))
   {
+    if (!failedMatchRequirements.contains("cuisine"))
+    {
+      failedMatchRequirements.append("cusine");
+    }
+    return 0.0;
+  }
+  else if (_failsSportMatch(t1, t2))
+  {
+    if (!failedMatchRequirements.contains("sport"))
+    {
+      failedMatchRequirements.append("sport");
+    }
     return 0.0;
   }
 
