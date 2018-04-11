@@ -394,6 +394,7 @@ boost::shared_ptr<Way> MapCropper::_reintroduceWay(OsmMapPtr map, boost::shared_
   // create a new way
   boost::shared_ptr<Way> newWay(new Way(w->getStatus(), map->createNextWayId(),
     w->getRawCircularError()));
+  newWay->setPid(w->getPid());
   newWay->setTags(w->getTags());
 
   // for each point on the linestring

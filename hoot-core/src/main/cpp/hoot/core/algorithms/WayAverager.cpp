@@ -107,6 +107,7 @@ WayPtr WayAverager::average()
   Meters newAcc = 2.0 * sqrt(weight1 * weight1 * v1 + weight2 * weight2 * v2);
 
   WayPtr result(new Way(_w1->getStatus(), _w1->getId(), newAcc));
+  result->setPid(Way::getPid(_w1, _w2));
 
   result->addNode(_merge(_w1->getNodeIds()[0], weight1, _w2->getNodeIds()[0], weight2));
 

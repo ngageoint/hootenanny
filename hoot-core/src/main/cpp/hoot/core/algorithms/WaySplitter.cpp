@@ -151,6 +151,9 @@ vector< WayPtr > WaySplitter::split(WayLocation& splitPoint)
     result.push_back(WaySubline(first, splitPoint).toWay(_map, _nf.get(), true));
     result.push_back(WaySubline(splitPoint, last).toWay(_map, _nf.get(), false));
 
+    //  Record the parent id for the way joiner
+    result[1]->setPid(_a->getId());
+
     RemoveWayOp::removeWay(_map, _a->getId());
     _map->addWay(result[0]);
     _map->addWay(result[1]);

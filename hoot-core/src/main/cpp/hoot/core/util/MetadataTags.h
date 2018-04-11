@@ -114,6 +114,8 @@ public:
 
   inline static const QString HootSource()              { return "hoot:source"; }
 
+  inline static const QString HootSplitParentId()       { return "hoot:split_parent_id"; }
+
   inline static const QString HootStub()                { return "hoot:stub"; }
 
   inline static const QString Ref1()                    { return "REF1"; }

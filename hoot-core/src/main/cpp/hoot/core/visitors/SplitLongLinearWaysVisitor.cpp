@@ -152,6 +152,7 @@ void SplitLongLinearWaysVisitor::visit(const boost::shared_ptr<Element>& element
     if (masterNodeIndex > 0)
       way_id = _map->createNextWayId();
     WayPtr newWay( new Way(Status::Unknown1, way_id, way->getRawCircularError() ) );
+    newWay->setPid(way->getPid());
     LOG_TRACE("Created new way w/ ID " << newWay->getId() << " that is going to hold " << nodesThisTime << " nodes");
     for ( unsigned int i = 0; i < nodesThisTime; ++i )
     {

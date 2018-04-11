@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "WayData.h"
 
@@ -34,23 +34,33 @@ using namespace boost;
 namespace hoot
 {
 
+long WayData::PID_EMPTY = 0;
+
 WayData::WayData(long id, long changeset, long version, unsigned int timestamp, QString user,
-                 long uid, bool visible) :
-ElementData(id, Tags(), -1, changeset, version, timestamp, user, uid, visible)
+                 long uid, bool visible, long pid)
+  : ElementData(id, Tags(), -1, changeset, version, timestamp, user, uid, visible),
+    _pid(pid)
 {
 }
 
-WayData::WayData(const WayData& from) :
-ElementData(from.getId(), from.getTags(), from.getCircularError(), from.getChangeset(),
-            from.getVersion(), from.getTimestamp(), from.getUser(), from.getUid(),
-            from.getVisible()),
-_nodes(from._nodes)
+WayData::WayData(const WayData& from)
+  : ElementData(from.getId(), from.getTags(), from.getCircularError(), from.getChangeset(),
+                from.getVersion(), from.getTimestamp(), from.getUser(), from.getUid(),
+                from.getVisible()),
+    _nodes(from._nodes),
+    _pid(from._pid)
 {
-
 }
 
 WayData::~WayData()
 {
+}
+
+void WayData::clear()
+{
+  ElementData::clear();
+  _nodes.clear();
+  _pid = WayData::PID_EMPTY;
 }
 
 }
