@@ -203,6 +203,7 @@ void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
   LOG_INFO(
     "Extracted "  << StringUtils::formatLargeNumber(_wordKeysToCountsValues.size()) <<
     " word/tag associations.");
+  LOG_INFO("Clearing word/tag associations...");
   _wordKeysToCountsValues.clear();
   if (tieCountsNeededResolved)
   {
