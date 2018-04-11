@@ -457,6 +457,36 @@ def printAttributeCsv(schema):
 # End printAttributeCsv
 
 
+# Dump the enumerated attributes into files.
+# Each file is named: <attribute>_<FCODE>
+# The files are put in a directory called: enumTDSv40
+def dumpEnumerations(schema):
+    if not os.path.exists('enumTDSv40'):
+        os.makedirs('enumTDSv40')
+    else:
+        shutil.rmtree('enumTDSv40')
+        os.makedirs('enumTDSv40')
+
+    currentDir = os.getcwd()
+    os.chdir('enumTDSv40')
+
+    fCode = ''
+    for i in schema:
+        fCode = schema[i]['fcode']
+
+        for j in schema[i]['columns']:
+            if schema[i]['columns'][j]['type'].find('numeration') > -1:
+                    outFile = open(j + '_' + fCode,'w')
+                    
+                    for k in schema[i]['columns'][j]['enum']:
+                        outFile.write('{} = {}\n'.format(k['name'],k['value']))
+                    
+                    outFile.close()
+
+    os.chdir(currentDir)
+# End dumpEnumerations
+
+
 def openFile(path, mode):
     if path.endswith(".gz"):
         return gzip.GzipFile(path, mode)
@@ -489,7 +519,7 @@ notice = """/*
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
  ////
@@ -1741,17 +1771,18 @@ def processFile(fileName):
 #
 parser = argparse.ArgumentParser(description='Process TDSv40 file and build a schema')
 parser.add_argument('-q','--quiet', help="Don't print warning messages.",action='store_true')
-parser.add_argument('--rules', help='Dump out one2one rules',action='store_true')
-parser.add_argument('--txtrules', help='Dump out text rules',action='store_true')
-parser.add_argument('--numrules', help='Dump out number rules',action='store_true')
+parser.add_argument('--attributecsv', help='Dump out attributes as a CSV file',action='store_true')
 parser.add_argument('--attrlist', help='Dump out a list of attributes',action='store_true')
+parser.add_argument('--dumpenum', help='Dump out the enumerated attributes, one file per FCODE into a directory called enum',action='store_true')
+parser.add_argument('--fcodeattrlist', help='Dump out a list of FCODE attributes',action='store_true')
 parser.add_argument('--fcodelist', help='Dump out a list of FCODEs',action='store_true')
 parser.add_argument('--fcodeschema', help='Dump out a list of fcodes in the internal OSM schema format',action='store_true')
-parser.add_argument('--fcodeattrlist', help='Dump out a list of FCODE attributes',action='store_true')
-parser.add_argument('--toenglish', help='Dump out To English translation rules',action='store_true')
 parser.add_argument('--fromenglish', help='Dump out From English translation rules',action='store_true')
-parser.add_argument('--attributecsv', help='Dump out attributes as a CSV file',action='store_true')
 parser.add_argument('--fullschema', help='Dump out a schema with text enumerations',action='store_true')
+parser.add_argument('--numrules', help='Dump out number rules',action='store_true')
+parser.add_argument('--rules', help='Dump out one2one rules',action='store_true')
+parser.add_argument('--toenglish', help='Dump out To English translation rules',action='store_true')
+parser.add_argument('--txtrules', help='Dump out text rules',action='store_true')
 parser.add_argument('mainfile', help='The TDSv40 spec csv file', action='store')
 
 args = parser.parse_args()
@@ -1810,6 +1841,10 @@ elif args.fullschema:
     printVariableBody('text_ZSAX_RS0',text_ZSAX_RS0)
     printJavascript(schema)
     printJSFooter()
+
+elif args.dumpenum:
+    dumpEnumerations(schema)
+
 
 else:
     dropTextEnumerations(schema)
