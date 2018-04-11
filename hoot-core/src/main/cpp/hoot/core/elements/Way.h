@@ -188,6 +188,7 @@ public:
   void setPid(long pid) { _wayData->setPid(pid); }
   void resetPid() { _wayData->setPid(WayData::PID_EMPTY); }
   static long getPid(const boost::shared_ptr<const Way>& p, const boost::shared_ptr<const Way>& c);
+  static long getPid(long p, long c);
 
 protected:
 
