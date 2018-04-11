@@ -1640,14 +1640,6 @@ bool OsmSchema::isPoiPolygonPoly(const ConstElementPtr& e, const QStringList tag
 
   //types we don't care about at all - see #1172 as to why this can't be handled in the schema
   //files
-//  if (tags.get("barrier").toLower() == "fence"
-//      || tags.get("landuse").toLower() == "grass"
-//      || tags.get("natural").toLower() == "tree_row"
-//      || tags.get("natural").toLower() == "scrub"
-//      || tags.get("highway").toLower() == "residential")
-//  {
-//    return false;
-//  }
   if (containsTagFromList(tags, tagIgnoreList))
   {
     LOG_DEBUG("Contains tag from tag ignore list");
@@ -1671,15 +1663,6 @@ bool OsmSchema::isPoiPolygonPoi(const ConstElementPtr& e, const QStringList tagI
   const Tags& tags = e->getTags();
 
   //see note in isPoiPolygonPoly
-//  if (tags.get("natural").toLower() == "tree"
-//      || tags.get("amenity").toLower() == "drinking_water"
-//      || tags.get("amenity").toLower() == "bench"
-//      || tags.contains("traffic_sign")
-//      || tags.get("amenity").toLower() == "recycling"
-//      || tags.get("barrier").toLower() == "obstacle")
-//  {
-//    return false;
-//  }
   if (containsTagFromList(tags, tagIgnoreList))
   {
     LOG_DEBUG("Contains tag from tag ignore list");

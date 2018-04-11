@@ -61,12 +61,14 @@ void ImplicitTagRulesDatabaseDeriver::setConfiguration(const Settings& conf)
     confOptions.getImplicitTaggingDatabaseDeriverUseSchemaTagValuesForWordsOnly());
 }
 
-void ImplicitTagRulesDatabaseDeriver::setElementType(const QString type)
+void ImplicitTagRulesDatabaseDeriver::setElementType(const QString /*type*/)
 {
-  if (type.trimmed().toUpper() != "POI")
-  {
-    throw HootException("Only POI implicit tag rule database generation is supported.");
-  }
+    //TODO: get rid of this and the associated input param if we end up defaulting to poi/poly
+    //tagging
+//  if (type.trimmed().toUpper() != "POI")
+//  {
+//    throw HootException("Only POI implicit tag rule database generation is supported.");
+//  }
 
   const ConfigOptions confOptions(conf());
   setCustomRuleFile(confOptions.getImplicitTaggingDatabaseDeriverPoiCustomRuleFile());
@@ -446,6 +448,9 @@ void ImplicitTagRulesDatabaseDeriver::_applyFiltering(const QString input)
 
 void ImplicitTagRulesDatabaseDeriver::_writeCustomRules(long& linesWrittenCount)
 {
+  //TODO: would like to know somehow if any of the custom rules overlap with the db derived
+  //rules from the public data
+
   LOG_DEBUG("Writing custom rules...");
   long ruleCount = 0;
   LOG_VARD(_customRules.getCustomRulesList().size());

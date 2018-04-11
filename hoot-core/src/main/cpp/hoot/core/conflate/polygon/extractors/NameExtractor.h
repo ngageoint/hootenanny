@@ -35,14 +35,11 @@
 namespace hoot
 {
 
-/**
- *
- */
 class NameExtractor : public FeatureExtractor, public StringDistanceConsumer
 {
 public:
-  NameExtractor();
 
+  NameExtractor();
   NameExtractor(StringDistancePtr d);
 
   static std::string className() { return "hoot::NameExtractor"; }
@@ -69,6 +66,7 @@ public:
   virtual QString getDescription() const { return "Extracts name tags from features"; }
 
 private:
+
   StringDistancePtr _d;
 };
 

@@ -545,6 +545,10 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
 
   //The operations from here are on down are roughly ordered by increasing runtime complexity.
 
+  //Used to allow for kicking out of the method once enough evidence was accumulated for a match
+  //as an optimization.  However, that results in incomplete scoring information passed to the
+  //review reducer, so have since disabled.
+
   evidence += _getNameEvidence(poi, poly);
   //if we already have a match, no point in doing more calculations
 //  if (_reviewIfMatchedTypes.isEmpty() && evidence >= _matchEvidenceThreshold)

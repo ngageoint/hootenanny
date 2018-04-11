@@ -55,11 +55,16 @@ double PoiPolygonNameScoreExtractor::extract(const OsmMap& /*map*/,
                                              const ConstElementPtr& poly) const
 {
   const double nameScore =
-    NameExtractor(StringDistancePtr(new TranslateStringDistance(
-                  StringDistancePtr(new MeanWordSetDistance(
+    NameExtractor(
+      StringDistancePtr(
+        new TranslateStringDistance(
+          StringDistancePtr(
+            new MeanWordSetDistance(
+              StringDistancePtr(
+                new LevenshteinDistance(
                   //TODO: why does this fail when the mem var is used?
-                  StringDistancePtr(new LevenshteinDistance(/*_levDist*/ConfigOptions().getLevenshteinDistanceAlpha())))))))
-                  .extract(poi, poly);
+                  /*_levDist*/ConfigOptions().getLevenshteinDistanceAlpha())))))))
+      .extract(poi, poly);
   LOG_VART(nameScore);
   return nameScore;
 }

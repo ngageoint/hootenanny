@@ -43,8 +43,6 @@ public:
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new StatsAreaFilter(_type)); }
 
-  virtual QString getName() const { return "Area for Map Statistics"; }
-
   virtual QString getDescription() const { return "Areas as defined by map statistics calculation"; }
 };
 

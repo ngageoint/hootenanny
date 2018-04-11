@@ -25,8 +25,8 @@
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef IMPLICIT_TAG_ELIGIBLE_POI_CRITERION_H
-#define IMPLICIT_TAG_ELIGIBLE_POI_CRITERION_H
+#ifndef IMPLICIT_TAG_ELIGIBLE_POI_POLY_CRITERION_H
+#define IMPLICIT_TAG_ELIGIBLE_POI_POLY_CRITERION_H
 
 // hoot
 #include <hoot/core/filters/ImplicitTagEligibleCriterion.h>
@@ -35,23 +35,24 @@ namespace hoot
 {
 
 /**
- * Any POI whose name can be harvested to feed the POI implicit tagger will pass this filter
+ * Any POI or polygon whose name can be harvested to feed the POI/Poly implicit tagger will pass
+ * this filter
  */
-class ImplicitTagEligiblePoiCriterion : public ImplicitTagEligibleCriterion
+class ImplicitTagEligiblePoiPolyCriterion : public ImplicitTagEligibleCriterion
 {
 public:
 
-  static std::string className() { return "hoot::ImplicitTagEligiblePoiCriterion"; }
+  static std::string className() { return "hoot::ImplicitTagEligiblePoiPolyCriterion"; }
 
-  ImplicitTagEligiblePoiCriterion() {}
+  ImplicitTagEligiblePoiPolyCriterion() {}
 
   virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
 
   virtual ElementCriterionPtr clone()
-  { return ElementCriterionPtr(new ImplicitTagEligiblePoiCriterion()); }
+  { return ElementCriterionPtr(new ImplicitTagEligiblePoiPolyCriterion()); }
 
   /**
-   * Returns all tag key/value pairs which could be applied implicitly by an implicit POI tagger
+   * Returns all tag key/value pairs which could be applied implicitly by an implicit POI/Poly tagger
    *
    * @param tags tags to examine
    * @return a list of key/value pairs (key=value)
@@ -60,7 +61,7 @@ public:
 
   /**
    * Returns true if the input tags contain at least one key/value pair which could be applied
-   * implicitly by an implicit POI tagger
+   * implicitly by an implicit POI/Poly tagger
    *
    * @param tags tags to examine
    * @return true if any eligible tags are present; false otherwise
@@ -68,7 +69,7 @@ public:
   virtual bool hasEligibleKvp(const Tags& tags) const;
 
   virtual QString getDescription() const
-  { return "Returns true if a POI is eligible for type tag addition"; }
+  { return "Returns true if a POI or polygon is eligible for type tag addition"; }
 };
 
 }

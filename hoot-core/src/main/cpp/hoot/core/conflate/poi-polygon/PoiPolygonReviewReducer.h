@@ -38,6 +38,10 @@ namespace hoot
  * goal of never causing a miss where there should be a match.  Any rule that results in an
  * incorrect match found over the course of time testing against different datasets should be
  * removed from this class.
+ *
+ * I would like to get rid of most, if not all, of this class, as it is kind of brittle.  It may be
+ * possible via modifications to the definition of what poi/poly conflation conflates, as well as
+ * modifications to the evidence calculation in PoiPolygonMatch.
  */
 class PoiPolygonReviewReducer
 {

@@ -39,6 +39,7 @@
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/algorithms/Translator.h>
 #include <hoot/core/filters/ImplicitTagEligiblePoiCriterion.h>
+#include <hoot/core/filters/ImplicitTagEligiblePoiPolyCriterion.h>
 #include <hoot/core/schema/ImplicitTagUtils.h>
 
 // Qt
@@ -79,9 +80,16 @@ void ImplicitTagRawRulesDeriver::setElementFilter(const QString type)
 {
   if (type.trimmed().toUpper() != "POI")
   {
-    throw HootException("Only POI implicit tag raw rules generation is supported.");
+    _elementFilter.reset(new ImplicitTagEligiblePoiCriterion());
   }
-  _elementFilter.reset(new ImplicitTagEligiblePoiCriterion());
+  else if (type.trimmed().toUpper() != "POI-POLYGON")
+  {
+    _elementFilter.reset(new ImplicitTagEligiblePoiPolyCriterion());
+  }
+  else
+  {
+    throw HootException("Invalid element filter type: " + type);
+  }
 }
 
 void ImplicitTagRawRulesDeriver::_init()
