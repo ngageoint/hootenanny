@@ -286,16 +286,14 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="8"/>
     </way>
-    <way visible="true" id="9" timestamp="1970-01-01T00:00:00Z" version="2" changeset="3">
+    <way visible="true" id="9" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
         <nd ref="35"/>
-        <nd ref="55"/>
         <nd ref="20"/>
         <nd ref="21"/>
-        <tag k="hoot:id" v="9"/>
-        <tag k="hoot:status" v="3"/>
         <tag k="source" v="digitalglobe"/>
-        <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2016-05-02T23:46:04Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="9"/>
     </way>
     <way visible="true" id="10" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
@@ -470,12 +468,24 @@
         <tag k="hoot:id" v="28"/>
     </way>
     <way visible="true" id="29" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+        <nd ref="35"/>
+        <nd ref="55"/>
+        <nd ref="20"/>
+        <nd ref="21"/>
+        <tag k="hoot:id" v="29"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="source" v="digitalglobe"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2016-05-02T23:46:04Z"/>
+        <tag k="hoot:id" v="29"/>
+    </way>
+    <way visible="true" id="30" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <nd ref="50"/>
         <nd ref="37"/>
-        <tag k="hoot:id" v="29"/>
+        <tag k="hoot:id" v="30"/>
         <tag k="hoot:status" v="2"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="29"/>
+        <tag k="hoot:id" v="30"/>
     </way>
     <relation visible="true" id="2" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
         <tag k="name:ia" v="Egypto"/>

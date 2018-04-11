@@ -91,8 +91,6 @@ private:
   boost::shared_ptr<const Way> _working;
   Meters _splitSize;
 
-  bool _preserveUnknown1ElementIdWhenModifyingFeatures;
-
   void _addConnector(long nodeId);
 
   boost::shared_ptr<Way> _createOneWay(boost::shared_ptr<const Way> w, Meters bufferSize, bool left);

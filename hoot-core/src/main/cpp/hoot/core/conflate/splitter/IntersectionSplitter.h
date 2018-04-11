@@ -74,9 +74,6 @@ private:
   boost::shared_ptr<OsmMap> _map;
   QMultiHash<long, long> _nodeToWays;
   QSet<long> _todoNodes;
-  QMap<long, long> _wayReplacements;
-
-  bool _preserveUnknown1ElementIdWhenModifyingFeatures;
 
   void _mapNodesToWays();
 

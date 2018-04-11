@@ -7551,117 +7551,6 @@
         <tag k="highway" v="motorway"/>
         <tag k="error:circular" v="3.53553"/>
     </way>
-    <way visible="true" id="-35557" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-36743"/>
-        <nd ref="-550"/>
-        <nd ref="-4535"/>
-        <nd ref="-4533"/>
-        <nd ref="-547"/>
-        <nd ref="-545"/>
-        <nd ref="-543"/>
-        <nd ref="-541"/>
-        <nd ref="-539"/>
-        <nd ref="-36742"/>
-        <nd ref="-537"/>
-        <nd ref="-535"/>
-        <nd ref="-4507"/>
-        <nd ref="-533"/>
-        <nd ref="-531"/>
-        <nd ref="-4508"/>
-        <nd ref="-529"/>
-        <nd ref="-4509"/>
-        <nd ref="-527"/>
-        <nd ref="-4510"/>
-        <nd ref="-525"/>
-        <nd ref="-4511"/>
-        <nd ref="-523"/>
-        <nd ref="-521"/>
-        <nd ref="-4512"/>
-        <nd ref="-519"/>
-        <nd ref="-517"/>
-        <nd ref="-4513"/>
-        <nd ref="-515"/>
-        <nd ref="-4514"/>
-        <nd ref="-513"/>
-        <nd ref="-4515"/>
-        <nd ref="-511"/>
-        <nd ref="-509"/>
-        <nd ref="-4516"/>
-        <nd ref="-4517"/>
-        <nd ref="-4518"/>
-        <nd ref="-507"/>
-        <nd ref="-4519"/>
-        <nd ref="-36750"/>
-        <nd ref="-505"/>
-        <nd ref="-4520"/>
-        <nd ref="-37024"/>
-        <nd ref="-4522"/>
-        <nd ref="-37186"/>
-        <nd ref="-503"/>
-        <nd ref="-4523"/>
-        <nd ref="-501"/>
-        <nd ref="-37232"/>
-        <nd ref="-499"/>
-        <nd ref="-4525"/>
-        <nd ref="-4526"/>
-        <nd ref="-497"/>
-        <nd ref="-4527"/>
-        <nd ref="-495"/>
-        <nd ref="-4528"/>
-        <nd ref="-493"/>
-        <nd ref="-491"/>
-        <nd ref="-4529"/>
-        <nd ref="-489"/>
-        <nd ref="-4530"/>
-        <nd ref="-487"/>
-        <nd ref="-485"/>
-        <nd ref="-484"/>
-        <nd ref="-4532"/>
-        <nd ref="-4534"/>
-        <nd ref="-483"/>
-        <nd ref="-482"/>
-        <nd ref="-481"/>
-        <nd ref="-480"/>
-        <nd ref="-479"/>
-        <nd ref="-4536"/>
-        <nd ref="-478"/>
-        <nd ref="-477"/>
-        <nd ref="-37233"/>
-        <nd ref="-476"/>
-        <nd ref="-475"/>
-        <nd ref="-474"/>
-        <nd ref="-473"/>
-        <nd ref="-472"/>
-        <nd ref="-471"/>
-        <nd ref="-470"/>
-        <nd ref="-469"/>
-        <nd ref="-468"/>
-        <nd ref="-467"/>
-        <nd ref="-4538"/>
-        <nd ref="-466"/>
-        <nd ref="-465"/>
-        <nd ref="-4539"/>
-        <nd ref="-37223"/>
-        <nd ref="-464"/>
-        <nd ref="-463"/>
-        <nd ref="-462"/>
-        <nd ref="-4541"/>
-        <nd ref="-7493"/>
-        <nd ref="-36893"/>
-        <tag k="alt_name" v="I- 66"/>
-        <tag k="name" v="INTERSTATE 66  BN"/>
-        <tag k="highway" v="motorway"/>
-        <tag k="error:circular" v="3.53553"/>
-    </way>
-    <way visible="true" id="-35555" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-36526"/>
-        <nd ref="-460"/>
-        <nd ref="-461"/>
-        <nd ref="-36893"/>
-        <tag k="name" v="INTERSTATE 66  BN"/>
-        <tag k="highway" v="motorway"/>
-        <tag k="error:circular" v="5"/>
-    </way>
     <way visible="true" id="-35501" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-37308"/>
         <nd ref="-37307"/>
@@ -7979,7 +7868,8 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-34443" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-34442" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-27277"/>
         <nd ref="-36979"/>
         <nd ref="-7488"/>
         <nd ref="-2912"/>
@@ -7995,24 +7885,11 @@
         <nd ref="-2907"/>
         <nd ref="-2906"/>
         <nd ref="-36750"/>
-        <tag k="alt_name" v="25th St NW;New Hampshire Ave NW"/>
-        <tag k="name" v="25TH ST NW"/>
-        <tag k="highway" v="road"/>
-        <tag k="error:circular" v="3.53553"/>
-    </way>
-    <way visible="true" id="-34442" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-36979"/>
-        <nd ref="-27277"/>
-        <tag k="name" v="25TH ST NW"/>
-        <tag k="highway" v="road"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-34441" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-25380"/>
-        <nd ref="-2903"/>
-        <nd ref="-2904"/>
         <nd ref="-7489"/>
-        <nd ref="-36750"/>
+        <nd ref="-2904"/>
+        <nd ref="-2903"/>
+        <nd ref="-25380"/>
+        <tag k="alt_name" v="25th St NW;New Hampshire Ave NW"/>
         <tag k="name" v="25TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
@@ -11124,6 +11001,268 @@
         <tag k="highway" v="secondary"/>
         <tag k="error:circular" v="5"/>
     </way>
+    <way visible="true" id="-1054" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-36743"/>
+        <nd ref="-550"/>
+        <nd ref="-4535"/>
+        <nd ref="-4533"/>
+        <nd ref="-547"/>
+        <nd ref="-545"/>
+        <nd ref="-543"/>
+        <nd ref="-541"/>
+        <nd ref="-539"/>
+        <nd ref="-36742"/>
+        <nd ref="-537"/>
+        <nd ref="-535"/>
+        <nd ref="-4507"/>
+        <nd ref="-533"/>
+        <nd ref="-531"/>
+        <nd ref="-4508"/>
+        <nd ref="-529"/>
+        <nd ref="-4509"/>
+        <nd ref="-527"/>
+        <nd ref="-4510"/>
+        <nd ref="-525"/>
+        <nd ref="-4511"/>
+        <nd ref="-523"/>
+        <nd ref="-521"/>
+        <nd ref="-4512"/>
+        <nd ref="-519"/>
+        <nd ref="-517"/>
+        <nd ref="-4513"/>
+        <nd ref="-515"/>
+        <nd ref="-4514"/>
+        <nd ref="-513"/>
+        <nd ref="-4515"/>
+        <nd ref="-511"/>
+        <nd ref="-509"/>
+        <nd ref="-4516"/>
+        <nd ref="-4517"/>
+        <nd ref="-4518"/>
+        <nd ref="-507"/>
+        <nd ref="-4519"/>
+        <nd ref="-36750"/>
+        <nd ref="-505"/>
+        <nd ref="-4520"/>
+        <nd ref="-37024"/>
+        <nd ref="-4522"/>
+        <nd ref="-37186"/>
+        <nd ref="-503"/>
+        <nd ref="-4523"/>
+        <nd ref="-501"/>
+        <nd ref="-37232"/>
+        <nd ref="-499"/>
+        <nd ref="-4525"/>
+        <nd ref="-4526"/>
+        <nd ref="-497"/>
+        <nd ref="-4527"/>
+        <nd ref="-495"/>
+        <nd ref="-4528"/>
+        <nd ref="-493"/>
+        <nd ref="-491"/>
+        <nd ref="-4529"/>
+        <nd ref="-489"/>
+        <nd ref="-4530"/>
+        <nd ref="-487"/>
+        <nd ref="-485"/>
+        <nd ref="-484"/>
+        <nd ref="-4532"/>
+        <nd ref="-4534"/>
+        <nd ref="-483"/>
+        <nd ref="-482"/>
+        <nd ref="-481"/>
+        <nd ref="-480"/>
+        <nd ref="-479"/>
+        <nd ref="-4536"/>
+        <nd ref="-478"/>
+        <nd ref="-477"/>
+        <nd ref="-37233"/>
+        <nd ref="-476"/>
+        <nd ref="-475"/>
+        <nd ref="-474"/>
+        <nd ref="-473"/>
+        <nd ref="-472"/>
+        <nd ref="-471"/>
+        <nd ref="-470"/>
+        <nd ref="-469"/>
+        <nd ref="-468"/>
+        <nd ref="-467"/>
+        <nd ref="-4538"/>
+        <nd ref="-466"/>
+        <nd ref="-465"/>
+        <nd ref="-4539"/>
+        <nd ref="-37223"/>
+        <nd ref="-464"/>
+        <nd ref="-463"/>
+        <nd ref="-462"/>
+        <nd ref="-4541"/>
+        <nd ref="-7493"/>
+        <nd ref="-36893"/>
+        <nd ref="-461"/>
+        <nd ref="-460"/>
+        <nd ref="-36526"/>
+        <nd ref="-458"/>
+        <nd ref="-4543"/>
+        <nd ref="-457"/>
+        <nd ref="-456"/>
+        <nd ref="-4544"/>
+        <nd ref="-455"/>
+        <nd ref="-4545"/>
+        <nd ref="-454"/>
+        <nd ref="-453"/>
+        <nd ref="-4546"/>
+        <nd ref="-452"/>
+        <nd ref="-4547"/>
+        <nd ref="-451"/>
+        <nd ref="-450"/>
+        <nd ref="-4548"/>
+        <nd ref="-449"/>
+        <nd ref="-4549"/>
+        <nd ref="-448"/>
+        <nd ref="-447"/>
+        <nd ref="-4550"/>
+        <nd ref="-446"/>
+        <nd ref="-4551"/>
+        <nd ref="-445"/>
+        <nd ref="-444"/>
+        <nd ref="-443"/>
+        <nd ref="-4552"/>
+        <nd ref="-442"/>
+        <nd ref="-4553"/>
+        <nd ref="-441"/>
+        <nd ref="-440"/>
+        <nd ref="-439"/>
+        <nd ref="-438"/>
+        <nd ref="-4554"/>
+        <nd ref="-437"/>
+        <nd ref="-436"/>
+        <nd ref="-4555"/>
+        <nd ref="-435"/>
+        <nd ref="-434"/>
+        <nd ref="-4556"/>
+        <nd ref="-433"/>
+        <nd ref="-432"/>
+        <nd ref="-4557"/>
+        <nd ref="-431"/>
+        <nd ref="-430"/>
+        <nd ref="-4558"/>
+        <nd ref="-429"/>
+        <nd ref="-4559"/>
+        <nd ref="-428"/>
+        <nd ref="-4560"/>
+        <nd ref="-427"/>
+        <nd ref="-4561"/>
+        <nd ref="-426"/>
+        <nd ref="-425"/>
+        <nd ref="-37177"/>
+        <nd ref="-424"/>
+        <nd ref="-37178"/>
+        <nd ref="-423"/>
+        <nd ref="-422"/>
+        <nd ref="-4564"/>
+        <nd ref="-421"/>
+        <nd ref="-420"/>
+        <nd ref="-4565"/>
+        <nd ref="-419"/>
+        <nd ref="-418"/>
+        <nd ref="-4566"/>
+        <nd ref="-416"/>
+        <nd ref="-414"/>
+        <nd ref="-4567"/>
+        <nd ref="-412"/>
+        <nd ref="-4568"/>
+        <nd ref="-410"/>
+        <nd ref="-408"/>
+        <nd ref="-407"/>
+        <nd ref="-4569"/>
+        <nd ref="-406"/>
+        <nd ref="-405"/>
+        <nd ref="-4570"/>
+        <nd ref="-404"/>
+        <nd ref="-403"/>
+        <nd ref="-4571"/>
+        <nd ref="-402"/>
+        <nd ref="-4572"/>
+        <nd ref="-401"/>
+        <nd ref="-400"/>
+        <nd ref="-4573"/>
+        <nd ref="-399"/>
+        <nd ref="-398"/>
+        <nd ref="-397"/>
+        <nd ref="-4574"/>
+        <nd ref="-396"/>
+        <nd ref="-395"/>
+        <nd ref="-4575"/>
+        <nd ref="-394"/>
+        <nd ref="-393"/>
+        <nd ref="-392"/>
+        <nd ref="-390"/>
+        <nd ref="-4576"/>
+        <nd ref="-388"/>
+        <nd ref="-386"/>
+        <nd ref="-4577"/>
+        <nd ref="-384"/>
+        <nd ref="-382"/>
+        <nd ref="-4578"/>
+        <nd ref="-381"/>
+        <nd ref="-380"/>
+        <nd ref="-37041"/>
+        <nd ref="-378"/>
+        <nd ref="-4579"/>
+        <nd ref="-377"/>
+        <nd ref="-376"/>
+        <nd ref="-4580"/>
+        <nd ref="-375"/>
+        <nd ref="-37042"/>
+        <nd ref="-373"/>
+        <nd ref="-372"/>
+        <nd ref="-371"/>
+        <nd ref="-4582"/>
+        <nd ref="-370"/>
+        <nd ref="-369"/>
+        <nd ref="-4583"/>
+        <nd ref="-368"/>
+        <nd ref="-367"/>
+        <nd ref="-4584"/>
+        <nd ref="-366"/>
+        <nd ref="-4585"/>
+        <nd ref="-365"/>
+        <nd ref="-364"/>
+        <nd ref="-4586"/>
+        <nd ref="-363"/>
+        <nd ref="-4587"/>
+        <nd ref="-362"/>
+        <nd ref="-361"/>
+        <nd ref="-4588"/>
+        <nd ref="-360"/>
+        <nd ref="-359"/>
+        <nd ref="-358"/>
+        <nd ref="-4589"/>
+        <nd ref="-357"/>
+        <nd ref="-356"/>
+        <nd ref="-355"/>
+        <nd ref="-4590"/>
+        <nd ref="-354"/>
+        <nd ref="-4591"/>
+        <nd ref="-353"/>
+        <nd ref="-352"/>
+        <nd ref="-4592"/>
+        <nd ref="-351"/>
+        <nd ref="-350"/>
+        <nd ref="-4593"/>
+        <nd ref="-349"/>
+        <nd ref="-348"/>
+        <nd ref="-347"/>
+        <nd ref="-346"/>
+        <nd ref="-345"/>
+        <nd ref="-4594"/>
+        <nd ref="-344"/>
+        <nd ref="-37082"/>
+        <tag k="alt_name" v="I- 66"/>
+        <tag k="name" v="INTERSTATE 66  BN"/>
+        <tag k="highway" v="motorway"/>
+        <tag k="error:circular" v="3.53553"/>
+    </way>
     <way visible="true" id="-1030" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-35336"/>
         <nd ref="-6779"/>
@@ -13144,170 +13283,6 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="3.53553"/>
     </way>
-    <way visible="true" id="-342" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-36526"/>
-        <nd ref="-458"/>
-        <nd ref="-4543"/>
-        <nd ref="-457"/>
-        <nd ref="-456"/>
-        <nd ref="-4544"/>
-        <nd ref="-455"/>
-        <nd ref="-4545"/>
-        <nd ref="-454"/>
-        <nd ref="-453"/>
-        <nd ref="-4546"/>
-        <nd ref="-452"/>
-        <nd ref="-4547"/>
-        <nd ref="-451"/>
-        <nd ref="-450"/>
-        <nd ref="-4548"/>
-        <nd ref="-449"/>
-        <nd ref="-4549"/>
-        <nd ref="-448"/>
-        <nd ref="-447"/>
-        <nd ref="-4550"/>
-        <nd ref="-446"/>
-        <nd ref="-4551"/>
-        <nd ref="-445"/>
-        <nd ref="-444"/>
-        <nd ref="-443"/>
-        <nd ref="-4552"/>
-        <nd ref="-442"/>
-        <nd ref="-4553"/>
-        <nd ref="-441"/>
-        <nd ref="-440"/>
-        <nd ref="-439"/>
-        <nd ref="-438"/>
-        <nd ref="-4554"/>
-        <nd ref="-437"/>
-        <nd ref="-436"/>
-        <nd ref="-4555"/>
-        <nd ref="-435"/>
-        <nd ref="-434"/>
-        <nd ref="-4556"/>
-        <nd ref="-433"/>
-        <nd ref="-432"/>
-        <nd ref="-4557"/>
-        <nd ref="-431"/>
-        <nd ref="-430"/>
-        <nd ref="-4558"/>
-        <nd ref="-429"/>
-        <nd ref="-4559"/>
-        <nd ref="-428"/>
-        <nd ref="-4560"/>
-        <nd ref="-427"/>
-        <nd ref="-4561"/>
-        <nd ref="-426"/>
-        <nd ref="-425"/>
-        <nd ref="-37177"/>
-        <nd ref="-424"/>
-        <nd ref="-37178"/>
-        <nd ref="-423"/>
-        <nd ref="-422"/>
-        <nd ref="-4564"/>
-        <nd ref="-421"/>
-        <nd ref="-420"/>
-        <nd ref="-4565"/>
-        <nd ref="-419"/>
-        <nd ref="-418"/>
-        <nd ref="-4566"/>
-        <nd ref="-416"/>
-        <nd ref="-414"/>
-        <nd ref="-4567"/>
-        <nd ref="-412"/>
-        <nd ref="-4568"/>
-        <nd ref="-410"/>
-        <nd ref="-408"/>
-        <nd ref="-407"/>
-        <nd ref="-4569"/>
-        <nd ref="-406"/>
-        <nd ref="-405"/>
-        <nd ref="-4570"/>
-        <nd ref="-404"/>
-        <nd ref="-403"/>
-        <nd ref="-4571"/>
-        <nd ref="-402"/>
-        <nd ref="-4572"/>
-        <nd ref="-401"/>
-        <nd ref="-400"/>
-        <nd ref="-4573"/>
-        <nd ref="-399"/>
-        <nd ref="-398"/>
-        <nd ref="-397"/>
-        <nd ref="-4574"/>
-        <nd ref="-396"/>
-        <nd ref="-395"/>
-        <nd ref="-4575"/>
-        <nd ref="-394"/>
-        <nd ref="-393"/>
-        <nd ref="-392"/>
-        <nd ref="-390"/>
-        <nd ref="-4576"/>
-        <nd ref="-388"/>
-        <nd ref="-386"/>
-        <nd ref="-4577"/>
-        <nd ref="-384"/>
-        <nd ref="-382"/>
-        <nd ref="-4578"/>
-        <nd ref="-381"/>
-        <nd ref="-380"/>
-        <nd ref="-37041"/>
-        <nd ref="-378"/>
-        <nd ref="-4579"/>
-        <nd ref="-377"/>
-        <nd ref="-376"/>
-        <nd ref="-4580"/>
-        <nd ref="-375"/>
-        <nd ref="-37042"/>
-        <nd ref="-373"/>
-        <nd ref="-372"/>
-        <nd ref="-371"/>
-        <nd ref="-4582"/>
-        <nd ref="-370"/>
-        <nd ref="-369"/>
-        <nd ref="-4583"/>
-        <nd ref="-368"/>
-        <nd ref="-367"/>
-        <nd ref="-4584"/>
-        <nd ref="-366"/>
-        <nd ref="-4585"/>
-        <nd ref="-365"/>
-        <nd ref="-364"/>
-        <nd ref="-4586"/>
-        <nd ref="-363"/>
-        <nd ref="-4587"/>
-        <nd ref="-362"/>
-        <nd ref="-361"/>
-        <nd ref="-4588"/>
-        <nd ref="-360"/>
-        <nd ref="-359"/>
-        <nd ref="-358"/>
-        <nd ref="-4589"/>
-        <nd ref="-357"/>
-        <nd ref="-356"/>
-        <nd ref="-355"/>
-        <nd ref="-4590"/>
-        <nd ref="-354"/>
-        <nd ref="-4591"/>
-        <nd ref="-353"/>
-        <nd ref="-352"/>
-        <nd ref="-4592"/>
-        <nd ref="-351"/>
-        <nd ref="-350"/>
-        <nd ref="-4593"/>
-        <nd ref="-349"/>
-        <nd ref="-348"/>
-        <nd ref="-347"/>
-        <nd ref="-346"/>
-        <nd ref="-345"/>
-        <nd ref="-4594"/>
-        <nd ref="-344"/>
-        <nd ref="-37082"/>
-        <tag k="alt_name" v="I- 66"/>
-        <tag k="name" v="INTERSTATE 66  BN"/>
-        <tag k="highway" v="motorway"/>
-        <tag k="error:circular" v="3.53553"/>
-    </way>
     <way visible="true" id="-338" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-32759"/>
         <nd ref="-6490"/>
@@ -13552,6 +13527,39 @@
         <nd ref="-24099"/>
         <tag k="alt_name" v="E St NW"/>
         <tag k="name" v="PENNSYLVANIA AVE NW"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="3.53553"/>
+    </way>
+    <way visible="true" id="-331" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-24045"/>
+        <nd ref="-3318"/>
+        <nd ref="-3319"/>
+        <nd ref="-3320"/>
+        <nd ref="-5790"/>
+        <nd ref="-3321"/>
+        <nd ref="-3322"/>
+        <nd ref="-3323"/>
+        <nd ref="-23999"/>
+        <nd ref="-5792"/>
+        <nd ref="-1180"/>
+        <nd ref="-1181"/>
+        <nd ref="-5793"/>
+        <nd ref="-1182"/>
+        <nd ref="-5794"/>
+        <nd ref="-1183"/>
+        <nd ref="-5795"/>
+        <nd ref="-1184"/>
+        <nd ref="-24005"/>
+        <nd ref="-1185"/>
+        <nd ref="-5797"/>
+        <nd ref="-5798"/>
+        <nd ref="-1186"/>
+        <nd ref="-1187"/>
+        <nd ref="-1188"/>
+        <nd ref="-5799"/>
+        <nd ref="-29305"/>
+        <tag k="alt_name" v="K St NW;US Hwy 29"/>
+        <tag k="name" v="K ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="3.53553"/>
     </way>
@@ -13824,69 +13832,6 @@
         <nd ref="-22232"/>
         <tag k="alt_name" v="13th St NW"/>
         <tag k="name" v="13TH ST NW"/>
-        <tag k="highway" v="road"/>
-        <tag k="error:circular" v="3.53553"/>
-    </way>
-    <way visible="true" id="-301" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-23981"/>
-        <nd ref="-4018"/>
-        <nd ref="-5783"/>
-        <nd ref="-4019"/>
-        <nd ref="-5784"/>
-        <nd ref="-4020"/>
-        <nd ref="-5785"/>
-        <nd ref="-4021"/>
-        <nd ref="-23996"/>
-        <nd ref="-4022"/>
-        <nd ref="-22748"/>
-        <nd ref="-2726"/>
-        <nd ref="-2728"/>
-        <nd ref="-2730"/>
-        <nd ref="-5788"/>
-        <nd ref="-2732"/>
-        <nd ref="-5789"/>
-        <nd ref="-2734"/>
-        <nd ref="-2736"/>
-        <nd ref="-2738"/>
-        <nd ref="-24045"/>
-        <nd ref="-3318"/>
-        <nd ref="-3319"/>
-        <nd ref="-3320"/>
-        <nd ref="-5790"/>
-        <nd ref="-3321"/>
-        <nd ref="-3322"/>
-        <nd ref="-3323"/>
-        <nd ref="-23999"/>
-        <nd ref="-5792"/>
-        <nd ref="-1180"/>
-        <nd ref="-1181"/>
-        <nd ref="-5793"/>
-        <nd ref="-1182"/>
-        <nd ref="-5794"/>
-        <nd ref="-1183"/>
-        <nd ref="-5795"/>
-        <nd ref="-1184"/>
-        <nd ref="-24005"/>
-        <nd ref="-1185"/>
-        <nd ref="-5797"/>
-        <nd ref="-5798"/>
-        <nd ref="-1186"/>
-        <nd ref="-1187"/>
-        <nd ref="-1188"/>
-        <nd ref="-5799"/>
-        <nd ref="-29305"/>
-        <nd ref="-5059"/>
-        <nd ref="-2289"/>
-        <nd ref="-34119"/>
-        <nd ref="-2291"/>
-        <nd ref="-37167"/>
-        <nd ref="-36185"/>
-        <nd ref="-2297"/>
-        <nd ref="-36230"/>
-        <nd ref="-2299"/>
-        <nd ref="-36800"/>
-        <tag k="alt_name" v="K St NW;US Hwy 29"/>
-        <tag k="name" v="K ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="3.53553"/>
     </way>
@@ -16540,6 +16485,23 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="3.53553"/>
     </way>
+    <way visible="true" id="-44" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-29305"/>
+        <nd ref="-5059"/>
+        <nd ref="-2289"/>
+        <nd ref="-34119"/>
+        <nd ref="-2291"/>
+        <nd ref="-37167"/>
+        <nd ref="-36185"/>
+        <nd ref="-2297"/>
+        <nd ref="-36230"/>
+        <nd ref="-2299"/>
+        <nd ref="-36800"/>
+        <tag k="alt_name" v="K St NW;US Hwy 29"/>
+        <tag k="name" v="K ST NW"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="3.53553"/>
+    </way>
     <way visible="true" id="-38" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-20879"/>
         <nd ref="-7172"/>
@@ -16559,6 +16521,33 @@
         <nd ref="-20925"/>
         <tag k="alt_name" v="Pennsylvania Ave NW"/>
         <tag k="name" v="PENNSYLVANIA AVE NW"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="3.53553"/>
+    </way>
+    <way visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-23981"/>
+        <nd ref="-4018"/>
+        <nd ref="-5783"/>
+        <nd ref="-4019"/>
+        <nd ref="-5784"/>
+        <nd ref="-4020"/>
+        <nd ref="-5785"/>
+        <nd ref="-4021"/>
+        <nd ref="-23996"/>
+        <nd ref="-4022"/>
+        <nd ref="-22748"/>
+        <nd ref="-2726"/>
+        <nd ref="-2728"/>
+        <nd ref="-2730"/>
+        <nd ref="-5788"/>
+        <nd ref="-2732"/>
+        <nd ref="-5789"/>
+        <nd ref="-2734"/>
+        <nd ref="-2736"/>
+        <nd ref="-2738"/>
+        <nd ref="-24045"/>
+        <tag k="alt_name" v="K St NW;US Hwy 29"/>
+        <tag k="name" v="K ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="3.53553"/>
     </way>
