@@ -78,11 +78,11 @@ void ImplicitTagRawRulesDeriver::setConfiguration(const Settings& conf)
 
 void ImplicitTagRawRulesDeriver::setElementFilter(const QString type)
 {
-  if (type.trimmed().toUpper() != "POI")
+  if (type.trimmed().toUpper() == "POI")
   {
     _elementFilter.reset(new ImplicitTagEligiblePoiCriterion());
   }
-  else if (type.trimmed().toUpper() != "POI-POLYGON")
+  else if (type.trimmed().toUpper() == "POI-POLYGON")
   {
     _elementFilter.reset(new ImplicitTagEligiblePoiPolyCriterion());
   }

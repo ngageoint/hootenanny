@@ -2,12 +2,13 @@
 [[ImplicitTagging]]
 == Implicit Tagging Based On Name
 
-Hootenanny has the capability to derive type tag information automatically for elements based soley on the contents of their name tags.  Currently, 
-implicit tagging is only supported for POI data.  This feature can be used simply to add better tags to poorly typed data or to add tags with 
-the goal of improving conflated output between datasets.  
+Hootenanny has the capability to derive type tag information automatically for elements based soley on the contents of their name tags.  
+Currently, implicit tagging is only supported for POI data.  This feature can be used simply to add better tags to poorly typed data or to 
+add tags with the goal of improving conflated output between datasets.  
 
-This feature should not be used unless the addition of some false type tags to the input data is acceptable.  There are no metrics yet for how many false
-tags this technique will generate on average, although the number is typically small and will become smaller over time as the feature is refined.
+This feature should not be used unless the addition of some false type tags to the input data is acceptable.  There are no metrics 
+yet for how many false tags this technique will generate on average, although the number is typically small and will become smaller 
+over time as the feature is refined.
 
 To use the feature from the command line with your POI data:
 

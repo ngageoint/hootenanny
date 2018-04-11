@@ -42,6 +42,9 @@ HOOT_FACTORY_REGISTER(ElementCriterion, ImplicitTagEligiblePoiCriterion)
 bool ImplicitTagEligiblePoiCriterion::isSatisfied(
   const boost::shared_ptr<const Element>& element) const
 {
+  LOG_VART(element->getElementType());
+  LOG_VART(element->getTags().getNames().size());
+  LOG_VART(hasEligibleKvp(element->getTags()));
   return
     element->getElementType() == ElementType::Node && element->getTags().getNames().size() > 0 &&
     hasEligibleKvp(element->getTags());
@@ -80,6 +83,7 @@ bool ImplicitTagEligiblePoiCriterion::hasEligibleKvp(const Tags& tags) const
     if (kvp != QLatin1String("poi=yes") &&
         OsmSchema::getInstance().getCategories(kvp).intersects(OsmSchemaCategory::poi()))
     {
+      LOG_TRACE("Eligible KVP: " << kvp);
       return true;
     }
   }
