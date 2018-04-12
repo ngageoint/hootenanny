@@ -37,22 +37,11 @@
 # Mattj Jul 16
 #
 
-import sys,os,csv,argparse,gzip
+import sys,csv,argparse
 
+# This is where the common functions live
+from hootLibrary import *
 
-def printJSHeader():
-    print notice
-    print
-    print "var _global = (0, eval)('this');"
-    print 'if (!_global.ggdm30)'
-    print '{'
-    print '  _global.ggdm30 = {};'
-    print '}'
-    print
-    print 'ggdm30.schema = {'
-    print '//  Schema built from %s, %s and %s' % (main_csv_file, layer_csv_file, values_csv_file)
-    print 'getDbSchema: function()'
-    print '{'
 
 # printJavascript: Dump out the structure as Javascript
 #
@@ -126,15 +115,6 @@ def printJavascript(schema,withDefs):
 
     print '    ]; // End of schema\n' # End of schema
 
-
-def printJSFooter():
-    print '    return schema; \n'
-    print '} // End of getDbSchema\n'
-    print '} // End of ggdm30.schema\n'
-    print
-    print 'exports.getDbSchema = ggdm30.schema.getDbSchema;'
-    print
-
 # End printJavascript
 
 
@@ -183,255 +163,6 @@ def convertTextEnumerations(tschema):
 # End convertTextEnumerations
 
 
-def asint(s):
-    try: return int(s)
-    except ValueError: return s
-
-
-# Print Rules
-def printRules(schema):
-    tList = {}
-    for i in schema:
-        for j in schema[i]['columns']:
-            #if schema[i]['columns'][j]['type'] != 'enumeration':
-            if schema[i]['columns'][j]['type'].find('numeration') == -1:
-                continue
-
-            eName = schema[i]['columns'][j]['name']
-
-            if eName not in tList:
-                tList[eName] = {}
-                tList[eName]['desc'] = schema[i]['columns'][j]['desc']
-                tList[eName]['enum'] = {}
-
-            for k in schema[i]['columns'][j]['enum']:
-                if k['value'] not in tList[eName]['enum']:
-                    tList[eName]['enum'][k['value']] = {}
-
-                tList[eName]['enum'][k['value']] = k['name']
-            #tList[schema[i]['columns'][j]['name']] = schema[i]['columns'][j]['desc']
-
-    for i in sorted(tList.keys()):
-        print "\n     // %s - %s" % (i,tList[i]['desc'])
-        for j in sorted(tList[i]['enum'].keys(), key=asint):
-            rVal = tList[i]['enum'][j]
-            eVal = rVal.replace(' ','_').lower()
-            if j == '-999999':
-                print "     // ['%s','%s',undefined,undefined], // %s" % (i,j,rVal)
-                continue
-            if j == '1000':
-                print "     ['%s','%s','raw:%s','no']," % (i,j,i)
-                continue
-            if j == '1001':
-                print "     ['%s','%s','raw:%s','yes']," % (i,j,i)
-                continue
-            print "     ['%s','%s','raw:%s','%s'], // %s" % (i,j,i,eVal,rVal)
-# End printRules
-
-
-# Print Attribute List
-def printAttrList(schema):
-    tList = {}
-
-    for i in schema:
-        for j in schema[i]['columns']:
-
-            eName = schema[i]['columns'][j]['name']
-
-            if eName not in tList:
-                tList[eName] = schema[i]['columns'][j]['desc']
-
-    for i in sorted(tList.keys()):
-        print "    '%s':'%s'," % (i,tList[i])
-# End printAttrList
-
-
-# Print FCode List
-def printFcodeList(schema):
-    tList = {}
-    for i in schema:
-        if schema[i]['fcode'] not in tList:
-            tList[schema[i]['fcode']] = schema[i]['desc']
-
-    print '"FCODE","Name"'
-    for i in sorted(tList.keys()):
-        print '"%s","%s"' % (i,tList[i])
-# End printFcodeList
-
-
-# Print FCODES in the internal OSM schema format
-def printFcodeSchema(schema):
-    tList = {}
-    gList = {'Line':'linestring', 'Area':'area', 'Point':'node' }
-
-    for i in schema:
-        # Skip geometry we don't care about
-        if schema[i]['geom'] not in gList:
-            continue
-
-        if schema[i]['fcode'] not in tList:
-            tList[schema[i]['fcode']] = {}
-            tList[schema[i]['fcode']]['description'] = schema[i]['desc']
-            tList[schema[i]['fcode']]['isA'] = 'FCODE'
-            tList[schema[i]['fcode']]['name'] = 'FCODE=' + schema[i]['fcode']
-            tList[schema[i]['fcode']]['objectType'] = 'tag'
-            tList[schema[i]['fcode']]['geometries'] = []
-
-        tList[schema[i]['fcode']]['geometries'].append(gList[schema[i]['geom']])
-
-    #print '"FCODE","Name"'
-    for i in sorted(tList.keys()):
-        #print tList[i]
-        # Manual printing to get the order we want for sorting later
-        print '{"name": "%s", "geometries": %s, "description": "%s", "isA": "FCODE", "objectType": "tag"}' % (tList[i]['name'],tList[i]['geometries'],tList[i]['description'])
-# End printFcodeSchema
-
-
-# Print FCode Attribute List
-def printFcodeAttrList(schema):
-    tList = {}
-    for i in schema:
-        if schema[i]['fcode'] not in tList:
-            tList[schema[i]['fcode']] = []
-            for j in schema[i]['columns']:
-                tList[schema[i]['fcode']].append(schema[i]['columns'][j]['name'])
-
-    #print '"FCODE","Name"'
-    for i in sorted(tList.keys()):
-        print '%s : %s' % (i,tList[i])
-# End printFcodeAttrList
-
-
-# printLayerList
-def printLayerList(layerList):
-    for i in sorted(layerList.keys()):
-        print "'%s':'%s',  // %s" % (i,layerList[i]['layer'],layerList[i]['name'])
-
-# End printLayerList
-
-
-# Print ToEnglish
-# Dump out the set of GGDM English rules
-def printToEnglish(schema):
-    eList = {}
-    sList = {}
-    dList = {}
-    fList = {}
-    for i in schema:
-        fList[schema[i]['fcode']] = {}
-        fList[schema[i]['fcode']]['desc'] = schema[i]['desc']
-        fList[schema[i]['fcode']]['enum'] = []
-        for j in schema[i]['columns']:
-            eName = schema[i]['columns'][j]['name']
-            if eName == 'F_CODE':
-                continue
-
-            if eName not in dList: # Default Values
-                dList[eName] = {}
-            dList[eName] = schema[i]['columns'][j]['defValue']
-            fList[schema[i]['fcode']]['enum'].append(eName)
-
-            # if schema[i]['columns'][j]['type'] == 'enumeration':
-            if schema[i]['columns'][j]['type'].find('numeration') > -1:
-                if eName not in eList:
-                    eList[eName] = {}
-
-                for k in schema[i]['columns'][j]['enum']:
-                    if k['value'] not in eList[eName]:
-                        eList[eName][k['value']] = {}
-                    eList[eName][k['value']] = [schema[i]['columns'][j]['desc'],k['name']]
-            else:
-                if eName not in sList: # Single Values
-                    sList[eName] = {}
-                sList[eName] = schema[i]['columns'][j]['desc']
-
-    print notice
-    print ''
-    print '/*'
-    print '    GGDMv30 "To English" Lookup Tables\n'
-    print '    Huge piles of Ugly JSON!'
-    print '*/\n'
-    print 'eggdm30.rules = {'
-    print '    // Tables built from %s, %s and %s' % (main_csv_file, layer_csv_file, values_csv_file)
-
-    # Dump out the Enumerated Values
-    print '    // Enumerated Values'
-    print '    engEnum : %s , // End of engEnum\n' % (eList)
-
-    # Dump out the Single Values
-    print '    // Single Values'
-    print '    engSingle : %s , // End of engSingle\n' % (sList)
-
-    # Dump out the Default Values
-    print '    // Default values for attributes'
-    print '    engDefault : %s , // End of engDefault\n' % (dList)
-
-    # Dump out the FCodes
-    print '    // FCode Lookup Table'
-    print '    fcodeLookup : %s ,  // End of fcodeLookup\n' % (fList)
-
-    print '} // End of eggdm30.rules\n'
-# End printToEnglish
-
-
-# Print FromEnglish
-# Dump out the set of TDS English rules
-def printFromEnglish(schema):
-    eList = {}
-    sList = {}
-    for i in schema:
-        for j in schema[i]['columns']:
-
-            eDesc = schema[i]['columns'][j]['desc']
-            if schema[i]['columns'][j]['type'].find('numeration') > -1:
-                if eDesc not in eList:
-                    eList[eDesc] = {}
-
-                for k in schema[i]['columns'][j]['enum']:
-                    if k['value'] not in eList[eDesc]:
-                        eList[eDesc][k['name']] = {}
-                    eList[eDesc][k['name']] = [schema[i]['columns'][j]['name'],k['value']]
-            else:
-                if eDesc not in sList: # Single Values
-                    sList[eDesc] = {}
-                sList[eDesc] = schema[i]['columns'][j]['name']
-
-    print notice
-    print ''
-    print '/*'
-    print '    GGDMv30 "From English" Lookup Tables\n'
-    print '    Huge piles of Ugly JSON!'
-    print '*/\n'
-    print 'eggdm30_osm_rules = {'
-    print '    // Tables built from %s, %s and %s' % (main_csv_file, layer_csv_file, values_csv_file)
-
-    # Dump out the Enumerated Values
-    print '    // Enumerated Values'
-    print '    enumValues : %s , // End of enumValues\n' % (eList)
-
-    # Dump out the Single Values
-    print '    // Single Values'
-    print '    singleValues : %s , // End of singleValues\n' % (sList)
-
-    print '} // End of eggdm30_osm_rules\n'
-# End printFromEnglish
-
-
-# Print Text Rules
-def printTxtRules(schema):
-    tList = {}
-
-    for i in schema:
-        for j in schema[i]['columns']:
-            if schema[i]['columns'][j]['type'] != 'String':
-                continue
-            tList[schema[i]['columns'][j]['name']] = schema[i]['columns'][j]['desc']
-
-    for i in sorted(tList.keys()):
-        print "     '%s':'raw:%s', // %s" % (i,i,tList[i])
-# End printTxtRules
-
-
 # Print Text Attribute Lengths
 # Output format:      'BA000_VDR':80,
 def printTxtLen(schema):
@@ -468,127 +199,7 @@ def printIntAttr(schema):
 # End printIntAttr
 
 
-# Print Number Rules
-def printNumRules(schema):
-    tList = {}
-    for i in schema:
-        for j in schema[i]['columns']:
-            if schema[i]['columns'][j]['type'].find('numeration') > -1:
-                continue
-            if schema[i]['columns'][j]['type'] == 'String':
-                continue
-            #if schema[i]['columns'][j]['name'] in tList:
-                #continue
-            tList[schema[i]['columns'][j]['name']] = schema[i]['columns'][j]['desc']
-
-    for i in sorted(tList.keys()):
-        print "     '%s':'raw:%s', // %s" % (i,i,tList[i])
-# End printNumRules
-
-
-# Print CSV Attribute List
-def printAttributeCsv(schema):
-    fList = {}
-    fDesc = ''
-    cDesc = ''
-    for i in schema:
-        fDesc = '"' + schema[i]['desc'] + '","' + schema[i]['fcode'] + '"'
-        if fDesc not in fList:
-            fList[fDesc] = {}
-
-        for j in schema[i]['columns']:
-            cDesc = schema[i]['columns'][j]['desc']
-
-            if cDesc not in fList[fDesc]:
-                fList[fDesc][cDesc] = []
-
-            if schema[i]['columns'][j]['type'].find('numeration') > -1:
-                for k in schema[i]['columns'][j]['enum']:
-                    if k['name'] not in fList[fDesc][cDesc]:
-                        fList[fDesc][cDesc].append(k['name'])
-            else:
-                fList[fDesc][cDesc].append('Value')
-
-    print '"Feature","FCODE","Name","Value"'
-    for i in sorted(fList.keys()):
-        for j in sorted(fList[i].keys()):
-            for k in sorted(fList[i][j]):
-                #print '"%s","%s","%s"' % (i,j,k)
-                print '%s,"%s","%s"' % (i,j,k)
-# End printAttributeCsv
-
-
-# Dump the enumerated attributes into files.
-# Each file is named: <attribute>_<FCODE>
-# The files are put in a directory called: enumGGDM30
-def dumpEnumerations(schema):
-    if not os.path.exists('enumGGDM30'):
-        os.makedirs('enumGGDM30')
-    else:
-        shutil.rmtree('enumGGDM30')
-        os.makedirs('enumGGDM30')
-
-    currentDir = os.getcwd()
-    os.chdir('enumGGDM30')
-
-    fCode = ''
-    for i in schema:
-        fCode = schema[i]['fcode']
-
-        for j in schema[i]['columns']:
-            if schema[i]['columns'][j]['type'].find('numeration') > -1:
-                    outFile = open(j + '_' + fCode,'w')
-                    
-                    for k in schema[i]['columns'][j]['enum']:
-                        outFile.write('{} = {}\n'.format(k['name'],k['value']))
-                    
-                    outFile.close()
-
-    os.chdir(currentDir)
-# End dumpEnumerations
-
-
-def openFile(path, mode):
-    if path.endswith(".gz"):
-        return gzip.GzipFile(path, mode)
-    else:
-        return open(path, mode)
-
-
 # Data & Lists
-notice = """/*
- * This file is part of Hootenanny.
- *
- * Hootenanny is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * --------------------------------------------------------------------
- *
- * The following copyright notices are generated automatically. If you
- * have a new notice to add, please use the format:
- * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
- * copyrights will be updated automatically.
- *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
- */
-
- ////
- // This file is automatically generated. Please do not modify the file
- // directly.
- ////
- """
-
 geo_list = {'T':'Table', 'C':'Line', 'S':'Area', 'P':'Point' }
 
 # Convert from the Spec into what Hoot understands
@@ -904,29 +515,33 @@ elif args.fcodeattrlist:
     printFcodeAttrList(schema)
 
 elif args.toenglish:
-    printToEnglish(schema)
+    printCopyright()
+    printToEnglish(schema,'GGDMv30','eggdm30','F_CODE')
 
 elif args.fromenglish:
-    printFromEnglish(schema)
+    printCopyright()
+    printFromEnglish(schema,'GGDMv30','eggdm30_osm_rules')
 
 elif args.attributecsv:  # Dump the schema as a CSV
     printAttributeCsv(schema)
 
 elif args.fullschema:
-    printJSHeader()
+    printCopyright()
+    printJSHeader('ggdm30')
     printFunctions(enumValues)
     printJavascript(schema,withDefs)
-    printJSFooter()
+    printJSFooter('ggdm30')
 
 elif args.dumpenum:
-    dumpEnumerations(schema)
+    dumpEnumerations(schema,'enumGGDM30')
 
 else: # The default is to dump out a basic schema with no text enumerations
     schema = convertTextEnumerations(schema)
-    printJSHeader()
+    printCopyright()
+    printJSHeader('ggdm30')
     enumValues = dropTextEnumerations(enumValues)
     printFunctions(enumValues)
     printJavascript(schema,withDefs)
-    printJSFooter()
+    printJSFooter('ggdm30')
 # End
 
