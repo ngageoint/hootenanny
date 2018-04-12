@@ -150,6 +150,8 @@ if ! hash qmake >/dev/null 2>&1 ; then
     fi
 fi
 
+cd $HOOT_HOME
+
 echo "### Configuring environment..."
 
 # Configure https alternative mirror for maven install, this can likely be removed once
