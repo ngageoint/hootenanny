@@ -6,7 +6,7 @@ var tds40_schema = require('./tds40_full_schema.js').getDbSchema();
 var tds61_schema = require('./tds61_full_schema.js').getDbSchema();
 var fs = require('fs');
 var builder = require('xmlbuilder');
-var hash = require('object-hash');
+var crypto = require('crypto');
 
 // <?xml version="1.0" encoding="UTF-8"?>
 // <presets xmlns="http://josm.openstreetmap.de/tagging-preset-1.0">
@@ -61,7 +61,9 @@ Object.keys(objs).forEach(s => {
 
     //Build a normalized map of items and chunks
     var items = {};
-    var chunks = {};
+    var listEntries = {};
+    var texts = {};
+    var combos = {};
     var groups = require('./facc_groups.json');
     var subgroups = require('./facc_subgroups.json');
     var groupCodeElements = {};
@@ -73,27 +75,46 @@ Object.keys(objs).forEach(s => {
         if (items[i.desc]) {
             items[i.desc].geoms.push(i.geom);
         } else {
+
             items[i.desc] = {
                 fcode: i.fcode,
                 geoms: [i.geom],
-                columns: i.columns
+                columns: i.columns,
+                hashes: []
             };
+
+            //Build de-duped map of unique enumerations (list entry),
+            //combo and text elements keyed by hash
+            i.columns.forEach(col => {
+                let colHash = crypto.createHash('md5').update(JSON.stringify(col)).digest('hex');
+                items[i.desc].hashes.push(colHash);
+
+                if (col.type === 'enumeration') {
+
+                    let key = crypto.createHash('md5').update(JSON.stringify(col.enumerations)).digest('hex');
+
+                    if (!listEntries[key])
+                        listEntries[key] = col.enumerations;
+
+                    if (!combos[colHash]) {
+                        col.enumHash = key;
+                        combos[colHash] = col;
+                    }
+
+                } else {
+                    if (!texts[colHash])
+                        texts[colHash] = col;
+                }
+            });
+
         }
 
-        //Build de-duped map of unique enumerations
-        //keyed by hash
-        i.columns.forEach(c => {
-            if (c.type === 'enumeration') {
-                let key = hash(c.enumerations);
-                if (!chunks[key])
-                    chunks[key] = c.enumerations;
-            }
-        });
     });
 
-    Object.keys(chunks).forEach(c => {
-        let chunk = presets.ele('chunk', {id: c});
-        chunks[c].sort((a,b) => {
+    //Write the unique list entries out as chunks
+    Object.keys(listEntries).forEach(k => {
+        let chunk = presets.ele('chunk', {id: k});
+        listEntries[k].sort((a,b) => {
             // numeric comparison
             if (!isNaN(a.value) && !isNaN(b.value)) {
                 return a.value - b.value;
@@ -117,7 +138,40 @@ Object.keys(objs).forEach(s => {
                     //Don't display name if equal to value
                     display_value: (e.value === e.name) ? e.value : e.value + ' - ' + e.name
                 });
-        })
+        });
+    });
+
+    //Write the unique combos out as chunks
+    Object.keys(combos).forEach(k => {
+        let col = combos[k];
+        let chunk = presets.ele('chunk', {id: k});
+        let attrs = {
+            key: col.name,
+            text: col.desc,
+            values_searchable: true,
+            // default: col.defValue
+        };
+
+        let combo = chunk.ele('combo', attrs);
+        combo.ele('reference', 
+            {
+                ref: col.enumHash
+            });
+    });
+
+    //Write the unique texts out as chunks
+    Object.keys(texts).forEach(k => {
+        let col = texts[k];
+        let chunk = presets.ele('chunk', {id: k});
+        let attrs = {
+            key: col.name,
+            text: col.desc,
+            // default: col.defValue
+        };
+        if (col.length) {
+            attrs.length = col.length;
+        }
+        chunk.ele('text', attrs);
     });
 
     let schemaGroup = presets.ele('group', {name: objs[s].name, icon: objs[s].icon});
@@ -133,7 +187,6 @@ Object.keys(objs).forEach(s => {
     });
 
     let usedGroups = new Set(); //Keep a list of used sub groups
-
     Object.keys(items).forEach(i => {
         //Get the right subgroup (two-letter) element to append to
         let code = items[i].fcode.slice(0,2);
@@ -145,37 +198,12 @@ Object.keys(objs).forEach(s => {
 
         it.ele('key', {key: (s === 'mgcp') ? 'FCODE' : 'F_CODE', value: items[i].fcode}); //MGCP uses 'FCODE' as key
 
-        items[i].columns.forEach(col => {
+        items[i].columns.forEach((col, j) => {
             if (col.name !== 'FCODE' && col.name !== 'F_CODE') { //FCODE is set as a key above
-                if (col.type === 'enumeration') {
-                    let attrs = {
-                        key: col.name,
-                        text: col.desc,
-                        values_searchable: true,
-                        // default: col.defValue
-                    };
-
-                    if (col.length) {
-                        attrs.length = col.length;
-
-                    }
-                    let combo = it.ele('combo', attrs);
-                    combo.ele('reference', 
-                        {
-                            ref: hash(col.enumerations)
-                        });
-                } else {
-                    let attrs = {
-                        key: col.name,
-                        text: col.desc,
-                        // default: col.defValue
-                    };
-                    if (col.length) {
-                        attrs.length = col.length;
-
-                    }
-                    it.ele('text', attrs);
-                }
+                it.ele('reference', 
+                    {
+                        ref: items[i].hashes[j]
+                    });
             }
         });
     });
