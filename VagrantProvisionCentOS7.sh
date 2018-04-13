@@ -150,12 +150,7 @@ if ! hash qmake >/dev/null 2>&1 ; then
     fi
 fi
 
-#####
-# Temp change until we get the C++11 support into develop
 cd $HOOT_HOME
-cp LocalConfig.pri.orig LocalConfig.pri
-echo "QMAKE_CXXFLAGS += -std=c++11" >> LocalConfig.pri
-#####
 
 echo "### Configuring environment..."
 
