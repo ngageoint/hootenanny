@@ -65,15 +65,35 @@ void RemoveRoundabouts::removeRoundabouts(std::vector<RoundaboutPtr> &removed)
     }
   }
 
-  // Make roundabout objects, and replace the roundabouts with intersections
+  // Make roundabout objects
   for (size_t i = 0; i < _todoWays.size(); i++)
   {
     WayPtr pWay = _pMap->getWay(_todoWays[i]);
     RoundaboutPtr rnd = Roundabout::makeRoundabout(_pMap, pWay);
-    rnd->removeRoundabout(_pMap);
-
     removed.push_back(rnd);
   }
+
+  // Mangle ways that may cross our roundabouts, if there is no matching
+  // roundabout in the other map
+  for (size_t i = 0; i < removed.size(); i++)
+  {
+    geos::geom::Coordinate c1 = removed[i]->getCenter()->toCoordinate();
+    bool hasSibling = false;
+    for (size_t j = i+1; j < removed.size() && !hasSibling; j++)
+    {
+      geos::geom::Coordinate c2 = removed[j]->getCenter()->toCoordinate();
+      double distance = c1.distance(c2);
+      if (distance <= removed[i]->getCenter()->getCircularError())
+        hasSibling = true;
+    }
+
+    if (!hasSibling)
+      removed[i]->handleCrossingWays(_pMap);
+  }
+
+  // Now remove roundabouts
+  for (size_t i = 0; i < removed.size(); i++)
+    removed[i]->removeRoundabout(_pMap);
 }
 
 void RemoveRoundabouts::apply(OsmMapPtr &pMap)
