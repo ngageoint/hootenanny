@@ -267,11 +267,21 @@ bool PoiPolygonTypeScoreExtractor::hasMoreThanOneType(ConstElementPtr element)
   QStringList typesParsed;
   if (_allTagKeys.size() == 0)
   {
-    _allTagKeys = OsmSchema::getInstance().getAllTagKeys();
-    _allTagKeys.remove(MetadataTags::Ref1());
-    _allTagKeys.remove(MetadataTags::Ref2());
-    _allTagKeys.remove("uuid");
-    _allTagKeys.remove("name");
+    QSet<QString> allTagKeysTemp = OsmSchema::getInstance().getAllTagKeys();
+    allTagKeysTemp.remove(MetadataTags::Ref1());
+    allTagKeysTemp.remove(MetadataTags::Ref2());
+    allTagKeysTemp.remove("uuid");
+    allTagKeysTemp.remove("name");
+    allTagKeysTemp.remove("ele");
+    for (QSet<QString>::const_iterator it = allTagKeysTemp.begin(); it != allTagKeysTemp.end(); ++it)
+    {
+      const QString tagKey = *it;
+      //address tags aren't really type tags
+      if (!tagKey.startsWith("addr:"))
+      {
+        _allTagKeys.insert(tagKey);
+      }
+    }
   }
 
   const Tags elementTags = element->getTags();
@@ -299,6 +309,15 @@ bool PoiPolygonTypeScoreExtractor::hasType(ConstElementPtr element)
   return
     OsmSchema::getInstance().getCategories(element->getTags()).intersects(
       OsmSchemaCategory::building() | OsmSchemaCategory::poi());
+}
+
+bool PoiPolygonTypeScoreExtractor::hasSpecificType(ConstElementPtr element)
+{
+  return
+    hasType(element) && !element->getTags().contains("poi") &&
+          element->getTags().get("building") != QLatin1String("yes") &&
+          element->getTags().get("office") != QLatin1String("yes") &&
+          element->getTags().get("area") != QLatin1String("yes");
 }
 
 }

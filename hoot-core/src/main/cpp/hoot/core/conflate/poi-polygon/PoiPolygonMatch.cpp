@@ -438,7 +438,7 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
       distanceCalc.getReviewDistanceForType(_poly->getTags()));
 
   //Tried type and density based match distance changes here too, but they didn't have any positive
-  //effect experimentally;
+  //effect.
 
   // calculate the 2 sigma for the distance between the two objects
   const double poiSigma = poi->getCircularError() / 2.0;
@@ -466,6 +466,26 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
   LOG_VART(_closeDistanceMatch);
 
   return _distance <= _matchDistanceThreshold ? 2u : 0u;
+  //TODO: experimental
+//  if (_distance > _matchDistanceThreshold)
+//  {
+//    return 0u;
+//  }
+//  else if (_distance <= _matchDistanceThreshold)
+//  {
+//    const bool bothElementsHaveSpecificType =
+//      PoiPolygonTypeScoreExtractor::hasSpecificType(poi) &&
+//      PoiPolygonTypeScoreExtractor::hasSpecificType(poly);
+//    if (bothElementsHaveSpecificType)
+//    {
+//      return 1u;
+//    }
+//    else
+//    {
+//      return 2u;
+//    }
+//  }
+//  return 0u;
 }
 
 unsigned int PoiPolygonMatch::_getConvexPolyDistanceEvidence(ConstElementPtr poi,
@@ -557,6 +577,18 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
 //  }
 
   evidence += _getTypeEvidence(poi, poly);
+  //TODO: experimental
+//  const bool bothElementsHaveSpecificType =
+//    PoiPolygonTypeScoreExtractor::hasSpecificType(poi) &&
+//    PoiPolygonTypeScoreExtractor::hasSpecificType(poly);
+//  LOG_VART(bothElementsHaveSpecificType);
+//  const unsigned int typeEvidence = _getTypeEvidence(poi, poly);
+//  LOG_VART(typeEvidence);
+//  if (typeEvidence == 0 && bothElementsHaveSpecificType)
+//  {
+//    return 0;
+//  }
+//  evidence += typeEvidence;
 //  if (evidence >= _matchEvidenceThreshold)
 //  {
 //    return evidence;

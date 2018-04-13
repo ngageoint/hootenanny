@@ -72,9 +72,15 @@ void ImplicitTagCustomRules::_readCustomRuleFile()
     while (!customRulesFile.atEnd())
     {
       const QString line = QString::fromUtf8(customRulesFile.readLine().constData()).trimmed();
+      LOG_VART(line);
       if (!line.trimmed().isEmpty() && !line.startsWith("#"))
       {
         const QStringList lineParts = line.trimmed().split("\t");
+        LOG_VART(lineParts);
+        if (lineParts.size() != 2)
+        {
+          throw HootException("Invalid custom rule: " + line);
+        }
         _customRulesList[lineParts[0].trimmed()] = lineParts[1].trimmed();
       }
     }

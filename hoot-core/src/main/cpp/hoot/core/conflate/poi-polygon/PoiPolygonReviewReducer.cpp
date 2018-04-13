@@ -139,9 +139,15 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
       return true;
   }
 
+  const bool polyIsPark = PoiPolygonTypeScoreExtractor::isPark(poly);
+  LOG_VART(polyIsPark);
+
   //same as above, but for gardens
   if ((poi->getTags().get("leisure").toLower() == "garden" ||
-       poly->getTags().get("leisure").toLower() == "garden") && !_nonDistanceSimilaritiesPresent())
+       poly->getTags().get("leisure").toLower() == "garden") &&
+       (!_nonDistanceSimilaritiesPresent() ||
+        (polyIsPark &&
+         !PoiPolygonNameScoreExtractor::getElementName(poly).toLower().contains("garden"))))
   {
       LOG_TRACE("Returning miss per review reduction rule #3...");
       return true;
@@ -189,8 +195,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
     return true;
   }
 
-  const bool polyIsPark = PoiPolygonTypeScoreExtractor::isPark(poly);
-  LOG_VART(polyIsPark);
   //prevent athletic POIs within a park poly from being reviewed against that park poly
   if (_distance == 0 && polyIsPark && poi->getTags().get("leisure") == "pitch")
   {
@@ -454,7 +458,8 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
         //poly is "very close" to another park poly that has a name match with the poi, then
         //declare a miss (exclude poly playgrounds from this).
         if (poiIsPark && !polyIsPark && !polyIsBuilding && polyVeryCloseToAnotherParkPoly &&
-            otherParkPolyNameMatch && !polyIsPlayground)
+            //TODO: test this change
+            otherParkPolyNameMatch /*&& !polyIsPlayground*/)
         {
           LOG_TRACE("Returning miss per review reduction rule #17...");
           return true;

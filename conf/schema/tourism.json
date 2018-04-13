@@ -74,6 +74,10 @@
             {
                 "name": "leisure=garden",
                 "weight": 0.2
+            },
+            {
+                "name": "amenity=auditorium",
+                "weight": 0.2
             }
         ]
     },

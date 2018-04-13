@@ -100,6 +100,8 @@ public:
    */
   static bool hasType(ConstElementPtr element);
 
+  static bool hasSpecificType(ConstElementPtr element);
+
   double getTypeScoreThreshold() { return _typeScoreThreshold; }
   void setTypeScoreThreshold(double threshold) { _typeScoreThreshold = threshold; }
 

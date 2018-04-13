@@ -35,6 +35,7 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/algorithms/Translator.h>
 #include <hoot/core/schema/ImplicitTagUtils.h>
+#include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonTypeScoreExtractor.h>
 
 // Qt
 #include <QSet>
@@ -237,6 +238,23 @@ void ImplicitTaggerBase::visit(const ElementPtr& e)
         {
           tagsToAdd.appendValue("building", "yes");
           matchingWords.insert("building");
+        }
+
+        //TODO: test this
+        //bit of hack...to handle a situation where playground have been incorrectly tagged as parks
+        //the argument could be made to just correct the input data instead
+        if (tagsToAdd.isEmpty() && PoiPolygonTypeScoreExtractor::isPark(e))
+        {
+          for (int i = 0; i < filteredNames.size(); i++)
+          {
+            const QString name = filteredNames.at(i).toLower();
+            if (name.endsWith("play area") || name.endsWith("play areas") ||
+                name.endsWith("playground"))
+            {
+              tagsToAdd.appendValue("leisure", "playground");
+              break;
+            }
+          }
         }
 
         if (!tagsToAdd.isEmpty())
@@ -571,6 +589,10 @@ void ImplicitTaggerBase::_addImplicitTags(const ElementPtr& e, const Tags& tagsT
   if (tagsToAdd.get("building") != "yes" && e->getTags().get("building") == "yes")
   {
     e->getTags().remove("building");
+  }
+  if (tagsToAdd.get("area") != "yes" && e->getTags().get("area") == "yes")
+  {
+    e->getTags().remove("area");
   }
 
   _numNodesModified++;

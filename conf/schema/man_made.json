@@ -120,7 +120,9 @@
         "objectType": "tag"
     },
     {
-        "categories": [],
+        "categories": [
+            "poi"
+        ],
         "geometries": [
             "linestring"
         ],
@@ -260,7 +262,13 @@
         ],
         "isA": "man_made",
         "name": "man_made=water_tower",
-        "objectType": "tag"
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "man_made=storage_tank",
+                "weight": 0.8
+            }
+        ]
     },
     {
         "isA": "man_made",

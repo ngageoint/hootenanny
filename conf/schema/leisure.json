@@ -255,6 +255,10 @@
         ],
         "isA": "leisure",
         "name": "leisure=pitch",
-        "objectType": "tag"
+        "objectType": "tag",
+        "similarTo": {
+            "name": "leisure=stadium",
+            "weight": 0.8
+        }
     }
 ]

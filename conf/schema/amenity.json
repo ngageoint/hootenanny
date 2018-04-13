@@ -517,6 +517,10 @@
         "aliases": [
             "amenity=community_center"
         ],
+        "categories": [
+            "use",
+            "poi"
+        ],
         "isA": "amenity",
         "name": "amenity=community_centre",
         "objectType": "tag"
@@ -1489,7 +1493,11 @@
     {
         "isA": "amenity",
         "name": "amenity=planetarium",
-        "objectType": "tag"
+        "objectType": "tag",
+        "similarTo": {
+            "name": "tourism=museum",
+            "weight": 0.8
+        }
     },
     {
         "isA": "amenity",
