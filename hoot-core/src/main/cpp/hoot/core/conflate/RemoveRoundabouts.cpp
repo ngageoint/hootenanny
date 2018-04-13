@@ -55,7 +55,7 @@ RemoveRoundabouts::RemoveRoundabouts()
 
 void RemoveRoundabouts::removeRoundabouts(std::vector<RoundaboutPtr> &removed)
 {
-  // Get a list of ways (that look like roads) in the map
+  // Get a list of roundabouts in the map
   for (WayMap::const_iterator it = _pMap->getWays().begin(); it != _pMap->getWays().end(); ++it)
   {
     if (OsmSchema::getInstance().isRoundabout(it->second->getTags(),
@@ -73,8 +73,8 @@ void RemoveRoundabouts::removeRoundabouts(std::vector<RoundaboutPtr> &removed)
     removed.push_back(rnd);
   }
 
-  // Mangle ways that may cross our roundabouts, if there is no matching
-  // roundabout in the other map
+  // Mangle (in a good way) ways that may cross our roundabouts, provided there
+  // is no 'sibling' roundabout in the secondary dataset
   for (size_t i = 0; i < removed.size(); i++)
   {
     geos::geom::Coordinate c1 = removed[i]->getCenter()->toCoordinate();
@@ -87,6 +87,7 @@ void RemoveRoundabouts::removeRoundabouts(std::vector<RoundaboutPtr> &removed)
         hasSibling = true;
     }
 
+    // If no sibling, do the mangle
     if (!hasSibling)
       removed[i]->handleCrossingWays(_pMap);
   }

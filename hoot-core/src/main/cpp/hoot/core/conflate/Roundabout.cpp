@@ -106,18 +106,21 @@ RoundaboutPtr Roundabout::makeRoundabout (const boost::shared_ptr<OsmMap> &pMap,
     rnd->addRoundaboutNode(pMap->getNode(nodeIds[i]));
   }
 
-  // Get/Set center
+  // Calculate and set center
   rnd->setRoundaboutCenter(rnd->getNewCenter(pMap));
 
   return rnd;
 }
 
-geos::geom::Coordinate getCentroid(ConstOsmMapPtr pMap, WayPtr pWay)
+namespace // Anonymous
 {
-  geos::geom::Envelope env = pWay->getEnvelopeInternal(pMap);
-  geos::geom::Coordinate center(0.0, 0.0);
-  env.centre(center);
-  return center;
+  geos::geom::Coordinate getCentroid(ConstOsmMapPtr pMap, WayPtr pWay)
+  {
+    geos::geom::Envelope env = pWay->getEnvelopeInternal(pMap);
+    geos::geom::Coordinate center(0.0, 0.0);
+    env.centre(center);
+    return center;
+  }
 }
 
 void Roundabout::handleCrossingWays(boost::shared_ptr<OsmMap> pMap)
@@ -126,13 +129,13 @@ void Roundabout::handleCrossingWays(boost::shared_ptr<OsmMap> pMap)
   NodePtr pCenterNode = getNewCenter(pMap);
   pCenterNode->setStatus(_otherStatus);
 
-  // Get our envelope
+  // Get our roundabout's envelope
   geos::geom::Envelope rndEnv = _roundaboutWay->getEnvelopeInternal(pMap);
 
-  // Find intersecting ways
+  // Find ways that intersect the envelope
   std::vector<long> intersectIds = pMap->getIndex().findWays(rndEnv);
 
-  // Find intersecting points
+  // Calculate intersection points of crossing ways
   ElementConverter converter(pMap);
   GeomPtr pRndGeo = converter.convertToGeometry(_roundaboutWay);
   for (size_t i = 0; i < intersectIds.size(); i++)
@@ -143,7 +146,6 @@ void Roundabout::handleCrossingWays(boost::shared_ptr<OsmMap> pMap)
       continue; // Bail if this is the ref data
 
     GeomPtr pWayGeo = converter.convertToGeometry(pWay);
-
     if (pRndGeo->intersects(pWayGeo.get()))
     {
       // Make list of waylocations
@@ -151,8 +153,8 @@ void Roundabout::handleCrossingWays(boost::shared_ptr<OsmMap> pMap)
       geos::geom::Geometry * pIntersect = pRndGeo->intersection(pWayGeo.get());
       geos::geom::CoordinateSequence *pCoords = pIntersect->getCoordinates();
 
-      // Only interested in ways that intersect the geometry once or twice. More
-      // than that is weird, and we want to ignore it
+      // We are only interested in ways that intersect the geometry once or
+      // twice. More than that is situation we are not prepared to handle.
       size_t numIntersects = pCoords->getSize();
       if (numIntersects > 0 && numIntersects < 3)
       {
@@ -172,7 +174,8 @@ void Roundabout::handleCrossingWays(boost::shared_ptr<OsmMap> pMap)
         WaySplitter splitter(pMap, pWay);
         std::vector<WayPtr> newWays = splitter.createSplits(splitPoints);
 
-        // Now what? Need to throw away the "interior" splits.
+        // Now what? Need to throw away the "interior" splits, and replace
+        // with wheel spokes.
         bool replace = false;
         for (size_t j = 0; j < newWays.size(); j++)
         {
@@ -181,7 +184,7 @@ void Roundabout::handleCrossingWays(boost::shared_ptr<OsmMap> pMap)
             geos::geom::Coordinate midpoint = getCentroid(pMap, newWays[j]);
 
             // If the midpoint of the split way is outside of our roundabout
-            // geometry, we want to keep it. Otherwise, throw it away
+            // geometry, we want to keep it. Otherwise, let it disappear.
             if (!rndEnv.contains(midpoint))
             {
               pMap->addWay(newWays[j]);
@@ -217,7 +220,7 @@ void Roundabout::handleCrossingWays(boost::shared_ptr<OsmMap> pMap)
           }
         }
 
-        // Remove the original way
+        // Remove the original way if it's been split
         if (newWays.size() > 0 && replace)
         {
           // Remove pWay
@@ -227,10 +230,6 @@ void Roundabout::handleCrossingWays(boost::shared_ptr<OsmMap> pMap)
       }
     }
   }
-
-  OsmMapPtr pMapCopy2(new OsmMap(pMap));
-  MapProjector::projectToWgs84(pMapCopy2);
-  OsmMapWriterFactory::getInstance().write(pMapCopy2, "tmp/roundabout2.osm");
 }
 
 /* Get all the nodes in the roundabout way.
