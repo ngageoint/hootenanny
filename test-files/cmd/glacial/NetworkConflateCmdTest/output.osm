@@ -23377,17 +23377,11 @@
         <tag k="error:circular" v="5"/>
         <tag k="hoot:id" v="-22135"/>
     </way>
-    <way visible="true" id="-22134" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-2913"/>
-        <nd ref="-2727"/>
-        <tag k="alt_name" v="25th St NW;New Hampshire Ave NW"/>
-        <tag k="name" v="25TH ST NW"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-22134"/>
-    </way>
-    <way visible="true" id="-22133" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-22132" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-851"/>
+        <nd ref="-2903"/>
+        <nd ref="-2904"/>
+        <nd ref="-7489"/>
         <nd ref="-2905"/>
         <nd ref="-2906"/>
         <nd ref="-2907"/>
@@ -23398,19 +23392,7 @@
         <nd ref="-2912"/>
         <nd ref="-7488"/>
         <nd ref="-2913"/>
-        <tag k="alt_name" v="25th St NW;New Hampshire Ave NW"/>
-        <tag k="name" v="25TH ST NW"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-22133"/>
-    </way>
-    <way visible="true" id="-22132" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-851"/>
-        <nd ref="-2903"/>
-        <nd ref="-2904"/>
-        <nd ref="-7489"/>
-        <nd ref="-2905"/>
+        <nd ref="-2727"/>
         <tag k="alt_name" v="25th St NW;New Hampshire Ave NW"/>
         <tag k="name" v="25TH ST NW"/>
         <tag k="highway" v="road"/>
