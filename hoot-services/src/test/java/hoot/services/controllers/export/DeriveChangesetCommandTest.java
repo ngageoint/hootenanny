@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.export;
 
@@ -85,7 +85,7 @@ public class DeriveChangesetCommandTest {
         assertNotNull(deriveChangesetCommand.getWorkDir());
         assertNotNull(deriveChangesetCommand.getCommand());
 
-        String expectedCommand = "hoot derive-changeset --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT_PATH}";
+        String expectedCommand = "hoot changeset-derive --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT_PATH}";
         assertEquals(expectedCommand, deriveChangesetCommand.getCommand());
 
         assertTrue(deriveChangesetCommand.getSubstitutionMap().containsKey("DEBUG_LEVEL"));
@@ -143,7 +143,7 @@ public class DeriveChangesetCommandTest {
         assertNotNull(deriveChangesetCommand.getWorkDir());
         assertNotNull(deriveChangesetCommand.getCommand());
 
-        String expectedCommand = "hoot derive-changeset --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${OSMAPI_DB_URL} " +
+        String expectedCommand = "hoot changeset-derive --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${OSMAPI_DB_URL} " +
                 "${INPUT} ${CHANGESET_OUTPUT_PATH} ${OSMAPI_DB_URL}";
         assertEquals(expectedCommand, deriveChangesetCommand.getCommand());
 

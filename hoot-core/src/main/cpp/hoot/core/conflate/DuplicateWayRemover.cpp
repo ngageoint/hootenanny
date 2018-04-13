@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "DuplicateWayRemover.h"
@@ -176,6 +176,11 @@ void DuplicateWayRemover::_splitDuplicateWays(WayPtr w1, WayPtr w2, bool rev1, b
     {
       //  Merge the two ways' tags
       w1->setTags(mergedTags);
+      //  Pass along the parent id or set w2 as the parent
+      long pid = Way::getPid(w1, w2);
+      if (pid == WayData::CHANGESET_EMPTY)
+        pid = w2->getId();
+      w1->setPid(pid);
       //  Remove w2
       _replaceMultiple(w2, vector<WayPtr>());
     }
@@ -186,6 +191,11 @@ void DuplicateWayRemover::_splitDuplicateWays(WayPtr w1, WayPtr w2, bool rev1, b
       ways1.push_back(w2);
       //  Merge the tags into w2
       w2->setTags(mergedTags);
+      //  Pass along the parent id or set w1 as the parent
+      long pid = Way::getPid(w2, w1);
+      if (pid == WayData::CHANGESET_EMPTY)
+        pid = w1->getId();
+      w2->setPid(pid);
       //  Replace w1 with both w1 and w2
       _replaceMultiple(w1, ways1);
     }
@@ -280,18 +290,8 @@ WayPtr DuplicateWayRemover::_getUpdatedWay(WayPtr way, const vector<long>& nodes
     WayPtr newWay;
     newWay.reset(new Way(way->getStatus(), _map->createNextWayId(), way->getRawCircularError()));
     newWay->addNodes(nodes);
+    newWay->setPid(way->getId());
     newWay->setTags(way->getTags());
-
-    // see comments for similar functionality in HighwaySnapMerger::_mergePair
-    if (ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures() &&
-        way->getStatus() == Status::Unknown1)
-    {
-      LOG_TRACE(
-        "Setting unknown1 " << way->getElementId().getId() << " on " <<
-        newWay->getElementId() << "...");
-      newWay->setId(way->getElementId().getId());
-    }
-
     _map->addWay(newWay);
     LOG_TRACE(
       "Created new way: " << newWay->getElementId() << " from old way: " << way->getElementId() <<

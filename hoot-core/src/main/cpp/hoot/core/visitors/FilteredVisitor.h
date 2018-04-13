@@ -89,6 +89,8 @@ public:
   static double getStat(ElementCriterion* criterion, ConstElementVisitor* visitor,
                         const ConstOsmMapPtr& map, const ElementPtr& element);
 
+  virtual QString getDescription() const { return ""; }
+
 private:
 
   const ElementCriterion* _criterion;

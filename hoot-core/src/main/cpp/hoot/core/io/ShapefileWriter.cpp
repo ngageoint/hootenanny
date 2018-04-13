@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ShapefileWriter.h"
@@ -63,6 +63,7 @@ HOOT_FACTORY_REGISTER(OsmMapWriter, ShapefileWriter)
 class ColumnVisitor : public ElementConstOsmMapVisitor
 {
 public:
+
   ColumnVisitor(ElementType type) : _type(type) {}
 
   virtual void visit(const boost::shared_ptr<const Element>& e)
@@ -89,7 +90,10 @@ public:
     return result;
   }
 
+  virtual QString getDescription() const { return ""; }
+
 private:
+
   ElementType _type;
   QHash<QString, int> _keys;
 };

@@ -158,7 +158,7 @@ void HootApiDb::_checkLastMapId(long mapId)
 
 void HootApiDb::close()
 {
-  LOG_DEBUG("Closing database connection...");
+  LOG_TRACE("Closing database connection...");
 
   if (_createIndexesOnClose)
   {
@@ -467,7 +467,7 @@ QString HootApiDb::execToString(QString sql, QVariant v1, QVariant v2, QVariant 
 
 void HootApiDb::_flushBulkInserts()
 {
-  LOG_DEBUG("Flushing bulk inserts...");
+  LOG_TRACE("Flushing bulk inserts...");
 
   if (_nodeBulkInsert != 0)
   {
@@ -493,7 +493,7 @@ void HootApiDb::_flushBulkInserts()
 
 void HootApiDb::_flushBulkDeletes()
 {
-  LOG_DEBUG("Flushing bulk deletes...");
+  LOG_TRACE("Flushing bulk deletes...");
 
   if (_nodeBulkDelete != 0)
   {
@@ -1100,7 +1100,7 @@ void HootApiDb::open(const QUrl& url)
 
 void HootApiDb::_resetQueries()
 {
-  LOG_DEBUG("Resetting queries...");
+  LOG_TRACE("Resetting queries...");
 
   ApiDb::_resetQueries();
 

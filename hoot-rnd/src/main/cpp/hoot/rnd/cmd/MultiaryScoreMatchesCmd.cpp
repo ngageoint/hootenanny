@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -100,6 +100,9 @@ public:
   }
 
   virtual QString getName() const { return "multiary-score-matches"; }
+
+  virtual QString getDescription() const
+  { return "(experimental) Scores how well multiary-conflate performs"; }
 
   virtual int runSimple(QStringList args)
   {

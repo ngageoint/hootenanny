@@ -70,6 +70,8 @@ public:
 
   virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
+  virtual QString getDescription() const { return ""; }
+
   virtual void visit(const ConstElementPtr& e)
   {
     QStringList refs;
@@ -123,6 +125,8 @@ public:
   const MatchComparator::UuidToEid& getUuidToEid() const { return _uuidToEid; }
 
   virtual void setOsmMap(const OsmMap* map) { _map = map; }
+
+  virtual QString getDescription() const { return ""; }
 
   virtual void visit(const ConstElementPtr& e)
   {

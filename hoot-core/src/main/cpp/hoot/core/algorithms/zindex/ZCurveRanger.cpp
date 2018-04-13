@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ZCurveRanger.h"
 
@@ -258,7 +258,7 @@ vector<Range> ZCurveRanger::decomposeRange(BBox box, int levels)
 
 vector<Range> ZCurveRanger::decomposeRange(LongBox box, int levels)
 {
-  vector<boost::shared_ptr<LongBox> > boxes = decomposeBox(make_shared<LongBox>(_clipBox(box)), levels);
+  vector<boost::shared_ptr<LongBox> > boxes = decomposeBox(boost::make_shared<LongBox>(_clipBox(box)), levels);
 
   vector<Range> result;
   result.reserve((boxes.size()));
@@ -300,7 +300,7 @@ bool ZCurveRanger::rangeCoversIdentity(Range r)
 
 vector<Range> ZCurveRanger::_decomposeRange(LongBox box, LongBox focusBox, int levels)
 {
-  vector<boost::shared_ptr<LongBox> > boxes = decomposeBox(make_shared<LongBox>(box), levels/2);
+  vector<boost::shared_ptr<LongBox> > boxes = decomposeBox(boost::make_shared<LongBox>(box), levels/2);
 
   for (int i = 0; i < (levels * 2); i++)
   {
@@ -334,7 +334,7 @@ vector<Range> ZCurveRanger::_decomposeRange(LongBox box, LongBox focusBox, int l
 vector<Range> ZCurveRanger::_decomposeRangeIterative(LongBox box, int count)
 {
   priority_queue<LongBoxContainer> pq;
-  pq.push(LongBoxContainer(box, calculateExcess(make_shared<LongBox>(box))));
+  pq.push(LongBoxContainer(box, calculateExcess(boost::make_shared<LongBox>(box))));
 
   vector<LongBox> completed;
   while ((!pq.empty()) && (((int)pq.size() + (int)completed.size()) < count))
@@ -348,7 +348,7 @@ vector<Range> ZCurveRanger::_decomposeRangeIterative(LongBox box, int count)
     }
     else
     {
-      vector<boost::shared_ptr<LongBox> > boxes = decomposeBox(make_shared<LongBox>(lbc.getBox()), 0);
+      vector<boost::shared_ptr<LongBox> > boxes = decomposeBox(boost::make_shared<LongBox>(lbc.getBox()), 0);
 
       if (boxes.size() == 1)
       {
@@ -376,7 +376,7 @@ vector<Range> ZCurveRanger::_decomposeRangeIterative(LongBox box, int count)
   result.reserve(completed.size());
   for (uint i = 0; i < completed.size(); i++)
   {
-    result[i] = _toRange(make_shared<LongBox>(completed[i]));
+    result[i] = _toRange(boost::make_shared<LongBox>(completed[i]));
   }
 
   return _condenseRanges(result);

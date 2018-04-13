@@ -176,6 +176,8 @@ public:
   //this doesn't work yet - #2207
   //static void updateSorted(const QString url, const bool sorted);
 
+  virtual QString supportedFormats() { return ".osm.pbf"; }
+
 private:
 
   std::string _buffer;

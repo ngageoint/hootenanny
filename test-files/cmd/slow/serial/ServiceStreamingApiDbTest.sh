@@ -18,40 +18,40 @@ echo ""
 hoot convert $HOOT_OPTS test-files/ToyTestA.osm "$HOOT_DB_URL/ToyTestA"
 scripts/database/CleanAndInitializeOsmApiDb.sh
 hoot convert $HOOT_OPTS "$HOOT_DB_URL/ToyTestA" $OSM_API_DB_URL
-hoot is-match $HOOT_OPTS "$HOOT_DB_URL/ToyTestA" $OSM_API_DB_URL
+hoot map-diff $HOOT_OPTS "$HOOT_DB_URL/ToyTestA" $OSM_API_DB_URL
 
 echo "streaming osm api db --> hoot api db..."
 echo ""
 scripts/database/CleanAndInitializeOsmApiDb.sh
 hoot convert $HOOT_OPTS test-files/ToyTestA.osm $OSM_API_DB_URL
 hoot convert $HOOT_OPTS $OSM_API_DB_URL "$HOOT_DB_URL/ToyTestA"
-hoot is-match $HOOT_OPTS $OSM_API_DB_URL "$HOOT_DB_URL/ToyTestA"
+hoot map-diff $HOOT_OPTS $OSM_API_DB_URL "$HOOT_DB_URL/ToyTestA"
 
 echo "streaming hoot api db --> pbf..."
 echo ""
 hoot convert $HOOT_OPTS test-files/ToyTestA.osm "$HOOT_DB_URL/ToyTestA"
 hoot convert $HOOT_OPTS "$HOOT_DB_URL/ToyTestA" $OUTPUT_DIR/ToyTestA-hootapidb.osm.pbf
-hoot is-match $HOOT_OPTS "$HOOT_DB_URL/ToyTestA" $OUTPUT_DIR/ToyTestA-hootapidb.osm.pbf
+hoot map-diff $HOOT_OPTS "$HOOT_DB_URL/ToyTestA" $OUTPUT_DIR/ToyTestA-hootapidb.osm.pbf
 
 echo "streaming osm api db --> pbf..."
 echo ""
 scripts/database/CleanAndInitializeOsmApiDb.sh
 hoot convert $HOOT_OPTS test-files/ToyTestA.osm $OSM_API_DB_URL
 hoot convert $HOOT_OPTS $OSM_API_DB_URL $OUTPUT_DIR/ToyTestA-osmapidb.osm.pbf
-hoot is-match $HOOT_OPTS $OSM_API_DB_URL $OUTPUT_DIR/ToyTestA-osmapidb.osm.pbf
+hoot map-diff $HOOT_OPTS $OSM_API_DB_URL $OUTPUT_DIR/ToyTestA-osmapidb.osm.pbf
 
 echo "streaming hoot api db --> xml..."
 echo ""
 hoot convert $HOOT_OPTS test-files/ToyTestA.osm "$HOOT_DB_URL/ToyTestA"
 hoot convert $HOOT_OPTS -D writer.xml.sort.by.id=false "$HOOT_DB_URL/ToyTestA" $OUTPUT_DIR/ToyTestA-hootapidb.osm
-hoot is-match $HOOT_OPTS "$HOOT_DB_URL/ToyTestA" $OUTPUT_DIR/ToyTestA-hootapidb.osm
+hoot map-diff $HOOT_OPTS "$HOOT_DB_URL/ToyTestA" $OUTPUT_DIR/ToyTestA-hootapidb.osm
 
 echo "streaming osm api db --> xml..."
 echo ""
 scripts/database/CleanAndInitializeOsmApiDb.sh
 hoot convert $HOOT_OPTS test-files/ToyTestA.osm $OSM_API_DB_URL
 hoot convert $HOOT_OPTS -D writer.xml.sort.by.id=false $OSM_API_DB_URL $OUTPUT_DIR/ToyTestA-osmapidb.osm
-hoot is-match $HOOT_OPTS $OSM_API_DB_URL $OUTPUT_DIR/ToyTestA-osmapidb.osm
+hoot map-diff $HOOT_OPTS $OSM_API_DB_URL $OUTPUT_DIR/ToyTestA-osmapidb.osm
 
 # need to make sure streaming I/O is *not* done if a bounds is specified, since the bound reading doesn't support streaming
 
@@ -61,31 +61,31 @@ echo "hoot api db bounds --> xml"
 echo ""
 hoot convert $HOOT_OPTS test-files/conflate/point/Poi1.osm "$HOOT_DB_URL/Poi1"
 hoot convert $HOOT_OPTS -D convert.bounding.box=$BOUNDS -D writer.xml.sort.by.id=false "$HOOT_DB_URL/Poi1" $OUTPUT_DIR/Poi1-cropped-hootapidb.osm
-hoot is-match $HOOT_OPTS $GOLD_DIR/Poi1-cropped.osm $OUTPUT_DIR/Poi1-cropped-hootapidb.osm
+hoot map-diff $HOOT_OPTS $GOLD_DIR/Poi1-cropped.osm $OUTPUT_DIR/Poi1-cropped-hootapidb.osm
 
 echo "osm api db bounds --> xml"
 echo ""
 scripts/database/CleanAndInitializeOsmApiDb.sh
 hoot convert $HOOT_OPTS test-files/conflate/point/Poi1.osm $OSM_API_DB_URL
 hoot convert $HOOT_OPTS -D convert.bounding.box=$BOUNDS -D writer.xml.sort.by.id=false $OSM_API_DB_URL $OUTPUT_DIR/Poi1-cropped-osmapidb.osm
-hoot is-match $HOOT_OPTS $GOLD_DIR/Poi1-cropped.osm $OUTPUT_DIR/Poi1-cropped-osmapidb.osm
+hoot map-diff $HOOT_OPTS $GOLD_DIR/Poi1-cropped.osm $OUTPUT_DIR/Poi1-cropped-osmapidb.osm
 
 echo "hoot api db bounds --> ogr"
 echo ""
 hoot convert $HOOT_OPTS test-files/conflate/point/Poi1.osm "$HOOT_DB_URL/Poi1"
-hoot osm2ogr $HOOT_OPTS -D convert.bounding.box=$BOUNDS translations/Poi.js "$HOOT_DB_URL/Poi1" $OUTPUT_DIR/Poi1-cropped-hootapidb.shp
+hoot convert-osm2ogr $HOOT_OPTS -D convert.bounding.box=$BOUNDS translations/Poi.js "$HOOT_DB_URL/Poi1" $OUTPUT_DIR/Poi1-cropped-hootapidb.shp
 hoot convert $HOOT_OPTS $OUTPUT_DIR/Poi1-cropped-hootapidb/poi.shp $OUTPUT_DIR/Poi1-cropped-hootapidb-ogr.osm
-hoot is-match $HOOT_OPTS $GOLD_DIR/Poi1-cropped-2.osm $OUTPUT_DIR/Poi1-cropped-hootapidb-ogr.osm
+hoot map-diff $HOOT_OPTS $GOLD_DIR/Poi1-cropped-2.osm $OUTPUT_DIR/Poi1-cropped-hootapidb-ogr.osm
 
 echo "osm api db bounds --> ogr"
 echo ""
 scripts/database/CleanAndInitializeOsmApiDb.sh
 hoot convert $HOOT_OPTS test-files/conflate/point/Poi1.osm $OSM_API_DB_URL
-hoot osm2ogr $HOOT_OPTS -D convert.bounding.box=$BOUNDS translations/Poi.js $OSM_API_DB_URL $OUTPUT_DIR/Poi1-cropped-osmapidb.shp
+hoot convert-osm2ogr $HOOT_OPTS -D convert.bounding.box=$BOUNDS translations/Poi.js $OSM_API_DB_URL $OUTPUT_DIR/Poi1-cropped-osmapidb.shp
 hoot convert $HOOT_OPTS $OUTPUT_DIR/Poi1-cropped-osmapidb/poi.shp $OUTPUT_DIR/Poi1-cropped-osmapidb-ogr.osm
-hoot is-match $HOOT_OPTS $GOLD_DIR/Poi1-cropped-2.osm $OUTPUT_DIR/Poi1-cropped-osmapidb-ogr.osm
+hoot map-diff $HOOT_OPTS $GOLD_DIR/Poi1-cropped-2.osm $OUTPUT_DIR/Poi1-cropped-osmapidb-ogr.osm
 
 # Cleanup the database
-hoot delete-map -D api.db.email=ServiceStreamingApiDbTest@test.com "$HOOT_DB_URL/ToyTestA"
-hoot delete-map -D api.db.email=ServiceStreamingApiDbTest@test.com "$HOOT_DB_URL/Poi1"
+hoot delete-db-map -D api.db.email=ServiceStreamingApiDbTest@test.com "$HOOT_DB_URL/ToyTestA"
+hoot delete-db-map -D api.db.email=ServiceStreamingApiDbTest@test.com "$HOOT_DB_URL/Poi1"
 scripts/database/CleanAndInitializeOsmApiDb.sh

@@ -98,6 +98,9 @@ public:
   RelationPtr combineParts(const OsmMapPtr &map,
     const std::vector< boost::shared_ptr<Element> >& parts);
 
+  virtual QString getDescription() const
+  { return "Implicitly merges individual building parts into a single part"; }
+
 private:
 
   /// Used to keep track of which elements make up a building.

@@ -58,7 +58,10 @@ public:
 
   DeriveChangesetCmd() { }
 
-  virtual QString getName() const { return "derive-changeset"; }
+  virtual QString getName() const { return "changeset-derive"; }
+
+  virtual QString getDescription() const
+  { return "Creates an OSM changeset containing the difference between two OSM datasets"; }
 
   bool _printStats = false;
 

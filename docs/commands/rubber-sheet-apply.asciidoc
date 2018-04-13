@@ -1,0 +1,23 @@
+== rubber-sheet-apply
+
+=== Description
+
+The +rubber-sheet-apply+ command uses a transform created with the +rubber-sheet-derive+ command to warp a map data input and write 
+to an output.
+
+* +transform.rs+ - Transform rubber sheet spec for moving the input.
+* +input+        - Input (e.g. .osm file).
+* +output+       - Write transformed result to this file. (e.g. .osm file).
+
+=== Usage
+
+--------------------------------------
+rubber-sheet-apply (transform.rs) (input) (output)
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+hoot rubber-sheet-apply TigerToDcGis.rs TigerRoads.osm TigerRoadsWarped.osm
+--------------------------------------
+

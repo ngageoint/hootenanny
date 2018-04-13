@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef KEEPREVIEWSVISITOR_H
 #define KEEPREVIEWSVISITOR_H
@@ -58,7 +58,11 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
+  virtual QString getDescription() const
+  { return "Remove all elements that are not review relations"; }
+
 private:
+
   OsmMap* _map;
 };
 

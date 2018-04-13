@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef EUCLIDEANDISTANCEEXTRACTOR_H
 #define EUCLIDEANDISTANCEEXTRACTOR_H
@@ -32,8 +32,6 @@
 namespace hoot
 {
 
-/**
- */
 class EuclideanDistanceExtractor : public AbstractDistanceExtractor
 {
 public:
@@ -43,6 +41,9 @@ public:
     const boost::shared_ptr<const Element>& candidate) const;
 
   virtual std::string getClassName() const { return EuclideanDistanceExtractor::className(); }
+
+  virtual QString getDescription() const
+  { return "Calculates the Euclidean distance between two features"; }
 };
 
 }

@@ -157,29 +157,6 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1"/>
     </node>
-    <way visible="true" id="-216" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-95"/>
-        <nd ref="-8"/>
-        <nd ref="-9"/>
-        <nd ref="-10"/>
-        <nd ref="-26"/>
-        <tag k="alt_name" v="24th St NW"/>
-        <tag k="name" v="24TH ST NW"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-216"/>
-    </way>
-    <way visible="true" id="-215" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-7"/>
-        <nd ref="-95"/>
-        <tag k="alt_name" v="24th St NW"/>
-        <tag k="name" v="24TH ST NW"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-215"/>
-    </way>
     <way visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-13"/>
         <nd ref="-42"/>
@@ -190,55 +167,6 @@
         <tag k="hoot:status" v="2"/>
         <tag k="error:circular" v="5"/>
         <tag k="hoot:id" v="-24"/>
-    </way>
-    <way visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-30"/>
-        <nd ref="-53"/>
-        <tag k="name" v="26th St NW"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-22"/>
-    </way>
-    <way visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-30"/>
-        <nd ref="-46"/>
-        <tag k="alt_name" v="K St NW"/>
-        <tag k="name" v="US Hwy 29"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-21"/>
-    </way>
-    <way visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-13"/>
-        <nd ref="-30"/>
-        <tag k="alt_name" v="K St NW"/>
-        <tag k="name" v="US Hwy 29"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-19"/>
-    </way>
-    <way visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-95"/>
-        <nd ref="-13"/>
-        <tag k="alt_name" v="K St NW"/>
-        <tag k="name" v="US Hwy 29"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-18"/>
-    </way>
-    <way visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-36"/>
-        <nd ref="-37"/>
-        <nd ref="-30"/>
-        <tag k="name" v="26th St NW"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-13"/>
     </way>
     <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-36"/>
@@ -255,6 +183,9 @@
         <nd ref="-34"/>
         <nd ref="-35"/>
         <nd ref="-36"/>
+        <nd ref="-37"/>
+        <nd ref="-30"/>
+        <nd ref="-53"/>
         <tag k="name" v="26th St NW"/>
         <tag k="highway" v="unclassified"/>
         <tag k="hoot:status" v="2"/>
@@ -264,6 +195,9 @@
     <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-51"/>
         <nd ref="-95"/>
+        <nd ref="-13"/>
+        <nd ref="-30"/>
+        <nd ref="-46"/>
         <tag k="alt_name" v="K St NW"/>
         <tag k="name" v="US Hwy 29"/>
         <tag k="highway" v="secondary"/>
@@ -290,6 +224,11 @@
         <nd ref="-5"/>
         <nd ref="-6"/>
         <nd ref="-7"/>
+        <nd ref="-95"/>
+        <nd ref="-8"/>
+        <nd ref="-9"/>
+        <nd ref="-10"/>
+        <nd ref="-26"/>
         <tag k="alt_name" v="24th St NW"/>
         <tag k="name" v="24TH ST NW"/>
         <tag k="highway" v="road"/>
@@ -356,12 +295,11 @@
         <tag k="hoot:id" v="-30"/>
     </relation>
     <relation visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-21" role="reviewee"/>
-        <member type="way" ref="-19" role="reviewee"/>
         <member type="way" ref="-1" role="reviewee"/>
+        <member type="way" ref="-9" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:members" v="3"/>
+        <tag k="hoot:review:members" v="2"/>
         <tag k="type" v="review"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-29"/>

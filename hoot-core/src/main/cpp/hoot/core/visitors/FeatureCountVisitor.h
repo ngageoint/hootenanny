@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef FEATURECOUNTVISITOR_H
@@ -52,6 +52,11 @@ public:
   double getStat() const { return _count; }
 
   virtual void visit(const boost::shared_ptr<const Element>& e);
+
+  virtual QString getName() const { return "Count Features"; }
+
+  virtual QString getDescription() const
+  { return "Counts the number of elements with an information tag count greater than zero"; }
 
 private:
 

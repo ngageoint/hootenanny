@@ -1,0 +1,21 @@
+== pbf-add-header 
+
+=== Description
+
+The +pbf-add-header+ command reads in a .osm.pbf file, adds an OSM Block header, and writes the result to the output.
+
+* +input+  - The input .osm.pbf map path. If "-" is specified then it will be read from standard in.
+* +output+ - The output .osm.pbf map path. If "-" is specified then the result will be written to stdout.
+
+=== Usage
+
+--------------------------------------
+pbf-add-header (input.osm.pbf) (output.osm.pbf)
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+hoot pbf-add-header NoCapitalHeights.osm.pbf
+--------------------------------------
+

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef COMPLETELYCONTAINEDBYMAPELEMENTVISITOR_H
 #define COMPLETELYCONTAINEDBYMAPELEMENTVISITOR_H
@@ -55,6 +55,7 @@ class Way;
 class CompletelyContainedByMapElementVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
 {
 public:
+
   static std::string className() { return "hoot::CompletelyContainedByMapElementVisitor"; }
 
   CompletelyContainedByMapElementVisitor();
@@ -70,7 +71,11 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
+  virtual QString getDescription() const
+  { return "Determines if a feature is completely contained within a map"; }
+
 protected:
+
   const OsmMap* _map;
   bool _complete;
 

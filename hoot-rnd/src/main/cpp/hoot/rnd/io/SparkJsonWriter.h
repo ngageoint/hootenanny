@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SPARKJSONWRITER_H
 #define SPARKJSONWRITER_H
@@ -90,7 +90,11 @@ public:
    */
   virtual void writePartial(const ConstRelationPtr&) { throw NotImplementedException(); }
 
+  //no point in showing this in the format list at this point, since its not actively maintained
+  virtual QString supportedFormats() { return ""; }
+
 private:
+
   boost::shared_ptr<QFile> _fp;
 
   SearchBoundsCalculatorPtr _bounds;

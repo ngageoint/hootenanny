@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef UNIQUENAMESVISITOR_H
 #define UNIQUENAMESVISITOR_H
@@ -39,7 +39,7 @@ namespace hoot
 {
 
 /**
- * Counts all the unique names.
+ * Counts all the unique names
  */
 class UniqueNamesVisitor : public ConstElementVisitor, public SingleStatistic
 {
@@ -56,6 +56,8 @@ public:
   double getStat() const { return _names.size(); }
 
   virtual void visit(const ConstElementPtr& e);
+
+  virtual QString getDescription() const { return "Counts all the unique names"; }
 
 private:
 

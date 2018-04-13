@@ -131,6 +131,7 @@ public:
   class AddPairsVisitor : public ConstElementVisitor
   {
   public:
+
     AddPairsVisitor(OsmMapPtr map, QString scenario) : _map(map), _scenario(scenario) {}
 
     set< pair<ElementId, ElementId> > getPairs() const
@@ -170,7 +171,10 @@ public:
       }
     }
 
+    virtual QString getDescription() const {return ""; }
+
   private:
+
     set< pair<ElementId, ElementId> > _pairs;
     vector<ElementId> _e1, _e2;
     OsmMapPtr _map;

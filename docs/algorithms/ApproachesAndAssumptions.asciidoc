@@ -75,7 +75,7 @@ tags.
 
 As part of Hootenanny, we have implemented a _shp2osm_ conversion tool that uses
 simple python scripts to convert tags while performing the file format
-conversion. This tool is based heavily on the work done in ogr2osm.py (Ortega,
+conversion. This tool is based heavily on the work done in convert-ogr2osm.py (Ortega,
 2012) but fixes several bugs, improves performance, and provides intersection
 matching of nodes that are at nearly the same location.
 

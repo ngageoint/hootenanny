@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BUFFEREDOVERLAPEXTRACTOR_H
 #define BUFFEREDOVERLAPEXTRACTOR_H
@@ -51,6 +51,7 @@ class Element;
 class BufferedOverlapExtractor : public FeatureExtractor
 {
 public:
+
   /**
    * Similar to OverlapExtractor, but the objects are buffered before the overlap is calculated.
    *
@@ -74,7 +75,11 @@ public:
   virtual double extract(const OsmMap& map, const boost::shared_ptr<const Element>& target,
     const boost::shared_ptr<const Element>& candidate) const;
 
+  virtual QString getDescription() const
+  { return "Similar to OverlapExtractor, but the objects are buffered before the overlap is calculated"; }
+
 private:
+
   double _bufferPortion;
 };
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef NODEFILTER_H
@@ -46,6 +46,7 @@ public:
   virtual bool isFiltered(const boost::shared_ptr<const Node>& w) const { return isFiltered(*w); }
 
 protected:
+
   virtual bool isFiltered(const Node&) const { throw NotImplementedException(); }
 };
 

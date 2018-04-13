@@ -121,7 +121,8 @@ boost::shared_ptr<Way> DualWaySplitter::_createOneWay(boost::shared_ptr<const Wa
   long way_id = w->getId();
   if (!left)
     way_id = _result->createNextWayId();
-  boost::shared_ptr<Way> result(new Way(w->getStatus(), way_id, w->getRawCircularError()));
+  WayPtr result(new Way(w->getStatus(), way_id, w->getRawCircularError()));
+  result->setPid(w->getPid());
 
   // This sometimes happens if the buffer builder returns a multilinestring. See #2275
   if (newLs == 0)

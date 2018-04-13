@@ -47,7 +47,6 @@
 #include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
 
-#include <hoot/core/visitors/RemoveInvalidMultilineStringMembersVisitor.h>
 using namespace hoot;
 
 // Qt

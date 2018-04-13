@@ -1,0 +1,19 @@
+== feature-extractors
+
+=== Description
+
+The +feature-extractors+ command prints out available feature extractors that can be used against map data.  
+
+=== Usage
+
+--------------------------------------
+feature-extractors
+--------------------------------------
+
+==== Command Example Usage
+
+--------------------------------------
+# prints all
+hoot feature-extractors
+--------------------------------------
+

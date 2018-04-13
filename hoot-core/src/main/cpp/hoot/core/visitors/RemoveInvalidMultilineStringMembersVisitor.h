@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVEINVALIDMULTILINESTRINGMEMBERSVISITOR_H
 #define REMOVEINVALIDMULTILINESTRINGMEMBERSVISITOR_H
@@ -47,6 +47,10 @@ public:
 
   virtual void visit(const ElementPtr& e);
 
+  virtual QString getName() const { return "Remove Invalid Multiline String Members"; }
+
+  virtual QString getDescription() const
+  { return "Removes invalid multiline string relation members"; }
 };
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OGRWRITER_H
@@ -131,6 +131,9 @@ public:
   virtual void writeElement(ElementPtr& element);
 
   virtual void writeElement(ElementPtr& element, bool debug);
+
+  //leaving this empty for the time being
+  virtual QString supportedFormats() { return ""; }
 
 protected:
 

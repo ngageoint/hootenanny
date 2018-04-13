@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENT_ID_SET_VISITOR_H
 #define ELEMENT_ID_SET_VISITOR_H
@@ -50,6 +50,8 @@ public:
   const std::set<ElementId>& getElementSet() const { return _elements; }
 
   virtual void visit(const ConstElementPtr& e);
+
+  virtual QString getDescription() const { return "Returns the element IDs visited"; }
 
 private:
 

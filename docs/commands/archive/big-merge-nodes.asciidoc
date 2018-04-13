@@ -1,0 +1,36 @@
+== big-merge-nodes
+
+NOTE: This documents Hootenanny conflation using Hadoop, which is no longer supported (supported up to v0.2.38), and has been 
+left here for references purposes only.
+
+=== Description
+
+The big-merge-nodes command reads the nodes from inputs, conflates and writes
+the result to output.pbf.  It is designed to be run in conjunction with the
++big-ogr2osm+ command.  This is most commonly used to join implicit
+intersections.  This command requires Hadoop to run.
+
+* +input.pbf+ - Input .pbf dir -- must reside on HDFS.
+* +output.pbf+ - Output .pbf dir -- must reside on HDFS.
+* +pixelSize+ - (Optional) pixel size in degrees (0.1 is reasonable for global
+  data)
+* +maxNodeCount+ - (Optional) max node count.
+* +--local+ - (Optional) runs the job locally rather than using Hadoop.
+
+=== Usage
+
+--------------------------------------
+big-merge-nodes (input.pbf) (output.pbf) [pixelSize] [maxNodeCount] [--local]
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+hoot big-merge-nodes MyGlobalInput.osm.pbf MyGlobalOutput.osm.pbf 
+
+# Merge the nodes within 20m in the DC data. This gives mediocre results but
+# provides an easy mechanism to see what might be going on with the data.
+hoot -D merge.nearby.nodes.distance=20 big-merge-nodes DcTigerRoads.osm.pbf \
+  MergedDcTigerRoads.osm.pbf 0.002 5000
+--------------------------------------
+

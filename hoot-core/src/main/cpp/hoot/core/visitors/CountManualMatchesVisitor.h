@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef COUNTMANUALMATCHESVISITOR_H
 #define COUNTMANUALMATCHESVISITOR_H
@@ -58,6 +58,8 @@ public:
   virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
   virtual void visit(const ConstElementPtr& e);
+
+  virtual QString getDescription() const { return "Counts the number of manual matches"; }
 
 private:
 

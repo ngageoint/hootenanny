@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef DUPLICATEREVIEWSOP_H
 #define DUPLICATEREVIEWSOP_H
@@ -57,7 +57,10 @@ public:
 
   virtual void writeObject(QDataStream& /*os*/) const {}
 
+  virtual QString getDescription() const { return "Removes duplicate reviews"; }
+
 private:
+
   boost::shared_ptr<OsmMap> _map;
 };
 

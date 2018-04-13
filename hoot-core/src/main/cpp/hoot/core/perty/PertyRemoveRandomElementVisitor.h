@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PERTYREMOVERANDOMELEMENTVISITOR_H
 #define PERTYREMOVERANDOMELEMENTVISITOR_H
@@ -36,6 +36,9 @@
 namespace hoot
 {
 
+/**
+ * Randomly removes elements from a map
+ */
 class PertyRemoveRandomElementVisitor : public ElementOsmMapVisitor, public RngConsumer,
     public Configurable
 {
@@ -65,7 +68,10 @@ public:
     */
   QString toString();
 
+  virtual QString getDescription() const { return "Randomly removes elements from a map"; }
+
 private:
+
   boost::minstd_rand* _rng;
   boost::shared_ptr<boost::minstd_rand> _localRng;
   double _p;

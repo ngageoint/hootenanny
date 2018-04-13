@@ -12,7 +12,7 @@
 // * What does this configuration change?
 // * If relevant, what are the units of the config option (e.g. meters)?
 // * Where can the user go to get more information? Please reference the
-//   appropriate document. E.g. "See `ogr2osm` in the _Command Line
+//   appropriate document. E.g. "See `convert-ogr2osm` in the _Command Line
 //   Reference_ for more information."
 // * What other options may be of interest? E.g. "See also
 //   `big.perty.op.sigma`"
@@ -174,39 +174,6 @@ Determines whether the AttributeScoreExtractor uses weighting when extracting sc
 Temporary setting that addresses some Hootenanny iD Editor UI bugs.  See
 MatchFactory::_tempFixDefaults() for more info.
 
-=== big.convert.exec.sql.with.mapreduce
-
-* Data Type: bool
-* Default Value: `true`
-
-If set to true, when writing to an OSM API database from a PBF file using the big-convert command
-the writer will execute the OSM SQL statements using mapreduce.  If set to false, the writer will
-execute the OSM SQL statements in a single thread from a single Hootenanny instance.
-
-=== big.convert.num.reduce.tasks
-
-* Data Type: int
-* Default Value: `-1`
-
-Sets the number of reduce tasks spawned by big-convert command writer.  If set to -1, then Hadoop
-determines the number of tasks.  This setting is for testing purposes only.
-
-=== big.perty.op.max.distance
-
-* Data Type: double
-* Default Value: `-1`
-
-The maximum distance that the BigPertyOp should move a node. This must be larger than
-big.perty.op.sigma to avoid endless or near endless loops.
-
-=== big.perty.op.sigma
-
-* Data Type: double
-* Default Value: `100`
-
-Sigma of the distance in meters. This is used in the gaussian distribution used to determine the
-distance.
-
 === building.date.format
 
 * Data Type: string
@@ -354,7 +321,7 @@ algorithm has road conflation enable then the results could get interesting.
 * Data Type: string
 * Default Value: `models/BuildingModel.rf`
 
-Path to the RF building model. A new model can be created with `build-model`. Searches local path
+Path to the RF building model. A new model can be created with `model-build`. Searches local path
 and then `$HOOT_HOME/conf/`.
 
 === conflate.match.highway.classifier
@@ -369,7 +336,7 @@ The highway match classifier to use. This should only be used for testing and de
 * Data Type: string
 * Default Value: `models/HighwayModel.rf`
 
-Path to the RF highway model. A new model can be created with `build-model`. Searches local path
+Path to the RF highway model. A new model can be created with `model-build`. Searches local path
 and then `$HOOT_HOME/conf/`. This is only relevant if the `conflate.match.highway.classifier` is
 set to `hoot::HighwayRfClassifier`.
 
@@ -378,7 +345,7 @@ set to `hoot::HighwayRfClassifier`.
 * Data Type: string
 * Default Value: `models/PoiModel.rf`
 
-Path to the POI match classifier model. A new model can be created with `build-model`. Searches
+Path to the POI match classifier model. A new model can be created with `model-build`. Searches
 local path and then `$HOOT_HOME/conf/`.
 
 === conflate.match.threshold.default
@@ -413,7 +380,9 @@ See also:
 ** `hoot::RemoveInvalidReviewRelationsVisitor` - Removes review relations whose members no longer exist after conflation.
 ** `hoot::RemoveDuplicateReviewsOp` - Removes any duplicate reviews
 ** `hoot::BuildingOutlineUpdateOp` - Updates any multi-part building outlines that may have changed during conflation.
-** `hoot::RemoveInvalidMultilineStringMembersVisitor` - Removes invalid multilinestring relations.
+** `hoot::WayJoinerOp` - Join up any previously split ways that can be rejoined.
+** `hoot::RemoveInvalidRelationVisitor` - Removes invalid multilinestring/review relations and duplicate members.
+** `hoot::RemoveInvalidMultilineStringMembersVisitor` - Removes invalid multilinestring relation members.
 ** `hoot::SuperfluousWayRemover` - Remove all ways that contain no nodes or all the nodes are exactly the same.
 ** `hoot::RemoveDuplicateWayNodesVisitor` - Remove all nodes that are unnecessarily duplicated in a way.
 ** `hoot::AddHilbertReviewSortOrderOp` - Adds a sorting value to all reviews.  By processing reviews in sorted order the results are a little more logically ordered.
@@ -801,40 +770,6 @@ The highway subline matcher to use when determining matching highway sublines.
 
 The way subline string matcher to use when determining matching sublines for highways.
 
-=== hoot.hadoop.file.deps
-
-* Data Type: list
-* Default Value:
-** `${HOOT_HOME}/conf/BuildingModel.rf`
-
-Used by the building matching hadoop code.
-
-=== hoot.hadoop.libpath
-
-* Data Type: list
-* Default Value:
-** `${HOOT_HOME}/lib/`
-** `${HOOT_HOME}/local/lib/`
-** `${HADOOP_HOME}/c++/Linux-amd64-64/lib/`
-** `${HOOT_HOME}/pretty-pipes/lib/`
-
-List of library paths to check for hadoop.
-
-=== hoot.hadoop.maxNodeCount
-
-* Data Type: int
-* Default Value: `5000000`
-
-The maximum number of nodes that can be processed by a single task tracker. See User Manual for
-details.
-
-=== hoot.hadoop.pixelSize
-
-* Data Type: double
-* Default Value: `0.01`
-
-The size of a pixel when calculating node density. See User Manual for details.
-
 === hootapi.db.writer.copy.bulk.insert
 
 * Data Type: bool
@@ -895,7 +830,7 @@ of assigning IDs within OSM.
 Example Usage:
 
 ----
-hoot ogr2osm -D id.generator=hoot::PositiveIdGenerator -D id.generator.node.start=100 -D id.generator.relation.start=200 -D id.generator.way.start=300 $HOOT_HOME/translations/Identity.js myoutput.osm myinput.osm
+hoot convert-ogr2osm -D id.generator=hoot::PositiveIdGenerator -D id.generator.node.start=100 -D id.generator.relation.start=200 -D id.generator.way.start=300 $HOOT_HOME/translations/Identity.js myoutput.osm myinput.osm
 ----
 
 === id.generator.node.start
@@ -1304,7 +1239,7 @@ RAM usage of applications in a shared server environment.
 * Data Type: double
 * Default Value: `1.0`
 
-When merging nodes during ogr2osm, determines what tolerance should be used for deciding two nodes
+When merging nodes during convert-ogr2osm, determines what tolerance should be used for deciding two nodes
 are identical. Units in meters and defaults to 1.0m.
 
 [[merger.creators]]
@@ -1577,7 +1512,7 @@ intelligently use indexes, others will simply filter features after reading from
 Example Usage:
 
 ----
-hoot ogr2osm -D ogr.reader.bounding.box=106.851,-6.160,107.052,-5.913 translations/Identity.js output.osm test-files/jakarta_raya_coastline.shp
+hoot convert-ogr2osm -D ogr.reader.bounding.box=106.851,-6.160,107.052,-5.913 translations/Identity.js output.osm test-files/jakarta_raya_coastline.shp
 ----
 
 === ogr.reader.bounding.box.latlng
@@ -2608,28 +2543,6 @@ a single way.
 
 The format used to write the element payload portion of the Spark changeset file.  Valid options are
 'json' or 'xml'.
-
-=== stats.format
-
-* Data Type: string
-* Default Value: `pdf`
-
-Format type for the statistics generated from conflate.  Can be 'pdf', 'html' or 'asciidoc'.
-
-=== stats.output
-
-* Data Type: string
-* Default Value: ``
-
-Path to the output document for the statistics.  If left empty, it will not output to a file, only
-to screen.
-
-=== stats.script
-
-* Data Type: string
-* Default Value: `${HOOT_HOME}/report/csr-default.js`
-
-Path to the statistics generator rules in javascript format.
 
 === stats.translate.script
 

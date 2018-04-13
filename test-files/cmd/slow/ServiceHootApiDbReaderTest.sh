@@ -14,11 +14,11 @@ hoot convert -D hootapi.db.writer.create.user=true -D api.db.email=$EMAIL -D hoo
 
 # unbounded query
 hoot convert -D api.db.email=$EMAIL -D convert.ops="hoot::RemoveTagVisitor;hoot::RemoveAttributeVisitor" -D remove.tag.visitor.keys="source:datetime" -D remove.attribute.visitor.types="changeset;timestamp" "$HOOT_DB_URL/DcGisRoads-ServiceHootApiDbReaderTest" $OUTPUT_DIR/output1.osm
-hoot is-match test-files/cmd/slow/ServiceHootApiDbReaderTest/output1.osm $OUTPUT_DIR/output1.osm
+hoot map-diff test-files/cmd/slow/ServiceHootApiDbReaderTest/output1.osm $OUTPUT_DIR/output1.osm
 
 # bounded query
 hoot convert -D api.db.email=$EMAIL -D convert.ops="hoot::RemoveTagVisitor;hoot::RemoveAttributeVisitor" -D remove.tag.visitor.keys="source:datetime" -D remove.attribute.visitor.types="changeset;timestamp" -D convert.bounding.box=-77.04,38.8916,-77.03324,38.8958 "$HOOT_DB_URL/DcGisRoads-ServiceHootApiDbReaderTest" $OUTPUT_DIR/output2.osm
-hoot is-match test-files/cmd/slow/ServiceHootApiDbReaderTest/output2.osm $OUTPUT_DIR/output2.osm
+hoot map-diff test-files/cmd/slow/ServiceHootApiDbReaderTest/output2.osm $OUTPUT_DIR/output2.osm
 
 # clean up database
-hoot delete-map -D api.db.email=$EMAIL "$HOOT_DB_URL/DcGisRoads-ServiceHootApiDbReaderTest"
+hoot delete-db-map -D api.db.email=$EMAIL "$HOOT_DB_URL/DcGisRoads-ServiceHootApiDbReaderTest"

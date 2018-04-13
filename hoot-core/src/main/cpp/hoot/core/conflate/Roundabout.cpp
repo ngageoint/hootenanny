@@ -39,9 +39,16 @@ namespace hoot
 
 typedef boost::shared_ptr<geos::geom::Geometry> GeomPtr;
 
-Roundabout::Roundabout()
+Roundabout::Roundabout():
+  _status(Status::Invalid)
 {
   // Blank
+}
+
+void Roundabout::setRoundaboutWay (WayPtr pWay)
+{
+  _roundaboutWay = pWay;
+  _status = pWay->getStatus();
 }
 
 NodePtr Roundabout::getCenter(OsmMapPtr pMap)
@@ -61,7 +68,7 @@ NodePtr Roundabout::getCenter(OsmMapPtr pMap)
   lat = lat / count;
   lon = lon / count;
 
-  NodePtr pNewNode(new Node(Status::Unknown1,
+  NodePtr pNewNode(new Node(_status,
                    pMap->createNextNodeId(),
                    lon, lat, 15));
   pNewNode->setTag("hoot:special", "RoundaboutCenter");
@@ -117,7 +124,7 @@ void Roundabout::connectCrossingWays(boost::shared_ptr<OsmMap> pMap)
         geos::geom::Coordinate coord = pCoords->getAt(j);
 
         // Make a node
-        NodePtr pNode(new Node(Status::Unknown1, pMap->createNextNodeId(), coord, 15));
+        NodePtr pNode(new Node(_status, pMap->createNextNodeId(), coord, 15));
         pMap->addNode(pNode);
 
         // Add to both ways
@@ -143,18 +150,18 @@ void Roundabout::removeRoundabout(boost::shared_ptr<OsmMap> pMap)
   connectCrossingWays(pMap);
 
   // Find our connecting nodes & extra nodes.
-  std::vector<ConstNodePtr> connectingNodes;
-  std::vector<ConstNodePtr> extraNodes;
+  std::set<long> connectingNodeIDs;
+  std::set<long> extraNodeIDs;
   for (size_t i = 0; i < _roundaboutNodes.size(); i++)
   {
     long nodeId = _roundaboutNodes[i]->getId();
     if (pMap->getIndex().getNodeToWayMap()->getWaysByNode(nodeId).size() > 1)
     {
-      connectingNodes.push_back(_roundaboutNodes[i]);
+      connectingNodeIDs.insert(_roundaboutNodes[i]->getId());
     }
     else
     {
-      extraNodes.push_back(_roundaboutNodes[i]);
+      extraNodeIDs.insert(_roundaboutNodes[i]->getId());
     }
   }
 
@@ -163,22 +170,24 @@ void Roundabout::removeRoundabout(boost::shared_ptr<OsmMap> pMap)
 
   // Remove roundabout way & extra nodes
   RemoveWayOp::removeWayFully(pMap, _roundaboutWay->getId());
-  for (size_t i = 0; i < extraNodes.size(); i++)
+  for (std::set<long>::iterator it = extraNodeIDs.begin();
+       it != extraNodeIDs.end(); ++it)
   {
-    RemoveNodeOp::removeNode(pMap, extraNodes[i]->getId());
+    RemoveNodeOp::removeNode(pMap, *it);
   }
 
   // Add center node
   pMap->addNode(_pCenterNode);
 
   // Connect it up
-  for (size_t j = 0; j < connectingNodes.size(); j++)
+  for (std::set<long>::iterator it = connectingNodeIDs.begin();
+       it != connectingNodeIDs.end(); ++it)
   {
-    WayPtr pWay(new Way(Status::Unknown1,
+    WayPtr pWay(new Way(_status,
                         pMap->createNextWayId(),
                         15));
     pWay->addNode(_pCenterNode->getId());
-    pWay->addNode(connectingNodes[j]->getId());
+    pWay->addNode(*it);
     pWay->setTag("highway", "unclassified");
 
     // Add special hoot tag
@@ -206,46 +215,51 @@ void Roundabout::removeRoundabout(boost::shared_ptr<OsmMap> pMap)
  */
 void Roundabout::replaceRoundabout(boost::shared_ptr<OsmMap> pMap)
 {
-  std::vector<ConstNodePtr> wayNodes;
-  for (size_t i = 0; i < _roundaboutNodes.size(); i++)
+  // Re-add roundabout from the ref dataset, but not secondary dataset
+  if(_status == Status::Unknown1)
   {
-    bool found = false;
-    ConstNodePtr thisNode = _roundaboutNodes[i];
-    long nodeId = thisNode->getId();
-    if (pMap->getNodes().end() != pMap->getNodes().find(nodeId))
+    std::vector<ConstNodePtr> wayNodes;
+    for (size_t i = 0; i < _roundaboutNodes.size(); i++)
     {
-      ConstNodePtr otherNode = pMap->getNodes().find(nodeId)->second;
-
-      // If nodes differ by more than circular error, add the node as new
-      if (thisNode->toCoordinate().distance(otherNode->toCoordinate()) > thisNode->getCircularError())
+      bool found = false;
+      ConstNodePtr thisNode = _roundaboutNodes[i];
+      long nodeId = thisNode->getId();
+      if (pMap->getNodes().end() != pMap->getNodes().find(nodeId))
       {
-        NodePtr pNewNode(new Node(*thisNode));
-        pNewNode->setId(pMap->createNextNodeId());
+        ConstNodePtr otherNode = pMap->getNodes().find(nodeId)->second;
+
+        // If nodes differ by more than circular error, add the node as new
+        if (thisNode->toCoordinate().distance(otherNode->toCoordinate()) > thisNode->getCircularError())
+        {
+          NodePtr pNewNode(new Node(*thisNode));
+          pNewNode->setId(pMap->createNextNodeId());
+          pMap->addNode(pNewNode);
+          wayNodes.push_back(pNewNode);
+          found = true;
+        }
+      }
+
+      // If not found, we need to add it back to the map
+      if (!found)
+      {
+        NodePtr pNewNode(new Node(*(_roundaboutNodes[i])));
         pMap->addNode(pNewNode);
         wayNodes.push_back(pNewNode);
-        found = true;
       }
     }
 
-    // If not found, we need to add it back to the map
-    if (!found)
-    {
-      NodePtr pNewNode(new Node(*(_roundaboutNodes[i])));
-      pMap->addNode(pNewNode);
-      wayNodes.push_back(pNewNode);
-    }
+    // All our nodes should be there, now lets add the way back
+    WayPtr pNewWay(new Way(*_roundaboutWay));
+
+    // Make sure our nodes are set correctly
+    std::vector<long> nodeIds;
+    for (size_t i = 0; i < wayNodes.size(); i++)
+      nodeIds.push_back(wayNodes[i]->getId());
+    pNewWay->setNodes(nodeIds);
+    pMap->addWay(pNewWay);
   }
 
-  // All our nodes should be there, now lets add the way back
-  WayPtr pNewWay(new Way(*_roundaboutWay));
-
-  // Make sure our nodes are set correctly
-  std::vector<long> nodeIds;
-  for (size_t i = 0; i < wayNodes.size(); i++)
-    nodeIds.push_back(wayNodes[i]->getId());
-  pNewWay->setNodes(nodeIds);
-  pMap->addWay(pNewWay);
-
+  // Need to remove temp parts no matter what
   // Delete temp ways we added
   for (size_t i = 0; i < _tempWays.size(); i++)
     RemoveWayOp::removeWayFully(pMap, _tempWays[i]->getId());

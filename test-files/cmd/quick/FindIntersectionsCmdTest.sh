@@ -11,4 +11,4 @@ outputfile=$HOOT_HOME/test-output/cmd/quick/FindIntersectionsCmdTest/out.osm
 hoot find-intersections $inputfile $outputfile
 
 # Checking output
-hoot is-match $comparefile $outputfile || diff $comparefile $outputfile
+hoot map-diff $comparefile $outputfile || diff $comparefile $outputfile

@@ -7,7 +7,7 @@ The +sort+ command sorts a file first by element type, then by increasing elemen
 is: 1) nodes, 2) ways, 3) relations.  The supported input formats are: OSM XML, OSM PBF, and GeoNames.  The specified
 output format must match that of the input format.
 
-* +input+ - Input (e.g. .osm file).
+* +input+  - Input (e.g. .osm file).
 * +output+ - Output file (e.g. .osm file).
 
 === Usage

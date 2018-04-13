@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PERTY_REMOVE_TAG_VISITOR_H
 #define PERTY_REMOVE_TAG_VISITOR_H
@@ -37,47 +37,49 @@ namespace hoot
 {
 
 /**
- * A simple random name changer. This is not part of the original perty paper.
+ * A simple random tag remover
  */
 class PertyRemoveTagVisitor : public ElementOsmMapVisitor, public RngConsumer,
     public Configurable
 {
-  public:
+public:
 
-    static std::string className() { return "hoot::PertyRemoveTagVisitor"; }
+  static std::string className() { return "hoot::PertyRemoveTagVisitor"; }
 
-    PertyRemoveTagVisitor();
+  PertyRemoveTagVisitor();
 
-    QString permuteName(const QString& s);
+  QString permuteName(const QString& s);
 
-    virtual void setConfiguration(const Settings& conf);
+  virtual void setConfiguration(const Settings& conf);
 
-    /**
-     * Set the probability that a tag will be removed.
-     */
-    void setProbability(double p) { _p = p; }
+  /**
+   * Set the probability that a tag will be removed.
+   */
+  void setProbability(double p) { _p = p; }
 
-    virtual void setRng(boost::minstd_rand& rng) { _rng = &rng; }
+  virtual void setRng(boost::minstd_rand& rng) { _rng = &rng; }
 
-    virtual void visit(const boost::shared_ptr<Element>& e);
+  virtual void visit(const boost::shared_ptr<Element>& e);
 
-    void setExemptTagKeys(const QStringList& keys) { _exemptTagKeys = keys; }
+  void setExemptTagKeys(const QStringList& keys) { _exemptTagKeys = keys; }
 
-    void setReplacementTagKeys(const QStringList& keys) { _replacementTagKeys = keys; }
+  void setReplacementTagKeys(const QStringList& keys) { _replacementTagKeys = keys; }
 
-    void setReplacementTagValues(const QStringList& values) { _replacementTagValues = values; }
+  void setReplacementTagValues(const QStringList& values) { _replacementTagValues = values; }
 
-    QString toString();
+  QString toString();
 
-  private:
+  virtual QString getDescription() const { return "Randomly removes feature tags"; }
 
-    double _p;
-    boost::minstd_rand* _rng;
-    boost::shared_ptr<boost::minstd_rand> _localRng;
+private:
 
-    QStringList _exemptTagKeys;
-    QStringList _replacementTagKeys;
-    QStringList _replacementTagValues;
+  double _p;
+  boost::minstd_rand* _rng;
+  boost::shared_ptr<boost::minstd_rand> _localRng;
+
+  QStringList _exemptTagKeys;
+  QStringList _replacementTagKeys;
+  QStringList _replacementTagValues;
 };
 
 }

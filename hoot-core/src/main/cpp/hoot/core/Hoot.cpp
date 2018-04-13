@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "Hoot.h"
 
@@ -116,10 +116,6 @@ void Hoot::_init()
 
   reinit();
 
-  // force load hoot hadoop if it is available.
-# ifdef HOOT_HAVE_HADOOP
-  loadLibrary("HootHadoop");
-# endif
 # ifdef HOOT_HAVE_RND
   loadLibrary("HootRnd");
 # endif

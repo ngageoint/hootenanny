@@ -2,10 +2,10 @@
 == Configuration Options
 
 Configuration settings can dramatically change the operation of Hootenanny. The
-configuration options are carried through any Hadoop commands and can be set in
-a configuration file (+$HOOT_HOME/conf/hoot.json+), environment variables or
-specified on the command line. Most of the configuration values are documented
-in more detail in the following sections.
+configuration options can be set in a configuration file 
+(+$HOOT_HOME/conf/hoot.json+), environment variables or specified on the 
+command line. Most of the configuration values are documented in more 
+detail in the following sections.
 
 These configuration options are advanced manipulations of the Hootenanny engine and may result in unexpected results. Please create an issue at https://github.com/ngageoint/hootenanny if you have specific questions.
 
@@ -77,7 +77,7 @@ Configuration parameters:
 [[OGR-Writer]]
 ==== OGR Writer
 
-The OGR Writer supports advanced translation of OSM formatted files into well defined tabular formats such as Shapefile and FileGDB. See the +--osm2ogr+ documentation for specific examples of how to use the OGR Writer.
+The OGR Writer supports advanced translation of OSM formatted files into well defined tabular formats such as Shapefile and FileGDB. See the +--convert-osm2ogr+ documentation for specific examples of how to use the OGR Writer.
 
 Configuration Parameters:
 
@@ -102,7 +102,7 @@ hoot convert \
   PG:"dbname='osm_gis2' host='localhost' port='5432' user='hoot' password='hoottest'" 
 
 # Same as above.
-hoot osm2ogr \
+hoot convert-osm2ogr \
   -D ogr.writer.pre.layer.name=bar \
   test-files/io/SampleTranslation.js \
   test-files/io/SampleTranslation.osm \
@@ -145,7 +145,7 @@ The parameter +way.splitter.max.length+ can be used to specify this max length.
 Example usage:
 
 ------
-hoot cleanup -D map.cleaner.transforms=hoot::WaySplitterOp -D way.splitter.max.length=100 test-files/ToyTestA.osm tmp/dum.osm
+hoot clean -D map.cleaner.transforms=hoot::WaySplitterOp -D way.splitter.max.length=100 test-files/ToyTestA.osm tmp/dum.osm
 ------
 
 

@@ -31,8 +31,6 @@ image::developer/images/n-tier-arch.png[]
 
 <<n-tier-webarch>> diagrams the n-tier architecture that supports the web enabled environment for Hootenanny Conflation. The web client is a customized version of the MapBox iD Editor that has been extended to handle conflation routines using REST service end points specifically tailored to meet the NSG user requirements. It is currently the only UI that can interact with the Hootenanny Web Services and core components. Conflation input data (FGDB, Shapefile, OSM, GEONAMES) can be imported into the system using the Hootenanny ETL and Translation services accessed via the Hootenanny User Interface (UI). Conflated data can be exported in the same file formats as well as streaming via WFS from UI. The Hootenanny web services also contain REST end points but are not required to interact between the Hoot Core libraries and the RDBMS. The Hoot Core represents the algorithms and routines that handle the bulk of conflation operations. Both the Web Services and Hoot core interact with the PostgreSQL RDBMS for invoking SQL queries and updating conflated data. Hootenanny web services call node.js to interact with the Hootenanny core for translation and provide requested information to the Hootenanny UI.  
 
-NOTE:  Although Apache Hadoop/MapReduce distributed processing has been implemented within Hootenanny Core for handling larger, country level data sets (POI and Road primarily), the capability has not been fully exploited due a lack of development.  If you have interest in exploring this capability, create an issue at https://github.com/ngageoint/hootenanny.. 
-
 === Document Overview
 
 The purpose of this document is two-fold:
@@ -52,7 +50,7 @@ image::developer/images/web-enabled-arch.png[]
 
 Hootenanny is a software platform designed for expert users to perform fully automated and semi-automated conflation of two disparate data sets to create a single conflated output file. To achieve this successfully for a range of source input data types, Hootenanny relies on a core set of algorithms and functions that can be invoked using command line and web service end points. 
 
-In terms of data management and performance, Hootenanny has many built-in mechanisms for dealing with a wide range of data types and complexities. Although system performance is generally bound to the host environment, intelligent tuning/scaling web services can be invoked to evaluate conflation tasks in terms of source data complexity and processing requirements. Regional and local scale datasets containing POIs, roads, and buildings are conflated using local server CPU processing resources while larger jobs operating against country-level data (POIs and roads) can be redirected to pre-configured Hadoop clusters (experimental). Additional background on core algorithms and the specifics of user interaction can be found in the Hootenanny Algorithms Guide and User Guide.  
+In terms of data management and performance, Hootenanny has many built-in mechanisms for dealing with a wide range of data types and complexities. Although system performance is generally bound to the host environment, intelligent tuning/scaling web services can be invoked to evaluate conflation tasks in terms of source data complexity and processing requirements. Additional background on core algorithms and the specifics of user interaction can be found in the Hootenanny Algorithms Guide and User Guide.  
 
 ==== PostgreSQL Database
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef UNLIKELYINTERSECTIONREMOVER_H
@@ -63,6 +63,9 @@ public:
    * Splits all the ways in the input map and returns the resulting map.
    */
   static void removeIntersections(boost::shared_ptr<OsmMap> map);
+
+  virtual QString getDescription() const
+  { return "Locates intersections that are likely mistakes and separates them"; }
 
 protected:
 
