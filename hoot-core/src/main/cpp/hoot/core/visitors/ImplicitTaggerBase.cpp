@@ -240,7 +240,6 @@ void ImplicitTaggerBase::visit(const ElementPtr& e)
           matchingWords.insert("building");
         }
 
-        //TODO: test this
         //bit of hack...to handle a situation where playground have been incorrectly tagged as parks
         //the argument could be made to just correct the input data instead
         if (tagsToAdd.isEmpty() && PoiPolygonTypeScoreExtractor::isPark(e))
@@ -248,9 +247,12 @@ void ImplicitTaggerBase::visit(const ElementPtr& e)
           for (int i = 0; i < filteredNames.size(); i++)
           {
             const QString name = filteredNames.at(i).toLower();
+            LOG_VART(name);
             if (name.endsWith("play area") || name.endsWith("play areas") ||
                 name.endsWith("playground"))
             {
+              LOG_VART(name);
+              LOG_TRACE("Using custom playground rule...");
               tagsToAdd.appendValue("leisure", "playground");
               break;
             }
@@ -273,18 +275,27 @@ void ImplicitTaggerBase::visit(const ElementPtr& e)
   }
 }
 
-QStringList ImplicitTaggerBase::_cleanNames(const Tags& tags)
+QStringList ImplicitTaggerBase::_cleanNames(/*const */Tags& tags)
 {
+  //the normal hoot convention is to split the name tag on ';' into multiple names; bypassing that
+  //here, as it seems to cause more harm to implicit tagging than good
+  QString name = tags.get("name");
+  if (name.contains(";"))
+  {
+    tags.set("name", name.replace(";", "").trimmed());
+  }
+
   QStringList names = tags.getNames();
+  LOG_VART(names);
   if (names.removeAll("old_name") > 0)
   {
-    LOG_VARD("Removed old name tag.");
+    LOG_VART("Removed old name tag.");
   }
   if (_translateAllNamesToEnglish)
   {
     names = ImplicitTagUtils::translateNamesToEnglish(names, tags);
   }
-  LOG_VARD(names);
+  LOG_VART(names);
   QStringList filteredNames;
   for (int i = 0; i < names.size(); i++)
   {
@@ -295,7 +306,7 @@ QStringList ImplicitTaggerBase::_cleanNames(const Tags& tags)
       filteredNames.append(name.toLower());
     }
   }
-  LOG_VARD(filteredNames);
+  LOG_VART(filteredNames);
   return filteredNames;
 }
 

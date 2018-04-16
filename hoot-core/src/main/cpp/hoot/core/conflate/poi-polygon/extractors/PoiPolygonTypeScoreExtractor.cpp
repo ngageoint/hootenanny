@@ -240,7 +240,7 @@ bool PoiPolygonTypeScoreExtractor::specificSchoolMatch(ConstElementPtr element1,
   if (isSpecificSchool(element1) && isSpecificSchool(element2))
   {
     const QString name1 = PoiPolygonNameScoreExtractor::getElementName(element1).toLower();
-    const QString name2 = PoiPolygonNameScoreExtractor::getElementName(element1).toLower();
+    const QString name2 = PoiPolygonNameScoreExtractor::getElementName(element2).toLower();
     if ((name1.endsWith("high school") && name2.endsWith("high school")) ||
         (name1.endsWith("middle school") && name2.endsWith("middle school")) ||
         (name1.endsWith("elementary school") && name2.endsWith("elementary school")))

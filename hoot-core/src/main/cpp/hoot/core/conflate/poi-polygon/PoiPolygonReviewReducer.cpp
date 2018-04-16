@@ -123,6 +123,9 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //The rules below are roughly ordered by increasing processing expense and by decreasing
   //likelihood of occurrence.
 
+  LOG_VART(PoiPolygonTypeScoreExtractor::isSpecificSchool(poi));
+  LOG_VART(PoiPolygonTypeScoreExtractor::isSpecificSchool(poly));
+  LOG_VART(PoiPolygonTypeScoreExtractor::specificSchoolMatch(poi, poly));
   if (PoiPolygonTypeScoreExtractor::isSpecificSchool(poi) &&
       PoiPolygonTypeScoreExtractor::isSpecificSchool(poly) &&
       !PoiPolygonTypeScoreExtractor::specificSchoolMatch(poi, poly))

@@ -202,6 +202,7 @@ planetarium	amenity=planetarium
 plant nursery	landuse=plant_nursery
 play area	leisure=playground
 playground	leisure=playground
+playground clubhouse	building=civic
 playing field	leisure=pitch
 plumbing	shop=plumbing
 pool	sport=swimming
