@@ -61,8 +61,15 @@ public:
   void setRoundaboutWay (WayPtr pWay);
 
   /**
+   * @brief setRoundaboutCenter - Set the center node for this roundabout. You
+   *                              can create one if needed by calling getNewCenter
+   * @param pNode - Center node
+   */
+  void setRoundaboutCenter (NodePtr pNode);
+
+  /**
    * @brief addRoundaboutNode - Add the node to our internal list of nodes that
-   *                            make up the roundabout
+   *                            make up the roundabout (perimeter)
    * @param pNode - Pointer to the node
    */
   void addRoundaboutNode (ConstNodePtr pNode) { _roundaboutNodes.push_back(pNode); }
@@ -80,14 +87,20 @@ public:
   std::vector<ConstNodePtr> getRoundaboutNodes() { return _roundaboutNodes; }
 
   /**
-   * @brief getCenter - Averages all of the locations of the nodes in the
-   *                    roundabout to produce a center point, creates a node
-   *                    at that location, and returns it
+   * @brief getNewCenter - Averages all of the locations of the nodes in the
+   *                       roundabout to produce a center point, creates a node
+   *                       at that location, and returns it
    * @param pMap - Map to operate on. We use this to get an ID for the node,
    *               but this method does not add the node to the map explicitly.
    * @return - Pointer to the newly created node
    */
-  boost::shared_ptr<Node> getCenter(boost::shared_ptr<OsmMap> pMap);
+  boost::shared_ptr<Node> getNewCenter(boost::shared_ptr<OsmMap> pMap);
+
+  /**
+   * @brief getCenter - Gets the node set as the roundabout's center
+   * @return - Node
+   */
+  boost::shared_ptr<Node> getCenter(){ return _pCenterNode; }
 
   /**
    * @brief makeRoundabout - Creates & populates a roundabout object using the
@@ -115,14 +128,14 @@ public:
   void replaceRoundabout(boost::shared_ptr<OsmMap> pMap);
 
   /**
-   * @brief connectCrossingWays - Finds ways that cross the roundabout,
-   *                              calculates intersection points, joins the
-   *                              ways up with the roundabout, and removes
-   *                              the bits out of the middle. Not fully
-   *                              implemented yet.
+   * @brief handleCrossingWays - Finds ways that cross the roundabout,
+   *                             calculates intersection points, splits the ways
+   *                             where they cross the ring, and then joins them
+   *                             up with "spokes". This facilitates conflation
+   *                             later on.
    * @param pMap - Map to operate upon.
    */
-  void connectCrossingWays(boost::shared_ptr<OsmMap> pMap);
+  void handleCrossingWays(boost::shared_ptr<OsmMap> pMap);
 
 private:
 
@@ -131,6 +144,9 @@ private:
 
   // The original roundabout status
   Status _status;
+
+  // The "other" status (I.E. if this is 1, other will be 2)
+  Status _otherStatus;
 
   // Has all the nodes that was in our original roundabout
   std::vector<ConstNodePtr> _roundaboutNodes;

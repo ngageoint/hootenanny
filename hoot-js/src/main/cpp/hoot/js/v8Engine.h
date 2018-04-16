@@ -59,7 +59,7 @@ public:
 
 private:
   /** static pointer to the singleton instance */
-  static std::auto_ptr<v8Engine> _theInstance;
+  static boost::shared_ptr<v8Engine> _theInstance;
   /** static flag for platform initialization */
   static bool _needPlatform;
 
