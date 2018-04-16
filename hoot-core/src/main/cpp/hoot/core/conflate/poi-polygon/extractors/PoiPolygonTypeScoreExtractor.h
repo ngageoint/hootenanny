@@ -80,9 +80,12 @@ public:
   static bool isParkish(ConstElementPtr element);
   static bool isPlayground(ConstElementPtr element);
   static bool isSport(ConstElementPtr element);
-  static bool isSchool(ConstElementPtr element);
   static bool isRestroom(ConstElementPtr element);
   static bool isParking(ConstElementPtr element);
+
+  static bool isSchool(ConstElementPtr element);
+  static bool isSpecificSchool(ConstElementPtr element);
+  static bool specificSchoolMatch(ConstElementPtr element1, ConstElementPtr element2);
 
   /**
    * Determines if an element has more than one type associated with it

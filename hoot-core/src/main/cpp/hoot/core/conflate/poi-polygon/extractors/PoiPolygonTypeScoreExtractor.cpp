@@ -33,6 +33,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/MetadataTags.h>
 
+#include "PoiPolygonNameScoreExtractor.h"
 #include "../PoiPolygonDistanceTruthRecorder.h"
 
 // Qt
@@ -219,6 +220,37 @@ QStringList PoiPolygonTypeScoreExtractor::_getRelatedTags(const Tags& tags) cons
   return tagsList;
 }
 
+bool PoiPolygonTypeScoreExtractor::isSchool(ConstElementPtr element)
+{
+  return element->getTags().get("amenity") == "school";
+}
+
+bool PoiPolygonTypeScoreExtractor::isSpecificSchool(ConstElementPtr element)
+{
+  const QString name = PoiPolygonNameScoreExtractor::getElementName(element).toLower();
+  return
+    isSchool(element) &&
+    (name.toLower().endsWith("high school") || name.toLower().endsWith("middle school") ||
+    name.toLower().endsWith("elementary school"));
+}
+
+bool PoiPolygonTypeScoreExtractor::specificSchoolMatch(ConstElementPtr element1,
+                                                       ConstElementPtr element2)
+{
+  if (isSpecificSchool(element1) && isSpecificSchool(element2))
+  {
+    const QString name1 = PoiPolygonNameScoreExtractor::getElementName(element1).toLower();
+    const QString name2 = PoiPolygonNameScoreExtractor::getElementName(element1).toLower();
+    if ((name1.endsWith("high school") && name2.endsWith("high school")) ||
+        (name1.endsWith("middle school") && name2.endsWith("middle school")) ||
+        (name1.endsWith("elementary school") && name2.endsWith("elementary school")))
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
 bool PoiPolygonTypeScoreExtractor::isPark(ConstElementPtr element)
 {
   return !OsmSchema::getInstance().isBuilding(element) &&
@@ -244,11 +276,6 @@ bool PoiPolygonTypeScoreExtractor::isSport(ConstElementPtr element)
 {
   const Tags& tags = element->getTags();
   return tags.contains("sport") || tags.get("leisure").contains("sport");
-}
-
-bool PoiPolygonTypeScoreExtractor::isSchool(ConstElementPtr element)
-{
-  return element->getTags().get("amenity").toLower() == "school";
 }
 
 bool PoiPolygonTypeScoreExtractor::isRestroom(ConstElementPtr element)

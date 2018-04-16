@@ -582,18 +582,19 @@ void ImplicitTaggerBase::_addImplicitTags(const ElementPtr& e, const Tags& tagsT
   e->getTags().appendValue("hoot:implicitTags:tagsAdded", tagValue);
 
   //remove generic tags
-  if (e->getTags().get("poi") == "yes")
-  {
-    e->getTags().remove("poi");
-  }
-  if (tagsToAdd.get("building") != "yes" && e->getTags().get("building") == "yes")
-  {
-    e->getTags().remove("building");
-  }
-  if (tagsToAdd.get("area") != "yes" && e->getTags().get("area") == "yes")
-  {
-    e->getTags().remove("area");
-  }
+  //TODO: is this ok?
+//  if (e->getTags().get("poi") == "yes")
+//  {
+//    e->getTags().remove("poi");
+//  }
+//  if (tagsToAdd.get("building") != "yes" && e->getTags().get("building") == "yes")
+//  {
+//    e->getTags().remove("building");
+//  }
+//  if (tagsToAdd.get("area") != "yes" && e->getTags().get("area") == "yes")
+//  {
+//    e->getTags().remove("area");
+//  }
 
   _numNodesModified++;
   _numTagsAdded += tagsToAdd.size();

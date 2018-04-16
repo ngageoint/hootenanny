@@ -4,6 +4,7 @@
 barrier=fence
 highway=residential
 landuse=grass
+leisure=bleachers
 natural=coastline
 natural=fell
 natural=scrub

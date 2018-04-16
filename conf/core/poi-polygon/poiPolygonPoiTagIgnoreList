@@ -11,6 +11,7 @@ barrier=entrance
 barrier=gate
 barrier=obstacle
 barrier=wall
+building=entrance
 emergency=fire_hydrant
 highway=bus_stop
 highway=street_lamp

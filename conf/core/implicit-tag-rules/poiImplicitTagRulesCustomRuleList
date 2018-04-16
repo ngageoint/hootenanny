@@ -210,6 +210,7 @@ power plant	power=plant
 power substation	power=substation
 power sub station	power=substation
 preschool	amenity=preschool
+project area	landuse=construction
 putting green	sport=golf
 rec center	amenity=community_centre
 recreation center	amenity=community_centre

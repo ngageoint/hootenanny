@@ -1670,14 +1670,16 @@ bool OsmSchema::isPoiPolygonPoi(const ConstElementPtr& e, const QStringList tagI
   }
   LOG_DEBUG("Does not contain tag from tag ignore list");
 
+  const bool isNode = e->getElementType() == ElementType::Node;
+  if (!isNode)
+  {
+    return false;
+  }
   const bool inABuildingOrPoiCategory =
     getCategories(tags).intersects(OsmSchemaCategory::building() | OsmSchemaCategory::poi());
-  bool isPoi =
-    e->getElementType() == ElementType::Node &&
-    (inABuildingOrPoiCategory || tags.getNames().size() > 0);
+  bool isPoi = isNode && (inABuildingOrPoiCategory || tags.getNames().size() > 0);
 
-  if (!isPoi && e->getElementType() == ElementType::Node &&
-      ConfigOptions().getPoiPolygonPromotePointsWithAddressesToPois() &&
+  if (!isPoi && ConfigOptions().getPoiPolygonPromotePointsWithAddressesToPois() &&
       PoiPolygonAddressScoreExtractor::hasAddress(*e))
   {
     isPoi = true;

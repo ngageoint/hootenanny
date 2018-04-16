@@ -123,6 +123,14 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //The rules below are roughly ordered by increasing processing expense and by decreasing
   //likelihood of occurrence.
 
+  if (PoiPolygonTypeScoreExtractor::isSpecificSchool(poi) &&
+      PoiPolygonTypeScoreExtractor::isSpecificSchool(poly) &&
+      !PoiPolygonTypeScoreExtractor::specificSchoolMatch(poi, poly))
+  {
+    LOG_TRACE("Returning miss per review reduction rule #1b...");
+    return true;
+  }
+
   //Be a little stricter on place related reviews.
   if ((poi->getTags().get("place").toLower() == "neighbourhood" ||
        poi->getTags().get("place").toLower() == "suburb") && !poly->getTags().contains("place"))
@@ -142,7 +150,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   const bool polyIsPark = PoiPolygonTypeScoreExtractor::isPark(poly);
   LOG_VART(polyIsPark);
 
-  //same as above, but for gardens
+  //similar to above, but for gardens
   if ((poi->getTags().get("leisure").toLower() == "garden" ||
        poly->getTags().get("leisure").toLower() == "garden") &&
        (!_nonDistanceSimilaritiesPresent() ||
@@ -299,6 +307,8 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
     return true;
   }
 
+  const bool polyIsPlayground = PoiPolygonTypeScoreExtractor::isPlayground(poly);
+  LOG_VART(polyIsPlayground);
   const bool polyHasMoreThanOneType = PoiPolygonTypeScoreExtractor::hasMoreThanOneType(poly);
   LOG_VART(polyHasMoreThanOneType);
   const bool poiIsParkish = PoiPolygonTypeScoreExtractor::isParkish(poi);
@@ -306,7 +316,8 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
 
   //This is a simple rule to prevent matching poi's not at all like a park with park polys.
   //this may render some of the previous rules obsolete.
-  if (!poiIsPark && !poiIsParkish && poiHasType && polyIsPark && !polyHasMoreThanOneType)
+  if (!poiIsPark && !poiIsParkish && poiHasType && (polyIsPark /*|| polyIsPlayground*/) &&
+      !polyHasMoreThanOneType)
   {
     LOG_TRACE("Returning miss per review reduction rule #15...");
     return true;
@@ -328,8 +339,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   const bool poiContainedInParkPoly =
     poiContainedInAnotherParkPoly || (polyIsPark && _distance == 0);
   LOG_VART(poiContainedInParkPoly);
-  const bool polyIsPlayground = PoiPolygonTypeScoreExtractor::isPlayground(poly);
-  LOG_VART(polyIsPlayground);
+
   const bool poiIsBuilding = OsmSchema::getInstance().isBuilding(poi);
   LOG_VART(poiIsBuilding);
 
