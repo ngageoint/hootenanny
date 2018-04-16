@@ -146,11 +146,15 @@ void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
         QStringList names = element->getTags().getNames();
         assert(!names.isEmpty());
 
-        //old_name generally indicates that an element formerly went by the name, so not really
-        //useful here.
+        //old_name/former_name generally indicates that an element formerly went by the name, so
+        //not really useful here.
         if (names.removeAll("old_name") > 0)
         {
-          LOG_VARD("Removed old name tag.");
+          LOG_VART("Removed old name tag.");
+        }
+        if (names.removeAll("former_name") > 0)
+        {
+          LOG_VART("Removed former name tag.");
         }
         assert(!names.isEmpty());
 

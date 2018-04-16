@@ -466,7 +466,9 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
   LOG_VART(_closeDistanceMatch);
 
   return _distance <= _matchDistanceThreshold ? 2u : 0u;
-  //TODO: experimental
+
+  //The idea here was to weight distance less when both POI's had specific types, but it hasn't
+  //helped so far.
 //  if (_distance > _matchDistanceThreshold)
 //  {
 //    return 0u;
@@ -577,18 +579,6 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
 //  }
 
   evidence += _getTypeEvidence(poi, poly);
-  //TODO: experimental
-//  const bool bothElementsHaveSpecificType =
-//    PoiPolygonTypeScoreExtractor::hasSpecificType(poi) &&
-//    PoiPolygonTypeScoreExtractor::hasSpecificType(poly);
-//  LOG_VART(bothElementsHaveSpecificType);
-//  const unsigned int typeEvidence = _getTypeEvidence(poi, poly);
-//  LOG_VART(typeEvidence);
-//  if (typeEvidence == 0 && bothElementsHaveSpecificType)
-//  {
-//    return 0;
-//  }
-//  evidence += typeEvidence;
 //  if (evidence >= _matchEvidenceThreshold)
 //  {
 //    return evidence;

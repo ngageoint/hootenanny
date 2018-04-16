@@ -238,6 +238,10 @@
             {
                 "name": "man_made=reservoir_covered",
                 "weight": 0.8
+            },
+            {
+                "name": "waterway=dam",
+                "weight": 0.7
             }
         ]
     },

@@ -240,7 +240,7 @@ void ImplicitTaggerBase::visit(const ElementPtr& e)
           matchingWords.insert("building");
         }
 
-        //bit of hack...to handle a situation where playground have been incorrectly tagged as parks
+        //bit of hack...to handle a situation where pois have been incorrectly tagged;
         //the argument could be made to just correct the input data instead
         if (tagsToAdd.isEmpty() && PoiPolygonTypeScoreExtractor::isPark(e))
         {
@@ -251,9 +251,14 @@ void ImplicitTaggerBase::visit(const ElementPtr& e)
             if (name.endsWith("play area") || name.endsWith("play areas") ||
                 name.endsWith("playground"))
             {
-              LOG_VART(name);
-              LOG_TRACE("Using custom playground rule...");
+              LOG_TRACE("Using custom tagging rule...");
               tagsToAdd.appendValue("leisure", "playground");
+              break;
+            }
+            else if (name.endsWith("golf course"))
+            {
+              LOG_TRACE("Using custom tagging rule...");
+              tagsToAdd.appendValue("leisure", "golf_course");
               break;
             }
           }
@@ -275,7 +280,7 @@ void ImplicitTaggerBase::visit(const ElementPtr& e)
   }
 }
 
-QStringList ImplicitTaggerBase::_cleanNames(/*const */Tags& tags)
+QStringList ImplicitTaggerBase::_cleanNames(Tags& tags)
 {
   //the normal hoot convention is to split the name tag on ';' into multiple names; bypassing that
   //here, as it seems to cause more harm to implicit tagging than good
@@ -290,6 +295,10 @@ QStringList ImplicitTaggerBase::_cleanNames(/*const */Tags& tags)
   if (names.removeAll("old_name") > 0)
   {
     LOG_VART("Removed old name tag.");
+  }
+  if (names.removeAll("former_name") > 0)
+  {
+    LOG_VART("Removed former name tag.");
   }
   if (_translateAllNamesToEnglish)
   {
@@ -593,7 +602,8 @@ void ImplicitTaggerBase::_addImplicitTags(const ElementPtr& e, const Tags& tagsT
   e->getTags().appendValue("hoot:implicitTags:tagsAdded", tagValue);
 
   //remove generic tags
-  //TODO: is this ok?
+  //Removing the generic tag after adding the specific tag was causing certain feature to be ignored
+  //by the poi/poly criterion.
 //  if (e->getTags().get("poi") == "yes")
 //  {
 //    e->getTags().remove("poi");

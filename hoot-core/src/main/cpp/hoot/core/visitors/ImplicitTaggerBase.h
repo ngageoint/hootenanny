@@ -101,7 +101,7 @@ private:
 
   QStringList _getNameTokens(const QStringList names) const;
   QStringList _getTranslatedNames(const QStringList names, const Tags& tags);
-  QStringList _cleanNames(/*const*/ Tags& tags);
+  QStringList _cleanNames(Tags& tags);
   QString _getEndOfNameToken(const QString name, const QStringList nameTokensList) const;
 
   void _addImplicitTags(const ElementPtr& e, const Tags& tagsToAdd,

@@ -393,7 +393,9 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
             if (polyNeighborGeom->intersects(polyGeom.get()))
             {
               parkPolyAngleHistVal = AngleHistogramExtractor().extract(*_map, polyNeighbor, poly);
+              LOG_VART(parkPolyAngleHistVal);
               parkPolyOverlapVal = OverlapExtractor().extract(*_map, polyNeighbor, poly);
+              LOG_VART(parkPolyOverlapVal);
 
               //When just using intersection as the criteria, only found one instance when something
               //was considered as "very close" to a park poly when I didn't want it to be...so these
@@ -461,7 +463,8 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
         //outer ring of this poly and the other park poly has a name.
         if ((poiIsPark || poiIsParkish) && polyVeryCloseToAnotherParkPoly && _distance == 0 &&
             poiToOtherParkPolyNodeDist < poiToPolyNodeDist && poiToPolyNodeDist != DBL_MAX &&
-            poiToOtherParkPolyNodeDist != DBL_MAX && otherParkPolyHasName)
+            poiToOtherParkPolyNodeDist != DBL_MAX && otherParkPolyHasName &&
+            parkPolyOverlapVal < 0.9)
         {
           LOG_TRACE("Returning miss per review reduction rule #16...");
           return true;
@@ -471,7 +474,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
         //poly is "very close" to another park poly that has a name match with the poi, then
         //declare a miss (exclude poly playgrounds from this).
         if (poiIsPark && !polyIsPark && !polyIsBuilding && polyVeryCloseToAnotherParkPoly &&
-            //TODO: test this change
+            //Unfortunately, include polyIsPlayground here blows up too many matches.
             otherParkPolyNameMatch /*&& !polyIsPlayground*/)
         {
           LOG_TRACE("Returning miss per review reduction rule #17...");

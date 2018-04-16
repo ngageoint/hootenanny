@@ -59,6 +59,10 @@
         "objectType": "tag"
     },
     {
+        "categories": [
+            "use",
+            "poi"
+        ],
         "isA": "tourism",
         "name": "tourism=attraction",
         "objectType": "tag",

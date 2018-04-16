@@ -39,10 +39,7 @@ void ImplicitTagUtils::cleanName(QString& name)
   name =
     name.replace("(", "").replace(")", "").replace(".", "").replace("/", " ").replace("<", "")
         .replace(">", "").replace("[", "").replace("]", "").replace("@", "").replace("&", "and")
-        .replace("(historical)", "")
-        //TODO: is this ok?
-        //.replace(";", "")
-        /*.trimmed()*/;
+        .replace("(historical)", "");
   if (name.startsWith("-"))
   {
     name = name.replace(0, 1, "");
