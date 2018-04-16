@@ -1,3 +1,3 @@
 Ideally, all the roads should conflate cleanly between these two datasets.
 
-For the roundabout, there is more work to be done - the roads going into it should be split (they have a median), and then they should conflate.
+Right now, the output is looking really good. The only area of strageness is at the South end of "Boulevard Harry Truman" - but that could easily be a result of the map being chopped in that area.
