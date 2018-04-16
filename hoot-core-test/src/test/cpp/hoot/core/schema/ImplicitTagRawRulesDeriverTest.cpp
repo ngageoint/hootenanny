@@ -66,7 +66,6 @@ public:
     QStringList translationScripts;
     translationScripts.append("translations/OSM_Ingest.js");
     ImplicitTagRawRulesDeriver rawRulesDeriver;
-    rawRulesDeriver.setElementFilter("poi");
     rawRulesDeriver.setKeepTempFiles(false); //set true for debugging
     rawRulesDeriver.setSkipFiltering(false);
     rawRulesDeriver.setSortParallelCount(1);
@@ -93,7 +92,6 @@ public:
       outDir() + "/ImplicitTagRawRulesDeriverTest-runMultipleInputsTest-out.implicitTagRules";
 
     ImplicitTagRawRulesDeriver rawRulesDeriver;
-    rawRulesDeriver.setElementFilter("poi");
     rawRulesDeriver.setKeepTempFiles(false); //set true for debugging
     rawRulesDeriver.setSkipFiltering(false);
     rawRulesDeriver.setSortParallelCount(1);
@@ -133,7 +131,6 @@ public:
     sortedCountFile->open();
 
     ImplicitTagRawRulesDeriver rawRulesDeriver;
-    rawRulesDeriver.setElementFilter("poi");
     rawRulesDeriver.setTempFileDir(outDir());
     rawRulesDeriver.setKeepTempFiles(true);
     rawRulesDeriver.setSkipFiltering(false);
@@ -167,7 +164,6 @@ public:
       outDir() + "/ImplicitTagRawRulesDeriverTest-runNameCaseTest-out.implicitTagRules";
 
     ImplicitTagRawRulesDeriver rawRulesDeriver;
-    rawRulesDeriver.setElementFilter("poi");
     rawRulesDeriver.setKeepTempFiles(false); //set true for debugging
     rawRulesDeriver.setSkipFiltering(false);
     rawRulesDeriver.setSortParallelCount(1);
@@ -190,7 +186,6 @@ public:
     QStringList translationScripts;
     translationScripts.append("translations/OSM_Ingest.js");
     ImplicitTagRawRulesDeriver rawRulesDeriver;
-    rawRulesDeriver.setElementFilter("poi");
     rawRulesDeriver.setKeepTempFiles(false); //set true for debugging
     rawRulesDeriver.setSkipFiltering(false);
     rawRulesDeriver.setSortParallelCount(1);
@@ -232,7 +227,6 @@ public:
     }
     CPPUNIT_ASSERT(exceptionMsg.contains("No element type was specified"));
 
-    rawRulesDeriver.setElementFilter("poi");
     inputs.clear();
     inputs.append(inDir() + "/yemen-crop-2.osm.pbf");
     translationScripts.clear();

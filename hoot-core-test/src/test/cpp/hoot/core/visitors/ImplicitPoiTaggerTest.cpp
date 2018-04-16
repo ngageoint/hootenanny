@@ -102,7 +102,7 @@ public:
     ImplicitPoiTagger uut(databaseOutFile);
     uut.setAddTopTagOnly(false);
     uut.setAllowWordsInvolvedInMultipleRules(false);
-    uut.setAllowTaggingSpecificPois(true);
+    uut.setAllowTaggingSpecificFeatures(true);
     uut.setMatchEndOfNameSingleTokenFirst(true);
     uut.setTranslateAllNamesToEnglish(true);
     map->visitRw(uut);
@@ -175,7 +175,7 @@ public:
     ImplicitPoiTagger uut(databaseOutFile);
     uut.setAddTopTagOnly(false);
     uut.setAllowWordsInvolvedInMultipleRules(false);
-    uut.setAllowTaggingSpecificPois(true);
+    uut.setAllowTaggingSpecificFeatures(true);
     uut.setMatchEndOfNameSingleTokenFirst(true);
     uut.setTranslateAllNamesToEnglish(true);
     map->visitRw(uut);
@@ -209,7 +209,7 @@ public:
     ImplicitPoiTagger uut(databaseOutFile);
     uut.setAddTopTagOnly(false);
     uut.setAllowWordsInvolvedInMultipleRules(false);
-    uut.setAllowTaggingSpecificPois(true);
+    uut.setAllowTaggingSpecificFeatures(true);
     uut.setMatchEndOfNameSingleTokenFirst(true);
     uut.setTranslateAllNamesToEnglish(true);
     map->visitRw(uut);
@@ -244,7 +244,7 @@ public:
     ImplicitPoiTagger uut(databaseOutFile);
     uut.setAddTopTagOnly(false);
     uut.setAllowWordsInvolvedInMultipleRules(false);
-    uut.setAllowTaggingSpecificPois(true);
+    uut.setAllowTaggingSpecificFeatures(true);
     uut.setMatchEndOfNameSingleTokenFirst(true);
     uut.setTranslateAllNamesToEnglish(true);
     map->visitRw(uut);

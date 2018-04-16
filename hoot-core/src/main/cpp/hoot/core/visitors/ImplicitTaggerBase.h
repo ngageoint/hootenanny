@@ -57,7 +57,7 @@ public:
   virtual void setConfiguration(const Settings& conf);
   void setTranslateAllNamesToEnglish(bool translate) { _translateAllNamesToEnglish = translate; }
   void setMatchEndOfNameSingleTokenFirst(bool match) { _matchEndOfNameSingleTokenFirst = match; }
-  void setAllowTaggingSpecificPois(bool allow) { _allowTaggingSpecificPois = allow; }
+  void setAllowTaggingSpecificFeatures(bool allow) { _allowTaggingSpecificFeatures = allow; }
   void setAddTopTagOnly(bool add) { _ruleReader->setAddTopTagOnly(add); }
   void setAllowWordsInvolvedInMultipleRules(bool allow)
   { _ruleReader->setAllowWordsInvolvedInMultipleRules(allow); }
@@ -66,37 +66,38 @@ protected:
 
   virtual bool _visitElement(const ElementPtr& e) = 0;
 
-  //allows for tagging POIs with specificity greater than poi=yes
-  bool _allowTaggingSpecificPois;
-  bool _elementIsASpecificPoi;
+  //allows for tagging features with specificity greater than poi=yes, building=yes, or area=yes
+  bool _allowTaggingSpecificFeatures;
+  bool _elementIsASpecificFeature;
 
   //reads implicit tag rules from the configured rules database
   boost::shared_ptr<ImplicitTagRulesSqliteReader> _ruleReader;
 
 private:
 
-  //number of nodes which received added tags
-  long _numNodesModified;
-  //sum of all tags added to all nodes
+  //number of features which received added tags
+  long _numFeaturesModified;
+  //sum of all tags added to all features
   long _numTagsAdded;
-  //number of nodes which were involved in multiple tag rules and not modified if the option was
-  //specified to not tag nodes involved in multiple tag rules
-  long _numNodesInvolvedInMultipleRules;
-  //total number of nodes processed
-  long _numNodesParsed;
+  //number of features which were involved in multiple tag rules and not modified if the option was
+  //specified to not tag features involved in multiple tag rules
+  long _numFeaturesInvolvedInMultipleRules;
+  //total number of features processed
+  long _numFeaturesParsed;
   long _statusUpdateInterval;
-  //smallest number of tags added to any one node
+  //smallest number of tags added to any one feature
   long _smallestNumberOfTagsAdded;
-  //largest number of tags added to any one node
+  //largest number of tags added to any one feature
   long _largestNumberOfTagsAdded;
-  //if true; all node names are first translated to english before querying the rules database;
+  //if true; all feature names are first translated to english before querying the rules database;
   //the value of this parameter should match the corresponding parameter used when the tag rules
   //were generated (see ImplicitTagRawRulesDeriver)
   bool _translateAllNamesToEnglish;
   //If true, the tagger will attempt to search for a rule match with the last token in a name first.
   //Setting to true can reduce the number of multiple rule involvements encountered.  e.g. "Police
   //Hospital" would involved rules for both a police station and a hospital if the setting was
-  //false.  Otherwise it would match "Hospital" alone and correctly identify the node as a hospital.
+  //false.  Otherwise it would match "Hospital" alone and correctly identify the feature as a
+  //hospital.
   bool _matchEndOfNameSingleTokenFirst;
 
   QStringList _getNameTokens(const QStringList names) const;

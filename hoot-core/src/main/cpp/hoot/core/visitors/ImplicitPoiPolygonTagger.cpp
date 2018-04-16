@@ -41,7 +41,7 @@ ImplicitPoiPolygonTagger::ImplicitPoiPolygonTagger() :
 ImplicitTaggerBase()
 {
   _ruleReader.reset(new ImplicitTagRulesSqliteReader());
-  _ruleReader->open(ConfigOptions().getImplicitTaggerPoiRulesDatabase());
+  _ruleReader->open(ConfigOptions().getImplicitTaggerRulesDatabase());
 }
 
 ImplicitPoiPolygonTagger::ImplicitPoiPolygonTagger(const QString databasePath) :
@@ -68,12 +68,12 @@ bool ImplicitPoiPolygonTagger::_elementIsATaggablePoi(const ElementPtr& e)
 {
   const bool elementIsANode = e->getElementType() == ElementType::Node;
   LOG_VART(elementIsANode);
-  _elementIsASpecificPoi =
+  _elementIsASpecificFeature =
     OsmSchema::getInstance().hasCategory(e->getTags(), "poi") && !e->getTags().contains("poi") &&
      e->getTags().get("building") != QLatin1String("yes") &&
      e->getTags().get("office") != QLatin1String("yes");
-  LOG_VART(_elementIsASpecificPoi);
-  const bool elementIsAGenericPoi = !_elementIsASpecificPoi;
+  LOG_VART(_elementIsASpecificFeature);
+  const bool elementIsAGenericPoi = !_elementIsASpecificFeature;
 
   //always allow generic elements
   if (elementIsAGenericPoi)
@@ -81,7 +81,7 @@ bool ImplicitPoiPolygonTagger::_elementIsATaggablePoi(const ElementPtr& e)
     return true;
   }
   //allowing specific elements is configurable
-  else if (_elementIsASpecificPoi && _allowTaggingSpecificPois)
+  else if (_elementIsASpecificFeature && _allowTaggingSpecificFeatures)
   {
     return true;
   }
@@ -106,8 +106,8 @@ bool ImplicitPoiPolygonTagger::_elementIsATaggablePolygon(const ElementPtr& e)
      e->getTags().get("area") != QLatin1String("yes") &&
      e->getTags().get("office") != QLatin1String("yes");
   //bit of a hack
-  _elementIsASpecificPoi = elementIsASpecificPoly;
-  LOG_VART(_elementIsASpecificPoi);
+  _elementIsASpecificFeature = elementIsASpecificPoly;
+  LOG_VART(_elementIsASpecificFeature);
   const bool elementIsAGenericPoly = !elementIsASpecificPoly;
 
   //always allow generic elements
@@ -116,7 +116,7 @@ bool ImplicitPoiPolygonTagger::_elementIsATaggablePolygon(const ElementPtr& e)
     return true;
   }
   //allowing specific elements is configurable
-  else if (elementIsASpecificPoly && _allowTaggingSpecificPois)
+  else if (elementIsASpecificPoly && _allowTaggingSpecificFeatures)
   {
     return true;
   }

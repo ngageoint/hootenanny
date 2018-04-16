@@ -54,26 +54,16 @@ _useSchemaTagValuesForWordsOnly(true)
 void ImplicitTagRulesDatabaseDeriver::setConfiguration(const Settings& conf)
 {
   const ConfigOptions confOptions(conf);
+
   setMinTagOccurrencesPerWord(
     confOptions.getImplicitTaggingDatabaseDeriverMinimumTagOccurrencesPerWord());
   setMinWordLength(confOptions.getImplicitTaggingDatabaseDeriverMinimumWordLength());
   setUseSchemaTagValuesForWordsOnly(
     confOptions.getImplicitTaggingDatabaseDeriverUseSchemaTagValuesForWordsOnly());
-}
 
-void ImplicitTagRulesDatabaseDeriver::setElementType(const QString /*type*/)
-{
-    //TODO: get rid of this and the associated input param if we end up defaulting to poi/poly
-    //tagging
-//  if (type.trimmed().toUpper() != "POI")
-//  {
-//    throw HootException("Only POI implicit tag rule database generation is supported.");
-//  }
-
-  const ConfigOptions confOptions(conf());
-  setCustomRuleFile(confOptions.getImplicitTaggingDatabaseDeriverPoiCustomRuleFile());
-  setTagIgnoreFile(confOptions.getImplicitTaggingDatabaseDeriverPoiTagIgnoreFile());
-  setWordIgnoreFile(confOptions.getImplicitTaggingDatabaseDeriverPoiWordIgnoreFile());
+  setCustomRuleFile(confOptions.getImplicitTaggingDatabaseDeriverCustomRuleFile());
+  setTagIgnoreFile(confOptions.getImplicitTaggingDatabaseDeriverTagIgnoreFile());
+  setWordIgnoreFile(confOptions.getImplicitTaggingDatabaseDeriverWordIgnoreFile());
 }
 
 void ImplicitTagRulesDatabaseDeriver::deriveRulesDatabase(const QString input, const QString output)
@@ -81,7 +71,7 @@ void ImplicitTagRulesDatabaseDeriver::deriveRulesDatabase(const QString input, c
   _validateInputs(input, output);
 
   LOG_INFO(
-    "Deriving POI implicit tag rules for input: " << input << ".  Writing to output: " <<
+    "Deriving implicit tag rules for input: " << input << ".  Writing to output: " <<
     output << "...");
 
   LOG_VARD(_minTagOccurrencesPerWord);
@@ -156,7 +146,7 @@ void ImplicitTagRulesDatabaseDeriver::_removeKvpsBelowOccurrenceThreshold(const 
   _thresholdedCountFile.reset(
     new QTemporaryFile(
       ConfigOptions().getApidbBulkInserterTempFileDir() +
-      "/poi-implicit-tag-rules-deriver-temp-XXXXXX"));
+      "/implicit-tag-rules-deriver-temp-XXXXXX"));
   _thresholdedCountFile->setAutoRemove(!ConfigOptions().getImplicitTaggingKeepTempFiles());
   if (!_thresholdedCountFile->open())
   {
@@ -230,6 +220,7 @@ void ImplicitTagRulesDatabaseDeriver::_populateSchemaTagValues()
   _schemaTagValues.clear();
   _wordsNotInSchema.clear();
 
+  //TODO: should the use category be added here?
   const std::vector<SchemaVertex> tags =
     OsmSchema::getInstance().getTagByCategory(OsmSchemaCategory::poi());
   StringTokenizer tokenizer;
@@ -289,7 +280,7 @@ void ImplicitTagRulesDatabaseDeriver::_applyFiltering(const QString input)
   _filteredCountFile.reset(
     new QTemporaryFile(
       ConfigOptions().getApidbBulkInserterTempFileDir() +
-      "/poi-implicit-tag-rules-deriver-temp-XXXXXX"));
+      "/implicit-tag-rules-deriver-temp-XXXXXX"));
   _filteredCountFile->setAutoRemove(!ConfigOptions().getImplicitTaggingKeepTempFiles());
   if (!_filteredCountFile->open())
   {

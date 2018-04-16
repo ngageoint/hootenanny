@@ -13,7 +13,7 @@ include::tmp/RulesTemplate.asciidoc[]
 include::user/HootAPIexamples.asciidoc[]
 include::user/SchemaFiles.asciidoc[]
 include::user/OsmApiDb.asciidoc[]
-include::user/ImplicitTagging.asciidoc[]
+include::user/ImplicitTypeTagging.asciidoc[]
 include::HootenannyConfigOptions.asciidoc[]
 :leveloffset: 0
 include::commands/HootCommandLineReference.asciidoc[]

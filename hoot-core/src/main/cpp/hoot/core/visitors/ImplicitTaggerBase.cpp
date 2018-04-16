@@ -45,12 +45,12 @@ namespace hoot
 {
 
 ImplicitTaggerBase::ImplicitTaggerBase() :
-_allowTaggingSpecificPois(true),
-_elementIsASpecificPoi(false),
-_numNodesModified(0),
+_allowTaggingSpecificFeatures(true),
+_elementIsASpecificFeature(false),
+_numFeaturesModified(0),
 _numTagsAdded(0),
-_numNodesInvolvedInMultipleRules(0),
-_numNodesParsed(0),
+_numFeaturesInvolvedInMultipleRules(0),
+_numFeaturesParsed(0),
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
 _smallestNumberOfTagsAdded(LONG_MAX),
 _largestNumberOfTagsAdded(0),
@@ -61,12 +61,12 @@ _matchEndOfNameSingleTokenFirst(true)
 }
 
 ImplicitTaggerBase::ImplicitTaggerBase(const QString /*databasePath*/) :
-_allowTaggingSpecificPois(true),
-_elementIsASpecificPoi(false),
-_numNodesModified(0),
+_allowTaggingSpecificFeatures(true),
+_elementIsASpecificFeature(false),
+_numFeaturesModified(0),
 _numTagsAdded(0),
-_numNodesInvolvedInMultipleRules(0),
-_numNodesParsed(0),
+_numFeaturesInvolvedInMultipleRules(0),
+_numFeaturesParsed(0),
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
 _smallestNumberOfTagsAdded(LONG_MAX),
 _largestNumberOfTagsAdded(0),
@@ -88,21 +88,21 @@ ImplicitTaggerBase::~ImplicitTaggerBase()
 
   LOG_INFO(
     "Added " << StringUtils::formatLargeNumber(_numTagsAdded) << " tags to " <<
-    StringUtils::formatLargeNumber(_numNodesModified) << " nodes / " <<
-    StringUtils::formatLargeNumber(_numNodesParsed)  << " total nodes.");
+    StringUtils::formatLargeNumber(_numFeaturesModified) << " features / " <<
+    StringUtils::formatLargeNumber(_numFeaturesParsed)  << " total features.");
   LOG_INFO(
-    StringUtils::formatLargeNumber(_numNodesInvolvedInMultipleRules) <<
-    " nodes were involved in multiple tag rules and were not modified.");
-  if (_numTagsAdded > 0 && _numNodesModified > 0)
+    StringUtils::formatLargeNumber(_numFeaturesInvolvedInMultipleRules) <<
+    " features were involved in multiple tag rules and were not modified.");
+  if (_numTagsAdded > 0 && _numFeaturesModified > 0)
   {
-    long avgTagsAdded = (long)(_numTagsAdded / _numNodesModified);
+    long avgTagsAdded = (long)(_numTagsAdded / _numFeaturesModified);
     LOG_INFO(
-      "Average tags added per node: " << StringUtils::formatLargeNumber(avgTagsAdded));
+      "Average tags added per feature: " << StringUtils::formatLargeNumber(avgTagsAdded));
     LOG_INFO(
-      "Smallest number of tags added to a node: " <<
+      "Smallest number of tags added to a feature: " <<
        StringUtils::formatLargeNumber(_smallestNumberOfTagsAdded));
     LOG_INFO(
-      "Largest number of tags added to a node: " <<
+      "Largest number of tags added to a feature: " <<
        StringUtils::formatLargeNumber(_largestNumberOfTagsAdded));
   }
 }
@@ -113,7 +113,7 @@ void ImplicitTaggerBase::setConfiguration(const Settings& conf)
 
   setTranslateAllNamesToEnglish(confOptions.getImplicitTaggingTranslateAllNamesToEnglish());
   setMatchEndOfNameSingleTokenFirst(confOptions.getImplicitTaggerMatchEndOfNameSingleTokenFirst());
-  setAllowTaggingSpecificPois(confOptions.getImplicitTaggerAllowTaggingSpecificEntities());
+  setAllowTaggingSpecificFeatures(confOptions.getImplicitTaggerAllowTaggingSpecificEntities());
 
   _ruleReader->setAddTopTagOnly(confOptions.getImplicitTaggerAddTopTagOnly());
   _ruleReader->setAllowWordsInvolvedInMultipleRules(
@@ -229,18 +229,18 @@ void ImplicitTaggerBase::visit(const ElementPtr& e)
         _ensureCorrectTagSpecificity(e, tagsToAdd);
 
         //This is a little kludgy, but we'll leave it for now since it helps.
-        if (tagsToAdd.isEmpty() && !_elementIsASpecificPoi && namesContainOffice)
+        if (tagsToAdd.isEmpty() && !_elementIsASpecificFeature && namesContainOffice)
         {
           tagsToAdd.appendValue("building", "office");
           matchingWords.insert("office");
         }
-        else if (tagsToAdd.isEmpty() && !_elementIsASpecificPoi && namesContainBuilding)
+        else if (tagsToAdd.isEmpty() && !_elementIsASpecificFeature && namesContainBuilding)
         {
           tagsToAdd.appendValue("building", "yes");
           matchingWords.insert("building");
         }
 
-        //bit of hack...to handle a situation where pois have been incorrectly tagged;
+        //bit of hack...to handle a situation where features have been incorrectly tagged;
         //the argument could be made to just correct the input data instead
         if (tagsToAdd.isEmpty() && PoiPolygonTypeScoreExtractor::isPark(e))
         {
@@ -271,11 +271,11 @@ void ImplicitTaggerBase::visit(const ElementPtr& e)
       }
     }
 
-    _numNodesParsed++;
-    if (_numNodesParsed % (_statusUpdateInterval / 10) == 0)
+    _numFeaturesParsed++;
+    if (_numFeaturesParsed % (_statusUpdateInterval / 10) == 0)
     {
       PROGRESS_INFO(
-        "Parsed " << StringUtils::formatLargeNumber(_numNodesParsed) << " nodes from input.");
+        "Parsed " << StringUtils::formatLargeNumber(_numFeaturesParsed) << " features from input.");
     }
   }
 }
@@ -513,7 +513,7 @@ void ImplicitTaggerBase::_ensureCorrectTagSpecificity(const ElementPtr& e, Tags&
 {
   Tags updatedTags;
   bool tagsAdded = false;
-  LOG_VARD(_elementIsASpecificPoi);
+  LOG_VARD(_elementIsASpecificFeature);
   for (Tags::const_iterator tagItr = tagsToAdd.begin(); tagItr != tagsToAdd.end(); ++tagItr)
   {
     const QString implicitTagKey = tagItr.key();
@@ -545,7 +545,7 @@ void ImplicitTaggerBase::_ensureCorrectTagSpecificity(const ElementPtr& e, Tags&
         updatedTags.appendValue(elementTagKey, elementTagValue);
       }
     }
-    else if (!_elementIsASpecificPoi)
+    else if (!_elementIsASpecificFeature)
     {
       LOG_DEBUG(
         "Input feature does not contain tag: " <<
@@ -577,12 +577,12 @@ void ImplicitTaggerBase::_updateElementForDuplicateMatch(const ElementPtr& e,
     matchingWordsList.join(", ");
   LOG_VART(tagValue);
   e->getTags().appendValue("hoot:implicitTags:multipleRules", tagValue);
-  _numNodesInvolvedInMultipleRules++;
-  if (_numNodesInvolvedInMultipleRules % 10 == 0)
+  _numFeaturesInvolvedInMultipleRules++;
+  if (_numFeaturesInvolvedInMultipleRules % 10 == 0)
   {
     PROGRESS_INFO(
-      StringUtils::formatLargeNumber(_numNodesInvolvedInMultipleRules) << " nodes have been " <<
-      "involved in multiple rules.");
+      StringUtils::formatLargeNumber(_numFeaturesInvolvedInMultipleRules) <<
+      " features have been involved in multiple rules.");
   }
 }
 
@@ -617,7 +617,7 @@ void ImplicitTaggerBase::_addImplicitTags(const ElementPtr& e, const Tags& tagsT
 //    e->getTags().remove("area");
 //  }
 
-  _numNodesModified++;
+  _numFeaturesModified++;
   _numTagsAdded += tagsToAdd.size();
   if (_numTagsAdded < _smallestNumberOfTagsAdded)
   {
@@ -627,11 +627,11 @@ void ImplicitTaggerBase::_addImplicitTags(const ElementPtr& e, const Tags& tagsT
   {
     _largestNumberOfTagsAdded = tagsToAdd.size();
   }
-  if (_numNodesModified % 100 == 0)
+  if (_numFeaturesModified % 100 == 0)
   {
     PROGRESS_INFO(
       "Added " << StringUtils::formatLargeNumber(_numTagsAdded) << " tags total to " <<
-      StringUtils::formatLargeNumber(_numNodesModified) << " nodes.");
+      StringUtils::formatLargeNumber(_numFeaturesModified) << " features.");
   }
 }
 

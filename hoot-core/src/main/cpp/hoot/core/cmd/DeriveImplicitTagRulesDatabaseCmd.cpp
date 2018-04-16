@@ -71,8 +71,7 @@ public:
     {
       ImplicitTagRulesDatabaseDeriver rulesDatabaseDeriver;
       rulesDatabaseDeriver.setConfiguration(conf());
-      rulesDatabaseDeriver.setElementType(args[0]);
-      rulesDatabaseDeriver.deriveRulesDatabase(args[1].trimmed(), args[2].trimmed());
+      rulesDatabaseDeriver.deriveRulesDatabase(args[0].trimmed(), args[1].trimmed());
     }
     else
     {
