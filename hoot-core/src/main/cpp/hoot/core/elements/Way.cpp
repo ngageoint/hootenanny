@@ -346,12 +346,15 @@ bool Way::isFirstLastNodeIdentical() const
 
 long Way::getPid(const ConstWayPtr& p, const ConstWayPtr& c)
 {
-  if (!p && !c)                                     return WayData::PID_EMPTY;
-  else if (p && c && p->hasPid() && c->hasPid())    return p->getPid();
-  else if (p && !c && p->hasPid())                  return p->getPid();
-  else if (!p && c && c->hasPid())                  return c->getPid();
-  else                                              return WayData::PID_EMPTY;
+  if (!p && !c)   return WayData::PID_EMPTY;
+  else            return Way::getPid(p->getPid(), c->getPid());
 }
 
+long Way::getPid(long p, long c)
+{
+  if (p != WayData::PID_EMPTY)      return p;
+  else if(c != WayData::PID_EMPTY)  return c;
+  else                              return WayData::PID_EMPTY;
+}
 
 }

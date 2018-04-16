@@ -26,6 +26,8 @@
  */
 
 #include "Roundabout.h"
+#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RemoveWayOp.h>
@@ -33,6 +35,9 @@
 #include <hoot/core/util/ElementConverter.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/LineString.h>
+#include <hoot/core/algorithms/WaySplitter.h>
+#include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
 
 namespace hoot
 {
@@ -49,9 +54,19 @@ void Roundabout::setRoundaboutWay (WayPtr pWay)
 {
   _roundaboutWay = pWay;
   _status = pWay->getStatus();
+
+  if (_status == Status::Unknown1)
+    _otherStatus = Status::Unknown2;
+  else
+    _otherStatus = Status::Unknown1;
 }
 
-NodePtr Roundabout::getCenter(OsmMapPtr pMap)
+void Roundabout::setRoundaboutCenter (NodePtr pNode)
+{
+  _pCenterNode = pNode;
+}
+
+NodePtr Roundabout::getNewCenter(OsmMapPtr pMap)
 {
   double lat = 0;
   double lon = 0;
@@ -91,45 +106,127 @@ RoundaboutPtr Roundabout::makeRoundabout (const boost::shared_ptr<OsmMap> &pMap,
     rnd->addRoundaboutNode(pMap->getNode(nodeIds[i]));
   }
 
+  // Calculate and set center
+  rnd->setRoundaboutCenter(rnd->getNewCenter(pMap));
+
   return rnd;
 }
 
-void Roundabout::connectCrossingWays(boost::shared_ptr<OsmMap> pMap)
+namespace // Anonymous
 {
-  // TODO: Finish implementing this. The new nodes need to be inserted into the
-  // proper location within their ways, and the chunk of way inside the
-  // roundabout needs to be removed.
-  return;
+  geos::geom::Coordinate getCentroid(ConstOsmMapPtr pMap, WayPtr pWay)
+  {
+    geos::geom::Envelope env = pWay->getEnvelopeInternal(pMap);
+    geos::geom::Coordinate center(0.0, 0.0);
+    env.centre(center);
+    return center;
+  }
+}
 
-  // Get our envelope
-  geos::geom::Envelope env = _roundaboutWay->getEnvelopeInternal(pMap);
+void Roundabout::handleCrossingWays(boost::shared_ptr<OsmMap> pMap)
+{
+  // Get a center point
+  NodePtr pCenterNode = getNewCenter(pMap);
+  pCenterNode->setStatus(_otherStatus);
 
-  // Find intersecting ways
-  std::vector<long> intersectIds = pMap->getIndex().findWays(env);
+  // Get our roundabout's envelope
+  geos::geom::Envelope rndEnv = _roundaboutWay->getEnvelopeInternal(pMap);
 
-  // Find intersecting points
+  // Find ways that intersect the envelope
+  std::vector<long> intersectIds = pMap->getIndex().findWays(rndEnv);
+
+  // Calculate intersection points of crossing ways
   ElementConverter converter(pMap);
   GeomPtr pRndGeo = converter.convertToGeometry(_roundaboutWay);
   for (size_t i = 0; i < intersectIds.size(); i++)
   {
     WayPtr pWay = pMap->getWay(intersectIds[i]);
-    GeomPtr pWayGeo = converter.convertToGeometry(pWay);
 
+    if (pWay->getStatus() == _status)
+      continue; // Bail if this is the ref data
+
+    GeomPtr pWayGeo = converter.convertToGeometry(pWay);
     if (pRndGeo->intersects(pWayGeo.get()))
     {
+      // Make list of waylocations
+      std::vector<WayLocation> splitPoints;
       geos::geom::Geometry * pIntersect = pRndGeo->intersection(pWayGeo.get());
       geos::geom::CoordinateSequence *pCoords = pIntersect->getCoordinates();
-      for (size_t j = 0; j < pCoords->getSize(); j++)
+
+      // We are only interested in ways that intersect the geometry once or
+      // twice. More than that is situation we are not prepared to handle.
+      size_t numIntersects = pCoords->getSize();
+      if (numIntersects > 0 && numIntersects < 3)
       {
-        geos::geom::Coordinate coord = pCoords->getAt(j);
+        for (size_t j = 0; j < pCoords->getSize(); j++)
+        {
+          // Get intersection
+          geos::geom::Coordinate coord = pCoords->getAt(j);
 
-        // Make a node
-        NodePtr pNode(new Node(_status, pMap->createNextNodeId(), coord, 15));
-        pMap->addNode(pNode);
+          WayLocation w = LocationOfPoint::locate(pMap, pWay, coord);
+          splitPoints.push_back(w);
+        }
 
-        // Add to both ways
-        _roundaboutWay->addNode(pNode->getId());
-        pWay->addNode(pNode->getId());
+        // Sort way locations really quick
+        std::sort(splitPoints.begin(), splitPoints.end());
+
+        // Get split ways
+        WaySplitter splitter(pMap, pWay);
+        std::vector<WayPtr> newWays = splitter.createSplits(splitPoints);
+
+        // Now what? Need to throw away the "interior" splits, and replace
+        // with wheel spokes.
+        bool replace = false;
+        for (size_t j = 0; j < newWays.size(); j++)
+        {
+          if (newWays[j])
+          {
+            geos::geom::Coordinate midpoint = getCentroid(pMap, newWays[j]);
+
+            // If the midpoint of the split way is outside of our roundabout
+            // geometry, we want to keep it. Otherwise, let it disappear.
+            if (!rndEnv.contains(midpoint))
+            {
+              pMap->addWay(newWays[j]);
+
+              // Now make connector way
+              WayPtr pWay(new Way(_otherStatus,
+                                  pMap->createNextWayId(),
+                                  15));
+              pWay->addNode(pCenterNode->getId());
+              pWay->setTag("highway", "unclassified");
+              pWay->setTag("hoot:special", "roundabout_connector");
+
+              // Take the new way. Whichever is closest, first node or last,
+              // connect it to our center point.
+              NodePtr pFirstNode = pMap->getNode(newWays[j]->getFirstNodeId());
+              NodePtr pLastNode = pMap->getNode(newWays[j]->getLastNodeId());
+
+              double firstD = pFirstNode->toCoordinate().distance(pCenterNode->toCoordinate());
+              double lastD = pLastNode->toCoordinate().distance(pCenterNode->toCoordinate());
+
+              // Connect to center node
+              if (firstD < lastD)
+              {
+                pWay->addNode(pFirstNode->getId());
+              }
+              else
+              {
+                pWay->addNode(pLastNode->getId());
+              }
+              pMap->addWay(pWay);
+              replace = true;
+            }
+          }
+        }
+
+        // Remove the original way if it's been split
+        if (newWays.size() > 0 && replace)
+        {
+          // Remove pWay
+          RemoveWayOp::removeWayFully(pMap, pWay->getId());
+          pMap->addNode(pCenterNode);
+        }
       }
     }
   }
@@ -146,9 +243,6 @@ void Roundabout::connectCrossingWays(boost::shared_ptr<OsmMap> pMap)
  */
 void Roundabout::removeRoundabout(boost::shared_ptr<OsmMap> pMap)
 {
-  // First, take care of ways that may cross the roundabout, but not connect
-  connectCrossingWays(pMap);
-
   // Find our connecting nodes & extra nodes.
   std::set<long> connectingNodeIDs;
   std::set<long> extraNodeIDs;
@@ -166,7 +260,7 @@ void Roundabout::removeRoundabout(boost::shared_ptr<OsmMap> pMap)
   }
 
   // Find our center coord...
-  _pCenterNode = getCenter(pMap);
+  _pCenterNode = getNewCenter(pMap);
 
   // Remove roundabout way & extra nodes
   RemoveWayOp::removeWayFully(pMap, _roundaboutWay->getId());
