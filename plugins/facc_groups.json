@@ -1,0 +1,50 @@
+{
+  "A": {
+    "title": "Culture",
+    "icon": "presets/sightseeing/museum.svg"
+  },
+  "B": {
+    "title": "Hydrography",
+    "icon": "presets/nautical/waterway_river.svg"
+  },
+  "C": {
+    "title": "Hypsography",
+    "icon": "presets/landmark/peak.svg"
+  },
+  "D": {
+    "title": "Physiography",
+    "icon": "presets/landmark/mountain_pass.svg"
+  },
+  "E": {
+    "title": "Vegetation",
+    "icon": "presets/landmark/trees.svg"
+  },
+  "F": {
+    "title": "Demarcation",
+    "icon": "presets/barrier/lift_gate.svg"
+  },
+  "G": {
+    "title": "Aeronautical Information",
+    "icon": "presets/transport/airport.svg"
+  },
+  "I": {
+    "title": "Cadastral",
+    "icon": "presets/misc/boundaries.svg"
+  },
+  "N": {
+    "title": "Area of Numerous (Aon)",
+    "icon": "presets/landuse/basin.svg"
+  },
+  "S": {
+    "title": "Special Use (Dataset-specific)",
+    "icon": "presets/sightseeing/attraction.svg"
+  },
+  "T": {  
+    "title": "Pump",
+    "icon": "presets/accommodation/water.svg"
+  },
+  "Z": {
+    "title": "General",
+    "icon": "presets/place/locality.svg"
+  }
+}
