@@ -216,6 +216,16 @@ public:
     rawRulesDeriver.setSortParallelCount(1);
     rawRulesDeriver.setTranslateAllNamesToEnglish(true);
 
+    try
+    {
+      rawRulesDeriver.setElementFilter("hoot::AreaCriterion");
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.contains("Invalid filter type"));
+
     inputs.clear();
     inputs.append(inDir() + "/yemen-crop-2.osm.pbf");
     translationScripts.clear();

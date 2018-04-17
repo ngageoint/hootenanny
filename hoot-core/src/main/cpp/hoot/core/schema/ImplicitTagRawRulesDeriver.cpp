@@ -76,10 +76,17 @@ void ImplicitTagRawRulesDeriver::setConfiguration(const Settings& conf)
   setElementFilter(options.getImplicitTaggingElementFilter());
 }
 
-void ImplicitTagRawRulesDeriver::setElementFilter(QString filter)
+void ImplicitTagRawRulesDeriver::setElementFilter(QString filterName)
 {
-  _elementFilter.reset(
-    Factory::getInstance().constructObject<ImplicitTagEligibleCriterion>(filter));
+  ElementCriterion* filter = Factory::getInstance().constructObject<ElementCriterion>(filterName);
+  if (dynamic_cast<ImplicitTagEligibleCriterion*>(filter) != 0)
+  {
+    _elementFilter.reset(dynamic_cast<ImplicitTagEligibleCriterion*>(filter));
+  }
+  else
+  {
+    throw IllegalArgumentException("Invalid filter type: " + filterName);
+  }
 }
 
 void ImplicitTagRawRulesDeriver::_init()

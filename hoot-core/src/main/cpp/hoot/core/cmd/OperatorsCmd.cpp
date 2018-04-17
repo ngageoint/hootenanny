@@ -79,11 +79,11 @@ public:
     std::sort(cmds.begin(), cmds.end(), operatorNameComparator);
     for (size_t i = 0; i < cmds.size(); i++)
     {
+      LOG_VARD(cmds[i]);
       boost::shared_ptr<Operator> c(
         Factory::getInstance().constructObject<Operator>(cmds[i]));
       if (!c->getDescription().isEmpty())
       {
-        LOG_VARD(cmds[i]);
         const QString name = QString::fromStdString(cmds[i]).replace("hoot::", "");
         const int indentAfterName = maxNameSize - name.size();
         const int indentAfterType = maxTypeSize - operatorType.size();
