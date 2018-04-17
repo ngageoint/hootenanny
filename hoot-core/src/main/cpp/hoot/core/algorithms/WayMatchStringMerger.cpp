@@ -45,9 +45,9 @@ QString WayMatchStringMerger::SublineMapping::toString() const
   return QString("{start: %1, end: %2, newWay1: %3, way2: %4, subline2: %5, newWay2: %6}")
     .arg(hoot::toString(_start))
     .arg(hoot::toString(_end))
-    .arg(hoot::toString(newWay1 ? newWay1->getElementId() : ElementId()))
-    .arg(hoot::toString(way2 ? way2->getElementId() : ElementId()))
-    .arg(hoot::toString(subline2))
+    .arg(hoot::toString(_newWay1 ? _newWay1->getElementId() : ElementId()))
+    .arg(hoot::toString(_way2 ? _way2->getElementId() : ElementId()))
+    .arg(hoot::toString(_subline2))
     .arg(_newWay2 ? hoot::toString(_newWay2->getElementId()) : "<empty>");
 }
 
@@ -107,7 +107,7 @@ void WayMatchStringMerger::_createWayMappings(WayLocation splitStart, WayLocatio
 
   SublineMappingPtr lastSm(new SublineMapping());
   lastSm->setStart1(splitStart);
-  lastSm->way2 = way2;
+  lastSm->setWay2(way2);
 
   int i = 0;
   // go through the list till we find the starting way
@@ -125,7 +125,7 @@ void WayMatchStringMerger::_createWayMappings(WayLocation splitStart, WayLocatio
     {
       lastSm.reset(new SublineMapping());
       lastSm->setStart1(ws1->at(i).getStart());
-      lastSm->way2 = way2;
+      lastSm->setWay2(way2);
     }
 
     // check our assumptions.
@@ -245,7 +245,7 @@ void WayMatchStringMerger::mergeIntersection(ElementId scrapNodeId)
   _moveNode(scrapNodeId, wl1);
 
   // notify _sublineMapping that way string 1 changed.
-  _rebuildWayString1();
+  _rebuildWayString(WayNumber::Way1);
 }
 
 void WayMatchStringMerger::mergeNode(ElementId scrapNode)
@@ -264,7 +264,7 @@ void WayMatchStringMerger::mergeNode(ElementId scrapNode)
   _moveNode(scrapNode, wl1);
 
   // notify _sublineMapping that way string 1 changed.
-  _rebuildWayString1();
+  _rebuildWayString(WayNumber::Way1);
 }
 
 void WayMatchStringMerger::mergeTags()
@@ -282,9 +282,9 @@ void WayMatchStringMerger::mergeTags()
     // merge the tags (order matters)
     Tags mergedTags =
       _tagMerger->mergeTags(
-        sm->newWay1->getTags(), sm->getNewWay2()->getTags(), sm->newWay1->getElementType());
+        sm->getNewWay1()->getTags(), sm->getNewWay2()->getTags(), sm->getNewWay1()->getElementType());
     // set the new tags.
-    sm->newWay1->setTags(mergedTags);
+    sm->getNewWay1()->setTags(mergedTags);
   }
 }
 
@@ -342,49 +342,24 @@ void WayMatchStringMerger::_moveNode(ElementId scrapNodeId, WayLocation wl1)
   }
 }
 
-void WayMatchStringMerger::_rebuildWayString1()
+void WayMatchStringMerger::_rebuildWayString(WayNumber way)
 {
-  WayStringPtr ws1(new WayString());
+  WayStringPtr ws(new WayString());
 
   for (int i = 0; i < _sublineMappingOrder.size(); ++i)
   {
-    WayPtr w1 = _sublineMappingOrder[i]->newWay1;
-    if (_sublineMappingOrder[i]->getStart1() <= _sublineMappingOrder[i]->getEnd1())
+    WayPtr w = _sublineMappingOrder[i]->getNewWay(way);
+    if (_sublineMappingOrder[i]->getStart(way) <= _sublineMappingOrder[i]->getEnd(way))
     {
-      ws1->append(WaySubline(WayLocation(_map, w1, 0.0), WayLocation::createAtEndOfWay(_map, w1)));
+      ws->append(WaySubline(WayLocation(_map, w, 0.0), WayLocation::createAtEndOfWay(_map, w)));
     }
     else
     {
-      ws1->append(WaySubline(WayLocation::createAtEndOfWay(_map, w1), WayLocation(_map, w1, 0.0)));
+      ws->append(WaySubline(WayLocation::createAtEndOfWay(_map, w), WayLocation(_map, w, 0.0)));
     }
   }
 
-  _mapping->setWayString1(ws1);
-}
-
-void WayMatchStringMerger::_rebuildWayString2()
-{
-  WayStringPtr ws2(new WayString());
-
-  LOG_VART(_sublineMappingOrder);
-
-  for (int i = 0; i < _sublineMappingOrder.size(); ++i)
-  {
-    WayPtr w2 = _sublineMappingOrder[i]->getNewWay2();
-    assert(w2);
-    if (_sublineMappingOrder[i]->getStart2() <= _sublineMappingOrder[i]->getEnd2())
-    {
-      ws2->append(WaySubline(WayLocation(_map, w2, 0.0), WayLocation::createAtEndOfWay(_map, w2)));
-    }
-    else
-    {
-      ws2->append(WaySubline(WayLocation::createAtEndOfWay(_map, w2), WayLocation(_map, w2, 0.0)));
-    }
-  }
-
-  LOG_VART(ws2);
-
-  _mapping->setWayString2(ws2);
+  _mapping->setWayString(way, ws);
 }
 
 void WayMatchStringMerger::replaceScraps()
@@ -398,7 +373,7 @@ void WayMatchStringMerger::replaceScraps()
 
   foreach (SublineMappingPtr sm, _sublineMappingOrder)
   {
-    ElementPtr w1 = _map->getElement(sm->newWay1->getElementId());
+    ElementPtr w1 = _map->getElement(sm->getNewWay1()->getElementId());
     LOG_VART(w1->getElementId());
     LOG_VART(w1->getStatus());
     WayPtr w2 = _map->getWay(sm->getNewWay2()->getId());
@@ -434,7 +409,7 @@ void WayMatchStringMerger::setKeeperStatus(Status s)
   foreach (SublineMappingPtr sm, _sublineMappingOrder)
   {
     // set the new status.
-    sm->newWay1->setStatus(s);
+    sm->getNewWay1()->setStatus(s);
   }
 }
 

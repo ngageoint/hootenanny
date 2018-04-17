@@ -33,6 +33,17 @@ namespace hoot
 {
 
 /**
+ * Enumeration for use with matches and mappings that contain two ways.  There is a lot of duplication
+ * of functions (i.e. getWayString1() and getWayString2() below) that can be accessed more generically
+ * by using WayNumber enum as a parameter in said functions
+ */
+enum WayNumber
+{
+  Way1 = 1,
+  Way2
+};
+
+/**
  * Maintains a mapping from one waystring to another. This allows the caller to get a corresponding
  * WayLocation on WayString1 for a WayLocation on WayString2, or vice versa.
  *
@@ -55,8 +66,8 @@ public:
   WayMatchStringMapping() {}
 
   virtual WayStringPtr getWayString1() = 0;
-
   virtual WayStringPtr getWayString2() = 0;
+  WayStringPtr getWayString(WayNumber way) { return (way == WayNumber::Way1) ? getWayString1() : getWayString2(); }
 
   /**
    * @param preferedEid Prefer to use this element ID if possible. (e.g. if the mapped point falls
@@ -71,8 +82,8 @@ public:
   virtual WayLocation map2To1(WayLocation l2, ElementId preferedEid = ElementId()) = 0;
 
   virtual void setWayString1(const WayStringPtr& ws1) = 0;
-
   virtual void setWayString2(const WayStringPtr& ws2) = 0;
+  void setWayString(WayNumber way, const WayStringPtr& ws) { (way == WayNumber::Way1) ? setWayString1(ws) : setWayString2(ws); }
 
 };
 
