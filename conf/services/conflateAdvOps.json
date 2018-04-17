@@ -159,8 +159,8 @@
             {
                 "id":"implicit_type_tagger",
                 "elem_type":"checkbox",
-                "description":"Add missing type tags to input data implied from feature name",
-                "name":"Type Tagger",
+                "description":"Add missing type tags to input data implied from the feature name",
+                "name":"Add Missing Type Tags",
                 "hoot_val":"hoot::ImplicitPoiPolygonTypeTagger",
                 "defaultvalue":"false"
             }
