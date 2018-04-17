@@ -55,6 +55,7 @@ campground	tourism=camp_site
 campsite	tourism=camp_site
 candies	amenity=restaurant
 car parts	shop=car_parts
+car rental	amenity=car_rental
 carport	parking=carports
 car repair	shop=car_repair
 cathedral	amenity=place_of_worship
@@ -124,6 +125,8 @@ football	sport=football
 football field	leisure=pitch
 footwear	shop=shoes
 forestry center	office=forestry
+# probably need to move fort to the word ignore list
+fort	historic=fort
 frisbee golf course	sport=disc_golf
 frozen yogurt	amenity=restaurant
 education center	amenity=school
@@ -260,6 +263,8 @@ steakhouse	amenity=restaurant
 steam laundry	shop=dry_cleaning
 strip club	amenity=stripclub
 substation	substation=yes
+# putting this to counteract subway restaurant in the db; possibly need a better way to handle
+subway	railway=subway
 sub station	substation=yes
 #TODO: this should be amenity=restaurant, cusine=sushi
 sushi	amenity=restaurant

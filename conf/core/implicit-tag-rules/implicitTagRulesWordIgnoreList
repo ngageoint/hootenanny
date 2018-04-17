@@ -1,4 +1,5 @@
-# This file contains exact match words in names to always ignore (longer phrases containing these words will not be ignored).
+# This file contains exact match words in names to always ignore (longer phrases containing these words will not be ignored), usually because
+# they are too common and/or often have multiple meanings/applications.
 # Use this list to fine tune tagging rules behavior based on the auto-generated rules database.
 # keep list alphabetized and in lower case
 
@@ -13,7 +14,10 @@ beach
 bed
 before
 bin
+block
+boat
 boutique
+box
 building
 buildings
 bureau
@@ -35,8 +39,11 @@ country
 course
 court
 cross
+dairy
 dean
 department
+depot
+discount
 district
 dry
 education
@@ -60,6 +67,7 @@ gate
 general
 gold
 government
+ground
 guest
 hall
 health
@@ -74,16 +82,20 @@ information
 inlet
 institute
 island
+junction
+landing
 lane
 life
 light
 lot
 mini
+motor
 mud lake
 municipal
 national
 neighborhood
 number historical
+ocean
 office historical
 oil
 parish
@@ -92,22 +104,27 @@ parts
 pet
 place
 plant
+platform
 plaza
 point
 post
 public
 recreation
+rental
 repair
 rescue
 reservoir number
 residence
+rest
 ride
 ring
 road
 rock
+sales
 sea
 service
 service station
+sport
 sports
 stand
 state
@@ -117,11 +134,16 @@ store
 street
 strip
 studio
+subdivision
 terminal
 the
+the box
 town
+track
 tree
 under
 village
 water
 wood
+zone
+

@@ -4,8 +4,10 @@
 # keep list alphabetized and in lower case
 # TODO: is this list still needed?
 abandoned:place=populated
+bridge=yes
 capital=yes
 historic=yes
+junction=yes
 place=county
 place=hamlet
 place=locality
