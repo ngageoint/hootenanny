@@ -180,6 +180,7 @@ music concourse	amenity=auditorium
 nail spa	beauty=nails
 natural area	leisure=park
 neighborhood center	building=civic
+net cafe	amenity=internet_cafe
 night club	amenity=club
 nightclub	amenity=club
 #TODO: this should be amenity=kindergarten, nursery=yes

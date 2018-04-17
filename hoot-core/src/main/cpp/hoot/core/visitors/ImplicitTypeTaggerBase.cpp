@@ -242,26 +242,9 @@ void ImplicitTypeTaggerBase::visit(const ElementPtr& e)
 
         //bit of hack...to handle a situation where features have been incorrectly tagged;
         //the argument could be made to just correct the input data instead
-        if (tagsToAdd.isEmpty() && PoiPolygonTypeScoreExtractor::isPark(e))
+        if (tagsToAdd.isEmpty())
         {
-          for (int i = 0; i < filteredNames.size(); i++)
-          {
-            const QString name = filteredNames.at(i).toLower();
-            LOG_VART(name);
-            if (name.endsWith("play area") || name.endsWith("play areas") ||
-                name.endsWith("playground"))
-            {
-              LOG_TRACE("Using custom tagging rule...");
-              tagsToAdd.appendValue("leisure", "playground");
-              break;
-            }
-            else if (name.endsWith("golf course"))
-            {
-              LOG_TRACE("Using custom tagging rule...");
-              tagsToAdd.appendValue("leisure", "golf_course");
-              break;
-            }
-          }
+          tagsToAdd = _applyCustomRules(e, filteredNames);
         }
 
         if (!tagsToAdd.isEmpty())
@@ -278,6 +261,32 @@ void ImplicitTypeTaggerBase::visit(const ElementPtr& e)
         "Parsed " << StringUtils::formatLargeNumber(_numFeaturesParsed) << " features from input.");
     }
   }
+}
+
+Tags ImplicitTypeTaggerBase::_applyCustomRules(const ElementPtr& e, const QStringList filteredNames)
+{
+  Tags tagsToAdd;
+  if (PoiPolygonTypeScoreExtractor::isPark(e))
+  {
+    for (int i = 0; i < filteredNames.size(); i++)
+    {
+      const QString name = filteredNames.at(i).toLower();
+      LOG_VART(name);
+      if (name.endsWith("play area") || name.endsWith("play areas") || name.endsWith("playground"))
+      {
+        LOG_TRACE("Using custom tagging rule...");
+        tagsToAdd.appendValue("leisure", "playground");
+        break;
+      }
+      else if (name.endsWith("golf course"))
+      {
+        LOG_TRACE("Using custom tagging rule...");
+        tagsToAdd.appendValue("leisure", "golf_course");
+        break;
+      }
+    }
+  }
+  return tagsToAdd;
 }
 
 QStringList ImplicitTypeTaggerBase::_cleanNames(Tags& tags)

@@ -1618,14 +1618,14 @@ bool OsmSchema::isArea(const Tags& t, ElementType type) const
 
 bool OsmSchema::containsTagFromList(const Tags& tags, const QStringList tagList)
 {
-  LOG_VARD(tagList.size());
+  LOG_VART(tagList.size());
   for (int i = 0; i < tagList.size(); i++)
   {
     QStringList tagParts = tagList.at(i).split("=");
     const QString key = tagParts[0];
-    LOG_VARD(key);
+    LOG_VART(key);
     const QString value = tagParts[1];
-    LOG_VARD(value);
+    LOG_VART(value);
     if ((value == "*" && tags.contains(key)) || (tags.get(key).toLower() == value))
     {
       return true;
@@ -1642,10 +1642,10 @@ bool OsmSchema::isPoiPolygonPoly(const ConstElementPtr& e, const QStringList tag
   //files
   if (containsTagFromList(tags, tagIgnoreList))
   {
-    LOG_DEBUG("Contains tag from tag ignore list");
+    LOG_TRACE("Contains tag from tag ignore list");
     return false;
   }
-  LOG_DEBUG("Does not contain tag from tag ignore list");
+  LOG_TRACE("Does not contain tag from tag ignore list");
 
   const bool inABuildingOrPoiCategory =
     getCategories(tags).intersects(OsmSchemaCategory::building() | OsmSchemaCategory::poi());
@@ -1665,10 +1665,10 @@ bool OsmSchema::isPoiPolygonPoi(const ConstElementPtr& e, const QStringList tagI
   //see note in isPoiPolygonPoly
   if (containsTagFromList(tags, tagIgnoreList))
   {
-    LOG_DEBUG("Contains tag from tag ignore list");
+    LOG_TRACE("Contains tag from tag ignore list");
     return false;
   }
-  LOG_DEBUG("Does not contain tag from tag ignore list");
+  LOG_TRACE("Does not contain tag from tag ignore list");
 
   const bool isNode = e->getElementType() == ElementType::Node;
   if (!isNode)

@@ -121,6 +121,8 @@ private:
     QStringList& nameTokensList, const Tags& elementTags, Tags& implicitlyDerivedTags,
     QSet<QString>& matchingWords, bool& wordsInvolvedInMultipleRules, bool& namesContainBuilding,
     bool& namesContainOffice);
+
+  Tags _applyCustomRules(const ElementPtr& e, const QStringList filteredNames);
 };
 
 }
