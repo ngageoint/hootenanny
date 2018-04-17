@@ -73,8 +73,6 @@ public:
 
   void setQuickSubset(bool quick) { _quick = quick; }
 
-  virtual QString getName() const { return "Calculate Map Statistics"; }
-
   virtual QString getDescription() const { return "Calculates map statistics"; }
 
 private:

@@ -59,8 +59,6 @@ public:
   // Handle const pointers to const
   static Meters getWorstCircularError(const ConstOsmMapPtr& map);
 
-  virtual QString getName() const { return "Find Worst Circular Error"; }
-
   virtual QString getDescription() const
   { return "Determines the highest circular error value in a map"; }
 

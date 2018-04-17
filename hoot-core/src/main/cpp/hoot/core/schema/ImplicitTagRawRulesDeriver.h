@@ -81,6 +81,7 @@ public:
   void setKeepTempFiles(bool keep) { _keepTempFiles = keep; }
   void setTempFileDir(QString dir) { _tempFileDir = dir; }
   void setTranslateAllNamesToEnglish(bool translate) { _translateAllNamesToEnglish = translate; }
+  void setElementFilter(QString filter);
 
 private:
 

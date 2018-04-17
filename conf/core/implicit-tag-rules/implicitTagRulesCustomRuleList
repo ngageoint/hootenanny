@@ -194,6 +194,7 @@ pasta	amenity=restaurant
 pastry	amenity=restaurant
 pastries	amenity=restaurant
 petroleumeum	amenity=fuel
+petroleumeum station	amenity=fuel
 pet shop	shop=pet
 pho	amenity=restaurant
 picnic area	tourism=picnic_site

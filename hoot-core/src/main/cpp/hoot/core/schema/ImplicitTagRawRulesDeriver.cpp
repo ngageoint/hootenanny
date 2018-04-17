@@ -73,9 +73,13 @@ void ImplicitTagRawRulesDeriver::setConfiguration(const Settings& conf)
   setKeepTempFiles(options.getImplicitTaggingKeepTempFiles());
   setTempFileDir(options.getApidbBulkInserterTempFileDir());
   setTranslateAllNamesToEnglish(options.getImplicitTaggingTranslateAllNamesToEnglish());
+  setElementFilter(options.getImplicitTaggingElementFilter());
+}
+
+void ImplicitTagRawRulesDeriver::setElementFilter(QString filter)
+{
   _elementFilter.reset(
-    Factory::getInstance().constructObject<ImplicitTagEligibleCriterion>(
-      options.getImplicitTaggingElementFilter()));
+    Factory::getInstance().constructObject<ImplicitTagEligibleCriterion>(filter));
 }
 
 void ImplicitTagRawRulesDeriver::_init()

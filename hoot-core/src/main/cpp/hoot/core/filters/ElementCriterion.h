@@ -110,6 +110,7 @@ public:
   virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const { return !isFiltered(e); }
 
 protected:
+
   virtual bool isFiltered(const Element& /*e*/) const { throw NotImplementedException(); }
 };
 

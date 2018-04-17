@@ -51,8 +51,6 @@ public:
 
   virtual void visit(const boost::shared_ptr<Element>& e);
 
-  virtual QString getName() const { return "Project Map To Geographic"; }
-
   virtual QString getDescription() const
   { return "Projects features to a geographic coordinate system"; }
 

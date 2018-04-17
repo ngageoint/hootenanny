@@ -2,7 +2,7 @@
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="15.3697127" minlon="44.2208847" maxlat="15.3697869" maxlon="44.2210439"/>
     <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3697869000000011" lon="44.2210438999999980">
-        <tag k="hoot:implicitTags:tagsAdded" v="Added 1 implicitly derived tag(s) based on: petroleumeum; tags added: amenity = fuel"/>
+        <tag k="hoot:implicitTags:tagsAdded" v="Added 1 implicitly derived tag(s) based on: petroleumeum station; tags added: amenity = fuel"/>
         <tag k="hoot:hash" v="sha1sum:6ebb6c918e24308a1ba8814b46be37b3b1ec0ae4"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="REVIEW" v="none"/>

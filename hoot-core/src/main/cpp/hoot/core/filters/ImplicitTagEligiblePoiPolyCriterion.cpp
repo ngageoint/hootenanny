@@ -37,7 +37,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementCriterion, ImplicitTagEligiblePoiPolyCriterion)
+HOOT_FACTORY_REGISTER(ImplicitTagEligibleCriterion, ImplicitTagEligiblePoiPolyCriterion)
 
 bool ImplicitTagEligiblePoiPolyCriterion::isSatisfied(
   const boost::shared_ptr<const Element>& element) const

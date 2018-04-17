@@ -54,8 +54,6 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  virtual QString getName() const { return "Rename Tag Keys"; }
-
   virtual QString getDescription() const
   { return "Renames all keys for all elements with the specified key to a new key"; }
 

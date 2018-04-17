@@ -50,8 +50,6 @@ public:
 
   virtual void visit(const ElementPtr& e);
 
-  virtual QString getName() const { return "Remove Invalid Relations"; }
-
   virtual QString getDescription() const
   {
     return "Removes duplicate ways in relations and invalid relations";
