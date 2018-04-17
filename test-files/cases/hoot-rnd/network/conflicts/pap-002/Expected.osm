@@ -1845,40 +1845,25 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1"/>
     </node>
-    <way visible="true" id="-4928" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-13"/>
-        <nd ref="-184"/>
-        <nd ref="-13"/>
-        <tag k="source:name" v="DMA Topo Map"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="osm;osm"/>
-        <tag k="uuid" v="{bab8f8ce-74df-4d0e-bd0a-e08c8894f272}"/>
-        <tag k="name" v="Ruelle Bergeaud"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-4928"/>
-    </way>
     <way visible="true" id="-4927" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-315"/>
         <nd ref="-186"/>
         <nd ref="-185"/>
         <nd ref="-13"/>
+        <nd ref="-184"/>
         <tag k="width:minimum_traveled_way" v="5"/>
         <tag k="source" v="osm;mgcp"/>
         <tag k="condition" v="functional"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="name" v="Ruelle Bergeaud"/>
         <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="seasonal" v="no"/>
         <tag k="source:name" v="DMA Topo Map;very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="surface" v="paved"/>
         <tag k="median" v="no"/>
         <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
         <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.139Z"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="highway" v="residential"/>
@@ -1889,7 +1874,8 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-4927"/>
     </way>
-    <way visible="true" id="-4903" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-4902" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-296"/>
         <nd ref="-2690"/>
         <nd ref="-292"/>
         <tag k="width:minimum_traveled_way" v="5"/>
@@ -1903,37 +1889,12 @@
         <tag k="median" v="no"/>
         <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
         <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.140Z"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.141Z;2016-03-16T16:46:59.140Z"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{021473f4-0d74-43d3-b3a3-89166d396342};{{4f45634d-1799-4f6c-810d-5d75c1db0b39}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-4903"/>
-    </way>
-    <way visible="true" id="-4902" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-296"/>
-        <nd ref="-2690"/>
-        <tag k="width:minimum_traveled_way" v="5"/>
-        <tag k="source" v="osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="lanes" v="2"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.141Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="highway" v="residential"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{021473f4-0d74-43d3-b3a3-89166d396342};{{7041c5e2-80b9-4926-8a5c-7a3ba8fd19da}}"/>
+        <tag k="uuid" v="{021473f4-0d74-43d3-b3a3-89166d396342};{{7041c5e2-80b9-4926-8a5c-7a3ba8fd19da}};{{4f45634d-1799-4f6c-810d-5d75c1db0b39}}"/>
         <tag k="location" v="overground"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>

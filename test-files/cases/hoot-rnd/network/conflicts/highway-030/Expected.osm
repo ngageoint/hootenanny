@@ -157,6 +157,20 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1"/>
     </node>
+    <way visible="true" id="-215" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-7"/>
+        <nd ref="-95"/>
+        <nd ref="-8"/>
+        <nd ref="-9"/>
+        <nd ref="-10"/>
+        <nd ref="-26"/>
+        <tag k="alt_name" v="24th St NW"/>
+        <tag k="name" v="24TH ST NW"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="hoot:id" v="-215"/>
+    </way>
     <way visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-13"/>
         <nd ref="-42"/>
@@ -224,11 +238,6 @@
         <nd ref="-5"/>
         <nd ref="-6"/>
         <nd ref="-7"/>
-        <nd ref="-95"/>
-        <nd ref="-8"/>
-        <nd ref="-9"/>
-        <nd ref="-10"/>
-        <nd ref="-26"/>
         <tag k="alt_name" v="24th St NW"/>
         <tag k="name" v="24TH ST NW"/>
         <tag k="highway" v="road"/>
