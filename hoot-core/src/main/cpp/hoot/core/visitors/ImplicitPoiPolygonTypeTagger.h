@@ -25,11 +25,11 @@
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef IMPLICIT_POI_POLYGON_TAGGER_H
-#define IMPLICIT_POI_POLYGON_TAGGER_H
+#ifndef IMPLICIT_POI_POLYGON_TYPE_TAGGER_H
+#define IMPLICIT_POI_POLYGON_TYPE_TAGGER_H
 
 // hoot
-#include <hoot/core/visitors/ImplicitTaggerBase.h>
+#include <hoot/core/visitors/ImplicitTypeTaggerBase.h>
 #include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPoiCriterion.h>
 #include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPolyCriterion.h>
 
@@ -37,18 +37,16 @@ namespace hoot
 {
 
 /**
- * Adds tags implicitly derived from POI names to POIs and polygons
+ * Adds tags implicitly derived from feature names to POIs and polygons
  */
-class ImplicitPoiPolygonTagger : public ImplicitTaggerBase
+class ImplicitPoiPolygonTypeTagger : public ImplicitTypeTaggerBase
 {
 public:
 
-  static std::string className() { return "hoot::ImplicitPoiPolygonTagger"; }
+  static std::string className() { return "hoot::ImplicitPoiPolygonTypeTagger"; }
 
-  ImplicitPoiPolygonTagger();
-  ImplicitPoiPolygonTagger(const QString databasePath);
-
-  virtual QString getName() const { return "Implicit POI/Polygon Tagger"; }
+  ImplicitPoiPolygonTypeTagger();
+  ImplicitPoiPolygonTypeTagger(const QString databasePath);
 
   virtual QString getDescription() const
   { return "Adds tags to POIs and polygons implicitly derived from their names"; }
@@ -70,4 +68,4 @@ private:
 
 }
 
-#endif // IMPLICIT_POI_POLYGON_TAGGER_H
+#endif // IMPLICIT_POI_POLYGON_TYPE_TAGGER_H

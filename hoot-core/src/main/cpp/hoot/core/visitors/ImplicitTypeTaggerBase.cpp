@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "ImplicitTaggerBase.h"
+#include "ImplicitTypeTaggerBase.h"
 
 #include <hoot/core/algorithms/string/StringTokenizer.h>
 #include <hoot/core/schema/OsmSchema.h>
@@ -44,7 +44,7 @@
 namespace hoot
 {
 
-ImplicitTaggerBase::ImplicitTaggerBase() :
+ImplicitTypeTaggerBase::ImplicitTypeTaggerBase() :
 _allowTaggingSpecificFeatures(true),
 _elementIsASpecificFeature(false),
 _numFeaturesModified(0),
@@ -60,7 +60,7 @@ _matchEndOfNameSingleTokenFirst(true)
 
 }
 
-ImplicitTaggerBase::ImplicitTaggerBase(const QString /*databasePath*/) :
+ImplicitTypeTaggerBase::ImplicitTypeTaggerBase(const QString /*databasePath*/) :
 _allowTaggingSpecificFeatures(true),
 _elementIsASpecificFeature(false),
 _numFeaturesModified(0),
@@ -76,7 +76,7 @@ _matchEndOfNameSingleTokenFirst(true)
 
 }
 
-ImplicitTaggerBase::~ImplicitTaggerBase()
+ImplicitTypeTaggerBase::~ImplicitTypeTaggerBase()
 {
   if (_ruleReader)
   {
@@ -107,7 +107,7 @@ ImplicitTaggerBase::~ImplicitTaggerBase()
   }
 }
 
-void ImplicitTaggerBase::setConfiguration(const Settings& conf)
+void ImplicitTypeTaggerBase::setConfiguration(const Settings& conf)
 {
   const ConfigOptions confOptions(conf);
 
@@ -125,7 +125,7 @@ bool caseInsensitiveLessThan(const QString s1, const QString s2)
   return s1.toLower() < s2.toLower();
 }
 
-void ImplicitTaggerBase::visit(const ElementPtr& e)
+void ImplicitTypeTaggerBase::visit(const ElementPtr& e)
 {
   if (_visitElement(e))
   {
@@ -280,7 +280,7 @@ void ImplicitTaggerBase::visit(const ElementPtr& e)
   }
 }
 
-QStringList ImplicitTaggerBase::_cleanNames(Tags& tags)
+QStringList ImplicitTypeTaggerBase::_cleanNames(Tags& tags)
 {
   //the normal hoot convention is to split the name tag on ';' into multiple names; bypassing that
   //here, as it seems to cause more harm to implicit tagging than good
@@ -319,8 +319,8 @@ QStringList ImplicitTaggerBase::_cleanNames(Tags& tags)
   return filteredNames;
 }
 
-QString ImplicitTaggerBase::_getEndOfNameToken(const QString name,
-                                               const QStringList nameTokensList) const
+QString ImplicitTypeTaggerBase::_getEndOfNameToken(const QString name,
+                                                   const QStringList nameTokensList) const
 {
   for (int i = 0; i < nameTokensList.size(); i++)
   {
@@ -333,7 +333,7 @@ QString ImplicitTaggerBase::_getEndOfNameToken(const QString name,
   return "";
 }
 
-void ImplicitTaggerBase::_getImplicitlyDerivedTagsFromMultipleNameTokens(
+void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromMultipleNameTokens(
   const QStringList names, const QStringList nameTokensList, const Tags& elementTags,
   Tags& implicitlyDerivedTags, QSet<QString>& matchingWords, bool& wordsInvolvedInMultipleRules)
 {
@@ -413,7 +413,7 @@ void ImplicitTaggerBase::_getImplicitlyDerivedTagsFromMultipleNameTokens(
   LOG_VARD(wordsInvolvedInMultipleRules);
 }
 
-void ImplicitTaggerBase::_getImplicitlyDerivedTagsFromSingleNameTokens(
+void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromSingleNameTokens(
   const QStringList names, QStringList& nameTokensList, const Tags& elementTags,
   Tags& implicitlyDerivedTags, QSet<QString>& matchingWords, bool& wordsInvolvedInMultipleRules,
   bool& namesContainBuilding, bool& namesContainOffice)
@@ -509,7 +509,7 @@ void ImplicitTaggerBase::_getImplicitlyDerivedTagsFromSingleNameTokens(
   }
 }
 
-void ImplicitTaggerBase::_ensureCorrectTagSpecificity(const ElementPtr& e, Tags& tagsToAdd)
+void ImplicitTypeTaggerBase::_ensureCorrectTagSpecificity(const ElementPtr& e, Tags& tagsToAdd)
 {
   Tags updatedTags;
   bool tagsAdded = false;
@@ -567,8 +567,8 @@ void ImplicitTaggerBase::_ensureCorrectTagSpecificity(const ElementPtr& e, Tags&
   LOG_VARD(tagsToAdd);
 }
 
-void ImplicitTaggerBase::_updateElementForDuplicateMatch(const ElementPtr& e,
-                                                         const QSet<QString>& matchingWords)
+void ImplicitTypeTaggerBase::_updateElementForDuplicateMatch(const ElementPtr& e,
+                                                             const QSet<QString>& matchingWords)
 {
   QStringList matchingWordsList = matchingWords.toList();
   qSort(matchingWordsList.begin(), matchingWordsList.end(), caseInsensitiveLessThan);
@@ -586,8 +586,8 @@ void ImplicitTaggerBase::_updateElementForDuplicateMatch(const ElementPtr& e,
   }
 }
 
-void ImplicitTaggerBase::_addImplicitTags(const ElementPtr& e, const Tags& tagsToAdd,
-                                          const QSet<QString>& matchingWords)
+void ImplicitTypeTaggerBase::_addImplicitTags(const ElementPtr& e, const Tags& tagsToAdd,
+                                              const QSet<QString>& matchingWords)
 {
   //add implicit tags and associated metadata tags
   e->getTags().addTags(tagsToAdd);
@@ -635,7 +635,7 @@ void ImplicitTaggerBase::_addImplicitTags(const ElementPtr& e, const Tags& tagsT
   }
 }
 
-QStringList ImplicitTaggerBase::_getNameTokens(const QStringList names) const
+QStringList ImplicitTypeTaggerBase::_getNameTokens(const QStringList names) const
 {
   if (_translateAllNamesToEnglish)
   {

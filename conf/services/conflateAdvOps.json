@@ -155,6 +155,14 @@
                 "name":"Split Sharp Road Corners",
                 "hoot_val":"hoot::CornerSplitter",
                 "defaultvalue":"true"
+            },
+            {
+                "id":"implicit_type_tagger",
+                "elem_type":"checkbox",
+                "description":"Add missing type tags to input data implied from feature name",
+                "name":"Type Tagger",
+                "hoot_val":"hoot::ImplicitPoiPolygonTypeTagger",
+                "defaultvalue":"false"
             }
         ]
     },

@@ -951,9 +951,9 @@ value in the Hootenanny schema.
 === implicit.tagging.element.filter
 
 * Data Type: string
-* Default Value: `hoot::ImplicitTagEligibleCriterion`
+* Default Value: `hoot::ImplicitTagEligiblePoiPolyCriterion`
 
-filter class inheriting from hoot::ImplicitTagEligibleCriterion; The default,
+Filter class inheriting from hoot::ImplicitTagEligibleCriterion; The default,
 ImplicitTagEligiblePoiPolyCriterion, derives tag information from POIs, buildings, and areas.
 
 === implicit.tagging.keep.temp.files

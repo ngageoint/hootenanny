@@ -29,7 +29,7 @@
 #include "../TestUtils.h"
 #include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/visitors/ImplicitPoiTagger.h>
+#include <hoot/core/visitors/ImplicitPoiTypeTagger.h>
 #include <hoot/core/io/ImplicitTagRulesSqliteWriter.h>
 
 // Qt
@@ -38,9 +38,9 @@
 namespace hoot
 {
 
-class ImplicitPoiTaggerTest : public CppUnit::TestFixture
+class ImplicitPoiTypeTaggerTest : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(ImplicitPoiTaggerTest);
+  CPPUNIT_TEST_SUITE(ImplicitPoiTypeTaggerTest);
   //CPPUNIT_TEST(runBasicTest); //TODO: fix
   CPPUNIT_TEST(runDuplicateTagKeyTest);
   CPPUNIT_TEST(runLessSpecificImplicitTagTest);
@@ -49,8 +49,8 @@ class ImplicitPoiTaggerTest : public CppUnit::TestFixture
 
 public:
 
-  static QString inDir() { return "test-files/visitors/ImplicitPoiTaggerTest"; }
-  static QString outDir() { return "test-output/visitors/ImplicitPoiTaggerTest"; }
+  static QString inDir() { return "test-files/visitors/ImplicitPoiTypeTaggerTest"; }
+  static QString outDir() { return "test-output/visitors/ImplicitPoiTypeTaggerTest"; }
 
   void setUp()
   {
@@ -65,10 +65,10 @@ public:
   {
     //regenerate the db file
     const QString databaseOutFile =
-      outDir() + "/ImplicitPoiTaggerTest-runBasicTest-rules.sqlite";
+      outDir() + "/ImplicitPoiTypeTaggerTest-runBasicTest-rules.sqlite";
     ImplicitTagRulesSqliteWriter writer;
     writer.open(databaseOutFile);
-    writer.write("test-files/visitors/ImplicitPoiTaggerTest/runBasicTest-ruleWordParts");
+    writer.write("test-files/visitors/ImplicitPoiTypeTaggerTest/runBasicTest-ruleWordParts");
     writer.close();
 
     QString testJsonStr = QString::fromUtf8(
@@ -99,7 +99,7 @@ public:
     // the JSON parser doesn't handle exotic characters
     map->getNode(-5)->getTags()["alt_name"] = QString::fromUtf8("Şiḩḩī");
 
-    ImplicitPoiTagger uut(databaseOutFile);
+    ImplicitPoiTypeTagger uut(databaseOutFile);
     uut.setAddTopTagOnly(false);
     uut.setAllowWordsInvolvedInMultipleRules(false);
     uut.setAllowTaggingSpecificFeatures(true);
@@ -157,10 +157,10 @@ public:
   {
     //regenerate the db file
     const QString databaseOutFile =
-      outDir() + "/ImplicitPoiTaggerTest-runDuplicateTagKeyTest-rules.sqlite";
+      outDir() + "/ImplicitPoiTypeTaggerTest-runDuplicateTagKeyTest-rules.sqlite";
     ImplicitTagRulesSqliteWriter writer;
     writer.open(databaseOutFile);
-    writer.write("test-files/visitors/ImplicitPoiTaggerTest/runDuplicateTagKeyTest-ruleWordParts");
+    writer.write("test-files/visitors/ImplicitPoiTypeTaggerTest/runDuplicateTagKeyTest-ruleWordParts");
     writer.close();
 
     OsmMapPtr map(new OsmMap());
@@ -172,7 +172,7 @@ public:
     node->getTags()["amenity"] = "bank";
     map->addNode(node);
 
-    ImplicitPoiTagger uut(databaseOutFile);
+    ImplicitPoiTypeTagger uut(databaseOutFile);
     uut.setAddTopTagOnly(false);
     uut.setAllowWordsInvolvedInMultipleRules(false);
     uut.setAllowTaggingSpecificFeatures(true);
@@ -192,10 +192,10 @@ public:
   {
     //regenerate the db file
     const QString databaseOutFile =
-      outDir() + "/ImplicitPoiTaggerTest-runLessSpecificImplicitTagTest-rules.sqlite";
+      outDir() + "/ImplicitPoiTypeTaggerTest-runLessSpecificImplicitTagTest-rules.sqlite";
     ImplicitTagRulesSqliteWriter writer;
     writer.open(databaseOutFile);
-    writer.write("test-files/visitors/ImplicitPoiTaggerTest/runLessSpecificImplicitTagTest-ruleWordParts");
+    writer.write("test-files/visitors/ImplicitPoiTypeTaggerTest/runLessSpecificImplicitTagTest-ruleWordParts");
     writer.close();
 
     OsmMapPtr map(new OsmMap());
@@ -206,7 +206,7 @@ public:
     node->getTags()["amenity"] = "public_hall";
     map->addNode(node);
 
-    ImplicitPoiTagger uut(databaseOutFile);
+    ImplicitPoiTypeTagger uut(databaseOutFile);
     uut.setAddTopTagOnly(false);
     uut.setAllowWordsInvolvedInMultipleRules(false);
     uut.setAllowTaggingSpecificFeatures(true);
@@ -226,11 +226,11 @@ public:
   {
     //regenerate the db file
     const QString databaseOutFile =
-      outDir() + "/ImplicitPoiTaggerTest-runMoreSpecificImplicitTagTest-rules.sqlite";
+      outDir() + "/ImplicitPoiTypeTaggerTest-runMoreSpecificImplicitTagTest-rules.sqlite";
     ImplicitTagRulesSqliteWriter writer;
     writer.open(databaseOutFile);
     writer.write(
-      "test-files/visitors/ImplicitPoiTaggerTest/runMoreSpecificImplicitTagTest-ruleWordParts");
+      "test-files/visitors/ImplicitPoiTypeTaggerTest/runMoreSpecificImplicitTagTest-ruleWordParts");
     writer.close();
 
     OsmMapPtr map(new OsmMap());
@@ -241,7 +241,7 @@ public:
     node->getTags()["amenity"] = "hall";
     map->addNode(node);
 
-    ImplicitPoiTagger uut(databaseOutFile);
+    ImplicitPoiTypeTagger uut(databaseOutFile);
     uut.setAddTopTagOnly(false);
     uut.setAllowWordsInvolvedInMultipleRules(false);
     uut.setAllowTaggingSpecificFeatures(true);
@@ -259,6 +259,6 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ImplicitPoiTaggerTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ImplicitPoiTypeTaggerTest, "quick");
 
 }

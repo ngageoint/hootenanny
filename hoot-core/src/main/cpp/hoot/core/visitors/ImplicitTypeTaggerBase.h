@@ -25,8 +25,8 @@
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef IMPLICITTAGGERBASE_H
-#define IMPLICITTAGGERBASE_H
+#ifndef IMPLICITTYPETAGGERBASE_H
+#define IMPLICITTYPETAGGERBASE_H
 
 // hoot
 #include <hoot/core/elements/ElementVisitor.h>
@@ -37,15 +37,15 @@ namespace hoot
 {
 
 /**
- * Base class for implicit element taggers
+ * Base class for implicit element type taggers
  */
-class ImplicitTaggerBase : public ElementVisitor, public Configurable
+class ImplicitTypeTaggerBase : public ElementVisitor, public Configurable
 {
 public:
 
-  ImplicitTaggerBase();
-  ImplicitTaggerBase(const QString databasePath);
-  ~ImplicitTaggerBase();
+  ImplicitTypeTaggerBase();
+  ImplicitTypeTaggerBase(const QString databasePath);
+  ~ImplicitTypeTaggerBase();
 
   /**
    * Adds implicitly derived tags to an element
@@ -125,4 +125,4 @@ private:
 
 }
 
-#endif // IMPLICITTAGGERBASE_H
+#endif // IMPLICITTYPETAGGERBASE_H
