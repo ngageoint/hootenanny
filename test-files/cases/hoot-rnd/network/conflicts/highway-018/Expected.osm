@@ -75,7 +75,7 @@
         <tag k="highway" v="living_street"/>
         <tag k="lanes" v="1"/>
         <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-5"/>
     </way>

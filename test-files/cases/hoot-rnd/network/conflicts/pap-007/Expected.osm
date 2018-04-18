@@ -3103,7 +3103,7 @@
         <tag k="location" v="surface"/>
         <tag k="smoothness" v="intermediate"/>
         <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-101"/>
     </way>
@@ -3134,7 +3134,7 @@
         <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
         <tag k="uuid" v="{04371857-9646-4a0a-a3a2-84792edc3095};{{4c6565c4-9ac3-4175-a398-7633e498309d}}"/>
         <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-100"/>
     </way>
