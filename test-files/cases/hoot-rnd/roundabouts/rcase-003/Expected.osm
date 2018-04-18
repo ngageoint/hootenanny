@@ -185,23 +185,13 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1"/>
     </node>
-    <way visible="true" id="-159" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-158" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-38"/>
         <nd ref="-129"/>
         <nd ref="-34"/>
         <nd ref="-33"/>
         <nd ref="-32"/>
         <nd ref="-41"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source" v="Unknown"/>
-        <tag k="source:datetime" v="2017-06-07T15:16:56Z"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-159"/>
-    </way>
-    <way visible="true" id="-158" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-38"/>
-        <nd ref="-129"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="Unknown"/>
         <tag k="source:datetime" v="2017-06-07T15:16:56Z;2017-06-07T15:16:55Z"/>

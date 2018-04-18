@@ -333,7 +333,19 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1"/>
     </node>
-    <way visible="true" id="-158" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-157" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-30"/>
+        <nd ref="-28"/>
+        <nd ref="-27"/>
+        <nd ref="-26"/>
+        <nd ref="-25"/>
+        <nd ref="-24"/>
+        <nd ref="-23"/>
+        <nd ref="-22"/>
+        <nd ref="-21"/>
+        <nd ref="-20"/>
+        <nd ref="-19"/>
+        <nd ref="-18"/>
         <nd ref="-217"/>
         <nd ref="-17"/>
         <nd ref="-16"/>
@@ -379,7 +391,7 @@
         <tag k="location" v="surface"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-158"/>
+        <tag k="hoot:id" v="-157"/>
     </way>
     <way visible="true" id="-8" timestamp="2017-06-07T15:24:10Z" version="1" changeset="124">
         <nd ref="-59"/>
@@ -476,18 +488,6 @@
         <nd ref="-29"/>
         <nd ref="-54"/>
         <nd ref="-30"/>
-        <nd ref="-28"/>
-        <nd ref="-27"/>
-        <nd ref="-26"/>
-        <nd ref="-25"/>
-        <nd ref="-24"/>
-        <nd ref="-23"/>
-        <nd ref="-22"/>
-        <nd ref="-21"/>
-        <nd ref="-20"/>
-        <nd ref="-19"/>
-        <nd ref="-18"/>
-        <nd ref="-217"/>
         <tag k="width:minimum_traveled_way" v="8"/>
         <tag k="source" v="osm;mgcp"/>
         <tag k="condition" v="functional"/>

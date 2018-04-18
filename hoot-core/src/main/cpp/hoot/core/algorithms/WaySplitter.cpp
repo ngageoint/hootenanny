@@ -69,6 +69,7 @@ vector<WayPtr> WaySplitter::createSplits(const vector<WayLocation>& wl)
     if (last.compareTo(curr) != 0)
     {
       result[i] = WaySubline(last, curr).toWay(_map, _nf.get());
+      result[i]->setPid(_a->getId());
       if (result[i]->getNodeCount() == 0)
       {
         result[i].reset();
@@ -80,7 +81,9 @@ vector<WayPtr> WaySplitter::createSplits(const vector<WayLocation>& wl)
   WayLocation end(_map, _a, _a->getNodeCount() - 1, 0.0);
   if (last.compareTo(end) != 0)
   {
-    result[result.size() - 1] = WaySubline(last, end).toWay(_map, _nf.get());
+    WayPtr w = WaySubline(last, end).toWay(_map, _nf.get());
+    w->setPid(_a->getId());
+    result[result.size() - 1] = w;
   }
 
   return result;

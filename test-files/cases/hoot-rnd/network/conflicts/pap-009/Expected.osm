@@ -983,7 +983,19 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1"/>
     </node>
-    <way visible="true" id="-1625" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1624" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-173"/>
+        <nd ref="-85"/>
+        <nd ref="-84"/>
+        <nd ref="-83"/>
+        <nd ref="-82"/>
+        <nd ref="-81"/>
+        <nd ref="-80"/>
+        <nd ref="-79"/>
+        <nd ref="-78"/>
+        <nd ref="-77"/>
+        <nd ref="-76"/>
+        <nd ref="-75"/>
         <nd ref="-1333"/>
         <nd ref="-74"/>
         <nd ref="-73"/>
@@ -991,18 +1003,18 @@
         <tag k="width:minimum_traveled_way" v="8"/>
         <tag k="source" v="osm;mgcp"/>
         <tag k="condition" v="functional"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="name" v="Route de Bourdon"/>
         <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="seasonal" v="no"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="alt_name" v="Avenue John Brown"/>
         <tag k="surface" v="paved"/>
         <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
         <tag k="source:haiti" v="CNIGS and CartONG"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
         <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.114Z"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="fixme" v="find out what part of Ave. John brown is Lalue?"/>
@@ -1013,7 +1025,7 @@
         <tag k="location" v="surface"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-1625"/>
+        <tag k="hoot:id" v="-1624"/>
     </way>
     <way visible="true" id="-47" timestamp="2017-06-07T15:21:35Z" version="1" changeset="122">
         <nd ref="-1333"/>
@@ -1109,18 +1121,6 @@
         <nd ref="-86"/>
         <nd ref="-210"/>
         <nd ref="-173"/>
-        <nd ref="-85"/>
-        <nd ref="-84"/>
-        <nd ref="-83"/>
-        <nd ref="-82"/>
-        <nd ref="-81"/>
-        <nd ref="-80"/>
-        <nd ref="-79"/>
-        <nd ref="-78"/>
-        <nd ref="-77"/>
-        <nd ref="-76"/>
-        <nd ref="-75"/>
-        <nd ref="-1333"/>
         <tag k="width:minimum_traveled_way" v="8"/>
         <tag k="source" v="osm;mgcp"/>
         <tag k="condition" v="functional"/>
