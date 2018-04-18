@@ -122,6 +122,14 @@ pipeline {
                 sh "vagrant ssh ${params.Box} -c 'cd hoot; make -s ui-test'"
             }
         }
+        stage("Sonar") {
+            agent { label 'Breeze (CentOS 7)' }
+            steps {
+                withSonarQubeEnv('Breeze Sonarqube') {
+                    sh 'cd hoot/hoot-services; mvn sonar:sonar'
+                }
+            }
+        }
     }
     post {
         always {
