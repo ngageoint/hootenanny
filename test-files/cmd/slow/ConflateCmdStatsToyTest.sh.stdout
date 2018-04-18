@@ -1,8 +1,8 @@
 stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)
 Node Count	36	65	37	
-Way Count	4	4	9	
+Way Count	4	4	4	
 Relation Count	0	0	0	
-Total Feature Count	4	4	9	
+Total Feature Count	4	4	4	
 Total Conflatable Features	4	4	0	
 Percentage of Total Features Conflatable	100	100	0	
 Untagged Feature Count	0	0	0	
@@ -10,13 +10,13 @@ Total Unconflatable Features	0	0	0
 Percentage of Total Features Unconflatable	0	0	0	
 Number of Match Creators	6	6	6	
 Features Conflatable by: hoot::HighwayMatchCreator	4	4	0	
-Total Conflated Features	0	0	8	
-Percentage of Total Features Conflated	0	0	88.88888888888889	
+Total Conflated Features	0	0	3	
+Percentage of Total Features Conflated	0	0	75	
 Total Features Marked for Review	0	0	0	
 Percentage of Total Features Marked for Review	0	0	0	
 Total Number of Reviews to be Made	0	0	0	
 Total Unmatched Features	4	4	1	
-Percentage of Total Features Unmatched	100	100	11.11111111111111	
+Percentage of Total Features Unmatched	100	100	25	
 POI Count	0	0	0	
 Conflatable POIs	0	0	0	
 Conflated POIs	0	0	0	
@@ -26,15 +26,15 @@ Unmatched POIs	0	0	0
 Percentage of POIs Conflated	0	0	0	
 Percentage of POIs Marked for Review	0	0	0	
 Percentage of Unmatched POIs	0	0	0	
-Highway Count	4	4	9	
+Highway Count	4	4	4	
 Conflatable Highways	4	4	0	
-Conflated Highways	0	0	8	
+Conflated Highways	0	0	3	
 Highways Marked for Review	0	0	0	
 Number of Highway Reviews to be Made	0	0	0	
 Unmatched Highways	4	4	1	
-Percentage of Highways Conflated	0	0	88.88888888888889	
+Percentage of Highways Conflated	0	0	75	
 Percentage of Highways Marked for Review	0	0	0	
-Percentage of Unmatched Highways	100	100	11.11111111111111	
+Percentage of Unmatched Highways	100	100	25	
 Building Count	0	0	0	
 Conflatable Buildings	0	0	0	
 Conflated Buildings	0	0	0	
@@ -72,7 +72,17 @@ Unmatched Polygons	0	0	0
 Percentage of Polygons Conflated	0	0	0	
 Percentage of Polygons Marked for Review	0	0	0	
 Percentage of Unmatched Polygons	0	0	0	
-Difference Between Total Features in Output and Total Features in Inputs			1	
-Percentage Difference Between Total Features in Output and Total Features in Inputs			12.5	
+Area Count	0	0	0	
+Conflatable Areas	0	0	0	
+Conflated Areas	0	0	0	
+Areas Marked for Review	0	0	0	
+Number of Area Reviews to be Made	0	0	0	
+Unmatched Areas	0	0	0	
+Meters Squared of Areas Processed by Conflation	0	0	0	
+Percentage of Areas Conflated	0	0	0	
+Percentage of Areas Marked for Review	0	0	0	
+Percentage of Unmatched Areas	0	0	0	
+Difference Between Total Features in Output and Total Features in Inputs			-4	
+Percentage Difference Between Total Features in Output and Total Features in Inputs			-50	
 
-19:27:38.814 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 252) Conflation job completed.
+14:02:09.783 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 252) Conflation job completed.

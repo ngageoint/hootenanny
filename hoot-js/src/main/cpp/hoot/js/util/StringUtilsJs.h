@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef STRINGUTILSJS_H
 #define STRINGUTILSJS_H
 
 // v8
-#include <v8.h>
+#include <hoot/js/HootJsStable.h>
 
 namespace hoot
 {

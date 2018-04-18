@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ReviewMarker.h"
 
@@ -40,7 +40,8 @@ namespace hoot
 
 QString ReviewMarker::_complexGeometryType = "Bad Geometry";
 
-ReviewMarker::ReviewMarker()
+ReviewMarker::ReviewMarker() :
+_addReviewTagsToFeatures(ConfigOptions().getAddReviewTagsToFeatures())
 {
 }
 
@@ -163,6 +164,9 @@ void ReviewMarker::mark(const OsmMapPtr &map, const ElementPtr& e1, const Elemen
 {
   LOG_TRACE("Marking review...");
 
+  LOG_VART(reviewType);
+  LOG_VART(note);
+
   if (note.isEmpty())
   {
     LOG_VART(e1->toString());
@@ -170,12 +174,19 @@ void ReviewMarker::mark(const OsmMapPtr &map, const ElementPtr& e1, const Elemen
     throw IllegalArgumentException("You must specify a review note.");
   }
 
-  RelationPtr r(new Relation(Status::Conflated, map->createNextRelationId(), 0, MetadataTags::RelationReview()));
+  RelationPtr r(
+    new Relation(
+      Status::Conflated, map->createNextRelationId(), 0, MetadataTags::RelationReview()));
   r->getTags().set(MetadataTags::HootReviewNeeds(), true);
+  if (_addReviewTagsToFeatures)
+  {
+    e1->getTags().set(MetadataTags::HootReviewNeeds(), true);
+    e2->getTags().set(MetadataTags::HootReviewNeeds(), true);
+  }
   r->getTags().appendValueIfUnique(MetadataTags::HootReviewType(), reviewType);
   if (ConfigOptions().getWriterIncludeConflateReviewDetailTags())
   {
-    r->getTags().appendValueIfUnique(MetadataTags::HootReviewNote(), note);
+    r->getTags().appendValueIfUnique(MetadataTags::HootReviewNote(), note.simplified());
     r->getTags().set(MetadataTags::HootReviewScore(), score);
   }
   r->addElement(MetadataTags::RoleReviewee(), e1->getElementId());
@@ -200,17 +211,29 @@ void ReviewMarker::mark(const OsmMapPtr &map, set<ElementId> ids, const QString&
 {
   LOG_TRACE("Marking review...");
 
+  LOG_VART(reviewType);
+  LOG_VART(note);
+
   if (note.isEmpty())
   {
     throw IllegalArgumentException("You must specify a review note.");
   }
 
-  RelationPtr r(new Relation(Status::Conflated, map->createNextRelationId(), 0, MetadataTags::RelationReview()));
+  RelationPtr r(
+    new Relation(
+      Status::Conflated, map->createNextRelationId(), 0, MetadataTags::RelationReview()));
   r->getTags().set(MetadataTags::HootReviewNeeds(), true);
+  if (_addReviewTagsToFeatures)
+  {
+    for (set<ElementId>::iterator itr = ids.begin(); itr != ids.end(); ++itr)
+    {
+      map->getElement(*itr)->getTags().set(MetadataTags::HootReviewNeeds(), true);
+    }
+  }
   r->getTags().appendValueIfUnique(MetadataTags::HootReviewType(), reviewType);
   if (ConfigOptions().getWriterIncludeConflateReviewDetailTags())
   {
-    r->getTags().appendValueIfUnique(MetadataTags::HootReviewNote(), note);
+    r->getTags().appendValueIfUnique(MetadataTags::HootReviewNote(), note.simplified());
     r->getTags().set(MetadataTags::HootReviewScore(), score);
   }
   for (set<ElementId>::iterator it = ids.begin(); it != ids.end(); ++it)
@@ -237,18 +260,27 @@ void ReviewMarker::mark(const OsmMapPtr& map, const ElementPtr& e, const QString
 {
   LOG_TRACE("Marking review with note: " << note);
 
+  LOG_VART(reviewType);
+  LOG_VART(note);
+
   if (note.isEmpty())
   {
     LOG_VART(e->toString())
     throw IllegalArgumentException("You must specify a review note.");
   }
 
-  RelationPtr r(new Relation(Status::Conflated, map->createNextRelationId(), 0, MetadataTags::RelationReview()));
+  RelationPtr r(
+    new Relation(
+      Status::Conflated, map->createNextRelationId(), 0, MetadataTags::RelationReview()));
   r->getTags().set(MetadataTags::HootReviewNeeds(), true);
+  if (_addReviewTagsToFeatures)
+  {
+    e->getTags().set(MetadataTags::HootReviewNeeds(), true);
+  }
   r->getTags().appendValueIfUnique(MetadataTags::HootReviewType(), reviewType);
   if (ConfigOptions().getWriterIncludeConflateReviewDetailTags())
   {
-    r->getTags().appendValueIfUnique(MetadataTags::HootReviewNote(), note);
+    r->getTags().appendValueIfUnique(MetadataTags::HootReviewNote(), note.simplified());
     r->getTags().set(MetadataTags::HootReviewScore(), score);
   }
   r->addElement(MetadataTags::RoleReviewee(), e->getElementId());

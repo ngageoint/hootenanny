@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGS_H
 #define TAGS_H
@@ -59,7 +59,6 @@ public:
   static std::string className() { return "hoot::Tags"; }
   static QString uuidKey() { return "uuid"; }
 
-
   void addNote(QString note);
 
   /**
@@ -74,6 +73,7 @@ public:
   void appendValue(QString k, QString v);
   void appendValue(QString k, double v) { appendValue(k, QString::number(v)); }
   void appendValue(QString k, QStringList v);
+  void appendValue(const QString kvp);
 
   /**
    * Appends a value to a key. If the key already has a value then the values are semi-colon
@@ -115,7 +115,7 @@ public:
 
   /**
    * Given a list of keys (that may include regex values), find all the keys in this Tags set that
-   * match one or more entries in the list and return it. Each key will only bet returned at most
+   * match one or more entries in the list and return it. Each key will only be returned at most
    * once.
    */
   QStringList getMatchingKeys(const QStringList& k);
@@ -175,6 +175,16 @@ public:
   bool isTrue(const QString& key) const;
 
   bool operator==(const Tags& other) const;
+
+  /**
+   * Similar to operator== but 'hoot::*' tags are ignored
+   */
+  bool dataOnlyEqual(const Tags& other) const;
+
+  /**
+   * Get a list of all non-'hoot::*' tags
+   */
+  QStringList dataOnlyTags(const Tags& tags) const;
 
   void readValues(const QString& k, QStringList& list) const;
 
@@ -239,6 +249,7 @@ public:
   QString toString() const;
 
 private:
+
   void _valueRegexParser(const QString& str, QString& num, QString& units) const;
 
   static QStringList _nameKeys;

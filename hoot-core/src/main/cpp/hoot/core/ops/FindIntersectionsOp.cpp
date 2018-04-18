@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "FindIntersectionsOp.h"
 
@@ -111,7 +111,6 @@ void FindIntersectionsOp::apply(boost::shared_ptr<OsmMap> &map)
   // then remove everything except for the intersection that we found
   boost::shared_ptr<IntersectionFilter> intersectionFilter(new IntersectionFilter(v->getIntersections()));
   VisitorOp(new RemoveElementsVisitor(intersectionFilter)).apply(map);
-
 
   // Apply any user specified operations.
   NamedOp(ConfigOptions().getMapCleanerTransforms()).apply(map);

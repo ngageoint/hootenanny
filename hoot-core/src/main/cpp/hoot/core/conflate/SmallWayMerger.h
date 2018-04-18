@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef SMALLWAYMERGER_H
@@ -62,6 +62,7 @@ class NodeToWayMap;
 class SmallWayMerger : public OsmMapOperation
 {
 public:
+
   static std::string className() { return "hoot::SmallWayMerger"; }
 
   SmallWayMerger(Meters threshold = -1);
@@ -73,6 +74,8 @@ public:
    */
   static void mergeWays(boost::shared_ptr<OsmMap> map, Meters threshold);
 
+  virtual QString getDescription() const { return "Merges small ways"; }
+
 protected:
 
   boost::shared_ptr<OsmMap> _map;
@@ -80,8 +83,6 @@ protected:
   double _threshold;
   NodeToWayMap* _n2w;
   boost::shared_ptr<TagDifferencer> _diff;
-
-  bool _preserveUnknown1ElementIdWhenModifyingFeatures;
 
   void _mergeNeighbors(boost::shared_ptr<Way> w);
 

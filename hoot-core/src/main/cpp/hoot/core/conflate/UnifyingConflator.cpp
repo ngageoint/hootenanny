@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "UnifyingConflator.h"
 
@@ -125,12 +125,6 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 
   LOG_INFO("Applying pre-unifying conflation operations...");
   NamedOp(ConfigOptions().getUnifyPreOps()).apply(map);
-
-  if (ConfigOptions().getMatchCreators().contains("NetworkMatchCreator"))
-  {
-    LOG_INFO("Applying pre-network conflation operations...");
-    NamedOp(ConfigOptions().getNetworkPreOps()).apply(map);
-  }
 
   _stats.append(SingleStat("Apply Pre Ops Time (sec)", timer.getElapsedAndRestart()));
 

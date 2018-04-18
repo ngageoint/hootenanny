@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // geos
@@ -65,6 +65,7 @@ public:
   void setUp()
   {
     TestUtils::resetEnvironment();
+    TestUtils::mkpath("test-output/ops/FindIntersectionsOp/");
   }
 
   void runToyTest()
@@ -86,7 +87,6 @@ public:
     LOG_VAR(TestUtils::toQuotedString(OsmJsonWriter(5).toString(map)));
 
     MapProjector::projectToWgs84(map);
-    QDir().mkpath("test-output/ops/FindIntersectionsOp/");
     OsmXmlWriter writer;
     writer.write(map, "test-output/ops/FindIntersectionsOp/Toy_intersections.osm");
     HOOT_FILE_EQUALS("test-files/ops/FindIntersectionsOp/ToyTestA_intersections.osm",

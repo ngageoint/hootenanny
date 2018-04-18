@@ -22,15 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVETAGVISITOR_H
 #define REMOVETAGVISITOR_H
 
 // hoot
-#include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/util/Configurable.h>
-
 #include "ElementOsmMapVisitor.h"
 
 namespace hoot
@@ -55,6 +53,10 @@ public:
   void addKey(QString key);
 
   virtual void visit(const boost::shared_ptr<Element>& e);
+
+  virtual QString getName() const { return "Remove Tags"; }
+
+  virtual QString getDescription() const { return "Removes any tags with matching keys"; }
 
 private:
 

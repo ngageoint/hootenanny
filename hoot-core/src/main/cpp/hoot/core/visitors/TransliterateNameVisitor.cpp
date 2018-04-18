@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "TransliterateNameVisitor.h"
 
@@ -71,6 +71,5 @@ void TransliterateNameVisitor::visit(const boost::shared_ptr<Element>& e)
     e->getTags().addNote("Transliterated Name: " + Translator::getInstance().toEnglish(names[0]));
   }
 }
-
 
 }

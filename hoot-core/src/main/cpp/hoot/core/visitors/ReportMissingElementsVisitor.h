@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REPORTMISSINGELEMENTSVISITOR_H
 #define REPORTMISSINGELEMENTSVISITOR_H
@@ -31,6 +31,7 @@
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
@@ -47,7 +48,8 @@ public:
 
   static std::string className() { return "hoot::ReportMissingElementsVisitor"; }
 
-  ReportMissingElementsVisitor(bool removeMissing = false, int maxReport = 10);
+  ReportMissingElementsVisitor(bool removeMissing = false,
+                               int maxReport = Log::getWarnMessageLimit());
 
   virtual ~ReportMissingElementsVisitor() {}
 
@@ -60,6 +62,9 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
   void setMaxReport(int maxReport) { _maxReport = maxReport; }
+
+  virtual QString getDescription() const
+  { return "Reports references to missing elements in a map"; }
 
 protected:
 

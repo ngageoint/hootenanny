@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ApiDb.h"
 
@@ -106,6 +106,7 @@ void ApiDb::_resetQueries()
   _selectWayNodeIdsByWayIds.reset();
   _selectRelationIdsByMemberIds.reset();
   _selectChangesetsCreatedAfterTime.reset();
+  _userExists.reset();
 
   for (QHash<QString, boost::shared_ptr<QSqlQuery> >::iterator itr = _maxIdQueries.begin();
        itr != _maxIdQueries.end(); ++itr)
@@ -223,13 +224,47 @@ void ApiDb::rollback()
   _inTransaction = false;
 }
 
+bool ApiDb::userExists(const long id)
+{
+  LOG_VART(id);
+  if (_userExists == 0)
+  {
+    _userExists.reset(new QSqlQuery(_db));
+    _userExists->prepare("SELECT id FROM " + ApiDb::getUsersTableName() + " WHERE id = :id");
+  }
+  _userExists->bindValue(":id", (qlonglong)id);
+  if (!_userExists->exec())
+  {
+    throw HootException(
+      "Error finding user with id: " + QString::number(id) + " " + _userExists->lastError().text());
+  }
+
+  long result = -1;
+  if (_userExists->next())
+  {
+    bool ok;
+    result = _userExists->value(0).toLongLong(&ok);
+    LOG_VART(result);
+    if (!ok || result == -1)
+    {
+      return false;
+    }
+  }
+  LOG_VART(result);
+
+  _userExists->finish();
+
+  return true;
+}
+
 long ApiDb::getUserId(const QString email, bool throwWhenMissing)
 {
   if (_selectUserByEmail == 0)
   {
     _selectUserByEmail.reset(new QSqlQuery(_db));
     _selectUserByEmail->prepare(
-      "SELECT email, id, display_name FROM " + ApiDb::getUsersTableName() + " WHERE email LIKE :email");
+      "SELECT email, id, display_name FROM " + ApiDb::getUsersTableName() +
+      " WHERE email LIKE :email");
   }
   _selectUserByEmail->bindValue(":email", email);
   if (_selectUserByEmail->exec() == false)
@@ -316,7 +351,6 @@ long ApiDb::insertUser(const QString email, const QString displayName)
 
   return id;
 }
-
 
 vector<long> ApiDb::selectNodeIdsForWay(long wayId, const QString sql)
 {

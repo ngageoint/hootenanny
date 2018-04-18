@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MaximalSublineStringMatcher.h"
 
@@ -113,7 +113,7 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPt
   vector<bool> reversed1(ways1.size(), false), reversed2(ways2.size(), false);
   ScoredMatch scoredResult = _findBestMatch(map, maxRelevantDistance, ways1, ways2, reversed1,
     reversed2);
-  LOG_VARD(scoredResult);
+  LOG_VART(scoredResult);
 
   // convert the best match into a WaySublineStringMatch and return.
   try
@@ -126,7 +126,7 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPt
   catch(const OverlappingMatchesException &e)
   {
     throw NeedsReviewException("Internal Error: Multiple overlapping way matches were found within "
-      "one set of ways.  Please report this to hootenanny.help@digitalglobe.com.");
+      "one set of ways.  Please report this to https://github.com/ngageoint/hootenanny.");
   }
 }
 
@@ -352,7 +352,7 @@ void MaximalSublineStringMatcher::_validateElement(const ConstOsmMapPtr& map, El
     {
       throw NeedsReviewException("Internal Error: When matching sublines expected a multilinestring "
         "relation not a " + r->getType() + ".  A non-multilinestring should never be found here.  "
-        "Please report this to hootenanny.help@digitalglobe.com");
+        "Please report this to  https://github.com/ngageoint/hootenanny.");
     }
 
     const vector<RelationData::Entry>& entries = r->getMembers();

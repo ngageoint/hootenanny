@@ -7,7 +7,7 @@ aclocal && autoconf && autoheader && automake --add-missing && ./configure -q &&
 function build_notest {
     make -s clean
     make -sj`nproc`
-    hoot --version
+    hoot version
     make -s clean
 }
 
@@ -22,9 +22,6 @@ function build {
 # Trying all of the combinations would take 32 runs.
 echo "### 01. --without-cppunit"
 ./configure -q --without-cppunit                                                                    && build_notest
-
-echo "### 02. --without-stxxl"
-./configure -q                                                                      --without-stxxl && build
 
 echo "### 03. --without-newmat"
 ./configure -q                   --without-newmat                                                   && build
@@ -56,20 +53,17 @@ echo "### 11. --without-newmat --without-log4cxx --with-services"
 echo "### 12. --without-log4cxx --with-services"
 ./configure -q                                    --without-log4cxx --with-services                 && build
 
-echo "### 13. --without-log4cxx --with-services --without-stxxl"
-./configure -q                                    --without-log4cxx --with-services --without-stxxl && build
-
 echo "### 14. ./configure -q"
 ./configure -q
 
-echo "### 15. --without-cppunit --without-newmat --without-log4cxx --with-services --without-stxxl --with-rnd"
-./configure -q --without-cppunit --without-newmat --without-log4cxx --with-services --without-stxxl --with-rnd && build_notest
+echo "### 15. --without-cppunit --without-newmat --without-log4cxx --with-services --with-rnd"
+./configure -q --without-cppunit --without-newmat --without-log4cxx --with-services --with-rnd      && build_notest
 
-echo "### 16. --without-newmat --without-log4cxx --with-services --without-stxxl --with-rnd"
-./configure -q                   --without-newmat --without-log4cxx --with-services --without-stxxl --with-rnd && build
+echo "### 16. --without-newmat --without-log4cxx --with-services --with-rnd"
+./configure -q                   --without-newmat --without-log4cxx --with-services --with-rnd      && build
 
 echo "### 17. --with-rnd"
-./configure -q                                                                                      --with-rnd && build
+./configure -q                                                                      --with-rnd      && build
 
 echo "############"
 echo "# Success! #"

@@ -57,7 +57,7 @@ Exporting data from a HootAPI database using an OSM translation schema.
 Shapefile export:
 
 ------
-hoot osm2shp -D api.db.email='test@test.com' translations/OSM_Ingest.js hootapidb://hoot:hoottest@localhost:5432/hoot/DcGisRoads tmp/DGRoads.shp
+hoot convert-osm2shp -D api.db.email='test@test.com' translations/OSM_Ingest.js hootapidb://hoot:hoottest@localhost:5432/hoot/DcGisRoads tmp/DGRoads.shp
 ------
 
 * translation file - a translation file used to translate source data attribution
@@ -67,7 +67,7 @@ hoot osm2shp -D api.db.email='test@test.com' translations/OSM_Ingest.js hootapid
 File Geodatabase export:
 
 ------
-hoot osm2ogr -D api.db.email='test@test.com' translations/MGCP_TRD4.js hootapidb://hoot:hoottest@localhost:5432/hoot/DcGisRoads tmp/DGRoads.gdb
+hoot convert-osm2ogr -D api.db.email='test@test.com' translations/MGCP_TRD4.js hootapidb://hoot:hoottest@localhost:5432/hoot/DcGisRoads tmp/DGRoads.gdb
 ------
 
 * translations/MGCP_TRD4.js - the MGCP_TRD4 translation used to translate the data.
@@ -76,13 +76,13 @@ hoot osm2ogr -D api.db.email='test@test.com' translations/MGCP_TRD4.js hootapidb
 
 ==== Crop-map
 
-Crops the input map to the given bounds. Individual features on the border are modified to make sure nothing is outside the given bounds.  For additional details see the +crop-map+ command line section.
+Crops the input map to the given bounds. Individual features on the border are modified to make sure nothing is outside the given bounds.  For additional details see the +crop+ command line section.
 
 Example Usage:
 
 ------
-crop-map (input.osm) (output.osm) (bounds)
-e.g. hoot crop-map hootapidb://hoot:hoottest@localhost:5432/hoot/DcGisRoads "-77.0551,38.8845,-77.0281,38.9031"
+crop (input.osm) (output.osm) (bounds)
+e.g. hoot crop hootapidb://hoot:hoottest@localhost:5432/hoot/DcGisRoads "-77.0551,38.8845,-77.0281,38.9031"
 ------
 
 ==== Generate Stats

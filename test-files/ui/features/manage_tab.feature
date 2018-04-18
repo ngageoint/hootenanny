@@ -60,6 +60,7 @@ Feature: Manage Tab
         Then I click the "Move (2)" context menu item
         And I select the "ManageTabTest" option in the "root" combobox
         And I press "big.loud" span with text "Update"
+        And I wait 5 seconds
         # Move datasets back out of folder
         Then I click the "ManageTabTest" Dataset
         When I click the "AllDataTypesACucumber" Dataset and the "AllDataTypesBCucumber" Dataset
@@ -67,6 +68,7 @@ Feature: Manage Tab
         And I should see "Delete (2)"
         Then I click the "Move (2)" context menu item
         And I press "big.loud" span with text "Update"
+        And I wait 5 seconds
 
     Scenario: Name and Rename folders
         Then I wait 5 "seconds" to see "tspan" element with text "ManageTabTest"
@@ -95,7 +97,6 @@ Feature: Manage Tab
 
     Scenario: Add dataset into sub folder
         # Add dataset into sub folder
-        Then I expand the "TestFolder" folder
         Then I wait 5 "seconds" to see "tspan" element with text "TestSubFolder"
         And I click the "TestSubFolder" Dataset
         And I context click the "TestSubFolder" Dataset

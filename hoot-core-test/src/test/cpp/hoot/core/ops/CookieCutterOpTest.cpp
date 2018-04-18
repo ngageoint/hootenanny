@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -84,7 +84,7 @@ public:
 
     MapProjector::projectToWgs84(map);
 
-    QDir().mkpath("test-output/ops/CookieCutterOp");
+    TestUtils::mkpath("test-output/ops/CookieCutterOp");
     OsmXmlWriter writer;
     writer.write(map, "test-output/ops/CookieCutterOp/CookieCutterOpTest.osm");
     HOOT_FILE_EQUALS("test-files/ops/CookieCutterOp/CookieCutterOpTest.osm",

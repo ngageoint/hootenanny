@@ -1,0 +1,33 @@
+== operators
+
+=== Description
+
+The +operators+ command prints out available inline operators for map data that can be applied to a Hootenanny command.  
+This includes map operations, map visitors, and map criteria (filters).
+
+=== Usage
+
+--------------------------------------
+operators [--criteria] [--operations] [--visitors]
+--------------------------------------
+
+==== Command Example Usage
+
+--------------------------------------
+# prints all
+hoot operators
+
+hoot operators --criteria
+
+hoot operators --operations
+
+hoot operators --visitors
+--------------------------------------
+
+=== Inline Operator Example Usage
+
+-------------------------
+# This inline operator, SetTagVisitor, adds a tag to all elements in a map.
+hoot convert -D convert.ops=hoot::SetTagVisitor -D set.tag.visitor.key=poi -D set.tag.visitor.value=yes input.osm output.osm
+-------------------------
+

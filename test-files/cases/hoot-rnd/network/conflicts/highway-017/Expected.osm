@@ -9,35 +9,35 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-363"/>
     </node>
-    <node visible="true" id="-351" timestamp="1970-01-01T00:00:00Z" version="1" lat="1.2939021837159554" lon="5.2772897908224010">
+    <node visible="true" id="-358" timestamp="1970-01-01T00:00:00Z" version="1" lat="1.2941929236840857" lon="5.2752350420689247">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-351"/>
+        <tag k="hoot:id" v="-358"/>
     </node>
-    <node visible="true" id="-350" timestamp="1970-01-01T00:00:00Z" version="1" lat="1.2942173686298433" lon="5.2772841962230608">
-        <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-350"/>
-    </node>
-    <node visible="true" id="-349" timestamp="1970-01-01T00:00:00Z" version="1" lat="1.2943297230597293" lon="5.2772508412585477">
+    <node visible="true" id="-349" timestamp="1970-01-01T00:00:00Z" version="1" lat="1.2939021837159554" lon="5.2772897908224010">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-349"/>
     </node>
-    <node visible="true" id="-348" timestamp="1970-01-01T00:00:00Z" version="1" lat="1.2949393956090276" lon="5.2770698460605399">
+    <node visible="true" id="-348" timestamp="1970-01-01T00:00:00Z" version="1" lat="1.2942173686298433" lon="5.2772841962230608">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-348"/>
     </node>
-    <node visible="true" id="-344" timestamp="1970-01-01T00:00:00Z" version="1" lat="1.2941851379733504" lon="5.2752701670261040">
+    <node visible="true" id="-347" timestamp="1970-01-01T00:00:00Z" version="1" lat="1.2943297230597293" lon="5.2772508412585477">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-344"/>
+        <tag k="hoot:id" v="-347"/>
     </node>
-    <node visible="true" id="-337" timestamp="1970-01-01T00:00:00Z" version="1" lat="1.2945795862566574" lon="5.2753102423284144">
+    <node visible="true" id="-346" timestamp="1970-01-01T00:00:00Z" version="1" lat="1.2949393956090276" lon="5.2770698460605399">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-346"/>
+    </node>
+    <node visible="true" id="-337" timestamp="1970-01-01T00:00:00Z" version="1" lat="1.2955407570978903" lon="5.2755846198161933">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-337"/>
     </node>
-    <node visible="true" id="-331" timestamp="1970-01-01T00:00:00Z" version="1" lat="1.2955407570978903" lon="5.2755846198161933">
+    <node visible="true" id="-336" timestamp="1970-01-01T00:00:00Z" version="1" lat="1.2955580285340687" lon="5.2755000417038325">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-331"/>
+        <tag k="hoot:id" v="-336"/>
     </node>
-    <node visible="true" id="-330" timestamp="1970-01-01T00:00:00Z" version="1" lat="1.2955580285340687" lon="5.2755000417038325">
+    <node visible="true" id="-330" timestamp="1970-01-01T00:00:00Z" version="1" lat="1.2945795862566574" lon="5.2753102423284144">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-330"/>
     </node>
@@ -333,43 +333,42 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1"/>
     </node>
-    <way visible="true" id="-456" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-364"/>
-        <nd ref="-3"/>
-        <nd ref="-19"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-456"/>
-    </way>
-    <way visible="true" id="-455" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-363"/>
-        <nd ref="-27"/>
-        <nd ref="-364"/>
-        <tag k="width" v="2.5"/>
-        <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="residential"/>
-        <tag k="lanes" v="1"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-455"/>
-    </way>
-    <way visible="true" id="-454" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-446" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-9"/>
         <nd ref="-16"/>
         <nd ref="-363"/>
+        <nd ref="-27"/>
+        <nd ref="-364"/>
+        <nd ref="-3"/>
+        <nd ref="-19"/>
         <tag k="width" v="2.5"/>
-        <tag k="all_weather" v="yes"/>
         <tag k="highway" v="residential"/>
+        <tag k="all_weather" v="yes"/>
         <tag k="lanes" v="1"/>
         <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-454"/>
+        <tag k="hoot:id" v="-446"/>
     </way>
-    <way visible="true" id="-452" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-351"/>
+    <way visible="true" id="-444" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-12"/>
+        <nd ref="-358"/>
+        <nd ref="-35"/>
+        <nd ref="-36"/>
+        <nd ref="-34"/>
+        <tag k="width" v="2.5"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="name" v="KOL. SUTOMO 3"/>
+        <tag k="highway" v="residential"/>
+        <tag k="all_weather" v="yes"/>
+        <tag k="lanes" v="1"/>
+        <tag k="surface" v="paved"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-444"/>
+    </way>
+    <way visible="true" id="-442" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-349"/>
         <nd ref="-79"/>
         <nd ref="-80"/>
         <nd ref="-81"/>
@@ -382,10 +381,16 @@
         <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="2"/>
         <tag k="error:circular" v="10.08"/>
-        <tag k="hoot:id" v="-452"/>
+        <tag k="hoot:id" v="-442"/>
     </way>
-    <way visible="true" id="-451" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-351"/>
+    <way visible="true" id="-437" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18"/>
+        <nd ref="-23"/>
+        <nd ref="-346"/>
+        <nd ref="-347"/>
+        <nd ref="-348"/>
+        <nd ref="-26"/>
+        <nd ref="-349"/>
         <nd ref="-2"/>
         <nd ref="-22"/>
         <tag k="width" v="2.5"/>
@@ -396,87 +401,31 @@
         <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-451"/>
+        <tag k="hoot:id" v="-437"/>
     </way>
-    <way visible="true" id="-450" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-350"/>
-        <nd ref="-26"/>
-        <nd ref="-351"/>
-        <tag k="width" v="2.5"/>
-        <tag k="name" v="DARUL KHAEROT"/>
-        <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="residential"/>
-        <tag k="lanes" v="1"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-450"/>
-    </way>
-    <way visible="true" id="-449" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-349"/>
-        <nd ref="-350"/>
-        <tag k="width" v="2.5"/>
-        <tag k="name" v="DARUL KHAEROT"/>
-        <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="residential"/>
-        <tag k="lanes" v="1"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-449"/>
-    </way>
-    <way visible="true" id="-448" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-348"/>
-        <nd ref="-349"/>
-        <tag k="width" v="2.5"/>
-        <tag k="name" v="DARUL KHAEROT"/>
-        <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="residential"/>
-        <tag k="lanes" v="1"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-448"/>
-    </way>
-    <way visible="true" id="-447" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-434" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-30"/>
+        <nd ref="-31"/>
+        <nd ref="-13"/>
+        <nd ref="-336"/>
+        <nd ref="-337"/>
+        <nd ref="-17"/>
+        <nd ref="-4"/>
         <nd ref="-18"/>
-        <nd ref="-23"/>
-        <nd ref="-348"/>
-        <tag k="width" v="2.5"/>
-        <tag k="name" v="DARUL KHAEROT"/>
-        <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="residential"/>
-        <tag k="lanes" v="1"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-447"/>
-    </way>
-    <way visible="true" id="-446" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-344"/>
-        <nd ref="-35"/>
-        <nd ref="-36"/>
-        <tag k="width" v="2.5"/>
-        <tag k="name" v="KOL. SUTOMO 3"/>
-        <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="residential"/>
-        <tag k="lanes" v="1"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-446"/>
-    </way>
-    <way visible="true" id="-445" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-12"/>
-        <nd ref="-344"/>
         <tag k="width" v="2.5"/>
         <tag k="bridge" v="yes"/>
+        <tag k="alt_name" v="PERINDUSTRIAN"/>
+        <tag k="source" v="Bing"/>
+        <tag k="name" v="Perindustrian"/>
+        <tag k="all_weather" v="yes"/>
         <tag k="highway" v="residential"/>
+        <tag k="lanes" v="1"/>
+        <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-445"/>
+        <tag k="hoot:id" v="-434"/>
     </way>
-    <way visible="true" id="-442" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-431" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-40"/>
         <nd ref="-48"/>
         <nd ref="-49"/>
@@ -491,15 +440,17 @@
         <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="2"/>
         <tag k="error:circular" v="10.08"/>
-        <tag k="hoot:id" v="-442"/>
+        <tag k="hoot:id" v="-431"/>
     </way>
-    <way visible="true" id="-441" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-337"/>
+    <way visible="true" id="-429" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-9"/>
+        <nd ref="-330"/>
         <nd ref="-10"/>
         <nd ref="-32"/>
         <nd ref="-33"/>
         <nd ref="-34"/>
         <tag k="width" v="2.5"/>
+        <tag k="bridge" v="yes"/>
         <tag k="name" v="KOL. SUTOMO 2"/>
         <tag k="all_weather" v="yes"/>
         <tag k="highway" v="residential"/>
@@ -507,65 +458,9 @@
         <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-441"/>
+        <tag k="hoot:id" v="-429"/>
     </way>
-    <way visible="true" id="-440" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-9"/>
-        <nd ref="-337"/>
-        <tag k="width" v="2.5"/>
-        <tag k="bridge" v="yes"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-440"/>
-    </way>
-    <way visible="true" id="-439" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-331"/>
-        <nd ref="-17"/>
-        <nd ref="-4"/>
-        <nd ref="-18"/>
-        <tag k="width" v="2.5"/>
-        <tag k="alt_name" v="PERINDUSTRIAN"/>
-        <tag k="source" v="Bing"/>
-        <tag k="name" v="Perindustrian"/>
-        <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="residential"/>
-        <tag k="lanes" v="1"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-439"/>
-    </way>
-    <way visible="true" id="-438" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-330"/>
-        <nd ref="-331"/>
-        <tag k="width" v="2.5"/>
-        <tag k="bridge" v="yes"/>
-        <tag k="source" v="Bing"/>
-        <tag k="name" v="Perindustrian"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-438"/>
-    </way>
-    <way visible="true" id="-437" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-30"/>
-        <nd ref="-31"/>
-        <nd ref="-13"/>
-        <nd ref="-330"/>
-        <tag k="width" v="2.5"/>
-        <tag k="alt_name" v="PERINDUSTRIAN"/>
-        <tag k="source" v="Bing"/>
-        <tag k="name" v="Perindustrian"/>
-        <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="residential"/>
-        <tag k="lanes" v="1"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-437"/>
-    </way>
-    <way visible="true" id="-58" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-50" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-60"/>
         <nd ref="-61"/>
         <nd ref="-62"/>
@@ -577,90 +472,7 @@
         <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="2"/>
         <tag k="error:circular" v="10.08"/>
-        <tag k="hoot:id" v="-58"/>
-    </way>
-    <way visible="true" id="-52" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-36"/>
-        <nd ref="-34"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-52"/>
-    </way>
-    <way visible="true" id="-49" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-40"/>
-        <nd ref="-41"/>
-        <nd ref="-36"/>
-        <tag k="width" v="2.5"/>
-        <tag k="name" v="KOL. SUTOMO 3"/>
-        <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="lanes" v="1"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="error:circular" v="10.08"/>
-        <tag k="hoot:id" v="-49"/>
-    </way>
-    <way visible="true" id="-47" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-58"/>
-        <nd ref="-59"/>
-        <nd ref="-60"/>
-        <tag k="width" v="2.5"/>
-        <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="lanes" v="1"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="error:circular" v="10.08"/>
-        <tag k="hoot:id" v="-47"/>
-    </way>
-    <way visible="true" id="-45" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-349"/>
-        <nd ref="-71"/>
-        <nd ref="-72"/>
-        <nd ref="-73"/>
-        <nd ref="-74"/>
-        <nd ref="-75"/>
-        <nd ref="-21"/>
-        <tag k="width" v="2.5"/>
-        <tag k="name" v="KOL. SUTOMO 2"/>
-        <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="lanes" v="1"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="error:circular" v="10.08"/>
-        <tag k="hoot:id" v="-45"/>
-    </way>
-    <way visible="true" id="-44" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-106"/>
-        <nd ref="-107"/>
-        <nd ref="-108"/>
-        <nd ref="-109"/>
-        <tag k="width" v="2.5"/>
-        <tag k="name" v="KOL. SUTOMO 1"/>
-        <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="lanes" v="1"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="error:circular" v="10.08"/>
-        <tag k="hoot:id" v="-44"/>
-    </way>
-    <way visible="true" id="-43" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-348"/>
-        <nd ref="-104"/>
-        <nd ref="-105"/>
-        <nd ref="-106"/>
-        <tag k="width" v="2.5"/>
-        <tag k="name" v="KOL. SUTOMO 1"/>
-        <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="lanes" v="1"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="error:circular" v="10.08"/>
-        <tag k="hoot:id" v="-43"/>
+        <tag k="hoot:id" v="-50"/>
     </way>
     <way visible="true" id="-39" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-134"/>
@@ -694,7 +506,7 @@
         <nd ref="-125"/>
         <nd ref="-126"/>
         <nd ref="-127"/>
-        <nd ref="-350"/>
+        <nd ref="-348"/>
         <tag k="width" v="2.5"/>
         <tag k="all_weather" v="yes"/>
         <tag k="highway" v="unclassified"/>
@@ -703,6 +515,69 @@
         <tag k="hoot:status" v="2"/>
         <tag k="error:circular" v="10.08"/>
         <tag k="hoot:id" v="-35"/>
+    </way>
+    <way visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-346"/>
+        <nd ref="-104"/>
+        <nd ref="-105"/>
+        <nd ref="-106"/>
+        <nd ref="-107"/>
+        <nd ref="-108"/>
+        <nd ref="-109"/>
+        <tag k="width" v="2.5"/>
+        <tag k="name" v="KOL. SUTOMO 1"/>
+        <tag k="all_weather" v="yes"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="lanes" v="1"/>
+        <tag k="surface" v="paved"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="error:circular" v="10.08"/>
+        <tag k="hoot:id" v="-32"/>
+    </way>
+    <way visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-347"/>
+        <nd ref="-71"/>
+        <nd ref="-72"/>
+        <nd ref="-73"/>
+        <nd ref="-74"/>
+        <nd ref="-75"/>
+        <nd ref="-21"/>
+        <tag k="width" v="2.5"/>
+        <tag k="name" v="KOL. SUTOMO 2"/>
+        <tag k="all_weather" v="yes"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="lanes" v="1"/>
+        <tag k="surface" v="paved"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="error:circular" v="10.08"/>
+        <tag k="hoot:id" v="-26"/>
+    </way>
+    <way visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-58"/>
+        <nd ref="-59"/>
+        <nd ref="-60"/>
+        <tag k="width" v="2.5"/>
+        <tag k="all_weather" v="yes"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="lanes" v="1"/>
+        <tag k="surface" v="paved"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="error:circular" v="10.08"/>
+        <tag k="hoot:id" v="-21"/>
+    </way>
+    <way visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-40"/>
+        <nd ref="-41"/>
+        <nd ref="-36"/>
+        <tag k="width" v="2.5"/>
+        <tag k="name" v="KOL. SUTOMO 3"/>
+        <tag k="all_weather" v="yes"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="lanes" v="1"/>
+        <tag k="surface" v="paved"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="error:circular" v="10.08"/>
+        <tag k="hoot:id" v="-19"/>
     </way>
     <way visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-37"/>

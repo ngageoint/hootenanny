@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -49,20 +49,6 @@ using namespace std;
 namespace hoot
 {
 
-/**
- * @ingroup cmd
- * @page ConvertCmd Convert Command
- * @code
---convert (input) (output)
- * @endcode
- *
- * The convert command converts from one format to another.
- *
- * @param input The input file to be cleaned. Supports common geospatial file types.
- * @param output The output file. Supports common geospatial file types.
- *
- * @sa @ref convert.ops
- */
 class ConvertCmd : public BaseCommand
 {
 public:
@@ -72,6 +58,9 @@ public:
   ConvertCmd() { }
 
   virtual QString getName() const { return "convert"; }
+
+  virtual QString getDescription() const
+  { return "Converts map data from one input format to another"; }
 
   /**
    * Return true if all the specified operations are valid streaming operations.
@@ -127,7 +116,7 @@ public:
 
     // This keeps the status and the tags.
     conf().set(ConfigOptions().getReaderUseFileStatusKey(), true);
-    conf().set(ConfigOptions().getReaderKeepFileStatusKey(), true);
+    conf().set(ConfigOptions().getReaderKeepStatusTagKey(), true);
 
 //    QString readerName = ConfigOptions().getOsmMapReaderFactoryReader();
 //    if (readerName.trimmed().isEmpty())

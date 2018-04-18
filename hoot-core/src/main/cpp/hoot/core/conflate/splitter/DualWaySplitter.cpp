@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "DualWaySplitter.h"
@@ -49,6 +49,7 @@ using namespace geos::operation::buffer;
 #include <hoot/core/filters/DistanceNodeCriterion.h>
 #include <hoot/core/filters/NotCriterion.h>
 #include <hoot/core/filters/TagCriterion.h>
+#include <hoot/core/ops/RemoveNodeOp.h>
 #include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ElementConverter.h>
@@ -93,8 +94,6 @@ DualWaySplitter::DualWaySplitter()
     LOG_DEBUG("Assuming drives on right.");
   }
   _defaultSplitSize = opts.getDualWaySplitterSplitSizeDefaultValue();
-  _preserveUnknown1ElementIdWhenModifyingFeatures =
-    opts.getPreserveUnknown1ElementIdWhenModifyingFeatures();
 }
 
 DualWaySplitter::DualWaySplitter(boost::shared_ptr<const OsmMap> map, DrivingSide drivingSide,
@@ -117,8 +116,11 @@ boost::shared_ptr<Way> DualWaySplitter::_createOneWay(boost::shared_ptr<const Wa
   boost::shared_ptr<Geometry> g(bb.bufferLineSingleSided(ls.get(), bufferSize, left));
   const LineString* newLs = dynamic_cast<const LineString*>(g.get());
 
-  boost::shared_ptr<Way> result(new Way(w->getStatus(), _result->createNextWayId(),
-    w->getRawCircularError()));
+  long way_id = w->getId();
+  if (!left)
+    way_id = _result->createNextWayId();
+  WayPtr result(new Way(w->getStatus(), way_id, w->getRawCircularError()));
+  result->setPid(w->getPid());
 
   // This sometimes happens if the buffer builder returns a multilinestring. See #2275
   if (newLs == 0)
@@ -287,6 +289,10 @@ boost::shared_ptr<OsmMap> DualWaySplitter::splitAll()
   {
     cout << endl;
   }
+
+  //  Remove the un-needed nodes from the original way that aren't part of any other way now
+  for (unordered_set<long>::iterator it = _nodes.begin(); it != _nodes.end(); ++it)
+    RemoveNodeOp::removeNode(_result, *it, true);
 
   _result.reset();
   return result;
@@ -462,16 +468,14 @@ void DualWaySplitter::_splitWay(long wid)
   _reconnectEnd(nids[nids.size() - 1], _left);
   _reconnectEnd(nids[nids.size() - 1], _right);
 
-  RemoveWayOp::removeWay(_result, wid);
-
-  // see comments for similar functionality in HighwaySnapMerger::_mergePair
-  if (_preserveUnknown1ElementIdWhenModifyingFeatures && _working->getStatus() == Status::Unknown1)
+  //  Keep track of the original nodes to remove them later
+  vector<long> nodes = _working->getNodeIds();
+  for (vector<long>::iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
-    LOG_TRACE(
-      "Setting unknown1 " << _working->getElementId().getId() << " on " <<
-      _left->getElementId() << "...");
-    _left->setId(_working->getElementId().getId());
+    _nodes.insert(*it);
   }
+
+  RemoveWayOp::removeWay(_result, wid);
 
   // add the results to the map
   _result->addWay(_left);

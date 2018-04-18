@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -56,7 +56,7 @@ public:
 
   void setUp()
   {
-    QDir().mkpath("test-output/perty/PertyMatchScorerTest");
+    TestUtils::mkpath("test-output/perty/PertyMatchScorerTest");
   }
 
   void runLoadReferenceMapTest()

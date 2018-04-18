@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGCOUNTVISITOR_H
 #define TAGCOUNTVISITOR_H
@@ -54,11 +54,12 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
+  virtual QString getDescription() const { return "Counts element tags"; }
+
 private:
 
   long _totalCount;
   long _informationCount;
-
 };
 
 }

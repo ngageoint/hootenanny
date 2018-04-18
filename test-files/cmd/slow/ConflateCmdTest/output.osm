@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="38.84672181207974" minlon="-104.9197586162135" maxlat="39.59441940337848" maxlon="-104.7145693652068"/>
     <node visible="true" id="-272" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8532641860755490" lon="-104.8997533243950926"/>
     <node visible="true" id="-270" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8543116509978290" lon="-104.8997171368439325"/>
     <node visible="true" id="-233" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5931217689487696" lon="-104.8062120958869343"/>
@@ -234,7 +235,7 @@
     <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8544293243065937" lon="-104.8980654352573794"/>
     <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8536194225014810" lon="-104.8987070428940598"/>
     <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8543319201230304" lon="-104.9017876860593788"/>
-    <way visible="true" id="-170" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-164" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-224"/>
         <nd ref="-227"/>
         <nd ref="-228"/>
@@ -260,7 +261,7 @@
         <tag k="name" v="Maid-Rite"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-168" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-162" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-13"/>
         <nd ref="-26"/>
         <nd ref="-12"/>
@@ -268,22 +269,34 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-165" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-155" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-30"/>
         <nd ref="-16"/>
-        <nd ref="-36"/>
-        <tag k="note" v="2"/>
-        <tag k="highway" v="road"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-161" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-36"/>
         <nd ref="-20"/>
         <tag k="note" v="2"/>
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-158" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-141" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-5"/>
+        <nd ref="-21"/>
+        <nd ref="-1"/>
+        <nd ref="-17"/>
+        <nd ref="-31"/>
+        <tag k="note" v="0"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-137" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-31"/>
+        <nd ref="-13"/>
+        <nd ref="-34"/>
+        <nd ref="-270"/>
+        <nd ref="-20"/>
+        <nd ref="-9"/>
+        <nd ref="-4"/>
+        <nd ref="-24"/>
         <nd ref="-272"/>
         <nd ref="-8"/>
         <nd ref="-29"/>
@@ -304,47 +317,6 @@
         <nd ref="-28"/>
         <nd ref="-14"/>
         <nd ref="-35"/>
-        <tag k="note" v="0"/>
-        <tag k="highway" v="road"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-154" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-20"/>
-        <nd ref="-9"/>
-        <nd ref="-4"/>
-        <nd ref="-24"/>
-        <nd ref="-272"/>
-        <tag k="note" v="0"/>
-        <tag k="highway" v="road"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-151" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-270"/>
-        <nd ref="-20"/>
-        <tag k="note" v="0"/>
-        <tag k="highway" v="road"/>
-    </way>
-    <way visible="true" id="-150" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-13"/>
-        <nd ref="-34"/>
-        <nd ref="-270"/>
-        <tag k="note" v="0"/>
-        <tag k="highway" v="road"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-147" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-5"/>
-        <nd ref="-21"/>
-        <nd ref="-1"/>
-        <nd ref="-17"/>
-        <nd ref="-31"/>
-        <tag k="note" v="0"/>
-        <tag k="highway" v="road"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-143" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-31"/>
-        <nd ref="-13"/>
         <tag k="note" v="0"/>
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="15"/>
@@ -540,7 +512,7 @@
     <relation visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-26" role="part"/>
         <member type="way" ref="-25" role="part"/>
-        <member type="way" ref="-170" role="outline"/>
+        <member type="way" ref="-164" role="outline"/>
         <tag k="REF1" v="Panera"/>
         <tag k="REF2" v="Panera"/>
         <tag k="hoot:building:match" v="true"/>
@@ -553,6 +525,7 @@
         <member type="node" ref="-41" role="reviewee"/>
         <member type="node" ref="-120" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:type" v="POI"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Overlapping matches"/>
@@ -563,6 +536,7 @@
         <member type="node" ref="-41" role="reviewee"/>
         <member type="node" ref="-122" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:type" v="POI"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Overlapping matches"/>
@@ -573,6 +547,7 @@
         <member type="node" ref="-45" role="reviewee"/>
         <member type="node" ref="-120" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:type" v="POI"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Overlapping matches"/>
@@ -583,6 +558,7 @@
         <member type="node" ref="-43" role="reviewee"/>
         <member type="node" ref="-123" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:type" v="POI"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Overlapping matches"/>
@@ -593,6 +569,7 @@
         <member type="node" ref="-46" role="reviewee"/>
         <member type="node" ref="-123" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:type" v="POI"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Overlapping matches"/>
@@ -603,6 +580,7 @@
         <member type="node" ref="-46" role="reviewee"/>
         <member type="node" ref="-126" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:type" v="POI"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Overlapping matches"/>
@@ -613,6 +591,7 @@
         <member type="node" ref="-44" role="reviewee"/>
         <member type="node" ref="-119" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:type" v="POI"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Overlapping matches"/>
@@ -623,6 +602,7 @@
         <member type="node" ref="-47" role="reviewee"/>
         <member type="node" ref="-119" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:type" v="POI"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Overlapping matches"/>

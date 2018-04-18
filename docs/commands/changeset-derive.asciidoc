@@ -1,0 +1,46 @@
+== changeset-derive
+
+=== Description
+
+The +changeset-derive+ command creates an OSM changeset file that represents the difference between two input 
+OSM datasets.  Alternatively, when only one dataset is input it generates a changeset file representing all 
+the data in the input dataset. The output changeset file can later be applied to an OSM API database with 
+the +changeset-apply+ command.  
+
+Currently, only the SQL output format only supports changeset application. 
+
+If deriving a changeset between two inputs from different dates, the first input should be the older 
+dataset and the second should be the newer dataset.  
+
+* +input1+            - OSM data input 1 (e.g. .osm file).
+* +input2+            - OSM data input 2 (e.g. .osm file or empty string ("") to derive changeset from one input only).
+* +output+            - Output location(s) (e.g. .osc or .osc.sql file; separate multiple outputs with a semicolon).
+* +osmApiDatabaseUrl+ - Target OSM API database the changeset is to be applied to.  Used to maintain 
+                        element ID continuity with a particular database instance when generating SQL 
+                        changesets only.  Required only if the changeset output format is .osc.sql.
+* +--stats+           - Stats flag, when turned on a table of create, modify, delete for each of the types
+                        node, way, relation (only valid for .osc output files)
+
+=== Usage
+
+--------------------------------------
+changeset-derive (input1) [input2] (output) [osmApiDatabaseUrl] [--stats]
+--------------------------------------
+
+==== Examples
+
+--------------------------------------
+hoot changeset-derive inputData1.osm inputData2.osm outputChangeset.osc
+
+hoot changeset-derive inputData1.osm inputData2.osm outputChangeset.osc --stats
+
+hoot changeset-derive inputData1.osm inputData2.osm outputChangeset.osc;outputChangeset.osc.sql osmapidb://username:password@localhost:5432/osmApiDatabaseName
+
+hoot changeset-derive inputData.osm "" outputChangeset.osc
+
+hoot changeset-derive inputData.osm "" outputChangeset.osc.sql osmapidb://username:password@localhost:5432/osmApiDatabaseName
+--------------------------------------
+
+=== See Also
+
+* `changeset.*` configuration options

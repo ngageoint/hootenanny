@@ -10,4 +10,4 @@ INPUT_FILE=test-files/cmd/quick/ConvertGeoNames.geonames
 hoot convert $INPUT_FILE $OUTPUT_DIR/out.osm.pbf #leave this one at info, so you get the "streaming" message
 hoot convert --warn $OUTPUT_DIR/out.osm.pbf $OUTPUT_DIR/out-1.osm
 hoot convert --warn $INPUT_FILE $OUTPUT_DIR/out-2.osm
-hoot is-match --warn $OUTPUT_DIR/out-1.osm $OUTPUT_DIR/out-2.osm
+hoot map-diff --warn $OUTPUT_DIR/out-1.osm $OUTPUT_DIR/out-2.osm

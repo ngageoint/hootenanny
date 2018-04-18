@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 /*
@@ -86,6 +86,11 @@ class BuildingMergerTest : public CppUnit::TestFixture
 
 public:
 
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/conflate/polygon");
+  }
+
   ConstWayPtr getWay(ConstOsmMapPtr map, const QString& key, const QString& value)
   {
     std::vector<long> wids = FindWaysVisitor::findWaysByTag(map, key, value);
@@ -122,9 +127,8 @@ public:
 
     MapProjector::projectToWgs84(map);
 
-    QDir(".").mkpath("test-output/conflate/polygon");
     OsmXmlWriter writer;
-    writer.write(map, "test-output/conflate/polygon/BuildingMergerTest.osm");
+    writer.write(map, "test-output/conflate/polygon/BuildingMergerTest-runMatchTest.osm");
 
     HOOT_STR_EQUALS("[3]{(Way:-15, Way:-7), (Way:-14, Way:-7), (Way:-13, Way:-7)}", replaced);
   }
@@ -132,6 +136,7 @@ public:
   class RemoveMissVisitor : public ConstElementVisitor
   {
   public:
+
     RemoveMissVisitor(OsmMapPtr map, QString ref) : _map(map), _ref(ref) {}
 
     virtual void visit(const ConstElementPtr& e)
@@ -142,7 +147,10 @@ public:
       }
     }
 
+    virtual QString getDescription() const {return ""; }
+
   private:
+
     OsmMapPtr _map;
     QString _ref;
   };

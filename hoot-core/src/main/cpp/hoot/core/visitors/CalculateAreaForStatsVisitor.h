@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CALCULATEAREAFORSTATSVISITOR_H
 #define CALCULATEAREAFORSTATSVISITOR_H
@@ -65,7 +65,10 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
+  virtual QString getDescription() const { return "Calculates feature areas for map statistics"; }
+
 private:
+
   const OsmMap* _map;
   Meters _total;
 };

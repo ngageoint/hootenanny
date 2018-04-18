@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NamedOp.h"
 
@@ -33,23 +33,35 @@
 #include <hoot/core/ops/VisitorOp.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/StringUtils.h>
+
+// Qt
+#include <QElapsedTimer>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, NamedOp)
 
-NamedOp::NamedOp()
+NamedOp::NamedOp() :
+_conf(&conf())
 {
-  _conf = 0;
+}
+
+NamedOp::NamedOp(QStringList namedOps)  :
+_conf(&conf()),
+_namedOps(namedOps)
+{
 }
 
 void NamedOp::apply(boost::shared_ptr<OsmMap> &map)
 {
   Factory& f = Factory::getInstance();
 
+  QElapsedTimer timer;
   foreach (QString s, _namedOps)
   {
+    timer.restart();
     if (s.isEmpty())
     {
       // pass
@@ -103,6 +115,8 @@ void NamedOp::apply(boost::shared_ptr<OsmMap> &map)
         constructObject<ElementVisitor>(s));
 
       Configurable* c = dynamic_cast<Configurable*>(t.get());
+      LOG_VARD(c == 0);
+      LOG_VARD(_conf == 0);
       if (_conf != 0 && c != 0)
       {
         c->setConfiguration(*_conf);
@@ -119,6 +133,8 @@ void NamedOp::apply(boost::shared_ptr<OsmMap> &map)
     {
       throw HootException("Unexpected named operation: " + s);
     }
+
+    LOG_DEBUG("Time elapsed: " << StringUtils::secondsToDhms(timer.elapsed()));
   }
 }
 

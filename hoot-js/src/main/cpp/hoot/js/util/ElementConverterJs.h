@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTCONVERTERJS_H
 #define ELEMENTCONVERTERJS_H
 
 // node.js
+#include <hoot/js/HootJsStable.h>
 #include <hoot/js/SystemNodeJs.h>
-#include <v8.h>
 
 namespace hoot
 {
@@ -43,7 +43,7 @@ private:
   ElementConverterJs();
   ~ElementConverterJs();
 
-  static v8::Handle<v8::Value> calculateLength(const v8::Arguments& args);
+  static void calculateLength(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
 }

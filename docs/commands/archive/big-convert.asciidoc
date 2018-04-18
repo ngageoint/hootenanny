@@ -1,0 +1,38 @@
+== big-convert
+
+NOTE: This documents Hootenanny conflation using Hadoop, which is no longer supported (supported up to v0.2.38), and has been 
+left here for references purposes only.
+
+=== Description
+
+The +big-convert+ command uses a mapreduce cluster to convert from one input format to another.  
+This does not perform any translation, only conversion.  Use this command instead of
++convert+ when working with very large amounts of data.  
+
+=== Usage
+
+--------------------------------------
+big-convert (input) (output)
+--------------------------------------
+
+=== Supported Formats
+
+The supported input formats are:
+
+* OpenStreetMap Protocol Buffers (.osm.pbf)
+
+The supported output formats are:
+
+* OpenStreetMap API Database SQL file (.sql)
+* OpenStreetMap API Database (osmapidb://)
+
+=== Notes
+
+==== Converting to SQL File or OSM API Database
+
+* The input must be a .pbf file and it must reside on HDFS.
+* The output should only be written to an offline database (no other writers).  The writer will disable the database
+constraints before writing and re-enable them when writing is completed.
+* All elements in the output belong to a single changeset.
+* No OSM validation is done on the output.
+

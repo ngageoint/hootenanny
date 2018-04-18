@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NETWORKDETAILS_H
 #define NETWORKDETAILS_H
@@ -55,6 +55,11 @@ class HighwayClassifier;
 class NetworkDetails : public SearchRadiusProvider, public Configurable
 {
 public:
+
+  static std::string className() { return "hoot::NetworkDetails"; }
+
+  static unsigned int logWarnCount;
+
   NetworkDetails(ConstOsmMapPtr map, ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2);
 
   Meters calculateDistance(ConstEdgeLocationPtr el) const;
@@ -179,6 +184,7 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
 private:
+
   boost::shared_ptr<HighwayClassifier> _classifier;
   ConstOsmMapPtr _map;
   ConstOsmNetworkPtr _n1, _n2;
@@ -188,9 +194,15 @@ private:
 
   class SublineCache
   {
-  public:
-    double p;
-    WaySublineMatchStringPtr matches;
+    public:
+
+      QString toString() const
+      {
+        return  "p: " + QString::number(p) + " " + matches->toString();
+      }
+
+      double p;
+      WaySublineMatchStringPtr matches;
   };
 
   QHash< ElementId, QHash<ElementId, SublineCache> > _sublineCache;

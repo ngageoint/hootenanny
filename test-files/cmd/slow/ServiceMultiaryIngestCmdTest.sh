@@ -39,7 +39,7 @@ TRANSLATION_SCRIPT=translations/GeoNames.js
 echo ""
 echo "MULTIARY INGEST - DELETING REFERENCE LAYER..."
 echo ""
-hoot delete-map $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer"
+hoot delete-db-map $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer"
 echo ""
 echo "MULTIARY INGEST - INGESTING GEONAMES REFERENCE DATASET..."
 echo ""
@@ -55,7 +55,7 @@ hoot convert $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer" $FINAL_OUTP
 echo ""
 echo "MULTIARY INGEST - COMPARING GEONAMES REFERENCE LAYER OUTPUT..."
 echo ""
-hoot is-match $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
+hoot map-diff $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
 echo ""
 echo "MULTIARY INGEST - COMPARING GEONAMES ADD CHANGESET OUTPUT..."
 echo ""
@@ -82,7 +82,7 @@ TRANSLATION_SCRIPT=translations/OSM_Ingest.js
 echo ""
 echo "MULTIARY INGEST - DELETING REFERENCE LAYER..."
 echo ""
-hoot delete-map $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer"
+hoot delete-db-map $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer"
 echo ""
 echo "MULTIARY INGEST - INGESTING OSM PBF REFERENCE DATASET..."
 echo ""
@@ -98,7 +98,7 @@ hoot convert $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer" $FINAL_OUTP
 echo ""
 echo "MULTIARY INGEST - COMPARING OSM PBF REFERENCE LAYER OUTPUT..."
 echo ""
-hoot is-match $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
+hoot map-diff $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
 echo ""
 echo "MULTIARY INGEST - COMPARING OSM PBF ADD CHANGESET OUTPUT..."
 echo ""
@@ -125,7 +125,7 @@ TRANSLATION_SCRIPT=translations/OSM_Ingest.js
 echo ""
 echo "MULTIARY INGEST - DELETING REFERENCE LAYER..."
 echo ""
-hoot delete-map $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer"
+hoot delete-db-map $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer"
 echo ""
 echo "MULTIARY INGEST - INGESTING OSM XML REFERENCE DATASET..."
 echo ""
@@ -141,7 +141,7 @@ hoot convert $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer" $FINAL_OUTP
 echo ""
 echo "MULTIARY INGEST - COMPARING OSM XML REFERENCE LAYER OUTPUT..."
 echo ""
-hoot is-match $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
+hoot map-diff $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
 echo ""
 echo "MULTIARY INGEST - COMPARING OSM XML ADD CHANGESET OUTPUT..."
 echo ""
@@ -168,7 +168,7 @@ TRANSLATION_SCRIPT=translations/OSM_Ingest.js
 echo ""
 echo "MULTIARY INGEST - DELETING REFERENCE LAYER..."
 echo ""
-hoot delete-map $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer"
+hoot delete-db-map $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer"
 echo ""
 echo "MULTIARY INGEST - INGESTING SHP REFERENCE DATASET..."
 echo ""
@@ -184,7 +184,7 @@ hoot convert $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer" $FINAL_OUTP
 echo ""
 echo "MULTIARY INGEST - COMPARING SHP REFERENCE LAYER OUTPUT..."
 echo ""
-hoot is-match $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
+hoot map-diff $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
 echo ""
 echo "MULTIARY INGEST - COMPARING SHP ADD CHANGESET OUTPUT..."
 echo ""
@@ -193,4 +193,8 @@ echo ""
 echo "MULTIARY INGEST - COMPARING SHP DELETE CHANGESET OUTPUT..."
 echo ""
 diff $GOLD_DELETE_CHANGESET $CHANGESET_DELETE_OUTPUT
+echo ""
+echo "MULTIARY INGEST - DELETING REFERENCE LAYER..."
+echo ""
+hoot delete-db-map $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer"
 

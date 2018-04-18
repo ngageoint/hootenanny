@@ -36,12 +36,12 @@ STEP 11b: Writing a XML changeset file that is the difference between the croppe
 STEP 12: Executing the SQL changeset on the osm api db...
 
 Changeset(s) Created: 1
-Changeset Details: min_lat=38.8920931, max_lat=38.902523, min_lon=-77.0501589, max_lon=-77.0336319, num_changes=153
+Changeset Details: min_lat=38.8920931, max_lat=38.902523, min_lon=-77.0501589, max_lon=-77.0336319, num_changes=139
 Node(s) Created: 108
 Node(s) Modified: 0
 Node(s) Deleted: 0
-Way(s) Created: 20
-Way(s) Modified: 25
+Way(s) Created: 9
+Way(s) Modified: 22
 Way(s) Deleted: 0
 Relation(s) Created: 0
 Relation(s) Modified: 0
@@ -49,14 +49,9 @@ Relation(s) Deleted: 0
 
 STEP 14: Reading the entire contents of the osm api db, for the SQL changeset workflow, writing it into a file, and verifying the data...
 
-14:36:47.278 WARN  ...core/scoring/MapComparator.cpp( 178) rn: -77.043341400000003, 38.900221799999997 n: -77.028100400000000, 38.892085399999999
-14:36:47.278 WARN  ...core/scoring/MapComparator.cpp( 178) rn: -77.043193599999995, 38.900230200000003 n: -77.028179199999997, 38.892085399999999
-14:36:47.278 WARN  ...core/scoring/MapComparator.cpp( 178) rn: -77.042952999999997, 38.900231400000003 n: -77.028333000000003, 38.892085000000002
-14:36:47.278 WARN  ...core/scoring/MapComparator.cpp( 178) rn: -77.042771599999995, 38.900231400000003 n: -77.028493800000007, 38.892084599999997
-14:36:47.278 WARN  ...core/scoring/MapComparator.cpp( 178) rn: -77.042626499999997, 38.900231499999997 n: -77.028766500000003, 38.892084699999998
-14:36:47.278 WARN  ...core/scoring/MapComparator.cpp( 178) rn: -77.042521600000001, 38.900227299999997 n: -77.029076200000006, 38.892086499999998
-14:36:47.278 WARN  ...core/scoring/MapComparator.cpp( 178) rn: -77.042364399999997, 38.900224199999997 n: -77.029387499999999, 38.892086200000001
-14:36:47.278 WARN  ...core/scoring/MapComparator.cpp( 178) rn: -77.042348500000003, 38.900223599999997 n: -77.029668799999996, 38.892085999999999
-14:36:47.278 WARN  ...core/scoring/MapComparator.cpp( 178) rn: -77.042207199999993, 38.900218000000002 n: -77.029715300000007, 38.892085999999999
-14:36:47.278 WARN  ...core/scoring/MapComparator.cpp( 178) rn: -77.041979999999995, 38.900209699999998 n: -77.029970000000006, 38.892087400000001
-14:36:47.278 WARN  ...core/scoring/MapComparator.cpp( 178) rn: -77.041830500000003, 38.900210100000002 n: -77.030029999999996, 38.892087799999999
+
+STEP 15: Cleaning up database...
+
+15:57:54.369 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 2257
+15:57:54.625 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 2258
+15:57:54.884 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 2259

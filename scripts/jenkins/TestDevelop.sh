@@ -6,16 +6,13 @@ set -e
 
 cd $HOOT_HOME
 
-hoot --version --debug
+hoot version --debug
 
 export HOOT_TEST_DIFF=--diff
 # Run all of the tests - from the "test-all" target
 echo "Running core glacial tests..."
 bin/HootTest $HOOT_TEST_DIFF --glacial --parallel $(nproc)
 
-
-echo "Running pretty-pipes tests..."
-make -sj`nproc` pp-test
 echo "Running plugins tests..."
 make -sj`nproc` plugins-test
 echo "Running services tests..."

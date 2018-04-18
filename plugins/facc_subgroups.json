@@ -1,0 +1,258 @@
+{
+  "AA": {
+    "title": "Extraction",
+    "icon": "presets/landmark/mine.svg"
+  },
+  "AB": {
+    "title": "Disposal",
+    "icon": "presets/landuse/landfill.svg"
+  },
+  "AC": {
+    "title": "Processing Industry",
+    "icon": "presets/landmark/chimney.svg"
+  },
+  "AD": {
+    "title": "Power Generation",
+    "icon": "presets/power/power.svg"
+  },
+  "AE": {
+    "title": "Fabrication Industry",
+    "icon": "presets/landmark/works.svg"
+  },
+  "AF": {
+    "title": "Associated Industrial Structures",
+    "icon": "presets/landmark/crane.svg"
+  },
+  "AG": {
+    "title": "Commercial",
+    "icon": "presets/landuse/commercial.svg"
+  },
+  "AH": {
+    "title": "Institutional/Governmental",
+    "icon": "presets/office/government.svg"
+  },
+  "AI": {
+    "title": "Residential",
+    "icon": "presets/landmark/building.svg"
+  },
+  "AJ": {
+    "title": "Agriculture",
+    "icon": "presets/landuse/farmyard.svg"
+  },
+  "AK": {
+    "title": "Recreational",
+    "icon": "presets/leisure/picnic.svg"
+  },
+  "AL": {
+    "title": "Miscellaneous Features",
+    "icon": "presets/misc/information/information.svg"
+  },
+  "AM": {
+    "title": "Storage",
+    "icon": "presets/landmark/storage_tank.svg"
+  },
+  "AN": {
+    "title": "Transportation — Railroad",
+    "icon": "presets/transport/railway/rail.svg"
+  },
+  "AP": {
+    "title": "Transportation — Road",
+    "icon": "presets/transport/way/way_unclassified.svg"
+  },
+  "AQ": {
+    "title": "Associated Transportation",
+    "icon": "presets/transport/bridge/bridge.svg"
+  },
+  "AR": {
+    "title": "Air Traffic Services",
+    "icon": "presets/transport/airport/terminal.svg"
+  },
+  "AT": {
+    "title": "Communication/Transmission",
+    "icon": "presets/power/line.svg"
+  },
+  "AU": {
+    "title": "Airport",
+    "icon": "presets/transport/airport.svg"
+  },
+  "BA": {
+    "title": "Coastal Hydrography",
+    "icon": "presets/nautical/coast_line.svg"
+  },
+  "BB": {
+    "title": "Ports and Harbors",
+    "icon": "presets/nautical/marina.svg"
+  },
+  "BC": {
+    "title": "NAVAIDS",
+    "icon": "presets/landmark/lighthouse.svg"
+  },
+  "BD": {
+    "title": "Dangers/Hazards",
+    "icon": "presets/misc/danger.svg"
+  },
+  "BE": {
+    "title": "Depth Information",
+    "icon": "presets/nautical/ferry.svg"
+  },
+  "BF": {
+    "title": "Bottom Features",
+    "icon": "presets/nautical/beach.svg"
+  },
+  "BG": {
+    "title": "Tide and Current Information",
+    "icon": "presets/nautical/lock_gate.svg"
+  },
+  "BH": {
+    "title": "Inland Water",
+    "icon": "presets/nautical/water.svg"
+  },
+  "BI": {
+    "title": "Miscellaneous Inland Water",
+    "icon": "presets/nautical/water.svg"
+  },
+  "BJ": {
+    "title": "Snow/Ice",
+    "icon": "presets/landmark/glacier.svg"
+  },
+  "BK": {
+    "title": "Oceanographic or Geophysical",
+    "icon": "presets/place/island.svg"
+  },
+  "CA": {
+    "title": "Relief Portrayal",
+    "icon": "presets/landmark/cave_entrance.svg"
+  },
+  "DA": {
+    "title": "Exposed Surface Material",
+    "icon": "presets/landmark/adit.svg"
+  },
+  "DB": {
+    "title": "Landforms",
+    "icon": "presets/misc/cliff.svg"
+  },
+  "EA": {
+    "title": "Cropland",
+    "icon": "presets/landuse/farmland.svg"
+  },
+  "EB": {
+    "title": "Rangeland",
+    "icon": "presets/landuse/meadow.svg"
+  },
+  "EC": {
+    "title": "Woodland",
+    "icon": "presets/landmark/forest.svg"
+  },
+  "ED": {
+    "title": "Wetlands",
+    "icon": "presets/landuse/wetland.svg"
+  },
+  "EE": {
+    "title": "Miscellaneous Vegetation",
+    "icon": "presets/leisure/garden.svg"
+  },
+  "FA": {
+    "title": "Boundaries/Limits/Zones (Topographic)",
+    "icon": "presets/place/village.svg"
+  },
+  "FB": {
+    "title": "Boundaries/Limits/Zones (Aeronautical)",
+    "icon": "presets/place/hamlet.svg"
+  },
+  "FC": {
+    "title": "Boundaries/Limits/Zones (Hydrographic)",
+    "icon": "presets/place/capital.svg"
+  },
+  "GA": {
+    "title": "Air Route",
+    "icon": "presets/transport/airport/windsock.svg"
+  },
+  "GB": {
+    "title": "Aerodrome",
+    "icon": "presets/transport/airport.svg"
+  },
+  "IA": {
+    "title": "Areas",
+    "icon": "presets/misc/boundaries.svg"
+  },
+  "ID": {
+    "title": "Reference Points",
+    "icon": "presets/landmark/boundary_stone.svg"
+  },
+  "IE": {
+    "title": "Special Characteristics",
+    "icon": "presets/misc/no_icon.svg"
+  },
+  "NA": {
+    "title": "Drainage",
+    "icon": "presets/nautical/waterway_riverbank.svg"
+  },
+  "NM": {
+    "title": "Area of Numerous (Aon) 1",
+    "icon": "presets/landuse/greenfield.svg"
+  },
+  "NU": {
+    "title": "Area of Numerous (Aon) 2",
+    "icon": "presets/landuse/brownfield.svg"
+  },
+  "SA": {
+    "title": "Terrain Analysis Dataset",
+    "icon": "presets/landmark/valley.svg"
+  },
+  "SB": {
+    "title": "Background Display Dataset",
+    "icon": "presets/landmark/saddle.svg"
+  },
+  "SC": {
+    "title": "Transportation and Logistics Dataset",
+    "icon": "presets/misc/route.svg"
+  },
+  "SD": {
+    "title": "Aeronautical Information Dataset",
+    "icon": "prests/transport/airport/airfield.svg"
+  },
+  "SE": {
+    "title": "Toponymic Dataset",
+    "icon": "presets/misc/information/guidepost.svg"
+  },
+  "SF": {
+    "title": "Simulation Dataset",
+    "icon": "presets/misc/no_icon.svg"
+  },
+  "ST": {
+    "title": "Military",
+    "icon": "presets/landuse/military.svg"
+  },
+  "SU": {
+    "title": "Dataset Development",
+    "icon": "presets/misc/construction.svg"
+  },
+  "T0": {
+    "title": "Pump",
+    "icon": "presets/accommodation/water.svg"
+  },
+  "ZA": {
+    "title": "Annotation",
+    "icon": "presets/misc/name.svg"
+  },
+  "ZB": {
+    "title": "Control Points",
+    "icon": "presets/landmark/survey_point.svg"
+  },
+  "ZC": {
+    "title": "Magnetic Variation",
+    "icon": "presets/misc/contact.svg"
+  },
+  "ZD": {
+    "title": "Miscellaneous",
+    "icon": "presets/misc/name.svg"
+  },
+  "ZE": {
+    "title": "Background Features",
+    "icon": "presets/misc/no_icon.svg"
+  },
+  "ZI": {
+    "title": "Metadata Dataset",
+    "icon": "presets/misc/description.svg"
+  }
+}

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef INTERSECTIONCRITERION_H
 #define INTERSECTIONCRITERION_H
@@ -44,6 +44,7 @@ namespace hoot
 class IntersectionCriterion : public ElementCriterion, public ConstOsmMapConsumer
 {
 public:
+
   static std::string className() { return "hoot::IntersectionCriterion"; }
 
   IntersectionCriterion() {}
@@ -59,7 +60,10 @@ public:
 
   virtual void setOsmMap(const OsmMap* map);
 
+  virtual QString getDescription() const { return "Identifies highway intersections"; }
+
 private:
+
   std::set<long> _highwayIds;
   ConstOsmMapPtr _map;
 };

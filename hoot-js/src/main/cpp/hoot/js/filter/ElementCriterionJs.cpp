@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ElementCriterionJs.h"
 
@@ -59,8 +59,10 @@ ElementCriterionJs::~ElementCriterionJs()
 {
 }
 
-Handle<Value> ElementCriterionJs::addCriterion(const Arguments& args) {
-  HandleScope scope;
+void ElementCriterionJs::addCriterion(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   ElementCriterionPtr addTo = ObjectWrap::Unwrap<ElementCriterionJs>(args.This())->getCriterion();
 
@@ -73,19 +75,19 @@ Handle<Value> ElementCriterionJs::addCriterion(const Arguments& args) {
   if (!consumer)
   {
     consumer->addCriterion(other);
+    args.GetReturnValue().SetUndefined();
   }
   else
   {
-    ThrowException(Exception::TypeError(String::New("This criterion doesn't support adding "
-                                                    "criterion.")));
-    return scope.Close(Undefined());
+    args.GetReturnValue().Set(current->ThrowException(
+      Exception::TypeError(String::NewFromUtf8(current, "This criterion doesn't support adding criterion."))));
   }
-
-  return scope.Close(Undefined());
 }
 
 void ElementCriterionJs::Init(Handle<Object> target)
 {
+  Isolate* current = target->GetIsolate();
+  HandleScope scope(current);
   vector<string> opNames =
     Factory::getInstance().getObjectNamesByBase(ElementCriterion::className());
 
@@ -95,35 +97,38 @@ void ElementCriterionJs::Init(Handle<Object> target)
     const char* n = utf8.data();
 
     // Prepare constructor template
-    Local<FunctionTemplate> tpl = FunctionTemplate::New(New);
-    tpl->SetClassName(String::NewSymbol(opNames[i].data()));
+    Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
+    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].data()));
     tpl->InstanceTemplate()->SetInternalFieldCount(2);
     // Prototype
-    tpl->PrototypeTemplate()->Set(String::NewSymbol("addCriterion"),
-        FunctionTemplate::New(addCriterion)->GetFunction());
-    tpl->PrototypeTemplate()->Set(String::NewSymbol("isSatisfied"),
-        FunctionTemplate::New(isSatisfied)->GetFunction());
+    tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "addCriterion"),
+        FunctionTemplate::New(current, addCriterion));
+    tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "isSatisfied"),
+        FunctionTemplate::New(current, isSatisfied));
     tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
-                                  String::New(ElementCriterion::className().data()));
+                                  String::NewFromUtf8(current, ElementCriterion::className().data()));
 
-    Persistent<Function> constructor = Persistent<Function>::New(tpl->GetFunction());
-    target->Set(String::NewSymbol(n), constructor);
+    Persistent<Function> constructor(current, tpl->GetFunction());
+    target->Set(String::NewFromUtf8(current, n), ToLocal(&constructor));
   }
 }
 
-Handle<Value> ElementCriterionJs::isSatisfied(const v8::Arguments& args)
+void ElementCriterionJs::isSatisfied(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   ElementCriterionPtr ec = ObjectWrap::Unwrap<ElementCriterionJs>(args.This())->getCriterion();
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
-  return scope.Close(Boolean::New(ec->isSatisfied(e)));
+  args.GetReturnValue().Set(Boolean::New(current, ec->isSatisfied(e)));
 }
 
-Handle<Value> ElementCriterionJs::New(const Arguments& args) {
-  HandleScope scope;
+void ElementCriterionJs::New(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   QString className = str(args.This()->GetConstructorName());
 
@@ -133,7 +138,7 @@ Handle<Value> ElementCriterionJs::New(const Arguments& args) {
 
   PopulateConsumersJs::populateConsumers<ElementCriterion>(c, args);
 
-  return args.This();
+  args.GetReturnValue().Set(args.This());
 }
 
 }

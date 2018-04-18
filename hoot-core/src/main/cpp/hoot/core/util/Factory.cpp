@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Factory.h"
@@ -102,7 +102,7 @@ void Factory::registerCreator(boost::shared_ptr<ObjectCreator> oc, bool baseClas
   if (baseClass == false && oc->getBaseName() == oc->getName())
   {
     throw HootException(
-      "Base name and class name are the same. Did you forget to imlement className() in "
+      "Base name and class name are the same. Did you forget to implement className() in "
       "your class? If this is intentional, then set baseClass to true, or use the "
       "HOOT_FACTORY_REGISTER_BASE macro.  Highly unusual. (" + oc->getName() + ")");
   }

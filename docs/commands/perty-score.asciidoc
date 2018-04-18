@@ -2,20 +2,17 @@
 
 === Description
 
-+perty-score+ generates a PERTY score for a conflation operation.  It reads from
-reference input, creates a permuted copy of the reference data, conflates the
-referenced data with the permuted data, and writes the reference data, permuted
-data, and conflated data to output files. The +perty-score+ command is based on
-the paper, Evaluating conflation methods using uncertainty modeling, P.
-Doucette, et. al, 2012.
+The +perty-score+ command generates a PERTY score for a conflation operation.  It reads from reference input, creates a permuted 
+copy of the reference data, conflates the referenced data with the permuted data, and writes the reference data, permuted data, and 
+conflated data to output files. The +perty-score+ command is based on the paper, Evaluating conflation methods using uncertainty 
+modeling, P. Doucette, et. al, 2012.
 
 * +reference-input-file+ - An input reference data path (e.g. .osm file).
-* +output-dir+ - The directory for all output files
+* +output-dir+           - The directory for all output files
 
 === Optional Defines
 
-All configuration options valid for the +perty+ command are also valid for the
-+perty-score+ command.
+All configuration options that are valid for the +perty+ command are also valid for the +perty-score+ command.
 
 === Usage
 
@@ -25,10 +22,9 @@ perty-score (reference-input-file) (output-dir)
 
 ==== Example
 
-The following example perturbs a copy of the input file "reference-in.osm",
-conflates "reference-in.osm" with the copy, and displays a PERTY score to define
-how accurately the data was conflated.  The conflated data, along with the
-perturbed and reference data are written to the "outdir" directory:
+The following example perturbs a copy of the input file "reference-in.osm", conflates "reference-in.osm" with the copy, and 
+displays a PERTY score to define how accurately the data was conflated.  The conflated data, along with the perturbed and 
+reference data are written to the "outdir" directory:
 
 --------------------------------------
 hoot perty-score -D perty.systematic.error.x=1 -D perty.systematic.error.y=1 \

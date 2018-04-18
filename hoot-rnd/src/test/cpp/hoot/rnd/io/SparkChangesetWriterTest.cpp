@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 // Hoot
 #include <hoot/rnd/io/SparkChangesetWriter.h>
@@ -49,6 +49,11 @@ class SparkChangesetWriterTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
+
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/io/SparkChangesetWriterTest/");
+  }
 
   void writeNodes(const QString output, const QString format)
   {
@@ -81,7 +86,6 @@ public:
     DisableLog dl;
 
     const QString outputDir = "test-output/io/SparkChangesetWriterTest";
-    QDir().mkpath(outputDir);
     const QString changesetOutput = outputDir + "/changeset-1.spark.1";
 
     writeNodes(changesetOutput, "json");
@@ -98,9 +102,7 @@ public:
   {
     DisableLog dl;
 
-    const QString outputDir = "test-output/io/SparkChangesetWriterTest";
-    QDir().mkpath(outputDir);
-    const QString changesetOutput = outputDir + "/changeset-3.spark.1";
+    const QString changesetOutput = "test-output/io/SparkChangesetWriterTest/changeset-3.spark.1";
 
     SparkChangesetWriter changesetFileWriter;
     changesetFileWriter.open(changesetOutput);
@@ -124,9 +126,7 @@ public:
   {
     DisableLog dl;
 
-    const QString outputDir = "test-output/io/SparkChangesetWriterTest";
-    QDir().mkpath(outputDir);
-    const QString changesetOutput = outputDir + "/changeset-4.spark.1";
+    const QString changesetOutput = "test-output/io/SparkChangesetWriterTest/changeset-4.spark.1";
 
     SparkChangesetWriter changesetFileWriter;
     changesetFileWriter.open(changesetOutput);
@@ -152,9 +152,7 @@ public:
   {
     DisableLog dl;
 
-    const QString outputDir = "test-output/io/SparkChangesetWriterTest";
-    QDir().mkpath(outputDir);
-    const QString changesetOutput = outputDir + "/changeset-5.spark.1";
+    const QString changesetOutput = "test-output/io/SparkChangesetWriterTest/changeset-5.spark.1";
 
     SparkChangesetWriter changesetFileWriter;
     changesetFileWriter.open(changesetOutput);

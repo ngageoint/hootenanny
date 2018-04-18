@@ -1,0 +1,22 @@
+== big-unify
+
+NOTE: This documents Hootenanny conflation using Hadoop, which is no longer supported (supported up to v0.2.38), and has been 
+left here for references purposes only.
+
+=== Description
+
+The +big-unify+ command leads from inputs, conflates using unify and writes the
+result to output.pbf.  For specifics on the unify command see +unify+ help.
+
+* +input1.pbf+ - Input 1 .pbf dir -- must reside on HDFS.
+* +input2.pbf+ - Input 2 .pbf dir -- must reside on HDFS.
+* +output.pbf+ - Output .pbf dir -- must reside on HDFS.
+* +--local+ - Runs the job locally rather than using Hadoop.
+
+=== Usage
+
+--------------------------------------
+big-unify (input1.pbf) (input2.pbf) (output.pbf) [pixelSize] [maxNodeCount]
+[--local]
+--------------------------------------
+

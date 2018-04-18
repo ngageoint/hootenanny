@@ -5,19 +5,19 @@ Feature: Toggle/hide map features of conflated layer in review mode
     And I resize the window
     And I click Get Started
     And I press "Add Reference Dataset"
-    And I click the "DcOsmRoadsCucumber" Dataset
+    And I click the "ToyTestACucumber" Dataset
     And I press "Add Layer"
-    Then I wait 30 "seconds" to see "span.strong" element with text "DcOsmRoadsCucumber"
+    Then I wait 30 "seconds" to see "span.strong" element with text "ToyTestACucumber"
     And I press "Add Secondary Dataset"
-    And I click the "DcTigerRoadsCucumber" Dataset
+    And I click the "TTCauseReviewCucumber" Dataset
     And I press "Add Layer"
-    Then I wait 30 "seconds" to see "span.strong" element with text "DcTigerRoadsCucumber"
+    Then I wait 30 "seconds" to see "span.strong" element with text "TTCauseReviewCucumber"
     Then I should see "Conflate"
     And I press "Conflate"
     And I fill "saveAs" input with "HideMapFeaturesCucumber"
     And I scroll element into view and press "conflate2"
     Then I wait 30 "seconds" to see "Conflating …"
-    Then I wait 3 "minutes" to see "HideMapFeaturesCucumber"
+    Then I wait 5 "minutes" to see "HideMapFeaturesCucumber"
     Then I wait 30 "seconds" to see "Complete Review"
     Then I context click "HideMapFeaturesCucumber"
     And I click the "div" with text "Zoom to Layer"

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef MAPCROPPER_H
@@ -91,7 +91,10 @@ public:
 
   virtual void writeObject(QDataStream& os) const;
 
+  virtual QString getDescription() const { return "Crops a map"; }
+
 private:
+
   geos::geom::Envelope _envelope;
   boost::shared_ptr<const geos::geom::Geometry> _envelopeG;
   bool _invert;

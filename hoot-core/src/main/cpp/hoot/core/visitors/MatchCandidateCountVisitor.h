@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MATCH_CANDIDATE_COUNT_VISITOR_H
 #define MATCH_CANDIDATE_COUNT_VISITOR_H
@@ -55,6 +55,11 @@ public:
   double getStat() const { return _totalCandidateCount; }
 
   boost::any getData() const { return _matchCandidateCountsByMatchCreator; }
+
+  virtual QString getName() const { return "Count Match Candidates"; }
+
+  virtual QString getDescription() const
+  { return "Counts all elements that are candidates for matches given a set of match creators"; }
 
 private:
 

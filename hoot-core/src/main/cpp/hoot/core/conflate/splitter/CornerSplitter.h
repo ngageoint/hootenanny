@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef CORNERSPLITTER_H
@@ -64,7 +64,10 @@ public:
 
   void splitCorners();
 
+  virtual QString getDescription() const { return "Splits sharp road corners"; }
+
 private:
+
   boost::shared_ptr<OsmMap> _map;
   std::vector<long> _todoWays;
 

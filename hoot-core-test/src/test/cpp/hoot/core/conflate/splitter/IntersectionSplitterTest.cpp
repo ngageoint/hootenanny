@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -30,11 +30,6 @@
 #include <hoot/core/conflate/splitter/IntersectionSplitter.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-using namespace hoot;
-
-
-// Boost
-using namespace boost;
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -48,19 +43,25 @@ using namespace boost;
 
 #include "../../TestUtils.h"
 
+namespace hoot
+{
+
 class IntersectionSplitterTest : public CppUnit::TestFixture
 {
-    CPPUNIT_TEST_SUITE(IntersectionSplitterTest);
-    CPPUNIT_TEST(runTest);
-    CPPUNIT_TEST(runTestSimple);
-    CPPUNIT_TEST_SUITE_END();
+  CPPUNIT_TEST_SUITE(IntersectionSplitterTest);
+  CPPUNIT_TEST(runTest);
+  CPPUNIT_TEST(runTestSimple);
+  CPPUNIT_TEST_SUITE_END();
 
 public:
 
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/conflate/splitter");
+  }
+
   void runTest()
   {
-    QDir().mkpath("test-output/conflate/splitter");
-
     OsmXmlReader reader;
 
     OsmMap::resetCounters();
@@ -81,8 +82,6 @@ public:
 
   void runTestSimple()
   {
-    QDir().mkpath("test-output/conflate/splitter");
-
     OsmXmlReader reader;
     OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
@@ -103,3 +102,4 @@ public:
 
 CPPUNIT_TEST_SUITE_REGISTRATION(IntersectionSplitterTest);
 
+}

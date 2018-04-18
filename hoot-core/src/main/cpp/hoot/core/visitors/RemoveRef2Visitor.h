@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVEREF2VISITOR_H
 #define REMOVEREF2VISITOR_H
@@ -73,9 +73,15 @@ public:
   virtual bool ref1CriterionSatisfied(const ConstElementPtr& e) const;
   virtual bool ref2CriterionSatisfied(const ConstElementPtr& e) const;
 
-private:
+  virtual QString getDescription() const
+  { return "Removes REF2 tags when a criterion is met for for both the REF1 and REF2 elements"; }
+
+protected:
 
   ElementCriterionPtr _criterion;
+
+private:
+
   OsmMap* _map;
   Ref1ToEid _ref1ToEid;
   static QStringList _ref2Keys;

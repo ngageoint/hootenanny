@@ -1227,6 +1227,7 @@ tds = {
             ["t.historic == 'castle' && t.ruins == 'yes'","t.condition = 'destroyed'; delete t.ruins"],
             ["t.landcover == 'snowfield' || t.landcover == 'ice-field'","a.F_CODE = 'BJ100'"],
             ["t.landuse == 'farmland' && t.crop == 'fruit_tree'","t.landuse = 'orchard'"],
+            ["t.landuse == 'railway' && t['railway:yard'] == 'marshalling_yard'","a.F_CODE = 'AN060'"],
             ["t.landuse == 'reservoir'","t.water = 'reservoir'; delete t.landuse"],
             ["t.landuse == 'scrub'","t.natural = 'scrub'; delete t.landuse"],
             ["t.launch_pad","delete t.launch_pad; t.aeroway='launchpad'"],
@@ -1323,6 +1324,24 @@ tds = {
                 // Debug
                 // print('PreDropped: amenity = ' + tags.amenity);
                 delete tags.amenity;
+            }
+        }
+
+        // Churches etc
+        if (tags.building && ! tags.amenity)
+        {
+            var how = [ 'church','chapel','cathedral','mosque','pagoda','shrine','temple',
+                        'synagogue','tabernacle','stupa']
+            if (how.indexOf(tags.building) > -1)
+            {
+                tags.amenity = 'place_of_worship';
+            }
+
+            var rc = [ 'mission','religious_community','seminary','convent','monastry',
+                       'noviciate','hermitage','retrest','marabout']
+            if (rc.indexOf(tags.building) > -1)
+            {
+                tags.use = 'religious_activities';
             }
         }
 
@@ -1503,17 +1522,36 @@ tds = {
                     // or a Coastline
                     if (tags.natural == 'coastline')
                     {
-                        if (geometryType == 'Area') // Islands are Areas
+                        if (geometryType == 'Line')
                         {
-                            delete tags.natural;
-                        }
-                        else if (geometryType =='Line') // Coastlines are lines
-                        {
+                            attrs.F_CODE = 'BA010'; // Land/Water Boundary - Line
                             delete tags.place;
+                        }
+                        else
+                        {
+                            // NOTE: Islands can be Points or Areas
+                            attrs.F_CODE = 'BA030'; // Island
+                            delete tags.natural;
                         }
                     }
                     break;
 
+            case 'island':
+            case 'islet':
+                if (tags.natural == 'coastline')
+                    if (geometryType == 'Line')
+                    {
+                        attrs.F_CODE = 'BA010'; // Land/Water Boundary - Line
+                        delete tags.place;
+                        break;                        
+                    }
+                    else
+                    {
+                        // NOTE: Islands can be Points or Areas
+                        attrs.F_CODE = 'BA030'; // Island - Polygon
+                        delete tags.natural;
+                        break;
+                    }
             } // End switch
         }
 
@@ -1661,6 +1699,50 @@ tds = {
            tags['aeroway:obstruction'] = tags.vertical_obstruction_identifier;
            delete tags.vertical_obstruction_identifier;
        }
+
+       // Railway loading things
+       if (tags.railway == 'loading')
+       {
+           if (tags.facility == 'gantry_crane')
+           {
+               delete tags.railway;
+               delete tags.facility;
+               attrs.F_CODE = 'AF040'; // Crane
+               tags['crane:type'] = 'bridge';
+           }
+
+           if (tags.facility == 'container_terminal')
+           {
+               delete tags.railway;
+               delete tags.facility;
+               attrs.F_CODE = 'AL010'; // Facility
+               attrs.FFN = '480'; // Transportation
+           }
+       } // End loading
+
+        switch (tags.man_made)
+        {
+            case undefined: // Break early if no value
+                break;
+
+            case 'reservoir_covered':
+                delete tags.man_made;
+                attrs.F_CODE = 'AM070'; // Storage Tank
+                tags.product = 'water';
+                break;
+
+            case 'gasometer':
+                delete tags.man_made;
+                attrs.F_CODE = 'AM070'; // Storage Tank
+                tags.product = 'gas';
+                break;
+        }
+
+        // Amusement Parks
+        if (attrs.F_CODE == 'AK030' && !(attrs.FFN))
+        {
+            attrs.FFN = '921'; // Recreation
+        }
 
     }, // End applyToTdsPreProcessing
 
@@ -1887,6 +1969,32 @@ tds = {
             // attrs.ZI005_FNA = translate.appendValue(attrs.ZI005_FNA,attrs.ZI005_FNA2,';');
 
             delete attrs.ZI005_FNA2;
+        }
+
+        // Fix ZI001_SSD
+        if (attrs.F_CODE == 'ZI040') // Spatial Metadata Entity Collection
+        {
+            // NOTE: We are going to override the normal source:datetime with what we get from JOSM
+            if (tags['source:imagery:datetime'])
+            {
+                attrs.ZI001_SSD = tags['source:imagery:datetime'];
+                delete notUsedTags['source:imagery:datetime'];
+            }
+
+            // Now try using tags from Taginfo
+            if (! attrs.ZI001_SSD)
+            {
+                if (tags['source:date']) 
+                {
+                    attrs.ZI001_SSD = tags['source:date'];
+                    delete notUsedTags['source:date'];
+                }
+                else if (tags['source:geometry:date'])
+                {
+                    attrs.ZI001_SSD = tags['source:geometry:date'];
+                    delete notUsedTags['source:geometry:date'];
+                }
+            }
         }
 
     }, // End applyToTdsPostProcessing

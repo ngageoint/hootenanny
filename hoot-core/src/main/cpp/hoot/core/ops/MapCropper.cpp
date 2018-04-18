@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "MapCropper.h"
@@ -53,7 +53,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Validate.h>
-#include <hoot/core/visitors/RemoveEmptyRelationsVisitor.h>
+#include <hoot/core/ops/RemoveEmptyRelationsOp.h>
 
 // Standard
 #include <limits>
@@ -215,8 +215,7 @@ void MapCropper::apply(OsmMapPtr& map)
   }
   LOG_DEBUG("Nodes removed: " + QString::number(nodesRemoved));
 
-  RemoveEmptyRelationsVisitor v;
-  map->visitRw(v);
+  RemoveEmptyRelationsOp().apply(map);
 }
 
 void MapCropper::crop(OsmMapPtr map, const Envelope& envelope)
@@ -395,6 +394,7 @@ boost::shared_ptr<Way> MapCropper::_reintroduceWay(OsmMapPtr map, boost::shared_
   // create a new way
   boost::shared_ptr<Way> newWay(new Way(w->getStatus(), map->createNextWayId(),
     w->getRawCircularError()));
+  newWay->setPid(w->getPid());
   newWay->setTags(w->getTags());
 
   // for each point on the linestring

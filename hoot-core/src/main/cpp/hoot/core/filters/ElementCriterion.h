@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTFILTER_H
 #define ELEMENTFILTER_H
@@ -72,6 +72,17 @@ public:
    * Use the clone pattern for all classes based on the ElementCriterion class
    */
   virtual boost::shared_ptr<ElementCriterion> clone() = 0;
+
+  /**
+   * Returns a one sentence description for the criterion.
+   *
+   * Keep this as short as possible, capitalize the first letter, and check to see that it stays
+   * on one line when displayed with the 'operators' command.
+   *
+   * To prevent a criterion from being displayed by the inline-operators command, this implemented
+   * as returning an empty string.
+   */
+  virtual QString getDescription() const = 0;
 };
 
 typedef boost::shared_ptr<ElementCriterion> ElementCriterionPtr;

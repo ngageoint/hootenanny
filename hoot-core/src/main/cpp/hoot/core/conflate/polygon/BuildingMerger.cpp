@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BuildingMerger.h"
 
@@ -49,7 +49,9 @@ namespace hoot
 
 class DeletableBuildingPart : public BaseFilter
 {
+
 public:
+
   DeletableBuildingPart() : BaseFilter(Filter::FilterMatches) {}
 
   bool isMatch(const Element &e) const
@@ -72,12 +74,15 @@ public:
     return result;
   }
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new DeletableBuildingPart()); }
+  virtual QString getDescription() const { return ""; }
 
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new DeletableBuildingPart()); }
 };
 
+unsigned int BuildingMerger::logWarnCount = 0;
+
 BuildingMerger::BuildingMerger(const set< pair<ElementId, ElementId> >& pairs) :
-  _pairs(pairs)
+_pairs(pairs)
 {
 }
 
@@ -87,6 +92,7 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Element
   set<ElementId> firstPairs;
   set<ElementId> secondPairs;
   set<ElementId> combined;
+  ReviewMarker reviewMarker;
   for (set< pair<ElementId, ElementId> >::iterator sit = _pairs.begin(); sit != _pairs.end(); ++sit)
   {
     firstPairs.insert(sit->first);
@@ -98,33 +104,100 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Element
   {
     QString note =
       "Merging multiple buildings from each data source is error prone and requires a human eye.";
-    ReviewMarker::mark(map, combined, note, "Building", 1);
+    reviewMarker.mark(map, combined, note, "Building", 1);
   }
   else
   {
-    // use node count as a surrogate for complexity of the geometry.
     boost::shared_ptr<Element> e1 = _buildBuilding1(map);
-    const int nodeCount1 =
-      (int)FilteredVisitor::getStat(
-        new ElementTypeCriterion(ElementType::Node), new ElementCountVisitor(), map, e1);
-
+    LOG_VART(e1.get());
     boost::shared_ptr<Element> e2 = _buildBuilding2(map);
-    const int nodeCount2 =
-      (int)FilteredVisitor::getStat(
-        new ElementTypeCriterion(ElementType::Node), new ElementCountVisitor(), map, e2);
+    LOG_VART(e2.get());
 
     boost::shared_ptr<Element> keeper;
     boost::shared_ptr<Element> scrap;
-    // keep the more complex building geometry.
-    if (nodeCount1 >= nodeCount2)
+    LOG_VART(ConfigOptions().getBuildingKeepMoreComplexGeometryWhenAutoMerging());
+    if (ConfigOptions().getBuildingKeepMoreComplexGeometryWhenAutoMerging())
     {
-      keeper = e1;
-      scrap = e2;
+      // use node count as a surrogate for complexity of the geometry.
+      int nodeCount1 = 0;
+      if (e1.get())
+      {
+        LOG_VART(e1);
+        nodeCount1 =
+          (int)FilteredVisitor::getStat(
+            new ElementTypeCriterion(ElementType::Node), new ElementCountVisitor(), map, e1);
+      }
+      LOG_VART(nodeCount1);
+
+      int nodeCount2 = 0;
+      if (e2.get())
+      {
+        nodeCount2 =
+          (int)FilteredVisitor::getStat(
+            new ElementTypeCriterion(ElementType::Node), new ElementCountVisitor(), map, e2);
+      }
+      LOG_VART(nodeCount2);
+
+      //This will happen if a way/relation building is passed in with missing nodes.
+      if (nodeCount1 == 0 || nodeCount2 == 0)
+      {
+        if (logWarnCount < Log::getWarnMessageLimit())
+        {
+          LOG_WARN("One or more of the buildings to merge are empty.  Skipping merge...");
+          if (e1.get())
+          {
+            LOG_VARD(e1->getElementId());
+          }
+          else
+          {
+            LOG_DEBUG("Building one null.");
+          }
+          if (e2.get())
+          {
+            LOG_VARD(e2->getElementId());
+          }
+          else
+          {
+            LOG_DEBUG("Building two null.");
+          }
+        }
+        else if (logWarnCount == Log::getWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
+
+        return;
+      }
+
+      if (nodeCount1 == nodeCount2)
+      {
+        keeper = e1;
+        scrap = e2;
+        LOG_TRACE(
+          "Buildings have equally complex geometries.  Keeping the first building geometry: " <<
+          keeper << "...");
+      }
+      else
+      {
+        if (nodeCount1 > nodeCount2)
+        {
+          keeper = e1;
+          scrap = e2;
+        }
+        else
+        {
+          keeper = e2;
+          scrap = e1;
+        }
+        LOG_TRACE("Keeping the more complex building geometry: " << keeper << "...");
+      }
     }
     else
     {
-      keeper = e2;
-      scrap = e1;
+      keeper = e1;
+      scrap = e2;
+      LOG_TRACE("Keeping the first building geometry: " << keeper << "...");
     }
 
     // use the default tag merging mechanism
@@ -195,8 +268,13 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Element
 boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
                                                          const set<ElementId>& eid)
 {
-  assert(eid.size() > 0);
+  LOG_TRACE("Build the building...");
 
+  LOG_VART(eid);
+  if (eid.size() == 0)
+  {
+    throw IllegalArgumentException("No element ID passed to buildBuilding.");
+  }
   if (eid.size() == 1)
   {
     return map->getElement(*eid.begin());
@@ -215,6 +293,7 @@ boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
         RelationPtr r = boost::dynamic_pointer_cast<Relation>(e);
         if (r->getType() == MetadataTags::RelationBuilding())
         {
+          LOG_VART(r);
           isBuilding = true;
 
           // This is odd. Originally I had a const reference to the result, but that was causing
@@ -228,8 +307,8 @@ boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
             {
               boost::shared_ptr<Element> em = map->getElement(m[i].getElementId());
               // push any non-conflicing tags in the parent relation down into the building part.
-              em->setTags(OverwriteTagMerger().mergeTags(em->getTags(), r->getTags(),
-                em->getElementType()));
+              em->setTags(
+                OverwriteTagMerger().mergeTags(em->getTags(), r->getTags(), em->getElementType()));
               parts.push_back(em);
             }
           }
@@ -243,12 +322,14 @@ boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
         parts.push_back(e);
       }
     }
+    LOG_VART(parts.size());
+    LOG_VART(toRemove.size());
 
     boost::shared_ptr<Element> result = BuildingPartMergeOp().combineParts(map, parts);
-
-    DeletableBuildingPart filter;
+    LOG_VART(result);
 
     // likely create a filter that only matches buildings and building parts and pass that to the
+    DeletableBuildingPart filter;
     for (size_t i = 0; i < toRemove.size(); i++)
     {
       if (map->containsElement(toRemove[i]))
@@ -289,6 +370,59 @@ boost::shared_ptr<Element> BuildingMerger::_buildBuilding2(const OsmMapPtr& map)
   }
 
   return buildBuilding(map, e);
+}
+
+void BuildingMerger::mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetId)
+{
+  LOG_INFO("Merging buildings...");
+
+  //The building merger by default uses geometric complexity (node count) to determine which
+  //building geometry to keep.  Since the UI at this point will never pass in buildings with their
+  //child nodes, we want to override the default behavior and make sure the building merger always
+  //arbitrarily keeps the geometry of the first building passed in.  This is ok, b/c the UI workflow
+  //lets the user select which building to keep and using complexity wouldn't make sense.
+  LOG_VART(ConfigOptions().getBuildingKeepMoreComplexGeometryWhenAutoMergingKey());
+  conf().set(
+    ConfigOptions().getBuildingKeepMoreComplexGeometryWhenAutoMergingKey(), "false");
+  LOG_VART(ConfigOptions().getBuildingKeepMoreComplexGeometryWhenAutoMerging());
+
+  int buildingsMerged = 0;
+
+  const WayMap ways = map->getWays();
+  for (WayMap::const_iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
+  {
+    const ConstWayPtr& way = wayItr->second;
+    if (way->getElementId() != mergeTargetId && OsmSchema::getInstance().isBuilding(way))
+    {
+      LOG_VART(way);
+      std::set<std::pair<ElementId, ElementId> > pairs;
+      pairs.insert(std::pair<ElementId, ElementId>(mergeTargetId, way->getElementId()));
+      BuildingMerger merger(pairs);
+      LOG_VART(pairs.size());
+      std::vector<std::pair<ElementId, ElementId> > replacedElements;
+      merger.apply(map, replacedElements);
+      buildingsMerged++;
+    }
+  }
+
+  const RelationMap relations = map->getRelations();
+  for (RelationMap::const_iterator relItr = relations.begin(); relItr != relations.end(); ++relItr)
+  {
+    const ConstRelationPtr& relation = relItr->second;
+    if (relation->getElementId() != mergeTargetId && OsmSchema::getInstance().isBuilding(relation))
+    {
+      LOG_VART(relation);
+      std::set<std::pair<ElementId, ElementId> > pairs;
+      pairs.insert(std::pair<ElementId, ElementId>(mergeTargetId, relation->getElementId()));
+      BuildingMerger merger(pairs);
+      LOG_VART(pairs.size());
+      std::vector<std::pair<ElementId, ElementId> > replacedElements;
+      merger.apply(map, replacedElements);
+      buildingsMerged++;
+    }
+  }
+
+  LOG_INFO("Merged " << buildingsMerged << " buildings.");
 }
 
 QString BuildingMerger::toString() const

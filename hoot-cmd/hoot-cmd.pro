@@ -12,7 +12,7 @@ DEPENDPATH += \
     ../tgs/src/main/cpp/tgs/ \
     ../hoot-core/src/main/cpp/hoot/core \
     ../hoot-core/src/main/cpp/ \
-    ../hoot-hadoop/src/main/cpp/ \
+    ../hoot-js/src/main/cpp/ \
 
 INCLUDEPATH += \
     $${DEPENDPATH}
@@ -23,10 +23,10 @@ CONFIG += rtti \
 
 include(../Configure.pri)
 
-LIBS += -L../tgs/ -lTgs -L../lib/ -lHootCore -ltbs
+LIBS += -L../tgs/ -lTgs -L../lib/ -lHootCore -lHootJs -ltbs -lnode
 
-hadoop {
-  LIBS += -lHootHadoop -lhadooppipes -lhadooputils -lHootCoreTest
+cppunit {
+  LIBS += -lHootCoreTest
 }
 
 UI_DIR = tmp/ui

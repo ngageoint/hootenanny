@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "JsRegistrar.h"
 
@@ -34,9 +34,11 @@ using namespace v8;
 namespace hoot
 {
 
-Handle<Value> Method(const Arguments& /*args*/) {
-  HandleScope scope;
-  return scope.Close(String::New("world"));
+void Method(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+  args.GetReturnValue().Set(String::NewFromUtf8(current, "world"));
 }
 
 JsRegistrar* JsRegistrar::_theInstance = 0;
@@ -63,8 +65,12 @@ void JsRegistrar::Init(Handle<Object> exports)
 
 void JsRegistrar::initAll(Handle<Object> exports)
 {
-  exports->Set(String::NewSymbol("hello"),
-      FunctionTemplate::New(Method)->GetFunction());
+  // Got this from the NodeJS docs. Seems to be a bit simpler than
+  // what we were doing.
+  NODE_SET_METHOD(exports,"hello",Method);
+//  Isolate* current = exports->GetIsolate();
+//  exports->Set(String::NewFromUtf8("hello"),
+//      FunctionTemplate::New(Method)->GetFunction());
 
   for (size_t i = 0; i < _initializers.size(); i++)
   {

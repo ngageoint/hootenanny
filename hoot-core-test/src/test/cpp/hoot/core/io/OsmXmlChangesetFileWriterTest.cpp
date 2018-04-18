@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -31,9 +31,6 @@
 #include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/io/OsmXmlChangesetFileWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
-
-// Boost
-using namespace boost;
 
 // Qt
 #include <QDebug>
@@ -48,17 +45,21 @@ namespace hoot
 
 class OsmXmlChangesetFileWriterTest : public CppUnit::TestFixture
 {
-    CPPUNIT_TEST_SUITE(OsmXmlChangesetFileWriterTest);
-    CPPUNIT_TEST(runSimpleTest);
-    CPPUNIT_TEST(runSplitTest);
-    CPPUNIT_TEST_SUITE_END();
+  CPPUNIT_TEST_SUITE(OsmXmlChangesetFileWriterTest);
+  CPPUNIT_TEST(runSimpleTest);
+  CPPUNIT_TEST(runSplitTest);
+  CPPUNIT_TEST_SUITE_END();
 
 public:
+
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/io/OsmXmlChangesetFileWriterTest");
+  }
 
   void runSimpleTest()
   {
     boost::shared_ptr<ChangeSetProvider> changesetProvider(new TestOsmChangesetProvider(false));
-    QDir().mkpath("test-output/io/OsmXmlChangesetFileWriterTest");
     OsmXmlChangesetFileWriter().write(
       "test-output/io/OsmXmlChangesetFileWriterTest/changeset.osc", changesetProvider);
 
@@ -70,7 +71,6 @@ public:
   void runSplitTest()
   {
     boost::shared_ptr<ChangeSetProvider> changesetProvider(new TestOsmChangesetProvider(false));
-    QDir().mkpath("test-output/io/OsmXmlChangesetFileWriterTest");
     OsmXmlChangesetFileWriter writer;
     Settings testSettings = conf();
     testSettings.set("changeset.max.size", "5");

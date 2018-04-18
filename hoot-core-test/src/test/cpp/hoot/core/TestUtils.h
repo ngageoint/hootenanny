@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef TESTUTILS_H
@@ -159,6 +159,13 @@ public:
   static QString toQuotedString(QString str);
 
   static void verifyStdMatchesOutputIgnoreDate(const QString stdFilePath, const QString outFilePath);
+
+  /**
+   * Creates a folder path using QDir::mkpath in a more thread-safe way
+   * @param path relative or absolute path to create (think `mkdir -p`)
+   * @return true if successful
+   */
+  static bool mkpath(const QString& path);
 
 private:
   QList<RegisteredReset*> _resets;

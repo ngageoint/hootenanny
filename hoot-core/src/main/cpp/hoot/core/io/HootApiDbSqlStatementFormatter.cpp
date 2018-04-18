@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HootApiDbSqlStatementFormatter.h"
 
@@ -84,6 +84,7 @@ QString HootApiDbSqlStatementFormatter::_toTagsString(const Tags& tags)
     QString value = it.value().trimmed();
     if (!value.isEmpty())
     {
+      key.replace("\\", "/");
       key.replace("'", "\'");
       key.replace("=>", "\\=\\>");
       key.replace("\"", "\\\"");
@@ -91,6 +92,7 @@ QString HootApiDbSqlStatementFormatter::_toTagsString(const Tags& tags)
 
       tagsStr.append("=>");
 
+      value.replace("\\", "/");
       value.replace("'", "\'");
       value.replace("=>", "\\=\\>");
       value.replace("\"", "\\\"");
@@ -107,10 +109,8 @@ QString HootApiDbSqlStatementFormatter::_toTagsString(const Tags& tags)
   return tagsStr;
 }
 
-QString HootApiDbSqlStatementFormatter::nodeToSqlString(const ConstNodePtr& node,
-                                                            const long nodeId,
-                                                            const long changesetId,
-                                                            const bool validate)
+QString HootApiDbSqlStatementFormatter::nodeToSqlString(const ConstNodePtr& node, const long nodeId,
+                                                        const long changesetId, const bool validate)
 {
   const QString nodeIdStr = QString::number(nodeId);
   if (validate)

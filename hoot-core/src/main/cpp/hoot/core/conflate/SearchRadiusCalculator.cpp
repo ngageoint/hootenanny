@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "SearchRadiusCalculator.h"
@@ -40,8 +40,6 @@
 
 using namespace std;
 
-//TODO: a lot of the logging levels in this class need changed, as they've revealed issues
-//with the element status reading...will handle that in #1262
 namespace hoot
 {
 
@@ -55,11 +53,13 @@ SearchRadiusCalculator::SearchRadiusCalculator()
 void SearchRadiusCalculator::setConfiguration(const Settings& conf)
 {
   ConfigOptions config(conf);
-  if (config.getUnifyPreOps().contains("hoot::RubberSheet"))
-  {
-    throw HootException(
-      "Rubber sheeting cannot be used when automatically calculating search radius.");
-  }
+  //TODO: I don't believe this actually matters.
+//  if (config.getConflatePreOps().contains("hoot::RubberSheet") ||
+//      config.getUnifyPreOps().contains("hoot::RubberSheet"))
+//  {
+//    throw HootException(
+//      "Rubber sheeting cannot be used when automatically calculating search radius.");
+//  }
   setCircularError(config.getCircularErrorDefaultValue());
   setRubberSheetRef(config.getRubberSheetRef());
   setRubberSheetMinTies(config.getRubberSheetMinimumTies());
@@ -95,9 +95,11 @@ void SearchRadiusCalculator::apply(boost::shared_ptr<OsmMap> &map)
     return;
   }
 
-  boost::shared_ptr<RubberSheet> rubberSheet(new RubberSheet(false));
+  boost::shared_ptr<RubberSheet> rubberSheet(new RubberSheet());
   rubberSheet->setReference(_rubberSheetRef);
   rubberSheet->setMinimumTies(_minTies);
+  rubberSheet->setFailWhenMinimumTiePointsNotFound(false);
+  rubberSheet->setLogWarningWhenRequirementsNotFound(false);
   try
   {
     rubberSheet->calculateTransform(mapWithOnlyUnknown1And2);
@@ -113,9 +115,11 @@ void SearchRadiusCalculator::apply(boost::shared_ptr<OsmMap> &map)
     try
     {
       MapCleaner().apply(mapWithOnlyUnknown1And2);
-      rubberSheet.reset(new RubberSheet(false));
+      rubberSheet.reset(new RubberSheet());
       rubberSheet->setReference(_rubberSheetRef);
       rubberSheet->setMinimumTies(_minTies);
+      rubberSheet->setFailWhenMinimumTiePointsNotFound(false);
+      rubberSheet->setLogWarningWhenRequirementsNotFound(false);
       rubberSheet->calculateTransform(mapWithOnlyUnknown1And2);
     }
     catch (const HootException& e)
@@ -154,7 +158,7 @@ void SearchRadiusCalculator::_calculateSearchRadius(const vector<double>& tiePoi
   else
   {
     _result = 2 * _calculateStandardDeviation(tiePointDistances);
-    LOG_INFO("Calculated search radius = " + QString::number(_result, 'g', _precision));
+    LOG_INFO("Calculated search radius = " + QString::number(_result, 'g', 2));
   }
 }
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMMAPREADER_H
 #define OSMMAPREADER_H
@@ -71,6 +71,19 @@ public:
    */
   virtual void setUseDataSourceIds(bool useDataSourceIds) = 0;
 
+  /**
+   * Uses the element status from the file
+   */
+  virtual void setUseFileStatus(bool /*useFileStatus*/) { }
+
+  /**
+   * Lists supported data format extensions
+   *
+   * If multiple are supported, delimit them with a semicolon.
+   *
+   * @return a formats string
+   */
+  virtual QString supportedFormats() = 0;
 };
 
 }

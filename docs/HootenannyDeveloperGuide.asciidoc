@@ -1,9 +1,7 @@
 
 = Hootenanny Developer Guide
 DigitalGlobe, Inc.
-:Email: hootenanny@digitalglobe.com
 
-include::developer/HootenannyDevelopmentEnvironmentSetupInstructions.asciidoc[]
 include::developer/HootenannyBuild.asciidoc[]
 include::developer/HootenannyDeveloperIDESetup.asciidoc[]
 include::developer/HootenannyTroubleshooting.asciidoc[]
@@ -18,5 +16,6 @@ include::developer/HootenannyConflatingANewFeatureTypeWithGenericConflation.asci
 include::developer/HootenannyOsmApiDatabaseConflationNotes.asciidoc[]
 include::developer/HootenannyManualConflation.asciidoc[]
 include::developer/HootenannyManualMultiaryConflation.asciidoc[]
+include::developer/HootenannyImplicitTagDatabaseGeneration.asciidoc[]
 
 

@@ -286,16 +286,14 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="8"/>
     </way>
-    <way visible="true" id="9" timestamp="1970-01-01T00:00:00Z" version="2" changeset="3">
+    <way visible="true" id="9" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
         <nd ref="35"/>
-        <nd ref="55"/>
         <nd ref="20"/>
         <nd ref="21"/>
-        <tag k="hoot:id" v="9"/>
-        <tag k="hoot:status" v="3"/>
         <tag k="source" v="digitalglobe"/>
-        <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2016-05-02T23:46:04Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="9"/>
     </way>
     <way visible="true" id="10" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
@@ -403,104 +401,91 @@
         <tag k="source:datetime" v="2016-05-02T23:46:09Z"/>
         <tag k="hoot:id" v="20"/>
     </way>
-    <way visible="true" id="24" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
-        <nd ref="50"/>
-        <nd ref="51"/>
-        <tag k="hoot:id" v="24"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="24"/>
-    </way>
-    <way visible="true" id="25" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+    <way visible="true" id="23" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <nd ref="53"/>
         <nd ref="52"/>
         <nd ref="50"/>
+        <nd ref="51"/>
+        <tag k="hoot:id" v="23"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="23"/>
+    </way>
+    <way visible="true" id="24" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+        <nd ref="56"/>
+        <nd ref="8"/>
+        <nd ref="42"/>
+        <nd ref="39"/>
+        <nd ref="9"/>
+        <nd ref="41"/>
+        <nd ref="40"/>
+        <nd ref="10"/>
+        <nd ref="2"/>
+        <tag k="hoot:id" v="24"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="source" v="Bing"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="source:datetime" v="2016-08-06T20:08:03Z"/>
+        <tag k="hoot:id" v="24"/>
+    </way>
+    <way visible="true" id="25" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+        <nd ref="57"/>
+        <nd ref="45"/>
+        <nd ref="59"/>
         <tag k="hoot:id" v="25"/>
         <tag k="hoot:status" v="2"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:id" v="25"/>
     </way>
     <way visible="true" id="26" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
-        <nd ref="41"/>
-        <nd ref="40"/>
-        <nd ref="10"/>
-        <nd ref="2"/>
+        <nd ref="29"/>
+        <nd ref="57"/>
         <tag k="hoot:id" v="26"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="source" v="Bing"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="source:datetime" v="2016-08-06T20:08:03Z"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="source" v="digitalglobe"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2016-05-02T23:46:09Z"/>
         <tag k="hoot:id" v="26"/>
     </way>
     <way visible="true" id="27" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
-        <nd ref="39"/>
-        <nd ref="9"/>
+        <nd ref="58"/>
         <nd ref="41"/>
         <tag k="hoot:id" v="27"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="source" v="Bing"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="source:datetime" v="2016-08-06T20:08:03Z"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="source" v="digitalglobe"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2016-05-02T23:46:09Z"/>
         <tag k="hoot:id" v="27"/>
     </way>
     <way visible="true" id="28" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
-        <nd ref="56"/>
-        <nd ref="8"/>
-        <nd ref="42"/>
-        <nd ref="39"/>
+        <nd ref="28"/>
+        <nd ref="59"/>
         <tag k="hoot:id" v="28"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="source" v="Bing"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="source:datetime" v="2016-08-06T20:08:03Z"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="source" v="digitalglobe"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2016-05-02T23:46:09Z"/>
         <tag k="hoot:id" v="28"/>
     </way>
     <way visible="true" id="29" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
-        <nd ref="57"/>
-        <nd ref="45"/>
-        <nd ref="59"/>
+        <nd ref="35"/>
+        <nd ref="55"/>
+        <nd ref="20"/>
+        <nd ref="21"/>
         <tag k="hoot:id" v="29"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="29"/>
-    </way>
-    <way visible="true" id="30" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
-        <nd ref="29"/>
-        <nd ref="57"/>
-        <tag k="hoot:id" v="30"/>
         <tag k="hoot:status" v="3"/>
         <tag k="source" v="digitalglobe"/>
         <tag k="highway" v="residential"/>
-        <tag k="source:datetime" v="2016-05-02T23:46:09Z"/>
-        <tag k="hoot:id" v="30"/>
+        <tag k="source:datetime" v="2016-05-02T23:46:04Z"/>
+        <tag k="hoot:id" v="29"/>
     </way>
-    <way visible="true" id="31" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
-        <nd ref="58"/>
-        <nd ref="41"/>
-        <tag k="hoot:id" v="31"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="source" v="digitalglobe"/>
-        <tag k="highway" v="residential"/>
-        <tag k="source:datetime" v="2016-05-02T23:46:09Z"/>
-        <tag k="hoot:id" v="31"/>
-    </way>
-    <way visible="true" id="32" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
-        <nd ref="28"/>
-        <nd ref="59"/>
-        <tag k="hoot:id" v="32"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="source" v="digitalglobe"/>
-        <tag k="highway" v="residential"/>
-        <tag k="source:datetime" v="2016-05-02T23:46:09Z"/>
-        <tag k="hoot:id" v="32"/>
-    </way>
-    <way visible="true" id="33" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+    <way visible="true" id="30" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <nd ref="50"/>
         <nd ref="37"/>
-        <tag k="hoot:id" v="33"/>
+        <tag k="hoot:id" v="30"/>
         <tag k="hoot:status" v="2"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="33"/>
+        <tag k="hoot:id" v="30"/>
     </way>
     <relation visible="true" id="2" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
         <tag k="name:ia" v="Egypto"/>
@@ -516,6 +501,7 @@
         <tag k="name:hy" v="Եգիպտոս"/>
         <tag k="name:lad" v="Ayifto"/>
         <tag k="name:be-tarask" v="Эгіпет"/>
+        <tag k="hoot:id" v="1"/>
         <tag k="name:bat-smg" v="Egėpts"/>
         <tag k="name:yo" v="Ẹ́gíptì"/>
         <tag k="name:io" v="Egiptia"/>
@@ -693,7 +679,6 @@
         <tag k="name:szl" v="Egipt"/>
         <tag k="flag" v="http://upload.wikimedia.org/wikipedia/commons/f/fe/Flag_of_Egypt.svg"/>
         <tag k="name:diq" v="Mısır"/>
-        <tag k="type" v="boundary"/>
         <tag k="name:la" v="Aegyptus"/>
         <tag k="wikipedia" v="en:Egypt"/>
         <tag k="name:lb" v="Egypten"/>
@@ -753,7 +738,7 @@
     </relation>
     <relation visible="true" id="3" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
         <tag k="name:ar" v="المستوطنات الإسرائيلية دمرت في قطاع غزة"/>
-        <tag k="type" v="collection"/>
+        <tag k="hoot:id" v="2"/>
         <tag k="name:he" v="היישובים הישראליים המפונים ברצועת עזה"/>
         <tag k="name" v="היישובים הישראליים המפונים ברצועת עזה"/>
         <tag k="source:datetime" v="2016-09-25T13:15:33Z"/>

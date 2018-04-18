@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include <hoot/core/HootConfig.h>
@@ -53,6 +53,7 @@ using namespace boost;
 #include <hoot/core/schema/OsmSchemaLoader.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
+#include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonAddressScoreExtractor.h>
 
 // Qt
 #include <QDomDocument>
@@ -1607,9 +1608,69 @@ bool OsmSchema::isArea(const Tags& t, ElementType type) const
   return result;
 }
 
+bool OsmSchema::isPoiPolygonPoly(const ConstElementPtr& e)
+{
+  const Tags& tags = e->getTags();
+  //types we don't care about at all - see #1172 as to why this can't be handled in the schema
+  //files
+  if (tags.get("barrier").toLower() == "fence"
+      || tags.get("landuse").toLower() == "grass"
+      || tags.get("natural").toLower() == "tree_row"
+      || tags.get("natural").toLower() == "scrub"
+      || tags.get("highway").toLower() == "residential")
+  {
+    return false;
+  }
+  const bool inABuildingOrPoiCategory =
+    getCategories(tags).intersects(OsmSchemaCategory::building() | OsmSchemaCategory::poi());
+  //isArea includes building too
+  const bool isPoly =
+    isArea(tags, e->getElementType()) && (inABuildingOrPoiCategory || tags.getNames().size() > 0);
+
+  //LOG_VART(e);
+  //LOG_VART(isPoly);
+  return isPoly;
+}
+
+bool OsmSchema::isPoiPolygonPoi(const ConstElementPtr& e)
+{
+  const Tags& tags = e->getTags();
+  //types we don't care about at all - see #1172 as to why this can't be handled in the schema
+  //files
+  if (tags.get("natural").toLower() == "tree"
+      || tags.get("amenity").toLower() == "drinking_water"
+      || tags.get("amenity").toLower() == "bench"
+      || tags.contains("traffic_sign")
+      || tags.get("amenity").toLower() == "recycling")
+  {
+    return false;
+  }
+  const bool inABuildingOrPoiCategory =
+    getCategories(tags).intersects(OsmSchemaCategory::building() | OsmSchemaCategory::poi());
+  bool isPoi =
+    e->getElementType() == ElementType::Node &&
+    (inABuildingOrPoiCategory || tags.getNames().size() > 0);
+
+  if (!isPoi && e->getElementType() == ElementType::Node &&
+      ConfigOptions().getPoiPolygonPromotePointsWithAddressesToPois() &&
+      PoiPolygonAddressScoreExtractor::hasAddress(*e))
+  {
+    isPoi = true;
+  }
+
+  //LOG_VART(e);
+  //LOG_VART(isPoi);
+  return isPoi;
+}
+
 bool OsmSchema::isArea(const ConstElementPtr& e) const
 {
   return isArea(e->getTags(), e->getElementType());
+}
+
+bool OsmSchema::isNonBuildingArea(const ConstElementPtr& e) const
+{
+  return isArea(e) && !isBuilding(e);
 }
 
 bool OsmSchema::isAreaForStats(const Tags& t, ElementType type) const
@@ -1689,6 +1750,26 @@ bool OsmSchema::isBuildingPart(const ConstElementPtr& e) const
   return isBuildingPart(e->getTags(), e->getElementType());
 }
 
+bool OsmSchema::isMultiUseBuilding(const Element& e)
+{
+  const OsmSchema& osmSchema = OsmSchema::getInstance();
+  const ElementType elementType = e.getElementType();
+  LOG_VART(elementType);
+  const Tags& tags = e.getTags();
+  LOG_VART(tags);
+  LOG_VART(osmSchema.getCategories(e.getTags()).intersects(OsmSchemaCategory::building()));
+  LOG_VART(tags.contains("amenity"));
+  LOG_VART(osmSchema.getCategories(tags).intersects(OsmSchemaCategory::multiUse()));
+
+  //(element is in a building category OR is an amenity) AND
+  //(element has a multi-purpose building tag OR is in a multi-use category)
+  return
+    (osmSchema.getCategories(e.getTags()).intersects(OsmSchemaCategory::building()) ||
+      tags.contains("amenity")) &&
+    (tags.get("building:use") == "multipurpose" ||
+     osmSchema.getCategories(tags).intersects(OsmSchemaCategory::multiUse()));
+}
+
 bool OsmSchema::isCollection(const Element& e) const
 {
   bool result = false;
@@ -1728,14 +1809,26 @@ bool OsmSchema::isLinearHighway(const Tags& t, ElementType type)
 {
   bool result = false;
   Tags::const_iterator it = t.find("highway");
+  QString key;
 
+  // Is it a legit highway?
   if ((type == ElementType::Way || type == ElementType::Relation) &&
       it != t.end() && it.value() != "")
   {
     result = true;
+    key = it.key();
   }
 
-  // make sure this isn't an area highway section.
+  // Maybe it's a way with nothing but a time tag...
+  it = t.find("source:datetime");
+  if (type == ElementType::Way && t.keys().size() < 2 && it != t.end())
+  {
+    // We can treat it like a highway
+    result = true;
+    key = it.key();
+  }
+
+  // Make sure this isn't an area highway section!
   if (result)
   {
     result = !isArea(t, type);
@@ -1743,7 +1836,7 @@ bool OsmSchema::isLinearHighway(const Tags& t, ElementType type)
 
   if (result)
   {
-    LOG_TRACE("isLinearHighway; key: " << it.key());
+    LOG_TRACE("isLinearHighway; key: " << key);
   }
 
   return result;
@@ -1797,6 +1890,31 @@ bool OsmSchema::isLinearWaterway(const Element& e)
     }
   }
   return false;
+}
+
+bool OsmSchema::isRoundabout(const Tags& tags, ElementType type)
+{
+  // If it's not a highway, it's not a roundabout
+  if (!isLinearHighway(tags, type))
+  {
+    return false;
+  }
+
+  // Now check some details...
+  bool result = false;
+  Tags::const_iterator tagIt = tags.find("junction");
+
+  if (tagIt != tags.end() && tagIt.value().toLower() == "roundabout")
+  {
+    result = true;
+  }
+
+  if (result)
+  {
+    LOG_TRACE("isRoundabout; key: " << tagIt.key());
+  }
+
+  return result;
 }
 
 bool OsmSchema::isList(const QString& /*key*/, const QString& value)

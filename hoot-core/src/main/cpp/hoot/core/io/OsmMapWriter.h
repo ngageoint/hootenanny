@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMMAPWRITER_H
 #define OSMMAPWRITER_H
@@ -61,6 +61,14 @@ public:
    */
   virtual void write(ConstOsmMapPtr map) = 0;
 
+  /**
+   * Lists supported data format extensions
+   *
+   * If multiple are supported, delimit them with a semicolon.
+   *
+   * @return a formats string
+   */
+  virtual QString supportedFormats() = 0;
 };
 
 }

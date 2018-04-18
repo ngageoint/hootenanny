@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -94,22 +94,6 @@ public:
     return map;
   }
 
-  WayPtr createWay(OsmMapPtr map, Coordinate* c, Status s = Status::Unknown1)
-  {
-    WayPtr result((new Way(s, map->createNextWayId(), 15.0)));
-
-    for (int i = 0; c[i].isNull() == false; i++)
-    {
-      NodePtr n(new Node(s, map->createNextNodeId(), c[i], 15.0));
-      map->addNode(n);
-      result->addNode(n->getId());
-    }
-
-    map->addWay(result);
-
-    return result;
-  }
-
   /**
    * Create two ways like this:
    *
@@ -126,10 +110,10 @@ public:
     OsmMapPtr map = createMap();
 
     Coordinate w1c[] = { Coordinate(50, 0), Coordinate(150, 0), Coordinate::getNull() };
-    WayPtr w1 = createWay(map, w1c, Status::Unknown1);
+    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c);
 
     Coordinate w2c[] = { Coordinate(100, 0), Coordinate(0, 0), Coordinate::getNull() };
-    WayPtr w2 = createWay(map, w2c, Status::Unknown2);
+    WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, w2c);
 
     boost::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
@@ -192,10 +176,10 @@ public:
     OsmMapPtr map = createMap();
 
     Coordinate w1c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
-    WayPtr w1 = createWay(map, w1c, Status::Unknown1);
+    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c);
 
     Coordinate w2c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
-    WayPtr w2 = createWay(map, w2c, Status::Unknown2);
+    WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, w2c);
 
     boost::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
@@ -236,10 +220,10 @@ public:
     OsmMapPtr map = createMap();
 
     Coordinate w1c[] = { Coordinate(0, 5), Coordinate(60, 5), Coordinate::getNull() };
-    WayPtr w1 = createWay(map, w1c, Status::Unknown1);
+    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c);
 
     Coordinate w2c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
-    WayPtr w2 = createWay(map, w2c, Status::Unknown2);
+    WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, w2c);
 
     boost::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
@@ -287,16 +271,16 @@ public:
     OsmMapPtr map = createMap();
 
     Coordinate w1c[] = { Coordinate(20, 5), Coordinate(60, 5), Coordinate::getNull() };
-    WayPtr w1 = createWay(map, w1c, Status::Unknown1);
+    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c);
     w1->getTags()["uuid"] = "w1";
 
     Coordinate w2c[] = { Coordinate(60, 5), Coordinate(150, 5), Coordinate::getNull() };
-    WayPtr w2 = createWay(map, w2c, Status::Unknown1);
+    WayPtr w2 = TestUtils::createWay(map, Status::Unknown1, w2c);
     w2->getTags()["barrier"] = "wall";
     w2->getTags()["uuid"] = "wall";
 
     Coordinate w3c[] = { Coordinate(-30, 0), Coordinate(100, 0), Coordinate::getNull() };
-    WayPtr w3 = createWay(map, w3c, Status::Unknown2);
+    WayPtr w3 = TestUtils::createWay(map, Status::Unknown2, w3c);
     w3->getTags()["highway"] = "path";
     w3->getTags()["uuid"] = "w3";
 
@@ -321,7 +305,7 @@ public:
 
     QString json = OsmJsonWriter().toString(map);
 
-    QDir().mkpath("tmp");
+    TestUtils::mkpath("tmp");
     MapProjector::projectToWgs84(map);
     OsmMapWriterFactory::write(map, "tmp/dum.osm");
 
@@ -368,12 +352,12 @@ public:
     OsmMapPtr map = createMap();
 
     Coordinate w1c[] = { Coordinate(0, 5), Coordinate(100, 5), Coordinate::getNull() };
-    WayPtr w1 = createWay(map, w1c, Status::Unknown1);
+    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c);
     w1->getTags()["highway"] = "road";
     w1->getTags()["uuid"] = "w1";
 
     Coordinate w2c[] = { Coordinate(40, 0), Coordinate(60, 0), Coordinate::getNull() };
-    WayPtr w2 = createWay(map, w2c, Status::Unknown2);
+    WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, w2c);
     w2->getTags()["highway"] = "path";
     w2->getTags()["uuid"] = "w2";
 
@@ -433,12 +417,12 @@ public:
     OsmMapPtr map = createMap();
 
     Coordinate w1c[] = { Coordinate(0, 5), Coordinate(50, 5), Coordinate::getNull() };
-    WayPtr w1 = createWay(map, w1c, Status::Unknown1);
+    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c);
     w1->getTags()["highway"] = "road";
     w1->getTags()["uuid"] = "w1";
 
     Coordinate w2c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
-    WayPtr w2 = createWay(map, w2c, Status::Unknown2);
+    WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, w2c);
 
     RelationPtr r(new Relation(Status::Unknown2, 0, 15, MetadataTags::RelationMultilineString()));
     r->addElement("", w2);
@@ -481,10 +465,10 @@ public:
     OsmMapPtr map = createMap();
 
     Coordinate w1c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
-    WayPtr w1 = createWay(map, w1c, Status::Unknown1);
+    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c);
 
     Coordinate w2c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
-    WayPtr w2 = createWay(map, w2c, Status::Unknown2);
+    WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, w2c);
 
     boost::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);

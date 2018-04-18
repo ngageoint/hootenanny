@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -96,7 +96,7 @@ public:
 
     LOG_TRACE(uut.getResults().toStdString());
 
-    QDir().mkpath("test-output/conflate/extractor/MatchFeatureExtractorTest/");
+    TestUtils::mkpath("test-output/conflate/extractor/MatchFeatureExtractorTest/");
     QFile fp("test-output/conflate/extractor/MatchFeatureExtractorTest/Buildings.arff");
     CPPUNIT_ASSERT(fp.open(QIODevice::WriteOnly | QIODevice::Text));
     QByteArray arr = uut.getResults().toUtf8();

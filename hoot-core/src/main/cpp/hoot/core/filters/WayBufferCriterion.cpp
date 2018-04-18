@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "WayBufferCriterion.h"
@@ -95,7 +95,6 @@ bool WayBufferCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) 
 
     if (ls2->getEnvelopeInternal()->intersects(_boundsPlus))
     {
-
       boost::shared_ptr<Geometry> g(_baseBuffered->intersection(ls2.get()));
       double ls2Length = ls2->getLength();
       double ls2IntersectLength = g->getLength();

@@ -1110,6 +1110,7 @@ ggdm30 = {
             ["t.landuse == 'grass'","t.natural = 'grassland'; t['grassland:type'] = 'grassland';"],
             ["t.landuse == 'meadow'","t.natural = 'grassland'; t['grassland:type'] = 'meadow';"],
             ["t.landuse == 'military'","t.military = 'installation'; delete t.landuse"],
+            ["t.landuse == 'railway' && t['railway:yard'] == 'marshalling_yard'","a.F_CODE = 'AN060'"],
             ["t.leisure == 'recreation_ground'","t.landuse = 'recreation_ground'; delete t.leisure"],
             ["t.landuse == 'reservoir'","t.water = 'reservoir'; delete t.landuse"],
             ["t.landuse == 'retail'","t.landuse = 'built_up_area'; t.use = 'commercial'"],
@@ -1212,6 +1213,24 @@ ggdm30 = {
             }
         }
 
+        // Churches etc
+        if (tags.building && ! tags.amenity)
+        {
+            var how = [ 'church','chapel','cathedral','mosque','pagoda','shrine','temple',
+                        'synagogue','tabernacle','stupa']
+            if (how.indexOf(tags.building) > -1)
+            {
+                tags.amenity = 'place_of_worship';
+            }
+
+            var rc = [ 'mission','religious_community','seminary','convent','monastry',
+                       'noviciate','hermitage','retrest','marabout']
+            if (rc.indexOf(tags.building) > -1)
+            {
+                tags.use = 'religious_activities';
+            }
+        }
+
         // Fix up water features from OSM
         if (tags.natural == 'water' && !(tags.water)) 
         {
@@ -1309,13 +1328,16 @@ ggdm30 = {
                     // or a Coastline
                     if (tags.natural == 'coastline')
                     {
-                        if (geometryType == 'Area') // Islands are Areas
+                        if (geometryType == 'Line')
                         {
-                            delete tags.natural;
-                        }
-                        else if (geometryType =='Line') // Coastlines are lines
-                        {
+                            attrs.F_CODE = 'BA010'; // Land/Water Boundary - Line
                             delete tags.place;
+                        }
+                        else
+                        {
+                            // NOTE: Islands can be Points or Areas
+                            attrs.F_CODE = 'BA030'; // Island
+                            delete tags.natural;
                         }
                     }
                     break;
@@ -1520,6 +1542,43 @@ ggdm30 = {
             delete tags.vertical_obstruction_identifier;
         }
 
+        // Railway loading things
+        if (tags.railway == 'loading')
+        {
+            if (tags.facility == 'gantry_crane')
+            {
+                delete tags.railway;
+                delete tags.facility;
+                attrs.F_CODE = 'AF040'; // Crane
+                tags['crane:type'] = 'bridge';
+            }
+
+            if (tags.facility == 'container_terminal')
+            {
+                delete tags.railway;
+                delete tags.facility;
+                attrs.F_CODE = 'AL010'; // Facility
+                attrs.FFN = '480'; // Transportation
+            }
+        } // End loading
+
+        switch (tags.man_made)
+        {
+            case undefined: // Break early if no value
+                break;
+
+            case 'reservoir_covered':
+                delete tags.man_made;
+                attrs.F_CODE = 'AM070'; // Storage Tank
+                tags.product = 'water';
+                break;
+
+            case 'gasometer':
+                delete tags.man_made;
+                attrs.F_CODE = 'AM070'; // Storage Tank
+                tags.product = 'gas';
+                break;
+        }
     }, // End applyToOgrPreProcessing
 
 // #####################################################################################################
@@ -1765,6 +1824,29 @@ ggdm30 = {
                 }
             }
         } // End for GE4 loop
+
+       // Fix ZI001_SDV
+        // NOTE: We are going to override the normal source:datetime with what we get from JOSM
+        if (tags['source:imagery:datetime'])
+        {
+            attrs.ZI001_SDV = tags['source:imagery:datetime'];
+            // delete notUsedTags['source:imagery:datetime'];
+        }
+
+        // Now try using tags from Taginfo
+        if (! attrs.ZI001_SDV)
+        {
+            if (tags['source:date']) 
+            {
+                attrs.ZI001_SDV = tags['source:date'];
+                // delete notUsedTags['source:date'];
+            }
+            else if (tags['source:geometry:date'])
+            {
+                attrs.ZI001_SDV = tags['source:geometry:date'];
+                // delete notUsedTags['source:geometry:date'];
+            }
+        }
 
     }, // End applyToOgrPostProcessing
 
@@ -2206,7 +2288,8 @@ ggdm30 = {
                 print('TableName ' + i + ': ' + returnData[i]['tableName'] + '  FCode: ' + returnData[i]['attrs']['F_CODE'] + '  Geom: ' + geometryType);
                 //for (var j in returnData[i]['attrs']) print('Out Attrs:' + j + ': :' + returnData[i]['attrs'][j] + ':');
                 var kList = Object.keys(returnData[i]['attrs']).sort()
-                for (var j = 0, kLen = kList.length; j < kLen; j++) print('Out Attrs:' + kList[j] + ': :' + returnData[i]['attrs'][kList[j]] + ':');
+                for (var j = 0, kLen = kList.length; j < kLen; j++) 
+                    if (returnData[i]['attrs'][kList[j]]) print('Out Attrs:' + kList[j] + ': :' + returnData[i]['attrs'][kList[j]] + ':');
             }
             print('');
         }

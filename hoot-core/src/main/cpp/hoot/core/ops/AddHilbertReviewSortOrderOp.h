@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __ADD_HILBERT_REVIEW_SORT_ORDER_H__
 #define __ADD_HILBERT_REVIEW_SORT_ORDER_H__
@@ -34,10 +34,6 @@
 namespace hoot
 {
 
-/**
- * Splits the map into ref/source (unknown1/unknown2), cuts the ref's shape out of the source, then
- * combines the the entire ref map back with the source map with the hole cut in it.
- */
 class AddHilbertReviewSortOrderOp : public OsmMapOperation
 {
 public:
@@ -49,6 +45,9 @@ public:
   virtual void apply(OsmMapPtr& map);
 
   virtual std::string getClassName() const { return className(); }
+
+  virtual QString getDescription() const
+  { return "Sorts reviewable features geospatially"; }
 
 private:
 

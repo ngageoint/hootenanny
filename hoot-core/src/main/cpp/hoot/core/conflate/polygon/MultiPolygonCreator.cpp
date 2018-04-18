@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MultiPolygonCreator.h"
 
@@ -131,8 +131,8 @@ Geometry* MultiPolygonCreator::_addHoles(vector<LinearRing*> &outers,
       {
         if (logWarnCount < Log::getWarnMessageLimit())
         {
-          LOG_WARN("Could not find a polygon that fully contains a hole. inner[" << i << "] " <<
-            _r->toString());
+          LOG_WARN("Could not find a polygon that fully contains a hole.");
+          LOG_DEBUG("inner[" << i << "] " <<_r->toString());
         }
         else if (logWarnCount == Log::getWarnMessageLimit())
         {
@@ -250,9 +250,21 @@ void MultiPolygonCreator::_createRings(const QString& role, vector<LinearRing *>
       }
       else
       {
-        LOG_TRACE("A multipolygon relation contains a way that is not a ring. While likely valid, "
-                 "this is currently unsupported by Hoot. Will attempt to deal with it. " <<
-                 e.getElementId());
+        //Leaving this one at trace level, since it is happening so much in poi/poly conflation.
+        //See #2287.
+        if (logWarnCount < Log::getWarnMessageLimit())
+        {
+          LOG_VART(e.getElementId());
+          LOG_TRACE("A multipolygon relation contains a way that is not a ring. While likely valid, "
+                   "this is currently unsupported by Hoot. Will attempt to deal with it. " <<
+                   e.getElementId());
+        }
+        else if (logWarnCount == Log::getWarnMessageLimit())
+        {
+          LOG_TRACE(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
+
         partials.push_back(w);
       }
     }

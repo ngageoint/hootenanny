@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HootApiDb.h"
 
@@ -63,7 +63,9 @@ namespace hoot
 unsigned int HootApiDb::logWarnCount = 0;
 
 HootApiDb::HootApiDb() :
-_precision(ConfigOptions().getWriterPrecision())
+_precision(ConfigOptions().getWriterPrecision()),
+_createIndexesOnClose(true),
+_flushOnClose(true)
 {
   _init();
 }
@@ -156,11 +158,17 @@ void HootApiDb::_checkLastMapId(long mapId)
 
 void HootApiDb::close()
 {
-  LOG_DEBUG("Closing database connection...");
+  LOG_TRACE("Closing database connection...");
 
-  createPendingMapIndexes();
-  _flushBulkInserts();
-  _flushBulkDeletes();
+  if (_createIndexesOnClose)
+  {
+    createPendingMapIndexes();
+  }
+  if (_flushOnClose)
+  {
+    _flushBulkInserts();
+    _flushBulkDeletes();
+  }
 
   _resetQueries();
 
@@ -231,7 +239,10 @@ void HootApiDb::_copyTableStructure(QString from, QString to)
 
 void HootApiDb::createPendingMapIndexes()
 {
-  LOG_TRACE("Creating map indexes...");
+  if (_pendingMapIndexes.size() > 0)
+  {
+    LOG_DEBUG("Creating " << _pendingMapIndexes.size() << " map indexes...");
+  }
 
   for (int i = 0; i < _pendingMapIndexes.size(); i++)
   {
@@ -297,6 +308,14 @@ void HootApiDb::deleteMap(long mapId)
   // Drop related renderDB First
   dropDatabase(_getRenderDBName(mapId));
 
+  // Drop related sequences
+  dropSequence(getCurrentRelationMembersSequenceName(mapId));
+  dropSequence(getCurrentRelationsSequenceName(mapId));
+  dropSequence(getCurrentWayNodesSequenceName(mapId));
+  dropSequence(getCurrentWaysSequenceName(mapId));
+  dropSequence(getCurrentNodesSequenceName(mapId));
+  dropSequence(getChangesetsSequenceName(mapId));
+
   // Drop related tables
   dropTable(getCurrentRelationMembersTableName(mapId));
   dropTable(getCurrentRelationsTableName(mapId));
@@ -304,14 +323,6 @@ void HootApiDb::deleteMap(long mapId)
   dropTable(getCurrentWaysTableName(mapId));
   dropTable(getCurrentNodesTableName(mapId));
   dropTable(getChangesetsTableName(mapId));
-
-  // Drop related sequences
-  DbUtils::execNoPrepare(
-    _db, "DROP SEQUENCE IF EXISTS " + getCurrentNodesSequenceName(mapId) + " CASCADE");
-  DbUtils::execNoPrepare(
-    _db, "DROP SEQUENCE IF EXISTS " + getCurrentWaysSequenceName(mapId) + " CASCADE");
-  DbUtils::execNoPrepare(
-    _db, "DROP SEQUENCE IF EXISTS " + getCurrentRelationsSequenceName(mapId) + " CASCADE");
 
   // Delete map last
   _exec("DELETE FROM " + ApiDb::getMapsTableName() + " WHERE id=:id", (qlonglong)mapId);
@@ -353,7 +364,24 @@ void HootApiDb::dropTable(const QString& tableName)
 
   // inserting strings in this fashion is safe b/c it is private and we closely control the table
   // names.
-  QString sql = QString("DROP TABLE IF EXISTS %1").arg(tableName);
+  QString sql = QString("DROP TABLE IF EXISTS %1 CASCADE;").arg(tableName);
+  QSqlQuery q(_db);
+
+  if (q.exec(sql) == false)
+  {
+    QString error = QString("Error executing query: %1 (%2)").arg(q.lastError().text()).
+        arg(sql);
+    throw HootException(error);
+  }
+}
+
+void HootApiDb::dropSequence(const QString& sequenceName)
+{
+  LOG_TRACE("Dropping sequence: " << sequenceName << "...");
+
+  // inserting strings in this fashion is safe b/c it is private and we closely control the sequence
+  // names.
+  QString sql = QString("DROP SEQUENCE IF EXISTS %1 CASCADE;").arg(sequenceName);
   QSqlQuery q(_db);
 
   if (q.exec(sql) == false)
@@ -443,18 +471,22 @@ void HootApiDb::_flushBulkInserts()
 
   if (_nodeBulkInsert != 0)
   {
+    LOG_VARD(_nodeBulkInsert->getPendingCount());
     _nodeBulkInsert->flush();
   }
   if (_wayBulkInsert != 0)
   {
+    LOG_VARD(_wayBulkInsert->getPendingCount());
     _wayBulkInsert->flush();
   }
   if (_wayNodeBulkInsert != 0)
   {
+    LOG_VARD(_wayNodeBulkInsert->getPendingCount());
     _wayNodeBulkInsert->flush();
   }
   if (_relationBulkInsert != 0)
   {
+    LOG_VARD(_relationBulkInsert->getPendingCount());
     _relationBulkInsert->flush();
   }
 }
@@ -465,6 +497,7 @@ void HootApiDb::_flushBulkDeletes()
 
   if (_nodeBulkDelete != 0)
   {
+    LOG_VARD(_nodeBulkDelete->getPendingCount());
     _nodeBulkDelete->flush();
   }
 }
@@ -1067,7 +1100,7 @@ void HootApiDb::open(const QUrl& url)
 
 void HootApiDb::_resetQueries()
 {
-  LOG_DEBUG("Resetting queries...");
+  LOG_TRACE("Resetting queries...");
 
   ApiDb::_resetQueries();
 
@@ -1094,6 +1127,7 @@ void HootApiDb::_resetQueries()
   _mapExistsByName.reset();
   _getMapIdByName.reset();
   _insertChangeSet2.reset();
+  _numChangesets.reset();
 
   // bulk insert objects.
   _nodeBulkInsert.reset();
@@ -1228,6 +1262,37 @@ long HootApiDb::getMapIdByName(const QString name)
     }
   }
   _getMapIdByName->finish();
+  return result;
+}
+
+long HootApiDb::numChangesets()
+{
+  if (!_numChangesets)
+  {
+    _numChangesets.reset(new QSqlQuery(_db));
+    _numChangesets->prepare("SELECT COUNT(*) FROM " + getChangesetsTableName(_currMapId));
+  }
+  LOG_VARD(_numChangesets->lastQuery());
+
+  if (!_numChangesets->exec())
+  {
+    LOG_ERROR(_numChangesets->executedQuery());
+    LOG_ERROR(_numChangesets->lastError().text());
+    throw HootException(_numChangesets->lastError().text());
+  }
+
+  long result = -1;
+  if (_numChangesets->next())
+  {
+    bool ok;
+    result = _numChangesets->value(0).toLongLong(&ok);
+    if (!ok)
+    {
+      throw HootException(
+        "Count not changeset count for map with ID: " + QString::number(_currMapId));
+    }
+  }
+  _numChangesets->finish();
   return result;
 }
 

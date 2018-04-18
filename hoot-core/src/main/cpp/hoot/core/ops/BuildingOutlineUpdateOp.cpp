@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BuildingOutlineUpdateOp.h"
 
@@ -44,7 +44,6 @@
 #include <hoot/core/util/GeometryConverter.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/util/Log.h>
 
@@ -72,6 +71,8 @@ public:
       allNodes.insert(e->getId());
     }
   }
+
+  virtual QString getDescription() const { return ""; }
 };
 
 class NodeReplaceVisitor : public ConstElementVisitor
@@ -110,6 +111,8 @@ public:
       }
     }
   }
+
+  virtual QString getDescription() const { return ""; }
 
 private:
   const map<long, long>& _fromTo;
@@ -162,6 +165,7 @@ void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& building,
       const QString errMsg =
         QString("Element with uncleanable topology.  Error occurred during union ") +
         QString("operation of element: ") + buildingMember->getElementId().toString();
+      //TODO: if _unionOutline gets activated, make a ReviewMaker mem var to use for this
       ReviewMarker().mark(_map, building, errMsg + ".", ReviewMarker::getBadGeometryType());
       if (logWarnCount < Log::getWarnMessageLimit())
       {
@@ -220,7 +224,7 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
                 const QString errMsg =
                   "Marking parent element for review for element with uncleanable topology: " +
                   way->getElementId().toString();
-                ReviewMarker().mark(_map, building, errMsg + ".", ReviewMarker::getBadGeometryType());
+                _reviewMarker.mark(_map, building, errMsg + ".", ReviewMarker::getBadGeometryType());
                 if (logWarnCount < Log::getWarnMessageLimit())
                 {
                   LOG_WARN(errMsg + ": " + QString(e.what()));
@@ -272,7 +276,7 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
                 const QString errMsg =
                   "Marking parent element for review for element with uncleanable topology: " +
                   relation->getElementId().toString();
-                ReviewMarker().mark(_map, building, errMsg + ".", ReviewMarker::getBadGeometryType());
+                _reviewMarker.mark(_map, building, errMsg + ".", ReviewMarker::getBadGeometryType());
                 if (logWarnCount < Log::getWarnMessageLimit())
                 {
                   LOG_WARN(errMsg + ": " + QString(e.what()));

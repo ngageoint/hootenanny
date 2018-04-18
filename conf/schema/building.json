@@ -364,5 +364,13 @@
             "name": "building=no",
             "weight": 0.1
         }
+    },
+    {
+        "categories": [
+            "poi"
+        ],
+        "isA": "building",
+        "name": "building=civic",
+        "objectType": "tag"
     }
 ]
