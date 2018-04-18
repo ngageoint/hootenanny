@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVEELEMENTSVISITOR_H
 #define REMOVEELEMENTSVISITOR_H
@@ -76,6 +76,8 @@ public:
                          const boost::shared_ptr<ElementCriterion>& pCrit);
 
   int getCount() { return _count; }
+
+  virtual QString getDescription() const { return "Removes elements that satisfy a filter"; }
 
 private:
 

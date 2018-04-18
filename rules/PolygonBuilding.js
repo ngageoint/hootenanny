@@ -87,6 +87,8 @@ exports.matchScore = function(map, e1, e2)
  * Simpler version of the merge function. Maybe only support this at first.
  * It only supports merging two elements and the replaced list is determined
  * implicitly based on the result.
+
+TODO: This can probably be replaced with the same mergePair function used in PoiGeneric.js and Area.js
  */
 exports.mergePair = function(map, e1, e2)
 {

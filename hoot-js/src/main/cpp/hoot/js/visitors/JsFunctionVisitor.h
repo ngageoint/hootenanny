@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef JSFUNCTIONVISITOR_H
 #define JSFUNCTIONVISITOR_H
@@ -48,7 +48,7 @@ public:
 
   JsFunctionVisitor() : _map(0) {}
 
-  virtual void addFunction(v8::Persistent<v8::Function> func) { _func = v8::Persistent<v8::Function>(func); }
+  virtual void addFunction(v8::Isolate* isolate, v8::Local<v8::Function>& func) { _func.Reset(isolate, func); }
 
   virtual void setOsmMap(OsmMap* map) { _map = map; }
 
@@ -56,7 +56,10 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
+  virtual QString getDescription() const { return ""; }
+
 private:
+
   v8::Persistent<v8::Function> _func;
   OsmMap* _map;
 };

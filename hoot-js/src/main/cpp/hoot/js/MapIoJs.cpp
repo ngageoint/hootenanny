@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MapIoJs.h"
 
@@ -40,69 +40,44 @@
 #include "JsRegistrar.h"
 #include "OsmMapJs.h"
 
+using namespace v8;
+using namespace node;
+
 namespace hoot
 {
-using namespace node;
-using namespace v8;
 
-class MapIoJs
+HOOT_JS_REGISTER(MapIoJs)
+
+void MapIoJs::Init(Handle<Object> exports)
 {
-public:
+  Isolate* current = exports->GetIsolate();
+  HandleScope scope(current);
+  exports->Set(String::NewFromUtf8(current, "loadMap"),
+               FunctionTemplate::New(current, loadMap)->GetFunction());
+  exports->Set(String::NewFromUtf8(current, "loadMapFromString"),
+               FunctionTemplate::New(current, loadMapFromString)->GetFunction());
+  exports->Set(String::NewFromUtf8(current, "loadMapFromStringPreserveIdAndStatus"),
+               FunctionTemplate::New(current, loadMapFromStringPreserveIdAndStatus)->GetFunction());
+  exports->Set(String::NewFromUtf8(current, "saveMap"),
+               FunctionTemplate::New(current, saveMap)->GetFunction());
+}
 
-  static void Init(Handle<Object> exports)
+void MapIoJs::loadMap(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  try
   {
-    exports->Set(String::NewSymbol("loadMap"), FunctionTemplate::New(loadMap)->GetFunction());
-    exports->Set(String::NewSymbol("loadMapFromString"), FunctionTemplate::New(loadMapFromString)->
-      GetFunction());
-    exports->Set(String::NewSymbol("saveMap"), FunctionTemplate::New(saveMap)->GetFunction());
-  }
-
-  static Handle<Value> loadMap(const Arguments& args) {
-    HandleScope scope;
-
-    try
-    {
-      OsmMapJs* map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
-
-      v8::String::Utf8Value param1(args[1]->ToString());
-      QString url = QString::fromUtf8(*param1);
-
-      bool useFileId = true;
-      if (args.Length() >= 3)
-      {
-        useFileId = args[2]->ToBoolean()->Value();
-      }
-
-      Status status = Status::Invalid;
-      if (args.Length() >= 4)
-      {
-        status = (Status::Type)args[3]->ToInteger()->Value();
-      }
-
-      OsmMapReaderFactory::getInstance().read(map->getMap(), url, useFileId, status);
-    }
-    catch ( const HootException& e )
-    {
-      return v8::ThrowException(HootExceptionJs::create(e));
-    }
-
-    return scope.Close(Undefined());
-  }
-
-  static Handle<Value> loadMapFromString(const Arguments& args) {
-    HandleScope scope;
-
-    // Arguments: output_map map_xml bool:useIds int:Status
-
     OsmMapJs* map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
 
-    QString mapXml = toCpp<QString>(args[1]);
+    String::Utf8Value param1(args[1]->ToString());
+    QString url = QString::fromUtf8(*param1);
 
-    OsmXmlReader reader;
-
+    bool useFileId = true;
     if (args.Length() >= 3)
     {
-      reader.setUseDataSourceIds(toCpp<bool>(args[2]));
+      useFileId = args[2]->ToBoolean()->Value();
     }
 
     Status status = Status::Invalid;
@@ -111,28 +86,71 @@ public:
       status = (Status::Type)args[3]->ToInteger()->Value();
     }
 
-    reader.readFromString(mapXml, map->getMap());
+    OsmMapReaderFactory::getInstance().read(map->getMap(), url, useFileId, status);
 
-    return scope.Close(Undefined());
+    args.GetReturnValue().SetUndefined();
   }
-
-  static Handle<Value> saveMap(const Arguments& args) {
-    HandleScope scope;
-
-    OsmMapPtr map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject())->getMap();
-
-    MapProjector::projectToWgs84(map);
-
-    v8::String::Utf8Value param1(args[1]->ToString());
-    QString url = QString::fromUtf8(*param1);
-
-    OsmMapWriterFactory::getInstance().write(map, url);
-
-    return scope.Close(Undefined());
+  catch (const HootException& e)
+  {
+    args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(e)));
   }
+}
 
-};
+void MapIoJs::loadMapFromString(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
-HOOT_JS_REGISTER(MapIoJs)
+  OsmMapJs* map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
+  QString mapXml = toCpp<QString>(args[1]);
+
+  OsmXmlReader reader;
+  if (args.Length() >= 3)
+  {
+    reader.setUseDataSourceIds(toCpp<bool>(args[2]));
+  }
+  Status status = Status::Invalid;
+  if (args.Length() >= 4)
+  {
+    status = (Status::Type)args[3]->ToInteger()->Value();
+    reader.setDefaultStatus(status);
+  }
+  reader.readFromString(mapXml, map->getMap());
+
+  args.GetReturnValue().SetUndefined();
+}
+
+void MapIoJs::loadMapFromStringPreserveIdAndStatus(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  OsmMapJs* map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
+  QString mapXml = toCpp<QString>(args[1]);
+
+  OsmXmlReader reader;
+  reader.setUseDataSourceIds(true);
+  reader.setUseStatusFromFile(true);
+  reader.readFromString(mapXml, map->getMap());
+
+  args.GetReturnValue().SetUndefined();
+}
+
+void MapIoJs::saveMap(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  OsmMapPtr map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject())->getMap();
+
+  MapProjector::projectToWgs84(map);
+
+  String::Utf8Value param1(args[1]->ToString());
+  QString url = QString::fromUtf8(*param1);
+
+  OsmMapWriterFactory::getInstance().write(map, url);
+
+  args.GetReturnValue().SetUndefined();
+}
 
 }

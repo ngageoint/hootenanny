@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -61,10 +61,16 @@ class RubberSheetTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runSimpleTest);
   CPPUNIT_TEST(runIoTest);
   CPPUNIT_TEST(runCalculateTiePointDistancesTest);
-  CPPUNIT_TEST(runCalculateTiePointDistancesNotEnoughTiePointsTest);
+  CPPUNIT_TEST(runCalculateTiePointDistancesNotEnoughTiePointsTest1);
+  CPPUNIT_TEST(runCalculateTiePointDistancesNotEnoughTiePointsTest2);
   CPPUNIT_TEST_SUITE_END();
 
 public:
+
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/conflate");
+  }
 
   void runIoTest()
   {
@@ -85,6 +91,7 @@ public:
       MapCleaner().apply(map);
       RubberSheet uut;
       uut.setReference(false);
+      uut.setMinimumTies(10);
       uut.calculateTransform(map);
 
       QBuffer buf1(&arr1);
@@ -110,6 +117,8 @@ public:
 
       MapCleaner().apply(map);
       RubberSheet uut;
+      uut.setReference(false);
+      uut.setMinimumTies(10);
 
       QBuffer buf1(&arr1);
       QBuffer buf2(&arr2);
@@ -122,7 +131,6 @@ public:
 
       MapProjector::projectToWgs84(map);
 
-      QDir().mkpath("test-output/conflate/");
       OsmXmlWriter writer;
       // for testing we don't need a high precision.
       writer.setPrecision(7);
@@ -154,7 +162,6 @@ public:
 
     MapProjector::projectToWgs84(map);
 
-    QDir().mkpath("test-output/conflate/");
     OsmXmlWriter writer;
     writer.write(map, "test-output/conflate/RubberSheetSimple.osm");
 
@@ -181,7 +188,7 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(11.477148, tiePointDistances.at(1), 1e-6);
   }
 
-  void runCalculateTiePointDistancesNotEnoughTiePointsTest()
+  void runCalculateTiePointDistancesNotEnoughTiePointsTest1()
   {
     RubberSheet rubberSheet;
 
@@ -196,6 +203,39 @@ public:
     }
     CPPUNIT_ASSERT_EQUAL(
       QString("No tie points have been generated.").toStdString(), exceptionMsg.toStdString());
+  }
+
+  void runCalculateTiePointDistancesNotEnoughTiePointsTest2()
+  {
+    TestUtils::resetEnvironment();
+
+    OsmXmlReader reader;
+    OsmMap::resetCounters();
+    OsmMapPtr map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read("test-files/DcGisRoads.osm", map);
+    reader.setDefaultStatus(Status::Unknown2);
+    reader.read("test-files/DcTigerRoads.osm", map);
+
+    MapCropper(Envelope(-77.0554,-77.0441,38.8833,38.8933)).apply(map);
+
+    MapCleaner().apply(map);
+    RubberSheet uut;
+    uut.setReference(false);
+    uut.setFailWhenMinimumTiePointsNotFound(true);
+    uut.setMinimumTies(999);
+
+    QString exceptionMsg("");
+    try
+    {
+      uut.apply(map);
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(
+      exceptionMsg.contains("Error rubbersheeting due to not finding enough tie points"));
   }
 
 };

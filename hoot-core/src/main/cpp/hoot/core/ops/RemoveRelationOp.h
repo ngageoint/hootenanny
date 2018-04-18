@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVERELATIONOP_H
 #define REMOVERELATIONOP_H
@@ -78,7 +78,10 @@ public:
    */
   static void removeRelation(OsmMapPtr map, long rId);
 
+  virtual QString getDescription() const { return "Removes relations from a map"; }
+
 private:
+
   long _rIdToRemove;
 
 };

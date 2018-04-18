@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "RasterComparator.h"
@@ -133,6 +133,8 @@ public:
       _gp.drawWay(_pt, _map.get(), ways[i].get(), _m);
     }
   }
+
+  virtual QString getDescription() const { return ""; }
 
 private:
   OsmMapPtr _map;

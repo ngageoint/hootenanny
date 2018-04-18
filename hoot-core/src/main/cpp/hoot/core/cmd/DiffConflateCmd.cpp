@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -30,14 +30,17 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/conflate/ConflateStatsHelper.h>
-#include <hoot/core/conflate/StatsComposer.h>
 #include <hoot/core/conflate/DiffConflator.h>
 #include <hoot/core/filters/StatusCriterion.h>
+#include <hoot/core/filters/BuildingCriterion.h>
+#include <hoot/core/filters/PoiCriterion.h>
 #include <hoot/core/ops/BuildingOutlineUpdateOp.h>
 #include <hoot/core/ops/CalculateStatsOp.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/ops/stats/IoSingleStat.h>
 #include <hoot/core/visitors/AddRef1Visitor.h>
+#include <hoot/core/visitors/CriterionCountVisitor.h>
+#include <hoot/core/visitors/LengthOfWaysVisitor.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmXmlWriter.h>
@@ -69,7 +72,10 @@ public:
 
   DiffConflateCmd() { }
 
-  virtual QString getName() const { return "diff-conflate"; }
+  virtual QString getName() const { return "conflate-differential"; }
+
+  virtual QString getDescription() const
+  { return "Conflates two maps into a single map based on the difference between the inputs"; }
 
   // Convenience function used when deriving a changeset
   boost::shared_ptr<ChangesetDeriver> _sortInputs(QList<OsmMapPtr> inputMaps)
@@ -88,12 +94,22 @@ public:
     QList<SingleStat> stats;
     bool displayStats = false;
     QString outputStatsFile;
-
-    // Handle Stats
-    if (args.endsWith("--stats"))
+    if (args.contains("--stats"))
     {
-      displayStats = true;
-      args.pop_back();
+      if (args.endsWith("--stats"))
+      {
+        displayStats = true;
+        //remove "--stats" from args list
+        args.pop_back();
+      }
+      else if (args.size() == 5)
+      {
+        displayStats = true;
+        outputStatsFile = args[4];
+        //remove "--stats" and stats output file name from args list
+        args.pop_back();
+        args.pop_back();
+      }
     }
 
     if (args.size() != 3)
@@ -215,20 +231,42 @@ public:
     stats.append(IoSingleStat(IoSingleStat::CancelledWriteBytes));
     stats.append(SingleStat("(Dubious) Bytes Processed per Second", inputBytes / totalElapsed));
 
+    // Differential specific stats - get some numbers for our output
+    // Number of new points
+    // Number of new buildings
+    // km of new roads
+
+    ElementCriterionPtr pPoiCrit(new PoiCriterion());
+    CriterionCountVisitor poiCounter;
+    poiCounter.addCriterion(pPoiCrit);
+    result->visitRo(poiCounter);
+    stats.append((SingleStat("Count of New POIs", poiCounter.getCount())));
+
+    ElementCriterionPtr pBuildingCrit(new BuildingCriterion(result));
+    CriterionCountVisitor buildingCounter;
+    buildingCounter.addCriterion(pBuildingCrit);
+    result->visitRo(buildingCounter);
+    stats.append((SingleStat("Count of New Buildings", buildingCounter.getCount())));
+
+    LengthOfWaysVisitor lengthVisitor;
+    result->visitRo(lengthVisitor);
+    stats.append((SingleStat("Km of New Road", lengthVisitor.getStat()/1000.0)));
+
     if (displayStats)
     {
       if (outputStatsFile.isEmpty())
       {
         allStats.append(stats);
-        MapStatsWriter().writeStats(allStats, args);
-        QString statsMsg = MapStatsWriter().statsToString( allStats, "\t" );
-        cout << "stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)\n" << statsMsg << endl;
+        QString statsMsg = MapStatsWriter().statsToString(allStats, "\t");
+        cout << "stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)\n" <<
+                statsMsg << endl;
       }
       else
       {
         allStats.append(stats);
         MapStatsWriter().writeStatsToJson(allStats, outputStatsFile);
-        cout << "stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat) in file: " << outputStatsFile << endl;
+        cout << "stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat) in file: " <<
+                outputStatsFile << endl;
       }
     }
 

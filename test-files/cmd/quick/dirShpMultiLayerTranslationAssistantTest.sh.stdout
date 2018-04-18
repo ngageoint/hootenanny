@@ -1,17 +1,2 @@
-17:03:36.607 INFO  ...hoot/core/schema/OsmSchema.cpp(1851) Loading translation files...
-17:03:36.683 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/translation_assistant/calizip cali-fake-points
-Loading test-files/translation_assistant/calizip cali-fake-points 0 / 4   
-17:03:36.693 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/translation_assistant/calizip cali-test
-Loading test-files/translation_assistant/calizip cali-test 0 / 357   
-
-17:03:36.804 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::MergeNearbyNodes
-17:03:36.804 INFO  .../core/ops/MergeNearbyNodes.cpp(  75) MergeNearbyNodes start
-MergeNearbyNodes 0 0    MergeNearbyNodes 1000 720    MergeNearbyNodes 1420 elapsed: 13ms        
-17:03:36.817 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::BuildingPartMergeOp
-Ways: 0 / 357        Ways: 357 / 357        
-Relations: 0 / 0        
-Combining Parts: 0 / 0        
-
-17:03:36.822 INFO  ...ore/io/OsmMapWriterFactory.cpp( 108) Writing map to test-output/cmd/translation_assistant_ogr2osm/calizip.osm...
-17:03:37.107 INFO  ...ore/io/OsmMapReaderFactory.cpp( 137) Loading map from test-output/cmd/translation_assistant_ogr2osm/calizip.osm...
-17:03:37.143 INFO  ...ore/io/OsmMapReaderFactory.cpp( 137) Loading map from test-files/translation_assistant/calizip.osm...
+20:54:47.633 INFO  ...ore/io/OsmMapReaderFactory.cpp( 178) Loading map from test-output/cmd/translation_assistant_convert-ogr2osm/calizip.osm...
+20:54:47.678 INFO  ...ore/io/OsmMapReaderFactory.cpp( 178) Loading map from test-files/translation_assistant/calizip.osm...

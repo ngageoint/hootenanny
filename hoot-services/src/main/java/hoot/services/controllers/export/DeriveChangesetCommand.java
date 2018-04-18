@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.export;
 
@@ -53,7 +53,7 @@ class DeriveChangesetCommand extends ExportCommand {
         options.add("convert.bounding.box=" + aoi);
         options.add("api.db.email=test@test.com");
         options.add("reader.use.file.status=true");
-        options.add("reader.keep.file.status=true");
+        options.add("reader.keep.status.tag=true");
         double changesetBufferSize = Double.parseDouble(CHANGESET_DERIVE_BUFFER); //in degrees
         options.add("changeset.buffer=" + String.valueOf(changesetBufferSize));
         options.add("changeset.allow.deleting.reference.features=false");
@@ -79,12 +79,12 @@ class DeriveChangesetCommand extends ExportCommand {
         if (params.getOutputType().equalsIgnoreCase("osc")) {
             // Just derive without apply (Will return .osc file to the REST caller)
             substitutionMap.put("CHANGESET_OUTPUT_PATH", super.getOutputPath());
-            command = "hoot derive-changeset --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${OSMAPI_DB_URL} ${INPUT} ${CHANGESET_OUTPUT_PATH}";
+            command = "hoot changeset-derive --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${OSMAPI_DB_URL} ${INPUT} ${CHANGESET_OUTPUT_PATH}";
         }
         else {
             // Derive changeset here.  The actual apply command is issued via ApplyChangesetCommand from another class.
             substitutionMap.put("CHANGESET_OUTPUT_PATH", super.getSQLChangesetPath()); //"changeset-" + getJobId() + ".osc.sql"
-            command = "hoot derive-changeset --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${OSMAPI_DB_URL} ${INPUT} ${CHANGESET_OUTPUT_PATH} ${OSMAPI_DB_URL}";
+            command = "hoot changeset-derive --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${OSMAPI_DB_URL} ${INPUT} ${CHANGESET_OUTPUT_PATH} ${OSMAPI_DB_URL}";
         }
 
         super.configureCommand(command, substitutionMap, caller);

@@ -1018,6 +1018,7 @@ mgcp = {
             ["t.construction && t.railway","t.railway = t.construction; t.condition = 'construction'; delete t.construction"],
             ["t.construction && t.highway","t.highway = t.construction; t.condition = 'construction'; delete t.construction"],
             ["t.content && !(t.product)","t.product = t.content; delete t.content"],
+            ["t.landuse == 'railway' && t['railway:yard'] == 'marshalling_yard'","a.F_CODE = 'AN060'"],
             ["t.leisure == 'stadium' && t.building","delete t.building"],
             ["t.man_made && t.building == 'yes'","delete t.building"],
             ["t.man_made == 'water_tower'","a.F_CODE = 'AL241'"],
@@ -1322,6 +1323,105 @@ mgcp = {
             delete tags.vertical_obstruction_identifier;
         }
 
+        // Soil Surface Regions
+        if (! attrs.F_CODE)
+        {
+            if (tags.surface)
+            {
+                attrs.F_CODE = 'DA010'; // Soil Surface Region
+                if (! tags.material)
+                {
+                    tags.material = tags.surface;
+                    delete tags.surface;
+                }
+            }
+
+            switch (tags.natural)
+            {
+                case 'mud':
+                    attrs.F_CODE = 'DA010'; // Soil Surface Region
+                    tags.material = tags.surface;
+                    break;
+
+                case 'sand':
+                    attrs.F_CODE = 'DA010'; // Soil Surface Region
+                    tags.material = tags.surface;
+                 break;
+
+                case 'bare_rock':
+                    attrs.F_CODE = 'DA010'; // Soil Surface Region
+                    tags.material = tags.surface;
+                    break;
+
+                case 'rock':
+                    attrs.F_CODE = 'DA010'; // Soil Surface Region
+                    tags.material = tags.surface;
+                    break;
+
+                case 'stone':
+                    attrs.F_CODE = 'DA010'; // Soil Surface Region
+                    tags.material = tags.surface;
+                    break;
+
+                case 'scree':
+                    attrs.F_CODE = 'DA010'; // Soil Surface Region
+                    tags.material = tags.surface;
+                    break;
+
+                case 'shingle':
+                    attrs.F_CODE = 'DA010'; // Soil Surface Region
+                    tags.material = tags.surface;
+                    break;
+
+            }
+        } // End ! F_CODE
+
+        // Railway loading things
+        if (tags.railway == 'loading')
+        {
+            if (tags.facility == 'gantry_crane')
+            {
+                delete tags.railway;
+                delete tags.facility;
+                attrs.F_CODE = 'AF040'; // Crane
+                tags['crane:type'] = 'bridge';
+            }
+
+            if (tags.facility == 'container_terminal')
+            {
+                delete tags.railway;
+                delete tags.facility;
+                attrs.F_CODE = 'AL010'; // Facility
+                attrs.FFN = '480'; // Transportation
+            }
+        } // End loading
+
+        // We don't have BH220 in MGCP
+        switch (tags.man_made)
+        {
+            case undefined: // Break early if no value
+                break;
+
+            case 'water_works':
+                delete tags.man_made;
+                attrs.F_CODE = 'AL010'; // Facility
+                attrs.FFN = '350'; // Utilities
+                break;
+
+            case 'reservoir_covered':
+                delete tags.man_made;
+                attrs.F_CODE = 'AM070'; // Storage Tank
+                tags.product = 'water';
+                break;
+
+            case 'gasometer':
+                delete tags.man_made;
+                attrs.F_CODE = 'AM070'; // Storage Tank
+                tags.product = 'gas';
+                break;
+        }
+
+
     }, // End applyToMgcpPreProcessing
 
 
@@ -1465,6 +1565,12 @@ mgcp = {
                 // Unknown House of Worship
                 if (tags.amenity == 'place_of_worship' && tags.building == 'other') attrs.HWT = 999;
 
+                if (attrs.HWT && ! tags.amenity && ! attrs.FFN)
+                {
+                    attrs.FFN = '931';
+                }
+
+
                 if (attrs.FFN && (attrs.FFN !== '930' && attrs.FFN !== '931'))
                 {
                     // Debug
@@ -1545,7 +1651,15 @@ mgcp = {
                 }
                 break;
 
-            case 'DA010': // Bluff/Cliff/Escarpment
+            case 'DA010': // Soil Surface Area
+                if (attrs.MCC)
+                {
+                    attrs.SMC = attrs.MCC;
+                    delete attrs.MCC;
+                }
+                break;
+
+            case 'DB010': // Bluff/Cliff/Escarpment
                 if (attrs.MCC)
                 {
                     attrs.SMC = attrs.MCC;
@@ -1622,6 +1736,28 @@ mgcp = {
 
         if (attrs.SRT in srtFix) attrs.SRT = srtFix[attrs.SRT];
 
+       // Fix SDV
+        // NOTE: We are going to override the normal source:datetime with what we get from JOSM
+        if (tags['source:imagery:datetime'])
+        {
+            attrs.SDV = tags['source:imagery:datetime'];
+            //delete notUsedTags['source:imagery:datetime'];
+        }
+
+        // Now try using tags from Taginfo
+        if (! attrs.SDV)
+        {
+            if (tags['source:date']) 
+            {
+                attrs.SDV = tags['source:date'];
+                //delete notUsedTags['source:date'];
+            }
+            else if (tags['source:geometry:date'])
+            {
+                attrs.SDV = tags['source:geometry:date'];
+                //delete notUsedTags['source:geometry:date'];
+            }
+        }
         // Chop the milliseconds off the "source:datetime"
         if (attrs.SDV)
         {
@@ -1844,7 +1980,7 @@ mgcp = {
         translate.overrideValues(tags,mgcp.toChange);
 
         // pre processing
-        mgcp.applyToMgcpPreProcessing(tags,attrs, geometryType);
+        mgcp.applyToMgcpPreProcessing(tags, attrs, geometryType);
 
         // Make a copy of the input tags so we can remove them as they get translated. What is left is
         // the not used tags.

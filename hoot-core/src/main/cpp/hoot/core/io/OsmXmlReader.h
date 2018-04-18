@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMXMLREADER_H
 #define OSMXMLREADER_H
@@ -96,14 +96,18 @@ public:
 
   virtual void setDefaultStatus(Status s) { _status = s; }
 
+  virtual void setUseFileStatus(bool useFileStatus) { _useFileStatus = useFileStatus; }
+
   virtual bool startElement(const QString &namespaceURI, const QString &localName,
                             const QString &qName, const QXmlAttributes &attributes);
 
   void setUseDataSourceIds(bool useDataSourceIds) { _useDataSourceId = useDataSourceIds; }
   void setUseStatusFromFile(bool useFileStatus) { _useFileStatus = useFileStatus; }
-  void setKeepStatusFromFile(bool keepFileStatus) { _keepFileStatus = keepFileStatus; }
+  void setKeepStatusTag(bool keepStatusTag) { _keepStatusTag = keepStatusTag; }
   void setDefaultAccuracy(Meters circularError) { _circularError = circularError; } 
   void setAddSourceDateTime(bool add) { _addSourceDateTime = add; }
+
+  virtual QString supportedFormats() { return ".osm;.osm.bz2;.osm.gz"; }
 
 private:
 
@@ -130,7 +134,7 @@ private:
   int _badAccuracyCount;
   QString _path;
 
-  bool _keepFileStatus;
+  bool _keepStatusTag;
   bool _useFileStatus;
   bool _useDataSourceId;
   bool _addSourceDateTime;      ///< Should reader add source:datetime attribute to values read in?

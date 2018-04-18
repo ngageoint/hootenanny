@@ -1,7 +1,12 @@
 # Element Merge Server API
 
-#### Merges two OSM features using Hootenanny conflation.  Currently supports merging POIs together or POIs with polygons.
-#### All POIs must OSM nodes and the polygons may be either OSM ways or relations.
+#### Merges two or more OSM features.  Currently supports merging POIs with POIs, one POI with one polygon, areas 
+#### with areas, or buildings with buildings.  The element being merged into must have the "hoot:merge:target=yes" tag, 
+#### except for POI/polygon merging which always merges the POI into the polygon.  
+####
+#### Constituent elements (way nodes or relation members) are optional in the request.  Whether they are passed in 
+#### the request or not, the caller is responsible for deleting the ones that belong to any parent features that 
+#### were merged into other features.
 ___
 ## POST /elementmerge
 
@@ -20,6 +25,7 @@ ___
         <tag k='error:circular' v='150' />
         <tag k='name' v='POST, JÄGER-VON-FALL-STRASSE' />
         <tag k='hoot:status' v='2' />
+        <tag k="hoot:merge:target" v="yes"/>
     </node>
 </osm>
 ```

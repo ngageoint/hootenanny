@@ -45,6 +45,9 @@ QMAKE_LFLAGS=-fuse-ld=gold
 # Show more warnings
 #QMAKE_CXXFLAGS+=-Wextra
 #QMAKE_CXXFLAGS+=-Wall
+
+# Turn warnings into errors
+QMAKE_CXXFLAGS+=-Werror
                          
 # Use this with valgrind
 #QMAKE_CXXFLAGS+=-g -O1 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __OGR_READER_H__
@@ -133,12 +133,15 @@ public:
 
   virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
 
+  //leaving this empty for the time being
+  virtual QString supportedFormats() { return ""; }
+
 protected:
 
   OgrReaderInternal* _d;
 };
 
-} // hoot
+}
 
 
 #endif // __OGR_READER_H__

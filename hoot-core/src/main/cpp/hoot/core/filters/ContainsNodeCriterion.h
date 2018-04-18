@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CONTAINSNODECRITERION_H
 #define CONTAINSNODECRITERION_H
@@ -54,6 +54,9 @@ public:
 
   ElementCriterionPtr clone()
   { return ElementCriterionPtr(new ContainsNodeCriterion(_nodeId)); }
+
+  virtual QString getDescription() const
+  { return "Determines if an element contains the given node ID"; }
 
 private:
 

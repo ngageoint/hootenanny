@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POIPOLYGONDISTANCEEXTRACTOR_H
 #define POIPOLYGONDISTANCEEXTRACTOR_H
@@ -60,6 +60,8 @@ public:
   virtual double extract(const OsmMap& map, const ConstElementPtr& poi,
                          const ConstElementPtr& poly) const;
 
+  virtual QString getDescription() const
+  { return "Calculates the distance between a poi and a polygon"; }
 };
 
 }

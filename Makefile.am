@@ -10,7 +10,6 @@ always:
 # Don't try to build these, the old makefile will do it.
 bin/hoot:
 bin/hoot.bin:
-pretty-pipes/bin/PrettyPipes:
 
 osmapidb:
 	$(MAKE) -f Makefile.old osmapidb
@@ -63,7 +62,6 @@ help:
 	@echo "dist                    - Make a distributable tarball."
 	@echo "eclipse                 - If configured '--with-services', then, builds Eclipse IDE project files."
 	@echo "osmapidb                - If configured '--with-services', then builds a clean copy of an OSM API database."
-	@echo "pp-test                 - Run the pretty-pipes tests.  Should take less than five minutes."
 	@echo "plugins-test            - Run the mocha plugins tests.  Should take less than five minutes."
 	@echo "services-build          - If configured '--with-services', then builds just the web services source."
 	@echo "services-clean          - If configured '--with-services', then cleans just the web services binaries. This will not modify the DB."
@@ -113,9 +111,6 @@ ui-coverage:
 ui-clean-coverage:
 	scripts/HootEnv.sh $(MAKE) -f Makefile.old ui-clean-coverage
 
-pp-test:
-	scripts/HootEnv.sh $(MAKE) -f Makefile.old pp-test
-
 plugins-test:
 	scripts/HootEnv.sh $(MAKE) -f Makefile.old plugins-test
 
@@ -140,7 +135,7 @@ services-coverage:
 # Use some tar fanciness to grab all the files in conf, plugins, translations and scripts
 install-other:
 	mkdir -p tmp
-	$(TAR) cf tmp/other.tar conf plugins scripts translations rules report
+	$(TAR) cf tmp/other.tar conf plugins scripts translations rules
 	mkdir -p $(localstatedir)
 	cat tmp/other.tar | $(TAR) xv -C $(localstatedir)
 	rm -f tmp/other.tar
@@ -169,8 +164,6 @@ install-exec-local:
 	cp bin/HootEnv.sh $(localstatedir)/bin/
 	cp -l $(localstatedir)/bin/HootEnv.sh $(bindir)
 	cp -a lib/* $(libdir)
-	test $(HAS_HADOOP) && $(INSTALL) pretty-pipes/bin/* $(bindir) || true
-	test $(HAS_HADOOP) && $(INSTALL) pretty-pipes/lib/* $(libdir) || true
 
 # Clean out all install files and then remove the empty directories.
 uninstall-local:

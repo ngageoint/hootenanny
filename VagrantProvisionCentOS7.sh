@@ -32,11 +32,7 @@ sudo yum -y install epel-release >> CentOS_upgrade.txt 2>&1
 
 # add Hoot repo for our pre-built dependencies.
 echo "### Add Hoot repo ###" >> CentOS_upgrade.txt
-$HOOT_HOME/scripts/hoot-repo/yum-configure.sh
-
-# add nodesource repo for NodeJS dependencies.
-echo "### Add nodesource repo ###" >> CentOS_upgrade.txt
-sudo $HOOT_HOME/scripts/node/nodesource-repo.sh $NODE_VERSION
+sudo $HOOT_HOME/scripts/hoot-repo/yum-configure.sh
 
 # check to see if postgres is already installed
 if ! rpm -qa | grep -q pgdg-centos95-9.5-3 ; then
@@ -54,17 +50,15 @@ sudo yum -q -y upgrade >> CentOS_upgrade.txt 2>&1
 # Make sure that we are in ~ before trying to wget & install stuff
 cd ~
 
-echo "### Installing an ancient version of NodeJS"
-
 if ! rpm -qa | grep -q ^yum-plugin-versionlock ; then
     # Install the versionlock plugin version first.
     sudo yum install -y yum-plugin-versionlock
 else
     # Remove any NodeJS version locks to allow upgrading to $NODE_VERSION.
-    sudo yum versionlock delete nodejs-*
+    sudo yum versionlock delete nodejs nodejs-devel
 fi
 
-# Install NodeJS at the desired version.
+echo "### Installing NodeJS ${NODE_VERSION}"
 sudo yum install -y nodejs-$NODE_VERSION nodejs-devel-$NODE_VERSION
 
 echo "### Locking version of NodeJS"
@@ -139,7 +133,6 @@ sudo yum -y install \
     texlive-collection-fontsrecommended \
     texlive-collection-langcyrillic \
     unzip \
-    v8-devel \
     vim \
     wamerican-insane \
     w3m \
@@ -157,12 +150,7 @@ if ! hash qmake >/dev/null 2>&1 ; then
     fi
 fi
 
-#####
-# Temp change until we get the C++11 support into develop
 cd $HOOT_HOME
-cp LocalConfig.pri.orig LocalConfig.pri
-echo "QMAKE_CXXFLAGS += -std=c++11" >> LocalConfig.pri
-#####
 
 echo "### Configuring environment..."
 
@@ -193,9 +181,13 @@ if ! grep --quiet GDAL_DATA ~/.bash_profile; then
     source ~/.bash_profile
 fi
 
-# Use RVM to install the desired Ruby version, then install the gems.
+# Use RVM to install the desired Ruby version, and then install
+# the bundler at the desired version.
 $HOOT_HOME/scripts/ruby/rvm-install.sh
-$HOOT_HOME/scripts/ruby/gem-install.sh
+$HOOT_HOME/scripts/ruby/bundler-install.sh
+
+# Install gems with bundler and strict versioning (see Gemfile)
+$RVM_HOME/bin/rvm $RUBY_VERSION_HOOT do bundle install
 
 # Make sure that we are in ~ before trying to wget & install stuff
 cd ~
@@ -308,7 +300,7 @@ echo "### Installing Tomcat8..."
 TOMCAT_HOME=/usr/share/tomcat8
 
 # Install Tomcat 8
-$HOOT_HOME/scripts/tomcat/tomcat8/centos7/tomcat8_install.sh
+$HOOT_HOME/scripts/tomcat/centos7/tomcat8_install.sh
 
 # Configure Tomcat for the user
 if ! grep --quiet TOMCAT8_HOME ~/.bash_profile; then
@@ -337,19 +329,23 @@ sudo sed -i "s|SERVICE_USER|$VMUSER|g" /etc/systemd/system/node-mapnik.service
 sudo sed -i "s|HOOT_HOME|$HOOT_HOME|g" /etc/systemd/system/node-mapnik.service
 # Make sure all npm modules are installed
 cd $HOOT_HOME/node-mapnik-server
-npm install --silent
+#NOTE: Re-enable once installation works
+#npm install --silent
 # Clean up after the npm install
 rm -rf ~/tmp
 
 echo "### Installing node-export-server..."
 sudo cp $HOOT_HOME/node-export-server/systemd/node-export.service /etc/systemd/system/node-export.service
 sudo sed -i "s|SERVICE_USER|$VMUSER|g" /etc/systemd/system/node-export.service
-sudo sed -i "s|HOOT_HOME|$HOOT_HOME|g" /etc/systemd/system/node-export.service
+sudo sed -i "s|HOOTENANNY_HOME|$HOOT_HOME|g" /etc/systemd/system/node-export.service
 # Make sure all npm modules are installed
 cd $HOOT_HOME/node-export-server
 npm install --silent
 # Clean up after the npm install
 rm -rf ~/tmp
+
+# Notify systemd that unit files have changed.
+sudo systemctl daemon-reload
 
 cd $HOOT_HOME
 

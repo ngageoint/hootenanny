@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef UNIONPOLYGONSVISITOR_H
 #define UNIONPOLYGONSVISITOR_H
@@ -52,6 +52,11 @@ public:
   const boost::shared_ptr<geos::geom::Geometry>& getUnion() const { return _result; }
 
   virtual void visit(const boost::shared_ptr<const Element>& e);
+
+  virtual QString getName() const { return "Union Polygons"; }
+
+  virtual QString getDescription() const
+  { return "Unions all area elements that are visited to create a single geometry"; }
 
 private:
 

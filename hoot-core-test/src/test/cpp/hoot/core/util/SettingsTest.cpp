@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2015, 2016, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -98,7 +98,7 @@ public:
     uut.set("osm.map.writer.factory.writer", "1");
     uut.set("osm.map.reader.factory.reader", "${perty.csm.D}");
 
-    QDir().mkpath("test-output/utils");
+    TestUtils::mkpath("test-output/utils");
     uut.storeJson("test-output/utils/SettingsTest.json");
 
     Settings uut2;

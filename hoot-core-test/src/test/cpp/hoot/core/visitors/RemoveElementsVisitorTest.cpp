@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // hoot
@@ -53,6 +53,11 @@ class RemoveElementsVisitorTest : public CppUnit::TestFixture
 
 public:
 
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/visitors");
+  }
+
   void runTest()
   {
     OsmMapPtr map(new OsmMap());
@@ -65,7 +70,6 @@ public:
     map->visitRw(removeElementsVisitor);
 
     MapProjector::projectToWgs84(map);
-    QDir().mkpath("test-output/visitors");
     OsmXmlWriter writer;
     writer.write(map, "test-output/visitors/RemoveElementsVisitorOutput.osm");
     HOOT_FILE_EQUALS("test-files/visitors/RemoveElementsVisitorOutput.osm",
@@ -84,7 +88,6 @@ public:
     map->visitRw(removeElementsVisitor);
 
     MapProjector::projectToWgs84(map);
-    QDir().mkpath("test-output/visitors");
     OsmXmlWriter writer;
     writer.write(map, "test-output/visitors/RemoveElementsVisitorRecursiveOutput.osm");
     HOOT_FILE_EQUALS("test-files/visitors/RemoveElementsVisitorRecursiveOutput.osm",

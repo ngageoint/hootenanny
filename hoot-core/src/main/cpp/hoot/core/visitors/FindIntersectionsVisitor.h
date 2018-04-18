@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef FINDINTERSECTIONSVISITOR_H
 #define FINDINTERSECTIONSVISITOR_H
@@ -52,6 +52,9 @@ public:
   virtual void setOsmMap(const OsmMap* /*map*/) { assert(false); }
 
   std::vector<long>& getIntersections() { return _ids; }
+
+  virtual QString getDescription() const { return "Identifies intersections"; }
+
 private:
 
   OsmMap* _map;

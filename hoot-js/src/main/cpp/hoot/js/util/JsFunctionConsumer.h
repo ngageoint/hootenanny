@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef JSFUNCTIONCONSUMER_H
@@ -38,7 +38,7 @@ class JsFunctionConsumer
 {
 public:
 
-  virtual void addFunction(v8::Persistent<v8::Function> func) = 0;
+  virtual void addFunction(v8::Isolate* isolate, v8::Local<v8::Function>& func) = 0;
 };
 
 }

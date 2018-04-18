@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef FILTEREDVISITOR_H
 #define FILTEREDVISITOR_H
@@ -43,6 +43,7 @@ class FilteredVisitor :
     public ElementCriterionConsumer,
     public ElementVisitorConsumer
 {
+
 public:
 
   static std::string className() { return "hoot::FilteredVisitor"; }
@@ -87,6 +88,8 @@ public:
                         const ConstOsmMapPtr& map);
   static double getStat(ElementCriterion* criterion, ConstElementVisitor* visitor,
                         const ConstOsmMapPtr& map, const ElementPtr& element);
+
+  virtual QString getDescription() const { return ""; }
 
 private:
 

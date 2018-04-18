@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef DATACONVERTJS_H
 #define DATACONVERTJS_H
@@ -36,7 +36,7 @@
 #include <QStringList>
 
 // v8
-#include <v8.h>
+#include <hoot/js/HootJsStable.h>
 
 #include "StreamUtilsJs.h"
 
@@ -118,18 +118,16 @@ inline void toCpp(v8::Handle<v8::Value> v, QString& s)
   {
     throw IllegalArgumentException("Expected a string. Got an empty value.");
   }
-  v8::Handle<v8::String> str;
   if (v->IsString() || v->IsNumber() || v->IsBoolean())
   {
-    str = v->ToString();
+    v8::String::Utf8Value param(v->ToString());
+    s = QString::fromUtf8(*param);
   }
   else
   {
     throw IllegalArgumentException("Expected a string. Got: (" + toJson(v) + ")");
   }
 
-  v8::String::Utf8Value param(str);
-  s = QString::fromUtf8(*param);
 }
 
 inline void toCpp(v8::Handle<v8::Value> v, QStringList& o)
@@ -265,28 +263,28 @@ inline T toCpp(v8::Handle<v8::Value> v)
 
 inline v8::Handle<v8::Value> toV8(bool v)
 {
-  return v8::Boolean::New(v);
+  return v8::Boolean::New(v8::Isolate::GetCurrent(), v);
 }
 
 inline v8::Handle<v8::Value> toV8(int i)
 {
-  return v8::Integer::New(i);
+  return v8::Integer::New(v8::Isolate::GetCurrent(), i);
 }
 
 inline v8::Handle<v8::Value> toV8(double v)
 {
-  return v8::Number::New(v);
+  return v8::Number::New(v8::Isolate::GetCurrent(),v);
 }
 
 inline v8::Handle<v8::Value> toV8(const std::string& s)
 {
-  return v8::String::New(s.data(), s.length());
+  return v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), s.data(), v8::NewStringType::kNormal, s.length()).ToLocalChecked();
 }
 
 template<typename T, typename U>
 v8::Handle<v8::Value> toV8(const std::pair<T, U>& p)
 {
-  v8::Handle<v8::Array> result = v8::Array::New(2);
+  v8::Handle<v8::Array> result = v8::Array::New(v8::Isolate::GetCurrent(), 2);
   result->Set(0, toV8(p.first));
   result->Set(1, toV8(p.second));
   return result;
@@ -295,7 +293,7 @@ v8::Handle<v8::Value> toV8(const std::pair<T, U>& p)
 template<typename T>
 v8::Handle<v8::Value> toV8(const std::vector<T>& v)
 {
-  v8::Handle<v8::Array> result = v8::Array::New(v.size());
+  v8::Handle<v8::Array> result = v8::Array::New(v8::Isolate::GetCurrent(), v.size());
 
   for (uint32_t i = 0; i < v.size(); i++)
   {
@@ -311,7 +309,7 @@ v8::Handle<v8::Value> toV8(const std::vector<T>& v)
 template<typename T>
 v8::Handle<v8::Value> toV8(const std::set<T>& v)
 {
-  v8::Handle<v8::Array> result = v8::Array::New(v.size());
+  v8::Handle<v8::Array> result = v8::Array::New(v8::Isolate::GetCurrent(), v.size());
 
   uint32_t i = 0;
   for (typename std::set<T>::const_iterator it = v.begin(); it != v.end(); ++it)
@@ -324,18 +322,18 @@ v8::Handle<v8::Value> toV8(const std::set<T>& v)
 
 inline v8::Handle<v8::Value> toV8(const char* s)
 {
-  return v8::String::New(s);
+  return v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), s);
 }
 
 inline v8::Handle<v8::Value> toV8(const QString& s)
 {
   QByteArray utf8 = s.toUtf8();
-  return v8::String::New(utf8.data(), utf8.length());
+  return v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), utf8.data(), v8::NewStringType::kNormal, utf8.length()).ToLocalChecked();
 }
 
 inline v8::Handle<v8::Value> toV8(const QStringList& v)
 {
-  v8::Handle<v8::Array> result = v8::Array::New(v.size());
+  v8::Handle<v8::Array> result = v8::Array::New(v8::Isolate::GetCurrent(), v.size());
   for (int i = 0; i < v.size(); i++)
   {
     result->Set(i, toV8(v[i]));
@@ -346,16 +344,17 @@ inline v8::Handle<v8::Value> toV8(const QStringList& v)
 
 inline v8::Handle<v8::Value> toV8(const QVariant& v)
 {
+  v8::Isolate* current = v8::Isolate::GetCurrent();
   switch (v.type())
   {
   case QVariant::Invalid:
-    return v8::Undefined();
+    return v8::Undefined(current);
   case QVariant::Bool:
-    return v8::Boolean::New(v.toBool());
+    return v8::Boolean::New(current, v.toBool());
   case QVariant::Double:
-    return v8::Number::New(v.toDouble());
+    return v8::Number::New(current, v.toDouble());
   case QVariant::Int:
-    return v8::Integer::New(v.toInt());
+    return v8::Integer::New(current, v.toInt());
   case QVariant::String:
     return toV8(v.toString());
   case QVariant::StringList:
@@ -363,7 +362,7 @@ inline v8::Handle<v8::Value> toV8(const QVariant& v)
   case QVariant::List:
     {
       QVariantList l = v.toList();
-      v8::Handle<v8::Array> result = v8::Array::New(l.size());
+      v8::Handle<v8::Array> result = v8::Array::New(current, l.size());
       for (int i = 0; i < l.size(); i++)
       {
         result->Set(i, toV8(l[i]));
@@ -372,24 +371,24 @@ inline v8::Handle<v8::Value> toV8(const QVariant& v)
     }
   case QVariant::Hash:
   {
-    v8::Handle<v8::Object> result = v8::Object::New();
+    v8::Handle<v8::Object> result = v8::Object::New(current);
     QVariantHash m = v.toHash();
 
     for (QVariantHash::const_iterator i = m.begin(); i != m.end(); i++)
     {
-      result->Set(toV8(i.key()),toV8(i.value()), v8::None);
+      result->Set(toV8(i.key()),toV8(i.value()));
     }
 
     return result;
   }
   case QVariant::Map:
   {
-    v8::Handle<v8::Object> result = v8::Object::New();
+    v8::Handle<v8::Object> result = v8::Object::New(current);
     QVariantMap m = v.toMap();
 
     for (QVariantMap::const_iterator i = m.begin(); i != m.end(); i++)
     {
-      result->Set(toV8(i.key()),toV8(i.value()), v8::None);
+      result->Set(toV8(i.key()),toV8(i.value()));
     }
 
     return result;
@@ -403,12 +402,12 @@ inline v8::Handle<v8::Value> toV8(const QVariant& v)
 template<typename T, typename U>
 inline v8::Handle<v8::Value> toV8(const QHash<T, U>& m)
 {
-  v8::Handle<v8::Object> result = v8::Object::New();
+  v8::Handle<v8::Object> result = v8::Object::New(v8::Isolate::GetCurrent());
 
   typename QHash<T, U>::const_iterator i;
   for (i = m.begin(); i != m.end(); i++)
   {
-    result->Set(toV8(i.key()),toV8(i.value()), v8::None);
+    result->Set(toV8(i.key()),toV8(i.value()));
   }
 
   return result;

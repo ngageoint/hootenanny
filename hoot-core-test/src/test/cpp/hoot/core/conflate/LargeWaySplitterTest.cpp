@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -33,11 +33,6 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
-using namespace hoot;
-
-
-// Boost
-using namespace boost;
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -51,6 +46,9 @@ using namespace boost;
 
 #include "../TestUtils.h"
 
+namespace hoot
+{
+
 class LargeWaySplitterTest : public CppUnit::TestFixture
 {
     CPPUNIT_TEST_SUITE(LargeWaySplitterTest);
@@ -62,6 +60,7 @@ public:
   void setUp()
   {
     TestUtils::resetEnvironment();
+    TestUtils::mkpath("test-output/conflate");
   }
 
   void runToyTest()
@@ -76,7 +75,6 @@ public:
     LargeWaySplitter::splitWays(map, 20.0);
     MapProjector::projectToWgs84(map);
 
-    QDir().mkpath("test-output/conflate/");
     OsmXmlWriter writer;
     writer.write(map, "test-output/conflate/LargeWaySplitterOutput1.osm");
 
@@ -88,3 +86,4 @@ public:
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(LargeWaySplitterTest, "quick");
 
+}

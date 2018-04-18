@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -52,6 +52,10 @@ public:
   static QString inDir() { return "test-files/visitors/ImplicitPoiTaggerTest"; }
   static QString outDir() { return "test-output/visitors/ImplicitPoiTaggerTest"; }
 
+  void setUp()
+  {
+    TestUtils::mkpath(outDir());
+  }
   void tearDown()
   {
     TestUtils::resetEnvironment();
@@ -59,8 +63,6 @@ public:
 
   void runBasicTest()
   {
-    QDir().mkpath(outDir());
-
     //regenerate the db file
     const QString databaseOutFile =
       outDir() + "/ImplicitPoiTaggerTest-runBasicTest-rules.sqlite";
@@ -153,8 +155,6 @@ public:
 
   void runDuplicateTagKeyTest()
   {
-    QDir().mkpath(outDir());
-
     //regenerate the db file
     const QString databaseOutFile =
       outDir() + "/ImplicitPoiTaggerTest-runDuplicateTagKeyTest-rules.sqlite";
@@ -190,8 +190,6 @@ public:
 
   void runLessSpecificImplicitTagTest()
   {
-    QDir().mkpath(outDir());
-
     //regenerate the db file
     const QString databaseOutFile =
       outDir() + "/ImplicitPoiTaggerTest-runLessSpecificImplicitTagTest-rules.sqlite";
@@ -226,8 +224,6 @@ public:
 
   void runMoreSpecificImplicitTagTest()
   {
-    QDir().mkpath(outDir());
-
     //regenerate the db file
     const QString databaseOutFile =
       outDir() + "/ImplicitPoiTaggerTest-runMoreSpecificImplicitTagTest-rules.sqlite";

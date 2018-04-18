@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NOTCRITERION_H
 #define NOTCRITERION_H
@@ -55,7 +55,10 @@ public:
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new NotCriterion(_child->clone())); }
 
+  virtual QString getDescription() const { return "Negates a criterion"; }
+
 private:
+
   ElementCriterionPtr _child;
 };
 

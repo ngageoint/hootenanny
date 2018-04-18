@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.export;
 
@@ -67,7 +67,7 @@ public class ExportCommandTest {
         assertNotNull(exportCommand.getWorkDir());
         assertNotNull(exportCommand.getCommand());
 
-        String expectedCommand = "hoot osm2ogr --${DEBUG_LEVEL} -C RemoveReview2Pre.conf " +
+        String expectedCommand = "hoot convert-osm2ogr --${DEBUG_LEVEL} -C RemoveReview2Pre.conf " +
                 "${HOOT_OPTIONS} ${TRANSLATION_PATH} ${INPUT_PATH} ${OUTPUT_PATH}";
         assertEquals(expectedCommand, exportCommand.getCommand());
 

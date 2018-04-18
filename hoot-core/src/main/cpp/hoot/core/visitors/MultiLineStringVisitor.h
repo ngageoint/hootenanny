@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MULTILINESTRINGVISITOR_H
 #define MULTILINESTRINGVISITOR_H
@@ -54,6 +54,7 @@ class Way;
 class MultiLineStringVisitor : public ConstElementVisitor
 {
 public:
+
   static std::string className() { return "hoot::MultiLineStringVisitor"; }
 
   MultiLineStringVisitor();
@@ -72,7 +73,11 @@ public:
 
   virtual void visit(const ConstWayPtr& w);
 
+  virtual QString getDescription() const
+  { return "Creates a multi-linestring out of all ways that are visited"; }
+
 protected:
+
   ConstElementProviderPtr _provider;
   std::vector<geos::geom::Geometry*>* _ls;
 };

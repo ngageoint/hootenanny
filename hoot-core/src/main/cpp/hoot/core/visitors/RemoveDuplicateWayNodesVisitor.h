@@ -51,6 +51,10 @@ public:
   RemoveDuplicateWayNodesVisitor();
 
   virtual void visit(const ElementPtr& e);
+
+  virtual QString getName() const { return "Remove Duplicate Way Nodes"; }
+
+  virtual QString getDescription() const { return "Removes duplicate way nodes"; }
 };
 
 }

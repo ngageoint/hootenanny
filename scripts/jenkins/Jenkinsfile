@@ -1,5 +1,8 @@
+// Load shared libraries
+@Library('radiant-pipeline-library')_
+
 pipeline {
-    agent any
+    agent { label 'master' }
     triggers {
         // Set nightly triggers
         cron((BRANCH_NAME == "master" || BRANCH_NAME == "develop") ? "H H(21-22) * * 1-5" : "")
@@ -15,7 +18,7 @@ pipeline {
         booleanParam(name: 'Core_tests', defaultValue: true)
         booleanParam(name: 'Services_tests', defaultValue: true)
         booleanParam(name: 'UI_tests', defaultValue: true)
-        string(name: 'Box', defaultValue: 'hoot_centos7_prov', description: 'Vagrant Box')
+        string(name: 'Box', defaultValue: 'default', description: 'Vagrant Box')
     }
     stages {
         stage("Destroy VM") {
@@ -29,10 +32,12 @@ pipeline {
             steps {
                 
                 // Make sure we have the tags info because figuring out the version is required in the build process
+                // Remove any screenshots from previous runs
                 sh '''
                     git fetch --tags
                     git submodule update --init
                     cp -R ../software.ubuntu1404 software
+                    rm -rf ./test-files/ui/screenshot_*.png
                 '''
             }
         }
@@ -95,19 +100,18 @@ pipeline {
                 '''
                 
                 // Perform remainder of provisioning
-                sh "vagrant provision ${params.Box} --provision-with build,EGD,tomcat,mapnik,hadoop"
+                sh "vagrant provision ${params.Box} --provision-with build,EGD,tomcat,mapnik"
             }       
         }
         stage("Core Tests") {
             when { expression { return params.Core_tests } }
             steps {
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot --version --debug; bin/HootTest --diff --glacial --parallel \$(nproc)'"
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot version --debug; bin/HootTest --diff --glacial --parallel \$(nproc)'"
             }
         }
         stage("Services Tests") {
             when { expression { return params.Services_tests } }
             steps {
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` pp-test'"
                 sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` plugins-test'"
                 sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` services-test'"
             }
@@ -120,6 +124,14 @@ pipeline {
         }
     }
     post {
+        always {
+            script {
+                if (!env.BRANCH_NAME.startsWith("PR-")) {
+                    // Send build notification
+                    notifySlack(currentBuild.result, "#builds_hoot")
+                }
+            }
+        }
         success {
             // If all tests passed, clean everything up
             sh "vagrant destroy -f ${params.Box}"
@@ -127,27 +139,10 @@ pipeline {
         }
         failure {
             script {
-                // Copy over any UI failure screenshots
-                sh "vagrant scp ${params.Box}:~/hoot/test-files/ui/screenshot_*.png ./test-files/ui/"
-                emailext (
-                    subject: "Failure: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                    attachmentsPattern: 'test-files/ui/screenshot_*.png',
-                    body: """<p>Failure: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-                    <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
-                    recipientProviders: [[$class: 'DevelopersRecipientProvider']]
-                )
-            }
-        }
-        changed {
-            script {
-                // Job has been fixed
-                if (currentBuild.currentResult == 'SUCCESS') {
-                    emailext (
-                        subject: "Back to normal: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                        body: """<p>Fixed: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-                            <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
-                            recipientProviders: [[$class: 'DevelopersRecipientProvider']]
-                    )
+                if (!env.BRANCH_NAME.startsWith("PR-")) {
+                    // Copy over any UI failure screenshots and send to slack
+                    sh "vagrant scp ${params.Box}:~/hoot/test-files/ui/screenshot_*.png ./test-files/ui/"
+                    postSlack("${env.WORKSPACE}/test-files/ui/", "screenshot_*.png", "${env.JENKINS_BOT_TOKEN}", "#builds_hoot")
                 }
             }
         }

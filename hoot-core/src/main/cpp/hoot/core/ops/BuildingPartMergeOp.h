@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BUILDINGPARTMERGEOP_H
 #define BUILDINGPARTMERGEOP_H
@@ -98,6 +98,9 @@ public:
   RelationPtr combineParts(const OsmMapPtr &map,
     const std::vector< boost::shared_ptr<Element> >& parts);
 
+  virtual QString getDescription() const
+  { return "Implicitly merges individual building parts into a single part"; }
+
 private:
 
   /// Used to keep track of which elements make up a building.
@@ -111,7 +114,7 @@ private:
 
   std::set<long> _calculateNeighbors(const WayPtr& w, const Tags& tags);
 
-  void _combineParts(const std::vector< boost::shared_ptr<Element> >& parts) { combineParts(_map, parts); }
+  void _combineParts(const std::vector< boost::shared_ptr<Element> >& parts);
 
   /**
    * Compares the given tags and determines if the two building parts could be part of the same

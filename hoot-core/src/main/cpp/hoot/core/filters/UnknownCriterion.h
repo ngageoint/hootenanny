@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef UNKNOWNCRITERION_H
@@ -48,6 +48,9 @@ public:
   virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
   ElementCriterionPtr clone() { return ElementCriterionPtr(new UnknownCriterion()); }
+
+  virtual QString getDescription() const
+  { return "Identifies elements which have not been conflated"; }
 };
 
 }

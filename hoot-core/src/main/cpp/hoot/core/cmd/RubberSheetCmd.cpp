@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -51,6 +51,8 @@ public:
 
   virtual QString getName() const { return "rubber-sheet"; }
 
+  virtual QString getDescription() const { return "Brings two map datasets into alignment"; }
+
   virtual int runSimple(QStringList args)
   {
     if (args.size() != 3)
@@ -67,7 +69,7 @@ public:
     l.removeAll(QString::fromStdString(RubberSheet::className()));
     conf().set(MapCleaner::opsKey(), l);
     MapCleaner().apply(map);
-    RubberSheet(true).apply(map);
+    RubberSheet().apply(map);
 
     MapProjector::projectToWgs84(map);
 

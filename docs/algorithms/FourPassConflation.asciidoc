@@ -2,6 +2,9 @@
 [[ExplFourPassConflation]]
 == Four Pass Conflation
 
+NOTE: This documents Hootenanny conflation using Hadoop, which is no longer supported (supported up to v0.2.38), and has been 
+left here for references purposes only.
+
 All Hootenanny desktop conflation operations assume that the operation can be completed within RAM. Even if all the data can be loaded into RAM, the desktop version of Hootenanny runs in a single thread. With this constraint, we estimate it would take approximately 2 months to conflate the global road network, or 19GB of compressed input data. To alleviate these issues, we have implemented the conflation operations to execute within the Hadoop environment. This approach works on a single desktop running in pseudo-distributed mode to roughly a 1000 core cluster. We have tested it with clusters as large as 160 cores.
 
 The following sections describe the process flow and a summary of each operation. It is assumed that the reader has a working knowledge of distributed systems and Hadoop. For specific details on how to execute these operations as well as software and hardware requirements, please reference the _Hootenanny User Documentation_ .

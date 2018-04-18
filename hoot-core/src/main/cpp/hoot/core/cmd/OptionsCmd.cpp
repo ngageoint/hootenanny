@@ -39,9 +39,6 @@ using namespace std;
 namespace hoot
 {
 
-/**
- * Lists Hootenanny config options
- */
 class OptionsCmd : public BaseCommand
 {
 
@@ -53,6 +50,9 @@ public:
 
   virtual QString getName() const { return "options"; }
 
+  virtual QString getDescription() const
+  { return "Prints configuration options"; }
+
   virtual int runSimple(QStringList args)
   {
     LOG_VARD(args.size());
@@ -62,7 +62,7 @@ public:
       throw HootException(QString("%1 takes one to two parameters.").arg(getName()));
     }
 
-    const QString configOptionsFile = ConfigOptions(conf()).getConfigOptionsFile();
+    const QString configOptionsFile = ConfigOptions().getConfigOptionsFile();
     QString cmd;
     if (args.size() == 1)
     {

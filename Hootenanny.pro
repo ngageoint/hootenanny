@@ -18,12 +18,6 @@ SUBDIRS += \
     hoot-js
 }
 
-hadoop {
-SUBDIRS += \
-    pretty-pipes \
-    hoot-hadoop \
-}
-
 swig {
 SUBDIRS += \
     hoot-swig

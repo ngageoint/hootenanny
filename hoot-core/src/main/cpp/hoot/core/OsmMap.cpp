@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OsmMap.h"
@@ -295,6 +295,7 @@ void OsmMap::_copy(ConstOsmMapPtr from)
   _idGenSp = from->_idGenSp;
   _index.reset(new OsmMapIndex(*this));
   _srs = from->getProjection();
+  _roundabouts = from->getRoundabouts();
 
   int i = 0;
   const RelationMap& allRelations = from->getRelations();
@@ -454,8 +455,10 @@ void OsmMap::replace(const boost::shared_ptr<const Element>& from, const QList<E
   }
   else
   {
+    QList<long> elem;
     for (int i = 0; i < to.size(); ++i)
     {
+      elem.append(to[i]->getId());
       if (!containsElement(to[i]))
       {
         addElement(to[i]);
@@ -470,7 +473,9 @@ void OsmMap::replace(const boost::shared_ptr<const Element>& from, const QList<E
       r->replaceElement(from, to);
     }
 
-    RemoveElementOp::removeElementNoCheck(shared_from_this(), from->getElementId());
+    //  Don't remove the element if it is being replaced by itself
+    if (!elem.contains(from->getId()))
+      RemoveElementOp::removeElementNoCheck(shared_from_this(), from->getElementId());
   }
 }
 
@@ -497,7 +502,6 @@ void OsmMap::replaceNode(long oldId, long newId)
   for (set<long>::iterator it = ways.begin(); it != ways.end(); ++it)
   {
     const WayPtr& w = getWay(*it);
-
 
 #   ifdef DEBUG
       if (w.get() == NULL)
@@ -754,6 +758,25 @@ void OsmMap::visitWaysRw(ConstElementVisitor& visitor)
   for (WayMap::const_iterator it = allWays.begin(); it != allWays.end(); ++it)
   {
     if (containsWay(it->first))
+    {
+      visitor.visit(it->second);
+    }
+  }
+}
+
+void OsmMap::visitRelationsRw(ConstElementVisitor& visitor)
+{
+  OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(&visitor);
+  if (consumer != 0)
+  {
+    consumer->setOsmMap(this);
+  }
+
+  // make a copy so we can iterate through even if there are changes.
+  const RelationMap allRs = getRelations();
+  for (RelationMap::const_iterator it = allRs.begin(); it != allRs.end(); ++it)
+  {
+    if (containsRelation(it->first))
     {
       visitor.visit(it->second);
     }

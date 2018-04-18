@@ -1,19 +1,22 @@
+20:26:27.831 INFO  ...ot/js/JavaScriptTranslator.cpp( 232) Loading script: test-files/cmd/slow/tSimple.js
 Initialize works!
-16:11:06.333 ERROR ...ot/js/JavaScriptTranslator.cpp( 344) Error initializing JavaScript: test-files/cmd/slow/tSimple.js (63) 
+20:26:27.859 ERROR ...ot/js/JavaScriptTranslator.cpp( 353) Error initializing JavaScript: test-files/cmd/slow/tSimple.js (63) 
     if (translate !== undefined)
-        ^ 
+    ^ 
 ReferenceError: translate is not defined
-16:11:06.333 INFO  ...t/core/io/PythonTranslator.cpp(  66) Initializing Python
-16:11:06.333 INFO  ...t/core/io/PythonTranslator.cpp(  96) Python path: translations:PYTHONPATH:/home/matt/dg/src/hoot/translations
-16:11:06.413 ERROR ...ot/js/JavaScriptTranslator.cpp( 344) Error initializing JavaScript: plugins/BadSyntaxTest.js (4) 
+20:26:27.859 INFO  ...t/core/io/PythonTranslator.cpp(  68) Initializing Python
+20:26:27.859 INFO  ...t/core/io/PythonTranslator.cpp(  99) Python path: translations:PYTHONPATH:/home/vagrant/hoot/translations
+20:26:28.864 INFO  ...ot/js/JavaScriptTranslator.cpp( 232) Loading script: plugins/BadSyntaxTest.js
+20:26:28.889 ERROR ...ot/js/JavaScriptTranslator.cpp( 353) Error initializing JavaScript: plugins/BadSyntaxTest.js (4) 
 foo is bad.
     ^^ 
 SyntaxError: Unexpected identifier
-16:11:06.413 INFO  ...t/core/io/PythonTranslator.cpp(  66) Initializing Python
-16:11:06.413 INFO  ...t/core/io/PythonTranslator.cpp(  96) Python path: translations:PYTHONPATH:/home/matt/dg/src/hoot/translations
-16:11:06.493 ERROR ...ot/js/JavaScriptTranslator.cpp( 344) Error initializing JavaScript: /home/matt/dg/src/hoot/plugins/BadSyntaxTest.js (4) 
+20:26:28.889 INFO  ...t/core/io/PythonTranslator.cpp(  68) Initializing Python
+20:26:28.889 INFO  ...t/core/io/PythonTranslator.cpp(  99) Python path: translations:PYTHONPATH:/home/vagrant/hoot/translations
+20:26:29.863 INFO  ...ot/js/JavaScriptTranslator.cpp( 232) Loading script: test-files/cmd/slow/BadRequire.js
+20:26:29.890 ERROR ...ot/js/JavaScriptTranslator.cpp( 353) Error initializing JavaScript: /home/vagrant/hoot/plugins/BadSyntaxTest.js (4) 
 foo is bad.
     ^^ 
 SyntaxError: Unexpected identifier
-16:11:06.493 INFO  ...t/core/io/PythonTranslator.cpp(  66) Initializing Python
-16:11:06.493 INFO  ...t/core/io/PythonTranslator.cpp(  96) Python path: translations:PYTHONPATH:/home/matt/dg/src/hoot/translations
+20:26:29.891 INFO  ...t/core/io/PythonTranslator.cpp(  68) Initializing Python
+20:26:29.891 INFO  ...t/core/io/PythonTranslator.cpp(  99) Python path: translations:PYTHONPATH:/home/vagrant/hoot/translations

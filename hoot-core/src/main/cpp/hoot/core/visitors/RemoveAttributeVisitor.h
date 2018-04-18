@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVEATTRIBUTEVISITOR_H
 #define REMOVEATTRIBUTEVISITOR_H
@@ -56,6 +56,10 @@ public:
   virtual void setConfiguration(const Settings &conf);
 
   void setTypes(const QStringList& types);
+
+  virtual QString getName() const { return "Remove Attributes"; }
+
+  virtual QString getDescription() const { return "Removes attributes from features"; }
 
 private:
 

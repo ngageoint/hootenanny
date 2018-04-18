@@ -39,7 +39,7 @@
     <node visible="true" id="-3" timestamp="2017-06-16T07:48:22Z" version="1" changeset="239" lat="1.1560228130000001" lon="-1.1190072513000000"/>
     <node visible="true" id="-2" timestamp="2017-06-16T07:48:22Z" version="1" changeset="239" lat="1.1597809990000001" lon="-1.1207548609000000"/>
     <node visible="true" id="-1" timestamp="2017-06-16T07:48:22Z" version="1" changeset="239" lat="1.1559378410000001" lon="-1.1188862060000000"/>
-    <way visible="true" id="-9">
+    <way visible="true" id="-5">
         <nd ref="-11"/>
         <nd ref="-10"/>
         <nd ref="-9"/>
@@ -59,7 +59,7 @@
         <tag k="lanes" v="2"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-8">
+    <way visible="true" id="-4">
         <nd ref="-13"/>
         <nd ref="-12"/>
         <nd ref="-11"/>
@@ -72,7 +72,7 @@
         <tag k="lanes" v="2"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-6">
+    <way visible="true" id="-3">
         <nd ref="-26"/>
         <nd ref="-25"/>
         <nd ref="-24"/>
@@ -96,7 +96,7 @@
         <tag k="lanes" v="2"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-4">
+    <way visible="true" id="-2">
         <nd ref="-31"/>
         <nd ref="-30"/>
         <nd ref="-29"/>
@@ -112,7 +112,7 @@
         <tag k="lanes" v="2"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2">
+    <way visible="true" id="-1">
         <nd ref="-2"/>
         <nd ref="-38"/>
         <nd ref="-37"/>

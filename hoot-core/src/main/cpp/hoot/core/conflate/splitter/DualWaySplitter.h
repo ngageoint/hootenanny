@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef DUALWAYSPLITTER_H
@@ -37,6 +37,8 @@
 
 // Tgs
 #include <tgs/SharedPtr.h>
+
+#include <unordered_set>
 
 namespace hoot
 {
@@ -73,18 +75,21 @@ public:
 
   void apply(boost::shared_ptr<OsmMap>& map);
 
+  virtual QString getDescription() const
+  { return "Splits all 'divided=yes'' highways into two oneway streets"; }
+
 private:
+
   Meters _defaultSplitSize;
   DrivingSide _drivingSide;
   boost::shared_ptr<const OsmMap> _map;
   boost::shared_ptr<OsmMap> _result;
+  std::unordered_set<long> _nodes;
 
   // temporary variables for convenience
   boost::shared_ptr<Way> _left, _right;
   boost::shared_ptr<const Way> _working;
   Meters _splitSize;
-
-  bool _preserveUnknown1ElementIdWhenModifyingFeatures;
 
   void _addConnector(long nodeId);
 

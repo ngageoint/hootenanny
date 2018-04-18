@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef STATSAREAFILTER_H
 #define STATSAREAFILTER_H
@@ -33,18 +33,19 @@
 namespace hoot
 {
 
-/**
- * A filter that will either keep or remove matches.
- */
 class StatsAreaFilter : public BaseFilter
 {
 public:
+
   StatsAreaFilter(FilterType type) : BaseFilter(type) {}
 
   virtual bool isMatch(const Element& e) const;
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new StatsAreaFilter(_type)); }
 
+  virtual QString getName() const { return "Area for Map Statistics"; }
+
+  virtual QString getDescription() const { return "Areas as defined by map statistics calculation"; }
 };
 
 }

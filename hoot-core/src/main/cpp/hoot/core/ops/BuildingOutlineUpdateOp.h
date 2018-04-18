@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BUILDINGOUTLINEUPDATEOP_H
 #define BUILDINGOUTLINEUPDATEOP_H
@@ -31,6 +31,7 @@
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/elements/Relation.h>
+#include <hoot/core/conflate/ReviewMarker.h>
 
 // Standard
 #include <set>
@@ -61,9 +62,13 @@ public:
 
   virtual void writeObject(QDataStream& /*os*/) const {}
 
+  virtual QString getDescription() const
+  { return "Updates the outline of buildings by taking the union of all the parts"; }
+
 private:
 
   boost::shared_ptr<OsmMap> _map;
+  ReviewMarker _reviewMarker;
 
   void _createOutline(const RelationPtr& building);
 

@@ -1,0 +1,15 @@
+== tag-schema
+
+=== Description
+
+The +tag-schema+ command prints OSM tag documentation. If +[documentation script]+ is not provided, the default translation script 
++$HOOT_HOME/translations/PrintOsmDocs.js+ will be used.
+
+* +[documentation script]+ - The script that will print the documentation.
+
+=== Usage
+
+--------------------------------------
+tag-schema [documentation script]
+--------------------------------------
+

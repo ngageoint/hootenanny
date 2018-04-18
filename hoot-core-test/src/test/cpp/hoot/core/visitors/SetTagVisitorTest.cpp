@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -33,7 +33,6 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/visitors/SetTagVisitor.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
@@ -54,9 +53,15 @@ class SetTagVisitorTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runAppendValueTest);
   CPPUNIT_TEST(runElementFilterTest);
   CPPUNIT_TEST(runBadElementTypeTest);
+  CPPUNIT_TEST(runOverwriteDisabledTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
+
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/visitors");
+  }
 
   void runAddNewTest()
   {
@@ -68,7 +73,6 @@ public:
     SetTagVisitor visitor("key3", "value3");
     map->visitRw(visitor);
 
-    QDir().mkpath("test-output/visitors");
     OsmMapWriterFactory::getInstance().write(map,
       "test-output/visitors/SetTagVisitorTest-runAddNewTest.osm");
 
@@ -87,7 +91,6 @@ public:
     SetTagVisitor visitor("key2", "value2");
     map->visitRw(visitor);
 
-    QDir().mkpath("test-output/visitors");
     OsmMapWriterFactory::getInstance().write(map,
       "test-output/visitors/SetTagVisitorTest-runOverwriteExistingTest.osm");
 
@@ -106,7 +109,6 @@ public:
     SetTagVisitor visitor("key1", "value1b", true);
     map->visitRw(visitor);
 
-    QDir().mkpath("test-output/visitors");
     OsmMapWriterFactory::getInstance().write(map,
       "test-output/visitors/SetTagVisitorTest-runAppendValueTest.osm");
 
@@ -125,7 +127,6 @@ public:
     SetTagVisitor visitor("key3", "value3", false, ElementType::fromString("node"));
     map->visitRw(visitor);
 
-    QDir().mkpath("test-output/visitors");
     OsmMapWriterFactory::getInstance().write(map,
       "test-output/visitors/SetTagVisitorTest-runElementFilterTest.osm");
 
@@ -147,6 +148,27 @@ public:
     }
 
     CPPUNIT_ASSERT(exceptionMsg.contains("Invalid element type string"));
+  }
+
+  void runOverwriteDisabledTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    OsmMap::resetCounters();
+    OsmMapReaderFactory::read(
+      map, "test-files/visitors/SetTagVisitorTest.osm", false, Status::Unknown1);
+
+    //We've disabled overwriting existing tags, so the tag with key="key2" should not be updated
+    //on any element that already has a tag with the key.  It should only be added to elements
+    //that don't have a tag with that key.
+    SetTagVisitor visitor("key2", "updatedValue", false, ElementType::Unknown, false);
+    map->visitRw(visitor);
+
+    OsmMapWriterFactory::getInstance().write(map,
+      "test-output/visitors/SetTagVisitorTest-runOverwriteDisabledTest.osm");
+
+    HOOT_FILE_EQUALS(
+      "test-files/visitors/SetTagVisitorTest-runOverwriteDisabledTest.osm",
+      "test-output/visitors/SetTagVisitorTest-runOverwriteDisabledTest.osm");
   }
 
 };

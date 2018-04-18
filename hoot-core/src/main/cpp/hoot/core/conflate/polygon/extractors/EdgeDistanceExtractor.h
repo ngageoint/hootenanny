@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef EDGEDISTANCEEXTRACTOR_H
 #define EDGEDISTANCEEXTRACTOR_H
@@ -71,6 +71,9 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
   void setSpacing(const double spacing);
+
+  virtual QString getDescription() const
+  { return "Calculates the distance from one set of lines to the other set of lines"; }
 
 private:
 

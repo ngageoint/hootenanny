@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.export;
 
@@ -92,7 +92,7 @@ public class ApplyChangesetCommandTest {
         assertNotNull(exportCommand.getWorkDir());
         assertNotNull(exportCommand.getCommand());
 
-        String expectedCommand = "hoot apply-changeset --${DEBUG_LEVEL} ${HOOT_OPTIONS} " +
+        String expectedCommand = "hoot changeset-apply --${DEBUG_LEVEL} ${HOOT_OPTIONS} " +
                         "${SQL_CHANGESET_PATH} ${TARGET_DATABASE_URL} ${CONFLICT_AOI} ${CONFLICT_TIMESTAMP}";
         assertEquals(expectedCommand, exportCommand.getCommand());
 

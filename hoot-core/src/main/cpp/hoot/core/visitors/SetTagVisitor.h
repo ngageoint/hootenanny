@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SETTAGVISITOR_H
 #define SETTAGVISITOR_H
@@ -38,6 +38,8 @@ namespace hoot
 
 /**
  * Sets any tags on any elements with the specified key to the specified value
+ *
+ * TODO: rename to SetTagValueVisitor for clarity
  */
 class SetTagVisitor : public ElementOsmMapVisitor, public Configurable
 {
@@ -48,11 +50,16 @@ public:
   SetTagVisitor();
   SetTagVisitor(QString key, QString value, bool appendToExistingValue = false,
                 //using Unknown as the default empty value for element type
-                ElementType elementType = ElementType::Unknown);
+                ElementType elementType = ElementType::Unknown, bool overwriteExistingTag = true);
 
   virtual void setConfiguration(const Settings& conf);
 
   virtual void visit(const boost::shared_ptr<Element>& e);
+
+  virtual QString getName() const { return "Set Tag Value"; }
+
+  virtual QString getDescription() const
+  { return "Sets tags with the specified key to the specified value"; }
 
 private:
 
@@ -61,6 +68,8 @@ private:
   bool _appendToExistingValue;
   //an element type filter
   ElementType _elementType;
+  //overwrites any tag with a matching key
+  bool _overwriteExistingTag;
 
   void _setTag(const ElementPtr& e, QString k, QString v);
 };

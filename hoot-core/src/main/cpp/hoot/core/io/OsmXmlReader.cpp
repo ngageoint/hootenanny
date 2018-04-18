@@ -62,7 +62,7 @@ HOOT_FACTORY_REGISTER(OsmMapReader, OsmXmlReader)
 OsmXmlReader::OsmXmlReader() :
 _status(Status::Invalid),
 _circularError(-1),
-_keepFileStatus(ConfigOptions().getReaderKeepFileStatus()),
+_keepStatusTag(ConfigOptions().getReaderKeepStatusTag()),
 _useFileStatus(ConfigOptions().getReaderUseFileStatus()),
 _useDataSourceId(false),
 _addSourceDateTime(ConfigOptions().getReaderAddSourceDatetime()),
@@ -89,7 +89,7 @@ void OsmXmlReader::_parseTimeStamp(const QXmlAttributes &attributes)
 void OsmXmlReader::_createNode(const QXmlAttributes &attributes)
 {
   long id = _parseLong(attributes.value("id"));
-  LOG_VART(id);
+  //LOG_VART(id);
   long newId;
   if (_useDataSourceId)
   {
@@ -99,7 +99,7 @@ void OsmXmlReader::_createNode(const QXmlAttributes &attributes)
   {
     newId = _map->createNextNodeId();
   }
-  LOG_VART(newId);
+  //LOG_VART(newId);
   _nodeIdMap.insert(id, newId);
 
   double x = _parseDouble(attributes.value("lon"));
@@ -304,6 +304,12 @@ void OsmXmlReader::open(QString url)
 
 void OsmXmlReader::read(OsmMapPtr map)
 {
+  LOG_VART(_status);
+  LOG_VART(_useDataSourceId);
+  LOG_VART(_useFileStatus);
+  LOG_VART(_keepStatusTag);
+  LOG_VART(_preserveAllTags);
+
   finalizePartial();
   _map = map;
 
@@ -545,8 +551,9 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
         if (_useFileStatus && key == MetadataTags::HootStatus())
         {
           _element->setStatus(Status::fromString(value));
+          LOG_VART(_element->getStatus());
 
-          if (_keepFileStatus)  { _element->setTag(key, value); }
+          if (_keepStatusTag)  { _element->setTag(key, value); }
         }
         else if (key == QLatin1String("type") &&
                  _element->getElementType() == ElementType::Relation)
@@ -637,19 +644,19 @@ bool OsmXmlReader::endElement(const QString & /* namespaceURI */,
     {
       NodePtr n = boost::dynamic_pointer_cast<Node, Element>(_element);
       _map->addNode(n);
-      LOG_VART(n);
+      //LOG_VART(n);
     }
     else if (qName == QLatin1String("way"))
     {
       WayPtr w = boost::dynamic_pointer_cast<Way, Element>(_element);
       _map->addWay(w);
-      LOG_VART(w);
+      //LOG_VART(w);
     }
     else if (qName == QLatin1String("relation"))
     {
       RelationPtr r = boost::dynamic_pointer_cast<Relation, Element>(_element);
       _map->addRelation(r);
-      LOG_VART(r);
+      //LOG_VART(r);
     }
   }
 
@@ -870,7 +877,6 @@ ElementPtr OsmXmlReader::readNextElement()
 
   //we're parsed the entire node/way/relation, so return it
   //LOG_TRACE("Parsing end xml element: " << _streamReader.name().toString());
-  assert(_element.get());
   LOG_VART(_element);
   return _element;
 }

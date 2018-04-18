@@ -285,7 +285,7 @@ function doExport(req, res, hash, input) {
                 command += ' -D translation.direction=toogr';
             }
         } else {
-            command += ' osm2ogr';
+            command += ' convert-osm2ogr';
             if (req.params.schema === 'OSM') command += ' -D writer.include.debug.tags=true';
             if (overrideTags) command +=  ' -D translation.override=' + overrideTags;
             if (bbox) command += ' -D ' + bbox_param + '=' + bbox;
@@ -299,7 +299,7 @@ function doExport(req, res, hash, input) {
         //command = 'dd bs=1024 count=1024 if=/dev/urandom of=' + outFile + ' > /dev/null 2>&1';
         console.log(command);
 
-        //hoot osm2ogr -D ogr.reader.bounding.box=106.851,-6.160,107.052,-5.913 translations/TDSv61.js "PG:dbname='osmsyria' host='192.168.33.12' port='5432' user='vagrant' password=''" osm.shp
+        //hoot convert-osm2ogr -D ogr.reader.bounding.box=106.851,-6.160,107.052,-5.913 translations/TDSv61.js "PG:dbname='osmsyria' host='192.168.33.12' port='5432' user='vagrant' password=''" osm.shp
         var child = exec(command, {cwd: hootHome},
             function(error, stdout, stderr) {
                 //setTimeout(function() { //used to simulate a long request

@@ -204,10 +204,6 @@ layer. Unfortunately this requires more than 40GB of RAM which made it a bit
 difficult to test. The exact RAM required is unknown because we could
 not let the process run to completion.
 
-If files of this size are of interest, the best approach would be to use Hadoop to
-process the data across a large number of machines. Unfortunately, Hadoop development 
-within Hootenanny is not receiving active development at this time.
-
 The conflation operation randomly uses one of two files. The first option is a
 DC roads conflation, the second is a 1' x 1' conflation of Gaalkacyo, Somalia.
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef WAYBUFFERCRITERION_H
@@ -44,6 +44,7 @@ class Way;
 class WayBufferCriterion : public ElementCriterion
 {
 public:
+
   /**
    * Buffer is the buffer in meters to put around the way. The circular
    * error of the base way and the way being evaluated will automatically
@@ -71,7 +72,10 @@ public:
   ElementCriterionPtr clone()
   { return ElementCriterionPtr(new WayBufferCriterion(_map, _baseLs, _buffer, 0, _matchPercent)); }
 
+  virtual QString getDescription() const { return "Allows for operation on ways with buffers"; }
+
 private:
+
   Meters _buffer;
   mutable boost::shared_ptr<geos::geom::Geometry> _baseBuffered;
   boost::shared_ptr<geos::geom::LineString> _baseLs;

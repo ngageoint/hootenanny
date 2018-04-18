@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVEELEMENTOP_H
 #define REMOVEELEMENTOP_H
@@ -113,7 +113,10 @@ public:
    */
   static void removeElementNoCheck(OsmMapPtr map, ElementId eId);
 
+  virtual QString getDescription() const { return "Removes an element from a map"; }
+
 private:
+
   ElementId _eIdToRemove;
   bool _doCheck;
 

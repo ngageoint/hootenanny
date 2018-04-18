@@ -191,125 +191,18 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1"/>
     </node>
-    <way visible="true" id="-478" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-471" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1"/>
+        <nd ref="-2"/>
+        <nd ref="-3"/>
+        <nd ref="-306"/>
+        <nd ref="-4"/>
+        <nd ref="-5"/>
         <nd ref="-307"/>
         <nd ref="-6"/>
         <tag k="width" v="5"/>
         <tag k="created_by" v="Merkaartor 0.12"/>
         <tag k="alt_name" v="KEMANGGISAN RAYA;PALMERAH BARAT 2"/>
-        <tag k="name" v="Rawa Belong 2"/>
-        <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="residential"/>
-        <tag k="lanes" v="2"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-478"/>
-    </way>
-    <way visible="true" id="-477" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-306"/>
-        <nd ref="-4"/>
-        <nd ref="-5"/>
-        <nd ref="-307"/>
-        <tag k="width" v="5"/>
-        <tag k="created_by" v="Merkaartor 0.12"/>
-        <tag k="alt_name" v="KEMANGGISAN RAYA;PALMERAH BARAT 2"/>
-        <tag k="name" v="Rawa Belong 2"/>
-        <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="residential"/>
-        <tag k="lanes" v="2"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-477"/>
-    </way>
-    <way visible="true" id="-476" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1"/>
-        <nd ref="-2"/>
-        <nd ref="-3"/>
-        <nd ref="-306"/>
-        <tag k="width" v="5"/>
-        <tag k="created_by" v="Merkaartor 0.12"/>
-        <tag k="alt_name" v="KEMANGGISAN RAYA;PALMERAH BARAT 2"/>
-        <tag k="name" v="Rawa Belong 2"/>
-        <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="residential"/>
-        <tag k="lanes" v="2"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-476"/>
-    </way>
-    <way visible="true" id="-475" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-297"/>
-        <nd ref="-13"/>
-        <nd ref="-14"/>
-        <tag k="width" v="5"/>
-        <tag k="created_by" v="Merkaartor 0.12"/>
-        <tag k="alt_name" v="RAWA BELONG 2"/>
-        <tag k="name" v="Rawa Belong 2"/>
-        <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="residential"/>
-        <tag k="lanes" v="2"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-475"/>
-    </way>
-    <way visible="true" id="-474" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-296"/>
-        <nd ref="-12"/>
-        <nd ref="-297"/>
-        <tag k="width" v="5"/>
-        <tag k="created_by" v="Merkaartor 0.12"/>
-        <tag k="alt_name" v="KEMANGGISAN RAYA"/>
-        <tag k="name" v="Rawa Belong 2"/>
-        <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="residential"/>
-        <tag k="lanes" v="2"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-474"/>
-    </way>
-    <way visible="true" id="-473" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-295"/>
-        <nd ref="-296"/>
-        <tag k="width" v="5"/>
-        <tag k="created_by" v="Merkaartor 0.12"/>
-        <tag k="alt_name" v="PALMERAH BARAT 9"/>
-        <tag k="name" v="Rawa Belong 2"/>
-        <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="residential"/>
-        <tag k="lanes" v="2"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-473"/>
-    </way>
-    <way visible="true" id="-472" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-294"/>
-        <nd ref="-10"/>
-        <nd ref="-11"/>
-        <nd ref="-295"/>
-        <tag k="width" v="5"/>
-        <tag k="created_by" v="Merkaartor 0.12"/>
-        <tag k="alt_name" v="KEMANGGISAN RAYA;PALMERAH BARAT 9"/>
-        <tag k="name" v="Rawa Belong 2"/>
-        <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="residential"/>
-        <tag k="lanes" v="2"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-472"/>
-    </way>
-    <way visible="true" id="-471" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-293"/>
-        <nd ref="-294"/>
-        <tag k="width" v="5"/>
-        <tag k="created_by" v="Merkaartor 0.12"/>
-        <tag k="alt_name" v="PALMERAH BARAT 9"/>
         <tag k="name" v="Rawa Belong 2"/>
         <tag k="all_weather" v="yes"/>
         <tag k="highway" v="residential"/>
@@ -319,45 +212,26 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-471"/>
     </way>
-    <way visible="true" id="-470" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-292"/>
-        <nd ref="-9"/>
-        <nd ref="-293"/>
-        <tag k="width" v="5"/>
-        <tag k="created_by" v="Merkaartor 0.12"/>
-        <tag k="alt_name" v="KEMANGGISAN RAYA;PALMERAH BARAT 9"/>
-        <tag k="name" v="Rawa Belong 2"/>
-        <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="residential"/>
-        <tag k="lanes" v="2"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-470"/>
-    </way>
-    <way visible="true" id="-469" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-291"/>
-        <nd ref="-8"/>
-        <nd ref="-292"/>
-        <tag k="width" v="5"/>
-        <tag k="created_by" v="Merkaartor 0.12"/>
-        <tag k="alt_name" v="KEMANGGISAN RAYA;PALMERAH BARAT 9"/>
-        <tag k="name" v="Rawa Belong 2"/>
-        <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="residential"/>
-        <tag k="lanes" v="2"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-469"/>
-    </way>
-    <way visible="true" id="-468" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-463" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-6"/>
         <nd ref="-7"/>
         <nd ref="-291"/>
+        <nd ref="-8"/>
+        <nd ref="-292"/>
+        <nd ref="-9"/>
+        <nd ref="-293"/>
+        <nd ref="-294"/>
+        <nd ref="-10"/>
+        <nd ref="-11"/>
+        <nd ref="-295"/>
+        <nd ref="-296"/>
+        <nd ref="-12"/>
+        <nd ref="-297"/>
+        <nd ref="-13"/>
+        <nd ref="-14"/>
         <tag k="width" v="5"/>
         <tag k="created_by" v="Merkaartor 0.12"/>
-        <tag k="alt_name" v="KEMANGGISAN RAYA;PALMERAH BARAT 9"/>
+        <tag k="alt_name" v="KEMANGGISAN RAYA;PALMERAH BARAT 9;RAWA BELONG 2"/>
         <tag k="name" v="Rawa Belong 2"/>
         <tag k="all_weather" v="yes"/>
         <tag k="highway" v="residential"/>
@@ -365,37 +239,28 @@
         <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-468"/>
+        <tag k="hoot:id" v="-463"/>
     </way>
-    <way visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-64"/>
-        <nd ref="-291"/>
-        <tag k="width" v="2.5"/>
+    <way visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-77"/>
+        <nd ref="-78"/>
+        <nd ref="-79"/>
+        <nd ref="-1"/>
+        <tag k="width" v="5"/>
+        <tag k="alt_name" v="PALMERAH BARAT 2"/>
+        <tag k="name" v="KEMANGGISAN RAYA"/>
         <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="lanes" v="1"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="lanes" v="2"/>
         <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="2"/>
         <tag k="error:circular" v="10.08"/>
-        <tag k="hoot:id" v="-25"/>
+        <tag k="hoot:id" v="-15"/>
     </way>
-    <way visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-59"/>
-        <nd ref="-60"/>
-        <nd ref="-61"/>
-        <nd ref="-62"/>
-        <nd ref="-63"/>
-        <nd ref="-64"/>
-        <tag k="width" v="2.5"/>
-        <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="lanes" v="1"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="error:circular" v="10.08"/>
-        <tag k="hoot:id" v="-18"/>
-    </way>
-    <way visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-65"/>
+        <nd ref="-66"/>
+        <nd ref="-67"/>
         <nd ref="-68"/>
         <nd ref="-69"/>
         <nd ref="-70"/>
@@ -413,13 +278,16 @@
         <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="2"/>
         <tag k="error:circular" v="10.08"/>
-        <tag k="hoot:id" v="-17"/>
+        <tag k="hoot:id" v="-14"/>
     </way>
-    <way visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-65"/>
-        <nd ref="-66"/>
-        <nd ref="-67"/>
-        <nd ref="-68"/>
+    <way visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-59"/>
+        <nd ref="-60"/>
+        <nd ref="-61"/>
+        <nd ref="-62"/>
+        <nd ref="-63"/>
+        <nd ref="-64"/>
+        <nd ref="-291"/>
         <tag k="width" v="2.5"/>
         <tag k="all_weather" v="yes"/>
         <tag k="highway" v="unclassified"/>
@@ -427,22 +295,6 @@
         <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="2"/>
         <tag k="error:circular" v="10.08"/>
-        <tag k="hoot:id" v="-16"/>
-    </way>
-    <way visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-77"/>
-        <nd ref="-78"/>
-        <nd ref="-79"/>
-        <nd ref="-1"/>
-        <tag k="width" v="5"/>
-        <tag k="alt_name" v="PALMERAH BARAT 2"/>
-        <tag k="name" v="KEMANGGISAN RAYA"/>
-        <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="lanes" v="2"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="error:circular" v="10.08"/>
-        <tag k="hoot:id" v="-15"/>
+        <tag k="hoot:id" v="-13"/>
     </way>
 </osm>

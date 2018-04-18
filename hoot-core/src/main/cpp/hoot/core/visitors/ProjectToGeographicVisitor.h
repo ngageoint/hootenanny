@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PROJECTTOGEOGRAPHICVISITOR_H
 #define PROJECTTOGEOGRAPHICVISITOR_H
@@ -41,6 +41,7 @@ class ReprojectCoordinateFilter;
 class ProjectToGeographicVisitor : public ElementOsmMapVisitor
 {
 public:
+
   static std::string className() { return "hoot::ProjectToGeographicVisitor"; }
 
   ProjectToGeographicVisitor();
@@ -49,6 +50,11 @@ public:
   void initialize(boost::shared_ptr<OGRSpatialReference>& projection);
 
   virtual void visit(const boost::shared_ptr<Element>& e);
+
+  virtual QString getName() const { return "Project Map To Geographic"; }
+
+  virtual QString getDescription() const
+  { return "Projects features to a geographic coordinate system"; }
 
 private:
 

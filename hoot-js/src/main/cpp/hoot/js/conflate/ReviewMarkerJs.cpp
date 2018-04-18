@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #define BUILDING_NODE_EXTENSION
 #include "ReviewMarkerJs.h"
@@ -52,14 +52,18 @@ ReviewMarkerJs::~ReviewMarkerJs() {}
 
 void ReviewMarkerJs::Init(Handle<Object> exports)
 {
-  Handle<Object> reviewMarker = Object::New();
-  exports->Set(String::NewSymbol("ReviewMarker"), reviewMarker);
-  reviewMarker->Set(String::NewSymbol("mark"), FunctionTemplate::New(mark)->GetFunction());
+  Isolate* current = exports->GetIsolate();
+  HandleScope scope(current);
+  Handle<Object> reviewMarker = Object::New(current);
+  exports->Set(String::NewFromUtf8(current, "ReviewMarker"), reviewMarker);
+  reviewMarker->Set(String::NewFromUtf8(current, "mark"),
+                    FunctionTemplate::New(current, mark)->GetFunction());
 }
 
-Handle<Value> ReviewMarkerJs::mark(const Arguments& args)
+void ReviewMarkerJs::mark(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope;
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   OsmMapPtr osmMap = toCpp<OsmMapPtr>(args[0]);
 
@@ -73,9 +77,9 @@ Handle<Value> ReviewMarkerJs::mark(const Arguments& args)
 
   vector<QString> choices = toCpp< vector<QString> >(args[5]);
 
-  ReviewMarker::mark(osmMap, e, note, reviewType, score, choices);
+  ReviewMarker().mark(osmMap, e, note, reviewType, score, choices);
 
-  return scope.Close(Undefined());
+  args.GetReturnValue().SetUndefined();
 }
 
 }

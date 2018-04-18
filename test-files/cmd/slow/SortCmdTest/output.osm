@@ -1,0 +1,374 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version="0.6" generator="Osmosis 0.46">
+  <node id="-6699420" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7396896" lon="-104.9968816"/>
+  <node id="-6699419" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.739927" lon="-104.9972185"/>
+  <node id="-6699418" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7400242" lon="-104.9965097"/>
+  <node id="-6699417" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7399162" lon="-104.996622"/>
+  <node id="-6699416" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7398191" lon="-104.9967272"/>
+  <node id="-6699415" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7398299" lon="-104.9965167"/>
+  <node id="-6699414" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.740294" lon="-104.9968957"/>
+  <node id="-6699413" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7401051" lon="-104.9968816"/>
+  <node id="-6699412" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7400619" lon="-104.9970431"/>
+  <node id="-6699411" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7399324" lon="-104.9963693"/>
+  <node id="-6699410" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7401968" lon="-104.997001"/>
+  <node id="-6699409" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.740008" lon="-104.9969729"/>
+  <node id="-6698314" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7416991" lon="-104.9942071"/>
+  <node id="-6698312" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7416273" lon="-104.9941278"/>
+  <node id="-6698310" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7417063" lon="-104.9940204"/>
+  <node id="-6698309" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7417816" lon="-104.9941091"/>
+  <node id="-6698231" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7442711" lon="-104.9984604"/>
+  <node id="-6698229" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7440631" lon="-104.9984604"/>
+  <node id="-6698227" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7440631" lon="-104.9986864"/>
+  <node id="-6698226" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7442711" lon="-104.9986864"/>
+  <node id="-6698195" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7438177" lon="-104.9977788"/>
+  <node id="-6698193" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7435881" lon="-104.9977322"/>
+  <node id="-6698191" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7435594" lon="-104.9980214"/>
+  <node id="-6698190" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7437603" lon="-104.9980681"/>
+  <node id="-6698186" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7447002" lon="-104.9975735"/>
+  <node id="-6698184" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7435091" lon="-104.9975922"/>
+  <node id="-6698182" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7432508" lon="-104.9990292"/>
+  <node id="-6697333" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7446213" lon="-104.9953704"/>
+  <node id="-6697331" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7444332" lon="-104.9953716"/>
+  <node id="-6697329" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7444289" lon="-104.9940742"/>
+  <node id="-6697327" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7450084" lon="-104.9942223"/>
+  <node id="-6697324" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7448135" lon="-104.9945411"/>
+  <node id="-6697321" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7449067" lon="-104.9948957"/>
+  <node id="-6697315" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.744591" lon="-104.994709"/>
+  <node id="-6697313" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7447848" lon="-104.9950263"/>
+  <node id="-6697310" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7450718" lon="-104.9952689"/>
+  <node id="-6696932" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7432653" lon="-104.9935221"/>
+  <node id="-6696924" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7436671" lon="-104.9934801"/>
+  <node id="-6696922" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7438357" lon="-104.9938254"/>
+  <node id="-6696905" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7435989" lon="-104.994124"/>
+  <node id="-6696903" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7433406" lon="-104.9937181"/>
+  <node id="-6696901" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7430393" lon="-104.9941006"/>
+  <node id="-6696900" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7433227" lon="-104.9944879"/>
+  <node id="-6696864" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7429405" lon="-104.9934145"/>
+  <node id="-6696862" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7428885" lon="-104.9933398"/>
+  <node id="-6696858" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7427321" lon="-104.9934527"/>
+  <node id="-6696854" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7427319" lon="-104.9934525"/>
+  <node id="-6696852" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7429064" lon="-104.9931998"/>
+  <node id="-6696850" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7430356" lon="-104.9933678"/>
+  <node id="-6696848" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7428485" lon="-104.9936132"/>
+  <node id="-6696846" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7426778" lon="-104.9933779"/>
+  <node id="-6696845" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7428807" lon="-104.9930744"/>
+  <node id="-6696844" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7431243" lon="-104.9933845"/>
+  <node id="-6696843" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7428969" lon="-104.9936799"/>
+  <node id="-6696835" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.743328" lon="-104.9971908"/>
+  <node id="-6696818" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7436121" lon="-104.9959338"/>
+  <node id="-6696792" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.743815" lon="-104.9956897"/>
+  <node id="-6696760" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7440662" lon="-104.9958679"/>
+  <node id="-6696751" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7439636" lon="-104.9959962"/>
+  <node id="-6696741" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7442287" lon="-104.9960627"/>
+  <node id="-6696739" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7444942" lon="-104.9963706"/>
+  <node id="-6696737" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7442431" lon="-104.9967252"/>
+  <node id="-6696728" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7419552" lon="-104.9930497"/>
+  <node id="-6696726" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7421987" lon="-104.9933598"/>
+  <node id="-6696724" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7419714" lon="-104.9936551"/>
+  <node id="-6696720" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7417116" lon="-104.9938877"/>
+  <node id="-6696718" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7415138" lon="-104.9941252"/>
+  <node id="-6696716" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7417218" lon="-104.9943693"/>
+  <node id="-6696715" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7418994" lon="-104.9941516"/>
+  <node id="-6696711" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7422647" lon="-104.9940592"/>
+  <node id="-6696709" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7417522" lon="-104.9933532"/>
+  <node id="-6696707" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7411992" lon="-104.9940724"/>
+  <node id="-6696706" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7417116" lon="-104.9947455"/>
+  <node id="-6696700" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7402598" lon="-104.9952857"/>
+  <node id="-6696698" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7405486" lon="-104.9949031"/>
+  <node id="-6696696" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7406867" lon="-104.9950688"/>
+  <node id="-6696692" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7405109" lon="-104.9952951"/>
+  <node id="-6696690" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7406221" lon="-104.995435"/>
+  <node id="-6696688" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7405019" lon="-104.9955914"/>
+  <node id="-6696687" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7403925" lon="-104.995449"/>
+  <node id="-6696668" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7423638" lon="-104.9942867"/>
+  <node id="-6696666" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7439926" lon="-104.996405"/>
+  <node id="-6696658" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7423136" lon="-104.9984393"/>
+  <node id="-6696656" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.742084" lon="-104.9989245"/>
+  <node id="-6696642" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7410794" lon="-104.9968996"/>
+  <node id="-6696640" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7406991" lon="-104.9963957"/>
+  <node id="-6696638" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7404982" lon="-104.9967596"/>
+  <node id="-6696636" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7405556" lon="-104.9969649"/>
+  <node id="-6696632" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7409861" lon="-104.9970489"/>
+  <node id="-6696630" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7407422" lon="-104.9970675"/>
+  <node id="-6696628" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7406704" lon="-104.997898"/>
+  <node id="-6696626" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7410507" lon="-104.9983739"/>
+  <node id="-6696625" version="1" timestamp="1970-01-01T00:00:00Z" lat="39.7416606" lon="-104.998122"/>
+  <way id="-6699424" version="1" timestamp="1970-01-01T00:00:00Z">
+    <nd ref="-6699419"/>
+    <nd ref="-6699412"/>
+    <nd ref="-6699409"/>
+    <nd ref="-6699416"/>
+    <nd ref="-6699420"/>
+    <nd ref="-6699419"/>
+    <tag k="addr:housenumber" v="125"/>
+    <tag k="building" v="residential"/>
+    <tag k="height" v="10"/>
+  </way>
+  <way id="-6699423" version="1" timestamp="1970-01-01T00:00:00Z">
+    <nd ref="-6699418"/>
+    <nd ref="-6699411"/>
+    <nd ref="-6699415"/>
+    <nd ref="-6699417"/>
+    <nd ref="-6699418"/>
+    <tag k="addr:country" v="United States"/>
+    <tag k="addr:housenumber" v="123"/>
+    <tag k="building" v="commercial"/>
+    <tag k="height" v="15"/>
+    <tag k="note" v="set 5"/>
+  </way>
+  <way id="-6699422" version="1" timestamp="1970-01-01T00:00:00Z">
+    <nd ref="-6699413"/>
+    <nd ref="-6699410"/>
+    <nd ref="-6699414"/>
+    <nd ref="-6699418"/>
+    <nd ref="-6699417"/>
+    <nd ref="-6699413"/>
+    <tag k="addr:country" v="United States"/>
+    <tag k="addr:housenumber" v="123"/>
+    <tag k="building" v="commercial"/>
+    <tag k="height" v="10"/>
+    <tag k="note" v="set 5"/>
+  </way>
+  <way id="-6699421" version="1" timestamp="1970-01-01T00:00:00Z">
+    <nd ref="-6699409"/>
+    <nd ref="-6699413"/>
+    <nd ref="-6699417"/>
+    <nd ref="-6699416"/>
+    <nd ref="-6699409"/>
+    <tag k="addr:housenumber" v="124"/>
+    <tag k="building" v="commercial"/>
+    <tag k="height" v="10"/>
+  </way>
+  <way id="-6698311" version="1" timestamp="1970-01-01T00:00:00Z">
+    <nd ref="-6698309"/>
+    <nd ref="-6698310"/>
+    <nd ref="-6698312"/>
+    <nd ref="-6698314"/>
+    <nd ref="-6698309"/>
+    <tag k="building" v="yes"/>
+    <tag k="description" v="Not contained by a polygon or touching a way."/>
+    <tag k="note" v="not a set"/>
+  </way>
+  <way id="-6698228" version="1" timestamp="1970-01-01T00:00:00Z">
+    <nd ref="-6698226"/>
+    <nd ref="-6698227"/>
+    <nd ref="-6698229"/>
+    <nd ref="-6698231"/>
+    <nd ref="-6698226"/>
+    <tag k="accuracy" v="15"/>
+    <tag k="building" v="yes"/>
+    <tag k="description" v="outside set 5"/>
+    <tag k="note" v="no set"/>
+  </way>
+  <way id="-6698192" version="1" timestamp="1970-01-01T00:00:00Z">
+    <nd ref="-6698190"/>
+    <nd ref="-6698191"/>
+    <nd ref="-6698193"/>
+    <nd ref="-6698195"/>
+    <nd ref="-6698190"/>
+    <tag k="accuracy" v="15"/>
+    <tag k="building" v="yes"/>
+    <tag k="description" v="inner"/>
+    <tag k="note" v="set 5"/>
+  </way>
+  <way id="-6698183" version="1" timestamp="1970-01-01T00:00:00Z">
+    <nd ref="-6698182"/>
+    <nd ref="-6698184"/>
+    <nd ref="-6698186"/>
+    <nd ref="-6698182"/>
+    <tag k="accuracy" v="15"/>
+    <tag k="building" v="yes"/>
+    <tag k="description" v="big triangle"/>
+    <tag k="note" v="set 5"/>
+  </way>
+  <way id="-6697323" version="1" timestamp="1970-01-01T00:00:00Z">
+    <nd ref="-6697333"/>
+    <nd ref="-6697315"/>
+    <nd ref="-6697324"/>
+    <nd ref="-6697321"/>
+    <nd ref="-6697327"/>
+    <nd ref="-6697329"/>
+    <nd ref="-6697331"/>
+    <nd ref="-6697333"/>
+    <tag k="building" v="yes"/>
+    <tag k="note" v="not a set"/>
+  </way>
+  <way id="-6697312" version="1" timestamp="1970-01-01T00:00:00Z">
+    <nd ref="-6697310"/>
+    <nd ref="-6697333"/>
+    <nd ref="-6697313"/>
+    <nd ref="-6697315"/>
+    <nd ref="-6697321"/>
+    <nd ref="-6697310"/>
+    <tag k="building" v="yes"/>
+    <tag k="note" v="not a set"/>
+  </way>
+  <way id="-6696923" version="1" timestamp="1970-01-01T00:00:00Z">
+    <nd ref="-6696905"/>
+    <nd ref="-6696922"/>
+    <nd ref="-6696924"/>
+    <nd ref="-6696903"/>
+    <nd ref="-6696905"/>
+    <tag k="leisure" v="park"/>
+    <tag k="note" v="This shouldn&apos;t be joined with the building."/>
+  </way>
+  <way id="-6696902" version="1" timestamp="1970-01-01T00:00:00Z">
+    <nd ref="-6696900"/>
+    <nd ref="-6696901"/>
+    <nd ref="-6696903"/>
+    <nd ref="-6696905"/>
+    <nd ref="-6696900"/>
+    <tag k="building" v="yes"/>
+    <tag k="note" v="next to park, shouldn&apos;t be joined."/>
+  </way>
+  <way id="-6696859" version="1" timestamp="1970-01-01T00:00:00Z">
+    <nd ref="-6696848"/>
+    <nd ref="-6696858"/>
+    <nd ref="-6696862"/>
+    <nd ref="-6696864"/>
+    <nd ref="-6696848"/>
+    <tag k="building" v="yes"/>
+    <tag k="note" v="set 3"/>
+  </way>
+  <way id="-6696851" version="1" timestamp="1970-01-01T00:00:00Z">
+    <nd ref="-6696848"/>
+    <nd ref="-6696850"/>
+    <nd ref="-6696852"/>
+    <nd ref="-6696854"/>
+    <nd ref="-6696858"/>
+    <nd ref="-6696848"/>
+    <tag k="building" v="yes"/>
+    <tag k="note" v="set 3"/>
+  </way>
+  <way id="-6696842" version="1" timestamp="1970-01-01T00:00:00Z">
+    <nd ref="-6696843"/>
+    <nd ref="-6696844"/>
+    <nd ref="-6696845"/>
+    <nd ref="-6696846"/>
+    <nd ref="-6696854"/>
+    <nd ref="-6696858"/>
+    <nd ref="-6696848"/>
+    <nd ref="-6696843"/>
+    <tag k="building" v="yes"/>
+    <tag k="note" v="set 3"/>
+  </way>
+  <way id="-6696738" version="1" timestamp="1970-01-01T00:00:00Z">
+    <nd ref="-6696666"/>
+    <nd ref="-6696737"/>
+    <nd ref="-6696739"/>
+    <nd ref="-6696741"/>
+    <nd ref="-6696760"/>
+    <nd ref="-6696792"/>
+    <nd ref="-6696818"/>
+    <nd ref="-6696751"/>
+    <nd ref="-6696666"/>
+    <tag k="building" v="yes"/>
+    <tag k="note" v="building that shares non-contiguous nodes -- shouldn&apos;t be joined"/>
+  </way>
+  <way id="-6696727" version="1" timestamp="1970-01-01T00:00:00Z">
+    <nd ref="-6696724"/>
+    <nd ref="-6696726"/>
+    <nd ref="-6696728"/>
+    <nd ref="-6696709"/>
+    <nd ref="-6696724"/>
+    <tag k="building" v="yes"/>
+    <tag k="note" v="set 2"/>
+  </way>
+  <way id="-6696717" version="1" timestamp="1970-01-01T00:00:00Z">
+    <nd ref="-6696715"/>
+    <nd ref="-6696716"/>
+    <nd ref="-6696718"/>
+    <nd ref="-6696720"/>
+    <nd ref="-6696715"/>
+    <tag k="note" v="inner piece of set 2"/>
+  </way>
+  <way id="-6696708" version="1" timestamp="1970-01-01T00:00:00Z">
+    <nd ref="-6696706"/>
+    <nd ref="-6696707"/>
+    <nd ref="-6696709"/>
+    <nd ref="-6696724"/>
+    <nd ref="-6696711"/>
+    <nd ref="-6696706"/>
+    <tag k="note" v="outer piece of set 2"/>
+  </way>
+  <way id="-6696697" version="1" timestamp="1970-01-01T00:00:00Z">
+    <nd ref="-6696692"/>
+    <nd ref="-6696696"/>
+    <nd ref="-6696698"/>
+    <nd ref="-6696700"/>
+    <nd ref="-6696687"/>
+    <nd ref="-6696692"/>
+    <tag k="building" v="yes"/>
+    <tag k="note" v="set 4"/>
+  </way>
+  <way id="-6696689" version="1" timestamp="1970-01-01T00:00:00Z">
+    <nd ref="-6696687"/>
+    <nd ref="-6696688"/>
+    <nd ref="-6696690"/>
+    <nd ref="-6696692"/>
+    <nd ref="-6696687"/>
+    <tag k="building" v="yes"/>
+    <tag k="note" v="set 4"/>
+  </way>
+  <way id="-6696665" version="1" timestamp="1970-01-01T00:00:00Z">
+    <nd ref="-6696658"/>
+    <nd ref="-6696642"/>
+    <nd ref="-6696640"/>
+    <nd ref="-6696668"/>
+    <nd ref="-6696818"/>
+    <nd ref="-6696666"/>
+    <nd ref="-6696835"/>
+    <nd ref="-6696658"/>
+    <tag k="accuracy" v="15"/>
+    <tag k="building" v="yes"/>
+    <tag k="description" v="big square"/>
+    <tag k="note" v="set 1"/>
+  </way>
+  <way id="-6696657" version="1" timestamp="1970-01-01T00:00:00Z">
+    <nd ref="-6696625"/>
+    <nd ref="-6696656"/>
+    <nd ref="-6696658"/>
+    <nd ref="-6696642"/>
+    <nd ref="-6696632"/>
+    <nd ref="-6696625"/>
+    <tag k="accuracy" v="15"/>
+    <tag k="building" v="yes"/>
+    <tag k="description" v="wedge"/>
+    <tag k="note" v="set 1"/>
+  </way>
+  <way id="-6696637" version="1" timestamp="1970-01-01T00:00:00Z">
+    <nd ref="-6696630"/>
+    <nd ref="-6696636"/>
+    <nd ref="-6696638"/>
+    <nd ref="-6696640"/>
+    <nd ref="-6696642"/>
+    <nd ref="-6696632"/>
+    <nd ref="-6696630"/>
+    <tag k="accuracy" v="15"/>
+    <tag k="building" v="yes"/>
+    <tag k="description" v="roundy thing"/>
+    <tag k="note" v="set 1"/>
+  </way>
+  <way id="-6696627" version="1" timestamp="1970-01-01T00:00:00Z">
+    <nd ref="-6696625"/>
+    <nd ref="-6696626"/>
+    <nd ref="-6696628"/>
+    <nd ref="-6696630"/>
+    <nd ref="-6696632"/>
+    <nd ref="-6696625"/>
+    <tag k="accuracy" v="15"/>
+    <tag k="building" v="yes"/>
+    <tag k="description" v="trapazoidish"/>
+    <tag k="note" v="set 1"/>
+  </way>
+  <relation id="-6698377" version="1" timestamp="1970-01-01T00:00:00Z">
+    <tag k="type" v="multipolygon"/>
+  </relation>
+  <relation id="-6696732" version="1" timestamp="1970-01-01T00:00:00Z">
+    <member type="way" ref="-6696708" role="outer"/>
+    <member type="way" ref="-6696717" role="inner"/>
+    <tag k="building" v="yes"/>
+    <tag k="note" v="set 2"/>
+    <tag k="type" v="multipolygon"/>
+  </relation>
+</osm>

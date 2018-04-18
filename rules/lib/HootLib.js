@@ -291,7 +291,8 @@ function calculatePercentOverlap(map, e1, e2)
  * discarded. If element 2 is part of another element (e.g. in a way or
  * relation) element 1 will take its place in that element.
  */
-function mergeElements(map, e1, e2) {
+function mergeElements(map, e1, e2) 
+{
     // merge tags from e2 into e1 using default tag merging
     var newTags = mergeTags(e1, e2);
     e1.setTags(newTags);
@@ -342,16 +343,4 @@ function calculateSearchRadiusUsingRubberSheeting(map, rubberSheetRef, rubberShe
       { "rubber.sheet.ref" : rubberSheetRef },
       { "rubber.sheet.minimum.ties" : rubberSheetMinTies })
       .applyAndGetResult(map);
-}
-
-/**
- * Merges a map that contains nothing but node objects that are POI objects that should be merged into one node
- *
- * @param map Map that contains the POIs that should be merged together
- *
- * @return Map that contains the single merged POI node
- */
-function poiMerge(map)
-{
-  return new hoot.poiMerge('PoiGeneric.js', map);
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TRANSLATIONOP_H
 #define TRANSLATIONOP_H
@@ -46,6 +46,7 @@ class ScriptTranslator;
 class TranslationOp : public OsmMapOperation, public Configurable
 {
 public:
+
   static std::string className() { return "hoot::TranslationOp"; }
 
   TranslationOp();
@@ -61,7 +62,10 @@ public:
    */
   void setPath(QString path) { _translator.setPath(path); }
 
+  virtual QString getDescription() const { return "Translates features in a map"; }
+
 private:
+
   TranslationVisitor _translator;
   bool _toOgr;
 };

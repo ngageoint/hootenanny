@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -62,6 +62,7 @@ using namespace hybrid;
 class RFqHybridDummyData
 {
 public:
+
   RFqHybridDummyData() {}
   RFqHybridDummyData(const RFqHybridDummyData& dd) :
     _e(dd._e),
@@ -89,6 +90,7 @@ public:
   const QString& getMetricElement() const { return _name; }
 
 private:
+
   Envelope _e;
   ElementId _eid;
   QString _name;
@@ -323,9 +325,11 @@ public:
       }
     }
 
-  private:
-    vector<RFqHybridDummyData>& _keys;
+    virtual QString getDescription() const {return ""; }
 
+  private:
+
+    vector<RFqHybridDummyData>& _keys;
   };
 
   class OptimizeFunction : public Tgs::NelderMead::Function

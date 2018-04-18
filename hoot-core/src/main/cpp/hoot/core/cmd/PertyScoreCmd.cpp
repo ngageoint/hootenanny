@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -38,30 +38,32 @@ namespace hoot
 
 class PertyScoreCmd : public BaseCommand
 {
+public:
 
-  public:
+  static string className() { return "hoot::PertyScoreCmd"; }
 
-    static string className() { return "hoot::PertyScoreCmd"; }
+  PertyScoreCmd() { }
 
-    PertyScoreCmd() { }
+  virtual QString getName() const { return "perty-score"; }
 
-    virtual QString getName() const { return "perty-score"; }
+  virtual QString getDescription() const
+  { return "Generates a PERTY score for a conflated map"; }
 
-    virtual int runSimple(QStringList args)
+  virtual int runSimple(QStringList args)
+  {
+    LOG_VARD(args.size());
+    if (args.size() != 2)
     {
-      LOG_VARD(args.size());
-      if (args.size() != 2)
-      {
-        cout << getHelp() << endl << endl;
-        throw HootException(QString("%1 takes two parameters.").arg(getName()));
-      }
-
-      boost::shared_ptr<const MatchComparator> matchComparator =
-        PertyMatchScorer().scoreMatches(args[0], args[1]);
-      cout << MapMatchScoringUtils::getMatchScoringString(matchComparator);
-
-      return 0;
+      cout << getHelp() << endl << endl;
+      throw HootException(QString("%1 takes two parameters.").arg(getName()));
     }
+
+    boost::shared_ptr<const MatchComparator> matchComparator =
+      PertyMatchScorer().scoreMatches(args[0], args[1]);
+    cout << MapMatchScoringUtils::getMatchScoringString(matchComparator);
+
+    return 0;
+  }
 };
 
 HOOT_FACTORY_REGISTER(Command, PertyScoreCmd)

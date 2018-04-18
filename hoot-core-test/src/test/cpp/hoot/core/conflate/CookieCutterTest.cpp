@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -52,15 +52,20 @@ namespace hoot
 
 class CookieCutterTest : public CppUnit::TestFixture
 {
-    CPPUNIT_TEST_SUITE(CookieCutterTest);
-    CPPUNIT_TEST(runTest);
-    CPPUNIT_TEST(runCropTest);
-    CPPUNIT_TEST(runBufferTest);
-    CPPUNIT_TEST(runNegativeBufferTest);
-    CPPUNIT_TEST(runCropAndBufferTest);
-    CPPUNIT_TEST_SUITE_END();
+  CPPUNIT_TEST_SUITE(CookieCutterTest);
+  CPPUNIT_TEST(runTest);
+  CPPUNIT_TEST(runCropTest);
+  CPPUNIT_TEST(runBufferTest);
+  CPPUNIT_TEST(runNegativeBufferTest);
+  CPPUNIT_TEST(runCropAndBufferTest);
+  CPPUNIT_TEST_SUITE_END();
 
 public:
+
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/conflate");
+  }
 
   void runTest()
   {
@@ -79,7 +84,6 @@ public:
 
     MapProjector::projectToWgs84(cookieCutMap);
 
-    QDir().mkpath("test-output/conflate");
     OsmXmlWriter writer;
     writer.write(cookieCutMap, "test-output/conflate/CookieCutterTest.osm");
 
@@ -104,7 +108,6 @@ public:
 
     MapProjector::projectToWgs84(cookieCutMap);
 
-    QDir().mkpath("test-output/conflate");
     OsmXmlWriter writer;
     writer.write(cookieCutMap, "test-output/conflate/CookieCutterCropTest.osm");
 
@@ -129,7 +132,6 @@ public:
 
     MapProjector::projectToWgs84(cookieCutMap);
 
-    QDir().mkpath("test-output/conflate");
     OsmXmlWriter writer;
     writer.write(cookieCutMap, "test-output/conflate/CookieCutterBufferTest.osm");
 
@@ -154,7 +156,6 @@ public:
 
     MapProjector::projectToWgs84(cookieCutMap);
 
-    QDir().mkpath("test-output/conflate");
     OsmXmlWriter writer;
     writer.write(cookieCutMap, "test-output/conflate/CookieCutterNegativeBufferTest.osm");
 
@@ -179,7 +180,6 @@ public:
 
     MapProjector::projectToWgs84(cookieCutMap);
 
-    QDir().mkpath("test-output/conflate");
     OsmXmlWriter writer;
     writer.write(cookieCutMap, "test-output/conflate/CookieCutterCropAndBufferTest.osm");
 

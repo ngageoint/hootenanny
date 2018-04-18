@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmFileSorter.h"
 
@@ -37,17 +37,24 @@
 
 // Qt
 #include <QDir>
+#include <QThread>
 
 namespace hoot
 {
 
 void OsmFileSorter::sort(const QString input, const QString output)
 {
+  //I believe Osmosis handles parallelization automatically, so this is to be passed to the Unix
+  //sort command used by the GeoNames format only.
+  const int sortParallelCount = QThread::idealThreadCount();
+
   if (GeoNamesReader().isSupported(input))
   {
     //sort the input by node id (first field) using the unix sort command
     if (std::system(
-         QString("sort -n " + input + " --output=" + output).toStdString().c_str()) != 0)
+         QString(
+           "sort --parallel=" + QString::number(sortParallelCount) + " -n " + input +
+           " --output=" + output).toStdString().c_str()) != 0)
     {
       throw HootException("Unable to sort input file.");
     }
@@ -116,6 +123,9 @@ void OsmFileSorter::_sortPbf(const QString input, const QString output)
   {
     throw HootException("Unable to sort OSM PBF file.");
   }
+
+  //this isn't working...can't update the sorted header yet - #2207
+  //OsmPbfWriter::updateSorted(output, true);
 }
 
 boost::shared_ptr<QTemporaryFile> OsmFileSorter::_ogrToPbfTemp(const QString input)
