@@ -309,47 +309,56 @@ bool PoiPolygonMatch::_skipForReviewTypeDebugging() const
   {
     return true;
   }
+
   QStringList reviewTypeIgnoreList;
   reviewTypeIgnoreList.append("leisure=park");
   reviewTypeIgnoreList.append("leisure=playground");
   reviewTypeIgnoreList.append("amenity=university");
-  reviewTypeIgnoreList.append("building=train_station");
+//  reviewTypeIgnoreList.append("building=train_station");
   reviewTypeIgnoreList.append("amenity=parking");
-  reviewTypeIgnoreList.append("building=retail");
+  reviewTypeIgnoreList.append("amenity=bicycle_parking");
+//  reviewTypeIgnoreList.append("building=retail");
   reviewTypeIgnoreList.append("building=residential");
-  reviewTypeIgnoreList.append("building=station");
-  reviewTypeIgnoreList.append("shop=department_store");
-  reviewTypeIgnoreList.append("building=terrace");
+//  reviewTypeIgnoreList.append("building=station");
+//  reviewTypeIgnoreList.append("shop=department_store");
+//  reviewTypeIgnoreList.append("building=terrace");
   reviewTypeIgnoreList.append("landuse=construction");
-  reviewTypeIgnoreList.append("railway=station");
-  reviewTypeIgnoreList.append("public_transport=station");
+//  reviewTypeIgnoreList.append("railway=station");
+//  reviewTypeIgnoreList.append("public_transport=station");
   reviewTypeIgnoreList.append("tourism=hotel");
   reviewTypeIgnoreList.append("building=office");
   reviewTypeIgnoreList.append("landuse=retail");
-  reviewTypeIgnoreList.append("sport=*");
+//  reviewTypeIgnoreList.append("sport=*");
   reviewTypeIgnoreList.append("amenity=school");
-  reviewTypeIgnoreList.append("man_made=water_works");
-  reviewTypeIgnoreList.append("amenity=bus_station");
-  reviewTypeIgnoreList.append("amenity=hospital");
-  reviewTypeIgnoreList.append("building=apartments");
-  reviewTypeIgnoreList.append("building=civic");
-  reviewTypeIgnoreList.append("building=commercial");
-  reviewTypeIgnoreList.append("building=public");
-  reviewTypeIgnoreList.append("building=retail");
-  reviewTypeIgnoreList.append("landuse=commercial");
-  reviewTypeIgnoreList.append("landuse=forest");
-  reviewTypeIgnoreList.append("landuse=industrial");
-  reviewTypeIgnoreList.append("landuse=residential");
+//  reviewTypeIgnoreList.append("man_made=water_works");
+//  reviewTypeIgnoreList.append("amenity=bus_station");
+//  reviewTypeIgnoreList.append("amenity=hospital");
+//  reviewTypeIgnoreList.append("building=apartments");
+//  reviewTypeIgnoreList.append("building=civic");
+//  reviewTypeIgnoreList.append("building=commercial");
+//  reviewTypeIgnoreList.append("building=public");
+//  reviewTypeIgnoreList.append("building=retail");
+//  reviewTypeIgnoreList.append("landuse=commercial");
+//  reviewTypeIgnoreList.append("landuse=forest");
+//  reviewTypeIgnoreList.append("landuse=industrial");
+//  reviewTypeIgnoreList.append("landuse=residential");
   reviewTypeIgnoreList.append("landuse=recreation_ground");
-  reviewTypeIgnoreList.append("leisure=common");
-  reviewTypeIgnoreList.append("leisure=garden");
-  reviewTypeIgnoreList.append("leisure=golf_course");
+//  reviewTypeIgnoreList.append("leisure=common");
+//  reviewTypeIgnoreList.append("leisure=garden");
+//  reviewTypeIgnoreList.append("leisure=golf_course");
   reviewTypeIgnoreList.append("natural=water");
-  reviewTypeIgnoreList.append("place=neighbourhood");
-  reviewTypeIgnoreList.append("shop=mall");
+//  reviewTypeIgnoreList.append("place=neighbourhood");
+//  reviewTypeIgnoreList.append("shop=mall");
   reviewTypeIgnoreList.append("shop=department_store");
   reviewTypeIgnoreList.append("tourism=attraction");
-  reviewTypeIgnoreList.append("tourism=zoo");
+//  reviewTypeIgnoreList.append("tourism=zoo");
+  reviewTypeIgnoreList.append("tourism=museum");
+  reviewTypeIgnoreList.append("building=roof");
+  reviewTypeIgnoreList.append("building=school");
+  reviewTypeIgnoreList.append("amenity=arts_centre");
+  reviewTypeIgnoreList.append("amenity=restaurant");
+  reviewTypeIgnoreList.append("building=house");
+
   if (_poi->getTags().hasAnyKvp(reviewTypeIgnoreList) ||
       _poly->getTags().hasAnyKvp(reviewTypeIgnoreList))
   {

@@ -183,12 +183,12 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Waterways Marked for Review"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Unmatched Waterways"), 1e-1);
 
-    CPPUNIT_ASSERT_EQUAL(8.0, calcStatsOp->getSingleStat("Polygon Conflatable POI Count"));
+    CPPUNIT_ASSERT_EQUAL(6.0, calcStatsOp->getSingleStat("Polygon Conflatable POI Count"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable Polygon Conflatable POIs"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflated Polygon Conflatable POIs"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Polygon Conflatable POIs Marked for Review"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Number of Polygon Conflatable POI Reviews to be Made"));
-    CPPUNIT_ASSERT_EQUAL(8.0, calcStatsOp->getSingleStat("Unmatched Polygon Conflatable POIs"));
+    CPPUNIT_ASSERT_EQUAL(6.0, calcStatsOp->getSingleStat("Unmatched Polygon Conflatable POIs"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0, calcStatsOp->getSingleStat("Percentage of Polygon Conflatable POIs Conflated"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Polygon Conflatable POIs Marked for Review"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
@@ -348,14 +348,14 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Waterways Marked for Review"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Unmatched Waterways"), 1e-1);
 
-    CPPUNIT_ASSERT_EQUAL(8.0, calcStatsOp->getSingleStat("Polygon Conflatable POI Count"));
+    CPPUNIT_ASSERT_EQUAL(6.0, calcStatsOp->getSingleStat("Polygon Conflatable POI Count"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable Polygon Conflatable POIs"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflated Polygon Conflatable POIs"));
-    CPPUNIT_ASSERT_EQUAL(2.0, calcStatsOp->getSingleStat("Polygon Conflatable POIs Marked for Review"));
+    CPPUNIT_ASSERT_EQUAL(1.0, calcStatsOp->getSingleStat("Polygon Conflatable POIs Marked for Review"));
     CPPUNIT_ASSERT_EQUAL(1.0, calcStatsOp->getSingleStat("Number of Polygon Conflatable POI Reviews to be Made"));
-    CPPUNIT_ASSERT_EQUAL(8.0, calcStatsOp->getSingleStat("Unmatched Polygon Conflatable POIs"));
+    CPPUNIT_ASSERT_EQUAL(6.0, calcStatsOp->getSingleStat("Unmatched Polygon Conflatable POIs"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Polygon Conflatable POIs Conflated"), 1e-1);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(25.0, calcStatsOp->getSingleStat("Percentage of Polygon Conflatable POIs Marked for Review"), 1e-1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(16.67, calcStatsOp->getSingleStat("Percentage of Polygon Conflatable POIs Marked for Review"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(100.0, calcStatsOp->getSingleStat("Percentage of Unmatched Polygon Conflatable POIs"), 1e-1);
 
     CPPUNIT_ASSERT_EQUAL(12.0, calcStatsOp->getSingleStat("Polygon Count"));

@@ -1,8 +1,8 @@
 ****Quick Stats****
-15:23:40.401 INFO  ...ore/io/OsmMapReaderFactory.cpp( 178) Loading map from test-files/conflate/unified/AllDataTypesA.osm...
+21:43:52.177 INFO  ...ore/io/OsmMapReaderFactory.cpp( 178) Loading map from test-files/conflate/unified/AllDataTypesA.osm...
 
-15:23:40.492 INFO  .../core/ops/CalculateStatsOp.cpp( 127) Calculating map statistics...
-15:23:40.492 INFO  ...oot/core/io/MapStatsWriter.cpp( 212) Writing stats to file: test-output/StatsAllDataTypesA.txt
+21:43:52.221 INFO  .../core/ops/CalculateStatsOp.cpp( 127) Calculating map statistics...
+21:43:52.221 INFO  ...oot/core/io/MapStatsWriter.cpp( 118) Writing stats to file: test-output/StatsAllDataTypesA.txt
 Node Count	117
 Way Count	14
 Relation Count	0
@@ -13,20 +13,20 @@ Maximum Way ID	-1559687
 Minimum Relation ID	9.223372036854776e+18
 Maximum Relation ID	-9.223372036854776e+18
 ****JSON Stats****
-15:23:41.185 INFO  ...ore/io/OsmMapReaderFactory.cpp( 178) Loading map from test-files/conflate/unified/AllDataTypesA.osm...
+21:43:52.594 INFO  ...ore/io/OsmMapReaderFactory.cpp( 178) Loading map from test-files/conflate/unified/AllDataTypesA.osm...
 
-15:23:41.275 INFO  .../core/ops/CalculateStatsOp.cpp( 127) Calculating map statistics...
-15:23:41.618 INFO  .../hoot/rules/LinearWaterway.js"(  33) "Calculating search radius for waterway conflation..."
-15:23:41.621 INFO  ...ate/SearchRadiusCalculator.cpp(  94) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
+21:43:52.639 INFO  .../core/ops/CalculateStatsOp.cpp( 127) Calculating map statistics...
+21:43:52.812 INFO  .../hoot/rules/LinearWaterway.js"(  33) "Calculating search radius for waterway conflation..."
+21:43:52.813 INFO  ...ate/SearchRadiusCalculator.cpp(  94) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
  Using default search radius value = 15
-15:23:42.534 INFO  ...ot/js/JavaScriptTranslator.cpp( 232) Loading script: /ramdisk/hoot/translations/TDSv61.js
-15:23:46.923 INFO  ...ore/io/OsmMapReaderFactory.cpp( 178) Loading map from test-files/conflate/unified/AllDataTypesB.osm...
+21:43:53.447 INFO  ...ot/js/JavaScriptTranslator.cpp( 232) Loading translation script: /ramdisk/hoot/translations/TDSv61.js
+21:43:55.830 INFO  ...ore/io/OsmMapReaderFactory.cpp( 178) Loading map from test-files/conflate/unified/AllDataTypesB.osm...
 
-15:23:47.019 INFO  .../core/ops/CalculateStatsOp.cpp( 127) Calculating map statistics...
-15:23:47.021 INFO  .../hoot/rules/LinearWaterway.js"(  33) "Calculating search radius for waterway conflation..."
-15:23:47.023 INFO  ...ate/SearchRadiusCalculator.cpp(  94) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
+21:43:55.878 INFO  .../core/ops/CalculateStatsOp.cpp( 127) Calculating map statistics...
+21:43:55.879 INFO  .../hoot/rules/LinearWaterway.js"(  33) "Calculating search radius for waterway conflation..."
+21:43:55.881 INFO  ...ate/SearchRadiusCalculator.cpp(  94) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
  Using default search radius value = 15
-15:23:47.721 INFO  ...ot/js/JavaScriptTranslator.cpp( 232) Loading script: /ramdisk/hoot/translations/TDSv61.js
+21:43:56.283 INFO  ...ot/js/JavaScriptTranslator.cpp( 232) Loading translation script: /ramdisk/hoot/translations/TDSv61.js
 {
     "Node Count":
     [
@@ -408,8 +408,8 @@ Maximum Relation ID	-9.223372036854776e+18
     ],
     "Polygon Conflatable POI Count":
     [
-        "11",
-        "10"
+        "10",
+        "8"
     ],
     "Conflatable Polygon Conflatable POIs":
     [
@@ -433,8 +433,8 @@ Maximum Relation ID	-9.223372036854776e+18
     ],
     "Unmatched Polygon Conflatable POIs":
     [
-        "11",
-        "10"
+        "10",
+        "8"
     ],
     "Percentage of Polygon Conflatable POIs Conflated":
     [
@@ -598,8 +598,8 @@ Maximum Relation ID	-9.223372036854776e+18
     ],
     "Polygon Conflatable POI Translated Populated Tag Percent":
     [
-        "0.06600249066002491",
-        "0.06504065040650407"
+        "0.06504065040650407",
+        "0.0625"
     ],
     "Polygon Translated Populated Tag Percent":
     [
