@@ -32,8 +32,8 @@ Feature: Advanced Conflation Options
         And I should see checkbox "Remove Unlikely Intersections" checked
         And I should see checkbox "Split Dual Ways" checked
         And I should see checkbox "Divided Road Marker Implied" checked
-	And I should see checkbox "Remove Duplicate Names" checked
-        And I should see checkbox "Merge Small Ways" checked
+	#And I should see checkbox "Remove Duplicate Names" checked
+        #And I should see checkbox "Merge Small Ways" checked
         And I should see element "#small_way_merger_threshold" with no value and placeholder "15"
         And I should see checkbox "Remove Empty Areas" checked
         And I should see checkbox "Remove Duplicate Areas" checked

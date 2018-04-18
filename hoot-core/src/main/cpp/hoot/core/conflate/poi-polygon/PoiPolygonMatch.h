@@ -178,6 +178,8 @@ private:
   unsigned int _getAddressEvidence(ConstElementPtr poi, ConstElementPtr poly);
 
   bool _featureHasReviewIfMatchedType(ConstElementPtr element) const;
+
+  bool _skipForReviewTypeDebugging() const;
 };
 
 }

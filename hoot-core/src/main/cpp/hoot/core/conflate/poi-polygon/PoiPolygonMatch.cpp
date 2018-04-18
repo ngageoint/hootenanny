@@ -302,6 +302,62 @@ bool PoiPolygonMatch::_inputFeaturesHaveSameSource(const ElementId& eid1,
   return false;
 }
 
+bool PoiPolygonMatch::_skipForReviewTypeDebugging() const
+{
+  if (!PoiPolygonTypeScoreExtractor::hasSpecificType(_poi) ||
+      !PoiPolygonTypeScoreExtractor::hasSpecificType(_poly))
+  {
+    return true;
+  }
+  QStringList reviewTypeIgnoreList;
+  reviewTypeIgnoreList.append("leisure=park");
+  reviewTypeIgnoreList.append("leisure=playground");
+  reviewTypeIgnoreList.append("amenity=university");
+  reviewTypeIgnoreList.append("building=train_station");
+  reviewTypeIgnoreList.append("amenity=parking");
+  reviewTypeIgnoreList.append("building=retail");
+  reviewTypeIgnoreList.append("building=residential");
+  reviewTypeIgnoreList.append("building=station");
+  reviewTypeIgnoreList.append("shop=department_store");
+  reviewTypeIgnoreList.append("building=terrace");
+  reviewTypeIgnoreList.append("landuse=construction");
+  reviewTypeIgnoreList.append("railway=station");
+  reviewTypeIgnoreList.append("public_transport=station");
+  reviewTypeIgnoreList.append("tourism=hotel");
+  reviewTypeIgnoreList.append("building=office");
+  reviewTypeIgnoreList.append("landuse=retail");
+  reviewTypeIgnoreList.append("sport=*");
+  reviewTypeIgnoreList.append("amenity=school");
+  reviewTypeIgnoreList.append("man_made=water_works");
+  reviewTypeIgnoreList.append("amenity=bus_station");
+  reviewTypeIgnoreList.append("amenity=hospital");
+  reviewTypeIgnoreList.append("building=apartments");
+  reviewTypeIgnoreList.append("building=civic");
+  reviewTypeIgnoreList.append("building=commercial");
+  reviewTypeIgnoreList.append("building=public");
+  reviewTypeIgnoreList.append("building=retail");
+  reviewTypeIgnoreList.append("landuse=commercial");
+  reviewTypeIgnoreList.append("landuse=forest");
+  reviewTypeIgnoreList.append("landuse=industrial");
+  reviewTypeIgnoreList.append("landuse=residential");
+  reviewTypeIgnoreList.append("landuse=recreation_ground");
+  reviewTypeIgnoreList.append("leisure=common");
+  reviewTypeIgnoreList.append("leisure=garden");
+  reviewTypeIgnoreList.append("leisure=golf_course");
+  reviewTypeIgnoreList.append("natural=water");
+  reviewTypeIgnoreList.append("place=neighbourhood");
+  reviewTypeIgnoreList.append("shop=mall");
+  reviewTypeIgnoreList.append("shop=department_store");
+  reviewTypeIgnoreList.append("tourism=attraction");
+  reviewTypeIgnoreList.append("tourism=zoo");
+  if (_poi->getTags().hasAnyKvp(reviewTypeIgnoreList) ||
+      _poly->getTags().hasAnyKvp(reviewTypeIgnoreList))
+  {
+    return true;
+  }
+  return false;
+}
+
 void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid2)
 {  
   //for testing only
@@ -321,6 +377,12 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
 
   _categorizeElementsByGeometryType(eid1, eid2);
 
+  //FOR REDUCING REVIEWS DURING REVIEW TYPE DEBUGGING ONLY!
+//  if (_skipForReviewTypeDebugging())
+//  {
+//    return;
+//  }
+
   //allow for auto marking features with certain types for review if they get matched
   const bool foundReviewIfMatchedType =
     _featureHasReviewIfMatchedType(_poi) || _featureHasReviewIfMatchedType(_poly);
@@ -339,6 +401,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
     if (reviewReducer.triggersRule(_poi, _poly))
     {
       evidence = 0;
+      //TODO: b/c this is a miss, don't think it will get added to the output anywhere...
       _explainText = "Match score automatically dropped by review reduction.";
     }
   }
@@ -394,7 +457,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
       const QString distanceMatchStr = _distance <= _matchDistanceThreshold ? "yes" : "no";
       //TODO: these score contributions are hardcoded
       _explainText =
-        QString("Features had an additive similarity score of %1, which is less than the required score of %2. Matches: distance: %3 (%4m; possible score contribution: 2), type: %5 (score: %6; possible score contribution: 1), name: %7 (score: %8; possible score contribution: 1), address: %9 (score: %10; possible score contribution: 1). Max distance to match: %11m, max distance to review: %12m.")
+        QString("Features had an additive similarity score of %1, which is less than the required score of %2. Matches: distance: %3 (%4m; score: 2, possible score: 2), type: %5 (score: %6; possible score: 1), name: %7 (score: %8; possible score: 1), address: %9 (score: %10; possible score: 1). Max distance allowed for match: %11m, max distance allowed for review: %12m.")
           .arg(evidence)
           .arg(_matchEvidenceThreshold)
           .arg(distanceMatchStr)
