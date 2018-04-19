@@ -62,47 +62,6 @@ void PoiPolygonTypeScoreExtractor::setConfiguration(const Settings& conf)
   setPrintMatchDistanceTruth(config.getPoiPolygonPrintMatchDistanceTruth());
 }
 
-bool PoiPolygonTypeScoreExtractor::_failsCuisineMatch(const Tags& t1, const Tags& t2) const
-{
-  //be a little more restrictive with restaurants
-  if (t1.get("amenity").toLower() == "restaurant" &&
-      t2.get("amenity").toLower() == "restaurant" &&
-      t1.contains("cuisine") && t2.contains("cuisine"))
-  {
-    const QString t1Cuisine = t1.get("cuisine").toLower();
-    const QString t2Cuisine = t2.get("cuisine").toLower();
-    if (OsmSchema::getInstance().score("cuisine=" + t1Cuisine, "cuisine=" + t2Cuisine) != 1.0 &&
-        //Don't return false on regional, since its location dependent and we don't take that into
-        //account.
-        t1Cuisine != "regional" && t2Cuisine != "regional" &&
-        //Don't fail on "other", since that's not very descriptive.
-        t1Cuisine != "other" && t2Cuisine != "other")
-    {
-      LOG_TRACE("Failed type match on different cuisines.");
-      return true;
-    }
-  }
-  return false;
-}
-
-bool PoiPolygonTypeScoreExtractor::_failsSportMatch(const Tags& t1, const Tags& t2) const
-{
-  //be a little more restrictive with sport areas
-  if (t1.get("leisure").toLower() == "pitch" &&
-      t2.get("leisure").toLower() == "pitch" &&
-      t1.contains("sport") && t2.contains("sport"))
-  {
-    const QString t1Sport = t1.get("sport").toLower();
-    const QString t2Sport = t2.get("sport").toLower();
-    if (OsmSchema::getInstance().score("sport=" + t1Sport, "sport=" + t2Sport) != 1.0)
-    {
-      LOG_TRACE("Failed type match on different sports.");
-      return true;
-    }
-  }
-  return false;
-}
-
 double PoiPolygonTypeScoreExtractor::extract(const OsmMap& /*map*/,
                                              const ConstElementPtr& poi,
                                              const ConstElementPtr& poly) const
@@ -112,7 +71,8 @@ double PoiPolygonTypeScoreExtractor::extract(const OsmMap& /*map*/,
   const Tags& t1 = poi->getTags();
   const Tags& t2 = poly->getTags();
 
-  //make this more extensible if it gets bigger
+  //TODO: make this failing match technique more extensible
+
   if (_failsCuisineMatch(t1, t2))
   {
     if (!failedMatchRequirements.contains("cuisine"))
@@ -126,6 +86,15 @@ double PoiPolygonTypeScoreExtractor::extract(const OsmMap& /*map*/,
     if (!failedMatchRequirements.contains("sport"))
     {
       failedMatchRequirements.append("sport");
+    }
+    return 0.0;
+  }
+  //TODO: test
+  else if (_failsReligionMatch(t1, t2))
+  {
+    if (!failedMatchRequirements.contains("religion"))
+    {
+      failedMatchRequirements.append("religion");
     }
     return 0.0;
   }
@@ -292,6 +261,19 @@ bool PoiPolygonTypeScoreExtractor::isParking(ConstElementPtr element)
   return element->getTags().get("amenity") == "parking";
 }
 
+bool PoiPolygonTypeScoreExtractor::isReligion(ConstElementPtr element)
+{
+  return isReligion(element->getTags());
+}
+
+bool PoiPolygonTypeScoreExtractor::isReligion(const Tags& tags)
+{
+  return tags.get("amenity") == "place_of_worship" ||
+         tags.get("building") == "church" ||
+         tags.get("building") == "mosque" ||
+         tags.get("building") == "synagogue";
+}
+
 bool PoiPolygonTypeScoreExtractor::hasMoreThanOneType(ConstElementPtr element)
 {
   int typeCount = 0;
@@ -349,6 +331,67 @@ bool PoiPolygonTypeScoreExtractor::hasSpecificType(ConstElementPtr element)
           element->getTags().get("building") != QLatin1String("yes") &&
           element->getTags().get("office") != QLatin1String("yes") &&
           element->getTags().get("area") != QLatin1String("yes");
+}
+
+//TODO: abstract these three type fail methods into one
+
+bool PoiPolygonTypeScoreExtractor::_failsCuisineMatch(const Tags& t1, const Tags& t2) const
+{
+  //be a little more restrictive with restaurants
+  if (t1.get("amenity").toLower() == "restaurant" &&
+      t2.get("amenity").toLower() == "restaurant" &&
+      t1.contains("cuisine") && t2.contains("cuisine"))
+  {
+    const QString t1Cuisine = t1.get("cuisine").toLower();
+    const QString t2Cuisine = t2.get("cuisine").toLower();
+    if (OsmSchema::getInstance().score("cuisine=" + t1Cuisine, "cuisine=" + t2Cuisine) != 1.0 &&
+        //Don't return false on regional, since its location dependent and we don't take that into
+        //account.
+        t1Cuisine != "regional" && t2Cuisine != "regional" &&
+        //Don't fail on "other", since that's not very descriptive.
+        t1Cuisine != "other" && t2Cuisine != "other")
+    {
+      LOG_TRACE("Failed type match on different cuisines.");
+      return true;
+    }
+  }
+  return false;
+}
+
+bool PoiPolygonTypeScoreExtractor::_failsSportMatch(const Tags& t1, const Tags& t2) const
+{
+  //be a little more restrictive with sport areas
+  if (t1.get("leisure").toLower() == "pitch" &&
+      t2.get("leisure").toLower() == "pitch" &&
+      t1.contains("sport") && t2.contains("sport"))
+  {
+    const QString t1Sport = t1.get("sport").toLower();
+    const QString t2Sport = t2.get("sport").toLower();
+    if (OsmSchema::getInstance().score("sport=" + t1Sport, "sport=" + t2Sport) != 1.0)
+    {
+      LOG_TRACE("Failed type match on different sports.");
+      return true;
+    }
+  }
+  return false;
+}
+
+bool PoiPolygonTypeScoreExtractor::_failsReligionMatch(const Tags& t1, const Tags& t2) const
+{
+  //be a little more restrictive with religions
+  if (isReligion(t1) && isReligion(t2) && t1.contains("denomination") &&
+      t2.contains("denomination"))
+  {
+    const QString t1Denom = t1.get("denomination").toLower().trimmed();
+    const QString t2Denom = t2.get("denomination").toLower().trimmed();
+    if (!t1Denom.isEmpty() && !t2Denom.isEmpty() &&
+        OsmSchema::getInstance().score("denomination=" + t1Denom, "denomination=" + t2Denom) != 1.0)
+    {
+      LOG_TRACE("Failed type match on different religions.");
+      return true;
+    }
+  }
+  return false;
 }
 
 }

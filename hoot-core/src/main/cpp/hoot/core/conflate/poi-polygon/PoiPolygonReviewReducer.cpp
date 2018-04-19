@@ -197,12 +197,22 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   const bool polyHasType = PoiPolygonTypeScoreExtractor::hasType(poly);
   LOG_VART(polyHasType);
 
+  const bool poiIsNatural = poi->getTags().contains("natural");
+  const bool polyIsNatural = poly->getTags().contains("natural");
+
   //Be more strict reviewing natural features against building features.
-  if (poiHasType && polyHasType && poly->getTags().contains("natural") &&
+  if (poiHasType && polyHasType && polyIsNatural &&
       OsmSchema::getInstance().getCategories(
         poi->getTags()).intersects(OsmSchemaCategory::building()))
   {
     LOG_TRACE("Returning miss per review reduction rule #7...");
+    return true;
+  }
+
+  //TODO: test
+  if (poiIsNatural && polyIsNatural && !_typeMatch)
+  {
+    LOG_TRACE("Returning miss per review reduction rule #7b...");
     return true;
   }
 

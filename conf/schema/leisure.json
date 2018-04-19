@@ -180,6 +180,25 @@
             "node",
             "area"
         ],
+        "categories": [
+            "use",
+            "poi"
+        ],
+        "isA": "leisure",
+        "name": "leisure=ice_rink",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "sport=ice_skating",
+                "weight": 0.9
+            }
+        ]
+    },
+    {
+        "geometries": [
+            "node",
+            "area"
+        ],
         "isA": "leisure",
         "name": "leisure=amusement_arcade",
         "objectType": "tag"
