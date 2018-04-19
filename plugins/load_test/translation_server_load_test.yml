@@ -62,7 +62,3 @@ scenarios:
           headers:
             Content-Type: "text/xml"
           body: "{{osmBody}}"
-          
-            
-
-        
