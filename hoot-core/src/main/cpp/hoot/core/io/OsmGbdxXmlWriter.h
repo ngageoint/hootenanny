@@ -66,6 +66,8 @@ public:
 
   virtual bool isSupported(QString url) { return url.toLower().endsWith(".gxml"); }
 
+  virtual QString supportedFormats() {return ".gxml";}
+
   virtual void open(QString url);
 
   void close();

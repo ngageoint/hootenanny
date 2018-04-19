@@ -200,7 +200,6 @@ void OsmGeoJsonReader::_parseGeoJsonFeature(const boost::property_tree::ptree& f
     if (feature.not_found() != feature.find("geometry"))
     {
       pt::ptree geometry = feature.get_child("geometry");
-
       //  Type can be node, way, or relation
       string typeStr = properties.get("type", string("--"));
       string geoType = geometry.get("type", string("--"));
@@ -280,6 +279,14 @@ void OsmGeoJsonReader::_parseGeoJsonNode(const string& id, const pt::ptree& prop
     node_id = _map->createNextNodeId();
   //  Parse the geometry
   vector<Coordinate> coords = _parseGeometry(geometry);
+
+  // Defensive: We have seen files with empty coordinate arrays
+  if (coords.size() == 0)
+  {
+    LOG_INFO("Empty Coordinates. Skipping feature");
+    return;
+  }
+
   double lat = coords[0].y;
   double lon = coords[0].x;
   //  Construct node
@@ -292,6 +299,15 @@ void OsmGeoJsonReader::_parseGeoJsonNode(const string& id, const pt::ptree& prop
 
 void OsmGeoJsonReader::_parseGeoJsonWay(const string& id, const pt::ptree& properties, const pt::ptree& geometry)
 {
+  vector<Coordinate> coords = _parseGeometry(geometry);
+
+  // Defensive: We have seen files with empty coordinate arrays
+  if (coords.size() == 0)
+  {
+    LOG_INFO("Empty Coordinates. Skipping feature");
+    return;
+  }
+
   //  Get info we need to construct our way
   long way_id = -1;
   if (_useDataSourceIds)
@@ -301,8 +317,8 @@ void OsmGeoJsonReader::_parseGeoJsonWay(const string& id, const pt::ptree& prope
   //  Construct Way
   WayPtr way(new Way(_defaultStatus, way_id, _defaultCircErr));
   bool isPoly = (geometry.get("type", "").compare("Polygon") == 0);
+
   //  Add nodes
-  vector<Coordinate> coords = _parseGeometry(geometry);
   for (vector<Coordinate>::iterator it = coords.begin(); it != coords.end(); ++it)
   {
     if (isPoly && (it + 1) == coords.end())

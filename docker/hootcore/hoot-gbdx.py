@@ -279,9 +279,6 @@ class HootGbdxTask(GbdxTaskInterface):
 
             eVars[key] = value
 
-        # Now clean up the env vars
-#        if ()
-
         return eVars
     # End processPlist
 
@@ -298,6 +295,8 @@ class HootGbdxTask(GbdxTaskInterface):
             shutil.rmtree(outputDir)
             os.makedirs(outputDir)
 
+        # Add an empty file to the output directory to keep the pipeline happy
+        open(os.path.join(outputDir,'.empty', 'a').close()
 
         # Working Directory. We zip this and make the output.
         workDirJson = self.checkFile(os.path.join('/tmp','hootJson%s' % os.getpid()))
