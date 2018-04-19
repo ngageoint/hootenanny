@@ -20554,7 +20554,7 @@
         <nd ref="1829"/>
         <tag k="accuracy" v="5"/>
         <tag k="hoot:id" v="58"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="alt_name" v="Lincoln Memorial Cir"/>
         <tag k="name" v="LINCOLN MEMORIAL CIR SW"/>
         <tag k="highway" v="road"/>
@@ -26867,7 +26867,7 @@
         <nd ref="4920"/>
         <tag k="accuracy" v="5"/>
         <tag k="hoot:id" v="376"/>
-        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="name" v="INTERSTATE 66  BN"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:id" v="376"/>
@@ -27122,7 +27122,7 @@
         <nd ref="741"/>
         <tag k="accuracy" v="5"/>
         <tag k="hoot:id" v="395"/>
-        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="alt_name" v="INDEPENDENCE AVE SW"/>
         <tag k="name" v="Independence Ave SW"/>
         <tag k="highway" v="unclassified"/>
@@ -27476,7 +27476,7 @@
         <nd ref="3421"/>
         <tag k="accuracy" v="5"/>
         <tag k="hoot:id" v="406"/>
-        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="name" v="OHIO DR NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:id" v="406"/>

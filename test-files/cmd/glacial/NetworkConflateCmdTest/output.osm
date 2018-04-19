@@ -21174,7 +21174,7 @@
         <tag k="alt_name" v="Independence Ave SW"/>
         <tag k="name" v="INDEPENDENCE AVE SW"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="5"/>
         <tag k="hoot:id" v="-22305"/>
     </way>
@@ -22087,7 +22087,7 @@
         <tag k="alt_name" v="Independence Ave SW"/>
         <tag k="name" v="INDEPENDENCE AVE SW"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="5"/>
         <tag k="hoot:id" v="-22227"/>
     </way>
@@ -22660,7 +22660,7 @@
         <tag k="alt_name" v="W Basin Dr SW"/>
         <tag k="name" v="WEST BASIN DR SW"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="5"/>
         <tag k="hoot:id" v="-22181"/>
     </way>

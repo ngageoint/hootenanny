@@ -36090,7 +36090,7 @@
         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
         <tag k="uuid" v="{2EE8AF8A-F80D-47D6-89FF-CFEF440E80E9}"/>
         <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="28.65"/>
         <tag k="hoot:id" v="-6809"/>
     </way>
@@ -36395,7 +36395,7 @@
         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
         <tag k="uuid" v="{DC40BC47-DE8B-43B0-BE69-99134FE561A7}"/>
         <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="28.65"/>
         <tag k="hoot:id" v="-6772"/>
     </way>
@@ -36426,7 +36426,7 @@
         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
         <tag k="uuid" v="{C9FE40BD-08A4-4E22-87EC-5EC53C948640}"/>
         <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="28.65"/>
         <tag k="hoot:id" v="-6756"/>
     </way>
@@ -36651,7 +36651,7 @@
         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
         <tag k="uuid" v="{5033398B-9C94-4F16-A44B-1287C0316FC5}"/>
         <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="28.65"/>
         <tag k="hoot:id" v="-6744"/>
     </way>
@@ -36768,7 +36768,7 @@
         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
         <tag k="uuid" v="{5ED38371-5FBA-480B-98AB-A92B85C5C913}"/>
         <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="28.65"/>
         <tag k="hoot:id" v="-6736"/>
     </way>
@@ -37172,7 +37172,7 @@
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
         <tag k="highway" v="track"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="28.65"/>
         <tag k="hoot:id" v="-6682"/>
     </way>
@@ -37373,7 +37373,7 @@
         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
         <tag k="uuid" v="{CC894A6B-927F-4396-93DD-AFCD1911911D}"/>
         <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="28.65"/>
         <tag k="hoot:id" v="-6668"/>
     </way>
@@ -37460,7 +37460,7 @@
         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
         <tag k="uuid" v="{4C002AB7-F093-482F-8F77-99F1FE4FFECD}"/>
         <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="28.65"/>
         <tag k="hoot:id" v="-6652"/>
     </way>
@@ -37510,7 +37510,7 @@
         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
         <tag k="uuid" v="{4C002AB7-F093-482F-8F77-99F1FE4FFECD}"/>
         <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="28.65"/>
         <tag k="hoot:id" v="-6650"/>
     </way>
@@ -37556,7 +37556,7 @@
         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
         <tag k="uuid" v="{4C002AB7-F093-482F-8F77-99F1FE4FFECD}"/>
         <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="28.65"/>
         <tag k="hoot:id" v="-6647"/>
     </way>
@@ -37592,7 +37592,7 @@
         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
         <tag k="uuid" v="{4C002AB7-F093-482F-8F77-99F1FE4FFECD}"/>
         <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="28.65"/>
         <tag k="hoot:id" v="-6644"/>
     </way>
@@ -37723,7 +37723,7 @@
         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
         <tag k="uuid" v="{24A43D12-8542-458D-AC2C-9D0FC6314056}"/>
         <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="28.65"/>
         <tag k="hoot:id" v="-6626"/>
     </way>
@@ -37863,7 +37863,7 @@
         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
         <tag k="uuid" v="{D80CB063-C703-4393-9698-A8A194A12871}"/>
         <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="28.65"/>
         <tag k="hoot:id" v="-6613"/>
     </way>
@@ -37967,7 +37967,7 @@
         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
         <tag k="uuid" v="{D80CB063-C703-4393-9698-A8A194A12871}"/>
         <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="28.65"/>
         <tag k="hoot:id" v="-6610"/>
     </way>
@@ -38051,7 +38051,7 @@
         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
         <tag k="uuid" v="{35F44F54-94D3-4C6A-8436-4280FDD4826A}"/>
         <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="28.65"/>
         <tag k="hoot:id" v="-6601"/>
     </way>
@@ -38468,7 +38468,7 @@
         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
         <tag k="uuid" v="{8E50E735-D174-4162-9905-B182AA6C1902}"/>
         <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="28.65"/>
         <tag k="hoot:id" v="-6559"/>
     </way>
@@ -38515,7 +38515,7 @@
         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
         <tag k="uuid" v="{1F2D558E-CA6A-4E32-BE3E-4773FEDFA1B0}"/>
         <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="28.65"/>
         <tag k="hoot:id" v="-6552"/>
     </way>
@@ -38675,7 +38675,7 @@
         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
         <tag k="uuid" v="{5033398B-9C94-4F16-A44B-1287C0316FC5}"/>
         <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="28.65"/>
         <tag k="hoot:id" v="-6543"/>
     </way>
@@ -39168,7 +39168,7 @@
         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
         <tag k="uuid" v="{95D9C3B5-225A-461D-AD68-9E67AAEE075D}"/>
         <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="28.65"/>
         <tag k="hoot:id" v="-6517"/>
     </way>
@@ -39199,7 +39199,7 @@
         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
         <tag k="uuid" v="{1F2D558E-CA6A-4E32-BE3E-4773FEDFA1B0}"/>
         <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="28.65"/>
         <tag k="hoot:id" v="-6515"/>
     </way>
@@ -39274,7 +39274,7 @@
         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
         <tag k="uuid" v="{C5C59584-2BE7-4F8A-BD12-6B2EA49941FB}"/>
         <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="28.65"/>
         <tag k="hoot:id" v="-6509"/>
     </way>
@@ -39665,7 +39665,7 @@
         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
         <tag k="uuid" v="{96D24CDC-0F74-4B36-B3A2-0CAA7DE2956D}"/>
         <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="28.65"/>
         <tag k="hoot:id" v="-454"/>
     </way>
@@ -49618,7 +49618,7 @@
         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
         <tag k="uuid" v="{53FA7AEC-6324-4374-A446-9B3180DF978E}"/>
         <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="28.65"/>
         <tag k="hoot:id" v="64"/>
     </way>
