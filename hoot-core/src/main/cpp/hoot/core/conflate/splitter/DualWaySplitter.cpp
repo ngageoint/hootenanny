@@ -94,8 +94,6 @@ DualWaySplitter::DualWaySplitter()
     LOG_DEBUG("Assuming drives on right.");
   }
   _defaultSplitSize = opts.getDualWaySplitterSplitSizeDefaultValue();
-  _preserveUnknown1ElementIdWhenModifyingFeatures =
-    opts.getPreserveUnknown1ElementIdWhenModifyingFeatures();
 }
 
 DualWaySplitter::DualWaySplitter(boost::shared_ptr<const OsmMap> map, DrivingSide drivingSide,

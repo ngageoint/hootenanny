@@ -17,6 +17,14 @@ hoot changeset-derive --stats \
  test-output/NonDestructiveTest/output.osm \
  test-output/NonDestructiveTest/changeset.osc
 
+# Check the output against the expected output
+hoot map-diff \
+  test-output/NonDestructiveTest/output.osm \
+  test-files/NonDestructiveTest/Expected.osm || \
+  diff \
+  test-output/NonDestructiveTest/output.osm \
+  test-files/NonDestructiveTest/Expected.osm
+
 # Old stats
 # ---------
 #
@@ -67,5 +75,12 @@ hoot changeset-derive --stats \
 # | Create |  859 |        0 | 309 |
 # | Delete |    1 |        1 |  17 |
 # | Modify |    0 |        0 |   9 |
-
+#
+# @ - WaySplitter::createSplits change
+#
+# |        | Node | Relation | Way |
+# | Create |  859 |        0 | 282 |
+# | Delete |    1 |        1 |  17 |
+# | Modify |    0 |        0 |   9 |
+#
 

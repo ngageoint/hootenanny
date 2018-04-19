@@ -2,7 +2,7 @@
 @Library('radiant-pipeline-library')_
 
 pipeline {
-    agent any
+    agent { label 'master' }
     triggers {
         // Set nightly triggers
         cron((BRANCH_NAME == "master" || BRANCH_NAME == "develop") ? "H H(21-22) * * 1-5" : "")
