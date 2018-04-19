@@ -73,8 +73,8 @@ civic center	building=civic
 clinic	amenity=clinic
 clothing	shop=clothes
 # TODO: not sure about this
-clubhouse	building=civic
-club house	building=civic
+clubhouse	amenity=community_center
+club house	amenity=community_center
 coffee bar	amenity=cafe
 coffee house	amenity=cafe
 college dormitory	building=dormitory

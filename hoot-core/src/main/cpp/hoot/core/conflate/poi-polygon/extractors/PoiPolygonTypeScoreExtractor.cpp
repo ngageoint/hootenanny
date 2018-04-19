@@ -130,7 +130,11 @@ double PoiPolygonTypeScoreExtractor::extract(const OsmMap& /*map*/,
     return 0.0;
   }
 
-  const double typeScore = _getTagScore(poi, poly);
+  double typeScore = _getTagScore(poi, poly);
+  if (typeScore < 0.001)
+  {
+    typeScore = 0.0;
+  }
   LOG_VART(typeScore);
   return typeScore;
 }

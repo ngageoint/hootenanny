@@ -1612,6 +1612,7 @@ bool OsmSchema::isArea(const Tags& t, ElementType type) const
       break;
     }
   }
+  LOG_VART(result);
 
   return result;
 } 
@@ -1637,6 +1638,18 @@ bool OsmSchema::containsTagFromList(const Tags& tags, const QStringList tagList)
 bool OsmSchema::isPoiPolygonPoly(const ConstElementPtr& e, const QStringList tagIgnoreList)
 {
   const Tags& tags = e->getTags();
+
+//  if (isLinearHighway(tags, e->getElementType()))
+//  {
+//    return false;
+//  }
+  //Using this looser definition b/c isLinearHighway will return false if any tag is in an area
+  //category and not a linestring category, which still gives us some features we don't want to
+  //conflate with poi/poly.
+  if (tags.contains("highway"))
+  {
+    return false;
+  }
 
   //types we don't care about at all - see #1172 as to why this can't be handled in the schema
   //files
@@ -1834,6 +1847,11 @@ bool OsmSchema::isHgisPoi(const Element& e)
 
 bool OsmSchema::isLinearHighway(const Tags& t, ElementType type)
 {
+//  if (t.contains("name"))
+//  {
+//    LOG_VART(t.get("name"));
+//  }
+
   bool result = false;
   Tags::const_iterator it = t.find("highway");
   QString key;
@@ -1859,11 +1877,17 @@ bool OsmSchema::isLinearHighway(const Tags& t, ElementType type)
   if (result)
   {
     result = !isArea(t, type);
+    LOG_VART(result);
   }
+  LOG_VART(result);
 
-  if (result)
+  if (Log::getInstance().getLevel() <= Log::Trace && result)
   {
     LOG_TRACE("isLinearHighway; key: " << key);
+    if (t.contains("name"))
+    {
+      LOG_VART(t.get("name"));
+    }
   }
 
   return result;

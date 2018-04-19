@@ -54,7 +54,7 @@ double PoiPolygonNameScoreExtractor::extract(const OsmMap& /*map*/,
                                              const ConstElementPtr& poi,
                                              const ConstElementPtr& poly) const
 {
-  const double nameScore =
+  double nameScore =
     NameExtractor(
       StringDistancePtr(
         new TranslateStringDistance(
@@ -65,6 +65,10 @@ double PoiPolygonNameScoreExtractor::extract(const OsmMap& /*map*/,
                   //TODO: why does this fail when the mem var is used?
                   /*_levDist*/ConfigOptions().getLevenshteinDistanceAlpha())))))))
       .extract(poi, poly);
+  if (nameScore < 0.001)
+  {
+    nameScore = 0.0;
+  }
   LOG_VART(nameScore);
   return nameScore;
 }

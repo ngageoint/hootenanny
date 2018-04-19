@@ -23,8 +23,10 @@ hoot convert -D convert.ops=hoot::ImplicitPoiPolygonTypeTagger input.osm output.
 To use the feature from the command line during conflation:
 
 ------------------------
-hoot conflate -D conflate.pre.ops=hoot::ImplicitPoiPolygonTypeTagger input1.osm input2.osm output.osm
+hoot conflate -D conflate.pre.ops="hoot::BuildingOutlineRemoveOp;hoot::MapCleaner;hoot::ImplicitPoiPolygonTypeTagger" input1.osm input2.osm output.osm
 ------------------------
+
+NOTE: In the above command, "hoot::ImplicitPoiPolygonTypeTagger" was appended to the default operations for conflate.pre.ops configuration option.  Check your version of Hootenanny configuration options to find the default value for this option.
 
 Features modified by the implicit feature tagger are marked with the tag "hoot:implicitTags:tagsAdded" to let you know what tags were 
 added to the data and which name tags triggered the additions.  If you have suggestions on how to improve the quality of the 

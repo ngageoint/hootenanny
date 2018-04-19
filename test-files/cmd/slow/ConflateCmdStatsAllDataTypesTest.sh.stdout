@@ -65,15 +65,15 @@ Unmatched Polygon Conflatable POIs	10	8	10
 Percentage of Polygon Conflatable POIs Conflated	0	0	28.57142857142857	
 Percentage of Polygon Conflatable POIs Marked for Review	0	0	71.42857142857143	
 Percentage of Unmatched Polygon Conflatable POIs	100	100	71.42857142857143	
-Polygon Count	10	8	12	
+Polygon Count	10	8	9	
 Conflatable Polygons	0	0	0	
 Conflated Polygons	0	0	5	
 Polygons Marked for Review	0	0	0	
 Number of Polygon Reviews to be Made	0	0	0	
-Unmatched Polygons	10	8	7	
-Percentage of Polygons Conflated	0	0	41.66666666666667	
+Unmatched Polygons	10	8	4	
+Percentage of Polygons Conflated	0	0	55.55555555555556	
 Percentage of Polygons Marked for Review	0	0	0	
-Percentage of Unmatched Polygons	100	100	58.33333333333334	
+Percentage of Unmatched Polygons	100	100	44.44444444444444	
 Area Count	0	0	2	
 Conflatable Areas	0	0	0	
 Conflated Areas	0	0	0	
@@ -87,4 +87,4 @@ Percentage of Unmatched Areas	0	0	100
 Difference Between Total Features in Output and Total Features in Inputs			-12	
 Percentage Difference Between Total Features in Output and Total Features in Inputs			-25.53191489361702	
 
-21:43:12.082 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 252) Conflation job completed.
+17:49:06.403 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 252) Conflation job completed.
