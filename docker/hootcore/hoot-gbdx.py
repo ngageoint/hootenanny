@@ -59,8 +59,9 @@ class HootGbdxTask(GbdxTaskInterface):
                 '-D','json.add.bbox=true',
                 '-D','osm.map.writer.skip.empty.map=true',
                 '-D',override,
-                # '-D','ogr.debug.dumptags=true',
+                '-D','ogr.debug.dumptags=true',
                 '-D','translation.script=/var/lib/hootenanny/translations/GBDX.js']
+                # '-D','translation.script=/home/dg/gbdx/hoot_docker/hoot/translations/GBDX.js']
 
         hootCmd.append(inputFile)
         hootCmd.append(outputFile)
@@ -68,7 +69,7 @@ class HootGbdxTask(GbdxTaskInterface):
         hootOut = ''
 
         # Debug
-        # print('Hoot: %s') % (' '.join(hootCmd))
+        # print('Hoot Command: %s') % (' '.join(hootCmd))
 
         # Very basic error checking
         try:
@@ -78,6 +79,7 @@ class HootGbdxTask(GbdxTaskInterface):
         except subprocess.CalledProcessError, e:
             return e.output
 
+        # Debug
         # print('\nHootOut: {}'.format(hootOut))
 
         # with "--error" the Hoot command shoud not have any output. If it does then
@@ -94,9 +96,10 @@ class HootGbdxTask(GbdxTaskInterface):
                 '-D','convert.ops=hoot::TranslationOp',
                 '-D','json.add.bbox=true',
                 '-D','osm.map.writer.skip.empty.map=true',
-                #'-D','ogr.debug.dumptags=true',
+                '-D','ogr.debug.dumptags=true',
                 '-D',override,
                 '-D','translation.script=/var/lib/hootenanny/translations/GBDX_XML_Shape.js']
+                # '-D','translation.script=/home/dg/gbdx/hoot_docker/hoot/translations/GBDX_XML_Shape.js']
 
         hootCmd.append(inputFile)
         hootCmd.append(outputFile)
@@ -104,7 +107,7 @@ class HootGbdxTask(GbdxTaskInterface):
         hootOut = ''
 
         # Debug
-        #print('Hoot: %s') % (' '.join(hootCmd))
+        # print('Hoot Command: %s') % (' '.join(hootCmd))
 
         # Very basic error checking
         try:
@@ -114,6 +117,7 @@ class HootGbdxTask(GbdxTaskInterface):
         except subprocess.CalledProcessError, e:
             return e.output
 
+        # Debug
         # print('\nHootOut: {}'.format(hootOut))
         
         # with "--error" the Hoot command shoud not have any output. If it does then
@@ -296,7 +300,7 @@ class HootGbdxTask(GbdxTaskInterface):
             os.makedirs(outputDir)
 
         # Add an empty file to the output directory to keep the pipeline happy
-        open(os.path.join(outputDir,'.empty', 'a').close()
+        open(os.path.join(outputDir,'.empty'), 'a').close()
 
         # Working Directory. We zip this and make the output.
         workDirJson = self.checkFile(os.path.join('/tmp','hootJson%s' % os.getpid()))
