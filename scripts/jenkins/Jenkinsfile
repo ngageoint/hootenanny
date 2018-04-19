@@ -123,10 +123,11 @@ pipeline {
             }
         }
         stage("Sonar") {
-            agent { label 'Breeze (CentOS 7)' }
             steps {
+                // rysnc the build folders back to host system so scan
+                sh "vagrant rsync-back ${params.Box}"
                 withSonarQubeEnv('Breeze Sonarqube') {
-                    sh 'cd hoot-services; mvn sonar:sonar'
+                    sh "cd hoot-services; mvn sonar:sonar"
                 }
             }
         }
