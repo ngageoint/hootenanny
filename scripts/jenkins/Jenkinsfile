@@ -126,7 +126,7 @@ pipeline {
             agent { label 'Breeze (CentOS 7)' }
             steps {
                 withSonarQubeEnv('Breeze Sonarqube') {
-                    sh 'cd hoot/hoot-services; mvn sonar:sonar'
+                    sh 'cd hoot-services; mvn sonar:sonar'
                 }
             }
         }
