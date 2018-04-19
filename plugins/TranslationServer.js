@@ -17,7 +17,7 @@ if (typeof hoot === 'undefined') {
     hoot = require(HOOT_HOME + '/lib/HootJs');
 }
 
-// //Getting schema for fcode, geom type
+//Getting schema for fcode, geom type
 var schemaMap = {
     TDSv40: require(HOOT_HOME + '/plugins/tds40_full_schema.js'),
     TDSv61: require(HOOT_HOME + '/plugins/tds61_full_schema.js'),
@@ -524,25 +524,25 @@ var searchSchema = function(options) {
     var maxLeinDistance = options.maxLeinDistance || 200;
     var schema = schemaMap[translation].getDbSchema();
     var leinSearch = getLein(searchStr).toLocaleLowerCase();
-  
+
     //Treat vertex geom type as point
     if (geomType.toLowerCase() === 'vertex') geomType = 'point';
-  
+
     // get desc and fcode matching results
     var schemaMatches = schema
         .filter(function(d) {
             return d.geom.toLowerCase().indexOf(geomType.toLowerCase()) !== -1  &&
                 (  d.desc.toLowerCase().indexOf(searchStr.toLowerCase()) !== -1 ||
-                   d.fcode.toLowerCase().indexOf(searchStr.toLowerCase()) !== -1 
+                   d.fcode.toLowerCase().indexOf(searchStr.toLowerCase()) !== -1
                 );
         });
- 
+
     var result = [];
     if (searchStr.length > 0) {
         // find exact fcode matches and sort.
-        var limitLeft = limitResult; 
+        var limitLeft = limitResult;
             fcodeMatches = schemaMatches
-                .filter(function(d) { 
+                .filter(function(d) {
                     return d.fcode.toLowerCase().indexOf(searchStr.toLowerCase()) !== -1;
                 })
                 .map(function(d) {
@@ -552,44 +552,44 @@ var searchSchema = function(options) {
                         desc: d.desc,
                         geom: d.geom,
                         idx: Number(d.fcode.toLowerCase().replace(searchStr.toLowerCase(), ''))
-                    }
+                    };
                 })
-                .sort(function(a, b) { return a.idx - b.idx })
+                .sort(function(a, b) { return a.idx - b.idx; })
                 .slice(0, limitResult);
- 
+
         result = result.concat(fcodeMatches);
         limitLeft = limitResult - fcodeMatches.length;
-        
-        // if fcode matches below result limit,
+
+        // if partial exact fcode matches don't fill limit
         // add desc matches to results.
         if (limitLeft > 0) {
- 
+
             var descMatches = schemaMatches
-                    .filter(function(d) { 
+                    .filter(function(d) {
                         return d.desc.toLowerCase().indexOf(searchStr.toLowerCase()) !== -1 &&
                                d.fcode.toLowerCase().indexOf(searchStr.toLowerCase()) === -1;
                     })
-                    .filter(function(d) {
+                    .map(function(d) {
                         return {
                             name: d.name,
                             fcode: d.fcode,
                             desc: d.desc,
                             geom: d.geom,
                             idx: d.desc.toLowerCase().indexOf(searchStr.toLowerCase())
-                        } 
+                        };
                     })
-                    .sort(function(a, b) { return a.idx - b.idx })
+                    .sort(function(a, b) { return a.idx - b.idx; })
                     .slice(0, limitLeft);
- 
+
             result = result.concat(descMatches);
-            limitLeft = limitLeft - descMatches.length; 
-  
-            // if limit result still unmet,
-            // add in fuzzy matches tags
-            if (limitLeft > 0) {
-                // make sure only matching on those 
+            limitLeft = limitLeft - descMatches.length;
+
+            // if no partial exact fcode or desc matches
+            // use fuzzy matches (Levenshtein) on desc
+            if (result.length === 0) {
+                // make sure only matching on those
                 // - valid geometry
-                // - not a match in desc or fcode
+                // - not a match in description or fcode
                 var fuzzyMatches = schema
                         .filter(function(d) {
                             var validGeom = d.geom.toLowerCase().indexOf(geomType.toLowerCase()) !== -1,
@@ -597,7 +597,7 @@ var searchSchema = function(options) {
                                     d.fcode.toLowerCase().indexOf(searchStr.toLowerCase()) === -1  &&
                                     d.desc.toLowerCase().indexOf(searchStr.toLowerCase()) === -1
                                 );
- 
+
                             return validGeom && notMatch;
                         })
                         .map(function(d) {
@@ -610,7 +610,7 @@ var searchSchema = function(options) {
                                     );
                                 })
                             )
- 
+
                             return {
                                 name: d.name,
                                 fcode: d.fcode,
@@ -622,15 +622,17 @@ var searchSchema = function(options) {
                         .filter(function(d) { return d.idx <= maxLeinDistance })
                         .sort(function(a, b) { return a.idx - b.idx })
                         .slice(0, limitLeft)
- 
-                result = result.concat(fuzzyMatches)
+
+                result = result.concat(fuzzyMatches);
                 limitLeft = limitLeft - fuzzyMatches.length;
-               
+
                 // when traditional fuzzy matches still do not return anything, try to
                 // use 'near by keys' as the lead character in string to find matches
                 // motivation here is to catch things like 'vuilding' instead of building
                 if (limitLeft > 0) {
 
+                    // after nearby (keyboard) character replacement
+                    // try exact matches on descriptions
                     var searchStrings = getFuzzyStrings(searchStr),
                         keyDescMatches = searchStrings.map(function(str) {
                             return schema
@@ -654,14 +656,15 @@ var searchSchema = function(options) {
                     // flatten, then concat keyDescMatches
                     keyDescMatches = [].concat.apply([], keyDescMatches)
                         .slice(0, limitLeft);
-                    
-                    result = result.concat(keyDescMatches);
-                    limitLeft = limitResult - keyDescMatches.length 
 
+                    result = result.concat(keyDescMatches);
+                    limitLeft = limitResult - keyDescMatches.length;
+
+                    // try fuzzy matches on nearby (keyboard) character replaced descriptions
                     if (limitLeft > 0) {
                         var fuzzyKeyMatches = searchStrings.map(function(str) {
                             var leinStr = getLein(str);
-                            
+
                             return schema
                                 .filter(function(d) {
                                     var validGeom = d.geom.toLowerCase().indexOf(geomType.toLowerCase()) !== -1,
@@ -669,7 +672,7 @@ var searchSchema = function(options) {
                                             d.fcode.toLowerCase().indexOf(str.toLowerCase()) === -1,
                                             d.desc.toLowerCase().indexOf(str.toLowerCase()) === -1
                                         )
-                                    
+
                                     return validGeom && notMatch;
                                 }).
                                 map(function(d) {
@@ -678,12 +681,12 @@ var searchSchema = function(options) {
                                             var leinWord = getLein(word);
 
                                             return leinWord[0] !== leinStr[0] ? Infinity : Math.abs(
-                                                Number(leinStr.substr(1, leinStr.length)) - 
+                                                Number(leinStr.substr(1, leinStr.length)) -
                                                 Number(leinWord.substr(1, leinWord.length))
                                             )
                                         })
                                     );
-                                  
+
                                     return {
                                         name: d.name,
                                         fcode: d.fcode,
@@ -705,7 +708,7 @@ var searchSchema = function(options) {
 
                             return aMinLein - bMinLein;
                         });
-                        
+
                         fuzzyKeyMatches = []
                             .concat.apply([], fuzzyKeyMatches)
                             .slice(0, limitLeft);
@@ -715,9 +718,9 @@ var searchSchema = function(options) {
                 }
 
             }
- 
+
         }
- 
+
     } else {
         // Return the first N elements of the schema
         result = schema.filter(function(d) {
@@ -730,20 +733,20 @@ var searchSchema = function(options) {
                     fcode: d.fcode,
                     desc: d.desc,
                     geom: d.geom
-                }
+                };
             });
     }
- 
+
     return result;
 }
- 
+
  // src: talisam
  // https://github.com/Yomguithereal/talisman/blob/master/src/phonetics/lein.js
  var getLein = function(name) {
    if (typeof name !== 'string') {
        throw Error('talisman/phonetics/lein: the given name is not a string.');
    }
- 
+
    // helpers start //
    var pad = function(code) {
        return (code + '0000').slice(0, 4);
@@ -753,65 +756,65 @@ var searchSchema = function(options) {
    };
    var squeeze = function (target) {
        var isString = typeof target === 'string',
-           sequence = seq(target), 
+           sequence = seq(target),
            squeezed = [sequence[0]];
-       
+
        for (var i = 1, l = sequence.length; i < l; i++) {
            if (sequence[i] !== sequence[i - 1]) {
                squeezed.push(sequence[i]);
            }
        }
-       
+
        return isString ? squeezed.join('') : squeezed;
    }
    var translation = function(first, second) {
        var index = {};
-       
+
        first = first.split(''),
        second = second.split('');
-     
+
        if (first.length !== second.length)
          throw Error('talisman/helpers#translation: given strings don\'t have the same length.');
-     
+
        for (var i = 0, l = first.length; i < l; i++)
          index[first[i]] = second[i];
-     
+
        return index;
    }
    // helpers end //
-     
+
    // constants start //
    var DROPPED = /[AEIOUYWH]/g;
    var TRANSLATION = translation('DTMNLRBFPVCJKGQSXZ', '112233444455555555');
    // constants end //
- 
+
    if (typeof name !== 'string') {
        throw Error('talisman/phonetics/lein: the given name is not a string.');
    }
    var code = name
        .toUpperCase()
        .replace(/[^A-Z\s]/g, '');
- 
+
    // 1-- Keeping the first letter
    var first = code[0];
    code = code.slice(1);
- 
+
    // 2-- Dropping vowels and Y, W & H
    code = code.replace(DROPPED, '');
- 
+
    // 3-- Dropping consecutive duplicates and truncating to 4 characters
    code = squeeze(code).slice(0, 4);
- 
+
    // 4-- Translations
    var backup = code;
    code = '';
- 
+
    for (var i = 0, l = backup.length; i < l; i++) {
        code += TRANSLATION[backup[i]] || backup[i];
    }
- 
-   return pad(first + code); 
- }    
+
+   return pad(first + code);
+ }
 
 var getIntendedKeys = function(key) {
     var keyboard = {
