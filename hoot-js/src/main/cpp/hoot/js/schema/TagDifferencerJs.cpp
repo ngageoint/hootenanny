@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "TagDifferencerJs.h"
 
@@ -59,8 +59,10 @@ TagDifferencerJs::~TagDifferencerJs()
 {
 }
 
-Handle<Value> TagDifferencerJs::diff(const Arguments& args) {
-  HandleScope scope;
+void TagDifferencerJs::diff(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = v8::Isolate::GetCurrent();
+  HandleScope scope(current);
 
   try
   {
@@ -77,16 +79,18 @@ Handle<Value> TagDifferencerJs::diff(const Arguments& args) {
 
     double d = op->getDifferencer()->diff(map, e1, e2);
 
-    return scope.Close(toV8(d));
+    args.GetReturnValue().Set(toV8(d));
   }
   catch (const HootException& e)
   {
-    return v8::ThrowException(HootExceptionJs::create(e));
+    args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(e)));
   }
 }
 
 void TagDifferencerJs::Init(Handle<Object> target)
 {
+  Isolate* current = target->GetIsolate();
+  HandleScope scope(current);
   vector<string> opNames =
     Factory::getInstance().getObjectNamesByBase(TagDifferencer::className());
 
@@ -95,42 +99,47 @@ void TagDifferencerJs::Init(Handle<Object> target)
     QByteArray utf8 = QString::fromStdString(opNames[i]).replace("hoot::", "").toUtf8();
     const char* n = utf8.data();
     // Prepare constructor template
-    Local<FunctionTemplate> tpl = FunctionTemplate::New(New);
-    tpl->SetClassName(String::NewSymbol(opNames[i].data()));
+    Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
+    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].data()));
     tpl->InstanceTemplate()->SetInternalFieldCount(2);
     // Prototype
-    tpl->PrototypeTemplate()->Set(String::NewSymbol("diff"),
-        FunctionTemplate::New(diff)->GetFunction());
+    tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "diff"),
+        FunctionTemplate::New(current, diff));
     tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
-                                  String::New(TagDifferencer::className().data()));
+                                  String::NewFromUtf8(current, TagDifferencer::className().data()));
 
-    Persistent<Function> constructor = Persistent<Function>::New(tpl->GetFunction());
-    target->Set(String::NewSymbol(n), constructor);
+    Persistent<Function> constructor(current, tpl->GetFunction());
+    target->Set(String::NewFromUtf8(current, n), ToLocal(&constructor));
   }
 }
 
-Handle<Value> TagDifferencerJs::New(const Arguments& args) {
-  HandleScope scope;
+void TagDifferencerJs::New(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
   try
   {
     QString className = str(args.This()->GetConstructorName());
     if (className == "Object")
     {
-      return v8::ThrowException(HootExceptionJs::create(IllegalArgumentException(
-        "Invalid TagDifferencer. Did you forget 'new'?")));
+      args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(IllegalArgumentException(
+        "Invalid TagDifferencer. Did you forget 'new'?"))));
     }
-    TagDifferencer* op = Factory::getInstance().constructObject<TagDifferencer>(className);
-    TagDifferencerJs* obj = new TagDifferencerJs(op);
-    obj->Wrap(args.This());
+    else
+    {
+      TagDifferencer* op = Factory::getInstance().constructObject<TagDifferencer>(className);
+      TagDifferencerJs* obj = new TagDifferencerJs(op);
+      obj->Wrap(args.This());
 
-    PopulateConsumersJs::populateConsumers<TagDifferencer>(op, args);
+      PopulateConsumersJs::populateConsumers<TagDifferencer>(op, args);
 
-    return args.This();
+      args.GetReturnValue().Set(args.This());
+    }
   }
   catch (const HootException& e)
   {
-    return v8::ThrowException(HootExceptionJs::create(e));
+    args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(e)));
   }
 }
 

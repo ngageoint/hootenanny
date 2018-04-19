@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OSMSCHEMA_H
@@ -67,7 +67,8 @@ struct OsmSchemaCategory {
     PseudoName = 32,
     // Human Geography POI. See ticket #6853 for a definition of a "HGIS POI"
     HgisPoi = 64,
-    All = Poi | Building | Transportation | Use | Name | HgisPoi
+    Multiuse = 128,
+    All = Poi | Building | Transportation | Use | Name | HgisPoi | Multiuse
   } Type;
 
   OsmSchemaCategory() : _type(Empty) {}
@@ -80,6 +81,7 @@ struct OsmSchemaCategory {
   static OsmSchemaCategory use() { return OsmSchemaCategory(Use); }
   static OsmSchemaCategory name() { return OsmSchemaCategory(Name); }
   static OsmSchemaCategory pseudoName() { return OsmSchemaCategory(PseudoName); }
+  static OsmSchemaCategory multiUse() { return OsmSchemaCategory(Multiuse); }
 
   bool operator==(OsmSchemaCategory t) const { return t._type == _type; }
   bool operator!=(OsmSchemaCategory t) const { return t._type != _type; }
@@ -115,6 +117,10 @@ struct OsmSchemaCategory {
     else if (s == "hgispoi")
     {
       return HgisPoi;
+    }
+    else if (s == "multiuse")
+    {
+      return Multiuse;
     }
     else if (s == "")
     {
@@ -179,6 +185,10 @@ struct OsmSchemaCategory {
     if (_type & HgisPoi)
     {
       result << "hgispoi";
+    }
+    if (_type & Multiuse)
+    {
+      result << "multiuse";
     }
 
     return result;
@@ -341,6 +351,8 @@ public:
   bool isAreaForStats(const Tags& t, ElementType type) const;
   bool isAreaForStats(const ConstElementPtr& e) const;
 
+  bool isNonBuildingArea(const ConstElementPtr& e) const;
+
   bool isBuilding(const Tags& t, ElementType type) const;
   bool isBuilding(const ConstElementPtr& e) const;
 
@@ -349,6 +361,24 @@ public:
    */
   bool isBuildingPart(const Tags& t, ElementType type) const;
   bool isBuildingPart(const ConstElementPtr& e) const;
+
+  /**
+   * Determines whether the element passed in is a polygon under the POI to Polygon conflation
+   * definition
+   *
+   * @param e element to determine type of
+   * @return true if the element meets the specified criteria; false otherwise
+   */
+  bool isPoiPolygonPoly(const ConstElementPtr& e);
+
+  /**
+   * Determines whether the element passed in is a POI under the POI to Polygon conflation
+   * definition
+   *
+   * @param e element to determine type of
+   * @return true if the element meets the specified criteria; false otherwise
+   */
+  bool isPoiPolygonPoi(const ConstElementPtr& e);
 
   /**
    * Returns true if this is a geometry collection.
@@ -377,8 +407,21 @@ public:
   bool isLinear(const Element& e);
 
   /**
+   * Returns true if the specified element is a linear waterway.
    */
   bool isLinearWaterway(const Element &e);
+
+  /**
+   * Returns true if the element is a roundabout
+   *
+   * This is not an exhaustive check, feel free to add more criteria
+   */
+  bool isRoundabout(const Tags& tags, ElementType type);
+
+  /**
+   * Returns true if the specified element is a multi-use building.
+   */
+  bool isMultiUseBuilding(const Element &e);
 
   /**
    * Returns true if this is a list of values. Right now this just looks for a semicolon in value,
@@ -452,6 +495,7 @@ public:
   void updateOrCreateVertex(const SchemaVertex& tv);
 
 private:
+
   // the templates we're including take a crazy long time to include, so I'm isolating the
   // implementation.
   OsmSchemaData* d;

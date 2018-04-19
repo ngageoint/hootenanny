@@ -1,0 +1,27 @@
+[[crop]]
+== crop
+
+=== Description
+
+The +crop+ command crops a map to the given bounds. Individual features on the border are modified to make sure nothing 
+is outside the given bounds.
+
+* +input+  - The input OSM data path.
+* +output+ - The output OSM data path.
+* +bounds+ - Comma delimited bounds. minx,miny,maxx,maxy e.g.38,-105,39,-104
+
+=== Usage
+
+--------------------------------------
+crop (input.osm) (output.osm) (bounds)
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+hoot crop data/dc-roads/dcgis-cropped.osm "-77.0551,38.8845,-77.0281,38.9031" 
+--------------------------------------
+
+=== See Also
+
+* `crop.*` configuration options

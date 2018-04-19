@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 // Hoot
 #include "../TestUtils.h"
@@ -53,10 +53,13 @@ public:
   static QString inDir() { return "test-files/schema/ImplicitTagRulesDatabaseDeriverTest"; }
   static QString outDir() { return "test-output/schema/ImplicitTagRulesDatabaseDeriverTest"; }
 
+  void setUp()
+  {
+    TestUtils::mkpath(outDir());
+  }
+
   void runBasicTest()
   {
-    QDir().mkpath(outDir());
-
     const QString input = inDir() + "/ImplicitTagRulesDatabaseDeriverTest-input.implicitTagRules";
     const QString dbOutputFile =
       outDir() + "/ImplicitTagRulesDatabaseDeriverTest-runBasicTest-out.sqlite";
@@ -78,8 +81,6 @@ public:
 
   void runBadInputsTest()
   {
-    QDir().mkpath(outDir());
-
     ImplicitTagRulesDatabaseDeriver rulesDeriver;
     rulesDeriver.setMinTagOccurrencesPerWord(1);
     rulesDeriver.setMinWordLength(1);
@@ -119,8 +120,6 @@ public:
 
   void runMinTagOccurrencePerWordTest()
   {
-    QDir().mkpath(outDir());
-
     const QString input = inDir() + "/ImplicitTagRulesDatabaseDeriverTest-input.implicitTagRules";
     const QString dbOutputFile =
       outDir() + "/ImplicitTagRulesDatabaseDeriverTest-runMinTagOccurrencePerWordTest-out.sqlite";
@@ -142,8 +141,6 @@ public:
 
   void runMinWordLengthTest()
   {
-    QDir().mkpath(outDir());
-
     const QString input = inDir() + "/ImplicitTagRulesDatabaseDeriverTest-input.implicitTagRules";
     const QString dbOutputFile =
       outDir() + "/ImplicitTagRulesDatabaseDeriverTest-runMinWordLengthTest-out.sqlite";
@@ -165,8 +162,6 @@ public:
 
   void runTagIgnoreTest()
   {
-    QDir().mkpath(outDir());
-
     const QString input = inDir() + "/ImplicitTagRulesDatabaseDeriverTest-input.implicitTagRules";
     const QString dbOutputFile =
       outDir() + "/ImplicitTagRulesDatabaseDeriverTest-runTagIgnoreTest-out.sqlite";
@@ -188,8 +183,6 @@ public:
 
   void runWordIgnoreTest()
   {
-    QDir().mkpath(outDir());
-
     const QString input = inDir() + "/ImplicitTagRulesDatabaseDeriverTest-input.implicitTagRules";
     const QString dbOutputFile =
       outDir() + "/ImplicitTagRulesDatabaseDeriverTest-runWordIgnoreTest-out.sqlite";
@@ -213,8 +206,6 @@ public:
 
   void runCustomRuleTest()
   {
-    QDir().mkpath(outDir());
-
     const QString input = inDir() + "/ImplicitTagRulesDatabaseDeriverTest-input.implicitTagRules";
     const QString dbOutputFile =
       outDir() + "/ImplicitTagRulesDatabaseDeriverTest-runCustomRuleTest-out.sqlite";
@@ -238,8 +229,6 @@ public:
 
   void runSchemaValuesOnlyOffTest()
   {
-    QDir().mkpath(outDir());
-
     const QString input = inDir() + "/ImplicitTagRulesDatabaseDeriverTest-input.implicitTagRules";
     const QString dbOutputFile =
       outDir() + "/ImplicitTagRulesDatabaseDeriverTest-runSchemaValuesOnlyOffTest-out.sqlite";

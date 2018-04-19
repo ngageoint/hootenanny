@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REQUIREJS_H
 #define REQUIREJS_H
@@ -31,8 +31,8 @@
 #include <QString>
 
 // node.js
+#include <hoot/js/HootJsStable.h>
 #include <hoot/js/SystemNodeJs.h>
-#include <v8.h>
 
 namespace hoot
 {
@@ -46,7 +46,7 @@ private:
   RequireJs();
   ~RequireJs();
 
-  static v8::Handle<v8::Value> jsRequire(const v8::Arguments& args);
+  static void jsRequire(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
 }

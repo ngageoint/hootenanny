@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="18.5323089135" minlon="-72.313396" maxlat="18.537589" maxlon="-72.303172"/>
-    <node visible="true" id="-223" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5343271712882256" lon="-72.3098938308312995">
+    <node visible="true" id="-218" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5343271712882256" lon="-72.3098938308312995">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-223"/>
+        <tag k="hoot:id" v="-218"/>
     </node>
-    <node visible="true" id="-222" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5353701521525522" lon="-72.3108243069201251">
+    <node visible="true" id="-217" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5353701521525522" lon="-72.3108243069201251">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-222"/>
+        <tag k="hoot:id" v="-217"/>
     </node>
     <node visible="true" id="-137" timestamp="2017-06-07T15:24:10Z" version="1" changeset="124" lat="18.5365136853899983" lon="-72.3098430395099996">
         <tag k="hoot:status" v="2"/>
@@ -333,72 +333,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1"/>
     </node>
-    <way visible="true" id="-173" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-223"/>
-        <nd ref="-10"/>
-        <nd ref="-9"/>
-        <nd ref="-8"/>
-        <nd ref="-7"/>
-        <nd ref="-6"/>
-        <nd ref="-5"/>
-        <nd ref="-4"/>
-        <nd ref="-3"/>
-        <nd ref="-2"/>
-        <nd ref="-1"/>
-        <nd ref="-56"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="fixme" v="find out what part of Ave. John brown is Lalue?"/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="alt_name" v="Avenue John Brown"/>
-        <tag k="source" v="osm;osm"/>
-        <tag k="uuid" v="{31b011c0-0cc8-46ef-9381-24e38cc7358d}"/>
-        <tag k="name" v="Route de Bourdon"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-173"/>
-    </way>
-    <way visible="true" id="-172" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-222"/>
-        <nd ref="-17"/>
-        <nd ref="-16"/>
-        <nd ref="-15"/>
-        <nd ref="-14"/>
-        <nd ref="-13"/>
-        <nd ref="-12"/>
-        <nd ref="-11"/>
-        <nd ref="-223"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
-        <tag k="source" v="osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="name" v="Route de Bourdon"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="alt_name" v="Avenue John Brown"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.114Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="fixme" v="find out what part of Ave. John brown is Lalue?"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{31b011c0-0cc8-46ef-9381-24e38cc7358d};{{00b2b754-a805-42fe-a7c0-60fe86d05092}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-172"/>
-    </way>
-    <way visible="true" id="-171" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-157" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-30"/>
         <nd ref="-28"/>
         <nd ref="-27"/>
@@ -411,22 +346,41 @@
         <nd ref="-20"/>
         <nd ref="-19"/>
         <nd ref="-18"/>
-        <nd ref="-222"/>
+        <nd ref="-217"/>
+        <nd ref="-17"/>
+        <nd ref="-16"/>
+        <nd ref="-15"/>
+        <nd ref="-14"/>
+        <nd ref="-13"/>
+        <nd ref="-12"/>
+        <nd ref="-11"/>
+        <nd ref="-218"/>
+        <nd ref="-10"/>
+        <nd ref="-9"/>
+        <nd ref="-8"/>
+        <nd ref="-7"/>
+        <nd ref="-6"/>
+        <nd ref="-5"/>
+        <nd ref="-4"/>
+        <nd ref="-3"/>
+        <nd ref="-2"/>
+        <nd ref="-1"/>
+        <nd ref="-56"/>
         <tag k="width:minimum_traveled_way" v="8"/>
         <tag k="source" v="osm;mgcp"/>
         <tag k="condition" v="functional"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="name" v="Route de Bourdon"/>
         <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="seasonal" v="no"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="alt_name" v="Avenue John Brown"/>
         <tag k="surface" v="paved"/>
         <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
         <tag k="source:haiti" v="CNIGS and CartONG"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
         <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.114Z"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="fixme" v="find out what part of Ave. John brown is Lalue?"/>
@@ -437,68 +391,7 @@
         <tag k="location" v="surface"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-171"/>
-    </way>
-    <way visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-54"/>
-        <nd ref="-30"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
-        <tag k="source" v="osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="name" v="Route de Bourdon"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="alt_name" v="Avenue John Brown"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.114Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="fixme" v="find out what part of Ave. John brown is Lalue?"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{31b011c0-0cc8-46ef-9381-24e38cc7358d};{{00b2b754-a805-42fe-a7c0-60fe86d05092}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-13"/>
-    </way>
-    <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-57"/>
-        <nd ref="-29"/>
-        <nd ref="-54"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
-        <tag k="source" v="osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="name" v="Route de Bourdon"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="alt_name" v="Avenue John Brown"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.114Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="fixme" v="find out what part of Ave. John brown is Lalue?"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{31b011c0-0cc8-46ef-9381-24e38cc7358d};{{00b2b754-a805-42fe-a7c0-60fe86d05092}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-9"/>
+        <tag k="hoot:id" v="-157"/>
     </way>
     <way visible="true" id="-8" timestamp="2017-06-07T15:24:10Z" version="1" changeset="124">
         <nd ref="-59"/>
@@ -529,7 +422,7 @@
         <tag k="hoot:id" v="-8"/>
     </way>
     <way visible="true" id="-6" timestamp="2017-06-07T15:24:10Z" version="1" changeset="124">
-        <nd ref="-222"/>
+        <nd ref="-217"/>
         <nd ref="-136"/>
         <nd ref="-135"/>
         <nd ref="-134"/>
@@ -589,6 +482,38 @@
         <tag k="hoot:status" v="2"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-4"/>
+    </way>
+    <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-57"/>
+        <nd ref="-29"/>
+        <nd ref="-54"/>
+        <nd ref="-30"/>
+        <tag k="width:minimum_traveled_way" v="8"/>
+        <tag k="source" v="osm;mgcp"/>
+        <tag k="condition" v="functional"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="name" v="Route de Bourdon"/>
+        <tag k="lanes" v="2"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="alt_name" v="Avenue John Brown"/>
+        <tag k="surface" v="paved"/>
+        <tag k="median" v="no"/>
+        <tag k="source:haiti" v="CNIGS and CartONG"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.114Z"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="fixme" v="find out what part of Ave. John brown is Lalue?"/>
+        <tag k="type:haiti" v="Autre Route"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="uuid" v="{31b011c0-0cc8-46ef-9381-24e38cc7358d};{{00b2b754-a805-42fe-a7c0-60fe86d05092}}"/>
+        <tag k="location" v="surface"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-3"/>
     </way>
     <way visible="true" id="-2" timestamp="2017-06-07T15:24:11Z" version="1" changeset="125">
         <nd ref="-54"/>

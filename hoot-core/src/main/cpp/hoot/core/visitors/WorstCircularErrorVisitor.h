@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef WORSTCIRCULARERRORVISITOR_H
@@ -58,6 +58,11 @@ public:
 
   // Handle const pointers to const
   static Meters getWorstCircularError(const ConstOsmMapPtr& map);
+
+  virtual QString getName() const { return "Find Worst Circular Error"; }
+
+  virtual QString getDescription() const
+  { return "Determines the highest circular error value in a map"; }
 
 private:
 

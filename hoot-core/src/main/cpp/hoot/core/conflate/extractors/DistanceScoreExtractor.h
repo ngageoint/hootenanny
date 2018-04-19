@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef DISTANCESCOREEXTRACTOR_H
 #define DISTANCESCOREEXTRACTOR_H
@@ -47,6 +47,9 @@ public:
   DistanceScoreExtractor();
 
   virtual std::string getClassName() const { return className(); }
+
+  virtual QString getDescription() const
+  { return "Similar to Metric Distance as described in [1].  1. Savary & Zeitouni, 2005"; }
 
 protected:
 

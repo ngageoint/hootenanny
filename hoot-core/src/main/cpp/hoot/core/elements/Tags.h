@@ -22,7 +22,6 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGS_H
@@ -59,7 +58,6 @@ public:
 
   static std::string className() { return "hoot::Tags"; }
   static QString uuidKey() { return "uuid"; }
-
 
   void addNote(QString note);
 
@@ -178,6 +176,16 @@ public:
 
   bool operator==(const Tags& other) const;
 
+  /**
+   * Similar to operator== but 'hoot::*' tags are ignored
+   */
+  bool dataOnlyEqual(const Tags& other) const;
+
+  /**
+   * Get a list of all non-'hoot::*' tags
+   */
+  QStringList dataOnlyTags(const Tags& tags) const;
+
   void readValues(const QString& k, QStringList& list) const;
 
   Meters readMeters(QString key) const;
@@ -241,6 +249,7 @@ public:
   QString toString() const;
 
 private:
+
   void _valueRegexParser(const QString& str, QString& num, QString& units) const;
 
   static QStringList _nameKeys;

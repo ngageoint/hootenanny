@@ -22,13 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NeedsReviewCriterion.h"
 
 // Hoot
 #include <hoot/core/elements/Element.h>
-#include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/util/Factory.h>
 
 namespace hoot
@@ -38,7 +37,7 @@ HOOT_FACTORY_REGISTER(ElementCriterion, NeedsReviewCriterion)
 
 bool NeedsReviewCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
 {
-  bool review = ReviewMarker().isNeedsReview(_map, e);
+  bool review = _reviewMarker.isNeedsReview(_map, e);
   return review;
 }
 

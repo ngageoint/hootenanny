@@ -4,8 +4,6 @@
 
 Hootenanny is only supported on 64bit platforms.
 
-All of the commands that don't start with +--big+ are memory bound. Using large files will use lots of RAM and potentially crash due to RAM limitations. 
-
 Not all ESRI geometry types are supported. Using ESRI "True Curve" geometries (parametric curves) will give in undefined results.
 
 === Projections

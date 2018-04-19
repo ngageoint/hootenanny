@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CRITERIONCOUNTVISITOR_H
 #define CRITERIONCOUNTVISITOR_H
@@ -70,6 +70,9 @@ public:
 
   uint64_t getCount() const { return _count; }
   uint64_t getTotal() const { return _visited; }
+
+  virtual QString getDescription() const
+  { return "Counts the number of elements matching a criterion"; }
 
 private:
 

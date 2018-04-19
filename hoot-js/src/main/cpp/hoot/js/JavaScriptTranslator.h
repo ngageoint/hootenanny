@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef JAVASCRIPTTRANSLATOR_H
@@ -108,6 +108,7 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
 protected:
+
   boost::shared_ptr<PluginContext> _gContext;
   QString _toOsmFunctionName;
 

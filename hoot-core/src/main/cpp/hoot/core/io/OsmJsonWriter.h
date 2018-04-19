@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMJSONWRITER_H
 #define OSMJSONWRITER_H
@@ -62,6 +62,7 @@ namespace hoot
 class OsmJsonWriter : public QXmlDefaultHandler, public OsmMapWriter
 {
 public:
+
   static std::string className() { return "hoot::OsmJsonWriter"; }
 
   OsmJsonWriter(int precision = ConfigOptions().getWriterPrecision());
@@ -74,6 +75,8 @@ public:
   static QString markupString(const QString& str);
 
   virtual void open(QString url);
+
+  virtual void close() { if (_fp.isOpen()) { _fp.close(); } }
 
   void setIncludeHootInfo(bool includeInfo) { _includeDebug = includeInfo; }
 
@@ -96,7 +99,10 @@ public:
    */
   void SetWriteEmptyTags(bool writeEmpty) { _writeEmptyTags = writeEmpty; }
 
+  virtual QString supportedFormats() { return ".json"; }
+
 protected:
+
   ConstOsmMapPtr _map;
   bool _includeDebug;
   int _precision;

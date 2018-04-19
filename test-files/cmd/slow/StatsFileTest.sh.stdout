@@ -1,8 +1,8 @@
 ****Quick Stats****
-19:28:43.305 INFO  ...ore/io/OsmMapReaderFactory.cpp( 160) Loading map from test-files/conflate/unified/AllDataTypesA.osm...
+15:23:40.401 INFO  ...ore/io/OsmMapReaderFactory.cpp( 178) Loading map from test-files/conflate/unified/AllDataTypesA.osm...
 
-19:28:43.368 INFO  .../core/ops/CalculateStatsOp.cpp( 127) Calculating map statistics...
-19:28:43.368 INFO  ...oot/core/io/MapStatsWriter.cpp( 212) Writing stats to file: test-output/StatsAllDataTypesA.txt
+15:23:40.492 INFO  .../core/ops/CalculateStatsOp.cpp( 127) Calculating map statistics...
+15:23:40.492 INFO  ...oot/core/io/MapStatsWriter.cpp( 212) Writing stats to file: test-output/StatsAllDataTypesA.txt
 Node Count	117
 Way Count	14
 Relation Count	0
@@ -13,20 +13,20 @@ Maximum Way ID	-1559687
 Minimum Relation ID	9.223372036854776e+18
 Maximum Relation ID	-9.223372036854776e+18
 ****JSON Stats****
-19:28:43.711 INFO  ...ore/io/OsmMapReaderFactory.cpp( 160) Loading map from test-files/conflate/unified/AllDataTypesA.osm...
+15:23:41.185 INFO  ...ore/io/OsmMapReaderFactory.cpp( 178) Loading map from test-files/conflate/unified/AllDataTypesA.osm...
 
-19:28:43.775 INFO  .../core/ops/CalculateStatsOp.cpp( 127) Calculating map statistics...
-19:28:44.082 INFO  .../hoot/rules/LinearWaterway.js"(  33) "Calculating search radius for waterway conflation..."
-19:28:44.084 INFO  ...ate/SearchRadiusCalculator.cpp(  94) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
+15:23:41.275 INFO  .../core/ops/CalculateStatsOp.cpp( 127) Calculating map statistics...
+15:23:41.618 INFO  .../hoot/rules/LinearWaterway.js"(  33) "Calculating search radius for waterway conflation..."
+15:23:41.621 INFO  ...ate/SearchRadiusCalculator.cpp(  94) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
  Using default search radius value = 15
-19:28:45.169 INFO  ...ot/js/JavaScriptTranslator.cpp( 231) Loading script: /ramdisk/hoot/translations/TDSv61.js
-19:28:47.163 INFO  ...ore/io/OsmMapReaderFactory.cpp( 160) Loading map from test-files/conflate/unified/AllDataTypesB.osm...
+15:23:42.534 INFO  ...ot/js/JavaScriptTranslator.cpp( 232) Loading script: /ramdisk/hoot/translations/TDSv61.js
+15:23:46.923 INFO  ...ore/io/OsmMapReaderFactory.cpp( 178) Loading map from test-files/conflate/unified/AllDataTypesB.osm...
 
-19:28:47.232 INFO  .../core/ops/CalculateStatsOp.cpp( 127) Calculating map statistics...
-19:28:47.234 INFO  .../hoot/rules/LinearWaterway.js"(  33) "Calculating search radius for waterway conflation..."
-19:28:47.236 INFO  ...ate/SearchRadiusCalculator.cpp(  94) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
+15:23:47.019 INFO  .../core/ops/CalculateStatsOp.cpp( 127) Calculating map statistics...
+15:23:47.021 INFO  .../hoot/rules/LinearWaterway.js"(  33) "Calculating search radius for waterway conflation..."
+15:23:47.023 INFO  ...ate/SearchRadiusCalculator.cpp(  94) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
  Using default search radius value = 15
-19:28:48.121 INFO  ...ot/js/JavaScriptTranslator.cpp( 231) Loading script: /ramdisk/hoot/translations/TDSv61.js
+15:23:47.721 INFO  ...ot/js/JavaScriptTranslator.cpp( 232) Loading script: /ramdisk/hoot/translations/TDSv61.js
 {
     "Node Count":
     [
@@ -500,6 +500,56 @@ Maximum Relation ID	-9.223372036854776e+18
     [
         "100",
         "100"
+    ],
+    "Area Count":
+    [
+        "0",
+        "0"
+    ],
+    "Conflatable Areas":
+    [
+        "0",
+        "0"
+    ],
+    "Conflated Areas":
+    [
+        "0",
+        "0"
+    ],
+    "Areas Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Number of Area Reviews to be Made":
+    [
+        "0",
+        "0"
+    ],
+    "Unmatched Areas":
+    [
+        "0",
+        "0"
+    ],
+    "Meters Squared of Areas Processed by Conflation":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Areas Conflated":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Areas Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched Areas":
+    [
+        "0",
+        "0"
     ],
     "Longest Tag":
     [

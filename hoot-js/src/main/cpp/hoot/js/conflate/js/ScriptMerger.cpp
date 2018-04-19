@@ -48,12 +48,14 @@ namespace hoot
 
 unsigned int ScriptMerger::logWarnCount = 0;
 
-ScriptMerger::ScriptMerger(boost::shared_ptr<PluginContext> script, Persistent<Object> plugin,
+ScriptMerger::ScriptMerger(boost::shared_ptr<PluginContext> script, Persistent<Object>& plugin,
                            const set<pair<ElementId, ElementId> > &pairs) :
   _pairs(pairs),
-  _plugin(plugin),
   _script(script)
 {
+  Isolate* current = v8::Isolate::GetCurrent();
+  HandleScope scope(current);
+  _plugin.Reset(current, plugin);
   _eid1 = _pairs.begin()->first;
   _eid2 = _pairs.begin()->second;
 }
@@ -131,8 +133,9 @@ void ScriptMerger::_applyMergePair(const OsmMapPtr& map,
                         "details.");
   }
 
-  HandleScope handleScope;
-  Context::Scope context_scope(_script->getContext());
+  Isolate* current = v8::Isolate::GetCurrent();
+  HandleScope handleScope(current);
+  Context::Scope context_scope(_script->getContext(current));
   Handle<Value> v = _callMergePair(map);
 
   Handle<Object> o = Handle<Object>::Cast(v);
@@ -167,10 +170,12 @@ void ScriptMerger::_applyMergeSets(const OsmMapPtr& map,
 
 Handle<Value> ScriptMerger::_callMergePair(const OsmMapPtr& map) const
 {
-  HandleScope handleScope;
+  Isolate* current = v8::Isolate::GetCurrent();
+  EscapableHandleScope handleScope(current);
   Handle<Object> plugin =
-    Handle<Object>::Cast(_script->getContext()->Global()->Get(String::New("plugin")));
-  Handle<Value> value = plugin->Get(String::New("mergePair"));
+    Handle<Object>::Cast(
+      _script->getContext(current)->Global()->Get(String::NewFromUtf8(current, "plugin")));
+  Handle<Value> value = plugin->Get(String::NewFromUtf8(current, "mergePair"));
 
   if (value.IsEmpty() || value->IsFunction() == false)
   {
@@ -188,25 +193,27 @@ Handle<Value> ScriptMerger::_callMergePair(const OsmMapPtr& map) const
   jsArgs[argc++] = ElementJs::New(map->getElement(_eid2));
 
   TryCatch trycatch;
-  Handle<Value> result = func->Call(_plugin, argc, jsArgs);
+  Handle<Value> result = func->Call(ToLocal(&_plugin), argc, jsArgs);
   HootExceptionJs::checkV8Exception(result, trycatch);
 
-  if (result.IsEmpty() || result == Undefined())
+  if (result.IsEmpty() || result == Undefined(current))
   {
     throw IllegalArgumentException("The merge function must return a valid element as a result.");
   }
 
-  return handleScope.Close(result);
+  return handleScope.Escape(result);
 }
 
 void ScriptMerger::_callMergeSets(const OsmMapPtr& map,
   vector< pair<ElementId, ElementId> >& replaced) const
 {
-  HandleScope handleScope;
-  Context::Scope context_scope(_script->getContext());
+  Isolate* current = v8::Isolate::GetCurrent();
+  HandleScope handleScope(current);
+  Context::Scope context_scope(_script->getContext(current));
   Handle<Object> plugin =
-    Handle<Object>::Cast(_script->getContext()->Global()->Get(String::New("plugin")));
-  Handle<Value> value = plugin->Get(String::New("mergeSets"));
+    Handle<Object>::Cast(
+      _script->getContext(current)->Global()->Get(String::NewFromUtf8(current, "plugin")));
+  Handle<Value> value = plugin->Get(String::NewFromUtf8(current, "mergeSets"));
 
   if (value.IsEmpty() || value->IsFunction() == false)
   {
@@ -222,7 +229,7 @@ void ScriptMerger::_callMergeSets(const OsmMapPtr& map,
   jsArgs[argc++] = toV8(replaced);
 
   TryCatch trycatch;
-  Handle<Value> result = func->Call(_plugin, argc, jsArgs);
+  Handle<Value> result = func->Call(ToLocal(&_plugin), argc, jsArgs);
   HootExceptionJs::checkV8Exception(result, trycatch);
 
   // read the replaced values back out
@@ -231,11 +238,12 @@ void ScriptMerger::_callMergeSets(const OsmMapPtr& map,
 
 bool ScriptMerger::hasFunction(QString name) const
 {
-  HandleScope handleScope;
-  Context::Scope context_scope(_script->getContext());
+  Isolate* current = v8::Isolate::GetCurrent();
+  HandleScope handleScope(current);
+  Context::Scope context_scope(_script->getContext(current));
   Handle<Object> plugin =
-    Handle<Object>::Cast(_script->getContext()->Global()->Get(String::New("plugin")));
-  Handle<Value> value = plugin->Get(String::New(name.toUtf8().data()));
+    Handle<Object>::Cast(_script->getContext(current)->Global()->Get(String::NewFromUtf8(current, "plugin")));
+  Handle<Value> value = plugin->Get(String::NewFromUtf8(current, name.toUtf8().data()));
 
   bool result = true;
   if (value.IsEmpty() || value->IsFunction() == false)

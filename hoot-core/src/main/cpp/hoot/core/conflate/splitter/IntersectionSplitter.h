@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef INTERSECTIONSPLITTER_H
@@ -66,13 +66,14 @@ public:
 
   void splitIntersections();
 
+  virtual QString getDescription() const
+  { return "Makes all intersections contain only way end nodes"; }
+
 private:
+
   boost::shared_ptr<OsmMap> _map;
   QMultiHash<long, long> _nodeToWays;
   QSet<long> _todoNodes;
-  QMap<long, long> _wayReplacements;
-
-  bool _preserveUnknown1ElementIdWhenModifyingFeatures;
 
   void _mapNodesToWays();
 

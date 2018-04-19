@@ -46,7 +46,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1"/>
     </node>
-    <way visible="true" id="-100" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-98" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-11"/>
         <nd ref="-4"/>
         <tag k="created_by" v="Merkaartor 0.12"/>
@@ -54,49 +54,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="2"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-100"/>
-    </way>
-    <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-4"/>
-        <nd ref="-5"/>
-        <tag k="width" v="5"/>
-        <tag k="created_by" v="Merkaartor 0.12"/>
-        <tag k="alt_name" v="Kemanggisan Pulo"/>
-        <tag k="name" v="KEMANGGISAN PULO 1"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="all_weather" v="yes"/>
-        <tag k="lanes" v="2"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="10.08"/>
-        <tag k="hoot:id" v="-9"/>
-    </way>
-    <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-3"/>
-        <nd ref="-4"/>
-        <tag k="width" v="5"/>
-        <tag k="name" v="KEMANGGISAN PULO 1"/>
-        <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="lanes" v="2"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="10.08"/>
-        <tag k="hoot:id" v="-8"/>
-    </way>
-    <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1"/>
-        <nd ref="-2"/>
-        <nd ref="-3"/>
-        <tag k="width" v="5"/>
-        <tag k="name" v="KEMANGGISAN PULO 1"/>
-        <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="lanes" v="2"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="10.08"/>
-        <tag k="hoot:id" v="-6"/>
+        <tag k="hoot:id" v="-98"/>
     </way>
     <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-9"/>
@@ -144,5 +102,23 @@
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="10.08"/>
         <tag k="hoot:id" v="-2"/>
+    </way>
+    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1"/>
+        <nd ref="-2"/>
+        <nd ref="-3"/>
+        <nd ref="-4"/>
+        <nd ref="-5"/>
+        <tag k="width" v="5"/>
+        <tag k="created_by" v="Merkaartor 0.12"/>
+        <tag k="alt_name" v="Kemanggisan Pulo"/>
+        <tag k="name" v="KEMANGGISAN PULO 1"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="all_weather" v="yes"/>
+        <tag k="lanes" v="2"/>
+        <tag k="surface" v="paved"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="error:circular" v="10.08"/>
+        <tag k="hoot:id" v="-1"/>
     </way>
 </osm>

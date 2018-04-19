@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="0.004415911553967119" minlon="5.97372708019433e-05" maxlat="0.006186612290206156" maxlon="0.001929360328719445"/>
     <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0061462428029057" lon="0.0000597372708019">
         <tag k="poi" v="yes"/>
         <tag k="uuid" v="E"/>
@@ -19,6 +20,7 @@
         <tag k="building" v="yes"/>
         <tag k="uuid" v="B;D"/>
         <tag k="name" v="foo"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-5" role="reviewee"/>
@@ -27,7 +29,7 @@
         <tag k="hoot:review:type" v="POI to Polygon"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="PoiPolygonMatch Node:-5 Way:-2 P: match: 0 miss: 0 review: 1, distance: 10.8567, close match: 1, type score: 0, name score: 1, address score: 0"/>
+        <tag k="hoot:review:note" v="Features had an additive similarity score less than the required score of 3. Matches: distance: yes, type: no, name: yes, address: no."/>
         <tag k="hoot:review:sort_order" v="0"/>
         <tag k="type" v="review"/>
     </relation>

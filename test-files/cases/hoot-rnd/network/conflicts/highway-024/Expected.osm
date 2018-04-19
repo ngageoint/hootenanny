@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="38.90118849999999" minlon="-77.02990440000001" maxlat="38.9031" maxlon="-77.02809999999999"/>
     <node visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025219999999763" lon="-77.0299044000000066">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-22"/>
@@ -84,7 +85,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1"/>
     </node>
-    <way visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-6"/>
         <nd ref="-22"/>
         <tag k="alt_name" v="K St NW"/>
@@ -92,7 +93,7 @@
         <tag k="highway" v="secondary"/>
         <tag k="hoot:status" v="2"/>
         <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-18"/>
+        <tag k="hoot:id" v="-14"/>
     </way>
     <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-20"/>

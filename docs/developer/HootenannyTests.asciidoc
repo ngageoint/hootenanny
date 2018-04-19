@@ -94,7 +94,6 @@ the command line aspects of the system. Examples include:
 
 * Complex command line options
 * Composite operations such as alpha shape, cookie cut, conflate
-* Hadoop operations that require moving multiple files to create the test scenario
 * Translation scripts
 
 Note that is is generally desirable to make the test do as little as possible to fully exercise
@@ -138,7 +137,7 @@ set -e
 mkdir -p test-output/cmd/example
 
 # perform the operation we're testing.
-hoot --convert test-files/jakarta_raya_coastline.shp test-output/cmd/example/jakarta.osm
+hoot convert test-files/jakarta_raya_coastline.shp test-output/cmd/example/jakarta.osm
 
 # Write the output to stdout. When this run in the future it'll compare the old output
 # to the new input to verify the test is consistent
@@ -318,18 +317,6 @@ make -sj($nproc) plugins-test
 
 They run by default in the slow test suite.
 
-==== Core Pretty Pipes Tests
-
-The Pretty Pipes Test test the pretty-pipes submodule.  They may be invoked in isolation with:
-
---------------
-# configure step required once per configuration only
-aclocal && autoconf && autoheader && automake && ./configure
-make -sj($nproc) pp-test
---------------
-
-They run by default in the quick test suite.
-
 === Web Services Tests
 
 The Web Services tests test the Hootenanny web services interface.  There are two types of
@@ -504,10 +491,9 @@ location).
 The Regression Tests run Hootenanny command line operations against specific datasets to measure
 Hootenanny performance against particular scenarios.  The tests are run against non-public data and,
 therefore, are kept in a private DigitalGlobe repository and run on a nightly basis only.  For
-more information about the tests, contact hootenanny.help@digitalglobe.com
+more information about the tests, create an issue at https://github.com/ngageoint/hootenanny.
 
-If you have access to the regression test repository and wish to run them locally, contact
-hootenanny.help@digitalglobe.com for further instructions.
+If you have access to the regression test repository and wish to run them locally, create an issue at https://github.com/ngageoint/hootenanny.
 
 Many of the regression tests score Hootenanny's conflation accuracy on a dataset and mark the test
 as passing or failing based on an allowable score range.  See

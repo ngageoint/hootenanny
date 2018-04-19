@@ -1,0 +1,28 @@
+[[clean]]
+== clean
+
+=== Description
+
+The +clean+ command corrects common erroneous data scenarios from input and writes to output by applying the operations specified 
+in the `map.cleaner.transforms` configuration option. 
+
+* +input+  - Input (e.g. .osm file).
+* +output+ - Output file (e.g. .osm file).
+
+=== Usage
+
+--------------------------------------
+clean (input) (output)
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+hoot clean JustHighways.osm Cleaned.osm
+--------------------------------------
+
+==== See Also
+
+* `map.cleaner.transforms` configuration option
+* `convert` command
+

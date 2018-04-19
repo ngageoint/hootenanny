@@ -2,9 +2,9 @@
 
 === Description
 
-Reads from inputs, matches nodes, transforms input2 and writes the combined data
-to output. This is intended for evaluation and debugging purposes, not for real
-production applications.
+The +rubber-sheet+ command finds common high confidence road intersection matches and rubber sheets two map datasets to bring them 
+into alignment.  Reads from inputs, matches nodes, transforms input2, and writes the combined data to output.  This is intended 
+for evaluation and debugging purposes, not for real production applications.
 
 * +input1+ - Input 1 (e.g. .osm file).
 * +input2+ - Input 2 (e.g. .osm file).
@@ -12,12 +12,10 @@ production applications.
 
 The following optional defines can be set:
 
-* +rubber.sheet.ref+ - If set to true then the first input will be treated as a
-  reference layer and the geometries will not be moved. By default +input1+ and
-  +input2+ are moved towards each other.
-* +rubber.sheet.kernel.estimate.sigma+ - The sigma to use when applying a kernel
-  estimation interpolation. By default cross validation is used to determine an
-  appropriate sigma and should be adequate for most purposes.
+* +rubber.sheet.ref+                   - If set to true then the first input will be treated as a reference layer and the geometries 
+                                         will not be moved. By default +input1+ and +input2+ are moved towards each other.
+* +rubber.sheet.kernel.estimate.sigma+ - The sigma to use when applying a kernel estimation interpolation. By default cross validation 
+                                         is used to determine an appropriate sigma and should be adequate for most purposes.
 
 
 === Usage

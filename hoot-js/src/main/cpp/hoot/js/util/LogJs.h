@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef LOGJS_H
 #define LOGJS_H
@@ -34,7 +34,7 @@
 #include <hoot/js/SystemNodeJs.h>
 
 // v8
-//#include <v8.h>
+#include <hoot/js/HootJsStable.h>
 
 namespace hoot
 {
@@ -48,17 +48,17 @@ private:
   LogJs();
   ~LogJs();
 
-  static v8::Handle<v8::Value> log(const v8::Arguments& args, Log::WarningLevel level);
-  static v8::Handle<v8::Value> debug(const v8::Arguments& args);
-  static v8::Handle<v8::Value> trace(const v8::Arguments& args);
-  static v8::Handle<v8::Value> logTrace(const v8::Arguments& args);
-  static v8::Handle<v8::Value> logDebug(const v8::Arguments& args);
-  static v8::Handle<v8::Value> logInfo(const v8::Arguments& args);
-  static v8::Handle<v8::Value> logWarn(const v8::Arguments& args);
-  static v8::Handle<v8::Value> logError(const v8::Arguments& args);
-  static v8::Handle<v8::Value> logFatal(const v8::Arguments& args);
-  static v8::Handle<v8::Value> init(const v8::Arguments& args);
-  static v8::Handle<v8::Value> setLogLevel(const v8::Arguments& args);
+  static void log(const v8::FunctionCallbackInfo<v8::Value>& args, Log::WarningLevel level);
+  static void debug(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void trace(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void logTrace(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void logDebug(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void logInfo(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void logWarn(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void logError(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void logFatal(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void init(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void setLogLevel(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   /**
    * Returns the number of times that this log message has been emitted.

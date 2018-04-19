@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="0" minlon="0" maxlat="0" maxlon="0"/>
+    <relation visible="true" id="-279269" timestamp="1970-01-01T00:00:00Z" version="1">
+        <tag k="hoot:status" v="3"/>
+        <tag k="alt_name" v="building 1"/>
+        <tag k="name" v="building 2"/>
+        <tag k="building:part" v="yes"/>
+        <tag k="type" v="multipolygon"/>
+        <tag k="error:circular" v="15"/>
+    </relation>
+</osm>

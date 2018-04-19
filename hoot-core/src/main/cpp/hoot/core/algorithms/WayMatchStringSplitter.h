@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef WAYMATCHSTRINGSPLITTER_H
 #define WAYMATCHSTRINGSPLITTER_H
@@ -51,21 +51,16 @@ public:
 private:
 
   static QString _overlyAggressiveMergeReviewText;
-  std::set< std::pair<ElementId, ElementId> > _unknown1Replacements;
 
   bool _preserveUnknown1ElementIdWhenModifyingFeatures;
+  std::set< std::pair<ElementId, ElementId> > _unknown1Replacements;
 
-  QMultiMap<WayPtr, WayMatchStringMerger::SublineMappingPtr> _buildWayIndex1(OsmMapPtr map,
-    QList<WayMatchStringMerger::SublineMappingPtr> mappings) const;
-  QMultiMap<WayPtr, WayMatchStringMerger::SublineMappingPtr> _buildWayIndex2(OsmMapPtr map,
+  QMultiMap<WayPtr, WayMatchStringMerger::SublineMappingPtr> _buildWayIndex(WayNumber wn, OsmMapPtr map,
     QList<WayMatchStringMerger::SublineMappingPtr> mappings) const;
 
-  /// @todo there is probably a clever way to make these two functions a single function that takes
-  /// function pointers or similar
-  void _splitWay1(OsmMapPtr map, std::vector<std::pair<ElementId, ElementId> > &replaced,
+  void _splitWay(WayNumber wn, OsmMapPtr map, std::vector<std::pair<ElementId, ElementId> > &replaced,
     QList<WayMatchStringMerger::SublineMappingPtr> mappings);
-  void _splitWay2(OsmMapPtr map, std::vector<std::pair<ElementId, ElementId> > &replaced,
-    QList<WayMatchStringMerger::SublineMappingPtr> mappings);
+
 };
 
 }

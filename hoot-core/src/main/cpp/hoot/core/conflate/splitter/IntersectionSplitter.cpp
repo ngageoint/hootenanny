@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "IntersectionSplitter.h"
@@ -48,17 +48,13 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, IntersectionSplitter)
 
-IntersectionSplitter::IntersectionSplitter() :
-_preserveUnknown1ElementIdWhenModifyingFeatures(
-  ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures())
+IntersectionSplitter::IntersectionSplitter()
 {
 }
 
-IntersectionSplitter::IntersectionSplitter(boost::shared_ptr<OsmMap> map) :
-_preserveUnknown1ElementIdWhenModifyingFeatures(
-  ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures())
+IntersectionSplitter::IntersectionSplitter(boost::shared_ptr<OsmMap> map)
+  : _map(map)
 {
-  _map = map;
 }
 
 void IntersectionSplitter::_mapNodesToWay(boost::shared_ptr<Way> way)
@@ -139,7 +135,6 @@ void IntersectionSplitter::splitIntersections()
 {
   // make a map of nodes to ways.
   _mapNodesToWays();
-  _wayReplacements.clear();
 
   // go through all the nodes
   bool todoLogged = false;
@@ -214,11 +209,6 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
       if (wayId == compWayId)
         continue;
 
-      //  Get the way info to make the comparison
-      if (_wayReplacements.contains(compWayId))
-      {
-        compWayId = _wayReplacements[compWayId];
-      }
       boost::shared_ptr<Way> comp = _map->getWay(compWayId);
       LOG_VART(comp.get());
       const std::vector<long>& compIds = comp->getNodeIds();
@@ -260,18 +250,6 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
         // make sure any ways that are part of relations continue to be part of those relations after
         // they're split.
         _map->replace(way, newWays);
-
-        // see comments for similar functionality in HighwaySnapMerger::_mergePair
-        if (_preserveUnknown1ElementIdWhenModifyingFeatures && way->getStatus() == Status::Unknown1)
-        {
-          LOG_TRACE(
-            "Setting unknown1 " << way->getElementId().getId() << " on " <<
-            splits[0]->getElementId() << "...");
-          ElementPtr newWaySegment(_map->getElement(splits[0]->getElementId())->clone());
-          newWaySegment->setId(way->getElementId().getId());
-          _map->replace(_map->getElement(splits[0]->getElementId()), newWaySegment);
-          _wayReplacements[splits[0]->getElementId().getId()] = way->getElementId().getId();
-        }
 
         _removeWayFromMap(way);
 

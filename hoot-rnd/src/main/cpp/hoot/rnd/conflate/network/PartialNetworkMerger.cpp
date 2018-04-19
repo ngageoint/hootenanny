@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PartialNetworkMerger.h"
 
@@ -90,7 +90,7 @@ void PartialNetworkMerger::apply(const OsmMapPtr& map,
 
 void PartialNetworkMerger::_applyMerger(const OsmMapPtr& map, WayMatchStringMergerPtr merger) const
 {
-  LOG_DEBUG("Applying merger...");
+  LOG_INFO("Applying PartialNetworkMerger...");
 
   // we changed the sublines so we must update the indices.
   merger->updateSublineMapping();
@@ -235,9 +235,9 @@ void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
         reviews.insert(mapping->getStart2().getWay()->getElementId());
       }
 
-      if (mapping->newWay1)
+      if (mapping->getNewWay1())
       {
-        reviews.insert(mapping->newWay1->getElementId());
+        reviews.insert(mapping->getNewWay1()->getElementId());
       }
       else
       {
@@ -245,7 +245,7 @@ void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
       }
     }
 
-    ReviewMarker::mark(map, reviews, e.getWhat(), HighwayMatch::getHighwayMatchName());
+    ReviewMarker().mark(map, reviews, e.getWhat(), HighwayMatch::getHighwayMatchName());
   }
 }
 
@@ -303,7 +303,7 @@ void PartialNetworkMerger::_processStubMatch(const OsmMapPtr& map,
 
 void PartialNetworkMerger::replace(ElementId oldEid, ElementId newEid)
 {
-  LOG_DEBUG("Replacing " << oldEid << " with " << newEid);
+  LOG_TRACE("Replacing " << oldEid << " with " << newEid);
   MergerBase::replace(oldEid, newEid);
   _substitions[oldEid] = newEid;
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef KEEPPOISVISITOR_H
 #define KEEPPOISVISITOR_H
@@ -56,7 +56,11 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
+  virtual QString getDescription() const
+  { return "Removes all elements that are not Nodes with meaningful tags"; }
+
 private:
+
   OsmMap* _map;
 };
 

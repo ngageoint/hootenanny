@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <node id='-40242' action='modify' lat='38.90557509673' lon='-105.09365512968' />
+  <node id='-40243' action='modify' lat='38.90559328059' lon='-105.09294343272' />
+  <node id='-40245' action='modify' lat='38.90560821805' lon='-105.09225104392' />
+  <way id='-40241' action='modify'>
+    <nd ref='-40242' />
+    <nd ref='-40243' />
+    <nd ref='-40245' />
+    <tag k='divider' v='yes' />
+    <tag k='highway' v='primary' />
+  </way>
+</osm>

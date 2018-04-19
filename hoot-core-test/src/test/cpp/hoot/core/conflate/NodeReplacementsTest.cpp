@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -41,6 +41,11 @@ using namespace hoot;
 #include <QDebug>
 #include <QDir>
 
+#include "../TestUtils.h"
+
+namespace hoot
+{
+
 class NodeReplacementsTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(NodeReplacementsTest);
@@ -50,9 +55,13 @@ class NodeReplacementsTest : public CppUnit::TestFixture
 
 public:
 
+  void setUp()
+  {
+    TestUtils::mkpath("test-output/conflate");
+  }
+
   void runIoTest()
   {
-    QDir().mkpath("test-output/conflate");
     NodeReplacements uut;
 
     HashMap<long, long>& m = uut.getReplacements();
@@ -90,3 +99,4 @@ public:
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(NodeReplacementsTest, "quick");
 
+}

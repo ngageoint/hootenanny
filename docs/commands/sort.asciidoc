@@ -1,0 +1,24 @@
+[[sort]]
+== sort
+
+=== Description
+
+The +sort+ command sorts a file first by element type, then by increasing element ID.  The element type sorting order 
+is: 1) nodes, 2) ways, 3) relations.  The supported input formats are: OSM XML, OSM PBF, and GeoNames.  The specified
+output format must match that of the input format.
+
+* +input+  - Input (e.g. .osm file).
+* +output+ - Output file (e.g. .osm file).
+
+=== Usage
+
+--------------------------------------
+sort (input) (output)
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+hoot sort unsorted.osm sorted.osm
+--------------------------------------
+

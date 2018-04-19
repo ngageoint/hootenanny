@@ -37,7 +37,6 @@
 #include <hoot/core/algorithms/SublineStringMatcher.h>
 #include <hoot/core/algorithms/MultiLineStringSplitter.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
-#include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
@@ -75,6 +74,7 @@ HighwaySnapMerger::HighwaySnapMerger(Meters minSplitSize,
 class ShortestFirstComparator
 {
 public:
+
   bool operator()(const pair<ElementId, ElementId>& p1, const pair<ElementId, ElementId>& p2)
   {
     return min(getLength(p1.first), getLength(p1.second)) <
@@ -99,8 +99,12 @@ public:
     return result;
   }
 
+  virtual QString getDescription() const { return ""; }
+
   OsmMapPtr map;
+
 private:
+
   QHash<ElementId, Meters> _lengthMap;
 };
 
@@ -171,7 +175,7 @@ bool HighwaySnapMerger::_doesWayConnect(long node1, long node2, const ConstWayPt
 }
 
 void HighwaySnapMerger::_markNeedsReview(const OsmMapPtr &map, ElementPtr e1, ElementPtr e2,
-  QString note, QString reviewType) const
+  QString note, QString reviewType)
 {
   if (!e1 && !e2)
   {
@@ -187,15 +191,15 @@ void HighwaySnapMerger::_markNeedsReview(const OsmMapPtr &map, ElementPtr e1, El
   }
   else if (e1 && e2)
   {
-    ReviewMarker().mark(map, e1, e2, note, reviewType);
+    _reviewMarker.mark(map, e1, e2, note, reviewType);
   }
   else if (e1)
   {
-    ReviewMarker().mark(map, e1, note, reviewType);
+    _reviewMarker.mark(map, e1, note, reviewType);
   }
   else if (e2)
   {
-    ReviewMarker().mark(map, e2, note, reviewType);
+    _reviewMarker.mark(map, e2, note, reviewType);
   }
 }
 
@@ -278,6 +282,20 @@ void HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   Tags newTags = TagMergerFactory::mergeTags(e1->getTags(), e2->getTags(), ElementType::Way);
   e1Match->setTags(newTags);
   e1Match->setStatus(Status::Conflated);
+
+  if (e1Match->getElementType() == ElementType::Way &&
+      e1->getElementType() == ElementType::Way &&
+      e2->getElementType() == ElementType::Way)
+  {
+    WayPtr w1 = boost::dynamic_pointer_cast<Way>(e1);
+    WayPtr w2 = boost::dynamic_pointer_cast<Way>(e2);
+    WayPtr wMatch = boost::dynamic_pointer_cast<Way>(e1Match);
+    wMatch->setPid(Way::getPid(w1, w2));
+    if (scraps1 && scraps1->getElementType() == ElementType::Way)
+      boost::dynamic_pointer_cast<Way>(scraps1)->setPid(w1->getPid());
+    if (scraps2 && scraps2->getElementType() == ElementType::Way)
+      boost::dynamic_pointer_cast<Way>(scraps2)->setPid(w2->getPid());
+  }
 
   LOG_VART(e1Match->getElementId());
   if (scraps1)
@@ -451,6 +469,8 @@ void HighwaySnapMerger::_snapEnds(const OsmMapPtr& map, ElementPtr snapee,  Elem
       }
       return result;
     }
+
+    virtual QString getDescription() const { return ""; }
 
     virtual void visit(const boost::shared_ptr<Element>& e)
     {

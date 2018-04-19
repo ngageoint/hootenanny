@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="38.89021859999999" minlon="-77.03212480000001" maxlat="38.89476852554999" maxlon="-77.02809999999999"/>
     <node visible="true" id="-96" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920905512699946" lon="-77.0321248000000054">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-96"/>
@@ -240,7 +241,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1"/>
     </node>
-    <way visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1"/>
         <nd ref="-89"/>
         <nd ref="-95"/>
@@ -248,9 +249,11 @@
         <tag k="highway" v="unclassified"/>
         <tag k="hoot:status" v="2"/>
         <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-21"/>
+        <tag k="hoot:id" v="-17"/>
     </way>
-    <way visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-94"/>
+        <nd ref="-76"/>
         <nd ref="-1"/>
         <nd ref="-78"/>
         <nd ref="-79"/>
@@ -260,18 +263,7 @@
         <tag k="highway" v="secondary"/>
         <tag k="hoot:status" v="2"/>
         <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-19"/>
-    </way>
-    <way visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-94"/>
-        <nd ref="-76"/>
-        <nd ref="-1"/>
-        <tag k="alt_name" v="US Hwy 1"/>
-        <tag k="name" v="14th St NW"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-18"/>
+        <tag k="hoot:id" v="-12"/>
     </way>
     <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2"/>

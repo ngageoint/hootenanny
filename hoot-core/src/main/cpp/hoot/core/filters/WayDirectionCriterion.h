@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef WAYDIRECTIONCRITERION_H
@@ -40,6 +40,7 @@ class Way;
 class WayDirectionCriterion : public ElementCriterion
 {
 public:
+
   WayDirectionCriterion(const ConstOsmMapPtr& map,
                         ConstWayPtr baseWay,
                         bool similarDirection = true);
@@ -49,7 +50,10 @@ public:
   ElementCriterionPtr clone()
   { return ElementCriterionPtr(new WayDirectionCriterion(_map, _baseWay, _similarDirection)); }
 
+  virtual QString getDescription() const { return "Identifies which direction a way is pointing"; }
+
 private:
+
   ConstOsmMapPtr _map;
   ConstWayPtr _baseWay;
   bool _similarDirection;

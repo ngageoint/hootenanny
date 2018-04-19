@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "WayMergeManipulation.h"
@@ -139,13 +139,14 @@ void WayMergeManipulation::applyManipulation(OsmMapPtr map,
   // average the two MNSs
   WayPtr w = WayAverager::average(map, mnsRight, mnsLeft);
   w->setStatus(Status::Conflated);
+
+  RemoveWayOp::removeWay(result, _left);
+  RemoveWayOp::removeWay(result, _right);
+
   result->addWay(w);
 
   // insert the new merged way
   newElements.insert(ElementId::way(w->getId()));
-
-  RemoveWayOp::removeWay(result, _left);
-  RemoveWayOp::removeWay(result, _right);
 
   for (set<ElementId>::iterator it = impactedElements.begin(); it != impactedElements.end(); ++it)
   {

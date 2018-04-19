@@ -86,7 +86,11 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1"/>
     </node>
-    <way visible="true" id="-344" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-339" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1"/>
+        <nd ref="-192"/>
+        <nd ref="-2"/>
+        <nd ref="-193"/>
         <nd ref="-194"/>
         <nd ref="-12"/>
         <nd ref="-3"/>
@@ -102,55 +106,11 @@
         <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-344"/>
+        <tag k="hoot:id" v="-339"/>
     </way>
-    <way visible="true" id="-343" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-193"/>
-        <nd ref="-194"/>
-        <tag k="width" v="5"/>
-        <tag k="created_by" v="Merkaartor 0.13"/>
-        <tag k="alt_name" v="SALAM;SALEM"/>
-        <tag k="name" v="Salam"/>
-        <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="residential"/>
-        <tag k="lanes" v="2"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-343"/>
-    </way>
-    <way visible="true" id="-342" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-192"/>
-        <nd ref="-2"/>
-        <nd ref="-193"/>
-        <tag k="width" v="5"/>
-        <tag k="created_by" v="Merkaartor 0.13"/>
-        <tag k="alt_name" v="SALAM;SALEM"/>
-        <tag k="name" v="Salam"/>
-        <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="residential"/>
-        <tag k="lanes" v="2"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-342"/>
-    </way>
-    <way visible="true" id="-341" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1"/>
-        <nd ref="-192"/>
-        <tag k="width" v="5"/>
-        <tag k="created_by" v="Merkaartor 0.13"/>
-        <tag k="alt_name" v="SALAM;SALEM"/>
-        <tag k="name" v="Salam"/>
-        <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="residential"/>
-        <tag k="lanes" v="2"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-341"/>
-    </way>
-    <way visible="true" id="-340" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-337" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-4"/>
+        <nd ref="-10"/>
         <nd ref="-189"/>
         <nd ref="-11"/>
         <tag k="width" v="2.5"/>
@@ -162,24 +122,11 @@
         <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-340"/>
+        <tag k="hoot:id" v="-337"/>
     </way>
-    <way visible="true" id="-339" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-334" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-4"/>
-        <nd ref="-10"/>
-        <nd ref="-189"/>
-        <tag k="width" v="2.5"/>
-        <tag k="created_by" v="Merkaartor 0.13"/>
-        <tag k="name" v="Salam"/>
-        <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="residential"/>
-        <tag k="lanes" v="1"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-339"/>
-    </way>
-    <way visible="true" id="-338" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-184"/>
         <nd ref="-185"/>
         <nd ref="-8"/>
         <nd ref="-9"/>
@@ -191,63 +138,13 @@
         <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-338"/>
+        <tag k="hoot:id" v="-334"/>
     </way>
-    <way visible="true" id="-337" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-184"/>
-        <nd ref="-185"/>
-        <tag k="width" v="5"/>
-        <tag k="created_by" v="Merkaartor 0.12"/>
-        <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="residential"/>
-        <tag k="lanes" v="2"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-337"/>
-    </way>
-    <way visible="true" id="-336" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-4"/>
-        <nd ref="-184"/>
-        <tag k="width" v="5"/>
-        <tag k="created_by" v="Merkaartor 0.12"/>
-        <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="residential"/>
-        <tag k="lanes" v="2"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-336"/>
-    </way>
-    <way visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-7"/>
-        <nd ref="-4"/>
-        <tag k="width" v="2.5"/>
-        <tag k="created_by" v="Merkaartor 0.12"/>
-        <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="residential"/>
-        <tag k="lanes" v="1"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-20"/>
-    </way>
-    <way visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-6"/>
-        <nd ref="-7"/>
-        <tag k="width" v="2.5"/>
-        <tag k="created_by" v="Merkaartor 0.12"/>
-        <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="residential"/>
-        <tag k="lanes" v="1"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-19"/>
-    </way>
-    <way visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-5"/>
         <nd ref="-6"/>
+        <nd ref="-7"/>
+        <nd ref="-4"/>
         <tag k="width" v="2.5"/>
         <tag k="created_by" v="Merkaartor 0.12"/>
         <tag k="all_weather" v="yes"/>
@@ -256,6 +153,6 @@
         <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-17"/>
+        <tag k="hoot:id" v="-2"/>
     </way>
 </osm>

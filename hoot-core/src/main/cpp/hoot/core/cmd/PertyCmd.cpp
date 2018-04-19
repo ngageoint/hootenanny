@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -47,6 +47,8 @@ public:
   PertyCmd() { }
 
   virtual QString getName() const { return "perty"; }
+
+  virtual QString getDescription() const { return "Perturbs map data using PERTY"; }
 
   virtual int runSimple(QStringList args)
   {

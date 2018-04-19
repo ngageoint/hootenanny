@@ -1,0 +1,38 @@
+== tiles-calculate 
+
+=== Description
+
+The +tiles-calculate+ command calculates a collection of bounding boxes that contain roughly equal distributions of node data from 
+the specified input(s) and writes the output to a file.
+
+* +input+               - one or more OSM data inputs; specify multiple inputs by separating them with a semicolon
+* +output+              - output file to write the tile boundaries to; valid formats are GeoJSON (*.geojson)
+* +maxNodeCountPerTile+ - The maximum number of nodes in any tile.  The default is 1000; optional only if pixelSize is not specified
+* +pixelSize+           - The size of the pixel used in the calculation in degrees.  The default is 0.001; optional only if 
+                          maxNodeCountPerTile is not specified
+
+If too low a value is specified for maxNodeCountPerTile or too high a value is specified for pixelSize, the 
+algorithm used may not be able to find a solution.  
+
+This command makes use of the optional 'convert.bounding.box' configuration option to determine a subset of the input data to calculate tiles for.  However, 'convert.bounding.box' is only currently supported for OSM API database or Hootenanny 
+API database data sources.  If any other data source is used with the option, this command will return an error.
+
+=== Usage
+
+--------------------------------------
+hoot tiles-calculate (input(s)) (output) [maxNodeCountPerTile] [pixelSize]
+--------------------------------------
+
+=== Examples
+
+--------------------------------------
+hoot tiles-calculate test-files/MyInputFile.osm MyOutputFile.geojson
+--------------------------------------
+
+--------------------------------------
+hoot tiles-calculate "test-files/MyInputFile1.osm;test-files/MyInputFile2.osm" MyOutputFile.geojson 1000 0.001
+--------------------------------------
+
+--------------------------------------
+hoot tiles-calculate -D convert.bounding.box="34.04,31.17,34.05,31.18" hootapidb://hoot:hoottest@localhost:5432/hoot/MyInputDb MyOutputFile.geojson
+--------------------------------------

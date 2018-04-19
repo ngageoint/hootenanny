@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "WayString.h"
 
@@ -213,6 +213,7 @@ WayPtr WayString::copySimplifiedWayIntoMap(const ElementProvider& map, OsmMapPtr
   ConstWayPtr w = _sublines.front().getWay();
   Meters ce = _aggregateCircularError();
   WayPtr newWay(new Way(w->getStatus(), destination->createNextWayId(), ce));
+  newWay->setPid(w->getPid());
 
   Tags newTags;
 
@@ -221,6 +222,7 @@ WayPtr WayString::copySimplifiedWayIntoMap(const ElementProvider& map, OsmMapPtr
   {
     // first, create a vector that contains all the node IDs in ascending order.
     ConstWayPtr oldWay = subline.getWay();
+    newWay->setPid(Way::getPid(newWay, oldWay));
 
     newTags =
       TagMergerFactory::getInstance().mergeTags(newTags, oldWay->getTags(), ElementType::Way);

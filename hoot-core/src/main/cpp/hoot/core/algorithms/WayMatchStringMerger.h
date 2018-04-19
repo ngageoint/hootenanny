@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef WAYSTRINGMERGER_H
 #define WAYSTRINGMERGER_H
@@ -55,60 +55,57 @@ public:
   {
   public:
 
-    WayPtr newWay1;
-    WaySubline subline2;
-    ConstWayPtr way2;
-
     WayLocation getEnd1() const { return _end; }
-    WayLocation getEnd2() const { return subline2.getEnd(); }
+    WayLocation getEnd2() const { return _subline2.getEnd(); }
+    WayLocation getEnd(WayNumber way) { return (way == WayNumber::Way1) ? getEnd1() : getEnd2(); }
 
+    WayPtr getNewWay1() const { return _newWay1; }
     WayPtr getNewWay2() const { return _newWay2; }
+    WayPtr getNewWay(WayNumber way) { return (way == WayNumber::Way1) ? getNewWay1() : getNewWay2(); }
 
     WayLocation getStart1() const { return _start; }
-    WayLocation getStart2() const { return subline2.getStart(); }
+    WayLocation getStart2() const { return _subline2.getStart(); }
+    WayLocation getStart(WayNumber way) const { return (way == WayNumber::Way1) ? getStart1() : getStart2(); }
     /**
      * This is only valid if start and end are part of the same way which is not guaranteed.
      */
     WaySubline getSubline1() const { return WaySubline(_start, _end); }
 
-    void setEnd1(WayLocation end) { _end = end; }
+    void setWay2(ConstWayPtr way2) { _way2 = way2; }
 
+    void setNewWay1(WayPtr newWay1) { _newWay1 = newWay1; }
     void setNewWay2(WayPtr newWay2) { _newWay2 = newWay2; }
+    void setNewWay(WayNumber way, WayPtr newWay) { (way == WayNumber::Way1) ? setNewWay1(newWay) : setNewWay2(newWay); }
 
     void setStart1(WayLocation start) { _start = start; }
+    void setEnd1(WayLocation end) { _end = end; }
 
-    void setSubline2(const WaySubline& ws) { subline2 = ws; }
+    void setSubline2(const WaySubline& ws) { _subline2 = ws; }
 
     QString toString() const;
 
   private:
-
+    WaySubline _subline2;
+    ConstWayPtr _way2;
     WayLocation _start;
     WayLocation _end;
+    WayPtr _newWay1;
     WayPtr _newWay2;
   };
   typedef boost::shared_ptr<SublineMapping> SublineMappingPtr;
 
-  class SublineMappingLessThan1
+  class SublineMappingLessThan
   {
   public:
+    SublineMappingLessThan(WayNumber way) { _way = way; }
 
-      inline bool operator()(const WayMatchStringMerger::SublineMappingPtr &t1,
-        const WayMatchStringMerger::SublineMappingPtr &t2) const
-      {
-          return std::min(t1->getStart1(), t1->getEnd1()) < std::min(t2->getStart1(), t2->getEnd1());
-      }
-  };
-
-  class SublineMappingLessThan2
-  {
-  public:
-
-      inline bool operator()(const WayMatchStringMerger::SublineMappingPtr &t1,
-        const WayMatchStringMerger::SublineMappingPtr &t2) const
-      {
-        return std::min(t1->getStart2(), t1->getEnd2()) < std::min(t2->getStart2(), t2->getEnd2());
-      }
+    inline bool operator()(const WayMatchStringMerger::SublineMappingPtr &t1,
+      const WayMatchStringMerger::SublineMappingPtr &t2) const
+    {
+        return std::min(t1->getStart(_way), t1->getEnd(_way)) < std::min(t2->getStart(_way), t2->getEnd(_way));
+    }
+  private:
+    WayNumber _way;
   };
 
   WayMatchStringMerger(const OsmMapPtr& map, WayMatchStringMappingPtr mapping,
@@ -159,7 +156,7 @@ public:
    * This must be called if any of the SublineMappingPtr values are changed. (e.g.
    * WayMatchStringSplitter)
    */
-  void updateSublineMapping() { _rebuildWayString1(); _rebuildWayString2(); }
+  void updateSublineMapping() { _rebuildWayString(WayNumber::Way1); _rebuildWayString(WayNumber::Way2); }
 
 private:
 
@@ -181,9 +178,7 @@ private:
 
   void _moveNode(ElementId scrapNodeId, WayLocation wl1);
 
-  /// @todo merge these two together.
-  void _rebuildWayString1();
-  void _rebuildWayString2();
+  void _rebuildWayString(WayNumber way);
 
   /**
    * Using WayLocation::SLOPPY_EPSILON snap locations that are nearly at the end of a way to the

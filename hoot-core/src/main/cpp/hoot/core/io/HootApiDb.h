@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HOOTAPIDB_H
 #define HOOTAPIDB_H
@@ -103,6 +103,13 @@ public:
    * Returns true if the changeset with the specified ID exists in the services database
    */
   bool changesetExists(const long id);
+
+  /**
+   * Returns the number of changesets for the given map in the database;
+   *
+   * @return the number of changesets for the map
+   */
+  long numChangesets();
 
   /**
    * Closes an existing changeset
@@ -266,6 +273,16 @@ public:
   bool hasTable(const QString& tableName);
 
   /**
+   * Drops the specified sequences and cascades. No warning or error will be given
+   * if the sequence does not exist.
+   *
+   * No validation is done on the sequence name. In other words, don't pass in user provided strings.
+   *
+   * @param sequenceName
+   */
+  void dropSequence(const QString& sequenceName);
+
+  /**
    * Returns a map ID string suitable for using in table names. E.g. _1
    */
   inline static QString getMapIdString(long id) { return QString("_%1").arg(id); }
@@ -327,6 +344,9 @@ public:
    */
   static QString removeLayerName(const QString url);
 
+  void setCreateIndexesOnClose(bool create) { _createIndexesOnClose = create; }
+  void setFlushOnClose(bool flush) { _flushOnClose = flush; }
+
 protected:
 
   virtual void _resetQueries();
@@ -354,6 +374,7 @@ private:
   boost::shared_ptr<QSqlQuery> _mapExistsByName;
   boost::shared_ptr<QSqlQuery> _getMapIdByName;
   boost::shared_ptr<QSqlQuery> _insertChangeSet2;
+  boost::shared_ptr<QSqlQuery> _numChangesets;
 
   boost::shared_ptr<BulkInsert> _nodeBulkInsert;
   long _nodesPerBulkInsert;
@@ -400,6 +421,9 @@ private:
    * be executed.
    */
   QVector<QString> _postTransactionStatements;
+
+  bool _createIndexesOnClose;
+  bool _flushOnClose;
 
   /**
    * This is here to improve query caching. In most cases users open a single ServiceDb and then

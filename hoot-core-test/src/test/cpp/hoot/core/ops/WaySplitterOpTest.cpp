@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // geos
@@ -82,7 +82,7 @@ public:
     myOp.setMaxLength(20);
     myOp.apply(map);
 
-    QDir().mkpath(outputPath);
+    TestUtils::mkpath(outputPath);
     OsmXmlWriter writer;
     writer.write(map, outputPath + outputFile);
     HOOT_FILE_EQUALS(inputPath+outputFile,

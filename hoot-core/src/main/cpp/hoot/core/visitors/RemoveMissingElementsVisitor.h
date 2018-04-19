@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVEMISSINGELEMENTSVISITOR_H
 #define REMOVEMISSINGELEMENTSVISITOR_H
@@ -52,7 +52,11 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
+  virtual QString getDescription() const
+  { return "Removes references to any elements that do not exist in a map"; }
+
 private:
+
   boost::shared_ptr<ReportMissingElementsVisitor> _v;
 };
 

@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<osm version='0.6' generator='JOSM'>
-  <node id='-32306' action='modify' lat='39.74925222519' lon='-105.01213074803'>
-    <tag k='name' v='Elitch Gardens' />
-    <tag k='tourism' v='theme_park' />
-  </node>
-</osm>

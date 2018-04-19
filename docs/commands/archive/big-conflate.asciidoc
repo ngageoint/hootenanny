@@ -1,0 +1,31 @@
+== big-conflate
+
+NOTE: This documents Hootenanny conflation using Hadoop, which is no longer supported (supported up to v0.2.38), and has been 
+left here for references purposes only.
+
+=== Description
+
+The +big-conflate+ command reads the nodes from inputs, conflates and writes the
+result to output.pbf.
+
+* +input1.pbf+ - Input 1.pbf dir -- must reside on HDFS.
+* +input2.pbf+ - Input 2.pbf dir -- must reside on HDFS.
+* +output.pbf+ - Output.pbf dir -- must reside on HDFS.
+* +pixelSize+ - Optional pixel size in degrees (0.1 is reasonable for global
+  data)
+* +maxNodeCount+ - Optional max node count.
+* +--local+ - Runs the job locally rather than using Hadoop.
+
+=== Usage
+
+--------------------------------------
+big-conflate (input1.pbf) (input2.pbf) (output.pbf) [pixelSize] [maxNodeCount]
+[--local]
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+hoot big-conflate myinput1-dir.osm.pbf myinput2-dir.osm.pbf myoutput-dir.osm.pbf
+--------------------------------------
+

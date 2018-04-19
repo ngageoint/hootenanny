@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -33,11 +33,6 @@
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-using namespace hoot;
-
-
-// Boost
-using namespace boost;
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -49,6 +44,11 @@ using namespace boost;
 #include <QDebug>
 #include <QDir>
 
+#include "../TestUtils.h"
+
+namespace hoot
+{
+
 class ConflatorTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ConflatorTest);
@@ -59,10 +59,13 @@ class ConflatorTest : public CppUnit::TestFixture
 
 public:
 
+  void setUp()
+  {
+    TestUtils::mkpath("test-output");
+  }
+
   void runPbfTest()
   {
-    QDir().mkpath("test-output");
-
     OsmPbfReader reader(true);
 
     OsmMapPtr map(new OsmMap());
@@ -76,17 +79,15 @@ public:
     OsmMapPtr out(new OsmMap(uut.getBestMap()));
     MapProjector::projectToWgs84(out);
 
-    CPPUNIT_ASSERT_EQUAL((size_t)15, out->getWays().size());
-
     OsmXmlWriter writer;
     writer.setIncludeIds(true);
     writer.write(out, "test-output/ConflatorPbfTest.osm");
+
+    CPPUNIT_ASSERT_EQUAL((size_t)15, out->getWays().size());
   }
 
   void runTest()
   {
-    QDir().mkpath("test-output");
-
     OsmXmlReader reader;
 
     OsmMapPtr map(new OsmMap());
@@ -102,19 +103,17 @@ public:
     OsmMapPtr out(new OsmMap(uut.getBestMap()));
     MapProjector::projectToWgs84(out);
 
-    CPPUNIT_ASSERT_EQUAL((size_t)9, out->getWays().size());
-
     OsmXmlWriter writer;
     writer.setIncludeIds(true);
     writer.write(out, "test-output/ConflatorTest.osm");
+
+    CPPUNIT_ASSERT_EQUAL((size_t)9, out->getWays().size());
   }
 
   //This test shows the fix for ticket #249.
   //Now the river/building never get merged together.
   void runMergeTest()
   {
-    QDir().mkpath("test-output");
-
     OsmXmlReader reader;
 
     OsmMapPtr map(new OsmMap());
@@ -130,15 +129,16 @@ public:
     OsmMapPtr out(new OsmMap(uut.getBestMap()));
     MapProjector::projectToWgs84(out);
 
-    CPPUNIT_ASSERT_EQUAL((size_t)2, out->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL((size_t)0, out->getRelations().size());
-
     OsmXmlWriter writer;
     writer.setIncludeIds(true);
     writer.write(out, "test-output/RiverBuildingConflatorTest.osm");
+
+    CPPUNIT_ASSERT_EQUAL((size_t)2, out->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)0, out->getRelations().size());
   }
 };
 
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ConflatorTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ConflatorTest, "quick");
 
+}

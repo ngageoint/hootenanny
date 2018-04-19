@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef SUPERFLUOUSWAYREMOVER_H
@@ -66,6 +66,9 @@ public:
   static void removeWays(boost::shared_ptr<OsmMap> map);
 
   void removeWays();
+
+  virtual QString getDescription() const
+  { return "Removes ways not in relations, contain zero nodes, or all nodes are identical"; }
 
 protected:
 

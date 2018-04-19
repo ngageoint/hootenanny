@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 // Hoot
 #include "../TestUtils.h"
@@ -56,7 +56,7 @@ public:
 
   void runBasicPoiTest()
   {
-    QDir().mkpath(outDir());
+    TestUtils::mkpath(outDir());
 
     QStringList inputs;
     inputs.append(inDir() + "/yemen-crop-2.osm.pbf");
@@ -79,7 +79,7 @@ public:
 
   void runMultipleInputsPoiTest()
   {
-    QDir().mkpath(outDir());
+    TestUtils::mkpath(outDir());
 
     QStringList inputs;
     inputs.append(inDir() + "/yemen-crop-2.osm.pbf");
@@ -108,7 +108,7 @@ public:
   void runDuplicateWordKeyCountPoiTest()
   {
     DisableLog dl;
-    QDir().mkpath(outDir());
+    TestUtils::mkpath(outDir());
 
     boost::shared_ptr<QTemporaryFile> sortedCountFile(
       new QTemporaryFile(
@@ -117,6 +117,7 @@ public:
     sortedCountFile->setAutoRemove(false);
     if (!sortedCountFile->open())
     {
+      // Note: QTemporaryFile returns empty string for ->fileName() if it can't be opened
       throw HootException(
         QObject::tr("Error opening %1 for writing.").arg(sortedCountFile->fileName()));
     }
@@ -154,7 +155,7 @@ public:
     //Case is actually already handled correctly in runBasicTest, but this smaller input dataset
     //will make debugging case problems easier, if needed.
 
-    QDir().mkpath(outDir());
+    TestUtils::mkpath(outDir());
 
     QStringList inputs;
     inputs.append(inDir() + "/ImplicitTagRawRulesDeriverTest-runNameCaseTest.osm");
@@ -179,7 +180,7 @@ public:
 
   void runTranslateNamesFalsePoiTest()
   {
-    QDir().mkpath(outDir());
+    TestUtils::mkpath(outDir());
 
     QStringList inputs;
     inputs.append(inDir() + "/yemen-crop-2.osm.pbf");
@@ -203,7 +204,7 @@ public:
 
   void runBadInputsTest()
   {
-    QDir().mkpath(outDir());
+    TestUtils::mkpath(outDir());
 
     QString exceptionMsg("");
     QStringList inputs;

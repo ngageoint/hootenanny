@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef MINIDVISITOR_H
@@ -55,6 +55,9 @@ public:
   double getStat() const { return _minId; }
 
   virtual void visit(const ConstElementPtr& e);
+
+  virtual QString getDescription() const
+  { return "Returns the smallest element ID value found"; }
 
 private:
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef UNIFYINGCONFLATOR_H
 #define UNIFYINGCONFLATOR_H
@@ -68,6 +68,7 @@ class UnifyingConflator : public OsmMapOperation, public Serializable, public Bo
     public Configurable
 {
 public:
+
   static std::string className() { return "hoot::UnifyingConflator"; }
 
   UnifyingConflator();
@@ -98,6 +99,9 @@ public:
   void setMergerFactory(boost::shared_ptr<MergerFactory> mf) { _mergerFactory = mf; }
 
   virtual void writeObject(QDataStream& /*os*/) const {}
+
+  virtual QString getDescription() const
+  { return "Conflates two inputs maps into one with Unifying Conflation"; }
 
 private:
 

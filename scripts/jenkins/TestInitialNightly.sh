@@ -6,10 +6,9 @@ set -e
 
 cd $HOOT_HOME
 
-hoot --version --debug
+hoot version --debug
 
 # Run the tests that don't get hit by coverage
-make -sj`nproc` pp-test
 make -sj`nproc` plugins-test
 
 export HOOT_TEST_DIFF=--diff

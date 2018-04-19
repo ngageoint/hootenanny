@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // GEOS
@@ -42,11 +42,15 @@ using namespace std;
 class CookieCutterCmd : public BaseCommand
 {
 public:
+
   static string className() { return "hoot::CookieCutterCmd"; }
 
   CookieCutterCmd() {}
 
-  virtual QString getName() const { return "cookie-cutter"; }
+  virtual QString getName() const { return "cookie-cut"; }
+
+  virtual QString getDescription() const
+  { return "Removes a 'cutter' shape from the contents of a 'dough' input"; }
 
   int runSimple(QStringList args)
   {

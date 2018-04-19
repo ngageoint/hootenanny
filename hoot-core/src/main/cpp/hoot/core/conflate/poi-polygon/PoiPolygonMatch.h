@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POIPOLYGONMATCH_H
 #define POIPOLYGONMATCH_H
@@ -35,6 +35,7 @@
 #include <hoot/core/conflate/MatchDetails.h>
 #include <hoot/core/conflate/MatchClassification.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 #include "PoiPolygonRfClassifier.h"
 
@@ -58,7 +59,6 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
   void calculateMatch(const ElementId& eid1, const ElementId& eid2);
-  void calculateMatchWeka(const ElementId& eid1, const ElementId& eid2);
 
   virtual const MatchClassification& getClassification() const { return _class; }
 
@@ -80,33 +80,6 @@ public:
   virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& m) const;
 
   /**
-   * Determines criteria for a feature to be considered a polygon for matching by
-   * PoiPolygonMatch
-   *
-   * @param element to be evaluated
-   * @return true if the element meets the criteria; false otherwise
-   */
-  static bool isPoly(const Element& e);
-
-  /**
-   * @Determines criteria for a feature to be considered a POI for matching by
-   * PoiPolygonMatch
-   *
-   * @param element to be evaluated
-   * @return true if the element meets the criteria; false otherwise
-   */
-  static bool isPoi(const Element& e);
-
-  /**
-   * Determines criteria for a feature to be considered an area by
-   * PoiPolygonMatch
-   *
-   * @param element to be evaluated
-   * @return true if the element meets the criteria; false otherwise
-   */
-  static bool isArea(const Element& e);
-
-  /**
    * Pass through to the same method in PoiPolygonDistanceTruthRecorder
    */
   static void printMatchDistanceInfo();
@@ -115,6 +88,8 @@ public:
    * Pass through to the same method in PoiPolygonDistanceTruthRecorder
    */
   static void resetMatchDistanceInfo();
+
+  virtual QString explain() const { return _explainText; }
 
   void setMatchDistanceThreshold(const double distance);
   void setReviewDistanceThreshold(const double distance);
@@ -125,6 +100,12 @@ public:
   void setEnableReviewReduction(const bool enabled) { _enableReviewReduction = enabled; }
   void setMatchEvidenceThreshold(const int threshold) { _matchEvidenceThreshold = threshold; }
   void setReviewEvidenceThreshold(const int threshold) { _reviewEvidenceThreshold = threshold; }
+  void setDisableSameSourceConflation(const bool disabled)
+  { _disableSameSourceConflation = disabled; }
+  void setDisableSameSourceConflationMatchTagKeyPrefixOnly(const bool disabled)
+  { _disableSameSourceConflationMatchTagKeyPrefixOnly = disabled; }
+  void setSourceTagKey(const QString key) { _sourceTagKey = key; }
+  void setReviewMultiUseBuildings(const bool review) { _reviewMultiUseBuildings = review; }
 
 private:
 
@@ -154,7 +135,7 @@ private:
   double _reviewDistanceThreshold;
   //true if the distance between the elements, given CE, is within the review distance; absolute
   //requirement for matching
-  bool _closeMatch;
+  bool _closeDistanceMatch;
 
   double _typeScore;
   double _typeScoreThreshold;
@@ -174,9 +155,19 @@ private:
   bool _enableAdvancedMatching;
   bool _enableReviewReduction;
 
+  bool _disableSameSourceConflation;
+  bool _disableSameSourceConflationMatchTagKeyPrefixOnly;
+  QString _sourceTagKey;
+
+  bool _reviewMultiUseBuildings;
+
   boost::shared_ptr<const PoiPolygonRfClassifier> _rf;
 
+  QString _explainText;
+
   void _categorizeElementsByGeometryType(const ElementId& eid1, const ElementId& eid2);
+
+  bool _inputFeaturesHaveSameSource(const ElementId& eid1, const ElementId& eid2) const;
 
   unsigned int _calculateEvidence(ConstElementPtr poi, ConstElementPtr poly);
   unsigned int _getDistanceEvidence(ConstElementPtr poi, ConstElementPtr poly);

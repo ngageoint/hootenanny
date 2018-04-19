@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RefRemoveOp.h"
 
@@ -57,7 +57,10 @@ public:
     }
   }
 
+  virtual QString getDescription() const { return ""; }
+
 private:
+
   ElementCriterionPtr _criterion;
   set<QString> _refs;
 };
@@ -77,7 +80,10 @@ public:
     }
   }
 
+  virtual QString getDescription() const { return "Randomly removes elements from a map"; }
+
 private:
+
   ElementCriterionPtr _criterion;
 };
 
@@ -101,6 +107,8 @@ public:
     return result;
   }
 
+  virtual QString getDescription() const { return ""; }
+
   virtual void visit(const boost::shared_ptr<Element>& e)
   {
     if (e->getTags().contains(MetadataTags::Ref2()))
@@ -122,6 +130,7 @@ public:
   }
 
 private:
+
   const set<QString>& _refs;
 };
 
@@ -143,7 +152,6 @@ void RefRemoveOp::apply(boost::shared_ptr<OsmMap> &map)
   // you remove all buildings, but there are some POIs remaining that were matched to the buildings.
   UpdateRefVisitor urv(grv.getRefs());
   map->visitRw(urv);
-
 }
 
 }

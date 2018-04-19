@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "WayMatchStringSplitter.h"
 
@@ -42,9 +42,9 @@ QString WayMatchStringSplitter::_overlyAggressiveMergeReviewText =
   "Please review the length of the review for overly aggressive merges and manually merge features "
   "using input data/imagery. There may also be one or more zero length ways at intersections.";
 
-WayMatchStringSplitter::WayMatchStringSplitter() :
-_preserveUnknown1ElementIdWhenModifyingFeatures(
-  ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures())
+WayMatchStringSplitter::WayMatchStringSplitter()
+  : _preserveUnknown1ElementIdWhenModifyingFeatures(
+      ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures())
 {
 }
 
@@ -53,63 +53,47 @@ void WayMatchStringSplitter::applySplits(OsmMapPtr map,
   QList<WayMatchStringMerger::SublineMappingPtr> mappings) throw (NeedsReviewException)
 {
   LOG_TRACE("Applying way splits...");
-  _splitWay1(map, replaced, mappings);
-  _splitWay2(map, replaced, mappings);
+  _splitWay(WayNumber::Way1, map, replaced, mappings);
+  _splitWay(WayNumber::Way2, map, replaced, mappings);
 }
 
-QMultiMap<WayPtr, WayMatchStringMerger::SublineMappingPtr> WayMatchStringSplitter::_buildWayIndex1(
-  OsmMapPtr map,
-  QList<WayMatchStringMerger::SublineMappingPtr> mappings) const
+QMultiMap<WayPtr, WayMatchStringMerger::SublineMappingPtr> WayMatchStringSplitter::_buildWayIndex(
+  WayNumber wn, OsmMapPtr map, QList<WayMatchStringMerger::SublineMappingPtr> mappings) const
 {
   QMultiMap<WayPtr, WayMatchStringMerger::SublineMappingPtr> result;
 
   foreach (WayMatchStringMerger::SublineMappingPtr sm, mappings)
-  {
-    result.insert(map->getWay(sm->getStart1().getWay()->getElementId()), sm);
-  }
+    result.insert(map->getWay(sm->getStart(wn).getWay()->getElementId()), sm);
 
   return result;
 }
 
-QMultiMap<WayPtr, WayMatchStringMerger::SublineMappingPtr> WayMatchStringSplitter::_buildWayIndex2(
-  OsmMapPtr map, QList<WayMatchStringMerger::SublineMappingPtr> mappings) const
-{
-  QMultiMap<WayPtr, WayMatchStringMerger::SublineMappingPtr> result;
-
-  foreach (WayMatchStringMerger::SublineMappingPtr sm, mappings)
-  {
-    result.insert(map->getWay(sm->getStart2().getWay()->getElementId()), sm);
-  }
-
-  return result;
-}
-
-void WayMatchStringSplitter::_splitWay1(OsmMapPtr map, vector<pair<ElementId, ElementId> > &replaced,
+void WayMatchStringSplitter::_splitWay(WayNumber wn, OsmMapPtr map, vector<pair<ElementId, ElementId> > &replaced,
                                         QList<WayMatchStringMerger::SublineMappingPtr> mappings)
 {
-  LOG_TRACE("Splitting way 1...");
+  LOG_TRACE(QString("Splitting way %1...").arg((int)wn));
 
   ElementConverter ec(map);
 
   QMultiMap<WayPtr, WayMatchStringMerger::SublineMappingPtr> wayMapping =
-    _buildWayIndex1(map, mappings);
+    _buildWayIndex(wn, map, mappings);
 
   // split each way in the subline mapping.
-  foreach (WayPtr w1, wayMapping.uniqueKeys())
+  foreach (WayPtr way, wayMapping.uniqueKeys())
   {
-    LOG_VART(w1->getElementId());
-    LOG_VART(w1->getStatus());
+    LOG_VART(way->getElementId());
+    LOG_VART(way->getStatus());
 
-    QList<WayMatchStringMerger::SublineMappingPtr> sm = wayMapping.values(w1);
-    qStableSort(sm.begin(), sm.end(), WayMatchStringMerger::SublineMappingLessThan1());
+    QList<WayMatchStringMerger::SublineMappingPtr> sm = wayMapping.values(way);
+    qStableSort(sm.begin(), sm.end(), WayMatchStringMerger::SublineMappingLessThan(wn));
 
     // if there is only one entry in sm and it spans the whole way, don't split anything.
-    if (sm.size() == 1 && sm[0]->getStart1().isExtreme(WayLocation::SLOPPY_EPSILON) &&
-      sm[0]->getEnd1().isExtreme(WayLocation::SLOPPY_EPSILON))
+    if (sm.size() == 1 && sm[0]->getStart(wn).isExtreme(WayLocation::SLOPPY_EPSILON) &&
+      sm[0]->getEnd(wn).isExtreme(WayLocation::SLOPPY_EPSILON))
     {
       LOG_TRACE(
-        "Skipping splitting way 1 due to single entry in subline spanning the entire way...");
-      sm[0]->newWay1 = w1;
+        QString("Skipping splitting way %1 due to single entry in subline spanning the entire way...").arg((int)wn));
+      sm[0]->setNewWay(wn, way);
       continue;
     }
 
@@ -119,8 +103,8 @@ void WayMatchStringSplitter::_splitWay1(OsmMapPtr map, vector<pair<ElementId, El
     for (int i = 0; i < sm.size(); ++i)
     {
       // make sure the split points are sorted.
-      wls.push_back(std::min(sm.at(i)->getStart1(), sm.at(i)->getEnd1()));
-      wls.push_back(std::max(sm.at(i)->getStart1(), sm.at(i)->getEnd1()));
+      wls.push_back(std::min(sm.at(i)->getStart(wn), sm.at(i)->getEnd(wn)));
+      wls.push_back(std::max(sm.at(i)->getStart(wn), sm.at(i)->getEnd(wn)));
     }
 
     // This can happen if there is an unmatched section in a way
@@ -129,126 +113,15 @@ void WayMatchStringSplitter::_splitWay1(OsmMapPtr map, vector<pair<ElementId, El
     {
       assert(wls[i] <= wls[i + 1]);
       if (i % 2 == 1 && wls[i] != wls[i + 1])
-      {
         discontiguous = true;
-      }
     }
 
-    LOG_VART(wls);
-    vector<WayPtr> splits = WaySplitter(map, w1).createSplits(wls);
-
-    assert((int)splits.size() == sm.size() * 2 + 1);
-
-    QList<ElementPtr> newWays;
-
-    int c = 0;
-    WayPtr w = splits[c++];
-    // if this isn't empty
-    if (w && ec.calculateLength(w) > 0.0)
-    {
-      newWays.append(w);
-      replaced.push_back(pair<ElementId, ElementId>(w1->getElementId(), w->getElementId()));
-    }
-
-    for (int i = 0; i < sm.size(); ++i)
-    {
-      WayPtr w;
-      w = splits[c++];
-      if (!w)
-      {
-        throw NeedsReviewException(_overlyAggressiveMergeReviewText);
-      }
-      sm.at(i)->newWay1 = w;
-      replaced.push_back(pair<ElementId, ElementId>(w1->getElementId(), w->getElementId()));
-      newWays.append(w);
-
-      w = splits[c++];
-      // if this isn't empty
-      if (w && ec.calculateLength(w) > 0.0)
-      {
-        // only the last split should be non-empty
-        if (i != sm.size() - 1 && discontiguous == false)
-        {
-          throw InternalErrorException("Only the last split should be empty.");
-        }
-        newWays.append(w);
-        replaced.push_back(pair<ElementId, ElementId>(w1->getElementId(), w->getElementId()));
-      }
-    }
-
-    // see comments for similar functionality in HighwaySnapMerger::_mergePair
-    if (w1->getStatus() == Status::Unknown1 && _preserveUnknown1ElementIdWhenModifyingFeatures)
-    {
-      LOG_TRACE(
-        "Retaining reference ID by mapping unknown1 ID: " << w1->getElementId() << " to ID: " <<
-        newWays[0]->getElementId() << "...");
-      _unknown1Replacements.insert(
-        pair<ElementId, ElementId>(w1->getElementId(), newWays[0]->getElementId()));
-    }
-
-    LOG_TRACE("Replacing: " << w1->getElementId() << " with: " << newWays);
-    map->replace(w1, newWays);
-  }
-}
-
-
-void WayMatchStringSplitter::_splitWay2(OsmMapPtr map, vector<pair<ElementId, ElementId> > &replaced,
-                                        QList<WayMatchStringMerger::SublineMappingPtr> mappings)
-{
-  LOG_TRACE("Splitting way 2...");
-
-  ElementConverter ec(map);
-
-  QMultiMap<WayPtr, WayMatchStringMerger::SublineMappingPtr> wayMapping =
-    _buildWayIndex2(map, mappings);
-
-  // split each way in the subline mapping.
-  foreach (WayPtr w2, wayMapping.uniqueKeys())
-  {
-    LOG_VART(w2->getElementId());
-    LOG_VART(w2->getStatus());
-
-    QList<WayMatchStringMerger::SublineMappingPtr> sm = wayMapping.values(w2);
-    qStableSort(sm.begin(), sm.end(), WayMatchStringMerger::SublineMappingLessThan2());
-
-    // if there is only one entry in sm and it spans the whole way, don't split anything.
-    if (sm.size() == 1 && sm[0]->getStart2().isExtreme(WayLocation::SLOPPY_EPSILON) &&
-      sm[0]->getEnd2().isExtreme(WayLocation::SLOPPY_EPSILON))
-    {
-      LOG_TRACE(
-        "Skipping splitting way 2 due to single entry in subline spanning the entire way...");
-      sm[0]->setNewWay2(w2);
-      continue;
-    }
-
-    vector<WayLocation> wls;
-
-    // push them all on. This will inevitably create some empty ways, but it is predictable.
-    for (int i = 0; i < sm.size(); ++i)
-    {
-      // make sure the split points are sorted.
-      wls.push_back(std::min(sm.at(i)->getStart2(), sm.at(i)->getEnd2()));
-      wls.push_back(std::max(sm.at(i)->getStart2(), sm.at(i)->getEnd2()));
-    }
-
-    // This can happen if there is an unmatched section in a way
-    bool discontiguous = false;
-    for (size_t i = 0; i < wls.size() - 1; ++i)
-    {
-      assert(wls[i] <= wls[i + 1]);
-      if (i % 2 == 1 && wls[i] != wls[i + 1])
-      {
-        discontiguous = true;
-      }
-    }
-
-    vector<WayPtr> splits = WaySplitter(map, w2).createSplits(wls);
+    vector<WayPtr> splits = WaySplitter(map, way).createSplits(wls);
 
     assert((int)splits.size() == sm.size() * 2 + 1);
 
     LOG_VART(wls);
     LOG_VART(splits);
-
     QList<ElementPtr> newWays;
 
     int c = 0;
@@ -257,7 +130,7 @@ void WayMatchStringSplitter::_splitWay2(OsmMapPtr map, vector<pair<ElementId, El
     if (w && ec.calculateLength(w) > 0.0)
     {
       newWays.append(w);
-      replaced.push_back(pair<ElementId, ElementId>(w2->getElementId(), w->getElementId()));
+      replaced.push_back(pair<ElementId, ElementId>(way->getElementId(), w->getElementId()));
     }
 
     for (int i = 0; i < sm.size(); ++i)
@@ -265,41 +138,37 @@ void WayMatchStringSplitter::_splitWay2(OsmMapPtr map, vector<pair<ElementId, El
       WayPtr w;
       w = splits[c++];
       if (!w)
-      {
         throw NeedsReviewException(_overlyAggressiveMergeReviewText);
-      }
-      sm.at(i)->setNewWay2(w);
-      replaced.push_back(pair<ElementId, ElementId>(w2->getElementId(), w->getElementId()));
+
+      sm.at(i)->setNewWay(wn, w);
+      replaced.push_back(pair<ElementId, ElementId>(way->getElementId(), w->getElementId()));
       newWays.append(w);
 
       w = splits[c++];
-      LOG_VART(c);
-      LOG_VART(w);
       // if this isn't empty
       if (w && ec.calculateLength(w) > 0.0)
       {
         // only the last split should be non-empty
         if (i != sm.size() - 1 && discontiguous == false)
-        {
           throw InternalErrorException("Only the last split should be empty.");
-        }
+
         newWays.append(w);
-        replaced.push_back(pair<ElementId, ElementId>(w2->getElementId(), w->getElementId()));
+        replaced.push_back(pair<ElementId, ElementId>(way->getElementId(), w->getElementId()));
       }
     }
 
     // see comments for similar functionality in HighwaySnapMerger::_mergePair
-    if (w2->getStatus() == Status::Unknown1 && _preserveUnknown1ElementIdWhenModifyingFeatures)
+    if (way->getStatus() == Status::Unknown1 && _preserveUnknown1ElementIdWhenModifyingFeatures)
     {
       LOG_TRACE(
-        "Retaining reference ID by mapping unknown1 ID: " << w2->getElementId() << " to ID: " <<
+        "Retaining reference ID by mapping unknown1 ID: " << way->getElementId() << " to ID: " <<
         newWays[0]->getElementId() << "...");
       _unknown1Replacements.insert(
-        pair<ElementId, ElementId>(w2->getElementId(), newWays[0]->getElementId()));
+        pair<ElementId, ElementId>(way->getElementId(), newWays[0]->getElementId()));
     }
 
-    LOG_TRACE("Replacing: " << w2->getElementId() << " with: " << newWays);
-    map->replace(w2, newWays);
+    LOG_TRACE("Replacing: " << way->getElementId() << " with: " << newWays);
+    map->replace(way, newWays);
   }
 }
 

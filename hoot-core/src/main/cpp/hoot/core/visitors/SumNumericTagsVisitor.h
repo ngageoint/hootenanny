@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SUMNUMERICTAGSVISITOR_H
 #define SUMNUMERICTAGSVISITOR_H
@@ -40,32 +40,33 @@ namespace hoot
  */
 class SumNumericTagsVisitor : public ConstElementVisitor, public SingleStatistic
 {
-  public:
+public:
 
-    static std::string className() { return "hoot::SumNumericTagsVisitor"; }
+  static std::string className() { return "hoot::SumNumericTagsVisitor"; }
 
-    static unsigned int logWarnCount;
+  static unsigned int logWarnCount;
 
-    SumNumericTagsVisitor();
-    SumNumericTagsVisitor(const QString key);
+  SumNumericTagsVisitor();
+  SumNumericTagsVisitor(const QString key);
 
-    virtual ~SumNumericTagsVisitor() {}
+  virtual ~SumNumericTagsVisitor() {}
 
-    /**
-     * Given a tag key and for all features having the tag, sums the values of those tags.  If
-     * the tag value cannot be converted to a number, a warning is logged and the tag is skipped.
-     *
-     * @param e element to check for tag on
-     */
-    virtual void visit(const ConstElementPtr& e);
+  /**
+   * Given a tag key and for all features having the tag, sums the values of those tags.  If
+   * the tag value cannot be converted to a number, a warning is logged and the tag is skipped.
+   *
+   * @param e element to check for tag on
+   */
+  virtual void visit(const ConstElementPtr& e);
 
-    virtual double getStat() const { return _sum; }
+  virtual double getStat() const { return _sum; }
 
-  private:
+  virtual QString getDescription() const { return "Sums numeric tag values with a specified key"; }
 
-    QString _key;
-    long _sum;
+private:
 
+  QString _key;
+  long _sum;
 };
 
 }

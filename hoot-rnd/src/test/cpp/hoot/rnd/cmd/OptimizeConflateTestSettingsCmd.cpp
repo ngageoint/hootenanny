@@ -46,7 +46,10 @@ public:
 
   OptimizeConflateTestSettingsCmd() { }
 
-  virtual QString getName() const { return "optimize-conflate-settings"; }
+  virtual QString getName() const { return "optimize-network-conf"; }
+
+  virtual QString getDescription() const
+  { return "Determines optimal network conflation settings"; }
 
   virtual int runSimple(QStringList args)
   {

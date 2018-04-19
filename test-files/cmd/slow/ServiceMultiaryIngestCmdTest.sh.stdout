@@ -4,13 +4,13 @@ MULTIARY INGEST - DELETING REFERENCE LAYER...
 
 MULTIARY INGEST - INGESTING GEONAMES REFERENCE DATASET...
 
-19:28:37.863 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-19:28:37.864 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
+11:11:07.288 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
+11:11:07.288 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
 
 MULTIARY INGEST - INGESTING GEONAMES NEW DATASET...
 
-19:28:38.856 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-19:28:38.857 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
+11:11:07.971 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
+11:11:07.971 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
 
 MULTIARY INGEST - EXPORTING GEONAMES REFERENCE LAYER...
 
@@ -29,14 +29,14 @@ MULTIARY INGEST - DELETING REFERENCE LAYER...
 
 MULTIARY INGEST - INGESTING OSM PBF REFERENCE DATASET...
 
-19:28:41.460 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-19:28:41.460 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
+11:11:09.515 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
+11:11:09.515 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
 
 MULTIARY INGEST - INGESTING OSM PBF NEW DATASET...
 
-19:28:42.033 WARN  ...hoot/core/io/OsmFileSorter.cpp(  63) OSM PBF input file: test-files/cmd/slow/ServiceMultiaryIngestCmdTest/allCountries-8-15-17-10.osm.pbf is marked as sorted by node ID, as indicated by its header, yet Hootenanny was instructed to sort the file.
-19:28:46.118 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-19:28:46.119 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
+11:11:09.817 WARN  ...hoot/core/io/OsmFileSorter.cpp(  63) OSM PBF input file: test-files/cmd/slow/ServiceMultiaryIngestCmdTest/allCountries-8-15-17-10.osm.pbf is marked as sorted by node ID, as indicated by its header, yet Hootenanny was instructed to sort the file.
+11:11:10.980 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
+11:11:10.980 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
 
 MULTIARY INGEST - EXPORTING OSM PBF REFERENCE LAYER...
 
@@ -55,13 +55,13 @@ MULTIARY INGEST - DELETING REFERENCE LAYER...
 
 MULTIARY INGEST - INGESTING OSM XML REFERENCE DATASET...
 
-19:28:49.012 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-19:28:49.012 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
+11:11:12.636 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
+11:11:12.637 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
 
 MULTIARY INGEST - INGESTING OSM XML NEW DATASET...
 
-19:28:54.707 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-19:28:54.707 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
+11:11:14.154 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
+11:11:14.154 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
 
 MULTIARY INGEST - EXPORTING OSM XML REFERENCE LAYER...
 
@@ -80,15 +80,15 @@ MULTIARY INGEST - DELETING REFERENCE LAYER...
 
 MULTIARY INGEST - INGESTING SHP REFERENCE DATASET...
 
-19:28:57.236 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-19:28:57.237 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
+11:11:15.761 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
+11:11:15.761 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
 
 MULTIARY INGEST - INGESTING SHP NEW DATASET...
 
-19:28:58.060 WARN  ...hoot/core/io/OsmFileSorter.cpp(  88) OGR inputs must be converted to the OSM format before sorting by node ID.
-19:28:58.061 WARN  ...hoot/core/io/OsmFileSorter.cpp(  89) Converting input to OSM format...
-19:29:02.094 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
-19:29:02.094 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
+11:11:16.102 WARN  ...hoot/core/io/OsmFileSorter.cpp(  88) OGR inputs must be converted to the OSM format before sorting by node ID.
+11:11:16.102 WARN  ...hoot/core/io/OsmFileSorter.cpp(  89) Converting input to OSM format...
+11:11:17.299 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
+11:11:17.299 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
 
 MULTIARY INGEST - EXPORTING SHP REFERENCE LAYER...
 
@@ -100,4 +100,7 @@ MULTIARY INGEST - COMPARING SHP ADD CHANGESET OUTPUT...
 
 
 MULTIARY INGEST - COMPARING SHP DELETE CHANGESET OUTPUT...
+
+
+MULTIARY INGEST - DELETING REFERENCE LAYER...
 

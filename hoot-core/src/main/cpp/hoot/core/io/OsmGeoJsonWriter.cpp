@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmGeoJsonWriter.h"
 
@@ -95,7 +95,7 @@ void OsmGeoJsonWriter::write(ConstOsmMapPtr map)
   _writeRelations();
   _writeLn("]");
   _writeLn("}");
-  _fp.close();
+  close();
 }
 
 QString OsmGeoJsonWriter::_getBbox()

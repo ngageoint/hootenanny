@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SAMPLED_ANGLE_HISTOGRAM_EXTRACTOR_H
 #define SAMPLED_ANGLE_HISTOGRAM_EXTRACTOR_H
@@ -68,6 +68,9 @@ public:
   void setSampleDistance(double sampleDistance) { _sampleDistance = sampleDistance; }
 
   void setHeadingDelta(double headingDelta) { _headingDelta = headingDelta; }
+
+  virtual QString getDescription() const
+  { return "Similar to the AngleHistogramExtractor except the angle is sampled along the way"; }
 
 protected:
 

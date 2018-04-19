@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTCRITERIONJS_H
 #define ELEMENTCRITERIONJS_H
@@ -55,9 +55,9 @@ private:
   ElementCriterionJs(ElementCriterion* c);
   ~ElementCriterionJs();
 
-  static v8::Handle<v8::Value> addCriterion(const v8::Arguments& args);
-  static v8::Handle<v8::Value> isSatisfied(const v8::Arguments& args);
-  static v8::Handle<v8::Value> New(const v8::Arguments& args);
+  static void addCriterion(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isSatisfied(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   QString _className;
   ElementCriterionPtr _c;

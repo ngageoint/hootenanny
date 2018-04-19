@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OgrReader.h"
@@ -260,7 +260,7 @@ OgrReader::OgrReader()
 OgrReader::OgrReader(QString path)
 {
   _d = new OgrReaderInternal();
-  if ( isSupported(path) == true )
+  if (isSupported(path) == true)
   {
     _d->open(path, QString(""));
   }
@@ -269,7 +269,7 @@ OgrReader::OgrReader(QString path)
 OgrReader::OgrReader(QString path, QString layer)
 {
   _d = new OgrReaderInternal();
-  if ( isSupported(path) == true )
+  if (isSupported(path) == true)
   {
     _d->open(path, layer);
   }
@@ -387,12 +387,13 @@ QStringList OgrReader::getFilteredLayerNames(QString path)
   QStringList result;
 
   QStringList allLayers = _d->getLayersWithGeometry(path);
+  LOG_VART(allLayers);
 
   for (int i = 0; i < allLayers.size(); i++)
   {
     if (allLayers[i].contains(filterStr))
     {
-        result.append(allLayers[i]);
+      result.append(allLayers[i]);
     }
   }
 
@@ -521,17 +522,18 @@ OgrReaderInternal::~OgrReaderInternal()
 QStringList OgrReaderInternal::getLayersWithGeometry(QString path) const
 {
   QStringList result;
+  LOG_TRACE("Opening layers with geometry: " << path);
   boost::shared_ptr<GDALDataset> ds = OgrUtilities::getInstance().openDataSource(path, true);
   int count = ds->GetLayerCount();
+  LOG_VART(count);
   for (int i = 0; i < count; i++)
   {
     OGRLayer* l = ds->GetLayer(i);
-
     if (l->GetGeomType() != wkbNone)
     {
       result.append(l->GetName());
+      LOG_VART(l->GetName());
     }
-
     l->Dereference();
   }
 
@@ -920,6 +922,7 @@ void OgrReaderInternal::open(QString path, QString layer)
   _initTranslate();
 
   _path = path;
+  LOG_DEBUG("Opening data source for layer: " << layer);
   _dataSource = OgrUtilities::getInstance().openDataSource(path, true);
   if (layer.isEmpty() == false)
   {
@@ -928,6 +931,12 @@ void OgrReaderInternal::open(QString path, QString layer)
   else
   {
     _pendingLayers = getLayersWithGeometry(path);
+  }
+  LOG_VART(_pendingLayers);
+  if (Log::getInstance().getLevel() == Log::Info)
+  {
+    std::cout << ".";
+    std::cout.flush();
   }
 }
 
@@ -992,7 +1001,7 @@ void OgrReaderInternal::_openNextLayer()
 
   if (_pendingLayers.isEmpty() == false)
   {
-    LOG_DEBUG("Opening layer " + _pendingLayers.front());
+    LOG_TRACE("Opening layer " + _pendingLayers.front());
     _openLayer(_path, _pendingLayers.front());
     _pendingLayers.pop_front();
   }
@@ -1072,19 +1081,15 @@ void OgrReaderInternal::read(OsmMapPtr map, Progress progress)
     f = 0;
     if (_count % 1000 == 0 && Log::getInstance().isInfoEnabled())
     {
-      cout << "Loading " << _path.toUtf8().data() << " " << _layerName.toAscii().data() << " " <<
-              _count << " / " << _featureCount << "   \r";
-      cout.flush();
+      LOG_DEBUG("Loading " << _path.toUtf8().data() << " " << _layerName.toAscii().data() << " " <<
+                _count << " / " << _featureCount);
     }
     _count++;
-    if(progress.getState() != "Pending")
+    if (progress.getState() != "Pending")
     {
-      progress.setFromRelative((double)_count / (double)_featureCount, "Running", false, "Reading ogr features" );
+      progress.setFromRelative(
+        (double)_count / (double)_featureCount, "Running", false, "Reading ogr features" );
     }
-  }
-  if (Log::getInstance().isInfoEnabled() && _count > 0)
-  {
-    cout << endl;
   }
 }
 

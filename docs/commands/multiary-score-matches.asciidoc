@@ -1,0 +1,21 @@
+== multiary-score-matches
+
+=== Description
+
+The +multiary-score-matches+ command scores how well Multiary POI conflation performs using manually matched data as a reference.  
+It reads from inputs, adds UUIDs, conflates using unify, and scores the matches. The command will return  an error if the first 
+input file contains any REF2 tags or the second input file contains any REF1 tags.
+
+TODO: this doc needs verification
+
+* +--confusion+ - print the confusion matrix
+* +input1+      - Input 1 (e.g. .osm file).
+* +input2+      - Input 2 (e.g. .osm file).
+* +output+      - Output file for debugging (e.g. .osm file). Only the first conflation will be output.
+
+=== Usage
+
+--------------------------------------
+multiary-score-matches [--confusion] (input1 input2) [input1 input2 ...] (output)
+--------------------------------------
+

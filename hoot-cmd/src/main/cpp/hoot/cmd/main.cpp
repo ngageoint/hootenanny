@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // GCC
@@ -38,6 +38,7 @@ using namespace geos::geom;
 #include <hoot/core/HootConfig.h>
 #include <hoot/core/cmd/Command.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/js/v8Engine.h>
 using namespace hoot;
 
 // Qt
@@ -54,6 +55,9 @@ int main(int argc, char *argv[])
 {
   Hoot::getInstance().init();
 
+  v8Engine::setPlatformInit();
+  v8Engine::getInstance().init();
+
   QCoreApplication app(argc, argv);
 
   vector<string> cmds = Factory::getInstance().getObjectNamesByBase(Command::className());
@@ -63,7 +67,7 @@ int main(int argc, char *argv[])
   {
     c.reset(Factory::getInstance().constructObject<Command>(cmds[i]));
     QString argName = c->getName();
-    if (QString(argv[1]) == argName || QString(argv[1]) == argName.prepend("--") /* this will be deprecated */ )
+    if (QString(argv[1]) == argName)
     {
       break;
     }
@@ -87,7 +91,7 @@ int main(int argc, char *argv[])
     }
   }
   // Yep, a juvenile easter egg. :)
-  else if (QString(argv[1]) == "--whoami" || QString(argv[1]) == "whoami")
+  else if (QString(argv[1]) == "whoami")
   {
     cout << "Papa Smurf" << endl;
     return 0;

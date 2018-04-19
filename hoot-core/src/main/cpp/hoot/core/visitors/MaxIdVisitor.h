@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef MAXIDVISITOR_H
@@ -39,9 +39,6 @@
 namespace hoot
 {
 
-/**
- * Counts the number of elements.
- */
 class MaxIdVisitor : public ConstElementVisitor, public SingleStatistic
 {
 public:
@@ -55,6 +52,9 @@ public:
   double getStat() const { return _maxId; }
 
   virtual void visit(const ConstElementPtr& e);
+
+  virtual QString getDescription() const
+  { return "Returns the largest element ID value found"; }
 
 private:
 

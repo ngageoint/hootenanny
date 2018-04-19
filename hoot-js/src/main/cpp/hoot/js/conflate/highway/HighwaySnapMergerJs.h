@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HIGHWAYSNAPMERGERJS_H
 #define HIGHWAYSNAPMERGERJS_H
@@ -51,6 +51,7 @@ class OsmMapOperation;
 class HighwaySnapMergerJs : public node::ObjectWrap
 {
 public:
+
   static void Init(v8::Handle<v8::Object> target);
 
   HighwaySnapMergerPtr getHighwaySnapMerger() { return _ptr; }
@@ -58,15 +59,15 @@ public:
   static v8::Handle<v8::Object> New(const HighwaySnapMergerPtr& ptr);
 
 private:
+
   HighwaySnapMergerJs();
   ~HighwaySnapMergerJs();
 
-  static v8::Handle<v8::Value> New(const v8::Arguments& args);
-  static v8::Handle<v8::Value> apply(const v8::Arguments& args);
+  static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void apply(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   HighwaySnapMergerPtr _ptr;
   static v8::Persistent<v8::Function> _constructor;
-
 };
 
 inline void toCpp(v8::Handle<v8::Value> v, HighwaySnapMergerPtr& ptr)

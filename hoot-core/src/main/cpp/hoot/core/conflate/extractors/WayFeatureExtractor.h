@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef WAYFEATUREEXTRACTOR_H
 #define WAYFEATUREEXTRACTOR_H
@@ -62,8 +62,8 @@ public:
   virtual void setValueAggregator(const ValueAggregatorPtr& va) { _agg = va; }
 
 protected:
-  virtual double _extract(const OsmMap& map, const ConstWayPtr& w1, const ConstWayPtr& w2)
-    const = 0;
+
+  virtual double _extract(const OsmMap& map, const ConstWayPtr& w1, const ConstWayPtr& w2) const = 0;
 
   ValueAggregatorPtr _agg;
 };

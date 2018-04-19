@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -58,12 +58,6 @@ public:
   static string className() { return "hoot::ScoreMatchesCmd"; }
 
   ScoreMatchesCmd() { }
-
-//  QString evaluateThreshold(vector<OsmMapPtr> maps, QString output, boost::shared_ptr<MatchThreshold> mt,
-//    bool showConfusion, double& score)
-//  {
-//    return evaluateThreshold(maps, output, mt, showConfusion, score, -1);
-//  }
 
   QString evaluateThreshold(vector<OsmMapPtr> maps, QString output, boost::shared_ptr<MatchThreshold> mt,
     bool showConfusion, double& score/*, long numManualMatches*/)
@@ -117,6 +111,8 @@ public:
   }
 
   virtual QString getName() const { return "score-matches"; }
+
+  virtual QString getDescription() const { return "Scores conflation performance"; }
 
   class ScoreFunction : public Tgs::NelderMead::Function
   {

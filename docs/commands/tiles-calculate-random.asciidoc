@@ -1,0 +1,39 @@
+== tiles-calculate-random 
+
+=== Description
+
+The +tiles-calculate-random+ command calculates a collection of bounding boxes that contain roughly equal distributions of node data 
+from the specified input(s), selects one of them at random, and writes the output to a file.
+
+* +input+               - one or more OSM data inputs; specify multiple inputs by separating them with a semicolon
+* +output+              - output file to write the tile boundary to; valid formats are GeoJSON (*.geojson)
+* +random-seed+         - seeds the random number generator for consistent tile boundary selection; use -1 for no seeding; defaults to -1
+* +maxNodeCountPerTile+ - The maximum number of nodes in any tile.  The default is 1000; optional only if pixelSize is not specified
+* +pixelSize+           - The size of the pixels used in the calculation in degrees.  The default is 0.001; optional only if 
+                          maxNodeCountPerTile is not specified
+
+See additional notes in the +tiles-calculate+ command documentation.
+
+=== Usage
+
+--------------------------------------
+hoot tiles-calculate-random (input(s)) (output) [random-seed] [maxNodeCountPerTile] [pixelSize]
+--------------------------------------
+
+=== Examples
+
+--------------------------------------
+hoot tiles-calculate-random test-files/MyInputFile.osm MyOutputFile.geojson
+--------------------------------------
+
+--------------------------------------
+hoot tiles-calculate-random test-files/MyInputFile.osm 2 MyOutputFile.geojson
+--------------------------------------
+
+--------------------------------------
+hoot tiles-calculate-random "test-files/MyInputFile1.osm;test-files/MyInputFile2.osm" MyOutputFile.geojson -1 1000 0.001
+--------------------------------------
+
+--------------------------------------
+hoot tiles-calculate-random -D convert.bounding.box="34.04,31.17,34.05,31.18" hootapidb://hoot:hoottest@localhost:5432/hoot/MyInputDb MyOutputFile.geojson
+--------------------------------------

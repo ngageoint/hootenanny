@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -60,7 +60,10 @@ public:
 
   BuildModelCmd() { }
 
-  virtual QString getName() const { return "build-model"; }
+  virtual QString getName() const { return "model-build"; }
+
+  virtual QString getDescription() const
+  { return "Creates a random forest model from manually matched map data"; }
 
   virtual int runSimple(QStringList args)
   {

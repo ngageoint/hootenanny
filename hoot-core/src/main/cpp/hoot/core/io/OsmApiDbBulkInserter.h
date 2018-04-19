@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMAPIDBBULKINSERTER_H
 #define OSMAPIDBBULKINSERTER_H
@@ -193,6 +193,8 @@ public:
   void setWriteIdSequenceUpdates(bool write)
   { _writeIdSequenceUpdates = write; }
 
+  virtual QString supportedFormats() { return "osmapidb://"; }
+
 protected:
 
   ElementWriteStats _writeStats;
@@ -284,6 +286,7 @@ private:
 
   void _verifyOutputCopySettings();
   void _verifyFileOutputs();
+  void _verifyChangesetUserId();
 
   void _incrementAndGetLatestIdsFromDb();
   void _updateRecordLineWithIdOffset(const QString tableName, QString& recordLine);

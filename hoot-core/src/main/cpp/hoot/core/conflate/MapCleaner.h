@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef MAPCLEANER_H
@@ -54,6 +54,8 @@ public:
   virtual ~MapCleaner() {}
 
   virtual void apply(boost::shared_ptr<OsmMap>& map);
+
+  virtual QString getDescription() const { return "Cleans map data"; }
 };
 
 }

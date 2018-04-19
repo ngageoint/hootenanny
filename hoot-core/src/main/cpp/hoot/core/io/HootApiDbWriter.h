@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HOOTAPIDBWRITER_H
 #define HOOTAPIDBWRITER_H
@@ -95,6 +95,8 @@ public:
   virtual void setElementPayloadFormat(const QString /*format*/) {}
 
   void setCopyBulkInsertActivated(bool activated) { _copyBulkInsertActivated = activated; }
+
+  virtual QString supportedFormats() { return "hootapidb://"; }
 
 protected:
 
