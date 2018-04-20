@@ -12,6 +12,7 @@ var server = require('../TranslationServer.js');
 describe('TranslationServer', function () {
 
     describe('fcodes', function() {
+        this.timeout(3000);
 
         it('should return fcodes for MGCP Line', function(){
             assert.equal(server.getFCodes({
@@ -45,62 +46,6 @@ describe('TranslationServer', function () {
             }).length, 190);
         });
 
-    });
-
-    describe('searchSchema', function() {
-
-        var defaults = {};
-        // Updated to reflect returning all geometries when none specified
-        var defaultsResult = {
-                                "name": "AERATION_BASIN_S",
-                                "fcode": "AB040",
-                                "desc": "Aeration Basin",
-                                "geom": "Area"
-                            };
-
-        var MgcpPointBui = {
-                                translation: 'MGCP',
-                                geomType: 'point',
-                                searchStr: 'Bui'
-                            };
-        var MgcpResult = [{
-                                name: "PAL015",
-                                fcode: "AL015",
-                                desc: "General Building",
-                                geom: "Point",
-                                idx: -1
-                            },
-                            {
-                                name: "PAL020",
-                                fcode: "AL020",
-                                desc: "Built-Up Area",
-                                geom: "Point",
-                                idx: -1
-                            }];
-
-        var MgcpVertexCulvert = {
-                                translation: 'MGCP',
-                                geomType: 'vertex',
-                                searchStr: 'culvert'
-                            };
-        var MgcpVertexResult = [{
-                                name: "PAQ065",
-                                fcode: "AQ065",
-                                desc: "Culvert",
-                                geom: "Point",
-                                idx: -1
-                            }];
-        it('should search for default options', function(){
-            assert.equal(JSON.stringify(server.searchSchema(defaults)[0]), JSON.stringify(defaultsResult));
-        });
-
-        it('should search for "Bui" point feature types in the MGCP schema', function(){
-            assert.equal(JSON.stringify(server.searchSchema(MgcpPointBui).slice(0,2)), JSON.stringify(MgcpResult));
-        });
-
-        it('should search for "culvert" vertex feature types in the MGCP schema', function(){
-            assert.equal(JSON.stringify(server.searchSchema(MgcpVertexCulvert).slice(0,1)), JSON.stringify(MgcpVertexResult));
-        });
     });
 
     describe('handleInputs', function() {
@@ -296,6 +241,8 @@ describe('TranslationServer', function () {
         });
 
         it('should handle OSM to GGDMv30 POST of power line feature', function() {
+            this.timeout(3000);
+
             var osm2trans = server.handleInputs({
                 osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-1" version="0"><nd ref="-1"/><nd ref="-4"/><nd ref="-7"/><nd ref="-10"/><nd ref="-1"/><tag k="power" v="line"/><tag k="uuid" v="{d7cdbdfe-88c6-4d8a-979d-ad88cfc65ef1}"/></way></osm>',
                 method: 'POST',
@@ -819,7 +766,7 @@ describe('TranslationServer', function () {
                 geometry: 'line',
                 translation: 'TDSv40',
                 searchstr: 'river',
-                maxlevdst: 20,
+                maxLeinDistance: 20,
                 limit: 12,
                 method: 'GET',
                 path: '/schema'
@@ -835,7 +782,7 @@ describe('TranslationServer', function () {
                 geometry: 'line',
                 translation: 'TDSv40',
                 searchstr: 'river',
-                maxlevdst: 10,
+                maxleindst: 10,
                 limit: 1,
                 method: 'GET',
                 path: '/schema'
@@ -848,12 +795,13 @@ describe('TranslationServer', function () {
                 geometry: 'line',
                 translation: 'TDSv40',
                 searchstr: 'ri',
-                maxlevdst: 50,
+                maxleindst: 200,
                 limit: 33,
                 method: 'GET',
                 path: '/schema'
             });
-            assert.equal(schm.length, 33);
+
+            assert.equal(schm.length, 8);
         });
 
         it('should handle /schema GET', function() {
@@ -861,7 +809,7 @@ describe('TranslationServer', function () {
                 geometry: 'line',
                 translation: 'TDSv40',
                 searchstr: 'ri',
-                maxlevdst: 50,
+                maxleindst: 50,
                 limit: 100,
                 method: 'GET',
                 path: '/schema'
@@ -875,7 +823,7 @@ describe('TranslationServer', function () {
                 geometry: 'line',
                 translation: 'TDSv40',
                 searchstr: '',
-                maxlevdst: 10,
+                maxleindst: 10,
                 limit: 1,
                 method: 'GET',
                 path: '/schema'
@@ -1126,6 +1074,200 @@ describe('TranslationServer', function () {
         assert.equal(response.statusCode, '404');
         done();
       });
+    });
+
+    describe('getLein', function() {
+        it('should return I251 for installation, I213 for intall, M313 for military', 
+            function() {
+                var leinIntall = server.getLein('intall'),
+                    leinInstallation = server.getLein('installation'),
+                    leinMilitary = server.getLein('military');
+                
+                assert.equal(leinIntall.toLowerCase(), 'i213');
+                assert.equal(leinInstallation.toLowerCase(), 'i251');
+                assert.equal(leinMilitary.toLowerCase(), 'm313');
+            }
+        )
+    })
+
+    describe('getIntendedKeys', function() {
+        it('should return ["a", "x", "s"] when provided "z"', function() {
+            var intendedKeys = server.getIntendedKeys('z');
+    
+            assert.equal(intendedKeys[0], 'a')
+            assert.equal(intendedKeys[1], 'x')
+            assert.equal(intendedKeys[2], 's')
+        });
+        it('should return same result when passed "{" or "["', function() {
+            var leftSqiglyKeys = server.getIntendedKeys('{'),
+                leftStraigthKeys = server.getIntendedKeys('[');
+    
+            assert.equal(leftSqiglyKeys[0], leftStraigthKeys[0]);
+        });
+    });
+    
+    describe('getFuzzyString', function() {
+        it('should return ["cuilding", "fuilding", "guilding", building"] when passed "vuilding', 
+            function() {
+                var fuzzyStrings = server.getFuzzyStrings('vuilding');
+    
+                assert.equal(fuzzyStrings[0], 'cuilding')
+                assert.equal(fuzzyStrings[1], 'fuilding')
+                assert.equal(fuzzyStrings[2], 'guilding')
+                assert.equal(fuzzyStrings[3], 'building')
+            }
+        )
+        it('should return surf and furf when passed durf', function() {
+            var fuzzyStrings = server.getFuzzyStrings('durf');
+    
+            assert.equal(fuzzyStrings[0], 'surf')
+            assert.equal(fuzzyStrings[1], 'furf');
+        })
+    })
+
+    describe('searchSchema', function() {
+        describe('fcodeMatches', function() {
+            it('includes items matching "AL" first and in order', function() {
+                var options = {
+                        geomType: 'Area',
+                        translation: 'TDSv61',
+                        searchStr: 'AL',
+                        limitResult: 12,
+                        maxLeinDistance: 500
+                    },
+                    alResults = server.searchSchema(options);
+
+                assert.equal(alResults[0].fcode, 'AL010');
+                assert.equal(alResults[1].fcode, 'AL011');
+            });
+        });
+        describe('descMatches', function() {
+            it('includes words including "mine" at reasonable index', function() {
+                var options = {
+                        geomType: 'Area',
+                        translation: 'TDSv61',
+                        searchStr: 'mine',
+                        limitResult: 12,
+                        maxLeinDistance: 100
+                    },
+                alResults = server.searchSchema(options),
+                includesMine = alResults.filter(function(d, index) {
+                    return /mine/.test(d.desc.toLowerCase()) && index < 99;
+                }).length > 0;
+
+                assert.equal(includesMine, true)
+            })
+        })
+        describe('fuzzyMatches', function() {
+            describe('minDescDistance', function () {
+                it('should represent minimum distance between post-leading character lein encoded strings',
+                    function() {
+                        var leinInstallation = server.getLein('installation'),
+                            leinIntall = server.getLein('intall'),
+                            leinMilitary = server.getLein('military'),
+                            minDist = Math.abs(
+                                Number(leinIntall.substr(1, leinIntall.length)) - 
+                                Number(leinInstallation.substr(1, leinInstallation.length))
+                            );
+                    
+                        minDescDistance = Math.min.apply(
+                            null, 'Military Installation'
+                                    .split(/\s+/)
+                                    .map(function(word) {
+                                        var leinWord = server.getLein(word);
+                                        return leinWord[0] !== leinIntall[0] ? Infinity : Math.abs(
+                                            Number(leinIntall.substr(1, leinIntall.length)) -
+                                            Number(leinWord.substr(1, leinWord.length))
+                                        )
+                                    })
+                            )
+                        
+                        assert.equal(minDescDistance, minDist)
+                    }
+                );
+            });
+
+            it('includes items with installation in description when searchStr is intall, isnall, or insralkl at reasonable index', 
+                function() {
+                    var options = {
+                        geomType: 'Area',
+                        translation: 'TDSv61',
+                        limitResult: 100,
+                        maxLeinDistance: 500
+                    };
+
+                    ['intall', 'isnall', 'isralkl'].forEach(function(misType) {
+                        options.searchStr = misType;
+
+                        var misTypeResults = server.searchSchema(options),
+                            includesInstallation = misTypeResults.filter(function(d, index) {
+                                return /installation/.test(d.desc.toLowerCase()) && index < 99;
+                            }).length > 0;
+                            
+                        assert.equal(includesInstallation, true);
+                    })
+                }
+            );
+            it('includes items with building in description when searchStr is bugidln, bidng, or buldng at reasonable index',
+                function() {
+                    var options = {
+                        geomType: 'Area',
+                        translation: 'TDSv61',
+                        limitResult: 100,
+                        maxLeinDistance: 500
+                    };
+
+                    ['budigln', 'biding', 'buldng'].forEach(function(misType) {
+                        options.searchStr = misType;
+
+                        var misTypeResults = server.searchSchema(options),
+                            includesBuilding = misTypeResults.filter(function(d, index) {
+                                return /building/.test(d.desc.toLowerCase()) && index < 99;
+                            }).length > 0;
+
+                        assert.equal(includesBuilding, true);
+                    });
+                }
+            )
+        });
+        describe('fuzzyKeyMatching', function() {
+            it('searching "toad" should include "road" in results at reasonable index', function() {
+                var options = {
+                    searchStr: 'toad',
+                    translation: 'TDSv61',
+                    maxLeinDistance: 200,
+                    geomType: 'Area'
+                }
+
+                var includesRoad = server.searchSchema(options).filter(function(d, index) {
+                    return d.desc.toLowerCase().indexOf('road') !== -1 && index < 99;
+                }).length > 0;
+
+                assert.equal(includesRoad, true);
+            })
+
+            it('searching "vilding" or "vuilding" should both include "building" in results at reasonable index', function() {
+                var options = {
+                    translation: 'TDSv61',
+                    maxLeinDistance: 200,
+                    geomType: 'Area'
+                }
+
+                var bothIncludeBuilding = [
+                    'vuilding',
+                    'vilding'
+                ].filter(function(misTyped) {
+                    options.searchStr = misTyped;
+
+                    return server.searchSchema(options)
+                        .filter(function(d, index) {
+                            return d.desc.toLowerCase().indexOf('building') && index < 49;
+                    }).length > 0;
+                }).length > 0;
+
+                assert.equal(bothIncludeBuilding, true);
+            })
+        })
     });
 });
 
