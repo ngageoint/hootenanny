@@ -419,7 +419,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
         "Feature contains tag specified for review from list: " + _reviewIfMatchedTypes.join(";");
     }
     //review anything matched with a multi-use building; only do the multi-use check on the poly
-    else if (reviewMultiUseBuildings && OsmSchema::getInstance().isMultiUseBuilding(*_poly))
+    else if (_reviewMultiUseBuildings && OsmSchema::getInstance().isMultiUseBuilding(*_poly))
     {
       _class.setReview();
       _explainText = "Match involves a multi-use building.";
