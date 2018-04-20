@@ -126,5 +126,11 @@
         "isA": "natural",
         "name": "natural=wood",
         "objectType": "tag"
+    },
+    {
+        "geometries": ["linestring"],
+        "isA": "natural",
+        "name": "natural=land_water_boundary",
+        "objectType": "tag"
     }
 ]
