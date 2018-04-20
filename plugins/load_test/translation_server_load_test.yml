@@ -15,6 +15,10 @@ config:
       fields:
         - "trans"
         - "body"
+    - path: "bulkTranslations.csv"
+      fields:
+        - "osmTrans"
+        - "osmBody"
   phases:
     - duration: 120
       arrivalRate: 5
@@ -25,12 +29,12 @@ config:
       name: "Sustained max load"
 scenarios:
   - name: "capabilities"
-    weight: "1"
+    weight: "2"
     flow:
     - get:
         url: "/capabilities"
   - name: "translateTo"
-    weight: "10"
+    weight: "20"
     flow:
     - post:
         url: "/translateTo?translation={{translation}}"
@@ -38,7 +42,7 @@ scenarios:
           Content-Type: "text/xml"
         body: "{{osm}}"
   - name: "translateFrom"
-    weight: "8"
+    weight: "16"
     flow:
     - post:
         url: "/translateFrom?translation={{trans}}"
@@ -46,7 +50,15 @@ scenarios:
           Content-Type: "text/xml"
         body: "{{body}}"
   - name: "getSchema"
-    weight: "10"
+    weight: "20"
     flow:
       - get:
           url: "/translateTo?idelem=fcode&idval={{code}}&geom={{geom}}&translation={{translation}}"
+  - name: "bulkTranslateTo"
+    weight: "1"
+    flow:
+      - post:
+          url: '/translateTo?translation={{osmTrans}}'
+          headers:
+            Content-Type: "text/xml"
+          body: "{{osmBody}}"
