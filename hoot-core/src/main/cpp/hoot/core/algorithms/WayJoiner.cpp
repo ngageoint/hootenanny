@@ -310,6 +310,9 @@ void WayJoiner::joinWays(const WayPtr &parent, const WayPtr &child)
     parent->setNodes(child_nodes);
     parent->addNodes(parent_nodes);
   }
+  //  Keep the conflated status in the parent if the child being merged is conflated
+  if (parent->getStatus() == Status::Conflated || child->getStatus() == Status::Conflated)
+    parent->setStatus(Status::Conflated);
   //  Update any relations that contain the child to use the parent
   ReplaceElementOp(child->getElementId(), parent->getElementId()).apply(_map);
   child->getTags().clear();

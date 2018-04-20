@@ -1397,7 +1397,7 @@
         <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
         <tag k="uuid" v="{6d02aaea-648c-4b09-8acf-8cf0b4fd4124};{{6a141b6c-44bb-41e8-b52e-6ec8a5602ed5}};{{4c6565c4-9ac3-4175-a398-7633e498309d}}"/>
         <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-6"/>
     </way>
