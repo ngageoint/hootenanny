@@ -562,7 +562,6 @@ describe('TranslationServer', function () {
 
         });
 
-
         it('should handle tdstoosm POST of power line feature', function() {
             var trans2osm = server.handleInputs({
                 osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-6" version="0"><nd ref="-13"/><nd ref="-14"/><nd ref="-15"/><nd ref="-16"/><tag k="UID" v="fee4529b-5ecc-4e5c-b06d-1b26a8e830e6"/><tag k="FCODE" v="AT030"/></way></osm>',
@@ -578,7 +577,6 @@ describe('TranslationServer', function () {
                 assert.equal(result.osm.way[0].tag[1].$.v, "line");
             });
         });
-
         it('should handle tdstoosm POST of power line feature', function() {
             var trans2osm = server.handleInputs({
                 osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-6" version="0"><nd ref="-13"/><nd ref="-14"/><nd ref="-15"/><nd ref="-16"/><tag k="UFI" v="fee4529b-5ecc-4e5c-b06d-1b26a8e830e6"/><tag k="F_CODE" v="AT005"/><tag k="CAB" v="2"/></way></osm>',

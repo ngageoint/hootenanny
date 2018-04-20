@@ -49,6 +49,15 @@
         "objectType": "tag"
     },
     {
+        "geometries": ["linestring"],
+        "isA": "natural",
+        "name": "natural=shear_wall",
+        "similarTo": [
+            { "name": "natural=cliff", "weight": 0.8 }
+         ],
+        "objectType": "tag"
+    },
+    {
         "geometries": [
             "node",
             "area"
