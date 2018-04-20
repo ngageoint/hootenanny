@@ -85,8 +85,6 @@ _badGeomCount(0)
   LOG_VART(_matchDistanceThreshold);
   LOG_VART(_addressMatch);
 
-  //can these two land use lists be combined somehow?
-
   _genericLandUseTagVals.append("cemetery");
   _genericLandUseTagVals.append("commercial");
   //_genericLandUseTagVals.append("construction");
@@ -109,9 +107,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
 {
   LOG_DEBUG("Checking review reduction rules...");
 
-  //to suppress the ElementConverter poly warnings...warnings worth looking into at some point
-  //DisableLog dl(Log::Warn);
-
   ElementConverter elementConverter(_map);
   boost::shared_ptr<Geometry> polyGeom = elementConverter.convertToGeometry(poly);
   if (QString::fromStdString(polyGeom->toString()).toUpper().contains("EMPTY"))
@@ -129,7 +124,9 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   LOG_VART(polyHasType);
 
   if (OsmSchema::getInstance().isMultiUse(*poly) && poiHasType &&
-      !_nonDistanceSimilaritiesPresent()/*!_typeMatch*//*_typeScore != 1.0*/)
+      !_nonDistanceSimilaritiesPresent()
+      /*!_typeMatch*//*_typeScore < 0.2 && _nameScore < 0.2*/
+      /*!_typeMatch && _nameScore == 0.0*/)
   {
     LOG_TRACE("Returning miss per review reduction rule #1a...");
     return true;
@@ -217,7 +214,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   const bool polyIsNatural = poly->getTags().contains("natural");
 
   //Be more strict reviewing natural features against building features.
-  //TODO: test
   if (/*poiHasType && polyHasType &&*/ polyIsNatural &&
       OsmSchema::getInstance().getCategories(
         poi->getTags()).intersects(OsmSchemaCategory::building()))
@@ -226,12 +222,17 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
     return true;
   }
 
-  //TODO: test
   if (/*poiIsNatural*/poiHasType && polyIsNatural && !_typeMatch)
   {
     LOG_TRACE("Returning miss per review reduction rule #7b...");
     return true;
   }
+
+//  if (poiHasType && poly->getTags().contains("landuse") && !_typeMatch)
+//  {
+//    LOG_TRACE("Returning miss per review reduction rule #7c...");
+//    return true;
+//  }
 
   //prevent athletic POIs within a park poly from being reviewed against that park poly
   if (_distance == 0 && polyIsPark && poi->getTags().get("leisure") == "pitch")

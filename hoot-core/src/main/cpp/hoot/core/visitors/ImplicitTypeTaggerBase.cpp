@@ -250,6 +250,7 @@ void ImplicitTypeTaggerBase::visit(const ElementPtr& e)
           tagsToAdd.appendValue("building", "yes");
           matchingWords.insert("building");
         }
+        LOG_VART(tagsToAdd);
 
         //bit of hack...to handle a situation where features have been incorrectly tagged;
         //the argument could be made to just correct the input data instead
@@ -361,7 +362,7 @@ void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromMultipleNameTokens(
 {
   //TODO: this method needs cleanup
 
-  LOG_DEBUG("Attempting match with token group size of 2...");
+  LOG_TRACE("Attempting match with token group size of 2...");
 
   QStringList nameTokensListGroupSizeTwo;
   for (int i = 0; i < nameTokensList.size() - 1; i++)
@@ -376,7 +377,7 @@ void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromMultipleNameTokens(
     }
     nameTokensListGroupSizeTwo.append(nameToken);
   }
-  LOG_VARD(nameTokensListGroupSizeTwo);
+  LOG_VART(nameTokensListGroupSizeTwo);
 
   if (_matchEndOfNameSingleTokenFirst)
   {
@@ -430,9 +431,9 @@ void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromMultipleNameTokens(
         nameTokensListGroupSizeTwo.toSet(), matchingWords, wordsInvolvedInMultipleRules);
   }
 
-  LOG_VARD(implicitlyDerivedTags);
-  LOG_VARD(matchingWords);
-  LOG_VARD(wordsInvolvedInMultipleRules);
+  LOG_VART(implicitlyDerivedTags);
+  LOG_VART(matchingWords);
+  LOG_VART(wordsInvolvedInMultipleRules);
 }
 
 void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromSingleNameTokens(
@@ -440,9 +441,10 @@ void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromSingleNameTokens(
   Tags& implicitlyDerivedTags, QSet<QString>& matchingWords, bool& wordsInvolvedInMultipleRules,
   bool& namesContainBuilding, bool& namesContainOffice)
 {
-  //TODO: should be possible to combine this with _getImplicitlyDerivedTagsFromMultipleNameTokens
+  //TODO: should be possible to combine this logic with
+  //_getImplicitlyDerivedTagsFromMultipleNameTokens into a single method
 
-  LOG_DEBUG("Attempting match with token group size of 1...");
+  LOG_TRACE("Attempting match with token group size of 1...");
 
   if (_translateAllNamesToEnglish)
   {
@@ -450,13 +452,15 @@ void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromSingleNameTokens(
     for (int i = 0; i < nameTokensList.size(); i++)
     {
       const QString word = nameTokensList.at(i);
+      LOG_VART(word);
       //TODO: can this be combined with the ImplicitTagUtils translate method?
       const QString englishNameToken = Translator::getInstance().toEnglish(word);
+      LOG_VART(englishNameToken);
       translatedNameTokens.append(englishNameToken);
     }
     nameTokensList = translatedNameTokens;
   }
-  LOG_VARD(nameTokensList);
+  LOG_VART(nameTokensList);
 
   //This logic is kind of one-off but did help a little bit with reducing false positives with
   //offices and buildings...probably need something cleaner and more extensible.
@@ -474,37 +478,40 @@ void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromSingleNameTokens(
     nameTokensList.removeAll("office");
     nameTokensList.removeAll("offices");
   }
+  LOG_VART(nameTokensList);
 
   if (implicitlyDerivedTags.size() == 0 && nameTokensList.size() > 0)
   {
     if (_matchEndOfNameSingleTokenFirst)
     {
-      //match the end of the name with an implicit tag rule before matching anything else in the name
+      //match the end of the name with an implicit tag rule before matching anything else in the
+      //name
 
       QString endOfNameToken =
         _getEndOfNameToken(elementTags.get("name:en"), nameTokensList);
       if (endOfNameToken.isEmpty())
       {
-        _getEndOfNameToken(elementTags.get("name"), nameTokensList);
+        endOfNameToken = _getEndOfNameToken(elementTags.get("name"), nameTokensList);
       }
       if (endOfNameToken.isEmpty())
       {
         for (int i = 0; i < names.size(); i++)
         {
-          _getEndOfNameToken(names.at(i), nameTokensList);
+          endOfNameToken = _getEndOfNameToken(names.at(i), nameTokensList);
           if (!endOfNameToken.isEmpty())
           {
             break;
           }
         }
       }
+      LOG_VART(endOfNameToken)
       if (!endOfNameToken.isEmpty())
       {
         QStringList tempTokenList;
         tempTokenList.append(endOfNameToken);
         implicitlyDerivedTags =
           _ruleReader->getImplicitTags(
-            tempTokenList.toSet(), matchingWords, wordsInvolvedInMultipleRules);
+            tempTokenList.toSet(), matchingWords, wordsInvolvedInMultipleRules);       
         if (implicitlyDerivedTags.size() == 0)
         {
           //end of name token didn't match; do token matching
@@ -527,21 +534,22 @@ void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromSingleNameTokens(
       implicitlyDerivedTags =
         _ruleReader->getImplicitTags(
           nameTokensList.toSet(), matchingWords, wordsInvolvedInMultipleRules);
-    }
+    } 
   }
+  LOG_VART(implicitlyDerivedTags);
 }
 
 void ImplicitTypeTaggerBase::_ensureCorrectTagSpecificity(const ElementPtr& e, Tags& tagsToAdd)
 {
   Tags updatedTags;
   bool tagsAdded = false;
-  LOG_VARD(_elementIsASpecificFeature);
+  LOG_VART(_elementIsASpecificFeature);
   for (Tags::const_iterator tagItr = tagsToAdd.begin(); tagItr != tagsToAdd.end(); ++tagItr)
   {
     const QString implicitTagKey = tagItr.key();
-    LOG_VARD(implicitTagKey);
+    LOG_VART(implicitTagKey);
     const QString implicitTagValue = tagItr.value();
-    LOG_VARD(implicitTagValue);
+    LOG_VART(implicitTagValue);
     if (e->getTags().contains(implicitTagKey))
     {
       //don't add a less specific tag if the element already has one with the same key; e.g. if
@@ -550,12 +558,12 @@ void ImplicitTypeTaggerBase::_ensureCorrectTagSpecificity(const ElementPtr& e, T
 
       const QString elementTagKey = implicitTagKey;
       const QString elementTagValue = e->getTags()[implicitTagKey];
-      LOG_VARD(OsmSchema::getInstance().isAncestor(implicitTagKey % "=" % implicitTagValue,
+      LOG_VART(OsmSchema::getInstance().isAncestor(implicitTagKey % "=" % implicitTagValue,
                                                    elementTagKey % "=" % elementTagValue));
       if (OsmSchema::getInstance().isAncestor(implicitTagKey % "=" % implicitTagValue,
                                               elementTagKey % "=" % elementTagValue))
       {
-        LOG_DEBUG(
+        LOG_TRACE(
           implicitTagKey % "=" % implicitTagValue << " is more specific than " <<
           elementTagKey % "=" % elementTagValue << " on the input feature.  Replacing with " <<
           "the more specific tag.")
@@ -569,15 +577,15 @@ void ImplicitTypeTaggerBase::_ensureCorrectTagSpecificity(const ElementPtr& e, T
     }
     else if (!_elementIsASpecificFeature)
     {
-      LOG_DEBUG(
+      LOG_TRACE(
         "Input feature does not contain tag: " <<
         implicitTagKey % "=" % implicitTagValue << ", so adding it...");
       updatedTags.appendValue(implicitTagKey, implicitTagValue);
       tagsAdded = true;
     }
   }
-  LOG_VARD(updatedTags);
-  LOG_VARD(tagsAdded);
+  LOG_VART(updatedTags);
+  LOG_VART(tagsAdded);
   if (tagsAdded)
   {
     tagsToAdd = updatedTags;
@@ -586,7 +594,7 @@ void ImplicitTypeTaggerBase::_ensureCorrectTagSpecificity(const ElementPtr& e, T
   {
     tagsToAdd.clear();
   }
-  LOG_VARD(tagsToAdd);
+  LOG_VART(tagsToAdd);
 }
 
 void ImplicitTypeTaggerBase::_updateElementForDuplicateMatch(const ElementPtr& e,
@@ -620,7 +628,7 @@ void ImplicitTypeTaggerBase::_addImplicitTags(const ElementPtr& e, const Tags& t
     "Added " + QString::number(tagsToAdd.size()) + " implicitly derived tag(s) based on: " +
     matchingWordsList.join(", ");
   tagValue += "; tags added: " + tagsToAdd.toString().trimmed().replace("\n", ", ");
-  LOG_VARD(tagValue);
+  LOG_VART(tagValue);
   e->getTags().appendValue("hoot:implicitTags:tagsAdded", tagValue);
 
   //remove generic tags

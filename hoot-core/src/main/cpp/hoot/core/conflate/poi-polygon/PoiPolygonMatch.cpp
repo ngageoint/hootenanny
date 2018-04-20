@@ -339,7 +339,7 @@ bool PoiPolygonMatch::_skipForReviewTypeDebugging() const
 //  reviewTypeIgnoreList.append("building=public");
 //  reviewTypeIgnoreList.append("building=retail");
 //  reviewTypeIgnoreList.append("landuse=commercial");
-  reviewTypeIgnoreList.append("landuse=forest");
+  //reviewTypeIgnoreList.append("landuse=forest");
 //  reviewTypeIgnoreList.append("landuse=industrial");
 //  reviewTypeIgnoreList.append("landuse=residential");
 //  reviewTypeIgnoreList.append("landuse=recreation_ground");
@@ -360,7 +360,7 @@ bool PoiPolygonMatch::_skipForReviewTypeDebugging() const
 //  reviewTypeIgnoreList.append("building=house");
 //  reviewTypeIgnoreList.append("tourism=camp_site");
 //  reviewTypeIgnoreList.append("landuse=quarry");
-  reviewTypeIgnoreList.append("landuse=forest_reserve");
+  //reviewTypeIgnoreList.append("landuse=forest_reserve");
 
   if (_poi->getTags().hasAnyKvp(reviewTypeIgnoreList) ||
       _poly->getTags().hasAnyKvp(reviewTypeIgnoreList))
@@ -397,37 +397,16 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
 //    return;
 //  }
 
-  unsigned int evidence = _calculateEvidence(_poi, _poly);
-  LOG_VART(evidence);
-
+  //allow for auto marking features with certain types for review if they get matched
   const bool foundReviewIfMatchedType =
     _featureHasReviewIfMatchedType(_poi) || _featureHasReviewIfMatchedType(_poly);
   LOG_VART(foundReviewIfMatchedType);
 
-  LOG_VART(_reviewMultiUseBuildings);
-  LOG_VART(OsmSchema::getInstance().isMultiUseBuilding(*_poly));
+  unsigned int evidence = _calculateEvidence(_poi, _poly);
+  LOG_VART(evidence);
 
-  if (evidence >= _matchEvidenceThreshold)
-  {
-    //we're only doing these auto-review situations for things that matched in the first place
-
-    //allow for auto marking features with certain types for review if they get matched
-    if (foundReviewIfMatchedType) // if (oneElementIsRelation) //for testing only
-    {
-      _class.setReview();
-      _explainText =
-        "Feature contains tag specified for review from list: " + _reviewIfMatchedTypes.join(";");
-    }
-    //review anything matched with a multi-use building; only do the multi-use check on the poly
-    else if (_reviewMultiUseBuildings && OsmSchema::getInstance().isMultiUseBuilding(*_poly))
-    {
-      _class.setReview();
-      _explainText = "Match involves a multi-use building.";
-    }
-  }
-  //if none of the above special situations triggered, we'll try reducing nonsense reviews here, but
-  //no point in trying to reduce reviews if we're still at a miss by this point
-  else if (_enableReviewReduction && evidence >= _reviewEvidenceThreshold)
+  //no point in trying to reduce reviews if we're still at a miss here
+  if (_enableReviewReduction && evidence >= _reviewEvidenceThreshold)
   {
     PoiPolygonReviewReducer reviewReducer(
       _map, _polyNeighborIds, _poiNeighborIds, _distance, _nameScoreThreshold, _nameScore,
@@ -436,7 +415,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
     if (reviewReducer.triggersRule(_poi, _poly))
     {
       evidence = 0;
-      //TODO: b/c this is a miss, don't think this text will get added to the output anywhere...
+      //TODO: b/c this is a miss, don't think it will get added to the output anywhere...
       _explainText = "Match score automatically dropped by review reduction.";
     }
   }
@@ -444,9 +423,27 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
 
   if (evidence >= _matchEvidenceThreshold)
   {
-    //if after going through all of the above and we're still above the match threshold, then its a
-    //match
-    _class.setMatch();
+    if (!foundReviewIfMatchedType)
+    {
+      LOG_VART(_reviewMultiUseBuildings);
+      LOG_VART(OsmSchema::getInstance().isMultiUseBuilding(*_poly));
+      //only do the multi-use check on the poly
+      if (_reviewMultiUseBuildings && OsmSchema::getInstance().isMultiUseBuilding(*_poly))
+      {
+        _class.setReview();
+        _explainText = "Match involves a multi-use building.";
+      }
+      else
+      {
+        _class.setMatch();
+      }
+    }
+    else// if (oneElementIsRelation) //for testing only
+    {
+      _class.setReview();
+      _explainText =
+        "Feature contains tag specified for review from list: " + _reviewIfMatchedTypes.join(";");
+    }
   }
   else if (evidence >= _reviewEvidenceThreshold)
            //&& oneElementIsRelation) //for testing only
