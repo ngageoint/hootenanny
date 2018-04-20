@@ -96,6 +96,8 @@ public:
       }
     }
 
+    virtual QString getDescription() const { return ""; }
+
   private:
 
     map<QString, int>& _counts;

@@ -38,6 +38,7 @@ namespace hoot
 class WaterwayCriterion : public ElementCriterion
 {
 public:
+
   static std::string className() { return "hoot::WaterwayCriterion"; }
 
   WaterwayCriterion() {}
@@ -46,10 +47,7 @@ public:
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new WaterwayCriterion()); }
 
-  virtual QString getName() const { return "Waterway"; }
-
   virtual QString getDescription() const { return "Identifies waterways"; }
-
 };
 
 }

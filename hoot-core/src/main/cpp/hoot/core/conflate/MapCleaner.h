@@ -55,8 +55,6 @@ public:
 
   virtual void apply(boost::shared_ptr<OsmMap>& map);
 
-  virtual QString getName() const { return "Map Cleaner"; }
-
   virtual QString getDescription() const { return "Cleans map data"; }
 };
 

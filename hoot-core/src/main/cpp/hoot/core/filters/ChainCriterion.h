@@ -54,8 +54,6 @@ public:
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new ChainCriterion(_filters)); }
 
-  virtual QString getName() const { return "Chain"; }
-
   virtual QString getDescription() const
   { return "Allows for chaining together multiple criterion"; }
 

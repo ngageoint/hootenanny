@@ -79,7 +79,11 @@ public:
    */
   void replaceRoundabouts(boost::shared_ptr<OsmMap> pMap);
 
+  virtual QString getDescription() const
+  { return "Replaces roundabouts in road data with simple intersections"; }
+
 private:
+
   boost::shared_ptr<OsmMap> _pMap;
 };
 

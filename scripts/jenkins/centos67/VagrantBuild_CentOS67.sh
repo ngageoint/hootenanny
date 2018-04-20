@@ -13,8 +13,8 @@ if [ -f missing ]; then
   rm -f missing
 fi
 
-# Remove C++11
-
+# Remove C++11 since the compiler on Centos67 doesn't support it.
+sed -i s/"-std=c++11"// Configure.pri.in
 
 # Sort out what version of Postgres we have - MJ
 PG_VERSION=`ls /etc/init.d | grep postgresql- | sort | tail -1 | egrep -o '[0-9]{1,}\.[0-9]{1,}'`
@@ -32,5 +32,8 @@ mkdir -p $HOOT_HOME/upload
 
 #make -sj$(nproc) docs &> /dev/null || true
 make -sj$(nproc) docs
+
+# Now undo the C++11 removal. This keeps Git happy the next time we try to update.
+git checkout -- Configure.pri.in
 
 hoot version

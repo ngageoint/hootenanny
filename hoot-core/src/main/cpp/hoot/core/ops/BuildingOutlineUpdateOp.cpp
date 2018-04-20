@@ -71,6 +71,8 @@ public:
       allNodes.insert(e->getId());
     }
   }
+
+  virtual QString getDescription() const { return ""; }
 };
 
 class NodeReplaceVisitor : public ConstElementVisitor
@@ -109,6 +111,8 @@ public:
       }
     }
   }
+
+  virtual QString getDescription() const { return ""; }
 
 private:
   const map<long, long>& _fromTo;

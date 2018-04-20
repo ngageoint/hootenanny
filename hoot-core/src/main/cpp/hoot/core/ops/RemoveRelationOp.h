@@ -78,8 +78,6 @@ public:
    */
   static void removeRelation(OsmMapPtr map, long rId);
 
-  virtual QString getName() const { return "Remove Relations"; }
-
   virtual QString getDescription() const { return "Removes relations from a map"; }
 
 private:

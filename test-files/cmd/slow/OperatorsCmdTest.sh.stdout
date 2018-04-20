@@ -1,4 +1,4 @@
-  Map Cleaner                               operation         Cleans map data
-  Implicit POI Tagger                       visitor           Adds tags to POIs implicitly derived from their names
-  Remove Empty Areas                        visitor (const)   Removes empty areas
-  Non-Building Area                         criterion         Identifies features that are areas but not buildings
+  MapCleaner                                   operation         Cleans map data
+  ImplicitPoiTagger                            visitor           Adds tags to POIs implicitly derived from their names
+  RemoveEmptyAreasVisitor                      visitor (const)   Removes empty areas
+  NonBuildingAreaCriterion                     criterion         Identifies features that are areas but not buildings

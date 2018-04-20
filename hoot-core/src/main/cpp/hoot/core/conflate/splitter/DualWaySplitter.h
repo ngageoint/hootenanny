@@ -75,7 +75,11 @@ public:
 
   void apply(boost::shared_ptr<OsmMap>& map);
 
+  virtual QString getDescription() const
+  { return "Splits all 'divided=yes'' highways into two oneway streets"; }
+
 private:
+
   Meters _defaultSplitSize;
   DrivingSide _drivingSide;
   boost::shared_ptr<const OsmMap> _map;
@@ -86,8 +90,6 @@ private:
   boost::shared_ptr<Way> _left, _right;
   boost::shared_ptr<const Way> _working;
   Meters _splitSize;
-
-  bool _preserveUnknown1ElementIdWhenModifyingFeatures;
 
   void _addConnector(long nodeId);
 

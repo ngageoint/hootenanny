@@ -44,7 +44,7 @@ public:
   virtual QString getName() const { return "tiles-calculate"; }
 
   virtual QString getDescription() const
-  { return "Calculates bounding boxes based on node density"; }
+  { return "(experimental) Calculates bounding boxes based on node density"; }
 
   virtual int runSimple(QStringList args)
   {

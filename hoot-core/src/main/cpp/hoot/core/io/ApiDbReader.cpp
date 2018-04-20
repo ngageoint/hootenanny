@@ -688,7 +688,7 @@ ElementType ApiDbReader::_getCurrentSelectElementType()
 
 void ApiDbReader::finalizePartial()
 {
-  LOG_DEBUG("Finalizing read operation...");
+  LOG_TRACE("Finalizing read operation...");
 
   _partialMap.reset();
 
@@ -724,7 +724,7 @@ void ApiDbReader::finalizePartial()
 
 void ApiDbReader::close()
 {
-  LOG_DEBUG("Closing database reader...");
+  LOG_TRACE("Closing database reader...");
   finalizePartial();
 }
 

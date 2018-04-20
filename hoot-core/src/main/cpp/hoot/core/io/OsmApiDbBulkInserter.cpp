@@ -208,7 +208,7 @@ void OsmApiDbBulkInserter::_verifyOutputCopySettings()
 
 void OsmApiDbBulkInserter::close()
 {
-  LOG_DEBUG("Closing writer...");
+  LOG_TRACE("Closing writer...");
 
   _closeOutputFiles();
   if (_destinationIsDatabase())

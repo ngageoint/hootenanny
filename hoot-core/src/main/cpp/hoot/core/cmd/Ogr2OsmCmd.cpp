@@ -96,9 +96,11 @@ public:
     progress.setReportType( configOptions.getProgressReportingFormat() );
     progress.setState("Running");
 
+    LOG_INFO("Reading layers...");
     for (int i = a; i < args.size(); i++)
     {
       QString input = args[i];
+      LOG_VART(input);
 
       if (input == "")
       {
@@ -136,8 +138,9 @@ public:
       long featureCountTotal = 0;
       int undefinedCounts = 0;
       vector<float> progressWeights;
-      for (int i=0; i<layers.size(); i++)
+      for (int i = 0; i < layers.size(); i++)
       {
+        LOG_VART(layers[i]);
         // simply open the file, get the meta feature count value, and close
         int featuresPerLayer = reader.getFeatureCount(input, layers[i]);
         progressWeights.push_back((float)featuresPerLayer);
@@ -173,8 +176,14 @@ public:
       // read each layer's data
       for (int i = 0; i < layers.size(); i++)
       {
-        LOG_INFO("Reading: " + input + " " + layers[i]);
-        progress.setTaskWeight( progressWeights[i] );
+        if (Log::getInstance().getLevel() == Log::Info)
+        {
+          std::cout << ".";
+          std::cout.flush();
+        }
+        LOG_VART(input);
+        LOG_VART(layers[i]);
+        progress.setTaskWeight(progressWeights[i]);
         reader.read(input, layers[i], map, progress);
       }
     }

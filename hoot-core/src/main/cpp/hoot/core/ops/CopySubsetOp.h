@@ -56,8 +56,6 @@ public:
    */
   virtual void apply(OsmMapPtr& map);
 
-  virtual QString getName() const { return "Copy Map Subset"; }
-
   virtual QString getDescription() const { return "Copies a subset of the map into a new map"; }
 
 private:

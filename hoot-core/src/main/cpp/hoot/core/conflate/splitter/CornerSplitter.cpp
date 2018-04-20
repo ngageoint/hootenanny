@@ -156,17 +156,6 @@ void CornerSplitter::_splitWay(long wayId, long nodeIdx, long nodeId)
     // corners
     _todoWays.push_back(splits[1]->getId());
 
-    if (ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures() &&
-        pWay->getStatus() == Status::Unknown1)
-    {
-      // see similar notes in HighwaySnapMerger::_mergePair
-      LOG_TRACE("Setting unknown1 " << pWay->getElementId().getId() << " on " <<
-                splits[0]->getElementId() << "...");
-      ElementPtr newWaySegment(_map->getElement(splits[0]->getElementId())->clone());
-      newWaySegment->setId(pWay->getElementId().getId());
-      _map->replace(_map->getElement(splits[0]->getElementId()), newWaySegment);
-    }
-
     LOG_VART(_map->containsElement(splitWayId));
   }
 }

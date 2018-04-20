@@ -1761,36 +1761,6 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1"/>
     </node>
-    <way visible="true" id="-8910" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-5825"/>
-        <nd ref="-127"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
-        <tag k="source" v="osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="name" v="Route de Bourdon"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="alt_name" v="Avenue John Brown"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.114Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="fixme" v="find out what part of Ave. John brown is Lalue?"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{31b011c0-0cc8-46ef-9381-24e38cc7358d};{{00b2b754-a805-42fe-a7c0-60fe86d05092}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-8910"/>
-    </way>
     <way visible="true" id="-8909" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-133"/>
         <nd ref="-132"/>
@@ -1799,21 +1769,24 @@
         <nd ref="-129"/>
         <nd ref="-128"/>
         <nd ref="-5825"/>
+        <nd ref="-127"/>
+        <nd ref="-149"/>
+        <nd ref="-332"/>
         <tag k="width:minimum_traveled_way" v="8"/>
         <tag k="source" v="osm;mgcp"/>
         <tag k="condition" v="functional"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="name" v="Route de Bourdon"/>
         <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="seasonal" v="no"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="alt_name" v="Avenue John Brown"/>
         <tag k="surface" v="paved"/>
         <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
         <tag k="source:haiti" v="CNIGS and CartONG"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
         <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.114Z"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="fixme" v="find out what part of Ave. John brown is Lalue?"/>
@@ -1901,383 +1874,29 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-8870"/>
     </way>
-    <way visible="true" id="-219" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-218" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-83"/>
+        <nd ref="-82"/>
+        <nd ref="-81"/>
         <nd ref="-80"/>
         <nd ref="-79"/>
         <nd ref="-78"/>
         <nd ref="-77"/>
         <nd ref="-76"/>
         <nd ref="-75"/>
-        <tag k="access" v="private"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="Bing; Google, 2010-01-17;osm;osm"/>
-        <tag k="uuid" v="{16691048-5a85-4146-9401-dc48324a0eee}"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="service"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-219"/>
-    </way>
-    <way visible="true" id="-218" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-81"/>
-        <nd ref="-80"/>
         <tag k="access" v="private"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="Bing; Google, 2010-01-17;osm;osm"/>
+        <tag k="source" v="Bing; Google, 2010-01-17;osm"/>
         <tag k="uuid" v="{16691048-5a85-4146-9401-dc48324a0eee}"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="service"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-218"/>
     </way>
-    <way visible="true" id="-217" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-98"/>
-        <nd ref="-97"/>
-        <nd ref="-96"/>
-        <tag k="access" v="private"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="service" v="parking_aisle"/>
-        <tag k="source" v="survey;osm;osm"/>
-        <tag k="uuid" v="{7db4e7bf-210b-47d4-af8d-fc911c1bbc7b}"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="service"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-217"/>
-    </way>
-    <way visible="true" id="-216" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-49"/>
-        <nd ref="-48"/>
-        <nd ref="-123"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="Google 2010-01-17;osm;osm"/>
-        <tag k="uuid" v="{00ed8137-6cbd-4f6b-b1a8-feaf1adea020}"/>
-        <tag k="name" v="Impasse Malebranche"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-216"/>
-    </way>
-    <way visible="true" id="-214" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-87"/>
-        <nd ref="-86"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="World Bank, 2010/01/21-2010-01/22;osm;osm"/>
-        <tag k="uuid" v="{cd71282d-28a9-4563-a0fc-582c04e85039}"/>
-        <tag k="name" v="Impasse Champagne"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-214"/>
-    </way>
-    <way visible="true" id="-213" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-99"/>
-        <nd ref="-98"/>
-        <tag k="access" v="private"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="service" v="parking_aisle"/>
-        <tag k="source" v="survey;osm;osm"/>
-        <tag k="uuid" v="{7db4e7bf-210b-47d4-af8d-fc911c1bbc7b}"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="service"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-213"/>
-    </way>
-    <way visible="true" id="-211" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-125"/>
-        <nd ref="-253"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="practicability" v="4wd_less_than_3.5mt"/>
-        <tag k="source" v="CNIGS/OIM/FOCS;osm;osm"/>
-        <tag k="uuid" v="{ea635f0c-7f10-4592-9000-0179d64f9af5}"/>
-        <tag k="name" v="Rue Mercier"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="bad"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="road"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-211"/>
-    </way>
-    <way visible="true" id="-209" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-263"/>
-        <nd ref="-262"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="operational_status" v="closed"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="CNIGS/OIM/ FOCS;osm;osm"/>
-        <tag k="uuid" v="{5e2e3cd2-ca19-4d56-85ac-6a9292a25608}"/>
-        <tag k="name" v="Impasse Cicéron"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="residential"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-209"/>
-    </way>
-    <way visible="true" id="-208" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-3"/>
-        <nd ref="-319"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="Google 2010-01-17;osm;osm"/>
-        <tag k="uuid" v="{7be46502-5878-4866-b485-7ee6a2abe6bb}"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="service"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-208"/>
-    </way>
-    <way visible="true" id="-207" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-259"/>
-        <nd ref="-30"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="CNIGS/OIM/FOCS;osm;osm"/>
-        <tag k="uuid" v="{7476ad29-1d9b-478c-b695-4d13eb396cd1}"/>
-        <tag k="name" v="Avenue Martin Luther King"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-207"/>
-    </way>
-    <way visible="true" id="-206" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-105"/>
-        <nd ref="-103"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="operational_status" v="closed"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="CNIGS/OIM/FOCS;osm;osm"/>
-        <tag k="uuid" v="{10e2ec3f-0f44-4a4e-a19f-5341b4994045}"/>
-        <tag k="name" v="Rue Hérard 1re"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="bad"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="residential"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-206"/>
-    </way>
-    <way visible="true" id="-205" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-251"/>
-        <nd ref="-314"/>
-        <tag k="width:minimum_traveled_way" v="5"/>
-        <tag k="source" v="GPS; survey;osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="loc_name" v="Bois Verna"/>
-        <tag k="name" v="Avenue Lamartinière"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="oneway" v="yes"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="FIXME" v="where does Avenue Lamartinière change to Rue Fernand? Split accordingly."/>
-        <tag k="source:name" v="DMA Topo Map;very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.117Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="highway" v="tertiary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{07fadde5-28fa-4703-8273-18938b0d943f};{{1740bac5-921f-4300-a4f0-935cf759d8d9}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-205"/>
-    </way>
-    <way visible="true" id="-204" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-242"/>
-        <nd ref="-61"/>
-        <nd ref="-60"/>
-        <nd ref="-59"/>
-        <nd ref="-58"/>
-        <nd ref="-214"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="practicability" v="light_truck_less_than_10mt"/>
-        <tag k="source" v="CNIGS/OIM/FOCS;osm;osm"/>
-        <tag k="uuid" v="{786f839a-600e-4eeb-b925-6bbec31f8f97}"/>
-        <tag k="name" v="Rue Nazon 2e"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="bad"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="residential"/>
-        <tag k="incline" v="yes"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-204"/>
-    </way>
-    <way visible="true" id="-203" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-239"/>
-        <nd ref="-238"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="practicability" v="4wd_less_than_3.5mt"/>
-        <tag k="source" v="CNIGS/OIM/FOCS;osm;osm"/>
-        <tag k="uuid" v="{94755128-31e1-4d51-9c5e-3cce1c860966}"/>
-        <tag k="name" v="Impasse Justin 1ère"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="bad"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="service"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-203"/>
-    </way>
-    <way visible="true" id="-202" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-127"/>
-        <nd ref="-149"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
-        <tag k="source" v="osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="name" v="Route de Bourdon"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="alt_name" v="Avenue John Brown"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.114Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="fixme" v="find out what part of Ave. John brown is Lalue?"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{31b011c0-0cc8-46ef-9381-24e38cc7358d};{{00b2b754-a805-42fe-a7c0-60fe86d05092}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-202"/>
-    </way>
-    <way visible="true" id="-201" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-126"/>
-        <nd ref="-341"/>
-        <tag k="source:datetime" v="2017-06-07T15:19:30Z"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-201"/>
-    </way>
-    <way visible="true" id="-200" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-236"/>
-        <nd ref="-235"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="Haiti DMA Topo;osm;osm"/>
-        <tag k="uuid" v="{4d90be44-e379-4065-a7cf-30d086768574}"/>
-        <tag k="name" v="Ruelle Muller"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-200"/>
-    </way>
-    <way visible="true" id="-199" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-123"/>
-        <nd ref="-122"/>
-        <nd ref="-140"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="practicability" v="light_truck_less_than_10mt"/>
-        <tag k="source" v="CNIGS/OIM/FOCS;osm;osm"/>
-        <tag k="uuid" v="{ff4306c9-4f56-4b73-833e-a1c78e1852be}"/>
-        <tag k="name" v="Ruelle Butte"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="tertiary"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-199"/>
-    </way>
-    <way visible="true" id="-198" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-120"/>
-        <nd ref="-201"/>
-        <tag k="width:minimum_traveled_way" v="5"/>
-        <tag k="source" v="GPS; survey;osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="loc_name" v="Bois Verna"/>
-        <tag k="name" v="Avenue Lamartinière"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="oneway" v="yes"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="FIXME" v="where does Avenue Lamartinière change to Rue Fernand? Split accordingly."/>
-        <tag k="source:name" v="DMA Topo Map;very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.117Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="highway" v="tertiary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{07fadde5-28fa-4703-8273-18938b0d943f};{{1740bac5-921f-4300-a4f0-935cf759d8d9}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-198"/>
-    </way>
-    <way visible="true" id="-197" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-261"/>
-        <nd ref="-322"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="CNIGS/OIM/FOCS;osm;osm"/>
-        <tag k="uuid" v="{5af5c97a-fe1d-40b9-b861-b2b4cd754c34}"/>
-        <tag k="name" v="Rue Jérémie 1re"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="residential"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-197"/>
-    </way>
-    <way visible="true" id="-196" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-112" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-460"/>
         <nd ref="-367"/>
         <nd ref="-472"/>
         <nd ref="-471"/>
@@ -2290,1936 +1909,22 @@
         <nd ref="-464"/>
         <nd ref="-463"/>
         <nd ref="-365"/>
-        <tag k="width:minimum_traveled_way" v="5"/>
-        <tag k="source" v="mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="lanes" v="2"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:description" v="IKONOS Imagery"/>
         <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.112Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="highway" v="road"/>
-        <tag k="source:datetime" v="2010-01-13"/>
-        <tag k="uuid" v="{{7ce9692f-4849-440e-979c-916936f16365}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-196"/>
-    </way>
-    <way visible="true" id="-195" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-235"/>
-        <nd ref="-234"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="Haiti DMA Topo;osm;osm"/>
-        <tag k="uuid" v="{4d90be44-e379-4065-a7cf-30d086768574}"/>
-        <tag k="name" v="Ruelle Muller"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-195"/>
-    </way>
-    <way visible="true" id="-194" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-234"/>
-        <nd ref="-316"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="Haiti DMA Topo;osm;osm"/>
-        <tag k="uuid" v="{4d90be44-e379-4065-a7cf-30d086768574}"/>
-        <tag k="name" v="Ruelle Muller"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-194"/>
-    </way>
-    <way visible="true" id="-193" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-101"/>
-        <nd ref="-96"/>
-        <tag k="access" v="private"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="Bing;osm;osm"/>
-        <tag k="uuid" v="{e7fffbb6-80c3-4981-afa6-891e31cc6a46}"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="service"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-193"/>
-    </way>
-    <way visible="true" id="-192" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-230"/>
-        <nd ref="-333"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="width:minimum_traveled_way" v="5"/>
-        <tag k="source" v="GPS; survey; CNIGS/FOCS/OIM;osm;mgcp"/>
         <tag k="condition" v="functional"/>
-        <tag k="loc_name" v="Bois Verna"/>
-        <tag k="name" v="Avenue Lamartinière"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="oneway" v="yes"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.117Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="highway" v="tertiary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{0cae07eb-5026-4d13-a117-b81d561b6c22};{{1740bac5-921f-4300-a4f0-935cf759d8d9}}"/>
         <tag k="location" v="surface"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-192"/>
-    </way>
-    <way visible="true" id="-191" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-359"/>
-        <nd ref="-204"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="impassable" v="yes"/>
-        <tag k="source" v="Haiti DMA Topo;osm;osm"/>
-        <tag k="uuid" v="{5cccf88e-df69-48f5-801b-d501e7489356}"/>
-        <tag k="name" v="Impasse Ascensio"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-191"/>
-    </way>
-    <way visible="true" id="-190" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-96"/>
-        <nd ref="-64"/>
-        <tag k="access" v="private"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="Bing;osm;osm"/>
-        <tag k="uuid" v="{e7fffbb6-80c3-4981-afa6-891e31cc6a46}"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="service"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-190"/>
-    </way>
-    <way visible="true" id="-189" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-226"/>
-        <nd ref="-225"/>
-        <nd ref="-224"/>
-        <nd ref="-223"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="CNIGS/OIM/FOCS;osm;osm"/>
-        <tag k="uuid" v="{194be4d3-27c5-48c7-bc12-e86f54590a25}"/>
-        <tag k="name" v="Ruelle M. Solomon"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="bad"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="tertiary"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-189"/>
-    </way>
-    <way visible="true" id="-188" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-357"/>
-        <nd ref="-312"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="oneway" v="no"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="CNIGS/OIM/ FOCS;osm;osm"/>
-        <tag k="uuid" v="{8bf22616-bc4c-4f84-8be2-4229b5611155}"/>
-        <tag k="name" v="Rue Robin"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="residential"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-188"/>
-    </way>
-    <way visible="true" id="-187" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-93"/>
-        <nd ref="-63"/>
-        <nd ref="-62"/>
-        <nd ref="-242"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="practicability" v="light_truck_less_than_10mt"/>
-        <tag k="source" v="CNIGS/OIM/FOCS;osm;osm"/>
-        <tag k="uuid" v="{786f839a-600e-4eeb-b925-6bbec31f8f97}"/>
-        <tag k="name" v="Rue Nazon 2e"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="bad"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="residential"/>
-        <tag k="incline" v="yes"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-187"/>
-    </way>
-    <way visible="true" id="-186" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-223"/>
-        <nd ref="-42"/>
-        <nd ref="-342"/>
-        <tag k="width:minimum_traveled_way" v="5"/>
-        <tag k="source" v="survey; GPS-adjusted Bing;osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="name" v="Rue Christ-Roi"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="median" v="no"/>
         <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.110Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="highway" v="tertiary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{36789196-bf1d-4a69-9bb1-3ad6dc214df0};{{8451de12-8c9f-49ea-a752-e9a78cb1c409}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-186"/>
-    </way>
-    <way visible="true" id="-185" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-218"/>
-        <nd ref="-217"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="practicability" v="4wd_less_than_3.5mt"/>
-        <tag k="source" v="CNIGS/OIM/FOCS;osm;osm"/>
-        <tag k="uuid" v="{edb11858-17cb-4d15-8c9d-d20f10cc93f9}"/>
-        <tag k="name" v="Rue Mercier"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="bad"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="residential"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-185"/>
-    </way>
-    <way visible="true" id="-184" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-215"/>
-        <nd ref="-294"/>
-        <tag k="width:minimum_traveled_way" v="5"/>
-        <tag k="source" v="GPS; survey;osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="loc_name" v="Bois Verna"/>
-        <tag k="name" v="Avenue Lamartinière"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="oneway" v="yes"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="FIXME" v="where does Avenue Lamartinière change to Rue Fernand? Split accordingly."/>
-        <tag k="source:name" v="DMA Topo Map;very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="surface" v="paved"/>
         <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.117Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="highway" v="tertiary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{07fadde5-28fa-4703-8273-18938b0d943f};{{1740bac5-921f-4300-a4f0-935cf759d8d9}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-184"/>
-    </way>
-    <way visible="true" id="-183" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-214"/>
-        <nd ref="-57"/>
-        <nd ref="-56"/>
-        <nd ref="-158"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="practicability" v="light_truck_less_than_10mt"/>
-        <tag k="source" v="CNIGS/OIM/FOCS;osm;osm"/>
-        <tag k="uuid" v="{786f839a-600e-4eeb-b925-6bbec31f8f97}"/>
-        <tag k="name" v="Rue Nazon 2e"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="bad"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="residential"/>
-        <tag k="incline" v="yes"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-183"/>
-    </way>
-    <way visible="true" id="-182" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-83"/>
-        <nd ref="-65"/>
-        <nd ref="-101"/>
-        <tag k="access" v="private"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="Bing;osm;osm"/>
-        <tag k="uuid" v="{e7fffbb6-80c3-4981-afa6-891e31cc6a46}"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="service"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-182"/>
-    </way>
-    <way visible="true" id="-181" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-201"/>
-        <nd ref="-91"/>
-        <nd ref="-90"/>
-        <nd ref="-251"/>
-        <tag k="width:minimum_traveled_way" v="5"/>
-        <tag k="source" v="GPS; survey;osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="loc_name" v="Bois Verna"/>
-        <tag k="name" v="Avenue Lamartinière"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="oneway" v="yes"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="FIXME" v="where does Avenue Lamartinière change to Rue Fernand? Split accordingly."/>
-        <tag k="source:name" v="DMA Topo Map;very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.117Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="highway" v="tertiary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{07fadde5-28fa-4703-8273-18938b0d943f};{{1740bac5-921f-4300-a4f0-935cf759d8d9}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-181"/>
-    </way>
-    <way visible="true" id="-180" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-199"/>
-        <nd ref="-32"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
-        <tag k="source" v="osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="name" v="Lalue"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="alt_name" v="Avenue John Brown"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.114Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="fixme" v="find out what part of Ave. John brown is Lalue?"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{2846d7f0-3cd0-4379-8e45-fd83731036b0};{{00b2b754-a805-42fe-a7c0-60fe86d05092}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-180"/>
-    </way>
-    <way visible="true" id="-179" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-197"/>
-        <nd ref="-24"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
-        <tag k="source" v="osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="name" v="Lalue"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="alt_name" v="Avenue John Brown"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.114Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="fixme" v="find out what part of Ave. John brown is Lalue?"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{2846d7f0-3cd0-4379-8e45-fd83731036b0};{{00b2b754-a805-42fe-a7c0-60fe86d05092}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-179"/>
-    </way>
-    <way visible="true" id="-178" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-194"/>
-        <nd ref="-328"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="CNIGS/OIM/FOCS;osm;osm"/>
-        <tag k="uuid" v="{a1c4f699-3126-4d48-be07-20e5b3921bd4}"/>
-        <tag k="name" v="Rue Lavaud 2e"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="residential"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-178"/>
-    </way>
-    <way visible="true" id="-177" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-193"/>
-        <nd ref="-126"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="practicability" v="4wd_less_than_3.5mt"/>
-        <tag k="source" v="survey; CNIGS/OIM/FOCS;osm;osm"/>
-        <tag k="uuid" v="{2658af5f-7d9b-4f7b-a60e-eb060d5ac012}"/>
-        <tag k="name" v="Rue Mercier"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="bad"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="residential"/>
-        <tag k="surface" v="dirt"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-177"/>
-    </way>
-    <way visible="true" id="-176" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-192"/>
-        <nd ref="-191"/>
-        <nd ref="-190"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="operational_status" v="restricted"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="CNIGS/OIM/FOCS;osm;osm"/>
-        <tag k="uuid" v="{834308c8-2be0-46e8-bab6-42ae04f2059d}"/>
-        <tag k="name" v="Ruelle Célie"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="bad"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="residential"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-176"/>
-    </way>
-    <way visible="true" id="-175" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-190"/>
-        <nd ref="-46"/>
-        <nd ref="-45"/>
-        <nd ref="-218"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="practicability" v="4wd_less_than_3.5mt"/>
-        <tag k="source" v="CNIGS/OIM/FOCS;osm;osm"/>
-        <tag k="uuid" v="{edfb5adb-0bf4-4681-aa30-d04917e37bfe}"/>
-        <tag k="name" v="Rue Louissaint"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="bad"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="residential"/>
-        <tag k="surface" v="gravel"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-175"/>
-    </way>
-    <way visible="true" id="-174" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-317"/>
-        <nd ref="-25"/>
-        <tag k="width:minimum_traveled_way" v="5"/>
-        <tag k="source" v="GPS; survey; CNIGS/FOCS/OIM;osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="loc_name" v="Bois Verna"/>
-        <tag k="name" v="Avenue Lamartinière"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="oneway" v="yes"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.117Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="highway" v="tertiary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{0cae07eb-5026-4d13-a117-b81d561b6c22};{{1740bac5-921f-4300-a4f0-935cf759d8d9}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-174"/>
-    </way>
-    <way visible="true" id="-173" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-55"/>
-        <nd ref="-54"/>
-        <nd ref="-258"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="practicability" v="light_truck_less_than_10mt"/>
-        <tag k="source" v="CNIGS/OIM/FOCS;osm;osm"/>
-        <tag k="uuid" v="{f8c301ac-a018-465d-992f-7312bab64c7a}"/>
-        <tag k="name" v="Ruelle Butte"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-173"/>
-    </way>
-    <way visible="true" id="-172" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-316"/>
-        <nd ref="-4"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="CNIGS/OIM/ FOCS;osm;osm"/>
-        <tag k="uuid" v="{083ca2cb-05ca-42e1-8d9d-a76cee1b63be}"/>
-        <tag k="name" v="Rue Berne"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-172"/>
-    </way>
-    <way visible="true" id="-171" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-315"/>
-        <nd ref="-295"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="fixme" v="find out what part of Ave. John brown is Lalue?"/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="alt_name" v="Avenue John Brown"/>
-        <tag k="source" v="osm;osm"/>
-        <tag k="uuid" v="{2846d7f0-3cd0-4379-8e45-fd83731036b0}"/>
-        <tag k="name" v="Lalue"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-171"/>
-    </way>
-    <way visible="true" id="-170" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-184"/>
-        <nd ref="-29"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="CNIGS/OIM/FOCS;osm;osm"/>
-        <tag k="uuid" v="{9bc6d3a9-3f79-414f-92cd-368bfe56e008}"/>
-        <tag k="name" v="Ruelle M. Solomon"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="bad"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="residential"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-170"/>
-    </way>
-    <way visible="true" id="-169" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-183"/>
-        <nd ref="-177"/>
-        <nd ref="-176"/>
-        <nd ref="-175"/>
-        <nd ref="-174"/>
-        <nd ref="-173"/>
-        <nd ref="-172"/>
-        <nd ref="-171"/>
-        <nd ref="-170"/>
-        <nd ref="-169"/>
-        <nd ref="-168"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="practicability" v="light_truck_less_than_10mt"/>
-        <tag k="source" v="CNIGS/OIM/FOCS;osm;osm"/>
-        <tag k="uuid" v="{d02b22cf-78b1-4ce0-a785-ed58fbaf1dcd}"/>
-        <tag k="name" v="Ruelle Mayard"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="bad"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="tertiary"/>
-        <tag k="incline" v="yes"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-169"/>
-    </way>
-    <way visible="true" id="-168" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-314"/>
-        <nd ref="-310"/>
-        <tag k="width:minimum_traveled_way" v="5"/>
-        <tag k="source" v="GPS; survey;osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="loc_name" v="Bois Verna"/>
-        <tag k="name" v="Avenue Lamartinière"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="oneway" v="yes"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="FIXME" v="where does Avenue Lamartinière change to Rue Fernand? Split accordingly."/>
-        <tag k="source:name" v="DMA Topo Map;very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.117Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="highway" v="tertiary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{07fadde5-28fa-4703-8273-18938b0d943f};{{1740bac5-921f-4300-a4f0-935cf759d8d9}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-168"/>
-    </way>
-    <way visible="true" id="-166" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-313"/>
-        <nd ref="-357"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="oneway" v="no"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="CNIGS/OIM/ FOCS;osm;osm"/>
-        <tag k="uuid" v="{8bf22616-bc4c-4f84-8be2-4229b5611155}"/>
-        <tag k="name" v="Rue Robin"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="residential"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-166"/>
-    </way>
-    <way visible="true" id="-165" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-312"/>
-        <nd ref="-165"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
-        <tag k="source" v="osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="name" v="Lalue"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="alt_name" v="Avenue John Brown"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.114Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="fixme" v="find out what part of Ave. John brown is Lalue?"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{2846d7f0-3cd0-4379-8e45-fd83731036b0};{{00b2b754-a805-42fe-a7c0-60fe86d05092}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-165"/>
-    </way>
-    <way visible="true" id="-164" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-311"/>
-        <nd ref="-312"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
-        <tag k="source" v="osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="name" v="Lalue"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="alt_name" v="Avenue John Brown"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.114Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="fixme" v="find out what part of Ave. John brown is Lalue?"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{2846d7f0-3cd0-4379-8e45-fd83731036b0};{{00b2b754-a805-42fe-a7c0-60fe86d05092}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-164"/>
-    </way>
-    <way visible="true" id="-163" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-310"/>
-        <nd ref="-89"/>
-        <nd ref="-88"/>
-        <nd ref="-215"/>
-        <tag k="width:minimum_traveled_way" v="5"/>
-        <tag k="source" v="GPS; survey;osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="loc_name" v="Bois Verna"/>
-        <tag k="name" v="Avenue Lamartinière"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="oneway" v="yes"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="FIXME" v="where does Avenue Lamartinière change to Rue Fernand? Split accordingly."/>
-        <tag k="source:name" v="DMA Topo Map;very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.117Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="highway" v="tertiary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{07fadde5-28fa-4703-8273-18938b0d943f};{{1740bac5-921f-4300-a4f0-935cf759d8d9}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-163"/>
-    </way>
-    <way visible="true" id="-162" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-303"/>
-        <nd ref="-302"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source" v="osm;osm"/>
-        <tag k="uuid" v="{79cdd2bf-505f-43ca-bb95-6a89a89ff6a3}"/>
-        <tag k="name" v="Avenue Martin Luther King"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="tertiary"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-162"/>
-    </way>
-    <way visible="true" id="-161" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-40"/>
-        <nd ref="-6"/>
-        <tag k="width:minimum_traveled_way" v="5"/>
-        <tag k="source" v="GPS; survey; CNIGS/FOCS/OIM;osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="loc_name" v="Bois Verna"/>
-        <tag k="name" v="Avenue Lamartinière"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="oneway" v="yes"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.117Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="highway" v="tertiary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{0cae07eb-5026-4d13-a117-b81d561b6c22};{{1740bac5-921f-4300-a4f0-935cf759d8d9}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-161"/>
-    </way>
-    <way visible="true" id="-160" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-302"/>
-        <nd ref="-41"/>
-        <nd ref="-301"/>
-        <nd ref="-300"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source" v="osm;osm"/>
-        <tag k="uuid" v="{79cdd2bf-505f-43ca-bb95-6a89a89ff6a3}"/>
-        <tag k="name" v="Avenue Martin Luther King"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="tertiary"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-160"/>
-    </way>
-    <way visible="true" id="-159" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-300"/>
-        <nd ref="-299"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source" v="osm;osm"/>
-        <tag k="uuid" v="{79cdd2bf-505f-43ca-bb95-6a89a89ff6a3}"/>
-        <tag k="name" v="Avenue Martin Luther King"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="tertiary"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-159"/>
-    </way>
-    <way visible="true" id="-158" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-168"/>
-        <nd ref="-141"/>
-        <nd ref="-331"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="practicability" v="light_truck_less_than_10mt"/>
-        <tag k="source" v="CNIGS/OIM/FOCS;osm;osm"/>
-        <tag k="uuid" v="{b83c5483-2b5f-42ae-ac30-1d29b6067caf}"/>
-        <tag k="name" v="Ruelle Butte"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="tertiary"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-158"/>
-    </way>
-    <way visible="true" id="-157" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-37"/>
-        <nd ref="-36"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="Google 2010-01-17;osm;osm"/>
-        <tag k="uuid" v="{dfcab291-5d38-4d86-85d9-14bb5ddce212}"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="service"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-157"/>
-    </way>
-    <way visible="true" id="-156" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-299"/>
-        <nd ref="-298"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source" v="osm;osm"/>
-        <tag k="uuid" v="{79cdd2bf-505f-43ca-bb95-6a89a89ff6a3}"/>
-        <tag k="name" v="Avenue Martin Luther King"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="tertiary"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-156"/>
-    </way>
-    <way visible="true" id="-154" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-36"/>
-        <nd ref="-197"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
-        <tag k="source" v="osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="name" v="Lalue"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="alt_name" v="Avenue John Brown"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.114Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="fixme" v="find out what part of Ave. John brown is Lalue?"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{2846d7f0-3cd0-4379-8e45-fd83731036b0};{{00b2b754-a805-42fe-a7c0-60fe86d05092}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-154"/>
-    </way>
-    <way visible="true" id="-153" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-167"/>
-        <nd ref="-166"/>
-        <nd ref="-311"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="fixme" v="find out what part of Ave. John brown is Lalue?"/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="alt_name" v="Avenue John Brown"/>
-        <tag k="source" v="osm;osm"/>
-        <tag k="uuid" v="{2846d7f0-3cd0-4379-8e45-fd83731036b0}"/>
-        <tag k="name" v="Lalue"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-153"/>
-    </way>
-    <way visible="true" id="-152" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-298"/>
-        <nd ref="-22"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source" v="osm;osm"/>
-        <tag k="uuid" v="{79cdd2bf-505f-43ca-bb95-6a89a89ff6a3}"/>
-        <tag k="name" v="Avenue Martin Luther King"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="tertiary"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-152"/>
-    </way>
-    <way visible="true" id="-151" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-297"/>
-        <nd ref="-164"/>
-        <nd ref="-199"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
-        <tag k="source" v="osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="name" v="Lalue"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="alt_name" v="Avenue John Brown"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.114Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="fixme" v="find out what part of Ave. John brown is Lalue?"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{2846d7f0-3cd0-4379-8e45-fd83731036b0};{{00b2b754-a805-42fe-a7c0-60fe86d05092}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-151"/>
-    </way>
-    <way visible="true" id="-150" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-165"/>
-        <nd ref="-21"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
-        <tag k="source" v="osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="name" v="Lalue"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="alt_name" v="Avenue John Brown"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.114Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="fixme" v="find out what part of Ave. John brown is Lalue?"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{2846d7f0-3cd0-4379-8e45-fd83731036b0};{{00b2b754-a805-42fe-a7c0-60fe86d05092}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-150"/>
-    </way>
-    <way visible="true" id="-149" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-295"/>
-        <nd ref="-167"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="fixme" v="find out what part of Ave. John brown is Lalue?"/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="alt_name" v="Avenue John Brown"/>
-        <tag k="source" v="osm;osm"/>
-        <tag k="uuid" v="{2846d7f0-3cd0-4379-8e45-fd83731036b0}"/>
-        <tag k="name" v="Lalue"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-149"/>
-    </way>
-    <way visible="true" id="-148" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-33"/>
-        <nd ref="-85"/>
-        <nd ref="-84"/>
-        <nd ref="-336"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="practicability" v="4wd_less_than_3.5mt"/>
-        <tag k="source" v="CNIGS/OIM/FOCS;osm;osm"/>
-        <tag k="uuid" v="{d0277840-0e44-4eaf-bfcd-8a5e8fd1b207}"/>
-        <tag k="name" v="Rue Vaillant"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="bad"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="residential"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-148"/>
-    </way>
-    <way visible="true" id="-147" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-163"/>
-        <nd ref="-162"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
-        <tag k="source" v="osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="name" v="Lalue"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="alt_name" v="Avenue John Brown"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.114Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="fixme" v="find out what part of Ave. John brown is Lalue?"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{2846d7f0-3cd0-4379-8e45-fd83731036b0};{{00b2b754-a805-42fe-a7c0-60fe86d05092}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-147"/>
-    </way>
-    <way visible="true" id="-146" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-32"/>
-        <nd ref="-163"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
-        <tag k="source" v="osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="name" v="Lalue"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="alt_name" v="Avenue John Brown"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.114Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="fixme" v="find out what part of Ave. John brown is Lalue?"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{2846d7f0-3cd0-4379-8e45-fd83731036b0};{{00b2b754-a805-42fe-a7c0-60fe86d05092}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-146"/>
-    </way>
-    <way visible="true" id="-145" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-162"/>
-        <nd ref="-161"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
-        <tag k="source" v="osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="name" v="Lalue"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="alt_name" v="Avenue John Brown"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.114Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="fixme" v="find out what part of Ave. John brown is Lalue?"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{2846d7f0-3cd0-4379-8e45-fd83731036b0};{{00b2b754-a805-42fe-a7c0-60fe86d05092}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-145"/>
-    </way>
-    <way visible="true" id="-144" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-30"/>
-        <nd ref="-323"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="CNIGS/OIM/FOCS;osm;osm"/>
-        <tag k="uuid" v="{7476ad29-1d9b-478c-b695-4d13eb396cd1}"/>
-        <tag k="name" v="Avenue Martin Luther King"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-144"/>
-    </way>
-    <way visible="true" id="-143" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-161"/>
-        <nd ref="-286"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
-        <tag k="source" v="osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="name" v="Lalue"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="alt_name" v="Avenue John Brown"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.114Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="fixme" v="find out what part of Ave. John brown is Lalue?"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{2846d7f0-3cd0-4379-8e45-fd83731036b0};{{00b2b754-a805-42fe-a7c0-60fe86d05092}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-143"/>
-    </way>
-    <way visible="true" id="-142" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-160"/>
-        <nd ref="-159"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
-        <tag k="source" v="osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="name" v="Lalue"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="alt_name" v="Avenue John Brown"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.114Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="fixme" v="find out what part of Ave. John brown is Lalue?"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{2846d7f0-3cd0-4379-8e45-fd83731036b0};{{00b2b754-a805-42fe-a7c0-60fe86d05092}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-142"/>
-    </way>
-    <way visible="true" id="-141" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-291"/>
-        <nd ref="-290"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="osm;osm"/>
-        <tag k="uuid" v="{ee13d6fe-3a36-4c0c-b9a4-9cb3599a61bb}"/>
-        <tag k="name" v="Rue Rivière"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="keepme" v="yes"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="tertiary"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-141"/>
-    </way>
-    <way visible="true" id="-140" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-159"/>
-        <nd ref="-158"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
-        <tag k="source" v="osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="name" v="Lalue"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="alt_name" v="Avenue John Brown"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.114Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="fixme" v="find out what part of Ave. John brown is Lalue?"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{2846d7f0-3cd0-4379-8e45-fd83731036b0};{{00b2b754-a805-42fe-a7c0-60fe86d05092}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-140"/>
-    </way>
-    <way visible="true" id="-139" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-290"/>
-        <nd ref="-289"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="osm;osm"/>
-        <tag k="uuid" v="{ee13d6fe-3a36-4c0c-b9a4-9cb3599a61bb}"/>
-        <tag k="name" v="Rue Rivière"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="keepme" v="yes"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="tertiary"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-139"/>
-    </way>
-    <way visible="true" id="-138" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-158"/>
-        <nd ref="-157"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
-        <tag k="source" v="osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="name" v="Lalue"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="alt_name" v="Avenue John Brown"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.114Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="fixme" v="find out what part of Ave. John brown is Lalue?"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{2846d7f0-3cd0-4379-8e45-fd83731036b0};{{00b2b754-a805-42fe-a7c0-60fe86d05092}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-138"/>
-    </way>
-    <way visible="true" id="-137" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-289"/>
-        <nd ref="-288"/>
-        <nd ref="-287"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="osm;osm"/>
-        <tag k="uuid" v="{ee13d6fe-3a36-4c0c-b9a4-9cb3599a61bb}"/>
-        <tag k="name" v="Rue Rivière"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="keepme" v="yes"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="tertiary"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-137"/>
-    </way>
-    <way visible="true" id="-136" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-157"/>
-        <nd ref="-39"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
-        <tag k="source" v="osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="name" v="Lalue"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="alt_name" v="Avenue John Brown"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.114Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="fixme" v="find out what part of Ave. John brown is Lalue?"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{2846d7f0-3cd0-4379-8e45-fd83731036b0};{{00b2b754-a805-42fe-a7c0-60fe86d05092}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-136"/>
-    </way>
-    <way visible="true" id="-135" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-25"/>
-        <nd ref="-16"/>
-        <tag k="width:minimum_traveled_way" v="5"/>
-        <tag k="source" v="GPS; survey; CNIGS/FOCS/OIM;osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="loc_name" v="Bois Verna"/>
-        <tag k="name" v="Avenue Lamartinière"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="oneway" v="yes"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.117Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="highway" v="tertiary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{0cae07eb-5026-4d13-a117-b81d561b6c22};{{1740bac5-921f-4300-a4f0-935cf759d8d9}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-135"/>
-    </way>
-    <way visible="true" id="-134" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-286"/>
-        <nd ref="-160"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
-        <tag k="source" v="osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="name" v="Lalue"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="alt_name" v="Avenue John Brown"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.114Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="fixme" v="find out what part of Ave. John brown is Lalue?"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{2846d7f0-3cd0-4379-8e45-fd83731036b0};{{00b2b754-a805-42fe-a7c0-60fe86d05092}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-134"/>
-    </way>
-    <way visible="true" id="-133" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-24"/>
-        <nd ref="-297"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
-        <tag k="source" v="osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="name" v="Lalue"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="alt_name" v="Avenue John Brown"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.114Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="fixme" v="find out what part of Ave. John brown is Lalue?"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{2846d7f0-3cd0-4379-8e45-fd83731036b0};{{00b2b754-a805-42fe-a7c0-60fe86d05092}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-133"/>
-    </way>
-    <way visible="true" id="-132" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-284"/>
-        <nd ref="-230"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="CNIGS/OIM/ FOCS;osm;osm"/>
-        <tag k="uuid" v="{4779df66-7003-4403-b57b-c88972fd46fc}"/>
-        <tag k="name" v="3e Rue du Travail"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-132"/>
-    </way>
-    <way visible="true" id="-131" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-22"/>
-        <nd ref="-297"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source" v="osm;osm"/>
-        <tag k="uuid" v="{79cdd2bf-505f-43ca-bb95-6a89a89ff6a3}"/>
-        <tag k="name" v="Avenue Martin Luther King"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="tertiary"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-131"/>
-    </way>
-    <way visible="true" id="-130" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-21"/>
-        <nd ref="-36"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
-        <tag k="source" v="osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="name" v="Lalue"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="alt_name" v="Avenue John Brown"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.114Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="fixme" v="find out what part of Ave. John brown is Lalue?"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{2846d7f0-3cd0-4379-8e45-fd83731036b0};{{00b2b754-a805-42fe-a7c0-60fe86d05092}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-130"/>
-    </way>
-    <way visible="true" id="-129" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-150"/>
-        <nd ref="-264"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
-        <tag k="source" v="osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="name" v="Route de Bourdon"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="alt_name" v="Avenue John Brown"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.114Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="fixme" v="find out what part of Ave. John brown is Lalue?"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{31b011c0-0cc8-46ef-9381-24e38cc7358d};{{00b2b754-a805-42fe-a7c0-60fe86d05092}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-129"/>
-    </way>
-    <way visible="true" id="-128" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-18"/>
-        <nd ref="-1"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="CNIGS/OIM/FOCS;osm;osm"/>
-        <tag k="uuid" v="{05caf30c-238d-4b5d-8702-372984d75909}"/>
-        <tag k="name" v="Rue Jérémie 2e"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="residential"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-128"/>
-    </way>
-    <way visible="true" id="-127" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-149"/>
-        <nd ref="-332"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
-        <tag k="source" v="osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="name" v="Route de Bourdon"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="alt_name" v="Avenue John Brown"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.114Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="fixme" v="find out what part of Ave. John brown is Lalue?"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{31b011c0-0cc8-46ef-9381-24e38cc7358d};{{00b2b754-a805-42fe-a7c0-60fe86d05092}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-127"/>
-    </way>
-    <way visible="true" id="-126" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-17"/>
-        <nd ref="-15"/>
-        <tag k="source:name" v="DMA Topo Map"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="Google 2010-01-17;osm;osm"/>
-        <tag k="uuid" v="{68b3a771-cfdd-4e8d-8a53-4fb824d1c806}"/>
-        <tag k="name" v="Impasse Price"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="service"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-126"/>
-    </way>
-    <way visible="true" id="-125" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-16"/>
-        <nd ref="-115"/>
-        <nd ref="-266"/>
-        <tag k="width:minimum_traveled_way" v="5"/>
-        <tag k="source" v="GPS; survey; CNIGS/FOCS/OIM;osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="loc_name" v="Bois Verna"/>
-        <tag k="name" v="Avenue Lamartinière"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="oneway" v="yes"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.117Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="highway" v="tertiary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{0cae07eb-5026-4d13-a117-b81d561b6c22};{{1740bac5-921f-4300-a4f0-935cf759d8d9}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-125"/>
-    </way>
-    <way visible="true" id="-124" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-12"/>
-        <nd ref="-230"/>
-        <tag k="width:minimum_traveled_way" v="5"/>
-        <tag k="source" v="GPS; survey; CNIGS/FOCS/OIM;osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="loc_name" v="Bois Verna"/>
-        <tag k="name" v="Avenue Lamartinière"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="oneway" v="yes"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.117Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="highway" v="tertiary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{0cae07eb-5026-4d13-a117-b81d561b6c22};{{1740bac5-921f-4300-a4f0-935cf759d8d9}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-124"/>
-    </way>
-    <way visible="true" id="-123" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-11"/>
-        <nd ref="-215"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="GeoEye;osm;osm"/>
-        <tag k="uuid" v="{a2123fc5-5b97-4576-a112-6da76456981f}"/>
-        <tag k="name" v="Rue Clermont"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="residential"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-123"/>
-    </way>
-    <way visible="true" id="-122" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-139"/>
-        <nd ref="-138"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
-        <tag k="source" v="osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="name" v="Route de Bourdon"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="alt_name" v="Avenue John Brown"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.114Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="fixme" v="find out what part of Ave. John brown is Lalue?"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{31b011c0-0cc8-46ef-9381-24e38cc7358d};{{00b2b754-a805-42fe-a7c0-60fe86d05092}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-122"/>
-    </way>
-    <way visible="true" id="-121" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-138"/>
-        <nd ref="-137"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
-        <tag k="source" v="osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="name" v="Route de Bourdon"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="alt_name" v="Avenue John Brown"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.114Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="fixme" v="find out what part of Ave. John brown is Lalue?"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{31b011c0-0cc8-46ef-9381-24e38cc7358d};{{00b2b754-a805-42fe-a7c0-60fe86d05092}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-121"/>
-    </way>
-    <way visible="true" id="-120" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-6"/>
-        <nd ref="-12"/>
-        <tag k="width:minimum_traveled_way" v="5"/>
-        <tag k="source" v="GPS; survey; CNIGS/FOCS/OIM;osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="loc_name" v="Bois Verna"/>
-        <tag k="name" v="Avenue Lamartinière"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="oneway" v="yes"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.117Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="highway" v="tertiary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{0cae07eb-5026-4d13-a117-b81d561b6c22};{{1740bac5-921f-4300-a4f0-935cf759d8d9}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-120"/>
-    </way>
-    <way visible="true" id="-119" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-137"/>
-        <nd ref="-150"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
-        <tag k="source" v="osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="name" v="Route de Bourdon"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="alt_name" v="Avenue John Brown"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.114Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="fixme" v="find out what part of Ave. John brown is Lalue?"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{31b011c0-0cc8-46ef-9381-24e38cc7358d};{{00b2b754-a805-42fe-a7c0-60fe86d05092}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-119"/>
-    </way>
-    <way visible="true" id="-118" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-266"/>
-        <nd ref="-40"/>
-        <tag k="width:minimum_traveled_way" v="5"/>
-        <tag k="source" v="GPS; survey; CNIGS/FOCS/OIM;osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="loc_name" v="Bois Verna"/>
-        <tag k="name" v="Avenue Lamartinière"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="oneway" v="yes"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.117Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="highway" v="tertiary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{0cae07eb-5026-4d13-a117-b81d561b6c22};{{1740bac5-921f-4300-a4f0-935cf759d8d9}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-118"/>
-    </way>
-    <way visible="true" id="-117" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-4"/>
-        <nd ref="-315"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="CNIGS/OIM/ FOCS;osm;osm"/>
-        <tag k="uuid" v="{083ca2cb-05ca-42e1-8d9d-a76cee1b63be}"/>
-        <tag k="name" v="Rue Berne"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-117"/>
-    </way>
-    <way visible="true" id="-115" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-264"/>
-        <nd ref="-136"/>
-        <nd ref="-135"/>
-        <nd ref="-134"/>
-        <nd ref="-133"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
-        <tag k="source" v="osm;mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="name" v="Route de Bourdon"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="alt_name" v="Avenue John Brown"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.114Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="fixme" v="find out what part of Ave. John brown is Lalue?"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="uuid" v="{31b011c0-0cc8-46ef-9381-24e38cc7358d};{{00b2b754-a805-42fe-a7c0-60fe86d05092}}"/>
-        <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-115"/>
-    </way>
-    <way visible="true" id="-114" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1"/>
-        <nd ref="-321"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="CNIGS/OIM/FOCS;osm;osm"/>
-        <tag k="uuid" v="{05caf30c-238d-4b5d-8702-372984d75909}"/>
-        <tag k="name" v="Rue Jérémie 2e"/>
-        <tag k="attribution" v="osm;osm"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="residential"/>
-        <tag k="surface" v="paved"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-114"/>
-    </way>
-    <way visible="true" id="-112" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-460"/>
-        <nd ref="-367"/>
-        <tag k="width:minimum_traveled_way" v="5"/>
         <tag k="source" v="mgcp"/>
-        <tag k="condition" v="functional"/>
-        <tag k="lanes" v="2"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.112Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="highway" v="road"/>
-        <tag k="source:datetime" v="2010-01-13"/>
         <tag k="uuid" v="{{7ce9692f-4849-440e-979c-916936f16365}}"/>
-        <tag k="location" v="surface"/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2010-01-13"/>
+        <tag k="highway" v="road"/>
+        <tag k="lanes" v="2"/>
+        <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="2"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-112"/>
@@ -4288,20 +1993,22 @@
     <way visible="true" id="-105" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-138"/>
         <nd ref="-223"/>
+        <nd ref="-42"/>
+        <nd ref="-342"/>
         <tag k="width:minimum_traveled_way" v="5"/>
         <tag k="source" v="survey; GPS-adjusted Bing;osm;mgcp"/>
         <tag k="condition" v="functional"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="name" v="Rue Christ-Roi"/>
         <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="seasonal" v="no"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="surface" v="asphalt"/>
         <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
         <tag k="source:haiti" v="CNIGS and CartONG"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
         <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.110Z"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="highway" v="tertiary"/>
@@ -4316,6 +2023,7 @@
         <nd ref="-258"/>
         <nd ref="-44"/>
         <nd ref="-126"/>
+        <nd ref="-341"/>
         <tag k="source:datetime" v="2017-06-07T15:19:30Z"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
@@ -4347,15 +2055,17 @@
     <way visible="true" id="-101" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-338"/>
         <nd ref="-55"/>
+        <nd ref="-54"/>
+        <nd ref="-258"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="operational_status_quality" v="confirmed"/>
         <tag k="oneway" v="yes"/>
         <tag k="operational_status" v="open"/>
         <tag k="practicability" v="light_truck_less_than_10mt"/>
-        <tag k="source" v="CNIGS/OIM/FOCS;osm;osm"/>
+        <tag k="source" v="CNIGS/OIM/FOCS;osm"/>
         <tag k="uuid" v="{f8c301ac-a018-465d-992f-7312bab64c7a}"/>
         <tag k="name" v="Ruelle Butte"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="smoothness" v="intermediate"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="unclassified"/>
@@ -4367,14 +2077,25 @@
     <way visible="true" id="-100" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-337"/>
         <nd ref="-93"/>
+        <nd ref="-63"/>
+        <nd ref="-62"/>
+        <nd ref="-242"/>
+        <nd ref="-61"/>
+        <nd ref="-60"/>
+        <nd ref="-59"/>
+        <nd ref="-58"/>
+        <nd ref="-214"/>
+        <nd ref="-57"/>
+        <nd ref="-56"/>
+        <nd ref="-158"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="operational_status_quality" v="confirmed"/>
         <tag k="operational_status" v="open"/>
         <tag k="practicability" v="light_truck_less_than_10mt"/>
-        <tag k="source" v="CNIGS/OIM/FOCS;osm;osm"/>
+        <tag k="source" v="CNIGS/OIM/FOCS;osm"/>
         <tag k="uuid" v="{786f839a-600e-4eeb-b925-6bbec31f8f97}"/>
         <tag k="name" v="Rue Nazon 2e"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="smoothness" v="bad"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="residential"/>
@@ -4387,14 +2108,17 @@
     <way visible="true" id="-99" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-165"/>
         <nd ref="-33"/>
+        <nd ref="-85"/>
+        <nd ref="-84"/>
+        <nd ref="-336"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="operational_status_quality" v="confirmed"/>
         <tag k="operational_status" v="open"/>
         <tag k="practicability" v="4wd_less_than_3.5mt"/>
-        <tag k="source" v="CNIGS/OIM/FOCS;osm;osm"/>
+        <tag k="source" v="CNIGS/OIM/FOCS;osm"/>
         <tag k="uuid" v="{d0277840-0e44-4eaf-bfcd-8a5e8fd1b207}"/>
         <tag k="name" v="Rue Vaillant"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="smoothness" v="bad"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="residential"/>
@@ -4446,14 +2170,23 @@
     <way visible="true" id="-96" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-294"/>
         <nd ref="-317"/>
+        <nd ref="-25"/>
+        <nd ref="-16"/>
+        <nd ref="-115"/>
+        <nd ref="-266"/>
+        <nd ref="-40"/>
+        <nd ref="-6"/>
+        <nd ref="-12"/>
+        <nd ref="-230"/>
+        <nd ref="-333"/>
         <tag k="width:minimum_traveled_way" v="5"/>
         <tag k="source" v="GPS; survey; CNIGS/FOCS/OIM;osm;mgcp"/>
         <tag k="condition" v="functional"/>
         <tag k="loc_name" v="Bois Verna"/>
-        <tag k="name" v="Avenue Lamartinière"/>
-        <tag k="lanes" v="2"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="oneway" v="yes"/>
+        <tag k="name" v="Avenue Lamartinière"/>
+        <tag k="lanes" v="2"/>
         <tag k="practicability" v="heavy_truck_less_than_20mt"/>
         <tag k="seasonal" v="no"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
@@ -4462,7 +2195,7 @@
         <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
         <tag k="source:description" v="IKONOS Imagery"/>
         <tag k="operational_status" v="open"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.117Z"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="highway" v="tertiary"/>
@@ -4478,21 +2211,29 @@
     <way visible="true" id="-95" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-39"/>
         <nd ref="-139"/>
+        <nd ref="-138"/>
+        <nd ref="-137"/>
+        <nd ref="-150"/>
+        <nd ref="-264"/>
+        <nd ref="-136"/>
+        <nd ref="-135"/>
+        <nd ref="-134"/>
+        <nd ref="-133"/>
         <tag k="width:minimum_traveled_way" v="8"/>
         <tag k="source" v="osm;mgcp"/>
         <tag k="condition" v="functional"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="name" v="Route de Bourdon"/>
         <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="seasonal" v="no"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="alt_name" v="Avenue John Brown"/>
         <tag k="surface" v="paved"/>
         <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
         <tag k="source:haiti" v="CNIGS and CartONG"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
         <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.114Z"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="fixme" v="find out what part of Ave. John brown is Lalue?"/>
@@ -4512,14 +2253,16 @@
         <nd ref="-143"/>
         <nd ref="-142"/>
         <nd ref="-168"/>
+        <nd ref="-141"/>
+        <nd ref="-331"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="operational_status_quality" v="confirmed"/>
         <tag k="operational_status" v="open"/>
         <tag k="practicability" v="light_truck_less_than_10mt"/>
-        <tag k="source" v="CNIGS/OIM/FOCS;osm;osm"/>
+        <tag k="source" v="CNIGS/OIM/FOCS;osm"/>
         <tag k="uuid" v="{b83c5483-2b5f-42ae-ac30-1d29b6067caf}"/>
         <tag k="name" v="Ruelle Butte"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="smoothness" v="intermediate"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="tertiary"/>
@@ -4531,18 +2274,53 @@
     <way visible="true" id="-93" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-330"/>
         <nd ref="-315"/>
+        <nd ref="-295"/>
+        <nd ref="-167"/>
+        <nd ref="-166"/>
+        <nd ref="-311"/>
+        <nd ref="-312"/>
+        <nd ref="-165"/>
+        <nd ref="-21"/>
+        <nd ref="-36"/>
+        <nd ref="-197"/>
+        <nd ref="-24"/>
+        <nd ref="-297"/>
+        <nd ref="-164"/>
+        <nd ref="-199"/>
+        <nd ref="-32"/>
+        <nd ref="-163"/>
+        <nd ref="-162"/>
+        <nd ref="-161"/>
+        <nd ref="-286"/>
+        <nd ref="-160"/>
+        <nd ref="-159"/>
+        <nd ref="-158"/>
+        <nd ref="-157"/>
+        <nd ref="-39"/>
+        <tag k="width:minimum_traveled_way" v="8"/>
+        <tag k="source" v="osm;mgcp"/>
+        <tag k="condition" v="functional"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="fixme" v="find out what part of Ave. John brown is Lalue?"/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="alt_name" v="Avenue John Brown"/>
-        <tag k="source" v="osm;osm"/>
-        <tag k="uuid" v="{2846d7f0-3cd0-4379-8e45-fd83731036b0}"/>
         <tag k="name" v="Lalue"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="lanes" v="2"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="alt_name" v="Avenue John Brown"/>
+        <tag k="surface" v="paved"/>
+        <tag k="median" v="no"/>
+        <tag k="source:haiti" v="CNIGS and CartONG"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.114Z"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="fixme" v="find out what part of Ave. John brown is Lalue?"/>
         <tag k="type:haiti" v="Autre Route"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="secondary"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="uuid" v="{2846d7f0-3cd0-4379-8e45-fd83731036b0};{{00b2b754-a805-42fe-a7c0-60fe86d05092}}"/>
+        <tag k="location" v="surface"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-93"/>
     </way>
@@ -4551,14 +2329,15 @@
         <nd ref="-196"/>
         <nd ref="-195"/>
         <nd ref="-194"/>
+        <nd ref="-328"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="operational_status_quality" v="confirmed"/>
         <tag k="operational_status" v="open"/>
         <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="CNIGS/OIM/FOCS;osm;osm"/>
+        <tag k="source" v="CNIGS/OIM/FOCS;osm"/>
         <tag k="uuid" v="{a1c4f699-3126-4d48-be07-20e5b3921bd4}"/>
         <tag k="name" v="Rue Lavaud 2e"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="smoothness" v="intermediate"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="residential"/>
@@ -4613,14 +2392,15 @@
         <nd ref="-325"/>
         <nd ref="-231"/>
         <nd ref="-284"/>
+        <nd ref="-230"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="operational_status_quality" v="confirmed"/>
         <tag k="operational_status" v="open"/>
         <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="CNIGS/OIM/ FOCS;osm;osm"/>
+        <tag k="source" v="CNIGS/OIM/ FOCS;osm"/>
         <tag k="uuid" v="{4779df66-7003-4403-b57b-c88972fd46fc}"/>
         <tag k="name" v="3e Rue du Travail"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="smoothness" v="intermediate"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="unclassified"/>
@@ -4648,14 +2428,16 @@
         <nd ref="-297"/>
         <nd ref="-260"/>
         <nd ref="-259"/>
+        <nd ref="-30"/>
+        <nd ref="-323"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="operational_status_quality" v="confirmed"/>
         <tag k="operational_status" v="open"/>
         <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="CNIGS/OIM/FOCS;osm;osm"/>
+        <tag k="source" v="CNIGS/OIM/FOCS;osm"/>
         <tag k="uuid" v="{7476ad29-1d9b-478c-b695-4d13eb396cd1}"/>
         <tag k="name" v="Avenue Martin Luther King"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="smoothness" v="intermediate"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="secondary"/>
@@ -4667,14 +2449,15 @@
     <way visible="true" id="-86" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-40"/>
         <nd ref="-261"/>
+        <nd ref="-322"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="operational_status_quality" v="confirmed"/>
         <tag k="operational_status" v="open"/>
         <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="CNIGS/OIM/FOCS;osm;osm"/>
+        <tag k="source" v="CNIGS/OIM/FOCS;osm"/>
         <tag k="uuid" v="{5af5c97a-fe1d-40b9-b861-b2b4cd754c34}"/>
         <tag k="name" v="Rue Jérémie 1re"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="smoothness" v="intermediate"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="residential"/>
@@ -4687,14 +2470,16 @@
         <nd ref="-266"/>
         <nd ref="-265"/>
         <nd ref="-18"/>
+        <nd ref="-1"/>
+        <nd ref="-321"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="operational_status_quality" v="confirmed"/>
         <tag k="operational_status" v="open"/>
         <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="CNIGS/OIM/FOCS;osm;osm"/>
+        <tag k="source" v="CNIGS/OIM/FOCS;osm"/>
         <tag k="uuid" v="{05caf30c-238d-4b5d-8702-372984d75909}"/>
         <tag k="name" v="Rue Jérémie 2e"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="smoothness" v="intermediate"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="residential"/>
@@ -4725,10 +2510,11 @@
     <way visible="true" id="-83" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-4"/>
         <nd ref="-3"/>
+        <nd ref="-319"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="Google 2010-01-17;osm;osm"/>
+        <tag k="source" v="Google 2010-01-17;osm"/>
         <tag k="uuid" v="{7be46502-5878-4866-b485-7ee6a2abe6bb}"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="service"/>
         <tag k="hoot:status" v="1"/>
@@ -4781,12 +2567,13 @@
     <way visible="true" id="-79" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-16"/>
         <nd ref="-17"/>
+        <nd ref="-15"/>
         <tag k="source:name" v="DMA Topo Map"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="Google 2010-01-17;osm;osm"/>
+        <tag k="source" v="Google 2010-01-17;osm"/>
         <tag k="uuid" v="{68b3a771-cfdd-4e8d-8a53-4fb824d1c806}"/>
         <tag k="name" v="Impasse Price"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="service"/>
         <tag k="hoot:status" v="1"/>
@@ -4905,14 +2692,16 @@
     <way visible="true" id="-71" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-317"/>
         <nd ref="-316"/>
+        <nd ref="-4"/>
+        <nd ref="-315"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="operational_status_quality" v="confirmed"/>
         <tag k="operational_status" v="open"/>
         <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="CNIGS/OIM/ FOCS;osm;osm"/>
+        <tag k="source" v="CNIGS/OIM/ FOCS;osm"/>
         <tag k="uuid" v="{083ca2cb-05ca-42e1-8d9d-a76cee1b63be}"/>
         <tag k="name" v="Rue Berne"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="smoothness" v="intermediate"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="unclassified"/>
@@ -4924,15 +2713,17 @@
     <way visible="true" id="-70" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-314"/>
         <nd ref="-313"/>
+        <nd ref="-357"/>
+        <nd ref="-312"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="operational_status_quality" v="confirmed"/>
         <tag k="oneway" v="no"/>
         <tag k="operational_status" v="open"/>
         <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="CNIGS/OIM/ FOCS;osm;osm"/>
+        <tag k="source" v="CNIGS/OIM/ FOCS;osm"/>
         <tag k="uuid" v="{8bf22616-bc4c-4f84-8be2-4229b5611155}"/>
         <tag k="name" v="Rue Robin"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="smoothness" v="intermediate"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="residential"/>
@@ -4970,12 +2761,20 @@
         <nd ref="-305"/>
         <nd ref="-304"/>
         <nd ref="-303"/>
+        <nd ref="-302"/>
+        <nd ref="-41"/>
+        <nd ref="-301"/>
+        <nd ref="-300"/>
+        <nd ref="-299"/>
+        <nd ref="-298"/>
+        <nd ref="-22"/>
+        <nd ref="-297"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source" v="osm;osm"/>
+        <tag k="source" v="osm"/>
         <tag k="uuid" v="{79cdd2bf-505f-43ca-bb95-6a89a89ff6a3}"/>
         <tag k="name" v="Avenue Martin Luther King"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="type:haiti" v="Autre Route"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="tertiary"/>
@@ -5022,11 +2821,15 @@
         <nd ref="-299"/>
         <nd ref="-292"/>
         <nd ref="-291"/>
+        <nd ref="-290"/>
+        <nd ref="-289"/>
+        <nd ref="-288"/>
+        <nd ref="-287"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="osm;osm"/>
+        <tag k="source" v="osm"/>
         <tag k="uuid" v="{ee13d6fe-3a36-4c0c-b9a4-9cb3599a61bb}"/>
         <tag k="name" v="Rue Rivière"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="keepme" v="yes"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="tertiary"/>
@@ -5104,14 +2907,15 @@
     <way visible="true" id="-62" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-264"/>
         <nd ref="-263"/>
+        <nd ref="-262"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="operational_status_quality" v="confirmed"/>
         <tag k="operational_status" v="closed"/>
         <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="CNIGS/OIM/ FOCS;osm;osm"/>
+        <tag k="source" v="CNIGS/OIM/ FOCS;osm"/>
         <tag k="uuid" v="{5e2e3cd2-ca19-4d56-85ac-6a9292a25608}"/>
         <tag k="name" v="Impasse Cicéron"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="residential"/>
         <tag k="surface" v="paved"/>
@@ -5193,14 +2997,15 @@
         <nd ref="-241"/>
         <nd ref="-240"/>
         <nd ref="-239"/>
+        <nd ref="-238"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="operational_status_quality" v="confirmed"/>
         <tag k="operational_status" v="open"/>
         <tag k="practicability" v="4wd_less_than_3.5mt"/>
-        <tag k="source" v="CNIGS/OIM/FOCS;osm;osm"/>
+        <tag k="source" v="CNIGS/OIM/FOCS;osm"/>
         <tag k="uuid" v="{94755128-31e1-4d51-9c5e-3cce1c860966}"/>
         <tag k="name" v="Impasse Justin 1ère"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="smoothness" v="bad"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="service"/>
@@ -5212,11 +3017,14 @@
     <way visible="true" id="-56" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-237"/>
         <nd ref="-236"/>
+        <nd ref="-235"/>
+        <nd ref="-234"/>
+        <nd ref="-316"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="Haiti DMA Topo;osm;osm"/>
+        <tag k="source" v="Haiti DMA Topo;osm"/>
         <tag k="uuid" v="{4d90be44-e379-4065-a7cf-30d086768574}"/>
         <tag k="name" v="Ruelle Muller"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="1"/>
@@ -5247,14 +3055,17 @@
         <nd ref="-29"/>
         <nd ref="-227"/>
         <nd ref="-226"/>
+        <nd ref="-225"/>
+        <nd ref="-224"/>
+        <nd ref="-223"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="operational_status_quality" v="confirmed"/>
         <tag k="operational_status" v="open"/>
         <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="CNIGS/OIM/FOCS;osm;osm"/>
+        <tag k="source" v="CNIGS/OIM/FOCS;osm"/>
         <tag k="uuid" v="{194be4d3-27c5-48c7-bc12-e86f54590a25}"/>
         <tag k="name" v="Ruelle M. Solomon"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="smoothness" v="bad"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="tertiary"/>
@@ -5302,14 +3113,15 @@
     <way visible="true" id="-51" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-219"/>
         <nd ref="-218"/>
+        <nd ref="-217"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="operational_status_quality" v="confirmed"/>
         <tag k="operational_status" v="open"/>
         <tag k="practicability" v="4wd_less_than_3.5mt"/>
-        <tag k="source" v="CNIGS/OIM/FOCS;osm;osm"/>
+        <tag k="source" v="CNIGS/OIM/FOCS;osm"/>
         <tag k="uuid" v="{edb11858-17cb-4d15-8c9d-d20f10cc93f9}"/>
         <tag k="name" v="Rue Mercier"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="smoothness" v="bad"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="residential"/>
@@ -5322,11 +3134,12 @@
         <nd ref="-234"/>
         <nd ref="-216"/>
         <nd ref="-11"/>
+        <nd ref="-215"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="GeoEye;osm;osm"/>
+        <tag k="source" v="GeoEye;osm"/>
         <tag k="uuid" v="{a2123fc5-5b97-4576-a112-6da76456981f}"/>
         <tag k="name" v="Rue Clermont"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="1"/>
@@ -5359,12 +3172,13 @@
     <way visible="true" id="-48" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-205"/>
         <nd ref="-359"/>
+        <nd ref="-204"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="impassable" v="yes"/>
-        <tag k="source" v="Haiti DMA Topo;osm;osm"/>
+        <tag k="source" v="Haiti DMA Topo;osm"/>
         <tag k="uuid" v="{5cccf88e-df69-48f5-801b-d501e7489356}"/>
         <tag k="name" v="Impasse Ascensio"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="1"/>
@@ -5440,14 +3254,16 @@
     <way visible="true" id="-43" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-193"/>
         <nd ref="-192"/>
+        <nd ref="-191"/>
+        <nd ref="-190"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="operational_status_quality" v="confirmed"/>
         <tag k="operational_status" v="restricted"/>
         <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="CNIGS/OIM/FOCS;osm;osm"/>
+        <tag k="source" v="CNIGS/OIM/FOCS;osm"/>
         <tag k="uuid" v="{834308c8-2be0-46e8-bab6-42ae04f2059d}"/>
         <tag k="name" v="Ruelle Célie"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="smoothness" v="bad"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="residential"/>
@@ -5463,14 +3279,15 @@
         <nd ref="-186"/>
         <nd ref="-185"/>
         <nd ref="-184"/>
+        <nd ref="-29"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="operational_status_quality" v="confirmed"/>
         <tag k="operational_status" v="open"/>
         <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="CNIGS/OIM/FOCS;osm;osm"/>
+        <tag k="source" v="CNIGS/OIM/FOCS;osm"/>
         <tag k="uuid" v="{9bc6d3a9-3f79-414f-92cd-368bfe56e008}"/>
         <tag k="name" v="Ruelle M. Solomon"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="smoothness" v="bad"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="residential"/>
@@ -5506,14 +3323,24 @@
         <nd ref="-179"/>
         <nd ref="-178"/>
         <nd ref="-183"/>
+        <nd ref="-177"/>
+        <nd ref="-176"/>
+        <nd ref="-175"/>
+        <nd ref="-174"/>
+        <nd ref="-173"/>
+        <nd ref="-172"/>
+        <nd ref="-171"/>
+        <nd ref="-170"/>
+        <nd ref="-169"/>
+        <nd ref="-168"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="operational_status_quality" v="confirmed"/>
         <tag k="operational_status" v="open"/>
         <tag k="practicability" v="light_truck_less_than_10mt"/>
-        <tag k="source" v="CNIGS/OIM/FOCS;osm;osm"/>
+        <tag k="source" v="CNIGS/OIM/FOCS;osm"/>
         <tag k="uuid" v="{d02b22cf-78b1-4ce0-a785-ed58fbaf1dcd}"/>
         <tag k="name" v="Ruelle Mayard"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="smoothness" v="bad"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="tertiary"/>
@@ -5624,14 +3451,15 @@
     <way visible="true" id="-34" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-252"/>
         <nd ref="-193"/>
+        <nd ref="-126"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="operational_status_quality" v="confirmed"/>
         <tag k="operational_status" v="open"/>
         <tag k="practicability" v="4wd_less_than_3.5mt"/>
-        <tag k="source" v="survey; CNIGS/OIM/FOCS;osm;osm"/>
+        <tag k="source" v="survey; CNIGS/OIM/FOCS;osm"/>
         <tag k="uuid" v="{2658af5f-7d9b-4f7b-a60e-eb060d5ac012}"/>
         <tag k="name" v="Rue Mercier"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="smoothness" v="bad"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="residential"/>
@@ -5643,14 +3471,15 @@
     <way visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-219"/>
         <nd ref="-125"/>
+        <nd ref="-253"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="operational_status_quality" v="confirmed"/>
         <tag k="operational_status" v="open"/>
         <tag k="practicability" v="4wd_less_than_3.5mt"/>
-        <tag k="source" v="CNIGS/OIM/FOCS;osm;osm"/>
+        <tag k="source" v="CNIGS/OIM/FOCS;osm"/>
         <tag k="uuid" v="{ea635f0c-7f10-4592-9000-0179d64f9af5}"/>
         <tag k="name" v="Rue Mercier"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="smoothness" v="bad"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="road"/>
@@ -5663,14 +3492,16 @@
         <nd ref="-228"/>
         <nd ref="-124"/>
         <nd ref="-123"/>
+        <nd ref="-122"/>
+        <nd ref="-140"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="operational_status_quality" v="confirmed"/>
         <tag k="operational_status" v="open"/>
         <tag k="practicability" v="light_truck_less_than_10mt"/>
-        <tag k="source" v="CNIGS/OIM/FOCS;osm;osm"/>
+        <tag k="source" v="CNIGS/OIM/FOCS;osm"/>
         <tag k="uuid" v="{ff4306c9-4f56-4b73-833e-a1c78e1852be}"/>
         <tag k="name" v="Ruelle Butte"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="smoothness" v="intermediate"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="tertiary"/>
@@ -5776,14 +3607,15 @@
     <way visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-137"/>
         <nd ref="-105"/>
+        <nd ref="-103"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="operational_status_quality" v="confirmed"/>
         <tag k="operational_status" v="closed"/>
         <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="CNIGS/OIM/FOCS;osm;osm"/>
+        <tag k="source" v="CNIGS/OIM/FOCS;osm"/>
         <tag k="uuid" v="{10e2ec3f-0f44-4a4e-a19f-5341b4994045}"/>
         <tag k="name" v="Rue Hérard 1re"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="smoothness" v="bad"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="residential"/>
@@ -5811,12 +3643,15 @@
         <nd ref="-101"/>
         <nd ref="-100"/>
         <nd ref="-99"/>
-        <tag k="access" v="private"/>
+        <nd ref="-98"/>
+        <nd ref="-97"/>
+        <nd ref="-96"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="access" v="private"/>
         <tag k="service" v="parking_aisle"/>
-        <tag k="source" v="survey;osm;osm"/>
+        <tag k="source" v="survey;osm"/>
         <tag k="uuid" v="{7db4e7bf-210b-47d4-af8d-fc911c1bbc7b}"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="service"/>
         <tag k="hoot:status" v="1"/>
@@ -5893,23 +3728,33 @@
     <way visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-302"/>
         <nd ref="-120"/>
+        <nd ref="-201"/>
+        <nd ref="-91"/>
+        <nd ref="-90"/>
+        <nd ref="-251"/>
+        <nd ref="-314"/>
+        <nd ref="-310"/>
+        <nd ref="-89"/>
+        <nd ref="-88"/>
+        <nd ref="-215"/>
+        <nd ref="-294"/>
         <tag k="width:minimum_traveled_way" v="5"/>
         <tag k="source" v="GPS; survey;osm;mgcp"/>
         <tag k="condition" v="functional"/>
         <tag k="loc_name" v="Bois Verna"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="name" v="Avenue Lamartinière"/>
         <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="oneway" v="yes"/>
-        <tag k="seasonal" v="no"/>
         <tag k="FIXME" v="where does Avenue Lamartinière change to Rue Fernand? Split accordingly."/>
+        <tag k="seasonal" v="no"/>
         <tag k="source:name" v="DMA Topo Map;very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="surface" v="paved"/>
         <tag k="median" v="no"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
         <tag k="source:haiti" v="CNIGS and CartONG"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
         <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.117Z"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="type:haiti" v="Autre Route"/>
@@ -5924,31 +3769,17 @@
     <way visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-298"/>
         <nd ref="-87"/>
+        <nd ref="-86"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="World Bank, 2010/01/21-2010-01/22;osm;osm"/>
+        <tag k="source" v="World Bank, 2010/01/21-2010-01/22;osm"/>
         <tag k="uuid" v="{cd71282d-28a9-4563-a0fc-582c04e85039}"/>
         <tag k="name" v="Impasse Champagne"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-18"/>
-    </way>
-    <way visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-83"/>
-        <nd ref="-82"/>
-        <nd ref="-81"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="access" v="private"/>
-        <tag k="source" v="Bing; Google, 2010-01-17;osm"/>
-        <tag k="uuid" v="{16691048-5a85-4146-9401-dc48324a0eee}"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="service"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-17"/>
     </way>
     <way visible="true" id="-16" timestamp="2017-06-07T15:19:30Z" version="1" changeset="121">
         <nd ref="-74"/>
@@ -6029,11 +3860,15 @@
     <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-66"/>
         <nd ref="-83"/>
-        <tag k="access" v="private"/>
+        <nd ref="-65"/>
+        <nd ref="-101"/>
+        <nd ref="-96"/>
+        <nd ref="-64"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="Bing;osm;osm"/>
+        <tag k="access" v="private"/>
+        <tag k="source" v="Bing;osm"/>
         <tag k="uuid" v="{e7fffbb6-80c3-4981-afa6-891e31cc6a46}"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="service"/>
         <tag k="hoot:status" v="1"/>
@@ -6076,11 +3911,13 @@
     <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-50"/>
         <nd ref="-49"/>
+        <nd ref="-48"/>
+        <nd ref="-123"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="Google 2010-01-17;osm;osm"/>
+        <tag k="source" v="Google 2010-01-17;osm"/>
         <tag k="uuid" v="{00ed8137-6cbd-4f6b-b1a8-feaf1adea020}"/>
         <tag k="name" v="Impasse Malebranche"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="1"/>
@@ -6091,14 +3928,17 @@
         <nd ref="-254"/>
         <nd ref="-47"/>
         <nd ref="-190"/>
+        <nd ref="-46"/>
+        <nd ref="-45"/>
+        <nd ref="-218"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="operational_status_quality" v="confirmed"/>
         <tag k="operational_status" v="open"/>
         <tag k="practicability" v="4wd_less_than_3.5mt"/>
-        <tag k="source" v="CNIGS/OIM/FOCS;osm;osm"/>
+        <tag k="source" v="CNIGS/OIM/FOCS;osm"/>
         <tag k="uuid" v="{edfb5adb-0bf4-4681-aa30-d04917e37bfe}"/>
         <tag k="name" v="Rue Louissaint"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="smoothness" v="bad"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="residential"/>
@@ -6139,10 +3979,11 @@
     <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-38"/>
         <nd ref="-37"/>
+        <nd ref="-36"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="Google 2010-01-17;osm;osm"/>
+        <tag k="source" v="Google 2010-01-17;osm"/>
         <tag k="uuid" v="{dfcab291-5d38-4d86-85d9-14bb5ddce212}"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="service"/>
         <tag k="hoot:status" v="1"/>

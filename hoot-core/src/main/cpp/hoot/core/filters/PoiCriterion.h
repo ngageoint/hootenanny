@@ -39,6 +39,7 @@ namespace hoot
 class PoiCriterion : public ElementCriterion
 {
 public:
+
   static std::string className() { return "hoot::PoiCriterion"; }
 
   PoiCriterion() {}
@@ -47,10 +48,7 @@ public:
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new PoiCriterion()); }
 
-  virtual QString getName() const { return "POI"; }
-
   virtual QString getDescription() const { return "Identifies POIs"; }
-
 };
 
 }

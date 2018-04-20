@@ -12,6 +12,7 @@ var server = require('../TranslationServer.js');
 describe('TranslationServer', function () {
 
     describe('fcodes', function() {
+        this.timeout(3000);
 
         it('should return fcodes for MGCP Line', function(){
             assert.equal(server.getFCodes({
@@ -45,62 +46,6 @@ describe('TranslationServer', function () {
             }).length, 190);
         });
 
-    });
-
-    describe('searchSchema', function() {
-
-        var defaults = {};
-        // Updated to reflect returning all geometries when none specified
-        var defaultsResult = {
-                                "name": "AERATION_BASIN_S",
-                                "fcode": "AB040",
-                                "desc": "Aeration Basin",
-                                "geom": "Area"
-                            };
-
-        var MgcpPointBui = {
-                                translation: 'MGCP',
-                                geomType: 'point',
-                                searchStr: 'Bui'
-                            };
-        var MgcpResult = [{
-                                name: "PAL015",
-                                fcode: "AL015",
-                                desc: "General Building",
-                                geom: "Point",
-                                idx: -1
-                            },
-                            {
-                                name: "PAL020",
-                                fcode: "AL020",
-                                desc: "Built-Up Area",
-                                geom: "Point",
-                                idx: -1
-                            }];
-
-        var MgcpVertexCulvert = {
-                                translation: 'MGCP',
-                                geomType: 'vertex',
-                                searchStr: 'culvert'
-                            };
-        var MgcpVertexResult = [{
-                                name: "PAQ065",
-                                fcode: "AQ065",
-                                desc: "Culvert",
-                                geom: "Point",
-                                idx: -1
-                            }];
-        it('should search for default options', function(){
-            assert.equal(JSON.stringify(server.searchSchema(defaults)[0]), JSON.stringify(defaultsResult));
-        });
-
-        it('should search for "Bui" point feature types in the MGCP schema', function(){
-            assert.equal(JSON.stringify(server.searchSchema(MgcpPointBui).slice(0,2)), JSON.stringify(MgcpResult));
-        });
-
-        it('should search for "culvert" vertex feature types in the MGCP schema', function(){
-            assert.equal(JSON.stringify(server.searchSchema(MgcpVertexCulvert).slice(0,1)), JSON.stringify(MgcpVertexResult));
-        });
     });
 
     describe('handleInputs', function() {
@@ -407,6 +352,8 @@ describe('TranslationServer', function () {
         });
 
         it('should handle OSM to GGDMv30 POST of power line feature', function() {
+            this.timeout(3000);
+
             var osm2trans = server.handleInputs({
                 osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-1" version="0"><nd ref="-1"/><nd ref="-4"/><nd ref="-7"/><nd ref="-10"/><nd ref="-1"/><tag k="power" v="line"/><tag k="uuid" v="{d7cdbdfe-88c6-4d8a-979d-ad88cfc65ef1}"/></way></osm>',
                 method: 'POST',
@@ -631,6 +578,51 @@ describe('TranslationServer', function () {
             assert.equal(tags["NAM"], "Manitou Springs");
             assert.equal(tags["FUC"], "999");
             assert.equal(tags["UID"], "4632d15b-7c44-4ba1-a0c4-8cfbb30e39d4");
+        });
+
+        it ('translates multiple features in an OSM dataset', function() {
+            var osm2trans = server.handleInputs({
+                osm: '<osm version="0.6" generator="JOSM"><node id="-41300" action="modify" lat="39.28775629713" lon="-74.55540463462"/><node id="-41301" action="modify" lat="39.28766391666" lon="-74.55532148615"/><node id="-41302" action="modify" lat="39.28770588277" lon="-74.55524365216"/><node id="-41303" action="modify" lat="39.28779826318" lon="-74.55532680064"/><node id="-41306" action="modify" lat="39.28768156238" lon="-74.55568894878"/><node id="-41307" action="modify" lat="39.28766910658" lon="-74.5555467917"/><node id="-41308" action="modify" lat="39.28757547786" lon="-74.55556048652"/><node id="-41309" action="modify" lat="39.28758793368" lon="-74.5557026436"/><node id="-41312" action="modify" lat="39.28771270187" lon="-74.55567687884"/><node id="-41313" action="modify" lat="39.28771581582" lon="-74.55556824937"/><node id="-41314" action="modify" lat="39.28779720499" lon="-74.55557214409"/><node id="-41315" action="modify" lat="39.28779409104" lon="-74.55568077355"/><node id="-41318" action="modify" lat="39.28815176719" lon="-74.55595985189"/><node id="-41319" action="modify" lat="39.28800541239" lon="-74.55586195126"/><node id="-41321" action="modify" lat="39.28771477783" lon="-74.55583378807"/><node id="-41323" action="modify" lat="39.28744490181" lon="-74.5558740212"/><node id="-41325" action="modify" lat="39.28738677453" lon="-74.5556956543"/><node id="-41327" action="modify" lat="39.28747085147" lon="-74.55527320638"/><node id="-41329" action="modify" lat="39.28775837309" lon="-74.55493256584"/><node id="-41331" action="modify" lat="39.28811647599" lon="-74.55479040876"/><node id="-41347" action="modify" lat="39.28804589353" lon="-74.55582037702"/><node id="-41348" action="modify" lat="39.28798659571" lon="-74.55573682457"/><node id="-41350" action="modify" lat="39.28800356093" lon="-74.55572434074"/><node id="-41351" action="modify" lat="39.2880230383" lon="-74.55572260378"/><node id="-41352" action="modify" lat="39.2880411701" lon="-74.55573195772"/><node id="-41353" action="modify" lat="39.2880543651" lon="-74.55575054989"/><node id="-41354" action="modify" lat="39.28806000988" lon="-74.55577469788"/><node id="-41355" action="modify" lat="39.28805698641" lon="-74.5557996189"/><node id="-41356" action="modify" lat="39.28802892832" lon="-74.55583286085"/><node id="-41357" action="modify" lat="39.28800945095" lon="-74.55583459781"/><node id="-41358" action="modify" lat="39.28799131914" lon="-74.55582524388"/><node id="-41359" action="modify" lat="39.28797812413" lon="-74.55580665171"/><node id="-41360" action="modify" lat="39.28797247935" lon="-74.55578250371"/><node id="-41361" action="modify" lat="39.28797550282" lon="-74.5557575827"/><way id="-41304" action="modify"><nd ref="-41300"/><nd ref="-41303"/><nd ref="-41302"/><nd ref="-41301"/><nd ref="-41300"/><tag k="building" v="yes"/></way><way id="-41310" action="modify"><nd ref="-41306"/><nd ref="-41307"/><nd ref="-41308"/><nd ref="-41309"/><nd ref="-41306"/><tag k="building" v="yes"/></way><way id="-41316" action="modify"><nd ref="-41312"/><nd ref="-41315"/><nd ref="-41314"/><nd ref="-41313"/><nd ref="-41312"/><tag k="building" v="yes"/></way><way id="-41320" action="modify"><nd ref="-41318"/><nd ref="-41319"/><nd ref="-41321"/><nd ref="-41323"/><nd ref="-41325"/><nd ref="-41327"/><nd ref="-41329"/><nd ref="-41331"/><tag k="highway" v="tertiary"/></way></osm>',
+                method: 'POST',
+                translation: 'TDSv61',
+                path: '/osmtotds'
+            });
+            
+            xml2js.parseString(osm2trans, function(err, result) {
+                if (err) console.log(err)
+                // road
+                assert.equal(result.osm.way[0].tag[0].$.k, 'Feature Code')
+                assert.equal(result.osm.way[0].tag[0].$.v, 'AP030:Road')
+                assert.equal(result.osm.way[0].tag[1].$.k, 'Roadway Type')
+                assert.equal(result.osm.way[0].tag[1].$.v, 'Road')
+                assert.equal(result.osm.way[0].tag[3].$.k, 'Route Pavement Information : Road Weather Restriction')
+                assert.equal(result.osm.way[0].tag[3].$.v, 'All-weather')
+                assert.equal(result.osm.way[0].tag[4].$.k, 'Route Identification <route designation type>')
+                assert.equal(result.osm.way[0].tag[4].$.v, 'Local')
+                // buildings
+                assert.equal(result.osm.way[1].tag[0].$.k, 'Feature Code')
+                assert.equal(result.osm.way[1].tag[0].$.v, 'AL013:Building')
+                assert.equal(result.osm.way[2].tag[0].$.k, 'Feature Code')
+                assert.equal(result.osm.way[2].tag[0].$.v, 'AL013:Building')
+                assert.equal(result.osm.way[3].tag[0].$.k, 'Feature Code')
+                assert.equal(result.osm.way[3].tag[0].$.v, 'AL013:Building')
+            });
+        });
+
+        it('include a non-translated feature if feature cannot be translated from OSM to TDSv61', function() {
+            var osm2trans = server.handleInputs({
+                osm: '<osm version="0.6" generator="JOSM"><node id="-41300" action="modify" lat="39.28775629713" lon="-74.55540463462"/><node id="-41301" action="modify" lat="39.28766391666" lon="-74.55532148615"/><node id="-41302" action="modify" lat="39.28770588277" lon="-74.55524365216"/><node id="-41303" action="modify" lat="39.28779826318" lon="-74.55532680064"/><node id="-41306" action="modify" lat="39.28768156238" lon="-74.55568894878"/><node id="-41307" action="modify" lat="39.28766910658" lon="-74.5555467917"/><node id="-41308" action="modify" lat="39.28757547786" lon="-74.55556048652"/><node id="-41309" action="modify" lat="39.28758793368" lon="-74.5557026436"/><node id="-41312" action="modify" lat="39.28771270187" lon="-74.55567687884"/><node id="-41313" action="modify" lat="39.28771581582" lon="-74.55556824937"/><node id="-41314" action="modify" lat="39.28779720499" lon="-74.55557214409"/><node id="-41315" action="modify" lat="39.28779409104" lon="-74.55568077355"/><node id="-41318" action="modify" lat="39.28815176719" lon="-74.55595985189"/><node id="-41319" action="modify" lat="39.28800541239" lon="-74.55586195126"/><node id="-41321" action="modify" lat="39.28771477783" lon="-74.55583378807"/><node id="-41323" action="modify" lat="39.28744490181" lon="-74.5558740212"/><node id="-41325" action="modify" lat="39.28738677453" lon="-74.5556956543"/><node id="-41327" action="modify" lat="39.28747085147" lon="-74.55527320638"/><node id="-41329" action="modify" lat="39.28775837309" lon="-74.55493256584"/><node id="-41331" action="modify" lat="39.28811647599" lon="-74.55479040876"/><node id="-41347" action="modify" lat="39.28804589353" lon="-74.55582037702"/><node id="-41348" action="modify" lat="39.28798659571" lon="-74.55573682457"/><node id="-41350" action="modify" lat="39.28800356093" lon="-74.55572434074"/><node id="-41351" action="modify" lat="39.2880230383" lon="-74.55572260378"/><node id="-41352" action="modify" lat="39.2880411701" lon="-74.55573195772"/><node id="-41353" action="modify" lat="39.2880543651" lon="-74.55575054989"/><node id="-41354" action="modify" lat="39.28806000988" lon="-74.55577469788"/><node id="-41355" action="modify" lat="39.28805698641" lon="-74.5557996189"/><node id="-41356" action="modify" lat="39.28802892832" lon="-74.55583286085"/><node id="-41357" action="modify" lat="39.28800945095" lon="-74.55583459781"/><node id="-41358" action="modify" lat="39.28799131914" lon="-74.55582524388"/><node id="-41359" action="modify" lat="39.28797812413" lon="-74.55580665171"/><node id="-41360" action="modify" lat="39.28797247935" lon="-74.55578250371"/><node id="-41361" action="modify" lat="39.28797550282" lon="-74.5557575827"/><way id="-41304" action="modify"><nd ref="-41300"/><nd ref="-41303"/><nd ref="-41302"/><nd ref="-41301"/><nd ref="-41300"/><tag k="building" v="yes"/></way><way id="-41310" action="modify"><nd ref="-41306"/><nd ref="-41307"/><nd ref="-41308"/><nd ref="-41309"/><nd ref="-41306"/><tag k="building" v="yes"/></way><way id="-41316" action="modify"><nd ref="-41312"/><nd ref="-41315"/><nd ref="-41314"/><nd ref="-41313"/><nd ref="-41312"/><tag k="building" v="yes"/></way><way id="-41320" action="modify"><nd ref="-41318"/><nd ref="-41319"/><nd ref="-41321"/><nd ref="-41323"/><nd ref="-41325"/><nd ref="-41327"/><nd ref="-41329"/><nd ref="-41331"/><tag k="highway" v="tertiary"/></way><way id="-38983" visible="true"><nd ref="-38979" /><nd ref="-38982" /><nd ref="-38986" /><nd ref="-38979" /><tag k="natural" v="tree" /><tag k="security:classification" v="UNCLASSIFIED" /><tag k="source" v="Unknown" /></way></osm>',
+                method: 'POST',
+                translation: 'TDSv61',
+                path: '/osmtotds'
+            });
+    
+            xml2js.parseString(osm2trans, function(err, result) {
+              if (err) console.log(err)
+              // tree that cannot be translated...
+              assert.equal(result.osm.way[4].tag[0].$.k, 'Feature Code')
+              assert.equal(result.osm.way[4].tag[0].$.v, 'Not found')
+            })
         });
 
         it('should translate OTH from tdsv61 -> osm -> tdsv61', function() {
@@ -930,7 +922,7 @@ describe('TranslationServer', function () {
                 geometry: 'line',
                 translation: 'TDSv40',
                 searchstr: 'river',
-                maxlevdst: 20,
+                maxLeinDistance: 20,
                 limit: 12,
                 method: 'GET',
                 path: '/schema'
@@ -946,7 +938,7 @@ describe('TranslationServer', function () {
                 geometry: 'line',
                 translation: 'TDSv40',
                 searchstr: 'river',
-                maxlevdst: 10,
+                maxleindst: 10,
                 limit: 1,
                 method: 'GET',
                 path: '/schema'
@@ -959,12 +951,13 @@ describe('TranslationServer', function () {
                 geometry: 'line',
                 translation: 'TDSv40',
                 searchstr: 'ri',
-                maxlevdst: 50,
+                maxleindst: 200,
                 limit: 33,
                 method: 'GET',
                 path: '/schema'
             });
-            assert.equal(schm.length, 33);
+
+            assert.equal(schm.length, 8);
         });
 
         it('should handle /schema GET', function() {
@@ -972,7 +965,7 @@ describe('TranslationServer', function () {
                 geometry: 'line',
                 translation: 'TDSv40',
                 searchstr: 'ri',
-                maxlevdst: 50,
+                maxleindst: 50,
                 limit: 100,
                 method: 'GET',
                 path: '/schema'
@@ -986,7 +979,7 @@ describe('TranslationServer', function () {
                 geometry: 'line',
                 translation: 'TDSv40',
                 searchstr: '',
-                maxlevdst: 10,
+                maxleindst: 10,
                 limit: 1,
                 method: 'GET',
                 path: '/schema'
@@ -1237,6 +1230,200 @@ describe('TranslationServer', function () {
         assert.equal(response.statusCode, '404');
         done();
       });
+    });
+
+    describe('getLein', function() {
+        it('should return I251 for installation, I213 for intall, M313 for military', 
+            function() {
+                var leinIntall = server.getLein('intall'),
+                    leinInstallation = server.getLein('installation'),
+                    leinMilitary = server.getLein('military');
+                
+                assert.equal(leinIntall.toLowerCase(), 'i213');
+                assert.equal(leinInstallation.toLowerCase(), 'i251');
+                assert.equal(leinMilitary.toLowerCase(), 'm313');
+            }
+        )
+    })
+
+    describe('getIntendedKeys', function() {
+        it('should return ["a", "x", "s"] when provided "z"', function() {
+            var intendedKeys = server.getIntendedKeys('z');
+    
+            assert.equal(intendedKeys[0], 'a')
+            assert.equal(intendedKeys[1], 'x')
+            assert.equal(intendedKeys[2], 's')
+        });
+        it('should return same result when passed "{" or "["', function() {
+            var leftSqiglyKeys = server.getIntendedKeys('{'),
+                leftStraigthKeys = server.getIntendedKeys('[');
+    
+            assert.equal(leftSqiglyKeys[0], leftStraigthKeys[0]);
+        });
+    });
+    
+    describe('getFuzzyString', function() {
+        it('should return ["cuilding", "fuilding", "guilding", building"] when passed "vuilding', 
+            function() {
+                var fuzzyStrings = server.getFuzzyStrings('vuilding');
+    
+                assert.equal(fuzzyStrings[0], 'cuilding')
+                assert.equal(fuzzyStrings[1], 'fuilding')
+                assert.equal(fuzzyStrings[2], 'guilding')
+                assert.equal(fuzzyStrings[3], 'building')
+            }
+        )
+        it('should return surf and furf when passed durf', function() {
+            var fuzzyStrings = server.getFuzzyStrings('durf');
+    
+            assert.equal(fuzzyStrings[0], 'surf')
+            assert.equal(fuzzyStrings[1], 'furf');
+        })
+    })
+
+    describe('searchSchema', function() {
+        describe('fcodeMatches', function() {
+            it('includes items matching "AL" first and in order', function() {
+                var options = {
+                        geomType: 'Area',
+                        translation: 'TDSv61',
+                        searchStr: 'AL',
+                        limitResult: 12,
+                        maxLeinDistance: 500
+                    },
+                    alResults = server.searchSchema(options);
+
+                assert.equal(alResults[0].fcode, 'AL010');
+                assert.equal(alResults[1].fcode, 'AL011');
+            });
+        });
+        describe('descMatches', function() {
+            it('includes words including "mine" at reasonable index', function() {
+                var options = {
+                        geomType: 'Area',
+                        translation: 'TDSv61',
+                        searchStr: 'mine',
+                        limitResult: 12,
+                        maxLeinDistance: 100
+                    },
+                alResults = server.searchSchema(options),
+                includesMine = alResults.filter(function(d, index) {
+                    return /mine/.test(d.desc.toLowerCase()) && index < 99;
+                }).length > 0;
+
+                assert.equal(includesMine, true)
+            })
+        })
+        describe('fuzzyMatches', function() {
+            describe('minDescDistance', function () {
+                it('should represent minimum distance between post-leading character lein encoded strings',
+                    function() {
+                        var leinInstallation = server.getLein('installation'),
+                            leinIntall = server.getLein('intall'),
+                            leinMilitary = server.getLein('military'),
+                            minDist = Math.abs(
+                                Number(leinIntall.substr(1, leinIntall.length)) - 
+                                Number(leinInstallation.substr(1, leinInstallation.length))
+                            );
+                    
+                        minDescDistance = Math.min.apply(
+                            null, 'Military Installation'
+                                    .split(/\s+/)
+                                    .map(function(word) {
+                                        var leinWord = server.getLein(word);
+                                        return leinWord[0] !== leinIntall[0] ? Infinity : Math.abs(
+                                            Number(leinIntall.substr(1, leinIntall.length)) -
+                                            Number(leinWord.substr(1, leinWord.length))
+                                        )
+                                    })
+                            )
+                        
+                        assert.equal(minDescDistance, minDist)
+                    }
+                );
+            });
+
+            it('includes items with installation in description when searchStr is intall, isnall, or insralkl at reasonable index', 
+                function() {
+                    var options = {
+                        geomType: 'Area',
+                        translation: 'TDSv61',
+                        limitResult: 100,
+                        maxLeinDistance: 500
+                    };
+
+                    ['intall', 'isnall', 'isralkl'].forEach(function(misType) {
+                        options.searchStr = misType;
+
+                        var misTypeResults = server.searchSchema(options),
+                            includesInstallation = misTypeResults.filter(function(d, index) {
+                                return /installation/.test(d.desc.toLowerCase()) && index < 99;
+                            }).length > 0;
+                            
+                        assert.equal(includesInstallation, true);
+                    })
+                }
+            );
+            it('includes items with building in description when searchStr is bugidln, bidng, or buldng at reasonable index',
+                function() {
+                    var options = {
+                        geomType: 'Area',
+                        translation: 'TDSv61',
+                        limitResult: 100,
+                        maxLeinDistance: 500
+                    };
+
+                    ['budigln', 'biding', 'buldng'].forEach(function(misType) {
+                        options.searchStr = misType;
+
+                        var misTypeResults = server.searchSchema(options),
+                            includesBuilding = misTypeResults.filter(function(d, index) {
+                                return /building/.test(d.desc.toLowerCase()) && index < 99;
+                            }).length > 0;
+
+                        assert.equal(includesBuilding, true);
+                    });
+                }
+            )
+        });
+        describe('fuzzyKeyMatching', function() {
+            it('searching "toad" should include "road" in results at reasonable index', function() {
+                var options = {
+                    searchStr: 'toad',
+                    translation: 'TDSv61',
+                    maxLeinDistance: 200,
+                    geomType: 'Area'
+                }
+
+                var includesRoad = server.searchSchema(options).filter(function(d, index) {
+                    return d.desc.toLowerCase().indexOf('road') !== -1 && index < 99;
+                }).length > 0;
+
+                assert.equal(includesRoad, true);
+            })
+
+            it('searching "vilding" or "vuilding" should both include "building" in results at reasonable index', function() {
+                var options = {
+                    translation: 'TDSv61',
+                    maxLeinDistance: 200,
+                    geomType: 'Area'
+                }
+
+                var bothIncludeBuilding = [
+                    'vuilding',
+                    'vilding'
+                ].filter(function(misTyped) {
+                    options.searchStr = misTyped;
+
+                    return server.searchSchema(options)
+                        .filter(function(d, index) {
+                            return d.desc.toLowerCase().indexOf('building') && index < 49;
+                    }).length > 0;
+                }).length > 0;
+
+                assert.equal(bothIncludeBuilding, true);
+            })
+        })
     });
 });
 

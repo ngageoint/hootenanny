@@ -235,9 +235,9 @@ void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
         reviews.insert(mapping->getStart2().getWay()->getElementId());
       }
 
-      if (mapping->newWay1)
+      if (mapping->getNewWay1())
       {
-        reviews.insert(mapping->newWay1->getElementId());
+        reviews.insert(mapping->getNewWay1()->getElementId());
       }
       else
       {

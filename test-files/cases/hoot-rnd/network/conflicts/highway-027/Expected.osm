@@ -251,22 +251,13 @@
         <tag k="error:circular" v="5"/>
         <tag k="hoot:id" v="-17"/>
     </way>
-    <way visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1"/>
-        <nd ref="-78"/>
-        <nd ref="-79"/>
-        <nd ref="-2"/>
-        <tag k="alt_name" v="US Hwy 1"/>
-        <tag k="name" v="14th St NW"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-16"/>
-    </way>
     <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-94"/>
         <nd ref="-76"/>
         <nd ref="-1"/>
+        <nd ref="-78"/>
+        <nd ref="-79"/>
+        <nd ref="-2"/>
         <tag k="alt_name" v="US Hwy 1"/>
         <tag k="name" v="14th St NW"/>
         <tag k="highway" v="secondary"/>

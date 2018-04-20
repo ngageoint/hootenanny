@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OgrWriter.h"
 
@@ -308,12 +308,12 @@ void OgrWriter::_createLayer(boost::shared_ptr<const Layer> layer)
   }
   else
   {
-    LOG_INFO("Layer: " << layerName << " not found.  Creating layer...");
+    LOG_DEBUG("Layer: " << layerName << " not found.  Creating layer...");
     // Layer does not exist
     poLayer = _ds->CreateLayer(layerName.toAscii(),
                   MapProjector::createWgs84Projection()->Clone(), gtype, options.getCrypticOptions());
 
-    if( poLayer == NULL )
+    if (poLayer == NULL)
     {
       throw HootException(QString("Layer creation failed. %1").arg(layerName));
     }
@@ -433,6 +433,7 @@ void OgrWriter::open(QString url)
 
   if (_createAllLayers)
   {
+    LOG_INFO("Creating layers...");
     for (size_t i = 0; i < _schema->getLayerCount(); ++i)
     {
       _createLayer(_schema->getLayer(i));

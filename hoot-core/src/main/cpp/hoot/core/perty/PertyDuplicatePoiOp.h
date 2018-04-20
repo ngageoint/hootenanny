@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PERTYDUPLICATEPOIOP_H
 #define PERTYDUPLICATEPOIOP_H
@@ -88,7 +88,11 @@ public:
     */
   QString toString();
 
+  virtual QString getDescription() const
+  { return "Duplicates a POI with some random error"; }
+
 private:
+
   double _moveMultiplier;
   double _p;
   double _duplicateSigma;

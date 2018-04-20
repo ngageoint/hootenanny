@@ -12,7 +12,7 @@ mkdir -p $outputDir
 rm -rf $outputDir/*
 
 # Normal Hoot options
-HOOT_OPT="--info"
+HOOT_OPT="--warn"
 
 # Hoot options for debugging the test input and output
 # NOTE: This will generate HEAPS of output.
@@ -20,7 +20,6 @@ HOOT_OPT="--info"
 
 # Script to compare shapefiles. NOTE: This might not run on Jenkins.
 COMPARE_SHAPE=$HOOT_HOME/scripts/util/CompareShapefiles.py
-
 
 ##### Start of initial setup #####
 # Un-comment and run these commands when the source OSM file changes.
@@ -43,8 +42,7 @@ hoot map-diff --ignore-uuid $outputDir/new_GGDMv30.osm $inputDir/GGDMv30.osm # |
 
 # Make shapefiles from the new OSM file
 # NOTE: This assumes that outputDir does not have any shapefiles in it!
-hoot convert-osm2ogr $HOOT_OPT $TRANS $outputDir/new_GGDMv30.osm $outputDir".shp" # > tmp/GGDM30_to_GGDM.txt
-
+hoot convert-osm2ogr --debug $TRANS $outputDir/new_GGDMv30.osm $outputDir".shp" # > tmp/GGDM30_to_GGDM.txt
 
 ##### This set of tests: comparing the individual shapefiles works!
 # Make individual shapefiles from the new OSM file

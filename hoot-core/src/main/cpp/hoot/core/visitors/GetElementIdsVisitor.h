@@ -46,8 +46,6 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
-  virtual QString getName() const { return "Get Element IDs"; }
-
   virtual QString getDescription() const { return "Puts all the visited elementIds into a bag"; }
 
 private:

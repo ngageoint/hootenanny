@@ -58,8 +58,6 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
-  virtual QString getName() const { return "Keep Reviews"; }
-
   virtual QString getDescription() const
   { return "Remove all elements that are not review relations"; }
 

@@ -12,7 +12,7 @@ mkdir -p $outputDir
 rm -f $outputDir/*
 
 # Normal Hoot options
-HOOT_OPT="--info"
+HOOT_OPT="--warn"
 
 # Hoot options for debugging the test input and output
 # NOTE: This will generate HEAPS of output.
@@ -33,8 +33,7 @@ hoot map-diff $outputDir/new_TDSv40.osm $inputDir/TDSv40.osm || diff $outputDir/
 
 # Make shapefiles
 # NOTE: These are thematic.
-hoot convert-osm2ogr $HOOT_OPT $TRANS $outputDir/new_TDSv40.osm $outputDir".shp"  # > tmp/TDSv40_toTDSv40.txt
-
+hoot convert-osm2ogr --debug $TRANS $outputDir/new_TDSv40.osm $outputDir".shp"  # > tmp/TDSv40_toTDSv40.txt
 
 ##################
 # More testing required to get this section of tests to work. In particular, createing two features from one is a problem
