@@ -1810,6 +1810,12 @@ bool OsmSchema::isMultiUseBuilding(const Element& e)
      osmSchema.getCategories(tags).intersects(OsmSchemaCategory::multiUse()));
 }
 
+bool OsmSchema::isMultiUse(const Element& e)
+{
+  return
+    OsmSchema::getInstance().getCategories(e.getTags()).intersects(OsmSchemaCategory::multiUse());
+}
+
 bool OsmSchema::isCollection(const Element& e) const
 {
   bool result = false;

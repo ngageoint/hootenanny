@@ -89,7 +89,6 @@ double PoiPolygonTypeScoreExtractor::extract(const OsmMap& /*map*/,
     }
     return 0.0;
   }
-  //TODO: test
   else if (_failsReligionMatch(t1, t2))
   {
     if (!failedMatchRequirements.contains("religion"))
@@ -258,7 +257,10 @@ bool PoiPolygonTypeScoreExtractor::isRestroom(ConstElementPtr element)
 
 bool PoiPolygonTypeScoreExtractor::isParking(ConstElementPtr element)
 {
-  return element->getTags().get("amenity") == "parking";
+  const Tags& tags = element->getTags();
+  return
+    tags.get("amenity") == "parking" || tags.contains("parking") ||
+    tags.get("amenity") == "bicycle_parking";
 }
 
 bool PoiPolygonTypeScoreExtractor::isReligion(ConstElementPtr element)

@@ -132,6 +132,17 @@ void ImplicitTypeTaggerBase::visit(const ElementPtr& e)
     bool foundDuplicateMatch = false;
     Tags tagsToAdd;
 
+    //TODO: this is temp for testing until it gets fixed with a translation
+    if (e->getTags().get("gnis:feature_type").toLower() == "mine")
+    {
+      LOG_TRACE("Using custom tagging rule...");
+      e->getTags().appendValue("man_made", "mine");
+      QString tagValue =
+        "Added 1 implicitly derived tag(s) based on: gnis:feature_type=mine; tags added: man_made=mine";
+      LOG_VART(tagValue);
+      e->getTags().appendValue("hoot:implicitTags:tagsAdded", tagValue);
+    }
+
     QStringList filteredNames = _cleanNames(e->getTags());
 
     if (filteredNames.size() > 0)
@@ -148,23 +159,23 @@ void ImplicitTypeTaggerBase::visit(const ElementPtr& e)
           _ruleReader->getImplicitTags(
             filteredNames.toSet(), matchingWords, wordsInvolvedInMultipleRules);
       }
-      LOG_VARD(implicitlyDerivedTags);
-      LOG_VARD(matchingWords);
-      LOG_VARD(wordsInvolvedInMultipleRules);
+      LOG_VART(implicitlyDerivedTags);
+      LOG_VART(matchingWords);
+      LOG_VART(wordsInvolvedInMultipleRules);
 
       bool namesContainBuilding = false;
       bool namesContainOffice = false;
 
       if (wordsInvolvedInMultipleRules)
       {
-        LOG_DEBUG(
+        LOG_TRACE(
           "Found duplicate match for names: " << filteredNames << " with matching words: " <<
           matchingWords);
         foundDuplicateMatch = true;
       }
       else if (implicitlyDerivedTags.size() > 0)
       {
-        LOG_DEBUG(
+        LOG_TRACE(
           "Derived implicit tags for names: " << filteredNames << " with matching words: " <<
           matchingWords);
         tagsToAdd = implicitlyDerivedTags;
@@ -175,9 +186,9 @@ void ImplicitTypeTaggerBase::visit(const ElementPtr& e)
         //name parts
         QStringList nameTokensList = _getNameTokens(filteredNames);
 
-        LOG_VARD(nameTokensList);
-        LOG_VARD(implicitlyDerivedTags.size());
-        LOG_VARD(nameTokensList.size());
+        LOG_VART(nameTokensList);
+        LOG_VART(implicitlyDerivedTags.size());
+        LOG_VART(nameTokensList.size());
 
         //only going up to token group size = 2, as larger sizes weren't found experimentally to
         //yield any better results
@@ -195,28 +206,28 @@ void ImplicitTypeTaggerBase::visit(const ElementPtr& e)
             filteredNames, nameTokensList, e->getTags(), implicitlyDerivedTags, matchingWords,
             wordsInvolvedInMultipleRules, namesContainBuilding, namesContainOffice);
         }
-        LOG_VARD(implicitlyDerivedTags);
-        LOG_VARD(matchingWords);
-        LOG_VARD(wordsInvolvedInMultipleRules);
+        LOG_VART(implicitlyDerivedTags);
+        LOG_VART(matchingWords);
+        LOG_VART(wordsInvolvedInMultipleRules);
 
         if (wordsInvolvedInMultipleRules)
         {
-          LOG_DEBUG(
+          LOG_TRACE(
             "Found duplicate match for name tokens: " << nameTokensList << " with matching words: " <<
             matchingWords);
           foundDuplicateMatch = true;
         }
         else if (implicitlyDerivedTags.size() > 0)
         {
-          LOG_DEBUG(
+          LOG_TRACE(
             "Derived implicit tags for name tokens: " << nameTokensList << " with matching words: " <<
             matchingWords);
           tagsToAdd = implicitlyDerivedTags;
         }
       }
-      LOG_VARD(tagsToAdd);
+      LOG_VART(tagsToAdd);
 
-      LOG_VARD(foundDuplicateMatch);
+      LOG_VART(foundDuplicateMatch);
       if (foundDuplicateMatch)
       {
         _updateElementForDuplicateMatch(e, matchingWords);
@@ -251,7 +262,7 @@ void ImplicitTypeTaggerBase::visit(const ElementPtr& e)
         {
           _addImplicitTags(e, tagsToAdd, matchingWords);
         }
-      }
+      } 
     }
 
     _numFeaturesParsed++;
@@ -266,6 +277,7 @@ void ImplicitTypeTaggerBase::visit(const ElementPtr& e)
 Tags ImplicitTypeTaggerBase::_applyCustomRules(const ElementPtr& e, const QStringList filteredNames)
 {
   Tags tagsToAdd;
+
   if (PoiPolygonTypeScoreExtractor::isPark(e))
   {
     for (int i = 0; i < filteredNames.size(); i++)
@@ -286,6 +298,7 @@ Tags ImplicitTypeTaggerBase::_applyCustomRules(const ElementPtr& e, const QStrin
       }
     }
   }
+
   return tagsToAdd;
 }
 

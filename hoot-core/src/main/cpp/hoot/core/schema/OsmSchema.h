@@ -429,6 +429,11 @@ public:
   bool isMultiUseBuilding(const Element &e);
 
   /**
+   * Returns true if the specified element is multi-use.
+   */
+  bool isMultiUse(const Element &e);
+
+  /**
    * Returns true if this is a list of values. Right now this just looks for a semicolon in value,
    * but in the future the list of valid list keys may be stored in the schema file.
    */

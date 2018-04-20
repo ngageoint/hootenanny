@@ -131,6 +131,7 @@ fort	historic=fort
 frisbee golf course	sport=disc_golf
 frozen yogurt	amenity=restaurant
 education center	amenity=school
+garage	building=garage
 garden	leisure=garden
 gelato	amenity=ice_cream
 gentlemen's club	amenity=stripclub

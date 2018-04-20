@@ -123,6 +123,17 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //The rules below are *roughly* ordered by increasing processing expense and by decreasing
   //likelihood of occurrence.
 
+  const bool poiHasType = PoiPolygonTypeScoreExtractor::hasType(poi);
+  LOG_VART(poiHasType);
+  const bool polyHasType = PoiPolygonTypeScoreExtractor::hasType(poly);
+  LOG_VART(polyHasType);
+
+//  if (OsmSchema::isMultiUse(poly) && poiHasType && !_nonDistanceSimilaritiesPresent())
+//  {
+//    LOG_TRACE("Returning miss per review reduction rule #1a...");
+//    return true;
+//  }
+
   //Be a little stricter on place related reviews.
   if ((poi->getTags().get("place").toLower() == "neighbourhood" ||
        poi->getTags().get("place").toLower() == "suburb") && !poly->getTags().contains("place"))
@@ -131,12 +142,21 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
     return true;
   }
 
+  //TODO: this one will go away
+  if (poi->getTags().get("man_made").toLower() == "mine" &&
+      poly->getTags().get("landuse").toLower() == "quarry" &&
+      poly->getTags().get("man_made").toLower() != "mine")
+  {
+    LOG_TRACE("Returning miss per review reduction rule #1b...");
+    return true;
+  }
+
   //points sitting on islands need to have an island type, or the match doesn't make any sense
   if ((poi->getTags().get("place").toLower() == "island" ||
        poly->getTags().get("place").toLower() == "island") && !_typeMatch)
   {
-      LOG_TRACE("Returning miss per review reduction rule #2...");
-      return true;
+    LOG_TRACE("Returning miss per review reduction rule #2...");
+    return true;
   }
 
   const bool polyIsPark = PoiPolygonTypeScoreExtractor::isPark(poly);
@@ -192,16 +212,12 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
     return true;
   }
 
-  const bool poiHasType = PoiPolygonTypeScoreExtractor::hasType(poi);
-  LOG_VART(poiHasType);
-  const bool polyHasType = PoiPolygonTypeScoreExtractor::hasType(poly);
-  LOG_VART(polyHasType);
-
-  const bool poiIsNatural = poi->getTags().contains("natural");
+  //const bool poiIsNatural = poi->getTags().contains("natural");
   const bool polyIsNatural = poly->getTags().contains("natural");
 
   //Be more strict reviewing natural features against building features.
-  if (poiHasType && polyHasType && polyIsNatural &&
+  //TODO: test
+  if (/*poiHasType && polyHasType &&*/ polyIsNatural &&
       OsmSchema::getInstance().getCategories(
         poi->getTags()).intersects(OsmSchemaCategory::building()))
   {
@@ -210,7 +226,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   }
 
   //TODO: test
-  if (poiIsNatural && polyIsNatural && !_typeMatch)
+  if (/*poiIsNatural*/poiHasType && polyIsNatural && !_typeMatch)
   {
     LOG_TRACE("Returning miss per review reduction rule #7b...");
     return true;
@@ -262,8 +278,10 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
 
   //Be more strict reviewing parking lots against other features.
   if (poiHasType && polyHasType && PoiPolygonTypeScoreExtractor::isParking(poly) &&
-      _distance > _matchDistanceThreshold &&
-      (!(_typeMatch || _nameMatch) || (_nameMatch && _typeScore < 0.2)))
+      //TODO: test
+      /*_distance > _matchDistanceThreshold &&*/
+      //(!(_typeMatch || _nameMatch) || (_nameMatch && _typeScore < 0.2)))
+      !_typeMatch && poly->getTags().get("parking") != "multi-storey")
   {
     LOG_TRACE("Returning miss per review reduction rule #11...");
     return true;

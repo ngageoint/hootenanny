@@ -311,7 +311,7 @@ bool PoiPolygonMatch::_skipForReviewTypeDebugging() const
   }
 
   QStringList reviewTypeIgnoreList;
-  reviewTypeIgnoreList.append("leisure=park");
+//  reviewTypeIgnoreList.append("leisure=park");
 //  reviewTypeIgnoreList.append("leisure=playground");
 //  reviewTypeIgnoreList.append("amenity=university");
 //  reviewTypeIgnoreList.append("building=train_station");
@@ -358,8 +358,9 @@ bool PoiPolygonMatch::_skipForReviewTypeDebugging() const
 //  reviewTypeIgnoreList.append("amenity=arts_centre");
 //  reviewTypeIgnoreList.append("amenity=restaurant");
 //  reviewTypeIgnoreList.append("building=house");
-  reviewTypeIgnoreList.append("tourism=camp_site");
-  reviewTypeIgnoreList.append("landuse=quarry");
+//  reviewTypeIgnoreList.append("tourism=camp_site");
+//  reviewTypeIgnoreList.append("landuse=quarry");
+  reviewTypeIgnoreList.append("landuse=forest_reserve");
 
   if (_poi->getTags().hasAnyKvp(reviewTypeIgnoreList) ||
       _poly->getTags().hasAnyKvp(reviewTypeIgnoreList))
@@ -468,7 +469,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
       const QString distanceMatchStr = _distance <= _matchDistanceThreshold ? "yes" : "no";
       //TODO: these score contributions are hardcoded
       _explainText =
-        QString("Features had an additive similarity score of %1, which is less than the required score of %2. Matches: distance: %3 (%4m; score: 2, possible score: 2), type: %5 (score: %6; possible score: 1), name: %7 (score: %8; possible score: 1), address: %9 (score: %10; possible score: 1). Max distance allowed for match: %11m, max distance allowed for review: %12m.")
+        QString("Features had an additive similarity score of %1, which is less than the required score of %2. Matches: distance: %3 (%4m; score: 2/2), type: %5 (score: %6/1), name: %7 (score: %8/1), address: %9 (score: %10/1). Max distance allowed for match: %11m, max distance allowed for review: %12m.")
           .arg(evidence)
           .arg(_matchEvidenceThreshold)
           .arg(distanceMatchStr)
