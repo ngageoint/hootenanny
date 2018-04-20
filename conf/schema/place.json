@@ -262,6 +262,9 @@
             "place=neighborhood",
             "place=official_neighborhood"
         ],
+        "categories": [
+            "multiuse"
+        ],
         "isA": "place",
         "name": "place=neighbourhood",
         "objectType": "tag",

@@ -49,11 +49,25 @@
         }
     },
     {
+        "categories": [
+            "multiuse"
+        ],
         "isA": "tourism",
         "name": "tourism=hotel",
         "objectType": "tag"
     },
     {
+        "categories": [
+            "multiuse"
+        ],
+        "isA": "tourism",
+        "name": "tourism=camp_site",
+        "objectType": "tag"
+    },
+    {
+        "categories": [
+            "multiuse"
+        ],
         "isA": "tourism",
         "name": "tourism=zoo",
         "objectType": "tag"
@@ -61,7 +75,8 @@
     {
         "categories": [
             "use",
-            "poi"
+            "poi",
+            "multiuse"
         ],
         "isA": "tourism",
         "name": "tourism=attraction",
@@ -95,7 +110,8 @@
             "amenity=museum"
         ],
          "categories": [
-            "building"
+            "building",
+            "multiuse"
         ],
         "isA": "tourism",
         "name": "tourism=museum",

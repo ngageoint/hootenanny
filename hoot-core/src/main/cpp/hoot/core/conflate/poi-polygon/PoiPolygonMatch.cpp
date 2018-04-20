@@ -382,6 +382,8 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
   _explainText = "";
   _class.setMiss();
 
+  //if the options was activated to not conflate features with the same source tag, then exit
+  //out with a miss now
   if (_disableSameSourceConflation && _inputFeaturesHaveSameSource(eid1, eid2))
   {
     return;
@@ -395,16 +397,37 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
 //    return;
 //  }
 
-  //allow for auto marking features with certain types for review if they get matched
+  unsigned int evidence = _calculateEvidence(_poi, _poly);
+  LOG_VART(evidence);
+
   const bool foundReviewIfMatchedType =
     _featureHasReviewIfMatchedType(_poi) || _featureHasReviewIfMatchedType(_poly);
   LOG_VART(foundReviewIfMatchedType);
 
-  unsigned int evidence = _calculateEvidence(_poi, _poly);
-  LOG_VART(evidence);
+  LOG_VART(_reviewMultiUseBuildings);
+  LOG_VART(OsmSchema::getInstance().isMultiUseBuilding(*_poly));
 
-  //no point in trying to reduce reviews if we're still at a miss here
-  if (_enableReviewReduction && evidence >= _reviewEvidenceThreshold)
+  if (evidence >= _matchEvidenceThreshold)
+  {
+    //we're only doing these auto-review situations for things that matched in the first place
+
+    //allow for auto marking features with certain types for review if they get matched
+    if (foundReviewIfMatchedType) // if (oneElementIsRelation) //for testing only
+    {
+      _class.setReview();
+      _explainText =
+        "Feature contains tag specified for review from list: " + _reviewIfMatchedTypes.join(";");
+    }
+    //review anything matched with a multi-use building; only do the multi-use check on the poly
+    else if (reviewMultiUseBuildings && OsmSchema::getInstance().isMultiUseBuilding(*_poly))
+    {
+      _class.setReview();
+      _explainText = "Match involves a multi-use building.";
+    }
+  }
+  //if none of the above special situations triggered, we'll try reducing nonsense reviews here, but
+  //no point in trying to reduce reviews if we're still at a miss by this point
+  else if (_enableReviewReduction && evidence >= _reviewEvidenceThreshold)
   {
     PoiPolygonReviewReducer reviewReducer(
       _map, _polyNeighborIds, _poiNeighborIds, _distance, _nameScoreThreshold, _nameScore,
@@ -413,7 +436,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
     if (reviewReducer.triggersRule(_poi, _poly))
     {
       evidence = 0;
-      //TODO: b/c this is a miss, don't think it will get added to the output anywhere...
+      //TODO: b/c this is a miss, don't think this text will get added to the output anywhere...
       _explainText = "Match score automatically dropped by review reduction.";
     }
   }
@@ -421,27 +444,9 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
 
   if (evidence >= _matchEvidenceThreshold)
   {
-    if (!foundReviewIfMatchedType)
-    {
-      LOG_VART(_reviewMultiUseBuildings);
-      LOG_VART(OsmSchema::getInstance().isMultiUseBuilding(*_poly));
-      //only do the multi-use check on the poly
-      if (_reviewMultiUseBuildings && OsmSchema::getInstance().isMultiUseBuilding(*_poly))
-      {
-        _class.setReview();
-        _explainText = "Match involves a multi-use building.";
-      }
-      else
-      {
-        _class.setMatch();
-      }
-    }
-    else// if (oneElementIsRelation) //for testing only
-    {
-      _class.setReview();
-      _explainText =
-        "Feature contains tag specified for review from list: " + _reviewIfMatchedTypes.join(";");
-    }
+    //if after going through all of the above and we're still above the match threshold, then its a
+    //match
+    _class.setMatch();
   }
   else if (evidence >= _reviewEvidenceThreshold)
            //&& oneElementIsRelation) //for testing only

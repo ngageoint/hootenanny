@@ -713,6 +713,9 @@
     {
         "#": "Count in tag info is 19446 on 2015-09-01",
         "description": "A large store with multiple '''clothing''' and other general merchandise departments.",
+        "categories": [
+            "multiuse"
+        ],
         "isA": "shop",
         "name": "shop=department_store",
         "objectType": "tag",

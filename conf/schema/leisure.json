@@ -26,7 +26,8 @@
         ],
         "categories": [
             "use",
-            "poi"
+            "poi",
+            "multiuse"
         ],
         "isA": "leisure",
         "name": "leisure=park",
@@ -57,10 +58,22 @@
         ],
         "categories": [
             "use",
-            "poi"
+            "poi",
+            "multiuse"
         ],
         "isA": "leisure",
         "name": "leisure=playground",
+        "objectType": "tag"
+    },
+    {
+        "geometries": [
+            "area"
+        ],
+        "categories": [
+            "multiuse"
+        ],
+        "isA": "leisure",
+        "name": "leisure=common",
         "objectType": "tag"
     },
     {
@@ -217,6 +230,9 @@
             "node",
             "area"
         ],
+        "categories": [
+            "multiuse"
+        ],
         "isA": "leisure",
         "name": "leisure=water_park",
         "objectType": "tag"
@@ -228,7 +244,8 @@
         ],
         "categories": [
             "use",
-            "poi"
+            "poi",
+            "multiuse"
         ],
         "isA": "leisure",
         "name": "leisure=golf_course",
@@ -242,12 +259,25 @@
     },
     {
         "geometries": [
+            "area"
+        ],
+        "categories": [
+            "use",
+            "multiuse"
+        ],
+        "isA": "leisure",
+        "name": "leisure=nature_reserve",
+        "objectType": "tag"
+    },
+    {
+        "geometries": [
             "node",
             "area"
         ],
         "categories": [
             "use",
-            "poi"
+            "poi",
+            "multiuse"
         ],
         "isA": "leisure",
         "name": "leisure=garden",

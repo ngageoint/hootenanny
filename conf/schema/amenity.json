@@ -83,6 +83,9 @@
         "objectType": "tag"
     },
     {
+        "categories": [
+            "multiuse"
+        ],
         "isA": "amenity",
         "name": "amenity=arts_centre",
         "objectType": "tag",
@@ -270,6 +273,9 @@
         }
     },
     {
+        "categories": [
+            "multiuse"
+        ],
         "isA": "amenity",
         "name": "amenity=bus_station",
         "objectType": "tag",
@@ -348,6 +354,14 @@
             "name": "amenity=gambling",
             "weight": 0.9
         }
+    },
+    {
+        "categories": [
+            "multiuse"
+        ],
+        "isA": "amenity",
+        "name": "amenity=fairground",
+        "objectType": "tag"
     },
     {
         "aliases": [
@@ -888,6 +902,11 @@
         }
     },
     {
+        "categories": [
+            "use",
+            "poi",
+            "multiuse"
+        ],
         "isA": "amenity",
         "name": "amenity=gallery",
         "objectType": "tag",
@@ -949,6 +968,9 @@
         "objectType": "tag"
     },
     {
+        "categories": [
+            "multiuse"
+        ],
         "isA": "amenity",
         "name": "amenity=grave_yard",
         "objectType": "tag",
@@ -1057,6 +1079,9 @@
     {
         "aliases": [
             "amenity=medical_centre"
+        ],
+        "categories": [
+            "multiuse"
         ],
         "isA": "amenity",
         "name": "amenity=hospital",
@@ -2070,6 +2095,9 @@
         "objectType": "tag"
     },
     {
+        "categories": [
+            "multiuse"
+        ],
         "isA": "amenity",
         "name": "amenity=university",
         "objectType": "tag",

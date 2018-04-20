@@ -128,11 +128,12 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   const bool polyHasType = PoiPolygonTypeScoreExtractor::hasType(poly);
   LOG_VART(polyHasType);
 
-//  if (OsmSchema::isMultiUse(poly) && poiHasType && !_nonDistanceSimilaritiesPresent())
-//  {
-//    LOG_TRACE("Returning miss per review reduction rule #1a...");
-//    return true;
-//  }
+  if (OsmSchema::getInstance().isMultiUse(*poly) && poiHasType &&
+      !_nonDistanceSimilaritiesPresent()/*!_typeMatch*//*_typeScore != 1.0*/)
+  {
+    LOG_TRACE("Returning miss per review reduction rule #1a...");
+    return true;
+  }
 
   //Be a little stricter on place related reviews.
   if ((poi->getTags().get("place").toLower() == "neighbourhood" ||
