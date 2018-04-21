@@ -72,7 +72,6 @@ cigar bar	shop=cigar
 civic center	building=civic
 clinic	amenity=clinic
 clothing	shop=clothes
-# TODO: not sure about this
 clubhouse	amenity=community_center
 club house	amenity=community_center
 coffee bar	amenity=cafe

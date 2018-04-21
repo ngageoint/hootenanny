@@ -41,7 +41,7 @@ namespace hoot
 class ImplicitPoiTypeTaggerTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ImplicitPoiTypeTaggerTest);
-  //CPPUNIT_TEST(runBasicTest); //TODO: fix
+  CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST(runDuplicateTagKeyTest);
   CPPUNIT_TEST(runLessSpecificImplicitTagTest);
   CPPUNIT_TEST(runMoreSpecificImplicitTagTest);

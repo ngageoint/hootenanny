@@ -2,7 +2,6 @@
 # Use this list to fine tune tagging rules behavior based on the auto-generated rules database.
 # key=value
 # keep list alphabetized and in lower case
-# TODO: is this list still needed?
 abandoned:place=populated
 bridge=yes
 capital=yes

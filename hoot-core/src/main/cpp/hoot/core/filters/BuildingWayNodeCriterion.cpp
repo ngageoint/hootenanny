@@ -68,8 +68,6 @@ bool BuildingWayNodeCriterion::isSatisfied(const boost::shared_ptr<const Element
       if (_map->containsElement(ElementId(ElementType::Way, wayId)) &&
           OsmSchema::getInstance().isBuilding(_map->getWay(wayId)))
       {
-        //TODO: fix
-        //_wayId = wayId;
         result = true;
         break;
       }
