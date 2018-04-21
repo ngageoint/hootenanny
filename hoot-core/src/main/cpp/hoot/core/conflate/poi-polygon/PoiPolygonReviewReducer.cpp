@@ -38,6 +38,7 @@
 #include <hoot/core/conflate/polygon/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/OverlapExtractor.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/filters/BuildingWayNodeCriterion.h>
 
 #include "extractors/PoiPolygonTypeScoreExtractor.h"
 #include "extractors/PoiPolygonNameScoreExtractor.h"
@@ -116,23 +117,27 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   boost::shared_ptr<Geometry> poiGeom = elementConverter.convertToGeometry(poi);
 
   //The rules below are *roughly* ordered by increasing processing expense and by decreasing
-  //likelihood of occurrence.
+  //likelihood of occurrence (probably needs some reordering at this point).
 
   const bool poiHasType = PoiPolygonTypeScoreExtractor::hasType(poi);
   LOG_VART(poiHasType);
   const bool polyHasType = PoiPolygonTypeScoreExtractor::hasType(poly);
   LOG_VART(polyHasType);
 
+  QStringList tempMultiUseIngoreList;
+  tempMultiUseIngoreList.append("landuse=construction");
+  tempMultiUseIngoreList.append("building=commercial");
+  tempMultiUseIngoreList.append("building=retail");
   if (OsmSchema::getInstance().isMultiUse(*poly) && poiHasType &&
-      !_nonDistanceSimilaritiesPresent()
-      /*!_typeMatch*//*_typeScore < 0.2 && _nameScore < 0.2*/
-      /*!_typeMatch && _nameScore == 0.0*/)
+      !poly->getTags().hasAnyKvp(tempMultiUseIngoreList) &&
+      /*!_nonDistanceSimilaritiesPresent()*/
+      _typeScore < 0.4 /*&& _nameScore < 0.2*/)
   {
     LOG_TRACE("Returning miss per review reduction rule #1a...");
     return true;
   }
 
-  //Be a little stricter on place related reviews.
+  //be a little stricter on place related reviews.
   if ((poi->getTags().get("place").toLower() == "neighbourhood" ||
        poi->getTags().get("place").toLower() == "suburb") && !poly->getTags().contains("place"))
   {
@@ -355,6 +360,24 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
     LOG_TRACE("Returning miss per review reduction rule #16...");
     return true;
   }
+
+  //If POI is a way node, it belongs to a building way, and there is a type match between the poi
+  //and the building way, then don't review the two.  This allows for tagged POI way nodes to
+  //conflate cleanly with building ways they belong to, rather than being reviewed against other
+  //building ways.
+  //TODO: test
+//  BuildingWayNodeCriterion buildingWayFilter(_map);
+//  if (buildingWayFilter.isSatisfied(poi))
+//  {
+//    const long matchingWayId = buildingWayFilter.getWayId();
+//    WayPtr matchingWay = _map->getWay(matchingWayId);
+//    PoiPolygonTypeScoreExtractor typeScorer;
+//    if (typeScorer.extract(*_map, poi, matchingWay) >= _typeScoreThreshold)
+//    {
+//      LOG_TRACE("Returning miss per review reduction rule #16b...");
+//      return true;
+//    }
+//  }
 
   bool polyVeryCloseToAnotherParkPoly = false;
   double parkPolyAngleHistVal = -1.0;

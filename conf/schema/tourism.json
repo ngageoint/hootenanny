@@ -92,17 +92,26 @@
             },
             {
                 "name": "leisure=garden",
-                "weight": 0.2
+                "weight": 0.5
             },
             {
                 "name": "amenity=auditorium",
                 "weight": 0.2
+            },
+            {
+                "name": "tourism=museum",
+                "weight": 0.8
             }
         ]
     },
     {
         "isA": "tourism",
         "name": "tourism=theme_park",
+        "objectType": "tag"
+    },
+    {
+        "isA": "tourism",
+        "name": "tourism=picnic_site",
         "objectType": "tag"
     },
     {

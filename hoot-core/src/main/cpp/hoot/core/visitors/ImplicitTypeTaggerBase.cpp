@@ -550,11 +550,12 @@ void ImplicitTypeTaggerBase::_ensureCorrectTagSpecificity(const ElementPtr& e, T
     LOG_VART(implicitTagKey);
     const QString implicitTagValue = tagItr.value();
     LOG_VART(implicitTagValue);
+    LOG_VART(e->getTags().contains(implicitTagKey));
     if (e->getTags().contains(implicitTagKey))
     {
       //don't add a less specific tag if the element already has one with the same key; e.g. if
       //the element has amenity=public_hall, don't add amenity=hall; for ties, keep the one we
-      //already have; e.g. if the element has amenity=bank, don't add amenity=school
+      //already have
 
       const QString elementTagKey = implicitTagKey;
       const QString elementTagValue = e->getTags()[implicitTagKey];
@@ -575,11 +576,11 @@ void ImplicitTypeTaggerBase::_ensureCorrectTagSpecificity(const ElementPtr& e, T
         updatedTags.appendValue(elementTagKey, elementTagValue);
       }
     }
-    else if (!_elementIsASpecificFeature)
+    else if (!_elementIsASpecificFeature || _allowTaggingSpecificFeatures)
     {
       LOG_TRACE(
-        "Input feature does not contain tag: " <<
-        implicitTagKey % "=" % implicitTagValue << ", so adding it...");
+        "Input feature does not contain key: " << implicitTagKey << " so adding tag: " <<
+        implicitTagKey % "=" % implicitTagValue << "...");
       updatedTags.appendValue(implicitTagKey, implicitTagValue);
       tagsAdded = true;
     }

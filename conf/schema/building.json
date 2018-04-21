@@ -396,14 +396,6 @@
             "multiuse"
         ],
         "isA": "building",
-        "name": "building=commercial",
-        "objectType": "tag"
-    },
-    {
-        "categories": [
-            "multiuse"
-        ],
-        "isA": "building",
         "name": "building=office",
         "objectType": "tag"
     },
@@ -413,14 +405,6 @@
         ],
         "isA": "building",
         "name": "building=public",
-        "objectType": "tag"
-    },
-    {
-        "categories": [
-            "multiuse"
-        ],
-        "isA": "building",
-        "name": "building=retail",
         "objectType": "tag"
     },
     {

@@ -62,14 +62,6 @@
             "multiuse"
         ],
         "isA": "landuse",
-        "name": "landuse=construction",
-        "objectType": "tag"
-    },
-    {
-        "categories": [
-            "multiuse"
-        ],
-        "isA": "landuse",
         "name": "landuse=forest",
         "objectType": "tag"
     },

@@ -48,6 +48,10 @@
             {
                 "name": "leisure=garden",
                 "weight": 0.3
+            },
+            {
+                "name": "leisure=common",
+                "weight": 0.5
             }
         ]
     },
@@ -63,7 +67,13 @@
         ],
         "isA": "leisure",
         "name": "leisure=playground",
-        "objectType": "tag"
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "tourism=picnic_site",
+                "weight": 0.4
+            }
+        ]
     },
     {
         "geometries": [

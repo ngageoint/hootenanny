@@ -1,4 +1,20 @@
-Implicit tag rules database summary:
-	Word count: 294
-	Tag count: 146
-	Rule count: 294
+230,231c230,231
+< 1	camella homes - phase 1	tourism=viewpoint
+< 1	camella homes - phase 2	tourism=viewpoint
+---
+> 1	camella homes   phase 1	tourism=viewpoint
+> 1	camella homes   phase 2	tourism=viewpoint
+256c256
+< 1	choobi choobi - newtown	amenity=restaurant
+---
+> 1	choobi choobi   newtown	amenity=restaurant
+444,445c444,445
+< 1	lapu-lapu city jail	tourism=viewpoint
+< 1	lapu-lapu monument	tourism=viewpoint
+---
+> 1	lapu lapu city jail	tourism=viewpoint
+> 1	lapu lapu monument	tourism=viewpoint
+637c637
+< 1	qubbat al-mahdi	amenity=place_of_worship
+---
+> 1	qubbat al mahdi	amenity=place_of_worship

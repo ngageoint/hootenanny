@@ -36,14 +36,14 @@ namespace hoot
 
 void ImplicitTagUtils::cleanName(QString& name)
 {
-  name =
-    name.replace("(", "").replace(")", "").replace(".", "").replace("/", " ").replace("<", "")
-        .replace(">", "").replace("[", "").replace("]", "").replace("@", "").replace("&", "and")
-        .replace("(historical)", "");
   if (name.startsWith("-"))
   {
     name = name.replace(0, 1, "");
   }
+  name =
+    name.replace("(", "").replace(")", "").replace(".", "").replace("/", " ").replace("<", "")
+        .replace(">", "").replace("[", "").replace("]", "").replace("@", "").replace("&", "and")
+        .replace("(historical)", "").replace("-", " ");
   if (name.startsWith("_"))
   {
     name = name.replace(0, 1, "");

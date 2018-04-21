@@ -203,7 +203,7 @@ bool PoiPolygonTypeScoreExtractor::isSpecificSchool(ConstElementPtr element)
   return
     isSchool(element) &&
     (name.toLower().endsWith("high school") || name.toLower().endsWith("middle school") ||
-    name.toLower().endsWith("elementary school"));
+     name.toLower().endsWith("elementary school"));
 }
 
 bool PoiPolygonTypeScoreExtractor::specificSchoolMatch(ConstElementPtr element1,

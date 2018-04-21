@@ -1562,7 +1562,11 @@
     {
         "isA": "amenity",
         "name": "amenity=post_office",
-        "objectType": "tag"
+        "objectType": "tag",
+        "similarTo": {
+            "name": "building=office",
+            "weight": 0.4
+        }
     },
     {
         "isA": "amenity",

@@ -236,6 +236,7 @@ restaurant and sports bar	amenity=restaurant
 restroom	amenity=toilets
 retirement home	amenity=nursing_home
 ristorante	amenity=restaurant
+roof	building=yes
 ruins	historic=ruins
 sailing	sport=sailing
 saloon	amenity=bar
@@ -276,6 +277,7 @@ sushi	amenity=restaurant
 #TODO: this should be amenity=restaurant, cusine=sushi
 sushi bar	amenity=restaurant
 surgical center	amenity=hospital
+synagogue	amenity=synagogue
 taqueria	amenity=restaurant
 tavern	amenity=pub
 teahouse	amenity=restaurant
