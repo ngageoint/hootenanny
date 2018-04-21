@@ -77,17 +77,18 @@ public:
    */
   static bool isPark(ConstElementPtr element);
 
-  //static bool isRecCenter(/*ConstElementPtr element*/const QString elementName);
-
-  //static bool isBuildingIsh(ConstElementPtr element, const QString elementName);
-
   static bool isParkish(ConstElementPtr element);
-  //static bool isPlayArea(/*ConstElementPtr element*/const QString elementName);
   static bool isPlayground(ConstElementPtr element);
   static bool isSport(ConstElementPtr element);
-  static bool isSchool(ConstElementPtr element);
   static bool isRestroom(ConstElementPtr element);
   static bool isParking(ConstElementPtr element);
+
+  static bool isSchool(ConstElementPtr element);
+  static bool isSpecificSchool(ConstElementPtr element);
+  static bool specificSchoolMatch(ConstElementPtr element1, ConstElementPtr element2);
+
+  static bool isReligion(ConstElementPtr element);
+  static bool isReligion(const Tags& tags);
 
   /**
    * Determines if an element has more than one type associated with it
@@ -104,6 +105,8 @@ public:
    * @return true if it has a type; false otherwise
    */
   static bool hasType(ConstElementPtr element);
+
+  static bool hasSpecificType(ConstElementPtr element);
 
   double getTypeScoreThreshold() { return _typeScoreThreshold; }
   void setTypeScoreThreshold(double threshold) { _typeScoreThreshold = threshold; }
@@ -128,7 +131,7 @@ private:
   QStringList _getRelatedTags(const Tags& tags) const;
   bool _failsCuisineMatch(const Tags& t1, const Tags& t2) const;
   bool _failsSportMatch(const Tags& t1, const Tags& t2) const;
-
+  bool _failsReligionMatch(const Tags& t1, const Tags& t2) const;
 };
 
 }

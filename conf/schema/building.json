@@ -167,6 +167,14 @@
     },
     {
         "categories": [
+            "multiuse"
+        ],
+        "isA": "building",
+        "name": "building=apartments",
+        "objectType": "tag"
+    },
+    {
+        "categories": [
             "poi",
             "hgispoi"
         ],
@@ -308,8 +316,17 @@
     },
     {
         "categories": [
+            "multiuse"
+        ],
+        "isA": "building",
+        "name": "building=station",
+        "objectType": "tag"
+    },
+    {
+        "categories": [
             "poi",
-            "hgispoi"
+            "hgispoi",
+            "multiuse"
         ],
         "isA": "building",
         "name": "building=train_station",
@@ -367,10 +384,45 @@
     },
     {
         "categories": [
-            "poi"
+            "poi",
+            "multiuse"
         ],
         "isA": "building",
         "name": "building=civic",
+        "objectType": "tag"
+    },
+    {
+        "categories": [
+            "multiuse"
+        ],
+        "isA": "building",
+        "name": "building=office",
+        "objectType": "tag"
+    },
+    {
+        "categories": [
+            "multiuse"
+        ],
+        "isA": "building",
+        "name": "building=public",
+        "objectType": "tag"
+    },
+    {
+        "categories": [
+            "poi",
+            "use"
+        ],
+        "isA": "building",
+        "name": "building=greenhouse",
+        "objectType": "tag"
+    },
+    {
+        "categories": [
+            "poi",
+            "use"
+        ],
+        "isA": "building",
+        "name": "building=arboretum",
         "objectType": "tag"
     }
 ]

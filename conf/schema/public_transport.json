@@ -27,7 +27,8 @@
         "#": "Any one of these tag combos can match, but all the tags in the sub-array must match.",
         "categories": [
             "poi",
-            "hgispoi"
+            "hgispoi",
+            "multiuse"
         ],
         "isA": "public_transport=station",
         "name": "bus_station",

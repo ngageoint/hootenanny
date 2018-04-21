@@ -133,6 +133,7 @@ private:
   double _matchDistanceThreshold;
   //max distance allowed between the elements where they can be considered for review
   double _reviewDistanceThreshold;
+  double _reviewDistancePlusCe;
   //true if the distance between the elements, given CE, is within the review distance; absolute
   //requirement for matching
   bool _closeDistanceMatch;
@@ -177,6 +178,8 @@ private:
   unsigned int _getAddressEvidence(ConstElementPtr poi, ConstElementPtr poly);
 
   bool _featureHasReviewIfMatchedType(ConstElementPtr element) const;
+
+  bool _skipForReviewTypeDebugging() const;
 };
 
 }

@@ -894,10 +894,10 @@ first before attempting to match other parts of the name.  Setting to true can b
 better tagging performance for names that would otherwise be involved in multiple implicit tag
 rules.
 
-=== implicit.tagger.poi.rules.database
+=== implicit.tagger.rules.database
 
 * Data Type: string
-* Default Value: `${HOOT_HOME}/conf/core/implicit-tag-rules/poi-allCountries-planet-11-2-17-minwordocc=1000-schemaonly=true.sqlite`
+* Default Value: `${HOOT_HOME}/conf/core/implicit-tag-rules/osm-geonames-4-5-18.sqlite`
 
 Database used by the POI implicit tagger to derive POI type tags implicitly based on a POI's name.
 
@@ -916,26 +916,26 @@ to be created that is associated with it.
 
 The minimum allowed word length when associating word tokens with tags.
 
-=== implicit.tagging.database.deriver.poi.custom.rule.file
+=== implicit.tagging.database.deriver.custom.rule.file
 
 * Data Type: string
-* Default Value: `${HOOT_HOME}/conf/core/implicit-tag-rules/poiImplicitTagRulesCustomRuleList`
+* Default Value: `${HOOT_HOME}/conf/core/implicit-tag-rules/implicitTagRulesCustomRuleList`
 
 Flat file containing tab separated word key/value pairs, one per line, to use as custom rules
 when deriving an implicit tags database from POI names.
 
-=== implicit.tagging.database.deriver.poi.tag.ignore.file
+=== implicit.tagging.database.deriver.tag.ignore.file
 
 * Data Type: string
-* Default Value: `${HOOT_HOME}/conf/core/implicit-tag-rules/poiImplicitTagRulesTagIgnoreList`
+* Default Value: `${HOOT_HOME}/conf/core/implicit-tag-rules/implicitTagRulesTagIgnoreList`
 
 Flat file containing key/value pairs, one per line, to ignore when deriving an implicit tags
 database from POI names.  Use 'key=*' to ignore all tags for a given key.
 
-=== implicit.tagging.database.deriver.poi.word.ignore.file
+=== implicit.tagging.database.deriver.word.ignore.file
 
 * Data Type: string
-* Default Value: `${HOOT_HOME}/conf/core/implicit-tag-rules/poiImplicitTagRulesWordIgnoreList`
+* Default Value: `${HOOT_HOME}/conf/core/implicit-tag-rules/implicitTagRulesWordIgnoreList`
 
 Flat file containing words, one per line, to ignore when deriving an implicit tags database from
 POI names.
@@ -947,6 +947,14 @@ POI names.
 
 If true, the implicit tag raw rules generator will only consider words that correspond to a OSM tag
 value in the Hootenanny schema.
+
+=== implicit.tagging.element.filter
+
+* Data Type: string
+* Default Value: `hoot::ImplicitTagEligiblePoiPolyCriterion`
+
+Filter class inheriting from hoot::ImplicitTagEligibleCriterion; The default,
+ImplicitTagEligiblePoiPolyCriterion, derives tag information from POIs, buildings, and areas.
 
 === implicit.tagging.keep.temp.files
 
@@ -2152,6 +2160,22 @@ The minimum similarity the name scores of two features can have and be considere
 match, with 0.0 being the least similar and 1.0 being the most similar (-1.0 if there are no names
 present (null).
 
+=== poi.polygon.poi.ignore.tags.file
+
+* Data Type: string
+* Default Value: `${HOOT_HOME}/conf/core/poi-polygon/poiPolygonPoiTagIgnoreList`
+
+Path to a file containing a list of POI feature ignore tags.  Any POIs containing tags in the file
+will be skipped by POI/Polygon conflation.
+
+=== poi.polygon.poly.ignore.tags.file
+
+* Data Type: string
+* Default Value: `${HOOT_HOME}/conf/core/poi-polygon/poiPolygonPolyTagIgnoreList`
+
+Path to a file containing a list of polygon feature ignore tags.  Any polygons containing tags in
+the file will be skipped by POI/Polygon conflation.
+
 === poi.polygon.print.match.distance.truth
 
 * Data Type: bool
@@ -2173,9 +2197,9 @@ they do not have specific type tags.
 * Data Type: double
 * Default Value: `125.0`
 
-The maximum distance, in meters, between a POI and a polygon where they can still be considered
-for review based on distance criteria only (value is added to the circular error of the compared
-features).
+The maximum distance, in meters, combined with the circular error of the features being compared,
+the total of which allows the features to still be considered a match based on distance criteria
+only.
 
 === poi.polygon.review.evidence.threshold
 

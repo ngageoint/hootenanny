@@ -49,6 +49,11 @@
         "objectType": "tag"
     },
     {
+        "isA": "abstract_name",
+        "name": "former_name",
+        "objectType": "tag"
+    },
+    {
         "categories": [
             "pseudoname"
         ],

@@ -2,14 +2,13 @@
 
 === Description
 
-The +type-tagger-create-rules+ command given input features, creates a rules file which can be used to derive an implicit tag 
-rules database using the +type-tagger-create-rules-db+ command.  The database can then be used to add tags implicitly 
-to elements, given their names.  Currently, only POI rule generation is supported.  See the "Implicit Element Type Tagging Based 
-On Name" section in the Hootenanny User Guide for more information.
+The +type-tagger-create-rules+ command, given input features, creates a rules file which can be used to derive an implicit tag 
+rules database using the +type-tagger-create-rules-db+ command.  The database can then be used to add tags implicitly to elements, 
+given their names.  See the "Implicit Element Type Tagging Based On Name" section in the Hootenanny User Guide for more information.
 
-* +featureType+	 - currently the only type supported is "poi"
 * +inputs+       - semicolon delimited list of input paths to supported Hootenanny input data formats
-* +translations+ - semicolon delimited list of translation scripts used to translate each input dataset; specify 'none' to skip translation for an input (e.g. OSM data)
+* +translations+ - semicolon delimited list of translation scripts used to translate each input dataset; specify 'none' to skip 
+                   translation for an input (e.g. OSM data)
 * +output+       - an *.implicitTagRules tab delimited implicit tag rules file
 
 Relevant configuration options are those beginning with implicit.tagging.raw.rules.deriver.*, and in some cases those beginning with implicit.tagging.*, in conf/core/ConfigOptions.asciidoc.
@@ -17,11 +16,13 @@ Relevant configuration options are those beginning with implicit.tagging.raw.rul
 === Usage
 
 --------------------------------------
-type-tagger-create-rules (featureType) (inputs) (translations) (output)
+type-tagger-create-rules (inputs) (translations) (output)
 --------------------------------------
 
 ==== Examples
 
 --------------------------------------
-hoot type-tagger-create-rules poi "myInput.osm.pbf;myInput.geonames" "translations/OSM_Ingest.js;translations/GeoNames.js" myRules.implicitTagRules
+hoot type-tagger-create-rules "myInput.osm.pbf;myInput.geonames" "translations/OSM_Ingest.js;translations/GeoNames.js" myRules.implicitTagRules
 --------------------------------------
+
+ 

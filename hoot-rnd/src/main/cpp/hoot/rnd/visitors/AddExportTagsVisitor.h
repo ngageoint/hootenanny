@@ -44,13 +44,12 @@ namespace hoot
 class AddExportTagsVisitor : ElementVisitor
 {
 public:
+
   AddExportTagsVisitor();
 
   static std::string className() { return "hoot::AddExportTagsVisitor"; }
 
   virtual void visit(const ElementPtr& e);
-
-  virtual QString getName() const { return "Add Export Tags"; }
 
   virtual QString getDescription() const { return "Adds tags needed for exporting map data"; }
 

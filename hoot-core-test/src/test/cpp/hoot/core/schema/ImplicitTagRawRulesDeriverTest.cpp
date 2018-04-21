@@ -66,11 +66,11 @@ public:
     QStringList translationScripts;
     translationScripts.append("translations/OSM_Ingest.js");
     ImplicitTagRawRulesDeriver rawRulesDeriver;
-    rawRulesDeriver.setElementFilter("poi");
     rawRulesDeriver.setKeepTempFiles(false); //set true for debugging
     rawRulesDeriver.setSkipFiltering(false);
     rawRulesDeriver.setSortParallelCount(1);
     rawRulesDeriver.setTranslateAllNamesToEnglish(true);
+    rawRulesDeriver.setElementFilter("hoot::ImplicitTagEligiblePoiPolyCriterion");
     rawRulesDeriver.deriveRawRules(inputs, translationScripts, outputFile);
 
     HOOT_FILE_EQUALS(
@@ -93,11 +93,11 @@ public:
       outDir() + "/ImplicitTagRawRulesDeriverTest-runMultipleInputsTest-out.implicitTagRules";
 
     ImplicitTagRawRulesDeriver rawRulesDeriver;
-    rawRulesDeriver.setElementFilter("poi");
     rawRulesDeriver.setKeepTempFiles(false); //set true for debugging
     rawRulesDeriver.setSkipFiltering(false);
     rawRulesDeriver.setSortParallelCount(1);
     rawRulesDeriver.setTranslateAllNamesToEnglish(true);
+    rawRulesDeriver.setElementFilter("hoot::ImplicitTagEligiblePoiPolyCriterion");
     rawRulesDeriver.deriveRawRules(inputs, translationScripts, outputFile);
 
     HOOT_FILE_EQUALS(
@@ -133,12 +133,12 @@ public:
     sortedCountFile->open();
 
     ImplicitTagRawRulesDeriver rawRulesDeriver;
-    rawRulesDeriver.setElementFilter("poi");
     rawRulesDeriver.setTempFileDir(outDir());
     rawRulesDeriver.setKeepTempFiles(true);
     rawRulesDeriver.setSkipFiltering(false);
     rawRulesDeriver.setSortParallelCount(1);
     rawRulesDeriver.setTranslateAllNamesToEnglish(true);
+    rawRulesDeriver.setElementFilter("hoot::ImplicitTagEligiblePoiPolyCriterion");
     rawRulesDeriver._sortedCountFile = sortedCountFile;
     rawRulesDeriver._removeDuplicatedKeyTypes();
     rawRulesDeriver._resolveCountTies();
@@ -167,11 +167,11 @@ public:
       outDir() + "/ImplicitTagRawRulesDeriverTest-runNameCaseTest-out.implicitTagRules";
 
     ImplicitTagRawRulesDeriver rawRulesDeriver;
-    rawRulesDeriver.setElementFilter("poi");
     rawRulesDeriver.setKeepTempFiles(false); //set true for debugging
     rawRulesDeriver.setSkipFiltering(false);
     rawRulesDeriver.setSortParallelCount(1);
     rawRulesDeriver.setTranslateAllNamesToEnglish(true);
+    rawRulesDeriver.setElementFilter("hoot::ImplicitTagEligiblePoiPolyCriterion");
     rawRulesDeriver.deriveRawRules(inputs, translationScripts, outputFile);
 
     HOOT_FILE_EQUALS(
@@ -190,11 +190,11 @@ public:
     QStringList translationScripts;
     translationScripts.append("translations/OSM_Ingest.js");
     ImplicitTagRawRulesDeriver rawRulesDeriver;
-    rawRulesDeriver.setElementFilter("poi");
     rawRulesDeriver.setKeepTempFiles(false); //set true for debugging
     rawRulesDeriver.setSkipFiltering(false);
     rawRulesDeriver.setSortParallelCount(1);
     rawRulesDeriver.setTranslateAllNamesToEnglish(false);
+    rawRulesDeriver.setElementFilter("hoot::ImplicitTagEligiblePoiPolyCriterion");
     rawRulesDeriver.deriveRawRules(inputs, translationScripts, outputFile);
 
     HOOT_FILE_EQUALS(
@@ -215,6 +215,17 @@ public:
     rawRulesDeriver.setSkipFiltering(false);
     rawRulesDeriver.setSortParallelCount(1);
     rawRulesDeriver.setTranslateAllNamesToEnglish(true);
+
+    try
+    {
+      rawRulesDeriver.setElementFilter("hoot::AreaCriterion");
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.contains("Invalid filter type"));
+
     inputs.clear();
     inputs.append(inDir() + "/yemen-crop-2.osm.pbf");
     translationScripts.clear();
@@ -232,7 +243,7 @@ public:
     }
     CPPUNIT_ASSERT(exceptionMsg.contains("No element type was specified"));
 
-    rawRulesDeriver.setElementFilter("poi");
+    rawRulesDeriver.setElementFilter("hoot::ImplicitTagEligiblePoiPolyCriterion");
     inputs.clear();
     inputs.append(inDir() + "/yemen-crop-2.osm.pbf");
     translationScripts.clear();

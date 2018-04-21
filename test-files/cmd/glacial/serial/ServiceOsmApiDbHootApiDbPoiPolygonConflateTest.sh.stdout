@@ -37,11 +37,11 @@ STEP 12: Executing the SQL changeset on the osm api db...
 
 Changeset(s) Created: 1
 Changeset Details: min_lat=37.7618, max_lat=37.7651, min_lon=-122.4239735, max_lon=-122.4195999, num_changes=322
-Node(s) Created: 0
+Node(s) Created: 1
 Node(s) Modified: 0
 Node(s) Deleted: 267
 Way(s) Created: 0
-Way(s) Modified: 4
+Way(s) Modified: 3
 Way(s) Deleted: 51
 Relation(s) Created: 0
 Relation(s) Modified: 0
@@ -52,6 +52,6 @@ STEP 14: Reading the entire contents of the osm api db, for the SQL changeset wo
 
 STEP 15: Cleaning up database...
 
-16:56:01.190 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 28
-16:56:01.408 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 29
-16:56:01.641 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 30
+18:05:43.841 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 439
+18:05:44.437 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 440
+18:05:44.931 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 444

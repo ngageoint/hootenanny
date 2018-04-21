@@ -96,6 +96,9 @@
         "import": "email.json"
     },
     {
+        "import": "emergency.json"
+    },
+    {
         "import": "error.json"
     },
     {
@@ -284,6 +287,9 @@
     },
     {
         "import": "uuid.json"
+    },
+    {
+        "import": "water.json"
     },
     {
         "import": "waterway.json"

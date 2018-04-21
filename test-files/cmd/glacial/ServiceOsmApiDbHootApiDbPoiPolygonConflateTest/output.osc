@@ -1012,6 +1012,18 @@
         <node id="489" version="1" lat="37.7636559999999974" lon="-122.4200440000000043">
             <tag k="hoot:status" v="0"/>
         </node>
+    </delete>
+    <create>
+        <node id="-1" version="0" lat="37.7626806948888003" lon="-122.4219696647950002">
+            <tag k="REF2" v="007037"/>
+            <tag k="hoot:id" v="506"/>
+            <tag k="hoot:status" v="2"/>
+            <tag k="name" v="MISSION POLICE STATION"/>
+            <tag k="amenity" v="police"/>
+            <tag k="error:circular" v="15"/>
+        </node>
+    </create>
+    <delete>
         <way id="3" version="1">
             <nd ref="202"/>
             <nd ref="203"/>
@@ -1596,42 +1608,6 @@
             <tag k="source" v="Bing"/>
             <tag k="error:circular" v="15"/>
         </way>
-    </delete>
-    <modify>
-        <way id="47" version="1">
-            <nd ref="244"/>
-            <nd ref="243"/>
-            <nd ref="242"/>
-            <nd ref="51"/>
-            <nd ref="52"/>
-            <nd ref="239"/>
-            <nd ref="240"/>
-            <nd ref="241"/>
-            <nd ref="66"/>
-            <nd ref="65"/>
-            <nd ref="64"/>
-            <nd ref="244"/>
-            <tag k="gnis:feature_id" v="2107373"/>
-            <tag k="addr:city" v="San Francisco"/>
-            <tag k="hoot:status" v="3"/>
-            <tag k="building" v="yes"/>
-            <tag k="ele" v="14"/>
-            <tag k="addr:housenumber" v="630"/>
-            <tag k="name" v="Mission Police Station"/>
-            <tag k="alt_name" v="MISSION POLICE STATION"/>
-            <tag k="amenity" v="police"/>
-            <tag k="hoot:poipolygon:poismerged" v="1"/>
-            <tag k="wheelchair" v="yes"/>
-            <tag k="gnis:county_name" v="San Francisco"/>
-            <tag k="REF1" v="007037"/>
-            <tag k="REF2" v="007037"/>
-            <tag k="addr:state" v="CA"/>
-            <tag k="addr:street" v="Valencia Street"/>
-            <tag k="hoot:id" v="47"/>
-            <tag k="error:circular" v="15"/>
-        </way>
-    </modify>
-    <delete>
         <way id="48" version="1">
             <nd ref="489"/>
             <nd ref="252"/>

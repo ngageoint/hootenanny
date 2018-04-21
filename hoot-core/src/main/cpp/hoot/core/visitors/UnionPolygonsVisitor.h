@@ -53,8 +53,6 @@ public:
 
   virtual void visit(const boost::shared_ptr<const Element>& e);
 
-  virtual QString getName() const { return "Union Polygons"; }
-
   virtual QString getDescription() const
   { return "Unions all area elements that are visited to create a single geometry"; }
 

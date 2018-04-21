@@ -48,8 +48,6 @@ public:
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new IntersectionFilter(_nids)); }
 
-  virtual QString getName() const { return "Intersection"; }
-
   virtual QString getDescription() const { return "Identifies highway intersections"; }
 
 protected:

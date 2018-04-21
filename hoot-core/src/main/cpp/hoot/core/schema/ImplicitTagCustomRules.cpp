@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/schema/TagListReader.h>
 
 // Qt
 #include <QFile>
@@ -71,40 +72,21 @@ void ImplicitTagCustomRules::_readCustomRuleFile()
     while (!customRulesFile.atEnd())
     {
       const QString line = QString::fromUtf8(customRulesFile.readLine().constData()).trimmed();
+      LOG_VART(line);
       if (!line.trimmed().isEmpty() && !line.startsWith("#"))
       {
         const QStringList lineParts = line.trimmed().split("\t");
+        LOG_VART(lineParts);
+        if (lineParts.size() != 2)
+        {
+          throw HootException("Invalid custom rule: " + line);
+        }
         _customRulesList[lineParts[0].trimmed()] = lineParts[1].trimmed();
       }
     }
     customRulesFile.close();
   }
   LOG_VART(_customRulesList);
-}
-
-void ImplicitTagCustomRules::_readIgnoreList(const QString inputPath, QStringList& outputList)
-{
-  LOG_VARD(inputPath);
-  if (!inputPath.trimmed().isEmpty())
-  {
-    QFile inputFile(inputPath);
-    if (!inputFile.open(QIODevice::ReadOnly))
-    {
-      throw HootException(
-        QObject::tr("Error opening %1 for writing.").arg(inputFile.fileName()));
-    }
-    outputList.clear();
-    while (!inputFile.atEnd())
-    {
-      const QString line = QString::fromUtf8(inputFile.readLine().constData()).trimmed();
-      if (!line.trimmed().isEmpty() && !line.startsWith("#"))
-      {
-        outputList.append(line);
-      }
-    }
-    inputFile.close();
-  }
-  LOG_VART(outputList);
 }
 
 void ImplicitTagCustomRules::_readAllowLists()
@@ -116,8 +98,9 @@ void ImplicitTagCustomRules::_readAllowLists()
 void ImplicitTagCustomRules::_readIgnoreLists()
 {
   LOG_DEBUG("Reading ignore lists...");
-  _readIgnoreList(_tagIgnoreFile, _tagIgnoreList);
-  _readIgnoreList(_wordIgnoreFile, _wordIgnoreList);
+  _tagIgnoreList = TagListReader::readList(_tagIgnoreFile);
+  //Words really aren't tags, but the tag list reader works fine for this.
+  _wordIgnoreList = TagListReader::readList(_wordIgnoreFile, true);
 }
 
 }

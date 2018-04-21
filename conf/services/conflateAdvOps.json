@@ -155,6 +155,14 @@
                 "name":"Split Sharp Road Corners",
                 "hoot_val":"hoot::CornerSplitter",
                 "defaultvalue":"true"
+            },
+            {
+                "id":"implicit_type_tagger",
+                "elem_type":"checkbox",
+                "description":"Add missing type tags to input data implied from the feature name",
+                "name":"Add Missing Type Tags",
+                "hoot_val":"hoot::ImplicitPoiPolygonTypeTagger",
+                "defaultvalue":"false"
             }
         ]
     },
@@ -883,7 +891,7 @@
     	    {
         	"id":"poipolygon_review_distance_threshold",
         	"elem_type":"int",
-        	"description":"The maximum distance, in meters, between a POI and a polygon where they can still be considered for review based on distance criteria only (value is added to the circular error of the compared features).",
+        	"description":"The maximum distance, in meters, combined with the circular error of the features being compared, the total of which allows the features to still be considered a match based on distance criteria only.",
         	"name":"Review Distance Threshold",
         	"defaultvalue":"125",
         	"minvalue":"0",

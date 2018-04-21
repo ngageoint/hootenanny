@@ -248,6 +248,14 @@ public:
 
   QString toString() const;
 
+  /**
+   * Returns true if the tags have any key=value in the input list
+   *
+   * @param kvps kvps to search for
+   * @return true if tags contain at least one kvp; false otherwise
+   */
+  bool hasAnyKvp(const QStringList kvps) const;
+
 private:
 
   void _valueRegexParser(const QString& str, QString& num, QString& units) const;

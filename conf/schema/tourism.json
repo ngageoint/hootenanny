@@ -49,16 +49,35 @@
         }
     },
     {
+        "categories": [
+            "multiuse"
+        ],
         "isA": "tourism",
         "name": "tourism=hotel",
         "objectType": "tag"
     },
     {
+        "categories": [
+            "multiuse"
+        ],
+        "isA": "tourism",
+        "name": "tourism=camp_site",
+        "objectType": "tag"
+    },
+    {
+        "categories": [
+            "multiuse"
+        ],
         "isA": "tourism",
         "name": "tourism=zoo",
         "objectType": "tag"
     },
     {
+        "categories": [
+            "use",
+            "poi",
+            "multiuse"
+        ],
         "isA": "tourism",
         "name": "tourism=attraction",
         "objectType": "tag",
@@ -70,6 +89,18 @@
             {
                 "name": "tourism=theme_park",
                 "weight": 0.8
+            },
+            {
+                "name": "leisure=garden",
+                "weight": 0.5
+            },
+            {
+                "name": "amenity=auditorium",
+                "weight": 0.2
+            },
+            {
+                "name": "tourism=museum",
+                "weight": 0.8
             }
         ]
     },
@@ -79,11 +110,17 @@
         "objectType": "tag"
     },
     {
+        "isA": "tourism",
+        "name": "tourism=picnic_site",
+        "objectType": "tag"
+    },
+    {
         "aliases": [
             "amenity=museum"
         ],
          "categories": [
-            "building"
+            "building",
+            "multiuse"
         ],
         "isA": "tourism",
         "name": "tourism=museum",

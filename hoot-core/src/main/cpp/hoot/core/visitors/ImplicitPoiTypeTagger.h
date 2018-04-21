@@ -25,28 +25,26 @@
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef IMPLICITPOITAGGER_H
-#define IMPLICITPOITAGGER_H
+#ifndef IMPLICITPOITYPETAGGER_H
+#define IMPLICITPOITYPETAGGER_H
 
 // hoot
-#include <hoot/core/visitors/ImplicitTaggerBase.h>
+#include <hoot/core/visitors/ImplicitTypeTaggerBase.h>
 
 namespace hoot
 {
 
 /**
- * Adds tags implicitly derived from POI names to POIs
+ * Adds tags implicitly derived from feature names to POIs
  */
-class ImplicitPoiTagger : public ImplicitTaggerBase
+class ImplicitPoiTypeTagger : public ImplicitTypeTaggerBase
 {
 public:
 
-  static std::string className() { return "hoot::ImplicitPoiTagger"; }
+  static std::string className() { return "hoot::ImplicitPoiTypeTagger"; }
 
-  ImplicitPoiTagger();
-  ImplicitPoiTagger(const QString databasePath);
-
-  virtual QString getName() const { return "Implicit POI Tagger"; }
+  ImplicitPoiTypeTagger();
+  ImplicitPoiTypeTagger(const QString databasePath);
 
   virtual QString getDescription() const
   { return "Adds tags to POIs implicitly derived from their names"; }
@@ -59,4 +57,4 @@ protected:
 
 }
 
-#endif // IMPLICITPOITAGGER_H
+#endif // IMPLICITPOITYPETAGGER_H

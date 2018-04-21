@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "ImplicitTaggerBase.h"
+#include "ImplicitTypeTaggerBase.h"
 
 #include <hoot/core/algorithms/string/StringTokenizer.h>
 #include <hoot/core/schema/OsmSchema.h>
@@ -35,6 +35,7 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/algorithms/Translator.h>
 #include <hoot/core/schema/ImplicitTagUtils.h>
+#include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonTypeScoreExtractor.h>
 
 // Qt
 #include <QSet>
@@ -43,13 +44,13 @@
 namespace hoot
 {
 
-ImplicitTaggerBase::ImplicitTaggerBase() :
-_allowTaggingSpecificPois(true),
-_elementIsASpecificPoi(false),
-_numNodesModified(0),
+ImplicitTypeTaggerBase::ImplicitTypeTaggerBase() :
+_allowTaggingSpecificFeatures(true),
+_elementIsASpecificFeature(false),
+_numFeaturesModified(0),
 _numTagsAdded(0),
-_numNodesInvolvedInMultipleRules(0),
-_numNodesParsed(0),
+_numFeaturesInvolvedInMultipleRules(0),
+_numFeaturesParsed(0),
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
 _smallestNumberOfTagsAdded(LONG_MAX),
 _largestNumberOfTagsAdded(0),
@@ -59,13 +60,13 @@ _matchEndOfNameSingleTokenFirst(true)
 
 }
 
-ImplicitTaggerBase::ImplicitTaggerBase(const QString /*databasePath*/) :
-_allowTaggingSpecificPois(true),
-_elementIsASpecificPoi(false),
-_numNodesModified(0),
+ImplicitTypeTaggerBase::ImplicitTypeTaggerBase(const QString /*databasePath*/) :
+_allowTaggingSpecificFeatures(true),
+_elementIsASpecificFeature(false),
+_numFeaturesModified(0),
 _numTagsAdded(0),
-_numNodesInvolvedInMultipleRules(0),
-_numNodesParsed(0),
+_numFeaturesInvolvedInMultipleRules(0),
+_numFeaturesParsed(0),
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
 _smallestNumberOfTagsAdded(LONG_MAX),
 _largestNumberOfTagsAdded(0),
@@ -75,7 +76,7 @@ _matchEndOfNameSingleTokenFirst(true)
 
 }
 
-ImplicitTaggerBase::~ImplicitTaggerBase()
+ImplicitTypeTaggerBase::~ImplicitTypeTaggerBase()
 {
   if (_ruleReader)
   {
@@ -87,32 +88,32 @@ ImplicitTaggerBase::~ImplicitTaggerBase()
 
   LOG_INFO(
     "Added " << StringUtils::formatLargeNumber(_numTagsAdded) << " tags to " <<
-    StringUtils::formatLargeNumber(_numNodesModified) << " nodes / " <<
-    StringUtils::formatLargeNumber(_numNodesParsed)  << " total nodes.");
+    StringUtils::formatLargeNumber(_numFeaturesModified) << " features / " <<
+    StringUtils::formatLargeNumber(_numFeaturesParsed)  << " total features.");
   LOG_INFO(
-    StringUtils::formatLargeNumber(_numNodesInvolvedInMultipleRules) <<
-    " nodes were involved in multiple tag rules and were not modified.");
-  if (_numTagsAdded > 0 && _numNodesModified > 0)
+    StringUtils::formatLargeNumber(_numFeaturesInvolvedInMultipleRules) <<
+    " features were involved in multiple tag rules and were not modified.");
+  if (_numTagsAdded > 0 && _numFeaturesModified > 0)
   {
-    long avgTagsAdded = (long)(_numTagsAdded / _numNodesModified);
+    long avgTagsAdded = (long)(_numTagsAdded / _numFeaturesModified);
     LOG_INFO(
-      "Average tags added per node: " << StringUtils::formatLargeNumber(avgTagsAdded));
+      "Average tags added per feature: " << StringUtils::formatLargeNumber(avgTagsAdded));
     LOG_INFO(
-      "Smallest number of tags added to a node: " <<
+      "Smallest number of tags added to a feature: " <<
        StringUtils::formatLargeNumber(_smallestNumberOfTagsAdded));
     LOG_INFO(
-      "Largest number of tags added to a node: " <<
+      "Largest number of tags added to a feature: " <<
        StringUtils::formatLargeNumber(_largestNumberOfTagsAdded));
   }
 }
 
-void ImplicitTaggerBase::setConfiguration(const Settings& conf)
+void ImplicitTypeTaggerBase::setConfiguration(const Settings& conf)
 {
   const ConfigOptions confOptions(conf);
 
   setTranslateAllNamesToEnglish(confOptions.getImplicitTaggingTranslateAllNamesToEnglish());
   setMatchEndOfNameSingleTokenFirst(confOptions.getImplicitTaggerMatchEndOfNameSingleTokenFirst());
-  setAllowTaggingSpecificPois(confOptions.getImplicitTaggerAllowTaggingSpecificEntities());
+  setAllowTaggingSpecificFeatures(confOptions.getImplicitTaggerAllowTaggingSpecificEntities());
 
   _ruleReader->setAddTopTagOnly(confOptions.getImplicitTaggerAddTopTagOnly());
   _ruleReader->setAllowWordsInvolvedInMultipleRules(
@@ -124,12 +125,23 @@ bool caseInsensitiveLessThan(const QString s1, const QString s2)
   return s1.toLower() < s2.toLower();
 }
 
-void ImplicitTaggerBase::visit(const ElementPtr& e)
+void ImplicitTypeTaggerBase::visit(const ElementPtr& e)
 {
   if (_visitElement(e))
   {
     bool foundDuplicateMatch = false;
     Tags tagsToAdd;
+
+    //TODO: this is temp for testing until it gets fixed with a translation
+    if (e->getTags().get("gnis:feature_type").toLower() == "mine")
+    {
+      LOG_TRACE("Using custom tagging rule...");
+      e->getTags().appendValue("man_made", "mine");
+      QString tagValue =
+        "Added 1 implicitly derived tag(s) based on: gnis:feature_type=mine; tags added: man_made=mine";
+      LOG_VART(tagValue);
+      e->getTags().appendValue("hoot:implicitTags:tagsAdded", tagValue);
+    }
 
     QStringList filteredNames = _cleanNames(e->getTags());
 
@@ -147,23 +159,23 @@ void ImplicitTaggerBase::visit(const ElementPtr& e)
           _ruleReader->getImplicitTags(
             filteredNames.toSet(), matchingWords, wordsInvolvedInMultipleRules);
       }
-      LOG_VARD(implicitlyDerivedTags);
-      LOG_VARD(matchingWords);
-      LOG_VARD(wordsInvolvedInMultipleRules);
+      LOG_VART(implicitlyDerivedTags);
+      LOG_VART(matchingWords);
+      LOG_VART(wordsInvolvedInMultipleRules);
 
       bool namesContainBuilding = false;
       bool namesContainOffice = false;
 
       if (wordsInvolvedInMultipleRules)
       {
-        LOG_DEBUG(
+        LOG_TRACE(
           "Found duplicate match for names: " << filteredNames << " with matching words: " <<
           matchingWords);
         foundDuplicateMatch = true;
       }
       else if (implicitlyDerivedTags.size() > 0)
       {
-        LOG_DEBUG(
+        LOG_TRACE(
           "Derived implicit tags for names: " << filteredNames << " with matching words: " <<
           matchingWords);
         tagsToAdd = implicitlyDerivedTags;
@@ -174,9 +186,9 @@ void ImplicitTaggerBase::visit(const ElementPtr& e)
         //name parts
         QStringList nameTokensList = _getNameTokens(filteredNames);
 
-        LOG_VARD(nameTokensList);
-        LOG_VARD(implicitlyDerivedTags.size());
-        LOG_VARD(nameTokensList.size());
+        LOG_VART(nameTokensList);
+        LOG_VART(implicitlyDerivedTags.size());
+        LOG_VART(nameTokensList.size());
 
         //only going up to token group size = 2, as larger sizes weren't found experimentally to
         //yield any better results
@@ -194,28 +206,28 @@ void ImplicitTaggerBase::visit(const ElementPtr& e)
             filteredNames, nameTokensList, e->getTags(), implicitlyDerivedTags, matchingWords,
             wordsInvolvedInMultipleRules, namesContainBuilding, namesContainOffice);
         }
-        LOG_VARD(implicitlyDerivedTags);
-        LOG_VARD(matchingWords);
-        LOG_VARD(wordsInvolvedInMultipleRules);
+        LOG_VART(implicitlyDerivedTags);
+        LOG_VART(matchingWords);
+        LOG_VART(wordsInvolvedInMultipleRules);
 
         if (wordsInvolvedInMultipleRules)
         {
-          LOG_DEBUG(
+          LOG_TRACE(
             "Found duplicate match for name tokens: " << nameTokensList << " with matching words: " <<
             matchingWords);
           foundDuplicateMatch = true;
         }
         else if (implicitlyDerivedTags.size() > 0)
         {
-          LOG_DEBUG(
+          LOG_TRACE(
             "Derived implicit tags for name tokens: " << nameTokensList << " with matching words: " <<
             matchingWords);
           tagsToAdd = implicitlyDerivedTags;
         }
       }
-      LOG_VARD(tagsToAdd);
+      LOG_VART(tagsToAdd);
 
-      LOG_VARD(foundDuplicateMatch);
+      LOG_VART(foundDuplicateMatch);
       if (foundDuplicateMatch)
       {
         _updateElementForDuplicateMatch(e, matchingWords);
@@ -228,45 +240,94 @@ void ImplicitTaggerBase::visit(const ElementPtr& e)
         _ensureCorrectTagSpecificity(e, tagsToAdd);
 
         //This is a little kludgy, but we'll leave it for now since it helps.
-        if (tagsToAdd.isEmpty() && !_elementIsASpecificPoi && namesContainOffice)
+        if (tagsToAdd.isEmpty() && !_elementIsASpecificFeature && namesContainOffice)
         {
           tagsToAdd.appendValue("building", "office");
           matchingWords.insert("office");
         }
-        else if (tagsToAdd.isEmpty() && !_elementIsASpecificPoi && namesContainBuilding)
+        else if (tagsToAdd.isEmpty() && !_elementIsASpecificFeature && namesContainBuilding)
         {
           tagsToAdd.appendValue("building", "yes");
           matchingWords.insert("building");
+        }
+        LOG_VART(tagsToAdd);
+
+        //bit of hack...to handle a situation where features have been incorrectly tagged;
+        //the argument could be made to just correct the input data instead
+        if (tagsToAdd.isEmpty())
+        {
+          tagsToAdd = _applyCustomRules(e, filteredNames);
         }
 
         if (!tagsToAdd.isEmpty())
         {
           _addImplicitTags(e, tagsToAdd, matchingWords);
         }
-      }
+      } 
     }
 
-    _numNodesParsed++;
-    if (_numNodesParsed % (_statusUpdateInterval / 10) == 0)
+    _numFeaturesParsed++;
+    if (_numFeaturesParsed % (_statusUpdateInterval / 10) == 0)
     {
       PROGRESS_INFO(
-        "Parsed " << StringUtils::formatLargeNumber(_numNodesParsed) << " nodes from input.");
+        "Parsed " << StringUtils::formatLargeNumber(_numFeaturesParsed) << " features from input.");
     }
   }
 }
 
-QStringList ImplicitTaggerBase::_cleanNames(const Tags& tags)
+Tags ImplicitTypeTaggerBase::_applyCustomRules(const ElementPtr& e, const QStringList filteredNames)
 {
+  Tags tagsToAdd;
+
+  if (PoiPolygonTypeScoreExtractor::isPark(e))
+  {
+    for (int i = 0; i < filteredNames.size(); i++)
+    {
+      const QString name = filteredNames.at(i).toLower();
+      LOG_VART(name);
+      if (name.endsWith("play area") || name.endsWith("play areas") || name.endsWith("playground"))
+      {
+        LOG_TRACE("Using custom tagging rule...");
+        tagsToAdd.appendValue("leisure", "playground");
+        break;
+      }
+      else if (name.endsWith("golf course"))
+      {
+        LOG_TRACE("Using custom tagging rule...");
+        tagsToAdd.appendValue("leisure", "golf_course");
+        break;
+      }
+    }
+  }
+
+  return tagsToAdd;
+}
+
+QStringList ImplicitTypeTaggerBase::_cleanNames(Tags& tags)
+{
+  //the normal hoot convention is to split the name tag on ';' into multiple names; bypassing that
+  //here, as it seems to cause more harm to implicit tagging than good
+  QString name = tags.get("name");
+  if (name.contains(";"))
+  {
+    tags.set("name", name.replace(";", "").trimmed());
+  }
+
   QStringList names = tags.getNames();
+  LOG_VART(names);
   if (names.removeAll("old_name") > 0)
   {
-    LOG_VARD("Removed old name tag.");
+    LOG_VART("Removed old name tag.");
+  }
+  if (names.removeAll("former_name") > 0)
+  {
+    LOG_VART("Removed former name tag.");
   }
   if (_translateAllNamesToEnglish)
   {
     names = ImplicitTagUtils::translateNamesToEnglish(names, tags);
   }
-  LOG_VARD(names);
+  LOG_VART(names);
   QStringList filteredNames;
   for (int i = 0; i < names.size(); i++)
   {
@@ -277,12 +338,12 @@ QStringList ImplicitTaggerBase::_cleanNames(const Tags& tags)
       filteredNames.append(name.toLower());
     }
   }
-  LOG_VARD(filteredNames);
+  LOG_VART(filteredNames);
   return filteredNames;
 }
 
-QString ImplicitTaggerBase::_getEndOfNameToken(const QString name,
-                                               const QStringList nameTokensList) const
+QString ImplicitTypeTaggerBase::_getEndOfNameToken(const QString name,
+                                                   const QStringList nameTokensList) const
 {
   for (int i = 0; i < nameTokensList.size(); i++)
   {
@@ -295,13 +356,13 @@ QString ImplicitTaggerBase::_getEndOfNameToken(const QString name,
   return "";
 }
 
-void ImplicitTaggerBase::_getImplicitlyDerivedTagsFromMultipleNameTokens(
+void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromMultipleNameTokens(
   const QStringList names, const QStringList nameTokensList, const Tags& elementTags,
   Tags& implicitlyDerivedTags, QSet<QString>& matchingWords, bool& wordsInvolvedInMultipleRules)
 {
   //TODO: this method needs cleanup
 
-  LOG_DEBUG("Attempting match with token group size of 2...");
+  LOG_TRACE("Attempting match with token group size of 2...");
 
   QStringList nameTokensListGroupSizeTwo;
   for (int i = 0; i < nameTokensList.size() - 1; i++)
@@ -316,7 +377,7 @@ void ImplicitTaggerBase::_getImplicitlyDerivedTagsFromMultipleNameTokens(
     }
     nameTokensListGroupSizeTwo.append(nameToken);
   }
-  LOG_VARD(nameTokensListGroupSizeTwo);
+  LOG_VART(nameTokensListGroupSizeTwo);
 
   if (_matchEndOfNameSingleTokenFirst)
   {
@@ -370,19 +431,20 @@ void ImplicitTaggerBase::_getImplicitlyDerivedTagsFromMultipleNameTokens(
         nameTokensListGroupSizeTwo.toSet(), matchingWords, wordsInvolvedInMultipleRules);
   }
 
-  LOG_VARD(implicitlyDerivedTags);
-  LOG_VARD(matchingWords);
-  LOG_VARD(wordsInvolvedInMultipleRules);
+  LOG_VART(implicitlyDerivedTags);
+  LOG_VART(matchingWords);
+  LOG_VART(wordsInvolvedInMultipleRules);
 }
 
-void ImplicitTaggerBase::_getImplicitlyDerivedTagsFromSingleNameTokens(
+void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromSingleNameTokens(
   const QStringList names, QStringList& nameTokensList, const Tags& elementTags,
   Tags& implicitlyDerivedTags, QSet<QString>& matchingWords, bool& wordsInvolvedInMultipleRules,
   bool& namesContainBuilding, bool& namesContainOffice)
 {
-  //TODO: should be possible to combine this with _getImplicitlyDerivedTagsFromMultipleNameTokens
+  //TODO: should be possible to combine this logic with
+  //_getImplicitlyDerivedTagsFromMultipleNameTokens into a single method
 
-  LOG_DEBUG("Attempting match with token group size of 1...");
+  LOG_TRACE("Attempting match with token group size of 1...");
 
   if (_translateAllNamesToEnglish)
   {
@@ -390,13 +452,15 @@ void ImplicitTaggerBase::_getImplicitlyDerivedTagsFromSingleNameTokens(
     for (int i = 0; i < nameTokensList.size(); i++)
     {
       const QString word = nameTokensList.at(i);
+      LOG_VART(word);
       //TODO: can this be combined with the ImplicitTagUtils translate method?
       const QString englishNameToken = Translator::getInstance().toEnglish(word);
+      LOG_VART(englishNameToken);
       translatedNameTokens.append(englishNameToken);
     }
     nameTokensList = translatedNameTokens;
   }
-  LOG_VARD(nameTokensList);
+  LOG_VART(nameTokensList);
 
   //This logic is kind of one-off but did help a little bit with reducing false positives with
   //offices and buildings...probably need something cleaner and more extensible.
@@ -414,37 +478,40 @@ void ImplicitTaggerBase::_getImplicitlyDerivedTagsFromSingleNameTokens(
     nameTokensList.removeAll("office");
     nameTokensList.removeAll("offices");
   }
+  LOG_VART(nameTokensList);
 
   if (implicitlyDerivedTags.size() == 0 && nameTokensList.size() > 0)
   {
     if (_matchEndOfNameSingleTokenFirst)
     {
-      //match the end of the name with an implicit tag rule before matching anything else in the name
+      //match the end of the name with an implicit tag rule before matching anything else in the
+      //name
 
       QString endOfNameToken =
         _getEndOfNameToken(elementTags.get("name:en"), nameTokensList);
       if (endOfNameToken.isEmpty())
       {
-        _getEndOfNameToken(elementTags.get("name"), nameTokensList);
+        endOfNameToken = _getEndOfNameToken(elementTags.get("name"), nameTokensList);
       }
       if (endOfNameToken.isEmpty())
       {
         for (int i = 0; i < names.size(); i++)
         {
-          _getEndOfNameToken(names.at(i), nameTokensList);
+          endOfNameToken = _getEndOfNameToken(names.at(i), nameTokensList);
           if (!endOfNameToken.isEmpty())
           {
             break;
           }
         }
       }
+      LOG_VART(endOfNameToken)
       if (!endOfNameToken.isEmpty())
       {
         QStringList tempTokenList;
         tempTokenList.append(endOfNameToken);
         implicitlyDerivedTags =
           _ruleReader->getImplicitTags(
-            tempTokenList.toSet(), matchingWords, wordsInvolvedInMultipleRules);
+            tempTokenList.toSet(), matchingWords, wordsInvolvedInMultipleRules);       
         if (implicitlyDerivedTags.size() == 0)
         {
           //end of name token didn't match; do token matching
@@ -467,35 +534,37 @@ void ImplicitTaggerBase::_getImplicitlyDerivedTagsFromSingleNameTokens(
       implicitlyDerivedTags =
         _ruleReader->getImplicitTags(
           nameTokensList.toSet(), matchingWords, wordsInvolvedInMultipleRules);
-    }
+    } 
   }
+  LOG_VART(implicitlyDerivedTags);
 }
 
-void ImplicitTaggerBase::_ensureCorrectTagSpecificity(const ElementPtr& e, Tags& tagsToAdd)
+void ImplicitTypeTaggerBase::_ensureCorrectTagSpecificity(const ElementPtr& e, Tags& tagsToAdd)
 {
   Tags updatedTags;
   bool tagsAdded = false;
-  LOG_VARD(_elementIsASpecificPoi);
+  LOG_VART(_elementIsASpecificFeature);
   for (Tags::const_iterator tagItr = tagsToAdd.begin(); tagItr != tagsToAdd.end(); ++tagItr)
   {
     const QString implicitTagKey = tagItr.key();
-    LOG_VARD(implicitTagKey);
+    LOG_VART(implicitTagKey);
     const QString implicitTagValue = tagItr.value();
-    LOG_VARD(implicitTagValue);
+    LOG_VART(implicitTagValue);
+    LOG_VART(e->getTags().contains(implicitTagKey));
     if (e->getTags().contains(implicitTagKey))
     {
       //don't add a less specific tag if the element already has one with the same key; e.g. if
       //the element has amenity=public_hall, don't add amenity=hall; for ties, keep the one we
-      //already have; e.g. if the element has amenity=bank, don't add amenity=school
+      //already have
 
       const QString elementTagKey = implicitTagKey;
       const QString elementTagValue = e->getTags()[implicitTagKey];
-      LOG_VARD(OsmSchema::getInstance().isAncestor(implicitTagKey % "=" % implicitTagValue,
+      LOG_VART(OsmSchema::getInstance().isAncestor(implicitTagKey % "=" % implicitTagValue,
                                                    elementTagKey % "=" % elementTagValue));
       if (OsmSchema::getInstance().isAncestor(implicitTagKey % "=" % implicitTagValue,
                                               elementTagKey % "=" % elementTagValue))
       {
-        LOG_DEBUG(
+        LOG_TRACE(
           implicitTagKey % "=" % implicitTagValue << " is more specific than " <<
           elementTagKey % "=" % elementTagValue << " on the input feature.  Replacing with " <<
           "the more specific tag.")
@@ -507,17 +576,17 @@ void ImplicitTaggerBase::_ensureCorrectTagSpecificity(const ElementPtr& e, Tags&
         updatedTags.appendValue(elementTagKey, elementTagValue);
       }
     }
-    else if (!_elementIsASpecificPoi)
+    else if (!_elementIsASpecificFeature || _allowTaggingSpecificFeatures)
     {
-      LOG_DEBUG(
-        "Input feature does not contain tag: " <<
-        implicitTagKey % "=" % implicitTagValue << ", so adding it...");
+      LOG_TRACE(
+        "Input feature does not contain key: " << implicitTagKey << " so adding tag: " <<
+        implicitTagKey % "=" % implicitTagValue << "...");
       updatedTags.appendValue(implicitTagKey, implicitTagValue);
       tagsAdded = true;
     }
   }
-  LOG_VARD(updatedTags);
-  LOG_VARD(tagsAdded);
+  LOG_VART(updatedTags);
+  LOG_VART(tagsAdded);
   if (tagsAdded)
   {
     tagsToAdd = updatedTags;
@@ -526,11 +595,11 @@ void ImplicitTaggerBase::_ensureCorrectTagSpecificity(const ElementPtr& e, Tags&
   {
     tagsToAdd.clear();
   }
-  LOG_VARD(tagsToAdd);
+  LOG_VART(tagsToAdd);
 }
 
-void ImplicitTaggerBase::_updateElementForDuplicateMatch(const ElementPtr& e,
-                                                         const QSet<QString>& matchingWords)
+void ImplicitTypeTaggerBase::_updateElementForDuplicateMatch(const ElementPtr& e,
+                                                             const QSet<QString>& matchingWords)
 {
   QStringList matchingWordsList = matchingWords.toList();
   qSort(matchingWordsList.begin(), matchingWordsList.end(), caseInsensitiveLessThan);
@@ -539,17 +608,17 @@ void ImplicitTaggerBase::_updateElementForDuplicateMatch(const ElementPtr& e,
     matchingWordsList.join(", ");
   LOG_VART(tagValue);
   e->getTags().appendValue("hoot:implicitTags:multipleRules", tagValue);
-  _numNodesInvolvedInMultipleRules++;
-  if (_numNodesInvolvedInMultipleRules % 10 == 0)
+  _numFeaturesInvolvedInMultipleRules++;
+  if (_numFeaturesInvolvedInMultipleRules % 10 == 0)
   {
     PROGRESS_INFO(
-      StringUtils::formatLargeNumber(_numNodesInvolvedInMultipleRules) << " nodes have been " <<
-      "involved in multiple rules.");
+      StringUtils::formatLargeNumber(_numFeaturesInvolvedInMultipleRules) <<
+      " features have been involved in multiple rules.");
   }
 }
 
-void ImplicitTaggerBase::_addImplicitTags(const ElementPtr& e, const Tags& tagsToAdd,
-                                          const QSet<QString>& matchingWords)
+void ImplicitTypeTaggerBase::_addImplicitTags(const ElementPtr& e, const Tags& tagsToAdd,
+                                              const QSet<QString>& matchingWords)
 {
   //add implicit tags and associated metadata tags
   e->getTags().addTags(tagsToAdd);
@@ -560,20 +629,26 @@ void ImplicitTaggerBase::_addImplicitTags(const ElementPtr& e, const Tags& tagsT
     "Added " + QString::number(tagsToAdd.size()) + " implicitly derived tag(s) based on: " +
     matchingWordsList.join(", ");
   tagValue += "; tags added: " + tagsToAdd.toString().trimmed().replace("\n", ", ");
-  LOG_VARD(tagValue);
+  LOG_VART(tagValue);
   e->getTags().appendValue("hoot:implicitTags:tagsAdded", tagValue);
 
   //remove generic tags
-  if (e->getTags().get("poi") == "yes")
-  {
-    e->getTags().remove("poi");
-  }
-  if (tagsToAdd.get("building") != "yes" && e->getTags().get("building") == "yes")
-  {
-    e->getTags().remove("building");
-  }
+  //Removing the generic tag after adding the specific tag was causing certain feature to be ignored
+  //by the poi/poly criterion.
+//  if (e->getTags().get("poi") == "yes")
+//  {
+//    e->getTags().remove("poi");
+//  }
+//  if (tagsToAdd.get("building") != "yes" && e->getTags().get("building") == "yes")
+//  {
+//    e->getTags().remove("building");
+//  }
+//  if (tagsToAdd.get("area") != "yes" && e->getTags().get("area") == "yes")
+//  {
+//    e->getTags().remove("area");
+//  }
 
-  _numNodesModified++;
+  _numFeaturesModified++;
   _numTagsAdded += tagsToAdd.size();
   if (_numTagsAdded < _smallestNumberOfTagsAdded)
   {
@@ -583,15 +658,15 @@ void ImplicitTaggerBase::_addImplicitTags(const ElementPtr& e, const Tags& tagsT
   {
     _largestNumberOfTagsAdded = tagsToAdd.size();
   }
-  if (_numNodesModified % 100 == 0)
+  if (_numFeaturesModified % 100 == 0)
   {
     PROGRESS_INFO(
       "Added " << StringUtils::formatLargeNumber(_numTagsAdded) << " tags total to " <<
-      StringUtils::formatLargeNumber(_numNodesModified) << " nodes.");
+      StringUtils::formatLargeNumber(_numFeaturesModified) << " features.");
   }
 }
 
-QStringList ImplicitTaggerBase::_getNameTokens(const QStringList names) const
+QStringList ImplicitTypeTaggerBase::_getNameTokens(const QStringList names) const
 {
   if (_translateAllNamesToEnglish)
   {

@@ -624,7 +624,6 @@ void OsmPbfWriter::_writeOsmHeader(bool includeBounds, bool sorted)
   LOG_VARD(size);
   _d->headerBlock.SerializePartialToArray(_getBuffer(size), size);
   _writeBlob(_buffer.data(), size, PBF_OSM_HEADER);
-  LOG_DEBUG("test1");
 }
 
 void OsmPbfWriter::writePartial(const ConstOsmMapPtr& map)

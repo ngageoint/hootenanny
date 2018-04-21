@@ -36,14 +36,14 @@ namespace hoot
 
 void ImplicitTagUtils::cleanName(QString& name)
 {
-  name =
-    name.replace("(", "").replace(")", "").replace(".", "").replace("/", " ").replace("<", "")
-        .replace(">", "").replace("[", "").replace("]", "").replace("@", "").replace("&", "and")
-        .replace("(historical)", "");
   if (name.startsWith("-"))
   {
     name = name.replace(0, 1, "");
   }
+  name =
+    name.replace("(", "").replace(")", "").replace(".", "").replace("/", " ").replace("<", "")
+        .replace(">", "").replace("[", "").replace("]", "").replace("@", "").replace("&", "and")
+        .replace("(historical)", "").replace("-", " ");
   if (name.startsWith("_"))
   {
     name = name.replace(0, 1, "");
@@ -71,6 +71,7 @@ QStringList ImplicitTagUtils::translateNamesToEnglish(const QStringList names, c
   else
   {
     QString altName = tags.get("alt_name");
+    LOG_VART(altName);
     for (int i = 0; i < names.size(); i++)
     {
       const QString name = names.at(i);

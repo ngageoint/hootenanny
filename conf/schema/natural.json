@@ -113,9 +113,17 @@
             "node",
             "area"
         ],
+        "categories": [
+            "multiuse"
+        ],
         "isA": "natural",
         "name": "natural=water",
-        "objectType": "tag"
+        "objectType": "tag",
+        "similarTo": [
+            { "name": "emergency=fire_water_pond", "weight": 0.9 },
+            { "name": "water=lake", "weight": 0.9 },
+            { "name": "water=pond", "weight": 0.9 }
+        ]
     },
     {
         "isA": "natural",
@@ -123,6 +131,9 @@
         "objectType": "tag"
     },
     {
+        "categories": [
+            "multiuse"
+        ],
         "isA": "natural",
         "name": "natural=wood",
         "objectType": "tag"

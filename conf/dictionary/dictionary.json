@@ -68,5 +68,9 @@
     ["United States", "US", "U.S.", "USA", "U.S.A."],
     ["United States of America", "US", "U.S.", "USA", "U.S.A."],
 
+    
+    ["#Cairo"],
+    ["sinagoga", "synagogue"],
+
     ["#end"]
 ] }

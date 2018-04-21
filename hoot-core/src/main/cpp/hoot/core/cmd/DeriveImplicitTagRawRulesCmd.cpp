@@ -47,17 +47,16 @@ public:
 
   virtual int runSimple(QStringList args)
   {
-    if (args.size() != 4)
+    if (args.size() != 3)
     {
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes four parameters.").arg(getName()));
+      throw HootException(QString("%1 takes three parameters.").arg(getName()));
     }
 
     ImplicitTagRawRulesDeriver rawRulesDeriver;
     rawRulesDeriver.setConfiguration(conf());
-    rawRulesDeriver.setElementFilter(args[0].trimmed());
     rawRulesDeriver.deriveRawRules(
-      args[1].trimmed().split(";"), args[2].trimmed().split(";"), args[3].trimmed());
+      args[0].trimmed().split(";"), args[1].trimmed().split(";"), args[2].trimmed());
 
     return 0;
   }

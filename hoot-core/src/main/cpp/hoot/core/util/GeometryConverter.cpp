@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "GeometryConverter.h"
@@ -79,7 +79,7 @@ boost::shared_ptr<Element> GeometryConverter::convertGeometryCollection(const Ge
 {
   if (gc->getNumGeometries() > 1)
   {
-    LOG_INFO("Creating relation. convertGeometryCollection");
+    LOG_DEBUG("Creating relation. convertGeometryCollection");
     RelationPtr r(new Relation(s, _map->createNextRelationId(), circularError));
     int count = gc->getNumGeometries();
 

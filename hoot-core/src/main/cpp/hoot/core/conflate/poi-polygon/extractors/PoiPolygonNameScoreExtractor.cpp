@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonNameScoreExtractor.h"
 
@@ -54,12 +54,21 @@ double PoiPolygonNameScoreExtractor::extract(const OsmMap& /*map*/,
                                              const ConstElementPtr& poi,
                                              const ConstElementPtr& poly) const
 {
-  const double nameScore =
-    NameExtractor(StringDistancePtr(new TranslateStringDistance(
-                  StringDistancePtr(new MeanWordSetDistance(
+  double nameScore =
+    NameExtractor(
+      StringDistancePtr(
+        new TranslateStringDistance(
+          StringDistancePtr(
+            new MeanWordSetDistance(
+              StringDistancePtr(
+                new LevenshteinDistance(
                   //TODO: why does this fail when the mem var is used?
-                  StringDistancePtr(new LevenshteinDistance(/*_levDist*/ConfigOptions().getLevenshteinDistanceAlpha())))))))
-                  .extract(poi, poly);
+                  /*_levDist*/ConfigOptions().getLevenshteinDistanceAlpha())))))))
+      .extract(poi, poly);
+  if (nameScore < 0.001)
+  {
+    nameScore = 0.0;
+  }
   LOG_VART(nameScore);
   return nameScore;
 }
