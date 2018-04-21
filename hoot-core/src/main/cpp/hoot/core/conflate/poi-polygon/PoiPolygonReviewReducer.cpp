@@ -356,25 +356,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
     return true;
   }
 
-<<<<<<< Updated upstream
-  //If POI is a way node, it belongs to a building way, and there is a type match between the poi
-  //and the building way, then don't review the two.  This allows for tagged POI way nodes to
-  //conflate cleanly with building ways they belong to, rather than being reviewed against other
-  //building ways.
-  //TODO: test
-//  BuildingWayNodeCriterion buildingWayFilter(_map);
-//  if (buildingWayFilter.isSatisfied(poi))
-//  {
-//    const long matchingWayId = buildingWayFilter.getWayId();
-//    WayPtr matchingWay = _map->getWay(matchingWayId);
-//    PoiPolygonTypeScoreExtractor typeScorer;
-//    if (typeScorer.extract(*_map, poi, matchingWay) >= _typeScoreThreshold)
-//    {
-//      LOG_TRACE("Returning miss per review reduction rule #16b...");
-//      return true;
-//    }
-//  }
-=======
   PoiPolygonTypeScoreExtractor typeScorer;
 
   //If the poi is a way node, it belongs to a building way, and there is a type match between the
@@ -384,9 +365,10 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   const long matchingWayId = BuildingWayNodeCriterion(_map).getMatchingWayId(poi);
   if (matchingWayId != 0)
   {
-    WayPtr matchingWay = _map->getWay(matchingWayId);
+    ConstWayPtr matchingWay = _map->getWay(matchingWayId);
     assert(matchingWay.get());
-    if (typeScorer.extract(*_map, poi, matchingWay) >= _typeScoreThreshold)
+    if (poly->getElementId() != matchingWay->getElementId() &&
+        typeScorer.extract(*_map, poi, matchingWay) >= _typeScoreThreshold)
     {
       LOG_TRACE("Returning miss per review reduction rule #16b...");
       return true;
@@ -396,7 +378,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //This portion is saved until last b/c it involves looping over all the neighboring data for
   //each of the features being compared.  This neighbor checking section could be abstracted to
   //types other than parks, if desired.
->>>>>>> Stashed changes
 
   bool polyVeryCloseToAnotherParkPoly = false;
   double parkPolyAngleHistVal = -1.0;
