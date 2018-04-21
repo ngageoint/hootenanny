@@ -56,7 +56,7 @@ public:
 
   virtual QString getDescription() const { return "Identifies way nodes in buildings"; }
 
-  long getWayId() const { return _wayId; }
+  long getMatchingWayId(const ConstElementPtr& e);
 
 private:
 

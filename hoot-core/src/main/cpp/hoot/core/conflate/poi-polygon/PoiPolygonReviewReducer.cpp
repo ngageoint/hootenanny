@@ -108,13 +108,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
 {
   LOG_DEBUG("Checking review reduction rules...");
 
-  ElementConverter elementConverter(_map);
-  boost::shared_ptr<Geometry> polyGeom = elementConverter.convertToGeometry(poly);
-  if (QString::fromStdString(polyGeom->toString()).toUpper().contains("EMPTY"))
-  {
-    throw geos::util::TopologyException();
-  }
-  boost::shared_ptr<Geometry> poiGeom = elementConverter.convertToGeometry(poi);
+  //TODO: Many of these rules may be obsolete now after recent additions.
 
   //The rules below are *roughly* ordered by increasing processing expense and by decreasing
   //likelihood of occurrence (probably needs some reordering at this point).
@@ -124,12 +118,12 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   const bool polyHasType = PoiPolygonTypeScoreExtractor::hasType(poly);
   LOG_VART(polyHasType);
 
-  QStringList tempMultiUseIngoreList;
-  tempMultiUseIngoreList.append("landuse=construction");
-  tempMultiUseIngoreList.append("building=commercial");
-  tempMultiUseIngoreList.append("building=retail");
+//  QStringList tempMultiUseIngoreList;
+//  tempMultiUseIngoreList.append("landuse=construction");
+//  tempMultiUseIngoreList.append("building=commercial");
+//  tempMultiUseIngoreList.append("building=retail");
   if (OsmSchema::getInstance().isMultiUse(*poly) && poiHasType &&
-      !poly->getTags().hasAnyKvp(tempMultiUseIngoreList) &&
+      /*!poly->getTags().hasAnyKvp(tempMultiUseIngoreList) &&*/
       /*!_nonDistanceSimilaritiesPresent()*/
       _typeScore < 0.4 /*&& _nameScore < 0.2*/)
   {
@@ -233,12 +227,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
     return true;
   }
 
-//  if (poiHasType && poly->getTags().contains("landuse") && !_typeMatch)
-//  {
-//    LOG_TRACE("Returning miss per review reduction rule #7c...");
-//    return true;
-//  }
-
   //prevent athletic POIs within a park poly from being reviewed against that park poly
   if (_distance == 0 && polyIsPark && poi->getTags().get("leisure") == "pitch")
   {
@@ -285,7 +273,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
 
   //Be more strict reviewing parking lots against other features.
   if (poiHasType && polyHasType && PoiPolygonTypeScoreExtractor::isParking(poly) &&
-      //TODO: test
       /*_distance > _matchDistanceThreshold &&*/
       //(!(_typeMatch || _nameMatch) || (_nameMatch && _typeScore < 0.2)))
       !_typeMatch && poly->getTags().get("parking") != "multi-storey")
@@ -302,12 +289,12 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   }
 
   //Gates and Parking are two separate things.
-  if (poi->getTags().get("barrier").toLower() == "gate" &&
-      poly->getTags().get("amenity").toLower() == "parking")
-  {
-    LOG_TRACE("Returning miss per review reduction rule #13...");
-    return true;
-  }
+//  if (poi->getTags().get("barrier").toLower() == "gate" &&
+//      poly->getTags().get("amenity").toLower() == "parking")
+//  {
+//    LOG_TRACE("Returning miss per review reduction rule #13...");
+//    return true;
+//  }
 
   //Need to be stricter on tunnels since we don't want above ground things to review against them.
   if (poly->getTags().get("tunnel") == "yes" && poiHasType &&
@@ -316,6 +303,14 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
     LOG_TRACE("Returning miss per review reduction rule #14...");
     return true;
   }
+
+  ElementConverter elementConverter(_map);
+  boost::shared_ptr<Geometry> polyGeom = elementConverter.convertToGeometry(poly);
+  if (QString::fromStdString(polyGeom->toString()).toUpper().contains("EMPTY"))
+  {
+    throw geos::util::TopologyException();
+  }
+  boost::shared_ptr<Geometry> poiGeom = elementConverter.convertToGeometry(poi);
 
   double polyArea = -1.0;
   try
@@ -361,6 +356,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
     return true;
   }
 
+<<<<<<< Updated upstream
   //If POI is a way node, it belongs to a building way, and there is a type match between the poi
   //and the building way, then don't review the two.  This allows for tagged POI way nodes to
   //conflate cleanly with building ways they belong to, rather than being reviewed against other
@@ -378,6 +374,29 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
 //      return true;
 //    }
 //  }
+=======
+  PoiPolygonTypeScoreExtractor typeScorer;
+
+  //If the poi is a way node, it belongs to a building way, and there is a type match between the
+  //poi and the building way, then don't review the two.  This allows for tagged poi way nodes to
+  //conflate cleanly with building ways they belong to, rather than being reviewed against other
+  //building ways.
+  const long matchingWayId = BuildingWayNodeCriterion(_map).getMatchingWayId(poi);
+  if (matchingWayId != 0)
+  {
+    WayPtr matchingWay = _map->getWay(matchingWayId);
+    assert(matchingWay.get());
+    if (typeScorer.extract(*_map, poi, matchingWay) >= _typeScoreThreshold)
+    {
+      LOG_TRACE("Returning miss per review reduction rule #16b...");
+      return true;
+    }
+  }
+
+  //This portion is saved until last b/c it involves looping over all the neighboring data for
+  //each of the features being compared.  This neighbor checking section could be abstracted to
+  //types other than parks, if desired.
+>>>>>>> Stashed changes
 
   bool polyVeryCloseToAnotherParkPoly = false;
   double parkPolyAngleHistVal = -1.0;
@@ -399,7 +418,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   const bool poiIsBuilding = OsmSchema::getInstance().isBuilding(poi);
   LOG_VART(poiIsBuilding);
 
-  PoiPolygonTypeScoreExtractor typeScorer;
   PoiPolygonNameScoreExtractor nameScorer;
 
   for (set<ElementId>::const_iterator polyNeighborItr = _polyNeighborIds.begin();

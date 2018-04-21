@@ -79,6 +79,35 @@ bool BuildingWayNodeCriterion::isSatisfied(const boost::shared_ptr<const Element
   return result;
 }
 
+long BuildingWayNodeCriterion::getMatchingWayId(const ConstElementPtr& e)
+{
+  long result = 0;
+
+  if (!_map)
+  {
+    throw HootException("You must set the map before calling BuildingWayNodeCriterion");
+  }
+
+  if (e->getElementType() == ElementType::Node)
+  {
+    const set<long> waysContainingNode =
+      _map->getIndex().getNodeToWayMap()->getWaysByNode(e->getElementId().getId());
+    for (set<long>::const_iterator it = waysContainingNode.begin();
+         it != waysContainingNode.end(); ++it)
+    {
+      const long wayId = *it;
+      if (_map->containsElement(ElementId(ElementType::Way, wayId)) &&
+          OsmSchema::getInstance().isBuilding(_map->getWay(wayId)))
+      {
+        return wayId;
+        break;
+      }
+    }
+  }
+
+  return result;
+}
+
 void BuildingWayNodeCriterion::setOsmMap(const OsmMap* map)
 {
   _map = map->shared_from_this();
