@@ -227,8 +227,8 @@
 1	camella homes	natural=water
 2	camella homes	tourism=viewpoint
 1	camella homes lagoon	natural=water
-1	camella homes - phase 1	tourism=viewpoint
-1	camella homes - phase 2	tourism=viewpoint
+1	camella homes   phase 1	tourism=viewpoint
+1	camella homes   phase 2	tourism=viewpoint
 1	camella homes subd	landuse=residential
 1	camella phase	leisure=park
 1	camella phase 2 park	leisure=park
@@ -253,7 +253,7 @@
 1	centre	place=locality
 2	choobi	amenity=restaurant
 1	choobi choobi	amenity=restaurant
-1	choobi choobi - newtown	amenity=restaurant
+1	choobi choobi   newtown	amenity=restaurant
 1	choobi newtown	amenity=restaurant
 1	church	amenity=place_of_worship
 1	city	place=locality
@@ -441,8 +441,8 @@
 1	lapu lapu	place=city
 3	lapu lapu	tourism=viewpoint
 1	lapu lapu city	tourism=viewpoint
-1	lapu-lapu city jail	tourism=viewpoint
-1	lapu-lapu monument	tourism=viewpoint
+1	lapu lapu city jail	tourism=viewpoint
+1	lapu lapu monument	tourism=viewpoint
 1	lapu monument	historic=memorial
 1	lasquite	amenity=drinking_water
 1	learning	building=school
@@ -634,7 +634,7 @@
 1	qbt	amenity=place_of_worship
 1	qbt almtwkl	amenity=place_of_worship
 1	qubbat	amenity=place_of_worship
-1	qubbat al-mahdi	amenity=place_of_worship
+1	qubbat al mahdi	amenity=place_of_worship
 1	quilar	amenity=place_of_worship
 1	res	tourism=guest_house
 2	residential	landuse=residential
