@@ -11,5 +11,13 @@
         "isA": "emergency",
         "name": "emergency=fire_hydrant",
         "objectType": "tag"
+    },
+    {
+        "categories": [
+            "use"
+        ],
+        "isA": "emergency",
+        "name": "emergency=fire_water_pond",
+        "objectType": "tag"
     }
 ]
