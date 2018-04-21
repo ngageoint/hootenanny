@@ -1,5 +1,15 @@
 [
     {
+        "geometries": [
+            "node",
+            "area"
+        ],
+        "dataType": "enumeration",
+        "influence": 1,
+        "name": "emergency",
+        "objectType": "tag"
+    },
+    {
         "isA": "emergency",
         "name": "emergency=*",
         "objectType": "tag"
