@@ -58,30 +58,34 @@ void ReplaceTagVisitor::setConfiguration(const Settings& conf)
   ConfigOptions configOptions(conf);
 
   const QString matchTag = configOptions.getReplaceTagVisitorMatchTag();
-  if (!matchTag.contains("="))
-  {
-    throw IllegalArgumentException("Invalid match tag: " + matchTag);
-  }
-  const QStringList matchTagParts = matchTag.split("=");
-  if (matchTagParts.size() != 2)
-  {
-    throw IllegalArgumentException("Invalid match tag: " + matchTag);
-  }
-  _matchKey = matchTagParts[0];
-  _matchValue = matchTagParts[1];
-
   const QString replaceTag = configOptions.getReplaceTagVisitorReplaceTag();
-  if (!replaceTag.contains("="))
+  if (!matchTag.trimmed().isEmpty() && !replaceTag.trimmed().isEmpty())
   {
-    throw IllegalArgumentException("Invalid replace tag: " + replaceTag);
+    if (!matchTag.contains("="))
+    {
+      throw IllegalArgumentException("Invalid match tag: " + matchTag);
+    }
+    const QStringList matchTagParts = matchTag.split("=");
+    if (matchTagParts.size() != 2)
+    {
+      throw IllegalArgumentException("Invalid match tag: " + matchTag);
+    }
+    _matchKey = matchTagParts[0];
+    _matchValue = matchTagParts[1];
+
+
+    if (!replaceTag.contains("="))
+    {
+      throw IllegalArgumentException("Invalid replace tag: " + replaceTag);
+    }
+    const QStringList replaceTagParts = replaceTag.split("=");
+    if (replaceTagParts.size() != 2)
+    {
+      throw IllegalArgumentException("Invalid replace tag: " + replaceTag);
+    }
+    _replaceKey = replaceTagParts[0];
+    _replaceValue = replaceTagParts[1];
   }
-  const QStringList replaceTagParts = replaceTag.split("=");
-  if (replaceTagParts.size() != 2)
-  {
-    throw IllegalArgumentException("Invalid replace tag: " + replaceTag);
-  }
-  _replaceKey = replaceTagParts[0];
-  _replaceValue = replaceTagParts[1];
 }
 
 void ReplaceTagVisitor::setMatchTag(QString k, QString v)
