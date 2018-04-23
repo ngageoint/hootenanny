@@ -2396,6 +2396,20 @@ Should the element remover remove the elements recursively?
 
 A list of tag keys the RemoveTagVisitor will remove on elements.
 
+=== replace.tag.visitor.match.tag
+
+* Data Type: string
+* Default Value: ``
+
+The tag the ReplaceTagVisitor replaces, of the form key=value.
+
+=== replace.tag.visitor.replace.tag
+
+* Data Type: string
+* Default Value: ``
+
+The tag the ReplaceTagVisitor uses as a replacement tag; of the form key=value.
+
 === rubber.sheet.debug
 
 * Data Type: bool
