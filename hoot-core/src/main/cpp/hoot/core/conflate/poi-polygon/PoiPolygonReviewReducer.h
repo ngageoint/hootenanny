@@ -79,6 +79,8 @@ private:
 
   unsigned int _badGeomCount;
 
+  bool _keepClosestMatchesOnly;
+
   bool _nonDistanceSimilaritiesPresent() const;
 };
 

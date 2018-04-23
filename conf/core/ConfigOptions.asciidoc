@@ -2119,6 +2119,14 @@ If true, POI to Polygon conflation will attempt to reduce unnecessary reviews wi
 incorrect matches.  This setting is somewhat experimental and can be runtime expensive when
 enabled.
 
+=== poi.polygon.keep.closest.matches.only
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, POI to Polygon conflation will only keep matches that are the closest to polygons and throw
+out any others even if they score high enough for a match.  TODO: this option may go away
+
 === poi.polygon.match.distance.threshold
 
 * Data Type: double

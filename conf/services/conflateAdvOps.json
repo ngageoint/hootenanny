@@ -975,6 +975,13 @@
         	"description":"If true, instances where multiple POIs were matched to a single polygon will result in all of the POIs being merged into the polygon.  If false, then each POI will generate a review against the polygon instead.",
 		"name":"Merge Many POI to Single Polygon Matches",
         	"hoot_key":"poi.polygon.auto.merge.many.poi.to.one.poly.matches"
+    	    },
+            {
+        	"id":"poipolygon_keep_closest_matches_only",
+        	"elem_type":"bool",
+        	"defaultvalue":"false",
+        	"description":"If true, POI to Polygon conflation will only keep matches that are the closest to polygons and throw out any others even if they score high enough for a match.",
+        	"hoot_key":"poi.polygon.keep.closest.matches.only"
     	    }
         ]
     },
