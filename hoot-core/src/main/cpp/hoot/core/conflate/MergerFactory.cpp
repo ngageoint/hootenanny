@@ -146,8 +146,10 @@ bool MergerFactory::isConflicting(const ConstOsmMapPtr& map, const Match* m1, co
   // if any creator considers a match conflicting then it is a conflict
   for (size_t i = 0; i < _creators.size(); i++)
   {
+    LOG_VART(_creators[i]);
     if (_creators[i]->isConflicting(map, m1, m2))
     {
+      LOG_TRACE("conflicting");
       return true;
     }
   }

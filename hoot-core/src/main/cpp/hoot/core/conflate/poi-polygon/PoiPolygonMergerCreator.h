@@ -60,6 +60,8 @@ private:
 
   const OsmMap* _map;
 
+  bool _autoMergeManyPoiToOnePolyMatches;
+
   Match* _createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2) const;
 
   /**

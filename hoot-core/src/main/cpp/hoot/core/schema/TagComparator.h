@@ -104,6 +104,15 @@ public:
    */
   bool nonNameTagsExactlyMatch(const Tags& t1, const Tags& t2);
 
+  /**
+   * Merge tags of type text
+   *
+   * @param t1 first set of tags to merge
+   * @param t2 second set of tags to merge
+   * @param result merged tags
+   */
+  void mergeText(Tags& t1, Tags& t2, Tags& result);
+
 private:
 
   static TagComparator* _theInstance;
@@ -123,8 +132,6 @@ private:
    * treated as unordered lists.
    */
   void _mergeExactMatches(Tags& t1, Tags& t2, Tags& result);
-
-  void _mergeText(Tags& t1, Tags& t2, Tags& result);
 
   /**
    * Any tag that is unrecognized will be put into result. If the values differ then a list will

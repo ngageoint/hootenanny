@@ -967,6 +967,14 @@
         	"description":"If true, POI to polygon conflation always mark matches between POIs and polygons where multi-use buildings are present.  See the user documentation for how a multi-use building is defined.",
 		"name":"Review Multi-Use Buildings",
         	"hoot_key":"poi.polygon.review.multiuse.buildings"
+    	    },
+            {
+        	"id":"poipolygon_auto_merge_many_poi_to_one_poly_matches",
+        	"elem_type":"bool",
+        	"defaultvalue":"false",
+        	"description":"If true, instances where multiple POIs were matched to a single polygon will result in all of the POIs being merged into the polygon.  If false, then each POI will generate a review against the polygon instead.",
+		"name":"Merge Many POI to Single Polygon Matches",
+        	"hoot_key":"poi.polygon.auto.merge.many.poi.to.one.poly.matches"
     	    }
         ]
     },
