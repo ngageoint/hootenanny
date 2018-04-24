@@ -103,7 +103,7 @@ _keepClosestMatchesOnly(ConfigOptions().getPoiPolygonKeepClosestMatchesOnly())
 
 bool PoiPolygonReviewReducer::_nonDistanceSimilaritiesPresent() const
 {
-  return _typeScore > 0.03 || _nameScore > 0.0 || _addressMatch;
+  return _typeScore > 0.03 || _nameScore > 0.35 || _addressMatch;
 }
 
 bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr poly)
@@ -207,8 +207,9 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //const bool poiIsNatural = poi->getTags().contains("natural");
   const bool polyIsNatural = poly->getTags().contains("natural");
 
-  //Be more strict reviewing natural features against building features.
-  if (polyIsNatural &&
+  //Be more strict reviewing natural features and parks against building features.  This could be
+  //extended
+  if ((polyIsNatural || polyIsPark) &&
       OsmSchema::getInstance().getCategories(
         poi->getTags()).intersects(OsmSchemaCategory::building()))
   {
