@@ -288,10 +288,12 @@ bool PoiPolygonTypeScoreExtractor::isReligion(ConstElementPtr element)
 
 bool PoiPolygonTypeScoreExtractor::isReligion(const Tags& tags)
 {
-  return tags.get("amenity") == "place_of_worship" ||
-         tags.get("building") == "church" ||
-         tags.get("building") == "mosque" ||
-         tags.get("building") == "synagogue";
+  return tags.get("amenity").toLower() == "place_of_worship" ||
+         tags.get("building").toLower() == "church" ||
+         tags.get("building").toLower() == "mosque" ||
+         //TODO: this one is an alias of building=mosque, so we should be getting it from there instead
+         tags.get("amenity").toLower() == "mosque" ||
+         tags.get("building").toLower() == "synagogue";
 }
 
 bool PoiPolygonTypeScoreExtractor::hasMoreThanOneType(ConstElementPtr element)
@@ -353,7 +355,8 @@ bool PoiPolygonTypeScoreExtractor::hasSpecificType(ConstElementPtr element)
           element->getTags().get("area") != QLatin1String("yes");
 }
 
-//TODO: abstract these three type fail methods into one
+//TODO: abstract these three type fail methods into one; also, this should be able to be done
+//more intelligently using the schema vs custom code
 
 bool PoiPolygonTypeScoreExtractor::_failsCuisineMatch(const Tags& t1, const Tags& t2) const
 {
@@ -399,18 +402,32 @@ bool PoiPolygonTypeScoreExtractor::_failsSportMatch(const Tags& t1, const Tags& 
 bool PoiPolygonTypeScoreExtractor::_failsReligionMatch(const Tags& t1, const Tags& t2) const
 {
   //be a little more restrictive with religions
-  if (isReligion(t1) && isReligion(t2) && t1.contains("denomination") &&
-      t2.contains("denomination"))
+  if (isReligion(t1) && isReligion(t2))
   {
-    const QString t1Denom = t1.get("denomination").toLower().trimmed();
-    const QString t2Denom = t2.get("denomination").toLower().trimmed();
-    if (!t1Denom.isEmpty() && !t2Denom.isEmpty() &&
-        OsmSchema::getInstance().score("denomination=" + t1Denom, "denomination=" + t2Denom) != 1.0)
+    if (t1.contains("denomination") && t2.contains("denomination"))
     {
-      LOG_TRACE("Failed type match on different religions.");
-      return true;
+      const QString t1Denom = t1.get("denomination").toLower().trimmed();
+      const QString t2Denom = t2.get("denomination").toLower().trimmed();
+      if (!t1Denom.isEmpty() && !t2Denom.isEmpty() &&
+          OsmSchema::getInstance().score("denomination=" + t1Denom, "denomination=" + t2Denom) != 1.0)
+      {
+        LOG_TRACE("Failed type match on different religious denomination.");
+        return true;
+      }
+    }
+    else if (t1.contains("religion") && t2.contains("religion"))
+    {
+      const QString t1Denom = t1.get("religion").toLower().trimmed();
+      const QString t2Denom = t2.get("religion").toLower().trimmed();
+      if (!t1Denom.isEmpty() && !t2Denom.isEmpty() &&
+          OsmSchema::getInstance().score("religion=" + t1Denom, "religion=" + t2Denom) != 1.0)
+      {
+        LOG_TRACE("Failed type match on different religions.");
+        return true;
+      }
     }
   }
+
   return false;
 }
 
