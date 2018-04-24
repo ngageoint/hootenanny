@@ -204,7 +204,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
     return true;
   }
 
-  //const bool poiIsNatural = poi->getTags().contains("natural");
+  const bool poiIsNatural = poi->getTags().contains("natural");
   const bool polyIsNatural = poly->getTags().contains("natural");
 
   //Be more strict reviewing natural features and parks against building features.  This could be
@@ -220,6 +220,13 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   if (poiHasType && polyIsNatural && !_typeMatch)
   {
     LOG_TRACE("Returning miss per review reduction rule #7b...");
+    return true;
+  }
+
+  //inverse of above
+  if (polyHasType && poiIsNatural && !_typeMatch)
+  {
+    LOG_TRACE("Returning miss per review reduction rule #7c...");
     return true;
   }
 

@@ -212,16 +212,21 @@ QStringList PoiPolygonTypeScoreExtractor::_getRelatedTags(const Tags& tags) cons
 
 bool PoiPolygonTypeScoreExtractor::isSchool(ConstElementPtr element)
 {
-  return element->getTags().get("amenity") == "school";
+  const QString amenityStr = element->getTags().get("amenity").toLower();
+  return amenityStr == "school" || amenityStr == "university";
 }
+
+//TODO: this specific school logic should be handled in the schema instead
 
 bool PoiPolygonTypeScoreExtractor::isSpecificSchool(ConstElementPtr element)
 {
   const QString name = PoiPolygonNameScoreExtractor::getElementName(element).toLower();
   return
     isSchool(element) &&
+    //TODO: these endsWiths can maybe be contains instead
     (name.toLower().endsWith("high school") || name.toLower().endsWith("middle school") ||
-     name.toLower().endsWith("elementary school"));
+     name.toLower().endsWith("elementary school") ||
+     name.toLower().contains("college") || name.toLower().contains("university") );
 }
 
 bool PoiPolygonTypeScoreExtractor::specificSchoolMatch(ConstElementPtr element1,
@@ -233,7 +238,11 @@ bool PoiPolygonTypeScoreExtractor::specificSchoolMatch(ConstElementPtr element1,
     const QString name2 = PoiPolygonNameScoreExtractor::getElementName(element2).toLower();
     if ((name1.endsWith("high school") && name2.endsWith("high school")) ||
         (name1.endsWith("middle school") && name2.endsWith("middle school")) ||
-        (name1.endsWith("elementary school") && name2.endsWith("elementary school")))
+        (name1.endsWith("elementary school") && name2.endsWith("elementary school")) ||
+        (name1.contains("college") && name2.contains("college")) ||
+        (name1.contains("college") && name2.contains("university")) ||
+        (name1.contains("university") && name2.contains("college")) ||
+        (name1.contains("university") && name2.contains("university")))
     {
       return true;
     }
@@ -361,8 +370,9 @@ bool PoiPolygonTypeScoreExtractor::hasSpecificType(ConstElementPtr element)
 bool PoiPolygonTypeScoreExtractor::_failsCuisineMatch(const Tags& t1, const Tags& t2) const
 {
   //be a little more restrictive with restaurants
-  if (t1.get("amenity").toLower() == "restaurant" &&
-      t2.get("amenity").toLower() == "restaurant" &&
+  //TODO: add isRestaurant
+  if ((t1.get("amenity").toLower() == "restaurant" || t1.get("amenity").toLower() == "fast_food") &&
+      (t2.get("amenity").toLower() == "restaurant" || t2.get("amenity").toLower() == "fast_food") &&
       t1.contains("cuisine") && t2.contains("cuisine"))
   {
     const QString t1Cuisine = t1.get("cuisine").toLower();
@@ -384,8 +394,11 @@ bool PoiPolygonTypeScoreExtractor::_failsCuisineMatch(const Tags& t1, const Tags
 bool PoiPolygonTypeScoreExtractor::_failsSportMatch(const Tags& t1, const Tags& t2) const
 {
   //be a little more restrictive with sport areas
-  if (t1.get("leisure").toLower() == "pitch" &&
-      t2.get("leisure").toLower() == "pitch" &&
+  //TODO: the sports center part of this may go away if the 0.8 similarity match between
+  //sports_centre and sport=tennis is removed
+  //TODO: use isSport here instead
+  if ((t1.get("leisure").toLower() == "pitch" || t1.get("leisure").toLower() == "sports_centre") &&
+      (t2.get("leisure").toLower() == "pitch" || t2.get("leisure").toLower() == "sports_centre") &&
       t1.contains("sport") && t2.contains("sport"))
   {
     const QString t1Sport = t1.get("sport").toLower();
