@@ -112,15 +112,32 @@ double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi,
 {
   double result = 0.0;
 
-  const QStringList poiTagList = _getRelatedTags(poi->getTags());
-  const QStringList polyTagList = _getRelatedTags(poly->getTags());
+  QStringList poiTagList = _getRelatedTags(poi->getTags());
+  QStringList polyTagList = _getRelatedTags(poly->getTags());
   LOG_VART(poiTagList);
   LOG_VART(polyTagList);
 
   QStringList excludeKvps;
-  excludeKvps.append("building=yes");
+  //If a feature has a more specific type than building=yes, we only want to look at that type.
+  //Otherwise, we'll allow a type match with just a generic building.  We don't need to use this
+  //same behavior with poi=yes, since the poi key isn't typically used with other values like the
+  //building key is.
+  const bool poiListOnlyContainsGenericBuilding =
+    poiTagList.size() == 1 && poiTagList.contains("building=yes");
+  const bool polyListOnlyContainsGenericBuilding =
+    polyTagList.size() == 1 && polyTagList.contains("building=yes");
+  if (!poiListOnlyContainsGenericBuilding && !polyListOnlyContainsGenericBuilding)
+  {
+    excludeKvps.append("building=yes");
+  }
   excludeKvps.append("poi=yes");
   LOG_VART(excludeKvps);
+  for (int i = 0; i < excludeKvps.size(); i++)
+  {
+    const QString excludeKvp = excludeKvps.at(i);
+    poiTagList.removeAll(excludeKvp);
+    polyTagList.removeAll(excludeKvp);
+  }
 
   for (int i = 0; i < poiTagList.size(); i++)
   {
@@ -128,23 +145,25 @@ double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi,
     {
       const QString poiKvp = poiTagList.at(i).toLower();
       const QString polyKvp = polyTagList.at(j).toLower();
+      LOG_VART(poiKvp);
+      LOG_VART(polyKvp);
 
       const double score = OsmSchema::getInstance().score(poiKvp, polyKvp);
+      LOG_VART(score);
       if (score >= result)
       {
         if (!poiKvp.isEmpty() && !excludeKvps.contains(poiKvp))
         {
           poiBestKvp = poiKvp;
+          LOG_VART(poiBestKvp);
         }
         if (!polyKvp.isEmpty() && !excludeKvps.contains(polyKvp))
         {
           polyBestKvp = polyKvp;
-        }
+          LOG_VART(polyBestKvp);
+        } 
       }
       result = max(score, result);
-
-      LOG_VART(poiKvp);
-      LOG_VART(polyKvp);
       LOG_VART(result);
 
       if (result == 1.0)
@@ -160,7 +179,6 @@ double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi,
       }
     }
   }
-
   LOG_VART(poiBestKvp);
   LOG_VART(polyBestKvp);
 
