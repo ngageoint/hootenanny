@@ -38,6 +38,8 @@
 #include <hoot/core/visitors/ElementIdSetVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/StatusUpdateVisitor.h>
+#include <hoot/core/schema/PreserveTypesTagMerger.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 using namespace std;
 
@@ -47,7 +49,8 @@ namespace hoot
 unsigned int PoiPolygonMerger::logWarnCount = 0;
 
 PoiPolygonMerger::PoiPolygonMerger(const set< pair<ElementId, ElementId> >& pairs) :
-_pairs(pairs)
+_pairs(pairs),
+_autoMergeManyPoiToOnePolyMatches(ConfigOptions().getPoiPolygonAutoMergeManyPoiToOnePolyMatches())
 {
   assert(_pairs.size() >= 1);
 }
@@ -95,17 +98,24 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Eleme
   assert(finalBuilding.get());
 
   Tags finalBuildingTags = finalBuilding->getTags();
+  boost::shared_ptr<const TagMerger> tagMerger;
+  if (_autoMergeManyPoiToOnePolyMatches)
+  {
+    tagMerger.reset(new PreserveTypesTagMerger());
+  }
+  else
+  {
+    tagMerger = TagMergerFactory::getInstance().getDefaultPtr();
+  }
   if (poiTags1.size())
   {
     finalBuildingTags =
-      TagMergerFactory::getInstance().mergeTags(poiTags1, finalBuildingTags,
-                                                finalBuilding->getElementType());
+      tagMerger->mergeTags(poiTags1, finalBuildingTags, finalBuilding->getElementType());
   }
   if (poiTags2.size())
   {
     finalBuildingTags =
-      TagMergerFactory::getInstance().mergeTags(finalBuildingTags, poiTags2,
-                                                finalBuilding->getElementType());
+      tagMerger->mergeTags(finalBuildingTags, poiTags2, finalBuilding->getElementType());
   }
 
   // do some book keeping to remove the POIs and mark them as replaced.
@@ -156,6 +166,16 @@ Tags PoiPolygonMerger::_mergePoiTags(const OsmMapPtr& map, Status s) const
 
   Tags result;
 
+  boost::shared_ptr<const TagMerger> tagMerger;
+  if (_autoMergeManyPoiToOnePolyMatches)
+  {
+    tagMerger.reset(new PreserveTypesTagMerger());
+  }
+  else
+  {
+    tagMerger = TagMergerFactory::getInstance().getDefaultPtr();
+  }
+
   for (set< pair<ElementId, ElementId> >::const_iterator it = _pairs.begin(); it != _pairs.end();
        ++it)
   {
@@ -167,16 +187,14 @@ Tags PoiPolygonMerger::_mergePoiTags(const OsmMapPtr& map, Status s) const
     LOG_VART(e1->getElementType());
     if (e1->getStatus() == s && e1->getElementType() == ElementType::Node)
     {
-      result =
-        TagMergerFactory::getInstance().mergeTags(result, e1->getTags(), e1->getElementType());
+      result = tagMerger->mergeTags(result, e1->getTags(), e1->getElementType());
     }
     LOG_VART(e2->getElementId());
     LOG_VART(e2->getStatus());
     LOG_VART(e2->getElementType());
     if (e2->getStatus() == s && e2->getElementType() == ElementType::Node)
     {
-      result =
-        TagMergerFactory::getInstance().mergeTags(result, e2->getTags(), e2->getElementType());
+      result = tagMerger->mergeTags(result, e2->getTags(), e2->getElementType());
     }
   }
 

@@ -567,7 +567,7 @@ void ImplicitTypeTaggerBase::_ensureCorrectTagSpecificity(const ElementPtr& e, T
         LOG_TRACE(
           implicitTagKey % "=" % implicitTagValue << " is more specific than " <<
           elementTagKey % "=" % elementTagValue << " on the input feature.  Replacing with " <<
-          "the more specific tag.")
+          "the more specific tag.");
         updatedTags.appendValue(implicitTagKey, implicitTagValue);
         tagsAdded = true;
       }

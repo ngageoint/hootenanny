@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "TagComparator.h"
@@ -134,7 +134,7 @@ void TagComparator::averageTags(const Tags& t1In, double w1, const Tags& t2In, d
   mergeNames(t1, t2, result);
 
   // Merge any text fields by concatenating the lists.
-  _mergeText(t1, t2, result);
+  mergeText(t1, t2, result);
 
   if (keepAllUnknownTags)
   {
@@ -493,7 +493,7 @@ Tags TagComparator::generalize(Tags t1, Tags t2, bool overwriteUnrecognizedTags)
   _mergeExactMatches(t1, t2, result);
 
   // Merge any text fields by adding to a list.
-  _mergeText(t1, t2, result);
+  mergeText(t1, t2, result);
 
   // Unrecognized tags are concatenated in a list.
   if (overwriteUnrecognizedTags)
@@ -630,7 +630,7 @@ void TagComparator::mergeNames(Tags& t1, Tags& t2, Tags& result)
   }
 }
 
-void TagComparator::_mergeText(Tags& t1, Tags& t2, Tags& result)
+void TagComparator::mergeText(Tags& t1, Tags& t2, Tags& result)
 {
   OsmSchema& schema = OsmSchema::getInstance();
 
@@ -717,7 +717,7 @@ Tags TagComparator::overwriteMerge(Tags t1, Tags t2)
   mergeNames(t1, t2, result);
 
   // concatenate the known text fields (e.g. note)
-  _mergeText(t1, t2, result);
+  mergeText(t1, t2, result);
 
   // use the tags in t1 first, then fall back to tags in t2
   _overwriteRemainingTags(t1, t2, result);

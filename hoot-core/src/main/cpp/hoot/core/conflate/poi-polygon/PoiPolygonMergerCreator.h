@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POIPOLYGONMERGERCREATOR_H
 #define POIPOLYGONMERGERCREATOR_H
@@ -59,6 +59,8 @@ public:
 private:
 
   const OsmMap* _map;
+
+  bool _autoMergeManyPoiToOnePolyMatches;
 
   Match* _createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2) const;
 

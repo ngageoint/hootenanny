@@ -74,6 +74,8 @@ private:
 
   std::set< std::pair<ElementId, ElementId> > _pairs;
 
+  bool _autoMergeManyPoiToOnePolyMatches;
+
   ElementId _mergeBuildings(const OsmMapPtr& map, std::vector<ElementId>& buildings1,
                             std::vector<ElementId>& buildings2,
                             std::vector< std::pair<ElementId, ElementId> >& replaced) const;
