@@ -364,16 +364,23 @@ bool PoiPolygonTypeScoreExtractor::hasSpecificType(ConstElementPtr element)
           element->getTags().get("area") != QLatin1String("yes");
 }
 
+bool PoiPolygonTypeScoreExtractor::isRestaurant(ConstElementPtr element)
+{
+  return isRestaurant(element->getTags());
+}
+
+bool PoiPolygonTypeScoreExtractor::isRestaurant(const Tags& tags)
+{
+  return tags.get("amenity") == "restaurant" || tags.get("amenity") == "fast_food";
+}
+
 //TODO: abstract these three type fail methods into one; also, this should be able to be done
 //more intelligently using the schema vs custom code
 
 bool PoiPolygonTypeScoreExtractor::_failsCuisineMatch(const Tags& t1, const Tags& t2) const
 {
   //be a little more restrictive with restaurants
-  //TODO: add isRestaurant
-  if ((t1.get("amenity").toLower() == "restaurant" || t1.get("amenity").toLower() == "fast_food") &&
-      (t2.get("amenity").toLower() == "restaurant" || t2.get("amenity").toLower() == "fast_food") &&
-      t1.contains("cuisine") && t2.contains("cuisine"))
+  if (isRestaurant(t1) && isRestaurant(t2) && t1.contains("cuisine") && t2.contains("cuisine"))
   {
     const QString t1Cuisine = t1.get("cuisine").toLower();
     const QString t2Cuisine = t2.get("cuisine").toLower();
