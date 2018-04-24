@@ -84,12 +84,8 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
       {
         //TODO: This is actually going to bring in any tags into alt_types and not just schema type
         //tags.  Probably need to either rename alt_types or have a more strict check on which tags
-<<<<<<< HEAD
         //can be merged into it.  Something similar to PoiPolygonTypeScoreExtractor::hasType but
         //looser could be used...or pass in a type def function to this class.
-=======
-        //can be merged into it.
->>>>>>> develop
 
         //arbitrarily use first one and add second to an alt_types field
         LOG_TRACE(
