@@ -329,7 +329,7 @@ bool PoiPolygonMatch::_skipForReviewTypeDebugging() const
 //  reviewTypeIgnoreList.append("building=office");
 //  reviewTypeIgnoreList.append("landuse=retail");
 //  reviewTypeIgnoreList.append("sport=*");
-//  reviewTypeIgnoreList.append("amenity=school");
+  reviewTypeIgnoreList.append("amenity=school");
 //  reviewTypeIgnoreList.append("man_made=water_works");
 //  reviewTypeIgnoreList.append("amenity=bus_station");
 //  reviewTypeIgnoreList.append("amenity=hospital");

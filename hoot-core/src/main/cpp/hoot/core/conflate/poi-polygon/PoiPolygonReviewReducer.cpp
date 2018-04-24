@@ -103,7 +103,7 @@ _keepClosestMatchesOnly(ConfigOptions().getPoiPolygonKeepClosestMatchesOnly())
 
 bool PoiPolygonReviewReducer::_nonDistanceSimilaritiesPresent() const
 {
-  return _typeScore > 0.0 || _nameScore > 0.0 || _addressMatch;
+  return _typeScore > 0.03 || _nameScore > 0.0 || _addressMatch;
 }
 
 bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr poly)
@@ -166,14 +166,14 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   }
 
   //similar to above, but for sport fields
-  const bool poiNameContainsField =
-    PoiPolygonNameScoreExtractor::getElementName(poi).toLower().contains("field");
-  LOG_VART(poiNameContainsField);
+  const bool poiNameEndsWithField =
+    PoiPolygonNameScoreExtractor::getElementName(poi).toLower().endsWith("field");
+  LOG_VART(poiNameEndsWithField);
   const bool polyIsSport = PoiPolygonTypeScoreExtractor::isSport(poly);
   LOG_VART(polyIsSport);
-  //we'll let this review pass if the poi has "field" in the name and is sitting on top of a sport
-  //poly
-  if (poiNameContainsField && polyIsSport)
+  //we'll let this review pass if the poi ends with "field" in the name and is sitting on top of a
+  //sport poly
+  if (poiNameEndsWithField && polyIsSport)
   {
   }
   else if ((poi->getTags().get("leisure").toLower() == "pitch" ||
