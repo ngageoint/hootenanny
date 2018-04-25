@@ -109,6 +109,7 @@ private:
   bool _formatXml;
   int _precision;
   int _encodingErrorCount;
+  int _fileNumber;
 
   boost::shared_ptr<QIODevice> _fp;
   boost::shared_ptr<QXmlStreamWriter> _writer;

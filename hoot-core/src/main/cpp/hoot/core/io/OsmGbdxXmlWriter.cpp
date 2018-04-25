@@ -65,7 +65,8 @@ HOOT_FACTORY_REGISTER(OsmMapWriter, OsmGbdxXmlWriter)
 OsmGbdxXmlWriter::OsmGbdxXmlWriter() :
 _formatXml(ConfigOptions().getOsmMapWriterFormatXml()),
 _precision(ConfigOptions().getWriterPrecision()),
-_encodingErrorCount(0)
+_encodingErrorCount(0),
+_fileNumber(0)
 {
 }
 
@@ -146,7 +147,8 @@ void OsmGbdxXmlWriter::_newOutputFile()
     close();
   }
 
-  QString url = _outputDir.filePath(UuidHelper::createUuid().toString().replace("{", "").replace("}", "") + ".xml");
+//  QString url = _outputDir.filePath(UuidHelper::createUuid().toString().replace("{", "").replace("}", "") + ".xml");
+  QString url = _outputDir.filePath(QString("det_%1.xml").arg(_fileNumber++));
 
   QFile* f = new QFile();
   _fp.reset(f);

@@ -64,7 +64,8 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapWriter, OsmGbdxJsonWriter)
 
 OsmGbdxJsonWriter::OsmGbdxJsonWriter(int precision)
-  : OsmJsonWriter(precision)
+  : OsmJsonWriter(precision),
+    _fileNumber(0)
 {
   _writeHootFormat = false;
 }
@@ -96,7 +97,8 @@ void OsmGbdxJsonWriter::_newOutputFile()
     close();
   }
 
-  QString url = _outputDir.filePath(UuidHelper::createUuid().toString().replace("{", "").replace("}", "") + ".json");
+//  QString url = _outputDir.filePath(UuidHelper::createUuid().toString().replace("{", "").replace("}", "") + ".json");
+  QString url = _outputDir.filePath(QString("det_%1.json").arg(_fileNumber++));
 
   _fp.setFileName(url);
 

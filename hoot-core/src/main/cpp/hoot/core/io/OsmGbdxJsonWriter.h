@@ -78,6 +78,7 @@ public:
 protected:
 
   QDir _outputDir;
+  int _fileNumber;
 
   /**
    * @brief Close the open file and open a unique file for output
