@@ -18731,194 +18731,194 @@
         <tag k="amenity" v="parking"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <relation visible="true" id="-216" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-192" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4680" role="reviewee"/>
         <member type="way" ref="-65" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="POI to Polygon"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Conflicting information"/>
+        <tag k="hoot:review:note" v="Conflicting information: multiple features have been matched to the same feature and require review."/>
         <tag k="hoot:review:sort_order" v="32"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-215" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-191" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4680" role="reviewee"/>
         <member type="way" ref="-797" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="POI to Polygon"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Conflicting information"/>
+        <tag k="hoot:review:note" v="Conflicting information: multiple features have been matched to the same feature and require review."/>
         <tag k="hoot:review:sort_order" v="31"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-214" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-190" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4679" role="reviewee"/>
         <member type="way" ref="-69" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="POI to Polygon"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Conflicting information"/>
-        <tag k="hoot:review:sort_order" v="191"/>
+        <tag k="hoot:review:note" v="Conflicting information: multiple features have been matched to the same feature and require review."/>
+        <tag k="hoot:review:sort_order" v="167"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-213" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-189" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4681" role="reviewee"/>
         <member type="way" ref="-69" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="POI to Polygon"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Conflicting information"/>
-        <tag k="hoot:review:sort_order" v="192"/>
+        <tag k="hoot:review:note" v="Conflicting information: multiple features have been matched to the same feature and require review."/>
+        <tag k="hoot:review:sort_order" v="168"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-212" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-188" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4686" role="reviewee"/>
         <member type="way" ref="-116" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="POI to Polygon"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Conflicting information"/>
-        <tag k="hoot:review:sort_order" v="120"/>
+        <tag k="hoot:review:note" v="Conflicting information: multiple features have been matched to the same feature and require review."/>
+        <tag k="hoot:review:sort_order" v="96"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-211" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-187" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4686" role="reviewee"/>
         <member type="way" ref="-798" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="POI to Polygon"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Conflicting information"/>
-        <tag k="hoot:review:sort_order" v="125"/>
+        <tag k="hoot:review:note" v="Conflicting information: multiple features have been matched to the same feature and require review."/>
+        <tag k="hoot:review:sort_order" v="101"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-210" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-186" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4676" role="reviewee"/>
         <member type="way" ref="-12" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="POI to Polygon"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Conflicting information"/>
-        <tag k="hoot:review:sort_order" v="126"/>
+        <tag k="hoot:review:note" v="Conflicting information: multiple features have been matched to the same feature and require review."/>
+        <tag k="hoot:review:sort_order" v="102"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-209" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-185" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4687" role="reviewee"/>
         <member type="way" ref="-12" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="POI to Polygon"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Conflicting information"/>
-        <tag k="hoot:review:sort_order" v="127"/>
+        <tag k="hoot:review:note" v="Conflicting information: multiple features have been matched to the same feature and require review."/>
+        <tag k="hoot:review:sort_order" v="103"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-208" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-184" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4677" role="reviewee"/>
         <member type="way" ref="-2" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="POI to Polygon"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Conflicting information"/>
-        <tag k="hoot:review:sort_order" v="121"/>
+        <tag k="hoot:review:note" v="Conflicting information: multiple features have been matched to the same feature and require review."/>
+        <tag k="hoot:review:sort_order" v="97"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-207" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-183" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4730" role="reviewee"/>
         <member type="way" ref="-2" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="POI to Polygon"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Conflicting information"/>
-        <tag k="hoot:review:sort_order" v="122"/>
+        <tag k="hoot:review:note" v="Conflicting information: multiple features have been matched to the same feature and require review."/>
+        <tag k="hoot:review:sort_order" v="98"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-206" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-182" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-241" role="reviewee"/>
         <member type="way" ref="-72" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="POI to Polygon"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Conflicting information"/>
+        <tag k="hoot:review:note" v="Conflicting information: multiple features have been matched to the same feature and require review."/>
         <tag k="hoot:review:sort_order" v="38"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-205" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-181" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-242" role="reviewee"/>
         <member type="way" ref="-72" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="POI to Polygon"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Conflicting information"/>
+        <tag k="hoot:review:note" v="Conflicting information: multiple features have been matched to the same feature and require review."/>
         <tag k="hoot:review:sort_order" v="39"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-204" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-180" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4678" role="reviewee"/>
         <member type="way" ref="-72" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="POI to Polygon"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Conflicting information"/>
+        <tag k="hoot:review:note" v="Conflicting information: multiple features have been matched to the same feature and require review."/>
         <tag k="hoot:review:sort_order" v="40"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-203" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-179" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4683" role="reviewee"/>
         <member type="way" ref="-72" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="POI to Polygon"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Conflicting information"/>
+        <tag k="hoot:review:note" v="Conflicting information: multiple features have been matched to the same feature and require review."/>
         <tag k="hoot:review:sort_order" v="41"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-202" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-178" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4685" role="reviewee"/>
         <member type="way" ref="-72" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="POI to Polygon"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Conflicting information"/>
+        <tag k="hoot:review:note" v="Conflicting information: multiple features have been matched to the same feature and require review."/>
         <tag k="hoot:review:sort_order" v="42"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-201" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-177" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-453" role="reviewee"/>
         <member type="way" ref="-607" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="POI to Polygon"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Conflicting information"/>
-        <tag k="hoot:review:sort_order" v="162"/>
+        <tag k="hoot:review:note" v="Conflicting information: multiple features have been matched to the same feature and require review."/>
+        <tag k="hoot:review:sort_order" v="138"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-200" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-176" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-453" role="reviewee"/>
         <member type="way" ref="-614" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="POI to Polygon"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Conflicting information"/>
-        <tag k="hoot:review:sort_order" v="161"/>
+        <tag k="hoot:review:note" v="Conflicting information: multiple features have been matched to the same feature and require review."/>
+        <tag k="hoot:review:sort_order" v="137"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-198" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-174" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4678" role="reviewee"/>
         <member type="way" ref="-801" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -18929,7 +18929,7 @@
         <tag k="hoot:review:sort_order" v="43"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-197" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-173" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4680" role="reviewee"/>
         <member type="way" ref="-67" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -18940,7 +18940,7 @@
         <tag k="hoot:review:sort_order" v="30"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-196" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-172" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4680" role="reviewee"/>
         <member type="way" ref="-73" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -18951,7 +18951,7 @@
         <tag k="hoot:review:sort_order" v="29"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-195" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-171" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4719" role="reviewee"/>
         <member type="way" ref="-658" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -18959,10 +18959,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 2, which is less than the required score of 3. Matches: distance: yes (0m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="183"/>
+        <tag k="hoot:review:sort_order" v="159"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-194" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-170" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4722" role="reviewee"/>
         <member type="way" ref="-23" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -18973,7 +18973,7 @@
         <tag k="hoot:review:sort_order" v="56"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-193" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-169" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4730" role="reviewee"/>
         <member type="way" ref="-12" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -18981,10 +18981,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 2, which is less than the required score of 3. Matches: distance: yes (0m; score: 2/2), type: no (score: 0/1), name: no (score: 0.141345/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="128"/>
+        <tag k="hoot:review:sort_order" v="104"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-192" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-168" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4730" role="reviewee"/>
         <member type="way" ref="-798" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -18992,10 +18992,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 2, which is less than the required score of 3. Matches: distance: yes (0m; score: 2/2), type: no (score: 0/1), name: no (score: 0.141345/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="129"/>
+        <tag k="hoot:review:sort_order" v="105"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-190" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-166" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4737" role="reviewee"/>
         <member type="way" ref="-82" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19003,10 +19003,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 2, which is less than the required score of 3. Matches: distance: yes (0m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="136"/>
+        <tag k="hoot:review:sort_order" v="112"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-189" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-165" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4738" role="reviewee"/>
         <member type="way" ref="-212" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19014,10 +19014,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 2, which is less than the required score of 3. Matches: distance: yes (0m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="132"/>
+        <tag k="hoot:review:sort_order" v="108"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-188" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-164" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4741" role="reviewee"/>
         <member type="way" ref="-276" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19028,7 +19028,7 @@
         <tag k="hoot:review:sort_order" v="45"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-187" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-163" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4741" role="reviewee"/>
         <member type="way" ref="-277" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19036,10 +19036,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 2, which is less than the required score of 3. Matches: distance: no (15m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="140"/>
+        <tag k="hoot:review:sort_order" v="116"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-186" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-162" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4741" role="reviewee"/>
         <member type="way" ref="-279" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19050,7 +19050,7 @@
         <tag k="hoot:review:sort_order" v="47"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-185" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-161" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4741" role="reviewee"/>
         <member type="way" ref="-280" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19061,7 +19061,7 @@
         <tag k="hoot:review:sort_order" v="46"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-184" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-160" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4741" role="reviewee"/>
         <member type="way" ref="-281" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19072,7 +19072,7 @@
         <tag k="hoot:review:sort_order" v="44"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-183" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-159" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4741" role="reviewee"/>
         <member type="way" ref="-282" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19080,10 +19080,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 2, which is less than the required score of 3. Matches: distance: no (16m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="139"/>
+        <tag k="hoot:review:sort_order" v="115"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-182" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-158" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4742" role="reviewee"/>
         <member type="way" ref="-381" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19091,10 +19091,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 2, which is less than the required score of 3. Matches: distance: yes (0m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="133"/>
+        <tag k="hoot:review:sort_order" v="109"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-181" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-157" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4744" role="reviewee"/>
         <member type="way" ref="-689" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19102,10 +19102,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 2, which is less than the required score of 3. Matches: distance: yes (0m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="193"/>
+        <tag k="hoot:review:sort_order" v="169"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-180" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-156" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4750" role="reviewee"/>
         <member type="way" ref="-2" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19113,10 +19113,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 2, which is less than the required score of 3. Matches: distance: yes (0m; score: 2/2), type: no (score: 0/1), name: no (score: 0.578552/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="123"/>
+        <tag k="hoot:review:sort_order" v="99"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-179" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-155" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4750" role="reviewee"/>
         <member type="way" ref="-12" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19124,10 +19124,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 2, which is less than the required score of 3. Matches: distance: yes (0m; score: 2/2), type: no (score: 0/1), name: no (score: 0.0785515/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="130"/>
+        <tag k="hoot:review:sort_order" v="106"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-178" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-154" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4750" role="reviewee"/>
         <member type="way" ref="-798" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19135,10 +19135,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 2, which is less than the required score of 3. Matches: distance: yes (0m; score: 2/2), type: no (score: 0/1), name: no (score: 0.0785515/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="131"/>
+        <tag k="hoot:review:sort_order" v="107"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-177" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-153" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-334" role="reviewee"/>
         <member type="way" ref="-456" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19146,10 +19146,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 2, which is less than the required score of 3. Matches: distance: yes (0m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="188"/>
+        <tag k="hoot:review:sort_order" v="164"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-176" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-152" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-334" role="reviewee"/>
         <member type="way" ref="-457" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19157,10 +19157,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 2, which is less than the required score of 3. Matches: distance: no (27m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="143"/>
+        <tag k="hoot:review:sort_order" v="119"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-175" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-151" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-334" role="reviewee"/>
         <member type="way" ref="-540" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19168,10 +19168,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 2, which is less than the required score of 3. Matches: distance: no (29m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="187"/>
+        <tag k="hoot:review:sort_order" v="163"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-174" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-150" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-334" role="reviewee"/>
         <member type="way" ref="-590" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19179,10 +19179,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 2, which is less than the required score of 3. Matches: distance: no (30m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="185"/>
+        <tag k="hoot:review:sort_order" v="161"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-173" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-149" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-345" role="reviewee"/>
         <member type="way" ref="-777" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19190,10 +19190,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 2, which is less than the required score of 3. Matches: distance: yes (0m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="194"/>
+        <tag k="hoot:review:sort_order" v="170"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-172" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-148" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-348" role="reviewee"/>
         <member type="way" ref="-377" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19204,7 +19204,7 @@
         <tag k="hoot:review:sort_order" v="48"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-171" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-147" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-350" role="reviewee"/>
         <member type="way" ref="-287" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19215,7 +19215,7 @@
         <tag k="hoot:review:sort_order" v="49"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-170" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-146" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-433" role="reviewee"/>
         <member type="way" ref="-381" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19223,10 +19223,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 2, which is less than the required score of 3. Matches: distance: yes (0m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="134"/>
+        <tag k="hoot:review:sort_order" v="110"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-169" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-145" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-440" role="reviewee"/>
         <member type="way" ref="-68" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19237,7 +19237,7 @@
         <tag k="hoot:review:sort_order" v="34"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-168" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-144" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-440" role="reviewee"/>
         <member type="way" ref="-219" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19248,7 +19248,7 @@
         <tag k="hoot:review:sort_order" v="52"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-167" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-143" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-441" role="reviewee"/>
         <member type="way" ref="-456" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19256,10 +19256,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 2, which is less than the required score of 3. Matches: distance: yes (0m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="189"/>
+        <tag k="hoot:review:sort_order" v="165"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-166" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-142" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-441" role="reviewee"/>
         <member type="way" ref="-457" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19267,10 +19267,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 2, which is less than the required score of 3. Matches: distance: no (18m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="144"/>
+        <tag k="hoot:review:sort_order" v="120"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-165" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-141" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-441" role="reviewee"/>
         <member type="way" ref="-590" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19278,10 +19278,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 2, which is less than the required score of 3. Matches: distance: no (24m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="186"/>
+        <tag k="hoot:review:sort_order" v="162"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-164" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-140" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-451" role="reviewee"/>
         <member type="way" ref="-750" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19289,10 +19289,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 2, which is less than the required score of 3. Matches: distance: yes (0m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="195"/>
+        <tag k="hoot:review:sort_order" v="171"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-163" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-139" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-453" role="reviewee"/>
         <member type="relation" ref="-9" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19300,10 +19300,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (78m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="172"/>
+        <tag k="hoot:review:sort_order" v="148"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-162" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-138" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-453" role="reviewee"/>
         <member type="way" ref="-5" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19311,10 +19311,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (118m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="154"/>
+        <tag k="hoot:review:sort_order" v="130"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-161" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-137" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-453" role="reviewee"/>
         <member type="way" ref="-437" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19322,10 +19322,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (19m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="160"/>
+        <tag k="hoot:review:sort_order" v="136"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-160" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-136" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-453" role="reviewee"/>
         <member type="way" ref="-456" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19333,10 +19333,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (110m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="145"/>
+        <tag k="hoot:review:sort_order" v="121"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-159" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-135" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-453" role="reviewee"/>
         <member type="way" ref="-457" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19344,10 +19344,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (83m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="146"/>
+        <tag k="hoot:review:sort_order" v="122"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-158" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-134" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-453" role="reviewee"/>
         <member type="way" ref="-583" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19355,10 +19355,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (79m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="181"/>
+        <tag k="hoot:review:sort_order" v="157"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-157" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-133" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-453" role="reviewee"/>
         <member type="way" ref="-590" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19366,10 +19366,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (75m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="182"/>
+        <tag k="hoot:review:sort_order" v="158"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-156" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-132" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-453" role="reviewee"/>
         <member type="way" ref="-591" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19377,10 +19377,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (141m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="184"/>
+        <tag k="hoot:review:sort_order" v="160"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-155" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-131" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-453" role="reviewee"/>
         <member type="way" ref="-605" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19388,10 +19388,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (38m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="159"/>
+        <tag k="hoot:review:sort_order" v="135"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-154" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-130" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-453" role="reviewee"/>
         <member type="way" ref="-606" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19399,10 +19399,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (35m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="158"/>
+        <tag k="hoot:review:sort_order" v="134"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-153" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-129" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-453" role="reviewee"/>
         <member type="way" ref="-608" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19410,10 +19410,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (17m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="163"/>
+        <tag k="hoot:review:sort_order" v="139"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-152" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-128" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-453" role="reviewee"/>
         <member type="way" ref="-609" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19421,10 +19421,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (44m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="155"/>
+        <tag k="hoot:review:sort_order" v="131"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-151" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-127" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-453" role="reviewee"/>
         <member type="way" ref="-611" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19432,10 +19432,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (38m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="156"/>
+        <tag k="hoot:review:sort_order" v="132"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-150" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-126" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-453" role="reviewee"/>
         <member type="way" ref="-613" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19443,10 +19443,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (53m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="157"/>
+        <tag k="hoot:review:sort_order" v="133"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-149" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-125" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-453" role="reviewee"/>
         <member type="way" ref="-617" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19454,10 +19454,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (27m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="164"/>
+        <tag k="hoot:review:sort_order" v="140"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-148" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-124" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-453" role="reviewee"/>
         <member type="way" ref="-619" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19465,10 +19465,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (69m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="168"/>
+        <tag k="hoot:review:sort_order" v="144"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-147" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-123" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-453" role="reviewee"/>
         <member type="way" ref="-620" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19476,10 +19476,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (62m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="167"/>
+        <tag k="hoot:review:sort_order" v="143"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-146" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-122" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-453" role="reviewee"/>
         <member type="way" ref="-622" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19487,10 +19487,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (121m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="151"/>
+        <tag k="hoot:review:sort_order" v="127"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-145" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-121" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-453" role="reviewee"/>
         <member type="way" ref="-623" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19498,10 +19498,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (64m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="178"/>
+        <tag k="hoot:review:sort_order" v="154"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-144" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-120" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-453" role="reviewee"/>
         <member type="way" ref="-627" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19509,10 +19509,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (116m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="152"/>
+        <tag k="hoot:review:sort_order" v="128"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-143" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-119" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-453" role="reviewee"/>
         <member type="way" ref="-628" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19520,10 +19520,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (123m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="153"/>
+        <tag k="hoot:review:sort_order" v="129"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-142" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-118" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-453" role="reviewee"/>
         <member type="way" ref="-629" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19531,10 +19531,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (109m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="170"/>
+        <tag k="hoot:review:sort_order" v="146"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-141" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-117" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-453" role="reviewee"/>
         <member type="way" ref="-630" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19542,10 +19542,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (56m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="166"/>
+        <tag k="hoot:review:sort_order" v="142"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-140" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-116" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-453" role="reviewee"/>
         <member type="way" ref="-631" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19553,10 +19553,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (44m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="165"/>
+        <tag k="hoot:review:sort_order" v="141"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-139" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-115" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-453" role="reviewee"/>
         <member type="way" ref="-633" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19564,10 +19564,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (106m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="171"/>
+        <tag k="hoot:review:sort_order" v="147"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-138" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-114" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-453" role="reviewee"/>
         <member type="way" ref="-640" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19575,10 +19575,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (59m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="169"/>
+        <tag k="hoot:review:sort_order" v="145"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-137" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-113" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-453" role="reviewee"/>
         <member type="way" ref="-644" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19586,10 +19586,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (50m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="148"/>
+        <tag k="hoot:review:sort_order" v="124"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-136" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-112" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-453" role="reviewee"/>
         <member type="way" ref="-646" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19597,10 +19597,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (67m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="147"/>
+        <tag k="hoot:review:sort_order" v="123"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-135" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-111" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-453" role="reviewee"/>
         <member type="way" ref="-648" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19608,10 +19608,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (43m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="180"/>
+        <tag k="hoot:review:sort_order" v="156"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-134" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-110" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-453" role="reviewee"/>
         <member type="way" ref="-653" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19619,10 +19619,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (84m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="176"/>
+        <tag k="hoot:review:sort_order" v="152"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-133" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-109" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-453" role="reviewee"/>
         <member type="way" ref="-655" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19630,10 +19630,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (41m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="179"/>
+        <tag k="hoot:review:sort_order" v="155"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-132" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-108" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-453" role="reviewee"/>
         <member type="way" ref="-656" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19641,10 +19641,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (107m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="173"/>
+        <tag k="hoot:review:sort_order" v="149"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-131" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-107" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-453" role="reviewee"/>
         <member type="way" ref="-657" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19652,10 +19652,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (110m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="174"/>
+        <tag k="hoot:review:sort_order" v="150"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-130" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-106" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-453" role="reviewee"/>
         <member type="way" ref="-658" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19663,10 +19663,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (67m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="177"/>
+        <tag k="hoot:review:sort_order" v="153"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-129" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-105" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-453" role="reviewee"/>
         <member type="way" ref="-659" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19674,10 +19674,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (108m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="175"/>
+        <tag k="hoot:review:sort_order" v="151"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-128" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-104" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-455" role="reviewee"/>
         <member type="way" ref="-83" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19685,10 +19685,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 2, which is less than the required score of 3. Matches: distance: yes (0m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="135"/>
+        <tag k="hoot:review:sort_order" v="111"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-127" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-103" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-478" role="reviewee"/>
         <member type="way" ref="-437" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19696,21 +19696,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (55m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="149"/>
+        <tag k="hoot:review:sort_order" v="125"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-126" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-580" role="reviewee"/>
-        <member type="way" ref="-144" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="POI to Polygon"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (104m; score: 2/2), type: yes (score: 0.9/1), name: no (score: 0.203063/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="59"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-125" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-102" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-598" role="reviewee"/>
         <member type="way" ref="-500" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19718,10 +19707,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 2, which is less than the required score of 3. Matches: distance: yes (0m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="138"/>
+        <tag k="hoot:review:sort_order" v="114"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-124" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-101" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-601" role="reviewee"/>
         <member type="way" ref="-288" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19732,18 +19721,7 @@
         <tag k="hoot:review:sort_order" v="35"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-123" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-603" role="reviewee"/>
-        <member type="way" ref="-144" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="POI to Polygon"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (91m; score: 2/2), type: yes (score: 0.9/1), name: no (score: 0.101532/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="58"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-122" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-100" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-610" role="reviewee"/>
         <member type="way" ref="-272" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19754,7 +19732,7 @@
         <tag k="hoot:review:sort_order" v="33"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-121" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-99" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-618" role="reviewee"/>
         <member type="way" ref="-127" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19765,7 +19743,7 @@
         <tag k="hoot:review:sort_order" v="23"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-120" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-98" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-620" role="reviewee"/>
         <member type="way" ref="-127" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19776,7 +19754,7 @@
         <tag k="hoot:review:sort_order" v="24"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-119" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-97" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-621" role="reviewee"/>
         <member type="way" ref="-127" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19787,7 +19765,7 @@
         <tag k="hoot:review:sort_order" v="25"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-118" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-96" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-622" role="reviewee"/>
         <member type="way" ref="-367" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19798,7 +19776,7 @@
         <tag k="hoot:review:sort_order" v="22"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-117" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-95" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-624" role="reviewee"/>
         <member type="way" ref="-752" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19806,10 +19784,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 2, which is less than the required score of 3. Matches: distance: yes (2m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="197"/>
+        <tag k="hoot:review:sort_order" v="173"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-116" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-94" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-624" role="reviewee"/>
         <member type="way" ref="-769" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19817,10 +19795,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 2, which is less than the required score of 3. Matches: distance: yes (4m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="196"/>
+        <tag k="hoot:review:sort_order" v="172"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-115" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-93" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-643" role="reviewee"/>
         <member type="way" ref="-798" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19828,10 +19806,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (31m; score: 2/2), type: no (score: 0/1), name: yes (score: 1/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="124"/>
+        <tag k="hoot:review:sort_order" v="100"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-114" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-92" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-683" role="reviewee"/>
         <member type="way" ref="-60" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19839,10 +19817,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (142m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="119"/>
+        <tag k="hoot:review:sort_order" v="95"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-113" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-91" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-683" role="reviewee"/>
         <member type="way" ref="-362" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19850,10 +19828,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (109m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="112"/>
+        <tag k="hoot:review:sort_order" v="88"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-112" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-90" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-683" role="reviewee"/>
         <member type="way" ref="-364" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19861,10 +19839,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (73m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="117"/>
+        <tag k="hoot:review:sort_order" v="93"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-111" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-89" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-683" role="reviewee"/>
         <member type="way" ref="-365" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19872,10 +19850,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (27m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="108"/>
+        <tag k="hoot:review:sort_order" v="84"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-110" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-88" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-683" role="reviewee"/>
         <member type="way" ref="-369" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19883,10 +19861,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (130m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="110"/>
+        <tag k="hoot:review:sort_order" v="86"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-109" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-87" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-683" role="reviewee"/>
         <member type="way" ref="-371" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19894,10 +19872,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (123m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="111"/>
+        <tag k="hoot:review:sort_order" v="87"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-108" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-86" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-683" role="reviewee"/>
         <member type="way" ref="-373" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19905,10 +19883,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (18m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="104"/>
+        <tag k="hoot:review:sort_order" v="80"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-107" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-85" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-683" role="reviewee"/>
         <member type="way" ref="-374" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19916,32 +19894,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (33m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="109"/>
+        <tag k="hoot:review:sort_order" v="85"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-106" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-686" role="reviewee"/>
-        <member type="way" ref="-144" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="POI to Polygon"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (63m; score: 2/2), type: yes (score: 1/1), name: no (score: 0.116185/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="96"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-105" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-687" role="reviewee"/>
-        <member type="way" ref="-144" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="POI to Polygon"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (69m; score: 2/2), type: yes (score: 1/1), name: no (score: 0.250432/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="97"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-104" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-84" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-694" role="reviewee"/>
         <member type="way" ref="-63" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19952,7 +19908,7 @@
         <tag k="hoot:review:sort_order" v="53"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-103" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-83" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-694" role="reviewee"/>
         <member type="way" ref="-143" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19963,7 +19919,7 @@
         <tag k="hoot:review:sort_order" v="55"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-102" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-82" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-694" role="reviewee"/>
         <member type="way" ref="-147" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19974,7 +19930,7 @@
         <tag k="hoot:review:sort_order" v="54"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-101" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-81" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-697" role="reviewee"/>
         <member type="way" ref="-145" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19982,10 +19938,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (125m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="95"/>
+        <tag k="hoot:review:sort_order" v="73"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-100" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-80" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-697" role="reviewee"/>
         <member type="way" ref="-146" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -19993,10 +19949,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (106m; score: 2/2), type: yes (score: 1/1), name: no (score: 0.391974/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="91"/>
+        <tag k="hoot:review:sort_order" v="71"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-99" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-79" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-697" role="reviewee"/>
         <member type="way" ref="-147" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20004,54 +19960,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (116m; score: 2/2), type: yes (score: 1/1), name: no (score: 0.393036/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="103"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-98" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-699" role="reviewee"/>
-        <member type="way" ref="-125" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="POI to Polygon"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (83m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="83"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-97" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-699" role="reviewee"/>
-        <member type="way" ref="-133" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="POI to Polygon"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (65m; score: 2/2), type: yes (score: 1/1), name: no (score: 0.302653/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
         <tag k="hoot:review:sort_order" v="79"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-96" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-699" role="reviewee"/>
-        <member type="way" ref="-138" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="POI to Polygon"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (90m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="92"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-95" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-699" role="reviewee"/>
-        <member type="way" ref="-144" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="POI to Polygon"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (86m; score: 2/2), type: yes (score: 1/1), name: no (score: 0.326844/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="93"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-94" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-78" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-708" role="reviewee"/>
         <member type="way" ref="-139" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20059,21 +19971,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (98m; score: 2/2), type: yes (score: 1/1), name: no (score: 0.17734/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="62"/>
+        <tag k="hoot:review:sort_order" v="60"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-93" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-709" role="reviewee"/>
-        <member type="way" ref="-133" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="POI to Polygon"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (97m; score: 2/2), type: yes (score: 1/1), name: no (score: 0.237915/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="69"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-92" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-77" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-711" role="reviewee"/>
         <member type="way" ref="-139" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20081,10 +19982,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (67m; score: 2/2), type: yes (score: 1/1), name: no (score: 0.0799137/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="84"/>
+        <tag k="hoot:review:sort_order" v="65"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-91" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-76" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-712" role="reviewee"/>
         <member type="way" ref="-126" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20092,10 +19993,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (41m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="66"/>
+        <tag k="hoot:review:sort_order" v="64"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-90" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-75" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-715" role="reviewee"/>
         <member type="way" ref="-125" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20103,21 +20004,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (81m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="61"/>
+        <tag k="hoot:review:sort_order" v="59"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-89" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-715" role="reviewee"/>
-        <member type="way" ref="-133" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="POI to Polygon"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (95m; score: 2/2), type: yes (score: 1/1), name: no (score: 0.224108/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="68"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-88" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-74" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-716" role="reviewee"/>
         <member type="way" ref="-125" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20125,43 +20015,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (116m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="65"/>
+        <tag k="hoot:review:sort_order" v="63"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-87" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-716" role="reviewee"/>
-        <member type="way" ref="-133" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="POI to Polygon"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (48m; score: 2/2), type: yes (score: 1/1), name: no (score: 0.142802/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="67"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-86" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-862" role="reviewee"/>
-        <member type="way" ref="-144" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="POI to Polygon"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (66m; score: 2/2), type: yes (score: 1/1), name: no (score: 0.154878/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="85"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-85" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-863" role="reviewee"/>
-        <member type="way" ref="-133" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="POI to Polygon"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (136m; score: 2/2), type: yes (score: 1/1), name: no (score: 0.194692/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="74"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-84" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-73" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-863" role="reviewee"/>
         <member type="way" ref="-139" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20172,7 +20029,7 @@
         <tag k="hoot:review:sort_order" v="57"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-83" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-72" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-863" role="reviewee"/>
         <member type="way" ref="-141" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20180,10 +20037,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (37m; score: 2/2), type: yes (score: 1/1), name: no (score: 0.194692/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="89"/>
+        <tag k="hoot:review:sort_order" v="69"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-82" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-71" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-863" role="reviewee"/>
         <member type="way" ref="-143" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20191,10 +20048,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (140m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="98"/>
+        <tag k="hoot:review:sort_order" v="74"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-81" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-70" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-863" role="reviewee"/>
         <member type="way" ref="-144" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20202,21 +20059,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (28m; score: 2/2), type: yes (score: 1/1), name: no (score: 0.0457527/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="88"/>
+        <tag k="hoot:review:sort_order" v="68"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-80" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-871" role="reviewee"/>
-        <member type="way" ref="-133" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="POI to Polygon"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (56m; score: 2/2), type: yes (score: 1/1), name: no (score: 0.142016/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="81"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-79" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-69" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1283" role="reviewee"/>
         <member type="way" ref="-127" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20227,7 +20073,7 @@
         <tag k="hoot:review:sort_order" v="5"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-78" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-68" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1283" role="reviewee"/>
         <member type="way" ref="-361" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20238,7 +20084,7 @@
         <tag k="hoot:review:sort_order" v="10"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-77" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-67" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1283" role="reviewee"/>
         <member type="way" ref="-367" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20249,7 +20095,7 @@
         <tag k="hoot:review:sort_order" v="18"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-76" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-66" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1283" role="reviewee"/>
         <member type="way" ref="-369" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20260,7 +20106,7 @@
         <tag k="hoot:review:sort_order" v="11"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-75" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-65" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1283" role="reviewee"/>
         <member type="way" ref="-386" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20271,7 +20117,7 @@
         <tag k="hoot:review:sort_order" v="1"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-74" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-64" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1284" role="reviewee"/>
         <member type="way" ref="-361" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20282,7 +20128,7 @@
         <tag k="hoot:review:sort_order" v="7"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-73" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-63" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1284" role="reviewee"/>
         <member type="way" ref="-367" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20293,7 +20139,7 @@
         <tag k="hoot:review:sort_order" v="19"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-72" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-62" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1284" role="reviewee"/>
         <member type="way" ref="-369" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20304,7 +20150,7 @@
         <tag k="hoot:review:sort_order" v="12"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-71" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-61" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1284" role="reviewee"/>
         <member type="way" ref="-371" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20315,7 +20161,7 @@
         <tag k="hoot:review:sort_order" v="13"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-70" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-60" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1284" role="reviewee"/>
         <member type="way" ref="-386" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20326,7 +20172,7 @@
         <tag k="hoot:review:sort_order" v="2"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-69" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-59" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1285" role="reviewee"/>
         <member type="way" ref="-361" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20337,7 +20183,7 @@
         <tag k="hoot:review:sort_order" v="8"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-68" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-58" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1285" role="reviewee"/>
         <member type="way" ref="-367" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20348,7 +20194,7 @@
         <tag k="hoot:review:sort_order" v="20"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-67" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-57" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1285" role="reviewee"/>
         <member type="way" ref="-369" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20359,7 +20205,7 @@
         <tag k="hoot:review:sort_order" v="14"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-66" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-56" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1285" role="reviewee"/>
         <member type="way" ref="-371" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20370,7 +20216,7 @@
         <tag k="hoot:review:sort_order" v="15"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-65" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-55" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1285" role="reviewee"/>
         <member type="way" ref="-386" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20381,7 +20227,7 @@
         <tag k="hoot:review:sort_order" v="3"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-64" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-54" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1286" role="reviewee"/>
         <member type="way" ref="-361" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20392,7 +20238,7 @@
         <tag k="hoot:review:sort_order" v="9"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-63" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-53" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1286" role="reviewee"/>
         <member type="way" ref="-367" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20403,7 +20249,7 @@
         <tag k="hoot:review:sort_order" v="21"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-62" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-52" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1286" role="reviewee"/>
         <member type="way" ref="-369" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20414,7 +20260,7 @@
         <tag k="hoot:review:sort_order" v="17"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-61" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-51" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1286" role="reviewee"/>
         <member type="way" ref="-371" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20425,7 +20271,7 @@
         <tag k="hoot:review:sort_order" v="16"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-60" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-50" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1286" role="reviewee"/>
         <member type="way" ref="-386" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20436,7 +20282,7 @@
         <tag k="hoot:review:sort_order" v="4"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-59" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-49" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1290" role="reviewee"/>
         <member type="way" ref="-364" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20447,7 +20293,7 @@
         <tag k="hoot:review:sort_order" v="6"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-58" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-48" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1291" role="reviewee"/>
         <member type="way" ref="-60" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20455,10 +20301,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (128m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="118"/>
+        <tag k="hoot:review:sort_order" v="94"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-57" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-47" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1291" role="reviewee"/>
         <member type="way" ref="-362" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20466,10 +20312,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (113m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="115"/>
+        <tag k="hoot:review:sort_order" v="91"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-56" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-46" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1291" role="reviewee"/>
         <member type="way" ref="-364" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20477,10 +20323,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (78m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="116"/>
+        <tag k="hoot:review:sort_order" v="92"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-55" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-45" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1291" role="reviewee"/>
         <member type="way" ref="-365" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20488,10 +20334,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (37m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="106"/>
+        <tag k="hoot:review:sort_order" v="82"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-54" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-44" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1291" role="reviewee"/>
         <member type="way" ref="-369" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20499,10 +20345,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (134m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="113"/>
+        <tag k="hoot:review:sort_order" v="89"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-53" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-43" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1291" role="reviewee"/>
         <member type="way" ref="-371" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20510,10 +20356,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (127m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="114"/>
+        <tag k="hoot:review:sort_order" v="90"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-52" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-42" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1291" role="reviewee"/>
         <member type="way" ref="-373" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20521,10 +20367,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (30m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="105"/>
+        <tag k="hoot:review:sort_order" v="81"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-51" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-41" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1291" role="reviewee"/>
         <member type="way" ref="-374" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20532,10 +20378,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (42m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="107"/>
+        <tag k="hoot:review:sort_order" v="83"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-50" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-40" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1292" role="reviewee"/>
         <member type="way" ref="-125" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20543,21 +20389,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (21m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="60"/>
+        <tag k="hoot:review:sort_order" v="58"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-49" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-1292" role="reviewee"/>
-        <member type="way" ref="-133" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="POI to Polygon"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (93m; score: 2/2), type: yes (score: 1/1), name: no (score: 0.113949/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="71"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-48" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-39" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1292" role="reviewee"/>
         <member type="way" ref="-138" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20565,10 +20400,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (74m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="90"/>
+        <tag k="hoot:review:sort_order" v="70"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-47" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-38" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1293" role="reviewee"/>
         <member type="way" ref="-125" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20576,21 +20411,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (27m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="63"/>
+        <tag k="hoot:review:sort_order" v="61"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-46" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-1293" role="reviewee"/>
-        <member type="way" ref="-133" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="POI to Polygon"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (86m; score: 2/2), type: yes (score: 1/1), name: no (score: 0.403087/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="70"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-45" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1293" role="reviewee"/>
         <member type="way" ref="-138" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20598,10 +20422,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (76m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="86"/>
+        <tag k="hoot:review:sort_order" v="66"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-44" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-36" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1325" role="reviewee"/>
         <member type="way" ref="-125" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20609,21 +20433,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (90m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="64"/>
+        <tag k="hoot:review:sort_order" v="62"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-43" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-1325" role="reviewee"/>
-        <member type="way" ref="-133" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="POI to Polygon"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (39m; score: 2/2), type: yes (score: 1/1), name: no (score: 0.320999/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="80"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-42" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-35" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1325" role="reviewee"/>
         <member type="way" ref="-138" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20631,54 +20444,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (116m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="94"/>
+        <tag k="hoot:review:sort_order" v="72"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-41" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-1326" role="reviewee"/>
-        <member type="way" ref="-133" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="POI to Polygon"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (63m; score: 2/2), type: yes (score: 1/1), name: no (score: 0.127387/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="82"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-40" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-1327" role="reviewee"/>
-        <member type="way" ref="-133" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="POI to Polygon"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (81m; score: 2/2), type: yes (score: 1/1), name: no (score: 0.205049/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="77"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-39" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-1328" role="reviewee"/>
-        <member type="way" ref="-133" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="POI to Polygon"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (87m; score: 2/2), type: yes (score: 1/1), name: no (score: 0.325348/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="78"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-38" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-1329" role="reviewee"/>
-        <member type="way" ref="-133" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="POI to Polygon"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (91m; score: 2/2), type: yes (score: 1/1), name: no (score: 0.214285/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="76"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-34" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1329" role="reviewee"/>
         <member type="way" ref="-143" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20686,21 +20455,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (145m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="102"/>
+        <tag k="hoot:review:sort_order" v="78"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-36" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-1330" role="reviewee"/>
-        <member type="way" ref="-133" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="POI to Polygon"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (115m; score: 2/2), type: yes (score: 1/1), name: no (score: 0.237596/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="72"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-35" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1330" role="reviewee"/>
         <member type="way" ref="-143" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20708,21 +20466,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (142m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="99"/>
+        <tag k="hoot:review:sort_order" v="75"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-34" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-1331" role="reviewee"/>
-        <member type="way" ref="-133" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="POI to Polygon"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (121m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="73"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1331" role="reviewee"/>
         <member type="way" ref="-139" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20730,10 +20477,10 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (20m; score: 2/2), type: yes (score: 0.9/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="87"/>
+        <tag k="hoot:review:sort_order" v="67"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1331" role="reviewee"/>
         <member type="way" ref="-143" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
@@ -20741,18 +20488,7 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (140m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="100"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-1332" role="reviewee"/>
-        <member type="way" ref="-133" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="POI to Polygon"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (129m; score: 2/2), type: yes (score: 1/1), name: no (score: 0.289364/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="75"/>
+        <tag k="hoot:review:sort_order" v="76"/>
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -20763,7 +20499,7 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (141m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="101"/>
+        <tag k="hoot:review:sort_order" v="77"/>
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -20796,7 +20532,7 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 2, which is less than the required score of 3. Matches: distance: yes (0m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="137"/>
+        <tag k="hoot:review:sort_order" v="113"/>
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -20807,7 +20543,7 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (121m; score: 2/2), type: yes (score: 1/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="150"/>
+        <tag k="hoot:review:sort_order" v="126"/>
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -20829,7 +20565,7 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 2, which is less than the required score of 3. Matches: distance: yes (0m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="142"/>
+        <tag k="hoot:review:sort_order" v="118"/>
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -20840,7 +20576,7 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 2, which is less than the required score of 3. Matches: distance: yes (4m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="141"/>
+        <tag k="hoot:review:sort_order" v="117"/>
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -20851,7 +20587,7 @@
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Features had an additive similarity score of 2, which is less than the required score of 3. Matches: distance: yes (0m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
-        <tag k="hoot:review:sort_order" v="190"/>
+        <tag k="hoot:review:sort_order" v="166"/>
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1">

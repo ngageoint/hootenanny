@@ -121,7 +121,10 @@ bool PoiPolygonMergerCreator::createMergers(const MatchSet& matches, vector<Merg
     if (_isConflictingSet(matches))
     {
       mergers.push_back(
-        new MarkForReviewMerger(eids, "Conflicting information", matchTypes.join(";"), 1));
+        new MarkForReviewMerger(
+          eids,
+          "Conflicting information: multiple features have been matched to the same feature and require review.",
+          matchTypes.join(";"), 1));
     }
     else
     {
