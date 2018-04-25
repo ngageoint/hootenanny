@@ -55,12 +55,15 @@ _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
 _smallestNumberOfTagsAdded(LONG_MAX),
 _largestNumberOfTagsAdded(0),
 _translateAllNamesToEnglish(true),
-_matchEndOfNameSingleTokenFirst(true)
+_matchEndOfNameSingleTokenFirst(true),
+_additionalNameKeys(ConfigOptions().getImplicitTaggerAdditionalNameKeys()),
+_maxNameLength(ConfigOptions().getImplicitTaggerMaxNameLength())
 {
-
+  _ruleReader.reset(new ImplicitTagRulesSqliteReader());
+  _ruleReader->open(ConfigOptions().getImplicitTaggerRulesDatabase());
 }
 
-ImplicitTypeTaggerBase::ImplicitTypeTaggerBase(const QString /*databasePath*/) :
+ImplicitTypeTaggerBase::ImplicitTypeTaggerBase(const QString databasePath) :
 _allowTaggingSpecificFeatures(true),
 _elementIsASpecificFeature(false),
 _numFeaturesModified(0),
@@ -71,9 +74,12 @@ _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
 _smallestNumberOfTagsAdded(LONG_MAX),
 _largestNumberOfTagsAdded(0),
 _translateAllNamesToEnglish(true),
-_matchEndOfNameSingleTokenFirst(true)
+_matchEndOfNameSingleTokenFirst(true),
+_additionalNameKeys(ConfigOptions().getImplicitTaggerAdditionalNameKeys()),
+_maxNameLength(ConfigOptions().getImplicitTaggerMaxNameLength())
 {
-
+  _ruleReader.reset(new ImplicitTagRulesSqliteReader());
+  _ruleReader->open(databasePath);
 }
 
 ImplicitTypeTaggerBase::~ImplicitTypeTaggerBase()
@@ -118,6 +124,29 @@ void ImplicitTypeTaggerBase::setConfiguration(const Settings& conf)
   _ruleReader->setAddTopTagOnly(confOptions.getImplicitTaggerAddTopTagOnly());
   _ruleReader->setAllowWordsInvolvedInMultipleRules(
     confOptions.getImplicitTaggerAllowWordsInvolvedInMultipleRules());
+}
+
+QStringList ImplicitTypeTaggerBase::_getNames(const Tags& tags) const
+{
+  QStringList namesToReturn;
+  QStringList names = tags.getNames();
+  for (int i = 0; i < _additionalNameKeys.size(); i++)
+  {
+    const QString key = _additionalNameKeys.at(i);
+    LOG_VART(key);
+    names.append(tags.get(key));
+  }
+  LOG_VART(names);
+  for (int i = 0; i < names.size(); i++)
+  {
+    const QString name = names.at(i);
+    if (name.size() <= _maxNameLength)
+    {
+      namesToReturn.append(name);
+    }
+  }
+  LOG_VART(namesToReturn);
+  return namesToReturn;
 }
 
 bool caseInsensitiveLessThan(const QString s1, const QString s2)
@@ -313,7 +342,7 @@ QStringList ImplicitTypeTaggerBase::_cleanNames(Tags& tags)
     tags.set("name", name.replace(";", "").trimmed());
   }
 
-  QStringList names = tags.getNames();
+  QStringList names = _getNames(tags);
   LOG_VART(names);
   if (names.removeAll("old_name") > 0)
   {

@@ -9,6 +9,7 @@ administrative building	office=administrative
 administrative buildings	office=administrative
 airport	aeroway=aerodrome
 alteration	shop=alteration
+ambulance station	emergency=ambulance_station
 and resort	leisure=resort
 apartment	building=apartment
 apartments	building=apartment
