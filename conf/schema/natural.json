@@ -34,6 +34,9 @@
         "geometries": [
             "linestring"
         ],
+        "aliases":[
+        "natural=land_water_boundary"
+        ],
         "isA": "natural",
         "name": "natural=coastline",
         "objectType": "tag"
@@ -136,12 +139,6 @@
         ],
         "isA": "natural",
         "name": "natural=wood",
-        "objectType": "tag"
-    },
-    {
-        "geometries": ["linestring"],
-        "isA": "natural",
-        "name": "natural=land_water_boundary",
         "objectType": "tag"
     }
 ]
