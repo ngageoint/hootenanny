@@ -1697,7 +1697,7 @@ bool OsmSchema::isPoiPolygonPoi(const ConstElementPtr& e, const QStringList tagI
   LOG_VART(isPoi);
 
   if (!isPoi && ConfigOptions().getPoiPolygonPromotePointsWithAddressesToPois() &&
-      PoiPolygonAddressScoreExtractor::hasAddress(*e))
+      PoiPolygonAddressScoreExtractor::nodeHasAddress(*boost::dynamic_pointer_cast<const Node>(e)))
   {
     isPoi = true;
   }

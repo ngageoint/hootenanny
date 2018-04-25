@@ -43,6 +43,7 @@
 
 #include "extractors/PoiPolygonTypeScoreExtractor.h"
 #include "extractors/PoiPolygonNameScoreExtractor.h"
+#include "extractors/PoiPolygonAddressScoreExtractor.h"
 
 #include <float.h>
 
@@ -120,6 +121,15 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   const bool polyHasType = PoiPolygonTypeScoreExtractor::hasType(poly);
   LOG_VART(polyHasType);
 
+  //if both have addresses and they explicitly contradict each other, throw out the review; don't
+  //do it if the poly has more than one address, like in many multi-use buildings
+  if (!_addressMatch && PoiPolygonAddressScoreExtractor::elementHasAddress(poi, *_map) &&
+      PoiPolygonAddressScoreExtractor::getAddresses(poly, *_map).size() == 1)
+  {
+    LOG_TRACE("Returning miss per review reduction rule #1a...");
+    return true;
+  }
+
   if (OsmSchema::getInstance().isMultiUse(*poly) && poiHasType && _typeScore < 0.4)
   {
     LOG_TRACE("Returning miss per review reduction rule #1...");
@@ -172,7 +182,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
     return true;
   }
 
-  //TODO: test
   //these seem to be clustered together tightly a lot in cities, so up the requirement a bit
   //TODO: using custom match/review distances or custom score requirements may be a better way to
   //handle these types
