@@ -230,7 +230,7 @@ fcodeCommon = {
       ['F_CODE','AT041','cableway','yes'], // Cableway
       ['F_CODE','AT042','pylon','yes'], // Pylon
       ['F_CODE','AT045','man_made','radar_station'], // Radar Station, Radar Transmitter
-      ['F_CODE','BA010','natural','land_water_boundary'], // Coastline/Shoreline, Land Water Boundary
+      ['F_CODE','BA010','natural','coastline'], // Coastline/Shoreline, Land Water Boundary
       ['F_CODE','BA023','foreshore','yes'], // GGDM3/NAS7 Foreshore (Precise IHO)
       ['F_CODE','BA024','shoreline','yes'], // GGDM3/NAS7 SHORELINE
       ['F_CODE','BA030','place','island'], // Island
