@@ -120,23 +120,6 @@ double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi,
   //If a feature has a specific type, we only want to look at that type and ignore any generic
   //types.  Otherwise, we'll allow a type match with just a generic tag.
   QStringList excludeKvps;
-  //TODO: this is messy
-//  const bool poiListOnlyContainsGenerics =
-//    (poiTagList.size() == 1 && poiTagList.contains("building=yes")) ||
-//    (poiTagList.size() == 1 && poiTagList.contains("poi=yes")) ||
-//    (poiTagList.size() == 2 && poiTagList.contains("poi=yes") && poiTagList.contains("building=yes"));
-//  const bool polyListOnlyContainsGenerics =
-//    (polyTagList.size() == 1 && polyTagList.contains("building=yes")) ||
-//    (polyTagList.size() == 1 && polyTagList.contains("poi=yes")) ||
-//    (polyTagList.size() == 2 && polyTagList.contains("poi=yes") && polyTagList.contains("building=yes"));
-//  LOG_VART(poiListOnlyContainsGenerics);
-//  LOG_VART(polyListOnlyContainsGenerics);
-//  if (!poiListOnlyContainsGenerics && !polyListOnlyContainsGenerics)
-//  {
-//    excludeKvps.append("poi=yes");
-//    excludeKvps.append("building=yes");
-//  }
-
   const bool poiIsGenericPoi = poiTagList.size() == 1 && poiTagList.contains("poi=yes");
   const bool poiIsGenericBuilding = poiTagList.size() == 1 && poiTagList.contains("building=yes");
   const bool polyIsGenericPoi = polyTagList.size() == 1 && polyTagList.contains("poi=yes");
