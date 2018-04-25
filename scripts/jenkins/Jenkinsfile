@@ -18,6 +18,7 @@ pipeline {
         booleanParam(name: 'Core_tests', defaultValue: true)
         booleanParam(name: 'Services_tests', defaultValue: true)
         booleanParam(name: 'UI_tests', defaultValue: true)
+        booleanParam(name: 'Sonar', defaultValue: false)
         string(name: 'Box', defaultValue: 'default', description: 'Vagrant Box')
     }
     stages {
@@ -120,6 +121,23 @@ pipeline {
             when { expression { return params.UI_tests } }
             steps {
                 sh "vagrant ssh ${params.Box} -c 'cd hoot; make -s ui-test'"
+            }
+        }
+        stage("Sonar") {
+            when {
+                anyOf {
+                    expression { return params.Sonar }
+                    // Work around to run sonar scans during nightly cron triggers but not on commits to develop.  Logic can be udpated
+                    // once this https://issues.jenkins-ci.org/browse/JENKINS-41272 is implemented
+                    expression { return Calendar.instance.get(Calendar.HOUR_OF_DAY) in 21..23 }
+                }
+            }
+            steps {
+                // rysnc the build folders back to host system so scan
+                sh "vagrant rsync-back ${params.Box}"
+                withSonarQubeEnv('Breeze Sonarqube') {
+                    sh "cd hoot-services; mvn sonar:sonar"
+                }
             }
         }
     }

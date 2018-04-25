@@ -38,8 +38,8 @@
 #include <hoot/core/visitors/TranslationVisitor.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/algorithms/Translator.h>
-#include <hoot/core/filters/ImplicitTagEligiblePoiCriterion.h>
 #include <hoot/core/schema/ImplicitTagUtils.h>
+#include <hoot/core/util/Factory.h>
 
 // Qt
 #include <QStringBuilder>
@@ -73,15 +73,20 @@ void ImplicitTagRawRulesDeriver::setConfiguration(const Settings& conf)
   setKeepTempFiles(options.getImplicitTaggingKeepTempFiles());
   setTempFileDir(options.getApidbBulkInserterTempFileDir());
   setTranslateAllNamesToEnglish(options.getImplicitTaggingTranslateAllNamesToEnglish());
+  setElementFilter(options.getImplicitTaggingElementFilter());
 }
 
-void ImplicitTagRawRulesDeriver::setElementFilter(const QString type)
+void ImplicitTagRawRulesDeriver::setElementFilter(QString filterName)
 {
-  if (type.trimmed().toUpper() != "POI")
+  ElementCriterion* filter = Factory::getInstance().constructObject<ElementCriterion>(filterName);
+  if (dynamic_cast<ImplicitTagEligibleCriterion*>(filter) != 0)
   {
-    throw HootException("Only POI implicit tag raw rules generation is supported.");
+    _elementFilter.reset(dynamic_cast<ImplicitTagEligibleCriterion*>(filter));
   }
-  _elementFilter.reset(new ImplicitTagEligiblePoiCriterion());
+  else
+  {
+    throw IllegalArgumentException("Invalid filter type: " + filterName);
+  }
 }
 
 void ImplicitTagRawRulesDeriver::_init()
@@ -91,7 +96,7 @@ void ImplicitTagRawRulesDeriver::_init()
   _countFileLineCtr = 0;
 
   _countFile.reset(
-    new QTemporaryFile(_tempFileDir + "/poi-implicit-tag-raw-rules-generator-temp-XXXXXX"));
+    new QTemporaryFile(_tempFileDir + "/implicit-tag-raw-rules-generator-temp-XXXXXX"));
   _countFile->setAutoRemove(!_keepTempFiles);
   if (!_countFile->open())
   {
@@ -111,7 +116,7 @@ void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
   _validateInputs(inputs, translationScripts, output);
 
   LOG_INFO(
-    "Generating POI implicit tag rules raw file for inputs: " << inputs <<
+    "Generating implicit tag rules raw file for inputs: " << inputs <<
     ", translation scripts: " << translationScripts << ".  Writing to output: " << output << "...");
   LOG_VARD(_sortParallelCount);
   LOG_VARD(_skipFiltering);;
@@ -119,8 +124,8 @@ void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
 
   _init();
 
-  long poiCount = 0;
-  long nodeCount = 0;
+  long eligibleFeatureCount = 0;
+  long totalFeatureCount = 0;
   for (int i = 0; i < inputs.size(); i++)
   {
     boost::shared_ptr<ElementInputStream> inputStream =
@@ -130,7 +135,7 @@ void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
       ElementPtr element = inputStream->readNextElement();
       LOG_VART(element);
 
-      nodeCount++;
+      totalFeatureCount++;
 
       assert(_elementFilter.get());
       if (_skipFiltering || _elementFilter->isSatisfied(element))
@@ -138,11 +143,15 @@ void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
         QStringList names = element->getTags().getNames();
         assert(!names.isEmpty());
 
-        //old_name generally indicates that an element formerly went by the name, so not really
-        //useful here.
+        //old_name/former_name generally indicates that an element formerly went by the name, so
+        //not really useful here.
         if (names.removeAll("old_name") > 0)
         {
-          LOG_VARD("Removed old name tag.");
+          LOG_VART("Removed old name tag.");
+        }
+        if (names.removeAll("former_name") > 0)
+        {
+          LOG_VART("Removed former name tag.");
         }
         assert(!names.isEmpty());
 
@@ -158,19 +167,20 @@ void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
         assert(!kvps.isEmpty());
         if (kvps.isEmpty())
         {
-          throw HootException("POI kvps empty.");
+          throw HootException("Kvps empty.");
         }
 
         //parse whole names and token groups
         _parseNames(names, kvps);
 
-        poiCount++;
+        eligibleFeatureCount++;
 
-        if (poiCount % _statusUpdateInterval == 0)
+        if (eligibleFeatureCount % _statusUpdateInterval == 0)
         {
           PROGRESS_INFO(
-            "Parsed " << StringUtils::formatLargeNumber(poiCount) << " eligible POIs / " <<
-            StringUtils::formatLargeNumber(nodeCount) << " nodes.");
+            "Parsed " << StringUtils::formatLargeNumber(eligibleFeatureCount) <<
+            " eligible features / " << StringUtils::formatLargeNumber(totalFeatureCount) <<
+            " total features.");
         }
       }
     }
@@ -179,8 +189,9 @@ void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
   _countFile->close();
 
   LOG_INFO(
-    "Parsed " << StringUtils::formatLargeNumber(poiCount) << " POIs from " <<
-    StringUtils::formatLargeNumber(nodeCount) << " nodes.");
+    "Parsed " << StringUtils::formatLargeNumber(eligibleFeatureCount) <<
+    " eligible features from " << StringUtils::formatLargeNumber(totalFeatureCount) <<
+    " total features.");
   LOG_INFO(
     "Wrote " << StringUtils::formatLargeNumber(_countFileLineCtr) << " lines to count file.");
 
@@ -195,6 +206,7 @@ void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
   LOG_INFO(
     "Extracted "  << StringUtils::formatLargeNumber(_wordKeysToCountsValues.size()) <<
     " word/tag associations.");
+  LOG_INFO("Clearing word/tag associations...");
   _wordKeysToCountsValues.clear();
   if (tieCountsNeededResolved)
   {
@@ -361,7 +373,7 @@ void ImplicitTagRawRulesDeriver::_sortByTagOccurrence()
   LOG_VART(_sortParallelCount);
 
   _sortedCountFile.reset(
-    new QTemporaryFile(_tempFileDir + "/poi-implicit-tag-raw-rules-generator-temp-XXXXXX"));
+    new QTemporaryFile(_tempFileDir + "/implicit-tag-raw-rules-generator-temp-XXXXXX"));
   _sortedCountFile->setAutoRemove(!_keepTempFiles);
   if (!_sortedCountFile->open())
   {
@@ -402,7 +414,7 @@ void ImplicitTagRawRulesDeriver::_removeDuplicatedKeyTypes()
 
   _dedupedCountFile.reset(
     new QTemporaryFile(
-      _tempFileDir + "/poi-implicit-tag-raw-rules-generator-temp-XXXXXX"));
+      _tempFileDir + "/implicit-tag-raw-rules-generator-temp-XXXXXX"));
   _dedupedCountFile->setAutoRemove(!_keepTempFiles);
   if (!_dedupedCountFile->open())
   {
@@ -502,7 +514,7 @@ void ImplicitTagRawRulesDeriver::_resolveCountTies()
 
   _tieResolvedCountFile.reset(
     new QTemporaryFile(
-      _tempFileDir + "/poi-implicit-tag-raw-rules-generator-temp-XXXXXX"));
+      _tempFileDir + "/implicit-tag-raw-rules-generator-temp-XXXXXX"));
   _tieResolvedCountFile->setAutoRemove(!_keepTempFiles);
   if (!_tieResolvedCountFile->open())
   {

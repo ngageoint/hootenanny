@@ -22,41 +22,34 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef IMPLICITPOITAGGER_H
-#define IMPLICITPOITAGGER_H
+#ifndef PRESERVETYPESTAGMERGER_H
+#define PRESERVETYPESTAGMERGER_H
 
-// hoot
-#include <hoot/core/visitors/ImplicitTaggerBase.h>
+#include "TagMerger.h"
 
 namespace hoot
 {
 
 /**
- * Adds tags implicitly derived from POI names to POIs
+ * This is used to preserve types when merging multiple elements into one.
+ *
+ * e.g. merging multiple POIs into a multi-use building
  */
-class ImplicitPoiTagger : public ImplicitTaggerBase
+class PreserveTypesTagMerger : public TagMerger
 {
 public:
 
-  static std::string className() { return "hoot::ImplicitPoiTagger"; }
+  static std::string className() { return "hoot::PreserveTypesTagMerger"; }
 
-  ImplicitPoiTagger();
-  ImplicitPoiTagger(const QString databasePath);
+  PreserveTypesTagMerger();
 
-  virtual QString getName() const { return "Implicit POI Tagger"; }
+  virtual ~PreserveTypesTagMerger() {}
 
-  virtual QString getDescription() const
-  { return "Adds tags to POIs implicitly derived from their names"; }
-
-protected:
-
-  virtual bool _visitElement(const ElementPtr& e);
-
+  virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const;
 };
 
 }
 
-#endif // IMPLICITPOITAGGER_H
+#endif // PRESERVETYPESTAGMERGER_H

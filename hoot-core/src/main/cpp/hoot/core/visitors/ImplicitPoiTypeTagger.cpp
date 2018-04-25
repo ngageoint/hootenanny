@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "ImplicitPoiTagger.h"
+#include "ImplicitPoiTypeTagger.h"
 
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>
@@ -35,30 +35,30 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, ImplicitPoiTagger)
+HOOT_FACTORY_REGISTER(ElementVisitor, ImplicitPoiTypeTagger)
 
-ImplicitPoiTagger::ImplicitPoiTagger() :
-ImplicitTaggerBase()
+ImplicitPoiTypeTagger::ImplicitPoiTypeTagger() :
+ImplicitTypeTaggerBase()
 {
   _ruleReader.reset(new ImplicitTagRulesSqliteReader());
-  _ruleReader->open(ConfigOptions().getImplicitTaggerPoiRulesDatabase());
+  _ruleReader->open(ConfigOptions().getImplicitTaggerRulesDatabase());
 }
 
-ImplicitPoiTagger::ImplicitPoiTagger(const QString databasePath) :
-ImplicitTaggerBase(databasePath)
+ImplicitPoiTypeTagger::ImplicitPoiTypeTagger(const QString databasePath) :
+ImplicitTypeTaggerBase(databasePath)
 {
   _ruleReader.reset(new ImplicitTagRulesSqliteReader());
   _ruleReader->open(databasePath);
 }
 
-bool ImplicitPoiTagger::_visitElement(const ElementPtr& e)
+bool ImplicitPoiTypeTagger::_visitElement(const ElementPtr& e)
 {
   const bool elementIsANode = e->getElementType() == ElementType::Node;
-  _elementIsASpecificPoi =
+  _elementIsASpecificFeature =
     OsmSchema::getInstance().hasCategory(e->getTags(), "poi") && !e->getTags().contains("poi") &&
      e->getTags().get("building") != QLatin1String("yes") &&
      e->getTags().get("office") != QLatin1String("yes");
-  const bool elementIsAGenericPoi = !_elementIsASpecificPoi;
+  const bool elementIsAGenericPoi = !_elementIsASpecificFeature;
 
   //always allow generic elements
   if (elementIsAGenericPoi)
@@ -66,7 +66,7 @@ bool ImplicitPoiTagger::_visitElement(const ElementPtr& e)
     return true;
   }
   //allowing specific elements is configurable
-  else if (_elementIsASpecificPoi && _allowTaggingSpecificPois)
+  else if (_elementIsASpecificFeature && _allowTaggingSpecificFeatures)
   {
     return true;
   }

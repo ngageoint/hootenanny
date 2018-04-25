@@ -40,7 +40,7 @@ namespace hoot
 {
 
 /**
- *
+ * Base class for filtering features which are eligible for implicit tag harvesting
  */
 class ImplicitTagEligibleCriterion : public ElementCriterion
 {

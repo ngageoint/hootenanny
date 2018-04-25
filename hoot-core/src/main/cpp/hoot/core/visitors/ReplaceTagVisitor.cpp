@@ -28,6 +28,7 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
 {
@@ -40,6 +41,7 @@ ReplaceTagVisitor::ReplaceTagVisitor():
   _replaceKey(""),
   _replaceValue("")
 {
+  setConfiguration(conf());
 }
 
 ReplaceTagVisitor::ReplaceTagVisitor(QString matchKey, QString matchValue,
@@ -51,13 +53,48 @@ ReplaceTagVisitor::ReplaceTagVisitor(QString matchKey, QString matchValue,
 {
 }
 
+void ReplaceTagVisitor::setConfiguration(const Settings& conf)
+{
+  ConfigOptions configOptions(conf);
+
+  const QString matchTag = configOptions.getReplaceTagVisitorMatchTag();
+  const QString replaceTag = configOptions.getReplaceTagVisitorReplaceTag();
+  if (!matchTag.trimmed().isEmpty() && !replaceTag.trimmed().isEmpty())
+  {
+    if (!matchTag.contains("="))
+    {
+      throw IllegalArgumentException("Invalid match tag: " + matchTag);
+    }
+    const QStringList matchTagParts = matchTag.split("=");
+    if (matchTagParts.size() != 2)
+    {
+      throw IllegalArgumentException("Invalid match tag: " + matchTag);
+    }
+    _matchKey = matchTagParts[0];
+    _matchValue = matchTagParts[1];
+
+
+    if (!replaceTag.contains("="))
+    {
+      throw IllegalArgumentException("Invalid replace tag: " + replaceTag);
+    }
+    const QStringList replaceTagParts = replaceTag.split("=");
+    if (replaceTagParts.size() != 2)
+    {
+      throw IllegalArgumentException("Invalid replace tag: " + replaceTag);
+    }
+    _replaceKey = replaceTagParts[0];
+    _replaceValue = replaceTagParts[1];
+  }
+}
+
 void ReplaceTagVisitor::setMatchTag(QString k, QString v)
 {
   _matchKey = k;
   _matchValue = v;
 }
 
-void ReplaceTagVisitor::setReplaceTage(QString k, QString v)
+void ReplaceTagVisitor::setReplaceTag(QString k, QString v)
 {
   _replaceKey = k;
   _replaceValue = v;

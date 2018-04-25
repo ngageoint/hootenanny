@@ -894,10 +894,10 @@ first before attempting to match other parts of the name.  Setting to true can b
 better tagging performance for names that would otherwise be involved in multiple implicit tag
 rules.
 
-=== implicit.tagger.poi.rules.database
+=== implicit.tagger.rules.database
 
 * Data Type: string
-* Default Value: `${HOOT_HOME}/conf/core/implicit-tag-rules/poi-allCountries-planet-11-2-17-minwordocc=1000-schemaonly=true.sqlite`
+* Default Value: `${HOOT_HOME}/conf/core/implicit-tag-rules/osm-geonames-4-5-18.sqlite`
 
 Database used by the POI implicit tagger to derive POI type tags implicitly based on a POI's name.
 
@@ -916,26 +916,26 @@ to be created that is associated with it.
 
 The minimum allowed word length when associating word tokens with tags.
 
-=== implicit.tagging.database.deriver.poi.custom.rule.file
+=== implicit.tagging.database.deriver.custom.rule.file
 
 * Data Type: string
-* Default Value: `${HOOT_HOME}/conf/core/implicit-tag-rules/poiImplicitTagRulesCustomRuleList`
+* Default Value: `${HOOT_HOME}/conf/core/implicit-tag-rules/implicitTagRulesCustomRuleList`
 
 Flat file containing tab separated word key/value pairs, one per line, to use as custom rules
 when deriving an implicit tags database from POI names.
 
-=== implicit.tagging.database.deriver.poi.tag.ignore.file
+=== implicit.tagging.database.deriver.tag.ignore.file
 
 * Data Type: string
-* Default Value: `${HOOT_HOME}/conf/core/implicit-tag-rules/poiImplicitTagRulesTagIgnoreList`
+* Default Value: `${HOOT_HOME}/conf/core/implicit-tag-rules/implicitTagRulesTagIgnoreList`
 
 Flat file containing key/value pairs, one per line, to ignore when deriving an implicit tags
 database from POI names.  Use 'key=*' to ignore all tags for a given key.
 
-=== implicit.tagging.database.deriver.poi.word.ignore.file
+=== implicit.tagging.database.deriver.word.ignore.file
 
 * Data Type: string
-* Default Value: `${HOOT_HOME}/conf/core/implicit-tag-rules/poiImplicitTagRulesWordIgnoreList`
+* Default Value: `${HOOT_HOME}/conf/core/implicit-tag-rules/implicitTagRulesWordIgnoreList`
 
 Flat file containing words, one per line, to ignore when deriving an implicit tags database from
 POI names.
@@ -947,6 +947,14 @@ POI names.
 
 If true, the implicit tag raw rules generator will only consider words that correspond to a OSM tag
 value in the Hootenanny schema.
+
+=== implicit.tagging.element.filter
+
+* Data Type: string
+* Default Value: `hoot::ImplicitTagEligiblePoiPolyCriterion`
+
+Filter class inheriting from hoot::ImplicitTagEligibleCriterion; The default,
+ImplicitTagEligiblePoiPolyCriterion, derives tag information from POIs, buildings, and areas.
 
 === implicit.tagging.keep.temp.files
 
@@ -2060,12 +2068,21 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== poi.polygon.auto.merge.many.poi.to.one.poly.matches
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, instances where multiple POIs were matched to a single polygon will result in all of the
+POIs being merged into the polygon.  If false, then each POI will generate a review against the
+polygon instead.
+
 === poi.polygon.disable.same.source.conflation
 
 * Data Type: bool
 * Default Value: `false`
 
-If true, POI to polygon conflation will not attempt to conflate two features with the same source
+If true, POI to Polygon conflation will not attempt to conflate two features with the same source
 tag value.  e.g. both have 'source=osm' tag  The source tag key is specified by
 poi.polygon.source.tag.key.  How strictly the source tag key must be matched is controlled by
 poi.polygon.disable.same.source.conflation.match.tag.key.prefix.only.  This setting is useful when
@@ -2089,7 +2106,7 @@ tag value when delimited by a colon.  e.g. 'source=mgcp:buildp_clip;osm' will ma
 * Data Type: bool
 * Default Value: `false`
 
-If true, POI to polygon conflation will perform additional checks against surrounding features
+If true, POI to Polygon conflation will perform additional checks against surrounding features
 for match evidence.  This setting allows for detailed conflation customization but can be runtime
 expensive when enabled.
 
@@ -2098,9 +2115,17 @@ expensive when enabled.
 * Data Type: bool
 * Default Value: `true`
 
-If true, POI to polygon conflation will attempt to reduce unnecessary reviews without increasing
+If true, POI to Polygon conflation will attempt to reduce unnecessary reviews without increasing
 incorrect matches.  This setting is somewhat experimental and can be runtime expensive when
 enabled.
+
+=== poi.polygon.keep.closest.matches.only
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, POI to Polygon conflation will only keep matches that are the closest to polygons and throw
+out any others even if they score high enough for a match.  TODO: this option may go away
 
 === poi.polygon.match.distance.threshold
 
@@ -2152,13 +2177,29 @@ The minimum similarity the name scores of two features can have and be considere
 match, with 0.0 being the least similar and 1.0 being the most similar (-1.0 if there are no names
 present (null).
 
+=== poi.polygon.poi.ignore.tags.file
+
+* Data Type: string
+* Default Value: `${HOOT_HOME}/conf/core/poi-polygon/poiPolygonPoiTagIgnoreList`
+
+Path to a file containing a list of POI feature ignore tags.  Any POIs containing tags in the file
+will be skipped by POI to Polygon conflation.
+
+=== poi.polygon.poly.ignore.tags.file
+
+* Data Type: string
+* Default Value: `${HOOT_HOME}/conf/core/poi-polygon/poiPolygonPolyTagIgnoreList`
+
+Path to a file containing a list of polygon feature ignore tags.  Any polygons containing tags in
+the file will be skipped by POI to Polygon conflation.
+
 === poi.polygon.print.match.distance.truth
 
 * Data Type: bool
 * Default Value: `false`
 
 If true, debug match distance output will be obtained from manually matched source data and printed
-if running 'hoot score-matches' with POI to polygon conflation.
+if running 'hoot score-matches' with POI to Polygon conflation.
 
 === poi.polygon.promote.points.with.addresses.to.pois
 
@@ -2173,9 +2214,9 @@ they do not have specific type tags.
 * Data Type: double
 * Default Value: `125.0`
 
-The maximum distance, in meters, between a POI and a polygon where they can still be considered
-for review based on distance criteria only (value is added to the circular error of the compared
-features).
+The maximum distance, in meters, combined with the circular error of the features being compared,
+the total of which allows the features to still be considered a match based on distance criteria
+only.
 
 === poi.polygon.review.evidence.threshold
 
@@ -2371,6 +2412,20 @@ Should the element remover remove the elements recursively?
 ** ``
 
 A list of tag keys the RemoveTagVisitor will remove on elements.
+
+=== replace.tag.visitor.match.tag
+
+* Data Type: string
+* Default Value: ``
+
+The tag the ReplaceTagVisitor replaces, of the form key=value.
+
+=== replace.tag.visitor.replace.tag
+
+* Data Type: string
+* Default Value: ``
+
+The tag the ReplaceTagVisitor uses as a replacement tag; of the form key=value.
 
 === rubber.sheet.debug
 

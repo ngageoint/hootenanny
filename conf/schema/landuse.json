@@ -42,6 +42,78 @@
         "objectType": "tag"
     },
     {
+        "categories": [
+            "multiuse"
+        ],
+        "isA": "landuse",
+        "name": "landuse=basin",
+        "objectType": "tag"
+    },
+    {
+        "categories": [
+            "multiuse"
+        ],
+        "isA": "landuse",
+        "name": "landuse=commercial",
+        "objectType": "tag"
+    },
+    {
+        "categories": [
+            "multiuse"
+        ],
+        "isA": "landuse",
+        "name": "landuse=forest",
+        "objectType": "tag"
+    },
+    {
+        "categories": [
+            "multiuse"
+        ],
+        "isA": "landuse",
+        "name": "landuse=forest_reserve",
+        "objectType": "tag"
+    },
+    {
+        "categories": [
+            "multiuse"
+        ],
+        "isA": "landuse",
+        "name": "landuse=industrial",
+        "objectType": "tag"
+    },
+    {
+        "categories": [
+            "multiuse"
+        ],
+        "isA": "landuse",
+        "name": "landuse=observatory",
+        "objectType": "tag"
+    },
+    {
+        "categories": [
+            "multiuse"
+        ],
+        "isA": "landuse",
+        "name": "landuse=quarry",
+        "objectType": "tag"
+    },
+    {
+        "categories": [
+            "multiuse"
+        ],
+        "isA": "landuse",
+        "name": "landuse=railway",
+        "objectType": "tag"
+    },
+    {
+        "categories": [
+            "multiuse"
+        ],
+        "isA": "landuse",
+        "name": "landuse=retail",
+        "objectType": "tag"
+    },
+    {
         "description": "FCODE: FA165 Training Site",
         "isA": "landuse",
         "name": "landuse=training_area",
@@ -58,6 +130,9 @@
          ]
     },
     {
+        "categories": [
+            "multiuse"
+        ],
         "isA": "landuse",
         "name": "landuse=recreation_ground",
         "objectType": "tag",
@@ -76,6 +151,9 @@
         }
     },
     {
+        "categories": [
+            "multiuse"
+        ],
         "isA": "landuse",
         "name": "landuse=residential",
         "objectType": "tag",
@@ -85,6 +163,9 @@
         }
     },
     {
+        "categories": [
+            "multiuse"
+        ],
         "isA": "landuse",
         "name": "landuse=reservoir",
         "objectType": "tag",

@@ -1,0 +1,33 @@
+[
+    {
+        "dataType": "enumeration",
+        "geometries": [
+            "node",
+            "area"
+        ],
+        "influence": 1,
+        "name": "water",
+        "objectType": "tag"
+    },
+    {
+        "isA": "water",
+        "name": "water=*",
+        "objectType": "tag"
+    },
+    {
+        "categories": [
+            "poi"
+        ],
+        "isA": "water",
+        "name": "water=pond",
+        "objectType": "tag"
+    },
+    {
+        "categories": [
+            "poi"
+        ],
+        "isA": "water",
+        "name": "water=lake",
+        "objectType": "tag"
+    }
+]

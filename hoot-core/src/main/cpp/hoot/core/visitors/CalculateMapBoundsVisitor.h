@@ -60,8 +60,6 @@ public:
   static geos::geom::Envelope getGeosBounds(const OsmMapPtr& map);
   static geos::geom::Envelope getGeosBounds(const ConstOsmMapPtr& map);
 
-  virtual QString getName() const { return "Calculate Map Bounds"; }
-
   virtual QString getDescription() const { return "Calculates the extent of a map"; }
 
 private:

@@ -64,13 +64,13 @@ coverage:
 	# Run the integration tests for the code coverage, so we get a report covering all of the code.
 	../scripts/maven/mvn-build $(MVN_QUIET) coverage
 	rm -rf ../coverage/services
-	cp -R target/site/cobertura ../coverage
-	mv ../coverage/cobertura ../coverage/services
+	cp -R target/site/jacoco ../coverage
+	mv ../coverage/jacoco ../coverage/services
 
 clean-coverage:
-	#../scripts/maven/mvn-build $(MVN_QUIET) cobertura:clean
-	rm -rf target/site/cobertura
-	rm -rf target/cobertura
+	#../scripts/maven/mvn-build $(MVN_QUIET) jacoco:restore-instrumented-classes
+	rm -rf target/site/jacoco
+	rm -rf target/jacoco
 	rm -rf ../coverage/services
 
 test: config

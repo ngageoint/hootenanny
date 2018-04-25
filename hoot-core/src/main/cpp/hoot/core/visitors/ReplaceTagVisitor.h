@@ -29,6 +29,7 @@
 
 // hoot
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -43,7 +44,7 @@ namespace hoot
  * Feel free to extend this class. Maybe add a flag for case-insensitive
  * matching. Or support for wildcards.
  */
-class ReplaceTagVisitor : public ElementOsmMapVisitor
+class ReplaceTagVisitor : public ElementOsmMapVisitor, public Configurable
 {
 public:
 
@@ -77,11 +78,11 @@ public:
   void setMatchTag(QString k, QString v);
 
   /**
-   * @brief setReplaceTage -Set the tag to use as a replacement
+   * @brief setReplaceTag -Set the tag to use as a replacement
    * @param k - tag key
    * @param v - tag value
    */
-  void setReplaceTage(QString k, QString v);
+  void setReplaceTag(QString k, QString v);
 
   /**
    * @brief visit - visit an element & perform check and replace
@@ -89,10 +90,10 @@ public:
    */
   virtual void visit(const boost::shared_ptr<Element>& e);
 
-  virtual QString getName() const { return "Replace Tag"; }
-
   virtual QString getDescription() const
   { return "Replaces matching tags with the specified replacement tag"; }
+
+  virtual void setConfiguration(const Settings& conf);
 
 private:
 

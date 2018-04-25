@@ -47,32 +47,17 @@ public:
 
   virtual int runSimple(QStringList args)
   {
-    if (args.size() != 2 && args.size() != 3)
+    if (args.size() != 2)
     {
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes two or three parameters.").arg(getName()));
-    }
-    if (args.size() == 2 && args[1].toLower() != "--stats")
-    {
-      std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(
-        QString("When using two input parameters with %1, the last input parameter must be '--stats'.")
-        .arg(getName()));
-    }
-    if (args.size() == 3 && args[2].toLower() == "--stats")
-    {
-      std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(
-        QString("When using three input parameters with %1, the '--stats' input parameter is invalid.")
-        .arg(getName()));
+      throw HootException(QString("%1 takes two parameters.").arg(getName()));
     }
 
-    if (args.size() == 3)
+    if (args[1].toLower() != "--stats")
     {
       ImplicitTagRulesDatabaseDeriver rulesDatabaseDeriver;
       rulesDatabaseDeriver.setConfiguration(conf());
-      rulesDatabaseDeriver.setElementType(args[0]);
-      rulesDatabaseDeriver.deriveRulesDatabase(args[1].trimmed(), args[2].trimmed());
+      rulesDatabaseDeriver.deriveRulesDatabase(args[0].trimmed(), args[1].trimmed());
     }
     else
     {

@@ -155,6 +155,14 @@
                 "name":"Split Sharp Road Corners",
                 "hoot_val":"hoot::CornerSplitter",
                 "defaultvalue":"true"
+            },
+            {
+                "id":"implicit_type_tagger",
+                "elem_type":"checkbox",
+                "description":"Add missing type tags to input data implied from the feature name",
+                "name":"Add Missing Type Tags",
+                "hoot_val":"hoot::ImplicitPoiPolygonTypeTagger",
+                "defaultvalue":"false"
             }
         ]
     },
@@ -883,7 +891,7 @@
     	    {
         	"id":"poipolygon_review_distance_threshold",
         	"elem_type":"int",
-        	"description":"The maximum distance, in meters, between a POI and a polygon where they can still be considered for review based on distance criteria only (value is added to the circular error of the compared features).",
+        	"description":"The maximum distance, in meters, combined with the circular error of the features being compared, the total of which allows the features to still be considered a match based on distance criteria only.",
         	"name":"Review Distance Threshold",
         	"defaultvalue":"125",
         	"minvalue":"0",
@@ -933,6 +941,16 @@
         	"hoot_key":"poi.polygon.promote.points.with.addresses.to.pois"
     	    },
             {
+        	"id":"poipolygon_match_evidence_threshold",
+        	"elem_type":"int",
+        	"description":"The minimum evidence score at which a POI will be matched to a polygon.  Valid values are 1 to 4.  If an evidence score for a feature pair falls below this value, the relationship between the features will be classified as a review or miss, depending on the value of 'poi.polygon.review.evidence.threshold'.  Generally, this setting should not be changed except when working with specific POI/Polygon conflation use cases that require it.",
+        	"name":"Match Evidence Threshold",
+        	"defaultvalue":"3",
+        	"minvalue":"1",
+        	"maxvalue":"4",
+        	"hoot_key":"poi.polygon.match.evidence.threshold"
+    	    },
+            {
         	"id":"poipolygon_review_evidence_threshold",
         	"elem_type":"int",
         	"description":"The minimum evidence score at which a POI will be reviewed against a polygon, if the evidence score does not meet the threshold defined by 'poi.polygon.match.evidence.threshold'. Valid values are 0 to 3. If an evidence score for a feature pair falls below this value, the relationship between the features will be classified as a miss. If the value is set to 0, all feature pairs which did not match will be reviewed. If the value is set greater than or equal to 'poi.polygon.match.evidence.threshold', an error will occur. Generally, this setting should not be changed except when working with specific POI/Polygon conflation use cases that require it.",
@@ -949,6 +967,21 @@
         	"description":"If true, POI to polygon conflation always mark matches between POIs and polygons where multi-use buildings are present.  See the user documentation for how a multi-use building is defined.",
 		"name":"Review Multi-Use Buildings",
         	"hoot_key":"poi.polygon.review.multiuse.buildings"
+    	    },
+            {
+        	"id":"poipolygon_auto_merge_many_poi_to_one_poly_matches",
+        	"elem_type":"bool",
+        	"defaultvalue":"false",
+        	"description":"If true, instances where multiple POIs were matched to a single polygon will result in all of the POIs being merged into the polygon.  If false, then each POI will generate a review against the polygon instead.",
+		"name":"Merge Many POI to Single Polygon Matches",
+        	"hoot_key":"poi.polygon.auto.merge.many.poi.to.one.poly.matches"
+    	    },
+            {
+        	"id":"poipolygon_keep_closest_matches_only",
+        	"elem_type":"bool",
+        	"defaultvalue":"false",
+        	"description":"If true, POI to Polygon conflation will only keep matches that are the closest to polygons and throw out any others even if they score high enough for a match.",
+        	"hoot_key":"poi.polygon.keep.closest.matches.only"
     	    }
         ]
     },

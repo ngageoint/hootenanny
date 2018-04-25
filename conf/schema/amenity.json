@@ -83,6 +83,9 @@
         "objectType": "tag"
     },
     {
+        "categories": [
+            "multiuse"
+        ],
         "isA": "amenity",
         "name": "amenity=arts_centre",
         "objectType": "tag",
@@ -270,6 +273,9 @@
         }
     },
     {
+        "categories": [
+            "multiuse"
+        ],
         "isA": "amenity",
         "name": "amenity=bus_station",
         "objectType": "tag",
@@ -324,7 +330,11 @@
     {
         "isA": "amenity",
         "name": "amenity=car_sharing",
-        "objectType": "tag"
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity=parking",
+            "weight": 0.2
+        }
     },
     {
         "isA": "amenity",
@@ -344,6 +354,14 @@
             "name": "amenity=gambling",
             "weight": 0.9
         }
+    },
+    {
+        "categories": [
+            "multiuse"
+        ],
+        "isA": "amenity",
+        "name": "amenity=fairground",
+        "objectType": "tag"
     },
     {
         "aliases": [
@@ -516,6 +534,10 @@
     {
         "aliases": [
             "amenity=community_center"
+        ],
+        "categories": [
+            "use",
+            "poi"
         ],
         "isA": "amenity",
         "name": "amenity=community_centre",
@@ -880,6 +902,11 @@
         }
     },
     {
+        "categories": [
+            "use",
+            "poi",
+            "multiuse"
+        ],
         "isA": "amenity",
         "name": "amenity=gallery",
         "objectType": "tag",
@@ -941,6 +968,9 @@
         "objectType": "tag"
     },
     {
+        "categories": [
+            "multiuse"
+        ],
         "isA": "amenity",
         "name": "amenity=grave_yard",
         "objectType": "tag",
@@ -1049,6 +1079,9 @@
     {
         "aliases": [
             "amenity=medical_centre"
+        ],
+        "categories": [
+            "multiuse"
         ],
         "isA": "amenity",
         "name": "amenity=hospital",
@@ -1489,7 +1522,11 @@
     {
         "isA": "amenity",
         "name": "amenity=planetarium",
-        "objectType": "tag"
+        "objectType": "tag",
+        "similarTo": {
+            "name": "tourism=museum",
+            "weight": 0.8
+        }
     },
     {
         "isA": "amenity",
@@ -1525,7 +1562,11 @@
     {
         "isA": "amenity",
         "name": "amenity=post_office",
-        "objectType": "tag"
+        "objectType": "tag",
+        "similarTo": {
+            "name": "building=office",
+            "weight": 0.4
+        }
     },
     {
         "isA": "amenity",
@@ -2058,6 +2099,9 @@
         "objectType": "tag"
     },
     {
+        "categories": [
+            "multiuse"
+        ],
         "isA": "amenity",
         "name": "amenity=university",
         "objectType": "tag",

@@ -34,7 +34,6 @@ etds40 = {
     toEnglish : function(tags, elementType, geometryType)
     {
         var tdsData = [];
-
         tdsData = tds.toTds(tags, elementType, geometryType)
 
         // Debug: Commenting this out to cut down the number of Hoot core calls

@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "ImplicitPoiPolygonTagger.h"
+#include "ImplicitPoiPolygonTypeTagger.h"
 
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>
@@ -35,23 +35,23 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, ImplicitPoiPolygonTagger)
+HOOT_FACTORY_REGISTER(ElementVisitor, ImplicitPoiPolygonTypeTagger)
 
-ImplicitPoiPolygonTagger::ImplicitPoiPolygonTagger() :
-ImplicitTaggerBase()
+ImplicitPoiPolygonTypeTagger::ImplicitPoiPolygonTypeTagger() :
+ImplicitTypeTaggerBase()
 {
   _ruleReader.reset(new ImplicitTagRulesSqliteReader());
-  _ruleReader->open(ConfigOptions().getImplicitTaggerPoiRulesDatabase());
+  _ruleReader->open(ConfigOptions().getImplicitTaggerRulesDatabase());
 }
 
-ImplicitPoiPolygonTagger::ImplicitPoiPolygonTagger(const QString databasePath) :
-ImplicitTaggerBase(databasePath)
+ImplicitPoiPolygonTypeTagger::ImplicitPoiPolygonTypeTagger(const QString databasePath) :
+ImplicitTypeTaggerBase(databasePath)
 {
   _ruleReader.reset(new ImplicitTagRulesSqliteReader());
   _ruleReader->open(databasePath);
 }
 
-bool ImplicitPoiPolygonTagger::_visitElement(const ElementPtr& e)
+bool ImplicitPoiPolygonTypeTagger::_visitElement(const ElementPtr& e)
 {
   _inABuildingOrPoiCategory =
     OsmSchema::getInstance().getCategories(e->getTags()).intersects(
@@ -64,15 +64,16 @@ bool ImplicitPoiPolygonTagger::_visitElement(const ElementPtr& e)
   return false;
 }
 
-bool ImplicitPoiPolygonTagger::_elementIsATaggablePoi(const ElementPtr& e)
+bool ImplicitPoiPolygonTypeTagger::_elementIsATaggablePoi(const ElementPtr& e)
 {
   const bool elementIsANode = e->getElementType() == ElementType::Node;
   LOG_VART(elementIsANode);
-  _elementIsASpecificPoi =
-    OsmSchema::getInstance().hasCategory(e->getTags(), "poi") &&
-    !e->getTags().contains("poi") && e->getTags().get("building") != QLatin1String("yes");
-  LOG_VART(_elementIsASpecificPoi);
-  const bool elementIsAGenericPoi = !_elementIsASpecificPoi;
+  _elementIsASpecificFeature =
+    OsmSchema::getInstance().hasCategory(e->getTags(), "poi") && !e->getTags().contains("poi") &&
+     e->getTags().get("building") != QLatin1String("yes") &&
+     e->getTags().get("office") != QLatin1String("yes");
+  LOG_VART(_elementIsASpecificFeature);
+  const bool elementIsAGenericPoi = !_elementIsASpecificFeature;
 
   //always allow generic elements
   if (elementIsAGenericPoi)
@@ -80,7 +81,7 @@ bool ImplicitPoiPolygonTagger::_elementIsATaggablePoi(const ElementPtr& e)
     return true;
   }
   //allowing specific elements is configurable
-  else if (_elementIsASpecificPoi && _allowTaggingSpecificPois)
+  else if (_elementIsASpecificFeature && _allowTaggingSpecificFeatures)
   {
     return true;
   }
@@ -92,16 +93,31 @@ bool ImplicitPoiPolygonTagger::_elementIsATaggablePoi(const ElementPtr& e)
   return false;
 }
 
-bool ImplicitPoiPolygonTagger::_elementIsATaggablePolygon(const ElementPtr& e)
+bool ImplicitPoiPolygonTypeTagger::_elementIsATaggablePolygon(const ElementPtr& e)
 {
+//  if (OsmSchema::getInstance().isLinearHighway(e->getTags(), e->getElementType()))
+//  {
+//    return false;
+//  }
+  //see comment in OsmSchema::isPoiPolygonPoly
+  if (e->getTags().contains("highway"))
+  {
+    return false;
+  }
+
   const bool elementIsAWay = e->getElementType() == ElementType::Way;
   LOG_VART(elementIsAWay);
+  const bool elementIsARelation = e->getElementType() == ElementType::Relation;
+  LOG_VART(elementIsARelation);
   const bool elementIsAPoly = _polyFilter.isSatisfied(e);
   LOG_VART(elementIsAPoly);
   const bool elementIsASpecificPoly =
-    _inABuildingOrPoiCategory && e->getTags().get("building") != QLatin1String("yes");
-  _elementIsASpecificPoi = elementIsASpecificPoly;
-  LOG_VART(_elementIsASpecificPoi);
+    _inABuildingOrPoiCategory && e->getTags().get("building") != QLatin1String("yes") &&
+     e->getTags().get("area") != QLatin1String("yes") &&
+     e->getTags().get("office") != QLatin1String("yes");
+  //bit of a hack
+  _elementIsASpecificFeature = elementIsASpecificPoly;
+  LOG_VART(_elementIsASpecificFeature);
   const bool elementIsAGenericPoly = !elementIsASpecificPoly;
 
   //always allow generic elements
@@ -110,11 +126,11 @@ bool ImplicitPoiPolygonTagger::_elementIsATaggablePolygon(const ElementPtr& e)
     return true;
   }
   //allowing specific elements is configurable
-  else if (elementIsASpecificPoly && _allowTaggingSpecificPois)
+  else if (elementIsASpecificPoly && _allowTaggingSpecificFeatures)
   {
     return true;
   }
-  else if (elementIsAWay && e->getTags().getNames().size() > 0)
+  else if ((elementIsAWay || elementIsARelation) && e->getTags().getNames().size() > 0)
   {
     return true;
   }

@@ -26,7 +26,8 @@
         ],
         "categories": [
             "use",
-            "poi"
+            "poi",
+            "multiuse"
         ],
         "isA": "leisure",
         "name": "leisure=park",
@@ -43,6 +44,14 @@
             {
                 "name": "amenity=fountain",
                 "weight": 0.2
+            },
+            {
+                "name": "leisure=garden",
+                "weight": 0.3
+            },
+            {
+                "name": "leisure=common",
+                "weight": 0.5
             }
         ]
     },
@@ -53,10 +62,28 @@
         ],
         "categories": [
             "use",
-            "poi"
+            "poi",
+            "multiuse"
         ],
         "isA": "leisure",
         "name": "leisure=playground",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "tourism=picnic_site",
+                "weight": 0.4
+            }
+        ]
+    },
+    {
+        "geometries": [
+            "area"
+        ],
+        "categories": [
+            "multiuse"
+        ],
+        "isA": "leisure",
+        "name": "leisure=common",
         "objectType": "tag"
     },
     {
@@ -85,8 +112,13 @@
             "node",
             "area"
         ],
+        "categories": [
+            "use",
+            "poi"
+        ],
         "aliases": [
-            "leisure=sports_complex"
+            "leisure=sports_complex",
+            "leisure=sport_centre"
         ],
         "isA": "leisure",
         "name": "leisure=sports_centre",
@@ -121,8 +153,16 @@
                 "weight": 0.8
             },
             {
+                "name": "leisure=pitch",
+                "weight": 0.3
+            },
+            {
                 "name": "sport=*",
                 "weight": 0.1
+            },
+            {
+                "name": "sport=tennis",
+                "weight": 0.8
             }
         ]
     },
@@ -163,6 +203,25 @@
             "node",
             "area"
         ],
+        "categories": [
+            "use",
+            "poi"
+        ],
+        "isA": "leisure",
+        "name": "leisure=ice_rink",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "sport=ice_skating",
+                "weight": 0.9
+            }
+        ]
+    },
+    {
+        "geometries": [
+            "node",
+            "area"
+        ],
         "isA": "leisure",
         "name": "leisure=amusement_arcade",
         "objectType": "tag"
@@ -181,6 +240,9 @@
             "node",
             "area"
         ],
+        "categories": [
+            "multiuse"
+        ],
         "isA": "leisure",
         "name": "leisure=water_park",
         "objectType": "tag"
@@ -192,7 +254,8 @@
         ],
         "categories": [
             "use",
-            "poi"
+            "poi",
+            "multiuse"
         ],
         "isA": "leisure",
         "name": "leisure=golf_course",
@@ -206,6 +269,42 @@
     },
     {
         "geometries": [
+            "area"
+        ],
+        "categories": [
+            "use",
+            "multiuse"
+        ],
+        "isA": "leisure",
+        "name": "leisure=nature_reserve",
+        "objectType": "tag"
+    },
+    {
+        "geometries": [
+            "node",
+            "area"
+        ],
+        "categories": [
+            "use",
+            "poi",
+            "multiuse"
+        ],
+        "isA": "leisure",
+        "name": "leisure=garden",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "building=greenhouse",
+                "weight": 0.6
+            },
+            {
+                "name": "building=arboretum",
+                "weight": 0.4
+            }
+        ]
+    },
+    {
+        "geometries": [
             "node",
             "area"
         ],
@@ -214,7 +313,11 @@
             "poi"
         ],
         "isA": "leisure",
-        "name": "leisure=garden",
-        "objectType": "tag"
+        "name": "leisure=pitch",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "leisure=stadium",
+            "weight": 0.8
+        }
     }
 ]

@@ -144,21 +144,3 @@ conjunction with Hootenanny. Specifically, the must properly protect and comply 
 
 This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published 
 by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
-
-# Developers
-In alphabetical order (past and present):
-* Justin Bronn (justin.bronn@radiantsolutions.com)
-* Trey Caldwell (trey.caldwell@radiantsolutions.com)
-* Jong Choi
-* Jason Goffeney (jason.goffeney@radiantsolutions.com)
-* Brian Hatchl (brian.hatchl@radiantsolutions.com)
-* Matt Jackson (matthew.jackson@radiantsolutions.com)
-* Ben Marchant (benjamin.marchant@radiantsolutions.com)
-* Dmitriy Mylov
-* Seth Putnam (seth.putnam@radiantsolutions.com)
-* Micah Schicker (micah.schicker@radiantsolutions.com)
-* Greg Schmidt
-* Josh Sisskind (josh.sisskind@radiantsolutions.com)
-* Ming Su (ming.su@radiantsolutions.com)
-* Jason R. Surratt
-* Brandon Witham (brandon.witham@radiantsolutions.com)

@@ -2667,7 +2667,7 @@
         <tag k="alt_name" v="CONSTITUTION AVE NW;Constitution Ave NW"/>
         <tag k="name" v="US Hwy 50"/>
         <tag k="highway" v="secondary"/>
-        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="5"/>
         <tag k="hoot:id" v="-667"/>
     </way>
@@ -3125,7 +3125,7 @@
         <tag k="name" v="South Pl NW"/>
         <tag k="foot" v="designated"/>
         <tag k="highway" v="path"/>
-        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="5"/>
         <tag k="hoot:id" v="-46"/>
     </way>

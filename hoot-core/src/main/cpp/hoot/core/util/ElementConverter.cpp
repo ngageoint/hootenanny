@@ -95,9 +95,8 @@ Meters ElementConverter::calculateLength(const ConstElementPtr &e) const
   }
 }
 
-boost::shared_ptr<Geometry> ElementConverter::convertToGeometry(const boost::shared_ptr<const Element>& e,
-                                                         bool throwError,
-                                                         const bool statsFlag) const
+boost::shared_ptr<Geometry> ElementConverter::convertToGeometry(
+  const boost::shared_ptr<const Element>& e, bool throwError, const bool statsFlag) const
 {
   switch(e->getElementType().getEnum())
   {

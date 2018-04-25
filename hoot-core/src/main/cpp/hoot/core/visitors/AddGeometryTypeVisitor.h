@@ -42,8 +42,6 @@ public:
 
   virtual void visit(const boost::shared_ptr<Element>& e);
 
-  virtual QString getName() const { return "Add Geometry Type"; }
-
   virtual QString getDescription() const { return "Adds geometry types"; }
 
 };

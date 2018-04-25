@@ -34,6 +34,7 @@
 #include <hoot/core/conflate/MatchFactory.h>
 #include <hoot/core/conflate/MergerFactory.h>
 #include <hoot/core/conflate/polygon/BuildingMatch.h>
+#include <hoot/core/schema/OsmSchema.h>
 
 // Standard
 #include <typeinfo>
@@ -48,7 +49,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(MergerCreator, PoiPolygonMergerCreator)
 
-PoiPolygonMergerCreator::PoiPolygonMergerCreator()
+PoiPolygonMergerCreator::PoiPolygonMergerCreator() :
+_autoMergeManyPoiToOnePolyMatches(ConfigOptions().getPoiPolygonAutoMergeManyPoiToOnePolyMatches())
 {
   _map = 0;
 }
@@ -114,6 +116,7 @@ bool PoiPolygonMergerCreator::createMergers(const MatchSet& matches, vector<Merg
       set< pair<ElementId, ElementId> > s = m->getMatchPairs();
       eids.insert(s.begin(), s.end());
     }
+    LOG_VART(eids);
 
     if (_isConflictingSet(matches))
     {
@@ -155,15 +158,25 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Mat
   bool result;
   if (foundAPoi && foundAPolygon)
   {
+    LOG_TRACE("Found a poi and a polygon...");
+
     // get out the matched pairs from the matches
     set< pair<ElementId, ElementId> > p1 = m1->getMatchPairs();
     set< pair<ElementId, ElementId> > p2 = m2->getMatchPairs();
     // we're expecting them to have one match each, more could be handled, but are not necessary at
     // this time.
+    LOG_VART(p1.size());
+    LOG_VART(p2.size());
     assert(p1.size() == 1 && p2.size() == 1);
     pair<ElementId, ElementId> eids1 = *p1.begin();
     pair<ElementId, ElementId> eids2 = *p2.begin();
+    LOG_VART(eids1);
+    LOG_VART(eids2);
 
+    LOG_VART(eids1.first);
+    LOG_VART(eids2.first);
+    LOG_VART(eids1.second);
+    LOG_VART(eids2.second);
     // there should be one elementId that is shared between the matches, find it as well as the
     // other elements.
     ElementId sharedEid, o1, o2;
@@ -180,9 +193,12 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Mat
     // there are no overlapping ElementIds, this isn't a conflict.
     else
     {
+      LOG_TRACE("no conflict");
       result = false;
       return result;
     }
+    LOG_VART(sharedEid);
+    LOG_VART(o1);
 
     if (eids2.first == sharedEid)
     {
@@ -193,6 +209,24 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Mat
       assert(eids2.second == sharedEid);
       o2 = eids2.first;
     }
+    LOG_VART(o2);
+
+    if (_autoMergeManyPoiToOnePolyMatches)
+    {
+      //We only want the situation here where two pois are matching against the same poly.  We
+      //want to leave default behavior for the situation where the same poi is being reviewed
+      //against multiple polys, so those end up as reviews.
+
+      //not passing the tag ignore list here, since it would have already be used when calling
+      //these methods from PoiPolygonMatch
+      if (OsmSchema::getInstance().isPoiPolygonPoi(map->getElement(o1)) &&
+          OsmSchema::getInstance().isPoiPolygonPoi(map->getElement(o2)) &&
+          OsmSchema::getInstance().isPoiPolygonPoly(map->getElement(sharedEid)))
+      {
+        LOG_TRACE("Automatically merging pois: " << o1 << ", " << o2 << " into poly: " << sharedEid);
+        return false;
+      }
+    }
 
     // create POI/Polygon matches and check to see if it is a miss
     boost::shared_ptr<Match> ma(_createMatch(map, o1, o2));
@@ -201,16 +235,19 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Mat
     result = false;
     if (ma.get() == 0 || ma->getType() == MatchType::Miss)
     {
+      LOG_TRACE("miss");
       result = true;
     }
   }
   // if you don't dereference the m1/m2 pointers it always returns Match as the typeid. Odd.
   else if (typeid(*m1) == typeid(*m2))
   {
+    LOG_TRACE("type ids match");
     result = m1->isConflicting(*m2, map);
   }
   else
   {
+    LOG_TRACE("no conflict");
     result = false;
   }
 
@@ -226,15 +263,18 @@ bool PoiPolygonMergerCreator::_isConflictingSet(const MatchSet& matches) const
   for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
   {
     const Match* m1 = *it;
+    LOG_VART(m1);
     for (MatchSet::const_iterator jt = matches.begin(); jt != matches.end(); ++jt)
     {
       const Match* m2 = *jt;
+      LOG_VART(m2);
 
       if (m1 != m2)
       {
         ConstOsmMapPtr map = _map->shared_from_this();
         if (MergerFactory::getInstance().isConflicting(map, m1, m2))
         {
+          LOG_TRACE("conflicting");
           conflicting = true;
         }
       }

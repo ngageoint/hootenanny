@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POIPOLYGONREVIEWREDUCER_H
 #define POIPOLYGONREVIEWREDUCER_H
@@ -38,16 +38,22 @@ namespace hoot
  * goal of never causing a miss where there should be a match.  Any rule that results in an
  * incorrect match found over the course of time testing against different datasets should be
  * removed from this class.
+ *
+ * I would like to get rid of most, if not all, of this class, as it is kind of brittle.  It may be
+ * possible via modifications to the definition of what poi/poly conflation conflates, as well as
+ * modifications to the evidence calculation in PoiPolygonMatch.
  */
 class PoiPolygonReviewReducer
 {
 
 public:
 
+  //TODO: encapsulate all these params in a class
   PoiPolygonReviewReducer(const ConstOsmMapPtr& map, const std::set<ElementId>& polyNeighborIds,
                           const std::set<ElementId>& poiNeighborIds, double distance,
-                          double nameScoreThreshold, bool nameMatch, bool exactNameMatch,
-                          double typeScore, bool typeMatch, double matchDistanceThreshold);
+                          double nameScoreThreshold, double nameScore, bool nameMatch,
+                          bool exactNameMatch, double typeScoreThreshold, double typeScore,
+                          bool typeMatch, double matchDistanceThreshold, bool addressMatch);
 
   bool triggersRule(ConstElementPtr poi, ConstElementPtr poly);
 
@@ -60,16 +66,22 @@ private:
 
   double _distance;
   double _nameScoreThreshold;
+  double _nameScore;
   bool _nameMatch;
   bool _exactNameMatch;
+  double _typeScoreThreshold;
   double _typeScore;
   bool _typeMatch;
   double _matchDistanceThreshold;
+  bool _addressMatch;
 
   QStringList _genericLandUseTagVals;
 
   unsigned int _badGeomCount;
 
+  bool _keepClosestMatchesOnly;
+
+  bool _nonDistanceSimilaritiesPresent() const;
 };
 
 }

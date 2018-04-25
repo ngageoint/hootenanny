@@ -56,9 +56,12 @@ public:
 
   virtual QString getDescription() const { return "Identifies way nodes in buildings"; }
 
+  long getMatchingWayId(const ConstElementPtr& e);
+
 private:
 
   ConstOsmMapPtr _map;
+  long _wayId;
 };
 
 }

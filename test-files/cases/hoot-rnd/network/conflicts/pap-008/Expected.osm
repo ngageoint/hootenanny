@@ -2320,7 +2320,7 @@
         <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
         <tag k="uuid" v="{2846d7f0-3cd0-4379-8e45-fd83731036b0};{{00b2b754-a805-42fe-a7c0-60fe86d05092}}"/>
         <tag k="location" v="surface"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-93"/>
     </way>

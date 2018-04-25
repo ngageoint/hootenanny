@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NameExtractor.h"
 
@@ -91,26 +91,6 @@ double NameExtractor::extract(const ConstElementPtr& target, const ConstElementP
   {
     return nullValue();
   }
-  else
-  {
-//    LOG_INFO("score: " << score << " weight: " << weight);
-//    LOG_INFO("target: " << target->toString());
-//    LOG_INFO("candidate: " << candidate->toString());
-
-//    if (candidate->getTags()[MetadataTags::Ref2()].contains(target->getTags()[MetadataTags::Ref1()]))
-//    {
-//      LOG_INFO(getName() << " | Match: " << score << " | " <<
-//               target->getTags().getNames().join(";") << " | " <<
-//               candidate->getTags().getNames().join(";"))
-//    }
-//    else
-//    {
-//      LOG_INFO(getName() << " | Miss: " << score << " | " <<
-//               target->getTags().getNames().join(";") << " | " <<
-//               candidate->getTags().getNames().join(";"))
-//    }
-  }
-
 
   return score;
 }

@@ -60,8 +60,6 @@ public:
 
   virtual bool isFiltered(const ConstWayPtr& w) const;
 
-  virtual QString getName() const { return "Parallel Way Filter"; }
-
   virtual QString getDescription() const
   { return "Identifies ways that are parallel to each other"; }
 
