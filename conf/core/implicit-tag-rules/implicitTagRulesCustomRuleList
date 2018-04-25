@@ -1,7 +1,7 @@
 # A list of custom implicit tagging rules based on name.  These rules override any rules associated with the same word in the rules database.
-# Use this list to fine tune tagging rules behavior based on the auto-generated rules database.
-# tab separated: word	key=value 
-# keep list alphabetized and in lower case
+# Use this list to fine tune tagging rules behavior.  To assign multiple tags to a single word, delimit the tags with a semicolon.
+# tab separated: word	key1=value1;key2=value2 
+# keep list alphabetized by tag value and in lower case
 
 academy	amenity=school
 administration building	office=government
@@ -15,7 +15,6 @@ apartment	building=apartment
 apartments	building=apartment
 arboretum	building=greenhouse
 art supply	shop=art
-# TODO: this should override all other words in the name?
 association	building=office
 auditorium	amenity=auditorium
 auto center	shop=car
@@ -25,11 +24,9 @@ auto service	shop=car_repair
 bagels	amenity=restaurant
 bar and grill	amenity=restaurant
 baseball	sport=baseball
-baseball field	leisure=pitch
+baseball field	leisure=pitch;sport=baseball
 basketball	sport=basketball
-basketball court	sport=basketball
-# the only way this one could really work if it is only at the end of the name
-#bay	natural=bay
+basketball court	leisure=pitch;sport=basketball
 beauty salon	shop=hairdresser
 boathouse	amenity=boathouse
 book store	shop=books
@@ -46,15 +43,15 @@ boutique	shop=boutique
 brewery	craft=brewery
 brewing	craft=brewery
 buffalo wings	amenity=restaurant
-burger	amenity=restaurant
-burrito	amenity=restaurant
+burger	amenity=restaurant;cuisine=burger
+burrito	amenity=restaurant;cuisine=mexican
 bus station	amenity=bus_station
 business park	landuse=industrial
 cabin	building=cabin
 camp	tourism=camp_site
 campground	tourism=camp_site
 campsite	tourism=camp_site
-candies	amenity=restaurant
+candies	shop=candy
 car parts	shop=car_parts
 car rental	amenity=car_rental
 carport	parking=carports
@@ -64,11 +61,10 @@ cemetery	amenity=grave_yard
 cemeteries	amenity=grave_yard
 check cashing	amenity=check_cashing
 child care	amenity=school
-# TODO: not sure about this
 child development	amenity=school
 child development center	amenity=school
 childrens center	amenity=school
-chop house	amenity=restaurant
+chop house	amenity=restaurant;cuisine=steak
 cigar bar	shop=cigar
 civic center	building=civic
 clinic	amenity=clinic
@@ -90,7 +86,7 @@ conferences center	amenity=conference_centre
 credit union	amenity=bank
 cuisine	amenity=restaurant
 cultural center	building=civic
-cupcakes	amenity=restaurant
+cupcakes	amenity=restaurant;cuisine=cupcake
 cyclery	shop=bicycle
 day care	amenity=kindergarten
 day care center	amenity=kindergarten
@@ -102,10 +98,10 @@ dentist	amenity=dentist
 dentistry	amenity=dentist
 department of	office=government
 detention center	amenity=prison
-diner	amenity=restaurant
+diner	amenity=restaurant;cuisine=american
 disc golf course	sport=disc_golf
 dog play area	leisure=dog_park
-donuts	amenity=restaurant
+donuts	amenity=restaurant;cuisine=donut
 dormitory	building=dormitory
 drug store	amenity=pharmacy
 dry clean	shop=dry_cleaning
@@ -126,10 +122,9 @@ football	sport=football
 football field	leisure=pitch
 footwear	shop=shoes
 forestry center	office=forestry
-# probably need to move fort to the word ignore list
 fort	historic=fort
 frisbee golf course	sport=disc_golf
-frozen yogurt	amenity=restaurant
+frozen yogurt	amenity=restaurant;cuisine=frozen_yogurt
 education center	amenity=school
 garage	building=garage
 garden	leisure=garden
@@ -159,8 +154,8 @@ insurance company	office=insurance
 internet cafe	amenity=internet_cafe
 junction	junction=yes
 justice center	amenity=courthouse
-korean barbecue	amenity=resturant
-korean bbq	amenity=resturant
+korean barbecue	amenity=resturant;cuisine=korean
+korean bbq	amenity=resturant;cuisine=korea
 lake	water=lake
 launderette	shop=laundry
 learning center	amenity=school
@@ -185,8 +180,7 @@ neighborhood center	building=civic
 net cafe	amenity=internet_cafe
 night club	amenity=club
 nightclub	amenity=club
-#TODO: this should be amenity=kindergarten, nursery=yes
-nursery	amenity=kindergarten
+nursery	amenity=kindergarten;nursery=yes
 nursing home	amenity=nursing_home
 office building	building=office
 opera house	amenity=theatre
@@ -197,18 +191,17 @@ park fieldhouse	amenity=community_centre
 park pavilion	building=pavilion
 parking garage	amenity=parking
 pasta	amenity=restaurant
-pastry	amenity=restaurant
-pastries	amenity=restaurant
+pastry	shop=pastry
+pastries	shop=pastry
 petroleumeum	amenity=fuel
 petroleumeum station	amenity=fuel
 pet shop	shop=pet
-pho	amenity=restaurant
+pho	amenity=restaurant;cuisine=noodle
 picnic area	tourism=picnic_site
 picnic table	leisure=picnic_table
-pies	amenity=restaurant
-#TODO: this should be amenity=restaurant, cusine=pizza
-pizza	amenity=restaurant
-pizzeria	amenity=restaurant
+pies	amenity=restaurant;cuisine=pies
+pizza	amenity=restaurant;cuisine=pizza
+pizzeria	amenity=restaurant;cuisine=pizza
 planetarium	amenity=planetarium
 plant nursery	landuse=plant_nursery
 play area	leisure=playground
@@ -240,20 +233,19 @@ roof	building=yes
 ruins	historic=ruins
 sailing	sport=sailing
 saloon	amenity=bar
-sandwiches	amenity=restaurant
+sandwiches	amenity=restaurant;cuisine=sandwich
 scuba supply	shop=scuba_diving
 senior center	amenity=community_centre
 sewage plant	pumping_station=sewage
-#shed	building=shed
 shoe repair	shop=shoe_repair
 shop	shop=yes
 shops	shop=yes
 smoke shop	tobacco=shop
 soccer	sport=soccer
-soccer field	leisure=pitch
-soccer stadium	leisure=stadium
-soul food	amenity=restaurant
-soup	amenity=restaurant
+soccer field	leisure=pitch;sport=soccer
+soccer stadium	leisure=stadium;sport=soccer
+soul food	amenity=restaurant;cuisine=soul_food
+soup	amenity=restaurant;cuisine=soup
 spa	amenity=spa
 spa hotel	tourism=hotel
 sport center	leisure=sports_centre
@@ -264,29 +256,27 @@ sports center	leisure=sports_centre
 sports club	leisure=sports_centre
 stables	amenity=stables
 station	station=yes
-steak house	amenity=restaurant
-steakhouse	amenity=restaurant
+steak house	amenity=restaurant;cuisine=steak
+steakhouse	amenity=restaurant;cuisine=steak
 steam laundry	shop=dry_cleaning
 strip club	amenity=stripclub
 substation	substation=yes
-# putting this to counteract subway restaurant in the db; possibly need a better way to handle
+# putting this in to counteract subway restaurant in the db; possibly need a better way to handle
 subway	railway=subway
 sub station	substation=yes
-#TODO: this should be amenity=restaurant, cusine=sushi
-sushi	amenity=restaurant
-#TODO: this should be amenity=restaurant, cusine=sushi
-sushi bar	amenity=restaurant
+sushi	amenity=restaurant;cusine=sushi
+sushi bar	amenity=restaurant;cusine=sushi
 surgical center	amenity=hospital
-synagogue	amenity=synagogue
-taqueria	amenity=restaurant
+synagogue	amenity=synagogue;religion=jewish
+taqueria	amenity=restaurant;cuisine=mexican
 tavern	amenity=pub
 teahouse	amenity=restaurant
 tea room	amenity=restaurant
 teaching center	amenity=school
 temple	amenity=place_of_worship
 tennis	sport=tennis
-tennis court	sport=tennis
-tennis courts	sport=tennis
+tennis court	leisure=pitch;sport=tennis
+tennis courts	leisure=pitch;sport=tennis
 thrift store	shop=yes
 toll booth	barrier=toll_booth
 university dormitory	building=dormitory
@@ -307,8 +297,7 @@ windmill	man_made=windmill
 wine bar	amenity=bar
 wine and spirits	shop=liquor
 wine and liquors	shop=liquor
-wok	amenity=restaurant
-# not sure about this one
+wok	amenity=restaurant;cuisine=chinese
 yacht club	amenity=bar
 youth center	amenity=community_centre
 zoo	tourism=zoo
