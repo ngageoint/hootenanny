@@ -1579,6 +1579,27 @@ ggdm30 = {
                 tags.product = 'gas';
                 break;
         }
+
+        // Stop some Religion tags from stomping on Denomination tags
+        if (tags.religion && tags.denomination)
+        {
+            if (tags.religion == 'christian' || tags.religion == 'muslim')
+            {
+                switch (tags.denomination)
+                {
+                    case 'roman_catholic':
+                    case 'orthodox':
+                    case 'protestant':
+                    case 'chaldean_catholic':
+                    case 'nestorian': // Not sure about this
+                    case 'shia':
+                    case 'sunni':
+                        delete tags.religion;
+                        break;
+                } // End switch
+            }
+        } // End if religion & denomination
+
     }, // End applyToOgrPreProcessing
 
 // #####################################################################################################
