@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonAddressScoreExtractor.h"
 
@@ -59,7 +59,7 @@ double PoiPolygonAddressScoreExtractor::extract(const OsmMap& map, const ConstEl
                                                 const ConstElementPtr& poly) const
 {
   //Experimented with partial addresses matches in the past and it had no positive affect.  Search
-  //the history for this class to see examples if its worth experimenting with again at some point.
+  //the history for this class to see examples, if its worth experimenting with again at some point.
 
   QSet<QString> polyAddresses;
 
@@ -265,12 +265,56 @@ bool PoiPolygonAddressScoreExtractor::_addressesMatchesOnSubLetter(const QString
   return false;
 }
 
-bool PoiPolygonAddressScoreExtractor::hasAddress(const Element& element)
+bool PoiPolygonAddressScoreExtractor::nodeHasAddress(const Node& node)
 {
   PoiPolygonAddressScoreExtractor extractor;
   QSet<QString> addresses;
-  extractor._collectAddressesFromElement(element, addresses);
+  extractor._collectAddressesFromElement(node, addresses);
   return addresses.size() > 0;
+}
+
+bool PoiPolygonAddressScoreExtractor::elementHasAddress(const ConstElementPtr& element,
+                                                        const OsmMap& map)
+{
+  PoiPolygonAddressScoreExtractor extractor;
+  QSet<QString> addresses;
+  if (element->getElementType() == ElementType::Node)
+  {
+    return nodeHasAddress(*boost::dynamic_pointer_cast<const Node>(element));
+  }
+  else if (element->getElementType() == ElementType::Way)
+  {
+    extractor._collectAddressesFromWayNodes(
+      *boost::dynamic_pointer_cast<const Way>(element), addresses, map);
+  }
+  else if (element->getElementType() == ElementType::Relation)
+  {
+    extractor._collectAddressesFromRelationMembers(
+      *boost::dynamic_pointer_cast<const Relation>(element), addresses, map);
+  }
+  return addresses.size() > 0;
+}
+
+QSet<QString> PoiPolygonAddressScoreExtractor::getAddresses(const ConstElementPtr& element,
+                                                            const OsmMap& map)
+{
+  PoiPolygonAddressScoreExtractor extractor;
+  QSet<QString> addresses;
+  if (element->getElementType() == ElementType::Node)
+  {
+    extractor._collectAddressesFromElement(*element, addresses);
+  }
+  else if (element->getElementType() == ElementType::Way)
+  {
+    extractor._collectAddressesFromWayNodes(
+      *boost::dynamic_pointer_cast<const Way>(element), addresses, map);
+  }
+  else if (element->getElementType() == ElementType::Relation)
+  {
+    extractor._collectAddressesFromRelationMembers(
+      *boost::dynamic_pointer_cast<const Relation>(element), addresses, map);
+  }
+  return addresses;
 }
 
 void PoiPolygonAddressScoreExtractor::_collectAddressesFromElement(const Element& element,

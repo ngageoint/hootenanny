@@ -45,5 +45,13 @@
         "isA": "emergency",
         "name": "emergency=water_tank",
         "objectType": "tag"
+    },
+    {
+        "categories": [
+            "use"
+        ],
+        "isA": "emergency",
+        "name": "emergency=ambulance_station",
+        "objectType": "tag"
     }
 ]

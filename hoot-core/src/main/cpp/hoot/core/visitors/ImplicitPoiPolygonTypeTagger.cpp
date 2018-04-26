@@ -38,17 +38,13 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ElementVisitor, ImplicitPoiPolygonTypeTagger)
 
 ImplicitPoiPolygonTypeTagger::ImplicitPoiPolygonTypeTagger() :
-ImplicitTypeTaggerBase()
+ImplicitPoiTypeTagger()
 {
-  _ruleReader.reset(new ImplicitTagRulesSqliteReader());
-  _ruleReader->open(ConfigOptions().getImplicitTaggerRulesDatabase());
 }
 
 ImplicitPoiPolygonTypeTagger::ImplicitPoiPolygonTypeTagger(const QString databasePath) :
-ImplicitTypeTaggerBase(databasePath)
+ImplicitPoiTypeTagger(databasePath)
 {
-  _ruleReader.reset(new ImplicitTagRulesSqliteReader());
-  _ruleReader->open(databasePath);
 }
 
 bool ImplicitPoiPolygonTypeTagger::_visitElement(const ElementPtr& e)
@@ -57,39 +53,10 @@ bool ImplicitPoiPolygonTypeTagger::_visitElement(const ElementPtr& e)
     OsmSchema::getInstance().getCategories(e->getTags()).intersects(
       OsmSchemaCategory::building() | OsmSchemaCategory::poi());
 
-  if (_elementIsATaggablePoi(e) || _elementIsATaggablePolygon(e))
+  if (ImplicitPoiTypeTagger::_visitElement(e) || _elementIsATaggablePolygon(e))
   {
     return true;
   }
-  return false;
-}
-
-bool ImplicitPoiPolygonTypeTagger::_elementIsATaggablePoi(const ElementPtr& e)
-{
-  const bool elementIsANode = e->getElementType() == ElementType::Node;
-  LOG_VART(elementIsANode);
-  _elementIsASpecificFeature =
-    OsmSchema::getInstance().hasCategory(e->getTags(), "poi") && !e->getTags().contains("poi") &&
-     e->getTags().get("building") != QLatin1String("yes") &&
-     e->getTags().get("office") != QLatin1String("yes");
-  LOG_VART(_elementIsASpecificFeature);
-  const bool elementIsAGenericPoi = !_elementIsASpecificFeature;
-
-  //always allow generic elements
-  if (elementIsAGenericPoi)
-  {
-    return true;
-  }
-  //allowing specific elements is configurable
-  else if (_elementIsASpecificFeature && _allowTaggingSpecificFeatures)
-  {
-    return true;
-  }
-  else if (elementIsANode && e->getTags().getNames().size() > 0)
-  {
-    return true;
-  }
-
   return false;
 }
 
@@ -119,6 +86,8 @@ bool ImplicitPoiPolygonTypeTagger::_elementIsATaggablePolygon(const ElementPtr& 
   _elementIsASpecificFeature = elementIsASpecificPoly;
   LOG_VART(_elementIsASpecificFeature);
   const bool elementIsAGenericPoly = !elementIsASpecificPoly;
+  LOG_VART(elementIsAGenericPoly);
+  LOG_VART(_getNames(e->getTags()).size());
 
   //always allow generic elements
   if (elementIsAGenericPoly)
@@ -130,7 +99,7 @@ bool ImplicitPoiPolygonTypeTagger::_elementIsATaggablePolygon(const ElementPtr& 
   {
     return true;
   }
-  else if ((elementIsAWay || elementIsARelation) && e->getTags().getNames().size() > 0)
+  else if ((elementIsAWay || elementIsARelation) && _getNames(e->getTags()).size() > 0)
   {
     return true;
   }
