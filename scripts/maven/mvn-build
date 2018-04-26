@@ -177,7 +177,7 @@ case $PHASE in
    ARGS="$ARGS verify"
    ;;   
    "coverage")
-   ARGS="$ARGS cobertura:cobertura-integration-test"
+   ARGS="$ARGS jacoco:prepare-agent install"
    ;;
    "clean")
    ARGS="$ARGS clean"
