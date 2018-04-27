@@ -79,6 +79,8 @@ void OsmSchemaJs::Init(Handle<Object> exports)
               FunctionTemplate::New(current, isMetaData)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "isPoi"),
               FunctionTemplate::New(current, isPoi)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "isRailway"),
+              FunctionTemplate::New(current, isRailway)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "isLinearHighway"),
               FunctionTemplate::New(current, isLinearHighway)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "score"),
@@ -223,6 +225,16 @@ void OsmSchemaJs::isPoi(const FunctionCallbackInfo<Value>& args)
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
   args.GetReturnValue().Set(Boolean::New(current, OsmSchema::getInstance().isPoi(*e)));
+}
+
+void OsmSchemaJs::isRailway(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
+
+  args.GetReturnValue().Set(Boolean::New(current, OsmSchema::getInstance().isRailway(*e)));
 }
 
 void OsmSchemaJs::hasName(const FunctionCallbackInfo<Value>& args)
