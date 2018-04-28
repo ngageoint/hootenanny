@@ -1179,7 +1179,7 @@ ggdm30 = {
             'waste_basket','drinking_water','swimming_pool','fire_hydrant','emergency_phone','yes',
             'compressed_air','water','nameplate','picnic_table','life_ring','grass_strip','dog_bin',
             'artwork','dog_waste_bin','street_light','park','hydrant','tricycle_station','loading_dock',
-            'trailer_park','game_feeding','fuel'
+            'trailer_park','game_feeding','fuel', 'ferry_terminal'
             ]; // End notBuildingList
 
         if (tags.amenity && !(tags.building) && (notBuildingList.indexOf(tags.amenity) == -1)) attrs.F_CODE = 'AL013';
@@ -1400,7 +1400,8 @@ ggdm30 = {
                     {
                         var row = ggdm30.fcodeLookup[col][value];
                         attrs.F_CODE = row[1];
-                        // print('FCODE: Got ' + attrs.F_CODE);
+                        // Debug
+                        //print('FCODE: Got ' + attrs.F_CODE);
                     }
                 }
             }
