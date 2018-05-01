@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "IntegerProgrammingSolver.h"
 
@@ -84,12 +84,18 @@ void IntegerProgrammingSolver::solveBranchAndCut()
 {
   glp_iocp iocp;
   glp_init_iocp(&iocp);
+  //  Turn on the presolver so that glp_intopt works correctly
   iocp.presolve = GLP_ON;
   iocp.binarize = GLP_ON;
+  //  Use the hybrid pseudocost heuristic for solving the problem, the default of
+  //  Driebeck and Tomlin heuristic (GLP_BR_DTH) sometimes fails unexpectedly
+  iocp.br_tech = GLP_BR_PCH;
+  //  Setup the time limit if necessary
   if (_timeLimit > 0)
   {
     iocp.tm_lim = _timeLimit * 1000.0 + 0.5;
   }
+  //  Setup message level
   if (Log::getInstance().getLevel() <= Log::Debug)
   {
     iocp.msg_lev = GLP_MSG_ON;
@@ -129,10 +135,12 @@ void IntegerProgrammingSolver::solveSimplex()
 {
   glp_smcp smcp;
   glp_init_smcp(&smcp);
+  //  Setup the time limit if necessary
   if (_timeLimit > 0)
   {
     smcp.tm_lim = _timeLimit * 1000.0 + 0.5;
   }
+  //  Setup message level
   if (Log::getInstance().getLevel() <= Log::Debug)
   {
     smcp.msg_lev = GLP_MSG_ON;
