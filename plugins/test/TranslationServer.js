@@ -213,7 +213,7 @@ describe('TranslationServer', function () {
         });
 
 
-        it('should translate Land Water Boundary (BA010) from ogr -> osm -> ogr', function() {
+        it('should translate Coastline (BA010) from ogr -> osm -> ogr', function() {
         
             var data = '<osm version="0.6" generator="JOSM"><way id="-38983" visible="true"><nd ref="-38979" /><nd ref="-38982" /> <tag k="F_CODE" v="BA010" /></way></osm>'
 
@@ -227,7 +227,7 @@ describe('TranslationServer', function () {
             xml2js.parseString(osm_xml, function(err, result) {
                 if (err) console.error(err);
                 assert.equal(result.osm.way[0].tag[0].$.k, "natural")
-                assert.equal(result.osm.way[0].tag[0].$.v, "land_water_boundary")
+                assert.equal(result.osm.way[0].tag[0].$.v, "coastline")
 
             })
 
@@ -301,7 +301,7 @@ describe('TranslationServer', function () {
                     if (err) console.error(err);
     
                     assert.equal(result.osm.way[0].tag[0].$.k, 'natural')
-                    assert.equal(result.osm.way[0].tag[0].$.v, 'land_water_boundary')
+                    assert.equal(result.osm.way[0].tag[0].$.v, 'coastline')
                     assert.equal(result.osm.way[0].tag[1].$.k, 'shoreline:type')
                     assert.equal(result.osm.way[0].tag[1].$.v, 'mangrove')
     

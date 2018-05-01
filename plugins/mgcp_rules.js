@@ -121,7 +121,7 @@ mgcp.rules = {
     ['F_CODE','AP030','highway','construction'], // Lifecycle
     ['F_CODE','AP030','highway','yes'], // Just in case...
     ['F_CODE','AT050','landuse','facility'],
-    ['F_CODE','BA010','natural','coastline'], // Land/Water Boundary - From OSM
+    ['F_CODE','BA010','natural','land_water_boundary'], // Land/Water Boundary - old translation
     ['F_CODE','BA030','place','islet'], // From OSM
     ['F_CODE','BB190','man_made','pier'], // From OSM
     ['F_CODE','BH080','landuse','basin'], // From OSM - Lake is close but not great
