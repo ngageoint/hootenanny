@@ -981,6 +981,7 @@
         	"elem_type":"bool",
         	"defaultvalue":"false",
         	"description":"If true, POI to Polygon conflation will only keep matches that are the closest to polygons and throw out any others even if they score high enough for a match.",
+                "name":"Keep Closest Matches Only",
         	"hoot_key":"poi.polygon.keep.closest.matches.only"
     	    }
         ]
