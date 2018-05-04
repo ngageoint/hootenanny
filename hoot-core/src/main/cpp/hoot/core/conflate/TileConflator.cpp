@@ -42,14 +42,13 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/conflate/splitter/LargeWaySplitter.h>
 
 // Standard
 #include <set>
 
 // TGS
 #include <tgs/System/Time.h>
-
-#include "LargeWaySplitter.h"
 
 using namespace geos::geom;
 using namespace std;

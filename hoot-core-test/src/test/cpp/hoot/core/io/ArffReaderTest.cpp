@@ -30,7 +30,7 @@
 #include <boost/iostreams/filter/bzip2.hpp>
 
 // Hoot
-#include <hoot/rnd/io/ArffReader.h>
+#include <hoot/core/io/ArffReader.h>
 #include <hoot/core/scoring/DataSamples.h>
 #include <hoot/core/scoring/MatchFeatureExtractor.h>
 #include <hoot/core/util/Log.h>
@@ -38,7 +38,7 @@
 // Qt
 #include <QDir>
 
-#include <hoot/core/TestUtils.h>
+#include "../TestUtils.h"
 
 namespace hoot
 {

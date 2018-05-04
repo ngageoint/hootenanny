@@ -29,9 +29,8 @@
 
 // hoot
 #include <hoot/core/conflate/network/NetworkMatcher.h>
-
-#include "IndexedEdgeLinks.h"
-#include "IndexedEdgeMatchSet.h"
+#include <hoot/core/conflate/network/IndexedEdgeLinks.h>
+#include <hoot/core/conflate/network/IndexedEdgeMatchSet.h>
 
 namespace hoot
 {

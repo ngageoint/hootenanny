@@ -30,7 +30,7 @@
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/optimizer/SingleAssignmentProblemSolver.h>
-#include <hoot/core/conflate/network/VagabondNetworkMatcher.h>
+#include <hoot/rnd/conflate/network/VagabondNetworkMatcher.h>
 #include <hoot/core/conflate/network/NetworkEdgeScore.h>
 #include <hoot/core/conflate/network/NetworkVertexScore.h>
 #include <hoot/core/conflate/network/OsmNetwork.h>

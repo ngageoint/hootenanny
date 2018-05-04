@@ -35,12 +35,11 @@
 #include <hoot/core/conflate/network/NetworkEdgeScore.h>
 #include <hoot/core/conflate/network/NetworkVertexScore.h>
 #include <hoot/core/conflate/network/OsmNetwork.h>
+#include <hoot/core/conflate/network/IndexedEdgeLinks.h>
 
 // tgs
 #include <tgs/RStarTree/HilbertRTree.h>
 #include <tgs/RStarTree/IntersectionIterator.h>
-
-#include "IndexedEdgeLinks.h"
 
 namespace hoot
 {

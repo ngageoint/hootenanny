@@ -45,6 +45,7 @@
 #include <hoot/core/conflate/network/DebugNetworkMapCreator.h>
 #include <hoot/core/conflate/network/NetworkMatch.h>
 #include <hoot/core/conflate/network/OsmNetworkExtractor.h>
+#include <hoot/core/conflate/network/NetworkMatcher.h>
 
 // Standard
 #include <fstream>

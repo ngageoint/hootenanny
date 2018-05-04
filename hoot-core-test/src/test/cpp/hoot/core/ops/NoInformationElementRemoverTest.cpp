@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include <hoot/core/conflate/NoInformationElementRemover.h>
+#include <hoot/core/ops/NoInformationElementRemover.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/util/Log.h>
 using namespace hoot;

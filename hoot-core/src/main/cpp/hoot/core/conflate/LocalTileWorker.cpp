@@ -39,7 +39,7 @@
 #include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/conflate/NodeReplacements.h>
 #include <hoot/core/conflate/OutsideBoundsRemover.h>
-#include <hoot/core/ops/LargeWaySplitter.h>
+#include <hoot/core/conflate/splitter/LargeWaySplitter.h>
 #include <hoot/core/conflate/LocalTileWorker.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
 #include <hoot/core/ops/SuperfluousWayRemover.h>

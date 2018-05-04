@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 // Hoot
-#include <hoot/core/TestUtils.h>
+#include "../TestUtils.h"
 #include <hoot/core/io/ImplicitTagRulesSqliteReader.h>
 
 // Qt

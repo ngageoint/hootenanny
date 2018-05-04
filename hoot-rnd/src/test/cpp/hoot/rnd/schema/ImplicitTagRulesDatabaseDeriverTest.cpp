@@ -26,7 +26,8 @@
  */
 // Hoot
 #include <hoot/rnd/schema/ImplicitTagRulesDatabaseDeriver.h>
-#include <hoot/rnd/io/ImplicitTagRulesSqliteReader.h>
+#include <hoot/core/io/ImplicitTagRulesSqliteReader.h>
+#include <hoot/core/TestUtils.h>
 
 // Qt
 #include <QDir>

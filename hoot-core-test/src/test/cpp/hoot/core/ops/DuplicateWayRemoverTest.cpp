@@ -30,7 +30,7 @@
 
 // Hoot
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/conflate/DuplicateWayRemover.h>
+#include <hoot/core/ops/DuplicateWayRemover.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/OsmMap.h>

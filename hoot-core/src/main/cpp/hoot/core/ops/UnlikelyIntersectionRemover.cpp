@@ -34,6 +34,7 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/conflate/NodeToWayMap.h>
 
 // Standard
 #include <iostream>
@@ -41,8 +42,6 @@
 // TGS
 #include <tgs/StreamUtils.h>
 using namespace Tgs;
-
-#include "NodeToWayMap.h"
 
 using namespace std;
 

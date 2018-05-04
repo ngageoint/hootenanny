@@ -35,7 +35,7 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/rnd/conflate/frechet/FrechetDistance.h>
+#include <hoot/core/conflate/frechet/FrechetDistance.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
 
 #include <hoot/core/io/OsmXmlReader.h>

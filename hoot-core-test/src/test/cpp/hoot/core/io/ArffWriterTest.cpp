@@ -26,14 +26,14 @@
  */
 
 // Hoot
-#include <hoot/rnd/io/ArffWriter.h>
+#include <hoot/core/io/ArffWriter.h>
 #include <hoot/core/scoring/MatchFeatureExtractor.h>
 #include <hoot/core/conflate/MatchType.h>
 
 // Qt
 #include <QDir>
 
-#include <hoot/core/TestUtils.h>
+#include "../TestUtils.h"
 
 using namespace std;
 

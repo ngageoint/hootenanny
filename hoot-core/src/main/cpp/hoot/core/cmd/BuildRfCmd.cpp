@@ -31,7 +31,7 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/conflate/MatchCreator.h>
-#include <hoot/rnd/io/ArffWriter.h>
+#include <hoot/core/io/ArffReader.h>
 #include <hoot/core/scoring/MatchFeatureExtractor.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
@@ -51,84 +51,37 @@ using namespace Tgs;
 namespace hoot
 {
 
-class BuildModelCmd : public BaseCommand
+class BuildRfCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::BuildModelCmd"; }
+  static string className() { return "hoot::BuildRfCmd"; }
 
-  BuildModelCmd() { }
+  BuildRfCmd() { }
 
-  virtual QString getName() const { return "model-build"; }
+  virtual QString getName() const { return "model-rf-build"; }
 
   virtual QString getDescription() const
-  { return "Creates a random forest model from manually matched map data"; }
+  { return "Creates a random forest model from a .arff file"; }
 
   virtual int runSimple(QStringList args)
   {
-    bool exportArffOnly = false;
-    if (args.contains("--export-arff-only"))
-    {
-      args.removeAll("--export-arff-only");
-      exportArffOnly = true;
-    }
-
-    if (args.size() < 3 || args.size() % 2 == 0)
+    if (args.size() < 2)
     {
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes an odd number of parameters, at least three.").
+      throw HootException(QString("%1 takes two parameters.").
                           arg(getName()));
     }
 
-    QString output = args.last();
+    QString input = args[0];
+    QString output = args[1];
 
-    if (output.endsWith(".rf"))
-    {
-      output = output.remove(output.size() - 3, 3);
-    }
+    ArffReader ar(input);
 
-    MatchFeatureExtractor mfe;
-    QStringList creators = ConfigOptions().getMatchCreators().split(";");
-    for (int i = 0; i < creators.size(); i++)
-    {
-      QString creator = creators[i];
-      QStringList args = creator.split(",");
-      QString className = args[0];
-      args.removeFirst();
-      MatchCreator* mc =
-        Factory::getInstance().constructObject<MatchCreator>(className);
-      if (args.size() > 0)
-      {
-        mc->setArguments(args);
-      }
-      mfe.addMatchCreator(boost::shared_ptr<MatchCreator>(mc));
-    }
-
-    for (int i = 0; i < args.size() - 1; i+=2)
-    {
-      LOG_INFO("Processing map : " << args[i] << " and " << args[i + 1]);
-      OsmMapPtr map(new OsmMap());
-
-      loadMap(map, args[i], false, Status::Unknown1);
-      loadMap(map, args[i + 1], false, Status::Unknown2);
-
-      MapCleaner().apply(map);
-
-      mfe.processMap(map);
-    }
-
-    ArffWriter aw(output + ".arff", true);
-    aw.write(mfe.getSamples());
-    if (exportArffOnly)
-    {
-      return 0;
-    }
-
-    // using -1 for null isn't ideal, but it doesn't seem to have a big impact on performance.
-    // ideally we'll circle back and update RF to use null values.
-    boost::shared_ptr<DataFrame> df = mfe.getSamples().toDataFrame(-1);
+    boost::shared_ptr<DataFrame> df = ar.read()->toDataFrame(-1);
 
     Tgs::Random::instance()->seed(0);
+    LOG_INFO("Building Random Forest...");
     RandomForest rf;
     boost::shared_ptr<DisableCout> dc;
     if (Log::getInstance().getLevel() >= Log::Warn)
@@ -137,7 +90,6 @@ public:
       dc.reset(new DisableCout());
     }
     int numFactors = min(df->getNumFactors(), max<unsigned int>(3, df->getNumFactors() / 5));
-    LOG_INFO("Training on data with " << numFactors << " factors...");
     rf.trainMulticlass(df, 40, numFactors);
     dc.reset();
 
@@ -146,9 +98,8 @@ public:
     rf.findAverageError(df, error, sigma);
     LOG_INFO("Error: " << error << " sigma: " << sigma);
 
-    LOG_INFO("Writing .rf file...");
     ofstream fileStream;
-    fileStream.open((output + ".rf").toStdString().data());
+    fileStream.open((output).toStdString().data());
     rf.exportModel(fileStream);
     fileStream.close();
 
@@ -156,7 +107,7 @@ public:
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, BuildModelCmd)
+HOOT_FACTORY_REGISTER(Command, BuildRfCmd)
 
 }
 

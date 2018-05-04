@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include <hoot/core/conflate/LargeWaySplitter.h>
+#include <hoot/core/conflate/splitter/LargeWaySplitter.h>
 #include <hoot/core/conflate/LocalTileWorker.h>
 #include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/conflate/TileConflator.h>

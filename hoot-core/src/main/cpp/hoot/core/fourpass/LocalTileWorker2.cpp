@@ -31,7 +31,7 @@
 #include <hoot/core/conflate/Conflator.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMapListener.h>
-#include <hoot/core/conflate/LargeWaySplitter.h>
+#include <hoot/core/conflate/splitter/LargeWaySplitter.h>
 #include <hoot/core/conflate/OutsideBoundsRemover.h>
 #include <hoot/core/algorithms/WaySplitter.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>

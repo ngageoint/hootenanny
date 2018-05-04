@@ -28,10 +28,9 @@
 #ifndef BASE_CALCULATE_TILES_CMD_H
 #define BASE_CALCULATE_TILES_CMD_H
 
-#include "BaseCommand.h"
-
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/cmd/BaseCommand.h>
 
 namespace hoot
 {
@@ -49,11 +48,14 @@ public:
 protected:
 
   OsmMapPtr _readInputs(const QStringList inputs);
+
   std::vector< std::vector<geos::geom::Envelope> > _calculateTiles(
     const long maxNodesPerTile, const double pixelSize, OsmMapPtr map);
+
   void _writeOutputAsGeoJson(
     const std::vector< std::vector<geos::geom::Envelope> >& tiles,
     const QString outputPath, const bool selectSingleRandomTile = false, int randomSeed = -1);
+
   void _writeOutputAsOsm(
     const std::vector< std::vector<geos::geom::Envelope> >& tiles, const QString outputPath,
     const bool selectSingleRandomTile = false, int randomSeed = -1);

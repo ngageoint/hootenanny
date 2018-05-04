@@ -33,7 +33,7 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/scoring/multiary/MultiaryMatchComparator.h>
+#include <hoot/rnd/scoring/multiary/MultiaryMatchComparator.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>

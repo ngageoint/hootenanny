@@ -55,7 +55,7 @@ class OsmMap;
 class NodeReplacements;
 
 /**
- * The TileConflator is a high level class that delegates the real work to TileWorkers. This class
+ * The FourPassManager is a high level class that delegates the real work to TileWorkers. This class
  * makes no assumptions about the underlying file system. It is designed to use either HDFS or
  * the local file system, but that could conceivably be expanded on to support DBs or other storage
  * mechanisms.

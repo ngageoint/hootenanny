@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/conflate/LargeWaySplitter.h>
+#include <hoot/core/conflate/splitter/LargeWaySplitter.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -44,7 +44,7 @@
 #include <QDebug>
 #include <QDir>
 
-#include "../TestUtils.h"
+#include "../../TestUtils.h"
 
 namespace hoot
 {

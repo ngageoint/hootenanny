@@ -55,12 +55,10 @@ services:SOURCES += $$files(src/Service*.cpp, true)
 SOURCES -= src/test/cpp/hoot/core/io/OgrReaderTest.cpp
 SOURCES -= src/test/cpp/hoot/core/io/OgrWriterTest.cpp
 SOURCES -= src/test/cpp/hoot/core/ops/CalculateStatsOpTest.cpp
-SOURCES -= src/test/cpp/hoot/rnd/perty/PertyTestRunnerTest.cpp
 SOURCES -= src/test/cpp/hoot/core/schema/TranslatedTagDifferencerTest.cpp
 nodejs:SOURCES += src/test/cpp/hoot/core/io/OgrReaderTest.cpp
 nodejs:SOURCES += src/test/cpp/hoot/core/io/OgrWriterTest.cpp
 nodejs:SOURCES += src/test/cpp/hoot/core/ops/CalculateStatsOpTest.cpp
-nodejs:SOURCES += src/test/cpp/hoot/rnd/perty/PertyTestRunnerTest.cpp
 nodejs:SOURCES += src/test/cpp/hoot/core/schema/TranslatedTagDifferencerTest.cpp
 
 }
