@@ -101,7 +101,9 @@
     },
     {
         "geometries": [
-            "node"
+            "node",
+            "linestring",
+            "area"
         ],
         "isA": "leisure",
         "name": "leisure=slipway",

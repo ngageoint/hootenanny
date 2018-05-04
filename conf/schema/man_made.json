@@ -124,6 +124,16 @@
     {
         "categories": [],
         "geometries": [
+            "linestring",
+            "area"
+        ],
+        "isA": "man_made",
+        "name": "man_made=mole",
+        "objectType": "tag"
+    },
+    {
+        "categories": [],
+        "geometries": [
             "node",
             "linestring"
         ],
@@ -136,7 +146,8 @@
             "poi"
         ],
         "geometries": [
-            "linestring"
+            "linestring",
+            "area"
         ],
         "isA": "man_made",
         "name": "man_made=pier",
@@ -154,7 +165,8 @@
     {
         "categories": [],
         "geometries": [
-            "linestring"
+            "linestring",
+            "area"
         ],
         "isA": "man_made",
         "name": "man_made=promenade",
@@ -163,7 +175,8 @@
     {
         "categories": [],
         "geometries": [
-            "linestring"
+            "linestring",
+            "area"
         ],
         "isA": "man_made",
         "name": "man_made=quay",
@@ -172,7 +185,8 @@
     {
         "categories": [],
         "geometries": [
-            "linestring"
+            "linestring",
+            "area"
         ],
         "isA": "man_made",
         "name": "man_made=recreational_pier",
@@ -238,6 +252,16 @@
                 "weight": 0.8
             }
         ]
+    },
+    {
+        "categories": [],
+        "geometries": [
+            "linestring",
+            "area"
+        ],
+        "isA": "man_made",
+        "name": "man_made=training_wall",
+        "objectType": "tag"
     },
     {
         "categories": [
