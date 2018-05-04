@@ -28,7 +28,7 @@
 #define __VAGABOND_NETWORK_MATCHER_H__
 
 // hoot
-#include <hoot/rnd/conflate/network/NetworkMatcher.h>
+#include <hoot/core/conflate/network/NetworkMatcher.h>
 
 #include "IndexedEdgeLinks.h"
 #include "IndexedEdgeMatchSet.h"

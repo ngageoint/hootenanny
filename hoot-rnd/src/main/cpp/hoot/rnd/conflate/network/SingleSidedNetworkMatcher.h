@@ -30,11 +30,11 @@
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/optimizer/SingleAssignmentProblemSolver.h>
-#include <hoot/rnd/conflate/network/IndexedEdgeMatchSet.h>
-#include <hoot/rnd/conflate/network/NetworkMatcher.h>
-#include <hoot/rnd/conflate/network/NetworkEdgeScore.h>
-#include <hoot/rnd/conflate/network/NetworkVertexScore.h>
-#include <hoot/rnd/conflate/network/OsmNetwork.h>
+#include <hoot/core/conflate/network/IndexedEdgeMatchSet.h>
+#include <hoot/core/conflate/network/NetworkMatcher.h>
+#include <hoot/core/conflate/network/NetworkEdgeScore.h>
+#include <hoot/core/conflate/network/NetworkVertexScore.h>
+#include <hoot/core/conflate/network/OsmNetwork.h>
 
 // tgs
 #include <tgs/RStarTree/HilbertRTree.h>

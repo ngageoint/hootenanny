@@ -1,6 +1,7 @@
 # -------------------------------------------------
-# Project created by QtCreator 2011-09-29T12:27:47
+# Exposes the HootTest command line interface
 # -------------------------------------------------
+
 include(../Configure.pri)
 
 TEMPLATE = app

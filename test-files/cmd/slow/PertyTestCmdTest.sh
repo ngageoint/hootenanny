@@ -1,6 +1,12 @@
 #!/bin/bash
 set -e
 
+# rnd test
+OPT_COMMAND=`hoot | grep perty-test`
+if [ -z "$OPT_COMMAND" ]; then
+ exit 0
+fi
+
 mkdir -p $HOOT_HOME/test-output/cmd/slow/PertyTestCmdTest
 
 infile=$HOOT_HOME/test-files/DcGisRoads.osm

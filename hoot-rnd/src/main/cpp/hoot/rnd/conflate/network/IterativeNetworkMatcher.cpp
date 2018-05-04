@@ -29,9 +29,8 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/rnd/conflate/network/EdgeMatch.h>
-
-#include "EdgeMatchSetFinder.h"
+#include <hoot/core/conflate/network/EdgeMatch.h>
+#include <hoot/core/conflate/network/EdgeMatchSetFinder.h>
 
 using namespace geos::geom;
 using namespace std;

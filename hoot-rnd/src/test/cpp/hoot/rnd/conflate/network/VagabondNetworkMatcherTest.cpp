@@ -34,9 +34,9 @@
 #include <hoot/core/filters/StatusCriterion.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/rnd/conflate/network/DebugNetworkMapCreator.h>
+#include <hoot/core/conflate/network/DebugNetworkMapCreator.h>
 #include <hoot/rnd/conflate/network/VagabondNetworkMatcher.h>
-#include <hoot/rnd/conflate/network/OsmNetworkExtractor.h>
+#include <hoot/core/conflate/network/OsmNetworkExtractor.h>
 
 // Qt
 #include <QDir>

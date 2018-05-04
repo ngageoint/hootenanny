@@ -1,6 +1,12 @@
 #!/bin/bash
 set -e
 
+# rnd test
+OPT_COMMAND=`hoot | grep score-map`
+if [ -z "$OPT_COMMAND" ]; then
+ exit 0
+fi
+
 # DC roads take about 6 minutes to run
 #baseMap1=$HOOT_HOME/test-files/DcGisRoads.osm
 #baseMap2=$HOOT_HOME/test-files/DcGisRoads.osm
@@ -14,7 +20,8 @@ uut=$HOOT_HOME/test-files/ToyTestB.osm
 # Run the command. Note that we remove some really small numbers from
 # the output, because they are essentially noise 
 #hoot score-map $baseMap1 $baseMap2 $uut | \
-#           sed "s///g" | \
+#           sed "s/
+//g" | \
 #           sed "s/^[0-9]\{2\}:[0-9]\{2\}:[0-9]\{2\}\.[0-9]\{3\} //g" | \
 #           sed "s/ [0-9]\+\.[0-9]\+e\-[0-9]\+//g"    
 hoot score-map $baseMap1 $baseMap2 $uut |\

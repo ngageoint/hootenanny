@@ -31,8 +31,7 @@
 #include <hoot/core/conflate/polygon/extractors/HausdorffDistanceExtractor.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-
-#include "EdgeMatchSetFinder.h"
+#include <hoot/core/conflate/network/EdgeMatchSetFinder.h>
 
 using namespace geos::geom;
 using namespace std;

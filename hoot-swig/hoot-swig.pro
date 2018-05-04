@@ -1,9 +1,5 @@
 # -------------------------------------------------
-# The Hoot R&D project is a place to store experimental code that isn't quite ready for prime time.
-# At this point anthing below TRL5 [1] should be put in this project. This project is disabled by
-# default which should help avoid introducing bugs into the core while experimenting.
-#
-# 1. TRL5 - Module and/or subsystem validation in a relevant environment
+# Code for the SWIG interface to hoot
 # -------------------------------------------------
 
 exists ("../../Configure.pri") {
