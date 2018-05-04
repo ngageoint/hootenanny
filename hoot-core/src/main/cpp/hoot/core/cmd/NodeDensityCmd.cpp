@@ -100,7 +100,7 @@ class NodeDensityCmd : public BaseCommand
             }
           }
         }
-        LOG_VAR(nodeCount);
+        LOG_VARD(nodeCount);
 
         return result;
       }
@@ -143,7 +143,7 @@ class NodeDensityCmd : public BaseCommand
         }
       }
 
-      LOG_VAR(count);
+      LOG_VARD(count);
 
       return c;
     }
@@ -217,7 +217,7 @@ class NodeDensityCmd : public BaseCommand
         OsmMapReaderFactory::getInstance().createReader(input, true);
       reader->open(input);
       Envelope e = getEnvelope(reader);
-      LOG_INFO("Envelope: " << GeometryUtils::toString(e));
+      LOG_DEBUG("Envelope: " << GeometryUtils::toString(e));
 
       double pixelSize;
       if (e.getWidth() > e.getHeight())
@@ -261,7 +261,7 @@ class NodeDensityCmd : public BaseCommand
           qImage.setPixel(x, qImage.height() - y - 1, rgb);
         }
       }
-      LOG_VAR(maxValue);
+      LOG_VARD(maxValue);
 
       qImage.save(output);
 
