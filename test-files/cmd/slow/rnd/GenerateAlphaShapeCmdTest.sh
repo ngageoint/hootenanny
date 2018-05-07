@@ -1,12 +1,6 @@
 #!/bin/bash
 set -e
 
-# rnd command
-OPT_COMMAND=`hoot | grep generate-alpha-shape`
-if [ -z "$OPT_COMMAND" ]; then
- exit 0
-fi
-
 mkdir -p test-output/cmd/GenerateAlphaShapeCmdTest
 
 hoot generate-alpha-shape test-files/DcGisRoads.osm 1000 0 test-output/cmd/GenerateAlphaShapeCmdTest/output-1.osm

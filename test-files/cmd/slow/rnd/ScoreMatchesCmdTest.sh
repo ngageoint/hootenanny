@@ -1,12 +1,6 @@
 #!/bin/bash
 set -e
 
-# rnd test
-OPT_COMMAND=`hoot | grep score-matches`
-if [ -z "$OPT_COMMAND" ]; then
- exit 0
-fi
-
 mkdir -p $HOOT_HOME/test-output/cmd/slow/ScoreMatchesCmdTest
 
 # These files are kind of lame. Maybe make better test files in the future. 

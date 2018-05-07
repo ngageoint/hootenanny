@@ -1,12 +1,6 @@
 #!/bin/bash
 set -e
 
-# rnd test
-OPT_COMMAND=`hoot | grep type-tagger-create-rules`
-if [ -z "$OPT_COMMAND" ]; then
- exit 0
-fi
-
 REF_DIR=test-files/cmd/slow/ImplicitTypeTaggerTest
 OUTPUT_DIR=test-output/cmd/slow/ImplicitTypeTaggerTest
 INPUT_DIR=test-files/schema/ImplicitTagRawRulesDeriverTest

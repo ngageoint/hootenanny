@@ -346,6 +346,9 @@ void populateTests(_TestType t, std::vector<TestPtr> &vTests, bool printDiff, bo
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry().makeTest()));
     vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/current/", printDiff, QUICK_WAIT, hideDisableTests)));
     vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/quick/", printDiff, QUICK_WAIT, hideDisableTests)));
+    # ifdef HOOT_HAVE_RND
+      vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/quick/rnd/", printDiff, QUICK_WAIT, hideDisableTests)));
+    # endif
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest()));
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest()));
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest()));
@@ -353,6 +356,9 @@ void populateTests(_TestType t, std::vector<TestPtr> &vTests, bool printDiff, bo
   case QUICK_ONLY:
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry().makeTest()));
     vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/quick/", printDiff, QUICK_WAIT, hideDisableTests)));
+    # ifdef HOOT_HAVE_RND
+      vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/quick/rnd/", printDiff, QUICK_WAIT, hideDisableTests)));
+    # endif
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest()));
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest()));
     break;
@@ -362,6 +368,9 @@ void populateTests(_TestType t, std::vector<TestPtr> &vTests, bool printDiff, bo
     vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/quick/", printDiff, QUICK_WAIT, hideDisableTests)));
     vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/slow/", printDiff, SLOW_WAIT, hideDisableTests)));
     vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/slow/serial/", printDiff, SLOW_WAIT, hideDisableTests)));
+    # ifdef HOOT_HAVE_RND
+      vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/slow/rnd/", printDiff, SLOW_WAIT, hideDisableTests)));
+    # endif
     vTests.push_back(TestPtr(new ConflateCaseTestSuite("test-files/cases", hideDisableTests)));
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest()));
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest()));
@@ -371,6 +380,9 @@ void populateTests(_TestType t, std::vector<TestPtr> &vTests, bool printDiff, bo
   case SLOW_ONLY:
     vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/slow/", printDiff, SLOW_WAIT, hideDisableTests)));
     vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/slow/serial/", printDiff, SLOW_WAIT, hideDisableTests)));
+    # ifdef HOOT_HAVE_RND
+      vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/slow/rnd/", printDiff, SLOW_WAIT, hideDisableTests)));
+    # endif
     vTests.push_back(TestPtr(new ConflateCaseTestSuite("test-files/cases", hideDisableTests)));
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("slow").makeTest()));
     break;
@@ -379,8 +391,14 @@ void populateTests(_TestType t, std::vector<TestPtr> &vTests, bool printDiff, bo
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry().makeTest()));
     vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/current/", printDiff, QUICK_WAIT, hideDisableTests)));
     vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/quick/", printDiff, QUICK_WAIT, hideDisableTests)));
+    # ifdef HOOT_HAVE_RND
+      vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/quick/rnd/", printDiff, QUICK_WAIT, hideDisableTests)));
+    # endif
     vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/slow/", printDiff, SLOW_WAIT, hideDisableTests)));
     vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/slow/serial/", printDiff, SLOW_WAIT, hideDisableTests)));
+    # ifdef HOOT_HAVE_RND
+      vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/slow/rnd/", printDiff, SLOW_WAIT, hideDisableTests)));
+    # endif
     vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/glacial/", printDiff, GLACIAL_WAIT, hideDisableTests)));
     vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/glacial/serial/", printDiff, GLACIAL_WAIT, hideDisableTests)));
     vTests.push_back(TestPtr(new ConflateCaseTestSuite("test-files/cases", hideDisableTests)));
