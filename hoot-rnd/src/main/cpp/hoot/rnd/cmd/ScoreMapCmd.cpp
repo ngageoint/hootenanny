@@ -31,8 +31,8 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/ops/SuperfluousWayRemover.h>
 #include <hoot/core/scoring/AttributeComparator.h>
-#include <hoot/core/scoring/GraphComparator.h>
-#include <hoot/core/scoring/RasterComparator.h>
+#include <hoot/rnd/scoring/GraphComparator.h>
+#include <hoot/rnd/scoring/RasterComparator.h>
 #include <hoot/core/visitors/KeepHighwaysVisitor.h>
 #include <hoot/core/util/ConfigOptions.h>
 

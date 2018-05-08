@@ -28,7 +28,7 @@
 #define SCRIPTMERGERCREATOR_H
 
 // hoot
-#include <hoot/core/conflate/MergerCreator.h>
+#include <hoot/core/conflate/merging/MergerCreator.h>
 
 namespace hoot
 {

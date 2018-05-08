@@ -30,8 +30,8 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/conflate/MatchType.h>
-#include <hoot/core/conflate/MatchThreshold.h>
+#include <hoot/core/conflate/matching/MatchType.h>
+#include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/filters/ChainCriterion.h>
 #include <hoot/core/filters/HighwayCriterion.h>

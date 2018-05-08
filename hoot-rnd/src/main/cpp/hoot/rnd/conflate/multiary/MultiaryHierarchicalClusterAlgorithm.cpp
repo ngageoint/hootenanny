@@ -27,7 +27,7 @@
 #include "MultiaryHierarchicalClusterAlgorithm.h"
 
 // hoot
-#include <hoot/core/conflate/MatchClassification.h>
+#include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/util/Log.h>
 
 // Qt

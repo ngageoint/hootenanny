@@ -27,7 +27,7 @@
 
 #include "DataSamples.h"
 
-#include <hoot/core/conflate/MatchType.h>
+#include <hoot/core/conflate/matching/MatchType.h>
 
 using namespace std;
 using namespace Tgs;

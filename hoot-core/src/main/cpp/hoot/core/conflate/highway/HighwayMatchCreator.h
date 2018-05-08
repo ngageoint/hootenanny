@@ -28,7 +28,7 @@
 #define HIGHWAYMATCHCREATOR_H
 
 // hoot
-#include <hoot/core/conflate/MatchCreator.h>
+#include <hoot/core/conflate/matching/MatchCreator.h>
 
 namespace hoot
 {

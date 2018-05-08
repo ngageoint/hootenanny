@@ -28,8 +28,8 @@
 #define __MULTIARY_POI_MERGER_H__
 
 // hoot
-#include <hoot/core/conflate/Match.h>
-#include <hoot/core/conflate/MergerBase.h>
+#include <hoot/core/conflate/matching/Match.h>
+#include <hoot/core/conflate/merging/MergerBase.h>
 
 #include "MultiaryClusterAlgorithm.h"
 

@@ -57,7 +57,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/visitors/TagCountVisitor.h>
-#include <hoot/core/conflate/MatchFactory.h>
+#include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/visitors/MatchCandidateCountVisitor.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/DataProducer.h>

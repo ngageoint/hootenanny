@@ -37,7 +37,7 @@
 #include <hoot/core/algorithms/MaxWordSetDistance.h>
 #include <hoot/core/algorithms/MeanWordSetDistance.h>
 #include <hoot/core/algorithms/Soundex.h>
-#include <hoot/core/conflate/MatchType.h>
+#include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/conflate/polygon/extractors/BufferedOverlapExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/CentroidDistanceExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/CompactnessExtractor.h>

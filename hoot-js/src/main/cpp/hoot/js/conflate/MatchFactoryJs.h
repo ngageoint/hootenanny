@@ -29,7 +29,7 @@
 #define MATCHFACTORYJS_H
 
 // node.js
-#include <hoot/core/conflate/MatchCreator.h>
+#include <hoot/core/conflate/matching/MatchCreator.h>
 #include <hoot/js/SystemNodeJs.h>
 #include <hoot/js/util/DataConvertJs.h>
 

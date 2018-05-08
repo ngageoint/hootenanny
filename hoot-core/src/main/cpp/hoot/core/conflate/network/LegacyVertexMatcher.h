@@ -28,7 +28,7 @@
 #define LEGACYVERTEXMATCHER_H
 
 // hoot
-#include <hoot/core/conflate/NodeMatcher.h>
+#include <hoot/core/conflate/matching/NodeMatcher.h>
 #include <hoot/core/conflate/network/OsmNetwork.h>
 #include <hoot/core/OsmMap.h>
 

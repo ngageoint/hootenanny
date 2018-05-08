@@ -28,10 +28,10 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/conflate/MatchFactory.h>
+#include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/ops/CopySubsetOp.h>
-#include <hoot/core/conflate/MatchClassification.h>
+#include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/util/Log.h>
 

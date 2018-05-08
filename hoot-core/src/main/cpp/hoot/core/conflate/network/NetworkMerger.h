@@ -28,7 +28,7 @@
 #define NETWORKMERGER_H
 
 // hoot
-#include <hoot/core/conflate/MergerBase.h>
+#include <hoot/core/conflate/merging/MergerBase.h>
 
 #include "EdgeMatch.h"
 #include "NetworkDetails.h"

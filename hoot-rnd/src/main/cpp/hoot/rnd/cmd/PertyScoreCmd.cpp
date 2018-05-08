@@ -29,7 +29,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/rnd/perty/PertyMatchScorer.h>
-#include <hoot/core/scoring/MapMatchScoringUtils.h>
+#include <hoot/rnd/scoring/MapMatchScoringUtils.h>
 
 using namespace std;
 

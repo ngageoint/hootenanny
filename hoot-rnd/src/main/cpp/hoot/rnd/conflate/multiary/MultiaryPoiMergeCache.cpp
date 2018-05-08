@@ -27,9 +27,9 @@
 #include "MultiaryPoiMergeCache.h"
 
 // hoot
-#include <hoot/core/conflate/MatchCreator.h>
-#include <hoot/core/conflate/Merger.h>
-#include <hoot/core/conflate/MergerCreator.h>
+#include <hoot/core/conflate/matching/MatchCreator.h>
+#include <hoot/core/conflate/merging/Merger.h>
+#include <hoot/core/conflate/merging/MergerCreator.h>
 #include <hoot/core/ops/CopySubsetOp.h>
 
 namespace hoot

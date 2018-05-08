@@ -35,7 +35,7 @@
 #include <hoot/core/conflate/OutsideBoundsRemover.h>
 #include <hoot/core/algorithms/WaySplitter.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
-#include <hoot/core/conflate/TileBoundsCalculator.h>
+#include <hoot/core/conflate/tile/TileBoundsCalculator.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/MergeNearbyNodes.h>

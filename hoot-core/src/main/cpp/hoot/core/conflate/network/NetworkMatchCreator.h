@@ -28,7 +28,7 @@
 #define NETWORKMATCHCREATOR_H
 
 // hoot
-#include <hoot/core/conflate/MatchCreator.h>
+#include <hoot/core/conflate/matching/MatchCreator.h>
 #include <hoot/core/filters/ElementCriterion.h>
 #include <hoot/core/conflate/network/NetworkDetails.h>
 #include <hoot/core/conflate/network/NetworkEdgeScore.h>

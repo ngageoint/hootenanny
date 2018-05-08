@@ -31,8 +31,8 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/ops/DuplicateNameRemover.h>
 #include <hoot/core/ops/DuplicateWayRemover.h>
-#include <hoot/core/conflate/ImpliedDividedMarker.h>
-#include <hoot/core/conflate/SmallWayMerger.h>
+#include <hoot/core/conflate/highway/ImpliedDividedMarker.h>
+#include <hoot/core/conflate/merging/SmallWayMerger.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
 #include <hoot/core/ops/VisitorOp.h>

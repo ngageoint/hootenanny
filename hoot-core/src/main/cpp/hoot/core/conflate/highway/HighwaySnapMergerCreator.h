@@ -28,7 +28,7 @@
 #define HIGHWAYSNAPMERGERCREATOR_H
 
 // hoot
-#include <hoot/core/conflate/MergerCreator.h>
+#include <hoot/core/conflate/merging/MergerCreator.h>
 #include <hoot/core/util/Configurable.h>
 
 namespace hoot

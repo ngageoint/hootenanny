@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/rnd/perty/PertyMatchScorer.h>
-#include <hoot/core/scoring/MapMatchScoringUtils.h>
+#include <hoot/rnd/scoring/MapMatchScoringUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/MetadataTags.h>

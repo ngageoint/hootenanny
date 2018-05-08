@@ -30,11 +30,11 @@
 #include <hoot/core/conflate/Conflator.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/conflate/MapCleaner.h>
-#include <hoot/core/conflate/MatchThreshold.h>
+#include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/RubberSheet.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/ops/BuildingOutlineUpdateOp.h>
-#include <hoot/core/scoring/MatchScoringMapPreparer.h>
+#include <hoot/rnd/scoring/MatchScoringMapPreparer.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/util/OsmUtils.h>

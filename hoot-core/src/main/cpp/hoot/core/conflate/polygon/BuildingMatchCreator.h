@@ -27,7 +27,7 @@
 #ifndef BUILDINGMATCHCREATOR_H
 #define BUILDINGMATCHCREATOR_H
 
-#include <hoot/core/conflate/MatchCreator.h>
+#include <hoot/core/conflate/matching/MatchCreator.h>
 
 namespace Tgs
 {

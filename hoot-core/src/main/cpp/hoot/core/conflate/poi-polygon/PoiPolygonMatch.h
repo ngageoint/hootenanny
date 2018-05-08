@@ -30,10 +30,10 @@
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/ElementId.h>
-#include <hoot/core/conflate/Match.h>
-#include <hoot/core/conflate/MatchThreshold.h>
-#include <hoot/core/conflate/MatchDetails.h>
-#include <hoot/core/conflate/MatchClassification.h>
+#include <hoot/core/conflate/matching/Match.h>
+#include <hoot/core/conflate/matching/MatchThreshold.h>
+#include <hoot/core/conflate/matching/MatchDetails.h>
+#include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/ConfigOptions.h>
 

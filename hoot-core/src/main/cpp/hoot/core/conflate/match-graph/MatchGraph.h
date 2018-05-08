@@ -28,7 +28,7 @@
 #define MATCHGRAPH_H
 
 // Hoot
-#include <hoot/core/conflate/MatchSet.h>
+#include <hoot/core/conflate/matching/MatchSet.h>
 
 // Standard
 #include <memory>

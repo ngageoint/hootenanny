@@ -34,7 +34,7 @@
 // Hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/highway/HighwayExpertClassifier.h>
-#include <hoot/core/conflate/MatchThreshold.h>
+#include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>

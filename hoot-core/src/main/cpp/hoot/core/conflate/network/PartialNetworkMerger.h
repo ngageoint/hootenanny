@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/algorithms/WayMatchStringMerger.h>
-#include <hoot/core/conflate/MergerBase.h>
+#include <hoot/core/conflate/merging/MergerBase.h>
 
 #include "EdgeMatch.h"
 #include "EidMapper.h"

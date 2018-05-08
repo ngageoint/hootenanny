@@ -1,0 +1,61 @@
+reference dataset:  test-files/cmd/glacial/RndServiceOsmApiDbHootApiDbRafahConflateTest/rafah-cropped.osm
+secondary dataset:  test-files/cmd/glacial/RndServiceOsmApiDbHootApiDbRafahConflateTest/secondary.osm
+AOI:  34.04725915004996,31.17907522629906,34.05654176863703,31.18329523832873
+CONFLATION TYPE:  unifying
+TEST_NAME:  RndServiceOsmApiDbHootApiDbRafahConflateTest
+TEST_CATEGORY:  glacial
+SELECT_RANDOM_AOI:  false
+RANDOM_SEED:  -1
+
+STEP 1: Cleaning out the osm api db and initializing it for use...
+
+ setval 
+--------
+      1
+(1 row)
+
+
+STEP 2: Writing the complete reference dataset to the osm api db...
+
+15:08:57.709 WARN  .../hoot/core/io/OsmXmlReader.cpp( 485) Missing node (505134642) in relation (3934458).
+15:08:57.709 WARN  .../hoot/core/io/OsmXmlReader.cpp( 485) Missing node (330666964) in relation (3934458).
+15:08:57.709 WARN  .../hoot/core/io/OsmXmlReader.cpp( 485) Missing node (2995490953) in relation (3934458).
+15:08:57.709 WARN  .../hoot/core/io/OsmXmlReader.cpp( 489) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+
+STEP 5: Writing the complete secondary dataset to the hoot api db...
+
+
+STEP 8a: Conflating the two datasets over the specified AOI with the SQL changeset workflow...
+
+
+STEP 8b: Conflating the two datasets over the specified AOI with the XML changeset workflow...
+
+
+STEP 11a: Writing a SQL changeset file that is the difference between the cropped reference input dataset specified AOI and the conflated output specified AOI...
+
+
+STEP 11b: Writing a XML changeset file that is the difference between the cropped reference input dataset specified AOI and the conflated output specified AOI...
+
+
+STEP 12: Executing the SQL changeset on the osm api db...
+
+Changeset(s) Created: 1
+Changeset Details: min_lat=31.1790644, max_lat=31.1832952, min_lon=34.0472592, max_lon=34.0565418, num_changes=21
+Node(s) Created: 10
+Node(s) Modified: 0
+Node(s) Deleted: 0
+Way(s) Created: 8
+Way(s) Modified: 3
+Way(s) Deleted: 0
+Relation(s) Created: 0
+Relation(s) Modified: 0
+Relation(s) Deleted: 0
+
+STEP 14: Reading the entire contents of the osm api db, for the SQL changeset workflow, writing it into a file, and verifying the data...
+
+
+STEP 15: Cleaning up database...
+
+15:09:11.149 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 73
+15:09:11.803 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 74
+15:09:12.265 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 86

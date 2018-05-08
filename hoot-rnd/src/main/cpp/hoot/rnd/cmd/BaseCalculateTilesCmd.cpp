@@ -34,7 +34,7 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/OpenCv.h>
-#include <hoot/core/conflate/TileBoundsCalculator.h>
+#include <hoot/core/conflate/tile/TileBoundsCalculator.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/io/ApiDbReader.h>
 #include <hoot/core/util/RandomNumberUtils.h>

@@ -28,7 +28,7 @@
 #include "ArffWriter.h"
 
 // Hoot
-#include <hoot/core/conflate/MatchType.h>
+#include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/util/Log.h>
 
 // Qt

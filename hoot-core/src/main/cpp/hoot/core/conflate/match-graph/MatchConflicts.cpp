@@ -27,8 +27,8 @@
 #include "MatchConflicts.h"
 
 // hoot
-#include <hoot/core/conflate/Match.h>
-#include <hoot/core/conflate/MergerFactory.h>
+#include <hoot/core/conflate/matching/Match.h>
+#include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/elements/ElementId.h>
 
 // Standard

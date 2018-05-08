@@ -46,11 +46,11 @@
 using namespace boost;
 
 // hoot
-#include <hoot/core/conflate/MatchThreshold.h>
-#include <hoot/core/conflate/MergerFactory.h>
+#include <hoot/core/conflate/matching/MatchThreshold.h>
+#include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/conflate/Match.h>
+#include <hoot/core/conflate/matching/Match.h>
 
 // Qt
 #include <QHash>

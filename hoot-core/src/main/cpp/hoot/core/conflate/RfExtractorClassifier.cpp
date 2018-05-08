@@ -28,9 +28,9 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/conflate/MatchType.h>
+#include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/conflate/extractors/FeatureExtractor.h>
-#include <hoot/core/conflate/MatchClassification.h>
+#include <hoot/core/conflate/matching/MatchClassification.h>
 
 // Standard
 #include <sstream>

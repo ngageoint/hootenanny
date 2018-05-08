@@ -32,7 +32,7 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/conflate/TileConflator.h>
+#include <hoot/core/conflate/tile/TileConflator.h>
 #include <hoot/core/fourpass/FourPassManager.h>
 #include <hoot/core/fourpass/LocalTileWorker2.h>
 #include <hoot/core/ops/OpList.h>
