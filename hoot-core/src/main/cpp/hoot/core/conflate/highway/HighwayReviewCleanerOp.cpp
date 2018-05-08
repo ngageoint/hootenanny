@@ -28,7 +28,7 @@
 
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
-#include <hoot/core/conflate/MatchFactory.h>
+#include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/ops/RemoveRelationOp.h>
 #include <hoot/core/OsmMap.h>
 

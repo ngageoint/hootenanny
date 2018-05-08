@@ -46,6 +46,7 @@ clean: Makefile.qmake ui-clean services-clean clean-coverage
 	rm -f plugins/config.js
 	rm -f translations/*.pyc
 	rm -f $(SCHEMA_FILES)
+	rm -f hoot-core/src/main/cpp/hoot/core/HootConfig.h
 	# The following bits are due to moving files in git. Since the Output.osm
 	# file is written to the test-files/cases/**/ directory git won't remove
 	# the directory. Doing this as part of clean will ensure that the

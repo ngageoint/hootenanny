@@ -32,7 +32,7 @@
 #include <geos/geom/Geometry.h>
 
 // hoot
-#include <hoot/core/conflate/MatchClassification.h>
+#include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/conflate/polygon/extractors/AngleHistogramExtractor.h>

@@ -29,8 +29,8 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/conflate/MatchFactory.h>
-#include <hoot/core/conflate/MatchThreshold.h>
+#include <hoot/core/conflate/matching/MatchFactory.h>
+#include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/match-graph/GreedyConstrainedMatches.h>
 #include <hoot/core/conflate/match-graph/OptimalConstrainedMatches.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
@@ -38,7 +38,7 @@
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/MetadataTags.h>
-#include <hoot/core/conflate/MatchClassification.h>
+#include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/filters/TagKeyCriterion.h>

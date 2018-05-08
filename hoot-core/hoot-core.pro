@@ -1,6 +1,7 @@
 # -------------------------------------------------
-# Project created by QtCreator 2011-09-29T12:27:47
+# Main project for hoot production code
 # -------------------------------------------------
+
 QT += \
     sql \
     testlib \

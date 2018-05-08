@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/conflate/MatchThreshold.h>
+#include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/js/HootJsStable.h>

@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MATCHGRAPH_H
 #define MATCHGRAPH_H
 
 // Hoot
-#include <hoot/core/conflate/MatchSet.h>
+#include <hoot/core/conflate/matching/MatchSet.h>
 
 // Standard
 #include <memory>

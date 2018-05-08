@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "VagabondNetworkMatcher.h"
 
@@ -31,8 +31,7 @@
 #include <hoot/core/conflate/polygon/extractors/HausdorffDistanceExtractor.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-
-#include "EdgeMatchSetFinder.h"
+#include <hoot/core/conflate/network/EdgeMatchSetFinder.h>
 
 using namespace geos::geom;
 using namespace std;

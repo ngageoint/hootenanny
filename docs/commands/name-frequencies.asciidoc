@@ -1,0 +1,28 @@
+[[name-frequencies]]
+== name-frequencies
+
+=== Description
+
+The +name-frequencies+ command reads input and write out a list of names ordered by frequency.
+
+* +input+ - One or more input map paths.
+
+=== Usage
+
+--------------------------------------
+name-frequencies (input) [inputs...]
+--------------------------------------
+
+=== Example Output
+
+---------------
+Total word count: 1163
+320 (0.28) : nw
+246 (0.21) : st
+80 (0.069) : ave
+45 (0.039) : sw
+18 (0.015) : h
+18 (0.015) : pennsylvania
+...
+---------------
+

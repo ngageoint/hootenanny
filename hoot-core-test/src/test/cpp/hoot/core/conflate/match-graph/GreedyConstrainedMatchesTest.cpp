@@ -42,13 +42,13 @@
  */
 
 // Hoot
-#include <hoot/core/conflate/MatchSet.h>
-#include <hoot/core/conflate/MatchThreshold.h>
-#include <hoot/core/conflate/MergerCreator.h>
-#include <hoot/core/conflate/MergerFactory.h>
+#include <hoot/core/conflate/matching/MatchSet.h>
+#include <hoot/core/conflate/matching/MatchThreshold.h>
+#include <hoot/core/conflate/merging/MergerCreator.h>
+#include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/conflate/match-graph/GreedyConstrainedMatches.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/conflate/MatchClassification.h>
+#include <hoot/core/conflate/matching/MatchClassification.h>
 using namespace hoot;
 
 // CPP Unit
@@ -58,7 +58,7 @@ using namespace hoot;
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/conflate/Match.h>
+#include <hoot/core/conflate/matching/Match.h>
 
 // Qt
 #include <QDebug>

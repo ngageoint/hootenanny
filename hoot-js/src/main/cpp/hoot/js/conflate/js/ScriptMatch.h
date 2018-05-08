@@ -28,10 +28,10 @@
 #define SCRIPTMATCH_H
 
 // hoot
-#include <hoot/core/conflate/Match.h>
-#include <hoot/core/conflate/MatchThreshold.h>
-#include <hoot/core/conflate/MatchDetails.h>
-#include <hoot/core/conflate/MatchClassification.h>
+#include <hoot/core/conflate/matching/Match.h>
+#include <hoot/core/conflate/matching/MatchThreshold.h>
+#include <hoot/core/conflate/matching/MatchDetails.h>
+#include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/js/PluginContext.h>
 
 namespace hoot

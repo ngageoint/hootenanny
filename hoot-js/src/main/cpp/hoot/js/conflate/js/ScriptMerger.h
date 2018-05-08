@@ -28,7 +28,7 @@
 #define SCRIPTMERGER_H
 
 // hoot
-#include <hoot/core/conflate/MergerBase.h>
+#include <hoot/core/conflate/merging/MergerBase.h>
 #include <hoot/js/PluginContext.h>
 
 namespace hoot

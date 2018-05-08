@@ -51,7 +51,7 @@ public:
   virtual QString getName() const { return "accuracy-distribution"; }
 
   virtual QString getDescription() const
-  { return "Prints the distribution of accuracy values"; }
+  { return "Prints the distribution of feature accuracy values"; }
 
   virtual int runSimple(QStringList args)
   {

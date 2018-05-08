@@ -28,7 +28,7 @@
 
 // hoot
 #include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/conflate/MatchType.h>
+#include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/filters/ChainCriterion.h>
 #include <hoot/core/filters/ElementTypeCriterion.h>
 #include <hoot/core/filters/TagKeyCriterion.h>

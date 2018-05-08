@@ -29,11 +29,11 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/conflate/Merger.h>
-#include <hoot/core/conflate/MarkForReviewMergerCreator.h>
-#include <hoot/core/conflate/MatchFactory.h>
-#include <hoot/core/conflate/MatchThreshold.h>
-#include <hoot/core/conflate/MergerFactory.h>
+#include <hoot/core/conflate/merging/Merger.h>
+#include <hoot/core/conflate/merging/MarkForReviewMergerCreator.h>
+#include <hoot/core/conflate/matching/MatchFactory.h>
+#include <hoot/core/conflate/matching/MatchThreshold.h>
+#include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/conflate/match-graph/GreedyConstrainedMatches.h>
 #include <hoot/core/conflate/match-graph/OptimalConstrainedMatches.h>
 #include <hoot/core/conflate/polygon/BuildingMergerCreator.h>
@@ -41,7 +41,7 @@
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/MetadataTags.h>
-#include <hoot/core/conflate/MatchClassification.h>
+#include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/util/Log.h>
 

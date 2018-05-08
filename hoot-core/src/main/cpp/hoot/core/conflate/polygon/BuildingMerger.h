@@ -28,7 +28,7 @@
 #define BUILDINGMERGER_H
 
 // hoot
-#include <hoot/core/conflate/MergerBase.h>
+#include <hoot/core/conflate/merging/MergerBase.h>
 
 // Standard
 #include <set>

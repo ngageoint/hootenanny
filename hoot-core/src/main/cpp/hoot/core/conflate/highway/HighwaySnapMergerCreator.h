@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HIGHWAYSNAPMERGERCREATOR_H
 #define HIGHWAYSNAPMERGERCREATOR_H
 
 // hoot
-#include <hoot/core/conflate/MergerCreator.h>
+#include <hoot/core/conflate/merging/MergerCreator.h>
 #include <hoot/core/util/Configurable.h>
 
 namespace hoot
