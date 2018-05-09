@@ -28,8 +28,8 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/conflate/MatchThreshold.h>
-#include <hoot/core/conflate/MatchType.h>
+#include <hoot/core/conflate/matching/MatchThreshold.h>
+#include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/filters/ArbitraryCriterion.h>
 #include <hoot/core/filters/ChainCriterion.h>
 #include <hoot/core/filters/StatusCriterion.h>

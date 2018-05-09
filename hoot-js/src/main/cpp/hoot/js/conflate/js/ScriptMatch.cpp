@@ -36,10 +36,10 @@
 #include <hoot/core/algorithms/MeanWordSetDistance.h>
 #include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/algorithms/Soundex.h>
-#include <hoot/core/conflate/MatchThreshold.h>
-#include <hoot/core/conflate/MatchType.h>
-#include <hoot/core/conflate/MergerFactory.h>
-#include <hoot/core/conflate/Merger.h>
+#include <hoot/core/conflate/matching/MatchThreshold.h>
+#include <hoot/core/conflate/matching/MatchType.h>
+#include <hoot/core/conflate/merging/MergerFactory.h>
+#include <hoot/core/conflate/merging/Merger.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/CopySubsetOp.h>

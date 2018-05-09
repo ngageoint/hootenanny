@@ -27,7 +27,7 @@
 #include "MergerFactoryJs.h"
 
 // hoot
-#include <hoot/core/conflate/MergerFactory.h>
+#include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/js/JsRegistrar.h>
 
 using namespace v8;

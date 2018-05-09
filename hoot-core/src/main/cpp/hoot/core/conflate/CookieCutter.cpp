@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "CookieCutter.h"
@@ -31,7 +31,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
-#include <hoot/core/conflate/SuperfluousWayRemover.h>
+#include <hoot/core/ops/SuperfluousWayRemover.h>
 #include <hoot/core/ops/MapCropper.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/visitors/UnionPolygonsVisitor.h>

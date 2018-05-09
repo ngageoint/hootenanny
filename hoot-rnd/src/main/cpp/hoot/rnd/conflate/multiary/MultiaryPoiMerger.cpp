@@ -27,9 +27,9 @@
 #include "MultiaryPoiMerger.h"
 
 // hoot
-#include <hoot/core/conflate/MergerCreator.h>
-#include <hoot/core/conflate/MatchFactory.h>
-#include <hoot/core/conflate/MergerFactory.h>
+#include <hoot/core/conflate/merging/MergerCreator.h>
+#include <hoot/core/conflate/matching/MatchFactory.h>
+#include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/util/Factory.h>

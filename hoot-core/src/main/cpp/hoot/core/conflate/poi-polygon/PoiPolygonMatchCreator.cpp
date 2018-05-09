@@ -29,7 +29,7 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/conflate/MatchThreshold.h>
+#include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/schema/OsmSchema.h>

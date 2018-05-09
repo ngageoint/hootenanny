@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BuildingRfClassifier.h"
 
@@ -37,7 +37,7 @@
 #include <hoot/core/algorithms/MaxWordSetDistance.h>
 #include <hoot/core/algorithms/MeanWordSetDistance.h>
 #include <hoot/core/algorithms/Soundex.h>
-#include <hoot/core/conflate/MatchType.h>
+#include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/conflate/polygon/extractors/BufferedOverlapExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/CentroidDistanceExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/CompactnessExtractor.h>

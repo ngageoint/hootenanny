@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/filters/ElementCriterion.h>
-#include <hoot/core/conflate/MatchCreator.h>
+#include <hoot/core/conflate/matching/MatchCreator.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include "ConstOsmMapOperation.h"
 #include "stats/SingleStat.h"

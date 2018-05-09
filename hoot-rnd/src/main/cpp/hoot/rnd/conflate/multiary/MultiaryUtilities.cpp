@@ -27,8 +27,8 @@
 #include "MultiaryUtilities.h"
 
 // hoot
-#include <hoot/core/conflate/MatchFactory.h>
-#include <hoot/core/conflate/MergerFactory.h>
+#include <hoot/core/conflate/matching/MatchFactory.h>
+#include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/io/OsmPbfWriter.h>

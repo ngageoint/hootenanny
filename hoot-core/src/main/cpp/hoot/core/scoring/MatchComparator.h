@@ -29,10 +29,10 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/conflate/ReviewMarker.h>
 
 // tgs
 #include <tgs/DisjointSet/DisjointSetMap.h>
-#include <hoot/core/conflate/ReviewMarker.h>
 
 namespace hoot
 {

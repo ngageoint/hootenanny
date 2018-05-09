@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SCRIPTMERGERCREATOR_H
 #define SCRIPTMERGERCREATOR_H
 
 // hoot
-#include <hoot/core/conflate/MergerCreator.h>
+#include <hoot/core/conflate/merging/MergerCreator.h>
 
 namespace hoot
 {

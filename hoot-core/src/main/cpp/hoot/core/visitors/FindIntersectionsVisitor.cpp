@@ -29,7 +29,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
-#include <hoot/core/conflate/NodeMatcher.h>
+#include <hoot/core/conflate/matching/NodeMatcher.h>
 #include <hoot/core/schema/OsmSchema.h>
 
 using namespace std;

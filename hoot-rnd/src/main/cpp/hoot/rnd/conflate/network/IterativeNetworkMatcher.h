@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ITERATIVENETWORKMATCHER_H
 #define ITERATIVENETWORKMATCHER_H
@@ -30,11 +30,11 @@
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/optimizer/SingleAssignmentProblemSolver.h>
-#include <hoot/rnd/conflate/network/IndexedEdgeMatchSet.h>
-#include <hoot/rnd/conflate/network/NetworkMatcher.h>
-#include <hoot/rnd/conflate/network/NetworkEdgeScore.h>
-#include <hoot/rnd/conflate/network/NetworkVertexScore.h>
-#include <hoot/rnd/conflate/network/OsmNetwork.h>
+#include <hoot/core/conflate/network/IndexedEdgeMatchSet.h>
+#include <hoot/core/conflate/network/NetworkMatcher.h>
+#include <hoot/core/conflate/network/NetworkEdgeScore.h>
+#include <hoot/core/conflate/network/NetworkVertexScore.h>
+#include <hoot/core/conflate/network/OsmNetwork.h>
 
 // tgs
 #include <tgs/RStarTree/HilbertRTree.h>

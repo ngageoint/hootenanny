@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __MULTIARY_POI_MERGER_H__
 #define __MULTIARY_POI_MERGER_H__
 
 // hoot
-#include <hoot/core/conflate/Match.h>
-#include <hoot/core/conflate/MergerBase.h>
+#include <hoot/core/conflate/matching/Match.h>
+#include <hoot/core/conflate/merging/MergerBase.h>
 
 #include "MultiaryClusterAlgorithm.h"
 

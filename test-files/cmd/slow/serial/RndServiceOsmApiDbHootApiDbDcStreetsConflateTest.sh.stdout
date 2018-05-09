@@ -1,0 +1,57 @@
+reference dataset:  test-files/DcGisRoads.osm
+secondary dataset:  test-files/DcTigerRoads.osm
+AOI:  -77.04,38.8916,-77.03324,38.8958
+CONFLATION TYPE:  unifying
+TEST_NAME:  RndServiceOsmApiDbHootApiDbDcStreetsConflateTest
+TEST_CATEGORY:  slow
+SELECT_RANDOM_AOI:  false
+RANDOM_SEED:  -1
+
+STEP 1: Cleaning out the osm api db and initializing it for use...
+
+ setval 
+--------
+      1
+(1 row)
+
+
+STEP 2: Writing the complete reference dataset to the osm api db...
+
+
+STEP 5: Writing the complete secondary dataset to the hoot api db...
+
+
+STEP 8a: Conflating the two datasets over the specified AOI with the SQL changeset workflow...
+
+
+STEP 8b: Conflating the two datasets over the specified AOI with the XML changeset workflow...
+
+
+STEP 11a: Writing a SQL changeset file that is the difference between the cropped reference input dataset specified AOI and the conflated output specified AOI...
+
+
+STEP 11b: Writing a XML changeset file that is the difference between the cropped reference input dataset specified AOI and the conflated output specified AOI...
+
+
+STEP 12: Executing the SQL changeset on the osm api db...
+
+Changeset(s) Created: 1
+Changeset Details: min_lat=38.8920931, max_lat=38.902523, min_lon=-77.0501589, max_lon=-77.0336319, num_changes=149
+Node(s) Created: 119
+Node(s) Modified: 0
+Node(s) Deleted: 0
+Way(s) Created: 13
+Way(s) Modified: 17
+Way(s) Deleted: 0
+Relation(s) Created: 0
+Relation(s) Modified: 0
+Relation(s) Deleted: 0
+
+STEP 14: Reading the entire contents of the osm api db, for the SQL changeset workflow, writing it into a file, and verifying the data...
+
+
+STEP 15: Cleaning up database...
+
+15:10:26.324 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 105
+15:10:26.715 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 106
+15:10:27.121 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 107

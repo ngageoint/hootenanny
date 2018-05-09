@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __FOUR_PASS_MANAGER_H__
@@ -55,7 +55,7 @@ class OsmMap;
 class NodeReplacements;
 
 /**
- * The TileConflator is a high level class that delegates the real work to TileWorkers. This class
+ * The FourPassManager is a high level class that delegates the real work to TileWorkers. This class
  * makes no assumptions about the underlying file system. It is designed to use either HDFS or
  * the local file system, but that could conceivably be expanded on to support DBs or other storage
  * mechanisms.

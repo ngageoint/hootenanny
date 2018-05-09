@@ -1,0 +1,68 @@
+reference dataset:  test-files/cmd/glacial/RndServiceOsmApiDbHootApiDbHaitiDrConflateTest/haiti-and-domrep-latest-cropped.osm
+secondary dataset:  test-files/cmd/glacial/RndServiceOsmApiDbHootApiDbHaitiDrConflateTest/PapMgcpClip-cropped.osm
+AOI:  -72.4822997917,18.5264918926,-72.4768066276,18.531700324028872
+CONFLATION TYPE:  unifying
+TEST_NAME:  RndServiceOsmApiDbHootApiDbHaitiDrConflateTest
+TEST_CATEGORY:  glacial
+SELECT_RANDOM_AOI:  false
+RANDOM_SEED:  -1
+
+STEP 1: Cleaning out the osm api db and initializing it for use...
+
+ setval 
+--------
+      1
+(1 row)
+
+
+STEP 2: Writing the complete reference dataset to the osm api db...
+
+15:08:19.386 WARN  .../hoot/core/io/OsmXmlReader.cpp( 485) Missing node (250651104) in relation (52900).
+15:08:19.387 WARN  .../hoot/core/io/OsmXmlReader.cpp( 485) Missing node (250651104) in relation (53432).
+15:08:19.388 WARN  .../hoot/core/io/OsmXmlReader.cpp( 485) Missing node (315342451) in relation (307828).
+15:08:19.388 WARN  .../hoot/core/io/OsmXmlReader.cpp( 489) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+15:08:19.416 WARN  ...re/io/OsmApiDbBulkInserter.cpp(1364) Found unresolved relation member ref!:
+15:08:19.416 WARN  ...re/io/OsmApiDbBulkInserter.cpp(1367) Relation ID 1240526 (DB ID=173) has ref to Entry: role: tributary, eid: Relation:1240981
+15:08:19.416 WARN  ...re/io/OsmApiDbBulkInserter.cpp(1364) Found unresolved relation member ref!:
+15:08:19.416 WARN  ...re/io/OsmApiDbBulkInserter.cpp(1367) Relation ID 1240526 (DB ID=173) has ref to Entry: role: tributary, eid: Relation:1241599
+15:08:19.417 WARN  ...re/io/OsmApiDbBulkInserter.cpp(1364) Found unresolved relation member ref!:
+15:08:19.417 WARN  ...re/io/OsmApiDbBulkInserter.cpp(1367) Relation ID 1244309 (DB ID=178) has ref to Entry: role: tributary, eid: Relation:1244310
+15:08:19.417 WARN  ...re/io/OsmApiDbBulkInserter.cpp(1371) hoot::OsmApiDbBulkInserter: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+
+STEP 5: Writing the complete secondary dataset to the hoot api db...
+
+
+STEP 8a: Conflating the two datasets over the specified AOI with the SQL changeset workflow...
+
+
+STEP 8b: Conflating the two datasets over the specified AOI with the XML changeset workflow...
+
+
+STEP 11a: Writing a SQL changeset file that is the difference between the cropped reference input dataset specified AOI and the conflated output specified AOI...
+
+
+STEP 11b: Writing a XML changeset file that is the difference between the cropped reference input dataset specified AOI and the conflated output specified AOI...
+
+
+STEP 12: Executing the SQL changeset on the osm api db...
+
+Changeset(s) Created: 1
+Changeset Details: min_lat=18.527401, max_lat=18.5388103, min_lon=-72.4805939, max_lon=-72.4757657, num_changes=72
+Node(s) Created: 67
+Node(s) Modified: 0
+Node(s) Deleted: 0
+Way(s) Created: 4
+Way(s) Modified: 1
+Way(s) Deleted: 0
+Relation(s) Created: 0
+Relation(s) Modified: 0
+Relation(s) Deleted: 0
+
+STEP 14: Reading the entire contents of the osm api db, for the SQL changeset workflow, writing it into a file, and verifying the data...
+
+
+STEP 15: Cleaning up database...
+
+15:08:34.310 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 57
+15:08:34.756 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 58
+15:08:35.209 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 59

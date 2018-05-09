@@ -30,6 +30,7 @@
 
 // hoot
 #include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/conflate/matching/NodeMatcher.h>
 
 // tgs
 #include <tgs/Interpolation/Interpolator.h>
@@ -38,8 +39,6 @@
 #include <geos/geom/Coordinate.h>
 
 #include <ogr_spatialref.h>
-
-#include "NodeMatcher.h"
 
 namespace hoot
 {

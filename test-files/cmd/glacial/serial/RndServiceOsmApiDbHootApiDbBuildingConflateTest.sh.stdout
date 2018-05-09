@@ -1,0 +1,57 @@
+reference dataset:  test-files/cmd/glacial/RndServiceOsmApiDbHootApiDbBuildingConflateTest/BostonSubsetRoadBuilding_FromShp-cropped-4.osm
+secondary dataset:  test-files/cmd/glacial/RndServiceOsmApiDbHootApiDbBuildingConflateTest/BostonSubsetRoadBuilding_FromOsm-cropped-4.osm
+AOI:  -71.4771,42.4835,-71.4758,42.4841
+CONFLATION TYPE:  unifying
+TEST_NAME:  RndServiceOsmApiDbHootApiDbBuildingConflateTest
+TEST_CATEGORY:  glacial
+SELECT_RANDOM_AOI:  false
+RANDOM_SEED:  -1
+
+STEP 1: Cleaning out the osm api db and initializing it for use...
+
+ setval 
+--------
+      1
+(1 row)
+
+
+STEP 2: Writing the complete reference dataset to the osm api db...
+
+
+STEP 5: Writing the complete secondary dataset to the hoot api db...
+
+
+STEP 8a: Conflating the two datasets over the specified AOI with the SQL changeset workflow...
+
+
+STEP 8b: Conflating the two datasets over the specified AOI with the XML changeset workflow...
+
+
+STEP 11a: Writing a SQL changeset file that is the difference between the cropped reference input dataset specified AOI and the conflated output specified AOI...
+
+
+STEP 11b: Writing a XML changeset file that is the difference between the cropped reference input dataset specified AOI and the conflated output specified AOI...
+
+
+STEP 12: Executing the SQL changeset on the osm api db...
+
+Changeset(s) Created: 1
+Changeset Details: min_lat=42.4832, max_lat=42.4851, min_lon=-71.4769999, max_lon=-71.4754999, num_changes=103
+Node(s) Created: 6
+Node(s) Modified: 0
+Node(s) Deleted: 93
+Way(s) Created: 0
+Way(s) Modified: 2
+Way(s) Deleted: 2
+Relation(s) Created: 0
+Relation(s) Modified: 0
+Relation(s) Deleted: 0
+
+STEP 14: Reading the entire contents of the osm api db, for the SQL changeset workflow, writing it into a file, and verifying the data...
+
+
+STEP 15: Cleaning up database...
+
+15:07:29.870 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 46
+15:07:30.311 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 47
+15:07:30.766 INFO  ...ot/core/io/HootApiDbWriter.cpp( 144) Removing map with ID: 48

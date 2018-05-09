@@ -29,10 +29,10 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/conflate/MarkForReviewMerger.h>
-#include <hoot/core/conflate/MatchThreshold.h>
-#include <hoot/core/conflate/MatchFactory.h>
-#include <hoot/core/conflate/MergerFactory.h>
+#include <hoot/core/conflate/merging/MarkForReviewMerger.h>
+#include <hoot/core/conflate/matching/MatchThreshold.h>
+#include <hoot/core/conflate/matching/MatchFactory.h>
+#include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/conflate/polygon/BuildingMatch.h>
 #include <hoot/core/schema/OsmSchema.h>
 

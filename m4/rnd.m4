@@ -1,4 +1,3 @@
-# hoot-services provides web services for hootenanny
 AC_DEFUN([RND_INIT],[
   AC_SUBST(HAS_RND) 
 

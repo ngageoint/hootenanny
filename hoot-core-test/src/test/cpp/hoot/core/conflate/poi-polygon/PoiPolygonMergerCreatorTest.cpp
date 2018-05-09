@@ -27,8 +27,8 @@
 
 // Hoot
 #include "../../TestUtils.h"
-#include <hoot/core/conflate/MarkForReviewMerger.h>
-#include <hoot/core/conflate/MatchThreshold.h>
+#include <hoot/core/conflate/merging/MarkForReviewMerger.h>
+#include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/polygon/BuildingMatchCreator.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>

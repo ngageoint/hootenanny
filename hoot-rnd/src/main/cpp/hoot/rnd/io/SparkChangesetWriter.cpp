@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "SparkChangesetWriter.h"
 
@@ -32,7 +32,7 @@
 using namespace geos::geom;
 
 // hoot
-#include <hoot/core/conflate/MatchFactory.h>
+#include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>

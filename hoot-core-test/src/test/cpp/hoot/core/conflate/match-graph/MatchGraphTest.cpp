@@ -42,10 +42,10 @@
  */
 
 // Hoot
-#include <hoot/core/conflate/MatchThreshold.h>
+#include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/match-graph/MatchGraph.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/conflate/MatchClassification.h>
+#include <hoot/core/conflate/matching/MatchClassification.h>
 using namespace hoot;
 
 // CPP Unit

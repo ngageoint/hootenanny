@@ -1,10 +1,13 @@
 # -------------------------------------------------
-# The Hoot R&D project is a place to store experimental code that isn't quite ready for prime time.
-# At this point anthing below TRL5 [1] should be put in this project. This project is disabled by
-# default which should help avoid introducing bugs into the core while experimenting.
+# The Hoot R&D project is a place to store experimental code that isn't quite ready for prime time
+# or code meant strictly for use by developers and/or power users for research or testing purposes
+# only.  Anything below TRL5 [1] should be put in this project, as well as all test code for the
+# classes in this project. This project is disabled by default which should help avoid introducing
+# bugs into the core while experimenting (TODO: this isn't currently true, but needs to be).
 #
 # 1. TRL5 - Module and/or subsystem validation in a relevant environment
 # -------------------------------------------------
+
 QT += script \
     sql \
     testlib \

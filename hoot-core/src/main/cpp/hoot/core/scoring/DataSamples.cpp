@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "DataSamples.h"
 
-#include <hoot/core/conflate/MatchType.h>
+#include <hoot/core/conflate/matching/MatchType.h>
 
 using namespace std;
 using namespace Tgs;
