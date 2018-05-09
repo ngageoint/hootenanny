@@ -29,6 +29,7 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Settings.h>
+#include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/elements/ElementType.h>
 #include <hoot/core/io/ApiDb.h>
@@ -36,6 +37,7 @@
 
 // Qt
 #include <QUrl>
+#include <QDateTime>
 
 using namespace geos::geom;
 using namespace std;
@@ -138,7 +140,9 @@ NodePtr OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& m
       _defaultCircularError,
       resultIterator.value(ApiDb::NODES_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::NODES_VERSION).toLongLong(),
-      resultIterator.value(ApiDb::NODES_TIMESTAMP).toUInt()));
+      OsmUtils::fromTimeString(resultIterator.value(ApiDb::NODES_TIMESTAMP)
+                               .toDateTime()
+                               .toString("yyyy-MM-ddThh:mm:ssZ"))));
 
   _parseAndSetTagsOnElement(node);
   _updateMetadataOnElement(node);
@@ -174,7 +178,9 @@ WayPtr OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& map
       _defaultCircularError,
       resultIterator.value(ApiDb::WAYS_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::WAYS_VERSION).toLongLong(),
-      resultIterator.value(ApiDb::WAYS_TIMESTAMP).toUInt()));
+      OsmUtils::fromTimeString(resultIterator.value(ApiDb::WAYS_TIMESTAMP)
+                               .toDateTime()
+                               .toString("yyyy-MM-ddThh:mm:ssZ"))));
 
   // if performance becomes an issue, try reading these out in batch at the same time
   // the element results are read
@@ -218,8 +224,9 @@ RelationPtr OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, c
       "",
       resultIterator.value(ApiDb::RELATIONS_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::RELATIONS_VERSION).toLongLong(),
-      resultIterator.value(ApiDb::RELATIONS_TIMESTAMP).toUInt()));
-
+      OsmUtils::fromTimeString(resultIterator.value(ApiDb::RELATIONS_TIMESTAMP)
+                               .toDateTime()
+                               .toString("yyyy-MM-ddThh:mm:ssZ"))));
   _parseAndSetTagsOnElement(relation);
 
   // These could be read out in batch at the same time the element results are read.
