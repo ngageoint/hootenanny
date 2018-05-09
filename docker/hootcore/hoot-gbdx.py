@@ -59,8 +59,8 @@ class HootGbdxTask(GbdxTaskInterface):
                 '-D','json.add.bbox=true',
                 '-D','osm.map.writer.skip.empty.map=true',
                 '-D',override,
-                '-D','translation.script=/var/lib/hootenanny/translations/GBDX.js']
                 # '-D','ogr.debug.dumptags=true',
+                '-D','translation.script=/var/lib/hootenanny/translations/GBDX.js']
                 # '-D','translation.script=/home/dg/gbdx/hoot_docker/hoot/translations/GBDX.js']
 
         hootCmd.append(inputFile)
@@ -118,7 +118,7 @@ class HootGbdxTask(GbdxTaskInterface):
             return e.output
 
         # Debug
-        # print('\nHootOut: {}'.format(hootOut))
+        print('\nHootOut: {}'.format(hootOut))
         
         # with "--error" the Hoot command shoud not have any output. If it does then
         # it is an error.
@@ -157,7 +157,7 @@ class HootGbdxTask(GbdxTaskInterface):
 
     def processJsonFiles(self,inputDir,fList,envVars,outputDirJson,outputDirXml):
         tmpInName = self.checkFile(os.path.join(inputDir,'hootIn%s.geojson' % os.getpid()))
-        # tmpOutName = self.checkFile(os.path.join(outputDir,'hootOut%s.geojson' % os.getpid()))
+        #tmpOutName = self.checkFile(os.path.join(outputDir,'hootOut%s.geojson' % os.getpid()))
         #tmpOutName = self.checkFile(os.path.join(outputDir,'hootOut%s.geojson' % os.getpid()))
         #fList = self.findFiles(inputDir,['json'])
 
@@ -271,17 +271,20 @@ class HootGbdxTask(GbdxTaskInterface):
 
 
     def processProperties(self,filename):
-        reader = csv.reader(open(filename,'rb'), delimiter='=')
+        file = open(filename,'rb')
         #print('Mapping Properties: {}'.format(filename))
 
         eVars = {}
-        for (rawKey,value) in reader:
-            if (rawKey.find('.') > -1):
-                key = rawKey.split('.')[1]
-            else:
-                key = rawKey
+        for rawLine in file:
+            # NOTE: Sometimes the values have '=' in them
+            line = rawLine.split('=',1)
 
-            eVars[key] = value
+            if (line[0].find('.') > -1):
+                key = line[0].split('.')[1]
+            else:
+                key = line[0]
+
+            eVars[key] = line[1].strip()
 
         return eVars
     # End processPlist
@@ -331,6 +334,7 @@ class HootGbdxTask(GbdxTaskInterface):
 
         envVars = {}
         if (fileList['properties']):
+            # print fileList['properties']
             envVars = self.processProperties(fileList['properties'][0])
          
 
