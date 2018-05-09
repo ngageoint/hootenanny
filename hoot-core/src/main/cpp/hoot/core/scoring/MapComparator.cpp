@@ -115,6 +115,8 @@ public:
     {
       in1.set("source:ingest:datetime","None");  // Wipe out the ingest datetime
       in2.set("source:ingest:datetime","None");
+      in1.set("source:datetime","None");  // Wipe out source datetime
+      in2.set("source:datetime","None");
     }
 
     if (in1 != in2)
