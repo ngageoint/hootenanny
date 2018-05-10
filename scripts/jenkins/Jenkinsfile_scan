@@ -42,7 +42,7 @@ pipeline {
         stage("Build") {
             steps {
                 // Build and scan
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; ./scripts/sonar/sonar-build.sh ${env.SONAR_CLOUD_KEY}'"
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-build.sh ${env.SONAR_CLOUD_KEY}'"
             }       
         }
     }
