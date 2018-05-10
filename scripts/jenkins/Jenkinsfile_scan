@@ -41,24 +41,9 @@ pipeline {
         }
         stage("Build") {
             steps {
-                // NOTE: Ubuntu only, may need more complex logic if other OS are included in pipeline
-                sh '''
-                    cp LocalConfig.pri.orig LocalConfig.pri
-                    echo "QMAKE_CXXFLAGS += -Werror" >> LocalConfig.pri
-                    sed -i s/"QMAKE_CXX=g++"/"#QMAKE_CXX=g++"/g LocalConfig.pri
-                    sed -i s/"#QMAKE_CXX=ccache g++"/"QMAKE_CXX=ccache g++"/g LocalConfig.pri
-                '''
-                
-                // Configure code
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; aclocal && autoconf && autoheader && automake --add-missing --copy && ./configure --quiet --with-rnd --with-services --with-uitests'"
-                // Make hoot with build watcher
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; build-wrapper-linux-x86-64 --out-dir bw-output make -sj\$(nproc)'"
+                // Build and scan
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; ./scripts/sonar/sonar-build.sh ${env.SONAR_CLOUD_KEY}'"
             }       
-        }
-        stage("Scan") {
-            steps {
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; sonar-scanner -Dsonar.projectKey=hoot -Dsonar.sources=./hoot-cmd,./hoot-core,./hoot-core-test,./hoot-js,./hoot-rnd,./hoot-test,./tbs,./tgs -Dsonar.cfamily.build-wrapper-output=bw-output -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=hootenanny -Dsonar.login=${env.SONAR_CLOUD_KEY} -Dsonar.cfamily.threads=4'"
-            }    
         }
     }
     post {
