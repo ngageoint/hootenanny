@@ -60,8 +60,8 @@ class HootGbdxTask(GbdxTaskInterface):
                 '-D','osm.map.writer.skip.empty.map=true',
                 '-D',override,
                 # '-D','ogr.debug.dumptags=true',
-                '-D','translation.script=/var/lib/hootenanny/translations/GBDX.js']
-                # '-D','translation.script=/home/dg/gbdx/hoot_docker/hoot/translations/GBDX.js']
+                # '-D','translation.script=/var/lib/hootenanny/translations/GBDX.js']
+                '-D','translation.script=/home/dg/gbdx/hoot_docker/hoot/translations/GBDX.js']
 
         hootCmd.append(inputFile)
         hootCmd.append(outputFile)
@@ -97,9 +97,9 @@ class HootGbdxTask(GbdxTaskInterface):
                 '-D','json.add.bbox=true',
                 '-D','osm.map.writer.skip.empty.map=true',
                 '-D',override,
-                '-D','translation.script=/var/lib/hootenanny/translations/GBDX_XML_Shape.js']
+                # '-D','translation.script=/var/lib/hootenanny/translations/GBDX_XML_Shape.js']
                 # '-D','ogr.debug.dumptags=true',
-                # '-D','translation.script=/home/dg/gbdx/hoot_docker/hoot/translations/GBDX_XML_Shape.js']
+                '-D','translation.script=/home/dg/gbdx/hoot_docker/hoot/translations/GBDX_XML_Shape.js']
 
         hootCmd.append(inputFile)
         hootCmd.append(outputFile)
@@ -118,7 +118,7 @@ class HootGbdxTask(GbdxTaskInterface):
             return e.output
 
         # Debug
-        print('\nHootOut: {}'.format(hootOut))
+        # print('\nHootOut: {}'.format(hootOut))
         
         # with "--error" the Hoot command shoud not have any output. If it does then
         # it is an error.
@@ -234,7 +234,7 @@ class HootGbdxTask(GbdxTaskInterface):
                 continue
 
             # Make sure that we have files to work with
-            tList = self.findFiles(tmpDirName,['geojson','json','zip','shp'])
+            tList = self.findFiles(tmpDirName,['geojson','json','zip','shp','properties'])
 
             #print 'Unpacked Zip: {}  Files: {}\n'.format(inputFile,tList)
 
@@ -244,6 +244,11 @@ class HootGbdxTask(GbdxTaskInterface):
                 # print 'About to Remove: {}\n'.format(tmpDirName)
                 shutil.rmtree(tmpDirName)
                 continue
+    
+            envVars = {}
+            if (tList['properties']):
+                # print fileList['properties']
+                envVars = self.processProperties(tList['properties'][0])
 
             # Now process the unpacked files
             if (tList['geojson']):
