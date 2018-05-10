@@ -84,7 +84,7 @@ public:
     Meters circularError);
 
   static boost::shared_ptr<Node> newSp(Status s, long id, double x, double y, Meters circularError,
-                                       long changeset, long version, unsigned int timestamp,
+                                       long changeset, long version, quint64 timestamp,
                                        QString user = ElementData::USER_EMPTY,
                                        long uid = ElementData::UID_EMPTY,
                                        bool visible = ElementData::VISIBLE_EMPTY);
@@ -164,7 +164,7 @@ inline NodePtr Node::newSp(Status s, long id, double x, double y, Meters circula
 }
 
 inline NodePtr Node::newSp(Status s, long id, double x, double y, Meters circularError,
-                           long changeset, long version, unsigned int timestamp, QString user,
+                           long changeset, long version, quint64 timestamp, QString user,
                            long uid, bool visible)
 {
   NodePtr result = SharedPtrPool<Node>::getInstance().allocate();

@@ -52,7 +52,7 @@ namespace hoot
 {
 
 Way::Way(Status s, long id, Meters circularError, long changeset, long version,
-         unsigned int timestamp, QString user, long uid, bool visible, long pid)
+         quint64 timestamp, QString user, long uid, bool visible, long pid)
   : Element(s)
 {
   _wayData.reset(new WayData(id, changeset, version, timestamp, user, uid, visible, pid));

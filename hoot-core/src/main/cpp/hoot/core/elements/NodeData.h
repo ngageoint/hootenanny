@@ -49,7 +49,7 @@ public:
   double getY() const { return _y; }
 
   void init(long id, double x, double y, long changeset = ElementData::CHANGESET_EMPTY,
-            long version = ElementData::VERSION_EMPTY, long timestamp = ElementData::TIMESTAMP_EMPTY,
+            long version = ElementData::VERSION_EMPTY, quint64 timestamp = ElementData::TIMESTAMP_EMPTY,
             QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY,
             bool visible = ElementData::VISIBLE_EMPTY);
 
@@ -66,7 +66,7 @@ protected:
 };
 
 inline void NodeData::init(long id, double x, double y, long changeset, long version,
-  long timestamp, QString user, long uid, bool visible)
+  quint64 timestamp, QString user, long uid, bool visible)
 {
  _id = id;
  _x = x;

@@ -78,7 +78,7 @@ private:
 };
 
 Relation::Relation(Status s, long id, Meters circularError, QString type, long changeset,
-                   long version, unsigned int timestamp, QString user, long uid, bool visible) :
+                   long version, quint64 timestamp, QString user, long uid, bool visible) :
 Element(s)
 {
   _relationData.reset(new RelationData(id, changeset, version, timestamp, user, uid, visible));
