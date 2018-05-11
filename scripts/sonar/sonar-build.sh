@@ -17,4 +17,4 @@ sonar-scanner \
     -Dsonar.organization=hootenanny \
     -Dsonar.login=$1 \
     -Dsonar.cfamily.threads=4 \
-    -Dsonar.exclusions=**/*.pb.cc
+    -Dsonar.exclusions=**/*.pb.cc,**/*.pb.h
