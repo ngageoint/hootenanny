@@ -37,7 +37,7 @@ namespace hoot
 {
 
 /**
- * Merged two buildings
+ * Merges two buildings
  */
 class BuildingMerger : public MergerBase
 {
@@ -79,6 +79,8 @@ private:
 
   boost::shared_ptr<Element> _buildBuilding1(const OsmMapPtr& map) const;
   boost::shared_ptr<Element> _buildBuilding2(const OsmMapPtr& map) const;
+
+  QSet<ElementId> _getMultiPolyMemberIds(const ConstElementPtr& element) const;
 };
 
 }
