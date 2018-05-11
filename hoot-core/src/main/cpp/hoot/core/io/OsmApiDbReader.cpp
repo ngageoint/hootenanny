@@ -131,6 +131,10 @@ NodePtr OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& m
   const double lon =
     resultIterator.value(ApiDb::NODES_LONGITUDE).toLongLong() / (double)ApiDb::COORDINATE_SCALE;
 
+  // Timestamp
+  QDateTime dt = resultIterator.value(ApiDb::NODES_TIMESTAMP).toDateTime();
+  dt.setTimeSpec(Qt::UTC);
+
   NodePtr node(
     Node::newSp(
       _status,
@@ -140,8 +144,7 @@ NodePtr OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& m
       _defaultCircularError,
       resultIterator.value(ApiDb::NODES_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::NODES_VERSION).toLongLong(),
-      resultIterator.value(ApiDb::NODES_TIMESTAMP)
-          .toDateTime().toMSecsSinceEpoch() / 1000));
+      dt.toMSecsSinceEpoch() / 1000));
 
   _parseAndSetTagsOnElement(node);
   _updateMetadataOnElement(node);
@@ -170,6 +173,10 @@ WayPtr OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& map
     LOG_VARD(newWayId);
   }
 
+  // Timestamp
+  QDateTime dt = resultIterator.value(ApiDb::WAYS_TIMESTAMP).toDateTime();
+  dt.setTimeSpec(Qt::UTC);
+
   WayPtr way(
     new Way(
       _status,
@@ -177,8 +184,7 @@ WayPtr OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& map
       _defaultCircularError,
       resultIterator.value(ApiDb::WAYS_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::WAYS_VERSION).toLongLong(),
-      resultIterator.value(ApiDb::WAYS_TIMESTAMP)
-          .toDateTime().toMSecsSinceEpoch() / 1000));
+      dt.toMSecsSinceEpoch() / 1000));
 
   // if performance becomes an issue, try reading these out in batch at the same time
   // the element results are read
@@ -214,6 +220,10 @@ RelationPtr OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, c
     LOG_VART(newRelationId);
   }
 
+  // Timestamp
+  QDateTime dt = resultIterator.value(ApiDb::RELATIONS_TIMESTAMP).toDateTime();
+  dt.setTimeSpec(Qt::UTC);
+
   RelationPtr relation(
     new Relation(
       _status,
@@ -222,8 +232,7 @@ RelationPtr OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, c
       "",
       resultIterator.value(ApiDb::RELATIONS_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::RELATIONS_VERSION).toLongLong(),
-      resultIterator.value(ApiDb::RELATIONS_TIMESTAMP)
-          .toDateTime().toMSecsSinceEpoch() / 1000));
+      dt.toMSecsSinceEpoch() / 1000));
   _parseAndSetTagsOnElement(relation);
 
   // These could be read out in batch at the same time the element results are read.

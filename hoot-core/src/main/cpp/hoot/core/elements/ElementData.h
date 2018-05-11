@@ -81,8 +81,8 @@ public:
   long getVersion() const { return _version; }
   void setVersion(long version) { _version = version; }
 
-  unsigned int getTimestamp() const { return _timestamp; }
-  void setTimestamp(unsigned int timestamp) { _timestamp = timestamp; }
+  quint64 getTimestamp() const { return _timestamp; }
+  void setTimestamp(quint64 timestamp) { _timestamp = timestamp; }
 
   QString getUser() const { return _user; }
   void setUser(QString user) { _user = user; }

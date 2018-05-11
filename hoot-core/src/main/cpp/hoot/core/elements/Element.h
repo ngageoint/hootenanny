@@ -104,8 +104,8 @@ public:
   long getVersion() const { return _getElementData().getVersion(); }
   void setVersion(long version) { _getElementData().setVersion(version); }
 
-  unsigned int getTimestamp() const { return _getElementData().getTimestamp(); }
-  void setTimestamp(unsigned int timestamp) { _getElementData().setTimestamp(timestamp); }
+  quint64 getTimestamp() const { return _getElementData().getTimestamp(); }
+  void setTimestamp(quint64 timestamp) { _getElementData().setTimestamp(timestamp); }
 
   QString getUser() const { return _getElementData().getUser(); }
   void setUser(QString user) { _getElementData().setUser(user); }

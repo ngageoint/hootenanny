@@ -196,6 +196,11 @@ public:
     //members that are out of bounds.
     CPPUNIT_ASSERT_EQUAL(5, (int)map->getRelations().size());
 
+    // Verify timestamps look OK
+    WayPtr pWay = map->getWays().begin()->second;
+    CPPUNIT_ASSERT(0 != pWay->getTimestamp());
+
+
     //Need to remove timestamps, otherwise they cause issues with the compare
     QList<ElementAttributeType> types;
     types.append(ElementAttributeType(ElementAttributeType::Timestamp));
