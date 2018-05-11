@@ -1,0 +1,71 @@
+// Load shared libraries
+@Library('radiant-pipeline-library')_
+
+pipeline {
+    agent { label 'master' }
+    // Configurable parameters for users to skip steps and control pipeline behavior
+    parameters {
+        booleanParam(name: 'Destroy_VM', defaultValue: true)
+        booleanParam(name: 'Hoot_provision', defaultValue: true)
+        string(name: 'Box', defaultValue: 'default', description: 'Vagrant Box')
+    }
+    stages {
+        stage("Destroy VM") {
+            when { expression { return params.Destroy_VM } }
+            steps {
+                // Attempt to destroy exiting VM but don't stop job if not there
+                sh "vagrant destroy -f ${params.Box} || true"
+            }
+        }
+        stage("Setup") {
+            steps {
+                
+                // Make sure we have the tags info because figuring out the version is required in the build process
+                // Remove any screenshots from previous runs
+                sh '''
+                    git fetch --tags
+                    git submodule update --init
+                    cp -R ../software.ubuntu1404 software
+                    rm -rf ./test-files/ui/screenshot_*.png
+                '''
+            }
+        }
+        stage("Hoot Provision") {
+            when { expression { return params.Hoot_provision } }
+            steps {
+                // NOTE: Only installs hoot build dependencies
+                sh "vagrant up ${params.Box} --provision-with software,hoot --provider aws"
+                // Install sonar scanner
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; ./scripts/sonar/sonar-install.sh'"
+            }       
+        }
+        stage("Build") {
+            steps {
+                // Build and scan
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-build.sh ${env.SONAR_CLOUD_KEY}'"
+            }       
+        }
+    }
+    post {
+        always {
+            script {
+                // Send build notification
+                notifySlack(currentBuild.result, "#builds_hoot")
+            }
+        }
+        success {
+            // If all tests passed, clean everything up
+            sh "vagrant destroy -f ${params.Box}"
+            cleanWs()
+        }
+        failure {
+            script {
+                if (!env.BRANCH_NAME.startsWith("PR-")) {
+                    // Copy over any UI failure screenshots and send to slack
+                    sh "vagrant scp ${params.Box}:~/hoot/test-files/ui/screenshot_*.png ./test-files/ui/"
+                    postSlack("${env.WORKSPACE}/test-files/ui/", "screenshot_*.png", "${env.JENKINS_BOT_TOKEN}", "#builds_hoot")
+                }
+            }
+        }
+    }
+}
