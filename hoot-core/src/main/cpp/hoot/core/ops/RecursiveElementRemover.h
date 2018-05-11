@@ -93,7 +93,8 @@ private:
   ElementId _eid;
   const ElementCriterion* _filter;
 
-  void _remove(const boost::shared_ptr<OsmMap> &map, ElementId eid, const std::set<ElementId>& removeSet);
+  void _remove(const boost::shared_ptr<OsmMap> &map, ElementId eid,
+               const std::set<ElementId>& removeSet);
 };
 
 }

@@ -41,6 +41,7 @@
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
+#include <hoot/core/elements/Relation.h>
 
 using namespace std;
 
@@ -110,8 +111,16 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Element
   {
     boost::shared_ptr<Element> e1 = _buildBuilding1(map);
     LOG_VART(e1.get());
+    if (e1.get())
+    {
+      LOG_VART(e1->getTags().get("uuid"));
+    }
     boost::shared_ptr<Element> e2 = _buildBuilding2(map);
     LOG_VART(e2.get());
+    if (e2.get())
+    {
+      LOG_VART(e2->getTags().get("uuid"));
+    }
 
     boost::shared_ptr<Element> keeper;
     boost::shared_ptr<Element> scrap;
@@ -231,11 +240,23 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Element
     const ElementId scrapId = scrap->getElementId();
     const Status scrapStatus = scrap->getStatus();
 
+    //Check to see if we are removing a multipoly building relation.  If so, its multipolygon
+    //relation members, need to be removed as well.
+    const QSet<ElementId> multiPolyMemberIds = _getMultiPolyMemberIds(scrap);
+    LOG_VART(multiPolyMemberIds);
+
     // remove the duplicate element
     DeletableBuildingPart filter;
     ReplaceElementOp(scrap->getElementId(), keeper->getElementId()).apply(map);
     RecursiveElementRemover(scrap->getElementId(), &filter).apply(map);
     scrap->getTags().clear();
+
+    //delete any multipoly members
+    for (QSet<ElementId>::const_iterator it = multiPolyMemberIds.begin();
+         it != multiPolyMemberIds.end(); ++it)
+    {
+      RecursiveElementRemover(*it).apply(map);
+    }
 
     // see comments for similar functionality in HighwaySnapMerger::_mergePair
     if (scrapStatus == Status::Unknown1 &&
@@ -263,6 +284,30 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Element
     }
     replaced.insert(replaced.end(), replacedSet.begin(), replacedSet.end());
   }
+}
+
+QSet<ElementId> BuildingMerger::_getMultiPolyMemberIds(const ConstElementPtr& element) const
+{
+  QSet<ElementId> relationMemberIdsToRemove;
+  if (element->getElementType() == ElementType::Relation)
+  {
+    ConstRelationPtr relation = boost::dynamic_pointer_cast<const Relation>(element);
+    if (relation->getType() == MetadataTags::RelationMultiPolygon())
+    {
+      const vector<RelationData::Entry>& entries = relation->getMembers();
+      for (size_t i = 0; i < entries.size(); i++)
+      {
+        const RelationData::Entry entry = entries[i];
+        const QString role = entry.getRole();
+        if (entry.getElementId().getType() == ElementType::Way &&
+            (role == MetadataTags::RoleInner() || role == MetadataTags::RoleOuter()))
+        {
+          relationMemberIdsToRemove.insert(entry.getElementId());
+        }
+      }
+    }
+  }
+  return relationMemberIdsToRemove;
 }
 
 boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
@@ -306,7 +351,7 @@ boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
             if (m[i].getRole() == MetadataTags::RolePart())
             {
               boost::shared_ptr<Element> em = map->getElement(m[i].getElementId());
-              // push any non-conflicing tags in the parent relation down into the building part.
+              // push any non-conflicting tags in the parent relation down into the building part.
               em->setTags(
                 OverwriteTagMerger().mergeTags(em->getTags(), r->getTags(), em->getElementType()));
               parts.push_back(em);
