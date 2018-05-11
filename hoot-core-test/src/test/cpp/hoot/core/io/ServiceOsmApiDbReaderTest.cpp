@@ -33,6 +33,7 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/ElementAttributeType.h>
 #include <hoot/core/io/ApiDb.h>
 #include <hoot/core/io/OsmApiDb.h>
 #include <hoot/core/io/OsmApiDbReader.h>
@@ -43,6 +44,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/io/OsmApiDbBulkInserter.h>
+#include <hoot/core/visitors/RemoveAttributeVisitor.h>
 
 // Qt
 #include <QDir>
@@ -193,6 +195,17 @@ public:
     //All but one of the six relations should be returned.  The relation not returned contains all
     //members that are out of bounds.
     CPPUNIT_ASSERT_EQUAL(5, (int)map->getRelations().size());
+
+    // Verify timestamps look OK
+    WayPtr pWay = map->getWays().begin()->second;
+    CPPUNIT_ASSERT(0 != pWay->getTimestamp());
+
+
+    //Need to remove timestamps, otherwise they cause issues with the compare
+    QList<ElementAttributeType> types;
+    types.append(ElementAttributeType(ElementAttributeType::Timestamp));
+    RemoveAttributeVisitor attrVis(types);
+    map->visitRw(attrVis);
 
     TestUtils::mkpath("test-output/io/ServiceOsmApiDbReaderTest");
     MapProjector::projectToWgs84(map);

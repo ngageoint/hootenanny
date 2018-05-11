@@ -123,6 +123,10 @@ NodePtr HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& 
   long nodeId = _mapElementId(map, ElementId::node(resultIterator.value(0).toLongLong())).getId();
   LOG_VART(ElementId(ElementType::Node, nodeId));
 
+  // Timestamp
+  QDateTime dt = resultIterator.value(ApiDb::NODES_TIMESTAMP).toDateTime();
+  dt.setTimeSpec(Qt::UTC);
+
   NodePtr node(
     Node::newSp(
       _status,
@@ -132,10 +136,7 @@ NodePtr HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& 
       -1,
       resultIterator.value(ApiDb::NODES_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::NODES_VERSION).toLongLong(),
-      OsmUtils::fromTimeString(
-        resultIterator.value(ApiDb::NODES_TIMESTAMP)
-          .toDateTime()
-          .toString("yyyy-MM-ddThh:mm:ssZ"))));
+      dt.toMSecsSinceEpoch() / 1000));
 
   node->setTags(ApiDb::unescapeTags(resultIterator.value(ApiDb::NODES_TAGS)));
   _updateMetadataOnElement(node);
@@ -160,6 +161,10 @@ WayPtr HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& ma
   const long newWayId = _mapElementId(map, ElementId::way(wayId)).getId();
   LOG_VART(ElementId(ElementType::Way, wayId));
 
+  // Timestamp
+  QDateTime dt = resultIterator.value(ApiDb::WAYS_TIMESTAMP).toDateTime();
+  dt.setTimeSpec(Qt::UTC);
+
   WayPtr way(
     new Way(
       _status,
@@ -167,10 +172,7 @@ WayPtr HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& ma
       -1,
       resultIterator.value(ApiDb::WAYS_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::WAYS_VERSION).toLongLong(),
-      OsmUtils::fromTimeString(
-        resultIterator.value(ApiDb::WAYS_TIMESTAMP)
-          .toDateTime()
-          .toString("yyyy-MM-ddThh:mm:ssZ"))));
+      dt.toMSecsSinceEpoch() / 1000));
 
   way->setTags(ApiDb::unescapeTags(resultIterator.value(ApiDb::WAYS_TAGS)));
   _updateMetadataOnElement(way);
@@ -200,6 +202,10 @@ RelationPtr HootApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, 
   const long newRelationId = _mapElementId(map, ElementId::relation(relationId)).getId();
   LOG_VART(ElementId(ElementType::Relation, relationId));
 
+  // Timestamp
+  QDateTime dt = resultIterator.value(ApiDb::RELATIONS_TIMESTAMP).toDateTime();
+  dt.setTimeSpec(Qt::UTC);
+
   RelationPtr relation(
     new Relation(
       _status,
@@ -208,10 +214,7 @@ RelationPtr HootApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, 
       "",/*MetadataTags::RelationCollection()*/ //services db doesn't support relation "type" yet
       resultIterator.value(ApiDb::RELATIONS_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::RELATIONS_VERSION).toLongLong(),
-      OsmUtils::fromTimeString(
-        resultIterator.value(ApiDb::RELATIONS_TIMESTAMP)
-          .toDateTime()
-          .toString("yyyy-MM-ddThh:mm:ssZ"))));
+      dt.toMSecsSinceEpoch() / 1000));
 
   relation->setTags(ApiDb::unescapeTags(resultIterator.value(ApiDb::RELATIONS_TAGS)));
   _updateMetadataOnElement(relation);

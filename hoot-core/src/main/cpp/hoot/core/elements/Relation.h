@@ -70,7 +70,7 @@ public:
   Relation(Status s, long id, Meters circularError, QString type = "",
            long changeset = ElementData::CHANGESET_EMPTY,
            long version = ElementData::VERSION_EMPTY,
-           unsigned int timestamp = ElementData::TIMESTAMP_EMPTY,
+           quint64 timestamp = ElementData::TIMESTAMP_EMPTY,
            QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY,
            bool visible = ElementData::VISIBLE_EMPTY);
 
