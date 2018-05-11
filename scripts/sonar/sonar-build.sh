@@ -16,5 +16,5 @@ sonar-scanner \
     -Dsonar.host.url=https://sonarcloud.io \
     -Dsonar.organization=hootenanny \
     -Dsonar.login=$1 \
-    -Dsonar.cfamily.threads=4
-    
+    -Dsonar.cfamily.threads=4 \
+    -Dsonar.exclusions=**/*.pb.cc
