@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef _ELEMENTS_NODE_H_
 #define _ELEMENTS_NODE_H_
@@ -84,7 +84,7 @@ public:
     Meters circularError);
 
   static boost::shared_ptr<Node> newSp(Status s, long id, double x, double y, Meters circularError,
-                                       long changeset, long version, unsigned int timestamp,
+                                       long changeset, long version, quint64 timestamp,
                                        QString user = ElementData::USER_EMPTY,
                                        long uid = ElementData::UID_EMPTY,
                                        bool visible = ElementData::VISIBLE_EMPTY);
@@ -164,7 +164,7 @@ inline NodePtr Node::newSp(Status s, long id, double x, double y, Meters circula
 }
 
 inline NodePtr Node::newSp(Status s, long id, double x, double y, Meters circularError,
-                           long changeset, long version, unsigned int timestamp, QString user,
+                           long changeset, long version, quint64 timestamp, QString user,
                            long uid, bool visible)
 {
   NodePtr result = SharedPtrPool<Node>::getInstance().allocate();

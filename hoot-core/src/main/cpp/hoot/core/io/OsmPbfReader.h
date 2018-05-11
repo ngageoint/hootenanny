@@ -164,6 +164,8 @@ public:
 
   bool getSortedTypeThenId() { return _typeThenId; }
 
+  void setAddSourceDateTime(bool add) { _addSourceDateTime = add; }
+
   /**
    * Checks to see if an input is sorted
    *
