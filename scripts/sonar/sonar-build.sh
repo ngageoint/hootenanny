@@ -3,10 +3,10 @@ set -e
 
 # Configure the make
 aclocal && autoconf && autoheader && automake --add-missing --copy
-./configure --quiet --with-rnd --with-services --with-uitests
+./configure --quiet --with-rnd --with-services --with-uitests --with-coverage
 
 # Make with the sonar build watcher
-build-wrapper-linux-x86-64 --out-dir bw-output make -sj$(nproc) core-coverage
+build-wrapper-linux-x86-64 --out-dir bw-output make -sj$(nproc)
 
 # Perform scan and upload to sonar scanner
 sonar-scanner \
@@ -17,4 +17,4 @@ sonar-scanner \
     -Dsonar.organization=hootenanny \
     -Dsonar.login=$1 \
     -Dsonar.cfamily.threads=4 \
-    -Dsonar.exclusions=**/*.pb.cc,**/*.pb.h
+    -Dsonar.exclusions=**/*.pb.cc,**/*.pb.h,**/*.sql
