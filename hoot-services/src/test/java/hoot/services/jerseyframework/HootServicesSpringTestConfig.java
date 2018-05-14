@@ -29,13 +29,6 @@ package hoot.services.jerseyframework;
 
 import javax.sql.DataSource;
 
-import static hoot.services.HootProperties.HOOTAPI_DB_NAME;
-import static hoot.services.HootProperties.HOOTAPI_DB_USER;
-import static hoot.services.HootProperties.HOOTAPI_DB_PASSWORD;
-import static hoot.services.HootProperties.HOOTAPI_DB_HOST;
-import static hoot.services.HootProperties.HOOTAPI_DB_PORT;
-
-
 import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -44,6 +37,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.test.context.ActiveProfiles;
@@ -61,8 +56,14 @@ import hoot.services.job.JobProcessorImplStub;
 @EnableTransactionManagement
 @ComponentScan(basePackages = {"hoot.services"},
                excludeFilters = @ComponentScan.Filter(value = HootServicesSpringConfig.class, type = FilterType.ASSIGNABLE_TYPE))
+@PropertySource("classpath:db/db.properties")
 @ActiveProfiles("test")
 public class HootServicesSpringTestConfig {
+
+    @Autowired
+    private Environment env;
+
+    public HootServicesSpringTestConfig() {}
 
     @Bean
     public ApplicationContextUtils applicationContextUtils() {
@@ -73,12 +74,11 @@ public class HootServicesSpringTestConfig {
     public DataSource dataSource() {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
-        // dataSource.setUrl("jdbc:postgresql://" + HOOTAPI_DB_HOST + ":" + HOOTAPI_DB_PORT + "/" + HOOTAPI_DB_NAME);
-        dataSource.setUrl("jdbc:postgresql://localhost:5432/hoot");
-        // dataSource.setUsername(HOOTAPI_DB_USER);
-        dataSource.setUsername("hoot");
-        // dataSource.setPassword(HOOTAPI_DB_PASSWORD);
-        dataSource.setPassword("hoottest");
+        dataSource.setUrl("jdbc:postgresql://" + env.getProperty("HOOTAPI_DB_HOST") + ":" +
+                                                 env.getProperty("HOOTAPI_DB_PORT") + "/" +
+                                                 env.getProperty("HOOTAPI_DB_NAME"));
+        dataSource.setUsername(env.getProperty("HOOTAPI_DB_USER"));
+        dataSource.setPassword(env.getProperty("HOOTAPI_DB_PASSWORD"));
         dataSource.setInitialSize(5);
         dataSource.setMaxActive(10);
         dataSource.setMaxIdle(2);
