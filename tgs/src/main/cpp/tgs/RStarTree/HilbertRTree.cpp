@@ -312,8 +312,11 @@ public:
 
   BoxHolder& operator=(const BoxHolder& bh)
   {
-    boxPair = bh.boxPair;
-    hilbertValue = bh.hilbertValue;
+    if (this != &bh)
+    {
+      boxPair = bh.boxPair;
+      hilbertValue = bh.hilbertValue;
+    }
     return *this;
   }
 };

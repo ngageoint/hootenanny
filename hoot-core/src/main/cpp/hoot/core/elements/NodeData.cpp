@@ -51,12 +51,14 @@ _y(from._y)
 
 NodeData& NodeData::operator=(const NodeData& nd)
 {
-  init(
-    nd.getId(), nd.getX(), nd.getY(), nd.getChangeset(), nd.getVersion(), nd.getTimestamp(),
-    nd.getUser(), nd.getUid(), nd.getVisible());
-  setTags(nd.getTags());
-  setCircularError(nd.getCircularError());
-
+  if (this != &nd)
+  {
+    init(
+      nd.getId(), nd.getX(), nd.getY(), nd.getChangeset(), nd.getVersion(), nd.getTimestamp(),
+      nd.getUser(), nd.getUid(), nd.getVisible());
+    setTags(nd.getTags());
+    setCircularError(nd.getCircularError());
+  }
   return *this;
 }
 

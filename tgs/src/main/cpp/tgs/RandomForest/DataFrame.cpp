@@ -985,23 +985,26 @@ namespace Tgs
 
   DataFrame& DataFrame::operator=(const DataFrame& from)
   {
-    try
+    if (this != &from)
     {
-      _trainingLabels = from._trainingLabels;
-      _trainingLabelsBak = from._trainingLabelsBak;
-      _classSet = from._classSet;
-      _factorLabels = from._factorLabels;
-      _activeFactorIndices = from._activeFactorIndices;
-      _data = from._data;
-      _factorType = from._factorType;
-      _trainingLabelEnum = from._trainingLabelEnum;
-      _nullTreatment = from._nullTreatment;
-      _trainingEnumCnt = from._trainingEnumCnt;
-      _randSeedCtr = from._randSeedCtr;
-    }
-    catch(const Exception & e)
-    {
-      throw Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
+      try
+      {
+        _trainingLabels = from._trainingLabels;
+        _trainingLabelsBak = from._trainingLabelsBak;
+        _classSet = from._classSet;
+        _factorLabels = from._factorLabels;
+        _activeFactorIndices = from._activeFactorIndices;
+        _data = from._data;
+        _factorType = from._factorType;
+        _trainingLabelEnum = from._trainingLabelEnum;
+        _nullTreatment = from._nullTreatment;
+        _trainingEnumCnt = from._trainingEnumCnt;
+        _randSeedCtr = from._randSeedCtr;
+      }
+      catch(const Exception & e)
+      {
+        throw Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
+      }
     }
     return *this;
   }
