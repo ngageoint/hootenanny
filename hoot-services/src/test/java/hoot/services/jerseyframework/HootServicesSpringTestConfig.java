@@ -29,6 +29,13 @@ package hoot.services.jerseyframework;
 
 import javax.sql.DataSource;
 
+import static hoot.services.HootProperties.HOOTAPI_DB_NAME;
+import static hoot.services.HootProperties.HOOTAPI_DB_USER;
+import static hoot.services.HootProperties.HOOTAPI_DB_PASSWORD;
+import static hoot.services.HootProperties.HOOTAPI_DB_HOST;
+import static hoot.services.HootProperties.HOOTAPI_DB_PORT;
+
+
 import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -66,8 +73,11 @@ public class HootServicesSpringTestConfig {
     public DataSource dataSource() {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
+        // dataSource.setUrl("jdbc:postgresql://" + HOOTAPI_DB_HOST + ":" + HOOTAPI_DB_PORT + "/" + HOOTAPI_DB_NAME);
         dataSource.setUrl("jdbc:postgresql://localhost:5432/hoot");
+        // dataSource.setUsername(HOOTAPI_DB_USER);
         dataSource.setUsername("hoot");
+        // dataSource.setPassword(HOOTAPI_DB_PASSWORD);
         dataSource.setPassword("hoottest");
         dataSource.setInitialSize(5);
         dataSource.setMaxActive(10);
