@@ -83,8 +83,7 @@ void AbstractRegressionTestFitnessFunction::_createConfig(const QString testName
   QFile settingsFileDest(settingsFileDestName);
   if (settingsFileDest.exists() && !settingsFileDest.remove())
   {
-    throw new HootException(
-      "Unable to remove previous test configuration file: " + settingsFileDestName);
+    throw HootException("Unable to remove previous test configuration file: " + settingsFileDestName);
   }
   LOG_DEBUG("Writing test conf file to: " << settingsFileDestName << "...");
   updatedSettings.storeJson(settingsFileDestName);
