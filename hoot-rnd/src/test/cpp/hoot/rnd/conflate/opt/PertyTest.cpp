@@ -83,7 +83,7 @@ void PertyTest::_parseScore()
   catch (const std::exception& e)
   {
     resultsFile.close();
-    throw e;
+    throw;
   }
   resultsFile.close();
 }

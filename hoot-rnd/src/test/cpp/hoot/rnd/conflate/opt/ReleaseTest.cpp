@@ -88,7 +88,7 @@ void ReleaseTest::_parseScore()
   catch (const std::exception& e)
   {
     scoresFile.close();
-    throw e;
+    throw;
   }
   scoresFile.close();
 }
