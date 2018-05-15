@@ -101,9 +101,6 @@ exports.matchScore = function(map, e1, e2)
     var edgeDistance  = edgeDistanceExtractor.extract(m, m1, m2);
     var hausdorffDistance = hausdorffDistanceExtractor.extract(m, m1, m2);
 
-    //var sampledAngleHistogramValue = sampledAngleHistogramExtractor.extract(m, m1, m2);
-    //var weightedShapeDistanceValue = weightedShapeDistanceExtractor.extract(m, m1, m2);
-
     var attribs = [distanceScore, edgeDistance, hausdorffDistance];
     var classification = WekaClassifier.classify(attribs);
     if (0 === classification) {
@@ -156,8 +153,8 @@ exports.getMatchFeatureDetails = function(map, e1, e2)
     featureDetails["edgeDistance"]               = edgeDistanceExtractor.extract(m, m1, m2);
     featureDetails["euclideanDistance"]          = euclideanDistanceExtractor.extract(m, m1, m2);
     featureDetails["hausdorffDistance"]          = hausdorffDistanceExtractor.extract(m, m1, m2);
-    featureDetails["parallelScoreExtractor"]     = parallelScoreExtractor.extract(m, m1, m2);
-    featureDetails["lengthScoreExtractor"]       = lengthScoreExtractor.extract(m, m1, m2);
+    featureDetails["parallelScore"]              = parallelScoreExtractor.extract(m, m1, m2);
+    featureDetails["lengthScore"]                = lengthScoreExtractor.extract(m, m1, m2);
   }
 
   return featureDetails;
