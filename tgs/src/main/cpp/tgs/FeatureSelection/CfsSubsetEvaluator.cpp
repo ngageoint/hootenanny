@@ -118,7 +118,7 @@ namespace Tgs
     double classCorrMean = classCorrSum / columns.size();
 
     double intraFactorCorrMean;
-    if (columns.size() == 1)
+    if (columns.size() <= 1)
     {
       intraFactorCorrMean = 1.0;
     }
