@@ -74,8 +74,11 @@ WaySubline::WaySubline(const WayLocation& start, const WayLocation& end) :
 
 WaySubline& WaySubline::operator=(const WaySubline& from)
 {
-  _start = from.getStart();
-  _end = from.getEnd();
+  if (this != &from)
+  {
+    _start = from.getStart();
+    _end = from.getEnd();
+  }
   return *this;
 }
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "GeometryPainter.h"
@@ -256,12 +256,11 @@ void GeometryPainter::drawPolygon(QPainter& pt, const OGRPolygon* polygon, const
 {
   QPen pen = pt.pen();
   QBrush brush = pt.brush();
-  QPainter* lpt = NULL;
-  QImage* image = NULL;
 
   if (polygon->getNumInteriorRings() > 0)
   {
-    image = new QImage(pt.window().size(), QImage::Format_ARGB32);
+    QPainter* lpt = NULL;
+    QImage* image = new QImage(pt.window().size(), QImage::Format_ARGB32);
     if (image->isNull() == true)
     {
       delete image;
@@ -273,27 +272,18 @@ void GeometryPainter::drawPolygon(QPainter& pt, const OGRPolygon* polygon, const
     lpt->setMatrix(pt.matrix());
     lpt->setPen(pen);
     lpt->setBrush(brush);
-  }
-  else
-  {
-    lpt = &pt;
-  }
 
-  const OGRLinearRing* ring = polygon->getExteriorRing();
-  QPolygonF qp;
-  _convertRingToQPolygon(ring, qp, m);
+    const OGRLinearRing* ring = polygon->getExteriorRing();
+    QPolygonF qp;
+    _convertRingToQPolygon(ring, qp, m);
 
-  lpt->setPen(Qt::NoPen);
-  lpt->setBrush(brush);
-  lpt->drawPolygon(qp, Qt::WindingFill);
+    lpt->setPen(Qt::NoPen);
+    lpt->setBrush(brush);
+    lpt->drawPolygon(qp, Qt::WindingFill);
 
-  lpt->setPen(pen);
-  lpt->setBrush(Qt::NoBrush);
-  lpt->drawPolygon(qp);
-
-  if (polygon->getNumInteriorRings() > 0)
-  {
-    OGRPoint p;
+    lpt->setPen(pen);
+    lpt->setBrush(Qt::NoBrush);
+    lpt->drawPolygon(qp);
     for (int i = 0; i < polygon->getNumInteriorRings(); i++)
     {
       ring = polygon->getInteriorRing(i);
@@ -319,10 +309,24 @@ void GeometryPainter::drawPolygon(QPainter& pt, const OGRPolygon* polygon, const
     pt.resetMatrix();
     pt.drawImage(pt.window(), *image);
     pt.setMatrix(m);
-  }
 
-  delete lpt;
-  delete image;
+    delete lpt;
+    delete image;
+  }
+  else
+  {
+    const OGRLinearRing* ring = polygon->getExteriorRing();
+    QPolygonF qp;
+    _convertRingToQPolygon(ring, qp, m);
+
+    pt.setPen(Qt::NoPen);
+    pt.setBrush(brush);
+    pt.drawPolygon(qp, Qt::WindingFill);
+
+    pt.setPen(pen);
+    pt.setBrush(Qt::NoBrush);
+    pt.drawPolygon(qp);
+  }
 }
 
 void GeometryPainter::drawWay(QPainter& pt, const OsmMap* map, const Way* way, const QMatrix& m)

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef WAYMATCHSET_H
@@ -58,7 +58,7 @@ public:
 
 inline bool operator==(const WayMatch& wm1, const WayMatch& wm2)
 {
-  return wm1.id1 == wm2.id1 && wm1.id2 == wm1.id2;
+  return wm1.id1 == wm2.id1 && wm1.id2 == wm2.id2;
 }
 
 }

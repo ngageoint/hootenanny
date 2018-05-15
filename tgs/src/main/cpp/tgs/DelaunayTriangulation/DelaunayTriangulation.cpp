@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "DelaunayTriangulation.h"
@@ -731,10 +731,11 @@ bool Face::operator<(const Face& other) const
 
 Face& Face::operator=(const Face& other)
 {
-  _id = other._id;
-  for (int i = 0; i < 6; i++)
+  if (this != &other)
   {
-    _edges[i] = other._edges[i];
+    _id = other._id;
+    for (int i = 0; i < 6; i++)
+      _edges[i] = other._edges[i];
   }
   return *this;
 }

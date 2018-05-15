@@ -101,7 +101,7 @@ bool OsmNetworkExtractor::_isContiguous(const ConstRelationPtr& r)
 
   const vector<RelationData::Entry>& members = r->getMembers();
   bool result = members.size() > 0;
-  long lastNode;
+  long lastNode = 0;
   for (size_t i = 0; i < members.size(); ++i)
   {
     ElementId eid = members[i].getElementId();

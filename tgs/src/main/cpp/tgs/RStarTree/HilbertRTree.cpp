@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "HilbertRTree.h"
@@ -312,8 +312,11 @@ public:
 
   BoxHolder& operator=(const BoxHolder& bh)
   {
-    boxPair = bh.boxPair;
-    hilbertValue = bh.hilbertValue;
+    if (this != &bh)
+    {
+      boxPair = bh.boxPair;
+      hilbertValue = bh.hilbertValue;
+    }
     return *this;
   }
 };
