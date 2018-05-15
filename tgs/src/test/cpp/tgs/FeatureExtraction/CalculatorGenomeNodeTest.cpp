@@ -106,7 +106,7 @@ namespace Tgs
       }
 
       // testing equation ((3 * v) + sqrt(v)) - 2
-      SubtractCalculatorNode* root = new SubtractCalculatorNode();
+      boost::shared_ptr<SubtractCalculatorNode> root(new SubtractCalculatorNode());
       AddCalculatorNode* add = new AddCalculatorNode();
       MultiplyCalculatorNode* mult = new MultiplyCalculatorNode();
       SqrtCalculatorNode* sqrtNode = new SqrtCalculatorNode();

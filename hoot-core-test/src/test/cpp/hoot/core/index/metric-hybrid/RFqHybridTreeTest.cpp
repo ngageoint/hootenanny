@@ -550,22 +550,22 @@ public:
     OptimizeFunction ofDummy(keys, values, bounds);
     ofDummy.f(v);
 
-    OptimizeFunction* of = new OptimizeFunction(keys, values, bounds);
-    of->f(v);
+    OptimizeFunction of(keys, values, bounds);
+    of.f(v);
     double delta = 5;
     //int iterations = 200;
     int iterations = 4;
     for (int i = 0; i < iterations; i++)
     {
       Tgs::Random::instance()->seed(i);
-      v[0] = bound(1, of->getBest().childCount + rdelta(delta), 10);
-      v[1] = bound(1, of->getBest().bucketSize + rdelta(delta), 10);
-      v[2] = bound(-1, of->getBest().rDepth + rdelta(delta), 40);
-      v[3] = bound(-1, of->getBest().fqDepth + rdelta(delta), 40);
-      of->f(v);
+      v[0] = bound(1, of.getBest().childCount + rdelta(delta), 10);
+      v[1] = bound(1, of.getBest().bucketSize + rdelta(delta), 10);
+      v[2] = bound(-1, of.getBest().rDepth + rdelta(delta), 40);
+      v[3] = bound(-1, of.getBest().fqDepth + rdelta(delta), 40);
+      of.f(v);
 
       LOG_INFO("###########################");
-      LOG_INFO(of->getBest().toString());
+      LOG_INFO(of.getBest().toString());
       LOG_INFO("###########################");
 
       delta = 5 - (i / (iterations / 4));

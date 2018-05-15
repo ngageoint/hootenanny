@@ -97,6 +97,11 @@ public:
     *os << is->rdbuf();
     os->flush();
 
+    if (is != &cin)
+      delete is;
+    if (os != &cout)
+      delete os;
+
     return 0;
   }
 };
