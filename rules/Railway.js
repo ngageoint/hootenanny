@@ -16,11 +16,27 @@ var sublineMatcher =
   new hoot.MaximalSublineStringMatcher(
     { "way.matcher.max.angle": hoot.get("railway.matcher.max.angle"),
       "way.subline.matcher": hoot.get("railway.subline.matcher") });
+
 var sampledAngleHistogramExtractor =
   new hoot.SampledAngleHistogramExtractor(
     { "way.angle.sample.distance" : hoot.get("railway.angle.sample.distance"),
       "way.matcher.heading.delta" : hoot.get("railway.matcher.heading.delta") });
+
+var distanceScoreExtractor = new hoot.DistanceScoreExtractor();
+
+// Use default spacing, 5 meters
+var edgeDistanceExtractor = new hoot.EdgeDistanceExtractor();
+
+
+var euclideanDistanceExtractor = new hoot.EuclideanDistanceExtractor();
+
+var hausdorffDistanceExtractor = new hoot.HausdorffDistanceExtractor();
+
 var weightedShapeDistanceExtractor = new hoot.WeightedShapeDistanceExtractor();
+
+var parallelScoreExtractor = new hoot.ParallelScoreExtractor();
+
+var lengthScoreExtractor = new hoot.LengthScoreExtractor();
 
 /**
  * Runs before match creation occurs and provides an opportunity to perform custom initialization.
@@ -81,12 +97,16 @@ exports.matchScore = function(map, e1, e2)
     var m1 = sublines.match1;
     var m2 = sublines.match2;
 
-    var sampledAngleHistogramValue = sampledAngleHistogramExtractor.extract(m, m1, m2);
-    var weightedShapeDistanceValue = weightedShapeDistanceExtractor.extract(m, m1, m2);
+    var distanceScore = distanceScoreExtractor.extract(m, m1, m2);
+    var edgeDistance  = edgeDistanceExtractor.extract(m, m1, m2);
+    var hausdorffDistance = hausdorffDistanceExtractor.extract(m, m1, m2);
 
-    var attribs = [sampledAngleHistogramValue, weightedShapeDistanceValue];
+    //var sampledAngleHistogramValue = sampledAngleHistogramExtractor.extract(m, m1, m2);
+    //var weightedShapeDistanceValue = weightedShapeDistanceExtractor.extract(m, m1, m2);
+
+    var attribs = [distanceScore, edgeDistance, hausdorffDistance];
     var classification = WekaClassifier.classify(attribs);
-    if (1 === classification) {
+    if (0 === classification) {
       hoot.trace("Found Match!");
       result = { match: 1.0, explain:"match" };
     }
@@ -132,141 +152,65 @@ exports.getMatchFeatureDetails = function(map, e1, e2)
 
     featureDetails["sampledAngleHistogramValue"] = sampledAngleHistogramExtractor.extract(m, m1, m2);
     featureDetails["weightedShapeDistanceValue"] = weightedShapeDistanceExtractor.extract(m, m1, m2);
+    featureDetails["distanceScore"]              = distanceScoreExtractor.extract(m, m1, m2);
+    featureDetails["edgeDistance"]               = edgeDistanceExtractor.extract(m, m1, m2);
+    featureDetails["euclideanDistance"]          = euclideanDistanceExtractor.extract(m, m1, m2);
+    featureDetails["hausdorffDistance"]          = hausdorffDistanceExtractor.extract(m, m1, m2);
+    featureDetails["parallelScoreExtractor"]     = parallelScoreExtractor.extract(m, m1, m2);
+    featureDetails["lengthScoreExtractor"]       = lengthScoreExtractor.extract(m, m1, m2);
   }
 
   return featureDetails;
 };
 
+/*
+Classifier derived using WEKA 3.8.2
+... And then I tweaked the numbers a bit
+Classifier chosen was "REPTree"
 
-
-/* Classifier derived using Weka 3.8
- * Using a manually-matched dataset which was probably too small
- * REPTree classifier
- *
- * === Summary ===
- * Correctly Classified Instances         369          79.3548 %
- * Incorrectly Classified Instances        96          20.6452 %
- * Kappa statistic                          0.1823
- * Mean absolute error                      0.192
- * Root mean squared error                  0.316
- * Relative absolute error                 86.5813 %
- * Root relative squared error             95.2511 %
- * Total Number of Instances              465
- *
- * Argument should be Object[2] = { Double sampledAngleHistogramValue,
- *                                  Double weightedShapeDistanceValue }
- */
-
+Invoke WekaClassifier.classify(i) with:
+i[0] = distanceScore
+i[1] = edgeDistance
+i[2] = hausdorffDistance
+*/
 class WekaClassifier {
 
   static classify(i) {
     var p = NaN;
-    p = WekaClassifier.Nbf90f236(i);
+    p = WekaClassifier.N1ddbfdb32(i);
     return p;
   }
 
-  static Nbf90f236(i) {
+  static N1ddbfdb32(i) {
     var p = NaN;
-    // weightedShapeDistanceValue
+    /* distanceScore */
+    if (i[0] == null) {
+      p = 1;
+    } else if (i[0] < 0.577) {
+      p = 1;
+    } else if (true) {
+    p = WekaClassifier.N4ee8593a3(i);
+    }
+    return p;
+  }
+  static N4ee8593a3(i) {
+    var p = NaN;
+    /* hausdorffDistance */
+    if (i[2] == null) {
+      p = 1;
+    } else if (i[2] < 0.800) {
+      p = 1;
+    } else if (true) {
+    p = WekaClassifier.N296715a14(i);
+    }
+    return p;
+  }
+  static N296715a14(i) {
+    var p = NaN;
+    /* edgeDistance */
     if (i[1] == null) {
       p = 1;
-    } else if (i[1] < 0.9996969548964832) {
-      p = 1;
-    } else if (true) {
-    p = WekaClassifier.Na1878427(i);
-    }
-    return p;
-  }
-  static Na1878427(i) {
-    var p = NaN;
-    // sampledAngleHistogramValue
-    if (i[0] == null) {
-      p = 1;
-    } else if (i[0] < 0.9999867882954654) {
-    p = WekaClassifier.N4649dd508(i);
-    } else if (true) {
-      p = 1;
-    }
-    return p;
-  }
-  static N4649dd508(i) {
-    var p = NaN;
-    // sampledAngleHistogramValue
-    if (i[0] == null) {
-      p = 0;
-    } else if (i[0] < 0.9994555988547049) {
-    p = WekaClassifier.N300d0e419(i);
-    } else if (true) {
-      p = 0;
-    }
-    return p;
-  }
-  static N300d0e419(i) {
-    var p = NaN;
-    // weightedShapeDistanceValue
-    if (i[1] == null) {
-      p = 1;
-    } else if (i[1] < 0.9999996992930555) {
-    p = WekaClassifier.N734e8f7410(i);
-    } else if (true) {
-      p = 1;
-    }
-    return p;
-  }
-  static N734e8f7410(i) {
-    var p = NaN;
-    // weightedShapeDistanceValue
-    if (i[1] == null) {
-      p = 1;
-    } else if (i[1] < 0.9999980378189885) {
-    p = WekaClassifier.N3add333711(i);
-    } else if (true) {
-      p = 0;
-    }
-    return p;
-  }
-  static N3add333711(i) {
-    var p = NaN;
-    // weightedShapeDistanceValue
-    if (i[1] == null) {
-      p = 1;
-    } else if (i[1] < 0.9997304137129573) {
-      p = 0;
-    } else if (true) {
-    p = WekaClassifier.N3276ca6112(i);
-    }
-    return p;
-  }
-  static N3276ca6112(i) {
-    var p = NaN;
-    // sampledAngleHistogramValue
-    if (i[0] == null) {
-      p = 1;
-    } else if (i[0] < 0.6118379265697682) {
-      p = 1;
-    } else if (true) {
-    p = WekaClassifier.N6ad1b56813(i);
-    }
-    return p;
-  }
-  static N6ad1b56813(i) {
-    var p = NaN;
-    // sampledAngleHistogramValue
-    if (i[0] == null) {
-      p = 1;
-    } else if (i[0] < 0.9545753445646151) {
-    p = WekaClassifier.N6de3b26914(i);
-    } else if (true) {
-      p = 1;
-    }
-    return p;
-  }
-  static N6de3b26914(i) {
-    var p = NaN;
-    // sampledAngleHistogramValue
-    if (i[0] == null) {
-      p = 0;
-    } else if (i[0] < 0.908430154556233) {
+    } else if (i[1] < 0.800) {
       p = 1;
     } else if (true) {
       p = 0;
