@@ -198,19 +198,9 @@
                 "id":"rubber_sheet_ref",
                 "elem_type":"checkbox",
                 "description":"If this configuration setting is set to true then the first layer is treated as the reference layer and will not be moved. If set to false the two layers will be moved towards each other. The weighting is determined based on the circular error.",
-                "name":"Rubber Sheet Ref",
+                "name":"Don't Move Reference Layer",
                 "defaultvalue":"true",
                 "hoot_key":"rubber.sheet.ref"
-            },
-            {
-                "id":"rubber_sheet_minimum_ties",
-                "minvalue":"0",
-                "elem_type":"int",
-                "description":"Sets the minimum number of tie points that will be used when calculating a rubber sheeting solution.",
-                "maxvalue":"",
-                "name":"Rubber Sheet Minimum Ties",
-                "defaultvalue":"4",
-                "hoot_key":"rubber.sheet.minimum.ties"
             },
             {
                 "id":"rubber_sheet_fail_when_min_tie_points_not_found",
@@ -228,7 +218,17 @@
                 "required":"true",
                 "defaultvalue":"true",
                 "hoot_key":"rubber.sheet.log.missing.requirements.as.warning"
-            }
+            },
+            {
+                "id":"rubber_sheet_minimum_ties",
+                "minvalue":"0",
+                "elem_type":"int",
+                "description":"Sets the minimum number of tie points that will be used when calculating a rubber sheeting solution.",
+                "maxvalue":"",
+                "name":"Minimum Ties Required",
+                "defaultvalue":"4",
+                "hoot_key":"rubber.sheet.minimum.ties"
+            } 
         ]
     },
     {
@@ -237,6 +237,71 @@
         "description":"Hootenanny general conflation options",
         "name":"General Conflation Options",
         "members":[
+            {
+            	"id":"add_review_tags_to_features",
+                "elem_type":"bool",
+                "defaultvalue":"false",
+                "description":"If true, not only will review relations receive the hoot:review:needs tag, the features involved in the review will receive them as well.",
+                "name":"Add Review Tags To Individual Features",
+                "hoot_key":"add.review.tags.to.features"
+            },
+            {
+                "id":"auto_correct_options",
+                "elem_type":"bool",
+                "defaultvalue":"true",
+                "required":"true",
+                "description":"Temporary setting that addresses some Hootenanny iD Editor UI bugs.  See MatchFactory::_tempFixDefaults() for more info.",
+                "name":"Auto Correct Options",
+                "hoot_key":"autocorrect.options"
+            },
+            {
+                "id":"element_cache_size_node",
+                "minvalue":"0",
+                "elem_type":"int",
+                "description":"Size of the memory cache used when streaming I/O is used with nodes.",
+                "name":"Cache Size For Nodes",
+                "maxvalue":"",
+                "defaultvalue":"2000000",
+                "hoot_key":"element.cache.size.node"
+            },
+            {
+                "id":"element_cache_size_relation",
+                "minvalue":"0",
+                "elem_type":"int",
+                "description":"Size of the memory cache used when streaming I/O is used with relations.",
+                "name":"Cache Size For Relations",
+                "maxvalue":"",
+                "defaultvalue":"200000",
+                "hoot_key":"element.cache.size.relation"
+            },
+            {
+                "id":"element_cache_size_way",
+                "minvalue":"0",
+                "elem_type":"int",
+                "description":"Size of the memory cache used when streaming I/O is used with ways.",
+                "name":"Cache Size For Ways",
+                "maxvalue":"",
+                "defaultvalue":"200000",
+                "hoot_key":"element.cache.size.way"
+            },
+            {
+                "id":"duplicate_name_case_sensitive",
+                "elem_type":"checkbox",
+                "hoot_key":"duplicate.name.case.sensitive",
+                "description":"If checked, the duplicate name remover will only remove duplicate names when their case also matches; Will ignore case when removing otherwise",
+                "name":"Duplicate Name Remover Case Sensitive",
+                "defaultvalue":"true"
+            },
+            {
+            	"id":"edge_distance_extractor_spacing",
+                "minvalue":"0.01",
+                "elem_type":"double",
+                "description":"The spacing used by the EdgeDistanceExtractor.  Units in meters.",
+                "maxvalue":"",
+                "name":"Edge Distance Extractor Spacing",
+                "defaultvalue":"5.0",
+                "hoot_key":"edge.distance.extractor.spacing"
+            },
             {
                 "id":"frechet_distance",
                 "elem_type":"checkplus",
@@ -263,94 +328,12 @@
                 ]
             },
             {
-            	"id":"add_review_tags_to_features",
+            	"id":"token_keep_non_words",
                 "elem_type":"bool",
                 "defaultvalue":"false",
-                "description":"If true, not only will review relations receive the hoot:review:needs tag, the features involved in the review will receive them as well.",
-                "name":"Add Review Tags To Individual Features",
-                "hoot_key":"add.review.tags.to.features"
-            },
-            {
-                "id":"unify_optimizer_time_limit",
-                "minvalue":"-1",
-                "elem_type":"int",
-                "description":"The maximum amount of time in seconds to wait for the optimizer to complete. A value of -1 makes the time limit unlimited. If this value is set to something other than -1 your conflation results may change between multiple runs. Especially if the machine Hoot is running on is under heavy load. If the \"CM Score:\" value is changing between runs and GLPK isn't finding an optimal solution then this is likely causing different output. Just because the output is changing doesn't mean it is wrong, but this can be problematic if you're doing testing or expecting repeatable output for other",
-                "maxvalue":"",
-                "name":"Unify Optimizer Time Limit",
-                "defaultvalue":"30",
-                "hoot_key":"unify.optimizer.time.limit"
-            },
-            {
-                "id":"ogr_split_o2s",
-                "elem_type":"checkbox",
-                "description":"If the list of o2s tags is > 255 char, split it into into 254 char long pieces. If this is false, it will be exported as one big string.",
-                "name":"OGR Split O2S",
-                "defaultvalue":"false",
-                "hoot_key":"ogr.split.o2s"
-            },
-            {
-                "id":"ogr_esri_fcsubtype",
-                "elem_type":"checkbox",
-                "description":"Add the ESRI specific FCSUBTYPE field to the output",
-                "name":"OGR Esri FCSubtype",
-                "defaultvalue":"true",
-                "hoot_key":"ogr.esri.fcsubtype"
-            },
-            {
-                "id":"ogr_thematic_structure",
-                "elem_type":"checkbox",
-                "description":"Export data in Thematic Groups (TransportationGroundCrv, StructurePnt etc) instead of one FCODE per file/layer (ROAD_L, BUILDING_P etc).",
-                "name":"OGR Thematic Structure",
-                "defaultvalue":"true",
-                "hoot_key":"ogr.thematic.structure"
-            },
-            {
-                "id":"duplicate_name_case_sensitive",
-                "elem_type":"checkbox",
-                "hoot_key":"duplicate.name.case.sensitive",
-                "description":"If checked, the duplicate name remover will only remove duplicate names when their case also matches; Will ignore case when removing otherwise",
-                "name":"Duplicate Name Case Sensitive",
-                "defaultvalue":"true"
-            },
-            {
-                "id":"element_cache_size_node",
-                "minvalue":"0",
-                "elem_type":"int",
-                "description":"Size of the memory cache used when streaming I/O is used with nodes.",
-                "name":"Node Cache Size",
-                "maxvalue":"",
-                "defaultvalue":"2000000",
-                "hoot_key":"element.cache.size.node"
-            },
-            {
-                "id":"element_cache_size_way",
-                "minvalue":"0",
-                "elem_type":"int",
-                "description":"Size of the memory cache used when streaming I/O is used with ways.",
-                "name":"Way Cache Size",
-                "maxvalue":"",
-                "defaultvalue":"200000",
-                "hoot_key":"element.cache.size.way"
-            },
-            {
-                "id":"element_cache_size_relation",
-                "minvalue":"0",
-                "elem_type":"int",
-                "description":"Size of the memory cache used when streaming I/O is used with relations.",
-                "name":"Relation Cache Size",
-                "maxvalue":"",
-                "defaultvalue":"200000",
-                "hoot_key":"element.cache.size.relation"
-            },
-            {
-            	"id":"edge_distance_extractor_spacing",
-                "minvalue":"0.01",
-                "elem_type":"double",
-                "description":"The spacing used by the EdgeDistanceExtractor.  Units in meters.",
-                "maxvalue":"",
-                "name":"Edge Distance Extractor Spacing",
-                "defaultvalue":"5.0",
-                "hoot_key":"edge.distance.extractor.spacing"
+                "description":"This does a rudimentary check to see if the string contains any letters/numbers. If the string doesn't contain any letters or numbers then it will be dropped.",
+                "name":"Keep Non Word Tokens",
+                "hoot_key":"token.keep.non.words"
             },
             {
             	"id":"levenshtein_distance_alpha",
@@ -372,6 +355,16 @@
                 "defaultvalue":"1.0",
                 "hoot_key":"merge.nearby.nodes.distance"
             },
+            {
+            	"id":"token_min_size",
+                "minvalue":"0.0",
+                "elem_type":"double",
+                "description":"This is the minimum string size that the string tokenizer should accept as a token. If the string length is less than this value, then it will not be accepted. Set the value to 0 if you want to accept all strings.  This setting primarily applies to string comparison functions and will eliminate comparing very short strings.",
+                "maxvalue":"",
+                "name":"Minimum String Token Size",
+                "defaultvalue":"3.0",
+                "hoot_key":"token.min.size"
+            },
 	    {
             	"id":"node_matcher_strictness",
                 "minvalue":"0.0",
@@ -383,29 +376,35 @@
                 "hoot_key":"node.matcher.strictness"
             },
             {
-            	"id":"token_keep_non_words",
-                "elem_type":"bool",
-                "defaultvalue":"false",
-                "description":"This does a rudimentary check to see if the string contains any letters/numbers. If the string doesn't contain any letters or numbers then it will be dropped.",
-                "name":"Keep Non Word Tokens",
-                "hoot_key":"token.keep.non.words"
+                "id":"ogr_esri_fcsubtype",
+                "elem_type":"checkbox",
+                "description":"Add the ESRI specific FCSUBTYPE field to the output",
+                "name":"OGR Esri FCSubtype",
+                "defaultvalue":"true",
+                "hoot_key":"ogr.esri.fcsubtype"
             },
             {
-            	"id":"token_min_size",
-                "minvalue":"0.0",
-                "elem_type":"double",
-                "description":"This is the minimum string size that the string tokenizer should accept as a token. If the string length is less than this value, then it will not be accepted. Set the value to 0 if you want to accept all strings.  This setting primarily applies to string comparison functions and will eliminate comparing very short strings.",
-                "maxvalue":"",
-                "name":"Minimum Token Size",
-                "defaultvalue":"3.0",
-                "hoot_key":"token.min.size"
+                "id":"ogr_split_o2s",
+                "elem_type":"checkbox",
+                "description":"If the list of o2s tags is > 255 char, split it into into 254 char long pieces. If this is false, it will be exported as one big string.",
+                "name":"OGR Split O2S",
+                "defaultvalue":"false",
+                "hoot_key":"ogr.split.o2s"
+            },
+            {
+                "id":"ogr_thematic_structure",
+                "elem_type":"checkbox",
+                "description":"Export data in Thematic Groups (TransportationGroundCrv, StructurePnt etc) instead of one FCODE per file/layer (ROAD_L, BUILDING_P etc).",
+                "name":"OGR Thematic Structure",
+                "defaultvalue":"true",
+                "hoot_key":"ogr.thematic.structure"
             },
             {
             	"id":"translate_string_distance_tokenize",
                 "elem_type":"bool",
                 "defaultvalue":"true",
                 "description":"Set to true if the strings should be tokenized (split into words) before translating the values.",
-                "name":"Tokenize When Translating",
+                "name":"Tokenize Strings When Translating",
                 "hoot_key":"translate.string.distance.tokenize"
             },
 	    {
@@ -419,13 +418,14 @@
                 "hoot_key":"weighted.metric.distance.extractor.search.radius"
             },
             {
-                "id":"auto_correct_options",
-                "elem_type":"bool",
-                "defaultvalue":"true",
-                "required":"true",
-                "description":"Temporary setting that addresses some Hootenanny iD Editor UI bugs.  See MatchFactory::_tempFixDefaults() for more info.",
-                "name":"Auto Correct Options",
-                "hoot_key":"autocorrect.options"
+                "id":"unify_optimizer_time_limit",
+                "minvalue":"-1",
+                "elem_type":"int",
+                "description":"The maximum amount of time in seconds to wait for the optimizer to complete. A value of -1 makes the time limit unlimited. If this value is set to something other than -1 your conflation results may change between multiple runs. Especially if the machine Hoot is running on is under heavy load. If the \"CM Score:\" value is changing between runs and GLPK isn't finding an optimal solution then this is likely causing different output. Just because the output is changing doesn't mean it is wrong, but this can be problematic if you're doing testing or expecting repeatable output for other",
+                "maxvalue":"",
+                "name":"Unifying Optimizer Time Limit",
+                "defaultvalue":"30",
+                "hoot_key":"unify.optimizer.time.limit"
             }
         ]
     },
@@ -703,6 +703,40 @@
                 "onchange":"true"
             },
             {
+            	"id":"building_review_if_secondary_newer",
+                "elem_type":"bool",
+                "defaultvalue":"false",
+                "description":"If true, any buildings in the secondary layer will be automatically reviewed against matching buildings in the reference layer if they are marked with a more recent date than that of the reference building.",
+                "name":"Review If Secondary Layer Feature Newer",
+                "hoot_key":"building.review.if.secondary.newer"
+            },
+            {
+        	"id":"building_date_format",
+        	"elem_type":"string",
+        	"description":"Date format string used by the building date tag value.  See QDateTime::fromString for more details.",
+        	"name":"Date Format",
+        	"defaultvalue":"yyyy-MM-ddTHH:mm",
+        	"hoot_key":"building.date.format",
+        	"onchange":"true"
+    	    },
+            {
+        	"id":"building_date_tag_key",
+        	"elem_type":"string",
+        	"description":"Tag key used by the building.review.if.secondary.newer configuration option.",
+        	"name":"Date Tag Key",
+        	"defaultvalue":"source:date",
+        	"hoot_key":"building.date.tag.key",
+        	"onchange":"true"
+    	    },
+            {
+            	"id":"building_keep_more_complex_geometry_when_auto_merging",
+                "elem_type":"bool",
+                "defaultvalue":"true",
+                "description":"If true, when buildings are auto-merged during conflation the geometry of the more complex building is the one that is kept.  If false or the buildings are equally complex, then the geometry of the first building in the pair passed to the Building Merger is the geometry kept.  This does not apply to feature merging done during the manual review process.",
+                "name":"Keep More Complex Geometry When Auto Merging",
+                "hoot_key":"building.keep.more.complex.geometry.when.auto.merging"
+            },
+            {
                 "id":"building_match_creator",
                 "elem_type":"string",
                 "description":"List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
@@ -729,46 +763,12 @@
                 "required":"true"
             },
             {
-            	"id":"building_review_if_secondary_newer",
-                "elem_type":"bool",
-                "defaultvalue":"false",
-                "description":"If true, any buildings in the secondary layer will be automatically reviewed against matching buildings in the reference layer if they are marked with a more recent date than that of the reference building.",
-                "name":"Always Review If Secondary Feature Newer",
-                "hoot_key":"building.review.if.secondary.newer"
-            },
-            {
-        	"id":"building_date_format",
-        	"elem_type":"string",
-        	"description":"Date format string used by the building date tag value.  See QDateTime::fromString for more details.",
-        	"name":"Date Format",
-        	"defaultvalue":"yyyy-MM-ddTHH:mm",
-        	"hoot_key":"building.date.format",
-        	"onchange":"true"
-    	    },
-            {
-        	"id":"building_date_tag_key",
-        	"elem_type":"string",
-        	"description":"Tag key used by the building.review.if.secondary.newer configuration option.",
-        	"name":"Date Tag Key",
-        	"defaultvalue":"source:date",
-        	"hoot_key":"building.date.tag.key",
-        	"onchange":"true"
-    	    },
-            {
             	"id":"building_review_matches_other_than_one_to_one",
                 "elem_type":"bool",
                 "defaultvalue":"false",
                 "description":"If true, any building matches other than 1:1 matches are automatically marked for review.",
                 "name":"Review Non 1:1 Building Matches",
                 "hoot_key":"building.review.matches.other.than.one.to.one"
-            },
-            {
-            	"id":"building_keep_more_complex_geometry_when_auto_merging",
-                "elem_type":"bool",
-                "defaultvalue":"true",
-                "description":"If true, when buildings are auto-merged during conflation the geometry of the more complex building is the one that is kept.  If false or the buildings are equally complex, then the geometry of the first building in the pair passed to the Building Merger is the geometry kept.  This does not apply to feature merging done during the manual review process.",
-                "name":"Keep More Complex Geometry When Auto Merging",
-                "hoot_key":"building.keep.more.complex.geometry.when.auto.merging"
             }
         ]
     },
@@ -785,6 +785,14 @@
                 "name":"Enabled",
                 "defaultvalue":"true",
                 "onchange":"true"
+            },
+            {
+            	"id":"poi_ignore_type_if_name_present",
+                "elem_type":"bool",
+                "defaultvalue":"false",
+                "description":"If true, POI to POI conflation will ignore the types of the features being compared completely as long as those being compared have a populated name field.",
+                "name":"Ignore Type If Name Present",
+                "hoot_key":"poi.ignore.type.if.name.present"
             },
             {
             	"id":"poi_match_creator_unifying",
@@ -809,14 +817,6 @@
                 	"defaultvalue":"hoot::ScriptMergerCreator"
                 },
                 "hoot_key":"merger.creators"
-            },
-            {
-            	"id":"poi_ignore_type_if_name_present",
-                "elem_type":"bool",
-                "defaultvalue":"false",
-                "description":"If true, POI to POI conflation will ignore the types of the features being compared completely as long as those being compared have a populated name field.",
-                "name":"Ignore Type If Name Present",
-                "hoot_key":"poi.ignore.type.if.name.present"
             }
         ]
     },
@@ -835,6 +835,30 @@
                 "onchange":"true"
             },
             {
+        	"id":"poipolygon_disable_same_source_conflation",
+        	"elem_type":"bool",
+        	"defaultvalue":"false",
+        	"description":"If true, POI to polygon conflation will not attempt to conflate two features with the same source tag value.  e.g. both have 'source=osm' tag  The source tag key is specified by poi.polygon.source.tag.key.  How strictly the source tag key must be matched is controlled by poi.polygon.disable.same.source.conflation.match.tag.key.prefix.only.  This setting is useful when you have a data layer where data has been collected as both POIs and polygons for the same source and you never want the two source to be conflated together.",
+        	"name":"Disable Same Source Conflation",
+        	"hoot_key":"poi.polygon.disable.same.source.conflation"
+    	    },
+            {
+        	"id":"poipolygon_disable_same_source_conflation_match_tag_key_prefix_only",
+        	"elem_type":"bool",
+        	"defaultvalue":"true",
+        	"description":"If set to false and poi.polygon.disable.same.source.conflation is set to true, POI to polygon conflation will disable conflation only between features who have the exact same source tag value.  e.g. both have 'source=osm' tag  If set to true and poi.polygon.disable.same.source.conflation is set to true, then the tag matcher is less strict and will attempt to match the prefix of the source tag value when delimited by a colon.  e.g. 'source=mgcp:buildp_clip;osm' will match 'source=mgcp:builda_clip;osm' since both tag values begin with 'mgcp:'.",
+        	"name":"Disable Same Source Conflation Match Tag Key Prefix Only",
+        	"hoot_key":"poi.polygon.disable.same.source.conflation.match.tag.key.prefix.only"
+    	    },
+            {
+        	"id":"poipolygon_keep_closest_matches_only",
+        	"elem_type":"bool",
+        	"defaultvalue":"false",
+        	"description":"If true, POI to Polygon conflation will only keep matches that are the closest to polygons and throw out any others even if they score high enough for a match.",
+                "name":"Keep Closest Matches Only",
+        	"hoot_key":"poi.polygon.keep.closest.matches.only"
+    	    },
+            {
             	"id":"poi_poly_match_creator_unifying",
                 "elem_type":"string",
                 "description":"List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
@@ -846,6 +870,34 @@
                 	},
                 "hoot_key":"match.creators"
             },
+            {
+        	"id":"poipolygon_match_distance_threshold",
+        	"elem_type":"int",
+        	"description":"The maximum distance, in meters, between a POI and a polygon where they can still be considered a match based on distance criteria only.",
+        	"name":"Match Distance Threshold",
+        	"defaultvalue":"5",
+        	"minvalue":"0",
+        	"maxvalue":"",
+        	"hoot_key":"poi.polygon.match.distance.threshold"
+    	    },
+            {
+        	"id":"poipolygon_match_evidence_threshold",
+        	"elem_type":"int",
+        	"description":"The minimum evidence score at which a POI will be matched to a polygon.  Valid values are 1 to 4.  If an evidence score for a feature pair falls below this value, the relationship between the features will be classified as a review or miss, depending on the value of 'poi.polygon.review.evidence.threshold'.  Generally, this setting should not be changed except when working with specific POI/Polygon conflation use cases that require it.",
+        	"name":"Match Evidence Threshold",
+        	"defaultvalue":"3",
+        	"minvalue":"1",
+        	"maxvalue":"4",
+        	"hoot_key":"poi.polygon.match.evidence.threshold"
+    	    },
+            {
+        	"id":"poipolygon_auto_merge_many_poi_to_one_poly_matches",
+        	"elem_type":"bool",
+        	"defaultvalue":"false",
+        	"description":"If true, instances where multiple POIs were matched to a single polygon will result in all of the POIs being merged into the polygon.  If false, then each POI will generate a review against the polygon instead.",
+		"name":"Merge Many POI to Single Polygon Matches",
+        	"hoot_key":"poi.polygon.auto.merge.many.poi.to.one.poly.matches"
+    	    },
             {
             	"id":"poi_poly_merger_creator_unifying",
                 "elem_type":"string",
@@ -868,70 +920,6 @@
                 "maxvalue":"1.0",
                 "hoot_key":"poi.polygon.name.score.threshold"
             },
-    	    {
-        	"id":"poipolygon_type_score_threshold",
-        	"elem_type":"double",
-        	"description":"The minimum similarity the type scores a POI and polygon can have and be considered a type match, with 0.0 being the least similar and 1.0 being the most similar.",
-        	"name":"Type Score Threshold",
-        	"defaultvalue":"0.7",
-        	"minvalue":"0.01",
-        	"maxvalue":"1.0",
-        	"hoot_key":"poi.polygon.type.score.threshold"
-    	    },
-    	    {
-        	"id":"poipolygon_match_distance_threshold",
-        	"elem_type":"int",
-        	"description":"The maximum distance, in meters, between a POI and a polygon where they can still be considered a match based on distance criteria only.",
-        	"name":"Match Distance Threshold",
-        	"defaultvalue":"5",
-        	"minvalue":"0",
-        	"maxvalue":"",
-        	"hoot_key":"poi.polygon.match.distance.threshold"
-    	    },
-    	    {
-        	"id":"poipolygon_review_distance_threshold",
-        	"elem_type":"int",
-        	"description":"The maximum distance, in meters, combined with the circular error of the features being compared, the total of which allows the features to still be considered a match based on distance criteria only.",
-        	"name":"Review Distance Threshold",
-        	"defaultvalue":"125",
-        	"minvalue":"0",
-        	"maxvalue":"",
-        	"hoot_key":"poi.polygon.review.distance.threshold"
-    	    },
-    	    {
-        	"id":"poipolygon_review_if_matched_types",
-        	"elem_type":"string",
-        	"description":"List of key value pairs in the format 'key=value' or  'key,value' (UI only) for features to always review if marked as matches with POI to polygon conflation.  Delimit the individual types with ';'.  e.g. 'amenity=school;shop=mall' or 'amenity,school;shop,mall'  Also, when specifying the list from the command line, surround the entire value string in double quotes.",
-        	"name":"Review If Matched Types",
-        	"defaultvalue":"",
-        	"hoot_key":"poi.polygon.review.if.matched.types",
-        	"onchange":"true"
-    	    },
-    	    {
-        	"id":"poipolygon_disable_same_source_conflation",
-        	"elem_type":"bool",
-        	"defaultvalue":"false",
-        	"description":"If true, POI to polygon conflation will not attempt to conflate two features with the same source tag value.  e.g. both have 'source=osm' tag  The source tag key is specified by poi.polygon.source.tag.key.  How strictly the source tag key must be matched is controlled by poi.polygon.disable.same.source.conflation.match.tag.key.prefix.only.  This setting is useful when you have a data layer where data has been collected as both POIs and polygons for the same source and you never want the two source to be conflated together.",
-        	"name":"Disable Same Source Conflation",
-        	"hoot_key":"poi.polygon.disable.same.source.conflation"
-    	    },
-    	    {
-        	"id":"poipolygon_disable_same_source_conflation_match_tag_key_prefix_only",
-        	"elem_type":"bool",
-        	"defaultvalue":"true",
-        	"description":"If set to false and poi.polygon.disable.same.source.conflation is set to true, POI to polygon conflation will disable conflation only between features who have the exact same source tag value.  e.g. both have 'source=osm' tag  If set to true and poi.polygon.disable.same.source.conflation is set to true, then the tag matcher is less strict and will attempt to match the prefix of the source tag value when delimited by a colon.  e.g. 'source=mgcp:buildp_clip;osm' will match 'source=mgcp:builda_clip;osm' since both tag values begin with 'mgcp:'.",
-        	"name":"Disable Same Source Conflation Match Tag Key Prefix Only",
-        	"hoot_key":"poi.polygon.disable.same.source.conflation.match.tag.key.prefix.only"
-    	    },
-   	    {
-        	"id":"poipolygon_source_tag_key",
-        	"elem_type":"string",
-        	"description":"The source tag key to be used in conjunction with poi.polygon.disable.same.source.conflation.",
-        	"name":"Source Tag Key",
-        	"defaultvalue":"source",
-        	"hoot_key":"poi.polygon.source.tag.key",
-        	"onchange":"true"
-    	    },
             {
         	"id":"poipolygon_promote_points_with_addresses_to_pois",
         	"elem_type":"bool",
@@ -941,14 +929,14 @@
         	"hoot_key":"poi.polygon.promote.points.with.addresses.to.pois"
     	    },
             {
-        	"id":"poipolygon_match_evidence_threshold",
+        	"id":"poipolygon_review_distance_threshold",
         	"elem_type":"int",
-        	"description":"The minimum evidence score at which a POI will be matched to a polygon.  Valid values are 1 to 4.  If an evidence score for a feature pair falls below this value, the relationship between the features will be classified as a review or miss, depending on the value of 'poi.polygon.review.evidence.threshold'.  Generally, this setting should not be changed except when working with specific POI/Polygon conflation use cases that require it.",
-        	"name":"Match Evidence Threshold",
-        	"defaultvalue":"3",
-        	"minvalue":"1",
-        	"maxvalue":"4",
-        	"hoot_key":"poi.polygon.match.evidence.threshold"
+        	"description":"The maximum distance, in meters, combined with the circular error of the features being compared, the total of which allows the features to still be considered a match based on distance criteria only.",
+        	"name":"Review Distance Threshold",
+        	"defaultvalue":"125",
+        	"minvalue":"0",
+        	"maxvalue":"",
+        	"hoot_key":"poi.polygon.review.distance.threshold"
     	    },
             {
         	"id":"poipolygon_review_evidence_threshold",
@@ -961,28 +949,40 @@
         	"hoot_key":"poi.polygon.review.evidence.threshold"
     	    },
             {
+        	"id":"poipolygon_review_if_matched_types",
+        	"elem_type":"string",
+        	"description":"List of key value pairs in the format 'key=value' or  'key,value' (UI only) for features to always review if marked as matches with POI to polygon conflation.  Delimit the individual types with ';'.  e.g. 'amenity=school;shop=mall' or 'amenity,school;shop,mall'  Also, when specifying the list from the command line, surround the entire value string in double quotes.",
+        	"name":"Review If Types Match",
+        	"defaultvalue":"",
+        	"hoot_key":"poi.polygon.review.if.matched.types",
+        	"onchange":"true"
+    	    },
+            {
         	"id":"poipolygon_review_multiuse_buildings",
         	"elem_type":"bool",
         	"defaultvalue":"false",
         	"description":"If true, POI to polygon conflation always mark matches between POIs and polygons where multi-use buildings are present.  See the user documentation for how a multi-use building is defined.",
-		"name":"Review Multi-Use Buildings",
+		"name":"Review Matches Against Multi-Use Buildings",
         	"hoot_key":"poi.polygon.review.multiuse.buildings"
     	    },
             {
-        	"id":"poipolygon_auto_merge_many_poi_to_one_poly_matches",
-        	"elem_type":"bool",
-        	"defaultvalue":"false",
-        	"description":"If true, instances where multiple POIs were matched to a single polygon will result in all of the POIs being merged into the polygon.  If false, then each POI will generate a review against the polygon instead.",
-		"name":"Merge Many POI to Single Polygon Matches",
-        	"hoot_key":"poi.polygon.auto.merge.many.poi.to.one.poly.matches"
+        	"id":"poipolygon_source_tag_key",
+        	"elem_type":"string",
+        	"description":"The source tag key to be used in conjunction with poi.polygon.disable.same.source.conflation.",
+        	"name":"Source Tag Key",
+        	"defaultvalue":"source",
+        	"hoot_key":"poi.polygon.source.tag.key",
+        	"onchange":"true"
     	    },
-            {
-        	"id":"poipolygon_keep_closest_matches_only",
-        	"elem_type":"bool",
-        	"defaultvalue":"false",
-        	"description":"If true, POI to Polygon conflation will only keep matches that are the closest to polygons and throw out any others even if they score high enough for a match.",
-                "name":"Keep Closest Matches Only",
-        	"hoot_key":"poi.polygon.keep.closest.matches.only"
+    	    {
+        	"id":"poipolygon_type_score_threshold",
+        	"elem_type":"double",
+        	"description":"The minimum similarity the type scores a POI and polygon can have and be considered a type match, with 0.0 being the least similar and 1.0 being the most similar.",
+        	"name":"Type Score Threshold",
+        	"defaultvalue":"0.7",
+        	"minvalue":"0.01",
+        	"maxvalue":"1.0",
+        	"hoot_key":"poi.polygon.type.score.threshold"
     	    }
         ]
     },
@@ -1028,15 +1028,6 @@
                 "hoot_key":"merger.creators"
             },
             {
-                "id":"waterway_way_subline_matcher",
-                "elem_type":"string",
-                "description":"The way subline matcher to use when determining matching sublines.",
-                "name":"Waterway Subline Matcher",
-                "defaultvalue":"hoot::MaximalSublineMatcher",
-                "hoot_key":"waterway.subline.matcher",
-                "required":"true"
-            },
-            {
                 "id":"waterway_way_angle_sample_distance",
                 "minvalue":"0.01",
                 "elem_type":"double",
@@ -1045,6 +1036,34 @@
                 "name":"Waterway Angle Sample Distance",
                 "defaultvalue":"20.0",
                 "hoot_key":"waterway.angle.sample.distance"
+            },
+            {
+                "id":"waterway_auto_calc_search_radius",
+                "elem_type":"bool",
+                "description":"Automatically calculates the search radius to be used during conflation of waterways using rubber sheet tie point distances.  When this setting is enabled, rubbersheeting is not allowed as a pre-conflation operation on the input data to be conflated.",
+                "name":"Waterway Auto Calculate Search Radius",
+                "defaultvalue":"true",
+                "disabled":"false",
+                "hoot_key":"waterway.auto.calc.search.radius",
+                "onchange":"true"
+            },
+            {
+                "id":"waterway_rubber_sheet_ref",
+                "elem_type":"bool",
+                "description":"When auto-calculating a search radius, if this configuration setting is set to true then the first layer is treated as the reference layer and will not be moved. If set to false, the two layers will be moved towards each other. The weighting is determined based on the circular error.  This is separate from the global Rubber Sheeting Ref option.",
+                "name":"Waterway Auto-Search Radius Calculation Rubber Sheet Ref",
+                "defaultvalue":"true",
+                "hoot_key":"waterway.rubber.sheet.ref"
+            },
+            {
+                "id":"waterway_rubber_sheet_minimum_ties",
+                "minvalue":"0",
+                "elem_type":"int",
+                "description":"Sets the minimum number of rubber sheet tie points that will be used when auto-calculating a search radius.  This is separate from the global Rubber Sheeting Minimum Ties option.",
+                "maxvalue":"",
+                "name":"Waterway Auto-Search Radius Minimum Ties Required",
+                "defaultvalue":"5",
+                "hoot_key":"waterway.rubber.sheet.minimum.ties"
             },
             {
                 "id":"waterway_way_matcher_heading_delta",
@@ -1067,22 +1086,12 @@
                 "hoot_key":"waterway.matcher.max.angle"
             },
             {
-                "id":"waterway_auto_calc_search_radius",
-                "elem_type":"bool",
-                "description":"Automatically calculates the search radius to be used during conflation of waterways using rubber sheet tie point distances.  When this setting is enabled, rubbersheeting is not allowed as a pre-conflation operation on the input data to be conflated.",
-                "name":"Waterway Auto Calc Search Radius",
-                "defaultvalue":"true",
-                "disabled":"false",
-                "hoot_key":"waterway.auto.calc.search.radius",
-                "onchange":"true"
-            },
-            {
                 "id":"search_radius_waterway",
                 "minvalue":"-1",
                 "elem_type":"double",
                 "description":"The search radius to use when conflating highways. If two features are within the search radius then they will be considered for conflation. If the value is -1 then the circular error will be used to calculate an appropriate search radius.",
                 "maxvalue":"",
-                "name":"Search Radius Waterway",
+                "name":"Waterway Search Radius",
                 "defaultvalue":"-1",
                 "disabled":"true",
                 "override":{
@@ -1091,22 +1100,13 @@
                 "hoot_key":"search.radius.waterway"
             },
             {
-                "id":"waterway_rubber_sheet_minimum_ties",
-                "minvalue":"0",
-                "elem_type":"int",
-                "description":"Sets the minimum number of rubber sheet tie points that will be used when auto-calculating a search radius.  This is separate from the global Rubber Sheeting Minimum Ties option.",
-                "maxvalue":"",
-                "name":"Waterway Auto-Search Radius Calculation Minimum Ties",
-                "defaultvalue":"5",
-                "hoot_key":"waterway.rubber.sheet.minimum.ties"
-            },
-            {
-                "id":"waterway_rubber_sheet_ref",
-                "elem_type":"bool",
-                "description":"When auto-calculating a search radius, if this configuration setting is set to true then the first layer is treated as the reference layer and will not be moved. If set to false, the two layers will be moved towards each other. The weighting is determined based on the circular error.  This is separate from the global Rubber Sheeting Ref option.",
-                "name":"Waterway Auto-Search Radius Calculation Rubber Sheet Ref",
-                "defaultvalue":"true",
-                "hoot_key":"waterway.rubber.sheet.ref"
+                "id":"waterway_way_subline_matcher",
+                "elem_type":"string",
+                "description":"The way subline matcher to use when determining matching sublines.",
+                "name":"Waterway Subline Matcher",
+                "defaultvalue":"hoot::MaximalSublineMatcher",
+                "hoot_key":"waterway.subline.matcher",
+                "required":"true"
             }
         ]
     }
