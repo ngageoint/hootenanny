@@ -86,7 +86,7 @@ Feature: Advanced Conflation Options
         And I should see "Building Options"
         And I click on "#hoot_building_options_label"
         And I should see checkbox "Enabled" checked
-        And I should see checkbox "Review If Secondary Feature Newer" unchecked
+        And I should see checkbox "Review If Secondary Layer Building Newer" unchecked
         And I should see element "#building_date_format" with no value and placeholder "yyyy-MM-ddTHH:mm"
         And I should see element "#building_date_tag_key" with no value and placeholder "source:date"
 	And I should see checkbox "Review Non 1:1 Building Matches" unchecked

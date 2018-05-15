@@ -707,7 +707,7 @@
                 "elem_type":"bool",
                 "defaultvalue":"false",
                 "description":"If true, any buildings in the secondary layer will be automatically reviewed against matching buildings in the reference layer if they are marked with a more recent date than that of the reference building.",
-                "name":"Review If Secondary Layer Feature Newer",
+                "name":"Review If Secondary Layer Building Newer",
                 "hoot_key":"building.review.if.secondary.newer"
             },
             {
