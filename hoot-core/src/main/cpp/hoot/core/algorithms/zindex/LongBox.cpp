@@ -72,7 +72,7 @@ bool LongBox::edgeOverlaps(LongBox b)
   bool result = false;
   for (uint i = 0; i < getMin().size(); i++)
   {
-    result = result || (b.getMin()[i] == getMax()[i]) || (b.getMin()[i] == b.getMin()[i]) || (b.getMax()[i] == b.getMax()[i]);
+    result = result || (b.getMin()[i] == getMax()[i]) || (getMin()[i] == b.getMin()[i]) || (getMax()[i] == b.getMax()[i]);
   }
   return result;
 }

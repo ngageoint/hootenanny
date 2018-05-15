@@ -52,7 +52,7 @@ void ImplicitTagUtils::cleanName(QString& name)
 
   //This needs to be expanded.
   if (name.at(0).isDigit() &&
-      (name.endsWith("th") || name.endsWith("nd") || name.endsWith("rd") || name.endsWith("st") ||
+      (name.endsWith("th") || name.endsWith("nd") || name.endsWith("rd") ||
        name.endsWith("ave") || name.endsWith("avenue") || name.endsWith("st") ||
        name.endsWith("street") || name.endsWith("pl") || name.endsWith("plaza")))
   {

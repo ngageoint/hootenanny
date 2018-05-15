@@ -58,7 +58,7 @@ public:
 
 inline bool operator==(const WayMatch& wm1, const WayMatch& wm2)
 {
-  return wm1.id1 == wm2.id1 && wm1.id2 == wm1.id2;
+  return wm1.id1 == wm2.id1 && wm1.id2 == wm2.id2;
 }
 
 }
