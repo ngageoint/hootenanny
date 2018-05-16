@@ -1133,6 +1133,16 @@
             "defaultvalue":"hoot::MaximalSublineMatcher",
             "hoot_key":"railway.subline.matcher",
             "required":"true"
+        },
+        {
+            "id":"railway_matcher_max_angle",
+            "minvalue":"0.0",
+            "maxvalue":"360.0",
+            "defaultvalue":"90.0",
+            "elem_type":"double",
+            "description":"Sets that maximum angle that is still considered a railway match. Units in degrees.",
+            "name":"Railway Matcher Max Angle",
+            "hoot_key":"railway.matcher.max.angle"
         }
     ]
 }

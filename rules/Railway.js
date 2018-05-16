@@ -17,11 +17,6 @@ var sublineMatcher =
     { "way.matcher.max.angle": hoot.get("railway.matcher.max.angle"),
       "way.subline.matcher": hoot.get("railway.subline.matcher") });
 
-var sampledAngleHistogramExtractor =
-  new hoot.SampledAngleHistogramExtractor(
-    { "way.angle.sample.distance" : hoot.get("railway.angle.sample.distance"),
-      "way.matcher.heading.delta" : hoot.get("railway.matcher.heading.delta") });
-
 var distanceScoreExtractor = new hoot.DistanceScoreExtractor();
 
 // Use default spacing, 5 meters
@@ -147,14 +142,13 @@ exports.getMatchFeatureDetails = function(map, e1, e2)
     var m1 = sublines.match1;
     var m2 = sublines.match2;
 
-    featureDetails["sampledAngleHistogramValue"] = sampledAngleHistogramExtractor.extract(m, m1, m2);
-    featureDetails["weightedShapeDistanceValue"] = weightedShapeDistanceExtractor.extract(m, m1, m2);
-    featureDetails["distanceScore"]              = distanceScoreExtractor.extract(m, m1, m2);
-    featureDetails["edgeDistance"]               = edgeDistanceExtractor.extract(m, m1, m2);
-    featureDetails["euclideanDistance"]          = euclideanDistanceExtractor.extract(m, m1, m2);
-    featureDetails["hausdorffDistance"]          = hausdorffDistanceExtractor.extract(m, m1, m2);
-    featureDetails["parallelScore"]              = parallelScoreExtractor.extract(m, m1, m2);
-    featureDetails["lengthScore"]                = lengthScoreExtractor.extract(m, m1, m2);
+    featureDetails["weightedShapeDistance"] = weightedShapeDistanceExtractor.extract(m, m1, m2);
+    featureDetails["distanceScore"]         = distanceScoreExtractor.extract(m, m1, m2);
+    featureDetails["edgeDistance"]          = edgeDistanceExtractor.extract(m, m1, m2);
+    featureDetails["euclideanDistance"]     = euclideanDistanceExtractor.extract(m, m1, m2);
+    featureDetails["hausdorffDistance"]     = hausdorffDistanceExtractor.extract(m, m1, m2);
+    featureDetails["parallelScore"]         = parallelScoreExtractor.extract(m, m1, m2);
+    featureDetails["lengthScore"]           = lengthScoreExtractor.extract(m, m1, m2);
   }
 
   return featureDetails;
