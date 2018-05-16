@@ -63,10 +63,10 @@ Feature: Advanced Conflation Options
             Then I should see "Rubber Sheeting Options"
             Then I click on "#hoot_rubber_sheeting_options_label"
             Then I should see checkbox "Enabled" checked
-            Then I should see checkbox "Rubber Sheet Ref" checked
+            Then I should see checkbox "Don't Move Reference Layer" checked
             Then I should see "Waterway Options"
             Then I click on "#hoot_waterway_options_label"
-            Then I uncheck the "Waterway Auto Calc Search Radius" checkbox
+            Then I uncheck the "Waterway Auto Calculate Search Radius" checkbox
 
             Scenario Outline: Check for Invalid Inputs that require checkboxes
                 And I should see element "#<element>" with no value and placeholder <placeholder>
