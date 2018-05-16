@@ -117,16 +117,18 @@ QString OsmGbdxXmlWriter::removeInvalidCharacters(const QString& s)
 
 void OsmGbdxXmlWriter::open(QString url)
 {
-  // NOTE: This function just tries to setup the output directory.
-  // _newOutputFile creates the output file.
+//  if (url.toLower().endsWith(".gxml"))
+//  {
+//    url.remove(url.size() - 5, url.size());
+//  }
 
-  if (url.toLower().endsWith(".gxml"))
-  {
-    url.remove(url.size() - 5, url.size());
-  }
+//  _outputDir = QDir(url);
+//  _outputDir.makeAbsolute();
+//  _outputFileName = _outputDir.dirName();
 
-  _outputDir = QDir(url);
-  _outputDir.makeAbsolute();
+  QFileInfo fi(url);
+  _outputDir = fi.absoluteDir();
+  _outputFileName = fi.baseName();
 
   if (_outputDir.exists() == false)
   {
@@ -147,14 +149,28 @@ void OsmGbdxXmlWriter::_newOutputFile()
     close();
   }
 
+  // The output has had a few changes.....
 //  QString url = _outputDir.filePath(UuidHelper::createUuid().toString().replace("{", "").replace("}", "") + ".xml");
-  QString url = _outputDir.filePath(QString("det_%1.xml").arg(_fileNumber++));
+//  QString url = _outputDir.filePath(QString("%1_%2.xml").arg(_outputFileName,QString::number(_fileNumber++).rightJustified(4,'0')));
+//  QString url = _outputDir.filePath(QString("%1_%2.xml").arg(_outputFileName).arg(_fileNumber++));
+  QString url = _outputDir.filePath(QString("%1_00_%2.xml").arg(_outputFileName).arg(_fileNumber++));
+
+  // If the file exists, increment the middle _00_ in the name.
+  // NOTE: This assumes that there can be a maximum of 10 copies of a filename....
+  if (QFile::exists(url))
+  {
+//    LOG_ERROR("Clash: Orig Filename: " + url);
+    int inc = 0;
+    while (QFile::exists(url)) {
+      inc++;
+      url = _outputDir.filePath(QString("%1_%2_%3.xml").arg(_outputFileName).arg(inc,2,10,QChar('0')).arg(_fileNumber));
+    }
+//    LOG_ERROR("Final name: " + url);
+  }
 
   QFile* f = new QFile();
   _fp.reset(f);
   f->setFileName(url);
-
-  LOG_VARD(url);
 
   if (!_fp->open(QIODevice::WriteOnly | QIODevice::Text))
   {

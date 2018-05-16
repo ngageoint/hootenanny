@@ -123,6 +123,7 @@ private:
   void _newOutputFile();
 
   QDir _outputDir;
+  QString _outputFileName;
 
   void _writeTags(const ConstElementPtr& element);
 

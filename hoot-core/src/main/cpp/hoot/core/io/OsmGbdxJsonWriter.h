@@ -78,6 +78,7 @@ public:
 protected:
 
   QDir _outputDir;
+  QString _outputFileName;
   int _fileNumber;
 
   /**
