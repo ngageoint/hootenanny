@@ -1481,10 +1481,18 @@ translate = {
 
         for (var i in override)
         {
+            // Delete: Remove a tag
             if (override[i] == '')
             {
                 delete values[i];
             }
+            // Modify: change a tag value ONLY if the tag already exists
+            else if (i.charAt(0) == '#')
+            {
+                var tag = i.slice(1);
+                if (values[tag]) values[tag] = override[i];
+            }
+            // Add/Modify: change or add a tag
             else
             {
                 values[i] = override[i];
