@@ -81,7 +81,7 @@ describe('TranslationServer', function () {
             assert.throws(function error() {
                 server.handleInputs({
                     idval: 'FB123',
-                    geom: 'Area',
+                    geom: 'area',
                     translation: 'TDSv61',
                     idelem: 'fcode',
                     method: 'GET',
@@ -861,7 +861,7 @@ describe('TranslationServer', function () {
 
         it('should handle /schema GET', function() {
             var schm = server.handleInputs({
-                geometry: 'line',
+                geometry: 'Line',
                 translation: 'TDSv40',
                 searchstr: 'ri',
                 maxleindst: 200,
@@ -1167,7 +1167,7 @@ describe('TranslationServer', function () {
         describe('descMatches', function() {
             it('includes words including "mine" at reasonable index', function() {
                 var options = {
-                        geomType: 'Area',
+                        geomType: 'area',
                         translation: 'TDSv61',
                         searchStr: 'mine',
                         limitResult: 12,
@@ -1273,7 +1273,7 @@ describe('TranslationServer', function () {
                 var options = {
                     translation: 'TDSv61',
                     maxLeinDistance: 200,
-                    geomType: 'Area'
+                    geomType: 'area'
                 }
 
                 var bothIncludeBuilding = [
