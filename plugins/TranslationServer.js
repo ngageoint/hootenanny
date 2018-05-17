@@ -471,12 +471,11 @@ var getFCodes = function(params) {
 
         //Get valid FCODEs for this translation and geometry type
         var schema = schemaMap[translation].getDbSchema();
-        var fcodes = {};
-        if(geomType){
+        var fcodes;
+        if (geomType) {
             //Treat vertex geom type as point
             if (geomType.toLowerCase() === 'vertex') geomType = 'point';
 
-            console.log(geomType + ', ' + translation + ', ' + schema.length);
             fcodes = schema
                 .filter(function(d) {
                     return d.geom.toLowerCase() === geomType.toLowerCase();
@@ -487,33 +486,26 @@ var getFCodes = function(params) {
                         desc: d.desc
                     }
                 });
-        } else{
-           var allFcodes = schema
-                .map(function(d) {
-                return {
-                    fcode: d.fcode,
-                    desc: d.desc,
-                    geom: d.geom
-                }
-            });
-            Object.entries(allFcodes).forEach(function(prop){
-                var fCodeData = prop[1];
-                var fCode = fCodeData.fcode;
-                if(!fcodes.hasOwnProperty(fCode)){
-                  fcodes[fCode] = fCodeData;
-                  var desc = fCodeData.desc;
-                  fcodes[fCode].geom = [fCodeData.geom];
-                } else{
-                  var fCodeData = fcodes[fCode];
-                  fcodes[fCode].geom.push(fCodeData.geom);
-                }
-            });
-            fcodes = [fcodes];
+        } else {
+
+            fcodes = Object.values(schema
+                .reduce(function(map, d) {
+                    if (map[d.fcode]) {
+                        map[d.fcode].geom.push(d.geom);
+                    } else {
+                        map[d.fcode] = {
+                            fcode: d.fcode,
+                            desc: d.desc,
+                            geom: [d.geom]
+                        };
+                    }
+                    return map;
+                }, {}));
         }
 
         return fcodes.sort(function(a, b) {
                 return a.fcode - b.fcode;
-                });
+            });
     }
 }
 
