@@ -469,28 +469,43 @@ var getFCodes = function(params) {
         var geomType = params.geometry;
         var translation = params.translation;
 
-        //Treat vertex geom type as point
-        if (geomType.toLowerCase() === 'vertex') geomType = 'point';
-
         //Get valid FCODEs for this translation and geometry type
         var schema = schemaMap[translation].getDbSchema();
+        var fcodes;
+        if (geomType) {
+            //Treat vertex geom type as point
+            if (geomType.toLowerCase() === 'vertex') geomType = 'point';
 
-        console.log(geomType + ', ' + translation + ', ' + schema.length);
-        var fcodes = schema
-            .filter(function(d) {
-                return d.geom.toLowerCase() === geomType.toLowerCase();
-            })
-            .map(function(d) {
-                return {
-                    fcode: d.fcode,
-                    desc: d.desc
-                }
-            })
-            .sort(function(a, b) {
+            fcodes = schema
+                .filter(function(d) {
+                    return d.geom.toLowerCase() === geomType.toLowerCase();
+                })
+                .map(function(d) {
+                    return {
+                        fcode: d.fcode,
+                        desc: d.desc
+                    }
+                });
+        } else {
+
+            fcodes = Object.values(schema
+                .reduce(function(map, d) {
+                    if (map[d.fcode]) {
+                        map[d.fcode].geom.push(d.geom);
+                    } else {
+                        map[d.fcode] = {
+                            fcode: d.fcode,
+                            desc: d.desc,
+                            geom: [d.geom]
+                        };
+                    }
+                    return map;
+                }, {}));
+        }
+
+        return fcodes.sort(function(a, b) {
                 return a.fcode - b.fcode;
             });
-
-        return fcodes;
     }
 }
 

@@ -46,6 +46,16 @@ describe('TranslationServer', function () {
             }).length, 190);
         });
 
+        it('should return fcodes for MGCP with no geometry', function(){
+            var fcodes = server.getFCodes({
+                method: 'GET',
+                translation: 'MGCP'
+            });
+
+            assert.equal(fcodes.length, 196);
+            assert.equal(fcodes[0].geom[0], 'Area');
+        });
+
     });
 
     describe('handleInputs', function() {
