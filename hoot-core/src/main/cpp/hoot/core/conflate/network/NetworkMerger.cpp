@@ -91,8 +91,11 @@ void NetworkMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementI
       eids.insert(e->getElementId());
     }
 
-    ReviewMarker().mark(map, eids, "Complex intersection match. Possible dogleg? "
-      "Very short segment?", HighwayMatch::getHighwayMatchName());
+    ReviewMarker().mark(map,
+                        eids,
+                        "Ambiguous intersection match. Possible dogleg? Very "
+                        "short segment? Please verify merge and fix as needed.",
+                        HighwayMatch::getHighwayMatchName());
   }
   else
   {
