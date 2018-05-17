@@ -46,7 +46,7 @@ class HootGbdxTask(GbdxTaskInterface):
                     prefix = ''
             else:
                     # Keep the folder structure after the path folder, append a '/' at the end 
-                    # and remome the first character, if it is a '/' in order to have a path like 
+                    # and remove the first character, if it is a '/' in order to have a path like 
                     # folder1/folder2/file.txt
                     prefix = root.replace(path, '') + '/'
                     if (prefix[0] == '/'):
@@ -81,7 +81,7 @@ class HootGbdxTask(GbdxTaskInterface):
     def convertFileJson(self,envVars,inputFile,outputFile):
         override = 'translation.override=' + json.dumps(envVars)
         hootCmd = ['hoot','convert','--error',
-                '-D','convert.ops=hoot::TranslationOp',
+                '-D','convert.ops=hoot::AddBboxVisitor;hoot::TranslationOp',
                 '-D','osm.map.writer.skip.empty.map=true',
                 '-D',override,
                 # '-D','ogr.debug.dumptags=true',

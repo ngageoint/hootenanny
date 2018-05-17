@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmGbdxXmlWriter.h"
 
@@ -77,7 +77,7 @@ OsmGbdxXmlWriter::~OsmGbdxXmlWriter()
 
 QString OsmGbdxXmlWriter::removeInvalidCharacters(const QString& s)
 {
-  // See #3553 for an explanation.
+  // See Redmine #3553 for an explanation.
 
   QString result;
   result.reserve(s.size());
@@ -161,7 +161,8 @@ void OsmGbdxXmlWriter::_newOutputFile()
   {
 //    LOG_ERROR("Clash: Orig Filename: " + url);
     int inc = 0;
-    while (QFile::exists(url)) {
+    while (QFile::exists(url))
+    {
       inc++;
       url = _outputDir.filePath(QString("%1_%2_%3.xml").arg(_outputFileName).arg(inc,2,10,QChar('0')).arg(_fileNumber));
     }
