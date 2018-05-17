@@ -215,8 +215,8 @@ Radians FrechetDistance::getHeadingAvg(WayPtr way, int index)
   if (start < 0)
     start = 0;
   //  This case is a way with only one point
-  if (stop == 0)
-    return WayHeading::calculateHeading(WayLocation(_map, way, 0, 0), 0.5);
+  if (start == stop)
+    return WayHeading::calculateHeading(WayLocation(_map, way, start, 0), 0.5);
   //  Iterate the 3 (hopefully) segments, getting their headings
   Radians heading = 0.0;
   int count = 0;

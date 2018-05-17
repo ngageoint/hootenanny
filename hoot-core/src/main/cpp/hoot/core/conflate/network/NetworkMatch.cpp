@@ -135,8 +135,8 @@ bool NetworkMatch::isConflicting(const Match& other, const ConstOsmMapPtr& /*map
     {
       const pair<ElementId, ElementId>& jp = *jt;
 
-      if (ip.first == jp.first || ip.second == jp.first ||
-        ip.second == jp.first || ip.second == jp.second)
+      if (ip.first == jp.first  || ip.first == jp.second ||
+          ip.second == jp.first || ip.second == jp.second)
       {
         LOG_TRACE("conflicting: " << other);
         return true;

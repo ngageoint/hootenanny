@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ReleaseTest.h"
 
@@ -88,7 +88,7 @@ void ReleaseTest::_parseScore()
   catch (const std::exception& e)
   {
     scoresFile.close();
-    throw e;
+    throw;
   }
   scoresFile.close();
 }

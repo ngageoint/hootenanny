@@ -361,7 +361,7 @@ vector<Range> ZCurveRanger::_decomposeRangeIterative(LongBox box, int count)
       }
       else
       {
-        throw new HootException("Invalid boxes.size = " + boxes.size());
+        throw HootException("Invalid boxes.size = " + boxes.size());
       }
     }
   }

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Box.h"
@@ -42,6 +42,8 @@ namespace Tgs
   {
     _valid = false;
     _dimensions = 0;
+    for (int i = 0; i < MAX_DIMENSIONS; ++i)
+      _lowerBound[i] = _upperBound[i] = 0.0;
   }
 
   Box::Box(const Box& b)
@@ -56,6 +58,8 @@ namespace Tgs
   {
     _valid = false;
     _dimensions = dimensions;
+    for (int i = 0; i < MAX_DIMENSIONS; ++i)
+      _lowerBound[i] = _upperBound[i] = 0.0;
   }
 
   double Box::calculateOverlap(const Box& b) const
@@ -142,8 +146,11 @@ namespace Tgs
     if (isValid() == false)
     {
       _valid = true;
-      _copyArray(_lowerBound, b._lowerBound);
-      _copyArray(_upperBound, b._upperBound);
+      for (int i = 0; i < getDimensions(); i++)
+      {
+        _lowerBound[i] = b.getLowerBound(i);
+        _upperBound[i] = b.getUpperBound(i);
+      }
     }
     else
     {
@@ -171,7 +178,7 @@ namespace Tgs
   }
 
   double Box::getLowerBound(int d) const
-  {   
+  {
     return std::min(_lowerBound[d], _upperBound[d]);
   }
 
@@ -181,7 +188,7 @@ namespace Tgs
   }
 
   double Box::getLowerBoundRaw(int d) const
-  {   
+  {
     return _lowerBound[d];
   }
 
@@ -190,9 +197,9 @@ namespace Tgs
     return _upperBound[d];
   }
 
-  bool Box::isValid() const 
-  { 
-    return _valid; 
+  bool Box::isValid() const
+  {
+    return _valid;
   }
 
   bool Box::operator==(const Box& b)
@@ -204,7 +211,7 @@ namespace Tgs
     for (int i = 0; i < _dimensions; i++)
     {
       if (getLowerBound(i) != b.getLowerBound(i) ||
-        b.getUpperBound(i) != b.getUpperBound(i))
+          getUpperBound(i) != b.getUpperBound(i))
       {
         return false;
       }

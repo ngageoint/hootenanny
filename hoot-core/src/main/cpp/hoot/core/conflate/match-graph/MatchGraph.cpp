@@ -256,7 +256,7 @@ private:
     {
       MatchVertexId vid1 = createOrGetVertex(it->first);
       MatchVertexId vid2 = createOrGetVertex(it->second);
-      add_edge(vid1, vid2, matchWith, _graph).first;
+      add_edge(vid1, vid2, matchWith, _graph);
     }
   }
 

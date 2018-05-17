@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "GeneticAlgorithm.h"
@@ -83,7 +83,6 @@ namespace Tgs
         _used.insert(g->toString());
       }
     }
-    //cout << "Updating scores: " << _population.size() << endl;
     _updateScores();
     _initialized = true;
   }
@@ -252,32 +251,15 @@ namespace Tgs
 
     while ((int)nextGen.size() < _populationSize)
     {
-//       if (nextGen.size() % 500 == 0 && nextGen.size() > 0)
-//       {
-//         cout << nextGen.size() << "/" << _populationSize << "\r";
-//         cout.flush();
-//       }
       // choose the act of 'god'
       double act = Tgs::Random::instance()->generateUniform();
-      //double mutate = Tgs::Random::instance()->generateUniform();
       // if they get a free pass, randomly select a genome and pass it on to the next gen
       if (act < _mutationProb)
       {
         int index = _selectMateRoulette();
         boost::shared_ptr<Genome> genome = _population[index]->clone();
         _mutate(genome);
-//         // make sure at least half of the new generation is unique
-//         if ((int)nextGen.size() < _populationSize / 4)
-//         {
-//           if (_used.find(genome->toString()) == _used.end())
-//           {
-//             nextGen.push_back(genome);
-//           }
-//         }
-//         else
-        {
-          nextGen.push_back(genome);
-        }
+        nextGen.push_back(genome);
       }
       // otherwise we're mating something
       else
@@ -290,97 +272,43 @@ namespace Tgs
           boost::shared_ptr<Genome> mother = _population[motherIndex];
           boost::shared_ptr<Genome> brother, sister;
           father->crossoverSexually(*father, *mother, brother, sister);
-//           if (mutate < _mutationProb)
-//           {
-//             brother->mutate(_mutationSeverity);
-//             sister->mutate(_mutationSeverity);
-//           }
-//           // make sure at least one fourth of the new generation is unique
-//           if ((int)nextGen.size() < _populationSize / 4)
-//           {
-//             if (_used.find(brother->toString()) == _used.end())
-//             {
-//               nextGen.push_back(brother);
-//               _used.insert(brother->toString());
-//             }
-//             if ((int)nextGen.size() < _populationSize)
-//             {
-//               if (_used.find(sister->toString()) == _used.end())
-//               {
-//                 nextGen.push_back(sister);
-//                 _used.insert(sister->toString());
-//               }
-//             }
-//           }
-//           else
-          {
             nextGen.push_back(brother);
             _used.insert(brother->toString());
             nextGen.push_back(sister);
             _used.insert(sister->toString());
-          }
         }
       }
     }
-    //cout << "                         \r";
     _population = nextGen;
     _updateScores();
-//     // sort in descending order
-//     sort(_population.begin(), _population.end(), CompareGenomes());
-//     nextGen.clear();
-//     string lastStr = _population[0]->toString();
-//     nextGen.push_back(_population[0]);
-//     for (unsigned int i = 1; i < _population.size(); i++)
-//     {
-//       if (_population[i]->toString() != lastStr)
-//       {
-//         nextGen.push_back(_population[i]);
-//         lastStr = _population[i]->toString();
-//       }
-//     }
-//     _population = nextGen;
   }
 
   void GeneticAlgorithm::_updateScores()
   {
-    bool printedProgress = false;
     for (unsigned int i = 0; i < _population.size(); i++)
     {
       boost::shared_ptr<Genome> g = _population[i];
       double score = g->getScore();
       string str = g->toString();
       _used.insert(str);
-//       if (i % 500 == 0 && i > 0)
-//       {
-//         cout << i + 1 << " / " << _population.size() << "                  \r";
-//         cout.flush();
-//         printedProgress = true;
-//       }
-      //cout << "Updating score: " << str << endl << "  ";
       if (_scoreCaching == false || g->isValidScore() == false)
       {
         HashMap<string, double>::const_iterator it = _allScores.find(str);
         if (_scoreCaching == false || it == _allScores.end())
         {
           score = _fitness->calculateFitness(*g);
-          //cout << "Updating... ";
           _allScores[str] = score;
         }
         else
         {
           score = it->second;
         }
-        //cout << score << endl;
         g->setScore(score);
       }
       if (_best == NULL || score > _best->getScore())
       {
         _best = g;
       }
-    }
-    if (printedProgress)
-    {
-      cout << "                       \r";
     }
   }
 }
