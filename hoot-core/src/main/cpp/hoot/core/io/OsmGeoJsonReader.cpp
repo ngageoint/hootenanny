@@ -67,7 +67,8 @@ HOOT_FACTORY_REGISTER(OsmMapReader, OsmGeoJsonReader)
 
 OsmGeoJsonReader::OsmGeoJsonReader() : OsmJsonReader()
 {
-  _addBboxTag = ConfigOptions().getJsonAddBbox();
+//  _addBboxTag = ConfigOptions().getJsonAddBbox();
+  _addBboxTag = true;
 }
 
 OsmGeoJsonReader::~OsmGeoJsonReader()
