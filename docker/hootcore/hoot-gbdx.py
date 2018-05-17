@@ -1,5 +1,9 @@
 # Run a Hootenanny translation using the GbdxTaskInterface
 
+# NOTE: There have been many changes to the file output type, nameing etc There is commented
+# out code that should get removed once things are stable.
+# -- Mattj
+
 import os
 import csv
 import json
@@ -30,7 +34,7 @@ class HootGbdxTask(GbdxTaskInterface):
         return os.path.join(dir,candidate)
         # End checkFile
 
-    # Handy function fro StackOverflow
+    # Another handy function from StackOverflow
     def zipdir(self,path,zipf):
         # Iterate all the directories and files
         for root, dirs, files in os.walk(path):
@@ -101,7 +105,7 @@ class HootGbdxTask(GbdxTaskInterface):
             return e.output
 
         # with "--error" the Hoot command shoud not have any output. If it does then
-        # it is an error.
+        # it is an error or we turned on debugging.
         if len(hootOut) > 0:
             # print('Hoot Command: %s') % (' '.join(hootCmd))
             # print('\nHootOut: {}'.format(hootOut))
@@ -137,7 +141,7 @@ class HootGbdxTask(GbdxTaskInterface):
             return e.output
 
         # with "--error" the Hoot command shoud not have any output. If it does then
-        # it is an error.
+        # it is an error or we turned on debugging.
         if len(hootOut) > 0:
             # print('Hoot Command: %s') % (' '.join(hootCmd))
             # print('\nHootOut: {}'.format(hootOut))
@@ -199,6 +203,7 @@ class HootGbdxTask(GbdxTaskInterface):
             fileNumber += 1
 
             # print 'Processing: {} as file{}'.format(inputFile,fileNumber)
+
             # jsonIndexFile.write('jsonFile{},{}\n'.format(fileNumber,inputFile))
             # xmlIndexFile.write('xmlFile{},{}\n'.format(fileNumber,inputFile))
 
@@ -213,7 +218,6 @@ class HootGbdxTask(GbdxTaskInterface):
 
             # Process the file and output it to the tmp Output geojson name
             # tOutputDirJson = os.path.join(outputDirJson,'jsonFile%s.gbdx' % fileNumber)
-            # tOutputDirJson = os.path.join(outputDirJson,os.path.basename(inputFile).replace('.json','.gbdx'))
             tOutputDirJson = os.path.join(outputDirJson,fName + '.gbdx')
 
             returnTextJson = self.convertFileJson(envVars,tmpInName,tOutputDirJson)
@@ -222,7 +226,6 @@ class HootGbdxTask(GbdxTaskInterface):
                 self.reason = returnTextJson
 
             # tOutputDirXml = os.path.join(outputDirXml,'xmlFile%s.gxml' % fileNumber)
-            # tOutputDirXml = os.path.join(outputDirXml,os.path.basename(inputFile).replace('.json','.gxml'))
             tOutputDirXml = os.path.join(outputDirXml,fName + '.gxml')
             returnTextXml = self.convertFileXml(envVars,tmpInName,tOutputDirXml)
             if returnTextXml is not None:
@@ -275,8 +278,7 @@ class HootGbdxTask(GbdxTaskInterface):
 
             # Check if the zip file has anything we can process
             if tList['geojson'] == [] and tList['json'] == [] and tList['zip'] == [] and tList['shp'] == []:
-                # print 'Empty Zip Directory'
-                # print 'About to Remove: {}\n'.format(tmpDirName)
+                # print 'Empty Zip Directory. About to Remove: {}\n'.format(tmpDirName)
                 shutil.rmtree(tmpDirName)
                 continue
     
@@ -332,7 +334,7 @@ class HootGbdxTask(GbdxTaskInterface):
             eVars[key] = line[1].strip()
 
         return eVars
-    # End processPlist
+    # End processProperties
 
 
     def invoke(self):
