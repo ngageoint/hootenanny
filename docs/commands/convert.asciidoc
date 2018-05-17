@@ -2,36 +2,120 @@
 
 === Description
 
-The +convert+ command converts map data from one input format to another. This does not perform any translation, only conversion.  
-The process may be memory bound, depending upon the formats selected (see below). Please see convert-ogr2osm and convert-osm2shp 
-for a description of conversions between tabular formats and OSM.  
+The +convert+ command converts map data from one input format to another.  Optionally, a translation may be performed during the 
+conversion.  Additionally, the process may be memory bound depending upon the formats selected.  See the README for information on 
+supported formats.
 
-* +input+  - Input (e.g. .osm file).
-* +output+ - Output file (e.g. .osm file).
-
-If the `convert.ops` configuration option is specified then all the specified
-operations are applied to the map in order before writing the result to the
-output.
+* +input(s)+    - When converting from an OGR format to an OSM output, one or more inputs are supported.  Each input is made up of a file
+                  name and, optionally, a layer name, with a single space separateing each input, and the set of inputs surrounded by quotes.  
+                  For all other conversions, the input is a single source (e.g. .osm file, PG:"dbname='databasename' host='addr' 
+                  port='5432' user='x' password='y'").
+* +output+      - Output (e.g. .osm file).
+* +translation+ - (optional) Valid only when converting to/from OGR formats.  When converting from an OGR format to OSM, this is the 
+                  base name of a Python translation file (without the .py extension).  When converting from OSM to an OGR format, this 
+                  is the path to a Javascript file (.js).  For more information on translation files read the "Translation" section of 
+                  the Hootenanny User Guide.
+* +columns+     - (optional) Comma delimited list of keys to use for columns, surrounded by quotes.  Valid only when converting from OSM 
+                  to shape file.  If empty, the list of columns will be automatically determined based on the most frequently 
+                  populated tags.
+* +limit+       - (optional) The maximum number of features to translate.  Valid only when the source is an OGR format.  This is useful 
+                  when debugging.
 
 === Usage
 
 --------------------------------------
-convert (input) (output)
+convert (input) (output) [--trans translation] [--cols columns] [--limit n]
+
+convert "(input1[;layer]) [input2[;layer]]" (output) [--trans translation] [--cols columns] [--limit n]
 --------------------------------------
 
-=== Supported Formats
+=== Configuration Options
 
-See the README file for details.
+If the `convert.ops` configuration option is included, then all the specified operations are applied to the map, in order, before 
+writing the result to the output.
 
-=== Database URL Format
+Use the following configuration options to control the size of the element cache (valid only when converting OSM to an OGR format).  This
+can prevent memory issues:
+* `element.cache.size.node`
+* `element.cache.size.relation`
+* `element.cache.size.way`
 
-The format for database URLs is: protocol://<user name>:<password>@<host name>:<port>/<database name>
+=== Examples
+
+Convert MyInput.osm file to File-GDB MyOutput.gdb and apply translation found in MyTranslation.js:
+
+--------------------------------------
+hoot convert MyInput.osm MyOutput.gdb --trans MyTranslation.js
+--------------------------------------
+
+Convert OSM database on myhost to File-GDB MyOutput.gdb and apply translation found in MyTranslation.js:
+
+--------------------------------------
+hoot convert \
+ PG:"dbname='mydb' host='myhost' port='5432' user='myuser' password='mypass'" \
+ MyOutput.gdb --trans MyTranslation.js
+--------------------------------------
+
+Convert OSM database on myhost to File-GDB MyOutput.gdb and apply translation found in MyTranslation.js and set cache capacities for 
+nodes, ways, and relations:
+
+--------------------------------------
+hoot convert \
+ PG:"dbname='mydb' host='myhost' port='5432' user='myuser' password='mypass'" \
+ MyOutput.gdb --trans MyTranslation.js -D element.cache.size.node=10000 -D element.cache.size.way=2000 -D element.cache.size.relation=2000
+--------------------------------------
+
+Convert an OSM file to a shape file:
+
+--------------------------------------
+hoot convert MyInput.osm MyOutput.shp --cols "highway,surface,name,alt_name,oneway,bridge" 
+--------------------------------------
+
+Convert multiple tiger road data sets using a tiger translation file found in _translations/TigerRoads.py_. by converting multiple files 
+at one time.  Hootenanny will make sure that road end points that fall within 1 meter will be merged into intersections:
+
+--------------------------------------
+hoot convert til_2010_*_roads.shp TigerRoadsOutput.osm --trans TigerRoads
+--------------------------------------
+
+Convert roads, bridges, overpasses and tunnels from a File Geodatabase into a single .osm file using a translation file named
+_translations/MyGdbTranslation.py_:
+
+--------------------------------------
+hoot convert "MyGdb.gdb;ROAD_L MyGdb.gdb;BRIDGE_OVERPASS_L MyGdb.gdb;TUNNEL_L" \ 
+MyGdbOutput.osm --trans MyGdbTranslation
+--------------------------------------
+
+Convert a road shapefile that is stored inside the +tds+ directory in a Zip file:
+
+--------------------------------------
+hoot convert /vsizip//gis-data/test_data.zip/tds/LAP030.shp \
+tds_roads.osm --trans $HOOT_HOME/translations/TDSv40.js
+--------------------------------------
+
+Convert all TDS shapefiles stored in the top level of a Zip file:
+
+--------------------------------------
+hoot convert /vsizip//gis-data/test_data.zip/ \ 
+tds_roads.osm --trans $HOOT_HOME/translations/TDSv40.js
+--------------------------------------
 
 === Notes
 
+* The format for database URLs is: protocol://<user name>:<password>@<host name>:<port>/<database name>
 * Writing to OSM API databases (osmapidb://) is intended to be a bulk operation for new data only (no updates on existing data).
-
-=== See Also
-
-* `convert.ops` configuration option
-
+* When converting from OSM to an OGR format, the +convert+ command provides conversion from .osm files or POSTGIS osm databases to 
+Shapefile, FileGDB, etc. The OGR libraries are used on the back end so other formats such as PostGIS and SQLite will likely work, 
+but are not tested.
+* The conversion from OSM file to shape file is a lossy process that generates a point, line and polygon shapefile.  The OSM XML 
+format is a richer format than Shapefile and supports such things as multiple geometry types within one file, inherit topology and 
+arbitrary tagging. For these reasons the conversion to Shapefile is a lossy conversion.
+* To use file geodatabases, the File Geodatabase module must be compiled into your version of GDAL to work. See 
+http://trac.osgeo.org/gdal/wiki/FileGDB for details.
+* The format for specifying zip file data is: "/vsizip/<path to Zip file>/<path to the shape file INSIDE the Zip file>.  The "/" are 
+field separators. If you get errors using absolute paths, check that you have the right number of "/".
+** a Zip file located at /gis-data/test_data.zip
+*** The path to the shapefile inside the Zip file: "dir/LAP010.shp
+*** The input is: "/vsizip//gis-data/test_data.zip/dir/LAP010.shp"
+*** If the Zip file is in the current directory, the input will be: /vsizip/./test_data.zip/dir/LAP010.shp
+*** If you do not specify a specific shapefile then it will read in all shapefiles in the given directory

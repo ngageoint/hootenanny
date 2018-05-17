@@ -25,4 +25,4 @@ hoot convert -D writer.xml.sort.by.id="false" -D convert.ops="hoot::PoiCriterion
 hoot map-diff test-files/cmd/slow/ConvertCmdTest/AllDataTypesAPois.osm test-output/cmd/ConvertCmdTest/AllDataTypesA.osm
 
 echo "Check for invalid characters. You should see 3 sets of warnings."
-hoot convert  test-files/io/InvalidCharacters.osm test-output/cmd/ConvertCmdTest/InvalidCharacters.osm
+hoot convert test-files/io/InvalidCharacters.osm test-output/cmd/ConvertCmdTest/InvalidCharacters.osm
