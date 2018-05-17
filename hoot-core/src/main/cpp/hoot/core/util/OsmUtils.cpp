@@ -119,22 +119,22 @@ void OsmUtils::saveMap(boost::shared_ptr<const OsmMap> map, QString path)
   OsmMapWriterFactory::write(map, path);
 }
 
-QString OsmUtils::toTimeString(unsigned int timestamp)
+QString OsmUtils::toTimeString(quint64 timestamp)
 {
   // convert time in seconds since epoch into timestamp string
-  time_t tt = (time_t) timestamp;
-  char buf[128];
-  strftime(buf, sizeof(buf), "%Y-%m-%dT%H:%M:%SZ", gmtime(&tt));
-  return QString::fromUtf8(buf);
+  QDateTime dt;
+  dt.setTimeSpec(Qt::UTC);
+  dt.setMSecsSinceEpoch(timestamp*1000);
+  return dt.toString("yyyy-MM-ddThh:mm:ssZ");
 }
 
-unsigned int OsmUtils::fromTimeString(QString timestamp)
+quint64 OsmUtils::fromTimeString(QString timestamp)
 {
   struct tm t;
   strptime(timestamp.toStdString().c_str(), "%Y-%m-%dT%H:%M:%SZ", &t);
 
   // calc time in seconds since epoch
-  return (unsigned int)(t.tm_sec + t.tm_min*60 + t.tm_hour*3600 + t.tm_yday*86400 +
+  return (quint64)(t.tm_sec + t.tm_min*60 + t.tm_hour*3600 + t.tm_yday*86400 +
     (t.tm_year-70)*31536000 + ((t.tm_year-69)/4)*86400 -
     ((t.tm_year-1)/100)*86400 + ((t.tm_year+299)/400)*86400);
 }

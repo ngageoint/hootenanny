@@ -581,6 +581,10 @@ unsigned int PoiPolygonMatch::_getConvexPolyDistanceEvidence(ConstElementPtr poi
 
 unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
+  //don't like these static var inits
+  PoiPolygonTypeScoreExtractor::poiBestKvp = "";
+  PoiPolygonTypeScoreExtractor::polyBestKvp = "";
+  PoiPolygonTypeScoreExtractor::failedMatchRequirements.clear();
   PoiPolygonTypeScoreExtractor typeScorer;
   typeScorer.setFeatureDistance(_distance);
   typeScorer.setTypeScoreThreshold(_typeScoreThreshold);

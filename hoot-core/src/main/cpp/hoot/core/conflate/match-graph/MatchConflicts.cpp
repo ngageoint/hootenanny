@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MatchConflicts.h"
 
 // hoot
-#include <hoot/core/conflate/Match.h>
-#include <hoot/core/conflate/MergerFactory.h>
+#include <hoot/core/conflate/matching/Match.h>
+#include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/elements/ElementId.h>
 
 // Standard

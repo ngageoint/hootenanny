@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "Relation.h"
 
@@ -78,7 +78,7 @@ private:
 };
 
 Relation::Relation(Status s, long id, Meters circularError, QString type, long changeset,
-                   long version, unsigned int timestamp, QString user, long uid, bool visible) :
+                   long version, quint64 timestamp, QString user, long uid, bool visible) :
 Element(s)
 {
   _relationData.reset(new RelationData(id, changeset, version, timestamp, user, uid, visible));

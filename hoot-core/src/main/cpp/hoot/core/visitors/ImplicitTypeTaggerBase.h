@@ -22,7 +22,6 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef IMPLICITTYPETAGGERBASE_H
@@ -66,6 +65,8 @@ protected:
 
   virtual bool _visitElement(const ElementPtr& e) = 0;
 
+  QStringList _getNames(const Tags& tags) const;
+
   //allows for tagging features with specificity greater than poi=yes, building=yes, or area=yes
   bool _allowTaggingSpecificFeatures;
   bool _elementIsASpecificFeature;
@@ -99,6 +100,10 @@ private:
   //false.  Otherwise it would match "Hospital" alone and correctly identify the feature as a
   //hospital.
   bool _matchEndOfNameSingleTokenFirst;
+  //will be appended to the default list of names
+  QStringList _additionalNameKeys;
+  //names won't be considered when they are longer than this; very long names tend to be gibberish
+  int _maxNameLength;
 
   QStringList _getNameTokens(const QStringList names) const;
   QStringList _getTranslatedNames(const QStringList names, const Tags& tags);

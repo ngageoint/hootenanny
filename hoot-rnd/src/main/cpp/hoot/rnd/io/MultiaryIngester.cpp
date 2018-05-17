@@ -32,7 +32,7 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/rnd/io/SparkChangesetWriter.h>
 #include <hoot/core/io/HootApiDbReader.h>
-#include <hoot/rnd/io/ElementCriterionVisitorInputStream.h>
+#include <hoot/core/io/ElementCriterionVisitorInputStream.h>
 #include <hoot/core/filters/PoiCriterion.h>
 #include <hoot/core/visitors/TranslationVisitor.h>
 #include <hoot/core/visitors/CalculateHashVisitor2.h>

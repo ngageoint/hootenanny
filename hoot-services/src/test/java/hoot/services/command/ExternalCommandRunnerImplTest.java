@@ -22,9 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.command;
+
+import static hoot.services.HootProperties.OSMAPI_DB_URL;
+import static hoot.services.HootProperties.HOOTAPI_DB_URL;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -62,9 +65,12 @@ public class ExternalCommandRunnerImplTest {
                           "hoot::RemoveEmptyAreasVisitor;hoot::RemoveDuplicateAreaVisitor;" +
                           "hoot::NoInformationElementRemover\"");
 
-        String input1 = "osmapidb://hoot:hoottest@localhost:5432/osmapi test";
-        String input2 = "hootapidb://hoot:hoottest@localhost:5432/hoot/394";
-        String output = "hootapidb://hoot:hoottest@localhost:5432/hoot/osmapi_test_AllDataTypesACucumber";
+        // String input1 = "osmapidb://hoot:hoottest@localhost:5432/osmapi test";
+        String input1 = OSMAPI_DB_URL + " test";
+        // String input2 = "hootapidb://hoot:hoottest@localhost:5432/hoot/394";
+        String input2 = HOOTAPI_DB_URL + "/394";
+        // String output = "hootapidb://hoot:hoottest@localhost:5432/hoot/osmapi_test_AllDataTypesACucumber";
+        String output = HOOTAPI_DB_URL + "/osmapi_test_AllDataTypesACucumber";
 
         Map<String, Object> substitutionMap = new HashMap<>();
         substitutionMap.put("DEBUG_LEVEL", "info");

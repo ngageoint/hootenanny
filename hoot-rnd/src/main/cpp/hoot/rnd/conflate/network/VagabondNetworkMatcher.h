@@ -22,16 +22,15 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __VAGABOND_NETWORK_MATCHER_H__
 #define __VAGABOND_NETWORK_MATCHER_H__
 
 // hoot
-#include <hoot/rnd/conflate/network/NetworkMatcher.h>
-
-#include "IndexedEdgeLinks.h"
-#include "IndexedEdgeMatchSet.h"
+#include <hoot/core/conflate/network/NetworkMatcher.h>
+#include <hoot/core/conflate/network/IndexedEdgeLinks.h>
+#include <hoot/core/conflate/network/IndexedEdgeMatchSet.h>
 
 namespace hoot
 {

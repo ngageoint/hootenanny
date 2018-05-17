@@ -112,15 +112,38 @@ double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi,
 {
   double result = 0.0;
 
-  const QStringList poiTagList = _getRelatedTags(poi->getTags());
-  const QStringList polyTagList = _getRelatedTags(poly->getTags());
+  QStringList poiTagList = _getRelatedTags(poi->getTags());
+  QStringList polyTagList = _getRelatedTags(poly->getTags());
   LOG_VART(poiTagList);
   LOG_VART(polyTagList);
 
+  //If a feature has a specific type, we only want to look at that type and ignore any generic
+  //types.  Otherwise, we'll allow a type match with just a generic tag.
   QStringList excludeKvps;
-  excludeKvps.append("building=yes");
-  excludeKvps.append("poi=yes");
+  const bool poiIsGenericPoi = poiTagList.size() == 1 && poiTagList.contains("poi=yes");
+  const bool poiIsGenericBuilding = poiTagList.size() == 1 && poiTagList.contains("building=yes");
+  const bool polyIsGenericPoi = polyTagList.size() == 1 && polyTagList.contains("poi=yes");
+  const bool polyIsGenericBuilding = polyTagList.size() == 1 && polyTagList.contains("building=yes");
+  if (!poiIsGenericPoi && !polyIsGenericPoi)
+  {
+    excludeKvps.append("poi=yes");
+  }
+  if (!poiIsGenericBuilding && !polyIsGenericBuilding)
+  {
+    excludeKvps.append("building=yes");
+  }
+  LOG_VART(poiIsGenericPoi);
+  LOG_VART(poiIsGenericBuilding);
+  LOG_VART(polyIsGenericPoi);
+  LOG_VART(polyIsGenericBuilding);
+
   LOG_VART(excludeKvps);
+  for (int i = 0; i < excludeKvps.size(); i++)
+  {
+    const QString excludeKvp = excludeKvps.at(i);
+    poiTagList.removeAll(excludeKvp);
+    polyTagList.removeAll(excludeKvp);
+  }
 
   for (int i = 0; i < poiTagList.size(); i++)
   {
@@ -128,23 +151,25 @@ double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi,
     {
       const QString poiKvp = poiTagList.at(i).toLower();
       const QString polyKvp = polyTagList.at(j).toLower();
+      LOG_VART(poiKvp);
+      LOG_VART(polyKvp);
 
       const double score = OsmSchema::getInstance().score(poiKvp, polyKvp);
+      LOG_VART(score);
       if (score >= result)
       {
         if (!poiKvp.isEmpty() && !excludeKvps.contains(poiKvp))
         {
           poiBestKvp = poiKvp;
+          LOG_VART(poiBestKvp);
         }
         if (!polyKvp.isEmpty() && !excludeKvps.contains(polyKvp))
         {
           polyBestKvp = polyKvp;
-        }
+          LOG_VART(polyBestKvp);
+        } 
       }
       result = max(score, result);
-
-      LOG_VART(poiKvp);
-      LOG_VART(polyKvp);
       LOG_VART(result);
 
       if (result == 1.0)
@@ -160,7 +185,6 @@ double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi,
       }
     }
   }
-
   LOG_VART(poiBestKvp);
   LOG_VART(polyBestKvp);
 
@@ -194,16 +218,21 @@ QStringList PoiPolygonTypeScoreExtractor::_getRelatedTags(const Tags& tags) cons
 
 bool PoiPolygonTypeScoreExtractor::isSchool(ConstElementPtr element)
 {
-  return element->getTags().get("amenity") == "school";
+  const QString amenityStr = element->getTags().get("amenity").toLower();
+  return amenityStr == "school" || amenityStr == "university";
 }
+
+//TODO: this specific school logic should be handled in the schema instead
 
 bool PoiPolygonTypeScoreExtractor::isSpecificSchool(ConstElementPtr element)
 {
   const QString name = PoiPolygonNameScoreExtractor::getElementName(element).toLower();
   return
     isSchool(element) &&
+    //TODO: these endsWiths can maybe be contains instead
     (name.toLower().endsWith("high school") || name.toLower().endsWith("middle school") ||
-     name.toLower().endsWith("elementary school"));
+     name.toLower().endsWith("elementary school") ||
+     name.toLower().contains("college") || name.toLower().contains("university") );
 }
 
 bool PoiPolygonTypeScoreExtractor::specificSchoolMatch(ConstElementPtr element1,
@@ -215,7 +244,11 @@ bool PoiPolygonTypeScoreExtractor::specificSchoolMatch(ConstElementPtr element1,
     const QString name2 = PoiPolygonNameScoreExtractor::getElementName(element2).toLower();
     if ((name1.endsWith("high school") && name2.endsWith("high school")) ||
         (name1.endsWith("middle school") && name2.endsWith("middle school")) ||
-        (name1.endsWith("elementary school") && name2.endsWith("elementary school")))
+        (name1.endsWith("elementary school") && name2.endsWith("elementary school")) ||
+        (name1.contains("college") && name2.contains("college")) ||
+        (name1.contains("college") && name2.contains("university")) ||
+        (name1.contains("university") && name2.contains("college")) ||
+        (name1.contains("university") && name2.contains("university")))
     {
       return true;
     }
@@ -270,10 +303,12 @@ bool PoiPolygonTypeScoreExtractor::isReligion(ConstElementPtr element)
 
 bool PoiPolygonTypeScoreExtractor::isReligion(const Tags& tags)
 {
-  return tags.get("amenity") == "place_of_worship" ||
-         tags.get("building") == "church" ||
-         tags.get("building") == "mosque" ||
-         tags.get("building") == "synagogue";
+  return tags.get("amenity").toLower() == "place_of_worship" ||
+         tags.get("building").toLower() == "church" ||
+         tags.get("building").toLower() == "mosque" ||
+         //TODO: this one is an alias of building=mosque, so we should be getting it from there instead
+         tags.get("amenity").toLower() == "mosque" ||
+         tags.get("building").toLower() == "synagogue";
 }
 
 bool PoiPolygonTypeScoreExtractor::hasMoreThanOneType(ConstElementPtr element)
@@ -335,14 +370,23 @@ bool PoiPolygonTypeScoreExtractor::hasSpecificType(ConstElementPtr element)
           element->getTags().get("area") != QLatin1String("yes");
 }
 
-//TODO: abstract these three type fail methods into one
+bool PoiPolygonTypeScoreExtractor::isRestaurant(ConstElementPtr element)
+{
+  return isRestaurant(element->getTags());
+}
+
+bool PoiPolygonTypeScoreExtractor::isRestaurant(const Tags& tags)
+{
+  return tags.get("amenity") == "restaurant" || tags.get("amenity") == "fast_food";
+}
+
+//TODO: abstract these three type fail methods into one; also, this should be able to be done
+//more intelligently using the schema vs custom code
 
 bool PoiPolygonTypeScoreExtractor::_failsCuisineMatch(const Tags& t1, const Tags& t2) const
 {
   //be a little more restrictive with restaurants
-  if (t1.get("amenity").toLower() == "restaurant" &&
-      t2.get("amenity").toLower() == "restaurant" &&
-      t1.contains("cuisine") && t2.contains("cuisine"))
+  if (isRestaurant(t1) && isRestaurant(t2) && t1.contains("cuisine") && t2.contains("cuisine"))
   {
     const QString t1Cuisine = t1.get("cuisine").toLower();
     const QString t2Cuisine = t2.get("cuisine").toLower();
@@ -363,8 +407,11 @@ bool PoiPolygonTypeScoreExtractor::_failsCuisineMatch(const Tags& t1, const Tags
 bool PoiPolygonTypeScoreExtractor::_failsSportMatch(const Tags& t1, const Tags& t2) const
 {
   //be a little more restrictive with sport areas
-  if (t1.get("leisure").toLower() == "pitch" &&
-      t2.get("leisure").toLower() == "pitch" &&
+  //TODO: the sports center part of this may go away if the 0.8 similarity match between
+  //sports_centre and sport=tennis is removed
+  //TODO: use isSport here instead
+  if ((t1.get("leisure").toLower() == "pitch" || t1.get("leisure").toLower() == "sports_centre") &&
+      (t2.get("leisure").toLower() == "pitch" || t2.get("leisure").toLower() == "sports_centre") &&
       t1.contains("sport") && t2.contains("sport"))
   {
     const QString t1Sport = t1.get("sport").toLower();
@@ -381,18 +428,32 @@ bool PoiPolygonTypeScoreExtractor::_failsSportMatch(const Tags& t1, const Tags& 
 bool PoiPolygonTypeScoreExtractor::_failsReligionMatch(const Tags& t1, const Tags& t2) const
 {
   //be a little more restrictive with religions
-  if (isReligion(t1) && isReligion(t2) && t1.contains("denomination") &&
-      t2.contains("denomination"))
+  if (isReligion(t1) && isReligion(t2))
   {
-    const QString t1Denom = t1.get("denomination").toLower().trimmed();
-    const QString t2Denom = t2.get("denomination").toLower().trimmed();
-    if (!t1Denom.isEmpty() && !t2Denom.isEmpty() &&
-        OsmSchema::getInstance().score("denomination=" + t1Denom, "denomination=" + t2Denom) != 1.0)
+    if (t1.contains("denomination") && t2.contains("denomination"))
     {
-      LOG_TRACE("Failed type match on different religions.");
-      return true;
+      const QString t1Denom = t1.get("denomination").toLower().trimmed();
+      const QString t2Denom = t2.get("denomination").toLower().trimmed();
+      if (!t1Denom.isEmpty() && !t2Denom.isEmpty() &&
+          OsmSchema::getInstance().score("denomination=" + t1Denom, "denomination=" + t2Denom) != 1.0)
+      {
+        LOG_TRACE("Failed type match on different religious denomination.");
+        return true;
+      }
+    }
+    else if (t1.contains("religion") && t2.contains("religion"))
+    {
+      const QString t1Denom = t1.get("religion").toLower().trimmed();
+      const QString t2Denom = t2.get("religion").toLower().trimmed();
+      if (!t1Denom.isEmpty() && !t2Denom.isEmpty() &&
+          OsmSchema::getInstance().score("religion=" + t1Denom, "religion=" + t2Denom) != 1.0)
+      {
+        LOG_TRACE("Failed type match on different religions.");
+        return true;
+      }
     }
   }
+
   return false;
 }
 

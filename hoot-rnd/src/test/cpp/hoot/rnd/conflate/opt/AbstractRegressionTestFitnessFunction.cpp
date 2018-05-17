@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "AbstractRegressionTestFitnessFunction.h"
@@ -83,8 +83,7 @@ void AbstractRegressionTestFitnessFunction::_createConfig(const QString testName
   QFile settingsFileDest(settingsFileDestName);
   if (settingsFileDest.exists() && !settingsFileDest.remove())
   {
-    throw new HootException(
-      "Unable to remove previous test configuration file: " + settingsFileDestName);
+    throw HootException("Unable to remove previous test configuration file: " + settingsFileDestName);
   }
   LOG_DEBUG("Writing test conf file to: " << settingsFileDestName << "...");
   updatedSettings.storeJson(settingsFileDestName);

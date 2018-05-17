@@ -29,5 +29,29 @@
         "isA": "emergency",
         "name": "emergency=fire_water_pond",
         "objectType": "tag"
+    },
+    {
+        "categories": [
+            "use"
+        ],
+        "isA": "emergency",
+        "name": "emergency=landing_site",
+        "objectType": "tag"
+    },
+    {
+        "categories": [
+            "use"
+        ],
+        "isA": "emergency",
+        "name": "emergency=water_tank",
+        "objectType": "tag"
+    },
+    {
+        "categories": [
+            "use"
+        ],
+        "isA": "emergency",
+        "name": "emergency=ambulance_station",
+        "objectType": "tag"
     }
 ]

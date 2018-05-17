@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Standard Includes
@@ -106,7 +106,7 @@ namespace Tgs
       }
 
       // testing equation ((3 * v) + sqrt(v)) - 2
-      SubtractCalculatorNode* root = new SubtractCalculatorNode();
+      boost::shared_ptr<SubtractCalculatorNode> root(new SubtractCalculatorNode());
       AddCalculatorNode* add = new AddCalculatorNode();
       MultiplyCalculatorNode* mult = new MultiplyCalculatorNode();
       SqrtCalculatorNode* sqrtNode = new SqrtCalculatorNode();

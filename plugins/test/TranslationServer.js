@@ -168,6 +168,33 @@ describe('TranslationServer', function () {
                 assert.equal(parseFloat(result.osm.bounds[0].$.maxlon).toFixed(6), -105.218118);
             });
         });
+        it('should handle translating way or node w/osm amenity=ferry_terminal to AQ080 (now for tdsv61 only)', function() {
+            var ferryWay = server.handleInputs({
+                osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-3" version="0"><nd ref="-7"/><nd ref="-8"/><nd ref="-9"/><nd ref="-7"/><tag k="amenity" v="ferry_terminal"/></way></osm>',
+                method: 'POST',
+                translation: 'TDSv61',
+                path: '/translateTo'
+            })
+            
+            xml2js.parseString(ferryWay, function(err, result) {
+                if (err) console.error(err);
+                assert(result.osm.way[0].tag[1].$.k, 'F_CODE')
+                assert(result.osm.way[0].tag[1].$.v, 'AQ080')
+            })
+            
+            var ferryNode = server.handleInputs({
+                osm: '<osm version="0.6" upload="true" generator="hootenanny"><node id="-1" lon="33.731597320098885" lat="-24.919578904988793" version="0"><tag k="amenity" v="ferry_terminal"/></node></osm>',
+                method: 'POST',
+                translation: 'TDSv61',
+                path: '/translateTo'
+            })
+
+            xml2js.parseString(ferryNode, function(err, result) {
+                if (err) console.error(err);
+                assert(result.osm.node[0].tag[1].$.k, 'F_CODE')
+                assert(result.osm.node[0].tag[1].$.v, 'AQ080')
+            })
+        })
         it('should handle OSM to MGCP POST of building area feature', function() {
             var osm2trans = server.handleInputs({
                 osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-1" version="0"><nd ref="-1"/><nd ref="-4"/><nd ref="-7"/><nd ref="-10"/><nd ref="-1"/><tag k="building" v="yes"/><tag k="uuid" v="{d7cdbdfe-88c6-4d8a-979d-ad88cfc65ef1}"/></way></osm>',
@@ -186,7 +213,7 @@ describe('TranslationServer', function () {
         });
 
 
-        it('should translate Land Water Boundary (BA010) from ogr -> osm -> ogr', function() {
+        it('should translate Coastline (BA010) from ogr -> osm -> ogr', function() {
         
             var data = '<osm version="0.6" generator="JOSM"><way id="-38983" visible="true"><nd ref="-38979" /><nd ref="-38982" /> <tag k="F_CODE" v="BA010" /></way></osm>'
 
@@ -200,7 +227,7 @@ describe('TranslationServer', function () {
             xml2js.parseString(osm_xml, function(err, result) {
                 if (err) console.error(err);
                 assert.equal(result.osm.way[0].tag[0].$.k, "natural")
-                assert.equal(result.osm.way[0].tag[0].$.v, "land_water_boundary")
+                assert.equal(result.osm.way[0].tag[0].$.v, "coastline")
 
             })
 
@@ -274,7 +301,7 @@ describe('TranslationServer', function () {
                     if (err) console.error(err);
     
                     assert.equal(result.osm.way[0].tag[0].$.k, 'natural')
-                    assert.equal(result.osm.way[0].tag[0].$.v, 'land_water_boundary')
+                    assert.equal(result.osm.way[0].tag[0].$.v, 'coastline')
                     assert.equal(result.osm.way[0].tag[1].$.k, 'shoreline:type')
                     assert.equal(result.osm.way[0].tag[1].$.v, 'mangrove')
     

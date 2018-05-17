@@ -29,10 +29,10 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/conflate/MarkForReviewMerger.h>
-#include <hoot/core/conflate/MatchThreshold.h>
-#include <hoot/core/conflate/MatchFactory.h>
-#include <hoot/core/conflate/MergerFactory.h>
+#include <hoot/core/conflate/merging/MarkForReviewMerger.h>
+#include <hoot/core/conflate/matching/MatchThreshold.h>
+#include <hoot/core/conflate/matching/MatchFactory.h>
+#include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/conflate/polygon/BuildingMatch.h>
 #include <hoot/core/schema/OsmSchema.h>
 
@@ -121,7 +121,10 @@ bool PoiPolygonMergerCreator::createMergers(const MatchSet& matches, vector<Merg
     if (_isConflictingSet(matches))
     {
       mergers.push_back(
-        new MarkForReviewMerger(eids, "Conflicting information", matchTypes.join(";"), 1));
+        new MarkForReviewMerger(
+          eids,
+          "Conflicting information: multiple features have been matched to the same feature and require review.",
+          matchTypes.join(";"), 1));
     }
     else
     {

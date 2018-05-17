@@ -148,18 +148,18 @@ class OsmUtils
     static void saveMap(boost::shared_ptr<const OsmMap> map, QString path);
 
     /**
-      Converts an unsigned int timestamp (time from epoch) to a QString (utc zulu)
+      Converts a 64-bit unsigned int timestamp (seconds from epoch) to a QString (utc zulu)
 
-      @param timestamp unsigned int time encoding in seconds from the epoch (1970-01-01 00:00:00)
+      @param timestamp quint64 time encoding in seconds from the epoch (1970-01-01T00:00:00Z)
       */
-    static QString toTimeString(unsigned int timestamp);
+    static QString toTimeString(quint64 timestamp);
 
     /**
       Converts a utc zulu timestamp to time since the epoch in seconds.
 
       @param timestamp in utc zulu string to be convered to seconds from the epoch (1970-01-01 00:00:00)
       */
-    static unsigned int fromTimeString(QString timestamp);
+    static quint64 fromTimeString(QString timestamp);
 
     /**
      * Returns a time string for the current time

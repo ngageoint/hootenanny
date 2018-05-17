@@ -1,0 +1,22 @@
+[
+    {
+        "dataType": "enumeration",
+        "geometries": [
+            "node",
+            "area"
+        ],
+        "influence": 1,
+        "name": "camp",
+        "objectType": "tag"
+    },
+    {
+        "isA": "camp",
+        "name": "camp=*",
+        "objectType": "tag"
+    },
+    {
+        "isA": "camp",
+        "name": "camp=yes",
+        "objectType": "tag"
+    }
+]

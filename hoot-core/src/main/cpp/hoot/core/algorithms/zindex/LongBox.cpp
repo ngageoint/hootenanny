@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "LongBox.h"
 
@@ -72,7 +72,12 @@ bool LongBox::edgeOverlaps(LongBox b)
   bool result = false;
   for (uint i = 0; i < getMin().size(); i++)
   {
-    result = result || (b.getMin()[i] == getMax()[i]) || (b.getMin()[i] == b.getMin()[i]) || (b.getMax()[i] == b.getMax()[i]);
+    result =
+        result ||
+        (getMin()[i] == b.getMin()[i]) ||
+        (getMin()[i] == b.getMax()[i]) ||
+        (getMax()[i] == b.getMin()[i]) ||
+        (getMax()[i] == b.getMax()[i]);
   }
   return result;
 }

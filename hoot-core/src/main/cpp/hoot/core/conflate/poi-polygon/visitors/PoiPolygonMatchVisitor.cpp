@@ -27,7 +27,7 @@
 #include "PoiPolygonMatchVisitor.h"
 
 // hoot
-#include <hoot/core/conflate/MatchType.h>
+#include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/visitors/IndexElementsVisitor.h>

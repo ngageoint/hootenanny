@@ -69,7 +69,6 @@ public:
       mapCompare.setUseDateTime();
     }
 
-
     if (args.size() != 2)
     {
       cout << getHelp() << endl << endl;

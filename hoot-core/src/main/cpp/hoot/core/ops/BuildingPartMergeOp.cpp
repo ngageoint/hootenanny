@@ -242,7 +242,7 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
   }
 
   // most other operations don't need this index, so we'll clear it out so it isn't actively
-  // maintainted.
+  // maintained.
   _map->getIndex().clearRelationIndex();
   _map.reset();
 }

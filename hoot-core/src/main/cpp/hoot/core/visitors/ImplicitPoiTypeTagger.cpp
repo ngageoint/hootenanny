@@ -22,7 +22,6 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ImplicitPoiTypeTagger.h"
@@ -40,25 +39,26 @@ HOOT_FACTORY_REGISTER(ElementVisitor, ImplicitPoiTypeTagger)
 ImplicitPoiTypeTagger::ImplicitPoiTypeTagger() :
 ImplicitTypeTaggerBase()
 {
-  _ruleReader.reset(new ImplicitTagRulesSqliteReader());
-  _ruleReader->open(ConfigOptions().getImplicitTaggerRulesDatabase());
 }
 
 ImplicitPoiTypeTagger::ImplicitPoiTypeTagger(const QString databasePath) :
 ImplicitTypeTaggerBase(databasePath)
 {
-  _ruleReader.reset(new ImplicitTagRulesSqliteReader());
-  _ruleReader->open(databasePath);
 }
 
 bool ImplicitPoiTypeTagger::_visitElement(const ElementPtr& e)
 {
+  LOG_VART(e);
   const bool elementIsANode = e->getElementType() == ElementType::Node;
+  LOG_VART(elementIsANode);
   _elementIsASpecificFeature =
     OsmSchema::getInstance().hasCategory(e->getTags(), "poi") && !e->getTags().contains("poi") &&
      e->getTags().get("building") != QLatin1String("yes") &&
      e->getTags().get("office") != QLatin1String("yes");
+  LOG_VART(_elementIsASpecificFeature);
   const bool elementIsAGenericPoi = !_elementIsASpecificFeature;
+  LOG_VART(elementIsAGenericPoi);
+  LOG_VART(_getNames(e->getTags()).size());
 
   //always allow generic elements
   if (elementIsAGenericPoi)
@@ -70,7 +70,7 @@ bool ImplicitPoiTypeTagger::_visitElement(const ElementPtr& e)
   {
     return true;
   }
-  else if (elementIsANode && e->getTags().getNames().size() > 0)
+  else if (elementIsANode && _getNames(e->getTags()).size() > 0)
   {
     return true;
   }

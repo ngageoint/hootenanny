@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HIGHWAYMATCH_H
 #define HIGHWAYMATCH_H
@@ -30,10 +30,10 @@
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
-#include <hoot/core/conflate/MatchClassification.h>
-#include <hoot/core/conflate/MatchThreshold.h>
-#include <hoot/core/conflate/Match.h>
-#include <hoot/core/conflate/MatchDetails.h>
+#include <hoot/core/conflate/matching/MatchClassification.h>
+#include <hoot/core/conflate/matching/MatchThreshold.h>
+#include <hoot/core/conflate/matching/Match.h>
+#include <hoot/core/conflate/matching/MatchDetails.h>
 
 // Qt
 #include <QHash>

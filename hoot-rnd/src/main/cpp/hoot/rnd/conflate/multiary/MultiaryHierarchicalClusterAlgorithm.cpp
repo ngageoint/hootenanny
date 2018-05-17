@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MultiaryHierarchicalClusterAlgorithm.h"
 
 // hoot
-#include <hoot/core/conflate/MatchClassification.h>
+#include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/util/Log.h>
 
 // Qt

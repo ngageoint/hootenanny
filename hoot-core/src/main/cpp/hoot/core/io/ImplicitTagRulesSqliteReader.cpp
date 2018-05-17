@@ -22,8 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
- * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ImplicitTagRulesSqliteReader.h"
@@ -442,9 +441,16 @@ Tags ImplicitTagRulesSqliteReader::_getTagsForWords(const QSet<long>& queriedWor
     while (_tagsForWordIdsQuery.next())
     {
       const QString kvp = _tagsForWordIdsQuery.value(0).toString();
+      //';' denotes multiple tags for the same word; currently this only occurs in the custom rules
+      //file.  It would also work for any entires in the rules database, but we don't write multiple
+      //tags for the same rules during derivation yet.
+      const QStringList kvps = kvp.split(";");
       if ((!_addTopTagOnly || (_addTopTagOnly && tags2.isEmpty())))
       {
-        tags2.appendValue(kvp);
+        for (int i = 0; i < kvps.size(); i++)
+        {
+          tags2.appendValue(kvps.at(i));
+        }
       }
     }
     LOG_VART(tags);

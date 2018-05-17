@@ -1,0 +1,106 @@
+
+MULTIARY INGEST - DELETING REFERENCE LAYER...
+
+
+MULTIARY INGEST - INGESTING GEONAMES REFERENCE DATASET...
+
+15:08:32.555 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
+15:08:32.555 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
+
+MULTIARY INGEST - INGESTING GEONAMES NEW DATASET...
+
+15:08:33.299 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
+15:08:33.299 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
+
+MULTIARY INGEST - EXPORTING GEONAMES REFERENCE LAYER...
+
+
+MULTIARY INGEST - COMPARING GEONAMES REFERENCE LAYER OUTPUT...
+
+
+MULTIARY INGEST - COMPARING GEONAMES ADD CHANGESET OUTPUT...
+
+
+MULTIARY INGEST - COMPARING GEONAMES DELETE CHANGESET OUTPUT...
+
+
+MULTIARY INGEST - DELETING REFERENCE LAYER...
+
+
+MULTIARY INGEST - INGESTING OSM PBF REFERENCE DATASET...
+
+15:08:35.699 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
+15:08:35.699 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
+
+MULTIARY INGEST - INGESTING OSM PBF NEW DATASET...
+
+15:08:36.266 WARN  ...hoot/core/io/OsmFileSorter.cpp(  70) OSM PBF input file: test-files/cmd/slow/RndServiceMultiaryIngestCmdTest/allCountries-8-15-17-10.osm.pbf is marked as sorted by node ID, as indicated by its header, yet Hootenanny was instructed to sort the file.
+15:08:37.993 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
+15:08:37.993 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
+
+MULTIARY INGEST - EXPORTING OSM PBF REFERENCE LAYER...
+
+
+MULTIARY INGEST - COMPARING OSM PBF REFERENCE LAYER OUTPUT...
+
+
+MULTIARY INGEST - COMPARING OSM PBF ADD CHANGESET OUTPUT...
+
+
+MULTIARY INGEST - COMPARING OSM PBF DELETE CHANGESET OUTPUT...
+
+
+MULTIARY INGEST - DELETING REFERENCE LAYER...
+
+
+MULTIARY INGEST - INGESTING OSM XML REFERENCE DATASET...
+
+15:08:40.352 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
+15:08:40.352 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
+
+MULTIARY INGEST - INGESTING OSM XML NEW DATASET...
+
+15:08:43.221 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
+15:08:43.221 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
+
+MULTIARY INGEST - EXPORTING OSM XML REFERENCE LAYER...
+
+
+MULTIARY INGEST - COMPARING OSM XML REFERENCE LAYER OUTPUT...
+
+
+MULTIARY INGEST - COMPARING OSM XML ADD CHANGESET OUTPUT...
+
+
+MULTIARY INGEST - COMPARING OSM XML DELETE CHANGESET OUTPUT...
+
+
+MULTIARY INGEST - DELETING REFERENCE LAYER...
+
+
+MULTIARY INGEST - INGESTING SHP REFERENCE DATASET...
+
+15:08:45.745 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
+15:08:45.746 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
+
+MULTIARY INGEST - INGESTING SHP NEW DATASET...
+
+15:08:46.306 WARN  ...hoot/core/io/OsmFileSorter.cpp(  95) OGR inputs must be converted to the OSM format before sorting by node ID.
+15:08:46.307 WARN  ...hoot/core/io/OsmFileSorter.cpp(  96) Converting input to OSM format...
+15:08:48.191 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
+15:08:48.191 WARN  ...nd/io/SparkChangesetWriter.cpp( 111) Found more than one bounds calculator. Using the first one.
+
+MULTIARY INGEST - EXPORTING SHP REFERENCE LAYER...
+
+
+MULTIARY INGEST - COMPARING SHP REFERENCE LAYER OUTPUT...
+
+
+MULTIARY INGEST - COMPARING SHP ADD CHANGESET OUTPUT...
+
+
+MULTIARY INGEST - COMPARING SHP DELETE CHANGESET OUTPUT...
+
+
+MULTIARY INGEST - DELETING REFERENCE LAYER...
+

@@ -22,14 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef IMPLICIT_POI_POLYGON_TYPE_TAGGER_H
 #define IMPLICIT_POI_POLYGON_TYPE_TAGGER_H
 
 // hoot
-#include <hoot/core/visitors/ImplicitTypeTaggerBase.h>
+#include <hoot/core/visitors/ImplicitPoiTypeTagger.h>
 #include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPoiCriterion.h>
 #include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPolyCriterion.h>
 
@@ -39,7 +38,7 @@ namespace hoot
 /**
  * Adds tags implicitly derived from feature names to POIs and polygons
  */
-class ImplicitPoiPolygonTypeTagger : public ImplicitTypeTaggerBase
+class ImplicitPoiPolygonTypeTagger : public ImplicitPoiTypeTagger
 {
 public:
 
@@ -57,13 +56,10 @@ protected:
 
 private:
 
-  PoiPolygonPoiCriterion _poiFilter;
   PoiPolygonPolyCriterion _polyFilter;
   bool _inABuildingOrPoiCategory;
 
-  bool _elementIsATaggablePoi(const ElementPtr& e);
   bool _elementIsATaggablePolygon(const ElementPtr& e);
-
 };
 
 }

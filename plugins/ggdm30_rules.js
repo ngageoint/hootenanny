@@ -91,7 +91,7 @@ ggdm30.rules = {
     ['F_CODE','AQ141','parking','multi-story'], // Parking Garage
     ['F_CODE','AT042','power','pole'], // OSM
     ['F_CODE','AT042','power','tower'], // OSM
-    ['F_CODE','BA010','natural','coastline'], // Land/Water Boundary - From OSM
+    ['F_CODE','BA010','natural','land_water_boundary'], // Land/Water Boundary - old translation
     ['F_CODE','BA030','place','islet'], // Island - From OSM
     ['F_CODE','BH140','waterway','yes'], // Make unknown waterways into rivers
     ['F_CODE','BH145','natural','sinkhole'],

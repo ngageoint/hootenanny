@@ -866,6 +866,14 @@ If true, implicit taggers will only add the implicit tag to the element with the
 occurrence count for a given set of inputs name tokens.  Setting to true may be useful in reducing
 false positive applied tags to elements.
 
+=== implicit.tagger.additional.name.keys
+
+* Data Type: list
+* Default Value:
+** `note`
+
+A list of additional tag keys to be considered as names when tagging implicitly based on type.
+
 === implicit.tagger.allow.tagging.specific.entities
 
 * Data Type: bool
@@ -893,6 +901,13 @@ If true, implicit taggers will attempt to match the last token in a name to an i
 first before attempting to match other parts of the name.  Setting to true can be useful in getting
 better tagging performance for names that would otherwise be involved in multiple implicit tag
 rules.
+
+=== implicit.tagger.max.name.length
+
+* Data Type: int
+* Default Value: `75`
+
+The maximum length a name tag value can have for the type tagger to try and derive a type from it.
 
 === implicit.tagger.rules.database
 

@@ -70,12 +70,30 @@ public:
                          const ConstElementPtr& poly) const;
 
   /**
-   * Determines if an element has an address
+   * Determines if a node has an address
    *
-   * @param element the element to examine for an address
-   * @return true if the element has an address; false otherwise
+   * @param node the node to examine for an address
+   * @return true if the node has an address; false otherwise
    */
-  static bool hasAddress(const Element& element);
+  static bool nodeHasAddress(const Node& node);
+
+  /**
+   *
+   *
+   * @param element
+   * @param map
+   * @return
+   */
+  static bool elementHasAddress(const ConstElementPtr& element, const OsmMap& map);
+
+  /**
+   *
+   *
+   * @param element
+   * @param map
+   * @return
+   */
+  static QSet<QString> getAddresses(const ConstElementPtr& element, const OsmMap& map);
 
   virtual QString getDescription() const
   { return "Calculates the address similarity score of two features involved in POI/Polygon conflation"; }

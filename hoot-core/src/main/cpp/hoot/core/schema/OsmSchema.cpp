@@ -1691,9 +1691,13 @@ bool OsmSchema::isPoiPolygonPoi(const ConstElementPtr& e, const QStringList tagI
   const bool inABuildingOrPoiCategory =
     getCategories(tags).intersects(OsmSchemaCategory::building() | OsmSchemaCategory::poi());
   bool isPoi = isNode && (inABuildingOrPoiCategory || tags.getNames().size() > 0);
+  LOG_VART(inABuildingOrPoiCategory);
+  LOG_VART(tags.get("uuid"));
+  LOG_VART(tags.getNames());
+  LOG_VART(isPoi);
 
   if (!isPoi && ConfigOptions().getPoiPolygonPromotePointsWithAddressesToPois() &&
-      PoiPolygonAddressScoreExtractor::hasAddress(*e))
+      PoiPolygonAddressScoreExtractor::nodeHasAddress(*boost::dynamic_pointer_cast<const Node>(e)))
   {
     isPoi = true;
   }

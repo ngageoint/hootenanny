@@ -38,7 +38,7 @@
 #include <hoot/core/algorithms/MultiLineStringSplitter.h>
 #include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/algorithms/Soundex.h>
-#include <hoot/core/conflate/MatchType.h>
+#include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/conflate/extractors/AttributeScoreExtractor.h>
 #include <hoot/core/conflate/extractors/DistanceScoreExtractor.h>
 #include <hoot/core/conflate/extractors/LengthScoreExtractor.h>

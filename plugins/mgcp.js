@@ -599,6 +599,12 @@ mgcp = {
         // The FCODE for Buildings is different. TDS uses AL013
         if (attrs.F_CODE == 'AL015') attrs.F_CODE = 'AL013';
 
+        // Swap the F_CODE for a Ferry Terminal
+        if (attrs.F_CODE == 'AQ125' && attrs.TRS == '7')
+        {
+            attrs.F_CODE = 'AQ080'; // TDS/GGDM fcode for Ferry Terminal
+        }
+
     }, // End of applyToOsmPreProcessing
 
     // Post Processing: Lots of cleanup
@@ -787,13 +793,13 @@ mgcp = {
         } // End Condition tags
 
         // Add 'building = yes' to amenities if we don't already have one
-        if (tags.amenity && !tags.building)
-        {
-            // Debug:
-            // print('Added building');
-            // Don't add building=yes to built up areas!
-            if (!tags.place) tags.building = 'yes';
-        }
+        // if (tags.amenity && !tags.building)
+        // {
+        //     // Debug:
+        //     // print('Added building');
+        //     // Don't add building=yes to built up areas!
+        //     if (!tags.place) tags.building = 'yes';
+        // }
 
         // Add 'building = yes' to military if it isn't a range
         if (tags.military && !tags.building)
@@ -876,6 +882,14 @@ mgcp = {
                         break;
                 } // End switch
 
+                break;
+
+            case 'AQ125': // Transportation Station
+                if (tags.amenity == 'ferry_terminal')
+                {
+                    attrs.TRS = '7';
+                    if (tags.bus) delete tags.bus;
+                }
                 break;
 
             case 'BH070': // Ford
@@ -1013,6 +1027,7 @@ mgcp = {
             // See ToOsmPostProcessing for more details about rulesList.
             var rulesList = [
             ["t.amenity == 'marketplace'","t.facility = 'yes'"],
+            ["t.amenity == 'ferry_terminal'","t['transport:type'] = 'maritime'"],
             ["t.aeroway == 'navigationaid' && t.navigationaid","delete t.navigationaid"],
             ["t.barrier == 'tank_trap' && t.tank_trap == 'dragons_teeth'","t.barrier = 'dragons_teeth'; delete t.tank_trap"],
             ["t.construction && t.railway","t.railway = t.construction; t.condition = 'construction'; delete t.construction"],
@@ -1148,7 +1163,7 @@ mgcp = {
             'waste_basket','drinking_water','swimming_pool','fire_hydrant','emergency_phone','yes',
             'compressed_air','water','nameplate','picnic_table','life_ring','grass_strip','dog_bin',
             'artwork','dog_waste_bin','street_light','park','hydrant','tricycle_station','loading_dock',
-            'trailer_park','game_feeding'
+            'trailer_park','game_feeding','ferry_terminal'
             ]; // End bldArray
 
         if (tags.amenity && notBuildingList.indexOf(tags.amenity) == -1 && !tags.building) attrs.F_CODE = 'AL015';

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MatchGraph.h"
 
@@ -46,11 +46,11 @@
 using namespace boost;
 
 // hoot
-#include <hoot/core/conflate/MatchThreshold.h>
-#include <hoot/core/conflate/MergerFactory.h>
+#include <hoot/core/conflate/matching/MatchThreshold.h>
+#include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/conflate/Match.h>
+#include <hoot/core/conflate/matching/Match.h>
 
 // Qt
 #include <QHash>
@@ -256,7 +256,7 @@ private:
     {
       MatchVertexId vid1 = createOrGetVertex(it->first);
       MatchVertexId vid2 = createOrGetVertex(it->second);
-      add_edge(vid1, vid2, matchWith, _graph).first;
+      add_edge(vid1, vid2, matchWith, _graph);
     }
   }
 

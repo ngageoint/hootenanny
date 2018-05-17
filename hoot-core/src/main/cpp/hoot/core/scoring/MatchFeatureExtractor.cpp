@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "MatchFeatureExtractor.h"
@@ -30,13 +30,13 @@
 // Hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/conflate/Match.h>
-#include <hoot/core/conflate/MatchCreator.h>
-#include <hoot/core/conflate/MatchDetails.h>
-#include <hoot/core/conflate/MatchFactory.h>
+#include <hoot/core/conflate/matching/Match.h>
+#include <hoot/core/conflate/matching/MatchCreator.h>
+#include <hoot/core/conflate/matching/MatchDetails.h>
+#include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/MetadataTags.h>
-#include <hoot/core/conflate/MatchType.h>
+#include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/util/Log.h>
 

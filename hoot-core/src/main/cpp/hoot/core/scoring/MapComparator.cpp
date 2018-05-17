@@ -111,10 +111,16 @@ public:
       in2.set("uuid","None");
     }
 
+    // By default, hoot will usually set these tags when ingesting a file
+    // this can cause problems when comparing files during testing, so we
+    // have the option to ignore it here.
     if (!_useDateTime)
     {
       in1.set("source:ingest:datetime","None");  // Wipe out the ingest datetime
       in2.set("source:ingest:datetime","None");
+
+      in1.set("source:datetime","None");  // Wipe out the ingest datetime
+      in2.set("source:datetime","None");
     }
 
     if (in1 != in2)
@@ -229,10 +235,11 @@ private:
   int _errorCount;
 };
 
-MapComparator::MapComparator()
+MapComparator::MapComparator():
+  _ignoreUUID(false),
+  _useDateTime(false)
 {
-  _ignoreUUID = false;
-  _useDateTime = false;
+  // blank
 }
 
 bool MapComparator::isMatch(boost::shared_ptr<OsmMap> ref, boost::shared_ptr<OsmMap> test)

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OutsideBoundsRemover.h"
@@ -41,7 +41,8 @@ using namespace geos::geom;
 namespace hoot
 {
 
-OutsideBoundsRemover::OutsideBoundsRemover(boost::shared_ptr<OsmMap> map, const Envelope& e, bool inverse)
+OutsideBoundsRemover::OutsideBoundsRemover(boost::shared_ptr<OsmMap> map, const Envelope& e,
+                                           bool inverse)
 {
   _inputMap = map;
   _envelope = e;
@@ -49,7 +50,8 @@ OutsideBoundsRemover::OutsideBoundsRemover(boost::shared_ptr<OsmMap> map, const 
 }
 
 
-void OutsideBoundsRemover::removeWays(boost::shared_ptr<OsmMap> map, const Envelope& e, bool inverse)
+void OutsideBoundsRemover::removeWays(boost::shared_ptr<OsmMap> map, const Envelope& e,
+                                      bool inverse)
 {
   OutsideBoundsRemover obr(map, e, inverse);
   return obr.removeWays();

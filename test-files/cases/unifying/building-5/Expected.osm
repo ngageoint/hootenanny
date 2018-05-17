@@ -1,0 +1,662 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="39.01499999999999" minlon="125.7638" maxlat="39.0185" maxlon="125.7679"/>
+    <node visible="true" id="-168" timestamp="2018-01-10T18:20:40Z" version="1" changeset="14856" lat="39.0152448999999919" lon="125.7676651000000163"/>
+    <node visible="true" id="-167" timestamp="2018-01-10T18:20:40Z" version="1" changeset="14856" lat="39.0151615999999990" lon="125.7676435999999853"/>
+    <node visible="true" id="-166" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0176824999999923" lon="125.7669731999999954"/>
+    <node visible="true" id="-165" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0179660999999953" lon="125.7670665999999926"/>
+    <node visible="true" id="-164" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0180527999999924" lon="125.7666305000000051"/>
+    <node visible="true" id="-163" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0179769000000007" lon="125.7666054999999830"/>
+    <node visible="true" id="-162" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0179245999999935" lon="125.7668687000000034"/>
+    <node visible="true" id="-161" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0177168000000023" lon="125.7668002999999999"/>
+    <node visible="true" id="-160" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0183012999999974" lon="125.7676443999999947"/>
+    <node visible="true" id="-159" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0181778999999906" lon="125.7676052000000055"/>
+    <node visible="true" id="-158" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0175883999999940" lon="125.7677941000000175"/>
+    <node visible="true" id="-157" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0167821000000004" lon="125.7678054000000003"/>
+    <node visible="true" id="-156" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0173523999999929" lon="125.7672902999999991"/>
+    <node visible="true" id="-155" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0172717000000020" lon="125.7672663000000028"/>
+    <node visible="true" id="-154" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0171715999999904" lon="125.7678228999999988"/>
+    <node visible="true" id="-153" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0167988999999977" lon="125.7677118999999948"/>
+    <node visible="true" id="-152" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0177181000000033" lon="125.7672609999999906"/>
+    <node visible="true" id="-151" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0181494999999927" lon="125.7673920000000010"/>
+    <node visible="true" id="-150" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0181206000000032" lon="125.7675492999999989"/>
+    <node visible="true" id="-149" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0177611999999883" lon="125.7674401999999816"/>
+    <node visible="true" id="-148" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0177093999999940" lon="125.7677223000000026"/>
+    <node visible="true" id="-147" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0176374999999851" lon="125.7677005000000179"/>
+    <node visible="true" id="-146" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0183209999999931" lon="125.7663991999999951"/>
+    <node visible="true" id="-145" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0182167999999976" lon="125.7663684999999845"/>
+    <node visible="true" id="-144" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0180450000000008" lon="125.7673333999999841"/>
+    <node visible="true" id="-143" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0181491000000022" lon="125.7673640999999947"/>
+    <node visible="true" id="-142" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0182833000000002" lon="125.7658088000000021"/>
+    <node visible="true" id="-141" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0182421000000019" lon="125.7660243000000122"/>
+    <node visible="true" id="-140" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0178800999999993" lon="125.7663659999999908"/>
+    <node visible="true" id="-139" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0178511999999955" lon="125.7665281999999962"/>
+    <node visible="true" id="-138" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0180709999999991" lon="125.7665930000000003"/>
+    <node visible="true" id="-137" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0180999000000099" lon="125.7664307999999949"/>
+    <node visible="true" id="-134" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0177841000000072" lon="125.7639142000000163"/>
+    <node visible="true" id="-129" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0151566999999986" lon="125.7646532000000121"/>
+    <node visible="true" id="-128" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0158723999999921" lon="125.7648475999999960"/>
+    <node visible="true" id="-127" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0158964000000026" lon="125.7647011999999904"/>
+    <node visible="true" id="-126" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0151807000000019" lon="125.7645067999999924"/>
+    <node visible="true" id="-125" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0153868999999958" lon="125.7663540999999867"/>
+    <node visible="true" id="-124" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0155172999999991" lon="125.7656451999999803"/>
+    <node visible="true" id="-123" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0153637000000018" lon="125.7655984000000018"/>
+    <node visible="true" id="-122" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0152333999999996" lon="125.7663072999999798"/>
+    <node visible="true" id="-121" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0152538999999905" lon="125.7649174999999957"/>
+    <node visible="true" id="-120" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0151716999999962" lon="125.7653844999999961"/>
+    <node visible="true" id="-119" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0152726999999970" lon="125.7654138999999986"/>
+    <node visible="true" id="-118" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0153390999999914" lon="125.7650368999999984"/>
+    <node visible="true" id="-117" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0155255999999966" lon="125.7650912999999804"/>
+    <node visible="true" id="-116" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0154581999999905" lon="125.7654739000000035"/>
+    <node visible="true" id="-115" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0155757000000065" lon="125.7655081999999993"/>
+    <node visible="true" id="-114" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0156452999999956" lon="125.7651129999999995"/>
+    <node visible="true" id="-113" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0155972999999960" lon="125.7650989999999922"/>
+    <node visible="true" id="-112" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0156108999999915" lon="125.7650217000000055"/>
+    <node visible="true" id="-111" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0160545999999826" lon="125.7649636999999956"/>
+    <node visible="true" id="-110" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0159959999999941" lon="125.7649435000000011"/>
+    <node visible="true" id="-109" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0159859999999910" lon="125.7649914999999936"/>
+    <node visible="true" id="-108" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0159275999999835" lon="125.7649713999999932"/>
+    <node visible="true" id="-107" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0159897999999927" lon="125.7646718999999820"/>
+    <node visible="true" id="-106" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0161068999999827" lon="125.7647120999999828"/>
+    <node visible="true" id="-105" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0150888000000009" lon="125.7645013000000205"/>
+    <node visible="true" id="-104" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0150804000000093" lon="125.7645459999999957"/>
+    <node visible="true" id="-103" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0150121999999939" lon="125.7645246999999955"/>
+    <node visible="true" id="-102" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0150007999999957" lon="125.7651472999999953"/>
+    <node visible="true" id="-101" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0150189999999952" lon="125.7652321999999998"/>
+    <node visible="true" id="-100" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0151528000000027" lon="125.7645212999999842"/>
+    <node visible="true" id="-99" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0151124000000067" lon="125.7648985000000010"/>
+    <node visible="true" id="-98" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0150466999999921" lon="125.7652331000000174"/>
+    <node visible="true" id="-97" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0151626999999905" lon="125.7652707999999961"/>
+    <node visible="true" id="-96" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0152283999999980" lon="125.7649363000000022"/>
+    <node visible="true" id="-95" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0156767999999872" lon="125.7654244999999946"/>
+    <node visible="true" id="-94" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0156382999999920" lon="125.7656551000000036"/>
+    <node visible="true" id="-93" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0156978999999922" lon="125.7656716000000046"/>
+    <node visible="true" id="-92" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0157364000000015" lon="125.7654409000000015"/>
+    <node visible="true" id="-91" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0157667000000004" lon="125.7652075999999965"/>
+    <node visible="true" id="-90" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0157548999999833" lon="125.7652609999999953"/>
+    <node visible="true" id="-89" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0160800999999893" lon="125.7653796999999969"/>
+    <node visible="true" id="-88" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0161015999999989" lon="125.7652819000000051"/>
+    <node visible="true" id="-87" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0160404999999955" lon="125.7652596000000074"/>
+    <node visible="true" id="-86" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0160636000000025" lon="125.7651546999999965"/>
+    <node visible="true" id="-85" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0157093999999915" lon="125.7650253999999990"/>
+    <node visible="true" id="-84" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0156764999999908" lon="125.7651745999999946"/>
+    <node visible="true" id="-83" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0154670999999880" lon="125.7673106999999959"/>
+    <node visible="true" id="-82" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0152386999999976" lon="125.7672426999999971"/>
+    <node visible="true" id="-81" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0152566999999877" lon="125.7671425999999855"/>
+    <node visible="true" id="-80" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0153979999999905" lon="125.7671845999999789"/>
+    <node visible="true" id="-79" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0155192000000000" lon="125.7665100999999908"/>
+    <node visible="true" id="-78" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0156063999999958" lon="125.7665360999999962"/>
+    <node visible="true" id="-77" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0157365999999897" lon="125.7656614999999931"/>
+    <node visible="true" id="-76" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0156665000000018" lon="125.7660183000000131"/>
+    <node visible="true" id="-75" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0157684999999930" lon="125.7660515000000032"/>
+    <node visible="true" id="-74" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0158384999999939" lon="125.7656946999999832"/>
+    <node visible="true" id="-73" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0155928000000074" lon="125.7677625999999975"/>
+    <node visible="true" id="-72" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0155087999999921" lon="125.7677381999999966"/>
+    <node visible="true" id="-71" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0163847999999973" lon="125.7668845999999832"/>
+    <node visible="true" id="-70" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0163358000000002" lon="125.7671066999999994"/>
+    <node visible="true" id="-69" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0161707999999905" lon="125.7670463999999981"/>
+    <node visible="true" id="-68" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0162197999999947" lon="125.7668244000000044"/>
+    <node visible="true" id="-63" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0176350999999997" lon="125.7672598999999849"/>
+    <node visible="true" id="-62" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0175957999999952" lon="125.7674597000000034"/>
+    <node visible="true" id="-61" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0174217999999939" lon="125.7674030999999957"/>
+    <node visible="true" id="-60" timestamp="2018-01-10T18:20:39Z" version="1" changeset="14856" lat="39.0174610999999985" lon="125.7672031999999831"/>
+    <node visible="true" id="-59" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.0154804054187636" lon="125.7678999999999974"/>
+    <node visible="true" id="-58" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.0155686874199006" lon="125.7678999999999974"/>
+    <node visible="true" id="-57" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.0150000000000006" lon="125.7652263176470768"/>
+    <node visible="true" id="-56" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.0150000000000006" lon="125.7651515496453953"/>
+    <node visible="true" id="-55" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.0149999999999935" lon="125.7651470511999889"/>
+    <node visible="true" id="-54" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.0150000000000006" lon="125.7645894782764771"/>
+    <node visible="true" id="-53" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.0178049307360766" lon="125.7637999999999892"/>
+    <node visible="true" id="-52" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.0174063281368930" lon="125.7637999999999892"/>
+    <node visible="true" id="-49" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.0184999999999960" lon="125.7661060698328441"/>
+    <node visible="true" id="-48" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.0185000000000031" lon="125.7658774494560987"/>
+    <node visible="true" id="-47" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.0172427646669746" lon="125.7678999999999974"/>
+    <node visible="true" id="-46" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.0170998158518429" lon="125.7678999999999974"/>
+    <node visible="true" id="-45" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.0179216942063789" lon="125.7678999999999974"/>
+    <node visible="true" id="-44" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.0175681013871340" lon="125.7678999999999974"/>
+    <node visible="true" id="-43" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.0181213675690870" lon="125.7678999999999974"/>
+    <node visible="true" id="-42" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.0182523012857914" lon="125.7678999999999974"/>
+    <node visible="true" id="-41" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.0151154375085270" lon="125.7678999999999974"/>
+    <node visible="true" id="-40" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.0152034755032062" lon="125.7678999999999974"/>
+    <node visible="true" id="-39" timestamp="2018-01-10T18:15:57Z" version="1" changeset="14855" lat="39.0152984999300045" lon="125.7669909999399920"/>
+    <node visible="true" id="-38" timestamp="2018-01-10T18:15:57Z" version="1" changeset="14855" lat="39.0152670002699935" lon="125.7671639998199993"/>
+    <node visible="true" id="-37" timestamp="2018-01-10T18:15:57Z" version="1" changeset="14855" lat="39.0161605001099900" lon="125.7672680001199836"/>
+    <node visible="true" id="-36" timestamp="2018-01-10T18:15:57Z" version="1" changeset="14855" lat="39.0155810003600081" lon="125.7670995004399828"/>
+    <node visible="true" id="-35" timestamp="2018-01-10T18:15:57Z" version="1" changeset="14855" lat="39.0155524999500045" lon="125.7672599997499958"/>
+    <node visible="true" id="-34" timestamp="2018-01-10T18:15:57Z" version="1" changeset="14855" lat="39.0161319996900033" lon="125.7674285003199941"/>
+    <node visible="true" id="-33" timestamp="2018-01-10T18:15:57Z" version="1" changeset="14855" lat="39.0160544997199850" lon="125.7656685000999914"/>
+    <node visible="true" id="-32" timestamp="2018-01-10T18:15:57Z" version="1" changeset="14855" lat="39.0159384997599901" lon="125.7656335002899937"/>
+    <node visible="true" id="-31" timestamp="2018-01-10T18:15:57Z" version="1" changeset="14855" lat="39.0157819997399926" lon="125.7664814998200029"/>
+    <node visible="true" id="-30" timestamp="2018-01-10T18:15:57Z" version="1" changeset="14855" lat="39.0158974996699897" lon="125.7665164996400051"/>
+    <node visible="true" id="-29" timestamp="2018-01-10T18:15:57Z" version="1" changeset="14855" lat="39.0159234999699933" lon="125.7648424997799879"/>
+    <node visible="true" id="-28" timestamp="2018-01-10T18:15:57Z" version="1" changeset="14855" lat="39.0152009999300020" lon="125.7646289998299949"/>
+    <node visible="true" id="-27" timestamp="2018-01-10T18:15:57Z" version="1" changeset="14855" lat="39.0151754996499918" lon="125.7647710000799890"/>
+    <node visible="true" id="-26" timestamp="2018-01-10T18:15:57Z" version="1" changeset="14855" lat="39.0158979996899973" lon="125.7649845000299820"/>
+    <node visible="true" id="-20" timestamp="2018-01-10T18:15:57Z" version="1" changeset="14855" lat="39.0175954997300067" lon="125.7658865002599811"/>
+    <node visible="true" id="-19" timestamp="2018-01-10T18:15:57Z" version="1" changeset="14855" lat="39.0176260002400070" lon="125.7657154995700211"/>
+    <node visible="true" id="-18" timestamp="2018-01-10T18:15:57Z" version="1" changeset="14855" lat="39.0168290003599978" lon="125.7654839996900051"/>
+    <node visible="true" id="-17" timestamp="2018-01-10T18:15:57Z" version="1" changeset="14855" lat="39.0167974997999991" lon="125.7656609997499828"/>
+    <node visible="true" id="-16" timestamp="2018-01-10T18:15:57Z" version="1" changeset="14855" lat="39.0168534996900007" lon="125.7656769995899992"/>
+    <node visible="true" id="-15" timestamp="2018-01-10T18:15:57Z" version="1" changeset="14855" lat="39.0167525004299875" lon="125.7662464997799958"/>
+    <node visible="true" id="-14" timestamp="2018-01-10T18:15:57Z" version="1" changeset="14855" lat="39.0166895002199823" lon="125.7662284998399969"/>
+    <node visible="true" id="-13" timestamp="2018-01-10T18:15:57Z" version="1" changeset="14855" lat="39.0166599997599874" lon="125.7663970004199996"/>
+    <node visible="true" id="-12" timestamp="2018-01-10T18:15:57Z" version="1" changeset="14855" lat="39.0174490001699965" lon="125.7666260001899872"/>
+    <node visible="true" id="-11" timestamp="2018-01-10T18:15:57Z" version="1" changeset="14855" lat="39.0174789997600016" lon="125.7664555004199798"/>
+    <node visible="true" id="-10" timestamp="2018-01-10T18:15:57Z" version="1" changeset="14855" lat="39.0174105001900102" lon="125.7664355003999788"/>
+    <node visible="true" id="-9" timestamp="2018-01-10T18:15:57Z" version="1" changeset="14855" lat="39.0175120003799947" lon="125.7658625000499910"/>
+    <node visible="true" id="-8" timestamp="2018-01-10T18:15:57Z" version="1" changeset="14855" lat="39.0173469999599902" lon="125.7658240000800021"/>
+    <node visible="true" id="-7" timestamp="2018-01-10T18:15:57Z" version="1" changeset="14855" lat="39.0172424996399911" lon="125.7663890000499975"/>
+    <node visible="true" id="-6" timestamp="2018-01-10T18:15:57Z" version="1" changeset="14855" lat="39.0168784999399989" lon="125.7662785003499977"/>
+    <node visible="true" id="-5" timestamp="2018-01-10T18:15:57Z" version="1" changeset="14855" lat="39.0169830002700024" lon="125.7657140003999956"/>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.0149999999999935" lon="125.7670843799387086"/>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.0149999999999935" lon="125.7669019863704278"/>
+    <way visible="true" id="-33" timestamp="2018-01-10T18:20:40Z" version="1" changeset="14856">
+        <nd ref="-161"/>
+        <nd ref="-162"/>
+        <nd ref="-163"/>
+        <nd ref="-164"/>
+        <nd ref="-165"/>
+        <nd ref="-166"/>
+        <nd ref="-161"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="building" v="yes"/>
+        <tag k="source" v="osm"/>
+        <tag k="uuid" v="{414eab16-310d-464e-93cd-cb316b45d507}"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2014-06-28T07:50:34.000Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-32" timestamp="2018-01-10T18:20:40Z" version="1" changeset="14856">
+        <nd ref="-147"/>
+        <nd ref="-148"/>
+        <nd ref="-149"/>
+        <nd ref="-150"/>
+        <nd ref="-151"/>
+        <nd ref="-152"/>
+        <nd ref="-147"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="building" v="yes"/>
+        <tag k="source" v="osm"/>
+        <tag k="uuid" v="{43d45970-6335-46f6-b6cc-e7cb3f7ea473}"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2014-06-28T07:50:34.000Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-31" timestamp="2018-01-10T18:20:40Z" version="1" changeset="14856">
+        <nd ref="-143"/>
+        <nd ref="-144"/>
+        <nd ref="-145"/>
+        <nd ref="-146"/>
+        <nd ref="-143"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="building" v="yes"/>
+        <tag k="source" v="osm"/>
+        <tag k="uuid" v="{72dd5e7c-9608-4824-9090-7fd2532c6873}"/>
+        <tag k="amenity" v="public_building"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2011-06-16T10:51:43.000Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-30" timestamp="2018-01-10T18:20:40Z" version="1" changeset="14856">
+        <nd ref="-137"/>
+        <nd ref="-138"/>
+        <nd ref="-139"/>
+        <nd ref="-140"/>
+        <nd ref="-137"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="addr:city" v="Pyongyang 평양"/>
+        <tag k="building" v="house"/>
+        <tag k="source" v="osm"/>
+        <tag k="uuid" v="{f05c74c0-55ce-4dcd-99fb-a4f443305f1e}"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2013-12-16T22:00:34.000Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-28" timestamp="2018-01-10T18:20:40Z" version="1" changeset="14856">
+        <nd ref="-126"/>
+        <nd ref="-127"/>
+        <nd ref="-128"/>
+        <nd ref="-129"/>
+        <nd ref="-126"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="building" v="yes"/>
+        <tag k="source" v="osm"/>
+        <tag k="uuid" v="{dd6777ab-6799-4de9-83bb-91cf06e03851}"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2011-04-10T20:41:18.000Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-27" timestamp="2018-01-10T18:20:40Z" version="1" changeset="14856">
+        <nd ref="-122"/>
+        <nd ref="-123"/>
+        <nd ref="-124"/>
+        <nd ref="-125"/>
+        <nd ref="-122"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="building" v="yes"/>
+        <tag k="source" v="osm"/>
+        <tag k="uuid" v="{84912110-53fe-4ee1-8d9b-a5279c3832ca}"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2011-04-10T20:41:17.000Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-26" timestamp="2018-01-10T18:20:40Z" version="1" changeset="14856">
+        <nd ref="-112"/>
+        <nd ref="-113"/>
+        <nd ref="-114"/>
+        <nd ref="-115"/>
+        <nd ref="-116"/>
+        <nd ref="-117"/>
+        <nd ref="-118"/>
+        <nd ref="-119"/>
+        <nd ref="-120"/>
+        <nd ref="-121"/>
+        <nd ref="-112"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="building" v="yes"/>
+        <tag k="source" v="osm"/>
+        <tag k="uuid" v="{c6e2c966-7c56-44cc-bd23-91f3aecbe9f7}"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2011-10-05T07:50:54.000Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-25" timestamp="2018-01-10T18:20:40Z" version="1" changeset="14856">
+        <nd ref="-106"/>
+        <nd ref="-107"/>
+        <nd ref="-108"/>
+        <nd ref="-109"/>
+        <nd ref="-110"/>
+        <nd ref="-111"/>
+        <nd ref="-106"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="building" v="yes"/>
+        <tag k="source" v="osm"/>
+        <tag k="uuid" v="{e56cb9e9-825a-4823-885a-a53286a00920}"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2011-10-05T07:50:54.000Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-24" timestamp="2018-01-10T18:20:40Z" version="1" changeset="14856">
+        <nd ref="-96"/>
+        <nd ref="-97"/>
+        <nd ref="-98"/>
+        <nd ref="-99"/>
+        <nd ref="-96"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="building" v="yes"/>
+        <tag k="source" v="osm"/>
+        <tag k="uuid" v="{677df91d-fae7-4eaf-ae18-d2aa040551bc}"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2011-10-05T07:50:54.000Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-23" timestamp="2018-01-10T18:20:40Z" version="1" changeset="14856">
+        <nd ref="-92"/>
+        <nd ref="-93"/>
+        <nd ref="-94"/>
+        <nd ref="-95"/>
+        <nd ref="-92"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="building" v="yes"/>
+        <tag k="source" v="osm"/>
+        <tag k="uuid" v="{017e9783-be30-45c2-ab2d-2b1ae4aa3c21}"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2011-10-05T07:50:55.000Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-22" timestamp="2018-01-10T18:20:40Z" version="1" changeset="14856">
+        <nd ref="-84"/>
+        <nd ref="-85"/>
+        <nd ref="-86"/>
+        <nd ref="-87"/>
+        <nd ref="-88"/>
+        <nd ref="-89"/>
+        <nd ref="-90"/>
+        <nd ref="-91"/>
+        <nd ref="-84"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="building" v="yes"/>
+        <tag k="source" v="osm"/>
+        <tag k="uuid" v="{6d0afaea-a5a9-418b-bdd4-0a37b1d018e3}"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2011-10-05T07:50:55.000Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-21" timestamp="2018-01-10T18:20:40Z" version="1" changeset="14856">
+        <nd ref="-78"/>
+        <nd ref="-79"/>
+        <nd ref="-80"/>
+        <nd ref="-81"/>
+        <nd ref="-82"/>
+        <nd ref="-83"/>
+        <nd ref="-78"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="building" v="yes"/>
+        <tag k="source" v="osm"/>
+        <tag k="uuid" v="{5f77c891-839a-41fc-bf74-3a3c608dc38b}"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2011-10-05T07:50:55.000Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-20" timestamp="2018-01-10T18:20:40Z" version="1" changeset="14856">
+        <nd ref="-74"/>
+        <nd ref="-75"/>
+        <nd ref="-76"/>
+        <nd ref="-77"/>
+        <nd ref="-74"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="building" v="yes"/>
+        <tag k="source" v="osm"/>
+        <tag k="uuid" v="{d4b902ed-f94e-47fd-ab56-e1867a5812a8}"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2011-10-05T07:50:55.000Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-19" timestamp="2018-01-10T18:20:40Z" version="1" changeset="14856">
+        <nd ref="-68"/>
+        <nd ref="-69"/>
+        <nd ref="-70"/>
+        <nd ref="-71"/>
+        <nd ref="-68"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="building" v="yes"/>
+        <tag k="source" v="osm"/>
+        <tag k="uuid" v="{51aba3f2-2279-4a3e-98c6-d922bdb4a6d6}"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2014-06-28T07:48:10.000Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-17" timestamp="2018-01-10T18:20:40Z" version="1" changeset="14856">
+        <nd ref="-60"/>
+        <nd ref="-61"/>
+        <nd ref="-62"/>
+        <nd ref="-63"/>
+        <nd ref="-60"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="building" v="yes"/>
+        <tag k="source" v="osm"/>
+        <tag k="uuid" v="{7ad7ab4f-065f-42ec-8cc3-7d90d85b7e82}"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2014-06-28T07:48:10.000Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-59"/>
+        <nd ref="-72"/>
+        <nd ref="-73"/>
+        <nd ref="-58"/>
+        <nd ref="-59"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="building" v="yes"/>
+        <tag k="source" v="osm"/>
+        <tag k="uuid" v="{b3cc76f2-1ae6-4ac5-b2ca-4046310aeb64}"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2011-04-10T13:22:41.000Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-100"/>
+        <nd ref="-101"/>
+        <nd ref="-57"/>
+        <nd ref="-56"/>
+        <nd ref="-102"/>
+        <nd ref="-55"/>
+        <nd ref="-54"/>
+        <nd ref="-103"/>
+        <nd ref="-104"/>
+        <nd ref="-105"/>
+        <nd ref="-100"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="building" v="yes"/>
+        <tag k="source" v="osm"/>
+        <tag k="uuid" v="{4ea51e08-2643-4571-b0a8-14f5e309f944}"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2011-10-05T07:50:54.000Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-53"/>
+        <nd ref="-134"/>
+        <nd ref="-52"/>
+        <nd ref="-53"/>
+        <tag k="historic" v="monument"/>
+        <tag k="start_date" v="1982"/>
+        <tag k="name:zh" v="主題思想塔"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="height" v="5"/>
+        <tag k="addr:city" v="Pyongyang 평양"/>
+        <tag k="name:es" v="Torre Juche"/>
+        <tag k="building" v="yes"/>
+        <tag k="source" v="osm"/>
+        <tag k="uuid" v="{a44e8fa1-efd6-434b-b92e-4bf4af962865}"/>
+        <tag k="name" v="주체사상탑"/>
+        <tag k="wikipedia" v="es:Torre Juche"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="tourism" v="attraction"/>
+        <tag k="source:datetime" v="2014-08-15T12:19:09.000Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-49"/>
+        <nd ref="-141"/>
+        <nd ref="-142"/>
+        <nd ref="-48"/>
+        <nd ref="-49"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="building" v="yes"/>
+        <tag k="source" v="osm"/>
+        <tag k="uuid" v="{5505dee5-781f-40fa-8ec9-d16ef6aba3a7}"/>
+        <tag k="amenity" v="public_building"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2011-06-16T10:51:43.000Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-153"/>
+        <nd ref="-154"/>
+        <nd ref="-155"/>
+        <nd ref="-156"/>
+        <nd ref="-47"/>
+        <nd ref="-46"/>
+        <nd ref="-157"/>
+        <nd ref="-153"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="building" v="yes"/>
+        <tag k="source" v="osm"/>
+        <tag k="uuid" v="{67ccb898-4998-460d-ae4c-644508594fd0}"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2014-06-28T07:50:34.000Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-158"/>
+        <nd ref="-45"/>
+        <nd ref="-44"/>
+        <nd ref="-158"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-43"/>
+        <nd ref="-159"/>
+        <nd ref="-160"/>
+        <nd ref="-42"/>
+        <nd ref="-43"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-41"/>
+        <nd ref="-167"/>
+        <nd ref="-168"/>
+        <nd ref="-40"/>
+        <nd ref="-41"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="building" v="yes"/>
+        <tag k="source" v="osm"/>
+        <tag k="uuid" v="{6ad440da-ec6b-4300-be0c-2f760e833591}"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2011-04-10T13:09:01.000Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-7" timestamp="2018-01-10T18:15:58Z" version="1" changeset="14855">
+        <nd ref="-34"/>
+        <nd ref="-35"/>
+        <nd ref="-36"/>
+        <nd ref="-37"/>
+        <nd ref="-34"/>
+        <tag k="width" v="14"/>
+        <tag k="condition" v="functional"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="height" v="20"/>
+        <tag k="length" v="66"/>
+        <tag k="building" v="yes"/>
+        <tag k="source" v="osm"/>
+        <tag k="uuid" v="{2ed42705-af19-4a1b-a4cc-dadd1426ea99};{684a005b-6502-4da3-ad3e-2ac65fd38b4f}"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2017-11-30T17:17:27Z;2014-06-28T07:48:10.000Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-6" timestamp="2018-01-10T18:15:58Z" version="1" changeset="14855">
+        <nd ref="-30"/>
+        <nd ref="-31"/>
+        <nd ref="-32"/>
+        <nd ref="-33"/>
+        <nd ref="-30"/>
+        <tag k="width" v="13"/>
+        <tag k="condition" v="functional"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="height" v="31"/>
+        <tag k="length" v="76"/>
+        <tag k="building" v="yes"/>
+        <tag k="source" v="osm"/>
+        <tag k="uuid" v="{57627fc4-6008-4286-9a3a-8467af381fd9};{482cc2f0-ca65-492d-82b7-5ec566710974}"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2017-11-30T17:17:27Z;2011-04-10T20:41:16.000Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-5" timestamp="2018-01-10T18:15:58Z" version="1" changeset="14855">
+        <nd ref="-26"/>
+        <nd ref="-27"/>
+        <nd ref="-28"/>
+        <nd ref="-29"/>
+        <nd ref="-26"/>
+        <tag k="width" v="13"/>
+        <tag k="condition" v="functional"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="height" v="18"/>
+        <tag k="length" v="82"/>
+        <tag k="building" v="yes"/>
+        <tag k="source" v="osm;osm;osm"/>
+        <tag k="uuid" v="{95d410fa-03c8-43ec-be57-d7b8a9b77a5c}"/>
+        <tag k="attribution" v="osm;osm;osm"/>
+        <tag k="source:datetime" v="2017-11-30T17:17:27Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-4" timestamp="2018-01-10T18:15:58Z" version="1" changeset="14855">
+        <nd ref="-9"/>
+        <nd ref="-10"/>
+        <nd ref="-11"/>
+        <nd ref="-12"/>
+        <nd ref="-13"/>
+        <nd ref="-14"/>
+        <nd ref="-15"/>
+        <nd ref="-16"/>
+        <nd ref="-17"/>
+        <nd ref="-18"/>
+        <nd ref="-19"/>
+        <nd ref="-20"/>
+        <nd ref="-9"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="source" v="osm;osm;osm"/>
+        <tag k="uuid" v="{ac7a8da6-b829-4f96-86f0-bd05ee6d0446}"/>
+        <tag k="attribution" v="osm;osm;osm"/>
+        <tag k="source:datetime" v="2017-11-30T17:17:28Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3" timestamp="2018-01-10T18:15:58Z" version="1" changeset="14855">
+        <nd ref="-5"/>
+        <nd ref="-6"/>
+        <nd ref="-7"/>
+        <nd ref="-8"/>
+        <nd ref="-5"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="source" v="osm;osm;osm"/>
+        <tag k="uuid" v="{6739b3ac-bc84-4018-b100-3d77e61254a9}"/>
+        <tag k="attribution" v="osm;osm;osm"/>
+        <tag k="source:datetime" v="2017-11-30T17:17:28Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-38"/>
+        <nd ref="-2"/>
+        <nd ref="-1"/>
+        <nd ref="-39"/>
+        <nd ref="-38"/>
+        <tag k="width" v="15"/>
+        <tag k="condition" v="functional"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="height" v="21"/>
+        <tag k="length" v="70"/>
+        <tag k="building" v="yes"/>
+        <tag k="source" v="osm;Bing"/>
+        <tag k="uuid" v="{da9dfa18-a887-40d7-8750-475a63cd14a4};{d21de8a5-dd9d-40b8-b1d2-cdcde07fa245}"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2017-11-30T17:17:27Z;2011-10-05T07:40:59.000Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <relation visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-1" role="reviewee"/>
+        <member type="way" ref="-21" role="reviewee"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:type" v="Building"/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:score" v="1"/>
+        <tag k="hoot:review:note" v="Unmatched buildings are overlapping."/>
+        <tag k="hoot:review:sort_order" v="1"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-5" role="reviewee"/>
+        <member type="way" ref="-28" role="reviewee"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:type" v="Building"/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:score" v="0.1"/>
+        <tag k="hoot:review:note" v="Very little building overlap. Very similar building orientation. Building edges not very close to each other."/>
+        <tag k="hoot:review:sort_order" v="0"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-10" role="outer"/>
+        <member type="way" ref="-9" role="outer"/>
+        <tag k="width" v="45"/>
+        <tag k="condition" v="functional"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="height" v="20"/>
+        <tag k="length" v="75"/>
+        <tag k="building" v="yes"/>
+        <tag k="source" v="osm"/>
+        <tag k="uuid" v="{824d0dbe-ec1e-4a8f-bcbb-23ff49fe548a};{873e78a6-303a-4493-ae45-cb3a1bc26592}"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2017-11-30T17:17:27Z;2014-06-28T07:50:34.000Z"/>
+        <tag k="type" v="multipolygon"/>
+        <tag k="error:circular" v="15"/>
+    </relation>
+    <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-4" role="outer"/>
+        <member type="way" ref="-3" role="inner"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="name:ru" v="Научно-исследовательский институт кинематографа"/>
+        <tag k="name:ko" v="영화과학연구소"/>
+        <tag k="building" v="yes"/>
+        <tag k="source" v="osm"/>
+        <tag k="uuid" v="{5f03b739-5b66-4ae6-ac78-2e2b7b0a2041}"/>
+        <tag k="name" v="영화과학연구소"/>
+        <tag k="office" v="research"/>
+        <tag k="amenity" v="public_building"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2015-05-14T11:24:43.000Z"/>
+        <tag k="name:en" v="Cinematography Science Research"/>
+        <tag k="type" v="multipolygon"/>
+        <tag k="error:circular" v="15"/>
+    </relation>
+</osm>

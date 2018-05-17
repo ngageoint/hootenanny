@@ -1299,7 +1299,7 @@ tds61 = {
             'hunting_stand', 'hydrant', 'life_ring', 'loading_dock', 'marketplace', 'nameplate', 'park', 'parking',
             'parking_entrance', 'parking_space', 'picnic_table', 'post_box', 'recycling', 'street_light', 'swimming_pool',
             'taxi', 'trailer_park', 'tricycle_station', 'vending_machine', 'waste_basket', 'waste_disposal', 'water',
-            'water_point', 'watering_place', 'yes',
+            'water_point', 'watering_place', 'yes', 'ferry_terminal',
             'fuel' // NOTE: Fuel goes to a different F_CODE
             ]; // End notBuildingList
 
@@ -1791,6 +1791,26 @@ tds61 = {
                 tags.product = 'gas';
                 break;
         }
+
+        // Stop some Religion tags from stomping on Denomination tags
+        if (tags.religion && tags.denomination)
+        {
+            if (tags.religion == 'christian' || tags.religion == 'muslim')
+            {
+                switch (tags.denomination)
+                {
+                    case 'roman_catholic':
+                    case 'orthodox':
+                    case 'protestant':
+                    case 'chaldean_catholic':
+                    case 'nestorian': // Not sure about this
+                    case 'shia':
+                    case 'sunni':
+                        delete tags.religion;
+                        break;
+                } // End switch
+            }
+        } // End if religion & denomination
 
     }, // End applyToTdsPreProcessing
 
