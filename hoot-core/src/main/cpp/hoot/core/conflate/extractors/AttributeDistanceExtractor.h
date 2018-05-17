@@ -34,7 +34,7 @@ namespace hoot
 
 /**
  * See exporatory funds report for details.
- * Compares "distance" between tags
+ * Calculates "distance" between tags using hoot::TagComparator
  */
 class AttributeDistanceExtractor : public WayFeatureExtractor
 {
@@ -50,7 +50,7 @@ public:
   virtual std::string getName() const;
 
   virtual QString getDescription() const
-  { return "TODO"; }
+  { return "Calculates \"distance\" between tags using hoot::TagComparator"; }
 
 protected:
 

@@ -46,7 +46,7 @@ public:
   virtual std::string getClassName() const { return className(); }
 
   virtual QString getDescription() const
-  { return "Derives a score from how parallel teh ways are to each-other"; }
+  { return "Derives a score from how parallel the ways are to each-other"; }
 
 protected:
 
