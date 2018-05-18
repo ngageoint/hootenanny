@@ -73,7 +73,7 @@ hoot map-diff $HOOT_OPTS $GOLD_DIR/Poi1-cropped.osm $OUTPUT_DIR/Poi1-cropped-osm
 echo "hoot api db bounds --> ogr"
 echo ""
 hoot convert $HOOT_OPTS test-files/conflate/point/Poi1.osm "$HOOT_DB_URL/Poi1"
-hoot convert-osm2ogr $HOOT_OPTS -D convert.bounding.box=$BOUNDS translations/Poi.js "$HOOT_DB_URL/Poi1" $OUTPUT_DIR/Poi1-cropped-hootapidb.shp
+hoot convert $HOOT_OPTS -D convert.bounding.box=$BOUNDS "$HOOT_DB_URL/Poi1" $OUTPUT_DIR/Poi1-cropped-hootapidb.shp --trans translations/Poi.js
 hoot convert $HOOT_OPTS $OUTPUT_DIR/Poi1-cropped-hootapidb/poi.shp $OUTPUT_DIR/Poi1-cropped-hootapidb-ogr.osm
 hoot map-diff $HOOT_OPTS $GOLD_DIR/Poi1-cropped-2.osm $OUTPUT_DIR/Poi1-cropped-hootapidb-ogr.osm
 
@@ -81,7 +81,7 @@ echo "osm api db bounds --> ogr"
 echo ""
 scripts/database/CleanAndInitializeOsmApiDb.sh
 hoot convert $HOOT_OPTS test-files/conflate/point/Poi1.osm $OSM_API_DB_URL
-hoot convert-osm2ogr $HOOT_OPTS -D convert.bounding.box=$BOUNDS translations/Poi.js $OSM_API_DB_URL $OUTPUT_DIR/Poi1-cropped-osmapidb.shp
+hoot convert $HOOT_OPTS -D convert.bounding.box=$BOUNDS $OSM_API_DB_URL $OUTPUT_DIR/Poi1-cropped-osmapidb.shp --trans translations/Poi.js
 hoot convert $HOOT_OPTS $OUTPUT_DIR/Poi1-cropped-osmapidb/poi.shp $OUTPUT_DIR/Poi1-cropped-osmapidb-ogr.osm
 hoot map-diff $HOOT_OPTS $GOLD_DIR/Poi1-cropped-2.osm $OUTPUT_DIR/Poi1-cropped-osmapidb-ogr.osm
 

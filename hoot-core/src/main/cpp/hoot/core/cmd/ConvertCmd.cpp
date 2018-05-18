@@ -80,9 +80,19 @@ public:
     QElapsedTimer timer;
     timer.start();
 
-    const QString input = args[0];
-    const QString output = args[1];
+    LOG_VARD(args.size());
+    LOG_VARD(args);
+    const QString input = args[0].trimmed();
+    LOG_VARD(input);
+    const QString output = args[1].trimmed();
+    LOG_VARD(output);
 
+    LOG_VARD(IoUtils::isSupportedOsmFormat(input));
+    LOG_VARD(IoUtils::isSupportedOsmFormat(output));
+    LOG_VARD(IoUtils::isSupportedOgrFormat(input));
+    LOG_VARD(IoUtils::isSupportedOgrFormat(output, false));
+
+    //TODO: what happens when no translation is specified going to/from OGR?
     QString translation;
     if (args.size() > 2 && args.contains("--trans"))
     {
@@ -92,11 +102,12 @@ public:
         throw HootException("Invalid translation specified.");
       }
       //TODO: Would a translation ever apply to shape file output?
-      if (!IoUtils::isSupportedOgrFormat(input) && !IoUtils::isSupportedOgrFormat(output))
+      if (!IoUtils::isSupportedOgrFormat(input) && !IoUtils::isSupportedOgrFormat(output, false))
       {
         throw HootException("A translation can only be specified when converting to/from OGR formats.");
       }
     }
+    LOG_VARD(translation);
 
     QStringList cols;
     if (args.size() > 2 && args.contains("--cols"))
@@ -111,6 +122,7 @@ public:
           "Columns may only be specified when converting from an OSM format to the shape file format.");
       }
     }
+    LOG_VARD(cols);
 
     int featureReadLimit = 0;
     if (args.size() > 2 && args.contains("--limit"))
@@ -128,16 +140,18 @@ public:
         throw HootException("Limit may only be specified when converting OGR inputs.");
       }
     }
+    LOG_VARD(featureReadLimit);
 
     LOG_INFO("Converting " << input.right(100) << " to " << output.right(100) << "...");
 
-    //TODO: try to simplify this logic down to as few if/elses as possible
+    //TODO: try to simplify this logic down to as few if/elses as possible, using the factories
+    //to select readers/writers
 
-    //osm2shp
     if (output.toLower().endsWith(".shp") && IoUtils::isSupportedOsmFormat(input) &&
         !cols.isEmpty())
     {
       LOG_DEBUG("osm2shp");
+      LOG_VARD(cols);
 
       OsmMapPtr map(new OsmMap());
       loadMap(map, input, true);
@@ -146,8 +160,7 @@ public:
       writer.setColumns(cols);
       writer.write(map, output);
     }
-    //osm2ogr
-    else if (IoUtils::isSupportedOsmFormat(input) && IoUtils::isSupportedOgrFormat(output) &&
+    else if (IoUtils::isSupportedOsmFormat(input) && IoUtils::isSupportedOgrFormat(output, false) &&
              !translation.isEmpty())
     {
       LOG_DEBUG("osm2ogr");
@@ -166,8 +179,7 @@ public:
 
       OsmMapReaderFactory readerFactory = OsmMapReaderFactory::getInstance();
       if (readerFactory.hasElementInputStream(input) &&
-          //TODO: deal with these ops
-          ConfigOptions().getOsm2ogrOps().size() == 0 &&
+          ConfigOptions().getConvertOps().size() == 0 &&
           //none of the convert bounding box supports are able to do streaming I/O at this point
           !ConfigUtils::boundsOptionEnabled())
       {
@@ -199,13 +211,11 @@ public:
         OsmMapPtr map(new OsmMap());
         loadMap(map, input, true);
 
-        //TODO: deal with these ops
-        NamedOp(ConfigOptions().getOsm2ogrOps()).apply(map);
+        NamedOp(ConfigOptions().getConvertOps()).apply(map);
         MapProjector::projectToWgs84(map);
         writer->write(map);
       }
     }
-    //ogr2osm
     else if (IoUtils::isSupportedOgrFormat(input) && IoUtils::isSupportedOsmFormat(output) &&
              !translation.isEmpty())
     {
@@ -228,10 +238,11 @@ public:
 
       LOG_INFO("Reading layers...");
       QStringList inputs = input.split(" ");
+      LOG_VARD(inputs);
       for (int i = 0; i < inputs.size(); i++)
       {
-        QString input = inputs[i];
-        LOG_VART(input);
+        QString input = inputs[i].trimmed();
+        LOG_VARD(input);
 
         if (input == "")
         {
@@ -251,6 +262,7 @@ public:
           layers = reader.getFilteredLayerNames(input);
           layers.sort();
         }
+        LOG_VARD(layers);
 
         if (layers.size() == 0)
         {
@@ -271,12 +283,12 @@ public:
         vector<float> progressWeights;
         for (int i = 0; i < layers.size(); i++)
         {
-          LOG_VART(layers[i]);
+          LOG_VARD(layers[i]);
           // simply open the file, get the meta feature count value, and close
           int featuresPerLayer = reader.getFeatureCount(input, layers[i]);
           progressWeights.push_back((float)featuresPerLayer);
           // cover the case where no feature count available efficiently
-          if(featuresPerLayer == -1) undefinedCounts++;
+          if (featuresPerLayer == -1) undefinedCounts++;
           else featureCountTotal += featuresPerLayer;
         }
 
@@ -285,23 +297,23 @@ public:
         // determine weights for 3 possible cases
         if (undefinedCounts == layers.size())
         {
-          for (int i=0;i<layers.size();i++) progressWeights[i]=1./(float)layers.size();
+          for (int i = 0; i < layers.size(); i++) progressWeights[i] = 1. / (float)layers.size();
         }
         else if(definedCounts == layers.size())
         {
-          for (int i=0;i<layers.size();i++) progressWeights[i] /= (float)featureCountTotal;
+          for (int i = 0; i < layers.size(); i++) progressWeights[i] /= (float)featureCountTotal;
         }
         else
         {
-          for (int i=0;i<layers.size();i++)
-            if(progressWeights[i] == -1)
+          for (int i = 0; i<layers.size(); i++)
+            if (progressWeights[i] == -1)
             {
-              progressWeights[i] = (1./(float)definedCounts) * featureCountTotal;
+              progressWeights[i] = (1. / (float)definedCounts) * featureCountTotal;
             }
           // reset featurecount total and recalculate
           featureCountTotal = 0;
-          for (int i=0;i<layers.size();i++) featureCountTotal += progressWeights[i];
-          for (int i=0;i<layers.size();i++) progressWeights[i] /= (float)featureCountTotal;
+          for (int i = 0; i < layers.size(); i++) featureCountTotal += progressWeights[i];
+          for (int i = 0; i < layers.size(); i++) progressWeights[i] /= (float)featureCountTotal;
         }
 
         // read each layer's data
@@ -312,8 +324,8 @@ public:
             std::cout << ".";
             std::cout.flush();
           }
-          LOG_VART(input);
-          LOG_VART(layers[i]);
+          LOG_VARD(input);
+          LOG_VARD(layers[i]);
           progress.setTaskWeight(progressWeights[i]);
           reader.read(input, layers[i], map, progress);
         }
@@ -326,7 +338,17 @@ public:
       }
 
       MapProjector::projectToPlanar(map);
-      NamedOp(ConfigOptions().getOgr2osmOps()).apply(map);
+      QStringList convertOps = ConfigOptions().getConvertOps();
+      //the ordering for these ogr2osm ops may matter
+      if (ConfigOptions().getOgr2osmSimplifyComplexBuildings())
+      {
+        convertOps.prepend("hoot::BuildingPartMergeOp");
+      }
+      if (ConfigOptions().getOgr2osmMergeNearbyNodes())
+      {
+        convertOps.prepend("hoot::MergeNearbyNodes");
+      }
+      NamedOp(ConfigOptions().getConvertOps()).apply(map);
       MapProjector::projectToWgs84(map);
       saveMap(map, output);
 

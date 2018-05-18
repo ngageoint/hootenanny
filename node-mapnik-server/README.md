@@ -4,7 +4,7 @@ The node-mapnik-server is a Node.js app that uses node-mapnik to render tiles on
 ### Datasource
 The render databases are built for each Hoot dataset and follow the naming convention 'renderdb_*layerid*'.  A separate PostGIS enabled database is created for each Hoot dataset with the script found [here](https://github.com/ngageoint/hootenanny/blob/mapnik/scripts/services/exportrenderdb.sh).  The map dataset features are exported from the OSM nodes, ways, and relations in the hoot db to PostGIS layers using the following hoot command:
 
-`hoot convert-osm2ogr -D api.db.email=test@test.com translations/RenderDb.js "postgresql://hoot:hoottest@localhost:5432/hoot/example" "PG:dbname='renderdb_example' host='localhost' port='5432' user='hoot' password='hoottest'"`
+`hoot convert -D api.db.email=test@test.com "postgresql://hoot:hoottest@localhost:5432/hoot/example" "PG:dbname='renderdb_example' host='localhost' port='5432' user='hoot' password='hoottest'" --trans translations/RenderDb.js`
 
 The features in the render database are not updated after hoot dataset creation, but their purpose is only to provide a small-scale rendering of the data when the limit of loading editable vector data into the UI is reached.  These render databases are deleted when the Hoot dataset tables for the layername are deleted from the hoot api db.
 

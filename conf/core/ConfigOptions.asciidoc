@@ -12,7 +12,7 @@
 // * What does this configuration change?
 // * If relevant, what are the units of the config option (e.g. meters)?
 // * Where can the user go to get more information? Please reference the
-//   appropriate document. E.g. "See `convert-ogr2osm` in the _Command Line
+//   appropriate document. E.g. "See `convert` in the _Command Line
 //   Reference_ for more information."
 // * What other options may be of interest? E.g. "See also
 //   `big.perty.op.sigma`"
@@ -484,8 +484,8 @@ the convert.bounding.box setting for OSM API database data sources only.
 * Default Value:
 ** ``
 
-Specifies one or more semi-colon delimited operations to perform before writing data. This is only
-applicable to the convert command.
+Specifies one or more semi-colon delimited operations to perform before writing converted data.
+This is only applicable to the convert command.
 
 === cookie.cutter.alpha
 
@@ -830,7 +830,7 @@ of assigning IDs within OSM.
 Example Usage:
 
 ----
-hoot convert-ogr2osm -D id.generator=hoot::PositiveIdGenerator -D id.generator.node.start=100 -D id.generator.relation.start=200 -D id.generator.way.start=300 $HOOT_HOME/translations/Identity.js myoutput.osm myinput.osm
+hoot convert -D id.generator=hoot::PositiveIdGenerator -D id.generator.node.start=100 -D id.generator.relation.start=200 -D id.generator.way.start=300 myinput.osm myoutput.osm --trans $HOOT_HOME/translations/Identity.js
 ----
 
 === id.generator.node.start
@@ -1262,7 +1262,7 @@ RAM usage of applications in a shared server environment.
 * Data Type: double
 * Default Value: `1.0`
 
-When merging nodes during convert-ogr2osm, determines what tolerance should be used for deciding two nodes
+When merging nodes during convert, determines what tolerance should be used for deciding two nodes
 are identical. Units in meters and defaults to 1.0m.
 
 [[merger.creators]]
@@ -1535,7 +1535,7 @@ intelligently use indexes, others will simply filter features after reading from
 Example Usage:
 
 ----
-hoot convert-ogr2osm -D ogr.reader.bounding.box=106.851,-6.160,107.052,-5.913 translations/Identity.js output.osm test-files/jakarta_raya_coastline.shp
+hoot convert -D ogr.reader.bounding.box=106.851,-6.160,107.052,-5.913 test-files/jakarta_raya_coastline.shp output.osm --trans translations/Identity.js
 ----
 
 === ogr.reader.bounding.box.latlng
@@ -1652,14 +1652,20 @@ hoot convert \
   PG:"dbname='osm_gis2' host='localhost' port='5432' user='hoot' password='hoottest'"
 ----
 
-=== ogr2osm.ops
+=== ogr2osm.merge.nearby.nodes
 
-* Data Type: list
-* Default Value:
-** `hoot::MergeNearbyNodes` - Merges nodes within the distance defined by merge.nearby.nodes.distance.
-** `hoot::BuildingPartMergeOp` - Implicitly merges certain individual building parts into a single part.
+* Data Type: bool
+* Default Value: `true`
 
-Operations that should be applied to ingested OGR data before saving the data.
+Merges nearby nodes together when converting from an OGR format to OSM.
+
+=== ogr2osm.simplify.complex.buildings
+
+* Data Type: bool
+* Default Value: `true`
+
+Implicitly merges certain individual building parts into a single part when converting from an OGR
+format to OSM.
 
 === osmapidb.bulk.inserter.disable.database.constraints.during.write
 
@@ -1747,14 +1753,6 @@ written if the value is not empty.
 
 If true, the OSM map writer will NOT write a file if the map is empty.
 The default is to write a file even if the map is empty.
-
-=== osm2ogr.ops
-
-* Data Type: list
-* Default Value:
-** ``
-
-User specified operations for converting OSM files to OGR compatible file types.
 
 === perty.apply.rubber.sheet
 
@@ -2887,7 +2885,6 @@ before the operations in `conflate.post.ops`.
 * Data Type: list
 * Default Value:
 ** ``
-
 
 List of operations to apply immediately before conflating when using Unifying Conflation only.  Runs
 after the operations in `conflate.pre.ops`.

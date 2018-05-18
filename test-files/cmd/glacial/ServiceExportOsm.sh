@@ -26,23 +26,22 @@ echo $SQL | psql -h $DB_HOST -d $WFS_DB_NAME -U $DB_USER -p $DB_PORT > /dev/null
 # Test osm with no translation
 export translation=""
 export outputtype=osm
-MAKEFLAGS= make -f $HOOT_HOME/test-files/cmd/glacial/osm2ogrscript > /dev/null
+MAKEFLAGS= make -f $HOOT_HOME/scripts/core/osm2ogrscript > /dev/null
 
 # Test shp with MPCP translation
 export translation="translations/MGCP_TRD4.js"
 export outputtype=shp
-MAKEFLAGS= make -f $HOOT_HOME/test-files/cmd/glacial/osm2ogrscript > /dev/null
+MAKEFLAGS= make -f $HOOT_HOME/scripts/core/osm2ogrscript > /dev/null
 
 # Test gdb with TDSv6.1 translation
 export translation="translations/TDSv61.js"
 export outputtype=gdb
-MAKEFLAGS= make -f $HOOT_HOME/test-files/cmd/glacial/osm2ogrscript > /dev/null
+MAKEFLAGS= make -f $HOOT_HOME/scripts/core/osm2ogrscript > /dev/null
 
 # Test wfs with TDSv4.0 translation
 export translation="translations/TDSv40.js"
 export outputtype=wfs
-MAKEFLAGS= make -f $HOOT_HOME/test-files/cmd/glacial/osm2ogrscript > /dev/null
-
+MAKEFLAGS= make -f $HOOT_HOME/scripts/core/osm2ogrscript > /dev/null
 
 # Remove ingested data
 hoot delete-db-map $HOOT_OPTS $DB_URL/$input

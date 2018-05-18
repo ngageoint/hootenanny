@@ -10,7 +10,7 @@ rm -rf $OUTPUT
 mkdir -p test-output/cmd/slow
 
 # Make shapefiles
-hoot convert-osm2ogr -D ogr.thematic.structure=false $HOOT_HOME/translations/HootTest.js $INPUT $OUTPUT".shp"
+hoot convert -D ogr.thematic.structure=false $INPUT $OUTPUT".shp" --trans $HOOT_HOME/translations/HootTest.js
 
 hoot stats --brief $OUTPUT/BRIDGE_C.shp | grep Count
 hoot stats --brief $OUTPUT/CART_TRACK_C.shp | grep Count

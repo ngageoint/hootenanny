@@ -55,9 +55,10 @@ public:
    * Returns true if the input format is a Hootenanny supported OGR format
    *
    * @param input input path
-   * @return true if the input is OGR and supported; false otherwise
+   * @param allowMultiple if true; then mutiple inputs can be passed in the input string
+   * @return true if all inputs passed in are OGR and supported; false otherwise
    */
-  static bool isSupportedOgrFormat(const QString input);
+  static bool isSupportedOgrFormat(const QString input, const bool allowMultiple = true);
 };
 
 }

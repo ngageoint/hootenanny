@@ -47,7 +47,7 @@ public class ExternalCommandRunnerImplTest {
 
         List<String> hootOptions = new LinkedList<>();
         hootOptions.add("-D");
-        hootOptions.add("\"osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor\"");
+        hootOptions.add("\"convert.ops=hoot::DecomposeBuildingRelationsVisitor\"");
         hootOptions.add("-D");
         hootOptions.add("\"conflate.add.score.tags=yes\"");
         hootOptions.add("-D");

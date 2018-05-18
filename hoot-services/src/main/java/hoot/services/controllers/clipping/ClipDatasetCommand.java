@@ -46,7 +46,6 @@ class ClipDatasetCommand extends ExternalCommand {
         super(jobId);
 
         List<String> options = new LinkedList<>();
-        //options.add("osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
         options.add("hootapi.db.writer.overwrite.map=true");
         options.add("hootapi.db.writer.create.user=true");
         options.add("api.db.email=test@test.com");

@@ -19,8 +19,8 @@ This is a contrived example set of commands that perform all the data preparatio
 
 ----------------------------
 # translate (may be optional)
-hoot convert-ogr2osm MyTranslation.py TranslatedOutput1.osm Input1.shp
-hoot convert-ogr2osm MyTranslation.py TranslatedOutput2.osm Input2.shp
+hoot convert Input1.shp TranslatedOutput1.osm --trans MyTranslation.py
+hoot convert Input2.shp TranslatedOutput2.osm --trans MyTranslation.py
 
 # crop (optional)
 hoot crop TranslatedOutput1.osm CroppedOutput1.osm "-77.0551,38.8845,-77.0281,38.9031"
@@ -49,12 +49,12 @@ Also, examine the geometries of the features with a backdrop of accurate satelli
 
 ==== Translating Test Data (may be optional)
 
-Once users have identified appropriate datasets to manually match, they will need to translate any non-OSM datasets into Hootenanny's OSM+ schema or create their own custom translation schema to do so.  If your input data is already OSM, you may skip this step.  If your input data already has name and type fields that correspond to the OSM standard, then you may also be able to skip this step.  See taginfo.openstreetmap.org for more information on the OSM tagging standard.  For detailed instructions on how to translate data, see the convert-ogr2osm command documentation.
+Once users have identified appropriate datasets to manually match, they will need to translate any non-OSM datasets into Hootenanny's OSM+ schema or create their own custom translation schema to do so.  If your input data is already OSM, you may skip this step.  If your input data already has name and type fields that correspond to the OSM standard, then you may also be able to skip this step.  See taginfo.openstreetmap.org for more information on the OSM tagging standard.  For detailed instructions on how to translate data, see the convert command documentation.
 
 An example:
 
 ----------------------
-hoot convert-ogr2osm MyTranslation.py TranslatedOutput.osm Input.shp
+hoot convert Input.shp TranslatedOutput.osm --trans MyTranslation.py
 ----------------------------
 
 ==== Cropping Test Data (optional)

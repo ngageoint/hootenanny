@@ -142,4 +142,18 @@ long FileUtils::getNumberOfLinesInFile(const QString file)
   return lineCount;
 }
 
+bool FileUtils::dirContainsFileWithExtension(const QDir dir, const QString extension)
+{
+  const QString ext = extension.toLower().replace(".", "");
+  const QStringList files = dir.entryList();
+  for (int i = 0; i < files.size(); i++)
+  {
+    if (files.at(i).toLower().endsWith(ext))
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
 }

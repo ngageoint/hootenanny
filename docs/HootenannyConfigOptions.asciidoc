@@ -77,7 +77,7 @@ Configuration parameters:
 [[OGR-Writer]]
 ==== OGR Writer
 
-The OGR Writer supports advanced translation of OSM formatted files into well defined tabular formats such as Shapefile and FileGDB. See the +--convert-osm2ogr+ documentation for specific examples of how to use the OGR Writer.
+The OGR Writer supports advanced translation of OSM formatted files into well defined tabular formats such as Shapefile and FileGDB. See the +--convert+ documentation for specific examples of how to use the OGR Writer.
 
 Configuration Parameters:
 
@@ -102,11 +102,10 @@ hoot convert \
   PG:"dbname='osm_gis2' host='localhost' port='5432' user='hoot' password='hoottest'" 
 
 # Same as above.
-hoot convert-osm2ogr \
+hoot convert \
   -D ogr.writer.pre.layer.name=bar \
-  test-files/io/SampleTranslation.js \
   test-files/io/SampleTranslation.osm \
-  PG:"dbname='osm_gis2' host='localhost' port='5432' user='hoot' password='hoottest'" 
+  PG:"dbname='osm_gis2' host='localhost' port='5432' user='hoot' password='hoottest'" --trans test-files/io/SampleTranslation.js
 
 # Convert example .osm file and write the resulting layers to a directory full of Shapefiles.
 # The directory will be named tmp/MyShapefiles, not tmp/MyShapefiles.shp

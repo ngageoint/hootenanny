@@ -10,7 +10,7 @@ The base command line interface follows the following syntax:
 hoot (operation) [args...]
 -----
 
-Where +operation+ is an operation name such as +convert-ogr2osm+ or +conflate+. The
+Where +operation+ is an operation name such as +convert+ or +conflate+. The
 parenthesis around +operation+ show that the argument is required.
 
 +[args...]+ shows that there are zero or more arguments to the operation. The
@@ -33,9 +33,6 @@ include::conflate.asciidoc[]
 include::conflate-differential.asciidoc[]
 include::conflate-cumulative.asciidoc[]
 include::convert.asciidoc[]
-include::convert-ogr2osm.asciidoc[]
-include::convert-osm2ogr.asciidoc[]
-include::convert-osm2shp.asciidoc[]
 include::cookie-cut.asciidoc[]
 include::crop.asciidoc[]
 include::delete-db-map.asciidoc[]

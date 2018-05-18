@@ -10,6 +10,6 @@ rm -rf $TA_OUT/caligdb.gdb
 ogr2ogr -f FileGDB -mapFieldType Integer64=Integer $TA_OUT/caligdb.gdb $TA_IN/calizip/cali-test.shp
 ogr2ogr -f FileGDB -mapFieldType Integer64=Integer -append $TA_OUT/caligdb.gdb $TA_IN/calizip/cali-fake-points.shp
 
-hoot convert-ogr2osm --warn $TA_IN/$TA_FILE-translation.js $TA_OUT/$TA_FILE.osm $TA_OUT/$TA_FILE.gdb
+hoot convert --warn $TA_OUT/$TA_FILE.gdb $TA_OUT/$TA_FILE.osm --trans $TA_IN/$TA_FILE-translation.js
 hoot map-diff --ignore-uuid $TA_OUT/$TA_FILE.osm $TA_IN/$TA_FILE.osm
 

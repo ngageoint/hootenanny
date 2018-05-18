@@ -30,6 +30,7 @@
 
 // Qt
 #include <QString>
+#include <QDir>
 
 namespace hoot
 {
@@ -81,6 +82,16 @@ public:
    * @return a line count
    */
   static long getNumberOfLinesInFile(const QString file);
+
+  /**
+   * Determines if a directory contains a file with the specified extension
+   *
+   * @param dir directory to examine
+   * @param extension file extension to search for
+   * @return returns true if the input directory contains at least one file with the specified
+   * extension; false otherwise
+   */
+  static bool dirContainsFileWithExtension(const QDir dir, const QString extension);
 };
 
 }

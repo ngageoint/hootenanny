@@ -6,7 +6,7 @@ set -e
 mkdir -p test-output/cmd/RubberSheetConflateTest
 
 # Broke this into seperate lines to make reading easier.
-hoot conflate -C core/RemoveReview2Pre.conf -D uuid.helper.repeatable=true -D osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor \
+hoot conflate -C core/RemoveReview2Pre.conf -D uuid.helper.repeatable=true -D convert.ops=hoot::DecomposeBuildingRelationsVisitor \
  -D writer.include.conflate.score.tags=true -D hootapi.db.writer.overwrite.map=true -D hootapi.db.writer.create.user=true -D api.db.email=test@test.com \
  -D "map.cleaner.transforms=hoot::ReprojectToPlanarOp;hoot::DuplicateWayRemover;hoot::SuperfluousWayRemover;hoot::IntersectionSplitter;hoot::UnlikelyIntersectionRemover;hoot::DualWaySplitter;hoot::ImpliedDividedMarker;hoot::DuplicateNameRemover;hoot::SmallWayMerger;hoot::RemoveEmptyAreasVisitor;hoot::RemoveDuplicateAreaVisitor;hoot::NoInformationElementRemover;hoot::RubberSheet" \
  -D "duplicate.name.case.sensitive=true" -D "small.way.merger.threshold=15" -D "rubber.sheet.ref=false" -D "rubber.sheet.minimum.ties=10" -D "unify.optimizer.time.limit=30" -D "ogr.split.o2s=false" -D "ogr.esri.fcsubtype=true" \

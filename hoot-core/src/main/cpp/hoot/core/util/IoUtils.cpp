@@ -27,8 +27,11 @@
 
 #include "IoUtils.h"
 
+// Hoot
 #include <hoot/core/io/OgrUtilities.h>
+#include "FileUtils.h"
 
+// Qt
 #include <QFileInfo>
 
 namespace hoot
@@ -41,10 +44,44 @@ bool IoUtils::isSupportedOsmFormat(const QString input)
          inputLower.startsWith("hootapidb://") || inputLower.startsWith("osmapidb://");
 }
 
-bool IoUtils::isSupportedOgrFormat(const QString input)
+bool IoUtils::isSupportedOgrFormat(const QString input, const bool allowMultiple)
 {
-  QFileInfo inputFileInfo(input);
-  return OgrUtilities::getInstance().getSupportedFormats(true).contains("." + inputFileInfo.suffix());
+  if (!allowMultiple && (input.contains(" ") || QFileInfo(input).isDir()))
+  {
+    return false;
+  }
+
+  //input is a dir; only accepting a dir as input if it contains a shape file for now
+  if (QFileInfo(input).isDir())
+  {
+    return FileUtils::dirContainsFileWithExtension(QFileInfo(input).dir(), "shp");
+  }
+  //multiple inputs
+  else if (input.contains(" "))
+  {
+    const QStringList inputs = input.split(" ");
+    if (inputs.size() == 0)
+    {
+      return false;
+    }
+    for (int i = 0; i < inputs.size(); i++)
+    {
+      const QString input = inputs.at(i);
+      const QString file = input.split(";")[0];
+      if (!OgrUtilities::getInstance().getSupportedFormats(true)
+              .contains("." + QFileInfo(file).suffix()))
+      {
+        return false;
+      }
+    }
+    return true;
+  }
+  //single input
+  else
+  {
+    return OgrUtilities::getInstance().getSupportedFormats(true)
+             .contains("." + QFileInfo(input).suffix());
+  }
 }
 
 }

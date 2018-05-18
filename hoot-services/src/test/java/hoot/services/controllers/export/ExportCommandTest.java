@@ -67,8 +67,8 @@ public class ExportCommandTest {
         assertNotNull(exportCommand.getWorkDir());
         assertNotNull(exportCommand.getCommand());
 
-        String expectedCommand = "hoot convert-osm2ogr --${DEBUG_LEVEL} -C RemoveReview2Pre.conf " +
-                "${HOOT_OPTIONS} ${TRANSLATION_PATH} ${INPUT_PATH} ${OUTPUT_PATH}";
+        String expectedCommand = "hoot convert --${DEBUG_LEVEL} -C RemoveReview2Pre.conf " +
+                "${HOOT_OPTIONS} ${INPUT_PATH} ${OUTPUT_PATH} --trans ${TRANSLATION_PATH}";
         assertEquals(expectedCommand, exportCommand.getCommand());
 
         assertTrue(exportCommand.getSubstitutionMap().containsKey("DEBUG_LEVEL"));
