@@ -1017,13 +1017,6 @@ same way when deriving raw implicit tag rules as it is when tagging elements wit
 
 A list of paths to include in the javascript translator search path.
 
-=== json.add.bbox
-
-* Data Type: bool
-* Default Value: `false`
-
-When reading JSON, add a tag with the bounding box for each element
-
 === json.format.hootenanny
 
 * Data Type: bool
@@ -1708,6 +1701,13 @@ the output is a SQL file.  If false, the ID update statements will not be writte
 This is required when using either the OsmApiDbAwareHootApiDbReader or the OsmApiDbAwareHootApiDbWriter
 It forces database reading/writing use the specified OSM API database as master for determining the
 sequencing of element ID's.
+
+=== osm.add.bbox.tag
+
+* Data Type: bool
+* Default Value: `false`
+
+Add a tag with the bounding box for each element
 
 === osm.map.reader.factory.reader
 

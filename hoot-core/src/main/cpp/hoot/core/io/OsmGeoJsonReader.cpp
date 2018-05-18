@@ -67,7 +67,6 @@ HOOT_FACTORY_REGISTER(OsmMapReader, OsmGeoJsonReader)
 
 OsmGeoJsonReader::OsmGeoJsonReader() : OsmJsonReader()
 {
-  _addBboxTag = ConfigOptions().getJsonAddBbox();
 }
 
 OsmGeoJsonReader::~OsmGeoJsonReader()
@@ -200,7 +199,6 @@ void OsmGeoJsonReader::_parseGeoJsonFeature(const boost::property_tree::ptree& f
     if (feature.not_found() != feature.find("geometry"))
     {
       pt::ptree geometry = feature.get_child("geometry");
-
       //  Type can be node, way, or relation
       string typeStr = properties.get("type", string("--"));
       string geoType = geometry.get("type", string("--"));
@@ -280,6 +278,14 @@ void OsmGeoJsonReader::_parseGeoJsonNode(const string& id, const pt::ptree& prop
     node_id = _map->createNextNodeId();
   //  Parse the geometry
   vector<Coordinate> coords = _parseGeometry(geometry);
+
+  // Defensive: We have seen files with empty coordinate arrays
+  if (coords.size() == 0)
+  {
+    LOG_INFO("Empty Coordinates. Skipping feature");
+    return;
+  }
+
   double lat = coords[0].y;
   double lon = coords[0].x;
   //  Construct node
@@ -292,6 +298,15 @@ void OsmGeoJsonReader::_parseGeoJsonNode(const string& id, const pt::ptree& prop
 
 void OsmGeoJsonReader::_parseGeoJsonWay(const string& id, const pt::ptree& properties, const pt::ptree& geometry)
 {
+  vector<Coordinate> coords = _parseGeometry(geometry);
+
+  // Defensive: We have seen files with empty coordinate arrays
+  if (coords.size() == 0)
+  {
+    LOG_INFO("Empty Coordinates. Skipping feature");
+    return;
+  }
+
   //  Get info we need to construct our way
   long way_id = -1;
   if (_useDataSourceIds)
@@ -301,8 +316,8 @@ void OsmGeoJsonReader::_parseGeoJsonWay(const string& id, const pt::ptree& prope
   //  Construct Way
   WayPtr way(new Way(_defaultStatus, way_id, _defaultCircErr));
   bool isPoly = (geometry.get("type", "").compare("Polygon") == 0);
+
   //  Add nodes
-  vector<Coordinate> coords = _parseGeometry(geometry);
   for (vector<Coordinate>::iterator it = coords.begin(); it != coords.end(); ++it)
   {
     if (isPoly && (it + 1) == coords.end())
@@ -322,15 +337,6 @@ void OsmGeoJsonReader::_parseGeoJsonWay(const string& id, const pt::ptree& prope
   _addTags(properties, way);
   //  Add way to map
   _map->addWay(way);
-
-  if (_addBboxTag)
-  {
-    const Envelope& bounds = way->getEnvelopeInternal(_map);
-    way->setTag("hoot:bbox",QString("%1,%2,%3,%4").arg(QString::number(bounds.getMinX(), 'g', 10))
-                .arg(QString::number(bounds.getMinY(), 'g', 10))
-                .arg(QString::number(bounds.getMaxX(), 'g', 10))
-                .arg(QString::number(bounds.getMaxY(), 'g', 10)));
-  }
 }
 
 void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& properties, const pt::ptree& geometry)
@@ -484,15 +490,6 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
   _addTags(properties, relation);
   //  Add relation to map
   _map->addRelation(relation);
-
-  if (_addBboxTag)
-  {
-    const Envelope& bounds = relation->getEnvelopeInternal(_map);
-    relation->setTag("hoot:bbox",QString("%1,%2,%3,%4").arg(QString::number(bounds.getMinX(), 'g', 10))
-                     .arg(QString::number(bounds.getMinY(), 'g', 10))
-                     .arg(QString::number(bounds.getMaxX(), 'g', 10))
-                     .arg(QString::number(bounds.getMaxY(), 'g', 10)));
-  }
 }
 
 void OsmGeoJsonReader::_parseMultiPointGeometry(const boost::property_tree::ptree& geometry, const RelationPtr& relation)
