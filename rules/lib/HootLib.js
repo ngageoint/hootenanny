@@ -230,6 +230,17 @@ function isPoi(e)
 }
 
 /**
+ * Returns true if the specified element is an railway element.
+ *
+ * See the OSM wiki for more information:
+ * http://wiki.openstreetmap.org/wiki/Railway
+ */
+function isRailway(e)
+{
+    return hoot.OsmSchema.isRailway(e);
+}
+
+/**
  * Returns true if the specified element has a name
  */
 function hasName(e)

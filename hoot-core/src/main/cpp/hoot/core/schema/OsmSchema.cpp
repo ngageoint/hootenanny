@@ -2049,6 +2049,23 @@ bool OsmSchema::isPoi(const Element& e)
   return result;
 }
 
+bool OsmSchema::isRailway(const Element& e)
+{
+  if (e.getElementType() == ElementType::Way || e.getElementType() == ElementType::Relation)
+  {
+    const Tags& tags = e.getTags();
+    for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
+    {
+      if (it.key() == "railway" || isAncestor(it.key(), "railway") ||
+          (it.key() == "type" && isAncestor("railway=" + it.value(), "railway")))
+      {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 bool OsmSchema::isReversed(const Element& e) const
 {
   bool result = false;

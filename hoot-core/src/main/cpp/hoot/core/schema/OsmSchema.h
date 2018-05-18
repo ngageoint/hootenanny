@@ -467,6 +467,11 @@ public:
   bool hasName(const Element& element) const;
 
   /**
+   * Returns true if the specified element is a railway.
+   */
+  bool isRailway(const Element &e);
+
+  /**
    * Returns true if this is a reversed unidirectional way. (E.g. oneway=reverse)
    */
   bool isReversed(const Element& e) const;
