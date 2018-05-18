@@ -368,11 +368,14 @@ void OsmGbdxXmlWriter::_writeWays(ConstOsmMapPtr map)
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     ConstWayPtr w = it->second;
+
+    // Skip if null
+    if (w.get() == NULL)
+      continue;
+
     //  Skip any ways that have parents
     set<ElementId> parents = map->getParents(w->getElementId());
     if (parents.size() > 0)
-      continue;
-    if (w.get() == NULL)
       continue;
 
     // Make sure that building ways are "complete"

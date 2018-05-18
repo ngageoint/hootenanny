@@ -72,6 +72,7 @@ public:
 
   void close();
 
+  // Set the precision for writing coordinates
   void setPrecision(int p) { _precision = p; }
 
   /**

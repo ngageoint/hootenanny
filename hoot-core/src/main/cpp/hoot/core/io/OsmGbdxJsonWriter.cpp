@@ -112,7 +112,8 @@ void OsmGbdxJsonWriter::_newOutputFile()
   {
 //    LOG_ERROR("Clash: Orig Filename: " + url);
     int inc = 0;
-    while (QFile::exists(url)) {
+    while (QFile::exists(url))
+    {
       inc++;
       url = _outputDir.filePath(QString("%1_%2_%3.xml").arg(_outputFileName).arg(inc,2,10,QChar('0')).arg(_fileNumber));
     }
