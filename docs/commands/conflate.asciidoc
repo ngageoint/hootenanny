@@ -5,24 +5,31 @@
 
 The +conflate+ command conflates two maps into a single map.
 
-* +input1+  - First input.
-* +input2+  - Second input.
-* +output+  - The output path.
-* +--stats+ - Hootenanny map statistics such as node and way count
+* +input1+         - First input.
+* +input2+         - Second input.
+* +output+         - The output path.
+* +--differential+ - calculates the the differential between two conflation inputs.  The output will be all elements in input2 that do 
+                     not conflict with any elements in input1.
+* +--stats+        - Hootenanny map statistics such as node and way count
 
 === Usage
 
 --------------------------------------
-conflate (input1) [input2] (output) [--stats]
+conflate (input1) [input2] (output) [--differential] [--stats]
 ---------------------------------
 
-==== Example
+==== Examples
 
 --------------------------------------
 hoot conflate input1.osm input2.osm output.osm --stats
 --------------------------------------
 
+--------------------------------------
+hoot conflate input1.osm input2.osm output.osm --differential
+--------------------------------------
+
 ==== See Also
 
 * _Unifying Conflation_, <<hootalgo,Hootenanny - Algorithms>>
+* _Differential Conflation_, <<hootalgo,Hootenanny - Algorithms>>
 
