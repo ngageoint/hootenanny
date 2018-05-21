@@ -80,15 +80,15 @@ public:
     QElapsedTimer timer;
     timer.start();
 
-    LOG_VARD(args.size());
-    LOG_VARD(args);
+    LOG_VART(args.size());
+    LOG_VART(args);
     QStringList inputs;
     QString output;
     int argIndex = 0;
     for (int i = 0; i < args.size(); i++)
     {
       const QString arg = args[i];
-      LOG_VARD(arg);
+      LOG_VART(arg);
       //-- options are assumed to be all at the end of the command, so we're done parsing
       //inputs/outputs once we reach one of them
       if (arg.startsWith("--"))
@@ -98,19 +98,19 @@ public:
       argIndex++;
       inputs.append(arg);
     }
-    LOG_VARD(inputs.size());
-    LOG_VARD(argIndex);
+    LOG_VART(inputs.size());
+    LOG_VART(argIndex);
     output = inputs.at(argIndex - 1);
     inputs.removeAt(argIndex - 1);
-    LOG_VARD(inputs.size());
-    LOG_VARD(inputs);
-    LOG_VARD(output);
+    LOG_VART(inputs.size());
+    LOG_VART(inputs);
+    LOG_VART(output);
 
-    LOG_VARD(IoUtils::areSupportedOgrFormats(inputs, true));
-    LOG_VARD(IoUtils::isSupportedOsmFormat(inputs.at(0)));
-    LOG_VARD(IoUtils::isSupportedOsmFormat(output));
-    LOG_VARD(IoUtils::isSupportedOgrFormat(inputs.at(0), true));
-    LOG_VARD(IoUtils::isSupportedOgrFormat(output));
+    LOG_VART(IoUtils::areSupportedOgrFormats(inputs, true));
+    LOG_VART(IoUtils::isSupportedOsmFormat(inputs.at(0)));
+    LOG_VART(IoUtils::isSupportedOsmFormat(output));
+    LOG_VART(IoUtils::isSupportedOgrFormat(inputs.at(0), true));
+    LOG_VART(IoUtils::isSupportedOgrFormat(output));
 
     if (inputs.size() > 1 && !IoUtils::areSupportedOgrFormats(inputs, true) &&
         !IoUtils::isSupportedOsmFormat(output))
@@ -182,10 +182,9 @@ public:
     //to select readers/writers
 
     if (output.toLower().endsWith(".shp") && inputs.size() == 1 &&
-        IoUtils::isSupportedOsmFormat(inputs.at(0)) && colsArgSpecified /*&& translation.isEmpty()*/)
+        IoUtils::isSupportedOsmFormat(inputs.at(0)) && colsArgSpecified)
     {
-      LOG_DEBUG("osm2shp");
-      LOG_VARD(cols);
+      LOG_TRACE("osm2shp");
       assert(inputs.size() == 1);
       const QString input = inputs.at(0);
 
@@ -199,7 +198,7 @@ public:
     else if (inputs.size() == 1 && IoUtils::isSupportedOsmFormat(inputs.at(0)) &&
              IoUtils::isSupportedOgrFormat(output) && !translation.isEmpty())
     {
-      LOG_DEBUG("osm2ogr");
+      LOG_TRACE("osm2ogr");
       assert(inputs.size() == 1);
       const QString input = inputs.at(0);
 
@@ -257,7 +256,7 @@ public:
     else if (IoUtils::areSupportedOgrFormats(inputs, true) &&
              IoUtils::isSupportedOsmFormat(output) && !translation.isEmpty())
     {
-      LOG_DEBUG("ogr2osm");
+      LOG_TRACE("ogr2osm");
 
       OsmMapPtr map(new OsmMap());
       OgrReader reader;
@@ -392,7 +391,7 @@ public:
     }
     else
     {
-      LOG_DEBUG("convert");
+      LOG_TRACE("convert");
       assert(inputs.size() == 1);
       const QString input = inputs.at(0);
 
@@ -413,9 +412,9 @@ public:
       {
         writerName = OsmMapWriterFactory::getWriterName(args[1]);
       }
-      LOG_VARD(writerName);
-      LOG_VARD(OsmMapWriterFactory::getInstance().hasElementOutputStream(output));
-      LOG_VARD(ConfigUtils::boundsOptionEnabled());
+      LOG_VART(writerName);
+      LOG_TRACE(OsmMapWriterFactory::getInstance().hasElementOutputStream(output));
+      LOG_TRACE(ConfigUtils::boundsOptionEnabled());
 
       if (OsmMapReaderFactory::getInstance().hasElementInputStream(input) &&
           OsmMapWriterFactory::getInstance().hasElementOutputStream(output) &&
