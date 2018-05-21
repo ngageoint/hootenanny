@@ -383,7 +383,7 @@ public:
       {
         convertOps.prepend("hoot::MergeNearbyNodes");
       }
-      NamedOp(ConfigOptions().getConvertOps()).apply(map);
+      NamedOp(convertOps).apply(map);
       MapProjector::projectToWgs84(map);
       saveMap(map, output);
 

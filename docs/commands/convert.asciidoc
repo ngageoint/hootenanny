@@ -15,8 +15,8 @@ supported formats.
                the .py extension) or the full path to a Javascript file (.js).  For more information on translation files read the
                "Translation" section of the Hootenanny User Guide.
 * +--cols+   - (optional) Comma delimited list of keys to use for columns, surrounded by quotes.  Valid only when converting from OSM 
-                to shape file.  If "--cols" is specified and the its value is empty, the list of columns will be automatically determined 
-                based on the most frequently populated tags.
+               to shape file and cannot be used in combination with a translation.  If "--cols" is specified and the its value is empty, 
+               the list of columns will be automatically determined based on the most frequently populated tags.
 * +--limit+  - (optional) The maximum number of features to translate.  Valid only when the source is an OGR format.  This is useful 
                when debugging.
 
@@ -66,7 +66,7 @@ hoot convert \
 Convert multiple shape files to an OSM file:
 
 ------------------------------
-hoot convert "input1.shp input2.shp" output.osm --trans translation.js
+hoot convert input1.shp input2.shp output.osm --trans translation.js
 ------------------------------
 
 Convert multiple tiger road data sets using a tiger translation file found in _translations/TigerRoads.py_. by converting multiple files 
@@ -80,7 +80,7 @@ Convert roads, bridges, overpasses and tunnels from a File Geodatabase into a si
 _translations/MyGdbTranslation.py_:
 
 --------------------------------------
-hoot convert "MyGdb.gdb;ROAD_L MyGdb.gdb;BRIDGE_OVERPASS_L MyGdb.gdb;TUNNEL_L" MyGdbOutput.osm --trans MyGdbTranslation
+hoot convert MyGdb.gdb;ROAD_L MyGdb.gdb;BRIDGE_OVERPASS_L MyGdb.gdb;TUNNEL_L MyGdbOutput.osm --trans MyGdbTranslation
 --------------------------------------
 
 Convert a road shapefile that is stored inside the +tds+ directory in a Zip file:
