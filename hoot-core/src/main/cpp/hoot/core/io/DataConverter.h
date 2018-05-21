@@ -9,6 +9,8 @@ namespace hoot
 
 /**
  * Converts data from one Hootenanny supported format to another
+ *
+ * There may be opportunities to consolidate some of the code in the various conversion functions.
  */
 class DataConverter
 {

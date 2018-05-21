@@ -85,9 +85,6 @@ void DataConverter::convert(const QStringList inputs, const QString output)
 
   LOG_INFO("Converting " << inputs.join(", ").right(100) << " to " << output.right(100) << "...");
 
-  //TODO: try to simplify this logic down to as few if/elses as possible, using the factories
-  //to select readers/writers
-
   if (output.toLower().endsWith(".shp") && inputs.size() == 1 &&
       IoUtils::isSupportedOsmFormat(inputs.at(0)) && _colsArgSpecified)
   {
