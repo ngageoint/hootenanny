@@ -30,13 +30,6 @@
 // Hoot
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/io/OgrReader.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/io/GeoNamesReader.h>
-#include <hoot/core/util/Progress.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/filters/PoiCriterion.h>
@@ -95,28 +88,6 @@ QList<boost::shared_ptr<const Node> > OsmUtils::nodeIdsToNodes(const QList<long>
 Coordinate OsmUtils::nodeToCoord(boost::shared_ptr<const Node> node)
 {
   return Coordinate(node->getX(), node->getY());
-}
-
-void OsmUtils::loadMap(boost::shared_ptr<OsmMap> map, QString path, bool useFileId, Status defaultStatus)
-{
-  QStringList pathLayer = path.split(";");
-  QString justPath = pathLayer[0];
-  if (OgrReader::isReasonablePath(justPath))
-  {
-    OgrReader reader;
-    Progress progress("OsmUtils");
-    reader.setDefaultStatus(defaultStatus);
-    reader.read(justPath, pathLayer.size() > 1 ? pathLayer[1] : "", map, progress);
-  }
-  else
-  {
-    OsmMapReaderFactory::read(map, path, useFileId, defaultStatus);
-  }
-}
-
-void OsmUtils::saveMap(boost::shared_ptr<const OsmMap> map, QString path)
-{
-  OsmMapWriterFactory::write(map, path);
 }
 
 QString OsmUtils::toTimeString(quint64 timestamp)

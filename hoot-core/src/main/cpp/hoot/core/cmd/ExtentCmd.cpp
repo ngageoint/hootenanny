@@ -31,6 +31,7 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/util/IoUtils.h>
 
 using namespace std;
 
@@ -69,7 +70,7 @@ public:
     const QString input = args[0];
     LOG_VARD(input);
     OsmMapPtr map(new OsmMap());
-    loadMap(map, input, true, Status::Invalid);
+    IoUtils::loadMap(map, input, true, Status::Invalid);
 
     const QString bounds =
       GeometryUtils::envelopeToConfigString(CalculateMapBoundsVisitor::getGeosBounds(map));

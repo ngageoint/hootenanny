@@ -28,6 +28,9 @@
 #ifndef IOUTILS_H
 #define IOUTILS_H
 
+// Hoot
+#include <hoot/core/OsmMap.h>
+
 // Qt
 #include <QString>
 
@@ -41,7 +44,6 @@ class IoUtils
 {
 
 public:
-
 
   /**
    * Returns true if the input format is a Hootenanny supported OSM format
@@ -68,6 +70,30 @@ public:
    * @return
    */
   static bool areSupportedOgrFormats(const QStringList inputs, const bool allowDir = false);
+
+  /**
+    Loads an OSM map into an OsmMap object
+
+    @param map the object to load the map into
+    @param path the file path to load the map from
+    @param useFileId if true, uses the element ID's in the map file; otherwise, generates new
+    element ID's
+    @param defaultStatus the hoot status to assign to all elements
+    @todo This was copied from BaseCommand.  Point all references to BaseCommand::loadMap to this
+    instead.
+    */
+  static void loadMap(boost::shared_ptr<OsmMap> map, QString path, bool useFileId,
+                      Status defaultStatus = Status::Invalid);
+
+  /**
+    Saves an OSM map to an OsmMap object
+
+    @param map the map object to save
+    @param path the file path to save the map to
+    @todo This was copied from BaseCommand.  Point all references to BaseCommand::saveMap to this
+    instead.
+    */
+  static void saveMap(boost::shared_ptr<const OsmMap> map, QString path);
 };
 
 }

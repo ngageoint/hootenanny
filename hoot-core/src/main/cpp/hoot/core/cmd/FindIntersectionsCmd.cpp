@@ -35,6 +35,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/ops/FindIntersectionsOp.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/IoUtils.h>
 
 using namespace std;
 
@@ -62,13 +63,13 @@ public:
     }
 
     OsmMapPtr map(new OsmMap());
-    loadMap(map, args[0], false, Status::Unknown1);
+    IoUtils::loadMap(map, args[0], false, Status::Unknown1);
 
     FindIntersectionsOp().apply(map);
 
     MapProjector::projectToWgs84(map);
 
-    saveMap(map, args[1]);
+    IoUtils::saveMap(map, args[1]);
 
     return 0;
   }

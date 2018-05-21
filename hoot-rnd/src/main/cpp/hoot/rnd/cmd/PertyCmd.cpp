@@ -32,6 +32,7 @@
 #include <hoot/rnd/perty/PertyOp.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/util/IoUtils.h>
 
 using namespace std;
 
@@ -59,14 +60,14 @@ public:
     }
 
     OsmMapPtr map(new OsmMap());
-    loadMap(map, args[0], true, Status::Unknown1);
+    IoUtils::loadMap(map, args[0], true, Status::Unknown1);
 
     PertyOp perty;
     perty.apply(map);
 
     MapProjector::projectToWgs84(map);
 
-    saveMap(map, args[1]);
+    IoUtils::saveMap(map, args[1]);
 
     return 0;
   }

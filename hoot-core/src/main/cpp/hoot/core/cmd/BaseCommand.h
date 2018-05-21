@@ -54,9 +54,6 @@ public:
 
   virtual QString getHelp() const;
 
-  void loadMap(boost::shared_ptr<OsmMap> map, QString path, bool useFileId,
-               Status defaultStatus = Status::Invalid);
-
   /**
    * Parses a comma delimited envelope in the form minx,miny,maxx,maxy.
    */
@@ -73,14 +70,11 @@ public:
    */
   virtual int runSimple(QStringList args) = 0;
 
-  void saveMap(boost::shared_ptr<const OsmMap> map, QString path);
-
   QStringList toQStringList(char* argv[], int argc);
 
 protected:
 
   virtual QString _getHelpPath() const;
-
 };
 
 typedef boost::shared_ptr<BaseCommand> BaseCommandPtr;

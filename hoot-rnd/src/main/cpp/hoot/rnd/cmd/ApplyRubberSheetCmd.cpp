@@ -34,6 +34,7 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/IoUtils.h>
 
 // Qt
 #include <QFile>
@@ -67,7 +68,7 @@ public:
     QString transformPath = args[0];
 
     OsmMapPtr map(new OsmMap());
-    loadMap(map, args[1], true, Status::Unknown1);
+    IoUtils::loadMap(map, args[1], true, Status::Unknown1);
     QString outputPath = args[2];
 
     // make sure rubber sheeting isn't applied during cleaning.
@@ -90,7 +91,7 @@ public:
 
     MapProjector::projectToWgs84(map);
 
-    saveMap(map, outputPath);
+    IoUtils::saveMap(map, outputPath);
 
     return 0;
   }

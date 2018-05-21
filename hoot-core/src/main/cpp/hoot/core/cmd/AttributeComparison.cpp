@@ -29,6 +29,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/scoring/AttributeCoOccurrence.h>
+#include <hoot/core/util/IoUtils.h>
 
 using namespace std;
 
@@ -69,8 +70,8 @@ public:
     }
 
     OsmMapPtr map(new OsmMap());
-    loadMap(map, args[0], false, Status::Unknown1);
-    loadMap(map, args[1], false, Status::Unknown2);
+    IoUtils::loadMap(map, args[0], false, Status::Unknown1);
+    IoUtils::loadMap(map, args[1], false, Status::Unknown2);
 
     cooccurrence.addToMatrix(map);
 

@@ -38,6 +38,7 @@
 #include <hoot/core/filters/TagKeyCriterion.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/visitors/CalculateHashVisitor2.h>
+#include <hoot/core/util/IoUtils.h>
 
 //GEOS
 #include <geos/geom/Envelope.h>
@@ -134,15 +135,15 @@ private:
     if (!singleInput)
     {
       //map1 is the former state of the data
-      loadMap(map1, input1, true, Status::Unknown1);
+      IoUtils::loadMap(map1, input1, true, Status::Unknown1);
       //map2 is the newer state of the data
-      loadMap(map2, input2, true, Status::Unknown2);
+      IoUtils::loadMap(map2, input2, true, Status::Unknown2);
     }
     else
     {
       //here we're passing all the input data through to the output changeset, so put it in the
       //map2 newer data
-      loadMap(map2, input1, true, Status::Unknown2);
+      IoUtils::loadMap(map2, input1, true, Status::Unknown2);
     }
 
     //we don't want to include review relations

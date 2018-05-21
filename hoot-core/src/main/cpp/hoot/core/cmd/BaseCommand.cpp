@@ -29,19 +29,11 @@
 
 // Hoot
 #include <hoot/core/Hoot.h>
-#include <hoot/core/io/OgrReader.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/io/GeoNamesReader.h>
-#include <hoot/core/io/OsmPbfReader.h>
-#include <hoot/core/io/OsmPbfWriter.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Progress.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/OsmMap.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/HootException.h>
 
 // Qt
 #include <QFileInfo>
@@ -73,12 +65,6 @@ QString BaseCommand::_getHelpPath() const
   QString result = ConfPath::getHootHome() + "/docs/commands/" + getName() + ".asciidoc";
 
   return result;
-}
-
-void BaseCommand::loadMap(OsmMapPtr map, QString path, bool useFileId,
-                          Status defaultStatus)
-{
-  OsmMapReaderFactory::read(map, path, useFileId, defaultStatus);
 }
 
 Envelope BaseCommand::parseEnvelope(QString envStr) const
@@ -119,11 +105,6 @@ int BaseCommand::run(char* argv[], int argc)
   LOG_VARD(args);
 
   return runSimple(args);
-}
-
-void BaseCommand::saveMap(boost::shared_ptr<const OsmMap> map, QString path)
-{
-  OsmMapWriterFactory::write(map, path);
 }
 
 QStringList BaseCommand::toQStringList(char* argv[], int argc)

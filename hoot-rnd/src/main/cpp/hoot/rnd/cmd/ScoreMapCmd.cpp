@@ -35,6 +35,7 @@
 #include <hoot/rnd/scoring/RasterComparator.h>
 #include <hoot/core/visitors/KeepHighwaysVisitor.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/IoUtils.h>
 
 // tgs
 #include <tgs/Optimization/NelderMead.h>
@@ -184,7 +185,7 @@ public:
   OsmMapPtr loadMap(QString p)
   {
     OsmMapPtr result(new OsmMap());
-    BaseCommand::loadMap(result, p, false);
+    IoUtils::loadMap(result, p, false);
 
     SuperfluousWayRemover(result).removeWays();
     // drop everything that isn't a highway.

@@ -34,6 +34,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
+#include <hoot/core/util/IoUtils.h>
 
 namespace hoot
 {
@@ -88,11 +89,11 @@ public:
     }
 
     OsmMapPtr cutterShapeMap(new OsmMap());
-    loadMap(cutterShapeMap, cutterShapePath, true, Status::Unknown1);
+    IoUtils::loadMap(cutterShapeMap, cutterShapePath, true, Status::Unknown1);
 
     // load up the "dough"
     OsmMapPtr doughMap(new OsmMap());
-    loadMap(doughMap, doughPath, true, Status::Unknown1);
+    IoUtils::loadMap(doughMap, doughPath, true, Status::Unknown1);
     CookieCutter(crop, buffer).cut(cutterShapeMap, doughMap);
     OsmMapPtr result = doughMap;
 
@@ -100,7 +101,7 @@ public:
     MapProjector::projectToWgs84(result);
 
     // save out the result.
-    saveMap(result, outputPath);
+    IoUtils::saveMap(result, outputPath);
 
     return 0;
   }

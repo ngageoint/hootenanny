@@ -33,6 +33,7 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/IoUtils.h>
 
 using namespace std;
 
@@ -76,9 +77,9 @@ public:
     }
 
     OsmMapPtr map1(new OsmMap());
-    loadMap(map1, args[0], true, Status::Unknown1);
+    IoUtils::loadMap(map1, args[0], true, Status::Unknown1);
     OsmMapPtr map2(new OsmMap());
-    loadMap(map2, args[1], true, Status::Unknown1);
+    IoUtils::loadMap(map2, args[1], true, Status::Unknown1);
 
     int result;
 

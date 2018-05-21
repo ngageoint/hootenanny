@@ -49,6 +49,7 @@
 #include <hoot/core/io/ElementSorter.h>
 #include <hoot/core/io/OsmXmlChangesetFileWriter.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/IoUtils.h>
 
 // Standard
 #include <fstream>
@@ -131,7 +132,8 @@ public:
 
     // read input 1 into our working map
     OsmMapPtr map(new OsmMap());
-    loadMap(map, input1, ConfigOptions().getReaderConflateUseDataSourceIds1(), Status::Unknown1);
+    IoUtils::loadMap(
+      map, input1, ConfigOptions().getReaderConflateUseDataSourceIds1(), Status::Unknown1);
 
     // Mark input1 elements (Use Ref1 visitor, because it's already coded up)
     Settings visitorConf;
@@ -141,7 +143,8 @@ public:
     map->visitRw(*pRef1v);
 
     // read input 2 into our working map
-    loadMap(map, input2, ConfigOptions().getReaderConflateUseDataSourceIds2(), Status::Unknown2);
+    IoUtils::loadMap(
+      map, input2, ConfigOptions().getReaderConflateUseDataSourceIds2(), Status::Unknown2);
 
     double inputBytes = IoSingleStat(IoSingleStat::RChar).value - bytesRead;
     LOG_VART(inputBytes);
@@ -194,7 +197,7 @@ public:
     stats.append(SingleStat("Project to WGS84 Time (sec)", t.getElapsedAndRestart()));
 
     // Write conflated map
-    saveMap(result, output);
+    IoUtils::saveMap(result, output);
 
     // Do more stats
     double timingOutput = t.getElapsedAndRestart();

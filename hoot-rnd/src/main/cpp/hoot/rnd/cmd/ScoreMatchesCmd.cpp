@@ -40,6 +40,7 @@
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/util/Settings.h>
+#include <hoot/core/util/IoUtils.h>
 
 // tgs
 #include <tgs/Optimization/NelderMead.h>
@@ -83,7 +84,7 @@ public:
       {
         BuildingOutlineUpdateOp().apply(copy);
         MapProjector::projectToWgs84(copy);
-        saveMap(copy, output);
+        IoUtils::saveMap(copy, output);
       }
     }
 
@@ -194,9 +195,8 @@ public:
     for (int i = 0; i < args.size() - 1; i+=2)
     {
       OsmMapPtr map(new OsmMap());
-      loadMap(map, args[i], false, Status::Unknown1);
-      loadMap(map, args[i + 1], false, Status::Unknown2);
-      //loadMap(ref2Map, args[i + 1], false, Status::Unknown2);
+      IoUtils::loadMap(map, args[i], false, Status::Unknown1);
+      IoUtils::loadMap(map, args[i + 1], false, Status::Unknown2);
 
       if (!MapScoringStatusAndRefTagValidator::allTagsAreValid(map))
       {
@@ -209,7 +209,7 @@ public:
 
       OsmMapPtr mapCopy(map);
       MapProjector::projectToWgs84(mapCopy);
-      OsmUtils::saveMap(mapCopy, "/tmp/score-matches-before-prep.osm");
+      IoUtils::saveMap(mapCopy, "/tmp/score-matches-before-prep.osm");
 
       MatchScoringMapPreparer().prepMap(map, ConfigOptions().getScoreMatchesRemoveNodes());
       maps.push_back(map);
@@ -224,7 +224,7 @@ public:
     LOG_VARD(maps.size());
     OsmMapPtr mapCopy(maps[0]);
     MapProjector::projectToWgs84(mapCopy);
-    OsmUtils::saveMap(mapCopy, "/tmp/score-matches-after-prep.osm");
+    IoUtils::saveMap(mapCopy, "/tmp/score-matches-after-prep.osm");
 
     if (optimizeThresholds)
     {

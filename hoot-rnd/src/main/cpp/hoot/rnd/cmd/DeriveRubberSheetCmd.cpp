@@ -35,6 +35,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/IoUtils.h>
 
 // Qt
 #include <QFile>
@@ -72,8 +73,8 @@ public:
       ref = true;
       args.pop_front();
     }
-    loadMap(map, args[0], false, Status::Unknown1);
-    loadMap(map, args[1], false, Status::Unknown2);
+    IoUtils::loadMap(map, args[0], false, Status::Unknown1);
+    IoUtils::loadMap(map, args[1], false, Status::Unknown2);
     QString transform2to1Path = args[2];
     QString transform1to2Path;
     if (args.size() == 4)

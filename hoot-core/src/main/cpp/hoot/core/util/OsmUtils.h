@@ -125,29 +125,6 @@ class OsmUtils
                                                                boost::shared_ptr<const OsmMap> map);
 
     /**
-      Loads an OSM map into an OsmMap object
-
-      @param map the object to load the map into
-      @param path the file path to load the map from
-      @param useFileId if true, uses the element ID's in the map file; otherwise, generates new
-      element ID's
-      @param defaultStatus the hoot status to assign to all elements
-      @todo This was copied from BaseCommand.  Point all references to BaseCommand::loadMap to this
-      instead.
-      */
-    static void loadMap(boost::shared_ptr<OsmMap> map, QString path, bool useFileId, Status defaultStatus);
-
-    /**
-      Saves an OSM map to an OsmMap object
-
-      @param map the map object to save
-      @param path the file path to save the map to
-      @todo This was copied from BaseCommand.  Point all references to BaseCommand::saveMap to this
-      instead.
-      */
-    static void saveMap(boost::shared_ptr<const OsmMap> map, QString path);
-
-    /**
       Converts a 64-bit unsigned int timestamp (seconds from epoch) to a QString (utc zulu)
 
       @param timestamp quint64 time encoding in seconds from the epoch (1970-01-01T00:00:00Z)

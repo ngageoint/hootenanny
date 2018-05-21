@@ -35,6 +35,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/LengthOfWaysVisitor.h>
+#include <hoot/core/util/IoUtils.h>
 
 using namespace std;
 
@@ -94,7 +95,7 @@ public:
     for (int i = 0; i < inputs.size(); i++)
     {
       OsmMapPtr map(new OsmMap());
-      loadMap(map, inputs[i], true, Status::Invalid);
+      IoUtils::loadMap(map, inputs[i], true, Status::Invalid);
 
       MapProjector::projectToPlanar(map);
 

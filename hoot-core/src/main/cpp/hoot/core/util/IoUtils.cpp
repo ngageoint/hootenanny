@@ -31,6 +31,10 @@
 #include <hoot/core/io/OgrUtilities.h>
 #include "FileUtils.h"
 #include <hoot/core/util/Log.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/io/OgrReader.h>
+#include <hoot/core/util/Progress.h>
 
 // Qt
 #include <QFileInfo>
@@ -95,6 +99,28 @@ bool IoUtils::areSupportedOgrFormats(const QStringList inputs, const bool allowD
     }
   }
   return true;
+}
+
+void IoUtils::loadMap(OsmMapPtr map, QString path, bool useFileId, Status defaultStatus)
+{
+  QStringList pathLayer = path.split(";");
+  QString justPath = pathLayer[0];
+  if (OgrReader::isReasonablePath(justPath))
+  {
+    OgrReader reader;
+    Progress progress("OsmUtils");
+    reader.setDefaultStatus(defaultStatus);
+    reader.read(justPath, pathLayer.size() > 1 ? pathLayer[1] : "", map, progress);
+  }
+  else
+  {
+    OsmMapReaderFactory::read(map, path, useFileId, defaultStatus);
+  }
+}
+
+void IoUtils::saveMap(boost::shared_ptr<const OsmMap> map, QString path)
+{
+  OsmMapWriterFactory::write(map, path);
 }
 
 }
