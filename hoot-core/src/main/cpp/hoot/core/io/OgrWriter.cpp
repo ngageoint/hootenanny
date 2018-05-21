@@ -809,6 +809,9 @@ void OgrWriter::writeElement(ElementPtr &element)
 
 void OgrWriter::writeElement(ElementPtr &element, bool debug)
 {
+  //  Do not attempt to write empty elements
+  if (!element)
+    return;
   Tags sourceTags = element->getTags();
   Tags destTags;
   for (Tags::const_iterator it = element->getTags().begin(); it != element->getTags().end(); ++it)
