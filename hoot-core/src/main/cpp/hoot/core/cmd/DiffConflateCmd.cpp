@@ -78,12 +78,25 @@ public:
   { return "Conflates two maps into a single map based on the difference between the inputs"; }
 
   // Convenience function used when deriving a changeset
-  boost::shared_ptr<ChangesetDeriver> _sortInputs(QList<OsmMapPtr> inputMaps)
+  boost::shared_ptr<ChangesetDeriver> _sortInputs(OsmMapPtr pMap1, OsmMapPtr pMap2)
   {
-    ElementSorterPtr sorted1(new ElementSorter(inputMaps[0]));
-    ElementSorterPtr sorted2(new ElementSorter(inputMaps[1]));
+    ElementSorterPtr sorted1(new ElementSorter(pMap1));
+    ElementSorterPtr sorted2(new ElementSorter(pMap2));
     boost::shared_ptr<ChangesetDeriver> delta(new ChangesetDeriver(sorted1, sorted2));
     return delta;
+  }
+
+  void writeChangeset(OsmMapPtr pMap, QString outFileName)
+  {
+    // Make empty map
+    OsmMapPtr pEmptyMap(new OsmMap());
+
+    // Get Changeset Deriver
+    boost::shared_ptr<ChangesetDeriver> pDeriver = _sortInputs(pEmptyMap, pMap);
+
+    // Write the file!
+    OsmXmlChangesetFileWriter writer;
+    writer.write(outFileName, pDeriver);
   }
 
   int runSimple(QStringList args)
@@ -193,8 +206,20 @@ public:
     MapProjector::projectToWgs84(result);
     stats.append(SingleStat("Project to WGS84 Time (sec)", t.getElapsedAndRestart()));
 
-    // Write conflated map
-    saveMap(result, output);
+    // If output ends with .osc, write out a changeset
+    // Else write normal stuff
+    if (output.endsWith(".osc"))
+    {
+      // Write changeset
+      writeChangeset(result, output);
+    }
+    else
+    {
+      // Write conflated map
+      saveMap(result, output);
+    }
+
+
 
     // Do more stats
     double timingOutput = t.getElapsedAndRestart();

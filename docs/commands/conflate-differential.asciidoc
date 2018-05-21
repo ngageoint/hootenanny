@@ -3,8 +3,11 @@
 
 === Description
 
-The +conflate-differential+ command conflates two maps into a single map by calculating the differential between two conflation inputs.  
-The output will be all elements in input2 that do not conflict with any elements in input1.
+The +conflate-differential+ command conflates two maps into a single map by
+calculating the differential between two conflation inputs. The output will be
+all elements in input2 that do not conflict with any elements in input1. If the
+specified output file name ends with the extension .osc, an OSM changeset will
+be written, instead of an OSM map.
 
 * +input1+  - First input.
 * +input2+  - Second input.
