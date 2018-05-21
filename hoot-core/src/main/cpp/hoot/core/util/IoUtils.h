@@ -55,10 +55,19 @@ public:
    * Returns true if the input format is a Hootenanny supported OGR format
    *
    * @param input input path
-   * @param allowMultiple if true; then mutiple inputs can be passed in the input string
+   * @param allowDir if true; then a directory can be passed as an input
    * @return true if all inputs passed in are OGR and supported; false otherwise
    */
-  static bool isSupportedOgrFormat(const QString input, const bool allowMultiple = true);
+  static bool isSupportedOgrFormat(const QString input, const bool allowDir = false);
+
+  /**
+   *
+   *
+   * @param inputs
+   * @param allowDir
+   * @return
+   */
+  static bool areSupportedOgrFormats(const QStringList inputs, const bool allowDir = false);
 };
 
 }

@@ -179,10 +179,10 @@ boost::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString url, b
    * loaded which has been known to cause issues.
    */
   OgrDriverInfo driverInfo = getDriverInfo(url, readonly);
-  LOG_VARD(driverInfo._driverName);
-  LOG_VARD(driverInfo._driverType);
+  LOG_VART(driverInfo._driverName);
+  LOG_VART(driverInfo._driverType);
   const char* drivers[2] = { driverInfo._driverName, NULL };
-  LOG_VARD(url.toUtf8().data());
+  LOG_VART(url.toUtf8().data());
   boost::shared_ptr<GDALDataset> result(static_cast<GDALDataset*>(GDALOpenEx(url.toUtf8().data(),
     driverInfo._driverType, (driverInfo._driverName != NULL ? drivers : NULL), NULL, NULL)));
 

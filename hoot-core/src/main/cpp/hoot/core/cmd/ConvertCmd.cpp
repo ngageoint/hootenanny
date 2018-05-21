@@ -71,10 +71,10 @@ public:
   virtual int runSimple(QStringList args)
   {
     //2 base args + 3 optional args each with a -- identifier in front (x2)
-    if (args.size() != 2 && args.size() != 4 && args.size() != 6 && args.size() != 8)
+    if (args.size() < 2)
     {
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes two to five parameters.").arg(getName()));
+      throw HootException(QString("%1 takes at least two parameters.").arg(getName()));
     }
 
     QElapsedTimer timer;
@@ -82,41 +82,70 @@ public:
 
     LOG_VARD(args.size());
     LOG_VARD(args);
-    const QString input = args[0].trimmed();
-    LOG_VARD(input);
-    const QString output = args[1].trimmed();
+    QStringList inputs;
+    QString output;
+    int argIndex = 0;
+    for (int i = 0; i < args.size(); i++)
+    {
+      const QString arg = args[i];
+      LOG_VARD(arg);
+      //-- options are assumed to be all at the end of the command, so we're done parsing
+      //inputs/outputs once we reach one of them
+      if (arg.startsWith("--"))
+      {
+        break;
+      }
+      argIndex++;
+      inputs.append(arg);
+    }
+    LOG_VARD(inputs.size());
+    LOG_VARD(argIndex);
+    output = inputs.at(argIndex - 1);
+    inputs.removeAt(argIndex - 1);
+    LOG_VARD(inputs.size());
+    LOG_VARD(inputs);
     LOG_VARD(output);
 
-    LOG_VARD(IoUtils::isSupportedOsmFormat(input));
+    LOG_VARD(IoUtils::areSupportedOgrFormats(inputs, true));
+    LOG_VARD(IoUtils::isSupportedOsmFormat(inputs.at(0)));
     LOG_VARD(IoUtils::isSupportedOsmFormat(output));
-    LOG_VARD(IoUtils::isSupportedOgrFormat(input));
-    LOG_VARD(IoUtils::isSupportedOgrFormat(output, false));
+    LOG_VARD(IoUtils::isSupportedOgrFormat(inputs.at(0), true));
+    LOG_VARD(IoUtils::isSupportedOgrFormat(output));
 
-    //TODO: what happens when no translation is specified going to/from OGR?
-    QString translation;
+    if (inputs.size() > 1 && !IoUtils::areSupportedOgrFormats(inputs, true) &&
+        !IoUtils::isSupportedOsmFormat(output))
+    {
+      throw HootException(
+        "Multiple inputs are only allowed when converting from an OGR format to OSM.");
+    }
+
+    QString translation = "";
     if (args.size() > 2 && args.contains("--trans"))
     {
-      translation = args.at(args.indexOf("--trans") + 1);
-      if (translation.trimmed().isEmpty())
+      translation = args.at(args.indexOf("--trans") + 1).trimmed();
+      if (translation.isEmpty())
       {
         throw HootException("Invalid translation specified.");
       }
-      //TODO: Would a translation ever apply to shape file output?
-      if (!IoUtils::isSupportedOgrFormat(input) && !IoUtils::isSupportedOgrFormat(output, false))
+      if (!IoUtils::areSupportedOgrFormats(inputs, true) &&
+          !IoUtils::isSupportedOgrFormat(output, false))
       {
-        throw HootException("A translation can only be specified when converting to/from OGR formats.");
+        throw HootException(
+          "A translation can only be specified when converting to/from OGR formats.");
       }
     }
     LOG_VARD(translation);
 
+    bool colsArgSpecified = false;
     QStringList cols;
     if (args.size() > 2 && args.contains("--cols"))
     {
-      cols = args.at(args.indexOf("--cols") + 1).split(",", QString::SkipEmptyParts);
+      colsArgSpecified = true;
+      cols = args.at(args.indexOf("--cols") + 1).trimmed().split(",", QString::SkipEmptyParts);
       //TODO: We may be able to relax the restriction here of requiring the input be an OSM
       //format, but since cols were originally only used with osm2shp, let's keep it here for now.
-      if (!cols.isEmpty() && !output.toLower().endsWith(".shp") &&
-          !IoUtils::isSupportedOsmFormat(input))
+      if (/*!cols.isEmpty()*/colsArgSpecified && !output.toLower().endsWith(".shp") &&
+          !IoUtils::isSupportedOsmFormat(inputs.at(0)))
       {
         throw HootException(
           "Columns may only be specified when converting from an OSM format to the shape file format.");
@@ -124,34 +153,41 @@ public:
     }
     LOG_VARD(cols);
 
+    if (!translation.isEmpty() && colsArgSpecified)
+    {
+      throw HootException("Cannot specify both a translation and export columns.");
+    }
+
     int featureReadLimit = 0;
     if (args.size() > 2 && args.contains("--limit"))
     {
       bool ok;
-      featureReadLimit = args.at(args.indexOf("--limit") + 1).toInt(&ok);
+      featureReadLimit = args.at(args.indexOf("--limit") + 1).trimmed().toInt(&ok);
       if (!ok)
       {
         throw HootException("Invalid input specified for limit: " +
                             args.at(args.indexOf("--limit") + 1));
       }
       //TODO: Can this eventually be removed?
-      if (!IoUtils::isSupportedOgrFormat(input))
+      if (!IoUtils::areSupportedOgrFormats(inputs, true))
       {
         throw HootException("Limit may only be specified when converting OGR inputs.");
       }
     }
     LOG_VARD(featureReadLimit);
 
-    LOG_INFO("Converting " << input.right(100) << " to " << output.right(100) << "...");
+    LOG_INFO("Converting " << inputs.join(", ").right(100) << " to " << output.right(100) << "...");
 
     //TODO: try to simplify this logic down to as few if/elses as possible, using the factories
     //to select readers/writers
 
-    if (output.toLower().endsWith(".shp") && IoUtils::isSupportedOsmFormat(input) &&
-        !cols.isEmpty())
+    if (output.toLower().endsWith(".shp") && inputs.size() == 1 &&
+        IoUtils::isSupportedOsmFormat(inputs.at(0)) && colsArgSpecified /*&& translation.isEmpty()*/)
     {
       LOG_DEBUG("osm2shp");
       LOG_VARD(cols);
+      assert(inputs.size() == 1);
+      const QString input = inputs.at(0);
 
       OsmMapPtr map(new OsmMap());
       loadMap(map, input, true);
@@ -160,10 +196,12 @@ public:
       writer.setColumns(cols);
       writer.write(map, output);
     }
-    else if (IoUtils::isSupportedOsmFormat(input) && IoUtils::isSupportedOgrFormat(output, false) &&
-             !translation.isEmpty())
+    else if (inputs.size() == 1 && IoUtils::isSupportedOsmFormat(inputs.at(0)) &&
+             IoUtils::isSupportedOgrFormat(output) && !translation.isEmpty())
     {
       LOG_DEBUG("osm2ogr");
+      assert(inputs.size() == 1);
+      const QString input = inputs.at(0);
 
       boost::shared_ptr<OgrWriter> writer(new OgrWriter());
       if (ConfigOptions().getElementCacheSizeNode() > 0 &&
@@ -216,8 +254,8 @@ public:
         writer->write(map);
       }
     }
-    else if (IoUtils::isSupportedOgrFormat(input) && IoUtils::isSupportedOsmFormat(output) &&
-             !translation.isEmpty())
+    else if (IoUtils::areSupportedOgrFormats(inputs, true) &&
+             IoUtils::isSupportedOsmFormat(output) && !translation.isEmpty())
     {
       LOG_DEBUG("ogr2osm");
 
@@ -231,20 +269,18 @@ public:
 
       ConfigOptions configOptions;
 
-      //TODO: move to top
+      //TODO: move to top?
       Progress progress(getName());
       progress.setReportType(configOptions.getProgressReportingFormat());
       progress.setState("Running");
 
       LOG_INFO("Reading layers...");
-      QStringList inputs = input.split(" ");
-      LOG_VARD(inputs);
       for (int i = 0; i < inputs.size(); i++)
       {
         QString input = inputs[i].trimmed();
-        LOG_VARD(input);
+        LOG_VART(input);
 
-        if (input == "")
+        if (input.trimmed().isEmpty())
         {
           LOG_WARN("Got an empty layer, skipping.");
           continue;
@@ -283,7 +319,7 @@ public:
         vector<float> progressWeights;
         for (int i = 0; i < layers.size(); i++)
         {
-          LOG_VARD(layers[i]);
+          LOG_VART(layers[i]);
           // simply open the file, get the meta feature count value, and close
           int featuresPerLayer = reader.getFeatureCount(input, layers[i]);
           progressWeights.push_back((float)featuresPerLayer);
@@ -324,8 +360,8 @@ public:
             std::cout << ".";
             std::cout.flush();
           }
-          LOG_VARD(input);
-          LOG_VARD(layers[i]);
+          LOG_VART(input);
+          LOG_VART(layers[i]);
           progress.setTaskWeight(progressWeights[i]);
           reader.read(input, layers[i], map, progress);
         }
@@ -357,6 +393,8 @@ public:
     else
     {
       LOG_DEBUG("convert");
+      assert(inputs.size() == 1);
+      const QString input = inputs.at(0);
 
       // This keeps the status and the tags.
       conf().set(ConfigOptions().getReaderUseFileStatusKey(), true);
@@ -365,7 +403,7 @@ public:
 //    QString readerName = ConfigOptions().getOsmMapReaderFactoryReader();
 //    if (readerName.trimmed().isEmpty())
 //    {
-//      readerName = OsmMapReaderFactory::getReaderName(input);
+//      readerName = OsmMapReaderFactory::getReaderName(inputs.at(0));
 //    }
 //    LOG_VARD(readerName);
       LOG_VARD(OsmMapReaderFactory::getInstance().hasElementInputStream(input));

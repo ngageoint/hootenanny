@@ -44,9 +44,9 @@ bool IoUtils::isSupportedOsmFormat(const QString input)
          inputLower.startsWith("hootapidb://") || inputLower.startsWith("osmapidb://");
 }
 
-bool IoUtils::isSupportedOgrFormat(const QString input, const bool allowMultiple)
+bool IoUtils::isSupportedOgrFormat(const QString input, const bool allowDir)
 {
-  if (!allowMultiple && (input.contains(" ") || QFileInfo(input).isDir()))
+  if (!allowDir && QFileInfo(input).isDir())
   {
     return false;
   }
@@ -56,32 +56,35 @@ bool IoUtils::isSupportedOgrFormat(const QString input, const bool allowMultiple
   {
     return FileUtils::dirContainsFileWithExtension(QFileInfo(input).dir(), "shp");
   }
-  //multiple inputs
-  else if (input.contains(" "))
-  {
-    const QStringList inputs = input.split(" ");
-    if (inputs.size() == 0)
-    {
-      return false;
-    }
-    for (int i = 0; i < inputs.size(); i++)
-    {
-      const QString input = inputs.at(i);
-      const QString file = input.split(";")[0];
-      if (!OgrUtilities::getInstance().getSupportedFormats(true)
-              .contains("." + QFileInfo(file).suffix()))
-      {
-        return false;
-      }
-    }
-    return true;
-  }
   //single input
   else
   {
+    if (input.toLower().endsWith(".zip"))
+    {
+      return true;
+    }
     return OgrUtilities::getInstance().getSupportedFormats(true)
              .contains("." + QFileInfo(input).suffix());
   }
+}
+
+bool IoUtils::areSupportedOgrFormats(const QStringList inputs, const bool allowDir)
+{
+  if (inputs.size() == 0)
+  {
+    return false;
+  }
+
+  for (int i = 0; i < inputs.size(); i++)
+  {
+    const QString input = inputs.at(i);
+    const QString file = input.split(";")[0];
+    if (!isSupportedOgrFormat(file, allowDir))
+    {
+      return false;
+    }
+  }
+  return true;
 }
 
 }

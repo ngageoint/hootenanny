@@ -18,5 +18,5 @@ cd $HOOT_HOME
 hoot convert --warn /vsizip/./test-output/AllDataTypesA.zip test-output/AllDataTypesA.osm --trans translations/Identity.js 
 hoot stats test-output/AllDataTypesA.osm | grep -w 'Node Count\|Way Count\|Relation Count'
 
-hoot convert --warn -D ogr.reader.bounding.box=-104.931,38.823,-104.869,38.877 /vsizip/./test-output/AllDataTypesA.zip test-output/AllDataTypesABBox.osm  --trans translations/Identity.js 
+hoot convert --warn -D ogr.reader.bounding.box=-104.931,38.823,-104.869,38.877 /vsizip/./test-output/AllDataTypesA.zip test-output/AllDataTypesABBox.osm --trans translations/Identity.js
 hoot stats test-output/AllDataTypesABBox.osm | grep -w 'Node Count\|Way Count\|Relation Count'

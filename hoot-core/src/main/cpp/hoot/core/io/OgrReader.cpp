@@ -383,7 +383,7 @@ QStringList OgrReader::getLayerNames(QString path)
 QStringList OgrReader::getFilteredLayerNames(const QString path)
 {
   QRegExp filterStr = _d->getNameFilter();
-  LOG_VARD(filterStr.pattern());
+  LOG_VART(filterStr.pattern());
 
   QStringList result;
 
@@ -526,14 +526,14 @@ QStringList OgrReaderInternal::getLayersWithGeometry(const QString path) const
   LOG_DEBUG("Opening layers with geometry: " << path);
   boost::shared_ptr<GDALDataset> ds = OgrUtilities::getInstance().openDataSource(path, true);
   int count = ds->GetLayerCount();
-  LOG_VARD(count);
+  LOG_VART(count);
   for (int i = 0; i < count; i++)
   {
     OGRLayer* l = ds->GetLayer(i);
     if (l->GetGeomType() != wkbNone)
     {
       result.append(l->GetName());
-      LOG_VARD(l->GetName());
+      LOG_VART(l->GetName());
     }
     l->Dereference();
   }

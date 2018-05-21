@@ -111,10 +111,12 @@ Envelope BaseCommand::parseEnvelope(QString envStr) const
 int BaseCommand::run(char* argv[], int argc)
 {
   QStringList args = toQStringList(argv, argc);
+  LOG_VARD(args)
 
   args = args.mid(2);
 
   Settings::parseCommonArguments(args);
+  LOG_VARD(args);
 
   return runSimple(args);
 }
