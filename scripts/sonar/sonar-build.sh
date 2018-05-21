@@ -19,4 +19,4 @@ sonar-scanner \
     -Dsonar.cfamily.threads=4 \
     -Dsonar.exclusions=**/*.pb.cc,**/*.pb.h,**/*.sql \
     -Dsonar.cfamily.lcov.reportsPaths=./coverage/core/core/Core.info \
-    -Dsonar.sonar.branch.name=$2
+    -Dsonar.branch.name=$2
