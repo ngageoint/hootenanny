@@ -65,7 +65,7 @@ bool IoUtils::isSupportedOgrFormat(const QString input, const bool allowDir)
   //single input
   else
   {
-    if (input.toLower().endsWith(".zip"))
+    if (input.toLower().endsWith(".zip") || input.toLower().startsWith("pg:"))
     {
       return true;
     }

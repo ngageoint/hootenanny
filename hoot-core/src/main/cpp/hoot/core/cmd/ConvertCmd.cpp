@@ -398,14 +398,7 @@ public:
       // This keeps the status and the tags.
       conf().set(ConfigOptions().getReaderUseFileStatusKey(), true);
       conf().set(ConfigOptions().getReaderKeepStatusTagKey(), true);
-
-//    QString readerName = ConfigOptions().getOsmMapReaderFactoryReader();
-//    if (readerName.trimmed().isEmpty())
-//    {
-//      readerName = OsmMapReaderFactory::getReaderName(inputs.at(0));
-//    }
-//    LOG_VARD(readerName);
-      LOG_VARD(OsmMapReaderFactory::getInstance().hasElementInputStream(input));
+      LOG_VART(OsmMapReaderFactory::getInstance().hasElementInputStream(input));
 
       QString writerName = ConfigOptions().getOsmMapWriterFactoryWriter();
       if (writerName.trimmed().isEmpty())

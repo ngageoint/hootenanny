@@ -6,19 +6,21 @@ The +convert+ command converts map data from one input format to another.  Optio
 conversion.  The process may be memory bound depending upon the formats selected.  See the README for information on 
 supported formats.
 
-* +input(s)+ - When converting from an OGR format to an OSM output, one or more inputs are supported.  Each input is made up of a file
-               name and, optionally, a layer name.  Use a single space to separate each input and a ';' between inputs and layer.  The
-               entire list of inputs needs to be surrounded by quotes.  For all other conversions, the input must be a single source 
-               (e.g. .osm file, PG:"dbname='databasename' host='addr' port='5432' user='x' password='y'", etc.).
-* +output+   - Output (e.g. .osm file).
-* +--trans+  - (optional) Valid only when converting to/from OGR formats.  Use either the base name of a Python translation file (without 
-               the .py extension) or the full path to a Javascript file (.js).  For more information on translation files read the
+* +input(s)+ - Input path(s); When converting from an OGR format to an OSM output, one or more inputs are supported.  Each input 
+               is made up of a file name and, optionally, a layer name.  Use a single space to separate each input and a ';' between 
+               inputs and layer.  The entire list of inputs needs to be surrounded by quotes.  For all other conversions, the input must 
+               be a single source (e.g. .osm file, etc.).
+* +output+   - Output path (e.g. .osm file, etc.).
+* +--trans+  - (optional) Valid only when converting to/from OGR formats and must appear after inputs(s)/outputs.  Use either the base 
+               name of a Python translation file (without the .py extension) or the full path to a Javascript file (.js).  For more 
+               information on translation files read the
                "Translation" section of the Hootenanny User Guide.
-* +--cols+   - (optional) Comma delimited list of keys to use for columns, surrounded by quotes.  Valid only when converting from OSM 
-               to shape file and cannot be used in combination with a translation.  If "--cols" is specified and the its value is empty, 
-               the list of columns will be automatically determined based on the most frequently populated tags.
-* +--limit+  - (optional) The maximum number of features to translate.  Valid only when the source is an OGR format.  This is useful 
-               when debugging.
+* +--cols+   - (optional) Comma delimited list of keys to use for columns, surrounded by quotes, and must appear after inputs(s)/outputs.  
+               Valid only when converting from OSM to shape file and cannot be used in combination with a translation.  If "--cols" is 
+               specified and the its value is empty, the list of columns will be automatically determined based on the most frequently 
+               populated tags.
+* +--limit+  - (optional) The maximum number of features to translate.  Valid only when the source is an OGR format and must appear after 
+               inputs(s)/outputs.  This can be useful when debugging.
 
 === Usage
 
@@ -103,7 +105,8 @@ hoot convert MyInput.osm MyOutput.shp --cols "highway,surface,name,alt_name,onew
 
 === Notes
 
-* The format for database URLs is: protocol://<user name>:<password>@<host name>:<port>/<database name>
+* The format for OSM database URLs is: protocol://<user name>:<password>@<host name>:<port>/<database name>
+* The format for OGR database URLs is: PG:"dbname='databasename' host='addr' port='5432' user='x' password='y'"
 * Writing to OSM API databases (osmapidb://) is intended to be a bulk operation for new data only (no updates on existing data).
 * When converting from OSM to an OGR format, the +convert+ command provides conversion from .osm files or POSTGIS osm databases to 
 Shapefile, FileGDB, etc. The OGR libraries are used on the back end so other formats such as PostGIS and SQLite will likely work, 
