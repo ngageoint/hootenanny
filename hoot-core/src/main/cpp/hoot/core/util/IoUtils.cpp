@@ -30,6 +30,7 @@
 // Hoot
 #include <hoot/core/io/OgrUtilities.h>
 #include "FileUtils.h"
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QFileInfo>
@@ -46,15 +47,20 @@ bool IoUtils::isSupportedOsmFormat(const QString input)
 
 bool IoUtils::isSupportedOgrFormat(const QString input, const bool allowDir)
 {
+  LOG_VART(input);
+  LOG_VART(allowDir);
+
   if (!allowDir && QFileInfo(input).isDir())
   {
     return false;
   }
 
-  //input is a dir; only accepting a dir as input if it contains a shape file for now
+  LOG_VART(QFileInfo(input).isDir());
+  //input is a dir; only accepting a dir as input if it contains a shape file or is a file geodb
   if (QFileInfo(input).isDir())
   {
-    return FileUtils::dirContainsFileWithExtension(QFileInfo(input).dir(), "shp");
+    return input.toLower().endsWith(".gdb") ||
+           FileUtils::dirContainsFileWithExtension(QFileInfo(input).dir(), "shp");
   }
   //single input
   else
@@ -63,7 +69,9 @@ bool IoUtils::isSupportedOgrFormat(const QString input, const bool allowDir)
     {
       return true;
     }
-    return OgrUtilities::getInstance().getSupportedFormats(true)
+    LOG_VART(OgrUtilities::getInstance().getSupportedFormats(false));
+    LOG_VART(QFileInfo(input).suffix());
+    return OgrUtilities::getInstance().getSupportedFormats(false)
              .contains("." + QFileInfo(input).suffix());
   }
 }
@@ -78,7 +86,9 @@ bool IoUtils::areSupportedOgrFormats(const QStringList inputs, const bool allowD
   for (int i = 0; i < inputs.size(); i++)
   {
     const QString input = inputs.at(i);
+    LOG_VART(input);
     const QString file = input.split(";")[0];
+    LOG_VART(file);
     if (!isSupportedOgrFormat(file, allowDir))
     {
       return false;
