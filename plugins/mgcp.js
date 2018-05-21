@@ -349,6 +349,8 @@ mgcp = {
 
             // post processing
             mgcp.applyToMgcpPostProcessing(newFeatures[i]['tags'], newFeatures[i]['attrs'], geometryType,notUsedTags);
+
+            returnData.push({attrs: newFeatures[i]['attrs'],tableName: ''});
         }
 
         return returnData;
