@@ -77,6 +77,21 @@ describe('TranslationServer', function () {
             assert.equal(schema.columns[0].enumerations[0].value, '1');
         });
 
+        it('should handle translateTo GET with key & value param', function() {
+            var schema = server.handleInputs({
+                value: 'AL015',
+                geom: 'Point',
+                translation: 'MGCP',
+                key: 'fcode',
+                method: 'GET',
+                path: '/translateTo'
+            });
+            assert.equal(schema.desc, 'General Building');
+            assert.equal(schema.columns[0].name, 'ACC');
+            assert.equal(schema.columns[0].enumerations[0].name, 'Accurate');
+            assert.equal(schema.columns[0].enumerations[0].value, '1');
+        });
+
         it('should handle no matches translateTo GET for MGCP', function() {
             assert.throws(function error() {
                 server.handleInputs({
@@ -970,24 +985,6 @@ describe('TranslationServer', function () {
             assert.throws(function error() {
                 server.handleInputs({
                     method: 'POST',
-                    path: '/taginfo/key/values'
-                })
-            }, Error, 'Unsupported method');
-        });
-
-        it('throws error if unsupported method', function() {
-            assert.throws(function error() {
-                server.handleInputs({
-                    method: 'POST',
-                    path: '/taginfo/keys/all'
-                })
-            }, Error, 'Unsupported method');
-        });
-
-        it('throws error if unsupported method', function() {
-            assert.throws(function error() {
-                server.handleInputs({
-                    method: 'POST',
                     path: '/capabilities'
                 })
             }, Error, 'Unsupported method');
@@ -1033,10 +1030,10 @@ describe('TranslationServer', function () {
             method: 'GET',
             url: '/translateTo',
             params: {
-                idval: 'AP030',
+                value: 'AP030',
                 translation: 'MGCP',
                 geom: 'Line',
-                idelem: 'fcode'
+                key: 'fcode'
             }
         });
         var response = httpMocks.createResponse();
