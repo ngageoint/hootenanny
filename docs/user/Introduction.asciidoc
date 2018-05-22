@@ -242,5 +242,5 @@ See also:
 
 * <<OSM-to-OGR-Translation,OSM to OGR Translation>>
 * <<File-Formats,File Formats>>
-* <<convert-osm2shp,convert-osm2shp command>>
+* <<convert,convert command>>
 

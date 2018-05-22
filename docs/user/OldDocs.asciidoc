@@ -420,7 +420,7 @@ function translateToOsm(attrs, layerName)
 [[OGR-to-OSM-Translation]]
 ==== OGR to OSM Translation
 
-=== Translation File
+===== Translation File
 
 The purpose of the translation file is to convert your custom Shapefile into the
 OSM schema (http://wiki.openstreetmap.org/wiki/Map_Features). The translation
@@ -441,7 +441,7 @@ translations of all files in the _input_ list. This means that the script will
 only be intialized once and then +translateAttributes+ will be called once for
 each feature in all of the input files.
 
-==== Example Translation Work Flow
+===== Example Translation Work Flow
 
 Imagine you have a Shapefile named _MyRoads.shp_ for input with the following
 attributes:
@@ -577,7 +577,7 @@ function translateToOsm(attrs, layerName)
 The translation scripts above will give the values found in the _Inputs/Outputs
 Table_.
 
-==== Example Python Translation File 
+===== Example Python Translation File 
 
 The following script provides a more thorough example for translating
 http://www.census.gov/geo/www/tiger/tgrshp2012/tgrshp2012.html[2010 Tiger road data]:
@@ -633,7 +633,7 @@ def translateAttributes(attrs, layerName):
     return tags
 ----
 
-==== Example JavaScript Translation File
+===== Example JavaScript Translation File
 
 ----
 function translateToOsm(attrs, layerName)
