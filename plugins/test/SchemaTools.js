@@ -81,6 +81,6 @@ describe('schema', function() {
         assert.deepEqual(
             st.generateToOgrTable([["FFN", 579, st.wildcard('amenity=^con.*_centre', .7, .1, .5)]]),
             {"amenity":{"convention_centre":["FFN",579,0.7],"conference_centre":["FFN",579,0.7]}});
-    });
+    }).timeout(3000);
 
 });

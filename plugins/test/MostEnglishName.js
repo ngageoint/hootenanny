@@ -13,11 +13,10 @@ describe('schema', function() {
             'alt_name': "Joe's Bar;бар Джо",
             'amenity': 'bar'
         }
-        hoot.log(new hoot.MostEnglishName().getMostEnglishName(tags));
 
         assert.deepEqual(
             "Joe's Bar",
             new hoot.MostEnglishName().getMostEnglishName(tags));
-    });
+    }).timeout(5000);
 
 });
