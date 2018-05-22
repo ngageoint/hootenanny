@@ -1,0 +1,638 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osmChange version="0.6" generator="hootenanny">
+    <create>
+        <node id="-1" version="0" lat="8.6548851891999998" lon="28.1463268213400006" timestamp="">
+            <tag k="security:classification" v="UNCLASSIFIED"/>
+            <tag k="building" v="retail"/>
+            <tag k="source" v="Unknown"/>
+            <tag k="name" v="Lana's House of Coffee"/>
+            <tag k="error:circular" v="15"/>
+        </node>
+        <node id="-2" version="0" lat="8.6541474185900018" lon="28.1392570135799964" timestamp=""/>
+        <node id="-3" version="0" lat="8.6548074607699963" lon="28.1410811127400002" timestamp=""/>
+        <node id="-4" version="0" lat="8.6552082001000006" lon="28.1408903572699991" timestamp=""/>
+        <node id="-5" version="0" lat="8.6544538668900017" lon="28.1391020247700006" timestamp=""/>
+        <node id="-6" version="0" lat="8.6429273889299978" lon="28.1463070570099987" timestamp=""/>
+        <node id="-7" version="0" lat="8.6428275656700002" lon="28.1460930009300014" timestamp=""/>
+        <node id="-8" version="0" lat="8.6426718413400003" lon="28.1458749060599978" timestamp=""/>
+        <node id="-9" version="0" lat="8.6425600392100002" lon="28.1456568111799967" timestamp=""/>
+        <node id="-10" version="0" lat="8.6423923359600003" lon="28.1453175524800017" timestamp=""/>
+        <node id="-11" version="0" lat="8.6422885196300001" lon="28.1450025265499981" timestamp=""/>
+        <node id="-12" version="0" lat="8.6422326185100022" lon="28.1448490523799961" timestamp=""/>
+        <node id="-13" version="0" lat="8.6421367880099993" lon="28.1445744143900001" timestamp=""/>
+        <node id="-14" version="0" lat="8.6420369645500017" lon="28.1443522807199997" timestamp=""/>
+        <node id="-15" version="0" lat="8.6419690845700003" lon="28.1440493711699986" timestamp=""/>
+        <node id="-16" version="0" lat="8.6419012045899990" lon="28.1437464616199975" timestamp=""/>
+        <node id="-17" version="0" lat="8.6417814163500015" lon="28.1434637460399983" timestamp=""/>
+        <node id="-18" version="0" lat="8.6416656210199978" lon="28.1431487201099948" timestamp=""/>
+        <node id="-19" version="0" lat="8.6415697903799984" lon="28.1428902372900005" timestamp=""/>
+        <node id="-20" version="0" lat="8.6414699667599990" lon="28.1425752113600005" timestamp=""/>
+        <node id="-21" version="0" lat="8.6413062559700009" lon="28.1422965345800016" timestamp=""/>
+        <node id="-22" version="0" lat="8.6412463617599986" lon="28.1419976638199998" timestamp=""/>
+        <node id="-23" version="0" lat="8.6412343829199987" lon="28.1417068706500011" timestamp=""/>
+        <node id="-24" version="0" lat="8.6411944534400007" lon="28.1413272240199994" timestamp=""/>
+        <node id="-25" version="0" lat="8.6411545239599974" lon="28.1409354610000015" timestamp=""/>
+        <node id="-26" version="0" lat="8.6411225803700003" lon="28.1406567842100017" timestamp=""/>
+        <node id="-27" version="0" lat="8.6411265733199993" lon="28.1402650212000012" timestamp=""/>
+        <node id="-28" version="0" lat="8.6410586931799998" lon="28.1398490254100011" timestamp=""/>
+        <node id="-29" version="0" lat="8.6502663223000020" lon="28.1437908883500008" timestamp=""/>
+        <node id="-30" version="0" lat="8.6501305653100005" lon="28.1435283667400000" timestamp=""/>
+        <node id="-31" version="0" lat="8.6499868225599990" lon="28.1431608364900008" timestamp=""/>
+        <node id="-32" version="0" lat="8.6498111369000004" lon="28.1428902372900005" timestamp=""/>
+        <node id="-33" version="0" lat="8.6496993368900004" lon="28.1426236768900004" timestamp=""/>
+        <node id="-34" version="0" lat="8.6495516011200024" lon="28.1423328837200017" timestamp=""/>
+        <node id="-35" version="0" lat="8.6493878938400002" lon="28.1420461293499962" timestamp=""/>
+        <node id="-36" version="0" lat="8.6491802650000000" lon="28.1416341723599999" timestamp=""/>
+        <node id="-37" version="0" lat="8.6490485004799975" lon="28.1413797283399987" timestamp=""/>
+        <node id="-38" version="0" lat="8.6489327073899993" lon="28.1411212455200008" timestamp=""/>
+        <node id="-39" version="0" lat="8.6487809784399978" lon="28.1407941032099984" timestamp=""/>
+        <node id="-40" version="0" lat="8.6486132779599973" lon="28.1405235040099981" timestamp=""/>
+        <node id="-41" version="0" lat="8.6484695346299993" lon="28.1402286720500001" timestamp=""/>
+        <node id="-42" version="0" lat="8.6483138126300041" lon="28.1399015297399977" timestamp=""/>
+        <node id="-43" version="0" lat="8.6481660763200026" lon="28.1396107365699990" timestamp=""/>
+        <node id="-44" version="0" lat="8.6479145251600009" lon="28.1391705080200012" timestamp=""/>
+        <node id="-45" version="0" lat="8.6477428314099978" lon="28.1388554820900012" timestamp=""/>
+        <node id="-46" version="0" lat="8.6475551660699992" lon="28.1383748656099968" timestamp=""/>
+        <node id="-47" version="0" lat="8.6474154152199976" lon="28.1380154129399962" timestamp=""/>
+        <node id="-48" version="0" lat="8.6472676785500013" lon="28.1376155723299988" timestamp=""/>
+        <node id="-49" version="0" lat="8.6328590822100004" lon="28.1300246590199947" timestamp=""/>
+        <node id="-50" version="0" lat="8.6330347757699997" lon="28.1303073746000010" timestamp=""/>
+        <node id="-51" version="0" lat="8.6333701905100018" lon="28.1306708660600009" timestamp=""/>
+        <node id="-52" version="0" lat="8.6337535212900001" lon="28.1313736162099985" timestamp=""/>
+        <node id="-53" version="0" lat="8.6339931028199999" lon="28.1318825042599983" timestamp=""/>
+        <node id="-54" version="0" lat="8.6342806004600003" lon="28.1326983406400011" timestamp=""/>
+        <node id="-55" version="0" lat="8.6345361537399992" lon="28.1331264528100000" timestamp=""/>
+        <node id="-56" version="0" lat="8.6346799023800003" lon="28.1333526252699997" timestamp=""/>
+        <node id="-57" version="0" lat="8.6349035112700001" lon="28.1337484270800005" timestamp=""/>
+        <node id="-58" version="0" lat="8.6351989942400014" lon="28.1342734702999984" timestamp=""/>
+        <node id="-59" version="0" lat="8.6353906587499996" lon="28.1347985135199963" timestamp=""/>
+        <node id="-60" version="0" lat="8.6356062811999994" lon="28.1351216170399994" timestamp=""/>
+        <node id="-61" version="0" lat="8.6359337076500022" lon="28.1356870482000012" timestamp=""/>
+        <node id="-62" version="0" lat="8.6360215537199991" lon="28.1361393931300015" timestamp=""/>
+        <node id="-63" version="0" lat="8.6362212038099990" lon="28.1365917380600017" timestamp=""/>
+        <node id="-64" version="0" lat="8.6364607837800023" lon="28.1371087036900001" timestamp=""/>
+        <node id="-65" version="0" lat="8.6365646017200000" lon="28.1375448934400012" timestamp=""/>
+        <node id="-66" version="0" lat="8.6368441114099994" lon="28.1380295487199952" timestamp=""/>
+        <node id="-67" version="0" lat="8.6369958451600031" lon="28.1385465143500006" timestamp=""/>
+        <node id="-68" version="0" lat="8.6373232704100023" lon="28.1392654196800009" timestamp=""/>
+        <node id="-69" version="0" lat="8.6398148873600036" lon="28.1296207796200015" timestamp=""/>
+        <node id="-70" version="0" lat="8.6398069014299992" lon="28.1298873400200016" timestamp=""/>
+        <node id="-71" version="0" lat="8.6399187043700003" lon="28.1303558401299973" timestamp=""/>
+        <node id="-72" version="0" lat="8.6400145354400006" lon="28.1308081850500002" timestamp=""/>
+        <node id="-73" version="0" lat="8.6402780707399991" lon="28.1312686075700000" timestamp=""/>
+        <node id="-74" version="0" lat="8.6403978594600002" lon="28.1316967197299981" timestamp=""/>
+        <node id="-75" version="0" lat="8.6404936903999978" lon="28.1322136853699973" timestamp=""/>
+        <node id="-76" version="0" lat="8.6406613945000021" lon="28.1327306509999993" timestamp=""/>
+        <node id="-77" version="0" lat="8.6408370844199975" lon="28.1331102976300009" timestamp=""/>
+        <node id="-78" version="0" lat="8.6410846473499987" lon="28.1336918839699983" timestamp=""/>
+        <node id="-79" version="0" lat="8.6413960972700004" lon="28.1342977030699970" timestamp=""/>
+        <node id="-80" version="0" lat="8.6415158856300014" lon="28.1347662031699990" timestamp=""/>
+        <node id="-81" version="0" lat="8.6417075469200011" lon="28.1350893066899985" timestamp=""/>
+        <node id="-82" version="0" lat="8.6418992081199999" lon="28.1354527981499984" timestamp=""/>
+        <node id="-83" version="0" lat="8.6421707279799982" lon="28.1358485999599957" timestamp=""/>
+        <node id="-84" version="0" lat="8.6425300922100003" lon="28.1363171000600012" timestamp=""/>
+        <node id="-85" version="0" lat="8.6427856398900005" lon="28.1368744536400008" timestamp=""/>
+        <node id="-86" version="0" lat="8.6431929186600005" lon="28.1371814019800013" timestamp=""/>
+        <node id="-87" version="0" lat="8.6437119988000006" lon="28.1376741348499948" timestamp=""/>
+        <node id="-88" version="0" lat="8.6442869790499994" lon="28.1382234108300011" timestamp=""/>
+        <node id="-89" version="0" lat="8.6436321403600012" lon="28.1262443478400002" timestamp=""/>
+        <node id="-90" version="0" lat="8.6438238005799981" lon="28.1268501669399988" timestamp=""/>
+        <node id="-91" version="0" lat="8.6438238005799981" lon="28.1271490376899997" timestamp=""/>
+        <node id="-92" version="0" lat="8.6440474040499975" lon="28.1279244861399995" timestamp=""/>
+        <node id="-93" version="0" lat="8.6443907948300023" lon="28.1286918569999997" timestamp=""/>
+        <node id="-94" version="0" lat="8.6446143979600016" lon="28.1296773227400010" timestamp=""/>
+        <node id="-95" version="0" lat="8.6450136889299998" lon="28.1304285384199986" timestamp=""/>
+        <node id="-96" version="0" lat="8.6453570788300009" lon="28.1309212712899956" timestamp=""/>
+        <node id="-97" version="0" lat="8.6457244258199992" lon="28.1313897713900012" timestamp=""/>
+        <node id="-98" version="0" lat="8.6462594740500016" lon="28.1319875129000003" timestamp=""/>
+        <node id="-99" version="0" lat="8.6466667490599978" lon="28.1325287113000009" timestamp=""/>
+        <node id="-100" version="0" lat="8.6470580520899993" lon="28.1331102976300009" timestamp=""/>
+        <node id="-101" version="0" lat="8.6476410129900003" lon="28.1336434184399984" timestamp=""/>
+        <node id="-102" version="0" lat="8.6482080014899996" lon="28.1343704013599982" timestamp=""/>
+        <node id="-103" version="0" lat="8.6489586610100009" lon="28.1351296946299954" timestamp=""/>
+        <node id="-104" version="0" lat="8.6507314892599982" lon="28.1488777493899995" timestamp=""/>
+        <node id="-105" version="0" lat="8.6512585447000010" lon="28.1486434993400003" timestamp=""/>
+        <node id="-106" version="0" lat="8.6517376853699997" lon="28.1483446285799985" timestamp=""/>
+        <node id="-107" version="0" lat="8.6523845243000004" lon="28.1481426888800002" timestamp=""/>
+        <node id="-108" version="0" lat="8.6529674769600007" lon="28.1478761284800001" timestamp=""/>
+        <node id="-109" version="0" lat="8.6535424430700019" lon="28.1476741887799982" timestamp=""/>
+        <node id="-110" version="0" lat="8.6543729481399989" lon="28.1475045594300006" timestamp=""/>
+        <node id="-111" version="0" lat="8.6551794945699996" lon="28.1472056886799997" timestamp=""/>
+        <node id="-112" version="0" lat="8.6503162329399998" lon="28.1470522145099977" timestamp=""/>
+        <node id="-113" version="0" lat="8.6506915607899995" lon="28.1468179644500012" timestamp=""/>
+        <node id="-114" version="0" lat="8.6512345876500003" lon="28.1465190937000003" timestamp=""/>
+        <node id="-115" version="0" lat="8.6519772554699994" lon="28.1462202229399985" timestamp=""/>
+        <node id="-116" version="0" lat="8.6524004956200020" lon="28.1460748263599996" timestamp=""/>
+        <node id="-117" version="0" lat="8.6530393477700009" lon="28.1459051970099985" timestamp=""/>
+        <node id="-118" version="0" lat="8.6538618683199999" lon="28.1455901710799985" timestamp=""/>
+        <node id="-119" version="0" lat="8.6545486316700000" lon="28.1453478434399962" timestamp=""/>
+        <node id="-120" version="0" lat="8.6499409047199993" lon="28.1449601192199950" timestamp=""/>
+        <node id="-121" version="0" lat="8.6503082472399981" lon="28.1447824122800014" timestamp=""/>
+        <node id="-122" version="0" lat="8.6509471029399982" lon="28.1445077742899947" timestamp=""/>
+        <node id="-123" version="0" lat="8.6516099145799998" lon="28.1442412138800009" timestamp=""/>
+        <node id="-124" version="0" lat="8.6522008541000002" lon="28.1439827310700004" timestamp=""/>
+        <node id="-125" version="0" lat="8.6528956061299986" lon="28.1437404034300016" timestamp=""/>
+        <node id="-126" version="0" lat="8.6534466154499974" lon="28.1436273172000000" timestamp=""/>
+        <node id="-127" version="0" lat="8.6541653220399990" lon="28.1434253775000016" timestamp=""/>
+        <node id="-128" version="0" lat="8.6418752504800000" lon="28.1225771228900001" timestamp=""/>
+        <node id="-129" version="0" lat="8.6420908692200005" lon="28.1224801918400011" timestamp=""/>
+        <node id="-130" version="0" lat="8.6425061346099987" lon="28.1224559590699990" timestamp=""/>
+        <node id="-131" version="0" lat="8.6431849328099997" lon="28.1226740539500000" timestamp=""/>
+        <node id="-132" version="0" lat="8.6437758855400002" lon="28.1230698557599972" timestamp=""/>
+        <node id="-133" version="0" lat="8.6443348940300009" lon="28.1235625886300014" timestamp=""/>
+        <node id="-134" version="0" lat="8.6449258449599995" lon="28.1237645283299997" timestamp=""/>
+        <node id="-135" version="0" lat="8.6455886671899993" lon="28.1236595196799968" timestamp=""/>
+        <node id="-136" version="0" lat="8.6464351613699986" lon="28.1235868213899991" timestamp=""/>
+        <node id="-137" version="0" lat="8.6418433069499976" lon="28.1196611136299985" timestamp=""/>
+        <node id="-138" version="0" lat="8.6421627421099974" lon="28.1198145877999970" timestamp=""/>
+        <node id="-139" version="0" lat="8.6426818236699994" lon="28.1201296137300005" timestamp=""/>
+        <node id="-140" version="0" lat="8.6432488196299992" lon="28.1206869672999993" timestamp=""/>
+        <node id="-141" version="0" lat="8.6436880412700017" lon="28.1210423811699997" timestamp=""/>
+        <node id="-142" version="0" lat="8.6441272624000014" lon="28.1212927864000015" timestamp=""/>
+        <node id="-143" version="0" lat="8.6449178591400013" lon="28.1213654846899992" timestamp=""/>
+        <node id="-144" version="0" lat="8.6455966530000001" lon="28.1213735622799987" timestamp=""/>
+        <node id="-145" version="0" lat="8.6462594740500016" lon="28.1213977950400000" timestamp=""/>
+        <node id="-146" version="0" lat="8.6471778386500002" lon="28.1215755019799971" timestamp=""/>
+        <node id="-147" version="0" lat="8.6421148268499994" lon="28.1177063373299987" timestamp=""/>
+        <node id="-148" version="0" lat="8.6424262759099992" lon="28.1179325097999957" timestamp=""/>
+        <node id="-149" version="0" lat="8.6429453571099994" lon="28.1184333202499950" timestamp=""/>
+        <node id="-150" version="0" lat="8.6434724234399969" lon="28.1188048893000015" timestamp=""/>
+        <node id="-151" version="0" lat="8.6440713615600000" lon="28.1190714497000016" timestamp=""/>
+        <node id="-152" version="0" lat="8.6448140434999985" lon="28.1192249238700001" timestamp=""/>
+        <node id="-153" version="0" lat="8.6455647097800004" lon="28.1191926135199992" timestamp=""/>
+        <node id="-154" version="0" lat="8.6463712750799999" lon="28.1191845359299997" timestamp=""/>
+        <node id="-155" version="0" lat="8.6469781943600008" lon="28.1192410790499956" timestamp=""/>
+        <node id="-156" version="0" lat="8.6476569845100002" lon="28.1192976221699986" timestamp=""/>
+        <node id="-157" version="0" lat="8.6614321671900001" lon="28.1405578337599991" timestamp=""/>
+        <node id="-158" version="0" lat="8.6611207338400025" lon="28.1402185750600005" timestamp=""/>
+        <node id="-159" version="0" lat="8.6604419679800007" lon="28.1398873939599987" timestamp=""/>
+        <node id="-160" version="0" lat="8.6595555777599991" lon="28.1395158249099993" timestamp=""/>
+        <node id="-161" version="0" lat="8.6588847945900014" lon="28.1391765662100006" timestamp=""/>
+        <node id="-162" version="0" lat="8.6583178221700017" lon="28.1387807643999999" timestamp=""/>
+        <node id="-163" version="0" lat="8.6575512102099985" lon="28.1382637987700015" timestamp=""/>
+        <node id="-164" version="0" lat="8.6568724378999988" lon="28.1375933589700011" timestamp=""/>
+        <node id="-165" version="0" lat="8.6564012893399997" lon="28.1370602381600001" timestamp=""/>
+        <node id="-166" version="0" lat="8.6559061834400008" lon="28.1366402035800007" timestamp=""/>
+        <node id="-167" version="0" lat="8.6554190624899991" lon="28.1361070827800006" timestamp=""/>
+        <node id="-168" version="0" lat="8.6547482719399991" lon="28.1353800998600008" timestamp=""/>
+        <node id="-169" version="0" lat="8.6543250344300020" lon="28.1348469790499998" timestamp=""/>
+        <node id="-170" version="0" lat="8.6539337389599993" lon="28.1343542461799956" timestamp=""/>
+        <node id="-171" version="0" lat="8.6536302850400002" lon="28.1340230650800009" timestamp=""/>
+        <node id="-172" version="0" lat="8.6530553190599981" lon="28.1334576339199991" timestamp=""/>
+        <node id="-173" version="0" lat="8.6525442374499999" lon="28.1328356596399978" timestamp=""/>
+        <node id="-174" version="0" lat="8.6520491264699988" lon="28.1320925215499962" timestamp=""/>
+        <node id="-175" version="0" lat="8.6611686466799984" lon="28.1363897983599962" timestamp=""/>
+        <node id="-176" version="0" lat="8.6609131114700002" lon="28.1363090224799990" timestamp=""/>
+        <node id="-177" version="0" lat="8.6604499534600006" lon="28.1360909275999980" timestamp=""/>
+        <node id="-178" version="0" lat="8.6597711863799987" lon="28.1354931860899988" timestamp=""/>
+        <node id="-179" version="0" lat="8.6592680994099993" lon="28.1353720222699977" timestamp=""/>
+        <node id="-180" version="0" lat="8.6585653736099975" lon="28.1350327635699990" timestamp=""/>
+        <node id="-181" version="0" lat="8.6583337932299980" lon="28.1346208065900001" timestamp=""/>
+        <node id="-182" version="0" lat="8.6578307043300011" lon="28.1340876857799955" timestamp=""/>
+        <node id="-183" version="0" lat="8.6574793402600001" lon="28.1339422891999966" timestamp=""/>
+        <node id="-184" version="0" lat="8.6570800625000022" lon="28.1336918839699983" timestamp=""/>
+        <node id="-185" version="0" lat="8.6564172604899987" lon="28.1331991511000012" timestamp=""/>
+        <node id="-186" version="0" lat="8.6559461113600005" lon="28.1324237026500015" timestamp=""/>
+        <node id="-187" version="0" lat="8.6556746014299986" lon="28.1318663490799992" timestamp=""/>
+        <node id="-188" version="0" lat="8.6554829472399994" lon="28.1312524523900009" timestamp=""/>
+        <node id="-189" version="0" lat="8.6551555377699998" lon="28.1304931591200003" timestamp=""/>
+        <node id="-190" version="0" lat="8.6547003582799995" lon="28.1300488917799960" timestamp=""/>
+        <node id="-191" version="0" lat="8.6542132357699995" lon="28.1297257882599965" timestamp=""/>
+        <node id="-192" version="0" lat="8.6537580551399991" lon="28.1294188399199996" timestamp=""/>
+        <node id="-193" version="0" lat="8.6533428021600010" lon="28.1291199691600013" timestamp=""/>
+        <node id="-194" version="0" lat="8.6528556778900025" lon="28.1287241673500006" timestamp=""/>
+        <node id="-195" version="0" lat="8.6526320796500009" lon="28.1283606758900007" timestamp=""/>
+        <node id="-196" version="0" lat="8.6587170986100013" lon="28.1332153062800003" timestamp=""/>
+        <node id="-197" version="0" lat="8.6588768090699997" lon="28.1327548837600006" timestamp=""/>
+        <node id="-198" version="0" lat="8.6591083891099974" lon="28.1322136853699973" timestamp=""/>
+        <node id="-199" version="0" lat="8.6592281718399988" lon="28.1316724869700003" timestamp=""/>
+        <node id="-200" version="0" lat="8.6591642877199995" lon="28.1309697368099982" timestamp=""/>
+        <node id="-201" version="0" lat="8.6589726353100023" lon="28.1305497022399997" timestamp=""/>
+        <node id="-202" version="0" lat="8.6585014893799990" lon="28.1302185211300007" timestamp=""/>
+        <node id="-203" version="0" lat="8.6579584730099999" lon="28.1298873400200016" timestamp=""/>
+        <node id="-204" version="0" lat="8.6573356003100024" lon="28.1294269175099956" timestamp=""/>
+        <node id="-205" version="0" lat="8.6568484812099982" lon="28.1290876588100005" timestamp=""/>
+        <node id="-206" version="0" lat="8.6564172604900023" lon="28.1287484001199992" timestamp=""/>
+        <node id="-207" version="0" lat="8.6560259671900006" lon="28.1281748913699978" timestamp=""/>
+        <node id="-208" version="0" lat="8.6556506446599979" lon="28.1274721412099993" timestamp=""/>
+        <node id="-209" version="0" lat="8.6552833073500004" lon="28.1267290031200012" timestamp=""/>
+        <node id="-210" version="0" lat="8.6549319408999992" lon="28.1261635719599994" timestamp=""/>
+        <node id="-211" version="0" lat="8.6545246748300002" lon="28.1256950718600010" timestamp=""/>
+        <node id="-212" version="0" lat="8.6496134904400019" lon="28.1183767771399999" timestamp=""/>
+        <node id="-213" version="0" lat="8.6495975190000021" lon="28.1188775875899992" timestamp=""/>
+        <node id="-214" version="0" lat="8.6495975190000021" lon="28.1194510963400006" timestamp=""/>
+        <node id="-215" version="0" lat="8.6497412618999991" lon="28.1200407602600002" timestamp=""/>
+        <node id="-216" version="0" lat="8.6499089618799978" lon="28.1206304241900007" timestamp=""/>
+        <node id="-217" version="0" lat="8.6500527046600002" lon="28.1211797001699999" timestamp=""/>
+        <node id="-218" version="0" lat="8.6502283901999988" lon="28.1217612865000000" timestamp=""/>
+        <node id="-219" version="0" lat="8.6504360184700015" lon="28.1223024849000005" timestamp=""/>
+        <node id="-220" version="0" lat="8.6508193318899984" lon="28.1227709849999989" timestamp=""/>
+        <node id="-221" version="0" lat="8.6512585446999992" lon="28.1232152523399961" timestamp=""/>
+        <node id="-222" version="0" lat="8.6517217140200025" lon="28.1236675972699999" timestamp=""/>
+        <node id="-223" version="0" lat="8.6520810691400012" lon="28.1240795542599997" timestamp=""/>
+        <node id="-224" version="0" lat="8.6523286246799991" lon="28.1245318991900000" timestamp=""/>
+        <node id="-225" version="0" lat="8.6526400652999982" lon="28.1250730975799996" timestamp=""/>
+        <node id="-226" version="0" lat="8.6529355343700018" lon="28.1255496752700012" timestamp=""/>
+        <node id="-227" version="0" lat="8.6534905364500005" lon="28.1166320181300016" timestamp=""/>
+        <node id="-228" version="0" lat="8.6535144933499986" lon="28.1169672380300000" timestamp=""/>
+        <node id="-229" version="0" lat="8.6535783784299998" lon="28.1173832338099992" timestamp=""/>
+        <node id="-230" version="0" lat="8.6536742060199980" lon="28.1177467252699955" timestamp=""/>
+        <node id="-231" version="0" lat="8.6538618683199999" lon="28.1180940615600008" timestamp=""/>
+        <node id="-232" version="0" lat="8.6540415448899992" lon="28.1184212038699997" timestamp=""/>
+        <node id="-233" version="0" lat="8.6541932717200005" lon="28.1188089280900009" timestamp=""/>
+        <node id="-234" version="0" lat="8.6543410056700019" lon="28.1191885747299963" timestamp=""/>
+        <node id="-235" version="0" lat="8.6544528042999982" lon="28.1196530360399990" timestamp=""/>
+        <node id="-236" version="0" lat="8.6545047107900004" lon="28.1200528766399991" timestamp=""/>
+        <node id="-237" version="0" lat="8.6545047107900022" lon="28.1205092603699995" timestamp=""/>
+        <node id="-238" version="0" lat="8.6544887395600014" lon="28.1209252561499987" timestamp=""/>
+        <node id="-239" version="0" lat="8.6544607899099990" lon="28.1214704933399986" timestamp=""/>
+        <node id="-240" version="0" lat="8.6545047107900004" lon="28.1220157305299985" timestamp=""/>
+        <node id="-241" version="0" lat="8.6545566172799990" lon="28.1225407737499999" timestamp=""/>
+        <node id="-242" version="0" lat="8.6547123366999994" lon="28.1230738945500001" timestamp=""/>
+        <node id="-243" version="0" lat="8.6549239552900001" lon="28.1235989377700015" timestamp=""/>
+        <node id="-244" version="0" lat="8.6566328709099984" lon="28.1195641825699987" timestamp=""/>
+        <node id="-245" version="0" lat="8.6565610007800000" lon="28.1191118376399984" timestamp=""/>
+        <node id="-246" version="0" lat="8.6567606399899990" lon="28.1200973033799997" timestamp=""/>
+        <node id="-247" version="0" lat="8.6567486616400000" lon="28.1198913248800011" timestamp=""/>
+        <node id="-248" version="0" lat="8.6565530152099992" lon="28.1186998806599995" timestamp=""/>
+        <node id="-249" version="0" lat="8.6564611811399992" lon="28.1178759666799998" timestamp=""/>
+        <node id="-250" version="0" lat="8.6564412172100003" lon="28.1173428458699988" timestamp=""/>
+        <node id="-251" version="0" lat="8.6564412172100003" lon="28.1167652983299980" timestamp=""/>
+        <node id="-252" version="0" lat="8.6567726183399998" lon="28.1204769500100014" timestamp=""/>
+        <node id="-253" version="0" lat="8.6567806038999979" lon="28.1207475492100016" timestamp=""/>
+        <node id="-254" version="0" lat="8.6567885894700005" lon="28.1210464199699999" timestamp=""/>
+        <node id="-255" version="0" lat="8.6568165389500003" lon="28.1214381829800004" timestamp=""/>
+        <node id="-256" version="0" lat="8.6568684451200024" lon="28.1218178296199994" timestamp=""/>
+        <node id="-257" version="0" lat="8.6569722574300005" lon="28.1222015150499978" timestamp=""/>
+        <node id="-258" version="0" lat="8.6570960336200020" lon="28.1225326961599968" timestamp=""/>
+        <node id="-259" version="0" lat="8.6572956725400019" lon="28.1228356057099980" timestamp=""/>
+        <node id="-260" version="0" lat="8.6475176963700005" lon="28.1236344124400013" timestamp=""/>
+        <node id="-261" version="0" lat="8.6476609791599994" lon="28.1217038614900012" timestamp=""/>
+        <node id="-262" version="0" lat="8.6481166451299973" lon="28.1193993315499995" timestamp=""/>
+        <node id="-263" version="0" lat="8.6559335454799999" lon="28.1469221196499966" timestamp=""/>
+        <node id="-264" version="0" lat="8.6553242307100025" lon="28.1451379938399953" timestamp=""/>
+        <node id="-265" version="0" lat="8.6546846287000001" lon="28.1432651875200008" timestamp=""/>
+        <node id="-266" version="0" lat="8.6410316365500002" lon="28.1395330008400002" timestamp=""/>
+        <node id="-267" version="0" lat="8.6471713913100015" lon="28.1373549573899986" timestamp=""/>
+        <node id="-268" version="0" lat="8.6532603911799999" lon="28.1260864957899983" timestamp=""/>
+        <node id="-269" version="0" lat="8.6575133124299999" lon="28.1230948905699947" timestamp=""/>
+        <node id="-270" version="0" lat="8.6540445117899996" lon="28.1252075383199980" timestamp=""/>
+        <node id="-271" version="0" lat="8.6376175892599996" lon="28.1398700865000002" timestamp=""/>
+        <node id="-272" version="0" lat="8.6447289496399993" lon="28.1386041166299989" timestamp=""/>
+        <node id="-273" version="0" lat="8.6493939291599986" lon="28.1356693682899994" timestamp=""/>
+        <node id="-274" version="0" lat="8.6516979526199993" lon="28.1316412823300013" timestamp=""/>
+        <node id="-275" version="0" lat="8.6523806235300000" lon="28.1277282845499990" timestamp=""/>
+        <node id="-276" version="0" lat="8.6551112947800011" lon="28.1240454631100008" timestamp=""/>
+        <way id="-1" version="0" timestamp="">
+            <nd ref="-5"/>
+            <nd ref="-4"/>
+            <nd ref="-3"/>
+            <nd ref="-2"/>
+            <nd ref="-5"/>
+            <tag k="security:classification" v="UNCLASSIFIED"/>
+            <tag k="building" v="cowshed"/>
+            <tag k="source" v="Unknown"/>
+            <tag k="name" v="cow house"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+        <way id="-2" version="0" timestamp="">
+            <nd ref="-266"/>
+            <nd ref="-28"/>
+            <nd ref="-27"/>
+            <nd ref="-26"/>
+            <nd ref="-25"/>
+            <nd ref="-24"/>
+            <nd ref="-23"/>
+            <nd ref="-22"/>
+            <nd ref="-21"/>
+            <nd ref="-20"/>
+            <nd ref="-19"/>
+            <nd ref="-18"/>
+            <nd ref="-17"/>
+            <nd ref="-16"/>
+            <nd ref="-15"/>
+            <nd ref="-14"/>
+            <nd ref="-13"/>
+            <nd ref="-12"/>
+            <nd ref="-11"/>
+            <nd ref="-10"/>
+            <nd ref="-9"/>
+            <nd ref="-8"/>
+            <nd ref="-7"/>
+            <nd ref="-6"/>
+            <tag k="highway" v="residential"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+        <way id="-3" version="0" timestamp="">
+            <nd ref="-267"/>
+            <nd ref="-48"/>
+            <nd ref="-47"/>
+            <nd ref="-46"/>
+            <nd ref="-45"/>
+            <nd ref="-44"/>
+            <nd ref="-43"/>
+            <nd ref="-42"/>
+            <nd ref="-41"/>
+            <nd ref="-40"/>
+            <nd ref="-39"/>
+            <nd ref="-38"/>
+            <nd ref="-37"/>
+            <nd ref="-36"/>
+            <nd ref="-35"/>
+            <nd ref="-34"/>
+            <nd ref="-33"/>
+            <nd ref="-32"/>
+            <nd ref="-31"/>
+            <nd ref="-30"/>
+            <nd ref="-29"/>
+            <tag k="highway" v="residential"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+        <way id="-4" version="0" timestamp="">
+            <nd ref="-271"/>
+            <nd ref="-68"/>
+            <nd ref="-67"/>
+            <nd ref="-66"/>
+            <nd ref="-65"/>
+            <nd ref="-64"/>
+            <nd ref="-63"/>
+            <nd ref="-62"/>
+            <nd ref="-61"/>
+            <nd ref="-60"/>
+            <nd ref="-59"/>
+            <nd ref="-58"/>
+            <nd ref="-57"/>
+            <nd ref="-56"/>
+            <nd ref="-55"/>
+            <nd ref="-54"/>
+            <nd ref="-53"/>
+            <nd ref="-52"/>
+            <nd ref="-51"/>
+            <nd ref="-50"/>
+            <nd ref="-49"/>
+            <tag k="highway" v="residential"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+        <way id="-5" version="0" timestamp="">
+            <nd ref="-272"/>
+            <nd ref="-88"/>
+            <nd ref="-87"/>
+            <nd ref="-86"/>
+            <nd ref="-85"/>
+            <nd ref="-84"/>
+            <nd ref="-83"/>
+            <nd ref="-82"/>
+            <nd ref="-81"/>
+            <nd ref="-80"/>
+            <nd ref="-79"/>
+            <nd ref="-78"/>
+            <nd ref="-77"/>
+            <nd ref="-76"/>
+            <nd ref="-75"/>
+            <nd ref="-74"/>
+            <nd ref="-73"/>
+            <nd ref="-72"/>
+            <nd ref="-71"/>
+            <nd ref="-70"/>
+            <nd ref="-69"/>
+            <tag k="highway" v="residential"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+        <way id="-6" version="0" timestamp="">
+            <nd ref="-273"/>
+            <nd ref="-103"/>
+            <nd ref="-102"/>
+            <nd ref="-101"/>
+            <nd ref="-100"/>
+            <nd ref="-99"/>
+            <nd ref="-98"/>
+            <nd ref="-97"/>
+            <nd ref="-96"/>
+            <nd ref="-95"/>
+            <nd ref="-94"/>
+            <nd ref="-93"/>
+            <nd ref="-92"/>
+            <nd ref="-91"/>
+            <nd ref="-90"/>
+            <nd ref="-89"/>
+            <tag k="highway" v="residential"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+        <way id="-7" version="0" timestamp="">
+            <nd ref="-263"/>
+            <nd ref="-111"/>
+            <nd ref="-110"/>
+            <nd ref="-109"/>
+            <nd ref="-108"/>
+            <nd ref="-107"/>
+            <nd ref="-106"/>
+            <nd ref="-105"/>
+            <nd ref="-104"/>
+            <tag k="highway" v="residential"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+        <way id="-8" version="0" timestamp="">
+            <nd ref="-264"/>
+            <nd ref="-119"/>
+            <nd ref="-118"/>
+            <nd ref="-117"/>
+            <nd ref="-116"/>
+            <nd ref="-115"/>
+            <nd ref="-114"/>
+            <nd ref="-113"/>
+            <nd ref="-112"/>
+            <tag k="highway" v="residential"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+        <way id="-9" version="0" timestamp="">
+            <nd ref="-265"/>
+            <nd ref="-127"/>
+            <nd ref="-126"/>
+            <nd ref="-125"/>
+            <nd ref="-124"/>
+            <nd ref="-123"/>
+            <nd ref="-122"/>
+            <nd ref="-121"/>
+            <nd ref="-120"/>
+            <tag k="highway" v="residential"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+        <way id="-10" version="0" timestamp="">
+            <nd ref="-260"/>
+            <nd ref="-136"/>
+            <nd ref="-135"/>
+            <nd ref="-134"/>
+            <nd ref="-133"/>
+            <nd ref="-132"/>
+            <nd ref="-131"/>
+            <nd ref="-130"/>
+            <nd ref="-129"/>
+            <nd ref="-128"/>
+            <tag k="highway" v="residential"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+        <way id="-11" version="0" timestamp="">
+            <nd ref="-261"/>
+            <nd ref="-146"/>
+            <nd ref="-145"/>
+            <nd ref="-144"/>
+            <nd ref="-143"/>
+            <nd ref="-142"/>
+            <nd ref="-141"/>
+            <nd ref="-140"/>
+            <nd ref="-139"/>
+            <nd ref="-138"/>
+            <nd ref="-137"/>
+            <tag k="highway" v="residential"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+        <way id="-12" version="0" timestamp="">
+            <nd ref="-262"/>
+            <nd ref="-156"/>
+            <nd ref="-155"/>
+            <nd ref="-154"/>
+            <nd ref="-153"/>
+            <nd ref="-152"/>
+            <nd ref="-151"/>
+            <nd ref="-150"/>
+            <nd ref="-149"/>
+            <nd ref="-148"/>
+            <nd ref="-147"/>
+            <tag k="highway" v="residential"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+        <way id="-13" version="0" timestamp="">
+            <nd ref="-274"/>
+            <nd ref="-174"/>
+            <nd ref="-173"/>
+            <nd ref="-172"/>
+            <nd ref="-171"/>
+            <nd ref="-170"/>
+            <nd ref="-169"/>
+            <nd ref="-168"/>
+            <nd ref="-167"/>
+            <nd ref="-166"/>
+            <nd ref="-165"/>
+            <nd ref="-164"/>
+            <nd ref="-163"/>
+            <nd ref="-162"/>
+            <nd ref="-161"/>
+            <nd ref="-160"/>
+            <nd ref="-159"/>
+            <nd ref="-158"/>
+            <nd ref="-157"/>
+            <tag k="highway" v="residential"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+        <way id="-14" version="0" timestamp="">
+            <nd ref="-275"/>
+            <nd ref="-195"/>
+            <nd ref="-194"/>
+            <nd ref="-193"/>
+            <nd ref="-192"/>
+            <nd ref="-191"/>
+            <nd ref="-190"/>
+            <nd ref="-189"/>
+            <nd ref="-188"/>
+            <nd ref="-187"/>
+            <nd ref="-186"/>
+            <nd ref="-185"/>
+            <nd ref="-184"/>
+            <nd ref="-183"/>
+            <nd ref="-182"/>
+            <nd ref="-181"/>
+            <nd ref="-180"/>
+            <nd ref="-179"/>
+            <nd ref="-178"/>
+            <nd ref="-177"/>
+            <nd ref="-176"/>
+            <nd ref="-175"/>
+            <tag k="highway" v="residential"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+        <way id="-15" version="0" timestamp="">
+            <nd ref="-270"/>
+            <nd ref="-211"/>
+            <nd ref="-210"/>
+            <nd ref="-209"/>
+            <nd ref="-208"/>
+            <nd ref="-207"/>
+            <nd ref="-206"/>
+            <nd ref="-205"/>
+            <nd ref="-204"/>
+            <nd ref="-203"/>
+            <nd ref="-202"/>
+            <nd ref="-201"/>
+            <nd ref="-200"/>
+            <nd ref="-199"/>
+            <nd ref="-198"/>
+            <nd ref="-197"/>
+            <nd ref="-196"/>
+            <tag k="highway" v="residential"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+        <way id="-16" version="0" timestamp="">
+            <nd ref="-268"/>
+            <nd ref="-226"/>
+            <nd ref="-225"/>
+            <nd ref="-224"/>
+            <nd ref="-223"/>
+            <nd ref="-222"/>
+            <nd ref="-221"/>
+            <nd ref="-220"/>
+            <nd ref="-219"/>
+            <nd ref="-218"/>
+            <nd ref="-217"/>
+            <nd ref="-216"/>
+            <nd ref="-215"/>
+            <nd ref="-214"/>
+            <nd ref="-213"/>
+            <nd ref="-212"/>
+            <tag k="highway" v="residential"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+        <way id="-17" version="0" timestamp="">
+            <nd ref="-276"/>
+            <nd ref="-243"/>
+            <nd ref="-242"/>
+            <nd ref="-241"/>
+            <nd ref="-240"/>
+            <nd ref="-239"/>
+            <nd ref="-238"/>
+            <nd ref="-237"/>
+            <nd ref="-236"/>
+            <nd ref="-235"/>
+            <nd ref="-234"/>
+            <nd ref="-233"/>
+            <nd ref="-232"/>
+            <nd ref="-231"/>
+            <nd ref="-230"/>
+            <nd ref="-229"/>
+            <nd ref="-228"/>
+            <nd ref="-227"/>
+            <tag k="highway" v="residential"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+        <way id="-18" version="0" timestamp="">
+            <nd ref="-269"/>
+            <nd ref="-259"/>
+            <nd ref="-258"/>
+            <nd ref="-257"/>
+            <nd ref="-256"/>
+            <nd ref="-255"/>
+            <nd ref="-254"/>
+            <nd ref="-253"/>
+            <nd ref="-252"/>
+            <nd ref="-246"/>
+            <nd ref="-247"/>
+            <nd ref="-244"/>
+            <nd ref="-245"/>
+            <nd ref="-248"/>
+            <nd ref="-249"/>
+            <nd ref="-250"/>
+            <nd ref="-251"/>
+            <tag k="highway" v="residential"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+    </create>
+</osmChange>

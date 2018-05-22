@@ -22,44 +22,46 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef ATTRIBUTEDISTANCEEXTRACTOR_H
-#define ATTRIBUTEDISTANCEEXTRACTOR_H
+#include "AddBboxVisitor.h"
 
-#include "WayFeatureExtractor.h"
+// GEOS
+#include <geos/geom/Geometry.h>
+
+// hoot
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/ElementConverter.h>
 
 namespace hoot
 {
 
-/**
- * See exporatory funds report for details.
- * Calculates "distance" between tags using hoot::TagComparator
- */
-class AttributeDistanceExtractor : public WayFeatureExtractor
+HOOT_FACTORY_REGISTER(ConstElementVisitor, AddBboxVisitor)
+
+AddBboxVisitor::AddBboxVisitor()
 {
-public:
-  static std::string className() { return "hoot::AttributeDistanceExtractor"; }
+}
 
-  AttributeDistanceExtractor(ValueAggregatorPtr wayAgg, QString key = "");
+void AddBboxVisitor::visit(const boost::shared_ptr<Element>& e)
+{
+  if (e->getTags().getNonDebugCount() > 0)
+  {
 
-  AttributeDistanceExtractor(QString key = "");
+    // Skip nodes.
+    if (e->getElementType() != ElementType::Node)
+    {
+      boost::shared_ptr<geos::geom::Envelope> bounds(e->getEnvelope(_map->shared_from_this()));
 
-  virtual std::string getClassName() const { return className(); }
-
-  virtual std::string getName() const;
-
-  virtual QString getDescription() const
-  { return "Calculates \"distance\" between tags using hoot::TagComparator"; }
-
-protected:
-
-  double _extract(const OsmMap& map, const ConstWayPtr& w1, const ConstWayPtr& w2) const;
-
-  bool _useWeight;
-  QString _key;
-};
+      if (bounds)
+      {
+        e->getTags()["hoot:bbox"] = QString("%1,%2,%3,%4").arg(QString::number(bounds->getMinX(), 'g', 10))
+            .arg(QString::number(bounds->getMinY(), 'g', 10))
+            .arg(QString::number(bounds->getMaxX(), 'g', 10))
+            .arg(QString::number(bounds->getMaxY(), 'g', 10));
+      }
+    }
+  }
 
 }
 
-#endif // ATTRIBUTEDISTANCEEXTRACTOR_H
+}

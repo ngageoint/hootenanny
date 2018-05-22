@@ -22,44 +22,30 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef ATTRIBUTEDISTANCEEXTRACTOR_H
-#define ATTRIBUTEDISTANCEEXTRACTOR_H
+#ifndef ADDBBOXVISITOR_H
+#define ADDBBOXVISITOR_H
 
-#include "WayFeatureExtractor.h"
+#include "ElementOsmMapVisitor.h"
 
 namespace hoot
 {
 
-/**
- * See exporatory funds report for details.
- * Calculates "distance" between tags using hoot::TagComparator
- */
-class AttributeDistanceExtractor : public WayFeatureExtractor
+class AddBboxVisitor : public ElementOsmMapVisitor
 {
 public:
-  static std::string className() { return "hoot::AttributeDistanceExtractor"; }
 
-  AttributeDistanceExtractor(ValueAggregatorPtr wayAgg, QString key = "");
+  static std::string className() { return "hoot::AddBboxVisitor"; }
 
-  AttributeDistanceExtractor(QString key = "");
+  AddBboxVisitor();
 
-  virtual std::string getClassName() const { return className(); }
+  virtual void visit(const boost::shared_ptr<Element>& e);
 
-  virtual std::string getName() const;
+  virtual QString getDescription() const { return "Adds a bounding box tag to each applicable element"; }
 
-  virtual QString getDescription() const
-  { return "Calculates \"distance\" between tags using hoot::TagComparator"; }
-
-protected:
-
-  double _extract(const OsmMap& map, const ConstWayPtr& w1, const ConstWayPtr& w2) const;
-
-  bool _useWeight;
-  QString _key;
 };
 
 }
 
-#endif // ATTRIBUTEDISTANCEEXTRACTOR_H
+#endif // ADDBBOXVISITOR_H

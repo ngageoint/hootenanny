@@ -64,20 +64,24 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapWriter, OsmGbdxJsonWriter)
 
 OsmGbdxJsonWriter::OsmGbdxJsonWriter(int precision)
-  : OsmJsonWriter(precision)
+  : OsmJsonWriter(precision),
+    _fileNumber(0)
 {
   _writeHootFormat = false;
 }
 
 void OsmGbdxJsonWriter::open(QString path)
 {
-  if (path.toLower().endsWith(".gbdx"))
-  {
-    path.remove(path.size() - 5, path.size());
-  }
+//  if (path.toLower().endsWith(".gbdx"))
+//  {
+//    path.remove(path.size() - 5, path.size());
+//  }
+//  _outputDir = QDir(path);
+//  _outputDir.makeAbsolute();
 
-  _outputDir = QDir(path);
-  _outputDir.makeAbsolute();
+  QFileInfo fi(path);
+  _outputDir = fi.absoluteDir();
+  _outputFileName = fi.baseName();
 
   if (_outputDir.exists() == false)
   {
@@ -96,7 +100,25 @@ void OsmGbdxJsonWriter::_newOutputFile()
     close();
   }
 
-  QString url = _outputDir.filePath(UuidHelper::createUuid().toString().replace("{", "").replace("}", "") + ".json");
+  // The output has had a few changes.....
+//  QString url = _outputDir.filePath(UuidHelper::createUuid().toString().replace("{", "").replace("}", "") + ".json");
+//  QString url = _outputDir.filePath(QString("det_%1.json").arg(_fileNumber++,4,10,QChar('0')));
+//  QString url = _outputDir.filePath(QString("%1_%2.json").arg(_outputFileName).arg(_fileNumber++));
+  QString url = _outputDir.filePath(QString("%1_00_%2.json").arg(_outputFileName).arg(_fileNumber++));
+
+  // If the file exists, increment the middle _00_ in the name.
+  // NOTE: This assumes that there can be a maximum of 10 copies of a filename....
+  if (QFile::exists(url))
+  {
+//    LOG_ERROR("Clash: Orig Filename: " + url);
+    int inc = 0;
+    while (QFile::exists(url))
+    {
+      inc++;
+      url = _outputDir.filePath(QString("%1_%2_%3.xml").arg(_outputFileName).arg(inc,2,10,QChar('0')).arg(_fileNumber));
+    }
+//    LOG_ERROR("Final name: " + url);
+  }
 
   _fp.setFileName(url);
 

@@ -22,39 +22,37 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef CENTROIDDISTANCEEXTRACTOR_H
-#define CENTROIDDISTANCEEXTRACTOR_H
+#ifndef PARALLELSCOREEXTRACTOR_H
+#define PARALLELSCOREEXTRACTOR_H
 
-#include "AbstractDistanceExtractor.h"
+#include "WayFeatureExtractor.h"
 
 namespace hoot
 {
 
 /**
- * @author RoadMatcher
- * @copyright GPL
- * http://www.vividsolutions.com/products.asp?catg=spaapp&code=roadmatcher
- * The ideas were shamelessly taken from RoadMatcher, but reimplemented in C++ with Hootenanny
- * appropriate data structures.
+ * Derive a score from how parallel the ways are
  */
-class CentroidDistanceExtractor : public AbstractDistanceExtractor
+class ParallelScoreExtractor : public WayFeatureExtractor
 {
 public:
-  static std::string className() { return "hoot::CentroidDistanceExtractor"; }
 
-  virtual double distance(const OsmMap& map, const boost::shared_ptr<const Element>& target,
-    const boost::shared_ptr<const Element>& candidate) const;
+  static std::string className() { return "hoot::ParallelScoreExtractor"; }
 
-  virtual std::string getClassName() const { return CentroidDistanceExtractor::className(); }
+  ParallelScoreExtractor();
+
+  virtual std::string getClassName() const { return className(); }
 
   virtual QString getDescription() const
-  { return "Converts target & candidate to geometries, finds their centroids, "
-           "calculates the distance between those two points"; }
+  { return "Derives a score from how parallel the ways are to each-other"; }
+
+protected:
+
+  double _extract(const OsmMap& map, const ConstWayPtr& w1, const ConstWayPtr& w2) const;
 };
 
 }
 
-#endif // CENTROIDDISTANCEEXTRACTOR_H
+#endif // PARALLELSCOREEXTRACTOR_H

@@ -52,6 +52,8 @@
 #include <hoot/core/visitors/LengthOfWaysVisitor.h>
 #include <hoot/core/filters/BuildingCriterion.h>
 #include <hoot/core/filters/PoiCriterion.h>
+#include <hoot/core/io/ElementSorter.h>
+#include <hoot/core/io/OsmXmlChangesetFileWriter.h>
 
 // Standard
 #include <fstream>
@@ -77,6 +79,28 @@ void ConflateCmd::printStats(const QList<SingleStat>& stats)
   {
     cout << stats[i].name << sep << stats[i].value << endl;
   }
+}
+
+// Convenience function used when deriving a changeset
+boost::shared_ptr<ChangesetDeriver> ConflateCmd::_sortInputs(OsmMapPtr pMap1, OsmMapPtr pMap2)
+{
+  ElementSorterPtr sorted1(new ElementSorter(pMap1));
+  ElementSorterPtr sorted2(new ElementSorter(pMap2));
+  boost::shared_ptr<ChangesetDeriver> delta(new ChangesetDeriver(sorted1, sorted2));
+  return delta;
+}
+
+void ConflateCmd::_writeChangeset(OsmMapPtr pMap, QString outFileName)
+{
+  // Make empty map
+  OsmMapPtr pEmptyMap(new OsmMap());
+
+  // Get Changeset Deriver
+  boost::shared_ptr<ChangesetDeriver> pDeriver = _sortInputs(pEmptyMap, pMap);
+
+  // Write the file!
+  OsmXmlChangesetFileWriter writer;
+  writer.write(outFileName, pDeriver);
 }
 
 int ConflateCmd::runSimple(QStringList args)
@@ -238,7 +262,19 @@ int ConflateCmd::runSimple(QStringList args)
   MapProjector::projectToWgs84(result);
   stats.append(SingleStat("Project to WGS84 Time (sec)", t.getElapsedAndRestart()));
 
-  IoUtils::saveMap(result, output);
+  // If output ends with .osc, write out a changeset
+  // Else write normal stuff
+  if (output.endsWith(".osc"))
+  {
+    // Write changeset
+    writeChangeset(result, output);
+  }
+  else
+  {
+    // Write conflated map
+    IoUtils::saveMap(result, output);
+  }
+
   double timingOutput = t.getElapsedAndRestart();
 
   if (displayStats)

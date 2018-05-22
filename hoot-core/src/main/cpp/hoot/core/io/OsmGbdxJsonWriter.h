@@ -78,6 +78,8 @@ public:
 protected:
 
   QDir _outputDir;
+  QString _outputFileName;
+  int _fileNumber;
 
   /**
    * @brief Close the open file and open a unique file for output
@@ -125,12 +127,6 @@ protected:
    * @param element
    */
   void _writeFeature(ConstElementPtr element);
-
-  /**
-   * @brief _writeMeta Write node/way/relation metadata, i.e. timestamp, version, and visible
-   * @param element
-   */
-//  void _writeMeta(ConstElementPtr element);
 
   /**
    * @brief _writeGeometry Write out the geometry in GeoJSON format based on the type

@@ -1089,7 +1089,7 @@
                 "id":"search_radius_waterway",
                 "minvalue":"-1",
                 "elem_type":"double",
-                "description":"The search radius to use when conflating highways. If two features are within the search radius then they will be considered for conflation. If the value is -1 then the circular error will be used to calculate an appropriate search radius.",
+                "description":"The search radius to use when conflating waterways. If two features are within the search radius then they will be considered for conflation. If the value is -1 then the circular error will be used to calculate an appropriate search radius.",
                 "maxvalue":"",
                 "name":"Waterway Search Radius",
                 "defaultvalue":"-1",
@@ -1109,5 +1109,67 @@
                 "required":"true"
             }
         ]
-    }
+    },
+    {
+        "id":"hoot_railway_options",
+        "elem_type":"group",
+        "description":"Hootenanny Railway options",
+        "name":"Railway Options",
+        "members":[
+        {
+            "id":"hoot_enable_railway_options",
+            "elem_type":"checkbox",
+            "override":{
+                "elem_type":"checkbox"
+            },
+            "description":"Enable railway options",
+            "name":"Enabled",
+            "defaultvalue":"true",
+            "onchange":"true"
+        },
+        {
+            "id":"railway_match_creator",
+            "elem_type":"string",
+            "description":"List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
+            "name":"Match Creator",
+            "required":"true",
+            "defaultvalue":"hoot::ScriptMatchCreator,Railway.js",
+            "override":{
+                "defaultvalue":"hoot::ScriptMatchCreator,Railway.js"
+            },
+            "hoot_key":"match.creators"
+        },
+        {
+            "id":"railway_merger_creator",
+            "elem_type":"string",
+            "description":"List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
+            "name":"Merger Creator",
+            "required":"true",
+            "defaultvalue":"hoot::ScriptMergerCreator",
+            "override":{
+                "defaultvalue":"hoot::ScriptMergerCreator"
+            },
+            "hoot_key":"merger.creators"
+        },
+        {
+            "id":"railway_way_subline_matcher",
+            "elem_type":"string",
+            "description":"The way subline matcher to use when determining matching sublines.",
+            "name":"Railway Subline Matcher",
+            "defaultvalue":"hoot::MaximalSublineMatcher",
+            "hoot_key":"railway.subline.matcher",
+            "required":"true"
+        },
+        {
+            "id":"railway_matcher_max_angle",
+            "minvalue":"0.0",
+            "maxvalue":"360.0",
+            "defaultvalue":"90.0",
+            "elem_type":"double",
+            "description":"Sets that maximum angle that is still considered a railway match. Units in degrees.",
+            "name":"Railway Matcher Max Angle",
+            "hoot_key":"railway.matcher.max.angle"
+        }
+    ]
+}
 ]
