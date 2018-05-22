@@ -63,6 +63,7 @@ typing 'hoot' at the command line in the Hootenanny environment.  More detail is
 
 # Supported Data Formats
 **Hootenanny can import from:**
+* OGR supported formats
 * ESRI File Geodatabase (.gdb)
 * GeoJSON (.geojson) (M)
 * geonames.org (.geonames)
@@ -73,9 +74,9 @@ typing 'hoot' at the command line in the Hootenanny environment.  More detail is
 * OpenStreetMap API Database (osmapidb://)
 * Shapefile (.shp)
 * Zip files containing shapefiles and/or ESRI File Geodatabase files (.zip)
-* OGR supported formats
 
 **Hootenanny can export to:** 
+* OGR supported formats
 * ESRI File Geodatabase (.gdb)
 * GeoJSON (.geojson) (M)
 * Hootenanny API Database (hootapidb://)
@@ -84,7 +85,6 @@ typing 'hoot' at the command line in the Hootenanny environment.  More detail is
 * OpenStreetMap Protocol Buffers file (.osm.pbf)
 * OpenStreetMap API Database (osmapidb://)
 * Shapefile (.shp) (M)
-* OGR supported formats
 
 **Hootenanny can export changesets to:** 
 * OpenStreetMap XML changeset file (.osc) (M)

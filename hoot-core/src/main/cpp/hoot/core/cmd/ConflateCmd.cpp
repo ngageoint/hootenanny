@@ -267,7 +267,7 @@ int ConflateCmd::runSimple(QStringList args)
   if (output.endsWith(".osc"))
   {
     // Write changeset
-    writeChangeset(result, output);
+    _writeChangeset(result, output);
   }
   else
   {
