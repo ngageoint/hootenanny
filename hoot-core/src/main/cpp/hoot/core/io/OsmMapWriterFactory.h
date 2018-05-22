@@ -57,6 +57,8 @@ public:
 
   static QString getWriterName(const QString url);
 
+  static bool isSupportedFormat(const QString url);
+
 private:
 
   static boost::shared_ptr<OsmMapWriterFactory> _theInstance;

@@ -48,6 +48,8 @@
 namespace hoot
 {
 
+typedef std::vector<geos::geom::Coordinate> JsonCoordinates;
+
 /**
  * This class is intended to create an OsmMap from a given GeoJSON string.
  *
@@ -55,9 +57,6 @@ namespace hoot
  * class doesn't do anything clever to handle large datasets - it simply keeps
  * everything in memory. Be careful if you want to use it with large datasets.
  */
-
-typedef std::vector<geos::geom::Coordinate> JsonCoordinates;
-
 class OsmGeoJsonReader : public OsmJsonReader
 {
 public:

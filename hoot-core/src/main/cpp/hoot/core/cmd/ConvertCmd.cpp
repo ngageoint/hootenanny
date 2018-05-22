@@ -55,7 +55,6 @@ public:
 
   virtual int runSimple(QStringList args)
   {
-    //2 base args + 3 optional args each with a -- identifier in front (x2)
     if (args.size() < 2)
     {
       cout << getHelp() << endl << endl;
@@ -93,7 +92,7 @@ public:
     LOG_VART(inputs);
     LOG_VART(output);
 
-    if (args.size() > 2 && args.contains("--trans"))
+    if (args.contains("--trans"))
     {
       const QString translation = args.at(args.indexOf("--trans") + 1).trimmed();
       if (translation.isEmpty())
@@ -101,19 +100,17 @@ public:
         throw HootException("Invalid translation specified.");
       }
       converter.setTranslation(translation);
-      LOG_VARD(translation);
     }    
 
-    if (args.size() > 2 && args.contains("--cols"))
+    if (args.contains("--cols"))
     {
       converter.setColsArgSpecified(true);
       const QStringList cols =
         args.at(args.indexOf("--cols") + 1).trimmed().split(",", QString::SkipEmptyParts);
       converter.setColumns(cols);
-      LOG_VARD(cols);
     }
 
-    if (args.size() > 2 && args.contains("--limit"))
+    if (args.contains("--limit"))
     {
       bool ok;
       const int featureReadLimit = args.at(args.indexOf("--limit") + 1).trimmed().toInt(&ok);
@@ -123,7 +120,11 @@ public:
                             args.at(args.indexOf("--limit") + 1));
       }
       converter.setFeatureReadLimit(featureReadLimit);
-      LOG_VARD(featureReadLimit);
+    }
+
+    if (args.contains("--batch"))
+    {
+      converter.setBatchMode(true);
     }
 
     converter.convert(inputs, output);

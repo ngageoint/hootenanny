@@ -28,11 +28,8 @@
 
 #include <hoot/core/util/Log.h>
 #include <hoot/core/OsmMapConsumer.h>
-#include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/io/ElementStreamer.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
@@ -47,9 +44,13 @@
 #include <hoot/core/util/Progress.h>
 #include <hoot/core/io/OgrWriter.h>
 #include <hoot/core/visitors/ProjectToGeographicVisitor.h>
+#include <hoot/core/util/Factory.h>
 
 // std
 #include <vector>
+
+// Qt
+#include <QDirIterator>
 
 namespace hoot
 {
@@ -58,57 +59,167 @@ unsigned int DataConverter::logWarnCount = 0;
 
 DataConverter::DataConverter() :
 _colsArgSpecified(false),
-_featureReadLimit(0)
+_featureReadLimit(0),
+_batchMode(false)
 {
-}
-
-void DataConverter::_validateInput(const QStringList inputs, const QString output)
-{
-  LOG_VART(IoUtils::areSupportedOgrFormats(inputs, true));
-  LOG_VART(IoUtils::isSupportedOsmFormat(inputs.at(0)));
-  LOG_VART(IoUtils::isSupportedOsmFormat(output));
-  LOG_VART(IoUtils::isSupportedOgrFormat(inputs.at(0), true));
-  LOG_VART(IoUtils::isSupportedOgrFormat(output));
-
-  if (inputs.size() > 1 && !IoUtils::areSupportedOgrFormats(inputs, true) &&
-      !IoUtils::isSupportedOsmFormat(output))
-  {
-    throw HootException(
-      "Multiple inputs are only allowed when converting from an OGR format to OSM.");
-  }
-
-  if (!_translation.trimmed().isEmpty() && !IoUtils::areSupportedOgrFormats(inputs, true) &&
-      !IoUtils::isSupportedOgrFormat(output, false))
-  {
-    throw HootException(
-      "A translation can only be specified when converting to/from OGR formats.");
-  }
-
-  //TODO: We may be able to relax the restriction here of requiring the input be an OSM
-  //format, but since cols were originally only used with osm2shp, let's keep it here for now.
-  if (_colsArgSpecified && !output.toLower().endsWith(".shp") &&
-      !IoUtils::isSupportedOsmFormat(inputs.at(0)))
-  {
-    throw HootException(
-      "Columns may only be specified when converting from an OSM format to the shape file format.");
-  }
-
-  if (!_translation.isEmpty() && _colsArgSpecified)
-  {
-    throw HootException("Cannot specify both a translation and export columns.");
-  }
-
-  //TODO: Can this eventually be removed?
-  if (_featureReadLimit > 0 && !IoUtils::areSupportedOgrFormats(inputs, true))
-  {
-    throw HootException("Limit may only be specified when converting OGR inputs.");
-  }
 }
 
 void DataConverter::convert(const QStringList inputs, const QString output)
 {
   _validateInput(inputs, output);
 
+  if (!_batchMode)
+  {
+    _convertSingle(inputs, output);
+  }
+  else
+  {
+    _convertBatch(inputs, output);
+  }
+}
+
+void DataConverter::_validateInput(const QStringList inputs, const QString output)
+{
+  LOG_VART(inputs.size());
+  LOG_VART(inputs);
+  LOG_VART(output);
+  LOG_VART(_translation);
+  LOG_VART(_colsArgSpecified);
+  LOG_VART(_columns);
+  LOG_VART(_featureReadLimit);
+  LOG_VART(_batchMode);
+  if (!_batchMode)
+  {
+    LOG_VART(IoUtils::areSupportedOgrFormats(inputs, true));
+    LOG_VART(IoUtils::isSupportedOsmFormat(inputs.at(0)));
+    LOG_VART(IoUtils::isSupportedOsmFormat(output));
+    LOG_VART(IoUtils::isSupportedOgrFormat(inputs.at(0), true));
+    LOG_VART(IoUtils::isSupportedOgrFormat(output));
+  }
+
+  if (inputs.size() == 0)
+  {
+    throw HootException("No input(s) specified.");
+  }
+
+  if (output.trimmed().isEmpty())
+  {
+    throw HootException("No output specified.");
+  }
+
+  if (!_batchMode)
+  {
+    //handle the prevention of converting a file to the same type
+    QFileInfo outputInfo(output);
+    for (int i = 0; i < inputs.size(); i++)
+    {
+      const QString input = inputs.at(i);
+      QFileInfo inputInfo(input);
+      if (!inputInfo.isDir() && inputInfo.completeSuffix() == outputInfo.completeSuffix())
+      {
+        throw HootException(
+          "Attempting to convert a file to the same file type.  Input: " + input + ", Output: " +
+          output);
+      }
+    }
+
+    if (inputs.size() > 1 && !IoUtils::areSupportedOgrFormats(inputs, true) &&
+        !IoUtils::isSupportedOsmFormat(output))
+    {
+      throw HootException(
+        "Multiple inputs are only allowed when converting from an OGR format to OSM.");
+    }
+
+    if (!_translation.trimmed().isEmpty() && !IoUtils::areSupportedOgrFormats(inputs, true) &&
+        !IoUtils::isSupportedOgrFormat(output, false))
+    {
+      throw HootException(
+        "A translation can only be specified when converting to/from OGR formats.");
+    }
+
+    //We may eventually be able to relax the restriction here of requiring the input be an OSM
+    //format, but since cols were originally only used with osm2shp, let's keep it here for now.
+    if (_colsArgSpecified && !output.toLower().endsWith(".shp") &&
+        !IoUtils::isSupportedOsmFormat(inputs.at(0)))
+    {
+      throw HootException(
+        "Columns may only be specified when converting from an OSM format to the shape file format.");
+    }
+
+    if (!_translation.isEmpty() && _colsArgSpecified)
+    {
+      throw HootException("Cannot specify both a translation and export columns.");
+    }
+
+    //Should the feature read limit eventually be supported for all types of inputs?
+    if (_featureReadLimit > 0 && !IoUtils::areSupportedOgrFormats(inputs, true))
+    {
+      throw HootException("Read limit may only be specified when converting OGR inputs.");
+    }
+  }
+  //In batch mode we're going to try to process everything we can and let the user know at the end
+  //what was processed, rather than imposing extra restrictions on the inputs up front.
+  else
+  {
+    //each input must be a directory
+    for (int i = 0; i < inputs.size(); i++)
+    {
+      if (!QFileInfo(inputs.at(i)).isDir())
+      {
+        throw HootException("Input(s) when running in batch mode must be directories.");
+      }
+    }
+
+    //the output must either be of the form *.ext or dir/*.ext; outputs can only be file formats
+    //for now
+    QString outputFileSuffix = "";
+    QString outputDirName = "";
+    _parseBatchOutput(output, outputFileSuffix, outputDirName);
+
+    //check that its an output format we can write to
+    if (!IoUtils::isSupportedOgrFormat("tmp." + outputFileSuffix) &&
+        !OsmMapWriterFactory::getInstance().isSupportedFormat("tmp." + outputFileSuffix))
+    {
+      throw HootException("Output specified is not a supported format:" + output);
+    }
+
+    //specified output is dir with file output
+    if (!outputDirName.isEmpty())
+    {
+      //create the output dir if it doesn't exist
+      if (!QDir().mkpath(outputDirName))
+      {
+        throw HootException("Unable to create specified output directory:" + outputDirName);
+      }
+    }
+  }
+}
+
+void DataConverter::_parseBatchOutput(const QString output, QString& outputFileSuffix,
+                                      QString& outputDirName)
+{
+  //get rid of the wildcard and make a valid temp output file
+  //QString outputTmp = output;
+  //outputTmp = outputTmp.replace("*", "tmp");
+  //LOG_VART(outputTmp);
+  QFileInfo outputInfo(output/*Tmp*/);
+  if (output.contains("/"))
+  {
+    //in this case the base name as actually a suffix
+    outputFileSuffix = outputInfo.baseName();
+    QDir dir = outputInfo.dir();
+    outputDirName = dir.currentPath();
+  }
+  else
+  {
+    outputFileSuffix = output;
+  }
+  LOG_VART(outputFileSuffix);
+  LOG_VART(outputDirName);
+}
+
+void DataConverter::_convertSingle(const QStringList inputs, const QString output)
+{
   LOG_INFO("Converting " << inputs.join(", ").right(100) << " to " << output.right(100) << "...");
 
   if (output.toLower().endsWith(".shp") && inputs.size() == 1 &&
@@ -130,6 +241,88 @@ void DataConverter::convert(const QStringList inputs, const QString output)
   {
     _generalConvert(inputs.at(0), output);
   }
+}
+
+void DataConverter::_convertBatch(const QStringList inputs, const QString output)
+{
+  QString outputFileSuffix = "";
+  QString outputDirName = "";
+  _parseBatchOutput(output, outputFileSuffix, outputDirName);
+
+  int numConversions = 0;
+  int numSkippedInputs = 0;
+  for (int i = 0; i < inputs.size(); i++)
+  {
+    LOG_VART(inputs.at(i));
+    assert(QFileInfo(inputs.at(i)).isDir());
+    QDir dir = QFileInfo(inputs.at(i)).dir();
+    QDirIterator it(dir.currentPath(), QDir::Files, QDirIterator::Subdirectories);
+    while (it.hasNext())
+    {
+      const QString file = it.next();
+      LOG_VART(file);
+      QFileInfo fileInfo(file);
+      const QString inputFileSuffix = fileInfo.suffix();
+      LOG_VART(inputFileSuffix);
+      const bool supportedInputFormat =
+        IoUtils::isSupportedOgrFormat(file) ||
+        OsmMapReaderFactory::getInstance().isSupportedFormat(file);
+      LOG_VART(supportedInputFormat);
+      const bool inputFormatSameAsOutputFormat = outputFileSuffix == inputFileSuffix;
+      LOG_VART(inputFormatSameAsOutputFormat);
+      if (supportedInputFormat && !inputFormatSameAsOutputFormat)
+      {
+        QString actualOutput;
+        if (outputDirName.isEmpty())
+        {
+          actualOutput =
+            fileInfo.dir().currentPath() + "/" + fileInfo.completeBaseName() + "." +
+            outputFileSuffix;
+        }
+        else
+        {
+          actualOutput = outputDirName + "/" + fileInfo.completeBaseName() + "." + outputFileSuffix;
+        }
+        LOG_VART(actualOutput);
+
+        numConversions++;
+        LOG_INFO(
+          "Converting input #" << numConversions << " from " << file << " to " <<
+          actualOutput << "...");
+
+        if (output.toLower().endsWith(".shp") && IoUtils::isSupportedOsmFormat(file) &&
+            _colsArgSpecified)
+        {
+          _convertOsmToShp(file, actualOutput);
+        }
+        else if (IoUtils::isSupportedOsmFormat(file) &&
+                 IoUtils::isSupportedOgrFormat(actualOutput) && !_translation.isEmpty())
+        {
+          _convertOsmToOgr(file, actualOutput);
+        }
+        else if (IoUtils::isSupportedOgrFormat(file) &&
+                 IoUtils::isSupportedOsmFormat(actualOutput) && !_translation.isEmpty())
+        {
+          _convertOgrToOsm(file, actualOutput);
+        }
+        else
+        {
+          _generalConvert(file, actualOutput);
+        }
+      }
+      else if (inputFormatSameAsOutputFormat)
+      {
+        LOG_DEBUG("Skipping file with same format as output: " << file);
+        numSkippedInputs++;
+      }
+      else if (!supportedInputFormat)
+      {
+        LOG_DEBUG("Skipping file with unsupported input format: " << file);
+        numSkippedInputs++;
+      }
+    }
+  }
+  LOG_INFO("Converted " << numConversions << " and skipped " << numSkippedInputs << " inputs.");
 }
 
 void DataConverter::_convertOsmToShp(const QString input, const QString output)
@@ -198,6 +391,13 @@ void DataConverter::_convertOsmToOgr(const QString input, const QString output)
     MapProjector::projectToWgs84(map);
     writer->write(map);
   }
+}
+
+void DataConverter::_convertOgrToOsm(const QString input, const QString output)
+{
+  QStringList inputs;
+  inputs.append(input);
+  _convertOgrToOsm(inputs, output);
 }
 
 void DataConverter::_convertOgrToOsm(const QStringList inputs, const QString output)

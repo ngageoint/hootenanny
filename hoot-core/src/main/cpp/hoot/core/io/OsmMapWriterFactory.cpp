@@ -111,6 +111,11 @@ QString OsmMapWriterFactory::getWriterName(const QString url)
   return "";
 }
 
+bool OsmMapWriterFactory::isSupportedFormat(const QString url)
+{
+  return !getWriterName(url).trimmed().isEmpty();
+}
+
 bool OsmMapWriterFactory::hasElementOutputStream(QString url)
 {
   bool result = false;
