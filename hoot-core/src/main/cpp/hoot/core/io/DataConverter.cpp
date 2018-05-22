@@ -95,91 +95,52 @@ void DataConverter::_validateInput(const QStringList inputs, const QString outpu
     throw HootException("No output specified.");
   }
 
-  if (!_batchMode)
+  //handle the prevention of converting a file to the same type
+  QFileInfo outputInfo(output);
+  for (int i = 0; i < inputs.size(); i++)
   {
-    //handle the prevention of converting a file to the same type
-    QFileInfo outputInfo(output);
-    for (int i = 0; i < inputs.size(); i++)
-    {
-      const QString input = inputs.at(i);
-      QFileInfo inputInfo(input);
-      if (!inputInfo.isDir() && inputInfo.completeSuffix() == outputInfo.completeSuffix())
-      {
-        throw HootException(
-          "Attempting to convert a file to the same file type.  Input: " + input + ", Output: " +
-          output);
-      }
-    }
-
-    if (inputs.size() > 1 && !IoUtils::areSupportedOgrFormats(inputs, true) &&
-        !IoUtils::isSupportedOsmFormat(output))
+    const QString input = inputs.at(i);
+    QFileInfo inputInfo(input);
+    if (!inputInfo.isDir() && inputInfo.completeSuffix() == outputInfo.completeSuffix())
     {
       throw HootException(
-        "Multiple inputs are only allowed when converting from an OGR format to OSM.");
-    }
-
-    if (!_translation.trimmed().isEmpty() && !IoUtils::areSupportedOgrFormats(inputs, true) &&
-        !IoUtils::isSupportedOgrFormat(output, false))
-    {
-      throw HootException(
-        "A translation can only be specified when converting to/from OGR formats.");
-    }
-
-    //We may eventually be able to relax the restriction here of requiring the input be an OSM
-    //format, but since cols were originally only used with osm2shp, let's keep it here for now.
-    if (_colsArgSpecified && !output.toLower().endsWith(".shp") &&
-        !IoUtils::isSupportedOsmFormat(inputs.at(0)))
-    {
-      throw HootException(
-        "Columns may only be specified when converting from an OSM format to the shape file format.");
-    }
-
-    if (!_translation.isEmpty() && _colsArgSpecified)
-    {
-      throw HootException("Cannot specify both a translation and export columns.");
-    }
-
-    //Should the feature read limit eventually be supported for all types of inputs?
-    if (_featureReadLimit > 0 && !IoUtils::areSupportedOgrFormats(inputs, true))
-    {
-      throw HootException("Read limit may only be specified when converting OGR inputs.");
+        "Attempting to convert a file to the same file type.  Input: " + input + ", Output: " +
+        output);
     }
   }
-  //In batch mode we're going to try to process everything we can and let the user know at the end
-  //what was processed, rather than imposing extra restrictions on the inputs up front.
-  else
+
+  if (inputs.size() > 1 && !IoUtils::areSupportedOgrFormats(inputs, true) &&
+      !IoUtils::isSupportedOsmFormat(output))
   {
-    //each input must be a directory
-    for (int i = 0; i < inputs.size(); i++)
-    {
-      if (!QFileInfo(inputs.at(i)).isDir())
-      {
-        throw HootException("Input(s) when running in batch mode must be directories.");
-      }
-    }
+    throw HootException(
+      "Multiple inputs are only allowed when converting from an OGR format to OSM.");
+  }
 
-    //the output must either be of the form *.ext or dir/*.ext; outputs can only be file formats
-    //for now
-    QString outputFileSuffix = "";
-    QString outputDirName = "";
-    _parseBatchOutput(output, outputFileSuffix, outputDirName);
+  if (!_translation.trimmed().isEmpty() && !IoUtils::areSupportedOgrFormats(inputs, true) &&
+      !IoUtils::isSupportedOgrFormat(output, false))
+  {
+    throw HootException(
+      "A translation can only be specified when converting to/from OGR formats.");
+  }
 
-    //check that its an output format we can write to
-    if (!IoUtils::isSupportedOgrFormat("tmp." + outputFileSuffix) &&
-        !OsmMapWriterFactory::getInstance().isSupportedFormat("tmp." + outputFileSuffix))
-    {
-      throw HootException("Output specified is not a supported format:" + output);
-    }
+  //We may eventually be able to relax the restriction here of requiring the input be an OSM
+  //format, but since cols were originally only used with osm2shp, let's keep it here for now.
+  if (_colsArgSpecified && !output.toLower().endsWith(".shp") &&
+      !IoUtils::isSupportedOsmFormat(inputs.at(0)))
+  {
+    throw HootException(
+      "Columns may only be specified when converting from an OSM format to the shape file format.");
+  }
 
-    //specified output is dir with file output
-    if (!outputDirName.isEmpty())
-    {
-      //create the output dir if it doesn't exist
-      if (!QDir().mkpath(outputDirName))
-      {
-        throw HootException("Unable to create specified output directory:" + outputDirName);
-      }
-    }
+  if (!_translation.isEmpty() && _colsArgSpecified)
+  {
+    throw HootException("Cannot specify both a translation and export columns.");
+  }
+
+  //Should the feature read limit eventually be supported for all types of inputs?
+  if (_featureReadLimit > 0 && !IoUtils::areSupportedOgrFormats(inputs, true))
+  {
+    throw HootException("Read limit may only be specified when converting OGR inputs.");
   }
 }
 
