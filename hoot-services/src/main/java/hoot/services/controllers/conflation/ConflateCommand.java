@@ -158,7 +158,7 @@ class ConflateCommand extends ExternalCommand {
 
         String conflationCommand = params.getConflationCommand();
         boolean isDifferentialConflate = false;
-        if (conflationCommand.equals("conflate-differential"))
+        if (conflationCommand != null && conflationCommand.equals("conflate-differential"))
         {
           conflationCommand = "conflate";
           isDifferentialConflate = true;
