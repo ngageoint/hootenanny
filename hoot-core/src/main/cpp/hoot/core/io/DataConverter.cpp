@@ -75,15 +75,11 @@ void DataConverter::_validateInput(const QStringList inputs, const QString outpu
   LOG_VART(_colsArgSpecified);
   LOG_VART(_columns);
   LOG_VART(_featureReadLimit);
-  LOG_VART(_batchMode);
-  if (!_batchMode)
-  {
-    LOG_VART(IoUtils::areSupportedOgrFormats(inputs, true));
-    LOG_VART(IoUtils::isSupportedOsmFormat(inputs.at(0)));
-    LOG_VART(IoUtils::isSupportedOsmFormat(output));
-    LOG_VART(IoUtils::isSupportedOgrFormat(inputs.at(0), true));
-    LOG_VART(IoUtils::isSupportedOgrFormat(output));
-  }
+  LOG_VART(IoUtils::areSupportedOgrFormats(inputs, true));
+  LOG_VART(IoUtils::isSupportedOsmFormat(inputs.at(0)));
+  LOG_VART(IoUtils::isSupportedOsmFormat(output));
+  LOG_VART(IoUtils::isSupportedOgrFormat(inputs.at(0), true));
+  LOG_VART(IoUtils::isSupportedOgrFormat(output));
 
   if (inputs.size() == 0)
   {
