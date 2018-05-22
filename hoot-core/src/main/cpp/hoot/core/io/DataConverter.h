@@ -53,7 +53,6 @@ public:
   void setColumns(const QStringList columns) { _columns = columns; }
   void setColsArgSpecified(const bool specified) { _colsArgSpecified = specified; }
   void setFeatureReadLimit(const int limit) { _featureReadLimit = limit; }
-  void setBatchMode(const bool batch) { _batchMode = batch; }
 
 private:
 
@@ -61,7 +60,6 @@ private:
   QStringList _columns;
   bool _colsArgSpecified;
   int _featureReadLimit;
-  bool _batchMode;
 
   void _convertOsmToShp(const QString input, const QString output);
   void _convertOsmToOgr(const QString input, const QString output);
@@ -79,9 +77,7 @@ private:
 
   void _validateInput(const QStringList inputs, const QString output);
 
-  void _parseBatchOutput(const QString output, QString& outputFileSuffix, QString& outputDirName);
   void _convertSingle(const QStringList inputs, const QString output);
-  void _convertBatch(const QStringList inputs, const QString output);
 };
 
 }

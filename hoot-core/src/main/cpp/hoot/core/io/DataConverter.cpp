@@ -49,9 +49,6 @@
 // std
 #include <vector>
 
-// Qt
-#include <QDirIterator>
-
 namespace hoot
 {
 
@@ -59,23 +56,14 @@ unsigned int DataConverter::logWarnCount = 0;
 
 DataConverter::DataConverter() :
 _colsArgSpecified(false),
-_featureReadLimit(0),
-_batchMode(false)
+_featureReadLimit(0)
 {
 }
 
 void DataConverter::convert(const QStringList inputs, const QString output)
 {
   _validateInput(inputs, output);
-
-  if (!_batchMode)
-  {
-    _convertSingle(inputs, output);
-  }
-  else
-  {
-    _convertBatch(inputs, output);
-  }
+  _convertSingle(inputs, output);
 }
 
 void DataConverter::_validateInput(const QStringList inputs, const QString output)
@@ -195,29 +183,6 @@ void DataConverter::_validateInput(const QStringList inputs, const QString outpu
   }
 }
 
-void DataConverter::_parseBatchOutput(const QString output, QString& outputFileSuffix,
-                                      QString& outputDirName)
-{
-  //get rid of the wildcard and make a valid temp output file
-  //QString outputTmp = output;
-  //outputTmp = outputTmp.replace("*", "tmp");
-  //LOG_VART(outputTmp);
-  QFileInfo outputInfo(output/*Tmp*/);
-  if (output.contains("/"))
-  {
-    //in this case the base name as actually a suffix
-    outputFileSuffix = outputInfo.baseName();
-    QDir dir = outputInfo.dir();
-    outputDirName = dir.currentPath();
-  }
-  else
-  {
-    outputFileSuffix = output;
-  }
-  LOG_VART(outputFileSuffix);
-  LOG_VART(outputDirName);
-}
-
 void DataConverter::_convertSingle(const QStringList inputs, const QString output)
 {
   LOG_INFO("Converting " << inputs.join(", ").right(100) << " to " << output.right(100) << "...");
@@ -241,88 +206,6 @@ void DataConverter::_convertSingle(const QStringList inputs, const QString outpu
   {
     _generalConvert(inputs.at(0), output);
   }
-}
-
-void DataConverter::_convertBatch(const QStringList inputs, const QString output)
-{
-  QString outputFileSuffix = "";
-  QString outputDirName = "";
-  _parseBatchOutput(output, outputFileSuffix, outputDirName);
-
-  int numConversions = 0;
-  int numSkippedInputs = 0;
-  for (int i = 0; i < inputs.size(); i++)
-  {
-    LOG_VART(inputs.at(i));
-    assert(QFileInfo(inputs.at(i)).isDir());
-    QDir dir = QFileInfo(inputs.at(i)).dir();
-    QDirIterator it(dir.currentPath(), QDir::Files, QDirIterator::Subdirectories);
-    while (it.hasNext())
-    {
-      const QString file = it.next();
-      LOG_VART(file);
-      QFileInfo fileInfo(file);
-      const QString inputFileSuffix = fileInfo.suffix();
-      LOG_VART(inputFileSuffix);
-      const bool supportedInputFormat =
-        IoUtils::isSupportedOgrFormat(file) ||
-        OsmMapReaderFactory::getInstance().isSupportedFormat(file);
-      LOG_VART(supportedInputFormat);
-      const bool inputFormatSameAsOutputFormat = outputFileSuffix == inputFileSuffix;
-      LOG_VART(inputFormatSameAsOutputFormat);
-      if (supportedInputFormat && !inputFormatSameAsOutputFormat)
-      {
-        QString actualOutput;
-        if (outputDirName.isEmpty())
-        {
-          actualOutput =
-            fileInfo.dir().currentPath() + "/" + fileInfo.completeBaseName() + "." +
-            outputFileSuffix;
-        }
-        else
-        {
-          actualOutput = outputDirName + "/" + fileInfo.completeBaseName() + "." + outputFileSuffix;
-        }
-        LOG_VART(actualOutput);
-
-        numConversions++;
-        LOG_INFO(
-          "Converting input #" << numConversions << " from " << file << " to " <<
-          actualOutput << "...");
-
-        if (output.toLower().endsWith(".shp") && IoUtils::isSupportedOsmFormat(file) &&
-            _colsArgSpecified)
-        {
-          _convertOsmToShp(file, actualOutput);
-        }
-        else if (IoUtils::isSupportedOsmFormat(file) &&
-                 IoUtils::isSupportedOgrFormat(actualOutput) && !_translation.isEmpty())
-        {
-          _convertOsmToOgr(file, actualOutput);
-        }
-        else if (IoUtils::isSupportedOgrFormat(file) &&
-                 IoUtils::isSupportedOsmFormat(actualOutput) && !_translation.isEmpty())
-        {
-          _convertOgrToOsm(file, actualOutput);
-        }
-        else
-        {
-          _generalConvert(file, actualOutput);
-        }
-      }
-      else if (inputFormatSameAsOutputFormat)
-      {
-        LOG_DEBUG("Skipping file with same format as output: " << file);
-        numSkippedInputs++;
-      }
-      else if (!supportedInputFormat)
-      {
-        LOG_DEBUG("Skipping file with unsupported input format: " << file);
-        numSkippedInputs++;
-      }
-    }
-  }
-  LOG_INFO("Converted " << numConversions << " and skipped " << numSkippedInputs << " inputs.");
 }
 
 void DataConverter::_convertOsmToShp(const QString input, const QString output)
@@ -391,13 +274,6 @@ void DataConverter::_convertOsmToOgr(const QString input, const QString output)
     MapProjector::projectToWgs84(map);
     writer->write(map);
   }
-}
-
-void DataConverter::_convertOgrToOsm(const QString input, const QString output)
-{
-  QStringList inputs;
-  inputs.append(input);
-  _convertOgrToOsm(inputs, output);
 }
 
 void DataConverter::_convertOgrToOsm(const QStringList inputs, const QString output)

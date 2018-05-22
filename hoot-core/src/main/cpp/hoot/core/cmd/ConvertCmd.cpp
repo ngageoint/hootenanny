@@ -122,11 +122,6 @@ public:
       converter.setFeatureReadLimit(featureReadLimit);
     }
 
-    if (args.contains("--batch"))
-    {
-      converter.setBatchMode(true);
-    }
-
     converter.convert(inputs, output);
 
     LOG_DEBUG("Convert operation complete.");
