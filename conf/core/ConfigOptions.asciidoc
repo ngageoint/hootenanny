@@ -2915,7 +2915,7 @@ NOTE: This assumes that you know exactly what tags you want to modify/delete
 * Data Type: string
 * Default Value: ``
 
-The script to use for translation.
+The script used by the TranslationVisitor for translation.
 
 === unify.enable.optimal.constrained.matches
 

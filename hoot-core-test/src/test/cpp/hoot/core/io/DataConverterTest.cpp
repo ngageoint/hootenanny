@@ -47,7 +47,6 @@ class DataConverterTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runEmptyOutputTest);
   CPPUNIT_TEST(runMultipleNonOgrInputsTest1);
   CPPUNIT_TEST(runMultipleNonOgrInputsTest2);
-  CPPUNIT_TEST(runTranslationNonOgrTest);
   CPPUNIT_TEST(runColumnsNotOsmToShpTest1);
   CPPUNIT_TEST(runColumnsNotOsmToShpTest2);
   CPPUNIT_TEST(runBothTranslationAndColumnsTest);
@@ -125,27 +124,6 @@ public:
     CPPUNIT_ASSERT(
       exceptionMsg.contains(
         "Multiple inputs are only allowed when converting from an OGR format to OSM"));
-  }
-
-  void runTranslationNonOgrTest()
-  {
-    QString exceptionMsg("");
-    try
-    {
-      DataConverter converter;
-      converter.setTranslation("test.js");
-      QStringList inputs;
-      inputs.append("test1.osm");
-      converter.convert(inputs, "test2.osm");
-    }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-    }
-
-    CPPUNIT_ASSERT(
-      exceptionMsg.contains(
-        "A translation can only be specified when converting to/from OGR formats"));
   }
 
   void runColumnsNotOsmToShpTest1()

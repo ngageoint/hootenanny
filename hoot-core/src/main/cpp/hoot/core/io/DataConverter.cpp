@@ -110,19 +110,6 @@ void DataConverter::_validateInput(const QStringList inputs, const QString outpu
       "Multiple inputs are only allowed when converting from an OGR format to OSM.");
   }
 
-  //Not completely sure about this one.  Could there be a situation where we have an OSM file, etc.
-  //with untranslated data that needsto be converted to OSM schema?  If so, not only would this
-  //restriction need to be removed, but the _convertGeneral method would need to be reworked to
-  //support the translation input param (didn't support it to begin with).  The easier workaround
-  //is to simply declare a TranslationOp in convert.ops...possiblly a little counterintuitive but
-  //will work.
-  if (!_translation.trimmed().isEmpty() && !IoUtils::areSupportedOgrFormats(inputs, true) &&
-      !IoUtils::isSupportedOgrFormat(output, false))
-  {
-    throw HootException(
-      "A translation can only be specified when converting to/from OGR formats.");
-  }
-
   //We may eventually be able to relax the restriction here of requiring the input be an OSM
   //format, but since cols were originally only used with osm2shp, let's keep it here for now.
   if (_colsArgSpecified && (!output.toLower().endsWith(".shp") ||
@@ -143,13 +130,13 @@ void DataConverter::_convertSingle(const QStringList inputs, const QString outpu
 {
   LOG_INFO("Converting " << inputs.join(", ").right(100) << " to " << output.right(100) << "...");
 
-  if (output.toLower().endsWith(".shp") && inputs.size() == 1 &&
-      IoUtils::isSupportedOsmFormat(inputs.at(0)) && _colsArgSpecified)
+  if (output.toLower().endsWith(".shp") && IoUtils::isSupportedOsmFormat(inputs.at(0)) &&
+      _colsArgSpecified)
   {
     _convertOsmToShp(inputs.at(0), output);
   }
-  else if (inputs.size() == 1 && IoUtils::isSupportedOsmFormat(inputs.at(0)) &&
-           IoUtils::isSupportedOgrFormat(output) && !_translation.isEmpty())
+  else if (IoUtils::isSupportedOsmFormat(inputs.at(0)) && IoUtils::isSupportedOgrFormat(output) &&
+           !_translation.isEmpty())
   {
     _convertOsmToOgr(inputs.at(0), output);
   }
@@ -377,6 +364,22 @@ void DataConverter::_generalConvert(const QString input, const QString output)
   conf().set(ConfigOptions().getReaderKeepStatusTagKey(), true);
   LOG_VART(OsmMapReaderFactory::getInstance().hasElementInputStream(input));
 
+  QStringList convertOps = ConfigOptions().getConvertOps();
+  if (!_translation.trimmed().isEmpty())
+  {
+    if (convertOps.contains("hoot::TranslationOp") ||
+        convertOps.contains("hoot::TranslationVisitor"))
+    {
+      throw HootException(
+        "Specified both a translation as an input parameter and as a configuration option.");
+    }
+    else
+    {
+      convertOps.prepend("hoot::TranslationOp");
+      conf().set(ConfigOptions().getTranslationScript(), _translation);
+    }
+  }
+
   QString writerName = ConfigOptions().getOsmMapWriterFactoryWriter();
   if (writerName.trimmed().isEmpty())
   {
@@ -388,7 +391,7 @@ void DataConverter::_generalConvert(const QString input, const QString output)
 
   if (OsmMapReaderFactory::getInstance().hasElementInputStream(input) &&
       OsmMapWriterFactory::getInstance().hasElementOutputStream(output) &&
-      _areValidStreamingOps(ConfigOptions().getConvertOps()) &&
+      _areValidStreamingOps(convertOps) &&
       //the XML writer can't keep sorted output when streaming, so require an additional config
       //option be specified in order to stream when writing that format
       (writerName != "hoot::OsmXmlWriter" ||
@@ -404,7 +407,7 @@ void DataConverter::_generalConvert(const QString input, const QString output)
     IoUtils::loadMap(
       map, input, ConfigOptions().getReaderUseDataSourceIds(),
       Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
-    NamedOp(ConfigOptions().getConvertOps()).apply(map);
+    NamedOp(convertOps).apply(map);
     MapProjector::projectToWgs84(map);
     IoUtils::saveMap(map, output);
   }

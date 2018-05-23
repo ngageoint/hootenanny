@@ -41,7 +41,8 @@ class ElementStreamer
 
 public:
 
-  static void stream(const QString in, const QString out);
+  static void stream(const QString in, const QString out,
+                     const QStringList convertOps = QStringList());
 
 };
 
