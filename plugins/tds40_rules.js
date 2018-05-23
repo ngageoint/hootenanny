@@ -2614,7 +2614,8 @@ tds.rules = {
     ['RLE','1','layer','1'], // Raised
     ['RLE','2','layer','0'], // Level with surrounding area
     ['RLE','3','layer','-1'], // Depressed
-    ['RLE','998',undefined,undefined], // Not Applicable
+    // ['RLE','998',undefined,undefined], // Not Applicable
+    ['RLE','998','relative_level','not_applicable'], // Not Applicable
 
     // RMWC - Route Median Width (interval closure): Nothing in OSM
     // ['RMWC','-999999',undefined,undefined],
@@ -2781,8 +2782,8 @@ tds.rules = {
     ['SLT','16','shoreline:type','coral'], // Coral
     ['SLT','17','shoreline:type','ice'], // Ice
     ['SLT','18','shoreline:type','mud'], // Mud
-    // ['SLT','998','shoreline:type','not_applicable'], // Not Applicable
-    ['SLT','998',undefined,undefined], // Not Applicable
+    // ['SLT','998',undefined,undefined], // Not Applicable
+    ['SLT','998','shoreline:type','not_applicable'], // Not Applicable
     ['SLT','999','shoreline:type','other'], // Other
 
     // SPT - Supported
@@ -3152,7 +3153,8 @@ tds.rules = {
     ['UMA','1','mine:access','drift'], // Drift
     ['UMA','2','mine:access','slope'], // Slope
     ['UMA','3','mine:access','shaft'], // Shaft
-    ['UMA','998',undefined,undefined], // Not Applicable
+    // ['UMA','998',undefined,undefined], // Not Applicable
+    ['UMA','998','mine:access','not_applicable'], // Not Applicable
 
     // UTY - Accessible Utility Type
     // ['UTY','-999999',undefined,undefined], // No Information
@@ -3369,8 +3371,8 @@ tds.rules = {
     ['YSU','7','military:service','joint'], // Joint
     ['YSU','8','military:service','air_national_guard'], // Air National Guard
     ['YSU','9','military:service','army_national_guard'], // Army National Guard
-    // ['YSU','998','military:service','not_applicable'], // Not Applicable
-    ['YSU','998',undefined,undefined], // Not Applicable
+    // ['YSU','998',undefined,undefined], // Not Applicable
+    ['YSU','998','military:service','not_applicable'], // Not Applicable
     ['YSU','999','military:service','other'], // Other
 
     // YWQ - Water Potability - See ZI024_YWQ
@@ -3855,8 +3857,8 @@ tds.rules = {
     ['ZI024_SCC','12','water:type','brackish'], // Brackish
     ['ZI024_SCC','13','water:type','seawater'], // Seawater
     ['ZI024_SCC','14','water:type','brine'], // Brine
-    // ['ZI024_SCC','998','water:type','not_applicable'], // Not Applicable
-    ['ZI024_SCC','998',undefined,undefined], // Not Applicable
+    // ['ZI024_SCC','998',undefined,undefined], // Not Applicable
+    ['ZI024_SCC','998','water:type','not_applicable'], // Not Applicable
 
     // ZI024_YWQ - Water Resource Information : Water Potability
     // ['ZI024_YWQ','-999999',undefined,undefined], // No Information
