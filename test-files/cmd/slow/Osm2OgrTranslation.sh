@@ -40,11 +40,11 @@ hoot convert --debug -D ogr.writer.pre.layer.name=foo_ -D ogr.writer.create.all.
 printLayerInfo $OUTPUT/options/
 
 # TODO: this isn't a valid osm to ogr conversion...figure out what to do with this
-#echo "#### Test to make sure all layers are read from a data source. ####"
-#rm -rf test-output/cmd/slow/delaware-tds test-output/cmd/slow/delaware-tds.shp
-#mkdir -p test-output/cmd/slow
-#export SHAPE_ENCODING=UTF-8
-#hoot convert --warn test-files/cmd/slow/delaware.shp test-output/cmd/slow/delaware-tds.shp --trans test-files/io/O2sTranslation.js
+echo "#### Test to make sure all layers are read from a data source. ####"
+rm -rf test-output/cmd/slow/delaware-tds test-output/cmd/slow/delaware-tds.shp
+mkdir -p test-output/cmd/slow
+export SHAPE_ENCODING=UTF-8
+hoot convert --warn test-files/cmd/slow/delaware.shp test-output/cmd/slow/delaware-tds.shp --trans test-files/io/O2sTranslation.js
 #mv test-output/cmd/slow/delaware-tds test-output/cmd/slow/delaware-tds.shp
-#hoot stats --brief test-output/cmd/slow/delaware-tds.shp
+hoot stats --brief test-output/cmd/slow/delaware-tds.shp
 

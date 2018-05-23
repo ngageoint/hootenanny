@@ -45,8 +45,6 @@ class DataConverterTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE(DataConverterTest);
   CPPUNIT_TEST(runEmptyInputsTest);
   CPPUNIT_TEST(runEmptyOutputTest);
-  //TODO: re-enable
-  //CPPUNIT_TEST(runConvertToSameTypeTest);
   CPPUNIT_TEST(runMultipleNonOgrInputsTest1);
   CPPUNIT_TEST(runMultipleNonOgrInputsTest2);
   CPPUNIT_TEST(runTranslationNonOgrTest);
@@ -89,23 +87,6 @@ public:
     }
 
     CPPUNIT_ASSERT(exceptionMsg.contains("No output specified"));
-  }
-
-  void runConvertToSameTypeTest()
-  {
-    QString exceptionMsg("");
-    try
-    {
-      QStringList inputs;
-      inputs.append("test1.shp");
-      DataConverter().convert(inputs, "test2.shp");
-    }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-    }
-
-    CPPUNIT_ASSERT(exceptionMsg.contains("Attempting to convert a file to the same file type"));
   }
 
   void runMultipleNonOgrInputsTest1()

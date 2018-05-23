@@ -84,6 +84,10 @@ void DataConverter::_validateInput(const QStringList inputs, const QString outpu
   LOG_VART(IoUtils::isSupportedOsmFormat(output));
   LOG_VART(IoUtils::isSupportedOgrFormat(output));
 
+  //I was tempted to also add an exception that prevents you from trying to convert from one format
+  //as input and the same format as output.  We do that in a couple of tests, and while there may
+  //be a way to rework the tests so we don't do it anymore, I haven't looked into it. - BDW
+
   if (inputs.size() == 0)
   {
     throw HootException("No input(s) specified.");
@@ -93,21 +97,6 @@ void DataConverter::_validateInput(const QStringList inputs, const QString outpu
   {
     throw HootException("No output specified.");
   }
-
-  //TODO: this is causing problems with ConvertCmdTest - FIX
-  //handle the prevention of converting a file to the same type
-//  QFileInfo outputInfo(output);
-//  for (int i = 0; i < inputs.size(); i++)
-//  {
-//    const QString input = inputs.at(i);
-//    QFileInfo inputInfo(input);
-//    if (!inputInfo.isDir() && inputInfo.completeSuffix() == outputInfo.completeSuffix())
-//    {
-//      throw HootException(
-//        "Attempting to convert a file to the same file type.  Input: " + input + ", Output: " +
-//        output);
-//    }
-//  }
 
   if (!_translation.isEmpty() && _colsArgSpecified)
   {
@@ -121,6 +110,12 @@ void DataConverter::_validateInput(const QStringList inputs, const QString outpu
       "Multiple inputs are only allowed when converting from an OGR format to OSM.");
   }
 
+  //Not completely sure about this one.  Could there be a situation where we have an OSM file, etc.
+  //with untranslated data that needsto be converted to OSM schema?  If so, not only would this
+  //restriction need to be removed, but the _convertGeneral method would need to be reworked to
+  //support the translation input param (didn't support it to begin with).  The easier workaround
+  //is to simply declare a TranslationOp in convert.ops...possiblly a little counterintuitive but
+  //will work.
   if (!_translation.trimmed().isEmpty() && !IoUtils::areSupportedOgrFormats(inputs, true) &&
       !IoUtils::isSupportedOgrFormat(output, false))
   {
