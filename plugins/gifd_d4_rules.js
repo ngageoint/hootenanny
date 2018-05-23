@@ -2667,9 +2667,9 @@ gifd.rules = {
        ['M_ATN_1Q100','0','raw:M_ATN_1Q100','unknown'], // Unknown
        ['M_ATN_1Q100','1','raw:M_ATN_1Q100','marked'], // Marked
        ['M_ATN_1Q100','2','raw:M_ATN_1Q100','unmarked'], // Unmarked
+       ['M_ATN_1Q100','997',undefined,undefined], // Unpopulated
        // ['M_ATN_1Q100','998',undefined,undefined], // Not Applicable
        ['M_ATN_1Q100','998','raw:M_ATN_1Q100','not_applicable'], // Not Applicable
-       ['M_ATN_1Q100','997',undefined,undefined], // Unpopulated
        ['M_ATN_1Q100','999','raw:M_ATN_1Q100','other'], // Other
 
        // M_ATN_6C165 - Hierarchy 6C165 ATN
