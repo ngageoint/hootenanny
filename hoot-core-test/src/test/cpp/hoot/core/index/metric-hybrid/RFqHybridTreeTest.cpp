@@ -551,6 +551,7 @@ public:
     ofDummy.f(v);
 
     OptimizeFunction* sonarTest = new OptimizeFunction(keys, values, bounds);
+    sonarTest->f(v);
 
     OptimizeFunction* of = new OptimizeFunction(keys, values, bounds);
     of->f(v);
