@@ -43,7 +43,7 @@ namespace hoot
 {
 
 /**
- * This is a additive, rule based mechanism for matching POIs to polygons. See "POI to
+ * This is an additive, rule based mechanism for matching POIs to polygons. See "POI to
  * Polygon Conflation" in the Hootenanny Algorithms document for more details.
  */
 class PoiPolygonMatch : public Match, public MatchDetails, public Configurable
