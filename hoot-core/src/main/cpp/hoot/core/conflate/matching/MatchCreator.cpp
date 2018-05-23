@@ -35,6 +35,7 @@
 #include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPoiCriterion.h>
 #include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPolyCriterion.h>
 #include <hoot/core/filters/NonBuildingAreaCriterion.h>
+#include <hoot/core/filters/RailwayCriterion.h>
 
 namespace hoot
 {
@@ -57,6 +58,8 @@ QString MatchCreator::BaseFeatureTypeToString(BaseFeatureType t)
       return "Polygon";
     case Area:
       return "Area";
+    case Railway:
+      return "Railway";
     case Unknown:
     default:
       return "Unknown";
@@ -80,6 +83,8 @@ MatchCreator::BaseFeatureType MatchCreator::StringToBaseFeatureType(QString s)
     return Polygon;
   else if (0 == s.compare("area"))
     return Area;
+  else if (0 == s.compare("railway"))
+    return Railway;
   else
     return Unknown;
 }
@@ -102,6 +107,8 @@ MatchCreator::FeatureCalcType MatchCreator::getFeatureCalcType (BaseFeatureType 
       return CalcTypeArea;
     case Area:
       return CalcTypeArea;
+    case Railway:
+      return CalcTypeLength;
     case Unknown:
     default:
       return CalcTypeNone;
@@ -126,6 +133,8 @@ ElementCriterionPtr MatchCreator::getElementCriterion (BaseFeatureType t, ConstO
       return ElementCriterionPtr(new PoiPolygonPolyCriterion());
     case Area:
       return ElementCriterionPtr(new NonBuildingAreaCriterion());
+    case Railway:
+      return ElementCriterionPtr(new RailwayCriterion());
     case Unknown:
     default:
       return ElementCriterionPtr();
