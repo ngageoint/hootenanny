@@ -71,7 +71,7 @@ public:
   {
     boost::shared_ptr<CalculateStatsOp> calcStatsOp =
       _calcStats("test-files/ops/CalculateStatsOp/all-data-types.osm");
-    CPPUNIT_ASSERT_EQUAL(119, calcStatsOp->getStats().size());
+    CPPUNIT_ASSERT_EQUAL(129, calcStatsOp->getStats().size());
   }
 
   void runStatsTest()
