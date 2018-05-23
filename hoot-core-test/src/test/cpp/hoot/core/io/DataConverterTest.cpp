@@ -45,8 +45,7 @@ class DataConverterTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE(DataConverterTest);
   CPPUNIT_TEST(runEmptyInputsTest);
   CPPUNIT_TEST(runEmptyOutputTest);
-  CPPUNIT_TEST(runMultipleNonOgrInputsTest1);
-  CPPUNIT_TEST(runMultipleNonOgrInputsTest2);
+  CPPUNIT_TEST(runMultipleNonOgrInputsTest);
   CPPUNIT_TEST(runColumnsNotOsmToShpTest1);
   CPPUNIT_TEST(runColumnsNotOsmToShpTest2);
   CPPUNIT_TEST(runBothTranslationAndColumnsTest);
@@ -88,7 +87,7 @@ public:
     CPPUNIT_ASSERT(exceptionMsg.contains("No output specified"));
   }
 
-  void runMultipleNonOgrInputsTest1()
+  void runMultipleNonOgrInputsTest()
   {
     QString exceptionMsg("");
     try
@@ -103,27 +102,8 @@ public:
       exceptionMsg = e.what();
     }
 
-    CPPUNIT_ASSERT(exceptionMsg.contains("Multiple inputs are only allowed when converting from an OGR format to OSM"));
-  }
-
-  void runMultipleNonOgrInputsTest2()
-  {
-    QString exceptionMsg("");
-    try
-    {
-      QStringList inputs;
-      inputs.append("test1.shp");
-      inputs.append("test2.shp");
-      DataConverter().convert(inputs, "test2.geojson");
-    }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-    }
-
     CPPUNIT_ASSERT(
-      exceptionMsg.contains(
-        "Multiple inputs are only allowed when converting from an OGR format to OSM"));
+      exceptionMsg.contains("Multiple inputs are only allowed when converting from an OGR format"));
   }
 
   void runColumnsNotOsmToShpTest1()
@@ -148,7 +128,7 @@ public:
 
     CPPUNIT_ASSERT(
       exceptionMsg.contains(
-        "Columns may only be specified when converting from an OSM format to the shape file format"));
+        "Columns may only be specified when converting to the shape file format"));
   }
 
   void runColumnsNotOsmToShpTest2()
@@ -173,7 +153,7 @@ public:
 
     CPPUNIT_ASSERT(
       exceptionMsg.contains(
-        "Columns may only be specified when converting from an OSM format to the shape file format"));
+        "Columns may only be specified when converting to the shape file format"));
   }
 
   void runBothTranslationAndColumnsTest()

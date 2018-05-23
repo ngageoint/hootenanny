@@ -61,11 +61,10 @@ private:
   bool _colsArgSpecified;
   int _featureReadLimit;
 
-  void _convertOsmToShp(const QString input, const QString output);
-  void _convertOsmToOgr(const QString input, const QString output);
-  void _convertOgrToOsm(const QStringList inputs, const QString output);
-  void _convertOgrToOsm(const QString input, const QString output);
-  void _generalConvert(const QString input, const QString output);
+  void _convertToShpWithCols(const QString input, const QString output);
+  void _convertToOgr(const QString input, const QString output);
+  void _convertFromOgr(const QStringList inputs, const QString output);
+  void _convert(const QString input, const QString output);
 
   /*
    * Return true if all the specified operations are valid streaming operations.
@@ -76,8 +75,6 @@ private:
   bool _areValidStreamingOps(const QStringList ops);
 
   void _validateInput(const QStringList inputs, const QString output);
-
-  void _convertSingle(const QStringList inputs, const QString output);
 };
 
 }

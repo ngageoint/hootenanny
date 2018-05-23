@@ -63,7 +63,26 @@ _featureReadLimit(0)
 void DataConverter::convert(const QStringList inputs, const QString output)
 {
   _validateInput(inputs, output);
-  _convertSingle(inputs, output);
+
+  LOG_INFO("Converting " << inputs.join(", ").right(100) << " to " << output.right(100) << "...");
+
+  if (output.toLower().endsWith(".shp") && IoUtils::isSupportedOsmFormat(inputs.at(0)) &&
+      _colsArgSpecified)
+  {
+    _convertToShpWithCols(inputs.at(0), output);
+  }
+  else if (IoUtils::isSupportedOgrFormat(output) && !_translation.isEmpty())
+  {
+    _convertToOgr(inputs.at(0), output);
+  }
+  else if (IoUtils::isSupportedOsmFormat(output) && !_translation.isEmpty())
+  {
+    _convertFromOgr(inputs, output);
+  }
+  else
+  {
+    _convert(inputs.at(0), output);
+  }
 }
 
 void DataConverter::_validateInput(const QStringList inputs, const QString output)
@@ -103,20 +122,18 @@ void DataConverter::_validateInput(const QStringList inputs, const QString outpu
     throw HootException("Cannot specify both a translation and export columns.");
   }
 
-  if (inputs.size() > 1 && (!IoUtils::areSupportedOgrFormats(inputs, true) ||
-      !IoUtils::isSupportedOsmFormat(output)))
+  if (inputs.size() > 1 && !IoUtils::areSupportedOgrFormats(inputs, true))
   {
     throw HootException(
-      "Multiple inputs are only allowed when converting from an OGR format to OSM.");
+      "Multiple inputs are only allowed when converting from an OGR format.");
   }
 
   //We may eventually be able to relax the restriction here of requiring the input be an OSM
   //format, but since cols were originally only used with osm2shp, let's keep it here for now.
-  if (_colsArgSpecified && (!output.toLower().endsWith(".shp") ||
-      !IoUtils::isSupportedOsmFormat(inputs.at(0))))
+  if (_colsArgSpecified && !output.toLower().endsWith(".shp"))
   {
     throw HootException(
-      "Columns may only be specified when converting from an OSM format to the shape file format.");
+      "Columns may only be specified when converting to the shape file format.");
   }
 
   //Should the feature read limit eventually be supported for all types of inputs?
@@ -126,32 +143,7 @@ void DataConverter::_validateInput(const QStringList inputs, const QString outpu
   }
 }
 
-void DataConverter::_convertSingle(const QStringList inputs, const QString output)
-{
-  LOG_INFO("Converting " << inputs.join(", ").right(100) << " to " << output.right(100) << "...");
-
-  if (output.toLower().endsWith(".shp") && IoUtils::isSupportedOsmFormat(inputs.at(0)) &&
-      _colsArgSpecified)
-  {
-    _convertOsmToShp(inputs.at(0), output);
-  }
-  else if (IoUtils::isSupportedOsmFormat(inputs.at(0)) && IoUtils::isSupportedOgrFormat(output) &&
-           !_translation.isEmpty())
-  {
-    _convertOsmToOgr(inputs.at(0), output);
-  }
-  else if (IoUtils::areSupportedOgrFormats(inputs, true) &&
-           IoUtils::isSupportedOsmFormat(output) && !_translation.isEmpty())
-  {
-    _convertOgrToOsm(inputs, output);
-  }
-  else
-  {
-    _generalConvert(inputs.at(0), output);
-  }
-}
-
-void DataConverter::_convertOsmToShp(const QString input, const QString output)
+void DataConverter::_convertToShpWithCols(const QString input, const QString output)
 {
   LOG_TRACE("osm2shp");
 
@@ -163,7 +155,7 @@ void DataConverter::_convertOsmToShp(const QString input, const QString output)
   writer.write(map, output);
 }
 
-void DataConverter::_convertOsmToOgr(const QString input, const QString output)
+void DataConverter::_convertToOgr(const QString input, const QString output)
 {
   LOG_TRACE("osm2ogr");
 
@@ -219,7 +211,7 @@ void DataConverter::_convertOsmToOgr(const QString input, const QString output)
   }
 }
 
-void DataConverter::_convertOgrToOsm(const QStringList inputs, const QString output)
+void DataConverter::_convertFromOgr(const QStringList inputs, const QString output)
 {
   LOG_TRACE("ogr2osm");
 
@@ -355,7 +347,7 @@ void DataConverter::_convertOgrToOsm(const QStringList inputs, const QString out
   progress.set(1.0, "Successful", true, "Finished successfully.");
 }
 
-void DataConverter::_generalConvert(const QString input, const QString output)
+void DataConverter::_convert(const QString input, const QString output)
 {
   LOG_TRACE("convert");
 
