@@ -313,7 +313,7 @@ mgcp.rules = {
     ['CAT','6','cableway:type','gondola_lift'], // Gondola Lift 
     ['CAT','8','cableway:type','industrial_ropeway'], // Industrial Ropeway 
     ['CAT','9','cableway:type','material_tramway'], // Material Tramway 
-    // ['CAT','998','cableway:type','not_applicable'], // Not Applicable
+    ['CAT','998','cableway:type','not_applicable'], // Not Applicable
     ['CAT','999','cableway:type','other'], // Other 
 
     // CCT - Cover Closure Type
@@ -1004,7 +1004,7 @@ mgcp.rules = {
     ['SFS','1','aeroway:pavement:status','fair'], // Fair 
     ['SFS','3','aeroway:pavement:status','good'], // Good 
     ['SFS','5','aeroway:pavement:status','poor'], // Poor
-    // ['SFS','998','aeroway:pavement:status','not_applicable'], // Not Applicable
+    ['SFS','998','aeroway:pavement:status','not_applicable'], // Not Applicable
 
     // SLT - Shoreline Type 
     // ['SLT','0','shoreline:type','unknown'], // Unknown 
@@ -1330,7 +1330,7 @@ mgcp.rules = {
     ['WLE','3','hydrographic_vertical_position','always_submerged'], // Always Submerged
     ['WLE','4','hydrographic_vertical_position','covers_and_uncovers'], // Covers and Uncovers
     ['WLE','8','hydrographic_vertical_position','floating'], // Floating
-    // ['WLE','998','hydrographic_vertical_position','not_applicable'], // Not Applicable
+    ['WLE','998','hydrographic_vertical_position','not_applicable'], // Not Applicable
     ['WLE','999','hydrographic_vertical_position','other'], // Other
 
     // WST - Watercourse Sink Type: No OSM even close
@@ -1384,6 +1384,7 @@ mgcp.rules = {
     ['AFC','4','building','farm_auxiliary'], // Outbuilding 
     ['AFC','5','building','barn'], // Barn 
     // ['AFC','998',undefined,undefined], // Not Applicable
+    ['AFC','998','agricultural_facility_type','not_applicable'], // Not Applicable
     ['AFC','999','building','other'], // Other
 
     // ALE_EVAL Absolute Vertical Accuracy Evaluation Method
@@ -1940,8 +1941,8 @@ mgcp.rules = {
     // ['SSR','0','roof:shape','unknown'], // Unknown 
     ['SSR','0',undefined,undefined], // Unknown 
     ['SSR','40','roof:shape','domed'], // Domed
-    // ['SSR','998','roof:shape','not_applicable'], // Not Applicable
     // ['SSR','998',undefined,undefined], // Not Applicable
+    ['SSR','998','roof:shape','not_applicable'], // Not Applicable
     ['SSR','999','roof:shape','other'], // Other
 
     // SUC - Shed Type
