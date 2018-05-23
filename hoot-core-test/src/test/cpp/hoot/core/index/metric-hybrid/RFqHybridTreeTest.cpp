@@ -550,6 +550,8 @@ public:
     OptimizeFunction ofDummy(keys, values, bounds);
     ofDummy.f(v);
 
+    OptimizeFunction* sonarTest = new OptimizeFunction(keys, values, bounds);
+
     OptimizeFunction* of = new OptimizeFunction(keys, values, bounds);
     of->f(v);
     double delta = 5;
