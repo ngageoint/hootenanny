@@ -262,16 +262,12 @@ int ConflateCmd::runSimple(QStringList args)
   MapProjector::projectToWgs84(result);
   stats.append(SingleStat("Project to WGS84 Time (sec)", t.getElapsedAndRestart()));
 
-  // If output ends with .osc, write out a changeset
-  // Else write normal stuff
   if (output.endsWith(".osc"))
   {
-    // Write changeset
     _writeChangeset(result, output);
   }
   else
   {
-    // Write conflated map
     IoUtils::saveMap(result, output);
   }
 
