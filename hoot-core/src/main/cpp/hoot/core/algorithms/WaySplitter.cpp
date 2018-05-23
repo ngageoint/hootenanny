@@ -64,7 +64,6 @@ vector<WayPtr> WaySplitter::createSplits(const vector<WayLocation>& wl)
   {
     assert(wl[i].getWay() == _a);
     WayLocation curr = wl[i];
-    assert(last <= curr);
 
     if (last.compareTo(curr) != 0)
     {
