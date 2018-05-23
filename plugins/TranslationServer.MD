@@ -1,7 +1,7 @@
 # Translation Server API
 * Translates OSM xml to/from supported schemas.
 * Provides full field information for selected feature types.
-* Provides available key/value information for translated schemas by feature type. (a la taginfo).
+* Provides available key/value information for translated schemas by feature type. (_a la_ taginfo).
 * Provides a search service for translated feature types.
 
 ___
@@ -12,10 +12,10 @@ http://localhost:8094/version
 
 ### Response
 ```
-{version: '0.0.2'}
+{version: '0.0.4'}
 ```
 ___
-## GET /capabilities
+## GET /capabilities _[deprecated]_ (use /translations instead)
 
 ### URL
 http://localhost:8094/capabilities
@@ -25,19 +25,42 @@ http://localhost:8094/capabilities
 {"TDSv40":{"isavailable":true},"TDSv61":{"isavailable":true},"MGCP":{"isavailable":true}}
 ```
 ___
-## GET /osmtotds
+## GET /translations
 
 ### URL
-http://localhost:8094/osmtotds?idval=AL015&geom=Point&translation=MGCP&idelem=fcode
+http://localhost:8094/translations
+
+### Response
+```
+["TDSv40","TDSv61","MGCP","GGDMv30"]
+```
+___
+## GET /translateTo
+
+### URL
+http://localhost:8094/translateTo?idval=AL015&geom=Point&translation=MGCP&idelem=fcode _[deprecated]_ (use key & value params instead)
+
+http://localhost:8094/translateTo?key=fcode&value=AL015&geom=Point&translation=MGCP
 
 ### Parameters
 ___
-idelem | The tag key for the feature to translate.
+
+key | The tag key for the feature to translate.
 --- | --- 
 _required_ | **Example: fcode**
 ___
 
-idval | The tag value for the feature to translate.
+value | The tag value for the feature to translate.
+--- | --- 
+_required_ | **Example: AL015**
+___
+
+idelem | The tag key for the feature to translate. _[deprecated]_
+--- | --- 
+_required_ | **Example: fcode**
+___
+
+idval | The tag value for the feature to translate. _[deprecated]_
 --- | --- 
 _required_ | **Example: AL015**
 ___
@@ -103,10 +126,10 @@ ___
 }    
 ```
 ___
-## POST /osmtotds
+## POST /translateTo
 
 ### URL
-http://localhost:8094/osmtotds?translation=TDSv61
+http://localhost:8094/translateTo?translation=TDSv61
 
 ### Parameters
 ___
@@ -137,10 +160,10 @@ ___
 </osm>
 ```
 ___
-## GET /tdstoosm
+## GET /translateFrom
 
 ### URL
-http://localhost:8094/tdstoosm?fcode=AL013&translation=TDSv61
+http://localhost:8094/translateFrom?fcode=AL013&translation=TDSv61
 
 ### Parameters
 ___
@@ -165,10 +188,10 @@ ___
 }
 ```
 ___
-## POST /tdstoosm
+## POST /translateFrom
 
 ### URL
-http://localhost:8094/tdstoosm?translation=MGCP
+http://localhost:8094/translateFrom?translation=MGCP
 
 ### Parameters
 ___
@@ -282,236 +305,3 @@ ___
 ]
 ```
 ___
-
-## ~~GET /taginfo/key/values~~ _deprecated_
-
-### URL
-http://localhost:8094/taginfo/key/values?fcode=AA040&filter=nodes&key=FUN&page=1&query=Damaged&rp=25&sortname=count_nodes&sortorder=desc&translation=MGCP
-
-### Parameters
-___
-fcode | The feature code.
---- | --- 
-_required_ | **Example: AA040**
-
-___
-filter | The geometry type to filter options by.
---- | --- 
-_required_ | **Example: nodes**
-
-___
-key | The tag key name for specified translation schema.
---- | --- 
-_required_ | **Example: FUN**
-
-___
-page | The result set page number. (NOT SURE THIS IS IMPLEMENTED)
---- | --- 
-_required_ | **Example: 1**
-
-___
-query | The query for tag values. (NOT SURE THIS IS IMPLEMENTED).
---- | --- 
-_required_ | **Example: Damaged**
-
-___
-rp | The results per page. (NOT SURE THIS IS IMPLEMENTED)
---- | --- 
-_optional_ | **Example: 25**
-
-___
-sortname | The property to sort. (NOT SURE THIS IS IMPLEMENTED)
---- | --- 
-_optional_ | **Example: count_nodes**
-
-___
-sortorder | The sort order [asc or desc]. (NOT SURE THIS IS IMPLEMENTED).
---- | --- 
-_optional_ | **Example: desc**
-
-___
-translation | The attribute schema name.
---- | --- 
-_required_ | **Example: TDSv61**
-
-___
-
-### Response
-```
-{
-  "page": 1,
-  "rp": 7,
-  "total": 7,
-  "url": "",
-  "data": [
-    {
-      "value": "Unknown",
-      "count": 1,
-      "fraction": 0.19,
-      "in_wiki": false,
-      "description": "Unknown",
-      "internal_val": "0"
-    },
-    {
-      "value": "Under Construction",
-      "count": 1,
-      "fraction": 0.19,
-      "in_wiki": false,
-      "description": "Under Construction",
-      "internal_val": "1"
-    },
-    {
-      "value": "Abandoned",
-      "count": 1,
-      "fraction": 0.19,
-      "in_wiki": false,
-      "description": "Abandoned",
-      "internal_val": "2"
-    },
-    {
-      "value": "Destroyed",
-      "count": 1,
-      "fraction": 0.19,
-      "in_wiki": false,
-      "description": "Destroyed",
-      "internal_val": "3"
-    },
-    {
-      "value": "Dismantled",
-      "count": 1,
-      "fraction": 0.19,
-      "in_wiki": false,
-      "description": "Dismantled",
-      "internal_val": "4"
-    },
-    {
-      "value": "Fully Functional",
-      "count": 1,
-      "fraction": 0.19,
-      "in_wiki": false,
-      "description": "Fully Functional",
-      "internal_val": "6"
-    },
-    {
-      "value": "Damaged",
-      "count": 1,
-      "fraction": 0.19,
-      "in_wiki": false,
-      "description": "Damaged",
-      "internal_val": "13"
-    }
-  ]
-}
-```
-
-___
-## GET ~~/taginfo/keys/all~~ _deprecated_
-
-### URL
-http://localhost:8094/taginfo/keys/all?fcode=AA040&page=1&query=&rawgeom=Point&rp=10&sortname=count_nodes&sortorder=desc&translation=MGCP
-
-### Parameters
-___
-
-fcode | The feature code.
---- | --- 
-_required_ | **Example: AA040**
-
-___
-page | The result set page number. (NOT SURE THIS IS IMPLEMENTED)
---- | --- 
-_required_ | **Example: 1**
-
-___
-query | The query for tag values. (NOT SURE THIS IS IMPLEMENTED).
---- | --- 
-_required_ | **Example: Damaged**
-
-___
-rawgeom | The geometry of the feature.
---- | --- 
-_required_ | **Example: Point**
-
-___
-rp | The results per page. (NOT SURE THIS IS IMPLEMENTED)
---- | --- 
-_optional_ | **Example: 25**
-
-___
-sortname | The property to sort. (NOT SURE THIS IS IMPLEMENTED)
---- | --- 
-_optional_ | **Example: count_nodes**
-
-___
-sortorder | The sort order [asc or desc]. (NOT SURE THIS IS IMPLEMENTED).
---- | --- 
-_optional_ | **Example: desc**
-
-___
-translation | The attribute schema name.
---- | --- 
-_required_ | **Example: TDSv61**
-
-___
-
-### Response
-```
-{
-  "page": 1,
-  "rp": 15,
-  "total": 15,
-  "url": "",
-  "data": [
-    {
-      "key": "ACC",
-      "count_all": 100001,
-      "count_all_fraction": 0.1,
-      "count_nodes": 100001,
-      "count_nodes_fraction": 0.1,
-      "count_ways": 100001,
-      "count_ways_fraction": 0.1,
-      "count_relations": 100001,
-      "count_relations_fraction": 0.1,
-      "values_all": 100,
-      "users_all": 100,
-      "in_wiki": false,
-      "in_josm": false
-    },
-    {
-      "key": "CCN",
-      "count_all": 100001,
-      "count_all_fraction": 0.1,
-      "count_nodes": 100001,
-      "count_nodes_fraction": 0.1,
-      "count_ways": 100001,
-      "count_ways_fraction": 0.1,
-      "count_relations": 100001,
-      "count_relations_fraction": 0.1,
-      "values_all": 100,
-      "users_all": 100,
-      "in_wiki": false,
-      "in_josm": false
-    },
-    {
-      "key": "FCODE",
-      "count_all": 100001,
-      "count_all_fraction": 0.1,
-      "count_nodes": 100001,
-      "count_nodes_fraction": 0.1,
-      "count_ways": 100001,
-      "count_ways_fraction": 0.1,
-      "count_relations": 100001,
-      "count_relations_fraction": 0.1,
-      "values_all": 100,
-      "users_all": 100,
-      "in_wiki": false,
-      "in_josm": false
-    },
-    .
-    .
-    .
-  ]
-}
-```
-___
-
