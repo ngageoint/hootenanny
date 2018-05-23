@@ -1,8 +1,8 @@
 ****Quick Stats****
-21:43:52.177 INFO  ...ore/io/OsmMapReaderFactory.cpp( 178) Loading map from test-files/conflate/unified/AllDataTypesA.osm...
+17:06:33.721 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from test-files/conflate/unified/AllDataTypesA.osm...
 
-21:43:52.221 INFO  .../core/ops/CalculateStatsOp.cpp( 127) Calculating map statistics...
-21:43:52.221 INFO  ...oot/core/io/MapStatsWriter.cpp( 118) Writing stats to file: test-output/StatsAllDataTypesA.txt
+17:06:33.781 INFO  .../core/ops/CalculateStatsOp.cpp( 127) Calculating map statistics...
+17:06:33.781 INFO  ...oot/core/io/MapStatsWriter.cpp( 118) Writing stats to file: test-output/StatsAllDataTypesA.txt
 Node Count	117
 Way Count	14
 Relation Count	0
@@ -13,20 +13,20 @@ Maximum Way ID	-1559687
 Minimum Relation ID	9.223372036854776e+18
 Maximum Relation ID	-9.223372036854776e+18
 ****JSON Stats****
-21:43:52.594 INFO  ...ore/io/OsmMapReaderFactory.cpp( 178) Loading map from test-files/conflate/unified/AllDataTypesA.osm...
+17:06:34.347 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from test-files/conflate/unified/AllDataTypesA.osm...
 
-21:43:52.639 INFO  .../core/ops/CalculateStatsOp.cpp( 127) Calculating map statistics...
-21:43:52.812 INFO  .../hoot/rules/LinearWaterway.js"(  33) "Calculating search radius for waterway conflation..."
-21:43:52.813 INFO  ...ate/SearchRadiusCalculator.cpp(  94) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
+17:06:34.413 INFO  .../core/ops/CalculateStatsOp.cpp( 127) Calculating map statistics...
+17:06:34.730 INFO  .../hoot/rules/LinearWaterway.js"(  33) "Calculating search radius for waterway conflation..."
+17:06:34.732 INFO  ...ate/SearchRadiusCalculator.cpp(  94) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
  Using default search radius value = 15
-21:43:53.447 INFO  ...ot/js/JavaScriptTranslator.cpp( 232) Loading translation script: /ramdisk/hoot/translations/TDSv61.js
-21:43:55.830 INFO  ...ore/io/OsmMapReaderFactory.cpp( 178) Loading map from test-files/conflate/unified/AllDataTypesB.osm...
+17:06:35.454 INFO  ...ot/js/JavaScriptTranslator.cpp( 232) Loading translation script: /ramdisk/hoot/translations/TDSv61.js
+17:06:38.473 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from test-files/conflate/unified/AllDataTypesB.osm...
 
-21:43:55.878 INFO  .../core/ops/CalculateStatsOp.cpp( 127) Calculating map statistics...
-21:43:55.879 INFO  .../hoot/rules/LinearWaterway.js"(  33) "Calculating search radius for waterway conflation..."
-21:43:55.881 INFO  ...ate/SearchRadiusCalculator.cpp(  94) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
+17:06:38.521 INFO  .../core/ops/CalculateStatsOp.cpp( 127) Calculating map statistics...
+17:06:38.527 INFO  .../hoot/rules/LinearWaterway.js"(  33) "Calculating search radius for waterway conflation..."
+17:06:38.528 INFO  ...ate/SearchRadiusCalculator.cpp(  94) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
  Using default search radius value = 15
-21:43:56.283 INFO  ...ot/js/JavaScriptTranslator.cpp( 232) Loading translation script: /ramdisk/hoot/translations/TDSv61.js
+17:06:39.246 INFO  ...ot/js/JavaScriptTranslator.cpp( 232) Loading translation script: /ramdisk/hoot/translations/TDSv61.js
 {
     "Node Count":
     [
@@ -547,6 +547,56 @@ Maximum Relation ID	-9.223372036854776e+18
         "0"
     ],
     "Percentage of Unmatched Areas":
+    [
+        "0",
+        "0"
+    ],
+    "Railway Count":
+    [
+        "0",
+        "0"
+    ],
+    "Conflatable Railways":
+    [
+        "0",
+        "0"
+    ],
+    "Conflated Railways":
+    [
+        "0",
+        "0"
+    ],
+    "Railways Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Number of Railway Reviews to be Made":
+    [
+        "0",
+        "0"
+    ],
+    "Unmatched Railways":
+    [
+        "0",
+        "0"
+    ],
+    "Meters of Railway Processed by Conflation":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Railways Conflated":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Railways Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched Railways":
     [
         "0",
         "0"
