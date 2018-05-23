@@ -376,7 +376,6 @@ See also:
 * Default Value:
 ** `hoot::ReplaceRoundabouts` - Replaces any roundabouts that were removed, pre-conflation.
 ** `hoot::RemoveMissingElementsVisitor` - Removes non-existent element references from relations or ways with negative IDs.
-** `hoot::RemoveEmptyRelationsOp` - Removes empty relations.
 ** `hoot::RemoveInvalidReviewRelationsVisitor` - Removes review relations whose members no longer exist after conflation.
 ** `hoot::RemoveDuplicateReviewsOp` - Removes any duplicate reviews
 ** `hoot::BuildingOutlineUpdateOp` - Updates any multi-part building outlines that may have changed during conflation.
@@ -385,6 +384,7 @@ See also:
 ** `hoot::RemoveInvalidMultilineStringMembersVisitor` - Removes invalid multilinestring relation members.
 ** `hoot::SuperfluousWayRemover` - Remove all ways that contain no nodes or all the nodes are exactly the same.
 ** `hoot::RemoveDuplicateWayNodesVisitor` - Remove all nodes that are unnecessarily duplicated in a way.
+** `hoot::RemoveEmptyRelationsOp` - Removes empty relations.
 ** `hoot::AddHilbertReviewSortOrderOp` - Adds a sorting value to all reviews.  By processing reviews in sorted order the results are a little more logically ordered.
 
 List of operations to run in the conflate command after data is conflated, after the ops in
