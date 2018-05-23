@@ -42,15 +42,16 @@ pipeline {
         stage("Build") {
             steps {
                 script {
-                if (env.BRANCH_NAME.startsWith("PR-")) {
-                    // This is a pull request so we need to pass PR info to the scripts
-                    sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-build.sh ${env.SONAR_CLOUD_KEY} ${env.BRANCH_NAME} ${env.CHANGE_ID} ${env.DGIS_BOT_TOKEN}'"
+                    if (env.BRANCH_NAME.startsWith("PR-")) {
+                        // This is a pull request so we need to pass PR info to the scripts
+                        sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-build.sh ${env.SONAR_CLOUD_KEY} ${env.BRANCH_NAME} ${env.CHANGE_ID} ${env.DGIS_BOT_TOKEN}'"
+                    }
+                    else {
+                        // Scan for a regular branch
+                        sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-build.sh ${env.SONAR_CLOUD_KEY} ${env.BRANCH_NAME}'"
+                    }
                 }
-                else {
-                    // Scan for a regular branch
-                    sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-build.sh ${env.SONAR_CLOUD_KEY} ${env.BRANCH_NAME}'"
-                }
-            }       
+            }
         }
     }
     post {
