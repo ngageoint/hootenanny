@@ -28,6 +28,7 @@ if [ -n "$2" ]; then
 fi
 if [ -n "$3" ]; then
     CMD+=" -Dsonar.github.pullRequest=$3"
+    CMD+=" -Dsonar.analysis.mode=preview"
 fi
 if [ -n "$4" ]; then
     CMD+=" -Dsonar.github.oauth=$4"
