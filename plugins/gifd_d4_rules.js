@@ -813,7 +813,7 @@ gifd.rules = {
        ['AUA','82','raw:AUA','radar_stage_3'], // Radar Stage 3
        ['AUA','83','raw:AUA','berlin_control_zone_associated_corridors'], // Berlin Control Zone Associated Corridors
        ['AUA','997',undefined,undefined], // Unpopulated
-       ['AUA','998',undefined,undefined], // Not Applicable
+       ['AUA','998','raw:AUA','not_applicable'], // Not Applicable
        ['AUA','999','raw:AUA','other'], // Other
 
        // AUB - Airspace Use Boundary
@@ -861,7 +861,8 @@ gifd.rules = {
        ['AUR','11','raw:AUR','oceanic'], // Oceanic
        ['AUR','12','raw:AUR','area_navigation_(rnav)'], // Area Navigation (RNAV)
        ['AUR','14','raw:AUR','tacan'], // TACAN
-       ['AUR','998','raw:AUR',undefined,undefined], // Not Applicable
+       // ['AUR','998','raw:AUR',undefined,undefined], // Not Applicable
+       ['AUR','998','raw:AUR','raw:AUR','not_applicable'], // Not Applicable
        ['AUR','999','raw:AUR','other'], // Other
 
        // AVB - Highway Access Road Category
@@ -1038,7 +1039,8 @@ gifd.rules = {
        ['BFC','150','raw:BFC','barracks'], // Barracks
        ['BFC','151','raw:BFC','dormitory'], // Dormitory
        ['BFC','723','raw:BFC','combined_fire_and_police_station'], // Combined Fire and Police Station
-       ['BFC','998',undefined,undefined], // Not Applicable
+       // ['BFC','998',undefined,undefined], // Not Applicable
+       ['BFC','998','raw:BFC','not_applicable'], // Not Applicable
        ['BFC','999','raw:BFC','other'], // Other
 
        // BIT - Beach Indicator Type
@@ -1065,7 +1067,8 @@ gifd.rules = {
        ['BOT','10','bridge:movable','swing'], // Swing
        ['BOT','11','bridge:movable','lift'], // Lift
        ['BOT','12','bridge:movable','retractable'], // Retractable
-       ['BOT','13',undefined,undefined], // Not Applicable
+       // ['BOT','13',undefined,undefined], // Not Applicable
+       ['BOT','13','bridge:movable','not_applicable'], // Not Applicable
        ['BOT','14','bridge:movable','submersible'], // Submersible
        ['BOT','999','bridge:movable','other'], // Other
 
@@ -1129,7 +1132,8 @@ gifd.rules = {
        ['BUD','3','raw:BUD','medium_(>15%<=50%)'], // Medium (>15%<=50%)
        ['BUD','4','raw:BUD','dense_(>50%)'], // Dense (>50%)
        ['BUD','997',undefined,undefined], // Unpopulated
-       ['BUD','998',undefined,undefined], // Not Applicable
+       // ['BUD','998',undefined,undefined], // Not Applicable
+       ['BUD','998','raw:BUD','not_applicable'], // Not Applicable
 
        // BUT - Buoy Type Category
        ['BUT','0','raw:BUT','unknown'], // Unknown
@@ -1152,7 +1156,8 @@ gifd.rules = {
        ['BUT','99','raw:BUT','installation'], // Installation
        ['BUT','100','raw:BUT','waverider'], // Waverider
        ['BUT','101','raw:BUT','wave_meter'], // Wave Meter
-       ['BUT','998',undefined,undefined], // Not Applicable
+       // ['BUT','998',undefined,undefined], // Not Applicable
+       ['BUT','998','raw:BUT','not_applicable'], // Not Applicable
        ['BUT','999','raw:BUT','other'], // Other
 
        // BVL - Bank Vegetation Left
@@ -1242,7 +1247,8 @@ gifd.rules = {
        ['CDA','1','raw:CDA','uncovered'], // Uncovered
        ['CDA','2','raw:CDA','covered'], // Covered
        ['CDA','997',undefined,undefined], // Unpopulated
-       ['CDA','998',undefined,undefined], // Not Applicable
+       // ['CDA','998',undefined,undefined], // Not Applicable
+       ['CDA','998','raw:CDA','not_applicable'], // Not Applicable
 
        // CDP - Calendar Date Type
        ['CDP','0','calendar:date_type','unknown'], // Unknown
@@ -1386,7 +1392,8 @@ gifd.rules = {
        ['CRA','3','raw:CRA','rotating'], // Rotating
        ['CRA','7','raw:CRA','tower_crane'], // Tower Crane
        ['CRA','997',undefined,undefined], // Unpopulated
-       ['CRA','998',undefined,undefined], // Not Applicable
+       // ['CRA','998',undefined,undefined], // Not Applicable
+       ['CRA','998','raw:CRA','not_applicable'], // Not Applicable
        ['CRA','999','raw:CRA','other'], // Other
 
        // CRM - Crane Mobility Type
@@ -1466,7 +1473,8 @@ gifd.rules = {
        ['DIR','3','directivity','omni'], // Omni
        ['DIR','4','directivity','right_uni'], // Right Uni
        ['DIR','5','directivity','left_uni'], // Left Uni
-       ['DIR','998',undefined,undefined], // Not Applicable
+       // ['DIR','998',undefined,undefined], // Not Applicable
+       ['DIR','998','directivity','not_applicable'], // Not Applicable
 
        // DMC - Boundary Demarcation Code
        ['DMC','0','boundary:demarcated','unknown'], // Unknown
@@ -1497,7 +1505,8 @@ gifd.rules = {
        ['EBT','4','raw:EBT','lyceum'], // Lyceum
        ['EBT','5','raw:EBT','university'], // University
        ['EBT','6','raw:EBT','seminary'], // Seminary
-       ['EBT','8',undefined,undefined], // Not Applicable
+       // ['EBT','8',undefined,undefined], // Not Applicable
+       ['EBT','8','raw:EBT','not_applicable'], // Not Applicable
        ['EBT','999','raw:EBT','other'], // Other
 
        // ELA - Elevation Accuracy
@@ -1736,7 +1745,8 @@ gifd.rules = {
        ['GW1','6','raw:GW1','>_75_and_<=_100'], // > 75 and <= 100
        ['GW1','7','raw:GW1','>_100_and_<=_142'], // > 100 and <= 142
        ['GW1','8','raw:GW1','>_142'], // > 142
-       ['GW1','9',undefined,undefined], // Not Applicable
+       // ['GW1','9',undefined,undefined], // Not Applicable
+       ['GW1','9','raw:GW1','not_applicable'], // Not Applicable
        ['GW1','997',undefined,undefined], // Unpopulated
 
        // GW3 - Gap Width Range (3)
@@ -1771,7 +1781,8 @@ gifd.rules = {
        ['HDI','12','raw:HDI','depth_unknown'], // Depth Unknown
        ['HDI','13','raw:HDI','uncovering_height_known'], // Uncovering Height Known
        ['HDI','14','raw:HDI','uncovering_height_unknown'], // Uncovering Height Unknown
-       ['HDI','15',undefined,undefined], // Not Applicable
+       // ['HDI','15',undefined,undefined], // Not Applicable
+       ['HDI','15','raw:HDI','not_applicable'], // Not Applicable
        ['HDI','997',undefined,undefined], // Unpopulated
 
        // HFC - Hydrological Form Category
@@ -1899,7 +1910,8 @@ gifd.rules = {
        ['HTC','509','raw:HTC','cable'], // Cable
        ['HTC','510','raw:HTC','depths_within_test_zone_which_are_shallower_than_zone_limits'], // Depths within test zone which are shallower than zone limits
        ['HTC','511','raw:HTC','depths_within_test_zone_which_are_deeper_than_zone_limits'], // Depths within test zone which are deeper than zone limits
-       ['HTC','998',undefined,undefined], // Not Applicable
+       // ['HTC','998',undefined,undefined], // Not Applicable
+       ['HTC','998','raw:HTC','not_applicable'], // Not Applicable
        ['HTC','999','raw:HTC','other'], // Other
 
        // HTP - Hangar Type Category
@@ -1931,7 +1943,8 @@ gifd.rules = {
        ['HTZ','503','raw:HTZ','zone_c'], // Zone C
        ['HTZ','504','raw:HTZ','zone_d'], // Zone D
        ['HTZ','505','raw:HTZ','zone_e'], // Zone E
-       ['HTZ','998',undefined,undefined], // Not Applicable
+       // ['HTZ','998',undefined,undefined], // Not Applicable
+       ['HTZ','998','raw:HTZ','not_applicable'], // Not Applicable
 
        // HWT - House of Worship Type
        ['HWT','0',undefined,undefined], // Unknown
@@ -1949,11 +1962,13 @@ gifd.rules = {
        ['HWT','20','building','synagogue'], // Synagogue
        ['HWT','21','building','stupa'], // Stupa
        ['HWT','997',undefined,undefined], // Unpopulated
-       ['HWT','998',undefined,undefined], // Not Applicable
+       // ['HWT','998',undefined,undefined], // Not Applicable
+       ['HWT','998','building:religious','not_applicable'], // Not Applicable
 
        // HYC - Hydrological Category
        ['HYC','0','raw:HYC','unknown'], // Unknown
-       ['HYC','2',undefined,undefined], // Not Applicable
+       // ['HYC','2',undefined,undefined], // Not Applicable
+       ['HYC','2','raw:HYC','not_applicable'], // Not Applicable
        ['HYC','3','raw:HYC','dry'], // Dry
        ['HYC','6','raw:HYC','non-perennial/intermittent/fluctuating'], // Non-Perennial/Intermittent/Fluctuating
        ['HYC','8','raw:HYC','perennial/permanent'], // Perennial/Permanent
@@ -1980,7 +1995,8 @@ gifd.rules = {
        ['IBC','0','raw:IBC','undefined'], // Undefined
        ['IBC','1','raw:IBC','catenary_anchor_leg_mooring_(calm)'], // Catenary Anchor Leg Mooring (CALM)
        ['IBC','2','raw:IBC','single_buoy_mooring_(sbm)'], // Single Buoy Mooring (SBM)
-       ['IBC','998',undefined,undefined], // Not Applicable
+       // ['IBC','998',undefined,undefined], // Not Applicable
+       ['IBC','998','raw:IBC','not_applicable'], // Not Applicable
 
        // ICL - ICAO Airspace Classification
        ['ICL','0','raw:ICL','unknown'], // Unknown
@@ -1991,7 +2007,8 @@ gifd.rules = {
        ['ICL','5','raw:ICL','class_e'], // Class E
        ['ICL','6','raw:ICL','class_f'], // Class F
        ['ICL','7','raw:ICL','class_g'], // Class G
-       ['ICL','998',undefined,undefined], // Not Applicable
+       // ['ICL','998',undefined,undefined], // Not Applicable
+       ['ICL','998','raw:ICL','not_applicable'], // Not Applicable
 
        // IWO - Inland Water Obstruction
        ['IWO','0','raw:IWO','unknown'], // Unknown
@@ -2010,7 +2027,8 @@ gifd.rules = {
        ['LAF','8','navigation_line_feature','moir_effect_light'], // Moir Effect Light
        ['LAF','9','navigation_line_feature','leading_radio_transponder_beacon'], // Leading Radio Transponder Beacon
        ['LAF','997',undefined,undefined], // Unpopulated
-       ['LAF','998',undefined,undefined], // Not Applicable
+       // ['LAF','998',undefined,undefined], // Not Applicable
+       ['LAF','998','navigation_line_feature','not_applicable'], // Not Applicable
 
        // LFA - Light Function Aeronautical
        ['LFA','0','raw:LFA','unknown'], // Unknown
@@ -2114,7 +2132,8 @@ gifd.rules = {
        ['LOC','39','location','depth_unknown'], // Depth Unknown
        ['LOC','40','location','underground'], // Underground
        ['LOC','997',undefined,undefined], // Unpopulated
-       ['LOC','998',undefined,undefined], // Not Applicable
+       // ['LOC','998',undefined,undefined], // Not Applicable
+       ['LOC','998','location_category','not_applicable'], // Not Applicable
        ['LOC','999',undefined,undefined], // Other
 
        // LSP - Boundary Lines Of Separation Code
@@ -2233,7 +2252,8 @@ gifd.rules = {
        ['MAS','1','maintained','maintained'], // Maintained
        ['MAS','2','maintained','not_maintained'], // Not Maintained
        ['MAS','997',undefined,undefined], // Unpopulated
-       ['MAS','998',undefined,undefined], // Not Applicable
+       // ['MAS','998',undefined,undefined], // Not Applicable
+       ['MAS','998','maintenance_status','not_applicable'], // Not Applicable
 
        // MBL - Maritime Boundary Limit
        ['MBL','0','raw:MBL','unknown'], // Unknown
@@ -2648,7 +2668,8 @@ gifd.rules = {
        ['M_ATN_1Q100','1','raw:M_ATN_1Q100','marked'], // Marked
        ['M_ATN_1Q100','2','raw:M_ATN_1Q100','unmarked'], // Unmarked
        ['M_ATN_1Q100','997',undefined,undefined], // Unpopulated
-       ['M_ATN_1Q100','998',undefined,undefined], // Not Applicable
+       // ['M_ATN_1Q100','998',undefined,undefined], // Not Applicable
+       ['M_ATN_1Q100','998','raw:M_ATN_1Q100','not_applicable'], // Not Applicable
        ['M_ATN_1Q100','999','raw:M_ATN_1Q100','other'], // Other
 
        // M_ATN_6C165 - Hierarchy 6C165 ATN
@@ -2656,7 +2677,8 @@ gifd.rules = {
        ['M_ATN_6C165','1','raw:M_ATN_6C165','marked'], // Marked
        ['M_ATN_6C165','2','raw:M_ATN_6C165','unmarked'], // Unmarked
        ['M_ATN_6C165','997',undefined,undefined], // Unpopulated
-       ['M_ATN_6C165','998',undefined,undefined], // Not Applicable
+       // ['M_ATN_6C165','998',undefined,undefined], // Not Applicable
+       ['M_ATN_6C165','998','raw:M_ATN_6C165','not_applicableot_a'], // Not Applicable
        ['M_ATN_6C165','999','raw:M_ATN_6C165','other'], // Other
 
        // M_AVB_1P031 - Hierarchy 1P031 AVB
@@ -2672,7 +2694,8 @@ gifd.rules = {
        ['M_EXS_6C165','22','raw:M_EXS_6C165','one-way'], // One-Way
        ['M_EXS_6C165','23','raw:M_EXS_6C165','two-way'], // Two-Way
        ['M_EXS_6C165','997',undefined,undefined], // Unpopulated
-       ['M_EXS_6C165','998',undefined,undefined], // Not Applicable
+       // ['M_EXS_6C165','998',undefined,undefined], // Not Applicable
+       ['M_EXS_6C165','998','raw:M_EXS_6C165','not_applicable'], // Not Applicable
        ['M_EXS_6C165','999','raw:M_EXS_6C165','other'], // Other
 
        // M_HAF_9D066 - Hierarchy 9D066 Horizontal Accuracy Flag
@@ -2688,7 +2711,8 @@ gifd.rules = {
        ['M_HDI_6C165','12','raw:M_HDI_6C165','depth_unknown'], // Depth Unknown
        ['M_HDI_6C165','13','raw:M_HDI_6C165','uncovering_height_known'], // Uncovering Height Known
        ['M_HDI_6C165','14','raw:M_HDI_6C165','uncovering_height_unknown'], // Uncovering Height Unknown
-       ['M_HDI_6C165','15',undefined,undefined], // Not Applicable
+       // ['M_HDI_6C165','15',undefined,undefined], // Not Applicable
+       ['M_HDI_6C165','15','raw:M_HDI_6C165','not_applicable'], // Not Applicable
        ['M_HDI_6C165','997',undefined,undefined], // Unpopulated
        ['M_HDI_6C165','999','raw:M_HDI_6C165','other'], // Other
 
@@ -2697,7 +2721,8 @@ gifd.rules = {
        ['M_IAS_6C160','1','raw:M_IAS_6C160','adopted'], // Adopted
        ['M_IAS_6C160','2','raw:M_IAS_6C160','not_adopted'], // Not Adopted
        ['M_IAS_6C160','997',undefined,undefined], // Unpopulated
-       ['M_IAS_6C160','998',undefined,undefined], // Not Applicable
+       // ['M_IAS_6C160','998',undefined,undefined], // Not Applicable
+       ['M_IAS_6C160','998','raw:M_IAS_6C160','not_applicable'], // Not Applicable
        ['M_IAS_6C160','999','raw:M_IAS_6C160','other'], // Other
 
        // M_IAS_6C180 - Hierarchy 6C160 IAS
@@ -2705,7 +2730,8 @@ gifd.rules = {
        ['M_IAS_6C180','1','raw:M_IAS_6C180','adopted'], // Adopted
        ['M_IAS_6C180','2','raw:M_IAS_6C180','not_adopted'], // Not Adopted
        ['M_IAS_6C180','997',undefined,undefined], // Unpopulated
-       ['M_IAS_6C180','998',undefined,undefined], // Not Applicable
+       // ['M_IAS_6C180','998',undefined,undefined], // Not Applicable
+       ['M_IAS_6C180','998','raw:M_IAS_6C180','not_applicable'], // Not Applicable
        ['M_IAS_6C180','999','raw:M_IAS_6C180','other'], // Other
 
        // M_RIT_1P020 - Hierarchy 1P020 RIT
@@ -2713,7 +2739,8 @@ gifd.rules = {
        ['M_RIT_1P020','1','raw:M_RIT_1P020','cloverleaf'], // Cloverleaf
        ['M_RIT_1P020','2','raw:M_RIT_1P020','diamond'], // Diamond
        ['M_RIT_1P020','997',undefined,undefined], // Unpopulated
-       ['M_RIT_1P020','998',undefined,undefined], // Not Applicable
+       // ['M_RIT_1P020','998',undefined,undefined], // Not Applicable
+       ['M_RIT_1P020','998','raw:M_RIT_1P020','not_applicable'], // Not Applicable
        ['M_RIT_1P020','999','raw:M_RIT_1P020','other'], // Other
 
        // M_RPA_2H020 - Hierarchy 2H020 RPA
@@ -2721,7 +2748,8 @@ gifd.rules = {
        ['M_RPA_2H020','1','raw:M_RPA_2H020','access_required'], // Access Required
        ['M_RPA_2H020','2','raw:M_RPA_2H020','access_not_required'], // Access Not Required
        ['M_RPA_2H020','997',undefined,undefined], // Unpopulated
-       ['M_RPA_2H020','998',undefined,undefined], // Not Applicable
+       // ['M_RPA_2H020','998',undefined,undefined], // Not Applicable
+       ['M_RPA_2H020','998','raw:M_RPA_2H020','not_applicable'], // Not Applicable
        ['M_RPA_2H020','999','raw:M_RPA_2H020','other'], // Other
 
        // M_RPA_2H141 - Hierarchy 2H141 RPA
@@ -2729,7 +2757,8 @@ gifd.rules = {
        ['M_RPA_2H141','1','raw:M_RPA_2H141','access_required'], // Access Required
        ['M_RPA_2H141','2','raw:M_RPA_2H141','access_not_required'], // Access Not Required
        ['M_RPA_2H141','997',undefined,undefined], // Unpopulated
-       ['M_RPA_2H141','998',undefined,undefined], // Not Applicable
+       // ['M_RPA_2H141','998',undefined,undefined], // Not Applicable
+       ['M_RPA_2H141','998','raw:M_RPA_2H141','not_applicable'], // Not Applicable
        ['M_RPA_2H141','999','raw:M_RPA_2H141','other'], // Other
 
        // M_RTT_6C165 - Hierarchy 6C165 RTT
@@ -2742,7 +2771,8 @@ gifd.rules = {
        ['M_RTT_6C165','18','raw:M_RTT_6C165','recommended_route'], // Recommended Route
        ['M_RTT_6C165','96','raw:M_RTT_6C165','recommended_traffic_lane_part'], // Recommended Traffic Lane Part
        ['M_RTT_6C165','997',undefined,undefined], // Unpopulated
-       ['M_RTT_6C165','998',undefined,undefined], // Not Applicable
+       // ['M_RTT_6C165','998',undefined,undefined], // Not Applicable
+       ['M_RTT_6C165','998','raw:M_RTT_6C165','not_applicable'], // Not Applicable
        ['M_RTT_6C165','999','raw:M_RTT_6C165','other'], // Other
 
        // M_SEP_1P031 - Hierarchy 1P031 SEP
@@ -2760,7 +2790,8 @@ gifd.rules = {
        ['M_TSP_6C160','6','raw:M_TSP_6C160','inbound_area'], // Inbound Area
        ['M_TSP_6C160','7','raw:M_TSP_6C160','outbound_area'], // Outbound Area
        ['M_TSP_6C160','997',undefined,undefined], // Unpopulated
-       ['M_TSP_6C160','998',undefined,undefined], // Not Applicable
+       // ['M_TSP_6C160','998',undefined,undefined], // Not Applicable
+       ['M_TSP_6C160','998','raw:M_TSP_6C160','not_applicable'], // Not Applicable
        ['M_TSP_6C160','999','raw:M_TSP_6C160','other'], // Other
 
        // M_TSP_6C180 - Hierarchy 6C180 TSP
@@ -2773,7 +2804,8 @@ gifd.rules = {
        ['M_TSP_6C180','6','raw:M_TSP_6C180','inbound_area'], // Inbound Area
        ['M_TSP_6C180','7','raw:M_TSP_6C180','outbound_area'], // Outbound Area
        ['M_TSP_6C180','997',undefined,undefined], // Unpopulated
-       ['M_TSP_6C180','998',undefined,undefined], // Not Applicable
+       // ['M_TSP_6C180','998',undefined,undefined], // Not Applicable
+       ['M_TSP_6C180','998','raw:M_TSP_6C180','not_applicable'], // Not Applicable
        ['M_TSP_6C180','999','raw:M_TSP_6C180','other'], // Other
 
        // M_TUC_1P020 - Hierarchy 1P020 TUC
@@ -2781,7 +2813,8 @@ gifd.rules = {
        ['M_TUC_1P020','4','transport:type','road'], // Road
        ['M_TUC_1P020','7','highway:through_route','yes'], // Through Route
        ['M_TUC_1P020','997',undefined,undefined], // Unpopulated
-       ['M_TUC_1P020','998',undefined,undefined], // Not Applicable
+       // ['M_TUC_1P020','998',undefined,undefined], // Not Applicable
+       ['M_TUC_1P020','998','IP023_TUC','not_applicable'], // Not Applicable
        ['M_TUC_1P020','999','transport:type','other'], // Other
 
        // M_UNI_1Q100 - Hierarchy 1Q100 UNI
@@ -2790,7 +2823,8 @@ gifd.rules = {
        ['M_UNI_1Q100','23','raw:M_UNI_1Q100','kilometers'], // Kilometers
        ['M_UNI_1Q100','28','raw:M_UNI_1Q100','fathoms'], // Fathoms
        ['M_UNI_1Q100','997',undefined,undefined], // Unpopulated
-       ['M_UNI_1Q100','998',undefined,undefined], // Not Applicable
+       // ['M_UNI_1Q100','998',undefined,undefined], // Not Applicable
+       ['M_UNI_1Q100','998','raw:M_UNI_1Q100','not_applicable'], // Not Applicable
        ['M_UNI_1Q100','999','raw:M_UNI_1Q100','other'], // Other
 
        // M_USE_1P030 - Hierarchy 1P030 USE
@@ -2799,7 +2833,8 @@ gifd.rules = {
        ['M_USE_1P030','5','ref:road:class','secondary'], // State
        ['M_USE_1P030','23','ref:road:class','international'], // International
        ['M_USE_1P030','990',undefined,undefined], // Unpopulated
-       ['M_USE_1P030','991',undefined,undefined], // Not Applicable
+       // ['M_USE_1P030','991',undefined,undefined], // Not Applicable
+       ['M_USE_1P030','991','IP023_USE','not_applicable'], // Not Applicable
        ['M_USE_1P030','999','ref:road:class','other'], // Other
 
        // M_VDC_2H020 - Hierarchy 2H020 VDC
@@ -2813,7 +2848,8 @@ gifd.rules = {
        ['M_VDC_2H020','27','source:datum:sounding','lowest_normal_low_water'], // Lowest Normal Low Water
        ['M_VDC_2H020','90','source:datum:sounding','lowest_low_water'], // Lowest Low Water
        ['M_VDC_2H020','997',undefined,undefined], // Unpopulated
-       ['M_VDC_2H020','998',undefined,undefined], // Not Applicable
+       // ['M_VDC_2H020','998',undefined,undefined], // Not Applicable
+       ['M_VDC_2H020','998','source:datum:sounding','not_applicable'], // Not Applicable
        ['M_VDC_2H020','999','source:datum:sounding','other'], // Other
 
        // M_VDC_6C165 - Hierarchy 6C165 VDC
@@ -2827,7 +2863,8 @@ gifd.rules = {
        ['M_VDC_6C165','27','source:datum:sounding','lowest_normal_low_water'], // Lowest Normal Low Water
        ['M_VDC_6C165','90','source:datum:sounding','lowest_low_water'], // Lowest Low Water
        ['M_VDC_6C165','997',undefined,undefined], // Unpopulated
-       ['M_VDC_6C165','998',undefined,undefined], // Not Applicable
+       // ['M_VDC_6C165','998',undefined,undefined], // Not Applicable
+       ['M_VDC_6C165','998','source:datum:sounding','not_applicable'], // Not Applicable
        ['M_VDC_6C165','999','source:datum:sounding','other'], // Other
 
        // NAS - Native Settlement Type
@@ -2907,7 +2944,8 @@ gifd.rules = {
        ['NST','81','beacon:type','locator_middle_marker'], // Lmm - Locator Middle Marker
        ['NST','82','beacon:type','rotating_beacon_light'], // Rotating Beacon Light
        ['NST','997',undefined,undefined], // Unpopulated
-       ['NST','998',undefined,undefined], // Not Applicable
+       // ['NST','998',undefined,undefined], // Not Applicable
+       ['NST','998','beacon:type','not_applicable'], // Not Applicable
        ['NST','999','beacon:type','other'], // Other
 
        // OAC - Ordnance Area Construction Activity
@@ -2975,7 +3013,8 @@ gifd.rules = {
        ['OPS','1','raw:OPS','operational'], // Operational
        ['OPS','2','raw:OPS','non-operational'], // Non-Operational
        ['OPS','997',undefined,undefined], // Unpopulated
-       ['OPS','998',undefined,undefined], // Not Applicable
+       // ['OPS','998',undefined,undefined], // Not Applicable
+       ['OPS','998','raw:OPS','not_applicable'], // Not Applicable
 
        // ORD - Ordinal Category
        ['ORD','0','raw:ORD','unknown'], // Unknown
@@ -3078,7 +3117,8 @@ gifd.rules = {
        ['PBV','1','raw:PBV','by_boat'], // By Boat
        ['PBV','2','raw:PBV','by_helicopter'], // By Helicopter
        ['PBV','997',undefined,undefined], // Unpopulated
-       ['PBV','998',undefined,undefined], // Not Applicable
+       // ['PBV','998',undefined,undefined], // Not Applicable
+       ['PBV','998','raw:PBV','not_applicable'], // Not Applicable
 
        // PCI - Point of Change Identifier
        ['PCI','0','raw:PCI','unknown'], // Unknown
@@ -3088,7 +3128,8 @@ gifd.rules = {
        ['PCI','4','raw:PCI','road_width_change'], // Road width change
        ['PCI','5','raw:PCI','obstacles'], // Obstacles
        ['PCI','997',undefined,undefined], // Unpopulated
-       ['PCI','998',undefined,undefined], // Not Applicable
+       // ['PCI','998',undefined,undefined], // Not Applicable
+       ['PCI','998','raw:PCI','not_applicable'], // Not Applicable
        ['PCI','999','raw:PCI','other'], // Other
 
        // PEC - Port of Entry Classification
@@ -3142,7 +3183,8 @@ gifd.rules = {
        ['PPC','9','raw:PPC','substation'], // Substation
        ['PPC','10','raw:PPC','transformer_yard'], // Transformer Yard
        ['PPC','997',undefined,undefined], // Unpopulated
-       ['PPC','998',undefined,undefined], // Not Applicable
+       // ['PPC','998',undefined,undefined], // Not Applicable
+       ['PPC','998','raw:PPC','not_applicable'], // Not Applicable
        ['PPC','999','raw:PPC','other'], // Other
 
        // PPT - Populated Place Type
@@ -3163,7 +3205,8 @@ gifd.rules = {
        ['PR1','10','raw:PR1','beginning_seasonal_limit_-_oct.'], // Beginning seasonal limit - Oct.
        ['PR1','11','raw:PR1','beginning_seasonal_limit_-_nov.'], // Beginning seasonal limit - Nov.
        ['PR1','12','raw:PR1','beginning_seasonal_limit_-_dec.'], // Beginning seasonal limit - Dec.
-       ['PR1','998',undefined,undefined], // Not Applicable
+       // ['PR1','998',undefined,undefined], // Not Applicable
+       ['PR1','998','raw:PR1','not_applicable'], // Not Applicable
 
        // PR2 - Periodic Restriction Ending
        ['PR2','1','raw:PR2','ending_seasonal_limit_-_jan.'], // Ending seasonal limit - Jan.
@@ -3178,7 +3221,8 @@ gifd.rules = {
        ['PR2','10','raw:PR2','ending_seasonal_limit_-_oct.'], // Ending seasonal limit - Oct.
        ['PR2','11','raw:PR2','ending_seasonal_limit_-_nov.'], // Ending seasonal limit - Nov.
        ['PR2','12','raw:PR2','ending_seasonal_limit_-_dec.'], // Ending seasonal limit - Dec.
-       ['PR2','998',undefined,undefined], // Not Applicable
+       // ['PR2','998',undefined,undefined], // Not Applicable
+       ['PR2','998','raw:PR2','not_applicable'], // Not Applicable
 
        // PRC - Periodic Restriction Category
        ['PRC','0','raw:PRC','unknown'], // Unknown
@@ -3287,7 +3331,8 @@ gifd.rules = {
        ['PRO','140','raw:PRO','ore'], // Ore
        ['PRO','148','raw:PRO','grain'], // Grain
        ['PRO','996',undefined,undefined], // Unpopulated
-       ['PRO','997',undefined,undefined], // Not Applicable
+       // ['PRO','997',undefined,undefined], // Not Applicable
+       ['PRO','997','raw:PRO','not_applicable'], // Not Applicable
        ['PRO','998','raw:PRO','multiple'], // Multiple
        ['PRO','999','raw:PRO','other'], // Other
 
@@ -3366,7 +3411,8 @@ gifd.rules = {
        ['RAG','19','raw:RAG','mad_report'], // MAD Report
        ['RAG','20','raw:RAG','undifferentiated_sonar_or_mad_report'], // Undifferentiated Sonar or MAD Report
        ['RAG','997',undefined,undefined], // Unpopulated
-       ['RAG','998',undefined,undefined], // Not Applicable
+       // ['RAG','998',undefined,undefined], // Not Applicable
+       ['RAG','998','raw:RAG','not_applicable'], // Not Applicable
        ['RAG','999','raw:RAG','other'], // Other
 
        // RAH - Runway High End Approach Lights
@@ -3414,7 +3460,8 @@ gifd.rules = {
        ['REL','6','religion','orthodox'], // Greek Orthodox
        ['REL','7','religion','protestant'], // Protestant
        ['REL','8','religion','shinto'], // Shinto
-       ['REL','998',undefined,undefined], // Not Applicable
+       // ['REL','998',undefined,undefined], // Not Applicable
+       ['REL','998','religious_denomination','not_applicable'], // Not Applicable
        ['REL','999','religion','other'], // Other
 
        // RFL - Runway Flood Lights
@@ -3576,7 +3623,8 @@ gifd.rules = {
        // SCC - Spring/Well Characteristic Category
        ['SCC','0','water:type','unknown'], // Unknown
        ['SCC','1','water:type','alkaline'], // Alkaline
-       ['SCC','2',undefined,undefined], // Not Applicable
+       // ['SCC','2',undefined,undefined], // Not Applicable
+       ['SCC','2','water:type','not_applicable'], // Not Applicable
        ['SCC','4','water:type','mineral'], // Mineral
        ['SCC','9','water:type','potable'], // Freshwater/Potable
        ['SCC','10','water:type','salt'], // Salt
@@ -3593,7 +3641,8 @@ gifd.rules = {
        ['SD1','5','raw:SD1','>_30.00_and_<=_40.00'], // > 30.00 and <= 40.00
        ['SD1','6','raw:SD1','>_40.00_and_<=_60.00'], // > 40.00 and <= 60.00
        ['SD1','7','raw:SD1','>_60.00'], // > 60.00
-       ['SD1','8',undefined,undefined], // Not Applicable
+       // ['SD1','8',undefined,undefined], // Not Applicable
+       ['SD1','8','raw:SD1','not_applicable'], // Not Applicable
        ['SD1','997',undefined,undefined], // Unpopulated
 
        // SD2 - Stem Diameter Size Range (2)
@@ -3603,7 +3652,8 @@ gifd.rules = {
        ['SD2','3','raw:SD2','>_30.00_and_<=_60.00'], // > 30.00 and <= 60.00
        ['SD2','4','raw:SD2','>_60.00_and_<=_100.00'], // > 60.00 and <= 100.00
        ['SD2','5','raw:SD2','>_100.00'], // > 100.00
-       ['SD2','6',undefined,undefined], // Not Applicable
+       // ['SD2','6',undefined,undefined], // Not Applicable
+       ['SD2','6','raw:SD2','not_applicable'], // Not Applicable
        ['SD2','997',undefined,undefined], // Unpopulated
 
        // SDE - Soil Depth With Greater Precision
@@ -3618,7 +3668,8 @@ gifd.rules = {
 
        // SEA - Sea Area Classification
        ['SEA','1','raw:SEA','sea_area_in_general'], // Sea area in general
-       ['SEA','998',undefined,undefined], // Not Applicable
+       // ['SEA','998',undefined,undefined], // Not Applicable
+       ['SEA','998','raw:SEA','not_applicable'], // Not Applicable
 
        // SEC - Security Classification
        ['SEC','0','security:classification','unknown'], // Unknown
@@ -4095,7 +4146,8 @@ gifd.rules = {
        ['SSR','79','raw:SSR','with_tower'], // With Tower
        ['SSR','80','raw:SSR','with_minaret'], // With Minaret
        ['SSR','997',undefined,undefined], // Unpopulated
-       ['SSR','998',undefined,undefined], // Not Applicable
+       // ['SSR','998',undefined,undefined], // Not Applicable
+       ['SSR','998','raw:SSR','not_applicable'], // Not Applicable
        ['SSR','999','raw:SSR','other'], // Other
 
        // SST - Sound Signal Type
@@ -4148,7 +4200,8 @@ gifd.rules = {
        ['STA','46','seamark:signal_station','foracs_transducer_77_(ft77)'], // FORACS Transducer 77 (FT77)
        ['STA','47','seamark:signal_station','nmh'], // NMH
        ['STA','997',undefined,undefined], // Unpopulated
-       ['STA','998',undefined,undefined], // Not Applicable
+       // ['STA','998',undefined,undefined], // Not Applicable
+       ['STA','998','seamark:signal_station','not_applicable'], // Not Applicable
 
        // STC - Source Type Code
        ['STC','0','source:type','unknown'], // Unknown
@@ -4178,7 +4231,8 @@ gifd.rules = {
        ['STL','0','raw:STL','unknown'], // Unknown
        ['STL','1','raw:STL','winter_location'], // Winter Location
        ['STL','2','raw:STL','summer_location'], // Summer Location
-       ['STL','998',undefined,undefined], // Not Applicable
+       // ['STL','998',undefined,undefined], // Not Applicable
+       ['STL','998','raw:STL','not_applicable'], // Not Applicable
 
        // STP - Soil Types
        ['STP','0','raw:STP','unknown'], // Unknown
@@ -4209,7 +4263,8 @@ gifd.rules = {
        ['STQ','3','raw:STQ','>50_and_<=75'], // >50 and <=75
        ['STQ','4','raw:STQ','>75'], // >75
        ['STQ','997',undefined,undefined], // Unpopulated
-       ['STQ','998',undefined,undefined], // Not Applicable
+       // ['STQ','998',undefined,undefined], // Not Applicable
+       ['STQ','998','raw:STQ','not_applicable'], // Not Applicable
 
        // STY - Style of Text
        ['STY','1','raw:STY','kern'], // Kern
@@ -4271,7 +4326,8 @@ gifd.rules = {
        ['TBT','1','raw:TBT','training_area_(overall_boundary)'], // Training Area (Overall Boundary)
        ['TBT','2','raw:TBT','training_area_(subsection_boundary)'], // Training Area (Subsection Boundary)
        ['TBT','997',undefined,undefined], // Unpopulated
-       ['TBT','998',undefined,undefined], // Not Applicable
+       // ['TBT','998',undefined,undefined], // Not Applicable
+       ['TBT','998','raw:TBT','not_applicable'], // Not Applicable
        ['TBT','999','raw:TBT','other'], // Other
 
        // TDT - Air Facility Terrain or Drainage Type
@@ -4365,7 +4421,8 @@ gifd.rules = {
        ['TS1','12','raw:TS1','>_80.0_and_<=_100.0'], // > 80.0 and <= 100.0
        ['TS1','13','raw:TS1','>_100.0_and_<=_150.0'], // > 100.0 and <= 150.0
        ['TS1','14','raw:TS1','>_150.0'], // > 150.0
-       ['TS1','15',undefined,undefined], // Not Applicable
+       // ['TS1','15',undefined,undefined], // Not Applicable
+       ['TS1','15','raw:TS1','not_applicable'], // Not Applicable
 
        // TS2 - Tree Spacing Range (2)
        ['TS2','0','raw:TS2','unknown'], // Unknown
@@ -4373,7 +4430,8 @@ gifd.rules = {
        ['TS2','2','raw:TS2','>_30.0_and_<=_70.0'], // > 30.0 and <= 70.0
        ['TS2','3','raw:TS2','>_70.0_and_<=_100.0'], // > 70.0 and <= 100.0
        ['TS2','4','raw:TS2','>_100.0'], // > 100.0
-       ['TS2','5',undefined,undefined], // Not Applicable
+       // ['TS2','5',undefined,undefined], // Not Applicable
+       ['TS2','5','raw:TS2','not_applicable'], // Not Applicable
        ['TS2','997','raw:TS2',undefined,undefined], // Unpopulated
 
        // TS3 - Tree Spacing Range (3)
@@ -4386,7 +4444,8 @@ gifd.rules = {
        ['TS3','6','raw:TS3','>70.0_and_<=100.0'], // >70.0 and <=100.0
        ['TS3','7','raw:TS3','>100.0_and_<=150.0'], // >100.0 and <=150.0
        ['TS3','8','raw:TS3','>150.0'], // >150.0
-       ['TS3','998','raw:TS3',undefined,undefined], // Not Applicable
+       // ['TS3','998','raw:TS3',undefined,undefined], // Not Applicable
+       ['TS3','998','raw:TS3','raw:TS3','not_applicable'], // Not Applicable
 
        // TSH - Runway High End Threshold Lights
        ['TSH','0','raw:TSH','unknown'], // Unknown
@@ -4415,7 +4474,8 @@ gifd.rules = {
        ['TST','1','raw:TST','normal_suspension'], // Normal Suspension
        ['TST','2','raw:TST','catenary_(over_mountains)'], // Catenary (Over Mountains)
        ['TST','3','raw:TST','catenary_(over_water)'], // Catenary (Over Water)
-       ['TST','998',undefined,undefined], // Not Applicable
+       // ['TST','998',undefined,undefined], // Not Applicable
+       ['TST','998','raw:TST','not_applicable'], // Not Applicable
        ['TST','999','raw:TST','other'], // Other
 
        // TTC - Tower Type Category
@@ -4453,7 +4513,8 @@ gifd.rules = {
        ['TUC','42','transport:type','both_road_and_runway'], // Both Road and Runway
        ['TUC','43','transport:type','recreational_vehicles'], // Recreational Vehicles
        ['TUC','997',undefined,undefined], // Unpopulated
-       ['TUC','998',undefined,undefined], // Not Applicable
+       // ['TUC','998',undefined,undefined], // Not Applicable
+       ['TUC','998','transport:type','not_applicable'], // Not Applicable
        ['TUC','999','transport:type','other'], // Other
 
        // TXP - Taxiway Type
@@ -4654,7 +4715,8 @@ gifd.rules = {
        ['USE_','158','use','reserved'], // Reserved
        ['USE_','161','use','roll-on_roll-off_berth_(roro)'], // Roll-On Roll-Off Berth (RORO)
        ['USE_','990',undefined,undefined], // Unpopulated
-       ['USE_','991',undefined,undefined], // Not Applicable
+       // ['USE_','991',undefined,undefined], // Not Applicable
+       ['USE_','991','use:type','not_applicable'], // Not Applicable
        ['USE_','999','use','other'], // Other
 
        // USP - Urban Street Pattern
@@ -4753,7 +4815,8 @@ gifd.rules = {
        ['VDC','106','source:datum:sounding','highest_astronomical_tide'], // Highest Astronomical Tide
        ['VDC','107','source:datum:sounding','nearly_highest_high_water'], // Nearly Highest High Water
        ['VDC','997',undefined,undefined], // Unpopulated
-       ['VDC','998',undefined,undefined], // Not Applicable
+       // ['VDC','998',undefined,undefined], // Not Applicable
+       ['VDC','998','source:datum:sounding','not_applicable'], // Not Applicable
        ['VDC','999','source:datum:sounding','other'], // Other
 
        // VEG - Vegetation Characteristics
@@ -4810,7 +4873,8 @@ gifd.rules = {
        ['VH1','10','raw:VH1','>_25_and_<=_30'], // > 25 and <= 30
        ['VH1','11','raw:VH1','>_30_and_<=_35'], // > 30 and <= 35
        ['VH1','12','raw:VH1','>_35'], // > 35
-       ['VH1','13',undefined,undefined], // Not Applicable
+       // ['VH1','13',undefined,undefined], // Not Applicable
+       ['VH1','13','raw:VH1','not_applicable'], // Not Applicable
 
        // VH3 - Predominant Vegetation Height Range (3)
        ['VH3','0','raw:VH3','unknown'], // Unknown
@@ -4820,7 +4884,8 @@ gifd.rules = {
        ['VH3','4','raw:VH3','>20_and_<=40'], // >20 and <=40
        ['VH3','5','raw:VH3','>40'], // >40
        ['VH3','997',undefined,undefined], // Unpopulated
-       ['VH3','998',undefined,undefined], // Not Applicable
+       // ['VH3','998',undefined,undefined], // Not Applicable
+       ['VH3','998','raw:VH3','not_applicable'], // Not Applicable
 
        // VOL - Volume
        ['VOL','1','raw:VOL','empty'], // Empty
@@ -4870,7 +4935,8 @@ gifd.rules = {
        ['VRR','2','raw:VRR','awash_at_sounding_datum'], // Awash at Sounding Datum
        ['VRR','4','raw:VRR','below_surface/submerged'], // Below Surface/Submerged
        ['VRR','8','raw:VRR','covers_and_uncovers'], // Covers and Uncovers
-       ['VRR','9',undefined,undefined], // Not Applicable
+       // ['VRR','9',undefined,undefined], // Not Applicable
+       ['VRR','9','raw:VRR','not_applicable'], // Not Applicable
        ['VRR','997',undefined,undefined], // Unpopulated
 
        // VSH - Runway High End VASI Lights
@@ -4951,7 +5017,8 @@ gifd.rules = {
        ['WKT','52','raw:WKT','very_large_container'], // Very Large Container
        ['WKT','53','raw:WKT','well_head'], // Well Head
        ['WKT','54','raw:WKT','yacht'], // Yacht
-       ['WKT','998',undefined,undefined], // Not Applicable
+       // ['WKT','998',undefined,undefined], // Not Applicable
+       ['WKT','998','raw:WKT','not_applicable'], // Not Applicable
        ['WKT','999','raw:WKT','other'], // Other
 
        // WPC - Work in Progress Category
@@ -5022,7 +5089,8 @@ gifd.rules = {
        ['WSR','61','raw:WSR','coast_and_geodetic_survey_(national_ocean_survey)_charts'], // Coast and Geodetic Survey (National Ocean Survey) Charts
        ['WSR','62','raw:WSR','radio_navigation_warning'], // Radio Navigation Warning
        ['WSR','63','raw:WSR','oman_national_hydrographic_office'], // OMAN National Hydrographic Office
-       ['WSR','998',undefined,undefined], // Not Applicable
+       // ['WSR','998',undefined,undefined], // Not Applicable
+       ['WSR','998','raw:WSR','not_applicable'], // Not Applicable
        ['WSR','999','raw:WSR','other'], // Other
 
        // WTC - Weather Type Category
@@ -5046,7 +5114,8 @@ gifd.rules = {
        ['WTR','2','raw:WTR','>_25_and_<=_50'], // > 25 and <= 50
        ['WTR','3','raw:WTR','>_50_and_<=_75'], // > 50 and <= 75
        ['WTR','4','raw:WTR','>_75'], // > 75
-       ['WTR','5',undefined,undefined], // Not Applicable
+       // ['WTR','5',undefined,undefined], // Not Applicable
+       ['WTR','5','raw:ETR','not_applicable'], // Not Applicable
        ['WTR','997',undefined,undefined], // Unpopulated
 
        // WV1 - Water Velocity Average 1
@@ -5077,7 +5146,8 @@ gifd.rules = {
        ['YSU','4','raw:YSU','marines'], // Marines
        ['YSU','5','raw:YSU','navy'], // Navy
        ['YSU','7','raw:YSU','joint'], // Joint
-       ['YSU','998',undefined,undefined], // Not Applicable
+       // ['YSU','998',undefined,undefined], // Not Applicable
+       ['YSU','998','raw:YSU','not_applicable'], // Not Applicable
        ['YSU','999','raw:YSU','other'], // Other
 
        // YVH - Water Velocity Mean (Seasonal High Water)
