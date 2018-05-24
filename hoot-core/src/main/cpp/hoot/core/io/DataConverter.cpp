@@ -145,7 +145,12 @@ void DataConverter::_convertToOgr(const QString input, const QString output)
 {
   LOG_TRACE("osm2ogr");
 
+  //This entire method could be replaced by _convert, if refactoring of the way OgrWriter handles
+  //translations is done.  Currently, it depends that a translation script is set directly on it
+  //(vs using a translation visitor).
+
   boost::shared_ptr<OgrWriter> writer(new OgrWriter());
+  //I believe this cache size setting can be removed.
   if (ConfigOptions().getElementCacheSizeNode() > 0 &&
       ConfigOptions().getElementCacheSizeWay() > 0 &&
       ConfigOptions().getElementCacheSizeRelation() > 0)
@@ -211,7 +216,6 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
 
   ConfigOptions configOptions;
 
-  //TODO: move to top?
   Progress progress("DataConverter");
   progress.setReportType(configOptions.getProgressReportingFormat());
   progress.setState("Running");
@@ -335,8 +339,6 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
 
 void DataConverter::_convert(const QString input, const QString output)
 {
-  LOG_TRACE("convert");
-
   // This keeps the status and the tags.
   conf().set(ConfigOptions().getReaderUseFileStatusKey(), true);
   conf().set(ConfigOptions().getReaderKeepStatusTagKey(), true);
