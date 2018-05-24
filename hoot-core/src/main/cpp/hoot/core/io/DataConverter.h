@@ -27,6 +27,9 @@
 #ifndef DATACONVERTER_H
 #define DATACONVERTER_H
 
+// Hoot
+#include <hoot/core/OsmMap.h>
+
 // Qt
 #include <QStringList>
 
@@ -35,8 +38,6 @@ namespace hoot
 
 /**
  * Converts data from one Hootenanny supported format to another
- *
- * There may be opportunities to consolidate some of the code in the various conversion functions.
  */
 class DataConverter
 {
@@ -61,7 +62,6 @@ private:
   bool _colsArgSpecified;
   int _featureReadLimit;
 
-  void _convertToShpWithCols(const QString input, const QString output);
   void _convertToOgr(const QString input, const QString output);
   void _convertFromOgr(const QStringList inputs, const QString output);
   void _convert(const QString input, const QString output);
@@ -75,6 +75,8 @@ private:
   bool _areValidStreamingOps(const QStringList ops);
 
   void _validateInput(const QStringList inputs, const QString output);
+
+  void _exportToShapeWithCols(const QString output, const QStringList cols, OsmMapPtr map);
 };
 
 }

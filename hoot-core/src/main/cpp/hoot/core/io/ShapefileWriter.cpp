@@ -130,7 +130,7 @@ void ShapefileWriter::open(QString url)
   {
     if (QDir(".").mkpath(url) == false)
     {
-      throw HootException("Error creating directory for writing.");
+      throw HootException("Error creating directory for writing: " + url);
     }
     _outputDir = QDir(url);
   }

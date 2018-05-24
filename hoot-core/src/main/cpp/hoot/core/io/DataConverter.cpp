@@ -36,7 +36,6 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/filters/ElementCriterion.h>
 #include <hoot/core/elements/ElementVisitor.h>
-#include <hoot/core/OsmMap.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/IoUtils.h>
 #include <hoot/core/io/ShapefileWriter.h>
@@ -66,16 +65,12 @@ void DataConverter::convert(const QStringList inputs, const QString output)
 
   LOG_INFO("Converting " << inputs.join(", ").right(100) << " to " << output.right(100) << "...");
 
-  if (output.toLower().endsWith(".shp") && IoUtils::isSupportedOsmFormat(inputs.at(0)) &&
-      _colsArgSpecified)
-  {
-    _convertToShpWithCols(inputs.at(0), output);
-  }
-  else if (IoUtils::isSupportedOgrFormat(output) && !_translation.isEmpty())
+  if (IoUtils::isSupportedOgrFormat(output) && !_translation.isEmpty() && !_colsArgSpecified)
   {
     _convertToOgr(inputs.at(0), output);
   }
-  else if (IoUtils::areSupportedOgrFormats(inputs, true) && !_translation.isEmpty())
+  else if (IoUtils::areSupportedOgrFormats(inputs, true) && !_translation.isEmpty() &&
+           !_colsArgSpecified)
   {
     _convertFromOgr(inputs, output);
   }
@@ -117,6 +112,9 @@ void DataConverter::_validateInput(const QStringList inputs, const QString outpu
     throw HootException("No output specified.");
   }
 
+  //I don't think it would be possible for translation to work along with the export columns
+  //specified, as you'd be first changing your column names with the translation and then trying
+  //to export old column names.  If this isn't true, then we could remove this.
   if (!_translation.isEmpty() && _colsArgSpecified)
   {
     throw HootException("Cannot specify both a translation and export columns.");
@@ -141,18 +139,6 @@ void DataConverter::_validateInput(const QStringList inputs, const QString outpu
   {
     throw HootException("Read limit may only be specified when converting OGR inputs.");
   }
-}
-
-void DataConverter::_convertToShpWithCols(const QString input, const QString output)
-{
-  LOG_TRACE("osm2shp");
-
-  OsmMapPtr map(new OsmMap());
-  IoUtils::loadMap(map, input, true);
-
-  ShapefileWriter writer;
-  writer.setColumns(_columns);
-  writer.write(map, output);
 }
 
 void DataConverter::_convertToOgr(const QString input, const QString output)
@@ -359,6 +345,8 @@ void DataConverter::_convert(const QString input, const QString output)
   QStringList convertOps = ConfigOptions().getConvertOps();
   if (!_translation.trimmed().isEmpty())
   {
+    //a previous check was done to make sure both a translation and export cols weren't specified
+    assert(!_colsArgSpecified);
     if (convertOps.contains("hoot::TranslationOp") ||
         convertOps.contains("hoot::TranslationVisitor"))
     {
@@ -391,6 +379,9 @@ void DataConverter::_convert(const QString input, const QString output)
       //none of the convert bounding box supports are able to do streaming I/O at this point
       !ConfigUtils::boundsOptionEnabled())
   {
+    //Shape file output currently isn't streamable, so we know we won't see export cols here.  If
+    //it is ever made streamable, then we'd have to refactor this.
+    assert(!_colsArgSpecified);
     ElementStreamer::stream(input, output);
   }
   else
@@ -399,10 +390,36 @@ void DataConverter::_convert(const QString input, const QString output)
     IoUtils::loadMap(
       map, input, ConfigOptions().getReaderUseDataSourceIds(),
       Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
+
     NamedOp(convertOps).apply(map);
     MapProjector::projectToWgs84(map);
-    IoUtils::saveMap(map, output);
+
+    if (output.toLower().endsWith(".shp") && _colsArgSpecified)
+    {
+      LOG_TRACE("osm2shp");
+
+      //if the user specified cols, then we want to export them
+      _exportToShapeWithCols(output, _columns, map);
+    }
+    else
+    {
+      IoUtils::saveMap(map, output);
+    }
   }
+}
+
+void DataConverter::_exportToShapeWithCols(const QString output, const QStringList cols,
+                                           OsmMapPtr map)
+{
+  boost::shared_ptr<OsmMapWriter> writer =
+    OsmMapWriterFactory::getInstance().createWriter(output);
+  boost::shared_ptr<ShapefileWriter> shapeFileWriter =
+    boost::dynamic_pointer_cast<ShapefileWriter>(writer);
+  //currently only one shape file writer, and this is it
+  assert(shapeFileWriter.get());
+  shapeFileWriter->setColumns(cols);
+  shapeFileWriter->open(output);
+  shapeFileWriter->write(map, output);
 }
 
 bool DataConverter::_areValidStreamingOps(const QStringList ops)
