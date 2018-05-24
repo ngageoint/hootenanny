@@ -367,7 +367,7 @@ deque<ConstWayPtr> MultiPolygonCreator::_orderWaysForRing(const vector<ConstWayP
 {
   deque<ConstWayPtr> result;
 
-  QList<ConstWayPtr> extra;
+  deque<ConstWayPtr> extras;
 
   // we have to start somewhere
   result.push_back(partials[0]);
@@ -418,52 +418,53 @@ deque<ConstWayPtr> MultiPolygonCreator::_orderWaysForRing(const vector<ConstWayP
       // If this way doesn't currently match the way we are building, add it to a list to be
       // processed later.
       // NOTE: If partials wasn't a const, we could probably do this in one loop.
-      LOG_TRACE("No match. Adding " << w->getElementId() << " to the extra list");
-      extra.append(w);
+      LOG_TRACE("No match. Adding " << w->getElementId() << " to the extras list");
+      extras.push_back(w);
     }
   }
 
   // Now go through the "extra" items and add them to the result.
   // This makes some assumptions and I'm sure that we will eventually get an edge case that
-  // makes it fail
+  // makes it fail. Also note that this part of the algorithm is of n-squared complexity.
+  // If it becomes a pain point, we can probably improve it's performance. Also note that
+  // there is probably simlary logic in the WayJoiner class - in the future we might abstract
+  // this algorithm to one place.
   // Assumptions:
   // 1) All of the elements in the partials vector are part of the same ring.
-  // 2) Since they are part of the same ring, they will all join
-  // 3) If they all join, then this will not run forever.....
+  // 2) Since they are part of the same ring, they should all join
+  // 3) If they don't all join, the misfists will just go away...
 
-  LOG_TRACE("Extra size = " << extra.size());
+  LOG_TRACE("Extras size = " << extras.size());
 
-  for (int i = 0; i < extra.size(); i++)
+  size_t misfitCount = 0; // The number of ways that don't fit in our ring
+  while (extras.size() > misfitCount)
   {
-    if (extra[i]->getNodeId(0) == lastId)
+    ConstWayPtr wayPtr = extras.front();
+    extras.pop_front();
+    if (wayPtr->getNodeId(0) == lastId)
     {
-      LOG_TRACE("Add " << extra[i]->getElementId() << " to end. From node:" << lastId << "  to node:" << extra[i]->getLastNodeId());
-      result.push_back(extra[i]);
+      LOG_TRACE("Add " << wayPtr->getElementId() << " to end. From node:" << lastId << "  to node:" << wayPtr->getLastNodeId());
+      result.push_back(wayPtr);
       //  Update the last id with the new last id
-      lastId = extra[i]->getLastNodeId();
+      lastId = wayPtr->getLastNodeId();
+      misfitCount = 0; // Since we've added a way, need to re-check all the misfits
     }
-    else if (extra[i]->getLastNodeId() == firstId)
+    else if (wayPtr->getLastNodeId() == firstId)
     {
-      LOG_TRACE("Add " << extra[i]->getElementId() << " to front. From node:" << firstId << "  to node:" << extra[i]->getNodeId(0));
-      result.push_front(extra[i]);
+      LOG_TRACE("Add " << wayPtr->getElementId() << " to front. From node:" << firstId << "  to node:" << wayPtr->getNodeId(0));
+      result.push_front(wayPtr);
       //  Update the first id with the new first id
-      firstId = extra[i]->getNodeId(0);
+      firstId = wayPtr->getNodeId(0);
+      misfitCount = 0;
     }
     else
     {
-      // We didn't find a match. Add the way to the end of the list so that it gets checked again later.
-      // Only do this if we are not already at the last element in the list.
-      if (extra[i]->getId() != extra[extra.size()]->getId())
-      {
-        LOG_TRACE("No Match. Appending " << extra[i]->getElementId() << " to extra.");
-        extra.append(extra[i]);
-      }
-      else
-      {
-        // We tried to add the last way to the end of the list.
-        LOG_ERROR("Unable to connect all ways in an outer ring. This may give unexpected results. " <<
-                         extra[i]->getElementId());
-      }
+      // We didn't find a match. Add the way to the end of the list so that it gets
+      // checked again later. Increment our misfitCount
+      LOG_TRACE("No Match. Putting " << wayPtr->getElementId()
+                << " on the back of the extras queue.");
+      extras.push_back(wayPtr);
+      misfitCount++;
     }
   }
 
