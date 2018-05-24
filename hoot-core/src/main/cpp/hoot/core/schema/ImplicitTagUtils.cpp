@@ -51,7 +51,7 @@ void ImplicitTagUtils::cleanName(QString& name)
   //another possibility here might be to replace name multiple spaces with one
 
   //This needs to be expanded.
-  if (name.at(0).isDigit() &&
+  if (!name.isEmpty() && name.at(0).isDigit() &&
       (name.endsWith("th") || name.endsWith("nd") || name.endsWith("rd") ||
        name.endsWith("ave") || name.endsWith("avenue") || name.endsWith("st") ||
        name.endsWith("street") || name.endsWith("pl") || name.endsWith("plaza")))
@@ -96,7 +96,6 @@ QStringList ImplicitTagUtils::translateNamesToEnglish(const QStringList names, c
     }
   }
   LOG_VART(filteredNames);
-  assert(!filteredNames.isEmpty());
 
   return filteredNames;
 }
