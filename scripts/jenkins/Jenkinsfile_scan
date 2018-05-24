@@ -70,7 +70,7 @@ pipeline {
         success {
             // If all tests passed, clean everything up
             //sh "vagrant destroy -f ${params.Box}"
-            cleanWs()
+            //cleanWs()
         }
         failure {
             script {
