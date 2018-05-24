@@ -73,9 +73,6 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Eleme
   // Merge all the building parts together into a single building entity using the typical building
   // merge process.
   ElementId finalBuildingEid = _mergeBuildings(map, buildings1, buildings2, replaced);
-  //  If no buildings are merged (many-to-many) then exit here
-  if (finalBuildingEid.isNull())
-    return;
   LOG_VART(finalBuildingEid);
 
   ElementPtr finalBuilding = map->getElement(finalBuildingEid);
@@ -272,20 +269,13 @@ ElementId PoiPolygonMerger::_mergeBuildings(const OsmMapPtr& map,
     pairs.insert(p);
   }
 
-  assert(replaced.size() == 0);
-  //assert(pairs.size() == 0);  //This fails on a poi-building case test.
   BuildingMerger(pairs).apply(map, replaced);
-  //  Empty replaced vector indicates a many-to-many review
-  if (replaced.size() < 1)
-    return ElementId();
-  assert(replaced.size() > 0);
 
   set<ElementId> newElement;
   for (size_t i = 0; i < replaced.size(); i++)
   {
     newElement.insert(replaced[i].second);
   }
-  assert(newElement.size() == 1);
 
   return *newElement.begin();
 }
