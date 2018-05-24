@@ -603,7 +603,6 @@ void EdgeString::trim(const ConstElementProviderPtr& provider, Meters newStartOf
   }
 
   _edges = newEdges;
-  assert(validate());
 }
 
 bool EdgeString::validate() const
