@@ -453,9 +453,9 @@ ifeq ($(BUILD_RND),rnd)
 	genhtml coverage/core/rnd/RndTrimmed.info --output-directory coverage/core/rnd/ 2>&1 | grep -v -F "geninfo" >> coverage/core/rnd/log
 endif
 
-core-coverage: coverage/core/core/index.html coverage/core/hadoop/index.html coverage/core/tbs/index.html core-rnd-coverage
+core-coverage: coverage/core/core/index.html coverage/core/tbs/index.html core-rnd-coverage
 
-coverage: services-coverage ui-coverage coverage/core/core/index.html coverage/core/hadoop/index.html coverage/core/tbs/index.html core-rnd-coverage
+coverage: services-coverage ui-coverage coverage/core/core/index.html coverage/core/tbs/index.html core-rnd-coverage
 
 conf/dictionary/WordsAbridged.sqlite: conf/dictionary/WordsAbridged.sqlite.gz
 	gunzip -c $^ > $@

@@ -43,12 +43,16 @@ pipeline {
             steps {
                 script {
                     if (env.BRANCH_NAME.startsWith("PR-")) {
-                        // This is a pull request so we need to pass PR info to the scripts
-                        sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-build.sh ${env.SONAR_CLOUD_KEY} ${env.BRANCH_NAME} ${env.CHANGE_ID} ${env.DGIS_BOT_TOKEN}'"
+                        sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-build.sh'"
+                        // This is a pull request so we need to pass PR info to the scan script
+                        sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-scan.sh ${env.SONAR_CLOUD_KEY} ${env.BRANCH_NAME} ${env.CHANGE_ID} ${env.DGIS_BOT_TOKEN}'"
                     }
                     else {
                         // Scan for a regular branch
-                        sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-build.sh ${env.SONAR_CLOUD_KEY} ${env.BRANCH_NAME}'"
+                        sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-build.sh'"
+                        // Run tests so coverage reports are created
+                        sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/jenkins/TestInitialNightly.sh'"
+                        sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-scan.sh ${env.SONAR_CLOUD_KEY} ${env.BRANCH_NAME}'"
                     }
                 }
             }       
@@ -65,7 +69,7 @@ pipeline {
         }
         success {
             // If all tests passed, clean everything up
-            sh "vagrant destroy -f ${params.Box}"
+            //sh "vagrant destroy -f ${params.Box}"
             cleanWs()
         }
         failure {
