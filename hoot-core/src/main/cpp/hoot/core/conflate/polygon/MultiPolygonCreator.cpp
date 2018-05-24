@@ -367,19 +367,30 @@ deque<ConstWayPtr> MultiPolygonCreator::_orderWaysForRing(const vector<ConstWayP
 {
   deque<ConstWayPtr> result;
 
+  QList<ConstWayPtr> extra;
+
   // we have to start somewhere
   result.push_back(partials[0]);
 
   long firstId = partials[0]->getNodeId(0);
   long lastId = partials[0]->getLastNodeId();
 
+  LOG_TRACE("##### Starting to make a multipolygon #####");
+  LOG_TRACE("Partials size = " + QString::number(partials.size()));
+  LOG_TRACE("First " << partials[0]->getElementId());
+  LOG_TRACE("First node id: " << firstId);
+  LOG_TRACE("Last node id: " << lastId);
+
   for (size_t i = 1; i < partials.size(); i++)
   {
     ConstWayPtr w = partials[i];
+    LOG_TRACE("Loop: " << i << "  processing " << w->getElementId());
+
     // if the ways are start to start or end to end
     if (w->getNodeId(0) == firstId ||
         w->getLastNodeId() == lastId)
     {
+      LOG_TRACE("Flip " << w->getElementId());
       // this way needs to be reversed, but clone it first so we don't change any source data
       WayPtr cloned = WayPtr(new Way(*partials[i]));
       cloned->reverseOrder();
@@ -389,29 +400,75 @@ deque<ConstWayPtr> MultiPolygonCreator::_orderWaysForRing(const vector<ConstWayP
     if (w->getNodeId(0) == lastId)
     {
       result.push_back(w);
+      LOG_TRACE("Add " << w->getElementId() << " to end. From node:" << lastId << "  to node:" << w->getLastNodeId());
+
       //  Update the last id with the new last id
       lastId = w->getLastNodeId();
     }
     else if (w->getLastNodeId() == firstId)
     {
       result.push_front(w);
+      LOG_TRACE("Add " << w->getElementId() << " to front. From node:" << firstId << "  to node:" << w->getNodeId(0));
+
       //  Update the first id with the new first id
       firstId = w->getNodeId(0);
     }
     else
     {
-      if (logWarnCount < Log::getWarnMessageLimit())
-      {
-        LOG_WARN("Unable to connect all ways in an outer ring. This may give unexpected results. " <<
-                 partials[i]->getElementId());
-      }
-      else if (logWarnCount == Log::getWarnMessageLimit())
-      {
-        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-      }
-      logWarnCount++;
+      // If this way doesn't currently match the way we are building, add it to a list to be
+      // processed later.
+      // NOTE: If partials wasn't a const, we could probably do this in one loop.
+      LOG_TRACE("No match. Adding " << w->getElementId() << " to the extra list");
+      extra.append(w);
     }
   }
+
+  // Now go through the "extra" items and add them to the result.
+  // This makes some assumptions and I'm sure that we will eventually get an edge case that
+  // makes it fail
+  // Assumptions:
+  // 1) All of the elements in the partials vector are part of the same ring.
+  // 2) Since they are part of the same ring, they will all join
+  // 3) If they all join, then this will not run forever.....
+
+  LOG_TRACE("Extra size = " << extra.size());
+
+  for (int i = 0; i < extra.size(); i++)
+  {
+    if (extra[i]->getNodeId(0) == lastId)
+    {
+      LOG_TRACE("Add " << extra[i]->getElementId() << " to end. From node:" << lastId << "  to node:" << extra[i]->getLastNodeId());
+      result.push_back(extra[i]);
+      //  Update the last id with the new last id
+      lastId = extra[i]->getLastNodeId();
+    }
+    else if (extra[i]->getLastNodeId() == firstId)
+    {
+      LOG_TRACE("Add " << extra[i]->getElementId() << " to front. From node:" << firstId << "  to node:" << extra[i]->getNodeId(0));
+      result.push_front(extra[i]);
+      //  Update the first id with the new first id
+      firstId = extra[i]->getNodeId(0);
+    }
+    else
+    {
+      // We didn't find a match. Add the way to the end of the list so that it gets checked again later.
+      // Only do this if we are not already at the last element in the list.
+      if (extra[i]->getId() != extra[extra.size()]->getId())
+      {
+        LOG_TRACE("No Match. Appending " << extra[i]->getElementId() << " to extra.");
+        extra.append(extra[i]);
+      }
+      else
+      {
+        // We tried to add the last way to the end of the list.
+        LOG_ERROR("Unable to connect all ways in an outer ring. This may give unexpected results. " <<
+                         extra[i]->getElementId());
+      }
+    }
+  }
+
+  LOG_TRACE("Result size = " << result.size());
+  LOG_TRACE("##### Finished making a multipolygon #####");
 
   return result;
 }
