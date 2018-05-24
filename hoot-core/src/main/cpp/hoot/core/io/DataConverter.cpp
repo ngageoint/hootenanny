@@ -349,6 +349,7 @@ void DataConverter::_convert(const QString input, const QString output)
   {
     //a previous check was done to make sure both a translation and export cols weren't specified
     assert(!_colsArgSpecified);
+
     if (convertOps.contains("hoot::TranslationOp") ||
         convertOps.contains("hoot::TranslationVisitor"))
     {
@@ -371,6 +372,7 @@ void DataConverter::_convert(const QString input, const QString output)
   LOG_TRACE(OsmMapWriterFactory::getInstance().hasElementOutputStream(output));
   LOG_TRACE(ConfigUtils::boundsOptionEnabled());
 
+  //try to stream the i/o
   if (OsmMapReaderFactory::getInstance().hasElementInputStream(input) &&
       OsmMapWriterFactory::getInstance().hasElementOutputStream(output) &&
       _areValidStreamingOps(convertOps) &&
@@ -384,8 +386,10 @@ void DataConverter::_convert(const QString input, const QString output)
     //Shape file output currently isn't streamable, so we know we won't see export cols here.  If
     //it is ever made streamable, then we'd have to refactor this.
     assert(!_colsArgSpecified);
+
     ElementStreamer::stream(input, output);
   }
+  //can't stream the i/o
   else
   {
     OsmMapPtr map(new OsmMap());
