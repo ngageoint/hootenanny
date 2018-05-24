@@ -75,7 +75,7 @@ void DataConverter::convert(const QStringList inputs, const QString output)
   {
     _convertToOgr(inputs.at(0), output);
   }
-  else if (IoUtils::isSupportedOsmFormat(output) && !_translation.isEmpty())
+  else if (IoUtils::areSupportedOgrFormats(inputs, true) && !_translation.isEmpty())
   {
     _convertFromOgr(inputs, output);
   }
