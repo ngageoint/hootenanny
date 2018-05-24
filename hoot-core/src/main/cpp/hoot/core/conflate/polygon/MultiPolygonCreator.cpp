@@ -375,22 +375,14 @@ deque<ConstWayPtr> MultiPolygonCreator::_orderWaysForRing(const vector<ConstWayP
   long firstId = partials[0]->getNodeId(0);
   long lastId = partials[0]->getLastNodeId();
 
-  LOG_TRACE("##### Starting to make a multipolygon #####");
-  LOG_TRACE("Partials size = " + QString::number(partials.size()));
-  LOG_TRACE("First " << partials[0]->getElementId());
-  LOG_TRACE("First node id: " << firstId);
-  LOG_TRACE("Last node id: " << lastId);
-
   for (size_t i = 1; i < partials.size(); i++)
   {
     ConstWayPtr w = partials[i];
-    LOG_TRACE("Loop: " << i << "  processing " << w->getElementId());
 
     // if the ways are start to start or end to end
     if (w->getNodeId(0) == firstId ||
         w->getLastNodeId() == lastId)
     {
-      LOG_TRACE("Flip " << w->getElementId());
       // this way needs to be reversed, but clone it first so we don't change any source data
       WayPtr cloned = WayPtr(new Way(*partials[i]));
       cloned->reverseOrder();
@@ -400,16 +392,12 @@ deque<ConstWayPtr> MultiPolygonCreator::_orderWaysForRing(const vector<ConstWayP
     if (w->getNodeId(0) == lastId)
     {
       result.push_back(w);
-      LOG_TRACE("Add " << w->getElementId() << " to end. From node:" << lastId << "  to node:" << w->getLastNodeId());
-
       //  Update the last id with the new last id
       lastId = w->getLastNodeId();
     }
     else if (w->getLastNodeId() == firstId)
     {
       result.push_front(w);
-      LOG_TRACE("Add " << w->getElementId() << " to front. From node:" << firstId << "  to node:" << w->getNodeId(0));
-
       //  Update the first id with the new first id
       firstId = w->getNodeId(0);
     }
@@ -418,14 +406,13 @@ deque<ConstWayPtr> MultiPolygonCreator::_orderWaysForRing(const vector<ConstWayP
       // If this way doesn't currently match the way we are building, add it to a list to be
       // processed later.
       // NOTE: If partials wasn't a const, we could probably do this in one loop.
-      LOG_TRACE("No match. Adding " << w->getElementId() << " to the extras list");
       extras.push_back(w);
     }
   }
 
   // Now go through the "extra" items and add them to the result.
   // This makes some assumptions and I'm sure that we will eventually get an edge case that
-  // makes it fail. Also note that this part of the algorithm is of n-squared complexity.
+  // makes it fail. Also note that this part of the algorithm is of n-factorial complexity.
   // If it becomes a pain point, we can probably improve it's performance. Also note that
   // there is probably simlary logic in the WayJoiner class - in the future we might abstract
   // this algorithm to one place.
@@ -434,8 +421,6 @@ deque<ConstWayPtr> MultiPolygonCreator::_orderWaysForRing(const vector<ConstWayP
   // 2) Since they are part of the same ring, they should all join
   // 3) If they don't all join, the misfists will just go away...
 
-  LOG_TRACE("Extras size = " << extras.size());
-
   size_t misfitCount = 0; // The number of ways that don't fit in our ring
   while (extras.size() > misfitCount)
   {
@@ -443,7 +428,6 @@ deque<ConstWayPtr> MultiPolygonCreator::_orderWaysForRing(const vector<ConstWayP
     extras.pop_front();
     if (wayPtr->getNodeId(0) == lastId)
     {
-      LOG_TRACE("Add " << wayPtr->getElementId() << " to end. From node:" << lastId << "  to node:" << wayPtr->getLastNodeId());
       result.push_back(wayPtr);
       //  Update the last id with the new last id
       lastId = wayPtr->getLastNodeId();
@@ -451,7 +435,6 @@ deque<ConstWayPtr> MultiPolygonCreator::_orderWaysForRing(const vector<ConstWayP
     }
     else if (wayPtr->getLastNodeId() == firstId)
     {
-      LOG_TRACE("Add " << wayPtr->getElementId() << " to front. From node:" << firstId << "  to node:" << wayPtr->getNodeId(0));
       result.push_front(wayPtr);
       //  Update the first id with the new first id
       firstId = wayPtr->getNodeId(0);
@@ -461,15 +444,10 @@ deque<ConstWayPtr> MultiPolygonCreator::_orderWaysForRing(const vector<ConstWayP
     {
       // We didn't find a match. Add the way to the end of the list so that it gets
       // checked again later. Increment our misfitCount
-      LOG_TRACE("No Match. Putting " << wayPtr->getElementId()
-                << " on the back of the extras queue.");
       extras.push_back(wayPtr);
       misfitCount++;
     }
   }
-
-  LOG_TRACE("Result size = " << result.size());
-  LOG_TRACE("##### Finished making a multipolygon #####");
 
   return result;
 }
