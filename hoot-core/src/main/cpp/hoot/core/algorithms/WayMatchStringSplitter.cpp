@@ -111,7 +111,6 @@ void WayMatchStringSplitter::_splitWay(WayNumber wn, OsmMapPtr map, vector<pair<
     bool discontiguous = false;
     for (size_t i = 0; i < wls.size() - 1; ++i)
     {
-      assert(wls[i] <= wls[i + 1]);
       if (i % 2 == 1 && wls[i] != wls[i + 1])
         discontiguous = true;
     }
