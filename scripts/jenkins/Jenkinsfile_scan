@@ -71,6 +71,7 @@ pipeline {
             // If all tests passed, clean everything up
             //sh "vagrant destroy -f ${params.Box}"
             //cleanWs()
+            echo 'success'
         }
         failure {
             script {
