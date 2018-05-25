@@ -228,11 +228,7 @@ bool Way::isOneWay() const
 
 bool Way::isSimpleLoop() const
 {
-  if (getNodeId(0) == getNodeId(getNodeCount()-1))
-  {
-    return true;
-  }
-  return false;
+  return (getFirstNodeId() == getLastNodeId());
 }
 
 bool Way::isValidPolygon() const
