@@ -367,6 +367,8 @@ deque<ConstWayPtr> MultiPolygonCreator::_orderWaysForRing(const vector<ConstWayP
 {
   deque<ConstWayPtr> result;
 
+  deque<ConstWayPtr> extras;
+
   // we have to start somewhere
   result.push_back(partials[0]);
 
@@ -376,6 +378,7 @@ deque<ConstWayPtr> MultiPolygonCreator::_orderWaysForRing(const vector<ConstWayP
   for (size_t i = 1; i < partials.size(); i++)
   {
     ConstWayPtr w = partials[i];
+
     // if the ways are start to start or end to end
     if (w->getNodeId(0) == firstId ||
         w->getLastNodeId() == lastId)
@@ -400,16 +403,49 @@ deque<ConstWayPtr> MultiPolygonCreator::_orderWaysForRing(const vector<ConstWayP
     }
     else
     {
-      if (logWarnCount < Log::getWarnMessageLimit())
-      {
-        LOG_WARN("Unable to connect all ways in an outer ring. This may give unexpected results. " <<
-                 partials[i]->getElementId());
-      }
-      else if (logWarnCount == Log::getWarnMessageLimit())
-      {
-        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-      }
-      logWarnCount++;
+      // If this way doesn't currently match the way we are building, add it to a list to be
+      // processed later.
+      // NOTE: If partials wasn't a const, we could probably do this in one loop.
+      extras.push_back(w);
+    }
+  }
+
+  // Now go through the "extra" items and add them to the result.
+  // This makes some assumptions and I'm sure that we will eventually get an edge case that
+  // makes it fail. Also note that this part of the algorithm is of n-factorial complexity.
+  // If it becomes a pain point, we can probably improve it's performance. Also note that
+  // there is probably simlary logic in the WayJoiner class - in the future we might abstract
+  // this algorithm to one place.
+  // Assumptions:
+  // 1) All of the elements in the partials vector are part of the same ring.
+  // 2) Since they are part of the same ring, they should all join
+  // 3) If they don't all join, the misfists will just go away...
+
+  size_t misfitCount = 0; // The number of ways that don't fit in our ring
+  while (extras.size() > misfitCount)
+  {
+    ConstWayPtr wayPtr = extras.front();
+    extras.pop_front();
+    if (wayPtr->getNodeId(0) == lastId)
+    {
+      result.push_back(wayPtr);
+      //  Update the last id with the new last id
+      lastId = wayPtr->getLastNodeId();
+      misfitCount = 0; // Since we've added a way, need to re-check all the misfits
+    }
+    else if (wayPtr->getLastNodeId() == firstId)
+    {
+      result.push_front(wayPtr);
+      //  Update the first id with the new first id
+      firstId = wayPtr->getNodeId(0);
+      misfitCount = 0;
+    }
+    else
+    {
+      // We didn't find a match. Add the way to the end of the list so that it gets
+      // checked again later. Increment our misfitCount
+      extras.push_back(wayPtr);
+      misfitCount++;
     }
   }
 
