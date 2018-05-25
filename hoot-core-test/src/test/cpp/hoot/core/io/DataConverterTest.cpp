@@ -45,7 +45,6 @@ class DataConverterTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE(DataConverterTest);
   CPPUNIT_TEST(runEmptyInputsTest);
   CPPUNIT_TEST(runEmptyOutputTest);
-  CPPUNIT_TEST(runMultipleNonOgrInputsTest);
   CPPUNIT_TEST(runColumnsNotOsmToShpTest1);
   CPPUNIT_TEST(runColumnsNotOsmToShpTest2);
   CPPUNIT_TEST(runBothTranslationAndColumnsTest);
@@ -85,25 +84,6 @@ public:
     }
 
     CPPUNIT_ASSERT(exceptionMsg.contains("No output specified"));
-  }
-
-  void runMultipleNonOgrInputsTest()
-  {
-    QString exceptionMsg("");
-    try
-    {
-      QStringList inputs;
-      inputs.append("test1.osm");
-      inputs.append("test2.osm");
-      DataConverter().convert(inputs, "test2.shp");
-    }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-    }
-
-    CPPUNIT_ASSERT(
-      exceptionMsg.contains("Multiple inputs are only allowed when converting from an OGR format"));
   }
 
   void runColumnsNotOsmToShpTest1()

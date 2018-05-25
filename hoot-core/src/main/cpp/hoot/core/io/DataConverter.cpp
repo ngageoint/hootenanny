@@ -65,18 +65,26 @@ void DataConverter::convert(const QStringList inputs, const QString output)
 
   LOG_INFO("Converting " << inputs.join(", ").right(100) << " to " << output.right(100) << "...");
 
-  if (IoUtils::isSupportedOgrFormat(output) && !_translation.isEmpty() && !_colsArgSpecified)
+  //We require that a translation be present when converting to OGR.
+  if (inputs.size() == 1 && IoUtils::isSupportedOgrFormat(output) && !_translation.isEmpty())
   {
     _convertToOgr(inputs.at(0), output);
   }
-  else if (IoUtils::areSupportedOgrFormats(inputs, true) && !_translation.isEmpty() &&
-           !_colsArgSpecified)
+  //We require that a translation be present when converting from OGR.  Also, converting to OGR
+  //is the only situation where we support multiple inputs.  Not requiring that the inputs all be
+  //of OGR formats b/c sometimes an OSM file in a non-OSM schema gets passed in here.
+  else if (inputs.size() >= 1 && !_translation.isEmpty())
   {
     _convertFromOgr(inputs, output);
   }
-  else
+  else if (inputs.size() == 1)
   {
     _convert(inputs.at(0), output);
+  }
+  else
+  {
+    //shouldn't ever get here
+    throw HootException("Invalid input arguments.");
   }
 }
 
@@ -147,7 +155,7 @@ void DataConverter::_convertToOgr(const QString input, const QString output)
 
   //This entire method could be replaced by _convert, if refactoring of the way OgrWriter handles
   //translations is done.  Currently, it depends that a translation script is set directly on it
-  //(vs using a translation visitor).
+  //(vs using a translation visitor).  See #2416.
 
   boost::shared_ptr<OgrWriter> writer(new OgrWriter());
   //I believe this cache size setting can be removed.
