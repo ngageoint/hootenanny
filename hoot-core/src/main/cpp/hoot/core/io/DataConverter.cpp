@@ -154,7 +154,8 @@ void DataConverter::_convertToOgr(const QString input, const QString output)
   //(vs using a translation visitor).  See #2416.
 
   boost::shared_ptr<OgrWriter> writer(new OgrWriter());
-  //I believe this cache size setting can be removed.
+  //TODO: I believe this cache size setting can be removed, since its being set in OgrWriter's
+  //constructor.
   if (ConfigOptions().getElementCacheSizeNode() > 0 &&
       ConfigOptions().getElementCacheSizeWay() > 0 &&
       ConfigOptions().getElementCacheSizeRelation() > 0)
@@ -168,6 +169,7 @@ void DataConverter::_convertToOgr(const QString input, const QString output)
 
   OsmMapReaderFactory readerFactory = OsmMapReaderFactory::getInstance();
   if (readerFactory.hasElementInputStream(input) &&
+      //TODO: this ops restriction needs to be removed and the ops applied during streaming.
       ConfigOptions().getConvertOps().size() == 0 &&
       //none of the convert bounding box supports are able to do streaming I/O at this point
       !ConfigUtils::boundsOptionEnabled())
@@ -177,6 +179,7 @@ void DataConverter::_convertToOgr(const QString input, const QString output)
     reader->open(input);
     boost::shared_ptr<ElementInputStream> streamReader =
       boost::dynamic_pointer_cast<ElementInputStream>(reader);
+    //OgrWriter is streamable, so no extra check needed here.
     boost::shared_ptr<ElementOutputStream> streamWriter =
       boost::dynamic_pointer_cast<ElementOutputStream>(writer);
 
