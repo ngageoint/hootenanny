@@ -133,7 +133,7 @@ void SmallWayMerger::_mergeWays(const set<long>& ids)
     return;
   }
 
-  // if either one is a loop (because it's really an interseciont, even though
+  // if either one is a loop (because it's really an intersection, even though
   // "only" two ways intersect!)
   if (w1->isSimpleLoop() || w2->isSimpleLoop())
   {
