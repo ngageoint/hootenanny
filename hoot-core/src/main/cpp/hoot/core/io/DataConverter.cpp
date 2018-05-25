@@ -71,8 +71,10 @@ void DataConverter::convert(const QStringList inputs, const QString output)
     _convertToOgr(inputs.at(0), output);
   }
   //We require that a translation be present when converting from OGR.  Also, converting to OGR
-  //is the only situation where we support multiple inputs.  Not requiring that the inputs all be
-  //of OGR formats b/c sometimes an OSM file in a non-OSM schema gets passed in here.
+  //is the only situation where we support multiple inputs.  NOTE: I don't like doing this, but not
+  //requiring that the inputs all be in OGR formats b/c we have certain tests where an OSM file in
+  //a non-OSM schema gets passed in as an OGR input....would rather see that OSM file be converted
+  //to an OGR format before calling the convert command but will deal with that another time.
   else if (inputs.size() >= 1 && !_translation.isEmpty())
   {
     _convertFromOgr(inputs, output);
