@@ -133,6 +133,13 @@ void SmallWayMerger::_mergeWays(const set<long>& ids)
     return;
   }
 
+  // if either one is a loop (because it's really an interseciont, even though
+  // "only" two ways intersect!)
+  if (w1->isSimpleLoop() || w2->isSimpleLoop())
+  {
+    return;
+  }
+
   // if they're from the same input sets & have effectively the same tags
   if (w1->getStatus() == w2->getStatus() &&
       _diff->diff(_map, w1, w2) == 0.0)

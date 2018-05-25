@@ -139,6 +139,13 @@ public:
   bool isOneWay() const;
 
   /**
+   * @brief isSimpleLoop - checks to see if the way starts and ends at the same
+   *                       node. If it does, return true.
+   * @return true if the way starts and ends at the same node
+   */
+  bool isSimpleLoop() const;
+
+  /**
    * Returns true if this could possibly be a valid polygon. This is only checking for rudimentary
    * conditions and doesn't look for bow ties, etc.
    */

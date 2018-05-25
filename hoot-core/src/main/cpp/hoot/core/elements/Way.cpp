@@ -226,6 +226,15 @@ bool Way::isOneWay() const
   return result;
 }
 
+bool Way::isSimpleLoop() const
+{
+  if (getNodeId(0) == getNodeId(getNodeCount()-1))
+  {
+    return true;
+  }
+  return false;
+}
+
 bool Way::isValidPolygon() const
 {
   size_t nc = getNodeCount();
