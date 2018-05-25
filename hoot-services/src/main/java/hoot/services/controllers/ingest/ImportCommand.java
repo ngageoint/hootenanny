@@ -91,7 +91,6 @@ class ImportCommand extends ExternalCommand {
         substitutionMap.put("INPUTS", inputs);
 
         String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
-        //String hootOGR2OSMCommand = "hoot convert-ogr2osm --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${TRANSLATION_PATH} ${INPUT_NAME} ${INPUTS}";
 
         String command = null;
         if ((classification == SHP) || (classification == FGDB) || (classification == ZIP)) {
@@ -103,12 +102,9 @@ class ImportCommand extends ExternalCommand {
 
             if (!isNoneTranslation) {
                 substitutionMap.put("TRANSLATION_PATH", translationPath);
-                //command = hootOGR2OSMCommand;
                 hootConvertCommand += "--trans ${TRANSLATION_PATH}";
             }
-            //else {
-                command = hootConvertCommand;
-           // }
+            command = hootConvertCommand;
         }
         else if ((classification == OSM) || (classification == GEONAMES)) {
             command = hootConvertCommand;
