@@ -128,12 +128,6 @@ void DataConverter::_validateInput(const QStringList inputs, const QString outpu
     throw HootException("Cannot specify both a translation and export columns.");
   }
 
-  if (inputs.size() > 1 && !IoUtils::areSupportedOgrFormats(inputs, true))
-  {
-    throw HootException(
-      "Multiple inputs are only allowed when converting from an OGR format.");
-  }
-
   //We may eventually be able to relax the restriction here of requiring the input be an OSM
   //format, but since cols were originally only used with osm2shp, let's keep it here for now.
   if (_colsArgSpecified && !output.toLower().endsWith(".shp"))
