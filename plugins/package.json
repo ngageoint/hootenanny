@@ -9,15 +9,12 @@
   "dependencies": {},
   "devDependencies": {
     "artillery": "~1.6.0-12",
-    "crypto": "^1.0.1",
     "istanbul": "~0.4.5",
     "node-mocks-http": "~1.5.3",
     "osmtogeojson": "~3.0.0-beta.2",
     "xmldom": "~0.1.27",
-    "istanbul": "~0.4.5",
     "xml2js": "~0.4.19",
-    "xmlbuilder": "^9.0.4",
-    "xmldom": "~0.1.27"
+    "xmlbuilder": "^9.0.4"
   },
   "scripts": {
     "test": "mocha --reporter dot",

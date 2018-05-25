@@ -74,7 +74,7 @@ Vagrant.configure(2) do |config|
       end
 
       override.vm.provision 'build', type: 'shell', :privileged => false, :path => 'VagrantBuild.sh'
-      override.vm.provision 'EGD', type: 'shell', :privileged => false, :inline  => '([ -f ~/ActivateEGDplugin.sh ] && sudo -u tomcat8 ~/ActivateEGDplugin.sh /var/lib/tomcat8) || true'
+      override.vm.provision 'EGD', type: 'shell', :privileged => false, :inline  => '([ -f ~/ActivateEGDplugin.sh ] && sudo -u tomcat ~/ActivateEGDplugin.sh /var/lib/tomcat8) || true'
       override.vm.provision 'tomcat', type: 'shell', :privileged => false, :inline => tomcat_script, run: 'always'
 #      override.vm.provision 'mapnik', type: 'shell', :privileged => false, :inline => mapnik_script, run: 'always'
 

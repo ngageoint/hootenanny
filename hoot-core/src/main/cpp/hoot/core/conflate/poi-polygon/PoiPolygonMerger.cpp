@@ -269,17 +269,13 @@ ElementId PoiPolygonMerger::_mergeBuildings(const OsmMapPtr& map,
     pairs.insert(p);
   }
 
-  assert(replaced.size() == 0);
-  //assert(pairs.size() == 0);  //This fails on a poi-building case test.
   BuildingMerger(pairs).apply(map, replaced);
-  assert(replaced.size() > 0);
 
   set<ElementId> newElement;
   for (size_t i = 0; i < replaced.size(); i++)
   {
     newElement.insert(replaced[i].second);
   }
-  assert(newElement.size() == 1);
 
   return *newElement.begin();
 }

@@ -12,6 +12,12 @@ var availableTrans = {
     MGCP: {isavailable: true},
     GGDMv30: {isavailable: true}
 };
+var availableTranslations = [
+    'TDSv40',
+    'TDSv61',
+    'MGCP',
+    'GGDMv30'
+];
 var HOOT_HOME = process.env.HOOT_HOME;
 if (typeof hoot === 'undefined') {
     hoot = require(HOOT_HOME + '/lib/HootJs');
@@ -67,48 +73,6 @@ var translationsMap = {
         }),
         GGDMv30: new hoot.TranslationOp({
             'translation.script': HOOT_HOME + '/translations/GGDMv30.js',
-            'translation.direction': 'toosm'
-        })
-    }
-};
-
-var osmToTdsMap = {
-    toogr: {
-        TDSv40: new hoot.TranslationOp({
-            'translation.script': HOOT_HOME + '/translations/OSM_to_englishTDS.js',
-            'translation.direction': 'toogr'
-        }),
-        TDSv61: new hoot.TranslationOp({
-            'translation.script': HOOT_HOME + '/translations/OSM_to_englishTDS61.js',
-            'translation.direction': 'toogr'
-        }),
-        MGCP: new hoot.TranslationOp({
-            'translation.script': HOOT_HOME + '/translations/OSM_to_englishMGCP.js',
-            'translation.direction': 'toogr'
-        }),
-        GGDMv30: new hoot.TranslationOp({
-            'translation.script': HOOT_HOME + '/translations/OSM_to_englishGGDM30.js',
-            'translation.direction': 'toogr'
-        })
-    }
-};
-
-var tdsToOsmMap = {
-    toosm: {
-        TDSv40: new hoot.TranslationOp({
-            'translation.script': HOOT_HOME + '/translations/englishTDS_to_OSM.js',
-            'translation.direction': 'toosm'
-        }),
-        TDSv61: new hoot.TranslationOp({
-            'translation.script': HOOT_HOME + '/translations/englishTDS61_to_OSM.js',
-            'translation.direction': 'toosm'
-        }),
-        MGCP: new hoot.TranslationOp({
-            'translation.script': HOOT_HOME + '/translations/englishMGCP_to_OSM.js',
-            'translation.direction': 'toosm'
-        }),
-        GGDMv30: new hoot.TranslationOp({
-            'translation.script': HOOT_HOME + '/translations/englishGGDM30_to_OSM.js',
             'translation.direction': 'toosm'
         })
     }
@@ -225,36 +189,15 @@ function TranslationServer(request, response) {
 function handleInputs(params) {
     var result;
     switch(params.path) {
-        case '/osmtotds':
-            params.transMap = osmToTdsMap;
-            params.transDir = 'toogr';
-            result = osmtotds(params);
-            break;
-        case '/translateToEnglish':
-            params.transMap = osmToTdsMap;
-            params.transDir = 'toogr';
-            result = osmtotds(params);
-            break;
         case '/translateTo':
             params.transMap = translationsMap;
             params.transDir = 'toogr';
-            result = osmtotds(params);
-            break;
-        case '/tdstoosm':
-            params.transMap = tdsToOsmMap;
-            params.transDir = 'toosm';
-            result = tdstoosm(params);
+            result = osm2ogr(params);
             break;
         case '/translateFrom':
             params.transMap = translationsMap;
             params.transDir = 'toosm';
-            result = tdstoosm(params);
-            break;
-        case '/taginfo/key/values':
-            result = getTaginfoKeyFields(params);
-            break;
-        case '/taginfo/keys/all':
-            result = getTaginfoKeys(params);
+            result = ogr2osm(params);
             break;
         case '/schema':
             result = getFilteredSchema(params);
@@ -265,8 +208,11 @@ function handleInputs(params) {
         case '/capabilities':
             result = getCapabilities(params);
             break;
+        case '/translations':
+            result = getTranslations(params);
+            break;
         case '/version':
-            result = {version: '0.0.3'};
+            result = {version: '0.0.4'};
             break;
         default:
             throw new Error('Not found');
@@ -282,10 +228,18 @@ var getCapabilities = function(params) {
     }
 };
 
+var getTranslations = function(params) {
+    if (params.method === 'GET'){
+        return availableTranslations;
+    } else {
+        throw new Error('Unsupported method');
+    }
+};
+
 // This is where all interesting things happen interfacing with hoot core lib directly
 var postHandler = function(data) {
-    if (!availableTrans[data.translation] || !availableTrans[data.translation].isavailable) {
-        throw new Error('Unsupported translation schema');
+    if (availableTranslations.indexOf(data.translation) === -1) {
+        throw new Error('Unsupported translation schema ' + data.translation);
     }
     var translation = data.transMap[data.transDir][data.translation];
     hoot.Settings.set({"ogr.esri.fcsubtype": "false"});
@@ -302,8 +256,8 @@ var postHandler = function(data) {
     return hoot.OsmWriter.toString(map);
 };
 
-// OSM to TDS request handler
-var osmtotds = function(params) {
+// OSM to Translated Schema request handler
+var osm2ogr = function(params) {
 
     if(params.method === 'POST'){
         //translate tags in xml from osm to a supported schema
@@ -317,8 +271,10 @@ var osmtotds = function(params) {
         var geom = params.geom;
         if (geom === 'Vertex') geom = 'Point';
 
+        var k = params.key || params.idelem;
+        var v = params.value || params.idval;
         var match = schema.filter(function(d) {
-            return d[params.idelem] === params.idval && d.geom === geom;
+            return d[k] === v && d.geom === geom;
         });
 
         if (match.length !== 1) {
@@ -329,8 +285,8 @@ var osmtotds = function(params) {
     }
 };
 
-// TDS to OSM handler
-var tdstoosm = function(params) {
+// Translated Schema to OSM handler
+var ogr2osm = function(params) {
 
     if (params.method === 'POST') {
         //translate tags in xml from a supported schema to osm
@@ -343,120 +299,6 @@ var tdstoosm = function(params) {
         }, '', '');
 
         return osm;
-    }
-}
-
-// TDS taginfo service
-// This retrieves associated tag keys/fields for requested fcode
-// http://localhost:8233/taginfo/key/values?fcode=AP030&filter=ways&key=SGCC&page=1&query=Clo&rp=25&sortname=count_ways&sortorder=desc&translation=TDSv61
-var getTaginfoKeyFields = function(params)
-{
-    if (params.method === 'POST') {
-        throw new Error('Unsupported method');
-    } else if (params.method === 'GET') {
-
-        // Line, Point, Area
-        var geom = [];
-
-        if (params.filter == 'nodes') {
-            geom = ['Point'];
-        } else if (params.filter == 'ways') {
-            geom = ['Line','Area'];
-        }
-
-        var schema = (params.translation) ? schemaMap[params.translation].getDbSchema() : schemaMap['TDSv61'].getDbSchema();
-        var match = schema.filter(function(d) {
-            return d.fcode === params.fcode && geom.indexOf(d.geom) > -1;
-        });
-        if (match.length !== 1) {
-            schemaError({
-                translation: params.translation,
-                idelem: 'fcode',
-                idval: params.fcode,
-                geom: geom
-            });
-        }
-
-        var data = match[0].columns.filter(function(c) {
-            return c.name === params.key && c.enumerations;
-        }).map(function(d) {
-            return d.enumerations.map(function(e) {
-                return {
-                    value: e.name,
-                    count: 1,
-                    fraction: 0.19,
-                    in_wiki: false,
-                    description: e.name,
-                    internal_val: e.value
-                };
-            });
-        }).reduce(function(a, b) {
-            return a.concat(b);
-        }, []);
-
-        return {
-            page: 1,
-            rp: data.length,
-            total: data.length,
-            url: '',
-            data: data
-        };
-    }
-}
-
-// TDS taginfo service
-// This retrieves associated tag keys/fields for requested fcode
-// http://localhost:8233/taginfo/keys/all?page=1&rp=10&sortname=count_ways&sortorder=desc&fcode=AP030&translation=TDSv61&geometry=Line
-var getTaginfoKeys = function(params)
-{
-    if (params.method === 'POST') {
-        throw new Error('Unsupported method');
-    } else if (params.method === 'GET') {
-
-        // Line, Point, Area
-        params.geom = params.rawgeom;
-
-        var schema = (params.translation) ? schemaMap[params.translation].getDbSchema() : schemaMap['TDSv61'].getDbSchema();
-
-        var match = schema.filter(function(d) {
-            return d.fcode === params.fcode;
-        });
-
-        if (match.length > 1) {
-            match = match.filter(function(d) {
-                return d.geom === params.geom;
-            })
-        }
-
-        if (match.length !== 1) {
-            schemaError(params);
-        }
-
-        var data = match[0].columns.map(function(d) {
-            return {
-                key: d.name,
-                count_all: 100001,
-                count_all_fraction: 0.1,
-                count_nodes: 100001,
-                count_nodes_fraction: 0.1,
-                count_ways: 100001,
-                count_ways_fraction: 0.1,
-                count_relations: 100001,
-                count_relations_fraction: 0.1,
-                values_all: 100,
-                users_all: 100,
-                in_wiki: false,
-                in_josm: false,
-            };
-        });
-
-        return {
-            page: 1,
-            rp: data.length,
-            total: data.length,
-            url: '',
-            data: data
-        };
     }
 }
 
