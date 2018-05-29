@@ -354,8 +354,8 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
 void DataConverter::_convert(const QString input, const QString output)
 {
   // This keeps the status and the tags.
-  conf().set(ConfigOptions().getReaderUseFileStatusKey(), true);
-  conf().set(ConfigOptions().getReaderKeepStatusTagKey(), true);
+  conf().set(ConfigOptions::getReaderUseFileStatusKey(), true);
+  conf().set(ConfigOptions::getReaderKeepStatusTagKey(), true);
   LOG_VART(OsmMapReaderFactory::getInstance().hasElementInputStream(input));
 
   //For non OGR conversions, the translation must be passed in as an op.
@@ -370,7 +370,7 @@ void DataConverter::_convert(const QString input, const QString output)
 
     _convertOps.prepend("hoot::TranslationOp");
     LOG_VART(_convertOps);
-    conf().set(ConfigOptions().getTranslationScriptKey(), _translation);
+    conf().set(ConfigOptions::getTranslationScriptKey(), _translation);
     LOG_VART(conf().get(ConfigOptions().getTranslationScriptKey()));
   }
 

@@ -58,7 +58,7 @@ public:
   virtual int runSimple(QStringList args)
   {
     LOG_VARD(args.size());
-    if (args.size() != 2 && args.size() != 3)
+    if (args.size() < 2 || args.size() > 3)
     {
       cout << getHelp() << endl << endl;
       throw HootException(QString("%1 takes two or three parameters.").arg(getName()));
@@ -116,7 +116,7 @@ public:
         boost::shared_ptr<const PertyTestRunResult> result = *it;
         LOG_INFO(result->toString());
         anyTestFailed = !result->testPassed();
-        //just checking here for test run scores that were higher than expected but allowed to pass;
+        //Just checking here for test run scores that were higher than expected but allowed to pass.
         //still want to log a warning about it so that the expected scores can eventually be updated
         //in regressions tests
         if (!result->getFailOnBetterScore() && result->testPassed() &&
