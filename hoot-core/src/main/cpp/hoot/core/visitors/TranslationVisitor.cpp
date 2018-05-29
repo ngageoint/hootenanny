@@ -73,6 +73,8 @@ void TranslationVisitor::setConfiguration(const Settings& conf)
     throw HootException("Expected a translation.direction of 'toogr' or 'toosm'.");
   }
   LOG_VART(_toOgr);
+  LOG_VART(conf.hasKey(c.getTranslationScriptKey()));
+  LOG_VART(c.getTranslationScript());
   if (conf.hasKey(c.getTranslationScriptKey()) && c.getTranslationScript() != "")
   {
     setPath(c.getTranslationScript());

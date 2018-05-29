@@ -379,7 +379,9 @@ void DataConverter::_convert(const QString input, const QString output)
             _convertOps.contains("hoot::TranslationVisitor"));
 
     _convertOps.prepend("hoot::TranslationOp");
-    conf().set(ConfigOptions().getTranslationScript(), _translation);
+    LOG_VART(_convertOps);
+    conf().set(ConfigOptions().getTranslationScriptKey(), _translation);
+    LOG_VART(conf().get(ConfigOptions().getTranslationScriptKey()));
   }
 
   QString writerName = ConfigOptions().getOsmMapWriterFactoryWriter();
