@@ -102,7 +102,7 @@ class ImportCommand extends ExternalCommand {
 
             if (!isNoneTranslation) {
                 substitutionMap.put("TRANSLATION_PATH", translationPath);
-                hootConvertCommand += "--trans ${TRANSLATION_PATH}";
+                hootConvertCommand += " --trans ${TRANSLATION_PATH}";
             }
             command = hootConvertCommand;
         }
