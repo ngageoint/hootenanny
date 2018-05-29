@@ -165,23 +165,13 @@ void DataConverter::_validateInput(const QStringList inputs, const QString outpu
 
 void DataConverter::_convertToOgr(const QString input, const QString output)
 {
-  LOG_TRACE("_convertToOgr (aka osm2ogr)");
+  LOG_TRACE("_convertToOgr (formerly known as osm2ogr)");
 
   //This entire method could be replaced by _convert, if refactoring of the way OgrWriter handles
   //translations is done.  Currently, it depends that a translation script is set directly on it
   //(vs using a translation visitor).  See #2416.
 
   boost::shared_ptr<OgrWriter> writer(new OgrWriter());
-  //TODO: I believe this cache size setting can be removed, since its being set in OgrWriter's
-  //constructor.
-  if (ConfigOptions().getElementCacheSizeNode() > 0 &&
-      ConfigOptions().getElementCacheSizeWay() > 0 &&
-      ConfigOptions().getElementCacheSizeRelation() > 0)
-  {
-    writer->setCacheCapacity(
-      ConfigOptions().getElementCacheSizeNode(), ConfigOptions().getElementCacheSizeWay(),
-      ConfigOptions().getElementCacheSizeRelation());
-  }
   writer->setScriptPath(_translation);
   writer->open(output);
 
@@ -229,7 +219,7 @@ void DataConverter::_convertToOgr(const QString input, const QString output)
 
 void DataConverter::_convertFromOgr(const QStringList inputs, const QString output)
 {
-  LOG_TRACE("_convertFromOgr (aka ogr2osm)");
+  LOG_TRACE("_convertFromOgr (formerly known as ogr2osm)");
 
   OsmMapPtr map(new OsmMap());
   OgrReader reader;
@@ -423,14 +413,14 @@ void DataConverter::_convert(const QString input, const QString output)
 
     if (output.toLower().endsWith(".shp") && _colsArgSpecified)
     {
-      LOG_TRACE("_exportToShapeWithCols (aka osm2shp)");
+      LOG_TRACE("_exportToShapeWithCols (formerly known as osm2shp)");
 
       //if the user specified cols, then we want to export them
       _exportToShapeWithCols(output, _columns, map);
     }
     else
     {
-      LOG_TRACE("General conversion with: _convert (aka old convert command)");
+      LOG_TRACE("General conversion with: _convert (the original convert command)");
 
       IoUtils::saveMap(map, output);
     }
