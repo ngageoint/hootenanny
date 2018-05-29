@@ -144,17 +144,15 @@ void SmallWayMerger::_mergeWays(const set<long>& ids)
   if (w1->getStatus() == w2->getStatus() &&
       _diff->diff(_map, w1, w2) == 0.0)
   {
-    // if both ways are one way
-    if (OsmSchema::getInstance().isOneWay(*w1) &&
-        OsmSchema::getInstance().isOneWay(*w2))
+    // if both ways are one-way & the beginning of one isn't equal to the end
+    // of the other
+    if ((OsmSchema::getInstance().isOneWay(*w1) &&
+         OsmSchema::getInstance().isOneWay(*w2)) &&
+        (w1->getNodeId(0) != w2->getLastNodeId() &&
+         w2->getNodeId(0) != w1->getLastNodeId()))
     {
-      // if they the beginning of one isn't equal to the end of the other
-      if (w1->getNodeId(0) != w2->getLastNodeId() &&
-          w2->getNodeId(0) != w1->getLastNodeId())
-      {
-        // They aren't headed in a consistent direction. No need to merge.
-        return;
-      }
+      // They aren't headed in a consistent direction. No need to merge.
+      return;
     }
 
     // Line the ways up so they're end to head and assign them to first and next.
