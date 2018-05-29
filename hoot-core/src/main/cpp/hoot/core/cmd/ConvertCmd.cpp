@@ -122,6 +122,8 @@ public:
       converter.setFeatureReadLimit(featureReadLimit);
     }
 
+    converter.setConfiguration(conf());
+
     converter.convert(inputs, output);
 
     LOG_DEBUG("Convert operation complete.");

@@ -29,6 +29,7 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/util/Configurable.h>
 
 // Qt
 #include <QStringList>
@@ -39,7 +40,7 @@ namespace hoot
 /**
  * Converts data from one Hootenanny supported format to another
  */
-class DataConverter
+class DataConverter : public Configurable
 {
 
 public:
@@ -48,12 +49,15 @@ public:
 
   DataConverter();
 
+  virtual void setConfiguration(const Settings& conf);
+
   void convert(const QStringList inputs, const QString output);
 
   void setTranslation(const QString translation) { _translation = translation; }
   void setColumns(const QStringList columns) { _columns = columns; }
   void setColsArgSpecified(const bool specified) { _colsArgSpecified = specified; }
   void setFeatureReadLimit(const int limit) { _featureReadLimit = limit; }
+  void setConvertOps(const QStringList ops) { _convertOps = ops; }
 
 private:
 
@@ -61,10 +65,7 @@ private:
   QStringList _columns;
   bool _colsArgSpecified;
   int _featureReadLimit;
-
-  void _convertToOgr(const QString input, const QString output);
-  void _convertFromOgr(const QStringList inputs, const QString output);
-  void _convert(const QString input, const QString output);
+  QStringList _convertOps;
 
   /*
    * Return true if all the specified operations are valid streaming operations.
@@ -76,6 +77,9 @@ private:
 
   void _validateInput(const QStringList inputs, const QString output);
 
+  void _convertToOgr(const QString input, const QString output);
+  void _convertFromOgr(const QStringList inputs, const QString output);
+  void _convert(const QString input, const QString output);
   void _exportToShapeWithCols(const QString output, const QStringList cols, OsmMapPtr map);
 };
 

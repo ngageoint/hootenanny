@@ -33,6 +33,7 @@
 
 // Hoot
 #include <hoot/core/io/DataConverter.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 #include "../TestUtils.h"
 
@@ -41,7 +42,7 @@ namespace hoot
 
 class DataConverterTest : public CppUnit::TestFixture
 {
-  //just testing validation here, as the command line tests get the rest
+  //just testing input validation here, as the command line tests get the rest
   CPPUNIT_TEST_SUITE(DataConverterTest);
   CPPUNIT_TEST(runEmptyInputsTest);
   CPPUNIT_TEST(runEmptyOutputTest);
@@ -49,6 +50,7 @@ class DataConverterTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runColumnsNotOsmToShpTest2);
   CPPUNIT_TEST(runBothTranslationAndColumnsTest);
   CPPUNIT_TEST(runFeatureLimitNonOgrInputsTest);
+  CPPUNIT_TEST(runSpecifyTranslationFromCommandLineAndInConvertOptionTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -179,6 +181,58 @@ public:
 
     CPPUNIT_ASSERT(
       exceptionMsg.contains("Read limit may only be specified when converting OGR inputs"));
+  }
+
+  void runSpecifyTranslationFromCommandLineAndInConvertOptionTest()
+  {
+    QString exceptionMsg("");
+
+    try
+    {
+      DataConverter converter;
+      converter.setTranslation("MyTranslation.js");
+
+      QStringList convertOps;
+      convertOps.append("hoot::TranslationOp");
+      Settings conf;
+      conf.set(ConfigOptions().getConvertOpsKey(), convertOps);
+      converter.setConfiguration(conf);
+
+      QStringList inputs;
+      inputs.append("test1.shp");
+      converter.convert(inputs, "test2.osm");
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(
+      exceptionMsg.contains(
+        "Cannot specify both a translation as an input parameter as a configuration option"));
+    exceptionMsg = "";
+
+    try
+    {
+      DataConverter converter;
+      converter.setTranslation("MyTranslation.js");
+
+      QStringList convertOps;
+      convertOps.append("hoot::TranslationVisitor");
+      Settings conf;
+      conf.set(ConfigOptions().getConvertOpsKey(), convertOps);
+      converter.setConfiguration(conf);
+
+      QStringList inputs;
+      inputs.append("test1.shp");
+      converter.convert(inputs, "test2.osm");
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(
+      exceptionMsg.contains(
+        "Cannot specify both a translation as an input parameter as a configuration option"));
   }
 };
 
