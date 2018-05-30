@@ -35,6 +35,8 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/LengthOfWaysVisitor.h>
+#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
 
 using namespace std;
 
@@ -94,7 +96,11 @@ public:
     for (int i = 0; i < inputs.size(); i++)
     {
       OsmMapPtr map(new OsmMap());
-      loadMap(map, inputs[i], true, Status::Invalid);
+      //IoUtils::loadMap has extra logic beyond OsmMapReaderFactory::read for reading in OGR layers.
+      //Using it causes the last part of Osm2OgrTranslationTest to fail.  Need to determine why
+      //either strictly use one reading method or the other.
+      //IoUtils::loadMap(map, inputs[i], true, Status::Invalid);
+      OsmMapReaderFactory::read(map, inputs[i], true, Status::Invalid);
 
       MapProjector::projectToPlanar(map);
 

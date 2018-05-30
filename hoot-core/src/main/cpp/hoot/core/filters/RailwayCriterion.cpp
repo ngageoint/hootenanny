@@ -22,45 +22,27 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef BASE_CALCULATE_TILES_CMD_H
-#define BASE_CALCULATE_TILES_CMD_H
+#include "RailwayCriterion.h"
 
-// Hoot
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/cmd/BaseCommand.h>
+// hoot
+#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
-class OsmMap;
+HOOT_FACTORY_REGISTER(ElementCriterion, RailwayCriterion)
 
-class BaseCalculateTilesCmd : public BaseCommand
+RailwayCriterion::RailwayCriterion()
 {
-public:
-
-  BaseCalculateTilesCmd();
-
-  virtual ~BaseCalculateTilesCmd() {}
-
-protected:
-
-  OsmMapPtr _readInputs(const QStringList inputs);
-
-  std::vector< std::vector<geos::geom::Envelope> > _calculateTiles(
-    const long maxNodesPerTile, const double pixelSize, OsmMapPtr map);
-
-  void _writeOutputAsGeoJson(
-    const std::vector< std::vector<geos::geom::Envelope> >& tiles,
-    const QString outputPath, const bool selectSingleRandomTile = false, int randomSeed = -1);
-
-  void _writeOutputAsOsm(
-    const std::vector< std::vector<geos::geom::Envelope> >& tiles, const QString outputPath,
-    const bool selectSingleRandomTile = false, int randomSeed = -1);
-};
-
 }
 
-#endif // BASE_CALCULATE_TILES_CMD_H
+bool RailwayCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
+{
+  return OsmSchema::getInstance().isRailway(*e);
+}
+
+}

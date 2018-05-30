@@ -35,6 +35,7 @@
 #include <hoot/core/scoring/MatchFeatureExtractor.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/IoUtils.h>
 
 // Standard
 #include <fstream>
@@ -109,8 +110,8 @@ public:
       LOG_INFO("Processing map : " << args[i] << " and " << args[i + 1]);
       OsmMapPtr map(new OsmMap());
 
-      loadMap(map, args[i], false, Status::Unknown1);
-      loadMap(map, args[i + 1], false, Status::Unknown2);
+      IoUtils::loadMap(map, args[i], false, Status::Unknown1);
+      IoUtils::loadMap(map, args[i + 1], false, Status::Unknown2);
 
       MapCleaner().apply(map);
 

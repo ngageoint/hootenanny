@@ -172,14 +172,17 @@ bool OgrUtilities::isReasonableUrl(const QString& url)
   return getDriverInfo(url, true)._driverName != NULL;
 }
 
-boost::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString& url, bool readonly)
+boost::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString url, bool readonly)
 {
   /* Check for the correct driver name, if unknown try all drivers.
    * This can be an issue because drivers are tried in the order that they are
    * loaded which has been known to cause issues.
    */
   OgrDriverInfo driverInfo = getDriverInfo(url, readonly);
+  LOG_VART(driverInfo._driverName);
+  LOG_VART(driverInfo._driverType);
   const char* drivers[2] = { driverInfo._driverName, NULL };
+  LOG_VART(url.toUtf8().data());
   boost::shared_ptr<GDALDataset> result(static_cast<GDALDataset*>(GDALOpenEx(url.toUtf8().data(),
     driverInfo._driverType, (driverInfo._driverName != NULL ? drivers : NULL), NULL, NULL)));
 

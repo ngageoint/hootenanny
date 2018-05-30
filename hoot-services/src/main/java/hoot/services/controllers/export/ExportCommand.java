@@ -72,7 +72,7 @@ class ExportCommand extends ExternalCommand {
         substitutionMap.put("INPUT_PATH", this.getInput());
         substitutionMap.put("OUTPUT_PATH", this.getOutputPath());
 
-        String command = "hoot convert-osm2ogr --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} ${TRANSLATION_PATH} ${INPUT_PATH} ${OUTPUT_PATH}";
+        String command = "hoot convert --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} ${INPUT_PATH} ${OUTPUT_PATH} --trans ${TRANSLATION_PATH} ";
 
         super.configureCommand(command, substitutionMap, caller);
     }
@@ -109,7 +109,7 @@ class ExportCommand extends ExternalCommand {
 
     List<String> getCommonExportHootOptions() {
         List<String> options = new LinkedList<>();
-        options.add("osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
+        options.add("convert.ops=hoot::DecomposeBuildingRelationsVisitor");
         options.add("hootapi.db.writer.overwrite.map=true");
         options.add("hootapi.db.writer.create.user=true");
         options.add("api.db.email=" + params.getUserEmail());

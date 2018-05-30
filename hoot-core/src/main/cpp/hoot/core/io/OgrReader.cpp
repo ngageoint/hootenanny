@@ -97,9 +97,9 @@ public:
 
   long getFeatureCount() const { return _featureCount; }
 
-  QStringList getLayersWithGeometry(QString path) const;
+  QStringList getLayersWithGeometry(const QString path) const;
 
-  void open(QString path, QString layer);
+  void open(const QString path, QString layer);
 
   QRegExp getNameFilter();
 
@@ -380,14 +380,15 @@ QStringList OgrReader::getLayerNames(QString path)
 /**
  * Returns a filtered list of layer names that have geometry.
  */
-QStringList OgrReader::getFilteredLayerNames(QString path)
+QStringList OgrReader::getFilteredLayerNames(const QString path)
 {
   QRegExp filterStr = _d->getNameFilter();
+  LOG_VART(filterStr.pattern());
 
   QStringList result;
 
   QStringList allLayers = _d->getLayersWithGeometry(path);
-  LOG_VART(allLayers);
+  LOG_VARD(allLayers);
 
   for (int i = 0; i < allLayers.size(); i++)
   {
@@ -519,10 +520,10 @@ OgrReaderInternal::~OgrReaderInternal()
   }
 }
 
-QStringList OgrReaderInternal::getLayersWithGeometry(QString path) const
+QStringList OgrReaderInternal::getLayersWithGeometry(const QString path) const
 {
   QStringList result;
-  LOG_TRACE("Opening layers with geometry: " << path);
+  LOG_DEBUG("Opening layers with geometry: " << path);
   boost::shared_ptr<GDALDataset> ds = OgrUtilities::getInstance().openDataSource(path, true);
   int count = ds->GetLayerCount();
   LOG_VART(count);
@@ -917,7 +918,7 @@ void OgrReaderInternal::_initTranslate()
   }
 }
 
-void OgrReaderInternal::open(QString path, QString layer)
+void OgrReaderInternal::open(const QString path, QString layer)
 {
   _initTranslate();
 

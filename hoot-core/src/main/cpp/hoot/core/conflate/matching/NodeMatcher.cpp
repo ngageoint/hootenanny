@@ -114,7 +114,7 @@ vector<Radians> NodeMatcher::calculateAngles(const OsmMap* map, long nid, const 
 
     //boost::shared_ptr<const OsmMap> copy(new OsmMap(*map));
     //MapProjector::reprojectToWgs84(copy);
-    //OsmUtils::saveMap(copy, "/data/river-data/NodeMatcherMap-temp.osm");
+    //IoUtils::saveMap(copy, "/data/river-data/NodeMatcherMap-temp.osm");
 
     const QString msg =
       "calculateAngles was called with a node that was not a start or end node on the specified way.";

@@ -1196,7 +1196,8 @@ bool OsmPbfReader::isSupported(QString urlStr)
   QFileInfo fileInfo(urlStr);
   if (fileInfo.isDir())
   {
-    throw HootException("Can't handle dirs with partial read yet.");
+    LOG_TRACE("Can't handle dirs with partial read yet.");
+    return false;
   }
 
   QFile input(urlStr);

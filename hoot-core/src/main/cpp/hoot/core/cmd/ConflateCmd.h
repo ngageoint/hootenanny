@@ -30,6 +30,8 @@
 
 // Hoot
 #include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/io/ChangesetDeriver.h>
 
 // Standard
 #include <fstream>
@@ -56,6 +58,12 @@ public:
   void printStats(const QList<SingleStat>& stats);
 
   virtual int runSimple(QStringList args);
+
+private:
+
+  boost::shared_ptr<ChangesetDeriver> _sortInputs(OsmMapPtr pMap1, OsmMapPtr pMap2);
+  void _writeChangeset(OsmMapPtr pMap, QString outFileName);
+
 };
 
 }

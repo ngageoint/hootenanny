@@ -3,7 +3,7 @@
 #
 
 # Options for most exports
-HOOT_OPTS+= -D osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor
+HOOT_OPTS+= -D convert.ops=hoot::DecomposeBuildingRelationsVisitor
 HOOT_OPTS+= -D hootapi.db.writer.overwrite.map=true -D hootapi.db.writer.create.user=true
 HOOT_OPTS+= -D api.db.email=test@test.com
 
@@ -58,7 +58,7 @@ endif
 ###
 step1:
 ifeq ("$(outputtype)","wfs")
-	hoot convert-osm2ogr $(REMOVE_REVIEW) -D ogr.writer.pre.layer.name=$(outputname)_ $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(INPUT_PATH)" $(OP_PG_URL)
+	hoot convert $(REMOVE_REVIEW) -D ogr.writer.pre.layer.name=$(outputname)_ $(HOOT_OPTS) "$(INPUT_PATH)" $(OP_PG_URL) --trans "$(OP_TRANSLATION)"
 else ifeq ("$(outputtype)","osm")
 	mkdir -p "$(outputfolder)"
 	hoot convert $(OSM_OPTS) "$(INPUT_PATH)" "$(OP_OUTPUT)"
@@ -89,7 +89,7 @@ endif # Template Path
 endif # Translations TDSv40
 endif # Else
 endif # Append
-	hoot convert-osm2ogr $(REMOVE_REVIEW) $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(INPUT_PATH)" "$(OP_OUTPUT)"
+	hoot convert $(REMOVE_REVIEW) $(HOOT_OPTS) "$(INPUT_PATH)" "$(OP_OUTPUT)" --trans "$(OP_TRANSLATION)"
 	$(OP_ZIP)
 
 endif # Shape/FGDB

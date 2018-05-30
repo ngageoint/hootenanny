@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ElementStreamer.h"
 
@@ -40,7 +40,7 @@
 namespace hoot
 {
 
-void ElementStreamer::stream(const QString in, const QString out)
+void ElementStreamer::stream(const QString in, const QString out, const QStringList convertOps)
 {
   LOG_INFO("Streaming data conversion from " << in << " to " << out << "...");
 
@@ -62,7 +62,16 @@ void ElementStreamer::stream(const QString in, const QString out)
   // add visitor/criterion operations if any of the convert ops are visitors.
   //this check is a little out of place in this class but not hurting anything...may be able to
   //move it back to ConvertCmd somehow at some point
-  foreach (QString opName, ConfigOptions().getConvertOps())
+  QStringList convertOpsToUse;
+  if (convertOps.isEmpty())
+  {
+    convertOpsToUse = ConfigOptions().getConvertOps();
+  }
+  else
+  {
+    convertOpsToUse = convertOps;
+  }
+  foreach (QString opName, convertOpsToUse)
   {
     if (!opName.trimmed().isEmpty())
     {

@@ -35,6 +35,7 @@
 #include <hoot/core/io/WordCount.h>
 #include <hoot/core/io/WordCountWriter.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/IoUtils.h>
 
 // Standard
 #include <iomanip>
@@ -156,7 +157,7 @@ public:
       else
       {
         OsmMapPtr map(new OsmMap());
-        loadMap(map, args[i], false, Status::Unknown1);
+        IoUtils::loadMap(map, args[i], false, Status::Unknown1);
         map->visitRo(v);
       }
     }

@@ -32,6 +32,11 @@
 #include <hoot/rnd/perty/PertyOp.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/util/IoUtils.h>
+#include <hoot/rnd/perty/PertyMatchScorer.h>
+#include <hoot/rnd/scoring/MapMatchScoringUtils.h>
+#include <hoot/rnd/perty/PertyTestRunner.h>
+#include <hoot/rnd/perty/PertyTestRunResult.h>
 
 using namespace std;
 
@@ -52,21 +57,89 @@ public:
 
   virtual int runSimple(QStringList args)
   {
-    if (args.size() != 2)
+    LOG_VARD(args.size());
+    if (args.size() < 2 || args.size() > 3)
     {
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes two parameters.").arg(getName()));
+      throw HootException(QString("%1 takes two or three parameters.").arg(getName()));
     }
 
-    OsmMapPtr map(new OsmMap());
-    loadMap(map, args[0], true, Status::Unknown1);
+    bool scoreOptionSpecified = false;
+    if (args.contains("--score"))
+    {
+      args.removeAt(args.indexOf("--score"));
+      scoreOptionSpecified = true;
+    }
 
-    PertyOp perty;
-    perty.apply(map);
+    bool testOptionSpecified = false;
+    if (args.contains("--test"))
+    {
+      args.removeAt(args.indexOf("--test"));
+      testOptionSpecified = true;
+    }
 
-    MapProjector::projectToWgs84(map);
+    assert(args.size() == 2);
+    if (scoreOptionSpecified && testOptionSpecified)
+    {
+      throw HootException("Cannot specify both the --score and --test options.");
+    }
 
-    saveMap(map, args[1]);
+    if (!scoreOptionSpecified && !testOptionSpecified)
+    {
+      OsmMapPtr map(new OsmMap());
+      IoUtils::loadMap(map, args[0], true, Status::Unknown1);
+
+      PertyOp perty;
+      perty.apply(map);
+
+      MapProjector::projectToWgs84(map);
+      IoUtils::saveMap(map, args[1]);
+    }
+    else if (scoreOptionSpecified)
+    {
+      boost::shared_ptr<const MatchComparator> matchComparator =
+        PertyMatchScorer().scoreMatches(args[0], args[1]);
+      cout << MapMatchScoringUtils::getMatchScoringString(matchComparator);
+    }
+    else if (testOptionSpecified)
+    {
+      QList<boost::shared_ptr<const PertyTestRunResult> > results =
+      PertyTestRunner().runTest(args[0], args[1]);
+
+      LOG_INFO("\n\nPERTY Test Results");
+      LOG_INFO("\n\nNumber of Test Runs: " << results.size());
+      bool anyTestFailed = false;
+      bool anyTestRunPassedWithScoreOutsideOfAllowedVarianceAndHigherThanExpected = false;
+      for (QList<boost::shared_ptr<const PertyTestRunResult> >::const_iterator it = results.begin();
+           it != results.end(); ++it)
+      {
+        boost::shared_ptr<const PertyTestRunResult> result = *it;
+        LOG_INFO(result->toString());
+        anyTestFailed = !result->testPassed();
+        //Just checking here for test run scores that were higher than expected but allowed to pass.
+        //still want to log a warning about it so that the expected scores can eventually be updated
+        //in regressions tests
+        if (!result->getFailOnBetterScore() && result->testPassed() &&
+            (result->getScoreVariance() > result->getAllowedScoreVariance()))
+        {
+          assert(result->getScore() > result->getExpectedScore());
+          anyTestRunPassedWithScoreOutsideOfAllowedVarianceAndHigherThanExpected = true;
+        }
+      }
+
+      if (anyTestRunPassedWithScoreOutsideOfAllowedVarianceAndHigherThanExpected)
+      {
+        LOG_WARN(
+          "At least one PERTY test run had a allowable passing score that was greater than the " <<
+          "expected score variance and higher than its expected score.");
+      }
+
+      if (anyTestFailed)
+      {
+        LOG_ERROR("At least one PERTY test run failed the score variance check.");
+        return -1;
+      }
+    }
 
     return 0;
   }

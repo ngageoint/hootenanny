@@ -22,50 +22,38 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-// Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/rnd/perty/PertyMatchScorer.h>
-#include <hoot/rnd/scoring/MapMatchScoringUtils.h>
+#ifndef RAILWAYCRITERION_H
+#define RAILWAYCRITERION_H
 
-using namespace std;
+// hoot
+#include "ElementCriterion.h"
 
 namespace hoot
 {
 
-class PertyScoreCmd : public BaseCommand
+/**
+ * A filter that will keep railways.
+ */
+class RailwayCriterion : public ElementCriterion
 {
 public:
 
-  static string className() { return "hoot::PertyScoreCmd"; }
+  static std::string className() { return "hoot::RailwayCriterion"; }
 
-  PertyScoreCmd() { }
+  RailwayCriterion();
 
-  virtual QString getName() const { return "perty-score"; }
+  bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
-  virtual QString getDescription() const
-  { return "Generates a PERTY score for a conflated map"; }
+  virtual ElementCriterionPtr clone()
+  { return ElementCriterionPtr(new RailwayCriterion()); }
 
-  virtual int runSimple(QStringList args)
-  {
-    LOG_VARD(args.size());
-    if (args.size() != 2)
-    {
-      cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes two parameters.").arg(getName()));
-    }
+  virtual QString getDescription() const { return "Identifies railways"; }
 
-    boost::shared_ptr<const MatchComparator> matchComparator =
-      PertyMatchScorer().scoreMatches(args[0], args[1]);
-    cout << MapMatchScoringUtils::getMatchScoringString(matchComparator);
-
-    return 0;
-  }
 };
 
-HOOT_FACTORY_REGISTER(Command, PertyScoreCmd)
-
 }
+
+#endif // RAILWAYCRITERION_H

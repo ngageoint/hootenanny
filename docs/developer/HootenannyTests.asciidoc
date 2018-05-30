@@ -20,7 +20,7 @@ If you want to run the tests for all codebases at the same time, first configure
 previous section, then run one of the following commands:
 
 -------------------
-make -sj($nproc) test-quick # slow tests
+make -sj($nproc) test-quick # quick tests
 make -sj($nproc) test       # slow tests
 make -sj($nproc) test-all   # glacial tests
 ------------------
