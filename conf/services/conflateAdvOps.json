@@ -706,7 +706,7 @@
             	"id":"building_review_if_secondary_newer",
                 "elem_type":"bool",
                 "defaultvalue":"false",
-                "description":"If true, any buildings in the secondary layer will be automatically reviewed against matching buildings in the reference layer if they are marked with a more recent date than that of the reference building.",
+                "description":"If true, any buildings in the secondary layer will be automatically reviewed against potentially matching features in the reference layer if they are marked with a more recent date than that of the reference feature.",
                 "name":"Review If Secondary Layer Building Newer",
                 "hoot_key":"building.review.if.secondary.newer"
             },
@@ -854,7 +854,7 @@
         	"id":"poipolygon_keep_closest_matches_only",
         	"elem_type":"bool",
         	"defaultvalue":"false",
-        	"description":"If true, POI to Polygon conflation will only keep matches that are the closest to polygons and throw out any others even if they score high enough for a match.",
+        	"description":"If true, POI to Polygon conflation will treat only the POI that is closest to a polygon as a distance match (multiple closest distance matches are possible in the case of distance ties) and not match any other POIs, even if they are within the match distance threshold.  If false, then all POIs within the match distance threshold of a polygon are treated as distance matches.",
                 "name":"Keep Closest Matches Only",
         	"hoot_key":"poi.polygon.keep.closest.matches.only"
     	    },

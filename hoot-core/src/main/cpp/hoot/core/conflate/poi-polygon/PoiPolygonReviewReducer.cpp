@@ -448,7 +448,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
         }
         else if (polyNeighborGeom.get())
         {
-          //TODO: not sure yet if this is the best place for this
+          //not sure yet if this is the best place for this
           if (_keepClosestMatchesOnly)
           {
             if (poly->getElementType() == ElementType::Way &&

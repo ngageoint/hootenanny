@@ -2137,8 +2137,10 @@ enabled.
 * Data Type: bool
 * Default Value: `false`
 
-If true, POI to Polygon conflation will only keep matches that are the closest to polygons and throw
-out any others even if they score high enough for a match.  TODO: this option may go away
+If true, POI to Polygon conflation will treat only the POI that is closest to a polygon as a
+distance match (multiple closest distance matches are possible in the case of distance ties) and
+not match any other POIs, even if they are within the match distance threshold.  If false, then all
+POIs within the match distance threshold of a polygon are treated as distance matches.
 
 === poi.polygon.match.distance.threshold
 
