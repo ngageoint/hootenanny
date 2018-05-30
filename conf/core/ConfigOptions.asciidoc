@@ -195,8 +195,8 @@ Tag key used by the building.review.if.secondary.newer configuration option.
 
 If true, when buildings are auto-merged during conflation the geometry of the more complex building
 is the one that is kept.  If false or the buildings are equally complex, then the geometry of the
-first building in the pair passed to the Building Merger is the geometry kept.  This does not apply
-to feature merging done during the manual review process.
+reference building is the geometry kept.  This does not apply to feature merging done during the
+manual review process.
 
 === building.match.threshold
 

@@ -83,7 +83,9 @@ public:
 unsigned int BuildingMerger::logWarnCount = 0;
 
 BuildingMerger::BuildingMerger(const set< pair<ElementId, ElementId> >& pairs) :
-_pairs(pairs)
+_pairs(pairs),
+_keepMoreComplexGeometryWhenAutoMerging(
+  ConfigOptions().getBuildingKeepMoreComplexGeometryWhenAutoMerging())
 {
 }
 
@@ -94,7 +96,8 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Element
   set<ElementId> secondPairs;
   set<ElementId> combined;
   ReviewMarker reviewMarker;
-  for (set< pair<ElementId, ElementId> >::iterator sit = _pairs.begin(); sit != _pairs.end(); ++sit)
+  for (set< pair<ElementId, ElementId> >::const_iterator sit = _pairs.begin(); sit != _pairs.end();
+       ++sit)
   {
     firstPairs.insert(sit->first);
     secondPairs.insert(sit->second);
@@ -124,8 +127,8 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Element
 
     boost::shared_ptr<Element> keeper;
     boost::shared_ptr<Element> scrap;
-    LOG_VART(ConfigOptions().getBuildingKeepMoreComplexGeometryWhenAutoMerging());
-    if (ConfigOptions().getBuildingKeepMoreComplexGeometryWhenAutoMerging())
+    LOG_VART(_keepMoreComplexGeometryWhenAutoMerging);
+    if (_keepMoreComplexGeometryWhenAutoMerging)
     {
       // use node count as a surrogate for complexity of the geometry.
       int nodeCount1 = 0;

@@ -68,6 +68,9 @@ public:
    */
   static void mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetId);
 
+  void setKeepMoreComplexGeometryWhenAutoMerging(bool keepMoreComplex)
+  { _keepMoreComplexGeometryWhenAutoMerging = keepMoreComplex; }
+
 protected:
 
   virtual PairsSet& getPairs() { return _pairs; }
@@ -76,6 +79,10 @@ protected:
 private:
 
   std::set< std::pair<ElementId, ElementId> > _pairs;
+
+  //If true, merging always keeps the more complex of the two building geometries.  If false,
+  //merging keeps the geometry of the reference building.
+  bool _keepMoreComplexGeometryWhenAutoMerging;
 
   boost::shared_ptr<Element> _buildBuilding1(const OsmMapPtr& map) const;
   boost::shared_ptr<Element> _buildBuilding2(const OsmMapPtr& map) const;
