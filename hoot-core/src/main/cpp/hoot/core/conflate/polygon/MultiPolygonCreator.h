@@ -104,6 +104,14 @@ private:
    */
   void _createSingleRing(const std::vector<ConstWayPtr>& partials, std::vector<geos::geom::LinearRing *> &rings) const;
 
+  /**
+   * Given a set of rings that are not either an inner or an outer, figure out what they are and add them
+   * to the appropriate ring set.
+   */
+  void _classifyRings(const std::vector<geos::geom::LinearRing *> &noRole,
+                      std::vector<geos::geom::LinearRing *> &inners,
+                      std::vector<geos::geom::LinearRing *> &outers) const;
+
   bool _isValidInner(geos::geom::LinearRing* innerRing) const;
 
   std::deque<ConstWayPtr> _orderWaysForRing(const std::vector<ConstWayPtr>& partials) const;

@@ -183,12 +183,21 @@ void MultiPolygonCreator::_addWayToSequence(ConstWayPtr w, CoordinateSequence& c
 
 boost::shared_ptr<Geometry> MultiPolygonCreator::createMultipolygon() const
 {
+
+  LOG_TRACE("### Starting CreateMultipolygon ###");
   vector<LinearRing*> outers;
   _createRings(MetadataTags::RoleOuter(), outers);
   _createRings(MetadataTags::RolePart(), outers);
 
   vector<LinearRing*> inners;
   _createRings(MetadataTags::RoleInner(), inners);
+
+  // Now go looking for rings that are not classified (empty role)
+  vector<LinearRing*> noRole;
+  _createRings("", noRole);
+
+  // Make sure that all rings are either an inner or an outer
+  _classifyRings(noRole, inners, outers);
 
   boost::shared_ptr<Geometry> result(_addHoles(outers, inners));
 
@@ -219,6 +228,119 @@ boost::shared_ptr<Geometry> MultiPolygonCreator::createMultipolygon() const
   }
 
   return result;
+}
+
+void MultiPolygonCreator::_classifyRings(const std::vector<LinearRing *> &noRole,
+                                         std::vector<LinearRing *> &inners,
+                                         std::vector<LinearRing *> &outers) const
+{
+  // Empty == nothing else to do
+  if (noRole.size() == 0)  return;
+
+  // Easy: 1 x ring == 1 x polygon == Outer
+  if (noRole.size() == 1)
+  {
+    outers.push_back(noRole[0]);
+    return;
+  }
+
+  // Now figure out what we have.
+  // Assumptions:
+  // 1) Outers & Inners are correct. I.e
+  //    * Something that is an Outer will not be inside a noRole polygon
+  //    * A noRole polygon will not be inside an Inner
+  // 2) There will be a small number of these. We would not be dealing with hundreds of polygons
+  //    * performance
+
+  LOG_TRACE("Need to loop through noRole");
+  LOG_TRACE("noRole size " << noRole.size());
+
+  // Make polygons from the noRole rings
+  const GeometryFactory& gf = *GeometryFactory::getDefaultInstance();
+
+  vector<Geometry*> polygons;
+  vector<Geometry*> noHoles;
+  vector<Geometry*>& noRolePolygons = polygons;
+  noRolePolygons.reserve(noRole.size());
+
+  for (size_t i = 0; i < noRole.size(); i++)
+    {
+      Polygon* p = gf.createPolygon(*noRole[i], noHoles);
+      noRolePolygons.push_back(p);
+    }
+
+  // Loop 1 - Does this contain any inners?
+  LOG_TRACE("## Inners size = " << inners.size());
+  for (size_t i = 0; i < inners.size(); i++)
+  {
+    for (size_t j = 0; j < noRole.size(); j++)
+    {
+      if (noRole[j]->contains(inners[i]))
+      {
+        outers.push_back(noRole[j]);
+        LOG_TRACE("### noRole[" << j << "] contains inners[" << i << "]");
+        break;
+      }
+    }
+  }
+
+  // Check for early return
+  if (noRole.size() == 0) return;
+
+  if (noRole.size() == 1)
+  {
+    outers.push_back(noRole[0]);
+    return;
+  }
+
+  // Loop 2 - Is this inside any outers?
+  LOG_TRACE("## Outers size = " << outers.size());
+  for (size_t i = 0; i < outers.size(); i++)
+  {
+    for (size_t j = 0; j < noRole.size(); j++)
+    {
+      if (outers[i]->contains(noRole[i]))
+      {
+        LOG_TRACE("### outers[" << i << "] contains noRole[" << j << "]");
+        inners.push_back(noRole[j]);
+        break;
+      }
+    }
+  }
+
+  // Check again for early return
+  if (noRole.size() == 0) return;
+
+  if (noRole.size() == 1)
+  {
+    outers.push_back(noRole[0]);
+    return;
+  }
+
+
+//  geos::geom::LinearRing k;
+//  k.contains();
+
+  // Loop 3 - Compare with itself: inner and Outer
+  for (size_t i = 0; i < noRole.size(); i++)
+  {
+    for (size_t j = i; j < noRole.size(); j++)
+    {
+      if (noRole[i]->contains(noRole[j]))
+      {
+        LOG_TRACE("Contains");
+        inners.push_back(noRole[j]);
+        continue;
+      }
+
+      if (noRole[j]->contains(noRole[i]))
+      {
+        inners.push_back(noRole[i]);
+        continue;
+      }
+    } // End j
+  } // End i
+
 }
 
 void MultiPolygonCreator::_createRings(const QString& role, vector<LinearRing *> &rings) const
