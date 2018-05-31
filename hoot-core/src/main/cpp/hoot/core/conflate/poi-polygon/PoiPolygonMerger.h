@@ -35,6 +35,16 @@ namespace hoot
 
 /**
  * Merges POIs with polygons
+ *
+ * A note about a tag merging inconsistency when auto-merging poi matches:
+ *
+ * The default tag merging behavior is to keep all poly type tags over poi type tags when there are
+ * conflicts (OverwriteTagMerger), so if merging with _autoMergeManyPoiToOnePolyMatches=false,
+ * poi type tags may be dropped.  When _autoMergeManyPoiToOnePolyMatches=true tag merging uses the
+ * PreserveTypesTagMerger, which will put all poi type tags that are unrelated to the poly type tag
+ * into an alt_tags field, so none of the types are lost.  This inconsistency may need to be dealt
+ * with, but at a later time when more feedback has been received on poi/polygon conflation with
+ * _autoMergeManyPoiToOnePolyMatches=true (poi.polygon.auto.merge.many.poi.to.one.poly.matches=true).
  */
 class PoiPolygonMerger : public MergerBase
 {
@@ -74,6 +84,7 @@ private:
 
   std::set< std::pair<ElementId, ElementId> > _pairs;
 
+  //This will cause multiple poi matches to get auto-merged vs being reviewed against the poly.
   bool _autoMergeManyPoiToOnePolyMatches;
 
   ElementId _mergeBuildings(const OsmMapPtr& map, std::vector<ElementId>& buildings1,
@@ -83,7 +94,6 @@ private:
   Tags _mergePoiTags(const OsmMapPtr& map, Status s) const;
 
   std::vector<ElementId> _getBuildingParts(const OsmMapPtr& map, Status s) const;
-
 };
 
 }
