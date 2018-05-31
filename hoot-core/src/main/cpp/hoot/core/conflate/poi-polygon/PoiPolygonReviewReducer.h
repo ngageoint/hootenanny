@@ -55,6 +55,15 @@ public:
                           bool exactNameMatch, double typeScoreThreshold, double typeScore,
                           bool typeMatch, double matchDistanceThreshold, bool addressMatch);
 
+  /**
+   * Determines whether the input features trigger a rule which precludes them from being matched or
+   * reviewed against each other.
+   *
+   * @param poi the POI feature to be examined
+   * @param poly the polygon feature to be examined
+   * @return return true if the features trigger a review reduction rule; false otherwise
+   * @todo this desperately needs to be broken up into more modular pieces
+   */
   bool triggersRule(ConstElementPtr poi, ConstElementPtr poly);
 
 private:

@@ -426,6 +426,9 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   LOG_VART(_poiNeighborIds);
   if (_keepClosestMatchesOnly)
   {
+    //This will check the current poi against all neighboring pois.  If any neighboring poi is
+    //closer to the current poly than the current poi, then the current poi will not be matched or
+    //reviewed against the current poly.
     for (set<ElementId>::const_iterator poiNeighborItr = _poiNeighborIds.begin();
          poiNeighborItr != _poiNeighborIds.end(); ++poiNeighborItr)
     {
@@ -504,12 +507,13 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
         }
         else if (polyNeighborGeom.get())
         {
-          //not sure yet if this is the best place for this
           if (_keepClosestMatchesOnly)
           {
+            //This will check the current poly against all neighboring polys.  If any neighboring
+            //poly is closer to the current poi than the current poly, then the current poi will
+            //not be matched or reviewed against the current poly.
             if (poly->getElementType() == ElementType::Way &&
-                polyNeighbor->getElementType() == ElementType::Way /*&&
-                poly->getElementId() != polyNeighbor->getElementId()*/)
+                polyNeighbor->getElementType() == ElementType::Way)
             {
               LOG_VART(poly);
               LOG_VART(polyNeighbor);
