@@ -234,6 +234,12 @@ void MultiPolygonCreator::_classifyRings(const std::vector<LinearRing *> &noRole
                                          std::vector<LinearRing *> &inners,
                                          std::vector<LinearRing *> &outers) const
 {
+
+  LOG_DEBUG("## Starting Classify");
+  LOG_DEBUG("noRole size " << noRole.size());
+  LOG_DEBUG("Inners size = " << inners.size());
+  LOG_DEBUG("Outers size = " << outers.size());
+
   // Empty == nothing else to do
   if (noRole.size() == 0)  return;
 
@@ -252,8 +258,7 @@ void MultiPolygonCreator::_classifyRings(const std::vector<LinearRing *> &noRole
   // 2) There will be a small number of these. We would not be dealing with hundreds of polygons
   //    * performance
 
-  LOG_TRACE("Need to loop through noRole");
-  LOG_TRACE("noRole size " << noRole.size());
+  LOG_DEBUG("Need to loop through noRole");
 
   // Make polygons from the noRole rings
   const GeometryFactory& gf = *GeometryFactory::getDefaultInstance();
@@ -270,7 +275,6 @@ void MultiPolygonCreator::_classifyRings(const std::vector<LinearRing *> &noRole
     }
 
   // Loop 1 - Does this contain any inners?
-  LOG_TRACE("## Inners size = " << inners.size());
   for (size_t i = 0; i < inners.size(); i++)
   {
     for (size_t j = 0; j < noRole.size(); j++)
@@ -278,7 +282,7 @@ void MultiPolygonCreator::_classifyRings(const std::vector<LinearRing *> &noRole
       if (noRole[j]->contains(inners[i]))
       {
         outers.push_back(noRole[j]);
-        LOG_TRACE("### noRole[" << j << "] contains inners[" << i << "]");
+        LOG_DEBUG("### noRole[" << j << "] contains inners[" << i << "]");
         break;
       }
     }
@@ -294,14 +298,13 @@ void MultiPolygonCreator::_classifyRings(const std::vector<LinearRing *> &noRole
   }
 
   // Loop 2 - Is this inside any outers?
-  LOG_TRACE("## Outers size = " << outers.size());
   for (size_t i = 0; i < outers.size(); i++)
   {
     for (size_t j = 0; j < noRole.size(); j++)
     {
       if (outers[i]->contains(noRole[i]))
       {
-        LOG_TRACE("### outers[" << i << "] contains noRole[" << j << "]");
+        LOG_DEBUG("### outers[" << i << "] contains noRole[" << j << "]");
         inners.push_back(noRole[j]);
         break;
       }
