@@ -423,66 +423,16 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
 
   PoiPolygonNameScoreExtractor nameScorer;
 
-  LOG_VART(_poiNeighborIds);
-  if (_keepClosestMatchesOnly)
+  //This will check the current poi against all neighboring pois.  If any neighboring poi is
+  //closer to the current poly than the current poi, then the current poi will not be matched or
+  //reviewed against the current poly.
+  if (_keepClosestMatchesOnly && _poiNeighborIsCloserToPolyThanPoi(poi, poly))
   {
-    //This will check the current poi against all neighboring pois.  If any neighboring poi is
-    //closer to the current poly than the current poi, then the current poi will not be matched or
-    //reviewed against the current poly.
-    for (set<ElementId>::const_iterator poiNeighborItr = _poiNeighborIds.begin();
-         poiNeighborItr != _poiNeighborIds.end(); ++poiNeighborItr)
-    {
-      ConstElementPtr poiNeighbor = _map->getElement(*poiNeighborItr);
-      if (poiNeighbor->getElementId() != poi->getElementId())
-      {
-        boost::shared_ptr<Geometry> poiNeighborGeom;
-        try
-        {
-          poiNeighborGeom = ElementConverter(_map).convertToGeometry(poiNeighbor);
-
-          if (poiNeighborGeom.get() &&
-              QString::fromStdString(poiNeighborGeom->toString()).toUpper().contains("EMPTY"))
-          {
-            if (_badGeomCount <= Log::getWarnMessageLimit())
-            {
-              LOG_TRACE(
-                "Invalid neighbor POI passed to PoiPolygonMatchCreator: " <<
-                poiNeighborGeom->toString());
-              _badGeomCount++;
-            }
-          }
-          else if (poiNeighborGeom.get())
-          {
-            LOG_VART(poi);
-            LOG_VART(poiNeighbor);
-            ConstWayPtr polyWay = boost::dynamic_pointer_cast<const Way>(poly);
-              boost::shared_ptr<const LineString> polyLineStr =
-                boost::dynamic_pointer_cast<const LineString>(
-                  ElementConverter(_map).convertToLineString(polyWay));
-            const long neighborPoiToPolyDist = polyLineStr->distance(poiNeighborGeom.get());
-            LOG_VART(neighborPoiToPolyDist);
-            if (_distance > neighborPoiToPolyDist)
-            {
-              LOG_TRACE("Returning miss per review reduction rule #25a...");
-              return true;
-            }
-          }
-        }
-        catch (const geos::util::TopologyException& e)
-        {
-          if (_badGeomCount <= Log::getWarnMessageLimit())
-          {
-            LOG_TRACE(
-              "Feature passed to PoiPolygonMatchCreator caused topology exception on conversion to a " <<
-              "geometry: " << poiNeighbor->toString() << "\n" << e.what());
-            _badGeomCount++;
-          }
-        }
-      }
-    }
+    return true;
   }
 
   LOG_VART(_polyNeighborIds);
+  //The loop becomes more expensive as the search radius is increased.
   for (set<ElementId>::const_iterator polyNeighborItr = _polyNeighborIds.begin();
        polyNeighborItr != _polyNeighborIds.end(); ++polyNeighborItr)
   {
@@ -683,6 +633,65 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
           LOG_TRACE(
             "Feature passed to PoiPolygonMatchCreator caused topology exception on conversion to a " <<
             "geometry: " << polyNeighbor->toString() << "\n" << e.what());
+          _badGeomCount++;
+        }
+      }
+    }
+  }
+
+  return false;
+}
+
+bool PoiPolygonReviewReducer::_poiNeighborIsCloserToPolyThanPoi(ConstElementPtr poi,
+                                                                ConstElementPtr poly)
+{
+  LOG_VART(_poiNeighborIds);
+  for (set<ElementId>::const_iterator poiNeighborItr = _poiNeighborIds.begin();
+       poiNeighborItr != _poiNeighborIds.end(); ++poiNeighborItr)
+  {
+    ConstElementPtr poiNeighbor = _map->getElement(*poiNeighborItr);
+    if (poiNeighbor->getElementId() != poi->getElementId())
+    {
+      boost::shared_ptr<Geometry> poiNeighborGeom;
+      try
+      {
+        poiNeighborGeom = ElementConverter(_map).convertToGeometry(poiNeighbor);
+
+        if (poiNeighborGeom.get() &&
+            QString::fromStdString(poiNeighborGeom->toString()).toUpper().contains("EMPTY"))
+        {
+          if (_badGeomCount <= Log::getWarnMessageLimit())
+          {
+            LOG_TRACE(
+              "Invalid neighbor POI passed to PoiPolygonMatchCreator: " <<
+              poiNeighborGeom->toString());
+            _badGeomCount++;
+          }
+        }
+        else if (poiNeighborGeom.get())
+        {
+          LOG_VART(poi);
+          LOG_VART(poiNeighbor);
+          ConstWayPtr polyWay = boost::dynamic_pointer_cast<const Way>(poly);
+            boost::shared_ptr<const LineString> polyLineStr =
+              boost::dynamic_pointer_cast<const LineString>(
+                ElementConverter(_map).convertToLineString(polyWay));
+          const long neighborPoiToPolyDist = polyLineStr->distance(poiNeighborGeom.get());
+          LOG_VART(neighborPoiToPolyDist);
+          if (_distance > neighborPoiToPolyDist)
+          {
+            LOG_TRACE("Returning miss per review reduction rule #25a...");
+            return true;
+          }
+        }
+      }
+      catch (const geos::util::TopologyException& e)
+      {
+        if (_badGeomCount <= Log::getWarnMessageLimit())
+        {
+          LOG_TRACE(
+            "Feature passed to PoiPolygonMatchCreator caused topology exception on conversion to a " <<
+            "geometry: " << poiNeighbor->toString() << "\n" << e.what());
           _badGeomCount++;
         }
       }
