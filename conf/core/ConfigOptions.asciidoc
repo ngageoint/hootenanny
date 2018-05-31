@@ -2137,10 +2137,11 @@ enabled.
 * Data Type: bool
 * Default Value: `false`
 
-If true, POI to Polygon conflation will treat only the POI that is closest to a polygon as a
-distance match (multiple closest distance matches are possible in the case of distance ties) and
-not match any other POIs, even if they are within the match distance threshold.  If false, then all
-POIs within the match distance threshold of a polygon are treated as distance matches.
+If this setting is true, POI to Polygon conflation will attempt to match the closest feature pairs
+only.  The conflation will not match additional features at greater distances, even if they are
+within the match distance threshold.  Multiple features matches are still possible in the case of
+exact distance ties.  If this setting is false, then multiple POIs found within the match distance
+threshold of a polygon are treated as reviews.
 
 === poi.polygon.match.distance.threshold
 
