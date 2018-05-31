@@ -2086,9 +2086,9 @@ See also:
 * Data Type: bool
 * Default Value: `false`
 
-If true, instances where multiple POIs were matched to a single polygon will result in all of the
-POIs being merged into the polygon.  If false, then each POI will generate a review against the
-polygon instead.
+If true, instances where multiple POIs were matched to a single polygon will result in all of those
+POIs being automatically merged into the polygon.  If false, then each matched POI will generate a
+review against the polygon instead.
 
 === poi.polygon.disable.same.source.conflation
 

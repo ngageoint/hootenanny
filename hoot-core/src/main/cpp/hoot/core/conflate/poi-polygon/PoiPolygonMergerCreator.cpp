@@ -216,9 +216,9 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Mat
 
     if (_autoMergeManyPoiToOnePolyMatches)
     {
-      //We only want the situation here where two pois are matching against the same poly.  We
-      //want to leave the default behavior for the situation where the same poi is being reviewed
-      //against multiple polys, so those end up as reviews.
+      //We only want the auto-merge to occur here in the situation where two pois are matching
+      //against the same poly.  We do not want auto-merges occurring in the situation where the
+      //same poi is being reviewed against multiple polys, so those end up as reviews.
 
       //not passing the tag ignore list here, since it would have already be used when calling
       //these methods from PoiPolygonMatch

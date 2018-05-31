@@ -3,7 +3,7 @@
     <bounds minlat="38.74020563419" minlon="-77.58210987120999" maxlat="38.74042059716" maxlon="-77.58186579018999"/>
     <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7404205971600035" lon="-77.5819958773300016">
         <tag k="name" v="poi1"/>
-        <tag k="amenity" v="arts_centre"/>
+        <tag k="amenity" v="community_centre"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7403395284700096" lon="-77.5820696380699957"/>

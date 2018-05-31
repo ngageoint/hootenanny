@@ -894,7 +894,7 @@
         	"id":"poipolygon_auto_merge_many_poi_to_one_poly_matches",
         	"elem_type":"bool",
         	"defaultvalue":"false",
-        	"description":"If true, instances where multiple POIs were matched to a single polygon will result in all of the POIs being merged into the polygon.  If false, then each POI will generate a review against the polygon instead.",
+        	"description":"If true, instances where multiple POIs were matched to a single polygon will result in all of those POIs being automatically merged into the polygon.  If false, then each matched POI will generate a review against the polygon instead.",
 		"name":"Merge Many POI to Single Polygon Matches",
         	"hoot_key":"poi.polygon.auto.merge.many.poi.to.one.poly.matches"
     	    },

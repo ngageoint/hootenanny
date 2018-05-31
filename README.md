@@ -49,8 +49,9 @@ If you have any support questions please create an issue in the [Hootenanny GitH
 [Mapbox iD Editor](https://github.com/openstreetmap/iD), which provides an intuitive and user-friendly conflation experience. 
 
 # Command Line User Interface
-A command line user interface for conflation capabilities is available for users not requiring the web user interface.  It also exposes some additional functionality not exposed in the web user interface.  For a list of available commands, 
-type 'hoot'.  More detail is provided [here](https://github.com/ngageoint/hootenanny/blob/master/VAGRANT.md).
+A command line user interface for conflation capabilities is available for users who wish to visualize data outside of the web user 
+interface (e.g. JOSM).  It exposes some additional functionality that is not exposed from the web user interface.  For a list of 
+available Hootenanny commands, type 'hoot'.  More detail is provided [here](https://github.com/ngageoint/hootenanny/blob/master/VAGRANT.md).
 
 # Supported Geodata Types
 **Hootenanny can conflate:**
