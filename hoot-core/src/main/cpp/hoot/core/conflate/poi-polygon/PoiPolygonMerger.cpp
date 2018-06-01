@@ -109,11 +109,13 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Eleme
   }
   if (poiTags1.size())
   {
+    LOG_TRACE("Merging POI tags with building tags for POI status Unknown1...");
     finalBuildingTags =
       tagMerger->mergeTags(poiTags1, finalBuildingTags, finalBuilding->getElementType());
   }
   if (poiTags2.size())
   {
+    LOG_TRACE("Merging POI tags with building tags for POI status Unknown2...");
     finalBuildingTags =
       tagMerger->mergeTags(finalBuildingTags, poiTags2, finalBuilding->getElementType());
   }
@@ -185,6 +187,7 @@ Tags PoiPolygonMerger::_mergePoiTags(const OsmMapPtr& map, Status s) const
     LOG_VART(e1->getElementId());
     LOG_VART(e1->getStatus());
     LOG_VART(e1->getElementType());
+    LOG_VART(e1->getTags().get("name"));
     if (e1->getStatus() == s && e1->getElementType() == ElementType::Node)
     {
       result = tagMerger->mergeTags(result, e1->getTags(), e1->getElementType());
@@ -192,6 +195,7 @@ Tags PoiPolygonMerger::_mergePoiTags(const OsmMapPtr& map, Status s) const
     LOG_VART(e2->getElementId());
     LOG_VART(e2->getStatus());
     LOG_VART(e2->getElementType());
+    LOG_VART(e2->getTags().get("name"));
     if (e2->getStatus() == s && e2->getElementType() == ElementType::Node)
     {
       result = tagMerger->mergeTags(result, e2->getTags(), e2->getElementType());
