@@ -263,7 +263,6 @@ void OsmXmlWriter::_writeMetadata(const Element *e)
       version = 1;
     }
     _writer->writeAttribute("version", QString::number(version));
-    //LOG_VART(version);=
   }
   else
   {

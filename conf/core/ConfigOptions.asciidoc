@@ -38,6 +38,17 @@
 // asciidoc just make sure you don't start any lines with "=== ".
 // http://www.methods.co.nz/asciidoc/
 //
+=== add.attributes.visitor.kvps
+
+* Data Type: list
+* Default Value:
+** ``
+
+List of element attribute key/value pairs to add with the AddAttributesVisitor of the form
+key=value.  The AddAttributesVisitor is generally used to repair a corrupted OSM output, as the
+attributes are normally added to the output automatically.  Valid key values are: changeset,
+timestamp, user, uid, or version.
+
 === add.ref.visitor.information.only
 
 * Data Type: bool
@@ -2453,14 +2464,14 @@ have negative IDs.  Not honored by all readers.
 
 By default should a reader use the file status from the file. Not honored by all readers.
 
-=== remove.attribute.visitor.types
+=== remove.attributes.visitor.types
 
 * Data Type: list
 * Default Value:
 ** ``
 
-List of element attributes to remove with the RemoveAttributeVisitor.  See ElementAttributeType for
-valid values.
+List of element attributes to remove with the RemoveAttributesVisitor.  Valid values are: changeset,
+timestamp, user, uid, or version.
 
 === remove.duplicate.areas.diff
 

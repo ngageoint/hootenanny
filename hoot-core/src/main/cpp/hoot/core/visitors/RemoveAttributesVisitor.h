@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef REMOVEATTRIBUTEVISITOR_H
-#define REMOVEATTRIBUTEVISITOR_H
+#ifndef REMOVEATTRIBUTESVISITOR_H
+#define REMOVEATTRIBUTESVISITOR_H
 
 // hoot
 #include <hoot/core/util/Configurable.h>
@@ -39,25 +39,29 @@ class ElementAttributeType;
 
 /**
  * Sets one or more element properties stored in XML attributes to an empty value, which will cause
- * them to be dropped when written to file output.
+ * them to be dropped when written to file output.  Only common OSM attributes may be removed
+ * (see ElementAttributeType).  For some attributes to be removed in output (e.g. version,
+ * timestamp) an additional setting may have to be set to break OSM compatibility
+ * (e.g. see OsmXmlWriter::_includeCompatibilityTags).
  */
-class RemoveAttributeVisitor : public ElementOsmMapVisitor, public Configurable
+class RemoveAttributesVisitor : public ElementOsmMapVisitor, public Configurable
 {
 
 public:
 
-  static std::string className() { return "hoot::RemoveAttributeVisitor"; }
+  static std::string className() { return "hoot::RemoveAttributesVisitor"; }
 
-  RemoveAttributeVisitor();
-  RemoveAttributeVisitor(const QList<ElementAttributeType>& types);
+  RemoveAttributesVisitor();
+  RemoveAttributesVisitor(const QStringList types);
 
   virtual void visit(const boost::shared_ptr<Element>& e);
 
   virtual void setConfiguration(const Settings &conf);
 
-  void setTypes(const QStringList& types);
+  void setTypes(const QStringList types);
 
-  virtual QString getDescription() const { return "Removes attributes from features"; }
+  virtual QString getDescription() const
+  { return "Removes one or more common OSM attributes from features"; }
 
 private:
 
@@ -66,4 +70,4 @@ private:
 
 }
 
-#endif // REMOVEATTRIBUTEVISITOR_H
+#endif // REMOVEATTRIBUTESVISITOR_H

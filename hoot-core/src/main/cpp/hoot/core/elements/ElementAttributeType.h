@@ -85,7 +85,7 @@ public:
 
   static Type fromString(QString typeString)
   {
-    typeString = typeString.toLower();
+    typeString = typeString.toLower().trimmed();
     if (typeString == "changeset")
     {
       return Changeset;
@@ -108,7 +108,7 @@ public:
     }
     else
     {
-      throw HootException("Invalid element attribute type string: " + typeString);
+      throw IllegalArgumentException("Invalid element attribute type string: " + typeString);
     }
   }
 
