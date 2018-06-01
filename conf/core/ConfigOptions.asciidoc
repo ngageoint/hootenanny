@@ -38,6 +38,16 @@
 // asciidoc just make sure you don't start any lines with "=== ".
 // http://www.methods.co.nz/asciidoc/
 //
+=== add.attributes.visitor.add.only.if.empty
+
+* Data Type: bool
+* Default Value: `false`
+
+If true and an element already has a non-empty attribute (attribute without a default value) with
+the same key as one specified in add.attributes.visitor.kvps, then the AddAttributesVisitor will not
+add the attribute.  If false, then AddAttributesVisitor will add the attribute to the element
+regardless.
+
 === add.attributes.visitor.kvps
 
 * Data Type: list

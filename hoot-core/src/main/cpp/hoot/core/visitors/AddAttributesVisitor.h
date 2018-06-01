@@ -56,6 +56,7 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
   void setAttributes(const QStringList attributes) { _attributes = attributes; }
+  void setAddOnlyIfEmpty(const bool addOnlyIfEmpty) { _addOnlyIfEmpty = addOnlyIfEmpty; }
 
   virtual QString getDescription() const
   { return "Adds one or more common OSM attributes to features"; }
@@ -64,6 +65,8 @@ private:
 
   //a semicolon delimited list of attributes of the form key=value
   QStringList _attributes;
+  //forces the visitor to only update features where the attribute has an empty (default) value
+  bool _addOnlyIfEmpty;
 };
 
 }

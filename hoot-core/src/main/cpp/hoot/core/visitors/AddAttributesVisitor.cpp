@@ -44,19 +44,20 @@ AddAttributesVisitor::AddAttributesVisitor()
 }
 
 AddAttributesVisitor::AddAttributesVisitor(const QStringList attributes) :
-_attributes(attributes)
+_attributes(attributes),
+_addOnlyIfEmpty(ConfigOptions().getAddAttributesVisitorAddOnlyIfEmpty())
 {
 }
 
 void AddAttributesVisitor::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
-  setAttributes(configOptions.getAddAttributesVisitorKvps());
+  _attributes = configOptions.getAddAttributesVisitorKvps();
+  _addOnlyIfEmpty = configOptions.getAddAttributesVisitorAddOnlyIfEmpty();
 }
 
 void AddAttributesVisitor::visit(const boost::shared_ptr<Element>& e)
 {
-  //see extensibility issue comments in ElementAttributeType
   for (int i = 0; i < _attributes.length(); i++)
   {
     const QString attribute = _attributes.at(i);
@@ -72,35 +73,55 @@ void AddAttributesVisitor::visit(const boost::shared_ptr<Element>& e)
     {
       throw IllegalArgumentException("Invalid empty attribute.");
     }
-    ElementAttributeType attrType = ElementAttributeType::fromString(attributeName);
+    const ElementAttributeType attrType = ElementAttributeType::fromString(attributeName);
+
     bool ok = false;
     switch (attrType.getEnum())
     {
       case ElementAttributeType::Changeset:
-        e->setChangeset(attributeValue.toLong(&ok));
-        if (!ok)
+        if (!_addOnlyIfEmpty || e->getChangeset() == ElementData::CHANGESET_EMPTY)
         {
-          throw IllegalArgumentException("Invalid attribute value: " + attributeValue);
+          e->setChangeset(attributeValue.toLong(&ok));
+          if (!ok)
+          {
+            throw IllegalArgumentException("Invalid attribute value: " + attributeValue);
+          }
         }
         break;
+
       case ElementAttributeType::Timestamp:
-        e->setTimestamp(OsmUtils::fromTimeString(attributeValue));
-        break;
-      case ElementAttributeType::User:
-        e->setUser(attributeValue);
-        break;
-      case ElementAttributeType::Uid:
-        e->setUid(attributeValue.toLong(&ok));
-        if (!ok)
+        if (!_addOnlyIfEmpty || e->getTimestamp() == ElementData::TIMESTAMP_EMPTY)
         {
-          throw IllegalArgumentException("Invalid attribute value: " + attributeValue);
+          e->setTimestamp(OsmUtils::fromTimeString(attributeValue));
         }
         break;
-      case ElementAttributeType::Version:
-        e->setVersion(attributeValue.toLong(&ok));
-        if (!ok)
+
+      case ElementAttributeType::User:
+        if (!_addOnlyIfEmpty || e->getUser() == ElementData::USER_EMPTY)
         {
-          throw IllegalArgumentException("Invalid attribute value: " + attributeValue);
+          e->setUser(attributeValue);
+        }
+        break;
+
+      case ElementAttributeType::Uid:
+        if (!_addOnlyIfEmpty || e->getUid() == ElementData::UID_EMPTY)
+        {
+          e->setUid(attributeValue.toLong(&ok));
+          if (!ok)
+          {
+            throw IllegalArgumentException("Invalid attribute value: " + attributeValue);
+          }
+        }
+        break;
+
+      case ElementAttributeType::Version:
+        if (!_addOnlyIfEmpty || e->getVersion() == ElementData::VERSION_EMPTY)
+        {
+          e->setVersion(attributeValue.toLong(&ok));
+          if (!ok)
+          {
+            throw IllegalArgumentException("Invalid attribute value: " + attributeValue);
+          }
         }
         break;
     }

@@ -49,6 +49,8 @@ class AddAttributesVisitorTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(AddAttributesVisitorTest);
   CPPUNIT_TEST(runAddAttributesTest);
+  CPPUNIT_TEST(runAddAttributesOnlyIfEmptyTest1);
+  CPPUNIT_TEST(runAddAttributesOnlyIfEmptyTest2);
   CPPUNIT_TEST(runAddInvalidAttributeKeyTest);
   CPPUNIT_TEST(runAddMissingAttributeValueTest);
   CPPUNIT_TEST(runAddEmptyAttributeValueTest);
@@ -84,6 +86,60 @@ public:
     HOOT_FILE_EQUALS(
       "test-files/visitors/AddAttributesVisitorTest-runAddAttributesTest.osm",
       "test-output/visitors/AddAttributesVisitorTest-runAddAttributesTest.osm");
+  }
+
+  void runAddAttributesOnlyIfEmptyTest1()
+  {
+    OsmMapPtr map(new OsmMap());
+    OsmMap::resetCounters();
+    OsmMapReaderFactory::read(
+      map, "test-files/visitors/AddAttributesVisitorTest2.osm", false, Status::Unknown1);
+
+    QStringList attributesToAdd;
+    attributesToAdd.append("version=1");
+    attributesToAdd.append("timestamp=2016-05-04T22:07:19Z");
+    attributesToAdd.append("changeset=39108451");
+    attributesToAdd.append("uid=550560");
+    attributesToAdd.append("user=Seandebasti");
+    AddAttributesVisitor visitor(attributesToAdd);
+    visitor.setAddOnlyIfEmpty(true);
+    //All of the attributes should be modified b/c we told the visitor to only modify empty
+    //attributes, and all of the attributes in the input file are empty.
+    map->visitRw(visitor);
+
+    OsmMapWriterFactory::getInstance().write(map,
+      "test-output/visitors/AddAttributesVisitorTest-runAddAttributesOnlyIfEmptyTest1.osm");
+
+    HOOT_FILE_EQUALS(
+      "test-files/visitors/AddAttributesVisitorTest-runAddAttributesOnlyIfEmptyTest1.osm",
+      "test-output/visitors/AddAttributesVisitorTest-runAddAttributesOnlyIfEmptyTest1.osm");
+  }
+
+  void runAddAttributesOnlyIfEmptyTest2()
+  {
+    OsmMapPtr map(new OsmMap());
+    OsmMap::resetCounters();
+    OsmMapReaderFactory::read(
+      map, "test-files/visitors/AddAttributesVisitorTest3.osm", false, Status::Unknown1);
+
+    QStringList attributesToAdd;
+    attributesToAdd.append("version=1");
+    attributesToAdd.append("timestamp=2016-05-04T22:07:19Z");
+    attributesToAdd.append("changeset=39108451");
+    attributesToAdd.append("uid=550560");
+    attributesToAdd.append("user=Seandebasti");
+    AddAttributesVisitor visitor(attributesToAdd);
+    visitor.setAddOnlyIfEmpty(true);
+    //None of the attributes should be modified b/c we told the visitor to only modify empty
+    //attributes, and none of the attributes in the input file are empty.
+    map->visitRw(visitor);
+
+    OsmMapWriterFactory::getInstance().write(map,
+      "test-output/visitors/AddAttributesVisitorTest-runAddAttributesOnlyIfEmptyTest2.osm");
+
+    HOOT_FILE_EQUALS(
+      "test-files/visitors/AddAttributesVisitorTest-runAddAttributesOnlyIfEmptyTest2.osm",
+      "test-output/visitors/AddAttributesVisitorTest-runAddAttributesOnlyIfEmptyTest2.osm");
   }
 
   void runAddInvalidAttributeKeyTest()

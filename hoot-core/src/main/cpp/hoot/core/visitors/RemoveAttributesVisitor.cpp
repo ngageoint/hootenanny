@@ -65,7 +65,6 @@ void RemoveAttributesVisitor::setTypes(const QStringList types)
 
 void RemoveAttributesVisitor::visit(const boost::shared_ptr<Element>& e)
 {
-  //see extensibility issue comments in ElementAttributeType
   for (int i = 0; i < _types.length(); i++)
   {
     LOG_VART(_types.at(i).toString());
