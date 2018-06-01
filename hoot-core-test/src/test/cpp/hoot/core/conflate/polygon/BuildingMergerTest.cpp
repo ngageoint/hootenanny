@@ -181,10 +181,6 @@ public:
     BuildingMerger bm(pairs);
     bm.apply(map, replaced);
 
-//    QDir(".").mkpath("test-output/conflate/polygon");
-//    OsmXmlWriter writer;
-//    writer.write(map, "test-output/conflate/polygon/BuildingTagTest.osm");
-
     HOOT_STR_EQUALS("[3]{(Way:-26, Relation:-1), (Way:-25, Relation:-1), (Way:-14, Relation:-1)}",
                     replaced);
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
@@ -278,7 +274,6 @@ private:
   }
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(BuildingMergerTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(BuildingMergerTest, "quick");
 
 }

@@ -59,7 +59,7 @@ public:
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
    * and Unknown2 as second.
    */
-  PoiPolygonMerger(const std::set< std::pair<ElementId, ElementId> >& pairs);
+  explicit PoiPolygonMerger(const std::set< std::pair<ElementId, ElementId> >& pairs);
 
   virtual void apply(const OsmMapPtr& map, std::vector< std::pair<ElementId, ElementId> >& replaced);
 

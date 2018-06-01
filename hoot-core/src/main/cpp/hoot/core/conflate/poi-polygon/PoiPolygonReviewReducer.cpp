@@ -457,27 +457,25 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
         }
         else if (polyNeighborGeom.get())
         {
-          if (_keepClosestMatchesOnly)
+
+          //This will check the current poly against all neighboring polys.  If any neighboring
+          //poly is closer to the current poi than the current poly, then the current poi will
+          //not be matched or reviewed against the current poly.
+          if (_keepClosestMatchesOnly && poly->getElementType() == ElementType::Way &&
+              polyNeighbor->getElementType() == ElementType::Way)
           {
-            //This will check the current poly against all neighboring polys.  If any neighboring
-            //poly is closer to the current poi than the current poly, then the current poi will
-            //not be matched or reviewed against the current poly.
-            if (poly->getElementType() == ElementType::Way &&
-                polyNeighbor->getElementType() == ElementType::Way)
+            LOG_VART(poly);
+            LOG_VART(polyNeighbor);
+            ConstWayPtr polyNeighborWay = boost::dynamic_pointer_cast<const Way>(polyNeighbor);
+            boost::shared_ptr<const LineString> polyNeighborLineStr =
+              boost::dynamic_pointer_cast<const LineString>(
+                ElementConverter(_map).convertToLineString(polyNeighborWay));
+            const long poiToNeighborPolyDist = polyNeighborLineStr->distance(poiGeom.get());
+            LOG_VART(poiToNeighborPolyDist);
+            if (_distance > poiToNeighborPolyDist)
             {
-              LOG_VART(poly);
-              LOG_VART(polyNeighbor);
-              ConstWayPtr polyNeighborWay = boost::dynamic_pointer_cast<const Way>(polyNeighbor);
-              boost::shared_ptr<const LineString> polyNeighborLineStr =
-                boost::dynamic_pointer_cast<const LineString>(
-                  ElementConverter(_map).convertToLineString(polyNeighborWay));
-              const long poiToNeighborPolyDist = polyNeighborLineStr->distance(poiGeom.get());
-              LOG_VART(poiToNeighborPolyDist);
-              if (_distance > poiToNeighborPolyDist)
-              {
-                LOG_TRACE("Returning miss per review reduction rule #25b...");
-                return true;
-              }
+              LOG_TRACE("Returning miss per review reduction rule #25b...");
+              return true;
             }
           }
 
