@@ -44,7 +44,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/visitors/RemoveAttributeVisitor.h>
+#include <hoot/core/visitors/RemoveAttributesVisitor.h>
 
 // Qt
 #include <QDir>
@@ -621,7 +621,7 @@ public:
     QList<ElementAttributeType> types;
     types.append(ElementAttributeType(ElementAttributeType::Changeset));
     types.append(ElementAttributeType(ElementAttributeType::Timestamp));
-    RemoveAttributeVisitor attrVis(types);
+    RemoveAttributesVisitor attrVis(types);
     map->visitRw(attrVis);
 
     MapProjector::projectToWgs84(map);
