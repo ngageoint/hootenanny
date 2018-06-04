@@ -52,6 +52,7 @@ pipeline {
                         sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-build.sh'"
                         // Run tests so coverage reports are created
                         sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/jenkins/TestInitialNightly.sh'"
+                        sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/cover/gcovHoot.sh'"
                         sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-scan.sh ${env.SONAR_CLOUD_KEY} ${env.BRANCH_NAME}'"
                     }
                 }
