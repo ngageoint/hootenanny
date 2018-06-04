@@ -103,7 +103,7 @@ QString OsmUtils::toTimeString(quint64 timestamp)
 quint64 OsmUtils::fromTimeString(QString timestamp)
 {
   //2016-05-04T22:07:19Z
-  QRegExp timestampRegex("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z");
+  QRegExp timestampRegex("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z*");
   if (!timestampRegex.exactMatch(timestamp))
   {
     throw IllegalArgumentException("Invalid timestamp string: " + timestamp);
