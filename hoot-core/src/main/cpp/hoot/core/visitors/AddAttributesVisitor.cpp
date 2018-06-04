@@ -74,6 +74,7 @@ void AddAttributesVisitor::visit(const boost::shared_ptr<Element>& e)
           {
             throw IllegalArgumentException("Invalid attribute value: " + attributeValue);
           }
+          LOG_TRACE("Added " << attrType.toString() << "=" << attributeValue);
         }
         break;
 
@@ -81,6 +82,7 @@ void AddAttributesVisitor::visit(const boost::shared_ptr<Element>& e)
         if (!_addOnlyIfEmpty || e->getTimestamp() == ElementData::TIMESTAMP_EMPTY)
         {
           e->setTimestamp(OsmUtils::fromTimeString(attributeValue));
+          LOG_TRACE("Added " << attrType.toString() << "=" << attributeValue);
         }
         break;
 
@@ -89,6 +91,7 @@ void AddAttributesVisitor::visit(const boost::shared_ptr<Element>& e)
         {
           e->setUser(attributeValue);
         }
+        LOG_TRACE("Added " << attrType.toString() << "=" << attributeValue);
         break;
 
       case ElementAttributeType::Uid:
@@ -99,6 +102,7 @@ void AddAttributesVisitor::visit(const boost::shared_ptr<Element>& e)
           {
             throw IllegalArgumentException("Invalid attribute value: " + attributeValue);
           }
+          LOG_TRACE("Added " << attrType.toString() << "=" << attributeValue);
         }
         break;
 
@@ -110,6 +114,7 @@ void AddAttributesVisitor::visit(const boost::shared_ptr<Element>& e)
           {
             throw IllegalArgumentException("Invalid attribute value: " + attributeValue);
           }
+          LOG_TRACE("Added " << attrType.toString() << "=" << attributeValue);
         }
         break;
 
@@ -122,7 +127,7 @@ void AddAttributesVisitor::visit(const boost::shared_ptr<Element>& e)
 ElementAttributeType::Type AddAttributesVisitor::_getAttributeType(const QString attribute,
                                                                    QString& attributeValue)
 {
-  LOG_VART(attribute);
+  //LOG_VART(attribute);
   const QStringList attributeParts = attribute.split("=");
   if (attributeParts.size() != 2)
   {

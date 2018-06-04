@@ -72,23 +72,29 @@ void RemoveAttributesVisitor::visit(const boost::shared_ptr<Element>& e)
 {
   for (int i = 0; i < _types.length(); i++)
   {
-    LOG_VART(_types.at(i).toString());
+    const ElementAttributeType attrType = _types.at(i);
+    //LOG_VART(attrType.toString());
     switch (_types.at(i).getEnum())
     {
       case ElementAttributeType::Changeset:
         e->setChangeset(ElementData::CHANGESET_EMPTY);
+        LOG_TRACE("Removed " << attrType.toString() << ".");
         break;
       case ElementAttributeType::Timestamp:
         e->setTimestamp(ElementData::TIMESTAMP_EMPTY);
+        LOG_TRACE("Removed " << attrType.toString() << ".");
         break;
       case ElementAttributeType::User:
         e->setUser(ElementData::USER_EMPTY);
+        LOG_TRACE("Removed " << attrType.toString() << ".");
         break;
       case ElementAttributeType::Uid:
         e->setUid(ElementData::UID_EMPTY);
+        LOG_TRACE("Removed " << attrType.toString() << ".");
         break;
       case ElementAttributeType::Version:
         e->setVersion(ElementData::VERSION_EMPTY);
+        LOG_TRACE("Removed " << attrType.toString() << ".");
         break;
       default:
         throw IllegalArgumentException("Invalid attribute type: " + _types.at(i).toString());
