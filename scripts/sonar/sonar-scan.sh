@@ -11,7 +11,7 @@ CMD+=" -Dsonar.organization=hootenanny"
 CMD+=" -Dsonar.cfamily.threads=4"
 CMD+=" -Dsonar.exclusions=**/*.pb.cc,**/*.pb.h,**/*.sql"
 CMD+=" -Dsonar.github.repository=ngageoint/hootenanny"
-CMD+=" -Dsonar.cfamily.gcov.reportsPath=hoot_core,tbs,hoot-rnd"
+CMD+=" -Dsonar.cfamily.gcov.reportsPath=./"
 
 # Optional scan parameters based off parameters passed into script
 if [ -n "$1" ]; then
