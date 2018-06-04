@@ -47,6 +47,11 @@ RemoveAttributesVisitor::RemoveAttributesVisitor(const QStringList types)
   setTypes(types);
 }
 
+RemoveAttributesVisitor::RemoveAttributesVisitor(const QList<ElementAttributeType>& types) :
+_types(types)
+{
+}
+
 void RemoveAttributesVisitor::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
