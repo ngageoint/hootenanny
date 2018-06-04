@@ -266,7 +266,7 @@ void OsmXmlWriter::_writeMetadata(const Element *e)
   }
   else
   {
-    //TODO: This comparison seems to be still unequal when I set an element's timestamp to
+    //This comparison seems to be still unequal when I set an element's timestamp to
     //ElementData::TIMESTAMP_EMPTY.  See RemoveAttributesVisitor
     if (e->getTimestamp() != ElementData::TIMESTAMP_EMPTY)
     {

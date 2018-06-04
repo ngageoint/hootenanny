@@ -49,7 +49,7 @@ namespace hoot
 class RemoveAttributesVisitorTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(RemoveAttributesVisitorTest);
-  //CPPUNIT_TEST(runRemoveAttributesTest);
+  CPPUNIT_TEST(runRemoveAttributesTest);
   CPPUNIT_TEST(runRemoveInvalidAttributeKeyTest);
   CPPUNIT_TEST_SUITE_END();
 

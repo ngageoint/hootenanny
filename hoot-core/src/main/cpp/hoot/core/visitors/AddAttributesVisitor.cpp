@@ -60,20 +60,8 @@ void AddAttributesVisitor::visit(const boost::shared_ptr<Element>& e)
 {
   for (int i = 0; i < _attributes.length(); i++)
   {
-    const QString attribute = _attributes.at(i);
-    LOG_VART(attribute);
-    const QStringList attributeParts = attribute.split("=");
-    if (attributeParts.size() != 2)
-    {
-      throw IllegalArgumentException("Invalid attribute: " + attribute);
-    }
-    const QString attributeName = attributeParts[0];
-    const QString attributeValue = attributeParts[1].trimmed();
-    if (attributeValue.isEmpty())
-    {
-      throw IllegalArgumentException("Invalid empty attribute.");
-    }
-    const ElementAttributeType attrType = ElementAttributeType::fromString(attributeName);
+    QString attributeValue;
+    const ElementAttributeType attrType = _getAttributeType(_attributes.at(i), attributeValue);
 
     bool ok = false;
     switch (attrType.getEnum())
@@ -124,8 +112,29 @@ void AddAttributesVisitor::visit(const boost::shared_ptr<Element>& e)
           }
         }
         break;
+
+      default:
+        throw IllegalArgumentException("Invalid attribute value: " + attributeValue);
     }
   }
+}
+
+ElementAttributeType::Type AddAttributesVisitor::_getAttributeType(const QString attribute,
+                                                                   QString& attributeValue)
+{
+  LOG_VART(attribute);
+  const QStringList attributeParts = attribute.split("=");
+  if (attributeParts.size() != 2)
+  {
+    throw IllegalArgumentException("Invalid attribute: " + attribute);
+  }
+  const QString attributeName = attributeParts[0];
+  attributeValue = attributeParts[1].trimmed();
+  if (attributeValue.isEmpty())
+  {
+    throw IllegalArgumentException("Invalid empty attribute.");
+  }
+  return ElementAttributeType::fromString(attributeName);
 }
 
 }

@@ -52,8 +52,8 @@ public:
   static std::string className() { return "hoot::RemoveAttributesVisitor"; }
 
   RemoveAttributesVisitor();
-  RemoveAttributesVisitor(const QStringList types);
-  RemoveAttributesVisitor(const QList<ElementAttributeType>& types);
+  explicit RemoveAttributesVisitor(const QStringList types);
+  explicit RemoveAttributesVisitor(const QList<ElementAttributeType>& types);
 
   virtual void visit(const boost::shared_ptr<Element>& e);
 

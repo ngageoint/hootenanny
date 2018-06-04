@@ -90,6 +90,8 @@ void RemoveAttributesVisitor::visit(const boost::shared_ptr<Element>& e)
       case ElementAttributeType::Version:
         e->setVersion(ElementData::VERSION_EMPTY);
         break;
+      default:
+        throw IllegalArgumentException("Invalid attribute type: " + _types.at(i).toString());
     }
   }
 }

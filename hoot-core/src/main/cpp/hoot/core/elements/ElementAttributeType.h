@@ -56,8 +56,8 @@ public:
     Version = 4
   } Type;
 
-  ElementAttributeType() { _type = Changeset; }
-  ElementAttributeType(Type type) { _type = type; }
+  ElementAttributeType() : _type(Changeset) {}
+  ElementAttributeType(Type type) : _type(type) {}
 
   bool operator==(ElementAttributeType t) const { return t._type == _type; }
   bool operator!=(ElementAttributeType t) const { return t._type != _type; }

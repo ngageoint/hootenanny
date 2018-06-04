@@ -29,13 +29,12 @@
 
 // hoot
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/elements/ElementAttributeType.h>
 
 #include "ElementOsmMapVisitor.h"
 
 namespace hoot
 {
-
-class ElementAttributeType;
 
 /**
  * Adds one or more attributes to elements.  Only common OSM attributes may be removed
@@ -49,7 +48,7 @@ public:
   static std::string className() { return "hoot::AddAttributesVisitor"; }
 
   AddAttributesVisitor();
-  AddAttributesVisitor(const QStringList attributes);
+  explicit AddAttributesVisitor(const QStringList attributes);
 
   virtual void visit(const boost::shared_ptr<Element>& e);
 
@@ -65,8 +64,11 @@ private:
 
   //a semicolon delimited list of attributes of the form key=value
   QStringList _attributes;
+
   //forces the visitor to only update features where the attribute has an empty (default) value
   bool _addOnlyIfEmpty;
+
+  ElementAttributeType::Type _getAttributeType(const QString attribute, QString& attributeValue);
 };
 
 }
