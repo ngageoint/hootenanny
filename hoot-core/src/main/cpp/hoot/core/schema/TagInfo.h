@@ -37,32 +37,44 @@
 namespace hoot
 {
 
+/**
+ * Prints information about a set of tags
+ */
 class TagInfo
 {
 public:
 
-  typedef QHash<QString, QHash<QString, int> > TagInfoHash;
-
-  TagInfo();
+  TagInfo(const int tagValuesPerKeyLimit = INT_MAX, const QStringList keys = QStringList(),
+          const bool keysOnly = false, const bool caseSensitive = true);
 
   /**
    * Returns a tags string with values grouped by keys
    *
    * @param input data source with tags to examine
-   * @param tagValuesPerKeyLimit the maximum number of tag values to return per key
-   * @param keys specific tag keys for which to return tag values only; if empty, then values are
-   * returned for all tag keys
-   * @param keysOnly if true, only tag keys will be returned
    * @return a tags string
    */
-  QString getInfo(QString input, const int tagValuesPerKeyLimit, const QStringList keys,
-                  const bool keysOnly);
+  QString getInfo(QString input);
 
 private:
 
-  QString _printJSON(QString lName, TagInfoHash& data, const QStringList keys, const bool keysOnly);
+  typedef QHash<QString, QHash<QString, int> > TagInfoHash;
 
-  void _parseElement(ElementPtr e, TagInfoHash& result, const int tagValuesPerKeyLimit);
+  //the maximum number of tag values to return per key
+  int _tagValuesPerKeyLimit;
+
+  //specific tag keys for which to return tag values only; if empty, then values are
+  //returned for all tag keys
+  QStringList _keys;
+
+  //if true, only tag keys will be returned
+  bool _keysOnly;
+
+  //if true, tag comparisons are case sensitive
+  bool _caseSensitive;
+
+  QString _printJSON(QString lName, TagInfoHash& data);
+
+  void _parseElement(ElementPtr e, TagInfoHash& result);
 };
 
 }

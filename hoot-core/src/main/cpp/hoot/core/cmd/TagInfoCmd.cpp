@@ -54,8 +54,6 @@ public:
 
   virtual int runSimple(QStringList args)
   {
-    TagInfo tagInfo;
-
     QString finalText;
 
     if (args.size() < 1)
@@ -64,12 +62,12 @@ public:
       throw HootException(QString("%1 takes at least one parameter.").arg(getName()));
     }
 
-    int tagValuePerKeyLimit = INT_MAX;
+    int tagValuesPerKeyLimit = INT_MAX;
     if (args.contains("--tag-values-limit"))
     {
       const int limitIndex = args.indexOf("--tag-values-limit");
       bool ok;
-      tagValuePerKeyLimit = args.at(limitIndex + 1).trimmed().toInt(&ok);
+      tagValuesPerKeyLimit = args.at(limitIndex + 1).trimmed().toInt(&ok);
       if (!ok)
       {
         throw HootException("Invalid input specified for limit: " +
@@ -98,13 +96,23 @@ public:
       LOG_VART(args);
     }
 
+    bool caseSensitive = true;
+    if (args.contains("--case-insensitive"))
+    {
+      caseSensitive = false;
+      args.removeAt(args.indexOf("--case-insensitive"));
+      LOG_VART(args);
+    }
+
+    TagInfo tagInfo(tagValuesPerKeyLimit, keys, keysOnly, caseSensitive);
+
     finalText += "{\n";
 
     for (int i = 0; i < args.size(); i++)
     {
       finalText += QString("  \"%1\":{\n").arg(QFileInfo(args[i]).fileName()); // Lazy :-)
 
-      finalText += tagInfo.getInfo(QString(args[i]), tagValuePerKeyLimit, keys, keysOnly) ;
+      finalText += tagInfo.getInfo(QString(args[i])) ;
       finalText += "\n  }";
 
       // Dont add a comma to the last dataset

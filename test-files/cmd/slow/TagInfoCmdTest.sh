@@ -11,4 +11,8 @@ hoot tag-info --warn $HOOT_HOME/test-files/DcTigerRoads.osm --keys-only
 
 hoot tag-info --warn $HOOT_HOME/test-files/DcTigerRoads.osm --keys "foot;highway"
 
+hoot tag-info --warn $HOOT_HOME/test-files/DcTigerRoads.osm --keys "foot;HIGHWAY"
+
+hoot tag-info --warn $HOOT_HOME/test-files/DcTigerRoads.osm --keys "foot;HIGHWAY" --case-insensitive
+
 hoot tag-info --warn $HOOT_HOME/test-files/DcTigerRoads.osm --keys "blah"

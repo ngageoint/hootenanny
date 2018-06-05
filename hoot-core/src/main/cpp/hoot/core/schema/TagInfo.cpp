@@ -39,13 +39,22 @@
 namespace hoot
 {
 
-TagInfo::TagInfo() {}
+TagInfo::TagInfo(const int tagValuesPerKeyLimit, const QStringList keys, const bool keysOnly,
+                 const bool caseSensitive) :
+_tagValuesPerKeyLimit(tagValuesPerKeyLimit),
+_keys(keys),
+_keysOnly(keysOnly),
+_caseSensitive(caseSensitive)
+{
+}
 
-QString TagInfo::getInfo(QString input, const int tagValuesPerKeyLimit, const QStringList keys,
-                         const bool keysOnly)
+QString TagInfo::getInfo(QString input)
 {
   LOG_VARD(input);
-  LOG_VART(tagValuesPerKeyLimit);
+  LOG_VART(_tagValuesPerKeyLimit);
+  LOG_VART(_keys);
+  LOG_VART(_keysOnly);
+  LOG_VART(_caseSensitive);
   QString finalText;
 
   boost::shared_ptr<OsmMapReader> reader =
@@ -98,10 +107,10 @@ QString TagInfo::getInfo(QString input, const int tagValuesPerKeyLimit, const QS
         //          break;
         //        }
 
-        _parseElement(e, result, tagValuesPerKeyLimit);
+        _parseElement(e, result);
       }
 
-      const QString tmpText = _printJSON(layers[i], result, keys, keysOnly);
+      const QString tmpText = _printJSON(layers[i], result);
 
       // Skip empty layers
       if (tmpText == "")
@@ -141,7 +150,7 @@ QString TagInfo::getInfo(QString input, const int tagValuesPerKeyLimit, const QS
       if (e.get())
       {
         LOG_VART(e);
-        _parseElement(e, result, tagValuesPerKeyLimit);
+        _parseElement(e, result);
       }
     }
     boost::shared_ptr<PartialOsmMapReader> partialReader =
@@ -151,14 +160,13 @@ QString TagInfo::getInfo(QString input, const int tagValuesPerKeyLimit, const QS
       partialReader->finalizePartial();
     }
 
-    finalText = _printJSON("osm", result, keys, keysOnly);
+    finalText = _printJSON("osm", result);
   }
 
   return finalText;
 }
 
-void TagInfo::_parseElement(ElementPtr e, TagInfoHash& result,
-                            const int tagValuesPerKeyLimit)
+void TagInfo::_parseElement(ElementPtr e, TagInfoHash& result)
 {
   for (Tags::const_iterator it = e->getTags().begin(); it != e->getTags().end(); ++it)
   {
@@ -178,15 +186,14 @@ void TagInfo::_parseElement(ElementPtr e, TagInfoHash& result,
 
     LOG_VART(result.value(it.key()));
     LOG_VART(result.value(it.key()).size());
-    if (result.value(it.key()).size() < tagValuesPerKeyLimit)
+    if (result.value(it.key()).size() < _tagValuesPerKeyLimit)
     {
       result[it.key()][it.value()]++;
     }
   }
 }
 
-QString TagInfo::_printJSON(QString lName, TagInfoHash& data, const QStringList keys,
-                            const bool keysOnly)
+QString TagInfo::_printJSON(QString lName, TagInfoHash& data)
 {
   QStringList attrKey = data.keys();
 
@@ -201,7 +208,7 @@ QString TagInfo::_printJSON(QString lName, TagInfoHash& data, const QStringList 
   QString result;
 
   // Start the JSON
-  if (!keysOnly)
+  if (!_keysOnly)
   {
     result += QString("    \"%1\":{\n").arg(lName);
   }
@@ -219,9 +226,11 @@ QString TagInfo::_printJSON(QString lName, TagInfoHash& data, const QStringList 
     valKey.sort();
 
     const QString key = attrKey[i];
-    if (keys.isEmpty() || keys.contains(key))
+    const Qt::CaseSensitivity caseSensitivity =
+      _caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
+    if (_keys.isEmpty() || _keys.contains(key, caseSensitivity))
     {
-      if (!keysOnly)
+      if (!_keysOnly)
       {
         result += QString("      \"%1\":[\n").arg(key);
 
@@ -285,9 +294,9 @@ QString TagInfo::_printJSON(QString lName, TagInfoHash& data, const QStringList 
     return "No keys found from input key list.";
   }
 
-  if (!keysOnly)
+  if (!_keysOnly)
   {
-    // We have no idea if this is the last layer so no comma on the end
+    // We have no idea if this is the last layer, so no comma on the end
     result += "      }";
   }
 
