@@ -51,9 +51,11 @@ pipeline {
                         // Scan for a regular branch
                         sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-build.sh'"
                         // Run tests so coverage reports are created
-                        sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/jenkins/TestInitialNightly.sh'"
+                        sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot version --debug; bin/HootTest --diff --glacial --parallel \$(nproc)'"
+                        // Generate .gcov intermediate files
                         sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/cover/gcovHoot.sh'"
-                        sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-scan.sh ${env.SONAR_CLOUD_KEY} ${env.BRANCH_NAME}'"
+                        // Perform sonar scan (will include coverage information)
+                        sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-scan.sh ${env.SONAR_CLOUD_KEY} release'"
                     }
                 }
             }       
