@@ -50,14 +50,17 @@ public:
    *
    * @param input data source with tags to examine
    * @param tagValuesPerKeyLimit the maximum number of tag values to return per key
+   * @param keys specific tag keys for which to return tag values only; if empty, then values are
+   * returned for all tag keys
    * @param keysOnly if true, only tag keys will be returned
    * @return a tags string
    */
-  QString getInfo(QString input, const int tagValuesPerKeyLimit, const bool keysOnly);
+  QString getInfo(QString input, const int tagValuesPerKeyLimit, const QStringList keys,
+                  const bool keysOnly);
 
 private:
 
-  QString _printJSON(QString lName, TagInfoHash& data, const bool keysOnly);
+  QString _printJSON(QString lName, TagInfoHash& data, const QStringList keys, const bool keysOnly);
 
   void _parseElement(ElementPtr e, TagInfoHash& result, const int tagValuesPerKeyLimit);
 };

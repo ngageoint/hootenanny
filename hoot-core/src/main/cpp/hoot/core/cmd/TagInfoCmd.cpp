@@ -80,6 +80,16 @@ public:
       LOG_VART(args);
     }
 
+    QStringList keys;
+    if (args.contains("--keys"))
+    {
+      const int keysIndex = args.indexOf("--keys");
+      keys = args.at(keysIndex + 1).trimmed().split(";");
+      args.removeAt(keysIndex + 1);
+      args.removeAt(keysIndex);
+      LOG_VART(args);
+    }
+
     bool keysOnly = false;
     if (args.contains("--keys-only"))
     {
@@ -94,7 +104,7 @@ public:
     {
       finalText += QString("  \"%1\":{\n").arg(QFileInfo(args[i]).fileName()); // Lazy :-)
 
-      finalText += tagInfo.getInfo(QString(args[i]), tagValuePerKeyLimit, keysOnly) ;
+      finalText += tagInfo.getInfo(QString(args[i]), tagValuePerKeyLimit, keys, keysOnly) ;
       finalText += "\n  }";
 
       // Dont add a comma to the last dataset

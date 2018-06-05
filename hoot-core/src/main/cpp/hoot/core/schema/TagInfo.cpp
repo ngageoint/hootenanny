@@ -41,7 +41,8 @@ namespace hoot
 
 TagInfo::TagInfo() {}
 
-QString TagInfo::getInfo(QString input, const int tagValuesPerKeyLimit, const bool keysOnly)
+QString TagInfo::getInfo(QString input, const int tagValuesPerKeyLimit, const QStringList keys,
+                         const bool keysOnly)
 {
   LOG_VARD(input);
   LOG_VART(tagValuesPerKeyLimit);
@@ -100,7 +101,7 @@ QString TagInfo::getInfo(QString input, const int tagValuesPerKeyLimit, const bo
         _parseElement(e, result, tagValuesPerKeyLimit);
       }
 
-      const QString tmpText = _printJSON(layers[i], result, keysOnly);
+      const QString tmpText = _printJSON(layers[i], result, keys, keysOnly);
 
       // Skip empty layers
       if (tmpText == "")
@@ -150,7 +151,7 @@ QString TagInfo::getInfo(QString input, const int tagValuesPerKeyLimit, const bo
       partialReader->finalizePartial();
     }
 
-    finalText = _printJSON("osm", result, keysOnly);
+    finalText = _printJSON("osm", result, keys, keysOnly);
   }
 
   return finalText;
@@ -184,7 +185,8 @@ void TagInfo::_parseElement(ElementPtr e, TagInfoHash& result,
   }
 }
 
-QString TagInfo::_printJSON(QString lName, TagInfoHash& data, const bool keysOnly)
+QString TagInfo::_printJSON(QString lName, TagInfoHash& data, const QStringList keys,
+                            const bool keysOnly)
 {
   QStringList attrKey = data.keys();
 
@@ -208,6 +210,7 @@ QString TagInfo::_printJSON(QString lName, TagInfoHash& data, const bool keysOnl
     result += QString("    \"%1\":[\n").arg(lName);
   }
 
+  int keysParsed = 0;
   for (int i = 0; i < attrKey.count(); i++)
   {
     QStringList valKey = data[attrKey[i]].keys();
@@ -215,61 +218,71 @@ QString TagInfo::_printJSON(QString lName, TagInfoHash& data, const bool keysOnl
     int maxValues = valKey.count();
     valKey.sort();
 
-    if (!keysOnly)
+    const QString key = attrKey[i];
+    if (keys.isEmpty() || keys.contains(key))
     {
-      result += QString("      \"%1\":[\n").arg(attrKey[i]);
-
-      for (int j = 0; j < maxValues; j++)
+      if (!keysOnly)
       {
-        QString tmpVal(valKey[j]);
+        result += QString("      \"%1\":[\n").arg(key);
 
-        // Escape carrage returns
-        tmpVal.replace("\n","\\n");
-        // Escape linefeeds
-        tmpVal.replace("\r","\\r");
-        // Escape form feeds
-        tmpVal.replace("\f","\\f");
-        // Escape tabs
-        tmpVal.replace("\t","\\t");
-        // Escape vertical tabs
-        tmpVal.replace("\v","\\v");
-        // And double quotes
-        tmpVal.replace("\"","\\\"");
-
-        result += QString("        \"%1\"").arg(tmpVal);
-
-        if (j != (maxValues - 1))
+        for (int j = 0; j < maxValues; j++)
         {
-          result += ",\n";
+          QString tmpVal(valKey[j]);
+
+          // Escape carriage returns
+          tmpVal.replace("\n","\\n");
+          // Escape linefeeds
+          tmpVal.replace("\r","\\r");
+          // Escape form feeds
+          tmpVal.replace("\f","\\f");
+          // Escape tabs
+          tmpVal.replace("\t","\\t");
+          // Escape vertical tabs
+          tmpVal.replace("\v","\\v");
+          // And double quotes
+          tmpVal.replace("\"","\\\"");
+
+          result += QString("        \"%1\"").arg(tmpVal);
+
+          if (j != (maxValues - 1))
+          {
+            result += ",\n";
+          }
+          else
+          {
+            // No comma after bracket
+            result += "\n";
+          }
+        }
+
+        if (i != (attrKey.count() - 1))
+        {
+          result += "        ],\n";
         }
         else
         {
           // No comma after bracket
-          result += "\n";
+          result += "        ]\n";
         }
       }
+      else
+      {
+        if (i != (attrKey.count() - 1))
+        {
+          result += QString("      \"%1\",\n").arg(key);
+        }
+        else
+        {
+          result += QString("      \"%1\"\n      ]\n").arg(key);
+        }
+      }
+      keysParsed++;
+    }
+  }
 
-      if (i != (attrKey.count() - 1))
-      {
-        result += "        ],\n";
-      }
-      else
-      {
-        // No comma after bracket
-        result += "        ]\n";
-      }
-    }
-    else
-    {
-      if (i != (attrKey.count() - 1))
-      {
-        result += QString("      \"%1\",\n").arg(attrKey[i]);
-      }
-      else
-      {
-        result += QString("      \"%1\"\n]\n").arg(attrKey[i]);
-      }
-    }
+  if (keysParsed == 0)
+  {
+    return "No keys found from input key list.";
   }
 
   if (!keysOnly)
@@ -277,6 +290,10 @@ QString TagInfo::_printJSON(QString lName, TagInfoHash& data, const bool keysOnl
     // We have no idea if this is the last layer so no comma on the end
     result += "      }";
   }
+
+  //A bit hackish to handle the situation wher the last key enountered isn't in the specified
+  //keys list and avoid an unneeded trailing comma.
+  result.replace("        ],\n      }", "        ]\n      }");
 
   return result;
 }
