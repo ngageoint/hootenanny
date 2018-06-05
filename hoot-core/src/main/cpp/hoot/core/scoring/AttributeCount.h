@@ -28,6 +28,9 @@
 #ifndef ATTRIBUTECOUNT_H
 #define ATTRIBUTECOUNT_H
 
+// Hoot
+#include <hoot/core/elements/Element.h>
+
 // Qt
 #include <QHash>
 
@@ -48,6 +51,7 @@ private:
 
   QString _printJSON(QString lName, AttributeCountHash& data);
 
+  void _parseElement(ElementPtr e, AttributeCountHash& result, const int maxAttributes);
 };
 
 }

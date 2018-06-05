@@ -34,6 +34,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/elements/ElementIterator.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
 
 namespace hoot
 {
@@ -42,92 +43,150 @@ AttributeCount::AttributeCount() {}
 
 QString AttributeCount::Count(QString input)
 {
+  LOG_VARD(input);
   QString finalText;
+
   int maxAttributes = ConfigOptions().getTagValuesMaxTagValuesPerTagKey();
   if (maxAttributes == -1) //unlimited
   {
     maxAttributes = INT_MAX;
   }
+  LOG_VARD(maxAttributes);
 
-  OgrReader reader;
-  reader.setTranslationFile(QString(getenv("HOOT_HOME")) + "/translations/quick.js");
+  boost::shared_ptr<OsmMapReader> reader =
+    OsmMapReaderFactory::getInstance().createReader(
+      input, ConfigOptions().getReaderUseDataSourceIds(),
+      Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
 
-  QStringList layers;
-  if (input.contains(";"))
+  //Using a different code path for the OGR inputs to handle the layer syntax.  There may be
+  //a way to combine the two logic paths...not sure, though.
+  boost::shared_ptr<OgrReader> ogrReader =
+    boost::dynamic_pointer_cast<OgrReader>(reader);
+  if (ogrReader.get())
   {
-    QStringList list = input.split(";");
-    input = list.at(0);
-    layers.append(list.at(1));
+    ogrReader->setTranslationFile(QString(getenv("HOOT_HOME")) + "/translations/quick.js");
+
+    QStringList layers;
+    if (input.contains(";"))
+    {
+      QStringList list = input.split(";");
+      input = list.at(0);
+      layers.append(list.at(1));
+    }
+    else
+    {
+      layers = ogrReader->getFilteredLayerNames(input);
+    }
+
+    if (layers.size() == 0)
+    {
+      LOG_WARN("Could not find any valid layers to read from in " + input + ".");
+    }
+
+    for (int i = 0; i < layers.size(); i++)
+    {
+      AttributeCountHash result;
+
+      LOG_DEBUG("Reading: " + input + " " + layers[i]);
+
+      boost::shared_ptr<ElementIterator> iterator(ogrReader->createIterator(input, layers[i]));
+
+      while (iterator->hasNext())
+      {
+        boost::shared_ptr<Element> e = iterator->next();
+
+        //        // Interesting problem: If there are no elements in the file, e == 0
+        //        // Need to look at the ElementIterator.cpp file to fix this.
+        //        if (e == 0)
+        //        {
+        //          LOG_WARN("No features in: " + input + " " + layer);
+        //          break;
+        //        }
+
+        _parseElement(e, result, maxAttributes);
+      }
+
+      const QString tmpText = _printJSON(layers[i], result);
+
+      // Skip empty layers
+      if (tmpText == "")
+      {
+        continue;
+      }
+
+      finalText += tmpText;
+
+      if (i != (layers.size() - 1))
+      {
+        finalText += ",\n";
+      }
+    }
   }
   else
   {
-    layers = reader.getFilteredLayerNames(input);
-  }
+    //At this time, the only unstreamable readers are the JSON readers.  If this capability is
+    //needed for JSON data, then either those readers can implement PartialOsmMapReader or the
+    //needed readed code can be manually added to this class.
 
-  if (layers.size() == 0)
-  {
-    LOG_WARN("Could not find any valid layers to read from in " + input + ".");
-  }
-
-  for (int i = 0; i < layers.size(); i++)
-  {
-    AttributeCountHash result;
-
-    LOG_DEBUG("Reading: " + input + " " + layers[i]);
-
-    boost::shared_ptr<ElementIterator> iterator(reader.createIterator(input, layers[i]));
-
-    while (iterator->hasNext())
+    if (!OsmMapReaderFactory::getInstance().hasElementInputStream(input))
     {
-      boost::shared_ptr<Element> e = iterator->next();
+      throw HootException("Inputs to tag-values must be streamable.");
+    }
 
-      //        // Interesting problem: If there are no elements in the file, e == 0
-      //        // Need to look at the ElementIterator.cpp file to fix this.
-      //        if (e == 0)
-      //        {
-      //          LOG_WARN("No features in: " + input + " " + layer);
-      //          break;
-      //        }
+    reader->open(input);
+    boost::shared_ptr<ElementInputStream> streamReader =
+      boost::dynamic_pointer_cast<ElementInputStream>(reader);
 
-      for (Tags::const_iterator it = e->getTags().begin(); it != e->getTags().end(); ++it)
+    AttributeCountHash result;
+    while (streamReader->hasMoreElements())
+    {
+      ElementPtr e = streamReader->readNextElement();
+      if (e.get())
       {
-        if (it.value() == "") // Drop empty values
-        {
-          continue;
-        }
-
-        // Drop Hoot metadata tags
-        if (it.key() == "source:ingest:datetime")
-        {
-          continue;
-        }
-
-        if (result.value(it.key()).size() < maxAttributes )
-        {
-          result[it.key()][it.value()]++;
-        }
+        LOG_VART(e);
+        _parseElement(e, result, maxAttributes);
       }
     }
-
-    const QString tmpText = _printJSON(layers[i], result);
-
-    // Skip empty layers
-    if (tmpText == "")
+    boost::shared_ptr<PartialOsmMapReader> partialReader =
+      boost::dynamic_pointer_cast<PartialOsmMapReader>(reader);
+    if (partialReader.get())
     {
-      continue;
+      partialReader->finalizePartial();
     }
 
-    finalText += tmpText;
-
-    if (i != (layers.size() - 1))
-    {
-      finalText += ",\n";
-    }
+    finalText = _printJSON("osm", result);
   }
 
   return finalText;
 }
 
+void AttributeCount::_parseElement(ElementPtr e, AttributeCountHash& result,
+                                   const int maxAttributes)
+{
+  for (Tags::const_iterator it = e->getTags().begin(); it != e->getTags().end(); ++it)
+  {
+    LOG_VART(it.key());
+    LOG_VART(it.value());
+
+    if (it.value() == "") // Drop empty values
+    {
+      continue;
+    }
+
+    // Drop Hoot metadata tags
+    if (it.key() == "source:ingest:datetime")
+    {
+      continue;
+    }
+
+    LOG_VART(result.value(it.key()));
+    LOG_VART(result.value(it.key()).size());
+    if (result.value(it.key()).size() < maxAttributes)
+    {
+      result[it.key()][it.value()]++;
+    }
+  }
+}
 
 QString AttributeCount::_printJSON(QString lName, AttributeCountHash& data)
 {
@@ -205,7 +264,6 @@ QString AttributeCount::_printJSON(QString lName, AttributeCountHash& data)
   result += "      }";
 
   return result;
-
 }
 
 }
