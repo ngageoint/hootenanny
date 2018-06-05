@@ -15,7 +15,7 @@ cd gcov-hoot-core
 gcov ../hoot-core/tmp/debug/*.gcda
 # fix path
 sed -i 's/src/hoot-core\/src/g' *.gcov
-mv *.gcov ./
+mv *.gcov ../
 cd ..
 
 #tbs coverage
@@ -24,7 +24,7 @@ cd gcov-tbs
 gcov ../tbs/tmp/debug/*.gcda
 # fix path
 sed -i 's/src/tbs\/src/g' *.gcov
-mv *.gcov ./
+mv *.gcov ../
 cd ..
 
 # hoot-rnd coverage
@@ -33,5 +33,5 @@ cd gcov-hoot-rnd
 gcov ../hoot-rnd/tmp/debug/*.gcda
 # fix path
 sed -i 's/src/hoot-rnd\/src/g' *.gcov
-mv *.gcov ./
+mv *.gcov ../
 cd ..
