@@ -184,7 +184,6 @@ void MultiPolygonCreator::_addWayToSequence(ConstWayPtr w, CoordinateSequence& c
 boost::shared_ptr<Geometry> MultiPolygonCreator::createMultipolygon() const
 {
 
-  LOG_TRACE("### Starting CreateMultipolygon ###");
   vector<LinearRing*> outers;
   _createRings(MetadataTags::RoleOuter(), outers);
   _createRings(MetadataTags::RolePart(), outers);
@@ -230,120 +229,169 @@ boost::shared_ptr<Geometry> MultiPolygonCreator::createMultipolygon() const
   return result;
 }
 
-void MultiPolygonCreator::_classifyRings(const std::vector<LinearRing *> &noRole,
+QString MultiPolygonCreator::_findRelationship(LinearRing *ring1, LinearRing *ring2) const
+{
+  QString result = "";
+
+  const GeometryFactory& gf = *GeometryFactory::getDefaultInstance();
+  vector<Geometry*> noHoles;
+  boost::shared_ptr<Polygon> p1(gf.createPolygon(*ring1, noHoles));
+  boost::shared_ptr<Polygon> p2(gf.createPolygon(*ring2, noHoles));
+
+  // It would be nice to do this in one call but "isWithin" doesn't seem to return anything.
+  // This could be refactored down to isContains, else, make p2, isContains.
+
+  boost::shared_ptr<IntersectionMatrix> im(p1->relate(ring2));
+  if (im->isContains())
+  {
+    result = "outer";
+  }
+//  else if (im->isWithin())
+//  {
+//    result = "inner";
+//  }
+
+  boost::shared_ptr<IntersectionMatrix> im2(p2->relate(ring1));
+  if (im2->isContains())
+  {
+    result = "inner";
+  }
+//  else if (im2->isWithin())
+//  {
+//    result = "outer";
+//  }
+
+  return result;
+}
+
+void MultiPolygonCreator::_classifyRings(std::vector<LinearRing *> &noRole,
                                          std::vector<LinearRing *> &inners,
                                          std::vector<LinearRing *> &outers) const
 {
-
-  LOG_DEBUG("## Starting Classify");
-  LOG_DEBUG("noRole size " << noRole.size());
-  LOG_DEBUG("Inners size = " << inners.size());
-  LOG_DEBUG("Outers size = " << outers.size());
-
   // Empty == nothing else to do
-  if (noRole.size() == 0)  return;
+  if (noRole.size() == 0)
+  {
+    return;
+  }
 
-  // Easy: 1 x ring == 1 x polygon == Outer
-  if (noRole.size() == 1)
+  // One polygon, no inners or outers
+  if (noRole.size() == 1 && inners.size() == 0 && outers.size() == 0)
   {
     outers.push_back(noRole[0]);
     return;
   }
 
-  // Now figure out what we have.
-  // Assumptions:
-  // 1) Outers & Inners are correct. I.e
-  //    * Something that is an Outer will not be inside a noRole polygon
-  //    * A noRole polygon will not be inside an Inner
-  // 2) There will be a small number of these. We would not be dealing with hundreds of polygons
-  //    * performance
+  // A list of things we haven't found yet.
+  deque<LinearRing *> notFound;
 
-  LOG_DEBUG("Need to loop through noRole");
+  for (size_t i = 0; i < noRole.size(); ++i)
+  {
+    QString status = "";
 
-  // Make polygons from the noRole rings
-  const GeometryFactory& gf = *GeometryFactory::getDefaultInstance();
-
-  vector<Geometry*> polygons;
-  vector<Geometry*> noHoles;
-  vector<Geometry*>& noRolePolygons = polygons;
-  noRolePolygons.reserve(noRole.size());
-
-  for (size_t i = 0; i < noRole.size(); i++)
+    // Check of we have an inner polygon.
+    for (size_t j = 0; j < outers.size(); ++j)
     {
-      Polygon* p = gf.createPolygon(*noRole[i], noHoles);
-      noRolePolygons.push_back(p);
-    }
+      status = _findRelationship(noRole[i],outers[j]);
 
-  // Loop 1 - Does this contain any inners?
-  for (size_t i = 0; i < inners.size(); i++)
-  {
-    for (size_t j = 0; j < noRole.size(); j++)
-    {
-      if (noRole[j]->contains(inners[i]))
-      {
-        outers.push_back(noRole[j]);
-        LOG_DEBUG("### noRole[" << j << "] contains inners[" << i << "]");
-        break;
-      }
-    }
-  }
-
-  // Check for early return
-  if (noRole.size() == 0) return;
-
-  if (noRole.size() == 1)
-  {
-    outers.push_back(noRole[0]);
-    return;
-  }
-
-  // Loop 2 - Is this inside any outers?
-  for (size_t i = 0; i < outers.size(); i++)
-  {
-    for (size_t j = 0; j < noRole.size(); j++)
-    {
-      if (outers[i]->contains(noRole[i]))
-      {
-        LOG_DEBUG("### outers[" << i << "] contains noRole[" << j << "]");
-        inners.push_back(noRole[j]);
-        break;
-      }
-    }
-  }
-
-  // Check again for early return
-  if (noRole.size() == 0) return;
-
-  if (noRole.size() == 1)
-  {
-    outers.push_back(noRole[0]);
-    return;
-  }
-
-
-//  geos::geom::LinearRing k;
-//  k.contains();
-
-  // Loop 3 - Compare with itself: inner and Outer
-  for (size_t i = 0; i < noRole.size(); i++)
-  {
-    for (size_t j = i; j < noRole.size(); j++)
-    {
-      if (noRole[i]->contains(noRole[j]))
-      {
-        LOG_TRACE("Contains");
-        inners.push_back(noRole[j]);
-        continue;
-      }
-
-      if (noRole[j]->contains(noRole[i]))
+      if (status == "inner")
       {
         inners.push_back(noRole[i]);
-        continue;
+        break;
       }
-    } // End j
-  } // End i
+      else if (status == "outer")
+      {
+        // This is not a good combination: Outside of an Outer
+        outers.push_back(noRole[i]);
+        break;
+      }
+    }
 
+    // No outers or we didn't find an inner polygon
+    if (status == "")
+    {
+      // Look for an outer polygon
+      for (size_t j = 0; j < inners.size(); ++j)
+      {
+        status =_findRelationship(noRole[i],inners[j]);
+
+        if (status == "inner")
+        {
+          // This is not a good combination: Inside of an inner
+          inners.push_back(noRole[i]);
+          break;
+        }
+        else if (status == "outer")
+        {
+          outers.push_back(noRole[i]);
+          break;
+        }
+      }
+
+      // No inners or we still didn't find anything so push it onto the list of things to check later
+      if (status == "")
+      {
+        notFound.push_back(noRole[i]);
+      }
+    }
+  }
+
+  // Now go through the things we didn't find.
+
+  // Early return?
+  if (notFound.size() == 0)
+  {
+    return;
+  }
+
+  // Looks like we have 1 or more polygons without a status. Time to loop through them.
+  while (notFound.size() > 0)
+  {
+    if (notFound.size() == 1)
+    {
+      // We only have one polygon left so it must be an outer
+      outers.push_back(notFound.front());
+      return;
+    }
+    else
+    {
+      // We have 2 or more polygons. Grab the first one to compare with and remove it from the list
+      LinearRing* tRing = notFound.front();
+      notFound.pop_front();
+
+      QString status = "";
+
+      // Loop through the rest of the list looking for a match
+      for (deque<LinearRing*>::iterator i = notFound.begin(); i != notFound.end(); ++i)
+      {
+        status =_findRelationship(tRing,*i);
+
+        // If we find inner or outer, push both elements to the right list and then delete the
+        // one from the loop. We break out of the loop since deleteing the element screws up the
+        // iterator and we only care about one match for each pair of polygons.
+        if (status == "inner")
+        {
+          inners.push_back(tRing);
+          outers.push_back(*i);
+          notFound.erase(i);
+          break;
+        }
+        else if (status == "outer")
+        {
+          inners.push_back(*i);
+          outers.push_back(tRing);
+          notFound.erase(i);
+          break;
+        }
+      }
+
+      // If we didn't find a match, this must be an outer.
+      // If we did find a match then we have already added it to a list so move on through the list
+      if (status == "")
+      {
+        outers.push_back(tRing);
+      }
+    }
+  }
 }
 
 void MultiPolygonCreator::_createRings(const QString& role, vector<LinearRing *> &rings) const

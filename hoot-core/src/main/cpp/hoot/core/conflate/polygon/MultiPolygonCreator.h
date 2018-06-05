@@ -108,9 +108,15 @@ private:
    * Given a set of rings that are not either an inner or an outer, figure out what they are and add them
    * to the appropriate ring set.
    */
-  void _classifyRings(const std::vector<geos::geom::LinearRing *> &noRole,
+  void _classifyRings(std::vector<geos::geom::LinearRing *> &noRole,
                       std::vector<geos::geom::LinearRing *> &inners,
                       std::vector<geos::geom::LinearRing *> &outers) const;
+
+  /**
+   * Given two Linear Rings, determine the realtionship between the two.
+   * Inner, Outer or "" for neither
+   */
+  QString _findRelationship(geos::geom::LinearRing* ring1, geos::geom::LinearRing* ring2) const;
 
   bool _isValidInner(geos::geom::LinearRing* innerRing) const;
 
