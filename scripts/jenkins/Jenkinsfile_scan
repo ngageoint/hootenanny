@@ -55,7 +55,7 @@ pipeline {
                         // Generate .gcov intermediate files
                         sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/cover/gcovHoot.sh'"
                         // Perform sonar scan (will include coverage information)
-                        sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-scan.sh ${env.SONAR_CLOUD_KEY} release'"
+                        sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-scan.sh ${env.SONAR_CLOUD_KEY} develop'"
                     }
                 }
             }       
