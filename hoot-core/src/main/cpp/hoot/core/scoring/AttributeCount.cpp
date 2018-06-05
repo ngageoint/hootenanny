@@ -41,17 +41,11 @@ namespace hoot
 
 AttributeCount::AttributeCount() {}
 
-QString AttributeCount::Count(QString input)
+QString AttributeCount::Count(QString input, const int tagValuesPerKeyLimit)
 {
   LOG_VARD(input);
+  LOG_VART(tagValuesPerKeyLimit);
   QString finalText;
-
-  int maxAttributes = ConfigOptions().getTagValuesMaxTagValuesPerTagKey();
-  if (maxAttributes == -1) //unlimited
-  {
-    maxAttributes = INT_MAX;
-  }
-  LOG_VARD(maxAttributes);
 
   boost::shared_ptr<OsmMapReader> reader =
     OsmMapReaderFactory::getInstance().createReader(
@@ -87,7 +81,7 @@ QString AttributeCount::Count(QString input)
     {
       AttributeCountHash result;
 
-      LOG_DEBUG("Reading: " + input + " " + layers[i]);
+      LOG_DEBUG("Reading: " << input + " " << layers[i] << "...");
 
       boost::shared_ptr<ElementIterator> iterator(ogrReader->createIterator(input, layers[i]));
 
@@ -103,7 +97,7 @@ QString AttributeCount::Count(QString input)
         //          break;
         //        }
 
-        _parseElement(e, result, maxAttributes);
+        _parseElement(e, result, tagValuesPerKeyLimit);
       }
 
       const QString tmpText = _printJSON(layers[i], result);
@@ -133,6 +127,8 @@ QString AttributeCount::Count(QString input)
       throw HootException("Inputs to tag-values must be streamable.");
     }
 
+    LOG_DEBUG("Reading: " << input << "...");
+
     reader->open(input);
     boost::shared_ptr<ElementInputStream> streamReader =
       boost::dynamic_pointer_cast<ElementInputStream>(reader);
@@ -144,7 +140,7 @@ QString AttributeCount::Count(QString input)
       if (e.get())
       {
         LOG_VART(e);
-        _parseElement(e, result, maxAttributes);
+        _parseElement(e, result, tagValuesPerKeyLimit);
       }
     }
     boost::shared_ptr<PartialOsmMapReader> partialReader =
@@ -161,7 +157,7 @@ QString AttributeCount::Count(QString input)
 }
 
 void AttributeCount::_parseElement(ElementPtr e, AttributeCountHash& result,
-                                   const int maxAttributes)
+                                   const int tagValuesPerKeyLimit)
 {
   for (Tags::const_iterator it = e->getTags().begin(); it != e->getTags().end(); ++it)
   {
@@ -181,7 +177,7 @@ void AttributeCount::_parseElement(ElementPtr e, AttributeCountHash& result,
 
     LOG_VART(result.value(it.key()));
     LOG_VART(result.value(it.key()).size());
-    if (result.value(it.key()).size() < maxAttributes)
+    if (result.value(it.key()).size() < tagValuesPerKeyLimit)
     {
       result[it.key()][it.value()]++;
     }

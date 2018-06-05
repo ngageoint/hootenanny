@@ -50,7 +50,7 @@ public:
   virtual QString getName() const { return "tag-values"; }
 
   virtual QString getDescription() const
-  { return "Prints tag names and unique values for map data from an OGR source."; }
+  { return "Prints tag names and unique values for map data."; }
 
   virtual int runSimple(QStringList args)
   {
@@ -64,13 +64,32 @@ public:
       throw HootException(QString("%1 takes at least one parameter.").arg(getName()));
     }
 
+    int tagValuePerKeyLimit = INT_MAX;
+    if (args.contains("--tag-values-limit"))
+    {
+      const int limitIndex = args.indexOf("--tag-values-limit");
+      LOG_VART(limitIndex);
+      LOG_VART(args.at(limitIndex));
+      LOG_VART(args.at(limitIndex + 1));
+      bool ok;
+      tagValuePerKeyLimit = args.at(limitIndex + 1).trimmed().toInt(&ok);
+      if (!ok)
+      {
+        throw HootException("Invalid input specified for limit: " +
+                            args.at(args.indexOf("--tag-values-limit") + 1));
+      }
+      args.removeAt(limitIndex + 1);
+      args.removeAt(limitIndex);
+      LOG_VART(args);
+    }
+
     finalText += "{\n";
 
     for (int i = 0; i < args.size(); i++)
     {
       finalText += QString("  \"%1\":{\n").arg(QFileInfo(args[i]).fileName()); // Lazy :-)
 
-      finalText += attrcount.Count(QString(args[i])) ;
+      finalText += attrcount.Count(QString(args[i]), tagValuePerKeyLimit) ;
       finalText += "\n  }";
 
       // Dont add a comma to the last dataset

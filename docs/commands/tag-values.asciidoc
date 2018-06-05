@@ -2,25 +2,15 @@
 
 === Description
 
-The +tag-values+ command prints out tag keys and all unique tag values associated with them, up to a specified number of tag values per tag
-key.
+The +tag-values+ command prints out tag keys and unique tag values associated with them.
 
-* +input+ - One or more inputs if the format is OGR; only one input otherwise.  If using an OGR layer within a data source, 
-            then delimit it with a semicolon. 
-
-=== Configuration Options
-
-Use the tag.values.max.tag.values.per.tag.key configuration option to put a limit on how many tag values per tag key are printed.  The 
-default value of -1 imposes no limit.
+* +input+              - One or more inputs.  If using an OGR layer within a data source, then delimit it with a semicolon.
+* +--tag-values-limit+ - Limits the number of unique tag values printed per tag key.  By default, there is no limit. 
 
 === Usage
 
 --------------------------------------
-# OGR
-tag-values (input1[;layer]) [input2[;layer]] ... 
-
-#Non-OGR 
-tag-values (input1)
+tag-values (input1[;layer]) [input2[;layer]] ... [--tag-values-limit]
 --------------------------------------
 
 ==== Examples
@@ -30,7 +20,7 @@ hoot tag-values myshapefile.shp "myfgb.gdb;mylayer"
 
 hoot tag-values input.osm
 
-hoot tag-values -D tag.values.max.tag.values.per.tag.key=30 myshapefile.shp "myfgb.gdb;mylayer"
+hoot tag-values myshapefile.shp "myfgb.gdb;mylayer" --tag-values-limit 30
 --------------------------------------
 
 === Example Output

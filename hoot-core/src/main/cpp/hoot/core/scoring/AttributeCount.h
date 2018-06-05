@@ -45,13 +45,20 @@ public:
 
   AttributeCount();
 
-  QString Count(QString input);
+  /**
+   * Returns a tags string with values grouped by keys
+   *
+   * @param input data source with tags to examine
+   * @param tagValuesPerKeyLimit the maximum number of tag values to return per key
+   * @return a tags string
+   */
+  QString Count(QString input, const int tagValuesPerKeyLimit);
 
 private:
 
   QString _printJSON(QString lName, AttributeCountHash& data);
 
-  void _parseElement(ElementPtr e, AttributeCountHash& result, const int maxAttributes);
+  void _parseElement(ElementPtr e, AttributeCountHash& result, const int tagValuesPerKeyLimit);
 };
 
 }
