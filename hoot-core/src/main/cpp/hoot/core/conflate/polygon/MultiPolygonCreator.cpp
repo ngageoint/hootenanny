@@ -236,30 +236,23 @@ QString MultiPolygonCreator::_findRelationship(LinearRing *ring1, LinearRing *ri
   const GeometryFactory& gf = *GeometryFactory::getDefaultInstance();
   vector<Geometry*> noHoles;
   boost::shared_ptr<Polygon> p1(gf.createPolygon(*ring1, noHoles));
-  boost::shared_ptr<Polygon> p2(gf.createPolygon(*ring2, noHoles));
 
   // It would be nice to do this in one call but "isWithin" doesn't seem to return anything.
-  // This could be refactored down to isContains, else, make p2, isContains.
-
   boost::shared_ptr<IntersectionMatrix> im(p1->relate(ring2));
   if (im->isContains())
   {
     result = "outer";
   }
-//  else if (im->isWithin())
-//  {
-//    result = "inner";
-//  }
-
-  boost::shared_ptr<IntersectionMatrix> im2(p2->relate(ring1));
-  if (im2->isContains())
+  else
   {
-    result = "inner";
+    boost::shared_ptr<Polygon> p2(gf.createPolygon(*ring2, noHoles));
+    boost::shared_ptr<IntersectionMatrix> im2(p2->relate(ring1));
+
+    if (im2->isContains())
+    {
+      result = "inner";
+    }
   }
-//  else if (im2->isWithin())
-//  {
-//    result = "outer";
-//  }
 
   return result;
 }
@@ -336,14 +329,6 @@ void MultiPolygonCreator::_classifyRings(std::vector<LinearRing *> &noRole,
   }
 
   // Now go through the things we didn't find.
-
-  // Early return?
-  if (notFound.size() == 0)
-  {
-    return;
-  }
-
-  // Looks like we have 1 or more polygons without a status. Time to loop through them.
   while (notFound.size() > 0)
   {
     if (notFound.size() == 1)
