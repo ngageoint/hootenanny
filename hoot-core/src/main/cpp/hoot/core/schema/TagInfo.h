@@ -25,8 +25,8 @@
  * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef ATTRIBUTECOUNT_H
-#define ATTRIBUTECOUNT_H
+#ifndef TAGINFO_H
+#define TAGINFO_H
 
 // Hoot
 #include <hoot/core/elements/Element.h>
@@ -37,30 +37,31 @@
 namespace hoot
 {
 
-class AttributeCount
+class TagInfo
 {
 public:
 
-  typedef QHash<QString, QHash<QString, int> > AttributeCountHash;
+  typedef QHash<QString, QHash<QString, int> > TagInfoHash;
 
-  AttributeCount();
+  TagInfo();
 
   /**
    * Returns a tags string with values grouped by keys
    *
    * @param input data source with tags to examine
    * @param tagValuesPerKeyLimit the maximum number of tag values to return per key
+   * @param keysOnly if true, only tag keys will be returned
    * @return a tags string
    */
-  QString Count(QString input, const int tagValuesPerKeyLimit);
+  QString getInfo(QString input, const int tagValuesPerKeyLimit, const bool keysOnly);
 
 private:
 
-  QString _printJSON(QString lName, AttributeCountHash& data);
+  QString _printJSON(QString lName, TagInfoHash& data, const bool keysOnly);
 
-  void _parseElement(ElementPtr e, AttributeCountHash& result, const int tagValuesPerKeyLimit);
+  void _parseElement(ElementPtr e, TagInfoHash& result, const int tagValuesPerKeyLimit);
 };
 
 }
 
-#endif // ATTRIBUTECOUNT_H
+#endif // TAGINFO_H

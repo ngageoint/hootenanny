@@ -1,26 +1,31 @@
-== tag-values
+== tag-info
 
 === Description
 
-The +tag-values+ command prints out tag keys and unique tag values associated with them.
+The +tag-info+ command prints out tag key/value information for map data.
 
-* +input+              - One or more inputs.  If using an OGR layer within a data source, then delimit it with a semicolon.
-* +--tag-values-limit+ - Limits the number of unique tag values printed per tag key.  By default, there is no limit. 
+* +input+              - One or more inputs.  If using an OGR layer within a data source, then delimit the data source and layer 
+                         with a semicolon.
+* +--tag-values-limit+ - Limits the number of unique tag values printed per tag key.  By default, there is no limit.  This option is ignored 
+                         if --keys-only is used. 
+* +--keys-only+        - Prints unique tag keys only and does not print associated values.
 
 === Usage
 
 --------------------------------------
-tag-values (input1[;layer]) [input2[;layer]] ... [--tag-values-limit]
+tag-values (input1[;layer]) [input2[;layer]] ... [--tag-values-limit] [--keys-only]
 --------------------------------------
 
 ==== Examples
 
 --------------------------------------
-hoot tag-values myshapefile.shp "myfgb.gdb;mylayer"
+hoot tag-info myshapefile.shp "myfgb.gdb;mylayer"
 
-hoot tag-values input.osm
+hoot tag-info input.osm
 
-hoot tag-values myshapefile.shp "myfgb.gdb;mylayer" --tag-values-limit 30
+hoot tag-info input.osm --keys-only
+
+hoot tag-info myshapefile.shp "myfgb.gdb;mylayer" --tag-values-limit 30
 --------------------------------------
 
 === Example Output

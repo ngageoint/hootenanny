@@ -29,7 +29,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/scoring/AttributeCount.h>
+#include <hoot/core/schema/TagInfo.h>
 
 // QT
 #include <QDir>
@@ -39,22 +39,22 @@ using namespace std;
 namespace hoot
 {
 
-class TagValuesCmd : public BaseCommand
+class TagInfoCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::TagValuesCmd"; }
+  static string className() { return "hoot::TagInfoCmd"; }
 
-  TagValuesCmd() { }
+  TagInfoCmd() { }
 
-  virtual QString getName() const { return "tag-values"; }
+  virtual QString getName() const { return "tag-info"; }
 
   virtual QString getDescription() const
-  { return "Prints tag names and unique values for map data."; }
+  { return "Prints tag keys and values for map data."; }
 
   virtual int runSimple(QStringList args)
   {
-    AttributeCount attrcount;
+    TagInfo tagInfo;
 
     QString finalText;
 
@@ -68,9 +68,6 @@ public:
     if (args.contains("--tag-values-limit"))
     {
       const int limitIndex = args.indexOf("--tag-values-limit");
-      LOG_VART(limitIndex);
-      LOG_VART(args.at(limitIndex));
-      LOG_VART(args.at(limitIndex + 1));
       bool ok;
       tagValuePerKeyLimit = args.at(limitIndex + 1).trimmed().toInt(&ok);
       if (!ok)
@@ -83,13 +80,21 @@ public:
       LOG_VART(args);
     }
 
+    bool keysOnly = false;
+    if (args.contains("--keys-only"))
+    {
+      keysOnly = true;
+      args.removeAt(args.indexOf("--keys-only"));
+      LOG_VART(args);
+    }
+
     finalText += "{\n";
 
     for (int i = 0; i < args.size(); i++)
     {
       finalText += QString("  \"%1\":{\n").arg(QFileInfo(args[i]).fileName()); // Lazy :-)
 
-      finalText += attrcount.Count(QString(args[i]), tagValuePerKeyLimit) ;
+      finalText += tagInfo.getInfo(QString(args[i]), tagValuePerKeyLimit, keysOnly) ;
       finalText += "\n  }";
 
       // Dont add a comma to the last dataset
@@ -106,6 +111,6 @@ public:
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, TagValuesCmd)
+HOOT_FACTORY_REGISTER(Command, TagInfoCmd)
 
 }

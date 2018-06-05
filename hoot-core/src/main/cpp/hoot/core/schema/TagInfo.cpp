@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "AttributeCount.h"
+#include "TagInfo.h"
 
 // Hoot
 #include <hoot/core/util/Factory.h>
@@ -39,9 +39,9 @@
 namespace hoot
 {
 
-AttributeCount::AttributeCount() {}
+TagInfo::TagInfo() {}
 
-QString AttributeCount::Count(QString input, const int tagValuesPerKeyLimit)
+QString TagInfo::getInfo(QString input, const int tagValuesPerKeyLimit, const bool keysOnly)
 {
   LOG_VARD(input);
   LOG_VART(tagValuesPerKeyLimit);
@@ -79,7 +79,7 @@ QString AttributeCount::Count(QString input, const int tagValuesPerKeyLimit)
 
     for (int i = 0; i < layers.size(); i++)
     {
-      AttributeCountHash result;
+      TagInfoHash result;
 
       LOG_DEBUG("Reading: " << input + " " << layers[i] << "...");
 
@@ -100,7 +100,7 @@ QString AttributeCount::Count(QString input, const int tagValuesPerKeyLimit)
         _parseElement(e, result, tagValuesPerKeyLimit);
       }
 
-      const QString tmpText = _printJSON(layers[i], result);
+      const QString tmpText = _printJSON(layers[i], result, keysOnly);
 
       // Skip empty layers
       if (tmpText == "")
@@ -133,7 +133,7 @@ QString AttributeCount::Count(QString input, const int tagValuesPerKeyLimit)
     boost::shared_ptr<ElementInputStream> streamReader =
       boost::dynamic_pointer_cast<ElementInputStream>(reader);
 
-    AttributeCountHash result;
+    TagInfoHash result;
     while (streamReader->hasMoreElements())
     {
       ElementPtr e = streamReader->readNextElement();
@@ -150,14 +150,14 @@ QString AttributeCount::Count(QString input, const int tagValuesPerKeyLimit)
       partialReader->finalizePartial();
     }
 
-    finalText = _printJSON("osm", result);
+    finalText = _printJSON("osm", result, keysOnly);
   }
 
   return finalText;
 }
 
-void AttributeCount::_parseElement(ElementPtr e, AttributeCountHash& result,
-                                   const int tagValuesPerKeyLimit)
+void TagInfo::_parseElement(ElementPtr e, TagInfoHash& result,
+                            const int tagValuesPerKeyLimit)
 {
   for (Tags::const_iterator it = e->getTags().begin(); it != e->getTags().end(); ++it)
   {
@@ -184,7 +184,7 @@ void AttributeCount::_parseElement(ElementPtr e, AttributeCountHash& result,
   }
 }
 
-QString AttributeCount::_printJSON(QString lName, AttributeCountHash& data)
+QString TagInfo::_printJSON(QString lName, TagInfoHash& data, const bool keysOnly)
 {
   QStringList attrKey = data.keys();
 
@@ -199,65 +199,84 @@ QString AttributeCount::_printJSON(QString lName, AttributeCountHash& data)
   QString result;
 
   // Start the JSON
-  result += QString("    \"%1\":{\n").arg(lName);
+  if (!keysOnly)
+  {
+    result += QString("    \"%1\":{\n").arg(lName);
+  }
+  else
+  {
+    result += QString("    \"%1\":[\n").arg(lName);
+  }
 
-  for (int i=0; i < attrKey.count(); i++)
+  for (int i = 0; i < attrKey.count(); i++)
   {
     QStringList valKey = data[attrKey[i]].keys();
 
     int maxValues = valKey.count();
     valKey.sort();
 
-    result += QString("      \"%1\":[\n").arg(attrKey[i]);
-
-    for (int j=0; j < maxValues; j++)
+    if (!keysOnly)
     {
-      QString tmpVal(valKey[j]);
+      result += QString("      \"%1\":[\n").arg(attrKey[i]);
 
-      // Escape carrage returns
-      tmpVal.replace("\n","\\n");
-
-      // Escape linefeeds
-      tmpVal.replace("\r","\\r");
-
-      // Escape form feeds
-      tmpVal.replace("\f","\\f");
-
-      // Escape tabs
-      tmpVal.replace("\t","\\t");
-
-      // Escape vertical tabs
-      tmpVal.replace("\v","\\v");
-
-      // And double quotes
-      tmpVal.replace("\"","\\\"");
-
-      result += QString("        \"%1\"").arg(tmpVal);
-
-      if (j != (maxValues - 1))
+      for (int j = 0; j < maxValues; j++)
       {
-        result += ",\n";
+        QString tmpVal(valKey[j]);
+
+        // Escape carrage returns
+        tmpVal.replace("\n","\\n");
+        // Escape linefeeds
+        tmpVal.replace("\r","\\r");
+        // Escape form feeds
+        tmpVal.replace("\f","\\f");
+        // Escape tabs
+        tmpVal.replace("\t","\\t");
+        // Escape vertical tabs
+        tmpVal.replace("\v","\\v");
+        // And double quotes
+        tmpVal.replace("\"","\\\"");
+
+        result += QString("        \"%1\"").arg(tmpVal);
+
+        if (j != (maxValues - 1))
+        {
+          result += ",\n";
+        }
+        else
+        {
+          // No comma after bracket
+          result += "\n";
+        }
+      }
+
+      if (i != (attrKey.count() - 1))
+      {
+        result += "        ],\n";
       }
       else
       {
         // No comma after bracket
-        result += "\n";
+        result += "        ]\n";
       }
-    }
-
-    if (i != (attrKey.count() - 1))
-    {
-      result += "        ],\n";
     }
     else
     {
-      // No comma after bracket
-      result += "        ]\n";
+      if (i != (attrKey.count() - 1))
+      {
+        result += QString("      \"%1\",\n").arg(attrKey[i]);
+      }
+      else
+      {
+        result += QString("      \"%1\"\n]\n").arg(attrKey[i]);
+      }
     }
   }
 
-  // We have no idea if this is the last layer so no comma on the end
-  result += "      }";
+  if (!keysOnly)
+  {
+    // We have no idea if this is the last layer so no comma on the end
+    result += "      }";
+  }
 
   return result;
 }

@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/scoring/AttributeCoOccurrence.h>
+#include <hoot/core/schema/AttributeCoOccurrence.h>
 #include <hoot/core/util/IoUtils.h>
 
 using namespace std;
