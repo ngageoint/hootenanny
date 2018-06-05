@@ -1,0 +1,60 @@
+== tag-values
+
+=== Description
+
+The +tag-values+ command prints out tag keys and all unique tag values associated with them, up to a specified number of tag values per tag
+key.  This command works on OGR data inputs only.
+
+* +input+ - One or more OGR compatible inputs. If you're using a layer within a data source, then delimit it with a semicolon. 
+
+=== Configuration Options
+
+Use the tag.values.max.tag.values.per.tag.key configuration option to put a limit on how many tag values per tag key are printed.  The 
+default value of -1 imposes no limit.
+
+=== Usage
+
+--------------------------------------
+tag-values (input1[;layer]) [input2[;layer]] ... 
+
+tag-values -D tag.values.max.tag.values.per.tag.key=30 (input1[;layer]) [input2[;layer]] ... 
+--------------------------------------
+
+==== Example 
+
+--------------------------------------
+hoot tag-values myshapefile.shp "myfgb.gdb;mylayer"
+--------------------------------------
+
+=== Example Output
+
+-------------------------------------
+.{
+  "ca-Transmission_Line-state-gov.shp":{
+    "ca-Transmission_Line-state-gov":{
+      "Circuit":[
+        "Double",
+        "Duble",
+        "Liberty Energy",
+        "Many",
+        "Quad",
+        "Single"
+        ],
+      "Comments":[
+        "Attached to 115kv poles",
+        "Caldwell-victor 220kv",
+        "Changed kv from 115 to 60kv",
+        "Distribution line",
+        ...
+        ],
+      "Legend":[
+        "IID_161kV",
+        "IID_230kV",
+        "IID_34.5_92kV",
+        "LADWP_115_138kV",
+        ...
+        ],
+        ...
+}}
+---------------------------------------
+

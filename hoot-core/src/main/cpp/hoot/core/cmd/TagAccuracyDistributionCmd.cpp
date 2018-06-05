@@ -28,69 +28,70 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/scoring/AttributeCount.h>
 
-// QT
-#include <QDir>
+// Qt
+#include <QDebug>
+#include <QTime>
 
 using namespace std;
 
 namespace hoot
 {
 
-class AttributeCountCmd : public BaseCommand
+class TagAccuracyDistributionCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::AttributeCountCmd"; }
+  static string className() { return "hoot::TagAccuracyDistributionCmd"; }
 
-  AttributeCountCmd() { }
+  TagAccuracyDistributionCmd() { }
 
-  virtual QString getName() const { return "attribute-count"; }
+  virtual QString getName() const { return "tag-accuracy-distribution"; }
 
   virtual QString getDescription() const
-  { return "Prints out the layer name, attribute name, and some attribute values"; }
+  { return "Prints the distribution of feature accuracy tag values"; }
 
   virtual int runSimple(QStringList args)
   {
-    AttributeCount attrcount;
-
-    QString finalText;
-
-    if (args.size() < 1)
+    if (args.size() != 1)
     {
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes at least one parameter.").arg(getName()));
+      throw HootException(QString("%1 takes one parameter.").arg(getName()));
     }
 
-    // Start the object
-    finalText += "{\n";
+    QTime time;
+    time.start();
 
-    for (int i = 0; i < args.size(); i++)
+    //TODO: Should we make this work for input formats other than OSM XML?
+    OsmXmlReader reader;
+    OsmMapPtr map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read(args[0], map);
+
+    const WayMap& ways = map->getWays();
+
+    std::map<Meters, int> m;
+    for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
     {
-      finalText += QString("  \"%1\":{\n").arg(QFileInfo(args[i]).fileName()); // Lazy :-)
+      const WayPtr& w = it->second;
+      m[w->getCircularError()]++;
+    }
 
-      finalText += attrcount.Count(QString(args[i])) ;
-      finalText += "\n  }";
+    for (std::map<Meters, int>::iterator it = m.begin(); it != m.end(); ++it)
+    {
+      double p = (double)it->second / (double)ways.size();
+      cout << it->first << " : " << it->second << " (" << p << ")" << endl;
+    }
 
-      // Dont add a comma to the last dataset
-      if (i != (args.size() - 1))
-      {
-        finalText += ",\n";
-      }
-    } // End Arguments
-
-    // End the object
-    finalText += "\n}";
-
-    // Dump it out to the screen
-    cout << finalText << endl;
-
+    qDebug() << "Elapsed: " << (double)time.elapsed() / 1000.0 << "sec";
     return 0;
+
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, AttributeCountCmd)
+HOOT_FACTORY_REGISTER(Command, TagAccuracyDistributionCmd)
 
 }
+

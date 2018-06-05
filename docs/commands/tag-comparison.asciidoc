@@ -1,8 +1,8 @@
-== attribute-comparison
+== tag-comparison
 
 === Description
 
-The +attribute-comparison+ command reads from inputs and outputs a co-occurrence matrix based on attribute values.
+The +tag-comparison+ command reads from inputs and outputs a co-occurrence matrix based on tag values.
 
 * +--no-table+ - print the matrix as a list.  The default is to print out as a table.
 * +input1+ -     Input 1 (e.g. .osm file).
@@ -11,7 +11,7 @@ The +attribute-comparison+ command reads from inputs and outputs a co-occurrence
 === Usage
 
 --------------------------------------
-attribute-comparison [--no-table] (input1 input2)
+tag-comparison [--no-table] (input1 input2)
 --------------------------------------
 
 === Example Output

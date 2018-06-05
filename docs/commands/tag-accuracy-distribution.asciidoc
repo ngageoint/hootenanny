@@ -1,22 +1,22 @@
-== accuracy-distribution
+== tag-accuracy-distribution
 
 === Description
 
-The +accuracy-distribution+ command prints out the distribution of accuracy (circular error) values, in meters, for all ways in 
+The +tag-accuracy-distribution+ command prints out the distribution of accuracy (circular error) values, in meters, for all ways in 
 the input data.
 
-* +input+ - Input (e.g. .osm file).
+* +input+ - Input; must be an OSM XML file
 
 === Usage
 
 --------------------------------------
-accuracy-distribution (input.osm)
+tag-accuracy-distribution (input.osm)
 --------------------------------------
 
 ==== Example Usage
 
 --------------------------------------
-hoot accuracy-distribution test-files/ToyTestA.osm
+hoot tag-accuracy-distribution test-files/ToyTestA.osm
 --------------------------------------
 
 ==== Example Output

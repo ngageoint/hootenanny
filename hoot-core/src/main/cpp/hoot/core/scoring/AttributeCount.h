@@ -37,6 +37,7 @@ namespace hoot
 class AttributeCount
 {
 public:
+
   typedef QHash<QString, QHash<QString, int> > AttributeCountHash;
 
   AttributeCount();
@@ -48,6 +49,7 @@ private:
   QString _printJSON(QString lName, AttributeCountHash& data);
 
 };
+
 }
 
 #endif // ATTRIBUTECOUNT_H

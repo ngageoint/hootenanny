@@ -40,11 +40,14 @@ namespace hoot
 
 AttributeCount::AttributeCount() {}
 
-
 QString AttributeCount::Count(QString input)
 {
   QString finalText;
-  int maxAttributes = ConfigOptions().getAttributeCountValues();
+  int maxAttributes = ConfigOptions().getTagValuesMaxTagValuesPerTagKey();
+  if (maxAttributes == -1) //unlimited
+  {
+    maxAttributes = INT_MAX;
+  }
 
   OgrReader reader;
   reader.setTranslationFile(QString(getenv("HOOT_HOME")) + "/translations/quick.js");
@@ -74,7 +77,7 @@ QString AttributeCount::Count(QString input)
 
     boost::shared_ptr<ElementIterator> iterator(reader.createIterator(input, layers[i]));
 
-    while(iterator->hasNext())
+    while (iterator->hasNext())
     {
       boost::shared_ptr<Element> e = iterator->next();
 
@@ -86,7 +89,6 @@ QString AttributeCount::Count(QString input)
       //          break;
       //        }
 
-      Tags t = e->getTags();
       for (Tags::const_iterator it = e->getTags().begin(); it != e->getTags().end(); ++it)
       {
         if (it.value() == "") // Drop empty values
@@ -100,15 +102,14 @@ QString AttributeCount::Count(QString input)
           continue;
         }
 
-        // The default is 30 values
         if (result.value(it.key()).size() < maxAttributes )
         {
           result[it.key()][it.value()]++;
         }
       }
-    } // End Layer
+    }
 
-    QString tmpText = _printJSON(layers[i], result);
+    const QString tmpText = _printJSON(layers[i], result);
 
     // Skip empty layers
     if (tmpText == "")
@@ -122,11 +123,10 @@ QString AttributeCount::Count(QString input)
     {
       finalText += ",\n";
     }
-
-  } // End layer list
+  }
 
   return finalText;
-} // End AttributeCount
+}
 
 
 QString AttributeCount::_printJSON(QString lName, AttributeCountHash& data)
@@ -188,8 +188,7 @@ QString AttributeCount::_printJSON(QString lName, AttributeCountHash& data)
         // No comma after bracket
         result += "\n";
       }
-
-    } // End values
+    }
 
     if (i != (attrKey.count() - 1))
     {
@@ -200,14 +199,13 @@ QString AttributeCount::_printJSON(QString lName, AttributeCountHash& data)
       // No comma after bracket
       result += "        ]\n";
     }
-
-  } // End attributes
+  }
 
   // We have no idea if this is the last layer so no comma on the end
   result += "      }";
 
   return result;
 
-} // End printJSON
+}
 
 }

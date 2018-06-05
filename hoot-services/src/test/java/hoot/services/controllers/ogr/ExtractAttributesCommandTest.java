@@ -66,7 +66,7 @@ public class ExtractAttributesCommandTest {
         assertNotNull(extractAttributesCommand.getWorkDir());
         assertNotNull(extractAttributesCommand.getCommand());
 
-        String expectedCommand = "hoot attribute-count --${DEBUG_LEVEL} ${INPUT_FILES}";
+        String expectedCommand = "hoot tag-values --${DEBUG_LEVEL} ${INPUT_FILES}";
         assertEquals(expectedCommand, extractAttributesCommand.getCommand());
 
         assertTrue(extractAttributesCommand.getSubstitutionMap().containsKey("DEBUG_LEVEL"));

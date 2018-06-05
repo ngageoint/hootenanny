@@ -57,7 +57,7 @@ class ExtractAttributesCommand extends ExternalCommand {
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
         substitutionMap.put("INPUT_FILES", inputFiles);
 
-        String command = "hoot attribute-count --${DEBUG_LEVEL} ${INPUT_FILES}";
+        String command = "hoot tag-values --${DEBUG_LEVEL} ${INPUT_FILES}";
 
         super.configureCommand(command, substitutionMap, caller);
     }

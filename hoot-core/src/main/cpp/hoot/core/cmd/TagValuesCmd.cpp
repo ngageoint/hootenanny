@@ -28,70 +28,65 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/util/Settings.h>
+#include <hoot/core/scoring/AttributeCount.h>
 
-// Qt
-#include <QDebug>
-#include <QTime>
+// QT
+#include <QDir>
 
 using namespace std;
 
 namespace hoot
 {
 
-class AccuracyDistributionCmd : public BaseCommand
+class TagValuesCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::AccuracyDistributionCmd"; }
+  static string className() { return "hoot::TagValuesCmd"; }
 
-  AccuracyDistributionCmd() { }
+  TagValuesCmd() { }
 
-  virtual QString getName() const { return "accuracy-distribution"; }
+  virtual QString getName() const { return "tag-values"; }
 
   virtual QString getDescription() const
-  { return "Prints the distribution of feature accuracy values"; }
+  { return "Prints tag names and unique values for map data from an OGR source."; }
 
   virtual int runSimple(QStringList args)
   {
-    if (args.size() != 1)
+    AttributeCount attrcount;
+
+    QString finalText;
+
+    if (args.size() < 1)
     {
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes one parameter.").arg(getName()));
+      throw HootException(QString("%1 takes at least one parameter.").arg(getName()));
     }
 
-    QTime time;
-    time.start();
+    finalText += "{\n";
 
-    // open up both OSM files.
-    OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
-    reader.setDefaultStatus(Status::Unknown1);
-    reader.read(args[0], map);
-
-    const WayMap& ways = map->getWays();
-
-    std::map<Meters, int> m;
-    for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
+    for (int i = 0; i < args.size(); i++)
     {
-      const WayPtr& w = it->second;
-      m[w->getCircularError()]++;
-    }
+      finalText += QString("  \"%1\":{\n").arg(QFileInfo(args[i]).fileName()); // Lazy :-)
 
-    for (std::map<Meters, int>::iterator it = m.begin(); it != m.end(); ++it)
-    {
-      double p = (double)it->second / (double)ways.size();
-      cout << it->first << " : " << it->second << " (" << p << ")" << endl;
-    }
+      finalText += attrcount.Count(QString(args[i])) ;
+      finalText += "\n  }";
 
-    qDebug() << "Elapsed: " << (double)time.elapsed() / 1000.0 << "sec";
+      // Dont add a comma to the last dataset
+      if (i != (args.size() - 1))
+      {
+        finalText += ",\n";
+      }
+    }
+    finalText += "\n}";
+
+    cout << finalText << endl;
+
     return 0;
-
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, AccuracyDistributionCmd)
+HOOT_FACTORY_REGISTER(Command, TagValuesCmd)
 
 }
-

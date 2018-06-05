@@ -173,13 +173,6 @@ Invalid relation members will cause a warning to be logged.  You should enable t
 are loading data that has not been previously validated in another OSM API database.  Enabling this
 setting may cause writing to an OSM API database to occur more slowly.
 
-=== attribute.count.values
-
-* Data Type: int
-* Default Value: `30`
-
-The maximum number of values returned for each attribute by the attribute-count command.
-
 === attribute.score.extractor.use.weight
 
 * Data Type: bool
@@ -2812,6 +2805,14 @@ renaming existing tag keys on all elements in a map.
 
 The key to be replaced by the TagRenameKeyVisitor.  TagRenameKeyVisitor allows for
 renaming existing tag keys on all elements in a map.
+
+=== tag.values.max.tag.values.per.tag.key
+
+* Data Type: int
+* Default Value: `-1`
+
+The maximum number of unique tag values per tag key with values returned for by the
+tag-values command.  A value of -1 indicates there is no limit.
 
 === task.status.update.interval
 
