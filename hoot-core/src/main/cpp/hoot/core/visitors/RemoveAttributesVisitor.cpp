@@ -22,9 +22,9 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "RemoveAttributeVisitor.h"
+#include "RemoveAttributesVisitor.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
@@ -35,56 +35,69 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveAttributeVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveAttributesVisitor)
 
-RemoveAttributeVisitor::RemoveAttributeVisitor()
+RemoveAttributesVisitor::RemoveAttributesVisitor()
 {
   setConfiguration(conf());
 }
 
-RemoveAttributeVisitor::RemoveAttributeVisitor(const QList<ElementAttributeType>& types) :
+RemoveAttributesVisitor::RemoveAttributesVisitor(const QStringList types)
+{
+  setTypes(types);
+}
+
+RemoveAttributesVisitor::RemoveAttributesVisitor(const QList<ElementAttributeType>& types) :
 _types(types)
 {
 }
 
-void RemoveAttributeVisitor::setConfiguration(const Settings& conf)
+void RemoveAttributesVisitor::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
-  setTypes(configOptions.getRemoveAttributeVisitorTypes());
+  setTypes(configOptions.getRemoveAttributesVisitorTypes());
 }
 
-void RemoveAttributeVisitor::setTypes(const QStringList& types)
+void RemoveAttributesVisitor::setTypes(const QStringList types)
 {
   LOG_VART(types);
   for (int i = 0; i < types.size(); i++)
   {
     _types.append(ElementAttributeType::fromString(types.at(i)));
   }
+  LOG_VART(_types);
 }
 
-void RemoveAttributeVisitor::visit(const boost::shared_ptr<Element>& e)
+void RemoveAttributesVisitor::visit(const boost::shared_ptr<Element>& e)
 {
-  //see extensibility issue comments in ElementAttributeType
   for (int i = 0; i < _types.length(); i++)
   {
-    LOG_VART(_types.at(i).toString());
+    const ElementAttributeType attrType = _types.at(i);
+    //LOG_VART(attrType.toString());
     switch (_types.at(i).getEnum())
     {
       case ElementAttributeType::Changeset:
         e->setChangeset(ElementData::CHANGESET_EMPTY);
+        LOG_TRACE("Removed " << attrType.toString() << ".");
         break;
       case ElementAttributeType::Timestamp:
         e->setTimestamp(ElementData::TIMESTAMP_EMPTY);
+        LOG_TRACE("Removed " << attrType.toString() << ".");
         break;
       case ElementAttributeType::User:
         e->setUser(ElementData::USER_EMPTY);
+        LOG_TRACE("Removed " << attrType.toString() << ".");
         break;
       case ElementAttributeType::Uid:
         e->setUid(ElementData::UID_EMPTY);
+        LOG_TRACE("Removed " << attrType.toString() << ".");
         break;
       case ElementAttributeType::Version:
         e->setVersion(ElementData::VERSION_EMPTY);
+        LOG_TRACE("Removed " << attrType.toString() << ".");
         break;
+      default:
+        throw IllegalArgumentException("Invalid attribute type: " + _types.at(i).toString());
     }
   }
 }

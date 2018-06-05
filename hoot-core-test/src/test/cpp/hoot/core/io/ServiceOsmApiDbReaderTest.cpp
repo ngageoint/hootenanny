@@ -44,7 +44,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/io/OsmApiDbBulkInserter.h>
-#include <hoot/core/visitors/RemoveAttributeVisitor.h>
+#include <hoot/core/visitors/RemoveAttributesVisitor.h>
 
 // Qt
 #include <QDir>
@@ -204,7 +204,7 @@ public:
     //Need to remove timestamps, otherwise they cause issues with the compare
     QList<ElementAttributeType> types;
     types.append(ElementAttributeType(ElementAttributeType::Timestamp));
-    RemoveAttributeVisitor attrVis(types);
+    RemoveAttributesVisitor attrVis(types);
     map->visitRw(attrVis);
 
     TestUtils::mkpath("test-output/io/ServiceOsmApiDbReaderTest");

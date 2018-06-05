@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="38.74023326560999" minlon="-77.58210552410999" maxlat="38.74060300361" maxlon="-77.58177304884001"/>
+    <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7405486092900020" lon="-77.5819735439600038"/>
+    <node visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7405334416299993" lon="-77.5819259347500036"/>
+    <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7406030036099978" lon="-77.5818796666499821"/>
+    <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7405622078700063" lon="-77.5817730488400059"/>
+    <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7405093825899982" lon="-77.5818085881099933"/>
+    <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7404994451599975" lon="-77.5817864598800071"/>
+    <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7404131463200017" lon="-77.5818447979300032"/>
+    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7404795702800087" lon="-77.5820178004100001"/>
+    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7403671598400052" lon="-77.5820652909699930"/>
+    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7403546072599951" lon="-77.5820062823799930"/>
+    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7404215543000063" lon="-77.5819633670299993"/>
+    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7403755282299898" lon="-77.5818614430900055"/>
+    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7403064890499991" lon="-77.5819177694800004"/>
+    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7402960285600031" lon="-77.5818909473899794"/>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7402332656099944" lon="-77.5819338627299970"/>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7403023048499975" lon="-77.5821055241099913"/>
+    <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-9"/>
+        <nd ref="-10"/>
+        <nd ref="-11"/>
+        <nd ref="-12"/>
+        <nd ref="-13"/>
+        <nd ref="-14"/>
+        <nd ref="-15"/>
+        <nd ref="-16"/>
+        <nd ref="-9"/>
+        <tag k="name" v="poly2"/>
+        <tag k="amenity" v="arts_centre"/>
+    </way>
+    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1"/>
+        <nd ref="-2"/>
+        <nd ref="-3"/>
+        <nd ref="-4"/>
+        <nd ref="-5"/>
+        <nd ref="-6"/>
+        <nd ref="-7"/>
+        <nd ref="-8"/>
+        <nd ref="-1"/>
+        <tag k="hoot:poipolygon:poismerged" v="1"/>
+        <tag k="alt_name" v="poi1"/>
+        <tag k="name" v="poly1"/>
+        <tag k="amenity" v="arts_centre"/>
+    </way>
+</osm>

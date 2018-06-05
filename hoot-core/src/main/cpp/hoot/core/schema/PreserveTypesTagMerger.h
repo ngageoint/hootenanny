@@ -41,6 +41,8 @@ class PreserveTypesTagMerger : public TagMerger
 {
 public:
 
+  static QString ALT_TYPES_TAG_KEY;
+
   static std::string className() { return "hoot::PreserveTypesTagMerger"; }
 
   PreserveTypesTagMerger();
@@ -48,6 +50,10 @@ public:
   virtual ~PreserveTypesTagMerger() {}
 
   virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const;
+
+private:
+
+  Tags _preserveAltTypes(const Tags& source, const Tags& target) const;
 };
 
 }

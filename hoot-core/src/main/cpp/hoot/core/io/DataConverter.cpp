@@ -353,6 +353,8 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
 
 void DataConverter::_convert(const QString input, const QString output)
 {
+  LOG_TRACE("general convert");
+
   // This keeps the status and the tags.
   conf().set(ConfigOptions::getReaderUseFileStatusKey(), true);
   conf().set(ConfigOptions::getReaderKeepStatusTagKey(), true);

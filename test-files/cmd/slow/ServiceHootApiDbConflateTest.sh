@@ -25,7 +25,7 @@ hoot convert $HOOT_OPTS test-files/conflate/unified/AllDataTypesA.osm "$DB_URL/A
 hoot convert $HOOT_OPTS test-files/conflate/unified/AllDataTypesB.osm "$DB_URL/AllDataTypesB-ServiceHootApiDbConflateTest" &
 wait
 
-hoot conflate $HOOT_OPTS -D unify.post.ops="hoot::SuperfluousNodeRemover;hoot::SmallWayMerger;hoot::RemoveTagVisitor;hoot::RemoveAttributeVisitor" -D remove.tag.visitor.keys="source:datetime" -D remove.attribute.visitor.types="changeset;timestamp" "$DB_URL/AllDataTypesA-ServiceHootApiDbConflateTest" "$DB_URL/AllDataTypesB-ServiceHootApiDbConflateTest" test-output/cmd/ServiceHootApiDbConflateTest/output1.osm
+hoot conflate $HOOT_OPTS -D unify.post.ops="hoot::SuperfluousNodeRemover;hoot::SmallWayMerger;hoot::RemoveTagVisitor;hoot::RemoveAttributesVisitor" -D remove.tag.visitor.keys="source:datetime" -D remove.attributes.visitor.types="changeset;timestamp" "$DB_URL/AllDataTypesA-ServiceHootApiDbConflateTest" "$DB_URL/AllDataTypesB-ServiceHootApiDbConflateTest" test-output/cmd/ServiceHootApiDbConflateTest/output1.osm
 hoot map-diff test-files/cmd/slow/ServiceHootApiDbConflateTest/output1.osm test-output/cmd/ServiceHootApiDbConflateTest/output1.osm
 
 hoot delete-db-map $HOOT_OPTS "$DB_URL/AllDataTypesA-ServiceHootApiDbConflateTest" &
@@ -46,7 +46,7 @@ hoot convert $HOOT_OPTS test-files/DcGisRoads.osm "$DB_URL/DcGisRoads-ServiceHoo
 hoot convert $HOOT_OPTS test-files/DcTigerRoads.osm "$DB_URL/DcTigerRoads-ServiceHootApiDbConflateTest" &
 wait
 
-hoot conflate $HOOT_OPTS -D convert.bounding.box=-77.04,38.8916,-77.03324,38.8958 -D unify.post.ops="hoot::SuperfluousNodeRemover;hoot::SmallWayMerger;hoot::RemoveTagVisitor;hoot::RemoveAttributeVisitor" -D remove.tag.visitor.keys="source:datetime" -D remove.attribute.visitor.types="changeset;timestamp" "$DB_URL/DcGisRoads-ServiceHootApiDbConflateTest" "$DB_URL/DcTigerRoads-ServiceHootApiDbConflateTest" test-output/cmd/ServiceHootApiDbConflateTest/output2.osm
+hoot conflate $HOOT_OPTS -D convert.bounding.box=-77.04,38.8916,-77.03324,38.8958 -D unify.post.ops="hoot::SuperfluousNodeRemover;hoot::SmallWayMerger;hoot::RemoveTagVisitor;hoot::RemoveAttributesVisitor" -D remove.tag.visitor.keys="source:datetime" -D remove.attributes.visitor.types="changeset;timestamp" "$DB_URL/DcGisRoads-ServiceHootApiDbConflateTest" "$DB_URL/DcTigerRoads-ServiceHootApiDbConflateTest" test-output/cmd/ServiceHootApiDbConflateTest/output2.osm
 hoot map-diff test-files/cmd/slow/ServiceHootApiDbConflateTest/output2.osm test-output/cmd/ServiceHootApiDbConflateTest/output2.osm
 
 hoot delete-db-map $HOOT_OPTS "$DB_URL/DcGisRoads-ServiceHootApiDbConflateTest" &

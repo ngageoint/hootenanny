@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="38.74020563419" minlon="-77.58210987120999" maxlat="38.74042059716" maxlon="-77.58186579018999"/>
+    <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7404205971600035" lon="-77.5819958773300016">
+        <tag k="name" v="poi1"/>
+        <tag k="amenity" v="community_centre"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7403395284700096" lon="-77.5820696380699957"/>
+    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7403269758899924" lon="-77.5820106294799814"/>
+    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7403939229499983" lon="-77.5819677141300019"/>
+    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7403478968600012" lon="-77.5818657901899940"/>
+    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7402788576599946" lon="-77.5819221165799888"/>
+    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7402683971699986" lon="-77.5818952944899962"/>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7402056341899979" lon="-77.5819382098299997"/>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7402746734600072" lon="-77.5821098712099939"/>
+    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1"/>
+        <nd ref="-2"/>
+        <nd ref="-3"/>
+        <nd ref="-4"/>
+        <nd ref="-5"/>
+        <nd ref="-6"/>
+        <nd ref="-7"/>
+        <nd ref="-8"/>
+        <nd ref="-1"/>
+        <tag k="hoot:poipolygon:poismerged" v="1"/>
+        <tag k="alt_name" v="poi2"/>
+        <tag k="name" v="poly1"/>
+        <tag k="amenity" v="arts_centre"/>
+    </way>
+</osm>
