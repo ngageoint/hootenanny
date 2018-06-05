@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "SetTagVisitor.h"
+#include "SetTagValueVisitor.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
@@ -36,15 +36,15 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, SetTagVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, SetTagValueVisitor)
 
-SetTagVisitor::SetTagVisitor()
+SetTagValueVisitor::SetTagValueVisitor()
 {
   setConfiguration(conf());
 }
 
-SetTagVisitor::SetTagVisitor(QString key, QString value, bool appendToExistingValue,
-                             ElementType elementType, bool overwriteExistingTag) :
+SetTagValueVisitor::SetTagValueVisitor(QString key, QString value, bool appendToExistingValue,
+                                       ElementType elementType, bool overwriteExistingTag) :
 _appendToExistingValue(appendToExistingValue),
 _elementType(elementType),
 _overwriteExistingTag(overwriteExistingTag)
@@ -59,21 +59,21 @@ _overwriteExistingTag(overwriteExistingTag)
   LOG_VART(_overwriteExistingTag);
 }
 
-void SetTagVisitor::setConfiguration(const Settings& conf)
+void SetTagValueVisitor::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
-  _k = configOptions.getSetTagVisitorKey();
-  _v = configOptions.getSetTagVisitorValue();
+  _k = configOptions.getSetTagValueVisitorKey();
+  _v = configOptions.getSetTagValueVisitorValue();
   if (_k.size() != _v.size())
   {
-    throw IllegalArgumentException("set.tag.visitor key and value must be the same length.");
+    throw IllegalArgumentException("set.tag.value.visitor key and value must be the same length.");
   }
-  _appendToExistingValue = configOptions.getSetTagVisitorAppendToExistingValue();
-  if (!configOptions.getSetTagVisitorElementType().trimmed().isEmpty())
+  _appendToExistingValue = configOptions.getSetTagValueVisitorAppendToExistingValue();
+  if (!configOptions.getSetTagValueVisitorElementType().trimmed().isEmpty())
   {
-    _elementType = ElementType::fromString(configOptions.getSetTagVisitorElementType());
+    _elementType = ElementType::fromString(configOptions.getSetTagValueVisitorElementType());
   }
-  _overwriteExistingTag = configOptions.getSetTagVisitorOverwrite();
+  _overwriteExistingTag = configOptions.getSetTagValueVisitorOverwrite();
 
   LOG_VART(_k);
   LOG_VART(_v);
@@ -82,15 +82,15 @@ void SetTagVisitor::setConfiguration(const Settings& conf)
   LOG_VART(_overwriteExistingTag);
 }
 
-void SetTagVisitor::_setTag(const ElementPtr& e, QString k, QString v)
+void SetTagValueVisitor::_setTag(const ElementPtr& e, QString k, QString v)
 {
   if (k.isEmpty())
   {
-    throw IllegalArgumentException("You must set the key in the SetTagVisitor class.");
+    throw IllegalArgumentException("You must set the key in the SetTagValueVisitor class.");
   }
   if (v.isEmpty())
   {
-    throw IllegalArgumentException("You must set the value in the SetTagVisitor class.");
+    throw IllegalArgumentException("You must set the value in the SetTagValueVisitor class.");
   }
 
   LOG_VART(e->getElementId());
@@ -133,7 +133,7 @@ void SetTagVisitor::_setTag(const ElementPtr& e, QString k, QString v)
   }
 }
 
-void SetTagVisitor::visit(const boost::shared_ptr<Element>& e)
+void SetTagValueVisitor::visit(const boost::shared_ptr<Element>& e)
 {
   for (int i = 0; i < _k.size(); i++)
   {

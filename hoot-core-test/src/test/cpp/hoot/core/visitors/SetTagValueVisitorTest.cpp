@@ -33,7 +33,7 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/visitors/SetTagVisitor.h>
+#include <hoot/core/visitors/SetTagValueVisitor.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 
@@ -45,9 +45,9 @@
 namespace hoot
 {
 
-class SetTagVisitorTest : public CppUnit::TestFixture
+class SetTagValueVisitorTest : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(SetTagVisitorTest);
+  CPPUNIT_TEST_SUITE(SetTagValueVisitorTest);
   CPPUNIT_TEST(runAddNewTest);
   CPPUNIT_TEST(runOverwriteExistingTest);
   CPPUNIT_TEST(runAppendValueTest);
@@ -68,17 +68,17 @@ public:
     OsmMapPtr map(new OsmMap());
     OsmMap::resetCounters();
     OsmMapReaderFactory::read(
-      map, "test-files/visitors/SetTagVisitorTest.osm", false, Status::Unknown1);
+      map, "test-files/visitors/SetTagValueVisitorTest.osm", false, Status::Unknown1);
 
-    SetTagVisitor visitor("key3", "value3");
+    SetTagValueVisitor visitor("key3", "value3");
     map->visitRw(visitor);
 
     OsmMapWriterFactory::getInstance().write(map,
-      "test-output/visitors/SetTagVisitorTest-runAddNewTest.osm");
+      "test-output/visitors/SetTagValueVisitorTest-runAddNewTest.osm");
 
     HOOT_FILE_EQUALS(
-      "test-files/visitors/SetTagVisitorTest-runAddNewTest.osm",
-      "test-output/visitors/SetTagVisitorTest-runAddNewTest.osm");
+      "test-files/visitors/SetTagValueVisitorTest-runAddNewTest.osm",
+      "test-output/visitors/SetTagValueVisitorTest-runAddNewTest.osm");
   }
 
   void runOverwriteExistingTest()
@@ -86,17 +86,17 @@ public:
     OsmMapPtr map(new OsmMap());
     OsmMap::resetCounters();
     OsmMapReaderFactory::read(
-      map, "test-files/visitors/SetTagVisitorTest.osm", false, Status::Unknown1);
+      map, "test-files/visitors/SetTagValueVisitorTest.osm", false, Status::Unknown1);
 
-    SetTagVisitor visitor("key2", "value2");
+    SetTagValueVisitor visitor("key2", "value2");
     map->visitRw(visitor);
 
     OsmMapWriterFactory::getInstance().write(map,
-      "test-output/visitors/SetTagVisitorTest-runOverwriteExistingTest.osm");
+      "test-output/visitors/SetTagValueVisitorTest-runOverwriteExistingTest.osm");
 
     HOOT_FILE_EQUALS(
-      "test-files/visitors/SetTagVisitorTest-runOverwriteExistingTest.osm",
-      "test-output/visitors/SetTagVisitorTest-runOverwriteExistingTest.osm");
+      "test-files/visitors/SetTagValueVisitorTest-runOverwriteExistingTest.osm",
+      "test-output/visitors/SetTagValueVisitorTest-runOverwriteExistingTest.osm");
   }
 
   void runAppendValueTest()
@@ -104,17 +104,17 @@ public:
     OsmMapPtr map(new OsmMap());
     OsmMap::resetCounters();
     OsmMapReaderFactory::read(
-      map, "test-files/visitors/SetTagVisitorTest.osm", false, Status::Unknown1);
+      map, "test-files/visitors/SetTagValueVisitorTest.osm", false, Status::Unknown1);
 
-    SetTagVisitor visitor("key1", "value1b", true);
+    SetTagValueVisitor visitor("key1", "value1b", true);
     map->visitRw(visitor);
 
     OsmMapWriterFactory::getInstance().write(map,
-      "test-output/visitors/SetTagVisitorTest-runAppendValueTest.osm");
+      "test-output/visitors/SetTagValueVisitorTest-runAppendValueTest.osm");
 
     HOOT_FILE_EQUALS(
-      "test-files/visitors/SetTagVisitorTest-runAppendValueTest.osm",
-      "test-output/visitors/SetTagVisitorTest-runAppendValueTest.osm");
+      "test-files/visitors/SetTagValueVisitorTest-runAppendValueTest.osm",
+      "test-output/visitors/SetTagValueVisitorTest-runAppendValueTest.osm");
   }
 
   void runElementFilterTest()
@@ -122,17 +122,17 @@ public:
     OsmMapPtr map(new OsmMap());
     OsmMap::resetCounters();
     OsmMapReaderFactory::read(
-      map, "test-files/visitors/SetTagVisitorTest.osm", false, Status::Unknown1);
+      map, "test-files/visitors/SetTagValueVisitorTest.osm", false, Status::Unknown1);
 
-    SetTagVisitor visitor("key3", "value3", false, ElementType::fromString("node"));
+    SetTagValueVisitor visitor("key3", "value3", false, ElementType::fromString("node"));
     map->visitRw(visitor);
 
     OsmMapWriterFactory::getInstance().write(map,
-      "test-output/visitors/SetTagVisitorTest-runElementFilterTest.osm");
+      "test-output/visitors/SetTagValueVisitorTest-runElementFilterTest.osm");
 
     HOOT_FILE_EQUALS(
-      "test-files/visitors/SetTagVisitorTest-runElementFilterTest.osm",
-      "test-output/visitors/SetTagVisitorTest-runElementFilterTest.osm");
+      "test-files/visitors/SetTagValueVisitorTest-runElementFilterTest.osm",
+      "test-output/visitors/SetTagValueVisitorTest-runElementFilterTest.osm");
   }
 
   void runBadElementTypeTest()
@@ -140,7 +140,7 @@ public:
     QString exceptionMsg("");
     try
     {
-      SetTagVisitor visitor("key1", "value1", false, ElementType::fromString("blah"));
+      SetTagValueVisitor visitor("key1", "value1", false, ElementType::fromString("blah"));
     }
     catch (const HootException& e)
     {
@@ -155,25 +155,25 @@ public:
     OsmMapPtr map(new OsmMap());
     OsmMap::resetCounters();
     OsmMapReaderFactory::read(
-      map, "test-files/visitors/SetTagVisitorTest.osm", false, Status::Unknown1);
+      map, "test-files/visitors/SetTagValueVisitorTest.osm", false, Status::Unknown1);
 
     //We've disabled overwriting existing tags, so the tag with key="key2" should not be updated
     //on any element that already has a tag with the key.  It should only be added to elements
     //that don't have a tag with that key.
-    SetTagVisitor visitor("key2", "updatedValue", false, ElementType::Unknown, false);
+    SetTagValueVisitor visitor("key2", "updatedValue", false, ElementType::Unknown, false);
     map->visitRw(visitor);
 
     OsmMapWriterFactory::getInstance().write(map,
-      "test-output/visitors/SetTagVisitorTest-runOverwriteDisabledTest.osm");
+      "test-output/visitors/SetTagValueVisitorTest-runOverwriteDisabledTest.osm");
 
     HOOT_FILE_EQUALS(
-      "test-files/visitors/SetTagVisitorTest-runOverwriteDisabledTest.osm",
-      "test-output/visitors/SetTagVisitorTest-runOverwriteDisabledTest.osm");
+      "test-files/visitors/SetTagValueVisitorTest-runOverwriteDisabledTest.osm",
+      "test-output/visitors/SetTagValueVisitorTest-runOverwriteDisabledTest.osm");
   }
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SetTagVisitorTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SetTagValueVisitorTest, "quick");
 
 }
 

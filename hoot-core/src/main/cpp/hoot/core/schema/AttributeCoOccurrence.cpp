@@ -57,7 +57,7 @@ public:
 
   typedef map<QString, set<ElementId> > RefToEid;
 
-  RefToEidVisitor(QString ref) : _ref(ref) {}
+  explicit RefToEidVisitor(QString ref) : _ref(ref) {}
 
   virtual ~RefToEidVisitor() {}
 

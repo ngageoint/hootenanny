@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef SETTAGVISITOR_H
-#define SETTAGVISITOR_H
+#ifndef SETTAGVALUEVISITOR_H
+#define SETTAGVALUEVISITOR_H
 
 // hoot
 #include <hoot/core/util/Configurable.h>
@@ -38,19 +38,18 @@ namespace hoot
 
 /**
  * Sets any tags on any elements with the specified key to the specified value
- *
- * TODO: rename to SetTagValueVisitor for clarity
  */
-class SetTagVisitor : public ElementOsmMapVisitor, public Configurable
+class SetTagValueVisitor : public ElementOsmMapVisitor, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::SetTagVisitor"; }
+  static std::string className() { return "hoot::SetTagValueVisitor"; }
 
-  SetTagVisitor();
-  SetTagVisitor(QString key, QString value, bool appendToExistingValue = false,
-                //using Unknown as the default empty value for element type
-                ElementType elementType = ElementType::Unknown, bool overwriteExistingTag = true);
+  SetTagValueVisitor();
+  SetTagValueVisitor(QString key, QString value, bool appendToExistingValue = false,
+                     //using Unknown as the default empty value for element type
+                     ElementType elementType = ElementType::Unknown,
+                     bool overwriteExistingTag = true);
 
   virtual void setConfiguration(const Settings& conf);
 
@@ -74,4 +73,4 @@ private:
 
 }
 
-#endif // SETTAGVISITOR_H
+#endif // SETTAGVALUEVISITOR_H
