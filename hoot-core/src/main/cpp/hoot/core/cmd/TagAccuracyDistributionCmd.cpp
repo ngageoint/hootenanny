@@ -40,18 +40,18 @@ using namespace std;
 namespace hoot
 {
 
-class AccuracyDistributionCmd : public BaseCommand
+class TagAccuracyDistributionCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::AccuracyDistributionCmd"; }
+  static string className() { return "hoot::TagAccuracyDistributionCmd"; }
 
-  AccuracyDistributionCmd() { }
+  TagAccuracyDistributionCmd() { }
 
-  virtual QString getName() const { return "accuracy-distribution"; }
+  virtual QString getName() const { return "tag-accuracy-distribution"; }
 
   virtual QString getDescription() const
-  { return "Prints the distribution of feature accuracy values"; }
+  { return "Prints the distribution of feature accuracy tag values"; }
 
   virtual int runSimple(QStringList args)
   {
@@ -64,7 +64,7 @@ public:
     QTime time;
     time.start();
 
-    // open up both OSM files.
+    //TODO: Should we make this work for input formats other than OSM XML?
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
@@ -91,7 +91,7 @@ public:
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, AccuracyDistributionCmd)
+HOOT_FACTORY_REGISTER(Command, TagAccuracyDistributionCmd)
 
 }
 

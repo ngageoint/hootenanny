@@ -1,0 +1,36 @@
+{
+  "jakarta_raya_coastline.shp":{
+    "jakarta_raya_coastline":{
+      "NATURAL":[
+        "shoreline",
+        "water"
+        ]
+      }
+  }
+}
+{
+  "jakarta_raya_coastline.shp":{
+    "jakarta_raya_coastline":{
+      "NATURAL":[
+        "shoreline"
+        ]
+      }
+  }
+}
+{
+  "DcGisRoads.osm":{
+    "osm":{
+      "highway":[
+        "motorway",
+        "road"
+        ],
+      "name":[
+        "13 1/2 ST NW",
+        "CONSTITUTION AVE NW",
+        "G ST NW",
+        "INDEPENDENCE AVE SW",
+        "K ST NW"
+        ]
+      }
+  }
+}
