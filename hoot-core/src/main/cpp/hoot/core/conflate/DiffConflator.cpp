@@ -86,24 +86,27 @@ void DiffConflator::apply(OsmMapPtr& map)
   Timer timer;
   _reset();
 
+  // Store the map - we might need it for tag diff later.
+  _pMap = map;
+
   LOG_INFO("Applying pre diff-conflation operations...");
-  NamedOp(ConfigOptions().getUnifyPreOps()).apply(map);
+  NamedOp(ConfigOptions().getUnifyPreOps()).apply(_pMap);
 
   _stats.append(SingleStat("Apply Pre Ops Time (sec)", timer.getElapsedAndRestart()));
 
   // will reproject if necessary.
-  MapProjector::projectToPlanar(map);
+  MapProjector::projectToPlanar(_pMap);
 
   _stats.append(SingleStat("Project to Planar Time (sec)", timer.getElapsedAndRestart()));
 
-  // find all the matches in this map
+  // find all the matches in this _pMap
   if (_matchThreshold.get())
   {
-    _matchFactory.createMatches(map, _matches, _bounds, _matchThreshold);
+    _matchFactory.createMatches(_pMap, _matches, _bounds, _matchThreshold);
   }
   else
   {
-    _matchFactory.createMatches(map, _matches, _bounds);
+    _matchFactory.createMatches(_pMap, _matches, _bounds);
   }
   LOG_DEBUG("Match count: " << _matches.size());
   LOG_TRACE(SystemInfo::getMemoryUsageString());
@@ -114,7 +117,10 @@ void DiffConflator::apply(OsmMapPtr& map)
   _stats.append(SingleStat("Number of Matches Found per Second",
     (double)_matches.size() / findMatchesTime));
 
-  // Now we have matches. Here's what we are going to do, because our map contains All of input1
+  // Use matches to calculate and store tag diff
+  _calcAndStoreTagChanges();
+
+  // Now we have matches. Here's what we are going to do, because our _pMap contains All of input1
   // and input2: we are going to delete everthing from the match pairs. Then we will delete all
   // remaining input1 items.
   for (std::vector<const Match*>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
@@ -124,8 +130,8 @@ void DiffConflator::apply(OsmMapPtr& map)
     for (std::set< std::pair<ElementId, ElementId> >::iterator pit = pairs.begin();
          pit != pairs.end(); ++pit)
     {
-      RecursiveElementRemover(pit->first).apply(map);
-      RecursiveElementRemover(pit->second).apply(map);
+      RecursiveElementRemover(pit->first).apply(_pMap);
+      RecursiveElementRemover(pit->second).apply(_pMap);
     }
   }
 
@@ -133,11 +139,11 @@ void DiffConflator::apply(OsmMapPtr& map)
   boost::shared_ptr<ElementCriterion> pTagKeyCrit(new TagKeyCriterion(MetadataTags::Ref1()));
   RemoveElementsVisitor removeRef1Visitor(pTagKeyCrit);
   removeRef1Visitor.setRecursive(true);
-  map->visitRw(removeRef1Visitor);
+  _pMap->visitRw(removeRef1Visitor);
 
 
   LOG_INFO("Applying post-diff conflation operations...");
-  NamedOp(ConfigOptions().getUnifyPostOps()).apply(map);
+  NamedOp(ConfigOptions().getUnifyPostOps()).apply(_pMap);
 
   _stats.append(SingleStat("Apply Post Ops Time (sec)", timer.getElapsedAndRestart()));
 }
@@ -150,9 +156,81 @@ void DiffConflator::setConfiguration(const Settings &conf)
   _reset();
 }
 
+MemChangesetProviderPtr DiffConflator::getTagDiff()
+{
+  return _pTagChanges;
+}
+
+void DiffConflator::_calcAndStoreTagChanges()
+{
+  // Make sure we have a container for our changes
+  if (!_pTagChanges)
+  {
+    _pTagChanges.reset(new MemChangesetProvider(_pMap->getProjection()));
+  }
+
+  for (std::vector<const Match*>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
+  {
+    std::set< std::pair<ElementId, ElementId> > pairs = (*mit)->getMatchPairs();
+
+    for (std::set< std::pair<ElementId, ElementId> >::iterator pit = pairs.begin();
+         pit != pairs.end(); ++pit)
+    {
+      // Compare pit->first tags to pit->second tags
+      ConstElementPtr pOldElement = _pMap->getElement(pit->first);
+      ConstElementPtr pNewElement = _pMap->getElement(pit->second);
+
+      if(_compareTags(pOldElement->getTags(), pNewElement->getTags()))
+      {
+        // Make new change
+        Change newChange = _getChange(pOldElement, pNewElement);
+
+        // Add it to our list
+        _pTagChanges->addChange(newChange);
+      }
+    }
+  }
+}
+
+// See if tags are the same
+bool DiffConflator::_compareTags (const Tags &oldTags, const Tags &newTags)
+{
+  for (Tags::const_iterator newTagIt = newTags.begin(); newTagIt != newTags.end(); ++newTagIt)
+  {
+    if (!oldTags.contains(newTagIt.key()) || oldTags[newTagIt.key()] != newTagIt.value())
+    {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+Change DiffConflator::_getChange(ConstElementPtr pOldElement,
+                                 ConstElementPtr pNewElement)
+{
+  // This may seem a little weird, but we want something very specific here.
+  // We want the old element as it was... with new tags.
+
+  // Copy the old one
+  ElementPtr pChangeElement (pOldElement->clone());
+
+  assert(pChangeElement->getId() == pOldElement->getId());
+
+  // Overwrite all old tags
+  pChangeElement->setTags(pNewElement->getTags());
+
+  // Create the change
+  Change newChange(Change::Modify, pChangeElement);
+
+  return newChange;
+}
+
 void DiffConflator::_reset()
 {
   _deleteAll(_matches);
+  _pMap.reset();
+  _pTagChanges.reset();
 }
 
 void DiffConflator::_printMatches(vector<const Match*> matches)

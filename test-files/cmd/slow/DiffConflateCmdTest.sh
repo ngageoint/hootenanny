@@ -11,6 +11,9 @@ hoot map-diff test-output/cmd/DiffConflateCmdTest/output.osm test-files/cmd/slow
 # Check changeset derivation
 hoot conflate-differential -C Diff.conf test-files/conflate/diff/input1.osm test-files/conflate/diff/input2.osm test-output/cmd/DiffConflateCmdTest/output.osc
 
+# Check changeset w/tags
+hoot conflate-differential -C Diff.conf test-files/conflate/diff/input1.osm test-files/conflate/diff/input2.osm test-output/cmd/DiffConflateCmdTest/output_t.osc --include-tags
+
 if diff test-output/cmd/DiffConflateCmdTest/output.osc test-files/cmd/slow/DiffConflateCmdTest/output.osc >/dev/null ; then
   echo "Changeset Files Match"
 else

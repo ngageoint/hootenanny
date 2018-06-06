@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/Serializable.h>
+#include <hoot/core/io/MemChangesetProvider.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/ops/Boundable.h>
 #include <hoot/core/util/Configurable.h>
@@ -98,14 +99,21 @@ public:
   virtual QString getDescription() const
   { return "Conflates two maps into a single map based on the difference between the inputs"; }
 
+  // Gets the tag differential between the maps. To do this, we look through all
+  // of the matches, and compare tags. A set of newer tags is returned as a
+  // changeset (because updating the tags requires a modify operation)
+  MemChangesetProviderPtr getTagDiff();
+
 private:
 
+  OsmMapPtr _pMap;
   geos::geom::Envelope _bounds;
   const MatchFactory& _matchFactory;
   boost::shared_ptr<MatchThreshold> _matchThreshold;
   Settings _settings;
   std::vector<const Match*> _matches;
   QList<SingleStat> _stats;
+  MemChangesetProviderPtr _pTagChanges;
 
   template <typename InputCollection>
   void _deleteAll(InputCollection& ic)
@@ -132,6 +140,12 @@ private:
 
   void _printMatches(std::vector<const Match*> matches);
   void _printMatches(std::vector<const Match*> matches, const MatchType& typeFilter);
+
+  void _calcAndStoreTagChanges();
+
+  bool _compareTags (const Tags &oldTags, const Tags &newTags);
+
+  Change _getChange(ConstElementPtr pOldElement, ConstElementPtr pNewElement);
 };
 
 }

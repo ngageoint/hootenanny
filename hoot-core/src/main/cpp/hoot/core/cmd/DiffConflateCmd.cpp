@@ -104,6 +104,7 @@ public:
     Timer totalTime;
     Timer t;
 
+    // Check for stats argument
     QList<SingleStat> stats;
     bool displayStats = false;
     QString outputStatsFile;
@@ -125,10 +126,21 @@ public:
       }
     }
 
+    // Check for tags argument "--Include-Tags"
+    bool conflateTags = false;
+    QRegExp rex("--Include-Tags");
+    rex.setCaseSensitivity(Qt::CaseInsensitive);
+    if (args.indexOf(rex) >= 0)
+    {
+      conflateTags = true;
+      args.removeAt(args.indexOf(rex));
+    }
+
+    // Make sure we have file inputs
     if (args.size() != 3)
     {
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes three parameters.").arg(getName()));
+      throw HootException(QString("%1 requires at least three parameters.").arg(getName()));
     }
 
     QString input1 = args[0];
@@ -191,13 +203,12 @@ public:
     stats.append(SingleStat("Apply Named Ops Time (sec)", t.getElapsedAndRestart()));
 
     OsmMapPtr result = map;
-    {
-      // call the diff conflator
-      DiffConflator conflator;
-      conflator.apply(result);
-      stats.append(conflator.getStats());
-      stats.append(SingleStat("Conflation Time (sec)", t.getElapsedAndRestart()));
-    }
+
+    // call the diff conflator
+    DiffConflator conflator;
+    conflator.apply(result);
+    stats.append(conflator.getStats());
+    stats.append(SingleStat("Conflation Time (sec)", t.getElapsedAndRestart()));
 
     // Apply any user specified operations.
     LOG_INFO("Applying post-conflation operations...");
@@ -212,14 +223,25 @@ public:
     {
       // Write changeset
       writeChangeset(result, output);
+
+      // Do the tags if we need to
+      if (conflateTags)
+      {
+        LOG_INFO("Generating tag changeset...");
+        MemChangesetProviderPtr pTagChanges = conflator.getTagDiff();
+
+        // Write the file!
+        QString outFileName = output;
+        outFileName.replace(".osc", ".tags.osc");
+        OsmXmlChangesetFileWriter tagChangeWriter;
+        tagChangeWriter.write(outFileName, pTagChanges);
+      }
     }
     else
     {
-      // Write conflated map
+      // Simply write conflated map
       saveMap(result, output);
     }
-
-
 
     // Do more stats
     double timingOutput = t.getElapsedAndRestart();
