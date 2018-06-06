@@ -4,7 +4,7 @@ set -e
 # Build out the scan command
 CMD="sonar-scanner"
 CMD+=" -Dsonar.projectKey=hoot"
-CMD+=" -Dsonar.sources=./hoot-cmd,./hoot-core,./hoot-core-test,./hoot-js,./hoot-rnd,./hoot-test,./tbs,./tgs"
+CMD+=" -Dsonar.sources=./hoot-core,./hoot-js,./hoot-rnd,./tbs,./tgs"
 CMD+=" -Dsonar.cfamily.build-wrapper-output=bw-output"
 CMD+=" -Dsonar.host.url=https://sonarcloud.io"
 CMD+=" -Dsonar.organization=hootenanny"

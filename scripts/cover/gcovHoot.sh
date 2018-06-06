@@ -10,25 +10,41 @@ fi
 cd $HOOT_HOME
 
 # hoot-core coverage
-cd hoot-core
-gcov tmp/debug/*.gcda
+mkdir gcovCore
+cd gcovCore
+gcov ../hoot-core/tmp/debug/*.gcda
 # fix path
-sed -i 's/src/hoot-core\/src/g' *.gcov
+sed -i 's/Source:src/Source:hoot-core\/src/g' *.gcov
+sed -i 's/Source:..\//Source:/g' *.gcov
 mv *.gcov ../
 cd ..
 
-#tbs coverage
-cd tbs
-gcov tmp/debug/*.gcda
+# tbs coverage
+mkdir gcovTbs
+cd gcovTbs
+gcov ../tbs/tmp/debug/*.gcda
 # fix path
-sed -i 's/src/tbs\/src/g' *.gcov
+sed -i 's/Source:src/Source:tbs\/src/g' *.gcov
+sed -i 's/Source:..\//Source:/g' *.gcov
+mv *.gcov ../
+cd ..
+
+# tgs coverage
+mkdir gcovTgs
+cd gcovTgs
+gcov ../tgs/tmp/obj/debug/*.gcda
+# fix path
+sed -i 's/Source:src/Source:tgs\/src/g' *.gcov
+sed -i 's/Source:..\//Source:/g' *.gcov
 mv *.gcov ../
 cd ..
 
 # hoot-rnd coverage
-cd hoot-rnd
-gcov tmp/debug/*.gcda
+mkdir gcovRnd
+cd gcovRnd
+gcov ../hoot-rnd/tmp/debug/*.gcda
 # fix path
-sed -i 's/src/hoot-rnd\/src/g' *.gcov
+sed -i 's/Source:src/Source:hoot-rnd\/src/g' *.gcov
+sed -i 's/Source:..\//Source:/g' *.gcov
 mv *.gcov ../
 cd ..
