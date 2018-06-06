@@ -57,7 +57,9 @@ class ExtractAttributesCommand extends ExternalCommand {
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
         substitutionMap.put("INPUT_FILES", inputFiles);
 
-        String command = "hoot tag-values --${DEBUG_LEVEL} ${INPUT_FILES}";
+        //Technically this command now works for all data source, not just OGR, so we could move this class and associated classes out of the
+        //hoot.services.controllers.ogr namespace.
+        String command = "hoot tag-info --${DEBUG_LEVEL} ${INPUT_FILES}";
 
         super.configureCommand(command, substitutionMap, caller);
     }
