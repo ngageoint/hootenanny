@@ -6,32 +6,43 @@ def translateAttributes(attrs, layerName, geometryType):
 
     print(geometryType)
     if not attrs or geometryType != 'line': return
-
-    tags = {}
     
-    voltage = -1
     if 'OWNER' in attrs:
-        tags['owner'] = attrs['OWNER']
+        attrs['owner'] = attrs['OWNER']
+        del attrs['OWNER']
     if 'SOURCE' in attrs:
-        tags['source'] = attrs['SOURCE']
+        attrs['source'] = attrs['SOURCE']
+        del attrs['SOURCE']
     # Standardizing these on those used by energydata.info and CA state gov
     if 'STATUS' in attrs:
 	status = attrs['STATUS'].toLower()
-	if status == 'IN SERVICE'
-	    tags['status'] = 'operational'
-        elif status == 'INACTIVE'
-	    tags['status'] = 'closed'
-        elif status == 'UNDER CONST'
-	    tags['status'] = 'construction'
-    if 'VOLTAGE' in attrs:
-        voltage = int(attrs['VOLTAGE'])
-        voltage = voltage / 1000
-        tags['voltage'] = str(voltage) 
-    if voltage >= 45:
-        tags['power'] = attrs['line']
-        #tags['location'] = attrs['overhead']
-    else
-        tags['power'] = attrs['minor_line']
-        #tags['location'] = attrs['overhead']
+	if status == 'IN SERVICE':
+	    attrs['status'] = 'operational'
+        elif status == 'INACTIVE':
+	    attrs['status'] = 'closed'
+        elif status == 'UNDER CONST':
+	    attrs['status'] = 'construction'
+        del attrs['STATUS']
 
-    return tags
+    voltage = -1
+    if 'VOLTAGE' in attrs:
+        try:
+            voltage = int(attrs['VOLTAGE'])
+        except ValueError as err:
+            pass
+        if voltage != -1:
+            voltage = voltage / 1000
+            attrs['voltage'] = str(voltage) 
+        del attrs['VOLTAGE']
+
+    # If we don't have voltage, assume major line?
+    # Should we go ahead and set location=overhead here?
+    #attrs['location'] = 'overhead'
+    if voltage == -1:
+        attrs['power'] = 'line'
+    elif voltage >= 45:
+        attrs['power'] = 'line'
+    else
+        attrs['power'] = 'minor_line'
+
+    return attrs

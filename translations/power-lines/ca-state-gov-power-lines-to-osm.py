@@ -6,38 +6,52 @@ def translateAttributes(attrs, layerName, geometryType):
 
     print(geometryType)
     if not attrs or geometryType != 'line': return
-
-    tags = {}
     
-    voltage = -1
     if 'Circuit' in attrs:
-        tags['circuits'] = attrs['Circuit']
+        attrs['circuits'] = attrs['Circuit']
+        del attrs['Circuit']
     if 'Comments' in attrs:
-        tags['comments'] = attrs['Comments']
+        attrs['comments'] = attrs['Comments']
+        del attrs['Comments']
     if 'Name' in attrs:
-        tags['name'] = attrs['Name']
+        attrs['name'] = attrs['Name']
+        del attrs['Name']
     if 'Owner' in attrs:
-        tags['owner'] = attrs['Owner']
+        attrs['owner'] = attrs['Owner']
+        del attrs['Owner']
     if 'Status' in attrs:
-        tags['status'] = attrs['Status'].toLower()
+        attrs['status'] = attrs['Status'].toLower()
+        del attrs['Status']
+
+    voltage = -1
     if 'kV' in attrs:
-        voltage = int(attrs['kV'])
-        voltage = voltage / 1000
-        tags['voltage'] = str(voltage)
-    if voltage >= 45:
-            tags['power'] = attrs['line']
-            tags['location'] = attrs['overhead']
-        else
-            tags['power'] = attrs['minor_line']
-            tags['location'] = attrs['overhead']
+        try:
+            voltage = int(attrs['kV'])
+        except ValueError as err:
+            pass
+        if voltage != -1:
+            voltage = voltage / 1000
+            attrs['voltage'] = str(voltage)
+        del attrs['kV']
+
+    # If we don't have voltage, assume major line?
+    attrs['location'] = 'overhead'
+    if voltage == -1:
+        attrs['power'] = 'line'
+    elif voltage >= 45:
+        attrs['power'] = 'line'
+    else
+        attrs['power'] = 'minor_line'
+
     if 'Type' in attrs:
         lineType = attrs['Type'].toLower()
-        # The inforation in Type will override what was previously marked as an overhead line if a different type of line is encountered.
-        if lineType == 'ug'
-            tags['power'] = attrs['cable']
-            tags['location'] = attrs['underground']
-        elif lineType == 'uw'
-            tags['power'] = attrs['cable']
-            tags['location'] = attrs['underwater']
+        # The inforation in Type will override what was previously assumed to be an overhead line if a different type of line is 
+        # encountered.
+        if lineType == 'ug':
+            attrs['power'] = 'cable'
+            attrs['location'] = 'underground'
+        elif lineType == 'uw':
+            attrs['power'] = 'cable'
+            attrs['location'] = 'underwater'
 
-    return tags
+    return attrs

@@ -7,9 +7,8 @@ def translateAttributes(attrs, layerName, geometryType):
     print(geometryType)
     if not attrs or geometryType != 'line': return
 
-    tags = {}
+    attrs['power'] = 'line'
+    # Should we go ahead and set location=overhead here?
+    #tags['location'] = 'overhead'
 
-    tags['power'] = attrs['line']
-    #tags['location'] = attrs['overhead']
-
-    return tags
+    return attrs
