@@ -3,7 +3,9 @@
 # This translates U.S. country-wide power line data from the United States Energy Information Adminstration.
 
 def translateAttributes(attrs, layerName, geometryType):
-    if not attrs: return
+
+    print(geometryType)
+    if not attrs or geometryType != 'line': return
 
     tags = {}
     
@@ -24,13 +26,12 @@ def translateAttributes(attrs, layerName, geometryType):
     if 'VOLTAGE' in attrs:
         voltage = int(attrs['VOLTAGE'])
         voltage = voltage / 1000
-        tags['voltage'] = str(voltage)
-    if geometryType == 'line': 
-        if voltage >= 45:
-            tags['power'] = attrs['line']
-            #tags['location'] = attrs['overhead']
-        else
-            tags['power'] = attrs['minor_line']
-            #tags['location'] = attrs['overhead']
+        tags['voltage'] = str(voltage) 
+    if voltage >= 45:
+        tags['power'] = attrs['line']
+        #tags['location'] = attrs['overhead']
+    else
+        tags['power'] = attrs['minor_line']
+        #tags['location'] = attrs['overhead']
 
     return tags

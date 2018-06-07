@@ -3,7 +3,9 @@
 # This translates power line data from the California State Goverment obtained from http://www.data.gov.
 
 def translateAttributes(attrs, layerName, geometryType):
-    if not attrs: return
+
+    print(geometryType)
+    if not attrs or geometryType != 'line': return
 
     tags = {}
     
@@ -22,20 +24,20 @@ def translateAttributes(attrs, layerName, geometryType):
         voltage = int(attrs['kV'])
         voltage = voltage / 1000
         tags['voltage'] = str(voltage)
-    if geometryType == 'line': 
-        if 'Type' in attrs:
-            lineType = attrs['Type'].toLower()
-            if lineType == 'ug'
-                tags['power'] = attrs['cable']
-                tags['location'] = attrs['underground']
-            elif lineType == 'uw'
-                tags['power'] = attrs['cable']
-                tags['location'] = attrs['underwater']
-        elif voltage >= 45:
+    if voltage >= 45:
             tags['power'] = attrs['line']
             tags['location'] = attrs['overhead']
         else
             tags['power'] = attrs['minor_line']
             tags['location'] = attrs['overhead']
+    if 'Type' in attrs:
+        lineType = attrs['Type'].toLower()
+        # The inforation in Type will override what was previously marked as an overhead line if a different type of line is encountered.
+        if lineType == 'ug'
+            tags['power'] = attrs['cable']
+            tags['location'] = attrs['underground']
+        elif lineType == 'uw'
+            tags['power'] = attrs['cable']
+            tags['location'] = attrs['underwater']
 
     return tags
