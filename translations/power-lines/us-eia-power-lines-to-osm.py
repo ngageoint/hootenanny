@@ -4,7 +4,7 @@
 
 def translateAttributes(attrs, layerName, geometryType):
 
-    print(geometryType)
+    #print(geometryType)
     if not attrs or geometryType != 'Line': return
     
     if 'OWNER' in attrs:
