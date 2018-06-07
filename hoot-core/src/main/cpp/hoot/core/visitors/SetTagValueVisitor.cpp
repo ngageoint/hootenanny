@@ -79,7 +79,7 @@ void SetTagValueVisitor::setConfiguration(const Settings& conf)
     throw IllegalArgumentException("set.tag.value.visitor key and value must be the same length.");
   }
   _appendToExistingValue = configOptions.getSetTagValueVisitorAppendToExistingValue();
-  setFilter(configOptions.getRemoveElementsVisitorFilter());
+  setFilter(configOptions.getSetTagValueVisitorFilter());
   _overwriteExistingTag = configOptions.getSetTagValueVisitorOverwrite();
 
   LOG_VART(_k);
