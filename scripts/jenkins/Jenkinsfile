@@ -85,7 +85,7 @@ pipeline {
                     // Configure for sonar if user selected it, pull-request, or nightly run of develop
                     expression { return params.Sonar }
                     changeRequest()
-                    allof {
+                    allOf {
                         expression { return Calendar.instance.get(Calendar.HOUR_OF_DAY) in 20..22 }
                         branch 'develop'
                     }
@@ -134,7 +134,7 @@ pipeline {
                 anyOf {
                     expression { return params.Sonar }
                     changeRequest()
-                    allof {
+                    allOf {
                         expression { IS_NIGHTLY }
                         branch 'develop'
                     }
