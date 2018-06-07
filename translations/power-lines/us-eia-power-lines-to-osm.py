@@ -15,7 +15,7 @@ def translateAttributes(attrs, layerName, geometryType):
         del attrs['SOURCE']
     # Standardizing these on those used by energydata.info and CA state gov
     if 'STATUS' in attrs:
-	status = attrs['STATUS'].toLower()
+	status = attrs['STATUS'].lower()
 	if status == 'IN SERVICE':
 	    attrs['status'] = 'operational'
         elif status == 'INACTIVE':

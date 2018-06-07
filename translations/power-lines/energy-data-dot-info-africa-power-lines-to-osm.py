@@ -9,7 +9,7 @@ def translateAttributes(attrs, layerName, geometryType):
     if not attrs or geometryType != 'Line': return
 
     if 'status' in attrs:
-        attrs['status'] = attrs['status'].toLower()
+        attrs['status'] = attrs['status'].lower()
 
     voltage == -1
     if 'voltage_kV' in attrs:

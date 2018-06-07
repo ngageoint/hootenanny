@@ -20,7 +20,7 @@ def translateAttributes(attrs, layerName, geometryType):
         attrs['owner'] = attrs['Owner']
         del attrs['Owner']
     if 'Status' in attrs:
-        attrs['status'] = attrs['Status'].toLower()
+        attrs['status'] = attrs['Status'].lower()
         del attrs['Status']
 
     voltage = -1
@@ -46,7 +46,7 @@ def translateAttributes(attrs, layerName, geometryType):
         attrs['power'] = 'minor_line'
 
     if 'Type' in attrs:
-        lineType = attrs['Type'].toLower()
+        lineType = attrs['Type'].lower()
         # The inforation in Type will override what was previously assumed to be an overhead line if a different type of line is 
         # encountered.
         if lineType == 'ug':
