@@ -9,6 +9,6 @@ def translateAttributes(attrs, layerName, geometryType):
 
     if geometryType == 'line': 
         tags['power'] = attrs['line']
-        tags['location'] = attrs['overhead']
+        #tags['location'] = attrs['overhead']
 
     return tags

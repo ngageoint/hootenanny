@@ -31,7 +31,7 @@ def translateAttributes(attrs, layerName, geometryType):
             elif lineType == 'uw'
                 tags['power'] = attrs['cable']
                 tags['location'] = attrs['underwater']
-        elif voltage >= 45
+        elif voltage >= 45:
             tags['power'] = attrs['line']
             tags['location'] = attrs['overhead']
         else

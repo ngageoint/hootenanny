@@ -20,11 +20,11 @@ def translateAttributes(attrs, layerName, geometryType):
         voltage = voltage / 1000
         tags['voltage'] = str(voltage)
     if geometryType == 'line': 
-        if voltage >= 45
+        if voltage >= 45:
             tags['power'] = attrs['line']
-            tags['location'] = attrs['overhead']
+            #tags['location'] = attrs['overhead']
         else
             tags['power'] = attrs['minor_line']
-            tags['location'] = attrs['overhead']
+            #tags['location'] = attrs['overhead']
 
     return tags
