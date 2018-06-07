@@ -4,8 +4,8 @@
 
 def translateAttributes(attrs, layerName, geometryType):
 
-    print(geometryType)
-    if not attrs or geometryType != 'line': return
+    #print(geometryType)
+    if not attrs or geometryType != 'Line': return
 
     # Haven't seen much useful in this schema, unfortunately.
 

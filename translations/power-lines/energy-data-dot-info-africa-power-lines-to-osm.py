@@ -6,7 +6,7 @@
 def translateAttributes(attrs, layerName, geometryType):
     
     print(geometryType)
-    if not attrs or geometryType != 'line': return
+    if not attrs or geometryType != 'Line': return
 
     if 'status' in attrs:
         attrs['status'] = attrs['status'].toLower()
