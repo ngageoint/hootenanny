@@ -7,6 +7,8 @@ def translateAttributes(attrs, layerName, geometryType):
     print(geometryType)
     if not attrs or geometryType != 'line': return
 
+    # Haven't seen much useful in this schema, unfortunately.
+
     attrs['power'] = 'line'
     # Should we go ahead and set location=overhead here?
     #tags['location'] = 'overhead'

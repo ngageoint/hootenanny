@@ -25,12 +25,14 @@ def translateAttributes(attrs, layerName, geometryType):
 
     voltage = -1
     if 'kV' in attrs:
+        voltageStr = attrs['kV'];
+        voltageStr.replace('DC', '')
         try:
-            voltage = int(attrs['kV'])
+            voltage = int(voltageStr)
         except ValueError as err:
             pass
-        if voltage != -1:
-            voltage = voltage / 1000
+        if voltage > 0:
+            voltage = voltage * 1000
             attrs['voltage'] = str(voltage)
         del attrs['kV']
 

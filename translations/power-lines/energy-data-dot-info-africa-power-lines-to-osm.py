@@ -17,8 +17,8 @@ def translateAttributes(attrs, layerName, geometryType):
             voltage = int(attrs['voltage_kV'])
         except ValueError as err:
             pass
-        if voltage != -1:
-            voltage = voltage / 1000
+        if voltage > 0:
+            voltage = voltage * 1000
             attrs['voltage'] = str(voltage)
         del attrs['voltage_kV']
 
