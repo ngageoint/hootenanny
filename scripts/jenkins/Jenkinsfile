@@ -131,7 +131,7 @@ pipeline {
                     expression { return params.Sonar }
                     changeRequest()
                     allOf {
-                        expression { return Calendar.instance.get(Calendar.HOUR_OF_DAY) in 20..23 } }
+                        expression { return Calendar.instance.get(Calendar.HOUR_OF_DAY) in 20..23 }
                         branch 'develop'
                     }
                 }
