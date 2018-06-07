@@ -37,7 +37,8 @@ namespace hoot
 {
 
 /**
- * Sets any tags on any elements with the specified key to the specified value
+ * Sets tags on any elements with the specified key to the specified value or adds a new tag, if
+ * the tag doesn't exist on the element.
  */
 class SetTagValueVisitor : public ElementOsmMapVisitor, public Configurable
 {
