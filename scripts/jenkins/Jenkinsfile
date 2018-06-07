@@ -7,7 +7,7 @@ pipeline {
     environment {
         // Work around to run certain tests during nightly cron triggers but not on commits to develop.  Logic can be udpated
         // once this https://issues.jenkins-ci.org/browse/JENKINS-41272 is implemented
-        IS_NIGHTLY = Calendar.instance.get(Calendar.HOUR_OF_DAY) in 20..22
+        IS_NIGHTLY = expression { return Calendar.instance.get(Calendar.HOUR_OF_DAY) in 20..23 }
     }
 
     triggers {
