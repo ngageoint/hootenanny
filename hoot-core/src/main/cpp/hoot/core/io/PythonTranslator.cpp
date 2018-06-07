@@ -73,7 +73,7 @@ PythonTranslator::~PythonTranslator()
 
 void PythonTranslator::_init()
 {
-  LOG_INFO("Initializing Python");
+  LOG_DEBUG("Initializing Python");
 
   QString hootHome(getenv("HOOT_HOME"));
 
@@ -103,8 +103,9 @@ void PythonTranslator::_init()
       pythonPath.append(hootHome + "/translations");
     }
   }
+  LOG_INFO("Using translation script: " << _scriptPath);
 
-  LOG_INFO("Python path: " << pythonPath.join(":"));
+  LOG_DEBUG("Python path: " << pythonPath.join(":"));
   setenv("PYTHONPATH", pythonPath.join(":").toUtf8().constData(), 1);
   Py_Initialize();
 
@@ -149,7 +150,7 @@ bool PythonTranslator::isValidScript()
 
 void PythonTranslator::_finalize()
 {
-  LOG_INFO("Finalizing Python");
+  LOG_DEBUG("Finalizing Python");
   Py_DECREF((PyObject*)_translateFunction);
   Py_Finalize();
 }
