@@ -11,7 +11,7 @@ def translateAttributes(attrs, layerName, geometryType):
     if 'status' in attrs:
         attrs['status'] = attrs['status'].lower()
 
-    voltage == -1
+    voltage = -1
     if 'voltage_kV' in attrs:
         try:
             voltage = int(attrs['voltage_kV'])
