@@ -4,12 +4,6 @@
 pipeline {
     agent { label 'master' }
 
-    environment {
-        // Work around to run certain tests during nightly cron triggers but not on commits to develop.  Logic can be udpated
-        // once this https://issues.jenkins-ci.org/browse/JENKINS-41272 is implemented
-        IS_NIGHTLY = expression { return Calendar.instance.get(Calendar.HOUR_OF_DAY) in 20..23 }
-    }
-
     triggers {
         // Set nightly trigger
         cron((BRANCH_NAME == "master" || BRANCH_NAME == "develop") ? "H H(20-21) * * 1-5" : "")
@@ -72,7 +66,9 @@ pipeline {
             when { 
                 anyOf {
                     expression { return params.Configure_Tests }
-                    expression { return IS_NIGHTLY }
+                    // Work around to run certain tests during nightly cron triggers but not on commits to develop.  Logic can be udpated
+                    // once this https://issues.jenkins-ci.org/browse/JENKINS-41272 is implemented
+                    expression { return Calendar.instance.get(Calendar.HOUR_OF_DAY) in 20..23 } }
                 }
             }
             steps {
@@ -135,7 +131,7 @@ pipeline {
                     expression { return params.Sonar }
                     changeRequest()
                     allOf {
-                        expression { IS_NIGHTLY }
+                        expression { return Calendar.instance.get(Calendar.HOUR_OF_DAY) in 20..23 } }
                         branch 'develop'
                     }
                 }
