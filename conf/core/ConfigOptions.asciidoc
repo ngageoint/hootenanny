@@ -2634,6 +2634,7 @@ waterway.auto.calc.search.radius = true.  See `search.radius.default`.
 
 The search radius to use when conflating railways.
 
+
 === set.tag.value.visitor.append.to.existing.value
 
 * Data Type: bool
@@ -2642,13 +2643,12 @@ The search radius to use when conflating railways.
 If true, any element with a value populated for the key defined by the set.tag.value.visitor.key
 option will have the value specified in the set.tag.value.visitor.value option appended to it.
 
-=== set.tag.value.visitor.element.type
+=== set.tag.value.visitor.filter
 
 * Data Type: string
 * Default Value: ``
 
-An optional element type filter for the SetTagValueVisitor.  Valid values are: 'node', 'way', or
-'relation'.  If left empty, all elements will receive tag additions.
+The plugin name of a filter used to select elements to add or modify tags on.
 
 === set.tag.value.visitor.key
 

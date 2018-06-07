@@ -10,7 +10,8 @@ def translateAttributes(attrs, layerName, geometryType):
     # Haven't seen much useful in this schema, unfortunately.
 
     attrs['power'] = 'line'
-    # Should we go ahead and set location=overhead here?
-    #tags['location'] = 'overhead'
+    # The only Green Mountain Power dataset this translation has been used against was labeled "overhead only", so setting all lines
+    # as overhead.  Check the dataset being translated before adding this tag to be sure its appropriate.
+    attrs['location'] = 'overhead'
 
     return attrs
