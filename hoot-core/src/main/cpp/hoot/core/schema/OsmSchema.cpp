@@ -1944,6 +1944,8 @@ bool OsmSchema::isLinearWaterway(const Element& e)
     for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
     {
       if (it.key() == "waterway" || isAncestor(it.key(), "waterway") ||
+          //TODO: Likely this condition needs to be removed and instead the affected data should
+          //be properly translated into OSM before conflation.
           (it.key() == "type" && isAncestor("waterway=" + it.value(), "waterway")))
       {
         return true;
@@ -2070,8 +2072,9 @@ bool OsmSchema::isRailway(const Element& e)
     const Tags& tags = e.getTags();
     for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
     {
-      if (it.key() == "railway" || isAncestor(it.key(), "railway") ||
-          (it.key() == "type" && isAncestor("railway=" + it.value(), "railway")))
+      //TODO: I think we may want to narrow down to a more specific set of railway values here
+      //at some point.
+      if (it.key() == "railway" || isAncestor(it.key(), "railway"))
       {
         return true;
       }
