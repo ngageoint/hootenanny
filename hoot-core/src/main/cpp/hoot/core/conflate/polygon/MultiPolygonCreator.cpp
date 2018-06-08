@@ -183,7 +183,6 @@ void MultiPolygonCreator::_addWayToSequence(ConstWayPtr w, CoordinateSequence& c
 
 boost::shared_ptr<Geometry> MultiPolygonCreator::createMultipolygon() const
 {
-
   vector<LinearRing*> outers;
   _createRings(MetadataTags::RoleOuter(), outers);
   _createRings(MetadataTags::RolePart(), outers);
@@ -196,7 +195,9 @@ boost::shared_ptr<Geometry> MultiPolygonCreator::createMultipolygon() const
   _createRings("", noRole);
 
   // Make sure that all rings are either an inner or an outer
-  _classifyRings(noRole, inners, outers);
+//  _classifyRings(noRole, inners, outers);
+
+  LOG_TRACE("After classify: Outers: " << outers.size() << "  Inners: " << inners.size());
 
   boost::shared_ptr<Geometry> result(_addHoles(outers, inners));
 
@@ -266,6 +267,8 @@ void MultiPolygonCreator::_classifyRings(std::vector<LinearRing *> &noRole,
   {
     return;
   }
+
+  LOG_TRACE("Rings without a role: " << noRole.size() << "  Outers: " << outers.size() << "  Inners: " << inners.size());
 
   // One polygon, no inners or outers
   if (noRole.size() == 1 && inners.size() == 0 && outers.size() == 0)
