@@ -12,7 +12,7 @@
     <nd ref='-129' />
   </way>
   <relation id='-139' action='modify' visible='true'>
-    <member type='way' ref='-137' role='' />
+    <member type='way' ref='-137' role='outer' />
     <tag k='landuse' v='forest' />
   </relation>
 </osm>
