@@ -1,0 +1,595 @@
+/*
+ * This file is part of Hootenanny.
+ *
+ * Hootenanny is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * --------------------------------------------------------------------
+ *
+ * The following copyright notices are generated automatically. If you
+ * have a new notice to add, please use the format:
+ * " * @copyright Copyright ..."
+ * This will properly maintain the copyright information. DigitalGlobe
+ * copyrights will be updated automatically.
+ *
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ */
+
+#include "OsmChangesetElement.h"
+
+//  Hoot
+#include <hoot/core/VersionDefines.h>
+#include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/Log.h>
+
+//  Qt
+#include <QTextStream>
+
+namespace hoot
+{
+
+XmlChangeset::XmlChangeset()
+  : _nodes(ChangesetType::TypeMax),
+    _ways(ChangesetType::TypeMax),
+    _relations(ChangesetType::TypeMax),
+    _maxChangesetSize()
+{
+}
+
+XmlChangeset::XmlChangeset(const QList<QString> &changesets)
+  : _nodes(ChangesetType::TypeMax),
+    _ways(ChangesetType::TypeMax),
+    _relations(ChangesetType::TypeMax),
+    _maxChangesetSize()
+{
+  for (QList<QString>::const_iterator it = changesets.begin(); it != changesets.end(); ++it)
+    loadChangeset(*it);
+}
+
+void XmlChangeset::loadChangeset(const QString &changesetPath)
+{
+  /* <osmChange version="0.6" generator="acme osm editor">
+   *   <create|modify|delete>
+   *     <node|way|relation.../>
+   *     ...
+   *   </create|modify|delete>
+   *   ...
+   * </osmChange>
+   */
+  QString changeset = FileUtils::readFully(changesetPath);
+  QXmlStreamReader reader(changeset);
+  //  Make sure that the XML provided starts with the <diffResult> tag
+  QXmlStreamReader::TokenType type = reader.readNext();
+  if (type == QXmlStreamReader::StartDocument)
+    type = reader.readNext();
+  if (type == QXmlStreamReader::StartElement && reader.name() != "osmChange")
+  {
+    LOG_WARN("Unknown changeset response format.");
+    return;
+  }
+  //  Iterate all of updates and record them
+  while (!reader.atEnd() && !reader.hasError())
+  {
+    type = reader.readNext();
+    if (type == QXmlStreamReader::StartElement)
+    {
+      QStringRef name = reader.name();
+      if (name == "create")
+        loadElements(reader, ChangesetType::TypeCreate);
+      else if (name == "modify")
+        loadElements(reader, ChangesetType::TypeModify);
+      else if (name == "delete")
+        loadElements(reader, ChangesetType::TypeDelete);
+    }
+  }
+}
+
+void XmlChangeset::loadElements(QXmlStreamReader& reader, ChangesetType changeset_type)
+{
+  XmlElementPtr element;
+  while (!reader.atEnd() && !reader.hasError())
+  {
+    QXmlStreamReader::TokenType type = reader.readNext();
+    QStringRef name = reader.name();
+    //  Start element for nodes/ways/relations and tags/nds/members
+    if (type == QXmlStreamReader::StartElement)
+    {
+      if (name == "node")
+      {
+        element.reset(new XmlNode(XmlObject("node", reader.attributes()), &_idMap));
+        long id = reader.attributes().value("id").toString().toLong();
+        _idMap.addId(ElementType::Node, id);
+      }
+      else if (name == "way")
+      {
+        element.reset(new XmlWay(XmlObject("way", reader.attributes()), &_idMap));
+        long id = reader.attributes().value("id").toString().toLong();
+        _idMap.addId(ElementType::Way, id);
+      }
+      else if (name == "relation")
+      {
+        element.reset(new XmlRelation(XmlObject("relation", reader.attributes()), &_idMap));
+        long id = reader.attributes().value("id").toString().toLong();
+        _idMap.addId(ElementType::Relation, id);
+      }
+      else if (name == "tag")
+        element->addTag(XmlObject("tag", reader.attributes()));
+      else if (name == "nd")
+      {
+        long id = reader.attributes().value("ref").toString().toLong();
+        _nodesToWays[id].push_back(element->id());
+        boost::dynamic_pointer_cast<XmlWay>(element)->addNode(id);
+      }
+      else if (name == "member")
+        boost::dynamic_pointer_cast<XmlRelation>(element)->addMember(reader.attributes());
+    }
+    //  End element for create/modify/delete
+    else if (type == QXmlStreamReader::EndElement)
+    {
+      if (name == "node")
+      {
+        _nodes[changeset_type][element->id()] = element;
+        _allNodes[element->id()] = element;
+      }
+      else if (name == "way")
+      {
+        _ways[changeset_type][element->id()] = element;
+        _allWays[element->id()] = element;
+      }
+      else if (name == "relation")
+      {
+        _relations[changeset_type][element->id()] = element;
+        _allRelations[element->id()] = element;
+      }
+      else if (name == "create" || name == "modify" || name == "delete")
+        return;
+    }
+  }
+}
+
+void XmlChangeset::updateChangeset(const QString &changes)
+{
+  /* <diffResult generator="OpenStreetMap Server" version="0.6">
+   *   <node|way|relation old_id="#" new_id="#" new_version="#"/>
+   *   ...
+   * </diffResult>
+   */
+  QXmlStreamReader reader(changes);
+  //  Make sure that the XML provided starts with the <diffResult> tag
+  QXmlStreamReader::TokenType type = reader.readNext();
+  if (type == QXmlStreamReader::StartDocument)
+    type = reader.readNext();
+  QStringRef name = reader.name();
+  if (type == QXmlStreamReader::StartElement && reader.name() != "diffResult")
+  {
+    LOG_WARN("Unknown changeset response format.");
+    return;
+  }
+  //  Iterate all of updates and record them
+  while (!reader.atEnd() && !reader.hasError())
+  {
+    type = reader.readNext();
+    if (type == QXmlStreamReader::StartElement)
+    {
+      QStringRef name = reader.name();
+      QXmlStreamAttributes attributes = reader.attributes();
+      //  Get the old and new IDs
+      long old_id = 0;
+      long new_id = 0;
+      long version = -1;
+      if (attributes.hasAttribute("old_id"))
+          old_id = attributes.value("old_id").toString().toLong();
+      if (attributes.hasAttribute("new_id"))
+        new_id = attributes.value("new_id").toString().toLong();
+      if (attributes.hasAttribute("new_version"))
+        version = attributes.value("new_version").toString().toLong();
+      //  Update the old ID to the new ID and the version
+      if (name == "node")
+        updateElement(_nodes, old_id, new_id, version);
+      else if (name == "way")
+        updateElement(_ways, old_id, new_id, version);
+      else if (name == "relation")
+        updateElement(_relations, old_id, new_id, version);
+    }
+  }
+}
+
+bool XmlChangeset::isDone()
+{
+  return false;
+}
+
+bool XmlChangeset::addNode(boost::shared_ptr<ChangesetInfo>& changeset, ChangesetType type, XmlNode* node)
+{
+  //  Only add the nodes that are "sendable"
+  if (node->canSend())
+  {
+    //  Add the node
+    changeset->add(ElementType::Node, type, node->id());
+    return true;
+  }
+  else
+    return false;
+}
+
+bool XmlChangeset::addNodes(boost::shared_ptr<ChangesetInfo>& changeset, ChangesetType type)
+{
+  bool added = false;
+  //  Iterate all of the nodes of "type" in the changeset
+  for (XmlElementMap::iterator it = _nodes[type].begin(); it != _nodes[type].end(); ++it)
+    added |= addNode(changeset, type, dynamic_cast<XmlNode*>(it->second.get()));
+  //  Return true if something was added
+  return added;
+}
+
+bool XmlChangeset::addWay(boost::shared_ptr<ChangesetInfo>& changeset, ChangesetType type, XmlWay* way)
+{
+  if (way->canSend())
+  {
+    //  Add the way
+    changeset->add(ElementType::Way, type, way->id());
+    //  Only creates require more processing
+    if (type == ChangesetType::TypeCreate)
+    {
+      //  Add any nodes that need to be created
+      for (int i = 0; i < way->getNodeCount(); ++i)
+      {
+        if (way->getNode(i) < 0)  //  Negative IDs are for created nodes
+        {
+          XmlNode* node = dynamic_cast<XmlNode*>(_allNodes[way->getNode(i)].get());
+          addNode(changeset, type, node);
+        }
+      }
+    }
+    return true;
+  }
+  else
+    return false;
+}
+
+bool XmlChangeset::addWays(boost::shared_ptr<ChangesetInfo>& changeset, ChangesetType type)
+{
+  bool added = false;
+  //  Iterate all of the ways of "type" in the changeset
+  for (XmlElementMap::iterator it = _ways[type].begin(); it != _ways[type].end(); ++it)
+    added |= addWay(changeset, type, dynamic_cast<XmlWay*>(it->second.get()));
+  //  Return true if something was added
+  return added;
+}
+
+bool XmlChangeset::addRelation(boost::shared_ptr<ChangesetInfo>& changeset, ChangesetType type, XmlRelation* relation)
+{
+  if (relation->canSend())
+  {
+    //  Add the relation
+    changeset->add(ElementType::Relation, type, relation->id());
+    //  Deletes require no more processing
+    if (type != ChangesetType::TypeDelete)
+    {
+      //  Add any relation members that need to be added
+      for (int i = 0; i < relation->getMemberCount(); ++i)
+      {
+        XmlMember& member = relation->getMember(i);
+        if (member.getRef() < 0)  //  Negative IDs are for added members
+        {
+          //  Add the types differently
+          if (member.isNode())
+          {
+            XmlNode* node = dynamic_cast<XmlNode*>(_allNodes[member.getRef()].get());
+            addNode(changeset, type, node);
+          }
+          else if (member.isWay())
+          {
+            XmlWay* way = dynamic_cast<XmlWay*>(_allWays[member.getRef()].get());
+            addWay(changeset, type, way);
+          }
+          else
+          {
+            XmlRelation* relation = dynamic_cast<XmlRelation*>(_allRelations[member.getRef()].get());
+            addRelation(changeset, type, relation);
+          }
+        }
+      }
+    }
+    return true;
+  }
+  else
+    return false;
+}
+
+bool XmlChangeset::addRelations(boost::shared_ptr<ChangesetInfo>& changeset, ChangesetType type)
+{
+  bool added = false;
+  //  Iterate all of the ways of "type" in the changeset
+  for (XmlElementMap::iterator it = _relations[type].begin(); it != _relations[type].end(); ++it)
+    added |= addRelation(changeset, type, dynamic_cast<XmlRelation*>(it->second.get()));
+  //  Return true if something was added
+  return added;
+}
+
+bool XmlChangeset::calculateChangeset(boost::shared_ptr<ChangesetInfo>& changeset)
+{
+  //  Create the changeset info object if there isn't one
+  if (!changeset)
+    changeset.reset(new ChangesetInfo());
+  changeset->clear();
+  //  Build up the changeset to be around the MAX changeset size
+  ChangesetType type = ChangesetType::TypeCreate;
+  while (changeset->size() < (size_t)_maxChangesetSize && true) //  Objects left to send
+  {
+    //  Start with the relations
+    addRelations(changeset, type);
+    //  Break out of the loop once the changeset is big enough
+    if (changeset->size() >= (size_t)_maxChangesetSize)
+      continue;
+    //  Then the ways
+    addWays(changeset, type);
+    //  Break out of the loop once the changeset is big enough
+    if (changeset->size() >= (size_t)_maxChangesetSize)
+      continue;
+    //  Then the nodes
+    addNodes(changeset, type);
+    //  Break out of the loop once the changeset is big enough
+    if (changeset->size() >= (size_t)_maxChangesetSize)
+      continue;
+    //  Go to the next type and loop back around
+    type = static_cast<ChangesetType>((type + 1) % ChangesetType::TypeMax);
+  }
+  //  Return successfully
+  return true;
+}
+
+QString XmlChangeset::getChangesetString(ChangesetInfoPtr changeset, long changeset_id)
+{
+  QString buffer;
+  QTextStream ts(&buffer);
+  //  OSM Changeset tag
+  ts << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+     << "<osmChange version=\"0.6\" generator=\""<< HOOT_NAME << "\">\n";
+  //  Creates should go first
+  ts << getChangeset(changeset, changeset_id, ChangesetType::TypeCreate);
+  //  Then modifies
+  ts << getChangeset(changeset, changeset_id, ChangesetType::TypeModify);
+  //  Finally deletes
+  ts << getChangeset(changeset, changeset_id, ChangesetType::TypeDelete);
+  //  Close OSM Changeset
+  ts << "</osmChange>\n";
+  //  Return the OSM Changeset
+  return ts.readAll();
+}
+
+QString XmlChangeset::getChangeset(ChangesetInfoPtr changeset, long id, ChangesetType type)
+{
+  QString buffer;
+  QTextStream ts(&buffer);
+  XmlElementMap& nodes = _nodes[type];
+  XmlElementMap& ways = _ways[type];
+  XmlElementMap& relations = _relations[type];
+  QString category;
+  if (type == ChangesetType::TypeCreate)
+    category = "create";
+  else if (type == ChangesetType::TypeModify)
+    category = "modify";
+  else if (type == ChangesetType::TypeDelete)
+    category = "delete";
+  if (nodes.size() > 0 || ways.size() > 0 || relations.size() > 0)
+  {
+    ts << "\t<" << category << ">\n";
+    for (ElementIdToIdMap::iterator it = _idMap.begin(ElementType::Node); it != _idMap.end(ElementType::Node); ++it)
+    {
+      if (nodes.find(it->second) != nodes.end() && changeset->contains(ElementType::Node, type, it->second))
+        ts << nodes.at(it->second)->toString(id);
+    }
+    for (ElementIdToIdMap::iterator it = _idMap.begin(ElementType::Way); it != _idMap.end(ElementType::Way); ++it)
+    {
+      if (ways.find(it->second) != ways.end() && changeset->contains(ElementType::Way, type, it->second))
+        ts << ways.at(it->second)->toString(id);
+    }
+    for (ElementIdToIdMap::iterator it = _idMap.begin(ElementType::Relation); it != _idMap.end(ElementType::Relation); ++it)
+    {
+      if (relations.find(it->second) != relations.end() && changeset->contains(ElementType::Relation, type, it->second))
+        ts << relations.at(it->second)->toString(id);
+    }
+    ts << "\t</" << category << ">\n";
+  }
+  //  Return the OSM Changeset category
+  return ts.readAll();
+}
+
+void XmlChangeset::updateElement(ChangesetTypeMap& map, long old_id, long new_id, long version)
+{
+  //  Zero IDs are not valid
+  if (old_id == 0)
+    return;
+  ChangesetType changeset_type;
+  if (new_id == 0)            //  No new ID means the element was deleted
+    changeset_type = ChangesetType::TypeDelete;
+  else if (new_id != old_id)  //  When the old and new IDs are different this was a create, update the node id
+    changeset_type = ChangesetType::TypeCreate;
+  else                        //  Otherwise it was a modify and nothing needs updating
+    changeset_type = ChangesetType::TypeModify;
+
+  XmlElementMap& type = map[changeset_type];
+  XmlElementMap::iterator position = type.find(old_id);
+  if (position != type.end())
+  {
+    XmlElementPtr element = type[old_id];
+    element->send();
+    if (changeset_type == ChangesetType::TypeCreate)
+      _idMap.updateId(element->getType(), old_id, new_id);
+    if (version >= 0)
+      element->setVersion(version);
+  }
+}
+
+XmlElement::XmlElement(const XmlObject& object, ElementIdToIdMap* idMap)
+  : _type(ElementType::Unknown),
+    _id(object.second.value("id").toString().toLong()),
+    _version(object.second.value("version").toString().toLong()),
+    _object(object),
+    _sent(false),
+    _idMap(idMap)
+{
+}
+
+void XmlElement::addTag(const XmlObject& tag)
+{
+  if (tag.first == "tag")
+    _tags.push_back(tag);
+}
+
+QString XmlElement::toString(const QXmlStreamAttributes& attributes, long changesetId) const
+{
+  QString buffer;
+  QTextStream ts(&buffer);
+  for (int i = 0; i < attributes.size(); ++i)
+  {
+    const QXmlStreamAttribute& attribute = attributes.at(i);
+    QStringRef name = attribute.name();
+    ts << name.toString() << "=\"";
+    if (name == "changeset")
+      ts << changesetId;
+    else if (name == "id")
+      ts << (_idMap ? _idMap->getNewId(_type, _id) : _id);
+    else if (name == "version")
+      ts << _version;
+    else
+      ts << attribute.value().toString();
+    ts << "\" ";
+  }
+  if (!attributes.hasAttribute("changeset"))
+    ts << "changeset=\"" << changesetId << "\"";
+  return ts.readAll();
+}
+
+QString XmlElement::toTagString(const QXmlStreamAttributes& attributes) const
+{
+  QString buffer;
+  QTextStream ts(&buffer);
+  ts << "\t\t\t<tag k=\"" << attributes.value("k").toString() << "\" v=\"" << attributes.value("v").toString() << "\"/>\n";
+  return ts.readAll();
+}
+
+XmlNode::XmlNode(const XmlObject& node, ElementIdToIdMap* idMap)
+  : XmlElement(node, idMap)
+{
+  _type = ElementType::Node;
+}
+
+QString XmlNode::toString(long changesetId) const
+{
+  QString buffer;
+  QTextStream ts(&buffer);
+  ts << "\t\t<node " << XmlElement::toString(_object.second, changesetId);
+  if (_tags.size() > 0)
+  {
+    ts << ">\n";
+    for (QVector<XmlObject>::const_iterator it = _tags.begin(); it != _tags.end(); ++it)
+      ts << toTagString(it->second);
+    ts << "\t\t</node>\n";
+  }
+  else
+    ts << "/>\n";
+  return ts.readAll();
+}
+
+XmlWay::XmlWay(const XmlObject& way, ElementIdToIdMap* idMap)
+  : XmlElement(way, idMap)
+{
+  _type = ElementType::Way;
+}
+
+bool XmlWay::canSend()
+{
+  return true;
+}
+
+QString XmlWay::toString(long changesetId) const
+{
+  QString buffer;
+  QTextStream ts(&buffer);
+  ts << "\t\t<way " << XmlElement::toString(_object.second, changesetId) << ">\n";
+  for (QList<long>::const_iterator it = _nodes.begin(); it != _nodes.end(); ++it)
+    ts << "\t\t\t<nd ref=\"" << (_idMap ? _idMap->getNewId(ElementType::Node, *it) : *it) << "\"/>\n";
+  if (_tags.size() > 0)
+  {
+    for (QVector<XmlObject>::const_iterator it = _tags.begin(); it != _tags.end(); ++it)
+      ts << toTagString(it->second);
+  }
+  ts << "\t\t</way>\n";
+  return ts.readAll();
+}
+
+XmlRelation::XmlRelation(const XmlObject& relation, ElementIdToIdMap* idMap)
+  : XmlElement(relation, idMap)
+{
+  _type = ElementType::Relation;
+}
+
+void XmlRelation::addMember(const QXmlStreamAttributes& member)
+{
+  XmlMember m(member, _idMap);
+  _members.append(m);
+}
+
+bool XmlRelation::canSend()
+{
+  return true;
+}
+
+QString XmlRelation::toString(long changesetId) const
+{
+  QString buffer;
+  QTextStream ts(&buffer);
+  ts << "\t\t<relation " << XmlElement::toString(_object.second, changesetId) << ">\n";
+  for (QList<XmlMember>::const_iterator it = _members.begin(); it != _members.end(); ++it)
+    ts << it->toString();
+  if (_tags.size() > 0)
+  {
+    for (QVector<XmlObject>::const_iterator it = _tags.begin(); it != _tags.end(); ++it)
+      ts << toTagString(it->second);
+  }
+  ts << "\t\t</relation>\n";
+  return ts.readAll();
+}
+
+XmlMember& XmlRelation::getMember(int index)
+{
+  return _members[index];
+}
+
+int XmlRelation::getMemberCount()
+{
+  return _members.size();
+}
+
+XmlMember::XmlMember(const QXmlStreamAttributes& member, ElementIdToIdMap* idMap)
+  : _type(member.value("type").toString()),
+    _ref(member.value("ref").toString().toLong()),
+    _role(member.value("role").toString()),
+    _idMap(idMap)
+{
+}
+
+QString XmlMember::toString() const
+{
+  QString buffer;
+  QTextStream ts(&buffer);
+  ts << "\t\t\t<member type=\"" << _type << "\" ref=\""
+     << (_idMap ? _idMap->getNewId(ElementType::fromString(_type),_ref) : _ref)
+     << "\" role=\"" << _role << "\"/>\n";
+  return ts.readAll();
+}
+
+
+}
