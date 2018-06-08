@@ -44,19 +44,29 @@ SetTagValueVisitor::SetTagValueVisitor()
 }
 
 SetTagValueVisitor::SetTagValueVisitor(QString key, QString value, bool appendToExistingValue,
-                                       ElementType elementType, bool overwriteExistingTag) :
+                                       const QString filterName, bool overwriteExistingTag) :
 _appendToExistingValue(appendToExistingValue),
-_elementType(elementType),
 _overwriteExistingTag(overwriteExistingTag)
 {
   _k.append(key);
   _v.append(value);
+  setFilter(filterName);
 
   LOG_VART(_k);
   LOG_VART(_v);
   LOG_VART(_appendToExistingValue);
-  LOG_VART(_elementType);
   LOG_VART(_overwriteExistingTag);
+}
+
+void SetTagValueVisitor::setFilter(const QString filterName)
+{
+  if (!filterName.trimmed().isEmpty())
+  {
+    LOG_VART(filterName);
+    ElementCriterion* ef =
+      Factory::getInstance().constructObject<ElementCriterion>(filterName.trimmed());
+    _filter.reset(ef);
+  }
 }
 
 void SetTagValueVisitor::setConfiguration(const Settings& conf)
@@ -69,16 +79,12 @@ void SetTagValueVisitor::setConfiguration(const Settings& conf)
     throw IllegalArgumentException("set.tag.value.visitor key and value must be the same length.");
   }
   _appendToExistingValue = configOptions.getSetTagValueVisitorAppendToExistingValue();
-  if (!configOptions.getSetTagValueVisitorElementType().trimmed().isEmpty())
-  {
-    _elementType = ElementType::fromString(configOptions.getSetTagValueVisitorElementType());
-  }
+  setFilter(configOptions.getSetTagValueVisitorFilter());
   _overwriteExistingTag = configOptions.getSetTagValueVisitorOverwrite();
 
   LOG_VART(_k);
   LOG_VART(_v);
   LOG_VART(_appendToExistingValue);
-  LOG_VART(_elementType);
   LOG_VART(_overwriteExistingTag);
 }
 
@@ -95,8 +101,7 @@ void SetTagValueVisitor::_setTag(const ElementPtr& e, QString k, QString v)
 
   LOG_VART(e->getElementId());
 
-  LOG_VART(e->getElementType());
-  if (_elementType != ElementType::Unknown && e->getElementType() != _elementType)
+  if (_filter.get() && !_filter->isSatisfied(e))
   {
     return;
   }

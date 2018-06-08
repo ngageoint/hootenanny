@@ -51,8 +51,7 @@ class SetTagValueVisitorTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runAddNewTest);
   CPPUNIT_TEST(runOverwriteExistingTest);
   CPPUNIT_TEST(runAppendValueTest);
-  CPPUNIT_TEST(runElementFilterTest);
-  CPPUNIT_TEST(runBadElementTypeTest);
+  CPPUNIT_TEST(runFilterTest);
   CPPUNIT_TEST(runOverwriteDisabledTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -117,14 +116,14 @@ public:
       "test-output/visitors/SetTagValueVisitorTest-runAppendValueTest.osm");
   }
 
-  void runElementFilterTest()
+  void runFilterTest()
   {
     OsmMapPtr map(new OsmMap());
     OsmMap::resetCounters();
     OsmMapReaderFactory::read(
       map, "test-files/visitors/SetTagValueVisitorTest.osm", false, Status::Unknown1);
 
-    SetTagValueVisitor visitor("key3", "value3", false, ElementType::fromString("node"));
+    SetTagValueVisitor visitor("key3", "value3", false, "hoot::NodeCriterion");
     map->visitRw(visitor);
 
     OsmMapWriterFactory::getInstance().write(map,
@@ -133,21 +132,6 @@ public:
     HOOT_FILE_EQUALS(
       "test-files/visitors/SetTagValueVisitorTest-runElementFilterTest.osm",
       "test-output/visitors/SetTagValueVisitorTest-runElementFilterTest.osm");
-  }
-
-  void runBadElementTypeTest()
-  {
-    QString exceptionMsg("");
-    try
-    {
-      SetTagValueVisitor visitor("key1", "value1", false, ElementType::fromString("blah"));
-    }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-    }
-
-    CPPUNIT_ASSERT(exceptionMsg.contains("Invalid element type string"));
   }
 
   void runOverwriteDisabledTest()
@@ -160,7 +144,7 @@ public:
     //We've disabled overwriting existing tags, so the tag with key="key2" should not be updated
     //on any element that already has a tag with the key.  It should only be added to elements
     //that don't have a tag with that key.
-    SetTagValueVisitor visitor("key2", "updatedValue", false, ElementType::Unknown, false);
+    SetTagValueVisitor visitor("key2", "updatedValue", false, "", false);
     map->visitRw(visitor);
 
     OsmMapWriterFactory::getInstance().write(map,
