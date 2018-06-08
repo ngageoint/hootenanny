@@ -173,13 +173,6 @@ Invalid relation members will cause a warning to be logged.  You should enable t
 are loading data that has not been previously validated in another OSM API database.  Enabling this
 setting may cause writing to an OSM API database to occur more slowly.
 
-=== attribute.count.values
-
-* Data Type: int
-* Default Value: `30`
-
-The maximum number of values returned for each attribute by the attribute-count command.
-
 === attribute.score.extractor.use.weight
 
 * Data Type: bool
@@ -2641,46 +2634,46 @@ waterway.auto.calc.search.radius = true.  See `search.radius.default`.
 
 The search radius to use when conflating railways.
 
-=== set.tag.visitor.append.to.existing.value
+
+=== set.tag.value.visitor.append.to.existing.value
 
 * Data Type: bool
 * Default Value: `false`
 
-If true, any element with a value populated for the key defined by the set.tag.visitor.key option
-will have the value specified in the set.tag.visitor.value option appended to it.
+If true, any element with a value populated for the key defined by the set.tag.value.visitor.key
+option will have the value specified in the set.tag.value.visitor.value option appended to it.
 
-=== set.tag.visitor.element.type
+=== set.tag.value.visitor.filter
 
 * Data Type: string
 * Default Value: ``
 
-An optional element type filter for the SetTagVisitor.  Valid values are: 'node', 'way', or
-'relation'.  If left empty, all elements will receive tag additions.
+The plugin name of a filter used to select elements to add or modify tags on.
 
-=== set.tag.visitor.key
+=== set.tag.value.visitor.key
 
 * Data Type: list
 * Default Value: ``
 
-Set the key member in the SetTagVisitor class.  SetTagVisitor allows for adding/modifying a
-particular tag on all elements in a map. The number of keys in `set.tag.visitor.key` should match
-the number of keys in `set.tag.visitor.value`.
+Set the key member in the SetTagValueVisitor class.  SetTagValueVisitor allows for
+adding/modifying a particular tag on all elements in a map. The number of keys in
+`set.tag.value.visitor.key` should match the number of keys in `set.tag.value.visitor.value`.
 
-=== set.tag.visitor.overwrite
+=== set.tag.value.visitor.overwrite
 
 * Data Type: bool
 * Default Value: `true`
 
-If true, the SetTagVisitor class will overwrite any existing tag it finds with
-key=set.tag.visitor.key, otherwise it will skip updating the tag.
+If true, the SetTagValueVisitor class will overwrite any existing tag it finds with
+key=set.tag.value.visitor.key, otherwise it will skip updating the tag.
 
-=== set.tag.visitor.value
+=== set.tag.value.visitor.value
 
 * Data Type: list
 * Default Value: ``
 
-Set the value member in the SetTagVisitor class.  SetTagVisitor allows for adding/modifying a
-particular tag on all elements in a map.
+Set the value member in the SetTagValueVisitor class.  SetTagValueVisitor allows for
+adding/modifying a particular tag on all elements in a map.
 
 === small.way.merger.diff
 
@@ -2727,8 +2720,8 @@ operations.
 * Data Type: bool
 * Default Value: `false`
 
-If true, the SetTagVisitor class will only update statuses on elements when the existing status is
-'Invalid'.
+If true, the SetTagValueVisitor class will only update statuses on elements when the existing
+status is 'Invalid'.
 
 === status.update.visitor.status
 
@@ -2754,13 +2747,13 @@ Primarily, this is useful within the node.js interface.
 The default category to use when using the hoot::TagCategoryDifferencer class for comparing tags.
 Primarily, this is useful within the node.js interface.
 
-=== tag.criterion.kvp
+=== tag.criterion.kvps
 
-* Data Type: string
+* Data Type: list
 * Default Value: ``
 
-The key/value pair to use in the tag criterion by default. E.g. 'highway,road'  Used by various
-element visitors and map operations.
+Key/value pairs to use with TagCriterion. Delimit keys and values with '='.  From the command line,
+delimit multiple key/value pairs with ';'.  E.g. 'highway=road;amenity=school'
 
 === tag.merger.default
 

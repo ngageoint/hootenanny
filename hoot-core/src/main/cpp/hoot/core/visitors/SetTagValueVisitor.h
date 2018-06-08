@@ -24,12 +24,12 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef SETTAGVISITOR_H
-#define SETTAGVISITOR_H
+#ifndef SETTAGVALUEVISITOR_H
+#define SETTAGVALUEVISITOR_H
 
 // hoot
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/elements/ElementType.h>
+#include <hoot/core/filters/ElementCriterionConsumer.h>
 
 #include "ElementOsmMapVisitor.h"
 
@@ -37,35 +37,38 @@ namespace hoot
 {
 
 /**
- * Sets any tags on any elements with the specified key to the specified value
- *
- * TODO: rename to SetTagValueVisitor for clarity
+ * Sets tags on any elements with the specified key to the specified value or adds a new tag, if
+ * the tag doesn't exist on the element.
  */
-class SetTagVisitor : public ElementOsmMapVisitor, public Configurable
+class SetTagValueVisitor : public ElementOsmMapVisitor, public Configurable,
+  public ElementCriterionConsumer
 {
 public:
 
-  static std::string className() { return "hoot::SetTagVisitor"; }
+  static std::string className() { return "hoot::SetTagValueVisitor"; }
 
-  SetTagVisitor();
-  SetTagVisitor(QString key, QString value, bool appendToExistingValue = false,
-                //using Unknown as the default empty value for element type
-                ElementType elementType = ElementType::Unknown, bool overwriteExistingTag = true);
+  SetTagValueVisitor();
+  SetTagValueVisitor(QString key, QString value, bool appendToExistingValue = false,
+                     const QString filterName = "", bool overwriteExistingTag = true);
+
+  virtual void addCriterion(const ElementCriterionPtr& e) { _filter = e; }
 
   virtual void setConfiguration(const Settings& conf);
 
   virtual void visit(const boost::shared_ptr<Element>& e);
 
   virtual QString getDescription() const
-  { return "Sets tags with the specified key to the specified value"; }
+  { return "Adds or updates tags using the specified key/value pair"; }
+
+  void setFilter(const QString filterName);
 
 private:
 
   QStringList _k, _v;
   //if true; will not overwrite existing keys and will append values to them
   bool _appendToExistingValue;
-  //an element type filter
-  ElementType _elementType;
+  //a customizable filter
+  boost::shared_ptr<ElementCriterion> _filter;
   //overwrites any tag with a matching key
   bool _overwriteExistingTag;
 
@@ -74,4 +77,4 @@ private:
 
 }
 
-#endif // SETTAGVISITOR_H
+#endif // SETTAGVALUEVISITOR_H

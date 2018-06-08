@@ -22,48 +22,35 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef TAGCRITERION_H
-#define TAGCRITERION_H
+#ifndef NODECRITERION_H
+#define NODECRITERION_H
 
 // hoot
-#include <hoot/core/filters/ElementCriterion.h>
-#include <hoot/core/util/Configurable.h>
-
-// Qt
-#include <QString>
+#include "ElementCriterion.h"
 
 namespace hoot
 {
 
 /**
- * Returns true if k==v
+ * A filter that will keep node features.
  */
-class TagCriterion : public ElementCriterion, public Configurable
+class NodeCriterion : public ElementCriterion
 {
 public:
 
-  static std::string className() { return "hoot::TagCriterion"; }
+  static std::string className() { return "hoot::NodeCriterion"; }
 
-  TagCriterion();
-  TagCriterion(const QString& k, const QString& v);
+  NodeCriterion();
 
-  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
+  bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
-  void setConfiguration(const Settings& s);
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new NodeCriterion()); }
 
-  void setKvps(const QStringList kvps);
-
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new TagCriterion(/*_k, _v*/)); }
-
-  virtual QString getDescription() const { return "Filters elements based on tags"; }
-
-private:
-
-  QStringList _kvps;
+  virtual QString getDescription() const { return "Identifies nodes"; }
 };
 
 }
 
-#endif // TAGCRITERION_H
+#endif // NODECRITERION_H

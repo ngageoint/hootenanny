@@ -29,7 +29,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/scoring/AttributeCount.h>
+#include <hoot/core/schema/TagInfo.h>
 
 // QT
 #include <QDir>
@@ -39,23 +39,21 @@ using namespace std;
 namespace hoot
 {
 
-class AttributeCountCmd : public BaseCommand
+class TagInfoCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::AttributeCountCmd"; }
+  static string className() { return "hoot::TagInfoCmd"; }
 
-  AttributeCountCmd() { }
+  TagInfoCmd() { }
 
-  virtual QString getName() const { return "attribute-count"; }
+  virtual QString getName() const { return "tag-info"; }
 
   virtual QString getDescription() const
-  { return "Prints out the layer name, attribute name, and some attribute values"; }
+  { return "Prints tag keys and values for map data."; }
 
   virtual int runSimple(QStringList args)
   {
-    AttributeCount attrcount;
-
     QString finalText;
 
     if (args.size() < 1)
@@ -64,14 +62,57 @@ public:
       throw HootException(QString("%1 takes at least one parameter.").arg(getName()));
     }
 
-    // Start the object
+    int tagValuesPerKeyLimit = INT_MAX;
+    if (args.contains("--tag-values-limit"))
+    {
+      const int limitIndex = args.indexOf("--tag-values-limit");
+      bool ok;
+      tagValuesPerKeyLimit = args.at(limitIndex + 1).trimmed().toInt(&ok);
+      if (!ok)
+      {
+        throw HootException("Invalid input specified for limit: " +
+                            args.at(args.indexOf("--tag-values-limit") + 1));
+      }
+      args.removeAt(limitIndex + 1);
+      args.removeAt(limitIndex);
+      LOG_VART(args);
+    }
+
+    QStringList keys;
+    if (args.contains("--keys"))
+    {
+      const int keysIndex = args.indexOf("--keys");
+      keys = args.at(keysIndex + 1).trimmed().split(";");
+      args.removeAt(keysIndex + 1);
+      args.removeAt(keysIndex);
+      LOG_VART(args);
+    }
+
+    bool keysOnly = false;
+    if (args.contains("--keys-only"))
+    {
+      keysOnly = true;
+      args.removeAt(args.indexOf("--keys-only"));
+      LOG_VART(args);
+    }
+
+    bool caseSensitive = true;
+    if (args.contains("--case-insensitive"))
+    {
+      caseSensitive = false;
+      args.removeAt(args.indexOf("--case-insensitive"));
+      LOG_VART(args);
+    }
+
+    TagInfo tagInfo(tagValuesPerKeyLimit, keys, keysOnly, caseSensitive);
+
     finalText += "{\n";
 
     for (int i = 0; i < args.size(); i++)
     {
       finalText += QString("  \"%1\":{\n").arg(QFileInfo(args[i]).fileName()); // Lazy :-)
 
-      finalText += attrcount.Count(QString(args[i])) ;
+      finalText += tagInfo.getInfo(QString(args[i])) ;
       finalText += "\n  }";
 
       // Dont add a comma to the last dataset
@@ -79,18 +120,15 @@ public:
       {
         finalText += ",\n";
       }
-    } // End Arguments
-
-    // End the object
+    }
     finalText += "\n}";
 
-    // Dump it out to the screen
     cout << finalText << endl;
 
     return 0;
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, AttributeCountCmd)
+HOOT_FACTORY_REGISTER(Command, TagInfoCmd)
 
 }

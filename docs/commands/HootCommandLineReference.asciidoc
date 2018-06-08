@@ -22,9 +22,6 @@ arguments and a short help screen will be displayed.
 
 :leveloffset: 1
 // be sure all included asciidocs end with a newline
-include::accuracy-distribution.asciidoc[]
-include::attribute-co-occurrence.asciidoc[]
-include::attribute-count.asciidoc[]
 include::big-cat.asciidoc[]
 include::calculate-tiles.asciidoc[]
 include::changeset-apply.asciidoc[]
@@ -65,6 +62,9 @@ include::score-map.asciidoc[]
 include::score-matches.asciidoc[]
 include::sort.asciidoc[]
 include::stats.asciidoc[]
+include::tag-accuracy-distribution.asciidoc[]
+include::tag-comparison.asciidoc[]
+include::tag-info.asciidoc[]
 include::tag-schema.asciidoc[]
 include::type-tagger-create-rules.asciidoc[]
 include::type-tagger-create-rules-db.asciidoc[]

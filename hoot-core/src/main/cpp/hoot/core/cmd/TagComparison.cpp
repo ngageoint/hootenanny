@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/scoring/AttributeCoOccurrence.h>
+#include <hoot/core/schema/AttributeCoOccurrence.h>
 #include <hoot/core/util/IoUtils.h>
 
 using namespace std;
@@ -36,18 +36,18 @@ using namespace std;
 namespace hoot
 {
 
-class AttributeComparisonCmd : public BaseCommand
+class TagComparisonCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::AttributeComparisonCmd"; }
+  static string className() { return "hoot::TagComparisonCmd"; }
 
-  AttributeComparisonCmd() { }
+  TagComparisonCmd() { }
 
-  virtual QString getName() const { return "attribute-comparison"; }
+  virtual QString getName() const { return "tag-comparison"; }
 
   virtual QString getDescription() const
-  { return "Compares attributes between two maps"; }
+  { return "Compares tags between two maps"; }
 
   virtual int runSimple(QStringList args)
   {
@@ -84,7 +84,7 @@ public:
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, AttributeComparisonCmd)
+HOOT_FACTORY_REGISTER(Command, TagComparisonCmd)
 
 }
 
