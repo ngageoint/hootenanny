@@ -1,6 +1,6 @@
 #!/bin/python
 
-# This translates power line data from the California State Goverment obtained from http://www.data.gov.
+# This translates power line data published by the California State Goverment and obtained from http://www.data.gov.
 
 def translateAttributes(attrs, layerName, geometryType):
 
@@ -8,7 +8,16 @@ def translateAttributes(attrs, layerName, geometryType):
     if not attrs or geometryType != 'Line': return
     
     if 'Circuit' in attrs:
-        attrs['circuits'] = attrs['Circuit']
+        numCircuitsStr = attrs['Circuit']
+        #fix typo in data
+        if numCircuitsStr == 'Duble':
+            numCircuitsStr = 'Double'
+        if numCircuitsStr == 'Single':
+            attrs['circuits'] = '1'
+        elif numCircuitsStr == 'Double':
+            attrs['circuits'] = '2'
+        elif numCircuitsStr == 'Quad':
+            attrs['circuits'] = '4'
         del attrs['Circuit']
     if 'Comments' in attrs:
         attrs['comments'] = attrs['Comments']

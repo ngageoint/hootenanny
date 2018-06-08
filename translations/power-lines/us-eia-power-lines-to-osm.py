@@ -1,6 +1,6 @@
 #!/bin/python
 
-# This translates U.S. country-wide power line data from the United States Energy Information Adminstration.
+# This translates U.S. country-wide power line data published by the United States Energy Information Adminstration.
 
 def translateAttributes(attrs, layerName, geometryType):
 

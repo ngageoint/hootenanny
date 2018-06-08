@@ -1,7 +1,7 @@
 #!/bin/python
 
-# This translates power line data from https://energydata.info/.  This translation only targets African datasets from that site, so datasets
-# from non-African countries likely would need their own translation.
+# This translates power line data published to https://energydata.info/.  This translation only targets African datasets from that site, 
+# so datasets from non-African countries likely would need their own translation.
 
 def translateAttributes(attrs, layerName, geometryType):
     
