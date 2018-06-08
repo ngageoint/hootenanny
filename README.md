@@ -59,6 +59,7 @@ available Hootenanny commands, type 'hoot'.  More detail is provided [here](http
 * Building polygons
 * Points of Interest (POIs)
 * Transportation polylines (roads and railways)
+* Utility polylines (power lines)
 * Waterway polylines
 
 # Supported Data Formats
