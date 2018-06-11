@@ -138,7 +138,7 @@ pipeline {
             }
             steps{
                 withSonarQubeEnv('SonarCloud') {
-                    sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; cd hoot-services; mvn sonar:sonar"
+                    sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; cd hoot-services; mvn sonar:sonar'"
                 }
 
                 script {
