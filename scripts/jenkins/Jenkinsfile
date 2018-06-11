@@ -94,7 +94,7 @@ pipeline {
                 script {
                     if (env.BRANCH_NAME == "develop") {
                         // Compile instrumented code for develop branch which allows for calculating coverage
-                        sh "vagrant ssh ${params.Box} -c 'cd hoot; sed -i s/\"--with-uitests\"/\"--with-uitests --with-coverage\"/g VagrantBuild.sh'"
+                        sh "sed -i 's/--with-uitests/--with-uitests --with-coverage/g' VagrantBuild.sh"
                     }
                 }
             }
