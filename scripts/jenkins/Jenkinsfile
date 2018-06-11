@@ -137,6 +137,10 @@ pipeline {
                 }
             }
             steps{
+                withSonarQubeEnv('SonarCloud') {
+                    sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; cd hoot-services; mvn sonar:sonar"
+                }
+
                 script {
                     if (env.BRANCH_NAME.startsWith("PR-")) {
                         // PR scan will use github plugin
@@ -149,13 +153,6 @@ pipeline {
 
                 }
             }
-            //steps {
-            //    // rysnc the build folders back to host system so scan
-            //    sh "vagrant rsync-back ${params.Box}"
-            //    withSonarQubeEnv('Breeze Sonarqube') {
-            //        sh "cd hoot-services; mvn sonar:sonar"
-            //    }
-            //}
         }
     }
     post {
