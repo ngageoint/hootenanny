@@ -137,6 +137,7 @@ private:
   QUrl _url;
   QList<QString> _changesets;
   int _maxWriters;
+  long _maxChangesetSize;
   OsmApiCapabilites _capabilities;
   QByteArray _content;
   int _status;

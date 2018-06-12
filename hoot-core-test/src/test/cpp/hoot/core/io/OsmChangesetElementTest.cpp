@@ -41,8 +41,9 @@ class OsmChangesetElementTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runXmlWayTest);
   CPPUNIT_TEST(runXmlRelationTest);
   CPPUNIT_TEST(runXmlChangesetTest);
-  CPPUNIT_TEST(runXmlChangesetSplitTest);
+  CPPUNIT_TEST(runXmlChangesetJoinTest);
   CPPUNIT_TEST(runXmlChangesetUpdateTest);
+  CPPUNIT_TEST(runXmlChangesetSplitTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -174,7 +175,7 @@ public:
     HOOT_STR_EQUALS(expectedText, changeset.getChangesetString(info, 1));
   }
 
-  void runXmlChangesetSplitTest()
+  void runXmlChangesetJoinTest()
   {
     XmlChangeset changeset;
     changeset.loadChangeset("test-files/io/OsmXmlChangesetFileWriterTest/changeset.split.osc");
@@ -213,6 +214,41 @@ public:
     QString expectedText = FileUtils::readFully("test-files/io/OsmChangesetElementTest/ToyTestAChangeset2.osc");
 
     HOOT_STR_EQUALS(expectedText, changeset.getChangesetString(info, 2));
+  }
+
+  void runXmlChangesetSplitTest()
+  {
+    XmlChangeset changeset;
+    changeset.loadChangeset("test-files/io/OsmChangesetElementTest/ToyTestAInput.osc");
+
+    changeset.setMaxSize(5);
+
+    QStringList expectedFiles;
+    expectedFiles.append("test-files/io/OsmChangesetElementTest/ToyTestASplit1.osc");
+    expectedFiles.append("test-files/io/OsmChangesetElementTest/ToyTestASplit2.osc");
+    expectedFiles.append("test-files/io/OsmChangesetElementTest/ToyTestASplit3.osc");
+
+    QStringList updatedFiles;
+    updatedFiles.append("test-files/io/OsmChangesetElementTest/ToyTestASplit1.response.xml");
+    updatedFiles.append("test-files/io/OsmChangesetElementTest/ToyTestASplit2.response.xml");
+    updatedFiles.append("test-files/io/OsmChangesetElementTest/ToyTestASplit3.response.xml");
+
+    ChangesetInfoPtr info;
+    int i = 1;
+    while (!changeset.isDone())
+    {
+      info.reset(new ChangesetInfo());
+      changeset.calculateChangeset(info);
+
+      QString expectedText = FileUtils::readFully(expectedFiles[i - 1]);
+
+      HOOT_STR_EQUALS(expectedText, changeset.getChangesetString(info, i));
+
+      QString updatedText = FileUtils::readFully(updatedFiles[i - 1]);
+      changeset.updateChangeset(updatedText);
+
+      ++i;
+    }
   }
 
 };

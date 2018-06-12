@@ -1729,6 +1729,20 @@ sequencing of element ID's.
 
 Add a tag with the bounding box for each element
 
+=== osm.api.max.changeset.size
+
+* Data Type: long
+* Default Value: `100`
+
+Maximum number of changes per changeset when uploading to live OSM API
+
+=== osm.api.max.writers
+
+* Data Type: int
+* Default Value: `8`
+
+Maximum number of writer threads pushing changesets to live OSM API
+
 === osm.map.reader.factory.reader
 
 * Data Type: string

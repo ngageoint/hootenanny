@@ -50,7 +50,8 @@ namespace hoot
 OsmApiWriter::OsmApiWriter(const QUrl& url, const QList<QString>& changesets)
   : _changesets(changesets),
     //  FIXME: Add the max writers option
-    _maxWriters(ConfigOptions().getApidbBulkInserterStartingNodeId()),
+    _maxWriters(ConfigOptions().getOsmApiMaxWriters()),
+    _maxChangesetSize(ConfigOptions().getOsmApiMaxChangesetSize()),
     _status(0)
 {
   if (isSupported(url))
@@ -70,14 +71,14 @@ bool OsmApiWriter::apply(const QString& description)
       LOG_ERROR("API Permissions error");
     //  Load all of the changesets into memory
     XmlChangeset changeset;
+    changeset.setMaxSize(_maxChangesetSize);
     for (int i = 0; i < _changesets.size(); ++i)
       changeset.loadChangeset(_changesets[i]);
     //  Start the writer threads
     for (int i = 0; i < _maxWriters; ++i)
     {
     }
-    bool _work = true;
-    while (_work)
+    while (!changeset.isDone())
     {
       //  Divide up the changes into atomic changesets
       ChangesetInfoPtr changeset_info(new ChangesetInfo());
@@ -97,7 +98,6 @@ bool OsmApiWriter::apply(const QString& description)
         //  Close the changeset
         _closeChangeset(id);
       }
-      _work = false;
     }
     //  Wait for the threads to shutdown
     for (int i = 0; i < _maxWriters; ++i)
@@ -129,8 +129,8 @@ bool OsmApiWriter::apply(const QString& description)
 
 void OsmApiWriter::setConfiguration(const Settings& conf)
 {
-  //  FIXME: Add the max writers option
-  _maxWriters = ConfigOptions(conf).getApidbBulkInserterStartingNodeId();
+  _maxWriters = ConfigOptions(conf).getOsmApiMaxWriters();
+  _maxChangesetSize = ConfigOptions(conf).getOsmApiMaxChangesetSize();
 }
 
 bool OsmApiWriter::isSupported(const QUrl &url)
