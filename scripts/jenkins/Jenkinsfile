@@ -137,9 +137,7 @@ pipeline {
                 }
             }
             steps{
-                withSonarQubeEnv('SonarCloud') {
-                    sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; cd hoot-services; mvn sonar:sonar'"
-                }
+                    sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; cd hoot-services; mvn sonar:sonar -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=hootenanny -Dsonar.login=${env.SONAR_CLOUD_KEY} -Dsonar.projectKey=hoot-services'"
 
                 script {
                     if (env.BRANCH_NAME.startsWith("PR-")) {
