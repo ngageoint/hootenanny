@@ -109,7 +109,7 @@ public:
   //  https://wiki.openstreetmap.org/wiki/API_v0.6#Retrieving_permissions:_GET_.2Fapi.2F0.6.2Fpermissions
   bool validatePermissions();
 
-  bool apply(const QString& description);
+  bool apply();
 
 private:
   //  for white box testing
@@ -136,6 +136,7 @@ private:
 
   QUrl _url;
   QList<QString> _changesets;
+  QString _description;
   int _maxWriters;
   OsmApiCapabilites _capabilities;
   QByteArray _content;

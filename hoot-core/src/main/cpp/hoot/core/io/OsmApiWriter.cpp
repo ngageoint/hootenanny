@@ -49,6 +49,7 @@ namespace hoot
 
 OsmApiWriter::OsmApiWriter(const QUrl& url, const QList<QString>& changesets)
   : _changesets(changesets),
+    _description(ConfigOptions().getApidbBulkInserterChangesetDescription()),
     //  FIXME: Add the max writers option
     _maxWriters(ConfigOptions().getApidbBulkInserterStartingNodeId()),
     _status(0)
@@ -57,10 +58,18 @@ OsmApiWriter::OsmApiWriter(const QUrl& url, const QList<QString>& changesets)
     _url = url;
 }
 
-bool OsmApiWriter::apply(const QString& description)
+bool OsmApiWriter::apply()
 {
-  bool success = true;
-  if (true)
+  //  Validate API capabilites
+  if (!queryCapabilities())
+    LOG_ERROR("API Capabilities error");
+
+  //  Validate API permissions
+  if (!validatePermissions())
+    LOG_ERROR("API Permissions error");
+
+  bool success = false;
+  if (success)
   {
     //  Validate API capabilites
     if (!queryCapabilities())
@@ -85,7 +94,7 @@ bool OsmApiWriter::apply(const QString& description)
       if (changeset.calculateChangeset(changeset_info))
       {
         //  Create the changeset for the first changeset
-        long id = _createChangeset(description);
+        long id = _createChangeset(_description);
         //  Upload the changeset
         if (!_uploadChangeset(id, changeset.getChangesetString(changeset_info, id)))
         {
@@ -106,20 +115,30 @@ bool OsmApiWriter::apply(const QString& description)
   }
   else
   {
+    QRegExp regex(" version=\"0\"");
+
     //  Let's make this work serially first
     for (int i = 0; i < _changesets.size(); ++i)
     {
       //  Create the changeset for the first changeset
-      long id = _createChangeset(description);
+      long id = _createChangeset(_description);
+
+      LOG_DEBUG("Changeset id: " << id);
+
       //  Read the text of the changeset
       QString changeset = FileUtils::readFully(_changesets[i]);
+
+      //  Temporarily update the changeset to allow it to work
+      changeset = changeset.replace(regex, QString(" version=\"0\" changeset=\"%1\"").arg(id));
+
       //  Upload the changeset
       if (!_uploadChangeset(id, changeset))
       {
         LOG_ERROR("Error uploading changeset" << _changesets[i]);
         success = false;
       }
-      LOG_INFO(QString(this->_content));
+      LOG_DEBUG("Changeset Content: " << QString(this->_content));
+
       //  Close the changeset
       _closeChangeset(id);
     }
@@ -131,6 +150,7 @@ void OsmApiWriter::setConfiguration(const Settings& conf)
 {
   //  FIXME: Add the max writers option
   _maxWriters = ConfigOptions(conf).getApidbBulkInserterStartingNodeId();
+  _description = ConfigOptions(conf).getApidbBulkInserterChangesetDescription();
 }
 
 bool OsmApiWriter::isSupported(const QUrl &url)
@@ -155,8 +175,8 @@ bool OsmApiWriter::queryCapabilities()
     capabilities.setPath(API_PATH_CAPABILITIES);
     _networkRequest(capabilities);
     QString responseXml = QString::fromAscii(_content.data());
-    LOG_WARN(capabilities.toString());
-    LOG_WARN(responseXml);
+    LOG_DEBUG("Capabilities: " << capabilities.toString());
+    LOG_DEBUG("Response: " << responseXml);
     _capabilities = _parseCapabilities(responseXml);
   }
   catch (const HootException& ex)
@@ -194,6 +214,7 @@ bool OsmApiWriter::_networkRequest(QUrl url, QNetworkAccessManager::Operation ht
   //  Do HTTP request
   boost::shared_ptr<QNetworkAccessManager> pNAM(new QNetworkAccessManager());
   QNetworkRequest request(url);
+
   if (url.scheme().toLower() == "https")
   {
     QSslConfiguration config(QSslConfiguration::defaultConfiguration());
@@ -202,6 +223,7 @@ bool OsmApiWriter::_networkRequest(QUrl url, QNetworkAccessManager::Operation ht
     config.setPeerVerifyMode(QSslSocket::VerifyNone);
     request.setSslConfiguration(config);
   }
+
   if (url.userInfo() != "")
   {
     //  Using basic authentication, replace with OAuth when necessary
@@ -209,6 +231,7 @@ bool OsmApiWriter::_networkRequest(QUrl url, QNetworkAccessManager::Operation ht
     request.setRawHeader("Authorization", QString("Basic %1").arg(base64).toAscii());
     url.setUserInfo("");
   }
+
   QNetworkReply* reply = NULL;
   switch (http_op)
   {
@@ -234,8 +257,10 @@ bool OsmApiWriter::_networkRequest(QUrl url, QNetworkAccessManager::Operation ht
 
   //  Get the status and content of the reply if available
   _status = _getHttpResponseCode(reply);
+
   if (reply != NULL)
     _content = reply->readAll();
+
   //  Check error status on our reply
   if (QNetworkReply::NoError != reply->error())
   {
@@ -300,6 +325,8 @@ bool OsmApiWriter::_parsePermissions(const QString& permissions)
 {
   QXmlStreamReader reader(permissions);
 
+  LOG_DEBUG("Permissions: " << permissions);
+
   while (!reader.atEnd() && !reader.hasError())
   {
     QXmlStreamReader::TokenType type = reader.readNext();
@@ -333,9 +360,12 @@ long OsmApiWriter::_createChangeset(const QString& description)
       "    <tag k='comment' v='%2'/>"
       "  </changeset>"
       "</osm>").arg(HOOT_NAME).arg(description);
+
     _networkRequest(changeset, QNetworkAccessManager::Operation::PutOperation, xml.toAscii());
+
     QString responseXml = QString::fromAscii(_content.data());
-//TODO: Parse response if it is more than just a single number
+
+    //TODO: Parse response if it is more than just a single number
     return responseXml.toLong();
   }
   catch (const HootException& ex)
@@ -384,8 +414,13 @@ bool OsmApiWriter::_uploadChangeset(long id, const QString& changeset)
   {
     QUrl change = _url;
     change.setPath(API_PATH_UPLOAD_CHANGESET.arg(id));
+
+    LOG_DEBUG("Changeset: " << changeset);
+
     _networkRequest(change, QNetworkAccessManager::Operation::PostOperation, changeset.toAscii());
+
     QString responseXml = QString::fromAscii(_content.data());
+
     switch (_status)
     {
     default:

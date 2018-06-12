@@ -141,7 +141,8 @@ public:
   {
     QUrl osm;
     osm.setUrl(OSMAPI_URL);
-    osm.setUserInfo("bmarchant:TestPassword");
+//    osm.setUserInfo("bmarchant:TestPassword");
+    osm.setUserInfo("test01:hoottest");
 
     QList<QString> changesets;
     OsmApiWriter writer(osm, changesets);
@@ -153,24 +154,24 @@ public:
   {
     QUrl osm;
     osm.setUrl(OSMAPI_URL);
-    osm.setUserInfo("bmarchant:TestPassword");
+//    osm.setUserInfo("bmarchant:TestPassword");
+    osm.setUserInfo("test01:hoottest");
+
+    LOG_INFO("Initial URL: " << osm);
 
     QList<QString> changesets;
-//*
-    changesets.append("test-files/ToyTestA.osc");
-//*/
-/*
-    changesets.append("/fouo/temp-data/ToyTest.osc");
-    changesets.append("/fouo/temp-data/ToyTest-001.osc");
-//*/
-/*
-    changesets.append("/fouo/temp-data/DcTigerRoads.osc");
-    changesets.append("/fouo/temp-data/DcTigerRoads-001.osc");
-    changesets.append("/fouo/temp-data/DcTigerRoads-002.osc");
-    changesets.append("/fouo/temp-data/DcTigerRoads-003.osc");
-//*/
+    changesets.append("test-files/io/OsmChangesetElementTest/ToyTestA.osc");
+
+//    changesets.append("test-files/cmd/quick/DeriveChangesetCmdTest/changeset-2.osc");
+//    changesets.append("/fouo/temp-data/ToyTest.osc");
+//    changesets.append("/fouo/temp-data/ToyTest-001.osc");
+//    changesets.append("/fouo/temp-data/DcTigerRoads.osc");
+//    changesets.append("/fouo/temp-data/DcTigerRoads-001.osc");
+//    changesets.append("/fouo/temp-data/DcTigerRoads-002.osc");
+//    changesets.append("/fouo/temp-data/DcTigerRoads-003.osc");
+
     OsmApiWriter writer(osm, changesets);
-    writer.apply("Hootenanny ingest");
+    writer.apply();
   }
 };
 

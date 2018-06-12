@@ -92,6 +92,13 @@ the review will receive them as well.
 
 Email address of the API database user.  Can be set here for debugging and testing.
 
+=== apidb.bulk.inserter.changeset.description
+
+* Data Type: string
+* Default Value: `Hootenanny ingest`
+
+The text description that is written to the OSM API database with a changeset
+
 === apidb.bulk.inserter.output.files.copy.location
 
 * Data Type: string
