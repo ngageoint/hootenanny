@@ -69,6 +69,8 @@ public:
 
   size_t getNumChanges();
 
+  bool containsChange(ElementId eID);
+
 private:
   boost::shared_ptr<OGRSpatialReference> _projection;
   std::list<Change> _changes;

@@ -155,18 +155,22 @@ public:
     QList< QList<SingleStat> > allStats;
 
     // read input 1 into our working map
-    OsmMapPtr map(new OsmMap());
-    loadMap(map, input1, ConfigOptions().getReaderConflateUseDataSourceIds1(), Status::Unknown1);
+    OsmMapPtr pMap(new OsmMap());
+    loadMap(pMap, input1, ConfigOptions().getReaderConflateUseDataSourceIds1(), Status::Unknown1);
+
+    // Store original IDs
+    DiffConflator conflator;
+    conflator.storeOriginalIDs(pMap);
 
     // Mark input1 elements (Use Ref1 visitor, because it's already coded up)
     Settings visitorConf;
     visitorConf.set(ConfigOptions::getAddRefVisitorInformationOnlyKey(), "false");
     boost::shared_ptr<AddRef1Visitor> pRef1v(new AddRef1Visitor());
     pRef1v->setConfiguration(visitorConf);
-    map->visitRw(*pRef1v);
+    pMap->visitRw(*pRef1v);
 
     // read input 2 into our working map
-    loadMap(map, input2, ConfigOptions().getReaderConflateUseDataSourceIds2(), Status::Unknown2);
+    loadMap(pMap, input2, ConfigOptions().getReaderConflateUseDataSourceIds2(), Status::Unknown2);
 
     double inputBytes = IoSingleStat(IoSingleStat::RChar).value - bytesRead;
     LOG_VART(inputBytes);
@@ -181,40 +185,40 @@ public:
                                "input map 2");
     if (displayStats)
     {
-      input1Cso.apply(map);
+      input1Cso.apply(pMap);
       allStats.append(input1Cso.getStats());
       stats.append(SingleStat("Time to Calculate Stats for Input 1 (sec)", t.getElapsedAndRestart()));
 
       if (input2 != "")
       {
-        input2Cso.apply(map);
+        input2Cso.apply(pMap);
         allStats.append(input2Cso.getStats());
         stats.append(SingleStat("Time to Calculate Stats for Input 2 (sec)",
           t.getElapsedAndRestart()));
       }
     }
 
-    size_t initialElementCount = map->getElementCount();
+    size_t initialElementCount = pMap->getElementCount();
     stats.append(SingleStat("Initial Element Count", initialElementCount));
 
     LOG_INFO("Applying pre-conflation operations...");
-    NamedOp(ConfigOptions().getConflatePreOps()).apply(map);
+    NamedOp(ConfigOptions().getConflatePreOps()).apply(pMap);
 
     stats.append(SingleStat("Apply Named Ops Time (sec)", t.getElapsedAndRestart()));
 
-    OsmMapPtr result = map;
+    // Make a copy to hold the results
+    OsmMapPtr pResult(new OsmMap(pMap));
 
     // call the diff conflator
-    DiffConflator conflator;
-    conflator.apply(result);
+    conflator.apply(pResult);
     stats.append(conflator.getStats());
     stats.append(SingleStat("Conflation Time (sec)", t.getElapsedAndRestart()));
 
     // Apply any user specified operations.
     LOG_INFO("Applying post-conflation operations...");
-    NamedOp(ConfigOptions().getConflatePostOps()).apply(result);
+    NamedOp(ConfigOptions().getConflatePostOps()).apply(pResult);
 
-    MapProjector::projectToWgs84(result);
+    MapProjector::projectToWgs84(pResult);
     stats.append(SingleStat("Project to WGS84 Time (sec)", t.getElapsedAndRestart()));
 
     // If output ends with .osc, write out a changeset
@@ -222,7 +226,7 @@ public:
     if (output.endsWith(".osc"))
     {
       // Write changeset
-      writeChangeset(result, output);
+      writeChangeset(pResult, output);
 
       // Do the tags if we need to
       if (conflateTags)
@@ -240,7 +244,7 @@ public:
     else
     {
       // Simply write conflated map
-      saveMap(result, output);
+      saveMap(pResult, output);
     }
 
     // Do more stats
@@ -248,7 +252,7 @@ public:
     if (displayStats)
     {
       CalculateStatsOp outputCso("output map", true);
-      outputCso.apply(result);
+      outputCso.apply(pResult);
       QList<SingleStat> outputStats = outputCso.getStats();
       if (input2 != "")
       {
@@ -265,9 +269,9 @@ public:
     stats.append(SingleStat("(Dubious) Initial Elements Processed per Second",
                             initialElementCount / totalElapsed));
     stats.append(SingleStat("(Dubious) Final Elements Processed per Second",
-                            result->getElementCount() / totalElapsed));
+                            pResult->getElementCount() / totalElapsed));
     stats.append(SingleStat("Write Output Time (sec)", timingOutput));
-    stats.append(SingleStat("Final Element Count", result->getElementCount()));
+    stats.append(SingleStat("Final Element Count", pResult->getElementCount()));
     stats.append(SingleStat("Total Time Elapsed (sec)", totalElapsed));
     stats.append(IoSingleStat(IoSingleStat::RChar));
     stats.append(IoSingleStat(IoSingleStat::WChar));
@@ -286,17 +290,17 @@ public:
     ElementCriterionPtr pPoiCrit(new PoiCriterion());
     CriterionCountVisitor poiCounter;
     poiCounter.addCriterion(pPoiCrit);
-    result->visitRo(poiCounter);
+    pResult->visitRo(poiCounter);
     stats.append((SingleStat("Count of New POIs", poiCounter.getCount())));
 
-    ElementCriterionPtr pBuildingCrit(new BuildingCriterion(result));
+    ElementCriterionPtr pBuildingCrit(new BuildingCriterion(pResult));
     CriterionCountVisitor buildingCounter;
     buildingCounter.addCriterion(pBuildingCrit);
-    result->visitRo(buildingCounter);
+    pResult->visitRo(buildingCounter);
     stats.append((SingleStat("Count of New Buildings", buildingCounter.getCount())));
 
     LengthOfWaysVisitor lengthVisitor;
-    result->visitRo(lengthVisitor);
+    pResult->visitRo(lengthVisitor);
     stats.append((SingleStat("Km of New Road", lengthVisitor.getStat()/1000.0)));
 
     if (displayStats)

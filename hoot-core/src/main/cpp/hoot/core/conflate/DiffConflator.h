@@ -65,6 +65,9 @@ class ElementId;
  * merged. It's not a true diff, either, because it won't tell you stuff that was in input1, but
  * not input2. It's basically answering the question: what can I super-easily merge from dataset2
  * into dataset1?
+ *
+ * TODO: Add tag diff description, ignore configuration item
+ *
  */
 class DiffConflator : public OsmMapOperation, public Serializable, public Boundable,
     public Configurable
@@ -82,7 +85,7 @@ public:
    * Conflates the specified map. If the map is not in a planar projection it is reprojected. The
    * map is not reprojected back to the original projection when conflation is complete.
    */
-  virtual void apply(OsmMapPtr& map);
+  virtual void apply(OsmMapPtr& pMap);
 
   virtual std::string getClassName() const { return className(); }
 
@@ -104,6 +107,8 @@ public:
   // changeset (because updating the tags requires a modify operation)
   MemChangesetProviderPtr getTagDiff();
 
+  void storeOriginalIDs(OsmMapPtr& pMap);
+
 private:
 
   OsmMapPtr _pMap;
@@ -114,6 +119,7 @@ private:
   std::vector<const Match*> _matches;
   QList<SingleStat> _stats;
   MemChangesetProviderPtr _pTagChanges;
+  std::set<ElementId> _originalIds;
 
   template <typename InputCollection>
   void _deleteAll(InputCollection& ic)

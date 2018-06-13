@@ -118,6 +118,8 @@ void DiffConflator::apply(OsmMapPtr& map)
     (double)_matches.size() / findMatchesTime));
 
   // Use matches to calculate and store tag diff
+  // We must do this before we create the map diff
+  MapProjector::projectToWgs84(_pMap);
   _calcAndStoreTagChanges();
 
   // Now we have matches. Here's what we are going to do, because our _pMap contains All of input1
@@ -161,6 +163,30 @@ MemChangesetProviderPtr DiffConflator::getTagDiff()
   return _pTagChanges;
 }
 
+void DiffConflator::storeOriginalIDs(OsmMapPtr& pMap)
+{
+  // Nodes
+  const NodeMap &nodes = pMap->getNodes();
+  for (auto it = nodes.begin(); it != nodes.end(); ++it)
+  {
+    _originalIds.insert(ElementId(ElementType::Node, it->first));
+  }
+
+  // Ways
+  const WayMap &ways = pMap->getWays();
+  for (auto it = ways.begin(); it != ways.end(); ++it)
+  {
+    _originalIds.insert(ElementId(ElementType::Way, it->first));
+  }
+
+  // Relations
+  const RelationMap &relations = pMap->getRelations();
+  for (auto it = relations.begin(); it != relations.end(); ++it)
+  {
+    _originalIds.insert(ElementId(ElementType::Relation, it->first));
+  }
+}
+
 void DiffConflator::_calcAndStoreTagChanges()
 {
   // Make sure we have a container for our changes
@@ -176,17 +202,42 @@ void DiffConflator::_calcAndStoreTagChanges()
     for (std::set< std::pair<ElementId, ElementId> >::iterator pit = pairs.begin();
          pit != pairs.end(); ++pit)
     {
-      // Compare pit->first tags to pit->second tags
-      ConstElementPtr pOldElement = _pMap->getElement(pit->first);
-      ConstElementPtr pNewElement = _pMap->getElement(pit->second);
-
-      if(_compareTags(pOldElement->getTags(), pNewElement->getTags()))
+      // If it's a POI-Poly match, the poi always comes first, even if it's from
+      // the secondary dataset, so we can't always count on the first being
+      // the old element
+      ConstElementPtr pOldElement;
+      ConstElementPtr pNewElement;
+      if (_originalIds.end() != _originalIds.find(pit->first))
       {
-        // Make new change
-        Change newChange = _getChange(pOldElement, pNewElement);
+        pOldElement = _pMap->getElement(pit->first);
+        pNewElement = _pMap->getElement(pit->second);
+      }
+      else if (_originalIds.end() != _originalIds.find(pit->second))
+      {
+        pOldElement = _pMap->getElement(pit->second);
+        pNewElement = _pMap->getElement(pit->first);
+      }
+      else
+      {
+        // How do you like me now, SonarQube?
+        // Skip the work in this loop, and try again with the next pair element
+        continue;
+      }
 
-        // Add it to our list
-        _pTagChanges->addChange(newChange);
+      LOG_INFO("Old: " << pOldElement->getElementId() << " : " << "New: " << pNewElement->getElementId());
+
+      // Sometimes we get multiple matches for the same pair. We don't want to
+      // make multiple changes, though.
+      if (!_pTagChanges->containsChange(pOldElement->getElementId()))
+      {
+        if(_compareTags(pOldElement->getTags(), pNewElement->getTags()))
+        {
+          // Make new change
+          Change newChange = _getChange(pOldElement, pNewElement);
+
+          // Add it to our list
+          _pTagChanges->addChange(newChange);
+        }
       }
     }
   }
@@ -197,9 +248,20 @@ bool DiffConflator::_compareTags (const Tags &oldTags, const Tags &newTags)
 {
   for (Tags::const_iterator newTagIt = newTags.begin(); newTagIt != newTags.end(); ++newTagIt)
   {
-    if (!oldTags.contains(newTagIt.key()) || oldTags[newTagIt.key()] != newTagIt.value())
+    QString newTagKey = newTagIt.key();
+    if (newTagKey != MetadataTags::Ref1()
+        && newTagKey != "uuid"
+        && newTagKey != "source:datetime"
+        && newTagKey != "license"
+        && newTagKey != "source:imagery")
     {
-      return true;
+      QString newVal = newTagIt.value();
+      QString oldVal = oldTags[newTagIt.key()];
+
+      if (!oldTags.contains(newTagIt.key()) || oldTags[newTagIt.key()] != newTagIt.value())
+      {
+        return true;
+      }
     }
   }
 
