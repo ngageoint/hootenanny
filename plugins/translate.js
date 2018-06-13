@@ -501,7 +501,7 @@ translate = {
         }
         else
         {
-            // Bad o2s_X. Usual cause is writeing > 254 char to a shapefile attribute
+            // Bad o2s_X. Usual cause is writing > 254 char to a shapefile attribute
             // We are expecting something that got chopped like this:
             //  {"source":"Tdh","building":"yes","statu
 

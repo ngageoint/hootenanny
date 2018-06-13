@@ -35,6 +35,8 @@
 //  Qt
 #include <QTextStream>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -42,7 +44,8 @@ XmlChangeset::XmlChangeset()
   : _nodes(ChangesetType::TypeMax),
     _ways(ChangesetType::TypeMax),
     _relations(ChangesetType::TypeMax),
-    _maxChangesetSize()
+    _maxChangesetSize(100),
+    _processedCount(0)
 {
 }
 
@@ -50,7 +53,8 @@ XmlChangeset::XmlChangeset(const QList<QString> &changesets)
   : _nodes(ChangesetType::TypeMax),
     _ways(ChangesetType::TypeMax),
     _relations(ChangesetType::TypeMax),
-    _maxChangesetSize()
+    _maxChangesetSize(100),
+    _processedCount(0)
 {
   for (QList<QString>::const_iterator it = changesets.begin(); it != changesets.end(); ++it)
     loadChangeset(*it);
@@ -204,18 +208,14 @@ void XmlChangeset::updateChangeset(const QString &changes)
   }
 }
 
-bool XmlChangeset::isDone()
-{
-  return false;
-}
-
 bool XmlChangeset::addNode(boost::shared_ptr<ChangesetInfo>& changeset, ChangesetType type, XmlNode* node)
 {
   //  Only add the nodes that are "sendable"
-  if (node->canSend())
+  if (canSend(node))
   {
     //  Add the node
     changeset->add(ElementType::Node, type, node->id());
+    markBuffered(node);
     return true;
   }
   else
@@ -227,17 +227,22 @@ bool XmlChangeset::addNodes(boost::shared_ptr<ChangesetInfo>& changeset, Changes
   bool added = false;
   //  Iterate all of the nodes of "type" in the changeset
   for (XmlElementMap::iterator it = _nodes[type].begin(); it != _nodes[type].end(); ++it)
-    added |= addNode(changeset, type, dynamic_cast<XmlNode*>(it->second.get()));
+  {
+    //  Add nodes up until the max changeset
+    if (changeset->size() < (size_t)_maxChangesetSize)
+      added |= addNode(changeset, type, dynamic_cast<XmlNode*>(it->second.get()));
+  }
   //  Return true if something was added
   return added;
 }
 
 bool XmlChangeset::addWay(boost::shared_ptr<ChangesetInfo>& changeset, ChangesetType type, XmlWay* way)
 {
-  if (way->canSend())
+  if (canSend(way))
   {
     //  Add the way
     changeset->add(ElementType::Way, type, way->id());
+    markBuffered(way);
     //  Only creates require more processing
     if (type == ChangesetType::TypeCreate)
     {
@@ -262,17 +267,22 @@ bool XmlChangeset::addWays(boost::shared_ptr<ChangesetInfo>& changeset, Changese
   bool added = false;
   //  Iterate all of the ways of "type" in the changeset
   for (XmlElementMap::iterator it = _ways[type].begin(); it != _ways[type].end(); ++it)
-    added |= addWay(changeset, type, dynamic_cast<XmlWay*>(it->second.get()));
+  {
+    //  Add ways up until the max changeset
+    if (changeset->size() < (size_t)_maxChangesetSize)
+      added |= addWay(changeset, type, dynamic_cast<XmlWay*>(it->second.get()));
+  }
   //  Return true if something was added
   return added;
 }
 
 bool XmlChangeset::addRelation(boost::shared_ptr<ChangesetInfo>& changeset, ChangesetType type, XmlRelation* relation)
 {
-  if (relation->canSend())
+  if (canSend(relation))
   {
     //  Add the relation
     changeset->add(ElementType::Relation, type, relation->id());
+    markBuffered(relation);
     //  Deletes require no more processing
     if (type != ChangesetType::TypeDelete)
     {
@@ -312,9 +322,86 @@ bool XmlChangeset::addRelations(boost::shared_ptr<ChangesetInfo>& changeset, Cha
   bool added = false;
   //  Iterate all of the ways of "type" in the changeset
   for (XmlElementMap::iterator it = _relations[type].begin(); it != _relations[type].end(); ++it)
-    added |= addRelation(changeset, type, dynamic_cast<XmlRelation*>(it->second.get()));
+  {
+    //  Add relations up until the max changeset
+    if (changeset->size() < (size_t)_maxChangesetSize)
+      added |= addRelation(changeset, type, dynamic_cast<XmlRelation*>(it->second.get()));
+  }
   //  Return true if something was added
   return added;
+}
+
+bool XmlChangeset::canSend(XmlNode* node)
+{
+  if (node == NULL)
+    return false;
+  else
+    return node->getStatus() == XmlElement::Available;
+}
+
+bool XmlChangeset::canSend(XmlWay* way)
+{
+  if (way == NULL)
+    return false;
+  else if (way->getStatus() != XmlElement::Available)
+    return false;
+  else
+  {
+    //  All nodes have to be Available or Finalized
+    for (int i = 0; i < way->getNodeCount(); ++i)
+    {
+      long id = way->getNode(i);
+      if (_allNodes.find(id) != _allNodes.end() &&
+          _allNodes.at(way->getNode(i))->getStatus() == XmlElement::Sent)
+        return false;
+    }
+  }
+  return true;
+}
+
+bool XmlChangeset::canSend(XmlRelation* relation)
+{
+  if (relation == NULL)
+    return false;
+  else if (relation->getStatus() != XmlElement::Available)
+    return false;
+  else
+  {
+    //  All members have to be Available or Finalized
+    for (int i = 0; i < relation->getMemberCount(); ++i)
+    {
+      XmlMember& member = relation->getMember(i);
+      if (member.isNode() &&
+          _allNodes.find(member.getRef()) != _allNodes.end() &&
+          !canSend(dynamic_cast<XmlNode*>(_allNodes[member.getRef()].get())))
+      {
+        return false;
+      }
+      else if (member.isWay() &&
+               _allWays.find(member.getRef()) != _allWays.end() &&
+               !canSend(dynamic_cast<XmlWay*>(_allWays[member.getRef()].get())))
+      {
+        return false;
+      }
+      else if (member.isRelation() &&
+               _allRelations.find(member.getRef()) != _allWays.end() &&
+               !canSend(dynamic_cast<XmlRelation*>(_allRelations[member.getRef()].get())))
+      {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
+void XmlChangeset::markBuffered(XmlElement* element)
+{
+  if (element != NULL)
+  {
+    element->setStatus(XmlElement::Buffering);
+    _sendBuffer.push_back(element);
+    _processedCount++;
+  }
 }
 
 bool XmlChangeset::calculateChangeset(boost::shared_ptr<ChangesetInfo>& changeset)
@@ -325,8 +412,12 @@ bool XmlChangeset::calculateChangeset(boost::shared_ptr<ChangesetInfo>& changese
   changeset->clear();
   //  Build up the changeset to be around the MAX changeset size
   ChangesetType type = ChangesetType::TypeCreate;
-  while (changeset->size() < (size_t)_maxChangesetSize && true) //  Objects left to send
+  while (type != ChangesetType::TypeMax &&
+         changeset->size() < (size_t)_maxChangesetSize &&
+         hasElementsToSend())
   {
+    //  TODO: At some point we should test if the relation/way/node order should be reversed
+    //  to figure out which one is faster
     //  Start with the relations
     addRelations(changeset, type);
     //  Break out of the loop once the changeset is big enough
@@ -343,8 +434,12 @@ bool XmlChangeset::calculateChangeset(boost::shared_ptr<ChangesetInfo>& changese
     if (changeset->size() >= (size_t)_maxChangesetSize)
       continue;
     //  Go to the next type and loop back around
-    type = static_cast<ChangesetType>((type + 1) % ChangesetType::TypeMax);
+    type = static_cast<ChangesetType>(type + 1);
   }
+  //  Move all elements from buffered to sending
+  for (vector<XmlElement*>::iterator it = _sendBuffer.begin(); it != _sendBuffer.end(); ++it)
+    (*it)->setStatus(XmlElement::Sent);
+  _sendBuffer.clear();
   //  Return successfully
   return true;
 }
@@ -424,7 +519,7 @@ void XmlChangeset::updateElement(ChangesetTypeMap& map, long old_id, long new_id
   if (position != type.end())
   {
     XmlElementPtr element = type[old_id];
-    element->send();
+    element->setStatus(XmlElement::Finalized);
     if (changeset_type == ChangesetType::TypeCreate)
       _idMap.updateId(element->getType(), old_id, new_id);
     if (version >= 0)
@@ -437,8 +532,8 @@ XmlElement::XmlElement(const XmlObject& object, ElementIdToIdMap* idMap)
     _id(object.second.value("id").toString().toLong()),
     _version(object.second.value("version").toString().toLong()),
     _object(object),
-    _sent(false),
-    _idMap(idMap)
+    _idMap(idMap),
+    _status(XmlElement::Available)
 {
 }
 
@@ -480,6 +575,11 @@ QString XmlElement::toTagString(const QXmlStreamAttributes& attributes) const
   return ts.readAll();
 }
 
+void XmlElement::setStatus(ElementStatus status)
+{
+  _status = status;
+}
+
 XmlNode::XmlNode(const XmlObject& node, ElementIdToIdMap* idMap)
   : XmlElement(node, idMap)
 {
@@ -509,11 +609,6 @@ XmlWay::XmlWay(const XmlObject& way, ElementIdToIdMap* idMap)
   _type = ElementType::Way;
 }
 
-bool XmlWay::canSend()
-{
-  return true;
-}
-
 QString XmlWay::toString(long changesetId) const
 {
   QString buffer;
@@ -540,11 +635,6 @@ void XmlRelation::addMember(const QXmlStreamAttributes& member)
 {
   XmlMember m(member, _idMap);
   _members.append(m);
-}
-
-bool XmlRelation::canSend()
-{
-  return true;
 }
 
 QString XmlRelation::toString(long changesetId) const

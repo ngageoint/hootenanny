@@ -40,25 +40,17 @@ namespace hoot
 class OsmApiWriterTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(OsmApiWriterTest);
-/*
   CPPUNIT_TEST(runParseStatusTest);
   CPPUNIT_TEST(runParseCapabilitiesTest);
-  CPPUNIT_TEST(runCapabilitesTest);
+//  CPPUNIT_TEST(runCapabilitesTest);
   CPPUNIT_TEST(runParsePermissionsTest);
-  CPPUNIT_TEST(runPermissionsTest);
-*/
-  CPPUNIT_TEST(runChangesetTest);
+//  CPPUNIT_TEST(runPermissionsTest);
+//  CPPUNIT_TEST(runChangesetTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-//  const QString OSMAPI_URL = "https://www.openstreetmap.org";
   const QString OSMAPI_URL = "http://ec2-34-237-221-226.compute-1.amazonaws.com";
-
-  void setUp()
-  {
-//    TestUtils::mkpath("test-output/io/GeoJson");
-  }
 
   void runParseStatusTest()
   {
@@ -108,9 +100,10 @@ public:
     osm.setUrl(OSMAPI_URL);
 
     QList<QString> changesets;
+    OsmApiNetworkRequestPtr request(new OsmApiNetworkRequest());
     OsmApiWriter writer(osm, changesets);
-    CPPUNIT_ASSERT(writer.queryCapabilities());
-    CPPUNIT_ASSERT_EQUAL(writer._status, 200);
+    CPPUNIT_ASSERT(writer.queryCapabilities(request));
+    CPPUNIT_ASSERT_EQUAL(request->getHttpStatus(), 200);
     HOOT_STR_EQUALS(writer._capabilities.getVersion(), QString("0.6"));
     CPPUNIT_ASSERT_EQUAL(writer._capabilities.getTracepoints(), static_cast<long>(5000));
     CPPUNIT_ASSERT_EQUAL(writer._capabilities.getWayNodes(), static_cast<long>(2000));
@@ -141,35 +134,35 @@ public:
   {
     QUrl osm;
     osm.setUrl(OSMAPI_URL);
-//    osm.setUserInfo("bmarchant:TestPassword");
-    osm.setUserInfo("test01:hoottest");
+    osm.setUserInfo("bmarchant:TestPassword");
 
     QList<QString> changesets;
+    OsmApiNetworkRequestPtr request(new OsmApiNetworkRequest());
     OsmApiWriter writer(osm, changesets);
-    CPPUNIT_ASSERT(writer.validatePermissions());
-    CPPUNIT_ASSERT_EQUAL(writer._status, 200);
+    CPPUNIT_ASSERT(writer.validatePermissions(request));
+    CPPUNIT_ASSERT_EQUAL(request->getHttpStatus(), 200);
   }
 
   void runChangesetTest()
   {
     QUrl osm;
     osm.setUrl(OSMAPI_URL);
-//    osm.setUserInfo("bmarchant:TestPassword");
-    osm.setUserInfo("test01:hoottest");
-
-    LOG_INFO("Initial URL: " << osm);
+    osm.setUserInfo("bmarchant:TestPassword");
 
     QList<QString> changesets;
-    changesets.append("test-files/io/OsmChangesetElementTest/ToyTestA.osc");
-
-//    changesets.append("test-files/cmd/quick/DeriveChangesetCmdTest/changeset-2.osc");
-//    changesets.append("/fouo/temp-data/ToyTest.osc");
-//    changesets.append("/fouo/temp-data/ToyTest-001.osc");
-//    changesets.append("/fouo/temp-data/DcTigerRoads.osc");
-//    changesets.append("/fouo/temp-data/DcTigerRoads-001.osc");
-//    changesets.append("/fouo/temp-data/DcTigerRoads-002.osc");
-//    changesets.append("/fouo/temp-data/DcTigerRoads-003.osc");
-
+//*
+    changesets.append("test-files/ToyTestA.osc");
+//*/
+/*
+    changesets.append("/fouo/temp-data/ToyTest.osc");
+    changesets.append("/fouo/temp-data/ToyTest-001.osc");
+//*/
+/*
+    changesets.append("/fouo/temp-data/DcTigerRoads.osc");
+    changesets.append("/fouo/temp-data/DcTigerRoads-001.osc");
+    changesets.append("/fouo/temp-data/DcTigerRoads-002.osc");
+    changesets.append("/fouo/temp-data/DcTigerRoads-003.osc");
+//*/
     OsmApiWriter writer(osm, changesets);
     writer.apply();
   }

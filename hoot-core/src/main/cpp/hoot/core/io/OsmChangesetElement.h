@@ -129,7 +129,7 @@ public:
 
   void updateChangeset(const QString& changes);
 
-  bool isDone();
+  bool isDone() { return !hasElementsToSend(); }
 
   enum ChangesetType
   {
@@ -141,6 +141,8 @@ public:
 
   bool calculateChangeset(boost::shared_ptr<ChangesetInfo>& changeset);
   QString getChangesetString(ChangesetInfoPtr changeset, long changeset_id);
+
+  void setMaxSize(long size) { _maxChangesetSize = size; }
 
 private:
 
@@ -157,6 +159,14 @@ private:
   bool addRelation(boost::shared_ptr<ChangesetInfo>& changeset, ChangesetType type, XmlRelation* relation);
   bool addRelations(boost::shared_ptr<ChangesetInfo>& changeset, ChangesetType type);
 
+  bool canSend(XmlNode* node);
+  bool canSend(XmlWay* way);
+  bool canSend(XmlRelation* relation);
+
+  void markBuffered(XmlElement* element);
+
+  bool hasElementsToSend() { return (long)(_allNodes.size() + _allWays.size() + _allRelations.size()) > _processedCount; }
+
   XmlElementMap _allNodes;
   XmlElementMap _allWays;
   XmlElementMap _allRelations;
@@ -171,6 +181,9 @@ private:
   std::array<std::map<long, std::vector<long>>, ElementType::Unknown> _idsToRelations;
 
   long _maxChangesetSize;
+  long _processedCount;
+
+  std::vector<XmlElement*> _sendBuffer;
 };
 
 class ChangesetInfo
@@ -222,14 +235,22 @@ public:
   void addTag(const XmlObject& tag);
 
   long id() { return _id; }
-  void send() { _sent = true; }
-  bool isSent() { return _sent; }
   ElementType::Type getType() { return _type; }
-  virtual bool canSend() { return !_sent; }
   virtual QString toString(long changesetId) const = 0;
 
   long getVersion() { return _version; }
   void setVersion(long version) { _version = version; }
+
+  enum ElementStatus
+  {
+    Available,
+    Buffering,
+    Sent,
+    Finalized
+  };
+
+  ElementStatus getStatus() { return _status; }
+  void setStatus(ElementStatus status);
 
 protected:
 
@@ -242,9 +263,9 @@ protected:
   XmlObject _object;
   QVector<XmlObject> _tags;
 
-  bool _sent;
-
   ElementIdToIdMap* _idMap;
+
+  ElementStatus _status;
 };
 
 class XmlNode : public XmlElement
@@ -264,7 +285,6 @@ public:
   long getNode(int index) { return _nodes[index]; }
   int getNodeCount() { return _nodes.size(); }
 
-  virtual bool canSend();
   virtual QString toString(long changesetId) const;
 
 private:
@@ -280,7 +300,6 @@ public:
   XmlMember& getMember(int index);
   int getMemberCount();
 
-  virtual bool canSend();
   virtual QString toString(long changesetId) const;
 
 private:

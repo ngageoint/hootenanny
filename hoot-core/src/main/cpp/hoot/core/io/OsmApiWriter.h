@@ -29,9 +29,15 @@
 #define OSM_API_WRITER_H
 
 //  hoot
+#include <hoot/core/io/OsmChangesetElement.h>
 #include <hoot/core/util/Configurable.h>
 
-// Boost
+//  Standard
+#include <mutex>
+#include <queue>
+#include <thread>
+
+//  Boost
 #include <boost/shared_ptr.hpp>
 
 //  Qt
@@ -91,6 +97,28 @@ private:
   OsmApiStatus _gpx;
 };
 
+class OsmApiNetworkRequest
+{
+public:
+  OsmApiNetworkRequest();
+
+  bool networkRequest(QUrl url,
+    QNetworkAccessManager::Operation http_op = QNetworkAccessManager::Operation::GetOperation,
+    const QByteArray& data = QByteArray());
+
+  const QByteArray& getResponseContent() { return _content; }
+  int getHttpStatus() { return _status; }
+
+private:
+
+  int _getHttpResponseCode(QNetworkReply* reply);
+
+  QByteArray _content;
+  int _status;
+};
+
+typedef boost::shared_ptr<OsmApiNetworkRequest> OsmApiNetworkRequestPtr;
+
 class OsmApiWriter : public Configurable
 {
 public:
@@ -104,43 +132,45 @@ public:
    */
   bool isSupported(const QUrl& url);
 
-  //  https://wiki.openstreetmap.org/wiki/API_v0.6#Capabilities:_GET_.2Fapi.2Fcapabilities
-  bool queryCapabilities();
-  //  https://wiki.openstreetmap.org/wiki/API_v0.6#Retrieving_permissions:_GET_.2Fapi.2F0.6.2Fpermissions
-  bool validatePermissions();
-
   bool apply();
+
+  //  https://wiki.openstreetmap.org/wiki/API_v0.6#Capabilities:_GET_.2Fapi.2Fcapabilities
+  bool queryCapabilities(OsmApiNetworkRequestPtr request);
+  //  https://wiki.openstreetmap.org/wiki/API_v0.6#Retrieving_permissions:_GET_.2Fapi.2F0.6.2Fpermissions
+  bool validatePermissions(OsmApiNetworkRequestPtr request);
 
 private:
   //  for white box testing
   friend class OsmApiWriterTest;
   OsmApiWriter() {}
+  //  https://wiki.openstreetmap.org/wiki/API_v0.6#Create:_PUT_.2Fapi.2F0.6.2Fchangeset.2Fcreate
+  long _createChangeset(OsmApiNetworkRequestPtr request, const QString& description);
+  //  https://wiki.openstreetmap.org/wiki/API_v0.6#Close:_PUT_.2Fapi.2F0.6.2Fchangeset.2F.23id.2Fclose
+  void _closeChangeset(OsmApiNetworkRequestPtr request, long id);
+  //  https://wiki.openstreetmap.org/wiki/API_v0.6#Diff_upload:_POST_.2Fapi.2F0.6.2Fchangeset.2F.23id.2Fupload
+  bool _uploadChangeset(OsmApiNetworkRequestPtr request, long id, const QString& changeset);
 
   OsmApiCapabilites _parseCapabilities(const QString& capabilites);
   OsmApiStatus _parseStatus(const QString& status);
 
   bool _parsePermissions(const QString& permissions);
 
-  //  https://wiki.openstreetmap.org/wiki/API_v0.6#Create:_PUT_.2Fapi.2F0.6.2Fchangeset.2Fcreate
-  long _createChangeset(const QString& description);
-  //  https://wiki.openstreetmap.org/wiki/API_v0.6#Close:_PUT_.2Fapi.2F0.6.2Fchangeset.2F.23id.2Fclose
-  void _closeChangeset(long id);
-  //  https://wiki.openstreetmap.org/wiki/API_v0.6#Diff_upload:_POST_.2Fapi.2F0.6.2Fchangeset.2F.23id.2Fupload
-  bool _uploadChangeset(long id, const QString& changeset);
+  void _changesetThreadFunc();
 
-  bool _networkRequest(QUrl url,
-    QNetworkAccessManager::Operation http_op = QNetworkAccessManager::Operation::GetOperation,
-    const QByteArray& data = QByteArray());
+  std::vector<std::thread> _threadPool;
 
-  int _getHttpResponseCode(QNetworkReply* reply);
+  std::queue<ChangesetInfoPtr> _workQueue;
+  std::mutex _workQueueMutex;
+
+  XmlChangeset _changeset;
+  std::mutex _changesetMutex;
 
   QUrl _url;
   QList<QString> _changesets;
   QString _description;
   int _maxWriters;
+  long _maxChangesetSize;
   OsmApiCapabilites _capabilities;
-  QByteArray _content;
-  int _status;
 
   const QString API_PATH_CAPABILITIES = "/api/capabilities/";
   const QString API_PATH_PERMISSIONS = "/api/0.6/permissions/";
