@@ -12,7 +12,6 @@ pipeline {
     // Configurable parameters for users to skip steps and control pipeline behavior
     parameters {
         booleanParam(name: 'Destroy_VM', defaultValue: true)
-        booleanParam(name: 'License_headers', defaultValue: true)
         booleanParam(name: 'Hoot_provision', defaultValue: true)
         booleanParam(name: 'Configure_Tests', defaultValue: false)
         booleanParam(name: 'Build', defaultValue: true)
@@ -42,17 +41,6 @@ pipeline {
                     cp -R ../software.ubuntu1404 software
                     rm -rf ./test-files/ui/screenshot_*.png
                 '''
-            }
-        }
-        stage("License Header") {
-            when { expression { return params.License_headers } }
-            steps {
-                 script { 
-                    sh '''
-                        export HOOT_HOME=`pwd`
-                        ./scripts/copyright/UpdateAllCopyrightHeaders.sh
-                    '''
-                }
             }
         }
         stage("Hoot Provision") {

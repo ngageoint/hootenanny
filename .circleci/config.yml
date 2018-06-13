@@ -36,6 +36,18 @@ jobs:
           name: 'Upload Hootenanny Archive'
           command: |
             find archives -type f -exec aws s3 cp {} s3://hoot-archives/circle/$CIRCLE_BRANCH/ \;
+  copyright:
+    working_directory: '/rpmbuild/hootenanny'
+    docker:
+      - image: hootenanny/rpmbuild-generic@sha256:1a90408da44fc3577634210f3a93ac6d80ad7330e7f7eee1d51b1544f0d835c7
+        user: rpmbuild
+        environment:
+          HOOT_HOME: '/rpmbuild/hootenanny'
+    steps:
+      - checkout
+      - run:
+          name: 'Check Copyright Headers'
+          command: ./scripts/copyright/UpdateAllCopyrightHeaders.sh
 
 workflows:
   version: 2
@@ -45,3 +57,4 @@ workflows:
       - archive-upload:
           requires:
             - archive-create
+      - copyright
