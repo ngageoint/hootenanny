@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="0.005724347982344418" minlon="-0.02879815981" maxlat="0.0217794106" maxlon="-0.01548393252793581"/>
+    <node visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0162069498300000" lon="-0.0287343530000000"/>
+    <node visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0089329741000000" lon="-0.0287981598100000"/>
+    <node visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0088111882377843" lon="-0.0226631968827861"/>
+    <node visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0057243479823444" lon="-0.0200911750811749"/>
+    <node visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0124018963053380" lon="-0.0154839325279358"/>
+    <node visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0187758610773200" lon="-0.0203270096426385"/>
+    <node visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0161430015288662" lon="-0.0223395227663527"/>
+    <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0162069498300000" lon="-0.0287343530000000"/>
+    <node visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0217794106000000" lon="-0.0255652816200000"/>
+    <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0179297335200000" lon="-0.0274582168700000"/>
+    <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0175043548300000" lon="-0.0230980851200000"/>
+    <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0217794106000000" lon="-0.0255652816200000"/>
+    <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-16"/>
+        <nd ref="-17"/>
+        <nd ref="-18"/>
+        <nd ref="-19"/>
+        <nd ref="-20"/>
+        <nd ref="-21"/>
+        <nd ref="-22"/>
+        <nd ref="-23"/>
+    </way>
+    <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-12"/>
+        <nd ref="-13"/>
+        <nd ref="-14"/>
+        <nd ref="-15"/>
+    </way>
+    <relation visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-4" role="outer"/>
+        <member type="way" ref="-5" role="outer"/>
+        <tag k="type" v="multipolygon"/>
+    </relation>
+</osm>

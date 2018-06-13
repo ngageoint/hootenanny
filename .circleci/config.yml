@@ -1,0 +1,47 @@
+---
+version: 2
+
+jobs:
+  archive-create:
+    working_directory: '/rpmbuild/hootenanny'
+    docker:
+      - image: hootenanny/rpmbuild-hoot-release@sha256:d41955e2b2b7bff973a23f289e373fb2c8117339b97fbefe2244c9e295b93f10
+    steps:
+      - checkout
+      - run:
+          name: 'Git Submodules'
+          command: |
+            chown -R rpmbuild:rpmbuild .
+            su-exec rpmbuild git submodule update --init --recursive
+      - run:
+          name: 'Make Hootenanny Archive'
+          command: |
+            su-exec postgres pg_ctl -D $PGDATA -s start
+            su-exec rpmbuild bash -c "mkdir -p /rpmbuild/.m2 && curl -sSL https://s3.amazonaws.com/hoot-maven/m2-cache.tar.gz | tar -C /rpmbuild/.m2 -xzf -"
+            su-exec rpmbuild ./scripts/ci/archive.sh
+            su-exec rpmbuild bash -c "mkdir -p archives && mv -v hootenanny-[0-9]*.tar.gz archives"
+      - persist_to_workspace:
+          root: archives
+          paths:
+            - hootenanny-*.tar.gz
+  archive-upload:
+    working_directory: '/rpmbuild/hootenanny'
+    docker:
+      - image: hootenanny/rpmbuild-repo@sha256:cfee4a229812fed0993b9fa27cd4291b68b19d24b316e77c4c40074e3c7b249e
+        user: rpmbuild
+    steps:
+      - attach_workspace:
+          at: archives
+      - run:
+          name: 'Upload Hootenanny Archive'
+          command: |
+            find archives -type f -exec aws s3 cp {} s3://hoot-archives/circle/$CIRCLE_BRANCH/ \;
+
+workflows:
+  version: 2
+  tests:
+    jobs:
+      - archive-create
+      - archive-upload:
+          requires:
+            - archive-create

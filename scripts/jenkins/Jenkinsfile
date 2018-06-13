@@ -3,14 +3,15 @@
 
 pipeline {
     agent { label 'master' }
+
     triggers {
-        // Set nightly triggers
+        // Set nightly trigger
         cron((BRANCH_NAME == "master" || BRANCH_NAME == "develop") ? "H H(20-21) * * 1-5" : "")
     }
+
     // Configurable parameters for users to skip steps and control pipeline behavior
     parameters {
         booleanParam(name: 'Destroy_VM', defaultValue: true)
-        booleanParam(name: 'Static_analysis', defaultValue: true)
         booleanParam(name: 'License_headers', defaultValue: true)
         booleanParam(name: 'Hoot_provision', defaultValue: true)
         booleanParam(name: 'Configure_Tests', defaultValue: false)
@@ -21,11 +22,12 @@ pipeline {
         booleanParam(name: 'Sonar', defaultValue: false)
         string(name: 'Box', defaultValue: 'default', description: 'Vagrant Box')
     }
+
     stages {
         stage("Destroy VM") {
             when { expression { return params.Destroy_VM } }
             steps {
-                // Attempt to destroy exiting VM but don't stop job if not there
+                // Existing VM may or may not exist depending on previous runs
                 sh "vagrant destroy -f ${params.Box} || true"
             }
         }
@@ -42,29 +44,14 @@ pipeline {
                 '''
             }
         }
-        // Need to expand this step to more robust static analysis scanning with SonarQube
-        // and publish results
-        stage ("Static checks") {
-            parallel {
-                stage("Static Analysis") {
-                    when { 
-                        expression { return params.Static_analysis }
-                        not { branch 'PR-*' }
-                    }
-                    steps {
-                        sh 'cppcheck --enable=all --inconclusive --xml-version=2 --verbose --check-config . 2> cppcheck.xml'
-                    }
-                }
-                stage("License Header") {
-                    when { expression { return params.License_headers } }
-                    steps {
-                        script { 
-                            sh '''
-                                export HOOT_HOME=`pwd`
-                                ./scripts/copyright/UpdateAllCopyrightHeaders.sh
-                            '''
-                        }
-                    }
+        stage("License Header") {
+            when { expression { return params.License_headers } }
+            steps {
+                 script { 
+                    sh '''
+                        export HOOT_HOME=`pwd`
+                        ./scripts/copyright/UpdateAllCopyrightHeaders.sh
+                    '''
                 }
             }
         }
@@ -79,27 +66,42 @@ pipeline {
             when { 
                 anyOf {
                     expression { return params.Configure_Tests }
-                    // Work around to run configuration tests during nightly cron triggers but not on commits to develop.  Logic can be udpated
+                    // Work around to run certain tests during nightly cron triggers but not on commits to develop.  Logic can be udpated
                     // once this https://issues.jenkins-ci.org/browse/JENKINS-41272 is implemented
-                    expression { return Calendar.instance.get(Calendar.HOUR_OF_DAY) in 20..22 }
+                    expression { return Calendar.instance.get(Calendar.HOUR_OF_DAY) in 20..23 } 
                 }
             }
             steps {
-                // Run configuration tests
                 sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; ./scripts/TestConfigure.sh &> Hoot_Config_Test || { cat Hoot_Config_Test; false; }'"
+            }
+        }
+        stage("Sonar Config") {
+            when {
+                anyOf {
+                    // Configure for sonar if user selected it, pull-request, or nightly run of develop
+                    expression { return params.Sonar }
+                    changeRequest()
+                    allOf {
+                        expression { return Calendar.instance.get(Calendar.HOUR_OF_DAY) in 20..22 }
+                        branch 'develop'
+                    }
+                }
+            }
+            steps{
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; ./scripts/sonar/sonar-install.sh'"
+                // Compile with build watcher to allow for sonar scanning in subsequent steps
+                sh "sed -i '/make -s clean && make -sj\$(nproc)/c\\make -s clean && build-wrapper-linux-x86-64 --out-dir bw-output make -sj\$(nproc)' VagrantBuild.sh"
+                script {
+                    if (env.BRANCH_NAME == "develop") {
+                        // Compile instrumented code for develop branch which allows for calculating coverage
+                        sh "sed -i 's/--with-uitests/--with-uitests --with-coverage/g' VagrantBuild.sh"
+                    }
+                }
             }
         }
         stage("Build") {
             when { expression { return params.Build } }
             steps {
-                // NOTE: Ubuntu only, may need more complex logic if other OS are included in pipeline
-                sh '''
-                    cp LocalConfig.pri.orig LocalConfig.pri
-                    echo "QMAKE_CXXFLAGS += -Werror" >> LocalConfig.pri
-                    sed -i s/"QMAKE_CXX=g++"/"#QMAKE_CXX=g++"/g LocalConfig.pri
-                    sed -i s/"#QMAKE_CXX=ccache g++"/"QMAKE_CXX=ccache g++"/g LocalConfig.pri
-                '''
-                
                 // Perform remainder of provisioning
                 sh "vagrant provision ${params.Box} --provision-with build,EGD,tomcat,mapnik"
             }       
@@ -127,18 +129,33 @@ pipeline {
             when {
                 anyOf {
                     expression { return params.Sonar }
-                    // Work around to run sonar scans during nightly cron triggers but not on commits to develop.  Logic can be udpated
-                    // once this https://issues.jenkins-ci.org/browse/JENKINS-41272 is implemented
-                    expression { return Calendar.instance.get(Calendar.HOUR_OF_DAY) in 20..23 }
+                    changeRequest()
+                    allOf {
+                        expression { return Calendar.instance.get(Calendar.HOUR_OF_DAY) in 20..23 }
+                        branch 'develop'
+                    }
                 }
             }
-            steps {
-                // rysnc the build folders back to host system so scan
-                sh "vagrant rsync-back ${params.Box}"
-                withSonarQubeEnv('Breeze Sonarqube') {
-                    sh "cd hoot-services; mvn sonar:sonar"
+            steps{
+                script {
+                    if (env.BRANCH_NAME.startsWith("PR-")) {
+                        // PR scan will use github plugin
+                        sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-scan.sh -l ${env.SONAR_CLOUD_KEY} -b ${env.BRANCH_NAME} -p ${env.CHANGE_ID} -a ${env.DGIS_BOT_TOKEN}'"
+                    }
+                    else {
+                        sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/cover/coverGcov.sh'"
+                        sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-scan.sh -l ${env.SONAR_CLOUD_KEY} -b ${env.BRANCH_NAME}'"
+                    }
+
                 }
             }
+            //steps {
+            //    // rysnc the build folders back to host system so scan
+            //    sh "vagrant rsync-back ${params.Box}"
+            //    withSonarQubeEnv('Breeze Sonarqube') {
+            //        sh "cd hoot-services; mvn sonar:sonar"
+            //    }
+            //}
         }
     }
     post {
