@@ -141,7 +141,8 @@ pipeline {
                         -Dsonar.host.url=https://sonarcloud.io \
                         -Dsonar.organization=hootenanny \
                         -Dsonar.login=${env.SONAR_CLOUD_KEY} \
-                        -Dsonar.projectKey=hoot-services'"
+                        -Dsonar.projectKey=hoot-services' \
+                        -Dsonar.branch.name=${env.BRANCH_NAME}"
 
                 script {
                     if (env.BRANCH_NAME.startsWith("PR-")) {
