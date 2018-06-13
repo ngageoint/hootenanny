@@ -253,7 +253,7 @@ public:
 
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmApiWriterTest, "quick");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmChangesetElementTest, "current");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmChangesetElementTest, "quick");
+//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmChangesetElementTest, "current");
 
 }

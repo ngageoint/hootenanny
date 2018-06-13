@@ -29,6 +29,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/OsmApiDbSqlChangesetApplier.h>
+#include <hoot/core/io/OsmApiWriter.h>
 
 // Qt
 #include <QFile>
@@ -64,10 +65,17 @@ public:
 
     LOG_INFO("Applying changeset " << args[0] << " to " << args[1] << "...");
 
+    // Not easy to extend this to N osc files without refactoring the *.osc.sql version
     if (args[0].endsWith(".osc"))
     {
-      throw HootException(
-        "XML changeset file writing is not currently supported by the changeset-apply command.");
+      QUrl osm;
+      osm.setUrl(args[1]);
+
+      QList<QString> changesets;
+      changesets.append(args[0]);
+
+      OsmApiWriter writer(osm, changesets);
+      writer.apply();
     }
     else if (args[0].endsWith(".osc.sql"))
     {

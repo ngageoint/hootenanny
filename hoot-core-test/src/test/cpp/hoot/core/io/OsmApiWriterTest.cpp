@@ -52,13 +52,7 @@ class OsmApiWriterTest : public CppUnit::TestFixture
 
 public:
 
-//  const QString OSMAPI_URL = "https://www.openstreetmap.org";
   const QString OSMAPI_URL = "http://ec2-34-237-221-226.compute-1.amazonaws.com";
-
-  void setUp()
-  {
-//    TestUtils::mkpath("test-output/io/GeoJson");
-  }
 
   void runParseStatusTest()
   {
@@ -108,9 +102,10 @@ public:
     osm.setUrl(OSMAPI_URL);
 
     QList<QString> changesets;
+    OsmApiNetworkRequestPtr request(new OsmApiNetworkRequest());
     OsmApiWriter writer(osm, changesets);
-    CPPUNIT_ASSERT(writer.queryCapabilities());
-    CPPUNIT_ASSERT_EQUAL(writer._status, 200);
+    CPPUNIT_ASSERT(writer.queryCapabilities(request));
+    CPPUNIT_ASSERT_EQUAL(request->getHttpStatus(), 200);
     HOOT_STR_EQUALS(writer._capabilities.getVersion(), QString("0.6"));
     CPPUNIT_ASSERT_EQUAL(writer._capabilities.getTracepoints(), static_cast<long>(5000));
     CPPUNIT_ASSERT_EQUAL(writer._capabilities.getWayNodes(), static_cast<long>(2000));
@@ -144,9 +139,10 @@ public:
     osm.setUserInfo("bmarchant:TestPassword");
 
     QList<QString> changesets;
+    OsmApiNetworkRequestPtr request(new OsmApiNetworkRequest());
     OsmApiWriter writer(osm, changesets);
-    CPPUNIT_ASSERT(writer.validatePermissions());
-    CPPUNIT_ASSERT_EQUAL(writer._status, 200);
+    CPPUNIT_ASSERT(writer.validatePermissions(request));
+    CPPUNIT_ASSERT_EQUAL(request->getHttpStatus(), 200);
   }
 
   void runChangesetTest()
@@ -170,7 +166,7 @@ public:
     changesets.append("/fouo/temp-data/DcTigerRoads-003.osc");
 //*/
     OsmApiWriter writer(osm, changesets);
-    writer.apply("Hootenanny ingest");
+    writer.apply();
   }
 };
 

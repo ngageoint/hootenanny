@@ -173,6 +173,27 @@ Invalid relation members will cause a warning to be logged.  You should enable t
 are loading data that has not been previously validated in another OSM API database.  Enabling this
 setting may cause writing to an OSM API database to occur more slowly.
 
+=== apidb.changeset.description
+
+* Data Type: string
+* Default Value: `Hootenanny ingest`
+
+The text description that is written to the OSM API database with a changeset.
+
+=== apidb.changeset.maxwriters
+
+* Data Type: long
+* Default Value: `10`
+
+The maximum number of writers to spawn for writing changesets in parallel to the OSM API database.
+
+=== apidb.changeset.maxsize
+
+* Data Type: long
+* Default Value: `100`
+
+Maximum number of changes per changeset when uploading to live OSM API
+
 === attribute.score.extractor.use.weight
 
 * Data Type: bool
@@ -1729,20 +1750,6 @@ sequencing of element ID's.
 
 Add a tag with the bounding box for each element
 
-=== osm.api.max.changeset.size
-
-* Data Type: long
-* Default Value: `100`
-
-Maximum number of changes per changeset when uploading to live OSM API
-
-=== osm.api.max.writers
-
-* Data Type: int
-* Default Value: `8`
-
-Maximum number of writer threads pushing changesets to live OSM API
-
 === osm.map.reader.factory.reader
 
 * Data Type: string
@@ -1771,7 +1778,7 @@ Turns on autoformatting (line breaks, indentation etc) for XML output.
 * Data Type: string
 * Default Value: ``
 
-Sets the value for a "schema" attribute when writeing a map to OSM XML.  NOTE: this will only be
+Sets the value for a "schema" attribute when writing a map to OSM XML.  NOTE: this will only be
 written if the value is not empty.
 
 === osm.map.writer.skip.empty.map
