@@ -96,7 +96,7 @@ public:
   void runBadPreOpTest()
   {
     Settings testSettings = conf();
-    testSettings.set("unify.pre.ops", "hoot::SetTagVisitor;hoot::RubberSheet");
+    testSettings.set("unify.pre.ops", "hoot::SetTagValueVisitor;hoot::RubberSheet");
     SearchRadiusCalculator searchRadiusCalculator;
 
     QString exceptionMsg("");

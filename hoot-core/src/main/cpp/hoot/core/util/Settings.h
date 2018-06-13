@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef CONFIGURATION_H
@@ -43,12 +43,8 @@ namespace hoot
 {
 
 /**
- * @defgroup properties Configuration Properties
- * @page Configuration Properties
- * The following sections define the available configuration properties in Hootenanny.
- */
-
-/**
+ * Stores Hootenanny configuration options
+ *
  * This class favors convenience over performance so use it appropriately outside performance
  * critical code sections.
  *
@@ -121,7 +117,6 @@ public:
   long getLong(const QString& key, long defaultValue) const;
   long getLong(const QString& key, long defaultValue, long min, long max) const;
  
-
   /**
    * Returns a QStringList from the value. The QStringList is created by
    * QString::split(";", QString::SkipEmptyParts)
@@ -164,6 +159,7 @@ public:
   QString toString() const;
 
 private:
+
   static Settings* _theInstance;
   SettingsMap _settings;
   /// matches variables in the form ${My_Var_1}

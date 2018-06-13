@@ -82,7 +82,17 @@ Meters Squared of Areas Processed by Conflation	0	0	0
 Percentage of Areas Conflated	0	0	0	
 Percentage of Areas Marked for Review	0	0	0	
 Percentage of Unmatched Areas	0	0	0	
+Railway Count	0	0	0	
+Conflatable Railways	0	0	0	
+Conflated Railways	0	0	0	
+Railways Marked for Review	0	0	0	
+Number of Railway Reviews to be Made	0	0	0	
+Unmatched Railways	0	0	0	
+Meters of Railway Processed by Conflation	0	0	0	
+Percentage of Railways Conflated	0	0	0	
+Percentage of Railways Marked for Review	0	0	0	
+Percentage of Unmatched Railways	0	0	0	
 Difference Between Total Features in Output and Total Features in Inputs			-2	
 Percentage Difference Between Total Features in Output and Total Features in Inputs			-33.33333333333333	
 
-15:23:25.546 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 252) Conflation job completed.
+17:06:23.350 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 355) Conflation job completed.

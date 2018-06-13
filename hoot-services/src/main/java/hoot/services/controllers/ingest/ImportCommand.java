@@ -70,15 +70,15 @@ class ImportCommand extends ExternalCommand {
         List<String> inputs = filesToImport.stream().map(File::getAbsolutePath).collect(Collectors.toList());
 
         List<String> options = new LinkedList<>();
-        options.add("osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
+        //options.add("convert.ops=hoot::DecomposeBuildingRelationsVisitor");
         options.add("hootapi.db.writer.overwrite.map=true");
         options.add("hootapi.db.writer.create.user=true");
         options.add("api.db.email=test@test.com");
 
-        if (((classification == OSM) && !isNoneTranslation) || (classification == GEONAMES)) {
-            options.add("convert.ops=hoot::TranslationOp");
-            options.add("translation.script=" + translationPath);
-        }
+        //if (((classification == OSM) && !isNoneTranslation) || (classification == GEONAMES)) {
+            //options.add("convert.ops=hoot::TranslationOp");
+            //options.add("translation.script=" + translationPath);
+        //}
 
         List<String> hootOptions = toHootOptions(options);
 
@@ -91,7 +91,6 @@ class ImportCommand extends ExternalCommand {
         substitutionMap.put("INPUTS", inputs);
 
         String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
-        String hootOGR2OSMCommand = "hoot convert-ogr2osm --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${TRANSLATION_PATH} ${INPUT_NAME} ${INPUTS}";
 
         String command = null;
         if ((classification == SHP) || (classification == FGDB) || (classification == ZIP)) {
@@ -103,11 +102,9 @@ class ImportCommand extends ExternalCommand {
 
             if (!isNoneTranslation) {
                 substitutionMap.put("TRANSLATION_PATH", translationPath);
-                command = hootOGR2OSMCommand;
+                hootConvertCommand += " --trans ${TRANSLATION_PATH}";
             }
-            else {
-                command = hootConvertCommand;
-            }
+            command = hootConvertCommand;
         }
         else if ((classification == OSM) || (classification == GEONAMES)) {
             command = hootConvertCommand;

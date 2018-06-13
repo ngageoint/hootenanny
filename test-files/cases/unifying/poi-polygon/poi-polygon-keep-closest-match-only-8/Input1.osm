@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <node id='-88659' action='modify' lat='38.74030230485' lon='-77.58210552411' />
+  <node id='-88661' action='modify' lat='38.74023326561' lon='-77.58193386273' />
+  <node id='-88663' action='modify' lat='38.74029602856' lon='-77.58189094739' />
+  <node id='-88665' action='modify' lat='38.74030648905' lon='-77.58191776948' />
+  <node id='-88667' action='modify' lat='38.74037552823' lon='-77.58186144309' />
+  <node id='-88669' action='modify' lat='38.7404215543' lon='-77.58196336703' />
+  <node id='-88671' action='modify' lat='38.74035460726' lon='-77.58200628238' />
+  <node id='-88673' action='modify' lat='38.74036715984' lon='-77.58206529097' />
+  <node id='-88675' action='modify' lat='38.74047957028' lon='-77.58201780041' />
+  <node id='-88677' action='modify' lat='38.74041314632' lon='-77.58184479793' />
+  <node id='-88679' action='modify' lat='38.74049944516' lon='-77.58178645988' />
+  <node id='-88681' action='modify' lat='38.74050938259' lon='-77.58180858811' />
+  <node id='-88683' action='modify' lat='38.74056220787' lon='-77.58177304884' />
+  <node id='-88685' action='modify' lat='38.74060300361' lon='-77.58187966665' />
+  <node id='-88687' action='modify' lat='38.74053344163' lon='-77.58192593475' />
+  <node id='-88689' action='modify' lat='38.74054860929' lon='-77.58197354396' />
+  <way id='-88691' action='modify'>
+    <nd ref='-88659' />
+    <nd ref='-88661' />
+    <nd ref='-88663' />
+    <nd ref='-88665' />
+    <nd ref='-88667' />
+    <nd ref='-88669' />
+    <nd ref='-88671' />
+    <nd ref='-88673' />
+    <nd ref='-88659' />
+    <tag k='amenity' v='arts_centre' />
+    <tag k='name' v='poly1' />
+  </way>
+  <way id='-88693' action='modify'>
+    <nd ref='-88675' />
+    <nd ref='-88677' />
+    <nd ref='-88679' />
+    <nd ref='-88681' />
+    <nd ref='-88683' />
+    <nd ref='-88685' />
+    <nd ref='-88687' />
+    <nd ref='-88689' />
+    <nd ref='-88675' />
+    <tag k='amenity' v='arts_centre' />
+    <tag k='name' v='poly2' />
+  </way>
+</osm>

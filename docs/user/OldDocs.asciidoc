@@ -152,7 +152,7 @@ depending on their knowledge of Python/Javascript, create a custom translation v
 provides a mapping between the two schemas in a significantly shorter duration of time.  
 
 The following sections discuss high level issues associated with translating
-files. For a more nuts and bolts discussion see the +convert-ogr2osm+ section.
+files. For a more nuts and bolts discussion see the +convert+ section.
 
 [[JavaScript-Translation]]
 === JavaScript Translation
@@ -196,19 +196,19 @@ There are several functions that may be called by Hootenanny:
 *  +finalize+ - An optional method that gets called after all other methods have
    been completed. This can be useful if you want to print out statistics on the
    translation.
-*  +translateToOgr+ - Required by the +convert-osm2ogr+ command to translate from OSM
+*  +translateToOgr+ - Required by the +convert+ command to translate from OSM
    to a custom schema.
-*  +translateToOsm+ - Required by the +convert-ogr2osm+ command to translate from a
+*  +translateToOsm+ - Required by the +convert+ command to translate from a
    custom schema to the OSM schema. For backwards compatibility reasons
    +translateAttributes+ is also supported, but +translateToOsm+ is preferred.
-*  +getDbSchema+ - Required by the +convert-osm2ogr+ command to get the custom schema
+*  +getDbSchema+ - Required by the +convert+ command to get the custom schema
    that OSM data will be converted into.
 
 [[Simple-Example]]
 ===== Simple Example
   
 
-Below is about the simplest useful example that supports both +convert-ogr2osm+ and +convert-osm2ogr+ . The following sections go into details on how these function are used.
+Below is about the simplest useful example that supports both +convert+. The following sections go into details on how these function are used.
 
 ------
 // an optional initialize function that gets called once before any 
@@ -329,7 +329,7 @@ _Note_: The +translateToOsm+ was previously called +translateAttributes+ . Eithe
 This method will be called after the +initialize+ method is called when translating from an OGR format to a OSM schema. For instance if you call:
 
 ------
-hoot convert-ogr2osm tmp/SimpleExample.js myoutput.osm myinput1.shp myinput2.shp
+hoot convert "myinput1.shp myinput2.shp" myoutput.osm --trans tmp/SimpleExample.js
 ------
 
 The functions will be called in the following order:
@@ -417,6 +417,283 @@ function translateToOsm(attrs, layerName)
 }
 ------
 
+[[OGR-to-OSM-Translation]]
+==== OGR to OSM Translation
+
+===== Translation File
+
+The purpose of the translation file is to convert your custom Shapefile into the
+OSM schema (http://wiki.openstreetmap.org/wiki/Map_Features). The translation
+file is a Python script with a global function with the following definition:
+
+* +def translateAttributes(attrs, layerName):+
+** +attrs+ - A dictionary of attributes for a single feature to be translated.
+** +layerName+ - The name of the layer being translated. This is provided in
+   case multiple files are being translated at one time such as roads, bridges
+   and tunnels. Sometimes this provides additional context when translated a
+   feature.
+
+The function must return either a dictionary of OSM tags or None if the feature
+should be filtered from the data set. When +convert+ is launched Hootenanny
+loads the specified Python file. The files in the +translations+ directory will
+be included in the Python path. The same Python instance will be used for the
+translations of all files in the _input_ list. This means that the script will
+only be intialized once and then +translateAttributes+ will be called once for
+each feature in all of the input files.
+
+===== Example Translation Work Flow
+
+Imagine you have a Shapefile named _MyRoads.shp_ for input with the following
+attributes:
+
+|==============================
+| _STNAME_ | _STTYPE_ | _FLOW_
+| Foo St.  | main     | 1
+| Bar Rd.  | res      | 2
+| Foo St.  | main     | 1
+|==============================
+
+In my notional example there are three columns with the following definitions:
+
+* +STNAME+ - The name of the street.
+* +STTYPE+ - The type of the street. 
+* +DIR+ - The flow of traffic, either 1 for one way traffic, or 2 for
+  bidirectional traffic.
+
+Hootenanny will call the translateAttributes method 3 times for this input. Each
+call will contain the attributes for a given row. In this case the parameters
+passed will be:
+
+|===================================================================
+| _attrs_                                           | _layerName_
+| {"STNAME":"Foo St.", "STTYPE":"main", "FLOW","1"} | "MyRoads.shp"
+| {"STNAME":"Bar Rd.", "STTYPE":"res", "FLOW","2"}  | "MyRoads.shp"
+| {"STNAME":"Foo St.", "STTYPE":"main", "FLOW","1"} | "MyRoads.shp"
+|===================================================================
+
+The syntax above for _attrs_ is the dictionary syntax in Python. For more
+details see the Python documentation
+(http://docs.python.org/2/library/stdtypes.html#mapping-types-dict). You may
+also have noticed that _layerName_ does not change during any of the calls. In
+this case since we're only passing one input file the value will stay the same,
+if we passed multiple files as input then the _layerName_ would change to
+reflect the current input.
+
+We must now write a translation file that will convert our input attributes into
+a set of appropriate OSM tags. Using the
+http://wiki.openstreetmap.org/wiki/Map_Features[Map Feature] reference on the
+OSM wiki you can determine what is appropriate for a given input, but in this
+notional example I'll give you the translations below:
+
+* +STNAME+ - Equivalent to the OSM +name+ tag.
+* +STTYPE+ - +main+ is equivalent to +highway=primary+ and +res+ is equivalent
+  to +highway=residential+
+* +DIR+ - 1 is equivalent to +oneway=yes+, 2 is equivalent to +oneway=no+.
+
+So the input/output mapping we want is below:
+
+*Inputs/Outputs Table*
+
+|===============================================================================================================================
+| _attrs_                                           | _layerName_   | _result_
+| {"STNAME":"Foo St.", "STTYPE":"main", "FLOW","1"} | "MyRoads.shp" | {"name":"Foo St.", "highway":"primary", "oneway":"yes"}
+| {"STNAME":"Bar Rd.", "STTYPE":"res", "FLOW","2"}  | "MyRoads.shp" | {"name":"Bar Rd.", "highway":"residential", "oneway":"no"}
+| {"STNAME":"Foo St.", "STTYPE":"main", "FLOW","1"} | "MyRoads.shp" | {"name":"Foo St.", "highway":"primary", "oneway":"yes"}
+|===============================================================================================================================
+
+To accomplish this we can use the following translation script:
+
+[source,python]
+----
+#!/bin/python
+
+def translateAttributes(attrs, layerName):
+    # Intialize our results object
+    tags = {}
+
+    # Is the STNAME attribute properly populated?
+    if 'STNAME' in attrs and attrs['STNAME'] != '':
+        tags['name'] = attrs['STNAME']
+    # Is the STTYPE attribute properly populated?
+    if 'STTYPE' in attrs and attrs['STTYPE'] != '':
+        if attrs['STTYPE'] == 'main':
+            tags['highway'] = 'primary'
+        if attrs['STTYPE'] == 'res':
+            tags['highway'] = 'residential'
+    # Is the FLOW attribute properly populated?
+    if 'FLOW' in attrs and attrs['FLOW'] != '':
+        if attrs['FLOW'] == '1':
+            tags['oneway'] = 'yes'
+        if attrs['FLOW'] == '2':
+            tags['oneway'] = 'no'
+
+    # Useful when debugging. You can see print statements on stdout when Hootenanny is running
+    #print "Input: " + str(attrs)
+    #print "Output: " + str(tags)
+
+    # Return our translated tags
+    return tags
+----
+
+The translation script can also be written in JavaScript.
+
+JavaScript notes:
+
+* "tags.highway" is the same as "tags['highway']"
+* OSM tags like "addr:street" MUST be specified using "tags['addr:street']" or
+  you will get errors.
+
+----
+function translateToOsm(attrs, layerName)
+{
+    tags = {};
+
+    // Names
+    if (attrs.STNAME) tags.name = attrs.STNAME;
+
+    // Highways
+    if (attrs.STTYPE == 'main') tags.highway = 'primary';
+    if (attrs.STTYPE == 'res') tags.highway = 'residential';
+
+    // Flow direction
+    if (attrs.FLOW == '1') tags.oneway = 'yes';
+    if (attrs.FLOW == '2') tags.oneway = 'no';
+
+    // Print the input attrs for debugging:
+    // This will print:
+    // Input:STNAME: :Foo St.:
+    // Input:STTYPE: :main:
+    // etc
+    // for (var i in attrs) print('Input:' + i + ': :' + attrs[i] + ':');
+
+    // Print the output tags for debugging. The format is the same as for the
+    // attrs
+    // for (var i in tags) print('Output:' + i + ': :' + tags[i] + ':');
+
+    return tags;
+}
+----
+
+The translation scripts above will give the values found in the _Inputs/Outputs
+Table_.
+
+===== Example Python Translation File 
+
+The following script provides a more thorough example for translating
+http://www.census.gov/geo/www/tiger/tgrshp2012/tgrshp2012.html[2010 Tiger road data]:
+
+[source,python]
+----
+#!/bin/python
+
+def translateAttributes(attrs, layerName):
+    if not attrs: return
+
+    tags = {}
+
+    if 'FULLNAME' in attrs:
+        name = attrs['FULLNAME']
+        if name != 'NULL' and name != '':
+            tags['name'] = name
+
+    if 'MTFCC' in attrs:
+        mtfcc = attrs['MTFCC']
+        if mtfcc == 'S1100':
+            tags['highway'] = 'primary'
+        if mtfcc == 'S1200':
+            tags['highway'] = 'secondary'
+        if mtfcc == 'S1400':
+            tags['highway'] = 'unclassified'
+        if mtfcc == 'S1500':
+            tags['highway'] = 'track'
+            tags['surface'] = 'unpaved'
+        if mtfcc == 'S1630':
+            tags['highway'] = 'road'
+        if mtfcc == 'S1640':
+            tags['highway'] = 'service'
+        if mtfcc == 'S1710':
+            tags['highway'] = 'path'
+            tags['foot'] = 'designated'
+        if mtfcc == 'S1720':
+            tags['highway'] = 'steps'
+        if mtfcc == 'S1730':
+            tags['highway'] = 'service'
+        if mtfcc == 'S1750':
+            tags['highway'] = 'road'
+        if mtfcc == 'S1780':
+            tags['highway'] = 'service'
+            tags['service'] = 'parking_aisle'
+        if mtfcc == 'S1820':
+            tags['highway'] = 'path'
+            tags['bicycle'] = 'designated'
+        if mtfcc == 'S1830':
+            tags['highway'] = 'path'
+            tags['horse'] = 'designated'
+
+    return tags
+----
+
+===== Example JavaScript Translation File
+
+----
+function translateToOsm(attrs, layerName)
+{
+    tags = {};
+
+    // Names
+    if (attrs.FULLNAME && attrs.FULLNAME !== 'NULL') tags.name = attrs.FULLNAME;
+
+    // Highways
+    if (attrs.MTFCC == 'S1100') tags.highway = 'primary';
+
+    if (attrs.MTFCC == 'S1200') tags.highway = 'secondary';
+
+    if (attrs.MTFCC == 'S1400') tags.highway = 'unclassified';
+
+    if (attrs.MTFCC == 'S1500') 
+    {
+        tags.highway = 'track';
+        tags.surface = 'unpaved';
+    }
+
+    if (attrs.MTFCC == 'S1600') tags.highway = 'road';
+
+    if (attrs.MTFCC == 'S1640') tags.highway = 'service';
+
+    if (attrs.MTFCC == 'S1710') 
+    {
+        tags.highway = 'path';
+        tags.foot = 'designated';
+    }
+
+    if (attrs.MTFCC == 'S1720') tags.highway = 'steps';
+
+    if (attrs.MTFCC == 'S1730') tags.highway = 'service';
+
+    if (attrs.MTFCC == 'S1750') tags.highway = 'road';
+
+    if (attrs.MTFCC == 'S1780') 
+    {
+        tags.highway = 'service';
+        tags.service = 'parking_aisle';
+    }
+
+    if (attrs.MTFCC == 'S1820') 
+    {
+        tags.highway = 'path';
+        tags.bicycle = 'designated';
+    }
+
+    if (attrs.MTFCC == 'S1830') 
+    {
+        tags.highway = 'path';
+        tags.horse = 'designated';
+    }
+
+
+    return tags;
+}
+----
 
 [[OSM-to-OGR-Translation]]
 ==== OSM to OGR Translation
@@ -445,7 +722,7 @@ Returns:
 The methods will be called after the +initialize+ method is called when translating from an OGR format to a OSM schema. For instance if you call:
 
 ------
-hoot convert-osm2ogr tmp/SimpleExample.js myinput.osm myoutput.shp
+hoot convert myinput.osm myoutput.shp --trans tmp/SimpleExample.js
 ------
 
 The functions will be called in the following order:
@@ -458,7 +735,7 @@ The functions will be called in the following order:
 
 .  +finalize+ 
 
-This is most commonly accessed through the +convert-osm2ogr+ command.
+This is most commonly accessed through the +convert+ command.
 
 
 [[DB-Schema]]
@@ -537,7 +814,7 @@ Below are a discussion of some special handling situations when reading and writ
 When writing shapefiles a new directory will be created with the basename of the specified path and the new layers will be created within that directory. For example:
 
 ------
-hoot convert-osm2ogr translations/MyTranslation.js input.osm output.shp
+hoot convert input.osm output.shp --trans translations/MyTranslation.js
 ------
 
 The above command will create a new directory called +output+ and the layers specified in the +translations/MyTranslation.js+ schema will be created as +output/<your layer name>.shp+ .
@@ -552,7 +829,7 @@ CSV files are created using the OGR CSV driver and will contain an associated +.
 Creating a new CSV file:
 
 ------
-hoot convert-osm2ogr translations/Poi.js test-files/conflate/unified/AllDataTypesA.osm foo.csv
+hoot convert test-files/conflate/unified/AllDataTypesA.osm foo.csv translations/Poi.js
 ------
 
 This uses a simple translation script ( +Poi.js+ ) that exports POI data and its associated tags. If you would then like to read that data create a new +.vrt+ file named +foo.vrt+ that contains the following:
@@ -571,7 +848,7 @@ This uses a simple translation script ( +Poi.js+ ) that exports POI data and its
 Then to convert the file back into a .osm file run:
 
 ------
-hoot convert-ogr2osm translations/Poi.js ConvertedBack.osm foo.vrt
+hoot convert foo.vrt ConvertedBack.osm --trans translations/Poi.js
 ------
 
 
@@ -644,10 +921,12 @@ The astute reader may notice that a new way was created during this process. The
 ===== Disabling Complex Buildings
   
 
-By default the +ogr2osm.ops+ parameter is set to +hoot::MergeNearbyNodes;hoot::BuildingPartMergeOp+ . If you would like to disable the automatic construction of complex buildings from the individual parts then simply remove +hoot::BuildingPartMergeOp+ from the +ogr2osm.ops+ parameter. For example:
+By default the when using the convert command to convert an OGR format to OSM +ogr2osm.simplify.complex.buildings+ is enabled.  If you 
+would like to disable the automatic construction of complex buildings from the individual parts then simply set 
++ogr2osm.simplify.complex.buildings+ to false.  For example:
 
 ------
-hoot convert-ogr2osm -D "ogr2osm.ops=hoot::MergeNearbyNodes" MyTranslation MyOutput.osm MyInput.shp
+hoot convert -D ogr2osm.simplify.complex.buildings=false MyInput.shp MyOutput.osm --trans MyTranslation
 ------
 
 [[Common-Use-Cases]]
@@ -711,7 +990,7 @@ MTFCC: String (5.0)
 ==== Translate the Shapefiles
   
 
-Hootenanny provides a link:$$User_-_convert-ogr2osm.html$$[convert-ogr2osm] operation to translate and convert shapefiles into OSM files. If the projection is available for the Shapefile the input will be automatically reprojected to WGS84 during the process. If you do a good job of translating the input data into the OSM schema then Hootenanny will conflate the attributes on your features as well as the geometries. If you do not translate the data properly then you'll still get a result, but it may not be desirable.
+Hootenanny provides a link:$$User_-_convert.html$$[convert] operation to translate and convert shapefiles into OSM files. If the projection is available for the Shapefile the input will be automatically reprojected to WGS84 during the process. If you do a good job of translating the input data into the OSM schema then Hootenanny will conflate the attributes on your features as well as the geometries. If you do not translate the data properly then you'll still get a result, but it may not be desirable.
 
 
 [[Crummy-Translation]]
@@ -792,7 +1071,7 @@ def translateAttributes(attrs, layerName):
 To run the tiger translation put the above code in a file named +translations/TigerRoads.py+ and run the following:
 
 ------
-hoot convert-ogr2osm TigerRoads tmp/dc-roads/tiger.osm tmp/dc-roads/tl_2012_11001_roads.shp
+hoot convert tmp/dc-roads/tl_2012_11001_roads.shp tmp/dc-roads/tiger.osm --trans TigerRoads
 ------
 
 The following translation will work OK with the DC data.
@@ -832,7 +1111,7 @@ def translateAttributes(attrs, layerName):
 To run the DC GIS translation put the above code in a file named +translations/DcRoads.py+ and run the following:
 
 ------
-hoot convert-ogr2osm DcRoads tmp/dc-roads/dcgis.osm tmp/dc-roads/Streets4326.shp
+hoot convert tmp/dc-roads/Streets4326.shp tmp/dc-roads/dcgis.osm  --trans DcRoads
 ------
 
 
@@ -861,7 +1140,7 @@ hoot conflate tmp/dc-roads/dcgis-cropped.osm tmp/dc-roads/tiger-cropped.osm tmp/
 Now we can convert the final result back into a Shapefile.
 
 ------
-hoot convert-osm2shp "name,highway,surface,foot,horse,bicycle" tmp/dc-roads/output.osm tmp/dc-roads/output.shp
+hoot convert tmp/dc-roads/output.osm tmp/dc-roads/output.shp --cols "name,highway,surface,foot,horse,bicycle"
 ------
 
 
@@ -874,14 +1153,14 @@ hoot convert-osm2shp "name,highway,surface,foot,horse,bicycle" tmp/dc-roads/outp
 . Convert your GPX file into an OSM file where each track is now a way.
 
 ------
-hoot convert-ogr2osm GpsTrack tmp/MyTracks.osm "$HOME/MyTracks.gpx;tracks" 
+hoot convert "$HOME/MyTracks.gpx;tracks" tmp/MyTracks.osm --trans GpsTrack
 ------
 +
 
 . Use the special track snapping conflation manipulation to snap your tracks to an existing road network and convert to Shapefile.
 ------
 hoot conflate -D conflator.manipulators=hoot::WaySnapMerger HighQualityRoads.osm tmp/MyTracks.osm tmp/MySnappedTracks.osm
-hoot convert-osm2shp "hoot:max:movement,hoot:mean:movement,hoot:score,name,foot" tmp/MySnappedTracks.osm tmp/MySnappedTracks.shp
+hoot convert tmp/MySnappedTracks.shp tmp/MySnappedTracks.osm --cols "hoot:max:movement,hoot:mean:movement,hoot:score,name,foot"
 ------
 
 
@@ -898,7 +1177,7 @@ If you have node attributes that you want to keep you can use the +hoot::PointsT
 The command used with a GPX input file is:
 
 ------
-hoot convert-ogr2osm  -D "ogr2osm.ops=hoot::MergeNearbyNodes;hoot::PointsToTracksOp" GpsTrack tmp/MyTracks.osm "$HOME/MyTracks.gpx;track_points" 
+hoot convert -D "convert.ops+=hoot::PointsToTracksOp" "$HOME/MyTracks.gpx;track_points" tmp/MyTracks.osm --trans GpsTrack
 ------
 
 An example translation file is:
@@ -956,7 +1235,7 @@ Run Hootenanny and add your data to the template File GeoDatabase::
 * Add the template File GeoDatabase to write to.
 +
 ----
-hoot convert-osm2ogr -D ogr.append.data="true" $HOOT_HOME/translations/TDS.js your_data.osm LTDS_4_0.gdb
+hoot convert -D ogr.append.data="true" your_data.osm LTDS_4_0.gdb --trans $HOOT_HOME/translations/TDS.js
 ----
 
 Transfer the LTDS_4_0.gdb to the machine that has ESRI ArcGIS installed::

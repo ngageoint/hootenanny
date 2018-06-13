@@ -35,6 +35,7 @@
 #include <hoot/core/io/ShapefileWriter.h>
 #include <hoot/core/conflate/AlphaShapeGenerator.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/IoUtils.h>
 
 namespace hoot
 {
@@ -67,7 +68,7 @@ public:
     QString outputPath = args[i++];
 
     OsmMapPtr pointsMap(new OsmMap());
-    loadMap(pointsMap, pointsPath, false, Status::Unknown1);
+    IoUtils::loadMap(pointsMap, pointsPath, false, Status::Unknown1);
     OsmMapPtr result = AlphaShapeGenerator(alpha, buffer).generateMap(pointsMap);
 
     // reproject back into lat/lng
@@ -81,7 +82,7 @@ public:
     }
     else
     {
-      saveMap(result, outputPath);
+      IoUtils::saveMap(result, outputPath);
     }
 
     return 0;

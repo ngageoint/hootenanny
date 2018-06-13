@@ -47,19 +47,21 @@ public:
   static std::string className() { return "hoot::TagCriterion"; }
 
   TagCriterion();
-  TagCriterion(const QString& k, const QString& v) : _k(k), _v(v) {}
+  TagCriterion(const QString& k, const QString& v);
 
   virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
   void setConfiguration(const Settings& s);
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new TagCriterion(_k, _v)); }
+  void setKvps(const QStringList kvps);
+
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new TagCriterion(/*_k, _v*/)); }
 
   virtual QString getDescription() const { return "Filters elements based on tags"; }
 
 private:
 
-  QString _k, _v;
+  QStringList _kvps;
 };
 
 }

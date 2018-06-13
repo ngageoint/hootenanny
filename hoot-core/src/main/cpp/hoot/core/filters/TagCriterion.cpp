@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "TagCriterion.h"
 
@@ -41,27 +41,43 @@ TagCriterion::TagCriterion()
   setConfiguration(conf());
 }
 
+TagCriterion::TagCriterion(const QString& k, const QString& v)
+{
+  _kvps.append(k + "=" + v);
+}
+
+void TagCriterion::setKvps(const QStringList kvps)
+{
+  _kvps = kvps;
+  for (int i = 0; i < _kvps.size(); i++)
+  {
+    const QString kvp = _kvps.at(i);
+    const QStringList kvpParts = kvp.split("=");
+    if (kvpParts.size() != 2)
+    {
+      throw IllegalArgumentException("Invalid TagCriterion KVP: " + kvp);
+    }
+  }
+}
+
 void TagCriterion::setConfiguration(const Settings &s)
 {
-  QString kvp = ConfigOptions(s).getTagCriterionKvp();
-  if (!kvp.isEmpty())
-  {
-    QStringList l = kvp.split(",");
-    if (l.size() != 2)
-    {
-      throw IllegalArgumentException(
-            QString("Expected '%1' to be populated with 'key,value'.").
-            arg(ConfigOptions::getTagCriterionKvpKey()));
-    }
-    _k = l[0];
-    _v = l[1];
-  }
+  setKvps(ConfigOptions(s).getTagCriterionKvps());
 }
 
 bool TagCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
 {
-  assert(!_k.isEmpty());
-  return e->getTags().get(_k) == _v;
+  for (int i = 0; i < _kvps.size(); i++)
+  {
+    const QStringList kvpParts = _kvps.at(i).split("=");
+    const QString key = kvpParts[0];
+    const QString val = kvpParts[1];
+    if (e->getTags().get(key) == val)
+    {
+      return true;
+    }
+  }
+  return false;
 }
 
 }

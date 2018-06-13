@@ -349,7 +349,7 @@
             	"id":"merge_nearby_nodes_distance",
                 "minvalue":"0.01",
                 "elem_type":"double",
-                "description":"When merging nodes during ogr2osm, determines what tolerance should be used for deciding two nodes are identical. Units in meters and defaults to 1.0m.",
+                "description":"When merging nodes during convert, determines what tolerance should be used for deciding two nodes are identical. Units in meters and defaults to 1.0m.",
                 "maxvalue":"",
                 "name":"Merge Nearby Nodes Distance",
                 "defaultvalue":"1.0",
@@ -706,7 +706,7 @@
             	"id":"building_review_if_secondary_newer",
                 "elem_type":"bool",
                 "defaultvalue":"false",
-                "description":"If true, any buildings in the secondary layer will be automatically reviewed against matching buildings in the reference layer if they are marked with a more recent date than that of the reference building.",
+                "description":"If true, any buildings in the secondary layer will be automatically reviewed against potentially matching features in the reference layer if they are marked with a more recent date than that of the reference feature.",
                 "name":"Review If Secondary Layer Building Newer",
                 "hoot_key":"building.review.if.secondary.newer"
             },
@@ -854,7 +854,7 @@
         	"id":"poipolygon_keep_closest_matches_only",
         	"elem_type":"bool",
         	"defaultvalue":"false",
-        	"description":"If true, POI to Polygon conflation will only keep matches that are the closest to polygons and throw out any others even if they score high enough for a match.",
+        	"description":"If this setting is true, POI to Polygon conflation will attempt to match the closest feature pairs only.  The conflation will not match additional features at greater distances, even if they are within the match distance threshold.  Multiple features matches are still possible in the case of exact distance ties.  If this setting is false, then multiple POIs found within the match distance threshold of a polygon are treated as reviews.",
                 "name":"Keep Closest Matches Only",
         	"hoot_key":"poi.polygon.keep.closest.matches.only"
     	    },
@@ -894,7 +894,7 @@
         	"id":"poipolygon_auto_merge_many_poi_to_one_poly_matches",
         	"elem_type":"bool",
         	"defaultvalue":"false",
-        	"description":"If true, instances where multiple POIs were matched to a single polygon will result in all of the POIs being merged into the polygon.  If false, then each POI will generate a review against the polygon instead.",
+        	"description":"If true, instances where multiple POIs were matched to a single polygon will result in all of those POIs being automatically merged into the polygon.  If false, then each matched POI will generate a review against the polygon instead.",
 		"name":"Merge Many POI to Single Polygon Matches",
         	"hoot_key":"poi.polygon.auto.merge.many.poi.to.one.poly.matches"
     	    },

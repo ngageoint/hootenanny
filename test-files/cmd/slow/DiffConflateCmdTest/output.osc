@@ -303,7 +303,6 @@
             <tag k="building" v="cowshed"/>
             <tag k="source" v="Unknown"/>
             <tag k="name" v="cow house"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-2" version="0" timestamp="">
             <nd ref="-275"/>
@@ -331,7 +330,6 @@
             <nd ref="-7"/>
             <nd ref="-6"/>
             <tag k="highway" v="residential"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-3" version="0" timestamp="">
             <nd ref="-276"/>
@@ -356,7 +354,6 @@
             <nd ref="-30"/>
             <nd ref="-29"/>
             <tag k="highway" v="residential"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-4" version="0" timestamp="">
             <nd ref="-281"/>
@@ -381,7 +378,6 @@
             <nd ref="-50"/>
             <nd ref="-49"/>
             <tag k="highway" v="residential"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-5" version="0" timestamp="">
             <nd ref="-282"/>
@@ -406,7 +402,6 @@
             <nd ref="-70"/>
             <nd ref="-69"/>
             <tag k="highway" v="residential"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-6" version="0" timestamp="">
             <nd ref="-283"/>
@@ -426,7 +421,6 @@
             <nd ref="-90"/>
             <nd ref="-89"/>
             <tag k="highway" v="residential"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-7" version="0" timestamp="">
             <nd ref="-272"/>
@@ -439,7 +433,6 @@
             <nd ref="-105"/>
             <nd ref="-104"/>
             <tag k="highway" v="residential"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-8" version="0" timestamp="">
             <nd ref="-273"/>
@@ -452,7 +445,6 @@
             <nd ref="-113"/>
             <nd ref="-112"/>
             <tag k="highway" v="residential"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-9" version="0" timestamp="">
             <nd ref="-274"/>
@@ -465,7 +457,6 @@
             <nd ref="-121"/>
             <nd ref="-120"/>
             <tag k="highway" v="residential"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-10" version="0" timestamp="">
             <nd ref="-269"/>
@@ -479,7 +470,6 @@
             <nd ref="-129"/>
             <nd ref="-128"/>
             <tag k="highway" v="residential"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-11" version="0" timestamp="">
             <nd ref="-270"/>
@@ -494,7 +484,6 @@
             <nd ref="-138"/>
             <nd ref="-137"/>
             <tag k="highway" v="residential"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-12" version="0" timestamp="">
             <nd ref="-271"/>
@@ -509,7 +498,6 @@
             <nd ref="-148"/>
             <nd ref="-147"/>
             <tag k="highway" v="residential"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-13" version="0" timestamp="">
             <nd ref="-284"/>
@@ -532,7 +520,6 @@
             <nd ref="-158"/>
             <nd ref="-157"/>
             <tag k="highway" v="residential"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-14" version="0" timestamp="">
             <nd ref="-285"/>
@@ -558,7 +545,6 @@
             <nd ref="-176"/>
             <nd ref="-175"/>
             <tag k="highway" v="residential"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-15" version="0" timestamp="">
             <nd ref="-280"/>
@@ -579,7 +565,6 @@
             <nd ref="-197"/>
             <nd ref="-196"/>
             <tag k="highway" v="residential"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-16" version="0" timestamp="">
             <nd ref="-277"/>
@@ -593,7 +578,6 @@
             <nd ref="-213"/>
             <nd ref="-212"/>
             <tag k="highway" v="residential"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-17" version="0" timestamp="">
             <nd ref="-278"/>
@@ -613,7 +597,6 @@
             <nd ref="-222"/>
             <nd ref="-221"/>
             <tag k="highway" v="residential"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-18" version="0" timestamp="">
             <nd ref="-286"/>
@@ -635,7 +618,6 @@
             <nd ref="-237"/>
             <nd ref="-236"/>
             <tag k="highway" v="residential"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-19" version="0" timestamp="">
             <nd ref="-279"/>
@@ -656,7 +638,6 @@
             <nd ref="-259"/>
             <nd ref="-260"/>
             <tag k="highway" v="residential"/>
-            <tag k="error:circular" v="15"/>
         </way>
     </create>
 </osmChange>

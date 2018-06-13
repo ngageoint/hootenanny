@@ -83,7 +83,7 @@ public:
 
   QStringList getLayerNames(QString path);
 
-  QStringList getFilteredLayerNames(QString path);
+  QStringList getFilteredLayerNames(const QString path);
 
   /**
    * Read all geometry data from the specified path.

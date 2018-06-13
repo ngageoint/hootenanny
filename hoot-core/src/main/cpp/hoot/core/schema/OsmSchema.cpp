@@ -1597,7 +1597,7 @@ bool OsmSchema::isArea(const Tags& t, ElementType type) const
   //LOG_VART(t.toString());
 
   result |= isBuilding(t, type);
-  result |= t.isTrue("building:part");
+  result |= t.isTrue(MetadataTags::BuildingPart());
   result |= t.isTrue("area");
 
   // if at least one of the tags is marked as an area, but not a linestring tag then we consider
@@ -1612,7 +1612,7 @@ bool OsmSchema::isArea(const Tags& t, ElementType type) const
       break;
     }
   }
-  LOG_VART(result);
+  //LOG_VART(result);
 
   return result;
 } 
@@ -1728,7 +1728,7 @@ bool OsmSchema::isAreaForStats(const Tags& t, ElementType type) const
   }
 
   // don't process if a building part
-  if (t.isTrue("building:part"))
+  if (t.isTrue(MetadataTags::BuildingPart()))
   {
     return false;
   }
@@ -1782,7 +1782,7 @@ bool OsmSchema::isBuilding(const ConstElementPtr& e) const
 bool OsmSchema::isBuildingPart(const Tags& t, ElementType type) const
 {
   bool result = false;
-  if (type != ElementType::Node && t.isTrue("building:part"))
+  if (type != ElementType::Node && t.isTrue(MetadataTags::BuildingPart()))
   {
     result = true;
   }
@@ -1944,6 +1944,8 @@ bool OsmSchema::isLinearWaterway(const Element& e)
     for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
     {
       if (it.key() == "waterway" || isAncestor(it.key(), "waterway") ||
+          //TODO: Likely this condition needs to be removed and instead the affected data should
+          //be properly translated into OSM before conflation.
           (it.key() == "type" && isAncestor("waterway=" + it.value(), "waterway")))
       {
         return true;
@@ -2056,8 +2058,9 @@ bool OsmSchema::isRailway(const Element& e)
     const Tags& tags = e.getTags();
     for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
     {
-      if (it.key() == "railway" || isAncestor(it.key(), "railway") ||
-          (it.key() == "type" && isAncestor("railway=" + it.value(), "railway")))
+      //TODO: I think we may want to narrow down to a more specific set of railway values here
+      //at some point.
+      if (it.key() == "railway" || isAncestor(it.key(), "railway"))
       {
         return true;
       }

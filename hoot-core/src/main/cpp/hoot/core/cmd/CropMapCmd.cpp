@@ -32,6 +32,7 @@
 #include <hoot/core/ops/MapCropper.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/util/IoUtils.h>
 
 // Qt
 #include <QStringList>
@@ -86,13 +87,13 @@ public:
     Envelope env(left, right, bottom, top);
 
     OsmMapPtr map(new OsmMap());
-    loadMap(map, in, true);
+    IoUtils::loadMap(map, in, true);
 
     MapCropper::crop(map, env);
     SuperfluousWayRemover::removeWays(map);
     SuperfluousNodeRemover().apply(map);
 
-    saveMap(map, out);
+    IoUtils::saveMap(map, out);
 
     return 0;
   }

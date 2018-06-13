@@ -74,6 +74,8 @@ public:
 
   static QString getReaderName(const QString url);
 
+  static bool isSupportedFormat(const QString url);
+
 private:
 
   static boost::shared_ptr<OsmMapReaderFactory> _theInstance;

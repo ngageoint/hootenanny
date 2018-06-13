@@ -45,7 +45,6 @@ namespace hoot
  *
  * Generally you will want to subclass BaseCommand rather than implementing this interface directly.
  */
-
 class Command
 {
 public:
@@ -82,7 +81,7 @@ public:
   virtual QString getDescription() const = 0;
 
   /**
-   * @sa BaseCommand for an example implementation.
+   * BaseCommand for an example implementation.
    */
   virtual int run(char* argv[], int argc) = 0;
 };

@@ -263,12 +263,11 @@ void OsmXmlWriter::_writeMetadata(const Element *e)
       version = 1;
     }
     _writer->writeAttribute("version", QString::number(version));
-    //LOG_VART(version);=
   }
   else
   {
-    //TODO: This comparison seems to be still unequal when I set an element's timestamp to
-    //ElementData::TIMESTAMP_EMPTY.  See RemoveAttributeVisitor
+    //This comparison seems to be still unequal when I set an element's timestamp to
+    //ElementData::TIMESTAMP_EMPTY.  See RemoveAttributesVisitor
     if (e->getTimestamp() != ElementData::TIMESTAMP_EMPTY)
     {
       _writer->writeAttribute("timestamp", OsmUtils::toTimeString(e->getTimestamp()));

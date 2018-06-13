@@ -10,7 +10,7 @@ The base command line interface follows the following syntax:
 hoot (operation) [args...]
 -----
 
-Where +operation+ is an operation name such as +convert-ogr2osm+ or +conflate+. The
+Where +operation+ is an operation name such as +convert+ or +conflate+. The
 parenthesis around +operation+ show that the argument is required.
 
 +[args...]+ shows that there are zero or more arguments to the operation. The
@@ -22,20 +22,13 @@ arguments and a short help screen will be displayed.
 
 :leveloffset: 1
 // be sure all included asciidocs end with a newline
-include::accuracy-distribution.asciidoc[]
-include::attribute-co-occurrence.asciidoc[]
-include::attribute-count.asciidoc[]
 include::big-cat.asciidoc[]
+include::calculate-tiles.asciidoc[]
 include::changeset-apply.asciidoc[]
 include::changeset-derive.asciidoc[]
 include::clean.asciidoc[]
 include::conflate.asciidoc[]
-include::conflate-differential.asciidoc[]
-include::conflate-cumulative.asciidoc[]
 include::convert.asciidoc[]
-include::convert-ogr2osm.asciidoc[]
-include::convert-osm2ogr.asciidoc[]
-include::convert-osm2shp.asciidoc[]
 include::cookie-cut.asciidoc[]
 include::crop.asciidoc[]
 include::delete-db-map.asciidoc[]
@@ -69,9 +62,10 @@ include::score-map.asciidoc[]
 include::score-matches.asciidoc[]
 include::sort.asciidoc[]
 include::stats.asciidoc[]
+include::tag-accuracy-distribution.asciidoc[]
+include::tag-comparison.asciidoc[]
+include::tag-info.asciidoc[]
 include::tag-schema.asciidoc[]
-include::tiles-calculate.asciidoc[]
-include::tiles-calculate-random.asciidoc[]
 include::type-tagger-create-rules.asciidoc[]
 include::type-tagger-create-rules-db.asciidoc[]
 include::union-polygons.asciidoc[]

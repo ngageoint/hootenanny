@@ -39,6 +39,7 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/CalculateHashVisitor.h>
 #include <hoot/rnd/conflate/multiary/MultiaryUtilities.h>
+#include <hoot/core/util/IoUtils.h>
 
 using namespace std;
 using namespace Tgs;
@@ -75,7 +76,7 @@ public:
     comparator.evaluateMatches(map, copy);
 
     MapProjector::projectToWgs84(copy);
-    saveMap(copy, output);
+    IoUtils::saveMap(copy, output);
     OsmXmlWriter writer;
     writer.setIncludeHootInfo(true);
     writer.write(copy, output);
@@ -161,7 +162,7 @@ public:
     {
       Status s = Status::fromInput(i);
 
-      loadMap(map, args[i], false, s);
+      IoUtils::loadMap(map, args[i], false, s);
     }
 
     CalculateHashVisitor hashVisitor;

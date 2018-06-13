@@ -1,8 +1,6 @@
 
 == Conflating a New Feature Type With Generic Conflation
 
-TODO: rewrite this document to account for generic and non-generic conflation
-
 This document discusses in detail some of the processes involved with using generic conflation to
 conflate a new type of feature with Hootenanny.  Hootenanny's generic conflation framework allows for
 more quickly creating the capability to conflate additional feature types by exposing, via a Javascript
@@ -19,25 +17,12 @@ rapidly causing this documentation's accuracy to lag.  So, when in doubt about c
 documentation, pose questions to members of the Hootenanny development team.  For more information on 
 Hootenanny's Javascript API, see the User Guide.  
 
-=== Obtaining Test Data
+=== Test Data
 
-This document assumes you are testing with data that had matches made in test data manually by a human.  See the "Hootenanny Manual Conflation" section in this document for more details on this process.  
-
-=== Pruning the Test Data
-
-TODO (also add pruning of existing irrelevant ref tags)  
-
-=== Cropping the Test data
-
-If more than 200 matches were made in the data, you may want to crop your data down to a smaller size
-so that test runs complete in five minutes or less, if possible.  Since you will be running many 
-tests as you tweak the model, this will prevent testing from taking an unreasonable amount of time.  
-Use the `crop` command for this.
-
-Example: 
--------------------------------------- 
-crop (input.osm) (output.osm) (bounds)
---------------------------------------
+This document assumes you are testing with data that had matches made in test data manually by a human.  If more than 200 matches were made 
+in the test data, you may want to crop your data down to a smaller size so that test runs complete in five minutes or less, if possible.  
+Since you will be running many tests as you tweak the model, this will prevent testing from taking an unreasonable amount of time.  
+See the "Hootenanny Manual Conflation" section in this document for more details on this process.
 
 === Initial Setup
 

@@ -50,6 +50,7 @@ namespace hoot
 class ScriptMatchTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ScriptMatchTest);
+  //TODO: should this test be re-enabled?
   //CPPUNIT_TEST(cacheTest);
   CPPUNIT_TEST(conflictTest);
   CPPUNIT_TEST_SUITE_END();

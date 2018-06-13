@@ -32,7 +32,7 @@
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/scoring/MapComparator.h>
-#include <hoot/core/visitors/SetTagVisitor.h>
+#include <hoot/core/visitors/SetTagValueVisitor.h>
 #include <hoot/core/util/MapProjector.h>
 
 #define int64 opencv_broken_int
@@ -91,7 +91,7 @@ public:
     uut.setUseDateTime();
 
     // Change dates...
-    SetTagVisitor vtor("source:datetime", "1989-12-13T12:34:56Z");
+    SetTagValueVisitor vtor("source:datetime", "1989-12-13T12:34:56Z");
     map2->visitRw(vtor);
 
     // Make sure it fails now!

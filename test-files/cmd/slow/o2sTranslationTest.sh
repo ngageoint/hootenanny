@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-# Test reading and writeing o2s_X files
+# Test reading and writing o2s_X files
 TRANS_TDS40=$HOOT_HOME/translations/TDSv40.js
 TRANS_TDS61=$HOOT_HOME/translations/TDSv61.js
 TRANS_MGCP=$HOOT_HOME/translations/MGCP_TRD4.js
@@ -25,44 +25,28 @@ HOOT_OPT="--warn"
 ##### Start Tests #####
 # Export files
 echo "### TDSv40 ###"
-hoot convert-osm2ogr $HOOT_OPT -D ogr.thematic.structure=false $TRANS_TDS40 $inputFile $outputDir/tds40.shp
-hoot convert-ogr2osm --debug $TRANS_TDS40 $outputDir/tds40.osm \
-  $outputDir/tds40/HUT_P.shp \
-  $outputDir/tds40/o2s_*.shp \
-  $outputDir/tds40/ORCHARD_S.shp \
-  $outputDir/tds40/RIVER_C.shp
+hoot convert $HOOT_OPT -D ogr.thematic.structure=false $inputFile $outputDir/tds40.shp --trans $TRANS_TDS40
+hoot convert --debug $outputDir/tds40/HUT_P.shp $outputDir/tds40/o2s_*.shp $outputDir/tds40/ORCHARD_S.shp $outputDir/tds40/RIVER_C.shp $outputDir/tds40.osm --trans $TRANS_TDS40
 
 hoot map-diff $outputDir/tds40.osm $tds40File || diff $outputDir/tds40.osm $tds40File
 
 echo
 echo "### TDSv61 ###"
-hoot convert-osm2ogr $HOOT_OPT -D ogr.thematic.structure=false $TRANS_TDS61 $inputFile $outputDir/tds61.shp
-hoot convert-ogr2osm --debug $TRANS_TDS61 $outputDir/tds61.osm \
-  $outputDir/tds61/HUT_P.shp \
-  $outputDir/tds61/o2s_*.shp \
-  $outputDir/tds61/ORCHARD_S.shp \
-  $outputDir/tds61/RIVER_C.shp
+hoot convert $HOOT_OPT -D ogr.thematic.structure=false $inputFile $outputDir/tds61.shp --trans $TRANS_TDS61
+hoot convert --debug $outputDir/tds61/HUT_P.shp $outputDir/tds61/o2s_*.shp $outputDir/tds61/ORCHARD_S.shp $outputDir/tds61/RIVER_C.shp $outputDir/tds61.osm --trans $TRANS_TDS61
 
 hoot map-diff $outputDir/tds61.osm $inputFile || diff $outputDir/tds61.osm $inputFile
 
 echo
 echo "### MGCP ###"
-hoot convert-osm2ogr $HOOT_OPT $TRANS_MGCP $inputFile $outputDir/mgcp.shp
-hoot convert-ogr2osm --debug $TRANS_MGCP $outputDir/mgcp.osm \
-  $outputDir/mgcp/PAL099.shp \
-  $outputDir/mgcp/o2s_*.shp \
-  $outputDir/mgcp/AEA040.shp \
-  $outputDir/mgcp/LBH140.shp
+hoot convert $HOOT_OPT $inputFile $outputDir/mgcp.shp --trans $TRANS_MGCP
+hoot convert --debug $outputDir/mgcp/PAL099.shp $outputDir/mgcp/o2s_*.shp $outputDir/mgcp/AEA040.shp $outputDir/mgcp/LBH140.shp $outputDir/mgcp.osm --trans $TRANS_MGCP
 
 hoot map-diff $outputDir/mgcp.osm $inputFile || diff $outputDir/mgcp.osm $inputFile
 
 echo
 echo "### GGDM ###"
-hoot convert-osm2ogr $HOOT_OPT -D ogr.thematic.structure=false $TRANS_GGDM $inputFile $outputDir/ggdm.shp
-hoot convert-ogr2osm --debug $TRANS_GGDM $outputDir/ggdm.osm \
-  $outputDir/ggdm/HUT_P.shp \
-  $outputDir/ggdm/o2s_*.shp \
-  $outputDir/ggdm/ORCHARD_S.shp \
-  $outputDir/ggdm/RIVER_C.shp
+hoot convert $HOOT_OPT -D ogr.thematic.structure=false $inputFile $outputDir/ggdm.shp --trans $TRANS_GGDM
+hoot convert --debug $outputDir/ggdm/HUT_P.shp $outputDir/ggdm/o2s_*.shp $outputDir/ggdm/ORCHARD_S.shp $outputDir/ggdm/RIVER_C.shp $outputDir/ggdm.osm --trans $TRANS_GGDM
 
 hoot map-diff $outputDir/ggdm.osm $ggdmFile || diff $outputDir/ggdm.osm $ggdmFile

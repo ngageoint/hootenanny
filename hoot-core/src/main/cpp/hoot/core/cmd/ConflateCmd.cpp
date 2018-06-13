@@ -38,7 +38,6 @@
 #include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/filters/StatusCriterion.h>
 #include <hoot/core/io/MapStatsWriter.h>
-#include <hoot/core/ops/BuildingOutlineUpdateOp.h>
 #include <hoot/core/ops/CalculateStatsOp.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/ops/stats/IoSingleStat.h>
@@ -46,6 +45,15 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/conflate/DiffConflator.h>
+#include <hoot/core/visitors/AddRef1Visitor.h>
+#include <hoot/core/visitors/CriterionCountVisitor.h>
+#include <hoot/core/visitors/LengthOfWaysVisitor.h>
+#include <hoot/core/filters/BuildingCriterion.h>
+#include <hoot/core/filters/PoiCriterion.h>
+#include <hoot/core/io/ElementSorter.h>
+#include <hoot/core/io/OsmXmlChangesetFileWriter.h>
 
 // Standard
 #include <fstream>
@@ -71,6 +79,28 @@ void ConflateCmd::printStats(const QList<SingleStat>& stats)
   {
     cout << stats[i].name << sep << stats[i].value << endl;
   }
+}
+
+// Convenience function used when deriving a changeset
+boost::shared_ptr<ChangesetDeriver> ConflateCmd::_sortInputs(OsmMapPtr pMap1, OsmMapPtr pMap2)
+{
+  ElementSorterPtr sorted1(new ElementSorter(pMap1));
+  ElementSorterPtr sorted2(new ElementSorter(pMap2));
+  boost::shared_ptr<ChangesetDeriver> delta(new ChangesetDeriver(sorted1, sorted2));
+  return delta;
+}
+
+void ConflateCmd::_writeChangeset(OsmMapPtr pMap, QString outFileName)
+{
+  // Make empty map
+  OsmMapPtr pEmptyMap(new OsmMap());
+
+  // Get Changeset Deriver
+  boost::shared_ptr<ChangesetDeriver> pDeriver = _sortInputs(pEmptyMap, pMap);
+
+  // Write the file!
+  OsmXmlChangesetFileWriter writer;
+  writer.write(outFileName, pDeriver);
 }
 
 int ConflateCmd::runSimple(QStringList args)
@@ -99,6 +129,13 @@ int ConflateCmd::runSimple(QStringList args)
     }
   }
 
+  bool isDiffConflate = false;
+  if (args.contains("--differential"))
+  {
+    isDiffConflate = true;
+    args.removeAt(args.indexOf("--differential"));
+  }
+
   if (args.size() < 2 || args.size() > 3)
   {
     cout << getHelp() << endl << endl;
@@ -118,9 +155,14 @@ int ConflateCmd::runSimple(QStringList args)
     output = args[1];
   }
 
-  LOG_INFO(
-    "Conflating " << input1.right(50) << " with " << input2.right(50) <<
-    " and writing the output to " << output.right(50));
+  QString msg =
+    "Conflating " + input1.right(50) + " with " + input2.right(50) + " and writing the output to " +
+     output.right(50);
+  if (isDiffConflate)
+  {
+    msg.prepend("Differentially ");
+  }
+  LOG_INFO(msg);
 
   double bytesRead = IoSingleStat(IoSingleStat::RChar).value;
   LOG_VART(bytesRead);
@@ -128,12 +170,26 @@ int ConflateCmd::runSimple(QStringList args)
 
   // read input 1
   OsmMapPtr map(new OsmMap());
-  loadMap(map, input1, ConfigOptions().getReaderConflateUseDataSourceIds1(), Status::Unknown1);
+  IoUtils::loadMap(
+    map, input1, ConfigOptions().getReaderConflateUseDataSourceIds1(), Status::Unknown1);
+
+  if (isDiffConflate)
+  {
+    // Mark input1 elements (Use Ref1 visitor, because it's already coded up)
+    Settings visitorConf;
+    visitorConf.set(ConfigOptions::getAddRefVisitorInformationOnlyKey(), "false");
+    boost::shared_ptr<AddRef1Visitor> pRef1v(new AddRef1Visitor());
+    pRef1v->setConfiguration(visitorConf);
+    map->visitRw(*pRef1v);
+  }
+
   // read input 2
   if (!input2.isEmpty())
   {
-    loadMap(map, input2, ConfigOptions().getReaderConflateUseDataSourceIds2(), Status::Unknown2);
+    IoUtils::loadMap(
+      map, input2, ConfigOptions().getReaderConflateUseDataSourceIds2(), Status::Unknown2);
   }
+
   double inputBytes = IoSingleStat(IoSingleStat::RChar).value - bytesRead;
   LOG_VART(inputBytes);
   double elapsed = t.getElapsedAndRestart();
@@ -170,22 +226,33 @@ int ConflateCmd::runSimple(QStringList args)
 
   OsmMapPtr result = map;
 
-  if (ConfigOptions().getConflateEnableOldRoads())
+  if (isDiffConflate)
   {
-    // call the old road conflation routine
-    Conflator conflator;
-    conflator.loadSource(map);
-    conflator.conflate();
-    result.reset(new OsmMap(conflator.getBestMap()));
-    stats.append(SingleStat("Old Road Conflation Time (sec)", t.getElapsedAndRestart()));
-  }
-
-  {
-    // call new conflation routine
-    UnifyingConflator conflator;
+    // call the diff conflator
+    DiffConflator conflator;
     conflator.apply(result);
     stats.append(conflator.getStats());
     stats.append(SingleStat("Conflation Time (sec)", t.getElapsedAndRestart()));
+  }
+  else
+  {
+    if (ConfigOptions().getConflateEnableOldRoads())
+    {
+      // call the old road conflation routine
+      Conflator conflator;
+      conflator.loadSource(map);
+      conflator.conflate();
+      result.reset(new OsmMap(conflator.getBestMap()));
+      stats.append(SingleStat("Old Road Conflation Time (sec)", t.getElapsedAndRestart()));
+    }
+
+    {
+      // call new conflation routine
+      UnifyingConflator conflator;
+      conflator.apply(result);
+      stats.append(conflator.getStats());
+      stats.append(SingleStat("Conflation Time (sec)", t.getElapsedAndRestart()));
+    }
   }
 
   // Apply any user specified operations.
@@ -195,7 +262,15 @@ int ConflateCmd::runSimple(QStringList args)
   MapProjector::projectToWgs84(result);
   stats.append(SingleStat("Project to WGS84 Time (sec)", t.getElapsedAndRestart()));
 
-  saveMap(result, output);
+  if (output.endsWith(".osc"))
+  {
+    _writeChangeset(result, output);
+  }
+  else
+  {
+    IoUtils::saveMap(result, output);
+  }
+
   double timingOutput = t.getElapsedAndRestart();
 
   if (displayStats)
@@ -230,6 +305,30 @@ int ConflateCmd::runSimple(QStringList args)
   stats.append(IoSingleStat(IoSingleStat::WriteBytes));
   stats.append(IoSingleStat(IoSingleStat::CancelledWriteBytes));
   stats.append(SingleStat("(Dubious) Bytes Processed per Second", inputBytes / totalElapsed));
+
+  if (isDiffConflate)
+  {
+    // Differential specific stats - get some numbers for our output
+    // Number of new points
+    // Number of new buildings
+    // km of new roads
+
+    ElementCriterionPtr pPoiCrit(new PoiCriterion());
+    CriterionCountVisitor poiCounter;
+    poiCounter.addCriterion(pPoiCrit);
+    result->visitRo(poiCounter);
+    stats.append((SingleStat("Count of New POIs", poiCounter.getCount())));
+
+    ElementCriterionPtr pBuildingCrit(new BuildingCriterion(result));
+    CriterionCountVisitor buildingCounter;
+    buildingCounter.addCriterion(pBuildingCrit);
+    result->visitRo(buildingCounter);
+    stats.append((SingleStat("Count of New Buildings", buildingCounter.getCount())));
+
+    LengthOfWaysVisitor lengthVisitor;
+    result->visitRo(lengthVisitor);
+    stats.append((SingleStat("Km of New Road", lengthVisitor.getStat() / 1000.0)));
+  }
 
   if (displayStats)
   {
