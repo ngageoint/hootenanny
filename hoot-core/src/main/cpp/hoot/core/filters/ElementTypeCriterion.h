@@ -48,7 +48,7 @@ public:
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new ElementTypeCriterion(_elementType)); }
 
-  virtual QString getDescription() const { return "Filters on element type"; }
+  virtual QString getDescription() const { return "Filters based on element type"; }
 
 protected:
 
