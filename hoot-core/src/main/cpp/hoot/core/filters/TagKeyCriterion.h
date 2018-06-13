@@ -56,7 +56,8 @@ public:
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new TagKeyCriterion(_keys)); }
 
-  virtual QString getDescription() const { return "Filters elements based on tag keys"; }
+  virtual QString getDescription() const
+  { return "Filters elements based on whether they contain any specified tag key"; }
 
 protected:
 

@@ -24,52 +24,87 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "RemoveTagVisitor.h"
+#include "RemoveTagsVisitor.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/filters/NotCriterion.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveTagVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveTagsVisitor)
 
-RemoveTagVisitor::RemoveTagVisitor()
+RemoveTagsVisitor::RemoveTagsVisitor()
 {
   setConfiguration(conf());
 }
 
-RemoveTagVisitor::RemoveTagVisitor(QString key)
+RemoveTagsVisitor::RemoveTagsVisitor(QString key) :
+_negateFilter(false)
 {
   addKey(key);
 }
 
-RemoveTagVisitor::RemoveTagVisitor(QString key1, QString key2)
+RemoveTagsVisitor::RemoveTagsVisitor(QString key1, QString key2) :
+_negateFilter(false)
 {
   addKey(key1);
   addKey(key2);
 }
 
-RemoveTagVisitor::RemoveTagVisitor(QStringList keys) :
-_keys(keys)
+RemoveTagsVisitor::RemoveTagsVisitor(QStringList keys) :
+_keys(keys),
+_negateFilter(false)
 {
 }
 
-void RemoveTagVisitor::setConfiguration(const Settings& conf)
+void RemoveTagsVisitor::setConfiguration(const Settings& conf)
 {
-  _keys = ConfigOptions(conf).getRemoveTagVisitorKeys();
+  ConfigOptions configOptions(conf);
+  _keys = configOptions.getRemoveTagsVisitorKeys();
   LOG_VART(_keys);
+  _negateFilter = configOptions.getElementCriterionNegate();
+  _setFilter(configOptions.getRemoveTagsVisitorElementCriterion());
 }
 
-void RemoveTagVisitor::addKey(QString key)
+void RemoveTagsVisitor::addCriterion(const ElementCriterionPtr& e)
+{
+  if (!_negateFilter)
+  {
+    _filter = e;
+  }
+  else
+  {
+    _filter.reset(new NotCriterion(e));
+  }
+}
+
+void RemoveTagsVisitor::_setFilter(const QString filterName)
+{
+  if (!filterName.trimmed().isEmpty())
+  {
+    LOG_VART(filterName);
+    addCriterion(
+      boost::shared_ptr<ElementCriterion>(
+        Factory::getInstance().constructObject<ElementCriterion>(filterName.trimmed())));
+  }
+}
+
+void RemoveTagsVisitor::addKey(QString key)
 {
   _keys.append(key);
 }
 
-void RemoveTagVisitor::visit(const boost::shared_ptr<Element>& e)
+void RemoveTagsVisitor::visit(const boost::shared_ptr<Element>& e)
 {
+  if (_filter.get() && !_filter->isSatisfied(e))
+  {
+    return;
+  }
+
   for (int i = 0; i < _keys.size(); i++)
   {
     LOG_TRACE("Removing tag " << _keys[i] << "...");

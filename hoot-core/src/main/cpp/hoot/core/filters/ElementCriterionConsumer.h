@@ -35,6 +35,7 @@ namespace hoot
 class ElementCriterionConsumer
 {
 public:
+
   virtual ~ElementCriterionConsumer() {}
 
   virtual void addCriterion(const ElementCriterionPtr& e) = 0;

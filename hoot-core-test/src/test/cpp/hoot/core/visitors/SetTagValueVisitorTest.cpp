@@ -53,6 +53,7 @@ class SetTagValueVisitorTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runAppendValueTest);
   CPPUNIT_TEST(runFilterTest);
   CPPUNIT_TEST(runOverwriteDisabledTest);
+  CPPUNIT_TEST(runNegatedFilterTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -127,11 +128,11 @@ public:
     map->visitRw(visitor);
 
     OsmMapWriterFactory::getInstance().write(map,
-      "test-output/visitors/SetTagValueVisitorTest-runElementFilterTest.osm");
+      "test-output/visitors/SetTagValueVisitorTest-runFilterTest.osm");
 
     HOOT_FILE_EQUALS(
-      "test-files/visitors/SetTagValueVisitorTest-runElementFilterTest.osm",
-      "test-output/visitors/SetTagValueVisitorTest-runElementFilterTest.osm");
+      "test-files/visitors/SetTagValueVisitorTest-runFilterTest.osm",
+      "test-output/visitors/SetTagValueVisitorTest-runFilterTest.osm");
   }
 
   void runOverwriteDisabledTest()
@@ -153,6 +154,24 @@ public:
     HOOT_FILE_EQUALS(
       "test-files/visitors/SetTagValueVisitorTest-runOverwriteDisabledTest.osm",
       "test-output/visitors/SetTagValueVisitorTest-runOverwriteDisabledTest.osm");
+  }
+
+  void runNegatedFilterTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    OsmMap::resetCounters();
+    OsmMapReaderFactory::read(
+      map, "test-files/visitors/SetTagValueVisitorTest.osm", false, Status::Unknown1);
+
+    SetTagValueVisitor visitor("key3", "value3", false, "hoot::NodeCriterion", false, true);
+    map->visitRw(visitor);
+
+    OsmMapWriterFactory::getInstance().write(map,
+      "test-output/visitors/SetTagValueVisitorTest-runNegatedFilterTest.osm");
+
+    HOOT_FILE_EQUALS(
+      "test-files/visitors/SetTagValueVisitorTest-runNegatedFilterTest.osm",
+      "test-output/visitors/SetTagValueVisitorTest-runNegatedFilterTest.osm");
   }
 
 };

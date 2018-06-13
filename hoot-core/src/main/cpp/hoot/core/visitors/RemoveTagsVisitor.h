@@ -24,12 +24,13 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef REMOVETAGVISITOR_H
-#define REMOVETAGVISITOR_H
+#ifndef REMOVETAGSVISITOR_H
+#define REMOVETAGSVISITOR_H
 
 // hoot
 #include <hoot/core/util/Configurable.h>
 #include "ElementOsmMapVisitor.h"
+#include <hoot/core/filters/ElementCriterionConsumer.h>
 
 namespace hoot
 {
@@ -37,16 +38,19 @@ namespace hoot
 /**
  * Removes any tags with keys matching those passed to this visitor
  */
-class RemoveTagVisitor : public ElementOsmMapVisitor, public Configurable
+class RemoveTagsVisitor : public ElementOsmMapVisitor, public Configurable,
+  public ElementCriterionConsumer
 {
 public:
 
-  static std::string className() { return "hoot::RemoveTagVisitor"; }
+  static std::string className() { return "hoot::RemoveTagsVisitor"; }
 
-  RemoveTagVisitor();
-  RemoveTagVisitor(QString key);
-  RemoveTagVisitor(QString key1, QString key2);
-  RemoveTagVisitor(QStringList keys);
+  RemoveTagsVisitor();
+  RemoveTagsVisitor(QString key);
+  RemoveTagsVisitor(QString key1, QString key2);
+  RemoveTagsVisitor(QStringList keys);
+
+  virtual void addCriterion(const ElementCriterionPtr& e);
 
   void setConfiguration(const Settings& conf);
 
@@ -54,14 +58,21 @@ public:
 
   virtual void visit(const boost::shared_ptr<Element>& e);
 
-  virtual QString getDescription() const { return "Removes any tags with matching keys"; }
+  virtual QString getDescription() const { return "Removes tags with matching keys"; }
+
+  void setNegateFilter(bool negate) { _negateFilter = negate; }
 
 private:
 
   QStringList _keys;
+  boost::shared_ptr<ElementCriterion> _filter;
+  //This allows for negating the filter as an option sent in from the command line.
+  bool _negateFilter;
+
+  void _setFilter(const QString filterName);
 };
 
 }
 
 
-#endif // REMOVETAGVISITOR_H
+#endif // REMOVETAGSVISITOR_H

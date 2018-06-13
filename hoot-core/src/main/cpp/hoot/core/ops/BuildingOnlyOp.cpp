@@ -34,7 +34,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/visitors/MultiVisitor.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
-#include <hoot/core/visitors/RemoveTagVisitor.h>
+#include <hoot/core/visitors/RemoveTagsVisitor.h>
 #include <hoot/core/visitors/ReplaceTagVisitor.h>
 
 // bost
@@ -56,7 +56,7 @@ void BuildingOnlyOp::apply(boost::shared_ptr<OsmMap>& map)
   _map = map;
 
   // Setup a visitor to remove superfluous tags
-  RemoveTagVisitor removeTagVtor;
+  RemoveTagsVisitor removeTagVtor;
   removeTagVtor.addKey("error:circular");
   removeTagVtor.addKey("OBJECTID");
   removeTagVtor.addKey("PAGENUMBER");

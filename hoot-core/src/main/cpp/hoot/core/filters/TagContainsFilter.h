@@ -52,7 +52,7 @@ public:
   { return ElementCriterionPtr(new TagContainsFilter(_type, _key, _valueSubstring)); }
 
   virtual QString getDescription() const
-  { return "Filters elements based on tag key and value substrings"; }
+  { return "Filters elements based on tag keys and tag value substrings"; }
 
 protected:
 
