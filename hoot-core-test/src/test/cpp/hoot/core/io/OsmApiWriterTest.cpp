@@ -40,14 +40,12 @@ namespace hoot
 class OsmApiWriterTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(OsmApiWriterTest);
-/*
   CPPUNIT_TEST(runParseStatusTest);
   CPPUNIT_TEST(runParseCapabilitiesTest);
-  CPPUNIT_TEST(runCapabilitesTest);
+//  CPPUNIT_TEST(runCapabilitesTest);
   CPPUNIT_TEST(runParsePermissionsTest);
-  CPPUNIT_TEST(runPermissionsTest);
-*/
-  CPPUNIT_TEST(runChangesetTest);
+//  CPPUNIT_TEST(runPermissionsTest);
+//  CPPUNIT_TEST(runChangesetTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
