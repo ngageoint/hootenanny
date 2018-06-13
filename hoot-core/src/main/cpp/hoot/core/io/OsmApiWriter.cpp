@@ -49,8 +49,8 @@ namespace hoot
 
 OsmApiWriter::OsmApiWriter(const QUrl& url, const QList<QString>& changesets)
   : _changesets(changesets),
-    _description(ConfigOptions().getApidbChangesetDescription()),
-    _maxWriters(ConfigOptions().getApidbChangesetMaxwriters()),
+    _description(ConfigOptions().getChangesetDescription()),
+    _maxWriters(ConfigOptions().getChangesetMaxWriters()),
     _status(0)
 {
   if (isSupported(url))
@@ -147,8 +147,8 @@ bool OsmApiWriter::apply()
 
 void OsmApiWriter::setConfiguration(const Settings& conf)
 {
-  _maxWriters = ConfigOptions(conf).getApidbChangesetMaxwriters();
-  _description = ConfigOptions(conf).getApidbChangesetDescription();
+  _maxWriters = ConfigOptions(conf).getChangesetMaxWriters();
+  _description = ConfigOptions(conf).getChangesetDescription();
 }
 
 bool OsmApiWriter::isSupported(const QUrl &url)
