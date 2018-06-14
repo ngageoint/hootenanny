@@ -45,7 +45,7 @@ using namespace geos::operation::distance;
 #include <hoot/core/algorithms/MaximalNearestSubline.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/filters/UnknownCriterion.h>
+#include <hoot/core/criterion/UnknownCriterion.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/conflate/NodeToWayMap.h>

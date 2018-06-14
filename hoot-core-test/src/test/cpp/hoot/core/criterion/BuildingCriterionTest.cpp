@@ -25,18 +25,25 @@
  * @copyright Copyright (C) 2015, 2016, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
+// Boost
+#include <boost/iostreams/filter/zlib.hpp>
+#include <boost/iostreams/filter/bzip2.hpp>
+
 // Hoot
-#include <hoot/core/filters/BuildingWayNodeCriterion.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
+
+// Qt
+#include <QDir>
 
 #include "../TestUtils.h"
 
 namespace hoot
 {
 
-class BuildingWayNodeCriterionTest : public CppUnit::TestFixture
+class BuildingCriterionTest : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(BuildingWayNodeCriterionTest);
+  CPPUNIT_TEST_SUITE(BuildingCriterionTest);
   CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -45,28 +52,22 @@ public:
   void runBasicTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::getInstance().read(
-      map, "test-files/filters/BuildingWayNodeCriterionTest.osm");
+    OsmMapReaderFactory::getInstance().read(map, "test-files/criterion/ComplexBuildings.osm");
 
-    BuildingWayNodeCriterion uut;
+    BuildingCriterion uut;
     uut.setOsmMap(map.get());
-
-    HOOT_STR_EQUALS(1, uut.isSatisfied(map->getNode(-20420)));
-    HOOT_STR_EQUALS(1, uut.isSatisfied(map->getNode(-20421)));
-    HOOT_STR_EQUALS(1, uut.isSatisfied(map->getNode(-74242)));
-
-    HOOT_STR_EQUALS(1, uut.isSatisfied(map->getNode(-271160)));
-    HOOT_STR_EQUALS(0, uut.isSatisfied(map->getNode(-271159)));
-    HOOT_STR_EQUALS(1, uut.isSatisfied(map->getNode(-271173)));
-
-    HOOT_STR_EQUALS(1, uut.isSatisfied(map->getNode(-271161)));
-
-    HOOT_STR_EQUALS(0, uut.isSatisfied(map->getWay(-3295)));
-    HOOT_STR_EQUALS(0, uut.isSatisfied(map->getWay(-27044)));
-    HOOT_STR_EQUALS(0, uut.isSatisfied(map->getWay(-27037)));
+    HOOT_STR_EQUALS(1, uut.isSatisfied(TestUtils::getElementWithNote(map, "targetandbestbuy")));
+    HOOT_STR_EQUALS(0, uut.isSatisfied(TestUtils::getElementWithNote(map, "target")));
+    HOOT_STR_EQUALS(0, uut.isSatisfied(TestUtils::getElementWithNote(map, "bestbuy")));
+    HOOT_STR_EQUALS(0, uut.isSatisfied(TestUtils::getElementWithNote(map, "pho")));
+    HOOT_STR_EQUALS(0, uut.isSatisfied(TestUtils::getElementWithNote(map, "panera")));
+    HOOT_STR_EQUALS(1, uut.isSatisfied(TestUtils::getElementWithNote(map, "freddys")));
+    HOOT_STR_EQUALS(1, uut.isSatisfied(TestUtils::getElementWithNote(map, "jewelry")));
+    HOOT_STR_EQUALS(1, uut.isSatisfied(TestUtils::getElementWithNote(map, "paneragroup")));
+    HOOT_STR_EQUALS(0, uut.isSatisfied(TestUtils::getElementWithNote(map, "jewelryandfreddys")));
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(BuildingWayNodeCriterionTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(BuildingCriterionTest, "quick");
 
 }

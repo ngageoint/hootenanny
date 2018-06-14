@@ -24,50 +24,38 @@
  *
  * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef INTERSECTIONCRITERION_H
-#define INTERSECTIONCRITERION_H
+
+#ifndef ONEWAYCRITERION_H
+#define ONEWAYCRITERION_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/filters/ElementCriterion.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
 
 /**
- * This criterion is satisified for all highway intersections with 3 or more interacting ways.
- * Multilinestring relations are not handled.
- *
- * This class assumes that IntersectionSplitter was applied to the map before being called.
+ * Keeps all the one-way elements
  */
-class IntersectionCriterion : public ElementCriterion, public ConstOsmMapConsumer
+class OneWayCriterion : public ElementCriterion
 {
 public:
 
-  static std::string className() { return "hoot::IntersectionCriterion"; }
+  static std::string className() { return "hoot::OneWayCriterion"; }
 
-  IntersectionCriterion() {}
+  OneWayCriterion(bool isOneWay = true): _isOneWay(isOneWay) { }
 
-  virtual ~IntersectionCriterion() {}
+  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
-  IntersectionCriterion(ConstOsmMapPtr map);
+  ElementCriterionPtr clone() { return ElementCriterionPtr(new OneWayCriterion()); }
 
-  virtual ElementCriterionPtr clone()
-  { return ElementCriterionPtr(new IntersectionCriterion(_map)); }
-
-  virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
-
-  virtual void setOsmMap(const OsmMap* map);
-
-  virtual QString getDescription() const { return "Identifies highway intersections"; }
+  virtual QString getDescription() const { return "Identifies one way streets"; }
 
 private:
 
-  std::set<long> _highwayIds;
-  ConstOsmMapPtr _map;
+  bool _isOneWay;
 };
 
 }
 
-#endif // INTERSECTIONCRITERION_H
+#endif // ONEWAYCRITERION_H

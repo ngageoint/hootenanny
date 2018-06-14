@@ -28,9 +28,9 @@
 
 // hoot
 #include <hoot/core/conflate/MapCleaner.h>
-#include <hoot/core/filters/TagKeyCriterion.h>
-#include <hoot/core/filters/IsNodeFilter.h>
-#include <hoot/core/filters/TagCriterion.h>
+#include <hoot/core/criterion/TagKeyCriterion.h>
+#include <hoot/core/criterion/IsNodeFilter.h>
+#include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/AddUuidVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>

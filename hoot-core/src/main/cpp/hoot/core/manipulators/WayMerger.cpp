@@ -47,7 +47,7 @@ using namespace geos::operation::distance;
 #include <hoot/core/algorithms/ProbabilityOfMatch.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/filters/StatusCriterion.h>
+#include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/CopySubsetOp.h>
 #include <hoot/core/schema/OsmSchema.h>

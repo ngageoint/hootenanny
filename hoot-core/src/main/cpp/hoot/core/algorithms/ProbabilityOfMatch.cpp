@@ -36,7 +36,7 @@ using namespace geos::geom;
 // Hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/DirectionFinder.h>
-#include <hoot/core/filters/ParallelWayFilter.h>
+#include <hoot/core/criterion/ParallelWayFilter.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/util/ConfigOptions.h>

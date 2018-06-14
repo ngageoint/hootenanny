@@ -22,43 +22,35 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
+#ifndef IMPLICIT_TAG_ELIGIBLE_CRITERION_H
+#define IMPLICIT_TAG_ELIGIBLE_CRITERION_H
 
-#ifndef WAYDIRECTIONCRITERION_H
-#define WAYDIRECTIONCRITERION_H
+// hoot
+#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/elements/Tags.h>
 
-// Hoot
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/filters/ElementCriterion.h>
+// Qt
+#include <QStringList>
+
 
 namespace hoot
 {
 
-class Way;
-
-class WayDirectionCriterion : public ElementCriterion
+/**
+ * Base class for filtering features which are eligible for implicit tag harvesting
+ */
+class ImplicitTagEligibleCriterion : public ElementCriterion
 {
 public:
 
-  WayDirectionCriterion(const ConstOsmMapPtr& map,
-                        ConstWayPtr baseWay,
-                        bool similarDirection = true);
+  virtual QStringList getEligibleKvps(const Tags& tags) const = 0;
+  virtual bool hasEligibleKvp(const Tags& tags) const = 0;
 
-  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
-
-  ElementCriterionPtr clone()
-  { return ElementCriterionPtr(new WayDirectionCriterion(_map, _baseWay, _similarDirection)); }
-
-  virtual QString getDescription() const { return "Identifies which direction a way is pointing"; }
-
-private:
-
-  ConstOsmMapPtr _map;
-  ConstWayPtr _baseWay;
-  bool _similarDirection;
+  virtual QString getDescription() const
+  { return "Identifies elements eligible for type tag additions"; }
 };
 
 }
-
-#endif // WAYDIRECTIONCRITERION_H
+#endif

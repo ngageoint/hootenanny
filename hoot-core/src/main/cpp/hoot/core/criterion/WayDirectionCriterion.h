@@ -25,47 +25,40 @@
  * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef DISTANCENODECRITERION_H
-#define DISTANCENODECRITERION_H
-
-// GEOS
-#include <geos/geom/Coordinate.h>
+#ifndef WAYDIRECTIONCRITERION_H
+#define WAYDIRECTIONCRITERION_H
 
 // Hoot
-#include <hoot/core/util/Units.h>
-#include <hoot/core/filters/ElementCriterion.h>
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
 
-class Element;
+class Way;
 
-/**
- * isSatisfied returns true if an element is within the specified distance of the given center
- */
-class DistanceNodeCriterion : public ElementCriterion
+class WayDirectionCriterion : public ElementCriterion
 {
 public:
 
-  static std::string className() { return "hoot::DistanceNodeCriterion"; }
-
-  DistanceNodeCriterion() {}
-  DistanceNodeCriterion(geos::geom::Coordinate center, Meters distance);
+  WayDirectionCriterion(const ConstOsmMapPtr& map,
+                        ConstWayPtr baseWay,
+                        bool similarDirection = true);
 
   virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
   ElementCriterionPtr clone()
-  { return ElementCriterionPtr(new DistanceNodeCriterion(_center, _distance)); }
+  { return ElementCriterionPtr(new WayDirectionCriterion(_map, _baseWay, _similarDirection)); }
 
-  virtual QString getDescription() const
-  { return "Returns true if an element is within the specified distance of the given center"; }
+  virtual QString getDescription() const { return "Identifies which direction a way is pointing"; }
 
 private:
 
-  geos::geom::Coordinate _center;
-  Meters _distance;
+  ConstOsmMapPtr _map;
+  ConstWayPtr _baseWay;
+  bool _similarDirection;
 };
 
 }
 
-#endif // DISTANCENODECRITERION_H
+#endif // WAYDIRECTIONCRITERION_H

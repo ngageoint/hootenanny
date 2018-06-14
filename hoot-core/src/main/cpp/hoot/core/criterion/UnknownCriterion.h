@@ -24,54 +24,35 @@
  *
  * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef ARBITRARYCRITERION_H
-#define ARBITRARYCRITERION_H
+
+#ifndef UNKNOWNCRITERION_H
+#define UNKNOWNCRITERION_H
 
 // hoot
-#include <hoot/core/elements/Element.h>
-#include <hoot/core/filters/ElementCriterion.h>
-
-// Qt
-#include <QString>
-
-// Boost
-#include <boost/function.hpp>
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
 
-class ArbitraryCriterion : public ElementCriterion
+/**
+ * Keeps all the unknown elements
+ */
+class UnknownCriterion : public ElementCriterion
 {
 public:
 
-  static std::string className() { return "hoot::ArbitraryCriterion"; }
+  UnknownCriterion() {}
 
-  // Do something like:
-  // boost::function<bool (ConstElementPtr e)> f = boost::bind(&ScriptMatchVisitor::isMatchCandidate, this, _1);
-  explicit ArbitraryCriterion(boost::function<bool (ConstElementPtr e)> f)
-  {
-    _f = f;
-  }
+  static std::string className() { return "hoot::UnknownCriterion"; }
 
-  explicit ArbitraryCriterion(boost::function<bool (const boost::shared_ptr<const Element> &e)> f)
-  {
-    _f = f;
-  }
+  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
-  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const
-  {
-    return _f(e);
-  }
+  ElementCriterionPtr clone() { return ElementCriterionPtr(new UnknownCriterion()); }
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new ArbitraryCriterion(_f)); }
-
-  virtual QString getDescription() const { return ""; }
-
-private:
-
-  boost::function<bool (const boost::shared_ptr<const Element> &e)> _f;
+  virtual QString getDescription() const
+  { return "Identifies elements which have not been conflated"; }
 };
 
 }
 
-#endif // ARBITRARYCRITERION_H
+#endif // UNKNOWNCRITERION_H

@@ -45,10 +45,10 @@ using namespace geos::operation::buffer;
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/filters/ChainCriterion.h>
-#include <hoot/core/filters/DistanceNodeCriterion.h>
-#include <hoot/core/filters/NotCriterion.h>
-#include <hoot/core/filters/TagCriterion.h>
+#include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/criterion/DistanceNodeCriterion.h>
+#include <hoot/core/criterion/NotCriterion.h>
+#include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/ops/RemoveNodeOp.h>
 #include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/util/ConfigOptions.h>

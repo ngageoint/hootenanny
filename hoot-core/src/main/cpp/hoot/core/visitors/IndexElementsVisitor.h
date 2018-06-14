@@ -30,7 +30,7 @@
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/filters/ElementCriterionConsumer.h>
+#include <hoot/core/criterion/ElementCriterionConsumer.h>
 
 // TGS
 #include <tgs/RStarTree/HilbertRTree.h>

@@ -28,14 +28,14 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/filters/BuildingCriterion.h>
-#include <hoot/core/filters/PoiCriterion.h>
-#include <hoot/core/filters/WaterwayCriterion.h>
-#include <hoot/core/filters/HighwayFilter.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/criterion/PoiCriterion.h>
+#include <hoot/core/criterion/WaterwayCriterion.h>
+#include <hoot/core/criterion/HighwayFilter.h>
 #include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPoiCriterion.h>
 #include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPolyCriterion.h>
-#include <hoot/core/filters/NonBuildingAreaCriterion.h>
-#include <hoot/core/filters/RailwayCriterion.h>
+#include <hoot/core/criterion/NonBuildingAreaCriterion.h>
+#include <hoot/core/criterion/RailwayCriterion.h>
 
 namespace hoot
 {

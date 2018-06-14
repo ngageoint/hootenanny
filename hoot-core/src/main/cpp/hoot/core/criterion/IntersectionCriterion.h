@@ -24,34 +24,50 @@
  *
  * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef POIPOLYGONPOICRITERION_H
-#define POIPOLYGONPOICRITERION_H
+#ifndef INTERSECTIONCRITERION_H
+#define INTERSECTIONCRITERION_H
 
 // hoot
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
 
 /**
- * A filter that will keep poi features, as defined by PoiPolygonMatch.
+ * This criterion is satisified for all highway intersections with 3 or more interacting ways.
+ * Multilinestring relations are not handled.
+ *
+ * This class assumes that IntersectionSplitter was applied to the map before being called.
  */
-class PoiPolygonPoiCriterion : public ElementCriterion
+class IntersectionCriterion : public ElementCriterion, public ConstOsmMapConsumer
 {
 public:
 
-  static std::string className() { return "hoot::PoiPolygonPoiCriterion"; }
+  static std::string className() { return "hoot::IntersectionCriterion"; }
 
-  PoiPolygonPoiCriterion();
+  IntersectionCriterion() {}
 
-  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
+  virtual ~IntersectionCriterion() {}
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new PoiPolygonPoiCriterion()); }
+  IntersectionCriterion(ConstOsmMapPtr map);
 
-  virtual QString getDescription() const
-  { return "Identifies POIs as defined by POI/Polygon conflation"; }
+  virtual ElementCriterionPtr clone()
+  { return ElementCriterionPtr(new IntersectionCriterion(_map)); }
+
+  virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
+
+  virtual void setOsmMap(const OsmMap* map);
+
+  virtual QString getDescription() const { return "Identifies highway intersections"; }
+
+private:
+
+  std::set<long> _highwayIds;
+  ConstOsmMapPtr _map;
 };
 
 }
 
-#endif // POIPOLYGONPOICRITERION_H
+#endif // INTERSECTIONCRITERION_H

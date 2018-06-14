@@ -33,7 +33,7 @@
 #include <hoot/rnd/io/SparkChangesetWriter.h>
 #include <hoot/core/io/HootApiDbReader.h>
 #include <hoot/core/io/ElementCriterionVisitorInputStream.h>
-#include <hoot/core/filters/PoiCriterion.h>
+#include <hoot/core/criterion/PoiCriterion.h>
 #include <hoot/core/visitors/TranslationVisitor.h>
 #include <hoot/core/visitors/CalculateHashVisitor2.h>
 #include <hoot/core/util/StringUtils.h>

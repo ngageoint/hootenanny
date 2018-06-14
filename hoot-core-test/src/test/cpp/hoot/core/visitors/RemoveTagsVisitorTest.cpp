@@ -36,7 +36,7 @@
 #include <hoot/core/visitors/RemoveTagsVisitor.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/filters/NodeCriterion.h>
+#include <hoot/core/criterion/NodeCriterion.h>
 
 #include "../TestUtils.h"
 

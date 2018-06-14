@@ -22,43 +22,47 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-// Hoot
-#include <hoot/core/filters/NonBuildingAreaCriterion.h>
+#ifndef CUSTOMCRITERION_H
+#define CUSTOMCRITERION_H
 
-// Qt
-#include <QDir>
-
-#include "../TestUtils.h"
+// hoot
+#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/util/JsFunctionConsumer.h>
 
 namespace hoot
 {
 
-class NonBuildingAreaCriterionTest : public CppUnit::TestFixture
+/**
+ * A filter that will either keep or remove matches.
+ */
+class JsFunctionCriterion : public ElementCriterion, public JsFunctionConsumer
 {
-  CPPUNIT_TEST_SUITE(NonBuildingAreaCriterionTest);
-  CPPUNIT_TEST(runBasicTest);
-  CPPUNIT_TEST_SUITE_END();
-
 public:
 
-  void runBasicTest()
-  {
-    NonBuildingAreaCriterion uut;
+  static std::string className() { return "hoot::JsFunctionCriterion"; }
 
-    WayPtr way1(new Way(Status::Unknown1, -1, 15.0));
-    way1->getTags().set("building", "yes");
-    way1->getTags().set("area", "yes");
-    CPPUNIT_ASSERT(!uut.isSatisfied(way1));
+  JsFunctionCriterion() {}
 
-    WayPtr way2(new Way(Status::Unknown1, -1, 15.0));
-    way2->getTags().set("area", "yes");
-    CPPUNIT_ASSERT(uut.isSatisfied(way2));
-  }
+  virtual void addFunction(v8::Isolate* isolate, v8::Local<v8::Function>& func) { _func.Reset(isolate, func); }
+
+  bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
+
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new JsFunctionCriterion(_func)); }
+
+  virtual QString getDescription() const { return ""; }
+
+private:
+
+  JsFunctionCriterion(v8::Persistent<v8::Function>& func) { _func.Reset(v8::Isolate::GetCurrent(), func); }
+
+  v8::Persistent<v8::Function> _func;
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(NonBuildingAreaCriterionTest, "quick");
-
 }
+
+
+#endif // CUSTOMCRITERION_H

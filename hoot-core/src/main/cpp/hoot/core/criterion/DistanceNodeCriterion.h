@@ -25,34 +25,47 @@
  * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef UNKNOWNCRITERION_H
-#define UNKNOWNCRITERION_H
+#ifndef DISTANCENODECRITERION_H
+#define DISTANCENODECRITERION_H
 
-// hoot
-#include <hoot/core/filters/ElementCriterion.h>
+// GEOS
+#include <geos/geom/Coordinate.h>
+
+// Hoot
+#include <hoot/core/util/Units.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
 
+class Element;
+
 /**
- * Keeps all the unknown elements
+ * isSatisfied returns true if an element is within the specified distance of the given center
  */
-class UnknownCriterion : public ElementCriterion
+class DistanceNodeCriterion : public ElementCriterion
 {
 public:
 
-  UnknownCriterion() {}
+  static std::string className() { return "hoot::DistanceNodeCriterion"; }
 
-  static std::string className() { return "hoot::UnknownCriterion"; }
+  DistanceNodeCriterion() {}
+  DistanceNodeCriterion(geos::geom::Coordinate center, Meters distance);
 
   virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
-  ElementCriterionPtr clone() { return ElementCriterionPtr(new UnknownCriterion()); }
+  ElementCriterionPtr clone()
+  { return ElementCriterionPtr(new DistanceNodeCriterion(_center, _distance)); }
 
   virtual QString getDescription() const
-  { return "Identifies elements which have not been conflated"; }
+  { return "Returns true if an element is within the specified distance of the given center"; }
+
+private:
+
+  geos::geom::Coordinate _center;
+  Meters _distance;
 };
 
 }
 
-#endif // UNKNOWNCRITERION_H
+#endif // DISTANCENODECRITERION_H

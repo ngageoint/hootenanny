@@ -24,33 +24,47 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef IMPLICIT_TAG_ELIGIBLE_CRITERION_H
-#define IMPLICIT_TAG_ELIGIBLE_CRITERION_H
+#ifndef TAGCRITERION_H
+#define TAGCRITERION_H
 
 // hoot
-#include <hoot/core/filters/ElementCriterion.h>
-#include <hoot/core/elements/Tags.h>
+#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/util/Configurable.h>
 
 // Qt
-#include <QStringList>
-
+#include <QString>
 
 namespace hoot
 {
 
 /**
- * Base class for filtering features which are eligible for implicit tag harvesting
+ * Returns true if k==v
  */
-class ImplicitTagEligibleCriterion : public ElementCriterion
+class TagCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  virtual QStringList getEligibleKvps(const Tags& tags) const = 0;
-  virtual bool hasEligibleKvp(const Tags& tags) const = 0;
+  static std::string className() { return "hoot::TagCriterion"; }
+
+  TagCriterion();
+  TagCriterion(const QString& k, const QString& v);
+
+  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
+
+  void setConfiguration(const Settings& s);
+
+  void setKvps(const QStringList kvps);
+
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new TagCriterion()); }
 
   virtual QString getDescription() const
-  { return "Identifies elements eligible for type tag additions"; }
+  { return "Filters elements based on whether they contain any specified tag key/value pair"; }
+
+private:
+
+  QStringList _kvps;
 };
 
 }
-#endif
+
+#endif // TAGCRITERION_H

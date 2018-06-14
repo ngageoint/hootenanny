@@ -25,44 +25,44 @@
  * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef CUSTOMCRITERION_H
-#define CUSTOMCRITERION_H
+// Hoot
+#include <hoot/core/criterion/AreaCriterion.h>
 
-// hoot
-#include <hoot/core/filters/ElementCriterion.h>
-#include <hoot/js/SystemNodeJs.h>
-#include <hoot/js/util/JsFunctionConsumer.h>
+// Qt
+#include <QDir>
+
+#include "../TestUtils.h"
+
+using namespace geos::geom;
 
 namespace hoot
 {
 
-/**
- * A filter that will either keep or remove matches.
- */
-class JsFunctionCriterion : public ElementCriterion, public JsFunctionConsumer
+class AreaCriterionTest : public CppUnit::TestFixture
 {
+  CPPUNIT_TEST_SUITE(AreaCriterionTest);
+  CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST_SUITE_END();
+
 public:
 
-  static std::string className() { return "hoot::JsFunctionCriterion"; }
+  void runBasicTest()
+  {
+    AreaCriterion uut;
 
-  JsFunctionCriterion() {}
+    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    node1->getTags().set("area", "yes");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node1));
 
-  virtual void addFunction(v8::Isolate* isolate, v8::Local<v8::Function>& func) { _func.Reset(isolate, func); }
+    WayPtr way1(new Way(Status::Unknown1, -1, 15.0));
+    way1->getTags().set("area", "yes");
+    CPPUNIT_ASSERT(uut.isSatisfied(way1));
 
-  bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
-
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new JsFunctionCriterion(_func)); }
-
-  virtual QString getDescription() const { return ""; }
-
-private:
-
-  JsFunctionCriterion(v8::Persistent<v8::Function>& func) { _func.Reset(v8::Isolate::GetCurrent(), func); }
-
-  v8::Persistent<v8::Function> _func;
+    WayPtr way2(new Way(Status::Unknown1, -1, 15.0));
+    CPPUNIT_ASSERT(!uut.isSatisfied(way2));
+  }
 };
 
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(AreaCriterionTest, "quick");
+
 }
-
-
-#endif // CUSTOMCRITERION_H
