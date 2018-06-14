@@ -2829,6 +2829,30 @@ renaming existing tag keys on all elements in a map.
 The key to be replaced by the TagRenameKeyVisitor.  TagRenameKeyVisitor allows for
 renaming existing tag keys on all elements in a map.
 
+=== tag.value.numeric.range.criterion.keys
+
+* Data Type: list
+* Default Value:
+** ``
+
+The keys the TagValueNumericRangeCriterion examines the numeric value of.  Tags for all keys must
+meet the numeric range requirement for the criterion to be met.  Separate multiple keys with a
+semicolon from the command line.
+
+=== tag.value.numeric.range.criterion.max
+
+* Data Type: long
+* Default Value: `-1`
+
+Minimum tag numeric value that will allow the TagValueNumericRangeCriterion to be satisified.
+
+=== tag.value.numeric.range.criterion.min
+
+* Data Type: long
+* Default Value: `-1`
+
+Minimum tag numeric value that will allow the TagValueNumericRangeCriterion to be satisified.
+
 === task.status.update.interval
 
 * Data Type: long
