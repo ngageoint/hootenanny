@@ -38,7 +38,6 @@ WayDirectionCriterion::WayDirectionCriterion(const ConstOsmMapPtr& map,
   _baseWay(baseWay),
   _similarDirection(similarDirection)
 {
-  // Blank
 }
 
 bool WayDirectionCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
