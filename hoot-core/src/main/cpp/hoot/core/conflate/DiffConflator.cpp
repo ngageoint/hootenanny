@@ -117,14 +117,16 @@ void DiffConflator::apply(OsmMapPtr& map)
   _stats.append(SingleStat("Number of Matches Found per Second",
     (double)_matches.size() / findMatchesTime));
 
-  // Use matches to calculate and store tag diff
-  // We must do this before we create the map diff
+  // Use matches to calculate and store tag diff. We must do this before we
+  // create the map diff, because that operation deletes all of the info needed
+  // for calculating the tag diff.
   MapProjector::projectToWgs84(_pMap);
   _calcAndStoreTagChanges();
 
-  // Now we have matches. Here's what we are going to do, because our _pMap contains All of input1
-  // and input2: we are going to delete everthing from the match pairs. Then we will delete all
-  // remaining input1 items.
+  // We have matches. Here's what we are going to do: because our _pMap contains
+  // all of input1 and input2, we are going to delete everthing that belongs to
+  // a match pair. Then we will delete all remaining input1 items... leaving us
+  // with the differential that we want.
   for (std::vector<const Match*>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
   {
     std::set< std::pair<ElementId, ElementId> > pairs = (*mit)->getMatchPairs();
@@ -153,7 +155,6 @@ void DiffConflator::apply(OsmMapPtr& map)
 void DiffConflator::setConfiguration(const Settings &conf)
 {
   _settings = conf;
-
   _matchThreshold.reset();
   _reset();
 }
@@ -199,6 +200,10 @@ void DiffConflator::_calcAndStoreTagChanges()
   {
     std::set< std::pair<ElementId, ElementId> > pairs = (*mit)->getMatchPairs();
 
+    // Go through our match pairs, calculate tag diff for elements. We only
+    // consider the "Original" elements when we do this - we want to ignore
+    // elements created during map cleaning operations (e.g. intersection splitting)
+    // because the map that the changeset operates on won't have those elements.
     for (std::set< std::pair<ElementId, ElementId> >::iterator pit = pairs.begin();
          pit != pairs.end(); ++pit)
     {
@@ -220,12 +225,12 @@ void DiffConflator::_calcAndStoreTagChanges()
       else
       {
         // How do you like me now, SonarQube?
-        // Skip the work in this loop, and try again with the next pair element
+        // Skip this element, because it's not in the OG map
         continue;
       }
 
-      // Sometimes we get multiple matches for the same pair. We don't want to
-      // make multiple changes, though.
+      // Double check to make sure we don't create multiple changes for the
+      // same element
       if (!_pTagChanges->containsChange(pOldElement->getElementId()))
       {
         if(_compareTags(pOldElement->getTags(), pNewElement->getTags()))
@@ -244,18 +249,13 @@ void DiffConflator::_calcAndStoreTagChanges()
 // See if tags are the same
 bool DiffConflator::_compareTags (const Tags &oldTags, const Tags &newTags)
 {
+  QStringList ignoreList = ConfigOptions().getDifferentialTagIgnoreList();
   for (Tags::const_iterator newTagIt = newTags.begin(); newTagIt != newTags.end(); ++newTagIt)
   {
     QString newTagKey = newTagIt.key();
     if (newTagKey != MetadataTags::Ref1()
-        && newTagKey != "uuid"
-        && newTagKey != "source:datetime"
-        && newTagKey != "license"
-        && newTagKey != "source:imagery")
+        && !ignoreList.contains(newTagKey, Qt::CaseInsensitive))
     {
-      QString newVal = newTagIt.value();
-      QString oldVal = oldTags[newTagIt.key()];
-
       if (!oldTags.contains(newTagIt.key()) || oldTags[newTagIt.key()] != newTagIt.value())
       {
         return true;
@@ -266,6 +266,7 @@ bool DiffConflator::_compareTags (const Tags &oldTags, const Tags &newTags)
   return false;
 }
 
+// Create a new change object based on the original element, with new tags
 Change DiffConflator::_getChange(ConstElementPtr pOldElement,
                                  ConstElementPtr pNewElement)
 {
