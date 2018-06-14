@@ -72,7 +72,7 @@ void ImplicitTagRawRulesDeriver::setConfiguration(const Settings& conf)
   setKeepTempFiles(options.getImplicitTaggingKeepTempFiles());
   setTempFileDir(options.getApidbBulkInserterTempFileDir());
   setTranslateAllNamesToEnglish(options.getImplicitTaggingTranslateAllNamesToEnglish());
-  setElementFilter(options.getImplicitTaggingElementFilter());
+  setElementFilter(options.getImplicitTaggingElementCriterion());
 }
 
 void ImplicitTagRawRulesDeriver::setElementFilter(QString filterName)

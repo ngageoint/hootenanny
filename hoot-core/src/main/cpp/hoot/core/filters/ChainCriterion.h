@@ -55,7 +55,7 @@ public:
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new ChainCriterion(_filters)); }
 
   virtual QString getDescription() const
-  { return "Allows for chaining together multiple criterion"; }
+  { return "Allows for chaining together multiple criterion (logical AND)"; }
 
 protected:
 

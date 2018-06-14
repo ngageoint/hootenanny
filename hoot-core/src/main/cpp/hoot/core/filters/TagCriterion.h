@@ -55,9 +55,10 @@ public:
 
   void setKvps(const QStringList kvps);
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new TagCriterion(/*_k, _v*/)); }
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new TagCriterion()); }
 
-  virtual QString getDescription() const { return "Filters elements based on tags"; }
+  virtual QString getDescription() const
+  { return "Filters elements based on whether they contain any specified tag key/value pair"; }
 
 private:
 

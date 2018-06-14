@@ -49,6 +49,7 @@ class RemoveElementsVisitorTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE(RemoveElementsVisitorTest);
   CPPUNIT_TEST(runTest);
   CPPUNIT_TEST(runRecursiveTest);
+  CPPUNIT_TEST(runNegatedFilterTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -67,6 +68,7 @@ public:
     boost::shared_ptr<PoiCriterion> elementCriterion(new PoiCriterion());
     RemoveElementsVisitor removeElementsVisitor(elementCriterion);
     removeElementsVisitor.setRecursive(false);
+    removeElementsVisitor.setNegateFilter(false);
     map->visitRw(removeElementsVisitor);
 
     MapProjector::projectToWgs84(map);
@@ -85,6 +87,7 @@ public:
     boost::shared_ptr<HighwayCriterion> elementCriterion(new HighwayCriterion());
     RemoveElementsVisitor removeElementsVisitor(elementCriterion);
     removeElementsVisitor.setRecursive(true);
+    removeElementsVisitor.setNegateFilter(false);
     map->visitRw(removeElementsVisitor);
 
     MapProjector::projectToWgs84(map);
@@ -92,6 +95,24 @@ public:
     writer.write(map, "test-output/visitors/RemoveElementsVisitorRecursiveOutput.osm");
     HOOT_FILE_EQUALS("test-files/visitors/RemoveElementsVisitorRecursiveOutput.osm",
                      "test-output/visitors/RemoveElementsVisitorRecursiveOutput.osm");
+  }
+
+  void runNegatedFilterTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::getInstance().read(
+      map, "test-files/visitors/RemoveElementsVisitorInput.osm");
+
+    boost::shared_ptr<PoiCriterion> elementCriterion(new PoiCriterion());
+    RemoveElementsVisitor removeElementsVisitor(elementCriterion, true);
+    removeElementsVisitor.setRecursive(false);
+    map->visitRw(removeElementsVisitor);
+
+    MapProjector::projectToWgs84(map);
+    OsmXmlWriter writer;
+    writer.write(map, "test-output/visitors/RemoveElementsVisitorNegatedFilterOutput.osm");
+    HOOT_FILE_EQUALS("test-files/visitors/RemoveElementsVisitorNegatedFilterOutput.osm",
+                     "test-output/visitors/RemoveElementsVisitorNegatedFilterOutput.osm");
   }
 
 };

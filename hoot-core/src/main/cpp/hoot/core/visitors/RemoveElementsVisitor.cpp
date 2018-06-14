@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RemoveElementsVisitor.h"
 
@@ -33,6 +33,7 @@
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/RemoveElementOp.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/filters/NotCriterion.h>
 
 namespace hoot
 {
@@ -40,28 +41,50 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveElementsVisitor)
 
 RemoveElementsVisitor::RemoveElementsVisitor():
-  _count(0)
+_count(0),
+_negateFilter(false)
 {
   setConfiguration(conf());
 }
 
-RemoveElementsVisitor::RemoveElementsVisitor(const boost::shared_ptr<ElementCriterion>& filter) :
-  _filter(filter),
-  _recursive(false),
-  _count(0)
+RemoveElementsVisitor::RemoveElementsVisitor(const boost::shared_ptr<ElementCriterion>& filter,
+                                             bool negateFilter) :
+_filter(filter),
+_recursive(false),
+_count(0),
+_negateFilter(negateFilter)
 {
+  if (_negateFilter)
+  {
+    _filter.reset(new NotCriterion(filter));
+  }
 }
 
 void RemoveElementsVisitor::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
-  QString filterName = configOptions.getRemoveElementsVisitorFilter();
+  _negateFilter = configOptions.getElementCriterionNegate();
+  const QString filterName = configOptions.getRemoveElementsVisitorElementCriterion();
   if (filterName.isEmpty() == false)
   {
-    ElementCriterion* ef = Factory::getInstance().constructObject<ElementCriterion>(filterName);
-    _filter.reset(ef);
+    LOG_VART(filterName);
+    addCriterion(
+      boost::shared_ptr<ElementCriterion>(
+        Factory::getInstance().constructObject<ElementCriterion>(filterName.trimmed())));
   }
   _recursive = configOptions.getRemoveElementsVisitorRecursive();
+}
+
+void RemoveElementsVisitor::addCriterion(const ElementCriterionPtr& e)
+{
+  if (!_negateFilter)
+  {
+    _filter = e;
+  }
+  else
+  {
+    _filter.reset(new NotCriterion(e));
+  }
 }
 
 void RemoveElementsVisitor::visit(const ConstElementPtr& e)

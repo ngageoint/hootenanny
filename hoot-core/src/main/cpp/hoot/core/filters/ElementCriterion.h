@@ -44,7 +44,7 @@ class Element;
  * - building type
  * - etc.
  *
- * How thise criterion is used is based on the context. E.g. you could use it to delete all elements
+ * How this criterion is used is based on the context. E.g. you could use it to delete all elements
  * that satisfy the criteria, or add tags to all those that meet the criteria. In general, you
  * should only use the criteria in a positive sense. (e.g. apply something to the elements that
  * meet the criteria, rather than apply it to those that don't meet the criteria). Look at the

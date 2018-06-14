@@ -46,7 +46,7 @@ public:
   static std::string className() { return "hoot::TagKeyCriterion"; }
 
   TagKeyCriterion() {}
-  TagKeyCriterion(QString key);
+  explicit TagKeyCriterion(QString key);
   TagKeyCriterion(QString key1, QString key2);
   TagKeyCriterion(QString key1, QString key2, QString key3);
 
@@ -56,11 +56,12 @@ public:
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new TagKeyCriterion(_keys)); }
 
-  virtual QString getDescription() const { return "Filters elements based on tag keys"; }
+  virtual QString getDescription() const
+  { return "Filters elements based on whether they contain any specified tag key"; }
 
 protected:
 
-  TagKeyCriterion(QStringList keys);
+  explicit TagKeyCriterion(QStringList keys);
 
 private:
 
