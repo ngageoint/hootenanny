@@ -28,7 +28,7 @@
 #define ELEMENTOUTPUTSTREAM_H
 
 #include <hoot/core/elements/Element.h>
-#include <hoot/core/filters/ElementCriterion.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {

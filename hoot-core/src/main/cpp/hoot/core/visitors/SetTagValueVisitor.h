@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/filters/ElementCriterionConsumer.h>
+#include <hoot/core/criterion/ElementCriterionConsumer.h>
 
 #include "ElementOsmMapVisitor.h"
 

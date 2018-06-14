@@ -22,49 +22,47 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef TAGCRITERION_H
-#define TAGCRITERION_H
+#ifndef ELEMENTCRITERIONJS_H
+#define ELEMENTCRITERIONJS_H
 
 // hoot
-#include <hoot/core/filters/ElementCriterion.h>
-#include <hoot/core/util/Configurable.h>
+#include <hoot/core/criterion/ElementCriterion.h>
+
+// node.js
+#include <hoot/js/SystemNodeJs.h>
 
 // Qt
 #include <QString>
 
+// Standard
+#include <memory>
+
 namespace hoot
 {
 
-/**
- * Returns true if k==v
- */
-class TagCriterion : public ElementCriterion, public Configurable
+class OsmMapOperation;
+
+class ElementCriterionJs : public node::ObjectWrap
 {
 public:
+  static void Init(v8::Handle<v8::Object> target);
 
-  static std::string className() { return "hoot::TagCriterion"; }
-
-  TagCriterion();
-  TagCriterion(const QString& k, const QString& v);
-
-  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
-
-  void setConfiguration(const Settings& s);
-
-  void setKvps(const QStringList kvps);
-
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new TagCriterion()); }
-
-  virtual QString getDescription() const
-  { return "Filters elements based on whether they contain any specified tag key/value pair"; }
+  ElementCriterionPtr getCriterion() { return _c; }
 
 private:
+  ElementCriterionJs(ElementCriterion* c);
+  ~ElementCriterionJs();
 
-  QStringList _kvps;
+  static void addCriterion(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isSatisfied(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
+
+  QString _className;
+  ElementCriterionPtr _c;
 };
 
 }
 
-#endif // TAGCRITERION_H
+#endif // ELEMENTCRITERIONJS_H

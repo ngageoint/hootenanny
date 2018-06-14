@@ -24,54 +24,48 @@
  *
  * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef ARBITRARYCRITERION_H
-#define ARBITRARYCRITERION_H
 
-// hoot
-#include <hoot/core/elements/Element.h>
-#include <hoot/core/filters/ElementCriterion.h>
+#ifndef DISTANCENODECRITERION_H
+#define DISTANCENODECRITERION_H
 
-// Qt
-#include <QString>
+// GEOS
+#include <geos/geom/Coordinate.h>
 
-// Boost
-#include <boost/function.hpp>
+// Hoot
+#include <hoot/core/util/Units.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
 
-class ArbitraryCriterion : public ElementCriterion
+class Element;
+
+/**
+ * isSatisfied returns true if an element is within the specified distance of the given center
+ */
+class DistanceNodeCriterion : public ElementCriterion
 {
 public:
 
-  static std::string className() { return "hoot::ArbitraryCriterion"; }
+  static std::string className() { return "hoot::DistanceNodeCriterion"; }
 
-  // Do something like:
-  // boost::function<bool (ConstElementPtr e)> f = boost::bind(&ScriptMatchVisitor::isMatchCandidate, this, _1);
-  explicit ArbitraryCriterion(boost::function<bool (ConstElementPtr e)> f)
-  {
-    _f = f;
-  }
+  DistanceNodeCriterion() {}
+  DistanceNodeCriterion(geos::geom::Coordinate center, Meters distance);
 
-  explicit ArbitraryCriterion(boost::function<bool (const boost::shared_ptr<const Element> &e)> f)
-  {
-    _f = f;
-  }
+  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
-  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const
-  {
-    return _f(e);
-  }
+  ElementCriterionPtr clone()
+  { return ElementCriterionPtr(new DistanceNodeCriterion(_center, _distance)); }
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new ArbitraryCriterion(_f)); }
-
-  virtual QString getDescription() const { return ""; }
+  virtual QString getDescription() const
+  { return "Returns true if an element is within the specified distance of the given center"; }
 
 private:
 
-  boost::function<bool (const boost::shared_ptr<const Element> &e)> _f;
+  geos::geom::Coordinate _center;
+  Meters _distance;
 };
 
 }
 
-#endif // ARBITRARYCRITERION_H
+#endif // DISTANCENODECRITERION_H

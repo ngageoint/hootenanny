@@ -32,7 +32,7 @@
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/filters/ElementCriterion.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 
 // TGS
 #include <tgs/RStarTree/IntersectionIterator.h>

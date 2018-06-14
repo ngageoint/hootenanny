@@ -22,26 +22,23 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-
-// Hoots
-#include <hoot/core/filters/WayCriterion.h>
+// Hoot
+#include <hoot/core/criterion/NonBuildingAreaCriterion.h>
 
 // Qt
 #include <QDir>
 
 #include "../TestUtils.h"
 
-using namespace geos::geom;
-
 namespace hoot
 {
 
-class WayCriterionTest : public CppUnit::TestFixture
+class NonBuildingAreaCriterionTest : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(WayCriterionTest);
+  CPPUNIT_TEST_SUITE(NonBuildingAreaCriterionTest);
   CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -49,16 +46,19 @@ public:
 
   void runBasicTest()
   {
-    WayCriterion uut;
-
-    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
-    CPPUNIT_ASSERT(!uut.isSatisfied(node1));
+    NonBuildingAreaCriterion uut;
 
     WayPtr way1(new Way(Status::Unknown1, -1, 15.0));
-    CPPUNIT_ASSERT(uut.isSatisfied(way1));
+    way1->getTags().set("building", "yes");
+    way1->getTags().set("area", "yes");
+    CPPUNIT_ASSERT(!uut.isSatisfied(way1));
+
+    WayPtr way2(new Way(Status::Unknown1, -1, 15.0));
+    way2->getTags().set("area", "yes");
+    CPPUNIT_ASSERT(uut.isSatisfied(way2));
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(WayCriterionTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(NonBuildingAreaCriterionTest, "quick");
 
 }

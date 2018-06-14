@@ -30,7 +30,7 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/filters/ElementCriterion.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {

@@ -22,40 +22,43 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef ONEWAYCRITERION_H
-#define ONEWAYCRITERION_H
 
-// hoot
-#include <hoot/core/filters/ElementCriterion.h>
+// Hoots
+#include <hoot/core/criterion/WayCriterion.h>
+
+// Qt
+#include <QDir>
+
+#include "../TestUtils.h"
+
+using namespace geos::geom;
 
 namespace hoot
 {
 
-/**
- * Keeps all the one-way elements
- */
-class OneWayCriterion : public ElementCriterion
+class WayCriterionTest : public CppUnit::TestFixture
 {
+  CPPUNIT_TEST_SUITE(WayCriterionTest);
+  CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST_SUITE_END();
+
 public:
 
-  static std::string className() { return "hoot::OneWayCriterion"; }
+  void runBasicTest()
+  {
+    WayCriterion uut;
 
-  OneWayCriterion(bool isOneWay = true): _isOneWay(isOneWay) { }
+    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    CPPUNIT_ASSERT(!uut.isSatisfied(node1));
 
-  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
-
-  ElementCriterionPtr clone() { return ElementCriterionPtr(new OneWayCriterion()); }
-
-  virtual QString getDescription() const { return "Identifies one way streets"; }
-
-private:
-
-  bool _isOneWay;
+    WayPtr way1(new Way(Status::Unknown1, -1, 15.0));
+    CPPUNIT_ASSERT(uut.isSatisfied(way1));
+  }
 };
 
-}
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(WayCriterionTest, "quick");
 
-#endif // ONEWAYCRITERION_H
+}

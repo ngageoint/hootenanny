@@ -24,33 +24,45 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef IMPLICIT_TAG_ELIGIBLE_CRITERION_H
-#define IMPLICIT_TAG_ELIGIBLE_CRITERION_H
 
-// hoot
-#include <hoot/core/filters/ElementCriterion.h>
-#include <hoot/core/elements/Tags.h>
+// Hoot
+#include <hoot/core/criterion/AreaCriterion.h>
 
 // Qt
-#include <QStringList>
+#include <QDir>
 
+#include "../TestUtils.h"
+
+using namespace geos::geom;
 
 namespace hoot
 {
 
-/**
- * Base class for filtering features which are eligible for implicit tag harvesting
- */
-class ImplicitTagEligibleCriterion : public ElementCriterion
+class AreaCriterionTest : public CppUnit::TestFixture
 {
+  CPPUNIT_TEST_SUITE(AreaCriterionTest);
+  CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST_SUITE_END();
+
 public:
 
-  virtual QStringList getEligibleKvps(const Tags& tags) const = 0;
-  virtual bool hasEligibleKvp(const Tags& tags) const = 0;
+  void runBasicTest()
+  {
+    AreaCriterion uut;
 
-  virtual QString getDescription() const
-  { return "Identifies elements eligible for type tag additions"; }
+    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    node1->getTags().set("area", "yes");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node1));
+
+    WayPtr way1(new Way(Status::Unknown1, -1, 15.0));
+    way1->getTags().set("area", "yes");
+    CPPUNIT_ASSERT(uut.isSatisfied(way1));
+
+    WayPtr way2(new Way(Status::Unknown1, -1, 15.0));
+    CPPUNIT_ASSERT(!uut.isSatisfied(way2));
+  }
 };
 
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(AreaCriterionTest, "quick");
+
 }
-#endif

@@ -32,7 +32,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
-#include <hoot/core/filters/NotCriterion.h>
+#include <hoot/core/criterion/NotCriterion.h>
 
 namespace hoot
 {

@@ -28,7 +28,7 @@
 #define IMPLICIT_TAG_ELIGIBLE_POI_POLY_CRITERION_H
 
 // hoot
-#include <hoot/core/filters/ImplicitTagEligibleCriterion.h>
+#include <hoot/core/criterion/ImplicitTagEligibleCriterion.h>
 
 namespace hoot
 {

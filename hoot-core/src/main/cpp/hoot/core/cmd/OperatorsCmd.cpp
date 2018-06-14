@@ -30,7 +30,7 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/filters/ElementCriterion.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/util/Log.h>

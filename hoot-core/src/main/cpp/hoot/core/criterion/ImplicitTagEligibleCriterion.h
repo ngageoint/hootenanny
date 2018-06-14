@@ -22,37 +22,35 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-
-#ifndef UNKNOWNCRITERION_H
-#define UNKNOWNCRITERION_H
+#ifndef IMPLICIT_TAG_ELIGIBLE_CRITERION_H
+#define IMPLICIT_TAG_ELIGIBLE_CRITERION_H
 
 // hoot
-#include <hoot/core/filters/ElementCriterion.h>
+#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/elements/Tags.h>
+
+// Qt
+#include <QStringList>
+
 
 namespace hoot
 {
 
 /**
- * Keeps all the unknown elements
+ * Base class for filtering features which are eligible for implicit tag harvesting
  */
-class UnknownCriterion : public ElementCriterion
+class ImplicitTagEligibleCriterion : public ElementCriterion
 {
 public:
 
-  UnknownCriterion() {}
-
-  static std::string className() { return "hoot::UnknownCriterion"; }
-
-  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
-
-  ElementCriterionPtr clone() { return ElementCriterionPtr(new UnknownCriterion()); }
+  virtual QStringList getEligibleKvps(const Tags& tags) const = 0;
+  virtual bool hasEligibleKvp(const Tags& tags) const = 0;
 
   virtual QString getDescription() const
-  { return "Identifies elements which have not been conflated"; }
+  { return "Identifies elements eligible for type tag additions"; }
 };
 
 }
-
-#endif // UNKNOWNCRITERION_H
+#endif

@@ -32,7 +32,7 @@
 // Hoot
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/filters/BuildingCriterion.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>

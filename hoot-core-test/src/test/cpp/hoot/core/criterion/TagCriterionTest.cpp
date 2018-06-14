@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include <hoot/core/filters/TagCriterion.h>
+#include <hoot/core/criterion/TagCriterion.h>
 
 // Qt
 #include <QDir>

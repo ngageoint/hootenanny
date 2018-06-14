@@ -36,7 +36,7 @@
 #include <hoot/core/conflate/Conflator.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/filters/ParallelWayFilter.h>
+#include <hoot/core/criterion/ParallelWayFilter.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/manipulators/DividedHighwayManipulation.h>

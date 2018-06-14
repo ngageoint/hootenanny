@@ -22,47 +22,31 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef CUSTOMCRITERION_H
-#define CUSTOMCRITERION_H
-
-// hoot
-#include <hoot/core/filters/ElementCriterion.h>
-#include <hoot/js/SystemNodeJs.h>
-#include <hoot/js/util/JsFunctionConsumer.h>
+#include "WayDirectionCriterion.h"
+#include <hoot/core/algorithms/DirectionFinder.h>
 
 namespace hoot
 {
 
-/**
- * A filter that will either keep or remove matches.
- */
-class JsFunctionCriterion : public ElementCriterion, public JsFunctionConsumer
+WayDirectionCriterion::WayDirectionCriterion(const ConstOsmMapPtr& map,
+                                             ConstWayPtr baseWay,
+                                             bool similarDirection) :
+  _map(map),
+  _baseWay(baseWay),
+  _similarDirection(similarDirection)
 {
-public:
-
-  static std::string className() { return "hoot::JsFunctionCriterion"; }
-
-  JsFunctionCriterion() {}
-
-  virtual void addFunction(v8::Isolate* isolate, v8::Local<v8::Function>& func) { _func.Reset(isolate, func); }
-
-  bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
-
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new JsFunctionCriterion(_func)); }
-
-  virtual QString getDescription() const { return ""; }
-
-private:
-
-  JsFunctionCriterion(v8::Persistent<v8::Function>& func) { _func.Reset(v8::Isolate::GetCurrent(), func); }
-
-  v8::Persistent<v8::Function> _func;
-};
-
 }
 
+bool WayDirectionCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
+{
+  if (e->getElementType() != ElementType::Way)
+    return false;
 
-#endif // CUSTOMCRITERION_H
+  ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e);
+  return DirectionFinder::isSimilarDirection(_map, _baseWay, w) == _similarDirection;
+}
+
+}

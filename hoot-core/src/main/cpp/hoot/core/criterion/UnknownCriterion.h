@@ -22,32 +22,37 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "WayDirectionCriterion.h"
-#include <hoot/core/algorithms/DirectionFinder.h>
+#ifndef UNKNOWNCRITERION_H
+#define UNKNOWNCRITERION_H
+
+// hoot
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
 
-WayDirectionCriterion::WayDirectionCriterion(const ConstOsmMapPtr& map,
-                                             ConstWayPtr baseWay,
-                                             bool similarDirection) :
-  _map(map),
-  _baseWay(baseWay),
-  _similarDirection(similarDirection)
+/**
+ * Keeps all the unknown elements
+ */
+class UnknownCriterion : public ElementCriterion
 {
-  // Blank
+public:
+
+  UnknownCriterion() {}
+
+  static std::string className() { return "hoot::UnknownCriterion"; }
+
+  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
+
+  ElementCriterionPtr clone() { return ElementCriterionPtr(new UnknownCriterion()); }
+
+  virtual QString getDescription() const
+  { return "Identifies elements which have not been conflated"; }
+};
+
 }
 
-bool WayDirectionCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
-{
-  if (e->getElementType() != ElementType::Way)
-    return false;
-
-  ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e);
-  return DirectionFinder::isSimilarDirection(_map, _baseWay, w) == _similarDirection;
-}
-
-}
+#endif // UNKNOWNCRITERION_H

@@ -40,7 +40,7 @@ namespace geos {
 
 // Hoot
 #include <hoot/core/util/Units.h>
-#include <hoot/core/filters/ChainCriterion.h>
+#include <hoot/core/criterion/ChainCriterion.h>
 namespace hoot {
   class OsmMap;
   class Node;

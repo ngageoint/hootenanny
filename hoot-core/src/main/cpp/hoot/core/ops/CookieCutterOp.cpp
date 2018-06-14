@@ -31,7 +31,7 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/conflate/AlphaShapeGenerator.h>
 #include <hoot/core/conflate/CookieCutter.h>
-#include <hoot/core/filters/StatusCriterion.h>
+#include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>

@@ -22,50 +22,49 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
+#ifndef TAGCRITERION_H
+#define TAGCRITERION_H
 
-#ifndef DISTANCENODECRITERION_H
-#define DISTANCENODECRITERION_H
+// hoot
+#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/util/Configurable.h>
 
-// GEOS
-#include <geos/geom/Coordinate.h>
-
-// Hoot
-#include <hoot/core/util/Units.h>
-#include <hoot/core/filters/ElementCriterion.h>
+// Qt
+#include <QString>
 
 namespace hoot
 {
 
-class Element;
-
 /**
- * isSatisfied returns true if an element is within the specified distance of the given center
+ * Returns true if k==v
  */
-class DistanceNodeCriterion : public ElementCriterion
+class TagCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::DistanceNodeCriterion"; }
+  static std::string className() { return "hoot::TagCriterion"; }
 
-  DistanceNodeCriterion() {}
-  DistanceNodeCriterion(geos::geom::Coordinate center, Meters distance);
+  TagCriterion();
+  TagCriterion(const QString& k, const QString& v);
 
   virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
-  ElementCriterionPtr clone()
-  { return ElementCriterionPtr(new DistanceNodeCriterion(_center, _distance)); }
+  void setConfiguration(const Settings& s);
+
+  void setKvps(const QStringList kvps);
+
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new TagCriterion()); }
 
   virtual QString getDescription() const
-  { return "Returns true if an element is within the specified distance of the given center"; }
+  { return "Filters elements based on whether they contain any specified tag key/value pair"; }
 
 private:
 
-  geos::geom::Coordinate _center;
-  Meters _distance;
+  QStringList _kvps;
 };
 
 }
 
-#endif // DISTANCENODECRITERION_H
+#endif // TAGCRITERION_H

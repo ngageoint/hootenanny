@@ -22,47 +22,56 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef ELEMENTCRITERIONJS_H
-#define ELEMENTCRITERIONJS_H
+#ifndef ARBITRARYCRITERION_H
+#define ARBITRARYCRITERION_H
 
 // hoot
-#include <hoot/core/filters/ElementCriterion.h>
-
-// node.js
-#include <hoot/js/SystemNodeJs.h>
+#include <hoot/core/elements/Element.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 
 // Qt
 #include <QString>
 
-// Standard
-#include <memory>
+// Boost
+#include <boost/function.hpp>
 
 namespace hoot
 {
 
-class OsmMapOperation;
-
-class ElementCriterionJs : public node::ObjectWrap
+class ArbitraryCriterion : public ElementCriterion
 {
 public:
-  static void Init(v8::Handle<v8::Object> target);
 
-  ElementCriterionPtr getCriterion() { return _c; }
+  static std::string className() { return "hoot::ArbitraryCriterion"; }
+
+  // Do something like:
+  // boost::function<bool (ConstElementPtr e)> f = boost::bind(&ScriptMatchVisitor::isMatchCandidate, this, _1);
+  explicit ArbitraryCriterion(boost::function<bool (ConstElementPtr e)> f)
+  {
+    _f = f;
+  }
+
+  explicit ArbitraryCriterion(boost::function<bool (const boost::shared_ptr<const Element> &e)> f)
+  {
+    _f = f;
+  }
+
+  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const
+  {
+    return _f(e);
+  }
+
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new ArbitraryCriterion(_f)); }
+
+  virtual QString getDescription() const { return ""; }
 
 private:
-  ElementCriterionJs(ElementCriterion* c);
-  ~ElementCriterionJs();
 
-  static void addCriterion(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void isSatisfied(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
-
-  QString _className;
-  ElementCriterionPtr _c;
+  boost::function<bool (const boost::shared_ptr<const Element> &e)> _f;
 };
 
 }
 
-#endif // ELEMENTCRITERIONJS_H
+#endif // ARBITRARYCRITERION_H
