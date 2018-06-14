@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/util/MapProjector.h>
 #include "../../TestUtils.h"
-#include <hoot/core/filters/TagCriterion.h>
+#include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/conflate/network/DebugNetworkMapCreator.h>

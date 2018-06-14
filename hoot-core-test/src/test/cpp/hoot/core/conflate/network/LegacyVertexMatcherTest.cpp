@@ -28,8 +28,8 @@
 // Hoot
 #include "../../TestUtils.h"
 #include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/filters/HighwayCriterion.h>
-#include <hoot/core/filters/StatusCriterion.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/conflate/network/LegacyVertexMatcher.h>
 #include <hoot/core/conflate/network/NetworkDetails.h>
 #include <hoot/core/conflate/network/OsmNetworkExtractor.h>

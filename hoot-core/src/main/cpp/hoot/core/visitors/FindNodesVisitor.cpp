@@ -27,7 +27,7 @@
 
 #include "FindNodesVisitor.h"
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/filters/ElementCriterion.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 
 using namespace geos::geom;
 using namespace std;

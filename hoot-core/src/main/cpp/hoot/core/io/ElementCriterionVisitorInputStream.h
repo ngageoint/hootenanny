@@ -30,7 +30,7 @@
 // Hoot
 #include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/elements/ElementVisitor.h>
-#include <hoot/core/filters/ElementCriterion.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 
 // Qt
 #include <QList>

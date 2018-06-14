@@ -32,9 +32,9 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
-#include <hoot/core/filters/PoiCriterion.h>
-#include <hoot/core/filters/BuildingCriterion.h>
-#include <hoot/core/filters/NonBuildingAreaCriterion.h>
+#include <hoot/core/criterion/PoiCriterion.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/criterion/NonBuildingAreaCriterion.h>
 #include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPoiCriterion.h>
 #include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPolyCriterion.h>
 

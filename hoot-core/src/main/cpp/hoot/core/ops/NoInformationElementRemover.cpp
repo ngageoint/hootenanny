@@ -32,10 +32,10 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/visitors/CriterionCountVisitor.h>
-#include <hoot/core/filters/ChainCriterion.h>
-#include <hoot/core/filters/ElementCriterion.h>
-#include <hoot/core/filters/NoInformationCriterion.h>
-#include <hoot/core/filters/UselessElementCriterion.h>
+#include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/criterion/NoInformationCriterion.h>
+#include <hoot/core/criterion/UselessElementCriterion.h>
 
 namespace hoot
 {

@@ -30,7 +30,7 @@
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 
 // For convenience functions
-#include <hoot/core/filters/TagCriterion.h>
+#include <hoot/core/criterion/TagCriterion.h>
 
 namespace hoot
 {

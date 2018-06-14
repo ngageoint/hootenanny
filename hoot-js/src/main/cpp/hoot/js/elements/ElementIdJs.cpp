@@ -30,7 +30,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/util/StringUtilsJs.h>
-#include <hoot/core/filters/ElementCriterion.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 
 // Qt
 #include <QStringList>
