@@ -48,10 +48,6 @@ public:
 
   virtual QString getDescription() const { return ""; }
 
-protected:
-
-  OsmMap* _map;
-
 private:
 
   std::vector<ElementOsmMapVisitor *> _visitors;

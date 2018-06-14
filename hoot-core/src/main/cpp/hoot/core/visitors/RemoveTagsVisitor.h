@@ -46,9 +46,9 @@ public:
   static std::string className() { return "hoot::RemoveTagsVisitor"; }
 
   RemoveTagsVisitor();
-  RemoveTagsVisitor(QString key);
+  explicit RemoveTagsVisitor(QString key);
   RemoveTagsVisitor(QString key1, QString key2);
-  RemoveTagsVisitor(QStringList keys);
+  explicit RemoveTagsVisitor(QStringList keys);
 
   virtual void addCriterion(const ElementCriterionPtr& e);
 
