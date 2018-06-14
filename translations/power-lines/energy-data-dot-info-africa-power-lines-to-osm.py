@@ -27,7 +27,7 @@ def translateAttributes(attrs, layerName, geometryType):
     #attrs['location'] = 'overhead'
     if voltage == -1:
         attrs['power'] = 'line'
-    elif voltage >= 45:
+    elif voltage >= 45000:
         attrs['power'] = 'line'  
     else:
         attrs['power'] = 'minor_line'
