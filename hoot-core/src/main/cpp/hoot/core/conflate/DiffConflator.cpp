@@ -224,8 +224,6 @@ void DiffConflator::_calcAndStoreTagChanges()
         continue;
       }
 
-      LOG_INFO("Old: " << pOldElement->getElementId() << " : " << "New: " << pNewElement->getElementId());
-
       // Sometimes we get multiple matches for the same pair. We don't want to
       // make multiple changes, though.
       if (!_pTagChanges->containsChange(pOldElement->getElementId()))

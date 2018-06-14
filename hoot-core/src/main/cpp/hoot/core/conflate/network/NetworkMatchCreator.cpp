@@ -124,7 +124,7 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
     matcher->iterate();
     LOG_INFO("Optimization iteration: " << i + 1 << "/" << numIterations << " complete.");
 
-    if (true || ConfigOptions().getNetworkMatchWriteDebugMaps())
+    if (ConfigOptions().getNetworkMatchWriteDebugMaps())
     {
       OsmMapPtr copy(new OsmMap(map));
       DebugNetworkMapCreator(matcher->getMatchThreshold()).addDebugElements(copy,
@@ -142,7 +142,7 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
   matcher->finalize();
 
   // Write final debug map
-  if (true || ConfigOptions().getNetworkMatchWriteDebugMaps())
+  if (ConfigOptions().getNetworkMatchWriteDebugMaps())
   {
     OsmMapPtr copy(new OsmMap(map));
     DebugNetworkMapCreator(matcher->getMatchThreshold()).addDebugElements(copy,
