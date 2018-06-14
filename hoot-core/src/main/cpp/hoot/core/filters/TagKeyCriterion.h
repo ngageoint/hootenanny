@@ -46,7 +46,7 @@ public:
   static std::string className() { return "hoot::TagKeyCriterion"; }
 
   TagKeyCriterion() {}
-  TagKeyCriterion(QString key);
+  explicit TagKeyCriterion(QString key);
   TagKeyCriterion(QString key1, QString key2);
   TagKeyCriterion(QString key1, QString key2, QString key3);
 
@@ -61,7 +61,7 @@ public:
 
 protected:
 
-  TagKeyCriterion(QStringList keys);
+  explicit TagKeyCriterion(QStringList keys);
 
 private:
 
