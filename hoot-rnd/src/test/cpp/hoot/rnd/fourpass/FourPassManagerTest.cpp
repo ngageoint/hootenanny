@@ -45,6 +45,7 @@
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
+#include <hoot/core/TestUtils.h>
 
 // Tgs
 #include <tgs/Statistics/Random.h>
@@ -52,8 +53,6 @@
 // Qt
 #include <QDebug>
 #include <QDir>
-
-#include "../TestUtils.h"
 
 using namespace geos::geom;
 
