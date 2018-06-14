@@ -33,8 +33,8 @@
 
 // Hoot
 #include <hoot/core/conflate/tile/TileConflator.h>
-#include <hoot/core/fourpass/FourPassManager.h>
-#include <hoot/core/fourpass/LocalTileWorker2.h>
+#include <hoot/rnd/fourpass/FourPassManager.h>
+#include <hoot/rnd/fourpass/LocalTileWorker2.h>
 #include <hoot/core/ops/OpList.h>
 #include <hoot/core/ops/MapCropper.h>
 #include <hoot/core/ops/MergeNearbyNodes.h>
