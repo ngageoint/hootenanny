@@ -36,7 +36,7 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/conflate/stats/ConflateStatsHelper.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
-#include <hoot/core/filters/StatusCriterion.h>
+#include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/io/MapStatsWriter.h>
 #include <hoot/core/ops/CalculateStatsOp.h>
 #include <hoot/core/ops/NamedOp.h>
@@ -50,8 +50,8 @@
 #include <hoot/core/visitors/AddRef1Visitor.h>
 #include <hoot/core/visitors/CriterionCountVisitor.h>
 #include <hoot/core/visitors/LengthOfWaysVisitor.h>
-#include <hoot/core/filters/BuildingCriterion.h>
-#include <hoot/core/filters/PoiCriterion.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/criterion/PoiCriterion.h>
 #include <hoot/core/io/ElementSorter.h>
 #include <hoot/core/io/OsmXmlChangesetFileWriter.h>
 

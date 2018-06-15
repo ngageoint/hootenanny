@@ -29,8 +29,8 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmJsonWriter.h>
-#include <hoot/core/filters/PoiCriterion.h>
-#include <hoot/core/filters/HighwayCriterion.h>
+#include <hoot/core/criterion/PoiCriterion.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/visitors/AddGeometryTypeVisitor.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/io/OsmXmlWriter.h>

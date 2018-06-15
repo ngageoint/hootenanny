@@ -32,6 +32,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/criterion/NotCriterion.h>
 
 namespace hoot
 {
@@ -44,29 +45,21 @@ SetTagValueVisitor::SetTagValueVisitor()
 }
 
 SetTagValueVisitor::SetTagValueVisitor(QString key, QString value, bool appendToExistingValue,
-                                       const QString filterName, bool overwriteExistingTag) :
+                                       const QString filterName, bool overwriteExistingTag,
+                                       bool negateFilter) :
 _appendToExistingValue(appendToExistingValue),
-_overwriteExistingTag(overwriteExistingTag)
+_overwriteExistingTag(overwriteExistingTag),
+_negateFilter(negateFilter)
 {
   _k.append(key);
   _v.append(value);
-  setFilter(filterName);
+  _setFilter(filterName);
 
   LOG_VART(_k);
   LOG_VART(_v);
   LOG_VART(_appendToExistingValue);
   LOG_VART(_overwriteExistingTag);
-}
-
-void SetTagValueVisitor::setFilter(const QString filterName)
-{
-  if (!filterName.trimmed().isEmpty())
-  {
-    LOG_VART(filterName);
-    ElementCriterion* ef =
-      Factory::getInstance().constructObject<ElementCriterion>(filterName.trimmed());
-    _filter.reset(ef);
-  }
+  LOG_VART(_negateFilter);
 }
 
 void SetTagValueVisitor::setConfiguration(const Settings& conf)
@@ -79,13 +72,38 @@ void SetTagValueVisitor::setConfiguration(const Settings& conf)
     throw IllegalArgumentException("set.tag.value.visitor key and value must be the same length.");
   }
   _appendToExistingValue = configOptions.getSetTagValueVisitorAppendToExistingValue();
-  setFilter(configOptions.getSetTagValueVisitorFilter());
   _overwriteExistingTag = configOptions.getSetTagValueVisitorOverwrite();
+  _negateFilter = configOptions.getElementCriterionNegate();
+  _setFilter(configOptions.getSetTagValueVisitorElementCriterion());
 
   LOG_VART(_k);
   LOG_VART(_v);
   LOG_VART(_appendToExistingValue);
   LOG_VART(_overwriteExistingTag);
+  LOG_VART(_negateFilter);
+}
+
+void SetTagValueVisitor::addCriterion(const ElementCriterionPtr& e)
+{
+  if (!_negateFilter)
+  {
+    _filter = e;
+  }
+  else
+  {
+    _filter.reset(new NotCriterion(e));
+  }
+}
+
+void SetTagValueVisitor::_setFilter(const QString filterName)
+{
+  if (!filterName.trimmed().isEmpty())
+  {
+    LOG_VART(filterName);
+    addCriterion(
+      boost::shared_ptr<ElementCriterion>(
+        Factory::getInstance().constructObject<ElementCriterion>(filterName.trimmed())));
+  }
 }
 
 void SetTagValueVisitor::_setTag(const ElementPtr& e, QString k, QString v)

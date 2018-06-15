@@ -29,10 +29,10 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmJsonWriter.h>
-#include <hoot/core/filters/PoiCriterion.h>
-#include <hoot/core/filters/BuildingCriterion.h>
+#include <hoot/core/criterion/PoiCriterion.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/visitors/RemoveRef2VisitorMultipleCriterion.h>
-#include <hoot/core/filters/ChainCriterion.h>
+#include <hoot/core/criterion/ChainCriterion.h>
 
 // Qt
 #include <QDebug>

@@ -35,7 +35,7 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/GeometryUtils.h>
-#include <hoot/core/filters/TagKeyCriterion.h>
+#include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/visitors/CalculateHashVisitor2.h>
 #include <hoot/core/util/IoUtils.h>

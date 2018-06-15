@@ -28,7 +28,7 @@
 #define CALCULATESTATSOP_H
 
 // hoot
-#include <hoot/core/filters/ElementCriterion.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/conflate/matching/MatchCreator.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include "ConstOsmMapOperation.h"

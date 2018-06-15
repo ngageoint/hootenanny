@@ -33,9 +33,9 @@
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/filters/ChainCriterion.h>
-#include <hoot/core/filters/HighwayCriterion.h>
-#include <hoot/core/filters/StatusCriterion.h>
+#include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/schema/OsmSchema.h>

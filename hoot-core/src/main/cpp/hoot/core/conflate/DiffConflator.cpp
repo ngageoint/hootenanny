@@ -41,7 +41,7 @@
 #include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/filters/TagKeyCriterion.h>
+#include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 
 // standard

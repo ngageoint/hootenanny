@@ -30,7 +30,7 @@
 // hoot
 #include <hoot/core/elements/ConstElementConsumer.h>
 #include <hoot/core/elements/ElementId.h>
-#include <hoot/core/filters/BaseFilter.h>
+#include <hoot/core/criterion/BaseFilter.h>
 
 // Standard
 #include <set>

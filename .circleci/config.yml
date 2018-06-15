@@ -1,0 +1,60 @@
+---
+version: 2
+
+jobs:
+  archive-create:
+    working_directory: '/rpmbuild/hootenanny'
+    docker:
+      - image: hootenanny/rpmbuild-hoot-release@sha256:9a99b469bd84c2d2b47e0bab56ad5a977d558a28b032181db32a7d6e16335639
+    steps:
+      - checkout
+      - run:
+          name: 'Git Submodules'
+          command: |
+            chown -R rpmbuild:rpmbuild .
+            su-exec rpmbuild git submodule update --init --recursive
+      - run:
+          name: 'Make Hootenanny Archive'
+          command: |
+            su-exec postgres pg_ctl -D $PGDATA -s start
+            su-exec rpmbuild bash -c "mkdir -p /rpmbuild/.m2 && curl -sSL https://s3.amazonaws.com/hoot-maven/m2-cache.tar.gz | tar -C /rpmbuild/.m2 -xzf -"
+            su-exec rpmbuild ./scripts/ci/archive.sh
+            su-exec rpmbuild bash -c "mkdir -p archives && mv -v hootenanny-[0-9]*.tar.gz archives"
+      - persist_to_workspace:
+          root: archives
+          paths:
+            - hootenanny-*.tar.gz
+  archive-upload:
+    working_directory: '/rpmbuild/hootenanny'
+    docker:
+      - image: hootenanny/rpmbuild-repo@sha256:7147b62b7a6dded4b72003df0aca52ab4b667dba4da5c11a7ceb4b00bbacd120
+        user: rpmbuild
+    steps:
+      - attach_workspace:
+          at: archives
+      - run:
+          name: 'Upload Hootenanny Archive'
+          command: |
+            find archives -type f -exec aws s3 cp {} s3://hoot-archives/circle/$CIRCLE_BRANCH/ \;
+  copyright:
+    working_directory: '/rpmbuild/hootenanny'
+    docker:
+      - image: hootenanny/rpmbuild-generic@sha256:73127bc570c1f2b8f35a8c162786a3c5a7fbf10e435ce98eb8d91761fcf8829a
+        user: rpmbuild
+        environment:
+          HOOT_HOME: '/rpmbuild/hootenanny'
+    steps:
+      - checkout
+      - run:
+          name: 'Check Copyright Headers'
+          command: ./scripts/copyright/UpdateAllCopyrightHeaders.sh
+
+workflows:
+  version: 2
+  tests:
+    jobs:
+      - archive-create
+      - archive-upload:
+          requires:
+            - archive-create
+      - copyright

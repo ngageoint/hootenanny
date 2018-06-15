@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="37.80112011104257" minlon="-122.4167694365631" maxlat="37.80126265613346" maxlon="-122.4167220492491"/>
+    <node visible="true" id="-861083" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8012626561334599" lon="-122.4167320255257749">
+        <tag k="REF1" v="C"/>
+        <tag k="amenity" v="restaurant"/>
+    </node>
+    <node visible="true" id="-861082" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8012468907913401" lon="-122.4167220492491026">
+        <tag k="REF2" v="C"/>
+        <tag k="amenity" v="restaurant"/>
+    </node>
+    <node visible="true" id="-861077" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8011201110425716" lon="-122.4167594602864710">
+        <tag k="REF2" v="A"/>
+        <tag k="poi" v="yes"/>
+    </node>
+    <node visible="true" id="-861055" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8011279937276043" lon="-122.4167428331587502">
+        <tag k="REF2" v="A"/>
+        <tag k="poi" v="yes"/>
+    </node>
+    <node visible="true" id="-861054" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8011358764117702" lon="-122.4167694365631149">
+        <tag k="REF1" v="A"/>
+        <tag k="poi" v="yes"/>
+    </node>
+</osm>

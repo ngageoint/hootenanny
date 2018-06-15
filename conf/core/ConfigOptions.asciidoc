@@ -637,6 +637,16 @@ Size of the in memory relation cache used when streaming I/O is used with relati
 
 Size of the in memory way cache used when streaming I/O is used with ways.
 
+=== element.criterion.negate
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, element criterions passed to an ElementCriterionConsumer will be negated.  May not be
+honored by all ElementCriterionConsumers.  Example setting which pass element criterions to
+ElementCriterionConsumers: remove.elements.visitor.element.criterion,
+set.tag.value.visitor.element.criterion, etc.
+
 === english.words.files
 
 * Data Type: list
@@ -1000,13 +1010,14 @@ POI names.
 If true, the implicit tag raw rules generator will only consider words that correspond to a OSM tag
 value in the Hootenanny schema.
 
-=== implicit.tagging.element.filter
+=== implicit.tagging.element.criterion
 
 * Data Type: string
 * Default Value: `hoot::ImplicitTagEligiblePoiPolyCriterion`
 
 Filter class inheriting from hoot::ImplicitTagEligibleCriterion; The default,
-ImplicitTagEligiblePoiPolyCriterion, derives tag information from POIs, buildings, and areas.
+ImplicitTagEligiblePoiPolyCriterion, derives tag information from POIs, buildings, and areas.  To
+pass in more nested criterion, use the Hootenanny Javascript interface instead.
 
 === implicit.tagging.keep.temp.files
 
@@ -1232,7 +1243,7 @@ A list of map operations to be applied to a map for cleaning purposes, in order.
 === match.creators
 
 * Data Type: string
-* Default Value: `hoot::BuildingMatchCreator;hoot::ScriptMatchCreator,PoiGeneric.js;hoot::HighwayMatchCreator;hoot::ScriptMatchCreator,LinearWaterway.js;hoot::PoiPolygonMatchCreator;hoot::ScriptMatchCreator,Area.js`
+* Default Value: `hoot::BuildingMatchCreator;hoot::ScriptMatchCreator,PoiGeneric.js;hoot::HighwayMatchCreator;hoot::ScriptMatchCreator,LinearWaterway.js;hoot::PoiPolygonMatchCreator;hoot::ScriptMatchCreator,Area.js;hoot::ScriptMatchCreator,Railway.js`
 
 List of match creators to use during conflation. This can modify what features will be conflated
 (e.g. buildings, roads, etc.).  The ordering must match that in merger.creators.
@@ -1244,8 +1255,9 @@ Some of the possible options include:
 * `hoot::NetworkMatchCreator` - Matches linear highway features using the Network algorithm.
 * `hoot::PoiPolygonMatchCreator` - Matches POIs with buildings or areas.
 * `hoot::ScriptMatchCreator,Area.js` - Matches areas (non-building polygons marked as areas; e.g. parks, parking lots, etc.).
-* `hoot::ScriptMatchCreator,PoiGeneric.js` - Matches POIs using the Unify algorithm.
 * `hoot::ScriptMatchCreator,LinearWaterway.js` - Matches linear rivers and streams.
+* `hoot::ScriptMatchCreator,PoiGeneric.js` - Matches POIs using the Unify algorithm.
+* `hoot::ScriptMatchCreator,Railway.js` - Matches railways.
 * `hoot::ScriptMatchCreator,<yourscript.js>` - Uses a custom match script. The script should be
   in `$HOOT_HOME/rules/<yourscript.js>`.
 
@@ -1299,7 +1311,7 @@ are identical. Units in meters and defaults to 1.0m.
 === merger.creators
 
 * Data Type: string
-* Default Value: `hoot::BuildingMergerCreator;hoot::ScriptMergerCreator;hoot::HighwaySnapMergerCreator;hoot::ScriptMergerCreator;hoot::PoiPolygonMergerCreator;hoot::ScriptMergerCreator`
+* Default Value: `hoot::BuildingMergerCreator;hoot::ScriptMergerCreator;hoot::HighwaySnapMergerCreator;hoot::ScriptMergerCreator;hoot::PoiPolygonMergerCreator;hoot::ScriptMergerCreator;hoot::ScriptMergerCreator`
 
 List of merger creators to use during conflation. This can modify what features will be conflated
 (e.g. buildings, roads, etc.).  The ordering must match that in match.creators.
@@ -2507,12 +2519,13 @@ timestamp, user, uid, or version.
 Use this class for calculating the difference between element tags. If the difference is exactly
 0 then they'll be a candidate for merging.
 
-=== remove.elements.visitor.filter
+=== remove.elements.visitor.element.criterion
 
 * Data Type: string
 * Default Value: ``
 
-The plugin name of a filter used to select the elements to delete.
+The plugin name of an element criterion used to select elements to delete.  To pass in complex
+nested criterion, use the Hootenanny Javascript interface instead.
 
 === remove.elements.visitor.recursive
 
@@ -2521,13 +2534,22 @@ The plugin name of a filter used to select the elements to delete.
 
 Should the element remover remove the elements recursively?
 
-=== remove.tag.visitor.keys
+=== remove.tags.visitor.element.criterion
+
+* Data Type: string
+* Default Value: ``
+
+The plugin name of an element criterion used to select tags to delete.  To pass in complex
+nested criterion, use the Hootenanny Javascript interface instead.
+
+=== remove.tags.visitor.keys
 
 * Data Type: list
 * Default Value:
 ** ``
 
-A list of tag keys the RemoveTagVisitor will remove on elements.
+A list of tag keys the RemoveTagsVisitor will remove on elements.  From the command line, separate
+list items with a semicolon.
 
 === replace.tag.visitor.match.tag
 
@@ -2666,12 +2688,13 @@ The search radius to use when conflating railways.
 If true, any element with a value populated for the key defined by the set.tag.value.visitor.key
 option will have the value specified in the set.tag.value.visitor.value option appended to it.
 
-=== set.tag.value.visitor.filter
+=== set.tag.value.visitor.element.criterion
 
 * Data Type: string
 * Default Value: ``
 
-The plugin name of a filter used to select elements to add or modify tags on.
+The plugin name of an element criterion used to select elements to add or modify tags on.  To pass
+in complex nested criterion, use the Hootenanny Javascript interface instead.
 
 === set.tag.value.visitor.key
 
@@ -2828,6 +2851,30 @@ renaming existing tag keys on all elements in a map.
 
 The key to be replaced by the TagRenameKeyVisitor.  TagRenameKeyVisitor allows for
 renaming existing tag keys on all elements in a map.
+
+=== tag.value.numeric.range.criterion.keys
+
+* Data Type: list
+* Default Value:
+** ``
+
+The keys the TagValueNumericRangeCriterion examines the numeric value of.  Tags for all keys must
+meet the numeric range requirement for the criterion to be met.  Separate multiple keys with a
+semicolon from the command line.
+
+=== tag.value.numeric.range.criterion.max
+
+* Data Type: long
+* Default Value: `-1`
+
+Minimum tag numeric value that will allow the TagValueNumericRangeCriterion to be satisified.
+
+=== tag.value.numeric.range.criterion.min
+
+* Data Type: long
+* Default Value: `-1`
+
+Minimum tag numeric value that will allow the TagValueNumericRangeCriterion to be satisified.
 
 === task.status.update.interval
 

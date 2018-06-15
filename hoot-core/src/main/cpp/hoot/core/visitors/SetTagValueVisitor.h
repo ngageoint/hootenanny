@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/filters/ElementCriterionConsumer.h>
+#include <hoot/core/criterion/ElementCriterionConsumer.h>
 
 #include "ElementOsmMapVisitor.h"
 
@@ -49,9 +49,10 @@ public:
 
   SetTagValueVisitor();
   SetTagValueVisitor(QString key, QString value, bool appendToExistingValue = false,
-                     const QString filterName = "", bool overwriteExistingTag = true);
+                     const QString filterName = "", bool overwriteExistingTag = true,
+                     bool negateFilter = false);
 
-  virtual void addCriterion(const ElementCriterionPtr& e) { _filter = e; }
+  virtual void addCriterion(const ElementCriterionPtr& e);
 
   virtual void setConfiguration(const Settings& conf);
 
@@ -60,7 +61,7 @@ public:
   virtual QString getDescription() const
   { return "Adds or updates tags using the specified key/value pair"; }
 
-  void setFilter(const QString filterName);
+  void setNegateFilter(bool negate) { _negateFilter = negate; }
 
 private:
 
@@ -71,8 +72,11 @@ private:
   boost::shared_ptr<ElementCriterion> _filter;
   //overwrites any tag with a matching key
   bool _overwriteExistingTag;
+  //This allows for negating the filter as an option sent in from the command line.
+  bool _negateFilter;
 
   void _setTag(const ElementPtr& e, QString k, QString v);
+  void _setFilter(const QString filterName);
 };
 
 }
