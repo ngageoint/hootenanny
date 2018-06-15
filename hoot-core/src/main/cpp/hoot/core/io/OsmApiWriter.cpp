@@ -51,7 +51,6 @@ namespace hoot
 
 OsmApiNetworkRequest::OsmApiNetworkRequest()
 {
-
 }
 
 bool OsmApiNetworkRequest::networkRequest(QUrl url, QNetworkAccessManager::Operation http_op, const QByteArray& data)
@@ -136,7 +135,8 @@ OsmApiWriter::OsmApiWriter(const QUrl& url, const QList<QString>& changesets)
   : _changesets(changesets),
     _description(ConfigOptions().getChangesetDescription()),
     _maxWriters(ConfigOptions().getChangesetApidbMaxWriters()),
-    _maxChangesetSize(ConfigOptions().getChangesetApidbMaxSize())
+    _maxChangesetSize(ConfigOptions().getChangesetApidbMaxSize()),
+    _parallel(false)
 {
   if (isSupported(url))
     _url = url;
@@ -153,36 +153,36 @@ bool OsmApiWriter::apply()
   if (!validatePermissions(request))
     LOG_ERROR("API Permissions error");
 
-  bool success = false;
-  if (success)
+  bool success = true;
+  if (_parallel)
   {
     //  Load all of the changesets into memory
-    XmlChangeset changeset;
-    changeset.setMaxSize(_maxChangesetSize);
+    _changeset.setMaxSize(_maxChangesetSize);
     for (int i = 0; i < _changesets.size(); ++i)
-      changeset.loadChangeset(_changesets[i]);
+      _changeset.loadChangeset(_changesets[i]);
     //  Start the writer threads
     for (int i = 0; i < _maxWriters; ++i)
       _threadPool.push_back(thread(&OsmApiWriter::_changesetThreadFunc, this));
-    while (!changeset.isDone())
+    //  Iterate all changes until there are no more elements to send
+    while (_changeset.hasElementsToSend())
     {
       //  Divide up the changes into atomic changesets
       ChangesetInfoPtr changeset_info(new ChangesetInfo());
       //  Repeat divide until all changes have been committed
-      if (changeset.calculateChangeset(changeset_info))
+      _changesetMutex.lock();
+      bool newChangeset = _changeset.calculateChangeset(changeset_info);
+      _changesetMutex.unlock();
+      //  Add the new work to the queue if there is any
+      if (newChangeset)
       {
-        //  Create the changeset for the first changeset
-        long id = _createChangeset(request, _description);
-        //  Upload the changeset
-        if (!_uploadChangeset(request, id, changeset.getChangesetString(changeset_info, id)))
-        {
-          LOG_ERROR("Error uploading changeset: " << id);
-          success = false;
-        }
-        //  Update the changeset with the response
-        changeset.updateChangeset(QString(request->getResponseContent()));
-        //  Close the changeset
-        _closeChangeset(request, id);
+        _workQueueMutex.lock();
+        _workQueue.push(changeset_info);
+        _workQueueMutex.unlock();
+      }
+      else
+      {
+        //  Allow time for the worker threads to complete some work
+        this_thread::sleep_for(chrono::milliseconds(10));
       }
     }
     //  Wait for the threads to shutdown
@@ -224,9 +224,12 @@ bool OsmApiWriter::apply()
 
 void OsmApiWriter::_changesetThreadFunc()
 {
+  OsmApiNetworkRequestPtr request(new OsmApiNetworkRequest());
+  //  Iterate until all elements are sent and updated
   while (!_changeset.isDone())
   {
     ChangesetInfoPtr workInfo;
+    //  Try to get something off of the work queue
     _workQueueMutex.lock();
     if (!_workQueue.empty())
     {
@@ -237,9 +240,35 @@ void OsmApiWriter::_changesetThreadFunc()
 
     if (workInfo)
     {
-
+      //  Create the changeset for the first changeset
+      long id = _createChangeset(request, _description);
+      //  Display the changeset in TRACE mode
+      LOG_TRACE("\n" << _changeset.getChangesetString(workInfo, id));
+      //  Upload the changeset
+      if (_uploadChangeset(request, id, _changeset.getChangesetString(workInfo, id)))
+      {
+        //  Display the upload response in TRACE mode
+        LOG_TRACE("\n" << QString(request->getResponseContent()));
+        //  Update the changeset with the response
+        _changesetMutex.lock();
+        _changeset.updateChangeset(QString(request->getResponseContent()));
+        _changesetMutex.unlock();
+        //  Signal the main thread that updates have been made
+      }
+      else
+      {
+        //  Log the error for now
+        //TODO: Clean up the error handling
+        LOG_ERROR("Error uploading changeset: " << id);
+        _workQueueMutex.lock();
+        _workQueue.push(workInfo);
+        _workQueueMutex.unlock();
+      }
+      //  Close the changeset
+      _closeChangeset(request, id);
     }
-    //  Wait for a signal maybe
+    else
+      this_thread::sleep_for(chrono::milliseconds(10));
   }
 }
 

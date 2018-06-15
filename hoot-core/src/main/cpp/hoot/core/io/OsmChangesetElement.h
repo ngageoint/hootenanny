@@ -129,7 +129,8 @@ public:
 
   void updateChangeset(const QString& changes);
 
-  bool isDone() { return !hasElementsToSend(); }
+  bool hasElementsToSend() { return (long)(_allNodes.size() + _allWays.size() + _allRelations.size()) > _sentCount; }
+  bool isDone() { return (long)(_allNodes.size() + _allWays.size() + _allRelations.size()) == _processedCount; }
 
   enum ChangesetType
   {
@@ -165,8 +166,6 @@ private:
 
   void markBuffered(XmlElement* element);
 
-  bool hasElementsToSend() { return (long)(_allNodes.size() + _allWays.size() + _allRelations.size()) > _processedCount; }
-
   XmlElementMap _allNodes;
   XmlElementMap _allWays;
   XmlElementMap _allRelations;
@@ -181,6 +180,7 @@ private:
   std::array<std::map<long, std::vector<long>>, ElementType::Unknown> _idsToRelations;
 
   long _maxChangesetSize;
+  long _sentCount;
   long _processedCount;
 
   std::vector<XmlElement*> _sendBuffer;

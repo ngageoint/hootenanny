@@ -45,6 +45,7 @@ XmlChangeset::XmlChangeset()
     _ways(ChangesetType::TypeMax),
     _relations(ChangesetType::TypeMax),
     _maxChangesetSize(100),
+    _sentCount(0),
     _processedCount(0)
 {
 }
@@ -54,6 +55,7 @@ XmlChangeset::XmlChangeset(const QList<QString> &changesets)
     _ways(ChangesetType::TypeMax),
     _relations(ChangesetType::TypeMax),
     _maxChangesetSize(100),
+    _sentCount(0),
     _processedCount(0)
 {
   for (QList<QString>::const_iterator it = changesets.begin(); it != changesets.end(); ++it)
@@ -213,9 +215,14 @@ bool XmlChangeset::addNode(boost::shared_ptr<ChangesetInfo>& changeset, Changese
   //  Only add the nodes that are "sendable"
   if (canSend(node))
   {
-    //  Add the node
-    changeset->add(ElementType::Node, type, node->id());
-    markBuffered(node);
+    //  Add create nodes if the ID map's ID is negative, modify and delete IDs don't matter
+    if ((type == ChangesetType::TypeCreate && _idMap.getNewId(ElementType::Node, node->id()) < 0) ||
+         type != ChangesetType::TypeCreate)
+    {
+      //  Add the node
+      changeset->add(ElementType::Node, type, node->id());
+      markBuffered(node);
+    }
     return true;
   }
   else
@@ -243,16 +250,17 @@ bool XmlChangeset::addWay(boost::shared_ptr<ChangesetInfo>& changeset, Changeset
     //  Add the way
     changeset->add(ElementType::Way, type, way->id());
     markBuffered(way);
-    //  Only creates require more processing
-    if (type == ChangesetType::TypeCreate)
+    //  Only creates/modifies require more processing
+    if (type != ChangesetType::TypeDelete)
     {
       //  Add any nodes that need to be created
       for (int i = 0; i < way->getNodeCount(); ++i)
       {
-        if (way->getNode(i) < 0)  //  Negative IDs are for created nodes
+        //  Negative IDs from the ID map are for created nodes
+        if (_idMap.getNewId(ElementType::Node, way->getNode(i)) < 0)
         {
           XmlNode* node = dynamic_cast<XmlNode*>(_allNodes[way->getNode(i)].get());
-          addNode(changeset, type, node);
+          addNode(changeset, ChangesetType::TypeCreate, node);
         }
       }
     }
@@ -290,23 +298,36 @@ bool XmlChangeset::addRelation(boost::shared_ptr<ChangesetInfo>& changeset, Chan
       for (int i = 0; i < relation->getMemberCount(); ++i)
       {
         XmlMember& member = relation->getMember(i);
-        if (member.getRef() < 0)  //  Negative IDs are for added members
+        //  Negative IDs are for added members
+        if (member.getRef() < 0)
         {
           //  Add the types differently
           if (member.isNode())
           {
-            XmlNode* node = dynamic_cast<XmlNode*>(_allNodes[member.getRef()].get());
-            addNode(changeset, type, node);
+            //  Make sure that the ID is negative (create) in the ID map
+            if (_idMap.getNewId(ElementType::Node, member.getRef()) < 0)
+            {
+              XmlNode* node = dynamic_cast<XmlNode*>(_allNodes[member.getRef()].get());
+              addNode(changeset, type, node);
+            }
           }
           else if (member.isWay())
           {
-            XmlWay* way = dynamic_cast<XmlWay*>(_allWays[member.getRef()].get());
-            addWay(changeset, type, way);
+            //  Make sure that the ID is negative (create) in the ID map
+            if (_idMap.getNewId(ElementType::Way, member.getRef()) < 0)
+            {
+              XmlWay* way = dynamic_cast<XmlWay*>(_allWays[member.getRef()].get());
+              addWay(changeset, type, way);
+            }
           }
-          else
+          else if (member.isRelation())
           {
-            XmlRelation* relation = dynamic_cast<XmlRelation*>(_allRelations[member.getRef()].get());
-            addRelation(changeset, type, relation);
+            //  Make sure that the ID is negative (create) in the ID map
+            if (_idMap.getNewId(ElementType::Relation, member.getRef()) < 0)
+            {
+              XmlRelation* relation = dynamic_cast<XmlRelation*>(_allRelations[member.getRef()].get());
+              addRelation(changeset, type, relation);
+            }
           }
         }
       }
@@ -400,7 +421,7 @@ void XmlChangeset::markBuffered(XmlElement* element)
   {
     element->setStatus(XmlElement::Buffering);
     _sendBuffer.push_back(element);
-    _processedCount++;
+    _sentCount++;
   }
 }
 
@@ -416,6 +437,9 @@ bool XmlChangeset::calculateChangeset(boost::shared_ptr<ChangesetInfo>& changese
          changeset->size() < (size_t)_maxChangesetSize &&
          hasElementsToSend())
   {
+//  TEMPORARY:
+#define RELATION_TO_NODE
+#ifdef RELATION_TO_NODE
     //  TODO: At some point we should test if the relation/way/node order should be reversed
     //  to figure out which one is faster
     //  Start with the relations
@@ -433,6 +457,23 @@ bool XmlChangeset::calculateChangeset(boost::shared_ptr<ChangesetInfo>& changese
     //  Break out of the loop once the changeset is big enough
     if (changeset->size() >= (size_t)_maxChangesetSize)
       continue;
+#else
+    //  Start with the nodes
+    addNodes(changeset, type);
+    //  Break out of the loop once the changeset is big enough
+    if (changeset->size() >= (size_t)_maxChangesetSize)
+      continue;
+    //  Then the ways
+    addWays(changeset, type);
+    //  Break out of the loop once the changeset is big enough
+    if (changeset->size() >= (size_t)_maxChangesetSize)
+      continue;
+    //  Then the relations
+    addRelations(changeset, type);
+    //  Break out of the loop once the changeset is big enough
+    if (changeset->size() >= (size_t)_maxChangesetSize)
+      continue;
+#endif
     //  Go to the next type and loop back around
     type = static_cast<ChangesetType>(type + 1);
   }
@@ -440,8 +481,8 @@ bool XmlChangeset::calculateChangeset(boost::shared_ptr<ChangesetInfo>& changese
   for (vector<XmlElement*>::iterator it = _sendBuffer.begin(); it != _sendBuffer.end(); ++it)
     (*it)->setStatus(XmlElement::Sent);
   _sendBuffer.clear();
-  //  Return successfully
-  return true;
+  //  Return true if there is anything in this changeset
+  return changeset->size() > 0;
 }
 
 QString XmlChangeset::getChangesetString(ChangesetInfoPtr changeset, long changeset_id)
@@ -524,6 +565,7 @@ void XmlChangeset::updateElement(ChangesetTypeMap& map, long old_id, long new_id
       _idMap.updateId(element->getType(), old_id, new_id);
     if (version >= 0)
       element->setVersion(version);
+    _processedCount++;
   }
 }
 

@@ -139,6 +139,9 @@ public:
   //  https://wiki.openstreetmap.org/wiki/API_v0.6#Retrieving_permissions:_GET_.2Fapi.2F0.6.2Fpermissions
   bool validatePermissions(OsmApiNetworkRequestPtr request);
 
+  //  TEMPORARY:
+  void doParallel(bool parallel) { _parallel = parallel; }
+
 private:
   //  for white box testing
   friend class OsmApiWriterTest;
@@ -171,6 +174,9 @@ private:
   int _maxWriters;
   long _maxChangesetSize;
   OsmApiCapabilites _capabilities;
+
+  //  TEMPORARY:
+  bool _parallel;
 
   const QString API_PATH_CAPABILITIES = "/api/capabilities/";
   const QString API_PATH_PERMISSIONS = "/api/0.6/permissions/";

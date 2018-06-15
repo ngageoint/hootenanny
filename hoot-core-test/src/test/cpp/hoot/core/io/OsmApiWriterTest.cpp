@@ -42,10 +42,10 @@ class OsmApiWriterTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE(OsmApiWriterTest);
   CPPUNIT_TEST(runParseStatusTest);
   CPPUNIT_TEST(runParseCapabilitiesTest);
-//  CPPUNIT_TEST(runCapabilitesTest);
+  CPPUNIT_TEST(runCapabilitesTest);
   CPPUNIT_TEST(runParsePermissionsTest);
-//  CPPUNIT_TEST(runPermissionsTest);
-//  CPPUNIT_TEST(runChangesetTest);
+  CPPUNIT_TEST(runPermissionsTest);
+  CPPUNIT_TEST(runChangesetTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -134,7 +134,7 @@ public:
   {
     QUrl osm;
     osm.setUrl(OSMAPI_URL);
-    osm.setUserInfo("bmarchant:TestPassword");
+    osm.setUserInfo("test01:hoottest");
 
     QList<QString> changesets;
     OsmApiNetworkRequestPtr request(new OsmApiNetworkRequest());
@@ -147,23 +147,19 @@ public:
   {
     QUrl osm;
     osm.setUrl(OSMAPI_URL);
-    osm.setUserInfo("bmarchant:TestPassword");
+    osm.setUserInfo("test01:hoottest");
 
     QList<QString> changesets;
-//*
-    changesets.append("test-files/ToyTestA.osc");
-//*/
-/*
-    changesets.append("/fouo/temp-data/ToyTest.osc");
-    changesets.append("/fouo/temp-data/ToyTest-001.osc");
-//*/
-/*
-    changesets.append("/fouo/temp-data/DcTigerRoads.osc");
-    changesets.append("/fouo/temp-data/DcTigerRoads-001.osc");
-    changesets.append("/fouo/temp-data/DcTigerRoads-002.osc");
-    changesets.append("/fouo/temp-data/DcTigerRoads-003.osc");
-//*/
+    changesets.append("test-files/io/OsmChangesetElementTest/ToyTestA.osc");
+
     OsmApiWriter writer(osm, changesets);
+/*
+    writer.doParallel(true);
+    Settings s;
+    s.set("changeset.apidb.max.writers", 4);
+    s.set("changeset.apidb.max.size", 5);
+    writer.setConfiguration(s);
+*/
     writer.apply();
   }
 };
