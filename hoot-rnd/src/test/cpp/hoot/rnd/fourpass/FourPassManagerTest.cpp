@@ -33,8 +33,8 @@
 
 // Hoot
 #include <hoot/core/conflate/tile/TileConflator.h>
-#include <hoot/core/fourpass/FourPassManager.h>
-#include <hoot/core/fourpass/LocalTileWorker2.h>
+#include <hoot/rnd/fourpass/FourPassManager.h>
+#include <hoot/rnd/fourpass/LocalTileWorker2.h>
 #include <hoot/core/ops/OpList.h>
 #include <hoot/core/ops/MapCropper.h>
 #include <hoot/core/ops/MergeNearbyNodes.h>
@@ -45,6 +45,7 @@
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
+#include <hoot/core/TestUtils.h>
 
 // Tgs
 #include <tgs/Statistics/Random.h>
@@ -52,8 +53,6 @@
 // Qt
 #include <QDebug>
 #include <QDir>
-
-#include "../TestUtils.h"
 
 using namespace geos::geom;
 

@@ -72,39 +72,10 @@ HEADERS += \
     src/main/cpp/tgs/BigContainers/BigMap.h \
     src/main/cpp/tgs/BigContainers/BigMapStxxl.h \
     src/main/cpp/tgs/BigContainers/Stxxl.h \
-    src/main/cpp/tgs/CostSensitiveLearning/CostSensitiveLearningTrainer.h \
-    src/main/cpp/tgs/CostSensitiveLearning/CslOptions.h \
-    src/main/cpp/tgs/CostSensitiveLearning/CslUtilities.h \
-    src/main/cpp/tgs/CostSensitiveLearning/MetaCostAlgorithm.h \
     src/main/cpp/tgs/DelaunayTriangulation/geom2d.h \
     src/main/cpp/tgs/DelaunayTriangulation/DelaunayTriangulation.h \
     src/main/cpp/tgs/DisjointSet/DisjointSet.h \
     src/main/cpp/tgs/DisjointSet/DisjointSetMap.h \
-    src/main/cpp/tgs/FeatureExtraction/BasicMathCalculatorNode.h \
-    src/main/cpp/tgs/FeatureExtraction/CalculatorGenome.h \
-    src/main/cpp/tgs/FeatureExtraction/CalculatorGenomeNode.h \
-    src/main/cpp/tgs/FeatureExtraction/CfsFitnessFunction.h \
-    src/main/cpp/tgs/FeatureExtraction/ConstantCalculatorNodeSource.h \
-    src/main/cpp/tgs/FeatureExtraction/DataFrameCalculatorNodeSource.h \
-    src/main/cpp/tgs/FeatureExtraction/FeatureScoreFitnessFunction.h \
-    src/main/cpp/tgs/FeatureExtraction/FitnessFunction.h \
-    src/main/cpp/tgs/FeatureExtraction/GeneticAlgorithm.h \
-    src/main/cpp/tgs/FeatureExtraction/Genome.h \
-    src/main/cpp/tgs/FeatureExtraction/MimicGa.h \
-    src/main/cpp/tgs/FeatureExtraction/TreeGenome.h \
-    src/main/cpp/tgs/FeatureExtraction/TreeGenomeNode.h \
-    src/main/cpp/tgs/FeatureExtraction/VectorCalculatorNodeSource.h \
-    src/main/cpp/tgs/FeatureSelection/CfsSubsetEvaluator.h \
-    src/main/cpp/tgs/FeatureSelection/ConsistencySubsetEvaluator.h \
-    src/main/cpp/tgs/FeatureSelection/DataFrameDiscretizer.h \
-    src/main/cpp/tgs/FeatureSelection/FactorEvaluator.h \
-    src/main/cpp/tgs/FeatureSelection/FactorSubsetEvaluator.h \
-    src/main/cpp/tgs/FeatureSelection/FayyadMdlDiscretizer.h \
-    src/main/cpp/tgs/FeatureSelection/GreedyStepwiseSearch.h \
-    src/main/cpp/tgs/FeatureSelection/InformationGainCalculator.h \
-    src/main/cpp/tgs/FeatureSelection/SearchMethod.h \
-    src/main/cpp/tgs/FeatureSelection/SymmetricUncertaintyCalculator.h \
-    src/main/cpp/tgs/Heap/JHeap.h \
     src/main/cpp/tgs/Interpolation/BaseInterpolator.h \
     src/main/cpp/tgs/Interpolation/DelaunayInterpolator.h \
     src/main/cpp/tgs/Interpolation/IdwInterpolator.h \
@@ -157,17 +128,11 @@ HEADERS += \
     src/main/cpp/tgs/System/SystemInfo.h \
     src/main/cpp/tgs/System/Time.h \
     src/main/cpp/tgs/System/Timer.h \
-    src/main/cpp/tgs/Xml/XmlHelper.h \
 
 win32:HEADERS += \
     src/main/cpp/tgs/RStarTree/FilePageStore.h \
     src/main/cpp/tgs/SpinImage/GroundPlaneRemover.h \
     src/main/cpp/tgs/SpinImage/NormalEstimator.h \
-    src/main/cpp/tgs/SpinImage/Points.h \
-    src/main/cpp/tgs/SpinImage/SpinImage.h \
-    src/main/cpp/tgs/SpinImage/SpinImageGenerator.h \
-    src/main/cpp/tgs/SpinImage/SpinImageStack.h \
-    src/main/cpp/tgs/SpinImage/SurfaceMatcher.h
 
 SOURCES += \
     src/main/cpp/tgs/StreamUtils.cpp \
@@ -175,31 +140,8 @@ SOURCES += \
     src/main/cpp/tgs/BigContainers/BigMap.cpp \
     src/main/cpp/tgs/BigContainers/BasicBloomFilter.cpp \
     src/main/cpp/tgs/BigContainers/Stxxl.cpp \
-    src/main/cpp/tgs/CostSensitiveLearning/CostSensitiveLearningTrainer.cpp \
-    src/main/cpp/tgs/CostSensitiveLearning/CslOptions.cpp \
-    src/main/cpp/tgs/CostSensitiveLearning/CslUtilities.cpp \
-    src/main/cpp/tgs/CostSensitiveLearning/MetaCostAlgorithm.cpp \
     src/main/cpp/tgs/DelaunayTriangulation/DelaunayTriangulation.cpp \
     src/main/cpp/tgs/DisjointSet/DisjointSet.cpp \
-    src/main/cpp/tgs/FeatureExtraction/BasicMathCalculatorNode.cpp \
-    src/main/cpp/tgs/FeatureExtraction/CalculatorGenome.cpp \
-    src/main/cpp/tgs/FeatureExtraction/CalculatorGenomeNode.cpp \
-    src/main/cpp/tgs/FeatureExtraction/CfsFitnessFunction.cpp \
-    src/main/cpp/tgs/FeatureExtraction/ConstantCalculatorNodeSource.cpp \
-    src/main/cpp/tgs/FeatureExtraction/DataFrameCalculatorNodeSource.cpp \
-    src/main/cpp/tgs/FeatureExtraction/FeatureScoreFitnessFunction.cpp \
-    src/main/cpp/tgs/FeatureExtraction/GeneticAlgorithm.cpp \
-    src/main/cpp/tgs/FeatureExtraction/MimicGa.cpp \
-    src/main/cpp/tgs/FeatureExtraction/TreeGenome.cpp \
-    src/main/cpp/tgs/FeatureExtraction/TreeGenomeNode.cpp \
-    src/main/cpp/tgs/FeatureExtraction/VectorCalculatorNodeSource.cpp \
-    src/main/cpp/tgs/FeatureSelection/CfsSubsetEvaluator.cpp \
-    src/main/cpp/tgs/FeatureSelection/ConsistencySubsetEvaluator.cpp \
-    src/main/cpp/tgs/FeatureSelection/DataFrameDiscretizer.cpp \
-    src/main/cpp/tgs/FeatureSelection/FayyadMdlDiscretizer.cpp \
-    src/main/cpp/tgs/FeatureSelection/GreedyStepwiseSearch.cpp \
-    src/main/cpp/tgs/FeatureSelection/InformationGainCalculator.cpp \
-    src/main/cpp/tgs/FeatureSelection/SymmetricUncertaintyCalculator.cpp \
     src/main/cpp/tgs/Interpolation/BaseInterpolator.cpp \
     src/main/cpp/tgs/Interpolation/DelaunayInterpolator.cpp \
     src/main/cpp/tgs/Interpolation/IdwInterpolator.cpp \
@@ -244,7 +186,6 @@ SOURCES += \
     src/main/cpp/tgs/System/DisableCout.cpp \
     src/main/cpp/tgs/System/SystemInfo.cpp \
     src/main/cpp/tgs/System/Time.cpp \
-    src/main/cpp/tgs/Xml/XmlHelper.cpp \
 
 
 cppunit:SOURCES += \
@@ -255,15 +196,6 @@ cppunit:SOURCES += \
     src/test/cpp/tgs/DelaunayTriangulation/DelaunayTriangulationTest.cpp \
     src/test/cpp/tgs/DisjointSet/DisjointSetTest.cpp \
     src/test/cpp/tgs/DisjointSet/DisjointSetMapTest.cpp \
-    src/test/cpp/tgs/FeatureExtraction/CalculatorGenomeNodeTest.cpp \
-    src/test/cpp/tgs/FeatureExtraction/CalculatorGenomeTest.cpp \
-    src/test/cpp/tgs/FeatureExtraction/GeneticAlgorithmTest.cpp \
-    src/test/cpp/tgs/FeatureSelection/DataFrameDiscretizerTest.cpp \
-    src/test/cpp/tgs/FeatureSelection/ConsistencySubsetEvaluatorTest.cpp \
-    src/test/cpp/tgs/FeatureSelection/FayyadMdlDiscretizerTest.cpp \
-    src/test/cpp/tgs/FeatureSelection/CfsSubsetEvaluatorTest.cpp \
-    src/test/cpp/tgs/FeatureSelection/GreedyStepwiseSearchTest.cpp \
-    src/test/cpp/tgs/FeatureSelection/SymmetricUncertaintyCalculatorTest.cpp \
     src/test/cpp/tgs/Interpolation/KernelEstimationInterpolatorTest.cpp \
     src/test/cpp/tgs/Interpolation/DelaunayInterpolatorTest.cpp \
     src/test/cpp/tgs/Io/StdIoDeviceTest.cpp \
@@ -283,21 +215,9 @@ cppunit:SOURCES += \
     src/test/cpp/tgs/RStarTree/HilbertCurveTest.cpp \
     src/test/cpp/tgs/RStarTree/KnnIteratorNdTest.cpp \
     src/test/cpp/tgs/System/SystemInfoTest.cpp \
-    src/test/cpp/tgs/Xml/XmlHelperTest.cpp \
 
 win32:SOURCES += src/main/cpp/tgs/RStarTree/FilePageStore.cpp \
-    src/main/cpp/tgs/SpinImage/GroundPlaneRemover.cpp \
-    src/main/cpp/tgs/SpinImage/NormalEstimator.cpp \
-    src/main/cpp/tgs/SpinImage/SpinImage.cpp \
-    src/main/cpp/tgs/SpinImage/SpinImageGenerator.cpp \
-    src/main/cpp/tgs/SpinImage/SpinImageStack.cpp \
-    src/main/cpp/tgs/SpinImage/SurfaceMatcher.cpp \
     src/test/cpp/tgs/RStarTree/PageStoreTest.cpp \
-    src/test/cpp/tgs/SpinImage/SpinImageGeneratorTest.cpp \
-    src/test/cpp/tgs/SpinImage/GroundPlaneRemoverTest.cpp \
-    src/test/cpp/tgs/SpinImage/SpinImageStackTest.cpp \
-    src/test/cpp/tgs/SpinImage/NormalEstimatorTest.cpp \
-    src/test/cpp/tgs/SpinImage/SpinImageTest.cpp \
 
 win32:INCLUDEPATH += $${THIRDPARTY_PATH}/NewMat/include
 
