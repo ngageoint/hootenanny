@@ -79,10 +79,6 @@ private:
   ElementId _exempt;
 };
 
-CopyMapSubsetOp::CopyMapSubsetOp()
-{
-}
-
 CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, const set<ElementId>& eids) :
   _eids(eids),
   _from(from)

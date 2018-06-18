@@ -41,7 +41,6 @@ class ExtractNodesVisitor :  public ConstElementVisitor
 {
 public:
 
-  ExtractNodesVisitor() { QList<ConstNodePtr> test; _n = test; }
   ExtractNodesVisitor(QList<ConstNodePtr>& n) : _n(n) {}
 
   virtual void visit(const boost::shared_ptr<const Element>& e);
