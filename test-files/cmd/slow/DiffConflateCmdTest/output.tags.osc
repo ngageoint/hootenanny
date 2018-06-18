@@ -105,7 +105,7 @@
             <tag k="surface" v="cobblestone"/>
             <tag k="error:circular" v="15"/>
         </way>
-        <way id="1" version="0" timestamp="">
+        <way id="1" version="1" timestamp="2018-06-11T16:49:01Z">
             <nd ref="1"/>
             <nd ref="2"/>
             <nd ref="3"/>
