@@ -38,6 +38,8 @@ class ElementTypeCriterion : public BaseElementFilter
 
 public:
 
+  static std::string className() { return "hoot::ElementTypeCriterion"; }
+
   ElementTypeCriterion() {}
   ElementTypeCriterion(ElementType::Type eType) : _elementType(eType) {}
 

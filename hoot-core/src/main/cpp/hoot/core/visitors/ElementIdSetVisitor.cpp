@@ -26,9 +26,13 @@
  */
 #include "ElementIdSetVisitor.h"
 
+// Hoot
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
+
+HOOT_FACTORY_REGISTER(ConstElementVisitor, ElementIdSetVisitor)
 
 void ElementIdSetVisitor::visit(const ConstElementPtr& e)
 {

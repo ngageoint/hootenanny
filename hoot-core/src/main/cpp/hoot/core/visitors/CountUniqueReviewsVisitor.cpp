@@ -36,7 +36,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ConstElementVisitor, CountUniqueReviewsVisitor)
 
-
 void CountUniqueReviewsVisitor::visit(const ConstElementPtr& e)
 {
   set<ReviewMarker::ReviewUid> reviews =

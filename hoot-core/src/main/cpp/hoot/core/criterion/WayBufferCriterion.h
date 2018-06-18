@@ -45,6 +45,10 @@ class WayBufferCriterion : public ElementCriterion
 {
 public:
 
+  static std::string className() { return "hoot::WayBufferCriterion"; }
+
+  WayBufferCriterion();
+
   /**
    * Buffer is the buffer in meters to put around the way. The circular
    * error of the base way and the way being evaluated will automatically

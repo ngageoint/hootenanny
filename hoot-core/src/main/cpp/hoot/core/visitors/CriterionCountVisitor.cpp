@@ -32,6 +32,8 @@
 namespace hoot
 {
 
+HOOT_FACTORY_REGISTER(ConstElementVisitor, CriterionCountVisitor)
+
 CriterionCountVisitor::CriterionCountVisitor():
   _map(NULL),
   _count(0),

@@ -30,7 +30,7 @@
 #include <hoot/core/conflate/matching/MatchCreator.h>
 #include <hoot/core/conflate/merging/Merger.h>
 #include <hoot/core/conflate/merging/MergerCreator.h>
-#include <hoot/core/ops/CopySubsetOp.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
 
 namespace hoot
 {
@@ -162,7 +162,7 @@ MultiaryClusterPtr MultiaryPoiMergeCache::merge(MultiaryClusterPtr c1, MultiaryC
   }
 
   OsmMapPtr tmp(new OsmMap(_map->getProjection()));
-  CopySubsetOp(_map, eids).apply(tmp);
+  CopyMapSubsetOp(_map, eids).apply(tmp);
 
   std::vector< std::pair<ElementId, ElementId> > replaced;
 

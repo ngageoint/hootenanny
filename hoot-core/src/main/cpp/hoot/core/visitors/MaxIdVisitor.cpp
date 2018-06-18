@@ -26,8 +26,13 @@
  */
 #include "MaxIdVisitor.h"
 
+// Hoot
+#include <hoot/core/util/Factory.h>
+
 namespace hoot
 {
+
+HOOT_FACTORY_REGISTER(ConstElementVisitor, MaxIdVisitor)
 
 void MaxIdVisitor::visit(const ConstElementPtr& e)
 {

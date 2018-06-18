@@ -26,7 +26,6 @@
  */
 #include "WeightedShapeDistanceExtractor.h"
 
-#include <hoot/core/visitors/WayVisitor.h>
 #include <hoot/core/algorithms/ProbabilityOfMatch.h>
 #include <hoot/core/util/Factory.h>
 

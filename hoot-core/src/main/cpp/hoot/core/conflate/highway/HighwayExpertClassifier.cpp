@@ -31,7 +31,7 @@
 #include <hoot/core/algorithms/MaximalNearestSubline.h>
 #include <hoot/core/algorithms/ProbabilityOfMatch.h>
 #include <hoot/core/util/ElementConverter.h>
-#include <hoot/core/ops/CopySubsetOp.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
 
 using namespace std;
@@ -76,7 +76,7 @@ MatchClassification HighwayExpertClassifier::classify(const ConstOsmMapPtr& map,
   MatchClassification result;
 
   OsmMapPtr mapCopy(new OsmMap());
-  CopySubsetOp(map,
+  CopyMapSubsetOp(map,
                match.getSubline1().getElementId(),
                match.getSubline2().getElementId()).apply(mapCopy);
 

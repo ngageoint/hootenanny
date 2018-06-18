@@ -35,12 +35,15 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace geos::geom;
 using namespace std;
 
 namespace hoot
 {
+
+HOOT_FACTORY_REGISTER(ConstElementVisitor, MultiLineStringVisitor)
 
 MultiLineStringVisitor::MultiLineStringVisitor() :
   _provider(),

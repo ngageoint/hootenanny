@@ -48,6 +48,7 @@ public:
 
   static std::string className() { return "hoot::MatchCandidateCountVisitor"; }
 
+  MatchCandidateCountVisitor() {}
   MatchCandidateCountVisitor(const std::vector<boost::shared_ptr<MatchCreator> >& matchCreators);
 
   virtual void visit(const boost::shared_ptr<const Element>& e);

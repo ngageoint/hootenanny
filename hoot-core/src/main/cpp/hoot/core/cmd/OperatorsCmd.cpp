@@ -34,6 +34,7 @@
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/visitors/SingleStatistic.h>
 
 namespace hoot
 {
@@ -84,7 +85,20 @@ public:
         Factory::getInstance().constructObject<Operator>(cmds[i]));
       if (!c->getDescription().isEmpty())
       {
-        const QString name = QString::fromStdString(cmds[i]).replace("hoot::", "");
+        bool supportsSingleStat = false;
+        boost::shared_ptr<SingleStatistic> singleStat =
+          boost::dynamic_pointer_cast<SingleStatistic>(c);
+        if (singleStat.get())
+        {
+          supportsSingleStat = true;
+        }
+
+        QString name = QString::fromStdString(cmds[i]).replace("hoot::", "");
+        //append '*' to the names of visitors that support the SingleStatistic interface
+        if (supportsSingleStat)
+        {
+          name += "*";
+        }
         const int indentAfterName = maxNameSize - name.size();
         const int indentAfterType = maxTypeSize - operatorType.size();
         const QString line =

@@ -26,8 +26,13 @@
  */
 #include "ElementCountVisitor.h"
 
+// Hoot
+#include <hoot/core/util/Factory.h>
+
 namespace hoot
 {
+
+HOOT_FACTORY_REGISTER(ConstElementVisitor, ElementCountVisitor)
 
 void ElementCountVisitor::visit(const ConstElementPtr& /*e*/)
 {

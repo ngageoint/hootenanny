@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef COPYSUBSETOP_H
-#define COPYSUBSETOP_H
+#ifndef COPYMAPSUBSETOP_H
+#define COPYMAPSUBSETOP_H
 
 // hoot
 #include <hoot/core/OsmMap.h>
@@ -37,18 +37,17 @@ namespace hoot
 
 /**
  * Copies a subset of the map into a new map. The old map is unchanged.
- *
- * TODO: rename to CopyMapSubsetOp
  */
-class CopySubsetOp : public OsmMapOperation
+class CopyMapSubsetOp : public OsmMapOperation
 {
 public:
 
-  CopySubsetOp(const ConstOsmMapPtr& from, const std::set<ElementId>& eids);
+  static std::string className() { return "hoot::CopyMapSubsetOp"; }
 
-  CopySubsetOp(const ConstOsmMapPtr& from, const std::vector<long>& ids);
-
-  CopySubsetOp(const ConstOsmMapPtr& from, ElementId eid1, ElementId eid2);
+  CopyMapSubsetOp();
+  CopyMapSubsetOp(const ConstOsmMapPtr& from, const std::set<ElementId>& eids);
+  CopyMapSubsetOp(const ConstOsmMapPtr& from, const std::vector<long>& ids);
+  CopyMapSubsetOp(const ConstOsmMapPtr& from, ElementId eid1, ElementId eid2);
 
   /**
    * A new map is created and the eids specified in the constructor and their depedencies will be
@@ -56,14 +55,17 @@ public:
    */
   virtual void apply(OsmMapPtr& map);
 
+  void setFrom(const ConstOsmMapPtr& from) { _from = from; }
+  void setEids(const std::set<ElementId>& eids) { _eids = eids; }
+
   virtual QString getDescription() const { return "Copies a subset of the map into a new map"; }
 
 private:
 
   std::set<ElementId> _eids;
-  const ConstOsmMapPtr& _from;
+  ConstOsmMapPtr _from;
 };
 
 }
 
-#endif // COPYSUBSETOP_H
+#endif // COPYMAPSUBSETOP_H

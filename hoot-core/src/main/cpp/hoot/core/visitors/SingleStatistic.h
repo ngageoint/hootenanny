@@ -33,6 +33,7 @@ namespace hoot
 class SingleStatistic
 {
 public:
+
   virtual double getStat() const = 0;
 };
 

@@ -29,11 +29,16 @@
 // Standard
 #include <numeric>
 
+// Hoot
+#include <hoot/core/util/Factory.h>
+
 using namespace geos::geom;
 using namespace std;
 
 namespace hoot
 {
+
+HOOT_FACTORY_REGISTER(ConstElementVisitor, MedianNodeVisitor)
 
 MedianNodeVisitor::MedianNodeVisitor()
 {

@@ -28,11 +28,14 @@
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/visitors/SingleStatistic.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace std;
 
 namespace hoot
 {
+
+HOOT_FACTORY_REGISTER(ConstElementVisitor, CalculateMapBoundsVisitor)
 
 CalculateMapBoundsVisitor::CalculateMapBoundsVisitor():
   _envelope()

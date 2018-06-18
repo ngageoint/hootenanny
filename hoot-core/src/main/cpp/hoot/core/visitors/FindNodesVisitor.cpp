@@ -28,12 +28,15 @@
 #include "FindNodesVisitor.h"
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace geos::geom;
 using namespace std;
 
 namespace hoot
 {
+
+HOOT_FACTORY_REGISTER(ConstElementVisitor, FindNodesVisitor)
 
 FindNodesVisitor::FindNodesVisitor (ElementCriterion* pCrit):
   _pCrit(pCrit)

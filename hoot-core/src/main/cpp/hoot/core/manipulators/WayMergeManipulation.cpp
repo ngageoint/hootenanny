@@ -41,7 +41,7 @@
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/ops/CopySubsetOp.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
@@ -174,7 +174,7 @@ double WayMergeManipulation::calculateScore(ConstOsmMapPtr map) const
 double WayMergeManipulation::_calculateExpertProbability(ConstOsmMapPtr map) const
 {
   OsmMapPtr theMap(new OsmMap());
-  CopySubsetOp(map,
+  CopyMapSubsetOp(map,
                ElementId(ElementType::Way, _left),
                ElementId(ElementType::Way, _right)).apply(theMap);
 

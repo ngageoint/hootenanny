@@ -26,8 +26,13 @@
  */
 #include "MinIdVisitor.h"
 
+// Hoot
+#include <hoot/core/util/Factory.h>
+
 namespace hoot
 {
+
+HOOT_FACTORY_REGISTER(ConstElementVisitor, MinIdVisitor)
 
 void MinIdVisitor::visit(const ConstElementPtr& e)
 {

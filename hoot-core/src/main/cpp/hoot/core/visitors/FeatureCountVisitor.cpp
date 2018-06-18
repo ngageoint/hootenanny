@@ -27,9 +27,12 @@
 #include "FeatureCountVisitor.h"
 
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
+
+HOOT_FACTORY_REGISTER(ConstElementVisitor, FeatureCountVisitor)
 
 void FeatureCountVisitor::visit(const boost::shared_ptr<const Element>& e)
 {
