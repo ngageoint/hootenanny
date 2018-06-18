@@ -32,6 +32,7 @@
 #include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/util/Factory.h>
 
+
 using namespace std;
 
 namespace hoot
