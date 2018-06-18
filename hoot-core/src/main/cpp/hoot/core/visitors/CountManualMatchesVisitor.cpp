@@ -46,7 +46,11 @@ void CountManualMatchesVisitor::visit(const ConstElementPtr& e)
   QStringList refIds;
   if (tags.contains(MetadataTags::Ref2()))
   {
-    refIds += tags.get(MetadataTags::Ref2()).split(";");
+    const QString ref2Val = tags.get(MetadataTags::Ref2());
+    if (ref2Val.toLower() != "todo")
+    {
+      refIds += ref2Val.split(";");
+    }
   }
   if (tags.contains("REVIEW"))
   {
