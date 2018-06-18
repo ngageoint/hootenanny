@@ -30,15 +30,11 @@
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/criterion/ContainsNodeCriterion.h>
 #include <hoot/core/criterion/TagCriterion.h>
-#include <hoot/core/util/Factory.h>
-
 
 using namespace std;
 
 namespace hoot
 {
-
-HOOT_FACTORY_REGISTER(ConstElementVisitor, FindWaysVisitor)
 
 FindWaysVisitor::FindWaysVisitor (ElementCriterion* pCrit):
   _pCrit(pCrit)

@@ -28,14 +28,11 @@
 
 #include <hoot/core/conflate/matching/MatchCreator.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/Factory.h>
 
 using namespace std;
 
 namespace hoot
 {
-
-HOOT_FACTORY_REGISTER(ConstElementVisitor, MatchCandidateCountVisitor)
 
 MatchCandidateCountVisitor::MatchCandidateCountVisitor(
   const vector<boost::shared_ptr<MatchCreator> >& matchCreators) :

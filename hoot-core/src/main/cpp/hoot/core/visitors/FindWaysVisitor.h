@@ -42,7 +42,6 @@ public:
 
   static std::string className() { return "hoot::FindWaysVisitor"; }
 
-  FindWaysVisitor() {}
   FindWaysVisitor(ElementCriterion* pCrit);
 
   void setOsmMap(const OsmMap* map) { _map = map; }

@@ -26,9 +26,13 @@
  */
 #include "ExtractNodesVisitor.h"
 
+// Hoot
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
+
+HOOT_FACTORY_REGISTER(ConstElementVisitor, ExtractNodesVisitor)
 
 void ExtractNodesVisitor::visit(const boost::shared_ptr<const Element>& e)
 {

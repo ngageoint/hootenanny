@@ -28,14 +28,11 @@
 
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/Factory.h>
 
 using namespace std;
 
 namespace hoot
 {
-
-HOOT_FACTORY_REGISTER(OsmMapOperation, CopyMapSubsetOp)
 
 class AddAllVisitor : public ConstElementVisitor
 {
