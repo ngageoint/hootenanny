@@ -34,7 +34,7 @@
 namespace hoot
 {
   class Relation;
-  typedef HashMap<long, RelationPtr > RelationMap;
+  typedef HashMap<long, RelationPtr> RelationMap;
 }
 
 #endif // RELATIONMAP_H
