@@ -31,10 +31,10 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/filters/ChainCriterion.h>
+#include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
-#include <hoot/core/filters/TagCriterion.h>
+#include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
 
 // Standard

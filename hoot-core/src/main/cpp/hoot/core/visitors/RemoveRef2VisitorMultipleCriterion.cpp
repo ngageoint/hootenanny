@@ -30,10 +30,10 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/filters/ChainCriterion.h>
+#include <hoot/core/criterion/ChainCriterion.h>
 
-#include <hoot/core/filters/PoiCriterion.h>
-#include <hoot/core/filters/BuildingCriterion.h>
+#include <hoot/core/criterion/PoiCriterion.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
 
 namespace hoot
 {

@@ -52,14 +52,14 @@ public:
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
       map,
-      "test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm",
+      "test-files/visitors/CountManualMatchesVisitorTest.osm",
       false,
       Status::Unknown2);
 
     CountManualMatchesVisitor uut;
     map->visitRo(uut);
     int numMatchesMade = (int)uut.getStat();
-    CPPUNIT_ASSERT_EQUAL(37, numMatchesMade);
+    CPPUNIT_ASSERT_EQUAL(35, numMatchesMade);
   }
 
 };

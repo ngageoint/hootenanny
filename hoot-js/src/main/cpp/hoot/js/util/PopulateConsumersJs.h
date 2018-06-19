@@ -32,7 +32,7 @@
 #include <hoot/core/algorithms/StringDistanceConsumer.h>
 #include <hoot/core/algorithms/aggregator/ValueAggregatorConsumer.h>
 #include <hoot/core/elements/ElementConsumer.h>
-#include <hoot/core/filters/ElementCriterionConsumer.h>
+#include <hoot/core/criterion/ElementCriterionConsumer.h>
 #include <hoot/core/visitors/ElementVisitorConsumer.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/Log.h>
@@ -40,8 +40,8 @@
 #include <hoot/js/OsmMapJs.h>
 #include <hoot/js/algorithms/StringDistanceJs.h>
 #include <hoot/js/elements/ElementJs.h>
-#include <hoot/js/filter/ElementCriterionJs.h>
-#include <hoot/js/filter/JsFunctionCriterion.h>
+#include <hoot/js/criterion/ElementCriterionJs.h>
+#include <hoot/js/criterion/JsFunctionCriterion.h>
 #include <hoot/js/util/JsFunctionConsumer.h>
 #include <hoot/js/visitors/ElementVisitorJs.h>
 #include <hoot/js/algorithms/aggregator/ValueAggregatorJs.h>

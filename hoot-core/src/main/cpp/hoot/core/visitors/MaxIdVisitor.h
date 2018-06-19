@@ -43,6 +43,8 @@ class MaxIdVisitor : public ConstElementVisitor, public SingleStatistic
 {
 public:
 
+  static std::string className() { return "hoot::MaxIdVisitor"; }
+
   MaxIdVisitor() : _maxId(-std::numeric_limits<long>::max()) {}
 
   virtual ~MaxIdVisitor() {}

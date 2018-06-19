@@ -30,9 +30,9 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/MatchType.h>
-#include <hoot/core/filters/ArbitraryCriterion.h>
-#include <hoot/core/filters/ChainCriterion.h>
-#include <hoot/core/filters/StatusCriterion.h>
+#include <hoot/core/criterion/ArbitraryCriterion.h>
+#include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfPath.h>

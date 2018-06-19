@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "DividedHighwayMerger.h"
@@ -45,13 +45,13 @@ using namespace geos::operation::distance;
 #include <hoot/core/algorithms/LineStringAverager.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/filters/NotCriterion.h>
-#include <hoot/core/filters/ParallelWayCriterion.h>
-#include <hoot/core/filters/StatusCriterion.h>
-#include <hoot/core/filters/WayDirectionCriterion.h>
-#include <hoot/core/filters/WayBufferCriterion.h>
-#include <hoot/core/filters/OneWayCriterion.h>
-#include <hoot/core/filters/UnknownCriterion.h>
+#include <hoot/core/criterion/NotCriterion.h>
+#include <hoot/core/criterion/ParallelWayCriterion.h>
+#include <hoot/core/criterion/StatusCriterion.h>
+#include <hoot/core/criterion/WayDirectionCriterion.h>
+#include <hoot/core/criterion/WayBufferCriterion.h>
+#include <hoot/core/criterion/OneWayCriterion.h>
+#include <hoot/core/criterion/UnknownCriterion.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/ElementConverter.h>

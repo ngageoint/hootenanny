@@ -114,7 +114,8 @@ public:
 
   virtual QString getName() const { return "score-matches"; }
 
-  virtual QString getDescription() const { return "Scores conflation performance"; }
+  virtual QString getDescription() const
+  { return "Scores conflation performance against manually matched data"; }
 
   class ScoreFunction : public Tgs::NelderMead::Function
   {

@@ -30,7 +30,7 @@
 // hoot
 #include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/filters/ElementCriterionConsumer.h>
+#include <hoot/core/criterion/ElementCriterionConsumer.h>
 
 #include "ElementVisitorConsumer.h"
 

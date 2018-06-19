@@ -41,7 +41,7 @@
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/polygon/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/EdgeDistanceExtractor.h>
-#include <hoot/core/ops/CopySubsetOp.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/util/GeometryConverter.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/util/Log.h>
@@ -246,7 +246,7 @@ bool HighwayMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sh
   eids.insert(other1);
   eids.insert(other2);
   OsmMapPtr copiedMap(new OsmMap(map->getProjection()));
-  CopySubsetOp(map, eids).apply(copiedMap);
+  CopyMapSubsetOp(map, eids).apply(copiedMap);
 
   WaySublineMatchString match(_sublineMatch, copiedMap);
 

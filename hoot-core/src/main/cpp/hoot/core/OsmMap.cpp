@@ -40,8 +40,8 @@ using namespace boost;
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/Node.h>
-#include <hoot/core/filters/NodeFilter.h>
-#include <hoot/core/filters/WayFilter.h>
+#include <hoot/core/criterion/NodeFilter.h>
+#include <hoot/core/criterion/WayFilter.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/HootException.h>

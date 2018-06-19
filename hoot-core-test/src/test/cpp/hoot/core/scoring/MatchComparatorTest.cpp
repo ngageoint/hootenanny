@@ -27,7 +27,7 @@
 
 // Hoot
 #include <hoot/core/conflate/UnifyingConflator.h>
-#include <hoot/core/filters/TagKeyCriterion.h>
+#include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/scoring/MatchComparator.h>

@@ -28,8 +28,8 @@
 
 // hoot
 #include <hoot/core/conflate/ReviewMarker.h>
-#include <hoot/core/filters/BaseFilter.h>
-#include <hoot/core/filters/ElementTypeCriterion.h>
+#include <hoot/core/criterion/BaseFilter.h>
+#include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/ops/BuildingPartMergeOp.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/ReplaceElementOp.h>

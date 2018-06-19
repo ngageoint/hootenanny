@@ -35,7 +35,7 @@
 #include <hoot/core/algorithms/DirectionFinder.h>
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
-#include <hoot/core/ops/CopySubsetOp.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ElementConverter.h>
 
@@ -52,7 +52,7 @@ FrechetDistance::FrechetDistance(const ConstOsmMapPtr &map, const ConstWayPtr &w
 {
   //  Copy the map and two ways
   _map.reset(new OsmMap());
-  CopySubsetOp(map,
+  CopyMapSubsetOp(map,
                way1->getElementId(),
                way2->getElementId()).apply(_map);
   _w1 = _map->getWay(way1->getId());

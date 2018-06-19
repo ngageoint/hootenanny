@@ -28,7 +28,7 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/filters/ArbitraryCriterion.h>
+#include <hoot/core/criterion/ArbitraryCriterion.h>
 #include <hoot/core/ops/RemoveRelationOp.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>

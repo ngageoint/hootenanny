@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "WayMerger.h"
@@ -47,9 +47,9 @@ using namespace geos::operation::distance;
 #include <hoot/core/algorithms/ProbabilityOfMatch.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/filters/StatusCriterion.h>
+#include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/ops/CopySubsetOp.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ElementConverter.h>
@@ -178,7 +178,7 @@ vector<long> WayMerger::_findOtherWays(ConstWayPtr baseWayConst)
   allWays.push_back(baseWayConst->getId());
 
   OsmMapPtr map(new OsmMap());
-  CopySubsetOp(_map, allWays).apply(map);
+  CopyMapSubsetOp(_map, allWays).apply(map);
 
 
   WayPtr baseWay = map->getWay(baseWayConst->getId());

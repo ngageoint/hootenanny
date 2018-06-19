@@ -34,7 +34,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/linearreference/WaySublineMatch.h>
 #include <hoot/core/algorithms/MaximalSublineMatcher.h>
-#include <hoot/core/ops/CopySubsetOp.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/visitors/ExtractWaysVisitor.h>
@@ -142,7 +142,7 @@ MaximalSublineStringMatcher::ScoredMatch MaximalSublineStringMatcher::_evaluateM
   _insertElementIds(ways1, eids);
   _insertElementIds(ways2, eids);
   OsmMapPtr copiedMap(new OsmMap(map->getProjection()));
-  CopySubsetOp(map, eids).apply(copiedMap);
+  CopyMapSubsetOp(map, eids).apply(copiedMap);
 
   vector<WayPtr> prep1 = _changeMap(ways1, copiedMap);
   vector<WayPtr> prep2 = _changeMap(ways2, copiedMap);

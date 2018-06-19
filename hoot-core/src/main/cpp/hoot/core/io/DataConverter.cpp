@@ -34,7 +34,7 @@
 #include <hoot/core/io/ElementStreamer.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/filters/ElementCriterion.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/IoUtils.h>

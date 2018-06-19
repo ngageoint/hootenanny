@@ -52,7 +52,7 @@
 #include <hoot/core/conflate/polygon/extractors/OverlapExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/SmallerOverlapExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/AngleHistogramExtractor.h>
-#include <hoot/core/ops/CopySubsetOp.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/schema/TranslateStringDistance.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -242,7 +242,7 @@ map<QString, double> HighwayRfClassifier::getFeatures(const ConstOsmMapPtr& m,
   eids.insert(eid1);
   eids.insert(eid2);
   OsmMapPtr copiedMap(new OsmMap(m->getProjection()));
-  CopySubsetOp(m, eids).apply(copiedMap);
+  CopyMapSubsetOp(m, eids).apply(copiedMap);
   WaySublineMatchString copiedMatch(match, copiedMap);
 
   // split the shared line based on the matching subline
