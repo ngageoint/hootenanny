@@ -46,6 +46,8 @@ class CalculateStatsOp : public ConstOsmMapOperation
 {
 public:
 
+  static std::string className() { return "hoot::CalculateStatsOp"; }
+
   CalculateStatsOp(QString mapName = "", bool inputIsConflatedMapOutput = false);
   CalculateStatsOp(ElementCriterionPtr criterion, QString mapName = "",
                    bool inputIsConflatedMapOutput = false);

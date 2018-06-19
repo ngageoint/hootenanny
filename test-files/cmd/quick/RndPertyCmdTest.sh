@@ -18,4 +18,5 @@ hoot perty -D perty.search.distance=20 \
 
 
 # Checking for a match is not a good idea, because perturbation is random
+# TODO: use the random seeing feature in perty, then we can check for the match
 # hoot map-diff $testfile $outputfile || diff $testfile $outputfile

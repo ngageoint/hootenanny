@@ -37,7 +37,7 @@
 // Hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
-#include <hoot/core/ops/CopySubsetOp.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/util/Log.h>
 
 #include "../../TestUtils.h"
@@ -71,7 +71,7 @@ public:
     set<ElementId> eids;
     eids.insert(w1->getElementId());
     eids.insert(w2->getElementId());
-    CopySubsetOp(map, eids).apply(copy);
+    CopyMapSubsetOp(map, eids).apply(copy);
 
     WaySublineMatchString::MatchCollection mc;
     mc.push_back(WaySublineMatch(
@@ -100,7 +100,7 @@ public:
     set<ElementId> eids;
     eids.insert(w1->getElementId());
     eids.insert(w2->getElementId());
-    CopySubsetOp(map, eids).apply(copy);
+    CopyMapSubsetOp(map, eids).apply(copy);
 
     WaySublineMatchString::MatchCollection mc1;
     mc1.push_back(WaySublineMatch(

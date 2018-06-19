@@ -40,7 +40,9 @@ class FindWaysVisitor :  public ElementConstOsmMapVisitor
 {
 public:
 
-  FindWaysVisitor (ElementCriterion* pCrit);
+  static std::string className() { return "hoot::FindWaysVisitor"; }
+
+  FindWaysVisitor(ElementCriterion* pCrit);
 
   void setOsmMap(const OsmMap* map) { _map = map; }
 

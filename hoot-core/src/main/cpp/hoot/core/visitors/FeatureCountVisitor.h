@@ -43,6 +43,8 @@ class FeatureCountVisitor : public ElementConstOsmMapVisitor, public SingleStati
 {
 public:
 
+  static std::string className() { return "hoot::FeatureCountVisitor"; }
+
   FeatureCountVisitor() : _count(0) {}
 
   virtual ~FeatureCountVisitor() {}

@@ -74,6 +74,8 @@ using namespace std;
 namespace hoot
 {
 
+HOOT_FACTORY_REGISTER(OsmMapOperation, CalculateStatsOp)
+
 CalculateStatsOp::CalculateStatsOp(QString mapName, bool inputIsConflatedMapOutput) :
   _mapName(mapName),
   _quick(false),

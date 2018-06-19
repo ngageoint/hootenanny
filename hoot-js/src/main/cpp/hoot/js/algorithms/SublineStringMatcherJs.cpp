@@ -31,7 +31,7 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/algorithms/MultiLineStringSplitter.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/ops/CopySubsetOp.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/js/JsRegistrar.h>
@@ -100,7 +100,7 @@ void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<
     eids.insert(e1->getElementId());
     eids.insert(e2->getElementId());
     OsmMapPtr copiedMap(new OsmMap(m->getProjection()));
-    CopySubsetOp(m, eids).apply(copiedMap);
+    CopyMapSubsetOp(m, eids).apply(copiedMap);
     WaySublineMatchString copiedMatch(match, copiedMap);
 
     // split the shared line based on the matching subline

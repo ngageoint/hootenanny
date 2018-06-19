@@ -41,6 +41,8 @@ class WayDirectionCriterion : public ElementCriterion
 {
 public:
 
+  static std::string className() { return "hoot::WayDirectionCriterion"; }
+
   WayDirectionCriterion(const ConstOsmMapPtr& map,
                         ConstWayPtr baseWay,
                         bool similarDirection = true);
