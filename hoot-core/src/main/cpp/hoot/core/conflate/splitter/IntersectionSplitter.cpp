@@ -224,7 +224,6 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
         concurrent_count++;
     }
 
-    // TODO: Need to figure out why this doesn't play nice with network conflation
     //  A split point is found when there is at least one non-concurrent way at this node
     if (concurrent_count < otherWays_count)
     {
