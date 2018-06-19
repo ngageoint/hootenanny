@@ -41,7 +41,7 @@ class MemChangesetProvider : public ChangeSetProvider
 
 public:
 
-  MemChangesetProvider(boost::shared_ptr<OGRSpatialReference> pProjection);
+  explicit MemChangesetProvider(boost::shared_ptr<OGRSpatialReference> pProjection);
 
   /**
    * @see ChangeSetProvider

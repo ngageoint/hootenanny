@@ -35,7 +35,7 @@
 namespace hoot
 {
   class Node;
-  typedef HashMap<long, NodePtr > NodeMap;
+  typedef HashMap<long, NodePtr> NodeMap;
 }
 
 #endif // NODEMAP_H

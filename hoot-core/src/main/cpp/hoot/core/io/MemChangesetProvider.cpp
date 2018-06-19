@@ -34,15 +34,17 @@ namespace hoot
 MemChangesetProvider::MemChangesetProvider(boost::shared_ptr<OGRSpatialReference> pProjection):
   _projection(pProjection)
 {
+  // empty
 }
 
 MemChangesetProvider::~MemChangesetProvider()
 {
+  // empty
 }
 
 void MemChangesetProvider::close()
 {
-
+  // nothing to do here
 }
 
 boost::shared_ptr<OGRSpatialReference> MemChangesetProvider::getProjection() const

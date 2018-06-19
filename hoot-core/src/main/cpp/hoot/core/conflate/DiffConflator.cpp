@@ -168,21 +168,21 @@ void DiffConflator::storeOriginalIDs(OsmMapPtr& pMap)
 {
   // Nodes
   const NodeMap &nodes = pMap->getNodes();
-  for (auto it = nodes.begin(); it != nodes.end(); ++it)
+  for (HashMap<long, NodePtr>::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
     _originalIds.insert(ElementId(ElementType::Node, it->first));
   }
 
   // Ways
   const WayMap &ways = pMap->getWays();
-  for (auto it = ways.begin(); it != ways.end(); ++it)
+  for (HashMap<long, WayPtr>::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     _originalIds.insert(ElementId(ElementType::Way, it->first));
   }
 
   // Relations
   const RelationMap &relations = pMap->getRelations();
-  for (auto it = relations.begin(); it != relations.end(); ++it)
+  for (HashMap<long, RelationPtr>::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     _originalIds.insert(ElementId(ElementType::Relation, it->first));
   }
@@ -198,7 +198,7 @@ void DiffConflator::_calcAndStoreTagChanges()
 
   for (std::vector<const Match*>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
   {
-    std::set< std::pair<ElementId, ElementId> > pairs = (*mit)->getMatchPairs();
+    std::set< std::pair<ElementId, ElementId>> pairs = (*mit)->getMatchPairs();
 
     // Go through our match pairs, calculate tag diff for elements. We only
     // consider the "Original" elements when we do this - we want to ignore
@@ -231,16 +231,14 @@ void DiffConflator::_calcAndStoreTagChanges()
 
       // Double check to make sure we don't create multiple changes for the
       // same element
-      if (!_pTagChanges->containsChange(pOldElement->getElementId()))
+      if (!_pTagChanges->containsChange(pOldElement->getElementId())
+          && _compareTags(pOldElement->getTags(), pNewElement->getTags()))
       {
-        if(_compareTags(pOldElement->getTags(), pNewElement->getTags()))
-        {
-          // Make new change
-          Change newChange = _getChange(pOldElement, pNewElement);
+        // Make new change
+        Change newChange = _getChange(pOldElement, pNewElement);
 
-          // Add it to our list
-          _pTagChanges->addChange(newChange);
-        }
+        // Add it to our list
+        _pTagChanges->addChange(newChange);
       }
     }
   }
@@ -253,13 +251,12 @@ bool DiffConflator::_compareTags (const Tags &oldTags, const Tags &newTags)
   for (Tags::const_iterator newTagIt = newTags.begin(); newTagIt != newTags.end(); ++newTagIt)
   {
     QString newTagKey = newTagIt.key();
-    if (newTagKey != MetadataTags::Ref1()
-        && !ignoreList.contains(newTagKey, Qt::CaseInsensitive))
+    if (newTagKey != MetadataTags::Ref1() // Make sure not ref1
+        && !ignoreList.contains(newTagKey, Qt::CaseInsensitive) // Not in our ignore list
+        && (!oldTags.contains(newTagIt.key()) // It's a new tag
+            || oldTags[newTagIt.key()] != newTagIt.value())) // Or it has a different value
     {
-      if (!oldTags.contains(newTagIt.key()) || oldTags[newTagIt.key()] != newTagIt.value())
-      {
-        return true;
-      }
+      return true;
     }
   }
 
