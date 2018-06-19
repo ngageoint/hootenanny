@@ -506,6 +506,7 @@ QString XmlChangeset::getChangesetString(ChangesetInfoPtr changeset, long change
 {
   QString buffer;
   QTextStream ts(&buffer);
+  ts.setCodec("UTF-8");
   //  OSM Changeset tag
   ts << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
      << "<osmChange version=\"0.6\" generator=\""<< HOOT_NAME << "\">\n";
@@ -525,6 +526,7 @@ QString XmlChangeset::getChangeset(ChangesetInfoPtr changeset, long id, Changese
 {
   QString buffer;
   QTextStream ts(&buffer);
+  ts.setCodec("UTF-8");
   XmlElementMap& nodes = _nodes[type];
   XmlElementMap& ways = _ways[type];
   XmlElementMap& relations = _relations[type];
@@ -606,6 +608,7 @@ QString XmlElement::toString(const QXmlStreamAttributes& attributes, long change
 {
   QString buffer;
   QTextStream ts(&buffer);
+  ts.setCodec("UTF-8");
   for (int i = 0; i < attributes.size(); ++i)
   {
     const QXmlStreamAttribute& attribute = attributes.at(i);
@@ -630,7 +633,6 @@ QString& XmlElement::escapeString(QString& value) const
 {
   return value.replace("&", "&amp;")
               .replace("\"", "&quot;")
-              .replace("\'", "&apos;")
               .replace("\n", "&#10;")
               .replace(">", "&gt;")
               .replace("<", "&lt;");
@@ -640,9 +642,9 @@ QString XmlElement::toTagString(const QXmlStreamAttributes& attributes) const
 {
   QString buffer;
   QTextStream ts(&buffer);
+  ts.setCodec("UTF-8");
   QString value(attributes.value("v").toString());
-  escapeString(value);
-  ts << "\t\t\t<tag k=\"" << attributes.value("k").toString() << "\" v=\"" << value.left(255) << "\"/>\n";
+  ts << "\t\t\t<tag k=\"" << attributes.value("k").toString() << "\" v=\"" << escapeString(value) << "\"/>\n";
   return ts.readAll();
 }
 
@@ -661,6 +663,7 @@ QString XmlNode::toString(long changesetId) const
 {
   QString buffer;
   QTextStream ts(&buffer);
+  ts.setCodec("UTF-8");
   ts << "\t\t<node " << XmlElement::toString(_object.second, changesetId);
   if (_tags.size() > 0)
   {
@@ -684,6 +687,7 @@ QString XmlWay::toString(long changesetId) const
 {
   QString buffer;
   QTextStream ts(&buffer);
+  ts.setCodec("UTF-8");
   ts << "\t\t<way " << XmlElement::toString(_object.second, changesetId) << ">\n";
   for (QList<long>::const_iterator it = _nodes.begin(); it != _nodes.end(); ++it)
     ts << "\t\t\t<nd ref=\"" << (_idMap ? _idMap->getNewId(ElementType::Node, *it) : *it) << "\"/>\n";
@@ -712,6 +716,7 @@ QString XmlRelation::toString(long changesetId) const
 {
   QString buffer;
   QTextStream ts(&buffer);
+  ts.setCodec("UTF-8");
   ts << "\t\t<relation " << XmlElement::toString(_object.second, changesetId) << ">\n";
   for (QList<XmlMember>::const_iterator it = _members.begin(); it != _members.end(); ++it)
     ts << it->toString();
@@ -746,6 +751,7 @@ QString XmlMember::toString() const
 {
   QString buffer;
   QTextStream ts(&buffer);
+  ts.setCodec("UTF-8");
   ts << "\t\t\t<member type=\"" << _type << "\" ref=\""
      << (_idMap ? _idMap->getNewId(ElementType::fromString(_type),_ref) : _ref)
      << "\" role=\"" << _role << "\"/>\n";

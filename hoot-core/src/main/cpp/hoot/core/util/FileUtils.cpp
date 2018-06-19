@@ -87,6 +87,7 @@ QStringList FileUtils::tokenizeOutputFileWithoutDates(const QString filePath)
   if (file.open(QIODevice::ReadOnly))
   {
     QTextStream in(&file);
+    in.setCodec("UTF-8");
     while (!in.atEnd())
     {
       QString line = in.readLine();
@@ -109,7 +110,9 @@ QString FileUtils::readFully(const QString path)
   QFile file(path);
   if (file.open(QIODevice::ReadOnly))
   {
-    return file.readAll();
+    QTextStream stream(&file);
+    stream.setCodec("UTF-8");
+    return stream.readAll();
   }
   else
   {
@@ -129,6 +132,7 @@ void FileUtils::writeFully(const QString path, const QString text)
     throw HootException("Error opening file: " + path);
   }
   QTextStream out(&outFile);
+  out.setCodec("UTF-8");
   out << text;
   out.flush();
   outFile.close();

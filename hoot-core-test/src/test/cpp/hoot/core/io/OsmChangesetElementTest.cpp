@@ -42,6 +42,7 @@ class OsmChangesetElementTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runXmlWayTest);
   CPPUNIT_TEST(runXmlRelationTest);
   CPPUNIT_TEST(runXmlChangesetTest);
+  CPPUNIT_TEST(runNonAsciiXmlChangesetTest);
   CPPUNIT_TEST(runXmlChangesetJoinTest);
   CPPUNIT_TEST(runXmlChangesetUpdateTest);
   CPPUNIT_TEST(runXmlChangesetSplitTest);
@@ -98,13 +99,13 @@ public:
     //  Name tags taken from OSM node in Djibouti
     QXmlStreamAttributes tagAttributesAr;
     tagAttributesAr.append("k", "name:ar");
-    tagAttributesAr.append("v", "سفارة جمهورية مصر العربية");
+    tagAttributesAr.append("v", QString::fromUtf8("سفارة جمهورية مصر العربية"));
     QXmlStreamAttributes tagAttributesZh;
     tagAttributesZh.append("k", "name:zh");
-    tagAttributesZh.append("v", "埃及大使馆");
+    tagAttributesZh.append("v", QString::fromUtf8("埃及大使馆"));
     QXmlStreamAttributes tagAttributesFr;
     tagAttributesFr.append("k", "name:fr");
-    tagAttributesFr.append("v", "Ambassade de l'Égypte");
+    tagAttributesFr.append("v", QString::fromUtf8("Ambassade de l'Égypte"));
     XmlObject nameTagAr;
     nameTagAr.first = "tag";
     nameTagAr.second = tagAttributesAr;
@@ -119,10 +120,10 @@ public:
     node.addTag(nameTagFr);
 
     HOOT_STR_EQUALS("\t\t<node id=\"-1\" version=\"0\" "
-                    "lat=\"38.8549321261880536\" lon=\"-104.8979050333482093\" changeset=\"1\">\n"
+                    "lat=\"11.6021625999999998\" lon=\"43.1529881000000017\" changeset=\"1\">\n"
                     "\t\t\t<tag k=\"name:ar\" v=\"سفارة جمهورية مصر العربية\"/>\n"
-                    "\t\t\t<tag k=\"name:ar\" v=\"埃及大使馆\"/>\n"
-                    "\t\t\t<tag k=\"name:ar\" v=\"Ambassade de l'Égypte\"/>\n"
+                    "\t\t\t<tag k=\"name:zh\" v=\"埃及大使馆\"/>\n"
+                    "\t\t\t<tag k=\"name:fr\" v=\"Ambassade de l'Égypte\"/>\n"
                     "\t\t</node>\n",
                     node.toString(1));
   }
@@ -212,6 +213,19 @@ public:
     changeset.loadChangeset("test-files/io/OsmChangesetElementTest/ToyTestAInput.osc");
 
     QString expectedText = FileUtils::readFully("test-files/io/OsmChangesetElementTest/ToyTestAChangeset1.osc");
+
+    ChangesetInfoPtr info(new ChangesetInfo());
+    changeset.calculateChangeset(info);
+
+    HOOT_STR_EQUALS(expectedText, changeset.getChangesetString(info, 1));
+  }
+
+  void runNonAsciiXmlChangesetTest()
+  {
+    XmlChangeset changeset;
+    changeset.loadChangeset("test-files/io/OsmChangesetElementTest/DjiboutiNonAsciiTest.osc");
+
+    QString expectedText = FileUtils::readFully("test-files/io/OsmChangesetElementTest/DjiboutiNonAsciiTestExpected.osc");
 
     ChangesetInfoPtr info(new ChangesetInfo());
     changeset.calculateChangeset(info);

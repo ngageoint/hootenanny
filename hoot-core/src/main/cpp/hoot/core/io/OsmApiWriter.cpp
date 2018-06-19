@@ -144,6 +144,8 @@ OsmApiWriter::OsmApiWriter(const QUrl& url, const QList<QString>& changesets)
 
 bool OsmApiWriter::apply()
 {
+  const int QUEUE_SIZE_MULTIPLIER = 2;
+
   OsmApiNetworkRequestPtr request(new OsmApiNetworkRequest());
   //  Validate API capabilites
   if (!queryCapabilities(request))
@@ -170,18 +172,34 @@ bool OsmApiWriter::apply()
     //  Iterate all changes until there are no more elements to send
     while (_changeset.hasElementsToSend())
     {
-      //  Divide up the changes into atomic changesets
-      ChangesetInfoPtr changeset_info(new ChangesetInfo());
-      //  Repeat divide until all changes have been committed
-      _changesetMutex.lock();
-      bool newChangeset = _changeset.calculateChangeset(changeset_info);
-      _changesetMutex.unlock();
-      //  Add the new work to the queue if there is any
-      if (newChangeset)
+      //  Check the size of the work queue, don't overwork the work queue
+      _workQueueMutex.lock();
+      int queueSize = (int)_workQueue.size();
+      _workQueueMutex.unlock();
+      //  Only queue up enough work to keep all the threads busy with times QUEUE_SIZE_MULTIPLIER
+      //  so that results can come back and update the changeset for more atomic changesets instead
+      //  of a big list of nodes, then ways, then relations.  This will give us fuller more atomic
+      //  changesets towards the end of the job
+      if (queueSize < QUEUE_SIZE_MULTIPLIER * _maxWriters)
       {
-        _workQueueMutex.lock();
-        _workQueue.push(changeset_info);
-        _workQueueMutex.unlock();
+        //  Divide up the changes into atomic changesets
+        ChangesetInfoPtr changeset_info(new ChangesetInfo());
+        //  Repeat divide until all changes have been committed
+        _changesetMutex.lock();
+        bool newChangeset = _changeset.calculateChangeset(changeset_info);
+        _changesetMutex.unlock();
+        //  Add the new work to the queue if there is any
+        if (newChangeset)
+        {
+          _workQueueMutex.lock();
+          _workQueue.push(changeset_info);
+          _workQueueMutex.unlock();
+        }
+        else
+        {
+          //  Allow time for the worker threads to complete some work
+          this_thread::sleep_for(chrono::milliseconds(10));
+        }
       }
       else
       {
