@@ -257,6 +257,8 @@ protected:
   QString toString(const QXmlStreamAttributes& attributes, long changesetId) const;
   QString toTagString(const QXmlStreamAttributes& attributes) const;
 
+  QString& escapeString(QString& value) const;
+
   ElementType::Type _type;
   long _id;
   long _version;

@@ -74,8 +74,8 @@ bool OsmApiNetworkRequest::networkRequest(QUrl url, QNetworkAccessManager::Opera
   if (url.userInfo() != "")
   {
     //  Using basic authentication, replace with OAuth when necessary
-    QString base64 = url.userInfo().toAscii().toBase64();
-    request.setRawHeader("Authorization", QString("Basic %1").arg(base64).toAscii());
+    QString base64 = url.userInfo().toUtf8().toBase64();
+    request.setRawHeader("Authorization", QString("Basic %1").arg(base64).toUtf8());
     url.setUserInfo("");
   }
 
@@ -112,9 +112,9 @@ bool OsmApiNetworkRequest::networkRequest(QUrl url, QNetworkAccessManager::Opera
   if (QNetworkReply::NoError != reply->error())
   {
     QString errMsg = reply->errorString();
-    throw HootException(QString("Network error for request (%1): %2")
+    throw HootException(QString("Network error for request (%1): %2\n%3")
       .arg(url.toString())
-      .arg(errMsg));
+      .arg(errMsg).arg(QString(_content)));
   }
 
   return true;
@@ -159,8 +159,12 @@ bool OsmApiWriter::apply()
     //  Load all of the changesets into memory
     _changeset.setMaxSize(_maxChangesetSize);
     for (int i = 0; i < _changesets.size(); ++i)
+    {
+      LOG_INFO("Loading changeset: " << _changesets[i]);
       _changeset.loadChangeset(_changesets[i]);
+    }
     //  Start the writer threads
+    LOG_INFO("Starting " << _maxWriters << " processing threads.");
     for (int i = 0; i < _maxWriters; ++i)
       _threadPool.push_back(thread(&OsmApiWriter::_changesetThreadFunc, this));
     //  Iterate all changes until there are no more elements to send
@@ -243,12 +247,12 @@ void OsmApiWriter::_changesetThreadFunc()
       //  Create the changeset for the first changeset
       long id = _createChangeset(request, _description);
       //  Display the changeset in TRACE mode
-      LOG_TRACE("\n" << _changeset.getChangesetString(workInfo, id));
+      LOG_TRACE("Thread: " << std::this_thread::get_id() << "\n" << _changeset.getChangesetString(workInfo, id));
       //  Upload the changeset
       if (_uploadChangeset(request, id, _changeset.getChangesetString(workInfo, id)))
       {
         //  Display the upload response in TRACE mode
-        LOG_TRACE("\n" << QString(request->getResponseContent()));
+        LOG_TRACE("Thread: " << std::this_thread::get_id() << "\n" << QString(request->getResponseContent()));
         //  Update the changeset with the response
         _changesetMutex.lock();
         _changeset.updateChangeset(QString(request->getResponseContent()));
@@ -259,7 +263,7 @@ void OsmApiWriter::_changesetThreadFunc()
       {
         //  Log the error for now
         //TODO: Clean up the error handling
-        LOG_ERROR("Error uploading changeset: " << id);
+        LOG_ERROR("Thread: " << std::this_thread::get_id() << "\tError uploading changeset: " << id);
         _workQueueMutex.lock();
         _workQueue.push(workInfo);
         _workQueueMutex.unlock();
@@ -300,7 +304,7 @@ bool OsmApiWriter::queryCapabilities(OsmApiNetworkRequestPtr request)
     QUrl capabilities = _url;
     capabilities.setPath(API_PATH_CAPABILITIES);
     request->networkRequest(capabilities);
-    QString responseXml = QString::fromAscii(request->getResponseContent().data());
+    QString responseXml = QString::fromUtf8(request->getResponseContent().data());
     LOG_DEBUG("Capabilities: " << capabilities.toString());
     LOG_DEBUG("Response: " << responseXml);
     _capabilities = _parseCapabilities(responseXml);
@@ -322,7 +326,7 @@ bool OsmApiWriter::validatePermissions(OsmApiNetworkRequestPtr request)
     QUrl permissions = _url;
     permissions.setPath(API_PATH_PERMISSIONS);
     request->networkRequest(permissions);
-    QString responseXml = QString::fromAscii(request->getResponseContent().data());
+    QString responseXml = QString::fromUtf8(request->getResponseContent().data());
     success = _parsePermissions(responseXml);
   }
   catch (const HootException& ex)
@@ -420,9 +424,9 @@ long OsmApiWriter::_createChangeset(OsmApiNetworkRequestPtr request, const QStri
       "  </changeset>"
       "</osm>").arg(HOOT_NAME).arg(description);
 
-    request->networkRequest(changeset, QNetworkAccessManager::Operation::PutOperation, xml.toAscii());
+    request->networkRequest(changeset, QNetworkAccessManager::Operation::PutOperation, xml.toUtf8());
 
-    QString responseXml = QString::fromAscii(request->getResponseContent().data());
+    QString responseXml = QString::fromUtf8(request->getResponseContent().data());
 
     //TODO: Parse response if it is more than just a single number
     return responseXml.toLong();
@@ -442,7 +446,7 @@ void OsmApiWriter::_closeChangeset(OsmApiNetworkRequestPtr request, long id)
     QUrl changeset = _url;
     changeset.setPath(API_PATH_CLOSE_CHANGESET.arg(id));
     request->networkRequest(changeset, QNetworkAccessManager::Operation::PutOperation);
-    QString responseXml = QString::fromAscii(request->getResponseContent().data());
+    QString responseXml = QString::fromUtf8(request->getResponseContent().data());
     switch (request->getHttpStatus())
     {
     default:
@@ -474,11 +478,9 @@ bool OsmApiWriter::_uploadChangeset(OsmApiNetworkRequestPtr request, long id, co
     QUrl change = _url;
     change.setPath(API_PATH_UPLOAD_CHANGESET.arg(id));
 
-    LOG_DEBUG("Changeset: " << changeset);
+    request->networkRequest(change, QNetworkAccessManager::Operation::PostOperation, changeset.toUtf8());
 
-    request->networkRequest(change, QNetworkAccessManager::Operation::PostOperation, changeset.toAscii());
-
-    QString responseXml = QString::fromAscii(request->getResponseContent().data());
+    QString responseXml = QString::fromUtf8(request->getResponseContent().data());
 
     switch (request->getHttpStatus())
     {

@@ -38,6 +38,7 @@ class OsmChangesetElementTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(OsmChangesetElementTest);
   CPPUNIT_TEST(runXmlNodeTest);
+  CPPUNIT_TEST(runNonAsciiXmlNodeTest);
   CPPUNIT_TEST(runXmlWayTest);
   CPPUNIT_TEST(runXmlRelationTest);
   CPPUNIT_TEST(runXmlChangesetTest);
@@ -79,6 +80,49 @@ public:
     HOOT_STR_EQUALS("\t\t<node id=\"-1\" version=\"0\" "
                     "lat=\"38.8549321261880536\" lon=\"-104.8979050333482093\" changeset=\"1\">\n"
                     "\t\t\t<tag k=\"name\" v=\"node name\"/>\n"
+                    "\t\t</node>\n",
+                    node.toString(1));
+  }
+
+  void runNonAsciiXmlNodeTest()
+  {
+    QXmlStreamAttributes attributes;
+    attributes.append("id", "-1");
+    attributes.append("version", "0");
+    attributes.append("lat", "11.6021625999999998");
+    attributes.append("lon", "43.1529881000000017");
+    XmlObject n;
+    n.first = "node";
+    n.second = attributes;
+    XmlNode node(n, NULL);
+    //  Name tags taken from OSM node in Djibouti
+    QXmlStreamAttributes tagAttributesAr;
+    tagAttributesAr.append("k", "name:ar");
+    tagAttributesAr.append("v", "سفارة جمهورية مصر العربية");
+    QXmlStreamAttributes tagAttributesZh;
+    tagAttributesZh.append("k", "name:zh");
+    tagAttributesZh.append("v", "埃及大使馆");
+    QXmlStreamAttributes tagAttributesFr;
+    tagAttributesFr.append("k", "name:fr");
+    tagAttributesFr.append("v", "Ambassade de l'Égypte");
+    XmlObject nameTagAr;
+    nameTagAr.first = "tag";
+    nameTagAr.second = tagAttributesAr;
+    node.addTag(nameTagAr);
+    XmlObject nameTagZh;
+    nameTagZh.first = "tag";
+    nameTagZh.second = tagAttributesZh;
+    node.addTag(nameTagZh);
+    XmlObject nameTagFr;
+    nameTagFr.first = "tag";
+    nameTagFr.second = tagAttributesFr;
+    node.addTag(nameTagFr);
+
+    HOOT_STR_EQUALS("\t\t<node id=\"-1\" version=\"0\" "
+                    "lat=\"38.8549321261880536\" lon=\"-104.8979050333482093\" changeset=\"1\">\n"
+                    "\t\t\t<tag k=\"name:ar\" v=\"سفارة جمهورية مصر العربية\"/>\n"
+                    "\t\t\t<tag k=\"name:ar\" v=\"埃及大使馆\"/>\n"
+                    "\t\t\t<tag k=\"name:ar\" v=\"Ambassade de l'Égypte\"/>\n"
                     "\t\t</node>\n",
                     node.toString(1));
   }

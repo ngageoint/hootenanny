@@ -438,7 +438,8 @@ bool XmlChangeset::calculateChangeset(boost::shared_ptr<ChangesetInfo>& changese
          hasElementsToSend())
   {
 //  TEMPORARY:
-#define RELATION_TO_NODE
+//#define RELATION_TO_NODE
+#define WAY_RELATION_NODE
 #ifdef RELATION_TO_NODE
     //  TODO: At some point we should test if the relation/way/node order should be reversed
     //  to figure out which one is faster
@@ -449,6 +450,22 @@ bool XmlChangeset::calculateChangeset(boost::shared_ptr<ChangesetInfo>& changese
       continue;
     //  Then the ways
     addWays(changeset, type);
+    //  Break out of the loop once the changeset is big enough
+    if (changeset->size() >= (size_t)_maxChangesetSize)
+      continue;
+    //  Then the nodes
+    addNodes(changeset, type);
+    //  Break out of the loop once the changeset is big enough
+    if (changeset->size() >= (size_t)_maxChangesetSize)
+      continue;
+#elif defined WAY_RELATION_NODE
+    //  Start with the ways
+    addWays(changeset, type);
+    //  Break out of the loop once the changeset is big enough
+    if (changeset->size() >= (size_t)_maxChangesetSize)
+      continue;
+    //  Then the relations
+    addRelations(changeset, type);
     //  Break out of the loop once the changeset is big enough
     if (changeset->size() >= (size_t)_maxChangesetSize)
       continue;
@@ -609,11 +626,23 @@ QString XmlElement::toString(const QXmlStreamAttributes& attributes, long change
   return ts.readAll();
 }
 
+QString& XmlElement::escapeString(QString& value) const
+{
+  return value.replace("&", "&amp;")
+              .replace("\"", "&quot;")
+              .replace("\'", "&apos;")
+              .replace("\n", "&#10;")
+              .replace(">", "&gt;")
+              .replace("<", "&lt;");
+}
+
 QString XmlElement::toTagString(const QXmlStreamAttributes& attributes) const
 {
   QString buffer;
   QTextStream ts(&buffer);
-  ts << "\t\t\t<tag k=\"" << attributes.value("k").toString() << "\" v=\"" << attributes.value("v").toString() << "\"/>\n";
+  QString value(attributes.value("v").toString());
+  escapeString(value);
+  ts << "\t\t\t<tag k=\"" << attributes.value("k").toString() << "\" v=\"" << value.left(255) << "\"/>\n";
   return ts.readAll();
 }
 
