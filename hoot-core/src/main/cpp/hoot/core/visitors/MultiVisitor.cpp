@@ -27,9 +27,12 @@
 #include "MultiVisitor.h"
 
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
+
+HOOT_FACTORY_REGISTER(ConstElementVisitor, MultiVisitor)
 
 MultiVisitor::MultiVisitor()
 {

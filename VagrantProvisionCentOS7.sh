@@ -91,6 +91,7 @@ sudo yum -y install \
     hoot-gdal \
     hoot-gdal-devel \
     hoot-gdal-python \
+    lcov \
     libicu-devel \
     libpng-devel \
     libtool \

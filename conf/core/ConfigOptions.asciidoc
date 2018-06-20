@@ -12,7 +12,7 @@
 // * What does this configuration change?
 // * If relevant, what are the units of the config option (e.g. meters)?
 // * Where can the user go to get more information? Please reference the
-//   appropriate document. E.g. "See `convert-ogr2osm` in the _Command Line
+//   appropriate document. E.g. "See `convert` in the _Command Line
 //   Reference_ for more information."
 // * What other options may be of interest? E.g. "See also
 //   `big.perty.op.sigma`"
@@ -38,6 +38,27 @@
 // asciidoc just make sure you don't start any lines with "=== ".
 // http://www.methods.co.nz/asciidoc/
 //
+=== add.attributes.visitor.add.only.if.empty
+
+* Data Type: bool
+* Default Value: `false`
+
+If true and an element already has a non-empty attribute (attribute without a default value) with
+the same key as one specified in add.attributes.visitor.kvps, then the AddAttributesVisitor will not
+add the attribute.  If false, then AddAttributesVisitor will add the attribute to the element
+regardless.
+
+=== add.attributes.visitor.kvps
+
+* Data Type: list
+* Default Value:
+** ``
+
+List of element attribute key/value pairs to add with the AddAttributesVisitor of the form
+key=value.  The AddAttributesVisitor is generally used to repair a corrupted OSM output, as the
+attributes are normally added to the output automatically.  Valid key values are: changeset,
+timestamp, user, uid, or version.
+
 === add.ref.visitor.information.only
 
 * Data Type: bool
@@ -152,13 +173,6 @@ Invalid relation members will cause a warning to be logged.  You should enable t
 are loading data that has not been previously validated in another OSM API database.  Enabling this
 setting may cause writing to an OSM API database to occur more slowly.
 
-=== attribute.count.values
-
-* Data Type: int
-* Default Value: `30`
-
-The maximum number of values returned for each attribute by the attribute-count command.
-
 === attribute.score.extractor.use.weight
 
 * Data Type: bool
@@ -195,8 +209,8 @@ Tag key used by the building.review.if.secondary.newer configuration option.
 
 If true, when buildings are auto-merged during conflation the geometry of the more complex building
 is the one that is kept.  If false or the buildings are equally complex, then the geometry of the
-first building in the pair passed to the Building Merger is the geometry kept.  This does not apply
-to feature merging done during the manual review process.
+reference building is the geometry kept.  This does not apply to feature merging done during the
+manual review process.
 
 === building.match.threshold
 
@@ -484,8 +498,8 @@ the convert.bounding.box setting for OSM API database data sources only.
 * Default Value:
 ** ``
 
-Specifies one or more semi-colon delimited operations to perform before writing data. This is only
-applicable to the convert command.
+Specifies one or more semi-colon delimited operations to perform before writing converted data.
+This is only applicable to the convert command.
 
 === cookie.cutter.alpha
 
@@ -532,6 +546,17 @@ Bounds used by the map cropper when cropping a map, of the form: minx,miny,maxx,
 * Default Value: `tmp/debug.osm`
 
 Debugging: The filename to use when saving the debug map during conflation.
+
+=== differential.tag.ignore.list
+
+* Data Type: list
+* Default Value:
+** `uuid` - Ignore UUID changes
+** `source:datetime` - Ignore source:datetime changes
+** `license`
+** `source:imagery`
+
+List of tags to ignore when performing differential conflation with tags.
 
 === dual.way.splitter.driving.side
 
@@ -599,6 +624,16 @@ Size of the in memory relation cache used when streaming I/O is used with relati
 * Default Value: `200000`
 
 Size of the in memory way cache used when streaming I/O is used with ways.
+
+=== element.criterion.negate
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, element criterions passed to an ElementCriterionConsumer will be negated.  May not be
+honored by all ElementCriterionConsumers.  Example setting which pass element criterions to
+ElementCriterionConsumers: remove.elements.visitor.element.criterion,
+set.tag.value.visitor.element.criterion, etc.
 
 === english.words.files
 
@@ -830,7 +865,7 @@ of assigning IDs within OSM.
 Example Usage:
 
 ----
-hoot convert-ogr2osm -D id.generator=hoot::PositiveIdGenerator -D id.generator.node.start=100 -D id.generator.relation.start=200 -D id.generator.way.start=300 $HOOT_HOME/translations/Identity.js myoutput.osm myinput.osm
+hoot convert -D id.generator=hoot::PositiveIdGenerator -D id.generator.node.start=100 -D id.generator.relation.start=200 -D id.generator.way.start=300 myinput.osm myoutput.osm --trans $HOOT_HOME/translations/Identity.js
 ----
 
 === id.generator.node.start
@@ -963,13 +998,14 @@ POI names.
 If true, the implicit tag raw rules generator will only consider words that correspond to a OSM tag
 value in the Hootenanny schema.
 
-=== implicit.tagging.element.filter
+=== implicit.tagging.element.criterion
 
 * Data Type: string
 * Default Value: `hoot::ImplicitTagEligiblePoiPolyCriterion`
 
 Filter class inheriting from hoot::ImplicitTagEligibleCriterion; The default,
-ImplicitTagEligiblePoiPolyCriterion, derives tag information from POIs, buildings, and areas.
+ImplicitTagEligiblePoiPolyCriterion, derives tag information from POIs, buildings, and areas.  To
+pass in more nested criterion, use the Hootenanny Javascript interface instead.
 
 === implicit.tagging.keep.temp.files
 
@@ -1195,7 +1231,7 @@ A list of map operations to be applied to a map for cleaning purposes, in order.
 === match.creators
 
 * Data Type: string
-* Default Value: `hoot::BuildingMatchCreator;hoot::ScriptMatchCreator,PoiGeneric.js;hoot::HighwayMatchCreator;hoot::ScriptMatchCreator,LinearWaterway.js;hoot::PoiPolygonMatchCreator;hoot::ScriptMatchCreator,Area.js`
+* Default Value: `hoot::BuildingMatchCreator;hoot::ScriptMatchCreator,PoiGeneric.js;hoot::HighwayMatchCreator;hoot::ScriptMatchCreator,LinearWaterway.js;hoot::PoiPolygonMatchCreator;hoot::ScriptMatchCreator,Area.js;hoot::ScriptMatchCreator,Railway.js`
 
 List of match creators to use during conflation. This can modify what features will be conflated
 (e.g. buildings, roads, etc.).  The ordering must match that in merger.creators.
@@ -1207,8 +1243,9 @@ Some of the possible options include:
 * `hoot::NetworkMatchCreator` - Matches linear highway features using the Network algorithm.
 * `hoot::PoiPolygonMatchCreator` - Matches POIs with buildings or areas.
 * `hoot::ScriptMatchCreator,Area.js` - Matches areas (non-building polygons marked as areas; e.g. parks, parking lots, etc.).
-* `hoot::ScriptMatchCreator,PoiGeneric.js` - Matches POIs using the Unify algorithm.
 * `hoot::ScriptMatchCreator,LinearWaterway.js` - Matches linear rivers and streams.
+* `hoot::ScriptMatchCreator,PoiGeneric.js` - Matches POIs using the Unify algorithm.
+* `hoot::ScriptMatchCreator,Railway.js` - Matches railways.
 * `hoot::ScriptMatchCreator,<yourscript.js>` - Uses a custom match script. The script should be
   in `$HOOT_HOME/rules/<yourscript.js>`.
 
@@ -1255,14 +1292,14 @@ RAM usage of applications in a shared server environment.
 * Data Type: double
 * Default Value: `1.0`
 
-When merging nodes during convert-ogr2osm, determines what tolerance should be used for deciding two nodes
+When merging nodes during convert, determines what tolerance should be used for deciding two nodes
 are identical. Units in meters and defaults to 1.0m.
 
 [[merger.creators]]
 === merger.creators
 
 * Data Type: string
-* Default Value: `hoot::BuildingMergerCreator;hoot::ScriptMergerCreator;hoot::HighwaySnapMergerCreator;hoot::ScriptMergerCreator;hoot::PoiPolygonMergerCreator;hoot::ScriptMergerCreator`
+* Default Value: `hoot::BuildingMergerCreator;hoot::ScriptMergerCreator;hoot::HighwaySnapMergerCreator;hoot::ScriptMergerCreator;hoot::PoiPolygonMergerCreator;hoot::ScriptMergerCreator;hoot::ScriptMergerCreator`
 
 List of merger creators to use during conflation. This can modify what features will be conflated
 (e.g. buildings, roads, etc.).  The ordering must match that in match.creators.
@@ -1528,7 +1565,7 @@ intelligently use indexes, others will simply filter features after reading from
 Example Usage:
 
 ----
-hoot convert-ogr2osm -D ogr.reader.bounding.box=106.851,-6.160,107.052,-5.913 translations/Identity.js output.osm test-files/jakarta_raya_coastline.shp
+hoot convert -D ogr.reader.bounding.box=106.851,-6.160,107.052,-5.913 test-files/jakarta_raya_coastline.shp output.osm --trans translations/Identity.js
 ----
 
 === ogr.reader.bounding.box.latlng
@@ -1645,14 +1682,20 @@ hoot convert \
   PG:"dbname='osm_gis2' host='localhost' port='5432' user='hoot' password='hoottest'"
 ----
 
-=== ogr2osm.ops
+=== ogr2osm.merge.nearby.nodes
 
-* Data Type: list
-* Default Value:
-** `hoot::MergeNearbyNodes` - Merges nodes within the distance defined by merge.nearby.nodes.distance.
-** `hoot::BuildingPartMergeOp` - Implicitly merges certain individual building parts into a single part.
+* Data Type: bool
+* Default Value: `true`
 
-Operations that should be applied to ingested OGR data before saving the data.
+Merges nearby nodes together when converting from an OGR format to OSM.
+
+=== ogr2osm.simplify.complex.buildings
+
+* Data Type: bool
+* Default Value: `true`
+
+Implicitly merges certain individual building parts into a single part when converting from an OGR
+format to OSM.
 
 === osmapidb.bulk.inserter.disable.database.constraints.during.write
 
@@ -1747,14 +1790,6 @@ written if the value is not empty.
 
 If true, the OSM map writer will NOT write a file if the map is empty.
 The default is to write a file even if the map is empty.
-
-=== osm2ogr.ops
-
-* Data Type: list
-* Default Value:
-** ``
-
-User specified operations for converting OSM files to OGR compatible file types.
 
 === perty.apply.rubber.sheet
 
@@ -2088,9 +2123,9 @@ See also:
 * Data Type: bool
 * Default Value: `false`
 
-If true, instances where multiple POIs were matched to a single polygon will result in all of the
-POIs being merged into the polygon.  If false, then each POI will generate a review against the
-polygon instead.
+If true, instances where multiple POIs were matched to a single polygon will result in all of those
+POIs being automatically merged into the polygon.  If false, then each matched POI will generate a
+review against the polygon instead.
 
 === poi.polygon.disable.same.source.conflation
 
@@ -2139,8 +2174,11 @@ enabled.
 * Data Type: bool
 * Default Value: `false`
 
-If true, POI to Polygon conflation will only keep matches that are the closest to polygons and throw
-out any others even if they score high enough for a match.  TODO: this option may go away
+If this setting is true, POI to Polygon conflation will attempt to match the closest feature pairs
+only.  The conflation will not match additional features at greater distances, even if they are
+within the match distance threshold.  Multiple features matches are still possible in the case of
+exact distance ties.  If this setting is false, then multiple POIs found within the match distance
+threshold of a polygon are treated as reviews.
 
 === poi.polygon.match.distance.threshold
 
@@ -2452,14 +2490,14 @@ have negative IDs.  Not honored by all readers.
 
 By default should a reader use the file status from the file. Not honored by all readers.
 
-=== remove.attribute.visitor.types
+=== remove.attributes.visitor.types
 
 * Data Type: list
 * Default Value:
 ** ``
 
-List of element attributes to remove with the RemoveAttributeVisitor.  See ElementAttributeType for
-valid values.
+List of element attributes to remove with the RemoveAttributesVisitor.  Valid values are: changeset,
+timestamp, user, uid, or version.
 
 === remove.duplicate.areas.diff
 
@@ -2469,12 +2507,13 @@ valid values.
 Use this class for calculating the difference between element tags. If the difference is exactly
 0 then they'll be a candidate for merging.
 
-=== remove.elements.visitor.filter
+=== remove.elements.visitor.element.criterion
 
 * Data Type: string
 * Default Value: ``
 
-The plugin name of a filter used to select the elements to delete.
+The plugin name of an element criterion used to select elements to delete.  To pass in complex
+nested criterion, use the Hootenanny Javascript interface instead.
 
 === remove.elements.visitor.recursive
 
@@ -2483,13 +2522,22 @@ The plugin name of a filter used to select the elements to delete.
 
 Should the element remover remove the elements recursively?
 
-=== remove.tag.visitor.keys
+=== remove.tags.visitor.element.criterion
+
+* Data Type: string
+* Default Value: ``
+
+The plugin name of an element criterion used to select tags to delete.  To pass in complex
+nested criterion, use the Hootenanny Javascript interface instead.
+
+=== remove.tags.visitor.keys
 
 * Data Type: list
 * Default Value:
 ** ``
 
-A list of tag keys the RemoveTagVisitor will remove on elements.
+A list of tag keys the RemoveTagsVisitor will remove on elements.  From the command line, separate
+list items with a semicolon.
 
 === replace.tag.visitor.match.tag
 
@@ -2619,46 +2667,46 @@ waterway.auto.calc.search.radius = true.  See `search.radius.default`.
 
 The search radius to use when conflating railways.
 
-=== set.tag.visitor.append.to.existing.value
+=== set.tag.value.visitor.append.to.existing.value
 
 * Data Type: bool
 * Default Value: `false`
 
-If true, any element with a value populated for the key defined by the set.tag.visitor.key option
-will have the value specified in the set.tag.visitor.value option appended to it.
+If true, any element with a value populated for the key defined by the set.tag.value.visitor.key
+option will have the value specified in the set.tag.value.visitor.value option appended to it.
 
-=== set.tag.visitor.element.type
+=== set.tag.value.visitor.element.criterion
 
 * Data Type: string
 * Default Value: ``
 
-An optional element type filter for the SetTagVisitor.  Valid values are: 'node', 'way', or
-'relation'.  If left empty, all elements will receive tag additions.
+The plugin name of an element criterion used to select elements to add or modify tags on.  To pass
+in complex nested criterion, use the Hootenanny Javascript interface instead.
 
-=== set.tag.visitor.key
+=== set.tag.value.visitor.key
 
 * Data Type: list
 * Default Value: ``
 
-Set the key member in the SetTagVisitor class.  SetTagVisitor allows for adding/modifying a
-particular tag on all elements in a map. The number of keys in `set.tag.visitor.key` should match
-the number of keys in `set.tag.visitor.value`.
+Set the key member in the SetTagValueVisitor class.  SetTagValueVisitor allows for
+adding/modifying a particular tag on all elements in a map. The number of keys in
+`set.tag.value.visitor.key` should match the number of keys in `set.tag.value.visitor.value`.
 
-=== set.tag.visitor.overwrite
+=== set.tag.value.visitor.overwrite
 
 * Data Type: bool
 * Default Value: `true`
 
-If true, the SetTagVisitor class will overwrite any existing tag it finds with
-key=set.tag.visitor.key, otherwise it will skip updating the tag.
+If true, the SetTagValueVisitor class will overwrite any existing tag it finds with
+key=set.tag.value.visitor.key, otherwise it will skip updating the tag.
 
-=== set.tag.visitor.value
+=== set.tag.value.visitor.value
 
 * Data Type: list
 * Default Value: ``
 
-Set the value member in the SetTagVisitor class.  SetTagVisitor allows for adding/modifying a
-particular tag on all elements in a map.
+Set the value member in the SetTagValueVisitor class.  SetTagValueVisitor allows for
+adding/modifying a particular tag on all elements in a map.
 
 === small.way.merger.diff
 
@@ -2705,8 +2753,8 @@ operations.
 * Data Type: bool
 * Default Value: `false`
 
-If true, the SetTagVisitor class will only update statuses on elements when the existing status is
-'Invalid'.
+If true, the SetTagValueVisitor class will only update statuses on elements when the existing
+status is 'Invalid'.
 
 === status.update.visitor.status
 
@@ -2732,13 +2780,13 @@ Primarily, this is useful within the node.js interface.
 The default category to use when using the hoot::TagCategoryDifferencer class for comparing tags.
 Primarily, this is useful within the node.js interface.
 
-=== tag.criterion.kvp
+=== tag.criterion.kvps
 
-* Data Type: string
+* Data Type: list
 * Default Value: ``
 
-The key/value pair to use in the tag criterion by default. E.g. 'highway,road'  Used by various
-element visitors and map operations.
+Key/value pairs to use with TagCriterion. Delimit keys and values with '='.  From the command line,
+delimit multiple key/value pairs with ';'.  E.g. 'highway=road;amenity=school'
 
 === tag.merger.default
 
@@ -2790,6 +2838,30 @@ renaming existing tag keys on all elements in a map.
 
 The key to be replaced by the TagRenameKeyVisitor.  TagRenameKeyVisitor allows for
 renaming existing tag keys on all elements in a map.
+
+=== tag.value.numeric.range.criterion.keys
+
+* Data Type: list
+* Default Value:
+** ``
+
+The keys the TagValueNumericRangeCriterion examines the numeric value of.  Tags for all keys must
+meet the numeric range requirement for the criterion to be met.  Separate multiple keys with a
+semicolon from the command line.
+
+=== tag.value.numeric.range.criterion.max
+
+* Data Type: long
+* Default Value: `-1`
+
+Minimum tag numeric value that will allow the TagValueNumericRangeCriterion to be satisified.
+
+=== tag.value.numeric.range.criterion.min
+
+* Data Type: long
+* Default Value: `-1`
+
+Minimum tag numeric value that will allow the TagValueNumericRangeCriterion to be satisified.
 
 === task.status.update.interval
 
@@ -2917,7 +2989,7 @@ NOTE: This assumes that you know exactly what tags you want to modify/delete
 * Data Type: string
 * Default Value: ``
 
-The script to use for translation.
+The script used by the TranslationVisitor for translation.
 
 === unify.enable.optimal.constrained.matches
 
@@ -2957,7 +3029,6 @@ before the operations in `conflate.post.ops`.
 * Data Type: list
 * Default Value:
 ** ``
-
 
 List of operations to apply immediately before conflating when using Unifying Conflation only.  Runs
 after the operations in `conflate.pre.ops`.

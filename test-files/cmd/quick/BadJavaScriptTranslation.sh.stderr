@@ -1,9 +1,9 @@
 ImportError: Import by filename is not supported.
-Error running convert-ogr2osm:
+Error running convert:
 Unable to find an appropriate scripting language for: test-files/cmd/slow/tSimple.js
 ImportError: Import by filename is not supported.
-Error running convert-ogr2osm:
+Error running convert:
 Unable to find an appropriate scripting language for: plugins/BadSyntaxTest.js
 ImportError: Import by filename is not supported.
-Error running convert-ogr2osm:
+Error running convert:
 Unable to find an appropriate scripting language for: test-files/cmd/slow/BadRequire.js

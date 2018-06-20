@@ -29,18 +29,18 @@
 // hoot
 #include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/conflate/matching/MatchType.h>
-#include <hoot/core/filters/ChainCriterion.h>
-#include <hoot/core/filters/ElementTypeCriterion.h>
-#include <hoot/core/filters/TagKeyCriterion.h>
-#include <hoot/core/filters/StatusCriterion.h>
-#include <hoot/core/filters/TagContainsFilter.h>
+#include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/criterion/ElementTypeCriterion.h>
+#include <hoot/core/criterion/TagKeyCriterion.h>
+#include <hoot/core/criterion/StatusCriterion.h>
+#include <hoot/core/criterion/TagContainsFilter.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/scoring/TextTable.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/GetTagValuesVisitor.h>
-#include <hoot/core/visitors/SetTagVisitor.h>
+#include <hoot/core/visitors/SetTagValueVisitor.h>
 #include <hoot/core/visitors/ElementIdSetVisitor.h>
 #include <hoot/core/util/Log.h>
 
@@ -645,9 +645,10 @@ bool MatchComparator::_isNeedsReview(QString uuid1, QString uuid2, const ConstOs
 void MatchComparator::_tagTestOutcome(const OsmMapPtr& map, const QString uuid,
                                       const QString expected, const QString actual)
 {
-  SetTagVisitor stv1(MetadataTags::HootExpected(), expected);
-  SetTagVisitor stv2(MetadataTags::HootActual(), actual);
-  for (MatchComparator::UuidToEid::iterator it = _actualUuidToEid.begin(); it != _actualUuidToEid.end(); ++it)
+  SetTagValueVisitor stv1(MetadataTags::HootExpected(), expected);
+  SetTagValueVisitor stv2(MetadataTags::HootActual(), actual);
+  for (MatchComparator::UuidToEid::iterator it = _actualUuidToEid.begin();
+       it != _actualUuidToEid.end(); ++it)
   {
     if (it.key().contains(uuid))
     {
@@ -661,8 +662,9 @@ void MatchComparator::_tagTestOutcome(const OsmMapPtr& map, const QString uuid,
 void MatchComparator::_tagError(const OsmMapPtr &map, const QString &uuid, const QString& value)
 {
   // if the uuid contains the first uuid, set mismatch
-  SetTagVisitor stv(MetadataTags::HootMismatch(), value);
-  for (MatchComparator::UuidToEid::iterator it = _actualUuidToEid.begin(); it != _actualUuidToEid.end(); ++it)
+  SetTagValueVisitor stv(MetadataTags::HootMismatch(), value);
+  for (MatchComparator::UuidToEid::iterator it = _actualUuidToEid.begin();
+       it != _actualUuidToEid.end(); ++it)
   {
     if (it.key().contains(uuid))
     {
@@ -675,8 +677,9 @@ void MatchComparator::_tagError(const OsmMapPtr &map, const QString &uuid, const
 void MatchComparator::_tagWrong(const OsmMapPtr &map, const QString &uuid)
 {
   // if the uuid contains the first uuid, set mismatch
-  SetTagVisitor stv(MetadataTags::HootWrong(), "1");
-  for (MatchComparator::UuidToEid::iterator it = _actualUuidToEid.begin(); it != _actualUuidToEid.end(); ++it)
+  SetTagValueVisitor stv(MetadataTags::HootWrong(), "1");
+  for (MatchComparator::UuidToEid::iterator it = _actualUuidToEid.begin();
+       it != _actualUuidToEid.end(); ++it)
   {
     if (it.key().contains(uuid))
     {

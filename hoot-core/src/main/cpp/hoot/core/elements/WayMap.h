@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef WAYMAP_H
@@ -35,7 +35,7 @@
 namespace hoot
 {
   class Way;
-  typedef HashMap<long, WayPtr > WayMap;
+  typedef HashMap<long, WayPtr> WayMap;
 }
 
 #endif // WAYMAP_H

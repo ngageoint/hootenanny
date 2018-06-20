@@ -172,6 +172,11 @@ QString OsmMapReaderFactory::getReaderName(const QString url)
   return "";
 }
 
+bool OsmMapReaderFactory::isSupportedFormat(const QString url)
+{
+  return !getReaderName(url).trimmed().isEmpty();
+}
+
 void OsmMapReaderFactory::read(boost::shared_ptr<OsmMap> map, QString url, bool useDataSourceIds,
                                Status defaultStatus)
 {

@@ -424,11 +424,11 @@ public:
     CPPUNIT_ASSERT_EQUAL(false, uut.isArea(t, ElementType::Way));
 
     t.clear();
-    t["building:part"] = "yes";
+    t[MetadataTags::BuildingPart()] = "yes";
     CPPUNIT_ASSERT_EQUAL(true, uut.isArea(t, ElementType::Way));
-    t["building:part"] = "no";
+    t[MetadataTags::BuildingPart()] = "no";
     CPPUNIT_ASSERT_EQUAL(false, uut.isArea(t, ElementType::Way));
-    t["building:part"] = "invalid";
+    t[MetadataTags::BuildingPart()] = "invalid";
     CPPUNIT_ASSERT_EQUAL(false, uut.isArea(t, ElementType::Way));
 
     t.clear();

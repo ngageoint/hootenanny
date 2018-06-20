@@ -42,6 +42,8 @@ class MedianNodeVisitor : public ConstElementVisitor
 {
 public:
 
+  static std::string className() { return "hoot::MedianNodeVisitor"; }
+
   MedianNodeVisitor();
 
   virtual void visit(const ConstElementPtr& e);

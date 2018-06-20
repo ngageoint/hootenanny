@@ -60,7 +60,7 @@ public class ImportCommandTest {
         Boolean isNoneTranslation = false;
 
         List<String> options = new LinkedList<>();
-        options.add("osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
+        //options.add("osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
         options.add("hootapi.db.writer.overwrite.map=true");
         options.add("hootapi.db.writer.create.user=true");
         options.add("api.db.email=test@test.com");
@@ -68,16 +68,16 @@ public class ImportCommandTest {
         ImportCommand importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation,
                                       etlName, isNoneTranslation, debugLevel, SHP, caller);
 
-        String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
-        String hootOGR2OSMCommand = "hoot convert-ogr2osm --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${TRANSLATION_PATH} ${INPUT_NAME} ${INPUTS}";
-
+        String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME} --trans ${TRANSLATION_PATH}";
+        String hootConvertCommandNoTranslation = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
+        
         assertEquals(jobId, importCommand.getJobId());
         assertEquals(true, importCommand.getTrackable());
         assertNotNull(importCommand.getSubstitutionMap());
         assertNotNull(importCommand.getWorkDir());
         assertNotNull(importCommand.getCommand());
 
-        assertEquals(hootOGR2OSMCommand, importCommand.getCommand());
+        assertEquals(hootConvertCommand, importCommand.getCommand());
         assertEquals(1, ((List)importCommand.getSubstitutionMap().get("INPUTS")).size());
         assertTrue(((List)importCommand.getSubstitutionMap().get("INPUTS")).get(0).toString().endsWith("file.shp"));
         assertEquals(HOOTAPI_DB_URL + "/" + etlName, importCommand.getSubstitutionMap().get("INPUT_NAME"));
@@ -87,7 +87,7 @@ public class ImportCommandTest {
         importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation,
                                           etlName, isNoneTranslation, debugLevel, SHP, caller);
 
-        assertEquals(hootConvertCommand, importCommand.getCommand());
+        assertEquals(hootConvertCommandNoTranslation, importCommand.getCommand());
 
         assertEquals(jobId, importCommand.getJobId());
         assertEquals(true, importCommand.getTrackable());
@@ -123,8 +123,8 @@ public class ImportCommandTest {
         ImportCommand importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation,
                 etlName, isNoneTranslation, debugLevel, FGDB, caller);
 
-        String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
-        String hootOGR2OSMCommand = "hoot convert-ogr2osm --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${TRANSLATION_PATH} ${INPUT_NAME} ${INPUTS}";
+        String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME} --trans ${TRANSLATION_PATH}";
+        String hootConvertCommandNoTranslation = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME} ";
 
         assertEquals(jobId, importCommand.getJobId());
         assertEquals(true, importCommand.getTrackable());
@@ -132,7 +132,7 @@ public class ImportCommandTest {
         assertNotNull(importCommand.getWorkDir());
         assertNotNull(importCommand.getCommand());
 
-        assertEquals(hootOGR2OSMCommand, importCommand.getCommand());
+        assertEquals(hootConvertCommand, importCommand.getCommand());
         assertEquals(1, ((List)importCommand.getSubstitutionMap().get("INPUTS")).size());
         assertTrue(((List)importCommand.getSubstitutionMap().get("INPUTS")).get(0).toString().endsWith("file.gdb"));
         assertEquals(HOOTAPI_DB_URL + "/" + etlName, importCommand.getSubstitutionMap().get("INPUT_NAME"));
@@ -142,7 +142,7 @@ public class ImportCommandTest {
         importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation,
                 etlName, isNoneTranslation, debugLevel, SHP, caller);
 
-        assertEquals(hootConvertCommand, importCommand.getCommand());
+        assertEquals(hootConvertCommandNoTranslation, importCommand.getCommand());
 
         assertEquals(jobId, importCommand.getJobId());
         assertEquals(true, importCommand.getTrackable());
@@ -179,8 +179,8 @@ public class ImportCommandTest {
         ImportCommand importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation,
                 etlName, isNoneTranslation, debugLevel, ZIP, caller);
 
-        String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
-        String hootOGR2OSMCommand = "hoot convert-ogr2osm --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${TRANSLATION_PATH} ${INPUT_NAME} ${INPUTS}";
+        String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME} --trans ${TRANSLATION_PATH}";
+        String hootConvertCommandNoTranslation = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
 
         assertEquals(jobId, importCommand.getJobId());
         assertEquals(true, importCommand.getTrackable());
@@ -188,7 +188,7 @@ public class ImportCommandTest {
         assertNotNull(importCommand.getWorkDir());
         assertNotNull(importCommand.getCommand());
 
-        assertEquals(hootOGR2OSMCommand, importCommand.getCommand());
+        assertEquals(hootConvertCommand, importCommand.getCommand());
 
         assertEquals(1, ((List) importCommand.getSubstitutionMap().get("INPUTS")).size());
         assertTrue(((List) importCommand.getSubstitutionMap().get("INPUTS")).get(0).toString().startsWith("/vsizip/"));
@@ -201,7 +201,7 @@ public class ImportCommandTest {
         importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation,
                 etlName, isNoneTranslation, debugLevel, ZIP, caller);
 
-        assertEquals(hootConvertCommand, importCommand.getCommand());
+        assertEquals(hootConvertCommandNoTranslation, importCommand.getCommand());
 
         assertEquals(jobId, importCommand.getJobId());
         assertEquals(true, importCommand.getTrackable());

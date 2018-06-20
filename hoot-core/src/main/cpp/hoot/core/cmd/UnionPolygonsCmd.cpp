@@ -32,13 +32,17 @@
 // Hoot
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/OgrReader.h>
-#include <hoot/core/ops/MergeNearbyNodes.h>
-#include <hoot/core/util/ElementConverter.h>
+//#include <hoot/core/ops/MergeNearbyNodes.h>
+//#include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/GeometryConverter.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MapProjector.h>
+//#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Settings.h>
+#include <hoot/core/util/IoUtils.h>
+
+#include <hoot/core/visitors/UnionPolygonsVisitor.h>
+
 
 using namespace geos::geom;
 using namespace std;
@@ -73,28 +77,17 @@ public:
     for (int i = 1; i < args.size(); i++)
     {
       QString input = args[i];
-      loadMap(map, input, false);
+      IoUtils::loadMap(map, input, false);
     }
 
-    boost::shared_ptr<Geometry> g(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
-    int count = 0;
-    const RelationMap& rm = map->getRelations();
-    for (RelationMap::const_iterator it = rm.begin(); it != rm.end(); ++it)
-    {
-      const ConstRelationPtr r = it->second;
-      g.reset(g->Union(ElementConverter(map).convertToGeometry(r).get()));
-      count++;
-    }
-
-    if (count == 0)
-    {
-      LOG_INFO("No polygons were found in the input.");
-    }
+    UnionPolygonsVisitor v;
+    map->visitRo(v);
+    boost::shared_ptr<Geometry> g = v.getUnion();
 
     OsmMapPtr result(new OsmMap());
     GeometryConverter(result).convertGeometryToElement(g.get(), Status::Unknown1, -1);
 
-    saveMap(result, output);
+    IoUtils::saveMap(result, output);
 
     LOG_INFO("Done writing file.");
 

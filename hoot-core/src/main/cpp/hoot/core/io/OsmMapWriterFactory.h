@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMMAPWRITERFACTORY_H
 #define OSMMAPWRITERFACTORY_H
@@ -56,6 +56,8 @@ public:
   static void write(const boost::shared_ptr<const OsmMap>& map, QString url);
 
   static QString getWriterName(const QString url);
+
+  static bool isSupportedFormat(const QString url);
 
 private:
 

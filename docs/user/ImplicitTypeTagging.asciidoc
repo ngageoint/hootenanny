@@ -12,7 +12,7 @@ over time as the feature is refined.
 
 The default implicit feature tagger is hoot::ImplicitPoiPolygonTypeTagger, which will tag POIs and building/POI related polygons.  You
 can use any tagger class that inherits from hoot::ImplicitTypeTaggerBase, however, it should be an implementation that works with the
-class used as the element filter specified by the implicit.tagging.element.filter when creating the implicit tag rules database.
+class used as the element filter specified by the implicit.tagging.element.criterion when creating the implicit tag rules database.
 
 To use the feature from the command line with your input data:
 

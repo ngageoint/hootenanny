@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "CumulativeConflator.h"
@@ -37,7 +37,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/MetadataTags.h>
-#include <hoot/core/visitors/SetTagVisitor.h>
+#include <hoot/core/visitors/SetTagValueVisitor.h>
 #include <hoot/rnd/visitors/KeepReviewsVisitor.h>
 
 namespace hoot
@@ -77,7 +77,7 @@ void CumulativeConflator::conflate(const QStringList inputs, const QString outpu
       //keep a source tag history on the data for provenance; append to any existing source values
       //(this shouldn't be added to any review relations)
       LOG_DEBUG("Setting source tags for map " << QString::number(i + 1) << "...");
-      SetTagVisitor sourceTagVisitor(MetadataTags::HootSource(), QString::number(i + 1));
+      SetTagValueVisitor sourceTagVisitor(MetadataTags::HootSource(), QString::number(i + 1));
       cumulativeMap->visitRw(sourceTagVisitor);
     }
     else
@@ -103,7 +103,8 @@ void CumulativeConflator::conflate(const QStringList inputs, const QString outpu
       //Same as above, but do this before combining the cumulative map with the unknown2 map to
       //prevent incorrect tags from being added to the cumulative map.
       LOG_DEBUG("Setting source tags for map " << QString::number(i + 1) << "...");
-      SetTagVisitor sourceTagVisitor(MetadataTags::HootSource(), QString::number(i + 1)/*, true*/);
+      SetTagValueVisitor sourceTagVisitor(
+        MetadataTags::HootSource(), QString::number(i + 1)/*, true*/);
       unknown2Map->visitRw(sourceTagVisitor);
 
       //now combine the two maps before conflation
@@ -142,7 +143,7 @@ void CumulativeConflator::conflate(const QStringList inputs, const QString outpu
         //tags are being left in at some point which causes the SearchRadiusCalculator to skip the
         //features.
         LOG_DEBUG("Setting status tags for map " << QString::number(i + 1) << "...");
-        SetTagVisitor statusTagVisitor(
+        SetTagValueVisitor statusTagVisitor(
           MetadataTags::HootStatus(), QString("%1").arg(Status(Status::Unknown1).getEnum()));
         cumulativeMap->visitRw(statusTagVisitor);
       }

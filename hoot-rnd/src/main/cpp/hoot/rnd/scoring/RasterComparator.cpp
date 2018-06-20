@@ -36,7 +36,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/OpenCv.h>
-#include <hoot/core/filters/HighwayFilter.h>
+#include <hoot/core/criterion/HighwayFilter.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/ExtractWaysVisitor.h>
 

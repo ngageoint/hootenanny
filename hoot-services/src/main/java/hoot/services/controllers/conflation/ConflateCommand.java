@@ -97,7 +97,7 @@ class ConflateCommand extends ExternalCommand {
         }
 
         List<String> options = new LinkedList<>();
-        options.add("osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
+        options.add("convert.ops=hoot::DecomposeBuildingRelationsVisitor");
         options.add("writer.include.conflate.score.tags=false");
         options.add("hootapi.db.writer.overwrite.map=true");
         options.add("hootapi.db.writer.create.user=true");
@@ -157,6 +157,12 @@ class ConflateCommand extends ExternalCommand {
         }
 
         String conflationCommand = params.getConflationCommand();
+        boolean isDifferentialConflate = false;
+        if (conflationCommand != null && conflationCommand.equals("conflate-differential"))
+        {
+          conflationCommand = "conflate";
+          isDifferentialConflate = true;
+        }
 
         Map<String, Object> substitutionMap = new HashMap<>();
         substitutionMap.put("CONFLATION_COMMAND", conflationCommand);
@@ -168,6 +174,10 @@ class ConflateCommand extends ExternalCommand {
         substitutionMap.put("STATS", stats);
 
         String command = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${STATS}";
+        if (isDifferentialConflate)
+        {
+          command += " --differential";
+        }
 
         super.configureCommand(command, substitutionMap, caller);
     }

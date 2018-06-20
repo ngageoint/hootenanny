@@ -31,7 +31,7 @@
 #include <hoot/core/ops/stats/SingleStat.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/OsmUtils.h>
+#include <hoot/core/util/IoUtils.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -143,7 +143,7 @@ void MapStatsWriter::writeStats(const QString& mapInputPath, const QString& stat
   // read the conflation status from the file.
   conf().set(ConfigOptions().getReaderUseFileStatusKey(), true);
   OsmMapPtr map(new OsmMap());
-  OsmUtils::loadMap(map, mapInputPath, true, Status::Invalid);
+  IoUtils::loadMap(map, mapInputPath, true, Status::Invalid);
   MapProjector::projectToPlanar(map);
 
   QList< QList<SingleStat> > allStats;

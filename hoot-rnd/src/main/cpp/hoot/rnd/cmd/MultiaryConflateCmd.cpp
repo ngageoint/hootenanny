@@ -41,6 +41,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/rnd/conflate/multiary/MultiaryUtilities.h>
+#include <hoot/core/util/IoUtils.h>
 
 // Qt
 #include <QFileInfo>
@@ -97,7 +98,7 @@ public:
     // load all the inputs into a single map
     for (int i = 0; i < inputs.size(); ++i)
     {
-      loadMap(map, inputs[i], false, Status::fromInput(i));
+      IoUtils::loadMap(map, inputs[i], false, Status::fromInput(i));
     }
 
     CalculateHashVisitor hashVisitor;
@@ -116,7 +117,7 @@ public:
 
     map->visitRw(hashVisitor);
 
-    saveMap(map, output);
+    IoUtils::saveMap(map, output);
 
     LOG_INFO("Total time elapsed: " << totalTime.getElapsed());
 

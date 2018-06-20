@@ -22,26 +22,18 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "BaseCommand.h"
 
 // Hoot
 #include <hoot/core/Hoot.h>
-#include <hoot/core/io/OgrReader.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/io/GeoNamesReader.h>
-#include <hoot/core/io/OsmPbfReader.h>
-#include <hoot/core/io/OsmPbfWriter.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Progress.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/OsmMap.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/HootException.h>
 
 // Qt
 #include <QFileInfo>
@@ -75,12 +67,6 @@ QString BaseCommand::_getHelpPath() const
   return result;
 }
 
-void BaseCommand::loadMap(OsmMapPtr map, QString path, bool useFileId,
-                          Status defaultStatus)
-{
-  OsmMapReaderFactory::read(map, path, useFileId, defaultStatus);
-}
-
 Envelope BaseCommand::parseEnvelope(QString envStr) const
 {
   QStringList envArr = envStr.split(",");
@@ -111,17 +97,14 @@ Envelope BaseCommand::parseEnvelope(QString envStr) const
 int BaseCommand::run(char* argv[], int argc)
 {
   QStringList args = toQStringList(argv, argc);
+  LOG_VARD(args)
 
   args = args.mid(2);
 
   Settings::parseCommonArguments(args);
+  LOG_VARD(args);
 
   return runSimple(args);
-}
-
-void BaseCommand::saveMap(boost::shared_ptr<const OsmMap> map, QString path)
-{
-  OsmMapWriterFactory::write(map, path);
 }
 
 QStringList BaseCommand::toQStringList(char* argv[], int argc)

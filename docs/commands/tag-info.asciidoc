@@ -1,0 +1,71 @@
+== tag-info
+
+=== Description
+
+The +tag-info+ command prints out tag key/value information for map data.
+
+* +input+              - One or more inputs.  If using an OGR layer within a data source, then delimit the data source and layer 
+                         with a semicolon.
+* +--tag-values-limit+ - Limits the number of unique tag values printed per tag key.  By default, there is no limit.  This option is ignored 
+                         if --keys-only is specified. 
+* +--keys+             - Prints unique tag values for the specified keys only.  Delimit multiple keys with a semicolon (e.g. "key1;key2").  
+                         This option is ignored if --keys-only is specified.
+* +--keys-only+        - Prints all tag keys only and does not print any associated values.
+* +--case-insensitive+ - If this option is specified, tag key comparisons are not case sensitive.  By default the comparisons are                        case sensitive.
+
+=== Usage
+
+--------------------------------------
+tag-values (input1[;layer]) [input2[;layer]] ... [--tag-values-limit] [--keys-only "key1;key2..."] [--keys-only] [--case-insensitive]
+--------------------------------------
+
+==== Examples
+
+--------------------------------------
+hoot tag-info myshapefile.shp "myfgb.gdb;mylayer"
+
+hoot tag-info input.osm
+
+hoot tag-info input.osm --keys-only
+
+hoot tag-info input.osm --keys "key1;Key2" --case-insensitive
+
+hoot tag-info myshapefile.shp "myfgb.gdb;mylayer" --tag-values-limit 30
+--------------------------------------
+
+=== Example Output
+
+-------------------------------------
+.{
+  "ca-Transmission_Line-state-gov.shp":{
+    "ca-Transmission_Line-state-gov":{
+      "Circuit":[
+        "Double",
+        "Duble",
+        "Liberty Energy",
+        "Many",
+        "Quad",
+        "Single"
+        ],
+      "Comments":[
+        "Attached to 115kv poles",
+        "Caldwell-victor 220kv",
+        "Changed kv from 115 to 60kv",
+        "Distribution line",
+        ...
+        ],
+      "Legend":[
+        "IID_161kV",
+        "IID_230kV",
+        "IID_34.5_92kV",
+        "LADWP_115_138kV",
+        ...
+        ],
+        ...
+}}
+---------------------------------------
+
+=== Notes
+
+This command works on streamable inputs only.  At the time of this writing that includes all inputs except JSON.
+

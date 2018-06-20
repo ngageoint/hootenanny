@@ -3,7 +3,7 @@
 == Manual Conflation
 
 To train a conflation model for a particular data type when using Hootenanny, it often relies on data manually matched by a human.  This
-section describes that process.
+section describes the process of making manual matches for that purpose.
 
 === Prerequisites
 
@@ -18,9 +18,9 @@ section describes that process.
 This is a contrived example set of commands that perform all the data preparation described in this section.  Not all of the commands may apply to your data, so read the rest of the section for more background, if needed.  Some, but not all, of these steps can be done in the Hootenanny iD Editor User Interface as well.  See that Hootenanny User Interface Documentation for more details on how to perform those steps within it.
 
 ----------------------------
-# translate (may be optional)
-hoot convert-ogr2osm MyTranslation.py TranslatedOutput1.osm Input1.shp
-hoot convert-ogr2osm MyTranslation.py TranslatedOutput2.osm Input2.shp
+# translate
+hoot convert Input1.shp TranslatedOutput1.osm --trans MyTranslation.py
+hoot convert Input2.shp TranslatedOutput2.osm --trans MyTranslation.py
 
 # crop (optional)
 hoot crop TranslatedOutput1.osm CroppedOutput1.osm "-77.0551,38.8845,-77.0281,38.9031"
@@ -41,25 +41,31 @@ hoot convert -D convert.ops=hoot::AddRef1Visitor BuildingsOutput2.osm Ref2.osm
 
 ==== Obtaining Test Data
 
-You will need at least two datasets from the same general AOI to manually match features.  Normally, we are manually conflating an OSM dataset with an NGA provided dataset.  Sometimes in place of an NGA dataset we may use some reliable, publicly available data and convert it to the OSM format, if needed.  Adding more than one pair of datasets into the training pipeline is encouraged and can strengthen the resulting model if the additional datasets contain unique feature matching situations that are representative of the data you will be eventually conflating.
+You will need at least two datasets from the same general AOI to manually match features.  Generally, test data is made up of specific data from the individual or organization you are adding the conflation capability for, public OpenStreetMap data, and public data from other sources.  Adding more than one pair of datasets into the training pipeline is encouraged and can strengthen the resulting model if the additional datasets contain unique feature matching situations that are representative of the data you will be eventually conflating.  link:$$http://www.data.gov$$[data.gov] is a great place to find open source data published by the U.S. federal and state governments.
 
 After obtaining the data, look over its attribution.  It should have tags that clearly identify the feature types of the contained data.  In the case of OSM data, the tags should fall cleanly into the OSM tag specification (taginfo.openstreetmap.org) or can be translated into the OSM tag specification with either an existing translation or a new one that you write (see the following translation section).  If the tagging is poor, then the accuracy of the conflated data will also likely be poor.  However if the poor data quality accurately represents the quality of the datasets you eventually want to conflate with Hootenanny and you understand the possible shortcomings, then manually matching poor quality datasets may make sense.
 
 Also, examine the geometries of the features with a backdrop of accurate satellite imagery, if possible.  This should give you clues as to the geospatial accuracy of the mapped data.  The poorer the overall geospatial accuracy is, also likely the harder the data will be to conflate.  The same caveats apply here as described in the previous attribution quality section.
 
-==== Translating Test Data (may be optional)
+==== Translating Test Data
 
-Once users have identified appropriate datasets to manually match, they will need to translate any non-OSM datasets into Hootenanny's OSM+ schema or create their own custom translation schema to do so.  If your input data is already OSM, you may skip this step.  If your input data already has name and type fields that correspond to the OSM standard, then you may also be able to skip this step.  See taginfo.openstreetmap.org for more information on the OSM tagging standard.  For detailed instructions on how to translate data, see the convert-ogr2osm command documentation.
+Once users have identified appropriate datasets to manually match, they will need to translate any non-OSM datasets into Hootenanny's OSM+ 
+schema or create their own custom translation schema to do so.  If your input data is already OSM, you may skip this step.  If your input data 
+already has name and type fields that correspond to the OSM standard, then you may also be able to skip this step.  See 
+taginfo.openstreetmap.org for more information on the OSM tagging standard.  For detailed instructions on how to translate data, read the 
+Hootenanny User Guide documentation on creating translations, as well as the convert command documentation.
 
 An example:
 
 ----------------------
-hoot convert-ogr2osm MyTranslation.py TranslatedOutput.osm Input.shp
+hoot convert Input.shp TranslatedOutput.osm --trans MyTranslation.py
 ----------------------------
 
 ==== Cropping Test Data (optional)
 
-If the AOI of either of your input datasets is larger than you need, then you may benefit from cropping the data down to a smaller AOI, as JOSM can be slow when dealing with very large datasets.  See the command line documenation on the crop command in the Hootenanny User Guide for more information on cropping data.
+If the AOI of either of your input datasets is larger than you need, then you may benefit from cropping the data down to a smaller AOI, as JOSM 
+can be slow when dealing with very large datasets.  See the command line documenation on the crop command in the Hootenanny User Guide for 
+more information on cropping data.
 
 An example:
 
@@ -69,7 +75,9 @@ hoot crop Input.osm CroppedOutput.osm "-77.0551,38.8845,-77.0281,38.9031"
 
 ==== Cleaning the Test Data (optional)
 
-The Hootenanny clean command can be used to perform useful cleaning operations on the data beforehand.  This is an optional step at this point but is always executed by Hootenanny on all input data before conflation.  The advantage of doing cleaning before manual conflation is that it may result in more intutive input data to use during the process.  See the clean command documentation for more details.
+The Hootenanny clean command can be used to perform useful cleaning operations on the data beforehand.  This is an optional step at this point 
+but is always executed by Hootenanny on all input data before conflation.  The advantage of doing cleaning before manual conflation is that it 
+may result in more intutive input data to use during the process.  See the clean command documentation for more details.
 
 An example:
 
@@ -79,7 +87,9 @@ hoot clean Input.osm CleanedOutput.osm
 
 ==== Pruning Irrelevant Test Data (optional)
 
-If you have a dataset which contains features not relevant to the manual matching you are doing, you can use Hootenanny to remove them.  This step is optional, though, and can be done by a developer when later creating conflation regression tests using the same data.  The advantage to doing it before manual matching is that you will have less clutter on the screen during the process.
+If you have a dataset which contains features not relevant to the manual matching you are doing, you can use Hootenanny to remove them.  This 
+step is optional, though, and can be done by a developer when later creating conflation regression tests using the same data.  The advantage 
+to doing it before manual matching is that you will have less clutter on the screen during the process.
 
 There are two basic ways to prune various types of data.
 
@@ -91,7 +101,8 @@ hoot convert -D "convert.ops=hoot::KeepBuildingsVisitor" Input.osm JustBuildings
 
 See the Hootenanny Command Line Documentation for a complete list of the available visitors that can be used for filtering.
 
-For more complicated data pruning tasks, you may want to use the Hootenanny Javascript interface.  Here is a Javascript example that loads in two datasets from two separate files and removes all features that aren't buildings or POI's.  First, the command (assumes a script called
+For more complicated data pruning tasks, you may want to use the Hootenanny Javascript interface.  Here is a Javascript example that loads in 
+two datasets from two separate files and removes all features that aren't buildings or POI's.  First, the command (assumes a script called
 'RemoveIrrelevants.js':
 
 ---------------------
@@ -147,7 +158,8 @@ If you need help with a specific filtering task for your data, reach out to the 
 
 ==== Adding REF Tags to Test Data
 
-In manual matching, you match a feature in one dataset to a feature in another using REF tags on the features (specific examples of this will follow).  One dataset will have a "REF1" tag on all of its features and the other will have a "REF2" tag on all of its features.  The values for both REF tags start out as "todo", so you know as a manual matcher that you still need to match the feature.  Typically you want to put REF1 tags on the larger data set. REF tags are six digit hex values that are unique to a single file.
+In manual matching, you match a feature in one dataset to a feature in another using REF tags on the features (specific examples of this will 
+follow).  One dataset will have a "REF1" tag on all of its features and the other will have a "REF2" tag on all of its features.  The values for both REF tags start out as "todo", so you know as a manual matcher that you still need to match the feature.  Typically you want to put REF1 tags on the larger data set. REF tags are six digit hex values that are unique to a single file.
 
 An example that generates the tags on two separate input datasets:
 
@@ -166,22 +178,31 @@ The following are typical scenarios of data matching relationships:
 * one to many Points/Lines/Polygons
 * many to one Points/Lines/Polygons
 
-Note that matching standards will vary between the type of features that you are trying to match.  For example, a corresponding pair of matched road features may appear as a single road in the reference data but a divided road in the second dataset.  Similarly, a single POI in one dataset may represent a cluster of buildings or POIs in another dataset.
+Note that matching standards will vary between the type of features that you are trying to match.  For example, a corresponding pair of matched 
+road features may appear as a single road in the reference data but a divided road in the second dataset.  Similarly, a single POI in one 
+dataset may represent a cluster of buildings or POIs in another dataset.
 
-JOSM is used to conflate the two data sets and the conflation should take place in two passes.  The first pass should be without using any additional data source for input (e.g. imagery, lidar or other maps).  After the map has been conflated without imagery, the second pass may use the imagery.  Resist the urge to consult data sources other than the ones your are matching for information...no cheating!
+JOSM is used to conflate the two data sets and the conflation should take place in two passes.  The first pass should be without using any 
+additional data source for input (e.g. imagery, lidar or other maps).  After the map has been conflated without imagery, the second pass may use the imagery.  Resist the urge to consult data sources other than the ones your are matching for information...no cheating!
 
-One way to reduce bias in matching is to have two people independently perform the manual matching process.  One person will use the NGA provided data as base data for matching and merge OSM data into it.  The other person will use the OSM data as base data and merge in the NGA provided data.  When in doubt, the conflator (tm) should give a very minor bias to the base data set.  This will help reduce the overall bias but doesn't mean that you can't modify the base data.
+One way to reduce bias in matching is to have two people independently perform the manual matching process.  One person will use the NGA 
+provided data as base data for matching and merge OSM data into it.  The other person will use the OSM data as base data and merge in the NGA 
+provided data.  When in doubt, the conflator (tm) should give a very minor bias to the base data set.  This will help reduce the overall bias 
+but doesn't mean that you can't modify the base data.
 
 === Matching Process
 
 There are two files used as input:
 
 * REF1 - This is the file with a REF1 tag on all features.  Do not modify this file in any way.
-* REF2 - This is the file with a REF2 tag on all features.  Only modify the tags in this file.  Do not modify the geometries, remove elements, add elements, etc.
+* REF2 - This is the file with a REF2 tag on all features.  Only modify the tags in this file.  Do not modify the geometries, remove elements, 
+         add elements, etc.
 
-By default all features are marked with REF2=todo. The JOSM paint style given in an earlier section highlights the todo in blue, which tells Hootenanny that a human has not reviewed the record and to omit it from training and testing.
+By default all features are marked with REF2=todo. The JOSM paint style given in an earlier section highlights the todo in blue, which tells 
+Hootenanny that a human has not reviewed the record and to omit it from training and testing.
 
-* To create a match between a feature in the REF2 dataset with a feature in the REF1 dataset, you add the REF1 tag ID value of the feature in the REF1 dataset to the value of the REF2 tag of the feature in the REF2 dataset, replacing its current "todo" value. To signify that one feature matches multiple features, use a ';' delimiter between the REF ID.  Example:
+* To create a match between a feature in the REF2 dataset with a feature in the REF1 dataset, you add the REF1 tag ID value of the feature in 
+the REF1 dataset to the value of the REF2 tag of the feature in the REF2 dataset, replacing its current "todo" value. To signify that one feature matches multiple features, use a ';' delimiter between the REF ID.  Example:
 ** Single match: REF2=007be5
 ** Two matches: REF2=007be5;007be6
 * To flag to features for review, do the same as in the previous step but populate the value of the REVIEW tag instead.  Example:

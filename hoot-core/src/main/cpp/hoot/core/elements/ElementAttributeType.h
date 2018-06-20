@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTATTRIBUTETYPE_H
 #define ELEMENTATTRIBUTETYPE_H
@@ -56,8 +56,8 @@ public:
     Version = 4
   } Type;
 
-  ElementAttributeType() { _type = Changeset; }
-  ElementAttributeType(Type type) { _type = type; }
+  ElementAttributeType() : _type(Changeset) {}
+  ElementAttributeType(Type type) : _type(type) {}
 
   bool operator==(ElementAttributeType t) const { return t._type == _type; }
   bool operator!=(ElementAttributeType t) const { return t._type != _type; }
@@ -85,7 +85,7 @@ public:
 
   static Type fromString(QString typeString)
   {
-    typeString = typeString.toLower();
+    typeString = typeString.toLower().trimmed();
     if (typeString == "changeset")
     {
       return Changeset;
@@ -108,7 +108,7 @@ public:
     }
     else
     {
-      throw HootException("Invalid element attribute type string: " + typeString);
+      throw IllegalArgumentException("Invalid element attribute type string: " + typeString);
     }
   }
 

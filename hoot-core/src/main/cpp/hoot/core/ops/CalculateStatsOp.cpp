@@ -28,19 +28,19 @@
 
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/filters/BuildingCriterion.h>
-#include <hoot/core/filters/ChainCriterion.h>
-#include <hoot/core/filters/ElementTypeCriterion.h>
-#include <hoot/core/filters/HighwayFilter.h>
-#include <hoot/core/filters/LinearFilter.h>
-#include <hoot/core/filters/NeedsReviewCriterion.h>
-#include <hoot/core/filters/NoInformationCriterion.h>
-#include <hoot/core/filters/NotCriterion.h>
-#include <hoot/core/filters/PoiCriterion.h>
-#include <hoot/core/filters/StatsAreaFilter.h>
-#include <hoot/core/filters/StatusCriterion.h>
-#include <hoot/core/filters/TagCriterion.h>
-#include <hoot/core/filters/WaterwayCriterion.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/criterion/ElementTypeCriterion.h>
+#include <hoot/core/criterion/HighwayFilter.h>
+#include <hoot/core/criterion/LinearFilter.h>
+#include <hoot/core/criterion/NeedsReviewCriterion.h>
+#include <hoot/core/criterion/NoInformationCriterion.h>
+#include <hoot/core/criterion/NotCriterion.h>
+#include <hoot/core/criterion/PoiCriterion.h>
+#include <hoot/core/criterion/StatsAreaFilter.h>
+#include <hoot/core/criterion/StatusCriterion.h>
+#include <hoot/core/criterion/TagCriterion.h>
+#include <hoot/core/criterion/WaterwayCriterion.h>
 #include <hoot/core/io/ScriptTranslatorFactory.h>
 #include <hoot/core/visitors/CalculateAreaVisitor.h>
 #include <hoot/core/visitors/CalculateAreaForStatsVisitor.h>
@@ -73,6 +73,8 @@ using namespace std;
 
 namespace hoot
 {
+
+HOOT_FACTORY_REGISTER(OsmMapOperation, CalculateStatsOp)
 
 CalculateStatsOp::CalculateStatsOp(QString mapName, bool inputIsConflatedMapOutput) :
   _mapName(mapName),

@@ -161,7 +161,7 @@ sudo rm -f datasources/feature/*.properties
 sudo rm -f services/ex_*.xml
 --------------------------------------
 
-* *Seeing this error: "convert-ogr2osm Unable to open /path/to/file.shp"* --> Possibly you do not have the Postgres extension installed for GDAL. See related troubleshooting tip in the "Core" section.
+* *Seeing this error: "convert Unable to open /path/to/file.shp"* --> Possibly you do not have the Postgres extension installed for GDAL. See related troubleshooting tip in the "Core" section.
 
 [[HootUITroubleshoot]]
 === UI

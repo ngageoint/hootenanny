@@ -56,7 +56,7 @@ Way::Way(Status s, long id, Meters circularError, long changeset, long version,
   : Element(s)
 {
   _wayData.reset(new WayData(id, changeset, version, timestamp, user, uid, visible, pid));
-  _getElementData().setCircularError(circularError);
+  _wayData->setCircularError(circularError);
 }
 
 Way::Way(const Way& from)

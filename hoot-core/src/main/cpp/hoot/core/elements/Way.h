@@ -199,12 +199,6 @@ public:
 
 protected:
 
-  boost::shared_ptr<WayData> _wayData;
-  /**
-   * This envelope may be cached, but it also may not be exact.
-   */
-  mutable geos::geom::Envelope _cachedEnvelope;
-
   virtual ElementData& _getElementData() { _makeWritable(); return *_wayData; }
 
   virtual const ElementData& _getElementData() const { return *_wayData; }
@@ -213,6 +207,12 @@ protected:
 
 private:
 
+  boost::shared_ptr<WayData> _wayData;
+
+  /**
+   * This envelope may be cached, but it also may not be exact.
+   */
+  mutable geos::geom::Envelope _cachedEnvelope;
 };
 
 typedef boost::shared_ptr<Way> WayPtr;

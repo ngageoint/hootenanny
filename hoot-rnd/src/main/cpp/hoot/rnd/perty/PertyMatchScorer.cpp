@@ -37,9 +37,9 @@
 #include <hoot/rnd/scoring/MatchScoringMapPreparer.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/MetadataTags.h>
-#include <hoot/core/util/OsmUtils.h>
+#include <hoot/core/util/IoUtils.h>
 #include <hoot/core/visitors/AddRef1Visitor.h>
-#include <hoot/core/visitors/SetTagVisitor.h>
+#include <hoot/core/visitors/SetTagValueVisitor.h>
 #include <hoot/core/visitors/TagCountVisitor.h>
 #include <hoot/core/visitors/TagRenameKeyVisitor.h>
 #include <hoot/core/OsmMap.h>
@@ -109,7 +109,7 @@ boost::shared_ptr<MatchComparator> PertyMatchScorer::scoreMatches(const QString 
     _combineMapsAndPrepareForConflation(referenceMap, perturbedMapOutputPath);
 
   MapProjector::projectToWgs84(combinedMap);
-  OsmUtils::saveMap(combinedMap, combinedMapOutputPath);
+  IoUtils::saveMap(combinedMap, combinedMapOutputPath);
 
   return _conflateAndScoreMatches(combinedMap, conflatedMapOutputPath);
 }
@@ -121,13 +121,13 @@ OsmMapPtr PertyMatchScorer::_loadReferenceMap(const QString referenceMapInputPat
             " tags to it; Saving a copy to " << referenceMapOutputPath << "...");
 
   OsmMapPtr referenceMap(new OsmMap());
-  OsmUtils::loadMap(referenceMap, referenceMapInputPath, false, Status::Unknown1);
+  IoUtils::loadMap(referenceMap, referenceMapInputPath, false, Status::Unknown1);
   MapCleaner().apply(referenceMap);
 
   boost::shared_ptr<AddRef1Visitor> addRef1Visitor(new AddRef1Visitor());
   referenceMap->visitRw(*addRef1Visitor);
-  boost::shared_ptr<SetTagVisitor> setAccuracyVisitor(
-    new SetTagVisitor(MetadataTags::ErrorCircular(), QString::number(_searchDistance)));
+  boost::shared_ptr<SetTagValueVisitor> setAccuracyVisitor(
+    new SetTagValueVisitor(MetadataTags::ErrorCircular(), QString::number(_searchDistance)));
   referenceMap->visitRw(*setAccuracyVisitor);
   LOG_VARD(referenceMap->getNodes().size());
   LOG_VARD(referenceMap->getWays().size());
@@ -141,7 +141,7 @@ OsmMapPtr PertyMatchScorer::_loadReferenceMap(const QString referenceMapInputPat
 
   OsmMapPtr referenceMapCopy(referenceMap);
   MapProjector::projectToWgs84(referenceMapCopy);
-  OsmUtils::saveMap(referenceMapCopy, referenceMapOutputPath);
+  IoUtils::saveMap(referenceMapCopy, referenceMapOutputPath);
 
   return referenceMap;
 }
@@ -155,15 +155,16 @@ void PertyMatchScorer::_loadPerturbedMap(const QString perturbedMapInputPath,
   //load from the modified reference data output to get the added ref1 tags; don't copy the map,
   //since updates to the names of the ref tags on this map will propagate to the map copied from
   OsmMapPtr perturbedMap(new OsmMap());
-  OsmUtils::loadMap(perturbedMap, perturbedMapInputPath, false, Status::Unknown2);
+  IoUtils::loadMap(perturbedMap, perturbedMapInputPath, false, Status::Unknown2);
   MapCleaner().apply(perturbedMap);
 
-  boost::shared_ptr<TagRenameKeyVisitor> tagRenameKeyVisitor(new TagRenameKeyVisitor(MetadataTags::Ref1(), MetadataTags::Ref2()));
+  boost::shared_ptr<TagRenameKeyVisitor> tagRenameKeyVisitor(
+    new TagRenameKeyVisitor(MetadataTags::Ref1(), MetadataTags::Ref2()));
   perturbedMap->visitRw(*tagRenameKeyVisitor);
-  // This could be replaced with a SetTagVisitor passed in from the command line
+  // This could be replaced with a SetTagValueVisitor passed in from the command line
   // instead.
-  boost::shared_ptr<SetTagVisitor> setAccuracyVisitor(
-    new SetTagVisitor(MetadataTags::ErrorCircular(), QString::number(_searchDistance)));
+  boost::shared_ptr<SetTagValueVisitor> setAccuracyVisitor(
+    new SetTagValueVisitor(MetadataTags::ErrorCircular(), QString::number(_searchDistance)));
   perturbedMap->visitRw(*setAccuracyVisitor);
   LOG_VARD(perturbedMap->getNodes().size());
   LOG_VARD(perturbedMap->getWays().size());
@@ -192,7 +193,7 @@ void PertyMatchScorer::_loadPerturbedMap(const QString perturbedMapInputPath,
   }
 
   MapProjector::projectToWgs84(perturbedMap);
-  OsmUtils::saveMap(perturbedMap, perturbedMapOutputPath);
+  IoUtils::saveMap(perturbedMap, perturbedMapOutputPath);
 }
 
 OsmMapPtr PertyMatchScorer::_combineMapsAndPrepareForConflation(
@@ -205,7 +206,7 @@ OsmMapPtr PertyMatchScorer::_combineMapsAndPrepareForConflation(
 //  LOG_DEBUG("saving a debug copy to " << combinedOutputPath << " ...");
 
   OsmMapPtr combinedMap(referenceMap);
-  OsmUtils::loadMap(combinedMap, perturbedMapInputPath, false, Status::Unknown2);
+  IoUtils::loadMap(combinedMap, perturbedMapInputPath, false, Status::Unknown2);
   LOG_VARD(combinedMap->getNodes().size());
   LOG_VARD(combinedMap->getWays().size());
   if (Log::getInstance().getLevel() <= Log::Debug)
@@ -218,7 +219,7 @@ OsmMapPtr PertyMatchScorer::_combineMapsAndPrepareForConflation(
 
 // OsmMapPtr combinedMapCopy(combinedMap);
 //  MapProjector::reprojectToWgs84(combinedMapCopy);
-//  OsmUtils::saveMap(combinedMapCopy, combinedOutputPath);
+//  IoUtils::saveMap(combinedMapCopy, combinedOutputPath);
 
 //  LOG_DEBUG("Preparing the reference data for conflation ...");
 //  QString combinedOutputPath2 = fileInfo.path() + "/ref-after-prep.osm";
@@ -237,7 +238,7 @@ OsmMapPtr PertyMatchScorer::_combineMapsAndPrepareForConflation(
 
 // OsmMapPtr combinedMapCopy2(combinedMap);
 //  MapProjector::reprojectToWgs84(combinedMapCopy2);
-//  OsmUtils::saveMap(combinedMapCopy2, combinedOutputPath2);
+//  IoUtils::saveMap(combinedMapCopy2, combinedOutputPath2);
 
   if (_applyRubberSheet)
   {
@@ -263,7 +264,7 @@ OsmMapPtr PertyMatchScorer::_combineMapsAndPrepareForConflation(
 
     // OsmMapPtr combinedMapCopy3(combinedMapCopy2);
     //  MapProjector::reprojectToWgs84(combinedMapCopy3);
-    //  OsmUtils::saveMap(combinedMapCopy3, combinedOutputPath3);
+    //  IoUtils::saveMap(combinedMapCopy3, combinedOutputPath3);
   }
 
   return combinedMap;
@@ -325,7 +326,7 @@ void PertyMatchScorer::_saveMap(OsmMapPtr map, QString path)
   }
 
   MapProjector::projectToWgs84(map);
-  OsmUtils::saveMap(map, path);
+  IoUtils::saveMap(map, path);
 }
 
 }

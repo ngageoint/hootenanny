@@ -31,11 +31,14 @@
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/conflate/matching/NodeMatcher.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace std;
 
 namespace hoot
 {
+
+HOOT_FACTORY_REGISTER(ConstElementVisitor, FindIntersectionsVisitor)
 
 void FindIntersectionsVisitor::visit(const ConstElementPtr& e)
 {

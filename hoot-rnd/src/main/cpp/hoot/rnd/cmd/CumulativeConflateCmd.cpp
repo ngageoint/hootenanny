@@ -76,7 +76,8 @@ public:
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, ConflateCumulativeCmd)
+//This hasn't seen much use but don't want to remove it just yet.
+//HOOT_FACTORY_REGISTER(Command, ConflateCumulativeCmd)
 
 }
 

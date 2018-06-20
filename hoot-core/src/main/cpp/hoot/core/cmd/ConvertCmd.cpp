@@ -26,23 +26,14 @@
  */
 
 // Hoot
-#include <hoot/core/OsmMapConsumer.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/ops/NamedOp.h>
-#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MapProjector.h>
-#include <hoot/core/io/ElementStreamer.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/filters/ElementCriterion.h>
-#include <hoot/core/elements/ElementVisitor.h>
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/util/ConfigUtils.h>
+#include <hoot/core/io/DataConverter.h>
 
 // Qt
 #include <QElapsedTimer>
+#include <QStringList>
 
 using namespace std;
 
@@ -55,109 +46,85 @@ public:
 
   static string className() { return "hoot::ConvertCmd"; }
 
-  ConvertCmd() { }
+  ConvertCmd() {}
 
   virtual QString getName() const { return "convert"; }
 
   virtual QString getDescription() const
   { return "Converts map data from one input format to another"; }
 
-  /**
-   * Return true if all the specified operations are valid streaming operations.
-   *
-   * There are some ops that require the whole map be available in RAM (e.g. remove duplicate
-   * nodes). These operations are not applicable for streaming.
-   */
-  bool areValidStreamingOps(QStringList ops)
-  {
-    // add visitor/criterion operations if any of the convert ops are visitors.
-    foreach (QString opName, ops)
-    {
-      if (!opName.trimmed().isEmpty())
-      {
-        if (Factory::getInstance().hasBase<ElementCriterion>(opName.toStdString()))
-        {
-          ElementCriterionPtr criterion(
-            Factory::getInstance().constructObject<ElementCriterion>(opName));
-          // when streaming we can't provide a reliable OsmMap.
-          if (dynamic_cast<OsmMapConsumer*>(criterion.get()) != 0)
-          {
-            return false;
-          }
-        }
-        else if (Factory::getInstance().hasBase<ElementVisitor>(opName.toStdString()))
-        {
-          // good, pass
-        }
-        else
-        {
-          return false;
-        }
-      }
-    }
-
-    return true;
-  }
-
   virtual int runSimple(QStringList args)
   {
-    if (args.size() != 2)
+    if (args.size() < 2)
     {
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes two parameters.").arg(getName()));
+      throw HootException(QString("%1 takes at least two parameters.").arg(getName()));
     }
 
     QElapsedTimer timer;
     timer.start();
 
-    const QString input = args[0];
-    const QString output = args[1];
-    LOG_INFO("Converting " << input.right(100) << " to " << output.right(100) << "...");
+    DataConverter converter;
 
-    // This keeps the status and the tags.
-    conf().set(ConfigOptions().getReaderUseFileStatusKey(), true);
-    conf().set(ConfigOptions().getReaderKeepStatusTagKey(), true);
-
-//    QString readerName = ConfigOptions().getOsmMapReaderFactoryReader();
-//    if (readerName.trimmed().isEmpty())
-//    {
-//      readerName = OsmMapReaderFactory::getReaderName(input);
-//    }
-//    LOG_VARD(readerName);
-    LOG_VARD(OsmMapReaderFactory::getInstance().hasElementInputStream(input));
-
-    QString writerName = ConfigOptions().getOsmMapWriterFactoryWriter();
-    if (writerName.trimmed().isEmpty())
+    LOG_VART(args.size());
+    LOG_VART(args);
+    QStringList inputs;
+    QString output;
+    int argIndex = 0;
+    for (int i = 0; i < args.size(); i++)
     {
-      writerName = OsmMapWriterFactory::getWriterName(args[1]);
+      const QString arg = args[i];
+      LOG_VART(arg);
+      //-- options are assumed to be all at the end of the command, so we're done parsing
+      //inputs/outputs once we reach one of them
+      if (arg.startsWith("--"))
+      {
+        break;
+      }
+      argIndex++;
+      inputs.append(arg);
     }
-    LOG_VARD(writerName);
-    LOG_VARD(OsmMapWriterFactory::getInstance().hasElementOutputStream(output));
-    LOG_VARD(ConfigUtils::boundsOptionEnabled());
+    LOG_VART(inputs.size());
+    LOG_VART(argIndex);
+    output = inputs.at(argIndex - 1);
+    inputs.removeAt(argIndex - 1);
+    LOG_VART(inputs.size());
+    LOG_VART(inputs);
+    LOG_VART(output);
 
-    if (OsmMapReaderFactory::getInstance().hasElementInputStream(input) &&
-        OsmMapWriterFactory::getInstance().hasElementOutputStream(output) &&
-        areValidStreamingOps(ConfigOptions().getConvertOps()) &&
-        //the XML writer can't keep sorted output when streaming, so require an additional config
-        //option be specified in order to stream when writing that format
-        (writerName != "hoot::OsmXmlWriter" ||
-         (writerName == "hoot::OsmXmlWriter" && !ConfigOptions().getWriterXmlSortById())) &&
-        //none of the convert bounding box supports are able to do streaming I/O at this point
-        !ConfigUtils::boundsOptionEnabled())
+    if (args.contains("--trans"))
     {
-      ElementStreamer::stream(input, output);
-    }
-    else
+      const QString translation = args.at(args.indexOf("--trans") + 1).trimmed();
+      if (translation.isEmpty())
+      {
+        throw HootException("Invalid translation specified.");
+      }
+      converter.setTranslation(translation);
+    }    
+
+    if (args.contains("--cols"))
     {
-      OsmMapPtr map(new OsmMap());
-      loadMap(
-        map, input, ConfigOptions().getReaderUseDataSourceIds(),
-        Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
-      // Apply any user specified operations.
-      NamedOp(ConfigOptions().getConvertOps()).apply(map);
-      MapProjector::projectToWgs84(map);
-      saveMap(map, output);
+      converter.setColsArgSpecified(true);
+      const QStringList cols =
+        args.at(args.indexOf("--cols") + 1).trimmed().split(",", QString::SkipEmptyParts);
+      converter.setColumns(cols);
     }
+
+    if (args.contains("--limit"))
+    {
+      bool ok;
+      const int featureReadLimit = args.at(args.indexOf("--limit") + 1).trimmed().toInt(&ok);
+      if (!ok)
+      {
+        throw HootException("Invalid input specified for limit: " +
+                            args.at(args.indexOf("--limit") + 1));
+      }
+      converter.setFeatureReadLimit(featureReadLimit);
+    }
+
+    converter.setConfiguration(conf());
+
+    converter.convert(inputs, output);
 
     LOG_DEBUG("Convert operation complete.");
     QString msg = "Convert operation took ";

@@ -362,16 +362,7 @@ public:
   void runIsSupportedUrlIsDirTest()
   {
     OsmPbfReader reader(false);
-    QString exceptionMsg("");
-    try
-    {
-      CPPUNIT_ASSERT(!reader.isSupported("test-files"));
-    }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-    }
-    CPPUNIT_ASSERT_EQUAL(QString("Can't handle dirs with partial read yet."), exceptionMsg);
+    CPPUNIT_ASSERT(!reader.isSupported("test-files"));
   }
 
   void runOpenUrlExistsTest()
