@@ -86,24 +86,27 @@ void DiffConflator::apply(OsmMapPtr& map)
   Timer timer;
   _reset();
 
+  // Store the map - we might need it for tag diff later.
+  _pMap = map;
+
   LOG_INFO("Applying pre diff-conflation operations...");
-  NamedOp(ConfigOptions().getUnifyPreOps()).apply(map);
+  NamedOp(ConfigOptions().getUnifyPreOps()).apply(_pMap);
 
   _stats.append(SingleStat("Apply Pre Ops Time (sec)", timer.getElapsedAndRestart()));
 
   // will reproject if necessary.
-  MapProjector::projectToPlanar(map);
+  MapProjector::projectToPlanar(_pMap);
 
   _stats.append(SingleStat("Project to Planar Time (sec)", timer.getElapsedAndRestart()));
 
-  // find all the matches in this map
+  // find all the matches in this _pMap
   if (_matchThreshold.get())
   {
-    _matchFactory.createMatches(map, _matches, _bounds, _matchThreshold);
+    _matchFactory.createMatches(_pMap, _matches, _bounds, _matchThreshold);
   }
   else
   {
-    _matchFactory.createMatches(map, _matches, _bounds);
+    _matchFactory.createMatches(_pMap, _matches, _bounds);
   }
   LOG_DEBUG("Match count: " << _matches.size());
   LOG_TRACE(SystemInfo::getMemoryUsageString());
@@ -114,9 +117,16 @@ void DiffConflator::apply(OsmMapPtr& map)
   _stats.append(SingleStat("Number of Matches Found per Second",
     (double)_matches.size() / findMatchesTime));
 
-  // Now we have matches. Here's what we are going to do, because our map contains All of input1
-  // and input2: we are going to delete everthing from the match pairs. Then we will delete all
-  // remaining input1 items.
+  // Use matches to calculate and store tag diff. We must do this before we
+  // create the map diff, because that operation deletes all of the info needed
+  // for calculating the tag diff.
+  MapProjector::projectToWgs84(_pMap);
+  _calcAndStoreTagChanges();
+
+  // We have matches. Here's what we are going to do: because our _pMap contains
+  // all of input1 and input2, we are going to delete everthing that belongs to
+  // a match pair. Then we will delete all remaining input1 items... leaving us
+  // with the differential that we want.
   for (std::vector<const Match*>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
   {
     std::set< std::pair<ElementId, ElementId> > pairs = (*mit)->getMatchPairs();
@@ -124,8 +134,8 @@ void DiffConflator::apply(OsmMapPtr& map)
     for (std::set< std::pair<ElementId, ElementId> >::iterator pit = pairs.begin();
          pit != pairs.end(); ++pit)
     {
-      RecursiveElementRemover(pit->first).apply(map);
-      RecursiveElementRemover(pit->second).apply(map);
+      RecursiveElementRemover(pit->first).apply(_pMap);
+      RecursiveElementRemover(pit->second).apply(_pMap);
     }
   }
 
@@ -133,11 +143,11 @@ void DiffConflator::apply(OsmMapPtr& map)
   boost::shared_ptr<ElementCriterion> pTagKeyCrit(new TagKeyCriterion(MetadataTags::Ref1()));
   RemoveElementsVisitor removeRef1Visitor(pTagKeyCrit);
   removeRef1Visitor.setRecursive(true);
-  map->visitRw(removeRef1Visitor);
+  _pMap->visitRw(removeRef1Visitor);
 
 
   LOG_INFO("Applying post-diff conflation operations...");
-  NamedOp(ConfigOptions().getUnifyPostOps()).apply(map);
+  NamedOp(ConfigOptions().getUnifyPostOps()).apply(_pMap);
 
   _stats.append(SingleStat("Apply Post Ops Time (sec)", timer.getElapsedAndRestart()));
 }
@@ -145,14 +155,140 @@ void DiffConflator::apply(OsmMapPtr& map)
 void DiffConflator::setConfiguration(const Settings &conf)
 {
   _settings = conf;
-
   _matchThreshold.reset();
   _reset();
+}
+
+MemChangesetProviderPtr DiffConflator::getTagDiff()
+{
+  return _pTagChanges;
+}
+
+void DiffConflator::storeOriginalIDs(OsmMapPtr& pMap)
+{
+  // Nodes
+  const NodeMap &nodes = pMap->getNodes();
+  for (HashMap<long, NodePtr>::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
+  {
+    _originalIds.insert(ElementId(ElementType::Node, it->first));
+  }
+
+  // Ways
+  const WayMap &ways = pMap->getWays();
+  for (HashMap<long, WayPtr>::const_iterator it = ways.begin(); it != ways.end(); ++it)
+  {
+    _originalIds.insert(ElementId(ElementType::Way, it->first));
+  }
+
+  // Relations
+  const RelationMap &relations = pMap->getRelations();
+  for (HashMap<long, RelationPtr>::const_iterator it = relations.begin(); it != relations.end(); ++it)
+  {
+    _originalIds.insert(ElementId(ElementType::Relation, it->first));
+  }
+}
+
+void DiffConflator::_calcAndStoreTagChanges()
+{
+  // Make sure we have a container for our changes
+  if (!_pTagChanges)
+  {
+    _pTagChanges.reset(new MemChangesetProvider(_pMap->getProjection()));
+  }
+
+  for (std::vector<const Match*>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
+  {
+    std::set< std::pair<ElementId, ElementId>> pairs = (*mit)->getMatchPairs();
+
+    // Go through our match pairs, calculate tag diff for elements. We only
+    // consider the "Original" elements when we do this - we want to ignore
+    // elements created during map cleaning operations (e.g. intersection splitting)
+    // because the map that the changeset operates on won't have those elements.
+    for (std::set< std::pair<ElementId, ElementId> >::iterator pit = pairs.begin();
+         pit != pairs.end(); ++pit)
+    {
+      // If it's a POI-Poly match, the poi always comes first, even if it's from
+      // the secondary dataset, so we can't always count on the first being
+      // the old element
+      ConstElementPtr pOldElement;
+      ConstElementPtr pNewElement;
+      if (_originalIds.end() != _originalIds.find(pit->first))
+      {
+        pOldElement = _pMap->getElement(pit->first);
+        pNewElement = _pMap->getElement(pit->second);
+      }
+      else if (_originalIds.end() != _originalIds.find(pit->second))
+      {
+        pOldElement = _pMap->getElement(pit->second);
+        pNewElement = _pMap->getElement(pit->first);
+      }
+      else
+      {
+        // How do you like me now, SonarQube?
+        // Skip this element, because it's not in the OG map
+        continue;
+      }
+
+      // Double check to make sure we don't create multiple changes for the
+      // same element
+      if (!_pTagChanges->containsChange(pOldElement->getElementId())
+          && _compareTags(pOldElement->getTags(), pNewElement->getTags()))
+      {
+        // Make new change
+        Change newChange = _getChange(pOldElement, pNewElement);
+
+        // Add it to our list
+        _pTagChanges->addChange(newChange);
+      }
+    }
+  }
+}
+
+// See if tags are the same
+bool DiffConflator::_compareTags (const Tags &oldTags, const Tags &newTags)
+{
+  QStringList ignoreList = ConfigOptions().getDifferentialTagIgnoreList();
+  for (Tags::const_iterator newTagIt = newTags.begin(); newTagIt != newTags.end(); ++newTagIt)
+  {
+    QString newTagKey = newTagIt.key();
+    if (newTagKey != MetadataTags::Ref1() // Make sure not ref1
+        && !ignoreList.contains(newTagKey, Qt::CaseInsensitive) // Not in our ignore list
+        && (!oldTags.contains(newTagIt.key()) // It's a new tag
+            || oldTags[newTagIt.key()] != newTagIt.value())) // Or it has a different value
+    {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+// Create a new change object based on the original element, with new tags
+Change DiffConflator::_getChange(ConstElementPtr pOldElement,
+                                 ConstElementPtr pNewElement)
+{
+  // This may seem a little weird, but we want something very specific here.
+  // We want the old element as it was... with new tags.
+
+  // Copy the old one
+  ElementPtr pChangeElement (pOldElement->clone());
+
+  assert(pChangeElement->getId() == pOldElement->getId());
+
+  // Overwrite all old tags
+  pChangeElement->setTags(pNewElement->getTags());
+
+  // Create the change
+  Change newChange(Change::Modify, pChangeElement);
+
+  return newChange;
 }
 
 void DiffConflator::_reset()
 {
   _deleteAll(_matches);
+  _pMap.reset();
+  _pTagChanges.reset();
 }
 
 void DiffConflator::_printMatches(vector<const Match*> matches)

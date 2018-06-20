@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/Serializable.h>
+#include <hoot/core/io/MemChangesetProvider.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/ops/Boundable.h>
 #include <hoot/core/util/Configurable.h>
@@ -64,15 +65,36 @@ class ElementId;
  * merged. It's not a true diff, either, because it won't tell you stuff that was in input1, but
  * not input2. It's basically answering the question: what can I super-easily merge from dataset2
  * into dataset1?
+ *
+ * The diff conflator also supports calculating a tag differential, but again this is approached
+ * from a, "What updates are in the second dataset?" perspective. To this end, the conflator
+ * iterates through all of the match pairs, looking for new or different tags in the input2
+ * elements. If a difference is found, the input2 element tag set is presumed to be an update, and
+ * a change is recorded, in which no element geometry is changed, but the tags from the input2
+ * element replace the tags from the input1 element. The output from the tag-differencing
+ * will always be an osm changeset (*.osc).
+ *
  */
 class DiffConflator : public OsmMapOperation, public Serializable, public Boundable,
     public Configurable
 {
 public:
+
+  /**
+   * @brief className - Get a string that represents this class name
+   * @return - class name
+   */
   static std::string className() { return "hoot::DiffConflator"; }
 
+  /**
+   * @brief DiffConflator - Default constructor
+   */
   DiffConflator();
 
+  /**
+   * @brief DiffConflator - Construct & set a match threshold
+   * @param matchThreshold - Match threshold
+   */
   DiffConflator(boost::shared_ptr<MatchThreshold> matchThreshold);
 
   ~DiffConflator();
@@ -81,10 +103,26 @@ public:
    * Conflates the specified map. If the map is not in a planar projection it is reprojected. The
    * map is not reprojected back to the original projection when conflation is complete.
    */
-  virtual void apply(OsmMapPtr& map);
 
+  /**
+   * @brief apply - Applies the differential conflation operation to the supplied
+   * map. If the map is not in a planar projection it is reprojected. The map
+   * is not reprojected back to the original projection when conflation is complete.
+   * @param pMap - The map to operate on
+   */
+  virtual void apply(OsmMapPtr& pMap);
+
+  /**
+   * @brief getClassName - Gets the class name
+   * @return - The class name string
+   */
   virtual std::string getClassName() const { return className(); }
 
+  /**
+   * @brief getStats - Gets a list of stats recorded during the conflation process,
+   * like number of matches found, time spent finding matches, etc.
+   * @return - List of stats
+   */
   QList<SingleStat> getStats() const { return _stats; }
 
   virtual void readObject(QDataStream& /*is*/) {}
@@ -98,14 +136,50 @@ public:
   virtual QString getDescription() const
   { return "Conflates two maps into a single map based on the difference between the inputs"; }
 
+  // Gets the tag differential between the maps. To do this, we look through all
+  // of the matches, and compare tags. A set of newer tags is returned as a
+  // changeset (because updating the tags requires a modify operation)
+
+  /**
+   * @brief getTagDiff - Gets the tag differential that was calculated during the
+   * conflation. This will be a list of 'modify' changes that contain tag updates
+   * for elements that matched between the input maps.
+   * @return - A changeset provider that can be used with ChangesetWriter classes
+   */
+  MemChangesetProviderPtr getTagDiff();
+
+  /**
+   * @brief storeOriginalIDs - Stores the ElementIDs for the original Input1
+   * elements. This is necessary for calculating the tag differential, and it's
+   * important to call this after loading the Input1 map, and before loading the
+   * Input2 map.
+   * @param pMap - Map that should be holding only the original "Input1" elements
+   */
+  void storeOriginalIDs(OsmMapPtr& pMap);
+
 private:
 
+  OsmMapPtr _pMap;
   geos::geom::Envelope _bounds;
   const MatchFactory& _matchFactory;
   boost::shared_ptr<MatchThreshold> _matchThreshold;
   Settings _settings;
+
+  // Stores the matches we found
   std::vector<const Match*> _matches;
+
+  // Stores stats calcuated during conflation
   QList<SingleStat> _stats;
+
+  // Stores the changes we calculate when doing the tag differential
+  MemChangesetProviderPtr _pTagChanges;
+
+  // Set of the elements that came from the "Input1" map
+  // Used when calculating the tag differential
+  // This is important, because elements get modified by map cleaning
+  // operations prior to conflation - and we need this list of IDs to help
+  // us generate a clean changeset output for the tag diff.
+  std::set<ElementId> _originalIds;
 
   template <typename InputCollection>
   void _deleteAll(InputCollection& ic)
@@ -132,6 +206,16 @@ private:
 
   void _printMatches(std::vector<const Match*> matches);
   void _printMatches(std::vector<const Match*> matches, const MatchType& typeFilter);
+
+  // Calculates and stores the tag differential as a set of change objects
+  void _calcAndStoreTagChanges();
+
+  // Decides if the newTags should replace the oldTags. Among other things,
+  // it checks the differential.tag.ignore.list
+  bool _compareTags (const Tags &oldTags, const Tags &newTags);
+
+  // Creates a change object using the original element and new tags
+  Change _getChange(ConstElementPtr pOldElement, ConstElementPtr pNewElement);
 };
 
 }
