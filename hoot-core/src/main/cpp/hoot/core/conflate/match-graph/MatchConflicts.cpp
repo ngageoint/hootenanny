@@ -47,6 +47,7 @@ MatchConflicts::MatchConflicts(const ConstOsmMapPtr& map) :
 MatchConflicts::EidIndexMap MatchConflicts::calculateEidIndexMap(
   const vector<const Match*>& matches) const
 {
+  LOG_DEBUG("Calculating element ID to index map...");
   EidIndexMap eidToMatches;
 
   // map each eid to all corresponding matches.
@@ -58,7 +59,14 @@ MatchConflicts::EidIndexMap MatchConflicts::calculateEidIndexMap(
       eidToMatches.insert(pair<ElementId, size_t>(it->first, i));
       eidToMatches.insert(pair<ElementId, size_t>(it->second, i));
     }
+
+    if (i % 10 == 0)
+    {
+      PROGRESS_DEBUG(i << " element ID indexes processed");
+    }
   }
+
+  LOG_DEBUG("Element ID to index map calculated.");
 
   return eidToMatches;
 }
@@ -66,6 +74,8 @@ MatchConflicts::EidIndexMap MatchConflicts::calculateEidIndexMap(
 void MatchConflicts::calculateMatchConflicts(const vector<const Match*>& matches,
   ConflictMap &conflicts)
 {
+  LOG_DEBUG("Calculating match conflicts...");
+  LOG_VART(matches.size());
   conflicts.clear();
   // go through all the matches and map from eid to the match index.
   EidIndexMap eidToMatches = calculateEidIndexMap(matches);
@@ -74,6 +84,8 @@ void MatchConflicts::calculateMatchConflicts(const vector<const Match*>& matches
   ElementId lastEid;
   // the set of indexes to all the matches that use a common ElementId
   vector<int> matchSet;
+  long eidToMatchCount = 0;
+  LOG_DEBUG("Calculating subset conflicts...");
   for (EidIndexMap::iterator it = eidToMatches.begin(); it != eidToMatches.end(); ++it)
   {
     // if we got a new Eid.
@@ -87,14 +99,23 @@ void MatchConflicts::calculateMatchConflicts(const vector<const Match*>& matches
 
     matchSet.push_back(it->second);
     lastEid = it->first;
+
+    eidToMatchCount++;
+    if (eidToMatchCount % 10 == 0)
+    {
+      PROGRESS_DEBUG(eidToMatchCount << " matches processed");
+    }
   }
 
   calculateSubsetConflicts(matches, conflicts, matchSet);
 }
 
-void MatchConflicts::calculateSubsetConflicts(const vector<const Match *> &matches, ConflictMap& conflicts,
-  const vector<int>& matchSet)
+void MatchConflicts::calculateSubsetConflicts(const vector<const Match *> &matches,
+                                              ConflictMap& conflicts, const vector<int>& matchSet)
 {
+  LOG_VART(matches.size());
+  LOG_VART(conflicts.size());
+  LOG_VART(matchSet.size());
   // search for all possible match pair conflicts within a set.
   for (size_t i = 0; i < matchSet.size(); i++)
   {
@@ -117,6 +138,5 @@ void MatchConflicts::calculateSubsetConflicts(const vector<const Match *> &match
     }
   }
 }
-
 
 }

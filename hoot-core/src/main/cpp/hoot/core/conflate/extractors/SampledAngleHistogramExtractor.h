@@ -70,7 +70,7 @@ public:
   void setHeadingDelta(double headingDelta) { _headingDelta = headingDelta; }
 
   virtual QString getDescription() const
-  { return "Similar to the AngleHistogramExtractor except the angle is sampled along the way"; }
+  { return "Calculates the angle of each line segment in a sampled fashion and adds it to a histogram"; }
 
 protected:
 

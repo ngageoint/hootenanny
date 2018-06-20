@@ -57,7 +57,7 @@ public:
    *
    * @param bufferPortion Buffer the objects by this portion of the sqrt of the max area.
    */
-  BufferedOverlapExtractor(double bufferPortion=0.1);
+  BufferedOverlapExtractor(double bufferPortion = 0.1);
 
   static std::string className() { return "hoot::BufferedOverlapExtractor"; }
 
@@ -76,7 +76,7 @@ public:
     const boost::shared_ptr<const Element>& candidate) const;
 
   virtual QString getDescription() const
-  { return "Similar to OverlapExtractor, but the objects are buffered before the overlap is calculated"; }
+  { return "Uses symmetric difference as the criterion for determining match scores and objects are buffered before the overlap is calculated"; }
 
 private:
 

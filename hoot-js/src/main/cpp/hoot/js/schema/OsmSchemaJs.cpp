@@ -75,6 +75,8 @@ void OsmSchemaJs::Init(Handle<Object> exports)
               FunctionTemplate::New(current, isLinear)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "isLinearWaterway"),
               FunctionTemplate::New(current, isLinearWaterway)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "isPowerLine"),
+              FunctionTemplate::New(current, isPowerLine)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "isMetaData"),
               FunctionTemplate::New(current, isMetaData)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "isPoi"),
@@ -204,6 +206,16 @@ void OsmSchemaJs::isLinearWaterway(const FunctionCallbackInfo<Value>& args)
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
   args.GetReturnValue().Set(Boolean::New(current, OsmSchema::getInstance().isLinearWaterway(*e)));
+}
+
+void OsmSchemaJs::isPowerLine(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
+
+  args.GetReturnValue().Set(Boolean::New(current, OsmSchema::getInstance().isPowerLine(*e)));
 }
 
 void OsmSchemaJs::isMetaData(const FunctionCallbackInfo<Value>& args)

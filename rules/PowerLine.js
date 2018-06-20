@@ -12,25 +12,41 @@ exports.matchThreshold = parseFloat(hoot.get("power.line.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("power.line.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("power.line.review.threshold"));
 
-/*var sublineMatcher =
+var sublineMatcher =
   new hoot.MaximalSublineStringMatcher(
-    { "way.matcher.max.angle": hoot.get("waterway.matcher.max.angle"),
-      "way.subline.matcher": hoot.get("waterway.subline.matcher") });
+    { "way.matcher.max.angle": hoot.get("generic.line.matcher.max.angle"),
+      "way.subline.matcher": hoot.get("generic.line.subline.matcher") });
+
+var angleHistogramExtractor = new hoot.AngleHistogramExtractor();
+var attributeScoreExtractor = new hoot.AttributeScoreExtractor();
+var bufferedOverlapExtractor = new hoot.BufferedOverlapExtractor(); //poly?
+var centroidDistanceExtractor = new hoot.CentroidDistanceExtractor(); //poly?
+var compactnessExtractor = new hoot.CompactnessExtractor(); //poly?
+var distanceScoreExtractor = new hoot.DistanceScoreExtractor();
+var edgeDistanceExtractor = new hoot.EdgeDistanceExtractor();
+var euclideanDistanceExtractor = new hoot.EuclideanDistanceExtractor();
+var hausdorffDistanceExtractor = new hoot.HausdorffDistanceExtractor(); //poly?
+var lengthScoreExtractor = new hoot.LengthScoreExtractor();
+var nameExtractor = new hoot.NameExtractor();
+var overlapExtractor = new hoot.OverlapExtractor(); //poly?
+var parallelScoreExtractor = new hoot.ParallelScoreExtractor();
 var sampledAngleHistogramExtractor =
   new hoot.SampledAngleHistogramExtractor(
     { "way.angle.sample.distance" : hoot.get("waterway.angle.sample.distance"),
-      "way.matcher.heading.delta" : hoot.get("waterway.matcher.heading.delta") });
-var weightedShapeDistanceExtractor = new hoot.WeightedShapeDistanceExtractor();*/
+      "way.matcher.heading.delta" : hoot.get("way.matcher.heading.delta") });
+var smallerOverlapExtractor = new hoot.SmallerOverlapExtractor(); //poly?
+var weightedMetricDistanceExtractor = new hoot.WeightedMetricDistanceExtractor();
+var weightedShapeDistanceExtractor = new hoot.WeightedShapeDistanceExtractor();
 
 /**
  * Runs before match creation occurs and provides an opportunity to perform custom initialization.
  */
 exports.calculateSearchRadius = function(map)
 {
-  /*var autoCalcSearchRadius = (hoot.get("waterway.auto.calc.search.radius") === 'true');
-  if (autoCalcSearchRadius)
+  var autoCalcSearchRadius = (hoot.get("waterway.auto.calc.search.radius") === 'true');
+  /*if (autoCalcSearchRadius)
   {
-    hoot.log("Calculating search radius for waterway conflation...");
+    hoot.log("Calculating search radius for power line conflation...");
     exports.searchRadius =
       parseFloat(
         calculateSearchRadiusUsingRubberSheeting(
@@ -52,7 +68,7 @@ exports.calculateSearchRadius = function(map)
  */
 exports.isMatchCandidate = function(map, e)
 {
-  return isLinearWaterway(e);
+  return isPowerLine(e);
 };
 
 /**
@@ -65,7 +81,7 @@ exports.isMatchCandidate = function(map, e)
  */
 exports.isWholeGroup = function()
 {
-    return false;
+  return false;
 };
 
 /**
@@ -80,6 +96,7 @@ exports.isWholeGroup = function()
 exports.matchScore = function(map, e1, e2)
 {
   var result = { miss: 1.0, explain:"miss" };
+  //return result;
 
   if (e1.getStatusString() == e2.getStatusString()) 
   {
@@ -94,8 +111,31 @@ exports.matchScore = function(map, e1, e2)
     var m1 = sublines.match1;
     var m2 = sublines.match2;
 
-    /*var sampledAngleHistogramValue = sampledAngleHistogramExtractor.extract(m, m1, m2);
-    var weightedShapeDistanceValue = weightedShapeDistanceExtractor.extract(m, m1, m2);
+    /*var angleHistogramValue = angleHistogramExtractor.extract(m, m1, m2);
+    var attributeScoreValue = attributeScoreExtractor.extract(m, m1, m2);
+    var bufferedOverlapValue = bufferedOverlapExtractor.extract(m, m1, m2);
+    var centroidDistanceValue = centroidDistanceExtractor.extract(m, m1, m2);
+    var compactnessValue = compactnessExtractor.extract(m, m1, m2);
+    var distanceScoreValue = distanceScoreExtractor.extract(m, m1, m2);
+    var edgeDistanceValue = edgeDistanceExtractor.extract(m, m1, m2);
+    var euclideanDistanceValue = euclideanDistanceExtractor.extract(m, m1, m2);
+    var hausdorffDistanceValue = hausdorffDistanceExtractor.extract(m, m1, m2);
+    var lengthScoreValue = lengthScoreExtractor.extract(m, m1, m2);
+    var nameValue = nameExtractor.extract(m, m1, m2);
+    var overlapValue = overlapExtractor.extract(m, m1, m2);
+    var parallelScoreValue = parallelScoreExtractor.extract(m, m1, m2);
+    var smallerOverlapValue = smallerOverlapExtractor.extract(m, m1, m2);
+    var smallerOverlapValue = smallerOverlapExtractor.extract(m, m1, m2);
+    var weightedMetricDistanceValue = weightedMetricDistanceExtractor.extract(m, m1, m2);*/
+
+    var sampledAngleHistogramValue = sampledAngleHistogramExtractor.extract(m, m1, m2);
+    if (sampledAngleHistogramValue > 0.1)
+    {
+      hoot.trace("Found Match!");
+      result = { match: 1.0, explain:"match" };
+    }
+
+    /*var weightedShapeDistanceValue = weightedShapeDistanceExtractor.extract(m, m1, m2);
 
     if (sampledAngleHistogramValue == 0 && weightedShapeDistanceValue > 0.861844)
     {
@@ -140,16 +180,32 @@ exports.getMatchFeatureDetails = function(map, e1, e2)
   var featureDetails = [];
 
   // extract the sublines needed for matching
-  var sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
-  if (sublines)
-  {
-    var m = sublines.map;
-    var m1 = sublines.match1;
-    var m2 = sublines.match2;
+  //var sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
+  //if (sublines)
+  //{
+    //var m = sublines.map;
+    //var m1 = sublines.match1;
+    //var m2 = sublines.match2;
 
-    //featureDetails["sampledAngleHistogramValue"] = sampledAngleHistogramExtractor.extract(m, m1, m2);
-    //featureDetails["weightedShapeDistanceValue"] = weightedShapeDistanceExtractor.extract(m, m1, m2);
-  }
+    /*featureDetails["angleHistogramValue"] = angleHistogramExtractor.extract(m, m1, m2);
+    featureDetails["attributeScoreValue"] = attributeScoreExtractor.extract(m, m1, m2);
+    featureDetails["bufferedOverlapValue"] = bufferedOverlapExtractor.extract(m, m1, m2);
+    featureDetails["centroidDistanceValue"] = centroidDistanceExtractor.extract(m, m1, m2);
+    featureDetails["compactnessValue"] = compactnessExtractor.extract(m, m1, m2);
+    featureDetails["distanceScoreValue"] = distanceScoreExtractor.extract(m, m1, m2);
+    featureDetails["edgeDistanceValue"] = edgeDistanceExtractor.extract(m, m1, m2);
+    featureDetails["euclideanDistanceValue"] = euclideanDistanceExtractor.extract(m, m1, m2);
+    featureDetails["hausdorffDistanceValue"] = hausdorffDistanceExtractor.extract(m, m1, m2);
+    featureDetails["lengthScoreValue"] = lengthScoreExtractor.extract(m, m1, m2);
+    featureDetails["nameValue"] = nameExtractor.extract(m, m1, m2);
+    featureDetails["overlapValue"] = overlapExtractor.extract(m, m1, m2);
+    featureDetails["parallelScoreValue"] = parallelScoreExtractor.extract(m, m1, m2);
+    featureDetails["smallerOverlapValue"] = smallerOverlapExtractor.extract(m, m1, m2);
+    featureDetails["sampledAngleHistogramValue"] = sampledAngleHistogramExtractor.extract(m, m1, m2);
+    featureDetails["smallerOverlapValue"] = smallerOverlapExtractor.extract(m, m1, m2);
+    featureDetails["weightedMetricDistanceValue"] = weightedMetricDistanceExtractor.extract(m, m1, m2); 
+    featureDetails["weightedShapeDistanceValue"] = weightedShapeDistanceExtractor.extract(m, m1, m2);*/
+  //}
 
   return featureDetails;
 };

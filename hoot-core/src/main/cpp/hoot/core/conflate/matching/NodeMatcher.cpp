@@ -66,8 +66,10 @@ vector<Radians> NodeMatcher::calculateAngles(const OsmMap* map, long nid, const 
   {
     const ConstWayPtr& w = map->getWay(*it);
 
+    //TODO: can this be changed to isLinear?
     if (OsmSchema::getInstance().isLinearHighway(w->getTags(), w->getElementType()) == false &&
-        OsmSchema::getInstance().isLinearWaterway(*w) == false)
+        OsmSchema::getInstance().isLinearWaterway(*w) == false &&
+        OsmSchema::getInstance().isPowerLine(*w) == false)
     {
       // if this isn't a highway or waterway, then don't consider it.
       LOG_TRACE("calculateAngles skipping feature...");

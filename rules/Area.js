@@ -124,7 +124,6 @@ exports.getMatchFeatureDetails = function(map, e1, e2)
   featureDetails["edgeDist"] = new hoot.EdgeDistanceExtractor().extract(map, e1, e2);
   featureDetails["bufferedOverlap"] = new hoot.BufferedOverlapExtractor().extract(map, e1, e2);
   featureDetails["hausDist"] = new hoot.HausdorffDistanceExtractor().extract(map, e1, e2);
-  featureDetails["attrDist"] = new hoot.AttributeDistanceExtractor().extract(map, e1, e2);
   featureDetails["attrScore"] = new hoot.AttributeScoreExtractor().extract(map, e1, e2);
   featureDetails["soundex"] = soundexExtractor.extract(map, e1, e2);
   featureDetails["mean"] = translateMeanWordSetLevenshtein_1_5.extract(map, e1, e2);

@@ -58,8 +58,8 @@ void PoiPolygonRfClassifier::_createExtractors()
   boost::shared_ptr<PoiPolygonAddressScoreExtractor> addressExtractor1(
     new PoiPolygonAddressScoreExtractor());
   _extractors.push_back(addressExtractor1);
-  boost::shared_ptr<PoiPolygonAddressScoreExtractor> addressExtractor2(
-    new PoiPolygonAddressScoreExtractor());
+  //boost::shared_ptr<PoiPolygonAddressScoreExtractor> addressExtractor2(
+    //new PoiPolygonAddressScoreExtractor());
   //addressExtractor2->setAddressScoreThreshold(0.8);
   //_extractors.push_back(addressExtractor2);
 
@@ -210,7 +210,6 @@ void PoiPolygonRfClassifier::_createExtractors()
     _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new AngleHistogramExtractor(r)));
   }
 
-   _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new AttributeDistanceExtractor()));
    _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new CentroidDistanceExtractor()));
    _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new CompactnessExtractor()));
    _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new DistanceScoreExtractor()));
