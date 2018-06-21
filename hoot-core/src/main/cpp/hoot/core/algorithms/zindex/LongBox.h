@@ -95,4 +95,4 @@ private:
 
 }
 
-#endif // MINAGGREGATOR_H
+#endif // LONGBOX_H

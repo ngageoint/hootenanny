@@ -188,6 +188,13 @@ Determines whether the AttributeScoreExtractor uses weighting when extracting sc
 Temporary setting that addresses some Hootenanny iD Editor UI bugs.  See
 MatchFactory::_tempFixDefaults() for more info.
 
+=== buffered.overlap.extractor.portion
+
+* Data Type: double
+* Default Value: `0.1`
+
+The portion of the sqrt max of the area that the BufferedOverlapExtractor buffers object by.
+
 === building.date.format
 
 * Data Type: string
@@ -2352,6 +2359,86 @@ reference data store (associated with the unknown1 status) where modifying exist
 preferred over replacing them for provenance purposes.  Not honored by all visitors, map operations,
 or mergers which modify features.
 
+=== power.line.angle.sample.distance
+
+* Data Type: double
+* Default Value: `10.0`
+
+Distance, in meters, used for sampling river data during angle histogram extraction with the
+SampledAngleHistogramExtractor
+
+=== power.line.auto.calc.search.radius
+
+* Data Type: bool
+* Default Value: `false`
+
+Automatically calculates the search radius to be used during conflation of waterways using rubber
+sheet tie point distances.  When this setting is enabled, rubbersheeting is not allowed as a
+pre-conflation operation on the input data to be conflated.
+
+=== power.line.match.threshold
+
+* Data Type: double
+* Default Value: `${conflate.match.threshold.default}`
+
+The threshold at which a match is called a match for waterways.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== power.line.matcher.heading.delta
+
+* Data Type: double
+* Default Value: `5.0`
+
+The distance around a point on a waterway to look when calculating the heading. See
+`way.matcher.heading.delta`.
+
+=== power.line.matcher.max.angle
+
+* Data Type: double
+* Default Value: `60.0`
+
+Sets that maximum angle that is still considered a waterway match. Units in degrees.
+
+=== power.line.miss.threshold
+
+* Data Type: double
+* Default Value: `${conflate.miss.threshold.default}`
+
+The threshold at which a miss is called a miss for waterways.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== power.line.review.threshold
+
+* Data Type: double
+* Default Value: `${conflate.review.threshold.default}`
+
+The threshold at which a review is called a review for waterways.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== power.line.rubber.sheet.minimum.ties
+
+* Data Type: int
+* Default Value: `5`
+
+Sets the minimum number of tie points that will be used when calculating a rubber sheeting solution
+with river data.
+
+=== power.line.rubber.sheet.ref
+
+* Data Type: bool
+* Default Value: `true`
+
+See `rubber.sheet.ref`.  Used during waterway conflation.
+
 === power.line.subline.matcher
 
 * Data Type: string
@@ -2660,6 +2747,21 @@ The search radius to use when conflating generic polygons.  See `search.radius.d
 
 The search radius to use when conflating highways.  See `search.radius.default`.
 
+=== search.radius.railway
+
+* Data Type: double
+* Default Value: `15`
+
+The search radius to use when conflating railways.
+
+=== search.radius.power.line
+
+* Data Type: double
+* Default Value: `${search.radius.default}`
+
+The search radius to use when conflating power lines.  Not used if
+power.line.auto.calc.search.radius = true.  See `search.radius.default`.
+
 === search.radius.waterway
 
 * Data Type: double
@@ -2667,13 +2769,6 @@ The search radius to use when conflating highways.  See `search.radius.default`.
 
 The search radius to use when conflating waterways.  Not used if
 waterway.auto.calc.search.radius = true.  See `search.radius.default`.
-
-=== search.radius.railway
-
-* Data Type: double
-* Default Value: `15`
-
-The search radius to use when conflating railways.
 
 === set.tag.value.visitor.append.to.existing.value
 
@@ -3157,7 +3252,7 @@ Values are in meters.
 === way.matcher.max.angle
 
 * Data Type: double
-* Default Value: `60`
+* Default Value: `60.0`
 
 Sets the maximum angle that is still considered a way match. Units in degrees.
 

@@ -53,6 +53,7 @@ class Element;
 class SmallerOverlapExtractor : public FeatureExtractor
 {
 public:
+
   SmallerOverlapExtractor();
 
   static std::string className() { return "hoot::SmallerOverlapExtractor"; }

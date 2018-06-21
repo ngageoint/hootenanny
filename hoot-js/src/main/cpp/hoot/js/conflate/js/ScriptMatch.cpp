@@ -27,24 +27,10 @@
 #include "ScriptMatch.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/algorithms/aggregator/MeanAggregator.h>
-#include <hoot/core/algorithms/aggregator/RmseAggregator.h>
-#include <hoot/core/algorithms/aggregator/QuantileAggregator.h>
-#include <hoot/core/algorithms/ExactStringDistance.h>
-#include <hoot/core/algorithms/MaxWordSetDistance.h>
-#include <hoot/core/algorithms/MeanWordSetDistance.h>
-#include <hoot/core/algorithms/LevenshteinDistance.h>
-#include <hoot/core/algorithms/Soundex.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/MatchType.h>
-#include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/conflate/merging/Merger.h>
-#include <hoot/core/io/OsmJsonWriter.h>
-#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
-#include <hoot/core/schema/TranslateStringDistance.h>
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/js/OsmMapJs.h>
 #include <hoot/js/conflate/js/ScriptMergerCreator.h>
 #include <hoot/js/elements/ElementJs.h>
@@ -56,9 +42,6 @@
 
 // Standard
 #include <sstream>
-
-// tgs
-#include <tgs/RandomForest/RandomForest.h>
 
 using namespace std;
 using namespace Tgs;

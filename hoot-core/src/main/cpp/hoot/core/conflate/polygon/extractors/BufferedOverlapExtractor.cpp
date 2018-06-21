@@ -45,9 +45,19 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, BufferedOverlapExtractor)
 
-BufferedOverlapExtractor::BufferedOverlapExtractor(double bufferPortion)
+BufferedOverlapExtractor::BufferedOverlapExtractor()
 {
-  _bufferPortion = bufferPortion;
+  setConfiguration(conf());
+}
+
+BufferedOverlapExtractor::BufferedOverlapExtractor(double bufferPortion) :
+_bufferPortion(bufferPortion)
+{
+}
+
+void BufferedOverlapExtractor::setConfiguration(const Settings& conf)
+{
+  _bufferPortion = ConfigOptions(conf).getBufferedOverlapExtractorPortion();
 }
 
 double BufferedOverlapExtractor::extract(const OsmMap& map, const ConstElementPtr& target,
