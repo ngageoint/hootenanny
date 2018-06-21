@@ -30,7 +30,6 @@
 
 // hoot
 #include <hoot/core/conflate/polygon/extractors/AngleHistogramExtractor.h>
-#include <hoot/core/util/Configurable.h>
 
 namespace geos
 {
@@ -53,7 +52,7 @@ class Histogram;
  * configurable
  * - 8 bins are used in the histogram.
  */
-class SampledAngleHistogramExtractor : public AngleHistogramExtractor, public Configurable
+class SampledAngleHistogramExtractor : public AngleHistogramExtractor
 {
 public:
 

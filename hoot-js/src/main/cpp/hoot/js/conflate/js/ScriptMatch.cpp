@@ -394,6 +394,7 @@ std::map<QString, double> ScriptMatch::getFeatures(const ConstOsmMapPtr& map) co
   global->Get(String::NewFromUtf8(current, "plugin"));
 
   std::map<QString, double> result;
+  LOG_TRACE("Calling getMatchFeatureDetails...");
   Handle<Value> v = _callGetMatchFeatureDetails(map);
 
   if (v.IsEmpty() || v->IsObject() == false)
@@ -403,6 +404,8 @@ std::map<QString, double> ScriptMatch::getFeatures(const ConstOsmMapPtr& map) co
   }
 
   QVariantMap vm = toCpp<QVariantMap>(v);
+  long valCtr = 0;
+  LOG_VART(vm.size());
   for (QVariantMap::const_iterator it = vm.begin(); it != vm.end(); ++it)
   {
     if (it.value().isNull() == false)
@@ -422,6 +425,12 @@ std::map<QString, double> ScriptMatch::getFeatures(const ConstOsmMapPtr& map) co
         logWarnCount++;
       }
     }
+    valCtr++;
+  }
+
+  if (vm.size() > 0)
+  {
+    LOG_DEBUG("Processed " << vm.size() << " sample values.");
   }
 
   return result;

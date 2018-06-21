@@ -105,9 +105,13 @@ public:
       mfe.addMatchCreator(boost::shared_ptr<MatchCreator>(mc));
     }
 
+    int datasetPairCtr = 1;
     for (int i = 0; i < args.size() - 1; i+=2)
     {
-      LOG_INFO("Processing map : " << args[i] << " and " << args[i + 1]);
+      LOG_INFO(
+        "Processing dataset pair " << datasetPairCtr << " of " << ((args.size() - 1) / 2) <<
+        ": " << args[i].right(100) << " and " << args[i + 1].right(100));
+      datasetPairCtr++;
       OsmMapPtr map(new OsmMap());
 
       IoUtils::loadMap(map, args[i], false, Status::Unknown1);
@@ -117,6 +121,7 @@ public:
 
       mfe.processMap(map);
     }
+    LOG_INFO("Processed " << mfe.getSamples().size() << " total samples.");
 
     ArffWriter aw(output + ".arff", true);
     aw.write(mfe.getSamples());

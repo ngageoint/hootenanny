@@ -68,7 +68,7 @@ void NamedOp::apply(boost::shared_ptr<OsmMap> &map)
     }
     else if (f.hasBase<OsmMapOperation>(s.toStdString()))
     {
-      LOG_DEBUG(map->getElementCount());
+      LOG_VARD(map->getElementCount());
       LOG_INFO("Applying operation: " << s);
       boost::shared_ptr<OsmMapOperation> t(Factory::getInstance().constructObject<OsmMapOperation>(s));
 

@@ -79,7 +79,8 @@ double WeightedMetricDistanceExtractor::_extract(const OsmMap& map, const ConstW
   WayDiscretizer wd(map.shared_from_this(), w1);
   wd.discretize(2.0, v);
 
-  boost::shared_ptr<LineString> ls2 = ElementConverter(map.shared_from_this()).convertToLineString(w2);
+  boost::shared_ptr<LineString> ls2 =
+    ElementConverter(map.shared_from_this()).convertToLineString(w2);
 
   double sigma = _searchRadius;
 
@@ -115,7 +116,7 @@ void WeightedMetricDistanceExtractor::setPointAggregator(const QString aggregato
 void WeightedMetricDistanceExtractor::setSearchRadius(const double radius)
 {
   _searchRadius = radius;
-  LOG_VARD(_searchRadius);
+  LOG_VART(_searchRadius);
 }
 
 void WeightedMetricDistanceExtractor::setConfiguration(const Settings& conf)

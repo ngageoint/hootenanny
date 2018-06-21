@@ -38,17 +38,11 @@ public:
 
   static std::string className() { return "hoot::SigmaAggregator"; }
 
-  /**
-   * quantile - A value from 0 to 1 for the quantile.
-   */
   SigmaAggregator() {}
 
   virtual double aggregate(std::vector<double>& d) const;
 
   virtual QString toString() const { return QString("Sigma Aggregator"); }
-
-private:
-  double _quantile;
 };
 
 }

@@ -41,15 +41,19 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ValueAggregator, QuantileAggregator)
 
-QuantileAggregator::QuantileAggregator() :
-_quantile(0)
+QuantileAggregator::QuantileAggregator()
 {
-
+  setConfiguration(conf());
 }
 
 QuantileAggregator::QuantileAggregator(double quantile)
 {
   _quantile = quantile;
+}
+
+void QuantileAggregator::setConfiguration(const Settings& conf)
+{
+  _quantile = ConfigOptions(conf).getQuantileAggregatorQuantile();
 }
 
 double QuantileAggregator::aggregate(vector<double>& d) const

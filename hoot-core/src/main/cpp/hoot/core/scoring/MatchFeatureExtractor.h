@@ -93,6 +93,7 @@ public:
   void processMap(const boost::shared_ptr<const OsmMap>& map);
 
 private:
+
   DataSamples _samples;
   std::vector<boost::shared_ptr<MatchCreator> > _creators;
   // if true then make sure there is an even representation from each class and only fully populated
@@ -101,8 +102,8 @@ private:
   bool _useNulls;
   const MatchFactory* _matchFactory;
 
-  MatchType _getActualMatchType(const std::set<ElementId> &eids, const boost::shared_ptr<const OsmMap>& map)
-    const;
+  MatchType _getActualMatchType(const std::set<ElementId> &eids,
+                                const boost::shared_ptr<const OsmMap>& map) const;
 
   /**
    * Returns a vector of unique factor labels. Not efficient.

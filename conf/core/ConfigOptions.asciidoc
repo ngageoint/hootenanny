@@ -85,6 +85,20 @@ details.
 If true, not only will review relations receive the hoot:review:needs tag, the features involved in
 the review will receive them as well.
 
+=== angle.histogram.extractor.bins
+
+* Data Type: int
+* Default Value: `16`
+
+The number of data bins used by the AngleHistogramExtractor.
+
+=== angle.histogram.extractor.smoothing
+
+* Data Type: double
+* Default Value: `0.0`
+
+Smoothing value in radians used by the AngleHistogramExtractor.
+
 === api.db.email
 
 * Data Type: string
@@ -2359,14 +2373,6 @@ reference data store (associated with the unknown1 status) where modifying exist
 preferred over replacing them for provenance purposes.  Not honored by all visitors, map operations,
 or mergers which modify features.
 
-=== power.line.angle.sample.distance
-
-* Data Type: double
-* Default Value: `10.0`
-
-Distance, in meters, used for sampling river data during angle histogram extraction with the
-SampledAngleHistogramExtractor
-
 === power.line.auto.calc.search.radius
 
 * Data Type: bool
@@ -2375,54 +2381,6 @@ SampledAngleHistogramExtractor
 Automatically calculates the search radius to be used during conflation of waterways using rubber
 sheet tie point distances.  When this setting is enabled, rubbersheeting is not allowed as a
 pre-conflation operation on the input data to be conflated.
-
-=== power.line.match.threshold
-
-* Data Type: double
-* Default Value: `${conflate.match.threshold.default}`
-
-The threshold at which a match is called a match for waterways.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
-=== power.line.matcher.heading.delta
-
-* Data Type: double
-* Default Value: `5.0`
-
-The distance around a point on a waterway to look when calculating the heading. See
-`way.matcher.heading.delta`.
-
-=== power.line.matcher.max.angle
-
-* Data Type: double
-* Default Value: `60.0`
-
-Sets that maximum angle that is still considered a waterway match. Units in degrees.
-
-=== power.line.miss.threshold
-
-* Data Type: double
-* Default Value: `${conflate.miss.threshold.default}`
-
-The threshold at which a miss is called a miss for waterways.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
-=== power.line.review.threshold
-
-* Data Type: double
-* Default Value: `${conflate.review.threshold.default}`
-
-The threshold at which a review is called a review for waterways.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
 
 === power.line.rubber.sheet.minimum.ties
 
@@ -2437,7 +2395,7 @@ with river data.
 * Data Type: bool
 * Default Value: `true`
 
-See `rubber.sheet.ref`.  Used during waterway conflation.
+See `rubber.sheet.ref`.  Used during power line conflation.
 
 === power.line.subline.matcher
 
@@ -2445,6 +2403,13 @@ See `rubber.sheet.ref`.  Used during waterway conflation.
 * Default Value: `hoot::FrechetSublineMatcher`
 
 The way subline matcher to use when determining matching power line sublines.
+
+=== quantile.aggregator.quantile
+
+* Data Type: double
+* Default Value: `0.0`
+
+A quantile value from 0.0 to 1.0 for the QuantileAggregator.
 
 === progress.reporting.format
 
@@ -2753,14 +2718,6 @@ The search radius to use when conflating highways.  See `search.radius.default`.
 * Default Value: `15`
 
 The search radius to use when conflating railways.
-
-=== search.radius.power.line
-
-* Data Type: double
-* Default Value: `${search.radius.default}`
-
-The search radius to use when conflating power lines.  Not used if
-power.line.auto.calc.search.radius = true.  See `search.radius.default`.
 
 === search.radius.waterway
 

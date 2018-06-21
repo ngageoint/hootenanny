@@ -47,6 +47,7 @@ typedef std::map<QString, double> Sample;
 class DataSamples : public std::vector<Sample>
 {
 public:
+
   DataSamples();
 
   std::vector<std::string> getUniqueLabels() const;

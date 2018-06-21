@@ -39,6 +39,7 @@ namespace hoot
 class ValueAggregatorConsumer
 {
 public:
+
   virtual ~ValueAggregatorConsumer() {}
   virtual void setValueAggregator(const ValueAggregatorPtr& sd) = 0;
 };

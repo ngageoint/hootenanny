@@ -427,7 +427,7 @@ public:
     if (_elementsVisited % 1000 == 0 && Log::getInstance().getLevel() <= Log::Info)
     {
       QString msg =
-        "candidates: " + QString::number(_elementsEvaluated) + " / " +
+        "Match candidates: " + QString::number(_elementsEvaluated) + " / " +
         QString::number(_elementsVisited);
       if (Log::getInstance().getLevel() <= Log::Debug)
       {

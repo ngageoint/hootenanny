@@ -84,9 +84,22 @@ private:
   const OsmMap& _map;
 };
 
-AngleHistogramExtractor::AngleHistogramExtractor(Radians smoothing, unsigned int bins)
-  : _smoothing(smoothing), _bins(bins)
+AngleHistogramExtractor::AngleHistogramExtractor()
 {
+  setConfiguration(conf());
+}
+
+AngleHistogramExtractor::AngleHistogramExtractor(Radians smoothing, unsigned int bins) :
+_smoothing(smoothing),
+_bins(bins)
+{
+}
+
+void AngleHistogramExtractor::setConfiguration(const Settings& conf)
+{
+  ConfigOptions options(conf);
+  _smoothing = options.getAngleHistogramExtractorSmoothing();
+  _bins = options.getAngleHistogramExtractorBins();
 }
 
 Histogram* AngleHistogramExtractor::_createHistogram(const OsmMap& map, const ConstElementPtr& e)
