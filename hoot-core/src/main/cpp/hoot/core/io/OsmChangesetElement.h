@@ -160,6 +160,7 @@ private:
   bool addRelation(boost::shared_ptr<ChangesetInfo>& changeset, ChangesetType type, XmlRelation* relation);
   bool addRelations(boost::shared_ptr<ChangesetInfo>& changeset, ChangesetType type);
 
+  bool isSent(XmlElement* element);
   bool canSend(XmlNode* node);
   bool canSend(XmlWay* way);
   bool canSend(XmlRelation* relation);

@@ -352,6 +352,14 @@ bool XmlChangeset::addRelations(boost::shared_ptr<ChangesetInfo>& changeset, Cha
   return added;
 }
 
+bool XmlChangeset::isSent(XmlElement* element)
+{
+  if (element == NULL)
+    return false;
+  else
+    return element->getStatus() == XmlElement::ElementStatus::Finalized;
+}
+
 bool XmlChangeset::canSend(XmlNode* node)
 {
   if (node == NULL)
@@ -364,6 +372,7 @@ bool XmlChangeset::canSend(XmlWay* way)
 {
   if (way == NULL)
     return false;
+
   else if (way->getStatus() != XmlElement::Available)
     return false;
   else
@@ -392,23 +401,38 @@ bool XmlChangeset::canSend(XmlRelation* relation)
     for (int i = 0; i < relation->getMemberCount(); ++i)
     {
       XmlMember& member = relation->getMember(i);
-      if (member.isNode() &&
-          _allNodes.find(member.getRef()) != _allNodes.end() &&
-          !canSend(dynamic_cast<XmlNode*>(_allNodes[member.getRef()].get())))
+      //  First check the member type, these are separated to reduce the comparisons
+      //  since these are called frequently
+      if (member.isNode())
       {
-        return false;
+        //  If the node exists in the list and
+        //  it hasn't been sent yet and
+        //  it can't be sent yet
+        //  then we can't send this relation
+        if (_allNodes.find(member.getRef()) != _allNodes.end() &&
+            !isSent(_allNodes[member.getRef()].get()) &&
+            !canSend(dynamic_cast<XmlNode*>(_allNodes[member.getRef()].get())))
+        {
+          return false;
+        }
       }
-      else if (member.isWay() &&
-               _allWays.find(member.getRef()) != _allWays.end() &&
-               !canSend(dynamic_cast<XmlWay*>(_allWays[member.getRef()].get())))
+      else if (member.isWay())
       {
-        return false;
+        if (_allWays.find(member.getRef()) != _allWays.end() &&
+            !isSent(_allWays[member.getRef()].get()) &&
+            !canSend(dynamic_cast<XmlWay*>(_allWays[member.getRef()].get())))
+        {
+          return false;
+        }
       }
-      else if (member.isRelation() &&
-               _allRelations.find(member.getRef()) != _allWays.end() &&
-               !canSend(dynamic_cast<XmlRelation*>(_allRelations[member.getRef()].get())))
+      else if (member.isRelation())
       {
-        return false;
+        if (_allRelations.find(member.getRef()) != _allWays.end() &&
+            !isSent(_allRelations[member.getRef()].get()) &&
+            !canSend(dynamic_cast<XmlRelation*>(_allRelations[member.getRef()].get())))
+        {
+          return false;
+        }
       }
     }
   }
