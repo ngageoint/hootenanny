@@ -8,14 +8,14 @@ exports.experimental = false;
 exports.baseFeatureType = "PowerLine";
 
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
-exports.matchThreshold = parseFloat(hoot.get("power.line.match.threshold"));
+exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
 exports.missThreshold = parseFloat(hoot.get("power.line.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("power.line.review.threshold"));
 
 var sublineMatcher =
   new hoot.MaximalSublineStringMatcher(
     { "way.matcher.max.angle": hoot.get("generic.line.matcher.max.angle"),
-      "way.subline.matcher": hoot.get("generic.line.subline.matcher") });
+      "way.subline.matcher": hoot.get("power.line.subline.matcher") });
 
 var angleHistogramExtractor = new hoot.AngleHistogramExtractor();
 var attributeScoreExtractor = new hoot.AttributeScoreExtractor();
@@ -44,7 +44,7 @@ var weightedShapeDistanceExtractor = new hoot.WeightedShapeDistanceExtractor();
 exports.calculateSearchRadius = function(map)
 {
   var autoCalcSearchRadius = (hoot.get("waterway.auto.calc.search.radius") === 'true');
-  /*if (autoCalcSearchRadius)
+  if (autoCalcSearchRadius)
   {
     hoot.log("Calculating search radius for power line conflation...");
     exports.searchRadius =
@@ -57,8 +57,8 @@ exports.calculateSearchRadius = function(map)
   else
   {
     exports.searchRadius = parseFloat(hoot.get("search.radius.waterway"));
-    hoot.log("Using specified search radius for waterway conflation: " + exports.searchRadius);
-  }*/
+    hoot.log("Using specified search radius for power line conflation: " + exports.searchRadius);
+  }
 }
 
 /**

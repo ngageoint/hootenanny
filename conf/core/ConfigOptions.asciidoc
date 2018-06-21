@@ -2340,39 +2340,6 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
-=== power.line.match.threshold
-
-* Data Type: double
-* Default Value: `${conflate.match.threshold.default}`
-
-The threshold at which a match is called a match for power lines.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
-=== power.line.miss.threshold
-
-* Data Type: double
-* Default Value: `${conflate.miss.threshold.default}`
-
-The threshold at which a miss is called a miss for power lines.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
-=== power.line.review.threshold
-
-* Data Type: double
-* Default Value: `${conflate.review.threshold.default}`
-
-The threshold at which a review is called a review for power lines.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
 === preserve.unknown1.element.id.when.modifying.features
 
 * Data Type: bool
@@ -2384,6 +2351,13 @@ be given a new, unique element ID.  This is useful when writing conflated data o
 reference data store (associated with the unknown1 status) where modifying existing features is
 preferred over replacing them for provenance purposes.  Not honored by all visitors, map operations,
 or mergers which modify features.
+
+=== power.line.subline.matcher
+
+* Data Type: string
+* Default Value: `hoot::FrechetSublineMatcher`
+
+The way subline matcher to use when determining matching power line sublines.
 
 === progress.reporting.format
 
