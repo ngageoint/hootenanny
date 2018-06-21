@@ -74,7 +74,6 @@ MatchConflicts::EidIndexMap MatchConflicts::calculateEidIndexMap(
 void MatchConflicts::calculateMatchConflicts(const vector<const Match*>& matches,
   ConflictMap &conflicts)
 {
-  LOG_DEBUG("Calculating match conflicts...");
   LOG_VART(matches.size());
   conflicts.clear();
   // go through all the matches and map from eid to the match index.
@@ -103,7 +102,9 @@ void MatchConflicts::calculateMatchConflicts(const vector<const Match*>& matches
     eidToMatchCount++;
     if (eidToMatchCount % 10 == 0)
     {
-      PROGRESS_DEBUG(eidToMatchCount << " matches processed");
+      PROGRESS_INFO(
+        "Processed matches for " << eidToMatchCount << " / " << eidToMatches.size() <<
+        " elements...");
     }
   }
 

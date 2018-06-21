@@ -426,9 +426,14 @@ public:
     _elementsVisited++;
     if (_elementsVisited % 1000 == 0 && Log::getInstance().getLevel() <= Log::Info)
     {
-      PROGRESS_INFO(
-        "candidates: " << _elementsEvaluated << " / " << _elementsVisited <<
-        "; _neighborCountSum: " << _neighborCountSum);
+      QString msg =
+        "candidates: " + QString::number(_elementsEvaluated) + " / " +
+        QString::number(_elementsVisited);
+      if (Log::getInstance().getLevel() <= Log::Debug)
+      {
+        msg += "; _neighborCountSum: " + QString::number(_neighborCountSum);
+      }
+      PROGRESS_INFO(msg);
     }
   }
 
