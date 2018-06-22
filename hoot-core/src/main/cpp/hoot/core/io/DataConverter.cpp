@@ -211,6 +211,7 @@ void DataConverter::_convertToOgr(const QString input, const QString output)
     OsmMapPtr map(new OsmMap());
     IoUtils::loadMap(map, input, true);
 
+    LOG_INFO("Applying conversion operations...");
     NamedOp(_convertOps).apply(map);
     MapProjector::projectToWgs84(map);
     writer->write(map);
@@ -344,6 +345,7 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
   {
     _convertOps.prepend("hoot::MergeNearbyNodes");
   }
+  LOG_INFO("Applying conversion operations...");
   NamedOp(_convertOps).apply(map);
   MapProjector::projectToWgs84(map);
   IoUtils::saveMap(map, output);
@@ -410,6 +412,7 @@ void DataConverter::_convert(const QString input, const QString output)
       map, input, ConfigOptions().getReaderUseDataSourceIds(),
       Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
 
+    LOG_INFO("Applying conversion operations...");
     NamedOp(_convertOps).apply(map);
     MapProjector::projectToWgs84(map);
 

@@ -110,7 +110,7 @@ public:
     {
       LOG_INFO(
         "Processing dataset pair " << datasetPairCtr << " of " << ((args.size() - 1) / 2) <<
-        ": " << args[i].right(100) << " and " << args[i + 1].right(100));
+        ": " << args[i].right(50) << " and " << args[i + 1].right(50));
       datasetPairCtr++;
       OsmMapPtr map(new OsmMap());
 
@@ -142,8 +142,9 @@ public:
       // disable the printing of "Trained Tree ..."
       dc.reset(new DisableCout());
     }
-    int numFactors = min(df->getNumFactors(), max<unsigned int>(3, df->getNumFactors() / 5));
+    const int numFactors = min(df->getNumFactors(), max<unsigned int>(3, df->getNumFactors() / 5));
     LOG_INFO("Training on data with " << numFactors << " factors...");
+    //make the number of trees configurable?
     rf.trainMulticlass(df, 40, numFactors);
     dc.reset();
 

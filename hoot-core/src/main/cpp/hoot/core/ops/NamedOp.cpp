@@ -59,7 +59,7 @@ void NamedOp::apply(boost::shared_ptr<OsmMap> &map)
   Factory& f = Factory::getInstance();
 
   QElapsedTimer timer;
-  LOG_INFO("Applying map operations...");
+  LOG_DEBUG("Applying map operations...");
   foreach (QString s, _namedOps)
   {
     timer.restart();
