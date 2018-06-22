@@ -51,6 +51,7 @@ ArffWriter::ArffWriter(QString path, bool useNulls) : _useNulls(useNulls)
   fstream* fs = new fstream();
   fs->exceptions(fstream::failbit | fstream::badbit);
   fs->open(path.toUtf8().data(), ios_base::out);
+  _path = path;
   _autoStrm.reset(fs);
   _strm = fs;
 }
@@ -62,7 +63,13 @@ void ArffWriter::_w(const QString& s)
 
 void ArffWriter::write(const vector<Sample> &samples)
 {
-  LOG_INFO("Writing .arff file...");
+  QString msg = "Writing .arff file";
+  if (!_path.isEmpty())
+  {
+    msg += " to " + _path.right(50);
+  }
+  msg += "...";
+  LOG_INFO(msg);
 
   set<QString> attributes;
 
@@ -77,8 +84,6 @@ void ArffWriter::write(const vector<Sample> &samples)
       }
     }
   }
-
-  QString result;
 
   _w("@RELATION manipulations");
   _w("");
