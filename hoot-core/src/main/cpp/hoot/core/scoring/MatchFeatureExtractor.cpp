@@ -316,7 +316,7 @@ void MatchFeatureExtractor::processMap(const boost::shared_ptr<const OsmMap> &ma
       }
     }
   }
-  LOG_INFO("Collected " << _samples.size() << " samples from " << matches.size() << "matches.");
+  LOG_INFO("Collected " << _samples.size() << " samples from " << matches.size() << " matches.");
 }
 
 void MatchFeatureExtractor::_resampleClasses()

@@ -41,7 +41,7 @@ exports.calculateSearchRadius = function(map)
   else
   {
     exports.searchRadius = parseFloat(hoot.get("search.radius.waterway"));
-    hoot.log("Using specified search radius for waterway conflation: " + exports.searchRadius);
+    hoot.debug("Using specified search radius for waterway conflation: " + exports.searchRadius);
   }
 }
 

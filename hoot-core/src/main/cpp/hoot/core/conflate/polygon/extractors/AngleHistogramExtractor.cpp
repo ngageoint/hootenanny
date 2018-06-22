@@ -93,6 +93,8 @@ AngleHistogramExtractor::AngleHistogramExtractor(Radians smoothing, unsigned int
 _smoothing(smoothing),
 _bins(bins)
 {
+  LOG_VART(_smoothing);
+  LOG_VART(_bins);
 }
 
 void AngleHistogramExtractor::setConfiguration(const Settings& conf)
@@ -100,6 +102,8 @@ void AngleHistogramExtractor::setConfiguration(const Settings& conf)
   ConfigOptions options(conf);
   _smoothing = options.getAngleHistogramExtractorSmoothing();
   _bins = options.getAngleHistogramExtractorBins();
+  LOG_VART(_smoothing);
+  LOG_VART(_bins);
 }
 
 Histogram* AngleHistogramExtractor::_createHistogram(const OsmMap& map, const ConstElementPtr& e)

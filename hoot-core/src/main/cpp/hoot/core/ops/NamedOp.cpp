@@ -59,6 +59,7 @@ void NamedOp::apply(boost::shared_ptr<OsmMap> &map)
   Factory& f = Factory::getInstance();
 
   QElapsedTimer timer;
+  LOG_INFO("Applying map operations...");
   foreach (QString s, _namedOps)
   {
     timer.restart();
@@ -69,7 +70,7 @@ void NamedOp::apply(boost::shared_ptr<OsmMap> &map)
     else if (f.hasBase<OsmMapOperation>(s.toStdString()))
     {
       LOG_VARD(map->getElementCount());
-      LOG_INFO("Applying operation: " << s);
+      LOG_DEBUG("Applying operation: " << s);
       boost::shared_ptr<OsmMapOperation> t(Factory::getInstance().constructObject<OsmMapOperation>(s));
 
       Configurable* c = dynamic_cast<Configurable*>(t.get());
@@ -80,7 +81,7 @@ void NamedOp::apply(boost::shared_ptr<OsmMap> &map)
 
       if (!t->toString().trimmed().isEmpty())
       {
-        LOG_DEBUG("Details: " << t->toString());
+        LOG_TRACE("Details: " << t->toString());
       }
 
       t->apply(map);
@@ -90,7 +91,7 @@ void NamedOp::apply(boost::shared_ptr<OsmMap> &map)
     else if (f.hasBase<ConstElementVisitor>(s.toStdString()))
     {
       LOG_VARD(map->getElementCount());
-      LOG_INFO("Applying visitor: " << s);
+      LOG_DEBUG("Applying visitor: " << s);
       boost::shared_ptr<ConstElementVisitor> t(Factory::getInstance().
         constructObject<ConstElementVisitor>(s));
 
@@ -102,7 +103,7 @@ void NamedOp::apply(boost::shared_ptr<OsmMap> &map)
 
       if (!t->toString().trimmed().isEmpty())
       {
-        LOG_DEBUG("Details: " << t->toString());
+        LOG_TRACE("Details: " << t->toString());
       }
 
       boost::shared_ptr<OsmMapOperation> op(new VisitorOp(t));
@@ -113,7 +114,7 @@ void NamedOp::apply(boost::shared_ptr<OsmMap> &map)
     else if (f.hasBase<ElementVisitor>(s.toStdString()))
     {
       LOG_VARD(map->getElementCount());
-      LOG_INFO("Applying visitor: " << s);
+      LOG_DEBUG("Applying visitor: " << s);
       boost::shared_ptr<ElementVisitor> t(Factory::getInstance().
         constructObject<ElementVisitor>(s));
 
@@ -127,7 +128,7 @@ void NamedOp::apply(boost::shared_ptr<OsmMap> &map)
 
       if (!t->toString().trimmed().isEmpty())
       {
-        LOG_DEBUG("Details: " << t->toString());
+        LOG_TRACE("Details: " << t->toString());
       }
 
       map->visitRw(*t);

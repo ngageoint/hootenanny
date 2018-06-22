@@ -63,7 +63,7 @@ void ArffWriter::_w(const QString& s)
 
 void ArffWriter::write(const vector<Sample> &samples)
 {
-  QString msg = "Writing .arff file";
+  QString msg = "Writing attribute-relation model file";
   if (!_path.isEmpty())
   {
     msg += " to " + _path.right(50);
@@ -96,6 +96,7 @@ void ArffWriter::write(const vector<Sample> &samples)
 
   _w("@DATA");
 
+  const int precision = ConfigOptions().getArffWriterPrecision();
   for (vector<Sample>::const_iterator st = samples.begin(); st != samples.end(); ++st)
   {
     const Sample& s = *st;
@@ -121,7 +122,7 @@ void ArffWriter::write(const vector<Sample> &samples)
         {
           // 17 digits is guaranteed to be the same by IEEE 754
           // http://en.wikipedia.org/wiki/Double-precision_floating-point_format
-          l.append(QString("%1").arg(v, 0, 'g', 17));
+          l.append(QString("%1").arg(v, 0, 'g', precision));
         }
       }
       else

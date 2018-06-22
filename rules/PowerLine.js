@@ -50,7 +50,6 @@ var translateMinWordSetLevenshtein_1_15 =
     new hoot.MinSumWordSetDistance(
         {"token.separator": "[\\s-,';]+"},
         new hoot.TranslateStringDistance(
-            // runs just a little faster w/ tokenize off
             {"translate.string.distance.tokenize": "false"},
             new hoot.LevenshteinDistance(
                 {"levenshtein.distance.alpha": 1.15}))));
@@ -59,7 +58,6 @@ var weightedWordDistance =
     new hoot.WeightedWordDistance(
         {"token.separator": "[\\s-,';]+", "weighted.word.distance.probability": 0.5},
         new hoot.TranslateStringDistance(
-            // runs just a little faster w/ tokenize off
             {"translate.string.distance.tokenize": "false"},
             new hoot.LevenshteinDistance(
                 {"levenshtein.distance.alpha": 1.5}))));
@@ -68,17 +66,13 @@ var parallelScoreExtractor = new hoot.ParallelScoreExtractor();
 
 var sampledAngleHistogramExtractor =
   new hoot.SampledAngleHistogramExtractor(
-    { "way.angle.sample.distance" : 10.0,
-      "way.matcher.heading.delta" : 5.0 }); //default
+    { "way.angle.sample.distance" : 20.0,
+      "way.matcher.heading.delta" : 150.0 });
 
-var weightedMetricDistanceExtractor1 = 
+var weightedMetricDistanceExtractor = 
   new hoot.WeightedMetricDistanceExtractor(
     new hoot.MeanAggregator(),
-    {"weighted.metric.distance.extractor.point.aggregator": "hoot::MeanAggregator", "weighted.metric.distance.extractor.search.radius": -1.0});
-var weightedMetricDistanceExtractor9 = 
-  new hoot.WeightedMetricDistanceExtractor(
-    new hoot.MeanAggregator(), 
-   {"weighted.metric.distance.extractor.point.aggregator": "hoot::MinAggregator", "weighted.metric.distance.extractor.search.radius": -1.0});
+    {"weighted.metric.distance.extractor.point.aggregator": "hoot::MinAggregator", "weighted.metric.distance.extractor.search.radius": -1.0});
 
 var weightedShapeDistanceExtractor = new hoot.WeightedShapeDistanceExtractor(new hoot.MeanAggregator());
 
@@ -101,7 +95,7 @@ exports.calculateSearchRadius = function(map)
   else
   {
     exports.searchRadius = parseFloat(hoot.get("search.radius.default"));
-    hoot.log("Using specified search radius for power line conflation: " + exports.searchRadius);
+    hoot.debug("Using specified search radius for power line conflation: " + exports.searchRadius);
   }
 }
 
@@ -154,12 +148,69 @@ exports.matchScore = function(map, e1, e2)
     var m1 = sublines.match1;
     var m2 = sublines.match2;
 
-    var sampledAngleHistogramValue = sampledAngleHistogramExtractor.extract(m, m1, m2);
-    if (sampledAngleHistogramValue > 0.1)
+    var angleHistogramValue = angleHistogramExtractor.extract(m, m1, m2);
+    var distanceScoreValue = distanceScoreExtractor.extract(m, m1, m2);
+    var edgeDistanceValue = edgeDistanceExtractor.extract(m, m1, m2);
+    var lengthScoreValue = lengthScoreExtractor.extract(m, m1, m2);
+    //var sampledAngleHistogramValue = sampledAngleHistogramExtractor.extract(m, m1, m2);
+    var weightedMetricDistanceValue = weightedMetricDistanceExtractor.extract(m, m1, m2);
+    var weightedWordDistanceValue = weightedWordDistance.extract(m, m1, m2);
+
+    //J48
+    
+    if (edgeDistanceValue > 0.992042 && lengthScoreValue > 0.998201 && distanceScoreValue > 0.999915)
     {
-      hoot.trace("Found Match!");
       result = { match: 1.0, explain:"match" };
     }
+
+    /*if (edgeDistanceValue > 0.992042 && lengthScoreValue > 0.998201)
+    {
+      if (distanceScoreValue > 0.999915)
+      {
+        result = { match: 1.0, explain:"match" };
+      }
+      else if (lengthScoreValue <= 0.999702 && angleHistogramValue > 0.999492)
+      {
+        result = { match: 1.0, explain:"match" };
+      }
+      else if (lengthScoreValue > 0.999702)
+      {
+        if (distanceScoreValue > 0.846607)
+        {
+          result = { match: 1.0, explain:"match" };
+        }
+        else if (lengthScoreValue > 0.999826)
+        {
+          if (distanceScoreValue <= 0.60615)
+          {
+            result = { review: 1.0, explain:"review" };
+          }
+          else if (distanceScoreValue > 0.699304)
+          {
+            result = { match: 1.0, explain:"match" };
+          }
+        }
+      }
+    }*/
+
+    /*if (edgeDistanceValue > 0.992042 && lengthScoreValue > 0.998201)
+    {
+      if (distanceScoreValue > 0.999915)
+      {
+        result = { match: 1.0, explain:"match" };
+      }
+      else if (lengthScoreValue > 0.999702)
+      {
+        if (weightedMetricDistanceValue <= 0.000034 && edgeDistanceValue > 0.999959)
+        {
+          result = { match: 1.0, explain:"match" };
+        }
+        else if (weightedMetricDistanceValue > 0.000034 && angleHistogramValue <= 0.999752)
+        {
+          result = { review: 1.0, explain:"review" };
+        }
+      }
+    }*/
   }
 
   return result;
@@ -201,31 +252,16 @@ exports.getMatchFeatureDetails = function(map, e1, e2)
     var m2 = sublines.match2;
 
     featureDetails["angleHistogramExtractor"] = angleHistogramExtractor.extract(m, m1, m2);
-
     featureDetails["distanceScoreExtractor"] = distanceScoreExtractor.extract(m, m1, m2);
-
     featureDetails["edgeDistanceExtractor"] = edgeDistanceExtractor.extract(m, m1, m2);
-
     featureDetails["euclideanDistanceExtractor"] = euclideanDistanceExtractor.extract(m, m1, m2);
-
     featureDetails["hausdorffDistanceExtractor"] = hausdorffDistanceExtractor.extract(m, m1, m2);
-
     featureDetails["lengthScoreExtractor"] = lengthScoreExtractor.extract(m, m1, m2);
-
-    featureDetails["nameExtractor"] = nameExtractor.extract(m, m1, m2);
-    featureDetails["translateMeanWordSetLevenshtein_1_5"] = translateMeanWordSetLevenshtein_1_5.extract(m, m1, m2);
-    featureDetails["translateMaxWordSetLevenshtein_1_15"] = translateMaxWordSetLevenshtein_1_15.extract(m, m1, m2);
-    featureDetails["translateMinWordSetLevenshtein_1_15"] = translateMinWordSetLevenshtein_1_15.extract(m, m1, m2);
-    featureDetails["weightedWordDistance"] = weightedWordDistance.extract(m, m1, m2);
-
     featureDetails["parallelScoreExtractor"] = parallelScoreExtractor.extract(m, m1, m2);
-   
     featureDetails["sampledAngleHistogramExtractor"] = sampledAngleHistogramExtractor.extract(m, m1, m2);
-
-    featureDetails["weightedMetricDistanceExtractor1"] = weightedMetricDistanceExtractor1.extract(m, m1, m2);
-    featureDetails["weightedMetricDistanceExtractor9"] = weightedMetricDistanceExtractor9.extract(m, m1, m2);
-
+    featureDetails["weightedMetricDistanceExtractor"] = weightedMetricDistanceExtractor.extract(m, m1, m2);
     featureDetails["weightedShapeDistanceExtractor"] = weightedShapeDistanceExtractor.extract(m, m1, m2);
+    featureDetails["weightedWordDistance"] = weightedWordDistance.extract(m, m1, m2);
   }
 
   return featureDetails;
