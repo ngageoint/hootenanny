@@ -140,7 +140,10 @@ public:
     TypeMax
   };
 
-  bool calculateChangeset(boost::shared_ptr<ChangesetInfo>& changeset);
+  bool calculateChangeset(ChangesetInfoPtr& changeset);
+
+  ChangesetInfoPtr splitChangeset(ChangesetInfoPtr changeset);
+
   QString getChangesetString(ChangesetInfoPtr changeset, long changeset_id);
 
   void setMaxSize(long size) { _maxChangesetSize = size; }
@@ -153,12 +156,12 @@ private:
 
   QString getChangeset(ChangesetInfoPtr changeset, long id, ChangesetType type);
 
-  bool addNode(boost::shared_ptr<ChangesetInfo>& changeset, ChangesetType type, XmlNode* node);
-  bool addNodes(boost::shared_ptr<ChangesetInfo>& changeset, ChangesetType type);
-  bool addWay(boost::shared_ptr<ChangesetInfo>& changeset, ChangesetType type, XmlWay* way);
-  bool addWays(boost::shared_ptr<ChangesetInfo>& changeset, ChangesetType type);
-  bool addRelation(boost::shared_ptr<ChangesetInfo>& changeset, ChangesetType type, XmlRelation* relation);
-  bool addRelations(boost::shared_ptr<ChangesetInfo>& changeset, ChangesetType type);
+  bool addNode(ChangesetInfoPtr& changeset, ChangesetType type, XmlNode* node);
+  bool addNodes(ChangesetInfoPtr& changeset, ChangesetType type);
+  bool addWay(ChangesetInfoPtr& changeset, ChangesetType type, XmlWay* way);
+  bool addWays(ChangesetInfoPtr& changeset, ChangesetType type);
+  bool addRelation(ChangesetInfoPtr& changeset, ChangesetType type, XmlRelation* relation);
+  bool addRelations(ChangesetInfoPtr& changeset, ChangesetType type);
 
   bool isSent(XmlElement* element);
   bool canSend(XmlNode* node);
@@ -197,6 +200,13 @@ public:
   ChangesetInfo() { }
   void add(ElementType::Type element_type, XmlChangeset::ChangesetType changeset_type, long id)
   { _changeset[element_type][changeset_type].insert(id); }
+  void remove(ElementType::Type element_type, XmlChangeset::ChangesetType changeset_type, long id)
+  {
+    container& selectedSet = _changeset[element_type][changeset_type];
+    if (selectedSet.find(id) != selectedSet.end())
+      selectedSet.erase(id);
+  }
+
   void clear()
   {
     for (int i = 0; i < (int)ElementType::Unknown; ++i)
@@ -224,6 +234,7 @@ public:
     return s;
   }
 
+  ChangesetInfoPtr splitChangeset();
 
 private:
   std::array<std::array<container, XmlChangeset::TypeMax>, ElementType::Unknown> _changeset;

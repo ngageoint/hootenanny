@@ -210,7 +210,7 @@ void XmlChangeset::updateChangeset(const QString &changes)
   }
 }
 
-bool XmlChangeset::addNode(boost::shared_ptr<ChangesetInfo>& changeset, ChangesetType type, XmlNode* node)
+bool XmlChangeset::addNode(ChangesetInfoPtr& changeset, ChangesetType type, XmlNode* node)
 {
   //  Only add the nodes that are "sendable"
   if (canSend(node))
@@ -229,7 +229,7 @@ bool XmlChangeset::addNode(boost::shared_ptr<ChangesetInfo>& changeset, Changese
     return false;
 }
 
-bool XmlChangeset::addNodes(boost::shared_ptr<ChangesetInfo>& changeset, ChangesetType type)
+bool XmlChangeset::addNodes(ChangesetInfoPtr& changeset, ChangesetType type)
 {
   bool added = false;
   //  Iterate all of the nodes of "type" in the changeset
@@ -243,7 +243,7 @@ bool XmlChangeset::addNodes(boost::shared_ptr<ChangesetInfo>& changeset, Changes
   return added;
 }
 
-bool XmlChangeset::addWay(boost::shared_ptr<ChangesetInfo>& changeset, ChangesetType type, XmlWay* way)
+bool XmlChangeset::addWay(ChangesetInfoPtr& changeset, ChangesetType type, XmlWay* way)
 {
   if (canSend(way))
   {
@@ -270,7 +270,7 @@ bool XmlChangeset::addWay(boost::shared_ptr<ChangesetInfo>& changeset, Changeset
     return false;
 }
 
-bool XmlChangeset::addWays(boost::shared_ptr<ChangesetInfo>& changeset, ChangesetType type)
+bool XmlChangeset::addWays(ChangesetInfoPtr& changeset, ChangesetType type)
 {
   bool added = false;
   //  Iterate all of the ways of "type" in the changeset
@@ -284,7 +284,7 @@ bool XmlChangeset::addWays(boost::shared_ptr<ChangesetInfo>& changeset, Changese
   return added;
 }
 
-bool XmlChangeset::addRelation(boost::shared_ptr<ChangesetInfo>& changeset, ChangesetType type, XmlRelation* relation)
+bool XmlChangeset::addRelation(ChangesetInfoPtr& changeset, ChangesetType type, XmlRelation* relation)
 {
   if (canSend(relation))
   {
@@ -338,7 +338,7 @@ bool XmlChangeset::addRelation(boost::shared_ptr<ChangesetInfo>& changeset, Chan
     return false;
 }
 
-bool XmlChangeset::addRelations(boost::shared_ptr<ChangesetInfo>& changeset, ChangesetType type)
+bool XmlChangeset::addRelations(ChangesetInfoPtr& changeset, ChangesetType type)
 {
   bool added = false;
   //  Iterate all of the ways of "type" in the changeset
@@ -449,7 +449,7 @@ void XmlChangeset::markBuffered(XmlElement* element)
   }
 }
 
-bool XmlChangeset::calculateChangeset(boost::shared_ptr<ChangesetInfo>& changeset)
+bool XmlChangeset::calculateChangeset(ChangesetInfoPtr& changeset)
 {
   //  Create the changeset info object if there isn't one
   if (!changeset)
@@ -524,6 +524,17 @@ bool XmlChangeset::calculateChangeset(boost::shared_ptr<ChangesetInfo>& changese
   _sendBuffer.clear();
   //  Return true if there is anything in this changeset
   return changeset->size() > 0;
+}
+
+ChangesetInfoPtr XmlChangeset::splitChangeset(ChangesetInfoPtr changeset)
+{
+  ChangesetInfoPtr split(new ChangesetInfo());
+  //  Start with relations and try to split
+  //  Then move to ways
+  //  Finally nodes
+
+  //  Return the second changeset to be added to the queue
+  return split;
 }
 
 QString XmlChangeset::getChangesetString(ChangesetInfoPtr changeset, long changeset_id)

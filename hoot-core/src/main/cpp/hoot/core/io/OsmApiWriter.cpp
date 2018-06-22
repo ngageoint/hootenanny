@@ -144,7 +144,7 @@ OsmApiWriter::OsmApiWriter(const QUrl& url, const QList<QString>& changesets)
 
 bool OsmApiWriter::apply()
 {
-  const int QUEUE_SIZE_MULTIPLIER = 2;
+  const int QUEUE_SIZE_MULTIPLIER = 4;
 
   OsmApiNetworkRequestPtr request(new OsmApiNetworkRequest());
   //  Validate API capabilites
