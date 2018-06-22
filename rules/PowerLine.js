@@ -148,21 +148,34 @@ exports.matchScore = function(map, e1, e2)
     var m1 = sublines.match1;
     var m2 = sublines.match2;
 
-    var angleHistogramValue = angleHistogramExtractor.extract(m, m1, m2);
-    var distanceScoreValue = distanceScoreExtractor.extract(m, m1, m2);
-    var edgeDistanceValue = edgeDistanceExtractor.extract(m, m1, m2);
-    var lengthScoreValue = lengthScoreExtractor.extract(m, m1, m2);
-    //var sampledAngleHistogramValue = sampledAngleHistogramExtractor.extract(m, m1, m2);
-    var weightedMetricDistanceValue = weightedMetricDistanceExtractor.extract(m, m1, m2);
-    var weightedWordDistanceValue = weightedWordDistance.extract(m, m1, m2);
+    //var angleHistogramValue = angleHistogramExtractor.extract(m, m1, m2);
+    //var distanceScoreValue = distanceScoreExtractor.extract(m, m1, m2);
+    //var edgeDistanceValue = edgeDistanceExtractor.extract(m, m1, m2);
+    //var lengthScoreValue = lengthScoreExtractor.extract(m, m1, m2);
+    var sampledAngleHistogramValue = sampledAngleHistogramExtractor.extract(m, m1, m2);
+    //var weightedMetricDistanceValue = weightedMetricDistanceExtractor.extract(m, m1, m2);
+    //var weightedWordDistanceValue = weightedWordDistance.extract(m, m1, m2);
 
-    //J48
-    
-    if (edgeDistanceValue > 0.992042 && lengthScoreValue > 0.998201 && distanceScoreValue > 0.999915)
+    if (sampledAngleHistogramValue > 0.1)
     {
       result = { match: 1.0, explain:"match" };
     }
 
+    //J48
+    
+    //77.9
+    //48.8
+    //pass
+    //40.4
+    /*if (edgeDistanceValue > 0.992042 && lengthScoreValue > 0.998201 && distanceScoreValue > 0.999915)
+    {
+      result = { match: 1.0, explain:"match" };
+    }*/
+
+    //pass
+    //12.7
+    //6.2
+    //1.0
     /*if (edgeDistanceValue > 0.992042 && lengthScoreValue > 0.998201)
     {
       if (distanceScoreValue > 0.999915)
@@ -193,6 +206,10 @@ exports.matchScore = function(map, e1, e2)
       }
     }*/
 
+    //77.1
+    //5.0
+    //0
+    //0
     /*if (edgeDistanceValue > 0.992042 && lengthScoreValue > 0.998201)
     {
       if (distanceScoreValue > 0.999915)
@@ -209,6 +226,18 @@ exports.matchScore = function(map, e1, e2)
         {
           result = { review: 1.0, explain:"review" };
         }
+      }
+    }*/
+
+    //////////////
+
+    /*if (result.explain === 'match')
+    {
+      var e1Voltage = parseInt(e1.getTags().get("voltage"));
+      var e2Voltage = parseInt(e2.getTags().get("voltage"));
+      if (e1Voltage != e2Voltage)
+      {
+        result = { review: 1.0, explain:"review" };
       }
     }*/
   }
@@ -254,14 +283,10 @@ exports.getMatchFeatureDetails = function(map, e1, e2)
     featureDetails["angleHistogramExtractor"] = angleHistogramExtractor.extract(m, m1, m2);
     featureDetails["distanceScoreExtractor"] = distanceScoreExtractor.extract(m, m1, m2);
     featureDetails["edgeDistanceExtractor"] = edgeDistanceExtractor.extract(m, m1, m2);
-    featureDetails["euclideanDistanceExtractor"] = euclideanDistanceExtractor.extract(m, m1, m2);
-    featureDetails["hausdorffDistanceExtractor"] = hausdorffDistanceExtractor.extract(m, m1, m2);
     featureDetails["lengthScoreExtractor"] = lengthScoreExtractor.extract(m, m1, m2);
     featureDetails["parallelScoreExtractor"] = parallelScoreExtractor.extract(m, m1, m2);
     featureDetails["sampledAngleHistogramExtractor"] = sampledAngleHistogramExtractor.extract(m, m1, m2);
     featureDetails["weightedMetricDistanceExtractor"] = weightedMetricDistanceExtractor.extract(m, m1, m2);
-    featureDetails["weightedShapeDistanceExtractor"] = weightedShapeDistanceExtractor.extract(m, m1, m2);
-    featureDetails["weightedWordDistance"] = weightedWordDistance.extract(m, m1, m2);
   }
 
   return featureDetails;
