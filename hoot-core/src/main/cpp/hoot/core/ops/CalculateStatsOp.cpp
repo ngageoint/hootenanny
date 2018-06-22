@@ -369,9 +369,13 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     for (QMap<MatchCreator::BaseFeatureType, double>::const_iterator it = conflatableFeatureCounts.begin();
          it != conflatableFeatureCounts.end(); ++it)
     {
-      _generateFeatureStats(constMap, it.key(), it.value(),
-                            MatchCreator::getFeatureCalcType(it.key()),
-                            MatchCreator::getElementCriterion(it.key(), map), poisMergedIntoPolys);
+      // Unknown does not get us a usable element criterion, so skip it
+      if (hoot::MatchCreator::Unknown != it.key())
+      {
+        _generateFeatureStats(constMap, it.key(), it.value(),
+                              MatchCreator::getFeatureCalcType(it.key()),
+                              MatchCreator::getElementCriterion(it.key(), map), poisMergedIntoPolys);
+      }
     }
 
     LongestTagVisitor v2;
