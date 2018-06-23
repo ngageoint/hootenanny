@@ -58,10 +58,9 @@ public:
 
   void runSimpleTest()
   {
+    TestUtils::resetEnvironment();
+
     OsmXmlReader reader;
-
-    OsmMap::resetCounters();
-
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/algorithms/wayjoiner/WayJoinerSimpleInput.osm", map);
@@ -80,10 +79,9 @@ public:
 
   void runCornerSplitterTest()
   {
+    TestUtils::resetEnvironment();
+
     OsmXmlReader reader;
-
-    OsmMap::resetCounters();
-
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/algorithms/wayjoiner/WayJoinerCornerSplitterInput.osm", map);
@@ -102,10 +100,9 @@ public:
 
   void runIntersectionSplitterTest()
   {
+    TestUtils::resetEnvironment();
+
     OsmXmlReader reader;
-
-    OsmMap::resetCounters();
-
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/algorithms/wayjoiner/WayJoinerIntersectionSplitterInput.osm", map);
@@ -124,10 +121,9 @@ public:
 
   void runConflateTest()
   {
+    TestUtils::resetEnvironment();
+
     OsmXmlReader reader;
-
-    OsmMap::resetCounters();
-
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
