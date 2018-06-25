@@ -238,6 +238,11 @@ public:
   iterator end(ElementType::Type element_type, XmlChangeset::ChangesetType changeset_type)
   { return _changeset[element_type][changeset_type].end(); }
 
+  size_t size(ElementType::Type elementType, XmlChangeset::ChangesetType changesetType)
+  {
+    return _changeset[(int)elementType][(int)changesetType].size();
+  }
+
   size_t size()
   {
     size_t s = 0;

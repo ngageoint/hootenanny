@@ -297,6 +297,7 @@ void OsmApiWriter::_changesetThreadFunc()
               _workQueueMutex.unlock();
             }
           }
+          break;
         case 405:   //  This shouldn't ever happen, push back on the queue
           _workQueueMutex.lock();
           _workQueue.push(workInfo);

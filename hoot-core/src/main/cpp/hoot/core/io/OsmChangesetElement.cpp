@@ -828,7 +828,33 @@ QString XmlChangeset::getFailedChangesetString()
     return "";
   //  Create a changeset info object to hold all of the failed elements
   ChangesetInfoPtr changeset(new ChangesetInfo());
-
+  for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
+  {
+    //  Iterate all of the nodes in the changeset looking for failed elements
+    for (XmlElementMap::iterator it = _nodes[current_type].begin(); it != _nodes[current_type].end(); ++it)
+    {
+      XmlNode* node = dynamic_cast<XmlNode*>(it->second.get());
+      //  Add only the failed nodes
+      if (node->getStatus() == XmlElement::ElementStatus::Failed)
+        changeset->add(ElementType::Node, (ChangesetType)current_type, node->id());
+    }
+    //  Iterate all of the ways in the changeset looking for failed elements
+    for (XmlElementMap::iterator it = _ways[current_type].begin(); it != _ways[current_type].end(); ++it)
+    {
+      XmlWay* way = dynamic_cast<XmlWay*>(it->second.get());
+      //  Add only the failed ways
+      if (way->getStatus() == XmlElement::ElementStatus::Failed)
+        changeset->add(ElementType::Way, (ChangesetType)current_type, way->id());
+    }
+    //  Iterate all of the relations in the changeset looking for failed elements
+    for (XmlElementMap::iterator it = _relations[current_type].begin(); it != _relations[current_type].end(); ++it)
+    {
+      XmlRelation* relation = dynamic_cast<XmlRelation*>(it->second.get());
+      //  Add only the failed relations
+      if (relation->getStatus() == XmlElement::ElementStatus::Failed)
+        changeset->add(ElementType::Relation, (ChangesetType)current_type, relation->id());
+    }
+  }
   //  Return the changeset string using changeset ID 0 to indicate it was a failure
   return getChangesetString(changeset, 0);
 }
@@ -848,7 +874,7 @@ QString XmlChangeset::getChangeset(ChangesetInfoPtr changeset, long id, Changese
     category = "modify";
   else if (type == ChangesetType::TypeDelete)
     category = "delete";
-  if (nodes.size() > 0 || ways.size() > 0 || relations.size() > 0)
+  if (changeset->size(ElementType::Node, type) > 0 || changeset->size(ElementType::Way, type) > 0 || changeset->size(ElementType::Relation, type) > 0)
   {
     ts << "\t<" << category << ">\n";
     for (ElementIdToIdMap::iterator it = _idMap.begin(ElementType::Node); it != _idMap.end(ElementType::Node); ++it)
