@@ -130,7 +130,7 @@ public:
   void updateChangeset(const QString& changes);
 
   bool hasElementsToSend() { return (long)(_allNodes.size() + _allWays.size() + _allRelations.size()) > _sentCount; }
-  bool isDone() { return (long)(_allNodes.size() + _allWays.size() + _allRelations.size()) == _processedCount; }
+  bool isDone() { return (long)(_allNodes.size() + _allWays.size() + _allRelations.size()) == _processedCount + _failedCount; }
 
   enum ChangesetType
   {
@@ -146,7 +146,11 @@ public:
 
   QString getChangesetString(ChangesetInfoPtr changeset, long changeset_id);
 
+  QString getFailedChangesetString();
+
   void setMaxSize(long size) { _maxChangesetSize = size; }
+
+  bool hasFailedElements() { return _failedCount > 0; }
 
 private:
 
@@ -156,12 +160,22 @@ private:
 
   QString getChangeset(ChangesetInfoPtr changeset, long id, ChangesetType type);
 
-  bool addNode(ChangesetInfoPtr& changeset, ChangesetType type, XmlNode* node);
   bool addNodes(ChangesetInfoPtr& changeset, ChangesetType type);
-  bool addWay(ChangesetInfoPtr& changeset, ChangesetType type, XmlWay* way);
+  bool addNode(ChangesetInfoPtr& changeset, ChangesetType type, XmlNode* node);
+  bool moveNode(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, XmlNode* node);
+  bool canMoveNode(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, XmlNode* node);
   bool addWays(ChangesetInfoPtr& changeset, ChangesetType type);
-  bool addRelation(ChangesetInfoPtr& changeset, ChangesetType type, XmlRelation* relation);
+  bool addWay(ChangesetInfoPtr& changeset, ChangesetType type, XmlWay* way);
+  bool moveWay(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, XmlWay* way);
+  bool canMoveWay(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, XmlWay* way);
   bool addRelations(ChangesetInfoPtr& changeset, ChangesetType type);
+  bool addRelation(ChangesetInfoPtr& changeset, ChangesetType type, XmlRelation* relation);
+  bool moveRelation(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, XmlRelation* relation);
+  bool canMoveRelation(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, XmlRelation* relation);
+
+  size_t getObjectCount(ChangesetInfoPtr& changeset, XmlNode* node);
+  size_t getObjectCount(ChangesetInfoPtr& changeset, XmlWay* way);
+  size_t getObjectCount(ChangesetInfoPtr& changeset, XmlRelation* relation);
 
   bool isSent(XmlElement* element);
   bool canSend(XmlNode* node);
@@ -186,6 +200,7 @@ private:
   long _maxChangesetSize;
   long _sentCount;
   long _processedCount;
+  long _failedCount;
 
   std::vector<XmlElement*> _sendBuffer;
 };
@@ -234,8 +249,6 @@ public:
     return s;
   }
 
-  ChangesetInfoPtr splitChangeset();
-
 private:
   std::array<std::array<container, XmlChangeset::TypeMax>, ElementType::Unknown> _changeset;
 };
@@ -258,7 +271,8 @@ public:
     Available,
     Buffering,
     Sent,
-    Finalized
+    Finalized,
+    Failed
   };
 
   ElementStatus getStatus() { return _status; }

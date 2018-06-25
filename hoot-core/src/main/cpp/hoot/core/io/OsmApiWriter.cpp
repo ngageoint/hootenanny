@@ -279,12 +279,33 @@ void OsmApiWriter::_changesetThreadFunc()
       }
       else
       {
-        //  Log the error for now
-        //TODO: Clean up the error handling
+        //  Log the error
         LOG_ERROR("Thread: " << std::this_thread::get_id() << "\tError uploading changeset: " << id);
-        _workQueueMutex.lock();
-        _workQueue.push(workInfo);
-        _workQueueMutex.unlock();
+        //  Split the changeset on conflict errors
+        switch (request->getHttpStatus())
+        {
+        case 400:   //  Placeholder ID is missing or not unique
+        case 404:   //  Diff contains elements where the given ID could not be found
+        case 409:   //  Conflict, Split the changeset, push both back on the queue
+          {
+            ChangesetInfoPtr split = _changeset.splitChangeset(workInfo);
+            if (split->size() > 0)
+            {
+              _workQueueMutex.lock();
+              _workQueue.push(split);
+              _workQueue.push(workInfo);
+              _workQueueMutex.unlock();
+            }
+          }
+        case 405:   //  This shouldn't ever happen, push back on the queue
+          _workQueueMutex.lock();
+          _workQueue.push(workInfo);
+          _workQueueMutex.unlock();
+          break;
+        default:
+          //  This is a big problem, update the changeset
+          break;
+        }
       }
       //  Close the changeset
       _closeChangeset(request, id);

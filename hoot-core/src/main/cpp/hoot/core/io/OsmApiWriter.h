@@ -134,6 +134,10 @@ public:
 
   bool apply();
 
+  bool containsFailed() { return _changeset.hasFailedElements(); }
+
+  QString getFailedChangeset() { return _changeset.getFailedChangesetString(); }
+
   //  https://wiki.openstreetmap.org/wiki/API_v0.6#Capabilities:_GET_.2Fapi.2Fcapabilities
   bool queryCapabilities(OsmApiNetworkRequestPtr request);
   //  https://wiki.openstreetmap.org/wiki/API_v0.6#Retrieving_permissions:_GET_.2Fapi.2F0.6.2Fpermissions
