@@ -157,7 +157,7 @@ pipeline {
         }
         success {
             script {
-                if (!env.BRANCH_NAME.startsWith("release")) {
+                if (env.BRANCH_NAME.startsWith("release")) {
                     // Don't clean up this workspace.  We want to leave it up for acceptance testing
                     def VERS = sh(returnStdout: true, script: "vagrant ssh default -c 'cd hoot; ./scripts/git/GitVersion.sh'")
                     def URL = sh(returnStdout: true, script: "vagrant ssh-config default | grep HostName | awk '{print \$2}'")
