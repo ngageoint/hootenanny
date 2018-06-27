@@ -149,18 +149,19 @@ exports.matchScore = function(map, e1, e2)
         weightedShapeDistanceExtractor7Val < 0.49*/)
     {
       //if both matched features have a populated value for the voltage tag that disagrees, then always force a review
-      /*var voltageStr1 = String(e1.getTags().get("voltage")).trim();
+      var voltageStr1 = String(e1.getTags().get("voltage")).trim();
       var voltageStr2 = String(e2.getTags().get("voltage")).trim();
       if (voltageStr1 !== null && voltageStr1 !== '' && voltageStr2 !== null && voltageStr2 !== '')
       {
         var voltage1 = parseInt(voltageStr1);
         var voltage2 = parseInt(voltageStr2);
-        if (voltage1 != voltage2)
+        if (!isNaN(voltage1) && !isNaN(voltage2) && voltage1 != voltage2)
         {
+          hoot.trace("Explicit voltage mismatch between matching features: " + voltage1 + " " + voltage2);
           result = { review: 1.0, explain:"review" };
           return result;
         }
-      }*/
+      }
 
       //if the features disagree on location (underground vs overhead), then always review
       /*var location1 = String(e1.getTags().get("location")).trim();
