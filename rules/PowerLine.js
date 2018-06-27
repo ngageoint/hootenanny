@@ -148,7 +148,9 @@ exports.matchScore = function(map, e1, e2)
         weightedMetricDistanceExtractor1Val < 0.59 /*&& weightedShapeDistanceExtractor1Val > 0.64 &&
         weightedShapeDistanceExtractor7Val < 0.49*/)
     {
-      //if both matched features have a populated value for the voltage tag that disagrees, then always force a review
+      //So far, voltage and location (underground vs overhead) seem to be the most consistent tags to disambiguate matches.  We'll 
+      //review when features match and they disagree, and we'll ignore them if the values for them are unpopulated.
+
       var voltageStr1 = String(e1.getTags().get("voltage")).trim();
       var voltageStr2 = String(e2.getTags().get("voltage")).trim();
       if (voltageStr1 !== null && voltageStr1 !== '' && voltageStr2 !== null && voltageStr2 !== '')
@@ -163,17 +165,17 @@ exports.matchScore = function(map, e1, e2)
         }
       }
 
-      //if the features disagree on location (underground vs overhead), then always review
-      /*var location1 = String(e1.getTags().get("location")).trim();
+      var location1 = String(e1.getTags().get("location")).trim();
       var location2 = String(e2.getTags().get("location")).trim();
-      if (location1 !== null && location1 !== '' && location2 !== null && location2 !== '' && location1 !== location2)
+      if (location1 !== 'undefined' && location1 !== null && location1 !== '' && 
+          location2 !== 'undefined' && location2 !== null && location2 !== '' && location1 !== location2)
       {
+        hoot.trace("Explicit location mismatch between matching features: " + location1 + " " + location2);
         result = { review: 1.0, explain:"review" };
         return result;
-      }*/
+      }
 
-      //result = { match: 1.0, explain:"match" };
-      //use distance weighting to favor features that are closer together
+      //use distance weighting to slightly favor features that are closer together
       var distanceScoreValue = distanceScoreExtractor.extract(m, m1, m2);
       var delta = (1.0 - distanceScoreValue) * distanceWeightCoeff;
       result.match = 1.0 + delta;
