@@ -173,7 +173,7 @@ exports.matchScore = function(map, e1, e2)
       }*/
 
       //result = { match: 1.0, explain:"match" };
-      //use distance weighting to favor matches that are closer together
+      //use distance weighting to favor features that are closer together
       var distanceScoreValue = distanceScoreExtractor.extract(m, m1, m2);
       var delta = (1.0 - distanceScoreValue) * distanceWeightCoeff;
       result.match = 1.0 + delta;
