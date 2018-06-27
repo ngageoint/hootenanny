@@ -28,11 +28,10 @@
 #define __INTERNAL_RSTAR_TREE_WRAPPER_H__
 
 //TGS Includes
-#include "../TgsExport.h"
-#include "DistanceIterator.h"
-#include "IntersectionIterator.h"
-#include "HilbertRTree.h"
-
+#include <tgs/TgsExport.h>
+#include <tgs/RStarTree/DistanceIterator.h>
+#include <tgs/RStarTree/IntersectionIterator.h>
+#include <tgs/RStarTree/HilbertRTree.h>
 
 //Std Includes
 #include <vector>

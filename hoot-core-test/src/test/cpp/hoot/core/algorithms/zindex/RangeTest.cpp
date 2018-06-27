@@ -35,14 +35,13 @@
 #include <geos/geom/Coordinate.h>
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/zindex/Range.h>
-
-#include "../../TestUtils.h"
 
 namespace hoot
 {
 
-class RangeTest : public CppUnit::TestFixture
+class RangeTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(RangeTest);
   CPPUNIT_TEST(testBasics);

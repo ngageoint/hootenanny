@@ -26,18 +26,16 @@
  */
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/MeanWordSetDistance.h>
 #include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/conflate/polygon/extractors/NameExtractor.h>
 #include <hoot/core/elements/Node.h>
-using namespace hoot;
-
-#include "../../../TestUtils.h"
 
 namespace hoot
 {
 
-class NameExtractorTest : public CppUnit::TestFixture
+class NameExtractorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(NameExtractorTest);
   CPPUNIT_TEST(runMeanLevenshteinTest);

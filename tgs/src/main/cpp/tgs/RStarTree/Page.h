@@ -29,7 +29,7 @@
 #ifndef __TGS__PAGE_H__
 #define __TGS__PAGE_H__
 
-#include "../TgsExport.h"
+#include <tgs/TgsExport.h>
 
 namespace Tgs
 {

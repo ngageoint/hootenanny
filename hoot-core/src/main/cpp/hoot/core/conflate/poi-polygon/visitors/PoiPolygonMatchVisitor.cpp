@@ -24,27 +24,26 @@
  *
  * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
+
 #include "PoiPolygonMatchVisitor.h"
 
 // hoot
 #include <hoot/core/conflate/matching/MatchType.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonTagIgnoreListReader.h>
+#include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPolyCriterion.h>
+#include <hoot/core/conflate/poi-polygon/filters/PoiPolygonPoiCriterion.h>
+#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/visitors/IndexElementsVisitor.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/schema/OsmSchema.h>
-
-#include "../PoiPolygonMatch.h"
-#include "../filters/PoiPolygonPolyCriterion.h"
-#include "../filters/PoiPolygonPoiCriterion.h"
-#include "../PoiPolygonTagIgnoreListReader.h"
+#include <hoot/core/visitors/IndexElementsVisitor.h>
 
 // Boost
 #include <boost/bind.hpp>
 
 // tgs
 #include <tgs/RStarTree/MemoryPageStore.h>
-
 
 namespace hoot
 {

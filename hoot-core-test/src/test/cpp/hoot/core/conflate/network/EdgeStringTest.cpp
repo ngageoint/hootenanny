@@ -26,14 +26,14 @@
  */
 
 // Hoot
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/network/EdgeString.h>
-#include "../../TestUtils.h"
+#include <hoot/core/util/MapProjector.h>
 
 namespace hoot
 {
 
-class EdgeStringTest : public CppUnit::TestFixture
+class EdgeStringTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(EdgeStringTest);
   CPPUNIT_TEST(basicTest);

@@ -26,13 +26,14 @@
  */
 
 // Hoot
-#include <hoot/core/conflate/Conflator.h>
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
+#include <hoot/core/conflate/Conflator.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/util/MapProjector.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -40,16 +41,10 @@
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// Qt
-#include <QDebug>
-#include <QDir>
-
-#include "../TestUtils.h"
-
 namespace hoot
 {
 
-class ConflatorTest : public CppUnit::TestFixture
+class ConflatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ConflatorTest);
   CPPUNIT_TEST(runPbfTest);
@@ -59,8 +54,9 @@ class ConflatorTest : public CppUnit::TestFixture
 
 public:
 
-  void setUp()
+  virtual void setUp()
   {
+    HootTestFixture::setUp();
     TestUtils::mkpath("test-output");
   }
 

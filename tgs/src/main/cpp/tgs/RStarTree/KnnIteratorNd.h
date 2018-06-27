@@ -29,7 +29,6 @@
 #ifndef __TGS__KNN_ITERATOR_ND_H__
 #define __TGS__KNN_ITERATOR_ND_H__
 
-#include "RStarTree.h"
 // Standard Includes
 #include <limits.h>
 #include <list>
@@ -37,10 +36,11 @@
 #include <set>
 #include <math.h>
 
-#include "../HashMap.h"
-#include "../SharedPtr.h"
-#include "../TgsExport.h"
-#include "Iterator.h"
+#include <tgs/HashMap.h>
+#include <tgs/SharedPtr.h>
+#include <tgs/TgsExport.h>
+#include <tgs/RStarTree/Iterator.h>
+#include <tgs/RStarTree/RStarTree.h>
 
 class OGRRawPoint;
 

@@ -33,8 +33,8 @@
 #include <limits>
 
 //Urgent Includes
-#include "../HashMap.h"
-#include "../TgsException.h"
+#include <tgs/HashMap.h>
+#include <tgs/TgsException.h>
 
 namespace Tgs
 {

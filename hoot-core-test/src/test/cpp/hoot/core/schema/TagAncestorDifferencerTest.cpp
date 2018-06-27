@@ -26,15 +26,14 @@
  */
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagAncestorDifferencer.h>
-
-#include "../TestUtils.h"
 
 namespace hoot
 {
 
-class TagAncestorDifferencerTest : public CppUnit::TestFixture
+class TagAncestorDifferencerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(TagAncestorDifferencerTest);
   CPPUNIT_TEST(compareRailwaysTest);

@@ -29,15 +29,9 @@
 #include <geos/geom/Geometry.h>
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/polygon/MultiPolygonCreator.h>
 #include <hoot/core/util/FindNodesInWayFactory.h>
-using namespace hoot;
-
-// Qt
-#include <QDebug>
-#include <QDir>
-
-#include "../TestUtils.h"
 
 using namespace geos::geom;
 using namespace std;
@@ -45,7 +39,7 @@ using namespace std;
 namespace hoot
 {
 
-class MultiPolygonCreatorTest : public CppUnit::TestFixture
+class MultiPolygonCreatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(MultiPolygonCreatorTest);
   CPPUNIT_TEST(runBadOuterRingsTest);
@@ -226,7 +220,6 @@ public:
 
 };
 
-}
-
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MultiPolygonCreatorTest, "quick");
 
+}

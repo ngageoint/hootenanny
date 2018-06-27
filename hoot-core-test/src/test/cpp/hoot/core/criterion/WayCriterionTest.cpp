@@ -27,19 +27,15 @@
 
 
 // Hoots
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/criterion/WayCriterion.h>
-
-// Qt
-#include <QDir>
-
-#include "../TestUtils.h"
 
 using namespace geos::geom;
 
 namespace hoot
 {
 
-class WayCriterionTest : public CppUnit::TestFixture
+class WayCriterionTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(WayCriterionTest);
   CPPUNIT_TEST(runBasicTest);

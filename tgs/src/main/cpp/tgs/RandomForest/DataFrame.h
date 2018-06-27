@@ -39,8 +39,8 @@
 #include <string>
 #include <vector>
 
-#include "../HashMap.h"
-#include "../TgsExport.h"
+#include <tgs/HashMap.h>
+#include <tgs/TgsExport.h>
 
 namespace Tgs
 {

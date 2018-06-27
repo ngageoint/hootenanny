@@ -32,6 +32,7 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/index/metric-hybrid/FqTree.h>
 #include <hoot/core/io/OsmPbfReader.h>
@@ -43,13 +44,12 @@
 // Tgs
 #include <tgs/System/Time.h>
 
-#include "../../TestUtils.h"
 
+using namespace hoot::hybrid;
 using namespace std;
 
 namespace hoot
 {
-using namespace hybrid;
 
 class FqDummyData
 {
@@ -70,7 +70,7 @@ std::ostream& operator<<(std::ostream & o, const FqDummyData& dd)
   return o;
 }
 
-class FqTreeTest : public CppUnit::TestFixture
+class FqTreeTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(FqTreeTest);
   CPPUNIT_TEST(runBuildIndexTest);

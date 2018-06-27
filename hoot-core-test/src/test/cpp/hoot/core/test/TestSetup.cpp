@@ -26,7 +26,7 @@
  */
 #include "TestSetup.h"
 
-#include "../TestUtils.h"
+#include <hoot/core/TestUtils.h>
 
 namespace hoot
 {
@@ -46,4 +46,5 @@ void TestSetup::reset()
 {
   TestUtils::resetEnvironment(_confs);
 }
+
 }

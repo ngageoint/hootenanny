@@ -30,20 +30,20 @@
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
+
 // Hoot
-#include <hoot/core/io/ElementCacheLRU.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/Node.h>
-#include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Status.h>
-
-#include "../TestUtils.h"
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/io/ElementCacheLRU.h>
 
 namespace hoot
 {
 
-class ElementCacheLruTest : public CppUnit::TestFixture
+class ElementCacheLruTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ElementCacheLruTest);
   CPPUNIT_TEST(runCacheSizeTest);

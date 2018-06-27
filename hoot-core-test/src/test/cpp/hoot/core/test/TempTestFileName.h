@@ -28,7 +28,6 @@
 #define TEMPTESTFILENAME_H
 
 // Qt
-#include <QDir>
 #include <QStringList>
 
 namespace hoot

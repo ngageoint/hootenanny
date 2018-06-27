@@ -27,9 +27,9 @@
 #include "InternalRStarTreeWrapper.h"
 
 //TGS Includes
-#include "Box.h"
-#include "MemoryPageStore.h"
-#include "../SharedPtr.h"
+#include <tgs/SharedPtr.h>
+#include <tgs/RStarTree/Box.h>
+#include <tgs/RStarTree/MemoryPageStore.h>
 
 //Std Includes
 #include <cassert>

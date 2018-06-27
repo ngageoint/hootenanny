@@ -25,15 +25,15 @@
  * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
+//  Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/extractors/Histogram.h>
 #include <hoot/core/util/Log.h>
-
-#include "../../TestUtils.h"
 
 namespace hoot
 {
 
-class HistogramTest : public CppUnit::TestFixture
+class HistogramTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(HistogramTest);
   CPPUNIT_TEST(runTest);

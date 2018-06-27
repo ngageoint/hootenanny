@@ -43,6 +43,7 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/polygon/BuildingMerger.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/Way.h>
@@ -61,23 +62,15 @@
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// Qt
-#include <QDebug>
-#include <QDir>
-#include <QBuffer>
-#include <QByteArray>
-
 // Tgs
 #include <tgs/StreamUtils.h>
-
-#include "../../TestUtils.h"
 
 using namespace std;
 
 namespace hoot
 {
 
-class BuildingMergerTest : public CppUnit::TestFixture
+class BuildingMergerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(BuildingMergerTest);
   CPPUNIT_TEST(runMatchTest);
@@ -88,8 +81,9 @@ class BuildingMergerTest : public CppUnit::TestFixture
 
 public:
 
-  void setUp()
+  virtual void setUp()
   {
+    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/conflate/polygon");
   }
 

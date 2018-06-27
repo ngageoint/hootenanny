@@ -31,13 +31,13 @@
 #include <assert.h>
 #include <iostream>
 
-#include "../RandomForest/DataFrame.h"
-#include "../StreamUtils.h"
+#include <tgs/StreamUtils.h>
+#include <tgs/RandomForest/DataFrame.h>
 
 #define WANT_STREAM
 #define WANT_MATH
 
-#include "Jacobi.h"
+#include <tgs/FeatureReduction/Jacobi.h>
 
 using namespace NEWMAT;
 

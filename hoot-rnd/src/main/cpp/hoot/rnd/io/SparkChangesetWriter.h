@@ -30,13 +30,12 @@
 // hoot
 #include <hoot/core/io/OsmChangeWriter.h>
 #include <hoot/core/io/OsmJsonWriter.h>
-#include "../visitors/AddExportTagsVisitor.h"
 #include <hoot/core/util/Configurable.h>
+#include <hoot/rnd/conflate/multiary/SearchBoundsCalculator.h>
+#include <hoot/rnd/visitors/AddExportTagsVisitor.h>
 
 // Qt
 #include <QFile>
-
-#include "../conflate/multiary/SearchBoundsCalculator.h"
 
 namespace hoot
 {

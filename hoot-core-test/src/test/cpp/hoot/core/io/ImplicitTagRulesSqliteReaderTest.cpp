@@ -24,19 +24,19 @@
  *
  * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
+
 // Hoot
-#include "../TestUtils.h"
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/ImplicitTagRulesSqliteReader.h>
 
 // Qt
-#include <QDir>
 #include <QSet>
 #include <QString>
 
 namespace hoot
 {
 
-class ImplicitTagRulesSqliteReaderTest : public CppUnit::TestFixture
+class ImplicitTagRulesSqliteReaderTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ImplicitTagRulesSqliteReaderTest);
   CPPUNIT_TEST(runTagsTest);

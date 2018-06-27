@@ -26,13 +26,14 @@
  */
 
 // Hoot
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/splitter/LargeWaySplitter.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -40,16 +41,10 @@
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// Qt
-#include <QDebug>
-#include <QDir>
-
-#include "../../TestUtils.h"
-
 namespace hoot
 {
 
-class LargeWaySplitterTest : public CppUnit::TestFixture
+class LargeWaySplitterTest : public HootTestFixture
 {
     CPPUNIT_TEST_SUITE(LargeWaySplitterTest);
     CPPUNIT_TEST(runToyTest);
@@ -57,9 +52,9 @@ class LargeWaySplitterTest : public CppUnit::TestFixture
 
 public:
 
-  void setUp()
+  virtual void setUp()
   {
-    TestUtils::resetEnvironment();
+    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/conflate");
   }
 

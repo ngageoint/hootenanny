@@ -33,13 +33,9 @@
 #include <set>
 #include <vector>
 
-// Boost Includes
-
-#include "Box.h"
-#include "RTreeNodeStore.h"
-
-#include "../TgsExport.h"
-
+#include <tgs/TgsExport.h>
+#include <tgs/RStarTree/Box.h>
+#include <tgs/RStarTree/RTreeNodeStore.h>
 
 namespace Tgs
 {

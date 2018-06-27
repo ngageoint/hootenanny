@@ -34,8 +34,8 @@
 #include <stdio.h>
 #include <string>
 
-#include "../HashMap.h"
-#include "PageStore.h"
+#include <tgs/HashMap.h>
+#include <tgs/RStarTree/PageStore.h>
 
 namespace Tgs
 {

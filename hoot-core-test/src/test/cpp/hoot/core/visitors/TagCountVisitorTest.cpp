@@ -33,19 +33,14 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/visitors/TagCountVisitor.h>
-
-// Qt
-#include <QDebug>
-#include <QDir>
-
-#include "../TestUtils.h"
 
 namespace hoot
 {
 
-class TagCountVisitorTest : public CppUnit::TestFixture
+class TagCountVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(TagCountVisitorTest);
   CPPUNIT_TEST(totalTagCountTest);

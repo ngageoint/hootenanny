@@ -26,19 +26,18 @@
  */
 
 // Hoot
-#include "../../TestUtils.h"
-#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/conflate/network/LegacyVertexMatcher.h>
 #include <hoot/core/conflate/network/NetworkDetails.h>
 #include <hoot/core/conflate/network/OsmNetworkExtractor.h>
-
+#include <hoot/core/io/OsmMapReaderFactory.h>
 
 namespace hoot
 {
 
-class LegacyVertexMatcherTest : public CppUnit::TestFixture
+class LegacyVertexMatcherTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(LegacyVertexMatcherTest);
   CPPUNIT_TEST(toyTest);

@@ -33,22 +33,17 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/visitors/KeepNodesVisitor.h>
-
-// Qt
-#include <QDebug>
-#include <QDir>
 
 // TGS
 #include <tgs/Statistics/Random.h>
-
-#include "../TestUtils.h"
+using namespace Tgs;
 
 namespace hoot
 {
-using namespace Tgs;
 
-class KeepNodesVisitorTest : public CppUnit::TestFixture
+class KeepNodesVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(KeepNodesVisitorTest);
   CPPUNIT_TEST(runToyTest);

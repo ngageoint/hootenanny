@@ -32,20 +32,16 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OgrWriter.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 
-// Qt
-#include <QDir>
-
-#include "../TestUtils.h"
-
 namespace hoot
 {
 
-class OgrWriterTest : public CppUnit::TestFixture
+class OgrWriterTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(OgrWriterTest);
   CPPUNIT_TEST(runGdbTest);
@@ -55,8 +51,9 @@ class OgrWriterTest : public CppUnit::TestFixture
 
 public:
 
-  void setUp()
+  virtual void setUp()
   {
+    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/io");
   }
 

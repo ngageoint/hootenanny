@@ -31,10 +31,10 @@
 // Standard Includes
 #include <queue>
 
-#include "../HashMap.h"
-#include "../SharedPtr.h"
-#include "../TgsExport.h"
-#include "Points.h"
+#include <tgs/HashMap.h>
+#include <tgs/SharedPtr.h>
+#include <tgs/TgsExport.h>
+#include <tgs/SpinImage/Points.h>
 
 namespace Tgs
 {

@@ -45,7 +45,7 @@ using namespace v8;
 namespace hoot
 {
 
-class UuidHelperJsTest : public CppUnit::TestFixture
+class UuidHelperJsTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(UuidHelperJsTest);
   CPPUNIT_TEST(uuidHashTest);

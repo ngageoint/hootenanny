@@ -27,24 +27,19 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/io/OsmJsonWriter.h>
-#include <hoot/core/criterion/PoiCriterion.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
-#include <hoot/core/visitors/RemoveElementsVisitor.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/criterion/PoiCriterion.h>
+#include <hoot/core/io/OsmJsonWriter.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-
-// Qt
-#include <QDir>
-
-#include "../TestUtils.h"
+#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/visitors/RemoveElementsVisitor.h>
 
 namespace hoot
 {
-using namespace Tgs;
 
-class RemoveElementsVisitorTest : public CppUnit::TestFixture
+class RemoveElementsVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(RemoveElementsVisitorTest);
   CPPUNIT_TEST(runTest);
@@ -54,8 +49,9 @@ class RemoveElementsVisitorTest : public CppUnit::TestFixture
 
 public:
 
-  void setUp()
+  virtual void setUp()
   {
+    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/visitors");
   }
 

@@ -34,11 +34,10 @@
 #include <map>
 #include <sstream>
 
-#include "../StreamUtils.h"
-#include "../Heap/JHeap.h"
-#include "../TgsException.h"
-
 // Tgs
+#include <tgs/StreamUtils.h>
+#include <tgs/TgsException.h>
+#include <tgs/Heap/JHeap.h>
 #include <tgs/Statistics/Random.h>
 
 using namespace std;

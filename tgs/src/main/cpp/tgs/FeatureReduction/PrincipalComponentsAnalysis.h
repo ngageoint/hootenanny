@@ -40,7 +40,7 @@ namespace NEWMAT {
   class Matrix;
 }
 
-#include "../TgsExport.h"
+#include <tgs/TgsExport.h>
 
 namespace Tgs
 {

@@ -31,10 +31,10 @@
 // Standard Includes
 #include <queue>
 
-#include "../HashMap.h"
-#include "../SharedPtr.h"
-#include "../TgsExport.h"
-#include "NormalEstimator.h"
+#include <tgs/HashMap.h>
+#include <tgs/SharedPtr.h>
+#include <tgs/TgsExport.h>
+#include <tgs/SpinImage/NormalEstimator.h>
 
 class GroundPlaneRemoverTest;
 

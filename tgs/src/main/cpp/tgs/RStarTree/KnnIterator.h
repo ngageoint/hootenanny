@@ -38,10 +38,10 @@
 #include <set>
 #include <math.h>
 
-#include "../HashMap.h"
-#include "../SharedPtr.h"
-#include "../TgsExport.h"
-#include "Iterator.h"
+#include <tgs/HashMap.h>
+#include <tgs/SharedPtr.h>
+#include <tgs/TgsExport.h>
+#include <tgs/RStarTree/Iterator.h>
 
 class OGRRawPoint;
 

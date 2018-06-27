@@ -28,8 +28,8 @@
 #include "FilePageStore.h"
 
 #include <errno.h>
-#include "../TgsException.h"
-#include "Page.h"
+#include <tgs/TgsException.h>
+#include <tgs/RStarTree/Page.h>
 
 using namespace std;
 

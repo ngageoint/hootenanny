@@ -39,7 +39,7 @@ using namespace std;
 namespace hoot
 {
 
-class MultiaryUtilitiesTest : public CppUnit::TestFixture
+class MultiaryUtilitiesTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(MultiaryUtilitiesTest);
   CPPUNIT_TEST(conflateClusterTest);

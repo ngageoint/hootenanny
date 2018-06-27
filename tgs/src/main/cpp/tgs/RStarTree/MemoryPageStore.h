@@ -31,8 +31,8 @@
 // Standard Includes
 #include <vector>
 
-#include "PageStore.h"
-#include "../TgsExport.h"
+#include <tgs/TgsExport.h>
+#include <tgs/RStarTree/PageStore.h>
 
 namespace Tgs
 {

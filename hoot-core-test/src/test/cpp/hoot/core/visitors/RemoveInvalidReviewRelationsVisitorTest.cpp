@@ -27,20 +27,18 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/ops/RemoveElementOp.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/RemoveInvalidReviewRelationsVisitor.h>
 
-#include "../TestUtils.h"
-
 using namespace std;
-using namespace Tgs;
 
 namespace hoot
 {
 
-class RemoveInvalidReviewRelationsVisitorTest : public CppUnit::TestFixture
+class RemoveInvalidReviewRelationsVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(RemoveInvalidReviewRelationsVisitorTest);
   CPPUNIT_TEST(runInvalidMemberCountTest);

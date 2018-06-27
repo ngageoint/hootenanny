@@ -34,9 +34,9 @@
 #include <sstream>
 #include <vector>
 
-#include "../HashMap.h"
-#include "../TgsExport.h"
-#include "../RasterOps/Image.hpp"
+#include <tgs/HashMap.h>
+#include <tgs/TgsExport.h>
+#include <tgs/RasterOps/Image.hpp>
 
 namespace Tgs
 {

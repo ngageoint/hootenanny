@@ -34,8 +34,8 @@
 #include <sstream>
 #include <vector>
 
-#include "../TgsExport.h"
-#include "Image.hpp"
+#include <tgs/TgsExport.h>
+#include <tgs/RasterOps/Image.hpp>
 
 #ifdef SWIG
 %{

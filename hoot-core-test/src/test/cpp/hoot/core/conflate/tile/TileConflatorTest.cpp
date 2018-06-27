@@ -26,6 +26,7 @@
  */
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/splitter/LargeWaySplitter.h>
 #include <hoot/core/conflate/tile/LocalTileWorker.h>
 #include <hoot/core/conflate/MapCleaner.h>
@@ -37,10 +38,6 @@
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
-using namespace hoot;
-
-// Boost
-using namespace boost;
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -48,16 +45,10 @@ using namespace boost;
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// Qt
-#include <QDebug>
-#include <QDir>
-
-#include "../../TestUtils.h"
-
 namespace hoot
 {
 
-class TileConflatorTest : public CppUnit::TestFixture
+class TileConflatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(TileConflatorTest);
   CPPUNIT_TEST(runToyTest);
@@ -65,16 +56,14 @@ class TileConflatorTest : public CppUnit::TestFixture
 
 public:
 
-  void setUp()
+  virtual void setUp()
   {
+    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/conflate");
   }
 
   void runToyTest()
   {
-    srand(0);
-    OsmMap::resetCounters();
-    Settings::getInstance().clear();
     conf().set(ConfigOptions().getUuidHelperRepeatableKey(), true);
     conf().set(ConfigOptions().getUnifyOptimizerTimeLimitKey(), -1);
 
@@ -92,11 +81,6 @@ public:
 
     HOOT_FILE_EQUALS("test-files/conflate/TileConflatorTest.osm",
                      "test-output/conflate/TileConflatorTest.osm");
-  }
-
-  virtual void tearDown()
-  {
-    Settings::getInstance().clear();
   }
 
 };

@@ -26,21 +26,17 @@
  */
 
 // Hoot
+#include <hoot/core/TestUtils.h>
+#include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/io/ArffWriter.h>
 #include <hoot/core/scoring/MatchFeatureExtractor.h>
-#include <hoot/core/conflate/matching/MatchType.h>
-
-// Qt
-#include <QDir>
-
-#include "../TestUtils.h"
 
 using namespace std;
 
 namespace hoot
 {
 
-class ArffWriterTest : public CppUnit::TestFixture
+class ArffWriterTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ArffWriterTest);
   CPPUNIT_TEST(runBasicTest);
@@ -48,8 +44,9 @@ class ArffWriterTest : public CppUnit::TestFixture
 
 public:
 
-  void setUp()
+  virtual void setUp()
   {
+    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/io/ArffWriterTest/");
   }
 

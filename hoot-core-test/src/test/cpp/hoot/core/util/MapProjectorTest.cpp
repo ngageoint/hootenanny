@@ -37,18 +37,16 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-using namespace hoot;
 
 // Tbs
 #include <tbs/stats/SampleStats.h>
-
-#include "../TestUtils.h"
 
 using namespace geos::geom;
 using namespace std;
@@ -56,7 +54,7 @@ using namespace std;
 namespace hoot
 {
 
-class MapProjectorTest : public CppUnit::TestFixture
+class MapProjectorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(MapProjectorTest);
   CPPUNIT_TEST(runErrorTest);
@@ -68,18 +66,12 @@ public:
   boost::minstd_rand rng;
   ofstream fs;
 
-  void setUp()
+  virtual void setUp()
   {
-    TestUtils::resetEnvironment();
+    HootTestFixture::setUp();
     // we are testing the map reprojector so we don't want to force to a single projection.
     conf().set(ConfigOptions::getTestForceOrthographicProjectionKey(), false);
   }
-
-  void tearDown()
-  {
-    TestUtils::resetEnvironment();
-  }
-
 
   Radians calculateAngle(Coordinate p1, Coordinate p2, Coordinate p3)
   {

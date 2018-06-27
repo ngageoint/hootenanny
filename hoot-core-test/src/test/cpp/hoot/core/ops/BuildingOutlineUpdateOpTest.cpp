@@ -27,14 +27,12 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/BuildingOutlineUpdateOp.h>
 #include <hoot/core/util/Log.h>
-using namespace hoot;
-
-// Boost
-using namespace boost;
+#include <hoot/core/util/MapProjector.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -42,19 +40,10 @@ using namespace boost;
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// hoot
-#include <hoot/core/util/MapProjector.h>
-
-// Qt
-#include <QDebug>
-#include <QDir>
-
-#include "../TestUtils.h"
-
 namespace hoot
 {
 
-class BuildingOutlineUpdateOpTest : public CppUnit::TestFixture
+class BuildingOutlineUpdateOpTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(BuildingOutlineUpdateOpTest);
   CPPUNIT_TEST(runSelfIntersectingRelationTest);
@@ -63,8 +52,9 @@ class BuildingOutlineUpdateOpTest : public CppUnit::TestFixture
 
 public:
 
-  void setUp()
+  virtual void setUp()
   {
+    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/ops/BuildingOutlineUpdateOp/");
   }
 
@@ -121,9 +111,7 @@ public:
 
 };
 
-}
-
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(BuildingOutlineUpdateOpTest, "quick");
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(BuildingOutlineUpdateOpTest, "current");
 
-
+}

@@ -34,7 +34,7 @@
 #include <string.h> // includes memcpy on Linux
 #include <vector>
 
-#include "../TgsExport.h"
+#include <tgs/TgsExport.h>
 
 namespace Tgs
 {

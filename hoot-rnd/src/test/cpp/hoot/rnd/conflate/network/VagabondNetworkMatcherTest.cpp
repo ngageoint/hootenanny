@@ -38,13 +38,10 @@
 #include <hoot/rnd/conflate/network/VagabondNetworkMatcher.h>
 #include <hoot/core/conflate/network/OsmNetworkExtractor.h>
 
-// Qt
-#include <QDir>
-
 namespace hoot
 {
 
-class VagabondNetworkMatcherTest : public CppUnit::TestFixture
+class VagabondNetworkMatcherTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(VagabondNetworkMatcherTest);
   CPPUNIT_TEST(toyTest);

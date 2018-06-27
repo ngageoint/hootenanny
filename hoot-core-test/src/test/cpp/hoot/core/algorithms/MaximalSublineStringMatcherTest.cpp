@@ -30,15 +30,12 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/MaximalSublineStringMatcher.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
-using namespace hoot;
-
-// Boost
-using namespace boost;
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -46,23 +43,17 @@ using namespace boost;
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// Qt
-#include <QDebug>
-#include <QDir>
-
 // Standard
 #include <sstream>
 #include <iomanip>
 using namespace std;
-
-#include "../TestUtils.h"
 
 using namespace geos::geom;
 
 namespace hoot
 {
 
-class MaximalSublineStringMatcherTest : public CppUnit::TestFixture
+class MaximalSublineStringMatcherTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(MaximalSublineStringMatcherTest);
   CPPUNIT_TEST(evaluateMatchTest);

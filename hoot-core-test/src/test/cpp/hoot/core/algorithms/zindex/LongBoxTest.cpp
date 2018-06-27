@@ -35,17 +35,16 @@
 #include <geos/geom/Coordinate.h>
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/zindex/LongBox.h>
 #include <hoot/core/util/Log.h>
-
-#include "../../TestUtils.h"
 
 using namespace std;
 
 namespace hoot
 {
 
-class LongBoxTest : public CppUnit::TestFixture
+class LongBoxTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(LongBoxTest);
   CPPUNIT_TEST(testBasics);

@@ -25,9 +25,6 @@
  * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-//Boost
-#include <boost/shared_ptr.hpp>
-
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
@@ -35,6 +32,7 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/ScriptTranslator.h>
 #include <hoot/core/io/ScriptToOgrTranslator.h>
 #include <hoot/core/io/ScriptTranslatorFactory.h>
@@ -44,14 +42,12 @@
 #include <hoot/core/io/schema/Schema.h>
 #include <hoot/core/util/Log.h>
 
-#include <hoot/core/TestUtils.h>
-
 using namespace geos::geom;
 
 namespace hoot
 {
 
-class JavaScriptTranslatorTest : public CppUnit::TestFixture
+class JavaScriptTranslatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(JavaScriptTranslatorTest);
   CPPUNIT_TEST(runSchemaTest);
@@ -67,7 +63,7 @@ public:
     boost::shared_ptr<ScriptTranslator> st(ScriptTranslatorFactory::getInstance().createTranslator(
                                       "test-files/io/SampleTranslation.js"));
 
-    boost::shared_ptr<ScriptToOgrTranslator>uut = boost::dynamic_pointer_cast<ScriptToOgrTranslator>(st);
+    boost::shared_ptr<ScriptToOgrTranslator> uut = boost::dynamic_pointer_cast<ScriptToOgrTranslator>(st);
 
     if (!uut)
     {

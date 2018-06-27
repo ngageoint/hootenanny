@@ -26,16 +26,16 @@
  */
 
 // Hoot
-#include "../../TestUtils.h"
-#include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
-#include <hoot/core/util/Log.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/network/OsmNetworkExtractor.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
 
-class OsmNetworkExtractorTest : public CppUnit::TestFixture
+class OsmNetworkExtractorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(OsmNetworkExtractorTest);
   CPPUNIT_TEST(toyTest);

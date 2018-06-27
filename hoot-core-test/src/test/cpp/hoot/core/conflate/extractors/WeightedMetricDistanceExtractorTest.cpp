@@ -26,13 +26,13 @@
  */
 
 // Hoot
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/extractors/WeightedMetricDistanceExtractor.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-using namespace hoot;
+#include <hoot/core/util/MapProjector.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -40,12 +40,10 @@ using namespace hoot;
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-#include "../../TestUtils.h"
-
 namespace hoot
 {
 
-class WeightedMetricDistanceExtractorTest : public CppUnit::TestFixture
+class WeightedMetricDistanceExtractorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(WeightedMetricDistanceExtractorTest);
   CPPUNIT_TEST(runTest);

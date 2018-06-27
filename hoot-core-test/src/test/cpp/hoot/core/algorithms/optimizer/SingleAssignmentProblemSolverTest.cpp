@@ -26,9 +26,9 @@
  */
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/optimizer/SingleAssignmentProblemSolver.h>
 #include <hoot/core/util/Log.h>
-#include "../../TestUtils.h"
 
 using namespace std;
 
@@ -63,7 +63,7 @@ public:
   }
 };
 
-class SingleAssignmentProblemSolverTest : public CppUnit::TestFixture
+class SingleAssignmentProblemSolverTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(SingleAssignmentProblemSolverTest);
   CPPUNIT_TEST(runTest1);
