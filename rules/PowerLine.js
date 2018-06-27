@@ -20,11 +20,11 @@ var sublineMatcher =
 var distanceWeightCoeff = parseFloat(hoot.get("power.line.distance.weight.coefficient")) * -1.0;
 var distanceScoreExtractor = new hoot.DistanceScoreExtractor();
 
-/*var angleHistogramExtractor5 = new hoot.AngleHistogramExtractor({"angle.histogram.extractor.smoothing": 1.57});
+//var angleHistogramExtractor5 = new hoot.AngleHistogramExtractor({"angle.histogram.extractor.smoothing": 1.57});
 
 var centroidDistanceExtractor = new hoot.CentroidDistanceExtractor();
 
-var distanceScoreExtractor7 = new hoot.DistanceScoreExtractor(new hoot.SigmaAggregator());
+/*var distanceScoreExtractor7 = new hoot.DistanceScoreExtractor(new hoot.SigmaAggregator());
 
 var edgeDistanceExtractor1 = new hoot.EdgeDistanceExtractor(new hoot.MeanAggregator());
 
@@ -36,8 +36,7 @@ var lengthScoreExtractor1 = new hoot.LengthScoreExtractor(new hoot.MeanAggregato
 var lengthScoreExtractor7 = new hoot.LengthScoreExtractor(new hoot.SigmaAggregator());
 
 var nameExtractor = new hoot.NameExtractor();
-var soundexExtractor = new hoot.NameExtractor(
-    new hoot.Soundex());
+var soundexExtractor = new hoot.NameExtractor(new hoot.Soundex());
 var translateMinWordSetLevenshtein_1_15 = 
   new hoot.NameExtractor(
     new hoot.MinSumWordSetDistance(
@@ -52,8 +51,8 @@ var parallelScoreExtractor = new hoot.ParallelScoreExtractor();*/
 
 var weightedMetricDistanceExtractor1 = new hoot.WeightedMetricDistanceExtractor(new hoot.MeanAggregator());
 
-/*var weightedShapeDistanceExtractor1 = new hoot.WeightedShapeDistanceExtractor(new hoot.MeanAggregator());
-var weightedShapeDistanceExtractor7 = new hoot.WeightedShapeDistanceExtractor(new hoot.SigmaAggregator());*/
+//var weightedShapeDistanceExtractor1 = new hoot.WeightedShapeDistanceExtractor(new hoot.MeanAggregator());
+//var weightedShapeDistanceExtractor7 = new hoot.WeightedShapeDistanceExtractor(new hoot.SigmaAggregator());
 
 /**
  * Runs before match creation occurs and provides an opportunity to perform custom initialization.
@@ -126,30 +125,30 @@ exports.matchScore = function(map, e1, e2)
     var m1 = sublines.match1;
     var m2 = sublines.match2;
 
-    //var centroidDistanceExtractorVal = centroidDistanceExtractor.extract(m, m1, m2);
+    var centroidDistanceExtractorVal = centroidDistanceExtractor.extract(m, m1, m2);
     //var angleHistogramExtractor5Val = angleHistogramExtractor5.extract(m, m1, m2);
-    //var distanceScoreExtractor7Val = distanceScoreExtractor7.extract(m, m1, m2);
-    //var edgeDistanceExtractor1Val = edgeDistanceExtractor1.extract(m, m1, m2);
-    //var euclideanDistanceExtractorVal = euclideanDistanceExtractor.extract(m, m1, m2);
-    //var hausdorffDistanceExtractorVal = hausdorffDistanceExtractor.extract(m, m1, m2);
-    //var lengthScoreExtractor1Val = lengthScoreExtractor1.extract(m, m1, m2);
-    //var lengthScoreExtractor7Val = lengthScoreExtractor7.extract(m, m1, m2);
-    //var nameScoreExtractorVal = nameExtractor.extract(m, m1, m2);
-    //var parallelScoreExtractorVal = parallelScoreExtractor.extract(m, m1, m2);
-    //var soundexExtractorVal = soundexExtractor.extract(m, m1, m2);
-    //var translateMinWordSetLevenshtein_1_15Val = translateMinWordSetLevenshtein_1_15.extract(m, m1, m2);
+    /*var distanceScoreExtractor7Val = distanceScoreExtractor7.extract(m, m1, m2);
+    var edgeDistanceExtractor1Val = edgeDistanceExtractor1.extract(m, m1, m2);
+    var euclideanDistanceExtractorVal = euclideanDistanceExtractor.extract(m, m1, m2);
+    var hausdorffDistanceExtractorVal = hausdorffDistanceExtractor.extract(m, m1, m2);
+    var lengthScoreExtractor1Val = lengthScoreExtractor1.extract(m, m1, m2);
+    var lengthScoreExtractor7Val = lengthScoreExtractor7.extract(m, m1, m2);
+    var nameScoreExtractorVal = nameExtractor.extract(m, m1, m2);
+    var parallelScoreExtractorVal = parallelScoreExtractor.extract(m, m1, m2);
+    var soundexExtractorVal = soundexExtractor.extract(m, m1, m2);
+    var translateMinWordSetLevenshtein_1_15Val = translateMinWordSetLevenshtein_1_15.extract(m, m1, m2);*/
     var weightedMetricDistanceExtractor1Val = weightedMetricDistanceExtractor1.extract(m, m1, m2);
     //var weightedShapeDistanceExtractor1Val = weightedShapeDistanceExtractor1.extract(m, m1, m2);
     //var weightedShapeDistanceExtractor7Val = weightedShapeDistanceExtractor7.extract(m, m1, m2);
 
-    if (/*angleHistogramExtractor5Val > 0.95 && centroidDistanceExtractorVal > 0.61 && distanceScoreExtractor7Val < 0.552 &&
+    if (/*angleHistogramExtractor5Val > 0.95 &&*/ centroidDistanceExtractorVal > 0.61 && /*distanceScoreExtractor7Val < 0.552 &&
         edgeDistanceExtractor1Val > 0.64 && euclideanDistanceExtractorVal > 0.64 && hausdorffDistanceExtractorVal > 0.14 &&
         lengthScoreExtractor1Val > 0.41 && lengthScoreExtractor7Val < 0.155 && nameScoreExtractorVal < 0.451 &&
         parallelScoreExtractorVal > 0.76 && soundexExtractorVal < 0.75 && translateMinWordSetLevenshtein_1_15Val <= 0.5 &&*/ 
-        weightedMetricDistanceExtractor1Val < 0.59 /*&& weightedShapeDistanceExtractor1Val > 0.64 &&*
+        weightedMetricDistanceExtractor1Val < 0.59 /*&& weightedShapeDistanceExtractor1Val > 0.64 &&
         weightedShapeDistanceExtractor7Val < 0.49*/)
     {
-      //if both features have a numeric value for the voltage tag and they disagree, then force a review
+      //if both matched features have a populated value for the voltage tag that disagrees, then always force a review
       /*var voltageStr1 = String(e1.getTags().get("voltage")).trim();
       var voltageStr2 = String(e2.getTags().get("voltage")).trim();
       if (voltageStr1 !== null && voltageStr1 !== '' && voltageStr2 !== null && voltageStr2 !== '')
