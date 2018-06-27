@@ -17,7 +17,10 @@ var sublineMatcher =
     { "way.matcher.max.angle": hoot.get("way.matcher.max.angle"),
       "way.subline.matcher": hoot.get("power.line.subline.matcher") });
 
-var angleHistogramExtractor5 = new hoot.AngleHistogramExtractor({"angle.histogram.extractor.smoothing": 1.57});
+var distanceWeightCoeff = parseFloat(hoot.get("power.line.distance.weight.coefficient")) * -1.0;
+var distanceScoreExtractor = new hoot.DistanceScoreExtractor();
+
+/*var angleHistogramExtractor5 = new hoot.AngleHistogramExtractor({"angle.histogram.extractor.smoothing": 1.57});
 
 var centroidDistanceExtractor = new hoot.CentroidDistanceExtractor();
 
@@ -45,12 +48,12 @@ var translateMinWordSetLevenshtein_1_15 =
             new hoot.LevenshteinDistance(
                 {"levenshtein.distance.alpha": 1.15}))));;
 
-var parallelScoreExtractor = new hoot.ParallelScoreExtractor();
+var parallelScoreExtractor = new hoot.ParallelScoreExtractor();*/
 
 var weightedMetricDistanceExtractor1 = new hoot.WeightedMetricDistanceExtractor(new hoot.MeanAggregator());
 
-var weightedShapeDistanceExtractor1 = new hoot.WeightedShapeDistanceExtractor(new hoot.MeanAggregator());
-var weightedShapeDistanceExtractor7 = new hoot.WeightedShapeDistanceExtractor(new hoot.SigmaAggregator());
+/*var weightedShapeDistanceExtractor1 = new hoot.WeightedShapeDistanceExtractor(new hoot.MeanAggregator());
+var weightedShapeDistanceExtractor7 = new hoot.WeightedShapeDistanceExtractor(new hoot.SigmaAggregator());*/
 
 /**
  * Runs before match creation occurs and provides an opportunity to perform custom initialization.
@@ -65,8 +68,8 @@ exports.calculateSearchRadius = function(map)
       parseFloat(
         calculateSearchRadiusUsingRubberSheeting(
           map,
-          hoot.get("power.line.rubber.sheet.ref"),
-          hoot.get("power.line.rubber.sheet.minimum.ties")));
+          hoot.get("rubber.sheet.ref"),
+          hoot.get("rubber.sheet.minimum.ties")));
   }
   else
   {
@@ -116,7 +119,6 @@ exports.matchScore = function(map, e1, e2)
     return result;
   }
 
-  // extract the sublines needed for matching
   var sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
   if (sublines)
   {
@@ -170,7 +172,13 @@ exports.matchScore = function(map, e1, e2)
         return result;
       }*/
 
-      result = { match: 1.0, explain:"match" };
+      //result = { match: 1.0, explain:"match" };
+      //use distance weighting to favor matches that are closer together
+      var distanceScoreValue = distanceScoreExtractor.extract(m, m1, m2);
+      var delta = (1.0 - distanceScoreValue) * distanceWeightCoeff;
+      result.match = 1.0 + delta;
+      result.miss = 0.0 - delta;
+
       return result;
     }
   }

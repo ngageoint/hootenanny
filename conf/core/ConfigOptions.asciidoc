@@ -1482,6 +1482,14 @@ node hash calculation.
 The number of decimal places taken into account when comparing node coordinates.  Used by node
 hash calculation.
 
+=== node.matcher.angle.calc.delta
+
+* Data Type: double
+* Default Value: `0.001`
+
+The distance moved along a way, in meters, before calculating the outbound heading for a node on
+that way by the NodeMatcher.
+
 === node.matcher.strictness
 
 * Data Type: double
@@ -2383,26 +2391,20 @@ or mergers which modify features.
 === power.line.auto.calc.search.radius
 
 * Data Type: bool
-* Default Value: `false`
+* Default Value: `true`
 
-Automatically calculates the search radius to be used during conflation of waterways using rubber
+Automatically calculates the search radius to be used during conflation of power lines using rubber
 sheet tie point distances.  When this setting is enabled, rubbersheeting is not allowed as a
 pre-conflation operation on the input data to be conflated.
 
-=== power.line.rubber.sheet.minimum.ties
+=== power.line.distance.weight.coefficient
 
-* Data Type: int
-* Default Value: `5`
+* Data Type: double
+* Default Value: `0.01`
 
-Sets the minimum number of tie points that will be used when calculating a rubber sheeting solution
-with river data.
-
-=== power.line.rubber.sheet.ref
-
-* Data Type: bool
-* Default Value: `true`
-
-See `rubber.sheet.ref`.  Used during power line conflation.
+A weighting coefficient value from 0.0 to 1.0 for the applying distance weighting to power line
+matches.  This will favor feature that are closer together.  The higher the coefficient value, the
+higher the weighting applied.  A value of 0.0 will disable distance weighting.
 
 === power.line.subline.matcher
 

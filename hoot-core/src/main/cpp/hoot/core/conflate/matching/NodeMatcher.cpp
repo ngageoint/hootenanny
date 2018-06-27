@@ -38,6 +38,7 @@
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/IoUtils.h>
 
 // Tgs
 #include <tgs/Statistics/Normal.h>
@@ -50,18 +51,21 @@ namespace hoot
 
 unsigned int NodeMatcher::logWarnCount = 0;
 
-NodeMatcher::NodeMatcher()
+NodeMatcher::NodeMatcher() :
+_strictness(ConfigOptions().getNodeMatcherStrictness()),
+_delta(ConfigOptions().getNodeMatcherAngleCalcDelta())
 {
-  _strictness = ConfigOptions().getNodeMatcherStrictness();
 }
 
-vector<Radians> NodeMatcher::calculateAngles(const OsmMap* map, long nid, const set<long>& wids, Meters delta)
+vector<Radians> NodeMatcher::calculateAngles(const OsmMap* map, long nid,
+                                             const set<long>& wids, Meters delta)
 {
   vector<Radians> result;
   result.reserve(wids.size());
 
   int badSpots = 0;
 
+  LOG_VART(nid);
   for (set<long>::const_iterator it = wids.begin(); it != wids.end(); ++it)
   {
     const ConstWayPtr& w = map->getWay(*it);
@@ -71,11 +75,12 @@ vector<Radians> NodeMatcher::calculateAngles(const OsmMap* map, long nid, const 
         OsmSchema::getInstance().isLinearWaterway(*w) == false &&
         OsmSchema::getInstance().isPowerLine(*w) == false)
     {
-      // if this isn't a highway or waterway, then don't consider it.
+      // if this isn't a highway, waterway, or power line then don't consider it.
       LOG_TRACE("calculateAngles skipping feature...");
     }
     else if (w->getNodeId(0) == nid)
     {
+      LOG_TRACE("Start node: " << nid);
       WayLocation wl(map->shared_from_this(), w, 0, 0.0);
       Radians heading = WayHeading::calculateHeading(wl, delta);
       // This is the first node so the angle is an inbound angle, reverse the value.
@@ -87,15 +92,20 @@ vector<Radians> NodeMatcher::calculateAngles(const OsmMap* map, long nid, const 
       {
         heading -= M_PI;
       }
+      LOG_VART(heading);
       result.push_back(heading);
     }
     else if (w->getLastNodeId() == nid)
     {
+      LOG_TRACE("End node: " << nid);
       WayLocation wl(map->shared_from_this(), w, w->getNodeCount() - 1, 1.0);
-      result.push_back(WayHeading::calculateHeading(wl, delta));
+      Radians heading = WayHeading::calculateHeading(wl, delta);
+      LOG_VART(heading);
+      result.push_back(heading);
     }
     else
     {
+      LOG_TRACE("Bad spot");
       LOG_VART(w->getNodeId(0));
       LOG_VART(w->getLastNodeId());
       // count this as a bad spot. If we find some valid spots and some bad spots then that is an
@@ -106,6 +116,7 @@ vector<Radians> NodeMatcher::calculateAngles(const OsmMap* map, long nid, const 
 
   if (result.size() > 0 && badSpots > 0)
   {
+    LOG_TRACE("Found bad spots in NodeMatcher when calculating angles:")
     LOG_TRACE("nid: " << nid);
     LOG_VART(map->getNode(nid)->toString());
     LOG_TRACE("wids: " << wids);
@@ -114,14 +125,12 @@ vector<Radians> NodeMatcher::calculateAngles(const OsmMap* map, long nid, const 
       LOG_VART(map->getWay(*it)->toString());
     }
 
-    //boost::shared_ptr<const OsmMap> copy(new OsmMap(*map));
-    //MapProjector::reprojectToWgs84(copy);
-    //IoUtils::saveMap(copy, "/data/river-data/NodeMatcherMap-temp.osm");
+//    OsmMapPtr copy(new OsmMap(*map));
+//    MapProjector::projectToWgs84(copy);
+//    IoUtils::saveMap(copy, "tmp/NodeMatcherMap-temp.osm");
 
-    const QString msg =
-      "calculateAngles was called with a node that was not a start or end node on the specified way.";
-    //where is this being caught?
-    throw HootException(msg);
+    throw HootException(
+      "NodeMatcher::calculateAngles was called with a node that was not a start or end node on the specified way.");
   }
 
   return result;
@@ -182,8 +191,8 @@ double NodeMatcher::scorePair(long nid1, long nid2)
     acc = max(acc, _map->getWay(*it)->getCircularError());
   }
 
-  vector<Radians> theta1 = calculateAngles(_map.get(), nid1, wids1);
-  vector<Radians> theta2 = calculateAngles(_map.get(), nid2, wids2);
+  vector<Radians> theta1 = calculateAngles(_map.get(), nid1, wids1, _delta);
+  vector<Radians> theta2 = calculateAngles(_map.get(), nid2, wids2, _delta);
 
   int s1 = theta1.size();
   int s2 = theta2.size();

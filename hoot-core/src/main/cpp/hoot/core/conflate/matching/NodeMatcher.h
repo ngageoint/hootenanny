@@ -79,14 +79,16 @@ public:
    * If the node is both a start and end node then two entries will be made in the resulting vector.
    * First the start, then the end node.
    */
-  static std::vector<Radians> calculateAngles(const OsmMap* map, long nid, const std::set<long>& wids,
-    Meters delta = 0.001);
+  static std::vector<Radians> calculateAngles(const OsmMap* map, long nid,
+                                              const std::set<long>& wids, Meters delta = 0.001);
 
 private:
 
   boost::shared_ptr<const OsmMap> _map;
 
   double _strictness;
+
+  double _delta;
 
   double _calculateAngleScore(const std::vector<Radians>& theta1, const std::vector<Radians>& theta2,
     std::vector<bool>& exclude, size_t depth, bool debug = false);
