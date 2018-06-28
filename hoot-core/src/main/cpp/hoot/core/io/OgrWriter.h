@@ -148,7 +148,6 @@ protected:
   StrictChecking _strictChecking;
   bool _textStatus;
   bool _includeDebug;
-  int _maxFieldWidth;
   ElementCachePtr _elementCache;
   OGRSpatialReference _wgs84;
 
@@ -176,6 +175,7 @@ private:
   //had not yet been written.
   QList<long> _unwrittenFirstPassRelationIds;
   bool _failOnSkipRelation;
+  int _maxFieldWidth;
 
 };
 
