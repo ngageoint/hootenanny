@@ -161,7 +161,7 @@ void OgrWriter::_addFeature(OGRLayer* layer, boost::shared_ptr<Feature> f, boost
       {
         if (logWarnCount < Log::getWarnMessageLimit())
         {
-          LOG_WARN("Truncateing the " << it.key() << " attribute (" << vba.length() << " characters) to the output field width (" << fieldWidth << " characters).");
+          LOG_WARN("Truncating the " << it.key() << " attribute (" << vba.length() << " characters) to the output field width (" << fieldWidth << " characters).");
         }
         else if (logWarnCount == Log::getWarnMessageLimit())
         {
