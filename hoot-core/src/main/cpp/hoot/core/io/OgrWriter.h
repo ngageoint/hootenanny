@@ -148,6 +148,7 @@ protected:
   StrictChecking _strictChecking;
   bool _textStatus;
   bool _includeDebug;
+  int _maxFieldWidth;
   ElementCachePtr _elementCache;
   OGRSpatialReference _wgs84;
 

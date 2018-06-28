@@ -1231,25 +1231,26 @@ translate = {
                       columns:[ { name:'tag1',
                                   desc:'Tag List',
                                   type:'String',
+                                  length:'8192'
                                   // length:'254'
                                 },
                                 { name:'tag2',
                                   desc:'Tag List',
                                   type:'String',
                                   defValue: '',
-                                  // length:'254'
+                                  length:'254'
                                 },
                                 { name:'tag3',
                                   desc:'Tag List',
                                   type:'String',
                                   defValue: '',
-                                  // length:'254'
+                                  length:'254'
                                 },
                                 { name:'tag4',
                                   desc:'Tag List',
                                   type:'String',
                                   defValue: '',
-                                  // length:'254'
+                                  length:'254'
                                 }
                               ]
                     });
@@ -1259,25 +1260,26 @@ translate = {
                       columns:[ { name:'tag1',
                                   desc:'Tag List',
                                   type:'String',
+                                  length:'8192'
                                   // length:'254'
                                 },
                                 { name:'tag2',
                                   desc:'Tag List',
                                   type:'String',
                                   defValue: '',
-                                  // length:'254'
+                                  length:'254'
                                 },
                                 { name:'tag3',
                                   desc:'Tag List',
                                   type:'String',
                                   defValue: '',
-                                  // length:'254'
+                                  length:'254'
                                 },
                                 { name:'tag4',
                                   desc:'Tag List',
                                   type:'String',
                                   defValue: '',
-                                  // length:'254'
+                                  length:'254'
                                 }
                               ]
                     });
@@ -1287,25 +1289,26 @@ translate = {
                       columns:[ { name:'tag1',
                                   desc:'Tag List',
                                   type:'String',
+                                  length:'8192'
                                   // length:'254'
                                 },
                                 { name:'tag2',
                                   desc:'Tag List',
                                   type:'String',
                                   defValue: '',
-                                  // length:'254'
+                                  length:'254'
                                 },
                                 { name:'tag3',
                                   desc:'Tag List',
                                   type:'String',
                                   defValue: '',
-                                  // length:'254'
+                                  length:'254'
                                 },
                                 { name:'tag4',
                                   desc:'Tag List',
                                   type:'String',
                                   defValue: '',
-                                  // length:'254'
+                                  length:'254'
                                 }
                               ]
                     });
