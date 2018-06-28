@@ -270,7 +270,8 @@ void OgrWriter::_createLayer(boost::shared_ptr<const Layer> layer)
       {
         options["FEATURE_DATASET"] = layer->getFdName();
         // speed up bulk inserts.
-        options["FGDB_BULK_LOAD"] = "YES";
+        // NOTE: Seems to be depreciated in GDAL 2.0+
+        //options["FGDB_BULK_LOAD"] = "YES";
       }
     }
   }
