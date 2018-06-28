@@ -110,7 +110,7 @@ OgrWriter::OgrWriter():
 
   _textStatus = ConfigOptions().getWriterTextStatus();
   _includeDebug = ConfigOptions().getWriterIncludeDebugTags();
-
+  _maxFieldWidth = 10240; // Default to a max of 10kb per attribute. This gets reduced if needed
   _wgs84.SetWellKnownGeogCS("WGS84");
 }
 
@@ -154,6 +154,24 @@ void OgrWriter::_addFeature(OGRLayer* layer, boost::shared_ptr<Feature> f, boost
     case QVariant::String:
     {
       QByteArray vba = v.toString().toUtf8();
+
+      int fieldWidth = poFeature->GetFieldDefnRef(poFeature->GetFieldIndex(ba.constData()))->GetWidth();
+
+      if (vba.length() > fieldWidth && fieldWidth > 0)
+      {
+        if (logWarnCount < Log::getWarnMessageLimit())
+        {
+          LOG_WARN("Truncating the " << it.key() << " attribute (" << vba.length() << " characters) to the output field width (" << fieldWidth << " characters).");
+        }
+        else if (logWarnCount == Log::getWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
+
+        vba.truncate(fieldWidth);
+      }
+
       poFeature->SetField(ba.constData(), vba.constData());
       break;
     }
@@ -261,6 +279,7 @@ void OgrWriter::_createLayer(boost::shared_ptr<const Layer> layer)
     if (name == QString("ESRI Shapefile"))
     {
       options["ENCODING"] = "UTF-8";
+      _maxFieldWidth = 254; // Shapefile DBF limit
     }
 
     // Add a Feature Dataset to a ESRI File GeoDatabase if requested
@@ -327,7 +346,16 @@ void OgrWriter::_createLayer(boost::shared_ptr<const Layer> layer)
       OGRFieldDefn oField(f->getName().toAscii(), toOgrFieldType(f->getType()));
       if (f->getWidth() > 0)
       {
-        oField.SetWidth(f->getWidth());
+        // Make sure that we create a valid field. Looking at you Shapefile.....
+        // NOTE: This is only if we specify a width for the output field.
+        if (f->getWidth() > _maxFieldWidth)
+        {
+          oField.SetWidth(_maxFieldWidth);
+        }
+        else
+        {
+          oField.SetWidth(f->getWidth());
+        }
       }
 
       int errCode = poLayer->CreateField(&oField);
