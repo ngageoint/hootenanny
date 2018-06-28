@@ -2413,6 +2413,13 @@ higher the weighting applied.  A value of 0.0 will disable distance weighting.
 
 The way subline matcher to use when determining matching power line sublines.
 
+=== power.line.matcher.max.angle
+
+* Data Type: double
+* Default Value: `90.0`
+
+Sets that maximum angle that is still considered a power line match. Units in degrees.
+
 === quantile.aggregator.quantile
 
 * Data Type: double
