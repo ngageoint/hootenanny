@@ -36,24 +36,19 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/Log.h>
-using namespace hoot;
-
-// Qt
-#include <QDebug>
-#include <QDir>
 
 // Tgs
 #include <tgs/HashMap.h>
 
-#include "../TestUtils.h"
 
 namespace hoot
 {
 
-class NodeTest : public CppUnit::TestFixture
+class NodeTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(NodeTest);
   CPPUNIT_TEST(runCopyTest);
@@ -72,7 +67,7 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.2, n->getX(), 1e-3);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(2.3, n->getY(), 1e-3);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(3.14, n->getCircularError(), 1e-3);
-    CPPUNIT_ASSERT_EQUAL(QString("bar"), n->getTags()["foo"]);
+    HOOT_STR_EQUALS(QString("bar"), n->getTags()["foo"]);
 
     NodePtr n2(new Node(*n));
     HOOT_STR_EQUALS(Status::Unknown1, (Status::TypeEnum)n2->getStatus().getEnum());
@@ -80,7 +75,7 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.2, n2->getX(), 1e-3);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(2.3, n2->getY(), 1e-3);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(3.14, n2->getCircularError(), 1e-3);
-    CPPUNIT_ASSERT_EQUAL(QString("bar"), n2->getTags()["foo"]);
+    HOOT_STR_EQUALS(QString("bar"), n2->getTags()["foo"]);
   }
 
   void runSetTest()
@@ -95,7 +90,7 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.2, n->getX(), 1e-3);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(2.3, n->getY(), 1e-3);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(3.14, n->getCircularError(), 1e-3);
-    CPPUNIT_ASSERT_EQUAL(QString("bar"), n->getTags()["foo"]);
+    HOOT_STR_EQUALS(QString("bar"), n->getTags()["foo"]);
 
     n->setX(3.4);
     n->setY(4.5);
@@ -108,13 +103,12 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(3.4, n->getX(), 1e-3);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(4.5, n->getY(), 1e-3);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(2.718, n->getCircularError(), 1e-3);
-    CPPUNIT_ASSERT_EQUAL(QString("cheese"), n->getTags()["foo"]);
+    HOOT_STR_EQUALS(QString("cheese"), n->getTags()["foo"]);
   }
 
 };
 
-}
-
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(NodeTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(NodeTest, "quick");
 
+}

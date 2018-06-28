@@ -29,16 +29,12 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/LongestCommonNodeString.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/OsmMap.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
-using namespace hoot;
-
-
-// Boost
-using namespace boost;
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -53,7 +49,10 @@ using namespace boost;
 #include <sstream>
 using namespace std;
 
-class LongestCommonNodeStringTest : public CppUnit::TestFixture
+namespace hoot
+{
+
+class LongestCommonNodeStringTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(LongestCommonNodeStringTest);
   CPPUNIT_TEST(runTest);
@@ -93,3 +92,4 @@ public:
 
 CPPUNIT_TEST_SUITE_REGISTRATION(LongestCommonNodeStringTest);
 
+}

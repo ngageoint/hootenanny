@@ -26,8 +26,8 @@
  */
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/index/ClosePointHash.h>
-using namespace hoot;
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -50,7 +50,10 @@ using namespace std;
 #include <tgs/StreamUtils.h>
 using namespace Tgs;
 
-class ClosePointHashTest : public CppUnit::TestFixture
+namespace hoot
+{
+
+class ClosePointHashTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ClosePointHashTest);
   CPPUNIT_TEST(runBasicTest);
@@ -151,3 +154,4 @@ public:
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ClosePointHashTest);
 
+}

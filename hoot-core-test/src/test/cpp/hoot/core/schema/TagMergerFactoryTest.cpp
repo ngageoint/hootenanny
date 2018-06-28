@@ -26,10 +26,10 @@
  */
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/Log.h>
-using namespace hoot;
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -37,10 +37,10 @@ using namespace hoot;
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// Qt
-#include <QDebug>
+namespace hoot
+{
 
-class TagMergerFactoryTest : public CppUnit::TestFixture
+class TagMergerFactoryTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(TagMergerFactoryTest);
   CPPUNIT_TEST(averageTest);
@@ -85,3 +85,4 @@ public:
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(TagMergerFactoryTest, "quick");
 
+}

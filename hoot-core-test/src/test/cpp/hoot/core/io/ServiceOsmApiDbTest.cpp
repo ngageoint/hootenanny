@@ -32,6 +32,7 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmApiDb.h>
 
 using namespace std;
@@ -39,7 +40,7 @@ using namespace std;
 namespace hoot
 {
 
-class ServiceOsmApiDbTest : public CppUnit::TestFixture
+class ServiceOsmApiDbTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceOsmApiDbTest);
   CPPUNIT_TEST(runToOsmApiCoordConvertTest);

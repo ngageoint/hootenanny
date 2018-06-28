@@ -32,19 +32,14 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmApiDbBulkInserter.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmApiDbReader.h>
+#include <hoot/core/io/ServicesDbTestUtils.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/DbUtils.h>
 #include <hoot/core/util/StringUtils.h>
-
-// Qt
-#include <QDir>
-#include <QFileInfo>
-
-#include "../TestUtils.h"
-#include "ServicesDbTestUtils.h"
 
 namespace hoot
 {
@@ -56,7 +51,7 @@ namespace hoot
  * - unresolved relation members
  * - config options error handling
  */
-class ServiceOsmApiDbBulkInserterTest : public CppUnit::TestFixture
+class ServiceOsmApiDbBulkInserterTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceOsmApiDbBulkInserterTest);
   CPPUNIT_TEST(runPsqlDbOfflineTest);
@@ -72,8 +67,9 @@ class ServiceOsmApiDbBulkInserterTest : public CppUnit::TestFixture
 
 public:
 
-  void setUp()
+  virtual void setUp()
   {
+    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/io/ServiceOsmApiDbBulkInserterTest/");
   }
 

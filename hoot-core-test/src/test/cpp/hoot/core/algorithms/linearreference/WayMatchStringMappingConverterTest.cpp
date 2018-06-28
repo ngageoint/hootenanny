@@ -26,15 +26,14 @@
  */
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/linearreference/NaiveWayMatchStringMapping.h>
 #include <hoot/core/algorithms/linearreference/WayMatchStringMappingConverter.h>
-
-#include "../../TestUtils.h"
 
 namespace hoot
 {
 
-class WayMatchStringMappingConverterTest : public CppUnit::TestFixture
+class WayMatchStringMappingConverterTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(WayMatchStringMappingConverterTest);
   CPPUNIT_TEST(runTest);

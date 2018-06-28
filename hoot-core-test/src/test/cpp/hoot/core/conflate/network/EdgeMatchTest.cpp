@@ -26,13 +26,13 @@
  */
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/network/EdgeMatch.h>
-#include "../../TestUtils.h"
 
 namespace hoot
 {
 
-class EdgeMatchTest : public CppUnit::TestFixture
+class EdgeMatchTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(EdgeMatchTest);
   CPPUNIT_TEST(basicTest);

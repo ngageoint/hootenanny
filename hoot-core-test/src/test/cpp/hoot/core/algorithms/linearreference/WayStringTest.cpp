@@ -26,13 +26,12 @@
  */
 
 // Hoot
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/linearreference/WayString.h>
 #include <hoot/core/algorithms/linearreference/WaySubline.h>
 #include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
-
-#include "../../TestUtils.h"
 
 using namespace geos::geom;
 using namespace std;
@@ -40,7 +39,7 @@ using namespace std;
 namespace hoot
 {
 
-class WayStringTest : public CppUnit::TestFixture
+class WayStringTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(WayStringTest);
   CPPUNIT_TEST(runBasicTests);

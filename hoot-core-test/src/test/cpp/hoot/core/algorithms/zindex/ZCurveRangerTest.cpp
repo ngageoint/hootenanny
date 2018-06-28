@@ -35,19 +35,18 @@
 #include <geos/geom/Coordinate.h>
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/zindex/ZCurveRanger.h>
 #include <hoot/core/algorithms/zindex/Range.h>
 #include <hoot/core/algorithms/zindex/BBox.h>
 #include <hoot/core/util/Log.h>
-
-#include "../../TestUtils.h"
 
 using namespace std;
 
 namespace hoot
 {
 
-class ZCurveRangerTest : public CppUnit::TestFixture
+class ZCurveRangerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ZCurveRangerTest);
   CPPUNIT_TEST(testMaxBitColumn);

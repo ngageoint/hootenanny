@@ -29,29 +29,21 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/util/MapProjector.h>
-#include <hoot/core/ops/DuplicateWayRemover.h>
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/ops/DuplicateWayRemover.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
-using namespace hoot;
-
-
-// Boost
-using namespace boost;
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
-
-// Qt
-#include <QDebug>
-#include <QDir>
 
 // Standard
 #include <sstream>
@@ -61,12 +53,10 @@ using namespace std;
 #include <tgs/StreamUtils.h>
 using namespace Tgs;
 
-#include "../TestUtils.h"
-
 namespace hoot
 {
 
-class DuplicateWayRemoverTest : public CppUnit::TestFixture
+class DuplicateWayRemoverTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(DuplicateWayRemoverTest);
   CPPUNIT_TEST(runTest);
@@ -76,8 +66,9 @@ class DuplicateWayRemoverTest : public CppUnit::TestFixture
 
 public:
 
-  void setUp()
+  virtual void setUp()
   {
+    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/conflate");
   }
 
@@ -166,8 +157,7 @@ public:
   }
 };
 
-}
-
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(DuplicateWayRemoverTest, "quick");
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(DuplicateWayRemoverTest, "current");
 
+}

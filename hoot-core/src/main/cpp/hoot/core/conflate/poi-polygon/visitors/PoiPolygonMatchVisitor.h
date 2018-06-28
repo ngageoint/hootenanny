@@ -28,15 +28,14 @@
 #define POIPOLYGONMATCHVISITOR_H
 
 // hoot
+#include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/Match.h>
-#include <hoot/core/OsmMap.h>
-#include "../PoiPolygonRfClassifier.h"
+#include <hoot/core/conflate/poi-polygon/PoiPolygonRfClassifier.h>
 
 // tgs
 #include <tgs/RStarTree/HilbertRTree.h>
-
 
 namespace hoot
 {

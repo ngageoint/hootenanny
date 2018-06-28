@@ -26,12 +26,13 @@
  */
 
 // Hoot
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/conflate/RubberSheet.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/MapCropper.h>
+#include <hoot/core/util/MapProjector.h>
 
 #include <tgs/Statistics/Random.h>
 
@@ -43,11 +44,8 @@
 
 // Qt
 #include <QDebug>
-#include <QDir>
 #include <QBuffer>
 #include <QByteArray>
-
-#include "../TestUtils.h"
 
 using namespace geos::geom;
 using namespace std;
@@ -55,7 +53,7 @@ using namespace std;
 namespace hoot
 {
 
-class RubberSheetTest : public CppUnit::TestFixture
+class RubberSheetTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(RubberSheetTest);
   CPPUNIT_TEST(runSimpleTest);
@@ -67,8 +65,9 @@ class RubberSheetTest : public CppUnit::TestFixture
 
 public:
 
-  void setUp()
+  virtual void setUp()
   {
+    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/conflate");
   }
 

@@ -24,18 +24,16 @@
  *
  * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-// Hoot
-#include <hoot/rnd/schema/ImplicitTagRulesDatabaseDeriver.h>
-#include <hoot/core/io/ImplicitTagRulesSqliteReader.h>
-#include <hoot/core/TestUtils.h>
 
-// Qt
-#include <QDir>
+// Hoot
+#include <hoot/core/TestUtils.h>
+#include <hoot/core/io/ImplicitTagRulesSqliteReader.h>
+#include <hoot/rnd/schema/ImplicitTagRulesDatabaseDeriver.h>
 
 namespace hoot
 {
 
-class ImplicitTagRulesDatabaseDeriverTest : public CppUnit::TestFixture
+class ImplicitTagRulesDatabaseDeriverTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ImplicitTagRulesDatabaseDeriverTest);
   CPPUNIT_TEST(runBasicTest);
@@ -55,6 +53,7 @@ public:
 
   void setUp()
   {
+    HootTestFixture::setUp();
     TestUtils::mkpath(outDir());
   }
 

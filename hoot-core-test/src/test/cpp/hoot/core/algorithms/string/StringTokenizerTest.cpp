@@ -26,16 +26,15 @@
  */
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/string/StringTokenizer.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 
-#include "../../TestUtils.h"
-
 namespace hoot
 {
 
-class StringTokenizerTest : public CppUnit::TestFixture
+class StringTokenizerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(StringTokenizerTest);
   CPPUNIT_TEST(runTest);

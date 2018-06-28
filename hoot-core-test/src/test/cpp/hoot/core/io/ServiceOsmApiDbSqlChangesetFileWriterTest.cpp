@@ -26,26 +26,15 @@
  */
 
 // Hoot
-#include "TestOsmChangesetProvider.h"
-#include "ServicesDbTestUtils.h"
-
+#include <hoot/core/TestUtils.h>
+#include <hoot/core/io/ServicesDbTestUtils.h>
+#include <hoot/core/io/TestOsmChangesetProvider.h>
 #include <hoot/core/io/OsmApiDbSqlChangesetFileWriter.h>
-
-// Boost
-using namespace boost;
-
-// Qt
-#include <QDebug>
-#include <QFile>
-#include <QFileInfo>
-#include <QDir>
-
-#include "../TestUtils.h"
 
 namespace hoot
 {
 
-class ServiceOsmApiDbSqlChangesetFileWriterTest : public CppUnit::TestFixture
+class ServiceOsmApiDbSqlChangesetFileWriterTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceOsmApiDbSqlChangesetFileWriterTest);
   CPPUNIT_TEST(runBasicTest);
@@ -56,13 +45,15 @@ public:
 
   OsmApiDb database;
 
-  void setUp()
+  virtual void setUp()
   {
+    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/io/ServiceOsmApiDbSqlChangesetFileWriterTest");
   }
 
-  void tearDown()
+  virtual void tearDown()
   {
+    HootTestFixture::tearDown();
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
     database.deleteData();
     database.close();

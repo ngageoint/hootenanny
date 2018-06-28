@@ -32,15 +32,14 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
-
-#include "../TestUtils.h"
 
 namespace hoot
 {
 
-class StringUtilsTest : public CppUnit::TestFixture
+class StringUtilsTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(StringUtilsTest);
   CPPUNIT_TEST(runHasAlphabeticCharTest);

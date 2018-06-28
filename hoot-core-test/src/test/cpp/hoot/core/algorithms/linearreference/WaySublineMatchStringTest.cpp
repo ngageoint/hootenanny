@@ -36,11 +36,10 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/util/Log.h>
-
-#include "../../TestUtils.h"
 
 using namespace geos::geom;
 using namespace std;
@@ -48,7 +47,7 @@ using namespace std;
 namespace hoot
 {
 
-class WaySublineMatchStringTest : public CppUnit::TestFixture
+class WaySublineMatchStringTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(WaySublineMatchStringTest);
   CPPUNIT_TEST(runTest);

@@ -28,15 +28,15 @@
 #include "ReviewMarkerJs.h"
 
 // hoot
+#include <hoot/core/conflate/ReviewMarker.h>
+#include <hoot/js/JsRegistrar.h>
+#include <hoot/js/OsmMapJs.h>
+#include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
 #include <hoot/js/util/StreamUtilsJs.h>
 #include <hoot/js/visitors/ElementVisitorJs.h>
 #include <hoot/js/visitors/JsFunctionVisitor.h>
-#include <hoot/js/JsRegistrar.h>
-#include <hoot/core/conflate/ReviewMarker.h>
-#include "../elements/ElementJs.h"
-#include "../OsmMapJs.h"
 
 using namespace std;
 using namespace v8;

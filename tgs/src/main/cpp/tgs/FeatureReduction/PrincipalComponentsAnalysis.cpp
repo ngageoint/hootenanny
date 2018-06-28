@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "PrincipalComponentsAnalysis.h"
@@ -31,13 +31,13 @@
 #include <assert.h>
 #include <iostream>
 
-#include "../RandomForest/DataFrame.h"
-#include "../StreamUtils.h"
+#include <tgs/StreamUtils.h>
+#include <tgs/RandomForest/DataFrame.h>
 
 #define WANT_STREAM
 #define WANT_MATH
 
-#include "Jacobi.h"
+#include <tgs/FeatureReduction/Jacobi.h>
 
 using namespace NEWMAT;
 

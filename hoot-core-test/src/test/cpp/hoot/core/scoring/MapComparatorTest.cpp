@@ -27,6 +27,7 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/OsmPbfReader.h>
@@ -60,7 +61,10 @@ using namespace boost;
 // Standard
 #include <stdio.h>
 
-class MapComparatorTest : public CppUnit::TestFixture
+namespace hoot
+{
+
+class MapComparatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(MapComparatorTest);
   CPPUNIT_TEST(runTest);
@@ -107,5 +111,5 @@ public:
 
 CPPUNIT_TEST_SUITE_REGISTRATION(MapComparatorTest);
 
-
+}
 

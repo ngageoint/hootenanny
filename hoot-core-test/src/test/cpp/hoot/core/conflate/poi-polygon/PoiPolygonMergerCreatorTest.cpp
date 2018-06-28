@@ -26,14 +26,14 @@
  */
 
 // Hoot
-#include "../../TestUtils.h"
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/merging/MarkForReviewMerger.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
-#include <hoot/core/conflate/polygon/BuildingMatchCreator.h>
-#include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMerger.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMergerCreator.h>
+#include <hoot/core/conflate/polygon/BuildingMatchCreator.h>
+#include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 
@@ -43,7 +43,7 @@ using namespace std;
 namespace hoot
 {
 
-class PoiPolygonMergerCreatorTest : public CppUnit::TestFixture
+class PoiPolygonMergerCreatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(PoiPolygonMergerCreatorTest);
   CPPUNIT_TEST(basicTest);
@@ -148,16 +148,11 @@ public:
     HOOT_STR_EQUALS(1, (dynamic_cast<MarkForReviewMerger*>(mergers[0]) != 0));
   }
 
-  void setUp()
+  virtual void setUp()
   {
-    TestUtils::resetEnvironment();
+    HootTestFixture::setUp();
     conf().set(ConfigOptions().getMatchCreatorsKey(), "hoot::PoiPolygonMatchCreator");
     conf().set(ConfigOptions().getMergerCreatorsKey(), "hoot::PoiPolygonMergerCreator");
-  }
-
-  void tearDown()
-  {
-    TestUtils::resetEnvironment();
   }
 };
 

@@ -26,14 +26,14 @@
  */
 
 // Hoot
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
+#include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonDistanceExtractor.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
-#include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonDistanceExtractor.h>
-using namespace hoot;
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -41,14 +41,12 @@ using namespace hoot;
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-#include "../../../TestUtils.h"
-
 using namespace geos::geom;
 
 namespace hoot
 {
 
-class PoiPolygonDistanceExtractorTest : public CppUnit::TestFixture
+class PoiPolygonDistanceExtractorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(PoiPolygonDistanceExtractorTest);
   CPPUNIT_TEST(runBasicTest);

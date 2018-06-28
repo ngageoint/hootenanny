@@ -32,16 +32,12 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/HootApiDbBulkInserter.h>
 #include <hoot/core/io/HootApiDbReader.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/io/ServicesDbTestUtils.h>
 #include <hoot/core/util/FileUtils.h>
-
-// Qt
-#include <QDir>
-
-#include "../TestUtils.h"
-#include "ServicesDbTestUtils.h"
 
 namespace hoot
 {
@@ -52,7 +48,7 @@ namespace hoot
  * rework the inheritance of the two classes as described in HootApiDbBulkWriter to get rid of the
  * unneeded functionality in HootApiDbBulkWriter.
  */
-class ServiceHootApiDbBulkInserterTest : public CppUnit::TestFixture
+class ServiceHootApiDbBulkInserterTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceHootApiDbBulkInserterTest);
   CPPUNIT_TEST(runPsqlDbOfflineTest);
@@ -64,8 +60,9 @@ public:
 
   long mapId;
 
-  void setUp()
+  virtual void setUp()
   {
+    HootTestFixture::setUp();
     mapId = -1;
     ServicesDbTestUtils::deleteUser(userEmail());
 
@@ -77,8 +74,9 @@ public:
     TestUtils::mkpath("test-output/io/ServiceHootApiDbBulkInserterTest");
   }
 
-  void tearDown()
+  virtual void tearDown()
   {
+    HootTestFixture::tearDown();
     ServicesDbTestUtils::deleteUser(userEmail());
 
     if (mapId != -1)

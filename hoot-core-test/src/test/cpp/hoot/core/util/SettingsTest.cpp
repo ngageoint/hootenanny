@@ -26,9 +26,9 @@
  */
 
 // Hoot
-#include <hoot/core/util/Settings.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/util/Log.h>
-using namespace hoot;
+#include <hoot/core/util/Settings.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -36,15 +36,10 @@ using namespace hoot;
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// Qt
-#include <QDir>
-
-#include "../TestUtils.h"
-
 namespace hoot
 {
 
-class SettingsTest : public CppUnit::TestFixture
+class SettingsTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(SettingsTest);
   CPPUNIT_TEST(envTest);
@@ -59,10 +54,10 @@ public:
     Settings uut;
     uut.loadEnvironment();
     char* path = getenv("PATH");
-    CPPUNIT_ASSERT_EQUAL(QString(path), uut.getString("PATH"));
+    HOOT_STR_EQUALS(QString(path), uut.getString("PATH"));
 
     uut.set("mypath", "my path: ${PATH}");
-    CPPUNIT_ASSERT_EQUAL(QString("my path: ") + path, uut.getString("mypath"));
+    HOOT_STR_EQUALS(QString("my path: ") + path, uut.getString("mypath"));
   }
 
   void replaceTest()
@@ -73,16 +68,16 @@ public:
     uut.set("perty.test.num.runs", 2);
     uut.set("osm.map.writer.factory.writer", "1");
     uut.set("osm.map.reader.factory.reader", "${perty.csm.D}");
-    CPPUNIT_ASSERT_EQUAL(QString("2"), uut.getString("osm.map.reader.factory.reader"));
+    HOOT_STR_EQUALS(QString("2"), uut.getString("osm.map.reader.factory.reader"));
 
     uut.set("osm.map.reader.factory.reader", "${perty.csm.D} ${osm.map.writer.factory.writer}");
-    CPPUNIT_ASSERT_EQUAL(QString("2 1"), uut.getString("osm.map.reader.factory.reader"));
+    HOOT_STR_EQUALS(QString("2 1"), uut.getString("osm.map.reader.factory.reader"));
 
     uut.set("osm.map.reader.factory.reader", "${osm.map.writer.factory.writer} ${osm.map.writer.factory.writer}");
-    CPPUNIT_ASSERT_EQUAL(QString("1 1"), uut.getString("osm.map.reader.factory.reader"));
+    HOOT_STR_EQUALS(QString("1 1"), uut.getString("osm.map.reader.factory.reader"));
 
     uut.set("perty.csm.D", "${doesnt.exist}");
-    CPPUNIT_ASSERT_EQUAL(QString(""), uut.getString("perty.csm.D"));
+    HOOT_STR_EQUALS(QString(""), uut.getString("perty.csm.D"));
 
     HOOT_STR_EQUALS("", uut.getValue("${doesnt.exist}"));
     HOOT_STR_EQUALS("1", uut.getValue("${osm.map.writer.factory.writer}"));

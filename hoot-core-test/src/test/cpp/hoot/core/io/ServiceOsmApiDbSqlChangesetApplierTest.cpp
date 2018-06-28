@@ -32,8 +32,10 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmApiDb.h>
 #include <hoot/core/io/OsmApiDbSqlChangesetApplier.h>
+#include <hoot/core/io/ServicesDbTestUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
@@ -42,15 +44,12 @@
 #include <QDateTime>
 #include <QSqlError>
 
-#include "../TestUtils.h"
-#include "ServicesDbTestUtils.h"
-
 using namespace geos::geom;
 
 namespace hoot
 {
 
-class ServiceOsmApiDbSqlChangesetApplierTest : public CppUnit::TestFixture
+class ServiceOsmApiDbSqlChangesetApplierTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceOsmApiDbSqlChangesetApplierTest);
   CPPUNIT_TEST(runSqlChangesetWriteTest);
@@ -66,13 +65,15 @@ public:
 
   long mapId;
 
-  void setUp()
+  virtual void setUp()
   {
+    HootTestFixture::setUp();
     deleteUser(userEmail());
   }
 
-  void tearDown()
+  virtual void tearDown()
   {
+    HootTestFixture::tearDown();
     deleteUser(userEmail());
 
     OsmApiDb database;

@@ -36,18 +36,17 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-
-#include "../../TestUtils.h"
 
 using namespace geos::geom;
 
 namespace hoot
 {
 
-class WayLocationTest : public CppUnit::TestFixture
+class WayLocationTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(WayLocationTest);
   CPPUNIT_TEST(runTest);

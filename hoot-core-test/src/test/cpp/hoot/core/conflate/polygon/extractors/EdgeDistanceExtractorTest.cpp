@@ -26,8 +26,8 @@
  */
 
 // Hoot
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/aggregator/MeanAggregator.h>
 #include <hoot/core/algorithms/aggregator/QuantileAggregator.h>
 #include <hoot/core/algorithms/aggregator/RmseAggregator.h>
@@ -36,6 +36,7 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
 
@@ -45,23 +46,15 @@
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// Qt
-#include <QDebug>
-#include <QDir>
-#include <QBuffer>
-#include <QByteArray>
-
 // Tgs
 #include <tgs/StreamUtils.h>
-
-#include "../../../TestUtils.h"
 
 using namespace std;
 
 namespace hoot
 {
 
-class EdgeDistanceExtractorTest : public CppUnit::TestFixture
+class EdgeDistanceExtractorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(EdgeDistanceExtractorTest);
   CPPUNIT_TEST(runBuildingsTest);
@@ -69,11 +62,6 @@ class EdgeDistanceExtractorTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
-
-  void setUp()
-  {
-    TestUtils::resetEnvironment();
-  }
 
   void runBuildingsTest()
   {

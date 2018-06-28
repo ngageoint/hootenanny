@@ -27,22 +27,17 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/SplitNameVisitor.h>
-
-// Qt
-#include <QDebug>
-#include <QDir>
-
-#include "../TestUtils.h"
 
 using namespace geos::geom;
 
 namespace hoot
 {
 
-class SplitNameVisitorTest : public CppUnit::TestFixture
+class SplitNameVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(SplitNameVisitorTest);
   CPPUNIT_TEST(basicTest);

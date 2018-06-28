@@ -27,9 +27,9 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/elements/Way.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonTypeScoreExtractor.h>
-using namespace hoot;
+#include <hoot/core/elements/Way.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -37,14 +37,12 @@ using namespace hoot;
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-#include "../../../TestUtils.h"
-
 using namespace geos::geom;
 
 namespace hoot
 {
 
-class PoiPolygonTypeScoreExtractorTest : public CppUnit::TestFixture
+class PoiPolygonTypeScoreExtractorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(PoiPolygonTypeScoreExtractorTest);
   CPPUNIT_TEST(runTest);

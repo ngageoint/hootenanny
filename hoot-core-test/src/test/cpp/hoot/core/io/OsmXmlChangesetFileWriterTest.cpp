@@ -26,24 +26,17 @@
  */
 
 // Hoot
-#include "TestOsmChangesetProvider.h"
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/ChangesetProvider.h>
 #include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/io/OsmXmlChangesetFileWriter.h>
+#include <hoot/core/io/TestOsmChangesetProvider.h>
 #include <hoot/core/util/ConfigOptions.h>
-
-// Qt
-#include <QDebug>
-#include <QFile>
-#include <QFileInfo>
-#include <QDir>
-
-#include "../TestUtils.h"
 
 namespace hoot
 {
 
-class OsmXmlChangesetFileWriterTest : public CppUnit::TestFixture
+class OsmXmlChangesetFileWriterTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(OsmXmlChangesetFileWriterTest);
   CPPUNIT_TEST(runSimpleTest);
@@ -52,8 +45,9 @@ class OsmXmlChangesetFileWriterTest : public CppUnit::TestFixture
 
 public:
 
-  void setUp()
+  virtual void setUp()
   {
+    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/io/OsmXmlChangesetFileWriterTest");
   }
 

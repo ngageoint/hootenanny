@@ -22,21 +22,21 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/rnd/conflate/multiary/MultiaryReviewCommand.h>
-#include <hoot/core/io/OsmJsonReader.h>
 
 using namespace std;
 
 namespace hoot
 {
 
-class MultiaryReviewCommandTest : public CppUnit::TestFixture
+class MultiaryReviewCommandTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(MultiaryReviewCommandTest);
   CPPUNIT_TEST(basicTest);

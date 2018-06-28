@@ -32,25 +32,21 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
+#include <hoot/core/conflate/splitter/DualWaySplitter.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/conflate/splitter/DualWaySplitter.h>
-
-// Qt
-#include <QDebug>
+#include <hoot/core/util/MapProjector.h>
 
 // TGS
 #include <tgs/StreamUtils.h>
 using namespace Tgs;
 
-#include "../../TestUtils.h"
-
 namespace hoot
 {
 
-class DualWaySplitterTest : public CppUnit::TestFixture
+class DualWaySplitterTest : public HootTestFixture
 {
     CPPUNIT_TEST_SUITE(DualWaySplitterTest);
     CPPUNIT_TEST(simpleTest);

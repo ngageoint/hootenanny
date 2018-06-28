@@ -26,10 +26,10 @@
  */
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/OverwriteTagMerger.h>
 #include <hoot/core/util/Log.h>
-using namespace hoot;
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -37,15 +37,10 @@ using namespace hoot;
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// Qt
-#include <QDebug>
-
-#include "../TestUtils.h"
-
 namespace hoot
 {
 
-class OverwriteTagMergerTest : public CppUnit::TestFixture
+class OverwriteTagMergerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(OverwriteTagMergerTest);
   CPPUNIT_TEST(overwriteTest);

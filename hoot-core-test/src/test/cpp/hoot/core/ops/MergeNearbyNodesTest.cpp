@@ -26,18 +26,14 @@
  */
 
 // Hoot
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/ops/MergeNearbyNodes.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OgrReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/ops/MergeNearbyNodes.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Progress.h>
-using namespace hoot;
-
-
-// Boost
-using namespace boost;
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -45,15 +41,10 @@ using namespace boost;
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// Qt
-#include <QDebug>
-
-#include "../TestUtils.h"
-
 namespace hoot
 {
 
-class MergeNearbyNodesTest : public CppUnit::TestFixture
+class MergeNearbyNodesTest : public HootTestFixture
 {
     CPPUNIT_TEST_SUITE(MergeNearbyNodesTest);
     CPPUNIT_TEST(runBasicTest);

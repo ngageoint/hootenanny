@@ -26,19 +26,15 @@
  */
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/criterion/AreaCriterion.h>
-
-// Qt
-#include <QDir>
-
-#include "../TestUtils.h"
 
 using namespace geos::geom;
 
 namespace hoot
 {
 
-class AreaCriterionTest : public CppUnit::TestFixture
+class AreaCriterionTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(AreaCriterionTest);
   CPPUNIT_TEST(runBasicTest);

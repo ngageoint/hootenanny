@@ -26,6 +26,7 @@
  */
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/tile/TileBoundsCalculator.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
@@ -37,19 +38,13 @@
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// Qt
-#include <QDebug>
-#include <QDir>
-
-#include "../../TestUtils.h"
-
 using namespace geos::geom;
 using namespace std;
 
 namespace hoot
 {
 
-class TileBoundsCalculatorTest : public CppUnit::TestFixture
+class TileBoundsCalculatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(TileBoundsCalculatorTest);
   CPPUNIT_TEST(runToyTest);
@@ -57,8 +52,9 @@ class TileBoundsCalculatorTest : public CppUnit::TestFixture
 
 public:
 
-  void setUp()
+  virtual void setUp()
   {
+    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/conflate");
   }
 

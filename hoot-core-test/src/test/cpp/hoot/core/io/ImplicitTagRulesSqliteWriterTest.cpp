@@ -25,16 +25,13 @@
  * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 // Hoot
-#include "../TestUtils.h"
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/ImplicitTagRulesSqliteWriter.h>
-
-// Qt
-#include <QDir>
 
 namespace hoot
 {
 
-class ImplicitTagRulesSqliteWriterTest : public CppUnit::TestFixture
+class ImplicitTagRulesSqliteWriterTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ImplicitTagRulesSqliteWriterTest);
   CPPUNIT_TEST(runWriteTest);
@@ -42,8 +39,9 @@ class ImplicitTagRulesSqliteWriterTest : public CppUnit::TestFixture
 
 public:
 
-  void setUp()
+  virtual void setUp()
   {
+    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/io/ImplicitTagRulesSqliteWriterTest");
   }
 

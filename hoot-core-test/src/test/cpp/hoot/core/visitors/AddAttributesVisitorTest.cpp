@@ -33,19 +33,15 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/visitors/AddAttributesVisitor.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 
-#include "../TestUtils.h"
-
-// Qt
-#include <QDir>
-
 namespace hoot
 {
 
-class AddAttributesVisitorTest : public CppUnit::TestFixture
+class AddAttributesVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(AddAttributesVisitorTest);
   CPPUNIT_TEST(runAddAttributesTest);
@@ -59,8 +55,9 @@ class AddAttributesVisitorTest : public CppUnit::TestFixture
 
 public:
 
-  void setUp()
+  virtual void setUp()
   {
+    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/visitors");
   }
 

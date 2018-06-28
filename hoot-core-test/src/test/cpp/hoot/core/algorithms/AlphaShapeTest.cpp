@@ -33,12 +33,10 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/AlphaShape.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/Log.h>
-
-// Qt
-#include <QDir>
 
 // Standard
 #include <fstream>
@@ -48,13 +46,13 @@
 // Tgs
 #include <tgs/Statistics/Random.h>
 
-#include "../TestUtils.h"
-
 using namespace geos::geom;
-using namespace hoot;
 using namespace std;
 
-class AlphaShapeTest : public CppUnit::TestFixture
+namespace hoot
+{
+
+class AlphaShapeTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(AlphaShapeTest);
   CPPUNIT_TEST(runTest);
@@ -63,8 +61,9 @@ class AlphaShapeTest : public CppUnit::TestFixture
 
 public:
 
-  void setUp()
+  virtual void setUp()
   {
+    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/algorithms");
   }
 
@@ -147,3 +146,4 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(AlphaShapeTest, "quick");
+}

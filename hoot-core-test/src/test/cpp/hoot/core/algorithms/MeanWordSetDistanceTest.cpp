@@ -35,25 +35,17 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/MeanWordSetDistance.h>
 #include <hoot/core/algorithms/ExactStringDistance.h>
 #include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
-using namespace hoot;
-
-// Qt
-#include <QString>
-
-// Standard
-#include <string>
-
-#include "../TestUtils.h"
 
 namespace hoot
 {
 
-class MeanWordSetDistanceTest : public CppUnit::TestFixture
+class MeanWordSetDistanceTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(MeanWordSetDistanceTest);
   CPPUNIT_TEST(runTest);

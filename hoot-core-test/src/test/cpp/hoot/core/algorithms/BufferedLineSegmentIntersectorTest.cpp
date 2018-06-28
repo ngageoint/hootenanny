@@ -37,6 +37,7 @@
 #include <geos/geom/Point.h>
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/BufferedLineSegmentIntersector.h>
 #include <hoot/core/util/Log.h>
 
@@ -44,16 +45,13 @@
 #include <tgs/Statistics/Random.h>
 #include <tgs/System/Time.h>
 
-#include "../TestUtils.h"
-
 using namespace geos::geom;
-using namespace hoot;
 using namespace std;
 
 namespace hoot
 {
 
-class BufferedLineSegmentIntersectorTest : public CppUnit::TestFixture
+class BufferedLineSegmentIntersectorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(BufferedLineSegmentIntersectorTest);
   CPPUNIT_TEST(runCircleTest);
@@ -228,6 +226,6 @@ public:
   }
 };
 
-}
-
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(BufferedLineSegmentIntersectorTest, "quick");
+
+}

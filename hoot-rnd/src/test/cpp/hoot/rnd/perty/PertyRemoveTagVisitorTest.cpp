@@ -32,18 +32,19 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/util/Exception.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/rnd/perty/PertyRemoveTagVisitor.h>
+#include <hoot/core/TestUtils.h>
+#include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
+#include <hoot/rnd/perty/PertyRemoveTagVisitor.h>
 
 using namespace std;
 
 namespace hoot
 {
 
-class PertyRemoveTagVisitorTest : public CppUnit::TestFixture
+class PertyRemoveTagVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(PertyRemoveTagVisitorTest);
   CPPUNIT_TEST(runBasicTest);

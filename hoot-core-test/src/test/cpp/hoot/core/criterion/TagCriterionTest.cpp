@@ -26,19 +26,15 @@
  */
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/criterion/TagCriterion.h>
-
-// Qt
-#include <QDir>
-
-#include "../TestUtils.h"
 
 using namespace geos::geom;
 
 namespace hoot
 {
 
-class TagCriterionTest : public CppUnit::TestFixture
+class TagCriterionTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(TagCriterionTest);
   CPPUNIT_TEST(runBasicTest);

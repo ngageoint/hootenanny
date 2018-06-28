@@ -32,8 +32,10 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/HootApiDb.h>
 #include <hoot/core/io/HootApiDbWriter.h>
+#include <hoot/core/io/ServicesDbTestUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/util/OsmUtils.h>
@@ -46,15 +48,12 @@
 #include <tgs/BigContainers/BigMap.h>
 #include <tgs/System/Time.h>
 
-#include "../TestUtils.h"
-#include "ServicesDbTestUtils.h"
-
 using namespace std;
 
 namespace hoot
 {
 
-class ServiceHootApiDbWriterTest : public CppUnit::TestFixture
+class ServiceHootApiDbWriterTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceHootApiDbWriterTest);
   CPPUNIT_TEST(runEscapeTest);
@@ -82,8 +81,9 @@ public:
     database.close();
   }
 
-  void tearDown()
+  virtual void tearDown()
   {
+    HootTestFixture::tearDown();
     ServicesDbTestUtils::deleteUser(userEmail());
 
     if (mapId != -1)
