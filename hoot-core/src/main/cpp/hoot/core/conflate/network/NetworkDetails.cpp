@@ -40,7 +40,7 @@
 #include <hoot/core/conflate/polygon/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/EuclideanDistanceExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/HausdorffDistanceExtractor.h>
-#include <hoot/core/ops/CopySubsetOp.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
@@ -673,7 +673,7 @@ double NetworkDetails::getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeS
 
       // create a copy of the map for experimentation
       OsmMapPtr mapCopy(new OsmMap(_map->getProjection()));
-      CopySubsetOp(_map, wids).apply(mapCopy);
+      CopyMapSubsetOp(_map, wids).apply(mapCopy);
       // we don't want to impact the global IDs with our little test.
       mapCopy->setIdGenerator(_map->getIdGenerator().clone());
       mapCopy->addElement(r1);

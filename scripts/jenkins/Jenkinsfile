@@ -156,9 +156,19 @@ pipeline {
             }
         }
         success {
-            // If all tests passed, clean everything up
-            sh "vagrant destroy -f ${params.Box}"
-            cleanWs()
+            script {
+                if (env.BRANCH_NAME.startsWith("release")) {
+                    // Don't clean up this workspace.  We want to leave it up for acceptance testing
+                    def VERS = sh(returnStdout: true, script: "vagrant ssh ${params.Box} -c 'cd hoot; ./scripts/git/GitVersion.sh'")
+                    def URL = sh(returnStdout: true, script: "vagrant ssh-config ${params.Box} | grep HostName | awk '{print \$2}'")
+                    URL = URL.trim()
+                    slackSend channel: "#builds_hoot", message: "Release candidate version ${VERS} ready for testing https://${URL}:8080/hootenanny-id/"
+                } else {
+                    // If all tests passed, clean everything up
+                    sh "vagrant destroy -f ${params.Box}"
+                    cleanWs()
+                }
+            }
         }
         failure {
             script {

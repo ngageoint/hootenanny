@@ -33,14 +33,15 @@
 
 // GEOS
 #include <geos/geom/LineString.h>
+
 // Hoot
-#include "../../TestUtils.h"
+#include <hoot/core/TestUtils.h>
+#include <hoot/core/conflate/frechet/FrechetSublineMatcher.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
-#include <hoot/core/conflate/frechet/FrechetSublineMatcher.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -48,7 +49,7 @@ using namespace std;
 namespace hoot
 {
 
-class FrechetSublineMatcherTest : public CppUnit::TestFixture
+class FrechetSublineMatcherTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(FrechetSublineMatcherTest);
   CPPUNIT_TEST(singleSublineTest);

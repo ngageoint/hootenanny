@@ -33,28 +33,22 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmPbfWriter.h>
+using namespace hoot::pb;
 
 // Tgs
 #include <tgs/Statistics/Random.h>
-
-using namespace hoot;
-using namespace hoot::pb;
-
-// Qt
-#include <QDir>
 
 // Standard
 #include <sstream>
 using namespace std;
 
-#include "../TestUtils.h"
-
 namespace hoot
 {
 
-class OsmPbfWriterTest : public CppUnit::TestFixture
+class OsmPbfWriterTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(OsmPbfWriterTest);
   CPPUNIT_TEST(runToyTest);
@@ -66,8 +60,9 @@ class OsmPbfWriterTest : public CppUnit::TestFixture
 
 public:
 
-  void setUp()
+  virtual void setUp()
   {
+    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/io");
   }
 

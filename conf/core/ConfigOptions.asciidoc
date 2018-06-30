@@ -570,6 +570,17 @@ Bounds used by the map cropper when cropping a map, of the form: minx,miny,maxx,
 
 Debugging: The filename to use when saving the debug map during conflation.
 
+=== differential.tag.ignore.list
+
+* Data Type: list
+* Default Value:
+** `uuid` - Ignore UUID changes
+** `source:datetime` - Ignore source:datetime changes
+** `license`
+** `source:imagery`
+
+List of tags to ignore when performing differential conflation with tags.
+
 === dual.way.splitter.driving.side
 
 * Data Type: string
@@ -1591,6 +1602,38 @@ projection. Only one of the two options can be specified.
 A best effort will be made to convert between the two projections. The translated bounding box
 will approximate the minimum bounding rectangle of the lat/lng bounding box. In some cases this
 may be significantly larger.
+
+=== ogr.reader.csv.keep.geom.fields
+
+* Data Type: string
+* Default Value: `NO`
+
+From the GDAL docs:
+If YES, the detected X,Y,Z or geometry columns will be stored as regular attribute fields.
+
+=== ogr.reader.csv.latfield
+
+* Data Type: string
+* Default Value: `Lat*,lat*,LAT*`
+
+From the GDAL docs:
+A comma separated list of possible names for Y/latitude coordinate of a point. Each name might be a pattern using the star character in starting and/or ending position. E.g.: prefix*, *suffix or *middle*. The values in the column must be floating point values.
+
+=== ogr.reader.csv.lonfield
+
+* Data Type: string
+* Default Value: `Lon*,lon*,LON*`
+
+From the GDAL docs:
+A comma separated list of possible names for X/longitude coordinate of a point. Each name might be a pattern using the star character in starting and/or ending position. E.g.: prefix*, *suffix or *middle*. The values in the column must be floating point values.
+
+//=== ogr.reader.csv.zfield
+
+//* Data Type: string
+//* Default Value: `Z,z`
+
+//From the GDAL docs:
+//A comma separated list of possible names for Z/elevation coordinate of a point. Each name might be a pattern using the star character in starting and/or ending position. E.g.: prefix*, *suffix or *middle*. The values in the column must be floating point values.
 
 === ogr.reader.epsg.override
 
@@ -2678,7 +2721,6 @@ waterway.auto.calc.search.radius = true.  See `search.radius.default`.
 * Default Value: `15`
 
 The search radius to use when conflating railways.
-
 
 === set.tag.value.visitor.append.to.existing.value
 

@@ -26,31 +26,22 @@
  */
 
 // Hoot
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OgrReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Progress.h>
-using namespace hoot;
-
-
-// Boost
-using namespace boost;
-
-#include "../TestUtils.h"
-
-// Qt
-#include <QDebug>
 
 using namespace geos::geom;
 
 namespace hoot
 {
 
-class OgrReaderTest : public CppUnit::TestFixture
+class OgrReaderTest : public HootTestFixture
 {
     CPPUNIT_TEST_SUITE(OgrReaderTest);
     CPPUNIT_TEST(runBasicTest);

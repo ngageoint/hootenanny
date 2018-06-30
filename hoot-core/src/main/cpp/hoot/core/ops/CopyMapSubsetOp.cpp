@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "CopySubsetOp.h"
+#include "CopyMapSubsetOp.h"
 
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/util/Log.h>
@@ -79,13 +79,13 @@ private:
   ElementId _exempt;
 };
 
-CopySubsetOp::CopySubsetOp(const ConstOsmMapPtr& from, const set<ElementId>& eids) :
+CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, const set<ElementId>& eids) :
   _eids(eids),
   _from(from)
 {
 }
 
-CopySubsetOp::CopySubsetOp(const ConstOsmMapPtr& from, const vector<long>& wayIds) :
+CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, const vector<long>& wayIds) :
   _from(from)
 {
   // Need to get ElementIds from our vector of longs
@@ -98,14 +98,14 @@ CopySubsetOp::CopySubsetOp(const ConstOsmMapPtr& from, const vector<long>& wayId
   }
 }
 
-CopySubsetOp::CopySubsetOp(const ConstOsmMapPtr& from, ElementId eid1, ElementId eid2) :
+CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, ElementId eid1, ElementId eid2) :
   _from(from)
 {
   _eids.insert(eid1);
   _eids.insert(eid2);
 }
 
-void CopySubsetOp::apply(OsmMapPtr &map)
+void CopyMapSubsetOp::apply(OsmMapPtr &map)
 {
   map->setProjection(_from->getProjection());
   AddAllVisitor v(_from, map);

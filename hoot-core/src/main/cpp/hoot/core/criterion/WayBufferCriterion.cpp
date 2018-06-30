@@ -36,6 +36,7 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/Factory.h>
 
 // Qt
 #include <QDebug>
@@ -45,6 +46,12 @@ using namespace std;
 
 namespace hoot
 {
+
+HOOT_FACTORY_REGISTER(ElementCriterion, WayBufferCriterion)
+
+WayBufferCriterion::WayBufferCriterion()
+{
+}
 
 WayBufferCriterion::WayBufferCriterion(ConstOsmMapPtr map,
                                        ConstWayPtr baseWay,

@@ -26,16 +26,15 @@
  */
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/string/MostEnglishName.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 
-#include "../../TestUtils.h"
-
 namespace hoot
 {
 
-class MostEnglishNameTest : public CppUnit::TestFixture
+class MostEnglishNameTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(MostEnglishNameTest);
   CPPUNIT_TEST(runTest);

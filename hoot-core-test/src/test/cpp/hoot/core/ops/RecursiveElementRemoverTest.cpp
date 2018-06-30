@@ -26,15 +26,11 @@
  */
 
 // Hoot
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/util/Log.h>
-using namespace hoot;
-
-
-// Boost
-using namespace boost;
+#include <hoot/core/util/MapProjector.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -42,12 +38,10 @@ using namespace boost;
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// Qt
-#include <QDebug>
+namespace hoot
+{
 
-#include "../TestUtils.h"
-
-class RecursiveElementRemoverTest : public CppUnit::TestFixture
+class RecursiveElementRemoverTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(RecursiveElementRemoverTest);
   CPPUNIT_TEST(removeRelationTest);
@@ -190,3 +184,4 @@ public:
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RecursiveElementRemoverTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RecursiveElementRemoverTest, "quick");
 
+}

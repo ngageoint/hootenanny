@@ -26,24 +26,19 @@
  */
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/rnd/perty/PertyMatchScorer.h>
-#include <hoot/rnd/scoring/MapMatchScoringUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/TagKeyCountVisitor.h>
-
-// Qt
-#include <QString>
-#include <QDir>
-
-#include <hoot/core/TestUtils.h>
+#include <hoot/rnd/perty/PertyMatchScorer.h>
+#include <hoot/rnd/scoring/MapMatchScoringUtils.h>
 
 namespace hoot
 {
 
-class PertyMatchScorerTest : public CppUnit::TestFixture
+class PertyMatchScorerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(PertyMatchScorerTest);
   CPPUNIT_TEST(runLoadReferenceMapTest);

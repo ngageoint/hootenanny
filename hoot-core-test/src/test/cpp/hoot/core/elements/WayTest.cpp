@@ -22,20 +22,18 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/Log.h>
-using namespace hoot;
-
-#include "../TestUtils.h"
 
 namespace hoot
 {
 
-class WayTest : public CppUnit::TestFixture
+class WayTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(WayTest);
   CPPUNIT_TEST(runRemoveTest);
@@ -62,7 +60,6 @@ public:
   }
 };
 
-}
-
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(WayTest, "quick");
 
+}

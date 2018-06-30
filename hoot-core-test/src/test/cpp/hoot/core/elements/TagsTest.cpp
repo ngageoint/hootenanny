@@ -32,9 +32,9 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/util/Log.h>
-using namespace hoot;
 
 // Qt
 #include <QRegExp>
@@ -42,12 +42,10 @@ using namespace hoot;
 // Tgs
 #include <tgs/HashMap.h>
 
-#include "../TestUtils.h"
-
 namespace hoot
 {
 
-class TagsTest : public CppUnit::TestFixture
+class TagsTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(TagsTest);
   CPPUNIT_TEST(runSplitTest);
@@ -122,8 +120,7 @@ public:
   }
 };
 
-}
-
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(TagsTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(TagsTest, "quick");
 
+}

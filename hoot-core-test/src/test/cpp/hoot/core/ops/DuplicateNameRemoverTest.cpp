@@ -26,14 +26,10 @@
  */
 
 // Hoot
-#include <hoot/core/ops/DuplicateNameRemover.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
+#include <hoot/core/ops/DuplicateNameRemover.h>
 #include <hoot/core/util/Log.h>
-using namespace hoot;
-
-
-// Boost
-using namespace boost;
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -41,17 +37,12 @@ using namespace boost;
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// Qt
-#include <QDebug>
-
-#include "../TestUtils.h"
-
 using namespace geos::geom;
 
 namespace hoot
 {
 
-class DuplicateNameRemoverTest : public CppUnit::TestFixture
+class DuplicateNameRemoverTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(DuplicateNameRemoverTest);
   CPPUNIT_TEST(runCaseInsensitiveTest);
@@ -79,7 +70,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getWays().size());
     const Tags& tags = map->getWay(way->getElementId())->getTags();
     CPPUNIT_ASSERT_EQUAL(1, tags.size());
-    CPPUNIT_ASSERT_EQUAL(QString("test"), tags.get("name"));
+    HOOT_STR_EQUALS(QString("test"), tags.get("name"));
   }
 
   void runCaseSensitiveTest()
@@ -100,7 +91,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getWays().size());
     const Tags& tags = map->getWay(way->getElementId())->getTags();
     CPPUNIT_ASSERT_EQUAL(1, tags.size());
-    CPPUNIT_ASSERT_EQUAL(QString("test;TEST"), tags.get("name"));
+    HOOT_STR_EQUALS(QString("test;TEST"), tags.get("name"));
   }
 
   void runExtraNamesTest()
@@ -122,8 +113,8 @@ public:
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getWays().size());
     const Tags& tags = map->getWay(way->getElementId())->getTags();
     CPPUNIT_ASSERT_EQUAL(2, tags.size());
-    CPPUNIT_ASSERT_EQUAL(QString("test"), tags.get("name"));
-    CPPUNIT_ASSERT_EQUAL(QString("blah"), tags.get("alt_name"));
+    HOOT_STR_EQUALS(QString("test"), tags.get("name"));
+    HOOT_STR_EQUALS(QString("blah"), tags.get("alt_name"));
   }
 };
 

@@ -42,11 +42,11 @@
  */
 
 // Hoot
+#include <hoot/core/TestUtils.h>
+#include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/match-graph/MatchGraph.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/conflate/matching/MatchClassification.h>
-using namespace hoot;
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -54,25 +54,17 @@ using namespace hoot;
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// Qt
-#include <QDebug>
-#include <QDir>
-#include <QBuffer>
-#include <QByteArray>
-
 // Standard
 #include <iostream>
 
 // Tgs
 #include <tgs/StreamUtils.h>
 
-#include "../../TestUtils.h"
-
+using namespace std;
+using namespace Tgs;
 
 namespace hoot
 {
-using namespace std;
-using namespace Tgs;
 
 class FakeMatch : public Match
 {
@@ -136,7 +128,7 @@ private:
   boost::shared_ptr<const MatchThreshold> _threshold;
 };
 
-class MatchGraphTest : public CppUnit::TestFixture
+class MatchGraphTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(MatchGraphTest);
   CPPUNIT_TEST(runFindSubgraphsTest);

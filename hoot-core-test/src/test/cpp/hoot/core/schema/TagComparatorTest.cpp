@@ -26,6 +26,7 @@
  */
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/scoring/TextTable.h>
@@ -38,15 +39,12 @@
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// Qt
-#include <QDebug>
-
 using namespace std;
 
 namespace hoot
 {
 
-class TagComparatorTest : public CppUnit::TestFixture
+class TagComparatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(TagComparatorTest);
   CPPUNIT_TEST(averageTest);

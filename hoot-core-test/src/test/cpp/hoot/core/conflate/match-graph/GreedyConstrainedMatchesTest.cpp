@@ -25,31 +25,16 @@
  * @copyright Copyright (C) 2014, 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-/*
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- */
-
 // Hoot
+#include <hoot/core/conflate/matching/Match.h>
+#include <hoot/core/TestUtils.h>
+#include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/conflate/matching/MatchSet.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/merging/MergerCreator.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/conflate/match-graph/GreedyConstrainedMatches.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/conflate/matching/MatchClassification.h>
-using namespace hoot;
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -57,28 +42,17 @@ using namespace hoot;
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// Hoot
-#include <hoot/core/conflate/matching/Match.h>
-
-// Qt
-#include <QDebug>
-#include <QDir>
-#include <QBuffer>
-#include <QByteArray>
-
 // Standard
 #include <iostream>
 
 // Tgs
 #include <tgs/StreamUtils.h>
 
-#include "../../TestUtils.h"
-
+using namespace std;
+using namespace Tgs;
 
 namespace hoot
 {
-using namespace std;
-using namespace Tgs;
 
 class ConstrainedFakeMatch : public Match
 {
@@ -184,7 +158,7 @@ public:
 
 };
 
-class GreedyConstrainedMatchesTest : public CppUnit::TestFixture
+class GreedyConstrainedMatchesTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(GreedyConstrainedMatchesTest);
   CPPUNIT_TEST(runFindSubgraphsTest);
@@ -234,12 +208,14 @@ public:
 
   virtual void setUp()
   {
+    HootTestFixture::setUp();
     MergerFactory::getInstance().clear();
     MergerFactory::getInstance().registerCreator(new ConstrainedFakeCreator());
   }
 
   virtual void tearDown()
   {
+    HootTestFixture::tearDown();
     MergerFactory::getInstance().clear();
     MergerFactory::getInstance().registerDefaultCreators();
   }

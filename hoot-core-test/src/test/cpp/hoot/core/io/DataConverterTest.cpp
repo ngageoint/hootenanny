@@ -32,15 +32,14 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/DataConverter.h>
 #include <hoot/core/util/ConfigOptions.h>
-
-#include "../TestUtils.h"
 
 namespace hoot
 {
 
-class DataConverterTest : public CppUnit::TestFixture
+class DataConverterTest : public HootTestFixture
 {
   //just testing input validation here, as the command line tests get the rest
   CPPUNIT_TEST_SUITE(DataConverterTest);

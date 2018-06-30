@@ -35,24 +35,20 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/MaximalNearestSubline.h>
 #include <hoot/core/algorithms/MaximalSubline.h>
 #include <hoot/core/algorithms/WaySplitter.h>
+#include <hoot/core/algorithms/linearreference/WaySublineMatch.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
-#include <hoot/core/algorithms/linearreference/WaySublineMatch.h>
-using namespace hoot;
-
-// Qt
-#include <QDir>
-#include <QString>
 
 // Standard
 #include <string>
@@ -60,15 +56,13 @@ using namespace hoot;
 // TGS
 #include <tgs/System/Time.h>
 
-#include "../TestUtils.h"
-
 using namespace geos::geom;
 using namespace std;
 
 namespace hoot
 {
 
-class MaximalSublineTest : public CppUnit::TestFixture
+class MaximalSublineTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(MaximalSublineTest);
   CPPUNIT_TEST(runCircleTest);
@@ -84,11 +78,6 @@ class MaximalSublineTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
-
-  void setUp()
-  {
-    TestUtils::resetEnvironment();
-  }
 
   void addEndNode(OsmMapPtr map, Coordinate c, QString note)
   {

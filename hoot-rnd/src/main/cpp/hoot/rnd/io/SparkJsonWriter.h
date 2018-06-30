@@ -29,12 +29,11 @@
 
 // hoot
 #include <hoot/core/io/PartialOsmMapWriter.h>
+#include <hoot/rnd/conflate/multiary/SearchBoundsCalculator.h>
+#include <hoot/rnd/visitors/AddExportTagsVisitor.h>
 
 // Qt
 #include <QFile>
-
-#include "../conflate/multiary/SearchBoundsCalculator.h"
-#include "../visitors/AddExportTagsVisitor.h"
 
 namespace hoot
 {

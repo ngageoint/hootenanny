@@ -167,6 +167,8 @@ WayPtr WaySubline::toWay(const OsmMapPtr& map, GeometryConverter::NodeFactory* n
     way_id = map->createNextWayId();
   WayPtr result(new Way(way->getStatus(), way_id, ce));
   result->setPid(way->getPid());
+  result->setVersion(way->getVersion());
+  result->setTimestamp(way->getTimestamp());
   result->setTags(way->getTags());
 
   int includedStartIndex = _start.getSegmentIndex();

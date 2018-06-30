@@ -27,14 +27,13 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/visitors/RemoveDuplicateWayNodesVisitor.h>
-
-#include "../TestUtils.h"
 
 namespace hoot
 {
 
-class RemoveDuplicateWayNodesVisitorTest : public CppUnit::TestFixture
+class RemoveDuplicateWayNodesVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(RemoveDuplicateWayNodesVisitorTest);
   CPPUNIT_TEST(runInvalidWayTest1);

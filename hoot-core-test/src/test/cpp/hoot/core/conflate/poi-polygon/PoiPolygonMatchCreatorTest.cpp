@@ -26,15 +26,15 @@
  */
 
 // Hoot
-#include "../../TestUtils.h"
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatchCreator.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/visitors/FindWaysVisitor.h>
 #include <hoot/core/visitors/FindNodesVisitor.h>
+#include <hoot/core/visitors/FindWaysVisitor.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -42,7 +42,7 @@ using namespace std;
 namespace hoot
 {
 
-class PoiPolygonMatchCreatorTest : public CppUnit::TestFixture
+class PoiPolygonMatchCreatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(PoiPolygonMatchCreatorTest);
   CPPUNIT_TEST(basicTest);

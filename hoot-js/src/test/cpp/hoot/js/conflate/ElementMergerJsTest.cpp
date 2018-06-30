@@ -27,11 +27,11 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/js/HootJsStable.h>
-#include <hoot/js/conflate/ElementMergerJs.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/MapProjector.h>
+#include <hoot/js/HootJsStable.h>
+#include <hoot/js/conflate/ElementMergerJs.h>
 
 // Std
 #include <string>
@@ -65,7 +65,7 @@ namespace hoot
  * conversion of the map arg from a nodejs object to a hoot object.  That gets tested by the element
  * merge service mocha plugin test, plugins/test/ElementMergerServer.js.
  */
-class ElementMergerJsTest : public CppUnit::TestFixture
+class ElementMergerJsTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ElementMergerJsTest);
   CPPUNIT_TEST(poiToPolyMergeWayAsPolyTest);

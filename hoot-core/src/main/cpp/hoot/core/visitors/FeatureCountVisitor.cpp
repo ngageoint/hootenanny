@@ -22,14 +22,17 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "FeatureCountVisitor.h"
 
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
+
+HOOT_FACTORY_REGISTER(ConstElementVisitor, FeatureCountVisitor)
 
 void FeatureCountVisitor::visit(const boost::shared_ptr<const Element>& e)
 {

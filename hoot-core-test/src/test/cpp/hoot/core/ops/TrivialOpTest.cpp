@@ -27,6 +27,8 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
+#include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/CookieCutterOp.h>
@@ -41,10 +43,7 @@
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
 #include <hoot/core/ops/WaySplitterOp.h>
 #include <hoot/core/util/Log.h>
-using namespace hoot;
-
-// Boost
-using namespace boost;
+#include <hoot/core/util/MapProjector.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -52,22 +51,12 @@ using namespace boost;
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// hoot
-#include <hoot/core/util/MapProjector.h>
-#include <hoot/core/conflate/MapCleaner.h>
-
-// Qt
-#include <QDebug>
-#include <QDir>
-
-#include "../TestUtils.h"
-
 using namespace std;
 
 namespace hoot
 {
 
-class TrivialOpTest : public CppUnit::TestFixture
+class TrivialOpTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(TrivialOpTest);
   CPPUNIT_TEST(runTest);
@@ -150,9 +139,7 @@ public:
 
 };
 
-}
-
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(TrivialOpTest, "quick");
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(TrivialOpTest, "current");
 
-
+}

@@ -38,6 +38,8 @@
 namespace hoot
 {
 
+HOOT_FACTORY_REGISTER(ElementCriterion, UselessElementCriterion)
+
 bool UselessElementCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
 {
   ElementId eid = e->getElementId();

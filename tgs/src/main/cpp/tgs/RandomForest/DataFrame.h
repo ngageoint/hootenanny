@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __DATA_FRAME_H__
@@ -39,8 +39,8 @@
 #include <string>
 #include <vector>
 
-#include "../HashMap.h"
-#include "../TgsExport.h"
+#include <tgs/HashMap.h>
+#include <tgs/TgsExport.h>
 
 namespace Tgs
 {

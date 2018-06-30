@@ -27,17 +27,14 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/MatchCandidateCountVisitor.h>
-using namespace hoot;
-
-// Boost
-using namespace boost;
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -45,18 +42,10 @@ using namespace boost;
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// Qt
-#include <QDebug>
-#include <QDir>
-#include <QBuffer>
-#include <QByteArray>
-
-#include "../TestUtils.h"
-
 namespace hoot
 {
 
-class MatchCandidateCountVisitorTest : public CppUnit::TestFixture
+class MatchCandidateCountVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(MatchCandidateCountVisitorTest);
   CPPUNIT_TEST(runBuildingMatchCandidateCountTest);
@@ -68,11 +57,6 @@ class MatchCandidateCountVisitorTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
-
-  void tearDown()
-  {
-    TestUtils::resetEnvironment();
-  }
 
   void runBuildingMatchCandidateCountTest()
   {
@@ -94,7 +78,7 @@ public:
     map->visitRo(uut);
     CPPUNIT_ASSERT_EQUAL((int)18, (int)uut.getStat());
     QMap<QString, long> matchCandidateCountsByMatchCreator =
-      any_cast<QMap<QString, long> >(uut.getData());
+      boost::any_cast<QMap<QString, long>>(uut.getData());
     CPPUNIT_ASSERT_EQUAL(1, matchCandidateCountsByMatchCreator.size());
     CPPUNIT_ASSERT_EQUAL((long)18, matchCandidateCountsByMatchCreator["hoot::BuildingMatchCreator"]);
   }
@@ -119,7 +103,7 @@ public:
     map->visitRo(uut);
     CPPUNIT_ASSERT_EQUAL((int)8, (int)uut.getStat());
     QMap<QString, long> matchCandidateCountsByMatchCreator =
-      any_cast<QMap<QString, long> >(uut.getData());
+      boost::any_cast<QMap<QString, long>>(uut.getData());
     CPPUNIT_ASSERT_EQUAL(1, matchCandidateCountsByMatchCreator.size());
     CPPUNIT_ASSERT_EQUAL((long)8, matchCandidateCountsByMatchCreator["hoot::HighwayMatchCreator"]);
   }
@@ -147,7 +131,7 @@ public:
 
     CPPUNIT_ASSERT_EQUAL((int)34, (int)uut.getStat());
     QMap<QString, long> matchCandidateCountsByMatchCreator =
-      any_cast<QMap<QString, long> >(uut.getData());
+      boost::any_cast<QMap<QString, long>>(uut.getData());
     CPPUNIT_ASSERT_EQUAL(3, matchCandidateCountsByMatchCreator.size());
     //These don't add up to the total...is there some overlap here?
     CPPUNIT_ASSERT_EQUAL((long)18, matchCandidateCountsByMatchCreator["hoot::BuildingMatchCreator"]);
@@ -182,7 +166,7 @@ public:
     map->visitRo(uut);
     CPPUNIT_ASSERT_EQUAL((int)21, (int)uut.getStat());
     QMap<QString, long> matchCandidateCountsByMatchCreator =
-      any_cast<QMap<QString, long> >(uut.getData());
+      boost::any_cast<QMap<QString, long>>(uut.getData());
     CPPUNIT_ASSERT_EQUAL(1, matchCandidateCountsByMatchCreator.size());
     CPPUNIT_ASSERT_EQUAL(
       (long)21, matchCandidateCountsByMatchCreator["hoot::ScriptMatchCreator,PoiGeneric.js"]);
@@ -211,7 +195,7 @@ public:
     map->visitRo(uut);
     CPPUNIT_ASSERT_EQUAL((int)21, (int)uut.getStat());
     QMap<QString, long> matchCandidateCountsByMatchCreator =
-      any_cast<QMap<QString, long> >(uut.getData());
+      boost::any_cast<QMap<QString, long>>(uut.getData());
     CPPUNIT_ASSERT_EQUAL(1, matchCandidateCountsByMatchCreator.size());
     LOG_VARD(matchCandidateCountsByMatchCreator);
     CPPUNIT_ASSERT_EQUAL(
@@ -240,7 +224,7 @@ public:
     map->visitRo(uut);
     CPPUNIT_ASSERT_EQUAL((int)21, (int)uut.getStat());
     QMap<QString, long> matchCandidateCountsByMatchCreator =
-      any_cast<QMap<QString, long> >(uut.getData());
+      boost::any_cast<QMap<QString, long>>(uut.getData());
     CPPUNIT_ASSERT_EQUAL(1, matchCandidateCountsByMatchCreator.size());
     CPPUNIT_ASSERT_EQUAL(
       (long)21, matchCandidateCountsByMatchCreator["hoot::ScriptMatchCreator,PoiGeneric.js"]);

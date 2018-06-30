@@ -32,6 +32,7 @@
 #include <cppunit/TestAssert.h>
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/HootApiDb.h>
 #include <hoot/core/io/OsmApiDbReader.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -44,8 +45,6 @@
 
 // Tgs
 #include <tgs/StreamUtils.h>
-
-#include "../TestUtils.h"
 
 using namespace std;
 using namespace Tgs;

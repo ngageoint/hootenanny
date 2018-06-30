@@ -42,6 +42,8 @@ class ElementCountVisitor : public ConstElementVisitor, public SingleStatistic
 {
 public:
 
+  static std::string className() { return "hoot::ElementCountVisitor"; }
+
   ElementCountVisitor() : _count(0) {}
 
   virtual ~ElementCountVisitor() {}

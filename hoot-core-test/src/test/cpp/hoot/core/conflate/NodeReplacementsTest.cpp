@@ -26,10 +26,10 @@
  */
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/NodeReplacements.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-using namespace hoot;
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -37,16 +37,10 @@ using namespace hoot;
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// Qt
-#include <QDebug>
-#include <QDir>
-
-#include "../TestUtils.h"
-
 namespace hoot
 {
 
-class NodeReplacementsTest : public CppUnit::TestFixture
+class NodeReplacementsTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(NodeReplacementsTest);
   CPPUNIT_TEST(runSimplifyTest);
@@ -55,8 +49,9 @@ class NodeReplacementsTest : public CppUnit::TestFixture
 
 public:
 
-  void setUp()
+  virtual void setUp()
   {
+    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/conflate");
   }
 

@@ -40,6 +40,8 @@ class ElementIdSetVisitor : public ConstElementVisitor
 {
 public:
 
+  static std::string className() { return "hoot::ElementIdSetVisitor"; }
+
   ElementIdSetVisitor() {}
 
   virtual ~ElementIdSetVisitor() {}

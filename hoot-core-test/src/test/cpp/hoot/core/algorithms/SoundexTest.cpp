@@ -35,19 +35,15 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/Soundex.h>
 #include <hoot/core/algorithms/Translator.h>
 #include <hoot/core/util/Log.h>
-using namespace hoot;
 
-// Qt
-#include <QString>
+namespace hoot
+{
 
-// Standard
-#include <string>
-
-
-class SoundexTest : public CppUnit::TestFixture
+class SoundexTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(SoundexTest);
   CPPUNIT_TEST(runTest);
@@ -57,20 +53,20 @@ public:
 
   void runTest()
   {
-    CPPUNIT_ASSERT_EQUAL(QString("R163"), Soundex::encode("Robert"));
-    CPPUNIT_ASSERT_EQUAL(QString("R163"), Soundex::encode("Rupert"));
-    CPPUNIT_ASSERT_EQUAL(QString("R150"), Soundex::encode("Rubin"));
-    CPPUNIT_ASSERT_EQUAL(QString("A261"), Soundex::encode("Ashcraft"));
-    CPPUNIT_ASSERT_EQUAL(QString("A261"), Soundex::encode("Ashcroft"));
-    CPPUNIT_ASSERT_EQUAL(QString("T522"), Soundex::encode("Tymczak"));
-    CPPUNIT_ASSERT_EQUAL(QString("P236"), Soundex::encode("Pfister"));
+    HOOT_STR_EQUALS(QString("R163"), Soundex::encode("Robert"));
+    HOOT_STR_EQUALS(QString("R163"), Soundex::encode("Rupert"));
+    HOOT_STR_EQUALS(QString("R150"), Soundex::encode("Rubin"));
+    HOOT_STR_EQUALS(QString("A261"), Soundex::encode("Ashcraft"));
+    HOOT_STR_EQUALS(QString("A261"), Soundex::encode("Ashcroft"));
+    HOOT_STR_EQUALS(QString("T522"), Soundex::encode("Tymczak"));
+    HOOT_STR_EQUALS(QString("P236"), Soundex::encode("Pfister"));
 
     // check boundary conditions. Soundex shouldn't take two words as input, but we should handle
     // it.
-    CPPUNIT_ASSERT_EQUAL(QString("H643"), Soundex::encode("hi world"));
+    HOOT_STR_EQUALS(QString("H643"), Soundex::encode("hi world"));
     // short words should have zeros appended
-    CPPUNIT_ASSERT_EQUAL(QString("H000"), Soundex::encode("hi"));
-    CPPUNIT_ASSERT_EQUAL(QString("L200"), Soundex::encode("LoOk"));
+    HOOT_STR_EQUALS(QString("H000"), Soundex::encode("hi"));
+    HOOT_STR_EQUALS(QString("L200"), Soundex::encode("LoOk"));
 
     CPPUNIT_ASSERT_EQUAL(4, Soundex::compareSoundex("Washington", "Washingtin"));
     CPPUNIT_ASSERT_EQUAL(1, Soundex::compareSoundex("fish", "swimmer"));
@@ -81,3 +77,4 @@ public:
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SoundexTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SoundexTest, "quick");
 
+}

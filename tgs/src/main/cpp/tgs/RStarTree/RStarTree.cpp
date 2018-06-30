@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "RStarTree.h"
@@ -34,10 +34,10 @@
 #include <math.h>
 using namespace std;
 
-#include "../TgsException.h"
-#include "PageStore.h"
-#include "RTreeNode.h"
-#include "../StreamUtils.h"
+#include <tgs/StreamUtils.h>
+#include <tgs/TgsException.h>
+#include <tgs/RStarTree/PageStore.h>
+#include <tgs/RStarTree/RTreeNode.h>
 
 using namespace Tgs;
 

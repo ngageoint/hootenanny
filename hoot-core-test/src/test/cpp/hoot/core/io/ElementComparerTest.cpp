@@ -26,18 +26,14 @@
  */
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/ElementComparer.h>
 #include <hoot/core/visitors/CalculateHashVisitor2.h>
-
-#include "../TestUtils.h"
-
-// Qt
-#include <QDebug>
 
 namespace hoot
 {
 
-class ElementComparerTest : public CppUnit::TestFixture
+class ElementComparerTest : public HootTestFixture
 {
     CPPUNIT_TEST_SUITE(ElementComparerTest);
     CPPUNIT_TEST(runNodeWithinDistanceThresholdTest1);

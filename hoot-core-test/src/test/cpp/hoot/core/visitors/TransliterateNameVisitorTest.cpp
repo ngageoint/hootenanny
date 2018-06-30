@@ -27,24 +27,19 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/io/OsmJsonWriter.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/criterion/PoiCriterion.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
-#include <hoot/core/visitors/TransliterateNameVisitor.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/io/OsmJsonWriter.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-
-// Qt
-#include <QDir>
-
-#include "../TestUtils.h"
+#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/visitors/TransliterateNameVisitor.h>
 
 namespace hoot
 {
-using namespace Tgs;
 
-class TransliterateNameVisitorTest : public CppUnit::TestFixture
+class TransliterateNameVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(TransliterateNameVisitorTest);
   CPPUNIT_TEST(runBasicTest);

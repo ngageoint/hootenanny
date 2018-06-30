@@ -136,6 +136,14 @@ int ConflateCmd::runSimple(QStringList args)
     args.removeAt(args.indexOf("--differential"));
   }
 
+  // Check for tags argument "--Include-Tags"
+  bool conflateTags = false;
+  if (args.contains("--include-tags"))
+  {
+    conflateTags = true;
+    args.removeAt(args.indexOf("--include-tags"));
+  }
+
   if (args.size() < 2 || args.size() > 3)
   {
     cout << getHelp() << endl << endl;
@@ -173,8 +181,12 @@ int ConflateCmd::runSimple(QStringList args)
   IoUtils::loadMap(
     map, input1, ConfigOptions().getReaderConflateUseDataSourceIds1(), Status::Unknown1);
 
+  DiffConflator diffConflator;
   if (isDiffConflate)
   {
+    // Store original IDs for tag diff
+    diffConflator.storeOriginalIDs(map);
+
     // Mark input1 elements (Use Ref1 visitor, because it's already coded up)
     Settings visitorConf;
     visitorConf.set(ConfigOptions::getAddRefVisitorInformationOnlyKey(), "false");
@@ -229,9 +241,8 @@ int ConflateCmd::runSimple(QStringList args)
   if (isDiffConflate)
   {
     // call the diff conflator
-    DiffConflator conflator;
-    conflator.apply(result);
-    stats.append(conflator.getStats());
+    diffConflator.apply(result);
+    stats.append(diffConflator.getStats());
     stats.append(SingleStat("Conflation Time (sec)", t.getElapsedAndRestart()));
   }
   else
@@ -269,6 +280,21 @@ int ConflateCmd::runSimple(QStringList args)
   else
   {
     IoUtils::saveMap(result, output);
+  }
+
+  // Do the tags if we need to
+  if (isDiffConflate && conflateTags)
+  {
+    LOG_INFO("Generating tag changeset...");
+    MemChangesetProviderPtr pTagChanges = diffConflator.getTagDiff();
+
+    // Write the file!
+    QString outFileName = output;
+    outFileName.replace(".osm", "");
+    outFileName.replace(".osc", "");
+    outFileName.append(".tags.osc");
+    OsmXmlChangesetFileWriter tagChangeWriter;
+    tagChangeWriter.write(outFileName, pTagChanges);
   }
 
   double timingOutput = t.getElapsedAndRestart();

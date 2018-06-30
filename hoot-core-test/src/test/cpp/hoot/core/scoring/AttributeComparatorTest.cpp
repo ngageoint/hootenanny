@@ -28,6 +28,7 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/scoring/AttributeComparator.h>
@@ -35,8 +36,6 @@
 #define int64 opencv_broken_int
 #include <hoot/core/util/OpenCv.h>
 #undef int64
-
-using namespace hoot;
 
 // Tgs
 #include <tgs/Statistics/Random.h>
@@ -56,7 +55,10 @@ using namespace boost;
 // Standard
 #include <stdio.h>
 
-class AttributeComparatorTest : public CppUnit::TestFixture
+namespace hoot
+{
+
+class AttributeComparatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(AttributeComparatorTest);
   CPPUNIT_TEST(runTest);
@@ -91,5 +93,5 @@ public:
 
 CPPUNIT_TEST_SUITE_REGISTRATION(AttributeComparatorTest);
 
-
+}
 

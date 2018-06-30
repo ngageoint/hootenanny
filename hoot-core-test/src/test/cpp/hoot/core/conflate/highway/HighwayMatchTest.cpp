@@ -33,6 +33,7 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/MaximalNearestSublineMatcher.h>
 #include <hoot/core/algorithms/MaximalSublineStringMatcher.h>
 #include <hoot/core/conflate/highway/HighwayExpertClassifier.h>
@@ -44,23 +45,15 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 
-// Qt
-#include <QDebug>
-#include <QDir>
-#include <QBuffer>
-#include <QByteArray>
-
 // Tgs
 #include <tgs/StreamUtils.h>
-
-#include "../../TestUtils.h"
 
 using namespace geos::geom;
 
 namespace hoot
 {
 
-class HighwayMatchTest : public CppUnit::TestFixture
+class HighwayMatchTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(HighwayMatchTest);
   CPPUNIT_TEST(runMajorOverlapTest);

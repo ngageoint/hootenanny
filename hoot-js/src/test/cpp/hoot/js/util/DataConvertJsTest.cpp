@@ -44,7 +44,7 @@ using namespace v8;
 namespace hoot
 {
 
-class DataConvertJsTest : public CppUnit::TestFixture
+class DataConvertJsTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(DataConvertJsTest);
   CPPUNIT_TEST(qvariantTest);

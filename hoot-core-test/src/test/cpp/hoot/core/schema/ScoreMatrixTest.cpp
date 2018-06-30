@@ -26,17 +26,16 @@
  */
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/schema/ScoreMatrix.h>
 #include <hoot/core/util/Log.h>
-
-#include "../TestUtils.h"
 
 using namespace std;
 
 namespace hoot
 {
 
-class ScoreMatrixTest : public CppUnit::TestFixture
+class ScoreMatrixTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ScoreMatrixTest);
   CPPUNIT_TEST(runTest);

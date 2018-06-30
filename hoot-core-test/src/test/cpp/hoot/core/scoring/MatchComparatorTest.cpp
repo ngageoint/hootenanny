@@ -26,6 +26,7 @@
  */
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/io/OsmXmlReader.h>
@@ -37,10 +38,6 @@
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/AddUuidVisitor.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
-using namespace hoot;
-
-// Boost
-using namespace boost;
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -48,19 +45,12 @@ using namespace boost;
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// Qt
-#include <QDebug>
-#include <QDir>
-
-// Standard
-#include <stdio.h>
-
 using namespace std;
 
 namespace hoot
 {
 
-class MatchComparatorTest : public CppUnit::TestFixture
+class MatchComparatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(MatchComparatorTest);
   CPPUNIT_TEST(runTest);
@@ -119,7 +109,7 @@ public:
 
 };
 
-}
-
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MatchComparatorTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MatchComparatorTest, "quick");
+
+}

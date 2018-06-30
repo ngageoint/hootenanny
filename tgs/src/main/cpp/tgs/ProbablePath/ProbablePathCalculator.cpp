@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ProbablePathCalculator.h"
@@ -34,11 +34,10 @@
 #include <map>
 #include <sstream>
 
-#include "../StreamUtils.h"
-#include "../Heap/JHeap.h"
-#include "../TgsException.h"
-
 // Tgs
+#include <tgs/StreamUtils.h>
+#include <tgs/TgsException.h>
+#include <tgs/Heap/JHeap.h>
 #include <tgs/Statistics/Random.h>
 
 using namespace std;

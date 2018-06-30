@@ -33,24 +33,19 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/rnd/perty/PertyWaySplitVisitor.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-
-// Qt
-#include <QString>
-#include <QDir>
-
-#include <hoot/core/TestUtils.h>
+#include <hoot/rnd/perty/PertyWaySplitVisitor.h>
 
 using namespace std;
 
 namespace hoot
 {
 
-class PertyWaySplitVisitorTest : public CppUnit::TestFixture
+class PertyWaySplitVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(PertyWaySplitVisitorTest);
   CPPUNIT_TEST(runWaySplitTest);
@@ -61,9 +56,9 @@ class PertyWaySplitVisitorTest : public CppUnit::TestFixture
 
 public:
 
-  void setUp()
+  virtual void setUp()
   {
-    TestUtils::resetEnvironment();
+    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/perty/PertyWaySplitVisitorTest/");
   }
 
@@ -72,7 +67,6 @@ public:
     //Log::WarningLevel levelBefore = Log::getInstance().getLevel();
     //Log::getInstance().setLevel(Log::Debug);
 
-    OsmMap::resetCounters();
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
@@ -113,7 +107,6 @@ public:
     //Log::WarningLevel levelBefore = Log::getInstance().getLevel();
     //Log::getInstance().setLevel(Log::Debug);
 
-    OsmMap::resetCounters();
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);

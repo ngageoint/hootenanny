@@ -42,7 +42,7 @@
 #include <hoot/core/conflate/merging/Merger.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/ops/CopySubsetOp.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/schema/TranslateStringDistance.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/js/OsmMapJs.h>
@@ -271,7 +271,7 @@ bool ScriptMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sha
   eids.insert(other2);
 
   OsmMapPtr copiedMap(new OsmMap(map->getProjection()));
-  CopySubsetOp(map, eids).apply(copiedMap);
+  CopyMapSubsetOp(map, eids).apply(copiedMap);
 
   Handle<Object> copiedMapJs = OsmMapJs::create(copiedMap);
 

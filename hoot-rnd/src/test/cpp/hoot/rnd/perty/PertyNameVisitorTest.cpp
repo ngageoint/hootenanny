@@ -32,26 +32,24 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/util/Exception.h>
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/rnd/perty/PertyNameVisitor.h>
+#include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
+#include <hoot/rnd/perty/PertyNameVisitor.h>
 
 // tbs
 #include <tbs/stats/SampleStats.h>
-
-// Qt
-#include <QDir>
 
 using namespace std;
 
 namespace hoot
 {
 
-class PertyNameVisitorTest : public CppUnit::TestFixture
+class PertyNameVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(PertyNameVisitorTest);
   CPPUNIT_TEST(runBasicTest);

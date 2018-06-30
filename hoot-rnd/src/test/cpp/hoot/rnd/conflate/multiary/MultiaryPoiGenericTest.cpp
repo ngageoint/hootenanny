@@ -39,7 +39,7 @@ using namespace std;
 namespace hoot
 {
 
-class MultiaryPoiGenericTest : public CppUnit::TestFixture
+class MultiaryPoiGenericTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(MultiaryPoiGenericTest);
   CPPUNIT_TEST(basicTest);

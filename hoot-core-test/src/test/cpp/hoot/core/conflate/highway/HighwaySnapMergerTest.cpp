@@ -36,6 +36,7 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/MaximalSublineStringMatcher.h>
 #include <hoot/core/conflate/highway/HighwayExpertClassifier.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
@@ -49,16 +50,8 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/MetadataTags.h>
 
-// Qt
-#include <QDebug>
-#include <QDir>
-#include <QBuffer>
-#include <QByteArray>
-
 // Tgs
 #include <tgs/StreamUtils.h>
-
-#include "../../TestUtils.h"
 
 using namespace geos::geom;
 using namespace std;
@@ -66,7 +59,7 @@ using namespace std;
 namespace hoot
 {
 
-class HighwaySnapMergerTest : public CppUnit::TestFixture
+class HighwaySnapMergerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(HighwaySnapMergerTest);
   CPPUNIT_TEST(runReverseTest);

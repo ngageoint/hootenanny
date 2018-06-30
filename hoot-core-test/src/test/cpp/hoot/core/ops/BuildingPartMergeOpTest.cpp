@@ -27,14 +27,12 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/BuildingPartMergeOp.h>
 #include <hoot/core/util/Log.h>
-using namespace hoot;
-
-// Boost
-using namespace boost;
+#include <hoot/core/util/MapProjector.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -47,22 +45,15 @@ using namespace boost;
 #include <geos/geom/Point.h>
 
 // hoot
-#include <hoot/core/util/MapProjector.h>
-
-// Qt
-#include <QDebug>
-#include <QDir>
 
 // TGS
 #include <tgs/Statistics/Random.h>
-
-#include "../TestUtils.h"
+using namespace Tgs;
 
 namespace hoot
 {
-using namespace Tgs;
 
-class BuildingPartMergeOpTest : public CppUnit::TestFixture
+class BuildingPartMergeOpTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(BuildingPartMergeOpTest);
   CPPUNIT_TEST(runToyTest);
@@ -93,9 +84,7 @@ public:
 
 };
 
-}
-
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(BuildingPartMergeOpTest, "quick");
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(BuildingPartMergeOpTest, "current");
 
-
+}

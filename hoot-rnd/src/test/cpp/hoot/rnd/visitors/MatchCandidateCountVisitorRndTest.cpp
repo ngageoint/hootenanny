@@ -27,16 +27,13 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/MatchCandidateCountVisitor.h>
-#include <hoot/core/TestUtils.h>
-
-// Boost
-using namespace boost;
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -44,27 +41,16 @@ using namespace boost;
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// Qt
-#include <QDebug>
-#include <QDir>
-#include <QBuffer>
-#include <QByteArray>
-
 namespace hoot
 {
 
-class MatchCandidateCountVisitorRndTest : public CppUnit::TestFixture
+class MatchCandidateCountVisitorRndTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(MatchCandidateCountVisitorRndTest);
   CPPUNIT_TEST(runMatchCandidateCountTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
-
-  void tearDown()
-  {
-    TestUtils::resetEnvironment();
-  }
 
   void runMatchCandidateCountTest()
   {
@@ -87,7 +73,7 @@ public:
     map->visitRo(uut);
     CPPUNIT_ASSERT_EQUAL((int)36, (int)uut.getStat());
     QMap<QString, long> matchCandidateCountsByMatchCreator =
-      any_cast<QMap<QString, long> >(uut.getData());
+      boost::any_cast<QMap<QString, long> >(uut.getData());
     CPPUNIT_ASSERT_EQUAL(1, matchCandidateCountsByMatchCreator.size());
     CPPUNIT_ASSERT_EQUAL((long)36, matchCandidateCountsByMatchCreator["hoot::PoiPolygonMatchCreator"]);
     CPPUNIT_ASSERT_EQUAL(

@@ -27,18 +27,16 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/MedianNodeVisitor.h>
-using namespace hoot;
-
-#include "../TestUtils.h"
 
 namespace hoot
 {
 
-class MedianNodeVisitorTest : public CppUnit::TestFixture
+class MedianNodeVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(MedianNodeVisitorTest);
   CPPUNIT_TEST(runTest);
