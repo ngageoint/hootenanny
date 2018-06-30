@@ -29,114 +29,36 @@
 
 //  Hootenanny
 #include <hoot/core/VersionDefines.h>
-#include <hoot/core/io/OsmChangesetElement.h>
+#include <hoot/core/io/OsmApiChangeset.h>
+#include <hoot/core/io/OsmApiChangesetElement.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 
 //  Qt
-#include <QEventLoop>
 #include <QXmlStreamReader>
-#include <QtNetwork/QNetworkReply>
-#include <QtNetwork/QNetworkRequest>
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QSslConfiguration>
-#include <QtNetwork/QSslSocket>
 
 using namespace std;
 
 namespace hoot
 {
 
-OsmApiNetworkRequest::OsmApiNetworkRequest()
+OsmApiWriter::OsmApiWriter(const QUrl &url, const QString &changeset)
+  : _description(ConfigOptions().getChangesetDescription()),
+    _maxWriters(ConfigOptions().getChangesetApidbMaxWriters()),
+    _maxChangesetSize(ConfigOptions().getChangesetApidbMaxSize())
 {
-}
-
-bool OsmApiNetworkRequest::networkRequest(QUrl url, QNetworkAccessManager::Operation http_op, const QByteArray& data)
-{
-  //  Reset status
-  _status = 0;
-  _content.clear();
-  //  Do HTTP request
-  boost::shared_ptr<QNetworkAccessManager> pNAM(new QNetworkAccessManager());
-  QNetworkRequest request(url);
-
-  if (url.scheme().toLower() == "https")
-  {
-    QSslConfiguration config(QSslConfiguration::defaultConfiguration());
-    config.setProtocol(QSsl::SslProtocol::AnyProtocol);
-    config.setPeerVerifyMode(QSslSocket::VerifyPeer);
-    config.setPeerVerifyMode(QSslSocket::VerifyNone);
-    request.setSslConfiguration(config);
-  }
-
-  if (url.userInfo() != "")
-  {
-    //  Using basic authentication, replace with OAuth when necessary
-    QString base64 = url.userInfo().toUtf8().toBase64();
-    request.setRawHeader("Authorization", QString("Basic %1").arg(base64).toUtf8());
-    url.setUserInfo("");
-  }
-
-  QNetworkReply* reply = NULL;
-  switch (http_op)
-  {
-  default:
-    return false;
-    break;
-  case QNetworkAccessManager::Operation::GetOperation:
-    reply = pNAM->get(request);
-    break;
-  case QNetworkAccessManager::Operation::PutOperation:
-    reply = pNAM->put(request, data);
-    break;
-  case QNetworkAccessManager::Operation::PostOperation:
-    request.setHeader(QNetworkRequest::KnownHeaders::ContentTypeHeader, "text/xml");
-    reply = pNAM->post(request, data);
-    break;
-  }
-
-  //  Wait for finished signal from reply object
-  QEventLoop loop;
-  QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
-  loop.exec();
-
-  //  Get the status and content of the reply if available
-  _status = _getHttpResponseCode(reply);
-
-  if (reply != NULL)
-    _content = reply->readAll();
-
-  //  Check error status on our reply
-  if (QNetworkReply::NoError != reply->error())
-  {
-    QString errMsg = reply->errorString();
-    throw HootException(QString("Network error for request (%1): %2\n%3")
-      .arg(url.toString())
-      .arg(errMsg).arg(QString(_content)));
-  }
-
-  return true;
-}
-
-int OsmApiNetworkRequest::_getHttpResponseCode(QNetworkReply* reply)
-{
-  if (reply != NULL)
-  {
-    QVariant status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
-    if (status.isValid())
-      return status.toInt();
-  }
-  return -1;
+  _changesets.push_back(changeset);
+  if (isSupported(url))
+    _url = url;
 }
 
 OsmApiWriter::OsmApiWriter(const QUrl& url, const QList<QString>& changesets)
   : _changesets(changesets),
     _description(ConfigOptions().getChangesetDescription()),
     _maxWriters(ConfigOptions().getChangesetApidbMaxWriters()),
-    _maxChangesetSize(ConfigOptions().getChangesetApidbMaxSize()),
-    _parallel(false)
+    _maxChangesetSize(ConfigOptions().getChangesetApidbMaxSize())
 {
   if (isSupported(url))
     _url = url;
@@ -144,62 +66,56 @@ OsmApiWriter::OsmApiWriter(const QUrl& url, const QList<QString>& changesets)
 
 bool OsmApiWriter::apply()
 {
-  const int QUEUE_SIZE_MULTIPLIER = 4;
-
   OsmApiNetworkRequestPtr request(new OsmApiNetworkRequest());
   //  Validate API capabilites
   if (!queryCapabilities(request))
+  {
     LOG_ERROR("API Capabilities error");
-
+    return false;
+  }
   //  Validate API permissions
   if (!validatePermissions(request))
-    LOG_ERROR("API Permissions error");
-
-  bool success = true;
-  if (_parallel)
   {
-    //  Load all of the changesets into memory
-    _changeset.setMaxSize(_maxChangesetSize);
-    for (int i = 0; i < _changesets.size(); ++i)
+    LOG_ERROR("API Permissions error");
+    return false;
+  }
+  bool success = true;
+  //  Load all of the changesets into memory
+  _changeset.setMaxSize(_maxChangesetSize);
+  for (int i = 0; i < _changesets.size(); ++i)
+  {
+    LOG_INFO("Loading changeset: " << _changesets[i]);
+    _changeset.loadChangeset(_changesets[i]);
+  }
+  //  Start the writer threads
+  LOG_INFO("Starting " << _maxWriters << " processing threads.");
+  for (int i = 0; i < _maxWriters; ++i)
+    _threadPool.push_back(thread(&OsmApiWriter::_changesetThreadFunc, this));
+  //  Iterate all changes until there are no more elements to send
+  while (_changeset.hasElementsToSend())
+  {
+    //  Check the size of the work queue, don't overwork the work queue
+    _workQueueMutex.lock();
+    int queueSize = (int)_workQueue.size();
+    _workQueueMutex.unlock();
+    //  Only queue up enough work to keep all the threads busy with times QUEUE_SIZE_MULTIPLIER
+    //  so that results can come back and update the changeset for more atomic changesets instead
+    //  of a big list of nodes, then ways, then relations.  This will give us fuller more atomic
+    //  changesets towards the end of the job
+    if (queueSize < QUEUE_SIZE_MULTIPLIER * _maxWriters)
     {
-      LOG_INFO("Loading changeset: " << _changesets[i]);
-      _changeset.loadChangeset(_changesets[i]);
-    }
-    //  Start the writer threads
-    LOG_INFO("Starting " << _maxWriters << " processing threads.");
-    for (int i = 0; i < _maxWriters; ++i)
-      _threadPool.push_back(thread(&OsmApiWriter::_changesetThreadFunc, this));
-    //  Iterate all changes until there are no more elements to send
-    while (_changeset.hasElementsToSend())
-    {
-      //  Check the size of the work queue, don't overwork the work queue
-      _workQueueMutex.lock();
-      int queueSize = (int)_workQueue.size();
-      _workQueueMutex.unlock();
-      //  Only queue up enough work to keep all the threads busy with times QUEUE_SIZE_MULTIPLIER
-      //  so that results can come back and update the changeset for more atomic changesets instead
-      //  of a big list of nodes, then ways, then relations.  This will give us fuller more atomic
-      //  changesets towards the end of the job
-      if (queueSize < QUEUE_SIZE_MULTIPLIER * _maxWriters)
+      //  Divide up the changes into atomic changesets
+      ChangesetInfoPtr changeset_info(new ChangesetInfo());
+      //  Repeat divide until all changes have been committed
+      _changesetMutex.lock();
+      bool newChangeset = _changeset.calculateChangeset(changeset_info);
+      _changesetMutex.unlock();
+      //  Add the new work to the queue if there is any
+      if (newChangeset)
       {
-        //  Divide up the changes into atomic changesets
-        ChangesetInfoPtr changeset_info(new ChangesetInfo());
-        //  Repeat divide until all changes have been committed
-        _changesetMutex.lock();
-        bool newChangeset = _changeset.calculateChangeset(changeset_info);
-        _changesetMutex.unlock();
-        //  Add the new work to the queue if there is any
-        if (newChangeset)
-        {
-          _workQueueMutex.lock();
-          _workQueue.push(changeset_info);
-          _workQueueMutex.unlock();
-        }
-        else
-        {
-          //  Allow time for the worker threads to complete some work
-          this_thread::sleep_for(chrono::milliseconds(10));
-        }
+        _workQueueMutex.lock();
+        _workQueue.push(changeset_info);
+        _workQueueMutex.unlock();
       }
       else
       {
@@ -207,46 +123,23 @@ bool OsmApiWriter::apply()
         this_thread::sleep_for(chrono::milliseconds(10));
       }
     }
-    //  Wait for the threads to shutdown
-    for (int i = 0; i < _maxWriters; ++i)
-      _threadPool[i].join();
-  }
-  else
-  {
-    QRegExp regex(" version=\"0\"");
-
-    //  Let's make this work serially first
-    for (int i = 0; i < _changesets.size(); ++i)
+    else
     {
-      //  Create the changeset for the first changeset
-      long id = _createChangeset(request, _description);
-
-      LOG_DEBUG("Changeset id: " << id);
-
-      //  Read the text of the changeset
-      QString changeset = FileUtils::readFully(_changesets[i]);
-
-      //  Temporarily update the changeset to allow it to work
-      changeset = changeset.replace(regex, QString(" version=\"0\" changeset=\"%1\"").arg(id));
-
-      //  Upload the changeset
-      if (!_uploadChangeset(request, id, changeset))
-      {
-        LOG_ERROR("Error uploading changeset" << _changesets[i]);
-        success = false;
-      }
-      LOG_DEBUG("Changeset Content: " << QString(request->getResponseContent()));
-
-      //  Close the changeset
-      _closeChangeset(request, id);
+      //  Allow time for the worker threads to complete some work
+      this_thread::sleep_for(chrono::milliseconds(10));
     }
   }
+  //  Wait for the threads to shutdown
+  for (int i = 0; i < _maxWriters; ++i)
+    _threadPool[i].join();
   return success;
 }
 
 void OsmApiWriter::_changesetThreadFunc()
 {
   OsmApiNetworkRequestPtr request(new OsmApiNetworkRequest());
+  //
+  long id = -1;
   //  Iterate until all elements are sent and updated
   while (!_changeset.isDone())
   {
@@ -263,7 +156,8 @@ void OsmApiWriter::_changesetThreadFunc()
     if (workInfo)
     {
       //  Create the changeset for the first changeset
-      long id = _createChangeset(request, _description);
+      if (id == -1)
+        id = _createChangeset(request, _description);
       //  Display the changeset in TRACE mode
       LOG_TRACE("Thread: " << std::this_thread::get_id() << "\n" << _changeset.getChangesetString(workInfo, id));
       //  Upload the changeset
@@ -275,7 +169,10 @@ void OsmApiWriter::_changesetThreadFunc()
         _changesetMutex.lock();
         _changeset.updateChangeset(QString(request->getResponseContent()));
         _changesetMutex.unlock();
-        //  Signal the main thread that updates have been made
+        //  Close the changeset
+        _closeChangeset(request, id);
+        //  Signal for a new changeset id
+        id = -1;
       }
       else
       {
@@ -308,12 +205,13 @@ void OsmApiWriter::_changesetThreadFunc()
           break;
         }
       }
-      //  Close the changeset
-      _closeChangeset(request, id);
     }
     else
       this_thread::sleep_for(chrono::milliseconds(10));
   }
+  //  Close the changeset if one is still open
+  if (id != -1)
+    _closeChangeset(request, id);
 }
 
 void OsmApiWriter::setConfiguration(const Settings& conf)
@@ -329,7 +227,7 @@ bool OsmApiWriter::isSupported(const QUrl &url)
       url.isLocalFile() ||
       url.isRelative() ||
       !url.isValid() ||
-      !url.path().isEmpty() ||
+      (!url.path().isEmpty() && url.path() != "/") ||
       (url.scheme().toLower() != "http" && url.scheme().toLower() != "https"))
     return false;
   else

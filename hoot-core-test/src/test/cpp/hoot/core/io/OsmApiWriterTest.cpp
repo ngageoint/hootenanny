@@ -44,13 +44,16 @@ class OsmApiWriterTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runParseCapabilitiesTest);
   CPPUNIT_TEST(runCapabilitesTest);
   CPPUNIT_TEST(runParsePermissionsTest);
-  CPPUNIT_TEST(runPermissionsTest);
-  CPPUNIT_TEST(runChangesetTest);
+  /* These tests are not setup to run every time */
+//  CPPUNIT_TEST(runPermissionsTest);
+//  CPPUNIT_TEST(runChangesetTest);
+//  CPPUNIT_TEST(runChangesetConflictTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  const QString OSMAPI_URL = "http://ec2-34-237-221-226.compute-1.amazonaws.com";
+  const QString OSM_API_URL = "https://www.openstreetmap.org";
+  const QString ME_API_URL = "http://ec2-34-237-221-226.compute-1.amazonaws.com";
 
   void runParseStatusTest()
   {
@@ -97,7 +100,7 @@ public:
   void runCapabilitesTest()
   {
     QUrl osm;
-    osm.setUrl(OSMAPI_URL);
+    osm.setUrl(OSM_API_URL);
 
     QList<QString> changesets;
     OsmApiNetworkRequestPtr request(new OsmApiNetworkRequest());
@@ -133,7 +136,7 @@ public:
   void runPermissionsTest()
   {
     QUrl osm;
-    osm.setUrl(OSMAPI_URL);
+    osm.setUrl(ME_API_URL);
     osm.setUserInfo("test01:hoottest");
 
     QList<QString> changesets;
@@ -146,21 +149,71 @@ public:
   void runChangesetTest()
   {
     QUrl osm;
-    osm.setUrl(OSMAPI_URL);
+    osm.setUrl(ME_API_URL);
     osm.setUserInfo("test01:hoottest");
 
     QList<QString> changesets;
     changesets.append("test-files/io/OsmChangesetElementTest/ToyTestA.osc");
 
     OsmApiWriter writer(osm, changesets);
-/*
-    writer.doParallel(true);
+
     Settings s;
-    s.set("changeset.apidb.max.writers", 4);
-    s.set("changeset.apidb.max.size", 5);
+    s.set("changeset.apidb.max.writers", 2);
+    s.set("changeset.apidb.max.size", 10);
     writer.setConfiguration(s);
-*/
+
     writer.apply();
+  }
+
+  void runChangesetConflictTest()
+  {
+    QUrl osm;
+    osm.setUrl(ME_API_URL);
+    osm.setUserInfo("test01:hoottest");
+
+    //  Load up the all-create ToyTestA
+    {
+      QList<QString> changesets;
+      changesets.append("test-files/io/OsmChangesetElementTest/ToyTestA.osc");
+
+      OsmApiWriter writer(osm, changesets);
+
+      Settings s;
+      //  Force the changeset to give consistent results with no parallelism
+      s.set("changeset.apidb.max.writers", 1);
+      s.set("changeset.apidb.max.size", 1000);
+      writer.setConfiguration(s);
+
+      writer.apply();
+    }
+
+    //  Load up the conflict dataset
+    {
+      QList<QString> changesets;
+      changesets.append("test-files/io/OsmChangesetElementTest/ToyTestAConflicts.osc");
+
+      OsmApiWriter writer(osm, changesets);
+
+      Settings s;
+      s.set("changeset.apidb.max.writers", 1);
+      s.set("changeset.apidb.max.size", 10);
+      writer.setConfiguration(s);
+
+      writer.apply();
+
+      //  Make sure that some of the changes failed
+      CPPUNIT_ASSERT(writer.containsFailed());
+      HOOT_STR_EQUALS(
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+        "<osmChange version=\"0.6\" generator=\"Hootenanny\">\n"
+        "\t<delete>\n"
+        "\t\t<node id=\"-1\" version=\"0\" lat=\"38.8549321261880536\" lon=\"-104.8979050333482093\" timestamp=\"\" changeset=\"0\">\n"
+        "\t\t\t<tag k=\"node\" v=\"Should fail\"/>\n"
+        "\t\t</node>\n"
+        "\t</delete>\n"
+        "</osmChange>\n",
+        writer.getFailedChangeset());
+    }
   }
 };
 
