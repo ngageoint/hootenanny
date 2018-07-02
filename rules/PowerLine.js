@@ -20,11 +20,11 @@ var sublineMatcher =
 var distanceWeightCoeff = parseFloat(hoot.get("power.line.distance.weight.coefficient")) * -1.0;
 var distanceScoreExtractor = new hoot.DistanceScoreExtractor();
 
-//var angleHistogramExtractor5 = new hoot.AngleHistogramExtractor({"angle.histogram.extractor.smoothing": 1.57});
+var angleHistogramExtractor5 = new hoot.AngleHistogramExtractor({"angle.histogram.extractor.smoothing": 1.57});
 
 var centroidDistanceExtractor = new hoot.CentroidDistanceExtractor();
 
-/*var distanceScoreExtractor7 = new hoot.DistanceScoreExtractor(new hoot.SigmaAggregator());
+var distanceScoreExtractor7 = new hoot.DistanceScoreExtractor(new hoot.SigmaAggregator());
 
 var edgeDistanceExtractor1 = new hoot.EdgeDistanceExtractor(new hoot.MeanAggregator());
 
@@ -47,12 +47,12 @@ var translateMinWordSetLevenshtein_1_15 =
             new hoot.LevenshteinDistance(
                 {"levenshtein.distance.alpha": 1.15}))));;
 
-var parallelScoreExtractor = new hoot.ParallelScoreExtractor();*/
+var parallelScoreExtractor = new hoot.ParallelScoreExtractor();
 
 var weightedMetricDistanceExtractor1 = new hoot.WeightedMetricDistanceExtractor(new hoot.MeanAggregator());
 
-//var weightedShapeDistanceExtractor1 = new hoot.WeightedShapeDistanceExtractor(new hoot.MeanAggregator());
-//var weightedShapeDistanceExtractor7 = new hoot.WeightedShapeDistanceExtractor(new hoot.SigmaAggregator());
+var weightedShapeDistanceExtractor1 = new hoot.WeightedShapeDistanceExtractor(new hoot.MeanAggregator());
+var weightedShapeDistanceExtractor7 = new hoot.WeightedShapeDistanceExtractor(new hoot.SigmaAggregator());
 
 /**
  * Runs before match creation occurs and provides an opportunity to perform custom initialization.
@@ -113,6 +113,9 @@ exports.matchScore = function(map, e1, e2)
 {
   var result = { miss: 1.0, explain:"miss" };
 
+  hoot.trace("e1: " + e1.getTags());
+  hoot.trace("e2: " + e2.getTags());
+
   if (e1.getStatusString() == e2.getStatusString()) 
   {
     return result;
@@ -126,26 +129,41 @@ exports.matchScore = function(map, e1, e2)
     var m2 = sublines.match2;
 
     var centroidDistanceExtractorVal = centroidDistanceExtractor.extract(m, m1, m2);
-    //var angleHistogramExtractor5Val = angleHistogramExtractor5.extract(m, m1, m2);
-    /*var distanceScoreExtractor7Val = distanceScoreExtractor7.extract(m, m1, m2);
+    hoot.trace("centroidDistanceExtractorVal: " + centroidDistanceExtractorVal);
+    var angleHistogramExtractor5Val = angleHistogramExtractor5.extract(m, m1, m2);
+    hoot.trace("angleHistogramExtractor5Val: " + angleHistogramExtractor5Val);
+    var distanceScoreExtractor7Val = distanceScoreExtractor7.extract(m, m1, m2);
+    hoot.trace("distanceScoreExtractor7Val: " + distanceScoreExtractor7Val);
     var edgeDistanceExtractor1Val = edgeDistanceExtractor1.extract(m, m1, m2);
+    hoot.trace("edgeDistanceExtractor1Val: " + edgeDistanceExtractor1Val);
     var euclideanDistanceExtractorVal = euclideanDistanceExtractor.extract(m, m1, m2);
+    hoot.trace("euclideanDistanceExtractorVal: " + euclideanDistanceExtractorVal);
     var hausdorffDistanceExtractorVal = hausdorffDistanceExtractor.extract(m, m1, m2);
+    hoot.trace("hausdorffDistanceExtractorVal: " + hausdorffDistanceExtractorVal);
     var lengthScoreExtractor1Val = lengthScoreExtractor1.extract(m, m1, m2);
+    hoot.trace("lengthScoreExtractor1Val: " + lengthScoreExtractor1Val);
     var lengthScoreExtractor7Val = lengthScoreExtractor7.extract(m, m1, m2);
-    var nameScoreExtractorVal = nameExtractor.extract(m, m1, m2);
+    hoot.trace("lengthScoreExtractor7Val: " + lengthScoreExtractor7Val);
+    //var nameScoreExtractorVal = nameExtractor.extract(m, m1, m2);
+    //hoot.trace("nameScoreExtractorVal: " + nameScoreExtractorVal);
     var parallelScoreExtractorVal = parallelScoreExtractor.extract(m, m1, m2);
-    var soundexExtractorVal = soundexExtractor.extract(m, m1, m2);
-    var translateMinWordSetLevenshtein_1_15Val = translateMinWordSetLevenshtein_1_15.extract(m, m1, m2);*/
+    hoot.trace("parallelScoreExtractorVal: " + parallelScoreExtractorVal);
+    //var soundexExtractorVal = soundexExtractor.extract(m, m1, m2);
+    //hoot.trace("soundexExtractorVal: " + soundexExtractorVal);
+    //var translateMinWordSetLevenshtein_1_15Val = translateMinWordSetLevenshtein_1_15.extract(m, m1, m2);
+    //hoot.trace("translateMinWordSetLevenshtein_1_15Val: " + translateMinWordSetLevenshtein_1_15Val);
     var weightedMetricDistanceExtractor1Val = weightedMetricDistanceExtractor1.extract(m, m1, m2);
-    //var weightedShapeDistanceExtractor1Val = weightedShapeDistanceExtractor1.extract(m, m1, m2);
-    //var weightedShapeDistanceExtractor7Val = weightedShapeDistanceExtractor7.extract(m, m1, m2);
+    hoot.trace("weightedMetricDistanceExtractor1Val: " + weightedMetricDistanceExtractor1Val);
+    var weightedShapeDistanceExtractor1Val = weightedShapeDistanceExtractor1.extract(m, m1, m2);
+    hoot.trace("weightedShapeDistanceExtractor1Val: " + weightedShapeDistanceExtractor1Val);
+    var weightedShapeDistanceExtractor7Val = weightedShapeDistanceExtractor7.extract(m, m1, m2); 
+    hoot.trace("weightedShapeDistanceExtractor7Val: " + weightedShapeDistanceExtractor7Val);
 
     if (/*angleHistogramExtractor5Val > 0.95 &&*/ centroidDistanceExtractorVal > 0.61 && /*distanceScoreExtractor7Val < 0.552 &&
         edgeDistanceExtractor1Val > 0.64 && euclideanDistanceExtractorVal > 0.64 && hausdorffDistanceExtractorVal > 0.14 &&
         lengthScoreExtractor1Val > 0.41 && lengthScoreExtractor7Val < 0.155 && nameScoreExtractorVal < 0.451 &&
         parallelScoreExtractorVal > 0.76 && soundexExtractorVal < 0.75 && translateMinWordSetLevenshtein_1_15Val <= 0.5 &&*/ 
-        weightedMetricDistanceExtractor1Val < 0.59 /*&& weightedShapeDistanceExtractor1Val > 0.64 &&
+        weightedMetricDistanceExtractor1Val < /*0.59*/1.20 /*&& weightedShapeDistanceExtractor1Val > 0.64 &&
         weightedShapeDistanceExtractor7Val < 0.49*/)
     {
       //So far, voltage and location (underground vs overhead) seem to be the most consistent tags to disambiguate matches.  We'll 
