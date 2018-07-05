@@ -59,6 +59,28 @@ var weightedMetricDistanceExtractor1 = new hoot.WeightedMetricDistanceExtractor(
 var weightedShapeDistanceExtractor1 = new hoot.WeightedShapeDistanceExtractor(new hoot.MeanAggregator());
 var weightedShapeDistanceExtractor7 = new hoot.WeightedShapeDistanceExtractor(new hoot.SigmaAggregator());
 
+var angleHistogramExtractor5ValMin = 10000.0;
+var distanceScoreExtractor7ValMin = 10000.0;
+var edgeDistanceExtractor1ValMin = 10000.0;
+var euclideanDistanceExtractorValMin = 10000.0;
+var hausdorffDistanceExtractorValMin = 10000.0;
+var lengthScoreExtractor1ValMin = 10000.0;
+var lengthScoreExtractor7ValMin = 10000.0;
+var parallelScoreExtractorValMin = 10000.0;
+var weightedShapeDistanceExtractor1ValMin = 10000.0;
+var weightedShapeDistanceExtractor7ValMin = 10000.0;
+
+var angleHistogramExtractor5ValMax = 0.0;
+var distanceScoreExtractor7ValMax = 0.0;
+var edgeDistanceExtractor1ValMax = 0.0;
+var euclideanDistanceExtractorValMax = 0.0;
+var hausdorffDistanceExtractorValMax = 0.0;
+var lengthScoreExtractor1ValMax = 0.0;
+var lengthScoreExtractor7ValMax = 0.0;
+var parallelScoreExtractorValMax = 0.0;
+var weightedShapeDistanceExtractor1ValMax = 0.0;
+var weightedShapeDistanceExtractor7ValMax = 0.0;
+
 /**
  * Runs before match creation occurs and provides an opportunity to perform custom initialization.
  */
@@ -188,11 +210,12 @@ exports.matchScore = function(map, e1, e2)
         edgeDistanceExtractor1Val > 0.64 && euclideanDistanceExtractorVal > 0.64 && hausdorffDistanceExtractorVal > 0.14 &&
         lengthScoreExtractor1Val > 0.41 && lengthScoreExtractor7Val < 0.155 && nameScoreExtractorVal < 0.451 &&
         parallelScoreExtractorVal > 0.76 && soundexExtractorVal < 0.75 && translateMinWordSetLevenshtein_1_15Val <= 0.5 &&*/ 
-        weightedMetricDistanceExtractor1Val < /*0.59*/1.20/*wmdMax*/ /*&& weightedShapeDistanceExtractor1Val > 0.64 &&
+        weightedMetricDistanceExtractor1Val < 1.4/*wmdMax*/ /*&& weightedShapeDistanceExtractor1Val > 0.64 &&
         weightedShapeDistanceExtractor7Val < 0.49*/)
     {
-      //So far, voltage and location (underground vs overhead) seem to be the most consistent tags to disambiguate matches.  We'll 
-      //review when features match and those tags disagree, and we'll ignore them if the values for either of them are unpopulated.
+      //So far, voltage and location (underground vs overhead) seem to be the only tags available to disambiguate matches.  We'll 
+      //review when features match and those tags disagree, and we'll ignore those tags completely if the values for either of them 
+      //are unpopulated.
 
       var voltageStr1 = String(e1.getTags().get("voltage")).trim();
       var voltageStr2 = String(e2.getTags().get("voltage")).trim();
@@ -238,6 +261,110 @@ exports.matchScore = function(map, e1, e2)
   else 
   {
     hoot.trace("miss on subline match");
+
+    //min
+    /*if (angleHistogramExtractor5Val < angleHistogramExtractor5ValMin)
+    {
+      angleHistogramExtractor5ValMin = angleHistogramExtractor5Val;
+      hoot.trace(angleHistogramExtractor5ValMin);
+    }
+    if (distanceScoreExtractor7Val < distanceScoreExtractor7ValMin)
+    {
+      distanceScoreExtractor7ValMin = distanceScoreExtractor7Val;
+      hoot.trace(distanceScoreExtractor7ValMin);
+    }
+    if (edgeDistanceExtractor1Val < edgeDistanceExtractor1ValMin)
+    {
+      edgeDistanceExtractor1ValMin = edgeDistanceExtractor1Val;
+      hoot.trace(edgeDistanceExtractor1ValMin);
+    }
+    if (euclideanDistanceExtractorVal < euclideanDistanceExtractorValMin)
+    {
+      euclideanDistanceExtractorValMin = euclideanDistanceExtractorVal;
+      hoot.trace(euclideanDistanceExtractorValMin);
+    }
+    if (hausdorffDistanceExtractorVal < hausdorffDistanceExtractorValMin)
+    {
+      hausdorffDistanceExtractorValMin = hausdorffDistanceExtractorVal;
+      hoot.trace(hausdorffDistanceExtractorValMin);
+    }
+    if (lengthScoreExtractor1Val < lengthScoreExtractor1ValMin)
+    {
+      lengthScoreExtractor1ValMin = lengthScoreExtractor1Val;
+      hoot.trace(lengthScoreExtractor1ValMin);
+    }
+    if (lengthScoreExtractor7Val < lengthScoreExtractor7ValMin)
+    {
+      lengthScoreExtractor7ValMin = lengthScoreExtractor7Val;
+      hoot.trace(lengthScoreExtractor7ValMin);
+    }
+    if (parallelScoreExtractorVal < parallelScoreExtractorValMin)
+    {
+      parallelScoreExtractorValMin = parallelScoreExtractorVal;
+      hoot.trace(parallelScoreExtractorValMin);
+    }
+    if (weightedShapeDistanceExtractor1Val < weightedShapeDistanceExtractor1ValMin)
+    {
+      weightedShapeDistanceExtractor1ValMin = weightedShapeDistanceExtractor1Val;
+      hoot.trace(weightedShapeDistanceExtractor1ValMin);
+    }
+    if (weightedShapeDistanceExtractor7Val < weightedShapeDistanceExtractor7ValMin)
+    {
+      weightedShapeDistanceExtractor7ValMin = weightedShapeDistanceExtractor7Val;
+      hoot.trace(weightedShapeDistanceExtractor7ValMin);
+    }*/
+
+    //max
+    /*if (angleHistogramExtractor5Val > angleHistogramExtractor5ValMax)
+    {
+      angleHistogramExtractor5ValMax = angleHistogramExtractor5Val;
+      hoot.trace(angleHistogramExtractor5ValMax);
+    }
+    if (distanceScoreExtractor7Val > distanceScoreExtractor7ValMax)
+    {
+      distanceScoreExtractor7ValMax = distanceScoreExtractor7Val;
+      hoot.trace(distanceScoreExtractor7ValMax);
+    }
+    if (edgeDistanceExtractor1Val > edgeDistanceExtractor1ValMax)
+    {
+      edgeDistanceExtractor1ValMax = edgeDistanceExtractor1Val;
+      hoot.trace(edgeDistanceExtractor1ValMax);
+    }
+    if (euclideanDistanceExtractorVal > euclideanDistanceExtractorValMax)
+    {
+      euclideanDistanceExtractorValMax = euclideanDistanceExtractorVal;
+      hoot.trace(euclideanDistanceExtractorValMax);
+    }
+    if (hausdorffDistanceExtractorVal > hausdorffDistanceExtractorValMax)
+    {
+      hausdorffDistanceExtractorValMax = hausdorffDistanceExtractorVal;
+      hoot.trace(hausdorffDistanceExtractorValMax);
+    }
+    if (lengthScoreExtractor1Val > lengthScoreExtractor1ValMax)
+    {
+      lengthScoreExtractor1ValMax = lengthScoreExtractor1Val;
+      hoot.trace(lengthScoreExtractor1ValMax);
+    }
+    if (lengthScoreExtractor7Val > lengthScoreExtractor7ValMax)
+    {
+      lengthScoreExtractor7ValMax = lengthScoreExtractor7Val;
+      hoot.trace(lengthScoreExtractor7ValMax);
+    }
+    if (parallelScoreExtractorVal > parallelScoreExtractorValMax)
+    {
+      parallelScoreExtractorValMax = parallelScoreExtractorVal;
+      hoot.trace(parallelScoreExtractorValMax);
+    }
+    if (weightedShapeDistanceExtractor1Val > weightedShapeDistanceExtractor1ValMax)
+    {
+      weightedShapeDistanceExtractor1ValMax = weightedShapeDistanceExtractor1Val;
+      hoot.trace(weightedShapeDistanceExtractor1ValMax);
+    }
+    if (weightedShapeDistanceExtractor7Val > weightedShapeDistanceExtractor7ValMax)
+    {
+      weightedShapeDistanceExtractor7ValMax = weightedShapeDistanceExtractor7Val;
+      hoot.trace(weightedShapeDistanceExtractor7ValMax);
+    }*/
   }
 
   return result;
