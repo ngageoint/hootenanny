@@ -22,7 +22,7 @@ var sublineMatcher2 =
     { "way.matcher.max.angle": 90,
       "way.subline.matcher": "hoot::MaximalSublineMatcher" });
 
-var distanceWeightCoeff = parseFloat(hoot.get("power.line.distance.weight.coefficient")) * -1.0;
+var distanceWeightCoeff = parseFloat(hoot.get("power.line.matcher.distance.weight.coefficient")) * -1.0;
 var distanceScoreExtractor = new hoot.DistanceScoreExtractor();
 
 var angleHistogramExtractor5 = new hoot.AngleHistogramExtractor({"angle.histogram.extractor.smoothing": 1.57});
@@ -132,6 +132,9 @@ exports.matchScore = function(map, e1, e2)
   var sublines; 
   sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
 
+  //This is an attempt to use maximal subline matching in situations when Frechet doesn't find the match.  It does yield some additional
+  //correct matches, but unfortunately, maximal subline matching is much slower than Frechet so the cost doesn't outweigh the benefit
+  //at this point.
   /*if (!sublines)
   {
     sublines = sublineMatcher2.extractMatchingSublines(map, e1, e2);
@@ -145,17 +148,17 @@ exports.matchScore = function(map, e1, e2)
     var m2 = sublines.match2;
 
     var centroidDistanceExtractorVal = centroidDistanceExtractor.extract(m, m1, m2);
-    /*var angleHistogramExtractor5Val = angleHistogramExtractor5.extract(m, m1, m2);
-    var distanceScoreExtractor7Val = distanceScoreExtractor7.extract(m, m1, m2);
+    //var angleHistogramExtractor5Val = angleHistogramExtractor5.extract(m, m1, m2);
+    //var distanceScoreExtractor7Val = distanceScoreExtractor7.extract(m, m1, m2);
     var edgeDistanceExtractor1Val = edgeDistanceExtractor1.extract(m, m1, m2);
-    var euclideanDistanceExtractorVal = euclideanDistanceExtractor.extract(m, m1, m2);
-    var hausdorffDistanceExtractorVal = hausdorffDistanceExtractor.extract(m, m1, m2);
-    var lengthScoreExtractor1Val = lengthScoreExtractor1.extract(m, m1, m2);
-    var lengthScoreExtractor7Val = lengthScoreExtractor7.extract(m, m1, m2);
-    var parallelScoreExtractorVal = parallelScoreExtractor.extract(m, m1, m2);*/
+    //var euclideanDistanceExtractorVal = euclideanDistanceExtractor.extract(m, m1, m2);
+    //var hausdorffDistanceExtractorVal = hausdorffDistanceExtractor.extract(m, m1, m2);
+    //var lengthScoreExtractor1Val = lengthScoreExtractor1.extract(m, m1, m2);
+    //var lengthScoreExtractor7Val = lengthScoreExtractor7.extract(m, m1, m2);
+    //var parallelScoreExtractorVal = parallelScoreExtractor.extract(m, m1, m2);
     var weightedMetricDistanceExtractor1Val = weightedMetricDistanceExtractor1.extract(m, m1, m2);
     //var weightedShapeDistanceExtractor1Val = weightedShapeDistanceExtractor1.extract(m, m1, m2);
-    //var weightedShapeDistanceExtractor7Val = weightedShapeDistanceExtractor7.extract(m, m1, m2);
+    var weightedShapeDistanceExtractor7Val = weightedShapeDistanceExtractor7.extract(m, m1, m2);
 
     /*hoot.trace("centroidDistanceExtractorVal: " + centroidDistanceExtractorVal);
     hoot.trace("angleHistogramExtractor5Val: " + angleHistogramExtractor5Val);
@@ -170,28 +173,33 @@ exports.matchScore = function(map, e1, e2)
     hoot.trace("weightedShapeDistanceExtractor1Val: " + weightedShapeDistanceExtractor1Val);
     hoot.trace("weightedShapeDistanceExtractor7Val: " + weightedShapeDistanceExtractor7Val);*/
 
-    //var nameScoreExtractorVal = nameExtractor.extract(m, m1, m2);
-    //var soundexExtractorVal = soundexExtractor.extract(m, m1, m2);
-    //var translateMinWordSetLevenshtein_1_15Val = translateMinWordSetLevenshtein_1_15.extract(m, m1, m2);
-
-    //hoot.trace("nameScoreExtractorVal: " + nameScoreExtractorVal);
-    //hoot.trace("soundexExtractorVal: " + soundexExtractorVal);
-    //hoot.trace("translateMinWordSetLevenshtein_1_15Val: " + translateMinWordSetLevenshtein_1_15Val);
-
     /*var wmdMax = 1.2;
     if (maximalUsed)
     {
       wmdMax = 1.39;
     }*/
 
-    if (/*angleHistogramExtractor5Val > 0.95 &&*/ centroidDistanceExtractorVal > 0.61 && /*distanceScoreExtractor7Val < 0.552 &&
-        edgeDistanceExtractor1Val > 0.64 && euclideanDistanceExtractorVal > 0.64 && hausdorffDistanceExtractorVal > 0.14 &&
-        lengthScoreExtractor1Val > 0.41 && lengthScoreExtractor7Val < 0.155 && nameScoreExtractorVal < 0.451 &&
-        parallelScoreExtractorVal > 0.76 && soundexExtractorVal < 0.75 && translateMinWordSetLevenshtein_1_15Val <= 0.5 &&*/ 
-        weightedMetricDistanceExtractor1Val < 1.4 /*&& weightedShapeDistanceExtractor1Val > 0.64 &&
-        weightedShapeDistanceExtractor7Val < 0.49*/)
+    /*if (angleHistogramExtractor5Val > 0.953 && 
+        distanceScoreExtractor7Val < 0.403 &&
+        edgeDistanceExtractor1Val > 0.645 && //0.997
+        euclideanDistanceExtractorVal > 0.647 && //0.718, 0.853
+        hausdorffDistanceExtractorVal > 0.497 && //0.815
+        lengthScoreExtractor1Val > 0.417 && //0.633, 0.696
+        lengthScoreExtractor7Val < 0.245 && //0.138
+        parallelScoreExtractorVal > 0.803 && //0.853
+        weightedShapeDistanceExtractor1Val > 0.803 &&
+        weightedShapeDistanceExtractor7Val == 0.0)*/
+    if ((centroidDistanceExtractorVal > 0.61 && weightedMetricDistanceExtractor1Val < 1.4) || 
+        (edgeDistanceExtractor1Val > 0.997 && weightedShapeDistanceExtractor7Val == 0.0
+         /*euclideanDistanceExtractorVal > 0.853 && 
+         hausdorffDistanceExtractorVal > 0.815 && 
+         lengthScoreExtractor1Val > 0.696 &&
+         lengthScoreExtractor7Val < 0.138 && 
+         parallelScoreExtractorVal > 0.853 && 
+         weightedShapeDistanceExtractor1Val > 0.803 &&*/
+         ))
     {
-      //So far, voltage and location (underground vs overhead) seem to be the only tags available to disambiguate matches.  We'll 
+      //So far, voltage and location (underground vs overhead) seem to be the only tags available to disambiguate power line matches.  We'll 
       //review when features match and those tags disagree, and we'll ignore those tags completely if the values for either of them 
       //are unpopulated.
 
@@ -238,7 +246,7 @@ exports.matchScore = function(map, e1, e2)
   }
   else 
   {
-    hoot.debug("miss on subline match");
+    hoot.trace("miss on subline match");
   }
 
   return result;
@@ -281,14 +289,14 @@ exports.getMatchFeatureDetails = function(map, e1, e2)
 
     featureDetails["angleHistogramExtractor5"] = angleHistogramExtractor5.extract(m, m1, m2);
     featureDetails["distanceScoreExtractor7"] = distanceScoreExtractor7.extract(m, m1, m2);
-    featureDetails["edgeDistanceExtractor1Val"] = edgeDistanceExtractor1Val.extract(m, m1, m2);
-    featureDetails["euclideanDistanceExtractorVal"] = euclideanDistanceExtractorVal.extract(m, m1, m2);
-    featureDetails["hausdorffDistanceExtractorVal"] = hausdorffDistanceExtractorVal.extract(m, m1, m2);
-    featureDetails["lengthScoreExtractor1Val"] = lengthScoreExtractor1Val.extract(m, m1, m2);
-    featureDetails["lengthScoreExtractor7Val"] = lengthScoreExtractor7Val.extract(m, m1, m2);
-    featureDetails["parallelScoreExtractorVal"] = parallelScoreExtractorVal.extract(m, m1, m2);
-    featureDetails["weightedShapeDistanceExtractor1Val"] = weightedShapeDistanceExtractor1Val.extract(m, m1, m2);
-    featureDetails["weightedShapeDistanceExtractor7Val"] = weightedShapeDistanceExtractor7Val.extract(m, m1, m2);
+    featureDetails["edgeDistanceExtractor1Val"] = edgeDistanceExtractor1.extract(m, m1, m2);
+    featureDetails["euclideanDistanceExtractorVal"] = euclideanDistanceExtractor.extract(m, m1, m2);
+    featureDetails["hausdorffDistanceExtractorVal"] = hausdorffDistanceExtractor.extract(m, m1, m2);
+    featureDetails["lengthScoreExtractor1Val"] = lengthScoreExtractor1.extract(m, m1, m2);
+    featureDetails["lengthScoreExtractor7Val"] = lengthScoreExtractor7.extract(m, m1, m2);
+    featureDetails["parallelScoreExtractorVal"] = parallelScoreExtractor.extract(m, m1, m2);
+    featureDetails["weightedShapeDistanceExtractor1Val"] = weightedShapeDistanceExtractor1.extract(m, m1, m2);
+    featureDetails["weightedShapeDistanceExtractor7Val"] = weightedShapeDistanceExtractor7.extract(m, m1, m2);
   }
 
   return featureDetails;
