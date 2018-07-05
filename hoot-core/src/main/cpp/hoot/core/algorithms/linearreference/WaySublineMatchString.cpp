@@ -172,6 +172,7 @@ bool WaySublineMatchString::isValid() const
 
 void WaySublineMatchString::removeEmptyMatches()
 {
+  LOG_TRACE("Removing empty matches...");
   MatchCollection copy = _matches;
   _matches.clear();
   for (size_t i = 0; i < copy.size(); i++)

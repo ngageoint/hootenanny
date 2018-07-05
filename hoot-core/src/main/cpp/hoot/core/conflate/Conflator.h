@@ -149,7 +149,7 @@ protected:
   bool _debug;
   int _maxIterations;
   double _bestScore;
-  Meters _vectorError, _maxDividedSeparation;
+  Meters _maxDividedSeparation;
   std::priority_queue<
           boost::shared_ptr<const WorkingMap>,
           std::deque< boost::shared_ptr<const WorkingMap> >,

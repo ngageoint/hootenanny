@@ -111,8 +111,8 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPt
   // Try with all combinations of forward and reversed ways. This is very expensive for
   // multilinestrings with lots of ways in them. Though those shouldn't be common.
   vector<bool> reversed1(ways1.size(), false), reversed2(ways2.size(), false);
-  ScoredMatch scoredResult = _findBestMatch(map, maxRelevantDistance, ways1, ways2, reversed1,
-    reversed2);
+  ScoredMatch scoredResult =
+    _findBestMatch(map, maxRelevantDistance, ways1, ways2, reversed1, reversed2);
   LOG_VART(scoredResult);
 
   // convert the best match into a WaySublineStringMatch and return.
@@ -121,9 +121,10 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPt
     WaySublineMatchString result = scoredResult.matches;
     // this likely shouldn't be necessary. See https://github.com/ngageoint/hootenanny/issues/157.
     result.removeEmptyMatches();
+    LOG_VART(result);
     return result;
   }
-  catch(const OverlappingMatchesException &e)
+  catch(const OverlappingMatchesException& /*e*/)
   {
     throw NeedsReviewException("Internal Error: Multiple overlapping way matches were found within "
       "one set of ways.  Please report this to https://github.com/ngageoint/hootenanny.");

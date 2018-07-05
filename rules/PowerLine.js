@@ -17,6 +17,11 @@ var sublineMatcher =
     { "way.matcher.max.angle": hoot.get("power.line.matcher.max.angle"),
       "way.subline.matcher": hoot.get("power.line.subline.matcher") });
 
+var sublineMatcher2 =
+  new hoot.MaximalSublineStringMatcher(
+    { "way.matcher.max.angle": 90,
+      "way.subline.matcher": "hoot::MaximalSublineMatcher" });
+
 var distanceWeightCoeff = parseFloat(hoot.get("power.line.distance.weight.coefficient")) * -1.0;
 var distanceScoreExtractor = new hoot.DistanceScoreExtractor();
 
@@ -115,13 +120,24 @@ exports.matchScore = function(map, e1, e2)
 
   hoot.trace("e1: " + e1.getTags());
   hoot.trace("e2: " + e2.getTags());
+  hoot.trace("e1: " +e1.getStatusString());
+  hoot.trace("e2: " +e2.getStatusString());
 
   if (e1.getStatusString() == e2.getStatusString()) 
   {
     return result;
   }
 
-  var sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
+  var maximalUsed = false;
+  var sublines; 
+  sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
+
+  /*if (!sublines)
+  {
+    sublines = sublineMatcher2.extractMatchingSublines(map, e1, e2);
+    maximalUsed = true;
+  }*/
+
   if (sublines)
   {
     var m = sublines.map;
@@ -129,41 +145,50 @@ exports.matchScore = function(map, e1, e2)
     var m2 = sublines.match2;
 
     var centroidDistanceExtractorVal = centroidDistanceExtractor.extract(m, m1, m2);
-    hoot.trace("centroidDistanceExtractorVal: " + centroidDistanceExtractorVal);
-    var angleHistogramExtractor5Val = angleHistogramExtractor5.extract(m, m1, m2);
-    hoot.trace("angleHistogramExtractor5Val: " + angleHistogramExtractor5Val);
-    var distanceScoreExtractor7Val = distanceScoreExtractor7.extract(m, m1, m2);
-    hoot.trace("distanceScoreExtractor7Val: " + distanceScoreExtractor7Val);
-    var edgeDistanceExtractor1Val = edgeDistanceExtractor1.extract(m, m1, m2);
-    hoot.trace("edgeDistanceExtractor1Val: " + edgeDistanceExtractor1Val);
-    var euclideanDistanceExtractorVal = euclideanDistanceExtractor.extract(m, m1, m2);
-    hoot.trace("euclideanDistanceExtractorVal: " + euclideanDistanceExtractorVal);
-    var hausdorffDistanceExtractorVal = hausdorffDistanceExtractor.extract(m, m1, m2);
-    hoot.trace("hausdorffDistanceExtractorVal: " + hausdorffDistanceExtractorVal);
-    var lengthScoreExtractor1Val = lengthScoreExtractor1.extract(m, m1, m2);
-    hoot.trace("lengthScoreExtractor1Val: " + lengthScoreExtractor1Val);
-    var lengthScoreExtractor7Val = lengthScoreExtractor7.extract(m, m1, m2);
-    hoot.trace("lengthScoreExtractor7Val: " + lengthScoreExtractor7Val);
-    //var nameScoreExtractorVal = nameExtractor.extract(m, m1, m2);
-    //hoot.trace("nameScoreExtractorVal: " + nameScoreExtractorVal);
-    var parallelScoreExtractorVal = parallelScoreExtractor.extract(m, m1, m2);
-    hoot.trace("parallelScoreExtractorVal: " + parallelScoreExtractorVal);
-    //var soundexExtractorVal = soundexExtractor.extract(m, m1, m2);
-    //hoot.trace("soundexExtractorVal: " + soundexExtractorVal);
-    //var translateMinWordSetLevenshtein_1_15Val = translateMinWordSetLevenshtein_1_15.extract(m, m1, m2);
-    //hoot.trace("translateMinWordSetLevenshtein_1_15Val: " + translateMinWordSetLevenshtein_1_15Val);
+    //var angleHistogramExtractor5Val = angleHistogramExtractor5.extract(m, m1, m2);
+    //var distanceScoreExtractor7Val = distanceScoreExtractor7.extract(m, m1, m2);
+    //var edgeDistanceExtractor1Val = edgeDistanceExtractor1.extract(m, m1, m2);
+    //var euclideanDistanceExtractorVal = euclideanDistanceExtractor.extract(m, m1, m2);
+    //var hausdorffDistanceExtractorVal = hausdorffDistanceExtractor.extract(m, m1, m2);
+    //var lengthScoreExtractor1Val = lengthScoreExtractor1.extract(m, m1, m2);
+    //var lengthScoreExtractor7Val = lengthScoreExtractor7.extract(m, m1, m2);
+    //var parallelScoreExtractorVal = parallelScoreExtractor.extract(m, m1, m2);
     var weightedMetricDistanceExtractor1Val = weightedMetricDistanceExtractor1.extract(m, m1, m2);
+    //var weightedShapeDistanceExtractor1Val = weightedShapeDistanceExtractor1.extract(m, m1, m2);
+    //var weightedShapeDistanceExtractor7Val = weightedShapeDistanceExtractor7.extract(m, m1, m2); 
+
+    /*hoot.trace("centroidDistanceExtractorVal: " + centroidDistanceExtractorVal);
+    hoot.trace("angleHistogramExtractor5Val: " + angleHistogramExtractor5Val);
+    hoot.trace("distanceScoreExtractor7Val: " + distanceScoreExtractor7Val);
+    hoot.trace("edgeDistanceExtractor1Val: " + edgeDistanceExtractor1Val);
+    hoot.trace("euclideanDistanceExtractorVal: " + euclideanDistanceExtractorVal);
+    hoot.trace("hausdorffDistanceExtractorVal: " + hausdorffDistanceExtractorVal);
+    hoot.trace("lengthScoreExtractor1Val: " + lengthScoreExtractor1Val);
+    hoot.trace("lengthScoreExtractor7Val: " + lengthScoreExtractor7Val);
+    hoot.trace("parallelScoreExtractorVal: " + parallelScoreExtractorVal);
     hoot.trace("weightedMetricDistanceExtractor1Val: " + weightedMetricDistanceExtractor1Val);
-    var weightedShapeDistanceExtractor1Val = weightedShapeDistanceExtractor1.extract(m, m1, m2);
     hoot.trace("weightedShapeDistanceExtractor1Val: " + weightedShapeDistanceExtractor1Val);
-    var weightedShapeDistanceExtractor7Val = weightedShapeDistanceExtractor7.extract(m, m1, m2); 
-    hoot.trace("weightedShapeDistanceExtractor7Val: " + weightedShapeDistanceExtractor7Val);
+    hoot.trace("weightedShapeDistanceExtractor7Val: " + weightedShapeDistanceExtractor7Val);*/
+
+    //var nameScoreExtractorVal = nameExtractor.extract(m, m1, m2);
+    //var soundexExtractorVal = soundexExtractor.extract(m, m1, m2);
+    //var translateMinWordSetLevenshtein_1_15Val = translateMinWordSetLevenshtein_1_15.extract(m, m1, m2);
+
+    //hoot.trace("nameScoreExtractorVal: " + nameScoreExtractorVal);
+    //hoot.trace("soundexExtractorVal: " + soundexExtractorVal);
+    //hoot.trace("translateMinWordSetLevenshtein_1_15Val: " + translateMinWordSetLevenshtein_1_15Val);
+
+    /*var wmdMax = 1.2;
+    if (maximalUsed)
+    {
+      wmdMax = 1.39;
+    }*/
 
     if (/*angleHistogramExtractor5Val > 0.95 &&*/ centroidDistanceExtractorVal > 0.61 && /*distanceScoreExtractor7Val < 0.552 &&
         edgeDistanceExtractor1Val > 0.64 && euclideanDistanceExtractorVal > 0.64 && hausdorffDistanceExtractorVal > 0.14 &&
         lengthScoreExtractor1Val > 0.41 && lengthScoreExtractor7Val < 0.155 && nameScoreExtractorVal < 0.451 &&
         parallelScoreExtractorVal > 0.76 && soundexExtractorVal < 0.75 && translateMinWordSetLevenshtein_1_15Val <= 0.5 &&*/ 
-        weightedMetricDistanceExtractor1Val < /*0.59*/1.20 /*&& weightedShapeDistanceExtractor1Val > 0.64 &&
+        weightedMetricDistanceExtractor1Val < /*0.59*/1.20/*wmdMax*/ /*&& weightedShapeDistanceExtractor1Val > 0.64 &&
         weightedShapeDistanceExtractor7Val < 0.49*/)
     {
       //So far, voltage and location (underground vs overhead) seem to be the most consistent tags to disambiguate matches.  We'll 
@@ -177,8 +202,9 @@ exports.matchScore = function(map, e1, e2)
         var voltage2 = parseInt(voltageStr2);
         if (!isNaN(voltage1) && !isNaN(voltage2) && voltage1 != voltage2)
         {
-          hoot.trace("Explicit voltage mismatch between matching features: " + voltage1 + " " + voltage2);
-          result = { review: 1.0, explain:"review" };
+          var msg = "Explicit voltage mismatch between matching features: " + voltage1 + " " + voltage2
+          hoot.trace(msg);
+          result = { review: 1.0, explain:msg };
           return result;
         }
       }
@@ -188,8 +214,9 @@ exports.matchScore = function(map, e1, e2)
       if (location1 !== 'undefined' && location1 !== null && location1 !== '' && 
           location2 !== 'undefined' && location2 !== null && location2 !== '' && location1 !== location2)
       {
-        hoot.trace("Explicit location mismatch between matching features: " + location1 + " " + location2);
-        result = { review: 1.0, explain:"review" };
+        var msg = "Explicit location mismatch between matching features: " + location1 + " " + location2;
+        hoot.trace(msg);
+        result = { review: 1.0, explain:msg };
         return result;
       }
 
@@ -197,10 +224,20 @@ exports.matchScore = function(map, e1, e2)
       var distanceScoreValue = distanceScoreExtractor.extract(m, m1, m2);
       var delta = (1.0 - distanceScoreValue) * distanceWeightCoeff;
       result.match = 1.0 + delta;
+      hoot.trace(result.match);
       result.miss = 0.0 - delta;
+      hoot.trace(result.miss);
 
       return result;
     }
+    else
+    {
+      hoot.trace("miss on score");   
+    }
+  }
+  else 
+  {
+    hoot.trace("miss on subline match");
   }
 
   return result;
