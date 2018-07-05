@@ -2429,7 +2429,7 @@ Automatically calculates the search radius to be used during conflation of power
 sheet tie point distances.  When this setting is enabled, rubbersheeting is not allowed as a
 pre-conflation operation on the input data to be conflated.
 
-=== power.line.distance.weight.coefficient
+=== power.line.matcher.distance.weight.coefficient
 
 * Data Type: double
 * Default Value: `0.01`
