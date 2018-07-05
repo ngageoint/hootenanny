@@ -32,27 +32,24 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/conflate/Conflator.h>
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
+#include <hoot/core/conflate/Conflator.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/index/KnnWayIterator.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/MetadataTags.h>
-#include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
 
-using namespace hoot;
-
 // Qt
-#include <QDebug>
 #include <QTime>
-#include <QDir>
 
 // TGS
 #include <tgs/RStarTree/KnnIterator.h>
@@ -60,15 +57,13 @@ using namespace hoot;
 #include <tgs/Statistics/Random.h>
 using namespace Tgs;
 
-#include "TestUtils.h"
-
 using namespace geos::geom;
 using namespace std;
 
 namespace hoot
 {
 
-class OsmMapTest : public CppUnit::TestFixture
+class OsmMapTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(OsmMapTest);
   CPPUNIT_TEST(runCopyTest);

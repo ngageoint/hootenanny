@@ -35,16 +35,15 @@
 #include <geos/geom/Coordinate.h>
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/zindex/ZValue.h>
-
-#include "../../TestUtils.h"
 
 using namespace std;
 
 namespace hoot
 {
 
-class ZValueTest : public CppUnit::TestFixture
+class ZValueTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ZValueTest);
   CPPUNIT_TEST(testBasics);

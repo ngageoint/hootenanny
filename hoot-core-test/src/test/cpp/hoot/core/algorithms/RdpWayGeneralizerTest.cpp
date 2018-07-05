@@ -34,27 +34,20 @@
 #include <boost/random/uniform_real.hpp>
 #include <boost/random/linear_congruential.hpp>
 
-// Qt
-#include <QFile>
-#include <QTextStream>
-#include <QString>
-#include <QDir>
-
 // Hoot
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/util/Log.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/RdpWayGeneralizer.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-
-#include "../TestUtils.h"
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
 
 using namespace geos::geom;
 
 namespace hoot
 {
 
-class RdpWayGeneralizerTest : public CppUnit::TestFixture
+class RdpWayGeneralizerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(RdpWayGeneralizerTest);
   CPPUNIT_TEST(runPerpendicularDistanceTest);
@@ -69,10 +62,10 @@ class RdpWayGeneralizerTest : public CppUnit::TestFixture
 
 public:
 
-  QMap<QString, QList<ConstNodePtr > > _inputPointsCache;
-  QMap<QString, QList<Coordinate> > _inputCoordsCache;
+  QMap<QString, QList<ConstNodePtr>> _inputPointsCache;
+  QMap<QString, QList<Coordinate>> _inputCoordsCache;
 
-  QList<ConstNodePtr > readPoints(const QString filePath)
+  QList<ConstNodePtr> readPoints(const QString filePath)
   {
     OsmMap::resetCounters();
 
@@ -88,7 +81,7 @@ public:
     }
 
     QTextStream textStream(&file);
-    QList<ConstNodePtr > points;
+    QList<ConstNodePtr> points;
     OsmMapPtr map(new OsmMap());
     while (!textStream.atEnd())
     {
@@ -148,14 +141,14 @@ public:
     return outFile;
   }
 
-  QString writePointOutput(const QList<ConstNodePtr >& points, const QString outDir,
+  QString writePointOutput(const QList<ConstNodePtr>& points, const QString outDir,
                            const QString outFileName)
   {
     OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
 
     //points will be empty for the generalize calls with way inputs instead of points
-    for (QList<ConstNodePtr >::const_iterator it = points.constBegin();
+    for (QList<ConstNodePtr>::const_iterator it = points.constBegin();
          it != points.constEnd(); ++it)
     {
       NodePtr nodeCopy(new Node(*(*it).get()));
@@ -167,7 +160,7 @@ public:
 
   void runPerpendicularDistanceTest()
   {
-    const QList<ConstNodePtr >& inputPoints =
+    const QList<ConstNodePtr>& inputPoints =
       readPoints("test-files/algorithms/RdpWayGeneralizerTest/RdpWayGeneralizerTestDataset1.txt");
     CPPUNIT_ASSERT_EQUAL(197, inputPoints.size());
 
@@ -181,12 +174,12 @@ public:
 
   void runCalcPointsInput1aTest()
   {
-    const QList<ConstNodePtr >& inputPoints =
+    const QList<ConstNodePtr>& inputPoints =
       readPoints("test-files/algorithms/RdpWayGeneralizerTest/RdpWayGeneralizerTestDataset1.txt");
     CPPUNIT_ASSERT_EQUAL(197, inputPoints.size());
 
     RdpWayGeneralizer generalizer(0.1);
-    const QList<ConstNodePtr >& outputPoints =
+    const QList<ConstNodePtr>& outputPoints =
       generalizer.getGeneralizedPoints(inputPoints);
     CPPUNIT_ASSERT_EQUAL(148, outputPoints.size());
     QString outFile =
@@ -199,12 +192,12 @@ public:
 
   void runCalcPointsInput1bTest()
   {
-    const QList<ConstNodePtr >& inputPoints =
+    const QList<ConstNodePtr>& inputPoints =
       readPoints("test-files/algorithms/RdpWayGeneralizerTest/RdpWayGeneralizerTestDataset1.txt");
     CPPUNIT_ASSERT_EQUAL(197, inputPoints.size());
 
     RdpWayGeneralizer generalizer(5.9);
-    const QList<ConstNodePtr >& outputPoints =
+    const QList<ConstNodePtr>& outputPoints =
       generalizer.getGeneralizedPoints(inputPoints);
     CPPUNIT_ASSERT_EQUAL(22, outputPoints.size());
     QString outFile =
@@ -217,12 +210,12 @@ public:
 
   void runCalcPointsInput2aTest()
   {
-    const QList<ConstNodePtr >& inputPoints =
+    const QList<ConstNodePtr>& inputPoints =
       readPoints("test-files/algorithms/RdpWayGeneralizerTest/RdpWayGeneralizerTestDataset2.txt");
     CPPUNIT_ASSERT_EQUAL(77, inputPoints.size());
 
     RdpWayGeneralizer generalizer(0.1);
-    const QList<ConstNodePtr >& outputPoints =
+    const QList<ConstNodePtr>& outputPoints =
       generalizer.getGeneralizedPoints(inputPoints);
     CPPUNIT_ASSERT_EQUAL(48, outputPoints.size());
     QString outFile =
@@ -235,12 +228,12 @@ public:
 
   void runCalcPointsInput2bTest()
   {
-    const QList<ConstNodePtr >& inputPoints =
+    const QList<ConstNodePtr>& inputPoints =
       readPoints("test-files/algorithms/RdpWayGeneralizerTest/RdpWayGeneralizerTestDataset2.txt");
     CPPUNIT_ASSERT_EQUAL(77, inputPoints.size());
 
     RdpWayGeneralizer generalizer(5.9);
-    const QList<ConstNodePtr >& outputPoints =
+    const QList<ConstNodePtr>& outputPoints =
       generalizer.getGeneralizedPoints(inputPoints);
     CPPUNIT_ASSERT_EQUAL(4, outputPoints.size());
     QString outFile =
@@ -334,7 +327,7 @@ public:
 
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MultiLineStringSplitterTest, "current");
+//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RdpWayGeneralizerTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RdpWayGeneralizerTest, "quick");
 
 }

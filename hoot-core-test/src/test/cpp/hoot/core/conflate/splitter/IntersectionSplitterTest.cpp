@@ -27,6 +27,7 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/splitter/IntersectionSplitter.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
@@ -37,16 +38,10 @@
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// Qt
-#include <QDebug>
-#include <QDir>
-
-#include "../../TestUtils.h"
-
 namespace hoot
 {
 
-class IntersectionSplitterTest : public CppUnit::TestFixture
+class IntersectionSplitterTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(IntersectionSplitterTest);
   CPPUNIT_TEST(runTest);
@@ -55,8 +50,9 @@ class IntersectionSplitterTest : public CppUnit::TestFixture
 
 public:
 
-  void setUp()
+  virtual void setUp()
   {
+    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/conflate/splitter");
   }
 

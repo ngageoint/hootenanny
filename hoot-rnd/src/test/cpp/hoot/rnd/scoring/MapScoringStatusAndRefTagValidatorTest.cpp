@@ -27,12 +27,9 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/rnd/scoring/MapScoringStatusAndRefTagValidator.h>
-using namespace hoot;
-
-// Boost
-using namespace boost;
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -40,16 +37,10 @@ using namespace boost;
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// Qt
-#include <QDebug>
-
-// Standard
-#include <stdio.h>
-
 namespace hoot
 {
 
-class MapScoringStatusAndRefTagValidatorTest : public CppUnit::TestFixture
+class MapScoringStatusAndRefTagValidatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(MapScoringStatusAndRefTagValidatorTest);
   CPPUNIT_TEST(runTest);
@@ -105,10 +96,6 @@ public:
 
 };
 
-}
-
 CPPUNIT_TEST_SUITE_REGISTRATION(MapScoringStatusAndRefTagValidatorTest);
 
-
-
-
+}

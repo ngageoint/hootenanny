@@ -26,9 +26,9 @@
  */
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
-using namespace hoot;
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -36,14 +36,13 @@ using namespace hoot;
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-#include "../TestUtils.h"
 
 using namespace geos::geom;
 
 namespace hoot
 {
 
-class GeometryUtilsTest : public CppUnit::TestFixture
+class GeometryUtilsTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(GeometryUtilsTest);
   CPPUNIT_TEST(calculateDestinationTest);

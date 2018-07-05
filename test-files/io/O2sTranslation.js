@@ -70,6 +70,7 @@ function getDbSchema()
     var tags = {
         'name':'tags',
         'type':'String',
+        'length':'254',
     };
 
     var o2s_p = {

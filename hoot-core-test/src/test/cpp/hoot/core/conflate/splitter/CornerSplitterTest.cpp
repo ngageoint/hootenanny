@@ -27,10 +27,11 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/splitter/CornerSplitter.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/util/MapProjector.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -38,16 +39,10 @@
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// Qt
-#include <QDebug>
-#include <QDir>
-
-#include "../../TestUtils.h"
-
 namespace hoot
 {
 
-class CornerSplitterTest : public CppUnit::TestFixture
+class CornerSplitterTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(CornerSplitterTest);
   CPPUNIT_TEST(runTest);
@@ -55,8 +50,9 @@ class CornerSplitterTest : public CppUnit::TestFixture
 
 public:
 
-  void setUp()
+  virtual void setUp()
   {
+    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/conflate/splitter");
   }
 

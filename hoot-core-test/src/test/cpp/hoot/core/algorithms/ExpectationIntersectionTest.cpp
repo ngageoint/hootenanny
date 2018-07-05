@@ -32,13 +32,14 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/ExpectationIntersection.h>
 #include <hoot/core/util/Log.h>
 
 // OpenCV
 // #include <opencv/cv.h>
 
-// tbs
+// Boost
 #include <boost/random/normal_distribution.hpp>
 #include <boost/random/linear_congruential.hpp>
 #include <boost/random/variate_generator.hpp>
@@ -46,16 +47,14 @@
 // Tgs
 #include <tgs/Statistics/Random.h>
 
-#include "../TestUtils.h"
+using namespace cv;
+using namespace std;
 
 namespace hoot
 {
 
-using namespace cv;
-using namespace hoot;
-using namespace std;
 
-class ExpectationIntersectionTest : public CppUnit::TestFixture
+class ExpectationIntersectionTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ExpectationIntersectionTest);
   CPPUNIT_TEST(runTest);

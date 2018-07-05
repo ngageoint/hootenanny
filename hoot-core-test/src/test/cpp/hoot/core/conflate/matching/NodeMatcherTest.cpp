@@ -26,6 +26,7 @@
  */
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/matching/NodeMatcher.h>
 #include <hoot/core/util/Settings.h>
 
@@ -38,14 +39,12 @@
 // Standard
 #include <math.h>
 
-#include "../../TestUtils.h"
-
 using namespace std;
 
 namespace hoot
 {
 
-class NodeMatcherTest : public CppUnit::TestFixture
+class NodeMatcherTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(NodeMatcherTest);
   CPPUNIT_TEST(runSimpleAnglesTest);

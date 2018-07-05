@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __PROBABLE_PATH_CALCULATOR_H__
@@ -34,9 +34,9 @@
 #include <sstream>
 #include <vector>
 
-#include "../HashMap.h"
-#include "../TgsExport.h"
-#include "../RasterOps/Image.hpp"
+#include <tgs/HashMap.h>
+#include <tgs/TgsExport.h>
+#include <tgs/RasterOps/Image.hpp>
 
 namespace Tgs
 {

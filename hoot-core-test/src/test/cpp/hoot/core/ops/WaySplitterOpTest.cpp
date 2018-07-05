@@ -31,6 +31,7 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/io/OsmXmlReader.h>
@@ -38,20 +39,14 @@
 #include <hoot/core/ops/WaySplitterOp.h>
 #include <hoot/core/util/Log.h>
 
-// Qt
-#include <QDebug>
-#include <QDir>
-
 // TGS
 #include <tgs/Statistics/Random.h>
-
-#include "../TestUtils.h"
+using namespace Tgs;
 
 namespace hoot
 {
-using namespace Tgs;
 
-class WaySplitterOpTest : public CppUnit::TestFixture
+class WaySplitterOpTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(WaySplitterOpTest);
   CPPUNIT_TEST(runTest);
@@ -59,8 +54,9 @@ class WaySplitterOpTest : public CppUnit::TestFixture
 
 public:
 
-  void setUp()
+  virtual void setUp()
   {
+    HootTestFixture::setUp();
     TestUtils::resetEnvironment();
   }
 

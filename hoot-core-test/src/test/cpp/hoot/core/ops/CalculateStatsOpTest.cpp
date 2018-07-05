@@ -27,6 +27,7 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/ops/CalculateStatsOp.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -40,12 +41,10 @@
 // Qt
 #include <qnumeric.h>
 
-#include "../TestUtils.h"
-
 namespace hoot
 {
 
-class CalculateStatsOpTest : public CppUnit::TestFixture
+class CalculateStatsOpTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(CalculateStatsOpTest);
   CPPUNIT_TEST(runStatsNumTest);
@@ -55,15 +54,10 @@ class CalculateStatsOpTest : public CppUnit::TestFixture
 
 public:
 
-  void setUp()
+  virtual void setUp()
   {
-    TestUtils::resetEnvironment();
+    HootTestFixture::setUp();
     conf().set(ConfigOptions::getStatsTranslateScriptKey(), "${HOOT_HOME}/translations/HootTest.js");
-  }
-
-  void tearDown()
-  {
-    TestUtils::resetEnvironment();
   }
 
   //this is here just to prevent someone from adding a stat that doesn't get tested in this test
@@ -417,9 +411,7 @@ private:
 
 };
 
-}
-
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::CalculateStatsOpTest, "slow");
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::CalculateStatsOpTest, "current");
 
-
+}

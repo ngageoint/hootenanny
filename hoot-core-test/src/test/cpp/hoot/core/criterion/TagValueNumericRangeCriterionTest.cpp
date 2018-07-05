@@ -26,19 +26,15 @@
  */
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/criterion/TagValueNumericRangeCriterion.h>
-
-// Qt
-#include <QDir>
-
-#include "../TestUtils.h"
 
 using namespace geos::geom;
 
 namespace hoot
 {
 
-class TagValueNumericRangeCriterionTest : public CppUnit::TestFixture
+class TagValueNumericRangeCriterionTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(TagValueNumericRangeCriterionTest);
   CPPUNIT_TEST(runInRangeTest);

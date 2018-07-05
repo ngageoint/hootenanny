@@ -51,7 +51,7 @@ using namespace std;
 namespace hoot
 {
 
-class FrechetDistanceTest : public CppUnit::TestFixture
+class FrechetDistanceTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(FrechetDistanceTest);
   CPPUNIT_TEST(simpleFrechet);

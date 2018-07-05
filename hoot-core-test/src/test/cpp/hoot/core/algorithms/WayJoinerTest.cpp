@@ -25,9 +25,8 @@
  * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "../TestUtils.h"
-
 //  Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/WayJoiner.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/conflate/splitter/CornerSplitter.h>
@@ -41,7 +40,7 @@
 namespace hoot
 {
 
-class WayJoinerTest : public CppUnit::TestFixture
+class WayJoinerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(WayJoinerTest);
   CPPUNIT_TEST(runSimpleTest);
@@ -51,8 +50,9 @@ class WayJoinerTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE_END();
 public:
 
-  void setUp()
+  virtual void setUp()
   {
+    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/algorithms/wayjoiner");
   }
 

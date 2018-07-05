@@ -22,17 +22,16 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __INTERNAL_RSTAR_TREE_WRAPPER_H__
 #define __INTERNAL_RSTAR_TREE_WRAPPER_H__
 
 //TGS Includes
-#include "../TgsExport.h"
-#include "DistanceIterator.h"
-#include "IntersectionIterator.h"
-#include "HilbertRTree.h"
-
+#include <tgs/TgsExport.h>
+#include <tgs/RStarTree/DistanceIterator.h>
+#include <tgs/RStarTree/IntersectionIterator.h>
+#include <tgs/RStarTree/HilbertRTree.h>
 
 //Std Includes
 #include <vector>

@@ -35,10 +35,10 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/algorithms/Translator.h>
 #include <hoot/core/util/Log.h>
-using namespace hoot;
 
 // Qt
 #include <QString>
@@ -49,7 +49,7 @@ using namespace hoot;
 namespace hoot
 {
 
-class LevenshteinDistanceTest : public CppUnit::TestFixture
+class LevenshteinDistanceTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(LevenshteinDistanceTest);
   CPPUNIT_TEST(runTest);

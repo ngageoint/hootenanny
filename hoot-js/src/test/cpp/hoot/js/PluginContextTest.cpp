@@ -27,7 +27,6 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-
 #include <hoot/js/HootJsStable.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/PluginContext.h>
@@ -40,7 +39,7 @@ using namespace v8;
 namespace hoot
 {
 
-class PluginContextTest : public CppUnit::TestFixture
+class PluginContextTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(PluginContextTest);
   CPPUNIT_TEST(basicTest);

@@ -26,16 +26,16 @@
  */
 
 // Hoot
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/extractors/SampledAngleHistogramExtractor.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
-using namespace hoot;
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -43,12 +43,10 @@ using namespace hoot;
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-#include "../../TestUtils.h"
-
 namespace hoot
 {
 
-class SampledAngleHistogramExtractorTest : public CppUnit::TestFixture
+class SampledAngleHistogramExtractorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(SampledAngleHistogramExtractorTest);
   CPPUNIT_TEST(runTest);

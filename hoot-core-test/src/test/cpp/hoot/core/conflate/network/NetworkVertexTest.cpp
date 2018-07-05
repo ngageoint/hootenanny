@@ -26,10 +26,10 @@
  */
 
 // Hoot
-#include "../../TestUtils.h"
+#include <hoot/core/TestUtils.h>
+#include <hoot/core/conflate/network/NetworkVertex.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/conflate/network/NetworkVertex.h>
 
 using namespace geos::geom;
 
@@ -38,7 +38,7 @@ namespace hoot
 
 TEST_UTILS_REGISTER_RESET(NetworkVertex)
 
-class NetworkVertexTest : public CppUnit::TestFixture
+class NetworkVertexTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(NetworkVertexTest);
   CPPUNIT_TEST(basicTest);

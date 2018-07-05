@@ -35,21 +35,17 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/MeanWordSetDistance.h>
 #include <hoot/core/algorithms/ExactStringDistance.h>
 #include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/schema/TranslateStringDistance.h>
 #include <hoot/core/util/Log.h>
-using namespace hoot;
 
-// Qt
-#include <QString>
+namespace hoot
+{
 
-// Standard
-#include <string>
-
-
-class TranslateStringDistanceTest : public CppUnit::TestFixture
+class TranslateStringDistanceTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(TranslateStringDistanceTest);
   CPPUNIT_TEST(runTest);
@@ -74,3 +70,4 @@ public:
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(TranslateStringDistanceTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(TranslateStringDistanceTest, "quick");
 
+}

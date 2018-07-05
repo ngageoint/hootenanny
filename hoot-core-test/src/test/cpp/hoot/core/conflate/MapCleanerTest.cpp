@@ -26,21 +26,17 @@
  */
 
 // Hoot
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/MapCleaner.h>
-#include <hoot/core/ops/MergeNearbyNodes.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/ops/MergeNearbyNodes.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Settings.h>
-using namespace hoot;
-
-
-// Boost
-using namespace boost;
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -48,16 +44,10 @@ using namespace boost;
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// Qt
-#include <QDebug>
-#include <QDir>
-
-#include "../TestUtils.h"
-
 namespace hoot
 {
 
-class MapCleanerTest : public CppUnit::TestFixture
+class MapCleanerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(MapCleanerTest);
   CPPUNIT_TEST(runBasicTest);
@@ -65,8 +55,9 @@ class MapCleanerTest : public CppUnit::TestFixture
 
 public:
 
-  void setUp()
+  virtual void setUp()
   {
+    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/conflate");
   }
 

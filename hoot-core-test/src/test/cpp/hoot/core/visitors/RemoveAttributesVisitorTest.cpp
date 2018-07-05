@@ -33,20 +33,16 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/visitors/RemoveAttributesVisitor.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/elements/ElementAttributeType.h>
-
-#include "../TestUtils.h"
-
-// Qt
-#include <QDir>
+#include <hoot/core/visitors/RemoveAttributesVisitor.h>
 
 namespace hoot
 {
 
-class RemoveAttributesVisitorTest : public CppUnit::TestFixture
+class RemoveAttributesVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(RemoveAttributesVisitorTest);
   CPPUNIT_TEST(runRemoveAttributesTest);
@@ -55,8 +51,9 @@ class RemoveAttributesVisitorTest : public CppUnit::TestFixture
 
 public:
 
-  void setUp()
+  virtual void setUp()
   {
+    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/visitors");
   }
 

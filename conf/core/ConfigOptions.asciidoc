@@ -1617,6 +1617,38 @@ A best effort will be made to convert between the two projections. The translate
 will approximate the minimum bounding rectangle of the lat/lng bounding box. In some cases this
 may be significantly larger.
 
+=== ogr.reader.csv.keep.geom.fields
+
+* Data Type: string
+* Default Value: `NO`
+
+From the GDAL docs:
+If YES, the detected X,Y,Z or geometry columns will be stored as regular attribute fields.
+
+=== ogr.reader.csv.latfield
+
+* Data Type: string
+* Default Value: `Lat*,lat*,LAT*`
+
+From the GDAL docs:
+A comma separated list of possible names for Y/latitude coordinate of a point. Each name might be a pattern using the star character in starting and/or ending position. E.g.: prefix*, *suffix or *middle*. The values in the column must be floating point values.
+
+=== ogr.reader.csv.lonfield
+
+* Data Type: string
+* Default Value: `Lon*,lon*,LON*`
+
+From the GDAL docs:
+A comma separated list of possible names for X/longitude coordinate of a point. Each name might be a pattern using the star character in starting and/or ending position. E.g.: prefix*, *suffix or *middle*. The values in the column must be floating point values.
+
+//=== ogr.reader.csv.zfield
+
+//* Data Type: string
+//* Default Value: `Z,z`
+
+//From the GDAL docs:
+//A comma separated list of possible names for Z/elevation coordinate of a point. Each name might be a pattern using the star character in starting and/or ending position. E.g.: prefix*, *suffix or *middle*. The values in the column must be floating point values.
+
 === ogr.reader.epsg.override
 
 * Data Type: int

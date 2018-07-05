@@ -26,13 +26,10 @@
  */
 
 // Hoot
-#include <hoot/core/ops/NoInformationElementRemover.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
+#include <hoot/core/ops/NoInformationElementRemover.h>
 #include <hoot/core/util/Log.h>
-using namespace hoot;
-
-// Boost
-using namespace boost;
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -40,17 +37,12 @@ using namespace boost;
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// Qt
-#include <QDebug>
-
-#include "../TestUtils.h"
-
 using namespace geos::geom;
 
 namespace hoot
 {
 
-class NoInformationElementRemoverTest : public CppUnit::TestFixture
+class NoInformationElementRemoverTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(NoInformationElementRemoverTest);
   CPPUNIT_TEST(runWayWithInfoOneNodeWithoutInfoTest);
@@ -118,8 +110,8 @@ public:
     ConstNodePtr parsedNode1 = map->getNode(node1->getElementId().getId());
     const Tags& node1Tags = parsedNode1->getTags();
     CPPUNIT_ASSERT_EQUAL(2, node1Tags.size());
-    CPPUNIT_ASSERT_EQUAL(QString("test1"), node1Tags.get("hoot:test"));
-    CPPUNIT_ASSERT_EQUAL(QString("test1"), node1Tags.get("test"));
+    HOOT_STR_EQUALS(QString("test1"), node1Tags.get("hoot:test"));
+    HOOT_STR_EQUALS(QString("test1"), node1Tags.get("test"));
 
     CPPUNIT_ASSERT(!map->containsNode(node2->getElementId().getId()));
   }
@@ -152,7 +144,7 @@ public:
   void runEmptyWayOrphanNodesTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     QList<NodePtr> nodes;
     NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
@@ -357,7 +349,7 @@ public:
   void runRelationWithoutInfoAllElementsWithoutInfoTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
     node1->getTags().appendValue("hoot:test", "test1");
@@ -388,7 +380,7 @@ public:
   void runUnrelatedElementsWithInfoTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
     node1->getTags().appendValue("hoot:test", "test1");

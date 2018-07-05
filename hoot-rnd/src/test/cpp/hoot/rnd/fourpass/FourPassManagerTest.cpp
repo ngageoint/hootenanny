@@ -32,9 +32,8 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/tile/TileConflator.h>
-#include <hoot/rnd/fourpass/FourPassManager.h>
-#include <hoot/rnd/fourpass/LocalTileWorker2.h>
 #include <hoot/core/ops/OpList.h>
 #include <hoot/core/ops/MapCropper.h>
 #include <hoot/core/ops/MergeNearbyNodes.h>
@@ -45,21 +44,18 @@
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/TestUtils.h>
+#include <hoot/rnd/fourpass/FourPassManager.h>
+#include <hoot/rnd/fourpass/LocalTileWorker2.h>
 
 // Tgs
 #include <tgs/Statistics/Random.h>
-
-// Qt
-#include <QDebug>
-#include <QDir>
 
 using namespace geos::geom;
 
 namespace hoot
 {
 
-class FourPassManagerTest : public CppUnit::TestFixture
+class FourPassManagerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(FourPassManagerTest);
   CPPUNIT_TEST(runToyTest);
@@ -67,17 +63,14 @@ class FourPassManagerTest : public CppUnit::TestFixture
 
 public:
 
-  void setUp()
+  virtual void setUp()
   {
+    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/fourpass");
   }
 
   void runToyTest()
   {
-    Tgs::Random::instance()->seed(0);
-    OsmMap::resetCounters();
-    Settings::getInstance().clear();
-
     FileUtils::removeDir("test-output/fourpass/FourPassManagerTest.osm-cache");
 
     boost::shared_ptr<TileWorker2> worker(new LocalTileWorker2());

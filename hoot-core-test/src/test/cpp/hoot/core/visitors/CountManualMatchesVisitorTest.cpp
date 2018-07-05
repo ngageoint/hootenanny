@@ -27,19 +27,14 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/visitors/CountManualMatchesVisitor.h>
 
-// Qt
-#include <QDir>
-
-#include "../TestUtils.h"
-
 namespace hoot
 {
-using namespace Tgs;
 
-class CountManualMatchesVisitorTest : public CppUnit::TestFixture
+class CountManualMatchesVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(CountManualMatchesVisitorTest);
   CPPUNIT_TEST(runBasicTest);

@@ -35,22 +35,18 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/Soundex.h>
 #include <hoot/core/algorithms/Translator.h>
 #include <hoot/core/util/Log.h>
-using namespace hoot;
 
 // Qt
-#include <QString>
 #include <QStringList>
-
-// Standard
-#include <string>
 
 namespace hoot
 {
 
-class TranslatorTest : public CppUnit::TestFixture
+class TranslatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(TranslatorTest);
   CPPUNIT_TEST(runTest);
@@ -62,17 +58,17 @@ public:
   {
     QStringList result;
     result << "building";
-    CPPUNIT_ASSERT_EQUAL(result, Translator::getInstance().toEnglishAll("gedung"));
+    HOOT_STR_EQUALS(result, Translator::getInstance().toEnglishAll("gedung"));
 
     result.clear();
     result << "office building";
     result << "agency building";
     result << "bureau building";
-    CPPUNIT_ASSERT_EQUAL(result, Translator::getInstance().toEnglishAll("kantor gedung"));
+    HOOT_STR_EQUALS(result, Translator::getInstance().toEnglishAll("kantor gedung"));
 
     result.clear();
     result << "hospital";
-    CPPUNIT_ASSERT_EQUAL(result, Translator::getInstance().toEnglishAll("rumah sakit"));
+    HOOT_STR_EQUALS(result, Translator::getInstance().toEnglishAll("rumah sakit"));
 
     result.clear();
     result << "general hospital office";
@@ -81,18 +77,18 @@ public:
     result << "hospital office";
     result << "hospital agency";
     result << "hospital bureau";
-    CPPUNIT_ASSERT_EQUAL(result, Translator::getInstance().toEnglishAll("rumah sakit umum kantor"));
+    HOOT_STR_EQUALS(result, Translator::getInstance().toEnglishAll("rumah sakit umum kantor"));
 
     result.clear();
     result << "ryba office bar";
     result << "ryba agency bar";
     result << "ryba bureau bar";
-    CPPUNIT_ASSERT_EQUAL(result, Translator::getInstance().toEnglishAll(
+    HOOT_STR_EQUALS(result, Translator::getInstance().toEnglishAll(
       QString::fromUtf8("рыба kantor bar")));
 
     result.clear();
     result << "embassy hungaria";
-    CPPUNIT_ASSERT_EQUAL(result, Translator::getInstance().toEnglishAll(
+    HOOT_STR_EQUALS(result, Translator::getInstance().toEnglishAll(
       QString::fromUtf8("Kedutaan Besar Hungaria")));
   }
 

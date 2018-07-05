@@ -26,17 +26,13 @@
  */
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/criterion/NonBuildingAreaCriterion.h>
-
-// Qt
-#include <QDir>
-
-#include "../TestUtils.h"
 
 namespace hoot
 {
 
-class NonBuildingAreaCriterionTest : public CppUnit::TestFixture
+class NonBuildingAreaCriterionTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(NonBuildingAreaCriterionTest);
   CPPUNIT_TEST(runBasicTest);

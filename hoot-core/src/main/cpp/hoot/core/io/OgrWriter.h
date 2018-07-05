@@ -175,6 +175,7 @@ private:
   //had not yet been written.
   QList<long> _unwrittenFirstPassRelationIds;
   bool _failOnSkipRelation;
+  int _maxFieldWidth;
 
 };
 

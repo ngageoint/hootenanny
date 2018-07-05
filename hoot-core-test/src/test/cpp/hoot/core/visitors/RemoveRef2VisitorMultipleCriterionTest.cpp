@@ -27,27 +27,22 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/io/OsmJsonWriter.h>
-#include <hoot/core/criterion/PoiCriterion.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
-#include <hoot/core/visitors/RemoveRef2VisitorMultipleCriterion.h>
 #include <hoot/core/criterion/ChainCriterion.h>
-
-// Qt
-#include <QDebug>
-#include <QDir>
+#include <hoot/core/criterion/PoiCriterion.h>
+#include <hoot/core/io/OsmJsonWriter.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/visitors/RemoveRef2VisitorMultipleCriterion.h>
 
 // TGS
 #include <tgs/Statistics/Random.h>
-
-#include "../TestUtils.h"
+using namespace Tgs;
 
 namespace hoot
 {
-using namespace Tgs;
 
-class RemoveRef2VisitorMultipleCriterionTest : public CppUnit::TestFixture
+class RemoveRef2VisitorMultipleCriterionTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(RemoveRef2VisitorMultipleCriterionTest);
   CPPUNIT_TEST(runToyTest1);

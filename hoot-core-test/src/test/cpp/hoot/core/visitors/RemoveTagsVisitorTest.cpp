@@ -33,20 +33,16 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/visitors/RemoveTagsVisitor.h>
+#include <hoot/core/TestUtils.h>
+#include <hoot/core/criterion/NodeCriterion.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/criterion/NodeCriterion.h>
-
-#include "../TestUtils.h"
-
-// Qt
-#include <QDir>
+#include <hoot/core/visitors/RemoveTagsVisitor.h>
 
 namespace hoot
 {
 
-class RemoveTagsVisitorTest : public CppUnit::TestFixture
+class RemoveTagsVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(RemoveTagsVisitorTest);
   CPPUNIT_TEST(runRemoveTest);
@@ -56,8 +52,9 @@ class RemoveTagsVisitorTest : public CppUnit::TestFixture
 
 public:
 
-  void setUp()
+  virtual void setUp()
   {
+    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/visitors");
   }
 

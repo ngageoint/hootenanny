@@ -30,18 +30,14 @@
 #include <boost/iostreams/filter/bzip2.hpp>
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
-
-// Qt
-#include <QDir>
-
-#include "../TestUtils.h"
 
 namespace hoot
 {
 
-class BuildingCriterionTest : public CppUnit::TestFixture
+class BuildingCriterionTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(BuildingCriterionTest);
   CPPUNIT_TEST(runBasicTest);
