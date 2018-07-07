@@ -22,6 +22,18 @@
     },
     {
         "categories": [
+                "use"
+        ],
+        "geometries": [
+            "linestring",
+            "area"
+        ],
+        "isA": "use",
+        "name": "use=transportation_support",
+        "objectType": "tag"
+    },
+    {
+        "categories": [
             "use"
         ],
         "isA": "use",
