@@ -34,6 +34,18 @@
     },
     {
         "categories": [
+                "use"
+        ],
+        "geometries": [
+            "linestring",
+            "area"
+        ],
+        "isA": "use",
+        "name": "use=commercial",
+        "objectType": "tag"
+    },
+    {
+        "categories": [
             "use"
         ],
         "isA": "use",
