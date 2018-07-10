@@ -24,6 +24,6 @@ export RUBY_VERSION_HOOT=2.3.6
 export RVM_BASE_URL=https://github.com/rvm/rvm
 export RVM_BINARIES_URL="${RUBY_BASE_URL}/binaries"
 export RVM_HOME="${RVM_HOME:-${HOME}/.rvm}"
-export RVM_VERSION=1.29.3
+export RVM_VERSION=1.29.4
 
 export GLPK_VERSION=4.64
