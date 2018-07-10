@@ -38,10 +38,24 @@
         ],
         "geometries": [
             "linestring",
+            "node",
             "area"
         ],
         "isA": "use",
         "name": "use=commercial",
+        "objectType": "tag"
+    },
+    {
+        "categories": [
+                "use"
+        ],
+        "geometries": [
+            "linestring",
+            "node",
+            "area"
+        ],
+        "isA": "use",
+        "name": "use=warehouse",
         "objectType": "tag"
     },
     {
