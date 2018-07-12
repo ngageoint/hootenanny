@@ -6,6 +6,7 @@
         "dataType": "enumeration",
         "geometries": [
             "node",
+            "linestring",
             "area"
         ],
         "influence": 1,
@@ -18,44 +19,6 @@
         ],
         "isA": "use",
         "name": "use=*",
-        "objectType": "tag"
-    },
-    {
-        "categories": [
-                "use"
-        ],
-        "geometries": [
-            "linestring",
-            "area"
-        ],
-        "isA": "use",
-        "name": "use=transportation_support",
-        "objectType": "tag"
-    },
-    {
-        "categories": [
-                "use"
-        ],
-        "geometries": [
-            "linestring",
-            "node",
-            "area"
-        ],
-        "isA": "use",
-        "name": "use=commercial",
-        "objectType": "tag"
-    },
-    {
-        "categories": [
-                "use"
-        ],
-        "geometries": [
-            "linestring",
-            "node",
-            "area"
-        ],
-        "isA": "use",
-        "name": "use=warehouse",
         "objectType": "tag"
     },
     {
