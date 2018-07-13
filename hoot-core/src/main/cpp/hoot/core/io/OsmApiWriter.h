@@ -156,7 +156,7 @@ private:
   OsmApiStatus _parseStatus(const QString& status);
   /**
    * @brief _changesetThreadFunc Thread function that does the actual work of creating a changeset ID
-   *  on via the API, pushing the changeset data, closing the changeset, and splitting a failing changeset
+   *  via the API, pushing the changeset data, closing the changeset, and splitting a failing changeset
    *  if necessary
    */
   void _changesetThreadFunc();

@@ -73,9 +73,6 @@ bool OsmApiNetworkRequest::networkRequest(QUrl url, QNetworkAccessManager::Opera
   QNetworkReply* reply = NULL;
   switch (http_op)
   {
-  default:
-    return false;
-    break;
   case QNetworkAccessManager::Operation::GetOperation:
     reply = pNAM->get(request);
     break;
@@ -85,6 +82,9 @@ bool OsmApiNetworkRequest::networkRequest(QUrl url, QNetworkAccessManager::Opera
   case QNetworkAccessManager::Operation::PostOperation:
     request.setHeader(QNetworkRequest::KnownHeaders::ContentTypeHeader, "text/xml");
     reply = pNAM->post(request, data);
+    break;
+  default:
+    return false;
     break;
   }
   //  Wait for finished signal from reply object

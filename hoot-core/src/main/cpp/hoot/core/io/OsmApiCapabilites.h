@@ -85,7 +85,7 @@ public:
   void setChangesets(long changesets) { _changesets = changesets; }
 
   /**
-   *  Setter/getter for API timeout
+   *  Setter/getter for API timeout in seconds
    */
   long getTimeout()             { return _timeout; }
   void setTimeout(long timeout) { _timeout = timeout; }

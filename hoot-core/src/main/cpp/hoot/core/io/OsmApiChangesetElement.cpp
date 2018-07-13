@@ -83,6 +83,7 @@ QString& XmlElement::escapeString(QString& value) const
   //  Simple XML encoding of some problematic characters
   return value.replace("&", "&amp;")
               .replace("\"", "&quot;")
+              .replace("'", "&apos;")
               .replace("\n", "&#10;")
               .replace(">", "&gt;")
               .replace("<", "&lt;");

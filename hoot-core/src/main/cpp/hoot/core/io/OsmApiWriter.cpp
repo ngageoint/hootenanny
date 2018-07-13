@@ -185,7 +185,9 @@ void OsmApiWriter::_changesetThreadFunc()
         case 404:   //  Diff contains elements where the given ID could not be found
         case 409:   //  Conflict, Split the changeset, push both back on the queue
           {
+            _changesetMutex.lock();
             ChangesetInfoPtr split = _changeset.splitChangeset(workInfo);
+            _changesetMutex.unlock();
             if (split->size() > 0)
             {
               _workQueueMutex.lock();
@@ -201,7 +203,11 @@ void OsmApiWriter::_changesetThreadFunc()
           _workQueueMutex.unlock();
           break;
         default:
-          //  This is a big problem, update the changeset
+          //  This is a big problem, report it and try again
+          LOG_ERROR("Changeset upload responded with HTTP status response: " << request->getHttpStatus());
+          _workQueueMutex.lock();
+          _workQueue.push(workInfo);
+          _workQueueMutex.unlock();
           break;
         }
       }
@@ -229,7 +235,10 @@ bool OsmApiWriter::isSupported(const QUrl &url)
       !url.isValid() ||
       (!url.path().isEmpty() && url.path() != "/") ||
       (url.scheme().toLower() != "http" && url.scheme().toLower() != "https"))
+  {
+    LOG_WARN("Invalid URL for OSM API endpoint.");
     return false;
+  }
   else
     return true;
 }
@@ -387,9 +396,6 @@ void OsmApiWriter::_closeChangeset(OsmApiNetworkRequestPtr request, long id)
     QString responseXml = QString::fromUtf8(request->getResponseContent().data());
     switch (request->getHttpStatus())
     {
-    default:
-      LOG_WARN("Uknown HTTP response code: " << request->getHttpStatus());
-      break;
     case 404:
       LOG_WARN("Unknown changeset");
       break;
@@ -398,6 +404,9 @@ void OsmApiWriter::_closeChangeset(OsmApiNetworkRequestPtr request, long id)
       break;
     case 200:
       //  Changeset closed successfully
+      break;
+    default:
+      LOG_WARN("Uknown HTTP response code: " << request->getHttpStatus());
       break;
     }
   }
@@ -422,9 +431,6 @@ bool OsmApiWriter::_uploadChangeset(OsmApiNetworkRequestPtr request, long id, co
 
     switch (request->getHttpStatus())
     {
-    default:
-      LOG_WARN("Uknown HTTP response code: " << request->getHttpStatus());
-      break;
     case 400:
       LOG_WARN("Changeset Upload Error: Error parsing XML changeset\n" << responseXml);
       break;
@@ -436,6 +442,9 @@ bool OsmApiWriter::_uploadChangeset(OsmApiNetworkRequestPtr request, long id, co
       break;
     case 200:
       success = true;
+      break;
+    default:
+      LOG_WARN("Uknown HTTP response code: " << request->getHttpStatus());
       break;
     }
   }
