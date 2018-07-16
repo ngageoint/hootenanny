@@ -1493,7 +1493,15 @@ translate = {
             else if (i.charAt(0) == '#')
             {
                 var tag = i.slice(1);
-                if (values[tag]) values[tag] = override[i];
+                if (values[tag]) {
+
+                    // *************************************************
+                    // If override value is null drop the entire feature
+                    if (override[i] === null) return null;
+                    // *************************************************
+
+                    values[tag] = override[i];
+                }
             }
             // Add/Modify: change or add a tag
             else

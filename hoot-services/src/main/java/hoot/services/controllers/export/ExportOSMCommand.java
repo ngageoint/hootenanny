@@ -54,7 +54,7 @@ class ExportOSMCommand extends ExportCommand {
 
             options.add("convert.ops=hoot::TranslationOp");
 
-            File trans = new File(new File(HootProperties.HOME_FOLDER, "translations"),"OSM_Ingest.js");
+            File trans = new File(new File(HootProperties.HOME_FOLDER, "translations"),"OSM_Export.js");
             options.add("translation.script=" + trans.getAbsolutePath());
 
             options.add("translation.override=" + params.getTagOverrides() );
