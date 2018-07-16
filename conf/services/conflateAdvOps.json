@@ -476,7 +476,7 @@
                 "members":[
                     {
                         "id":"hoot_road_opt_engine_unify",
-                        "description":"A non-greedy conflation algorithm which uses a random-forest model",
+                        "description":"A non-greedy road conflation algorithm which uses a random-forest model for classification",
                         "name":"Unify",
                         "members":[
                             {
@@ -546,7 +546,7 @@
                     },
                     {
                         "id":"hoot_road_opt_engine_network",
-                        "description":"Road conflation that is tuned for road conflation using the unifying conflation model",
+                        "description":"A road conflation algorithm based on graph operations treating the data as a network",
                         "name":"Network",
                         "members":[
                             {
@@ -589,7 +589,7 @@
                     },
                     {
                     "id": "hoot_road_opt_engine_differential",
-                    "description": "Differential Conflation (with the Network roads conflation algorithm) creates an output of what data exists in the secondary dataset that does not exist in the reference dataset",
+                    "description": "An application of the Network Roads Conflation algorithm that outputs only road data existing in the secondary dataset but not in the reference dataset",
                     "name": "Differential",
                     "members": [
                           {
