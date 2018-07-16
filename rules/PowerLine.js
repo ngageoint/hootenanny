@@ -133,8 +133,8 @@ exports.matchScore = function(map, e1, e2)
   sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
 
   //This is an attempt to use maximal subline matching in situations when Frechet doesn't find the match.  It does yield some additional
-  //correct matches, but unfortunately, maximal subline matching is much slower than Frechet so the cost doesn't outweigh the benefit
-  //at this point.
+  //correct matches, but unfortunately, maximal subline matching is much slower than Frechet so the runtime performance cost doesn't 
+  //outweigh the benefit.
   /*if (!sublines)
   {
     sublines = sublineMatcher2.extractMatchingSublines(map, e1, e2);
@@ -179,25 +179,8 @@ exports.matchScore = function(map, e1, e2)
       wmdMax = 1.39;
     }*/
 
-    /*if (angleHistogramExtractor5Val > 0.953 && 
-        distanceScoreExtractor7Val < 0.403 &&
-        edgeDistanceExtractor1Val > 0.645 && //0.997
-        euclideanDistanceExtractorVal > 0.647 && //0.718, 0.853
-        hausdorffDistanceExtractorVal > 0.497 && //0.815
-        lengthScoreExtractor1Val > 0.417 && //0.633, 0.696
-        lengthScoreExtractor7Val < 0.245 && //0.138
-        parallelScoreExtractorVal > 0.803 && //0.853
-        weightedShapeDistanceExtractor1Val > 0.803 &&
-        weightedShapeDistanceExtractor7Val == 0.0)*/
     if ((centroidDistanceExtractorVal > 0.61 && weightedMetricDistanceExtractor1Val < 1.4) || 
-        (edgeDistanceExtractor1Val > 0.997 && weightedShapeDistanceExtractor7Val == 0.0
-         /*euclideanDistanceExtractorVal > 0.853 && 
-         hausdorffDistanceExtractorVal > 0.815 && 
-         lengthScoreExtractor1Val > 0.696 &&
-         lengthScoreExtractor7Val < 0.138 && 
-         parallelScoreExtractorVal > 0.853 && 
-         weightedShapeDistanceExtractor1Val > 0.803 &&*/
-         ))
+        (edgeDistanceExtractor1Val > 0.997 && weightedShapeDistanceExtractor7Val == 0.0))
     {
       //So far, voltage and location (underground vs overhead) seem to be the only tags available to disambiguate power line matches.  We'll 
       //review when features match and those tags disagree, and we'll ignore those tags completely if the values for either of them 
