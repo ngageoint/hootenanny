@@ -150,6 +150,6 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(WayJoinerTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(WayJoinerTest, "slow");
 
 }
