@@ -68,7 +68,7 @@ OsmXmlWriter::OsmXmlWriter()
     _includePid(false),
     _textStatus(ConfigOptions().getWriterTextStatus()),
     _osmSchema(ConfigOptions().getOsmMapWriterSchema()),
-    _timestamp("1970-01-01T00:00:00Z"),
+    //_timestamp("1970-01-01T00:00:00Z"),
     _precision(ConfigOptions().getWriterPrecision()),
     _encodingErrorCount(0),
     _includeCircularErrorTags(ConfigOptions().getWriterIncludeCircularErrorTags())
