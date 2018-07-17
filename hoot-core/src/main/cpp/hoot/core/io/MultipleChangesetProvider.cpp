@@ -54,24 +54,25 @@ boost::shared_ptr<OGRSpatialReference> MultipleChangesetProvider::getProjection(
 
 bool MultipleChangesetProvider::hasMoreChanges()
 {
-  if (_changeSets.front() == _changeSets.end())
+  if (_changesets.size() < 1)
+  {
     return false;
-
-  if (_changeSets.front()->hasMoreChanges())
+  }
+  else if (_changesets.front()->hasMoreChanges())
   {
     return true;
   }
   else
   {
     // Advance to next changeset and check
-    _changeSets.pop_front();
+    _changesets.pop_front();
     return hasMoreChanges();
   }
 }
 
 Change MultipleChangesetProvider::readNextChange()
 {
-  Change nextChange = _changeSets.front()->readNextChange();
+  Change nextChange = _changesets.front()->readNextChange();
 
   return nextChange;
 }
