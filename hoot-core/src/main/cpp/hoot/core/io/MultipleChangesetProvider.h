@@ -22,65 +22,60 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef MULTIARY_INGEST_CHANGESET_READER_H
-#define MULTIARY_INGEST_CHANGESET_READER_H
+#ifndef MULTIPLECHANGESETPROVIDER_H
+#define MULTIPLECHANGESETPROVIDER_H
 
-// hoot
-#include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/io/ChangesetProvider.h>
-#include <hoot/core/io/OsmXmlReader.h>
-
-// Qt
-#include <QFile>
 
 namespace hoot
 {
 
 /**
- * This is a reader for the internal temp changeset format used by the multiary ingester.
+ * This is essentially a changeset provider container, allowing multiple
+ * changeset providers to be chained together
  */
-class MultiaryIngestChangesetReader : public ChangesetProvider
+class MultipleChangesetProvider : public ChangesetProvider
 {
 
 public:
 
-  MultiaryIngestChangesetReader();
-
-  virtual ~MultiaryIngestChangesetReader();
+  explicit MultipleChangesetProvider(boost::shared_ptr<OGRSpatialReference> pProjection);
 
   /**
-   * @see ChangesetProvider
+   * @todo: is this even used?
    */
   virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
 
-  void open(QString fileName);
+  virtual ~MultipleChangesetProvider();
 
   /**
-   * @see ChangesetProvider
+   * @see ChangeSetProvider
    */
   virtual void close();
 
   /**
-   * @see ChangesetProvider
+   * @see ChangeSetProvider
    */
   virtual bool hasMoreChanges();
 
   /**
-   * @see ChangesetProvider
+   * @see ChangeSetProvider
    */
   virtual Change readNextChange();
 
+  void addChangesetProvider(ChangesetProviderPtr newChangeset);
+
+  size_t getNumChangesets();
+
 private:
-
-  QFile _file;
-  mutable boost::shared_ptr<OGRSpatialReference> _wgs84;
-  OsmJsonReader _jsonReader;
-  OsmXmlReader _xmlReader;
-
+  boost::shared_ptr<OGRSpatialReference> _projection;
+  std::list<ChangesetProviderPtr> _changesets;
 };
+
+typedef boost::shared_ptr<MultipleChangesetProvider> MultipleChangesetProviderPtr;
 
 }
 
-#endif // MULTIARY_INGEST_CHANGESET_READER_H
+#endif // MULTIPLECHANGESETPROVIDER_H

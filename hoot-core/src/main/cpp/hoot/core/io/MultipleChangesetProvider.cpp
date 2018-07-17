@@ -24,60 +24,66 @@
  *
  * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef MEMCHANGESETPROVIDER_H
-#define MEMCHANGESETPROVIDER_H
+#include "MultipleChangesetProvider.h"
 
-#include <hoot/core/io/ChangesetProvider.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
 
-/**
- * This is a simple memory-bound changeset provider. It's basically used to collect
- * a set of changes, then feed them to a writer later.
- */
-class MemChangesetProvider : public ChangesetProvider
+MultipleChangesetProvider::MultipleChangesetProvider(boost::shared_ptr<OGRSpatialReference> pProjection):
+  _projection(pProjection)
 {
-
-public:
-
-  explicit MemChangesetProvider(boost::shared_ptr<OGRSpatialReference> pProjection);
-
-  /**
-   * @see ChangeSetProvider
-   */
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
-
-  virtual ~MemChangesetProvider();
-
-  /**
-   * @see ChangeSetProvider
-   */
-  virtual void close();
-
-  /**
-   * @see ChangeSetProvider
-   */
-  virtual bool hasMoreChanges();
-
-  /**
-   * @see ChangeSetProvider
-   */
-  virtual Change readNextChange();
-
-  void addChange(Change newChange);
-
-  size_t getNumChanges();
-
-  bool containsChange(ElementId eID);
-
-private:
-  boost::shared_ptr<OGRSpatialReference> _projection;
-  std::list<Change> _changes;
-};
-
-typedef boost::shared_ptr<MemChangesetProvider> MemChangesetProviderPtr;
-
+  // empty
 }
 
-#endif // MEMCHANGESETPROVIDER_H
+MultipleChangesetProvider::~MultipleChangesetProvider()
+{
+  // empty
+}
+
+void MultipleChangesetProvider::close()
+{
+  // nothing to do here
+}
+
+boost::shared_ptr<OGRSpatialReference> MultipleChangesetProvider::getProjection() const
+{
+  return _projection;
+}
+
+bool MultipleChangesetProvider::hasMoreChanges()
+{
+  if (_changeSets.front() == _changeSets.end())
+    return false;
+
+  if (_changeSets.front()->hasMoreChanges())
+  {
+    return true;
+  }
+  else
+  {
+    // Advance to next changeset and check
+    _changeSets.pop_front();
+    return hasMoreChanges();
+  }
+}
+
+Change MultipleChangesetProvider::readNextChange()
+{
+  Change nextChange = _changeSets.front()->readNextChange();
+
+  return nextChange;
+}
+
+void MultipleChangesetProvider::addChangesetProvider(ChangesetProviderPtr newChangeset)
+{
+  _changesets.push_back(newChangeset);
+}
+
+size_t MultipleChangesetProvider::getNumChangesets()
+{
+  return _changesets.size();
+}
+
+} // namespace hoot

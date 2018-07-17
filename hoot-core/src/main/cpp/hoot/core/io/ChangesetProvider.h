@@ -40,7 +40,7 @@ namespace hoot
 /**
  * Interface for classes implementing OSM changeset capabilities
  */
-class ChangeSetProvider
+class ChangesetProvider
 {
 
 public:
@@ -56,7 +56,7 @@ public:
    *
    * If the stream is open when the destructor is called, closeStream must be called in the destructor
    */
-  virtual ~ChangeSetProvider() {}
+  virtual ~ChangesetProvider() {}
 
   /**
    * @brief closeStream
@@ -81,7 +81,7 @@ public:
 
 };
 
-typedef boost::shared_ptr<ChangeSetProvider> ChangeSetProviderPtr;
+typedef boost::shared_ptr<ChangesetProvider> ChangesetProviderPtr;
 
 }
 

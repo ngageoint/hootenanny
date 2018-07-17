@@ -56,7 +56,7 @@ OsmApiDbSqlChangesetFileWriter::~OsmApiDbSqlChangesetFileWriter()
 }
 
 void OsmApiDbSqlChangesetFileWriter::write(const QString path,
-                                           ChangeSetProviderPtr changesetProvider)
+                                           ChangesetProviderPtr changesetProvider)
 {
   LOG_DEBUG("Writing changeset to " << path);
 

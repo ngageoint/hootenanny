@@ -47,7 +47,7 @@ namespace hoot
  * Implementation of ChangeSetProvider that psuedo-randomly creates, modifies, and deletes
  * nodes, ways, and relations for use with both the SQL and OSM changeset writers.
  */
-class TestOsmChangesetProvider : public ChangeSetProvider
+class TestOsmChangesetProvider : public ChangesetProvider
 {
 public:
   /**

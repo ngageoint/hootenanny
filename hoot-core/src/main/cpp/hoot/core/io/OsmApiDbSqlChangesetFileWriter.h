@@ -63,7 +63,7 @@ public:
    * @param path SQL file output path
    * @param changesetProvider changeset data
    */
-  void write(const QString path, ChangeSetProviderPtr changesetProvider);
+  void write(const QString path, ChangesetProviderPtr changesetProvider);
 
   /**
    * Set the configuration settings

@@ -38,7 +38,7 @@ namespace hoot
  * Calculates the changeset difference between a source and target map.  This logic is based on
  * the same logic used in Osmosis.
  */
-class ChangesetDeriver : public ChangeSetProvider
+class ChangesetDeriver : public ChangesetProvider
 {
 
 public:
