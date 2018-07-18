@@ -63,8 +63,9 @@ public:
    *
    * 1. http://mathworld.wolfram.com/Circle-LineIntersection.html
    */
-  void circleIntersection(const geos::geom::Coordinate& origin, Meters radius, const geos::geom::LineSegment& l,
-    geos::geom::Coordinate& p1, geos::geom::Coordinate& p2);
+  void circleIntersection(const geos::geom::Coordinate& origin, Meters radius,
+                          const geos::geom::LineSegment& l,
+                          geos::geom::Coordinate& p1, geos::geom::Coordinate& p2);
 
 };
 

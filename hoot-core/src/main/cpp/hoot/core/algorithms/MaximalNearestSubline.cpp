@@ -39,7 +39,6 @@
 #include <hoot/core/algorithms/linearreference/WaySubline.h>
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/FindNodesInWayFactory.h>
 
@@ -110,7 +109,7 @@ void MaximalNearestSubline::_findNearestOnA(const geos::geom::Coordinate& bPt)
 WayPtr MaximalNearestSubline::getMaximalNearestSubline(const OsmMapPtr& map,
     ConstWayPtr a, ConstWayPtr b, Meters minSplitSize, Meters maxRelevantDistance)
 {
-  MaximalNearestSubline mns(map, a, b, minSplitSize, maxRelevantDistance/*, _headingDelta*/);
+  MaximalNearestSubline mns(map, a, b, minSplitSize, maxRelevantDistance);
 
   vector<WayLocation> interval = mns.getInterval();
 
@@ -286,7 +285,8 @@ const vector<WayLocation>& MaximalNearestSubline::_getInterval()
   return _maxInterval;
 }
 
-bool MaximalNearestSubline::_isInBounds(const WayLocation& wl, const boost::shared_ptr<LineString>& ls)
+bool MaximalNearestSubline::_isInBounds(const WayLocation& wl,
+                                        const boost::shared_ptr<LineString>& ls)
 {
   // calculate the distance from the test point to b
   boost::shared_ptr<Point> tp(GeometryFactory::getDefaultInstance()->createPoint(

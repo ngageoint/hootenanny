@@ -1,8 +1,5 @@
 "use strict";
 
-var MATCH_OVERLAP_THRESHOLD = 0.75;
-var MISS_OVERLAP_THRESHOLD = 0.15;
-
 exports.description = "Linear Waterway";
 exports.experimental = false;
 exports.baseFeatureType = "Waterway";
