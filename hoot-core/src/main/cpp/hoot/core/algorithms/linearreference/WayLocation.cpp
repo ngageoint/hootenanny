@@ -152,6 +152,8 @@ Meters WayLocation::calculateDistanceFromEnd() const
 
 Meters WayLocation::calculateDistanceOnWay() const
 {
+  LOG_TRACE("Calculating distance on way...");
+
   Meters result = 0.0;
   Coordinate last = _map->getNode(_way->getNodeId(0))->toCoordinate();
   for (int i = 1; i < (int)_way->getNodeCount() && i <= _segmentIndex; i++)

@@ -99,6 +99,8 @@ double ExpectationIntersection::_findSplit(const TDistribution& t1, const TDistr
 
 vector<double> ExpectationIntersection::snapMatches(const Mat& matches, const Mat& ranges)
 {
+  LOG_TRACE("Snapping matches...");
+
   _validateRanges(matches.rows, ranges);
 
   set< vector<int> > visitedSplits;

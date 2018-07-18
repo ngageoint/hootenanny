@@ -1054,7 +1054,7 @@
                 "description":"Sets that maximum angle that is still considered a power line match. Units in degrees.",
                 "maxvalue":"360.0",
                 "name":"Power Line Matcher Max Angle",
-                "defaultvalue":"90.0",
+                "defaultvalue":"155.0",
                 "hoot_key":"power.line.matcher.max.angle"
             },
             {

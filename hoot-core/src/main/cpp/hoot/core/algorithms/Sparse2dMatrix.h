@@ -95,6 +95,8 @@ public:
 
   QString toString() const;
 
+  long size() { return _map.size(); }
+
 private:
   HashMap<CellId, double> _map;
 };

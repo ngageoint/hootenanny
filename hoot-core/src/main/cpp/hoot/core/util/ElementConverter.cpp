@@ -177,6 +177,8 @@ boost::shared_ptr<Geometry> ElementConverter::convertToGeometry(const RelationPt
 
 boost::shared_ptr<LineString> ElementConverter::convertToLineString(const ConstWayPtr& w) const
 {
+  //LOG_TRACE("Converting to line string...");
+
   const std::vector<long>& ids = w->getNodeIds();
   int size = ids.size();
   if (size == 1)

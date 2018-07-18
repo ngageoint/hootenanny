@@ -129,6 +129,8 @@ void MultiLineStringSplitter::split(const OsmMapPtr& map, const WaySublineCollec
   const vector<bool> &reverse, ElementPtr& match, ElementPtr &scraps,
   GeometryConverter::NodeFactory *nf) const
 {
+  LOG_TRACE("Splitting " << string.toString().left(100) << "...");
+
   boost::shared_ptr<FindNodesInWayFactory> nfPtr;
   if (nf == 0)
   {

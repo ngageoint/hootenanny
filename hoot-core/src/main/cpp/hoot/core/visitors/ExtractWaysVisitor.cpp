@@ -43,6 +43,8 @@ void ExtractWaysVisitor::visit(const boost::shared_ptr<const Element>& e)
 vector<ConstWayPtr> ExtractWaysVisitor::extractWays(const ConstOsmMapPtr& map,
                                                     const ConstElementPtr& e)
 {
+  LOG_TRACE("Extracting ways from " << e->getElementId());
+
   vector<ConstWayPtr> result;
   ExtractWaysVisitor v(result);
 

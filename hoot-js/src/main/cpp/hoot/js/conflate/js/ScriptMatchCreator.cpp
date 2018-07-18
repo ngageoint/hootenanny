@@ -267,7 +267,7 @@ public:
       }
     }
 
-    LOG_VART(result);
+    //LOG_VART(result);
     return result;
   }
 

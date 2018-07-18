@@ -47,7 +47,8 @@ void WaySublineCollection::addSubline(const WaySubline& subline)
     {
       if (subline.overlaps(_sublines[i]))
       {
-        throw HootException("A subline string may not contain overlapping sublines.");
+        //throw HootException("A subline string may not contain overlapping sublines.");
+        LOG_WARN("A subline string may not contain overlapping sublines.");
       }
     }
 

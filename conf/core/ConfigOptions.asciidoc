@@ -1316,6 +1316,13 @@ The Linux utility RLIMIT_AS is used for limiting virtual memory. This is analago
 less RAM will be utilized than the value specified. Typically this is most useful when limiting
 RAM usage of applications in a shared server environment.
 
+=== maximal.subline.spacing
+
+* Data Type: double
+* Default Value: `2.0`
+
+Spacing in meters used by the MaximalSublineMatcher - TODO: better description
+
 === merge.nearby.nodes.distance
 
 * Data Type: double
