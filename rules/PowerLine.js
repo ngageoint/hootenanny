@@ -1,8 +1,5 @@
 "use strict";
 
-var MATCH_OVERLAP_THRESHOLD = 0.75;
-var MISS_OVERLAP_THRESHOLD = 0.15;
-
 exports.description = "Power Line";
 exports.experimental = false;
 exports.baseFeatureType = "PowerLine";
@@ -17,10 +14,10 @@ var sublineMatcher =
     { "way.matcher.max.angle": hoot.get("power.line.matcher.max.angle"),
       "way.subline.matcher": hoot.get("power.line.subline.matcher") });
 
-var sublineMatcher2 =
+/*var sublineMatcher2 =
   new hoot.MaximalSublineStringMatcher(
-    { "way.matcher.max.angle": 90,
-      "way.subline.matcher": "hoot::MaximalSublineMatcher" });
+    { "way.matcher.max.angle": hoot.get("power.line.matcher.max.angle"),
+      "way.subline.matcher": "hoot::MaximalSublineMatcher" });*/
 
 var distanceWeightCoeff = parseFloat(hoot.get("power.line.matcher.distance.weight.coefficient")) * -1.0;
 var distanceScoreExtractor = new hoot.DistanceScoreExtractor();
@@ -120,8 +117,8 @@ exports.matchScore = function(map, e1, e2)
 
   hoot.trace("e1: " + e1.getTags());
   hoot.trace("e2: " + e2.getTags());
-  hoot.trace("e1: " +e1.getStatusString());
-  hoot.trace("e2: " +e2.getStatusString());
+  hoot.trace("e1: " + e1.getStatusString());
+  hoot.trace("e2: " + e2.getStatusString());
 
   if (e1.getStatusString() == e2.getStatusString()) 
   {
@@ -182,8 +179,8 @@ exports.matchScore = function(map, e1, e2)
     if ((centroidDistanceExtractorVal > 0.61 && weightedMetricDistanceExtractor1Val < 1.4) || 
         (edgeDistanceExtractor1Val > 0.997 && weightedShapeDistanceExtractor7Val == 0.0))
     {
-      //So far, voltage and location (underground vs overhead) seem to be the only tags available to disambiguate power line matches.  We'll 
-      //review when features match and those tags disagree, and we'll ignore those tags completely if the values for either of them 
+      //So far, voltage and location (underground vs overhead) seem to be the only tags useful to disambiguate power line matches.  We'll 
+      //review when two features match and those tags disagree, and we'll ignore those tags completely if the values for either of them 
       //are unpopulated.
 
       var voltageStr1 = String(e1.getTags().get("voltage")).trim();
