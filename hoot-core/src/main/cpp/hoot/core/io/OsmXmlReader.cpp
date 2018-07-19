@@ -61,7 +61,9 @@ HOOT_FACTORY_REGISTER(OsmMapReader, OsmXmlReader)
 
 OsmXmlReader::OsmXmlReader() :
 _status(Status::Invalid),
-_circularError(ConfigOptions().getCircularErrorDefaultValue()),
+//This should be using the config option, but with the change a couple of the tests have suspect
+//results, so the change needs further investigation.
+_circularError(-1/*ConfigOptions().getCircularErrorDefaultValue()*/),
 _keepStatusTag(ConfigOptions().getReaderKeepStatusTag()),
 _useFileStatus(ConfigOptions().getReaderUseFileStatus()),
 _useDataSourceId(false),

@@ -2805,8 +2805,9 @@ in complex nested criterion, use the Hootenanny Javascript interface instead.
 * Default Value: ``
 
 Set the key member in the SetTagValueVisitor class.  SetTagValueVisitor allows for
-adding/modifying a particular tag on all elements in a map. The number of keys in
+adding/modifying one or more tags on all elements in a map. The number of keys in
 `set.tag.value.visitor.key` should match the number of keys in `set.tag.value.visitor.value`.
+Separate list items with a semicolon.
 
 === set.tag.value.visitor.overwrite
 
@@ -2822,7 +2823,7 @@ key=set.tag.value.visitor.key, otherwise it will skip updating the tag.
 * Default Value: ``
 
 Set the value member in the SetTagValueVisitor class.  SetTagValueVisitor allows for
-adding/modifying a particular tag on all elements in a map.
+adding/modifying one or more tags on all elements in a map.  Separate list items with a semicolon.
 
 === small.way.merger.diff
 
