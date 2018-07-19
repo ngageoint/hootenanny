@@ -1321,7 +1321,8 @@ RAM usage of applications in a shared server environment.
 * Data Type: double
 * Default Value: `2.0`
 
-Spacing in meters used by the MaximalSublineMatcher - TODO: better description
+Spacing in meters used by the MaximalSublineMatcher during point discretization performed between
+matching ways.  Larger values may increase runtime performance but decrease conflation quality.
 
 === merge.nearby.nodes.distance
 

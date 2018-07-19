@@ -146,6 +146,7 @@ void MultiLineStringSplitter::split(const OsmMapPtr& map, const WaySublineCollec
   // create all the sublines that fall within the positive WaySublineCollection and put them into
   // the match element.
   match = createSublines(map, positive, reverse, nf);
+  LOG_VART(match.get());
 
   // create all the sublines that fall within the negative WaySublineCollection and put them into
   // the scraps element.

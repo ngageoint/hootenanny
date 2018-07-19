@@ -14,40 +14,23 @@ var sublineMatcher =
     { "way.matcher.max.angle": hoot.get("power.line.matcher.max.angle"),
       "way.subline.matcher": hoot.get("power.line.subline.matcher") });
 
-/*var sublineMatcher2 =
+var sublineMatcher2 =
   new hoot.MaximalSublineStringMatcher(
-    { "way.matcher.max.angle": hoot.get("power.line.matcher.max.angle"),
-      "way.subline.matcher": "hoot::MaximalSublineMatcher" });*/
+    { "way.matcher.max.angle": 60,
+      "way.subline.matcher": "hoot::MaximalNearestSublineMatcher" });
 
 var distanceWeightCoeff = parseFloat(hoot.get("power.line.matcher.distance.weight.coefficient")) * -1.0;
 var distanceScoreExtractor = new hoot.DistanceScoreExtractor();
+
+var distanceScoreExtractor7 = new hoot.DistanceScoreExtractor(new hoot.SigmaAggregator());
 
 var angleHistogramExtractor5 = new hoot.AngleHistogramExtractor({"angle.histogram.extractor.smoothing": 1.57});
 
 var centroidDistanceExtractor = new hoot.CentroidDistanceExtractor();
 
-var distanceScoreExtractor7 = new hoot.DistanceScoreExtractor(new hoot.SigmaAggregator());
-
 var edgeDistanceExtractor1 = new hoot.EdgeDistanceExtractor(new hoot.MeanAggregator());
 
-var euclideanDistanceExtractor = new hoot.EuclideanDistanceExtractor();
-
-var hausdorffDistanceExtractor = new hoot.HausdorffDistanceExtractor();
-
-var lengthScoreExtractor1 = new hoot.LengthScoreExtractor(new hoot.MeanAggregator());
-var lengthScoreExtractor7 = new hoot.LengthScoreExtractor(new hoot.SigmaAggregator());
-
 var nameExtractor = new hoot.NameExtractor();
-var soundexExtractor = new hoot.NameExtractor(new hoot.Soundex());
-var translateMinWordSetLevenshtein_1_15 = 
-  new hoot.NameExtractor(
-    new hoot.MinSumWordSetDistance(
-        {"token.separator": "[\\s-,';]+"},
-        new hoot.TranslateStringDistance(
-            // runs just a little faster w/ tokenize off
-            {"translate.string.distance.tokenize": "false"},
-            new hoot.LevenshteinDistance(
-                {"levenshtein.distance.alpha": 1.15}))));;
 
 var parallelScoreExtractor = new hoot.ParallelScoreExtractor();
 
@@ -113,6 +96,10 @@ exports.isWholeGroup = function()
  */
 exports.matchScore = function(map, e1, e2)
 {
+  //FOR MODEL BUILDING ONLY
+  //var result = { match: 1.0, explain:"match" };
+  //return result;
+
   var result = { miss: 1.0, explain:"miss" };
 
   hoot.trace("e1: " + e1.getTags());
@@ -126,17 +113,17 @@ exports.matchScore = function(map, e1, e2)
   }
 
   var maximalUsed = false;
-  var sublines; 
-  sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
 
-  //This is an attempt to use maximal subline matching in situations when Frechet doesn't find the match.  It does yield some additional
-  //correct matches, but unfortunately, maximal subline matching is much slower than Frechet so the runtime performance cost doesn't 
-  //outweigh the benefit.
-  /*if (!sublines)
+  var sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
+
+  //This is an attempt to use maximal subline matching in situations when Frechet doesn't find the match.  Maximal finds more matches
+  //with some data, although for the most part, we want anything it finds that Frechet didn't to become a review rather than a match.
+  if (!sublines)
   {
     sublines = sublineMatcher2.extractMatchingSublines(map, e1, e2);
     maximalUsed = true;
-  }*/
+  }
+  hoot.trace("maximalUsed");
 
   if (sublines)
   {
@@ -144,40 +131,47 @@ exports.matchScore = function(map, e1, e2)
     var m1 = sublines.match1;
     var m2 = sublines.match2;
 
-    var centroidDistanceExtractorVal = centroidDistanceExtractor.extract(m, m1, m2);
-    //var angleHistogramExtractor5Val = angleHistogramExtractor5.extract(m, m1, m2);
-    //var distanceScoreExtractor7Val = distanceScoreExtractor7.extract(m, m1, m2);
-    var edgeDistanceExtractor1Val = edgeDistanceExtractor1.extract(m, m1, m2);
-    //var euclideanDistanceExtractorVal = euclideanDistanceExtractor.extract(m, m1, m2);
-    //var hausdorffDistanceExtractorVal = hausdorffDistanceExtractor.extract(m, m1, m2);
-    //var lengthScoreExtractor1Val = lengthScoreExtractor1.extract(m, m1, m2);
-    //var lengthScoreExtractor7Val = lengthScoreExtractor7.extract(m, m1, m2);
-    //var parallelScoreExtractorVal = parallelScoreExtractor.extract(m, m1, m2);
-    var weightedMetricDistanceExtractor1Val = weightedMetricDistanceExtractor1.extract(m, m1, m2);
-    //var weightedShapeDistanceExtractor1Val = weightedShapeDistanceExtractor1.extract(m, m1, m2);
+    var centroidDistanceExtractorVal;
+    var edgeDistanceExtractor1Val;
+    var weightedMetricDistanceExtractor1Val;
+
+    var angleHistogramExtractor5Val;
+    var distanceScoreExtractor7Val;
+    var nameExtractorVal;
+    var parallelScoreExtractorVal;
+    var weightedShapeDistanceExtractor1Val;
+
     var weightedShapeDistanceExtractor7Val = weightedShapeDistanceExtractor7.extract(m, m1, m2);
+
+    if (!maximalUsed)
+    {
+      centroidDistanceExtractorVal = centroidDistanceExtractor.extract(m, m1, m2);
+      edgeDistanceExtractor1Val = edgeDistanceExtractor1.extract(m, m1, m2);
+      weightedMetricDistanceExtractor1Val = weightedMetricDistanceExtractor1.extract(m, m1, m2);
+    }
+    else
+    {
+      angleHistogramExtractor5Val = angleHistogramExtractor5.extract(m, m1, m2);
+      distanceScoreExtractor7Val = distanceScoreExtractor7.extract(m, m1, m2);
+      nameExtractorVal = nameExtractor.extract(m, m1, m2);
+      parallelScoreExtractorVal = parallelScoreExtractor.extract(m, m1, m2);
+      weightedShapeDistanceExtractor1Val = weightedShapeDistanceExtractor1.extract(m, m1, m2);
+    }
 
     /*hoot.trace("centroidDistanceExtractorVal: " + centroidDistanceExtractorVal);
     hoot.trace("angleHistogramExtractor5Val: " + angleHistogramExtractor5Val);
     hoot.trace("distanceScoreExtractor7Val: " + distanceScoreExtractor7Val);
     hoot.trace("edgeDistanceExtractor1Val: " + edgeDistanceExtractor1Val);
-    hoot.trace("euclideanDistanceExtractorVal: " + euclideanDistanceExtractorVal);
-    hoot.trace("hausdorffDistanceExtractorVal: " + hausdorffDistanceExtractorVal);
-    hoot.trace("lengthScoreExtractor1Val: " + lengthScoreExtractor1Val);
-    hoot.trace("lengthScoreExtractor7Val: " + lengthScoreExtractor7Val);
     hoot.trace("parallelScoreExtractorVal: " + parallelScoreExtractorVal);
     hoot.trace("weightedMetricDistanceExtractor1Val: " + weightedMetricDistanceExtractor1Val);
     hoot.trace("weightedShapeDistanceExtractor1Val: " + weightedShapeDistanceExtractor1Val);
     hoot.trace("weightedShapeDistanceExtractor7Val: " + weightedShapeDistanceExtractor7Val);*/
 
-    /*var wmdMax = 1.2;
-    if (maximalUsed)
-    {
-      wmdMax = 1.39;
-    }*/
-
-    if ((centroidDistanceExtractorVal > 0.61 && weightedMetricDistanceExtractor1Val < 1.4) || 
-        (edgeDistanceExtractor1Val > 0.997 && weightedShapeDistanceExtractor7Val == 0.0))
+    if ((maximalUsed && angleHistogramExtractor5Val > 0.95 && distanceScoreExtractor7Val < 0.575 && parallelScoreExtractorVal > 0.118 &&
+         weightedShapeDistanceExtractor1Val > 0.118 && weightedShapeDistanceExtractor7Val < 0.13 && nameExtractorVal < 0.451 &&
+         weightedMetricDistanceExtractor1Val < 2.38/*angleHistogramExtractor5Val > 0.95 && weightedMetricDistanceExtractor1Val < 1.93*/) ||
+        (!maximalUsed && (centroidDistanceExtractorVal > 0.61 && weightedMetricDistanceExtractor1Val < 1.4) || 
+         (edgeDistanceExtractor1Val > 0.997 && weightedShapeDistanceExtractor7Val == 0.0)))
     {
       //So far, voltage and location (underground vs overhead) seem to be the only tags useful to disambiguate power line matches.  We'll 
       //review when two features match and those tags disagree, and we'll ignore those tags completely if the values for either of them 
@@ -267,14 +261,12 @@ exports.getMatchFeatureDetails = function(map, e1, e2)
     var m1 = sublines.match1;
     var m2 = sublines.match2;
 
+    featureDetails["centroidDistanceExtractorVal"] = centroidDistanceExtractor.extract(m, m1, m2);
     featureDetails["angleHistogramExtractor5"] = angleHistogramExtractor5.extract(m, m1, m2);
-    featureDetails["distanceScoreExtractor7"] = distanceScoreExtractor7.extract(m, m1, m2);
     featureDetails["edgeDistanceExtractor1Val"] = edgeDistanceExtractor1.extract(m, m1, m2);
-    featureDetails["euclideanDistanceExtractorVal"] = euclideanDistanceExtractor.extract(m, m1, m2);
-    featureDetails["hausdorffDistanceExtractorVal"] = hausdorffDistanceExtractor.extract(m, m1, m2);
-    featureDetails["lengthScoreExtractor1Val"] = lengthScoreExtractor1.extract(m, m1, m2);
-    featureDetails["lengthScoreExtractor7Val"] = lengthScoreExtractor7.extract(m, m1, m2);
+    featureDetails["nameExtractorVal"] = nameExtractor.extract(m, m1, m2);
     featureDetails["parallelScoreExtractorVal"] = parallelScoreExtractor.extract(m, m1, m2);
+    featureDetails["weightedMetricDistanceExtractor1Val"] = weightedMetricDistanceExtractor1.extract(m, m1, m2);
     featureDetails["weightedShapeDistanceExtractor1Val"] = weightedShapeDistanceExtractor1.extract(m, m1, m2);
     featureDetails["weightedShapeDistanceExtractor7Val"] = weightedShapeDistanceExtractor7.extract(m, m1, m2);
   }

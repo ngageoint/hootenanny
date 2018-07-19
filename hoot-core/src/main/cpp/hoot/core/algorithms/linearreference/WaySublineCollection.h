@@ -48,6 +48,10 @@ class WaySublineCollection
 {
 public:
 
+  static std::string className() { return "hoot::WaySublineCollection"; }
+
+  static unsigned int logWarnCount;
+
   typedef std::vector<WaySubline> SublineCollection;
 
   WaySublineCollection();

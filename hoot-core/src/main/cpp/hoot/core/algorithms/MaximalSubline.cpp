@@ -158,7 +158,6 @@ void MaximalSubline::MatchCriteria::maximalNearestSubline(LineSegment& a,
   b.p1 = b2;
 }
 
-
 MaximalSubline::MaximalSubline(MatchCriteria* criteria, Meters minSplitSize) :
 _criteria(criteria),
 _spacing(ConfigOptions().getMaximalSublineSpacing()),
@@ -903,7 +902,7 @@ vector<WaySublineMatch> MaximalSubline::_snapIntersections(const ConstOsmMapPtr&
 
   for (size_t i = 0; i < matchIndexes.size(); i++)
   {
-    LOG_VART(rawSublineMatches[i]);
+    //LOG_VART(rawSublineMatches[i]);
 
     const int mi = matchIndexes[i];
 
