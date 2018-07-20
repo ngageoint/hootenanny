@@ -1,10 +1,4 @@
 <diffResult generator="OpenStreetMap Server" version="0.6">
-  <node old_id="-3" new_id="3" new_version="1"/>
-  <node old_id="-4" new_id="4" new_version="1"/>
-  <node old_id="-5" new_id="5" new_version="1"/>
-  <node old_id="-6" new_id="6" new_version="1"/>
-  <node old_id="-9" new_id="9" new_version="1"/>
-  <node old_id="-10" new_id="10" new_version="1"/>
   <node old_id="-11" new_id="11" new_version="1"/>
   <node old_id="-12" new_id="12" new_version="1"/>
   <node old_id="-13" new_id="13" new_version="1"/>
@@ -15,17 +9,4 @@
   <node old_id="-18" new_id="18" new_version="1"/>
   <node old_id="-19" new_id="19" new_version="1"/>
   <node old_id="-20" new_id="20" new_version="1"/>
-  <node old_id="-21" new_id="21" new_version="1"/>
-  <node old_id="-22" new_id="22" new_version="1"/>
-  <node old_id="-23" new_id="23" new_version="1"/>
-  <node old_id="-24" new_id="24" new_version="1"/>
-  <node old_id="-25" new_id="25" new_version="1"/>
-  <node old_id="-26" new_id="26" new_version="1"/>
-  <node old_id="-27" new_id="27" new_version="1"/>
-  <node old_id="-28" new_id="28" new_version="1"/>
-  <node old_id="-29" new_id="29" new_version="1"/>
-  <node old_id="-30" new_id="30" new_version="1"/>
-  <node old_id="-31" new_id="31" new_version="1"/>
-  <node old_id="-36" new_id="36" new_version="1"/>
-  <way old_id="-3" new_id="3" new_version="1"/>
 </diffResult>

@@ -61,7 +61,7 @@ class XmlChangeset
 public:
   /** Constructors */
   XmlChangeset();
-  XmlChangeset(const QList<QString>& changesets);
+  explicit XmlChangeset(const QList<QString>& changesets);
   /**
    * @brief loadChangeset Load changeset file, can be called multiple times on changeset that are split across files
    * @param changesetPath
@@ -234,10 +234,6 @@ private:
   ChangesetTypeMap _relations;
   /** Element ID to ID data structure for checking old ID to new ID and new ID to old ID lookups */
   ElementIdToIdMap _idMap;
-  /** Map listing node IDs with all way IDs that they are a part of */
-  std::map<long, std::vector<long>> _nodesToWays;
-  /** Three element array of maps of element IDs to relations that they are a part of */
-  std::array<std::map<long, std::vector<long>>, ElementType::Unknown> _idsToRelations;
   /** Soft maximum changeset size */
   long _maxChangesetSize;
   /** Count of elements that have been sent */

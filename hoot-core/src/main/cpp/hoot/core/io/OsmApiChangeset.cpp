@@ -139,7 +139,6 @@ void XmlChangeset::loadElements(QXmlStreamReader& reader, ChangesetType changese
       else if (name == "nd")
       {
         long id = reader.attributes().value("ref").toString().toLong();
-        _nodesToWays[id].push_back(element->id());
         boost::dynamic_pointer_cast<XmlWay>(element)->addNode(id);
       }
       else if (name == "member")
@@ -638,44 +637,12 @@ bool XmlChangeset::calculateChangeset(ChangesetInfoPtr& changeset)
          changeset->size() < (size_t)_maxChangesetSize &&
          hasElementsToSend())
   {
-//  TEMPORARY:
-//#define RELATION_TO_NODE
-#define WAY_RELATION_NODE
-#ifdef RELATION_TO_NODE
-    //  TODO: At some point we should test if the relation/way/node order should be reversed
-    //  to figure out which one is faster
-    //  Start with the relations
-    addRelations(changeset, type);
-    //  Break out of the loop once the changeset is big enough
-    if (changeset->size() >= (size_t)_maxChangesetSize)
-      continue;
-    //  Then the ways
-    addWays(changeset, type);
-    //  Break out of the loop once the changeset is big enough
-    if (changeset->size() >= (size_t)_maxChangesetSize)
-      continue;
-    //  Then the nodes
-    addNodes(changeset, type);
-    //  Break out of the loop once the changeset is big enough
-    if (changeset->size() >= (size_t)_maxChangesetSize)
-      continue;
-#elif defined WAY_RELATION_NODE
-    //  Start with the ways
-    addWays(changeset, type);
-    //  Break out of the loop once the changeset is big enough
-    if (changeset->size() >= (size_t)_maxChangesetSize)
-      continue;
-    //  Then the relations
-    addRelations(changeset, type);
-    //  Break out of the loop once the changeset is big enough
-    if (changeset->size() >= (size_t)_maxChangesetSize)
-      continue;
-    //  Then the nodes
-    addNodes(changeset, type);
-    //  Break out of the loop once the changeset is big enough
-    if (changeset->size() >= (size_t)_maxChangesetSize)
-      continue;
-#else
+    /**
+     *  Changesets are created by first adding nodes, then ways, and
+     *  finally relations. In testing this order was found to be 4%-7%
+     *  faster than any other interpolation of the ordering of nodes,
+     *  ways, and relations.
+     */
     //  Start with the nodes
     addNodes(changeset, type);
     //  Break out of the loop once the changeset is big enough
@@ -691,7 +658,6 @@ bool XmlChangeset::calculateChangeset(ChangesetInfoPtr& changeset)
     //  Break out of the loop once the changeset is big enough
     if (changeset->size() >= (size_t)_maxChangesetSize)
       continue;
-#endif
     //  Go to the next type and loop back around
     type = static_cast<ChangesetType>(type + 1);
   }

@@ -122,17 +122,19 @@ public:
     XmlChangeset changeset;
     changeset.loadChangeset("test-files/io/OsmChangesetElementTest/ToyTestAInput.osc");
 
-    changeset.setMaxSize(5);
+    changeset.setMaxSize(10);
 
     QStringList expectedFiles;
     expectedFiles.append("test-files/io/OsmChangesetElementTest/ToyTestASplit1.osc");
     expectedFiles.append("test-files/io/OsmChangesetElementTest/ToyTestASplit2.osc");
     expectedFiles.append("test-files/io/OsmChangesetElementTest/ToyTestASplit3.osc");
+    expectedFiles.append("test-files/io/OsmChangesetElementTest/ToyTestASplit4.osc");
 
     QStringList updatedFiles;
     updatedFiles.append("test-files/io/OsmChangesetElementTest/ToyTestASplit1.response.xml");
     updatedFiles.append("test-files/io/OsmChangesetElementTest/ToyTestASplit2.response.xml");
     updatedFiles.append("test-files/io/OsmChangesetElementTest/ToyTestASplit3.response.xml");
+    updatedFiles.append("test-files/io/OsmChangesetElementTest/ToyTestASplit4.response.xml");
 
     ChangesetInfoPtr info;
     int i = 1;

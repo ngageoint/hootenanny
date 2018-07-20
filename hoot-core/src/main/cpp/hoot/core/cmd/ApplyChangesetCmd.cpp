@@ -54,31 +54,42 @@ public:
 
   virtual int runSimple(QStringList args)
   {
-    if (args.size() != 2 && args.size() != 4)
+    if (args.size() < 2)
     {
       cout << getHelp() << endl << endl;
       throw HootException(
-        QString("%1 takes two or four parameters and was given %2 parameters")
+        QString("%1 takes at least two parameters and was given %2 parameters")
           .arg(getName())
           .arg(args.size()));
     }
 
-    LOG_INFO("Applying changeset " << args[0] << " to " << args[1] << "...");
-
-    // Not easy to extend this to N osc files without refactoring the *.osc.sql version
     if (args[0].endsWith(".osc"))
     {
       QUrl osm;
-      osm.setUrl(args[1]);
-
+      osm.setUrl(args[args.size() - 1]);
       QList<QString> changesets;
-      changesets.append(args[0]);
+      for (int i = 0; i < args.size() - 1; ++i)
+      {
+        LOG_INFO("Applying changeset " << args[i] << " to " << args[args.size() - 1] << "...");
+        changesets.append(args[i]);
+      }
 
       OsmApiWriter writer(osm, changesets);
       writer.apply();
     }
     else if (args[0].endsWith(".osc.sql"))
     {
+      if (args.size() != 2 && args.size() != 4)
+      {
+        cout << getHelp() << endl << endl;
+        throw HootException(
+          QString("%1 takes two or four parameters and was given %2 parameters")
+            .arg(getName())
+            .arg(args.size()));
+      }
+
+      LOG_INFO("Applying changeset " << args[0] << " to " << args[1] << "...");
+
       QUrl url(args[1]);
       OsmApiDbSqlChangesetApplier changesetWriter(url);
 
