@@ -59,8 +59,8 @@ public:
       cout << getHelp() << endl << endl;
       throw HootException(
         QString("%1 takes at least two parameters and was given %2 parameters")
-        .arg(getName())
-        .arg(args.size()));
+          .arg(getName())
+          .arg(args.size()));
     }
 
     if (args[0].endsWith(".osc"))
