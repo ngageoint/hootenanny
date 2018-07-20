@@ -88,7 +88,7 @@ public:
 private:
 
   std::vector<boost::shared_ptr<ClassInitializer> > _initializers;
-  static JsRegistrar* _theInstance;
+  static boost::shared_ptr<JsRegistrar> _theInstance;
 };
 
 template<class T>

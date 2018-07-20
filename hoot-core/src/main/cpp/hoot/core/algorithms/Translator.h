@@ -89,8 +89,8 @@ private:
   char* _buffer;
   int _bufferLength;
   Tgs::LruCache<QString, QString> _cache;
-  static Translator* _theInstance;
-  JsonDictionary* _dictionary;
+  static boost::shared_ptr<Translator> _theInstance;
+  boost::shared_ptr<JsonDictionary> _dictionary;
   QSet<QString> _streetTypes;
   Transliterator* _transliterator;
   Transliterator* _titler;

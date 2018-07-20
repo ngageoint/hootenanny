@@ -89,9 +89,9 @@ public:
 
   static Log& getInstance()
   {
-    if (_theInstance == 0)
+    if (_theInstance == NULL)
     {
-      _theInstance = new Log();
+      _theInstance.reset(new Log());
       _theInstance->init();
       _theInstance->setLevel(_theInstance->_level);
     }
@@ -136,7 +136,7 @@ public:
 
 private:
   WarningLevel _level;
-  static Log* _theInstance;
+  static boost::shared_ptr<Log> _theInstance;
   static unsigned int _warnMessageLimit;
 
   Log();

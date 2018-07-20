@@ -73,7 +73,7 @@ public:
    * It is expected that the eid will be populated with addElement after construction. addElement
    * must be called exactly two times.
    */
-  ReplaceElementOp() {}
+  ReplaceElementOp();
 
   virtual ~ReplaceElementOp() {}
 
