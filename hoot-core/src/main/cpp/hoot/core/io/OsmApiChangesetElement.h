@@ -153,6 +153,8 @@ public:
    * @param idMap ID to ID Map for updated IDs
    */
   XmlNode(const XmlObject& node, ElementIdToIdMap* idMap);
+  /** Virtual destructor */
+  virtual ~XmlNode() { }
   /**
    * @brief toString Get the XML string equivalent for the node
    * @param changesetId ID of the changeset to insert into the node
@@ -171,6 +173,8 @@ public:
    * @param idMap ID to ID Map for updated IDs
    */
   XmlWay(const XmlObject& way, ElementIdToIdMap* idMap);
+  /** Virtual destructor */
+  virtual ~XmlWay() { }
   /**
    * @brief addNode Add a node ID to the node (in order)
    * @param id Node ID
@@ -258,6 +262,8 @@ public:
    * @param idMap ID to ID Map for updated IDs
    */
   XmlRelation(const XmlObject& relation, ElementIdToIdMap* idMap);
+  /** Virtual destructor */
+  virtual ~XmlRelation() { }
   /**
    * @brief addMember Add relation member
    * @param member XML attributes of the relation member
@@ -287,8 +293,9 @@ private:
 };
 
 /** Custom sorting function to sort IDs from -1 to -n followed by 1 to m */
-struct osm_id_sort
+class osm_id_sort
 {
+public:
   bool operator() (long lhs, long rhs) const
   {
     if (lhs > 0 && rhs > 0)       return lhs < rhs; //  Positive numbers count up

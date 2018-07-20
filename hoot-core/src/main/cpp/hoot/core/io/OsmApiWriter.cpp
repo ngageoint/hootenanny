@@ -375,7 +375,6 @@ long OsmApiWriter::_createChangeset(OsmApiNetworkRequestPtr request, const QStri
 
     QString responseXml = QString::fromUtf8(request->getResponseContent().data());
 
-    //TODO: Parse response if it is more than just a single number
     return responseXml.toLong();
   }
   catch (const HootException& ex)
