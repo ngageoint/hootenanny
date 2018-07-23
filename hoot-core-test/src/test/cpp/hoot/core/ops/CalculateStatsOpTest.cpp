@@ -27,7 +27,7 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/TestUtils.h>
+#include "../TestUtils.h"
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/ops/CalculateStatsOp.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -65,7 +65,7 @@ public:
   {
     boost::shared_ptr<CalculateStatsOp> calcStatsOp =
       _calcStats("test-files/ops/CalculateStatsOp/all-data-types.osm");
-    CPPUNIT_ASSERT_EQUAL(129, calcStatsOp->getStats().size());
+    CPPUNIT_ASSERT_EQUAL(139, calcStatsOp->getStats().size());
   }
 
   void runStatsTest()
@@ -176,6 +176,21 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Waterways Conflated"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Waterways Marked for Review"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Unmatched Waterways"), 1e-1);
+
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Power Line Count"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable Power Lines"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflated Power Lines"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Power Lines Marked for Review"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Number of Power Line Reviews to be Made"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Unmatched Power Lines"));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+      0.0, calcStatsOp->getSingleStat("Meters of Power Line Processed by Conflation"), 1e-1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+      0.0, calcStatsOp->getSingleStat("Percentage of Power Lines Conflated"), 1e-1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+      0.0, calcStatsOp->getSingleStat("Percentage of Power Lines Marked for Review"), 1e-1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+      0.0, calcStatsOp->getSingleStat("Percentage of Unmatched Power Lines"), 1e-1);
 
     CPPUNIT_ASSERT_EQUAL(6.0, calcStatsOp->getSingleStat("Polygon Conflatable POI Count"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable Polygon Conflatable POIs"));
@@ -341,6 +356,21 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Waterways Conflated"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Waterways Marked for Review"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Unmatched Waterways"), 1e-1);
+
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Power Line Count"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable Power Lines"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflated Power Lines"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Power Lines Marked for Review"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Number of Power Line Reviews to be Made"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Unmatched Power Lines"));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+      0.0, calcStatsOp->getSingleStat("Meters of Power Line Processed by Conflation"), 1e-1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+      0.0, calcStatsOp->getSingleStat("Percentage of Power Lines Conflated"), 1e-1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+      0.0, calcStatsOp->getSingleStat("Percentage of Power Lines Marked for Review"), 1e-1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+      0.0, calcStatsOp->getSingleStat("Percentage of Unmatched Power Lines"), 1e-1);
 
     CPPUNIT_ASSERT_EQUAL(6.0, calcStatsOp->getSingleStat("Polygon Conflatable POI Count"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable Polygon Conflatable POIs"));
