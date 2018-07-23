@@ -119,7 +119,7 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       61.29, calcStatsOp->getSingleStat("Percentage of Total Features Unmatched"), 1e-1);
 
-    CPPUNIT_ASSERT_EQUAL(7.0, calcStatsOp->getSingleStat("Number of Match Creators"));
+    CPPUNIT_ASSERT_EQUAL(8.0, calcStatsOp->getSingleStat("Number of Match Creators"));
     //we're parsing a conflated output map here, so all conflatable counts are equal to zero;
     //counts for PoiPolygon are broken up by type in addition to being shown as total
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Features Conflatable by: hoot::BuildingMatchCreator"));
@@ -300,7 +300,7 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       62.07, calcStatsOp->getSingleStat("Percentage of Total Features Unmatched"), 1e-1);
 
-    CPPUNIT_ASSERT_EQUAL(7.0, calcStatsOp->getSingleStat("Number of Match Creators"));
+    CPPUNIT_ASSERT_EQUAL(8.0, calcStatsOp->getSingleStat("Number of Match Creators"));
     //we're parsing a conflated output map here, so all conflatable counts are equal to zero;
     //counts for PoiPolygon are broken up by type in addition to being shown as total
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Features Conflatable by: hoot::BuildingMatchCreator"));
