@@ -23,11 +23,6 @@ var weightedShapeDistanceExtractor7 = new hoot.WeightedShapeDistanceExtractor(ne
 var distanceWeightCoeff = parseFloat(hoot.get("power.line.matcher.distance.weight.coefficient")) * -1.0;
 var distanceScoreExtractor = new hoot.DistanceScoreExtractor();
 
-//var angleHistogramExtractor5 = new hoot.AngleHistogramExtractor({"angle.histogram.extractor.smoothing": 1.57});
-//var nameExtractor = new hoot.NameExtractor();
-//var parallelScoreExtractor = new hoot.ParallelScoreExtractor();
-//var weightedShapeDistanceExtractor1 = new hoot.WeightedShapeDistanceExtractor(new hoot.MeanAggregator());
-
 /**
  * Runs before match creation occurs and provides an opportunity to perform custom initialization.
  */
@@ -161,14 +156,6 @@ exports.matchScore = function(map, e1, e2)
 
       return result;
     }
-    else
-    {
-      hoot.trace("miss on score");  
-    }
-  }
-  else 
-  {
-    hoot.trace("miss on subline match");
   }
 
   return result;
@@ -209,13 +196,9 @@ exports.getMatchFeatureDetails = function(map, e1, e2)
     var m1 = sublines.match1;
     var m2 = sublines.match2;
 
-    featureDetails["angleHistogramExtractor5"] = angleHistogramExtractor5.extract(m, m1, m2);
     featureDetails["centroidDistanceExtractorVal"] = centroidDistanceExtractor.extract(m, m1, m2);
     featureDetails["edgeDistanceExtractor1Val"] = edgeDistanceExtractor1.extract(m, m1, m2);
-    featureDetails["nameExtractorVal"] = nameExtractor.extract(m, m1, m2);
-    featureDetails["parallelScoreExtractorVal"] = parallelScoreExtractor.extract(m, m1, m2);
     featureDetails["weightedMetricDistanceExtractor1Val"] = weightedMetricDistanceExtractor1.extract(m, m1, m2);
-    featureDetails["weightedShapeDistanceExtractor1Val"] = weightedShapeDistanceExtractor1.extract(m, m1, m2);
     featureDetails["weightedShapeDistanceExtractor7Val"] = weightedShapeDistanceExtractor7.extract(m, m1, m2);
   }
 

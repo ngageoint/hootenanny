@@ -579,12 +579,18 @@ image::user/images/id/hoot_poi_conflate.png[]
 NOTE: A POI merge can occur in either direction depending on the users preference.  In most cases clicking merge will merge the secondary dataset POI into the reference POI combining relevant attributes but this can be reversed by holding down the Ctrl key when clicking the merge button.  This will not work when using the merge `m` short-cut key.
 
 [[HootiD_GenericRiverConflation]]
-==== Advanced Conflation Example: Generic River Conflation
+==== River Conflation
 
-One of the experimental options available for advanced conflation is the ability to conflate Waterways data using methods described in the link:$$https://github.com/ngageoint/hootenanny/releases/download/v0.2.17/Hootenanny.-.Developer.Guide.pdf$$[Developer Guide] in the Generic River Conflation section.  If users would like to explore this capability by conflating two rivers datasets, make sure that the Waterways options have been enabled in the Advanced Conflation Options panel as shown in the figure below.  Note that no exact set of parameters may produce the desired results so experimentation maybe required.  Background on each options is provided in greater detail in the Developer Guide and listed in <<WaterwayOptions>>.
+One of the options available for advanced conflation is the ability to conflate Waterways data using methods described in the Hootenanny Developer Guide in the Generic River Conflation section.  If users would like to explore this capability by conflating two rivers datasets, make sure that the Waterways options have been enabled in the Advanced Conflation Options panel as shown in the figure below.  Note that no exact set of parameters may produce the desired results so experimentation maybe required.  Background on each options is provided in greater detail in the Developer Guide and listed in <<WaterwayOptions>>.
 
 .Waterway conflation options available from the Advanced Conflation Options panel.
 image::user/images/id/hoot_waterway.png[scaledwidth="25%"]
+
+[[HootiD_PowerLineConflation]]
+==== Power Line Conflation
+
+The capability to conflate power lines exists within Hootenanny iD Editor.  It can be configured in a similar fashion as that described
+for river conflation.
 
 [[HootiD_Exporting]]
 ==== Export Conflated Data
