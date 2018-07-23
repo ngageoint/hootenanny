@@ -84,7 +84,6 @@ void IntersectionSplitter::_mapNodesToWays()
 
     bool isNetworkType = false;
 
-    //TODO: can this be changed to isLinear?
     if (OsmSchema::getInstance().isLinearHighway(w->getTags(), w->getElementType()) ||
         OsmSchema::getInstance().isLinearWaterway(*w) ||
         OsmSchema::getInstance().isPowerLine(*w))

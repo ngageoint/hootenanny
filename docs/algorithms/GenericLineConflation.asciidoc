@@ -497,16 +497,23 @@ compared to the more specialized open source power line datasets coming from pow
 .*Power Line Conflation Test Results - July 2018*
 [width="100%"]
 |======
-| *Test Number* | *AOI* | *Reference Data* | *Secondary Data* | *Manually Matched Feature Count* | *Percentage Correctly Conflated* | *Percentage Marked for Unecessary Review* | *Percentage Combined Correct and Reviewable* | *Time Elapsed (HH:MM:SS)*
-| 1 | Mozambique | ENERGYDATA.INFO | OpenStreetMap | 62 | 96.7 | 0.0 | 96.7 | 00:05:14
-| 2 | Namibia | ENERGYDATA.INFO | OpenStreetMap | 200 | 51.7 | 0.0 | 51.7 | 00:00:00
-| 3 | California Bay Area | California State Govt | OpenStreetMap | 229 | 75.3 | 0.0 | 75.3 | 00:01:39
-| 4 | Los Angeles | California State Govt | OpenStreetMap | 204 | 69.6 | 1.2 | 70.8 | 00:00:00
-| 5 | Namibia | MGCP | ENERGYDATA.INFO | 41 | 71.7 | 0.0 | 71.7 | 00:00:30 
-| 6 | Namibia | ENERGYDATA.INFO | OpenStreetMap | 51 | 92.7 | 0.0 | 92.7 | 00:03:53 
+| *Test Number* | *AOI* | *Reference Data* | *Secondary Data* | *Manually Matched Feature Count* | *Percentage Correctly Conflated* | *Percentage Marked for Unecessary Review* | *Percentage Combined Correct and Reviewable* | *Time Elapsed (MM:SS)*
+| 1 | Mozambique | ENERGYDATA.INFO | OpenStreetMap | 62 | 96.7 | 0.0 | 96.7 | 05:14
+| 2 | Namibia | ENERGYDATA.INFO | OpenStreetMap | 200 | 51.7 | 0.0 | 51.7 | 23:15
+| 3 | California Bay Area | California State Govt | OpenStreetMap | 229 | 75.3 | 0.0 | 75.3 | 01:39
+| 4 | Los Angeles | California State Govt | OpenStreetMap | 204 | 69.6 | 1.2 | 70.8 | 00:56
+| 5 | Namibia | MGCP | ENERGYDATA.INFO | 41 | 71.7 | 0.0 | 71.7 | 00:30 
+| 6 | Namibia | ENERGYDATA.INFO | OpenStreetMap | 51 | 92.7 | 0.0 | 92.7 | 03:53 
 |======
 
-The 80% correct conflation threshold was met by two of the tests, with three additional tests rougly at or better than 70% correct.  The Nambia test with only 51.7% correct obviously still requires attention, though.
+The 80% correct conflation threshold was met by two of the tests, with three additional tests within 10% of that value.  The Nambia 
+test with only 51.7% correct obviously still requires quite a bit of attention.  
+
+It is worth noting that some of the ENERGYDATA.INFO and MGCP data contain previously added OpenStreetMap data.  Therefore, in some cases 
+nearly identical sections of data are being conflated together, which Hootenanny performs very well against (as expected).  In those areas 
+test scores could be considered artificially inflated.  However, since it is a quite common workflow to conflate OpenStreetMap into other 
+custom data sources due to OSM's richness as a result of open source contribution, testing conflating such overlapping data is still quite 
+valid.
 
 [[GenericLineConflationFutureWork]]
 === Future Work
