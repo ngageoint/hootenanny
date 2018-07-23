@@ -29,6 +29,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/OsmApiDbSqlChangesetApplier.h>
+#include <hoot/core/io/OsmApiWriter.h>
 
 // Qt
 #include <QFile>
@@ -53,24 +54,42 @@ public:
 
   virtual int runSimple(QStringList args)
   {
-    if (args.size() != 2 && args.size() != 4)
+    if (args.size() < 2)
     {
       cout << getHelp() << endl << endl;
       throw HootException(
-        QString("%1 takes two or four parameters and was given %2 parameters")
+        QString("%1 takes at least two parameters and was given %2 parameters")
           .arg(getName())
           .arg(args.size()));
     }
 
-    LOG_INFO("Applying changeset " << args[0] << " to " << args[1] << "...");
-
     if (args[0].endsWith(".osc"))
     {
-      throw HootException(
-        "XML changeset file writing is not currently supported by the changeset-apply command.");
+      QUrl osm;
+      osm.setUrl(args[args.size() - 1]);
+      QList<QString> changesets;
+      for (int i = 0; i < args.size() - 1; ++i)
+      {
+        LOG_INFO("Applying changeset " << args[i] << " to " << args[args.size() - 1] << "...");
+        changesets.append(args[i]);
+      }
+
+      OsmApiWriter writer(osm, changesets);
+      writer.apply();
     }
     else if (args[0].endsWith(".osc.sql"))
     {
+      if (args.size() != 2 && args.size() != 4)
+      {
+        cout << getHelp() << endl << endl;
+        throw HootException(
+          QString("%1 takes two or four parameters and was given %2 parameters")
+            .arg(getName())
+            .arg(args.size()));
+      }
+
+      LOG_INFO("Applying changeset " << args[0] << " to " << args[1] << "...");
+
       QUrl url(args[1]);
       OsmApiDbSqlChangesetApplier changesetWriter(url);
 

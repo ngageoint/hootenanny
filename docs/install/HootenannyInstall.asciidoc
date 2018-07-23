@@ -18,28 +18,17 @@ See VAGRANT.md
 [[fullinstall]]
 == CentOS/RHEL RPM Install Instructions
 
-The recommended and easiest installation method is to install from RPMs.  This can be accomplished by performing the following steps:
+The recommended and easiest installation method is to install from RPMs.  This can be accomplished by running the following commands:
 
-. Create the following file: +/etc/yum.repos.d/hoot.repo+
-. Add the following content to the file:
-+
 --------------------------------------
-[hoot]
-name=hoot
-baseurl=https://s3.amazonaws.com/hoot-rpms/stable/el6/
-gpgcheck=0
---------------------------------------
-. Run the following:
-+
---------------------------------------
-sudo yum update
-sudo yum install hootenanny-autostart
+sudo yum install -y epel-release yum-utils
+sudo yum-config-manager --add-repo https://s3.amazonaws.com/hoot-repo/el7/pgdg95.repo
+sudo yum-config-manager --add-repo https://s3.amazonaws.com/hoot-repo/el7/release/hoot.repo
+sudo yum makecache -y
+sudo yum install -y hootenanny-autostart
 --------------------------------------
 
-`scripts/InstallHoot-CentOS-RHEL.sh` may also be used to install.  This script requires custom 
-configuration as described within it.  It may require updating if you have installed certain Hootenanny 
-dependencies (Tomcat, Postgres, etc.) with non-standard methods.  It also may require that certain file 
-and directory permissions be relaxed within your the target environment.
+This will set up the EPEL, PGDG, and Hootennanny repositories.  All packages in these repositories are cryptographically signed by their maintainers.
 
 For additional details on configuring the database connection pool, see <<HootDBConnectionPool>>.
 

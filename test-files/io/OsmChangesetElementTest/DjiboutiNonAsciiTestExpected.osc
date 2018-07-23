@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osmChange version="0.6" generator="Hootenanny">
+	<create>
+		<node id="-1" version="0" lat="11.6021625999999998" lon="43.1529881000000017" timestamp="" changeset="1">
+			<tag k="name:ar" v="فندق لا سيستا"/>
+			<tag k="name:fr" v="Hôtel la Siesta"/>
+			<tag k="name" v="Hôtel la Siesta فندق لا سيستا"/>
+			<tag k="tourism" v="hotel"/>
+			<tag k="error:circular" v="15"/>
+		</node>
+		<node id="-2" version="0" lat="11.6188301999999997" lon="43.1483161000000024" timestamp="" changeset="1">
+			<tag k="addr:street" v="شارع برنار"/>
+			<tag k="name:ar" v="سفارة جمهورية مصر العربية"/>
+			<tag k="name:zh" v="埃及大使馆"/>
+			<tag k="name:fr" v="Ambassade de l'Égypte"/>
+			<tag k="addr:city" v="جيبوتي"/>
+			<tag k="name" v="Ambassade de l'Égypte سفارة جمهورية مصر العربية"/>
+			<tag k="amenity" v="embassy"/>
+			<tag k="error:circular" v="15"/>
+		</node>
+		<node id="-3" version="0" lat="11.6189701000000003" lon="43.1478938999999997" timestamp="" changeset="1">
+			<tag k="addr:street" v="شارع برنار"/>
+			<tag k="name:ar" v="سفارة ليبيا"/>
+			<tag k="name:zh" v="利比亚大使馆"/>
+			<tag k="name:fr" v="Ambassade de la Lybie"/>
+			<tag k="addr:city" v="جيبوتي"/>
+			<tag k="name" v="Ambassade de la Lybie سفارة ليبيا"/>
+			<tag k="amenity" v="embassy"/>
+			<tag k="error:circular" v="15"/>
+		</node>
+		<node id="-4" version="0" lat="11.6119851000000001" lon="43.1489947000000029" timestamp="" changeset="1">
+			<tag k="name:ar" v="كارفور"/>
+			<tag k="name:fr" v="Carrefour"/>
+			<tag k="shop" v="convenience"/>
+			<tag k="addr:city" v="جيبوتي"/>
+			<tag k="name" v="Carrefour كارفور"/>
+			<tag k="error:circular" v="15"/>
+		</node>
+		<node id="-5" version="0" lat="11.5764229000000007" lon="43.1507804000000021" timestamp="" changeset="1">
+			<tag k="note" v="RUBIS Énergie"/>
+			<tag k="name" v="RUBIS Station-service"/>
+			<tag k="error:circular" v="15"/>
+		</node>
+		<node id="-6" version="0" lat="11.5964007000000002" lon="43.1487393999999966" timestamp="" changeset="1">
+			<tag k="addr:street" v="Boulevard du Général de Gaulle شارع الجنرال ديغول"/>
+			<tag k="shop" v="stationery"/>
+			<tag k="phone" v="+253 21 35 25 97"/>
+			<tag k="name" v="Le Pount"/>
+			<tag k="error:circular" v="15"/>
+		</node>
+		<node id="-7" version="0" lat="11.5963104999999995" lon="43.1430701000000028" timestamp="" changeset="1">
+			<tag k="name:ar" v="رئاسة الجمهورية"/>
+			<tag k="name:fr" v="Présidence de la République"/>
+			<tag k="addr:city" v="جيبوتي"/>
+			<tag k="name" v="Présidence de la République رئاسة الجمهورية"/>
+			<tag k="amenity" v="townhall"/>
+			<tag k="error:circular" v="15"/>
+		</node>
+	</create>
+</osmChange>

@@ -1608,6 +1608,7 @@ bool OsmSchema::isArea(const Tags& t, const ElementType& type) const
     uint16_t g = tv.geometries;
     if (g & OsmGeometries::Area && !(g & (OsmGeometries::LineString | OsmGeometries::ClosedWay)))
     {
+      //LOG_VERBOSE("Area: " << it.key() << "=" << it.value());
       result = true;
       break;
     }

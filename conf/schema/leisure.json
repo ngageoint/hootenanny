@@ -308,6 +308,16 @@
     {
         "geometries": [
             "node",
+            "linestring",
+            "area"
+        ],
+        "isA": "leisure",
+        "name": "leisure=fishing",
+        "objectType": "tag"
+    },
+    {
+        "geometries": [
+            "node",
             "area"
         ],
         "categories": [

@@ -6,6 +6,7 @@
         "dataType": "enumeration",
         "geometries": [
             "node",
+            "linestring",
             "area"
         ],
         "influence": 1,

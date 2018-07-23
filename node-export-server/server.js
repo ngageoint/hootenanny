@@ -289,11 +289,12 @@ function doExport(req, res, hash, input) {
             if (req.params.schema === 'OSM') command += ' -D writer.include.debug.tags=true';
             if (overrideTags) command +=  ' -D translation.override=' + overrideTags;
             if (bbox) command += ' -D ' + bbox_param + '=' + bbox;
-            command += ' ' + config.schemas[req.params.schema];
         }
         command += ' "' + input + '" '
             + outFile
             ;
+
+        if (!isFile) command += ' --trans ' + config.schemas[req.params.schema];
 
         //used for testing to simulate hoot export
         //command = 'dd bs=1024 count=1024 if=/dev/urandom of=' + outFile + ' > /dev/null 2>&1';
