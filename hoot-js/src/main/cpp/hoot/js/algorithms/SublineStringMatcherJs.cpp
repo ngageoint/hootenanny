@@ -153,8 +153,6 @@ void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<
 
 void SublineStringMatcherJs::findMatch(const FunctionCallbackInfo<Value>& args)
 {
-  LOG_TRACE("test1");
-
   HandleScope scope(args.GetIsolate());
 
   SublineStringMatcherJs* smJs = ObjectWrap::Unwrap<SublineStringMatcherJs>(args.This());
@@ -164,13 +162,9 @@ void SublineStringMatcherJs::findMatch(const FunctionCallbackInfo<Value>& args)
     throw IllegalArgumentException("Expected exactly three argument in findMatch (map, e1, e2)");
   }
 
-  LOG_TRACE("test2");
-
   OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
   ElementJs* e1Js = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject());
   ElementJs* e2Js = ObjectWrap::Unwrap<ElementJs>(args[2]->ToObject());
-
-  LOG_TRACE("test3");
 
   WaySublineMatchString match = smJs->getSublineStringMatcher()->findMatch(
         mapJs->getConstMap(),
@@ -180,8 +174,6 @@ void SublineStringMatcherJs::findMatch(const FunctionCallbackInfo<Value>& args)
   WaySublineMatchStringPtr result(new WaySublineMatchString(match));
 
   args.GetReturnValue().Set(WaySublineMatchStringJs::New(result));
-
-  LOG_TRACE("test4");
 }
 
 void SublineStringMatcherJs::Init(Handle<Object> target)
