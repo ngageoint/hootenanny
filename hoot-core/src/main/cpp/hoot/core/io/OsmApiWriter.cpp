@@ -177,13 +177,14 @@ void OsmApiWriter::_changesetThreadFunc()
       else
       {
         //  Log the error
-        LOG_ERROR("Thread: " << std::this_thread::get_id() << "\tError uploading changeset: " << id);
+        LOG_ERROR("Error uploading changeset: " << id << "\t" << request->getErrorString());
         //  Split the changeset on conflict errors
         switch (request->getHttpStatus())
         {
         case 400:   //  Placeholder ID is missing or not unique
         case 404:   //  Diff contains elements where the given ID could not be found
         case 409:   //  Conflict, Split the changeset, push both back on the queue
+        case 412:   //  Precondition Failed, Relation with id cannot be saved due to other member
           {
             _changesetMutex.lock();
             ChangesetInfoPtr split = _changeset.splitChangeset(workInfo);
@@ -430,6 +431,9 @@ bool OsmApiWriter::_uploadChangeset(OsmApiNetworkRequestPtr request, long id, co
 
     switch (request->getHttpStatus())
     {
+    case 200:
+      success = true;
+      break;
     case 400:
       LOG_WARN("Changeset Upload Error: Error parsing XML changeset\n" << responseXml);
       break;
@@ -438,9 +442,6 @@ bool OsmApiWriter::_uploadChangeset(OsmApiNetworkRequestPtr request, long id, co
       break;
     case 409:
       LOG_WARN("Changeset conflict: " << responseXml);
-      break;
-    case 200:
-      success = true;
       break;
     default:
       LOG_WARN("Uknown HTTP response code: " << request->getHttpStatus());

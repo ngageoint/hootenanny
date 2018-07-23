@@ -26,13 +26,15 @@
  */
 
 // Hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/OsmApiDbSqlChangesetApplier.h>
 #include <hoot/core/io/OsmApiWriter.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 
 // Qt
 #include <QFile>
+#include <QFileInfo>
 
 using namespace std;
 
@@ -76,6 +78,17 @@ public:
 
       OsmApiWriter writer(osm, changesets);
       writer.apply();
+
+      if (writer.containsFailed())
+      {
+        //  Output the errors from 'changeset.osc' to 'changeset-error.osc'
+        QFileInfo path(args[0]);
+        QString errorFilename =
+          path.absolutePath() + QDir::separator() +
+          path.baseName() + "-error." + path.completeSuffix();
+        LOG_ERROR(QString("Some changeset elements failed to upload. Stored in %1.").arg(errorFilename));
+        FileUtils::writeFully(errorFilename, writer.getFailedChangeset());
+      }
     }
     else if (args[0].endsWith(".osc.sql"))
     {

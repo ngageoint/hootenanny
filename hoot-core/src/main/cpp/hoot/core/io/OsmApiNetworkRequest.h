@@ -68,6 +68,12 @@ public:
    */
   int getHttpStatus() { return _status; }
 
+  /**
+   * @brief getErrorString
+   * @return Error string from the last network request
+   */
+  QString getErrorString() { return _error; }
+
 private:
   /**
    * @brief _getHttpResponseCode Get the HTTP response code from the response object
@@ -79,6 +85,8 @@ private:
   QByteArray _content;
   /** HTTP status response code  */
   int _status;
+  /** Error string */
+  QString _error;
 };
 
 typedef boost::shared_ptr<OsmApiNetworkRequest> OsmApiNetworkRequestPtr;
