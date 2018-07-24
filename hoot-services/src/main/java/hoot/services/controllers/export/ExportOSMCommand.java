@@ -50,9 +50,14 @@ class ExportOSMCommand extends ExportCommand {
         options.add("hootapi.db.writer.create.user=true");
         options.add("api.db.email=" + params.getUserEmail());
 
-        if (!params.getTagOverrides().isEmpty()) {
-
+        if (!params.getTagOverrides().isEmpty() && !params.getIncludeHootTags()) {
+            options.add("convert.ops=hoot::TranslationOp;hoot::RemoveElementsVisitor");
+            options.add("remove.elements.visitor.element.criterion=hoot::NoInformationCriterion");
+        } else if (!params.getTagOverrides().isEmpty()) {
             options.add("convert.ops=hoot::TranslationOp");
+        }
+
+        if (!params.getTagOverrides().isEmpty()) {
 
             File trans = new File(new File(HootProperties.HOME_FOLDER, "translations"),"OSM_Export.js");
             options.add("translation.script=" + trans.getAbsolutePath());
