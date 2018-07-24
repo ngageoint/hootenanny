@@ -78,15 +78,21 @@ void XmlChangeset::loadChangeset(const QString &changesetPath)
    *   ...
    * </osmChange>
    */
-  QString changeset = FileUtils::readFully(changesetPath);
-  QXmlStreamReader reader(changeset);
+  QFile file(changesetPath);
+  if (!file.open(QIODevice::ReadOnly))
+  {
+    LOG_ERROR("Unable to read file at: " << changesetPath);
+    return;
+  }
+  //  Open the XML stream reader and attach it to the file
+  QXmlStreamReader reader(&file);
   //  Make sure that the XML provided starts with the <diffResult> tag
   QXmlStreamReader::TokenType type = reader.readNext();
   if (type == QXmlStreamReader::StartDocument)
     type = reader.readNext();
   if (type == QXmlStreamReader::StartElement && reader.name() != "osmChange")
   {
-    LOG_WARN("Unknown changeset response format.");
+    LOG_ERROR("Unknown changeset response format.");
     return;
   }
   //  Iterate all of updates and record them
