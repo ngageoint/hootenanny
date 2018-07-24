@@ -276,6 +276,9 @@ public:
     if (selectedSet.find(id) != selectedSet.end())
       selectedSet.erase(id);
   }
+
+  long getFirst(ElementType::Type element_type, XmlChangeset::ChangesetType changeset_type)
+  { return *(_changeset[element_type][changeset_type].begin()); }
   /**
    * @brief clear Clear out this entire changeset subset
    */

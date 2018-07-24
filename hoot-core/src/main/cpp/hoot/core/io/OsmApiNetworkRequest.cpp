@@ -48,6 +48,7 @@ bool OsmApiNetworkRequest::networkRequest(QUrl url, QNetworkAccessManager::Opera
   //  Reset status
   _status = 0;
   _content.clear();
+  _error.clear();
   //  Do HTTP request
   boost::shared_ptr<QNetworkAccessManager> pNAM(new QNetworkAccessManager());
   QNetworkRequest request(url);
@@ -103,10 +104,8 @@ bool OsmApiNetworkRequest::networkRequest(QUrl url, QNetworkAccessManager::Opera
   //  Check error status on our reply
   if (QNetworkReply::NoError != reply->error())
   {
-    QString errMsg = reply->errorString();
-    throw HootException(QString("Network error for request (%1): %2\n%3")
-      .arg(url.toString())
-      .arg(errMsg).arg(QString(_content)));
+    _error = reply->errorString();
+    return false;
   }
   //  return successfully
   return true;
