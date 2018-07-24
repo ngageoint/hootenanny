@@ -27,13 +27,12 @@
 #include "ConflateCaseTest.h"
 
 // hoot
+#include <hoot/core/TestUtils.h>
+#include <hoot/core/cmd/ConflateCmd.h>
+#include <hoot/core/test/TestSetup.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/cmd/ConflateCmd.h>
-
-#include "../TestUtils.h"
-#include "TestSetup.h"
 
 namespace hoot
 {

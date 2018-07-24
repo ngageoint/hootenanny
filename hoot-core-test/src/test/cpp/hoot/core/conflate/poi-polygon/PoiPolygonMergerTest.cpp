@@ -26,8 +26,7 @@
  */
 
 // Hoot
-#include "../../TestUtils.h"
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMerger.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/io/OsmJsonWriter.h>
@@ -35,10 +34,8 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/MetadataTags.h>
-
-// Qt
-#include <QDir>
 
 using namespace geos::geom;
 using namespace std;
@@ -49,7 +46,7 @@ namespace hoot
 /**
  * See "Hootenanny - POI to Building" power point for a description of the tests.
  */
-class PoiPolygonMergerTest : public CppUnit::TestFixture
+class PoiPolygonMergerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(PoiPolygonMergerTest);
   CPPUNIT_TEST(basicTest);
@@ -63,8 +60,9 @@ class PoiPolygonMergerTest : public CppUnit::TestFixture
 
 public:
 
-  void setUp()
+  virtual void setUp()
   {
+    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/conflate/poi-polygon/PoiPolygonMergerTest");
   }
 

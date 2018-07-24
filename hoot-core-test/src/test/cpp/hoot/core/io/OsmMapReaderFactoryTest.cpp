@@ -26,15 +26,14 @@
  */
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
-
-#include "../TestUtils.h"
 
 namespace hoot
 {
 
-class OsmMapReaderFactoryTest : public CppUnit::TestFixture
+class OsmMapReaderFactoryTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(OsmMapReaderFactoryTest);
   CPPUNIT_TEST(runUnsupportedBoundingBoxRead);

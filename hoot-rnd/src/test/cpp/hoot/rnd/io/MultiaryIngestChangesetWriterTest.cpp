@@ -24,17 +24,15 @@
  *
  * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-// Hoot
-#include <hoot/rnd/io/MultiaryIngestChangesetWriter.h>
-#include <hoot/core/TestUtils.h>
 
-//#include <hoot/core/io/GeoNamesReader.h>
-//#include <hoot/rnd/io/MultiaryIngestChangesetReader.h>
+// Hoot
+#include <hoot/core/TestUtils.h>
+#include <hoot/rnd/io/MultiaryIngestChangesetWriter.h>
 
 namespace hoot
 {
 
-class MultiaryIngestChangesetWriterTest : public CppUnit::TestFixture
+class MultiaryIngestChangesetWriterTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(MultiaryIngestChangesetWriterTest);
   CPPUNIT_TEST(elementAsJsonTest);
@@ -48,8 +46,9 @@ class MultiaryIngestChangesetWriterTest : public CppUnit::TestFixture
 
 public:
 
-  void setUp()
+  virtual void setUp()
   {
+    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/io/MultiaryIngestChangesetWriterTest/");
   }
 

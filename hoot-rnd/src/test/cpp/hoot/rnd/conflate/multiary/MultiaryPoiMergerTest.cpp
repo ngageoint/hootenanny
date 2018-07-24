@@ -42,7 +42,7 @@ using namespace std;
 namespace hoot
 {
 
-class MultiaryPoiMergerTest : public CppUnit::TestFixture
+class MultiaryPoiMergerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(MultiaryPoiMergerTest);
   CPPUNIT_TEST(basicTest);

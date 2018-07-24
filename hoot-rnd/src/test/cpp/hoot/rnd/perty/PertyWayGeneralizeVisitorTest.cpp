@@ -33,24 +33,22 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/rnd/perty/PertyWayGeneralizeVisitor.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
+#include <hoot/rnd/perty/PertyWayGeneralizeVisitor.h>
 
 // Qt
-#include <QString>
-#include <QDir>
-
-#include <hoot/core/TestUtils.h>
+#include <QFileInfo>
 
 using namespace std;
 
 namespace hoot
 {
 
-class PertyWayGeneralizeVisitorTest : public CppUnit::TestFixture
+class PertyWayGeneralizeVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(PertyWayGeneralizeVisitorTest);
   CPPUNIT_TEST(runTest1);

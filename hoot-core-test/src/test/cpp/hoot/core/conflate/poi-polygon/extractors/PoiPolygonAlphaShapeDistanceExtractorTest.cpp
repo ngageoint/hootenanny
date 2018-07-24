@@ -27,9 +27,9 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonAlphaShapeDistanceExtractor.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
-using namespace hoot;
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -37,12 +37,10 @@ using namespace hoot;
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-#include "../../../TestUtils.h"
-
 namespace hoot
 {
 
-class PoiPolygonAlphaShapeDistanceExtractorTest : public CppUnit::TestFixture
+class PoiPolygonAlphaShapeDistanceExtractorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(PoiPolygonAlphaShapeDistanceExtractorTest);
   CPPUNIT_TEST(runBasicTest);

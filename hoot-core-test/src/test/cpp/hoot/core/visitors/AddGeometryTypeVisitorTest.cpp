@@ -27,26 +27,21 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/io/OsmJsonWriter.h>
-#include <hoot/core/criterion/PoiCriterion.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
-#include <hoot/core/visitors/AddGeometryTypeVisitor.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/criterion/PoiCriterion.h>
+#include <hoot/core/io/OsmJsonWriter.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-
-// Qt
-#include <QDir>
-
-#include "../TestUtils.h"
+#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/visitors/AddGeometryTypeVisitor.h>
 
 using namespace std;
 
 namespace hoot
 {
-using namespace Tgs;
 
-class AddGeometryTypeVisitorTest : public CppUnit::TestFixture
+class AddGeometryTypeVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(AddGeometryTypeVisitorTest);
   CPPUNIT_TEST(runBasicTest);

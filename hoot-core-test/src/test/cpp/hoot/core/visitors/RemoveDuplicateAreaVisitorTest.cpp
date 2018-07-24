@@ -36,28 +36,23 @@
 #include <geos/geom/Point.h>
 
 // hoot
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/visitors/RemoveDuplicateAreaVisitor.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
-
-// Qt
-#include <QDebug>
-#include <QDir>
+#include <hoot/core/visitors/RemoveDuplicateAreaVisitor.h>
 
 // TGS
 #include <tgs/Statistics/Random.h>
-
-#include "../TestUtils.h"
+using namespace Tgs;
 
 namespace hoot
 {
-using namespace Tgs;
 
-class RemoveDuplicateAreaVisitorTest : public CppUnit::TestFixture
+class RemoveDuplicateAreaVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(RemoveDuplicateAreaVisitorTest);
   CPPUNIT_TEST(runToyTest);

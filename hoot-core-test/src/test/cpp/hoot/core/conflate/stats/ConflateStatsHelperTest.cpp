@@ -27,11 +27,9 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/stats/ConflateStatsHelper.h>
 #include <hoot/core/ops/stats/SingleStat.h>
-
-// Boost
-using namespace boost;
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -39,15 +37,10 @@ using namespace boost;
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// Qt
-#include <QDebug>
-
-#include "../../TestUtils.h"
-
 namespace hoot
 {
 
-class ConflateStatsHelperTest : public CppUnit::TestFixture
+class ConflateStatsHelperTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ConflateStatsHelperTest);
   CPPUNIT_TEST(runTest);

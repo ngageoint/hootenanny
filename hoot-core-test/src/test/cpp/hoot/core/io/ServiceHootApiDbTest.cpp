@@ -32,14 +32,14 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/HootApiDb.h>
+#include <hoot/core/io/ServicesDbTestUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
 
-#include "../TestUtils.h"
-#include "ServicesDbTestUtils.h"
-
+//  Qt
 #include <QTextCodec>
 
 using namespace std;
@@ -47,7 +47,7 @@ using namespace std;
 namespace hoot
 {
 
-class ServiceHootApiDbTest : public CppUnit::TestFixture
+class ServiceHootApiDbTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceHootApiDbTest);
 
@@ -88,8 +88,9 @@ public:
     database.close();
   }
 
-  void tearDown()
+  virtual void tearDown()
   {
+    HootTestFixture::tearDown();
     ServicesDbTestUtils::deleteUser(userEmail());
 
     if (mapId != -1)

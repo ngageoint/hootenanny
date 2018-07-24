@@ -32,11 +32,12 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/index/metric-hybrid/RFqHybridTree.h>
 #include <hoot/core/io/OsmPbfReader.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
@@ -50,14 +51,12 @@
 #include <tgs/Optimization/NelderMead.h>
 #include <tgs/System/Time.h>
 
-#include "../../TestUtils.h"
-
 using namespace geos::geom;
+using namespace hoot::hybrid;
 using namespace std;
 
 namespace hoot
 {
-using namespace hybrid;
 
 class RFqHybridDummyData
 {
@@ -102,7 +101,7 @@ std::ostream& operator<<(std::ostream & o, const RFqHybridDummyData& dd)
   return o;
 }
 
-class RFqHybridTreeTest : public CppUnit::TestFixture
+class RFqHybridTreeTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(RFqHybridTreeTest);
   CPPUNIT_TEST(runEmptyIndexTest);

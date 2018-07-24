@@ -27,23 +27,16 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
+#include <hoot/core/io/ElementSorter.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/io/ElementSorter.h>
 #include <hoot/core/util/Log.h>
-
-// Boost
-using namespace boost;
-
-// Qt
-#include <QDebug>
-
-#include "../TestUtils.h"
 
 namespace hoot
 {
 
-class ElementSorterTest : public CppUnit::TestFixture
+class ElementSorterTest : public HootTestFixture
 {
     CPPUNIT_TEST_SUITE(ElementSorterTest);
     CPPUNIT_TEST(runTest);

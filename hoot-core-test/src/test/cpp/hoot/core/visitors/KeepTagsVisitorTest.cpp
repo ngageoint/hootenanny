@@ -33,16 +33,15 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/visitors/TagKeyCountVisitor.h>
 #include <hoot/core/visitors/KeepTagsVisitor.h>
 
-#include "../TestUtils.h"
-
 namespace hoot
 {
 
-class KeepTagsVisitorTest : public CppUnit::TestFixture
+class KeepTagsVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(KeepTagsVisitorTest);
   CPPUNIT_TEST(runTest);

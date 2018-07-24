@@ -32,17 +32,14 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/ObjectInputStream.h>
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/util/Factory.h>
 
-using namespace hoot;
-
 // Standard
 #include <sstream>
 using namespace std;
-
-#include "../TestUtils.h"
 
 namespace hoot
 {
@@ -70,7 +67,7 @@ public:
 
 HOOT_FACTORY_REGISTER_BASE(TestClass)
 
-class ObjectInputStreamTest : public CppUnit::TestFixture
+class ObjectInputStreamTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ObjectInputStreamTest);
   CPPUNIT_TEST(runToyTest);

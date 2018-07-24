@@ -501,7 +501,7 @@ translate = {
         }
         else
         {
-            // Bad o2s_X. Usual cause is writeing > 254 char to a shapefile attribute
+            // Bad o2s_X. Usual cause is writing > 254 char to a shapefile attribute
             // We are expecting something that got chopped like this:
             //  {"source":"Tdh","building":"yes","statu
 
@@ -1231,25 +1231,26 @@ translate = {
                       columns:[ { name:'tag1',
                                   desc:'Tag List',
                                   type:'String',
+                                  length:'8192'
                                   // length:'254'
                                 },
                                 { name:'tag2',
                                   desc:'Tag List',
                                   type:'String',
                                   defValue: '',
-                                  // length:'254'
+                                  length:'254'
                                 },
                                 { name:'tag3',
                                   desc:'Tag List',
                                   type:'String',
                                   defValue: '',
-                                  // length:'254'
+                                  length:'254'
                                 },
                                 { name:'tag4',
                                   desc:'Tag List',
                                   type:'String',
                                   defValue: '',
-                                  // length:'254'
+                                  length:'254'
                                 }
                               ]
                     });
@@ -1259,25 +1260,26 @@ translate = {
                       columns:[ { name:'tag1',
                                   desc:'Tag List',
                                   type:'String',
+                                  length:'8192'
                                   // length:'254'
                                 },
                                 { name:'tag2',
                                   desc:'Tag List',
                                   type:'String',
                                   defValue: '',
-                                  // length:'254'
+                                  length:'254'
                                 },
                                 { name:'tag3',
                                   desc:'Tag List',
                                   type:'String',
                                   defValue: '',
-                                  // length:'254'
+                                  length:'254'
                                 },
                                 { name:'tag4',
                                   desc:'Tag List',
                                   type:'String',
                                   defValue: '',
-                                  // length:'254'
+                                  length:'254'
                                 }
                               ]
                     });
@@ -1287,25 +1289,26 @@ translate = {
                       columns:[ { name:'tag1',
                                   desc:'Tag List',
                                   type:'String',
+                                  length:'8192'
                                   // length:'254'
                                 },
                                 { name:'tag2',
                                   desc:'Tag List',
                                   type:'String',
                                   defValue: '',
-                                  // length:'254'
+                                  length:'254'
                                 },
                                 { name:'tag3',
                                   desc:'Tag List',
                                   type:'String',
                                   defValue: '',
-                                  // length:'254'
+                                  length:'254'
                                 },
                                 { name:'tag4',
                                   desc:'Tag List',
                                   type:'String',
                                   defValue: '',
-                                  // length:'254'
+                                  length:'254'
                                 }
                               ]
                     });

@@ -33,19 +33,15 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/visitors/SetTagValueVisitor.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-
-#include "../TestUtils.h"
-
-// Qt
-#include <QDir>
+#include <hoot/core/visitors/SetTagValueVisitor.h>
 
 namespace hoot
 {
 
-class SetTagValueVisitorTest : public CppUnit::TestFixture
+class SetTagValueVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(SetTagValueVisitorTest);
   CPPUNIT_TEST(runAddNewTest);
@@ -58,8 +54,9 @@ class SetTagValueVisitorTest : public CppUnit::TestFixture
 
 public:
 
-  void setUp()
+  virtual void setUp()
   {
+    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/visitors");
   }
 

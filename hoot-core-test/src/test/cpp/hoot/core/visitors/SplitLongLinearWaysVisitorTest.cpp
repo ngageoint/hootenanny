@@ -34,17 +34,16 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/SplitLongLinearWaysVisitor.h>
 
-#include "../TestUtils.h"
-
 namespace hoot
 {
 
-class SplitLongLinearWaysVisitorTest : public CppUnit::TestFixture
+class SplitLongLinearWaysVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(SplitLongLinearWaysVisitorTest);
   CPPUNIT_TEST(defaultConstructorNoOpTest);

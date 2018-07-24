@@ -41,7 +41,7 @@ using namespace std;
 namespace hoot
 {
 
-class MultiaryHierarchicalClusterAlgorithmTest : public CppUnit::TestFixture
+class MultiaryHierarchicalClusterAlgorithmTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(MultiaryHierarchicalClusterAlgorithmTest);
   CPPUNIT_TEST(basicTest);

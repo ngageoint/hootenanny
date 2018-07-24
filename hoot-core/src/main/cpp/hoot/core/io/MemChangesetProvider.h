@@ -36,7 +36,7 @@ namespace hoot
  * This is a simple memory-bound changeset provider. It's basically used to collect
  * a set of changes, then feed them to a writer later.
  */
-class MemChangesetProvider : public ChangeSetProvider
+class MemChangesetProvider : public ChangesetProvider
 {
 
 public:

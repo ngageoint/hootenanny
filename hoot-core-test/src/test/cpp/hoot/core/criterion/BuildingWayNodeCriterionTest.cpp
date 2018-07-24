@@ -26,15 +26,14 @@
  */
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/criterion/BuildingWayNodeCriterion.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
-
-#include "../TestUtils.h"
 
 namespace hoot
 {
 
-class BuildingWayNodeCriterionTest : public CppUnit::TestFixture
+class BuildingWayNodeCriterionTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(BuildingWayNodeCriterionTest);
   CPPUNIT_TEST(runBasicTest);

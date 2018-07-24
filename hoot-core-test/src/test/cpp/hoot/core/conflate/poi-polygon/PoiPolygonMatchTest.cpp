@@ -26,18 +26,17 @@
  */
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
-
-#include "../../TestUtils.h"
+#include <hoot/core/util/Log.h>
 
 using namespace geos::geom;
 
 namespace hoot
 {
 
-class PoiPolygonMatchTest : public CppUnit::TestFixture
+class PoiPolygonMatchTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(PoiPolygonMatchTest);
   CPPUNIT_TEST(matchTest);

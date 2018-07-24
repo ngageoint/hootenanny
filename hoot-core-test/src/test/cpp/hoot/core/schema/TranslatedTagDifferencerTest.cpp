@@ -36,24 +36,16 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/schema/TranslatedTagDifferencer.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
-using namespace hoot;
-
-// Qt
-#include <QString>
-
-// Standard
-#include <string>
-
-#include "../TestUtils.h"
 
 namespace hoot
 {
 
-class TranslateTagDifferencerTest : public CppUnit::TestFixture
+class TranslateTagDifferencerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(TranslateTagDifferencerTest);
   CPPUNIT_TEST(runTest);

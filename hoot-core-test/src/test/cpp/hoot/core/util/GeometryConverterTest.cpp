@@ -35,6 +35,7 @@
 #include <geos/geom/Geometry.h>
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
 
@@ -43,7 +44,7 @@ using namespace geos::geom;
 namespace hoot
 {
 
-class GeometryConverterTest : public CppUnit::TestFixture
+class GeometryConverterTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(GeometryConverterTest);
   CPPUNIT_TEST(emptyWayTest);

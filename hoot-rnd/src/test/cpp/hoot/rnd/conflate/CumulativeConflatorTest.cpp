@@ -29,13 +29,10 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/rnd/conflate/CumulativeConflator.h>
 
-// Qt
-#include <QDir>
-
 namespace hoot
 {
 
-class CumulativeConflatorTest : public CppUnit::TestFixture
+class CumulativeConflatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(CumulativeConflatorTest);
   CPPUNIT_TEST(basicTest);
@@ -44,15 +41,14 @@ class CumulativeConflatorTest : public CppUnit::TestFixture
 
 public:
 
-  void setUp()
+  virtual void setUp()
   {
+    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/conflate/");
   }
 
   void basicTest()
   {
-    TestUtils::resetEnvironment();
-    OsmMap::resetCounters();
     Settings::getInstance().set(ConfigOptions::getWriterCleanReviewTagsKey(), false);
     Settings::getInstance().set(
       ConfigOptions::getTagMergerDefaultKey(), "hoot::ProvenanceAwareOverwriteTagMerger");
@@ -67,8 +63,6 @@ public:
     HOOT_FILE_EQUALS(
       "test-files/conflate/CumulativeConflatorTest/CumulativeConflatorTest.osm",
       "test-output/conflate/CumulativeConflatorTest.osm");
-
-    TestUtils::resetEnvironment();
   }
 
 };

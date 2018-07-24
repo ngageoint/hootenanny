@@ -15,6 +15,7 @@ DEPENDPATH += \
     ../tbs/src/main/cpp/ \
     ../tgs/src/main/cpp/ \
     ../hoot-core/src/main/cpp/ \
+    src/test/cpp/ \
 
 INCLUDEPATH += \
   $${DEPENDPATH} \

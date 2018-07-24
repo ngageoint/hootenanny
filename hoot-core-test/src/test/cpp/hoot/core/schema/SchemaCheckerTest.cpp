@@ -26,13 +26,12 @@
  */
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/SchemaChecker.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Log.h>
-
-using namespace hoot;
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -40,18 +39,12 @@ using namespace hoot;
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// Qt
-#include <QDebug>
-#include <QFile>
-
-#include "../TestUtils.h"
-
 const double epsilon = 1e-6;
 
 namespace hoot
 {
 
-class SchemaCheckerTest : public CppUnit::TestFixture
+class SchemaCheckerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(SchemaCheckerTest);
   CPPUNIT_TEST(checkUnknownTypeTest);

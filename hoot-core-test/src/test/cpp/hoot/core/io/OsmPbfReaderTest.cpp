@@ -27,18 +27,14 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
-
-using namespace hoot;
 using namespace hoot::pb;
-
-// Boost
-using namespace boost;
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -46,20 +42,14 @@ using namespace boost;
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// Qt
-#include <QDebug>
-#include <QDir>
-
 #include <zlib.h>
-
-#include "../TestUtils.h"
 
 using namespace std;
 
 namespace hoot
 {
 
-class OsmPbfReaderTest : public CppUnit::TestFixture
+class OsmPbfReaderTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(OsmPbfReaderTest);
   CPPUNIT_TEST(runOffsetsTest);
@@ -86,8 +76,9 @@ class OsmPbfReaderTest : public CppUnit::TestFixture
 
 public:
 
-  void setUp()
+  virtual void setUp()
   {
+    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/io");
   }
 
@@ -385,8 +376,8 @@ public:
     {
       exceptionMsg = e.what();
     }
-    CPPUNIT_ASSERT_EQUAL(QString("Error opening test-files/fileDoesntExist.osm.pbf for reading."),
-                         exceptionMsg);
+    HOOT_STR_EQUALS(QString("Error opening test-files/fileDoesntExist.osm.pbf for reading."),
+                    exceptionMsg);
   }
 
   void runReadMapTest()

@@ -27,17 +27,13 @@
 
 // hoot
 #include <hoot/core/util/Log.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/visitors/CalculateHashVisitor.h>
-
-#include "../TestUtils.h"
-
-using namespace std;
 
 namespace hoot
 {
-using namespace Tgs;
 
-class CalculateHashVisitorTest : public CppUnit::TestFixture
+class CalculateHashVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(CalculateHashVisitorTest);
   CPPUNIT_TEST(runBasicTest);

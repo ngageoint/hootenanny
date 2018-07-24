@@ -39,7 +39,7 @@ using namespace hoot;
 namespace hoot
 {
 
-class MultiaryMatchComparatorTest : public CppUnit::TestFixture
+class MultiaryMatchComparatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(MultiaryMatchComparatorTest);
   CPPUNIT_TEST(runEmptyTest);

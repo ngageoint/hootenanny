@@ -27,24 +27,15 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/Log.h>
-using namespace hoot;
-
-
-// Boost
-using namespace boost;
-
-// Qt
-#include <QDebug>
-
-#include "../TestUtils.h"
 
 namespace hoot
 {
 
-class OsmXmlReaderTest : public CppUnit::TestFixture
+class OsmXmlReaderTest : public HootTestFixture
 {
     CPPUNIT_TEST_SUITE(OsmXmlReaderTest);
     CPPUNIT_TEST(runTest);

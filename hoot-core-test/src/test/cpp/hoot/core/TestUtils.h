@@ -195,6 +195,13 @@ public:
   static hoot::AutoRegisterResetInstance<ClassName> ClassName##AutoRegisterReset;
 
 
+class HootTestFixture : public CppUnit::TestFixture
+{
+public:
+  virtual void setUp()    { TestUtils::resetEnvironment(); }
+  virtual void tearDown() { TestUtils::resetEnvironment(); }
+};
+
 }
 
 #endif // TESTUTILS_H

@@ -25,9 +25,8 @@
  * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "../TestUtils.h"
-
 //  Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/WayJoiner.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/conflate/splitter/CornerSplitter.h>
@@ -41,7 +40,7 @@
 namespace hoot
 {
 
-class WayJoinerTest : public CppUnit::TestFixture
+class WayJoinerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(WayJoinerTest);
   CPPUNIT_TEST(runSimpleTest);
@@ -51,17 +50,17 @@ class WayJoinerTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE_END();
 public:
 
-  void setUp()
+  virtual void setUp()
   {
+    HootTestFixture::setUp();
     TestUtils::mkpath("test-output/algorithms/wayjoiner");
   }
 
   void runSimpleTest()
   {
+    TestUtils::resetEnvironment();
+
     OsmXmlReader reader;
-
-    OsmMap::resetCounters();
-
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/algorithms/wayjoiner/WayJoinerSimpleInput.osm", map);
@@ -80,10 +79,9 @@ public:
 
   void runCornerSplitterTest()
   {
+    TestUtils::resetEnvironment();
+
     OsmXmlReader reader;
-
-    OsmMap::resetCounters();
-
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/algorithms/wayjoiner/WayJoinerCornerSplitterInput.osm", map);
@@ -102,10 +100,9 @@ public:
 
   void runIntersectionSplitterTest()
   {
+    TestUtils::resetEnvironment();
+
     OsmXmlReader reader;
-
-    OsmMap::resetCounters();
-
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/algorithms/wayjoiner/WayJoinerIntersectionSplitterInput.osm", map);
@@ -124,10 +121,9 @@ public:
 
   void runConflateTest()
   {
+    TestUtils::resetEnvironment();
+
     OsmXmlReader reader;
-
-    OsmMap::resetCounters();
-
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
@@ -154,6 +150,6 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(WayJoinerTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(WayJoinerTest, "slow");
 
 }

@@ -1,0 +1,12 @@
+<diffResult generator="OpenStreetMap Server" version="0.6">
+  <node old_id="-11" new_id="11" new_version="1"/>
+  <node old_id="-12" new_id="12" new_version="1"/>
+  <node old_id="-13" new_id="13" new_version="1"/>
+  <node old_id="-14" new_id="14" new_version="1"/>
+  <node old_id="-15" new_id="15" new_version="1"/>
+  <node old_id="-16" new_id="16" new_version="1"/>
+  <node old_id="-17" new_id="17" new_version="1"/>
+  <node old_id="-18" new_id="18" new_version="1"/>
+  <node old_id="-19" new_id="19" new_version="1"/>
+  <node old_id="-20" new_id="20" new_version="1"/>
+</diffResult>

@@ -30,20 +30,16 @@
 #include <boost/iostreams/filter/bzip2.hpp>
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/ArffReader.h>
 #include <hoot/core/scoring/DataSamples.h>
 #include <hoot/core/scoring/MatchFeatureExtractor.h>
 #include <hoot/core/util/Log.h>
 
-// Qt
-#include <QDir>
-
-#include "../TestUtils.h"
-
 namespace hoot
 {
 
-class ArffReaderTest : public CppUnit::TestFixture
+class ArffReaderTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ArffReaderTest);
   CPPUNIT_TEST(runBasicTest);

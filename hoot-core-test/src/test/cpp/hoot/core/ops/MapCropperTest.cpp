@@ -26,20 +26,17 @@
  */
 
 // Hoot
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/ObjectInputStream.h>
 #include <hoot/core/io/ObjectOutputStream.h>
-#include <hoot/core/ops/MapCropper.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/ops/MapCropper.h>
 #include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Settings.h>
-using namespace hoot;
-
-// Boost
-using namespace boost;
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -53,13 +50,8 @@ using namespace boost;
 #include <geos/geom/Envelope.h>
 #include <geos/geom/Polygon.h>
 
-// Qt
-#include <QDebug>
-
 // TGS
 #include <tgs/Statistics/Random.h>
-
-#include "../TestUtils.h"
 
 using namespace geos::geom;
 using namespace std;
@@ -68,7 +60,7 @@ using namespace Tgs;
 namespace hoot
 {
 
-class MapCropperTest : public CppUnit::TestFixture
+class MapCropperTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(MapCropperTest);
   CPPUNIT_TEST(runGeometryTest);
@@ -298,9 +290,7 @@ public:
 
 };
 
-}
-
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MapCropperTest, "quick");
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MapCropperTest, "current");
 
-
+}

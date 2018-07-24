@@ -32,11 +32,9 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/optimizer/IntegerProgrammingSolver.h>
 #include <hoot/core/util/Log.h>
-
-// Qt
-#include <QDir>
 
 // Standard
 #include <fstream>
@@ -48,7 +46,7 @@ using namespace std;
 namespace hoot
 {
 
-class IntegerProgrammingSolverTest : public CppUnit::TestFixture
+class IntegerProgrammingSolverTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(IntegerProgrammingSolverTest);
   CPPUNIT_TEST(runTest);

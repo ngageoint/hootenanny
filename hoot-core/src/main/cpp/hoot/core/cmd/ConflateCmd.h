@@ -62,7 +62,7 @@ public:
 private:
 
   boost::shared_ptr<ChangesetDeriver> _sortInputs(OsmMapPtr pMap1, OsmMapPtr pMap2);
-  void _writeChangeset(OsmMapPtr pMap, QString outFileName);
+  ChangesetProviderPtr _getChangesetFromMap(OsmMapPtr pMap);
 
 };
 
