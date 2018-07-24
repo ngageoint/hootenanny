@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef MEMCHANGESETPROVIDER_H
-#define MEMCHANGESETPROVIDER_H
+#ifndef MULTIPLECHANGESETPROVIDER_H
+#define MULTIPLECHANGESETPROVIDER_H
 
 #include <hoot/core/io/ChangesetProvider.h>
 
@@ -33,22 +33,22 @@ namespace hoot
 {
 
 /**
- * This is a simple memory-bound changeset provider. It's basically used to collect
- * a set of changes, then feed them to a writer later.
+ * This is essentially a changeset provider container, allowing multiple
+ * changeset providers to be chained together
  */
-class MemChangesetProvider : public ChangesetProvider
+class MultipleChangesetProvider : public ChangesetProvider
 {
 
 public:
 
-  explicit MemChangesetProvider(boost::shared_ptr<OGRSpatialReference> pProjection);
+  explicit MultipleChangesetProvider(boost::shared_ptr<OGRSpatialReference> pProjection);
 
   /**
-   * @see ChangeSetProvider
+   * @todo: is this even used?
    */
   virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
 
-  virtual ~MemChangesetProvider();
+  virtual ~MultipleChangesetProvider();
 
   /**
    * @see ChangeSetProvider
@@ -65,19 +65,17 @@ public:
    */
   virtual Change readNextChange();
 
-  void addChange(Change newChange);
+  void addChangesetProvider(ChangesetProviderPtr newChangeset);
 
-  size_t getNumChanges();
-
-  bool containsChange(ElementId eID);
+  size_t getNumChangesets();
 
 private:
   boost::shared_ptr<OGRSpatialReference> _projection;
-  std::list<Change> _changes;
+  std::list<ChangesetProviderPtr> _changesets;
 };
 
-typedef boost::shared_ptr<MemChangesetProvider> MemChangesetProviderPtr;
+typedef boost::shared_ptr<MultipleChangesetProvider> MultipleChangesetProviderPtr;
 
 }
 
-#endif // MEMCHANGESETPROVIDER_H
+#endif // MULTIPLECHANGESETPROVIDER_H

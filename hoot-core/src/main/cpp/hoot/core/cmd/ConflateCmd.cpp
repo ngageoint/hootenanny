@@ -54,6 +54,7 @@
 #include <hoot/core/criterion/PoiCriterion.h>
 #include <hoot/core/io/ElementSorter.h>
 #include <hoot/core/io/OsmXmlChangesetFileWriter.h>
+#include <hoot/core/io/MultipleChangesetProvider.h>
 
 // Standard
 #include <fstream>
@@ -90,7 +91,7 @@ boost::shared_ptr<ChangesetDeriver> ConflateCmd::_sortInputs(OsmMapPtr pMap1, Os
   return delta;
 }
 
-void ConflateCmd::_writeChangeset(OsmMapPtr pMap, QString outFileName)
+ChangesetProviderPtr ConflateCmd::_getChangesetFromMap(OsmMapPtr pMap)
 {
   // Make empty map
   OsmMapPtr pEmptyMap(new OsmMap());
@@ -98,9 +99,8 @@ void ConflateCmd::_writeChangeset(OsmMapPtr pMap, QString outFileName)
   // Get Changeset Deriver
   boost::shared_ptr<ChangesetDeriver> pDeriver = _sortInputs(pEmptyMap, pMap);
 
-  // Write the file!
-  OsmXmlChangesetFileWriter writer;
-  writer.write(outFileName, pDeriver);
+  // Return the provider
+  return pDeriver;
 }
 
 int ConflateCmd::runSimple(QStringList args)
@@ -142,6 +142,14 @@ int ConflateCmd::runSimple(QStringList args)
   {
     conflateTags = true;
     args.removeAt(args.indexOf("--include-tags"));
+  }
+
+  // Check for separate output files (for geometry & tags)
+  bool separateOutput = false;
+  if (args.contains("--separate-output"))
+  {
+    separateOutput = true;
+    args.removeAt(args.indexOf("--separate-output"));
   }
 
   if (args.size() < 2 || args.size() > 3)
@@ -273,12 +281,43 @@ int ConflateCmd::runSimple(QStringList args)
   MapProjector::projectToWgs84(result);
   stats.append(SingleStat("Project to WGS84 Time (sec)", t.getElapsedAndRestart()));
 
-  if (output.endsWith(".osc"))
-  {
-    _writeChangeset(result, output);
+  // Figure out what to write
+  if (isDiffConflate && output.endsWith(".osc"))
+  { // Write a changeset
+    ChangesetProviderPtr pGeoChanges = _getChangesetFromMap(result);
+    ChangesetProviderPtr pTagChanges;
+    if (conflateTags)
+    {
+      pTagChanges = diffConflator.getTagDiff();
+    }
+
+    if (!conflateTags)
+    { // only one changeset to write
+      OsmXmlChangesetFileWriter writer;
+      writer.write(output, pGeoChanges);
+    }
+    else if(separateOutput)
+    { // write two changesets
+      OsmXmlChangesetFileWriter writer;
+      writer.write(output, pGeoChanges);
+
+      QString outFileName = output;
+      outFileName.replace(".osc", "");
+      outFileName.append(".tags.osc");
+      OsmXmlChangesetFileWriter tagChangeWriter;
+      tagChangeWriter.write(outFileName, pTagChanges);
+    }
+    else
+    { // write unified output
+      MultipleChangesetProviderPtr pChanges(new MultipleChangesetProvider(result->getProjection()));
+      pChanges->addChangesetProvider(pGeoChanges);
+      pChanges->addChangesetProvider(pTagChanges);
+      OsmXmlChangesetFileWriter writer;
+      writer.write(output, pChanges);
+    }
   }
   else
-  {
+  { // Write a map
     IoUtils::saveMap(result, output);
   }
 
@@ -291,10 +330,7 @@ int ConflateCmd::runSimple(QStringList args)
     // Write the file!
     QString outFileName = output;
     outFileName.replace(".osm", "");
-    outFileName.replace(".osc", "");
-    outFileName.append(".tags.osc");
-    OsmXmlChangesetFileWriter tagChangeWriter;
-    tagChangeWriter.write(outFileName, pTagChanges);
+
   }
 
   double timingOutput = t.getElapsedAndRestart();
