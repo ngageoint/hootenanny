@@ -33,7 +33,6 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-//#include <hoot/core/conflate/polygon/extractors/EuclideanDistanceExtractor.h>
 
 using namespace std;
 
@@ -49,7 +48,6 @@ void PoiPolygonRfClassifier::_createExtractors()
 {
   _extractors.clear();
 
-  //_extractors.push_back(boost::shared_ptr<FeatureExtractor>(new EuclideanDistanceExtractor()));
   _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new PoiPolygonDistanceExtractor()));
   _extractors.push_back(boost::shared_ptr<FeatureExtractor>(
     new PoiPolygonAlphaShapeDistanceExtractor()));
@@ -58,165 +56,6 @@ void PoiPolygonRfClassifier::_createExtractors()
   boost::shared_ptr<PoiPolygonAddressScoreExtractor> addressExtractor1(
     new PoiPolygonAddressScoreExtractor());
   _extractors.push_back(addressExtractor1);
-  //boost::shared_ptr<PoiPolygonAddressScoreExtractor> addressExtractor2(
-    //new PoiPolygonAddressScoreExtractor());
-  //addressExtractor2->setAddressScoreThreshold(0.8);
-  //_extractors.push_back(addressExtractor2);
-
-  /*vector<std::string> allExtractorNames = Factory::getInstance().getObjectNamesByBase(
-    FeatureExtractor::className());
-  vector<std::string> extractorNames;
-  for (size_t i = 0; i < allExtractorNames.size(); i++)
-  {
-    if (allExtractorNames.at(i) != "hoot::OverlapExtractor" &&
-        allExtractorNames.at(i) != "hoot::SmallerOverlapExtractor" &&
-        allExtractorNames.at(i) != "hoot::SampledAngleHistogramExtractor")
-    {
-      extractorNames.push_back(allExtractorNames.at(i));
-    }
-  }
-  for (size_t i = 0; i < extractorNames.size(); i++)
-  {
-    _extractors.push_back(
-      boost::shared_ptr<FeatureExtractor>(
-        Factory::getInstance().constructObject<FeatureExtractor>(extractorNames[i])));
-  }
-  LOG_VAR(extractorNames);
-
-  _extractors.push_back(
-    boost::shared_ptr<FeatureExtractor>(
-      new NameExtractor(
-        new TranslateStringDistance(
-          new ExactStringDistance()))));
-  _extractors.push_back(
-    boost::shared_ptr<FeatureExtractor>(
-      new NameExtractor(
-        new TranslateStringDistance(
-          new MaxWordSetDistance(
-            new ExactStringDistance())))));
-  _extractors.push_back(
-    boost::shared_ptr<FeatureExtractor>(
-      new NameExtractor(
-        new TranslateStringDistance(
-          new MeanWordSetDistance(
-            new ExactStringDistance())))));
-
-  _extractors.push_back(
-    boost::shared_ptr<FeatureExtractor>(
-      new NameExtractor(
-        new TranslateStringDistance(
-          new LevenshteinDistance()))));
-  _extractors.push_back(
-    boost::shared_ptr<FeatureExtractor>(
-      new NameExtractor(
-        new TranslateStringDistance(
-          new MaxWordSetDistance(
-            new LevenshteinDistance())))));
-  _extractors.push_back(
-    boost::shared_ptr<FeatureExtractor>(
-      new NameExtractor(
-        new TranslateStringDistance(
-          new MeanWordSetDistance(
-            new LevenshteinDistance())))));
-  _extractors.push_back(
-    boost::shared_ptr<FeatureExtractor>(
-      new NameExtractor(
-        new TranslateStringDistance(
-          new MinSumWordSetDistance(
-            new LevenshteinDistance())))));
-
-  for (double a = 1.0; a < 1.8; a += 0.05)
-  {
-    _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
-      new MeanWordSetDistance(new LevenshteinDistance(a)))));
-    _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
-      new TranslateStringDistance(new MeanWordSetDistance(new LevenshteinDistance(a))))));
-  }
-
-  _extractors.push_back(
-    boost::shared_ptr<FeatureExtractor>(
-      new NameExtractor(
-        new TranslateStringDistance(
-          new Soundex()))));
-  _extractors.push_back(
-    boost::shared_ptr<FeatureExtractor>(
-      new NameExtractor(
-        new TranslateStringDistance(
-          new MaxWordSetDistance(
-            new Soundex())))));
-  _extractors.push_back(
-    boost::shared_ptr<FeatureExtractor>(
-      new NameExtractor(
-        new TranslateStringDistance(
-          new MeanWordSetDistance(
-            new Soundex())))));
-
-  _extractors.push_back(
-    boost::shared_ptr<FeatureExtractor>(
-      new PoiPolygonAddressExtractor(
-        new TranslateStringDistance(
-          new MeanWordSetDistance(
-            new LevenshteinDistance())))));
-
-   SqliteWordWeightDictionary* dict =
-      new SqliteWordWeightDictionary(
-        ConfPath::search(ConfigOptions().getWeightedWordDistanceDictionary()));
-  _extractors.push_back(
-    boost::shared_ptr<FeatureExtractor>(
-      new NameExtractor(
-        new TranslateStringDistance(
-          new WeightedWordDistance(
-            new LevenshteinDistance(ConfigOptions().getLevenshteinDistanceAlpha()), dict)))));
-
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new EdgeDistanceExtractor()));
-  for (double q = 0; q < 1.0; q += 0.05)
-  {
-    _extractors.push_back(boost::shared_ptr<FeatureExtractor>(
-      new EdgeDistanceExtractor(new QuantileAggregator(q))));
-  }
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(
-    new EdgeDistanceExtractor(new RmseAggregator())));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(
-    new EdgeDistanceExtractor(new SigmaAggregator())));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new AngleHistogramExtractor()));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new AttributeScoreExtractor(NULL, false)));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new AttributeScoreExtractor(NULL, true)));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new WeightedShapeDistanceExtractor()));
-
-  _extractors.push_back(
-    boost::shared_ptr<FeatureExtractor>(
-    new WeightedMetricDistanceExtractor(
-      new MeanAggregator(), new SigmaAggregator())));
-  _extractors.push_back(
-    boost::shared_ptr<FeatureExtractor>(
-      new WeightedMetricDistanceExtractor(
-        new MeanAggregator(), new RmseAggregator())));
-
-  for (double b = -0.3; b < 0.0; b += 0.1)
-  {
-    _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new BufferedOverlapExtractor(b)));
-  }
-
-  for (double b = 0.1; b < 0.5; b += 0.1)
-  {
-    _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new BufferedOverlapExtractor(b)));
-  }
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new BufferedOverlapExtractor()));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new BufferedOverlapExtractor(0.3)));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new BufferedOverlapExtractor(0.1)));
-
-  for (double r = 0.0; r <= 1.0; r += 0.05)
-  {
-    _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new AngleHistogramExtractor(r)));
-  }
-
-   _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new CentroidDistanceExtractor()));
-   _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new CompactnessExtractor()));
-   _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new DistanceScoreExtractor()));
-   _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new EuclideanDistanceExtractor()));
-   _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new HausdorffDistanceExtractor()));
-   _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new LengthScoreExtractor()));
-   _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new SampledAngleHistogramExtractor()));*/
 }
 
 map<QString, double> PoiPolygonRfClassifier::getFeatures(const ConstOsmMapPtr& m,

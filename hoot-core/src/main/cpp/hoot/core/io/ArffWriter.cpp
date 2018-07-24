@@ -42,16 +42,19 @@ using namespace std;
 namespace hoot
 {
 
-ArffWriter::ArffWriter(ostream* strm, bool useNulls) : _strm(strm), _useNulls(useNulls)
+ArffWriter::ArffWriter(ostream* strm, bool useNulls) :
+_strm(strm),
+_useNulls(useNulls)
 {
 }
 
-ArffWriter::ArffWriter(QString path, bool useNulls) : _useNulls(useNulls)
+ArffWriter::ArffWriter(QString path, bool useNulls) :
+_path(path),
+_useNulls(useNulls)
 {
   fstream* fs = new fstream();
   fs->exceptions(fstream::failbit | fstream::badbit);
   fs->open(path.toUtf8().data(), ios_base::out);
-  _path = path;
   _autoStrm.reset(fs);
   _strm = fs;
 }

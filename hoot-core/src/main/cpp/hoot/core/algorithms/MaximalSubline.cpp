@@ -323,8 +323,8 @@ vector<WaySublineMatch> MaximalSubline::findAllMatches(const ConstOsmMapPtr &map
   // subline.
   Sparse2dMatrix::CellId endMatch;
   _populateTotalScores(scores, sublineMatrix, endMatch, score);
-  //LOG_VART(scores.toString());
   LOG_VART(scores.size());
+  LOG_VART(scores.toString());
 
   vector<WaySublineMatch> rawSublines;
 
@@ -860,7 +860,7 @@ vector<WaySublineMatch> MaximalSubline::_snapIntersections(const ConstOsmMapPtr&
   pairs = _discretizePointPairs(map, w1, w2, rawSublineMatches);
   LOG_VART(pairs.size());
   assert(pairs.size() > 0);
-  //LOG_VART(pairs);
+  LOG_VART(pairs);
 
   vector<int> starts(rawSublineMatches.size(), numeric_limits<int>::max());
   vector<int> ends(rawSublineMatches.size(), 0);
@@ -902,7 +902,7 @@ vector<WaySublineMatch> MaximalSubline::_snapIntersections(const ConstOsmMapPtr&
 
   for (size_t i = 0; i < matchIndexes.size(); i++)
   {
-    //LOG_VART(rawSublineMatches[i]);
+    LOG_VART(rawSublineMatches[i]);
 
     const int mi = matchIndexes[i];
 

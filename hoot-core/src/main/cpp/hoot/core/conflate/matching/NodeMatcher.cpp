@@ -124,10 +124,6 @@ vector<Radians> NodeMatcher::calculateAngles(const OsmMap* map, long nid,
       LOG_VART(map->getWay(*it)->toString());
     }
 
-//    OsmMapPtr copy(new OsmMap(*map));
-//    MapProjector::projectToWgs84(copy);
-//    IoUtils::saveMap(copy, "tmp/NodeMatcherMap-temp.osm");
-
     throw HootException(
       "NodeMatcher::calculateAngles was called with a node that was not a start or end node on the specified way.");
   }

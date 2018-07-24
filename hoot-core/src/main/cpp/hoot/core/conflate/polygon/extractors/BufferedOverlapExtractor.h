@@ -59,7 +59,7 @@ public:
    *
    * @param bufferPortion Buffer the objects by this portion of the sqrt of the max area.
    */
-  BufferedOverlapExtractor(double bufferPortion);
+  explicit BufferedOverlapExtractor(double bufferPortion);
 
   static std::string className() { return "hoot::BufferedOverlapExtractor"; }
 

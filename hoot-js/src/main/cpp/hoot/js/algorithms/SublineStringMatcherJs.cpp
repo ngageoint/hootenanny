@@ -134,8 +134,6 @@ void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<
     }
     else
     {
-      //LOG_VART(match1);
-      //LOG_VART(match2);
       LOG_TRACE("match");
       Handle<Object> obj = Object::New(current);
       obj->Set(String::NewFromUtf8(current, "map"), OsmMapJs::create(copiedMap));
