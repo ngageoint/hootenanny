@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OSMCHANGESETTESTPROVIDER_H
@@ -47,7 +47,7 @@ namespace hoot
  * Implementation of ChangeSetProvider that psuedo-randomly creates, modifies, and deletes
  * nodes, ways, and relations for use with both the SQL and OSM changeset writers.
  */
-class TestOsmChangesetProvider : public ChangeSetProvider
+class TestOsmChangesetProvider : public ChangesetProvider
 {
 public:
   /**

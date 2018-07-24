@@ -579,11 +579,14 @@ bool XmlChangeset::canSend(XmlRelation* relation)
       //  since these are called frequently
       if (member.isNode())
       {
+        //  Special case, node doesn't exist in changeset, it may in database, send it
+        if (member.getRef() > 0 && _allNodes.find(member.getRef()) == _allNodes.end())
+          return true;
         //  If the node exists in the list and
         //  it hasn't been sent yet and
         //  it can't be sent yet
         //  then we can't send this relation
-        if (_allNodes.find(member.getRef()) != _allNodes.end() &&
+        else if (_allNodes.find(member.getRef()) != _allNodes.end() &&
             !isSent(_allNodes[member.getRef()].get()) &&
             !canSend(dynamic_cast<XmlNode*>(_allNodes[member.getRef()].get())))
         {
@@ -592,7 +595,11 @@ bool XmlChangeset::canSend(XmlRelation* relation)
       }
       else if (member.isWay())
       {
-        if (_allWays.find(member.getRef()) != _allWays.end() &&
+        //  Special case, way doesn't exist in changeset, it may in database, send it
+        if (member.getRef() > 0 && _allWays.find(member.getRef()) == _allWays.end())
+          return true;
+        //  Check if the way exists and can't be sent
+        else if (_allWays.find(member.getRef()) != _allWays.end() &&
             !isSent(_allWays[member.getRef()].get()) &&
             !canSend(dynamic_cast<XmlWay*>(_allWays[member.getRef()].get())))
         {
@@ -601,7 +608,11 @@ bool XmlChangeset::canSend(XmlRelation* relation)
       }
       else if (member.isRelation())
       {
-        if (_allRelations.find(member.getRef()) != _allWays.end() &&
+        //  Special case, relation doesn't exist in changeset, it may in database, send it
+        if (member.getRef() > 0 && _allRelations.find(member.getRef()) == _allRelations.end())
+          return true;
+        //  Check if the relation exists and can't be sent
+        else if (_allRelations.find(member.getRef()) != _allWays.end() &&
             !isSent(_allRelations[member.getRef()].get()) &&
             !canSend(dynamic_cast<XmlRelation*>(_allRelations[member.getRef()].get())))
         {
@@ -706,10 +717,11 @@ ChangesetInfoPtr XmlChangeset::splitChangeset(ChangesetInfoPtr changeset)
   //  Start with relations and try to split
   for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
   {
-    for (ChangesetInfo::iterator it = changeset->begin(ElementType::Relation, (ChangesetType)current_type);
-         it != changeset->end(ElementType::Relation, (ChangesetType)current_type); ++it)
+    //  Because we are modifying the changeset, get the first element in the set and iterate
+    while (changeset->size(ElementType::Relation, (ChangesetType)current_type) > 0)
     {
-      XmlRelation* relation = dynamic_cast<XmlRelation*>(_allRelations[*it].get());
+      long id = changeset->getFirst(ElementType::Relation, (ChangesetType)current_type);
+      XmlRelation* relation = dynamic_cast<XmlRelation*>(_allRelations[id].get());
 
       if (canMoveRelation(changeset, split, (ChangesetType)current_type, relation))
       {
@@ -731,10 +743,11 @@ ChangesetInfoPtr XmlChangeset::splitChangeset(ChangesetInfoPtr changeset)
   //  Then move to ways
   for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
   {
-    for (ChangesetInfo::iterator it = changeset->begin(ElementType::Way, (ChangesetType)current_type);
-         it != changeset->end(ElementType::Way, (ChangesetType)current_type); ++it)
+    //  Because we are modifying the changeset, get the first element in the set and iterate
+    while (changeset->size(ElementType::Way, (ChangesetType)current_type) > 0)
     {
-      XmlWay* way = dynamic_cast<XmlWay*>(_allWays[*it].get());
+      long id = changeset->getFirst(ElementType::Way, (ChangesetType)current_type);
+      XmlWay* way = dynamic_cast<XmlWay*>(_allWays[id].get());
       if (canMoveWay(changeset, split, (ChangesetType)current_type, way))
       {
         //  Move the way and anything associated
@@ -755,10 +768,11 @@ ChangesetInfoPtr XmlChangeset::splitChangeset(ChangesetInfoPtr changeset)
   //  Finally nodes
   for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
   {
-    for (ChangesetInfo::iterator it = changeset->begin(ElementType::Node, (ChangesetType)current_type);
-         it != changeset->end(ElementType::Node, (ChangesetType)current_type); ++it)
+    //  Because we are modifying the changeset, get the first element in the set and iterate
+    while (changeset->size(ElementType::Node, (ChangesetType)current_type) > 0)
     {
-      XmlNode* node = dynamic_cast<XmlNode*>(_allNodes[*it].get());
+      long id = changeset->getFirst(ElementType::Node, (ChangesetType)current_type);
+      XmlNode* node = dynamic_cast<XmlNode*>(_allNodes[id].get());
       if (canMoveNode(changeset, split, (ChangesetType)current_type, node))
       {
         //  Move the node
