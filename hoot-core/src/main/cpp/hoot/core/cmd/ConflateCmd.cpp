@@ -110,6 +110,8 @@ int ConflateCmd::runSimple(QStringList args)
 
   QList<SingleStat> stats;
   bool displayStats = false;
+  //force stats to always be the last optional param so it can be followed by an optional
+  //output file
   QString outputStatsFile;
   if (args.contains("--stats"))
   {
@@ -119,15 +121,17 @@ int ConflateCmd::runSimple(QStringList args)
       //remove "--stats" from args list
       args.pop_back();
     }
-    else if (args.size() == 5)
+    else if (args[args.size() - 1] == "--stats")
     {
       displayStats = true;
-      outputStatsFile = args[4];
+      outputStatsFile = args[args.size() - 1];
       //remove "--stats" and stats output file name from args list
       args.pop_back();
       args.pop_back();
     }
   }
+  LOG_VARD(displayStats);
+  LOG_VARD(outputStatsFile);
 
   bool isDiffConflate = false;
   if (args.contains("--differential"))
@@ -135,6 +139,7 @@ int ConflateCmd::runSimple(QStringList args)
     isDiffConflate = true;
     args.removeAt(args.indexOf("--differential"));
   }
+  LOG_VARD(isDiffConflate);
 
   // Check for tags argument "--Include-Tags"
   bool conflateTags = false;
@@ -176,7 +181,7 @@ int ConflateCmd::runSimple(QStringList args)
      output.right(50);
   if (isDiffConflate)
   {
-    msg.prepend("Differentially ");
+    msg = msg.prepend("Differentially ");
   }
   LOG_INFO(msg);
 

@@ -82,6 +82,8 @@ load-data: clean
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/ToyTestB.osm $(DB_URL)/ToyTestBCucumber
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/ToyTestCauseReview.osm $(DB_URL)/TTCauseReviewCucumber
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/Merged_Brazil_daba15e4.osm $(DB_URL)/BrazilMergedCucumber
+	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/conflate/diff/input1.osm $(DB_URL)/DiffConflateInput1
+	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/conflate/diff/input2.osm $(DB_URL)/DiffConflateInput2
 
 	# MapEdit conflation - 
 	# ME conflation in the UI has to be rewritten for HOT integration and also for #1431 changes, so no point in loading

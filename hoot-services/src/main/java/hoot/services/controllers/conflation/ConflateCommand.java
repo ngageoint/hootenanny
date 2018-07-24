@@ -101,7 +101,6 @@ class ConflateCommand extends ExternalCommand {
         options.add("writer.include.conflate.score.tags=false");
         options.add("hootapi.db.writer.overwrite.map=true");
         options.add("hootapi.db.writer.create.user=true");
-        //options.add("writer.include.debug.tags=true");
         options.add("writer.text.status=true");
         options.add("api.db.email=test@test.com");
 
@@ -176,7 +175,7 @@ class ConflateCommand extends ExternalCommand {
         String command = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${STATS}";
         if (isDifferentialConflate)
         {
-          command += " --differential";
+          command = command.replace("${STATS}", "--differential ${STATS}");
         }
 
         super.configureCommand(command, substitutionMap, caller);
