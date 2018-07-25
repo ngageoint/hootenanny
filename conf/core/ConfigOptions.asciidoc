@@ -3017,7 +3017,7 @@ setting may have a negative impact on performance if set to a very low value.
 * Default Value: `hoot::ConflateCmd`
 
 Set the conflate command that should be used in a test case. This is only useful when writing
-test cases (`test-files/cases/`) and was originally added to support the MultiaryConflateCmd.
+test cases (`test-files/cases/`) and was originally added to support the MultiaryPoiConflateCmd.
 
 === test.force.orthographic.projection
 
