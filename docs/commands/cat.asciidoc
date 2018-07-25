@@ -1,8 +1,8 @@
-== big-cat
+== cat
 
 === Description
 
-The +big-cat+ command reads data from the user specified inputs, renumbers the elements to avoid conflict and writes the result to 
+The +cat+ command reads data from the user specified inputs, renumbers the elements to avoid conflict and writes the result to 
 +output.osm.pbf+.  This command does not require Hadoop.
 
 * +output.osm.pbf+ - Output file name.
@@ -12,16 +12,15 @@ The command does two passes over the input data. The first pass it to determine 
 pass is used to write out the new results. No attempt is made to conflate the data files so it is primarily useful when putting 
 together two files that are in very different regions.
 
-
 === Usage
 
 --------------------------------------
-big-cat (output.osm.pbf) (input1.osm.pbf) [input2.osm.pbf ...]
+cat (output.osm.pbf) (input1.osm.pbf) [input2.osm.pbf ...]
 --------------------------------------
 
 ==== Example
 
 --------------------------------------
-hoot big-cat TwoBigCities.osm.pbf NewYork.osm.pbf Chicago.osm.pbf
+hoot cat TwoBigCities.osm.pbf NewYork.osm.pbf Chicago.osm.pbf
 --------------------------------------
 

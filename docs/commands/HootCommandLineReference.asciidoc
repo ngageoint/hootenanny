@@ -22,7 +22,7 @@ arguments and a short help screen will be displayed.
 
 :leveloffset: 1
 // be sure all included asciidocs end with a newline
-include::big-cat.asciidoc[]
+include::cat.asciidoc[]
 include::changeset-apply.asciidoc[]
 include::changeset-derive.asciidoc[]
 include::clean.asciidoc[]

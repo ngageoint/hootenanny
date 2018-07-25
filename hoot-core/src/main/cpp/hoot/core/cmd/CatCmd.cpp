@@ -44,15 +44,15 @@ using namespace std;
 namespace hoot
 {
 
-class BigCatCmd : public BaseCommand
+class CatCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::BigCatCmd"; }
+  static string className() { return "hoot::CatCmd"; }
 
-  BigCatCmd() { }
+  CatCmd() { }
 
-  virtual QString getName() const { return "big-cat"; }
+  virtual QString getName() const { return "cat"; }
 
   virtual QString getDescription() const
   { return "Concatenates two files and renumbers element IDs to avoid conflicts"; }
@@ -183,7 +183,7 @@ public:
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, BigCatCmd)
+HOOT_FACTORY_REGISTER(Command, CatCmd)
 
 }
 
