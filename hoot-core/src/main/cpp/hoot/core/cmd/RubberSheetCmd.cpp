@@ -39,7 +39,7 @@ class RubberSheetCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::RubberSheetCmd"; }
+  static std::string className() { return "hoot::RubberSheetCmd"; }
 
   RubberSheetCmd() { }
 

@@ -39,7 +39,7 @@ void RubberSheetApplier::apply(const QString transform, const QString input, con
   QFile fp(transform);
   if (fp.open(QIODevice::ReadOnly) == false)
   {
-    throw HootException(QString("Error opening %1 for writing").arg(transformPath));
+    throw HootException(QString("Error opening %1 for writing").arg(transform));
   }
   rs.readTransform1to2(fp);
 
