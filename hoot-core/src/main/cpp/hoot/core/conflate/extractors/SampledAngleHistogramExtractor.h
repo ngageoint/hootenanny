@@ -29,7 +29,7 @@
 #define SAMPLED_ANGLE_HISTOGRAM_EXTRACTOR_H
 
 // hoot
-#include <hoot/core/conflate/polygon/extractors/AngleHistogramExtractor.h>
+#include <hoot/core/conflate/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/util/Configurable.h>
 
 namespace geos

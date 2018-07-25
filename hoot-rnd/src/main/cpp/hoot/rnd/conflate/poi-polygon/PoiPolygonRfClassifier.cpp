@@ -33,7 +33,7 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-//#include <hoot/core/conflate/polygon/extractors/EuclideanDistanceExtractor.h>
+//#include <hoot/core/conflate/extractors/EuclideanDistanceExtractor.h>
 
 using namespace std;
 
