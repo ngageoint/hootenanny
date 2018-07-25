@@ -2,7 +2,7 @@
 set -e
 
 # use a static config file, so this is not susceptible to config file changes
-CONFIG_FILE=test-files/cmd/quick/OptionsCmdTest/ConfigOptions.asciidoc
+CONFIG_FILE=test-files/cmd/quick/ConfigOptionsCmdTest/ConfigOptions.asciidoc
 
 echo "Listing all option names..."
 echo ""
