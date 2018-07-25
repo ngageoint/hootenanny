@@ -16,4 +16,4 @@ mkdir -p $OUTPUT_DIR
 
 hoot convert $HOOT_OPTS -D convert.ops+=$ADDITIONAL_VISITORS $INPUTS $TEST_OUTPUT --trans $HOOT_HOME/translations/$TRANSLATION
 
-hoot map-diff $HOOT_OPTS $KNOWN_GOOD_OUTPUT $TEST_OUTPUT && echo "Test Complete"
+hoot diff $HOOT_OPTS $KNOWN_GOOD_OUTPUT $TEST_OUTPUT && echo "Test Complete"

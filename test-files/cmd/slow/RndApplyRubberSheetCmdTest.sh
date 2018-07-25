@@ -29,4 +29,4 @@ hoot rubber-sheet-apply --error\
 
 goodfile=$HOOT_HOME/test-files/cmd/slow/RndApplyRubberSheetCmdTest/DcTigerToDcGis.osm
 testfile=$HOOT_HOME/test-output/cmd/slow/RndApplyRubberSheetCmdTest/DcTigerToDcGis.osm
-hoot map-diff $goodfile $testfile || diff $goodfile $testfile
+hoot diff $goodfile $testfile || diff $goodfile $testfile
