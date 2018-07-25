@@ -82,25 +82,4 @@ load-data: clean
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/ToyTestB.osm $(DB_URL)/ToyTestBCucumber
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/ToyTestCauseReview.osm $(DB_URL)/TTCauseReviewCucumber
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/Merged_Brazil_daba15e4.osm $(DB_URL)/BrazilMergedCucumber
-	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/conflate/diff/input1.osm $(DB_URL)/DiffConflateInput1
-	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/conflate/diff/input2.osm $(DB_URL)/DiffConflateInput2
-
-	# MapEdit conflation - 
-	# ME conflation in the UI has to be rewritten for HOT integration and also for #1431 changes, so no point in loading
-	# this data yet.
-	
-	#source $(HOOT_HOME)/scripts/database/SetupOsmApiDB.sh force
-
-	#PGPASSWORD=$(PGPASSWORD) psql --quiet $(OSM_API_DB_AUTH) -d $(DB_NAME_OSMAPI) -f $(HOOT_HOME)/test-files/servicesdb/users.sql
-	#hoot convert $(HOOT_OPTS) -D postgresql.dumpfile.writer.start.id.changeset=1 $(HOOT_HOME)/test-files/DcGisRoads.osm /tmp/DcGisRoadsCucumber.sql
-	
-	#PGPASSWORD=$(PGPASSWORD) psql --quiet $(OSM_API_DB_AUTH) -d $(DB_NAME_OSMAPI) -f /tmp/DcGisRoadsCucumber.sql
-	# These hardcoded element starting id's are a little kludgy.  See #796.
-	#hoot convert $(HOOT_OPTS) -D postgresql.dumpfile.writer.start.id.changeset=2 -D postgresql.dumpfile.writer.start.id.node=4325 -D postgresql.dumpfile.writer.start.id.way=375 $(HOOT_HOME)/test-files/conflate/unified/AllDataTypesA.osm /tmp/AllDataTypesACucumber.sql
-	
-	#PGPASSWORD=$(PGPASSWORD) psql --quiet $(OSM_API_DB_AUTH) -d $(DB_NAME_OSMAPI) -f /tmp/AllDataTypesACucumber.sql
-	#hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/conflate/generic/rivers/Haiti_osm_waterway_ss_REF2-cropped-2.osm $(DB_URL)/HaitiRiversCucumber
-	
-	# Write a dummy changeset record in order for the export conflicts test to work.
-	#PGPASSWORD=$(PGPASSWORD) psql --quiet $(OSM_API_DB_AUTH) -d $(DB_NAME_OSMAPI) -f $(HOOT_HOME)/test-files/ui/conflict_changeset.sql
 
