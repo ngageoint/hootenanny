@@ -36,7 +36,7 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/conflate/frechet/FrechetSublineMatcher.h>
+#include <hoot/core/algorithms//frechet/FrechetSublineMatcher.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/Log.h>
