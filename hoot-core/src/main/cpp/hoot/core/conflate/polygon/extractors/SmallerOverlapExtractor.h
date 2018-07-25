@@ -53,6 +53,7 @@ class Element;
 class SmallerOverlapExtractor : public FeatureExtractor
 {
 public:
+
   SmallerOverlapExtractor();
 
   static std::string className() { return "hoot::SmallerOverlapExtractor"; }
@@ -70,7 +71,7 @@ public:
     const boost::shared_ptr<const Element>& candidate) const;
 
   virtual QString getDescription() const
-  { return "Uses the building with more overlap to calculate the percentage overlap"; }
+  { return "Uses symmetric difference as the criterion for determining match scores, using the feature with more overlap to calculate the percentage overlap"; }
 };
 
 }

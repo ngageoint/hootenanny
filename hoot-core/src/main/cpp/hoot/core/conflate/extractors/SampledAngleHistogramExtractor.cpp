@@ -114,6 +114,7 @@ SampledAngleHistogramExtractor::SampledAngleHistogramExtractor()
 
 void SampledAngleHistogramExtractor::setConfiguration(const Settings& conf)
 {
+  AngleHistogramExtractor::setConfiguration(conf);
   ConfigOptions config = ConfigOptions(conf);
   setSampleDistance(config.getWayAngleSampleDistance());
   setHeadingDelta(config.getWayMatcherHeadingDelta());

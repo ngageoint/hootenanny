@@ -18,6 +18,9 @@
         "objectType": "tag"
     },
     {
+        "geometries": [
+            "node"
+        ],
         "isA": "power",
         "name": "power=pole",
         "objectType": "tag"
@@ -33,5 +36,29 @@
             "name": "power=pole",
             "weight": 0.7
         }
+    },
+    {
+        "geometries": [
+            "linestring"
+        ],
+        "isA": "power",
+        "name": "power=line",
+        "objectType": "tag"
+    },
+    {
+        "geometries": [
+            "linestring"
+        ],
+        "isA": "power",
+        "name": "power=minor_line",
+        "objectType": "tag"
+    },
+    {
+        "geometries": [
+            "linestring"
+        ],
+        "isA": "power",
+        "name": "power=cable",
+        "objectType": "tag"
     }
 ]

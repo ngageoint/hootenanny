@@ -36,10 +36,12 @@ namespace hoot
 
 /**
  * See exporatory funds report for details.
+ * Calculates "distance" between tags using hoot::TagComparator
  */
 class AttributeScoreExtractor : public WayFeatureExtractor, public Configurable
 {
 public:
+
   static std::string className() { return "hoot::AttributeScoreExtractor"; }
 
   AttributeScoreExtractor(ValueAggregatorPtr wayAgg, bool useWeight = false);
@@ -55,7 +57,7 @@ public:
   void setUseWeight(const bool useWeight);
 
   virtual QString getDescription() const
-  { return "TODO"; }
+  { return "Calculates the similarity between two tag sets"; }
 
 protected:
 

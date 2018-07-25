@@ -241,6 +241,17 @@ function isRailway(e)
 }
 
 /**
+ * Returns true if the specified element is an power line.
+ *
+ * See the OSM wiki for more information:
+ * https://wiki.openstreetmap.org/wiki/Power
+ */
+function isPowerLine(e)
+{
+    return hoot.OsmSchema.isPowerLine(e);
+}
+
+/**
  * Returns true if the specified element has a name
  */
 function hasName(e)

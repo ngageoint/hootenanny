@@ -132,7 +132,6 @@ private:
   bool _includePid;
   bool _textStatus;
   QString _osmSchema;
-  QString _timestamp;
   int _precision;
   boost::shared_ptr<QIODevice> _fp;
   int _encodingErrorCount;
