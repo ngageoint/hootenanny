@@ -33,7 +33,7 @@
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
-#include <hoot/core/visitors/RemoveRef2Visitor.h>
+#include <hoot/rnd/visitors/RemoveRef2Visitor.h>
 
 // TGS
 #include <tgs/Statistics/Random.h>

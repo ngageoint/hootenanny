@@ -33,7 +33,7 @@
 #include <hoot/core/criterion/PoiCriterion.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/visitors/RemoveRef2VisitorMultipleCriterion.h>
+#include <hoot/rnd/visitors/RemoveRef2VisitorMultipleCriterion.h>
 
 // TGS
 #include <tgs/Statistics/Random.h>
