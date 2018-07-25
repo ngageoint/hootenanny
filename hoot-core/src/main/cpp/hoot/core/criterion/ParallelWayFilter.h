@@ -42,9 +42,6 @@ namespace hoot
 
 class Way;
 
-/*
- * TODO: remove
- */
 class ParallelWayFilter : public WayFilter
 {
 public:

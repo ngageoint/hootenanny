@@ -33,7 +33,6 @@
 #include <hoot/core/ops/DuplicateWayRemover.h>
 #include <hoot/core/conflate/highway/ImpliedDividedMarker.h>
 #include <hoot/core/conflate/merging/SmallWayMerger.h>
-#include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
 #include <hoot/core/ops/VisitorOp.h>
 #include <hoot/core/ops/SuperfluousWayRemover.h>
@@ -51,6 +50,7 @@
 #include <hoot/core/criterion/IntersectionFilter.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/conflate/MapCleaner.h>
 
 namespace hoot
 {
@@ -112,8 +112,7 @@ void FindIntersectionsOp::apply(boost::shared_ptr<OsmMap> &map)
   boost::shared_ptr<IntersectionFilter> intersectionFilter(new IntersectionFilter(v->getIntersections()));
   VisitorOp(new RemoveElementsVisitor(intersectionFilter)).apply(map);
 
-  // Apply any user specified operations.
-  NamedOp(ConfigOptions().getMapCleanerTransforms()).apply(map);
+  MapCleaner().apply(map);
 }
 
 }

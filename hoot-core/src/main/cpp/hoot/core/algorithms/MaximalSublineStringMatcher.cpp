@@ -92,6 +92,7 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPt
   {
     maxRelevantDistance = e1->getCircularError() + e2->getCircularError();
   }
+  LOG_VART(maxRelevantDistance);
 
   // make sure the inputs are legit. If either element isn't legit then throw a NeedsReviewException
   _validateElement(map, e1->getElementId());
@@ -101,6 +102,8 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPt
   // multilinestrings may contain multiple ways
   vector<ConstWayPtr> ways1 = ExtractWaysVisitor::extractWays(map, e1);
   vector<ConstWayPtr> ways2 = ExtractWaysVisitor::extractWays(map, e2);
+  LOG_VART(ways1.size());
+  LOG_VART(ways2.size());
 
   if ((ways1.size() > 4 && ways2.size() > 4) || (ways1.size() + ways2.size() > 7))
   {
@@ -111,8 +114,9 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPt
   // Try with all combinations of forward and reversed ways. This is very expensive for
   // multilinestrings with lots of ways in them. Though those shouldn't be common.
   vector<bool> reversed1(ways1.size(), false), reversed2(ways2.size(), false);
-  ScoredMatch scoredResult = _findBestMatch(map, maxRelevantDistance, ways1, ways2, reversed1,
-    reversed2);
+  LOG_TRACE("Finding best match...");
+  ScoredMatch scoredResult =
+    _findBestMatch(map, maxRelevantDistance, ways1, ways2, reversed1, reversed2);
   LOG_VART(scoredResult);
 
   // convert the best match into a WaySublineStringMatch and return.
@@ -121,9 +125,10 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPt
     WaySublineMatchString result = scoredResult.matches;
     // this likely shouldn't be necessary. See https://github.com/ngageoint/hootenanny/issues/157.
     result.removeEmptyMatches();
+    LOG_VART(result);
     return result;
   }
-  catch(const OverlappingMatchesException &e)
+  catch (const OverlappingMatchesException& /*e*/)
   {
     throw NeedsReviewException("Internal Error: Multiple overlapping way matches were found within "
       "one set of ways.  Please report this to https://github.com/ngageoint/hootenanny.");
@@ -223,8 +228,8 @@ MaximalSublineStringMatcher::ScoredMatch MaximalSublineStringMatcher::_evaluateM
 
 MaximalSublineStringMatcher::ScoredMatch MaximalSublineStringMatcher::_findBestMatch(
   const ConstOsmMapPtr& map, Meters maxDistance, vector<ConstWayPtr>& ways1,
-  vector<ConstWayPtr> &ways2, vector<bool>& reversed1, vector<bool> &reversed2, size_t i, size_t j)
-  const
+  vector<ConstWayPtr> &ways2, vector<bool>& reversed1, vector<bool> &reversed2, size_t i,
+  size_t j) const
 {
   const double epsilon = 1e-2;
 

@@ -54,6 +54,7 @@ class Element;
 class CompactnessExtractor : public FeatureExtractor
 {
 public:
+
   CompactnessExtractor();
 
   static std::string className() { return "hoot::CompactnessExtractor"; }
@@ -70,7 +71,8 @@ public:
   virtual double extract(const OsmMap& map, const boost::shared_ptr<const Element>& target,
     const boost::shared_ptr<const Element>& candidate) const;
 
-  virtual QString getDescription() const { return "TODO"; }
+  virtual QString getDescription() const
+  { return "Calculates the compactness of a shape where circles score the highest"; }
 
 private:
 

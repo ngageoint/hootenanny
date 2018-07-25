@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "MapCleaner.h"
@@ -46,6 +46,7 @@ MapCleaner::MapCleaner()
 void MapCleaner::apply(boost::shared_ptr<OsmMap> &map)
 {
   // Apply any user specified operations.
+  LOG_INFO("Cleaning map...");
   NamedOp(ConfigOptions().getMapCleanerTransforms()).apply(map);
 }
 

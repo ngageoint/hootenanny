@@ -105,9 +105,13 @@ public:
       mfe.addMatchCreator(boost::shared_ptr<MatchCreator>(mc));
     }
 
+    int datasetPairCtr = 1;
     for (int i = 0; i < args.size() - 1; i+=2)
     {
-      LOG_INFO("Processing map : " << args[i] << " and " << args[i + 1]);
+      LOG_INFO(
+        "Processing dataset pair " << datasetPairCtr << " of " << ((args.size() - 1) / 2) <<
+        ": " << args[i].right(50) << " and " << args[i + 1].right(50));
+      datasetPairCtr++;
       OsmMapPtr map(new OsmMap());
 
       IoUtils::loadMap(map, args[i], false, Status::Unknown1);
@@ -117,6 +121,7 @@ public:
 
       mfe.processMap(map);
     }
+    LOG_INFO("Processed " << mfe.getSamples().size() << " total samples.");
 
     ArffWriter aw(output + ".arff", true);
     aw.write(mfe.getSamples());
@@ -137,8 +142,9 @@ public:
       // disable the printing of "Trained Tree ..."
       dc.reset(new DisableCout());
     }
-    int numFactors = min(df->getNumFactors(), max<unsigned int>(3, df->getNumFactors() / 5));
+    const int numFactors = min(df->getNumFactors(), max<unsigned int>(3, df->getNumFactors() / 5));
     LOG_INFO("Training on data with " << numFactors << " factors...");
+    //make the number of trees configurable?
     rf.trainMulticlass(df, 40, numFactors);
     dc.reset();
 

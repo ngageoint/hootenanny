@@ -73,9 +73,12 @@ public:
       OsmMapPtr copy(new OsmMap(maps[i]));
 
       // Apply any user specified operations.
+      LOG_INFO("Applying pre conflation operations...");
+      LOG_VART(ConfigOptions().getConflatePreOps());
       NamedOp(ConfigOptions().getConflatePreOps()).apply(copy);
       UnifyingConflator(mt).apply(copy);
       // Apply any user specified operations.
+      LOG_INFO("Applying post conflation operations...");
       NamedOp(ConfigOptions().getConflatePostOps()).apply(copy);
 
       comparator.evaluateMatches(maps[i], copy);
@@ -208,9 +211,10 @@ public:
               .arg(MetadataTags::Ref2()));
       }
 
-      OsmMapPtr mapCopy(map);
-      MapProjector::projectToWgs84(mapCopy);
-      IoUtils::saveMap(mapCopy, "/tmp/score-matches-before-prep.osm");
+      //for debugging
+//      OsmMapPtr mapCopy(map);
+//      MapProjector::projectToWgs84(mapCopy);
+//      IoUtils::saveMap(mapCopy, "/tmp/score-matches-before-prep.osm");
 
       MatchScoringMapPreparer().prepMap(map, ConfigOptions().getScoreMatchesRemoveNodes());
       maps.push_back(map);
@@ -223,9 +227,10 @@ public:
     //const long numManualMatches = manualMatchVisitor->getStat();
 
     LOG_VARD(maps.size());
-    OsmMapPtr mapCopy(maps[0]);
-    MapProjector::projectToWgs84(mapCopy);
-    IoUtils::saveMap(mapCopy, "/tmp/score-matches-after-prep.osm");
+    //for debugging
+//    OsmMapPtr mapCopy(maps[0]);
+//    MapProjector::projectToWgs84(mapCopy);
+//    IoUtils::saveMap(mapCopy, "/tmp/score-matches-after-prep.osm");
 
     if (optimizeThresholds)
     {

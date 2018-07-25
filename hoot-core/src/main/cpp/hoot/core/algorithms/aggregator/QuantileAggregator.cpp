@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "QuantileAggregator.h"
 
@@ -41,15 +41,19 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ValueAggregator, QuantileAggregator)
 
-QuantileAggregator::QuantileAggregator() :
-_quantile(0)
+QuantileAggregator::QuantileAggregator()
 {
-
+  setConfiguration(conf());
 }
 
 QuantileAggregator::QuantileAggregator(double quantile)
 {
   _quantile = quantile;
+}
+
+void QuantileAggregator::setConfiguration(const Settings& conf)
+{
+  _quantile = ConfigOptions(conf).getQuantileAggregatorQuantile();
 }
 
 double QuantileAggregator::aggregate(vector<double>& d) const

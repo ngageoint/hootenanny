@@ -122,7 +122,6 @@ void TagComparator::averageTags(const Tags& t1, const Tags& t2, Tags& result,
 void TagComparator::averageTags(const Tags& t1In, double w1, const Tags& t2In, double w2,
                                 Tags& result, bool keepAllUnknownTags)
 {
-  LOG_TRACE("score: " << OsmSchema::getInstance().score("highway=road", "highway=unclassified"));
   result.clear();
   OsmSchema& schema = OsmSchema::getInstance();
 
