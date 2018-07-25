@@ -28,7 +28,7 @@
 #define OPTIMALCONSTRAINEDMATCHES_H
 
 // Hoot
-#include <hoot/core/conflate/match-graph/ConstrainedMatches.h>
+#include <hoot/core/conflate/matching/ConstrainedMatches.h>
 
 namespace hoot
 {

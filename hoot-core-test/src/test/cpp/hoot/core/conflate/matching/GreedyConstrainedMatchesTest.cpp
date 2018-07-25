@@ -33,7 +33,7 @@
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/merging/MergerCreator.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
-#include <hoot/core/conflate/match-graph/GreedyConstrainedMatches.h>
+#include <hoot/core/conflate/matching/GreedyConstrainedMatches.h>
 #include <hoot/core/util/Log.h>
 
 // CPP Unit

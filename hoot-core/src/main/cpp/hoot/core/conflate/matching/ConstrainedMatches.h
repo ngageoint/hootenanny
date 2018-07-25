@@ -29,7 +29,7 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/conflate/match-graph/MatchConflicts.h>
+#include <hoot/core/conflate/matching/MatchConflicts.h>
 #include <hoot/core/util/Configurable.h>
 
 // Standard

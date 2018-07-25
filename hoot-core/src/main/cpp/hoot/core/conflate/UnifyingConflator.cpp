@@ -34,8 +34,8 @@
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
-#include <hoot/core/conflate/match-graph/GreedyConstrainedMatches.h>
-#include <hoot/core/conflate/match-graph/OptimalConstrainedMatches.h>
+#include <hoot/core/conflate/matching/GreedyConstrainedMatches.h>
+#include <hoot/core/conflate/matching/OptimalConstrainedMatches.h>
 #include <hoot/core/conflate/polygon/BuildingMergerCreator.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/NamedOp.h>

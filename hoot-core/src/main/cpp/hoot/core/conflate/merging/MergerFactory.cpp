@@ -34,7 +34,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/conflate/match-graph/MatchGraph.h>
+#include <hoot/core/conflate/matching/MatchGraph.h>
 
 using namespace std;
 
