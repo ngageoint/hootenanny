@@ -54,7 +54,7 @@ public:
       args.removeAt(args.indexOf("--derive"));
       if (args.size() < 3 || args.size() > 5)
       {
-        cout << getHelp() << endl << endl;
+        std::cout << getHelp() << std::endl << std::endl;
         throw HootException(
           QString("%1 with the --derive option takes three to five parameters.").arg(getName()));
       }
@@ -84,7 +84,7 @@ public:
       args.removeAt(args.indexOf("--apply"));
       if (args.size() != 3)
       {
-        cout << getHelp() << endl << endl;
+        std::cout << getHelp() << std::endl << std::endl;
         throw HootException(
           QString("%1 with the --apply option takes three parameters.").arg(getName()));
       }
@@ -95,7 +95,7 @@ public:
     {
       if (args.size() != 3)
       {
-        cout << getHelp() << endl << endl;
+        std::cout << getHelp() << std::endl << std::endl;
         throw HootException(QString("%1 takes three parameters.").arg(getName()));
       }
 
