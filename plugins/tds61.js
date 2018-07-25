@@ -2513,6 +2513,7 @@ tds61 = {
                     // Debug
                     // print('## Skipping: ' + gFcode);
                     returnData.splice(i,1);
+                    fLen = returnData.length;
                 }
             } // End returnData loop
 
