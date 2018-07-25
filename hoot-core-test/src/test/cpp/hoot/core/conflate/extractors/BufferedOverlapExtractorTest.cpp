@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/conflate/polygon/extractors/BufferedOverlapExtractor.h>
+#include <hoot/core/conflate/extractors/BufferedOverlapExtractor.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>

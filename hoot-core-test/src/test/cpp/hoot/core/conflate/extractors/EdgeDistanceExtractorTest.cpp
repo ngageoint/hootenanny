@@ -32,7 +32,7 @@
 #include <hoot/core/algorithms/aggregator/QuantileAggregator.h>
 #include <hoot/core/algorithms/aggregator/RmseAggregator.h>
 #include <hoot/core/algorithms/aggregator/MinAggregator.h>
-#include <hoot/core/conflate/polygon/extractors/EdgeDistanceExtractor.h>
+#include <hoot/core/conflate/extractors/EdgeDistanceExtractor.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>

@@ -29,7 +29,7 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/MeanWordSetDistance.h>
 #include <hoot/core/algorithms/LevenshteinDistance.h>
-#include <hoot/core/conflate/polygon/extractors/NameExtractor.h>
+#include <hoot/core/conflate/extractors/NameExtractor.h>
 #include <hoot/core/elements/Node.h>
 
 namespace hoot
