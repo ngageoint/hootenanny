@@ -126,6 +126,51 @@ public:
    * @return true if any elements failed upload
    */
   bool hasFailedElements() { return _failedCount > 0; }
+  /**
+   * @brief getFailedCount
+   * @return number of failed elements
+   */
+  long getFailedCount()         { return _failedCount; }
+  /**
+   * @brief getTotalElementCount
+   * @return total number of elements in the changeset
+   */
+  long getTotalElementCount()   { return _allNodes.size() + _allWays.size() + _allRelations.size(); }
+  /**
+   * @brief getTotalNodeCount
+   * @return total number of nodes in the changeset (create, modify, or delete)
+   */
+  long getTotalNodeCount()      { return _allNodes.size(); }
+  /**
+   * @brief getTotalWayCount
+   * @return total number of ways in the changeset (create, modify, or delete)
+   */
+  long getTotalWayCount()       { return _allWays.size(); }
+  /**
+   * @brief getTotalRelationCount
+   * @return total number of relations in the changeset (create, modify, or delete)
+   */
+  long getTotalRelationCount()  { return _allRelations.size(); }
+  /**
+   * @brief getTotalCreateCount
+   * @return total number of nodes/ways/relations created in the changeset
+   */
+  long getTotalCreateCount()    { return _nodes[TypeCreate].size() + _ways[TypeCreate].size() + _relations[TypeCreate].size(); }
+  /**
+   * @brief getTotalModifyCount
+   * @return total number of nodes/ways/relations modified in the changeset
+   */
+  long getTotalModifyCount()    { return _nodes[TypeModify].size() + _ways[TypeModify].size() + _relations[TypeModify].size(); }
+  /**
+   * @brief getTotalDeleteCount
+   * @return total number of nodes/ways/relations deleted in the changeset
+   */
+  long getTotalDeleteCount()    { return _nodes[TypeDelete].size() + _ways[TypeDelete].size() + _relations[TypeDelete].size(); }
+  /**
+   * @brief getProcessedCount
+   * @return Number of elements processed so far
+   */
+  long getProcessedCount()      { return _processedCount; }
 
 private:
   /**

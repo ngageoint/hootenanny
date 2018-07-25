@@ -36,10 +36,14 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 
+//  Tgs
+#include <tgs/System/Timer.h>
+
 //  Qt
 #include <QXmlStreamReader>
 
 using namespace std;
+using namespace Tgs;
 
 namespace hoot
 {
@@ -47,7 +51,8 @@ namespace hoot
 OsmApiWriter::OsmApiWriter(const QUrl &url, const QString &changeset)
   : _description(ConfigOptions().getChangesetDescription()),
     _maxWriters(ConfigOptions().getChangesetApidbMaxWriters()),
-    _maxChangesetSize(ConfigOptions().getChangesetApidbMaxSize())
+    _maxChangesetSize(ConfigOptions().getChangesetApidbMaxSize()),
+    _showProgress(false)
 {
   _changesets.push_back(changeset);
   if (isSupported(url))
@@ -58,7 +63,8 @@ OsmApiWriter::OsmApiWriter(const QUrl& url, const QList<QString>& changesets)
   : _changesets(changesets),
     _description(ConfigOptions().getChangesetDescription()),
     _maxWriters(ConfigOptions().getChangesetApidbMaxWriters()),
-    _maxChangesetSize(ConfigOptions().getChangesetApidbMaxSize())
+    _maxChangesetSize(ConfigOptions().getChangesetApidbMaxSize()),
+    _showProgress(false)
 {
   if (isSupported(url))
     _url = url;
@@ -66,6 +72,7 @@ OsmApiWriter::OsmApiWriter(const QUrl& url, const QList<QString>& changesets)
 
 bool OsmApiWriter::apply()
 {
+  Timer timer;
   OsmApiNetworkRequestPtr request(new OsmApiNetworkRequest());
   //  Validate API capabilites
   if (!queryCapabilities(request))
@@ -73,12 +80,14 @@ bool OsmApiWriter::apply()
     LOG_ERROR("API Capabilities error");
     return false;
   }
+  _stats.append(SingleStat("API Capabilites Query Time (sec)", timer.getElapsedAndRestart()));
   //  Validate API permissions
   if (!validatePermissions(request))
   {
     LOG_ERROR("API Permissions error");
     return false;
   }
+  _stats.append(SingleStat("API Permissions Query Time (sec)", timer.getElapsedAndRestart()));
   bool success = true;
   //  Load all of the changesets into memory
   _changeset.setMaxSize(_maxChangesetSize);
@@ -86,11 +95,21 @@ bool OsmApiWriter::apply()
   {
     LOG_INFO("Loading changeset: " << _changesets[i]);
     _changeset.loadChangeset(_changesets[i]);
+    _stats.append(SingleStat(QString("Changeset (%1) Time (sec)").arg(_changesets[i]), timer.getElapsedAndRestart()));
   }
   //  Start the writer threads
   LOG_INFO("Starting " << _maxWriters << " processing threads.");
   for (int i = 0; i < _maxWriters; ++i)
     _threadPool.push_back(thread(&OsmApiWriter::_changesetThreadFunc, this));
+  //  Setup the progress indicators
+  long total = _changeset.getTotalElementCount();
+  int progress = 0;
+  int increment = 1;
+  //  Setup the increment
+  if (total < 100000)
+    increment = 10;
+  else if (total < 1000000)
+    increment = 5;
   //  Iterate all changes until there are no more elements to send
   while (_changeset.hasElementsToSend())
   {
@@ -128,10 +147,31 @@ bool OsmApiWriter::apply()
       //  Allow time for the worker threads to complete some work
       this_thread::sleep_for(chrono::milliseconds(10));
     }
+    //  Show the progress
+    if (_showProgress)
+    {
+      //  Actual progress is calculated and once it passes the next increment it is reported
+      if (_changeset.getProcessedCount() / (double)total * 100.0 >= progress + increment)
+      {
+        progress += increment;
+        PROGRESS_INFO("Upload progress: " << progress << "%");
+      }
+    }
   }
+  PROGRESS_INFO("Upload progress: 100%");
   //  Wait for the threads to shutdown
   for (int i = 0; i < _maxWriters; ++i)
     _threadPool[i].join();
+  //  Keep some stats
+  _stats.append(SingleStat("API Upload Time (sec)", timer.getElapsedAndRestart()));
+  _stats.append(SingleStat("Total Nodes in Changeset", _changeset.getTotalNodeCount()));
+  _stats.append(SingleStat("Total Ways in Changeset", _changeset.getTotalWayCount()));
+  _stats.append(SingleStat("Total Relations in Changeset", _changeset.getTotalRelationCount()));
+  _stats.append(SingleStat("Total Elements Created", _changeset.getTotalCreateCount()));
+  _stats.append(SingleStat("Total Elements Modified", _changeset.getTotalModifyCount()));
+  _stats.append(SingleStat("Total Elements Deleted", _changeset.getTotalDeleteCount()));
+  _stats.append(SingleStat("Total Errors", _changeset.getFailedCount()));
+  //  Return successfully
   return success;
 }
 

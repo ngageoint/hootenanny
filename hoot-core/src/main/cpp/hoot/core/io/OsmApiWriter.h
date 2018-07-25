@@ -33,6 +33,7 @@
 #include <hoot/core/io/OsmApiChangeset.h>
 #include <hoot/core/io/OsmApiChangesetElement.h>
 #include <hoot/core/io/OsmApiNetworkRequest.h>
+#include <hoot/core/ops/stats/SingleStat.h>
 #include <hoot/core/util/Configurable.h>
 
 //  Standard
@@ -108,6 +109,16 @@ public:
    * @return true if the current user has write permission for the OSM API
    */
   bool validatePermissions(OsmApiNetworkRequestPtr request);
+  /**
+   * @brief getStats Get the stats object
+   * @return
+   */
+  QList<SingleStat> getStats() const { return _stats; }
+  /**
+   * @brief showProgress Set the show progress flag for progress during upload
+   * @param show True shows an adaptive, granular progress
+   */
+  void showProgress(bool show) { _showProgress = show; }
 
 private:
   /**
@@ -184,6 +195,10 @@ private:
   long _maxChangesetSize;
   /** Queried capabilities from the target OSM API */
   OsmApiCapabilites _capabilities;
+  /** Actual statistics */
+  QList<SingleStat> _stats;
+  /** Progress flag */
+  bool _showProgress;
   /** Default constructor for testing purposes only */
   OsmApiWriter() {}
   //  for white box testing
