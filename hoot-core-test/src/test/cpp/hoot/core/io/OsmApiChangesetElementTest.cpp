@@ -26,15 +26,14 @@
  */
 
 //  Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmApiChangesetElement.h>
 #include <hoot/core/util/FileUtils.h>
-
-#include "../TestUtils.h"
 
 namespace hoot
 {
 
-class OsmApiChangesetElementTest : public CppUnit::TestFixture
+class OsmApiChangesetElementTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(OsmApiChangesetElementTest);
   CPPUNIT_TEST(runXmlNodeTest);
@@ -44,10 +43,6 @@ class OsmApiChangesetElementTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
-
-  void setUp()
-  {
-  }
 
   void runXmlNodeTest()
   {
