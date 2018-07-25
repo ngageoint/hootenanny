@@ -43,13 +43,13 @@ using namespace std;
 namespace hoot
 {
 
-class CropMapCmd : public BaseCommand
+class CropCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::CropMapCmd"; }
+  static string className() { return "hoot::CropCmd"; }
 
-  CropMapCmd() {}
+  CropCmd() {}
 
   virtual QString getName() const { return "crop"; }
 
@@ -99,6 +99,6 @@ public:
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, CropMapCmd)
+HOOT_FACTORY_REGISTER(Command, CropCmd)
 
 }

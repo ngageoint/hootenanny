@@ -40,13 +40,13 @@ namespace hoot
 {
 using namespace std;
 
-class CookieCutterCmd : public BaseCommand
+class CookieCutCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::CookieCutterCmd"; }
+  static string className() { return "hoot::CookieCutCmd"; }
 
-  CookieCutterCmd() {}
+  CookieCutCmd() {}
 
   virtual QString getName() const { return "cookie-cut"; }
 
@@ -107,6 +107,6 @@ public:
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, CookieCutterCmd)
+HOOT_FACTORY_REGISTER(Command, CookieCutCmd)
 
 }

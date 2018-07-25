@@ -29,7 +29,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/visitors/CountManualMatchesVisitor.h>
+#include <hoot/rnd/visitors/CountManualMatchesVisitor.h>
 
 namespace hoot
 {
