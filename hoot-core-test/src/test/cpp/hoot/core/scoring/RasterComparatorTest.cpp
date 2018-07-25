@@ -29,7 +29,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/rnd/scoring/RasterComparator.h>
+#include <hoot/core/scoring/RasterComparator.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>

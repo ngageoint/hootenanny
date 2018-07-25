@@ -34,7 +34,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/OpenCv.h>
-#include <hoot/rnd/scoring/GraphComparator.h>
+#include <hoot/core/scoring/GraphComparator.h>
 
 // Tgs
 #include <tgs/Statistics/Random.h>
