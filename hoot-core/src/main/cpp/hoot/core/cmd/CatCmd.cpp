@@ -55,7 +55,7 @@ public:
   virtual QString getName() const { return "cat"; }
 
   virtual QString getDescription() const
-  { return "Concatenates two files and renumbers element IDs to avoid conflicts"; }
+  { return "Concatenates two map files and renumbers element IDs to avoid conflicts"; }
 
   virtual int runSimple(QStringList args)
   {

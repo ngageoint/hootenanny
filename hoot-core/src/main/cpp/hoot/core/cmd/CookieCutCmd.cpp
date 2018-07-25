@@ -51,7 +51,7 @@ public:
   virtual QString getName() const { return "cookie-cut"; }
 
   virtual QString getDescription() const
-  { return "Removes a 'cutter' shape from the contents of a 'dough' input"; }
+  { return "Removes a 'cutter' shape from the contents of a 'dough' map input"; }
 
   int runSimple(QStringList args)
   {
