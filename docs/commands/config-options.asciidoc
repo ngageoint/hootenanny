@@ -1,8 +1,8 @@
-== options
+== config-options
 
 === Description
 
-The +options+ command prints out available Hootenanny configuration options.  
+The +config-options+ command prints out available Hootenanny configuration options.  
 
 One of the following input parameters must be specified.
 
@@ -15,25 +15,25 @@ One of the following input parameters must be specified.
 === Usage
 
 --------------------------------------
-options (--option-names)
-options (--option-details)
-options (name) [--option-names]
-options (name) [--option-details]
+config-options (--option-names)
+config-options (--option-details)
+config-options (name) [--option-names]
+config-options (name) [--option-details]
 --------------------------------------
 
 ==== Examples
 
 --------------------------------------
 # list all config option names
-hoot options --option-names
+hoot config-options --option-names
 
 # list all config option names and their descriptions
-hoot options --option-details
+hoot config-options --option-details
 
 # list all config option names where the name contains the given string
-hoot options poi.polygon --option-names
+hoot config-options poi.polygon --option-names
 
 # list all config option names and their descriptions where the name contains the given string
-hoot options poi.polygon --option-details
+hoot config-options poi.polygon --option-details
 --------------------------------------
 

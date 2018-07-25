@@ -39,19 +39,19 @@ using namespace std;
 namespace hoot
 {
 
-class OptionsCmd : public BaseCommand
+class ConfigOptionsCmd : public BaseCommand
 {
 
 public:
 
-  static string className() { return "hoot::OptionsCmd"; }
+  static string className() { return "hoot::ConfigOptionsCmd"; }
 
-  OptionsCmd() {}
+  ConfigOptionsCmd() {}
 
-  virtual QString getName() const { return "options"; }
+  virtual QString getName() const { return "config-options"; }
 
   virtual QString getDescription() const
-  { return "Prints configuration options"; }
+  { return "Prints available configuration options"; }
 
   virtual int runSimple(QStringList args)
   {
@@ -159,7 +159,7 @@ private:
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, OptionsCmd)
+HOOT_FACTORY_REGISTER(Command, ConfigOptionsCmd)
 
 }
 
