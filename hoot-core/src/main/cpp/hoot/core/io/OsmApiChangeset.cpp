@@ -90,25 +90,39 @@ void XmlChangeset::loadChangeset(const QString &changesetPath)
   QXmlStreamReader::TokenType type = reader.readNext();
   if (type == QXmlStreamReader::StartDocument)
     type = reader.readNext();
-  if (type == QXmlStreamReader::StartElement && reader.name() != "osmChange")
+  //  Read the OSC changeset
+  if (changesetPath.endsWith(".osc"))
   {
-    LOG_ERROR("Unknown changeset response format.");
-    return;
-  }
-  //  Iterate all of updates and record them
-  while (!reader.atEnd() && !reader.hasError())
-  {
-    type = reader.readNext();
-    if (type == QXmlStreamReader::StartElement)
+    if (type == QXmlStreamReader::StartElement && reader.name() != "osmChange")
     {
-      QStringRef name = reader.name();
-      if (name == "create")
-        loadElements(reader, ChangesetType::TypeCreate);
-      else if (name == "modify")
-        loadElements(reader, ChangesetType::TypeModify);
-      else if (name == "delete")
-        loadElements(reader, ChangesetType::TypeDelete);
+      LOG_ERROR("Unknown changeset file format.");
+      return;
     }
+    //  Iterate all of updates and record them
+    while (!reader.atEnd() && !reader.hasError())
+    {
+      type = reader.readNext();
+      if (type == QXmlStreamReader::StartElement)
+      {
+        QStringRef name = reader.name();
+        if (name == "create")
+          loadElements(reader, ChangesetType::TypeCreate);
+        else if (name == "modify")
+          loadElements(reader, ChangesetType::TypeModify);
+        else if (name == "delete")
+          loadElements(reader, ChangesetType::TypeDelete);
+      }
+    }
+  }
+  else  //  .osm file
+  {
+    if (type == QXmlStreamReader::StartElement && reader.name() != "osm")
+    {
+      LOG_ERROR("Unknown OSM XML file format.");
+      return;
+    }
+    //  Force load all of the elements as 'create' elements
+    loadElements(reader, ChangesetType::TypeCreate);
   }
 }
 
