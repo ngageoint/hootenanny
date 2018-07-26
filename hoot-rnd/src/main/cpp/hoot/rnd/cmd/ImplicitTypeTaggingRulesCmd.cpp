@@ -73,24 +73,24 @@ public:
           QString("%1 with the --create-db option takes two parameters.").arg(getName()));
       }
 
-      ImplicitTagRulesSqliteReader dbReader;
-      dbReader.open(args[0].trimmed());
-      dbReader.printStats();
-      dbReader.close();
+      ImplicitTagRulesDatabaseDeriver rulesDatabaseDeriver;
+      rulesDatabaseDeriver.setConfiguration(conf());
+      rulesDatabaseDeriver.deriveRulesDatabase(args[0].trimmed(), args[1].trimmed());
     }
     else if (args.contains("--db-stats"))
     {
       args.removeAt(args.indexOf("--db-stats"));
-      if (args.size() != 2)
+      if (args.size() != 1)
       {
         std::cout << getHelp() << std::endl << std::endl;
         throw HootException(
-          QString("%1 with the --db-stats option takes two parameters.").arg(getName()));
+          QString("%1 with the --db-stats option takes one parameter.").arg(getName()));
       }
 
-      ImplicitTagRulesDatabaseDeriver rulesDatabaseDeriver;
-      rulesDatabaseDeriver.setConfiguration(conf());
-      rulesDatabaseDeriver.deriveRulesDatabase(args[0].trimmed(), args[1].trimmed());
+      ImplicitTagRulesSqliteReader dbReader;
+      dbReader.open(args[0].trimmed());
+      dbReader.printStats();
+      dbReader.close();
     }
     else
     {
