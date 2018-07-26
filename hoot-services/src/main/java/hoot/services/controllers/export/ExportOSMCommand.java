@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.export;
 
@@ -52,7 +52,8 @@ class ExportOSMCommand extends ExportCommand {
 
         if (!params.getTagOverrides().isEmpty() && !params.getIncludeHootTags()) {
             options.add("convert.ops=hoot::TranslationOp;hoot::RemoveElementsVisitor");
-            options.add("remove.elements.visitor.element.criterion=hoot::NoInformationCriterion");
+            options.add("remove.elements.visitor.element.criterion=hoot::ReviewRelationCriterion");
+            options.add("remove.elements.visitor.recursive=false");
         } else if (!params.getTagOverrides().isEmpty()) {
             options.add("convert.ops=hoot::TranslationOp");
         }
