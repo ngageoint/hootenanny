@@ -94,8 +94,10 @@ public:
     }
     else
     {
-      throw HootException(
+      LOG_WARN(
         "Must supply one of the option parameters: --create-raw, --create-db, --db-stats");
+      std::cout << getHelp() << std::endl << std::endl;
+      return 1;
     }
 
     return 0;

@@ -22,6 +22,7 @@ arguments and a short help screen will be displayed.
 
 :leveloffset: 1
 // be sure all included asciidocs end with a newline
+include::build-model.asciidoc[]
 include::cat.asciidoc[]
 include::changeset-apply.asciidoc[]
 include::changeset-derive.asciidoc[]
@@ -43,8 +44,6 @@ include::formats.asciidoc[]
 include::generate-alpha-shape.asciidoc[]
 include::help.asciidoc[]
 include::implicit-type-tagging-rules.asciidoc[]
-include::model-build.asciidoc[]
-include::model-rf-build.asciidoc[]
 include::multiary-poi-conflate.asciidoc[]
 include::multiary-poi-ingest.asciidoc[]
 include::multiary-score-poi-matches.asciidoc[]

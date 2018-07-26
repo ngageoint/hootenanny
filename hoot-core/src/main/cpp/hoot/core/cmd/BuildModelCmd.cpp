@@ -37,6 +37,9 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/IoUtils.h>
 
+#include <hoot/core/io/ArffToRfConverter.h>
+#include <hoot/core/scoring/RandomForestModelBuilder.h>
+
 // Standard
 #include <fstream>
 #include <iostream>
@@ -60,13 +63,14 @@ public:
 
   BuildModelCmd() { }
 
-  virtual QString getName() const { return "model-build"; }
+  virtual QString getName() const { return "build-model"; }
 
   virtual QString getDescription() const
-  { return "Creates a random forest model from manually matched map data"; }
+  { return "Creates a random forest model for conflation"; }
 
   virtual int runSimple(QStringList args)
   {
+    // This argument is only valid when converting to .rf from training data.
     bool exportArffOnly = false;
     if (args.contains("--export-arff-only"))
     {
@@ -74,90 +78,30 @@ public:
       exportArffOnly = true;
     }
 
-    if (args.size() < 3 || args.size() % 2 == 0)
+    if (args.size() == 2 && !exportArffOnly)
+    {
+      //must be a .arff to .rf conversion
+      ArffToRfConverter().convert(args[0], args[1]);
+    }
+    //must be a conversion to .rf from training data
+    else if (args.size() < 3 || args.size() % 2 == 0)
     {
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes an odd number of parameters, at least three.").
-                          arg(getName()));
+      throw HootException(
+        QString(
+          "%1 takes an odd number of parameters and at least three parameters when converting to .rf from training data.")
+        .arg(getName()));
     }
-
-    QString output = args.last();
-
-    if (output.endsWith(".rf"))
+    else
     {
-      output = output.remove(output.size() - 3, 3);
-    }
-
-    MatchFeatureExtractor mfe;
-    QStringList creators = ConfigOptions().getMatchCreators().split(";");
-    for (int i = 0; i < creators.size(); i++)
-    {
-      QString creator = creators[i];
-      QStringList args = creator.split(",");
-      QString className = args[0];
-      args.removeFirst();
-      MatchCreator* mc =
-        Factory::getInstance().constructObject<MatchCreator>(className);
-      if (args.size() > 0)
+      QStringList inputs;
+      for (int i = 0; i < args.size() - 1; i++)
       {
-        mc->setArguments(args);
+        inputs.append(args.at(i));
       }
-      mfe.addMatchCreator(boost::shared_ptr<MatchCreator>(mc));
+
+      RandomForestModelBuilder().build(inputs, args.last(), exportArffOnly);
     }
-
-    int datasetPairCtr = 1;
-    for (int i = 0; i < args.size() - 1; i+=2)
-    {
-      LOG_INFO(
-        "Processing dataset pair " << datasetPairCtr << " of " << ((args.size() - 1) / 2) <<
-        ": " << args[i].right(50) << " and " << args[i + 1].right(50));
-      datasetPairCtr++;
-      OsmMapPtr map(new OsmMap());
-
-      IoUtils::loadMap(map, args[i], false, Status::Unknown1);
-      IoUtils::loadMap(map, args[i + 1], false, Status::Unknown2);
-
-      MapCleaner().apply(map);
-
-      mfe.processMap(map);
-    }
-    LOG_INFO("Processed " << mfe.getSamples().size() << " total samples.");
-
-    ArffWriter aw(output + ".arff", true);
-    aw.write(mfe.getSamples());
-    if (exportArffOnly)
-    {
-      return 0;
-    }
-
-    // using -1 for null isn't ideal, but it doesn't seem to have a big impact on performance.
-    // ideally we'll circle back and update RF to use null values.
-    boost::shared_ptr<DataFrame> df = mfe.getSamples().toDataFrame(-1);
-
-    Tgs::Random::instance()->seed(0);
-    RandomForest rf;
-    boost::shared_ptr<DisableCout> dc;
-    if (Log::getInstance().getLevel() >= Log::Warn)
-    {
-      // disable the printing of "Trained Tree ..."
-      dc.reset(new DisableCout());
-    }
-    const int numFactors = min(df->getNumFactors(), max<unsigned int>(3, df->getNumFactors() / 5));
-    LOG_INFO("Training on data with " << numFactors << " factors...");
-    //make the number of trees configurable?
-    rf.trainMulticlass(df, 40, numFactors);
-    dc.reset();
-
-    double error;
-    double sigma;
-    rf.findAverageError(df, error, sigma);
-    LOG_INFO("Error: " << error << " sigma: " << sigma);
-
-    LOG_INFO("Writing .rf file...");
-    ofstream fileStream;
-    fileStream.open((output + ".rf").toStdString().data());
-    rf.exportModel(fileStream);
-    fileStream.close();
 
     return 0;
   }
