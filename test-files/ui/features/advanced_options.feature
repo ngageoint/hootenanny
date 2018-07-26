@@ -57,9 +57,9 @@ Feature: Advanced Conflation Options
         And I should see checkbox "OGR Esri FCSubtype" checked
         And I should see checkbox "OGR Thematic Structure" checked
         And I should see checkbox "Duplicate Name Remover Case Sensitive" checked
-        And I should see element "#element_cache_size_node" with no value and placeholder "2000000"
-        And I should see element "#element_cache_size_relation" with no value and placeholder "200000"
-        And I should see element "#element_cache_size_way" with no value and placeholder "200000"
+        And I should see element "#element_cache_size_node" with no value and placeholder "10000000"
+        And I should see element "#element_cache_size_relation" with no value and placeholder "2000000"
+        And I should see element "#element_cache_size_way" with no value and placeholder "2000000"
 	And I should see element "#edge_distance_extractor_spacing" with no value and placeholder "5.0"
 	And I should see element "#levenshtein_distance_alpha" with no value and placeholder "1.15"
 	And I should see element "#merge_nearby_nodes_distance" with no value and placeholder "1.0"
