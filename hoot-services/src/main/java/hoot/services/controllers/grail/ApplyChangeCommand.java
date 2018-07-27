@@ -62,7 +62,7 @@ class ApplyChangesetCommand extends ExternalCommand {
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
 
         // hoot changeset-apply -D changeset.description='Raw NZ OSM data' $x "http://test:hoottest@192.168.0.31:3000" 
-        String command = "hoot changeset-apply --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT} ${API_URL}";
+        String command = "hoot changeset-apply --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT} ${API_URL} --stats --progress";
 
         super.configureCommand(command, substitutionMap, caller);
     }
