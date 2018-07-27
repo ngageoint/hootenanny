@@ -57,7 +57,7 @@ public:
   virtual bool ref2CriterionSatisfied(const ConstElementPtr& e) const;
 
   virtual QString getDescription() const
-  { return "Removes REF2 tags when multiple criteria are met for both the REF1 and REF2 elements"; }
+  { return "Removes REF2 tags when multiple criterion are met for REF1 and REF2 elements"; }
 
 private:
 

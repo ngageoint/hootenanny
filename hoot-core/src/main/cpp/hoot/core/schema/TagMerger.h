@@ -50,7 +50,7 @@ public:
 
   virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const = 0;
 
-  virtual QString getDescription();
+  virtual QString getDescription() = 0;
 };
 
 typedef boost::shared_ptr<TagMerger> TagMergerPtr;

@@ -1,7 +1,7 @@
 "use strict";
 
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
-exports.description = "Generic Line String";
+exports.description = "matches lines generically";
 exports.experimental = true;
 exports.matchThreshold = parseFloat(hoot.get("generic.line.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("generic.line.miss.threshold"));

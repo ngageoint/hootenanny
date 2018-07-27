@@ -89,12 +89,11 @@ bool HighwaySnapMergerCreator::createMergers(const MatchSet& matches, vector<Mer
   return result;
 }
 
-vector<MergerCreator::Description> HighwaySnapMergerCreator::getAllCreators() const
+vector<CreatorDescription> HighwaySnapMergerCreator::getAllCreators() const
 {
-  vector<Description> result;
-
-  result.push_back(Description(className(), "Highway Snap Merge Creator", false));
-
+  vector<CreatorDescription> result;
+  result.push_back(
+    CreatorDescription(className(), "merges roads conflated with the non-greedy algorithm", false));
   return result;
 }
 

@@ -105,9 +105,9 @@ void MergerFactory::createMergers(const OsmMapPtr& map, const MatchSet& matches,
   //throw HootException("Error creating a merger for the provided set of matches.");
 }
 
-vector<MergerCreator::Description> MergerFactory::getAllAvailableCreators() const
+vector<CreatorDescription> MergerFactory::getAllAvailableCreators() const
 {
-  vector<MergerCreator::Description> result;
+  vector<CreatorDescription> result;
 
   // get all match creators from the factory
   vector<std::string> names =
@@ -116,9 +116,10 @@ vector<MergerCreator::Description> MergerFactory::getAllAvailableCreators() cons
   for (size_t i = 0; i < names.size(); i++)
   {
     // get all names known by this creator.
-    boost::shared_ptr<MergerCreator> mc(Factory::getInstance().constructObject<MergerCreator>(names[i]));
+    boost::shared_ptr<MergerCreator> mc(
+      Factory::getInstance().constructObject<MergerCreator>(names[i]));
 
-    vector<MergerCreator::Description> d = mc->getAllCreators();
+    vector<CreatorDescription> d = mc->getAllCreators();
     result.insert(result.end(), d.begin(), d.end());
   }
 

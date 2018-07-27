@@ -80,7 +80,7 @@ public:
     const boost::shared_ptr<const Element>& candidate) const;
 
   virtual QString getDescription() const
-  { return "Uses symmetric difference as the criterion for determining match scores and objects are buffered before the overlap is calculated"; }
+  { return "Uses Symmetric Difference with buffering to calculate overlap"; }
 
 private:
 

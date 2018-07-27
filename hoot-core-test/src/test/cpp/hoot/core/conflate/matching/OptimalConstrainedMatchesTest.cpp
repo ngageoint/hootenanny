@@ -151,9 +151,9 @@ public:
     return cfm1->isConflicting(*cfm2, map);
   }
 
-  vector<MergerCreator::Description> getAllCreators() const
+  vector<CreatorDescription> getAllCreators() const
   {
-    return vector<Description>();
+    return vector<CreatorDescription>();
   }
 };
 

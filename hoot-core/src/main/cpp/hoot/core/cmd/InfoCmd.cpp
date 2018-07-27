@@ -52,20 +52,24 @@ public:
   virtual int runSimple(QStringList args)
   {
     //only allowing one option per command
-    const QString supportedOpts = _getSupportedOptions();
+    const QStringList supportedOpts = _getSupportedOptions();
     QStringList specifiedOpts;
     for (int i = 0; i < args.size(); i++)
     {
       const QString arg = args.at(i);
       if (specifiedOpts.contains(arg) || (supportedOpts.contains(arg) && specifiedOpts.size() > 0))
       {
+        std::cout << getHelp() << std::endl << std::endl;
         throw HootException(QString("%1 takes a single option.").arg(getName()));
       }
+      specifiedOpts.append(arg);
     }
     if (specifiedOpts.size() == 0)
     {
+      std::cout << getHelp() << std::endl << std::endl;
       throw HootException(QString("%1 takes a single option.").arg(getName()));
     }
+    LOG_VARD(specifiedOpts.size());
     assert(specifiedOpts.size() == 1);
 
     if (specifiedOpts.contains("--config-options"))
@@ -88,6 +92,7 @@ public:
 
       if (getNamesOnly && getDetails)
       {
+        std::cout << getHelp() << std::endl << std::endl;
         throw HootException(
           "Only one option can be used, either --option-names or --option-details.");
       }
@@ -125,6 +130,7 @@ public:
         const QString arg = args.at(i);
         if (arg != "--input" && arg != "--output")
         {
+          std::cout << getHelp() << std::endl << std::endl;
           throw IllegalArgumentException("Invalid parameter: " + arg + " passed to " + getName());
         }
       }
@@ -143,7 +149,7 @@ public:
         args.removeAt(args.indexOf("--output"));
       }
 
-      if (args.size() == 0)
+      if (!displayInputs && !displayOutputs && args.size() == 0)
       {
         displayInputs = true;
         displayOutputs = true;
@@ -151,27 +157,33 @@ public:
 
       FormatsDisplayer::display(displayInputs, displayOutputs);
     }
-    else //feature-extractors, operators, matchers, mergers, or tag mergers
+    //feature-extractors, operators, matchers, mergers, or tag mergers
+    else if (specifiedOpts.size() == 1)
     {
       QString apiEntityType;
       for (int i = 0; i < supportedOpts.size(); i++)
       {
-        const QString supportedOpt = supportedOpts.at(i);
+        QString supportedOpt = supportedOpts.at(i);
         if (args.contains(supportedOpt))
         {
           //should only be one of these
-          apiEntityType = apiEntityType.replace("--", "");
           args.removeAt(args.indexOf(supportedOpt));
+          apiEntityType = supportedOpt.replace("--", "");
         }
       }
+      LOG_VARD(apiEntityType);
       if (args.size() != 0)
       {
         std::cout << getHelp() << std::endl << std::endl;
         throw HootException(
-          QString("%1 with the --feature-extractors option takes zero parameters.").arg(getName()));
+          QString("%1 with the --operators option takes zero parameters.").arg(getName()));
       }
 
       ApiEntityDisplayer::display(apiEntityType);
+    }
+    else
+    {
+      return 1;
     }
 
     return 0;

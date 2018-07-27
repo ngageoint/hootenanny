@@ -165,10 +165,11 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
   return result;
 }
 
-vector<MergerCreator::Description> NetworkMergerCreator::getAllCreators() const
+vector<CreatorDescription> NetworkMergerCreator::getAllCreators() const
 {
-  vector<Description> result;
-  result.push_back(Description(className(), "Network Merger Creator", true));
+  vector<CreatorDescription> result;
+  result.push_back(
+    CreatorDescription(className(), "merges roads conflated with the network algorithm", false));
   return result;
 }
 

@@ -22,9 +22,10 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "MatchCreator.h"
+
+#include "CreatorDescription.h"
 
 // hoot
 #include <hoot/core/OsmMap.h>
@@ -41,7 +42,29 @@
 namespace hoot
 {
 
-QString MatchCreator::BaseFeatureTypeToString(BaseFeatureType t)
+CreatorDescription::CreatorDescription() :
+experimental()
+{
+}
+
+CreatorDescription::CreatorDescription(std::string className, QString description,
+                                       bool experimental) :
+experimental(experimental),
+className(className),
+description(description)
+{
+}
+
+CreatorDescription::CreatorDescription(std::string className, QString description,
+                                       BaseFeatureType featureType, bool experimental) :
+experimental(experimental),
+className(className),
+description(description),
+baseFeatureType(featureType)
+{
+}
+
+QString CreatorDescription::BaseFeatureTypeToString(BaseFeatureType t)
 {
   switch (t)
   {
@@ -69,7 +92,7 @@ QString MatchCreator::BaseFeatureTypeToString(BaseFeatureType t)
   }
 }
 
-MatchCreator::BaseFeatureType MatchCreator::StringToBaseFeatureType(QString s)
+CreatorDescription::BaseFeatureType CreatorDescription::StringToBaseFeatureType(QString s)
 {
   s = s.toLower();
   if (0 == s.compare("poi"))
@@ -94,7 +117,7 @@ MatchCreator::BaseFeatureType MatchCreator::StringToBaseFeatureType(QString s)
     return Unknown;
 }
 
-MatchCreator::FeatureCalcType MatchCreator::getFeatureCalcType (BaseFeatureType t)
+CreatorDescription::FeatureCalcType CreatorDescription::getFeatureCalcType (BaseFeatureType t)
 {
   switch (t)
   {
@@ -122,7 +145,7 @@ MatchCreator::FeatureCalcType MatchCreator::getFeatureCalcType (BaseFeatureType 
   }
 }
 
-ElementCriterionPtr MatchCreator::getElementCriterion (BaseFeatureType t, ConstOsmMapPtr map)
+ElementCriterionPtr CreatorDescription::getElementCriterion(BaseFeatureType t, ConstOsmMapPtr map)
 {
   switch (t)
   {
@@ -148,6 +171,11 @@ ElementCriterionPtr MatchCreator::getElementCriterion (BaseFeatureType t, ConstO
     default:
       return ElementCriterionPtr();
   }
+}
+
+QString CreatorDescription::toString() const
+{
+  return QString::fromStdString(className) + ";" + BaseFeatureTypeToString(baseFeatureType);
 }
 
 }

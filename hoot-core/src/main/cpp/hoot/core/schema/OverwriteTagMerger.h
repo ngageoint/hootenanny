@@ -51,6 +51,9 @@ public:
 
   virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const;
 
+  virtual QString getDescription()
+  { return "Overwrites tags in the secondary feature with tags from the reference feature"; }
+
 protected:
 
   bool _swap;
@@ -69,9 +72,6 @@ public:
   OverwriteTag2Merger() : OverwriteTagMerger(false) {}
 
   virtual ~OverwriteTag2Merger() {}
-
-  virtual QString getDescription()
-  { return "Overwrites tags in the secondary feature with tags from the reference feature"; }
 };
 
 /**

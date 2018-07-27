@@ -32,17 +32,11 @@ public:
   }
 };
 
-//static bool extractorCompare(const std::string& n1, const std::string& n2)
-//{
-//  const QString cleanedName1 = QString::fromStdString(n1).replace("hoot::", "");
-//  const QString cleanedName2 = QString::fromStdString(n2).replace("hoot::", "");
-//  return cleanedName1 < cleanedName2;
-//}
-
 template<typename ApiEntity>
-void printApiEntities(const std::string& apiEntityClassName, const QString apiEntityType)
+void printApiEntities(const std::string& apiEntityClassName, const QString apiEntityType,
+                      const bool displayType)
 {
-  //the size of the longest operator/type names plus a 3 space buffer
+  //the size of the longest names plus a 3 space buffer
   const int maxNameSize = 45;
   const int maxTypeSize = 18;
 
@@ -73,69 +67,110 @@ void printApiEntities(const std::string& apiEntityClassName, const QString apiEn
       }
       const int indentAfterName = maxNameSize - name.size();
       const int indentAfterType = maxTypeSize - apiEntityType.size();
-      const QString line =
-        "  " + name + QString(indentAfterName, ' ') + apiEntityType +
-        QString(indentAfterType, ' ') + c->getDescription();
+      QString line = "  " + name + QString(indentAfterName, ' ');
+      if (displayType)
+      {
+        line += apiEntityType + QString(indentAfterType, ' ');
+      }
+      line += c->getDescription();
       std::cout << line << std::endl;
     }
   }
   std::cout << std::endl;
 }
 
-void ApiEntityDisplayer::display(const QString apiEntityType)
+//matchers/mergers have a more roundabout way to get at the description, so we'll create a new
+//display method for them
+template<typename ApiEntity>
+void printApiEntities2(const std::string& apiEntityClassName)
 {
-  /*
-   * feature-extractors
-   * //the size of the longest extractor name plus a small buffer
-    const int indent = 40;
-    std::vector<std::string> extractorNames =
-      Factory::getInstance().getObjectNamesByBase(FeatureExtractor::className());
-    std::sort(extractorNames.begin(), extractorNames.end(), extractorCompare);
-    for (size_t i = 0; i < extractorNames.size(); i++)
+  //the size of the longest names plus a 3 space buffer
+  const int maxNameSize = 48;
+
+  std::vector<std::string> names =
+    Factory::getInstance().getObjectNamesByBase(apiEntityClassName);
+  ApiEntityNameComparator<ApiEntity> apiEntityNameComparator;
+  std::sort(names.begin(), names.end(), apiEntityNameComparator);
+  LOG_VARD(names);
+  QStringList output;
+  for (size_t i = 0; i < names.size(); i++)
+  {
+    // get all names known by this creator
+    boost::shared_ptr<ApiEntity> mc(
+      Factory::getInstance().constructObject<ApiEntity>(names[i]));
+    std::vector<CreatorDescription> creators = mc->getAllCreators();
+    LOG_VARD(creators.size());
+
+    for (std::vector<CreatorDescription>::const_iterator itr = creators.begin();
+         itr != creators.end(); ++itr)
     {
-      boost::shared_ptr<FeatureExtractor> c(
-        Factory::getInstance().constructObject<FeatureExtractor>(extractorNames[i]));
-      const QString cleanedName = QString::fromStdString(extractorNames[i]).replace("hoot::", "");
-      if (!cleanedName.isEmpty() && !c->getDescription().isEmpty())
+      CreatorDescription description = *itr;
+      LOG_VARD(description);
+      const QString name = QString::fromStdString(description.className).replace("hoot::", "");
+      LOG_VARD(name);
+      //this suppresses test and auxiliary rules files
+      if (!name.endsWith("Test.js") && !name.endsWith("Rules.js"))
       {
-        LOG_VARD(cleanedName);
-        const int spaceSize = indent - cleanedName.size();
-        const QString line = "  " + cleanedName + QString(spaceSize, ' ') + c->getDescription();
-        std::cout << line << std::endl;
+        const int indentAfterName = maxNameSize - name.size();
+        QString line = "  " + name + QString(indentAfterName, ' ');
+        if (description.experimental)
+        {
+          line += "(experimental) ";
+        }
+        line += description.description;
+        LOG_VARD(line);
+        output.append(line);
       }
     }
-   */
+  }
 
-  DisableLog dl;
+  output.sort();
+  for (int i = 0; i < output.size(); i++)
+  {
+    std::cout << output.at(i) << std::endl;
+  }
+}
+
+void ApiEntityDisplayer::display(const QString apiEntityType)
+{
+  //TODO: re-enable
+  //DisableLog dl;
+  QString msg = " (prepend 'hoot::' before using):";
   if (apiEntityType == "operators")
   {
-    std::cout << "Operators (prepend 'hoot::'):" << std::endl << std::endl;
+    msg.prepend("Operators");
+    std::cout << msg << std::endl << std::endl;
 
-    printApiEntities<ElementCriterion>(ElementCriterion::className(), "criterion");
-    printApiEntities<OsmMapOperation>(OsmMapOperation::className(), "operation");
+    printApiEntities<ElementCriterion>(ElementCriterion::className(), "criterion", true);
+    printApiEntities<OsmMapOperation>(OsmMapOperation::className(), "operation", true);
     //TODO: would like to combine these into one, as far as the display is concerned, somehow
-    printApiEntities<ElementVisitor>(ElementVisitor::className(), "visitor");
-    printApiEntities<ConstElementVisitor>(ConstElementVisitor::className(), "visitor (const)");
+    printApiEntities<ElementVisitor>(ElementVisitor::className(), "visitor", true);
+    printApiEntities<ConstElementVisitor>(
+      ConstElementVisitor::className(), "visitor (const)", true);
   }
   else if (apiEntityType == "feature-extractors")
   {
-    std::cout << "Feature Extractors (prepend 'hoot::'):" << std::endl << std::endl;
-    printApiEntities<FeatureExtractor>(FeatureExtractor::className(), "feature extractor");
+    msg.prepend("Feature Extractors");
+    std::cout << msg << std::endl << std::endl;
+    printApiEntities<FeatureExtractor>(FeatureExtractor::className(), "feature extractor", false);
   }
   else if (apiEntityType == "matchers")
   {
-    std::cout << "Conflate Matchers (prepend 'hoot::'):" << std::endl << std::endl;
-    printApiEntities<MatchCreator>(MatchCreator::className(), "matcher");
+    msg.prepend("Conflate Matchers");
+    std::cout << msg << std::endl << std::endl;
+    printApiEntities2<MatchCreator>(MatchCreator::className());
   }
   else if (apiEntityType == "mergers")
   {
-    std::cout << "Conflate Mergers (prepend 'hoot::'):" << std::endl << std::endl;
-    printApiEntities<MergerCreator>(MergerCreator::className(), "merger");
+    msg.prepend("Conflate Mergers");
+    std::cout << msg << std::endl << std::endl;
+    printApiEntities2<MergerCreator>(MergerCreator::className());
   }
   else if (apiEntityType == "tag-mergers")
   {
-    std::cout << "Tag Mergers (prepend 'hoot::'):" << std::endl << std::endl;
-    printApiEntities<TagMerger>(TagMerger::className(), "tag merger");
+    msg.prepend("Tag Mergers");
+    std::cout << msg << std::endl << std::endl;
+    printApiEntities<TagMerger>(TagMerger::className(), "tag merger", false);
   }
 }
 

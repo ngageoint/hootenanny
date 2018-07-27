@@ -32,7 +32,7 @@ public:
   
 private:
 
-  static void _printAllConfigOptionsDetails(const QStringList args,
+  static void _printAllConfigOptionsDetails(const QString optionName,
                                             const QString configOptionsFile);
 };
 

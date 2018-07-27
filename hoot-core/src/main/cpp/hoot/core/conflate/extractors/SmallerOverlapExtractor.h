@@ -71,7 +71,7 @@ public:
     const boost::shared_ptr<const Element>& candidate) const;
 
   virtual QString getDescription() const
-  { return "Uses symmetric difference as the criterion for determining match scores, using the feature with more overlap to calculate the percentage overlap"; }
+  { return "Uses Symmetric Difference with buffering and the feature with more overlap"; }
 };
 
 }

@@ -36,9 +36,11 @@ hoot info --formats --output | grep ".shp"
 
 # MATCHERS
 hoot info --matchers | grep "HighwayMatchCreator"
+hoot info --matchers | grep "ScriptMatchCreator"
 
 # MERGERS
 hoot info --mergers | grep "PoiPolygonMergerCreator"
+hoot info --mergers | grep "ScriptMergerCreator"
 
 # OPERATORS
 hoot info --operators | grep "MapCleaner"

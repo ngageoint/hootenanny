@@ -4,6 +4,7 @@
 // Hoot
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/HootException.h>
 
 // Qt
 #include <QFile>
@@ -45,8 +46,7 @@ void ConfigOptionsDisplayer::displayOptionName(const QString optionName, const b
   }
   else
   {
-    _printAllConfigOptionsDetails(args, configOptionsFile);
-    return 0;
+    _printAllConfigOptionsDetails(optionName, configOptionsFile);
   }
 
   if (!cmd.isEmpty() && std::system(cmd.toStdString().c_str()) != 0)
@@ -55,7 +55,7 @@ void ConfigOptionsDisplayer::displayOptionName(const QString optionName, const b
   }
 }
 
-void ConfigOptionsDisplayer::_printAllConfigOptionsDetails(const QStringList args,
+void ConfigOptionsDisplayer::_printAllConfigOptionsDetails(const QString optionName,
                                                            const QString configOptionsFile)
 {
   QFile file(configOptionsFile);
@@ -69,7 +69,6 @@ void ConfigOptionsDisplayer::_printAllConfigOptionsDetails(const QStringList arg
   QString output;
   try
   {
-    const QString optionName = args[0].toLower().trimmed();
     bool foundOption = false;
     while (!file.atEnd())
     {

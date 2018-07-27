@@ -67,14 +67,13 @@ bool MultiaryPoiMergerCreator::createMergers(const MatchSet& matches, std::vecto
   return result;
 }
 
-std::vector<MergerCreator::Description> MultiaryPoiMergerCreator::getAllCreators() const
+std::vector<CreatorDescription> MultiaryPoiMergerCreator::getAllCreators() const
 {
-  MergerCreator::Description d;
+  CreatorDescription d;
   d.className = className();
-  d.description = "Multiary conflation identifies clusters within a match set and merges each "
-      "cluster.";
+  d.description = "identifies clusters within a match set and merges each cluster.";
   d.experimental = true;
-  vector<MergerCreator::Description> result;
+  vector<CreatorDescription> result;
   result.push_back(d);
 
   return result;

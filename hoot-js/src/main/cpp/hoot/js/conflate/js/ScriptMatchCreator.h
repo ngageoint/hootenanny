@@ -67,7 +67,7 @@ public:
   virtual void createMatches(const ConstOsmMapPtr& map, std::vector<const Match*>& matches,
     ConstMatchThresholdPtr threshold);
 
-  virtual std::vector<Description> getAllCreators() const;
+  virtual std::vector<CreatorDescription> getAllCreators() const;
 
   virtual void setArguments(QStringList args);
 
@@ -87,7 +87,7 @@ private:
   boost::shared_ptr<PluginContext> _script;
   QString _scriptPath;
 
-  Description _getScriptDescription(QString path) const;
+  CreatorDescription _getScriptDescription(QString path) const;
 
   boost::shared_ptr<ScriptMatchVisitor> _cachedScriptVisitor;
   boost::shared_ptr<MatchThreshold> _matchThreshold;

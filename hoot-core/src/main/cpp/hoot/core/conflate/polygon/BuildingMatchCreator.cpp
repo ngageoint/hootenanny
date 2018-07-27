@@ -293,11 +293,11 @@ void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map, std::vector<
   map->visitRo(v);
 }
 
-std::vector<MatchCreator::Description> BuildingMatchCreator::getAllCreators() const
+std::vector<CreatorDescription> BuildingMatchCreator::getAllCreators() const
 {
-  std::vector<Description> result;
+  std::vector<CreatorDescription> result;
   result.push_back(
-    Description(className(), "Building Match Creator", MatchCreator::Building, false));
+    CreatorDescription(className(), "matches buildings", CreatorDescription::Building, false));
   return result;
 }
 

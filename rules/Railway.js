@@ -1,6 +1,6 @@
 "use strict";
 
-exports.description = "Railways";
+exports.description = "matches railways";
 exports.experimental = false;
 exports.baseFeatureType = "Railway";
 

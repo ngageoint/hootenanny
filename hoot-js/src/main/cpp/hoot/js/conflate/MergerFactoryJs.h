@@ -50,7 +50,7 @@ private:
   static void getAllAvailableCreators(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
-inline v8::Handle<v8::Value> toV8(const MergerCreator::Description& d)
+inline v8::Handle<v8::Value> toV8(const CreatorDescription& d)
 {
   v8::Handle<v8::Object> result = v8::Object::New(v8::Isolate::GetCurrent());
   result->Set(toV8("className"), toV8(d.className));

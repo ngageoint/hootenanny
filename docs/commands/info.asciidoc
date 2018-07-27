@@ -6,13 +6,13 @@ The +info+ command displays information about Hootenanny capabilities.
 
 Only one of the following options can be passed to the command:
 
-* +--config-options+ - Prints available configuration options
+* +--config-options+     - Prints available configuration options
 * +--feature-extractors+ - Prints feature extractors used for conflation model building
-* +--formats+ - Prints supported data formats
-* +--matchers+ - Prints available matchers used with conflation
-* +--mergers+ - Prints available mergers used with conflation
-* +--operators+ - Prints inline operators that can be applied to map datasets
-* +--tag-mergers+ - Prints available tag mergers used with conflation
+* +--formats+            - Prints supported data formats
+* +--matchers+           - Prints available matchers used with conflation
+* +--mergers+            - Prints available mergers used with conflation
+* +--operators+          - Prints inline operators that can be applied to map datasets
+* +--tag-mergers+        - Prints available tag mergers used with conflation
 
 Each of the following sections describes an option that may be used with this command and its input parameters.
 
@@ -33,8 +33,8 @@ One of the following input parameters must be specified:
 ==== Usage
 
 --------------------------------------
-info --config-options (--option-names)
-info --config-options (--option-details)
+info --config-options [--option-names]
+info --config-options [--option-details]
 info --config-options (name) [--option-names]
 info --config-options (name) [--option-details]
 --------------------------------------
@@ -42,6 +42,9 @@ info --config-options (name) [--option-details]
 ==== Example
 
 --------------------------------------
+# by default lists all config option names
+hoot info --config-options
+
 # list all config option names
 hoot info --config-options --option-names
 
@@ -62,7 +65,7 @@ The +--feature-extractors+ option prints out available feature extractors that c
 ==== Usage
 
 --------------------------------------
-info feature-extractors
+info --feature-extractors
 --------------------------------------
 
 ==== Example

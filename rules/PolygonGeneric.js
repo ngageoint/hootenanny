@@ -1,7 +1,7 @@
 "use strict";
 
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
-exports.description = "Polygon Generic";
+exports.description = "matches generic polygons";
 exports.matchThreshold = parseFloat(hoot.get("generic.polygon.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("generic.polygon.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("generic.polygon.review.threshold"));
