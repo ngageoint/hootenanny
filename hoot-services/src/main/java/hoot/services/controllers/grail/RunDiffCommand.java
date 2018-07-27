@@ -38,22 +38,22 @@ import hoot.services.command.ExternalCommand;
 import hoot.services.geo.BoundingBox;
 
 
-class PullOSMDataCommand extends ExternalCommand {
-    private static final Logger logger = LoggerFactory.getLogger(PullOSMDataCommand.class);
+class RunDiffCommand extends ExternalCommand {
+    private static final Logger logger = LoggerFactory.getLogger(RunDiffCommand.class);
 
-    PullOSMDataCommand(String jobId, String bbox, String apiUrl, File outputFile, Class<?> caller) {
+    RunDiffCommand(String jobId, File input1, File input2, File outputFile, String debugLevel, Class<?> caller) {
         super(jobId);
 
-        logger.info("Started to pull OSM");
-
-        String fullUrl = apiUrl + "/map?bbox=" + bbox;
+        logger.info("Starting to run diff");
 
         Map<String, Object> substitutionMap = new HashMap<>();
-        substitutionMap.put("OUTPUT_FILE", outputFile.getAbsolutePath());
-        substitutionMap.put("API_URL", fullUrl);
+        substitutionMap.put("INPUT1", input1.getAbsolutePath());
+        substitutionMap.put("INPUT2", input2.getAbsolutePath());
+        substitutionMap.put("OUTPUT", outputFile.getAbsolutePath());
+        substitutionMap.put("DEBUG_LEVEL", debugLevel);
 
         // wget -O <output.osm> "http://api.openstreetmap.org/api/0.6/map?bbox=$EXTENT"
-        String command = "wget -O ${OUTPUT_FILE} ${API_URL}";
+        String command = "hoot conflate --${DEBUG_LEVEL} -C Diff.conf ${INPUT1} ${INPUT2} ${OUTPUT} --differential";
 
         super.configureCommand(command, substitutionMap, caller);
     }

@@ -256,7 +256,7 @@ public final class HootProperties {
         OSMAPI_DB_URL = "osmapidb://" + OSMAPI_DB_USER + ":" + OSMAPI_DB_PASSWORD + "@" + OSMAPI_DB_HOST + ":" + OSMAPI_DB_PORT + "/" + OSMAPI_DB_NAME;
 
         // The base URL for pulling OSM data
-        MAIN_OSMAPI_URL = "${OSM_API_URL}";
+        MAIN_OSMAPI_URL = "${MAIN_OSMAPI_URL}";
 
         // The OSM Rails Port that we are going to pull and push data to.
         RAILSPORT_USER = "${RAILSPORT_USER}";

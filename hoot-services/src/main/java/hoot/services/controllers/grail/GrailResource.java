@@ -83,6 +83,12 @@ public class GrailResource {
     @Autowired
     private PullOSMDataCommandFactory OSMDataCommandFactory;
 
+    @Autowired
+    private RunDiffCommandFactory runDiffCommandFactory;
+
+    @Autowired
+    private ApplyChangesetCommandFactory applyChangesetCommandFactory;
+
     /**
      * The purpose of this service is to take a bounding box and then:
      * Pull the native OSM data for the area
@@ -106,10 +112,10 @@ public class GrailResource {
      */
     @POST
     @Path("/bybox")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    //@Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response grailByBox(@QueryParam("BBOX") String bbox,
-                          @QueryParam("USER_NAME") String userName,
+    public Response grailByBox(@QueryParam("bbox") String bbox,
+                          @QueryParam("user_name") String userName,
                           @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
         String jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
@@ -123,12 +129,20 @@ public class GrailResource {
             File workDir = new File(TEMP_OUTPUT_PATH, jobId);
             FileUtils.forceMkdir(workDir);
 
-            String tmpUrl = RAILSPORT_PULL_URL;
+            //String tmpUrl = RAILSPORT_PULL_URL;
 
-            File localOutputFile = new File(workDir,"local.osm");
-            ExternalCommand getLocalOSM = OSMDataCommandFactory.build(jobId, bbox,tmpUrl,localOutputFile, this.getClass());
+            File localOSMFile = new File(workDir,"local.osm");
+            ExternalCommand getLocalOSM = OSMDataCommandFactory.build(jobId,bbox,RAILSPORT_PULL_URL,localOSMFile, this.getClass());
 
-            Command[] workflow = { getLocalOSM };
+            File internetOSMFile = new File(workDir,"internet.osm");
+            ExternalCommand getInternetOSM = OSMDataCommandFactory.build(jobId,bbox,MAIN_OSMAPI_URL,internetOSMFile, this.getClass());
+
+            File diffFile = new File(workDir,"diff.osc");
+            ExternalCommand makeDiff = runDiffCommandFactory.build(jobId,localOSMFile,internetOSMFile,diffFile,debugLevel, this.getClass());
+
+            ExternalCommand applyChange = applyChangesetCommandFactory.build(jobId,diffFile,RAILSPORT_PUSH_URL,userName, debugLevel, this.getClass());
+
+            Command[] workflow = { getLocalOSM, getInternetOSM, makeDiff, applyChange };
 
             jobProcessor.submitAsync(new Job(jobId, workflow));
         }
