@@ -133,9 +133,8 @@ void printApiEntities2(const std::string& apiEntityClassName)
 
 void ApiEntityDisplayer::display(const QString apiEntityType)
 {
-  //TODO: re-enable
-  //DisableLog dl;
-  QString msg = " (prepend 'hoot::' before using):";
+  DisableLog dl;
+  QString msg = " (prepend 'hoot::' before using; * = implements SingleStatistic):";
   if (apiEntityType == "operators")
   {
     msg.prepend("Operators");

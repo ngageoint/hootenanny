@@ -7,22 +7,22 @@ CONFIG_FILE=test-files/cmd/quick/ConfigOptionsCmdTest/ConfigOptions.asciidoc
 
 echo "Listing all option names..."
 echo ""
-hoot info --config-options -D config.options.file=$CONFIG_FILE --option-names
+hoot info --config-options --option-names -D config.options.file=$CONFIG_FILE
 echo ""
 
 echo "Listing all option names and descriptions..."
 echo ""
-hoot info --config-options -D config.options.file=$CONFIG_FILE --option-details
+hoot info --config-options --option-details -D config.options.file=$CONFIG_FILE
 echo ""
 
 echo "Listing all option names containing 'poi.polygon'..."
 echo ""
-hoot info --config-options -D config.options.file=$CONFIG_FILE poi.polygon --option-names
+hoot info --config-options --option-names -D config.options.file=$CONFIG_FILE poi.polygon
 echo ""
 
 echo "Listing all option names containing 'poi.polygon' and their descriptions..."
 echo ""
-hoot info --config-options -D config.options.file=$CONFIG_FILE poi.polygon --option-details
+hoot info --config-options --option-details -D config.options.file=$CONFIG_FILE poi.polygon
 
 # Since the list of a lot of these will constantly be changing, just going to grep out ones that are unlikely to change any time soon.
 
